@@ -158,8 +158,13 @@ proc jesd204_phy_composition_callback {} {
   set_interface_property reconfig_reset EXPORT_OF phy_glue.reconfig_reset
 
   if {$tx} {
-    add_interface serial_clk hssi_serial_clock end
-    set_interface_property serial_clk EXPORT_OF phy_glue.tx_serial_clk0
+    add_interface serial_clk_x1 hssi_serial_clock end
+    set_interface_property serial_clk_x1 EXPORT_OF phy_glue.tx_serial_clk_x1
+
+    if {$num_of_lanes > 6} {
+      add_interface serial_clk_xN hssi_serial_clock end
+      set_interface_property serial_clk_xN EXPORT_OF phy_glue.tx_serial_clk_xN
+    }
 
     add_connection link_clock.clk phy_glue.tx_coreclkin
 
