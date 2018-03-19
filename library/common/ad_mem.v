@@ -46,6 +46,7 @@ module ad_mem #(
   input       [(DATA_WIDTH-1):0]      dina,
 
   input                               clkb,
+  input                               reb,
   input       [(ADDRESS_WIDTH-1):0]   addrb,
   output  reg [(DATA_WIDTH-1):0]      doutb);
 
@@ -59,7 +60,9 @@ module ad_mem #(
   end
 
   always @(posedge clkb) begin
-    doutb <= m_ram[addrb];
+    if (reb == 1'b1) begin
+      doutb <= m_ram[addrb];
+    end
   end
 
 endmodule

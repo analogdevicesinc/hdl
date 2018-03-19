@@ -408,6 +408,7 @@ module axi_adcfifo_wr #(
     .addra (adc_waddr),
     .dina (adc_wdata),
     .clkb (axi_clk),
+    .reb (1'b1),
     .addrb (axi_raddr),
     .doutb (axi_rdata_s));
 
