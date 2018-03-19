@@ -66,7 +66,8 @@ ad_ip_files jesd204_glue [list \
 
 ad_ip_parameter TX_OR_RX_N BOOLEAN false false
 ad_ip_parameter SOFT_PCS BOOLEAN false false
-ad_ip_parameter NUM_OF_LANES POSITIVE 4 false
+ad_ip_parameter NUM_OF_LANES POSITIVE 4 true
+ad_ip_parameter LANE_INVERT INTEGER 0 true
 ad_ip_parameter WIDTH NATURAL 20 true { \
   DERIVED true \
 }
@@ -231,6 +232,10 @@ proc jesd204_phy_glue_elab {} {
     }
 
     glue_add_const_conduit unused_tx_parallel_data $unused_width
+
+    add_interface phy_tx_polinv conduit end
+    add_interface_port phy_tx_polinv polinv tx_polinv Output $num_of_lanes
+    set_port_property polinv TERMINATION $soft_pcs
   } else {
     glue_add_if 1 rx_cdr_refclk0 clock sink true
     glue_add_if_port 1 rx_cdr_refclk0 rx_cdr_refclk0 clk Input 1 true
@@ -261,6 +266,10 @@ proc jesd204_phy_glue_elab {} {
     add_interface_port const_out const_out const_out Output 1
     set_port_property const_out TERMINATION true
     set const_offset 1
+
+    add_interface phy_rx_polinv conduit end
+    add_interface_port phy_rx_polinv polinv rx_polinv Output $num_of_lanes
+    set_port_property polinv TERMINATION $soft_pcs
   }
 
   set_interface_property reconfig_reset associatedClock reconfig_clk
@@ -268,4 +277,4 @@ proc jesd204_phy_glue_elab {} {
 
   set_parameter_value WIDTH $sig_offset
   set_parameter_value CONST_WIDTH $const_offset
-}   
+}

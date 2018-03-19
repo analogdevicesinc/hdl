@@ -109,6 +109,12 @@ ad_ip_parameter LANE_MAP STRING "" false { \
   DISPLAY_NAME "Lane Mapping" \
 }
 
+ad_ip_parameter LANE_INVERT STD_LOGIC_VECTOR 0 false { \
+  DISPLAY_NAME "Lane Invert Mask" \
+  DISPLAY_HINT "hexadecimal" \
+  WIDTH 8 \
+}
+
 ad_ip_parameter SOFT_PCS BOOLEAN true false { \
   DISPLAY_NAME "Enable Soft PCS" \
 }
@@ -226,6 +232,7 @@ proc jesd204_compose {} {
   set sysclk_frequency [get_parameter_value "SYSCLK_FREQUENCY"]
   set refclk_frequency [get_parameter_value "REFCLK_FREQUENCY"]
   set lane_map [get_parameter_value "LANE_MAP"]
+  set lane_invert [get_parameter_value "LANE_INVERT"]
   set soft_pcs [get_parameter_value "SOFT_PCS"]
   set device_family [get_parameter_value "DEVICE_FAMILY"]
   set device [get_parameter_value "DEVICE"]
@@ -327,6 +334,7 @@ proc jesd204_compose {} {
   set_instance_parameter_value phy REFCLK_FREQUENCY $refclk_frequency
   set_instance_parameter_value phy NUM_OF_LANES $num_of_lanes
   set_instance_parameter_value phy REGISTER_INPUTS $register_inputs
+  set_instance_parameter_value phy LANE_INVERT $lane_invert
 
   add_connection link_clock.out_clk_1 phy.link_clk
   add_connection link_reset.out_reset phy.link_reset
