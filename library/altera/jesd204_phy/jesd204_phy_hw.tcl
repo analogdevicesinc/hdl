@@ -68,6 +68,7 @@ ad_ip_parameter LANE_RATE FLOAT 10000 false
 ad_ip_parameter REFCLK_FREQUENCY FLOAT 500.0 false
 ad_ip_parameter NUM_OF_LANES POSITIVE 4 false
 ad_ip_parameter REGISTER_INPUTS INTEGER 0 false
+ad_ip_parameter LANE_INVERT INTEGER 0 false
 
 proc jesd204_phy_composition_callback {} {
   set soft_pcs [get_parameter_value "SOFT_PCS"]
@@ -77,6 +78,7 @@ proc jesd204_phy_composition_callback {} {
   set id [get_parameter_value "ID"]
   set num_of_lanes [get_parameter_value "NUM_OF_LANES"]
   set register_inputs [get_parameter_value "REGISTER_INPUTS"]
+  set lane_invert [get_parameter_value "LANE_INVERT"]
 
   set link_clk_frequency [expr $lane_rate / 40]
 
@@ -99,6 +101,8 @@ proc jesd204_phy_composition_callback {} {
     if {$tx} {
       set_instance_parameter_value native_phy {std_tx_byte_ser_mode} "Serialize x2"
       set_instance_parameter_value native_phy {std_tx_8b10b_enable} 1
+      set_instance_parameter_value native_phy {std_tx_polinv_enable} 1
+      set_instance_parameter_value native_phy {enable_port_tx_polinv} 1
     } else {
       set_instance_parameter_value native_phy {std_rx_byte_deser_mode} "Deserialize x2"
       set_instance_parameter_value native_phy {std_rx_8b10b_enable} 1
@@ -106,6 +110,8 @@ proc jesd204_phy_composition_callback {} {
       set_instance_parameter_value native_phy {std_rx_word_aligner_pattern_len} 20
       set_instance_parameter_value native_phy {std_rx_word_aligner_pattern} 0xA0D7C
       set_instance_parameter_value native_phy {enable_port_rx_std_wa_patternalign} 1
+      set_instance_parameter_value native_phy {std_rx_polinv_enable} 1
+      set_instance_parameter_value native_phy {enable_port_rx_polinv} 1
     }
   }
 
@@ -143,6 +149,7 @@ proc jesd204_phy_composition_callback {} {
   set_instance_parameter_value phy_glue TX_OR_RX_N $tx
   set_instance_parameter_value phy_glue SOFT_PCS $soft_pcs
   set_instance_parameter_value phy_glue NUM_OF_LANES $num_of_lanes
+  set_instance_parameter_value phy_glue LANE_INVERT $lane_invert
 
   add_interface reconfig_clk clock sink
   set_interface_property reconfig_clk EXPORT_OF phy_glue.reconfig_clk
@@ -172,6 +179,7 @@ proc jesd204_phy_composition_callback {} {
 
     if {$soft_pcs == false} {
       add_connection phy_glue.phy_tx_datak native_phy.tx_datak
+      add_connection phy_glue.phy_tx_polinv native_phy.tx_polinv
     }
   } else {
     add_interface ref_clk clock sink
@@ -193,6 +201,7 @@ proc jesd204_phy_composition_callback {} {
       foreach x {rx_datak rx_disperr rx_errdetect rx_std_wa_patternalign} {
         add_connection phy_glue.phy_${x} native_phy.${x}
       }
+      add_connection phy_glue.phy_rx_polinv native_phy.rx_polinv
     }
   }
 
@@ -205,6 +214,8 @@ proc jesd204_phy_composition_callback {} {
     if {$tx} {
       if {$soft_pcs} {
         add_instance soft_pcs_${i} jesd204_soft_pcs_tx
+        set_instance_parameter_value soft_pcs_${i} INVERT_OUTPUTS \
+          [expr ($lane_invert >> $i) & 1]
         add_connection link_clock.clk soft_pcs_${i}.clock
         add_connection link_clock.clk_reset soft_pcs_${i}.reset
         add_connection soft_pcs_${i}.tx_raw_data phy_glue.tx_raw_data_${i}
@@ -216,7 +227,9 @@ proc jesd204_phy_composition_callback {} {
     } else {
       if {$soft_pcs} {
         add_instance soft_pcs_${i} jesd204_soft_pcs_rx
-		set_instance_parameter_value soft_pcs_${i} REGISTER_INPUTS $register_inputs
+        set_instance_parameter_value soft_pcs_${i} REGISTER_INPUTS $register_inputs
+        set_instance_parameter_value soft_pcs_${i} INVERT_INPUTS \
+          [expr ($lane_invert >> $i) & 1]
         add_connection link_clock.clk soft_pcs_${i}.clock
         add_connection link_clock.clk_reset soft_pcs_${i}.reset
         add_connection phy_glue.rx_raw_data_${i} soft_pcs_${i}.rx_raw_data
