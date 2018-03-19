@@ -147,7 +147,7 @@ proc create_phy_reset_control {tx num_of_lanes sysclk_frequency} {
   }
 }
 
-proc create_lane_pll {id pllclk_frequency refclk_frequency} {
+proc create_lane_pll {id pllclk_frequency refclk_frequency num_lanes} {
   add_instance lane_pll altera_xcvr_atx_pll_a10
   set_instance_property lane_pll SUPPRESS_ALL_INFO_MESSAGES true
   set_instance_parameter_value lane_pll {enable_pll_reconfig} {1}
@@ -157,7 +157,18 @@ proc create_lane_pll {id pllclk_frequency refclk_frequency} {
   set_instance_parameter_value lane_pll {set_csr_soft_logic_enable} {1}
   set_instance_parameter_value lane_pll {set_output_clock_frequency} $pllclk_frequency
   set_instance_parameter_value lane_pll {set_auto_reference_clock_frequency} $refclk_frequency
-  add_connection phy_reset_control.pll_powerdown lane_pll.pll_powerdown
+  if {$num_lanes > 6} {
+    set_instance_parameter_value lane_pll enable_mcgb {true}
+    set_instance_parameter_value lane_pll enable_hfreq_clk {true}
+
+    add_instance glue adi_jesd204_glue
+    add_connection phy_reset_control.pll_powerdown glue.in_pll_powerdown
+    add_connection glue.out_pll_powerdown lane_pll.pll_powerdown
+    add_connection glue.out_mcgb_rst lane_pll.mcgb_rst
+  } else {
+    add_connection phy_reset_control.pll_powerdown lane_pll.pll_powerdown
+  }
+
   add_connection lane_pll.pll_locked phy_reset_control.pll_locked
   add_connection lane_pll.pll_cal_busy phy_reset_control.pll_cal_busy
   add_connection ref_clock.out_clk lane_pll.pll_refclk0
@@ -347,8 +358,11 @@ proc jesd204_compose {} {
     set jesd204_intfs {config control ilas_config event status}
     set phy_reset_intfs {analogreset digitalreset cal_busy}
 
-    create_lane_pll $id $pllclk_frequency $refclk_frequency
-    add_connection lane_pll.tx_serial_clk phy.serial_clk
+    create_lane_pll $id $pllclk_frequency $refclk_frequency $num_of_lanes
+    add_connection lane_pll.tx_serial_clk phy.serial_clk_x1
+    if {$num_of_lanes > 6} {
+      add_connection lane_pll.mcgb_serial_clk phy.serial_clk_xN
+    }
   } else {
     set tx_rx "rx"
     set data_direction source

@@ -131,6 +131,53 @@ proc glue_add_if_port {num ifname port role dir width {bcast false}} {
   set_port_property phy_${port} fragment_list $frag
 }
 
+proc glue_add_tx_serial_clk {num_of_lanes} {
+  variable sig_offset
+
+  # The serial clock is special. The first 6 transceivers use the x1 connection
+  # since they are in the same bank as the PLL. The others have to use the xN
+  # connection through the CGB.
+
+  if {$num_of_lanes > 6} {
+    set clk0_width 6
+    set clk1_width [expr $num_of_lanes - 6]
+
+  } else {
+    set clk0_width $num_of_lanes
+    set clk1_width 0
+  }
+
+  add_interface tx_serial_clk_x1 hssi_serial_clock sink
+  add_interface_port tx_serial_clk_x1 tx_serial_clk_x1 clk Input 1
+  set_port_property tx_serial_clk_x1 fragment_list \
+    [format "in(%d:%d)" $sig_offset $sig_offset]
+
+  add_interface phy_tx_serial_clk0 conduit end
+  add_interface_port phy_tx_serial_clk0 phy_tx_serial_clk0 clk Output $num_of_lanes
+
+  set _frag [format "out(%d:%d)" $sig_offset $sig_offset]
+  set sig_offset [expr $sig_offset + 1]
+  set frag "${_frag}"
+  for {set i 1} {$i < $clk0_width} {incr i} {
+    set frag [concat ${_frag} ${frag}]
+  }
+
+  if {$num_of_lanes > 6} {
+    add_interface tx_serial_clk_xN hssi_serial_clock sink
+    add_interface_port tx_serial_clk_xN tx_serial_clk_xN clk Input 1
+    set_port_property tx_serial_clk_xN fragment_list \
+      [format "in(%d:%d)" $sig_offset $sig_offset]
+
+    set _frag [format "out(%d:%d)" $sig_offset $sig_offset]
+    set sig_offset [expr $sig_offset + 1]
+    for {set i 0} {$i < $clk1_width} {incr i} {
+      set frag [concat ${_frag} ${frag}]
+    }
+  }
+
+  set_port_property phy_tx_serial_clk0 fragment_list $frag
+}
+
 proc glue_add_if_port_conduit {num ifname port phy_port dir width} {
   variable sig_offset
 
@@ -209,9 +256,8 @@ proc jesd204_phy_glue_elab {} {
     glue_add_if $num_of_lanes tx_coreclkin clock sink true
     glue_add_if_port $num_of_lanes tx_coreclkin tx_coreclkin clk Input 1 true
 
-    glue_add_if $num_of_lanes tx_serial_clk0 hssi_serial_clock sink true
-    glue_add_if_port $num_of_lanes tx_serial_clk0 tx_serial_clk0 clk Input 1 true
-  
+    glue_add_tx_serial_clk $num_of_lanes
+
     if {$soft_pcs} {
       set unused_width [expr $num_of_lanes * 88]
 
