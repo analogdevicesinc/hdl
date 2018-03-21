@@ -12,20 +12,20 @@ set_location_assignment PIN_AL8   -to ref_clk0               ; ## D04  FMCA_GBTC
 set_location_assignment PIN_AL7   -to "ref_clk0(n)"          ; ## D05  FMCA_GBTCLK0_M2C_N
 set_location_assignment PIN_AJ8   -to ref_clk1               ; ## B20  FMCA_GBTCLK1_M2C_P
 set_location_assignment PIN_AJ7   -to "ref_clk1(n)"          ; ## B21  FMCA_GBTCLK1_M2C_N
-set_location_assignment PIN_BA7   -to rx_serial_data[0]      ; ## A02  FMCA_DP1_M2C_P
-set_location_assignment PIN_BA8   -to "rx_serial_data[0](n)" ; ## A03  FMCA_DP1_M2C_N
-set_location_assignment PIN_AY5   -to rx_serial_data[1]      ; ## A06  FMCA_DP2_M2C_P
-set_location_assignment PIN_AY6   -to "rx_serial_data[1](n)" ; ## A07  FMCA_DP2_M2C_N
-set_location_assignment PIN_AW7   -to rx_serial_data[2]      ; ## C06  FMCA_DP0_M2C_P
-set_location_assignment PIN_AW8   -to "rx_serial_data[2](n)" ; ## C07  FMCA_DP0_M2C_N
+set_location_assignment PIN_AW7   -to rx_serial_data[0]      ; ## C06  FMCA_DP0_M2C_P
+set_location_assignment PIN_AW8   -to "rx_serial_data[0](n)" ; ## C07  FMCA_DP0_M2C_N
+set_location_assignment PIN_BA7   -to rx_serial_data[1]      ; ## A02  FMCA_DP1_M2C_P
+set_location_assignment PIN_BA8   -to "rx_serial_data[1](n)" ; ## A03  FMCA_DP1_M2C_N
+set_location_assignment PIN_AY5   -to rx_serial_data[2]      ; ## A06  FMCA_DP2_M2C_P
+set_location_assignment PIN_AY6   -to "rx_serial_data[2](n)" ; ## A07  FMCA_DP2_M2C_N
 set_location_assignment PIN_AV5   -to rx_serial_data[3]      ; ## A10  FMCA_DP3_M2C_P
 set_location_assignment PIN_AV6   -to "rx_serial_data[3](n)" ; ## A11  FMCA_DP3_M2C_N
-set_location_assignment PIN_BD5   -to tx_serial_data[0]      ; ## A22  FMCA_DP1_C2M_P (tx_serial_data_p[0])
-set_location_assignment PIN_BD6   -to "tx_serial_data[0](n)" ; ## A23  FMCA_DP1_C2M_N (tx_serial_data_n[0])
-set_location_assignment PIN_BB5   -to tx_serial_data[1]      ; ## A26  FMCA_DP2_C2M_P (tx_serial_data_p[1])
-set_location_assignment PIN_BB6   -to "tx_serial_data[1](n)" ; ## A27  FMCA_DP2_C2M_N (tx_serial_data_n[1])
-set_location_assignment PIN_BC7   -to tx_serial_data[2]      ; ## C02  FMCA_DP0_C2M_P (tx_serial_data_p[2])
-set_location_assignment PIN_BC8   -to "tx_serial_data[2](n)" ; ## C03  FMCA_DP0_C2M_N (tx_serial_data_n[2])
+set_location_assignment PIN_BC7   -to tx_serial_data[0]      ; ## C02  FMCA_DP0_C2M_P (tx_serial_data_p[2])
+set_location_assignment PIN_BC8   -to "tx_serial_data[0](n)" ; ## C03  FMCA_DP0_C2M_N (tx_serial_data_n[2])
+set_location_assignment PIN_BD5   -to tx_serial_data[1]      ; ## A22  FMCA_DP1_C2M_P (tx_serial_data_p[0])
+set_location_assignment PIN_BD6   -to "tx_serial_data[1](n)" ; ## A23  FMCA_DP1_C2M_N (tx_serial_data_n[0])
+set_location_assignment PIN_BB5   -to tx_serial_data[2]      ; ## A26  FMCA_DP2_C2M_P (tx_serial_data_p[1])
+set_location_assignment PIN_BB6   -to "tx_serial_data[2](n)" ; ## A27  FMCA_DP2_C2M_N (tx_serial_data_n[1])
 set_location_assignment PIN_BC3   -to tx_serial_data[3]      ; ## A30  FMCA_DP3_C2M_P (tx_serial_data_p[3])
 set_location_assignment PIN_BC4   -to "tx_serial_data[3](n)" ; ## A31  FMCA_DP3_C2M_N (tx_serial_data_n[3])
 

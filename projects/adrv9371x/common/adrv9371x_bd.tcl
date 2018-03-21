@@ -137,7 +137,7 @@ ad_xcvrpll  axi_ad9371_rx_os_xcvr/up_pll_rst util_ad9371_xcvr/up_cpll_rst_3
 ad_connect  sys_cpu_resetn util_ad9371_xcvr/up_rstn
 ad_connect  sys_cpu_clk util_ad9371_xcvr/up_clk
 
-ad_xcvrcon  util_ad9371_xcvr axi_ad9371_tx_xcvr axi_ad9371_tx_jesd
+ad_xcvrcon  util_ad9371_xcvr axi_ad9371_tx_xcvr axi_ad9371_tx_jesd {1 3 0 2}
 ad_reconct  util_ad9371_xcvr/tx_out_clk_0 axi_ad9371_tx_clkgen/clk
 ad_connect  axi_ad9371_tx_clkgen/clk_0 util_ad9371_xcvr/tx_clk_0
 ad_connect  axi_ad9371_tx_clkgen/clk_0 util_ad9371_xcvr/tx_clk_1
@@ -145,10 +145,6 @@ ad_connect  axi_ad9371_tx_clkgen/clk_0 util_ad9371_xcvr/tx_clk_2
 ad_connect  axi_ad9371_tx_clkgen/clk_0 util_ad9371_xcvr/tx_clk_3
 ad_connect  axi_ad9371_tx_clkgen/clk_0 axi_ad9371_tx_jesd/device_clk
 ad_connect  axi_ad9371_tx_clkgen/clk_0 axi_ad9371_tx_jesd_rstgen/slowest_sync_clk
-ad_reconct  util_ad9371_xcvr/tx_0 axi_ad9371_tx_jesd/tx_phy3
-ad_reconct  util_ad9371_xcvr/tx_1 axi_ad9371_tx_jesd/tx_phy0
-ad_reconct  util_ad9371_xcvr/tx_2 axi_ad9371_tx_jesd/tx_phy1
-ad_reconct  util_ad9371_xcvr/tx_3 axi_ad9371_tx_jesd/tx_phy2
 ad_xcvrcon  util_ad9371_xcvr axi_ad9371_rx_xcvr axi_ad9371_rx_jesd
 ad_reconct  util_ad9371_xcvr/rx_out_clk_0 axi_ad9371_rx_clkgen/clk
 ad_connect  axi_ad9371_rx_clkgen/clk_0 util_ad9371_xcvr/rx_clk_0
@@ -161,6 +157,15 @@ ad_connect  axi_ad9371_rx_os_clkgen/clk_0 util_ad9371_xcvr/rx_clk_2
 ad_connect  axi_ad9371_rx_os_clkgen/clk_0 util_ad9371_xcvr/rx_clk_3
 ad_connect  axi_ad9371_rx_os_clkgen/clk_0 axi_ad9371_rx_os_jesd/device_clk
 ad_connect  axi_ad9371_rx_os_clkgen/clk_0 axi_ad9371_rx_os_jesd_rstgen/slowest_sync_clk
+
+# lane re-mapping for RX
+# because the four RX lanes are shared between two JESD204 IP (RX and RX_OS) we
+# are reconnecting/remapping the lanes manually
+
+ad_reconct  axi_ad9371_rx_jesd/rx_phy0    util_ad9371_xcvr/rx_2
+ad_reconct  axi_ad9371_rx_jesd/rx_phy1    util_ad9371_xcvr/rx_0
+ad_reconct  axi_ad9371_rx_os_jesd/rx_phy0 util_ad9371_xcvr/rx_1
+ad_reconct  axi_ad9371_rx_os_jesd/rx_phy1 util_ad9371_xcvr/rx_3
 
 # dma clock & reset
 
