@@ -1,90 +1,25 @@
 ####################################################################################
-####################################################################################
-## Copyright 2011(c) Analog Devices, Inc.
+## Copyright 2018(c) Analog Devices, Inc.
 ## Auto-generated, do not modify!
 ####################################################################################
-####################################################################################
 
-M_DEPS += system_top.v
-M_DEPS += system_project.tcl
-M_DEPS += system_constr.xdc
-M_DEPS += system_bd.tcl
+PROJECT_NAME := motcon2_fmc_zed
+
 M_DEPS += ../common/motcon2_fmc_bd.tcl
-M_DEPS += ../../scripts/adi_project.tcl
-M_DEPS += ../../scripts/adi_env.tcl
-M_DEPS += ../../scripts/adi_board.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
 M_DEPS += ../../common/zed/zed_system_bd.tcl
 M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
-M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
-M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
-M_DEPS += ../../../library/axi_hdmi_tx/axi_hdmi_tx.xpr
-M_DEPS += ../../../library/axi_i2s_adi/axi_i2s_adi.xpr
-M_DEPS += ../../../library/axi_mc_controller/axi_mc_controller.xpr
-M_DEPS += ../../../library/axi_mc_current_monitor/axi_mc_current_monitor.xpr
-M_DEPS += ../../../library/axi_mc_speed/axi_mc_speed.xpr
-M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
-M_DEPS += ../../../library/util_cpack/util_cpack.xpr
-M_DEPS += ../../../library/util_gmii_to_rgmii/util_gmii_to_rgmii.xpr
-M_DEPS += ../../../library/util_i2c_mixer/util_i2c_mixer.xpr
 
-M_VIVADO := vivado -mode batch -source
+LIB_DEPS += axi_clkgen
+LIB_DEPS += axi_dmac
+LIB_DEPS += axi_hdmi_tx
+LIB_DEPS += axi_i2s_adi
+LIB_DEPS += axi_mc_controller
+LIB_DEPS += axi_mc_current_monitor
+LIB_DEPS += axi_mc_speed
+LIB_DEPS += axi_spdif_tx
+LIB_DEPS += util_cpack
+LIB_DEPS += util_gmii_to_rgmii
+LIB_DEPS += util_i2c_mixer
 
-M_FLIST := *.cache
-M_FLIST += *.data
-M_FLIST += *.xpr
-M_FLIST += *.log
-M_FLIST += *.jou
-M_FLIST +=  xgui
-M_FLIST += *.runs
-M_FLIST += *.srcs
-M_FLIST += *.sdk
-M_FLIST += *.hw
-M_FLIST += *.sim
-M_FLIST += .Xil
-M_FLIST += *.ip_user_files
-
-
-
-.PHONY: all lib clean clean-all
-all: lib motcon2_fmc_zed.sdk/system_top.hdf
-
-
-clean: 
-	rm -rf $(M_FLIST)
-
-
-clean-all:clean
-	$(MAKE) -C ../../../library/axi_clkgen clean
-	$(MAKE) -C ../../../library/axi_dmac clean
-	$(MAKE) -C ../../../library/axi_hdmi_tx clean
-	$(MAKE) -C ../../../library/axi_i2s_adi clean
-	$(MAKE) -C ../../../library/axi_mc_controller clean
-	$(MAKE) -C ../../../library/axi_mc_current_monitor clean
-	$(MAKE) -C ../../../library/axi_mc_speed clean
-	$(MAKE) -C ../../../library/axi_spdif_tx clean
-	$(MAKE) -C ../../../library/util_cpack clean
-	$(MAKE) -C ../../../library/util_gmii_to_rgmii clean
-	$(MAKE) -C ../../../library/util_i2c_mixer clean
-
-
-motcon2_fmc_zed.sdk/system_top.hdf: $(M_DEPS)
-	-rm -rf $(M_FLIST)
-	$(M_VIVADO) system_project.tcl >> motcon2_fmc_zed_vivado.log 2>&1
-
-
-lib:
-	$(MAKE) -C ../../../library/axi_clkgen
-	$(MAKE) -C ../../../library/axi_dmac
-	$(MAKE) -C ../../../library/axi_hdmi_tx
-	$(MAKE) -C ../../../library/axi_i2s_adi
-	$(MAKE) -C ../../../library/axi_mc_controller
-	$(MAKE) -C ../../../library/axi_mc_current_monitor
-	$(MAKE) -C ../../../library/axi_mc_speed
-	$(MAKE) -C ../../../library/axi_spdif_tx
-	$(MAKE) -C ../../../library/util_cpack
-	$(MAKE) -C ../../../library/util_gmii_to_rgmii
-	$(MAKE) -C ../../../library/util_i2c_mixer
-
-####################################################################################
-####################################################################################
+include ../../scripts/project-xilinx.mk
