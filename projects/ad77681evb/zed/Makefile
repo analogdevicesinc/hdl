@@ -26,6 +26,7 @@ M_DEPS += ../../../library/spi_engine/axi_spi_engine/axi_spi_engine.xpr
 M_DEPS += ../../../library/spi_engine/spi_engine_execution/spi_engine_execution.xpr
 M_DEPS += ../../../library/spi_engine/spi_engine_interconnect/spi_engine_interconnect.xpr
 M_DEPS += ../../../library/spi_engine/spi_engine_offload/spi_engine_offload.xpr
+M_DEPS += ../../../library/util_axis_upscale/util_axis_upscale.xpr
 M_DEPS += ../../../library/util_i2c_mixer/util_i2c_mixer.xpr
 
 M_VIVADO := vivado -mode batch -source
@@ -64,6 +65,7 @@ clean-all:clean
 	$(MAKE) -C ../../../library/spi_engine/spi_engine_execution clean
 	$(MAKE) -C ../../../library/spi_engine/spi_engine_interconnect clean
 	$(MAKE) -C ../../../library/spi_engine/spi_engine_offload clean
+	$(MAKE) -C ../../../library/util_axis_upscale clean
 	$(MAKE) -C ../../../library/util_i2c_mixer clean
 
 
@@ -82,6 +84,7 @@ lib:
 	$(MAKE) -C ../../../library/spi_engine/spi_engine_execution
 	$(MAKE) -C ../../../library/spi_engine/spi_engine_interconnect
 	$(MAKE) -C ../../../library/spi_engine/spi_engine_offload
+	$(MAKE) -C ../../../library/util_axis_upscale
 	$(MAKE) -C ../../../library/util_i2c_mixer
 
 ####################################################################################
