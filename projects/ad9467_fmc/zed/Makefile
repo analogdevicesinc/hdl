@@ -1,79 +1,22 @@
 ####################################################################################
-####################################################################################
-## Copyright 2011(c) Analog Devices, Inc.
+## Copyright 2018(c) Analog Devices, Inc.
 ## Auto-generated, do not modify!
 ####################################################################################
-####################################################################################
 
-M_DEPS += system_top.v
-M_DEPS += system_project.tcl
-M_DEPS += system_constr.xdc
-M_DEPS += system_bd.tcl
+PROJECT_NAME := ad9467_fmc_zed
+
 M_DEPS += ../common/ad9467_spi.v
 M_DEPS += ../common/ad9467_bd.tcl
-M_DEPS += ../../scripts/adi_project.tcl
-M_DEPS += ../../scripts/adi_env.tcl
-M_DEPS += ../../scripts/adi_board.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
 M_DEPS += ../../common/zed/zed_system_bd.tcl
 M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
-M_DEPS += ../../../library/axi_ad9467/axi_ad9467.xpr
-M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
-M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
-M_DEPS += ../../../library/axi_hdmi_tx/axi_hdmi_tx.xpr
-M_DEPS += ../../../library/axi_i2s_adi/axi_i2s_adi.xpr
-M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
-M_DEPS += ../../../library/util_i2c_mixer/util_i2c_mixer.xpr
 
-M_VIVADO := vivado -mode batch -source
+LIB_DEPS += axi_ad9467
+LIB_DEPS += axi_clkgen
+LIB_DEPS += axi_dmac
+LIB_DEPS += axi_hdmi_tx
+LIB_DEPS += axi_i2s_adi
+LIB_DEPS += axi_spdif_tx
+LIB_DEPS += util_i2c_mixer
 
-M_FLIST := *.cache
-M_FLIST += *.data
-M_FLIST += *.xpr
-M_FLIST += *.log
-M_FLIST += *.jou
-M_FLIST +=  xgui
-M_FLIST += *.runs
-M_FLIST += *.srcs
-M_FLIST += *.sdk
-M_FLIST += *.hw
-M_FLIST += *.sim
-M_FLIST += .Xil
-M_FLIST += *.ip_user_files
-
-
-
-.PHONY: all lib clean clean-all
-all: lib ad9467_fmc_zed.sdk/system_top.hdf
-
-
-clean: 
-	rm -rf $(M_FLIST)
-
-
-clean-all:clean
-	$(MAKE) -C ../../../library/axi_ad9467 clean
-	$(MAKE) -C ../../../library/axi_clkgen clean
-	$(MAKE) -C ../../../library/axi_dmac clean
-	$(MAKE) -C ../../../library/axi_hdmi_tx clean
-	$(MAKE) -C ../../../library/axi_i2s_adi clean
-	$(MAKE) -C ../../../library/axi_spdif_tx clean
-	$(MAKE) -C ../../../library/util_i2c_mixer clean
-
-
-ad9467_fmc_zed.sdk/system_top.hdf: $(M_DEPS)
-	-rm -rf $(M_FLIST)
-	$(M_VIVADO) system_project.tcl >> ad9467_fmc_zed_vivado.log 2>&1
-
-
-lib:
-	$(MAKE) -C ../../../library/axi_ad9467
-	$(MAKE) -C ../../../library/axi_clkgen
-	$(MAKE) -C ../../../library/axi_dmac
-	$(MAKE) -C ../../../library/axi_hdmi_tx
-	$(MAKE) -C ../../../library/axi_i2s_adi
-	$(MAKE) -C ../../../library/axi_spdif_tx
-	$(MAKE) -C ../../../library/util_i2c_mixer
-
-####################################################################################
-####################################################################################
+include ../../scripts/project-xilinx.mk
