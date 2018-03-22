@@ -1,67 +1,18 @@
 ####################################################################################
-####################################################################################
-## Copyright 2011(c) Analog Devices, Inc.
+## Copyright 2018(c) Analog Devices, Inc.
 ## Auto-generated, do not modify!
 ####################################################################################
-####################################################################################
 
-M_DEPS += system_top.v
-M_DEPS += system_project.tcl
-M_DEPS += system_constr.xdc
-M_DEPS += system_bd.tcl
-M_DEPS += ../../scripts/adi_project.tcl
-M_DEPS += ../../scripts/adi_env.tcl
-M_DEPS += ../../scripts/adi_board.tcl
+PROJECT_NAME := adv7511_kc705
+
 M_DEPS += ../../common/kc705/kc705_system_mig.prj
 M_DEPS += ../../common/kc705/kc705_system_constr.xdc
 M_DEPS += ../../common/kc705/kc705_system_bd.tcl
 M_DEPS += ../../adv7511/common/adv7511_bd.tcl
 M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
-M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
-M_DEPS += ../../../library/axi_hdmi_tx/axi_hdmi_tx.xpr
-M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
 
-M_VIVADO := vivado -mode batch -source
+LIB_DEPS += axi_clkgen
+LIB_DEPS += axi_hdmi_tx
+LIB_DEPS += axi_spdif_tx
 
-M_FLIST := *.cache
-M_FLIST += *.data
-M_FLIST += *.xpr
-M_FLIST += *.log
-M_FLIST += *.jou
-M_FLIST +=  xgui
-M_FLIST += *.runs
-M_FLIST += *.srcs
-M_FLIST += *.sdk
-M_FLIST += *.hw
-M_FLIST += *.sim
-M_FLIST += .Xil
-M_FLIST += *.ip_user_files
-
-
-
-.PHONY: all lib clean clean-all
-all: lib adv7511_kc705.sdk/system_top.hdf
-
-
-clean: 
-	rm -rf $(M_FLIST)
-
-
-clean-all:clean
-	$(MAKE) -C ../../../library/axi_clkgen clean
-	$(MAKE) -C ../../../library/axi_hdmi_tx clean
-	$(MAKE) -C ../../../library/axi_spdif_tx clean
-
-
-adv7511_kc705.sdk/system_top.hdf: $(M_DEPS)
-	-rm -rf $(M_FLIST)
-	$(M_VIVADO) system_project.tcl >> adv7511_kc705_vivado.log 2>&1
-
-
-lib:
-	$(MAKE) -C ../../../library/axi_clkgen
-	$(MAKE) -C ../../../library/axi_hdmi_tx
-	$(MAKE) -C ../../../library/axi_spdif_tx
-
-####################################################################################
-####################################################################################
+include ../../scripts/project-xilinx.mk

@@ -1,85 +1,26 @@
 ####################################################################################
-####################################################################################
-## Copyright 2011(c) Analog Devices, Inc.
+## Copyright 2018(c) Analog Devices, Inc.
 ## Auto-generated, do not modify!
 ####################################################################################
-####################################################################################
 
-M_DEPS += system_top.v
-M_DEPS += system_project.tcl
-M_DEPS += system_constr.xdc
-M_DEPS += system_bd.tcl
+PROJECT_NAME := fmcjesdadc1_kc705
+
 M_DEPS += ../common/fmcjesdadc1_spi.v
 M_DEPS += ../common/fmcjesdadc1_bd.tcl
-M_DEPS += ../../scripts/adi_project.tcl
-M_DEPS += ../../scripts/adi_env.tcl
-M_DEPS += ../../scripts/adi_board.tcl
 M_DEPS += ../../common/kc705/kc705_system_mig.prj
 M_DEPS += ../../common/kc705/kc705_system_constr.xdc
 M_DEPS += ../../common/kc705/kc705_system_bd.tcl
 M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
 M_DEPS += ../../../library/common/ad_sysref_gen.v
-M_DEPS += ../../../library/axi_ad9250/axi_ad9250.xpr
-M_DEPS += ../../../library/xilinx/axi_adxcvr/axi_adxcvr.xpr
-M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
-M_DEPS += ../../../library/jesd204/axi_jesd204_rx/axi_jesd204_rx.xpr
-M_DEPS += ../../../library/jesd204/jesd204_rx/jesd204_rx.xpr
-M_DEPS += ../../../library/xilinx/util_adxcvr/util_adxcvr.xpr
-M_DEPS += ../../../library/util_bsplit/util_bsplit.xpr
-M_DEPS += ../../../library/util_cpack/util_cpack.xpr
 
-M_VIVADO := vivado -mode batch -source
+LIB_DEPS += axi_ad9250
+LIB_DEPS += axi_dmac
+LIB_DEPS += jesd204/axi_jesd204_rx
+LIB_DEPS += jesd204/jesd204_rx
+LIB_DEPS += util_bsplit
+LIB_DEPS += util_cpack
+LIB_DEPS += xilinx/axi_adxcvr
+LIB_DEPS += xilinx/util_adxcvr
 
-M_FLIST := *.cache
-M_FLIST += *.data
-M_FLIST += *.xpr
-M_FLIST += *.log
-M_FLIST += *.jou
-M_FLIST +=  xgui
-M_FLIST += *.runs
-M_FLIST += *.srcs
-M_FLIST += *.sdk
-M_FLIST += *.hw
-M_FLIST += *.sim
-M_FLIST += .Xil
-M_FLIST += *.ip_user_files
-
-
-
-.PHONY: all lib clean clean-all
-all: lib fmcjesdadc1_kc705.sdk/system_top.hdf
-
-
-clean: 
-	rm -rf $(M_FLIST)
-
-
-clean-all:clean
-	$(MAKE) -C ../../../library/axi_ad9250 clean
-	$(MAKE) -C ../../../library/xilinx/axi_adxcvr clean
-	$(MAKE) -C ../../../library/axi_dmac clean
-	$(MAKE) -C ../../../library/jesd204/axi_jesd204_rx clean
-	$(MAKE) -C ../../../library/jesd204/jesd204_rx clean
-	$(MAKE) -C ../../../library/xilinx/util_adxcvr clean
-	$(MAKE) -C ../../../library/util_bsplit clean
-	$(MAKE) -C ../../../library/util_cpack clean
-
-
-fmcjesdadc1_kc705.sdk/system_top.hdf: $(M_DEPS)
-	-rm -rf $(M_FLIST)
-	$(M_VIVADO) system_project.tcl >> fmcjesdadc1_kc705_vivado.log 2>&1
-
-
-lib:
-	$(MAKE) -C ../../../library/axi_ad9250
-	$(MAKE) -C ../../../library/xilinx/axi_adxcvr
-	$(MAKE) -C ../../../library/axi_dmac
-	$(MAKE) -C ../../../library/jesd204/axi_jesd204_rx
-	$(MAKE) -C ../../../library/jesd204/jesd204_rx
-	$(MAKE) -C ../../../library/xilinx/util_adxcvr
-	$(MAKE) -C ../../../library/util_bsplit
-	$(MAKE) -C ../../../library/util_cpack
-
-####################################################################################
-####################################################################################
+include ../../scripts/project-xilinx.mk
