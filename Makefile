@@ -14,7 +14,7 @@ help:
 	@echo "To build a specific project:"
 	@echo "    make proj.board"
 	@echo "e.g.,"
-	@echo "    make fmcomms1.zed"
+	@echo "    make adv7511.zed"
 
 
 PROJECTS := $(filter-out $(NO_PROJ), $(shell ls projects))
