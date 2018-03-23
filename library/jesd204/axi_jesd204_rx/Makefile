@@ -1,14 +1,12 @@
 ####################################################################################
-####################################################################################
-## Copyright 2011(c) Analog Devices, Inc.
+## Copyright 2018(c) Analog Devices, Inc.
 ## Auto-generated, do not modify!
 ####################################################################################
-####################################################################################
+
+LIBRARY_NAME := axi_jesd204_rx
 
 M_DEPS += ../../common/up_axi.v
 M_DEPS += ../../common/up_clock_mon.v
-M_DEPS += ../../scripts/adi_env.tcl
-M_DEPS += ../../scripts/adi_ip.tcl
 M_DEPS += ../../xilinx/common/up_clock_mon_constr.xdc
 M_DEPS += axi_jesd204_rx.v
 M_DEPS += axi_jesd204_rx_constr.xdc
@@ -16,9 +14,6 @@ M_DEPS += axi_jesd204_rx_ip.tcl
 M_DEPS += jesd204_up_ilas_mem.v
 M_DEPS += jesd204_up_rx.v
 M_DEPS += jesd204_up_rx_lane.v
-
-M_DEPS += ../../jesd204/axi_jesd204_common/axi_jesd204_common.xpr
-M_DEPS += ../../util_cdc/util_cdc.xpr
 
 M_DEPS += ../../jesd204/interfaces/jesd204_rx_cfg.xml
 M_DEPS += ../../jesd204/interfaces/jesd204_rx_cfg_rtl.xml
@@ -29,41 +24,9 @@ M_DEPS += ../../jesd204/interfaces/jesd204_rx_ilas_config_rtl.xml
 M_DEPS += ../../jesd204/interfaces/jesd204_rx_status.xml
 M_DEPS += ../../jesd204/interfaces/jesd204_rx_status_rtl.xml
 
-M_VIVADO := vivado -mode batch -source
+LIB_DEPS += jesd204/axi_jesd204_common
+LIB_DEPS += util_cdc
 
-M_FLIST := *.cache
-M_FLIST += *.data
-M_FLIST += *.xpr
-M_FLIST += *.log
-M_FLIST += component.xml
-M_FLIST += *.jou
-M_FLIST +=  xgui
-M_FLIST += *.ip_user_files
-M_FLIST += *.srcs
-M_FLIST += *.hw
-M_FLIST += *.sim
-M_FLIST += .Xil
+INTERFACE_DEPS += jesd204/interfaces
 
-
-
-.PHONY: all dep clean clean-all
-all: dep axi_jesd204_rx.xpr
-
-
-clean:clean-all
-
-
-clean-all:
-	rm -rf $(M_FLIST)
-
-
-axi_jesd204_rx.xpr: $(M_DEPS)
-	-rm -rf $(M_FLIST)
-	$(M_VIVADO) axi_jesd204_rx_ip.tcl  >> axi_jesd204_rx_ip.log 2>&1
-
-dep:
-	$(MAKE) -C ../../jesd204/axi_jesd204_common/
-	$(MAKE) -C ../../util_cdc/
-	$(MAKE) -C ../../jesd204/interfaces/
-####################################################################################
-####################################################################################
+include ../../scripts/library.mk
