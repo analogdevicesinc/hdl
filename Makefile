@@ -19,7 +19,7 @@ help:
 
 PROJECTS := $(filter-out $(NO_PROJ), $(notdir $(wildcard projects/*)))
 SUBPROJECTS := $(foreach projname,$(PROJECTS), \
-	$(foreach archname,$(notdir $(wildcard projects/$(projname)/*)), \
+	$(foreach archname,$(notdir $(subst /Makefile,,$(wildcard projects/$(projname)/*/Makefile))), \
 		$(projname).$(archname)))
 
 .PHONY: lib all clean clean-all $(SUBPROJECTS)
