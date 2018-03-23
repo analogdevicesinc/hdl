@@ -17,18 +17,15 @@ help:
 	@echo "    make adv7511.zed"
 
 
-PROJECTS := $(filter-out $(NO_PROJ), $(shell ls projects))
-define PROJECT_RULE
-$1.$2:
-	cd projects/$1/$2; $(MAKE)
-endef
-define APROJECT_RULE
-	$(foreach archname,$(shell ls projects/$1), $(eval $(call PROJECT_RULE,$1,$(archname))))
-endef
-$(foreach projname,$(PROJECTS), $(eval $(call APROJECT_RULE,$(projname))))
+PROJECTS := $(filter-out $(NO_PROJ), $(notdir $(wildcard projects/*)))
+SUBPROJECTS := $(foreach projname,$(PROJECTS), \
+	$(foreach archname,$(notdir $(wildcard projects/$(projname)/*)), \
+		$(projname).$(archname)))
 
+.PHONY: lib all clean clean-all $(SUBPROJECTS)
 
-.PHONY: lib all clean clean-all
+$(SUBPROJECTS):
+	$(MAKE) -C projects/$(subst .,/,$@)
 
 lib:
 	$(MAKE) -C library/ all
