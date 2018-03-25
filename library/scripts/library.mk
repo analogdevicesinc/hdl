@@ -5,6 +5,8 @@
 # Assumes this file is in library/scripts/library.mk
 HDL_LIBRARY_PATH := $(subst scripts/library.mk,,$(lastword $(MAKEFILE_LIST)))
 
+include $(HDL_LIBRARY_PATH)../quiet.mk
+
 VIVADO := vivado -mode batch -source
 
 CLEAN_TARGET := *.cache
@@ -30,7 +32,9 @@ all: altera xilinx
 clean: clean-all
 
 clean-all:
-	rm -rf $(CLEAN_TARGET)
+	$(call clean, \
+		$(CLEAN_TARGET), \
+		$(HL)$(LIBRARY_NAME)$(NC) library)
 
 ifneq ($(ALTERA_DEPS),)
 
@@ -59,7 +63,10 @@ xilinx: xilinx_dep component.xml
 
 component.xml: $(XILINX_DEPS)
 	-rm -rf $(CLEAN_TARGET)
-	$(VIVADO) $(LIBRARY_NAME)_ip.tcl  >> $(LIBRARY_NAME)_ip.log 2>&1
+	$(call build, \
+		$(VIVADO) $(LIBRARY_NAME)_ip.tcl, \
+		$(LIBRARY_NAME)_ip.log, \
+		$(HL)$(LIBRARY_NAME)$(NC) library)
 
 xilinx_dep:
 	@for lib in $(XILINX_LIB_DEPS); do \

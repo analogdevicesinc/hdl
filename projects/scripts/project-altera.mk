@@ -6,6 +6,8 @@
 HDL_PROJECT_PATH := $(subst scripts/project-altera.mk,,$(lastword $(MAKEFILE_LIST)))
 HDL_LIBRARY_PATH := $(HDL_PROJECT_PATH)../library/
 
+include $(HDL_PROJECT_PATH)../quiet.mk
+
 ifeq ($(NIOS2_MMU),)
   NIOS2_MMU := 1
 endif
@@ -62,7 +64,9 @@ all: lib $(PROJECT_NAME).sof
 
 
 clean:
-	rm -rf $(CLEAN_TARGET)
+	$(call clean, \
+		$(CLEAN_TARGET), \
+		$(HL)$(PROJECT_NAME)$(NC) project)
 
 clean-all: clean
 	@for lib in $(LIB_DEPS); do \
@@ -71,7 +75,10 @@ clean-all: clean
 
 $(PROJECT_NAME).sof: $(M_DEPS)
 	-rm -rf $(CLEAN_TARGET)
-	$(ALTERA) system_project.tcl  >> $(PROJECT_NAME)_quartus.log 2>&1
+	$(call build,\
+		$(ALTERA) system_project.tcl, \
+		$(PROJECT_NAME)_quartus.log, \
+		$(HL)$(PROJECT_NAME)$(NC))
 
 lib:
 	@for lib in $(LIB_DEPS); do \
