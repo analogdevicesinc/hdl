@@ -5,6 +5,8 @@
 ####################################################################################
 ####################################################################################
 
+include ../../quiet.mk
+
 M_DEPS := interfaces_ip.tcl
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
@@ -36,10 +38,15 @@ xilinx: if_xcvr_cm.xml if_xcvr_cm_rtl.xml if_xcvr_ch.xml if_xcvr_ch_rtl.xml if_g
 clean:clean-all
 
 clean-all:
-	rm -rf $(M_FLIST)
+	$(call clean, \
+		$(M_FLIST), \
+		interface definitions)
 
 %.xml: $(M_DEPS)
-	$(M_VIVADO) interfaces_ip.tcl >> interfaces_ip.log 2>&1
+	$(call build, \
+		$(M_VIVADO) interfaces_ip.tcl, \
+		interfaces_ip.log, \
+		interface definitions)
 
 ####################################################################################
 ####################################################################################

@@ -6,6 +6,8 @@
 HDL_PROJECT_PATH := $(subst scripts/project-xilinx.mk,,$(lastword $(MAKEFILE_LIST)))
 HDL_LIBRARY_PATH := $(HDL_PROJECT_PATH)../library/
 
+include $(HDL_PROJECT_PATH)../quiet.mk
+
 VIVADO := vivado -mode batch -source
 
 CLEAN_TARGET := *.cache
@@ -38,7 +40,9 @@ M_DEPS += $(foreach dep,$(LIB_DEPS),$(HDL_LIBRARY_PATH)$(dep)/component.xml)
 all: lib $(PROJECT_NAME).sdk/system_top.hdf
 
 clean:
-	rm -rf $(CLEAN_TARGET)
+	$(call clean, \
+		$(CLEAN_TARGET), \
+		$(HL)$(PROJECT_NAME)$(NC) project)
 
 clean-all: clean
 	@for lib in $(LIB_DEPS); do \
@@ -47,7 +51,10 @@ clean-all: clean
 
 $(PROJECT_NAME).sdk/system_top.hdf: $(M_DEPS)
 	-rm -rf $(CLEAN_TARGET)
-	$(VIVADO) system_project.tcl >> $(PROJECT_NAME)_vivado.log 2>&1
+	$(call build, \
+		$(VIVADO) system_project.tcl, \
+		$(PROJECT_NAME)_vivado.log, \
+		$(HL)$(PROJECT_NAME)$(NC) project)
 
 lib:
 	@for lib in $(LIB_DEPS); do \
