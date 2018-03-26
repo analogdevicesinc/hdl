@@ -31,7 +31,7 @@ M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_project.tcl
 M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_env.tcl
 M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_board.tcl
 
-M_DEPS += $(foreach dep,$(LIB_DEPS),$(HDL_LIBRARY_PATH)$(dep)/$(notdir $(dep)).xpr)
+M_DEPS += $(foreach dep,$(LIB_DEPS),$(HDL_LIBRARY_PATH)$(dep)/component.xml)
 
 .PHONY: all lib clean clean-all
 all: lib $(PROJECT_NAME).sdk/system_top.hdf
