@@ -10,7 +10,6 @@ M_DEPS += ../common/up_adc_channel.v
 M_DEPS += ../common/up_adc_common.v
 M_DEPS += ../common/up_axi.v
 M_DEPS += ../common/up_clock_mon.v
-M_DEPS += ../common/up_delay_cntrl.v
 M_DEPS += ../common/up_xfer_cntrl.v
 M_DEPS += ../common/up_xfer_status.v
 M_DEPS += ad7401.v

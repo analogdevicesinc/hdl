@@ -7,7 +7,6 @@ adi_ip_create axi_mc_current_monitor
 adi_ip_files axi_mc_current_monitor [list \
   "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
-  "$ad_hdl_dir/library/common/up_delay_cntrl.v" \
   "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
   "$ad_hdl_dir/library/common/up_xfer_status.v" \
   "$ad_hdl_dir/library/common/up_clock_mon.v" \
