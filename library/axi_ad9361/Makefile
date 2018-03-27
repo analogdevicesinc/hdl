@@ -7,7 +7,6 @@ LIBRARY_NAME := axi_ad9361
 
 M_DEPS += ../common/ad_addsub.v
 M_DEPS += ../common/ad_datafmt.v
-M_DEPS += ../common/ad_dcfilter.v
 M_DEPS += ../common/ad_dds.v
 M_DEPS += ../common/ad_dds_1.v
 M_DEPS += ../common/ad_dds_sine.v
@@ -29,6 +28,7 @@ M_DEPS += ../common/up_xfer_status.v
 M_DEPS += ../xilinx/common/ad_data_clk.v
 M_DEPS += ../xilinx/common/ad_data_in.v
 M_DEPS += ../xilinx/common/ad_data_out.v
+M_DEPS += ../xilinx/common/ad_dcfilter.v
 M_DEPS += ../xilinx/common/ad_mul.v
 M_DEPS += ../xilinx/common/ad_rst_constr.xdc
 M_DEPS += ../xilinx/common/up_clock_mon_constr.xdc
