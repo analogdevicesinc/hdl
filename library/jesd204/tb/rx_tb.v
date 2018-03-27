@@ -45,6 +45,7 @@
 module rx_tb;
   parameter VCD_FILE = "rx_tb.vcd";
   parameter NUM_LANES = 1;
+  parameter NUM_LINKS = 1;
   parameter OCTETS_PER_FRAME = 8;
   parameter FRAMES_PER_MULTIFRAME = 32;
 
@@ -96,12 +97,13 @@ module rx_tb;
   reg [3:0] charisk = 4'b1111;
   reg [3:0] disperr = 4'b0000;
   reg [3:0] notintable = 4'b0000;
+  wire [NUM_LINKS-1:0] sync;
 
   integer counter = 'h00;
   wire [31:0] counter2 = (counter - 'h10) * 4;
 
   always @(posedge clk) begin
-    if (sync == 1'b0) begin
+    if ( &sync == 1'b0 ) begin
       counter <= 'h00;
       charisk <= 4'b1111;
       data <= {KCHAR_CGS,KCHAR_CGS,KCHAR_CGS,KCHAR_CGS};
@@ -134,6 +136,7 @@ module rx_tb;
   end
 
   wire [NUM_LANES-1:0] cfg_lanes_disable;
+  wire [NUM_LINKS-1:0] cfg_links_disable;
   wire [7:0] cfg_beats_per_multiframe;
   wire [7:0] cfg_octets_per_frame;
   wire [7:0] cfg_lmfc_offset;
@@ -144,12 +147,14 @@ module rx_tb;
 
   jesd204_rx_static_config #(
     .NUM_LANES(NUM_LANES),
+    .NUM_LINKS(NUM_LINKS),
     .OCTETS_PER_FRAME(OCTETS_PER_FRAME),
     .FRAMES_PER_MULTIFRAME(FRAMES_PER_MULTIFRAME)
   ) i_cfg (
     .clk(clk),
 
     .cfg_lanes_disable(cfg_lanes_disable),
+    .cfg_links_disable(cfg_links_disable),
     .cfg_beats_per_multiframe(cfg_beats_per_multiframe),
     .cfg_octets_per_frame(cfg_octets_per_frame),
     .cfg_lmfc_offset(cfg_lmfc_offset),
@@ -160,12 +165,14 @@ module rx_tb;
   );
 
   jesd204_rx #(
-    .NUM_LANES(NUM_LANES)
+    .NUM_LANES(NUM_LANES),
+    .NUM_LINKS(NUM_LINKS)
   ) i_rx (
     .clk(clk),
     .reset(reset),
 
     .cfg_lanes_disable(cfg_lanes_disable),
+    .cfg_links_disable(cfg_links_disable),
     .cfg_beats_per_multiframe(cfg_beats_per_multiframe),
     .cfg_octets_per_frame(cfg_octets_per_frame),
     .cfg_lmfc_offset(cfg_lmfc_offset),
