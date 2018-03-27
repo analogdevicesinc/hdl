@@ -54,7 +54,6 @@ M_DEPS += ../../../library/common/up_adc_channel.v
 M_DEPS += ../../../library/common/up_adc_common.v
 M_DEPS += ../../../library/common/up_axi.v
 M_DEPS += ../../../library/common/up_clock_mon.v
-M_DEPS += ../../../library/common/up_delay_cntrl.v
 M_DEPS += ../../../library/common/up_xfer_cntrl.v
 M_DEPS += ../../../library/common/up_xfer_status.v
 M_DEPS += ../../../library/jesd204/jesd204_soft_pcs_rx/8b10b_decoder.v
