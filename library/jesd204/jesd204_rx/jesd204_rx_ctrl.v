@@ -43,12 +43,14 @@
 //
 
 module jesd204_rx_ctrl #(
-  parameter NUM_LANES = 1
+  parameter NUM_LANES = 1,
+  parameter NUM_LINKS = 1
 ) (
   input clk,
   input reset,
 
   input [NUM_LANES-1:0] cfg_lanes_disable,
+  input [NUM_LINKS-1:0] cfg_links_disable,
 
   input phy_ready,
 
@@ -61,7 +63,7 @@ module jesd204_rx_ctrl #(
 
   input lmfc_edge,
 
-  output sync,
+  output [NUM_LINKS-1:0] sync,
   output reg latency_monitor_reset,
 
   output reg [1:0] status_state
@@ -83,7 +85,7 @@ reg [2:0] next_state = STATE_RESET;
 
 reg [NUM_LANES-1:0] cgs_rst = {NUM_LANES{1'b1}};
 reg [NUM_LANES-1:0] ifs_rst = {NUM_LANES{1'b1}};
-reg sync_n = 1'b1;
+reg [NUM_LINKS-1:0] sync_n = {NUM_LINKS{1'b1}};
 reg en_align = 1'b0;
 reg state_good = 1'b0;
 
@@ -111,16 +113,16 @@ always @(posedge clk) begin
   STATE_RESET: begin
     cgs_rst <= {NUM_LANES{1'b1}};
     ifs_rst <= {NUM_LANES{1'b1}};
-    sync_n <= 1'b1;
+    sync_n <= {NUM_LINKS{1'b1}};
     latency_monitor_reset <= 1'b1;
   end
   STATE_CGS: begin
-    sync_n <= 1'b0;
+    sync_n <= {NUM_LINKS{1'b0}} ^ cfg_links_disable;
     cgs_rst <= cfg_lanes_disable;
   end
   STATE_SYNCHRONIZED: begin
     if (lmfc_edge == 1'b1) begin
-      sync_n <= 1'b1;
+      sync_n <= {NUM_LINKS{1'b1}};
       ifs_rst <= cfg_lanes_disable;
       latency_monitor_reset <= 1'b0;
     end

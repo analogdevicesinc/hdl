@@ -43,7 +43,8 @@
 //
 
 module jesd204_rx #(
-  parameter NUM_LANES = 1
+  parameter NUM_LANES = 1,
+  parameter NUM_LINKS = 1
 ) (
   input clk,
   input reset,
@@ -60,7 +61,7 @@ module jesd204_rx #(
   output event_sysref_alignment_error,
   output event_sysref_edge,
 
-  output sync,
+  output [NUM_LINKS-1:0] sync,
 
   output phy_en_char_align,
 
@@ -70,6 +71,7 @@ module jesd204_rx #(
   output [3:0] rx_sof,
 
   input [NUM_LANES-1:0] cfg_lanes_disable,
+  input [NUM_LINKS-1:0] cfg_links_disable,
   input [7:0] cfg_beats_per_multiframe,
   input [7:0] cfg_octets_per_frame,
   input [7:0] cfg_lmfc_offset,
@@ -225,12 +227,14 @@ jesd204_lmfc i_lmfc (
 );
 
 jesd204_rx_ctrl #(
-  .NUM_LANES(NUM_LANES)
+  .NUM_LANES(NUM_LANES),
+  .NUM_LINKS(NUM_LINKS)
 ) i_rx_ctrl (
   .clk(clk),
   .reset(reset),
 
   .cfg_lanes_disable(cfg_lanes_disable),
+  .cfg_links_disable(cfg_links_disable),
 
   .phy_ready(1'b1),
   .phy_en_char_align(phy_en_char_align),
