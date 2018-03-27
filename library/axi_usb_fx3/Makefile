@@ -5,11 +5,12 @@
 
 LIBRARY_NAME := axi_usb_fx3
 
-M_DEPS += ../common/up_axi.v
-M_DEPS += axi_usb_fx3.v
-M_DEPS += axi_usb_fx3_core.v
-M_DEPS += axi_usb_fx3_if.v
-M_DEPS += axi_usb_fx3_ip.tcl
-M_DEPS += axi_usb_fx3_reg.v
+GENERIC_DEPS += ../common/up_axi.v
+GENERIC_DEPS += axi_usb_fx3.v
+GENERIC_DEPS += axi_usb_fx3_core.v
+GENERIC_DEPS += axi_usb_fx3_if.v
+GENERIC_DEPS += axi_usb_fx3_reg.v
+
+XILINX_DEPS += axi_usb_fx3_ip.tcl
 
 include ../scripts/library.mk

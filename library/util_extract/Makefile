@@ -5,7 +5,8 @@
 
 LIBRARY_NAME := util_extract
 
-M_DEPS += util_extract.v
-M_DEPS += util_extract_ip.tcl
+GENERIC_DEPS += util_extract.v
+
+XILINX_DEPS += util_extract_ip.tcl
 
 include ../scripts/library.mk

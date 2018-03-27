@@ -5,9 +5,13 @@
 
 LIBRARY_NAME := util_wfifo
 
-M_DEPS += ../common/ad_mem.v
-M_DEPS += util_wfifo.v
-M_DEPS += util_wfifo_constr.xdc
-M_DEPS += util_wfifo_ip.tcl
+GENERIC_DEPS += ../common/ad_mem.v
+GENERIC_DEPS += util_wfifo.v
+
+XILINX_DEPS += util_wfifo_constr.xdc
+XILINX_DEPS += util_wfifo_ip.tcl
+
+ALTERA_DEPS += util_wfifo_constr.sdc
+ALTERA_DEPS += util_wfifo_hw.tcl
 
 include ../scripts/library.mk

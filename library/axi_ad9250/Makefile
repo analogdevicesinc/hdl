@@ -5,25 +5,32 @@
 
 LIBRARY_NAME := axi_ad9250
 
-M_DEPS += ../common/ad_datafmt.v
-M_DEPS += ../common/ad_pnmon.v
-M_DEPS += ../common/ad_rst.v
-M_DEPS += ../common/ad_xcvr_rx_if.v
-M_DEPS += ../common/up_adc_channel.v
-M_DEPS += ../common/up_adc_common.v
-M_DEPS += ../common/up_axi.v
-M_DEPS += ../common/up_clock_mon.v
-M_DEPS += ../common/up_xfer_cntrl.v
-M_DEPS += ../common/up_xfer_status.v
-M_DEPS += ../xilinx/common/ad_rst_constr.xdc
-M_DEPS += ../xilinx/common/up_clock_mon_constr.xdc
-M_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
-M_DEPS += ../xilinx/common/up_xfer_status_constr.xdc
-M_DEPS += axi_ad9250.v
-M_DEPS += axi_ad9250_channel.v
-M_DEPS += axi_ad9250_constr.xdc
-M_DEPS += axi_ad9250_if.v
-M_DEPS += axi_ad9250_ip.tcl
-M_DEPS += axi_ad9250_pnmon.v
+GENERIC_DEPS += ../common/ad_datafmt.v
+GENERIC_DEPS += ../common/ad_pnmon.v
+GENERIC_DEPS += ../common/ad_rst.v
+GENERIC_DEPS += ../common/ad_xcvr_rx_if.v
+GENERIC_DEPS += ../common/up_adc_channel.v
+GENERIC_DEPS += ../common/up_adc_common.v
+GENERIC_DEPS += ../common/up_axi.v
+GENERIC_DEPS += ../common/up_clock_mon.v
+GENERIC_DEPS += ../common/up_xfer_cntrl.v
+GENERIC_DEPS += ../common/up_xfer_status.v
+GENERIC_DEPS += axi_ad9250.v
+GENERIC_DEPS += axi_ad9250_channel.v
+GENERIC_DEPS += axi_ad9250_if.v
+GENERIC_DEPS += axi_ad9250_pnmon.v
+
+XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
+XILINX_DEPS += ../xilinx/common/up_clock_mon_constr.xdc
+XILINX_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
+XILINX_DEPS += ../xilinx/common/up_xfer_status_constr.xdc
+XILINX_DEPS += axi_ad9250_constr.xdc
+XILINX_DEPS += axi_ad9250_ip.tcl
+
+ALTERA_DEPS += ../altera/common/up_clock_mon_constr.sdc
+ALTERA_DEPS += ../altera/common/up_rst_constr.sdc
+ALTERA_DEPS += ../altera/common/up_xfer_cntrl_constr.sdc
+ALTERA_DEPS += ../altera/common/up_xfer_status_constr.sdc
+ALTERA_DEPS += axi_ad9250_hw.tcl
 
 include ../scripts/library.mk

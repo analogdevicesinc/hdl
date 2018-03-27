@@ -5,28 +5,38 @@
 
 LIBRARY_NAME := axi_jesd204_rx
 
-M_DEPS += ../../common/up_axi.v
-M_DEPS += ../../common/up_clock_mon.v
-M_DEPS += ../../xilinx/common/up_clock_mon_constr.xdc
-M_DEPS += axi_jesd204_rx.v
-M_DEPS += axi_jesd204_rx_constr.xdc
-M_DEPS += axi_jesd204_rx_ip.tcl
-M_DEPS += jesd204_up_ilas_mem.v
-M_DEPS += jesd204_up_rx.v
-M_DEPS += jesd204_up_rx_lane.v
+GENERIC_DEPS += ../../common/up_axi.v
+GENERIC_DEPS += ../../common/up_clock_mon.v
+GENERIC_DEPS += axi_jesd204_rx.v
+GENERIC_DEPS += jesd204_up_ilas_mem.v
+GENERIC_DEPS += jesd204_up_rx.v
+GENERIC_DEPS += jesd204_up_rx_lane.v
 
-M_DEPS += ../../jesd204/interfaces/jesd204_rx_cfg.xml
-M_DEPS += ../../jesd204/interfaces/jesd204_rx_cfg_rtl.xml
-M_DEPS += ../../jesd204/interfaces/jesd204_rx_event.xml
-M_DEPS += ../../jesd204/interfaces/jesd204_rx_event_rtl.xml
-M_DEPS += ../../jesd204/interfaces/jesd204_rx_ilas_config.xml
-M_DEPS += ../../jesd204/interfaces/jesd204_rx_ilas_config_rtl.xml
-M_DEPS += ../../jesd204/interfaces/jesd204_rx_status.xml
-M_DEPS += ../../jesd204/interfaces/jesd204_rx_status_rtl.xml
+XILINX_DEPS += ../../xilinx/common/up_clock_mon_constr.xdc
+XILINX_DEPS += axi_jesd204_rx_constr.xdc
+XILINX_DEPS += axi_jesd204_rx_ip.tcl
 
-LIB_DEPS += jesd204/axi_jesd204_common
-LIB_DEPS += util_cdc
+XILINX_DEPS += ../../jesd204/interfaces/jesd204_rx_cfg.xml
+XILINX_DEPS += ../../jesd204/interfaces/jesd204_rx_cfg_rtl.xml
+XILINX_DEPS += ../../jesd204/interfaces/jesd204_rx_event.xml
+XILINX_DEPS += ../../jesd204/interfaces/jesd204_rx_event_rtl.xml
+XILINX_DEPS += ../../jesd204/interfaces/jesd204_rx_ilas_config.xml
+XILINX_DEPS += ../../jesd204/interfaces/jesd204_rx_ilas_config_rtl.xml
+XILINX_DEPS += ../../jesd204/interfaces/jesd204_rx_status.xml
+XILINX_DEPS += ../../jesd204/interfaces/jesd204_rx_status_rtl.xml
 
-INTERFACE_DEPS += jesd204/interfaces
+XILINX_LIB_DEPS += jesd204/axi_jesd204_common
+XILINX_LIB_DEPS += util_cdc
+
+XILINX_INTERFACE_DEPS += jesd204/interfaces
+
+ALTERA_DEPS += ../../altera/common/up_clock_mon_constr.sdc
+ALTERA_DEPS += ../../util_cdc/sync_bits.v
+ALTERA_DEPS += ../../util_cdc/sync_data.v
+ALTERA_DEPS += ../../util_cdc/sync_event.v
+ALTERA_DEPS += ../axi_jesd204_common/jesd204_up_common.v
+ALTERA_DEPS += ../axi_jesd204_common/jesd204_up_sysref.v
+ALTERA_DEPS += axi_jesd204_rx_constr.sdc
+ALTERA_DEPS += axi_jesd204_rx_hw.tcl
 
 include ../../scripts/library.mk

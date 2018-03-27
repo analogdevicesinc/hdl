@@ -5,26 +5,34 @@
 
 LIBRARY_NAME := jesd204_tx
 
-M_DEPS += jesd204_tx_constr.xdc
-M_DEPS += jesd204_tx_ip.tcl
-M_DEPS += tx.v
-M_DEPS += tx_ctrl.v
-M_DEPS += tx_lane.v
+GENERIC_DEPS += tx.v
+GENERIC_DEPS += tx_ctrl.v
+GENERIC_DEPS += tx_lane.v
 
-M_DEPS += ../../jesd204/interfaces/jesd204_tx_cfg.xml
-M_DEPS += ../../jesd204/interfaces/jesd204_tx_cfg_rtl.xml
-M_DEPS += ../../jesd204/interfaces/jesd204_tx_ctrl.xml
-M_DEPS += ../../jesd204/interfaces/jesd204_tx_ctrl_rtl.xml
-M_DEPS += ../../jesd204/interfaces/jesd204_tx_event.xml
-M_DEPS += ../../jesd204/interfaces/jesd204_tx_event_rtl.xml
-M_DEPS += ../../jesd204/interfaces/jesd204_tx_ilas_config.xml
-M_DEPS += ../../jesd204/interfaces/jesd204_tx_ilas_config_rtl.xml
-M_DEPS += ../../jesd204/interfaces/jesd204_tx_status.xml
-M_DEPS += ../../jesd204/interfaces/jesd204_tx_status_rtl.xml
+XILINX_DEPS += jesd204_tx_constr.xdc
+XILINX_DEPS += jesd204_tx_ip.tcl
 
-LIB_DEPS += jesd204/jesd204_common
-LIB_DEPS += util_cdc
+XILINX_DEPS += ../../jesd204/interfaces/jesd204_tx_cfg.xml
+XILINX_DEPS += ../../jesd204/interfaces/jesd204_tx_cfg_rtl.xml
+XILINX_DEPS += ../../jesd204/interfaces/jesd204_tx_ctrl.xml
+XILINX_DEPS += ../../jesd204/interfaces/jesd204_tx_ctrl_rtl.xml
+XILINX_DEPS += ../../jesd204/interfaces/jesd204_tx_event.xml
+XILINX_DEPS += ../../jesd204/interfaces/jesd204_tx_event_rtl.xml
+XILINX_DEPS += ../../jesd204/interfaces/jesd204_tx_ilas_config.xml
+XILINX_DEPS += ../../jesd204/interfaces/jesd204_tx_ilas_config_rtl.xml
+XILINX_DEPS += ../../jesd204/interfaces/jesd204_tx_status.xml
+XILINX_DEPS += ../../jesd204/interfaces/jesd204_tx_status_rtl.xml
 
-INTERFACE_DEPS += jesd204/interfaces
+XILINX_LIB_DEPS += jesd204/jesd204_common
+XILINX_LIB_DEPS += util_cdc
+
+XILINX_INTERFACE_DEPS += jesd204/interfaces
+
+ALTERA_DEPS += ../../util_cdc/sync_bits.v
+ALTERA_DEPS += ../jesd204_common/eof.v
+ALTERA_DEPS += ../jesd204_common/lmfc.v
+ALTERA_DEPS += ../jesd204_common/scrambler.v
+ALTERA_DEPS += jesd204_tx_constr.sdc
+ALTERA_DEPS += jesd204_tx_hw.tcl
 
 include ../../scripts/library.mk

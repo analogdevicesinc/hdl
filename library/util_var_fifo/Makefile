@@ -5,7 +5,8 @@
 
 LIBRARY_NAME := util_var_fifo
 
-M_DEPS += util_var_fifo.v
-M_DEPS += util_var_fifo_ip.tcl
+GENERIC_DEPS += util_var_fifo.v
+
+XILINX_DEPS += util_var_fifo_ip.tcl
 
 include ../scripts/library.mk

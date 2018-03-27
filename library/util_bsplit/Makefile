@@ -5,8 +5,11 @@
 
 LIBRARY_NAME := util_bsplit
 
-M_DEPS += util_bsplit.v
-M_DEPS += util_bsplit_constr.xdc
-M_DEPS += util_bsplit_ip.tcl
+GENERIC_DEPS += util_bsplit.v
+
+XILINX_DEPS += util_bsplit_constr.xdc
+XILINX_DEPS += util_bsplit_ip.tcl
+
+ALTERA_DEPS += util_bsplit_hw.tcl
 
 include ../scripts/library.mk

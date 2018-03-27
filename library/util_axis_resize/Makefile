@@ -5,7 +5,8 @@
 
 LIBRARY_NAME := util_axis_resize
 
-M_DEPS += util_axis_resize.v
-M_DEPS += util_axis_resize_ip.tcl
+GENERIC_DEPS += util_axis_resize.v
+
+XILINX_DEPS += util_axis_resize_ip.tcl
 
 include ../scripts/library.mk

@@ -34,8 +34,10 @@ M_FLIST := *.log
 M_FLIST += *.jou
 M_FLIST += $(XML_FLIST)
 
-.PHONY: all clean clean-all
-all: $(XML_FLIST)
+.PHONY: all xilinx clean clean-all
+all: xilinx
+
+xilinx: $(XML_FLIST)
 
 clean:clean-all
 

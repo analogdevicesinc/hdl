@@ -5,9 +5,10 @@
 
 LIBRARY_NAME := util_tdd_sync
 
-M_DEPS += ../common/util_pulse_gen.v
-M_DEPS += util_tdd_sync.v
-M_DEPS += util_tdd_sync_constr.xdc
-M_DEPS += util_tdd_sync_ip.tcl
+GENERIC_DEPS += ../common/util_pulse_gen.v
+GENERIC_DEPS += util_tdd_sync.v
+
+XILINX_DEPS += util_tdd_sync_constr.xdc
+XILINX_DEPS += util_tdd_sync_ip.tcl
 
 include ../scripts/library.mk

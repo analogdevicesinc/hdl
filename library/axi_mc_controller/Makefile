@@ -5,12 +5,13 @@
 
 LIBRARY_NAME := axi_mc_controller
 
-M_DEPS += ../common/up_axi.v
-M_DEPS += axi_mc_controller.v
-M_DEPS += axi_mc_controller_constr.xdc
-M_DEPS += axi_mc_controller_ip.tcl
-M_DEPS += control_registers.v
-M_DEPS += delay.v
-M_DEPS += motor_driver.v
+GENERIC_DEPS += ../common/up_axi.v
+GENERIC_DEPS += axi_mc_controller.v
+GENERIC_DEPS += control_registers.v
+GENERIC_DEPS += delay.v
+GENERIC_DEPS += motor_driver.v
+
+XILINX_DEPS += axi_mc_controller_constr.xdc
+XILINX_DEPS += axi_mc_controller_ip.tcl
 
 include ../scripts/library.mk

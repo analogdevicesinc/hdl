@@ -5,17 +5,18 @@
 
 LIBRARY_NAME := axi_spi_engine
 
-M_DEPS += ../../common/ad_rst.v
-M_DEPS += ../../common/up_axi.v
-M_DEPS += axi_spi_engine.v
-M_DEPS += axi_spi_engine_ip.tcl
+GENERIC_DEPS += axi_spi_engine.v
 
-M_DEPS += ../../spi_engine/interfaces/spi_engine_ctrl.xml
-M_DEPS += ../../spi_engine/interfaces/spi_engine_ctrl_rtl.xml
-M_DEPS += ../../spi_engine/interfaces/spi_engine_offload_ctrl.xml
-M_DEPS += ../../spi_engine/interfaces/spi_engine_offload_ctrl_rtl.xml
+XILINX_DEPS += ../../common/ad_rst.v
+XILINX_DEPS += ../../common/up_axi.v
+XILINX_DEPS += axi_spi_engine_ip.tcl
 
-LIB_DEPS += util_axis_fifo
-LIB_DEPS += util_cdc
+XILINX_DEPS += ../../spi_engine/interfaces/spi_engine_ctrl.xml
+XILINX_DEPS += ../../spi_engine/interfaces/spi_engine_ctrl_rtl.xml
+XILINX_DEPS += ../../spi_engine/interfaces/spi_engine_offload_ctrl.xml
+XILINX_DEPS += ../../spi_engine/interfaces/spi_engine_offload_ctrl_rtl.xml
+
+XILINX_LIB_DEPS += util_axis_fifo
+XILINX_LIB_DEPS += util_cdc
 
 include ../../scripts/library.mk

@@ -5,10 +5,11 @@
 
 LIBRARY_NAME := util_sigma_delta_spi
 
-M_DEPS += util_sigma_delta_spi.v
-M_DEPS += util_sigma_delta_spi_ip.tcl
+GENERIC_DEPS += util_sigma_delta_spi.v
 
-M_DEPS += ../spi_engine/interfaces/spi_master.xml
-M_DEPS += ../spi_engine/interfaces/spi_master_rtl.xml
+XILINX_DEPS += util_sigma_delta_spi_ip.tcl
+
+XILINX_DEPS += ../spi_engine/interfaces/spi_master.xml
+XILINX_DEPS += ../spi_engine/interfaces/spi_master_rtl.xml
 
 include ../scripts/library.mk

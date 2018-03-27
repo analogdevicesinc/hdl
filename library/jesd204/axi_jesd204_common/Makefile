@@ -5,8 +5,9 @@
 
 LIBRARY_NAME := axi_jesd204_common
 
-M_DEPS += axi_jesd204_common_ip.tcl
-M_DEPS += jesd204_up_common.v
-M_DEPS += jesd204_up_sysref.v
+GENERIC_DEPS += jesd204_up_common.v
+GENERIC_DEPS += jesd204_up_sysref.v
+
+XILINX_DEPS += axi_jesd204_common_ip.tcl
 
 include ../../scripts/library.mk

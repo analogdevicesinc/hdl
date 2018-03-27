@@ -5,10 +5,11 @@
 
 LIBRARY_NAME := util_cdc
 
-M_DEPS += sync_bits.v
-M_DEPS += sync_data.v
-M_DEPS += sync_event.v
-M_DEPS += sync_gray.v
-M_DEPS += util_cdc_ip.tcl
+GENERIC_DEPS += sync_bits.v
+GENERIC_DEPS += sync_data.v
+GENERIC_DEPS += sync_event.v
+GENERIC_DEPS += sync_gray.v
+
+XILINX_DEPS += util_cdc_ip.tcl
 
 include ../scripts/library.mk

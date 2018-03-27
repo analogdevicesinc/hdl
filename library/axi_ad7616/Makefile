@@ -5,17 +5,18 @@
 
 LIBRARY_NAME := axi_ad7616
 
-M_DEPS += ../common/ad_edge_detect.v
-M_DEPS += ../common/up_axi.v
-M_DEPS += axi_ad7616.v
-M_DEPS += axi_ad7616_control.v
-M_DEPS += axi_ad7616_ip.tcl
-M_DEPS += axi_ad7616_maxis2wrfifo.v
-M_DEPS += axi_ad7616_pif.v
+GENERIC_DEPS += ../common/ad_edge_detect.v
+GENERIC_DEPS += ../common/up_axi.v
+GENERIC_DEPS += axi_ad7616.v
+GENERIC_DEPS += axi_ad7616_control.v
+GENERIC_DEPS += axi_ad7616_maxis2wrfifo.v
+GENERIC_DEPS += axi_ad7616_pif.v
 
-LIB_DEPS += spi_engine/axi_spi_engine
-LIB_DEPS += spi_engine/spi_engine_execution
-LIB_DEPS += spi_engine/spi_engine_interconnect
-LIB_DEPS += spi_engine/spi_engine_offload
+XILINX_DEPS += axi_ad7616_ip.tcl
+
+XILINX_LIB_DEPS += spi_engine/axi_spi_engine
+XILINX_LIB_DEPS += spi_engine/spi_engine_execution
+XILINX_LIB_DEPS += spi_engine/spi_engine_interconnect
+XILINX_LIB_DEPS += spi_engine/spi_engine_offload
 
 include ../scripts/library.mk

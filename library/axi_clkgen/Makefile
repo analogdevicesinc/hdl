@@ -5,13 +5,14 @@
 
 LIBRARY_NAME := axi_clkgen
 
-M_DEPS += ../common/ad_rst.v
-M_DEPS += ../common/up_axi.v
-M_DEPS += ../common/up_clkgen.v
-M_DEPS += ../xilinx/common/ad_mmcm_drp.v
-M_DEPS += axi_clkgen.v
-M_DEPS += axi_clkgen_constr.xdc
-M_DEPS += axi_clkgen_ip.tcl
-M_DEPS += bd/bd.tcl
+GENERIC_DEPS += ../common/ad_rst.v
+GENERIC_DEPS += ../common/up_axi.v
+GENERIC_DEPS += ../common/up_clkgen.v
+GENERIC_DEPS += axi_clkgen.v
+
+XILINX_DEPS += ../xilinx/common/ad_mmcm_drp.v
+XILINX_DEPS += axi_clkgen_constr.xdc
+XILINX_DEPS += axi_clkgen_ip.tcl
+XILINX_DEPS += bd/bd.tcl
 
 include ../scripts/library.mk

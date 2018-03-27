@@ -10,6 +10,18 @@ all: lib
 
 
 clean:
+	$(MAKE) -C altera/adi_jesd204 clean
+	$(MAKE) -C altera/avl_adxcfg clean
+	$(MAKE) -C altera/avl_adxcvr clean
+	$(MAKE) -C altera/avl_adxcvr_octet_swap clean
+	$(MAKE) -C altera/avl_adxphy clean
+	$(MAKE) -C altera/avl_dacfifo clean
+	$(MAKE) -C altera/axi_adxcvr clean
+	$(MAKE) -C altera/common/alt_ifconv clean
+	$(MAKE) -C altera/common/alt_mem_asym clean
+	$(MAKE) -C altera/common/alt_mul clean
+	$(MAKE) -C altera/common/alt_serdes clean
+	$(MAKE) -C altera/jesd204_phy clean
 	$(MAKE) -C axi_ad5766 clean
 	$(MAKE) -C axi_ad6676 clean
 	$(MAKE) -C axi_ad7616 clean
@@ -59,6 +71,8 @@ clean:
 	$(MAKE) -C jesd204/jesd204_common clean
 	$(MAKE) -C jesd204/jesd204_rx clean
 	$(MAKE) -C jesd204/jesd204_rx_static_config clean
+	$(MAKE) -C jesd204/jesd204_soft_pcs_rx clean
+	$(MAKE) -C jesd204/jesd204_soft_pcs_tx clean
 	$(MAKE) -C jesd204/jesd204_tx clean
 	$(MAKE) -C jesd204/jesd204_tx_static_config clean
 	$(MAKE) -C spi_engine/axi_spi_engine clean
@@ -102,6 +116,18 @@ clean-all:clean
 
 
 lib:
+	$(MAKE) -C altera/adi_jesd204
+	$(MAKE) -C altera/avl_adxcfg
+	$(MAKE) -C altera/avl_adxcvr
+	$(MAKE) -C altera/avl_adxcvr_octet_swap
+	$(MAKE) -C altera/avl_adxphy
+	$(MAKE) -C altera/avl_dacfifo
+	$(MAKE) -C altera/axi_adxcvr
+	$(MAKE) -C altera/common/alt_ifconv
+	$(MAKE) -C altera/common/alt_mem_asym
+	$(MAKE) -C altera/common/alt_mul
+	$(MAKE) -C altera/common/alt_serdes
+	$(MAKE) -C altera/jesd204_phy
 	$(MAKE) -C axi_ad5766
 	$(MAKE) -C axi_ad6676
 	$(MAKE) -C axi_ad7616
@@ -151,6 +177,8 @@ lib:
 	$(MAKE) -C jesd204/jesd204_common
 	$(MAKE) -C jesd204/jesd204_rx
 	$(MAKE) -C jesd204/jesd204_rx_static_config
+	$(MAKE) -C jesd204/jesd204_soft_pcs_rx
+	$(MAKE) -C jesd204/jesd204_soft_pcs_tx
 	$(MAKE) -C jesd204/jesd204_tx
 	$(MAKE) -C jesd204/jesd204_tx_static_config
 	$(MAKE) -C spi_engine/axi_spi_engine

@@ -5,10 +5,13 @@
 
 LIBRARY_NAME := util_upack
 
-M_DEPS += util_upack.v
-M_DEPS += util_upack_constr.xdc
-M_DEPS += util_upack_dmx.v
-M_DEPS += util_upack_dsf.v
-M_DEPS += util_upack_ip.tcl
+GENERIC_DEPS += util_upack.v
+GENERIC_DEPS += util_upack_dmx.v
+GENERIC_DEPS += util_upack_dsf.v
+
+XILINX_DEPS += util_upack_constr.xdc
+XILINX_DEPS += util_upack_ip.tcl
+
+ALTERA_DEPS += util_upack_hw.tcl
 
 include ../scripts/library.mk
