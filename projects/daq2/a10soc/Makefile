@@ -78,7 +78,6 @@ M_DEPS += ../../../library/common/up_axi.v
 M_DEPS += ../../../library/common/up_clock_mon.v
 M_DEPS += ../../../library/common/up_dac_channel.v
 M_DEPS += ../../../library/common/up_dac_common.v
-M_DEPS += ../../../library/common/up_delay_cntrl.v
 M_DEPS += ../../../library/common/up_xfer_cntrl.v
 M_DEPS += ../../../library/common/up_xfer_status.v
 M_DEPS += ../../../library/common/util_delay.v

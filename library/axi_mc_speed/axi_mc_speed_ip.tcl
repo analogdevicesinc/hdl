@@ -7,12 +7,10 @@ adi_ip_create axi_mc_speed
 adi_ip_files axi_mc_speed [list \
   "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
-  "$ad_hdl_dir/library/common/up_delay_cntrl.v" \
   "$ad_hdl_dir/library/common/up_clock_mon.v" \
   "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
   "$ad_hdl_dir/library/common/up_xfer_status.v" \
   "$ad_hdl_dir/library/common/up_adc_common.v" \
-  "$ad_hdl_dir/library/common/up_adc_channel.v" \
   "debouncer.v" \
   "speed_detector.v" \
   "delay_30_degrees.v" \
