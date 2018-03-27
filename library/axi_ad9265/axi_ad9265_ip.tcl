@@ -8,8 +8,8 @@ adi_ip_files axi_ad9265 [list \
   "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_data_clk.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_data_in.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_dcfilter.v" \
   "$ad_hdl_dir/library/common/ad_datafmt.v" \
-  "$ad_hdl_dir/library/common/ad_dcfilter.v" \
   "$ad_hdl_dir/library/common/ad_pnmon.v" \
   "$ad_hdl_dir/library/common/up_xfer_status.v" \
   "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \

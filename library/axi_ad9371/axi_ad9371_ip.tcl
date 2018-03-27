@@ -10,12 +10,12 @@ adi_ip_files axi_ad9371 [list \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
   "$ad_hdl_dir/library/common/ad_rst.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_dcfilter.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_mul.v" \
   "$ad_hdl_dir/library/common/ad_dds_sine.v" \
   "$ad_hdl_dir/library/common/ad_dds_1.v" \
   "$ad_hdl_dir/library/common/ad_dds.v" \
   "$ad_hdl_dir/library/common/ad_datafmt.v" \
-  "$ad_hdl_dir/library/common/ad_dcfilter.v" \
   "$ad_hdl_dir/library/common/ad_iqcor.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
