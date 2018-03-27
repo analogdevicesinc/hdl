@@ -44,7 +44,8 @@
 
 module axi_jesd204_rx #(
   parameter ID = 0,
-  parameter NUM_LANES = 1
+  parameter NUM_LANES = 1,
+  parameter NUM_LINKS = 1
 ) (
   input s_axi_aclk,
   input s_axi_aresetn,
@@ -76,6 +77,7 @@ module axi_jesd204_rx #(
   output core_reset,
 
   output [NUM_LANES-1:0] core_cfg_lanes_disable,
+  output [NUM_LINKS-1:0] core_cfg_links_disable,
   output [7:0] core_cfg_beats_per_multiframe,
   output [7:0] core_cfg_octets_per_frame,
   output core_cfg_disable_scrambler,
@@ -166,6 +168,7 @@ jesd204_up_common #(
   .PCORE_MAGIC(PCORE_MAGIC),
   .ID(ID),
   .NUM_LANES(NUM_LANES),
+  .NUM_LINKS(NUM_LINKS),
   .DATA_PATH_WIDTH(2),
   .NUM_IRQS(5),
   .EXTRA_CFG_WIDTH(19)
@@ -194,6 +197,7 @@ jesd204_up_common #(
   .core_cfg_beats_per_multiframe(core_cfg_beats_per_multiframe),
   .core_cfg_octets_per_frame(core_cfg_octets_per_frame),
   .core_cfg_lanes_disable(core_cfg_lanes_disable),
+  .core_cfg_links_disable(core_cfg_links_disable),
   .core_cfg_disable_scrambler(core_cfg_disable_scrambler),
   .core_cfg_disable_char_replacement(core_cfg_disable_char_replacement),
 

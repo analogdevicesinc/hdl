@@ -76,6 +76,11 @@ set_parameter_property NUM_LANES DISPLAY_NAME "Number of Lanes"
 set_parameter_property NUM_LANES ALLOWED_RANGES 1:8
 set_parameter_property NUM_LANES HDL_PARAMETER true
 
+add_parameter NUM_LINKS INTEGER 1
+set_parameter_property NUM_LINKS DISPLAY_NAME "Number of Links"
+set_parameter_property NUM_LINKS ALLOWED_RANGES 1:8
+set_parameter_property NUM_LINKS HDL_PARAMETER true
+
 #ad_ip_parameter PORT_ENABLE_RX_EOF BOOLEAN false false
 #ad_ip_parameter PORT_ENABLE_LMFC_CLK BOOLEAN false false
 #ad_ip_parameter PORT_ENABLE_LMFC_EDGE BOOLEAN false false
@@ -105,7 +110,7 @@ add_interface_port sysref sysref export Input 1
 add_interface sync conduit end
 set_interface_property sync associatedClock clock
 set_interface_property sync associatedReset reset
-add_interface_port sync sync export Output 1
+add_interface_port sync sync export Output NUM_LINKS
 
 # config interface
 
@@ -119,6 +124,7 @@ add_interface_port config cfg_buffer_early_release buffer_early_release Input 1
 add_interface_port config cfg_disable_char_replacement disable_char_replacement Input 1
 add_interface_port config cfg_disable_scrambler disable_scrambler Input 1
 add_interface_port config cfg_lanes_disable lanes_disable Input NUM_LANES
+add_interface_port config cfg_links_disable links_disable Input NUM_LINKS
 add_interface_port config cfg_lmfc_offset lmfc_offset Input 8
 add_interface_port config cfg_octets_per_frame octets_per_frame Input 8
 add_interface_port config cfg_sysref_disable sysref_disable Input 1

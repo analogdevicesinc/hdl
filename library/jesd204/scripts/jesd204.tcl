@@ -108,10 +108,14 @@ proc adi_axi_jesd204_tx_create {ip_name num_lanes} {
   return -options $resultoptions $resulttext
 }
 
-proc adi_axi_jesd204_rx_create {ip_name num_lanes} {
+proc adi_axi_jesd204_rx_create {ip_name num_lanes {num_links 1}} {
 
   if {$num_lanes < 1 || $num_lanes > 8} {
     return -code 1 "ERROR: Invalid number of JESD204B lanes. (Supported range 1-8)"
+  }
+
+  if {$num_links < 1 || $num_links > 8} {
+    return -code 1 "ERROR: Invalid number of JESD204B links. (Supported range 1-8)"
   }
 
   startgroup
@@ -124,7 +128,9 @@ proc adi_axi_jesd204_rx_create {ip_name num_lanes} {
     ad_ip_instance jesd204_rx "${ip_name}/rx"
 
     ad_ip_parameter "${ip_name}/rx_axi" CONFIG.NUM_LANES $num_lanes
+    ad_ip_parameter "${ip_name}/rx_axi" CONFIG.NUM_LINKS $num_links
     ad_ip_parameter "${ip_name}/rx"     CONFIG.NUM_LANES $num_lanes
+    ad_ip_parameter "${ip_name}/rx"     CONFIG.NUM_LINKS $num_links
 
     ad_connect "${ip_name}/rx_axi/core_reset" "${ip_name}/rx/reset"
     ad_connect "${ip_name}/rx_axi/rx_cfg" "${ip_name}/rx/rx_cfg"
@@ -145,7 +151,7 @@ proc adi_axi_jesd204_rx_create {ip_name num_lanes} {
 
     # JESD204 processing
     create_bd_pin -dir I -type clk "${ip_name}/device_clk"
-    create_bd_pin -dir O "${ip_name}/sync"
+    create_bd_pin -dir O -from [expr $num_links - 1] -to 0 "${ip_name}/sync"
     create_bd_pin -dir I "${ip_name}/sysref"
     create_bd_pin -dir O "${ip_name}/phy_en_char_align"
 #    create_bd_pin -dir I "${ip_name}/phy_ready"

@@ -44,6 +44,7 @@
 
 module jesd204_rx_static_config #(
   parameter NUM_LANES = 1,
+  parameter NUM_LINKS = 1,
   parameter OCTETS_PER_FRAME = 1,
   parameter FRAMES_PER_MULTIFRAME = 32,
   parameter SCR = 1,
@@ -52,6 +53,7 @@ module jesd204_rx_static_config #(
   input clk,
 
   output [NUM_LANES-1:0] cfg_lanes_disable,
+  output [NUM_LINKS-1:0] cfg_links_disable,
   output [7:0] cfg_beats_per_multiframe,
   output [7:0] cfg_octets_per_frame,
   output [7:0] cfg_lmfc_offset,
@@ -72,6 +74,7 @@ assign cfg_sysref_disable = 1'b0;
 assign cfg_buffer_delay = 'h0;
 assign cfg_buffer_early_release = BUFFER_EARLY_RELEASE;
 assign cfg_lanes_disable = {NUM_LANES{1'b0}};
+assign cfg_links_disable = {NUM_LINKS{1'b0}};
 assign cfg_disable_scrambler = SCR ? 1'b0 : 1'b1;
 assign cfg_disable_char_replacement = cfg_disable_scrambler;
 
