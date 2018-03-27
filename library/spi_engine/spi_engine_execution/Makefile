@@ -5,12 +5,13 @@
 
 LIBRARY_NAME := spi_engine_execution
 
-M_DEPS += spi_engine_execution.v
-M_DEPS += spi_engine_execution_ip.tcl
+GENERIC_DEPS += spi_engine_execution.v
 
-M_DEPS += ../../spi_engine/interfaces/spi_engine_ctrl.xml
-M_DEPS += ../../spi_engine/interfaces/spi_engine_ctrl_rtl.xml
-M_DEPS += ../../spi_engine/interfaces/spi_master.xml
-M_DEPS += ../../spi_engine/interfaces/spi_master_rtl.xml
+XILINX_DEPS += spi_engine_execution_ip.tcl
+
+XILINX_DEPS += ../../spi_engine/interfaces/spi_engine_ctrl.xml
+XILINX_DEPS += ../../spi_engine/interfaces/spi_engine_ctrl_rtl.xml
+XILINX_DEPS += ../../spi_engine/interfaces/spi_master.xml
+XILINX_DEPS += ../../spi_engine/interfaces/spi_master_rtl.xml
 
 include ../../scripts/library.mk

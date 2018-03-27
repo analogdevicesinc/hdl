@@ -5,13 +5,14 @@
 
 LIBRARY_NAME := util_axis_fifo
 
-M_DEPS += ../common/ad_mem.v
-M_DEPS += address_gray.v
-M_DEPS += address_gray_pipelined.v
-M_DEPS += address_sync.v
-M_DEPS += util_axis_fifo.v
-M_DEPS += util_axis_fifo_ip.tcl
+GENERIC_DEPS += ../common/ad_mem.v
+GENERIC_DEPS += address_gray.v
+GENERIC_DEPS += address_gray_pipelined.v
+GENERIC_DEPS += address_sync.v
+GENERIC_DEPS += util_axis_fifo.v
 
-LIB_DEPS += util_cdc
+XILINX_DEPS += util_axis_fifo_ip.tcl
+
+XILINX_LIB_DEPS += util_cdc
 
 include ../scripts/library.mk

@@ -5,9 +5,10 @@
 
 LIBRARY_NAME := util_gmii_to_rgmii
 
-M_DEPS += mdc_mdio.v
-M_DEPS += util_gmii_to_rgmii.v
-M_DEPS += util_gmii_to_rgmii_constr.xdc
-M_DEPS += util_gmii_to_rgmii_ip.tcl
+GENERIC_DEPS += mdc_mdio.v
+GENERIC_DEPS += util_gmii_to_rgmii.v
+
+XILINX_DEPS += util_gmii_to_rgmii_constr.xdc
+XILINX_DEPS += util_gmii_to_rgmii_ip.tcl
 
 include ../scripts/library.mk

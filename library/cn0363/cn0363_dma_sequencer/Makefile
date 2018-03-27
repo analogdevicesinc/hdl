@@ -5,10 +5,11 @@
 
 LIBRARY_NAME := cn0363_dma_sequencer
 
-M_DEPS += cn0363_dma_sequencer.v
-M_DEPS += cn0363_dma_sequencer_ip.tcl
+GENERIC_DEPS += cn0363_dma_sequencer.v
 
-M_DEPS += ../../interfaces/fifo_wr.xml
-M_DEPS += ../../interfaces/fifo_wr_rtl.xml
+XILINX_DEPS += cn0363_dma_sequencer_ip.tcl
+
+XILINX_DEPS += ../../interfaces/fifo_wr.xml
+XILINX_DEPS += ../../interfaces/fifo_wr_rtl.xml
 
 include ../../scripts/library.mk

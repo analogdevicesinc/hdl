@@ -5,7 +5,8 @@
 
 LIBRARY_NAME := util_delay
 
-M_DEPS += ../common/util_delay.v
-M_DEPS += util_delay_ip.tcl
+GENERIC_DEPS += ../common/util_delay.v
+
+XILINX_DEPS += util_delay_ip.tcl
 
 include ../scripts/library.mk

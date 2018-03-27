@@ -5,8 +5,9 @@
 
 LIBRARY_NAME := util_cic
 
-M_DEPS += cic_comb.v
-M_DEPS += cic_int.v
-M_DEPS += util_cic_ip.tcl
+GENERIC_DEPS += cic_comb.v
+GENERIC_DEPS += cic_int.v
+
+XILINX_DEPS += util_cic_ip.tcl
 
 include ../scripts/library.mk

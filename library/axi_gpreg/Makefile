@@ -5,13 +5,14 @@
 
 LIBRARY_NAME := axi_gpreg
 
-M_DEPS += ../common/ad_rst.v
-M_DEPS += ../common/up_axi.v
-M_DEPS += ../common/up_clock_mon.v
-M_DEPS += axi_gpreg.v
-M_DEPS += axi_gpreg_clock_mon.v
-M_DEPS += axi_gpreg_constr.xdc
-M_DEPS += axi_gpreg_io.v
-M_DEPS += axi_gpreg_ip.tcl
+GENERIC_DEPS += ../common/ad_rst.v
+GENERIC_DEPS += ../common/up_axi.v
+GENERIC_DEPS += ../common/up_clock_mon.v
+GENERIC_DEPS += axi_gpreg.v
+GENERIC_DEPS += axi_gpreg_clock_mon.v
+GENERIC_DEPS += axi_gpreg_io.v
+
+XILINX_DEPS += axi_gpreg_constr.xdc
+XILINX_DEPS += axi_gpreg_ip.tcl
 
 include ../scripts/library.mk

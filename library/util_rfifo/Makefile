@@ -5,9 +5,13 @@
 
 LIBRARY_NAME := util_rfifo
 
-M_DEPS += ../common/ad_mem.v
-M_DEPS += util_rfifo.v
-M_DEPS += util_rfifo_constr.xdc
-M_DEPS += util_rfifo_ip.tcl
+GENERIC_DEPS += ../common/ad_mem.v
+GENERIC_DEPS += util_rfifo.v
+
+XILINX_DEPS += util_rfifo_constr.xdc
+XILINX_DEPS += util_rfifo_ip.tcl
+
+ALTERA_DEPS += util_rfifo_constr.sdc
+ALTERA_DEPS += util_rfifo_hw.tcl
 
 include ../scripts/library.mk

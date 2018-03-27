@@ -5,16 +5,17 @@
 
 LIBRARY_NAME := axi_dac_interpolate
 
-M_DEPS += ../common/ad_iqcor.v
-M_DEPS += ../common/up_axi.v
-M_DEPS += ../common/up_xfer_cntrl.v
-M_DEPS += ../xilinx/common/ad_mul.v
-M_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
-M_DEPS += axi_dac_interpolate.v
-M_DEPS += axi_dac_interpolate_filter.v
-M_DEPS += axi_dac_interpolate_ip.tcl
-M_DEPS += axi_dac_interpolate_reg.v
-M_DEPS += cic_interp.v
-M_DEPS += fir_interp.v
+GENERIC_DEPS += ../common/ad_iqcor.v
+GENERIC_DEPS += ../common/up_axi.v
+GENERIC_DEPS += ../common/up_xfer_cntrl.v
+GENERIC_DEPS += axi_dac_interpolate.v
+GENERIC_DEPS += axi_dac_interpolate_filter.v
+GENERIC_DEPS += axi_dac_interpolate_reg.v
+GENERIC_DEPS += cic_interp.v
+GENERIC_DEPS += fir_interp.v
+
+XILINX_DEPS += ../xilinx/common/ad_mul.v
+XILINX_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
+XILINX_DEPS += axi_dac_interpolate_ip.tcl
 
 include ../scripts/library.mk

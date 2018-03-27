@@ -4,6 +4,7 @@
 
 # Assumes this file is in projects/scripts/project-altera.mk
 HDL_PROJECT_PATH := $(subst scripts/project-altera.mk,,$(lastword $(MAKEFILE_LIST)))
+HDL_LIBRARY_PATH := $(HDL_PROJECT_PATH)../library/
 
 ifeq ($(NIOS2_MMU),)
   NIOS2_MMU := 1
@@ -54,14 +55,25 @@ M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_tquest.tcl
 M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_project_alt.tcl
 M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_env.tcl
 
+M_DEPS += $(foreach dep,$(LIB_DEPS),$(HDL_LIBRARY_PATH)$(dep)/.timestamp_altera)
+
 .PHONY: all lib clean clean-all
 all: lib $(PROJECT_NAME).sof
 
-clean: clean-all
 
-clean-all:
+clean:
 	rm -rf $(CLEAN_TARGET)
+
+clean-all: clean
+	@for lib in $(LIB_DEPS); do \
+		$(MAKE) -C $(HDL_LIBRARY_PATH)$${lib} clean; \
+	done
 
 $(PROJECT_NAME).sof: $(M_DEPS)
 	-rm -rf $(CLEAN_TARGET)
 	$(ALTERA) system_project.tcl  >> $(PROJECT_NAME)_quartus.log 2>&1
+
+lib:
+	@for lib in $(LIB_DEPS); do \
+		$(MAKE) -C $(HDL_LIBRARY_PATH)$${lib} altera || exit $$?; \
+	done
