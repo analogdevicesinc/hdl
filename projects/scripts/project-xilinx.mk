@@ -51,5 +51,5 @@ $(PROJECT_NAME).sdk/system_top.hdf: $(M_DEPS)
 
 lib:
 	@for lib in $(LIB_DEPS); do \
-		$(MAKE) -C $(HDL_LIBRARY_PATH)$${lib} || exit $$?; \
+		$(MAKE) -C $(HDL_LIBRARY_PATH)$${lib} xilinx || exit $$?; \
 	done

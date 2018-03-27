@@ -5,11 +5,15 @@
 
 LIBRARY_NAME := util_dacfifo
 
-M_DEPS += ../common/ad_b2g.v
-M_DEPS += ../common/ad_g2b.v
-M_DEPS += ../common/ad_mem.v
-M_DEPS += util_dacfifo.v
-M_DEPS += util_dacfifo_constr.xdc
-M_DEPS += util_dacfifo_ip.tcl
+GENERIC_DEPS += ../common/ad_b2g.v
+GENERIC_DEPS += ../common/ad_g2b.v
+GENERIC_DEPS += ../common/ad_mem.v
+GENERIC_DEPS += util_dacfifo.v
+
+XILINX_DEPS += util_dacfifo_constr.xdc
+XILINX_DEPS += util_dacfifo_ip.tcl
+
+ALTERA_DEPS += util_dacfifo_constr.sdc
+ALTERA_DEPS += util_dacfifo_hw.tcl
 
 include ../scripts/library.mk

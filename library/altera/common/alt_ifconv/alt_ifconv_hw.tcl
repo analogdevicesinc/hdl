@@ -5,7 +5,9 @@ source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_alt.tcl
 
 ad_ip_create alt_ifconv {Altera Interface Translator} alt_ifconv_elab
-ad_ip_files alt_ifconv $ad_hdl_dir/library/altera/common/alt_ifconv/alt_ifconv.v
+ad_ip_files alt_ifconv { \
+  $ad_hdl_dir/library/altera/common/alt_ifconv/alt_ifconv.v \
+}
 
 # parameters
 

@@ -5,28 +5,29 @@
 
 LIBRARY_NAME := axi_ad9434
 
-M_DEPS += ../common/ad_datafmt.v
-M_DEPS += ../common/ad_pnmon.v
-M_DEPS += ../common/ad_rst.v
-M_DEPS += ../common/up_adc_channel.v
-M_DEPS += ../common/up_adc_common.v
-M_DEPS += ../common/up_axi.v
-M_DEPS += ../common/up_clock_mon.v
-M_DEPS += ../common/up_delay_cntrl.v
-M_DEPS += ../common/up_xfer_cntrl.v
-M_DEPS += ../common/up_xfer_status.v
-M_DEPS += ../xilinx/common/ad_mmcm_drp.v
-M_DEPS += ../xilinx/common/ad_rst_constr.xdc
-M_DEPS += ../xilinx/common/ad_serdes_clk.v
-M_DEPS += ../xilinx/common/ad_serdes_in.v
-M_DEPS += ../xilinx/common/up_clock_mon_constr.xdc
-M_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
-M_DEPS += ../xilinx/common/up_xfer_status_constr.xdc
-M_DEPS += axi_ad9434.v
-M_DEPS += axi_ad9434_constr.xdc
-M_DEPS += axi_ad9434_core.v
-M_DEPS += axi_ad9434_if.v
-M_DEPS += axi_ad9434_ip.tcl
-M_DEPS += axi_ad9434_pnmon.v
+GENERIC_DEPS += ../common/ad_datafmt.v
+GENERIC_DEPS += ../common/ad_pnmon.v
+GENERIC_DEPS += ../common/ad_rst.v
+GENERIC_DEPS += ../common/up_adc_channel.v
+GENERIC_DEPS += ../common/up_adc_common.v
+GENERIC_DEPS += ../common/up_axi.v
+GENERIC_DEPS += ../common/up_clock_mon.v
+GENERIC_DEPS += ../common/up_delay_cntrl.v
+GENERIC_DEPS += ../common/up_xfer_cntrl.v
+GENERIC_DEPS += ../common/up_xfer_status.v
+GENERIC_DEPS += axi_ad9434.v
+GENERIC_DEPS += axi_ad9434_core.v
+GENERIC_DEPS += axi_ad9434_if.v
+GENERIC_DEPS += axi_ad9434_pnmon.v
+
+XILINX_DEPS += ../xilinx/common/ad_mmcm_drp.v
+XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
+XILINX_DEPS += ../xilinx/common/ad_serdes_clk.v
+XILINX_DEPS += ../xilinx/common/ad_serdes_in.v
+XILINX_DEPS += ../xilinx/common/up_clock_mon_constr.xdc
+XILINX_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
+XILINX_DEPS += ../xilinx/common/up_xfer_status_constr.xdc
+XILINX_DEPS += axi_ad9434_constr.xdc
+XILINX_DEPS += axi_ad9434_ip.tcl
 
 include ../scripts/library.mk

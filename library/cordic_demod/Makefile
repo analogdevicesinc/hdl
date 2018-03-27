@@ -5,7 +5,8 @@
 
 LIBRARY_NAME := cordic_demod
 
-M_DEPS += cordic_demod.v
-M_DEPS += cordic_demod_ip.tcl
+GENERIC_DEPS += cordic_demod.v
+
+XILINX_DEPS += cordic_demod_ip.tcl
 
 include ../scripts/library.mk

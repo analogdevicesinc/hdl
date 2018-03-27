@@ -5,14 +5,15 @@
 
 LIBRARY_NAME := axi_spdif_tx
 
-M_DEPS += ../common/axi_ctrlif.vhd
-M_DEPS += ../common/axi_streaming_dma_tx_fifo.vhd
-M_DEPS += ../common/dma_fifo.vhd
-M_DEPS += ../common/pl330_dma_fifo.vhd
-M_DEPS += axi_spdif_tx.vhd
-M_DEPS += axi_spdif_tx_constr.xdc
-M_DEPS += axi_spdif_tx_ip.tcl
-M_DEPS += tx_encoder.vhd
-M_DEPS += tx_package.vhd
+GENERIC_DEPS += ../common/axi_ctrlif.vhd
+GENERIC_DEPS += ../common/axi_streaming_dma_tx_fifo.vhd
+GENERIC_DEPS += ../common/dma_fifo.vhd
+GENERIC_DEPS += ../common/pl330_dma_fifo.vhd
+GENERIC_DEPS += axi_spdif_tx.vhd
+GENERIC_DEPS += tx_encoder.vhd
+GENERIC_DEPS += tx_package.vhd
+
+XILINX_DEPS += axi_spdif_tx_constr.xdc
+XILINX_DEPS += axi_spdif_tx_ip.tcl
 
 include ../scripts/library.mk

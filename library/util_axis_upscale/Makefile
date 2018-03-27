@@ -5,7 +5,8 @@
 
 LIBRARY_NAME := util_axis_upscale
 
-M_DEPS += ../common/util_axis_upscale.v
-M_DEPS += util_axis_upscale_ip.tcl
+GENERIC_DEPS += ../common/util_axis_upscale.v
+
+XILINX_DEPS += util_axis_upscale_ip.tcl
 
 include ../scripts/library.mk

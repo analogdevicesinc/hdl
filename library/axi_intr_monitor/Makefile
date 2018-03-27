@@ -5,8 +5,9 @@
 
 LIBRARY_NAME := axi_intr_monitor
 
-M_DEPS += ../common/up_axi.v
-M_DEPS += axi_intr_monitor.v
-M_DEPS += axi_intr_monitor_ip.tcl
+GENERIC_DEPS += ../common/up_axi.v
+GENERIC_DEPS += axi_intr_monitor.v
+
+XILINX_DEPS += axi_intr_monitor_ip.tcl
 
 include ../scripts/library.mk

@@ -5,24 +5,25 @@
 
 LIBRARY_NAME := axi_ad6676
 
-M_DEPS += ../common/ad_pnmon.v
-M_DEPS += ../common/ad_rst.v
-M_DEPS += ../common/ad_xcvr_rx_if.v
-M_DEPS += ../common/up_adc_channel.v
-M_DEPS += ../common/up_adc_common.v
-M_DEPS += ../common/up_axi.v
-M_DEPS += ../common/up_clock_mon.v
-M_DEPS += ../common/up_xfer_cntrl.v
-M_DEPS += ../common/up_xfer_status.v
-M_DEPS += ../xilinx/common/ad_rst_constr.xdc
-M_DEPS += ../xilinx/common/up_clock_mon_constr.xdc
-M_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
-M_DEPS += ../xilinx/common/up_xfer_status_constr.xdc
-M_DEPS += axi_ad6676.v
-M_DEPS += axi_ad6676_channel.v
-M_DEPS += axi_ad6676_constr.xdc
-M_DEPS += axi_ad6676_if.v
-M_DEPS += axi_ad6676_ip.tcl
-M_DEPS += axi_ad6676_pnmon.v
+GENERIC_DEPS += ../common/ad_pnmon.v
+GENERIC_DEPS += ../common/ad_rst.v
+GENERIC_DEPS += ../common/ad_xcvr_rx_if.v
+GENERIC_DEPS += ../common/up_adc_channel.v
+GENERIC_DEPS += ../common/up_adc_common.v
+GENERIC_DEPS += ../common/up_axi.v
+GENERIC_DEPS += ../common/up_clock_mon.v
+GENERIC_DEPS += ../common/up_xfer_cntrl.v
+GENERIC_DEPS += ../common/up_xfer_status.v
+GENERIC_DEPS += axi_ad6676.v
+GENERIC_DEPS += axi_ad6676_channel.v
+GENERIC_DEPS += axi_ad6676_if.v
+GENERIC_DEPS += axi_ad6676_pnmon.v
+
+XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
+XILINX_DEPS += ../xilinx/common/up_clock_mon_constr.xdc
+XILINX_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
+XILINX_DEPS += ../xilinx/common/up_xfer_status_constr.xdc
+XILINX_DEPS += axi_ad6676_constr.xdc
+XILINX_DEPS += axi_ad6676_ip.tcl
 
 include ../scripts/library.mk

@@ -5,8 +5,9 @@
 
 LIBRARY_NAME := util_mfifo
 
-M_DEPS += ../common/ad_mem.v
-M_DEPS += util_mfifo.v
-M_DEPS += util_mfifo_ip.tcl
+GENERIC_DEPS += ../common/ad_mem.v
+GENERIC_DEPS += util_mfifo.v
+
+XILINX_DEPS += util_mfifo_ip.tcl
 
 include ../scripts/library.mk
