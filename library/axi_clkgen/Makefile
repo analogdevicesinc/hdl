@@ -12,5 +12,6 @@ M_DEPS += ../xilinx/common/ad_mmcm_drp.v
 M_DEPS += axi_clkgen.v
 M_DEPS += axi_clkgen_constr.xdc
 M_DEPS += axi_clkgen_ip.tcl
+M_DEPS += bd/bd.tcl
 
 include ../scripts/library.mk
