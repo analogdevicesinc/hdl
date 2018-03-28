@@ -47,15 +47,15 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
 adi_ip_create jesd204_rx
 adi_ip_files jesd204_rx [list \
-  "rx_lane.v" \
-  "rx_cgs.v" \
-  "rx_ctrl.v" \
+  "jesd204_rx_lane.v" \
+  "jesd204_rx_cgs.v" \
+  "jesd204_rx_ctrl.v" \
   "elastic_buffer.v" \
-  "ilas_monitor.v" \
+  "jesd204_ilas_monitor.v" \
   "align_mux.v" \
-  "lane_latency_monitor.v" \
+  "jesd204_lane_latency_monitor.v" \
   "jesd204_rx_constr.xdc" \
-  "rx.v" \
+  "jesd204_rx.v" \
 ]
 
 adi_ip_properties_lite jesd204_rx

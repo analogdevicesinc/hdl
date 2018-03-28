@@ -5,9 +5,9 @@
 
 LIBRARY_NAME := jesd204_tx
 
-GENERIC_DEPS += tx.v
-GENERIC_DEPS += tx_ctrl.v
-GENERIC_DEPS += tx_lane.v
+GENERIC_DEPS += jesd204_tx.v
+GENERIC_DEPS += jesd204_tx_ctrl.v
+GENERIC_DEPS += jesd204_tx_lane.v
 
 XILINX_DEPS += jesd204_tx_constr.xdc
 XILINX_DEPS += jesd204_tx_ip.tcl
@@ -29,9 +29,9 @@ XILINX_LIB_DEPS += util_cdc
 XILINX_INTERFACE_DEPS += jesd204/interfaces
 
 ALTERA_DEPS += ../../util_cdc/sync_bits.v
-ALTERA_DEPS += ../jesd204_common/eof.v
-ALTERA_DEPS += ../jesd204_common/lmfc.v
-ALTERA_DEPS += ../jesd204_common/scrambler.v
+ALTERA_DEPS += ../jesd204_common/jesd204_eof_generator.v
+ALTERA_DEPS += ../jesd204_common/jesd204_lmfc.v
+ALTERA_DEPS += ../jesd204_common/jesd204_scrambler.v
 ALTERA_DEPS += jesd204_tx_constr.sdc
 ALTERA_DEPS += jesd204_tx_hw.tcl
 

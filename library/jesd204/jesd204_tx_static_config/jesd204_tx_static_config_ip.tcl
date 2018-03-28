@@ -47,8 +47,8 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
 adi_ip_create jesd204_tx_static_config
 adi_ip_files jesd204_tx_static_config [list \
-  "tx_static_config.v" \
-  "ilas_cfg_static.v" \
+  "jesd204_tx_static_config.v" \
+  "jesd204_ilas_cfg_static.v" \
 ]
 
 adi_ip_properties_lite jesd204_tx_static_config

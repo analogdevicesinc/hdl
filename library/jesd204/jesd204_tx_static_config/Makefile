@@ -5,8 +5,8 @@
 
 LIBRARY_NAME := jesd204_tx_static_config
 
-GENERIC_DEPS += ilas_cfg_static.v
-GENERIC_DEPS += tx_static_config.v
+GENERIC_DEPS += jesd204_ilas_cfg_static.v
+GENERIC_DEPS += jesd204_tx_static_config.v
 
 XILINX_DEPS += jesd204_tx_static_config_ip.tcl
 

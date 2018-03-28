@@ -47,10 +47,10 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
 adi_ip_create jesd204_tx
 adi_ip_files jesd204_tx [list \
-  "tx_lane.v" \
-  "tx_ctrl.v" \
+  "jesd204_tx_lane.v" \
+  "jesd204_tx_ctrl.v" \
   "jesd204_tx_constr.xdc" \
-  "tx.v"
+  "jesd204_tx.v"
 ]
 
 adi_ip_properties_lite jesd204_tx

@@ -54,18 +54,18 @@ set_module_property INTERNAL true
 # files
 
 ad_ip_files jesd204_rx [list \
-  rx.v \
+  jesd204_rx.v \
   align_mux.v \
   elastic_buffer.v \
-  ilas_monitor.v \
-  lane_latency_monitor.v \
-  rx_cgs.v \
-  rx_ctrl.v \
-  rx_lane.v \
+  jesd204_ilas_monitor.v \
+  jesd204_lane_latency_monitor.v \
+  jesd204_rx_cgs.v \
+  jesd204_rx_ctrl.v \
+  jesd204_rx_lane.v \
   jesd204_rx_constr.sdc \
-  ../jesd204_common/eof.v \
-  ../jesd204_common/lmfc.v \
-  ../jesd204_common/scrambler.v \
+  ../jesd204_common/jesd204_eof_generator.v \
+  ../jesd204_common/jesd204_lmfc.v \
+  ../jesd204_common/jesd204_scrambler.v \
   ../jesd204_common/pipeline_stage.v \
 ]
 

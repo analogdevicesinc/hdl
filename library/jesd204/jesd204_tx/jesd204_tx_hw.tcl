@@ -54,13 +54,13 @@ set_module_property INTERNAL true
 # files
 
 ad_ip_files jesd204_tx [list \
-  tx.v \
-  tx_ctrl.v \
-  tx_lane.v \
+  jesd204_tx.v \
+  jesd204_tx_ctrl.v \
+  jesd204_tx_lane.v \
   jesd204_tx_constr.sdc \
-  ../jesd204_common/eof.v \
-  ../jesd204_common/lmfc.v \
-  ../jesd204_common/scrambler.v \
+  ../jesd204_common/jesd204_eof_generator.v \
+  ../jesd204_common/jesd204_lmfc.v \
+  ../jesd204_common/jesd204_scrambler.v \
   $ad_hdl_dir/library/util_cdc/sync_bits.v \
   $ad_hdl_dir/library/util_cdc/util_cdc_constr.tcl \
 ]
