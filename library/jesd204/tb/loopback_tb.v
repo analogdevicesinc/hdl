@@ -267,8 +267,6 @@ module loopback_tb;
     .rx_data(rx_data),
     .rx_valid(rx_valid),
 
-    .phy_ready(1'b1),
-
     .phy_data(phy_data_in),
     .phy_charisk(phy_charisk_in),
     .phy_notintable({NUM_LANES{4'b0000}}),
