@@ -57,8 +57,8 @@ set_module_property INTERNAL true
 
 ad_ip_files jesd204_soft_pcs_rx [list \
   jesd204_soft_pcs_rx.v \
-  pattern_align.v \
-  8b10b_decoder.v \
+  jesd204_pattern_align.v \
+  jesd204_8b10b_decoder.v \
 ]
 
 # clock

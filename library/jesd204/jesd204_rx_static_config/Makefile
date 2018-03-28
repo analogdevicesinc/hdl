@@ -5,7 +5,7 @@
 
 LIBRARY_NAME := jesd204_rx_static_config
 
-GENERIC_DEPS += rx_static_config.v
+GENERIC_DEPS += jesd204_rx_static_config.v
 
 XILINX_DEPS += jesd204_rx_static_config_ip.tcl
 
