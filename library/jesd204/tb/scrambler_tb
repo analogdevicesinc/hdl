@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SOURCE="scrambler_tb.v"
-SOURCE+=" ../jesd204_common/scrambler.v"
+SOURCE+=" ../jesd204_common/jesd204_scrambler.v"
 
 cd `dirname $0`
 source run_tb.sh

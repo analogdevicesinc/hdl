@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SOURCE="rx_cgs_tb.v"
-SOURCE+=" ../jesd204_rx/rx_cgs.v"
+SOURCE+=" ../jesd204_rx/jesd204_rx_cgs.v"
 
 cd `dirname $0`
 source run_tb.sh
