@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SOURCE="tx_ctrl_phase_tb.v"
-SOURCE+=" ../jesd204_tx/tx_ctrl.v"
+SOURCE+=" ../jesd204_tx/jesd204_tx_ctrl.v"
 SOURCE+=" ../../util_cdc/sync_bits.v"
 
 cd `dirname $0`

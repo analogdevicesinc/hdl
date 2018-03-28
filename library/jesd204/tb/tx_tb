@@ -1,9 +1,9 @@
 #!/bin/bash
 
 SOURCE="tx_tb.v"
-SOURCE+=" ../jesd204_common/lmfc.v ../jesd204_common/scrambler.v ../jesd204_common/eof.v"
-SOURCE+=" ../jesd204_tx/tx.v ../jesd204_tx/tx_ctrl.v ../jesd204_tx/tx_lane.v"
-SOURCE+=" ../jesd204_tx_static_config/tx_static_config.v ../jesd204_tx_static_config/ilas_cfg_static.v"
+SOURCE+=" ../jesd204_common/jesd204_lmfc.v ../jesd204_common/jesd204_scrambler.v ../jesd204_common/jesd204_eof_generator.v"
+SOURCE+=" ../jesd204_tx/jesd204_tx.v ../jesd204_tx/jesd204_tx_ctrl.v ../jesd204_tx/jesd204_tx_lane.v"
+SOURCE+=" ../jesd204_tx_static_config/jesd204_tx_static_config.v ../jesd204_tx_static_config/jesd204_ilas_cfg_static.v"
 SOURCE+=" ../../util_cdc/sync_bits.v"
 
 cd `dirname $0`
