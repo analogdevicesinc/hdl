@@ -1,9 +1,9 @@
 #!/bin/bash
 
 SOURCE="soft_pcs_loopback_tb.v"
-SOURCE+=" ../jesd204_soft_pcs_tx/jesd204_soft_pcs_tx.v ../jesd204_soft_pcs_tx/8b10b_encoder.v"
-SOURCE+=" ../jesd204_soft_pcs_rx/jesd204_soft_pcs_rx.v ../jesd204_soft_pcs_rx/8b10b_decoder.v"
-SOURCE+=" ../jesd204_soft_pcs_rx/pattern_align.v"
+SOURCE+=" ../jesd204_soft_pcs_tx/jesd204_soft_pcs_tx.v ../jesd204_soft_pcs_tx/jesd204_8b10b_encoder.v"
+SOURCE+=" ../jesd204_soft_pcs_rx/jesd204_soft_pcs_rx.v ../jesd204_soft_pcs_rx/jesd204_8b10b_decoder.v"
+SOURCE+=" ../jesd204_soft_pcs_rx/jesd204_pattern_align.v"
 
 cd `dirname $0`
 source run_tb.sh
