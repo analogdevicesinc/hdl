@@ -42,6 +42,9 @@ CLEAN_TARGET +=  *.jdi
 CLEAN_TARGET += *.pin
 CLEAN_TARGET += *_summary.csv
 CLEAN_TARGET += *.dpf
+CLEAN_TARGET += system_qsys_script.tcl
+CLEAN_TARGET += system_bd.qsys
+CLEAN_TARGET += .qsys_edit
 
 M_DEPS += system_top.v
 M_DEPS += system_qsys.tcl
