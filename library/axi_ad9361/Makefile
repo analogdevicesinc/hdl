@@ -13,6 +13,7 @@ M_DEPS += ../common/ad_dds_sine.v
 M_DEPS += ../common/ad_iqcor.v
 M_DEPS += ../common/ad_pnmon.v
 M_DEPS += ../common/ad_pps_receiver.v
+M_DEPS += ../common/ad_pps_receiver_constr.ttcl
 M_DEPS += ../common/ad_rst.v
 M_DEPS += ../common/ad_tdd_control.v
 M_DEPS += ../common/up_adc_channel.v
