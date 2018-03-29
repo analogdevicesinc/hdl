@@ -45,6 +45,7 @@
 module loopback_tb;
   parameter VCD_FILE = "loopback_tb.vcd";
   parameter NUM_LANES = 4;
+  parameter NUM_LINKS = 1;
   parameter OCTETS_PER_FRAME = 4;
   parameter FRAMES_PER_MULTIFRAME = 16;
   parameter ENABLE_SCRAMBLER = 1;
@@ -95,7 +96,7 @@ module loopback_tb;
   wire [NUM_LANES*4-1:0] phy_charisk_out;
   wire [NUM_LANES*32-1:0] phy_data_in;
   wire [NUM_LANES*4-1:0] phy_charisk_in;
-  wire sync;
+  wire [NUM_LINKS-1:0] sync;
 
   reg [5:0] sysref_counter = 'h00;
   reg sysref_rx = 1'b0;
@@ -133,6 +134,7 @@ module loopback_tb;
   end endgenerate
 
   wire [NUM_LANES-1:0] tx_cfg_lanes_disable;
+  wire [NUM_LINKS-1:0] tx_cfg_links_disable;
   wire [7:0] tx_cfg_beats_per_multiframe;
   wire [7:0] tx_cfg_octets_per_frame;
   wire [7:0] tx_cfg_lmfc_offset;
@@ -151,6 +153,7 @@ module loopback_tb;
 
   jesd204_tx_static_config #(
     .NUM_LANES(NUM_LANES),
+    .NUM_LINKS(NUM_LINKS),
     .OCTETS_PER_FRAME(OCTETS_PER_FRAME),
     .FRAMES_PER_MULTIFRAME(FRAMES_PER_MULTIFRAME),
     .SCR(ENABLE_SCRAMBLER)
@@ -158,6 +161,7 @@ module loopback_tb;
     .clk(clk),
 
     .cfg_lanes_disable(tx_cfg_lanes_disable),
+    .cfg_links_disable(tx_cfg_links_disable),
     .cfg_beats_per_multiframe(tx_cfg_beats_per_multiframe),
     .cfg_octets_per_frame(tx_cfg_octets_per_frame),
     .cfg_lmfc_offset(tx_cfg_lmfc_offset),
@@ -176,12 +180,14 @@ module loopback_tb;
   );
 
   jesd204_tx #(
-    .NUM_LANES(NUM_LANES)
+    .NUM_LANES(NUM_LANES),
+    .NUM_LINKS(NUM_LINKS)
   ) i_tx (
     .clk(clk),
     .reset(reset),
 
     .cfg_lanes_disable(tx_cfg_lanes_disable),
+    .cfg_links_disable(tx_cfg_links_disable),
     .cfg_beats_per_multiframe(tx_cfg_beats_per_multiframe),
     .cfg_octets_per_frame(tx_cfg_octets_per_frame),
     .cfg_lmfc_offset(tx_cfg_lmfc_offset),
