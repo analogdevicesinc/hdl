@@ -43,7 +43,8 @@
 //
 
 module jesd204_up_tx # (
-  parameter NUM_LANES = 1
+  parameter NUM_LANES = 1,
+  parameter NUM_LINKS = 1
 ) (
   input up_clk,
   input up_reset,
@@ -69,21 +70,26 @@ module jesd204_up_tx # (
   output core_ctrl_manual_sync_request,
 
   input [1:0] core_status_state,
-  input core_status_sync
+  input [NUM_LINKS-1:0] core_status_sync
 );
 
 reg [31:0] up_cfg_ilas_data[0:NUM_LANES-1][0:3];
 reg up_ctrl_manual_sync_request = 1'b0;
 
 wire [1:0] up_status_state;
-wire up_status_sync;
+wire [NUM_LINKS-1:0] up_status_sync;
 
-sync_bits i_cdc_sync (
-  .in(core_status_sync),
-  .out_clk(up_clk),
-  .out_resetn(1'b1),
-  .out(up_status_sync)
-);
+genvar j;
+generate
+  for (j=0; j<NUM_LINKS; j=j+1) begin : SYNC_CDC
+    sync_bits i_cdc_sync (
+      .in(core_status_sync[j]),
+      .out_clk(up_clk),
+      .out_resetn(1'b1),
+      .out(up_status_sync[j])
+    );
+  end
+endgenerate
 
 sync_data #(
   .NUM_OF_BITS(2)
@@ -122,8 +128,8 @@ always @(*) begin
 
   /* JESD TX status */
   12'ha0: up_rdata <= {
-    /* 05-31 */ 23'h00, /* Reserved for future additions */
-    /*    04 */ up_status_sync, /* Raw value of the SYNC pin */
+    /* 12-31 */ 20'h00, /* Reserved for future additions */
+    /* 04-11 */ up_status_sync, /* Raw value of the SYNC pin */
     /* 02-03 */ 2'b0, /* Reserved fo future extension of the status_state field */
     /* 00-01 */ up_status_state /* State of the internal state machine (0=CGS, 1=ILAS, 2=DATA) */
   };

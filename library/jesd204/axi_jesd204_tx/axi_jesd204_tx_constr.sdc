@@ -49,7 +49,7 @@ source "$script_dir/util_cdc_constr.tcl"
 util_cdc_sync_event_constr {*|jesd204_up_sysref:i_up_sysref|sync_event:i_cdc_sysref_event}
 util_cdc_sync_event_constr {*|jesd204_up_tx:i_up_tx|sync_event:i_cdc_manual_sync_request}
 util_cdc_sync_data_constr {*|jesd204_up_tx:i_up_tx|sync_data:i_cdc_status}
-util_cdc_sync_bits_constr {*|jesd204_up_tx:i_up_tx|sync_bits:i_cdc_sync}
+util_cdc_sync_bits_constr {*|jesd204_up_tx:i_up_tx|sync_bits:*.i_cdc_sync}
 
 set_false_path \
   -from [get_registers {*|jesd204_up_common:i_up_common|up_reset_core}] \

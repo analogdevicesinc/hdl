@@ -43,7 +43,8 @@
 //
 
 module jesd204_tx #(
-  parameter NUM_LANES = 1
+  parameter NUM_LANES = 1,
+  parameter NUM_LINKS = 1
 ) (
   input clk,
   input reset,
@@ -55,13 +56,14 @@ module jesd204_tx #(
   output lmfc_edge,
   output lmfc_clk,
 
-  input sync,
+  input [NUM_LINKS-1:0] sync,
 
   input [32*NUM_LANES-1:0] tx_data,
   output tx_ready,
   input tx_valid,
 
   input [NUM_LANES-1:0] cfg_lanes_disable,
+  input [NUM_LINKS-1:0] cfg_links_disable,
   input [7:0] cfg_beats_per_multiframe,
   input [7:0] cfg_octets_per_frame,
   input [7:0] cfg_lmfc_offset,
@@ -83,7 +85,7 @@ module jesd204_tx #(
   output event_sysref_edge,
   output event_sysref_alignment_error,
 
-  output status_sync,
+  output [NUM_LINKS-1:0] status_sync,
   output [1:0] status_state
 );
 
@@ -138,6 +140,7 @@ jesd204_lmfc i_lmfc (
 
 jesd204_tx_ctrl #(
   .NUM_LANES(NUM_LANES),
+  .NUM_LINKS(NUM_LINKS),
   .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
 ) i_tx_ctrl (
   .clk(clk),
@@ -159,6 +162,7 @@ jesd204_tx_ctrl #(
   .ilas_config_data(ilas_config_data),
 
   .cfg_lanes_disable(cfg_lanes_disable),
+  .cfg_links_disable(cfg_links_disable),
   .cfg_continuous_cgs(cfg_continuous_cgs),
   .cfg_continuous_ilas(cfg_continuous_ilas),
   .cfg_skip_ilas(cfg_skip_ilas),

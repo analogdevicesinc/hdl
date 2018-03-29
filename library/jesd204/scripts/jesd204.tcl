@@ -42,10 +42,14 @@
 # is copyright © 2016-2017, Analog Devices, Inc.”
 #
 
-proc adi_axi_jesd204_tx_create {ip_name num_lanes} {
+proc adi_axi_jesd204_tx_create {ip_name num_lanes {num_links 1}} {
 
   if {$num_lanes < 1 || $num_lanes > 8} {
     return -code 1 "ERROR: Invalid number of JESD204B lanes. (Supported range 1-8)"
+  }
+
+  if {$num_links < 1 || $num_links > 8} {
+    return -code 1 "ERROR: Invalid number of JESD204B links. (Supported range 1-8)"
   }
 
   startgroup
@@ -58,7 +62,9 @@ proc adi_axi_jesd204_tx_create {ip_name num_lanes} {
     ad_ip_instance jesd204_tx "${ip_name}/tx"
 
     ad_ip_parameter "${ip_name}/tx_axi" CONFIG.NUM_LANES $num_lanes
+    ad_ip_parameter "${ip_name}/tx_axi" CONFIG.NUM_LINKS $num_links
     ad_ip_parameter "${ip_name}/tx"     CONFIG.NUM_LANES $num_lanes
+    ad_ip_parameter "${ip_name}/tx"     CONFIG.NUM_LINKS $num_links
 
     ad_connect "${ip_name}/tx_axi/core_reset" "${ip_name}/tx/reset"
     ad_connect "${ip_name}/tx_axi/tx_ctrl" "${ip_name}/tx/tx_ctrl"
@@ -80,7 +86,7 @@ proc adi_axi_jesd204_tx_create {ip_name num_lanes} {
 
     # JESD204 processing
     create_bd_pin -dir I -type clk "${ip_name}/device_clk"
-    create_bd_pin -dir I "${ip_name}/sync"
+    create_bd_pin -dir I -from [expr $num_links - 1] -to 0 "${ip_name}/sync"
     create_bd_pin -dir I "${ip_name}/sysref"
 
     create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:axis_rtl:1.0 "${ip_name}/tx_data"
