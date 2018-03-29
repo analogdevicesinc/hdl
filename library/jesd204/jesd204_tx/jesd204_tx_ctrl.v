@@ -44,12 +44,13 @@
 
 module jesd204_tx_ctrl #(
   parameter NUM_LANES = 1,
+  parameter NUM_LINKS = 1,
   parameter DATA_PATH_WIDTH = 4
 ) (
   input clk,
   input reset,
 
-  input sync,
+  input [NUM_LINKS-1:0] sync,
   input lmfc_edge,
 
   output reg [NUM_LANES-1:0] lane_cgs_enable,
@@ -65,6 +66,7 @@ module jesd204_tx_ctrl #(
   input [DATA_PATH_WIDTH*8*NUM_LANES-1:0] ilas_config_data,
 
   input [NUM_LANES-1:0] cfg_lanes_disable,
+  input [NUM_LINKS-1:0] cfg_links_disable,
   input cfg_continuous_cgs,
   input cfg_continuous_ilas,
   input cfg_skip_ilas,
@@ -73,7 +75,7 @@ module jesd204_tx_ctrl #(
 
   input ctrl_manual_sync_request,
 
-  output status_sync,
+  output [NUM_LINKS-1:0] status_sync,
   output reg [1:0] status_state
 );
 
@@ -89,16 +91,24 @@ reg ilas_config_rd_d1 = 1'b1;
 reg last_ilas_mframe = 1'b0;
 reg cgs_enable = 1'b1;
 
-sync_bits i_cdc_sync (
-  .in(sync),
-  .out_clk(clk),
-  .out_resetn(1'b1),
-  .out(status_sync)
-);
+wire [NUM_LINKS-1:0] status_sync_cdc;
+
+genvar i;
+generate
+  for (i=0; i<NUM_LINKS; i=i+1) begin : SYNC_CDC
+    sync_bits i_cdc_sync (
+      .in(sync[i]),
+      .out_clk(clk),
+      .out_resetn(1'b1),
+      .out(status_sync_cdc[i])
+    );
+  end
+endgenerate
+assign status_sync = status_sync_cdc ^ cfg_links_disable;
 
 always @(posedge clk) begin
   if (reset == 1'b1) begin
-    sync_request <= 1'b0;
+    sync_request <= {NUM_LINKS{1'b0}};
   end else begin
     /* TODO: SYNC must be asserted at least 4 frames before interpreted as a
      * sync request and the /K28.5/ symbol generation has lasted for at
@@ -106,7 +116,7 @@ always @(posedge clk) begin
     if (cfg_continuous_cgs == 1'b1) begin
       sync_request <= 1'b1;
     end else begin
-      sync_request <= ~status_sync | ctrl_manual_sync_request;
+      sync_request <= ~(&status_sync) | ctrl_manual_sync_request;
     end
   end
 end

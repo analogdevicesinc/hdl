@@ -84,7 +84,7 @@ set_max_delay -datapath_only \
 
 set_false_path \
   -from $core_clk \
-  -to [get_pins {i_up_tx/i_cdc_sync/cdc_sync_stage1_reg[0]/D}]
+  -to [get_pins {i_up_tx/*.i_cdc_sync/cdc_sync_stage1_reg[0]/D}]
 
 set_false_path \
   -from [get_pins {i_up_common/up_reset_core_reg/C}] \

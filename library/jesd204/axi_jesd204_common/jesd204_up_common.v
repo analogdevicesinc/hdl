@@ -229,7 +229,8 @@ always @(*) begin
   /* 0x32-0x34 reserver for future use */
 
   12'h080: up_rdata <= up_cfg_lanes_disable;
-  /* 0x81-0x83 reserved for future lane disable bits (max 128 lanes) */
+  12'h081: up_rdata <= up_cfg_links_disable;
+  /* 0x82-0x83 reserved for future lane disable bits (max 128 lanes) */
   12'h084: up_rdata <= {
     /* 24-31 */ 8'h00, /* Reserved for future extensions of octets_per_frame */
     /* 16-23 */ up_cfg_octets_per_frame,
@@ -295,6 +296,9 @@ always @(posedge up_clk) begin
       case (up_waddr)
       12'h080: begin
         up_cfg_lanes_disable <= up_wdata[NUM_LANES-1:0];
+      end
+      12'h081: begin
+        up_cfg_links_disable <= up_wdata[NUM_LINKS-1:0];
       end
       12'h084: begin
         up_cfg_octets_per_frame <= up_wdata[23:16];
