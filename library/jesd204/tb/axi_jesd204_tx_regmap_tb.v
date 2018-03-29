@@ -45,12 +45,13 @@
 module axi_jesd204_tx_tb;
   parameter VCD_FILE = "axi_jesd204_tx_regmap_tb.vcd";
   parameter NUM_LANES = 2;
+  parameter NUM_LINKS = 2;
 
   `define TIMEOUT 1000000
   `include "tb_base.v"
 
   reg [1:0] core_status_state = 2'b00;
-  reg core_status_sync = 1'b0;
+  reg [NUM_LINKS-1:0] core_status_sync = {NUM_LINKS{1'b0}};
 
   wire s_axi_aclk = clk;
   wire s_axi_aresetn = ~reset;
@@ -239,6 +240,10 @@ module axi_jesd204_tx_tb;
     write_reg_and_update('h200, {NUM_LANES{1'b1}});
     check_all_registers();
 
+    /* Check links disable */
+    write_reg_and_update('h204, {NUM_LANES{1'b1}});
+    check_all_registers();
+
     /* Check JESD common config */
     write_reg_and_update('h210, 32'hff03ff);
     check_all_registers();
@@ -254,23 +259,23 @@ module axi_jesd204_tx_tb;
     check_all_registers();
 
     /* Check status register */
-    core_status_state = 2'b01;
+    core_status_state = 2'b01;  /* CGS */
     set_reset_reg_value('h280, 32'h00000001);
     check_all_registers();
-    core_status_state = 2'b10;
+    core_status_state = 2'b10; /* ILAS */
     set_reset_reg_value('h280, 32'h00000002);
     check_all_registers();
-    core_status_state = 2'b11;
+    core_status_state = 2'b11; /* DATA */
     set_reset_reg_value('h280, 32'h00000003);
     check_all_registers();
-    core_status_state = 2'b00;
+    core_status_state = 2'b00; /* WAIT */
     set_reset_reg_value('h280, 32'h00000000);
     check_all_registers();
 
-    core_status_sync = 1'b1;
-    set_reset_reg_value('h280, 32'h00000010);
+    core_status_sync = {NUM_LINKS{1'b1}}; /* SYNC deasserted */
+    set_reset_reg_value('h280, ({NUM_LINKS{1'b1}} << 4));
     check_all_registers();
-    core_status_sync = 1'b0;
+    core_status_sync = {NUM_LINKS{1'b0}}; /* SYNC asserted */
     set_reset_reg_value('h280, 32'h00000000);
     check_all_registers();
 
@@ -289,6 +294,7 @@ module axi_jesd204_tx_tb;
 
     /* Should be read-only when core is out of reset */
     invert_register('h200);
+    invert_register('h204);
     invert_register('h210);
     invert_register('h214);
     invert_register('h240);
@@ -315,7 +321,8 @@ module axi_jesd204_tx_tb;
   always @(*) #4 core_clk <= ~core_clk;
 
   axi_jesd204_tx #(
-    .NUM_LANES(NUM_LANES)
+    .NUM_LANES(NUM_LANES),
+    .NUM_LINKS(NUM_LINKS)
   ) i_axi (
     .s_axi_aclk(s_axi_aclk),
     .s_axi_aresetn(s_axi_aresetn),

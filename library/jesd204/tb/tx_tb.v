@@ -45,6 +45,7 @@
 module tx_tb;
   parameter VCD_FILE = "tx_tb.vcd";
   parameter NUM_LANES = 1;
+  parameter NUM_LINKS = 1;
   parameter OCTETS_PER_FRAME = 4;
   parameter FRAMES_PER_MULTIFRAME = 32;
 
@@ -61,19 +62,20 @@ module tx_tb;
     end
   end
 
-  reg sync = 1'b1;
+  reg [NUM_LINKS-1:0] sync = {NUM_LINKS{1'b1}};
   reg [31:0] counter = 'h00;
 
   always @(posedge clk) begin
     counter <= counter + 1'b1;
     if (counter >= 'h10 && counter <= 'h30) begin
-      sync <= 1'b0;
+      sync <= {NUM_LINKS{1'b0}};
     end else begin
-      sync <= 1'b1;
+      sync <= {NUM_LINKS{1'b1}};
     end
   end
 
   wire [NUM_LANES-1:0] cfg_lanes_disable;
+  wire [NUM_LINKS-1:0] cfg_links_disable;
   wire [7:0] cfg_beats_per_multiframe;
   wire [7:0] cfg_octets_per_frame;
   wire [7:0] cfg_lmfc_offset;
@@ -92,10 +94,12 @@ module tx_tb;
 
   jesd204_tx_static_config #(
     .NUM_LANES(NUM_LANES),
+    .NUM_LINKS(NUM_LINKS),
     .OCTETS_PER_FRAME(OCTETS_PER_FRAME),
     .FRAMES_PER_MULTIFRAME(FRAMES_PER_MULTIFRAME)
   ) i_cfg (
     .cfg_lanes_disable(cfg_lanes_disable),
+    .cfg_links_disable(cfg_links_disable),
     .cfg_beats_per_multiframe(cfg_beats_per_multiframe),
     .cfg_octets_per_frame(cfg_octets_per_frame),
     .cfg_lmfc_offset(cfg_lmfc_offset),
@@ -114,12 +118,14 @@ module tx_tb;
   );
 
   jesd204_tx #(
-    .NUM_LANES(NUM_LANES)
+    .NUM_LANES(NUM_LANES),
+    .NUM_LINKS(NUM_LINKS)
   ) i_tx (
     .clk(clk),
     .reset(reset),
 
     .cfg_lanes_disable(cfg_lanes_disable),
+    .cfg_links_disable(cfg_links_disable),
     .cfg_beats_per_multiframe(cfg_beats_per_multiframe),
     .cfg_octets_per_frame(cfg_octets_per_frame),
     .cfg_lmfc_offset(cfg_lmfc_offset),
