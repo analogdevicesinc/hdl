@@ -14,6 +14,7 @@ fi
 # Can be overwritten using a environment variables
 NUM_CHANNELS=${NUM_CHANNELS:-"1 2 4 8 16 32"}
 SAMPLES_PER_CHANNEL=${SAMPLES_PER_CHANNEL:-1}
+ENABLE_RANDOM=${ENABLE_RANDOM:-0}
 VCD=${VCD:-0}
 
 for i in ${NUM_CHANNELS}; do
@@ -26,6 +27,7 @@ for i in ${NUM_CHANNELS}; do
 	iverilog ${WARNINGS} ${SOURCE} -o run/run_${NAME}_${i} $1 \
 		-P ${NAME}.NUM_OF_CHANNELS=${i} \
 		-P ${NAME}.SAMPLES_PER_CHANNEL=${SAMPLES_PER_CHANNEL} \
+		-P ${NAME}.ENABLE_RANDOM=${ENABLE_RANDOM} \
 		-P ${NAME}.VCD_FILE=${VCD_FILE} \
 	|| exit 1
 	(cd vcd; vvp -N ../run/run_${NAME}_${i})
