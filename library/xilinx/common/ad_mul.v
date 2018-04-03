@@ -37,14 +37,16 @@
 
 module ad_mul #(
 
+  parameter   A_DATA_WIDTH = 17,
+  parameter   B_DATA_WIDTH = 17,
   parameter   DELAY_DATA_WIDTH = 16) (
 
   // data_p = data_a * data_b;
 
-  input                   clk,
-  input       [16:0]      data_a,
-  input       [16:0]      data_b,
-  output      [33:0]      data_p,
+  input                                     clk,
+  input   [               A_DATA_WIDTH-1:0] data_a,
+  input   [               B_DATA_WIDTH-1:0] data_b,
+  output  [A_DATA_WIDTH + B_DATA_WIDTH-1:0] data_p,
 
   // delay interface
 
@@ -67,8 +69,8 @@ module ad_mul #(
 
   MULT_MACRO #(
     .LATENCY (3),
-    .WIDTH_A (17),
-    .WIDTH_B (17))
+    .WIDTH_A (A_DATA_WIDTH),
+    .WIDTH_B (B_DATA_WIDTH))
   i_mult_macro (
     .CE (1'b1),
     .RST (1'b0),

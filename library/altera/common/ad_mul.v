@@ -37,14 +37,16 @@
 
 module ad_mul #(
 
+  parameter   A_DATA_WIDTH = 17,
+  parameter   B_DATA_WIDTH = 17,
   parameter   DELAY_DATA_WIDTH = 16) (
 
   // data_p = data_a * data_b;
 
-  input                   clk,
-  input       [16:0]      data_a,
-  input       [16:0]      data_b,
-  output      [33:0]      data_p,
+  input                                     clk,
+  input   [               A_DATA_WIDTH-1:0] data_a,
+  input   [               B_DATA_WIDTH-1:0] data_b,
+  output  [A_DATA_WIDTH + B_DATA_WIDTH-1:0] data_p,
 
   // delay interface
 
@@ -67,9 +69,9 @@ module ad_mul #(
 
   lpm_mult #(
     .lpm_type ("lpm_mult"),
-    .lpm_widtha (17),
-    .lpm_widthb (17),
-    .lpm_widthp (34),
+    .lpm_widtha (A_DATA_WIDTH),
+    .lpm_widthb (B_DATA_WIDTH),
+    .lpm_widthp (A_DATA_WIDTH + B_DATA_WIDTH),
     .lpm_representation ("SIGNED"),
     .lpm_pipeline (3))
   i_lpm_mult (
