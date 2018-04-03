@@ -13,6 +13,10 @@ adi_ip_files util_dacfifo [list \
 
 adi_ip_properties_lite util_dacfifo
 
-ipx::remove_all_bus_interface [ipx::current_core]
+ipx::infer_bus_interface dma_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface dma_rst xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface dac_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface dac_rst xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+
 ipx::save_core [ipx::current_core]
 
