@@ -82,10 +82,13 @@ module ad_dds_sine_cordic #(
   localparam ANGLE_ROT_VAL_22 = 0.0000136603783400;
   localparam ANGLE_ROT_VAL_23 = 0.0000068301891700;
 
-  // 1.64676025812 = system gain
+  // 1.64676025812 =~ system gain
 
   localparam X_FSCALE = 1 << (CORDIC_DW);
-  localparam [CORDIC_DW-1:0] X_VALUE = ((X_FSCALE/2)/1.64676025812)-3; // ((2^N)/2)/1.647...
+  localparam APROX_DW_GAIN_ERR = (CORDIC_DW < 21) ? 4 :
+                                 (CORDIC_DW <= 24) ? 7 : 0;
+  // ((2^N)/2)/1.647...
+  localparam [CORDIC_DW-1:0] X_VALUE = ((X_FSCALE/2)/(1.64676))-APROX_DW_GAIN_ERR;
 
   // Registers Declarations
 
