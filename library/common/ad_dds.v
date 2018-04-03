@@ -37,51 +37,83 @@
 
 module ad_dds #(
 
-  // data path disable
-
+  // Disable DDS
   parameter   DISABLE = 0,
+  // Range = 8-24
+  parameter   DDS_DW = 16,
+  // Set 1 for CORDIC or 2 for Polynomial
   parameter   DDS_TYPE = 1,
+  // Range = 8-24
   parameter   CORDIC_DW = 16,
+  // Range = 8-24 ( make sure CORDIC_PHASE_DW < CORDIC_DW)
   parameter   CORDIC_PHASE_DW = 16) (
 
   // interface
 
-  input           clk,
-  input           dds_format,
-  input   [15:0]  dds_phase_0,
-  input   [15:0]  dds_scale_0,
-  input   [15:0]  dds_phase_1,
-  input   [15:0]  dds_scale_1,
-  output  [15:0]  dds_data);
+  input                 clk,
+  input                 dds_format,
+  input   [      15:0]  dds_phase_0,
+  input   [      15:0]  dds_scale_0,
+  input   [      15:0]  dds_phase_1,
+  input   [      15:0]  dds_scale_1,
+  output  [DDS_DW-1:0]  dds_data);
+
+ // Local parameters
+
+ localparam CORDIC = 1;
+ localparam POLYNOMIAL = 2;
+
+ // The width for Polynomial DDS is fixed (16)
+ localparam DDS_D_DW = (DDS_TYPE == CORDIC) ? CORDIC_DW : 16;
+ localparam DDS_P_DW = (DDS_TYPE == CORDIC) ? CORDIC_PHASE_DW : 16;
+ // concatenation or truncation width
+ localparam C_T_WIDTH = (DDS_D_DW > DDS_DW) ? (DDS_D_DW - DDS_DW) : (DDS_DW - DDS_D_DW);
 
   // internal registers
 
-  reg     [15:0]  dds_data_int = 'd0;
-  reg     [15:0]  dds_data_out = 'd0;
-  reg     [15:0]  dds_scale_0_d = 'd0;
-  reg     [15:0]  dds_scale_1_d = 'd0;
+  reg     [  DDS_DW-1:0]  dds_data_width = 0;
+  reg     [DDS_D_DW-1:0]  dds_data_rownd = 0;
+  reg     [DDS_D_DW-1:0]  dds_data_int = 0;
+  reg     [        15:0]  dds_scale_0_d = 0;
+  reg     [        15:0]  dds_scale_1_d = 0;
+  reg     [  DDS_DW-1:0]  dds_data_out = 0;
 
   // internal signals
 
   wire    [15:0]  dds_data_0_s;
   wire    [15:0]  dds_data_1_s;
 
-  // disable
-
+  // disable DDS
   generate
     if (DISABLE == 1) begin
-      assign dds_data = 16'd0;
+      // assign 0 for the exact buss width to avoid warnings
+      assign dds_data = {DDS_DW{1'b0}};
     end else begin
 
+      // dds channel output
       assign dds_data = dds_data_out;
 
-       // dds channel output
+      // output data format
+      always @(posedge clk) begin
+        dds_data_out[DDS_DW-1] <= dds_data_width[DDS_DW-1] ^ dds_format;
+        dds_data_out[DDS_DW-2: 0] <= dds_data_width[DDS_DW-2: 0];
+      end
 
-       always @(posedge clk) begin
-         dds_data_int <= dds_data_0_s + dds_data_1_s;
-         dds_data_out[15:15] <= dds_data_int[15] ^ dds_format;
-         dds_data_out[14: 0] <= dds_data_int[14:0];
-       end
+      // set desired data width
+      always @(posedge clk) begin
+        if (DDS_DW <= DDS_D_DW) begin // truncation
+          // fair rownding
+          dds_data_rownd <= dds_data_int + {(C_T_WIDTH){dds_data_int[DDS_D_DW-1]}};
+          dds_data_width <= dds_data_rownd[DDS_D_DW-1:DDS_D_DW-DDS_DW];
+        end else begin // concatenation
+          dds_data_width <= dds_data_int << C_T_WIDTH;
+        end
+      end
+
+      // dual tone
+      always @(posedge clk) begin
+        dds_data_int <= dds_data_0_s + dds_data_1_s;
+      end
 
        always @(posedge clk) begin
          dds_scale_0_d <= dds_scale_0;
