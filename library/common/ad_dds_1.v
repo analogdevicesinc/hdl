@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2018 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -40,15 +40,15 @@ module ad_dds_1 #(
   // parameters
 
   parameter   DDS_TYPE = 1,
-  parameter   CORDIC_DW = 16,
-  parameter   CORDIC_PHASE_DW = 16) (
+  parameter   DDS_D_DW = 16,
+  parameter   DDS_P_DW = 16) (
 
   // interface
 
-  input                   clk,
-  input       [15:0]      angle,
-  input       [15:0]      scale,
-  output  reg [15:0]      dds_data);
+  input                        clk,
+  input       [DDS_P_DW-1:0]  angle,
+  input       [        15:0]  scale,
+  output  reg [DDS_D_DW-1:0]  dds_data);
 
   // local parameters
 
@@ -57,10 +57,9 @@ module ad_dds_1 #(
 
   // internal signals
 
-  wire    [CORDIC_DW-1:0] sine_s;
-  wire    [         15:0] sine16_s;
-  wire    [          3:0] zeros;
-  wire    [         33:0] s1_data_s;
+  wire    [  DDS_D_DW-1:0] sine_s;
+  wire    [           3:0] zeros;
+  wire    [DDS_D_DW+17:0] s1_data_s;
 
   assign zeros = 0;
 
@@ -70,6 +69,7 @@ module ad_dds_1 #(
     if (DDS_TYPE == DDS_CORDIC_TYPE) begin
 
       // the cordic module input angle width must be equal with it's width
+      // at this point the phase is only generated on 16 bits
       wire    [CORDIC_PHASE_DW:0] angle_s;
 
       if (CORDIC_PHASE_DW >= 16) begin
@@ -77,19 +77,14 @@ module ad_dds_1 #(
       end else begin
         assign angle_s = {angle[15:16-CORDIC_PHASE_DW],1'b0};
       end
-      if (CORDIC_DW >= 16) begin
-        assign sine16_s = sine_s[CORDIC_DW-1:CORDIC_DW-16];
-      end else begin
-        assign sine16_s = {sine_s,zeros[15-CORDIC_DW:0]};
-      end
 
       ad_dds_sine_cordic #(
-        .CORDIC_DW(CORDIC_DW),
-        .PHASE_DW(CORDIC_PHASE_DW),
+        .CORDIC_DW(DDS_D_DW),
+        .PHASE_DW(DDS_P_DW),
         .DELAY_DW(1))
       i_dds_sine (
         .clk (clk),
-        .angle (angle_s[CORDIC_PHASE_DW:1]),
+        .angle (angle),
         .sine (sine_s),
         .cosine (),
         .ddata_in (1'b0),
@@ -97,7 +92,6 @@ module ad_dds_1 #(
 
     end else begin
 
-      assign sine16_s = sine_s;
       ad_dds_sine i_dds_sine (
         .clk (clk),
         .angle (angle),
@@ -107,11 +101,15 @@ module ad_dds_1 #(
     end
   endgenerate
 
-  // scale for a 16 bit sine generator
+  // scale for a sine generator
 
-  ad_mul #(.DELAY_DATA_WIDTH(1)) i_dds_scale (
+  ad_mul #(
+    .A_DATA_WIDTH(DDS_D_DW + 1),
+    .B_DATA_WIDTH(17),
+    .DELAY_DATA_WIDTH(1))
+  i_dds_scale (
     .clk (clk),
-    .data_a ({sine16_s[15], sine16_s}),
+    .data_a ({sine_s[DDS_D_DW-1], sine_s}),
     .data_b ({scale[15], scale}),
     .data_p (s1_data_s),
     .ddata_in (1'b0),
@@ -120,7 +118,8 @@ module ad_dds_1 #(
   // dds data
 
   always @(posedge clk) begin
-    dds_data <= s1_data_s[29:14];
+    //15'h8000 is the maximum scale
+    dds_data <= s1_data_s[DDS_D_DW+13:14];
   end
 
 endmodule
