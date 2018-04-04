@@ -212,7 +212,8 @@ always @(*) begin
   /* Core configuration */
   12'h004: up_rdata <= NUM_LANES;
   12'h005: up_rdata <= DATA_PATH_WIDTH;
-  /* 0x06-0x0f reserved for future use */
+  12'h006: up_rdata <= {24'b0, NUM_LINKS[7:0]};
+  /* 0x07-0x0f reserved for future use */
   /* 0x10-0x1f reserved for core specific HDL configuration information */
 
   /* IRQ block */

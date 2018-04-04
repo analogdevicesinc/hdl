@@ -160,6 +160,7 @@ module axi_jesd204_rx_tb;
     set_reset_reg_value('h00, 32'h00010061); /* PCORE version register */
     set_reset_reg_value('h0c, 32'h32303452); /* PCORE magic register */
     set_reset_reg_value('h10, NUM_LANES); /* Number of lanes */
+    set_reset_reg_value('h18, NUM_LINKS); /* Number of links */
     set_reset_reg_value('h40, 32'h00000100); /* Elastic buffer size */
     set_reset_reg_value('h14, 'h2); /* Datapath width */
     set_reset_reg_value('hc0, 'h1); /* Core reset */
