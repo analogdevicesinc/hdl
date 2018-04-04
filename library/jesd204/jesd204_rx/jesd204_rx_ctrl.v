@@ -117,7 +117,7 @@ always @(posedge clk) begin
     latency_monitor_reset <= 1'b1;
   end
   STATE_CGS: begin
-    sync_n <= {NUM_LINKS{1'b0}} ^ cfg_links_disable;
+    sync_n <= cfg_links_disable;
     cgs_rst <= cfg_lanes_disable;
   end
   STATE_SYNCHRONIZED: begin
