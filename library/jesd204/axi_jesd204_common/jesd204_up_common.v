@@ -228,8 +228,7 @@ always @(*) begin
   /* 0x32-0x34 reserver for future use */
 
   12'h080: up_rdata <= up_cfg_lanes_disable;
-  12'h081: up_rdata <= up_cfg_links_disable;
-  /* 0x82-0x83 reserved for future lane disable bits (max 128 lanes) */
+  /* 0x81-0x83 reserved for future lane disable bits (max 128 lanes) */
   12'h084: up_rdata <= {
     /* 24-31 */ 8'h00, /* Reserved for future extensions of octets_per_frame */
     /* 16-23 */ up_cfg_octets_per_frame,
@@ -241,7 +240,9 @@ always @(*) begin
     /*    01 */ up_cfg_disable_char_replacement, /* Disable character replacement */
     /*    00 */ up_cfg_disable_scrambler /* Disable scrambler */
   };
-  /* 0x86-0x8f reserved for future use */
+
+  12'h086: up_rdata <= up_cfg_links_disable;
+  /* 0x87-0x8f reserved for future use */
 
   /* 0x90-0x9f reserved for core specific configuration options */
 
@@ -294,9 +295,6 @@ always @(posedge up_clk) begin
       12'h080: begin
         up_cfg_lanes_disable <= up_wdata[NUM_LANES-1:0];
       end
-      12'h081: begin
-        up_cfg_links_disable <= up_wdata[NUM_LINKS-1:0];
-      end
       12'h084: begin
         up_cfg_octets_per_frame <= up_wdata[23:16];
         up_cfg_beats_per_multiframe <= up_wdata[9:DATA_PATH_WIDTH];
@@ -304,6 +302,9 @@ always @(posedge up_clk) begin
       12'h085: begin
         up_cfg_disable_char_replacement <= up_wdata[1];
         up_cfg_disable_scrambler <= up_wdata[0];
+      end
+      12'h086: begin
+        up_cfg_links_disable <= up_wdata[NUM_LINKS-1:0];
       end
       endcase
     end
