@@ -101,7 +101,7 @@ i_cdc_sync (
   .out_resetn(1'b1),
   .out(status_sync)
 );
-assign status_sync_masked = status_sync ^ cfg_links_disable;
+assign status_sync_masked = status_sync | cfg_links_disable;
 
 always @(posedge clk) begin
   if (reset == 1'b1) begin
