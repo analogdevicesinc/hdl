@@ -46,12 +46,14 @@ module util_adxcvr_xch #(
 
   parameter   integer TX_OUT_DIV = 1,
   parameter   integer TX_CLK25_DIV = 20,
+  parameter   integer TX_POLARITY = 0,
 
   parameter   integer RX_OUT_DIV = 1,
   parameter   integer RX_CLK25_DIV = 20,
   parameter   [15:0]  RX_DFE_LPM_CFG = 16'h0104,
   parameter   [31:0]  RX_PMA_CFG = 32'h001e7080,
-  parameter   [72:0]  RX_CDR_CFG = 72'h0b000023ff10400020) (
+  parameter   [72:0]  RX_CDR_CFG = 72'h0b000023ff10400020,
+  parameter   integer RX_POLARITY = 0) (
 
   // pll interface
 
@@ -658,7 +660,7 @@ module util_adxcvr_xch #(
     .RXPHDLYRESET (1'h0),
     .RXPHOVRDEN (1'h0),
     .RXPMARESET (1'h0),
-    .RXPOLARITY (1'h0),
+    .RXPOLARITY (RX_POLARITY),
     .RXPRBSCNTRESET (1'h0),
     .RXPRBSERR (),
     .RXPRBSSEL (3'h0),
@@ -715,7 +717,7 @@ module util_adxcvr_xch #(
     .TXPHOVRDEN (1'h0),
     .TXPISOPD (1'h0),
     .TXPMARESET (1'h0),
-    .TXPOLARITY (1'h0),
+    .TXPOLARITY (TX_POLARITY),
     .TXPOSTCURSOR (5'h0),
     .TXPOSTCURSORINV (1'h0),
     .TXPRBSFORCEERR (1'h0),
@@ -1369,7 +1371,7 @@ module util_adxcvr_xch #(
     .RXPLLCLKSEL (rx_pll_clk_sel_s),
     .RXPMARESET (1'h0),
     .RXPMARESETDONE (),
-    .RXPOLARITY (1'h0),
+    .RXPOLARITY (RX_POLARITY),
     .RXPRBSCNTRESET (1'h0),
     .RXPRBSERR (),
     .RXPRBSLOCKED (),
@@ -1460,7 +1462,7 @@ module util_adxcvr_xch #(
     .TXPLLCLKSEL (tx_pll_clk_sel_s),
     .TXPMARESET (1'h0),
     .TXPMARESETDONE (),
-    .TXPOLARITY (1'h0),
+    .TXPOLARITY (TX_POLARITY),
     .TXPOSTCURSOR (5'h0),
     .TXPOSTCURSORINV (1'h0),
     .TXPRBSFORCEERR (1'h0),
@@ -2244,7 +2246,7 @@ module util_adxcvr_xch #(
     .RXPLLCLKSEL (rx_pll_clk_sel_s),
     .RXPMARESET (1'd0),
     .RXPMARESETDONE (),
-    .RXPOLARITY (1'd0),
+    .RXPOLARITY (RX_POLARITY),
     .RXPRBSCNTRESET (1'd0),
     .RXPRBSERR (),
     .RXPRBSLOCKED (),
@@ -2343,7 +2345,7 @@ module util_adxcvr_xch #(
     .TXPLLCLKSEL (tx_pll_clk_sel_s),
     .TXPMARESET (1'd0),
     .TXPMARESETDONE (),
-    .TXPOLARITY (1'd0),
+    .TXPOLARITY (TX_POLARITY),
     .TXPOSTCURSOR (5'd0),
     .TXPRBSFORCEERR (1'd0),
     .TXPRBSSEL (4'd0),
