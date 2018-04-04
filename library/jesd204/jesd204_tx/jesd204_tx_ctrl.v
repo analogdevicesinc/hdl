@@ -91,7 +91,7 @@ reg ilas_config_rd_d1 = 1'b1;
 reg last_ilas_mframe = 1'b0;
 reg cgs_enable = 1'b1;
 
-wire [NUM_LINKS-1:0] status_sync_cdc;
+wire [NUM_LINKS-1:0] status_sync_masked;
 
 sync_bits #(
   .NUM_OF_BITS (NUM_LINKS))
@@ -99,9 +99,9 @@ i_cdc_sync (
   .in(sync),
   .out_clk(clk),
   .out_resetn(1'b1),
-  .out(status_sync_cdc)
+  .out(status_sync)
 );
-assign status_sync = status_sync_cdc ^ cfg_links_disable;
+assign status_sync_masked = status_sync ^ cfg_links_disable;
 
 always @(posedge clk) begin
   if (reset == 1'b1) begin
@@ -113,7 +113,7 @@ always @(posedge clk) begin
     if (cfg_continuous_cgs == 1'b1) begin
       sync_request <= 1'b1;
     end else begin
-      sync_request <= ~(&status_sync) | ctrl_manual_sync_request;
+      sync_request <= ~(&status_sync_masked) | ctrl_manual_sync_request;
     end
   end
 end
