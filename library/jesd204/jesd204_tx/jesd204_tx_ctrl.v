@@ -93,17 +93,14 @@ reg cgs_enable = 1'b1;
 
 wire [NUM_LINKS-1:0] status_sync_cdc;
 
-genvar i;
-generate
-  for (i=0; i<NUM_LINKS; i=i+1) begin : SYNC_CDC
-    sync_bits i_cdc_sync (
-      .in(sync[i]),
-      .out_clk(clk),
-      .out_resetn(1'b1),
-      .out(status_sync_cdc[i])
-    );
-  end
-endgenerate
+sync_bits #(
+  .NUM_OF_BITS (NUM_LINKS))
+i_cdc_sync (
+  .in(sync),
+  .out_clk(clk),
+  .out_resetn(1'b1),
+  .out(status_sync_cdc)
+);
 assign status_sync = status_sync_cdc ^ cfg_links_disable;
 
 always @(posedge clk) begin
