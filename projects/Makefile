@@ -7,6 +7,7 @@
 
 .PHONY: all clean clean_all
 all:
+	-make -C ad400x all
 	-make -C ad5766_sdz all
 	-make -C ad6676evb all
 	-make -C ad7134_fmc all
@@ -47,6 +48,7 @@ all:
 
 
 clean:
+	make -C ad400x clean
 	make -C ad5766_sdz clean
 	make -C ad6676evb clean
 	make -C ad7134_fmc clean
@@ -87,6 +89,7 @@ clean:
 
 
 clean-all:
+	make -C ad400x clean-all
 	make -C ad5766_sdz clean-all
 	make -C ad6676evb clean-all
 	make -C ad7134_fmc clean-all
