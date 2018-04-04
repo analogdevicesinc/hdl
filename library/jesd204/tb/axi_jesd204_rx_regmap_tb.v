@@ -157,7 +157,7 @@ module axi_jesd204_rx_tb;
     for (i = 0; i < 1024; i = i + 1)
       expected_reg_mem[i] <= 'h00;
     /* Non zero power-on-reset values */
-    set_reset_reg_value('h00, 32'h00010061); /* PCORE version register */
+    set_reset_reg_value('h00, 32'h00010161); /* PCORE version register */
     set_reset_reg_value('h0c, 32'h32303452); /* PCORE magic register */
     set_reset_reg_value('h10, NUM_LANES); /* Number of lanes */
     set_reset_reg_value('h18, NUM_LINKS); /* Number of links */

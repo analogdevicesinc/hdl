@@ -101,7 +101,7 @@ module axi_jesd204_rx #(
   input [14*NUM_LANES-1:0] core_status_lane_latency
 );
 
-localparam PCORE_VERSION = 32'h00010061; // 1.00.a
+localparam PCORE_VERSION = 32'h00010161; // 1.01.a
 localparam PCORE_MAGIC = 32'h32303452; // 204R
 
 /* Register interface signals */
