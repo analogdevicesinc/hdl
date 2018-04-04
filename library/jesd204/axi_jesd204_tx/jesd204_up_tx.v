@@ -79,17 +79,14 @@ reg up_ctrl_manual_sync_request = 1'b0;
 wire [1:0] up_status_state;
 wire [NUM_LINKS-1:0] up_status_sync;
 
-genvar j;
-generate
-  for (j=0; j<NUM_LINKS; j=j+1) begin : SYNC_CDC
-    sync_bits i_cdc_sync (
-      .in(core_status_sync[j]),
-      .out_clk(up_clk),
-      .out_resetn(1'b1),
-      .out(up_status_sync[j])
-    );
-  end
-endgenerate
+sync_bits #(
+  .NUM_OF_BITS (NUM_LINKS))
+i_cdc_sync (
+  .in(core_status_sync),
+  .out_clk(up_clk),
+  .out_resetn(1'b1),
+  .out(up_status_sync)
+);
 
 sync_data #(
   .NUM_OF_BITS(2)

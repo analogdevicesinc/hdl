@@ -240,14 +240,14 @@ module axi_jesd204_tx_tb;
     write_reg_and_update('h200, {NUM_LANES{1'b1}});
     check_all_registers();
 
-    /* Check links disable */
-    write_reg_and_update('h204, {NUM_LANES{1'b1}});
-    check_all_registers();
-
     /* Check JESD common config */
     write_reg_and_update('h210, 32'hff03ff);
     check_all_registers();
     write_reg_and_update('h214, 32'h03);
+    check_all_registers();
+
+    /* Check links disable */
+    write_reg_and_update('h218, {NUM_LINKS{1'b1}});
     check_all_registers();
 
     /* Check JESD TX configuration */
@@ -294,9 +294,9 @@ module axi_jesd204_tx_tb;
 
     /* Should be read-only when core is out of reset */
     invert_register('h200);
-    invert_register('h204);
     invert_register('h210);
     invert_register('h214);
+    invert_register('h218);
     invert_register('h240);
     invert_register('h244);
     for (i = 0; i < NUM_LANES; i = i + 1) begin
