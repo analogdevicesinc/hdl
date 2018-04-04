@@ -104,7 +104,7 @@ module axi_jesd204_tx #(
   input [NUM_LINKS-1:0] core_status_sync
 );
 
-localparam PCORE_VERSION = 32'h00010061; // 1.00.a
+localparam PCORE_VERSION = 32'h00010161; // 1.01.a
 localparam PCORE_MAGIC = 32'h32303454; // 204T
 
 wire up_reset;
