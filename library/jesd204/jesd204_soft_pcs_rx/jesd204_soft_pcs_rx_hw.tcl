@@ -50,6 +50,7 @@ source $ad_hdl_dir/library/scripts/adi_ip_alt.tcl
 ad_ip_create jesd204_soft_pcs_rx "ADI JESD204 Transmit Soft PCS"
 
 ad_ip_parameter REGISTER_INPUTS INTEGER 0
+ad_ip_parameter INVERT_INPUTS INTEGER 0
 
 set_module_property INTERNAL true
 
