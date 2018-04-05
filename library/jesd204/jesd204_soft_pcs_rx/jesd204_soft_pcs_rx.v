@@ -45,7 +45,8 @@
 module jesd204_soft_pcs_rx #(
   parameter NUM_LANES = 1,
   parameter DATA_PATH_WIDTH = 4,
-  parameter REGISTER_INPUTS = 0
+  parameter REGISTER_INPUTS = 0,
+  parameter INVERT_INPUTS = 0
 ) (
    input clk,
    input reset,
@@ -94,7 +95,6 @@ if (REGISTER_INPUTS == 1) begin
   end
   assign patternalign_en_s = patternalign_en_r;
   assign data_s = data_r;
-
 end else begin
   assign patternalign_en_s = patternalign_en;
   assign data_s = data;
@@ -125,9 +125,11 @@ for (lane = 0; lane < NUM_LANES; lane = lane + 1) begin: gen_lane
 
   for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: gen_dpw
     localparam j = DATA_PATH_WIDTH * lane + i;
+    wire [9:0] in_char = INVERT_INPUTS ? ~data_aligned[j*10+:10] :
+                                         data_aligned[j*10+:10];
 
     jesd204_8b10b_decoder i_dec (
-      .in_char(data_aligned[j*10+:10]),
+      .in_char(in_char),
       .out_char(char_s[j*8+:8]),
       .out_charisk(charisk_s[j]),
       .out_notintable(notintable_s[j]),
