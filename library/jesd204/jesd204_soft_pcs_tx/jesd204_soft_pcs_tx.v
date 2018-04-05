@@ -44,7 +44,8 @@
 
 module jesd204_soft_pcs_tx #(
   parameter NUM_LANES = 1,
-  parameter DATA_PATH_WIDTH = 4
+  parameter DATA_PATH_WIDTH = 4,
+  parameter INVERT_OUTPUTS = 0
 ) (
    input clk,
    input reset,
@@ -61,7 +62,7 @@ wire [DATA_PATH_WIDTH:0] disparity_chain[0:NUM_LANES-1];
 wire [NUM_LANES*DATA_PATH_WIDTH*10-1:0] data_s;
 
 always @(posedge clk) begin
-  data <= data_s;
+  data <= INVERT_OUTPUTS ? ~data_s : data_s;
 end
 
 generate
