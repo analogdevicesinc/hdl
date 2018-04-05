@@ -45,6 +45,7 @@
 module soft_pcs_loopback_tb;
   parameter VCD_FILE = "soft_pcs_loopback_tb.vcd";
   parameter DATA_PATH_WIDTH = 4;
+  parameter LANE_INVERT = 0;
 
   `include "tb_base.v"
 
@@ -96,7 +97,8 @@ module soft_pcs_loopback_tb;
   end
 
   jesd204_soft_pcs_tx #(
-    .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
+    .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
+    .INVERT_OUTPUTS(LANE_INVERT)
   ) i_soft_pcs_tx (
     .clk(pcs_clk),
     .reset(pcs_reset),
@@ -108,7 +110,8 @@ module soft_pcs_loopback_tb;
   );
 
   jesd204_soft_pcs_rx #(
-    .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
+    .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
+    .INVERT_INPUTS(LANE_INVERT)
   ) i_soft_pcs_rx (
     .clk(pcs_clk),
     .reset(pcs_reset),
