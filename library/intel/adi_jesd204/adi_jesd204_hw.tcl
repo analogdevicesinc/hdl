@@ -386,9 +386,12 @@ proc jesd204_compose {} {
     add_instance link_pll altera_xcvr_fpll_a10 $version
     set_instance_parameter_value link_pll {gui_fpll_mode} {0}
     set_instance_parameter_value link_pll {gui_reference_clock_frequency} $refclk_frequency
-    set_instance_parameter_value link_pll {gui_number_of_output_clocks} 1
+    set_instance_parameter_value link_pll {gui_number_of_output_clocks} 2
+    set_instance_parameter_value link_pll {gui_enable_phase_alignment} 1
     set_instance_parameter_value link_pll {gui_desired_outclk0_frequency} $linkclk_frequency
     set_instance_parameter_value link_pll {enable_pll_reconfig} {1}
+    set pfdclk_frequency [get_instance_parameter_value link_pll gui_pfd_frequency]
+    set_instance_parameter_value link_pll {gui_desired_outclk1_frequency} $pfdclk_frequency
 
     set outclk_name "outclk0"
 
