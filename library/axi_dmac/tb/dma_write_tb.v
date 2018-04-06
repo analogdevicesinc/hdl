@@ -42,6 +42,7 @@ module dmac_dma_write_tb;
 
   reg req_valid = 1'b1;
   wire req_ready;
+  reg [23:0] req_length = 'h03;
   wire awvalid;
   wire awready;
   wire [31:0] awaddr;
@@ -57,6 +58,10 @@ module dmac_dma_write_tb;
   wire [3:0] wstrb;
   wire [31:0] wdata;
 
+  reg [31:0] fifo_wr_din = 'b0;
+  reg fifo_wr_rq = 'b0;
+  wire fifo_wr_xfer_req;
+
   wire bready;
   wire bvalid;
   wire [1:0] bresp;
@@ -64,6 +69,7 @@ module dmac_dma_write_tb;
   always @(posedge clk) begin
     if (reset != 1'b1 && req_ready == 1'b1) begin
       req_valid <= 1'b1;
+      req_length <= req_length + 'h4;
     end
   end
 
@@ -130,14 +136,39 @@ module dmac_dma_write_tb;
     .req_valid(req_valid),
     .req_ready(req_ready),
     .req_dest_address(30'h7e09000),
-    .req_length(24'h1ff),
+    .req_length(req_length),
     .req_sync_transfer_start(1'b0),
 
     .fifo_wr_clk(clk),
-    .fifo_wr_en(1'b1),
-    .fifo_wr_din(32'h00),
+    .fifo_wr_en(fifo_wr_en),
+    .fifo_wr_din(fifo_wr_din),
+    .fifo_wr_overflow(fifo_wr_overflow),
     .fifo_wr_sync(1'b1),
-    .fifo_wr_xfer_req()
+    .fifo_wr_xfer_req(fifo_wr_xfer_req)
   );
+
+  always @(posedge clk) begin
+    if (reset) begin
+      fifo_wr_din <= 'b0;
+      fifo_wr_rq <= 'b0;
+    end else begin
+      if (fifo_wr_en) begin
+        fifo_wr_din <= fifo_wr_din + 'h4;
+      end
+      fifo_wr_rq <= (($random % 4) == 0);
+    end
+  end
+
+  assign fifo_wr_en = fifo_wr_rq & fifo_wr_xfer_req;
+
+  always @(posedge clk) begin
+    if (reset) begin
+      failed <= 'b0;
+    end else begin
+      failed <= failed |
+                i_write_slave.failed |
+                fifo_wr_overflow;
+    end
+  end
 
 endmodule

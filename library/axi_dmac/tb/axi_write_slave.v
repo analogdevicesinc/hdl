@@ -84,11 +84,13 @@ axi_slave #(
 
 reg [4:0] resp_count = 'h00;
 wire [4:0] resp_count_next;
+reg [DATA_WIDTH-1:0] data_cmp = 'h00;
+reg failed = 'b0;
 
 assign bresp = 2'b00;
 
-wire resp_count_dec = bvalid & bready == 1'b1 ? 1'b1 : 1'b0;
-wire resp_count_inc = wvalid == 1'b1 && wready == 1'b1 && beat_last == 1'b1 ? 1'b1 : 1'b0;
+wire resp_count_dec = bvalid & bready;
+wire resp_count_inc = wvalid & wready & beat_last;
 assign resp_count_next = resp_count - resp_count_dec + resp_count_inc;
 
 always @(posedge clk) begin
@@ -108,6 +110,18 @@ always @(posedge clk) begin
     end else begin
       bvalid <= 1'b0;
     end
+  end
+end
+
+always @(posedge clk) begin
+  if (reset) begin
+    data_cmp <= 'h00;
+    failed <= 'b0;
+  end else if (wvalid & wready) begin
+    if (data_cmp !== wdata) begin
+      failed <= 1'b1;
+    end
+    data_cmp <= data_cmp + 'h4;
   end
 end
 
