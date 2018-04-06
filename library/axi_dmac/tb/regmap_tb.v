@@ -32,6 +32,7 @@
 //
 // ***************************************************************************
 // ***************************************************************************
+`timescale 1ns/100ps
 
 module dmac_regmap_tb;
   parameter VCD_FILE = "dmac_regmap_tb.vcd";
@@ -92,6 +93,8 @@ module dmac_regmap_tb;
   end
   endtask
 
+  reg [31:0] expected_reg_mem[0:NUM_REGS-1];
+
   reg [AW-1:0] s_axi_araddr = 'h0;
   reg s_axi_arvalid = 'h0;
   reg s_axi_rready = 'h0;
@@ -148,7 +151,6 @@ module dmac_regmap_tb;
     end
   end
 
-  reg [31:0] expected_reg_mem[0:NUM_REGS-1];
 
   task set_reset_reg_value;
   input [31:0] addr;

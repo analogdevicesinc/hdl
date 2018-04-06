@@ -72,8 +72,8 @@ module axi_dmac_regmap #(
   // Interrupt
   output reg irq,
 
-  output ctrl_enable,
-  output ctrl_pause,
+  output reg ctrl_enable = 1'b0,
+  output reg ctrl_pause = 1'b0,
 
   output request_valid,
   input request_ready,
@@ -113,10 +113,6 @@ wire [31:0]  up_rdata_request;
 
 // Scratch register
 reg [31:0] up_scratch = 32'h00;
-
-// Control bits
-reg ctrl_enable = 1'b0;
-reg ctrl_pause = 1'b0;
 
 // Start and end of transfer
 wire up_eot; // Asserted for one cycle when a transfer has been completed

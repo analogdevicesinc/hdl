@@ -77,7 +77,6 @@ localparam MAX_LENGTH = {BEATS_PER_BURST_WIDTH{1'b1}};
 assign burst = 2'b01;
 assign prot = 3'b000;
 assign cache = 4'b0011;
-assign len = length;
 assign size = DMA_DATA_WIDTH == 1024 ? 3'b111 :
               DMA_DATA_WIDTH ==  512 ? 3'b110 :
               DMA_DATA_WIDTH ==  256 ? 3'b101 :
@@ -90,6 +89,7 @@ reg [LENGTH_WIDTH-1:0] length = 'h0;
 reg [DMA_ADDR_WIDTH-BYTES_PER_BEAT_WIDTH-1:0] address = 'h00;
 reg [BEATS_PER_BURST_WIDTH-1:0] last_burst_len = 'h00;
 assign addr = {address, {BYTES_PER_BEAT_WIDTH{1'b0}}};
+assign len = length;
 
 reg addr_valid_d1;
 reg last = 1'b0;
