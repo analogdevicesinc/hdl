@@ -479,9 +479,9 @@ module avl_dacfifo_rd #(
         dac_mem_valid <= 1'b0;
     end else begin
       if (dac_mem_dunf_s == 1'b1) begin
-        dac_mem_renable = 1'b0;
+        dac_mem_renable <= 1'b0;
       end else if (dac_mem_addr_diff >= DAC_MEM_THRESHOLD) begin
-        dac_mem_renable = 1'b1;
+        dac_mem_renable <= 1'b1;
       end
       dac_mem_valid <= (dac_mem_renable) ? dac_valid : 1'b0;
     end
