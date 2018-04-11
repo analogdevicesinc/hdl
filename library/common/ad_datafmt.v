@@ -65,8 +65,6 @@ module ad_datafmt #(
   // internal signals
 
   wire                        type_s;
-  wire                        signext_s;
-  wire                        sign_s;
   wire    [15:0]              data_out_s;
 
   // data-path disable
@@ -84,15 +82,18 @@ module ad_datafmt #(
   // if offset-binary convert to 2's complement first
 
   assign type_s = dfmt_enable & dfmt_type;
-  assign signext_s = dfmt_enable & dfmt_se;
-  assign sign_s = signext_s & (type_s ^ data[(DATA_WIDTH-1)]);
 
   generate
   if (DATA_WIDTH < 16) begin
-  assign data_out_s[15:DATA_WIDTH] = {(16-DATA_WIDTH){sign_s}};
+    wire signext_s;
+    wire sign_s;
+
+    assign signext_s = dfmt_enable & dfmt_se;
+    assign sign_s = signext_s & (type_s ^ data[(DATA_WIDTH-1)]);
+    assign data_out_s[15:DATA_WIDTH] = {(16-DATA_WIDTH){sign_s}};
   end
   endgenerate
-  
+
   assign data_out_s[(DATA_WIDTH-1)] = type_s ^ data[(DATA_WIDTH-1)];
   assign data_out_s[(DATA_WIDTH-2):0] = data[(DATA_WIDTH-2):0];
 
