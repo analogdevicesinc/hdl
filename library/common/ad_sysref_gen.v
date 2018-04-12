@@ -65,9 +65,9 @@ module ad_sysref_gen (
   // free running counter for periodic SYSREF generation
   always @(posedge core_clk) begin
     if (sysref_en_int) begin
-      counter <= (counter < SYSREF_HALFPERIOD) ? counter + 1 : 0;
+      counter <= (counter < SYSREF_HALFPERIOD) ? counter + 1'b1 : 8'h0;
     end else begin
-      counter <= 0;
+      counter <= 8'h0;
     end
   end
 
