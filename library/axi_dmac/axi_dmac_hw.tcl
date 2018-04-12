@@ -87,6 +87,12 @@ foreach {suffix group} { \
     { "0:Memory-Mapped AXI" "1:Streaming AXI" "2:FIFO Interface" }
   set_parameter_property DMA_TYPE_$suffix GROUP $group
 
+  add_parameter  DMA_AXI_PROTOCOL_$suffix INTEGER 0
+  set_parameter_property DMA_AXI_PROTOCOL_$suffix DISPLAY_NAME "AXI Protocol"
+  set_parameter_property DMA_AXI_PROTOCOL_$suffix HDL_PARAMETER true
+  set_parameter_property DMA_AXI_PROTOCOL_$suffix ALLOWED_RANGES { "0:AXI4" "1:AXI3" }
+  set_parameter_property DMA_AXI_PROTOCOL_$suffix GROUP $group
+
   add_parameter DMA_DATA_WIDTH_$suffix INTEGER 64
   set_parameter_property DMA_DATA_WIDTH_$suffix DISPLAY_NAME "Bus Width"
   set_parameter_property DMA_DATA_WIDTH_$suffix UNITS Bits
@@ -234,6 +240,14 @@ proc axi_dmac_validate {} {
     set_parameter_property ${p}_MANUAL VISIBLE [expr $auto_clk ? false : true]
     set_parameter_property $p VISIBLE $auto_clk
   }
+  foreach suffix {SRC DEST} {
+   if {[get_parameter_value DMA_TYPE_$suffix] == 0} {
+     set show_axi_protocol true
+   } else {
+     set show_axi_protocol false
+   }
+   set_parameter_property DMA_AXI_PROTOCOL_$suffix VISIBLE $show_axi_protocol
+  }
 }
 
 # conditional interfaces
@@ -247,38 +261,6 @@ add_interface m_dest_axi_reset reset end
 set_interface_property m_dest_axi_reset associatedClock m_dest_axi_clock
 add_interface_port m_dest_axi_reset m_dest_axi_aresetn reset_n Input 1
 
-add_interface m_dest_axi axi4 start
-set_interface_property m_dest_axi associatedClock m_dest_axi_clock
-set_interface_property m_dest_axi associatedReset m_dest_axi_reset
-set_interface_property m_dest_axi readIssuingCapability 1
-add_interface_port m_dest_axi m_dest_axi_awvalid awvalid Output 1
-add_interface_port m_dest_axi m_dest_axi_awaddr awaddr Output 32
-add_interface_port m_dest_axi m_dest_axi_awready awready Input 1
-add_interface_port m_dest_axi m_dest_axi_wvalid wvalid Output 1
-add_interface_port m_dest_axi m_dest_axi_wdata wdata Output DMA_DATA_WIDTH_DEST
-add_interface_port m_dest_axi m_dest_axi_wstrb wstrb Output DMA_DATA_WIDTH_DEST/8
-add_interface_port m_dest_axi m_dest_axi_wready wready Input 1
-add_interface_port m_dest_axi m_dest_axi_bvalid bvalid Input 1
-add_interface_port m_dest_axi m_dest_axi_bresp bresp Input 2
-add_interface_port m_dest_axi m_dest_axi_bready bready Output 1
-add_interface_port m_dest_axi m_dest_axi_arvalid arvalid Output 1
-add_interface_port m_dest_axi m_dest_axi_araddr araddr Output 32
-add_interface_port m_dest_axi m_dest_axi_arready arready Input 1
-add_interface_port m_dest_axi m_dest_axi_rvalid rvalid Input 1
-add_interface_port m_dest_axi m_dest_axi_rresp rresp Input 2
-add_interface_port m_dest_axi m_dest_axi_rdata rdata Input DMA_DATA_WIDTH_DEST
-add_interface_port m_dest_axi m_dest_axi_rready rready Output 1
-add_interface_port m_dest_axi m_dest_axi_awlen awlen Output 8
-add_interface_port m_dest_axi m_dest_axi_awsize awsize Output 3
-add_interface_port m_dest_axi m_dest_axi_awburst awburst Output 2
-add_interface_port m_dest_axi m_dest_axi_awcache awcache Output 4
-add_interface_port m_dest_axi m_dest_axi_awprot awprot Output 3
-add_interface_port m_dest_axi m_dest_axi_wlast wlast Output 1
-add_interface_port m_dest_axi m_dest_axi_arlen arlen Output 8
-add_interface_port m_dest_axi m_dest_axi_arsize arsize Output 3
-add_interface_port m_dest_axi m_dest_axi_arburst arburst Output 2
-add_interface_port m_dest_axi m_dest_axi_arcache arcache Output 4
-add_interface_port m_dest_axi m_dest_axi_arprot arprot Output 3
 
 add_interface m_src_axi_clock clock end
 add_interface_port m_src_axi_clock m_src_axi_aclk clk Input 1
@@ -286,41 +268,6 @@ add_interface_port m_src_axi_clock m_src_axi_aclk clk Input 1
 add_interface m_src_axi_reset reset end
 set_interface_property m_src_axi_reset associatedClock m_src_axi_clock
 add_interface_port m_src_axi_reset m_src_axi_aresetn reset_n Input 1
-
-add_interface m_src_axi axi4 start
-set_interface_property m_src_axi associatedClock m_src_axi_clock
-set_interface_property m_src_axi associatedReset m_src_axi_reset
-set_interface_property m_src_axi readIssuingCapability 1
-set_interface_property m_src_axi writeIssuingCapability 1
-set_interface_property m_src_axi combinedIssuingCapability 1
-add_interface_port m_src_axi m_src_axi_awvalid awvalid Output 1
-add_interface_port m_src_axi m_src_axi_awaddr awaddr Output 32
-add_interface_port m_src_axi m_src_axi_awready awready Input 1
-add_interface_port m_src_axi m_src_axi_wvalid wvalid Output 1
-add_interface_port m_src_axi m_src_axi_wdata wdata Output DMA_DATA_WIDTH_SRC
-add_interface_port m_src_axi m_src_axi_wstrb wstrb Output DMA_DATA_WIDTH_SRC/8
-add_interface_port m_src_axi m_src_axi_wready wready Input 1
-add_interface_port m_src_axi m_src_axi_bvalid bvalid Input 1
-add_interface_port m_src_axi m_src_axi_bresp bresp Input 2
-add_interface_port m_src_axi m_src_axi_bready bready Output 1
-add_interface_port m_src_axi m_src_axi_arvalid arvalid Output 1
-add_interface_port m_src_axi m_src_axi_araddr araddr Output 32
-add_interface_port m_src_axi m_src_axi_arready arready Input 1
-add_interface_port m_src_axi m_src_axi_rvalid rvalid Input 1
-add_interface_port m_src_axi m_src_axi_rresp rresp Input 2
-add_interface_port m_src_axi m_src_axi_rdata rdata Input DMA_DATA_WIDTH_SRC
-add_interface_port m_src_axi m_src_axi_rready rready Output 1
-add_interface_port m_src_axi m_src_axi_awlen awlen Output 8
-add_interface_port m_src_axi m_src_axi_awsize awsize Output 3
-add_interface_port m_src_axi m_src_axi_awburst awburst Output 2
-add_interface_port m_src_axi m_src_axi_awcache awcache Output 4
-add_interface_port m_src_axi m_src_axi_awprot awprot Output 3
-add_interface_port m_src_axi m_src_axi_wlast wlast Output 1
-add_interface_port m_src_axi m_src_axi_arlen arlen Output 8
-add_interface_port m_src_axi m_src_axi_arsize arsize Output 3
-add_interface_port m_src_axi m_src_axi_arburst arburst Output 2
-add_interface_port m_src_axi m_src_axi_arcache arcache Output 4
-add_interface_port m_src_axi m_src_axi_arprot arprot Output 3
 
 # axis destination/source
 
@@ -354,9 +301,74 @@ ad_alt_intf signal  fifo_wr_overflow  output  1                       ovf
 ad_alt_intf signal  fifo_wr_sync      input   1                       sync
 ad_alt_intf signal  fifo_wr_xfer_req  output  1                       xfer_req
 
+proc add_axi_master_interface {axi_type port suffix} {
+  add_interface $port $axi_type start
+  set_interface_property $port associatedClock ${port}_clock
+  set_interface_property $port associatedReset ${port}_reset
+  set_interface_property $port readIssuingCapability 1
+  add_interface_port $port ${port}_awvalid awvalid Output 1
+  add_interface_port $port ${port}_awaddr awaddr Output 32
+  add_interface_port $port ${port}_awready awready Input 1
+  add_interface_port $port ${port}_wvalid wvalid Output 1
+  add_interface_port $port ${port}_wdata wdata Output DMA_DATA_WIDTH_${suffix}
+  add_interface_port $port ${port}_wstrb wstrb Output DMA_DATA_WIDTH_${suffix}/8
+  add_interface_port $port ${port}_wready wready Input 1
+  add_interface_port $port ${port}_bvalid bvalid Input 1
+  add_interface_port $port ${port}_bresp bresp Input 2
+  add_interface_port $port ${port}_bready bready Output 1
+  add_interface_port $port ${port}_arvalid arvalid Output 1
+  add_interface_port $port ${port}_araddr araddr Output 32
+  add_interface_port $port ${port}_arready arready Input 1
+  add_interface_port $port ${port}_rvalid rvalid Input 1
+  add_interface_port $port ${port}_rresp rresp Input 2
+  add_interface_port $port ${port}_rdata rdata Input DMA_DATA_WIDTH_${suffix}
+  add_interface_port $port ${port}_rready rready Output 1
+  add_interface_port $port ${port}_awlen awlen Output "8-(4*DMA_AXI_PROTOCOL_${suffix})"
+  add_interface_port $port ${port}_awsize awsize Output 3
+  add_interface_port $port ${port}_awburst awburst Output 2
+  add_interface_port $port ${port}_awcache awcache Output 4
+  add_interface_port $port ${port}_awprot awprot Output 3
+  add_interface_port $port ${port}_wlast wlast Output 1
+  add_interface_port $port ${port}_arlen arlen Output "8-(4*DMA_AXI_PROTOCOL_${suffix})"
+  add_interface_port $port ${port}_arsize arsize Output 3
+  add_interface_port $port ${port}_arburst arburst Output 2
+  add_interface_port $port ${port}_arcache arcache Output 4
+  add_interface_port $port ${port}_arprot arprot Output 3
+  # Some signals are mandatory in Altera's implementation of AXI3
+  # awid, awlock, wid, bid, arid, arlock, rid, rlast
+  # Hide them in AXI4
+  add_interface_port $port ${port}_awid awid Output 4
+  add_interface_port $port ${port}_awlock awlock Output "1+DMA_AXI_PROTOCOL_${suffix}"
+  add_interface_port $port ${port}_wid wid Output 4
+  add_interface_port $port ${port}_arid arid Output 4
+  add_interface_port $port ${port}_arlock arlock Output "1+DMA_AXI_PROTOCOL_${suffix}"
+  add_interface_port $port ${port}_rid rid Input 4
+  add_interface_port $port ${port}_bid bid Input 4
+  add_interface_port $port ${port}_rlast rlast Input 1
+  if {$axi_type == "axi4"} {
+    set_port_property ${port}_awid TERMINATION true
+    set_port_property ${port}_awlock TERMINATION true
+    set_port_property ${port}_wid TERMINATION true
+    set_port_property ${port}_arid TERMINATION true
+    set_port_property ${port}_arlock TERMINATION true
+    set_port_property ${port}_rid TERMINATION true
+    set_port_property ${port}_bid TERMINATION true
+    set_port_property ${port}_rlast TERMINATION true
+  }
+}
 proc axi_dmac_elaborate {} {
   set fifo_size [get_parameter_value FIFO_SIZE]
   set disabled_intfs {}
+
+  # add axi3 or axi4 interface depending on user selection
+  foreach {suffix port} {SRC m_src_axi DEST m_dest_axi} {
+    if {[get_parameter_value DMA_AXI_PROTOCOL_${suffix}] == 0} {
+      set axi_type axi4
+    } else {
+      set axi_type axi
+    }
+    add_axi_master_interface $axi_type $port $suffix
+  }
 
   # axi4 destination/source
 
