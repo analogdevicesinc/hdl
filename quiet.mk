@@ -28,7 +28,9 @@ ifneq ($(VERBOSE),1)
 	(ERR=$$?; if [ $$ERR = 0 ]; then \
 		echo " $(GREEN)OK$(NC)"; \
 	else \
-		echo " $(RED)FAILED$(NC)\nFor details see $(HL)$(CURDIR)/$(strip $(2))$(NC)\n"; \
+		echo " $(RED)FAILED$(NC)"; \
+		echo "For details see $(HL)$(CURDIR)/$(strip $(2))$(NC)"; \
+		echo ""; \
 	fi; exit $$ERR)
   endef
 
