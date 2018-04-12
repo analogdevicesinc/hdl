@@ -54,8 +54,9 @@ module axi_dmac #(
   parameter DMA_AXI_ADDR_WIDTH = 32,
   parameter MAX_BYTES_PER_BURST = 128,
   parameter FIFO_SIZE = 4, // In bursts
+  parameter AXI_ID_WIDTH_SRC = 4,
+  parameter AXI_ID_WIDTH_DEST = 4,
   parameter DISABLE_DEBUG_REGISTERS = 0)(
-
   // Slave AXI interface
   input s_axi_aclk,
   input s_axi_aresetn,
@@ -96,6 +97,8 @@ module axi_dmac #(
   output [ 3:0]                            m_dest_axi_awcache,
   output                                   m_dest_axi_awvalid,
   input                                    m_dest_axi_awready,
+  output [AXI_ID_WIDTH_DEST-1:0]           m_dest_axi_awid,
+  output [DMA_AXI_PROTOCOL_DEST:0]         m_dest_axi_awlock,
 
   // Write data
   output [DMA_DATA_WIDTH_DEST-1:0]         m_dest_axi_wdata,
@@ -103,11 +106,13 @@ module axi_dmac #(
   input                                    m_dest_axi_wready,
   output                                   m_dest_axi_wvalid,
   output                                   m_dest_axi_wlast,
+  output [AXI_ID_WIDTH_DEST-1:0]           m_dest_axi_wid,
 
   // Write response
   input                                    m_dest_axi_bvalid,
   input  [ 1:0]                            m_dest_axi_bresp,
   output                                   m_dest_axi_bready,
+  input  [AXI_ID_WIDTH_DEST-1:0]           m_dest_axi_bid,
 
   // Unused read interface
   output                                   m_dest_axi_arvalid,
@@ -122,6 +127,10 @@ module axi_dmac #(
   input  [ 1:0]                            m_dest_axi_rresp,
   input  [DMA_DATA_WIDTH_DEST-1:0]         m_dest_axi_rdata,
   output                                   m_dest_axi_rready,
+  output [AXI_ID_WIDTH_DEST-1:0]           m_dest_axi_arid,
+  output [DMA_AXI_PROTOCOL_DEST:0]         m_dest_axi_arlock,
+  input  [AXI_ID_WIDTH_DEST-1:0]           m_dest_axi_rid,
+  input                                    m_dest_axi_rlast,
 
   // Master AXI interface
   input                                    m_src_axi_aclk,
@@ -136,12 +145,16 @@ module axi_dmac #(
   output [ 1:0]                            m_src_axi_arburst,
   output [ 2:0]                            m_src_axi_arprot,
   output [ 3:0]                            m_src_axi_arcache,
+  output [AXI_ID_WIDTH_SRC-1:0]            m_src_axi_arid,
+  output [DMA_AXI_PROTOCOL_SRC:0]          m_src_axi_arlock,
 
   // Read data and response
   input  [DMA_DATA_WIDTH_SRC-1:0]          m_src_axi_rdata,
   output                                   m_src_axi_rready,
   input                                    m_src_axi_rvalid,
   input  [ 1:0]                            m_src_axi_rresp,
+  input  [AXI_ID_WIDTH_SRC-1:0]            m_src_axi_rid,
+  input                                    m_src_axi_rlast,
 
   // Unused write interface
   output                                   m_src_axi_awvalid,
@@ -160,6 +173,12 @@ module axi_dmac #(
   input                                    m_src_axi_bvalid,
   input  [ 1:0]                            m_src_axi_bresp,
   output                                   m_src_axi_bready,
+  output [AXI_ID_WIDTH_SRC-1:0]            m_src_axi_awid,
+  output [DMA_AXI_PROTOCOL_SRC:0]          m_src_axi_awlock,
+  output [AXI_ID_WIDTH_SRC-1:0]            m_src_axi_wid,
+  input  [AXI_ID_WIDTH_SRC-1:0]            m_src_axi_bid,
+
+
 
   // Slave streaming AXI interface
   input                                    s_axis_aclk,
@@ -296,6 +315,11 @@ assign m_dest_axi_arsize = 'd0;
 assign m_dest_axi_arburst = 'd0;
 assign m_dest_axi_arcache = 'd0;
 assign m_dest_axi_arprot = 'd0;
+assign m_dest_axi_awid = 'h0;
+assign m_dest_axi_awlock = 'h0;
+assign m_dest_axi_wid = 'h0;
+assign m_dest_axi_arid = 'h0;
+assign m_dest_axi_arlock = 'h0;
 assign m_src_axi_awaddr = 'd0;
 assign m_src_axi_awlen = 'd0;
 assign m_src_axi_awsize = 'd0;
@@ -305,6 +329,11 @@ assign m_src_axi_awprot = 'd0;
 assign m_src_axi_wdata = 'd0;
 assign m_src_axi_wstrb = 'd0;
 assign m_src_axi_wlast = 'd0;
+assign m_src_axi_awid = 'h0;
+assign m_src_axi_awlock = 'h0;
+assign m_src_axi_wid = 'h0;
+assign m_src_axi_arid = 'h0;
+assign m_src_axi_arlock = 'h0;
 
 up_axi #(
   .AXI_ADDRESS_WIDTH (12),
