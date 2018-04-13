@@ -47,6 +47,7 @@ set script_dir [file dirname [info script]]
 source "$script_dir/util_cdc_constr.tcl"
 
 util_cdc_sync_data_constr {*|jesd204_up_rx:i_up_rx|sync_data:i_cdc_status}
+util_cdc_sync_data_constr {*|jesd204_up_rx:i_up_rx|sync_data:i_cdc_cfg}
 util_cdc_sync_event_constr {*|jesd204_up_sysref:i_up_sysref|sync_event:i_cdc_sysref_event}
 util_cdc_sync_bits_constr {*|jesd204_up_rx:i_up_rx|jesd204_up_rx_lane:gen_lane[*].i_up_rx_lane|sync_bits:i_cdc_status_ready}
 
