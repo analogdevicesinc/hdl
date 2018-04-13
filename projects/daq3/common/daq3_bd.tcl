@@ -98,6 +98,7 @@ ad_connect  util_daq3_xcvr/tx_out_clk_0 axi_ad9152_fifo/dac_clk
 ad_connect  axi_ad9152_jesd_rstgen/peripheral_reset axi_ad9152_fifo/dac_rst
 ad_connect  axi_ad9152_upack/dac_valid axi_ad9152_fifo/dac_valid
 ad_connect  axi_ad9152_upack/dac_data axi_ad9152_fifo/dac_data
+ad_connect  axi_ad9152_core/dac_dunf axi_ad9152_fifo/dac_dunf
 ad_connect  sys_cpu_clk axi_ad9152_fifo/dma_clk
 ad_connect  sys_cpu_reset axi_ad9152_fifo/dma_rst
 ad_connect  sys_cpu_clk axi_ad9152_dma/m_axis_aclk
