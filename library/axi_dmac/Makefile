@@ -38,6 +38,7 @@ XILINX_LIB_DEPS += util_axis_fifo
 XILINX_LIB_DEPS += util_axis_resize
 XILINX_LIB_DEPS += util_cdc
 
+ALTERA_DEPS += ../common/ad_mem.v
 ALTERA_DEPS += ../util_axis_fifo/address_gray.v
 ALTERA_DEPS += ../util_axis_fifo/address_gray_pipelined.v
 ALTERA_DEPS += ../util_axis_fifo/address_sync.v
