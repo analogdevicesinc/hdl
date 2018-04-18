@@ -86,6 +86,7 @@ foreach p {DDS_CORDIC_DW DDS_CORDIC_PHASE_DW} {
 foreach {p v} {
   "NUM_LANES" "1 2 3 4 8" \
   "NUM_CHANNELS" "1 2 4 6 8" \
+  "SAMPLES_PER_FRAME" "1 2 3 4 6 8 12 16" \
 } { \
   set_property -dict [list \
     "value_validation_type" "list" \
@@ -112,6 +113,7 @@ set i 0
 foreach {k v} { \
   "NUM_LANES" "Number of Lanes (L)" \
   "NUM_CHANNELS" "Number of Conveters (M)" \
+  "SAMPLES_PER_FRAME" "Samples per Frame (S)" \
   } { \
   set p [ipgui::get_guiparamspec -name $k -component $cc]
   ipgui::move_param -component $cc -order $i $p -parent $framer_group

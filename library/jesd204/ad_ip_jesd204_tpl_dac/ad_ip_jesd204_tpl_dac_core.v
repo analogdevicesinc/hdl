@@ -27,7 +27,10 @@ module ad_ip_jesd204_tpl_dac_core #(
   parameter DATAPATH_DISABLE = 0,
   parameter NUM_LANES = 1,
   parameter NUM_CHANNELS = 1,
+  parameter SAMPLES_PER_FRAME = 1,
+  parameter OCTETS_PER_BEAT = 4,
   parameter DATA_PATH_WIDTH = 4,
+  parameter LINK_DATA_WIDTH = NUM_LANES * OCTETS_PER_BEAT * 8,
   parameter DDS_TYPE = 1,
   parameter DDS_CORDIC_DW = 16,
   parameter DDS_CORDIC_PHASE_DW = 16
@@ -37,11 +40,11 @@ module ad_ip_jesd204_tpl_dac_core #(
 
   output link_valid,
   input link_ready,
-  output [NUM_LANES*32-1:0] link_data,
+  output [LINK_DATA_WIDTH-1:0] link_data,
 
   // dma interface
   output [NUM_CHANNELS-1:0] dac_valid,
-  input [NUM_LANES*32-1:0] dac_ddata,
+  input [LINK_DATA_WIDTH-1:0] dac_ddata,
 
   // Configuration interface
 
@@ -65,7 +68,7 @@ module ad_ip_jesd204_tpl_dac_core #(
 
   assign link_valid = 1'b1;
 
-  wire [NUM_LANES*32-1:0] dac_data_s;
+  wire [LINK_DATA_WIDTH-1:0] dac_data_s;
 
   wire [DATA_PATH_WIDTH*16-1:0] pn7_data;
   wire [DATA_PATH_WIDTH*16-1:0] pn15_data;
@@ -74,7 +77,10 @@ module ad_ip_jesd204_tpl_dac_core #(
 
   ad_ip_jesd204_tpl_dac_framer #(
     .NUM_LANES (NUM_LANES),
-    .NUM_CHANNELS (NUM_CHANNELS)
+    .NUM_CHANNELS (NUM_CHANNELS),
+    .SAMPLES_PER_FRAME (SAMPLES_PER_FRAME),
+    .OCTETS_PER_BEAT (OCTETS_PER_BEAT),
+    .LINK_DATA_WIDTH (LINK_DATA_WIDTH)
   ) i_framer (
     .link_data (link_data),
     .dac_data (dac_data_s)

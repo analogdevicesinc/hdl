@@ -25,36 +25,116 @@
 
 module ad_ip_jesd204_tpl_dac_framer #(
   parameter NUM_LANES = 8,
-  parameter NUM_CHANNELS = 4
+  parameter NUM_CHANNELS = 4,
+  parameter SAMPLES_PER_FRAME = 2,
+  parameter OCTETS_PER_BEAT = 4,
+  parameter LINK_DATA_WIDTH = OCTETS_PER_BEAT * 8 * NUM_LANES
 ) (
   // jesd interface
 
-  output [NUM_LANES*32-1:0] link_data,
+  output [LINK_DATA_WIDTH-1:0] link_data,
 
   // dac interface
 
-  input [NUM_LANES*32-1:0] dac_data
+  input [LINK_DATA_WIDTH-1:0] dac_data
 );
 
-  localparam DATA_PATH_WIDTH = 2 * NUM_LANES / NUM_CHANNELS;
-  localparam H = NUM_LANES / NUM_CHANNELS / 2;
-  localparam HD = NUM_LANES > NUM_CHANNELS ? 1 : 0;
-  localparam OCT_OFFSET = HD ? 32 : 8;
+  /*
+   * The framer module takes sample data and maps it onto the format that the
+   * JESD204 link expects for the specified framer configuration.
+   *
+   * The input sample data in dac_data is expected to be grouped by converter.
+   * The first sample is in the LSBs.
+   *
+   * Or in other words the data in dac_data is expected to have the following
+   * layout.
+   *
+   *  MSB                                                                      LSB
+   *   [ MmSn, ..., MmS1, MnS0, ..., M1Sn, ... M1S1, M1S0, M0Sn, ... M0S1, M0S0 ]
+   *
+   * Where MjSi refers to the i-th sample of the j-th converter. With m being
+   * the number of converters and n the number of samples per converter per
+   * beat.
+   *
+   * In the default configuration the framer module processes 4 octets per beat.
+   * This means it can support settings with either 1, 2 or 4 octets per frame
+   * (F). Depending on the octets per frame the frames per beat will either be
+   * 4, 2 or 1 respectively. For other settings of OCTETS_PER_BEAT similar
+   * reasoning applies.
+   *
+   * The number of samples per frame (S) and the number of frames processed per
+   * beat gives the number of samples per converter per beat. This is either
+   * S * 4 (for F=1), S * 2 (for F=2) or S (for F=1).
+   *
+   * The framer module does not have a parameter for the octets per frame (F)
+   * since it can be derived from all other parameters given the following
+   * relationship: F = (M * N' * S) / (L * 8)
+   *
+   *
+   * Mapping in performed in two steps. First samples are grouped into frames,
+   * as there might be more than one frame pert beat. In the second step the
+   * frames are distributed onto the lanes.
+   *
+   * In the JESD204 standard samples and octets are ordered MSB first, this
+   * means earlier data is in the MSBs. This core on the other hand expects
+   * samples and octets to be LSB first ordered. This means earlier data is in
+   * the LSBs. To accommodate this two additional steps are required to order
+   * data from LSB to MSB before the framing process and back from MSB to LSB
+   * after it.
+   *
+   * The data itself that is contained within the samples and octets is LSB
+   * ordered in either case. That means lower bits are in the LSBs.
+   */
+
+  localparam BITS_PER_SAMPLE = 16;
+  localparam FRAMES_PER_BEAT = 8 * OCTETS_PER_BEAT / BITS_PER_LANE_PER_FRAME;
+  localparam SAMPLES_PER_BEAT = LINK_DATA_WIDTH / 16;
+  localparam BITS_PER_CHANNEL_PER_FRAME = BITS_PER_SAMPLE * SAMPLES_PER_FRAME;
+  localparam BITS_PER_LANE_PER_FRAME = BITS_PER_CHANNEL_PER_FRAME *
+                                       NUM_CHANNELS / NUM_LANES;
+
+  wire [LINK_DATA_WIDTH-1:0] link_data_msb_s;
+  wire [LINK_DATA_WIDTH-1:0] frame_data_s;
+  wire [LINK_DATA_WIDTH-1:0] dac_data_msb;
 
   generate
-  genvar i;
-  genvar j;
-  for (i = 0; i < NUM_CHANNELS; i = i + 1) begin: g_framer_outer
-    for (j = 0; j < DATA_PATH_WIDTH; j = j + 1) begin: g_framer_inner
-      localparam k = j + i * DATA_PATH_WIDTH;
-      localparam dac_lsb = k * 16;
-      localparam oct0_lsb = HD ? ((i * H + j % H) * 64 + (j / H) * 8) : (k * 16);
-      localparam oct1_lsb = oct0_lsb + OCT_OFFSET;
+    genvar i;
+    genvar j;
+    /* Reorder samples MSB first */
+    for (i = 0; i < SAMPLES_PER_BEAT; i = i + 1) begin: g_dac_data_msb
+      localparam w = BITS_PER_SAMPLE;
+      localparam src_lsb = i * w;
+      localparam dst_msb = LINK_DATA_WIDTH - 1 - src_lsb;
 
-      assign link_data[oct0_lsb+:8] = dac_data[dac_lsb+8+:8];
-      assign link_data[oct1_lsb+:8] = dac_data[dac_lsb+:8];
+      assign dac_data_msb[dst_msb-:w] = dac_data[src_lsb+:w];
     end
-  end
+
+    /* Slice channel and pack it into frames */
+    for (i = 0; i < NUM_CHANNELS; i = i + 1) begin: g_frame_data_outer
+      for (j = 0; j < FRAMES_PER_BEAT; j = j + 1) begin: g_frame_data_inner
+        localparam w = BITS_PER_CHANNEL_PER_FRAME;
+        localparam dst_lsb = (i + j * NUM_CHANNELS) * w;
+        localparam src_lsb = (j + i * FRAMES_PER_BEAT) * w;
+
+        assign frame_data_s[dst_lsb+:w] = dac_data_msb[src_lsb+:w];
+      end
+    end
+
+    /* Slice frame and pack it into lanes */
+    for (i = 0; i < FRAMES_PER_BEAT; i = i + 1) begin: g_link_data_msb_outer
+      for (j = 0; j < NUM_LANES; j = j + 1) begin: g_link_data_msb_inner
+        localparam w = BITS_PER_LANE_PER_FRAME;
+        localparam dst_lsb = (i + j * FRAMES_PER_BEAT) * w;
+        localparam src_lsb = (j + i * NUM_LANES) * w;
+
+        assign link_data_msb_s[dst_lsb+:w] = frame_data_s[src_lsb+:w];
+      end
+    end
+
+    /* Reorder octets LSB first */
+    for (i = 0; i < LINK_DATA_WIDTH; i = i + 8) begin: g_link_data
+      assign link_data[i+:8] = link_data_msb_s[LINK_DATA_WIDTH-1-i-:8];
+    end
   endgenerate
 
 endmodule
