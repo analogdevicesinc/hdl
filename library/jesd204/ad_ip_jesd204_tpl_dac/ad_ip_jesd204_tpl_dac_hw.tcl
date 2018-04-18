@@ -81,6 +81,13 @@ ad_ip_parameter NUM_CHANNELS INTEGER 1 true [list \
   GROUP $group \
 ]
 
+ad_ip_parameter SAMPLES_PER_FRAME INTEGER 1 true [list \
+  DISPLAY_NAME "Samples per Frame (S)" \
+  DISPLAY_UNITS "samples" \
+  ALLOWED_RANGES {1 2 3 4 6 8 12 16} \
+  GROUP $group \
+]
+
 set group "Datapath Configuration"
 
 ad_ip_parameter DATAPATH_DISABLE boolean 0 true [list \
