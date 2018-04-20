@@ -166,10 +166,8 @@ end
 always @(posedge clk) begin
   if (cfg_err_statistics_reset == 1'b1 || cgs_ready == 1'b0) begin
     status_err_statistics_cnt <= 32'h0;
-  end else begin
-    if (status_err_statistics_cnt[31:4] != 28'hfffffff) begin
-      status_err_statistics_cnt <= status_err_statistics_cnt + phy_notintable_cnt + phy_disperr_cnt + phy_unexpectedk_cnt;
-    end
+  end else if (status_err_statistics_cnt[31:4] != 28'hfffffff) begin
+    status_err_statistics_cnt <= status_err_statistics_cnt + phy_notintable_cnt + phy_disperr_cnt + phy_unexpectedk_cnt;
   end
 end
 
