@@ -312,7 +312,7 @@ for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
 
     .cfg_err_statistics_reset(cfg_err_statistics_reset),
     .cfg_err_statistics_mask(cfg_err_statistics_mask),
-    .status_err_statistics_cnt(status_err_statistics_cnt[32*(i+1)-1:32*i]),
+    .status_err_statistics_cnt(status_err_statistics_cnt[32*i+31:32*i]),
 
     .ilas_config_valid(ilas_config_valid[i]),
     .ilas_config_addr(ilas_config_addr[2*i+1:2*i]),
