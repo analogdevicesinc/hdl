@@ -104,9 +104,9 @@ wire [DATA_PATH_WIDTH*8-1:0] data_scrambled_s;
 wire [DATA_PATH_WIDTH*8-1:0] data_scrambled;
 
 reg  [DATA_PATH_WIDTH-1:0] unexpected_char;
-reg  [1:0] phy_disperr_cnt;
-reg  [1:0] phy_notintable_cnt;
-reg  [1:0] phy_unexpectedk_cnt;
+reg  [2:0] phy_disperr_cnt;
+reg  [2:0] phy_notintable_cnt;
+reg  [2:0] phy_unexpectedk_cnt;
 
 wire ilas_monitor_reset_s;
 wire ilas_monitor_reset;
@@ -149,17 +149,17 @@ always @(posedge clk) begin
   if (cfg_err_statistics_mask[0] == 1'b1) begin
     phy_disperr_cnt <= phy_disperr[0] + phy_disperr[1] + phy_disperr[2] + phy_disperr[3];
   end else begin
-    phy_disperr_cnt <= 2'h0;
+    phy_disperr_cnt <= 3'h0;
   end
   if (cfg_err_statistics_mask[1] == 1'b1) begin
     phy_notintable_cnt <= phy_notintable[0] + phy_notintable[1] + phy_notintable[2] + phy_notintable[3];
   end else begin
-    phy_notintable_cnt <= 2'h0;
+    phy_notintable_cnt <= 3'h0;
   end
   if (cfg_err_statistics_mask[2] == 1'b1) begin
     phy_unexpectedk_cnt <= unexpected_char[0] + unexpected_char[1] + unexpected_char[2] + unexpected_char[3];
   end else begin
-    phy_unexpectedk_cnt <= 2'h0;
+    phy_unexpectedk_cnt <= 3'h0;
   end
 end
 
