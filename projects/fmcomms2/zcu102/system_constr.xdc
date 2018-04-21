@@ -2,13 +2,13 @@
 # constraints
 # ad9361
 
-set_property  -dict {PACKAGE_PIN  Y4    IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports rx_clk_in_p]           ; ## G6   FMC_HPC0_LA00_CC_P
-set_property  -dict {PACKAGE_PIN  Y3    IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports rx_clk_in_n]           ; ## G7   FMC_HPC0_LA00_CC_N
-set_property  -dict {PACKAGE_PIN  AB4   IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports rx_frame_in_p]         ; ## D8   FMC_HPC0_LA01_CC_P
-set_property  -dict {PACKAGE_PIN  AC4   IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports rx_frame_in_n]         ; ## D9   FMC_HPC0_LA01_CC_N
-set_property  -dict {PACKAGE_PIN  V2    IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports rx_data_in_p[0]]       ; ## H7   FMC_HPC0_LA02_P
-set_property  -dict {PACKAGE_PIN  V1    IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports rx_data_in_n[0]]       ; ## H8   FMC_HPC0_LA02_N
-set_property  -dict {PACKAGE_PIN  Y2    IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports rx_data_in_p[1]]       ; ## G9   FMC_HPC0_LA03_P
+set_property  -dict {PACKAGE_PIN  Y4    IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports rx_clk_in_p]           ; ## G06  FMC_HPC0_LA00_CC_P
+set_property  -dict {PACKAGE_PIN  Y3    IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports rx_clk_in_n]           ; ## G07  FMC_HPC0_LA00_CC_N
+set_property  -dict {PACKAGE_PIN  AB4   IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports rx_frame_in_p]         ; ## D08  FMC_HPC0_LA01_CC_P
+set_property  -dict {PACKAGE_PIN  AC4   IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports rx_frame_in_n]         ; ## D09  FMC_HPC0_LA01_CC_N
+set_property  -dict {PACKAGE_PIN  V2    IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports rx_data_in_p[0]]       ; ## H07  FMC_HPC0_LA02_P
+set_property  -dict {PACKAGE_PIN  V1    IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports rx_data_in_n[0]]       ; ## H08  FMC_HPC0_LA02_N
+set_property  -dict {PACKAGE_PIN  Y2    IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports rx_data_in_p[1]]       ; ## G09  FMC_HPC0_LA03_P
 set_property  -dict {PACKAGE_PIN  Y1    IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports rx_data_in_n[1]]       ; ## G10  FMC_HPC0_LA03_N
 set_property  -dict {PACKAGE_PIN  AA2   IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports rx_data_in_p[2]]       ; ## H10  FMC_HPC0_LA04_P
 set_property  -dict {PACKAGE_PIN  AA1   IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports rx_data_in_n[2]]       ; ## H11  FMC_HPC0_LA04_N

@@ -61,7 +61,7 @@ set_property  -dict {PACKAGE_PIN  L10   IOSTANDARD LVCMOS18}  [get_ports gpio_de
 set_property  -dict {PACKAGE_PIN  L15   IOSTANDARD LVCMOS18}  [get_ports gpio_calsw_1_0]                        ; ## D26  FMC_HPC0_LA26_P
 set_property  -dict {PACKAGE_PIN  K15   IOSTANDARD LVCMOS18}  [get_ports gpio_calsw_2_0]                        ; ## D27  FMC_HPC0_LA26_N
 set_property  -dict {PACKAGE_PIN  T7    IOSTANDARD LVCMOS18}  [get_ports gpio_ad5355_rfen]                      ; ## H31  FMC_HPC0_LA28_P
-set_property  -dict {PACKAGE_PIN  T6    IOSTANDARD LVCMOS18}  [get_ports gpio_ad5355_lock]                      ; ## H37  FMC_HPC0_LA32_P
+set_property  -dict {PACKAGE_PIN  U11   IOSTANDARD LVCMOS18}  [get_ports gpio_ad5355_lock]                      ; ## H37  FMC_HPC0_LA32_P
 
 # spi
 
