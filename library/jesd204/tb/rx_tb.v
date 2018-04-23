@@ -195,8 +195,8 @@ module rx_tb;
     .cfg_disable_scrambler(cfg_disable_scrambler),
     .cfg_buffer_early_release(cfg_buffer_early_release),
 
-    .cfg_err_statistics_reset(1'b0),
-    .cfg_err_statistics_mask(3'h7),
+    .ctrl_err_statistics_reset(1'b0),
+    .ctrl_err_statistics_mask(3'h7),
 
     .status_err_statistics_cnt(status_err_statistics_cnt),
 

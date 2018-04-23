@@ -134,8 +134,8 @@ module rx_lane_tb;
     .ilas_config_addr(ilas_config_addr),
     .ilas_config_data(ilas_config_data),
 
-    .cfg_err_statistics_reset(1'b0),
-    .cfg_err_statistics_mask(3'h7),
+    .ctrl_err_statistics_reset(1'b0),
+    .ctrl_err_statistics_mask(3'h7),
     .status_err_statistics_cnt(status_err_statistics_cnt),
 
     .status_cgs_state(status_cgs_state),

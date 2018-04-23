@@ -95,8 +95,8 @@ module axi_jesd204_rx #(
   input core_event_sysref_alignment_error,
   input core_event_sysref_edge,
 
-  output [2:0] core_cfg_err_statistics_mask,
-  output core_cfg_err_statistics_reset,
+  output [2:0] core_ctrl_err_statistics_mask,
+  output core_ctrl_err_statistics_reset,
 
   input [32*NUM_LANES-1:0] core_status_err_statistics_cnt,
 
@@ -265,8 +265,8 @@ jesd204_up_rx #(
   .up_cfg_buffer_early_release(up_cfg_buffer_early_release),
   .up_cfg_buffer_delay(up_cfg_buffer_delay),
 
-  .core_cfg_err_statistics_reset(core_cfg_err_statistics_reset),
-  .core_cfg_err_statistics_mask(core_cfg_err_statistics_mask),
+  .core_ctrl_err_statistics_reset(core_ctrl_err_statistics_reset),
+  .core_ctrl_err_statistics_mask(core_ctrl_err_statistics_mask),
 
   .core_status_ctrl_state(core_status_ctrl_state),
   .core_status_lane_cgs_state(core_status_lane_cgs_state),

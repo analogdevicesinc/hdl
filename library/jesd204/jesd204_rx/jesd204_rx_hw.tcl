@@ -129,8 +129,8 @@ add_interface_port config cfg_lmfc_offset lmfc_offset Input 8
 add_interface_port config cfg_octets_per_frame octets_per_frame Input 8
 add_interface_port config cfg_sysref_disable sysref_disable Input 1
 add_interface_port config cfg_sysref_oneshot sysref_oneshot Input 1
-add_interface_port config cfg_err_statistics_reset err_statistics_reset Input 1
-add_interface_port config cfg_err_statistics_mask err_statistics_mask Input 3
+add_interface_port config ctrl_err_statistics_reset err_statistics_reset Input 1
+add_interface_port config ctrl_err_statistics_mask err_statistics_mask Input 3
 
 # status interface
 

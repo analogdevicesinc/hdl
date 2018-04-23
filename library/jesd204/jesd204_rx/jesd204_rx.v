@@ -82,8 +82,8 @@ module jesd204_rx #(
   input cfg_disable_char_replacement,
   input cfg_disable_scrambler,
 
-  input cfg_err_statistics_reset,
-  input [2:0] cfg_err_statistics_mask,
+  input ctrl_err_statistics_reset,
+  input [2:0] ctrl_err_statistics_mask,
 
   output [32*NUM_LANES-1:0] status_err_statistics_cnt,
 
@@ -310,8 +310,8 @@ for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
     .buffer_release_n(buffer_release_n),
     .buffer_ready_n(buffer_ready_n[i]),
 
-    .cfg_err_statistics_reset(cfg_err_statistics_reset),
-    .cfg_err_statistics_mask(cfg_err_statistics_mask),
+    .ctrl_err_statistics_reset(ctrl_err_statistics_reset),
+    .ctrl_err_statistics_mask(ctrl_err_statistics_mask),
     .status_err_statistics_cnt(status_err_statistics_cnt[32*i+31:32*i]),
 
     .ilas_config_valid(ilas_config_valid[i]),

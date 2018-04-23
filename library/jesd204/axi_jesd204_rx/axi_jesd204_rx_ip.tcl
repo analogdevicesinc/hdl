@@ -82,8 +82,8 @@ adi_add_bus "rx_cfg" "master" \
     { "core_cfg_lmfc_offset" "lmfc_offset" } \
     { "core_cfg_sysref_oneshot" "sysref_oneshot" } \
     { "core_cfg_sysref_disable" "sysref_disable" } \
-    { "core_cfg_err_statistics_reset" "err_statistics_reset" } \
-    { "core_cfg_err_statistics_mask" "err_statistics_mask" } \
+    { "core_ctrl_err_statistics_reset" "err_statistics_reset" } \
+    { "core_ctrl_err_statistics_mask" "err_statistics_mask" } \
     { "core_cfg_buffer_early_release" "buffer_early_release" } \
     { "core_cfg_buffer_delay" "buffer_delay" } \
     { "core_cfg_disable_char_replacement" "disable_char_replacement" } \

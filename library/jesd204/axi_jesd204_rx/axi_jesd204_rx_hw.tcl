@@ -133,8 +133,8 @@ add_interface_port config core_cfg_lmfc_offset lmfc_offset Output 8
 add_interface_port config core_cfg_octets_per_frame octets_per_frame Output 8
 add_interface_port config core_cfg_sysref_disable sysref_disable Output 1
 add_interface_port config core_cfg_sysref_oneshot sysref_oneshot Output 1
-add_interface_port config core_cfg_err_statistics_reset err_statistics_reset Output 1
-add_interface_port config core_cfg_err_statistics_mask err_statistics_mask Output 3
+add_interface_port config core_ctrl_err_statistics_reset err_statistics_reset Output 1
+add_interface_port config core_ctrl_err_statistics_mask err_statistics_mask Output 3
 
 # status interface
 

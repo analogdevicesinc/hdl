@@ -69,8 +69,8 @@ module jesd204_up_rx # (
   input [14*NUM_LANES-1:0] core_status_lane_latency,
 
   input [32*NUM_LANES-1:0] core_status_err_statistics_cnt,
-  output [2:0] core_cfg_err_statistics_mask,
-  output core_cfg_err_statistics_reset,
+  output [2:0] core_ctrl_err_statistics_mask,
+  output core_ctrl_err_statistics_reset,
 
   input up_cfg_is_writeable,
   output reg up_cfg_buffer_early_release,
@@ -84,8 +84,8 @@ wire [2*NUM_LANES-1:0] up_status_lane_cgs_state;
 wire [31:0] up_lane_rdata[0:NUM_LANES-1];
 wire [32*NUM_LANES-1:0] up_status_err_statistics_cnt;
 
-reg up_cfg_err_statistics_reset = 0;
-reg [2:0] up_cfg_err_statistics_mask = 3'h0;
+reg up_ctrl_err_statistics_reset = 0;
+reg [2:0] up_ctrl_err_statistics_mask = 3'h0;
 
 sync_data #(
   .NUM_OF_BITS(2+NUM_LANES*(2+32))
@@ -109,13 +109,13 @@ sync_data #(
 ) i_cdc_cfg (
   .in_clk(up_clk),
   .in_data({
-    up_cfg_err_statistics_mask,
-    up_cfg_err_statistics_reset
+    up_ctrl_err_statistics_mask,
+    up_ctrl_err_statistics_reset
   }),
   .out_clk(core_clk),
   .out_data({
-    core_cfg_err_statistics_mask,
-    core_cfg_err_statistics_reset
+    core_ctrl_err_statistics_mask,
+    core_ctrl_err_statistics_reset
   })
 );
 
@@ -136,9 +136,9 @@ always @(*) begin
   };
   12'h91: up_rdata <= {
     /* 11-31 */ 21'h00, /* Reserved for future additions */
-    /* 08-10 */ up_cfg_err_statistics_mask,
+    /* 08-10 */ up_ctrl_err_statistics_mask,
     /* 01-07 */ 7'h0,
-    /*    00 */ up_cfg_err_statistics_reset
+    /*    00 */ up_ctrl_err_statistics_reset
   };
   /* 0x92-0x9f reserved for future use */
 
@@ -163,8 +163,8 @@ always @(posedge up_clk) begin
   if (up_reset == 1'b1) begin
     up_cfg_buffer_early_release <= 1'b0;
     up_cfg_buffer_delay <= 'h00;
-    up_cfg_err_statistics_mask <= 3'h0;
-    up_cfg_err_statistics_reset <= 1'b0;
+    up_ctrl_err_statistics_mask <= 3'h0;
+    up_ctrl_err_statistics_reset <= 1'b0;
   end else if (up_wreq == 1'b1 && up_cfg_is_writeable == 1'b1) begin
     case (up_waddr)
     /* JESD RX configuraton */
@@ -176,8 +176,8 @@ always @(posedge up_clk) begin
   end else if (up_wreq == 1'b1) begin
     case (up_waddr)
     12'h91: begin
-      up_cfg_err_statistics_mask <= up_wdata[10:8];
-      up_cfg_err_statistics_reset <= up_wdata[0];
+      up_ctrl_err_statistics_mask <= up_wdata[10:8];
+      up_ctrl_err_statistics_reset <= up_wdata[0];
     end
     endcase
   end
