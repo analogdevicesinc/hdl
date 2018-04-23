@@ -207,6 +207,8 @@ proc axi_dmac_validate {} {
   set type_src [get_parameter_value DMA_TYPE_SRC]
   set type_dest [get_parameter_value DMA_TYPE_DEST]
 
+  set max_burst 32768
+
   if {$auto_clk == true} {
     global src_clks dest_clks
 
@@ -244,11 +246,20 @@ proc axi_dmac_validate {} {
   foreach suffix {SRC DEST} {
     if {[get_parameter_value DMA_TYPE_$suffix] == 0} {
       set show_axi_protocol true
+      set proto [get_parameter_value DMA_AXI_PROTOCOL_$suffix]
+      set width [get_parameter_value DMA_DATA_WIDTH_$suffix]
+      if {$proto == 0} {
+        set max_burst [expr min($max_burst, $width * 256 / 8)]
+      } else {
+        set max_burst [expr min($max_burst, $width * 16 / 8)]
+      }
     } else {
       set show_axi_protocol false
     }
     set_parameter_property DMA_AXI_PROTOCOL_$suffix VISIBLE $show_axi_protocol
   }
+
+  set_parameter_property MAX_BYTES_PER_BURST ALLOWED_RANGES "1:$max_burst"
 }
 
 # conditional interfaces
