@@ -250,6 +250,34 @@ localparam ID_WIDTH = (FIFO_SIZE) > 64 ? 8 :
   (FIFO_SIZE) > 1 ? 2 : 1;
 localparam DBG_ID_PADDING = ID_WIDTH > 8 ? 0 : 8 - ID_WIDTH;
 
+/* AXI3 supports a maximum of 16 beats per burst. AXI4 supports a maximum of
+   256 beats per burst. If either bus is AXI3 set the maximum number of beats
+   per burst to 16. For non AXI interfaces the maximum beats per burst is in
+   theory unlimted. Set it to 1024 to provide a reasonable upper threshold */
+localparam BEATS_PER_BURST_LIMIT_DEST =
+  (DMA_TYPE_DEST == DMA_TYPE_AXI_MM) ?
+    (DMA_AXI_PROTOCOL_DEST == 1 ? 16 : 256) :
+    1024;
+localparam BYTES_PER_BURST_LIMIT_DEST =
+    BEATS_PER_BURST_LIMIT_DEST * DMA_DATA_WIDTH_DEST / 8;
+localparam BEATS_PER_BURST_LIMIT_SRC =
+  (DMA_TYPE_SRC == DMA_TYPE_AXI_MM) ?
+    (DMA_AXI_PROTOCOL_SRC == 1 ? 16 : 256) :
+    1024;
+localparam BYTES_PER_BURST_LIMIT_SRC =
+    BEATS_PER_BURST_LIMIT_SRC * DMA_DATA_WIDTH_SRC / 8;
+
+/* The smaller bus limits the maximum bytes per burst. */
+localparam BYTES_PER_BURST_LIMIT =
+  (BYTES_PER_BURST_LIMIT_DEST < BYTES_PER_BURST_LIMIT_SRC) ?
+  BYTES_PER_BURST_LIMIT_DEST : BYTES_PER_BURST_LIMIT_SRC;
+
+/* Make sure the requested MAX_BYTES_PER_BURST does not exceed what the
+   interfaces can support. Limit the value if necessary. */
+localparam REAL_MAX_BYTES_PER_BURST =
+  BYTES_PER_BURST_LIMIT < MAX_BYTES_PER_BURST ?
+    BYTES_PER_BURST_LIMIT : MAX_BYTES_PER_BURST;
+
 // Register interface signals
 reg  [31:0]  up_rdata = 'd0;
 reg          up_wack = 1'b0;
@@ -614,7 +642,7 @@ dmac_request_arb #(
   .ASYNC_CLK_DEST_REQ(ASYNC_CLK_DEST_REQ),
   .AXI_SLICE_DEST(AXI_SLICE_DEST),
   .AXI_SLICE_SRC(AXI_SLICE_SRC),
-  .MAX_BYTES_PER_BURST(MAX_BYTES_PER_BURST),
+  .MAX_BYTES_PER_BURST(REAL_MAX_BYTES_PER_BURST),
   .FIFO_SIZE(FIFO_SIZE),
   .ID_WIDTH(ID_WIDTH),
   .AXI_LENGTH_WIDTH_SRC(8-(4*DMA_AXI_PROTOCOL_SRC)),

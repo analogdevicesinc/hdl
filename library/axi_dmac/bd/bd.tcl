@@ -40,10 +40,24 @@ proc post_config_ip {cellpath otherinfo} {
 			continue
 		}
 
+		set axi_protocol [get_property "CONFIG.DMA_AXI_PROTOCOL_$dir" $ip]
 		set data_width [get_property "CONFIG.DMA_DATA_WIDTH_$dir" $ip]
 		set max_beats_per_burst [expr {int(ceil($max_bytes_per_burst * 8.0 / $data_width))}]
 
+		if {$axi_protocol == 0} {
+			set axi_protocol_str "AXI4"
+			if {$max_beats_per_burst > 256} {
+				set max_beats_per_burst 256
+			}
+		} else {
+			set axi_protocol_str "AXI3"
+			if {$max_beats_per_burst > 16} {
+				set max_beats_per_burst 16
+			}
+		}
+
 		set intf [get_bd_intf_pins [format "%s/m_%s_axi" $cellpath [string tolower $dir]]]
+		set_property CONFIG.PROTOCOL $axi_protocol_str $intf
 		set_property CONFIG.MAX_BURST_LENGTH $max_beats_per_burst $intf
 
 		# The core issues as many requests as the amount of data the FIFO can hold
