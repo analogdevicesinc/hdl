@@ -3,7 +3,7 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-LIBRARY_NAME := axi_ad9379
+LIBRARY_NAME := axi_adrv9009
 
 GENERIC_DEPS += ../common/ad_datafmt.v
 GENERIC_DEPS += ../common/ad_dds.v
@@ -20,13 +20,13 @@ GENERIC_DEPS += ../common/up_dac_channel.v
 GENERIC_DEPS += ../common/up_dac_common.v
 GENERIC_DEPS += ../common/up_xfer_cntrl.v
 GENERIC_DEPS += ../common/up_xfer_status.v
-GENERIC_DEPS += axi_ad9379.v
-GENERIC_DEPS += axi_ad9379_if.v
-GENERIC_DEPS += axi_ad9379_rx.v
-GENERIC_DEPS += axi_ad9379_rx_channel.v
-GENERIC_DEPS += axi_ad9379_rx_os.v
-GENERIC_DEPS += axi_ad9379_tx.v
-GENERIC_DEPS += axi_ad9379_tx_channel.v
+GENERIC_DEPS += axi_adrv9009.v
+GENERIC_DEPS += axi_adrv9009_if.v
+GENERIC_DEPS += axi_adrv9009_rx.v
+GENERIC_DEPS += axi_adrv9009_rx_channel.v
+GENERIC_DEPS += axi_adrv9009_rx_os.v
+GENERIC_DEPS += axi_adrv9009_tx.v
+GENERIC_DEPS += axi_adrv9009_tx_channel.v
 
 XILINX_DEPS += ../xilinx/common/ad_dcfilter.v
 XILINX_DEPS += ../xilinx/common/ad_mul.v
@@ -34,7 +34,7 @@ XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
 XILINX_DEPS += ../xilinx/common/up_clock_mon_constr.xdc
 XILINX_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
 XILINX_DEPS += ../xilinx/common/up_xfer_status_constr.xdc
-XILINX_DEPS += axi_ad9379_ip.tcl
+XILINX_DEPS += axi_adrv9009_ip.tcl
 
 ALTERA_DEPS += ../altera/common/ad_dcfilter.v
 ALTERA_DEPS += ../altera/common/ad_mul.v
@@ -42,6 +42,6 @@ ALTERA_DEPS += ../altera/common/up_clock_mon_constr.sdc
 ALTERA_DEPS += ../altera/common/up_rst_constr.sdc
 ALTERA_DEPS += ../altera/common/up_xfer_cntrl_constr.sdc
 ALTERA_DEPS += ../altera/common/up_xfer_status_constr.sdc
-ALTERA_DEPS += axi_ad9379_hw.tcl
+ALTERA_DEPS += axi_adrv9009_hw.tcl
 
 include ../scripts/library.mk

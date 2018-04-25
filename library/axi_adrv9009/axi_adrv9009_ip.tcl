@@ -3,8 +3,8 @@
 source ../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
-adi_ip_create axi_ad9379
-adi_ip_files axi_ad9379 [list \
+adi_ip_create axi_adrv9009
+adi_ip_files axi_adrv9009 [list \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
@@ -26,15 +26,15 @@ adi_ip_files axi_ad9379 [list \
   "$ad_hdl_dir/library/common/up_dac_common.v" \
   "$ad_hdl_dir/library/common/up_dac_channel.v" \
   "$ad_hdl_dir/library/common/ad_xcvr_rx_if.v" \
-  "axi_ad9379_if.v" \
-  "axi_ad9379_rx_channel.v" \
-  "axi_ad9379_rx.v" \
-  "axi_ad9379_rx_os.v" \
-  "axi_ad9379_tx_channel.v" \
-  "axi_ad9379_tx.v" \
-  "axi_ad9379.v" ]
+  "axi_adrv9009_if.v" \
+  "axi_adrv9009_rx_channel.v" \
+  "axi_adrv9009_rx.v" \
+  "axi_adrv9009_rx_os.v" \
+  "axi_adrv9009_tx_channel.v" \
+  "axi_adrv9009_tx.v" \
+  "axi_adrv9009.v" ]
 
-adi_ip_properties axi_ad9379
+adi_ip_properties axi_adrv9009
 
 set_property driver_value 0 [ipx::get_ports *dovf* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *dunf* -of_objects [ipx::current_core]]

@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9379 #(
+module axi_adrv9009 #(
 
   parameter   ID = 0,
   parameter   DAC_DATAPATH_DISABLE = 0,
@@ -185,7 +185,7 @@ module axi_ad9379 #(
 
   // device interface
 
-  axi_ad9379_if i_if (
+  axi_adrv9009_if i_if (
     .adc_clk (adc_clk),
     .adc_rx_sof (adc_rx_sof),
     .adc_rx_data (adc_rx_data),
@@ -201,7 +201,7 @@ module axi_ad9379 #(
 
   // receive
 
-  axi_ad9379_rx #(
+  axi_adrv9009_rx #(
     .ID (ID),
     .DATAPATH_DISABLE (ADC_DATAPATH_DISABLE))
   i_rx (
@@ -235,7 +235,7 @@ module axi_ad9379 #(
 
   // receive (o/s)
 
-  axi_ad9379_rx_os #(
+  axi_adrv9009_rx_os #(
     .ID (ID),
     .DATAPATH_DISABLE (ADC_DATAPATH_DISABLE))
   i_rx_os (
@@ -264,7 +264,7 @@ module axi_ad9379 #(
 
   // transmit
 
-  axi_ad9379_tx #(
+  axi_adrv9009_tx #(
     .ID (ID),
     .DATAPATH_DISABLE (DAC_DATAPATH_DISABLE))
   i_tx (
