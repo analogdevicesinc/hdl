@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9379_if (
+module axi_adrv9009_if (
   // receive
 
   input                   adc_clk,

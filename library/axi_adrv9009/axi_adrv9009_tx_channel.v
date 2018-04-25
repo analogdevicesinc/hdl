@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9379_tx_channel #(
+module axi_adrv9009_tx_channel #(
 
   parameter   CHANNEL_ID = 32'h0,
   parameter   Q_OR_I_N = 0,

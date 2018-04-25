@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9379_rx_channel #(
+module axi_adrv9009_rx_channel #(
 
   parameter   Q_OR_I_N = 0,
   parameter   COMMON_ID = 0,

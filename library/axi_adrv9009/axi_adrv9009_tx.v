@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9379_tx #(
+module axi_adrv9009_tx #(
 
   parameter   DATAPATH_DISABLE = 0,
   parameter   ID = 0) (
@@ -127,7 +127,7 @@ module axi_ad9379_tx #(
 
   assign dac_valid_i0 = 1'b1;
 
-  axi_ad9379_tx_channel #(
+  axi_adrv9009_tx_channel #(
     .CHANNEL_ID (0),
     .Q_OR_I_N (0),
     .DATAPATH_DISABLE (DATAPATH_DISABLE))
@@ -156,7 +156,7 @@ module axi_ad9379_tx #(
 
   assign dac_valid_q0 = 1'b1;
 
-  axi_ad9379_tx_channel #(
+  axi_adrv9009_tx_channel #(
     .CHANNEL_ID (1),
     .Q_OR_I_N (1),
     .DATAPATH_DISABLE (DATAPATH_DISABLE))
@@ -185,7 +185,7 @@ module axi_ad9379_tx #(
 
   assign dac_valid_i1 = 1'b1;
 
-  axi_ad9379_tx_channel #(
+  axi_adrv9009_tx_channel #(
     .CHANNEL_ID (2),
     .Q_OR_I_N (0),
     .DATAPATH_DISABLE (DATAPATH_DISABLE))
@@ -214,7 +214,7 @@ module axi_ad9379_tx #(
 
   assign dac_valid_q1 = 1'b1;
 
-  axi_ad9379_tx_channel #(
+  axi_adrv9009_tx_channel #(
     .CHANNEL_ID (3),
     .Q_OR_I_N (1),
     .DATAPATH_DISABLE (DATAPATH_DISABLE))

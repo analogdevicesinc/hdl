@@ -4,16 +4,16 @@ package require qsys
 source ../scripts/adi_env.tcl
 source ../scripts/adi_ip_alt.tcl
 
-set_module_property NAME axi_ad9379
-set_module_property DESCRIPTION "AXI AD9379 Interface"
+set_module_property NAME axi_adrv9009
+set_module_property DESCRIPTION "AXI adrv9009 Interface"
 set_module_property VERSION 1.0
 set_module_property GROUP "Analog Devices"
-set_module_property DISPLAY_NAME axi_ad9379
+set_module_property DISPLAY_NAME axi_adrv9009
 
 # files
 
 add_fileset quartus_synth QUARTUS_SYNTH "" "Quartus Synthesis"
-set_fileset_property quartus_synth TOP_LEVEL axi_ad9379
+set_fileset_property quartus_synth TOP_LEVEL axi_adrv9009
 add_fileset_file ad_rst.v                   VERILOG PATH $ad_hdl_dir/library/common/ad_rst.v
 add_fileset_file ad_mul.v                   VERILOG PATH $ad_hdl_dir/library/altera/common/ad_mul.v
 add_fileset_file ad_dds_sine.v              VERILOG PATH $ad_hdl_dir/library/common/ad_dds_sine.v
@@ -31,13 +31,13 @@ add_fileset_file up_adc_channel.v           VERILOG PATH $ad_hdl_dir/library/com
 add_fileset_file up_dac_common.v            VERILOG PATH $ad_hdl_dir/library/common/up_dac_common.v
 add_fileset_file up_dac_channel.v           VERILOG PATH $ad_hdl_dir/library/common/up_dac_channel.v
 add_fileset_file ad_xcvr_rx_if.v            VERILOG PATH $ad_hdl_dir/library/common/ad_xcvr_rx_if.v
-add_fileset_file axi_ad9379_if.v            VERILOG PATH axi_ad9379_if.v
-add_fileset_file axi_ad9379_rx_channel.v    VERILOG PATH axi_ad9379_rx_channel.v
-add_fileset_file axi_ad9379_rx.v            VERILOG PATH axi_ad9379_rx.v
-add_fileset_file axi_ad9379_rx_os.v         VERILOG PATH axi_ad9379_rx_os.v
-add_fileset_file axi_ad9379_tx_channel.v    VERILOG PATH axi_ad9379_tx_channel.v
-add_fileset_file axi_ad9379_tx.v            VERILOG PATH axi_ad9379_tx.v
-add_fileset_file axi_ad9379.v               VERILOG PATH axi_ad9379.v TOP_LEVEL_FILE
+add_fileset_file axi_adrv9009_if.v            VERILOG PATH axi_adrv9009_if.v
+add_fileset_file axi_adrv9009_rx_channel.v    VERILOG PATH axi_adrv9009_rx_channel.v
+add_fileset_file axi_adrv9009_rx.v            VERILOG PATH axi_adrv9009_rx.v
+add_fileset_file axi_adrv9009_rx_os.v         VERILOG PATH axi_adrv9009_rx_os.v
+add_fileset_file axi_adrv9009_tx_channel.v    VERILOG PATH axi_adrv9009_tx_channel.v
+add_fileset_file axi_adrv9009_tx.v            VERILOG PATH axi_adrv9009_tx.v
+add_fileset_file axi_adrv9009.v               VERILOG PATH axi_adrv9009.v TOP_LEVEL_FILE
 add_fileset_file up_xfer_cntrl_constr.sdc   SDC PATH  $ad_hdl_dir/library/altera/common/up_xfer_cntrl_constr.sdc
 add_fileset_file up_xfer_status_constr.sdc  SDC PATH  $ad_hdl_dir/library/altera/common/up_xfer_status_constr.sdc
 add_fileset_file up_clock_mon_constr.sdc    SDC PATH  $ad_hdl_dir/library/altera/common/up_clock_mon_constr.sdc

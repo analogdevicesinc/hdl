@@ -96,40 +96,40 @@ module system_top (
   output                  sysref_out_n,
 
   output                  spi_csn_ad9528,
-  output                  spi_csn_ad9379,
+  output                  spi_csn_adrv9009,
   output                  spi_clk,
   output                  spi_mosi,
   input                   spi_miso,
 
   inout                   ad9528_reset_b,
   inout                   ad9528_sysref_req,
-  inout                   ad9379_tx1_enable,
-  inout                   ad9379_tx2_enable,
-  inout                   ad9379_rx1_enable,
-  inout                   ad9379_rx2_enable,
-  inout                   ad9379_test,
-  inout                   ad9379_reset_b,
-  inout                   ad9379_gpint,
+  inout                   adrv9009_tx1_enable,
+  inout                   adrv9009_tx2_enable,
+  inout                   adrv9009_rx1_enable,
+  inout                   adrv9009_rx2_enable,
+  inout                   adrv9009_test,
+  inout                   adrv9009_reset_b,
+  inout                   adrv9009_gpint,
 
-  inout                   ad9379_gpio_00,
-  inout                   ad9379_gpio_01,
-  inout                   ad9379_gpio_02,
-  inout                   ad9379_gpio_03,
-  inout                   ad9379_gpio_04,
-  inout                   ad9379_gpio_05,
-  inout                   ad9379_gpio_06,
-  inout                   ad9379_gpio_07,
-  inout                   ad9379_gpio_15,
-  inout                   ad9379_gpio_08,
-  inout                   ad9379_gpio_09,
-  inout                   ad9379_gpio_10,
-  inout                   ad9379_gpio_11,
-  inout                   ad9379_gpio_12,
-  inout                   ad9379_gpio_14,
-  inout                   ad9379_gpio_13,
-  inout                   ad9379_gpio_17,
-  inout                   ad9379_gpio_16,
-  inout                   ad9379_gpio_18,
+  inout                   adrv9009_gpio_00,
+  inout                   adrv9009_gpio_01,
+  inout                   adrv9009_gpio_02,
+  inout                   adrv9009_gpio_03,
+  inout                   adrv9009_gpio_04,
+  inout                   adrv9009_gpio_05,
+  inout                   adrv9009_gpio_06,
+  inout                   adrv9009_gpio_07,
+  inout                   adrv9009_gpio_15,
+  inout                   adrv9009_gpio_08,
+  inout                   adrv9009_gpio_09,
+  inout                   adrv9009_gpio_10,
+  inout                   adrv9009_gpio_11,
+  inout                   adrv9009_gpio_12,
+  inout                   adrv9009_gpio_14,
+  inout                   adrv9009_gpio_13,
+  inout                   adrv9009_gpio_17,
+  inout                   adrv9009_gpio_16,
+  inout                   adrv9009_gpio_18,
 
   input                   sys_rst,
   input                   sys_clk_p,
@@ -221,32 +221,32 @@ module system_top (
     .dio_o ({gpio_i[59:32]}),
     .dio_p ({ ad9528_reset_b,       // 59
               ad9528_sysref_req,    // 58
-              ad9379_tx1_enable,    // 57
-              ad9379_tx2_enable,    // 56
-              ad9379_rx1_enable,    // 55
-              ad9379_rx2_enable,    // 54
-              ad9379_test,          // 53
-              ad9379_reset_b,       // 52
-              ad9379_gpint,         // 51
-              ad9379_gpio_00,       // 50
-              ad9379_gpio_01,       // 49
-              ad9379_gpio_02,       // 48
-              ad9379_gpio_03,       // 47
-              ad9379_gpio_04,       // 46
-              ad9379_gpio_05,       // 45
-              ad9379_gpio_06,       // 44
-              ad9379_gpio_07,       // 43
-              ad9379_gpio_15,       // 42
-              ad9379_gpio_08,       // 41
-              ad9379_gpio_09,       // 40
-              ad9379_gpio_10,       // 39
-              ad9379_gpio_11,       // 38
-              ad9379_gpio_12,       // 37
-              ad9379_gpio_14,       // 36
-              ad9379_gpio_13,       // 35
-              ad9379_gpio_17,       // 34
-              ad9379_gpio_16,       // 33
-              ad9379_gpio_18}));    // 32
+              adrv9009_tx1_enable,  // 57
+              adrv9009_tx2_enable,  // 56
+              adrv9009_rx1_enable,  // 55
+              adrv9009_rx2_enable,  // 54
+              adrv9009_test,        // 53
+              adrv9009_reset_b,     // 52
+              adrv9009_gpint,       // 51
+              adrv9009_gpio_00,     // 50
+              adrv9009_gpio_01,     // 49
+              adrv9009_gpio_02,     // 48
+              adrv9009_gpio_03,     // 47
+              adrv9009_gpio_04,     // 46
+              adrv9009_gpio_05,     // 45
+              adrv9009_gpio_06,     // 44
+              adrv9009_gpio_07,     // 43
+              adrv9009_gpio_15,     // 42
+              adrv9009_gpio_08,     // 41
+              adrv9009_gpio_09,     // 40
+              adrv9009_gpio_10,     // 39
+              adrv9009_gpio_11,     // 38
+              adrv9009_gpio_12,     // 37
+              adrv9009_gpio_14,     // 36
+              adrv9009_gpio_13,     // 35
+              adrv9009_gpio_17,     // 34
+              adrv9009_gpio_16,     // 33
+              adrv9009_gpio_18}));  // 32
 
   ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_bd (
     .dio_t (gpio_t[14:0]),
@@ -327,7 +327,7 @@ module system_top (
     .spdif (spdif),
     .spi0_clk_i (spi_clk),
     .spi0_clk_o (spi_clk),
-    .spi0_csn_0_o (spi_csn_ad9379),
+    .spi0_csn_0_o (spi_csn_adrv9009),
     .spi0_csn_1_o (spi_csn_ad9528),
     .spi0_csn_2_o (),
     .spi0_csn_i (1'b1),
