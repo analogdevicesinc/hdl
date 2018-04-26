@@ -146,17 +146,17 @@ end
 endgenerate
 
 always @(posedge clk) begin
-  if (ctrl_err_statistics_mask[0] == 1'b1) begin
+  if (ctrl_err_statistics_mask[0] == 1'b0 && cgs_ready == 1'b1) begin
     phy_disperr_cnt <= phy_disperr[0] + phy_disperr[1] + phy_disperr[2] + phy_disperr[3];
   end else begin
     phy_disperr_cnt <= 3'h0;
   end
-  if (ctrl_err_statistics_mask[1] == 1'b1) begin
+  if (ctrl_err_statistics_mask[1] == 1'b0 && cgs_ready == 1'b1) begin
     phy_notintable_cnt <= phy_notintable[0] + phy_notintable[1] + phy_notintable[2] + phy_notintable[3];
   end else begin
     phy_notintable_cnt <= 3'h0;
   end
-  if (ctrl_err_statistics_mask[2] == 1'b1) begin
+  if (ctrl_err_statistics_mask[2] == 1'b0 && cgs_ready == 1'b1) begin
     phy_unexpectedk_cnt <= unexpected_char[0] + unexpected_char[1] + unexpected_char[2] + unexpected_char[3];
   end else begin
     phy_unexpectedk_cnt <= 3'h0;
@@ -164,7 +164,7 @@ always @(posedge clk) begin
 end
 
 always @(posedge clk) begin
-  if (ctrl_err_statistics_reset == 1'b1 || cgs_ready == 1'b0) begin
+  if (ctrl_err_statistics_reset == 1'b1) begin
     status_err_statistics_cnt <= 32'h0;
   end else if (status_err_statistics_cnt[31:4] != 28'hfffffff) begin
     status_err_statistics_cnt <= status_err_statistics_cnt + phy_notintable_cnt + phy_disperr_cnt + phy_unexpectedk_cnt;
