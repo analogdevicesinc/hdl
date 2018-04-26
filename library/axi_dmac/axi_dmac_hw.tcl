@@ -14,36 +14,36 @@ set_module_property VALIDATION_CALLBACK axi_dmac_validate
 
 # files
 
-add_fileset quartus_synth QUARTUS_SYNTH "" "Quartus Synthesis"
-set_fileset_property quartus_synth TOP_LEVEL axi_dmac
-add_fileset_file sync_bits.v              VERILOG PATH $ad_hdl_dir/library/util_cdc/sync_bits.v
-add_fileset_file sync_gray.v              VERILOG PATH $ad_hdl_dir/library/util_cdc/sync_gray.v
-add_fileset_file up_axi.v                 VERILOG PATH $ad_hdl_dir/library/common/up_axi.v
-add_fileset_file axi_repack.v             VERILOG PATH $ad_hdl_dir/library/util_axis_resize/util_axis_resize.v
-add_fileset_file fifo.v                   VERILOG PATH $ad_hdl_dir/library/util_axis_fifo/util_axis_fifo.v
-add_fileset_file address_gray.v           VERILOG PATH $ad_hdl_dir/library/util_axis_fifo/address_gray.v
-add_fileset_file address_gray_pipelined.v VERILOG PATH $ad_hdl_dir/library/util_axis_fifo/address_gray_pipelined.v
-add_fileset_file address_sync.v           VERILOG PATH $ad_hdl_dir/library/util_axis_fifo/address_sync.v
-add_fileset_file ad_mem.v                 VERILOG PATH $ad_hdl_dir/library/common/ad_mem.v
-add_fileset_file inc_id.h                 VERILOG_INCLUDE PATH inc_id.h
-add_fileset_file resp.h                   VERILOG_INCLUDE PATH resp.h
-add_fileset_file address_generator.v      VERILOG PATH address_generator.v
-add_fileset_file data_mover.v             VERILOG PATH data_mover.v
-add_fileset_file request_arb.v            VERILOG PATH request_arb.v
-add_fileset_file request_generator.v      VERILOG PATH request_generator.v
-add_fileset_file response_handler.v       VERILOG PATH response_handler.v
-add_fileset_file axi_register_slice.v     VERILOG PATH axi_register_slice.v
-add_fileset_file 2d_transfer.v            VERILOG PATH 2d_transfer.v
-add_fileset_file dest_axi_mm.v            VERILOG PATH dest_axi_mm.v
-add_fileset_file dest_axi_stream.v        VERILOG PATH dest_axi_stream.v
-add_fileset_file dest_fifo_inf.v          VERILOG PATH dest_fifo_inf.v
-add_fileset_file src_axi_mm.v             VERILOG PATH src_axi_mm.v
-add_fileset_file src_axi_stream.v         VERILOG PATH src_axi_stream.v
-add_fileset_file src_fifo_inf.v           VERILOG PATH src_fifo_inf.v
-add_fileset_file splitter.v               VERILOG PATH splitter.v
-add_fileset_file response_generator.v     VERILOG PATH response_generator.v
-add_fileset_file axi_dmac.v               VERILOG PATH axi_dmac.v
-add_fileset_file axi_dmac_constr.sdc      SDC     PATH axi_dmac_constr.sdc
+ad_ip_files axi_dmac [list \
+  $ad_hdl_dir/library/util_cdc/sync_bits.v \
+  $ad_hdl_dir/library/util_cdc/sync_gray.v \
+  $ad_hdl_dir/library/common/up_axi.v \
+  $ad_hdl_dir/library/util_axis_resize/util_axis_resize.v \
+  $ad_hdl_dir/library/util_axis_fifo/util_axis_fifo.v \
+  $ad_hdl_dir/library/util_axis_fifo/address_gray.v \
+  $ad_hdl_dir/library/util_axis_fifo/address_gray_pipelined.v \
+  $ad_hdl_dir/library/util_axis_fifo/address_sync.v \
+  $ad_hdl_dir/library/common/ad_mem.v \
+  inc_id.h \
+  resp.h \
+  address_generator.v \
+  data_mover.v \
+  request_arb.v \
+  request_generator.v \
+  response_handler.v \
+  axi_register_slice.v \
+  2d_transfer.v \
+  dest_axi_mm.v \
+  dest_axi_stream.v \
+  dest_fifo_inf.v \
+  src_axi_mm.v \
+  src_axi_stream.v \
+  src_fifo_inf.v \
+  splitter.v \
+  response_generator.v \
+  axi_dmac.v \
+  axi_dmac_constr.sdc \
+]
 
 # Disable dual-clock RAM read-during-write behaviour warning.
 set_qip_strings { "set_instance_assignment -name MESSAGE_DISABLE 276027 -entity util_axis_fifo" }
