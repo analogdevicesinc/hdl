@@ -69,6 +69,7 @@ set_property -dict  {PACKAGE_PIN  AG5   IOSTANDARD  LVCMOS15} [get_ports gpio_bd
 set_property -dict  {PACKAGE_PIN  AB12  IOSTANDARD  LVCMOS15} [get_ports gpio_bd[6]]
 set_property -dict  {PACKAGE_PIN  AC6   IOSTANDARD  LVCMOS15} [get_ports gpio_bd[7]]
 set_property -dict  {PACKAGE_PIN  G12   IOSTANDARD  LVCMOS25} [get_ports gpio_bd[8]]
+#LEDs 0-7
 set_property -dict  {PACKAGE_PIN  AB8   IOSTANDARD  LVCMOS15} [get_ports gpio_bd[9]]
 set_property -dict  {PACKAGE_PIN  AA8   IOSTANDARD  LVCMOS15} [get_ports gpio_bd[10]]
 set_property -dict  {PACKAGE_PIN  AC9   IOSTANDARD  LVCMOS15} [get_ports gpio_bd[11]]
@@ -83,3 +84,20 @@ set_property -dict  {PACKAGE_PIN  F16   IOSTANDARD  LVCMOS25} [get_ports gpio_bd
 set_property -dict  {PACKAGE_PIN  P23   IOSTANDARD  LVCMOS25} [get_ports iic_rstn]
 set_property -dict  {PACKAGE_PIN  K21   IOSTANDARD  LVCMOS25  DRIVE 8 SLEW SLOW} [get_ports iic_scl]
 set_property -dict  {PACKAGE_PIN  L21   IOSTANDARD  LVCMOS25  DRIVE 8 SLEW SLOW} [get_ports iic_sda]
+
+################################################################################
+##### SMA CLOCKS and GPOI
+###############################################################################
+set_property IOSTANDARD LVCMOS25 [get_ports user_sma_clk_*] 
+#user_sma_clk_p SMA J11
+set_property PACKAGE_PIN L25 [get_ports user_sma_clk_p] 
+#create_clock -period 100.000 -name sma_clk [get_ports user_sma_clk_p]
+
+set_property PACKAGE_PIN K25 [get_ports user_sma_clk_n]
+#set_property IOSTANDARD LVCMOS25 [get_ports user_sma_clk_n]
+
+set_property PACKAGE_PIN Y23 [get_ports user_sma_gpio_p]
+set_property IOSTANDARD LVCMOS25 [get_ports user_sma_gpio_*]
+
+set_property PACKAGE_PIN Y24 [get_ports user_sma_gpio_n]
+#set_property IOSTANDARD LVCMOS25 [get_ports user_sma_gpio_n]

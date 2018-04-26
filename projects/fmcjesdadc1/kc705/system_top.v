@@ -98,6 +98,13 @@ module system_top (
   input       [ 3:0]      rx_data_p,
   input       [ 3:0]      rx_data_n,
 
+    //User SMA Clock 
+    output          user_sma_clk_p, // SMA J11
+    output          user_sma_clk_n, // SMA J12
+    //User SMA Gpio 
+    output          user_sma_gpio_p, //Y23 USER_SMA_GPIO_P LVCMOS25 J13.1
+    output          user_sma_gpio_n, //Y24 USER_SMA_GPIO_N LVCMOS25 J14.1 bellow J11
+
   output                  spi_csn_0,
   output                  spi_clk,
   inout                   spi_sdio);
@@ -112,6 +119,15 @@ module system_top (
   wire            spi_miso;
   wire            rx_ref_clk;
   wire            rx_clk;
+
+  wire           adc_enable;
+  wire           adc_valid;
+  wire    [31:0] adc_data;
+
+  assign           user_sma_clk_p = rx_clk;
+  assign           user_sma_clk_n = adc_enable;
+  assign           user_sma_gpio_p = adc_valid;
+  assign           user_sma_gpio_n = adc_data[31]; // Sign bit
 
   assign ddr3_1_p = 2'b11;
   assign ddr3_1_n = 3'b000;
@@ -149,6 +165,9 @@ module system_top (
   // instantiations
 
   system_wrapper i_system_wrapper (
+    .adc_data_a (adc_data),
+    .adc_enable_a (adc_enable),
+    .adc_valid_a (adc_valid),
     .ddr3_addr (ddr3_addr),
     .ddr3_ba (ddr3_ba),
     .ddr3_cas_n (ddr3_cas_n),
