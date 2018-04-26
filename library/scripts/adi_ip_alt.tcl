@@ -150,6 +150,10 @@ proc ad_ip_addfile {pname pfile} {
     add_fileset_file $pmodule VERILOG PATH $pfile
     return
   }
+  if {$ptype eq ".h"} {
+    add_fileset_file $pmodule VERILOG_INCLUDE PATH $pfile
+    return
+  }
   if {$ptype eq ".sdc"} {
     add_fileset_file $pmodule SDC PATH $pfile
     return
