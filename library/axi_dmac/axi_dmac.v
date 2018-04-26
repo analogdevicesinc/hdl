@@ -340,15 +340,15 @@ wire up_dma_req_sync_transfer_start;
 wire up_dma_req_last;
 
 assign dbg_ids0 = {
-  {DBG_ID_PADDING{1'b0}}, dest_data_id,
   {DBG_ID_PADDING{1'b0}}, dest_response_id,
+  {DBG_ID_PADDING{1'b0}}, dest_data_id,
   {DBG_ID_PADDING{1'b0}}, dest_address_id,
   {DBG_ID_PADDING{1'b0}}, dest_request_id
 };
 
 assign dbg_ids1 = {
-  {DBG_ID_PADDING{1'b0}}, src_data_id,
   {DBG_ID_PADDING{1'b0}}, src_response_id,
+  {DBG_ID_PADDING{1'b0}}, src_data_id,
   {DBG_ID_PADDING{1'b0}}, src_address_id,
   {DBG_ID_PADDING{1'b0}}, src_request_id
 };
@@ -568,12 +568,12 @@ dmac_request_arb #(
 
   // DBG
   .dbg_dest_request_id(dest_request_id),
-  .dbg_dest_address_id(dest_data_id),
-  .dbg_dest_data_id(dest_address_id),
+  .dbg_dest_address_id(dest_address_id),
+  .dbg_dest_data_id(dest_data_id),
   .dbg_dest_response_id(dest_response_id),
   .dbg_src_request_id(src_request_id),
-  .dbg_src_address_id(src_data_id),
-  .dbg_src_data_id(src_address_id),
+  .dbg_src_address_id(src_address_id),
+  .dbg_src_data_id(src_data_id),
   .dbg_src_response_id(src_response_id),
   .dbg_status(dbg_status)
 );
