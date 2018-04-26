@@ -35,6 +35,7 @@
 
 module dmac_2d_transfer #(
 
+  parameter DMA_AXI_ADDR_WIDTH = 32,
   parameter DMA_LENGTH_WIDTH = 24,
   parameter BYTES_PER_BEAT_WIDTH_SRC = 3,
   parameter BYTES_PER_BEAT_WIDTH_DEST = 3)(
@@ -45,8 +46,8 @@ module dmac_2d_transfer #(
   input req_valid,
   output reg req_ready,
 
-  input [31:BYTES_PER_BEAT_WIDTH_DEST] req_dest_address,
-  input [31:BYTES_PER_BEAT_WIDTH_SRC] req_src_address,
+  input [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] req_dest_address,
+  input [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] req_src_address,
   input [DMA_LENGTH_WIDTH-1:0] req_x_length,
   input [DMA_LENGTH_WIDTH-1:0] req_y_length,
   input [DMA_LENGTH_WIDTH-1:0] req_dest_stride,
@@ -56,15 +57,15 @@ module dmac_2d_transfer #(
 
   output reg out_req_valid,
   input out_req_ready,
-  output [31:BYTES_PER_BEAT_WIDTH_DEST] out_req_dest_address,
-  output [31:BYTES_PER_BEAT_WIDTH_SRC] out_req_src_address,
+  output [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] out_req_dest_address,
+  output [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] out_req_src_address,
   output [DMA_LENGTH_WIDTH-1:0] out_req_length,
   output reg out_req_sync_transfer_start,
   input out_eot
 );
 
-reg [31:BYTES_PER_BEAT_WIDTH_DEST] dest_address = 'h00;
-reg [31:BYTES_PER_BEAT_WIDTH_SRC] src_address = 'h00;
+reg [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] dest_address = 'h00;
+reg [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] src_address = 'h00;
 reg [DMA_LENGTH_WIDTH-1:0] x_length = 'h00;
 reg [DMA_LENGTH_WIDTH-1:0] y_length = 'h00;
 reg [DMA_LENGTH_WIDTH-1:0] dest_stride = 'h0;
