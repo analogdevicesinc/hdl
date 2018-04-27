@@ -189,7 +189,7 @@ localparam BEATS_PER_BURST_WIDTH_DEST = BYTES_PER_BURST_WIDTH - BYTES_PER_BEAT_W
 
 localparam BURSTS_PER_TRANSFER_WIDTH = DMA_LENGTH_WIDTH - BYTES_PER_BURST_WIDTH;
 
-reg [0:2**ID_WIDTH-1] eot_mem;
+reg eot_mem[0:2**ID_WIDTH-1];
 wire request_eot;
 
 wire [ID_WIDTH-1:0] request_id;
