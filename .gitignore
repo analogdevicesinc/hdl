@@ -1,6 +1,7 @@
 *.cache
 *.data
 *.xpr
+!fmcjesdadc1_kc705.xpr #Except
 *.log
 *.bld
 *.chk

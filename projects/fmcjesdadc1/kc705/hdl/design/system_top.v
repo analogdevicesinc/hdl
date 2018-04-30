@@ -147,7 +147,7 @@ module system_top (
     .adc_data_a (adc_data[0]),
     .adc_enable_a (adc_enable[0]),
     .adc_valid_a (adc_valid[0]),
-    .trig_level ({2'b00, 16'h0800} ), // 18'd1000 * 2
+    .trig_level ({2'b00, 16'h2000} ), // 18'd4000 * 2
     .trigger_out (user_sma_gpio_n));
 
 // 
