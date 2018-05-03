@@ -37,16 +37,19 @@ ad_ip_files ad_ip_jesd204_tpl_adc [list \
   $ad_hdl_dir/library/common/up_adc_common.v \
   $ad_hdl_dir/library/common/up_adc_channel.v \
   $ad_hdl_dir/library/common/ad_xcvr_rx_if.v \
-  $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_regmap.v \
-  $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_pnmon.v \
-  $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_channel.v \
-  $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_core.v \
-  $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_deframer.v \
-  $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc.v \
+  \
   $ad_hdl_dir/library/altera/common/up_xfer_cntrl_constr.sdc \
   $ad_hdl_dir/library/altera/common/up_xfer_status_constr.sdc \
   $ad_hdl_dir/library/altera/common/up_clock_mon_constr.sdc \
-  $ad_hdl_dir/library/altera/common/up_rst_constr.sdc]
+  $ad_hdl_dir/library/altera/common/up_rst_constr.sdc \
+  \
+  ad_ip_jesd204_tpl_adc_regmap.v \
+  ad_ip_jesd204_tpl_adc_pnmon.v \
+  ad_ip_jesd204_tpl_adc_channel.v \
+  ad_ip_jesd204_tpl_adc_core.v \
+  ad_ip_jesd204_tpl_adc_deframer.v \
+  ad_ip_jesd204_tpl_adc.v \
+]
 
 # parameters
 
