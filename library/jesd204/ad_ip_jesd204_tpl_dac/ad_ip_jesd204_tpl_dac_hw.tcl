@@ -42,16 +42,16 @@ ad_ip_files ad_ip_jesd204_tpl_dac [list \
   $ad_hdl_dir/library/common/up_dac_common.v \
   $ad_hdl_dir/library/common/up_dac_channel.v \
   \
-  $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac.v \
-  $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_channel.v \
-  $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_core.v \
-  $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_framer.v \
-  $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_regmap.v \
-  \
   $ad_hdl_dir/library/altera/common/up_xfer_cntrl_constr.sdc \
   $ad_hdl_dir/library/altera/common/up_xfer_status_constr.sdc \
   $ad_hdl_dir/library/altera/common/up_clock_mon_constr.sdc \
   $ad_hdl_dir/library/altera/common/up_rst_constr.sdc \
+  \
+  ad_ip_jesd204_tpl_dac.v \
+  ad_ip_jesd204_tpl_dac_channel.v \
+  ad_ip_jesd204_tpl_dac_core.v \
+  ad_ip_jesd204_tpl_dac_framer.v \
+  ad_ip_jesd204_tpl_dac_regmap.v \
 ]
 
 # parameters
