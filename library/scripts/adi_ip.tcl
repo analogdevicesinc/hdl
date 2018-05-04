@@ -26,6 +26,17 @@ proc adi_ip_ttcl {ip_name ip_constr_files} {
   ipx::reorder_files -front $ip_constr_files $proj_filegroup
 }
 
+# add ttcl file to the simulation file set
+proc adi_ip_sim_ttcl {ip_name ip_files} {
+
+  set proj_filegroup [ipx::get_file_groups -of_objects [ipx::current_core] -filter {NAME =~ *simulation*}]
+  set f [ipx::add_file $ip_files $proj_filegroup]
+  set_property -dict [list \
+    type ttcl \
+  ] $f
+  ipx::reorder_files -front $ip_files $proj_filegroup
+}
+
 proc adi_ip_bd {ip_name ip_bd_files} {
   set proj_filegroup [ipx::get_file_groups xilinx_blockdiagram -of_objects [ipx::current_core]]
   if {$proj_filegroup == {}} {
