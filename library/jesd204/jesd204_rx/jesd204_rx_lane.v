@@ -82,6 +82,8 @@ module jesd204_rx_lane #(
   output [1:0] status_frame_align
 );
 
+localparam MAX_DATA_PATH_WIDTH = 8;
+
 wire [7:0] char[0:DATA_PATH_WIDTH-1];
 wire [DATA_PATH_WIDTH-1:0] char_is_valid;
 reg [DATA_PATH_WIDTH-1:0] char_is_cgs = 1'b0;        // K28.5 /K/
@@ -104,9 +106,12 @@ wire [DATA_PATH_WIDTH*8-1:0] data_scrambled_s;
 wire [DATA_PATH_WIDTH*8-1:0] data_scrambled;
 
 reg  [DATA_PATH_WIDTH-1:0] unexpected_char;
-reg  [2:0] phy_disperr_cnt;
-reg  [2:0] phy_notintable_cnt;
-reg  [2:0] phy_unexpectedk_cnt;
+reg  [3:0] phy_disperr_cnt;
+reg  [3:0] phy_notintable_cnt;
+reg  [3:0] phy_unexpectedk_cnt;
+wire [7:0] phy_disperr_s;
+wire [7:0] phy_notintable_s;
+wire [7:0] unexpected_char_s;
 
 wire ilas_monitor_reset_s;
 wire ilas_monitor_reset;
@@ -117,6 +122,18 @@ assign status_frame_align = frame_align;
 
 genvar i;
 generate
+
+for (i = DATA_PATH_WIDTH; i < MAX_DATA_PATH_WIDTH; i = i + 1) begin: g_defaults
+  assign phy_disperr_s[i] = 'd0;
+  assign phy_notintable_s[i] = 'd0;
+  assign unexpected_char_s[i] = 'd0;
+end
+
+for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: gen_err
+  assign phy_disperr_s[i] = phy_disperr[i];
+  assign phy_notintable_s[i] = phy_notintable[i];
+  assign unexpected_char_s[i] = unexpected_char[i];
+end
 
 for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: gen_char
   assign char[i] = phy_data[i*8+7:i*8];
@@ -145,28 +162,28 @@ for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: gen_char
 end
 endgenerate
 
-always @(posedge clk) begin
-  if (ctrl_err_statistics_mask[0] == 1'b0 && cgs_ready == 1'b1) begin
-    phy_disperr_cnt <= phy_disperr[0] + phy_disperr[1] + phy_disperr[2] + phy_disperr[3];
-  end else begin
-    phy_disperr_cnt <= 3'h0;
+  always @(posedge clk) begin
+    if (ctrl_err_statistics_mask[0] == 1'b0 && cgs_ready == 1'b1) begin
+      phy_disperr_cnt <= phy_disperr_s[0] + phy_disperr_s[1] + phy_disperr_s[2] + phy_disperr_s[3] + phy_disperr_s[4] + phy_disperr_s[5] + phy_disperr_s[6] + phy_disperr_s[7];
+    end else begin
+      phy_disperr_cnt <= 4'h0;
+    end
+    if (ctrl_err_statistics_mask[1] == 1'b0 && cgs_ready == 1'b1) begin
+      phy_notintable_cnt <= phy_notintable_s[0] +  phy_notintable_s[0] +  phy_notintable_s[1] +  phy_notintable_s[2] +  phy_notintable_s[3] +  phy_notintable_s[4] +  phy_notintable_s[5] +  phy_notintable_s[6] +  phy_notintable_s[7];
+    end else begin
+      phy_notintable_cnt <= 4'h0;
+    end
+    if (ctrl_err_statistics_mask[2] == 1'b0 && cgs_ready == 1'b1) begin
+      phy_unexpectedk_cnt <= unexpected_char_s[0] +  unexpected_char_s[1] + unexpected_char_s[2] + unexpected_char_s[3] + unexpected_char_s[4] + unexpected_char_s[5] + unexpected_char_s[6] + unexpected_char_s[7];
+    end else begin
+      phy_unexpectedk_cnt <= 4'h0;
+    end
   end
-  if (ctrl_err_statistics_mask[1] == 1'b0 && cgs_ready == 1'b1) begin
-    phy_notintable_cnt <= phy_notintable[0] + phy_notintable[1] + phy_notintable[2] + phy_notintable[3];
-  end else begin
-    phy_notintable_cnt <= 3'h0;
-  end
-  if (ctrl_err_statistics_mask[2] == 1'b0 && cgs_ready == 1'b1) begin
-    phy_unexpectedk_cnt <= unexpected_char[0] + unexpected_char[1] + unexpected_char[2] + unexpected_char[3];
-  end else begin
-    phy_unexpectedk_cnt <= 3'h0;
-  end
-end
 
 always @(posedge clk) begin
   if (ctrl_err_statistics_reset == 1'b1) begin
     status_err_statistics_cnt <= 32'h0;
-  end else if (status_err_statistics_cnt[31:4] != 28'hfffffff) begin
+  end else if (status_err_statistics_cnt[31:5] != 27'h7ffffff) begin
     status_err_statistics_cnt <= status_err_statistics_cnt + phy_notintable_cnt + phy_disperr_cnt + phy_unexpectedk_cnt;
   end
 end
