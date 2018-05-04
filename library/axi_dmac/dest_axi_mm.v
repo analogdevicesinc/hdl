@@ -100,7 +100,6 @@ wire data_req_valid;
 wire data_req_ready;
 
 wire address_enabled;
-wire data_enabled;
 
 splitter #(
   .NUM_M(2)
@@ -161,8 +160,9 @@ dmac_data_mover # (
   .clk(m_axi_aclk),
   .resetn(m_axi_aresetn),
 
-  .enable(address_enabled),
-  .enabled(data_enabled),
+  /* Unused. AXI protocol guarantees ordering */
+  .enable(1'b1),
+  .enabled(),
 
   .xfer_req(),
 
@@ -194,11 +194,11 @@ dmac_response_handler #(
   .bready(m_axi_bready),
   .bresp(m_axi_bresp),
 
-  .enable(data_enabled),
+  .enable(address_enabled),
   .enabled(enabled),
 
   .id(response_id),
-  .request_id(data_id),
+  .request_id(address_id),
 
   .eot(response_eot),
 
