@@ -51,6 +51,7 @@ module jesd204_up_rx_lane (
   output reg [31:0] up_rdata,
 
   input [1:0] up_status_cgs_state,
+  input [31:0] up_status_err_statistics_cnt,
 
   input core_clk,
   input core_reset,
@@ -113,6 +114,9 @@ always @(*) begin
     2'b01: up_rdata <= {
       /* 14-31 */ 18'h00, /* Reserved for future use */
       /* 00-13 */ up_status_latency
+    };
+    2'b10: up_rdata <= {
+      /* 00-31 */ up_status_err_statistics_cnt
     };
     default: up_rdata <= 'h00;
     endcase

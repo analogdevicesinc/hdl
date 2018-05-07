@@ -349,6 +349,10 @@ module axi_jesd204_rx_tb;
     .core_event_sysref_alignment_error(1'b0),
     .core_event_sysref_edge(1'b0),
 
+    .core_status_err_statistics_cnt(),
+    .core_ctrl_err_statistics_mask(),
+    .core_ctrl_err_statistics_reset(),
+
     .core_status_ctrl_state(2'b00),
     .core_status_lane_cgs_state(4'b0000),
     .core_status_lane_ifs_ready({NUM_LANES{1'b0}}),

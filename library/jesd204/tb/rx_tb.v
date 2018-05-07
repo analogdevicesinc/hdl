@@ -145,6 +145,20 @@ module rx_tb;
   wire cfg_disable_scrambler;
   wire cfg_buffer_early_release;
 
+  always @(posedge clk) begin
+    if ($urandom % 400 == 0)
+      disperr <= 4'b1111;
+    else if ($urandom % 400 == 1)
+      disperr <= 4'b0001;
+    else if ($urandom % 400 == 2)
+      disperr <= 4'b0011;
+    else if ($urandom % 400 == 3)
+      disperr <= 4'b0111;
+    else
+      disperr <= 4'b0000;
+  end
+  wire [NUM_LANES*32-1:0] status_err_statistics_cnt;
+
   jesd204_rx_static_config #(
     .NUM_LANES(NUM_LANES),
     .NUM_LINKS(NUM_LINKS),
@@ -181,13 +195,17 @@ module rx_tb;
     .cfg_disable_scrambler(cfg_disable_scrambler),
     .cfg_buffer_early_release(cfg_buffer_early_release),
 
+    .ctrl_err_statistics_reset(1'b0),
+    .ctrl_err_statistics_mask(3'h7),
+
+    .status_err_statistics_cnt(status_err_statistics_cnt),
+
     .phy_en_char_align(en_align),
 
     .phy_data({NUM_LANES{data}}),
     .phy_charisk({NUM_LANES{charisk}}),
     .phy_notintable({NUM_LANES{notintable}}),
     .phy_disperr({NUM_LANES{disperr}}),
-
     .sync(sync),
     .sysref(sysref)
   );

@@ -82,6 +82,8 @@ adi_add_bus "rx_cfg" "master" \
     { "core_cfg_lmfc_offset" "lmfc_offset" } \
     { "core_cfg_sysref_oneshot" "sysref_oneshot" } \
     { "core_cfg_sysref_disable" "sysref_disable" } \
+    { "core_ctrl_err_statistics_reset" "err_statistics_reset" } \
+    { "core_ctrl_err_statistics_mask" "err_statistics_mask" } \
     { "core_cfg_buffer_early_release" "buffer_early_release" } \
     { "core_cfg_buffer_delay" "buffer_delay" } \
     { "core_cfg_disable_char_replacement" "disable_char_replacement" } \
@@ -113,6 +115,7 @@ adi_add_bus "rx_status" "slave" \
     { "core_status_lane_cgs_state" "lane_cgs_state" } \
     { "core_status_lane_ifs_ready" "lane_ifs_ready" } \
     { "core_status_lane_latency" "lane_latency" } \
+    { "core_status_err_statistics_cnt" "err_statistics_cnt" } \
   }
 
 ipx::infer_bus_interface irq xilinx.com:signal:interrupt_rtl:1.0 [ipx::current_core]

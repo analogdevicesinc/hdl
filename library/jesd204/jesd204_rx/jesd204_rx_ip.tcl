@@ -104,6 +104,8 @@ adi_add_bus "rx_cfg" "slave" \
     { "cfg_buffer_delay" "buffer_delay" } \
     { "cfg_buffer_early_release" "buffer_early_release" } \
     { "cfg_disable_char_replacement" "disable_char_replacement" } \
+    { "ctrl_err_statistics_reset" "err_statistics_reset" } \
+    { "ctrl_err_statistics_mask" "err_statistics_mask" } \
     { "cfg_disable_scrambler" "disable_scrambler" } \
   }
 
@@ -113,6 +115,7 @@ adi_add_bus "rx_status" "master" \
   { \
     { "status_ctrl_state" "ctrl_state" } \
     { "status_lane_cgs_state" "lane_cgs_state" } \
+    { "status_err_statistics_cnt" "err_statistics_cnt" } \
     { "status_lane_ifs_ready" "lane_ifs_ready" } \
     { "status_lane_latency" "lane_latency" } \
   }

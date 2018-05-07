@@ -95,13 +95,18 @@ module axi_jesd204_rx #(
   input core_event_sysref_alignment_error,
   input core_event_sysref_edge,
 
+  output [2:0] core_ctrl_err_statistics_mask,
+  output core_ctrl_err_statistics_reset,
+
+  input [32*NUM_LANES-1:0] core_status_err_statistics_cnt,
+
   input [1:0] core_status_ctrl_state,
   input [2*NUM_LANES-1:0] core_status_lane_cgs_state,
   input [NUM_LANES-1:0] core_status_lane_ifs_ready,
   input [14*NUM_LANES-1:0] core_status_lane_latency
 );
 
-localparam PCORE_VERSION = 32'h00010161; // 1.01.a
+localparam PCORE_VERSION = 32'h00010261; // 1.02.a
 localparam PCORE_MAGIC = 32'h32303452; // 204R
 
 /* Register interface signals */
@@ -260,10 +265,15 @@ jesd204_up_rx #(
   .up_cfg_buffer_early_release(up_cfg_buffer_early_release),
   .up_cfg_buffer_delay(up_cfg_buffer_delay),
 
+  .core_ctrl_err_statistics_reset(core_ctrl_err_statistics_reset),
+  .core_ctrl_err_statistics_mask(core_ctrl_err_statistics_mask),
+
   .core_status_ctrl_state(core_status_ctrl_state),
   .core_status_lane_cgs_state(core_status_lane_cgs_state),
   .core_status_lane_ifs_ready(core_status_lane_ifs_ready),
   .core_status_lane_latency(core_status_lane_latency),
+
+  .core_status_err_statistics_cnt(core_status_err_statistics_cnt),
 
   .core_ilas_config_valid(core_ilas_config_valid),
   .core_ilas_config_addr(core_ilas_config_addr),
