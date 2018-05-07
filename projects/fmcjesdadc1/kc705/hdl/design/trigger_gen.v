@@ -58,9 +58,11 @@ module trigger_gen #(
     input adc_valid_c,
     input [31:0] adc_data_d,
     input adc_enable_d,
-    input signed [17:0]   trig_level,
+    input signed [17:0]   trig_level_a,
+    input signed [17:0]   trig_level_b,
     
-    output trigger_out
+    output trigger0,
+    output trigger1
     );
 /*********** Function Declarations ***************/
 
@@ -68,11 +70,12 @@ function signed [ADC_DATA_WIDTH +1:0] adc_channel_mean_f;
 	 input [ADC_DATA_WIDTH-1:0] adc_data_first;
 	 input [ADC_DATA_WIDTH-1:0] adc_data_second;
 	 
-     reg signed [ADC_DATA_WIDTH +1:0] adc_ext_1st, adc_ext_2nd; 
+     reg signed [ADC_DATA_WIDTH +1:0] adc_ext_1st; 
+     reg signed [ADC_DATA_WIDTH +1:0] adc_ext_2nd; 
 	   begin 	
             adc_ext_1st = $signed({{2{adc_data_first[ADC_DATA_WIDTH-1]}}, adc_data_first}); // sign extend
             adc_ext_2nd = $signed({{2{adc_data_second[ADC_DATA_WIDTH-1]}}, adc_data_second}); 
-            adc_channel_mean_f = adc_ext_1st + adc_ext_1st;
+            adc_channel_mean_f = adc_ext_1st + adc_ext_2nd;
 	  end 
   endfunction
 
@@ -84,20 +87,32 @@ function  trigger_eval_f;
         trigger_eval_f =(adc_channel_mean > trig_lvl)? 1'b1: 1'b0;
        end 
 endfunction
+/*********** End Function Declarations ***************/
 
-/*Integrator Logic*/
-	reg signed [17:0] adc_mean;
-	
+/*Trigger Logic*/
+	reg signed [17:0] adc_mean_a;
 	always @(posedge adc_clk) begin
          if (adc_enable_a)  // Use adc_valid_a ?
-            adc_mean <= adc_channel_mean_f(adc_data_a[15:0], adc_data_a[31:16]); // check order (not really necessary, its a mean...)
+            adc_mean_a <= adc_channel_mean_f(adc_data_a[15:0], adc_data_a[31:16]); // check order (not really necessary, its a mean...)
 	end
-	
-	reg  trigger_r = 0;
-    assign trigger_out = trigger_r; 
+	reg  trigger0_r = 0;
+    assign trigger0 = trigger0_r; 
 
 	always @(posedge adc_clk) begin
-         trigger_r <= trigger_eval_f(adc_mean, trig_level);
+         trigger0_r <= trigger_eval_f(adc_mean_a, trig_level_a);
+    end
+
+
+	reg signed [17:0] adc_mean_b;
+	always @(posedge adc_clk) begin
+         if (adc_enable_b)  // Use adc_valid_b ?
+            adc_mean_b <= adc_channel_mean_f(adc_data_b[15:0], adc_data_b[31:16]); // check order (not really necessary, its a mean...)
+	end
+	reg  trigger1_r = 0;
+    assign trigger1 = trigger1_r; 
+
+	always @(posedge adc_clk) begin
+         trigger1_r <= trigger_eval_f(adc_mean_b, trig_level_b );
     end
 	
 endmodule

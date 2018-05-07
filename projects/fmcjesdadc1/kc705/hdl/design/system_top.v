@@ -110,6 +110,7 @@ module system_top (
   inout                   spi_sdio);
 
   localparam N_ADC_CHANNELS  = 2;
+  
   // internal signals
 
   wire    [63:0]  gpio_i;
@@ -121,17 +122,14 @@ module system_top (
   wire            rx_ref_clk;
   wire            rx_clk;
 
-
   wire    [0:(N_ADC_CHANNELS-1)] adc_enable;
   wire    [0:(N_ADC_CHANNELS-1)] adc_valid;
   wire    [31:0] adc_data[0:(N_ADC_CHANNELS-1)]; // array of  32-bit registers;
 
-  assign           user_sma_clk_p = rx_clk;
-  assign           user_sma_clk_n = adc_enable[0];
-  assign           user_sma_gpio_p = adc_valid[0];
+  assign           user_sma_gpio_n = rx_clk;
+  assign           user_sma_gpio_p = adc_enable[0] & adc_valid[0];
+  //assign           user_sma_gpio_p = adc_valid[0];
   //assign           user_sma_gpio_n = adc_data[31]; // Sign bit
-
-
 
   assign ddr3_1_p = 2'b11;
   assign ddr3_1_n = 3'b000;
@@ -144,11 +142,20 @@ module system_top (
 
   trigger_gen i_trigger_gen (
     .adc_clk (rx_clk),
+    
     .adc_data_a (adc_data[0]),
     .adc_enable_a (adc_enable[0]),
     .adc_valid_a (adc_valid[0]),
-    .trig_level ({2'b00, 16'h2000} ), // 18'd4000 * 2
-    .trigger_out (user_sma_gpio_n));
+    
+    .adc_data_b (adc_data[1]),
+    .adc_enable_b (adc_enable[1]),
+    .adc_valid_b (adc_valid[1]),
+    
+    .trig_level_a ({2'b00, 16'h8000} ), // 18'd4000 * 2
+    .trig_level_b ({2'b00, 16'h4000} ), // 18'd4000 * 2
+
+    .trigger0 (user_sma_clk_p),
+    .trigger1 (user_sma_clk_n));
 
 // 
   IBUFDS_GTE2 i_ibufds_rx_ref_clk (
