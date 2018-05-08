@@ -95,9 +95,9 @@ endfunction
          if (adc_enable_a)  // Use adc_valid_a ?
             adc_mean_a <= adc_channel_mean_f(adc_data_a[15:0], adc_data_a[31:16]); // check order (not really necessary, its a mean...)
 	end
+
 	reg  trigger0_r = 0;
     assign trigger0 = trigger0_r; 
-
 	always @(posedge adc_clk) begin
          trigger0_r <= trigger_eval_f(adc_mean_a, trig_level_a);
     end
@@ -108,6 +108,7 @@ endfunction
          if (adc_enable_b)  // Use adc_valid_b ?
             adc_mean_b <= adc_channel_mean_f(adc_data_b[15:0], adc_data_b[31:16]); // check order (not really necessary, its a mean...)
 	end
+	
 	reg  trigger1_r = 0;
     assign trigger1 = trigger1_r; 
 

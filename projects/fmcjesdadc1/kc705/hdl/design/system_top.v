@@ -151,8 +151,8 @@ module system_top (
     .adc_enable_b (adc_enable[1]),
     .adc_valid_b (adc_valid[1]),
     
-    .trig_level_a ({2'b00, 16'h8000} ), // 18'd4000 * 2
-    .trig_level_b ({2'b00, 16'h4000} ), // 18'd4000 * 2
+    .trig_level_a ({2'b00, 16'h2000} ), // 18'd4000 * 2
+    .trig_level_b ({2'b00, 16'h1000} ), // 18'd4000 * 2
 
     .trigger0 (user_sma_clk_p),
     .trigger1 (user_sma_clk_n));
