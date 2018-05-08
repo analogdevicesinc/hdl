@@ -139,6 +139,10 @@ module system_top (
 
   // instantiations
 
+    wire [31:0] adc_data_0 = adc_data[0];
+    assign  user_sma_clk_p = adc_data_0[15];
+    assign  user_sma_clk_n = adc_data_0[31];
+    //.trigger1 (user_sma_clk_n));
 
   trigger_gen i_trigger_gen (
     .adc_clk (rx_clk),
@@ -152,10 +156,12 @@ module system_top (
     .adc_valid_b (adc_valid[1]),
     
     .trig_level_a ({2'b00, 16'h2000} ), // 18'd4000 * 2
-    .trig_level_b ({2'b00, 16'h1000} ), // 18'd4000 * 2
+//    .trig_level_b ({2'b00, 16'h1000} ), // 18'd4000 * 2
+    .trig_level_b ({2'b11, 16'h3FFF} )  //, // 18'd4000 * 2 
 
-    .trigger0 (user_sma_clk_p),
-    .trigger1 (user_sma_clk_n));
+    //.trigger0 (user_sma_clk_p),
+    //.trigger1 (user_sma_clk_n)
+    );
 
 // 
   IBUFDS_GTE2 i_ibufds_rx_ref_clk (
