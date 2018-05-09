@@ -37,8 +37,8 @@
 
 module system_top (
 
-  input   [12:0]  gpio_bd_i,
-  output  [ 7:0]  gpio_bd_o,
+  input   [ 7:0]  gpio_bd_i,
+  output  [ 3:0]  gpio_bd_o,
 
   input           rx_clk_in_p,
   input           rx_clk_in_n,
@@ -79,12 +79,13 @@ module system_top (
   assign gpio_sync = gpio_o[45:45];
   assign gpio_en_agc = gpio_o[44:44];
   assign gpio_ctl = gpio_o[43:40];
-  assign gpio_bd_o = gpio_o[20:13];
+  assign gpio_bd_o = gpio_o[20:17];
 
   assign gpio_i[95:40] = gpio_o[95:40];
   assign gpio_i[39:32] = gpio_status;
   assign gpio_i[31:13] = gpio_o[31:13];
-  assign gpio_i[12: 0] = gpio_bd_i;
+  assign gpio_i[12:8] = 5'b00000;
+  assign gpio_i[7: 0] = gpio_bd_i;
 
   assign spi_csn = spi0_csn[0];
 

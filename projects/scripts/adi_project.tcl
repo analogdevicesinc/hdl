@@ -81,6 +81,12 @@ proc adi_project_xilinx {project_name {mode 0}} {
     set p_board "xilinx.com:zcu102:part0:3.1"
     set sys_zynq 2
   }
+  if [regexp "_zcu104$" $project_name] {
+    set p_device "xczu7ev-ffvc1156-2-e"
+    set p_board "xilinx.com:zcu104:part0:1.0"
+    set sys_zynq 2
+  }
+
 
   set VIVADO_VERSION [version -short]
   if {[string compare $VIVADO_VERSION $REQUIRED_VIVADO_VERSION] != 0} {
@@ -280,4 +286,3 @@ proc adi_project_verify {project_name} {
     return -code error [format "ERROR: Timing Constraints NOT met!"]
   }
 }
-
