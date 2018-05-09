@@ -16,19 +16,17 @@ set_module_property VALIDATION_CALLBACK axi_dmac_validate
 
 ad_ip_files axi_dmac [list \
   $ad_hdl_dir/library/util_cdc/sync_bits.v \
-  $ad_hdl_dir/library/util_cdc/sync_gray.v \
   $ad_hdl_dir/library/common/up_axi.v \
-  $ad_hdl_dir/library/util_axis_resize/util_axis_resize.v \
   $ad_hdl_dir/library/util_axis_fifo/util_axis_fifo.v \
-  $ad_hdl_dir/library/util_axis_fifo/address_gray.v \
-  $ad_hdl_dir/library/util_axis_fifo/address_gray_pipelined.v \
-  $ad_hdl_dir/library/util_axis_fifo/address_sync.v \
   $ad_hdl_dir/library/common/ad_mem.v \
   inc_id.h \
   resp.h \
+  axi_dmac_burst_memory.v \
   axi_dmac_regmap.v \
   axi_dmac_regmap_request.v \
   axi_dmac_reset_manager.v \
+  axi_dmac_resize_dest.v \
+  axi_dmac_resize_src.v \
   axi_dmac_transfer.v \
   address_generator.v \
   data_mover.v \
@@ -50,7 +48,7 @@ ad_ip_files axi_dmac [list \
 ]
 
 # Disable dual-clock RAM read-during-write behaviour warning.
-set_qip_strings { "set_instance_assignment -name MESSAGE_DISABLE 276027 -entity util_axis_fifo" }
+set_qip_strings { "set_instance_assignment -name MESSAGE_DISABLE 276027 -entity axi_dmac_burst_memory" }
 
 # parameters
 

@@ -69,6 +69,7 @@ module dmac_src_mm_axi #(
   output                          fifo_valid,
   input                           fifo_ready,
   output [DMA_DATA_WIDTH-1:0]   fifo_data,
+  output                          fifo_last,
 
   // Read address
   input                            m_axi_arready,
@@ -134,6 +135,7 @@ dmac_address_generator #(
 assign fifo_valid = m_axi_rvalid;
 assign m_axi_rready = fifo_ready;
 assign fifo_data = m_axi_rdata;
+assign fifo_last = m_axi_rlast;
 
 /*
  * There is a requirement that data_id <= address_id (modulo 2**ID_WIDTH).  We

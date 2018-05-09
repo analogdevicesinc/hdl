@@ -175,11 +175,6 @@ localparam DMA_TYPE_FIFO = 2;
 localparam DMA_ADDRESS_WIDTH_DEST = DMA_AXI_ADDR_WIDTH - BYTES_PER_BEAT_WIDTH_DEST;
 localparam DMA_ADDRESS_WIDTH_SRC = DMA_AXI_ADDR_WIDTH - BYTES_PER_BEAT_WIDTH_SRC;
 
-localparam DMA_DATA_WIDTH = DMA_DATA_WIDTH_SRC < DMA_DATA_WIDTH_DEST ?
-  DMA_DATA_WIDTH_DEST : DMA_DATA_WIDTH_SRC;
-
-
-
 // Bytes per burst is the same for both dest and src, but bytes per beat may
 // differ, so beats per burst may also differ
 localparam BYTES_PER_BURST_WIDTH =
@@ -233,12 +228,9 @@ wire [ID_WIDTH-1:0] dest_response_id;
 wire dest_valid;
 wire dest_ready;
 wire [DMA_DATA_WIDTH_DEST-1:0] dest_data;
-wire dest_fifo_repacked_valid;
-wire dest_fifo_repacked_ready;
-wire [DMA_DATA_WIDTH_DEST-1:0] dest_fifo_repacked_data;
 wire dest_fifo_valid;
 wire dest_fifo_ready;
-wire [DMA_DATA_WIDTH-1:0] dest_fifo_data;
+wire [DMA_DATA_WIDTH_DEST-1:0] dest_fifo_data;
 
 wire src_req_valid;
 wire src_req_ready;
@@ -260,12 +252,11 @@ wire [ID_WIDTH-1:0] src_response_id;
 wire src_valid;
 wire src_ready;
 wire [DMA_DATA_WIDTH_SRC-1:0] src_data;
+wire src_last;
 wire src_fifo_valid;
 wire src_fifo_ready;
 wire [DMA_DATA_WIDTH_SRC-1:0] src_fifo_data;
-wire src_fifo_repacked_valid;
-wire src_fifo_repacked_ready;
-wire [DMA_DATA_WIDTH-1:0] src_fifo_repacked_data;
+wire src_fifo_last;
 
 wire response_dest_valid;
 wire response_dest_ready = 1'b1;
@@ -555,6 +546,7 @@ dmac_src_mm_axi #(
   .fifo_valid(src_valid),
   .fifo_ready(src_ready),
   .fifo_data(src_data),
+  .fifo_last(src_last),
 
   .m_axi_arready(m_axi_arready),
   .m_axi_arvalid(m_axi_arvalid),
@@ -625,6 +617,7 @@ dmac_src_axi_stream #(
   .fifo_valid(src_valid),
   .fifo_ready(src_ready),
   .fifo_data(src_data),
+  .fifo_last(src_last),
 
   .s_axis_valid(s_axis_valid),
   .s_axis_ready(s_axis_ready),
@@ -680,6 +673,7 @@ dmac_src_fifo_inf #(
   .fifo_valid(src_valid),
   .fifo_ready(src_ready),
   .fifo_data(src_data),
+  .fifo_last(src_last),
 
   .en(fifo_wr_en),
   .din(fifo_wr_din),
@@ -726,7 +720,7 @@ sync_bits #(
 );
 
 axi_register_slice #(
-  .DATA_WIDTH(DMA_DATA_WIDTH_SRC),
+  .DATA_WIDTH(DMA_DATA_WIDTH_SRC + 1),
   .FORWARD_REGISTERED(AXI_SLICE_SRC),
   .BACKWARD_REGISTERED(AXI_SLICE_SRC)
 ) i_src_slice (
@@ -734,59 +728,31 @@ axi_register_slice #(
   .resetn(src_resetn),
   .s_axi_valid(src_valid),
   .s_axi_ready(src_ready),
-  .s_axi_data(src_data),
+  .s_axi_data({src_data,src_last}),
   .m_axi_valid(src_fifo_valid),
   .m_axi_ready(src_fifo_ready),
-  .m_axi_data(src_fifo_data)
+  .m_axi_data({src_fifo_data,src_fifo_last})
 );
 
-util_axis_resize #(
-  .SLAVE_DATA_WIDTH(DMA_DATA_WIDTH_SRC),
-  .MASTER_DATA_WIDTH(DMA_DATA_WIDTH)
-) i_src_repack (
-  .clk(src_clk),
-  .resetn(src_resetn),
-  .s_valid(src_fifo_valid),
-  .s_ready(src_fifo_ready),
-  .s_data(src_fifo_data),
-  .m_valid(src_fifo_repacked_valid),
-  .m_ready(src_fifo_repacked_ready),
-  .m_data(src_fifo_repacked_data)
-);
-
-util_axis_fifo #(
-  .DATA_WIDTH(DMA_DATA_WIDTH),
-  .ADDRESS_WIDTH($clog2(MAX_BYTES_PER_BURST / (DMA_DATA_WIDTH / 8) * FIFO_SIZE)),
+axi_dmac_burst_memory #(
+  .DATA_WIDTH_SRC(DMA_DATA_WIDTH_SRC),
+  .DATA_WIDTH_DEST(DMA_DATA_WIDTH_DEST),
+  .ID_WIDTH(ID_WIDTH),
+  .MAX_BYTES_PER_BURST(MAX_BYTES_PER_BURST),
   .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
-) i_fifo (
-  .s_axis_aclk(src_clk),
-  .s_axis_aresetn(src_resetn),
-  .s_axis_valid(src_fifo_repacked_valid),
-  .s_axis_ready(src_fifo_repacked_ready),
-  .s_axis_data(src_fifo_repacked_data),
-  .s_axis_empty(),
-  .s_axis_room(),
+) i_store_and_forward (
+  .src_clk(src_clk),
+  .src_reset(~src_resetn),
+  .src_data_valid(src_fifo_valid),
+  .src_data_ready(src_fifo_ready),
+  .src_data(src_fifo_data),
+  .src_data_last(src_fifo_last),
 
-  .m_axis_aclk(dest_clk),
-  .m_axis_aresetn(dest_resetn),
-  .m_axis_valid(dest_fifo_valid),
-  .m_axis_ready(dest_fifo_ready),
-  .m_axis_data(dest_fifo_data),
-  .m_axis_level()
-);
-
-util_axis_resize #(
-  .SLAVE_DATA_WIDTH(DMA_DATA_WIDTH),
-  .MASTER_DATA_WIDTH(DMA_DATA_WIDTH_DEST)
-) i_dest_repack (
-  .clk(dest_clk),
-  .resetn(dest_resetn),
-  .s_valid(dest_fifo_valid),
-  .s_ready(dest_fifo_ready),
-  .s_data(dest_fifo_data),
-  .m_valid(dest_fifo_repacked_valid),
-  .m_ready(dest_fifo_repacked_ready),
-  .m_data(dest_fifo_repacked_data)
+  .dest_clk(dest_clk),
+  .dest_reset(~dest_resetn),
+  .dest_data_valid(dest_fifo_valid),
+  .dest_data_ready(dest_fifo_ready),
+  .dest_data(dest_fifo_data)
 );
 
 wire _dest_valid;
@@ -799,9 +765,9 @@ axi_register_slice #(
 ) i_dest_slice2 (
   .clk(dest_clk),
   .resetn(dest_resetn),
-  .s_axi_valid(dest_fifo_repacked_valid),
-  .s_axi_ready(dest_fifo_repacked_ready),
-  .s_axi_data(dest_fifo_repacked_data),
+  .s_axi_valid(dest_fifo_valid),
+  .s_axi_ready(dest_fifo_ready),
+  .s_axi_data(dest_fifo_data),
   .m_axi_valid(_dest_valid),
   .m_axi_ready(_dest_ready),
   .m_axi_data(_dest_data)

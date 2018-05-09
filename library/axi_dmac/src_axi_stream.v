@@ -60,6 +60,7 @@ module dmac_src_axi_stream #(
   input fifo_ready,
   output fifo_valid,
   output [S_AXIS_DATA_WIDTH-1:0] fifo_data,
+  output fifo_last,
 
   input req_valid,
   output req_ready,
@@ -77,7 +78,6 @@ wire sync = s_axis_user[0];
 wire has_sync = ~needs_sync | sync;
 wire data_valid;
 wire data_ready;
-wire fifo_last;
 
 assign data = transfer_abort == 1'b1 ? {S_AXIS_DATA_WIDTH{1'b0}} : s_axis_data;
 assign data_valid = (s_axis_valid & has_sync) | transfer_abort;
@@ -102,7 +102,7 @@ always @(posedge s_axis_aclk) begin
   if (s_axis_aresetn == 1'b0) begin
     transfer_abort <= 1'b0;
   end else if (data_ready == 1'b1 && data_valid == 1'b1) begin
-    if (fifo_last == 1'b1 && req_xlast_d == 1'b1) begin
+    if (fifo_last == 1'b1 && eot == 1'b1 && req_xlast_d == 1'b1) begin
       transfer_abort <= 1'b0;
     end else if (s_axis_last == 1'b1) begin
       transfer_abort <= 1'b1;
@@ -120,8 +120,7 @@ dmac_data_mover # (
   .ID_WIDTH(ID_WIDTH),
   .DATA_WIDTH(S_AXIS_DATA_WIDTH),
   .DISABLE_WAIT_FOR_ID(0),
-  .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH),
-  .LAST(1)
+  .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH)
 ) i_data_mover (
   .clk(s_axis_aclk),
   .resetn(s_axis_aresetn),
