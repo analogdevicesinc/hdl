@@ -5,13 +5,17 @@
 
 LIBRARY_NAME := axi_dmac
 
+GENERIC_DEPS += ../common/ad_mem.v
 GENERIC_DEPS += ../common/up_axi.v
 GENERIC_DEPS += 2d_transfer.v
 GENERIC_DEPS += address_generator.v
 GENERIC_DEPS += axi_dmac.v
+GENERIC_DEPS += axi_dmac_burst_memory.v
 GENERIC_DEPS += axi_dmac_regmap.v
 GENERIC_DEPS += axi_dmac_regmap_request.v
 GENERIC_DEPS += axi_dmac_reset_manager.v
+GENERIC_DEPS += axi_dmac_resize_dest.v
+GENERIC_DEPS += axi_dmac_resize_src.v
 GENERIC_DEPS += axi_dmac_transfer.v
 GENERIC_DEPS += axi_register_slice.v
 GENERIC_DEPS += data_mover.v
@@ -39,17 +43,10 @@ XILINX_DEPS += ../interfaces/fifo_wr.xml
 XILINX_DEPS += ../interfaces/fifo_wr_rtl.xml
 
 XILINX_LIB_DEPS += util_axis_fifo
-XILINX_LIB_DEPS += util_axis_resize
 XILINX_LIB_DEPS += util_cdc
 
-ALTERA_DEPS += ../common/ad_mem.v
-ALTERA_DEPS += ../util_axis_fifo/address_gray.v
-ALTERA_DEPS += ../util_axis_fifo/address_gray_pipelined.v
-ALTERA_DEPS += ../util_axis_fifo/address_sync.v
 ALTERA_DEPS += ../util_axis_fifo/util_axis_fifo.v
-ALTERA_DEPS += ../util_axis_resize/util_axis_resize.v
 ALTERA_DEPS += ../util_cdc/sync_bits.v
-ALTERA_DEPS += ../util_cdc/sync_gray.v
 ALTERA_DEPS += axi_dmac_constr.sdc
 ALTERA_DEPS += axi_dmac_hw.tcl
 

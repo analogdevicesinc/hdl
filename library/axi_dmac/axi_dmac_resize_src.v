@@ -33,94 +33,73 @@
 // ***************************************************************************
 // ***************************************************************************
 
-module dmac_src_fifo_inf #(
+/*
+ * Resize the data width between the source interface and the burst memory
+ * if necessary.
+ */
 
-  parameter ID_WIDTH = 3,
-  parameter DATA_WIDTH = 64,
-  parameter BEATS_PER_BURST_WIDTH = 4)(
-
+module axi_dmac_resize_src #(
+  parameter DATA_WIDTH_SRC = 64,
+  parameter DATA_WIDTH_MEM = 64
+) (
   input clk,
-  input resetn,
+  input reset,
 
-  input enable,
-  output enabled,
+  input src_data_valid,
+  output src_data_ready,
+  input [DATA_WIDTH_SRC-1:0] src_data,
+  input src_data_last,
 
-  input [ID_WIDTH-1:0] request_id,
-  output [ID_WIDTH-1:0] response_id,
-  input eot,
-
-  input en,
-  input [DATA_WIDTH-1:0] din,
-  output reg overflow,
-  input sync,
-  output xfer_req,
-
-  input fifo_ready,
-  output fifo_valid,
-  output [DATA_WIDTH-1:0] fifo_data,
-  output fifo_last,
-
-  input req_valid,
-  output req_ready,
-  input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
-  input req_sync_transfer_start
+  output mem_data_valid,
+  input mem_data_ready,
+  output [DATA_WIDTH_MEM-1:0] mem_data,
+  output mem_data_last
 );
 
-wire ready;
+generate if (DATA_WIDTH_SRC == DATA_WIDTH_MEM)  begin
+  assign mem_data_valid = src_data_valid;
+  assign src_data_ready = mem_data_ready;
+  assign mem_data = src_data;
+  assign mem_data_last = src_data_last;
+end else begin
 
-reg needs_sync = 1'b0;
-wire has_sync = ~needs_sync | sync;
-wire sync_valid = en & ready & has_sync;
+  localparam RATIO = DATA_WIDTH_MEM / DATA_WIDTH_SRC;
 
-assign enabled = enable;
+  reg [RATIO-1:0] mask = 'h1;
+  reg valid = 1'b0;
+  reg last = 1'b0;
+  reg [DATA_WIDTH_MEM-1:0] data = 'h0;
 
-always @(posedge clk)
-begin
-  if (ready && en && sync) begin
-    needs_sync <= 1'b0;
-  end else if (req_valid && req_ready) begin
-    needs_sync <= req_sync_transfer_start;
+  always @(posedge clk) begin
+    if (reset == 1'b1) begin
+      valid <= 1'b0;
+      mask <= 'h1;
+    end else if (src_data_valid == 1'b1 && src_data_ready == 1'b1) begin
+      valid <= mask[RATIO-1];
+      mask <= {mask[RATIO-2:0],mask[RATIO-1]};
+    end else if (mem_data_ready == 1'b1) begin
+      valid <= 1'b0;
+    end
   end
-end
 
-always @(posedge clk)
-begin
-  if (enable) begin
-    overflow <= en & ~ready;
-  end else begin
-    overflow <= en;
+  integer i;
+
+  always @(posedge clk) begin
+    if (src_data_ready == 1'b1) begin
+      for (i = 0; i < RATIO; i = i+1) begin
+        if (mask[i] == 1'b1) begin
+          data[i*DATA_WIDTH_SRC+:DATA_WIDTH_SRC] <= src_data;
+        end
+      end
+      last <= src_data_last;
+    end
   end
-end
 
-dmac_data_mover # (
-  .ID_WIDTH(ID_WIDTH),
-  .DATA_WIDTH(DATA_WIDTH),
-  .DISABLE_WAIT_FOR_ID(0),
-  .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH)
-) i_data_mover (
-  .clk(clk),
-  .resetn(resetn),
+  assign src_data_ready = ~valid | mem_data_ready;
+  assign mem_data_valid = valid;
+  assign mem_data = data;
+  assign mem_data_last = last;
 
-  .enable(enable),
-  .enabled(),
-
-  .xfer_req(xfer_req),
-
-  .request_id(request_id),
-  .response_id(response_id),
-  .eot(eot),
-
-  .req_valid(req_valid),
-  .req_ready(req_ready),
-  .req_last_burst_length(req_last_burst_length),
-
-  .s_axi_ready(ready),
-  .s_axi_valid(sync_valid),
-  .s_axi_data(din),
-  .m_axi_ready(fifo_ready),
-  .m_axi_valid(fifo_valid),
-  .m_axi_data(fifo_data),
-  .m_axi_last(fifo_last)
-);
+end endgenerate
 
 endmodule

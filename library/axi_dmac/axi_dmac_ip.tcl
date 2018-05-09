@@ -5,12 +5,16 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
 adi_ip_create axi_dmac
 adi_ip_files axi_dmac [list \
+  "$ad_hdl_dir/library/common/ad_mem.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "inc_id.h" \
   "resp.h" \
+  "axi_dmac_burst_memory.v" \
   "axi_dmac_regmap.v" \
   "axi_dmac_regmap_request.v" \
   "axi_dmac_reset_manager.v" \
+  "axi_dmac_resize_dest.v" \
+  "axi_dmac_resize_src.v" \
   "axi_dmac_transfer.v" \
   "address_generator.v" \
   "data_mover.v" \
@@ -37,7 +41,6 @@ adi_ip_ttcl axi_dmac "axi_dmac_constr.ttcl"
 adi_ip_bd axi_dmac "bd/bd.tcl"
 
 adi_ip_add_core_dependencies { \
-	analog.com:user:util_axis_resize:1.0 \
 	analog.com:user:util_axis_fifo:1.0 \
 	analog.com:user:util_cdc:1.0 \
 }
