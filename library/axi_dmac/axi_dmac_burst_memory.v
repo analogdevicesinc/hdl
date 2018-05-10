@@ -53,7 +53,9 @@ module axi_dmac_burst_memory #(
 
   output dest_data_valid,
   input dest_data_ready,
-  output [DATA_WIDTH_DEST-1:0] dest_data
+  output [DATA_WIDTH_DEST-1:0] dest_data,
+
+  output [ID_WIDTH-1:0] dest_request_id
 );
 
 localparam DATA_WIDTH = DATA_WIDTH_SRC > DATA_WIDTH_DEST ?
@@ -337,5 +339,7 @@ sync_bits #(
   .out_resetn (1'b1),
   .out (src_dest_id)
 );
+
+assign dest_request_id = dest_src_id;
 
 endmodule
