@@ -701,16 +701,6 @@ sync_bits #(
 
 sync_bits #(
   .NUM_OF_BITS(ID_WIDTH),
-  .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
-) i_sync_dest_request_id (
-  .out_clk(dest_clk),
-  .out_resetn(1'b1),
-  .in(src_response_id),
-  .out(dest_request_id)
-);
-
-sync_bits #(
-  .NUM_OF_BITS(ID_WIDTH),
   .ASYNC_CLK(ASYNC_CLK_DEST_REQ)
 ) i_sync_req_response_id (
   .out_clk(req_clk),
@@ -752,7 +742,9 @@ axi_dmac_burst_memory #(
   .dest_reset(~dest_resetn),
   .dest_data_valid(dest_fifo_valid),
   .dest_data_ready(dest_fifo_ready),
-  .dest_data(dest_fifo_data)
+  .dest_data(dest_fifo_data),
+
+  .dest_request_id(dest_request_id)
 );
 
 wire _dest_valid;

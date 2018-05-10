@@ -190,7 +190,7 @@ set_false_path -quiet \
 	-to [get_cells -quiet -hier *up_rdata_reg* -filter {IS_SEQUENTIAL}]
 set_false_path -quiet \
 	-from [get_cells -quiet -hier *cdc_sync_stage2_reg* \
-		-filter {name =~ *i_sync_dest_request_id* && IS_SEQUENTIAL}] \
+		-filter {name =~ *i_dest_sync_id* && IS_SEQUENTIAL}] \
 	-to [get_cells -quiet -hier *up_rdata_reg* -filter {IS_SEQUENTIAL}]
 set_false_path -quiet \
 	-from [get_cells -quiet -hier *id_reg* -filter {name =~ *i_request_arb* && IS_SEQUENTIAL}] \
