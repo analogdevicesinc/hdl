@@ -35,7 +35,7 @@ set_property driver_value 0 [ipx::get_ports *vsync* -of_objects [ipx::current_co
 set_property driver_value 0 [ipx::get_ports *data* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *es_data* -of_objects [ipx::current_core]]
 
-set_property driver_value 0 [ipx::get_ports *vdma_fs* -of_objects [ipx::current_core]]
+set_property driver_value 0 [ipx::get_ports *vdma_end_of_frame* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *vdma_valid* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *vdma_data* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *vdma_ready* -of_objects [ipx::current_core]]

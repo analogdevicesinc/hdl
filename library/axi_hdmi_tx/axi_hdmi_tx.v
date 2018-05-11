@@ -71,8 +71,7 @@ module axi_hdmi_tx #(
   // vdma interface
 
   input                   vdma_clk,
-  output                  vdma_fs,
-  input                   vdma_fs_ret,
+  input                   vdma_end_of_frame,
   input                   vdma_valid,
   input       [63:0]      vdma_data,
   output                  vdma_ready,
@@ -237,11 +236,10 @@ module axi_hdmi_tx #(
     .hdmi_raddr_g (hdmi_raddr_g_s),
     .vdma_clk (vdma_clk),
     .vdma_rst (vdma_rst),
-    .vdma_fs (vdma_fs),
-    .vdma_fs_ret (vdma_fs_ret),
     .vdma_valid (vdma_valid),
     .vdma_data (vdma_data),
     .vdma_ready (vdma_ready),
+    .vdma_end_of_frame (vdma_end_of_frame),
     .vdma_wr (vdma_wr_s),
     .vdma_waddr (vdma_waddr_s),
     .vdma_wdata (vdma_wdata_s),
