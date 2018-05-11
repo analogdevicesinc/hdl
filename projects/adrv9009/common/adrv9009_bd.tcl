@@ -262,19 +262,19 @@ ad_cpu_interconnect 0x43C20000 axi_adrv9009_rx_os_clkgen
 ad_cpu_interconnect 0x44AB0000 axi_adrv9009_rx_os_jesd
 ad_cpu_interconnect 0x7c440000 axi_adrv9009_rx_os_dma
 
-# gt uses hp3, and 100MHz clock for both DRP and AXI4
+# gt uses hp0, and 100MHz clock for both DRP and AXI4
 
-ad_mem_hp3_interconnect sys_cpu_clk sys_ps7/S_AXI_HP3
-ad_mem_hp3_interconnect sys_cpu_clk axi_adrv9009_rx_xcvr/m_axi
-ad_mem_hp3_interconnect sys_cpu_clk axi_adrv9009_rx_os_xcvr/m_axi
+ad_mem_hp0_interconnect sys_cpu_clk axi_adrv9009_rx_xcvr/m_axi
+ad_mem_hp0_interconnect sys_cpu_clk axi_adrv9009_rx_os_xcvr/m_axi
 
 # interconnect (mem/dac)
 
 ad_mem_hp1_interconnect sys_dma_clk sys_ps7/S_AXI_HP1
-ad_mem_hp1_interconnect sys_dma_clk axi_adrv9009_tx_dma/m_src_axi
+ad_mem_hp1_interconnect sys_dma_clk axi_adrv9009_rx_os_dma/m_dest_axi
 ad_mem_hp2_interconnect sys_dma_clk sys_ps7/S_AXI_HP2
 ad_mem_hp2_interconnect sys_dma_clk axi_adrv9009_rx_dma/m_dest_axi
-ad_mem_hp2_interconnect sys_dma_clk axi_adrv9009_rx_os_dma/m_dest_axi
+ad_mem_hp3_interconnect sys_dma_clk sys_ps7/S_AXI_HP3
+ad_mem_hp3_interconnect sys_dma_clk axi_adrv9009_tx_dma/m_src_axi
 
 # interrupts
 
