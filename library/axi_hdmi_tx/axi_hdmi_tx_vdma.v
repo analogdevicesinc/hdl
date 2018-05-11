@@ -45,8 +45,7 @@ module axi_hdmi_tx_vdma (
 
   input                   vdma_clk,
   input                   vdma_rst,
-  output  reg             vdma_fs,
-  input                   vdma_fs_ret,
+  input                   vdma_end_of_frame,
   input                   vdma_valid,
   input       [63:0]      vdma_data,
   output  reg             vdma_ready,
@@ -66,16 +65,20 @@ module axi_hdmi_tx_vdma (
 
   // internal registers
 
-  reg             vdma_fs_toggle_m1 = 'd0;
-  reg             vdma_fs_toggle_m2 = 'd0;
-  reg             vdma_fs_toggle_m3 = 'd0;
-  reg     [22:0]  vdma_tpm_data = 'd0;
-  reg     [ 8:0]  vdma_raddr_g_m1 = 'd0;
-  reg     [ 8:0]  vdma_raddr_g_m2 = 'd0;
-  reg     [ 8:0]  vdma_raddr = 'd0;
-  reg     [ 8:0]  vdma_addr_diff = 'd0;
-  reg             vdma_almost_full = 'd0;
-  reg             vdma_almost_empty = 'd0;
+  reg             vdma_fs_toggle_m1 = 1'd0;
+  reg             vdma_fs_toggle_m2 = 1'd0;
+  reg             vdma_fs_toggle_m3 = 1'd0;
+  reg     [22:0]  vdma_tpm_data = 23'd0;
+  reg     [ 8:0]  vdma_raddr_g_m1 = 9'd0;
+  reg     [ 8:0]  vdma_raddr_g_m2 = 9'd0;
+  reg     [ 8:0]  vdma_raddr = 9'd0;
+  reg     [ 8:0]  vdma_addr_diff = 9'd0;
+  reg             vdma_almost_full = 1'd0;
+  reg             vdma_almost_empty = 1'd0;
+  reg             hdmi_fs = 1'd0;
+  reg             vdma_fs = 1'd0;
+  reg             vdma_end_of_frame_d = 1'd0;
+  reg             vdma_active_frame = 1'd0;
 
   // internal wires
 
@@ -104,7 +107,7 @@ module axi_hdmi_tx_vdma (
     end
   endfunction
 
-  // get fs from hdmi side, return fs and sof write address back
+  // hdmi frame sync
 
   always @(posedge vdma_clk or posedge vdma_rst) begin
     if (vdma_rst == 1'b1) begin
@@ -116,13 +119,46 @@ module axi_hdmi_tx_vdma (
       vdma_fs_toggle_m2 <= vdma_fs_toggle_m1;
       vdma_fs_toggle_m3 <= vdma_fs_toggle_m2;
     end
+    hdmi_fs <= vdma_fs_toggle_m2 ^ vdma_fs_toggle_m3;
   end
 
+  // dma frame sync
+
+  always @(posedge vdma_clk or posedge vdma_rst) begin
+    if (vdma_rst == 1'b1) begin
+      vdma_end_of_frame_d <= 1'b0;
+      vdma_fs <=  1'b0;
+    end else begin
+      vdma_end_of_frame_d <= vdma_end_of_frame;
+      vdma_fs <= vdma_end_of_frame_d;
+    end
+  end
+
+  // sync dma and hdmi frames
+
   always @(posedge vdma_clk) begin
-    vdma_fs <= vdma_fs_toggle_m2 ^ vdma_fs_toggle_m3;
-    if (vdma_fs_ret == 1'b1) begin
-      vdma_fs_waddr <= vdma_waddr;
-      vdma_fs_ret_toggle <= ~vdma_fs_ret_toggle;
+    if (vdma_rst == 1'b1) begin
+      vdma_fs_ret_toggle = 1'b0;
+      vdma_fs_waddr <= 9'b0;
+    end else begin
+      if (vdma_fs) begin
+        vdma_fs_ret_toggle <= ~vdma_fs_ret_toggle;
+        vdma_fs_waddr <= vdma_waddr ;
+      end
+    end
+  end
+
+  // accept new frame from dma
+
+  always @(posedge vdma_clk) begin
+    if (vdma_rst == 1'b1) begin
+      vdma_active_frame <= 1'b0;
+    end else begin
+      if ((vdma_active_frame == 1'b1) && (vdma_end_of_frame == 1'b1)) begin
+        vdma_active_frame <= 1'b0;
+      end else if ((vdma_active_frame == 1'b0) && (hdmi_fs == 1'b1)) begin
+        vdma_active_frame <= 1'b1;
+      end
     end
   end
 
@@ -144,7 +180,7 @@ module axi_hdmi_tx_vdma (
   assign vdma_tpm_oos_s = (vdma_wdata == vdma_tpm_data_s) ? 1'b0 : vdma_wr;
 
   always @(posedge vdma_clk) begin
-    if ((vdma_rst == 1'b1) || (vdma_fs_ret == 1'b1)) begin
+    if ((vdma_rst == 1'b1) || (vdma_fs == 1'b1)) begin
       vdma_tpm_data <= 23'd0;
       vdma_tpm_oos <= 1'd0;
     end else if (vdma_wr == 1'b1) begin
@@ -175,7 +211,7 @@ module axi_hdmi_tx_vdma (
     if (vdma_addr_diff >= RDY_THRESHOLD_HI) begin
       vdma_ready <= 1'b0;
     end else if (vdma_addr_diff <= RDY_THRESHOLD_LO) begin
-      vdma_ready <= 1'b1;
+      vdma_ready <= vdma_active_frame;
     end
     if (vdma_addr_diff > BUF_THRESHOLD_HI) begin
       vdma_almost_full <= 1'b1;

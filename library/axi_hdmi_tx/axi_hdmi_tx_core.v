@@ -244,21 +244,26 @@ module axi_hdmi_tx_core #(
   // hdmi start of frame
 
   always @(posedge hdmi_clk) begin
-    if (EMBEDDED_SYNC == 1) begin
-      if ((hdmi_hs_count == 1) && (hdmi_vs_count == hdmi_ve_width_s)) begin
-        hdmi_fs <= hdmi_enable;
-      end else begin
-        hdmi_fs <= 1'b0;
-      end
+    if (hdmi_rst == 1'b1) begin
+      hdmi_fs_toggle <= 1'b0;
+      hdmi_fs <= 1'b0;
     end else begin
-      if ((hdmi_hs_count == 1) && (hdmi_vs_count == hdmi_vs_width)) begin
-        hdmi_fs <= hdmi_enable;
+      if (EMBEDDED_SYNC == 1) begin
+        if ((hdmi_hs_count == 1) && (hdmi_vs_count == hdmi_ve_width_s)) begin
+          hdmi_fs <= hdmi_enable;
+        end else begin
+          hdmi_fs <= 1'b0;
+        end
       end else begin
-        hdmi_fs <= 1'b0;
+        if ((hdmi_hs_count == 1) && (hdmi_vs_count == hdmi_vs_width)) begin
+          hdmi_fs <= hdmi_enable;
+        end else begin
+          hdmi_fs <= 1'b0;
+        end
       end
-    end
-    if (hdmi_fs == 1'b1) begin
-      hdmi_fs_toggle <= ~hdmi_fs_toggle;
+      if (hdmi_fs == 1'b1) begin
+        hdmi_fs_toggle <= ~hdmi_fs_toggle;
+      end
     end
   end
 
@@ -279,10 +284,8 @@ module axi_hdmi_tx_core #(
   end
 
   always @(posedge hdmi_clk) begin
-    hdmi_fs_ret <= hdmi_fs_ret_s;
-    if (hdmi_fs_ret_s == 1'b1) begin
+      hdmi_fs_ret <= hdmi_fs_ret_s;
       hdmi_fs_waddr <= vdma_fs_waddr;
-    end
   end
 
   // hdmi sync signals
@@ -332,7 +335,7 @@ module axi_hdmi_tx_core #(
   always @(posedge hdmi_clk) begin
     if (hdmi_rst == 1'b1) begin
       hdmi_raddr <= 10'd0;
-    end else if (hdmi_fs_ret == 1'b1) begin
+    end else if (hdmi_fs == 1'b1) begin
       hdmi_raddr <= {hdmi_fs_waddr, 1'b0};
     end else if (hdmi_de_s == 1'b1) begin
       hdmi_raddr <= hdmi_raddr + 1'b1;
