@@ -111,9 +111,9 @@ module axi_hdmi_tx_vdma (
 
   always @(posedge vdma_clk or posedge vdma_rst) begin
     if (vdma_rst == 1'b1) begin
-      vdma_fs_toggle_m1 <= 'd0;
-      vdma_fs_toggle_m2 <= 'd0;
-      vdma_fs_toggle_m3 <= 'd0;
+      vdma_fs_toggle_m1 <= 1'd0;
+      vdma_fs_toggle_m2 <= 1'd0;
+      vdma_fs_toggle_m3 <= 1'd0;
     end else begin
       vdma_fs_toggle_m1 <= hdmi_fs_toggle;
       vdma_fs_toggle_m2 <= vdma_fs_toggle_m1;
