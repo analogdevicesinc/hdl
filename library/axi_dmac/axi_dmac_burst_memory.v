@@ -44,7 +44,6 @@ module axi_dmac_burst_memory #(
   input src_reset,
 
   input src_data_valid,
-  output src_data_ready,
   input [DATA_WIDTH_SRC-1:0] src_data,
   input src_data_last,
 
@@ -108,7 +107,6 @@ reg [ID_WIDTH-1:0] src_id_next;
 reg [ID_WIDTH-1:0] src_id = 'h0;
 reg src_id_reduced_msb = 1'b0;
 reg [BURST_LEN_WIDTH-1:0] src_beat_counter = 'h00;
-reg src_mem_data_ready = 1'b0;
 
 reg [ID_WIDTH-1:0] dest_id_next = 'h0;
 reg dest_id_reduced_msb_next = 1'b0;
@@ -157,7 +155,7 @@ end else begin
   assign dest_id_reduced = dest_id_reduced_msb;
 end endgenerate
 
-assign src_beat = src_mem_data_valid & src_mem_data_ready;
+assign src_beat = src_mem_data_valid;
 assign src_last_beat = src_beat & src_mem_data_last;
 assign src_waddr = {src_id_reduced,src_beat_counter};
 
@@ -169,13 +167,6 @@ always @(*) begin
   end else begin
     src_id_next <= src_id;
   end
-end
-
-always @(posedge src_clk) begin
-  /* Ready if there is room for at least one full burst. */
-  src_mem_data_ready <= (src_id_next[ID_WIDTH-1] == src_dest_id[ID_WIDTH-1] ||
-                src_id_next[ID_WIDTH-2] == src_dest_id[ID_WIDTH-2] ||
-                src_id_next[ID_WIDTH-3:0] != src_dest_id[ID_WIDTH-3:0]);
 end
 
 always @(posedge src_clk) begin
@@ -303,12 +294,10 @@ axi_dmac_resize_src #(
   .reset (src_reset),
 
   .src_data_valid (src_data_valid),
-  .src_data_ready (src_data_ready),
   .src_data (src_data),
   .src_data_last (src_data_last),
 
   .mem_data_valid (src_mem_data_valid),
-  .mem_data_ready (src_mem_data_ready),
   .mem_data (src_mem_data),
   .mem_data_last (src_mem_data_last)
 );

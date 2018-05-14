@@ -46,19 +46,16 @@ module axi_dmac_resize_src #(
   input reset,
 
   input src_data_valid,
-  output src_data_ready,
   input [DATA_WIDTH_SRC-1:0] src_data,
   input src_data_last,
 
   output mem_data_valid,
-  input mem_data_ready,
   output [DATA_WIDTH_MEM-1:0] mem_data,
   output mem_data_last
 );
 
 generate if (DATA_WIDTH_SRC == DATA_WIDTH_MEM)  begin
   assign mem_data_valid = src_data_valid;
-  assign src_data_ready = mem_data_ready;
   assign mem_data = src_data;
   assign mem_data_last = src_data_last;
 end else begin
@@ -74,10 +71,10 @@ end else begin
     if (reset == 1'b1) begin
       valid <= 1'b0;
       mask <= 'h1;
-    end else if (src_data_valid == 1'b1 && src_data_ready == 1'b1) begin
+    end else if (src_data_valid == 1'b1) begin
       valid <= mask[RATIO-1];
       mask <= {mask[RATIO-2:0],mask[RATIO-1]};
-    end else if (mem_data_ready == 1'b1) begin
+    end else begin
       valid <= 1'b0;
     end
   end
@@ -85,17 +82,14 @@ end else begin
   integer i;
 
   always @(posedge clk) begin
-    if (src_data_ready == 1'b1) begin
-      for (i = 0; i < RATIO; i = i+1) begin
-        if (mask[i] == 1'b1) begin
-          data[i*DATA_WIDTH_SRC+:DATA_WIDTH_SRC] <= src_data;
-        end
+    for (i = 0; i < RATIO; i = i+1) begin
+      if (mask[i] == 1'b1) begin
+        data[i*DATA_WIDTH_SRC+:DATA_WIDTH_SRC] <= src_data;
       end
-      last <= src_data_last;
     end
+    last <= src_data_last;
   end
 
-  assign src_data_ready = ~valid | mem_data_ready;
   assign mem_data_valid = valid;
   assign mem_data = data;
   assign mem_data_last = last;
