@@ -57,7 +57,6 @@ module dmac_src_axi_stream #(
   input s_axis_last,
   output s_axis_xfer_req,
 
-  input fifo_ready,
   output fifo_valid,
   output [S_AXIS_DATA_WIDTH-1:0] fifo_data,
   output fifo_last,
@@ -141,7 +140,7 @@ dmac_data_mover # (
   .s_axi_ready(data_ready),
   .s_axi_valid(data_valid),
   .s_axi_data(data),
-  .m_axi_ready(fifo_ready),
+  .m_axi_ready(1'b1),
   .m_axi_valid(fifo_valid),
   .m_axi_data(fifo_data),
   .m_axi_last(fifo_last)

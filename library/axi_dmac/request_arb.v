@@ -256,11 +256,9 @@ wire [ID_WIDTH-1:0] src_data_request_id;
 wire [ID_WIDTH-1:0] src_response_id;
 
 wire src_valid;
-wire src_ready;
 wire [DMA_DATA_WIDTH_SRC-1:0] src_data;
 wire src_last;
 wire src_fifo_valid;
-wire src_fifo_ready;
 wire [DMA_DATA_WIDTH_SRC-1:0] src_fifo_data;
 wire src_fifo_last;
 
@@ -552,7 +550,6 @@ dmac_src_mm_axi #(
   .address_eot(src_address_eot),
 
   .fifo_valid(src_valid),
-  .fifo_ready(src_ready),
   .fifo_data(src_data),
   .fifo_last(src_last),
 
@@ -623,7 +620,6 @@ dmac_src_axi_stream #(
   .eot(src_eot),
 
   .fifo_valid(src_valid),
-  .fifo_ready(src_ready),
   .fifo_data(src_data),
   .fifo_last(src_last),
 
@@ -679,7 +675,6 @@ dmac_src_fifo_inf #(
   .eot(src_eot),
 
   .fifo_valid(src_valid),
-  .fifo_ready(src_ready),
   .fifo_data(src_data),
   .fifo_last(src_last),
 
@@ -753,15 +748,15 @@ sync_bits #(
 axi_register_slice #(
   .DATA_WIDTH(DMA_DATA_WIDTH_SRC + 1),
   .FORWARD_REGISTERED(AXI_SLICE_SRC),
-  .BACKWARD_REGISTERED(AXI_SLICE_SRC)
+  .BACKWARD_REGISTERED(0)
 ) i_src_slice (
   .clk(src_clk),
   .resetn(src_resetn),
   .s_axi_valid(src_valid),
-  .s_axi_ready(src_ready),
+  .s_axi_ready(),
   .s_axi_data({src_data,src_last}),
   .m_axi_valid(src_fifo_valid),
-  .m_axi_ready(src_fifo_ready),
+  .m_axi_ready(1'b1), /* No backpressure */
   .m_axi_data({src_fifo_data,src_fifo_last})
 );
 
@@ -775,7 +770,6 @@ axi_dmac_burst_memory #(
   .src_clk(src_clk),
   .src_reset(~src_resetn),
   .src_data_valid(src_fifo_valid),
-  .src_data_ready(src_fifo_ready),
   .src_data(src_fifo_data),
   .src_data_last(src_fifo_last),
 

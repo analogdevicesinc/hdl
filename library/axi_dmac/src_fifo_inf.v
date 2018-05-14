@@ -55,7 +55,6 @@ module dmac_src_fifo_inf #(
   input sync,
   output xfer_req,
 
-  input fifo_ready,
   output fifo_valid,
   output [DATA_WIDTH-1:0] fifo_data,
   output fifo_last,
@@ -117,7 +116,7 @@ dmac_data_mover # (
   .s_axi_ready(ready),
   .s_axi_valid(sync_valid),
   .s_axi_data(din),
-  .m_axi_ready(fifo_ready),
+  .m_axi_ready(1'b1),
   .m_axi_valid(fifo_valid),
   .m_axi_data(fifo_data),
   .m_axi_last(fifo_last)
