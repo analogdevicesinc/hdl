@@ -756,31 +756,6 @@ axi_dmac_burst_memory #(
   .dest_data_response_id(dest_data_response_id)
 );
 
-wire _dest_valid;
-wire _dest_ready;
-wire [DMA_DATA_WIDTH_DEST-1:0] _dest_data;
-wire _dest_last;
-
-axi_register_slice #(
-  .DATA_WIDTH(DMA_DATA_WIDTH_DEST + 1),
-  .FORWARD_REGISTERED(AXI_SLICE_DEST)
-) i_dest_slice2 (
-  .clk(dest_clk),
-  .resetn(dest_resetn),
-  .s_axi_valid(dest_fifo_valid),
-  .s_axi_ready(dest_fifo_ready),
-  .s_axi_data({
-    dest_fifo_last,
-    dest_fifo_data
-  }),
-  .m_axi_valid(_dest_valid),
-  .m_axi_ready(_dest_ready),
-  .m_axi_data({
-    _dest_last,
-    _dest_data
-  })
-);
-
 axi_register_slice #(
   .DATA_WIDTH(DMA_DATA_WIDTH_DEST + 1),
   .FORWARD_REGISTERED(AXI_SLICE_DEST),
@@ -788,11 +763,11 @@ axi_register_slice #(
 ) i_dest_slice (
   .clk(dest_clk),
   .resetn(dest_resetn),
-  .s_axi_valid(_dest_valid),
-  .s_axi_ready(_dest_ready),
+  .s_axi_valid(dest_fifo_valid),
+  .s_axi_ready(dest_fifo_ready),
   .s_axi_data({
-    _dest_last,
-    _dest_data
+    dest_fifo_last,
+    dest_fifo_data
   }),
   .m_axi_valid(dest_valid),
   .m_axi_ready(dest_ready),
