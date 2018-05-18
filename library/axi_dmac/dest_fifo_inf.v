@@ -72,12 +72,11 @@ module dmac_dest_fifo_inf #(
   output [1:0] response_resp
 );
 
-wire data_enabled;
-
 wire [DATA_WIDTH-1:0]  dout_s;
 wire data_ready;
 wire data_valid;
 
+assign enabled = enable;
 assign data_ready = en & (data_valid | ~enable);
 
 dmac_data_mover # (
@@ -90,7 +89,7 @@ dmac_data_mover # (
   .resetn(resetn),
 
   .enable(enable),
-  .enabled(data_enabled),
+  .enabled(),
   .xfer_req(xfer_req),
 
   .request_id(request_id),
@@ -127,8 +126,8 @@ dmac_response_generator # (
   .clk(clk),
   .resetn(resetn),
 
-  .enable(data_enabled),
-  .enabled(enabled),
+  .enable(enable),
+  .enabled(),
 
   .request_id(data_id),
   .response_id(response_id),

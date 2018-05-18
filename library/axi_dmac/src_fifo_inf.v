@@ -71,6 +71,8 @@ reg needs_sync = 1'b0;
 wire has_sync = ~needs_sync | sync;
 wire sync_valid = en & ready & has_sync;
 
+assign enabled = enable;
+
 always @(posedge clk)
 begin
   if (ready && en && sync) begin
@@ -99,7 +101,7 @@ dmac_data_mover # (
   .resetn(resetn),
 
   .enable(enable),
-  .enabled(enabled),
+  .enabled(),
 
   .xfer_req(xfer_req),
 
