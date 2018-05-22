@@ -82,11 +82,6 @@ wire data_enabled;
 wire _fifo_ready;
 wire m_axis_last_s;
 
-// We are not allowed to just de-assert valid, but if the streaming target does
-// not accept any samples anymore we'd lock up the DMA core. So retain the last
-// beat when disabled until it is accepted. But if in the meantime the DMA core
-// is re-enabled and new data becomes available overwrite the old.
-
 always @(posedge s_axis_aclk) begin
   if(req_ready == 1'b1) begin
     req_xlast_d <= req_xlast;
