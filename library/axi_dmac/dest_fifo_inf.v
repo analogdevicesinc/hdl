@@ -45,9 +45,11 @@ module dmac_dest_fifo_inf #(
   input enable,
   output enabled,
 
-  input [ID_WIDTH-1:0] request_id,
+  input req_valid,
+  output req_ready,
+
   output [ID_WIDTH-1:0] response_id,
-  output [ID_WIDTH-1:0] data_id,
+  output reg [ID_WIDTH-1:0] data_id = 'h0,
   input data_eot,
   input response_eot,
 
@@ -61,10 +63,7 @@ module dmac_dest_fifo_inf #(
   output fifo_ready,
   input fifo_valid,
   input [DATA_WIDTH-1:0] fifo_data,
-
-  input req_valid,
-  output req_ready,
-  input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
+  input fifo_last,
 
   output response_valid,
   input response_ready,
@@ -72,51 +71,51 @@ module dmac_dest_fifo_inf #(
   output [1:0] response_resp
 );
 
-wire [DATA_WIDTH-1:0]  dout_s;
-wire data_ready;
-wire data_valid;
+`include "inc_id.h"
+
+reg active = 1'b0;
+
+/* Last beat of the burst */
+wire fifo_last_beat;
+/* Last beat of the segment */
+wire fifo_eot_beat;
 
 assign enabled = enable;
-assign data_ready = en & (data_valid | ~enable);
+assign fifo_ready = en & (fifo_valid | ~enable);
 
-dmac_data_mover # (
-  .ID_WIDTH(ID_WIDTH),
-  .DATA_WIDTH(DATA_WIDTH),
-  .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH),
-  .DISABLE_WAIT_FOR_ID(0)
-) i_data_mover (
-  .clk(clk),
-  .resetn(resetn),
+/* fifo_last == 1'b1 implies fifo_valid == 1'b1 */
+assign fifo_last_beat = fifo_ready & fifo_last;
+assign fifo_eot_beat = fifo_last_beat & data_eot;
 
-  .enable(enable),
-  .enabled(),
-  .xfer_req(xfer_req),
-
-  .request_id(request_id),
-  .response_id(data_id),
-  .eot(data_eot),
-
-  .req_valid(req_valid),
-  .req_ready(req_ready),
-  .req_last_burst_length(req_last_burst_length),
-
-  .s_axi_ready(fifo_ready),
-  .s_axi_valid(fifo_valid),
-  .s_axi_data(fifo_data),
-  .m_axi_ready(data_ready),
-  .m_axi_valid(data_valid),
-  .m_axi_data(dout_s),
-  .m_axi_last()
-);
+assign req_ready = fifo_eot_beat | ~active;
+assign xfer_req = active;
 
 always @(posedge clk) begin
   if (en) begin
-    dout <= (data_valid) ? dout_s : {DATA_WIDTH{1'b0}};
-    valid <= data_valid & enable;
-    underflow <= ~(data_valid & enable);
+    dout <= fifo_valid ? fifo_data : {DATA_WIDTH{1'b0}};
+    valid <= fifo_valid & enable;
+    underflow <= ~(fifo_valid & enable);
   end else begin
     valid <= 1'b0;
     underflow <= 1'b0;
+  end
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    data_id <= 'h00;
+  end else if (fifo_last_beat == 1'b1) begin
+    data_id <= inc_id(data_id);
+  end
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    active <= 1'b0;
+  end else if (req_valid == 1'b1) begin
+    active <= 1'b1;
+  end else if (fifo_eot_beat == 1'b1) begin
+    active <= 1'b0;
   end
 end
 
