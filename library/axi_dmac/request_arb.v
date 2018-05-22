@@ -223,14 +223,18 @@ wire [1:0] dest_response_resp;
 wire dest_response_resp_eot;
 
 wire [ID_WIDTH-1:0] dest_request_id;
+wire [ID_WIDTH-1:0] dest_data_request_id;
+wire [ID_WIDTH-1:0] dest_data_response_id;
 wire [ID_WIDTH-1:0] dest_response_id;
 
 wire dest_valid;
 wire dest_ready;
 wire [DMA_DATA_WIDTH_DEST-1:0] dest_data;
+wire dest_last;
 wire dest_fifo_valid;
 wire dest_fifo_ready;
 wire [DMA_DATA_WIDTH_DEST-1:0] dest_fifo_data;
+wire dest_fifo_last;
 
 wire src_req_valid;
 wire src_req_ready;
@@ -293,14 +297,14 @@ generate if (DMA_TYPE_DEST == DMA_TYPE_MM_AXI) begin
 assign dest_clk = m_dest_axi_aclk;
 assign dest_ext_resetn = m_dest_axi_aresetn;
 
-wire [ID_WIDTH-1:0] dest_data_id;
 wire [ID_WIDTH-1:0] dest_address_id;
 wire dest_address_eot = eot_mem[dest_address_id];
-wire dest_data_eot = eot_mem[dest_data_id];
 wire dest_response_eot = eot_mem[dest_response_id];
 
 assign dbg_dest_address_id = dest_address_id;
-assign dbg_dest_data_id = dest_data_id;
+assign dbg_dest_data_id = dest_data_response_id;
+
+assign dest_data_request_id = dest_address_id;
 
 dmac_dest_mm_axi #(
   .ID_WIDTH(ID_WIDTH),
@@ -329,16 +333,15 @@ dmac_dest_mm_axi #(
   .request_id(dest_request_id),
   .response_id(dest_response_id),
 
-  .data_id(dest_data_id),
   .address_id(dest_address_id),
 
   .address_eot(dest_address_eot),
-  .data_eot(dest_data_eot),
   .response_eot(dest_response_eot),
 
   .fifo_valid(dest_valid),
   .fifo_ready(dest_ready),
   .fifo_data(dest_data),
+  .fifo_last(dest_last),
 
   .m_axi_awready(m_axi_awready),
   .m_axi_awvalid(m_axi_awvalid),
@@ -388,6 +391,8 @@ wire [ID_WIDTH-1:0] data_id;
 wire data_eot = eot_mem[data_id];
 wire response_eot = eot_mem[dest_response_id];
 
+assign dest_data_request_id = dest_request_id;
+
 assign dbg_dest_address_id = 'h00;
 assign dbg_dest_data_id = data_id;
 
@@ -412,7 +417,6 @@ dmac_dest_axi_stream #(
   .response_resp(dest_response_resp),
   .response_resp_eot(dest_response_resp_eot),
 
-  .request_id(dest_request_id),
   .response_id(dest_response_id),
   .data_id(data_id),
   .xfer_req(m_axis_xfer_req),
@@ -423,6 +427,7 @@ dmac_dest_axi_stream #(
   .fifo_valid(dest_valid),
   .fifo_ready(dest_ready),
   .fifo_data(dest_data),
+  .fifo_last(dest_last),
 
   .m_axis_valid(m_axis_valid),
   .m_axis_ready(m_axis_ready),
@@ -449,6 +454,8 @@ wire [ID_WIDTH-1:0] data_id;
 wire data_eot = eot_mem[data_id];
 wire response_eot = eot_mem[dest_response_id];
 
+assign dest_data_request_id = dest_request_id;
+
 assign dbg_dest_address_id = 'h00;
 assign dbg_dest_data_id = data_id;
 
@@ -465,14 +472,12 @@ dmac_dest_fifo_inf #(
 
   .req_valid(dest_req_valid),
   .req_ready(dest_req_ready),
-  .req_last_burst_length(dest_req_last_burst_length),
 
   .response_valid(dest_response_valid),
   .response_ready(dest_response_ready),
   .response_resp(dest_response_resp),
   .response_resp_eot(dest_response_resp_eot),
 
-  .request_id(dest_request_id),
   .response_id(dest_response_id),
   .data_id(data_id),
 
@@ -482,6 +487,7 @@ dmac_dest_fifo_inf #(
   .fifo_valid(dest_valid),
   .fifo_ready(dest_ready),
   .fifo_data(dest_data),
+  .fifo_last(dest_last),
 
   .en(fifo_rd_en),
   .valid(fifo_rd_valid),
@@ -743,30 +749,40 @@ axi_dmac_burst_memory #(
   .dest_data_valid(dest_fifo_valid),
   .dest_data_ready(dest_fifo_ready),
   .dest_data(dest_fifo_data),
+  .dest_data_last(dest_fifo_last),
 
-  .dest_request_id(dest_request_id)
+  .dest_request_id(dest_request_id),
+  .dest_data_request_id(dest_data_request_id),
+  .dest_data_response_id(dest_data_response_id)
 );
 
 wire _dest_valid;
 wire _dest_ready;
 wire [DMA_DATA_WIDTH_DEST-1:0] _dest_data;
+wire _dest_last;
 
 axi_register_slice #(
-  .DATA_WIDTH(DMA_DATA_WIDTH_DEST),
+  .DATA_WIDTH(DMA_DATA_WIDTH_DEST + 1),
   .FORWARD_REGISTERED(AXI_SLICE_DEST)
 ) i_dest_slice2 (
   .clk(dest_clk),
   .resetn(dest_resetn),
   .s_axi_valid(dest_fifo_valid),
   .s_axi_ready(dest_fifo_ready),
-  .s_axi_data(dest_fifo_data),
+  .s_axi_data({
+    dest_fifo_last,
+    dest_fifo_data
+  }),
   .m_axi_valid(_dest_valid),
   .m_axi_ready(_dest_ready),
-  .m_axi_data(_dest_data)
+  .m_axi_data({
+    _dest_last,
+    _dest_data
+  })
 );
 
 axi_register_slice #(
-  .DATA_WIDTH(DMA_DATA_WIDTH_DEST),
+  .DATA_WIDTH(DMA_DATA_WIDTH_DEST + 1),
   .FORWARD_REGISTERED(AXI_SLICE_DEST),
   .BACKWARD_REGISTERED(AXI_SLICE_DEST)
 ) i_dest_slice (
@@ -774,10 +790,16 @@ axi_register_slice #(
   .resetn(dest_resetn),
   .s_axi_valid(_dest_valid),
   .s_axi_ready(_dest_ready),
-  .s_axi_data(_dest_data),
+  .s_axi_data({
+    _dest_last,
+    _dest_data
+  }),
   .m_axi_valid(dest_valid),
   .m_axi_ready(dest_ready),
-  .m_axi_data(dest_data)
+  .m_axi_data({
+    dest_last,
+    dest_data
+  })
 );
 
 splitter #(

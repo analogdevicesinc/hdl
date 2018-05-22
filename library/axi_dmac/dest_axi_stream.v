@@ -46,7 +46,6 @@ module dmac_dest_axi_stream #(
   output enabled,
   output xfer_req,
 
-  input [ID_WIDTH-1:0] request_id,
   output [ID_WIDTH-1:0] response_id,
   output [ID_WIDTH-1:0] data_id,
   input data_eot,
@@ -60,6 +59,7 @@ module dmac_dest_axi_stream #(
   output fifo_ready,
   input fifo_valid,
   input [S_AXIS_DATA_WIDTH-1:0] fifo_data,
+  input fifo_last,
 
   input req_valid,
   output req_ready,
@@ -72,50 +72,65 @@ module dmac_dest_axi_stream #(
   output [1:0] response_resp
 );
 
+`include "inc_id.h"
 
+reg data_enabled = 1'b0;
 reg req_xlast_d = 1'b0;
+reg active = 1'b0;
 
-wire data_enabled;
-wire m_axis_last_s;
+reg [ID_WIDTH-1:0] id = 'h0;
+
+/* Last beat of the burst */
+wire fifo_last_beat;
+/* Last beat of the segment */
+wire fifo_eot_beat;
+
+/* fifo_last == 1'b1 implies fifo_valid == 1'b1 */
+assign fifo_last_beat = fifo_ready & fifo_last;
+assign fifo_eot_beat = fifo_last_beat & data_eot;
+
+assign req_ready = fifo_eot_beat | ~active;
+assign data_id = id;
+assign xfer_req = active;
+
+assign m_axis_valid = fifo_valid & active;
+assign fifo_ready = m_axis_ready & active;
+assign m_axis_last = req_xlast_d & fifo_last & data_eot;
+assign m_axis_data = fifo_data;
 
 always @(posedge s_axis_aclk) begin
-  if(req_ready == 1'b1) begin
+  if (s_axis_aresetn == 1'b0) begin
+    data_enabled <= 1'b0;
+  end else if (enable == 1'b1) begin
+    data_enabled <= 1'b1;
+  end else if (m_axis_valid == 1'b0 || m_axis_ready == 1'b1) begin
+    data_enabled <= 1'b0;
+  end
+end
+
+always @(posedge s_axis_aclk) begin
+  if (req_ready == 1'b1) begin
     req_xlast_d <= req_xlast;
   end
 end
 
-assign m_axis_last = (req_xlast_d == 1'b1) ? m_axis_last_s : 1'b0;
+always @(posedge s_axis_aclk) begin
+  if (s_axis_aresetn == 1'b0) begin
+    active <= 1'b0;
+  end else if (req_valid == 1'b1) begin
+    active <= 1'b1;
+  end else if (fifo_eot_beat == 1'b1) begin
+    active <= 1'b0;
+  end
+end
 
-dmac_data_mover # (
-  .ID_WIDTH(ID_WIDTH),
-  .DATA_WIDTH(S_AXIS_DATA_WIDTH),
-  .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH),
-  .DISABLE_WAIT_FOR_ID(0),
-  .LAST(1)
-) i_data_mover (
-  .clk(s_axis_aclk),
-  .resetn(s_axis_aresetn),
-
-  .enable(enable),
-  .enabled(data_enabled),
-  .xfer_req(xfer_req),
-
-  .request_id(request_id),
-  .response_id(data_id),
-  .eot(data_eot),
-
-  .req_valid(req_valid),
-  .req_ready(req_ready),
-  .req_last_burst_length(req_last_burst_length),
-
-  .m_axi_ready(m_axis_ready),
-  .m_axi_valid(m_axis_valid),
-  .m_axi_data(m_axis_data),
-  .m_axi_last(m_axis_last_s),
-  .s_axi_ready(fifo_ready),
-  .s_axi_valid(fifo_valid),
-  .s_axi_data(fifo_data)
-);
+always @(posedge s_axis_aclk) begin
+  if (s_axis_aresetn == 1'b0) begin
+    id <= 'h00;
+  end else if (fifo_last_beat == 1'b1) begin
+    id <= inc_id(id);
+  end
+end
 
 dmac_response_generator # (
   .ID_WIDTH(ID_WIDTH)
@@ -126,7 +141,7 @@ dmac_response_generator # (
   .enable(data_enabled),
   .enabled(enabled),
 
-  .request_id(data_id),
+  .request_id(id),
   .response_id(response_id),
 
   .eot(response_eot),
