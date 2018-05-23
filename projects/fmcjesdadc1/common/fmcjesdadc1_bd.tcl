@@ -37,6 +37,7 @@ ad_ip_parameter axi_ad9250_0_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad9250_0_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_ad9250_0_dma CONFIG.DMA_DATA_WIDTH_SRC 64
 ad_ip_parameter axi_ad9250_0_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+ad_ip_parameter axi_ad9250_0_dma CONFIG.FIFO_SIZE 8
 
 ad_ip_instance axi_dmac axi_ad9250_1_dma
 ad_ip_parameter axi_ad9250_1_dma CONFIG.DMA_TYPE_SRC 2
@@ -50,6 +51,7 @@ ad_ip_parameter axi_ad9250_1_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad9250_1_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_ad9250_1_dma CONFIG.DMA_DATA_WIDTH_SRC 64
 ad_ip_parameter axi_ad9250_1_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+ad_ip_parameter axi_ad9250_0_dma CONFIG.FIFO_SIZE 8
 
 # transceiver core
 
