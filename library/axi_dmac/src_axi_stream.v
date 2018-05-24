@@ -78,6 +78,8 @@ wire has_sync = ~needs_sync | sync;
 wire data_valid;
 wire data_ready;
 
+assign enabled = enable;
+
 assign data = transfer_abort == 1'b1 ? {S_AXIS_DATA_WIDTH{1'b0}} : s_axis_data;
 assign data_valid = (s_axis_valid & has_sync) | transfer_abort;
 assign s_axis_ready = data_ready & ~transfer_abort;
@@ -118,14 +120,10 @@ end
 dmac_data_mover # (
   .ID_WIDTH(ID_WIDTH),
   .DATA_WIDTH(S_AXIS_DATA_WIDTH),
-  .DISABLE_WAIT_FOR_ID(0),
   .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH)
 ) i_data_mover (
   .clk(s_axis_aclk),
   .resetn(s_axis_aresetn),
-
-  .enable(enable),
-  .enabled(enabled),
 
   .xfer_req(s_axis_xfer_req),
 
@@ -140,7 +138,6 @@ dmac_data_mover # (
   .s_axi_ready(data_ready),
   .s_axi_valid(data_valid),
   .s_axi_data(data),
-  .m_axi_ready(1'b1),
   .m_axi_valid(fifo_valid),
   .m_axi_data(fifo_data),
   .m_axi_last(fifo_last)

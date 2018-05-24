@@ -94,14 +94,10 @@ end
 dmac_data_mover # (
   .ID_WIDTH(ID_WIDTH),
   .DATA_WIDTH(DATA_WIDTH),
-  .DISABLE_WAIT_FOR_ID(0),
   .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH)
 ) i_data_mover (
   .clk(clk),
   .resetn(resetn),
-
-  .enable(enable),
-  .enabled(),
 
   .xfer_req(xfer_req),
 
@@ -116,7 +112,6 @@ dmac_data_mover # (
   .s_axi_ready(ready),
   .s_axi_valid(sync_valid),
   .s_axi_data(din),
-  .m_axi_ready(1'b1),
   .m_axi_valid(fifo_valid),
   .m_axi_data(fifo_data),
   .m_axi_last(fifo_last)

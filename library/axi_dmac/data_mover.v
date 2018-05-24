@@ -37,9 +37,7 @@ module dmac_data_mover #(
 
   parameter ID_WIDTH = 3,
   parameter DATA_WIDTH = 64,
-  parameter DISABLE_WAIT_FOR_ID = 1,
-  parameter BEATS_PER_BURST_WIDTH = 4,
-  parameter LAST = 0)( /* 0 = last asserted at the end of each burst, 1 = last only asserted at the end of the transfer */
+  parameter BEATS_PER_BURST_WIDTH = 4) (
 
   input clk,
   input resetn,
@@ -48,16 +46,12 @@ module dmac_data_mover #(
   output [ID_WIDTH-1:0] response_id,
   input eot,
 
-  input enable,
-  output reg enabled,
-
   output xfer_req,
 
   output s_axi_ready,
   input s_axi_valid,
   input [DATA_WIDTH-1:0] s_axi_data,
 
-  input m_axi_ready,
   output m_axi_valid,
   output [DATA_WIDTH-1:0] m_axi_data,
   output m_axi_last,
@@ -90,37 +84,15 @@ assign response_id = id;
 
 assign last = eot ? last_eot : last_non_eot;
 
-assign s_axi_ready = m_axi_ready & pending_burst & active;
+assign s_axi_ready = pending_burst & active;
 assign m_axi_valid = s_axi_valid & pending_burst & active;
 assign m_axi_data = s_axi_data;
-assign m_axi_last = LAST ? (last_eot & eot) : last;
+assign m_axi_last = last;
 
 // If we want to support zero delay between transfers we have to assert
 // req_ready on the same cycle on which the last load happens.
 assign last_load = s_axi_ready && s_axi_valid && last_eot && eot;
 assign req_ready = last_load || ~active;
-
-always @(posedge clk) begin
-  if (resetn == 1'b0) begin
-    enabled <= 1'b0;
-  end else begin
-    if (enable) begin
-      enabled <= 1'b1;
-    end else begin
-      if (DISABLE_WAIT_FOR_ID == 0) begin
-        // We are not allowed to just deassert valid, so wait until the
-        // current beat has been accepted
-        if (~s_axi_valid || m_axi_ready)
-          enabled <= 1'b0;
-      end else begin
-        // For memory mapped AXI busses we have to complete all pending
-        // burst requests before we can disable the data mover.
-        if (response_id == request_id)
-          enabled <= 1'b0;
-      end
-    end
-  end
-end
 
 always @(posedge clk) begin
   if (req_ready) begin
