@@ -18,8 +18,9 @@ source ../common/adrv9009_bd.tcl
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.DMA_DATA_WIDTH_SRC 128
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.DMA_DATA_WIDTH_DEST 128
-ad_ip_parameter axi_adrv9009_rx_dma CONFIG.FIFO_SIZE {16}
-ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.FIFO_SIZE {16}
+ad_ip_parameter axi_adrv9009_rx_dma CONFIG.FIFO_SIZE 32
+ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.FIFO_SIZE 32
+ad_ip_parameter axi_adrv9009_tx_dma CONFIG.FIFO_SIZE 32
 
 ad_connect sys_dma_clk sys_ps8/pl_clk2
 ad_connect sys_dma_rstgen/ext_reset_in sys_rstgen/peripheral_reset
