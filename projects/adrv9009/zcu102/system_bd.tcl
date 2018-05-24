@@ -7,10 +7,6 @@ set dac_dma_data_width 128
 source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
 
-ad_ip_parameter sys_ps8 CONFIG.PSU__FPGA_PL2_ENABLE 1
-ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL2_REF_CTRL__SRCSEL {IOPLL}
-ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL2_REF_CTRL__FREQMHZ 300
-
 ad_mem_hp0_interconnect sys_cpu_clk sys_ps8/S_AXI_HP0
 
 source ../common/adrv9009_bd.tcl
@@ -22,7 +18,17 @@ ad_ip_parameter axi_adrv9009_rx_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.FIFO_SIZE 32
 
-ad_connect sys_dma_clk sys_ps8/pl_clk2
+ad_ip_instance clk_wiz dma_clk_wiz
+ad_ip_parameter dma_clk_wiz CONFIG.PRIMITIVE PLL
+ad_ip_parameter dma_clk_wiz CONFIG.RESET_TYPE ACTIVE_LOW
+ad_ip_parameter dma_clk_wiz CONFIG.USE_LOCKED false
+ad_ip_parameter dma_clk_wiz CONFIG.CLKOUT1_REQUESTED_OUT_FREQ 325
+ad_ip_parameter dma_clk_wiz CONFIG.PRIM_SOURCE No_buffer
+
+ad_connect sys_cpu_clk dma_clk_wiz/clk_in1
+ad_connect sys_cpu_resetn dma_clk_wiz/resetn
+
+ad_connect sys_dma_clk dma_clk_wiz/clk_out1
 ad_connect sys_dma_rstgen/ext_reset_in sys_rstgen/peripheral_reset
 
 ad_ip_parameter axi_adrv9009_tx_xcvr CONFIG.XCVR_TYPE 2
