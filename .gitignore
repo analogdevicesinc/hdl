@@ -1,5 +1,6 @@
 *.cache
 *.data
+*.str
 *.xpr
 !fmcjesdadc1_kc705.xpr #Except
 *.log
