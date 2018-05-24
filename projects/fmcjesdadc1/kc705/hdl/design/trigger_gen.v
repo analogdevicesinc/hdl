@@ -59,7 +59,7 @@ module trigger_gen #(
     input [31:0] adc_data_d,
     input adc_enable_d,
     input signed [17:0]   trig_level_a,
-    input signed [17:0]   trig_level_b,
+    input signed [13:0]   trig_level_b,
     
     output trigger0,
     output trigger1
@@ -87,6 +87,16 @@ function  trigger_eval_f;
         trigger_eval_f =(adc_channel_mean > trig_lvl)? 1'b1: 1'b0;
        end 
 endfunction
+
+function  trigger_minus_eval_f;
+	input signed [ADC_DATA_WIDTH +1:0] adc_channel_mean;
+	input signed [ADC_DATA_WIDTH +1:0] trig_lvl;
+
+	   begin 	
+        trigger_minus_eval_f =(adc_channel_mean < trig_lvl)? 1'b1: 1'b0;
+       end 
+endfunction
+
 /*********** End Function Declarations ***************/
 
 /*Trigger Logic*/
@@ -99,7 +109,7 @@ endfunction
 	reg  trigger0_r = 0;
     assign trigger0 = trigger0_r; 
 	always @(posedge adc_clk) begin
-         trigger0_r <= trigger_eval_f(adc_mean_a, trig_level_a);
+         trigger0_r <= trigger_minus_eval_f(adc_mean_a, trig_level_a);
     end
 
 
@@ -113,7 +123,7 @@ endfunction
     assign trigger1 = trigger1_r; 
 
 	always @(posedge adc_clk) begin
-         trigger1_r <= trigger_eval_f(adc_mean_b, trig_level_b );
+         trigger1_r <= trigger_eval_f(adc_mean_b, {trig_level_b, 4'h0}  ); // {2'b00, 16'h0200}
     end
 	
 endmodule
