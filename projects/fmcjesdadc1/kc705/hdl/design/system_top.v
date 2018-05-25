@@ -126,7 +126,7 @@ module system_top (
   wire    [0:(N_ADC_CHANNELS-1)] adc_valid;
   wire    [31:0] adc_data[0:(N_ADC_CHANNELS-1)]; // array of  32-bit registers;
 
-  wire    [13:0]      gpio_trigg_lvl = gpio_o[31:18]; // GPIO lines 18 -31
+  wire    [13:0]      gpio_trigg_lvl = gpio_o[31:18]; // 14 bit GPIO lines 18 -31
 
 //assign gpio_o
   assign           user_sma_gpio_n = rx_clk;
@@ -162,6 +162,7 @@ module system_top (
     //Trigger levels are positive
 //    .trig_level_a ({2'b11, 16'hF000} ), // < 18'h02000 / 18'd8192 = -200mV 18'h03000 = -320mV
 //    .trig_level_b ({2'b00, 16'h1000} ), // >
+    .trig_reset(gpio_o[9]), // First LED
     .trig_level_a ({2'b00, 16'h0200}), // {2'b11, 16'h0FE0} < 18'h02000 / 18'd8192 = -200mV 18'h03000 = -320mV
     .trig_level_b (gpio_trigg_lvl), // > {2'b00, 16'h0200}
 //    .trig_level_b ({2'b11, 16'h8000} ),  //,-2048
@@ -169,6 +170,7 @@ module system_top (
     .trigger0 (user_sma_clk_p),
     .trigger1 (user_sma_clk_n)
     );
+
 
 // 
   IBUFDS_GTE2 i_ibufds_rx_ref_clk (
