@@ -98,12 +98,14 @@ dmac_data_mover # (
   .req_valid(req_valid),
   .req_ready(req_ready),
   .req_last_burst_length(req_last_burst_length),
-  .req_sync_transfer_start(req_sync_transer_start),
+  .req_sync_transfer_start(req_sync_transfer_start),
+  .req_xlast(1'b0),
 
   .s_axi_ready(ready),
   .s_axi_valid(valid),
   .s_axi_data(din),
   .s_axi_sync(sync),
+  .s_axi_last(1'b0),
 
   .m_axi_valid(fifo_valid),
   .m_axi_data(fifo_data),
