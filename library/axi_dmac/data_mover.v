@@ -37,7 +37,8 @@ module dmac_data_mover #(
 
   parameter ID_WIDTH = 3,
   parameter DATA_WIDTH = 64,
-  parameter BEATS_PER_BURST_WIDTH = 4) (
+  parameter BEATS_PER_BURST_WIDTH = 4,
+  parameter ALLOW_ABORT = 0) (
 
   input clk,
   input resetn,
@@ -51,6 +52,7 @@ module dmac_data_mover #(
   output s_axi_ready,
   input s_axi_valid,
   input [DATA_WIDTH-1:0] s_axi_data,
+  input s_axi_last,
   input s_axi_sync,
 
   output m_axi_valid,
@@ -60,7 +62,8 @@ module dmac_data_mover #(
   input req_valid,
   output req_ready,
   input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
-  input req_sync_transfer_start
+  input req_sync_transfer_start,
+  input req_xlast
 );
 
 localparam BEAT_COUNTER_MAX = {BEATS_PER_BURST_WIDTH{1'b1}};
@@ -81,7 +84,7 @@ reg needs_sync = 1'b0;
 wire has_sync = ~needs_sync | s_axi_sync;
 
 wire s_axi_sync_valid = has_sync & s_axi_valid;
-wire s_axi_beat = s_axi_sync_valid & s_axi_ready;
+wire transfer_abort_s;
 
 wire last_load;
 wire last;
@@ -92,18 +95,51 @@ assign response_id = id;
 
 assign last = eot ? last_eot : last_non_eot;
 
-assign s_axi_ready = pending_burst & active;
-assign m_axi_valid = s_axi_sync_valid & pending_burst & active;
-assign m_axi_data = s_axi_data;
+assign s_axi_ready = (pending_burst & active) & ~transfer_abort_s;
+assign m_axi_valid = (s_axi_sync_valid | transfer_abort_s) & pending_burst & active;
+assign m_axi_data = transfer_abort_s == 1'b1 ? {DATA_WIDTH{1'b0}} : s_axi_data;
 assign m_axi_last = last;
-assign m_axi_eot = last & eot;
+
+generate if (ALLOW_ABORT == 1) begin
+  reg transfer_abort = 1'b0;
+  reg req_xlast_d = 1'b0;
+
+  /*
+   * A 'last' on the external interface indicates the end of an packet. If such a
+   * 'last' indicator is observed before the end of the current transfer stop
+   * accepting data on the external interface and complete the current transfer by
+   * writing zeros to the buffer.
+   */
+  always @(posedge clk) begin
+    if (resetn == 1'b0) begin
+      transfer_abort <= 1'b0;
+    end else if (m_axi_valid == 1'b1) begin
+      if (last == 1'b1 && eot == 1'b1 && req_xlast_d == 1'b1) begin
+        transfer_abort <= 1'b0;
+      end else if (s_axi_last == 1'b1) begin
+        transfer_abort <= 1'b1;
+      end
+    end
+  end
+
+  always @(posedge clk) begin
+    if (req_ready == 1'b1) begin
+      req_xlast_d <= req_xlast;
+    end
+  end
+
+  assign transfer_abort_s = transfer_abort;
+
+end else begin
+  assign transfer_abort_s = 1'b0;
+end endgenerate
 
 /*
  * If req_sync_transfer_start is set all incoming beats will be skipped until
  * one has s_axi_sync set. This will be the first beat that is passsed through.
  */
 always @(posedge clk) begin
-  if (s_axi_beat == 1'b1)
+  if (m_axi_valid == 1'b1) begin
     needs_sync <= 1'b0;
   end else if (req_ready == 1'b1) begin
     needs_sync <= req_sync_transfer_start;
@@ -112,7 +148,7 @@ end
 
 // If we want to support zero delay between transfers we have to assert
 // req_ready on the same cycle on which the last load happens.
-assign last_load = s_axi_beat && last_eot && eot;
+assign last_load = m_axi_valid && last_eot && eot;
 assign req_ready = last_load || ~active;
 
 always @(posedge clk) begin
@@ -120,7 +156,7 @@ always @(posedge clk) begin
     last_eot <= req_last_burst_length == 'h0;
     last_non_eot <= 1'b0;
     beat_counter <= 'h1;
-  end else if (s_axi_beat == 1'b1) begin
+  end else if (m_axi_valid == 1'b1) begin
     last_eot <= beat_counter == last_burst_length;
     last_non_eot <= beat_counter == BEAT_COUNTER_MAX;
     beat_counter <= beat_counter + 1'b1;
@@ -144,7 +180,7 @@ end
 
 always @(*)
 begin
-  if (s_axi_beat == 1'b1 && last == 1'b1)
+  if (m_axi_valid == 1'b1 && last == 1'b1)
     id_next <= inc_id(id);
   else
     id_next <= id;
