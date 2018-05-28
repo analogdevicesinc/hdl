@@ -66,21 +66,11 @@ module dmac_src_fifo_inf #(
 );
 
 wire ready;
-
-reg needs_sync = 1'b0;
-wire has_sync = ~needs_sync | sync;
-wire sync_valid = en & ready & has_sync;
+wire valid;
 
 assign enabled = enable;
 
-always @(posedge clk)
-begin
-  if (ready && en && sync) begin
-    needs_sync <= 1'b0;
-  end else if (req_valid && req_ready) begin
-    needs_sync <= req_sync_transfer_start;
-  end
-end
+assign valid = en & ready;
 
 always @(posedge clk)
 begin
@@ -108,10 +98,13 @@ dmac_data_mover # (
   .req_valid(req_valid),
   .req_ready(req_ready),
   .req_last_burst_length(req_last_burst_length),
+  .req_sync_transfer_start(req_sync_transer_start),
 
   .s_axi_ready(ready),
-  .s_axi_valid(sync_valid),
+  .s_axi_valid(valid),
   .s_axi_data(din),
+  .s_axi_sync(sync),
+
   .m_axi_valid(fifo_valid),
   .m_axi_data(fifo_data),
   .m_axi_last(fifo_last)

@@ -68,30 +68,19 @@ module dmac_src_axi_stream #(
   input req_xlast
 );
 
-reg needs_sync = 1'b0;
 reg transfer_abort = 1'b0;
 reg req_xlast_d = 1'b0;
 
 wire [S_AXIS_DATA_WIDTH-1:0] data;
-wire sync = s_axis_user[0];
-wire has_sync = ~needs_sync | sync;
 wire data_valid;
 wire data_ready;
+wire fifo_eot;
 
 assign enabled = enable;
 
 assign data = transfer_abort == 1'b1 ? {S_AXIS_DATA_WIDTH{1'b0}} : s_axis_data;
-assign data_valid = (s_axis_valid & has_sync) | transfer_abort;
+assign data_valid = s_axis_valid | transfer_abort;
 assign s_axis_ready = data_ready & ~transfer_abort;
-
-always @(posedge s_axis_aclk)
-begin
-  if (s_axis_valid && s_axis_ready && sync) begin
-    needs_sync <= 1'b0;
-  end else if (req_valid && req_ready) begin
-    needs_sync <= req_sync_transfer_start;
-  end
-end
 
 /*
  * A 'last' on the external interface indicates the end of an packet. If such a
@@ -103,7 +92,7 @@ always @(posedge s_axis_aclk) begin
   if (s_axis_aresetn == 1'b0) begin
     transfer_abort <= 1'b0;
   end else if (data_ready == 1'b1 && data_valid == 1'b1) begin
-    if (fifo_last == 1'b1 && eot == 1'b1 && req_xlast_d == 1'b1) begin
+    if (fifo_eot == 1'b1 && req_xlast_d == 1'b1) begin
       transfer_abort <= 1'b0;
     end else if (s_axis_last == 1'b1) begin
       transfer_abort <= 1'b1;
@@ -134,13 +123,17 @@ dmac_data_mover # (
   .req_valid(req_valid),
   .req_ready(req_ready),
   .req_last_burst_length(req_last_burst_length),
+  .req_sync_transfer_start(req_sync_transfer_start),
 
   .s_axi_ready(data_ready),
   .s_axi_valid(data_valid),
   .s_axi_data(data),
+  .s_axi_sync(s_axis_user[0]),
+
   .m_axi_valid(fifo_valid),
   .m_axi_data(fifo_data),
-  .m_axi_last(fifo_last)
+  .m_axi_last(fifo_last),
+  .m_axi_eot(fifo_eot)
 );
 
 endmodule

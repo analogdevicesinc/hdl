@@ -51,6 +51,7 @@ module dmac_data_mover #(
   output s_axi_ready,
   input s_axi_valid,
   input [DATA_WIDTH-1:0] s_axi_data,
+  input s_axi_sync,
 
   output m_axi_valid,
   output [DATA_WIDTH-1:0] m_axi_data,
@@ -58,7 +59,8 @@ module dmac_data_mover #(
 
   input req_valid,
   output req_ready,
-  input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length
+  input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
+  input req_sync_transfer_start
 );
 
 localparam BEAT_COUNTER_MAX = {BEATS_PER_BURST_WIDTH{1'b1}};
@@ -75,6 +77,12 @@ reg active = 1'b0;
 reg last_eot = 1'b0;
 reg last_non_eot = 1'b0;
 
+reg needs_sync = 1'b0;
+wire has_sync = ~needs_sync | s_axi_sync;
+
+wire s_axi_sync_valid = has_sync & s_axi_valid;
+wire s_axi_beat = s_axi_sync_valid & s_axi_ready;
+
 wire last_load;
 wire last;
 
@@ -85,13 +93,26 @@ assign response_id = id;
 assign last = eot ? last_eot : last_non_eot;
 
 assign s_axi_ready = pending_burst & active;
-assign m_axi_valid = s_axi_valid & pending_burst & active;
+assign m_axi_valid = s_axi_sync_valid & pending_burst & active;
 assign m_axi_data = s_axi_data;
 assign m_axi_last = last;
+assign m_axi_eot = last & eot;
+
+/*
+ * If req_sync_transfer_start is set all incoming beats will be skipped until
+ * one has s_axi_sync set. This will be the first beat that is passsed through.
+ */
+always @(posedge clk) begin
+  if (s_axi_beat == 1'b1)
+    needs_sync <= 1'b0;
+  end else if (req_ready == 1'b1) begin
+    needs_sync <= req_sync_transfer_start;
+  end
+end
 
 // If we want to support zero delay between transfers we have to assert
 // req_ready on the same cycle on which the last load happens.
-assign last_load = s_axi_ready && s_axi_valid && last_eot && eot;
+assign last_load = s_axi_beat && last_eot && eot;
 assign req_ready = last_load || ~active;
 
 always @(posedge clk) begin
@@ -99,7 +120,7 @@ always @(posedge clk) begin
     last_eot <= req_last_burst_length == 'h0;
     last_non_eot <= 1'b0;
     beat_counter <= 'h1;
-  end else if (s_axi_ready && s_axi_valid) begin
+  end else if (s_axi_beat == 1'b1) begin
     last_eot <= beat_counter == last_burst_length;
     last_non_eot <= beat_counter == BEAT_COUNTER_MAX;
     beat_counter <= beat_counter + 1'b1;
@@ -123,7 +144,7 @@ end
 
 always @(*)
 begin
-  if (s_axi_ready == 1'b1 && s_axi_valid == 1'b1 && last == 1'b1)
+  if (s_axi_beat == 1'b1 && last == 1'b1)
     id_next <= inc_id(id);
   else
     id_next <= id;
