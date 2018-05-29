@@ -111,8 +111,6 @@ module system_top (
   wire    [ 94:0] gpio_i;
   wire    [ 94:0] gpio_o;
   wire            gpio_sync;
-  wire            gpio_open_44_44;
-  wire            gpio_open_15_15;
   wire    [ 2:0]  spi0_csn;
   wire            spi0_clk;
   wire            spi0_mosi;
@@ -161,14 +159,12 @@ module system_top (
   assign gpio_en_agc_0 = gpio_o[53];
   assign gpio_resetb_0 = gpio_o[52];
   assign gpio_sync = gpio_o[51];
-  assign gpio_open_44_44 = gpio_o[50];
   assign gpio_debug_4_0 = gpio_o[49];
   assign gpio_debug_3_0 = gpio_o[48];
   assign gpio_debug_2_0 = gpio_o[47];
   assign gpio_debug_1_0 = gpio_o[46];
   assign gpio_ctl_1 = gpio_o[45:42];
   assign gpio_ctl_0 = gpio_o[41:38];
-  assign gpio_open_15_15 = gpio_o[21];
   assign gpio_bd_o = gpio_o[20:13];
   assign gpio_i[12: 0] = gpio_bd_i;
   assign gpio_i[21:13] = gpio_o[21:13];
