@@ -251,6 +251,8 @@ wire [1:0] src_response_resp;
 */
 
 wire [ID_WIDTH-1:0] src_request_id;
+reg [ID_WIDTH-1:0] src_throttled_request_id;
+wire [ID_WIDTH-1:0] src_data_request_id;
 wire [ID_WIDTH-1:0] src_response_id;
 
 wire src_valid;
@@ -542,7 +544,7 @@ dmac_src_mm_axi #(
   .response_resp(src_response_resp),
 */
 
-  .request_id(src_request_id),
+  .request_id(src_throttled_request_id),
   .response_id(src_response_id),
   .address_id(src_address_id),
   .data_id(src_data_id),
@@ -615,7 +617,7 @@ dmac_src_axi_stream #(
   .req_sync_transfer_start(src_req_sync_transfer_start),
   .req_xlast(src_req_xlast),
 
-  .request_id(src_request_id),
+  .request_id(src_throttled_request_id),
   .response_id(src_response_id),
 
   .eot(src_eot),
@@ -671,7 +673,7 @@ dmac_src_fifo_inf #(
   .req_last_burst_length(src_req_last_burst_length),
   .req_sync_transfer_start(src_req_sync_transfer_start),
 
-  .request_id(src_request_id),
+  .request_id(src_throttled_request_id),
   .response_id(src_response_id),
 
   .eot(src_eot),
@@ -704,6 +706,39 @@ sync_bits #(
   .in(request_id),
   .out(src_request_id)
 );
+
+`include "inc_id.h"
+
+function compare_id;
+  input [ID_WIDTH-1:0] a;
+  input [ID_WIDTH-1:0] b;
+  begin
+    compare_id = a[ID_WIDTH-1] == b[ID_WIDTH-1];
+    if (ID_WIDTH >= 2) begin
+      if (a[ID_WIDTH-2] == b[ID_WIDTH-2]) begin
+        compare_id = 1'b1;
+      end
+    end
+    if (ID_WIDTH >= 3) begin
+      if (a[ID_WIDTH-3:0] != b[ID_WIDTH-3:0]) begin
+        compare_id = 1'b1;
+      end
+    end
+  end
+endfunction
+
+/*
+ * Make sure that we do not request more data than what fits into the
+ * store-and-forward burst memory.
+ */
+always @(posedge src_clk) begin
+  if (src_resetn == 1'b0) begin
+    src_throttled_request_id <= 'h00;
+  end else if (src_throttled_request_id != src_request_id &&
+               compare_id(src_throttled_request_id, src_data_request_id)) begin
+    src_throttled_request_id <= inc_id(src_throttled_request_id);
+  end
+end
 
 sync_bits #(
   .NUM_OF_BITS(ID_WIDTH),
@@ -743,6 +778,8 @@ axi_dmac_burst_memory #(
   .src_data_ready(src_fifo_ready),
   .src_data(src_fifo_data),
   .src_data_last(src_fifo_last),
+
+  .src_data_request_id(src_data_request_id),
 
   .dest_clk(dest_clk),
   .dest_reset(~dest_resetn),
