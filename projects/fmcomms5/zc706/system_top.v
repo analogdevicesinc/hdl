@@ -144,9 +144,6 @@ module system_top (
   wire    [ 63:0] gpio_i;
   wire    [ 63:0] gpio_o;
   wire    [ 63:0] gpio_t;
-  wire            gpio_open_45_45;
-  wire            gpio_open_44_44;
-  wire            gpio_open_15_15;
   wire    [ 2:0]  spi0_csn;
   wire            spi0_clk;
   wire            spi0_mosi;
@@ -181,10 +178,10 @@ module system_top (
     .I (ref_clk_s),
     .O (ref_clk));
 
-  ad_iobuf #(.DATA_WIDTH(60)) i_iobuf (
-    .dio_t (gpio_t[59:0]),
-    .dio_i (gpio_o[59:0]),
-    .dio_o (gpio_i[59:0]),
+  ad_iobuf #(.DATA_WIDTH(57)) i_iobuf (
+    .dio_t ({gpio_t[59:46], gpio_t[43:16], gpio_t[14:0]}),
+    .dio_i ({gpio_o[59:46], gpio_o[43:16], gpio_o[14:0]}),
+    .dio_o ({gpio_i[59:46], gpio_i[43:16], gpio_i[14:0]}),
     .dio_p ({ gpio_resetb_1,    // 59
               gpio_ad5355_lock, // 58
               gpio_ad5355_rfen, // 57
@@ -199,18 +196,15 @@ module system_top (
               gpio_enable_0,    // 48
               gpio_en_agc_0,    // 47
               gpio_resetb_0,    // 46
-              gpio_open_45_45,  // 45
-              gpio_open_44_44,  // 44
               gpio_debug_4_1,   // 43
               gpio_debug_3_1,   // 42
               gpio_debug_2_0,   // 41
               gpio_debug_1_0,   // 40
-              gpio_ctl_1,       // 36
-              gpio_ctl_0,       // 32
-              gpio_status_1,    // 24
-              gpio_status_0,    // 16
-              gpio_open_15_15,  // 15
-              gpio_bd}));       //  0
+              gpio_ctl_1,       // 39:36
+              gpio_ctl_0,       // 35:32
+              gpio_status_1,    // 31:24
+              gpio_status_0,    // 23:16
+              gpio_bd}));       // 14: 0
 
   assign spi_ad9361_0 = spi0_csn[0];
   assign spi_ad9361_1 = spi0_csn[1];
@@ -219,6 +213,8 @@ module system_top (
   assign spi_mosi = spi0_mosi;
   assign spi0_miso = spi_miso;
   assign gpio_i[63:60] = gpio_o[63:60];
+  assign gpio_i[45:44] = gpio_o[45:44];
+  assign gpio_i[15] = gpio_o[15];
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
