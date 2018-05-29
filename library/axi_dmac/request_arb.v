@@ -49,7 +49,7 @@ module dmac_request_arb #(
   parameter AXI_SLICE_DEST = 0,
   parameter AXI_SLICE_SRC = 0,
   parameter MAX_BYTES_PER_BURST = 128,
-  parameter FIFO_SIZE = 4,
+  parameter FIFO_SIZE = 8,
   parameter ID_WIDTH = $clog2(FIFO_SIZE*2),
   parameter AXI_LENGTH_WIDTH_SRC = 8,
   parameter AXI_LENGTH_WIDTH_DEST = 8)(
