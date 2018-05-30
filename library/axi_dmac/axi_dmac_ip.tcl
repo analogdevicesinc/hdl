@@ -318,7 +318,7 @@ set p [ipgui::get_guiparamspec -name "FIFO_SIZE" -component $cc]
 ipgui::move_param -component $cc -order 2 $p -parent $general_group
 set_property -dict [list \
 	"widget" "comboBox" \
-	"display_name" "FIFO Size (In Bursts)" \
+	"display_name" "Store-and-Forward Memory Size (In Bursts)" \
 ] $p
 
 set p [ipgui::get_guiparamspec -name "MAX_BYTES_PER_BURST" -component $cc]
