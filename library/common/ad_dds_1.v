@@ -57,11 +57,8 @@ module ad_dds_1 #(
 
   // internal signals
 
-  wire    [  DDS_D_DW-1:0] sine_s;
-  wire    [           3:0] zeros;
+  wire    [ DDS_D_DW-1:0] sine_s;
   wire    [DDS_D_DW+17:0] s1_data_s;
-
-  assign zeros = 0;
 
   // sine
 
@@ -70,12 +67,12 @@ module ad_dds_1 #(
 
       // the cordic module input angle width must be equal with it's width
       // at this point the phase is only generated on 16 bits
-      wire    [CORDIC_PHASE_DW:0] angle_s;
+      wire    [DDS_P_DW-1:0] angle_s;
 
-      if (CORDIC_PHASE_DW >= 16) begin
-        assign angle_s = {angle,{CORDIC_PHASE_DW-15{1'b0}}};
+      if (DDS_P_DW >= 16) begin
+        assign angle_s = {angle,{DDS_P_DW-15{1'b0}}};
       end else begin
-        assign angle_s = {angle[15:16-CORDIC_PHASE_DW],1'b0};
+        assign angle_s = {angle[15:16-DDS_P_DW],1'b0};
       end
 
       ad_dds_sine_cordic #(
@@ -84,7 +81,7 @@ module ad_dds_1 #(
         .DELAY_DW(1))
       i_dds_sine (
         .clk (clk),
-        .angle (angle),
+        .angle (angle_s),
         .sine (sine_s),
         .cosine (),
         .ddata_in (1'b0),

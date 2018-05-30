@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module ad_dds #(
+module ad_dds_2 #(
 
   // Disable DDS
   parameter   DISABLE = 0,
@@ -124,8 +124,8 @@ module ad_dds #(
 
        ad_dds_1 #(
          .DDS_TYPE(DDS_TYPE),
-         .CORDIC_DW(CORDIC_DW),
-         .CORDIC_PHASE_DW(CORDIC_PHASE_DW))
+         .DDS_D_DW(CORDIC_DW),
+         .DDS_P_DW(CORDIC_PHASE_DW))
        i_dds_1_0 (
          .clk (clk),
          .angle (dds_phase_0),
@@ -136,8 +136,8 @@ module ad_dds #(
 
        ad_dds_1 #(
          .DDS_TYPE(DDS_TYPE),
-         .CORDIC_DW(CORDIC_DW),
-         .CORDIC_PHASE_DW(CORDIC_PHASE_DW))
+         .DDS_D_DW(DDS_D_DW),
+         .DDS_P_DW(DDS_P_DW))
        i_dds_1_1 (
          .clk (clk),
          .angle (dds_phase_1),
