@@ -136,9 +136,6 @@ module axi_dacfifo_rd #(
   reg     [ 2:0]                        dac_xfer_req_m = 3'b0;
   reg     [ 3:0]                        dac_last_beats = 4'b0;
   reg     [ 3:0]                        dac_last_beats_m = 4'b0;
-  reg                                   dac_dlast = 1'b0;
-  reg                                   dac_dlast_m1 = 1'b0;
-  reg                                   dac_dlast_m2 = 1'b0;
 
   // internal signals
 
@@ -369,9 +366,6 @@ module axi_dacfifo_rd #(
       dac_mem_waddr_m2 <= 'b0;
       dac_mem_laddr_toggle_m <= 4'b0;
       dac_mem_laddr <= 'b0;
-      dac_dlast <= 1'b0;
-      dac_dlast_m1 <= 1'b0;
-      dac_dlast_m2 <= 1'b0;
     end else begin
       dac_mem_waddr_m1 <= axi_mem_waddr_g;
       dac_mem_waddr_m2 <= dac_mem_waddr_m1;
@@ -380,9 +374,6 @@ module axi_dacfifo_rd #(
       dac_mem_laddr <= (dac_mem_laddr_toggle_m[2] ^ dac_mem_laddr_toggle_m[1]) ?
                                                       axi_mem_laddr_s :
                                                       dac_mem_laddr;
-      dac_dlast_m1 <= axi_dlast;
-      dac_dlast_m2 <= dac_dlast_m1;
-      dac_dlast <= dac_dlast_m2;
     end
   end
 
