@@ -67,7 +67,7 @@ set_parameter_property DMA_LENGTH_WIDTH ALLOWED_RANGES {8:32}
 set_parameter_property DMA_LENGTH_WIDTH GROUP $group
 
 add_parameter FIFO_SIZE INTEGER 4
-set_parameter_property FIFO_SIZE DISPLAY_NAME "FIFO Size (In Bursts)"
+set_parameter_property FIFO_SIZE DISPLAY_NAME "Store-and-Forward Memory Size (In Bursts)"
 set_parameter_property FIFO_SIZE HDL_PARAMETER true
 set_parameter_property FIFO_SIZE ALLOWED_RANGES {2 4 8 16 32}
 set_parameter_property FIFO_SIZE GROUP $group
