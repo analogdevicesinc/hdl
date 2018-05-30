@@ -60,7 +60,9 @@ module trigger_gen #(
     input adc_enable_d,
     
     input trig_reset,
-    input signed [17:0]   trig_level_a,
+    input  [1:0]   trig_level_add,
+    input signed [15:0]   trig_level,
+    input signed [13:0]   trig_level_a,
     input signed [13:0]   trig_level_b,
     
     output trigger0,
@@ -153,7 +155,7 @@ endfunction
        else
           case (state)
              IDLE: begin
-                if (trigger_eval_f(adc_mean_a, {trig_level_a, 4'h0})) begin
+                if (trigger_eval_f(adc_mean_a, {1'b0,trig_level_a, 3'b000})) begin
                    state <= PULSE0;
                 end   
                 trigger0_r  <=  0; 
@@ -168,14 +170,31 @@ endfunction
                 trigger0_r <=  1'b1; 
              end
              PULSE1 : begin   
-                trigger1_r <=  1'b1; 
+//                trigger1_r <=  1'b1; 
                 wait_cnt <= wait_cnt - 1;
                 if (wait_cnt == {WAIT_WIDTH{1'b0}})
                    state <= TRIGGER;
              end
              TRIGGER : begin 
-                   state <= IDLE;
+                trigger1_r <=  1'b1; 
+                wait_cnt <= wait_cnt + 1;
+                if (wait_cnt == {WAIT_WIDTH{1'b1}})
+                     state <= IDLE;
+//                    state <= TRIGGER;
              end
           endcase
+
+reg  signed [15:0]  trig_level_a_reg=0;       
+reg  signed [15:0]  trig_level_b_reg=0;       
+
+   always @(posedge adc_clk)
+                 case (trig_level_add)
+ //                   2'b00:  
+                    2'b01: trig_level_a_reg  <=  trig_level; 
+                    2'b10: trig_level_b_reg  <=  trig_level; 
+//                    2'b11:
+                    //default :  
+                 endcase
+                           
 	
 endmodule
