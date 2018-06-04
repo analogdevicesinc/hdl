@@ -38,8 +38,9 @@
 module axi_ad9122_channel #(
 
   parameter CHANNEL_ID = 32'h0,
-  parameter DDS_TYPE = 1,
-  parameter DDS_CORDIC_DW = 16,
+  parameter DAC_DDS_TYPE = 1,
+  parameter DAC_DDS_CORDIC_DW = 16,
+  parameter DAC_DDS_CORDIC_PHASE_DW = 16,
   parameter DATAPATH_DISABLE = 0) (
 
   // dac interface
@@ -70,27 +71,9 @@ module axi_ad9122_channel #(
   output      [31:0]      up_rdata,
   output                  up_rack);
 
-
-  // internal registers
-
-  reg     [15:0]  dac_dds_phase_0_0 = 'd0;
-  reg     [15:0]  dac_dds_phase_0_1 = 'd0;
-  reg     [15:0]  dac_dds_phase_1_0 = 'd0;
-  reg     [15:0]  dac_dds_phase_1_1 = 'd0;
-  reg     [15:0]  dac_dds_phase_2_0 = 'd0;
-  reg     [15:0]  dac_dds_phase_2_1 = 'd0;
-  reg     [15:0]  dac_dds_phase_3_0 = 'd0;
-  reg     [15:0]  dac_dds_phase_3_1 = 'd0;
-  reg     [15:0]  dac_dds_incr_0 = 'd0;
-  reg     [15:0]  dac_dds_incr_1 = 'd0;
-  reg     [63:0]  dac_dds_data = 'd0;
-
   // internal signals
 
-  wire    [15:0]  dac_dds_data_0_s;
-  wire    [15:0]  dac_dds_data_1_s;
-  wire    [15:0]  dac_dds_data_2_s;
-  wire    [15:0]  dac_dds_data_3_s;
+  wire    [15:0]  dac_dds_data_s;
   wire    [15:0]  dac_dds_scale_1_s;
   wire    [15:0]  dac_dds_init_1_s;
   wire    [15:0]  dac_dds_incr_1_s;
@@ -109,7 +92,7 @@ module axi_ad9122_channel #(
       4'h2: dac_data <= dma_data;
       4'ha, 4'h1: dac_data <= {dac_pat_data_2_s, dac_pat_data_1_s,
         dac_pat_data_2_s, dac_pat_data_1_s};
-      default: dac_data <= dac_dds_data;
+      default: dac_data <= dac_dds_data_s;
     endcase
     if (dac_data_sel_s == 4'h1) begin
       dac_frame <= 4'b0101;
@@ -118,112 +101,28 @@ module axi_ad9122_channel #(
     end
   end
 
-  // single channel dds
+  // dds
 
-  always @(posedge dac_div_clk) begin
-    if (dac_data_sync == 1'b1) begin
-      dac_dds_phase_0_0 <= dac_dds_init_1_s;
-      dac_dds_phase_0_1 <= dac_dds_init_2_s;
-      dac_dds_phase_1_0 <= dac_dds_phase_0_0 + dac_dds_incr_1_s;
-      dac_dds_phase_1_1 <= dac_dds_phase_0_1 + dac_dds_incr_2_s;
-      dac_dds_phase_2_0 <= dac_dds_phase_1_0 + dac_dds_incr_1_s;
-      dac_dds_phase_2_1 <= dac_dds_phase_1_1 + dac_dds_incr_2_s;
-      dac_dds_phase_3_0 <= dac_dds_phase_2_0 + dac_dds_incr_1_s;
-      dac_dds_phase_3_1 <= dac_dds_phase_2_1 + dac_dds_incr_2_s;
-      dac_dds_incr_0 <= {dac_dds_incr_1_s[13:0], 2'd0};
-      dac_dds_incr_1 <= {dac_dds_incr_2_s[13:0], 2'd0};
-      dac_dds_data <= 64'd0;
-    end else begin
-      dac_dds_phase_0_0 <= dac_dds_phase_0_0 + dac_dds_incr_0;
-      dac_dds_phase_0_1 <= dac_dds_phase_0_1 + dac_dds_incr_1;
-      dac_dds_phase_1_0 <= dac_dds_phase_1_0 + dac_dds_incr_0;
-      dac_dds_phase_1_1 <= dac_dds_phase_1_1 + dac_dds_incr_1;
-      dac_dds_phase_2_0 <= dac_dds_phase_2_0 + dac_dds_incr_0;
-      dac_dds_phase_2_1 <= dac_dds_phase_2_1 + dac_dds_incr_1;
-      dac_dds_phase_3_0 <= dac_dds_phase_3_0 + dac_dds_incr_0;
-      dac_dds_phase_3_1 <= dac_dds_phase_3_1 + dac_dds_incr_1;
-      dac_dds_incr_0 <= dac_dds_incr_0;
-      dac_dds_incr_1 <= dac_dds_incr_1;
-      dac_dds_data <= { dac_dds_data_3_s, dac_dds_data_2_s,
-                        dac_dds_data_1_s, dac_dds_data_0_s};
-    end
-  end
-
-  generate
-  if (DATAPATH_DISABLE == 1) begin
-  assign dac_dds_data_0_s = 16'd0;
-  end else begin
   ad_dds #(
-    .DISABLE (0),
-    .DDS_TYPE (DDS_TYPE),
-    .CORDIC_DW (DDS_CORDIC_DW))
-  i_dds_0 (
-    .clk (dac_div_clk),
-    .dds_format (dac_dds_format),
-    .dds_phase_0 (dac_dds_phase_0_0),
-    .dds_scale_0 (dac_dds_scale_1_s),
-    .dds_phase_1 (dac_dds_phase_0_1),
-    .dds_scale_1 (dac_dds_scale_2_s),
-    .dds_data (dac_dds_data_0_s));
-  end
-  endgenerate
-
-  generate
-  if (DATAPATH_DISABLE == 1) begin
-  assign dac_dds_data_1_s = 16'd0;
-  end else begin
-  ad_dds #(
-    .DISABLE (0),
-    .DDS_TYPE (DDS_TYPE),
-    .CORDIC_DW (DDS_CORDIC_DW))
-  i_dds_1 (
-    .clk (dac_div_clk),
-    .dds_format (dac_dds_format),
-    .dds_phase_0 (dac_dds_phase_1_0),
-    .dds_scale_0 (dac_dds_scale_1_s),
-    .dds_phase_1 (dac_dds_phase_1_1),
-    .dds_scale_1 (dac_dds_scale_2_s),
-    .dds_data (dac_dds_data_1_s));
-  end
-  endgenerate
-
-  generate
-  if (DATAPATH_DISABLE == 1) begin
-  assign dac_dds_data_2_s = 16'd0;
-  end else begin
-  ad_dds #(
-    .DISABLE (0),
-    .DDS_TYPE (DDS_TYPE),
-    .CORDIC_DW (DDS_CORDIC_DW))
-  i_dds_2 (
-    .clk (dac_div_clk),
-    .dds_format (dac_dds_format),
-    .dds_phase_0 (dac_dds_phase_2_0),
-    .dds_scale_0 (dac_dds_scale_1_s),
-    .dds_phase_1 (dac_dds_phase_2_1),
-    .dds_scale_1 (dac_dds_scale_2_s),
-    .dds_data (dac_dds_data_2_s));
-  end
-  endgenerate
-
-  generate
-  if (DATAPATH_DISABLE == 1) begin
-  assign dac_dds_data_3_s = 16'd0;
-  end else begin
-  ad_dds #(
-    .DISABLE (0),
-    .DDS_TYPE (DDS_TYPE),
-    .CORDIC_DW (DDS_CORDIC_DW))
-  i_dds_3 (
-    .clk (dac_div_clk),
-    .dds_format (dac_dds_format),
-    .dds_phase_0 (dac_dds_phase_3_0),
-    .dds_scale_0 (dac_dds_scale_1_s),
-    .dds_phase_1 (dac_dds_phase_3_1),
-    .dds_scale_1 (dac_dds_scale_2_s),
-    .dds_data (dac_dds_data_3_s));
-  end
-  endgenerate
+    .DISABLE (DATAPATH_DISABLE),
+    .DDS_DW (16),
+    .PHASE_DW (16),
+    .DDS_TYPE (DAC_DDS_TYPE),
+    .CORDIC_DW (DAC_DDS_CORDIC_DW),
+    .CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
+    .CLK_RATIO (4))
+  i_dds (
+    .clk (dac_clk),
+    .rst (dac_rst),
+    .dac_dds_format (dac_dds_format),
+    .dac_data_sync (dac_data_sync),
+    .tone_1_scale (dac_dds_scale_1_s),
+    .tone_2_scale (dac_dds_scale_2_s),
+    .tone_1_init_offset (dac_dds_init_1_s),
+    .tone_2_init_offset (dac_dds_init_2_s),
+    .tone_1_freq_word (dac_dds_init_2_s),
+    .tone_2_freq_word (dac_dds_incr_2_s),
+    .dac_dds_data (dac_dds_data_s));
 
   // single channel processor
 
