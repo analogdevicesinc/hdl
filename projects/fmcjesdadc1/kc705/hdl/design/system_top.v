@@ -162,7 +162,10 @@ module system_top (
     //Trigger levels are positive
 //    .trig_level_a ({2'b11, 16'hF000} ), // < 18'h02000 / 18'd8192 = -200mV 18'h03000 = -320mV
 //    .trig_level_b ({2'b00, 16'h1000} ), // >
+
     .trig_reset(gpio_o[9]), // First LED
+    .trig_level_add(gpio_o[10:10]),
+    .trig_level(gpio_o[55:40]),
     .trig_level_a (gpio_trigg_lvl), // {2'b11, 16'h0FE0} < 18'h02000 / 18'd8192 = -200mV 18'h03000 = -320mV
     .trig_level_b (gpio_trigg_lvl), // > {2'b00, 16'h0200}
 //    .trig_level_b ({2'b11, 16'h8000} ),  //,-2048
@@ -170,7 +173,6 @@ module system_top (
     .trigger0 (user_sma_clk_p),
     .trigger1 (user_sma_clk_n)
     );
-
 
 // 
   IBUFDS_GTE2 i_ibufds_rx_ref_clk (

@@ -134,6 +134,9 @@ endfunction
          trigger1_r <= trigger_eval_f(adc_mean_b, {trig_level_b, 4'h0}  ); // {2'b00, 16'h0200}
     end
 */	
+    reg  signed [15:0]  trig_level_a_reg=0;       
+    reg  signed [15:0]  trig_level_b_reg=0;       
+
 	 localparam IDLE    = 2'b00;
      localparam PULSE0  = 2'b01;
      localparam PULSE1  = 2'b10;
@@ -155,7 +158,7 @@ endfunction
        else
           case (state)
              IDLE: begin
-                if (trigger_eval_f(adc_mean_a, {1'b0,trig_level_a, 3'b000})) begin
+                if (trigger_eval_f(adc_mean_a, trig_level_a_reg)) begin //{1'b0,trig_level_a, 3'b000}
                    state <= PULSE0;
                 end   
                 trigger0_r  <=  0; 
@@ -184,8 +187,6 @@ endfunction
              end
           endcase
 
-reg  signed [15:0]  trig_level_a_reg=0;       
-reg  signed [15:0]  trig_level_b_reg=0;       
 
    always @(posedge adc_clk)
                  case (trig_level_add)
