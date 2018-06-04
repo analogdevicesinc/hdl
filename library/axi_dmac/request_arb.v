@@ -172,8 +172,18 @@ localparam DMA_DATA_WIDTH = DMA_DATA_WIDTH_SRC < DMA_DATA_WIDTH_DEST ?
 
 // Bytes per burst is the same for both dest and src, but bytes per beat may
 // differ, so beats per burst may also differ
-
-parameter BYTES_PER_BURST_WIDTH = $clog2(MAX_BYTES_PER_BURST);
+localparam BYTES_PER_BURST_WIDTH =
+  MAX_BYTES_PER_BURST > 2048 ? 12 :
+  MAX_BYTES_PER_BURST > 1024 ? 11 :
+  MAX_BYTES_PER_BURST > 512 ? 10 :
+  MAX_BYTES_PER_BURST > 256 ? 9 :
+  MAX_BYTES_PER_BURST > 128 ? 8 :
+  MAX_BYTES_PER_BURST > 64 ? 7 :
+  MAX_BYTES_PER_BURST > 32 ? 6 :
+  MAX_BYTES_PER_BURST > 16 ? 5 :
+  MAX_BYTES_PER_BURST > 8 ? 4 :
+  MAX_BYTES_PER_BURST > 4 ? 3 :
+  MAX_BYTES_PER_BURST > 2 ? 2 : 1;
 localparam BEATS_PER_BURST_WIDTH_SRC = BYTES_PER_BURST_WIDTH - BYTES_PER_BEAT_WIDTH_SRC;
 localparam BEATS_PER_BURST_WIDTH_DEST = BYTES_PER_BURST_WIDTH - BYTES_PER_BEAT_WIDTH_DEST;
 
