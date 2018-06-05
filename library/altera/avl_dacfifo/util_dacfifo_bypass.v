@@ -77,24 +77,22 @@ module util_dacfifo_bypass #(
   reg     [(DMA_ADDRESS_WIDTH-1):0]     dma_mem_waddr_g = 'd0;
   reg     [(DAC_ADDRESS_WIDTH-1):0]     dac_mem_raddr = 'd0;
   reg     [(DAC_ADDRESS_WIDTH-1):0]     dac_mem_raddr_g = 'd0;
+  reg                                   dac_mem_rea = 1'b0;
+  reg                                   dac_mem_rea_d = 1'b0;
   reg                                   dma_rst_m1 = 1'b0;
   reg                                   dma_rst = 1'b0;
   reg     [DMA_ADDRESS_WIDTH-1:0]       dma_mem_addr_diff = 1'b0;
   reg     [(DAC_ADDRESS_WIDTH-1):0]     dma_mem_raddr_m1 = 1'b0;
   reg     [(DAC_ADDRESS_WIDTH-1):0]     dma_mem_raddr_m2 = 1'b0;
   reg     [(DAC_ADDRESS_WIDTH-1):0]     dma_mem_raddr = 1'b0;
-  reg     [DAC_ADDRESS_WIDTH-1:0]       dac_mem_addr_diff = 1'b0;
   reg     [(DMA_ADDRESS_WIDTH-1):0]     dac_mem_waddr_m1 = 1'b0;
   reg     [(DMA_ADDRESS_WIDTH-1):0]     dac_mem_waddr_m2 = 1'b0;
   reg     [(DMA_ADDRESS_WIDTH-1):0]     dac_mem_waddr = 1'b0;
-  reg                                   dac_mem_ready = 1'b0;
   reg                                   dac_xfer_out = 1'b0;
   reg                                   dac_xfer_out_m1 = 1'b0;
 
   // internal signals
 
-  wire                                  dma_mem_last_read_s;
-  wire    [(DMA_ADDRESS_WIDTH):0]       dma_mem_addr_diff_s;
   wire    [(DAC_ADDRESS_WIDTH):0]       dac_mem_addr_diff_s;
   wire    [(DMA_ADDRESS_WIDTH-1):0]     dma_mem_raddr_s;
   wire    [(DAC_ADDRESS_WIDTH-1):0]     dac_mem_waddr_s;
@@ -102,7 +100,7 @@ module util_dacfifo_bypass #(
   wire                                  dac_mem_rea_s;
   wire    [(DAC_DATA_WIDTH-1):0]        dac_mem_rdata_s;
   wire    [DMA_ADDRESS_WIDTH:0]         dma_address_diff_s;
-  wire    [DAC_ADDRESS_WIDTH:0]         dac_address_diff_s;
+  wire                                  dac_mem_empty_s;
 
   wire    [(DMA_ADDRESS_WIDTH-1):0]     dma_mem_waddr_b2g_s;
   wire    [(DAC_ADDRESS_WIDTH-1):0]     dac_mem_raddr_b2g_s;
@@ -189,7 +187,7 @@ module util_dacfifo_bypass #(
 
 
   // relative address offset on dac domain
-  assign dac_address_diff_s = {1'b1, dac_mem_raddr} - dac_mem_waddr_s;
+  assign dac_address_diff_s = {1'b1, dac_mem_waddr_s} - dac_mem_raddr;
   assign dac_mem_waddr_s = (DAC_DATA_WIDTH>DMA_DATA_WIDTH) ?
                                 ((MEM_RATIO == 1) ? (dac_mem_waddr) :
                                  (MEM_RATIO == 2) ? (dac_mem_waddr[(DMA_ADDRESS_WIDTH-1):1]) :
@@ -200,7 +198,8 @@ module util_dacfifo_bypass #(
 
   // Read address generation for the asymmetric memory
 
-  assign dac_mem_rea_s = dac_valid & dac_mem_ready;
+  assign dac_mem_empty_s = (dac_mem_waddr_s == dac_mem_raddr) ? 1'b1 : 1'b0;
+  assign dac_mem_rea_s = dac_valid & !dac_mem_empty_s;
 
   always @(posedge dac_clk) begin
     if (dac_rst == 1'b1) begin
@@ -214,6 +213,12 @@ module util_dacfifo_bypass #(
     end
   end
 
+  // compensate the read latency of the memory
+  always @(posedge dac_clk) begin
+    dac_mem_rea_d <= dac_mem_rea_s;
+    dac_mem_rea <= dac_mem_rea_d;
+  end
+
   ad_b2g #(
     .DATA_WIDTH (DAC_ADDRESS_WIDTH))
   i_dac_mem_raddr_b2g (
@@ -224,21 +229,13 @@ module util_dacfifo_bypass #(
 
   always @(posedge dac_clk) begin
     if (dac_rst == 1'b1) begin
-      dac_mem_addr_diff <= 'b0;
       dac_mem_waddr_m1 <= 'b0;
       dac_mem_waddr_m2 <= 'b0;
       dac_mem_waddr <= 'b0;
-      dac_mem_ready <= 1'b0;
     end else begin
       dac_mem_waddr_m1 <= dma_mem_waddr_g;
       dac_mem_waddr_m2 <= dac_mem_waddr_m1;
       dac_mem_waddr <= dac_mem_waddr_m2_g2b_s;
-      dac_mem_addr_diff <= dac_address_diff_s[DAC_ADDRESS_WIDTH-1:0];
-      if (dac_mem_addr_diff > 0) begin
-        dac_mem_ready <= 1'b1;
-      end else begin
-        dac_mem_ready <= 1'b0;
-      end
     end
   end
 
@@ -258,14 +255,16 @@ module util_dacfifo_bypass #(
     end else begin
       dac_xfer_out_m1 <= dma_xfer_req;
       dac_xfer_out <= dac_xfer_out_m1;
-      dac_dunf <= (dac_valid == 1'b1) ? (dac_xfer_out & ~dac_mem_ready) : dac_dunf;
+      if (dac_valid == 1'b1) begin
+        dac_dunf <= dac_mem_empty_s;
+      end
     end
   end
 
   // DAC data output logic
 
   always @(posedge dac_clk) begin
-    if (dac_rst == 1'b1) begin
+    if (dac_dunf == 1'b1) begin
       dac_data <= 0;
     end else begin
       dac_data <= dac_mem_rdata_s;
