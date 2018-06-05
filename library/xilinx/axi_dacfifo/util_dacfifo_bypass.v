@@ -48,7 +48,7 @@ module util_dacfifo_bypass #(
   output  reg                         dma_ready_out,
   input                               dma_valid,
 
-  // request and syncronizaiton
+  // request and synchronization
 
   input                               dma_xfer_req,
 
@@ -61,7 +61,7 @@ module util_dacfifo_bypass #(
   output  reg                         dac_dunf
 );
 
-  // suported ratios: 1:1 / 1:2 / 1:4 / 1:8 / 2:1 / 4:1 / 8:1
+  // supported ratios: 1:1 / 1:2 / 1:4 / 1:8 / 2:1 / 4:1 / 8:1
 
   localparam  MEM_RATIO = (DMA_DATA_WIDTH > DAC_DATA_WIDTH) ? DMA_DATA_WIDTH/DAC_DATA_WIDTH :
                                                               DAC_DATA_WIDTH/DMA_DATA_WIDTH;
@@ -79,14 +79,14 @@ module util_dacfifo_bypass #(
   reg     [(DAC_ADDRESS_WIDTH-1):0]     dac_mem_raddr_g = 'd0;
   reg                                   dma_rst_m1 = 1'b0;
   reg                                   dma_rst = 1'b0;
-  reg     [DMA_ADDRESS_WIDTH-1:0]       dma_mem_addr_diff = 1'b0;
-  reg     [(DAC_ADDRESS_WIDTH-1):0]     dma_mem_raddr_m1 = 1'b0;
-  reg     [(DAC_ADDRESS_WIDTH-1):0]     dma_mem_raddr_m2 = 1'b0;
-  reg     [(DAC_ADDRESS_WIDTH-1):0]     dma_mem_raddr = 1'b0;
-  reg     [DAC_ADDRESS_WIDTH-1:0]       dac_mem_addr_diff = 1'b0;
-  reg     [(DMA_ADDRESS_WIDTH-1):0]     dac_mem_waddr_m1 = 1'b0;
-  reg     [(DMA_ADDRESS_WIDTH-1):0]     dac_mem_waddr_m2 = 1'b0;
-  reg     [(DMA_ADDRESS_WIDTH-1):0]     dac_mem_waddr = 1'b0;
+  reg     [DMA_ADDRESS_WIDTH-1:0]       dma_mem_addr_diff = 'd0;
+  reg     [(DAC_ADDRESS_WIDTH-1):0]     dma_mem_raddr_m1 = 'd0;
+  reg     [(DAC_ADDRESS_WIDTH-1):0]     dma_mem_raddr_m2 = 'd0;
+  reg     [(DAC_ADDRESS_WIDTH-1):0]     dma_mem_raddr = 'd0;
+  reg     [DAC_ADDRESS_WIDTH-1:0]       dac_mem_addr_diff = 'd0;
+  reg     [(DMA_ADDRESS_WIDTH-1):0]     dac_mem_waddr_m1 = 'd0;
+  reg     [(DMA_ADDRESS_WIDTH-1):0]     dac_mem_waddr_m2 = 'd0;
+  reg     [(DMA_ADDRESS_WIDTH-1):0]     dac_mem_waddr = 'd0;
   reg                                   dac_mem_ready = 1'b0;
   reg                                   dac_xfer_out = 1'b0;
   reg                                   dac_xfer_out_m1 = 1'b0;
