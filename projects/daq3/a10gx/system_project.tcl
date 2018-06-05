@@ -101,5 +101,8 @@ set_location_assignment PIN_AW14  -to spi_dir               ; ## C11  FMCA_LA06_
 set_instance_assignment -name REMOVE_DUPLICATE_REGISTERS OFF -to "system_bd:i_system_bd|util_adcfifo:ad9680_adcfifo"
 set_instance_assignment -name REMOVE_DUPLICATE_REGISTERS OFF -to "system_bd:i_system_bd|system_bd_altera_mm_interconnect_161_mcfxx2a:mm_interconnect_0"
 
+# set optimization to get a better timing closure
+set_global_assignment -name OPTIMIZATION_MODE "HIGH PERFORMANCE EFFORT"
+
 execute_flow -compile
 
