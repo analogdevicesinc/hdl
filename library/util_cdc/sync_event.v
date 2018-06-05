@@ -69,13 +69,12 @@ sync_bits i_sync_in (
 wire in_ready = in_toggle == in_toggle_d1;
 wire load_out = out_toggle ^ out_toggle_d1;
 
-reg [NUM_OF_EVENTS-1:0] cdc_hold = 'h00;
 reg [NUM_OF_EVENTS-1:0] in_event_sticky = 'h00;
 wire [NUM_OF_EVENTS-1:0] pending_events = in_event_sticky | in_event;
+wire [NUM_OF_EVENTS-1:0] out_event_s;
 
 always @(posedge in_clk) begin
   if (in_ready == 1'b1) begin
-    cdc_hold <= pending_events;
     in_event_sticky <= {NUM_OF_EVENTS{1'b0}};
     if (|pending_events == 1'b1) begin
       in_toggle_d1 <= ~in_toggle_d1;
@@ -85,10 +84,24 @@ always @(posedge in_clk) begin
   end
 end
 
+if (NUM_OF_EVENTS > 1) begin
+  reg [NUM_OF_EVENTS-1:0] cdc_hold = 'h00;
+
+  always @(posedge in_clk) begin
+    if (in_ready == 1'b1) begin
+      cdc_hold <= pending_events;
+    end
+  end
+
+  assign out_event_s = cdc_hold;
+end else begin
+  // When there is only one event, we know that it is set.
+  assign out_event_s = 1'b1;
+end
+
 always @(posedge out_clk) begin
   if (load_out == 1'b1) begin
-    // When there is only one event, we know that it is set.
-    out_event <= NUM_OF_EVENTS == 1 ? 1'b1 : cdc_hold;
+    out_event <= out_event_s;
   end else begin
     out_event <= {NUM_OF_EVENTS{1'b0}};
   end
