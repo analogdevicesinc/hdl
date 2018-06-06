@@ -8,7 +8,9 @@ LIBRARY_NAME := axi_ad9371
 GENERIC_DEPS += ../common/ad_datafmt.v
 GENERIC_DEPS += ../common/ad_dds.v
 GENERIC_DEPS += ../common/ad_dds_1.v
+GENERIC_DEPS += ../common/ad_dds_cordic_pipe.v
 GENERIC_DEPS += ../common/ad_dds_sine.v
+GENERIC_DEPS += ../common/ad_dds_sine_cordic.v
 GENERIC_DEPS += ../common/ad_iqcor.v
 GENERIC_DEPS += ../common/ad_rst.v
 GENERIC_DEPS += ../common/ad_xcvr_rx_if.v
@@ -28,6 +30,7 @@ GENERIC_DEPS += axi_ad9371_rx_os.v
 GENERIC_DEPS += axi_ad9371_tx.v
 GENERIC_DEPS += axi_ad9371_tx_channel.v
 
+XILINX_DEPS += ../common/ad_dds_2.v
 XILINX_DEPS += ../xilinx/common/ad_dcfilter.v
 XILINX_DEPS += ../xilinx/common/ad_mul.v
 XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
