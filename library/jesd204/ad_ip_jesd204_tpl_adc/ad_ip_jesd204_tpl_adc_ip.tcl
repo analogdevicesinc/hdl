@@ -50,4 +50,6 @@ adi_ip_files ad_ip_jesd204_tpl_adc [list \
 
 adi_ip_properties ad_ip_jesd204_tpl_adc
 
+ipx::infer_bus_interface link_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+
 ipx::save_core [ipx::current_core]
