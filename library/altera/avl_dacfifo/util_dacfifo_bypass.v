@@ -40,7 +40,7 @@ module util_dacfifo_bypass #(
   parameter   DAC_DATA_WIDTH = 64,
   parameter   DMA_DATA_WIDTH = 64) (
 
-  // dma fifo interface
+  // DMA FIFO interface
 
   input                               dma_clk,
   input       [(DMA_DATA_WIDTH-1):0]  dma_data,
@@ -48,7 +48,7 @@ module util_dacfifo_bypass #(
   output  reg                         dma_ready_out,
   input                               dma_valid,
 
-  // request and syncronizaiton
+  // request and synchronization
 
   input                               dma_xfer_req,
 
@@ -61,7 +61,7 @@ module util_dacfifo_bypass #(
   output  reg                         dac_dunf
 );
 
-  // suported ratios: 1:1 / 1:2 / 1:4 / 1:8 / 2:1 / 4:1 / 8:1
+  // supported ratios: 1:1 / 1:2 / 1:4 / 1:8 / 2:1 / 4:1 / 8:1
 
   localparam  MEM_RATIO = (DMA_DATA_WIDTH > DAC_DATA_WIDTH) ? DMA_DATA_WIDTH/DAC_DATA_WIDTH :
                                                               DAC_DATA_WIDTH/DMA_DATA_WIDTH;
@@ -225,7 +225,7 @@ module util_dacfifo_bypass #(
     .din (dac_mem_raddr),
     .dout (dac_mem_raddr_b2g_s));
 
-  // The memory module is ready if it's not empty
+  // transfer the write address into the DAC's clock domain
 
   always @(posedge dac_clk) begin
     if (dac_rst == 1'b1) begin
@@ -261,7 +261,8 @@ module util_dacfifo_bypass #(
     end
   end
 
-  // DAC data output logic
+  // DAC data output logic - make sure that the data output is zero between
+  // transfers
 
   always @(posedge dac_clk) begin
     if (dac_dunf == 1'b1) begin
