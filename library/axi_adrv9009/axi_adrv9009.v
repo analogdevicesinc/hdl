@@ -48,7 +48,11 @@ module axi_adrv9009 #(
   parameter   ADC_OS_IQCORRECTION_DISABLE = 0,
   parameter   DAC_DATAPATH_DISABLE = 0,
   parameter   DAC_DDS_DISABLE = 0,
-  parameter   DAC_IQCORRECTION_DISABLE = 0) (
+  parameter   DAC_IQCORRECTION_DISABLE = 0,
+  parameter   DAC_DDS_TYPE = 1,
+  parameter   DAC_DDS_CORDIC_DW = 20,
+  parameter   DAC_DDS_CORDIC_PHASE_DW = 18) (
+
 
   // receive
 
@@ -299,7 +303,10 @@ module axi_adrv9009 #(
   axi_adrv9009_tx #(
     .ID (ID),
     .DDS_DISABLE (DAC_DDS_DISABLE_INT),
-    .IQCORRECTION_DISABLE (DAC_IQCORRECTION_DISABLE_INT))
+    .IQCORRECTION_DISABLE (DAC_IQCORRECTION_DISABLE_INT),
+    .DAC_DDS_TYPE (DAC_DDS_TYPE),
+    .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
+    .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
   i_tx (
     .dac_rst (dac_rst),
     .dac_clk (dac_clk),
