@@ -26,7 +26,8 @@
 module ad_ip_jesd204_tpl_adc_deframer #(
   parameter NUM_LANES = 1,
   parameter NUM_CHANNELS = 1,
-  parameter CHANNEL_WIDTH = 16
+  parameter CHANNEL_WIDTH = 16,
+  parameter OCTETS_PER_SAMPLE = 2
 ) (
   // jesd interface
   // clk is (line-rate/40)
@@ -37,14 +38,14 @@ module ad_ip_jesd204_tpl_adc_deframer #(
 
    // adc data output
 
-   output [NUM_LANES*CHANNEL_WIDTH*2-1:0] adc_data
+   output [NUM_LANES*CHANNEL_WIDTH*(4/OCTETS_PER_SAMPLE)-1:0] adc_data
  );
 
   // Fixed for now
-  localparam BITS_PER_SAMPLE = 16;
   localparam SAMPLES_PER_FRAME = 1;
   localparam OCTETS_PER_BEAT = 4;
 
+  localparam BITS_PER_SAMPLE = OCTETS_PER_SAMPLE * 8;
   localparam BITS_PER_FRAME = BITS_PER_SAMPLE * SAMPLES_PER_FRAME *
                               NUM_CHANNELS / NUM_LANES;
   localparam FRAMES_PER_BEAT = OCTETS_PER_BEAT / (BITS_PER_FRAME / 8);

@@ -77,9 +77,11 @@ module ad_ip_jesd204_tpl_adc #(
   output [31:0] s_axi_rdata
 );
 
+  localparam OCTETS_PER_SAMPLE = (CHANNEL_WIDTH > 8) ? 2 : 1;
+
   // Number of samples per channel that are processed in parallel.
   // Assumes 2 octets per sample and 4 octets per lane
-  localparam DATA_PATH_WIDTH = 2 * NUM_LANES / NUM_CHANNELS;
+  localparam DATA_PATH_WIDTH = (4 / OCTETS_PER_SAMPLE) * NUM_LANES / NUM_CHANNELS;
 
   wire [NUM_CHANNELS-1:0] dfmt_enable_s;
   wire [NUM_CHANNELS-1:0] dfmt_sign_extend_s;
@@ -93,7 +95,8 @@ module ad_ip_jesd204_tpl_adc #(
   ad_ip_jesd204_tpl_adc_regmap #(
     .ID (ID),
     .NUM_CHANNELS (NUM_CHANNELS),
-    .DATA_PATH_WIDTH (DATA_PATH_WIDTH)
+    .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
+    .OCTETS_PER_SAMPLE (OCTETS_PER_SAMPLE)
   ) i_regmap (
     .s_axi_aclk (s_axi_aclk),
     .s_axi_aresetn (s_axi_aresetn),
@@ -137,7 +140,8 @@ module ad_ip_jesd204_tpl_adc #(
     .CHANNEL_WIDTH (CHANNEL_WIDTH),
     .NUM_LANES (NUM_LANES),
     .TWOS_COMPLEMENT (TWOS_COMPLEMENT),
-    .DATA_PATH_WIDTH (DATA_PATH_WIDTH)
+    .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
+    .OCTETS_PER_SAMPLE (OCTETS_PER_SAMPLE)
   ) i_core (
     .clk (link_clk),
 

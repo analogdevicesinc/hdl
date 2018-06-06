@@ -26,7 +26,8 @@
 module ad_ip_jesd204_tpl_adc_regmap #(
   parameter ID = 0,
   parameter NUM_CHANNELS = 1,
-  parameter DATA_PATH_WIDTH = 1
+  parameter DATA_PATH_WIDTH = 1,
+  parameter OCTETS_PER_SAMPLE = 2
 ) (
   // axi interface
   input s_axi_aclk,
@@ -260,8 +261,8 @@ module ad_ip_jesd204_tpl_adc_regmap #(
       .adc_usr_datatype_be (1'b0),
       .adc_usr_datatype_signed (1'b1),
       .adc_usr_datatype_shift (8'd0),
-      .adc_usr_datatype_total_bits (8'd16),
-      .adc_usr_datatype_bits (8'd16),
+      .adc_usr_datatype_total_bits (8'd8 * OCTETS_PER_SAMPLE),
+      .adc_usr_datatype_bits (8'd8 * OCTETS_PER_SAMPLE),
       .adc_usr_decimation_m (16'd1),
       .adc_usr_decimation_n (16'd1),
 

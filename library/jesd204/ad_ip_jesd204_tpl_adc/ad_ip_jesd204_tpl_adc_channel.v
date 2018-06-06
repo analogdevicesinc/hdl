@@ -26,13 +26,14 @@
 module ad_ip_jesd204_tpl_adc_channel #(
   parameter CHANNEL_WIDTH = 14,
   parameter DATA_PATH_WIDTH = 2,
-  parameter TWOS_COMPLEMENT = 1
+  parameter TWOS_COMPLEMENT = 1,
+  parameter OCTETS_PER_SAMPLE = 2
 ) (
   input clk,
 
   input [CHANNEL_WIDTH*DATA_PATH_WIDTH-1:0] raw_data,
 
-  output [16*DATA_PATH_WIDTH-1:0] fmt_data,
+  output [8*OCTETS_PER_SAMPLE*DATA_PATH_WIDTH-1:0] fmt_data,
 
   // Configuration and status
   input dfmt_enable,
@@ -63,14 +64,15 @@ module ad_ip_jesd204_tpl_adc_channel #(
   genvar n;
   for (n = 0; n < DATA_PATH_WIDTH; n = n + 1) begin: g_datafmt
     ad_datafmt #(
-      .DATA_WIDTH (CHANNEL_WIDTH)
+      .DATA_WIDTH (CHANNEL_WIDTH),
+      .OCT_PER_SAMPLE (OCTETS_PER_SAMPLE)
     ) i_ad_datafmt (
       .clk (clk),
 
       .valid (1'b1),
       .data (raw_data[n*CHANNEL_WIDTH+:CHANNEL_WIDTH]),
       .valid_out (),
-      .data_out (fmt_data[n*16+:16]),
+      .data_out (fmt_data[n*8*OCTETS_PER_SAMPLE+:8*OCTETS_PER_SAMPLE]),
 
       .dfmt_enable (dfmt_enable),
       .dfmt_type (dfmt_type),

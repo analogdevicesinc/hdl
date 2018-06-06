@@ -28,7 +28,8 @@ module ad_ip_jesd204_tpl_adc_core #(
   parameter CHANNEL_WIDTH = 14,
   parameter NUM_LANES = 1,
   parameter TWOS_COMPLEMENT = 1,
-  parameter DATA_PATH_WIDTH = 1
+  parameter DATA_PATH_WIDTH = 1,
+  parameter OCTETS_PER_SAMPLE = 2
 ) (
   input clk,
 
@@ -50,7 +51,7 @@ module ad_ip_jesd204_tpl_adc_core #(
 );
   // Raw and formated channel data widths
   localparam CDW_RAW = CHANNEL_WIDTH * DATA_PATH_WIDTH;
-  localparam CDW_FMT = 16 * DATA_PATH_WIDTH;
+  localparam CDW_FMT = 8 * OCTETS_PER_SAMPLE * DATA_PATH_WIDTH;
 
   wire [NUM_CHANNELS*CHANNEL_WIDTH*DATA_PATH_WIDTH-1:0] raw_data_s;
 
@@ -60,7 +61,8 @@ module ad_ip_jesd204_tpl_adc_core #(
   ad_ip_jesd204_tpl_adc_deframer #(
     .NUM_LANES (NUM_LANES),
     .NUM_CHANNELS (NUM_CHANNELS),
-    .CHANNEL_WIDTH (CHANNEL_WIDTH)
+    .CHANNEL_WIDTH (CHANNEL_WIDTH),
+    .OCTETS_PER_SAMPLE (OCTETS_PER_SAMPLE)
   ) i_deframer (
     .clk (clk),
     .link_sof (link_sof),
@@ -74,7 +76,8 @@ module ad_ip_jesd204_tpl_adc_core #(
     ad_ip_jesd204_tpl_adc_channel #(
       .CHANNEL_WIDTH (CHANNEL_WIDTH),
       .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
-      .TWOS_COMPLEMENT (TWOS_COMPLEMENT)
+      .TWOS_COMPLEMENT (TWOS_COMPLEMENT),
+      .OCTETS_PER_SAMPLE (OCTETS_PER_SAMPLE)
     ) i_channel (
       .clk (clk),
 
