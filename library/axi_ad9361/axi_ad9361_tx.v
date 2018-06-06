@@ -45,9 +45,10 @@ module axi_ad9361_tx #(
   parameter   CMOS_OR_LVDS_N = 0,
   parameter   PPS_RECEIVER_ENABLE = 0,
   parameter   INIT_DELAY = 0,
-  parameter   DDS_DISABLE = 0,
-  parameter   DDS_TYPE = 1,
-  parameter   CORDIC_DW = 16,
+  parameter   DAC_DDS_DISABLE = 0,
+  parameter   DAC_DDS_TYPE = 1,
+  parameter   DAC_DDS_CORDIC_DW = 14,
+  parameter   DAC_DDS_CORDIC_PHASE_DW = 13,
   parameter   USERPORTS_DISABLE = 0,
   parameter   DELAYCNTRL_DISABLE = 0,
   parameter   IQCORRECTION_DISABLE = 0) (
@@ -119,7 +120,7 @@ module axi_ad9361_tx #(
 
   localparam  CONFIG =  (PPS_RECEIVER_ENABLE * 256) +
                         (CMOS_OR_LVDS_N * 128) +
-                        (DDS_DISABLE * 64) +
+                        (DAC_DDS_DISABLE * 64) +
                         (DELAYCNTRL_DISABLE * 32) +
                         (MODE_1R1T * 16) +
                         (USERPORTS_DISABLE * 8) +
@@ -215,9 +216,10 @@ module axi_ad9361_tx #(
     .CHANNEL_ID (0),
     .Q_OR_I_N (0),
     .DISABLE (0),
-    .DDS_DISABLE (DDS_DISABLE),
-    .DDS_TYPE (DDS_TYPE),
-    .CORDIC_DW (CORDIC_DW),
+    .DAC_DDS_DISABLE (DAC_DDS_DISABLE),
+    .DAC_DDS_TYPE (DAC_DDS_TYPE),
+    .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
+    .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
     .USERPORTS_DISABLE (USERPORTS_DISABLE),
     .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE))
   i_tx_channel_0 (
@@ -249,9 +251,10 @@ module axi_ad9361_tx #(
     .CHANNEL_ID (1),
     .Q_OR_I_N (1),
     .DISABLE (0),
-    .DDS_DISABLE (DDS_DISABLE),
-    .DDS_TYPE (DDS_TYPE),
-    .CORDIC_DW (CORDIC_DW),
+    .DAC_DDS_DISABLE (DAC_DDS_DISABLE),
+    .DAC_DDS_TYPE (DAC_DDS_TYPE),
+    .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
+    .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
     .USERPORTS_DISABLE (USERPORTS_DISABLE),
     .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE))
   i_tx_channel_1 (
@@ -283,9 +286,10 @@ module axi_ad9361_tx #(
     .CHANNEL_ID (2),
     .Q_OR_I_N (0),
     .DISABLE (MODE_1R1T),
-    .DDS_DISABLE (DDS_DISABLE),
-    .DDS_TYPE (DDS_TYPE),
-    .CORDIC_DW (CORDIC_DW),
+    .DAC_DDS_DISABLE (DAC_DDS_DISABLE),
+    .DAC_DDS_TYPE (DAC_DDS_TYPE),
+    .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
+    .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
     .USERPORTS_DISABLE (USERPORTS_DISABLE),
     .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE))
   i_tx_channel_2 (
@@ -317,9 +321,10 @@ module axi_ad9361_tx #(
     .CHANNEL_ID (3),
     .Q_OR_I_N (1),
     .DISABLE (MODE_1R1T),
-    .DDS_DISABLE (DDS_DISABLE),
-    .DDS_TYPE (DDS_TYPE),
-    .CORDIC_DW (CORDIC_DW),
+    .DAC_DDS_DISABLE (DAC_DDS_DISABLE),
+    .DAC_DDS_TYPE (DAC_DDS_TYPE),
+    .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
+    .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
     .USERPORTS_DISABLE (USERPORTS_DISABLE),
     .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE))
   i_tx_channel_3 (

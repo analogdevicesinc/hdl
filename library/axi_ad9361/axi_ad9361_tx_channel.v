@@ -42,9 +42,10 @@ module axi_ad9361_tx_channel #(
   parameter   Q_OR_I_N = 0,
   parameter   CHANNEL_ID = 32'h0,
   parameter   DISABLE = 0,
-  parameter   DDS_DISABLE = 0,
-  parameter   DDS_TYPE = 1,
-  parameter   CORDIC_DW = 16,
+  parameter   DAC_DDS_DISABLE = 0,
+  parameter   DAC_DDS_TYPE = 1,
+  parameter   DAC_DDS_CORDIC_DW = 14,
+  parameter   DAC_DDS_CORDIC_PHASE_DW = 13,
   parameter   USERPORTS_DISABLE = 0,
   parameter   IQCORRECTION_DISABLE = 0) (
 
@@ -95,17 +96,12 @@ module axi_ad9361_tx_channel #(
   reg     [23:0]  dac_pn_seq = 'd0;
   reg     [11:0]  dac_pn_data = 'd0;
   reg     [15:0]  dac_pat_data = 'd0;
-  reg     [15:0]  dac_dds_phase_0 = 'd0;
-  reg     [15:0]  dac_dds_phase_1 = 'd0;
-  reg     [15:0]  dac_dds_incr_0 = 'd0;
-  reg     [15:0]  dac_dds_incr_1 = 'd0;
-  reg     [15:0]  dac_dds_data = 'd0;
 
   // internal signals
 
   wire            dac_iqcor_valid_s;
   wire    [15:0]  dac_iqcor_data_s;
-  wire    [15:0]  dac_dds_data_s;
+  wire    [11:0]  dac_dds_data_s;
   wire    [15:0]  dac_dds_scale_1_s;
   wire    [15:0]  dac_dds_init_1_s;
   wire    [15:0]  dac_dds_incr_1_s;
@@ -285,7 +281,7 @@ module axi_ad9361_tx_channel #(
       4'h3: dac_data_out_int <= 12'd0;
       4'h2: dac_data_out_int <= dma_data[15:4];
       4'h1: dac_data_out_int <= dac_pat_data[15:4];
-      default: dac_data_out_int <= dac_dds_data[15:4];
+      default: dac_data_out_int <= dac_dds_data_s;
     endcase
   end
 
@@ -305,7 +301,7 @@ module axi_ad9361_tx_channel #(
       end
     end
   end
-  
+
   // pattern
 
   always @(posedge dac_clk) begin
@@ -320,36 +316,26 @@ module axi_ad9361_tx_channel #(
 
   // dds
 
-  always @(posedge dac_clk) begin
-    if (dac_data_sync == 1'b1) begin
-      dac_dds_phase_0 <= dac_dds_init_1_s;
-      dac_dds_phase_1 <= dac_dds_init_2_s;
-      dac_dds_incr_0 <= dac_dds_incr_1_s;
-      dac_dds_incr_1 <= dac_dds_incr_2_s;
-      dac_dds_data <= 16'd0;
-    end else if (dac_valid == 1'b1) begin
-      dac_dds_phase_0 <= dac_dds_phase_0 + dac_dds_incr_0;
-      dac_dds_phase_1 <= dac_dds_phase_1 + dac_dds_incr_1;
-      dac_dds_incr_0 <= dac_dds_incr_0;
-      dac_dds_incr_1 <= dac_dds_incr_1;
-      dac_dds_data <= dac_dds_data_s;
-    end
-  end
-
-  // dds
-
   ad_dds #(
-    .DDS_TYPE (DDS_TYPE),
-    .CORDIC_DW (CORDIC_DW),
-    .DISABLE (DDS_DISABLE))
+    .DISABLE (DAC_DDS_DISABLE),
+    .DDS_DW (12),
+    .PHASE_DW (16),
+    .DDS_TYPE (DAC_DDS_TYPE),
+    .CORDIC_DW (DAC_DDS_CORDIC_DW),
+    .CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
+    .CLK_RATIO (1))
   i_dds (
     .clk (dac_clk),
-    .dds_format (dac_dds_format),
-    .dds_phase_0 (dac_dds_phase_0),
-    .dds_scale_0 (dac_dds_scale_1_s),
-    .dds_phase_1 (dac_dds_phase_1),
-    .dds_scale_1 (dac_dds_scale_2_s),
-    .dds_data (dac_dds_data_s));
+    .dac_dds_format (dac_dds_format),
+    .dac_data_sync (dac_data_sync),
+    .dac_valid (dac_valid),
+    .tone_1_scale (dac_dds_scale_1_s),
+    .tone_2_scale (dac_dds_scale_2_s),
+    .tone_1_init_offset (dac_dds_init_1_s),
+    .tone_2_init_offset (dac_dds_init_2_s),
+    .tone_1_freq_word (dac_dds_incr_1_s),
+    .tone_2_freq_word (dac_dds_incr_2_s),
+    .dac_dds_data (dac_dds_data_s));
 
   // single channel processor
 
@@ -360,7 +346,7 @@ module axi_ad9361_tx_channel #(
   up_dac_channel #(
     .COMMON_ID (6'h11),
     .CHANNEL_ID (CHANNEL_ID),
-    .DDS_DISABLE (DDS_DISABLE),
+    .DDS_DISABLE (DAC_DDS_DISABLE),
     .USERPORTS_DISABLE (USERPORTS_DISABLE),
     .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE))
   i_up_dac_channel (
@@ -403,7 +389,7 @@ module axi_ad9361_tx_channel #(
     .up_raddr (up_raddr),
     .up_rdata (up_rdata_s),
     .up_rack (up_rack_s));
-  
+
 endmodule
 
 // ***************************************************************************
