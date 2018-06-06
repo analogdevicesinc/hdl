@@ -78,7 +78,7 @@ module ad_ip_jesd204_tpl_adc #(
 );
 
   // Number of samples per channel that are processed in parallel.
-  // Assumes 2 octets per sample.
+  // Assumes 2 octets per sample and 4 octets per lane
   localparam DATA_PATH_WIDTH = 2 * NUM_LANES / NUM_CHANNELS;
 
   wire [NUM_CHANNELS-1:0] dfmt_enable_s;

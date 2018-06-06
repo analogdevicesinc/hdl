@@ -40,31 +40,60 @@ module ad_ip_jesd204_tpl_adc_deframer #(
    output [NUM_LANES*CHANNEL_WIDTH*2-1:0] adc_data
  );
 
-  localparam TAIL_BITS = (16 - CHANNEL_WIDTH);
-  localparam DATA_PATH_WIDTH = 2 * NUM_LANES / NUM_CHANNELS;
-  localparam H = NUM_LANES / NUM_CHANNELS / 2;
-  localparam HD = NUM_LANES > NUM_CHANNELS ? 1 : 0;
-  localparam OCT_OFFSET = HD ? 32 : 8;
+  // Fixed for now
+  localparam BITS_PER_SAMPLE = 16;
+  localparam SAMPLES_PER_FRAME = 1;
+  localparam OCTETS_PER_BEAT = 4;
 
-  wire [NUM_LANES*32-1:0] link_data_s;
+  localparam BITS_PER_FRAME = BITS_PER_SAMPLE * SAMPLES_PER_FRAME *
+                              NUM_CHANNELS / NUM_LANES;
+  localparam FRAMES_PER_BEAT = OCTETS_PER_BEAT / (BITS_PER_FRAME / 8);
+  localparam TOTAL_BITS = OCTETS_PER_BEAT * 8 * NUM_LANES;
 
-  // data multiplex
+  wire [TOTAL_BITS-1:0] link_data_s;
+  wire [TOTAL_BITS-1:0] link_data_msb_s;
+  wire [TOTAL_BITS-1:0] frame_data_s;
+  wire [TOTAL_BITS-1:0] adc_data_msb_s;
 
+  generate
   genvar i;
   genvar j;
-  generate
-  for (i = 0; i < NUM_CHANNELS; i = i + 1) begin: g_deframer_outer
-    for (j = 0; j < DATA_PATH_WIDTH; j = j + 1) begin: g_deframer_inner
-      localparam k = j + i * DATA_PATH_WIDTH;
-      localparam adc_lsb = k * CHANNEL_WIDTH;
-      localparam oct0_lsb = HD ? ((i * H + j % H) * 64 + (j / H) * 8) : (k * 16);
-      localparam oct1_lsb = oct0_lsb + OCT_OFFSET + TAIL_BITS;
 
-      assign adc_data[adc_lsb+:CHANNEL_WIDTH] = {
-          link_data_s[oct0_lsb+:8],
-          link_data_s[oct1_lsb+:8-TAIL_BITS]
-        };
+  // Reorder octets LSB first
+  for (i = 0; i < NUM_LANES*OCTETS_PER_BEAT; i = i + 1) begin: whatever
+    localparam src_lsb = i*8;
+    localparam dst_msb = TOTAL_BITS - 1 - src_lsb;
+
+    assign link_data_msb_s[dst_msb-:8] = link_data_s[src_lsb+:8];
+  end
+
+  // Group data by frames
+  for (i = 0; i < FRAMES_PER_BEAT; i = i + 1) begin: g_frame_outer
+    for (j = 0; j < NUM_LANES; j = j + 1) begin: g_frame_inner
+      localparam src_lsb = (i + j * FRAMES_PER_BEAT) * BITS_PER_FRAME;
+      localparam dst_lsb = (j + i * NUM_LANES) * BITS_PER_FRAME;
+
+      assign frame_data_s[dst_lsb+:BITS_PER_FRAME] = link_data_msb_s[src_lsb+:BITS_PER_FRAME];
     end
+  end
+
+  // Group data by channels
+  for (i = 0; i < NUM_CHANNELS; i = i + 1) begin: g_framer_outer
+    for (j = 0; j < FRAMES_PER_BEAT; j = j + 1) begin: g_framer_inner
+      localparam w = SAMPLES_PER_FRAME * BITS_PER_SAMPLE;
+      localparam src_lsb = (i + j * NUM_CHANNELS) * w;
+      localparam dst_lsb = (j + i * FRAMES_PER_BEAT) * w;
+
+      assign adc_data_msb_s[dst_lsb+:w] = frame_data_s[src_lsb+:w];
+    end
+  end
+
+  // Reorder samples MSB first and drop tail bits
+  for (i = 0; i < NUM_CHANNELS * SAMPLES_PER_FRAME * FRAMES_PER_BEAT; i = i + 1) begin: joho
+    localparam dst_lsb = i * CHANNEL_WIDTH;
+    localparam src_msb = TOTAL_BITS - 1 - i * BITS_PER_SAMPLE;
+
+    assign adc_data[dst_lsb+:CHANNEL_WIDTH] = adc_data_msb_s[src_msb-:CHANNEL_WIDTH];
   end
   endgenerate
 
