@@ -27,7 +27,10 @@ module ad_ip_jesd204_tpl_dac_core #(
   parameter DATAPATH_DISABLE = 0,
   parameter NUM_LANES = 1,
   parameter NUM_CHANNELS = 1,
-  parameter DATA_PATH_WIDTH = 4
+  parameter DATA_PATH_WIDTH = 4,
+  parameter DAC_DDS_TYPE = 1,
+  parameter DAC_DDS_CORDIC_DW = 16,
+  parameter DAC_DDS_CORDIC_PHASE_DW = 16
 ) (
   // dac interface
   input clk,
@@ -86,7 +89,10 @@ module ad_ip_jesd204_tpl_dac_core #(
   for (i = 0; i < NUM_CHANNELS; i = i + 1) begin: g_channel
     ad_ip_jesd204_tpl_dac_channel #(
       .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
-      .DATAPATH_DISABLE (DATAPATH_DISABLE)
+      .DATAPATH_DISABLE (DATAPATH_DISABLE),
+      .DAC_DDS_TYPE (DAC_DDS_TYPE),
+      .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
+      .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW)
     ) i_channel (
       .clk (clk),
       .dac_enable (enable[i]),

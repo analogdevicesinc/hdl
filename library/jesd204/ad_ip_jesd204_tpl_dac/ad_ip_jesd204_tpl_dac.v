@@ -28,6 +28,9 @@ module ad_ip_jesd204_tpl_dac #(
   parameter NUM_LANES = 4,
   parameter NUM_CHANNELS = 2,
   parameter CHANNEL_WIDTH = 16,
+  parameter DAC_DDS_TYPE = 1,
+  parameter DAC_DDS_CORDIC_DW = 16,
+  parameter DAC_DDS_CORDIC_PHASE_DW = 16,
   parameter DAC_DATAPATH_DISABLE = 0
 ) (
   // jesd interface
@@ -146,7 +149,10 @@ module ad_ip_jesd204_tpl_dac #(
     .DATAPATH_DISABLE (DAC_DATAPATH_DISABLE),
     .NUM_LANES (NUM_LANES),
     .NUM_CHANNELS (NUM_CHANNELS),
-    .DATA_PATH_WIDTH (DATA_PATH_WIDTH)
+    .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
+    .DAC_DDS_TYPE (DAC_DDS_TYPE),
+    .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
+    .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW)
   ) i_core (
     .clk (link_clk),
 
