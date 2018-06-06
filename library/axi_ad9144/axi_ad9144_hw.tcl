@@ -15,7 +15,10 @@ set_module_property ELABORATION_CALLBACK p_axi_ad9144
 
 ad_ip_files axi_ad9144 [list \
   $ad_hdl_dir/library/altera/common/ad_mul.v \
+  $ad_hdl_dir/library/common/ad_dds_cordic_pipe.v \
+  $ad_hdl_dir/library/common/ad_dds_sine_cordic.v \
   $ad_hdl_dir/library/common/ad_dds_sine.v \
+  $ad_hdl_dir/library/common/ad_dds_2.v \
   $ad_hdl_dir/library/common/ad_dds_1.v \
   $ad_hdl_dir/library/common/ad_dds.v \
   $ad_hdl_dir/library/common/ad_rst.v \
