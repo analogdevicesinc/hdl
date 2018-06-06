@@ -38,8 +38,9 @@
 module axi_ad9162_core #(
 
   parameter   ID = 0,
-  parameter   DDS_TYPE = 1,
-  parameter   DDS_CORDIC_DW = 16,
+  parameter   DAC_DDS_TYPE = 1,
+  parameter   DAC_DDS_CORDIC_DW = 16,
+  parameter   DAC_DDS_CORDIC_PHASE_DW = 16,
   parameter   DATAPATH_DISABLE = 0) (
 
   // dac interface
@@ -101,6 +102,9 @@ module axi_ad9162_core #(
 
   axi_ad9162_channel #(
     .CHANNEL_ID (0),
+    .DAC_DDS_TYPE (DAC_DDS_TYPE),
+    .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
+    .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
     .DATAPATH_DISABLE (DATAPATH_DISABLE))
   i_channel_0 (
     .dac_clk (dac_clk),
