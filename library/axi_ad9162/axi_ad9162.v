@@ -40,6 +40,7 @@ module axi_ad9162 #(
   parameter   ID = 0,
   parameter   DAC_DDS_TYPE = 1,
   parameter   DAC_DDS_CORDIC_DW = 16,
+  parameter   DAC_DDS_CORDIC_PHASE_DW = 16,
   parameter   DAC_DATAPATH_DISABLE = 0) (
 
   // jesd interface
@@ -122,6 +123,9 @@ module axi_ad9162 #(
 
   axi_ad9162_core #(
     .ID (ID),
+    .DAC_DDS_TYPE (DAC_DDS_TYPE),
+    .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
+    .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
     .DATAPATH_DISABLE (DAC_DATAPATH_DISABLE))
   i_core (
     .dac_clk (dac_clk),
