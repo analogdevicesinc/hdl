@@ -25,7 +25,10 @@
 
 module ad_ip_jesd204_tpl_dac_channel #(
   parameter DATAPATH_DISABLE = 0,
-  parameter DATA_PATH_WIDTH = 4
+  parameter DATA_PATH_WIDTH = 4,
+  parameter DAC_DDS_TYPE = 1,
+  parameter DAC_DDS_CORDIC_DW = 16,
+  parameter DAC_DDS_CORDIC_PHASE_DW = 16
 ) (
   // dac interface
 
@@ -62,7 +65,6 @@ module ad_ip_jesd204_tpl_dac_channel #(
   reg [DW:0] dac_pn15_data = 'd0;
   reg [15:0] dac_dds_phase_0[0:DATA_PATH_WIDTH-1];
   reg [15:0] dac_dds_phase_1[0:DATA_PATH_WIDTH-1];
-  reg [DW:0] dac_dds_data = 'd0;
 
   // internal signals
 
@@ -106,7 +108,7 @@ module ad_ip_jesd204_tpl_dac_channel #(
       4'h3: dac_data <= 'h00;
       4'h2: dac_data <= dma_data;
       4'h1: dac_data <= {DATA_PATH_WIDTH/2{dac_pat_data_1, dac_pat_data_0}};
-      default: dac_data <= dac_dds_data;
+      default: dac_data <= dac_dds_data_s;
     endcase
   end
 
@@ -124,55 +126,25 @@ module ad_ip_jesd204_tpl_dac_channel #(
 
   // dds
 
-  generate
-  if (DATAPATH_DISABLE == 1) begin
-    always @(posedge clk) begin
-      dac_dds_data <= 64'd0;
-    end
-  end else begin
-    genvar i;
-
-    always @(posedge clk) begin
-      if (dac_data_sync == 1'b1) begin
-        dac_dds_data <= 64'd0;
-      end else begin
-        dac_dds_data <= dac_dds_data_s;
-      end
-    end
-
-    for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: g_dds_phase
-      reg [15:0] dac_dds_incr_0_r = 'd0;
-      reg [15:0] dac_dds_incr_1_r = 'd0;
-
-      always @(posedge clk) begin
-        if (dac_data_sync == 1'b1) begin
-          dac_dds_incr_0_r <= dac_dds_incr_0 * DATA_PATH_WIDTH;
-          dac_dds_incr_1_r <= dac_dds_incr_1 * DATA_PATH_WIDTH;
-
-          if (i == 0) begin
-            dac_dds_phase_0[i] <= dac_dds_init_0;
-            dac_dds_phase_1[i] <= dac_dds_init_1;
-          end else begin
-            dac_dds_phase_0[i] <= dac_dds_phase_0[i-1] + dac_dds_incr_0;
-            dac_dds_phase_1[i] <= dac_dds_phase_1[i-1] + dac_dds_incr_1;
-          end
-        end else begin
-          dac_dds_phase_0[i] <= dac_dds_phase_0[i] + dac_dds_incr_0_r;
-          dac_dds_phase_1[i] <= dac_dds_phase_1[i] + dac_dds_incr_1_r;
-        end
-      end
-
-      ad_dds i_dds (
-        .clk (clk),
-        .dds_format (dac_dds_format),
-        .dds_phase_0 (dac_dds_phase_0[i]),
-        .dds_scale_0 (dac_dds_scale_0),
-        .dds_phase_1 (dac_dds_phase_1[i]),
-        .dds_scale_1 (dac_dds_scale_1),
-        .dds_data (dac_dds_data_s[16*i+:16])
-      );
-    end
-  end
-  endgenerate
+    ad_dds #(
+    .DISABLE (DATAPATH_DISABLE),
+    .DDS_DW (16),
+    .PHASE_DW (16),
+    .DDS_TYPE (DAC_DDS_TYPE),
+    .CORDIC_DW (DAC_DDS_CORDIC_DW),
+    .CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
+    .CLK_RATIO (DATA_PATH_WIDTH))
+  i_dds (
+    .clk (clk),
+    .dac_dds_format (dac_dds_format),
+    .dac_data_sync (dac_data_sync),
+    .dac_valid (1'b1),
+    .tone_1_scale (dac_dds_scale_0),
+    .tone_2_scale (dac_dds_scale_1),
+    .tone_1_init_offset (dac_dds_init_0),
+    .tone_2_init_offset (dac_dds_init_1),
+    .tone_1_freq_word (dac_dds_incr_0),
+    .tone_2_freq_word (dac_dds_incr_1),
+    .dac_dds_data (dac_dds_data_s));
 
 endmodule

@@ -29,6 +29,9 @@ ad_ip_create ad_ip_jesd204_tpl_dac {ADI JESD204 Transport DAC Layer} p_ad_ip_jes
 ad_ip_files ad_ip_jesd204_tpl_dac [list \
   $ad_hdl_dir/library/altera/common/ad_mul.v \
   $ad_hdl_dir/library/common/ad_dds_sine.v \
+  $ad_hdl_dir/library/common/ad_dds_cordic_pipe.v \
+  $ad_hdl_dir/library/common/ad_dds_sine_cordic.v \
+  $ad_hdl_dir/library/common/ad_dds_2.v \
   $ad_hdl_dir/library/common/ad_dds_1.v \
   $ad_hdl_dir/library/common/ad_dds.v \
   $ad_hdl_dir/library/common/ad_rst.v \

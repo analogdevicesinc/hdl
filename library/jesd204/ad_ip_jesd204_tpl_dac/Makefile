@@ -7,7 +7,10 @@ LIBRARY_NAME := ad_ip_jesd204_tpl_dac
 
 GENERIC_DEPS += ../../common/ad_dds.v
 GENERIC_DEPS += ../../common/ad_dds_1.v
+GENERIC_DEPS += ../../common/ad_dds_2.v
+GENERIC_DEPS += ../../common/ad_dds_cordic_pipe.v
 GENERIC_DEPS += ../../common/ad_dds_sine.v
+GENERIC_DEPS += ../../common/ad_dds_sine_cordic.v
 GENERIC_DEPS += ../../common/ad_rst.v
 GENERIC_DEPS += ../../common/up_axi.v
 GENERIC_DEPS += ../../common/up_clock_mon.v
