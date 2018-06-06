@@ -41,8 +41,9 @@ module axi_adrv9009_tx #(
   parameter   DISABLE = 0,
   parameter   DDS_DISABLE = 0,
   parameter   IQCORRECTION_DISABLE = 0,
-  parameter   DDS_TYPE = 1,
-  parameter   DDS_CORDIC_DW = 16) (
+  parameter   DAC_DDS_TYPE = 1,
+  parameter   DAC_DDS_CORDIC_DW = 20,
+  parameter   DAC_DDS_CORDIC_PHASE_DW = 18) (
 
   // dac interface
 
@@ -138,8 +139,9 @@ module axi_adrv9009_tx #(
     .DISABLE (DISABLE),
     .DDS_DISABLE (DDS_DISABLE),
     .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
-    .DDS_TYPE (DDS_TYPE),
-    .DDS_CORDIC_DW (DDS_CORDIC_DW))
+    .DAC_DDS_TYPE (DAC_DDS_TYPE),
+    .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
+    .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
   i_tx_channel_0 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
@@ -171,8 +173,9 @@ module axi_adrv9009_tx #(
     .DISABLE (DISABLE),
     .DDS_DISABLE (DDS_DISABLE),
     .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
-    .DDS_TYPE (DDS_TYPE),
-    .DDS_CORDIC_DW (DDS_CORDIC_DW))
+    .DAC_DDS_TYPE (DAC_DDS_TYPE),
+    .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
+    .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
   i_tx_channel_1 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
@@ -204,8 +207,9 @@ module axi_adrv9009_tx #(
     .DISABLE (DISABLE),
     .DDS_DISABLE (DDS_DISABLE),
     .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
-    .DDS_TYPE (DDS_TYPE),
-    .DDS_CORDIC_DW (DDS_CORDIC_DW))
+    .DAC_DDS_TYPE (DAC_DDS_TYPE),
+    .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
+    .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
   i_tx_channel_2 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
@@ -237,8 +241,9 @@ module axi_adrv9009_tx #(
     .DISABLE (DISABLE),
     .DDS_DISABLE (DDS_DISABLE),
     .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
-    .DDS_TYPE (DDS_TYPE),
-    .DDS_CORDIC_DW (DDS_CORDIC_DW))
+    .DAC_DDS_TYPE (DAC_DDS_TYPE),
+    .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
+    .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
   i_tx_channel_3 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
