@@ -52,7 +52,8 @@ module axi_dmac_transfer #(
   parameter FIFO_SIZE = 8,
   parameter ID_WIDTH = $clog2(FIFO_SIZE*2),
   parameter AXI_LENGTH_WIDTH_SRC = 8,
-  parameter AXI_LENGTH_WIDTH_DEST = 8
+  parameter AXI_LENGTH_WIDTH_DEST = 8,
+  parameter ENABLE_DIAGNOSTICS_IF = 0
 ) (
   input ctrl_clk,
   input ctrl_resetn,
@@ -160,7 +161,10 @@ module axi_dmac_transfer #(
   output [ID_WIDTH-1:0] dbg_src_address_id,
   output [ID_WIDTH-1:0] dbg_src_data_id,
   output [ID_WIDTH-1:0] dbg_src_response_id,
-  output [11:0] dbg_status
+  output [11:0] dbg_status,
+
+  // Diagnostics interface
+  output [7:0] dest_diag_level_bursts
 );
 
 wire dma_req_valid;
@@ -299,7 +303,8 @@ dmac_request_arb #(
   .FIFO_SIZE (FIFO_SIZE),
   .ID_WIDTH (ID_WIDTH),
   .AXI_LENGTH_WIDTH_DEST (AXI_LENGTH_WIDTH_DEST),
-  .AXI_LENGTH_WIDTH_SRC (AXI_LENGTH_WIDTH_SRC)
+  .AXI_LENGTH_WIDTH_SRC (AXI_LENGTH_WIDTH_SRC),
+  .ENABLE_DIAGNOSTICS_IF(ENABLE_DIAGNOSTICS_IF)
 ) i_request_arb (
   .req_clk (req_clk),
   .req_resetn (req_resetn),
@@ -403,7 +408,9 @@ dmac_request_arb #(
   .dbg_src_request_id (dbg_src_request_id),
   .dbg_src_address_id (dbg_src_address_id),
   .dbg_src_data_id (dbg_src_data_id),
-  .dbg_src_response_id (dbg_src_response_id)
+  .dbg_src_response_id (dbg_src_response_id),
+
+  .dest_diag_level_bursts(dest_diag_level_bursts)
 );
 
 endmodule

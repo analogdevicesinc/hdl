@@ -38,7 +38,8 @@ module axi_dmac_burst_memory #(
   parameter DATA_WIDTH_DEST = 64,
   parameter ID_WIDTH = 3,
   parameter MAX_BYTES_PER_BURST = 128,
-  parameter ASYNC_CLK = 1
+  parameter ASYNC_CLK = 1,
+  parameter ENABLE_DIAGNOSTICS_IF = 0
 ) (
   input src_clk,
   input src_reset,
@@ -59,7 +60,10 @@ module axi_dmac_burst_memory #(
 
   output [ID_WIDTH-1:0] dest_request_id,
   input [ID_WIDTH-1:0] dest_data_request_id,
-  output [ID_WIDTH-1:0] dest_data_response_id
+  output [ID_WIDTH-1:0] dest_data_response_id,
+
+  // Diagnostics interface
+  output  [7:0] dest_diag_level_bursts
 );
 
 localparam DATA_WIDTH = DATA_WIDTH_SRC > DATA_WIDTH_DEST ?
@@ -357,5 +361,24 @@ sync_bits #(
 
 assign dest_request_id = dest_src_id;
 assign dest_data_response_id = dest_id;
+
+generate if (ENABLE_DIAGNOSTICS_IF == 1) begin
+
+  reg [ID_WIDTH-1:0] _dest_diag_level_bursts = 'h0;
+
+  // calculate buffer fullness in bursts
+  always @(posedge dest_clk) begin
+    if (dest_reset == 1'b1) begin
+      _dest_diag_level_bursts <= 'h0;
+    end else begin
+      _dest_diag_level_bursts <= g2b(dest_src_id) - g2b(dest_id);
+    end
+  end
+  assign dest_diag_level_bursts = {{{8-ID_WIDTH}{1'b0}},_dest_diag_level_bursts};
+
+end else begin
+  assign dest_diag_level_bursts = 'h0;
+end
+endgenerate
 
 endmodule
