@@ -164,6 +164,7 @@ module axi_dmac_transfer #(
   output [11:0] dbg_status,
 
   // Diagnostics interface
+  output [15:0] dest_diag_level_beats,
   output [7:0] dest_diag_level_bursts
 );
 
@@ -410,7 +411,9 @@ dmac_request_arb #(
   .dbg_src_data_id (dbg_src_data_id),
   .dbg_src_response_id (dbg_src_response_id),
 
+  .dest_diag_level_beats(dest_diag_level_beats),
   .dest_diag_level_bursts(dest_diag_level_bursts)
 );
+
 
 endmodule

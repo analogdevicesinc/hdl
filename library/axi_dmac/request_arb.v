@@ -169,6 +169,7 @@ module dmac_request_arb #(
   output src_enabled,
 
   // Diagnostics interface
+  output [15:0] dest_diag_level_beats,
   output  [7:0] dest_diag_level_bursts
 );
 
@@ -791,6 +792,7 @@ axi_dmac_burst_memory #(
   .dest_data_request_id(dest_data_request_id),
   .dest_data_response_id(dest_data_response_id),
 
+  .dest_diag_level_beats(dest_diag_level_beats),
   .dest_diag_level_bursts(dest_diag_level_bursts)
 );
 

@@ -215,6 +215,7 @@ module axi_dmac #(
   output                                   fifo_rd_xfer_req,
 
   // Diagnostics interface
+  output [15:0] dest_diag_level_beats,
   output  [7:0] dest_diag_level_bursts
 );
 
@@ -539,6 +540,7 @@ axi_dmac_transfer #(
   .dbg_src_response_id(src_response_id),
   .dbg_status(dbg_status),
 
+  .dest_diag_level_beats(dest_diag_level_beats),
   .dest_diag_level_bursts(dest_diag_level_bursts)
 );
 

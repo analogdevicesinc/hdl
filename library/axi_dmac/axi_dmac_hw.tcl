@@ -492,4 +492,5 @@ set_parameter_property ENABLE_DIAGNOSTICS_IF HDL_PARAMETER true
 set_parameter_property ENABLE_DIAGNOSTICS_IF GROUP $group
 
 add_interface diagnostics_if conduit end
+add_interface_port diagnostics_if dest_diag_level_beats dest_diag_level_beats Output "16"
 add_interface_port diagnostics_if dest_diag_level_bursts dest_diag_level_bursts Output "8"
