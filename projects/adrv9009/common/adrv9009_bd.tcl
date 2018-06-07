@@ -29,14 +29,14 @@ ad_ip_instance axi_dmac axi_adrv9009_tx_dma
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.DMA_TYPE_SRC 0
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.DMA_TYPE_DEST 1
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.CYCLIC 1
-ad_ip_parameter axi_adrv9009_tx_dma CONFIG.AXI_SLICE_SRC 0
-ad_ip_parameter axi_adrv9009_tx_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.ASYNC_CLK_DEST_REQ 1
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.ASYNC_CLK_SRC_DEST 1
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.ASYNC_CLK_REQ_SRC 1
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.MAX_BYTES_PER_BURST 256
+ad_ip_parameter axi_adrv9009_tx_dma CONFIG.AXI_SLICE_DEST true
+ad_ip_parameter axi_adrv9009_tx_dma CONFIG.AXI_SLICE_SRC true
 
 # adc peripherals
 
@@ -63,14 +63,14 @@ ad_ip_parameter axi_adrv9009_rx_dma CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.SYNC_TRANSFER_START 1
-ad_ip_parameter axi_adrv9009_rx_dma CONFIG.AXI_SLICE_SRC 0
-ad_ip_parameter axi_adrv9009_rx_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.ASYNC_CLK_DEST_REQ 1
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.ASYNC_CLK_SRC_DEST 1
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.ASYNC_CLK_REQ_SRC 1
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.DMA_DATA_WIDTH_SRC 64
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.MAX_BYTES_PER_BURST 256
+ad_ip_parameter axi_adrv9009_rx_dma CONFIG.AXI_SLICE_DEST true
+ad_ip_parameter axi_adrv9009_rx_dma CONFIG.AXI_SLICE_SRC true
 
 # adc-os peripherals
 
@@ -97,14 +97,14 @@ ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.SYNC_TRANSFER_START 1
-ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.AXI_SLICE_SRC 0
-ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.ASYNC_CLK_DEST_REQ 1
 ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.ASYNC_CLK_SRC_DEST 1
 ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.ASYNC_CLK_REQ_SRC 1
 ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.DMA_DATA_WIDTH_SRC 64
 ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.MAX_BYTES_PER_BURST 256
+ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.AXI_SLICE_DEST true
+ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.AXI_SLICE_SRC true
 
 # common cores
 
