@@ -154,7 +154,7 @@ module util_dacfifo #(
 
   // write address generation
 
-  assign dma_wren_s = dma_valid & dma_xfer_req & dma_ready;
+  assign dma_wren_s = dma_valid & dma_ready;
 
   always @(posedge dma_clk) begin
     if(dma_rst == 1'b1) begin
