@@ -468,6 +468,10 @@ proc axi_dmac_elaborate {} {
     set_port_property fifo_wr_sync termination_value 1
   }
 
+  if {[get_parameter_value ENABLE_DIAGNOSTICS_IF] != 1} {
+    lappend disabled_intfs diagnostics_if
+  }
+
   foreach intf $disabled_intfs {
     set_interface_property $intf ENABLED false
   }
@@ -480,3 +484,12 @@ set_parameter_property DISABLE_DEBUG_REGISTERS DISPLAY_NAME "Disable debug regis
 set_parameter_property DISABLE_DEBUG_REGISTERS DISPLAY_HINT boolean
 set_parameter_property DISABLE_DEBUG_REGISTERS HDL_PARAMETER false
 set_parameter_property DISABLE_DEBUG_REGISTERS GROUP $group
+
+add_parameter ENABLE_DIAGNOSTICS_IF INTEGER 0
+set_parameter_property ENABLE_DIAGNOSTICS_IF DISPLAY_NAME "Enable Diagnostics Interface"
+set_parameter_property ENABLE_DIAGNOSTICS_IF DISPLAY_HINT boolean
+set_parameter_property ENABLE_DIAGNOSTICS_IF HDL_PARAMETER true
+set_parameter_property ENABLE_DIAGNOSTICS_IF GROUP $group
+
+add_interface diagnostics_if conduit end
+add_interface_port diagnostics_if dest_diag_level_bursts dest_diag_level_bursts Output "8"

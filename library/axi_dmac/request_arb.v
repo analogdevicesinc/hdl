@@ -51,7 +51,8 @@ module dmac_request_arb #(
   parameter FIFO_SIZE = 8,
   parameter ID_WIDTH = $clog2(FIFO_SIZE*2),
   parameter AXI_LENGTH_WIDTH_SRC = 8,
-  parameter AXI_LENGTH_WIDTH_DEST = 8)(
+  parameter AXI_LENGTH_WIDTH_DEST = 8,
+  parameter ENABLE_DIAGNOSTICS_IF = 0)(
 
   input req_clk,
   input req_resetn,
@@ -165,7 +166,10 @@ module dmac_request_arb #(
   input src_resetn,
   output src_ext_resetn,
   input src_enable,
-  output src_enabled
+  output src_enabled,
+
+  // Diagnostics interface
+  output  [7:0] dest_diag_level_bursts
 );
 
 localparam DMA_TYPE_MM_AXI = 0;
@@ -765,7 +769,8 @@ axi_dmac_burst_memory #(
   .DATA_WIDTH_DEST(DMA_DATA_WIDTH_DEST),
   .ID_WIDTH(ID_WIDTH),
   .MAX_BYTES_PER_BURST(MAX_BYTES_PER_BURST),
-  .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
+  .ASYNC_CLK(ASYNC_CLK_SRC_DEST),
+  .ENABLE_DIAGNOSTICS_IF(ENABLE_DIAGNOSTICS_IF)
 ) i_store_and_forward (
   .src_clk(src_clk),
   .src_reset(~src_resetn),
@@ -784,7 +789,9 @@ axi_dmac_burst_memory #(
 
   .dest_request_id(dest_request_id),
   .dest_data_request_id(dest_data_request_id),
-  .dest_data_response_id(dest_data_response_id)
+  .dest_data_response_id(dest_data_response_id),
+
+  .dest_diag_level_bursts(dest_diag_level_bursts)
 );
 
 axi_register_slice #(

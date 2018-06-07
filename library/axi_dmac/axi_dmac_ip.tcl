@@ -77,6 +77,8 @@ adi_set_bus_dependency "m_axis" "m_axis" \
 	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE_DEST')) = 1)"
 adi_set_ports_dependency "fifo_rd" \
 	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE_DEST')) = 2)"
+adi_set_ports_dependency "dest_diag_level_bursts" \
+	"(spirit:decode(id('MODELPARAM_VALUE.ENABLE_DIAGNOSTICS_IF')) = 1)"
 
 # These are in the design to keep the Altera tools happy which can't handle
 # uni-directional AXI interfaces. The Xilinx tools can and do a better job when
@@ -217,6 +219,7 @@ foreach {k v} { \
 		"AXI_SLICE_SRC" "false" \
 		"AXI_SLICE_DEST" "false" \
 		"DISABLE_DEBUG_REGISTERS" "false" \
+    "ENABLE_DIAGNOSTICS_IF" "false" \
 	} { \
 	set_property -dict [list \
 			"value_format" "bool" \
@@ -374,6 +377,12 @@ set p [ipgui::get_guiparamspec -name "DISABLE_DEBUG_REGISTERS" -component $cc]
 ipgui::move_param -component $cc -order 0 $p -parent $dbg_group
 set_property -dict [list \
 	"display_name" "Disable Debug Registers" \
+] $p
+
+set p [ipgui::get_guiparamspec -name "ENABLE_DIAGNOSTICS_IF" -component $cc]
+ipgui::move_param -component $cc -order 1 $p -parent $dbg_group
+set_property -dict [list \
+	"display_name" "Enable Diagnostics Interface" \
 ] $p
 
 ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "DMA_AXI_ADDR_WIDTH" -component $cc]
