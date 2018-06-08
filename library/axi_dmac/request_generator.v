@@ -70,10 +70,17 @@ wire [ID_WIDTH-1:0] id_next = inc_id(id);
 assign eot = burst_count == 'h00;
 assign request_id = id;
 
+always @(posedge req_aclk) begin
+  if (req_ready == 1'b1) begin
+    burst_count <= req_burst_count;
+  end else if (response_id != id_next && pause == 1'b0) begin
+    burst_count <= burst_count - 1'b1;
+  end
+end
+
 always @(posedge req_aclk)
 begin
   if (req_aresetn == 1'b0) begin
-    burst_count <= 'h00;
     id <= 'h0;
     req_ready <= 1'b1;
   end else if (enable == 1'b0) begin
@@ -81,13 +88,11 @@ begin
   end else begin
     if (req_ready) begin
       if (req_valid && enable) begin
-        burst_count <= req_burst_count;
         req_ready <= 1'b0;
       end
     end else if (response_id != id_next && ~pause) begin
       if (eot)
         req_ready <= 1'b1;
-      burst_count <= burst_count - 1'b1;
       id <= id_next;
     end
   end

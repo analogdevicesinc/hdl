@@ -49,7 +49,7 @@ module dmac_request_arb #(
   parameter AXI_SLICE_DEST = 0,
   parameter AXI_SLICE_SRC = 0,
   parameter MAX_BYTES_PER_BURST = 128,
-  parameter FIFO_SIZE = 4,
+  parameter FIFO_SIZE = 8,
   parameter ID_WIDTH = $clog2(FIFO_SIZE*2),
   parameter AXI_LENGTH_WIDTH_SRC = 8,
   parameter AXI_LENGTH_WIDTH_DEST = 8)(
@@ -172,14 +172,24 @@ localparam DMA_DATA_WIDTH = DMA_DATA_WIDTH_SRC < DMA_DATA_WIDTH_DEST ?
 
 // Bytes per burst is the same for both dest and src, but bytes per beat may
 // differ, so beats per burst may also differ
-
-parameter BYTES_PER_BURST_WIDTH = $clog2(MAX_BYTES_PER_BURST);
+localparam BYTES_PER_BURST_WIDTH =
+  MAX_BYTES_PER_BURST > 2048 ? 12 :
+  MAX_BYTES_PER_BURST > 1024 ? 11 :
+  MAX_BYTES_PER_BURST > 512 ? 10 :
+  MAX_BYTES_PER_BURST > 256 ? 9 :
+  MAX_BYTES_PER_BURST > 128 ? 8 :
+  MAX_BYTES_PER_BURST > 64 ? 7 :
+  MAX_BYTES_PER_BURST > 32 ? 6 :
+  MAX_BYTES_PER_BURST > 16 ? 5 :
+  MAX_BYTES_PER_BURST > 8 ? 4 :
+  MAX_BYTES_PER_BURST > 4 ? 3 :
+  MAX_BYTES_PER_BURST > 2 ? 2 : 1;
 localparam BEATS_PER_BURST_WIDTH_SRC = BYTES_PER_BURST_WIDTH - BYTES_PER_BEAT_WIDTH_SRC;
 localparam BEATS_PER_BURST_WIDTH_DEST = BYTES_PER_BURST_WIDTH - BYTES_PER_BEAT_WIDTH_DEST;
 
 localparam BURSTS_PER_TRANSFER_WIDTH = DMA_LENGTH_WIDTH - BYTES_PER_BURST_WIDTH;
 
-reg [0:2**ID_WIDTH-1] eot_mem;
+reg eot_mem[0:2**ID_WIDTH-1];
 wire request_eot;
 
 wire [ID_WIDTH-1:0] request_id;
