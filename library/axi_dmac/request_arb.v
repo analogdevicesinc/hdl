@@ -56,8 +56,9 @@ module dmac_request_arb #(
   parameter ID_WIDTH = $clog2(FIFO_SIZE*2),
   parameter AXI_LENGTH_WIDTH_SRC = 8,
   parameter AXI_LENGTH_WIDTH_DEST = 8,
-  parameter ENABLE_DIAGNOSTICS_IF = 0)(
-
+  parameter ENABLE_DIAGNOSTICS_IF = 0,
+  parameter ALLOW_ASYM_MEM = 0
+)(
   input req_clk,
   input req_resetn,
 
@@ -941,7 +942,8 @@ axi_dmac_burst_memory #(
   .BYTES_PER_BEAT_WIDTH_SRC(BYTES_PER_BEAT_WIDTH_SRC),
   .BYTES_PER_BURST_WIDTH(BYTES_PER_BURST_WIDTH),
   .DMA_LENGTH_ALIGN(DMA_LENGTH_ALIGN),
-  .ENABLE_DIAGNOSTICS_IF(ENABLE_DIAGNOSTICS_IF)
+  .ENABLE_DIAGNOSTICS_IF(ENABLE_DIAGNOSTICS_IF),
+  .ALLOW_ASYM_MEM(ALLOW_ASYM_MEM)
 ) i_store_and_forward (
   .src_clk(src_clk),
   .src_reset(~src_resetn),

@@ -20,7 +20,7 @@ ad_ip_files axi_dmac [list \
   $ad_hdl_dir/library/common/up_axi.v \
   $ad_hdl_dir/library/util_axis_fifo/util_axis_fifo.v \
   $ad_hdl_dir/library/util_axis_fifo/address_sync.v \
-  $ad_hdl_dir/library/common/ad_mem.v \
+  $ad_hdl_dir/library/common/ad_mem_asym.v \
   inc_id.vh \
   resp.vh \
   axi_dmac_burst_memory.v \

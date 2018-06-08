@@ -59,7 +59,9 @@ module axi_dmac #(
   parameter AXI_ID_WIDTH_SRC = 1,
   parameter AXI_ID_WIDTH_DEST = 1,
   parameter DISABLE_DEBUG_REGISTERS = 0,
-  parameter ENABLE_DIAGNOSTICS_IF = 0)(
+  parameter ENABLE_DIAGNOSTICS_IF = 0,
+  parameter ALLOW_ASYM_MEM = 0
+) (
   // Slave AXI interface
   input s_axi_aclk,
   input s_axi_aresetn,
@@ -466,7 +468,8 @@ axi_dmac_transfer #(
   .ID_WIDTH(ID_WIDTH),
   .AXI_LENGTH_WIDTH_SRC(8-(4*DMA_AXI_PROTOCOL_SRC)),
   .AXI_LENGTH_WIDTH_DEST(8-(4*DMA_AXI_PROTOCOL_DEST)),
-  .ENABLE_DIAGNOSTICS_IF(ENABLE_DIAGNOSTICS_IF)
+  .ENABLE_DIAGNOSTICS_IF(ENABLE_DIAGNOSTICS_IF),
+  .ALLOW_ASYM_MEM(ALLOW_ASYM_MEM)
 ) i_transfer (
   .ctrl_clk(s_axi_aclk),
   .ctrl_resetn(s_axi_aresetn),
