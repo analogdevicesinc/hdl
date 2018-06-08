@@ -5,7 +5,7 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
 adi_ip_create axi_dmac
 adi_ip_files axi_dmac [list \
-  "$ad_hdl_dir/library/common/ad_mem.v" \
+  "$ad_hdl_dir/library/common/ad_mem_asym.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "inc_id.vh" \
   "resp.vh" \
@@ -391,7 +391,7 @@ set_property -dict [list \
 ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "DMA_AXI_ADDR_WIDTH" -component $cc]
 ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "AXI_ID_WIDTH_SRC" -component $cc]
 ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "AXI_ID_WIDTH_DEST" -component $cc]
-
+ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "ALLOW_ASYM_MEM" -component $cc]
 
 ipx::create_xgui_files [ipx::current_core]
 ipx::save_core $cc

@@ -44,7 +44,8 @@ module axi_dmac_burst_memory #(
   parameter BYTES_PER_BEAT_WIDTH_SRC = $clog2(DATA_WIDTH_SRC/8),
   parameter BYTES_PER_BURST_WIDTH = $clog2(MAX_BYTES_PER_BURST),
   parameter DMA_LENGTH_ALIGN = 3,
-  parameter ENABLE_DIAGNOSTICS_IF = 0
+  parameter ENABLE_DIAGNOSTICS_IF = 0,
+  parameter ALLOW_ASYM_MEM = 0
 ) (
   input src_clk,
   input src_reset,
@@ -78,11 +79,13 @@ module axi_dmac_burst_memory #(
   output  [7:0] dest_diag_level_bursts
 );
 
-localparam DATA_WIDTH = DATA_WIDTH_SRC > DATA_WIDTH_DEST ?
+localparam DATA_WIDTH_MEM = DATA_WIDTH_SRC > DATA_WIDTH_DEST ?
   DATA_WIDTH_SRC : DATA_WIDTH_DEST;
+localparam MEM_RATIO = DATA_WIDTH_SRC > DATA_WIDTH_DEST ?
+  DATA_WIDTH_SRC / DATA_WIDTH_DEST : DATA_WIDTH_DEST / DATA_WIDTH_SRC;
 
 /* A burst can have up to 256 beats */
-localparam BURST_LEN = MAX_BYTES_PER_BURST / (DATA_WIDTH / 8);
+localparam BURST_LEN = MAX_BYTES_PER_BURST / (DATA_WIDTH_MEM / 8);
 localparam BURST_LEN_WIDTH = BURST_LEN > 128 ? 8 :
   BURST_LEN > 64 ? 7 :
   BURST_LEN > 32 ? 6 :
@@ -91,11 +94,26 @@ localparam BURST_LEN_WIDTH = BURST_LEN > 128 ? 8 :
   BURST_LEN > 4 ? 3 :
   BURST_LEN > 2 ? 2 : 1;
 
-localparam ADDRESS_WIDTH = BURST_LEN_WIDTH + ID_WIDTH - 1;
-
 localparam AUX_FIFO_SIZE = 2**(ID_WIDTH-1);
 
-localparam BYTES_PER_BEAT_WIDTH = BYTES_PER_BURST_WIDTH - BURST_LEN_WIDTH;
+localparam MEM_RATIO_WIDTH =
+    (ALLOW_ASYM_MEM == 0 || MEM_RATIO == 1) ? 0 :
+    MEM_RATIO == 2 ? 1 :
+    MEM_RATIO == 4 ? 2 : 3;
+
+localparam BURST_LEN_WIDTH_SRC = BURST_LEN_WIDTH +
+  (DATA_WIDTH_SRC < DATA_WIDTH_MEM ? MEM_RATIO_WIDTH : 0);
+localparam BURST_LEN_WIDTH_DEST = BURST_LEN_WIDTH +
+  (DATA_WIDTH_DEST < DATA_WIDTH_MEM ? MEM_RATIO_WIDTH : 0);
+localparam DATA_WIDTH_MEM_SRC = DATA_WIDTH_MEM >>
+  (DATA_WIDTH_SRC < DATA_WIDTH_MEM ? MEM_RATIO_WIDTH : 0);
+localparam DATA_WIDTH_MEM_DEST = DATA_WIDTH_MEM >>
+  (DATA_WIDTH_DEST < DATA_WIDTH_MEM ? MEM_RATIO_WIDTH : 0);
+
+localparam ADDRESS_WIDTH_SRC = BURST_LEN_WIDTH_SRC + ID_WIDTH - 1;
+localparam ADDRESS_WIDTH_DEST = BURST_LEN_WIDTH_DEST + ID_WIDTH - 1;
+
+localparam BYTES_PER_BEAT_WIDTH_MEM_SRC = BYTES_PER_BURST_WIDTH - BURST_LEN_WIDTH_SRC;
 
 /*
  * The burst memory is separated into 2**(ID_WIDTH-1) segments. Each segment can
@@ -124,14 +142,14 @@ localparam BYTES_PER_BEAT_WIDTH = BYTES_PER_BURST_WIDTH - BURST_LEN_WIDTH;
 reg [ID_WIDTH-1:0] src_id_next;
 reg [ID_WIDTH-1:0] src_id = 'h0;
 reg src_id_reduced_msb = 1'b0;
-reg [BURST_LEN_WIDTH-1:0] src_beat_counter = 'h00;
+reg [BURST_LEN_WIDTH_SRC-1:0] src_beat_counter = 'h00;
 
 reg [ID_WIDTH-1:0] dest_id_next = 'h0;
 reg dest_id_reduced_msb_next = 1'b0;
 reg dest_id_reduced_msb = 1'b0;
 reg [ID_WIDTH-1:0] dest_id = 'h0;
-reg [BURST_LEN_WIDTH-1:0] dest_beat_counter = 'h00;
-wire [BURST_LEN_WIDTH-1:0] dest_burst_len;
+reg [BURST_LEN_WIDTH_DEST-1:0] dest_beat_counter = 'h00;
+wire [BURST_LEN_WIDTH_DEST-1:0] dest_burst_len;
 reg dest_valid = 1'b0;
 reg dest_mem_data_valid = 1'b0;
 reg dest_mem_data_last = 1'b0;
@@ -144,26 +162,26 @@ reg [BYTES_PER_BURST_WIDTH+1-1:0] dest_burst_len_data = {DMA_LENGTH_ALIGN{1'b1}}
 wire src_beat;
 wire src_last_beat;
 wire [ID_WIDTH-1:0] src_dest_id;
-wire [ADDRESS_WIDTH-1:0] src_waddr;
+wire [ADDRESS_WIDTH_SRC-1:0] src_waddr;
 wire [ID_WIDTH-2:0] src_id_reduced;
 wire src_mem_data_valid;
 wire src_mem_data_last;
-wire [DATA_WIDTH-1:0] src_mem_data;
-wire [BYTES_PER_BEAT_WIDTH-1:0] src_mem_data_valid_bytes;
+wire [DATA_WIDTH_MEM_SRC-1:0] src_mem_data;
+wire [BYTES_PER_BEAT_WIDTH_MEM_SRC-1:0] src_mem_data_valid_bytes;
 wire src_mem_data_partial_burst;
 
 wire dest_beat;
 wire dest_last_beat;
 wire dest_last;
 wire [ID_WIDTH-1:0] dest_src_id;
-wire [ADDRESS_WIDTH-1:0] dest_raddr;
+wire [ADDRESS_WIDTH_DEST-1:0] dest_raddr;
 wire [ID_WIDTH-2:0] dest_id_reduced_next;
 wire [ID_WIDTH-1:0] dest_id_next_inc;
 wire [ID_WIDTH-2:0] dest_id_reduced;
 wire dest_burst_valid;
 wire dest_burst_ready;
 wire dest_ready;
-wire [DATA_WIDTH-1:0] dest_mem_data;
+wire [DATA_WIDTH_MEM_DEST-1:0] dest_mem_data;
 wire dest_mem_data_ready;
 
 `include "inc_id.vh"
@@ -317,13 +335,13 @@ always @(posedge dest_clk) begin
   dest_burst_info_write <= (dest_burst_valid == 1'b1 && dest_burst_ready == 1'b1);
 end
 
-assign dest_burst_len = dest_burst_len_data[BYTES_PER_BURST_WIDTH-1 -: BURST_LEN_WIDTH];
+assign dest_burst_len = dest_burst_len_data[BYTES_PER_BURST_WIDTH-1 -: BURST_LEN_WIDTH_DEST];
 
 axi_dmac_resize_src #(
   .DATA_WIDTH_SRC (DATA_WIDTH_SRC),
   .BYTES_PER_BEAT_WIDTH_SRC (BYTES_PER_BEAT_WIDTH_SRC),
-  .DATA_WIDTH_MEM (DATA_WIDTH),
-  .BYTES_PER_BEAT_WIDTH_MEM (BYTES_PER_BEAT_WIDTH)
+  .DATA_WIDTH_MEM (DATA_WIDTH_MEM_SRC),
+  .BYTES_PER_BEAT_WIDTH_MEM (BYTES_PER_BEAT_WIDTH_MEM_SRC)
 ) i_resize_src (
   .clk (src_clk),
   .reset (src_reset),
@@ -345,9 +363,11 @@ assign src_burst_len_data = {src_mem_data_partial_burst,
                              src_beat_counter,
                              src_mem_data_valid_bytes};
 
-ad_mem #(
-  .DATA_WIDTH (DATA_WIDTH),
-  .ADDRESS_WIDTH (ADDRESS_WIDTH)
+ad_mem_asym #(
+  .A_ADDRESS_WIDTH (ADDRESS_WIDTH_SRC),
+  .A_DATA_WIDTH (DATA_WIDTH_MEM_SRC),
+  .B_ADDRESS_WIDTH (ADDRESS_WIDTH_DEST),
+  .B_DATA_WIDTH (DATA_WIDTH_MEM_DEST)
 ) i_mem (
   .clka (src_clk),
   .wea (src_beat),
@@ -362,7 +382,7 @@ ad_mem #(
 
 axi_dmac_resize_dest #(
   .DATA_WIDTH_DEST (DATA_WIDTH_DEST),
-  .DATA_WIDTH_MEM (DATA_WIDTH)
+  .DATA_WIDTH_MEM (DATA_WIDTH_MEM_DEST)
 ) i_resize_dest (
   .clk (dest_clk),
   .reset (dest_reset),

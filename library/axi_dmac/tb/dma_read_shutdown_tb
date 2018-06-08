@@ -13,7 +13,7 @@ SOURCE+=" ../src_axi_mm.v ../address_generator.v ../response_generator.v"
 SOURCE+=" ../../util_axis_fifo/util_axis_fifo.v"
 SOURCE+=" ../../util_cdc/sync_bits.v"
 SOURCE+=" ../../util_cdc/sync_event.v"
-SOURCE+=" ../../common/ad_mem.v"
+SOURCE+=" ../../common/ad_mem_asym.v"
 
 cd `dirname $0`
 source run_tb.sh

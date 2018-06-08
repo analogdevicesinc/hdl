@@ -57,7 +57,8 @@ module axi_dmac_transfer #(
   parameter ID_WIDTH = $clog2(FIFO_SIZE*2),
   parameter AXI_LENGTH_WIDTH_SRC = 8,
   parameter AXI_LENGTH_WIDTH_DEST = 8,
-  parameter ENABLE_DIAGNOSTICS_IF = 0
+  parameter ENABLE_DIAGNOSTICS_IF = 0,
+  parameter ALLOW_ASYM_MEM = 0
 ) (
   input ctrl_clk,
   input ctrl_resetn,
@@ -335,7 +336,8 @@ dmac_request_arb #(
   .ID_WIDTH (ID_WIDTH),
   .AXI_LENGTH_WIDTH_DEST (AXI_LENGTH_WIDTH_DEST),
   .AXI_LENGTH_WIDTH_SRC (AXI_LENGTH_WIDTH_SRC),
-  .ENABLE_DIAGNOSTICS_IF(ENABLE_DIAGNOSTICS_IF)
+  .ENABLE_DIAGNOSTICS_IF(ENABLE_DIAGNOSTICS_IF),
+  .ALLOW_ASYM_MEM (ALLOW_ASYM_MEM)
 ) i_request_arb (
   .req_clk (req_clk),
   .req_resetn (req_resetn),
