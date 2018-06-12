@@ -117,13 +117,9 @@ module axi_dacfifo #(
   reg                                 dac_xfer_out_m1 = 1'b0;
   reg                                 dac_xfer_out_bypass = 1'b0;
 
-  wire    [(AXI_DATA_WIDTH-1):0]      axi_rd_data_s;
-  wire                                axi_rd_ready_s;
-  wire                                axi_rd_valid_s;
   wire                                axi_xfer_req_s;
   (* dont_touch = "true" *) wire    [31:0]                      axi_last_addr_s;
   (* dont_touch = "true" *) wire    [ 7:0]                      axi_last_beats_s;
-  wire                                axi_dlast_s;
   wire    [ 3:0]                      dma_last_beats_s;
   wire    [(DAC_DATA_WIDTH-1):0]      dac_data_fifo_s;
   wire    [(DAC_DATA_WIDTH-1):0]      dac_data_bypass_s;
