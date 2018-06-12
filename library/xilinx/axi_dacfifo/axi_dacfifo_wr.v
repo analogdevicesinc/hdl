@@ -171,7 +171,6 @@ module axi_dacfifo_wr #(
   wire                                      axi_waddr_ready_s;
   wire                                      axi_wready_s;
   wire                                      axi_partial_burst_s;
-  wire                                      axi_last_burst_s;
   wire                                      axi_xlast_s;
   wire                                      axi_reset_s;
 
