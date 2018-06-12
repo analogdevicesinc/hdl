@@ -57,8 +57,8 @@ module axi_dacfifo_address_buffer #(
       waddr <= 0;
       raddr <= 0;
     end else begin
-      waddr <= (wea == 1'b1) ? waddr + 1 : waddr;
-      raddr <= (rea == 1'b1) ? raddr + 1 : raddr;
+      waddr <= (wea == 1'b1) ? waddr + 1'b1 : waddr;
+      raddr <= (rea == 1'b1) ? raddr + 1'b1 : raddr;
     end
   end
 
