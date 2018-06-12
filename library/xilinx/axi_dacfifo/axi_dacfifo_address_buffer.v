@@ -71,7 +71,7 @@ module axi_dacfifo_address_buffer #(
     .addra (waddr),
     .dina (din),
     .clkb (clk),
-    .reb (rea),
+    .reb (1'b1),
     .addrb (raddr),
     .doutb (dout));
 
