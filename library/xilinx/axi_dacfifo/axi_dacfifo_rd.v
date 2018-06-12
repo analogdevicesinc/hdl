@@ -437,7 +437,7 @@ module axi_dacfifo_rd #(
             (dac_mem_raddr == (dac_mem_laddr_b + dac_last_beats - 1))) begin
           dac_mem_raddr <= dac_mem_raddr + (MEM_RATIO - (dac_last_beats - 1));
         end else begin
-          dac_mem_raddr <= dac_mem_raddr + 1;
+          dac_mem_raddr <= dac_mem_raddr + 1'b1;
         end
       end
       dac_mem_raddr_g <= dac_mem_raddr_b2g_s;
