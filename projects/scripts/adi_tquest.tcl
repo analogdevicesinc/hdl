@@ -13,6 +13,20 @@ if {$slack > 0} {
   }
 }
 
+if {$slack > 0} {
+  set worst_path [get_timing_paths -npaths 1 -recovery]
+  foreach_in_collection path $worst_path {
+    set slack [get_path_info $path -slack]
+  }
+}
+
+if {$slack > 0} {
+  set worst_path [get_timing_paths -npaths 1 -removal]
+  foreach_in_collection path $worst_path {
+    set slack [get_path_info $path -slack]
+  }
+}
+
 if {$slack < 0} {
   set sof_files [glob *.sof]
   foreach sof_file $sof_files {
