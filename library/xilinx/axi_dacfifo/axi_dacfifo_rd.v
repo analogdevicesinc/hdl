@@ -433,7 +433,7 @@ module axi_dacfifo_rd #(
     end else begin
       dac_mem_laddr_b <= dac_mem_laddr_s;
       if (dac_mem_valid == 1'b1) begin
-        if ((dac_last_beats > 0) &&
+        if ((dac_last_beats != 0) &&
             (dac_mem_raddr == (dac_mem_laddr_b + dac_last_beats - 1))) begin
           dac_mem_raddr <= dac_mem_raddr + (MEM_RATIO - (dac_last_beats - 1));
         end else begin
