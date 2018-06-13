@@ -124,6 +124,7 @@
   ad_ip_parameter current_monitor_m1_dma CONFIG.DMA_2D_TRANSFER 0
   ad_ip_parameter current_monitor_m1_dma CONFIG.CYCLIC 0
   ad_ip_parameter current_monitor_m1_dma CONFIG.DMA_AXI_PROTOCOL_DEST 0
+  ad_ip_parameter current_monitor_m1_dma CONFIG.SYNC_TRANSFER_START true
     # data packer motor 1
   #
   ad_ip_instance util_cpack current_monitor_m1_pack
@@ -138,6 +139,7 @@
   ad_ip_parameter current_monitor_m2_dma CONFIG.DMA_2D_TRANSFER 0
   ad_ip_parameter current_monitor_m2_dma CONFIG.CYCLIC 0
   ad_ip_parameter current_monitor_m2_dma CONFIG.DMA_AXI_PROTOCOL_DEST 0
+  ad_ip_parameter current_monitor_m2_dma CONFIG.SYNC_TRANSFER_START true
     # data packer motor 2
   ad_ip_instance util_cpack current_monitor_m2_pack
   ad_ip_parameter current_monitor_m2_pack CONFIG.NUM_OF_CHANNELS 4
@@ -223,6 +225,7 @@
   ad_connect current_monitor_m1/vbus_o current_monitor_m1_pack/adc_data_2
   ad_connect current_monitor_m1_pack/adc_data current_monitor_m1_dma/fifo_wr_din
   ad_connect current_monitor_m1_pack/adc_valid current_monitor_m1_dma/fifo_wr_en
+  ad_connect current_monitor_m1_pack/adc_sync current_monitor_m1_dma/fifo_wr_sync
 
   ad_connect current_monitor_m1_pack/adc_enable_3 GND
   ad_connect current_monitor_m1_pack/adc_valid_3  GND
@@ -252,6 +255,7 @@
   ad_connect current_monitor_m2/vbus_o            current_monitor_m2_pack/adc_data_2
   ad_connect current_monitor_m2_pack/adc_valid    current_monitor_m2_dma/fifo_wr_en
   ad_connect current_monitor_m2_pack/adc_data     current_monitor_m2_dma/fifo_wr_din
+  ad_connect current_monitor_m2_pack/adc_sync     current_monitor_m2_dma/fifo_wr_sync
 
   ad_connect current_monitor_m2_pack/adc_enable_3 GND
   ad_connect current_monitor_m2_pack/adc_valid_3  GND
