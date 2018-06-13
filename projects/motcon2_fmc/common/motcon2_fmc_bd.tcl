@@ -75,6 +75,8 @@
   ad_ip_parameter sys_ps7 CONFIG.PCW_ENET0_ENET0_IO EMIO
   ad_ip_parameter sys_ps7 CONFIG.PCW_ENET0_GRP_MDIO_IO EMIO
   ad_ip_parameter sys_ps7 CONFIG.PCW_ENET1_PERIPHERAL_ENABLE 1
+  ad_ip_parameter sys_ps7 CONFIG.PCW_ENET1_GRP_MDIO_ENABLE 1
+  ad_ip_parameter sys_ps7 CONFIG.PCW_ENET1_GRP_MDIO_IO EMIO
 
   # Add additional clocks to be used by gmii to rgmii modules and current monitoring modules
   ad_ip_parameter sys_audio_clkgen CONFIG.CLKOUT2_USED true
