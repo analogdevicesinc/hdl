@@ -276,6 +276,7 @@
 
   ad_connect controller_m1/sensors_o          speed_detector_m1/hall_bemf_i
   ad_connect controller_m1/position_i         speed_detector_m1/position_o
+  ad_connect controller_m1/gpo_o              gpo_o
 
   ad_connect controller_m1/pwm_a_i GND
   ad_connect controller_m1/pwm_b_i GND
