@@ -52,4 +52,13 @@ adi_ip_files ad_ip_jesd204_tpl_dac [list \
 
 adi_ip_properties ad_ip_jesd204_tpl_dac
 
+adi_add_bus "link" "master" \
+	"xilinx.com:interface:axis_rtl:1.0" \
+	"xilinx.com:interface:axis:1.0" \
+	[list {"link_ready" "TREADY"} \
+	  {"link_valid" "TVALID"} \
+	  {"link_data" "TDATA"} \
+  ]
+adi_add_bus_clock "link_clk" "link"
+
 ipx::save_core [ipx::current_core]
