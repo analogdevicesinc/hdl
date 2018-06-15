@@ -31,10 +31,18 @@ set xcvr_instance NONE
 ###################################################################################################
 ###################################################################################################
 
-proc ad_ip_instance {i_ip i_name} {
+proc ad_ip_instance {i_ip i_name {i_params {}}} {
 
-  create_bd_cell -type ip -vlnv [get_ipdefs -all -filter "VLNV =~ *:${i_ip}:* && \
-    design_tool_contexts =~ *IPI* && UPGRADE_VERSIONS == \"\""] ${i_name}
+  set cell [create_bd_cell -type ip -vlnv [get_ipdefs -all -filter "VLNV =~ *:${i_ip}:* && \
+    design_tool_contexts =~ *IPI* && UPGRADE_VERSIONS == \"\""] ${i_name}]
+  if {$i_params != {}} {
+    set config {}
+    # Add CONFIG. prefix to all config options
+    foreach {k v} $i_params {
+      lappend config "CONFIG.$k" $v
+    }
+    set_property -dict $config $cell
+  }
 }
 
 proc ad_ip_parameter {i_name i_param i_value} {
