@@ -174,7 +174,7 @@ proc ad_reconct {p_name_1 p_name_2} {
 # lane_map maps the logical lane $n onto the physical lane $lane_map[$n]. If no
 # lane map is provided logical lane $n is mapped onto physical lane $n.
 #
-proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}}} {
+proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {device_clk {}}} {
   
   global xcvr_index
   global xcvr_tx_index
@@ -236,7 +236,22 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}}} {
 
   create_bd_port -dir I $m_sysref
   create_bd_port -dir ${ctrl_dir} $m_sync
-  ad_ip_instance proc_sys_reset ${a_jesd}_rstgen
+
+  if {$device_clk == {}} {
+    set device_clk ${u_xcvr}/${txrx}_out_clk_${index}
+    set rst_gen ${a_jesd}_rstgen
+    set create_rst_gen 1
+  } else {
+    set rst_gen ${device_clk}_rstgen
+    # Only create one reset gen per clock
+    set create_rst_gen [expr {[get_bd_cells -quiet ${rst_gen}] == {}}]
+  }
+
+  if {${create_rst_gen}} {
+    ad_ip_instance proc_sys_reset ${rst_gen}
+    ad_connect ${device_clk} ${rst_gen}/slowest_sync_clk
+    ad_connect sys_cpu_resetn ${rst_gen}/ext_reset_in
+  }
 
   for {set n 0} {$n < $no_of_lanes} {incr n} {
 
@@ -262,7 +277,7 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}}} {
     }
 
     ad_connect  ${a_xcvr}/up_ch_${n} ${u_xcvr}/up_${txrx}_${m}
-    ad_connect  ${u_xcvr}/${txrx}_out_clk_${index} ${u_xcvr}/${txrx}_clk_${m}
+    ad_connect  ${device_clk} ${u_xcvr}/${txrx}_clk_${m}
     if {$jesd204_type == 0} {
       ad_connect  ${u_xcvr}/${txrx}_${phys_lane} ${a_jesd}/${txrx}_phy${n}
     } else {
@@ -278,20 +293,17 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}}} {
   if {$jesd204_type == 0} {
     ad_connect  ${a_jesd}/sysref $m_sysref
     ad_connect  ${a_jesd}/sync $m_sync
-    ad_connect  ${u_xcvr}/${txrx}_out_clk_${index} ${a_jesd}/device_clk
+    ad_connect  ${device_clk} ${a_jesd}/device_clk
 #    if {$tx_or_rx_n == 0} {
 #      ad_connect  ${a_xcvr}/up_status ${a_jesd}/phy_ready
 #    }
   } else {
     ad_connect  ${a_jesd}/${txrx}_sysref $m_sysref
     ad_connect  ${a_jesd}/${txrx}_sync $m_sync
-    ad_connect  ${u_xcvr}/${txrx}_out_clk_${index} ${a_jesd}/${txrx}_core_clk
+    ad_connect  ${device_clk} ${a_jesd}/${txrx}_core_clk
     ad_connect  ${a_xcvr}/up_status ${a_jesd}/${txrx}_reset_done
-    ad_connect  ${a_jesd}_rstgen/peripheral_reset ${a_jesd}/${txrx}_reset
+    ad_connect  ${rst_gen}/peripheral_reset ${a_jesd}/${txrx}_reset
   }
-
-  ad_connect  ${u_xcvr}/${txrx}_out_clk_${index} ${a_jesd}_rstgen/slowest_sync_clk
-  ad_connect  sys_cpu_resetn ${a_jesd}_rstgen/ext_reset_in
 
   if {$tx_or_rx_n == 0} {
     set xcvr_rx_index [expr ($xcvr_rx_index + $no_of_lanes)]
