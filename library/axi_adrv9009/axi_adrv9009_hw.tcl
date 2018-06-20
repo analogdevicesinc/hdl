@@ -157,6 +157,22 @@ add_interface_port adc_os_ch_1  adc_os_data_q0    data     Output  32
 set_interface_property adc_os_ch_1 associatedClock if_adc_os_clk
 set_interface_property adc_os_ch_1 associatedReset none
 
+add_interface adc_os_ch_2 conduit end
+add_interface_port adc_os_ch_2  adc_os_enable_i1  enable   Output  1
+add_interface_port adc_os_ch_2  adc_os_valid_i1   valid    Output  1
+add_interface_port adc_os_ch_2  adc_os_data_i1    data     Output  32
+
+set_interface_property adc_os_ch_2 associatedClock if_adc_os_clk
+set_interface_property adc_os_ch_2 associatedReset none
+
+add_interface adc_os_ch_3 conduit end
+add_interface_port adc_os_ch_3  adc_os_enable_q1  enable   Output  1
+add_interface_port adc_os_ch_3  adc_os_valid_q1   valid    Output  1
+add_interface_port adc_os_ch_3  adc_os_data_q1    data     Output  32
+
+set_interface_property adc_os_ch_3 associatedClock if_adc_os_clk
+set_interface_property adc_os_ch_3 associatedReset none
+
 ad_alt_intf signal  adc_os_dovf      input   1 ovf
 
 # dac-channel interface
