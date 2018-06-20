@@ -1,0 +1,262 @@
+
+# adrv9009_tx JESD204
+
+add_instance adrv9009_tx_jesd204 adi_jesd204
+set_instance_parameter_value adrv9009_tx_jesd204 {ID} {0}
+set_instance_parameter_value adrv9009_tx_jesd204 {TX_OR_RX_N} {1}
+set_instance_parameter_value adrv9009_tx_jesd204 {SOFT_PCS} {true}
+set_instance_parameter_value adrv9009_tx_jesd204 {LANE_RATE} {9830.4}
+set_instance_parameter_value adrv9009_tx_jesd204 {REFCLK_FREQUENCY} {245.76}
+set_instance_parameter_value adrv9009_tx_jesd204 {NUM_OF_LANES} {4}
+set_instance_parameter_value adrv9009_tx_jesd204 {LANE_MAP} {0 3 2 1}
+
+add_connection sys_clk.clk adrv9009_tx_jesd204.sys_clk
+add_connection sys_clk.clk_reset adrv9009_tx_jesd204.sys_resetn
+add_interface tx_ref_clk clock sink
+set_interface_property tx_ref_clk EXPORT_OF adrv9009_tx_jesd204.ref_clk
+add_interface tx_serial_data conduit end
+set_interface_property tx_serial_data EXPORT_OF adrv9009_tx_jesd204.serial_data
+add_interface tx_sysref conduit end
+set_interface_property tx_sysref EXPORT_OF adrv9009_tx_jesd204.sysref
+add_interface tx_sync conduit end
+set_interface_property tx_sync EXPORT_OF adrv9009_tx_jesd204.sync
+
+# adrv9009_rx JESD204
+
+add_instance adrv9009_rx_jesd204 adi_jesd204
+set_instance_parameter_value adrv9009_rx_jesd204 {ID} {1}
+set_instance_parameter_value adrv9009_rx_jesd204 {TX_OR_RX_N} {0}
+set_instance_parameter_value adrv9009_rx_jesd204 {SOFT_PCS} {true}
+set_instance_parameter_value adrv9009_rx_jesd204 {LANE_RATE} {9830.4}
+set_instance_parameter_value adrv9009_rx_jesd204 {REFCLK_FREQUENCY} {245.76}
+set_instance_parameter_value adrv9009_rx_jesd204 {NUM_OF_LANES} {2}
+
+add_connection sys_clk.clk adrv9009_rx_jesd204.sys_clk
+add_connection sys_clk.clk_reset adrv9009_rx_jesd204.sys_resetn
+add_interface rx_ref_clk clock sink
+set_interface_property rx_ref_clk EXPORT_OF adrv9009_rx_jesd204.ref_clk
+add_interface rx_serial_data conduit end
+set_interface_property rx_serial_data EXPORT_OF adrv9009_rx_jesd204.serial_data
+add_interface rx_sysref conduit end
+set_interface_property rx_sysref EXPORT_OF adrv9009_rx_jesd204.sysref
+add_interface rx_sync conduit end
+set_interface_property rx_sync EXPORT_OF adrv9009_rx_jesd204.sync
+
+# adrv9009_rx_os JESD204
+
+add_instance adrv9009_rx_os_jesd204 adi_jesd204
+set_instance_parameter_value adrv9009_rx_os_jesd204 {ID} {1}
+set_instance_parameter_value adrv9009_rx_os_jesd204 {TX_OR_RX_N} {0}
+set_instance_parameter_value adrv9009_rx_os_jesd204 {SOFT_PCS} {true}
+set_instance_parameter_value adrv9009_rx_os_jesd204 {LANE_RATE} {9830.4}
+set_instance_parameter_value adrv9009_rx_os_jesd204 {REFCLK_FREQUENCY} {245.76}
+set_instance_parameter_value adrv9009_rx_os_jesd204 {NUM_OF_LANES} {2}
+
+add_connection sys_clk.clk adrv9009_rx_os_jesd204.sys_clk
+add_connection sys_clk.clk_reset adrv9009_rx_os_jesd204.sys_resetn
+add_interface rx_os_ref_clk clock sink
+set_interface_property rx_os_ref_clk EXPORT_OF adrv9009_rx_os_jesd204.ref_clk
+add_interface rx_os_serial_data conduit end
+set_interface_property rx_os_serial_data EXPORT_OF adrv9009_rx_os_jesd204.serial_data
+add_interface rx_os_sysref conduit end
+set_interface_property rx_os_sysref EXPORT_OF adrv9009_rx_os_jesd204.sysref
+add_interface rx_os_sync conduit end
+set_interface_property rx_os_sync EXPORT_OF adrv9009_rx_os_jesd204.sync
+
+# adrv9009-core
+
+add_instance axi_adrv9009 axi_adrv9009
+add_connection adrv9009_tx_jesd204.link_clk axi_adrv9009.if_dac_clk
+add_connection axi_adrv9009.if_dac_tx_data adrv9009_tx_jesd204.link_data
+add_connection adrv9009_rx_jesd204.link_clk axi_adrv9009.if_adc_clk
+add_connection adrv9009_rx_jesd204.link_sof axi_adrv9009.if_adc_rx_sof
+add_connection adrv9009_rx_jesd204.link_data axi_adrv9009.if_adc_rx_data
+add_connection adrv9009_rx_os_jesd204.link_clk axi_adrv9009.if_adc_os_clk
+add_connection adrv9009_rx_os_jesd204.link_sof axi_adrv9009.if_adc_rx_os_sof
+add_connection adrv9009_rx_os_jesd204.link_data axi_adrv9009.if_adc_rx_os_data
+add_connection sys_clk.clk axi_adrv9009.s_axi_clock
+add_connection sys_clk.clk_reset axi_adrv9009.s_axi_reset
+
+# pack(s) & unpack(s)
+
+add_instance axi_adrv9009_tx_upack util_upack
+set_instance_parameter_value axi_adrv9009_tx_upack {NUM_OF_CHANNELS} {4}
+set_instance_parameter_value axi_adrv9009_tx_upack {CHANNEL_DATA_WIDTH} {32}
+add_connection adrv9009_tx_jesd204.link_clk axi_adrv9009_tx_upack.if_dac_clk
+add_connection axi_adrv9009_tx_upack.dac_ch_0 axi_adrv9009.dac_ch_0
+add_connection axi_adrv9009_tx_upack.dac_ch_1 axi_adrv9009.dac_ch_1
+add_connection axi_adrv9009_tx_upack.dac_ch_2 axi_adrv9009.dac_ch_2
+add_connection axi_adrv9009_tx_upack.dac_ch_3 axi_adrv9009.dac_ch_3
+
+add_instance axi_adrv9009_rx_cpack util_cpack
+set_instance_parameter_value axi_adrv9009_rx_cpack {NUM_OF_CHANNELS} {4}
+set_instance_parameter_value axi_adrv9009_rx_cpack {CHANNEL_DATA_WIDTH} {16}
+add_connection sys_clk.clk_reset axi_adrv9009_rx_cpack.if_adc_rst
+add_connection adrv9009_rx_jesd204.link_clk axi_adrv9009_rx_cpack.if_adc_clk
+add_connection axi_adrv9009.adc_ch_0 axi_adrv9009_rx_cpack.adc_ch_0
+add_connection axi_adrv9009.adc_ch_1 axi_adrv9009_rx_cpack.adc_ch_1
+add_connection axi_adrv9009.adc_ch_2 axi_adrv9009_rx_cpack.adc_ch_2
+add_connection axi_adrv9009.adc_ch_3 axi_adrv9009_rx_cpack.adc_ch_3
+
+add_instance axi_adrv9009_rx_os_cpack util_cpack
+set_instance_parameter_value axi_adrv9009_rx_os_cpack {NUM_OF_CHANNELS} {2}
+set_instance_parameter_value axi_adrv9009_rx_os_cpack {CHANNEL_DATA_WIDTH} {32}
+add_connection sys_clk.clk_reset axi_adrv9009_rx_os_cpack.if_adc_rst
+add_connection adrv9009_rx_os_jesd204.link_clk axi_adrv9009_rx_os_cpack.if_adc_clk
+add_connection axi_adrv9009.adc_os_ch_0 axi_adrv9009_rx_os_cpack.adc_ch_0
+add_connection axi_adrv9009.adc_os_ch_1 axi_adrv9009_rx_os_cpack.adc_ch_1
+
+# dac fifo
+
+add_interface tx_fifo_bypass conduit end
+set_interface_property tx_fifo_bypass EXPORT_OF avl_adrv9009_tx_fifo.if_bypass
+
+add_connection adrv9009_tx_jesd204.link_clk avl_adrv9009_tx_fifo.if_dac_clk
+add_connection adrv9009_tx_jesd204.link_reset avl_adrv9009_tx_fifo.if_dac_rst
+add_connection axi_adrv9009_tx_upack.if_dac_valid avl_adrv9009_tx_fifo.if_dac_valid
+add_connection avl_adrv9009_tx_fifo.if_dac_data axi_adrv9009_tx_upack.if_dac_data
+add_connection avl_adrv9009_tx_fifo.if_dac_dunf axi_adrv9009.if_dac_dunf
+
+# dac & adc dma
+
+add_instance axi_adrv9009_tx_dma axi_dmac
+set_instance_parameter_value axi_adrv9009_tx_dma {ID} {0}
+set_instance_parameter_value axi_adrv9009_tx_dma {DMA_DATA_WIDTH_SRC} {128}
+set_instance_parameter_value axi_adrv9009_tx_dma {DMA_DATA_WIDTH_DEST} {128}
+set_instance_parameter_value axi_adrv9009_tx_dma {DMA_LENGTH_WIDTH} {24}
+set_instance_parameter_value axi_adrv9009_tx_dma {DMA_2D_TRANSFER} {0}
+set_instance_parameter_value axi_adrv9009_tx_dma {AXI_SLICE_DEST} {0}
+set_instance_parameter_value axi_adrv9009_tx_dma {AXI_SLICE_SRC} {0}
+set_instance_parameter_value axi_adrv9009_tx_dma {SYNC_TRANSFER_START} {0}
+set_instance_parameter_value axi_adrv9009_tx_dma {CYCLIC} {1}
+set_instance_parameter_value axi_adrv9009_tx_dma {DMA_TYPE_DEST} {1}
+set_instance_parameter_value axi_adrv9009_tx_dma {DMA_TYPE_SRC} {0}
+set_instance_parameter_value axi_adrv9009_tx_dma {FIFO_SIZE} {16}
+add_connection sys_dma_clk.clk avl_adrv9009_tx_fifo.if_dma_clk
+add_connection sys_dma_clk.clk_reset avl_adrv9009_tx_fifo.if_dma_rst
+add_connection sys_dma_clk.clk axi_adrv9009_tx_dma.if_m_axis_aclk
+add_connection axi_adrv9009_tx_dma.if_m_axis_valid avl_adrv9009_tx_fifo.if_dma_valid
+add_connection axi_adrv9009_tx_dma.if_m_axis_data avl_adrv9009_tx_fifo.if_dma_data
+add_connection axi_adrv9009_tx_dma.if_m_axis_last avl_adrv9009_tx_fifo.if_dma_xfer_last
+add_connection axi_adrv9009_tx_dma.if_m_axis_xfer_req avl_adrv9009_tx_fifo.if_dma_xfer_req
+add_connection avl_adrv9009_tx_fifo.if_dma_ready axi_adrv9009_tx_dma.if_m_axis_ready
+add_connection sys_clk.clk axi_adrv9009_tx_dma.s_axi_clock
+add_connection sys_clk.clk_reset axi_adrv9009_tx_dma.s_axi_reset
+add_connection sys_dma_clk.clk axi_adrv9009_tx_dma.m_src_axi_clock
+add_connection sys_dma_clk.clk_reset axi_adrv9009_tx_dma.m_src_axi_reset
+
+add_instance axi_adrv9009_rx_dma axi_dmac
+set_instance_parameter_value axi_adrv9009_rx_dma {ID} {0}
+set_instance_parameter_value axi_adrv9009_rx_dma {DMA_DATA_WIDTH_SRC} {64}
+set_instance_parameter_value axi_adrv9009_rx_dma {DMA_DATA_WIDTH_DEST} {128}
+set_instance_parameter_value axi_adrv9009_rx_dma {DMA_LENGTH_WIDTH} {24}
+set_instance_parameter_value axi_adrv9009_rx_dma {DMA_2D_TRANSFER} {0}
+set_instance_parameter_value axi_adrv9009_rx_dma {AXI_SLICE_DEST} {0}
+set_instance_parameter_value axi_adrv9009_rx_dma {AXI_SLICE_SRC} {0}
+set_instance_parameter_value axi_adrv9009_rx_dma {SYNC_TRANSFER_START} {1}
+set_instance_parameter_value axi_adrv9009_rx_dma {CYCLIC} {0}
+set_instance_parameter_value axi_adrv9009_rx_dma {DMA_TYPE_DEST} {0}
+set_instance_parameter_value axi_adrv9009_rx_dma {DMA_TYPE_SRC} {2}
+set_instance_parameter_value axi_adrv9009_rx_dma {FIFO_SIZE} {16}
+add_connection adrv9009_rx_jesd204.link_clk axi_adrv9009_rx_dma.if_fifo_wr_clk
+add_connection axi_adrv9009_rx_cpack.if_adc_valid axi_adrv9009_rx_dma.if_fifo_wr_en
+add_connection axi_adrv9009_rx_cpack.if_adc_sync axi_adrv9009_rx_dma.if_fifo_wr_sync
+add_connection axi_adrv9009_rx_cpack.if_adc_data axi_adrv9009_rx_dma.if_fifo_wr_din
+add_connection axi_adrv9009_rx_dma.if_fifo_wr_overflow axi_adrv9009.if_adc_dovf
+add_connection sys_clk.clk axi_adrv9009_rx_dma.s_axi_clock
+add_connection sys_clk.clk_reset axi_adrv9009_rx_dma.s_axi_reset
+add_connection sys_dma_clk.clk axi_adrv9009_rx_dma.m_dest_axi_clock
+add_connection sys_dma_clk.clk_reset axi_adrv9009_rx_dma.m_dest_axi_reset
+
+add_instance axi_adrv9009_rx_os_dma axi_dmac
+set_instance_parameter_value axi_adrv9009_rx_os_dma {ID} {0}
+set_instance_parameter_value axi_adrv9009_rx_os_dma {DMA_DATA_WIDTH_SRC} {64}
+set_instance_parameter_value axi_adrv9009_rx_os_dma {DMA_DATA_WIDTH_DEST} {128}
+set_instance_parameter_value axi_adrv9009_rx_os_dma {DMA_LENGTH_WIDTH} {24}
+set_instance_parameter_value axi_adrv9009_rx_os_dma {DMA_2D_TRANSFER} {0}
+set_instance_parameter_value axi_adrv9009_rx_os_dma {AXI_SLICE_DEST} {0}
+set_instance_parameter_value axi_adrv9009_rx_os_dma {AXI_SLICE_SRC} {0}
+set_instance_parameter_value axi_adrv9009_rx_os_dma {SYNC_TRANSFER_START} {1}
+set_instance_parameter_value axi_adrv9009_rx_os_dma {CYCLIC} {0}
+set_instance_parameter_value axi_adrv9009_rx_os_dma {DMA_TYPE_DEST} {0}
+set_instance_parameter_value axi_adrv9009_rx_os_dma {DMA_TYPE_SRC} {2}
+set_instance_parameter_value axi_adrv9009_rx_os_dma {FIFO_SIZE} {16}
+add_connection adrv9009_rx_os_jesd204.link_clk axi_adrv9009_rx_os_dma.if_fifo_wr_clk
+add_connection axi_adrv9009_rx_os_cpack.if_adc_valid axi_adrv9009_rx_os_dma.if_fifo_wr_en
+add_connection axi_adrv9009_rx_os_cpack.if_adc_sync axi_adrv9009_rx_os_dma.if_fifo_wr_sync
+add_connection axi_adrv9009_rx_os_cpack.if_adc_data axi_adrv9009_rx_os_dma.if_fifo_wr_din
+add_connection axi_adrv9009_rx_os_dma.if_fifo_wr_overflow axi_adrv9009.if_adc_os_dovf
+add_connection sys_clk.clk axi_adrv9009_rx_os_dma.s_axi_clock
+add_connection sys_clk.clk_reset axi_adrv9009_rx_os_dma.s_axi_reset
+add_connection sys_dma_clk.clk axi_adrv9009_rx_os_dma.m_dest_axi_clock
+add_connection sys_dma_clk.clk_reset axi_adrv9009_rx_os_dma.m_dest_axi_reset
+
+# adrv9009 gpio
+
+add_instance avl_adrv9009_gpio altera_avalon_pio
+set_instance_parameter_value avl_adrv9009_gpio {direction} {Bidir}
+set_instance_parameter_value avl_adrv9009_gpio {generateIRQ} {1}
+set_instance_parameter_value avl_adrv9009_gpio {width} {19}
+add_connection sys_clk.clk avl_adrv9009_gpio.clk
+add_connection sys_clk.clk_reset avl_adrv9009_gpio.reset
+add_interface adrv9009_gpio conduit end
+set_interface_property adrv9009_gpio EXPORT_OF avl_adrv9009_gpio.external_connection
+
+# reconfig sharing
+
+for {set i 0} {$i < 4} {incr i} {
+  add_instance avl_adxcfg_${i} avl_adxcfg
+  add_connection sys_clk.clk avl_adxcfg_${i}.rcfg_clk
+  add_connection sys_clk.clk_reset avl_adxcfg_${i}.rcfg_reset_n
+  add_connection avl_adxcfg_${i}.rcfg_m0 adrv9009_tx_jesd204.phy_reconfig_${i}
+
+  if {$i < 2} {
+    add_connection avl_adxcfg_${i}.rcfg_m1 adrv9009_rx_jesd204.phy_reconfig_${i}
+  } else {
+    set j [expr $i - 2]
+    add_connection avl_adxcfg_${i}.rcfg_m1 adrv9009_rx_os_jesd204.phy_reconfig_${j}
+  }
+}
+
+# addresses
+
+ad_cpu_interconnect 0x00020000 adrv9009_tx_jesd204.link_reconfig
+ad_cpu_interconnect 0x00024000 adrv9009_tx_jesd204.link_management
+ad_cpu_interconnect 0x00025000 adrv9009_tx_jesd204.link_pll_reconfig
+ad_cpu_interconnect 0x00026000 adrv9009_tx_jesd204.lane_pll_reconfig
+ad_cpu_interconnect 0x00028000 avl_adxcfg_0.rcfg_s0
+ad_cpu_interconnect 0x00029000 avl_adxcfg_1.rcfg_s0
+ad_cpu_interconnect 0x0002a000 avl_adxcfg_2.rcfg_s0
+ad_cpu_interconnect 0x0002b000 avl_adxcfg_3.rcfg_s0
+ad_cpu_interconnect 0x0002c000 axi_adrv9009_tx_dma.s_axi
+
+ad_cpu_interconnect 0x00030000 adrv9009_rx_jesd204.link_reconfig
+ad_cpu_interconnect 0x00034000 adrv9009_rx_jesd204.link_management
+ad_cpu_interconnect 0x00035000 adrv9009_rx_jesd204.link_pll_reconfig
+ad_cpu_interconnect 0x00038000 avl_adxcfg_0.rcfg_s1
+ad_cpu_interconnect 0x00039000 avl_adxcfg_1.rcfg_s1
+ad_cpu_interconnect 0x0003c000 axi_adrv9009_rx_dma.s_axi
+
+ad_cpu_interconnect 0x00040000 adrv9009_rx_os_jesd204.link_reconfig
+ad_cpu_interconnect 0x00044000 adrv9009_rx_os_jesd204.link_management
+ad_cpu_interconnect 0x00045000 adrv9009_rx_os_jesd204.link_pll_reconfig
+ad_cpu_interconnect 0x00048000 avl_adxcfg_2.rcfg_s1
+ad_cpu_interconnect 0x00049000 avl_adxcfg_3.rcfg_s1
+ad_cpu_interconnect 0x0004c000 axi_adrv9009_rx_os_dma.s_axi
+
+ad_cpu_interconnect 0x00050000 axi_adrv9009.s_axi
+ad_cpu_interconnect 0x00060000 avl_adrv9009_gpio.s1
+
+# dma interconnects
+
+ad_dma_interconnect axi_adrv9009_tx_dma.m_src_axi
+ad_dma_interconnect axi_adrv9009_rx_dma.m_dest_axi
+ad_dma_interconnect axi_adrv9009_rx_os_dma.m_dest_axi
+
+# interrupts
+
+ad_cpu_interrupt 11 axi_adrv9009_tx_dma.interrupt_sender
+ad_cpu_interrupt 12 axi_adrv9009_rx_dma.interrupt_sender
+ad_cpu_interrupt 13 axi_adrv9009_rx_os_dma.interrupt_sender
+ad_cpu_interrupt 14 avl_adrv9009_gpio.irq
+
