@@ -88,6 +88,12 @@ module axi_adrv9009 #(
   output                  adc_os_enable_q0,
   output                  adc_os_valid_q0,
   output      [ 31:0]     adc_os_data_q0,
+  output                  adc_os_enable_i1,
+  output                  adc_os_valid_i1,
+  output      [ 31:0]     adc_os_data_i1,
+  output                  adc_os_enable_q1,
+  output                  adc_os_valid_q1,
+  output      [ 31:0]     adc_os_data_q1,
   input                   adc_os_dovf,
 
   output                  dac_enable_i0,
@@ -143,7 +149,7 @@ module axi_adrv9009 #(
   wire              adc_os_rst;
   wire    [ 63:0]   adc_data_s;
   wire              adc_os_valid_s;
-  wire    [ 63:0]   adc_os_data_s;
+  wire    [127:0]   adc_os_data_s;
   wire              dac_rst;
   wire    [127:0]   dac_data_s;
   wire              up_wreq_s;
@@ -189,6 +195,7 @@ module axi_adrv9009 #(
     .adc_os_clk (adc_os_clk),
     .adc_rx_os_sof (adc_rx_os_sof),
     .adc_rx_os_data (adc_rx_os_data),
+    .adc_r1_mode (adc_r1_mode),
     .adc_data (adc_data_s),
     .adc_os_valid (adc_os_valid_s),
     .adc_os_data (adc_os_data_s),
@@ -239,12 +246,19 @@ module axi_adrv9009 #(
     .adc_os_clk (adc_os_clk),
     .adc_os_valid (adc_os_valid_s),
     .adc_os_data (adc_os_data_s),
+    .adc_r1_mode (adc_r1_mode),
     .adc_os_enable_i0 (adc_os_enable_i0),
     .adc_os_valid_i0 (adc_os_valid_i0),
     .adc_os_data_i0 (adc_os_data_i0),
     .adc_os_enable_q0 (adc_os_enable_q0),
     .adc_os_valid_q0 (adc_os_valid_q0),
     .adc_os_data_q0 (adc_os_data_q0),
+    .adc_os_enable_i1 (adc_os_enable_i1),
+    .adc_os_valid_i1 (adc_os_valid_i1),
+    .adc_os_data_i1 (adc_os_data_i1),
+    .adc_os_enable_q1 (adc_os_enable_q1),
+    .adc_os_valid_q1 (adc_os_valid_q1),
+    .adc_os_data_q1 (adc_os_data_q1),
     .adc_os_dovf (adc_os_dovf),
     .up_rstn (up_rstn),
     .up_clk (up_clk),

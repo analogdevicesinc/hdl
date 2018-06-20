@@ -45,15 +45,15 @@ module axi_adrv9009_rx_channel #(
 
   // adc interface
 
-  input                   adc_clk,
-  input                   adc_rst,
-  input                   adc_valid_in,
+  input                           adc_clk,
+  input                           adc_rst,
+  input                           adc_valid_in,
   input       [(DATA_WIDTH-1):0]  adc_data_in,
-  output                  adc_valid_out,
+  output                          adc_valid_out,
   output      [(DATA_WIDTH-1):0]  adc_data_out,
   input       [(DATA_WIDTH-1):0]  adc_data_iq_in,
   output      [(DATA_WIDTH-1):0]  adc_data_iq_out,
-  output                  adc_enable,
+  output                          adc_enable,
 
   // channel interface
 

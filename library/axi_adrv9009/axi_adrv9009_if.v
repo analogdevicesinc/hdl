@@ -44,10 +44,11 @@ module axi_adrv9009_if (
   input                   adc_os_clk,
   input       [ 3:0]      adc_rx_os_sof,
   input       [ 63:0]     adc_rx_os_data,
+  input                   adc_r1_mode,
 
   output      [ 63:0]     adc_data,
-  output                  adc_os_valid,
-  output      [ 63:0]     adc_os_data,
+  output reg              adc_os_valid,
+  output reg  [127:0]     adc_os_data,
 
   // transmit
 
@@ -61,46 +62,73 @@ module axi_adrv9009_if (
 
   wire    [ 63:0]   adc_rx_data_s;
   wire    [ 63:0]   adc_rx_os_data_s;
+  wire              rx_os_sof;
 
   // delineating
 
-  assign adc_data[((8* 7)+7):(8* 7)] = adc_rx_data_s[((8* 6)+7):(8* 6)];
-  assign adc_data[((8* 6)+7):(8* 6)] = adc_rx_data_s[((8* 7)+7):(8* 7)];
-  assign adc_data[((8* 5)+7):(8* 5)] = adc_rx_data_s[((8* 4)+7):(8* 4)];
-  assign adc_data[((8* 4)+7):(8* 4)] = adc_rx_data_s[((8* 5)+7):(8* 5)];
-  assign adc_data[((8* 3)+7):(8* 3)] = adc_rx_data_s[((8* 2)+7):(8* 2)];
-  assign adc_data[((8* 2)+7):(8* 2)] = adc_rx_data_s[((8* 3)+7):(8* 3)];
-  assign adc_data[((8* 1)+7):(8* 1)] = adc_rx_data_s[((8* 0)+7):(8* 0)];
-  assign adc_data[((8* 0)+7):(8* 0)] = adc_rx_data_s[((8* 1)+7):(8* 1)];
+  assign adc_data[8* 7+:8] = adc_rx_data_s[8* 6+:8];
+  assign adc_data[8* 6+:8] = adc_rx_data_s[8* 7+:8];
+  assign adc_data[8* 5+:8] = adc_rx_data_s[8* 4+:8];
+  assign adc_data[8* 4+:8] = adc_rx_data_s[8* 5+:8];
+  assign adc_data[8* 3+:8] = adc_rx_data_s[8* 2+:8];
+  assign adc_data[8* 2+:8] = adc_rx_data_s[8* 3+:8];
+  assign adc_data[8* 1+:8] = adc_rx_data_s[8* 0+:8];
+  assign adc_data[8* 0+:8] = adc_rx_data_s[8* 1+:8];
 
-  assign adc_os_valid = 'd1;
-  assign adc_os_data[((8* 7)+7):(8* 7)] = adc_rx_os_data_s[((8* 6)+7):(8* 6)];
-  assign adc_os_data[((8* 6)+7):(8* 6)] = adc_rx_os_data_s[((8* 7)+7):(8* 7)];
-  assign adc_os_data[((8* 5)+7):(8* 5)] = adc_rx_os_data_s[((8* 4)+7):(8* 4)];
-  assign adc_os_data[((8* 4)+7):(8* 4)] = adc_rx_os_data_s[((8* 5)+7):(8* 5)];
-  assign adc_os_data[((8* 3)+7):(8* 3)] = adc_rx_os_data_s[((8* 2)+7):(8* 2)];
-  assign adc_os_data[((8* 2)+7):(8* 2)] = adc_rx_os_data_s[((8* 3)+7):(8* 3)];
-  assign adc_os_data[((8* 1)+7):(8* 1)] = adc_rx_os_data_s[((8* 0)+7):(8* 0)];
-  assign adc_os_data[((8* 0)+7):(8* 0)] = adc_rx_os_data_s[((8* 1)+7):(8* 1)];
-
-  assign dac_tx_data[((8*15)+7):(8*15)] = dac_data[((8*14)+7):(8*14)];
-  assign dac_tx_data[((8*14)+7):(8*14)] = dac_data[((8*15)+7):(8*15)];
-  assign dac_tx_data[((8*13)+7):(8*13)] = dac_data[((8*12)+7):(8*12)];
-  assign dac_tx_data[((8*12)+7):(8*12)] = dac_data[((8*13)+7):(8*13)];
-  assign dac_tx_data[((8*11)+7):(8*11)] = dac_data[((8*10)+7):(8*10)];
-  assign dac_tx_data[((8*10)+7):(8*10)] = dac_data[((8*11)+7):(8*11)];
-  assign dac_tx_data[((8* 9)+7):(8* 9)] = dac_data[((8* 8)+7):(8* 8)];
-  assign dac_tx_data[((8* 8)+7):(8* 8)] = dac_data[((8* 9)+7):(8* 9)];
-  assign dac_tx_data[((8* 7)+7):(8* 7)] = dac_data[((8* 6)+7):(8* 6)];
-  assign dac_tx_data[((8* 6)+7):(8* 6)] = dac_data[((8* 7)+7):(8* 7)];
-  assign dac_tx_data[((8* 5)+7):(8* 5)] = dac_data[((8* 4)+7):(8* 4)];
-  assign dac_tx_data[((8* 4)+7):(8* 4)] = dac_data[((8* 5)+7):(8* 5)];
-  assign dac_tx_data[((8* 3)+7):(8* 3)] = dac_data[((8* 2)+7):(8* 2)];
-  assign dac_tx_data[((8* 2)+7):(8* 2)] = dac_data[((8* 3)+7):(8* 3)];
-  assign dac_tx_data[((8* 1)+7):(8* 1)] = dac_data[((8* 0)+7):(8* 0)];
-  assign dac_tx_data[((8* 0)+7):(8* 0)] = dac_data[((8* 1)+7):(8* 1)];
+  assign dac_tx_data[8*15+:8] = dac_data[8*14+:8];
+  assign dac_tx_data[8*14+:8] = dac_data[8*15+:8];
+  assign dac_tx_data[8*13+:8] = dac_data[8*12+:8];
+  assign dac_tx_data[8*12+:8] = dac_data[8*13+:8];
+  assign dac_tx_data[8*11+:8] = dac_data[8*10+:8];
+  assign dac_tx_data[8*10+:8] = dac_data[8*11+:8];
+  assign dac_tx_data[8* 9+:8] = dac_data[8* 8+:8];
+  assign dac_tx_data[8* 8+:8] = dac_data[8* 9+:8];
+  assign dac_tx_data[8* 7+:8] = dac_data[8* 6+:8];
+  assign dac_tx_data[8* 6+:8] = dac_data[8* 7+:8];
+  assign dac_tx_data[8* 5+:8] = dac_data[8* 4+:8];
+  assign dac_tx_data[8* 4+:8] = dac_data[8* 5+:8];
+  assign dac_tx_data[8* 3+:8] = dac_data[8* 2+:8];
+  assign dac_tx_data[8* 2+:8] = dac_data[8* 3+:8];
+  assign dac_tx_data[8* 1+:8] = dac_data[8* 0+:8];
+  assign dac_tx_data[8* 0+:8] = dac_data[8* 1+:8];
 
   // instantiations
+
+  always @(posedge adc_clk) begin
+    if (adc_r1_mode == 1'b1) begin
+      adc_os_valid <= 'd1;
+      adc_os_data[8* 7+:8] <= adc_rx_os_data_s[8* 6+:8];
+      adc_os_data[8* 6+:8] <= adc_rx_os_data_s[8* 7+:8];
+      adc_os_data[8* 5+:8] <= adc_rx_os_data_s[8* 4+:8];
+      adc_os_data[8* 4+:8] <= adc_rx_os_data_s[8* 5+:8];
+      adc_os_data[8* 3+:8] <= adc_rx_os_data_s[8* 2+:8];
+      adc_os_data[8* 2+:8] <= adc_rx_os_data_s[8* 3+:8];
+      adc_os_data[8* 1+:8] <= adc_rx_os_data_s[8* 0+:8];
+      adc_os_data[8* 0+:8] <= adc_rx_os_data_s[8* 1+:8];
+      adc_os_data[127:64] <= 64'h0;
+    end else begin
+      adc_os_valid <= !adc_os_valid;
+      if (adc_os_valid == 1'b1) begin
+        adc_os_data[8*13+:8] <= adc_rx_os_data_s[8* 6+:8];
+        adc_os_data[8*12+:8] <= adc_rx_os_data_s[8* 7+:8];
+        adc_os_data[8* 9+:8] <= adc_rx_os_data_s[8* 4+:8];
+        adc_os_data[8* 8+:8] <= adc_rx_os_data_s[8* 5+:8];
+        adc_os_data[8* 5+:8] <= adc_rx_os_data_s[8* 2+:8];
+        adc_os_data[8* 4+:8] <= adc_rx_os_data_s[8* 3+:8];
+        adc_os_data[8* 1+:8] <= adc_rx_os_data_s[8* 0+:8];
+        adc_os_data[8* 0+:8] <= adc_rx_os_data_s[8* 1+:8];
+      end else begin
+        adc_os_data[8*15+:8] <= adc_rx_os_data_s[8* 6+:8];
+        adc_os_data[8*14+:8] <= adc_rx_os_data_s[8* 7+:8];
+        adc_os_data[8*11+:8] <= adc_rx_os_data_s[8* 4+:8];
+        adc_os_data[8*10+:8] <= adc_rx_os_data_s[8* 5+:8];
+        adc_os_data[8* 7+:8] <= adc_rx_os_data_s[8* 2+:8];
+        adc_os_data[8* 6+:8] <= adc_rx_os_data_s[8* 3+:8];
+        adc_os_data[8* 3+:8] <= adc_rx_os_data_s[8* 0+:8];
+        adc_os_data[8* 2+:8] <= adc_rx_os_data_s[8* 1+:8];
+      end
+    end
+  end
 
   genvar n;
 
@@ -110,16 +138,16 @@ module axi_adrv9009_if (
   ad_xcvr_rx_if i_xcvr_rx_if (
     .rx_clk (adc_clk),
     .rx_ip_sof (adc_rx_sof),
-    .rx_ip_data (adc_rx_data[((n*32)+31):(n*32)]),
+    .rx_ip_data (adc_rx_data[n*32+:32]),
     .rx_sof (),
-    .rx_data (adc_rx_data_s[((n*32)+31):(n*32)]));
+    .rx_data (adc_rx_data_s[n*32+:32]));
 
   ad_xcvr_rx_if i_xcvr_rx_os_if (
     .rx_clk (adc_os_clk),
     .rx_ip_sof (adc_rx_os_sof),
-    .rx_ip_data (adc_rx_os_data[((n*32)+31):(n*32)]),
-    .rx_sof (),
-    .rx_data (adc_rx_os_data_s[((n*32)+31):(n*32)]));
+    .rx_ip_data (adc_rx_os_data[n*32+:32]),
+    .rx_sof (rx_os_sof),
+    .rx_data (adc_rx_os_data_s[n*32+:32]));
   end
   endgenerate
 
