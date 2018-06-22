@@ -96,9 +96,6 @@ adi_set_ports_dependency "dma_req_rx_aclk" \
 adi_set_ports_dependency "dma_req_rx_rstn" \
 	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 1)"
 
-ipx::associate_bus_interfaces -clock s_axi_aclk -reset s_axi_aresetn [ipx::current_core]
-ipx::associate_bus_interfaces -clock s_axi_aclk -reset s_axis_aresetn -clear [ipx::current_core]
-
 # Tie-off optional inputs to 0
 set_property driver_value 0 [ipx::get_ports -filter "direction==in && enablement_dependency!={}"  -of_objects [ipx::current_core]]
 
