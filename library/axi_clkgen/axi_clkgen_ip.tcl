@@ -15,8 +15,6 @@ adi_ip_files axi_clkgen [list \
 adi_ip_properties axi_clkgen
 adi_ip_bd axi_clkgen "bd/bd.tcl"
 
-ipx::associate_bus_interfaces -busif s_axi -clock s_axi_aclk [ipx::current_core]
-
 ipx::infer_bus_interface clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 ipx::infer_bus_interface clk2 xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 ipx::infer_bus_interface clk_0 xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]

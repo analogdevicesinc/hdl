@@ -46,7 +46,5 @@ adi_set_ports_dependency "dma_req_aclk" \
 adi_set_ports_dependency "dma_req_rstn" \
 	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 1)"
 
-ipx::associate_bus_interfaces -clock s_axi_aclk -reset s_axis_aresetn -clear [ipx::current_core]
-ipx::associate_bus_interfaces -clock s_axi_aclk -reset s_axi_aresetn [ipx::current_core]
 ipx::save_core [ipx::current_core]
 
