@@ -3,7 +3,7 @@
 ## check tool version
 
 if {![info exists REQUIRED_VIVADO_VERSION]} {
-  set REQUIRED_VIVADO_VERSION "2017.4.1"
+  set REQUIRED_VIVADO_VERSION "2018.2"
 }
 
 if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
