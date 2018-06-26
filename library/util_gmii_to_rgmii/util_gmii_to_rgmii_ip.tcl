@@ -12,7 +12,6 @@ adi_ip_files util_gmii_to_rgmii [list \
 adi_ip_properties_lite util_gmii_to_rgmii
 
 ipx::infer_bus_interface {gmii_tx_clk gmii_txd gmii_tx_en gmii_tx_er gmii_crs gmii_col gmii_rx_clk gmii_rxd gmii_rx_dv gmii_rx_er} xilinx.com:interface:gmii_rtl:1.0 [ipx::current_core]
-set_property name {gmii} [ipx::get_bus_interfaces gmii_1 -of_objects [ipx::current_core]]
 ipx::infer_bus_interface {rgmii_td rgmii_tx_ctl rgmii_txc rgmii_rd rgmii_rx_ctl rgmii_rxc} xilinx.com:interface:rgmii_rtl:1.0 [ipx::current_core]
 
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.IODELAY_CTRL')) = 1} \
