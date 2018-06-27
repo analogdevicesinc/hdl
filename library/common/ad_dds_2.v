@@ -87,76 +87,69 @@ module ad_dds_2 #(
   wire    [DDS_P_DW-1:0]  dds_phase_0_s;
   wire    [DDS_P_DW-1:0]  dds_phase_1_s;
 
-  // disable DDS
   generate
-    if (DISABLE == 1) begin
-      // assign 0 for the exact buss width to avoid warnings
-      assign dds_data = {DDS_DW{1'b0}};
-    end else begin
+    // dds channel output
+    assign dds_data = dds_data_out;
 
-      // dds channel output
-      assign dds_data = dds_data_out;
-
-      // output data format
-      always @(posedge clk) begin
-        dds_data_out[DDS_DW-1] <= dds_data_width[DDS_DW-1] ^ dds_format;
-        dds_data_out[DDS_DW-2: 0] <= dds_data_width[DDS_DW-2: 0];
-      end
-
-      // set desired data width
-      always @(posedge clk) begin
-        if (DDS_DW <= DDS_D_DW) begin // truncation
-          // fair rownding
-          dds_data_rownd <= dds_data_int + {(C_T_WIDTH){dds_data_int[DDS_D_DW-1]}};
-          dds_data_width <= dds_data_rownd[DDS_D_DW-1:DDS_D_DW-DDS_DW];
-        end else begin // concatenation
-          dds_data_width <= dds_data_int << C_T_WIDTH;
-        end
-      end
-
-      // dual tone
-      always @(posedge clk) begin
-        dds_data_int <= dds_data_0_s + dds_data_1_s;
-      end
-
-       always @(posedge clk) begin
-         dds_scale_0_d <= dds_scale_0;
-         dds_scale_1_d <= dds_scale_1;
-       end
-
-       // phase
-        if (DDS_P_DW >= PHASE_DW) begin
-          assign dds_phase_0_s = {dds_phase_0,{DDS_P_DW-(PHASE_DW-1){1'b0}}};
-          assign dds_phase_1_s = {dds_phase_1,{DDS_P_DW-(PHASE_DW-1){1'b0}}};
-        end else begin
-          assign dds_phase_0_s = {dds_phase_0[(PHASE_DW-1):PHASE_DW-DDS_P_DW],1'b0};
-          assign dds_phase_1_s = {dds_phase_1[(PHASE_DW-1):PHASE_DW-DDS_P_DW],1'b0};
-        end
-
-       // dds-1
-
-       ad_dds_1 #(
-         .DDS_TYPE(DDS_TYPE),
-         .DDS_D_DW(CORDIC_DW),
-         .DDS_P_DW(CORDIC_PHASE_DW))
-       i_dds_1_0 (
-         .clk (clk),
-         .angle (dds_phase_0_s),
-         .scale (dds_scale_0_d),
-         .dds_data (dds_data_0_s));
-
-       // dds-2
-
-       ad_dds_1 #(
-         .DDS_TYPE(DDS_TYPE),
-         .DDS_D_DW(DDS_D_DW),
-         .DDS_P_DW(DDS_P_DW))
-       i_dds_1_1 (
-         .clk (clk),
-         .angle (dds_phase_1_s),
-         .scale (dds_scale_1_d),
-         .dds_data (dds_data_1_s));
+    // output data format
+    always @(posedge clk) begin
+      dds_data_out[DDS_DW-1] <= dds_data_width[DDS_DW-1] ^ dds_format;
+      dds_data_out[DDS_DW-2: 0] <= dds_data_width[DDS_DW-2: 0];
     end
+
+    // set desired data width
+    always @(posedge clk) begin
+      if (DDS_DW <= DDS_D_DW) begin // truncation
+        // fair rownding
+        dds_data_rownd <= dds_data_int + {(C_T_WIDTH){dds_data_int[DDS_D_DW-1]}};
+        dds_data_width <= dds_data_rownd[DDS_D_DW-1:DDS_D_DW-DDS_DW];
+      end else begin // concatenation
+        dds_data_width <= dds_data_int << C_T_WIDTH;
+      end
+    end
+
+    // dual tone
+    always @(posedge clk) begin
+      dds_data_int <= dds_data_0_s + dds_data_1_s;
+    end
+
+     always @(posedge clk) begin
+       dds_scale_0_d <= dds_scale_0;
+       dds_scale_1_d <= dds_scale_1;
+     end
+
+     // phase
+      if (DDS_P_DW > PHASE_DW) begin
+        assign dds_phase_0_s = {dds_phase_0,{DDS_P_DW-PHASE_DW{1'b0}}};
+        assign dds_phase_1_s = {dds_phase_1,{DDS_P_DW-PHASE_DW{1'b0}}};
+      end else begin
+        assign dds_phase_0_s = dds_phase_0[(PHASE_DW-1):PHASE_DW-DDS_P_DW];
+        assign dds_phase_1_s = dds_phase_1[(PHASE_DW-1):PHASE_DW-DDS_P_DW];
+      end
+
+     // dds-1
+
+     ad_dds_1 #(
+       .DDS_TYPE(DDS_TYPE),
+       .DDS_D_DW(DDS_D_DW),
+       .DDS_P_DW(DDS_P_DW))
+     i_dds_1_0 (
+       .clk (clk),
+       .angle (dds_phase_0_s),
+       .scale (dds_scale_0_d),
+       .dds_data (dds_data_0_s));
+
+     // dds-2
+
+     ad_dds_1 #(
+       .DDS_TYPE(DDS_TYPE),
+       .DDS_D_DW(DDS_D_DW),
+       .DDS_P_DW(DDS_P_DW))
+     i_dds_1_1 (
+       .clk (clk),
+       .angle (dds_phase_1_s),
+       .scale (dds_scale_1_d),
+       .dds_data (dds_data_1_s));
   endgenerate
 
 endmodule
