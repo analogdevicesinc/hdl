@@ -50,14 +50,15 @@ module ad_dds #(
   // range 8-24 (make sure CORDIC_PHASE_DW < CORDIC_DW)
   parameter CORDIC_PHASE_DW = 16,
   // the clock radtio between the device clock(sample rate) and the dac_core clock
+  // 2^N, 1<N<6
   parameter CLK_RATIO = 1) (
 
   // interface
 
   input                               clk,
-  input                               rst,
   input                               dac_dds_format,
   input                               dac_data_sync,
+  input                               dac_valid,
   input       [                15:0]  tone_1_scale,
   input       [                15:0]  tone_2_scale,
   input       [                15:0]  tone_1_init_offset,
@@ -67,56 +68,46 @@ module ad_dds #(
   output  reg [DDS_DW*CLK_RATIO-1:0]  dac_dds_data
   );
 
-  // internal registers
+  wire [DDS_DW*CLK_RATIO-1:0] dac_dds_data_s;
 
-  reg         [PHASE_DW-1:0]  dac_dds_incr_0 = 'd0;
-  reg         [PHASE_DW-1:0]  dac_dds_incr_1 = 'd0;
-
-  // dds solution
+  always @(posedge clk) begin
+    dac_dds_data <= dac_dds_data_s;
+  end
 
   genvar i;
-
   generate
 
     if (DISABLE == 1) begin
-      always @(posedge clk) begin
-        dac_dds_data <= {(DDS_DW*CLK_RATIO-1){1'b0}};
-      end
+      assign dac_dds_data_s = {(DDS_DW*CLK_RATIO-1){1'b0}};
     end else begin
+
       // enable dds
 
       reg  [PHASE_DW-1:0]  dac_dds_phase_0[1:CLK_RATIO];
       reg  [PHASE_DW-1:0]  dac_dds_phase_1[1:CLK_RATIO];
-      wire [  DDS_DW-1:0]  dac_dds_data_s[1:CLK_RATIO];
+      reg  [PHASE_DW-1:0]  dac_dds_incr_0 = 'd0;
+      reg  [PHASE_DW-1:0]  dac_dds_incr_1 = 'd0;
 
+      always @(posedge clk) begin
+        dac_dds_incr_0 <= tone_1_freq_word * CLK_RATIO;
+        dac_dds_incr_1 <= tone_2_freq_word * CLK_RATIO;
+      end
+
+      //  phase accumulator
       for (i=1; i <= CLK_RATIO; i=i+1) begin: dds_phase
-
         always @(posedge clk) begin
-             if (dac_data_sync == 1'b1) begin
-               dac_dds_data[DDS_DW*i-1:DDS_DW*(i-1)] <= {(DDS_DW-1){1'b0}};
-             end else begin
-               dac_dds_data[DDS_DW*i-1:DDS_DW*(i-1)] <= dac_dds_data_s[i];
-             end
-        end
-
-        //  phase accumulator
-        always @(posedge clk) begin
-          // phase incrementaion accross 2^N (0<N<5) phase clock ratio
-          dac_dds_incr_0 <= tone_1_freq_word * CLK_RATIO;
-          dac_dds_incr_1 <= tone_2_freq_word * CLK_RATIO;
-
-            if (dac_data_sync == 1'b1) begin
-              if (i == 1) begin
-                dac_dds_phase_0[1] <= tone_1_init_offset;
-                dac_dds_phase_1[1] <= tone_2_init_offset;
-              end else begin
-                dac_dds_phase_0[i] <= dac_dds_phase_0[i-1] + tone_1_freq_word;
-                dac_dds_phase_1[i] <= dac_dds_phase_1[i-1] + tone_2_freq_word;
-              end
-            end else begin
-              dac_dds_phase_0[i] <= dac_dds_phase_0[i] + dac_dds_incr_0;
-              dac_dds_phase_1[i] <= dac_dds_phase_1[i] + dac_dds_incr_1;
+          if (dac_data_sync == 1'b1) begin
+            if (i == 1) begin
+              dac_dds_phase_0[1] <= tone_1_init_offset;
+              dac_dds_phase_1[1] <= tone_2_init_offset;
+            end else if (CLK_RATIO > 1)begin
+              dac_dds_phase_0[i] <= dac_dds_phase_0[i-1] + tone_1_freq_word;
+              dac_dds_phase_1[i] <= dac_dds_phase_1[i-1] + tone_2_freq_word;
             end
+          end else if (dac_valid == 1'b1) begin
+            dac_dds_phase_0[i] <= dac_dds_phase_0[i] + dac_dds_incr_0;
+            dac_dds_phase_1[i] <= dac_dds_phase_1[i] + dac_dds_incr_1;
+          end
         end
 
         // phase to amplitude convertor
@@ -133,9 +124,7 @@ module ad_dds #(
           .dds_scale_0 (tone_1_scale),
           .dds_phase_1 (dac_dds_phase_1[i]),
           .dds_scale_1 (tone_2_scale),
-          .dds_data (dac_dds_data_s[i])
-        );
-
+          .dds_data (dac_dds_data_s[(DDS_DW*i)-1:DDS_DW*(i-1)]));
       end
     end
   endgenerate
