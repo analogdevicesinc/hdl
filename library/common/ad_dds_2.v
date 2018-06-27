@@ -37,8 +37,6 @@
 
 module ad_dds_2 #(
 
-  // Disable DDS
-  parameter   DISABLE = 0,
   // Range = 8-24
   parameter   DDS_DW = 16,
   // Range = 8-24
