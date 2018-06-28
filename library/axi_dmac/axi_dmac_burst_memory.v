@@ -147,7 +147,7 @@ wire dest_ready;
 wire [DATA_WIDTH-1:0] dest_mem_data;
 wire dest_mem_data_ready;
 
-`include "inc_id.h"
+`include "inc_id.vh"
 
 generate if (ID_WIDTH >= 3) begin
   assign src_id_reduced = {src_id_reduced_msb,src_id[ID_WIDTH-3:0]};

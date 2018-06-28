@@ -72,7 +72,7 @@ module dmac_dest_axi_stream #(
   output [1:0] response_resp
 );
 
-`include "inc_id.h"
+`include "inc_id.vh"
 
 reg data_enabled = 1'b0;
 reg req_xlast_d = 1'b0;

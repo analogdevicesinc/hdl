@@ -53,7 +53,7 @@ module dmac_request_generator #(
   output eot
 );
 
-`include "inc_id.h"
+`include "inc_id.vh"
 
 /*
  * Here we only need to count the number of bursts, which means we can ignore

@@ -68,7 +68,7 @@ module dmac_data_mover #(
 
 localparam BEAT_COUNTER_MAX = {BEATS_PER_BURST_WIDTH{1'b1}};
 
-`include "inc_id.h"
+`include "inc_id.vh"
 
 reg [BEATS_PER_BURST_WIDTH-1:0] last_burst_length = 'h00;
 reg [BEATS_PER_BURST_WIDTH-1:0] beat_counter = 'h00;
