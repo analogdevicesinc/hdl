@@ -39,7 +39,9 @@ module axi_adrv9009_tx_channel #(
 
   parameter   CHANNEL_ID = 32'h0,
   parameter   Q_OR_I_N = 0,
-  parameter   DATAPATH_DISABLE = 0) (
+  parameter   DISABLE = 0,
+  parameter   DDS_DISABLE = 0,
+  parameter   IQCORRECTION_DISABLE = 0) (
 
   // dac interface
 
@@ -101,7 +103,7 @@ module axi_adrv9009_tx_channel #(
   // dac iq correction
 
   generate
-  if (DATAPATH_DISABLE == 1) begin
+  if (DISABLE == 1 || IQCORRECTION_DISABLE == 1) begin
 
   assign dac_data_out = dac_data_iq_out;
 
@@ -174,7 +176,7 @@ module axi_adrv9009_tx_channel #(
   // dds
 
   generate
-  if (DATAPATH_DISABLE == 1) begin
+  if (DISABLE == 1 || DDS_DISABLE == 1) begin
 
   assign dac_dds_data_0_s = 16'd0;
   assign dac_dds_data_1_s = 16'd0;
@@ -207,9 +209,9 @@ module axi_adrv9009_tx_channel #(
   up_dac_channel #(
     .COMMON_ID(6'h11),
     .CHANNEL_ID (CHANNEL_ID),
-    .DDS_DISABLE(DATAPATH_DISABLE),
+    .DDS_DISABLE(DDS_DISABLE),
     .USERPORTS_DISABLE(1),
-    .IQCORRECTION_DISABLE(DATAPATH_DISABLE))
+    .IQCORRECTION_DISABLE(IQCORRECTION_DISABLE))
     i_up_dac_channel (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),

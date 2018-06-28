@@ -38,8 +38,17 @@
 module axi_adrv9009 #(
 
   parameter   ID = 0,
+  parameter   ADC_DATAPATH_DISABLE = 0,
+  parameter   ADC_DATAFORMAT_DISABLE = 0,
+  parameter   ADC_DCFILTER_DISABLE = 0,
+  parameter   ADC_IQCORRECTION_DISABLE = 0,
+  parameter   ADC_OS_DATAPATH_DISABLE = 0,
+  parameter   ADC_OS_DATAFORMAT_DISABLE = 0,
+  parameter   ADC_OS_DCFILTER_DISABLE = 0,
+  parameter   ADC_OS_IQCORRECTION_DISABLE = 0,
   parameter   DAC_DATAPATH_DISABLE = 0,
-  parameter   ADC_DATAPATH_DISABLE = 0) (
+  parameter   DAC_DDS_DISABLE = 0,
+  parameter   DAC_IQCORRECTION_DISABLE = 0) (
 
   // receive
 
@@ -134,6 +143,16 @@ module axi_adrv9009 #(
   output      [ 1:0]      s_axi_rresp,
   input                   s_axi_rready);
 
+  // derived parameters
+
+  localparam  ADC_DATAFORMAT_DISABLE_INT = (ADC_DATAPATH_DISABLE == 1) ? 1 : ADC_DATAFORMAT_DISABLE;
+  localparam  ADC_DCFILTER_DISABLE_INT = (ADC_DATAPATH_DISABLE == 1) ? 1 : ADC_DCFILTER_DISABLE;
+  localparam  ADC_IQCORRECTION_DISABLE_INT = (ADC_DATAPATH_DISABLE == 1) ? 1 : ADC_IQCORRECTION_DISABLE;
+  localparam  ADC_OS_DATAFORMAT_DISABLE_INT = (ADC_OS_DATAPATH_DISABLE == 1) ? 1 : ADC_OS_DATAFORMAT_DISABLE;
+  localparam  ADC_OS_DCFILTER_DISABLE_INT = (ADC_OS_DATAPATH_DISABLE == 1) ? 1 : ADC_OS_DCFILTER_DISABLE;
+  localparam  ADC_OS_IQCORRECTION_DISABLE_INT = (ADC_OS_DATAPATH_DISABLE == 1) ? 1 : ADC_OS_IQCORRECTION_DISABLE;
+  localparam  DAC_DDS_DISABLE_INT = (DAC_DATAPATH_DISABLE == 1) ? 1 : DAC_DDS_DISABLE;
+  localparam  DAC_IQCORRECTION_DISABLE_INT = (DAC_DATAPATH_DISABLE == 1) ? 1 : DAC_IQCORRECTION_DISABLE;
 
   // internal registers
 
@@ -207,7 +226,9 @@ module axi_adrv9009 #(
 
   axi_adrv9009_rx #(
     .ID (ID),
-    .DATAPATH_DISABLE (ADC_DATAPATH_DISABLE))
+    .DATAFORMAT_DISABLE (ADC_DATAFORMAT_DISABLE_INT),
+    .DCFILTER_DISABLE (ADC_DCFILTER_DISABLE_INT),
+    .IQCORRECTION_DISABLE (ADC_IQCORRECTION_DISABLE_INT))
   i_rx (
     .adc_rst (adc_rst),
     .adc_clk (adc_clk),
@@ -240,7 +261,9 @@ module axi_adrv9009 #(
 
   axi_adrv9009_rx_os #(
     .ID (ID),
-    .DATAPATH_DISABLE (ADC_DATAPATH_DISABLE))
+    .DATAFORMAT_DISABLE (ADC_DATAFORMAT_DISABLE_INT),
+    .DCFILTER_DISABLE (ADC_DCFILTER_DISABLE_INT),
+    .IQCORRECTION_DISABLE (ADC_IQCORRECTION_DISABLE_INT))
   i_rx_os (
     .adc_os_rst (adc_os_rst),
     .adc_os_clk (adc_os_clk),
@@ -275,7 +298,8 @@ module axi_adrv9009 #(
 
   axi_adrv9009_tx #(
     .ID (ID),
-    .DATAPATH_DISABLE (DAC_DATAPATH_DISABLE))
+    .DDS_DISABLE (DAC_DDS_DISABLE_INT),
+    .IQCORRECTION_DISABLE (DAC_IQCORRECTION_DISABLE_INT))
   i_tx (
     .dac_rst (dac_rst),
     .dac_clk (dac_clk),

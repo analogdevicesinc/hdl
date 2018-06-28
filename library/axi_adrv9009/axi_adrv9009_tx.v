@@ -37,8 +37,9 @@
 
 module axi_adrv9009_tx #(
 
-  parameter   DATAPATH_DISABLE = 0,
-  parameter   ID = 0) (
+  parameter   ID = 0,
+  parameter   DDS_DISABLE = 0,
+  parameter   IQCORRECTION_DISABLE = 0) (
 
   // dac interface
 
@@ -80,8 +81,10 @@ module axi_adrv9009_tx #(
   output  reg [ 31:0]     up_rdata,
   output  reg             up_rack);
 
+  // configuration settings
 
-
+  localparam  CONFIG =  (DDS_DISABLE * 64) +
+                        (IQCORRECTION_DISABLE * 1);
 
   // internal registers
 
@@ -129,7 +132,9 @@ module axi_adrv9009_tx #(
   axi_adrv9009_tx_channel #(
     .CHANNEL_ID (0),
     .Q_OR_I_N (0),
-    .DATAPATH_DISABLE (DATAPATH_DISABLE))
+    .DISABLE (0),
+    .DDS_DISABLE (DDS_DISABLE),
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE))
   i_tx_channel_0 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
@@ -158,7 +163,9 @@ module axi_adrv9009_tx #(
   axi_adrv9009_tx_channel #(
     .CHANNEL_ID (1),
     .Q_OR_I_N (1),
-    .DATAPATH_DISABLE (DATAPATH_DISABLE))
+    .DISABLE (0),
+    .DDS_DISABLE (DDS_DISABLE),
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE))
   i_tx_channel_1 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
@@ -187,7 +194,9 @@ module axi_adrv9009_tx #(
   axi_adrv9009_tx_channel #(
     .CHANNEL_ID (2),
     .Q_OR_I_N (0),
-    .DATAPATH_DISABLE (DATAPATH_DISABLE))
+    .DISABLE (0),
+    .DDS_DISABLE (DDS_DISABLE),
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE))
   i_tx_channel_2 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
@@ -216,7 +225,9 @@ module axi_adrv9009_tx #(
   axi_adrv9009_tx_channel #(
     .CHANNEL_ID (3),
     .Q_OR_I_N (1),
-    .DATAPATH_DISABLE (DATAPATH_DISABLE))
+    .DISABLE (0),
+    .DDS_DISABLE (DDS_DISABLE),
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE))
   i_tx_channel_3 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
@@ -242,7 +253,7 @@ module axi_adrv9009_tx #(
 
   up_dac_common #(
     .ID (ID),
-    .CONFIG(0),
+    .CONFIG(CONFIG),
     .CLK_EDGE_SEL(0),
     .COMMON_ID(6'h10),
     .DRP_DISABLE(1),
