@@ -37,8 +37,10 @@
 
 module axi_adrv9009_rx_os #(
 
-  parameter   DATAPATH_DISABLE = 0,
-  parameter   ID = 0) (
+  parameter   ID = 0,
+  parameter   DATAFORMAT_DISABLE = 0,
+  parameter   DCFILTER_DISABLE = 0,
+  parameter   IQCORRECTION_DISABLE = 0) (
 
   // adc interface
 
@@ -77,6 +79,9 @@ module axi_adrv9009_rx_os #(
   output  reg [ 31:0]     up_rdata,
   output  reg             up_rack);
 
+  localparam  CONFIG =  (DATAFORMAT_DISABLE * 4) +
+                        (DCFILTER_DISABLE * 2) +
+                        (IQCORRECTION_DISABLE * 1);
 
   // internal registers
 
@@ -123,7 +128,10 @@ module axi_adrv9009_rx_os #(
     .Q_OR_I_N (0),
     .COMMON_ID ('h21),
     .CHANNEL_ID (0),
-    .DATAPATH_DISABLE (DATAPATH_DISABLE),
+    .DISABLE (0),
+    .DATAFORMAT_DISABLE (DATAFORMAT_DISABLE),
+    .DCFILTER_DISABLE (DCFILTER_DISABLE),
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
     .DATA_WIDTH (32))
   i_rx_os_channel_0 (
     .adc_clk (adc_os_clk),
@@ -155,7 +163,10 @@ module axi_adrv9009_rx_os #(
     .Q_OR_I_N (1),
     .COMMON_ID ('h21),
     .CHANNEL_ID (1),
-    .DATAPATH_DISABLE (DATAPATH_DISABLE),
+    .DISABLE (0),
+    .DATAFORMAT_DISABLE (DATAFORMAT_DISABLE),
+    .DCFILTER_DISABLE (DCFILTER_DISABLE),
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
     .DATA_WIDTH (32))
   i_rx_os_channel_1 (
     .adc_clk (adc_os_clk),
@@ -185,7 +196,10 @@ module axi_adrv9009_rx_os #(
     .Q_OR_I_N (2),
     .COMMON_ID ('h21),
     .CHANNEL_ID (2),
-    .DATAPATH_DISABLE (DATAPATH_DISABLE),
+    .DISABLE (0),
+    .DATAFORMAT_DISABLE (DATAFORMAT_DISABLE),
+    .DCFILTER_DISABLE (DCFILTER_DISABLE),
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
     .DATA_WIDTH (32))
   i_rx_os_channel_2 (
     .adc_clk (adc_os_clk),
@@ -215,7 +229,10 @@ module axi_adrv9009_rx_os #(
     .Q_OR_I_N (3),
     .COMMON_ID ('h21),
     .CHANNEL_ID (3),
-    .DATAPATH_DISABLE (DATAPATH_DISABLE),
+    .DISABLE (0),
+    .DATAFORMAT_DISABLE (DATAFORMAT_DISABLE),
+    .DCFILTER_DISABLE (DCFILTER_DISABLE),
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
     .DATA_WIDTH (32))
   i_rx_os_channel_3 (
     .adc_clk (adc_os_clk),
@@ -244,8 +261,13 @@ module axi_adrv9009_rx_os #(
   // common processor control
 
   up_adc_common #(
+    .ID (ID),
     .COMMON_ID ('h20),
-    .ID (ID))
+    .CONFIG (CONFIG),
+    .DRP_DISABLE (1),
+    .USERPORTS_DISABLE (1),
+    .GPIO_DISABLE (1),
+    .START_CODE_DISABLE (1))
   i_up_adc_common (
     .mmcm_rst (),
     .adc_clk (adc_os_clk),
