@@ -71,7 +71,7 @@ module dmac_dest_fifo_inf #(
   output [1:0] response_resp
 );
 
-`include "inc_id.h"
+`include "inc_id.vh"
 
 reg active = 1'b0;
 

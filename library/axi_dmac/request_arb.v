@@ -706,7 +706,7 @@ sync_bits #(
   .out(src_request_id)
 );
 
-`include "inc_id.h"
+`include "inc_id.vh"
 
 function compare_id;
   input [ID_WIDTH-1:0] a;

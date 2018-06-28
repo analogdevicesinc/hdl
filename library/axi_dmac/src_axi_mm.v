@@ -88,7 +88,7 @@ module dmac_src_mm_axi #(
   input  [ 1:0]                    m_axi_rresp
 );
 
-`include "inc_id.h"
+`include "inc_id.vh"
 
 reg [ID_WIDTH-1:0] id = 'h00;
 
@@ -170,7 +170,7 @@ always @(posedge m_axi_aclk) begin
 end
 
 /* TODO
-`include "resp.h"
+`include "resp.vh"
 
 assign response_valid = 1'b0;
 assign response_resp = RESP_OKAY;

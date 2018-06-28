@@ -58,8 +58,8 @@ module dmac_response_handler #(
   output [1:0] resp_resp
 );
 
-`include "resp.h"
-`include "inc_id.h"
+`include "resp.vh"
+`include "inc_id.vh"
 
 assign resp_resp = bresp;
 assign resp_eot = eot;

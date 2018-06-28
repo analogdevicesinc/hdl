@@ -150,7 +150,7 @@ proc ad_ip_addfile {pname pfile} {
     add_fileset_file $pmodule VERILOG PATH $pfile
     return
   }
-  if {$ptype eq ".h"} {
+  if {$ptype eq ".vh"} {
     add_fileset_file $pmodule VERILOG_INCLUDE PATH $pfile
     return
   }

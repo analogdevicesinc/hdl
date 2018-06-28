@@ -71,7 +71,7 @@ module dmac_address_generator #(
 localparam MAX_BEATS_PER_BURST = {1'b1,{BEATS_PER_BURST_WIDTH{1'b0}}};
 localparam MAX_LENGTH = {BEATS_PER_BURST_WIDTH{1'b1}};
 
-`include "inc_id.h"
+`include "inc_id.vh"
 
 assign burst = 2'b01;
 assign prot = 3'b000;

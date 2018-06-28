@@ -54,8 +54,8 @@ module dmac_response_generator #(
   output [1:0] resp_resp
 );
 
-`include "inc_id.h"
-`include "resp.h"
+`include "inc_id.vh"
+`include "resp.vh"
 
 assign resp_resp = RESP_OKAY;
 assign resp_eot = eot;
