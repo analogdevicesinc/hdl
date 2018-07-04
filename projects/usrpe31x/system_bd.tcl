@@ -20,25 +20,6 @@ create_bd_port -dir I -from 63 -to 0 ps_gpio_i
 create_bd_port -dir O -from 63 -to 0 ps_gpio_o
 create_bd_port -dir O -from 63 -to 0 ps_gpio_t
 
-# interrupts
-
-create_bd_port -dir I -type intr ps_intr_00
-create_bd_port -dir I -type intr ps_intr_01
-create_bd_port -dir I -type intr ps_intr_02
-create_bd_port -dir I -type intr ps_intr_03
-create_bd_port -dir I -type intr ps_intr_04
-create_bd_port -dir I -type intr ps_intr_05
-create_bd_port -dir I -type intr ps_intr_06
-create_bd_port -dir I -type intr ps_intr_07
-create_bd_port -dir I -type intr ps_intr_08
-create_bd_port -dir I -type intr ps_intr_09
-create_bd_port -dir I -type intr ps_intr_10
-create_bd_port -dir I -type intr ps_intr_11
-create_bd_port -dir I -type intr ps_intr_12
-create_bd_port -dir I -type intr ps_intr_13
-create_bd_port -dir I -type intr ps_intr_14
-create_bd_port -dir I -type intr ps_intr_15
-
 # instance: sys_ps7
 
 ad_ip_instance processing_system7 sys_ps7
@@ -103,6 +84,9 @@ ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_TRAIN_DATA_EYE 1
 ad_ip_instance xlconcat sys_concat_intc
 ad_ip_parameter sys_concat_intc CONFIG.NUM_PORTS 16
 
+ad_ip_instance xlconstant intc_gnd
+ad_ip_parameter intc_gnd CONFIG.CONST_VAL 0
+
 ad_ip_instance proc_sys_reset sys_rstgen
 ad_ip_parameter sys_rstgen CONFIG.C_EXT_RST_WIDTH 1
 
@@ -144,22 +128,6 @@ ad_connect  sys_ps7/SPI1_MISO_I GND
 # interrupts
 
 ad_connect  sys_concat_intc/dout sys_ps7/IRQ_F2P
-ad_connect  sys_concat_intc/In15 ps_intr_15
-ad_connect  sys_concat_intc/In14 ps_intr_14
-ad_connect  sys_concat_intc/In13 ps_intr_13
-ad_connect  sys_concat_intc/In12 ps_intr_12
-ad_connect  sys_concat_intc/In11 ps_intr_11
-ad_connect  sys_concat_intc/In10 ps_intr_10
-ad_connect  sys_concat_intc/In9 ps_intr_09
-ad_connect  sys_concat_intc/In8 ps_intr_08
-ad_connect  sys_concat_intc/In7 ps_intr_07
-ad_connect  sys_concat_intc/In6 ps_intr_06
-ad_connect  sys_concat_intc/In5 ps_intr_05
-ad_connect  sys_concat_intc/In4 ps_intr_04
-ad_connect  sys_concat_intc/In3 ps_intr_03
-ad_connect  sys_concat_intc/In2 ps_intr_02
-ad_connect  sys_concat_intc/In1 ps_intr_01
-ad_connect  sys_concat_intc/In0 ps_intr_00
 
 # ad9361
 
@@ -276,11 +244,6 @@ ad_mem_hp2_interconnect sys_cpu_clk axi_ad9361_dac_dma/m_src_axi
 ad_connect  sys_cpu_resetn axi_ad9361_adc_dma/m_dest_axi_aresetn
 ad_connect  sys_cpu_resetn axi_ad9361_dac_dma/m_src_axi_aresetn
 
-# interrupts
-
-ad_cpu_interrupt ps-13 mb-13 axi_ad9361_adc_dma/irq
-ad_cpu_interrupt ps-12 mb-12 axi_ad9361_dac_dma/irq
-
 # tdd-sync
 
 ad_ip_instance util_tdd_sync util_ad9361_tdd_sync
@@ -309,5 +272,20 @@ ad_connect  pl_gpio_o axi_gpio/gpio_io_o
 ad_connect  pl_gpio_t axi_gpio/gpio_io_t
 
 ad_cpu_interconnect 0x41600000 axi_gpio
-ad_cpu_interrupt ps-15 mb-15 axi_gpio/ip2intc_irpt
 
+ad_connect  sys_concat_intc/In15 axi_gpio/ip2intc_irpt
+ad_connect  sys_concat_intc/In14 intc_gnd/dout
+ad_connect  sys_concat_intc/In13 axi_ad9361_adc_dma/irq
+ad_connect  sys_concat_intc/In12 axi_ad9361_dac_dma/irq
+ad_connect  sys_concat_intc/In11 intc_gnd/dout
+ad_connect  sys_concat_intc/In10 intc_gnd/dout
+ad_connect  sys_concat_intc/In9 intc_gnd/dout
+ad_connect  sys_concat_intc/In8 intc_gnd/dout
+ad_connect  sys_concat_intc/In7 intc_gnd/dout
+ad_connect  sys_concat_intc/In6 intc_gnd/dout
+ad_connect  sys_concat_intc/In5 intc_gnd/dout
+ad_connect  sys_concat_intc/In4 intc_gnd/dout
+ad_connect  sys_concat_intc/In3 intc_gnd/dout
+ad_connect  sys_concat_intc/In2 intc_gnd/dout
+ad_connect  sys_concat_intc/In1 intc_gnd/dout
+ad_connect  sys_concat_intc/In0 intc_gnd/dout
