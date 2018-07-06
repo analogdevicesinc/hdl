@@ -132,6 +132,7 @@ set_instance_parameter_value axi_ad9371_tx_dma {CYCLIC} {1}
 set_instance_parameter_value axi_ad9371_tx_dma {DMA_TYPE_DEST} {1}
 set_instance_parameter_value axi_ad9371_tx_dma {DMA_TYPE_SRC} {0}
 set_instance_parameter_value axi_ad9371_tx_dma {FIFO_SIZE} {16}
+set_instance_parameter_value axi_ad9371_tx_dma {USE_TLAST_DEST} {1}
 add_connection sys_dma_clk.clk avl_ad9371_tx_fifo.if_dma_clk
 add_connection sys_dma_clk.clk_reset avl_ad9371_tx_fifo.if_dma_rst
 add_connection sys_dma_clk.clk axi_ad9371_tx_dma.if_m_axis_aclk
