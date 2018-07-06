@@ -60,6 +60,7 @@ set_instance_parameter_value axi_ad9152_dma {SYNC_TRANSFER_START} {0}
 set_instance_parameter_value axi_ad9152_dma {DMA_TYPE_DEST} {1}
 set_instance_parameter_value axi_ad9152_dma {DMA_TYPE_SRC} {0}
 set_instance_parameter_value axi_ad9152_dma {FIFO_SIZE} {16}
+set_instance_parameter_value axi_ad9152_dma {USE_TLAST_DEST} {1}
 
 add_connection sys_clk.clk avl_ad9152_fifo.if_dma_clk
 add_connection sys_clk.clk_reset avl_ad9152_fifo.if_dma_rst

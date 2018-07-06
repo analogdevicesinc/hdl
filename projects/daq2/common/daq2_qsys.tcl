@@ -65,6 +65,7 @@ set_instance_parameter_value axi_ad9144_dma {CYCLIC} {1}
 set_instance_parameter_value axi_ad9144_dma {DMA_TYPE_DEST} {1}
 set_instance_parameter_value axi_ad9144_dma {DMA_TYPE_SRC} {0}
 set_instance_parameter_value axi_ad9144_dma {FIFO_SIZE} {16}
+set_instance_parameter_value axi_ad9144_dma {USE_TLAST_DEST} {1}
 
 add_connection sys_dma_clk.clk avl_ad9144_fifo.if_dma_clk
 add_connection sys_dma_clk.clk_reset avl_ad9144_fifo.if_dma_rst
