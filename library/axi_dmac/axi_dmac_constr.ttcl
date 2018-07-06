@@ -175,7 +175,7 @@ set_false_path -quiet \
 set_property -dict { \
     SHREG_EXTRACT NO \
     ASYNC_REG TRUE \
-  } [get_cells -quiet -hier *reset_shift_reg*]
+  } [get_cells -quiet -hier *reset_async_reg*]
 
 set_property -dict { \
     SHREG_EXTRACT NO \
