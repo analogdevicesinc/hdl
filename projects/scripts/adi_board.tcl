@@ -268,17 +268,22 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {device_clk {}}} {
     }
 
     if {$lane_map != {}} {
-      set phys_lane [expr [lindex $lane_map $n] + $index]
+      set phys_lane [lindex $lane_map $n]
+      if {$phys_lane != {}} {
+        set phys_lane [expr $phys_lane + $index]
+      }
     } else {
       set phys_lane $m
     }
 
     ad_connect  ${a_xcvr}/up_ch_${n} ${u_xcvr}/up_${txrx}_${m}
     ad_connect  ${device_clk} ${u_xcvr}/${txrx}_clk_${m}
-    if {$jesd204_type == 0} {
-      ad_connect  ${u_xcvr}/${txrx}_${phys_lane} ${a_jesd}/${txrx}_phy${n}
-    } else {
-      ad_connect  ${u_xcvr}/${txrx}_${phys_lane} ${a_jesd}/gt${n}_${txrx}
+    if {$phys_lane != {}} {
+      if {$jesd204_type == 0} {
+        ad_connect  ${u_xcvr}/${txrx}_${phys_lane} ${a_jesd}/${txrx}_phy${n}
+      } else {
+        ad_connect  ${u_xcvr}/${txrx}_${phys_lane} ${a_jesd}/gt${n}_${txrx}
+      }
     }
 
     create_bd_port -dir ${data_dir} ${m_data}_${m}_p
