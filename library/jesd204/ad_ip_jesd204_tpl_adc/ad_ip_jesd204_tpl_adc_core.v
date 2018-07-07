@@ -46,7 +46,6 @@ module ad_ip_jesd204_tpl_adc_core #(
 
   input link_valid,
   output link_ready,
-  input [3:0] link_sof,
   input [NUM_LANES*32-1:0] link_data
 );
   // Raw and formated channel data widths
@@ -64,8 +63,6 @@ module ad_ip_jesd204_tpl_adc_core #(
     .CHANNEL_WIDTH (CHANNEL_WIDTH),
     .OCTETS_PER_SAMPLE (OCTETS_PER_SAMPLE)
   ) i_deframer (
-    .clk (clk),
-    .link_sof (link_sof),
     .link_data (link_data),
     .adc_data (raw_data_s)
   );

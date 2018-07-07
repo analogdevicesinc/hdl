@@ -155,7 +155,6 @@ module ad_ip_jesd204_tpl_adc #(
 
     .link_valid (link_valid),
     .link_ready (link_ready),
-    .link_sof (link_sof),
     .link_data (link_data),
 
     .adc_valid (adc_valid),

@@ -30,10 +30,7 @@ module ad_ip_jesd204_tpl_adc_deframer #(
   parameter OCTETS_PER_SAMPLE = 2
 ) (
   // jesd interface
-  // clk is (line-rate/40)
 
-  input clk,
-  input [3:0] link_sof,
   input [NUM_LANES*32-1:0] link_data,
 
    // adc data output
@@ -51,7 +48,6 @@ module ad_ip_jesd204_tpl_adc_deframer #(
   localparam FRAMES_PER_BEAT = OCTETS_PER_BEAT / (BITS_PER_FRAME / 8);
   localparam TOTAL_BITS = OCTETS_PER_BEAT * 8 * NUM_LANES;
 
-  wire [TOTAL_BITS-1:0] link_data_s;
   wire [TOTAL_BITS-1:0] link_data_msb_s;
   wire [TOTAL_BITS-1:0] frame_data_s;
   wire [TOTAL_BITS-1:0] adc_data_msb_s;
@@ -65,7 +61,7 @@ module ad_ip_jesd204_tpl_adc_deframer #(
     localparam src_lsb = i*8;
     localparam dst_msb = TOTAL_BITS - 1 - src_lsb;
 
-    assign link_data_msb_s[dst_msb-:8] = link_data_s[src_lsb+:8];
+    assign link_data_msb_s[dst_msb-:8] = link_data[src_lsb+:8];
   end
 
   // Group data by frames
@@ -95,21 +91,6 @@ module ad_ip_jesd204_tpl_adc_deframer #(
     localparam src_msb = TOTAL_BITS - 1 - i * BITS_PER_SAMPLE;
 
     assign adc_data[dst_lsb+:CHANNEL_WIDTH] = adc_data_msb_s[src_msb-:CHANNEL_WIDTH];
-  end
-  endgenerate
-
-  // frame-alignment
-
-  generate
-  genvar n;
-  for (n = 0; n < NUM_LANES; n = n + 1) begin: g_xcvr_if
-    ad_xcvr_rx_if  i_xcvr_if (
-      .rx_clk (clk),
-      .rx_ip_sof (link_sof),
-      .rx_ip_data (link_data[n*32+:32]),
-      .rx_sof (),
-      .rx_data (link_data_s[n*32+:32])
-    );
   end
   endgenerate
 
