@@ -99,12 +99,14 @@ add_connection axi_adrv9009.adc_ch_2 axi_adrv9009_rx_cpack.adc_ch_2
 add_connection axi_adrv9009.adc_ch_3 axi_adrv9009_rx_cpack.adc_ch_3
 
 add_instance axi_adrv9009_rx_os_cpack util_cpack
-set_instance_parameter_value axi_adrv9009_rx_os_cpack {NUM_OF_CHANNELS} {2}
+set_instance_parameter_value axi_adrv9009_rx_os_cpack {NUM_OF_CHANNELS} {4}
 set_instance_parameter_value axi_adrv9009_rx_os_cpack {CHANNEL_DATA_WIDTH} {32}
 add_connection sys_clk.clk_reset axi_adrv9009_rx_os_cpack.if_adc_rst
 add_connection adrv9009_rx_os_jesd204.link_clk axi_adrv9009_rx_os_cpack.if_adc_clk
 add_connection axi_adrv9009.adc_os_ch_0 axi_adrv9009_rx_os_cpack.adc_ch_0
 add_connection axi_adrv9009.adc_os_ch_1 axi_adrv9009_rx_os_cpack.adc_ch_1
+add_connection axi_adrv9009.adc_os_ch_2 axi_adrv9009_rx_os_cpack.adc_ch_2
+add_connection axi_adrv9009.adc_os_ch_3 axi_adrv9009_rx_os_cpack.adc_ch_3
 
 # dac fifo
 
@@ -132,6 +134,8 @@ set_instance_parameter_value axi_adrv9009_tx_dma {CYCLIC} {1}
 set_instance_parameter_value axi_adrv9009_tx_dma {DMA_TYPE_DEST} {1}
 set_instance_parameter_value axi_adrv9009_tx_dma {DMA_TYPE_SRC} {0}
 set_instance_parameter_value axi_adrv9009_tx_dma {FIFO_SIZE} {16}
+set_instance_parameter_value axi_adrv9009_tx_dma {USE_TLAST_DEST} {1}
+
 add_connection sys_dma_clk.clk avl_adrv9009_tx_fifo.if_dma_clk
 add_connection sys_dma_clk.clk_reset avl_adrv9009_tx_fifo.if_dma_rst
 add_connection sys_dma_clk.clk axi_adrv9009_tx_dma.if_m_axis_aclk
@@ -170,7 +174,7 @@ add_connection sys_dma_clk.clk_reset axi_adrv9009_rx_dma.m_dest_axi_reset
 
 add_instance axi_adrv9009_rx_os_dma axi_dmac
 set_instance_parameter_value axi_adrv9009_rx_os_dma {ID} {0}
-set_instance_parameter_value axi_adrv9009_rx_os_dma {DMA_DATA_WIDTH_SRC} {64}
+set_instance_parameter_value axi_adrv9009_rx_os_dma {DMA_DATA_WIDTH_SRC} {128}
 set_instance_parameter_value axi_adrv9009_rx_os_dma {DMA_DATA_WIDTH_DEST} {128}
 set_instance_parameter_value axi_adrv9009_rx_os_dma {DMA_LENGTH_WIDTH} {24}
 set_instance_parameter_value axi_adrv9009_rx_os_dma {DMA_2D_TRANSFER} {0}
