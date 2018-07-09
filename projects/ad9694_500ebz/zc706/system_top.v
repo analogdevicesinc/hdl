@@ -95,6 +95,8 @@ module system_top (
 
   input                   rx_ref_clk_p,
   input                   rx_ref_clk_n,
+  input                   rx_device_clk_p,
+  input                   rx_device_clk_n,
   output                  rx_sync0_p,
   output                  rx_sync0_n,
   output                  rx_sync1_p,
@@ -138,6 +140,7 @@ module system_top (
   wire            spi1_miso;
   wire            rx_ref_clk;
   wire            rx_sync;
+  wire            rx_device_clk;
   wire            adc_capture_start_s;
 
   // spi
@@ -173,6 +176,21 @@ module system_top (
     .I (rx_sync),
     .O (rx_sync1_p),
     .OB (rx_sync1_n));
+
+  /* Use separate device clock */
+  IBUFGDS i_rx_device_clk (
+    .I (rx_device_clk_p),
+    .IB (rx_device_clk_n),
+    .O (rx_device_clk)
+  );
+
+  /* Share clock between device and reference */
+  /*
+    BUFG i_rx_device_clk (
+      .I (rx_ref_clk),
+      .O (rx_device_clk)
+    );
+  */
 
   ODDR #(
     .INIT(1'b0)
@@ -266,7 +284,8 @@ module system_top (
     .rx_data_4_p (rx_data_p[2]),
     .rx_data_5_n (rx_data_n[3]),
     .rx_data_5_p (rx_data_p[3]),
-    .rx_ref_clk_0 (rx_ref_clk),
+    .rx_ref_clk (rx_ref_clk),
+    .rx_device_clk (rx_device_clk),
     .rx_sync_0 (rx_sync),
     .rx_sysref_0 (1'b0),
     .spdif (spdif),

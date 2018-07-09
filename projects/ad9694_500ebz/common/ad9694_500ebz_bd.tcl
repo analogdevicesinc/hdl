@@ -51,23 +51,24 @@ ad_connect sys_cpu_clk util_ad9694_xcvr/up_clk
 
 # reference clocks & resets
 
-create_bd_port -dir I rx_ref_clk_0
+create_bd_port -dir I -type clk rx_ref_clk
+create_bd_port -dir I -type clk rx_device_clk
 
-ad_xcvrpll  rx_ref_clk_0 util_ad9694_xcvr/qpll_ref_clk_*
-ad_xcvrpll  rx_ref_clk_0 util_ad9694_xcvr/cpll_ref_clk_*
+ad_xcvrpll  rx_ref_clk util_ad9694_xcvr/qpll_ref_clk_*
+ad_xcvrpll  rx_ref_clk util_ad9694_xcvr/cpll_ref_clk_*
 ad_xcvrpll  axi_ad9694_xcvr/up_pll_rst util_ad9694_xcvr/up_qpll_rst_*
 ad_xcvrpll  axi_ad9694_xcvr/up_pll_rst util_ad9694_xcvr/up_cpll_rst_*
 
 # connections (adc)
 
-ad_xcvrcon util_ad9694_xcvr axi_ad9694_xcvr ad9694_jesd
-ad_connect util_ad9694_xcvr/rx_out_clk_0 ad9694_tpl_core/link_clk
+ad_xcvrcon util_ad9694_xcvr axi_ad9694_xcvr ad9694_jesd {0 1 4 5} rx_device_clk
+ad_connect rx_device_clk ad9694_tpl_core/link_clk
 ad_connect ad9694_jesd/rx_sof ad9694_tpl_core/link_sof
 ad_connect ad9694_jesd/rx_data_tvalid ad9694_tpl_core/link_valid
 ad_connect ad9694_jesd/rx_data_tdata ad9694_tpl_core/link_data
 
-ad_connect util_ad9694_xcvr/rx_out_clk_0 util_ad9694_cpack/adc_clk
-ad_connect ad9694_jesd_rstgen/peripheral_reset util_ad9694_cpack/adc_rst
+ad_connect rx_device_clk util_ad9694_cpack/adc_clk
+ad_connect rx_device_clk_rstgen/peripheral_reset util_ad9694_cpack/adc_rst
 
 for {set i 0} {$i < $NUM_OF_CHANNELS} {incr i} {
   ad_ip_instance xlslice ad9694_enable_slice_$i [list \
@@ -97,8 +98,8 @@ for {set i 0} {$i < $NUM_OF_CHANNELS} {incr i} {
   ad_connect ad9694_data_slice_$i/Dout util_ad9694_cpack/adc_data_$i
 }
 
-ad_connect util_ad9694_xcvr/rx_out_clk_0 axi_ad9694_fifo/adc_clk
-ad_connect ad9694_jesd_rstgen/peripheral_reset axi_ad9694_fifo/adc_rst
+ad_connect rx_device_clk axi_ad9694_fifo/adc_clk
+ad_connect rx_device_clk_rstgen/peripheral_reset axi_ad9694_fifo/adc_rst
 ad_connect util_ad9694_cpack/adc_valid axi_ad9694_fifo/adc_wr
 ad_connect util_ad9694_cpack/adc_data axi_ad9694_fifo/adc_wdata
 ad_connect sys_cpu_clk axi_ad9694_fifo/dma_clk

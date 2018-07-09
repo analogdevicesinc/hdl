@@ -39,5 +39,6 @@ set_property  -dict {PACKAGE_PIN  AC19  IOSTANDARD LVCMOS25} [get_ports adc_capt
 
 # clocks
 
+create_clock -name rx_device_clk -period  4.00 [get_ports rx_device_clk_p]
 create_clock -name rx_ref_clk   -period  4.00 [get_ports rx_ref_clk_p]
 create_clock -name rx_div_clk   -period  4.00 [get_pins i_system_wrapper/system_i/util_ad9694_xcvr/inst/i_xch_0/i_gtxe2_channel/RXOUTCLK]
