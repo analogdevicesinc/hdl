@@ -94,7 +94,7 @@ module axi_adrv9009_if (
 
   // instantiations
 
-  always @(posedge adc_clk) begin
+  always @(posedge adc_os_clk) begin
     if (adc_r1_mode == 1'b1) begin
       adc_os_valid <= 'd1;
       adc_os_data[8* 7+:8] <= adc_rx_os_data_s[8* 6+:8];
