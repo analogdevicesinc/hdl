@@ -54,6 +54,8 @@ module axi_adcfifo #(
   input       [ADC_DATA_WIDTH-1:0]  adc_wdata,
   output                  adc_wovf,
 
+  output                  adc_capture_start,
+
   // dma interface
 
   input                   dma_clk,
@@ -154,6 +156,7 @@ module axi_adcfifo #(
     .adc_clk (adc_clk),
     .adc_wr (adc_dwr_s),
     .adc_wdata (adc_ddata_s),
+    .adc_capture_start (adc_capture_start),
     .axi_clk (axi_clk),
     .axi_resetn (axi_resetn),
     .axi_awvalid (axi_awvalid),

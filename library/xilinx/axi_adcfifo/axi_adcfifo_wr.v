@@ -58,6 +58,7 @@ module axi_adcfifo_wr #(
   input                   adc_clk,
   input                   adc_wr,
   input       [AXI_DATA_WIDTH-1:0]  adc_wdata,
+  output                  adc_capture_start,
 
   // axi interface
 
@@ -127,6 +128,8 @@ module axi_adcfifo_wr #(
   reg                             axi_rlast_d = 'd0;
   reg     [AXI_DATA_WIDTH-1:0]    axi_rdata_d = 'd0;
   reg                             axi_reset = 'd0;
+  reg                             adc_capture_arm = 1'b0;
+
 
   // internal signals
 
@@ -175,6 +178,18 @@ module axi_adcfifo_wr #(
   endfunction
 
   // fifo interface
+
+  always @(posedge adc_clk) begin
+    if (adc_rst == 1'b1) begin
+      adc_capture_arm <= 1'b0;
+    end else if (adc_xfer_init == 1'b1) begin
+      adc_capture_arm <= 1'b1;
+    end else if (adc_wr == 1'b1) begin
+      adc_capture_arm <= 1'b0;
+    end
+  end
+
+  assign adc_capture_start = adc_wr & adc_capture_arm;
 
   always @(posedge adc_clk) begin
     if (adc_rst == 1'b1) begin
