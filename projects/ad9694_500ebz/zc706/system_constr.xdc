@@ -28,10 +28,13 @@ set_property  -dict {PACKAGE_PIN  AH21  IOSTANDARD LVCMOS25} [get_ports spi_adc_
 set_property  -dict {PACKAGE_PIN  AD23  IOSTANDARD LVCMOS25} [get_ports adc_fda]                      ; ## H16  FMC_HPC_LA11_P
 set_property  -dict {PACKAGE_PIN  AE23  IOSTANDARD LVCMOS25} [get_ports adc_fdb]                      ; ## H17  FMC_HPC_LA11_N
 
-set_property  -dict {PACKAGE_PIN  AJ21  IOSTANDARD LVCMOS25} [get_ports spi_clk_clk]                  ; ## PMOD1_0
-set_property  -dict {PACKAGE_PIN  AK21  IOSTANDARD LVCMOS25} [get_ports spi_clk_mosi]                 ; ## PMOD1_1
-set_property  -dict {PACKAGE_PIN  AB21  IOSTANDARD LVCMOS25} [get_ports spi_clk_csn]                  ; ## PMOD1_2
-set_property  -dict {PACKAGE_PIN  AB16  IOSTANDARD LVCMOS25} [get_ports spi_clk_miso]                 ; ## PMOD1_3
+set_property  -dict {PACKAGE_PIN  AJ21  IOSTANDARD LVCMOS25} [get_ports spi_clk0_clk]                 ; ## PMOD1_0
+set_property  -dict {PACKAGE_PIN  AK21  IOSTANDARD LVCMOS25} [get_ports spi_clk0_mosi]                ; ## PMOD1_1
+set_property  -dict {PACKAGE_PIN  AB21  IOSTANDARD LVCMOS25} [get_ports spi_clk0_csn]                 ; ## PMOD1_2
+set_property  -dict {PACKAGE_PIN  AB16  IOSTANDARD LVCMOS25} [get_ports spi_clk0_miso]                ; ## PMOD1_3
+set_property  -dict {PACKAGE_PIN   Y20  IOSTANDARD LVCMOS25} [get_ports spi_clk1_clk]                 ; ## PMOD1_4
+set_property  -dict {PACKAGE_PIN  AA20  IOSTANDARD LVCMOS25} [get_ports spi_clk1_mosi]                ; ## PMOD1_5
+set_property  -dict {PACKAGE_PIN  AC18  IOSTANDARD LVCMOS25} [get_ports spi_clk1_csn]                 ; ## PMOD1_6
 
 # clocks
 

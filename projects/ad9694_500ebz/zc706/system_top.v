@@ -111,11 +111,14 @@ module system_top (
   output            spi_adc_mosi,
   input             spi_adc_miso,
 
-  // PMOD clockchip SPI
-  output            spi_clk_csn,
-  output            spi_clk_clk,
-  output            spi_clk_mosi,
-  input             spi_clk_miso
+  // PMOD clockchips SPI
+  output            spi_clk0_csn,
+  output            spi_clk0_clk,
+  output            spi_clk0_mosi,
+  input             spi_clk0_miso,
+  output            spi_clk1_csn,
+  output            spi_clk1_clk,
+  output            spi_clk1_mosi
 );
 
   // internal signals
@@ -137,14 +140,17 @@ module system_top (
   // spi
 
   assign spi_adc_clk = spi0_clk;
-  assign spi_adc_csn = spi0_csn[1];
+  assign spi_adc_csn = spi0_csn[2];
   assign spi_adc_mosi = spi0_mosi;
 
-  assign spi_clk_clk = spi0_clk;
-  assign spi_clk_csn = spi0_csn[0];
-  assign spi_clk_mosi = spi0_mosi;
+  assign spi_clk0_clk = spi0_clk;
+  assign spi_clk0_csn = spi0_csn[0];
+  assign spi_clk0_mosi = spi0_mosi;
+  assign spi_clk1_clk = spi0_clk;
+  assign spi_clk1_csn = spi0_csn[1];
+  assign spi_clk1_mosi = spi0_mosi;
 
-  assign spi0_miso = |({spi_adc_miso,spi_clk_miso} & ~spi0_csn);
+  assign spi0_miso = |({spi_adc_miso,1'b0,spi_clk0_miso} & ~spi0_csn);
 
   // instantiations
 
