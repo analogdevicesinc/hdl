@@ -118,7 +118,9 @@ module system_top (
   input             spi_clk0_miso,
   output            spi_clk1_csn,
   output            spi_clk1_clk,
-  output            spi_clk1_mosi
+  output            spi_clk1_mosi,
+
+  output            adc_capture_start
 );
 
   // internal signals
@@ -136,6 +138,7 @@ module system_top (
   wire            spi1_miso;
   wire            rx_ref_clk;
   wire            rx_sync;
+  wire            adc_capture_start_s;
 
   // spi
 
@@ -170,6 +173,18 @@ module system_top (
     .I (rx_sync),
     .O (rx_sync1_p),
     .OB (rx_sync1_n));
+
+  ODDR #(
+    .INIT(1'b0)
+  ) i_adc_capture_start_oddr (
+    .R (1'b0),
+    .S (1'b0),
+    .CE (1'b1),
+    .D1 (adc_capture_start_s),
+    .D2 (1'b0),
+    .C (rx_device_clk),
+    .Q (adc_capture_start)
+  );
 
   ad_iobuf #(.DATA_WIDTH(2)) i_iobuf (
     .dio_t ({gpio_t[33:32]}),
@@ -275,7 +290,8 @@ module system_top (
     .spi1_sdo_o (spi1_mosi),
     .sys_clk_clk_n (sys_clk_n),
     .sys_clk_clk_p (sys_clk_p),
-    .sys_rst (sys_rst)
+    .sys_rst (sys_rst),
+    .adc_capture_start (adc_capture_start_s)
   );
 
 endmodule

@@ -35,6 +35,7 @@ set_property  -dict {PACKAGE_PIN  AB16  IOSTANDARD LVCMOS25} [get_ports spi_clk0
 set_property  -dict {PACKAGE_PIN   Y20  IOSTANDARD LVCMOS25} [get_ports spi_clk1_clk]                 ; ## PMOD1_4
 set_property  -dict {PACKAGE_PIN  AA20  IOSTANDARD LVCMOS25} [get_ports spi_clk1_mosi]                ; ## PMOD1_5
 set_property  -dict {PACKAGE_PIN  AC18  IOSTANDARD LVCMOS25} [get_ports spi_clk1_csn]                 ; ## PMOD1_6
+set_property  -dict {PACKAGE_PIN  AC19  IOSTANDARD LVCMOS25} [get_ports adc_capture_start]            ; ## PMOD1_7
 
 # clocks
 

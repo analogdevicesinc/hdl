@@ -22,3 +22,7 @@ set adc_dma_data_width $DMA_DATA_WIDTH
 source $ad_hdl_dir/projects/common/zc706/zc706_system_bd.tcl
 source $ad_hdl_dir/projects/common/zc706/zc706_plddr3_adcfifo_bd.tcl
 source ../common/ad9694_500ebz_bd.tcl
+
+create_bd_port -dir O adc_capture_start
+
+ad_connect axi_ad9694_fifo/adc_capture_start adc_capture_start
