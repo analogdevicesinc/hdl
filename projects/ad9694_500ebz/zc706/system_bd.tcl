@@ -1,8 +1,8 @@
 
 # Configurable parameters
 
-set NUM_OF_CHANNELS 2
-set NUM_OF_LANES 2
+set NUM_OF_CHANNELS 4
+set NUM_OF_LANES 4
 set SAMPLE_RATE_MHZ 1000.0
 set ADC_RESOLUTION 8
 

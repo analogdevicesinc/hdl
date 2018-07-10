@@ -1,10 +1,18 @@
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
+# Lane 0 and 1 are in a different quad than lane 2 and 3. To get two quads
+# instantiate 6 physical lanes and leave lane 2 and 3 of the PHY unconnected.
+if {$NUM_OF_LANES == 4} {
+  set NUM_OF_XCVR_LANES 6
+} else {
+  set NUM_OF_XCVR_LANES 2
+}
+
 # adc peripherals
 
 ad_ip_instance axi_adxcvr axi_ad9694_xcvr [list \
-  CONFIG.NUM_OF_LANES $NUM_OF_LANES \
+  CONFIG.NUM_OF_LANES $NUM_OF_XCVR_LANES \
   CONFIG.QPLL_ENABLE 1 \
   CONFIG.TX_OR_RX_N 0 \
 ]
@@ -34,7 +42,7 @@ ad_ip_instance axi_dmac ad9694_dma [list \
 # shared transceiver core
 
 ad_ip_instance util_adxcvr util_ad9694_xcvr [list \
-  CONFIG.RX_NUM_OF_LANES $NUM_OF_LANES \
+  CONFIG.RX_NUM_OF_LANES $NUM_OF_XCVR_LANES \
   CONFIG.TX_NUM_OF_LANES 0 \
 ]
 

@@ -95,10 +95,12 @@ module system_top (
 
   input                   rx_ref_clk_p,
   input                   rx_ref_clk_n,
-  output                  rx_sync_p,
-  output                  rx_sync_n,
-  input       [ 1:0]      rx_data_p,
-  input       [ 1:0]      rx_data_n,
+  output                  rx_sync0_p,
+  output                  rx_sync0_n,
+  output                  rx_sync1_p,
+  output                  rx_sync1_n,
+  input       [ 3:0]      rx_data_p,
+  input       [ 3:0]      rx_data_n,
 
   inout                   adc_fdb,
   inout                   adc_fda,
@@ -153,10 +155,15 @@ module system_top (
     .O (rx_ref_clk),
     .ODIV2 ());
 
-  OBUFDS i_obufds_rx_sync (
+  OBUFDS i_obufds_rx_sync0 (
     .I (rx_sync),
-    .O (rx_sync_p),
-    .OB (rx_sync_n));
+    .O (rx_sync0_p),
+    .OB (rx_sync0_n));
+
+  OBUFDS i_obufds_rx_sync1 (
+    .I (rx_sync),
+    .O (rx_sync1_p),
+    .OB (rx_sync1_n));
 
   ad_iobuf #(.DATA_WIDTH(2)) i_iobuf (
     .dio_t ({gpio_t[33:32]}),
@@ -234,6 +241,10 @@ module system_top (
     .rx_data_0_p (rx_data_p[0]),
     .rx_data_1_n (rx_data_n[1]),
     .rx_data_1_p (rx_data_p[1]),
+    .rx_data_4_n (rx_data_n[2]),
+    .rx_data_4_p (rx_data_p[2]),
+    .rx_data_5_n (rx_data_n[3]),
+    .rx_data_5_p (rx_data_p[3]),
     .rx_ref_clk_0 (rx_ref_clk),
     .rx_sync_0 (rx_sync),
     .rx_sysref_0 (1'b0),
