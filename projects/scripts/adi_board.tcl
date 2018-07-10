@@ -68,18 +68,19 @@ proc ad_connect {p_name_1 p_name_2} {
     if {($p_msb ne "") && ($p_lsb ne "")} {
       set p_size [expr (($p_msb + 1) - $p_lsb)]
     }
-    set p_cell_name [regsub -all {/} $p_name_1 "_"]
-    set p_cell_name "${p_cell_name}_${p_name_2}"
-    if {$p_name_2 eq "VCC"} {
-      set p_value -1
-    } else {
-      set p_value 0
+    set p_cell_name "$p_name_2\_$p_size"
+    if {[get_bd_cells -quiet $p_cell_name] eq ""} {
+      if {$p_name_2 eq "VCC"} {
+        set p_value [expr (1 << $p_size) - 1]
+      } else {
+        set p_value 0
+      }
+      ad_ip_instance xlconstant $p_cell_name
+      set_property CONFIG.CONST_WIDTH $p_size [get_bd_cells $p_cell_name]
+      set_property CONFIG.CONST_VAL $p_value [get_bd_cells $p_cell_name]
     }
-    ad_ip_instance xlconstant $p_cell_name
-    set_property CONFIG.CONST_WIDTH $p_size [get_bd_cells $p_cell_name]
-    set_property CONFIG.CONST_VAL $p_value [get_bd_cells $p_cell_name]
     puts "connect_bd_net $p_cell_name/dout $p_name_1"
-    connect_bd_net [get_bd_pins $p_cell_name/dout] [get_bd_pins $p_name_1]
+    connect_bd_net [get_bd_pins $p_name_1] [get_bd_pins $p_cell_name/dout]
     return
   }
 
@@ -172,7 +173,7 @@ proc ad_reconct {p_name_1 p_name_2} {
 # lane map is provided logical lane $n is mapped onto physical lane $n.
 #
 proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {device_clk {}}} {
-  
+
   global xcvr_index
   global xcvr_tx_index
   global xcvr_rx_index
