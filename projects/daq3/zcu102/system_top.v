@@ -197,6 +197,7 @@ module system_top (
     .spi1_miso (1'd0),
     .spi1_mosi (),
     .spi1_sclk (),
+    .dac_fifo_bypass(gpio_o[41]),
     .tx_data_0_n (tx_data_n[0]),
     .tx_data_0_p (tx_data_p[0]),
     .tx_data_1_n (tx_data_n[1]),
