@@ -54,6 +54,7 @@ module dmac_2d_transfer #(
   input [DMA_LENGTH_WIDTH-1:0] req_src_stride,
   input req_sync_transfer_start,
   output reg req_eot,
+  input req_last,
 
   output reg out_req_valid,
   input out_req_ready,
@@ -61,6 +62,7 @@ module dmac_2d_transfer #(
   output [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] out_req_src_address,
   output [DMA_LENGTH_WIDTH-1:0] out_req_length,
   output reg out_req_sync_transfer_start,
+  output out_req_last,
   input out_eot
 );
 
@@ -70,6 +72,8 @@ reg [DMA_LENGTH_WIDTH-1:0] x_length = 'h00;
 reg [DMA_LENGTH_WIDTH-1:0] y_length = 'h00;
 reg [DMA_LENGTH_WIDTH-1:0] dest_stride = 'h0;
 reg [DMA_LENGTH_WIDTH-1:0] src_stride = 'h00;
+
+reg gen_last = 'h0;
 
 reg [1:0] req_id = 'h00;
 reg [1:0] eot_id = 'h00;
@@ -116,6 +120,7 @@ always @(posedge req_aclk) begin
     dest_stride <= req_dest_stride;
     src_stride <= req_src_stride;
     out_req_sync_transfer_start <= req_sync_transfer_start;
+    gen_last <= req_last;
   end else if (out_req_valid == 1'b1 && out_req_ready == 1'b1) begin
     dest_address <= dest_address + dest_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST];
     src_address <= src_address + src_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC];
@@ -139,5 +144,7 @@ always @(posedge req_aclk) begin
     end
   end
 end
+
+assign out_req_last = out_last & gen_last;
 
 endmodule
