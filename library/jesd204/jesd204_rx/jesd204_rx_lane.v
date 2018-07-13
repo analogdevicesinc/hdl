@@ -181,7 +181,7 @@ endgenerate
   end
 
 always @(posedge clk) begin
-  if (ctrl_err_statistics_reset == 1'b1) begin
+  if (reset == 1'b1 || ctrl_err_statistics_reset == 1'b1) begin
     status_err_statistics_cnt <= 32'h0;
   end else if (status_err_statistics_cnt[31:5] != 27'h7ffffff) begin
     status_err_statistics_cnt <= status_err_statistics_cnt + phy_notintable_cnt + phy_disperr_cnt + phy_unexpectedk_cnt;
