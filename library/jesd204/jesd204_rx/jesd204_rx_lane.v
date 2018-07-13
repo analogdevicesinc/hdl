@@ -106,12 +106,7 @@ wire [DATA_PATH_WIDTH*8-1:0] data_scrambled_s;
 wire [DATA_PATH_WIDTH*8-1:0] data_scrambled;
 
 reg  [DATA_PATH_WIDTH-1:0] unexpected_char;
-reg  [3:0] phy_disperr_cnt;
-reg  [3:0] phy_notintable_cnt;
-reg  [3:0] phy_unexpectedk_cnt;
-wire [7:0] phy_disperr_s;
-wire [7:0] phy_notintable_s;
-wire [7:0] unexpected_char_s;
+reg  [DATA_PATH_WIDTH-1:0] phy_char_err;
 
 wire ilas_monitor_reset_s;
 wire ilas_monitor_reset;
@@ -123,18 +118,6 @@ assign status_frame_align = frame_align;
 genvar i;
 generate
 
-for (i = DATA_PATH_WIDTH; i < MAX_DATA_PATH_WIDTH; i = i + 1) begin: g_defaults
-  assign phy_disperr_s[i] = 'd0;
-  assign phy_notintable_s[i] = 'd0;
-  assign unexpected_char_s[i] = 'd0;
-end
-
-for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: gen_err
-  assign phy_disperr_s[i] = phy_disperr[i];
-  assign phy_notintable_s[i] = phy_notintable[i];
-  assign unexpected_char_s[i] = unexpected_char[i];
-end
-
 for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: gen_char
   assign char[i] = phy_data[i*8+7:i*8];
   assign char_is_valid[i] = ~(phy_notintable[i] | phy_disperr[i]);
@@ -144,47 +127,52 @@ for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: gen_char
 
     char_is_cgs[i] <= 1'b0;
     charisk28[i] <= 1'b0;
+    unexpected_char[i] <= 1'b0;
 
-    if (char[i][4:0] == 'd28 && phy_charisk[i] && char_is_valid[i]) begin
-      charisk28[i] <= 1'b1;
-      if (char[i][7:5] == 'd5) begin
-        char_is_cgs[i] <= 1'b1;
+    if (phy_charisk[i] == 1'b1 && char_is_valid[i] == 1'b1) begin
+      if (char[i][4:0] == 'd28) begin
+        charisk28[i] <= 1'b1;
+        if (char[i][7:5] == 'd5) begin
+          char_is_cgs[i] <= 1'b1;
+        end
+      end else begin
+        unexpected_char[i] <= 1'b1;
       end
-    end
-  end
-  always @(posedge clk) begin
-    if (char[i][4:0] != 'd28 && phy_charisk[i] && char_is_valid[i]) begin
-      unexpected_char[i] <= 1'b1;
-    end else begin
-      unexpected_char[i] <= 1'b0;
     end
   end
 end
 endgenerate
 
-  always @(posedge clk) begin
-    if (ctrl_err_statistics_mask[0] == 1'b0 && cgs_ready == 1'b1) begin
-      phy_disperr_cnt <= phy_disperr_s[0] + phy_disperr_s[1] + phy_disperr_s[2] + phy_disperr_s[3] + phy_disperr_s[4] + phy_disperr_s[5] + phy_disperr_s[6] + phy_disperr_s[7];
-    end else begin
-      phy_disperr_cnt <= 4'h0;
-    end
-    if (ctrl_err_statistics_mask[1] == 1'b0 && cgs_ready == 1'b1) begin
-      phy_notintable_cnt <= phy_notintable_s[0] +  phy_notintable_s[0] +  phy_notintable_s[1] +  phy_notintable_s[2] +  phy_notintable_s[3] +  phy_notintable_s[4] +  phy_notintable_s[5] +  phy_notintable_s[6] +  phy_notintable_s[7];
-    end else begin
-      phy_notintable_cnt <= 4'h0;
-    end
-    if (ctrl_err_statistics_mask[2] == 1'b0 && cgs_ready == 1'b1) begin
-      phy_unexpectedk_cnt <= unexpected_char_s[0] +  unexpected_char_s[1] + unexpected_char_s[2] + unexpected_char_s[3] + unexpected_char_s[4] + unexpected_char_s[5] + unexpected_char_s[6] + unexpected_char_s[7];
-    end else begin
-      phy_unexpectedk_cnt <= 4'h0;
-    end
+always @(posedge clk) begin
+  if (cgs_ready == 1'b1) begin
+    /*
+     * Set the bit in phy_char_err if at least one of the monitored error
+     * conditions has occured.
+     */
+    phy_char_err <= (~{DATA_PATH_WIDTH{ctrl_err_statistics_mask[0]}} & phy_disperr) |
+                    (~{DATA_PATH_WIDTH{ctrl_err_statistics_mask[1]}} & phy_notintable) |
+                    (~{DATA_PATH_WIDTH{ctrl_err_statistics_mask[2]}} & unexpected_char);
+  end else begin
+    phy_char_err <= {DATA_PATH_WIDTH{1'b0}};
   end
+end
+
+function [7:0] num_set_bits;
+input [DATA_PATH_WIDTH-1:0] x;
+integer j;
+begin
+  num_set_bits = 0;
+  for (j = 0; j < DATA_PATH_WIDTH; j = j + 1) begin
+    num_set_bits = num_set_bits + x[j];
+  end
+end
+endfunction
 
 always @(posedge clk) begin
   if (reset == 1'b1 || ctrl_err_statistics_reset == 1'b1) begin
     status_err_statistics_cnt <= 32'h0;
   end else if (status_err_statistics_cnt[31:5] != 27'h7ffffff) begin
-    status_err_statistics_cnt <= status_err_statistics_cnt + phy_notintable_cnt + phy_disperr_cnt + phy_unexpectedk_cnt;
+    status_err_statistics_cnt <= status_err_statistics_cnt + num_set_bits(phy_char_err);
   end
 end
 
