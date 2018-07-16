@@ -41,7 +41,7 @@ module axi_ad9739a #(
   parameter   DEVICE_TYPE = 0,
   parameter   SERDES_OR_DDR_N = 1,
   parameter   MMCM_OR_BUFIO_N = 1,
-  parameter   DAC_DDS_TYPE = 1,
+  parameter   DAC_DDS_TYPE = 2,
   parameter   DAC_DDS_CORDIC_DW = 16,
   parameter   DAC_DDS_CORDIC_PHASE_DW = 16,
   parameter   DAC_DATAPATH_DISABLE = 0,
