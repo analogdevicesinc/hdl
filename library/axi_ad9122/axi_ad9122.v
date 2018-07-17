@@ -48,8 +48,8 @@ module axi_ad9122 #(
   parameter   MMCM_CLK1_DIV = 8,
   parameter   DAC_DATAPATH_DISABLE = 0,
   parameter   DAC_DDS_TYPE = 1,
-  parameter   DAC_DDS_CORDIC_DW = 16,
-  parameter   DAC_DDS_CORDIC_PHASE_DW = 16,
+  parameter   DAC_DDS_CORDIC_DW = 20,
+  parameter   DAC_DDS_CORDIC_PHASE_DW = 18,
   parameter   IO_DELAY_GROUP = "dev_if_delay_group") (
 
   // dac interface
