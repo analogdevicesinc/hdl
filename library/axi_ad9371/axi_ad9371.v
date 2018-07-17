@@ -39,8 +39,8 @@ module axi_ad9371 #(
 
   parameter   ID = 0,
   parameter   DAC_DDS_TYPE = 1,
-  parameter   DAC_DDS_CORDIC_DW = 16,
-  parameter   DAC_DDS_CORDIC_PHASE_DW = 16,
+  parameter   DAC_DDS_CORDIC_DW = 20,
+  parameter   DAC_DDS_CORDIC_PHASE_DW = 18,
   parameter   DAC_DATAPATH_DISABLE = 0,
   parameter   ADC_DATAPATH_DISABLE = 0) (
 
