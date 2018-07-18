@@ -118,7 +118,7 @@ module up_pmod #(
 
   // resets
 
-  ad_rst i_adc_rst_reg    (.preset(up_preset_s),      .clk(pmod_clk),    .rst(pmod_rst));
+  ad_rst i_adc_rst_reg (.rst_async(up_preset_s), .clk(pmod_clk), .rstn(), .rst(pmod_rst));
 
   // adc control & status
 

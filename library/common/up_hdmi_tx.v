@@ -267,8 +267,8 @@ module up_hdmi_tx #(
 
   // resets
 
-  ad_rst i_core_rst_reg (.preset(up_core_preset), .clk(hdmi_clk),   .rst(hdmi_rst));
-  ad_rst i_vdma_rst_reg (.preset(up_core_preset), .clk(vdma_clk),   .rst(vdma_rst));
+  ad_rst i_core_rst_reg (.rst_async(up_core_preset), .clk(hdmi_clk), .rstn(), .rst(hdmi_rst));
+  ad_rst i_vdma_rst_reg (.rst_async(up_core_preset), .clk(vdma_clk), .rstn(), .rst(vdma_rst));
 
   // hdmi control & status
 
@@ -340,7 +340,7 @@ module up_hdmi_tx #(
                       up_vdma_tpm_oos_s}),
     .d_rst (vdma_rst),
     .d_clk (vdma_clk),
-    .d_data_status ({ vdma_ovf, 
+    .d_data_status ({ vdma_ovf,
                       vdma_unf,
                       vdma_tpm_oos}));
 
