@@ -122,8 +122,9 @@ module axi_gpreg_clock_mon #(
     .d_clk (d_clk_g));
 
   ad_rst i_d_rst_reg (
-    .preset (up_d_preset),
+    .rst_async (up_d_preset),
     .clk (d_clk_g),
+    .rstn (),
     .rst (d_rst));
 
   generate

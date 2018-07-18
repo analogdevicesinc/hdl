@@ -221,8 +221,9 @@ module up_hdmi_rx #(
   // resets
 
   ad_rst i_hdmi_rst_reg (
-    .preset (up_core_preset),
+    .rst_async (up_core_preset),
     .clk (hdmi_clk),
+    .rstn (),
     .rst (hdmi_rst));
 
   // hdmi control & status

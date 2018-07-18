@@ -403,8 +403,8 @@ module up_adc_common #(
 
   // resets
 
-  ad_rst i_mmcm_rst_reg (.preset(up_mmcm_preset), .clk(up_clk),  .rst(mmcm_rst));
-  ad_rst i_core_rst_reg (.preset(up_core_preset), .clk(adc_clk), .rst(adc_rst));
+  ad_rst i_mmcm_rst_reg (.rst_async(up_mmcm_preset), .clk(up_clk),  .rstn(), .rst(mmcm_rst));
+  ad_rst i_core_rst_reg (.rst_async(up_core_preset), .clk(adc_clk), .rstn(), .rst(adc_rst));
 
   // adc control & status
 

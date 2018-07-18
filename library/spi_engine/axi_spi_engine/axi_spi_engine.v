@@ -333,8 +333,9 @@ generate if (ASYNC_SPI_CLK) begin
 
 wire spi_reset;
 ad_rst i_spi_resetn (
-        .preset(up_sw_reset),
+        .rst_async(up_sw_reset),
         .clk(spi_clk),
+        .rstn(),
         .rst(spi_reset)
 );
 assign spi_resetn = ~spi_reset;

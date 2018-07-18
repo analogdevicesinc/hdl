@@ -205,8 +205,9 @@ module up_delay_cntrl #(
   assign delay_rst = delay_rst_s;
 
   ad_rst i_delay_rst_reg (
-    .preset (up_preset),
+    .rst_async (up_preset),
     .clk (delay_clk),
+    .rstn (),
     .rst (delay_rst_s));
   end
   endgenerate

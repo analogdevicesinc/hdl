@@ -57,9 +57,9 @@ module axi_logic_analyzer_reg (
   output      [15:0]  overwrite_data,
   input       [15:0]  input_data,
   output      [15:0]  od_pp_n,
-  
+
   input               triggered,
-  
+
   output              streaming,
 
  // bus interface
@@ -220,7 +220,7 @@ module axi_logic_analyzer_reg (
     end
   end
 
-  ad_rst i_core_rst_reg (.preset(!up_rstn), .clk(clk), .rst(reset));
+  ad_rst i_core_rst_reg (.rst_async(~up_rstn), .clk(clk), .rstn(), .rst(reset));
 
    up_xfer_cntrl #(.DATA_WIDTH(285)) i_xfer_cntrl (
     .up_rstn (up_rstn),
