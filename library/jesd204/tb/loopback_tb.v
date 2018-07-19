@@ -217,6 +217,7 @@ module loopback_tb;
   );
 
   wire [NUM_LANES-1:0] rx_cfg_lanes_disable;
+  wire [NUM_LINKS-1:0] rx_cfg_links_disable;
   wire [7:0] rx_cfg_beats_per_multiframe;
   wire [7:0] rx_cfg_octets_per_frame;
   wire [7:0] rx_cfg_lmfc_offset;
@@ -239,6 +240,7 @@ module loopback_tb;
     .clk(clk),
 
     .cfg_lanes_disable(rx_cfg_lanes_disable),
+    .cfg_links_disable(rx_cfg_links_disable),
     .cfg_beats_per_multiframe(rx_cfg_beats_per_multiframe),
     .cfg_octets_per_frame(rx_cfg_octets_per_frame),
     .cfg_lmfc_offset(rx_cfg_lmfc_offset),
@@ -257,6 +259,7 @@ module loopback_tb;
     .reset(reset),
 
     .cfg_lanes_disable(rx_cfg_lanes_disable),
+    .cfg_links_disable(rx_cfg_links_disable),
     .cfg_beats_per_multiframe(rx_cfg_beats_per_multiframe),
     .cfg_octets_per_frame(rx_cfg_octets_per_frame),
     .cfg_lmfc_offset(rx_cfg_lmfc_offset),
