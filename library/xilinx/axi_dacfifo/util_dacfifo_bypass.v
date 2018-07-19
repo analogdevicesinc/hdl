@@ -118,6 +118,7 @@ module util_dacfifo_bypass #(
     .addra (dma_mem_waddr),
     .dina (dma_data),
     .clkb (dac_clk),
+    .reb (1'b1),
     .addrb (dac_mem_raddr),
     .doutb (dac_mem_rdata_s));
 

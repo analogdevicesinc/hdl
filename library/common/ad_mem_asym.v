@@ -45,29 +45,51 @@ module ad_mem_asym #(
   parameter   B_ADDRESS_WIDTH =   10,
   parameter   B_DATA_WIDTH =  64) (
 
-  input                   clka,
-  input                   wea,
-  input       [A_ADDRESS_WIDTH-1:0]  addra,
-  input       [A_DATA_WIDTH-1:0]  dina,
+  input                             clka,
+  input                             wea,
+  input       [A_ADDRESS_WIDTH-1:0] addra,
+  input       [A_DATA_WIDTH-1:0]    dina,
 
-  input                   clkb,
-  input       [B_ADDRESS_WIDTH-1:0]  addrb,
-  output  reg [B_DATA_WIDTH-1:0]  doutb);
+  input                             clkb,
+  input                             reb,
+  input       [B_ADDRESS_WIDTH-1:0] addrb,
+  output  reg [B_DATA_WIDTH-1:0]    doutb);
 
 
-  localparam  MEM_ADDRESS_WIDTH = (A_ADDRESS_WIDTH > B_ADDRESS_WIDTH) ? A_ADDRESS_WIDTH : B_ADDRESS_WIDTH;
-  localparam  MEM_DATA_WIDTH = (A_DATA_WIDTH > B_DATA_WIDTH) ? B_DATA_WIDTH : A_DATA_WIDTH;
+  `define max(a,b) {(a) > (b) ? (a) : (b)}
+  `define min(a,b) {(a) < (b) ? (a) : (b)}
+
+  function integer clog2;
+    input integer value;
+    begin
+      if (value < 2)
+        clog2 = value;
+      else begin
+        value = value - 1;
+        for (clog2 = 0; value > 0; clog2 = clog2 + 1)
+          value = value >> 1;
+      end
+    end
+  endfunction
+
+  localparam  MEM_ADDRESS_WIDTH = `max(A_ADDRESS_WIDTH, B_ADDRESS_WIDTH);
+  localparam  MIN_WIDTH = `min(A_DATA_WIDTH, B_DATA_WIDTH);
+  localparam  MAX_WIDTH = `max(A_DATA_WIDTH, B_DATA_WIDTH);
+  localparam  MEM_DATA_WIDTH = MIN_WIDTH;
   localparam  MEM_SIZE = 2 ** MEM_ADDRESS_WIDTH;
-  localparam  MEM_RATIO = (A_DATA_WIDTH > B_DATA_WIDTH) ? A_DATA_WIDTH/B_DATA_WIDTH : B_DATA_WIDTH/A_DATA_WIDTH;
-  localparam  MEM_IO_COMP = (A_DATA_WIDTH > B_DATA_WIDTH) ? 1'b1 : 1'b0;
+  localparam  MEM_RATIO = MAX_WIDTH / MIN_WIDTH;
+  localparam  MEM_RATIO_LOG2 = clog2(MEM_RATIO);
 
   // internal registers
 
-  reg     [MEM_DATA_WIDTH-1:0]    m_ram[0:MEM_SIZE-1];
+  reg      [MEM_DATA_WIDTH-1:0]    m_ram[0:MEM_SIZE-1];
 
-  // write interface options
+  //---------------------------------------------------------------------------
+  // write interface
+  //---------------------------------------------------------------------------
 
-  generate if (MEM_IO_COMP == 0) begin
+  // write data width is narrower than read data width
+  generate if (A_DATA_WIDTH <= B_DATA_WIDTH) begin
     always @(posedge clka) begin
       if (wea == 1'b1) begin
         m_ram[addra] <= dina;
@@ -76,81 +98,46 @@ module ad_mem_asym #(
   end
   endgenerate
 
-  generate if ((MEM_IO_COMP == 1) && (MEM_RATIO == 2)) begin
-    always @(posedge clka) begin
-      if (wea == 1'b1) begin
-        m_ram[{addra, 1'd0}] <= dina[((1*B_DATA_WIDTH)-1):(B_DATA_WIDTH*0)];
-        m_ram[{addra, 1'd1}] <= dina[((2*B_DATA_WIDTH)-1):(B_DATA_WIDTH*1)];
+  // write data width is wider than read data width
+  generate if (A_DATA_WIDTH > B_DATA_WIDTH) begin
+    always @(posedge clka) begin : memwrite
+      integer i;
+      reg [MEM_RATIO_LOG2-1:0] lsb;
+      for (i = 0; i < MEM_RATIO; i = i + 1) begin : awrite
+        lsb = i;
+        if (wea) begin
+          m_ram[{addra, lsb}] <= dina[i * MIN_WIDTH +: MIN_WIDTH];
+        end
       end
     end
   end
   endgenerate
 
-  generate if ((MEM_IO_COMP == 1) && (MEM_RATIO == 4)) begin
-    always @(posedge clka) begin
-      if (wea == 1'b1) begin
-        m_ram[{addra, 2'd0}] <= dina[((1*B_DATA_WIDTH)-1):(B_DATA_WIDTH*0)];
-        m_ram[{addra, 2'd1}] <= dina[((2*B_DATA_WIDTH)-1):(B_DATA_WIDTH*1)];
-        m_ram[{addra, 2'd2}] <= dina[((3*B_DATA_WIDTH)-1):(B_DATA_WIDTH*2)];
-        m_ram[{addra, 2'd3}] <= dina[((4*B_DATA_WIDTH)-1):(B_DATA_WIDTH*3)];
+  //---------------------------------------------------------------------------
+  // read interface
+  //---------------------------------------------------------------------------
+
+  // read data width is narrower than write data width
+  generate if (A_DATA_WIDTH >= B_DATA_WIDTH) begin
+    always @(posedge clkb) begin
+      if (reb == 1'b1) begin
+        doutb <= m_ram[addrb];
       end
     end
   end
   endgenerate
 
-  generate if ((MEM_IO_COMP == 1) && (MEM_RATIO == 8)) begin
-    always @(posedge clka) begin
-      if (wea == 1'b1) begin
-        m_ram[{addra, 3'd0}] <= dina[((1*B_DATA_WIDTH)-1):(B_DATA_WIDTH*0)];
-        m_ram[{addra, 3'd1}] <= dina[((2*B_DATA_WIDTH)-1):(B_DATA_WIDTH*1)];
-        m_ram[{addra, 3'd2}] <= dina[((3*B_DATA_WIDTH)-1):(B_DATA_WIDTH*2)];
-        m_ram[{addra, 3'd3}] <= dina[((4*B_DATA_WIDTH)-1):(B_DATA_WIDTH*3)];
-        m_ram[{addra, 3'd4}] <= dina[((5*B_DATA_WIDTH)-1):(B_DATA_WIDTH*4)];
-        m_ram[{addra, 3'd5}] <= dina[((6*B_DATA_WIDTH)-1):(B_DATA_WIDTH*5)];
-        m_ram[{addra, 3'd6}] <= dina[((7*B_DATA_WIDTH)-1):(B_DATA_WIDTH*6)];
-        m_ram[{addra, 3'd7}] <= dina[((8*B_DATA_WIDTH)-1):(B_DATA_WIDTH*7)];
+  // read data width is wider than write data width
+  generate if (A_DATA_WIDTH < B_DATA_WIDTH) begin
+    always @(posedge clkb) begin : memread
+      integer i;
+      reg [MEM_RATIO_LOG2-1:0] lsb;
+      for (i = 0; i < MEM_RATIO; i = i + 1) begin : aread
+        lsb = i;
+        if (reb == 1'b1) begin
+          doutb[i*MIN_WIDTH +: MIN_WIDTH] <= m_ram[{addrb, lsb}];
+        end
       end
-    end
-  end
-  endgenerate
-
-  // read interface options
-
-  generate if ((MEM_IO_COMP == 1) || (MEM_RATIO == 1)) begin
-    always @(posedge clkb) begin
-      doutb <= m_ram[addrb];
-    end
-  end
-  endgenerate
-
-  generate if ((MEM_IO_COMP == 0) && (MEM_RATIO == 2)) begin
-    always @(posedge clkb) begin
-      doutb <= {m_ram[{addrb, 1'd1}],
-                m_ram[{addrb, 1'd0}]};
-    end
-  end
-  endgenerate
-
-  generate if ((MEM_IO_COMP == 0) && (MEM_RATIO == 4)) begin
-    always @(posedge clkb) begin
-      doutb <= {m_ram[{addrb, 2'd3}],
-                m_ram[{addrb, 2'd2}],
-                m_ram[{addrb, 2'd1}],
-                m_ram[{addrb, 2'd0}]};
-    end
-  end
-  endgenerate
-
-  generate if ((MEM_IO_COMP == 0) && (MEM_RATIO == 8)) begin
-    always @(posedge clkb) begin
-      doutb <= {m_ram[{addrb, 3'd7}],
-                m_ram[{addrb, 3'd6}],
-                m_ram[{addrb, 3'd5}],
-                m_ram[{addrb, 3'd4}],
-                m_ram[{addrb, 3'd3}],
-                m_ram[{addrb, 3'd2}],
-                m_ram[{addrb, 3'd1}],
-                m_ram[{addrb, 3'd0}]};
     end
   end
   endgenerate

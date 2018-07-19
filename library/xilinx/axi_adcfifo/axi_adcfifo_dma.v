@@ -60,7 +60,7 @@ module axi_adcfifo_dma #(
   localparam  DMA_ADDRESS_WIDTH = 8;
   localparam  AXI_ADDRESS_WIDTH = (DMA_MEM_RATIO == 2) ? (DMA_ADDRESS_WIDTH - 1) :
     ((DMA_MEM_RATIO == 4) ? (DMA_ADDRESS_WIDTH - 2) : (DMA_ADDRESS_WIDTH - 3));
- 
+
 
   // internal registers
 
@@ -157,7 +157,7 @@ module axi_adcfifo_dma #(
       end
     end
   end
-  
+
   assign dma_wready_s = (DMA_READY_ENABLE == 0) ? 1'b1 : dma_wready;
   assign dma_rd_s = (dma_raddr == dma_waddr_rel_s) ? 1'b0 : dma_wready_s;
 
@@ -198,6 +198,7 @@ module axi_adcfifo_dma #(
     .addra (axi_waddr),
     .dina (axi_ddata),
     .clkb (dma_clk),
+    .reb (1'b1),
     .addrb (dma_raddr),
     .doutb (dma_rdata_s));
 

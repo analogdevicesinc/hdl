@@ -213,6 +213,7 @@ module util_adcfifo #(
     .addra (adc_waddr_int),
     .dina (adc_wdata_int),
     .clkb (dma_clk),
+    .reb (1'b1),
     .addrb (dma_raddr),
     .doutb (dma_rdata_s));
   end
