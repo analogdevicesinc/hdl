@@ -188,6 +188,7 @@ module axi_dacfifo_wr #(
     .addra (dma_mem_waddr),
     .dina (dma_data),
     .clkb (axi_clk),
+    .reb (1'b1),
     .addrb (axi_mem_raddr),
     .doutb (axi_mem_rdata_s));
 
