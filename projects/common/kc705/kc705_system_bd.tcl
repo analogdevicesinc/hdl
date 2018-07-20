@@ -35,18 +35,6 @@ create_bd_port -dir I -from 31 -to 0 gpio1_i
 create_bd_port -dir O -from 31 -to 0 gpio1_o
 create_bd_port -dir O -from 31 -to 0 gpio1_t
 
-# interrupts
-
-create_bd_port -dir I -type intr mb_intr_02
-create_bd_port -dir I -type intr mb_intr_03
-create_bd_port -dir I -type intr mb_intr_06
-create_bd_port -dir I -type intr mb_intr_07
-create_bd_port -dir I -type intr mb_intr_08
-create_bd_port -dir I -type intr mb_intr_12
-create_bd_port -dir I -type intr mb_intr_13
-create_bd_port -dir I -type intr mb_intr_14
-create_bd_port -dir I -type intr mb_intr_15
-
 # io settings
 
 set_property -dict [list CONFIG.POLARITY {ACTIVE_HIGH}] [get_bd_ports sys_rst]
@@ -189,20 +177,20 @@ ad_connect sys_cpu_clk  axi_spi/ext_spi_clk
 
 ad_connect sys_concat_intc/In0    axi_timer/interrupt
 ad_connect sys_concat_intc/In1    axi_ethernet/ip2intc_irpt
-ad_connect sys_concat_intc/In2    mb_intr_02
-ad_connect sys_concat_intc/In3    mb_intr_03
+ad_connect sys_concat_intc/In2    GND
+ad_connect sys_concat_intc/In3    GND
 ad_connect sys_concat_intc/In4    axi_uart/interrupt
 ad_connect sys_concat_intc/In5    axi_gpio_lcd/ip2intc_irpt
-ad_connect sys_concat_intc/In6    mb_intr_06
-ad_connect sys_concat_intc/In7    mb_intr_07
-ad_connect sys_concat_intc/In8    mb_intr_08
+ad_connect sys_concat_intc/In6    GND
+ad_connect sys_concat_intc/In7    GND
+ad_connect sys_concat_intc/In8    GND
 ad_connect sys_concat_intc/In9    axi_iic_main/iic2intc_irpt
 ad_connect sys_concat_intc/In10   axi_spi/ip2intc_irpt
 ad_connect sys_concat_intc/In11   axi_gpio/ip2intc_irpt
-ad_connect sys_concat_intc/In12   mb_intr_12
-ad_connect sys_concat_intc/In13   mb_intr_13
-ad_connect sys_concat_intc/In14   mb_intr_14
-ad_connect sys_concat_intc/In15   mb_intr_15
+ad_connect sys_concat_intc/In12   GND
+ad_connect sys_concat_intc/In13   GND
+ad_connect sys_concat_intc/In14   GND
+ad_connect sys_concat_intc/In15   GND
 
 # defaults (external interface)
 

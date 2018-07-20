@@ -41,23 +41,6 @@ create_bd_port -dir O -from 23 -to 0 hdmi_data
 
 create_bd_port -dir O spdif
 
-# interrupts
-
-create_bd_port -dir I -type intr ps_intr_00
-create_bd_port -dir I -type intr ps_intr_01
-create_bd_port -dir I -type intr ps_intr_02
-create_bd_port -dir I -type intr ps_intr_03
-create_bd_port -dir I -type intr ps_intr_04
-create_bd_port -dir I -type intr ps_intr_05
-create_bd_port -dir I -type intr ps_intr_06
-create_bd_port -dir I -type intr ps_intr_07
-create_bd_port -dir I -type intr ps_intr_08
-create_bd_port -dir I -type intr ps_intr_09
-create_bd_port -dir I -type intr ps_intr_10
-create_bd_port -dir I -type intr ps_intr_11
-create_bd_port -dir I -type intr ps_intr_12
-create_bd_port -dir I -type intr ps_intr_13
-
 # instance: sys_ps7
 
 ad_ip_instance processing_system7 sys_ps7
@@ -189,20 +172,20 @@ ad_connect  spdif axi_spdif_tx_core/spdif_tx_o
 ad_connect  sys_concat_intc/dout sys_ps7/IRQ_F2P
 ad_connect  sys_concat_intc/In15 axi_hdmi_dma/mm2s_introut
 ad_connect  sys_concat_intc/In14 axi_iic_main/iic2intc_irpt
-ad_connect  sys_concat_intc/In13 ps_intr_13
-ad_connect  sys_concat_intc/In12 ps_intr_12
-ad_connect  sys_concat_intc/In11 ps_intr_11
-ad_connect  sys_concat_intc/In10 ps_intr_10
-ad_connect  sys_concat_intc/In9 ps_intr_09
-ad_connect  sys_concat_intc/In8 ps_intr_08
-ad_connect  sys_concat_intc/In7 ps_intr_07
-ad_connect  sys_concat_intc/In6 ps_intr_06
-ad_connect  sys_concat_intc/In5 ps_intr_05
-ad_connect  sys_concat_intc/In4 ps_intr_04
-ad_connect  sys_concat_intc/In3 ps_intr_03
-ad_connect  sys_concat_intc/In2 ps_intr_02
-ad_connect  sys_concat_intc/In1 ps_intr_01
-ad_connect  sys_concat_intc/In0 ps_intr_00
+ad_connect  sys_concat_intc/In13 GND
+ad_connect  sys_concat_intc/In12 GND
+ad_connect  sys_concat_intc/In11 GND
+ad_connect  sys_concat_intc/In10 GND
+ad_connect  sys_concat_intc/In9 GND
+ad_connect  sys_concat_intc/In8 GND
+ad_connect  sys_concat_intc/In7 GND
+ad_connect  sys_concat_intc/In6 GND
+ad_connect  sys_concat_intc/In5 GND
+ad_connect  sys_concat_intc/In4 GND
+ad_connect  sys_concat_intc/In3 GND
+ad_connect  sys_concat_intc/In2 GND
+ad_connect  sys_concat_intc/In1 GND
+ad_connect  sys_concat_intc/In0 GND
 
 # interconnects
 
