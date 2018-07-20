@@ -16,25 +16,6 @@ create_bd_port -dir I -from 94 -to 0 gpio_i
 create_bd_port -dir O -from 94 -to 0 gpio_o
 create_bd_port -dir O -from 94 -to 0 gpio_t
 
-# interrupts
-
-create_bd_port -dir I -type intr ps_intr_00
-create_bd_port -dir I -type intr ps_intr_01
-create_bd_port -dir I -type intr ps_intr_02
-create_bd_port -dir I -type intr ps_intr_03
-create_bd_port -dir I -type intr ps_intr_04
-create_bd_port -dir I -type intr ps_intr_05
-create_bd_port -dir I -type intr ps_intr_06
-create_bd_port -dir I -type intr ps_intr_07
-create_bd_port -dir I -type intr ps_intr_08
-create_bd_port -dir I -type intr ps_intr_09
-create_bd_port -dir I -type intr ps_intr_10
-create_bd_port -dir I -type intr ps_intr_11
-create_bd_port -dir I -type intr ps_intr_12
-create_bd_port -dir I -type intr ps_intr_13
-create_bd_port -dir I -type intr ps_intr_14
-create_bd_port -dir I -type intr ps_intr_15
-
 # instance: sys_ps8
 
 ad_ip_instance zynq_ultra_ps_e sys_ps8
@@ -125,20 +106,20 @@ ad_ip_parameter sys_concat_intc_1 CONFIG.NUM_PORTS 8
 ad_connect  sys_concat_intc_0/dout sys_ps8/pl_ps_irq0
 ad_connect  sys_concat_intc_1/dout sys_ps8/pl_ps_irq1
 
-ad_connect  sys_concat_intc_1/In7 ps_intr_15
-ad_connect  sys_concat_intc_1/In6 ps_intr_14
-ad_connect  sys_concat_intc_1/In5 ps_intr_13
-ad_connect  sys_concat_intc_1/In4 ps_intr_12
-ad_connect  sys_concat_intc_1/In3 ps_intr_11
-ad_connect  sys_concat_intc_1/In2 ps_intr_10
-ad_connect  sys_concat_intc_1/In1 ps_intr_09
-ad_connect  sys_concat_intc_1/In0 ps_intr_08
-ad_connect  sys_concat_intc_0/In7 ps_intr_07
-ad_connect  sys_concat_intc_0/In6 ps_intr_06
-ad_connect  sys_concat_intc_0/In5 ps_intr_05
-ad_connect  sys_concat_intc_0/In4 ps_intr_04
-ad_connect  sys_concat_intc_0/In3 ps_intr_03
-ad_connect  sys_concat_intc_0/In2 ps_intr_02
-ad_connect  sys_concat_intc_0/In1 ps_intr_01
-ad_connect  sys_concat_intc_0/In0 ps_intr_00
+ad_connect  sys_concat_intc_1/In7 GND
+ad_connect  sys_concat_intc_1/In6 GND
+ad_connect  sys_concat_intc_1/In5 GND
+ad_connect  sys_concat_intc_1/In4 GND
+ad_connect  sys_concat_intc_1/In3 GND
+ad_connect  sys_concat_intc_1/In2 GND
+ad_connect  sys_concat_intc_1/In1 GND
+ad_connect  sys_concat_intc_1/In0 GND
+ad_connect  sys_concat_intc_0/In7 GND
+ad_connect  sys_concat_intc_0/In6 GND
+ad_connect  sys_concat_intc_0/In5 GND
+ad_connect  sys_concat_intc_0/In4 GND
+ad_connect  sys_concat_intc_0/In3 GND
+ad_connect  sys_concat_intc_0/In2 GND
+ad_connect  sys_concat_intc_0/In1 GND
+ad_connect  sys_concat_intc_0/In0 GND
 

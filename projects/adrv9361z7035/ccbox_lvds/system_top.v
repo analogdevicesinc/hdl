@@ -262,7 +262,7 @@ module system_top (
   assign gpio_i[55:53] = gpio_o[55:53];
 
   // rf & clock-select gpio - 52:51
- 
+
   ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_rf_1 (
     .dio_t (gpio_t[52:51]),
     .dio_i (gpio_o[52:51]),
@@ -271,7 +271,7 @@ module system_top (
               gpio_clksel}));     // 51:51
 
   // tact-scroll-wheel gpio - 50:47
- 
+
   ad_iobuf #(.DATA_WIDTH(4)) i_iobuf_tsw_1 (
     .dio_t (gpio_t[50:47]),
     .dio_i (gpio_o[50:47]),
@@ -282,7 +282,7 @@ module system_top (
               tsw_s5}));          // 47
 
   // ad9361 gpio - 46:32
- 
+
   ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_ad9361 (
     .dio_t (gpio_t[46:32]),
     .dio_i (gpio_o[46:32]),
@@ -341,18 +341,6 @@ module system_top (
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
     .otg_vbusoc (1'b0),
-    .ps_intr_00 (1'b0),
-    .ps_intr_01 (1'b0),
-    .ps_intr_02 (1'b0),
-    .ps_intr_03 (1'b0),
-    .ps_intr_04 (1'b0),
-    .ps_intr_05 (1'b0),
-    .ps_intr_06 (1'b0),
-    .ps_intr_07 (1'b0),
-    .ps_intr_08 (1'b0),
-    .ps_intr_09 (1'b0),
-    .ps_intr_10 (1'b0),
-    .ps_intr_15 (1'b0),
     .rx_clk_in_n (rx_clk_in_n),
     .rx_clk_in_p (rx_clk_in_p),
     .rx_data_in_n (rx_data_in_n),

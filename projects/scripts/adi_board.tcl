@@ -717,29 +717,29 @@ proc ad_cpu_interrupt {p_ps_index p_mb_index p_name} {
 
   if {($sys_zynq == 2) && ($p_index <= 7)} {
     set p_net [get_bd_nets -of_objects [get_bd_pins sys_concat_intc_0/In$p_index]]
-    set p_pin [find_bd_objs -relation connected_to [get_bd_pins sys_concat_intc_0/In$p_index]]
+    set p_pin [get_bd_pins sys_concat_intc_0/In$p_index]
 
-    puts "delete_bd_objs $p_net $p_pin"
-    delete_bd_objs $p_net $p_pin
+    puts "disconnect_bd_net $p_net $p_pin"
+    disconnect_bd_net $p_net $p_pin
     ad_connect sys_concat_intc_0/In$p_index $p_name
   }
 
   if {($sys_zynq == 2) && ($p_index >= 8)} {
     set p_net [get_bd_nets -of_objects [get_bd_pins sys_concat_intc_1/In$m_index]]
-    set p_pin [find_bd_objs -relation connected_to [get_bd_pins sys_concat_intc_1/In$m_index]]
+    set p_pin [get_bd_pins sys_concat_intc_1/In$m_index]
 
-    puts "delete_bd_objs $p_net $p_pin"
-    delete_bd_objs $p_net $p_pin
+    puts "disconnect_bd_net $p_net $p_pin"
+    disconnect_bd_net $p_net $p_pin
     ad_connect sys_concat_intc_1/In$m_index $p_name
   }
 
   if {$sys_zynq <= 1} {
 
     set p_net [get_bd_nets -of_objects [get_bd_pins sys_concat_intc/In$p_index]]
-    set p_pin [find_bd_objs -relation connected_to [get_bd_pins sys_concat_intc/In$p_index]]
+    set p_pin [get_bd_pins sys_concat_intc/In$p_index]
 
-    puts "delete_bd_objs $p_net $p_pin"
-    delete_bd_objs $p_net $p_pin
+    puts "disconnect_bd_net $p_net $p_pin"
+    disconnect_bd_net $p_net $p_pin
     ad_connect sys_concat_intc/In$p_index $p_name
   }
 }
