@@ -149,7 +149,7 @@ proc post_propagate {cellpath otherinfo} {
 			foreach addr_seg $addr_segs {
 				set range [get_property "range" $addr_seg]
 				set offset [get_property "offset" $addr_seg]
-				set addr_width [expr max(round(log($range + $offset) / log(2)), $addr_width)]
+				set addr_width [expr max(int(ceil(log($range - 1 + $offset) / log(2))), $addr_width)]
 			}
 		} else {
 			set addr_width 32
