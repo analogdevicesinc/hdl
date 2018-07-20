@@ -235,7 +235,7 @@ module ad_tdd_control#(
     end else begin
       if (tdd_cstate == OFF) begin
         tdd_burst_counter <= tdd_burst_count;
-      end else if ((tdd_burst_counter > 0) && (tdd_endof_frame == 1'b1)) begin
+      end else if ((tdd_burst_counter != 0) && (tdd_endof_frame == 1'b1)) begin
         tdd_burst_counter <= tdd_burst_counter - 1'b1;
       end
     end
