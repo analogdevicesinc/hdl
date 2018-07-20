@@ -12,7 +12,6 @@ adi_project_files adrv9364z7020_ccbob_lvds [list \
   "../common/ccbob_constr.xdc" \
   "system_top.v" ]
 
-set_property is_enabled false [get_files  *axi_gpreg_constr.xdc]
 adi_project_run adrv9364z7020_ccbob_lvds
 source $ad_hdl_dir/library/axi_ad9361/axi_ad9361_delay.tcl
 

@@ -12,7 +12,7 @@ adi_project_files adrv9361z7035_ccbob_cmos [list \
   "../common/ccbob_constr.xdc" \
   "system_top.v" ]
 
-set_property is_enabled false [get_files  *axi_gpreg_constr.xdc]
+set_property is_enabled false [get_files  *ad_rst_constr.xdc]
 adi_project_run adrv9361z7035_ccbob_cmos
 source $ad_hdl_dir/library/axi_ad9361/axi_ad9361_delay.tcl
 
