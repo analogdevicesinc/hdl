@@ -45,7 +45,7 @@ module ad_tdd_control#(
   input                   clk,
   input                   rst,
 
-  // TDD timming signals
+  // TDD timing signals
 
   input                   tdd_enable,
   input                   tdd_secondary,
@@ -136,6 +136,8 @@ module ad_tdd_control#(
   reg             tdd_sync_d2 = 1'b0;
   reg             tdd_sync_d3 = 1'b0;
 
+  reg             tdd_endof_frame = 1'b0;
+
   // internal signals
 
   wire   [23:0]   tdd_vco_rx_on_1_s;
@@ -159,7 +161,6 @@ module ad_tdd_control#(
   wire   [23:0]   tdd_tx_off_2_s;
   wire   [23:0]   tdd_tx_dp_on_2_s;
   wire   [23:0]   tdd_tx_dp_off_2_s;
-  wire            tdd_endof_frame;
   wire            tdd_endof_burst;
   wire            tdd_txrx_only_en_s;
 
@@ -208,8 +209,14 @@ module ad_tdd_control#(
     endcase
   end
 
-  assign tdd_endof_frame = (tdd_counter == tdd_frame_length) ? 1'b1 : 1'b0;
-  assign tdd_endof_burst = ((tdd_last_burst == 1'b1) && (tdd_counter == tdd_frame_length)) ? 1'b1 : 1'b0;
+  always @(posedge clk) begin
+    if (tdd_counter == (tdd_frame_length - 1'b1)) begin
+      tdd_endof_frame <= 1'b1;
+    end else begin
+      tdd_endof_frame <= 1'b0;
+    end
+  end
+  assign tdd_endof_burst = ((tdd_last_burst == 1'b1) && (tdd_endof_frame == 1'b1)) ? 1'b1 : 1'b0;
 
   // tdd free running counter
   always @(posedge clk) begin
@@ -220,7 +227,7 @@ module ad_tdd_control#(
         if ((~tdd_sync_d3 & tdd_sync_d2) == 1'b1) begin
           tdd_counter <= 24'b0;
         end else begin
-          tdd_counter <= (tdd_counter < tdd_frame_length) ? tdd_counter + 1 : 24'b0;
+          tdd_counter <= (tdd_endof_frame == 1'b1) ? 24'b0 : tdd_counter + 1'b1;
         end
       end else begin
         tdd_counter <= tdd_counter_init;
