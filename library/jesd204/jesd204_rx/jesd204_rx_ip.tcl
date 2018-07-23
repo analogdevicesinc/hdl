@@ -54,15 +54,12 @@ adi_ip_files jesd204_rx [list \
   "jesd204_ilas_monitor.v" \
   "align_mux.v" \
   "jesd204_lane_latency_monitor.v" \
-  "jesd204_rx_constr.xdc" \
+  "jesd204_rx_constr.ttcl" \
   "jesd204_rx.v" \
 ]
 
 adi_ip_properties_lite jesd204_rx
-
-set_property PROCESSING_ORDER LATE [ipx::get_files jesd204_rx_constr.xdc \
-  -of_objects [ipx::get_file_groups -of_objects [ipx::current_core] \
-  -filter {NAME =~ *synthesis*}]]
+adi_ip_ttcl jesd204_rx "jesd204_rx_constr.ttcl"
 
 adi_ip_add_core_dependencies { \
   analog.com:user:jesd204_common:1.0 \
@@ -139,4 +136,18 @@ adi_add_bus "rx_event" "master" \
 
 adi_add_bus_clock "clk" "rx_cfg:rx_ilas_config:rx_event:rx_status:rx_data" "reset"
 
+set cc [ipx::current_core]
+set page0 [ipgui::get_pagespec -name "Page 0" -component $cc]
+
+set param [ipx::add_user_parameter SYSREF_IOB $cc]
+set_property -dict {value_resolve_type user value_format bool value true} $param
+
+set param [ipgui::add_param -name {SYSREF_IOB} -component $cc -parent $page0]
+set_property -dict [list \
+  display_name {Place SYSREF in IOB} \
+  widget {checkBox} \
+  show_label true \
+] $param
+
+ipx::create_xgui_files [ipx::current_core]
 ipx::save_core [ipx::current_core]

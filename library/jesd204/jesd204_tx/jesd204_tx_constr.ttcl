@@ -41,6 +41,12 @@
 # “The design and implementation of the JESD204 HDL Core used in this project
 # is copyright © 2016-2017, Analog Devices, Inc.”
 #
+<: set ComponentName [getComponentNameString] :>
+<: setOutputDirectory "./" :>
+<: setFileName [ttcl_add $ComponentName "_constr"] :>
+<: setFileExtension ".xdc" :>
+<: setFileProcessingOrder late :>
+<: set sysref_iob [get_property PARAM_VALUE.SYSREF_IOB] :>
 
 set_property ASYNC_REG TRUE \
   [get_cells {i_lmfc/sysref_d1_reg}] \
@@ -48,5 +54,5 @@ set_property ASYNC_REG TRUE \
 
 # Make sure that the device clock to sysref skew is at least somewhat
 # predictable
-set_property IOB TRUE \
+set_property IOB <=: $sysref_iob :> \
   [get_cells {i_lmfc/sysref_r_reg}]
