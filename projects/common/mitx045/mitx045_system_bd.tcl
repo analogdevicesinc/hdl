@@ -103,6 +103,7 @@ ad_ip_parameter sys_rstgen CONFIG.C_EXT_RST_WIDTH 1
 
 ad_ip_instance axi_clkgen axi_hdmi_clkgen
 ad_ip_instance axi_hdmi_tx axi_hdmi_core
+ad_ip_parameter axi_hdmi_core CONFIG.INTERFACE 16_BIT
 
 ad_ip_instance axi_vdma axi_hdmi_dma
 ad_ip_parameter axi_hdmi_dma CONFIG.C_M_AXIS_MM2S_TDATA_WIDTH 64
@@ -114,7 +115,7 @@ ad_ip_parameter axi_hdmi_dma CONFIG.C_INCLUDE_S2MM 0
 ad_ip_instance clk_wiz sys_audio_clkgen
 ad_ip_parameter sys_audio_clkgen CONFIG.CLKOUT1_REQUESTED_OUT_FREQ 12.288
 ad_ip_parameter sys_audio_clkgen CONFIG.USE_LOCKED false
-ad_ip_parameter sys_audio_clkgen CONFIG.USE_RESET true 
+ad_ip_parameter sys_audio_clkgen CONFIG.USE_RESET true
 ad_ip_parameter sys_audio_clkgen CONFIG.USE_PHASE_ALIGNMENT false
 ad_ip_parameter sys_audio_clkgen CONFIG.RESET_TYPE ACTIVE_LOW
 ad_ip_parameter sys_audio_clkgen CONFIG.PRIM_SOURCE No_buffer

@@ -93,6 +93,7 @@ ad_ip_parameter sys_rstgen CONFIG.C_EXT_RST_WIDTH 1
 
 ad_ip_instance axi_clkgen axi_hdmi_clkgen
 ad_ip_instance axi_hdmi_tx axi_hdmi_core
+ad_ip_parameter axi_hdmi_core CONFIG.INTERFACE 16_BIT
 
 ad_ip_instance axi_vdma axi_hdmi_dma
 ad_ip_parameter axi_hdmi_dma CONFIG.c_m_axis_mm2s_tdata_width 64
