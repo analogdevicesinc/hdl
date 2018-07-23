@@ -13,7 +13,7 @@ delete_bd_objs [get_bd_ports hdmi_hsync]
 delete_bd_objs [get_bd_ports hdmi_data_e]
 delete_bd_objs [get_bd_ports hdmi_data]
 
-ad_ip_parameter axi_hdmi_core CONFIG.EMBEDDED_SYNC 1
+ad_ip_parameter axi_hdmi_core CONFIG.INTERFACE 16_BIT_EMBEDDED_SYNC
 ad_ip_parameter axi_hdmi_core CONFIG.OUT_CLK_POLARITY 1
 
 create_bd_port -dir O hdmi_tx_clk

@@ -38,7 +38,7 @@ module axi_hdmi_tx #(
   parameter   ID = 0,
   parameter   CR_CB_N = 0,
   parameter   DEVICE_TYPE = 0,
-  parameter   EMBEDDED_SYNC = 0,
+  parameter   INTERFACE = "16_BIT",
   parameter   OUT_CLK_POLARITY = 0) (
 
   // hdmi interface
@@ -103,6 +103,7 @@ module axi_hdmi_tx #(
 
   /* 0 = Launch on rising edge, 1 = Launch on falling edge */
 
+  localparam  EMBEDDED_SYNC = (INTERFACE == "16_BIT_EMBEDDED_SYNC") ? 1 : 0;
   localparam  XILINX_7SERIES = 0;
   localparam  XILINX_ULTRASCALE = 1;
   localparam  ALTERA_5SERIES = 16;

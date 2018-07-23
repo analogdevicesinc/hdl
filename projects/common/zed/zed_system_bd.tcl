@@ -117,6 +117,7 @@ ad_ip_parameter sys_logic_inv CONFIG.C_OPERATION not
 
 ad_ip_instance axi_clkgen axi_hdmi_clkgen
 ad_ip_instance axi_hdmi_tx axi_hdmi_core
+ad_ip_parameter axi_hdmi_core CONFIG.INTERFACE 16_BIT
 
 ad_ip_instance axi_vdma axi_hdmi_dma
 ad_ip_parameter axi_hdmi_dma CONFIG.C_M_AXIS_MM2S_TDATA_WIDTH 64
