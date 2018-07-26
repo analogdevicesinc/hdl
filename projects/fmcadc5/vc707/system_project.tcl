@@ -13,9 +13,6 @@ adi_project_files fmcadc5_vc707 [list \
   "system_constr.xdc"\
   "system_top.v"]
 
-set_property is_enabled false [get_files  *system_rx_0/jesd204_rx_constr.xdc]
-set_property is_enabled false [get_files  *system_rx_1/jesd204_rx_constr.xdc]
-
 adi_project_run fmcadc5_vc707
 
 

@@ -45,8 +45,10 @@ ad_ip_parameter axi_ad9625_1_xcvr CONFIG.SYS_CLK_SEL 0x0
 ad_ip_parameter axi_ad9625_1_xcvr CONFIG.OUT_CLK_SEL 0x2
 
 adi_axi_jesd204_rx_create axi_ad9625_0_jesd 8
+ad_ip_parameter axi_ad9625_0_jesd/rx CONFIG.SYSREF_IOB false
 
 adi_axi_jesd204_rx_create axi_ad9625_1_jesd 8
+ad_ip_parameter axi_ad9625_1_jesd/rx CONFIG.SYSREF_IOB false
 
 ad_ip_instance axi_ad9625 axi_ad9625_0_core
 ad_ip_parameter axi_ad9625_0_core CONFIG.ID 0
