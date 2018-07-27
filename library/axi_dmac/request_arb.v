@@ -209,15 +209,14 @@ wire enabled_dest;
 
 wire req_gen_valid;
 wire req_gen_ready;
-wire req_dest_valid;
-wire req_dest_ready;
+wire src_dest_valid;
+wire src_dest_ready;
 wire req_src_valid;
 wire req_src_ready;
 
 wire dest_req_valid;
 wire dest_req_ready;
-wire [DMA_ADDRESS_WIDTH_DEST-1:0] dest_req_address;
-wire [BEATS_PER_BURST_WIDTH_DEST-1:0] dest_req_last_burst_length;
+wire [DMA_ADDRESS_WIDTH_DEST-1:0] dest_req_dest_address;
 wire dest_req_xlast;
 
 wire dest_response_valid;
@@ -242,7 +241,8 @@ wire dest_fifo_last;
 
 wire src_req_valid;
 wire src_req_ready;
-wire [DMA_ADDRESS_WIDTH_SRC-1:0] src_req_address;
+wire [DMA_ADDRESS_WIDTH_DEST-1:0] src_req_dest_address;
+wire [DMA_ADDRESS_WIDTH_SRC-1:0] src_req_src_address;
 wire [BEATS_PER_BURST_WIDTH_SRC-1:0] src_req_last_burst_length;
 wire src_req_sync_transfer_start;
 wire src_req_xlast;
@@ -271,6 +271,10 @@ wire response_dest_ready = 1'b1;
 wire [1:0] response_dest_resp;
 wire response_dest_resp_eot;
 
+wire                                 src_bl_valid;
+wire                                 src_bl_ready;
+wire [BEATS_PER_BURST_WIDTH_SRC-1:0] src_burst_length;
+
 /* Unused for now
 wire response_src_valid;
 wire response_src_ready = 1'b1;
@@ -297,6 +301,11 @@ begin
 end
 
 generate if (DMA_TYPE_DEST == DMA_TYPE_MM_AXI) begin
+
+wire                                  dest_bl_valid;
+wire                                  dest_bl_ready;
+wire [BEATS_PER_BURST_WIDTH_DEST-1:0] dest_burst_length;
+wire [BEATS_PER_BURST_WIDTH_SRC-1:0] dest_src_burst_length;
 
 assign dest_clk = m_dest_axi_aclk;
 assign dest_ext_resetn = m_dest_axi_aresetn;
@@ -326,8 +335,11 @@ dmac_dest_mm_axi #(
 
   .req_valid(dest_req_valid),
   .req_ready(dest_req_ready),
-  .req_address(dest_req_address),
-  .req_last_burst_length(dest_req_last_burst_length),
+  .req_address(dest_req_dest_address),
+
+  .bl_valid(dest_bl_valid),
+  .bl_ready(dest_bl_ready),
+  .measured_last_burst_length(dest_burst_length),
 
   .response_valid(dest_response_valid),
   .response_ready(dest_response_ready),
@@ -366,6 +378,42 @@ dmac_dest_mm_axi #(
   .m_axi_bready(m_axi_bready)
 );
 
+util_axis_fifo #(
+  .DATA_WIDTH(BEATS_PER_BURST_WIDTH_SRC),
+  .ADDRESS_WIDTH(0),
+  .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
+) i_src_dest_bl_fifo (
+  .s_axis_aclk(src_clk),
+  .s_axis_aresetn(src_resetn),
+  .s_axis_valid(src_bl_valid),
+  .s_axis_ready(src_bl_ready),
+  .s_axis_empty(),
+  .s_axis_data(src_burst_length),
+  .s_axis_room(),
+
+  .m_axis_aclk(dest_clk),
+  .m_axis_aresetn(dest_resetn),
+  .m_axis_valid(dest_bl_valid),
+  .m_axis_ready(dest_bl_ready),
+  .m_axis_data(dest_src_burst_length),
+  .m_axis_level()
+);
+
+// Adapt burst length from source width to destination width by either
+// truncation or completion with ones.
+if (BEATS_PER_BURST_WIDTH_SRC == BEATS_PER_BURST_WIDTH_DEST) begin
+assign dest_burst_length = dest_src_burst_length;
+end
+
+if (BEATS_PER_BURST_WIDTH_SRC < BEATS_PER_BURST_WIDTH_DEST) begin
+assign dest_burst_length = {dest_src_burst_length,
+                           {BEATS_PER_BURST_WIDTH_DEST - BEATS_PER_BURST_WIDTH_SRC{1'b1}}};
+end
+
+if (BEATS_PER_BURST_WIDTH_SRC > BEATS_PER_BURST_WIDTH_DEST) begin
+assign dest_burst_length = dest_src_burst_length[BEATS_PER_BURST_WIDTH_SRC-1 -: BEATS_PER_BURST_WIDTH_DEST];
+end
+
 end else begin
 
 assign m_axi_awvalid = 1'b0;
@@ -382,6 +430,8 @@ assign m_axi_wstrb = 'h00;
 assign m_axi_wlast = 1'b0;
 
 assign m_axi_bready = 1'b0;
+
+assign src_bl_ready = 1'b1;
 
 end
 
@@ -413,7 +463,6 @@ dmac_dest_axi_stream #(
 
   .req_valid(dest_req_valid),
   .req_ready(dest_req_ready),
-  .req_last_burst_length(dest_req_last_burst_length),
   .req_xlast(dest_req_xlast),
 
   .response_valid(dest_response_valid),
@@ -537,8 +586,12 @@ dmac_src_mm_axi #(
 
   .req_valid(src_req_valid),
   .req_ready(src_req_ready),
-  .req_address(src_req_address),
+  .req_address(src_req_src_address),
   .req_last_burst_length(src_req_last_burst_length),
+
+  .bl_valid(src_bl_valid),
+  .bl_ready(src_bl_ready),
+  .measured_last_burst_length(src_burst_length),
 
 /* TODO
   .response_valid(src_response_valid),
@@ -623,6 +676,10 @@ dmac_src_axi_stream #(
 
   .eot(src_eot),
 
+  .bl_valid(src_bl_valid),
+  .bl_ready(src_bl_ready),
+  .measured_last_burst_length(src_burst_length),
+
   .fifo_valid(src_valid),
   .fifo_data(src_data),
   .fifo_last(src_last),
@@ -677,6 +734,10 @@ dmac_src_fifo_inf #(
   .response_id(src_response_id),
 
   .eot(src_eot),
+
+  .bl_valid(src_bl_valid),
+  .bl_ready(src_bl_ready),
+  .measured_last_burst_length(src_burst_length),
 
   .fifo_valid(src_valid),
   .fifo_data(src_data),
@@ -816,7 +877,7 @@ axi_register_slice #(
 );
 
 splitter #(
-  .NUM_M(3)
+  .NUM_M(2)
 ) i_req_splitter (
   .clk(req_clk),
   .resetn(req_resetn),
@@ -824,30 +885,27 @@ splitter #(
   .s_ready(req_ready),
   .m_valid({
     req_gen_valid,
-    req_dest_valid,
     req_src_valid
   }),
   .m_ready({
     req_gen_ready,
-    req_dest_ready,
     req_src_ready
   })
 );
 
 util_axis_fifo #(
-  .DATA_WIDTH(DMA_ADDRESS_WIDTH_DEST + BEATS_PER_BURST_WIDTH_DEST + 1),
+  .DATA_WIDTH(DMA_ADDRESS_WIDTH_DEST + 1),
   .ADDRESS_WIDTH(0),
-  .ASYNC_CLK(ASYNC_CLK_DEST_REQ)
+  .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
 ) i_dest_req_fifo (
-  .s_axis_aclk(req_clk),
-  .s_axis_aresetn(req_resetn),
-  .s_axis_valid(req_dest_valid),
-  .s_axis_ready(req_dest_ready),
+  .s_axis_aclk(src_clk),
+  .s_axis_aresetn(src_resetn),
+  .s_axis_valid(src_dest_valid),
+  .s_axis_ready(src_dest_ready),
   .s_axis_empty(),
   .s_axis_data({
-    req_dest_address,
-    req_length[BYTES_PER_BURST_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST],
-    req_xlast
+    src_req_dest_address,
+    src_req_xlast
   }),
   .s_axis_room(),
 
@@ -856,15 +914,14 @@ util_axis_fifo #(
   .m_axis_valid(dest_req_valid),
   .m_axis_ready(dest_req_ready),
   .m_axis_data({
-    dest_req_address,
-    dest_req_last_burst_length,
+    dest_req_dest_address,
     dest_req_xlast
   }),
   .m_axis_level()
 );
 
 util_axis_fifo #(
-  .DATA_WIDTH(DMA_ADDRESS_WIDTH_SRC + BEATS_PER_BURST_WIDTH_SRC + 2),
+  .DATA_WIDTH(DMA_ADDRESS_WIDTH_DEST + DMA_ADDRESS_WIDTH_SRC + BEATS_PER_BURST_WIDTH_SRC + 2),
   .ADDRESS_WIDTH(0),
   .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
 ) i_src_req_fifo (
@@ -874,6 +931,7 @@ util_axis_fifo #(
   .s_axis_ready(req_src_ready),
   .s_axis_empty(),
   .s_axis_data({
+    req_dest_address,
     req_src_address,
     req_length[BYTES_PER_BURST_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC],
     req_sync_transfer_start,
@@ -883,15 +941,33 @@ util_axis_fifo #(
 
   .m_axis_aclk(src_clk),
   .m_axis_aresetn(src_resetn),
-  .m_axis_valid(src_req_valid),
-  .m_axis_ready(src_req_ready),
+  .m_axis_valid(src_req_spltr_valid),
+  .m_axis_ready(src_req_spltr_ready),
   .m_axis_data({
-    src_req_address,
+    src_req_dest_address,
+    src_req_src_address,
     src_req_last_burst_length,
     src_req_sync_transfer_start,
     src_req_xlast
   }),
   .m_axis_level()
+);
+
+splitter #(
+  .NUM_M(2)
+) i_src_splitter (
+  .clk(src_clk),
+  .resetn(src_resetn),
+  .s_valid(src_req_spltr_valid),
+  .s_ready(src_req_spltr_ready),
+  .m_valid({
+    src_req_valid,
+    src_dest_valid
+  }),
+  .m_ready({
+    src_req_ready,
+    src_dest_ready
+  })
 );
 
 util_axis_fifo #(
@@ -914,6 +990,7 @@ util_axis_fifo #(
   .m_axis_data(response_dest_resp_eot),
   .m_axis_level()
 );
+
 
 /* Unused for now
 util_axis_fifo #(
