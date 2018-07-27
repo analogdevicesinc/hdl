@@ -48,7 +48,10 @@ module dmac_dest_mm_axi #(
   input                               req_valid,
   output                              req_ready,
   input [DMA_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH] req_address,
-  input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
+
+  input                             bl_valid,
+  output                            bl_ready,
+  input [BEATS_PER_BURST_WIDTH-1:0] measured_last_burst_length,
 
   input                               enable,
   output                              enabled,
@@ -115,7 +118,10 @@ dmac_address_generator #(
   .req_valid(req_valid),
   .req_ready(req_ready),
   .req_address(req_address),
-  .req_last_burst_length(req_last_burst_length),
+
+  .bl_valid(bl_valid),
+  .bl_ready(bl_ready),
+  .measured_last_burst_length(measured_last_burst_length),
 
   .eot(address_eot),
 

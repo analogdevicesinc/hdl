@@ -47,6 +47,10 @@ module dmac_data_mover #(
   output [ID_WIDTH-1:0] response_id,
   input eot,
 
+  output reg bl_valid = 'b0,
+  input bl_ready,
+  output reg [BEATS_PER_BURST_WIDTH-1:0] measured_last_burst_length,
+
   output xfer_req,
 
   output s_axi_ready,
@@ -72,6 +76,7 @@ localparam BEAT_COUNTER_MAX = {BEATS_PER_BURST_WIDTH{1'b1}};
 
 reg [BEATS_PER_BURST_WIDTH-1:0] last_burst_length = 'h00;
 reg [BEATS_PER_BURST_WIDTH-1:0] beat_counter = 'h00;
+reg [BEATS_PER_BURST_WIDTH-1:0] beat_counter_minus_one = 'h0;
 reg [ID_WIDTH-1:0] id = 'h00;
 reg [ID_WIDTH-1:0] id_next = 'h00;
 
@@ -166,6 +171,23 @@ end
 always @(posedge clk) begin
   if (req_ready)
     last_burst_length <= req_last_burst_length;
+end
+
+always @(posedge clk) begin
+  if (req_ready) begin
+    beat_counter_minus_one <= 'h0;
+  end else if (m_axi_valid == 1'b1) begin
+    beat_counter_minus_one <= beat_counter;
+  end
+end
+
+always @(posedge clk) begin
+  if (last_load) begin
+    bl_valid <= 1'b1;
+    measured_last_burst_length <= beat_counter_minus_one;
+  end else if (bl_ready) begin
+    bl_valid <= 1'b0;
+  end
 end
 
 always @(posedge clk) begin

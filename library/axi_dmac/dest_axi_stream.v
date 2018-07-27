@@ -63,7 +63,6 @@ module dmac_dest_axi_stream #(
 
   input req_valid,
   output req_ready,
-  input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
   input req_xlast,
 
   output response_valid,

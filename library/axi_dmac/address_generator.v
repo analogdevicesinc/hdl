@@ -48,10 +48,13 @@ module dmac_address_generator #(
   input                        req_valid,
   output reg                   req_ready,
   input [DMA_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH] req_address,
-  input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
 
   output reg [ID_WIDTH-1:0]  id,
   input [ID_WIDTH-1:0]       request_id,
+
+  input                             bl_valid,
+  output reg                        bl_ready,
+  input [BEATS_PER_BURST_WIDTH-1:0] measured_last_burst_length,
 
   input                        eot,
 
@@ -106,6 +109,12 @@ always @(posedge clk) begin
 end
 
 always @(posedge clk) begin
+  if (bl_valid == 1'b1 && bl_ready == 1'b1) begin
+    last_burst_len <= measured_last_burst_length;
+  end
+end
+
+always @(posedge clk) begin
   if (addr_valid == 1'b0) begin
     last <= eot;
     if (eot == 1'b1) begin
@@ -119,9 +128,23 @@ end
 always @(posedge clk) begin
   if (req_ready == 1'b1) begin
     address <= req_address;
-    last_burst_len <= req_last_burst_length;
   end else if (addr_valid == 1'b1 && addr_ready == 1'b1) begin
     address <= address + MAX_BEATS_PER_BURST;
+  end
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    bl_ready <= 1'b1;
+  end else begin
+    if (bl_ready == 1'b1) begin
+      bl_ready <= ~bl_valid;
+    end else if (addr_valid == 1'b0 && eot == 1'b1) begin
+      // assert bl_ready only when the addr_valid asserts in the next cycle
+      if (id != request_id && enable == 1'b1) begin
+        bl_ready <= 1'b1;
+      end
+    end
   end
 end
 
@@ -136,7 +159,10 @@ always @(posedge clk) begin
       addr_valid <= 1'b0;
       req_ready <= last;
     end else if (id != request_id && enable == 1'b1) begin
-      addr_valid <= 1'b1;
+      // if eot wait until the last_burst_len gets synced over
+      if (eot == 1'b0 || (eot == 1'b1 && bl_ready == 1'b0)) begin
+        addr_valid <= 1'b1;
+      end
     end
   end
 end

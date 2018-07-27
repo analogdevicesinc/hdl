@@ -53,6 +53,9 @@ module dmac_src_mm_axi #(
   input                           enable,
   output reg                      enabled = 1'b0,
 
+  output                             bl_valid,
+  input                              bl_ready,
+  output [BEATS_PER_BURST_WIDTH-1:0] measured_last_burst_length,
 /*
   output                          response_valid,
   input                           response_ready,
@@ -93,9 +96,34 @@ module dmac_src_mm_axi #(
 reg [ID_WIDTH-1:0] id = 'h00;
 
 wire address_enabled;
+wire req_ready_ag;
+wire req_valid_ag;
+wire bl_ready_ag;
+wire bl_valid_ag;
 
 assign data_id = id;
 assign response_id = id;
+
+assign measured_last_burst_length = req_last_burst_length;
+
+splitter #(
+  .NUM_M(3)
+) i_req_splitter (
+  .clk(m_axi_aclk),
+  .resetn(m_axi_aresetn),
+  .s_valid(req_valid),
+  .s_ready(req_ready),
+  .m_valid({
+    bl_valid,
+    bl_valid_ag,
+    req_valid_ag
+  }),
+  .m_ready({
+    bl_ready,
+    bl_ready_ag,
+    req_ready_ag
+  })
+);
 
 dmac_address_generator #(
   .ID_WIDTH(ID_WIDTH),
@@ -114,10 +142,13 @@ dmac_address_generator #(
   .request_id(request_id),
   .id(address_id),
 
-  .req_valid(req_valid),
-  .req_ready(req_ready),
+  .req_valid(req_valid_ag),
+  .req_ready(req_ready_ag),
   .req_address(req_address),
-  .req_last_burst_length(req_last_burst_length),
+
+  .bl_valid(bl_valid_ag),
+  .bl_ready(bl_ready_ag),
+  .measured_last_burst_length(req_last_burst_length),
 
   .eot(address_eot),
 
