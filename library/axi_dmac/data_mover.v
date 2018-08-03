@@ -51,6 +51,9 @@ module dmac_data_mover #(
   input bl_ready,
   output reg [BEATS_PER_BURST_WIDTH-1:0] measured_last_burst_length,
 
+  output [ID_WIDTH-1:0] source_id,
+  output source_eot,
+
   output xfer_req,
 
   output s_axi_ready,
@@ -97,6 +100,9 @@ wire last;
 assign xfer_req = active;
 
 assign response_id = id;
+
+assign source_id = id;
+assign source_eot = eot;
 
 assign last = eot ? last_eot : last_non_eot;
 

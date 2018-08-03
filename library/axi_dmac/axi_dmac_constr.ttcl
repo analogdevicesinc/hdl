@@ -56,7 +56,7 @@ set_max_delay -quiet -datapath_only \
 set_max_delay -quiet -datapath_only \
   -from $req_clk \
   -through [get_cells -quiet -hier DP \
-    -filter {NAME =~ *i_request_arb/eot_mem_reg*}] \
+    -filter {NAME =~ *i_request_arb/eot_mem_src_reg*}] \
 	-to $src_clk \
 	[get_property -min PERIOD $src_clk]
 
@@ -94,13 +94,6 @@ set_max_delay -quiet -datapath_only \
 		-filter {NAME =~ *i_dest_response_fifo* && IS_SEQUENTIAL}] \
 	-to $req_clk \
 	[get_property -min PERIOD $req_clk]
-
-set_max_delay -quiet -datapath_only \
-  -from $req_clk \
-  -through [get_cells -quiet -hier DP \
-    -filter {NAME =~ *i_request_arb/eot_mem_reg*}] \
-	-to $dest_clk \
-	[get_property -min PERIOD $dest_clk]
 
 <: } :>
 <: if {$async_src_dest} { :>
@@ -164,6 +157,14 @@ set_max_delay -quiet -datapath_only \
 		-filter {NAME =~ *i_src_dest_bl_fifo* && IS_SEQUENTIAL}] \
 	-to $dest_clk \
 	[get_property -min PERIOD $dest_clk]
+
+  set_max_delay -quiet -datapath_only \
+  -from $src_clk \
+  -through [get_cells -quiet -hier DP \
+    -filter {NAME =~ *i_request_arb/eot_mem_dest_reg*}] \
+	-to $dest_clk \
+	[get_property -min PERIOD $dest_clk]
+
 <: } :>
 # Reset signals
 set_false_path -quiet \
