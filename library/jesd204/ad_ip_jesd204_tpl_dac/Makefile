@@ -22,6 +22,7 @@ GENERIC_DEPS += ad_ip_jesd204_tpl_dac.v
 GENERIC_DEPS += ad_ip_jesd204_tpl_dac_channel.v
 GENERIC_DEPS += ad_ip_jesd204_tpl_dac_core.v
 GENERIC_DEPS += ad_ip_jesd204_tpl_dac_framer.v
+GENERIC_DEPS += ad_ip_jesd204_tpl_dac_pn.v
 GENERIC_DEPS += ad_ip_jesd204_tpl_dac_regmap.v
 
 XILINX_DEPS += ../../xilinx/common/ad_mul.v
