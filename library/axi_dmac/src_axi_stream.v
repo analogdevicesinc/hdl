@@ -54,6 +54,9 @@ module dmac_src_axi_stream #(
   input                              bl_ready,
   output [BEATS_PER_BURST_WIDTH-1:0] measured_last_burst_length,
 
+  output [ID_WIDTH-1:0] source_id,
+  output source_eot,
+
   output s_axis_ready,
   input s_axis_valid,
   input [S_AXIS_DATA_WIDTH-1:0] s_axis_data,
@@ -92,6 +95,9 @@ dmac_data_mover # (
   .bl_valid(bl_valid),
   .bl_ready(bl_ready),
   .measured_last_burst_length(measured_last_burst_length),
+
+  .source_id(source_id),
+  .source_eot(source_eot),
 
   .req_valid(req_valid),
   .req_ready(req_ready),

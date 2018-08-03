@@ -198,10 +198,13 @@ localparam BEATS_PER_BURST_WIDTH_DEST = BYTES_PER_BURST_WIDTH - BYTES_PER_BEAT_W
 
 localparam BURSTS_PER_TRANSFER_WIDTH = DMA_LENGTH_WIDTH - BYTES_PER_BURST_WIDTH;
 
-reg eot_mem[0:2**ID_WIDTH-1];
+reg eot_mem_src[0:2**ID_WIDTH-1];
+reg eot_mem_dest[0:2**ID_WIDTH-1];
 wire request_eot;
+wire source_eot;
 
 wire [ID_WIDTH-1:0] request_id;
+wire [ID_WIDTH-1:0] source_id;
 wire [ID_WIDTH-1:0] response_id;
 
 wire enabled_src;
@@ -288,7 +291,12 @@ assign dbg_src_response_id = src_response_id;
 
 always @(posedge req_clk)
 begin
-  eot_mem[request_id] <= request_eot;
+  eot_mem_src[request_id] <= request_eot;
+end
+
+always @(posedge src_clk)
+begin
+  eot_mem_dest[source_id] <= source_eot;
 end
 
 always @(posedge req_clk)
@@ -311,8 +319,8 @@ assign dest_clk = m_dest_axi_aclk;
 assign dest_ext_resetn = m_dest_axi_aresetn;
 
 wire [ID_WIDTH-1:0] dest_address_id;
-wire dest_address_eot = eot_mem[dest_address_id];
-wire dest_response_eot = eot_mem[dest_response_id];
+wire dest_address_eot = eot_mem_dest[dest_address_id];
+wire dest_response_eot = eot_mem_dest[dest_response_id];
 
 assign dbg_dest_address_id = dest_address_id;
 assign dbg_dest_data_id = dest_data_response_id;
@@ -442,8 +450,8 @@ assign dest_ext_resetn = 1'b1;
 
 wire [ID_WIDTH-1:0] data_id;
 
-wire data_eot = eot_mem[data_id];
-wire response_eot = eot_mem[dest_response_id];
+wire data_eot = eot_mem_dest[data_id];
+wire response_eot = eot_mem_dest[dest_response_id];
 
 assign dest_data_request_id = dest_request_id;
 
@@ -504,8 +512,8 @@ assign dest_ext_resetn = 1'b1;
 
 wire [ID_WIDTH-1:0] data_id;
 
-wire data_eot = eot_mem[data_id];
-wire response_eot = eot_mem[dest_response_id];
+wire data_eot = eot_mem_dest[data_id];
+wire response_eot = eot_mem_dest[dest_response_id];
 
 assign dest_data_request_id = dest_request_id;
 
@@ -560,12 +568,15 @@ end endgenerate
 
 generate if (DMA_TYPE_SRC == DMA_TYPE_MM_AXI) begin
 
+assign source_id = src_address_id;
+assign source_eot = src_address_eot;
+
 assign src_clk = m_src_axi_aclk;
 assign src_ext_resetn = m_src_axi_aresetn;
 
 wire [ID_WIDTH-1:0] src_data_id;
 wire [ID_WIDTH-1:0] src_address_id;
-wire src_address_eot = eot_mem[src_address_id];
+wire src_address_eot = eot_mem_src[src_address_id];
 
 assign dbg_src_address_id = src_address_id;
 assign dbg_src_data_id = src_data_id;
@@ -644,7 +655,7 @@ if (DMA_TYPE_SRC == DMA_TYPE_STREAM_AXI) begin
 assign src_clk = s_axis_aclk;
 assign src_ext_resetn = 1'b1;
 
-wire src_eot = eot_mem[src_response_id];
+wire src_eot = eot_mem_src[src_response_id];
 
 assign dbg_src_address_id = 'h00;
 assign dbg_src_data_id = 'h00;
@@ -680,6 +691,9 @@ dmac_src_axi_stream #(
   .bl_ready(src_bl_ready),
   .measured_last_burst_length(src_burst_length),
 
+  .source_id(source_id),
+  .source_eot(source_eot),
+
   .fifo_valid(src_valid),
   .fifo_data(src_data),
   .fifo_last(src_last),
@@ -701,10 +715,13 @@ end
 
 if (DMA_TYPE_SRC == DMA_TYPE_FIFO) begin
 
+assign source_id = src_response_id;
+assign source_eot = src_eot;
+
 assign src_clk = fifo_wr_clk;
 assign src_ext_resetn = 1'b1;
 
-wire src_eot = eot_mem[src_response_id];
+wire src_eot = eot_mem_src[src_response_id];
 
 assign dbg_src_address_id = 'h00;
 assign dbg_src_data_id = 'h00;
