@@ -67,6 +67,26 @@ ad_ip_parameter ID INTEGER 0 true [list \
 
 set group "JESD204 Framer Configuration"
 
+ad_ip_parameter PART STRING "Generic" false [list \
+  DISPLAY_NAME "Part" \
+  ALLOWED_RANGES { \
+    "Generic" \
+    "AD9135" \
+    "AD9136" \
+    "AD9144" \
+    "AD9152" \
+    "AD9154" \
+    "AD9161" \
+    "AD9162" \
+    "AD9163" \
+    "AD9164" \
+    "AD9171" \
+    "AD9172" \
+    "AD9173" \
+  } \
+  GROUP $group \
+]
+
 ad_ip_parameter NUM_LANES INTEGER 1 true [list \
   DISPLAY_NAME "Number of Lanes (L)" \
   DISPLAY_UNITS "lanes" \
@@ -198,6 +218,101 @@ proc gcd {a b} {
   }
 }
 
+#  M L S F N  NP
+set ad9136_modes { \
+  {1 4 2 1 16 16} \
+  {1 2 1 1 16 16} \
+  {1 1 1 2 16 16} \
+  {2 8 2 1 16 16} \
+  {2 4 1 1 16 16} \
+  {2 2 1 2 16 16} \
+}
+
+set ad9144_modes { \
+  {4 8 1 1 16 16} \
+  {4 8 2 2 16 16} \
+  {4 4 1 2 16 16} \
+  {4 2 1 4 16 16} \
+  {2 4 1 1 16 16} \
+  {2 4 2 2 16 16} \
+  {2 2 1 2 16 16} \
+  {2 1 1 4 16 16} \
+  {1 2 1 1 16 16} \
+  {1 1 1 2 16 16} \
+}
+
+set ad9152_modes { \
+  {2 4 1 1 16 16} \
+  {2 4 2 2 16 16} \
+  {2 2 1 2 16 16} \
+  {2 1 1 4 16 16} \
+  {1 2 1 1 16 16} \
+  {1 1 1 2 16 16} \
+}
+
+set ad9161_modes { \
+  {2 1 1 4 16 16} \
+  {2 2 1 2 16 16} \
+  {2 3 3 4 16 16} \
+  {2 4 1 1 16 16} \
+  {2 6 3 2 16 16} \
+  {1 8 4 1 16 16} \
+  {2 8 2 1 16 16} \
+}
+
+set ad9163_modes { \
+  {2 1 1 4 16 16} \
+  {2 2 1 2 16 16} \
+  {2 3 3 4 16 16} \
+  {2 4 1 1 16 16} \
+  {2 6 3 2 16 16} \
+  {2 8 2 1 16 16} \
+}
+
+set ad9171_modes { \
+  {2 1 1 4 16 16} \
+  {2 2 1 2 16 16} \
+  {2 1 1 3 12 12} \
+}
+
+set ad9172_modes { \
+  {2 1 1 4 16 16} \
+  {4 2 1 4 16 16} \
+  {6 3 1 4 16 16} \
+  {2 2 1 2 16 16} \
+  {4 4 1 2 16 16} \
+  {2 1 1 3 12 12} \
+  {4 2 1 3 12 12} \
+  {4 1 1 8 16 16} \
+  {2 4 1 1 16 16} \
+  {2 4 2 2 16 16} \
+  {2 8 2 1 16 16} \
+  {2 8 4 2 16 16} \
+  {2 8 8 3 12 12} \
+  {1 4 2 1 16 16} \
+  {1 4 4 2 16 16} \
+  {1 8 4 1 16 16} \
+  {1 8 8 2 16 16} \
+}
+
+set ad9173_modes { \
+  {2 1 1 4 16 16} \
+  {4 2 1 4 16 16} \
+  {6 3 1 4 16 16} \
+  {2 2 1 2 16 16} \
+  {4 4 1 2 16 16} \
+  {2 1 1 3 12 12} \
+  {4 2 1 3 12 12} \
+  {4 1 1 8 16 16} \
+  {2 4 1 1 16 16} \
+  {2 4 2 2 16 16} \
+  {2 4 1 1 11 16} \
+  {2 4 2 2 11 16} \
+  {2 8 2 1 11 16} \
+  {2 8 4 2 11 16} \
+  {2 8 8 3 11 12} \
+}
+
 # validate
 
 proc p_ad_ip_jesd204_tpl_dac_validate {} {
@@ -230,14 +345,6 @@ proc p_ad_ip_jesd204_tpl_dac_validate {} {
   set F_min [expr $F_min / $common_factor]
 
   if {$enable_S_manual} {
-    foreach i {1 2 4} {
-      if {$F * $i <= 4 && $S * $i <= 16} {
-        lappend allowed_S [expr $S * $i]
-      }
-    }
-
-    set_parameter_property SAMPLES_PER_FRAME_MANUAL ALLOWED_RANGES $allowed_S
-
     if {$S_manual % $S_min != 0} {
       send_message ERROR "For framer configuration (L=$L, M=$M, NP=$NP) samples per frame (S) must be an integer multiple of $S_min"
       set S $S_min
@@ -247,7 +354,6 @@ proc p_ad_ip_jesd204_tpl_dac_validate {} {
       set F [expr $S_manual * $M * $NP / $L / 8]
     }
   } else {
-    set_parameter_property SAMPLES_PER_FRAME_MANUAL ALLOWED_RANGES {1 2 3 4 6 8 12 16}
     set S $S_min
     set F $F_min
   }
@@ -267,6 +373,94 @@ proc p_ad_ip_jesd204_tpl_dac_validate {} {
   set_parameter_property DDS_TYPE ENABLED $data_path_enabled
   set_parameter_property DDS_CORDIC_DW ENABLED $cordic_enabled
   set_parameter_property DDS_CORDIC_PHASE_DW ENABLED $cordic_enabled
+
+  set part [get_parameter_value "PART"]
+
+  if {$part == "AD9135" || $part == "AD9136"} {
+    global ad9136_modes
+    set modes $ad9136_modes
+  } elseif {$part == "AD9144" || $part == "AD9154"} {
+    global ad9144_modes
+    set modes $ad9144_modes
+  } elseif {$part == "AD9152"} {
+    global ad9152_modes
+    set modes $ad9152_modes
+  } elseif {$part == "AD9161" || $part == "AD9162" || $part == "AD9164"} {
+    global ad9161_modes
+    set modes $ad9161_modes
+  } elseif {$part == "AD9163"} {
+    global ad9163_modes
+    set modes $ad9163_modes
+  } elseif {$part == "AD9171"} {
+    global ad9171_modes
+    set modes $ad9171_modes
+  } elseif {$part == "AD9172"} {
+    global ad9172_modes
+    set modes $ad9172_modes
+  } elseif {$part == "AD9173"} {
+    global ad9173_modes
+    set modes $ad9173_modes
+  } else {
+    set modes {}
+  }
+
+  if {$modes != {}} {
+    set allowed_channels {}
+    set allowed_lanes {}
+    set allowed_samples_per_frame {}
+    set allowed_resolution {}
+    set allowed_bits_per_sample {}
+
+    set valid_mode false
+    foreach m $modes {
+      if {$m == [list $M $L $S $F $N $NP]} {
+        set valid_mode true
+      }
+
+      lappend allowed_channels [lindex $m 0]
+      lappend allowed_lanes [lindex $m 1]
+      lappend allowed_samples_per_frame [lindex $m 2]
+      lappend allowed_resolution [lindex $m 4]
+      lappend allowed_bits_per_sample [lindex $m 5]
+    }
+
+    set allowed_channels [lsort -unique -integer $allowed_channels]
+    set allowed_lanes [lsort -unique -integer $allowed_lanes]
+    set allowed_samples_per_frame [lsort -unique -integer $allowed_samples_per_frame]
+    set allowed_resolution [lsort -unique -integer $allowed_resolution]
+    set allowed_bits_per_sample [lsort -unique -integer $allowed_bits_per_sample]
+
+    if {!$valid_mode} {
+      send_message ERROR "Framer configuration (L=$L, M=$M, N=$N, NP=$NP, S=$S, F=$F) not supported by $part"
+    }
+  } else {
+    set allowed_channels {1 2 4 6}
+    set allowed_lanes {1 2 3 4 8}
+    set allowed_samples_per_frame {1 2 3 4 6 8 12 16}
+    set allowed_resolution {11 12 16}
+    set allowed_bits_per_sample {12 16}
+  }
+
+  set_parameter_property "NUM_CHANNELS" "ALLOWED_RANGES" $allowed_channels
+  set_parameter_property "NUM_LANES" "ALLOWED_RANGES" $allowed_lanes
+  set_parameter_property "SAMPLES_PER_FRAME" "ALLOWED_RANGES" $allowed_samples_per_frame
+  set_parameter_property "CONVERTER_RESOLUTION" "ALLOWED_RANGES" $allowed_resolution
+  set_parameter_property "BITS_PER_SAMPLE" "ALLOWED_RANGES" $allowed_bits_per_sample
+
+  if {$enable_S_manual} {
+    set allowed_S {}
+    foreach i {1 2 4} {
+      if {$F_min * $i <= 4 && $S_min * $i <= 16} {
+        set new_S [expr $S_min * $i]
+        if {[lsearch -integer $allowed_samples_per_frame $new_S] != -1} {
+          lappend allowed_S $new_S
+        }
+      }
+    }
+    set_parameter_property SAMPLES_PER_FRAME_MANUAL ALLOWED_RANGES $allowed_S
+  } else {
+    set_parameter_property SAMPLES_PER_FRAME_MANUAL ALLOWED_RANGES {1 2 3 4 6 8 12 16}
+  }
 }
 
 # elaborate
@@ -280,7 +474,10 @@ proc p_ad_ip_jesd204_tpl_dac_elab {} {
   set NP [get_parameter_value "BITS_PER_SAMPLE"]
 
   # The DMA interface is always 16-bits per sample, regardless of NP
-  set channel_bus_width [expr 16 * (32 * $L / ($M * $NP))]
+  # In case of an invalid configuration the expression can be 0, but we still
+  # want to be able to generate an interface without generating an extra error,
+  # so set the minimum width to 1.
+  set channel_bus_width [expr max(1, 16 * (32 * $L / ($M * $NP)))]
 
   # link layer interface
 
