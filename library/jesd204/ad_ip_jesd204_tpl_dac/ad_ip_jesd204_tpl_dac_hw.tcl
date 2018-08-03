@@ -78,7 +78,7 @@ proc p_ad_ip_jesd204_tpl_dac_elab {} {
 
   set m_num_of_lanes [get_parameter_value "NUM_LANES"]
   set m_num_of_channels [get_parameter_value "NUM_CHANNELS"]
-  set channel_bus_witdh [expr 32*$m_num_of_lanes/$m_num_of_channels]
+  set channel_bus_width [expr 32*$m_num_of_lanes/$m_num_of_channels]
 
   # link layer interface
 
@@ -97,9 +97,9 @@ proc p_ad_ip_jesd204_tpl_dac_elab {} {
     set_port_property dac_enable_$i fragment_list [format "enable(%d:%d)" $i $i]
     add_interface_port dac_ch_$i dac_valid_$i  valid  output 1
     set_port_property dac_valid_$i fragment_list [format "dac_valid(%d:%d)" $i $i]
-    add_interface_port dac_ch_$i dac_data_$i   data   input $channel_bus_witdh
+    add_interface_port dac_ch_$i dac_data_$i   data   input $channel_bus_width
     set_port_property dac_data_$i fragment_list \
-          [format "dac_ddata(%d:%d)" [expr $channel_bus_witdh*$i+$channel_bus_witdh-1] [expr $channel_bus_witdh*$i]]
+          [format "dac_ddata(%d:%d)" [expr $channel_bus_width*$i+$channel_bus_width-1] [expr $channel_bus_width*$i]]
     set_interface_property dac_ch_$i associatedClock link_clk
   }
 
