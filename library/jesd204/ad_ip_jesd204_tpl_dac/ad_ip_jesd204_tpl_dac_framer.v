@@ -43,17 +43,6 @@ module ad_ip_jesd204_tpl_dac_framer #(
   localparam HD = NUM_LANES > NUM_CHANNELS ? 1 : 0;
   localparam OCT_OFFSET = HD ? 32 : 8;
 
-  // internal registers
-
-  reg    [NUM_LANES*32-1:0]  link_data_r = 'd0;
-  wire   [NUM_LANES*32-1:0]  link_data_s;
-
-  always @(posedge clk) begin
-    link_data_r <= link_data_s;
-  end
-
-  assign link_data = link_data_r;
-
   generate
   genvar i;
   genvar j;
@@ -64,8 +53,8 @@ module ad_ip_jesd204_tpl_dac_framer #(
       localparam oct0_lsb = HD ? ((i * H + j % H) * 64 + (j / H) * 8) : (k * 16);
       localparam oct1_lsb = oct0_lsb + OCT_OFFSET;
 
-      assign link_data_s[oct0_lsb+:8] = dac_data[dac_lsb+8+:8];
-      assign link_data_s[oct1_lsb+:8] = dac_data[dac_lsb+:8];
+      assign link_data[oct0_lsb+:8] = dac_data[dac_lsb+8+:8];
+      assign link_data[oct1_lsb+:8] = dac_data[dac_lsb+:8];
     end
   end
   endgenerate
