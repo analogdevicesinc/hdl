@@ -93,13 +93,13 @@ proc ad_generate_module_inst { inst_name mark source_file target_file } {
 ###################################################################################################
 ###################################################################################################
 
-proc ad_ip_create {pname pdesc {pelabfunction ""} {pcomposefunction ""}} {
+proc ad_ip_create {pname pdisplay_name {pelabfunction ""} {pcomposefunction ""}} {
 
   set_module_property NAME $pname
-  set_module_property DESCRIPTION $pdesc
+  set_module_property DISPLAY_NAME $pdisplay_name
+  set_module_property DESCRIPTION $pdisplay_name
   set_module_property VERSION 1.0
   set_module_property GROUP "Analog Devices"
-  set_module_property DISPLAY_NAME $pname
   
   if {$pelabfunction ne ""} {
     set_module_property ELABORATION_CALLBACK $pelabfunction
