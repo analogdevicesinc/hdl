@@ -67,6 +67,9 @@ module ad_ip_jesd204_tpl_dac_core #(
 
   wire [NUM_LANES*32-1:0] dac_data_s;
 
+  wire [DATA_PATH_WIDTH*16-1:0] pn7_data;
+  wire [DATA_PATH_WIDTH*16-1:0] pn15_data;
+
   // device interface
 
   ad_ip_jesd204_tpl_dac_framer #(
@@ -76,6 +79,17 @@ module ad_ip_jesd204_tpl_dac_core #(
     .clk (clk),
     .link_data (link_data),
     .dac_data (dac_data_s)
+  );
+
+  // PN generator
+  ad_ip_jesd204_tpl_dac_pn #(
+    .DATA_PATH_WIDTH (DATA_PATH_WIDTH)
+  ) i_pn_gen (
+    .clk (clk),
+    .reset (dac_sync),
+
+    .pn7_data (pn7_data),
+    .pn15_data (pn15_data)
   );
 
   // dac valid
@@ -98,6 +112,9 @@ module ad_ip_jesd204_tpl_dac_core #(
       .dac_enable (enable[i]),
       .dac_data (dac_data_s[CDW*i+:CDW]),
       .dma_data (dac_ddata[CDW*i+:CDW]),
+
+      .pn7_data (pn7_data),
+      .pn15_data (pn15_data),
 
       .dac_data_sync (dac_sync),
       .dac_dds_format (dac_dds_format),
