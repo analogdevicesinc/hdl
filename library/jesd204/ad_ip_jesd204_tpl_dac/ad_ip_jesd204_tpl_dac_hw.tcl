@@ -25,7 +25,8 @@ package require qsys
 source ../../scripts/adi_env.tcl
 source ../../scripts/adi_ip_alt.tcl
 
-ad_ip_create ad_ip_jesd204_tpl_dac {ADI JESD204 Transport DAC Layer} p_ad_ip_jesd204_tpl_dac_elab
+ad_ip_create ad_ip_jesd204_tpl_dac "JESD204 Transport Layer for DACs" p_ad_ip_jesd204_tpl_dac_elab
+set_module_property VALIDATION_CALLBACK p_ad_ip_jesd204_tpl_dac_validate
 ad_ip_files ad_ip_jesd204_tpl_dac [list \
   $ad_hdl_dir/library/altera/common/ad_mul.v \
   $ad_hdl_dir/library/common/ad_dds_sine.v \
@@ -57,9 +58,55 @@ ad_ip_files ad_ip_jesd204_tpl_dac [list \
 
 # parameters
 
-ad_ip_parameter ID INTEGER 0
-ad_ip_parameter NUM_CHANNELS INTEGER 1
-ad_ip_parameter NUM_LANES INTEGER 1
+set group "General Configuration"
+
+ad_ip_parameter ID INTEGER 0 true [list \
+  DISPLAY_NAME "Core ID" \
+  GROUP $group \
+]
+
+set group "JESD204 Framer Configuration"
+
+ad_ip_parameter NUM_LANES INTEGER 1 true [list \
+  DISPLAY_NAME "Number of Lanes (L)" \
+  DISPLAY_UNITS "lanes" \
+  ALLOWED_RANGES {1 2 3 4 8} \
+  GROUP $group \
+]
+
+ad_ip_parameter NUM_CHANNELS INTEGER 1 true [list \
+  DISPLAY_NAME "Number of Converters (M)" \
+  DISPLAY_UNITS "converters" \
+  ALLOWED_RANGES {1 2 4 6 8} \
+  GROUP $group \
+]
+
+set group "Datapath Configuration"
+
+ad_ip_parameter DATAPATH_DISABLE boolean 0 true [list \
+  DISPLAY_NAME "Disable Datapath" \
+  GROUP $group \
+]
+
+ad_ip_parameter DDS_TYPE INTEGER 1 true [list \
+  DISPLAY_NAME "DDS Type" \
+  ALLOWED_RANGES {"0:Polynominal" "1:CORDIC"} \
+  GROUP $group \
+]
+
+ad_ip_parameter DDS_CORDIC_DW INTEGER 16 true [list \
+  DISPLAY_NAME "CORDIC DDS Data Width" \
+  ALLOWED_RANGES {8:20} \
+  UNITS bits \
+  GROUP $group \
+]
+
+ad_ip_parameter DDS_CORDIC_PHASE_DW INTEGER 16 true [list \
+  DISPLAY_NAME "CORDIC DDS Phase Width" \
+  ALLOWED_RANGES {8:20} \
+  UNITS bits \
+  GROUP $group \
+]
 
 # axi4 slave
 
@@ -69,6 +116,17 @@ ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn
 
 add_interface link_clk clock end
 add_interface_port link_clk link_clk clk Input 1
+
+# validate
+
+proc p_ad_ip_jesd204_tpl_dac_validate {} {
+  set data_path_enabled [expr ![get_parameter_value DATAPATH_DISABLE]]
+  set cordic_enabled [expr $data_path_enabled && [get_parameter_value DDS_TYPE] == 1]
+
+  set_parameter_property DDS_TYPE ENABLED $data_path_enabled
+  set_parameter_property DDS_CORDIC_DW ENABLED $cordic_enabled
+  set_parameter_property DDS_CORDIC_PHASE_DW ENABLED $cordic_enabled
+}
 
 # elaborate
 
