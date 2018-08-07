@@ -5,7 +5,7 @@ variable version
 
 set family "none"
 set device "none"
-set version "17.1.1"
+set version "18.0.0"
 
 proc adi_project_altera {project_name} {
 
