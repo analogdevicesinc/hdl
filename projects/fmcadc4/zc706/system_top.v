@@ -146,8 +146,8 @@ module system_top (
   assign ad9680_2_csn = (spi0_csn == 3'b010) ? 1'b0 : 1'b1;
   assign ada4961_1a_csn = (spi0_csn == 3'b011) ? 1'b0 : 1'b1;
   assign ada4961_1b_csn = (spi0_csn == 3'b100) ? 1'b0 : 1'b1;
-  assign ada4961_1c_csn = (spi0_csn == 3'b101) ? 1'b0 : 1'b1;
-  assign ada4961_1d_csn = (spi0_csn == 3'b110) ? 1'b0 : 1'b1;
+  assign ada4961_2a_csn = (spi0_csn == 3'b101) ? 1'b0 : 1'b1;
+  assign ada4961_2b_csn = (spi0_csn == 3'b110) ? 1'b0 : 1'b1;
 
   // instantiations
 
