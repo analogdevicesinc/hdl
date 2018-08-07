@@ -45,10 +45,10 @@ module ad_rst (
   output  reg             rst);
 
   // internal registers
-  reg             rst_async_d1 = 'd0;
-  reg             rst_async_d2 = 'd0;
-  reg             rst_sync = 'd0;
-  reg             rst_sync_d = 'd0 /* synthesis preserve */;
+  reg             rst_async_d1 = 1'd1;
+  reg             rst_async_d2 = 1'd1;
+  reg             rst_sync = 1'd1;
+  reg             rst_sync_d = 1'd1 /* synthesis preserve */;
 
   // simple reset synchronizer
   always @(posedge clk or posedge rst_async) begin
