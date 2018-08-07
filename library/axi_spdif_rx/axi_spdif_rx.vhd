@@ -234,6 +234,7 @@ begin
     m_axis_tvalid <= '0';
     m_axis_tlast <= '0';
     m_axis_tkeep <= "0000";
+    m_axis_tdata <= (others => '0');
   end generate;
 
   pl330_dma_gen: if C_DMA_TYPE = 1 generate
