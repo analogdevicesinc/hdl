@@ -26,6 +26,7 @@
 module ad_ip_jesd204_tpl_dac_channel #(
   parameter DATAPATH_DISABLE = 0,
   parameter DATA_PATH_WIDTH = 4,
+  parameter CONVERTER_RESOLUTION = 16,
   parameter DDS_TYPE = 1,
   parameter DDS_CORDIC_DW = 16,
   parameter DDS_CORDIC_PHASE_DW = 16
@@ -35,12 +36,12 @@ module ad_ip_jesd204_tpl_dac_channel #(
   input clk,
 
   input [DATA_PATH_WIDTH*16-1:0] dma_data,
-  output reg [DATA_PATH_WIDTH*16-1:0] dac_data = 'h00,
+  output reg [DATA_PATH_WIDTH*CONVERTER_RESOLUTION-1:0] dac_data = 'h00,
 
   // PN data
 
-  input [DATA_PATH_WIDTH*16-1:0] pn7_data,
-  input [DATA_PATH_WIDTH*16-1:0] pn15_data,
+  input [DATA_PATH_WIDTH*CONVERTER_RESOLUTION-1:0] pn7_data,
+  input [DATA_PATH_WIDTH*CONVERTER_RESOLUTION-1:0] pn15_data,
 
   // Configuration
 
@@ -62,14 +63,18 @@ module ad_ip_jesd204_tpl_dac_channel #(
   output reg dac_enable = 1'b0
 );
 
+  localparam CR = CONVERTER_RESOLUTION;
+  localparam CHANNEL_DATA_WIDTH = DATA_PATH_WIDTH * CR;
+
   // internal signals
 
-  wire [DATA_PATH_WIDTH*16-1:0] dac_dds_data_s;
-  wire [DATA_PATH_WIDTH*16-1:0] dac_pat_data_s;
+  wire [CHANNEL_DATA_WIDTH-1:0] dac_dds_data_s;
+  wire [CHANNEL_DATA_WIDTH-1:0] dac_dma_data_s;
+  wire [CHANNEL_DATA_WIDTH-1:0] dac_pat_data_s;
 
   generate
     if (DATA_PATH_WIDTH > 1) begin
-      assign dac_pat_data_s = {DATA_PATH_WIDTH/2{dac_pat_data_1,dac_pat_data_0}};
+      assign dac_pat_data_s = {DATA_PATH_WIDTH/2{dac_pat_data_1[0+:CR],dac_pat_data_0[0+:CR]}};
     end else begin
       reg dac_pat_data_sel = 1'b0;
 
@@ -82,7 +87,13 @@ module ad_ip_jesd204_tpl_dac_channel #(
       end
 
       assign dac_pat_data_s = dac_pat_data_sel == 1'b0 ?
-        dac_pat_data_0 : dac_pat_data_1;
+        dac_pat_data_0[0+:CR] : dac_pat_data_1[0+:CR];
+    end
+
+    genvar i;
+    /* Data is expected to be LSB aligned, drop unused MSBs */
+    for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: g_dac_dma_data
+      assign dac_dma_data_s[CR*i+:CR] = dma_data[16*i+:CR];
     end
   endgenerate
 
@@ -96,7 +107,7 @@ module ad_ip_jesd204_tpl_dac_channel #(
       4'h5: dac_data <= ~pn15_data;
       4'h4: dac_data <= ~pn7_data;
       4'h3: dac_data <= 'h00;
-      4'h2: dac_data <= dma_data;
+      4'h2: dac_data <= dac_dma_data_s;
       4'h1: dac_data <= dac_pat_data_s;
       default: dac_data <= dac_dds_data_s;
     endcase
@@ -106,7 +117,7 @@ module ad_ip_jesd204_tpl_dac_channel #(
 
     ad_dds #(
     .DISABLE (DATAPATH_DISABLE),
-    .DDS_DW (16),
+    .DDS_DW (CONVERTER_RESOLUTION),
     .PHASE_DW (16),
     .DDS_TYPE (DDS_TYPE),
     .CORDIC_DW (DDS_CORDIC_DW),
