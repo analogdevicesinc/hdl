@@ -27,7 +27,6 @@ module ad_ip_jesd204_tpl_dac #(
   parameter ID = 0,
   parameter NUM_LANES = 4,
   parameter NUM_CHANNELS = 2,
-  parameter CHANNEL_WIDTH = 16,
   parameter DDS_TYPE = 1,
   parameter DDS_CORDIC_DW = 16,
   parameter DDS_CORDIC_PHASE_DW = 16,
