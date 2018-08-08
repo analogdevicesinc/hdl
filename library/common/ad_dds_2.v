@@ -97,7 +97,7 @@ module ad_dds_2 #(
 
     // set desired data width
     always @(posedge clk) begin
-      if (DDS_DW <= DDS_D_DW) begin // truncation
+      if (DDS_DW < DDS_D_DW) begin // truncation
         // fair rownding
         dds_data_rownd <= dds_data_int + {(C_T_WIDTH){dds_data_int[DDS_D_DW-1]}};
         dds_data_width <= dds_data_rownd[DDS_D_DW-1:DDS_D_DW-DDS_DW];
