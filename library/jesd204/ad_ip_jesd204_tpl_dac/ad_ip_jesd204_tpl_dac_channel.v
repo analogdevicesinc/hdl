@@ -65,6 +65,26 @@ module ad_ip_jesd204_tpl_dac_channel #(
   // internal signals
 
   wire [DATA_PATH_WIDTH*16-1:0] dac_dds_data_s;
+  wire [DATA_PATH_WIDTH*16-1:0] dac_pat_data_s;
+
+  generate
+    if (DATA_PATH_WIDTH > 1) begin
+      assign dac_pat_data_s = {DATA_PATH_WIDTH/2{dac_pat_data_1,dac_pat_data_0}};
+    end else begin
+      reg dac_pat_data_sel = 1'b0;
+
+      always @(posedge clk) begin
+        if (dac_data_sync == 1'b1) begin
+          dac_pat_data_sel <= 1'b0;
+        end else begin
+          dac_pat_data_sel <= ~dac_pat_data_sel;
+        end
+      end
+
+      assign dac_pat_data_s = dac_pat_data_sel == 1'b0 ?
+        dac_pat_data_0 : dac_pat_data_1;
+    end
+  endgenerate
 
   // dac data select
 
@@ -77,7 +97,7 @@ module ad_ip_jesd204_tpl_dac_channel #(
       4'h4: dac_data <= ~pn7_data;
       4'h3: dac_data <= 'h00;
       4'h2: dac_data <= dma_data;
-      4'h1: dac_data <= {DATA_PATH_WIDTH/2{dac_pat_data_1, dac_pat_data_0}};
+      4'h1: dac_data <= dac_pat_data_s;
       default: dac_data <= dac_dds_data_s;
     endcase
   end
