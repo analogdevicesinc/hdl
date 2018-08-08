@@ -95,10 +95,32 @@ ad_ip_parameter CONVERTER_RESOLUTION INTEGER 16 true [list \
   GROUP $group \
 ]
 
+ad_ip_parameter ENABLE_SAMPLES_PER_FRAME_MANUAL BOOLEAN 0 false [list \
+  DISPLAY_NAME "Manual Samples per Frame" \
+  GROUP $group \
+]
+
 ad_ip_parameter SAMPLES_PER_FRAME INTEGER 1 true [list \
   DISPLAY_NAME "Samples per Frame (S)" \
   DISPLAY_UNITS "samples" \
   ALLOWED_RANGES {1 2 3 4 6 8 12 16} \
+  DERIVED true \
+  GROUP $group \
+]
+
+ad_ip_parameter SAMPLES_PER_FRAME_MANUAL INTEGER 1 false [list \
+  DISPLAY_NAME "Samples per Frame (S)" \
+  DISPLAY_UNITS "samples" \
+  ALLOWED_RANGES {1 2 3 4 6 8 12 16} \
+  VISIBLE false \
+  GROUP $group \
+]
+
+ad_ip_parameter OCTETS_PER_FRAME INTEGER 1 false [list \
+  DISPLAY_NAME "Octets per Frame (F)" \
+  DISPLAY_UNITS "octets" \
+  ALLOWED_RANGES {1 2 4} \
+  DERIVED true \
   GROUP $group \
 ]
 
@@ -138,9 +160,79 @@ ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn
 add_interface link_clk clock end
 add_interface_port link_clk link_clk clk Input 1
 
+# We don't expect too large values for a and b, trivial implementation will do
+proc gcd {a b} {
+  if {$a == $b} {
+    return $b
+  } elseif {$a > $b} {
+    return [gcd [expr $a - $b] $b]
+  } else {
+    return [gcd $a [expr $b - $a]]
+  }
+}
+
 # validate
 
 proc p_ad_ip_jesd204_tpl_dac_validate {} {
+  set L [get_parameter_value "NUM_LANES"]
+  set M [get_parameter_value "NUM_CHANNELS"]
+  set NP [get_parameter_value "BITS_PER_SAMPLE"]
+  set N [get_parameter_value "CONVERTER_RESOLUTION"]
+  set S_manual [get_parameter_value "SAMPLES_PER_FRAME_MANUAL"]
+  set enable_S_manual [get_parameter_value "ENABLE_SAMPLES_PER_FRAME_MANUAL"]
+
+  set channel_bus_width [expr 32 * $L / $M]
+
+  # With fixed values for M, L and N' all valid values for S and F have a
+  # constant ratio of S / F. Choose a ratio so that S and F are co-prime.
+  # Choosing values for F and S that have a common factor has higher latency
+  # and no added benefits.
+  #
+  # Since converters often support those higher latency modes still allow a
+  # manual override of the S parameter in case somebody wants to use those modes
+  # anyway.
+  #
+  # To be able to set samples per frame manually ENABLE_SAMPLES_PER_FRAME_MANUAL
+  # needs to be set to true and SAMPLES_PER_FRAME_MANUAL to the desired value.
+  #
+  # When manual sample per frame selection is enabled still verify that the
+  # selected value is valid.
+
+  set S_min [expr $L * 8]
+  set F_min [expr $M * $NP]
+  set common_factor [gcd $S_min $F_min]
+  set S_min [expr $S_min / $common_factor]
+  set F_min [expr $F_min / $common_factor]
+
+  if {$enable_S_manual} {
+    foreach i {1 2 4} {
+      if {$F * $i <= 4 && $S * $i <= 16} {
+        lappend allowed_S [expr $S * $i]
+      }
+    }
+
+    set_parameter_property SAMPLES_PER_FRAME_MANUAL ALLOWED_RANGES $allowed_S
+
+    if {$S_manual % $S_min != 0} {
+      send_message ERROR "For framer configuration (L=$L, M=$M, NP=$NP) samples per frame (S) must be an integer multiple of $S_min"
+      set S $S_min
+      set F $F_min
+    } else {
+      set S $S_manual
+      set F [expr $S_manual * $M * $NP / $L / 8]
+    }
+  } else {
+    set_parameter_property SAMPLES_PER_FRAME_MANUAL ALLOWED_RANGES {1 2 3 4 6 8 12 16}
+    set S $S_min
+    set F $F_min
+  }
+
+  set_parameter_value OCTETS_PER_FRAME $F
+  set_parameter_value SAMPLES_PER_FRAME $S
+
+  set_parameter_property SAMPLES_PER_FRAME VISIBLE [expr !$enable_S_manual]
+  set_parameter_property SAMPLES_PER_FRAME_MANUAL VISIBLE $enable_S_manual
+
   set data_path_enabled [expr ![get_parameter_value DATAPATH_DISABLE]]
   set cordic_enabled [expr $data_path_enabled && [get_parameter_value DDS_TYPE] == 1]
 
