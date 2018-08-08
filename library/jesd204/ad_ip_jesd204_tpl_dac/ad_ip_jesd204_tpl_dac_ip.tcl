@@ -53,6 +53,11 @@ adi_ip_files ad_ip_jesd204_tpl_dac [list \
 
 adi_ip_properties ad_ip_jesd204_tpl_dac
 
+set cc [ipx::current_core]
+
+set_property display_name "JESD204 Transport Layer for DACs" $cc
+set_property description "JESD204 Transport Layer for DACs" $cc
+
 adi_add_bus "link" "master" \
   "xilinx.com:interface:axis_rtl:1.0" \
   "xilinx.com:interface:axis:1.0" \
@@ -63,4 +68,79 @@ adi_add_bus "link" "master" \
   ]
 adi_add_bus_clock "link_clk" "link"
 
+set_property -dict [list \
+  "value_validation_type" "pairs" \
+  "value_validation_pairs" {"Polynominal" "0" "CORDIC" "1"} \
+  "enablement_tcl_expr" "\$DATAPATH_DISABLE == 0" \
+] [ipx::get_user_parameters DDS_TYPE -of_objects $cc]
+
+foreach p {DDS_CORDIC_DW DDS_CORDIC_PHASE_DW} {
+  set_property -dict [list \
+    "value_validation_type" "range_long" \
+    "value_validation_range_minimum" 8 \
+    "value_validation_range_maximum" 20 \
+    "enablement_tcl_expr" "\$DATAPATH_DISABLE == 0 && \$DDS_TYPE == 1" \
+  ] [ipx::get_user_parameters $p -of_objects $cc]
+}
+
+foreach {p v} {
+  "NUM_LANES" "1 2 3 4 8" \
+  "NUM_CHANNELS" "1 2 4 6 8" \
+} { \
+  set_property -dict [list \
+    "value_validation_type" "list" \
+    "value_validation_list" $v \
+  ] [ipx::get_user_parameters $p -of_objects $cc]
+}
+
+set page0 [ipgui::get_pagespec -name "Page 0" -component $cc]
+
+set general_group [ipgui::add_group -name "General Configuration" -component $cc \
+    -parent $page0 -display_name "General Configuration"]
+
+set p [ipgui::get_guiparamspec -name "ID" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $general_group
+set_property -dict [list \
+  "display_name" "Core ID" \
+] $p
+
+set framer_group [ipgui::add_group -name "JESD204 Framer Configuration" -component $cc \
+    -parent $page0 -display_name "JESD204 Framer Cofiguration"]
+
+set i 0
+
+foreach {k v} { \
+  "NUM_LANES" "Number of Lanes (L)" \
+  "NUM_CHANNELS" "Number of Conveters (M)" \
+  } { \
+  set p [ipgui::get_guiparamspec -name $k -component $cc]
+  ipgui::move_param -component $cc -order $i $p -parent $framer_group
+  set_property -dict [list \
+    WIDGET "comboBox" \
+    DISPLAY_NAME $v \
+  ] $p
+  incr i
+}
+
+set datapath_group [ipgui::add_group -name "Datapath Configuration" -component $cc \
+    -parent $page0 -display_name "Datapath Cofiguration"]
+
+set i 0
+
+foreach {k v w} {
+  "DATAPATH_DISABLE" "Disable Datapath" "checkBox" \
+  "DDS_TYPE" "DDS Type" "comboBox" \
+  "DDS_CORDIC_DW" "CORDIC DDS Data Width" "text" \
+  "DDS_CORDIC_PHASE_DW" "CORDIC DDS Phase Width" "text" \
+  } { \
+  set p [ipgui::get_guiparamspec -name $k -component $cc]
+  ipgui::move_param -component $cc -order $i $p -parent $datapath_group
+  set_property -dict [list \
+    WIDGET $w \
+    DISPLAY_NAME $v \
+  ] $p
+  incr i
+}
+
+ipx::create_xgui_files [ipx::current_core]
 ipx::save_core [ipx::current_core]
