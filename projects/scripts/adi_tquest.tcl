@@ -1,5 +1,8 @@
 
-report_timing -detail full_path -npaths 20 -file timing_impl.log
+report_timing -detail full_path -npaths 20 -setup -file timing_impl.log
+report_timing -detail full_path -npaths 20 -hold -append -file timing_impl.log
+report_timing -detail full_path -npaths 20 -recovery -append -file timing_impl.log
+report_timing -detail full_path -npaths 20 -removal -append -file timing_impl.log
 
 set worst_path [get_timing_paths -npaths 1 -setup]
 foreach_in_collection path $worst_path {
