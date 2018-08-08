@@ -58,7 +58,6 @@ ad_ip_files ad_ip_jesd204_tpl_dac [list \
 
 ad_ip_parameter ID INTEGER 0
 ad_ip_parameter NUM_CHANNELS INTEGER 1
-ad_ip_parameter CHANNEL_WIDTH INTEGER 14
 ad_ip_parameter NUM_LANES INTEGER 1
 
 # axi4 slave
