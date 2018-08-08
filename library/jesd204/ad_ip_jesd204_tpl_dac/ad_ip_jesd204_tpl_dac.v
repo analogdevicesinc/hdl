@@ -28,6 +28,8 @@ module ad_ip_jesd204_tpl_dac #(
   parameter NUM_LANES = 4,
   parameter NUM_CHANNELS = 2,
   parameter SAMPLES_PER_FRAME = 1,
+  parameter CONVERTER_RESOLUTION = 16,
+  parameter BITS_PER_SAMPLE = 16,
   parameter DDS_TYPE = 1,
   parameter DDS_CORDIC_DW = 16,
   parameter DDS_CORDIC_PHASE_DW = 16,
@@ -81,8 +83,9 @@ module ad_ip_jesd204_tpl_dac #(
   /* Static for now */
   localparam OCTETS_PER_BEAT = 4;
 
-  localparam DATA_PATH_WIDTH = 2 * OCTETS_PER_BEAT * NUM_LANES / NUM_CHANNELS;
+  localparam DATA_PATH_WIDTH = OCTETS_PER_BEAT * 8 * NUM_LANES / NUM_CHANNELS / BITS_PER_SAMPLE;
   localparam LINK_DATA_WIDTH = NUM_LANES * OCTETS_PER_BEAT * 8;
+  localparam DMA_DATA_WIDTH = 16 * DATA_PATH_WIDTH * NUM_CHANNELS;
 
   // internal signals
 
@@ -157,6 +160,7 @@ module ad_ip_jesd204_tpl_dac #(
     .OCTETS_PER_BEAT (OCTETS_PER_BEAT),
     .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
     .LINK_DATA_WIDTH (LINK_DATA_WIDTH),
+    .DMA_DATA_WIDTH (DMA_DATA_WIDTH),
     .DDS_TYPE (DDS_TYPE),
     .DDS_CORDIC_DW (DDS_CORDIC_DW),
     .DDS_CORDIC_PHASE_DW (DDS_CORDIC_PHASE_DW)

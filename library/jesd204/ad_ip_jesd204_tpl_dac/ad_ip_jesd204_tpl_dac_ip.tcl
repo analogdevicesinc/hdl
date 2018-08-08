@@ -86,6 +86,8 @@ foreach p {DDS_CORDIC_DW DDS_CORDIC_PHASE_DW} {
 foreach {p v} {
   "NUM_LANES" "1 2 3 4 8" \
   "NUM_CHANNELS" "1 2 4 6 8" \
+  "BITS_PER_SAMPLE" "12 16" \
+  "CONVERTER_RESOLUTION" "11 12 16" \
   "SAMPLES_PER_FRAME" "1 2 3 4 6 8 12 16" \
 } { \
   set_property -dict [list \
@@ -113,6 +115,8 @@ set i 0
 foreach {k v} { \
   "NUM_LANES" "Number of Lanes (L)" \
   "NUM_CHANNELS" "Number of Conveters (M)" \
+  "BITS_PER_SAMPLE" "Bits per Sample (N')" \
+  "CONVERTER_RESOLUTION" "Converter Resolution (N)" \
   "SAMPLES_PER_FRAME" "Samples per Frame (S)" \
   } { \
   set p [ipgui::get_guiparamspec -name $k -component $cc]

@@ -92,6 +92,8 @@ module axi_ad9152 #(
     .ID(ID),
     .NUM_LANES(4),
     .NUM_CHANNELS(2),
+    .CONVERTER_RESOLUTION (16),
+    .BITS_PER_SAMPLE (16),
     .SAMPLES_PER_FRAME (1),
     .DDS_TYPE (DAC_DDS_TYPE),
     .DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),

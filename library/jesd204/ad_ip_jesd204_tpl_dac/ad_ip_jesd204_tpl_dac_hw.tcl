@@ -81,6 +81,20 @@ ad_ip_parameter NUM_CHANNELS INTEGER 1 true [list \
   GROUP $group \
 ]
 
+ad_ip_parameter BITS_PER_SAMPLE INTEGER 16 false [list \
+  DISPLAY_NAME "Bits per Sample (N')" \
+  ALLOWED_RANGES {12 16} \
+  UNITS bits \
+  GROUP $group \
+]
+
+ad_ip_parameter CONVERTER_RESOLUTION INTEGER 16 true [list \
+  DISPLAY_NAME "Converter Resolution (N)" \
+  ALLOWED_RANGES {11 12 16} \
+  UNITS bits \
+  GROUP $group \
+]
+
 ad_ip_parameter SAMPLES_PER_FRAME INTEGER 1 true [list \
   DISPLAY_NAME "Samples per Frame (S)" \
   DISPLAY_UNITS "samples" \
@@ -141,22 +155,25 @@ proc p_ad_ip_jesd204_tpl_dac_elab {} {
 
   # read core parameters
 
-  set m_num_of_lanes [get_parameter_value "NUM_LANES"]
-  set m_num_of_channels [get_parameter_value "NUM_CHANNELS"]
-  set channel_bus_width [expr 32*$m_num_of_lanes/$m_num_of_channels]
+  set L [get_parameter_value "NUM_LANES"]
+  set M [get_parameter_value "NUM_CHANNELS"]
+  set NP [get_parameter_value "BITS_PER_SAMPLE"]
+
+  # The DMA interface is always 16-bits per sample, regardless of NP
+  set channel_bus_width [expr 16 * (32 * $L / ($M * $NP))]
 
   # link layer interface
 
   add_interface link_data avalon_streaming source
-  add_interface_port link_data link_data  data  output  [expr 32*$m_num_of_lanes]
+  add_interface_port link_data link_data  data  output  [expr 32 * $L]
   add_interface_port link_data link_valid valid output  1
   add_interface_port link_data link_ready ready input   1
   set_interface_property link_data associatedClock link_clk
-  set_interface_property link_data dataBitsPerSymbol [expr 32*$m_num_of_lanes]
+  set_interface_property link_data dataBitsPerSymbol [expr 32 * $L]
 
   # dma interface
 
-  for {set i 0} {$i < $m_num_of_channels} {incr i} {
+  for {set i 0} {$i < $M} {incr i} {
     add_interface dac_ch_$i conduit end
     add_interface_port dac_ch_$i dac_enable_$i enable output 1
     set_port_property dac_enable_$i fragment_list [format "enable(%d:%d)" $i $i]

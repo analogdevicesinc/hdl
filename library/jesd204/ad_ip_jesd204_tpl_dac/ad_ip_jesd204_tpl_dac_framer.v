@@ -26,9 +26,12 @@
 module ad_ip_jesd204_tpl_dac_framer #(
   parameter NUM_LANES = 8,
   parameter NUM_CHANNELS = 4,
+  parameter BITS_PER_SAMPLE = 16,
+  parameter CONVERTER_RESOLUTION = 16,
   parameter SAMPLES_PER_FRAME = 2,
   parameter OCTETS_PER_BEAT = 4,
-  parameter LINK_DATA_WIDTH = OCTETS_PER_BEAT * 8 * NUM_LANES
+  parameter LINK_DATA_WIDTH = OCTETS_PER_BEAT * 8 * NUM_LANES,
+  parameter DAC_DATA_WIDTH = LINK_DATA_WIDTH * CONVERTER_RESOLUTION / BITS_PER_SAMPLE
 ) (
   // jesd interface
 
@@ -36,7 +39,7 @@ module ad_ip_jesd204_tpl_dac_framer #(
 
   // dac interface
 
-  input [LINK_DATA_WIDTH-1:0] dac_data
+  input [DAC_DATA_WIDTH-1:0] dac_data
 );
 
   /*
@@ -44,7 +47,7 @@ module ad_ip_jesd204_tpl_dac_framer #(
    * JESD204 link expects for the specified framer configuration.
    *
    * The input sample data in dac_data is expected to be grouped by converter.
-   * The first sample is in the LSBs.
+   * The first sample is in the LSBs. Each sample has CONVERTER_RESOLUTION bits.
    *
    * Or in other words the data in dac_data is expected to have the following
    * layout.
@@ -86,12 +89,12 @@ module ad_ip_jesd204_tpl_dac_framer #(
    * ordered in either case. That means lower bits are in the LSBs.
    */
 
-  localparam BITS_PER_SAMPLE = 16;
-  localparam FRAMES_PER_BEAT = 8 * OCTETS_PER_BEAT / BITS_PER_LANE_PER_FRAME;
-  localparam SAMPLES_PER_BEAT = LINK_DATA_WIDTH / 16;
+  localparam FRAMES_PER_BEAT = OCTETS_PER_BEAT * 8 / BITS_PER_LANE_PER_FRAME;
+  localparam SAMPLES_PER_BEAT = DAC_DATA_WIDTH / CONVERTER_RESOLUTION;
   localparam BITS_PER_CHANNEL_PER_FRAME = BITS_PER_SAMPLE * SAMPLES_PER_FRAME;
   localparam BITS_PER_LANE_PER_FRAME = BITS_PER_CHANNEL_PER_FRAME *
                                        NUM_CHANNELS / NUM_LANES;
+  localparam TAIL_BITS = BITS_PER_SAMPLE - CONVERTER_RESOLUTION;
 
   wire [LINK_DATA_WIDTH-1:0] link_data_msb_s;
   wire [LINK_DATA_WIDTH-1:0] frame_data_s;
@@ -100,13 +103,17 @@ module ad_ip_jesd204_tpl_dac_framer #(
   generate
     genvar i;
     genvar j;
-    /* Reorder samples MSB first */
+    /* Reorder samples MSB first and insert tail bits */
     for (i = 0; i < SAMPLES_PER_BEAT; i = i + 1) begin: g_dac_data_msb
-      localparam w = BITS_PER_SAMPLE;
-      localparam src_lsb = i * w;
-      localparam dst_msb = LINK_DATA_WIDTH - 1 - src_lsb;
+      localparam src_w = CONVERTER_RESOLUTION;
+      localparam dst_w = BITS_PER_SAMPLE;
+      localparam src_lsb = i * src_w;
+      localparam dst_msb = LINK_DATA_WIDTH - 1 - i * dst_w;
 
-      assign dac_data_msb[dst_msb-:w] = dac_data[src_lsb+:w];
+      assign dac_data_msb[dst_msb-:src_w] = dac_data[src_lsb+:src_w];
+      if (TAIL_BITS > 0) begin
+        assign dac_data_msb[dst_msb-src_w-:TAIL_BITS] = {TAIL_BITS{1'b0}};
+      end
     end
 
     /* Slice channel and pack it into frames */
