@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ip><presets version="17.1">
+	<preset name="AD9171 Mode 00" kind="ad_ip_jesd204_tpl_dac" version="All" description="AD9171">
+		<parameter name="PART" value="AD9171" />
+		<parameter name="NUM_CHANNELS" value="2" />
+		<parameter name="NUM_LANES" value="1" />
+		<parameter name="ENABLE_SAMPLES_PER_FRAME_MANUAL" value="0" />
+		<parameter name="SAMPLES_PER_FRAME_MANUAL" value="1" />
+		<parameter name="CONVERTER_RESOLUTION" value="16" />
+		<parameter name="BITS_PER_SAMPLE" value="16" />
+	</preset>
+	<preset name="AD9171 Mode 03" kind="ad_ip_jesd204_tpl_dac" version="All" description="AD9171">
+		<parameter name="PART" value="AD9171" />
+		<parameter name="NUM_CHANNELS" value="2" />
+		<parameter name="NUM_LANES" value="2" />
+		<parameter name="ENABLE_SAMPLES_PER_FRAME_MANUAL" value="0" />
+		<parameter name="SAMPLES_PER_FRAME_MANUAL" value="1" />
+		<parameter name="CONVERTER_RESOLUTION" value="16" />
+		<parameter name="BITS_PER_SAMPLE" value="16" />
+	</preset>
+	<preset name="AD9171 Mode 05" kind="ad_ip_jesd204_tpl_dac" version="All" description="AD9171">
+		<parameter name="PART" value="AD9171" />
+		<parameter name="NUM_CHANNELS" value="2" />
+		<parameter name="NUM_LANES" value="1" />
+		<parameter name="ENABLE_SAMPLES_PER_FRAME_MANUAL" value="0" />
+		<parameter name="SAMPLES_PER_FRAME_MANUAL" value="1" />
+		<parameter name="CONVERTER_RESOLUTION" value="12" />
+		<parameter name="BITS_PER_SAMPLE" value="12" />
+	</preset>
+</presets></ip>

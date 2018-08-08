@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ip><presets version="17.1">
+	<preset name="AD9152 Mode 04" kind="ad_ip_jesd204_tpl_dac" version="All" description="AD9152">
+		<parameter name="PART" value="AD9152" />
+		<parameter name="NUM_CHANNELS" value="2" />
+		<parameter name="NUM_LANES" value="4" />
+		<parameter name="ENABLE_SAMPLES_PER_FRAME_MANUAL" value="0" />
+		<parameter name="SAMPLES_PER_FRAME_MANUAL" value="1" />
+		<parameter name="CONVERTER_RESOLUTION" value="16" />
+		<parameter name="BITS_PER_SAMPLE" value="16" />
+	</preset>
+	<preset name="AD9152 Mode 05" kind="ad_ip_jesd204_tpl_dac" version="All" description="AD9152">
+		<parameter name="PART" value="AD9152" />
+		<parameter name="NUM_CHANNELS" value="2" />
+		<parameter name="NUM_LANES" value="4" />
+		<parameter name="ENABLE_SAMPLES_PER_FRAME_MANUAL" value="1" />
+		<parameter name="SAMPLES_PER_FRAME_MANUAL" value="2" />
+		<parameter name="CONVERTER_RESOLUTION" value="16" />
+		<parameter name="BITS_PER_SAMPLE" value="16" />
+	</preset>
+	<preset name="AD9152 Mode 06" kind="ad_ip_jesd204_tpl_dac" version="All" description="AD9152">
+		<parameter name="PART" value="AD9152" />
+		<parameter name="NUM_CHANNELS" value="2" />
+		<parameter name="NUM_LANES" value="2" />
+		<parameter name="ENABLE_SAMPLES_PER_FRAME_MANUAL" value="0" />
+		<parameter name="SAMPLES_PER_FRAME_MANUAL" value="1" />
+		<parameter name="CONVERTER_RESOLUTION" value="16" />
+		<parameter name="BITS_PER_SAMPLE" value="16" />
+	</preset>
+	<preset name="AD9152 Mode 07" kind="ad_ip_jesd204_tpl_dac" version="All" description="AD9152">
+		<parameter name="PART" value="AD9152" />
+		<parameter name="NUM_CHANNELS" value="2" />
+		<parameter name="NUM_LANES" value="1" />
+		<parameter name="ENABLE_SAMPLES_PER_FRAME_MANUAL" value="0" />
+		<parameter name="SAMPLES_PER_FRAME_MANUAL" value="1" />
+		<parameter name="CONVERTER_RESOLUTION" value="16" />
+		<parameter name="BITS_PER_SAMPLE" value="16" />
+	</preset>
+	<preset name="AD9152 Mode 09" kind="ad_ip_jesd204_tpl_dac" version="All" description="AD9152">
+		<parameter name="PART" value="AD9152" />
+		<parameter name="NUM_CHANNELS" value="1" />
+		<parameter name="NUM_LANES" value="2" />
+		<parameter name="ENABLE_SAMPLES_PER_FRAME_MANUAL" value="0" />
+		<parameter name="SAMPLES_PER_FRAME_MANUAL" value="1" />
+		<parameter name="CONVERTER_RESOLUTION" value="16" />
+		<parameter name="BITS_PER_SAMPLE" value="16" />
+	</preset>
+	<preset name="AD9152 Mode 10" kind="ad_ip_jesd204_tpl_dac" version="All" description="AD9152">
+		<parameter name="PART" value="AD9152" />
+		<parameter name="NUM_CHANNELS" value="1" />
+		<parameter name="NUM_LANES" value="1" />
+		<parameter name="ENABLE_SAMPLES_PER_FRAME_MANUAL" value="0" />
+		<parameter name="SAMPLES_PER_FRAME_MANUAL" value="1" />
+		<parameter name="CONVERTER_RESOLUTION" value="16" />
+		<parameter name="BITS_PER_SAMPLE" value="16" />
+	</preset>
+</presets></ip>
