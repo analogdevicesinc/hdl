@@ -124,6 +124,33 @@ ad_ip_parameter OCTETS_PER_FRAME INTEGER 1 false [list \
   GROUP $group \
 ]
 
+set group "Framer Input Information"
+
+# Parameters in this group are informative only and can be read back after the
+# core has been configured to find out the expected layout of the input data.
+# E.g.
+#  set NUM_OF_CHANNELS  [get_instance_parameter_value jesd204_transport NUM_CHANNELS]
+#  set CHANNEL_DATA_WIDTH [get_instance_parameter_value jesd204_transport CHANNEL_DATA_WIDTH]
+#
+#  add_instance util_dac_upack util_upack
+#  set_instance_parameter_values util_dac_upack [list \
+#    CHANNEL_DATA_WIDTH $CHANNEL_DATA_WIDTH \
+#    NUM_OF_CHANNELS $NUM_OF_CHANNELS \
+#  ]
+
+ad_ip_parameter SAMPLES_PER_CHANNEL INTEGER 1 false [list \
+  DISPLAY_NAME "Samples per Channel per Beat" \
+  DERIVED true \
+  GROUP $group \
+]
+
+ad_ip_parameter CHANNEL_DATA_WIDTH INTEGER 1 false [list \
+  DISPLAY_NAME "Channel Data Width" \
+  UNITS bits \
+  DERIVED true \
+  GROUP $group \
+]
+
 set group "Datapath Configuration"
 
 ad_ip_parameter DATAPATH_DISABLE boolean 0 true [list \
@@ -181,8 +208,6 @@ proc p_ad_ip_jesd204_tpl_dac_validate {} {
   set S_manual [get_parameter_value "SAMPLES_PER_FRAME_MANUAL"]
   set enable_S_manual [get_parameter_value "ENABLE_SAMPLES_PER_FRAME_MANUAL"]
 
-  set channel_bus_width [expr 32 * $L / $M]
-
   # With fixed values for M, L and N' all valid values for S and F have a
   # constant ratio of S / F. Choose a ratio so that S and F are co-prime.
   # Choosing values for F and S that have a common factor has higher latency
@@ -232,6 +257,9 @@ proc p_ad_ip_jesd204_tpl_dac_validate {} {
 
   set_parameter_property SAMPLES_PER_FRAME VISIBLE [expr !$enable_S_manual]
   set_parameter_property SAMPLES_PER_FRAME_MANUAL VISIBLE $enable_S_manual
+
+  set_parameter_value SAMPLES_PER_CHANNEL [expr 4 * $S / $F]
+  set_parameter_value CHANNEL_DATA_WIDTH [expr 16 * (4 * $S / $F)]
 
   set data_path_enabled [expr ![get_parameter_value DATAPATH_DISABLE]]
   set cordic_enabled [expr $data_path_enabled && [get_parameter_value DDS_TYPE] == 1]
