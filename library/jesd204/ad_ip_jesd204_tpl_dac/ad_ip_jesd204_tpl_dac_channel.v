@@ -63,8 +63,6 @@ module ad_ip_jesd204_tpl_dac_channel #(
 
   reg [DW:0] dac_pn7_data = 'd0;
   reg [DW:0] dac_pn15_data = 'd0;
-  reg [15:0] dac_dds_phase_0[0:DATA_PATH_WIDTH-1];
-  reg [15:0] dac_dds_phase_1[0:DATA_PATH_WIDTH-1];
 
   // internal signals
 
