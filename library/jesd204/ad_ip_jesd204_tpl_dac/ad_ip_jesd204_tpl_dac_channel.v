@@ -71,17 +71,25 @@ module ad_ip_jesd204_tpl_dac_channel #(
   wire [DW:0] pn15;
   wire [DW+15:0] pn15_full_state;
   wire [DW:0] dac_pn15_data_s;
+  wire [DW:0] pn15_reset;
   wire [DW:0] pn7;
   wire [DW+7:0] pn7_full_state;
   wire [DW:0] dac_pn7_data_s;
+  wire [DW:0] pn7_reset;
 
   // PN15 x^15 + x^14 + 1
   assign pn15 = pn15_full_state[15+:DW+1] ^ pn15_full_state[14+:DW+1];
   assign pn15_full_state = {dac_pn15_data[14:0],pn15};
 
+  assign pn15_reset[DW-:15] = {15{1'b1}};
+  assign pn15_reset[DW-15:0] = pn15_reset[DW:15] ^ pn15_reset[DW-1:14];
+
   // PN7 x^7 + x^6 + 1
   assign pn7 = pn7_full_state[7+:DW+1] ^ pn7_full_state[6+:DW+1];
   assign pn7_full_state = {dac_pn7_data[6:0],pn7};
+
+  assign pn7_reset[DW-:7] = {7{1'b1}};
+  assign pn7_reset[DW-7:0] = pn7_reset[DW:7] ^ pn7_reset[DW-1:6];
 
   generate
   genvar i;
@@ -114,8 +122,8 @@ module ad_ip_jesd204_tpl_dac_channel #(
 
   always @(posedge clk) begin
     if (dac_data_sync == 1'b1) begin
-      dac_pn15_data <= {DW+1{1'd1}};
-      dac_pn7_data <= {DW+1{1'd1}};
+      dac_pn15_data <= pn15_reset;
+      dac_pn7_data <= pn7_reset;
     end else begin
       dac_pn15_data <= pn15;
       dac_pn7_data <= pn7;
