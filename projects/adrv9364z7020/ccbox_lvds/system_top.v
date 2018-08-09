@@ -362,6 +362,7 @@ module system_top (
     .tdd_sync_o (),
     .tdd_sync_t (),
     .gps_pps (gps_pps),
+    .sys_cpu_clk_out (sys_cpu_clk),
     .tx_clk_out_n (tx_clk_out_n),
     .tx_clk_out_p (tx_clk_out_p),
     .tx_data_out_n (tx_data_out_n),
