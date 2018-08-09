@@ -48,7 +48,7 @@ module ad_rst (
   reg             rst_async_d1 = 1'd1;
   reg             rst_async_d2 = 1'd1;
   reg             rst_sync = 1'd1;
-  reg             rst_sync_d = 1'd1 /* synthesis preserve */;
+  reg             rst_sync_d = 1'd1;
 
   // simple reset synchronizer
   always @(posedge clk or posedge rst_async) begin
