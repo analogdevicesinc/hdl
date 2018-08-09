@@ -94,6 +94,7 @@ module system_top (
     .enable (enable),
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
+    .gpio_t (),
     .rx_clk_in_n (rx_clk_in_n),
     .rx_clk_in_p (rx_clk_in_p),
     .rx_data_in_n (rx_data_in_n),

@@ -87,6 +87,8 @@ module system_top (
     .dio_o (gpio_i[15:0]),
     .dio_p ({gpio_bd[7:4], gpio_bd[15:8], gpio_bd[3:0]}));
 
+  assign gpio_i[63:16] = gpio_o[63:16];
+
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
     .ddr_ba (ddr_ba),
@@ -119,7 +121,25 @@ module system_top (
     .hdmi_vsync (hdmi_vsync),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
-    .spdif (spdif));
+    .spdif (spdif),
+    .spi0_clk_i (1'b0),
+    .spi0_clk_o (),
+    .spi0_csn_0_o (),
+    .spi0_csn_1_o (),
+    .spi0_csn_2_o (),
+    .spi0_csn_i (1'b1),
+    .spi0_sdi_i (1'b0),
+    .spi0_sdo_i (1'b0),
+    .spi0_sdo_o (),
+    .spi1_clk_i (1'b0),
+    .spi1_clk_o (),
+    .spi1_csn_0_o (),
+    .spi1_csn_1_o (),
+    .spi1_csn_2_o (),
+    .spi1_csn_i (1'b1),
+    .spi1_sdi_i (1'b0),
+    .spi1_sdo_i (1'b0),
+    .spi1_sdo_o());
 
 endmodule
 

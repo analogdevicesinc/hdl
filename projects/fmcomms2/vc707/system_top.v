@@ -148,6 +148,9 @@ module system_top (
     .dio_o (gpio_i[20:0]),
     .dio_p (gpio_bd));
 
+  assign gpio_i[63:47] = gpio_o[63:47];
+  assign gpio_i[31:21] = gpio_o[31:21];
+
   system_wrapper i_system_wrapper (
     .ddr3_addr (ddr3_addr),
     .ddr3_ba (ddr3_ba),
@@ -211,6 +214,9 @@ module system_top (
     .tx_data_out_p (tx_data_out_p),
     .tx_frame_out_n (tx_frame_out_n),
     .tx_frame_out_p (tx_frame_out_p),
+    .tdd_sync_i (1'b0),
+    .tdd_sync_o (),
+    .tdd_sync_t (),
     .uart_sin (uart_sin),
     .uart_sout (uart_sout),
     .enable (enable),

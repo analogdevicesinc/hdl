@@ -233,6 +233,9 @@ module system_top (
     .dio_o (gpio_i[14:0]),
     .dio_p (gpio_bd));
 
+  assign gpio_i[63:40] = gpio_o[63:40];
+  assign gpio_i[31:15] = gpio_o[31:15];
+
   system_wrapper i_system_wrapper (
     .ddr3_addr (ddr3_addr),
     .ddr3_ba (ddr3_ba),

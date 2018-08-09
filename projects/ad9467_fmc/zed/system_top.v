@@ -115,6 +115,8 @@ wire            iic_mux_sda_t_s;
     .dio_o ({gpio_i[31:0]}),
     .dio_p (gpio_bd));
 
+  assign gpio_i[63:32] = gpio_o[63:32];
+
    ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_iic_scl (
     .dio_t ({iic_mux_scl_t_s,iic_mux_scl_t_s}),
     .dio_i (iic_mux_scl_o_s),
@@ -194,9 +196,19 @@ system_wrapper i_system_wrapper (
     .spi0_csn_i(1'b1),
     .spi0_csn_0_o(spi_csn[0]),
     .spi0_csn_1_o(spi_csn[1]),
+    .spi0_csn_2_o (),
     .spi0_sdi_i(spi_miso),
     .spi0_sdo_i(1'b0),
-    .spi0_sdo_o(spi_mosi));
+    .spi0_sdo_o(spi_mosi),
+    .spi1_clk_i(1'b0),
+    .spi1_clk_o (),
+    .spi1_csn_0_o (),
+    .spi1_csn_1_o (),
+    .spi1_csn_2_o (),
+    .spi1_csn_i(1'b1),
+    .spi1_sdi_i(1'b0),
+    .spi1_sdo_i(1'b0),
+    .spi1_sdo_o());
 
 endmodule
 

@@ -205,13 +205,16 @@ module system_top (
               adc_fdb,          // 36
               adc_fda,          // 35
               dac_irq,          // 34
-              clkd_status}));   // 32
+              clkd_status}));   // 33-32
 
   ad_iobuf #(.DATA_WIDTH(17)) i_iobuf_bd (
     .dio_t (gpio_t[16:0]),
     .dio_i (gpio_o[16:0]),
     .dio_o (gpio_i[16:0]),
     .dio_p (gpio_bd));
+
+  assign gpio_i[63:40] = gpio_o[63:40];
+  assign gpio_i[31:17] = gpio_o[31:17];
 
   system_wrapper i_system_wrapper (
     .c0_ddr4_act_n (ddr4_act_n),

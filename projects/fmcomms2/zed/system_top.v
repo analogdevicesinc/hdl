@@ -144,6 +144,9 @@ module system_top (
               gpio_status,
               gpio_bd}));
 
+  assign gpio_i[63:51] = gpio_o[63:51];
+  assign gpio_i[48:47] = gpio_o[48:47];
+
    ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_iic_scl (
     .dio_t ({iic_mux_scl_t_s,iic_mux_scl_t_s}),
     .dio_i (iic_mux_scl_o_s),
@@ -206,6 +209,9 @@ module system_top (
     .rx_data_in_p (rx_data_in_p),
     .rx_frame_in_n (rx_frame_in_n),
     .rx_frame_in_p (rx_frame_in_p),
+    .tdd_sync_i (1'b0),
+    .tdd_sync_o (),
+    .tdd_sync_t (),
     .spdif (spdif),
     .spi0_clk_i (1'b0),
     .spi0_clk_o (spi_clk),
