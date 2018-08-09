@@ -172,8 +172,8 @@ module system_top (
     .dio_o (gpio_i[20:0]),
     .dio_p (gpio_bd));
 
-  assign gpio_i[63:34] = gpio_o[63:34];
-  assign gpio_i[31:21] = gpio_o[31:21];
+  assign gpio_i[63:34] = 'h0;
+  assign gpio_i[31:21] = 'h0;
 
   ad_sysref_gen i_sysref (
     .core_clk (rx_clk),

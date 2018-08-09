@@ -155,21 +155,21 @@ module system_top (
 
   // gpio in & out are separate cores
 
-  assign gpio_i[63:44] = gpio_o[63:44];
+  assign gpio_i[63:44] = 'h0;
   assign dac_fifo_bypass = gpio_o[44];
   assign gpio_i[43:43] = trig;
 
-  assign gpio_i[42:40] = gpio_o[42:40];
+  assign gpio_i[42:40] = 'h0;
   assign adc_pd = gpio_o[42];
   assign dac_txen = gpio_o[41];
   assign dac_reset = gpio_o[40];
 
-  assign gpio_i[39:39] = gpio_o[39];
+  assign gpio_i[39:39] = 'h0;
 
-  assign gpio_i[38:38] = gpio_o[38];
+  assign gpio_i[38:38] = 'h0;
   assign clkd_sync = gpio_o[38];
 
-  assign gpio_i[37:37] = gpio_o[37];
+  assign gpio_i[37:37] = 'h0;
   assign gpio_i[36:36] = adc_fdb;
   assign gpio_i[35:35] = adc_fda;
   assign gpio_i[34:34] = dac_irq;
@@ -183,9 +183,9 @@ module system_top (
 
   assign ddr3_a[14:12] = 3'd0;
 
-  assign gpio_i[31:27] = gpio_o[31:27];
+  assign gpio_i[31:27] = 'h0;
   assign gpio_i[26:16] = gpio_bd_i;
-  assign gpio_i[15: 0] = gpio_o[15:0];
+  assign gpio_i[15: 0] = 'h0;
 
   assign gpio_bd_o = gpio_o[15:0];
 
