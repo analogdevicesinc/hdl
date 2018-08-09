@@ -180,6 +180,9 @@ module system_top (
     .dio_o (gpio_i[14:0]),
     .dio_p (gpio_bd));
 
+  assign gpio_i[63:34] = gpio_o[63:34];
+  assign gpio_i[31:15] = gpio_o[31:15];
+
   ad_sysref_gen i_sysref (
     .core_clk (rx_clk),
     .sysref_en (gpio_o[34]),

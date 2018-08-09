@@ -224,6 +224,9 @@ module system_top (
     .dio_o (gpio_i[16:0]),
     .dio_p (gpio_bd));
 
+  assign gpio_i[31:17] = gpio_o[31:17];
+  assign gpio_i[63:60] = gpio_o[63:60];
+
   system_wrapper i_system_wrapper (
     .dac_fifo_bypass (gpio_o[60]),
     .c0_ddr4_act_n (ddr4_act_n),

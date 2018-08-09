@@ -166,6 +166,7 @@ module system_top (
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .gpio_t (gpio_t),
+    .gps_pps (1'b0),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
     .otg_vbusoc (1'b0),

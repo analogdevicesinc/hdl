@@ -192,6 +192,7 @@ module system_top (
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .gpio_t (gpio_t),
+    .gps_pps (1'b0),
     .gt_ref_clk (gt_ref_clk),
     .gt_rx_n (gt_rx_n),
     .gt_rx_p (gt_rx_p),

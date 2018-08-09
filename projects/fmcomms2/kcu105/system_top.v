@@ -150,6 +150,7 @@ module system_top (
     .c0_ddr4_dqs_t (ddr4_dqs_p),
     .c0_ddr4_odt (ddr4_odt),
     .c0_ddr4_reset_n (ddr4_reset_n),
+    .enable (),
     .gpio0_i (gpio_i[31:0]),
     .gpio0_o (gpio_o[31:0]),
     .gpio0_t (gpio_t[31:0]),

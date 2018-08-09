@@ -168,6 +168,7 @@ module system_top (
   system_wrapper i_system_wrapper (
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
+    .gpio_t (),
     .rx_data_0_n (rx_data_n[0]),
     .rx_data_0_p (rx_data_p[0]),
     .rx_data_1_n (rx_data_n[1]),

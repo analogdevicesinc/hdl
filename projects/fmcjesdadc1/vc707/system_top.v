@@ -131,6 +131,9 @@ module system_top (
     .dio_o (gpio_i[20:0]),
     .dio_p (gpio_bd));
 
+  assign gpio_i[63:32] = gpio_o[63:32];
+  assign gpio_i[31:21] = gpio_o[31:21];
+
   fmcjesdadc1_spi i_fmcjesdadc1_spi (
     .spi_csn (spi_csn_0),
     .spi_clk (spi_clk),

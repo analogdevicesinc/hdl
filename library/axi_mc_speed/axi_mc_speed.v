@@ -192,6 +192,8 @@ up_adc_common i_up_adc_common(
   .adc_start_code(),
   .adc_sref_sync(),
   .adc_sync(),
+  .up_pps_rcounter (32'b0),
+  .up_pps_status (1'b0),
   .up_adc_ce(),
   .up_status_pn_err(1'b0),
   .up_status_pn_oos(1'b0),
