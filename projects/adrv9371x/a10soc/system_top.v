@@ -175,10 +175,10 @@ module system_top (
 
   // gpio (ad9371)
 
-  assign gpio_i[63:61] = gpio_o[63:61];
+  assign gpio_i[63:61] = 'h0;
 
   assign dac_fifo_bypass = gpio_o[60];
-  assign gpio_i[60:60] = gpio_o[60];
+  assign gpio_i[60:60] = 'h0;
 
   assign ad9528_reset_b = gpio_o[59];
   assign ad9528_sysref_req = gpio_o[58];
@@ -188,19 +188,19 @@ module system_top (
   assign ad9371_rx2_enable = gpio_o[54];
   assign ad9371_test = gpio_o[53];
   assign ad9371_reset_b = gpio_o[52];
-  assign gpio_i[59:52] = gpio_o[59:52];
+  assign gpio_i[59:52] = 'h0;
 
   assign gpio_i[51:51] = ad9371_gpint;
 
-  assign gpio_i[50:32] = gpio_o[50:32];
+  assign gpio_i[50:32] = 'h0;
   
   // board stuff (max-v-u21)
 
-  assign gpio_i[31:14] = gpio_o[31:14];
+  assign gpio_i[31:14] = 'h0;
   assign gpio_i[13:13] = sys_ddr_cal_success;
   assign gpio_i[12:12] = sys_ddr_cal_fail;
   assign gpio_i[11: 4] = gpio_bd_i;
-  assign gpio_i[ 3: 0] = gpio_o[3:0];
+  assign gpio_i[ 3: 0] = 'h0;
 
   assign gpio_bd_o = gpio_o[3:0];
 

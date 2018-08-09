@@ -149,12 +149,12 @@ module system_top (
 
   // gpio in & out are separate cores
 
-  assign gpio_i[63:40] = gpio_o[63:40];
+  assign gpio_i[63:40] = 'h0;
   assign dac_fifo_bypass = gpio_o[41];
   assign sysref = gpio_o[40];
   assign gpio_i[39:39] = trig;
 
-  assign gpio_i[38:37] = gpio_o[38:37];
+  assign gpio_i[38:37] = 'h0;
   assign adc_pd = gpio_o[38];
   assign dac_txen = gpio_o[37];
 
@@ -171,9 +171,9 @@ module system_top (
 
   assign ddr3_a[14:12] = 3'd0;
 
-  assign gpio_i[31:27] = gpio_o[31:27];
+  assign gpio_i[31:27] = 'h0;
   assign gpio_i[26:16] = gpio_bd_i;
-  assign gpio_i[15: 0] = gpio_o[15:0];
+  assign gpio_i[15: 0] = 'h0;
 
   assign gpio_bd_o = gpio_o[15:0];
 
