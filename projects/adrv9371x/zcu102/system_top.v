@@ -179,14 +179,12 @@ module system_top (
               ad9371_gpio_16,       // 33
               ad9371_gpio_18}));    // 32
 
-  ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_bd (
-    .dio_t (gpio_t[20:0]),
-    .dio_i (gpio_o[20:0]),
-    .dio_o (gpio_i[20:0]),
-    .dio_p (gpio_bd));
+  assign gpio_i[ 7: 0] = gpio_o[ 7: 0];
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_i[31:21] = gpio_o[31:21];
+  assign gpio_i[94:60] = gpio_o[94:60];
 
-  assign gpio_bd_i = gpio_bd[20:8];
-  assign gpio_bd_o = gpio_bd[ 7:0];
+  assign gpio_bd_o = gpio_o[ 7: 0];
 
   assign spi_csn_ad9528 =  spi_csn[0];
   assign spi_csn_ad9371 =  spi_csn[1];
