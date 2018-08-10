@@ -3,41 +3,42 @@
 
 # ad9361 master
 
-set_property  -dict {PACKAGE_PIN  P11   IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports ref_clk_p]             ; ## D20  FMC_HPC0_LA17_CC_P
-set_property  -dict {PACKAGE_PIN  N11   IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports ref_clk_n]             ; ## D21  FMC_HPC0_LA17_CC_N
+DIFF_TERM_ADV TERM_100
+set_property  -dict {PACKAGE_PIN  P11   IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports ref_clk_p]             ; ## D20  FMC_HPC0_LA17_CC_P
+set_property  -dict {PACKAGE_PIN  N11   IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports ref_clk_n]             ; ## D21  FMC_HPC0_LA17_CC_N
 
-set_property  -dict {PACKAGE_PIN  Y4    IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_clk_in_0_p]         ; ## G06  FMC_HPC0_LA00_CC_P
-set_property  -dict {PACKAGE_PIN  Y3    IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_clk_in_0_n]         ; ## G07  FMC_HPC0_LA00_CC_N
-set_property  -dict {PACKAGE_PIN  AB4   IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_frame_in_0_p]       ; ## D08  FMC_HPC0_LA01_CC_P
-set_property  -dict {PACKAGE_PIN  AC4   IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_frame_in_0_n]       ; ## D09  FMC_HPC0_LA01_CC_N
-set_property  -dict {PACKAGE_PIN  V2    IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_data_in_0_p[0]]     ; ## H07  FMC_HPC0_LA02_P
-set_property  -dict {PACKAGE_PIN  V1    IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_data_in_0_n[0]]     ; ## H08  FMC_HPC0_LA02_N
-set_property  -dict {PACKAGE_PIN  Y2    IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_data_in_0_p[1]]     ; ## G09  FMC_HPC0_LA03_P
-set_property  -dict {PACKAGE_PIN  Y1    IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_data_in_0_n[1]]     ; ## G10  FMC_HPC0_LA03_N
-set_property  -dict {PACKAGE_PIN  AA2   IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_data_in_0_p[2]]     ; ## H10  FMC_HPC0_LA04_P
-set_property  -dict {PACKAGE_PIN  AA1   IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_data_in_0_n[2]]     ; ## H11  FMC_HPC0_LA04_N
-set_property  -dict {PACKAGE_PIN  AB3   IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_data_in_0_p[3]]     ; ## D11  FMC_HPC0_LA05_P
-set_property  -dict {PACKAGE_PIN  AC3   IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_data_in_0_n[3]]     ; ## D12  FMC_HPC0_LA05_N
-set_property  -dict {PACKAGE_PIN  AC2   IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_data_in_0_p[4]]     ; ## C10  FMC_HPC0_LA06_P
-set_property  -dict {PACKAGE_PIN  AC1   IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_data_in_0_n[4]]     ; ## C11  FMC_HPC0_LA06_N
-set_property  -dict {PACKAGE_PIN  U5    IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_data_in_0_p[5]]     ; ## H13  FMC_HPC0_LA07_P
-set_property  -dict {PACKAGE_PIN  U4    IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_data_in_0_n[5]]     ; ## H14  FMC_HPC0_LA07_N
-set_property  -dict {PACKAGE_PIN  V4    IOSTANDARD LVDS}   [get_ports tx_clk_out_0_p]                        ; ## G12  FMC_HPC0_LA08_P
-set_property  -dict {PACKAGE_PIN  V3    IOSTANDARD LVDS}   [get_ports tx_clk_out_0_n]                        ; ## G13  FMC_HPC0_LA08_N
-set_property  -dict {PACKAGE_PIN  W2    IOSTANDARD LVDS}   [get_ports tx_frame_out_0_p]                      ; ## D14  FMC_HPC0_LA09_P
-set_property  -dict {PACKAGE_PIN  W1    IOSTANDARD LVDS}   [get_ports tx_frame_out_0_n]                      ; ## D15  FMC_HPC0_LA09_N
-set_property  -dict {PACKAGE_PIN  W5    IOSTANDARD LVDS}   [get_ports tx_data_out_0_p[0]]                    ; ## C14  FMC_HPC0_LA10_P
-set_property  -dict {PACKAGE_PIN  W4    IOSTANDARD LVDS}   [get_ports tx_data_out_0_n[0]]                    ; ## C15  FMC_HPC0_LA10_N
-set_property  -dict {PACKAGE_PIN  AB6   IOSTANDARD LVDS}   [get_ports tx_data_out_0_p[1]]                    ; ## H16  FMC_HPC0_LA11_P
-set_property  -dict {PACKAGE_PIN  AB5   IOSTANDARD LVDS}   [get_ports tx_data_out_0_n[1]]                    ; ## H17  FMC_HPC0_LA11_N
-set_property  -dict {PACKAGE_PIN  W7    IOSTANDARD LVDS}   [get_ports tx_data_out_0_p[2]]                    ; ## G15  FMC_HPC0_LA12_P
-set_property  -dict {PACKAGE_PIN  W6    IOSTANDARD LVDS}   [get_ports tx_data_out_0_n[2]]                    ; ## G16  FMC_HPC0_LA12_N
-set_property  -dict {PACKAGE_PIN  AB8   IOSTANDARD LVDS}   [get_ports tx_data_out_0_p[3]]                    ; ## D17  FMC_HPC0_LA13_P
-set_property  -dict {PACKAGE_PIN  AC8   IOSTANDARD LVDS}   [get_ports tx_data_out_0_n[3]]                    ; ## D18  FMC_HPC0_LA13_N
-set_property  -dict {PACKAGE_PIN  AC7   IOSTANDARD LVDS}   [get_ports tx_data_out_0_p[4]]                    ; ## C18  FMC_HPC0_LA14_P
-set_property  -dict {PACKAGE_PIN  AC6   IOSTANDARD LVDS}   [get_ports tx_data_out_0_n[4]]                    ; ## C19  FMC_HPC0_LA14_N
-set_property  -dict {PACKAGE_PIN  Y10   IOSTANDARD LVDS}   [get_ports tx_data_out_0_p[5]]                    ; ## H19  FMC_HPC0_LA15_P
-set_property  -dict {PACKAGE_PIN  Y9    IOSTANDARD LVDS}   [get_ports tx_data_out_0_n[5]]                    ; ## H20  FMC_HPC0_LA15_N
+set_property  -dict {PACKAGE_PIN  Y4    IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_clk_in_0_p]         ; ## G06  FMC_HPC0_LA00_CC_P
+set_property  -dict {PACKAGE_PIN  Y3    IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_clk_in_0_n]         ; ## G07  FMC_HPC0_LA00_CC_N
+set_property  -dict {PACKAGE_PIN  AB4   IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_frame_in_0_p]       ; ## D08  FMC_HPC0_LA01_CC_P
+set_property  -dict {PACKAGE_PIN  AC4   IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_frame_in_0_n]       ; ## D09  FMC_HPC0_LA01_CC_N
+set_property  -dict {PACKAGE_PIN  V2    IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_data_in_0_p[0]]     ; ## H07  FMC_HPC0_LA02_P
+set_property  -dict {PACKAGE_PIN  V1    IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_data_in_0_n[0]]     ; ## H08  FMC_HPC0_LA02_N
+set_property  -dict {PACKAGE_PIN  Y2    IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_data_in_0_p[1]]     ; ## G09  FMC_HPC0_LA03_P
+set_property  -dict {PACKAGE_PIN  Y1    IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_data_in_0_n[1]]     ; ## G10  FMC_HPC0_LA03_N
+set_property  -dict {PACKAGE_PIN  AA2   IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_data_in_0_p[2]]     ; ## H10  FMC_HPC0_LA04_P
+set_property  -dict {PACKAGE_PIN  AA1   IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_data_in_0_n[2]]     ; ## H11  FMC_HPC0_LA04_N
+set_property  -dict {PACKAGE_PIN  AB3   IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_data_in_0_p[3]]     ; ## D11  FMC_HPC0_LA05_P
+set_property  -dict {PACKAGE_PIN  AC3   IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_data_in_0_n[3]]     ; ## D12  FMC_HPC0_LA05_N
+set_property  -dict {PACKAGE_PIN  AC2   IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_data_in_0_p[4]]     ; ## C10  FMC_HPC0_LA06_P
+set_property  -dict {PACKAGE_PIN  AC1   IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_data_in_0_n[4]]     ; ## C11  FMC_HPC0_LA06_N
+set_property  -dict {PACKAGE_PIN  U5    IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_data_in_0_p[5]]     ; ## H13  FMC_HPC0_LA07_P
+set_property  -dict {PACKAGE_PIN  U4    IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_data_in_0_n[5]]     ; ## H14  FMC_HPC0_LA07_N
+set_property  -dict {PACKAGE_PIN  V4    IOSTANDARD LVDS}   [get_ports tx_clk_out_0_p]                                ; ## G12  FMC_HPC0_LA08_P
+set_property  -dict {PACKAGE_PIN  V3    IOSTANDARD LVDS}   [get_ports tx_clk_out_0_n]                                ; ## G13  FMC_HPC0_LA08_N
+set_property  -dict {PACKAGE_PIN  W2    IOSTANDARD LVDS}   [get_ports tx_frame_out_0_p]                              ; ## D14  FMC_HPC0_LA09_P
+set_property  -dict {PACKAGE_PIN  W1    IOSTANDARD LVDS}   [get_ports tx_frame_out_0_n]                              ; ## D15  FMC_HPC0_LA09_N
+set_property  -dict {PACKAGE_PIN  W5    IOSTANDARD LVDS}   [get_ports tx_data_out_0_p[0]]                            ; ## C14  FMC_HPC0_LA10_P
+set_property  -dict {PACKAGE_PIN  W4    IOSTANDARD LVDS}   [get_ports tx_data_out_0_n[0]]                            ; ## C15  FMC_HPC0_LA10_N
+set_property  -dict {PACKAGE_PIN  AB6   IOSTANDARD LVDS}   [get_ports tx_data_out_0_p[1]]                            ; ## H16  FMC_HPC0_LA11_P
+set_property  -dict {PACKAGE_PIN  AB5   IOSTANDARD LVDS}   [get_ports tx_data_out_0_n[1]]                            ; ## H17  FMC_HPC0_LA11_N
+set_property  -dict {PACKAGE_PIN  W7    IOSTANDARD LVDS}   [get_ports tx_data_out_0_p[2]]                            ; ## G15  FMC_HPC0_LA12_P
+set_property  -dict {PACKAGE_PIN  W6    IOSTANDARD LVDS}   [get_ports tx_data_out_0_n[2]]                            ; ## G16  FMC_HPC0_LA12_N
+set_property  -dict {PACKAGE_PIN  AB8   IOSTANDARD LVDS}   [get_ports tx_data_out_0_p[3]]                            ; ## D17  FMC_HPC0_LA13_P
+set_property  -dict {PACKAGE_PIN  AC8   IOSTANDARD LVDS}   [get_ports tx_data_out_0_n[3]]                            ; ## D18  FMC_HPC0_LA13_N
+set_property  -dict {PACKAGE_PIN  AC7   IOSTANDARD LVDS}   [get_ports tx_data_out_0_p[4]]                            ; ## C18  FMC_HPC0_LA14_P
+set_property  -dict {PACKAGE_PIN  AC6   IOSTANDARD LVDS}   [get_ports tx_data_out_0_n[4]]                            ; ## C19  FMC_HPC0_LA14_N
+set_property  -dict {PACKAGE_PIN  Y10   IOSTANDARD LVDS}   [get_ports tx_data_out_0_p[5]]                            ; ## H19  FMC_HPC0_LA15_P
+set_property  -dict {PACKAGE_PIN  Y9    IOSTANDARD LVDS}   [get_ports tx_data_out_0_n[5]]                            ; ## H20  FMC_HPC0_LA15_N
 
 set_property  -dict {PACKAGE_PIN  L13   IOSTANDARD LVCMOS18}  [get_ports gpio_status_0[0]]                      ; ## H22  FMC_HPC0_LA19_P
 set_property  -dict {PACKAGE_PIN  K13   IOSTANDARD LVCMOS18}  [get_ports gpio_status_0[1]]                      ; ## H23  FMC_HPC0_LA19_N
@@ -74,38 +75,38 @@ set_property  -dict {PACKAGE_PIN  V7    IOSTANDARD LVCMOS18}  [get_ports spi_mis
 
 # ad9361 slave
 
-set_property  -dict {PACKAGE_PIN  AE5   IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_clk_in_1_p]         ; ## G06  FMC_HPC1_LA00_CC_P
-set_property  -dict {PACKAGE_PIN  AF5   IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_clk_in_1_n]         ; ## G07  FMC_HPC1_LA00_CC_N
-set_property  -dict {PACKAGE_PIN  AJ6   IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_frame_in_1_p]       ; ## D08  FMC_HPC1_LA01_CC_P
-set_property  -dict {PACKAGE_PIN  AJ5   IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_frame_in_1_n]       ; ## D09  FMC_HPC1_LA01_CC_N
-set_property  -dict {PACKAGE_PIN  AD2   IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_data_in_1_p[0]]     ; ## H07  FMC_HPC1_LA02_P
-set_property  -dict {PACKAGE_PIN  AD1   IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_data_in_1_n[0]]     ; ## H08  FMC_HPC1_LA02_N
-set_property  -dict {PACKAGE_PIN  AH1   IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_data_in_1_p[1]]     ; ## G09  FMC_HPC1_LA03_P
-set_property  -dict {PACKAGE_PIN  AJ1   IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_data_in_1_n[1]]     ; ## G10  FMC_HPC1_LA03_N
-set_property  -dict {PACKAGE_PIN  AF2   IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_data_in_1_p[2]]     ; ## H10  FMC_HPC1_LA04_P
-set_property  -dict {PACKAGE_PIN  AF1   IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_data_in_1_n[2]]     ; ## H11  FMC_HPC1_LA04_N
-set_property  -dict {PACKAGE_PIN  AG3   IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_data_in_1_p[3]]     ; ## D11  FMC_HPC1_LA05_P
-set_property  -dict {PACKAGE_PIN  AH3   IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_data_in_1_n[3]]     ; ## D12  FMC_HPC1_LA05_N
-set_property  -dict {PACKAGE_PIN  AH2   IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_data_in_1_p[4]]     ; ## C10  FMC_HPC1_LA06_P
-set_property  -dict {PACKAGE_PIN  AJ2   IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_data_in_1_n[4]]     ; ## C11  FMC_HPC1_LA06_N
-set_property  -dict {PACKAGE_PIN  AD4   IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_data_in_1_p[5]]     ; ## H13  FMC_HPC1_LA07_P
-set_property  -dict {PACKAGE_PIN  AE4   IOSTANDARD LVDS    DIFF_TERM TRUE} [get_ports rx_data_in_1_n[5]]     ; ## H14  FMC_HPC1_LA07_N
-set_property  -dict {PACKAGE_PIN  AE3   IOSTANDARD LVDS}   [get_ports tx_clk_out_1_p]                        ; ## G12  FMC_HPC1_LA08_P
-set_property  -dict {PACKAGE_PIN  AF3   IOSTANDARD LVDS}   [get_ports tx_clk_out_1_n]                        ; ## G13  FMC_HPC1_LA08_N
-set_property  -dict {PACKAGE_PIN  AE2   IOSTANDARD LVDS}   [get_ports tx_frame_out_1_p]                      ; ## D14  FMC_HPC1_LA09_P
-set_property  -dict {PACKAGE_PIN  AE1   IOSTANDARD LVDS}   [get_ports tx_frame_out_1_n]                      ; ## D15  FMC_HPC1_LA09_N
-set_property  -dict {PACKAGE_PIN  AH4   IOSTANDARD LVDS}   [get_ports tx_data_out_1_p[0]]                    ; ## C14  FMC_HPC1_LA10_P
-set_property  -dict {PACKAGE_PIN  AJ4   IOSTANDARD LVDS}   [get_ports tx_data_out_1_n[0]]                    ; ## C15  FMC_HPC1_LA10_N
-set_property  -dict {PACKAGE_PIN  AE8   IOSTANDARD LVDS}   [get_ports tx_data_out_1_p[1]]                    ; ## H16  FMC_HPC1_LA11_P
-set_property  -dict {PACKAGE_PIN  AF8   IOSTANDARD LVDS}   [get_ports tx_data_out_1_n[1]]                    ; ## H17  FMC_HPC1_LA11_N
-set_property  -dict {PACKAGE_PIN  AD7   IOSTANDARD LVDS}   [get_ports tx_data_out_1_p[2]]                    ; ## G15  FMC_HPC1_LA12_P
-set_property  -dict {PACKAGE_PIN  AD6   IOSTANDARD LVDS}   [get_ports tx_data_out_1_n[2]]                    ; ## G16  FMC_HPC1_LA12_N
-set_property  -dict {PACKAGE_PIN  AG8   IOSTANDARD LVDS}   [get_ports tx_data_out_1_p[3]]                    ; ## D17  FMC_HPC1_LA13_P
-set_property  -dict {PACKAGE_PIN  AH8   IOSTANDARD LVDS}   [get_ports tx_data_out_1_n[3]]                    ; ## D18  FMC_HPC1_LA13_N
-set_property  -dict {PACKAGE_PIN  AH7   IOSTANDARD LVDS}   [get_ports tx_data_out_1_p[4]]                    ; ## C18  FMC_HPC1_LA14_P
-set_property  -dict {PACKAGE_PIN  AH6   IOSTANDARD LVDS}   [get_ports tx_data_out_1_n[4]]                    ; ## C19  FMC_HPC1_LA14_N
-set_property  -dict {PACKAGE_PIN  AD10  IOSTANDARD LVDS}   [get_ports tx_data_out_1_p[5]]                    ; ## H19  FMC_HPC1_LA15_P
-set_property  -dict {PACKAGE_PIN  AE9   IOSTANDARD LVDS}   [get_ports tx_data_out_1_n[5]]                    ; ## H20  FMC_HPC1_LA15_N
+set_property  -dict {PACKAGE_PIN  AE5   IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_clk_in_1_p]         ; ## G06  FMC_HPC1_LA00_CC_P
+set_property  -dict {PACKAGE_PIN  AF5   IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_clk_in_1_n]         ; ## G07  FMC_HPC1_LA00_CC_N
+set_property  -dict {PACKAGE_PIN  AJ6   IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_frame_in_1_p]       ; ## D08  FMC_HPC1_LA01_CC_P
+set_property  -dict {PACKAGE_PIN  AJ5   IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_frame_in_1_n]       ; ## D09  FMC_HPC1_LA01_CC_N
+set_property  -dict {PACKAGE_PIN  AD2   IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_data_in_1_p[0]]     ; ## H07  FMC_HPC1_LA02_P
+set_property  -dict {PACKAGE_PIN  AD1   IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_data_in_1_n[0]]     ; ## H08  FMC_HPC1_LA02_N
+set_property  -dict {PACKAGE_PIN  AH1   IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_data_in_1_p[1]]     ; ## G09  FMC_HPC1_LA03_P
+set_property  -dict {PACKAGE_PIN  AJ1   IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_data_in_1_n[1]]     ; ## G10  FMC_HPC1_LA03_N
+set_property  -dict {PACKAGE_PIN  AF2   IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_data_in_1_p[2]]     ; ## H10  FMC_HPC1_LA04_P
+set_property  -dict {PACKAGE_PIN  AF1   IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_data_in_1_n[2]]     ; ## H11  FMC_HPC1_LA04_N
+set_property  -dict {PACKAGE_PIN  AG3   IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_data_in_1_p[3]]     ; ## D11  FMC_HPC1_LA05_P
+set_property  -dict {PACKAGE_PIN  AH3   IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_data_in_1_n[3]]     ; ## D12  FMC_HPC1_LA05_N
+set_property  -dict {PACKAGE_PIN  AH2   IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_data_in_1_p[4]]     ; ## C10  FMC_HPC1_LA06_P
+set_property  -dict {PACKAGE_PIN  AJ2   IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_data_in_1_n[4]]     ; ## C11  FMC_HPC1_LA06_N
+set_property  -dict {PACKAGE_PIN  AD4   IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_data_in_1_p[5]]     ; ## H13  FMC_HPC1_LA07_P
+set_property  -dict {PACKAGE_PIN  AE4   IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports rx_data_in_1_n[5]]     ; ## H14  FMC_HPC1_LA07_N
+set_property  -dict {PACKAGE_PIN  AE3   IOSTANDARD LVDS}   [get_ports tx_clk_out_1_p]                                ; ## G12  FMC_HPC1_LA08_P
+set_property  -dict {PACKAGE_PIN  AF3   IOSTANDARD LVDS}   [get_ports tx_clk_out_1_n]                                ; ## G13  FMC_HPC1_LA08_N
+set_property  -dict {PACKAGE_PIN  AE2   IOSTANDARD LVDS}   [get_ports tx_frame_out_1_p]                              ; ## D14  FMC_HPC1_LA09_P
+set_property  -dict {PACKAGE_PIN  AE1   IOSTANDARD LVDS}   [get_ports tx_frame_out_1_n]                              ; ## D15  FMC_HPC1_LA09_N
+set_property  -dict {PACKAGE_PIN  AH4   IOSTANDARD LVDS}   [get_ports tx_data_out_1_p[0]]                            ; ## C14  FMC_HPC1_LA10_P
+set_property  -dict {PACKAGE_PIN  AJ4   IOSTANDARD LVDS}   [get_ports tx_data_out_1_n[0]]                            ; ## C15  FMC_HPC1_LA10_N
+set_property  -dict {PACKAGE_PIN  AE8   IOSTANDARD LVDS}   [get_ports tx_data_out_1_p[1]]                            ; ## H16  FMC_HPC1_LA11_P
+set_property  -dict {PACKAGE_PIN  AF8   IOSTANDARD LVDS}   [get_ports tx_data_out_1_n[1]]                            ; ## H17  FMC_HPC1_LA11_N
+set_property  -dict {PACKAGE_PIN  AD7   IOSTANDARD LVDS}   [get_ports tx_data_out_1_p[2]]                            ; ## G15  FMC_HPC1_LA12_P
+set_property  -dict {PACKAGE_PIN  AD6   IOSTANDARD LVDS}   [get_ports tx_data_out_1_n[2]]                            ; ## G16  FMC_HPC1_LA12_N
+set_property  -dict {PACKAGE_PIN  AG8   IOSTANDARD LVDS}   [get_ports tx_data_out_1_p[3]]                            ; ## D17  FMC_HPC1_LA13_P
+set_property  -dict {PACKAGE_PIN  AH8   IOSTANDARD LVDS}   [get_ports tx_data_out_1_n[3]]                            ; ## D18  FMC_HPC1_LA13_N
+set_property  -dict {PACKAGE_PIN  AH7   IOSTANDARD LVDS}   [get_ports tx_data_out_1_p[4]]                            ; ## C18  FMC_HPC1_LA14_P
+set_property  -dict {PACKAGE_PIN  AH6   IOSTANDARD LVDS}   [get_ports tx_data_out_1_n[4]]                            ; ## C19  FMC_HPC1_LA14_N
+set_property  -dict {PACKAGE_PIN  AD10  IOSTANDARD LVDS}   [get_ports tx_data_out_1_p[5]]                            ; ## H19  FMC_HPC1_LA15_P
+set_property  -dict {PACKAGE_PIN  AE9   IOSTANDARD LVDS}   [get_ports tx_data_out_1_n[5]]                            ; ## H20  FMC_HPC1_LA15_N
 
 set_property  -dict {PACKAGE_PIN  AA11  IOSTANDARD LVCMOS18}  [get_ports gpio_status_1[0]]                      ; ## H22  FMC_HPC1_LA19_P
 set_property  -dict {PACKAGE_PIN  AA10  IOSTANDARD LVCMOS18}  [get_ports gpio_status_1[1]]                      ; ## H23  FMC_HPC1_LA19_N
