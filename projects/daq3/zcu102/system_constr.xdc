@@ -2,15 +2,15 @@
 
 # daq3
 
-set_property  -dict {PACKAGE_PIN  AB4   IOSTANDARD LVDS} [get_ports rx_sync_p]                        ; ## D08  FMC_HPC0_LA01_CC_P
-set_property  -dict {PACKAGE_PIN  AC4   IOSTANDARD LVDS} [get_ports rx_sync_n]                        ; ## D09  FMC_HPC0_LA01_CC_N
-set_property  -dict {PACKAGE_PIN  Y2    IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports rx_sysref_p]       ; ## G09  FMC_HPC0_LA03_P
-set_property  -dict {PACKAGE_PIN  Y1    IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports rx_sysref_n]       ; ## G10  FMC_HPC0_LA03_N
+set_property  -dict {PACKAGE_PIN  AB4   IOSTANDARD LVDS} [get_ports rx_sync_p]                                ; ## D08  FMC_HPC0_LA01_CC_P
+set_property  -dict {PACKAGE_PIN  AC4   IOSTANDARD LVDS} [get_ports rx_sync_n]                                ; ## D09  FMC_HPC0_LA01_CC_N
+set_property  -dict {PACKAGE_PIN  Y2    IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [get_ports rx_sysref_p]       ; ## G09  FMC_HPC0_LA03_P
+set_property  -dict {PACKAGE_PIN  Y1    IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [get_ports rx_sysref_n]       ; ## G10  FMC_HPC0_LA03_N
 
-set_property  -dict {PACKAGE_PIN  V2    IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports tx_sync_p]         ; ## H07  FMC_HPC0_LA02_P
-set_property  -dict {PACKAGE_PIN  V1    IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports tx_sync_n]         ; ## H08  FMC_HPC0_LA02_N
-set_property  -dict {PACKAGE_PIN  AA2   IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports tx_sysref_p]       ; ## H10  FMC_HPC0_LA04_P
-set_property  -dict {PACKAGE_PIN  AA1   IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports tx_sysref_n]       ; ## H11  FMC_HPC0_LA04_N
+set_property  -dict {PACKAGE_PIN  V2    IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [get_ports tx_sync_p]         ; ## H07  FMC_HPC0_LA02_P
+set_property  -dict {PACKAGE_PIN  V1    IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [get_ports tx_sync_n]         ; ## H08  FMC_HPC0_LA02_N
+set_property  -dict {PACKAGE_PIN  AA2   IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [get_ports tx_sysref_p]       ; ## H10  FMC_HPC0_LA04_P
+set_property  -dict {PACKAGE_PIN  AA1   IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [get_ports tx_sysref_n]       ; ## H11  FMC_HPC0_LA04_N
 
 set_property  -dict {PACKAGE_PIN  AB3   IOSTANDARD LVCMOS18} [get_ports spi_csn_clk]                  ; ## D11  FMC_HPC0_LA05_P
 set_property  -dict {PACKAGE_PIN  AC3   IOSTANDARD LVCMOS18} [get_ports spi_clk]                      ; ## D12  FMC_HPC0_LA05_N
@@ -30,8 +30,8 @@ set_property  -dict {PACKAGE_PIN  W7    IOSTANDARD LVCMOS18} [get_ports dac_irq]
 set_property  -dict {PACKAGE_PIN  AB6   IOSTANDARD LVCMOS18} [get_ports adc_fda]                      ; ## H16  FMC_HPC0_LA11_P
 set_property  -dict {PACKAGE_PIN  AB5   IOSTANDARD LVCMOS18} [get_ports adc_fdb]                      ; ## H17  FMC_HPC0_LA11_N
 
-set_property  -dict {PACKAGE_PIN  U5    IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports trig_p]            ; ## H13  FMC_HPC0_LA07_P
-set_property  -dict {PACKAGE_PIN  U4    IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports trig_n]            ; ## H14  FMC_HPC0_LA07_N
+set_property  -dict {PACKAGE_PIN  U5    IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [get_ports trig_p]            ; ## H13  FMC_HPC0_LA07_P
+set_property  -dict {PACKAGE_PIN  U4    IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [get_ports trig_n]            ; ## H14  FMC_HPC0_LA07_N
 
 set_property LOC GTHE4_COMMON_X1Y1 [get_cells -hierarchical -filter {NAME =~ *i_ibufds_rx_ref_clk}]
 set_property LOC GTHE4_COMMON_X1Y2 [get_cells -hierarchical -filter {NAME =~ *i_ibufds_tx_ref_clk}]
