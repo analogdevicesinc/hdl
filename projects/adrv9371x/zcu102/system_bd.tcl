@@ -1,8 +1,11 @@
 
+## FIFO depth is 16Mb - 1M samples
 set dac_fifo_name axi_ad9371_dacfifo
-set dac_fifo_address_width 10
+set dac_fifo_address_width 17
 set dac_data_width 128
 set dac_dma_data_width 128
+
+## NOTE: With this configuration the #36Kb BRAM utilization is at ~51%
 
 source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl

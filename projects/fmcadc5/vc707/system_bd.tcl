@@ -1,14 +1,17 @@
 
+## FIFO depth is 16Mb - 1M Samples
 set adc_fifo_name axi_ad9625_fifo
 set adc_fifo_address_width 18
 set adc_data_width 512
 set adc_dma_data_width 64
 
+## NOTE: With this configuration the #36Kb BRAM utilization is at ~70%
+
 source $ad_hdl_dir/projects/common/vc707/vc707_system_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/adcfifo_bd.tcl
 source ../common/fmcadc5_bd.tcl
 
-# ila 
+# ila
 
 ad_ip_instance util_mfifo mfifo_adc
 ad_ip_parameter mfifo_adc CONFIG.NUM_OF_CHANNELS 1
