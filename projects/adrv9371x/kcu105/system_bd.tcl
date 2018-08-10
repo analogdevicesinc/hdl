@@ -1,8 +1,11 @@
 
+## FIFO depth is 8Mb - 500k samples
 set dac_fifo_name axi_ad9371_dacfifo
-set dac_fifo_address_width 10
+set dac_fifo_address_width 16
 set dac_data_width 128
 set dac_dma_data_width 128
+
+## NOTE: With this configuration the #36Kb BRAM utilization is at ~68%
 
 source $ad_hdl_dir/projects/common/kcu105/kcu105_system_bd.tcl
 source $ad_hdl_dir/projects/common/kcu105/kcu105_system_mig.tcl
