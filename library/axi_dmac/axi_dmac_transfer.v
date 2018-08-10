@@ -49,6 +49,7 @@ module axi_dmac_transfer #(
   parameter AXI_SLICE_DEST = 0,
   parameter AXI_SLICE_SRC = 0,
   parameter MAX_BYTES_PER_BURST = 128,
+  parameter BYTES_PER_BURST_WIDTH = 7,
   parameter FIFO_SIZE = 8,
   parameter ID_WIDTH = $clog2(FIFO_SIZE*2),
   parameter AXI_LENGTH_WIDTH_SRC = 8,
@@ -74,6 +75,10 @@ module axi_dmac_transfer #(
   input req_last,
 
   output req_eot,
+  output [BYTES_PER_BURST_WIDTH-1:0] req_measured_burst_length,
+  output req_response_partial,
+  output req_response_valid,
+  input req_response_ready,
 
   // Master AXI interface
   input m_dest_axi_aclk,
@@ -172,7 +177,11 @@ wire dma_req_ready;
 wire [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] dma_req_dest_address;
 wire [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] dma_req_src_address;
 wire [DMA_LENGTH_WIDTH-1:0] dma_req_length;
+wire [BYTES_PER_BURST_WIDTH-1:0] dma_req_measured_burst_length;
 wire dma_req_eot;
+wire dma_response_valid;
+wire dma_response_ready;
+wire dma_response_partial;
 wire dma_req_sync_transfer_start;
 wire dma_req_last;
 
@@ -195,6 +204,7 @@ wire src_enabled;
 
 wire req_valid_gated;
 wire req_ready_gated;
+
 
 axi_dmac_reset_manager #(
   .ASYNC_CLK_REQ_SRC (ASYNC_CLK_REQ_SRC),
@@ -240,6 +250,7 @@ generate if (DMA_2D_TRANSFER == 1) begin
 dmac_2d_transfer #(
   .DMA_AXI_ADDR_WIDTH(DMA_AXI_ADDR_WIDTH),
   .DMA_LENGTH_WIDTH (DMA_LENGTH_WIDTH),
+  .BYTES_PER_BURST_WIDTH (BYTES_PER_BURST_WIDTH),
   .BYTES_PER_BEAT_WIDTH_DEST (BYTES_PER_BEAT_WIDTH_DEST),
   .BYTES_PER_BEAT_WIDTH_SRC (BYTES_PER_BEAT_WIDTH_SRC)
 ) i_2d_transfer (
@@ -247,6 +258,10 @@ dmac_2d_transfer #(
   .req_aresetn (req_resetn),
 
   .req_eot (req_eot),
+  .req_measured_burst_length (req_measured_burst_length),
+  .req_response_partial (req_response_partial),
+  .req_response_valid (req_response_valid),
+  .req_response_ready (req_response_ready),
 
   .req_valid (req_valid_gated),
   .req_ready (req_ready_gated),
@@ -266,8 +281,12 @@ dmac_2d_transfer #(
   .out_req_length (dma_req_length),
   .out_req_sync_transfer_start (dma_req_sync_transfer_start),
   .out_req_last (dma_req_last),
-  .out_eot (dma_req_eot)
-);
+  .out_eot (dma_req_eot),
+  .out_measured_burst_length (dma_req_measured_burst_length),
+  .out_response_partial (dma_response_partial),
+  .out_response_valid (dma_response_valid),
+  .out_response_ready (dma_response_ready)
+  );
 
 end else begin
 
@@ -283,6 +302,10 @@ assign dma_req_last = req_last;
 
 /* Response */
 assign req_eot = dma_req_eot;
+assign req_measured_burst_length = dma_req_measured_burst_length;
+assign req_response_partial = dma_response_partial;
+assign req_response_valid = dma_response_valid;
+assign dma_response_ready = req_response_ready;
 
 end endgenerate
 
@@ -301,6 +324,7 @@ dmac_request_arb #(
   .AXI_SLICE_DEST (AXI_SLICE_DEST),
   .AXI_SLICE_SRC (AXI_SLICE_SRC),
   .MAX_BYTES_PER_BURST (MAX_BYTES_PER_BURST),
+  .BYTES_PER_BURST_WIDTH (BYTES_PER_BURST_WIDTH),
   .FIFO_SIZE (FIFO_SIZE),
   .ID_WIDTH (ID_WIDTH),
   .AXI_LENGTH_WIDTH_DEST (AXI_LENGTH_WIDTH_DEST),
@@ -319,6 +343,10 @@ dmac_request_arb #(
   .req_sync_transfer_start (dma_req_sync_transfer_start),
 
   .eot (dma_req_eot),
+  .measured_burst_length(dma_req_measured_burst_length),
+  .response_partial (dma_response_partial),
+  .response_valid (dma_response_valid),
+  .response_ready (dma_response_ready),
 
   .req_enable (req_enable),
 

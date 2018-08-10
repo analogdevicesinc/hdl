@@ -38,6 +38,7 @@ module axi_dmac_regmap #(
   parameter DISABLE_DEBUG_REGISTERS = 0,
   parameter BYTES_PER_BEAT_WIDTH_DEST = 1,
   parameter BYTES_PER_BEAT_WIDTH_SRC = 1,
+  parameter BYTES_PER_BURST_WIDTH = 7,
   parameter DMA_AXI_ADDR_WIDTH = 32,
   parameter DMA_LENGTH_WIDTH = 24,
   parameter DMA_LENGTH_ALIGN = 3,
@@ -95,6 +96,10 @@ module axi_dmac_regmap #(
 
   // DMA response interface
   input response_eot,
+  input [BYTES_PER_BURST_WIDTH-1:0] response_measured_burst_length,
+  input response_partial,
+  input response_valid,
+  output response_ready,
 
   // Debug interface
   input [DMA_AXI_ADDR_WIDTH-1:0] dbg_src_addr,
@@ -104,7 +109,7 @@ module axi_dmac_regmap #(
   input [31:0] dbg_ids1
 );
 
-localparam PCORE_VERSION = 'h00040161;
+localparam PCORE_VERSION = 'h00040261;
 
 // Register interface signals
 reg [31:0] up_rdata = 32'h00;
@@ -209,6 +214,7 @@ axi_dmac_regmap_request #(
   .DISABLE_DEBUG_REGISTERS(DISABLE_DEBUG_REGISTERS),
   .BYTES_PER_BEAT_WIDTH_DEST(BYTES_PER_BEAT_WIDTH_DEST),
   .BYTES_PER_BEAT_WIDTH_SRC(BYTES_PER_BEAT_WIDTH_SRC),
+  .BYTES_PER_BURST_WIDTH(BYTES_PER_BURST_WIDTH),
   .DMA_AXI_ADDR_WIDTH(DMA_AXI_ADDR_WIDTH),
   .DMA_LENGTH_WIDTH(DMA_LENGTH_WIDTH),
   .DMA_LENGTH_ALIGN(DMA_LENGTH_ALIGN),
@@ -224,6 +230,7 @@ axi_dmac_regmap_request #(
   .up_eot(up_eot),
 
   .up_wreq(up_wreq),
+  .up_rreq(up_rreq),
   .up_waddr(up_waddr),
   .up_wdata(up_wdata),
   .up_raddr(up_raddr),
@@ -242,7 +249,11 @@ axi_dmac_regmap_request #(
   .request_sync_transfer_start(request_sync_transfer_start),
   .request_last(request_last),
 
-  .response_eot(response_eot)
+  .response_eot(response_eot),
+  .response_measured_burst_length(response_measured_burst_length),
+  .response_partial(response_partial),
+  .response_valid(response_valid),
+  .response_ready(response_ready)
 );
 
 up_axi #(

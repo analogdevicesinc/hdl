@@ -67,6 +67,7 @@ module dmac_src_axi_stream #(
   output fifo_valid,
   output [S_AXIS_DATA_WIDTH-1:0] fifo_data,
   output fifo_last,
+  output fifo_partial_burst,
 
   input req_valid,
   output req_ready,
@@ -113,7 +114,8 @@ dmac_data_mover # (
 
   .m_axi_valid(fifo_valid),
   .m_axi_data(fifo_data),
-  .m_axi_last(fifo_last)
+  .m_axi_last(fifo_last),
+  .m_axi_partial_burst(fifo_partial_burst)
 );
 
 endmodule
