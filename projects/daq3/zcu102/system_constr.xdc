@@ -12,23 +12,23 @@ set_property  -dict {PACKAGE_PIN  V1    IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} 
 set_property  -dict {PACKAGE_PIN  AA2   IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [get_ports tx_sysref_p]       ; ## H10  FMC_HPC0_LA04_P
 set_property  -dict {PACKAGE_PIN  AA1   IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [get_ports tx_sysref_n]       ; ## H11  FMC_HPC0_LA04_N
 
-set_property  -dict {PACKAGE_PIN  AB3   IOSTANDARD LVCMOS18} [get_ports spi_csn_clk]                  ; ## D11  FMC_HPC0_LA05_P
-set_property  -dict {PACKAGE_PIN  AC3   IOSTANDARD LVCMOS18} [get_ports spi_clk]                      ; ## D12  FMC_HPC0_LA05_N
-set_property  -dict {PACKAGE_PIN  W5    IOSTANDARD LVCMOS18} [get_ports spi_csn_dac]                  ; ## C14  FMC_HPC0_LA10_P
-set_property  -dict {PACKAGE_PIN  W1    IOSTANDARD LVCMOS18} [get_ports spi_csn_adc]                  ; ## D15  FMC_HPC0_LA09_N
-set_property  -dict {PACKAGE_PIN  W2    IOSTANDARD LVCMOS18} [get_ports spi_sdio]                     ; ## D14  FMC_HPC0_LA09_P
-set_property  -dict {PACKAGE_PIN  AC1   IOSTANDARD LVCMOS18} [get_ports spi_dir]                      ; ## C11  FMC_HPC0_LA06_N
+set_property  -dict {PACKAGE_PIN  AB3   IOSTANDARD LVCMOS18} [get_ports spi_csn_clk]                          ; ## D11  FMC_HPC0_LA05_P
+set_property  -dict {PACKAGE_PIN  AC3   IOSTANDARD LVCMOS18} [get_ports spi_clk]                              ; ## D12  FMC_HPC0_LA05_N
+set_property  -dict {PACKAGE_PIN  W5    IOSTANDARD LVCMOS18} [get_ports spi_csn_dac]                          ; ## C14  FMC_HPC0_LA10_P
+set_property  -dict {PACKAGE_PIN  W1    IOSTANDARD LVCMOS18} [get_ports spi_csn_adc]                          ; ## D15  FMC_HPC0_LA09_N
+set_property  -dict {PACKAGE_PIN  W2    IOSTANDARD LVCMOS18} [get_ports spi_sdio]                             ; ## D14  FMC_HPC0_LA09_P
+set_property  -dict {PACKAGE_PIN  AC1   IOSTANDARD LVCMOS18} [get_ports spi_dir]                              ; ## C11  FMC_HPC0_LA06_N
 
-set_property  -dict {PACKAGE_PIN  AB8   IOSTANDARD LVDS}  [get_ports sysref_p]                        ; ## D17  FMC_HPC0_LA13_P
-set_property  -dict {PACKAGE_PIN  AC8   IOSTANDARD LVDS}  [get_ports sysref_n]                        ; ## D18  FMC_HPC0_LA13_N
-set_property  -dict {PACKAGE_PIN  W6    IOSTANDARD LVCMOS18} [get_ports dac_txen]                     ; ## G16  FMC_HPC0_LA12_N
-set_property  -dict {PACKAGE_PIN  AC2   IOSTANDARD LVCMOS18} [get_ports adc_pd]                       ; ## C10  FMC_HPC0_LA06_P
+set_property  -dict {PACKAGE_PIN  AB8   IOSTANDARD LVDS}  [get_ports sysref_p]                                ; ## D17  FMC_HPC0_LA13_P
+set_property  -dict {PACKAGE_PIN  AC8   IOSTANDARD LVDS}  [get_ports sysref_n]                                ; ## D18  FMC_HPC0_LA13_N
+set_property  -dict {PACKAGE_PIN  W6    IOSTANDARD LVCMOS18} [get_ports dac_txen]                             ; ## G16  FMC_HPC0_LA12_N
+set_property  -dict {PACKAGE_PIN  AC2   IOSTANDARD LVCMOS18} [get_ports adc_pd]                               ; ## C10  FMC_HPC0_LA06_P
 
-set_property  -dict {PACKAGE_PIN  V4    IOSTANDARD LVCMOS18} [get_ports clkd_status[0]]               ; ## G12  FMC_HPC0_LA08_P
-set_property  -dict {PACKAGE_PIN  V3    IOSTANDARD LVCMOS18} [get_ports clkd_status[1]]               ; ## G13  FMC_HPC0_LA08_N
-set_property  -dict {PACKAGE_PIN  W7    IOSTANDARD LVCMOS18} [get_ports dac_irq]                      ; ## G15  FMC_HPC0_LA12_P
-set_property  -dict {PACKAGE_PIN  AB6   IOSTANDARD LVCMOS18} [get_ports adc_fda]                      ; ## H16  FMC_HPC0_LA11_P
-set_property  -dict {PACKAGE_PIN  AB5   IOSTANDARD LVCMOS18} [get_ports adc_fdb]                      ; ## H17  FMC_HPC0_LA11_N
+set_property  -dict {PACKAGE_PIN  V4    IOSTANDARD LVCMOS18} [get_ports clkd_status[0]]                       ; ## G12  FMC_HPC0_LA08_P
+set_property  -dict {PACKAGE_PIN  V3    IOSTANDARD LVCMOS18} [get_ports clkd_status[1]]                       ; ## G13  FMC_HPC0_LA08_N
+set_property  -dict {PACKAGE_PIN  W7    IOSTANDARD LVCMOS18} [get_ports dac_irq]                              ; ## G15  FMC_HPC0_LA12_P
+set_property  -dict {PACKAGE_PIN  AB6   IOSTANDARD LVCMOS18} [get_ports adc_fda]                              ; ## H16  FMC_HPC0_LA11_P
+set_property  -dict {PACKAGE_PIN  AB5   IOSTANDARD LVCMOS18} [get_ports adc_fdb]                              ; ## H17  FMC_HPC0_LA11_N
 
 set_property  -dict {PACKAGE_PIN  U5    IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [get_ports trig_p]            ; ## H13  FMC_HPC0_LA07_P
 set_property  -dict {PACKAGE_PIN  U4    IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [get_ports trig_n]            ; ## H14  FMC_HPC0_LA07_N
