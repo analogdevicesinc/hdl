@@ -18,6 +18,7 @@ ad_ip_files axi_dmac [list \
   $ad_hdl_dir/library/util_cdc/sync_bits.v \
   $ad_hdl_dir/library/common/up_axi.v \
   $ad_hdl_dir/library/util_axis_fifo/util_axis_fifo.v \
+  $ad_hdl_dir/library/util_axis_fifo/address_sync.v \
   $ad_hdl_dir/library/common/ad_mem.v \
   inc_id.vh \
   resp.vh \
@@ -27,6 +28,7 @@ ad_ip_files axi_dmac [list \
   axi_dmac_reset_manager.v \
   axi_dmac_resize_dest.v \
   axi_dmac_resize_src.v \
+  axi_dmac_response_manager.v \
   axi_dmac_transfer.v \
   address_generator.v \
   data_mover.v \

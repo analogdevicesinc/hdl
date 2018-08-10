@@ -65,6 +65,7 @@ module dmac_data_mover #(
   output m_axi_valid,
   output [DATA_WIDTH-1:0] m_axi_data,
   output m_axi_last,
+  output m_axi_partial_burst,
 
   input req_valid,
   output req_ready,
@@ -140,9 +141,12 @@ generate if (ALLOW_ABORT == 1) begin
   end
 
   assign transfer_abort_s = transfer_abort;
+  assign m_axi_partial_burst = (transfer_abort == 1'b0) && (s_axi_last == 1'b1) &&
+                              !(last == 1'b1 && eot == 1'b1 && req_xlast_d == 1'b1);
 
 end else begin
   assign transfer_abort_s = 1'b0;
+  assign m_axi_partial_burst = 1'b0;
 end endgenerate
 
 /*

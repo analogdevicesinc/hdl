@@ -40,6 +40,8 @@ module dmac_dest_mm_axi #(
   parameter DMA_ADDR_WIDTH = 32,
   parameter BYTES_PER_BEAT_WIDTH = $clog2(DMA_DATA_WIDTH/8),
   parameter BEATS_PER_BURST_WIDTH = 4,
+  parameter MAX_BYTES_PER_BURST = 128,
+  parameter BYTES_PER_BURST_WIDTH = $clog2(MAX_BYTES_PER_BURST),
   parameter AXI_LENGTH_WIDTH = 8)(
 
   input                               m_axi_aclk,
@@ -60,6 +62,8 @@ module dmac_dest_mm_axi #(
   input                               response_ready,
   output [1:0]                        response_resp,
   output                              response_resp_eot,
+  output                              response_resp_partial,
+  output [BYTES_PER_BURST_WIDTH-1:0]  response_data_burst_length,
 
   input  [ID_WIDTH-1:0]             request_id,
   output [ID_WIDTH-1:0]             response_id,
@@ -73,6 +77,10 @@ module dmac_dest_mm_axi #(
   input [DMA_DATA_WIDTH-1:0]        fifo_data,
   input                               fifo_last,
 
+  input [BYTES_PER_BURST_WIDTH-1:0] dest_burst_info_length,
+  input                             dest_burst_info_partial,
+  input [ID_WIDTH-1:0]              dest_burst_info_id,
+  input                             dest_burst_info_write,
   // Write address
   input                               m_axi_awready,
   output                              m_axi_awvalid,
@@ -164,5 +172,18 @@ dmac_response_handler #(
   .resp_resp(response_resp),
   .resp_eot(response_resp_eot)
 );
+
+reg [BYTES_PER_BURST_WIDTH+1-1:0] bl_mem [0:2**(ID_WIDTH)-1];
+
+assign {response_resp_partial,
+        response_data_burst_length} = bl_mem[response_id];
+
+always @(posedge m_axi_aclk) begin
+  if (dest_burst_info_write) begin
+    bl_mem[dest_burst_info_id] <= {dest_burst_info_partial,
+                                   dest_burst_info_length};
+  end
+end
+
 
 endmodule

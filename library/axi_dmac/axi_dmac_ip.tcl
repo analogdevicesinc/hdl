@@ -15,6 +15,7 @@ adi_ip_files axi_dmac [list \
   "axi_dmac_reset_manager.v" \
   "axi_dmac_resize_dest.v" \
   "axi_dmac_resize_src.v" \
+  "axi_dmac_response_manager.v" \
   "axi_dmac_transfer.v" \
   "address_generator.v" \
   "data_mover.v" \

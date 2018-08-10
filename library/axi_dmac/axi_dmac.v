@@ -285,6 +285,19 @@ localparam DMA_LENGTH_ALIGN =
   BYTES_PER_BEAT_WIDTH_DEST < BYTES_PER_BEAT_WIDTH_SRC ?
     BYTES_PER_BEAT_WIDTH_SRC : BYTES_PER_BEAT_WIDTH_DEST;
 
+localparam BYTES_PER_BURST_WIDTH =
+  REAL_MAX_BYTES_PER_BURST > 2048 ? 12 :
+  REAL_MAX_BYTES_PER_BURST > 1024 ? 11 :
+  REAL_MAX_BYTES_PER_BURST > 512 ? 10 :
+  REAL_MAX_BYTES_PER_BURST > 256 ? 9 :
+  REAL_MAX_BYTES_PER_BURST > 128 ? 8 :
+  REAL_MAX_BYTES_PER_BURST > 64 ? 7 :
+  REAL_MAX_BYTES_PER_BURST > 32 ? 6 :
+  REAL_MAX_BYTES_PER_BURST > 16 ? 5 :
+  REAL_MAX_BYTES_PER_BURST > 8 ? 4 :
+  REAL_MAX_BYTES_PER_BURST > 4 ? 3 :
+  REAL_MAX_BYTES_PER_BURST > 2 ? 2 : 1;
+
 // ID signals from the DMAC, just for debugging
 wire [ID_WIDTH-1:0] dest_request_id;
 wire [ID_WIDTH-1:0] dest_data_id;
@@ -325,6 +338,10 @@ assign m_src_axi_arid = 'h0;
 assign m_src_axi_arlock = 'h0;
 
 wire up_req_eot;
+wire [BYTES_PER_BURST_WIDTH-1:0] up_req_measured_burst_length;
+wire up_response_partial;
+wire up_response_valid;
+wire up_response_ready;
 
 wire ctrl_enable;
 wire ctrl_pause;
@@ -358,6 +375,7 @@ axi_dmac_regmap #(
   .DISABLE_DEBUG_REGISTERS(DISABLE_DEBUG_REGISTERS),
   .BYTES_PER_BEAT_WIDTH_DEST(BYTES_PER_BEAT_WIDTH_DEST),
   .BYTES_PER_BEAT_WIDTH_SRC(BYTES_PER_BEAT_WIDTH_SRC),
+  .BYTES_PER_BURST_WIDTH(BYTES_PER_BURST_WIDTH),
   .DMA_AXI_ADDR_WIDTH(DMA_AXI_ADDR_WIDTH),
   .DMA_LENGTH_WIDTH(DMA_LENGTH_WIDTH),
   .DMA_LENGTH_ALIGN(DMA_LENGTH_ALIGN),
@@ -410,6 +428,10 @@ axi_dmac_regmap #(
 
   // DMA response interface
   .response_eot(up_req_eot),
+  .response_measured_burst_length(up_req_measured_burst_length),
+  .response_partial(up_response_partial),
+  .response_valid(up_response_valid),
+  .response_ready(up_response_ready),
 
   // Debug interface
   .dbg_dest_addr(m_dest_axi_awaddr),
@@ -425,6 +447,7 @@ axi_dmac_transfer #(
   .DMA_LENGTH_WIDTH(DMA_LENGTH_WIDTH),
   .BYTES_PER_BEAT_WIDTH_DEST(BYTES_PER_BEAT_WIDTH_DEST),
   .BYTES_PER_BEAT_WIDTH_SRC(BYTES_PER_BEAT_WIDTH_SRC),
+  .BYTES_PER_BURST_WIDTH(BYTES_PER_BURST_WIDTH),
   .DMA_TYPE_DEST(DMA_TYPE_DEST),
   .DMA_TYPE_SRC(DMA_TYPE_SRC),
   .DMA_AXI_ADDR_WIDTH(DMA_AXI_ADDR_WIDTH),
@@ -459,6 +482,10 @@ axi_dmac_transfer #(
   .req_last(up_dma_req_last),
 
   .req_eot(up_req_eot),
+  .req_measured_burst_length(up_req_measured_burst_length),
+  .req_response_partial(up_response_partial),
+  .req_response_valid(up_response_valid),
+  .req_response_ready(up_response_ready),
 
   .m_dest_axi_aclk(m_dest_axi_aclk),
   .m_dest_axi_aresetn(m_dest_axi_aresetn),
