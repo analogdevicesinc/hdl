@@ -3,7 +3,7 @@ source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
-adi_project_xilinx ad9467_fmc_zed
+adi_project ad9467_fmc_zed
 adi_project_files ad9467_fmc_zed [list \
   "../common/ad9467_spi.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \

@@ -4,7 +4,7 @@ source $ad_hdl_dir/projects/scripts/adi_project.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 set p_device "xc7z035ifbg676-2L"
-adi_project_xilinx adrv9361z7035_ccbox_lvds
+adi_project adrv9361z7035_ccbox_lvds
 adi_project_files adrv9361z7035_ccbox_lvds [list \
   "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
   "$ad_hdl_dir/library/common/ad_adl5904_rst.v" \

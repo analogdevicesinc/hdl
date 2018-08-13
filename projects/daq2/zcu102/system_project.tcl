@@ -3,7 +3,7 @@ source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
-adi_project_xilinx daq2_zcu102
+adi_project daq2_zcu102
 adi_project_files daq2_zcu102 [list \
   "../common/daq2_spi.v" \
   "system_top.v" \

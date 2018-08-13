@@ -3,7 +3,7 @@ source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
-adi_project_xilinx fmcomms5_zcu102
+adi_project fmcomms5_zcu102
 adi_project_files fmcomms5_zcu102 [list \
   "system_top.v" \
   "system_constr.xdc"\
