@@ -19,7 +19,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 set adc_port_type   0
 
-adi_project_xilinx ad7405_fmc_zed
+adi_project ad7405_fmc_zed
 
 if { $adc_port_type == 0 } {
 

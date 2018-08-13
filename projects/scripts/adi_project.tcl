@@ -45,7 +45,7 @@ set p_prcfg_status ""
 # Supported carrier names are: ac701, kc705, vc707, vcu118, kcu105, zed,
 # microzed, zc702, zc706, mitx405, zcu102.
 #
-proc adi_project_xilinx {project_name {mode 0} {parameter_list {}} } {
+proc adi_project {project_name {mode 0} {parameter_list {}} } {
 
   global ad_hdl_dir
   global ad_phdl_dir

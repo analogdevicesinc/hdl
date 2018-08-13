@@ -21,7 +21,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 ##
 set ad40xx_adaq400x_n 1
 
-adi_project_xilinx ad40xx_zed
+adi_project ad40xx_zed
 
 if {$ad40xx_adaq400x_n == 1} {
   adi_project_files ad40xx_zed [list \

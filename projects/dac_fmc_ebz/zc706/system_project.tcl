@@ -39,7 +39,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 source ../common/config.tcl
 
-adi_project_xilinx dac_fmc_ebz_zc706 0 [list \
+adi_project dac_fmc_ebz_zc706 0 [list \
   JESD_M    [get_config_param M] \
   JESD_L    [get_config_param L] \
   JESD_S    [get_config_param S] \

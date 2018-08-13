@@ -4,7 +4,7 @@ source $ad_hdl_dir/projects/scripts/adi_project.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 set p_device "xc7z020clg484-1"
-adi_project_xilinx usrpe31x
+adi_project usrpe31x
 
 adi_project_files usrpe31x [list \
   "system_top.v" \

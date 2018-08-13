@@ -18,7 +18,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 set ad7616_if   0
 
-adi_project_xilinx ad7616_sdz_zc706
+adi_project ad7616_sdz_zc706
 
 if { $ad7616_if == 0 } {
 
