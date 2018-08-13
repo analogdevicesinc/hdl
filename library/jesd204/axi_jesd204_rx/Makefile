@@ -28,14 +28,14 @@ XILINX_LIB_DEPS += jesd204/axi_jesd204_common
 
 XILINX_INTERFACE_DEPS += jesd204/interfaces
 
-ALTERA_DEPS += ../../altera/common/up_clock_mon_constr.sdc
-ALTERA_DEPS += ../../common/up_clock_mon.v
-ALTERA_DEPS += ../../util_cdc/sync_bits.v
-ALTERA_DEPS += ../../util_cdc/sync_data.v
-ALTERA_DEPS += ../../util_cdc/sync_event.v
-ALTERA_DEPS += ../axi_jesd204_common/jesd204_up_common.v
-ALTERA_DEPS += ../axi_jesd204_common/jesd204_up_sysref.v
-ALTERA_DEPS += axi_jesd204_rx_constr.sdc
-ALTERA_DEPS += axi_jesd204_rx_hw.tcl
+INTEL_DEPS += ../../common/up_clock_mon.v
+INTEL_DEPS += ../../intel/common/up_clock_mon_constr.sdc
+INTEL_DEPS += ../../util_cdc/sync_bits.v
+INTEL_DEPS += ../../util_cdc/sync_data.v
+INTEL_DEPS += ../../util_cdc/sync_event.v
+INTEL_DEPS += ../axi_jesd204_common/jesd204_up_common.v
+INTEL_DEPS += ../axi_jesd204_common/jesd204_up_sysref.v
+INTEL_DEPS += axi_jesd204_rx_constr.sdc
+INTEL_DEPS += axi_jesd204_rx_hw.tcl
 
 include ../../scripts/library.mk

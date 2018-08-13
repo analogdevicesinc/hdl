@@ -3,11 +3,13 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-LIBRARY_NAME := axi_adxcvr
+LIBRARY_NAME := jesd204_phy
 
-ALTERA_DEPS += ../../common/up_axi.v
-ALTERA_DEPS += axi_adxcvr.v
-ALTERA_DEPS += axi_adxcvr_hw.tcl
-ALTERA_DEPS += axi_adxcvr_up.v
+INTEL_DEPS += jesd204_phy_glue.v
+INTEL_DEPS += jesd204_phy_glue_hw.tcl
+INTEL_DEPS += jesd204_phy_hw.tcl
+
+INTEL_LIB_DEPS += jesd204/jesd204_soft_pcs_rx
+INTEL_LIB_DEPS += jesd204/jesd204_soft_pcs_tx
 
 include ../../scripts/library.mk

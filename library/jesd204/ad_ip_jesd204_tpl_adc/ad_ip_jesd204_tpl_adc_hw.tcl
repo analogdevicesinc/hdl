@@ -46,10 +46,10 @@ ad_ip_files ad_ip_jesd204_tpl_adc [list \
   $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_core.v \
   $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_deframer.v \
   $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc.v \
-  $ad_hdl_dir/library/altera/common/up_xfer_cntrl_constr.sdc \
-  $ad_hdl_dir/library/altera/common/up_xfer_status_constr.sdc \
-  $ad_hdl_dir/library/altera/common/up_clock_mon_constr.sdc \
-  $ad_hdl_dir/library/altera/common/up_rst_constr.sdc]
+  $ad_hdl_dir/library/intel/common/up_xfer_cntrl_constr.sdc \
+  $ad_hdl_dir/library/intel/common/up_xfer_status_constr.sdc \
+  $ad_hdl_dir/library/intel/common/up_clock_mon_constr.sdc \
+  $ad_hdl_dir/library/intel/common/up_rst_constr.sdc]
 
 # parameters
 

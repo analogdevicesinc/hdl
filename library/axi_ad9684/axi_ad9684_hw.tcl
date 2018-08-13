@@ -23,10 +23,10 @@ ad_ip_files axi_ad9684 [list \
     axi_ad9684_if.v \
     axi_ad9684_channel.v \
     axi_ad9684.v \
-    $ad_hdl_dir/library/altera/common/up_xfer_cntrl_constr.sdc \
-    $ad_hdl_dir/library/altera/common/up_xfer_status_constr.sdc \
-    $ad_hdl_dir/library/altera/common/up_clock_mon_constr.sdc \
-    $ad_hdl_dir/library/altera/common/up_rst_constr.sdc \
+    $ad_hdl_dir/library/intel/common/up_xfer_cntrl_constr.sdc \
+    $ad_hdl_dir/library/intel/common/up_xfer_status_constr.sdc \
+    $ad_hdl_dir/library/intel/common/up_clock_mon_constr.sdc \
+    $ad_hdl_dir/library/intel/common/up_rst_constr.sdc \
     axi_ad9684_constr.sdc] \
     axi_ad9684_fileset
 

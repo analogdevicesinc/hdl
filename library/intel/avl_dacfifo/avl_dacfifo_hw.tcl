@@ -109,7 +109,7 @@ proc p_avl_dacfifo_elab {} {
     }
   }
 
-  # altera memory for WRITE side
+  # intel memory for WRITE side
 
   add_hdl_instance alt_mem_asym_wr alt_mem_asym
   set_instance_parameter_value alt_mem_asym_wr DEVICE_FAMILY $m_device_family
@@ -117,7 +117,7 @@ proc p_avl_dacfifo_elab {} {
   set_instance_parameter_value alt_mem_asym_wr A_DATA_WIDTH $m_dma_data_width
   set_instance_parameter_value alt_mem_asym_wr B_DATA_WIDTH $m_avl_data_width
 
-  # altera memory for READ side
+  # intel memory for READ side
 
   add_hdl_instance alt_mem_asym_rd alt_mem_asym
   set_instance_parameter_value alt_mem_asym_rd DEVICE_FAMILY $m_device_family
@@ -126,7 +126,7 @@ proc p_avl_dacfifo_elab {} {
   set_instance_parameter_value alt_mem_asym_rd B_ADDRESS_WIDTH $m_dac_mem_addr_width
   set_instance_parameter_value alt_mem_asym_rd B_DATA_WIDTH $m_dac_data_width
 
-  # altera memory for bypass logic
+  # intel memory for bypass logic
 
   add_hdl_instance alt_mem_asym_bypass alt_mem_asym
   set_instance_parameter_value alt_mem_asym_bypass DEVICE_FAMILY $m_device_family

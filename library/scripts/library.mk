@@ -26,13 +26,13 @@ CLEAN_TARGET += *.srcs
 CLEAN_TARGET += *.hw
 CLEAN_TARGET += *.sim
 CLEAN_TARGET += .Xil
-CLEAN_TARGET += .timestamp_altera
+CLEAN_TARGET += .timestamp_intel
 
 GENERIC_DEPS += $(HDL_LIBRARY_PATH)scripts/adi_env.tcl
 
-.PHONY: all altera altera_dep xilinx xilinx_dep clean clean-all
+.PHONY: all intel intel_dep xilinx xilinx_dep clean clean-all
 
-all: altera xilinx
+all: intel xilinx
 
 clean: clean-all
 
@@ -41,27 +41,27 @@ clean-all:
 		$(CLEAN_TARGET), \
 		$(HL)$(LIBRARY_NAME)$(NC) library)
 
-ifneq ($(ALTERA_DEPS),)
+ifneq ($(INTEL_DEPS),)
 
-ALTERA_DEPS += $(GENERIC_DEPS)
-ALTERA_DEPS += $(HDL_LIBRARY_PATH)scripts/adi_ip_alt.tcl
-ALTERA_DEPS += $(foreach dep,$(ALTERA_LIB_DEPS),$(HDL_LIBRARY_PATH)$(dep)/.timestamp_altera)
+INTEL_DEPS += $(GENERIC_DEPS)
+INTEL_DEPS += $(HDL_LIBRARY_PATH)scripts/adi_ip_intel.tcl
+INTEL_DEPS += $(foreach dep,$(INTEL_LIB_DEPS),$(HDL_LIBRARY_PATH)$(dep)/.timestamp_intel)
 
-altera: altera_dep .timestamp_altera
+intel: intel_dep .timestamp_intel
 
-.timestamp_altera: $(ALTERA_DEPS)
+.timestamp_intel: $(INTEL_DEPS)
 	touch $@
 
-altera_dep:
-	@for lib in $(ALTERA_LIB_DEPS); do \
-		$(MAKE) -C $(HDL_LIBRARY_PATH)$${lib} altera || exit $$?; \
+intel_dep:
+	@for lib in $(INTEL_LIB_DEPS); do \
+		$(MAKE) -C $(HDL_LIBRARY_PATH)$${lib} intel || exit $$?; \
 	done
 endif
 
 ifneq ($(XILINX_DEPS),)
 
 XILINX_DEPS += $(GENERIC_DEPS)
-XILINX_DEPS += $(HDL_LIBRARY_PATH)scripts/adi_ip.tcl
+XILINX_DEPS += $(HDL_LIBRARY_PATH)scripts/adi_ip_xilinx.tcl
 XILINX_DEPS += $(foreach dep,$(XILINX_LIB_DEPS),$(HDL_LIBRARY_PATH)$(dep)/component.xml)
 
 xilinx: xilinx_dep component.xml

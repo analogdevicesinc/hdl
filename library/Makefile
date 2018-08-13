@@ -12,18 +12,6 @@ all: lib
 
 
 clean:
-	$(MAKE) -C altera/adi_jesd204 clean
-	$(MAKE) -C altera/avl_adxcfg clean
-	$(MAKE) -C altera/avl_adxcvr clean
-	$(MAKE) -C altera/avl_adxcvr_octet_swap clean
-	$(MAKE) -C altera/avl_adxphy clean
-	$(MAKE) -C altera/avl_dacfifo clean
-	$(MAKE) -C altera/axi_adxcvr clean
-	$(MAKE) -C altera/common/alt_ifconv clean
-	$(MAKE) -C altera/common/alt_mem_asym clean
-	$(MAKE) -C altera/common/alt_mul clean
-	$(MAKE) -C altera/common/alt_serdes clean
-	$(MAKE) -C altera/jesd204_phy clean
 	$(MAKE) -C axi_ad5766 clean
 	$(MAKE) -C axi_ad6676 clean
 	$(MAKE) -C axi_ad7616 clean
@@ -69,6 +57,18 @@ clean:
 	$(MAKE) -C cn0363/cn0363_dma_sequencer clean
 	$(MAKE) -C cn0363/cn0363_phase_data_sync clean
 	$(MAKE) -C cordic_demod clean
+	$(MAKE) -C intel/adi_jesd204 clean
+	$(MAKE) -C intel/avl_adxcfg clean
+	$(MAKE) -C intel/avl_adxcvr clean
+	$(MAKE) -C intel/avl_adxcvr_octet_swap clean
+	$(MAKE) -C intel/avl_adxphy clean
+	$(MAKE) -C intel/avl_dacfifo clean
+	$(MAKE) -C intel/axi_adxcvr clean
+	$(MAKE) -C intel/common/alt_ifconv clean
+	$(MAKE) -C intel/common/alt_mem_asym clean
+	$(MAKE) -C intel/common/alt_mul clean
+	$(MAKE) -C intel/common/alt_serdes clean
+	$(MAKE) -C intel/jesd204_phy clean
 	$(MAKE) -C jesd204/ad_ip_jesd204_tpl_adc clean
 	$(MAKE) -C jesd204/ad_ip_jesd204_tpl_dac clean
 	$(MAKE) -C jesd204/axi_jesd204_common clean
@@ -123,18 +123,6 @@ clean-all:clean
 
 
 lib:
-	$(MAKE) -C altera/adi_jesd204
-	$(MAKE) -C altera/avl_adxcfg
-	$(MAKE) -C altera/avl_adxcvr
-	$(MAKE) -C altera/avl_adxcvr_octet_swap
-	$(MAKE) -C altera/avl_adxphy
-	$(MAKE) -C altera/avl_dacfifo
-	$(MAKE) -C altera/axi_adxcvr
-	$(MAKE) -C altera/common/alt_ifconv
-	$(MAKE) -C altera/common/alt_mem_asym
-	$(MAKE) -C altera/common/alt_mul
-	$(MAKE) -C altera/common/alt_serdes
-	$(MAKE) -C altera/jesd204_phy
 	$(MAKE) -C axi_ad5766
 	$(MAKE) -C axi_ad6676
 	$(MAKE) -C axi_ad7616
@@ -180,6 +168,18 @@ lib:
 	$(MAKE) -C cn0363/cn0363_dma_sequencer
 	$(MAKE) -C cn0363/cn0363_phase_data_sync
 	$(MAKE) -C cordic_demod
+	$(MAKE) -C intel/adi_jesd204
+	$(MAKE) -C intel/avl_adxcfg
+	$(MAKE) -C intel/avl_adxcvr
+	$(MAKE) -C intel/avl_adxcvr_octet_swap
+	$(MAKE) -C intel/avl_adxphy
+	$(MAKE) -C intel/avl_dacfifo
+	$(MAKE) -C intel/axi_adxcvr
+	$(MAKE) -C intel/common/alt_ifconv
+	$(MAKE) -C intel/common/alt_mem_asym
+	$(MAKE) -C intel/common/alt_mul
+	$(MAKE) -C intel/common/alt_serdes
+	$(MAKE) -C intel/jesd204_phy
 	$(MAKE) -C jesd204/ad_ip_jesd204_tpl_adc
 	$(MAKE) -C jesd204/ad_ip_jesd204_tpl_dac
 	$(MAKE) -C jesd204/axi_jesd204_common
@@ -203,7 +203,6 @@ lib:
 	$(MAKE) -C util_bsplit
 	$(MAKE) -C util_cdc
 	$(MAKE) -C util_cic
-	$(MAKE) -C util_clkdiv
 	$(MAKE) -C util_dacfifo
 	$(MAKE) -C util_dec256sinc24b
 	$(MAKE) -C util_delay

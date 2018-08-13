@@ -11,7 +11,7 @@ XILINX_DEPS += util_clkdiv_constr.xdc
 XILINX_DEPS += util_clkdiv_ooc.ttcl
 XILINX_DEPS += util_clkdiv_ip.tcl
 
-ALTERA_DEPS += util_clkdiv_alt.v
-ALTERA_DEPS += util_clkdiv_hw.tcl
+INTEL_DEPS += util_clkdiv_alt.v
+INTEL_DEPS += util_clkdiv_hw.tcl
 
 include ../scripts/library.mk

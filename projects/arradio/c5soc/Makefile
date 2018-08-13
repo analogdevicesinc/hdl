@@ -16,4 +16,4 @@ LIB_DEPS += util_pack/util_upack2
 LIB_DEPS += util_rfifo
 LIB_DEPS += util_wfifo
 
-include ../../scripts/project-altera.mk
+include ../../scripts/project-intel.mk

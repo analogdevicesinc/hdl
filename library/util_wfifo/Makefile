@@ -11,7 +11,7 @@ GENERIC_DEPS += util_wfifo.v
 XILINX_DEPS += util_wfifo_constr.xdc
 XILINX_DEPS += util_wfifo_ip.tcl
 
-ALTERA_DEPS += util_wfifo_constr.sdc
-ALTERA_DEPS += util_wfifo_hw.tcl
+INTEL_DEPS += util_wfifo_constr.sdc
+INTEL_DEPS += util_wfifo_hw.tcl
 
 include ../scripts/library.mk
