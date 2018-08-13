@@ -35,7 +35,7 @@ source ../../scripts/adi_project_alt.tcl
 
 source ../common/config.tcl
 
-adi_project_altera dac_fmc_ebz_a10soc [list \
+adi_project dac_fmc_ebz_a10soc [list \
   JESD_L    [get_config_param L] \
   MODE      $mode \
   DEVICE    $device \

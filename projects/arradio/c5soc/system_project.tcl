@@ -2,7 +2,7 @@
 source ../../scripts/adi_env.tcl
 source ../../scripts/adi_project_alt.tcl
 
-adi_project_altera arradio_c5soc
+adi_project arradio_c5soc
 
 source $ad_hdl_dir/projects/common/c5soc/c5soc_system_assign.tcl
 
