@@ -9,6 +9,6 @@ GENERIC_DEPS += util_bsplit.v
 
 XILINX_DEPS += util_bsplit_ip.tcl
 
-ALTERA_DEPS += util_bsplit_hw.tcl
+INTEL_DEPS += util_bsplit_hw.tcl
 
 include ../scripts/library.mk

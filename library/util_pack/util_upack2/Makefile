@@ -15,6 +15,7 @@ GENERIC_DEPS += util_upack2_impl.v
 XILINX_DEPS += util_upack2.v
 XILINX_DEPS += util_upack2_ip.tcl
 
-ALTERA_DEPS += util_upack2_hw.tcl
+INTEL_DEPS += ../../scripts/adi_ip_alt.tcl
+INTEL_DEPS += util_upack2_hw.tcl
 
 include ../../scripts/library.mk

@@ -18,6 +18,7 @@ XILINX_DEPS += util_cpack2_ip.tcl
 XILINX_DEPS += ../../interfaces/fifo_wr.xml
 XILINX_DEPS += ../../interfaces/fifo_wr_rtl.xml
 
-ALTERA_DEPS += util_cpack2_hw.tcl
+INTEL_DEPS += ../../scripts/adi_ip_alt.tcl
+INTEL_DEPS += util_cpack2_hw.tcl
 
 include ../../scripts/library.mk

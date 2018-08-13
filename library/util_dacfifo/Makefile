@@ -16,7 +16,7 @@ XILINX_DEPS += util_dacfifo_constr.xdc
 XILINX_DEPS += util_dacfifo_ooc.ttcl
 XILINX_DEPS += util_dacfifo_ip.tcl
 
-ALTERA_DEPS += util_dacfifo_constr.sdc
-ALTERA_DEPS += util_dacfifo_hw.tcl
+INTEL_DEPS += util_dacfifo_constr.sdc
+INTEL_DEPS += util_dacfifo_hw.tcl
 
 include ../scripts/library.mk

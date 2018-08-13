@@ -2,7 +2,7 @@
 set dac_fifo_address_width 10
 
 source $ad_hdl_dir/projects/common/a10gx/a10gx_system_qsys.tcl
-source $ad_hdl_dir/projects/common/altera/dacfifo_qsys.tcl
+source $ad_hdl_dir/projects/common/intel/dacfifo_qsys.tcl
 source ../common/daq2_qsys.tcl
 
 set_interconnect_requirement {mm_interconnect_0|rsp_demux_021.src0/sys_ddr3_cntrl_ctrl_amm_0_to_sys_cpu_data_master_rsp_width_adapter.sink} {qsys_mm.postTransform.pipelineCount} {1}

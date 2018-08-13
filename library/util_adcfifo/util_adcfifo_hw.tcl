@@ -35,7 +35,7 @@ proc p_util_adcfifo {} {
   set m_dma_addr_width [get_parameter_value "DMA_ADDRESS_WIDTH"]
   set m_dma_data_width [get_parameter_value "DMA_DATA_WIDTH"]
 
-  # altera memory
+  # intel memory
 
   add_hdl_instance alt_mem_asym alt_mem_asym
   set_instance_parameter_value alt_mem_asym DEVICE_FAMILY $m_device_family

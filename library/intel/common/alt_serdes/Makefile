@@ -3,9 +3,8 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-LIBRARY_NAME := avl_adxcfg
+LIBRARY_NAME := alt_serdes
 
-ALTERA_DEPS += avl_adxcfg.v
-ALTERA_DEPS += avl_adxcfg_hw.tcl
+INTEL_DEPS += alt_serdes_hw.tcl
 
-include ../../scripts/library.mk
+include ../../../scripts/library.mk

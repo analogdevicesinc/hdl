@@ -5,7 +5,7 @@
 
 LIBRARY_NAME := avl_adxcvr_octet_swap
 
-ALTERA_DEPS += avl_adxcvr_octet_swap.v
-ALTERA_DEPS += avl_adxcvr_octet_swap_hw.tcl
+INTEL_DEPS += avl_adxcvr_octet_swap.v
+INTEL_DEPS += avl_adxcvr_octet_swap_hw.tcl
 
 include ../../scripts/library.mk

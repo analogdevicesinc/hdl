@@ -32,10 +32,10 @@ add_fileset_file axi_ad9671_pnmon.v   VERILOG PATH axi_ad9671_pnmon.v
 add_fileset_file axi_ad9671_if.v      VERILOG PATH axi_ad9671_if.v
 add_fileset_file axi_ad9671_channel.v VERILOG PATH axi_ad9671_channel.v
 add_fileset_file axi_ad9671.v         VERILOG PATH axi_ad9671.v TOP_LEVEL_FILE
-add_fileset_file up_xfer_cntrl_constr.sdc   SDC PATH  $ad_hdl_dir/library/altera/common/up_xfer_cntrl_constr.sdc
-add_fileset_file up_xfer_status_constr.sdc  SDC PATH  $ad_hdl_dir/library/altera/common/up_xfer_status_constr.sdc
-add_fileset_file up_clock_mon_constr.sdc    SDC PATH  $ad_hdl_dir/library/altera/common/up_clock_mon_constr.sdc
-add_fileset_file up_rst_constr.sdc          SDC PATH  $ad_hdl_dir/library/altera/common/up_rst_constr.sdc
+add_fileset_file up_xfer_cntrl_constr.sdc   SDC PATH  $ad_hdl_dir/library/intel/common/up_xfer_cntrl_constr.sdc
+add_fileset_file up_xfer_status_constr.sdc  SDC PATH  $ad_hdl_dir/library/intel/common/up_xfer_status_constr.sdc
+add_fileset_file up_clock_mon_constr.sdc    SDC PATH  $ad_hdl_dir/library/intel/common/up_clock_mon_constr.sdc
+add_fileset_file up_rst_constr.sdc          SDC PATH  $ad_hdl_dir/library/intel/common/up_rst_constr.sdc
 
 # parameters
 

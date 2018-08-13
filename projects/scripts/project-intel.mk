@@ -2,8 +2,8 @@
 ## Copyright 2018(c) Analog Devices, Inc.
 ####################################################################################
 
-# Assumes this file is in projects/scripts/project-altera.mk
-HDL_PROJECT_PATH := $(subst scripts/project-altera.mk,,$(lastword $(MAKEFILE_LIST)))
+# Assumes this file is in projects/scripts/project-intel.mk
+HDL_PROJECT_PATH := $(subst scripts/project-intel.mk,,$(lastword $(MAKEFILE_LIST)))
 HDL_LIBRARY_PATH := $(HDL_PROJECT_PATH)../library/
 
 include $(HDL_PROJECT_PATH)../quiet.mk
@@ -14,7 +14,7 @@ endif
 
 export ALT_NIOS_MMU_ENABLED := $(NIOS2_MMU)
 
-ALTERA := quartus_sh --64bit -t
+INTEL := quartus_sh --64bit -t
 
 CLEAN_TARGET += *.log
 CLEAN_TARGET += *_INFO.txt
@@ -76,11 +76,11 @@ clean-all: clean
 $(PROJECT_NAME).sof: $(M_DEPS)
 	-rm -rf $(CLEAN_TARGET)
 	$(call build,\
-		$(ALTERA) system_project.tcl, \
+		$(INTEL) system_project.tcl, \
 		$(PROJECT_NAME)_quartus.log, \
 		$(HL)$(PROJECT_NAME)$(NC))
 
 lib:
 	@for lib in $(LIB_DEPS); do \
-		$(MAKE) -C $(HDL_LIBRARY_PATH)$${lib} altera || exit $$?; \
+		$(MAKE) -C $(HDL_LIBRARY_PATH)$${lib} intel || exit $$?; \
 	done

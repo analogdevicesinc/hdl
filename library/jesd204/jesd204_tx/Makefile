@@ -28,11 +28,11 @@ XILINX_LIB_DEPS += util_cdc
 
 XILINX_INTERFACE_DEPS += jesd204/interfaces
 
-ALTERA_DEPS += ../../util_cdc/sync_bits.v
-ALTERA_DEPS += ../jesd204_common/jesd204_eof_generator.v
-ALTERA_DEPS += ../jesd204_common/jesd204_lmfc.v
-ALTERA_DEPS += ../jesd204_common/jesd204_scrambler.v
-ALTERA_DEPS += jesd204_tx_constr.sdc
-ALTERA_DEPS += jesd204_tx_hw.tcl
+INTEL_DEPS += ../../util_cdc/sync_bits.v
+INTEL_DEPS += ../jesd204_common/jesd204_eof_generator.v
+INTEL_DEPS += ../jesd204_common/jesd204_lmfc.v
+INTEL_DEPS += ../jesd204_common/jesd204_scrambler.v
+INTEL_DEPS += jesd204_tx_constr.sdc
+INTEL_DEPS += jesd204_tx_hw.tcl
 
 include ../../scripts/library.mk

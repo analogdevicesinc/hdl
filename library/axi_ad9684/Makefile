@@ -30,11 +30,11 @@ XILINX_DEPS += ../xilinx/common/up_xfer_status_constr.xdc
 XILINX_DEPS += axi_ad9684_constr.xdc
 XILINX_DEPS += axi_ad9684_ip.tcl
 
-ALTERA_DEPS += ../altera/common/up_clock_mon_constr.sdc
-ALTERA_DEPS += ../altera/common/up_rst_constr.sdc
-ALTERA_DEPS += ../altera/common/up_xfer_cntrl_constr.sdc
-ALTERA_DEPS += ../altera/common/up_xfer_status_constr.sdc
-ALTERA_DEPS += axi_ad9684_constr.sdc
-ALTERA_DEPS += axi_ad9684_hw.tcl
+INTEL_DEPS += ../intel/common/up_clock_mon_constr.sdc
+INTEL_DEPS += ../intel/common/up_rst_constr.sdc
+INTEL_DEPS += ../intel/common/up_xfer_cntrl_constr.sdc
+INTEL_DEPS += ../intel/common/up_xfer_status_constr.sdc
+INTEL_DEPS += axi_ad9684_constr.sdc
+INTEL_DEPS += axi_ad9684_hw.tcl
 
 include ../scripts/library.mk

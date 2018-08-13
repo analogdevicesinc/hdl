@@ -9,8 +9,8 @@ ad_ip_create axi_ad9361 {AXI AD9361 Interface} axi_ad9361_elab
 set_module_property VALIDATION_CALLBACK info_param_validate
 
 ad_ip_files axi_ad9361 [list\
-  $ad_hdl_dir/library/altera/common/ad_mul.v \
-  $ad_hdl_dir/library/altera/common/ad_dcfilter.v \
+  $ad_hdl_dir/library/intel/common/ad_mul.v \
+  $ad_hdl_dir/library/intel/common/ad_dcfilter.v \
   $ad_hdl_dir/library/common/ad_rst.v \
   $ad_hdl_dir/library/common/ad_pnmon.v \
   $ad_hdl_dir/library/common/ad_dds_cordic_pipe.v \
@@ -34,10 +34,10 @@ ad_ip_files axi_ad9361 [list\
   $ad_hdl_dir/library/common/up_dac_common.v \
   $ad_hdl_dir/library/common/up_dac_channel.v \
   $ad_hdl_dir/library/common/up_tdd_cntrl.v \
-  altera/axi_ad9361_lvds_if_10.v \
-  altera/axi_ad9361_lvds_if_c5.v \
-  altera/axi_ad9361_lvds_if.v \
-  altera/axi_ad9361_cmos_if.v \
+  intel/axi_ad9361_lvds_if_10.v \
+  intel/axi_ad9361_lvds_if_c5.v \
+  intel/axi_ad9361_lvds_if.v \
+  intel/axi_ad9361_cmos_if.v \
   axi_ad9361_rx_pnmon.v \
   axi_ad9361_rx_channel.v \
   axi_ad9361_rx.v \
@@ -46,10 +46,10 @@ ad_ip_files axi_ad9361 [list\
   axi_ad9361_tdd.v \
   axi_ad9361_tdd_if.v \
   axi_ad9361.v \
-  $ad_hdl_dir/library/altera/common/up_xfer_cntrl_constr.sdc \
-  $ad_hdl_dir/library/altera/common/up_xfer_status_constr.sdc \
-  $ad_hdl_dir/library/altera/common/up_clock_mon_constr.sdc \
-  $ad_hdl_dir/library/altera/common/up_rst_constr.sdc \
+  $ad_hdl_dir/library/intel/common/up_xfer_cntrl_constr.sdc \
+  $ad_hdl_dir/library/intel/common/up_xfer_status_constr.sdc \
+  $ad_hdl_dir/library/intel/common/up_clock_mon_constr.sdc \
+  $ad_hdl_dir/library/intel/common/up_rst_constr.sdc \
   axi_ad9361_constr.sdc]
 
 # parameters

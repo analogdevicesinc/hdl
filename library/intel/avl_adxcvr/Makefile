@@ -3,8 +3,11 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-LIBRARY_NAME := alt_mem_asym
+LIBRARY_NAME := avl_adxcvr
 
-ALTERA_DEPS += alt_mem_asym_hw.tcl
+INTEL_DEPS += avl_adxcvr_hw.tcl
 
-include ../../../scripts/library.mk
+INTEL_LIB_DEPS += intel/avl_adxcvr_octet_swap
+INTEL_LIB_DEPS += intel/avl_adxphy
+
+include ../../scripts/library.mk

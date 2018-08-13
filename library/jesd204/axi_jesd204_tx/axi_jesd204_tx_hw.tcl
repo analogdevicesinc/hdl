@@ -65,7 +65,7 @@ ad_ip_files axi_jesd204_tx [list \
   $ad_hdl_dir/library/util_cdc/sync_data.v \
   $ad_hdl_dir/library/util_cdc/sync_event.v \
   $ad_hdl_dir/library/util_cdc/util_cdc_constr.tcl \
-  $ad_hdl_dir/library/altera/common/up_clock_mon_constr.sdc \
+  $ad_hdl_dir/library/intel/common/up_clock_mon_constr.sdc \
 ]
 
 # parameters

@@ -3,8 +3,9 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-LIBRARY_NAME := alt_mul
+LIBRARY_NAME := avl_adxphy
 
-ALTERA_DEPS += alt_mul_hw.tcl
+INTEL_DEPS += avl_adxphy.v
+INTEL_DEPS += avl_adxphy_hw.tcl
 
-include ../../../scripts/library.mk
+include ../../scripts/library.mk

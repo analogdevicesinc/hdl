@@ -3,11 +3,9 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-LIBRARY_NAME := jesd204_soft_pcs_tx
+LIBRARY_NAME := alt_ifconv
 
-GENERIC_DEPS += jesd204_8b10b_encoder.v
-GENERIC_DEPS += jesd204_soft_pcs_tx.v
+INTEL_DEPS += alt_ifconv.v
+INTEL_DEPS += alt_ifconv_hw.tcl
 
-INTEL_DEPS += jesd204_soft_pcs_tx_hw.tcl
-
-include ../../scripts/library.mk
+include ../../../scripts/library.mk

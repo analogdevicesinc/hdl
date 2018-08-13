@@ -18,7 +18,7 @@ set_module_property VALIDATION_CALLBACK info_param_validate
 add_fileset quartus_synth QUARTUS_SYNTH "" "Quartus Synthesis"
 set_fileset_property quartus_synth TOP_LEVEL axi_ad9371
 add_fileset_file ad_rst.v                   VERILOG PATH $ad_hdl_dir/library/common/ad_rst.v
-add_fileset_file ad_mul.v                   VERILOG PATH $ad_hdl_dir/library/altera/common/ad_mul.v
+add_fileset_file ad_mul.v                   VERILOG PATH $ad_hdl_dir/library/intel/common/ad_mul.v
 add_fileset_file ad_dds_cordic_pipe.v       VERILOG PATH $ad_hdl_dir/library/common/ad_dds_cordic_pipe.v
 add_fileset_file ad_dds_sine_cordic.v       VERILOG PATH $ad_hdl_dir/library/common/ad_dds_sine_cordic.v
 add_fileset_file ad_dds_sine.v              VERILOG PATH $ad_hdl_dir/library/common/ad_dds_sine.v
@@ -26,7 +26,7 @@ add_fileset_file ad_dds_2.v                 VERILOG PATH $ad_hdl_dir/library/com
 add_fileset_file ad_dds_1.v                 VERILOG PATH $ad_hdl_dir/library/common/ad_dds_1.v
 add_fileset_file ad_dds.v                   VERILOG PATH $ad_hdl_dir/library/common/ad_dds.v
 add_fileset_file ad_datafmt.v               VERILOG PATH $ad_hdl_dir/library/common/ad_datafmt.v
-add_fileset_file ad_dcfilter.v              VERILOG PATH $ad_hdl_dir/library/altera/common/ad_dcfilter.v
+add_fileset_file ad_dcfilter.v              VERILOG PATH $ad_hdl_dir/library/intel/common/ad_dcfilter.v
 add_fileset_file ad_iqcor.v                 VERILOG PATH $ad_hdl_dir/library/common/ad_iqcor.v
 add_fileset_file up_axi.v                   VERILOG PATH $ad_hdl_dir/library/common/up_axi.v
 add_fileset_file up_xfer_cntrl.v            VERILOG PATH $ad_hdl_dir/library/common/up_xfer_cntrl.v
@@ -44,10 +44,10 @@ add_fileset_file axi_ad9371_rx_os.v         VERILOG PATH axi_ad9371_rx_os.v
 add_fileset_file axi_ad9371_tx_channel.v    VERILOG PATH axi_ad9371_tx_channel.v
 add_fileset_file axi_ad9371_tx.v            VERILOG PATH axi_ad9371_tx.v
 add_fileset_file axi_ad9371.v               VERILOG PATH axi_ad9371.v TOP_LEVEL_FILE
-add_fileset_file up_xfer_cntrl_constr.sdc   SDC PATH  $ad_hdl_dir/library/altera/common/up_xfer_cntrl_constr.sdc
-add_fileset_file up_xfer_status_constr.sdc  SDC PATH  $ad_hdl_dir/library/altera/common/up_xfer_status_constr.sdc
-add_fileset_file up_clock_mon_constr.sdc    SDC PATH  $ad_hdl_dir/library/altera/common/up_clock_mon_constr.sdc
-add_fileset_file up_rst_constr.sdc          SDC PATH  $ad_hdl_dir/library/altera/common/up_rst_constr.sdc
+add_fileset_file up_xfer_cntrl_constr.sdc   SDC PATH  $ad_hdl_dir/library/intel/common/up_xfer_cntrl_constr.sdc
+add_fileset_file up_xfer_status_constr.sdc  SDC PATH  $ad_hdl_dir/library/intel/common/up_xfer_status_constr.sdc
+add_fileset_file up_clock_mon_constr.sdc    SDC PATH  $ad_hdl_dir/library/intel/common/up_clock_mon_constr.sdc
+add_fileset_file up_rst_constr.sdc          SDC PATH  $ad_hdl_dir/library/intel/common/up_rst_constr.sdc
 
 # parameters
 
