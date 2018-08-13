@@ -12,7 +12,7 @@ set version "18.1.0"
 #
 # Supported carrier names are: a10gx, a10soc, c5soc, de10nano, a5soc, a5gt.
 #
-proc adi_project_altera {project_name {parameter_list {}}} {
+proc adi_project {project_name {parameter_list {}}} {
 
   global ad_hdl_dir
   global ad_phdl_dir
