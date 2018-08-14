@@ -103,9 +103,9 @@ module axi_ad9361_lvds_if_10 (
   wire    [ 6:0]      rx_delay_locked_s;
   wire    [27:0]      tx_data_s;
   wire                locked_s;
-  wire                alt_lvds_clk;
-  wire                alt_lvds_loaden;
-  wire    [ 7:0]      alt_lvds_phase;
+  wire                lvds_clk;
+  wire                lvds_loaden;
+  wire    [ 7:0]      lvds_phase;
 
   // pll reset
 
@@ -199,10 +199,10 @@ module axi_ad9361_lvds_if_10 (
   for (i = 0; i < 6; i = i + 1) begin: g_rx_data
   axi_ad9361_serdes_in i_rx_data (
     .data_in_export (rx_data_in_p[i]),
-    .clk_export (alt_lvds_clk),
-    .loaden_export (alt_lvds_loaden),
+    .clk_export (lvds_clk),
+    .loaden_export (lvds_loaden),
     .div_clk_export (clk),
-    .hs_phase_export (alt_lvds_phase),
+    .hs_phase_export (lvds_phase),
     .locked_export (rx_data_locked_s[i]),
     .data_s_export (rx_data_s[((i*4)+3):(i*4)]),
     .delay_locked_export (rx_delay_locked_s[i]));
@@ -211,10 +211,10 @@ module axi_ad9361_lvds_if_10 (
 
   axi_ad9361_serdes_in i_rx_frame (
     .data_in_export (rx_frame_in_p),
-    .clk_export (alt_lvds_clk),
-    .loaden_export (alt_lvds_loaden),
+    .clk_export (lvds_clk),
+    .loaden_export (lvds_loaden),
     .div_clk_export (clk),
-    .hs_phase_export (alt_lvds_phase),
+    .hs_phase_export (lvds_phase),
     .locked_export (rx_data_locked_s[6]),
     .data_s_export (rx_data_s[27:24]),
     .delay_locked_export (rx_delay_locked_s[6]));
@@ -223,8 +223,8 @@ module axi_ad9361_lvds_if_10 (
   for (i = 0; i < 6; i = i + 1) begin: g_tx_data
   axi_ad9361_serdes_out i_tx_data (
     .data_out_export (tx_data_out_p[i]),
-    .clk_export (alt_lvds_clk),
-    .loaden_export (alt_lvds_loaden),
+    .clk_export (lvds_clk),
+    .loaden_export (lvds_loaden),
     .div_clk_export (clk),
     .data_s_export (tx_data_s[((i*4)+3):(i*4)]));
   end
@@ -232,15 +232,15 @@ module axi_ad9361_lvds_if_10 (
 
   axi_ad9361_serdes_out i_tx_frame (
     .data_out_export (tx_frame_out_p),
-    .clk_export (alt_lvds_clk),
-    .loaden_export (alt_lvds_loaden),
+    .clk_export (lvds_clk),
+    .loaden_export (lvds_loaden),
     .div_clk_export (clk),
     .data_s_export (tx_data_s[27:24]));
 
   axi_ad9361_serdes_out i_tx_clk (
     .data_out_export (tx_clk_out_p),
-    .clk_export (alt_lvds_clk),
-    .loaden_export (alt_lvds_loaden),
+    .clk_export (lvds_clk),
+    .loaden_export (lvds_loaden),
     .div_clk_export (clk),
     .data_s_export (4'b1010));
 
@@ -258,9 +258,9 @@ module axi_ad9361_lvds_if_10 (
     .rst_reset (pll_rst),
     .ref_clk_clk (rx_clk_in_p),
     .locked_export (locked_s),
-    .hs_phase_phout (alt_lvds_phase),
-    .hs_clk_lvds_clk (alt_lvds_clk),
-    .loaden_loaden (alt_lvds_loaden),
+    .hs_phase_phout (lvds_phase),
+    .hs_clk_lvds_clk (lvds_clk),
+    .loaden_loaden (lvds_loaden),
     .ls_clk_clk (clk));
 
 endmodule
