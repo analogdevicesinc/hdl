@@ -1,7 +1,7 @@
 
 source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
-source $ad_hdl_dir/projects/scripts/adi_project.tcl
+source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 
 adi_project fmcjesdadc1_kc705
 adi_project_files fmcjesdadc1_kc705 [list \

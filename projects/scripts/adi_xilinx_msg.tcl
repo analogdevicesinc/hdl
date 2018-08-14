@@ -13,7 +13,7 @@
 #
 ## at ~/hdl/library/scripts/adi_ip.tcl
 ## and
-## at ~/hdl/projects/scripts/adi_project.tcl
+## at ~/hdl/projects/scripts/adi_project_xilinx.tcl
 ##
 ################################################################################
 
