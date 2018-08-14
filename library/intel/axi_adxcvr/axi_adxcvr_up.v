@@ -140,7 +140,7 @@ module axi_adxcvr_up #(
     end
   end
 
-  // Specific to Altera
+  // Specific to Intel
 
   assign up_rparam_s[31:28] = 8'd0;
   assign up_rparam_s[27:24] = XCVR_TYPE[3:0];

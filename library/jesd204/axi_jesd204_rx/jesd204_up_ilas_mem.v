@@ -97,7 +97,7 @@ end
  * Shift register with variable tap for accessing the stored data.
  *
  * This has slightly better utilization on Xilinx based platforms than the dual
- * port RAM approach, but there is no equivalent primitive on Altera resulting
+ * port RAM approach, but there is no equivalent primitive on Intel resulting
  * in increased utilization since it needs to be implemented used registers and
  * muxes.
  *

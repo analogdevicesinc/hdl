@@ -206,7 +206,7 @@ module axi_ad9361_lvds_if #(
     rx_locked <= rx_locked_m1;
   end
 
-  // altera-equivalence
+  // intel-equivalence
 
   always @(posedge l_clk) begin
     rx_valid <= ~rx_valid;
