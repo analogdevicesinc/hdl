@@ -1,6 +1,6 @@
 
 source ../../scripts/adi_env.tcl
-source ../../scripts/adi_project_alt.tcl
+source ../../scripts/adi_project_intel.tcl
 
 adi_project daq2_a10soc
 
