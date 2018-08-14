@@ -1,6 +1,6 @@
 
 source ../../scripts/adi_env.tcl
-source $ad_hdl_dir/projects/scripts/adi_project.tcl
+source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 adi_project adrv9009_zcu102
