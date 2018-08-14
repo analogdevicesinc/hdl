@@ -96,13 +96,13 @@ ad_alt_intf signal adc_dovf input 1 ovf
 
 # SERDES instances and configurations
 
-add_hdl_instance ad_serdes_clk_core_rx alt_serdes
+add_hdl_instance ad_serdes_clk_core_rx intel_serdes
 set_instance_parameter_value ad_serdes_clk_core_rx {MODE} {CLK}
 set_instance_parameter_value ad_serdes_clk_core_rx {DDR_OR_SDR_N} {1}
 set_instance_parameter_value ad_serdes_clk_core_rx {SERDES_FACTOR} {4}
 set_instance_parameter_value ad_serdes_clk_core_rx {CLKIN_FREQUENCY} {500.0}
 
-add_hdl_instance ad_serdes_in_core alt_serdes
+add_hdl_instance ad_serdes_in_core intel_serdes
 set_instance_parameter_value ad_serdes_in_core {MODE} {IN}
 set_instance_parameter_value ad_serdes_in_core {DDR_OR_SDR_N} {1}
 set_instance_parameter_value ad_serdes_in_core {SERDES_FACTOR} {4}

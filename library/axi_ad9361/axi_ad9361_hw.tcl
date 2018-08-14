@@ -175,22 +175,22 @@ proc axi_ad9361_elab {} {
 
   if {$m_fpga_technology eq "Arria 10"} {
 
-    add_hdl_instance axi_ad9361_serdes_clk alt_serdes
-    set_instance_parameter_value axi_ad9361_serdes_clk {FPGA_TECHNOLOGY} $m_fpga_technology
+    add_hdl_instance axi_ad9361_serdes_clk intel_serdes
+    set_instance_parameter_value axi_ad9361_serdes_clk {DEVICE_FAMILY} $m_fpga_technology
     set_instance_parameter_value axi_ad9361_serdes_clk {MODE} {CLK}
     set_instance_parameter_value axi_ad9361_serdes_clk {DDR_OR_SDR_N} {1}
     set_instance_parameter_value axi_ad9361_serdes_clk {SERDES_FACTOR} {4}
     set_instance_parameter_value axi_ad9361_serdes_clk {CLKIN_FREQUENCY} {250.0}
 
-    add_hdl_instance axi_ad9361_serdes_in alt_serdes
-    set_instance_parameter_value axi_ad9361_serdes_in {FPGA_TECHNOLOGY} $m_fpga_technology
+    add_hdl_instance axi_ad9361_serdes_in intel_serdes
+    set_instance_parameter_value axi_ad9361_serdes_in {DEVICE_FAMILY} $m_fpga_technology
     set_instance_parameter_value axi_ad9361_serdes_in {MODE} {IN}
     set_instance_parameter_value axi_ad9361_serdes_in {DDR_OR_SDR_N} {1}
     set_instance_parameter_value axi_ad9361_serdes_in {SERDES_FACTOR} {4}
     set_instance_parameter_value axi_ad9361_serdes_in {CLKIN_FREQUENCY} {250.0}
 
-    add_hdl_instance axi_ad9361_serdes_out alt_serdes
-    set_instance_parameter_value axi_ad9361_serdes_out {FPGA_TECHNOLOGY} $m_fpga_technology
+    add_hdl_instance axi_ad9361_serdes_out intel_serdes
+    set_instance_parameter_value axi_ad9361_serdes_out {DEVICE_FAMILY} $m_fpga_technology
     set_instance_parameter_value axi_ad9361_serdes_out {MODE} {OUT}
     set_instance_parameter_value axi_ad9361_serdes_out {DDR_OR_SDR_N} {1}
     set_instance_parameter_value axi_ad9361_serdes_out {SERDES_FACTOR} {4}

@@ -3,8 +3,8 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-LIBRARY_NAME := alt_serdes
+LIBRARY_NAME := intel_serdes
 
-INTEL_DEPS += alt_serdes_hw.tcl
+INTEL_DEPS += intel_serdes_hw.tcl
 
 include ../../../scripts/library.mk

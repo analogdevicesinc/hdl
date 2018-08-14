@@ -96,13 +96,13 @@ ad_alt_intf signal dac_dunf input 1 unf
 
 # SERDES instances and configurations
 
-add_hdl_instance ad_serdes_clk_core_tx alt_serdes
+add_hdl_instance ad_serdes_clk_core_tx intel_serdes
 set_instance_parameter_value ad_serdes_clk_core_tx {MODE} {CLK}
 set_instance_parameter_value ad_serdes_clk_core_tx {DDR_OR_SDR_N} {1}
 set_instance_parameter_value ad_serdes_clk_core_tx {SERDES_FACTOR} {8}
 set_instance_parameter_value ad_serdes_clk_core_tx {CLKIN_FREQUENCY} {500.0}
 
-add_hdl_instance ad_serdes_out_core alt_serdes
+add_hdl_instance ad_serdes_out_core intel_serdes
 set_instance_parameter_value ad_serdes_out_core {MODE} {OUT}
 set_instance_parameter_value ad_serdes_out_core {DDR_OR_SDR_N} {1}
 set_instance_parameter_value ad_serdes_out_core {SERDES_FACTOR} {8}
