@@ -169,7 +169,7 @@ module system_top (
 
   assign gpio_bd_o = gpio_o[15:0];
 
-  // User code space at offset 0x0930_0000 per Altera's Board Update Portal
+  // User code space at offset 0x0930_0000 per Intel's Board Update Portal
   // reference design used to program flash
 
   assign flash_addr = flash_addr_raw + 28'h9300000;

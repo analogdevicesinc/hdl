@@ -116,7 +116,7 @@ module axi_ad9361_cmos_if #(
   output              up_drp_ready,
   output              up_drp_locked);
 
-  // cmos is not supported on altera platforms yet.
+  // cmos is not supported on intel platforms yet.
 
   assign tx_clk_out = 1'd0;
   assign tx_frame_out = 1'd0;

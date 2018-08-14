@@ -370,7 +370,7 @@ proc add_axi_master_interface {axi_type port suffix} {
   add_interface_port $port ${port}_arburst arburst Output 2
   add_interface_port $port ${port}_arcache arcache Output 4
   add_interface_port $port ${port}_arprot arprot Output 3
-  # Some signals are mandatory in Altera's implementation of AXI3
+  # Some signals are mandatory in Intel's implementation of AXI3
   # awid, awlock, wid, bid, arid, arlock, rid, rlast
   # Hide them in AXI4
   add_interface_port $port ${port}_awid awid Output 1

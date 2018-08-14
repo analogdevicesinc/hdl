@@ -478,8 +478,6 @@ module axi_adxcvr_up #(
   assign up_rack = up_rreq_d;
   assign up_rdata = up_rdata_d;
 
-  // altera specific
-
   assign up_rparam_s[31:24] = 8'd0;
 
   // xilinx specific

@@ -133,7 +133,7 @@ module system_top (
   wire    [  7:0]   spi_csn_s;
   wire              dac_fifo_bypass;
 
-  // User code space at offset 0x0930_0000 per Altera's Board Update Portal
+  // User code space at offset 0x0930_0000 per Intel's Board Update Portal
   // reference design used to program flash
 
   wire    [23:0]    flash_addr_raw;

@@ -83,7 +83,7 @@ adi_set_ports_dependency "fifo_rd" \
 adi_set_ports_dependency "dest_diag_level_bursts" \
 	"(spirit:decode(id('MODELPARAM_VALUE.ENABLE_DIAGNOSTICS_IF')) = 1)"
 
-# These are in the design to keep the Altera tools happy which can't handle
+# These are in the design to keep the Intel tools happy which can't handle
 # uni-directional AXI interfaces. The Xilinx tools can and do a better job when
 # they know that the interface is uni-directional, so disable the ports.
 set dummy_axi_ports [list \
@@ -119,7 +119,7 @@ set dummy_axi_ports [list \
 	"m_src_axi_bresp" \
 ]
 
-# These are in the design to keep the Altera tools happy which require
+# These are in the design to keep the Intel tools happy which require
 # certain signals in AXI3 mode even if these are defined as optinal in the standard.
 lappend dummy_axi_ports \
 	"m_dest_axi_awid" \
