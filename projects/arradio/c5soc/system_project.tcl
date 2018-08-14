@@ -1,6 +1,6 @@
 
 source ../../scripts/adi_env.tcl
-source ../../scripts/adi_project_alt.tcl
+source ../../scripts/adi_project_intel.tcl
 
 adi_project arradio_c5soc
 

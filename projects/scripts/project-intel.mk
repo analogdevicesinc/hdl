@@ -54,10 +54,10 @@ M_DEPS += system_qsys.tcl
 M_DEPS += system_project.tcl
 M_DEPS += system_constr.sdc
 M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_tquest.tcl
-M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_project_alt.tcl
+M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_project_intel.tcl
 M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_env.tcl
 
-M_DEPS += $(foreach dep,$(LIB_DEPS),$(HDL_LIBRARY_PATH)$(dep)/.timestamp_altera)
+M_DEPS += $(foreach dep,$(LIB_DEPS),$(HDL_LIBRARY_PATH)$(dep)/.timestamp_intel)
 
 .PHONY: all lib clean clean-all
 all: lib $(PROJECT_NAME).sof
