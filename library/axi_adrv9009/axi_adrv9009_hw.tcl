@@ -4,7 +4,7 @@ package require qsys
 package require quartus::device
 
 source ../scripts/adi_env.tcl
-source ../scripts/adi_ip_alt.tcl
+source ../scripts/adi_ip_intel.tcl
 
 set_module_property NAME axi_adrv9009
 set_module_property DESCRIPTION "AXI adrv9009 Interface"

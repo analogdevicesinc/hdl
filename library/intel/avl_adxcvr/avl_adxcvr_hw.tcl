@@ -1,7 +1,7 @@
 
 package require qsys
 source ../../scripts/adi_env.tcl
-source ../../scripts/adi_ip_alt.tcl
+source ../../scripts/adi_ip_intel.tcl
 
 ad_ip_create avl_adxcvr {Avalon ADXCVR Core}
 set_module_property COMPOSITION_CALLBACK p_avl_adxcvr

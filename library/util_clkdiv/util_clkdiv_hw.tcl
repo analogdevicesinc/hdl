@@ -1,7 +1,7 @@
 
 package require -exact qsys 13.0
 source ../scripts/adi_env.tcl
-source ../scripts/adi_ip_alt.tcl
+source ../scripts/adi_ip_intel.tcl
 
 
 set_module_property NAME util_clkdiv

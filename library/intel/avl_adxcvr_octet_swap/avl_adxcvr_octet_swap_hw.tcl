@@ -2,7 +2,7 @@
 package require qsys
 
 source ../../scripts/adi_env.tcl
-source $ad_hdl_dir/library/scripts/adi_ip_alt.tcl
+source $ad_hdl_dir/library/scripts/adi_ip_intel.tcl
 
 ad_ip_create avl_adxcvr_octet_swap "avl_adxcvvr_octet_swap helper" avl_adxcvr_octet_swap_elaboration
 set_module_property HIDE_FROM_SOPC true

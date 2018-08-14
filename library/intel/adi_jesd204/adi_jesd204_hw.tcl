@@ -44,7 +44,7 @@
 
 package require qsys
 source ../../scripts/adi_env.tcl
-source ../../scripts/adi_ip_alt.tcl
+source ../../scripts/adi_ip_intel.tcl
 
 #
 # Wrapper module that instantiates and connects all the components required to

@@ -2,7 +2,7 @@
 package require qsys
 
 source ../../scripts/adi_env.tcl
-source $ad_hdl_dir/library/scripts/adi_ip_alt.tcl
+source $ad_hdl_dir/library/scripts/adi_ip_intel.tcl
 
 set_module_property NAME avl_adxphy
 set_module_property DESCRIPTION "Avalon ADXPHY Core"

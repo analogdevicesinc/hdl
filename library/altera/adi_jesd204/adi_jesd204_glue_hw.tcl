@@ -44,7 +44,7 @@
 
 package require qsys
 source ../../scripts/adi_env.tcl
-source ../../scripts/adi_ip_alt.tcl
+source ../../scripts/adi_ip_intel.tcl
 
 
 ad_ip_create adi_jesd204_glue {Glue} jesd204_phy_glue_elab
