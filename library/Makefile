@@ -64,7 +64,7 @@ clean:
 	$(MAKE) -C intel/avl_adxphy clean
 	$(MAKE) -C intel/avl_dacfifo clean
 	$(MAKE) -C intel/axi_adxcvr clean
-	$(MAKE) -C intel/common/alt_mem_asym clean
+	$(MAKE) -C intel/common/intel_mem_asym clean
 	$(MAKE) -C intel/common/intel_serdes clean
 	$(MAKE) -C intel/jesd204_phy clean
 	$(MAKE) -C intel/util_clkdiv clean
@@ -174,7 +174,7 @@ lib:
 	$(MAKE) -C intel/avl_adxphy
 	$(MAKE) -C intel/avl_dacfifo
 	$(MAKE) -C intel/axi_adxcvr
-	$(MAKE) -C intel/common/alt_mem_asym
+	$(MAKE) -C intel/common/intel_mem_asym
 	$(MAKE) -C intel/common/intel_serdes
 	$(MAKE) -C intel/jesd204_phy
 	$(MAKE) -C intel/util_clkdiv

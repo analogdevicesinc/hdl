@@ -147,7 +147,7 @@ module avl_dacfifo_wr #(
   // An asymmetric memory to transfer data from DMAC interface to Avalon Memory Map
   // interface
 
-  alt_mem_asym_wr i_mem_asym (
+  ad_mem_asym_wr i_mem_asym (
     .mem_i_wrclock (dma_clk),
     .mem_i_wren (dma_mem_wea_s),
     .mem_i_wraddress (dma_mem_waddr),

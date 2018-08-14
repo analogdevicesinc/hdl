@@ -210,7 +210,7 @@ module util_adcfifo #(
 
   generate
   if (FPGA_TECHNOLOGY == 1) begin
-  alt_mem_asym i_mem_asym (
+  mem_asym i_mem_asym (
     .mem_i_wrclock (adc_clk),
     .mem_i_wren (adc_wr_int),
     .mem_i_wraddress (adc_waddr_int),

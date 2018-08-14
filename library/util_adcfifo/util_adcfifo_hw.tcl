@@ -37,12 +37,12 @@ proc p_util_adcfifo {} {
 
   # intel memory
 
-  add_hdl_instance alt_mem_asym alt_mem_asym
-  set_instance_parameter_value alt_mem_asym DEVICE_FAMILY $m_device_family
-  set_instance_parameter_value alt_mem_asym A_ADDRESS_WIDTH 0
-  set_instance_parameter_value alt_mem_asym A_DATA_WIDTH $m_adc_data_width
-  set_instance_parameter_value alt_mem_asym B_ADDRESS_WIDTH $m_dma_addr_width
-  set_instance_parameter_value alt_mem_asym B_DATA_WIDTH $m_dma_data_width
+  add_hdl_instance mem_asym intel_mem_asym
+  set_instance_parameter_value mem_asym DEVICE_FAMILY $m_device_family
+  set_instance_parameter_value mem_asym A_ADDRESS_WIDTH 0
+  set_instance_parameter_value mem_asym A_DATA_WIDTH $m_adc_data_width
+  set_instance_parameter_value mem_asym B_ADDRESS_WIDTH $m_dma_addr_width
+  set_instance_parameter_value mem_asym B_DATA_WIDTH $m_dma_data_width
 
   # interfaces
 
