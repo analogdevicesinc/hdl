@@ -89,6 +89,7 @@ module util_adcfifo #(
 
   // internal signals
 
+  wire                                  adc_rst_s;
   wire                                  dma_waddr_rel_t_s;
   wire        [DMA_ADDRESS_WIDTH-1:0]   dma_waddr_rel_s;
   wire                                  dma_wready_s;
@@ -99,8 +100,15 @@ module util_adcfifo #(
 
   assign adc_wovf = 1'd0;
 
-  always @(posedge adc_clk or posedge adc_rst) begin
-    if (adc_rst == 1'b1) begin
+  // synchronize the adc_rst to the adc_clk clock domain
+  ad_rst i_adc_rst_sync (
+    .rst_async (adc_rst),
+    .clk (adc_clk),
+    .rstn (),
+    .rst (adc_rst_s));
+
+  always @(posedge adc_clk) begin
+    if (adc_rst_s == 1'b1) begin
       adc_xfer_req_m <= 'd0;
       adc_xfer_init <= 'd0;
       adc_xfer_enable <= 'd0;
@@ -116,8 +124,8 @@ module util_adcfifo #(
     end
   end
 
-  always @(posedge adc_clk or posedge adc_rst) begin
-    if (adc_rst == 1'b1) begin
+  always @(posedge adc_clk) begin
+    if (adc_rst_s == 1'b1) begin
       adc_wr_int <= 'd0;
       adc_wdata_int <= 'd0;
       adc_waddr_int <= 'd0;
@@ -136,8 +144,8 @@ module util_adcfifo #(
     end
   end
 
-  always @(posedge adc_clk or posedge adc_rst) begin
-    if (adc_rst == 1'b1) begin
+  always @(posedge adc_clk) begin
+    if (adc_rst_s == 1'b1) begin
       adc_waddr_rel_t <= 'd0;
       adc_waddr_rel <= 'd0;
     end else begin

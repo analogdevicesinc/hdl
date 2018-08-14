@@ -9,6 +9,7 @@ set_module_property ELABORATION_CALLBACK p_util_adcfifo
 # files
 
 ad_ip_files util_adcfifo [list\
+  $ad_hdl_dir/library/common/ad_rst.v \
   $ad_hdl_dir/library/common/ad_axis_inf_rx.v \
   util_adcfifo.v \
   util_adcfifo_constr.sdc]
