@@ -2,7 +2,7 @@
 # ip
 
 source ../scripts/adi_env.tcl
-source $ad_hdl_dir/library/scripts/adi_ip.tcl
+source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 adi_ip_create util_tdd_sync
 adi_ip_files util_tdd_sync [list \

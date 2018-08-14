@@ -43,7 +43,7 @@
 #
 
 source ../../scripts/adi_env.tcl
-source $ad_hdl_dir/library/scripts/adi_ip.tcl
+source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 adi_ip_create jesd204_rx_static_config
 adi_ip_files jesd204_rx_static_config [list \

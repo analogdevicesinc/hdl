@@ -1,7 +1,7 @@
 # ip
 
 source ../scripts/adi_env.tcl
-source $ad_hdl_dir/library/scripts/adi_ip.tcl
+source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 adi_if_define if_xcvr_cm
 adi_if_ports output    1  enb
