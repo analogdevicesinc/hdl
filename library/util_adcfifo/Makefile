@@ -6,6 +6,7 @@
 LIBRARY_NAME := util_adcfifo
 
 GENERIC_DEPS += ../common/ad_axis_inf_rx.v
+GENERIC_DEPS += ../common/ad_rst.v
 GENERIC_DEPS += util_adcfifo.v
 
 XILINX_DEPS += ../common/ad_mem_asym.v
