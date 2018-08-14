@@ -12,7 +12,7 @@ ifeq ($(NIOS2_MMU),)
   NIOS2_MMU := 1
 endif
 
-export ALT_NIOS_MMU_ENABLED := $(NIOS2_MMU)
+export NIOS_MMU_ENABLED := $(NIOS2_MMU)
 
 INTEL := quartus_sh --64bit -t
 

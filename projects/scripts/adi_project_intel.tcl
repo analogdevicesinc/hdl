@@ -89,8 +89,8 @@ proc adi_project {project_name {parameter_list {}}} {
   # qsys
 
   set mmu_enabled 1
-  if [info exists ::env(ALT_NIOS_MMU_ENABLED)] {
-    set mmu_enabled $::env(ALT_NIOS_MMU_ENABLED)
+  if [info exists ::env(NIOS_MMU_ENABLED)] {
+    set mmu_enabled $::env(NIOS_MMU_ENABLED)
   }
 
   set QFILE [open "system_qsys_script.tcl" "w"]

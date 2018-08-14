@@ -30,8 +30,8 @@ set_global_assignment -name IP_SEARCH_PATHS $ad_lib_folders
 # qsys-script is a crippled tool, so work around is generate a run-time one
 
 set mmu_enabled 1
-if [info exists ::env(ALT_NIOS_MMU_ENABLED)] {
-  set mmu_enabled $::env(ALT_NIOS_MMU_ENABLED)
+if [info exists ::env(NIOS_MMU_ENABLED)] {
+  set mmu_enabled $::env(NIOS_MMU_ENABLED)
 }
 
 set QFILE [open "system_qsys_script.tcl" "w"]
