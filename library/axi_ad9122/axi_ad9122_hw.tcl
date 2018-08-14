@@ -3,7 +3,7 @@ package require qsys
 package require quartus::device
 
 source ../scripts/adi_env.tcl
-source ../scripts/adi_ip_alt.tcl
+source ../scripts/adi_ip_intel.tcl
 
 ad_ip_create axi_ad9122 {AXI AD9122 Interface}
 set_module_property VALIDATION_CALLBACK info_param_validate

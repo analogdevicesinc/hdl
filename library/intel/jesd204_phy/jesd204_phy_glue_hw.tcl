@@ -44,7 +44,7 @@
 
 package require qsys
 source ../../scripts/adi_env.tcl
-source ../../scripts/adi_ip_alt.tcl
+source ../../scripts/adi_ip_intel.tcl
 
 #
 # For whatever strange reason all the interface of the native PHY become

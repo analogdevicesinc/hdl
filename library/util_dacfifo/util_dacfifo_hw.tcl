@@ -1,7 +1,7 @@
 
 package require qsys
 source ../scripts/adi_env.tcl
-source ../scripts/adi_ip_alt.tcl
+source ../scripts/adi_ip_intel.tcl
 
 ad_ip_create util_dacfifo {UTIL DAC FIFO Interface}
 ad_ip_files util_dacfifo [list\

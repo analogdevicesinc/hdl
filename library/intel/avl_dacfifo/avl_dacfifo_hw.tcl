@@ -1,7 +1,7 @@
 
 package require qsys
 source ../../scripts/adi_env.tcl
-source ../../scripts/adi_ip_alt.tcl
+source ../../scripts/adi_ip_intel.tcl
 
 ad_ip_create avl_dacfifo {Avalon DDR DAC Fifo} p_avl_dacfifo_elab
 ad_ip_files avl_dacfifo [list\

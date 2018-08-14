@@ -23,7 +23,7 @@
 
 package require qsys
 source ../../scripts/adi_env.tcl
-source ../../scripts/adi_ip_alt.tcl
+source ../../scripts/adi_ip_intel.tcl
 
 ad_ip_create util_upack2 {Channel Unpack Utility v2} util_upack_elab
 ad_ip_files util_upack2_impl [list \

@@ -45,7 +45,7 @@
 package require qsys
 
 source ../../scripts/adi_env.tcl
-source $ad_hdl_dir/library/scripts/adi_ip_alt.tcl
+source $ad_hdl_dir/library/scripts/adi_ip_intel.tcl
 
 #
 # Instantiates the Arria 10 native PHY and configures it for JESD204 operation.

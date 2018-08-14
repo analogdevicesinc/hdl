@@ -2,7 +2,7 @@
 package require qsys
 
 source ../../../scripts/adi_env.tcl
-source $ad_hdl_dir/library/scripts/adi_ip_alt.tcl
+source $ad_hdl_dir/library/scripts/adi_ip_intel.tcl
 
 ad_ip_create alt_ifconv {Altera Interface Translator} alt_ifconv_elab
 ad_ip_files alt_ifconv { \

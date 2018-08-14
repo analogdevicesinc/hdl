@@ -23,7 +23,7 @@
 
 package require qsys
 source ../../scripts/adi_env.tcl
-source ../../scripts/adi_ip_alt.tcl
+source ../../scripts/adi_ip_intel.tcl
 
 ad_ip_create ad_ip_jesd204_tpl_adc "JESD204 Transport Layer for ADCs" p_ad_ip_jesd204_tpl_adc_elab
 set_module_property VALIDATION_CALLBACK p_ad_ip_jesd204_tpl_adc_validate

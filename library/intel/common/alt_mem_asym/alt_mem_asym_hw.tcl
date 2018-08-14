@@ -2,7 +2,7 @@
 package require qsys
 
 source ../../../scripts/adi_env.tcl
-source $ad_hdl_dir/library/scripts/adi_ip_alt.tcl
+source $ad_hdl_dir/library/scripts/adi_ip_intel.tcl
 
 ad_ip_create alt_mem_asym {Altera Asymmetric Memory}
 set_module_property COMPOSITION_CALLBACK p_alt_mem_asym

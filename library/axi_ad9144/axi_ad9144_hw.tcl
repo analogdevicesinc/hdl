@@ -3,7 +3,7 @@
 package require qsys
 package require quartus::device
 source ../scripts/adi_env.tcl
-source ../scripts/adi_ip_alt.tcl
+source ../scripts/adi_ip_intel.tcl
 
 set_module_property NAME axi_ad9144
 set_module_property DESCRIPTION "AXI AD9144 Interface"

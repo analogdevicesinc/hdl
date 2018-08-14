@@ -2,7 +2,7 @@
 
 package require qsys
 source ../scripts/adi_env.tcl
-source ../scripts/adi_ip_alt.tcl
+source ../scripts/adi_ip_intel.tcl
 
 set_module_property NAME axi_dmac
 set_module_property DESCRIPTION "AXI DMA Controller"
