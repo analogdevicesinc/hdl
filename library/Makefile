@@ -66,7 +66,6 @@ clean:
 	$(MAKE) -C intel/axi_adxcvr clean
 	$(MAKE) -C intel/common/alt_ifconv clean
 	$(MAKE) -C intel/common/alt_mem_asym clean
-	$(MAKE) -C intel/common/alt_mul clean
 	$(MAKE) -C intel/common/alt_serdes clean
 	$(MAKE) -C intel/jesd204_phy clean
 	$(MAKE) -C jesd204/ad_ip_jesd204_tpl_adc clean
@@ -177,7 +176,6 @@ lib:
 	$(MAKE) -C intel/axi_adxcvr
 	$(MAKE) -C intel/common/alt_ifconv
 	$(MAKE) -C intel/common/alt_mem_asym
-	$(MAKE) -C intel/common/alt_mul
 	$(MAKE) -C intel/common/alt_serdes
 	$(MAKE) -C intel/jesd204_phy
 	$(MAKE) -C jesd204/ad_ip_jesd204_tpl_adc
