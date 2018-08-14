@@ -22,7 +22,7 @@
 # ***************************************************************************
 
 source ../../scripts/adi_env.tcl
-source $ad_hdl_dir/library/scripts/adi_ip.tcl
+source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 adi_ip_create ad_ip_jesd204_tpl_dac
 adi_ip_files ad_ip_jesd204_tpl_dac [list \

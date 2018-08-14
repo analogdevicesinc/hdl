@@ -11,7 +11,7 @@
 
 ## This file is source in two places:
 #
-## at ~/hdl/library/scripts/adi_ip.tcl
+## at ~/hdl/library/scripts/adi_ip_xilinx.tcl
 ## and
 ## at ~/hdl/projects/scripts/adi_project_xilinx.tcl
 ##
@@ -72,7 +72,7 @@ set_msg_config -id {IP_Flow 19-3656} -new_severity INFO
 ## set_msg_config -id {IP_Flow 19-1654} -new_severity INFO
 
 ## Unrecognized family xxxxxxx. Please verify spelling and reissue command to
-## set the supported files. -- the adi_ip.tcl script trying to add all the existent
+## set the supported files. -- the adi_ip_xilinx.tcl script trying to add all the existent
 ## family to the supported family list. Apparently Xilinx has some inconsistent
 ## naming conventions for families. TODO:Maybe we should define exactly the supported
 ## architectures.
