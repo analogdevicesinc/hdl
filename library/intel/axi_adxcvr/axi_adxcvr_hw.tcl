@@ -56,7 +56,7 @@ ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn 12
 
 # xcvr interface
 
-ad_alt_intf reset up_rst output 1 s_axi_clock
+ad_interface reset up_rst output 1 s_axi_clock
 set_interface_property if_up_rst associatedResetSinks s_axi_reset
 
 add_interface core_pll_locked conduit end

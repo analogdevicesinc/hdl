@@ -75,8 +75,8 @@ add_interface_port device_if adc_data_in_n adc_data_in_n Input 14
 
 # dma interface
 
-ad_alt_intf clock adc_clk output 1
-ad_alt_intf reset adc_rst output 1 if_adc_clk
+ad_interface clock adc_clk output 1
+ad_interface reset adc_rst output 1 if_adc_clk
 
 add_interface adc_ch_0 conduit end
 add_interface_port adc_ch_0 adc_valid_0   valid   Output 1
@@ -92,7 +92,7 @@ add_interface_port adc_ch_1 adc_data_1   data    Output 32
 set_interface_property adc_ch_1 associatedClock if_adc_clk
 set_interface_property adc_ch_1 associatedReset none
 
-ad_alt_intf signal adc_dovf input 1 ovf
+ad_interface signal adc_dovf input 1 ovf
 
 # SERDES instances and configurations
 

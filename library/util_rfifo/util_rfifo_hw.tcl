@@ -19,10 +19,10 @@ ad_ip_parameter DIN_ADDRESS_WIDTH INTEGER 8
 
 # defaults
 
-ad_alt_intf clock din_clk input 1
-ad_alt_intf reset-n din_rstn input 1 if_din_clk
-ad_alt_intf clock dout_clk input 1
-ad_alt_intf reset dout_rst input 1 if_dout_clk
+ad_interface clock din_clk input 1
+ad_interface reset-n din_rstn input 1 if_din_clk
+ad_interface clock dout_clk input 1
+ad_interface reset dout_rst input 1 if_dout_clk
 
 add_interface din_0 conduit end
 add_interface_port din_0 din_enable_0 enable Output 1
@@ -40,8 +40,8 @@ add_interface_port dout_0 dout_data_0 data Output DOUT_DATA_WIDTH
 set_interface_property dout_0 associatedClock if_dout_clk
 set_interface_property dout_0 associatedReset none
 
-ad_alt_intf signal din_unf input 1 unf
-ad_alt_intf signal dout_unf output 1 unf
+ad_interface signal din_unf input 1 unf
+ad_interface signal dout_unf output 1 unf
 
 proc util_rfifo_elab {} {
 
