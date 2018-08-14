@@ -158,7 +158,7 @@ module avl_dacfifo_rd #(
   // An asymmetric memory to transfer data from Avalon interface to DAC
   // interface
 
-  alt_mem_asym_rd i_mem_asym (
+  ad_mem_asym_rd i_mem_asym (
     .mem_i_wrclock (avl_clk),
     .mem_i_wren (avl_readdatavalid),
     .mem_i_wraddress (avl_mem_waddr),

@@ -3,8 +3,8 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-LIBRARY_NAME := alt_mem_asym
+LIBRARY_NAME := intel_mem_asym
 
-INTEL_DEPS += alt_mem_asym_hw.tcl
+INTEL_DEPS += intel_mem_asym_hw.tcl
 
 include ../../../scripts/library.mk
