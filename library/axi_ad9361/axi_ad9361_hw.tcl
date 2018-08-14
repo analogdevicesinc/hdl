@@ -77,16 +77,16 @@ adi_add_auto_fpga_spec_params
 
 ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn
 
-ad_alt_intf signal dac_sync_in input 1
-ad_alt_intf signal dac_sync_out output 1
-ad_alt_intf signal tdd_sync input 1
-ad_alt_intf signal tdd_sync_cntr output 1
+ad_interface signal dac_sync_in input 1
+ad_interface signal dac_sync_out output 1
+ad_interface signal tdd_sync input 1
+ad_interface signal tdd_sync_cntr output 1
 
-ad_alt_intf clock delay_clk input 1
-ad_alt_intf clock l_clk output 1
-ad_alt_intf clock clk input 1
+ad_interface clock delay_clk input 1
+ad_interface clock l_clk output 1
+ad_interface clock clk input 1
 
-ad_alt_intf reset rst output 1 if_clk
+ad_interface reset rst output 1 if_clk
 set_interface_property if_rst associatedResetSinks s_axi_reset
 
 add_interface adc_ch_0 conduit end
@@ -121,8 +121,8 @@ add_interface_port adc_ch_3 adc_data_q1 data Output 16
 set_interface_property adc_ch_3 associatedClock if_clk
 set_interface_property adc_ch_3 associatedReset none
 
-ad_alt_intf signal adc_dovf input 1 ovf
-ad_alt_intf signal adc_r1_mode output 1 r1_mode
+ad_interface signal adc_dovf input 1 ovf
+ad_interface signal adc_r1_mode output 1 r1_mode
 
 add_interface dac_ch_0 conduit end
 add_interface_port dac_ch_0 dac_enable_i0 enable Output 1
@@ -156,15 +156,15 @@ add_interface_port dac_ch_3 dac_data_q1 data Input 16
 set_interface_property dac_ch_3 associatedClock if_clk
 set_interface_property dac_ch_3 associatedReset none
 
-ad_alt_intf signal dac_dunf input 1 unf
-ad_alt_intf signal dac_r1_mode output 1 r1_mode
+ad_interface signal dac_dunf input 1 unf
+ad_interface signal dac_r1_mode output 1 r1_mode
 
-ad_alt_intf signal up_enable input 1
-ad_alt_intf signal up_txnrx input 1
-ad_alt_intf signal up_dac_gpio_in input 32
-ad_alt_intf signal up_dac_gpio_out output 32
-ad_alt_intf signal up_adc_gpio_in input 32
-ad_alt_intf signal up_adc_gpio_out output 32
+ad_interface signal up_enable input 1
+ad_interface signal up_txnrx input 1
+ad_interface signal up_dac_gpio_in input 32
+ad_interface signal up_dac_gpio_out output 32
+ad_interface signal up_adc_gpio_in input 32
+ad_interface signal up_adc_gpio_out output 32
 
 # updates
 

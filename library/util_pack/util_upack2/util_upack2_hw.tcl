@@ -81,17 +81,17 @@ proc util_upack_elab {} {
     add_interface_port  s_axis  s_axis_ready tready  Output  1
     add_interface_port  s_axis  s_axis_data  tdata   Input   $total_data_width
   } else {
-    ad_alt_intf signal packed_fifo_rd_en output 1 valid
+    ad_interface signal packed_fifo_rd_en output 1 valid
     set_port_property packed_fifo_rd_en fragment_list "s_axis_ready"
-    ad_alt_intf signal packed_fifo_rd_data input $total_data_width data
+    ad_interface signal packed_fifo_rd_data input $total_data_width data
     set_port_property packed_fifo_rd_data fragment_list \
       [format "s_axis_data(%d:0)" [expr $total_data_width - 1]]
-    ad_alt_intf signal s_axis_valid input 1 valid
+    ad_interface signal s_axis_valid input 1 valid
     set_port_property s_axis_valid TERMINATION TRUE
     set_port_property s_axis_valid TERMINATION_VALUE 1
   }
 
-  ad_alt_intf signal fifo_rd_underflow output 1 unf
+  ad_interface signal fifo_rd_underflow output 1 unf
 
   for {set n 0} {$n < $num_channels} {incr n} {
     add_interface dac_ch_${n} conduit end

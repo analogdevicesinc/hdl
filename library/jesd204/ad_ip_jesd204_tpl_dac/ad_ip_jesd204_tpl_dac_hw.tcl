@@ -504,5 +504,5 @@ proc p_ad_ip_jesd204_tpl_dac_elab {} {
     set_interface_property dac_ch_$i associatedClock link_clk
   }
 
-  ad_alt_intf signal  dac_dunf  input  1 unf
+  ad_interface signal  dac_dunf  input  1 unf
 }

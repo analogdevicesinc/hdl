@@ -18,8 +18,8 @@ add_fileset_file util_clkdiv.v       VERILOG PATH util_clkdiv.v TOP_LEVEL_FILE
 
 # defaults
 
-ad_alt_intf clock   clk             input   1
-ad_alt_intf reset   reset           input 1 if_clk
-ad_alt_intf clock   clk_out         output  1
-ad_alt_intf reset   reset_out       output 1 if_clk_out
+ad_interface clock   clk             input   1
+ad_interface reset   reset           input 1 if_clk
+ad_interface clock   clk_out         output  1
+ad_interface reset   reset_out       output 1 if_clk_out
 

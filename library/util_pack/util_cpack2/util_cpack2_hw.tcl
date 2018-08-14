@@ -64,12 +64,12 @@ proc util_cpack_elab {} {
   add_interface_port reset reset reset Input 1
   set_interface_property reset associatedClock clk
 
-  ad_alt_intf signal packed_fifo_wr_en output 1 valid
-  ad_alt_intf signal packed_fifo_wr_sync output 1 sync
-  ad_alt_intf signal packed_fifo_wr_data output $total_data_width data
-  ad_alt_intf signal packed_fifo_wr_overflow input 1 ovf
+  ad_interface signal packed_fifo_wr_en output 1 valid
+  ad_interface signal packed_fifo_wr_sync output 1 sync
+  ad_interface signal packed_fifo_wr_data output $total_data_width data
+  ad_interface signal packed_fifo_wr_overflow input 1 ovf
 
-  ad_alt_intf signal fifo_wr_overflow output 1 ovf
+  ad_interface signal fifo_wr_overflow output 1 ovf
 
   for {set n 0} {$n < $num_channels} {incr n} {
     add_interface adc_ch_${n} conduit end

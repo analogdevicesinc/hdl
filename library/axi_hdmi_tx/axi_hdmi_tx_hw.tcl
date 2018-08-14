@@ -101,7 +101,14 @@ add_interface_port hdmi_if hdmi_36_data h36_data Output 36
 add_interface vdma_clock  clock end
 add_interface_port vdma_clock vdma_clk clk Input 1
 
-ad_alt_intf signal vdma_ready         output  1  ready
-ad_alt_intf signal vdma_valid         input   1  valid
-ad_alt_intf signal vdma_data          input   64 data
-ad_alt_intf signal vdma_end_of_frame  input   1  last
+add_interface vdma_if avalon_streaming end
+set_interface_property vdma_if associatedClock vdma_clock
+add_interface_port vdma_if vdma_valid valid Input 1
+add_interface_port vdma_if vdma_data data Input 64
+add_interface_port vdma_if vdma_ready ready Output 1
+
+# frame sync
+
+ad_interface signal  vdma_fs       output  1
+ad_interface signal  vdma_fs_ret   input   1
+

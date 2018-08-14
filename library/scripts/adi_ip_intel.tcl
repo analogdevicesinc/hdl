@@ -11,7 +11,7 @@
 # \param[arg_2] - Optional argument to define the associated reset sink for a
 # reset interface
 #
-proc ad_alt_intf {type name dir width {arg_1 ""} {arg_2 ""}} {
+proc ad_interface {type name dir width {arg_1 ""} {arg_2 ""}} {
 
   if {([string equal -nocase ${type} "clock"]) && ([string equal -nocase ${dir} "input"])} {
     add_interface if_${name} clock sink

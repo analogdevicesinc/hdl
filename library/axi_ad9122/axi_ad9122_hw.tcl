@@ -76,7 +76,7 @@ add_interface_port device_if dac_sync_in  dac_sync_in  Input 1
 
 # dma interface
 
-ad_alt_intf clock dac_div_clk Output 1
+ad_interface clock dac_div_clk Output 1
 
 add_interface dac_ch_0 conduit end
 add_interface_port dac_ch_0 dac_valid_0   valid  Output 1
@@ -92,7 +92,7 @@ add_interface_port dac_ch_1 dac_ddata_1   data   Input 64
 set_interface_property dac_ch_1 associatedClock if_dac_div_clk
 set_interface_property dac_ch_1 associatedReset none
 
-ad_alt_intf signal dac_dunf input 1 unf
+ad_interface signal dac_dunf input 1 unf
 
 # SERDES instances and configurations
 

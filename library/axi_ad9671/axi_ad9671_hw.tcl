@@ -61,8 +61,8 @@ ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn
 
 # transceiver interface
 
-ad_alt_intf clock   rx_clk        input   1
-ad_alt_intf signal  rx_sof        input   4 export
+ad_interface clock   rx_clk        input   1
+ad_interface signal  rx_sof        input   4 export
 
 add_interface if_rx_data avalon_streaming sink
 add_interface_port if_rx_data rx_data  data  input 64*QUAD_OR_DUAL_N+64
@@ -80,8 +80,8 @@ add_interface_port if_sync adc_raddr_out raddr_out Output 4
 
 # dma interface
 
-ad_alt_intf clock   adc_clk     output  1
-ad_alt_intf reset   adc_rst     output  1 if_adc_clk
+ad_interface clock   adc_clk     output  1
+ad_interface reset   adc_rst     output  1 if_adc_clk
 
 add_interface adc_ch conduit end
 add_interface_port adc_ch adc_enable  enable  Output 8
@@ -91,5 +91,5 @@ add_interface_port adc_ch adc_data    data    Output 128
 set_interface_property adc_ch associatedClock if_rx_clk
 set_interface_property adc_ch associatedReset none
 
-ad_alt_intf signal  adc_dovf      input   1     ovf
+ad_interface signal  adc_dovf      input   1     ovf
 

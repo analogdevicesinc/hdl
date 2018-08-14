@@ -143,8 +143,8 @@ ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn
 
 # transceiver interface
 
-ad_alt_intf clock adc_clk input 1
-ad_alt_intf signal adc_rx_sof input 4 export
+ad_interface clock adc_clk input 1
+ad_interface signal adc_rx_sof input 4 export
 add_interface if_adc_rx_data avalon_streaming sink
 add_interface_port if_adc_rx_data adc_rx_data  data  input 64
 add_interface_port if_adc_rx_data adc_rx_valid valid input 1
@@ -152,8 +152,8 @@ add_interface_port if_adc_rx_data adc_rx_ready ready output 1
 set_interface_property if_adc_rx_data associatedClock if_adc_clk
 set_interface_property if_adc_rx_data dataBitsPerSymbol 64
 
-ad_alt_intf clock adc_os_clk input 1
-ad_alt_intf signal adc_rx_os_sof input 4 export
+ad_interface clock adc_os_clk input 1
+ad_interface signal adc_rx_os_sof input 4 export
 add_interface if_adc_rx_os_data avalon_streaming sink
 add_interface_port if_adc_rx_os_data adc_rx_os_data  data  input 64
 add_interface_port if_adc_rx_os_data adc_rx_os_valid valid input 1
@@ -161,7 +161,7 @@ add_interface_port if_adc_rx_os_data adc_rx_os_ready ready output 1
 set_interface_property if_adc_rx_os_data associatedClock if_adc_os_clk
 set_interface_property if_adc_rx_os_data dataBitsPerSymbol 64
 
-ad_alt_intf clock dac_clk input 1
+ad_interface clock dac_clk input 1
 add_interface if_dac_tx_data avalon_streaming source
 add_interface_port if_dac_tx_data dac_tx_data data output 128
 add_interface_port if_dac_tx_data dac_tx_valid valid output 1
@@ -171,8 +171,8 @@ set_interface_property if_dac_tx_data dataBitsPerSymbol 128
 
 # master/slave
 
-ad_alt_intf signal  dac_sync_in     input   1
-ad_alt_intf signal  dac_sync_out    output  1
+ad_interface signal  dac_sync_in     input   1
+ad_interface signal  dac_sync_out    output  1
 
 # adc-channel interface
 
@@ -208,7 +208,7 @@ add_interface_port adc_ch_3  adc_data_q1    data     Output  16
 set_interface_property adc_ch_3 associatedClock if_adc_clk
 set_interface_property adc_ch_3 associatedReset none
 
-ad_alt_intf signal  adc_dovf      input   1 ovf
+ad_interface signal  adc_dovf      input   1 ovf
 
 # adc-os-channel interface
 
@@ -244,7 +244,7 @@ add_interface_port adc_os_ch_3  adc_os_data_q1    data     Output  32
 set_interface_property adc_os_ch_3 associatedClock if_adc_os_clk
 set_interface_property adc_os_ch_3 associatedReset none
 
-ad_alt_intf signal  adc_os_dovf      input   1 ovf
+ad_interface signal  adc_os_dovf      input   1 ovf
 
 # dac-channel interface
 
@@ -280,5 +280,5 @@ add_interface_port dac_ch_3  dac_data_q1    data     Input   32
 set_interface_property dac_ch_3 associatedClock if_dac_clk
 set_interface_property dac_ch_3 associatedReset none
 
-ad_alt_intf signal  dac_dunf      input   1 unf
+ad_interface signal  dac_dunf      input   1 unf
 

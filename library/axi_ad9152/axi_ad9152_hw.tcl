@@ -64,7 +64,7 @@ ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn 12
 
 # transceiver interface
 
-ad_alt_intf clock   tx_clk        input   1
+ad_interface clock   tx_clk        input   1
 
 add_interface if_tx_data avalon_streaming source
 add_interface_port if_tx_data tx_data data output 128
@@ -75,7 +75,7 @@ set_interface_property if_tx_data dataBitsPerSymbol 128
 
 # dma interface
 
-ad_alt_intf clock   dac_clk       output  1
+ad_interface clock   dac_clk       output  1
 
 add_interface dac_ch_0 conduit end
 add_interface_port dac_ch_0  dac_enable_0  enable   Output  1
@@ -93,5 +93,5 @@ add_interface_port dac_ch_1  dac_ddata_1   data     Input   64
 set_interface_property dac_ch_1 associatedClock if_tx_clk
 set_interface_property dac_ch_1 associatedReset none
 
-ad_alt_intf signal  dac_dunf      input   1 unf
+ad_interface signal  dac_dunf      input   1 unf
 
