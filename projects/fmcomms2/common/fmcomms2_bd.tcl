@@ -76,13 +76,13 @@ ad_ip_parameter util_ad9361_divclk_sel CONFIG.C_SIZE 2
 ad_connect util_ad9361_divclk_sel_concat/dout util_ad9361_divclk_sel/Op1
 
 ad_ip_instance util_clkdiv util_ad9361_divclk
-ad_connect util_ad9361_divclk_sel/Res util_ad9361_divclk/clk_sel 
+ad_connect util_ad9361_divclk_sel/Res util_ad9361_divclk/clk_sel
 ad_connect axi_ad9361/l_clk util_ad9361_divclk/clk
 
 # resets at divided clock
 
 ad_ip_instance proc_sys_reset util_ad9361_divclk_reset
-ad_connect sys_rstgen/peripheral_aresetn util_ad9361_divclk_reset/ext_reset_in 
+ad_connect sys_rstgen/peripheral_aresetn util_ad9361_divclk_reset/ext_reset_in
 ad_connect util_ad9361_divclk/clk_out util_ad9361_divclk_reset/slowest_sync_clk
 
 # adc-path wfifo
@@ -201,7 +201,6 @@ ad_ip_instance axi_dmac axi_ad9361_dac_dma
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_TYPE_SRC 0
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_TYPE_DEST 2
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.CYCLIC 1
-ad_ip_parameter axi_ad9361_dac_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_2D_TRANSFER 0

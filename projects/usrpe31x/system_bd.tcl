@@ -114,7 +114,7 @@ ad_connect  sys_ps7/SPI0_SS1_O spi0_csn_1
 ad_connect  sys_ps7/SPI0_SS2_O spi0_csn_2
 ad_connect  sys_ps7/SPI0_SCLK_O spi0_clk
 ad_connect  sys_ps7/SPI0_MOSI_O spi0_mosi
-ad_connect  sys_ps7/SPI0_MISO_I spi0_miso 
+ad_connect  sys_ps7/SPI0_MISO_I spi0_miso
 ad_connect  sys_ps7/SPI0_SS_I VCC
 ad_connect  sys_ps7/SPI0_SCLK_I GND
 ad_connect  sys_ps7/SPI0_MOSI_I GND
@@ -123,7 +123,7 @@ ad_connect  sys_ps7/SPI1_SS_I spi1_csn
 ad_connect  sys_ps7/SPI1_SCLK_I spi1_clk
 ad_connect  sys_ps7/SPI1_MOSI_I spi1_mosi
 ad_connect  sys_ps7/SPI1_MISO_O spi1_miso
-ad_connect  sys_ps7/SPI1_MISO_I GND 
+ad_connect  sys_ps7/SPI1_MISO_I GND
 
 # interrupts
 
@@ -155,7 +155,6 @@ ad_ip_instance axi_dmac axi_ad9361_dac_dma
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_TYPE_SRC 0
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_TYPE_DEST 2
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.CYCLIC 1
-ad_ip_parameter axi_ad9361_dac_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_2D_TRANSFER 0
