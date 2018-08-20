@@ -91,7 +91,7 @@ foreach {suffix group} { \
     { "0:Memory-Mapped AXI" "1:Streaming AXI" "2:FIFO Interface" }
   set_parameter_property DMA_TYPE_$suffix GROUP $group
 
-  add_parameter  DMA_AXI_PROTOCOL_$suffix INTEGER 0
+  add_parameter  DMA_AXI_PROTOCOL_$suffix INTEGER 1
   set_parameter_property DMA_AXI_PROTOCOL_$suffix DISPLAY_NAME "AXI Protocol"
   set_parameter_property DMA_AXI_PROTOCOL_$suffix HDL_PARAMETER true
   set_parameter_property DMA_AXI_PROTOCOL_$suffix ALLOWED_RANGES { "0:AXI4" "1:AXI3" }
