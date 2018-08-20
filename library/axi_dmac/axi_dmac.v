@@ -54,8 +54,8 @@ module axi_dmac #(
   parameter DMA_AXI_ADDR_WIDTH = 32,
   parameter MAX_BYTES_PER_BURST = 128,
   parameter FIFO_SIZE = 8, // In bursts
-  parameter AXI_ID_WIDTH_SRC = 4,
-  parameter AXI_ID_WIDTH_DEST = 4,
+  parameter AXI_ID_WIDTH_SRC = 1,
+  parameter AXI_ID_WIDTH_DEST = 1,
   parameter DISABLE_DEBUG_REGISTERS = 0,
   parameter ENABLE_DIAGNOSTICS_IF = 0)(
   // Slave AXI interface

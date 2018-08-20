@@ -366,13 +366,13 @@ proc add_axi_master_interface {axi_type port suffix} {
   # Some signals are mandatory in Altera's implementation of AXI3
   # awid, awlock, wid, bid, arid, arlock, rid, rlast
   # Hide them in AXI4
-  add_interface_port $port ${port}_awid awid Output 4
+  add_interface_port $port ${port}_awid awid Output 1
   add_interface_port $port ${port}_awlock awlock Output "1+DMA_AXI_PROTOCOL_${suffix}"
-  add_interface_port $port ${port}_wid wid Output 4
-  add_interface_port $port ${port}_arid arid Output 4
+  add_interface_port $port ${port}_wid wid Output 1
+  add_interface_port $port ${port}_arid arid Output 1
   add_interface_port $port ${port}_arlock arlock Output "1+DMA_AXI_PROTOCOL_${suffix}"
-  add_interface_port $port ${port}_rid rid Input 4
-  add_interface_port $port ${port}_bid bid Input 4
+  add_interface_port $port ${port}_rid rid Input 1
+  add_interface_port $port ${port}_bid bid Input 1
   add_interface_port $port ${port}_rlast rlast Input 1
   if {$axi_type == "axi4"} {
     set_port_property ${port}_awid TERMINATION true
