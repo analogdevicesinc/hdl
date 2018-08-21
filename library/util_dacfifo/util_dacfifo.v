@@ -74,11 +74,9 @@ module util_dacfifo #(
   reg     [(ADDRESS_WIDTH-1):0]       dma_raddr = 'b0;
   reg     [(ADDRESS_WIDTH-1):0]       dma_addr_diff = 'b0;
   reg                                 dma_ready_fifo = 1'b0;
-  reg                                 dma_ready_bypass = 1'b0;
   reg                                 dma_bypass = 1'b0;
   reg                                 dma_bypass_m1 = 1'b0;
   reg                                 dma_xfer_out_fifo = 1'b0;
-  reg                                 dma_xfer_out_bypass = 1'b0;
 
   reg     [(ADDRESS_WIDTH-1):0]       dac_raddr = 'b0;
   reg     [(ADDRESS_WIDTH-1):0]       dac_raddr_g = 'b0;
@@ -92,15 +90,16 @@ module util_dacfifo #(
   reg                                 dac_mem_ready = 1'b0;
   reg                                 dac_xfer_out_fifo = 1'b0;
   reg                                 dac_xfer_out_fifo_m1 = 1'b0;
-  reg                                 dac_xfer_out_bypass = 1'b0;
-  reg                                 dac_xfer_out_bypass_m1 = 1'b0;
+  reg                                 dac_xfer_out_fifo_d = 1'b0;
   reg                                 dac_bypass = 1'b0;
   reg                                 dac_bypass_m1 = 1'b0;
 
   // internal wires
 
   wire                                dma_wren_s;
-  wire    [(DATA_WIDTH-1):0]          dac_data_s;
+  wire                                dma_ready_bypass_s;
+  wire    [(DATA_WIDTH-1):0]          dac_data_fifo_s;
+  wire    [(DATA_WIDTH-1):0]          dac_data_bypass_s;
   wire    [ADDRESS_WIDTH:0]           dma_addr_diff_s;
   wire    [ADDRESS_WIDTH:0]           dac_addr_diff_s;
   wire    [(ADDRESS_WIDTH-1):0]       dma_waddr_b2g_s;
@@ -112,18 +111,6 @@ module util_dacfifo #(
 
   // DMA / Write interface
 
-  // fifo is always ready, if it's not in bypass mode
-
-  always @(posedge dma_clk) begin
-    if(dma_rst == 1'b1) begin
-      dma_ready_fifo <= 1'b0;
-    end else begin
-      dma_ready_fifo <= 1'b1;
-    end
-  end
-
-  // if bypass is enabled, fifo request data until reaches the high threshold.
-
   assign dma_addr_diff_s = {1'b1, dma_waddr} - dma_raddr;
 
   always @(posedge dma_clk) begin
@@ -132,16 +119,16 @@ module util_dacfifo #(
       dma_raddr_m1 <= 'b0;
       dma_raddr_m2 <= 'b0;
       dma_raddr <= 'b0;
-      dma_ready_bypass <= 1'b0;
+      dma_ready_fifo <= 1'b0;
     end else begin
       dma_raddr_m1 <= dac_raddr_g;
       dma_raddr_m2 <= dma_raddr_m1;
       dma_raddr <= dma_raddr_g2b_s;
       dma_addr_diff <= dma_addr_diff_s[ADDRESS_WIDTH-1:0];
       if (dma_addr_diff >= FIFO_THRESHOLD_HI) begin
-        dma_ready_bypass <= 1'b0;
+        dma_ready_fifo <= 1'b0;
       end else begin
-        dma_ready_bypass <= 1'b1;
+        dma_ready_fifo <= 1'b1;
       end
     end
   end
@@ -161,18 +148,15 @@ module util_dacfifo #(
       dma_waddr <= 'b0;
       dma_waddr_g <= 'b0;
       dma_xfer_out_fifo <= 1'b0;
-      dma_xfer_out_bypass <= 1'b0;
     end else begin
       if (dma_wren_s == 1'b1) begin
         dma_waddr <= dma_waddr + 1'b1;
-        dma_xfer_out_fifo <= 1'b0;
       end
       if (dma_xfer_last == 1'b1) begin
         dma_waddr <= 'b0;
         dma_xfer_out_fifo <= 1'b1;
       end
       dma_waddr_g <= dma_waddr_b2g_s;
-      dma_xfer_out_bypass <= dma_xfer_req;
     end
   end
 
@@ -234,16 +218,14 @@ module util_dacfifo #(
       dac_lastaddr_m2 <= 1'b0;
       dac_xfer_out_fifo_m1 <= 1'b0;
       dac_xfer_out_fifo <= 1'b0;
-      dac_xfer_out_bypass_m1 <= 1'b0;
-      dac_xfer_out_bypass <= 1'b0;
+      dac_xfer_out_fifo_d <= 1'b0;
     end else begin
       dac_lastaddr_m1 <= dma_lastaddr_g;
       dac_lastaddr_m2 <= dac_lastaddr_m1;
       dac_lastaddr <= dac_lastaddr_g2b_s;
       dac_xfer_out_fifo_m1 <= dma_xfer_out_fifo;
       dac_xfer_out_fifo <= dac_xfer_out_fifo_m1;
-      dac_xfer_out_bypass_m1 <= dma_xfer_out_bypass;
-      dac_xfer_out_bypass <= dac_xfer_out_bypass_m1;
+      dac_xfer_out_fifo_d <= dac_xfer_out_fifo;    // read consume at least one clock cycle
     end
   end
 
@@ -255,7 +237,8 @@ module util_dacfifo #(
 
   // generate dac read address
 
-  assign dac_mem_ren_s = (dac_bypass == 1'b1) ? (dac_valid & dac_mem_ready) : (dac_valid & dac_xfer_out_fifo);
+  assign dac_mem_ren_s = (dac_bypass == 1'b1) ? (dac_valid & dac_mem_ready) :
+                                                (dac_valid & dac_xfer_out_fifo);
 
   always @(posedge dac_clk) begin
     if (dac_rst == 1'b1) begin
@@ -263,7 +246,7 @@ module util_dacfifo #(
       dac_raddr_g <= 'b0;
     end else begin
       if (dac_mem_ren_s == 1'b1) begin
-        if (dac_lastaddr == 'b0 || dac_raddr < dac_lastaddr) begin
+        if (dac_lastaddr == 'b0 || dac_raddr != dac_lastaddr) begin
           dac_raddr <= dac_raddr + 1'b1;
         end else begin
           dac_raddr <= 'b0;
@@ -292,7 +275,7 @@ module util_dacfifo #(
     .clkb (dac_clk),
     .reb (1'b1),
     .addrb (dac_raddr),
-    .doutb (dac_data_s));
+    .doutb (dac_data_fifo_s));
 
   // define underflow
   // underflow make sense just if bypass is enabled
@@ -301,11 +284,28 @@ module util_dacfifo #(
     if (dac_rst == 1'b1) begin
       dac_dunf <= 1'b0;
     end else begin
-      dac_dunf <= (dac_bypass == 1'b1) ? (dac_valid & dac_xfer_out_bypass & ~dac_mem_ren_s) : 1'b0;
+      dac_dunf <= (dac_bypass == 1'b1) ? (dac_valid & dac_xfer_req & ~dac_mem_ren_s) : 1'b0;
     end
   end
 
-  // output logic
+  // bypass logic
+
+  util_dacfifo_bypass #(
+    .DAC_DATA_WIDTH (DATA_WIDTH),
+    .DMA_DATA_WIDTH (DATA_WIDTH)
+  ) i_dacfifo_bypass (
+    .dma_clk(dma_clk),
+    .dma_data(dma_data),
+    .dma_ready(dma_ready),
+    .dma_ready_out(dma_ready_bypass_s),
+    .dma_valid(dma_valid),
+    .dma_xfer_req(dma_xfer_req),
+    .dac_clk(dac_clk),
+    .dac_rst(dac_rst),
+    .dac_valid(dac_valid),
+    .dac_data(dac_data_bypass_s),
+    .dac_dunf(dac_dunf_bypass_s)
+  );
 
   always @(posedge dma_clk) begin
     dma_bypass_m1 <= bypass;
@@ -318,12 +318,15 @@ module util_dacfifo #(
   end
 
   always @(posedge dma_clk) begin
-    dma_ready <= (dma_bypass == 1'b1) ? dma_ready_bypass : dma_ready_fifo;
+    dma_ready <= (dma_bypass == 1'b1) ? dma_ready_bypass_s : dma_ready_fifo;
   end
 
   always @(posedge dac_clk) begin
-    dac_data <= dac_data_s;
-    dac_xfer_out <= (dac_bypass == 1'b1) ? dac_xfer_out_bypass : dac_xfer_out_fifo;
+    if (dac_valid) begin
+      dac_data <= (dac_bypass == 1'b1) ? dac_data_bypass_s : dac_data_fifo_s;
+    end
+    // this signal along with the dac_valid validate the data coming out from the buffer
+    dac_xfer_out <= (dac_bypass == 1'b1) ? dac_xfer_req : dac_xfer_out_fifo_d;
   end
 
 endmodule
