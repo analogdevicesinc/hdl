@@ -28,9 +28,7 @@ module ad_ip_jesd204_tpl_dac_framer #(
   parameter NUM_CHANNELS = 4
 ) (
   // jesd interface
-  // clk is (line-rate/40)
 
-  input clk,
   output [NUM_LANES*32-1:0] link_data,
 
   // dac interface
