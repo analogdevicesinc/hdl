@@ -76,7 +76,6 @@ module ad_ip_jesd204_tpl_dac_core #(
     .NUM_LANES (NUM_LANES),
     .NUM_CHANNELS (NUM_CHANNELS)
   ) i_framer (
-    .clk (clk),
     .link_data (link_data),
     .dac_data (dac_data_s)
   );
