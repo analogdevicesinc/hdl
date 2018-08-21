@@ -16,6 +16,6 @@ XILINX_DEPS += axi_dacfifo_constr.xdc
 XILINX_DEPS += axi_dacfifo_ip.tcl
 XILINX_DEPS += axi_dacfifo_rd.v
 XILINX_DEPS += axi_dacfifo_wr.v
-XILINX_DEPS += util_dacfifo_bypass.v
+XILINX_DEPS += ../../util_dacfifo/util_dacfifo_bypass.v
 
 include ../../scripts/library.mk
