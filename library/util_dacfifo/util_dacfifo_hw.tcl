@@ -6,9 +6,11 @@ source ../scripts/adi_ip_alt.tcl
 ad_ip_create util_dacfifo {UTIL DAC FIFO Interface}
 ad_ip_files util_dacfifo [list\
   $ad_hdl_dir/library/common/ad_mem.v \
+  $ad_hdl_dir/library/common/ad_mem_asym.v \
   $ad_hdl_dir/library/common/ad_b2g.v \
   $ad_hdl_dir/library/common/ad_g2b.v \
   util_dacfifo.v \
+  util_dacfifo_bypass.v \
   util_dacfifo_constr.sdc]
 
 # parameters
