@@ -55,6 +55,14 @@ module dmac_request_generator #(
 
 `include "inc_id.vh"
 
+localparam STATE_IDLE       = 3'h0;
+localparam STATE_GEN_ID     = 3'h1;
+localparam STATE_REWIND_ID  = 3'h2;
+localparam STATE_CONSUME    = 3'h3;
+localparam STATE_WAIT_LAST  = 3'h4;
+
+reg [2:0] state = STATE_IDLE;
+reg [2:0] nx_state;
 /*
  * Here we only need to count the number of bursts, which means we can ignore
  * the lower bits of the byte count. The last last burst may not contain the
@@ -65,14 +73,19 @@ module dmac_request_generator #(
 reg [BURSTS_PER_TRANSFER_WIDTH-1:0] burst_count = 'h00;
 reg [ID_WIDTH-1:0] id;
 wire [ID_WIDTH-1:0] id_next = inc_id(id);
+wire incr_en;
+wire incr_id;
 
 assign eot = burst_count == 'h00;
 assign request_id = id;
 
+assign incr_en = (response_id != id_next) && (enable == 1'b1);
+assign incr_id = (state == STATE_GEN_ID) && (incr_en == 1'b1);
+
 always @(posedge clk) begin
-  if (req_ready == 1'b1) begin
+  if (state == STATE_IDLE) begin
     burst_count <= req_burst_count;
-  end else if (response_id != id_next && enable == 1'b1) begin
+  end else if (incr_id == 1'b1) begin
     burst_count <= burst_count - 1'b1;
   end
 end
@@ -80,14 +93,43 @@ end
 always @(posedge clk) begin
   if (resetn == 1'b0) begin
     id <= 'h0;
-    req_ready <= 1'b1;
-  end else if (req_ready == 1'b1) begin
-    req_ready <= ~req_valid;
-  end else if (response_id != id_next && enable == 1'b1) begin
-    if (eot == 1'b1) begin
-      req_ready <= 1'b1;
-    end
+  end else if (incr_id == 1'b1) begin
     id <= id_next;
+  end
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    req_ready <= 1'b0;
+  end else begin
+    req_ready <= (nx_state == STATE_IDLE);
+  end
+end
+
+always @(*) begin
+  nx_state = state;
+  case (state)
+    STATE_IDLE: begin
+      if (req_valid == 1'b1) begin
+        nx_state = STATE_GEN_ID;
+      end
+    end
+    STATE_GEN_ID: begin
+      if (eot == 1'b1 && incr_en == 1'b1) begin
+        nx_state = STATE_IDLE;
+      end
+    end
+    default: begin
+      nx_state = STATE_IDLE;
+    end
+  endcase
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    state <= STATE_IDLE;
+  end else begin
+    state <= nx_state;
   end
 end
 
