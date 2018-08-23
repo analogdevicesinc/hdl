@@ -3,7 +3,6 @@
 
 # ad9361 master
 
-DIFF_TERM_ADV TERM_100
 set_property  -dict {PACKAGE_PIN  P11   IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports ref_clk_p]             ; ## D20  FMC_HPC0_LA17_CC_P
 set_property  -dict {PACKAGE_PIN  N11   IOSTANDARD LVDS    DIFF_TERM_ADV TERM_100} [get_ports ref_clk_n]             ; ## D21  FMC_HPC0_LA17_CC_N
 
