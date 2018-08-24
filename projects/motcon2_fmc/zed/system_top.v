@@ -118,7 +118,6 @@ module system_top (
   input                   vauxn8,
   input                   vauxp0,
   input                   vauxp8,
-/*  muxaddr_out,*/
 
   output                  i2s_mclk,
   output                  i2s_bclk,
@@ -145,8 +144,6 @@ module system_top (
   input       [ 1:0]      gpi,
 
   input                   otg_vbusoc);
-
-/*  output  [ 3:0]  muxaddr_out;*/
 
   // internal signals
 
@@ -290,7 +287,6 @@ module system_top (
     .vaux0_v_p(vauxp0),
     .vaux8_v_n(vauxn8),
     .vaux8_v_p(vauxp8),
-    /*.muxaddr_out(muxaddr_out),*/
     .i2s_bclk (i2s_bclk),
     .i2s_lrclk (i2s_lrclk),
     .i2s_mclk (i2s_mclk),
