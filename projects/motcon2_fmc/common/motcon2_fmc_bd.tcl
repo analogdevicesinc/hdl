@@ -54,16 +54,12 @@
     #common reset
   create_bd_port -dir O eth_phy_rst_n
     # reference clock for the delay interface used for the gmii to rgmii conversion
-  create_bd_port -dir o -type clk refclk
-  create_bd_port -dir o -from 0 -to 0 -type rst refclk_rst
-
   # iic
   create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0  iic_ee2
 
   # xadc interface
   create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_analog_io_rtl:1.0 vaux0
   create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_analog_io_rtl:1.0 vaux8
-  create_bd_port -dir O -from 4 -to 0 muxaddr_out
 
 
   # core instantiation and configuration
@@ -302,8 +298,6 @@
 
   # ethernet
 
-  ad_connect sys_200m_clk refclk
-  ad_connect sys_cpu_resetn refclk_rst
   ad_connect sys_cpu_resetn eth_phy_rst_n
   ad_connect sys_ps7/ENET0_MDIO_MDC eth_mdio_mdc
   ad_connect sys_ps7/ENET0_MDIO_O eth_mdio_o
@@ -336,7 +330,6 @@
   # xadc
   ad_connect xadc_core/Vaux0 vaux0
   ad_connect xadc_core/Vaux8 vaux8
-  ad_connect muxaddr_out xadc_core/muxaddr_out
 
   # iic
   ad_connect iic_ee2/IIC iic_ee2
