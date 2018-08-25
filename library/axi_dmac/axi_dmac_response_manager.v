@@ -60,17 +60,22 @@ module axi_dmac_response_manager #(
   output reg [BYTES_PER_BURST_WIDTH-1:0] measured_burst_length = 'h0,
   output response_partial,
   output reg response_valid = 1'b0,
-  input response_ready
+  input response_ready,
 
   // Interface to requester side
+  input completion_req_valid,
+  input completion_req_last,
+  input [1:0] completion_transfer_id
 );
 
-localparam STATE_IDLE         = 2'h0;
-localparam STATE_ACC          = 2'h1;
-localparam STATE_WRITE_RESPR  = 2'h2;
+localparam STATE_IDLE         = 3'h0;
+localparam STATE_ACC          = 3'h1;
+localparam STATE_WRITE_RESPR  = 3'h2;
+localparam STATE_ZERO_COMPL   = 3'h3;
+localparam STATE_WRITE_ZRCMPL = 3'h4;
 
-reg [1:0] state = STATE_IDLE;
-reg [1:0] nx_state;
+reg [2:0] state = STATE_IDLE;
+reg [2:0] nx_state;
 
 localparam DEST_SRC_RATIO = DMA_DATA_WIDTH_DEST/DMA_DATA_WIDTH_SRC;
 
@@ -86,6 +91,7 @@ localparam BYTES_PER_BEAT_WIDTH = DEST_SRC_RATIO_WIDTH + BYTES_PER_BEAT_WIDTH_SR
 localparam BURST_LEN_WIDTH = BYTES_PER_BURST_WIDTH - BYTES_PER_BEAT_WIDTH;
 
 wire do_acc_st;
+wire do_compl;
 reg req_eot = 1'b0;
 reg req_response_partial = 1'b0;
 reg [BYTES_PER_BURST_WIDTH-1:0] req_response_dest_data_burst_length = 'h0;
@@ -98,6 +104,10 @@ wire [BYTES_PER_BURST_WIDTH-1:0] response_dest_data_burst_length;
 
 wire [BURST_LEN_WIDTH-1:0] burst_lenght;
 reg [BURST_LEN_WIDTH-1:0] burst_pointer_end;
+
+reg [1:0] to_complete_count = 'h0;
+reg [1:0] transfer_id = 'h0;
+reg completion_req_last_found = 1'b0;
 
 util_axis_fifo #(
   .DATA_WIDTH(BYTES_PER_BURST_WIDTH+1+1),
@@ -150,7 +160,7 @@ begin
   if (req_resetn == 1'b0) begin
     response_valid <= 1'b0;
   end else begin
-    if (nx_state == STATE_WRITE_RESPR) begin
+    if (nx_state == STATE_WRITE_RESPR || nx_state == STATE_WRITE_ZRCMPL) begin
       response_valid <= 1'b1;
     end else if (response_ready == 1'b1) begin
       response_valid <= 1'b0;
@@ -188,6 +198,9 @@ always @(*) begin
     STATE_IDLE: begin
       if (response_dest_valid == 1'b1) begin
         nx_state = STATE_ACC;
+      end else if (|to_complete_count) begin
+        if (transfer_id == completion_transfer_id)
+          nx_state = STATE_ZERO_COMPL;
       end
     end
     STATE_ACC: begin
@@ -196,6 +209,20 @@ always @(*) begin
     STATE_WRITE_RESPR: begin
       if (response_ready == 1'b1) begin
         nx_state = STATE_IDLE;
+      end
+    end
+    STATE_ZERO_COMPL: begin
+      if (|to_complete_count) begin
+        nx_state = STATE_WRITE_ZRCMPL;
+      end else begin
+        if (completion_req_last_found == 1'b1) begin
+          nx_state = STATE_IDLE;
+        end
+      end
+    end
+    STATE_WRITE_ZRCMPL:begin
+      if (response_ready == 1'b1) begin
+        nx_state = STATE_ZERO_COMPL;
       end
     end
     default: begin
@@ -209,6 +236,41 @@ always @(posedge req_clk) begin
     state <= STATE_IDLE;
   end else begin
     state <= nx_state;
+  end
+end
+
+assign do_compl = (state == STATE_WRITE_ZRCMPL) && response_ready;
+
+// Once the last completion request from request generator is received 
+// we can wait for completions from the destination side
+always @(posedge req_clk) begin
+  if (req_resetn == 1'b0) begin
+    completion_req_last_found <= 1'b0;
+  end else if (completion_req_valid) begin
+    completion_req_last_found <= completion_req_last;
+  end else if (state ==STATE_ZERO_COMPL && ~(|to_complete_count)) begin
+    completion_req_last_found <= 1'b0;
+  end
+end
+
+// Track transfers so we can tell when did the destination completed all its
+// transfers  
+always @(posedge req_clk) begin
+  if (req_resetn == 1'b0) begin
+    transfer_id <= 'h0;
+  end else if ((state == STATE_ACC && req_eot) || do_compl) begin
+    transfer_id <= transfer_id + 1;
+  end
+end
+
+// Count how many transfers we need to complete 
+always @(posedge req_clk) begin
+  if (req_resetn == 1'b0) begin
+    to_complete_count <= 'h0;
+  end else if (completion_req_valid & ~do_compl) begin
+    to_complete_count <= to_complete_count + 1;
+  end else if (~completion_req_valid & do_compl) begin
+    to_complete_count <= to_complete_count - 1;
   end
 end
 

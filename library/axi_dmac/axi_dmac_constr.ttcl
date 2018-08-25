@@ -60,6 +60,34 @@ set_max_delay -quiet -datapath_only \
 	-to $src_clk \
 	[get_property -min PERIOD $src_clk]
 
+set_max_delay -quiet -datapath_only \
+	-from $src_clk \
+	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+		-filter {NAME =~ *i_rewind_req_fifo/i_waddr_sync* && IS_SEQUENTIAL}] \
+	[get_property -min PERIOD $src_clk]
+
+set_max_delay -quiet -datapath_only \
+	-from $dest_clk \
+	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+		-filter {NAME =~ *i_rewind_req_fifo/i_raddr_sync* && IS_SEQUENTIAL}] \
+	[get_property -min PERIOD $dest_clk]
+
+set_max_delay -quiet -datapath_only \
+	-from [get_cells -quiet -hier *cdc_sync_fifo_ram_reg* \
+		-filter {NAME =~ *i_rewind_req_fifo* && IS_SEQUENTIAL}] \
+	-to $dest_clk \
+	[get_property -min PERIOD $dest_clk]
+
+set_false_path -quiet \
+	-from $req_clk \
+	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+		-filter {NAME =~ *sync_rewind/i_sync_out* && IS_SEQUENTIAL}]
+
+set_false_path -quiet \
+	-from $src_clk \
+	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+		-filter {NAME =~ *sync_rewind/i_sync_in* && IS_SEQUENTIAL}]
+
 <: } :>
 <: if {$async_dest_req} { :>
 set_max_delay -quiet -datapath_only \
