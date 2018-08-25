@@ -16,6 +16,7 @@ set_module_property VALIDATION_CALLBACK axi_dmac_validate
 
 ad_ip_files axi_dmac [list \
   $ad_hdl_dir/library/util_cdc/sync_bits.v \
+  $ad_hdl_dir/library/util_cdc/sync_event.v \
   $ad_hdl_dir/library/common/up_axi.v \
   $ad_hdl_dir/library/util_axis_fifo/util_axis_fifo.v \
   $ad_hdl_dir/library/util_axis_fifo/address_sync.v \

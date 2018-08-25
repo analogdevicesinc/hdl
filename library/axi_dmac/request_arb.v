@@ -246,6 +246,9 @@ wire [BEATS_PER_BURST_WIDTH_SRC-1:0] src_req_last_burst_length;
 wire src_req_sync_transfer_start;
 wire src_req_xlast;
 
+reg [DMA_ADDRESS_WIDTH_DEST-1:0] src_req_dest_address_cur = 'h0;
+reg src_req_xlast_cur = 1'b0;
+
 /* TODO
 wire src_response_valid;
 wire src_response_ready;
@@ -262,6 +265,7 @@ wire src_valid;
 wire [DMA_DATA_WIDTH_SRC-1:0] src_data;
 wire src_last;
 wire src_partial_burst;
+wire block_descr_to_dst;
 wire src_fifo_valid;
 wire [DMA_DATA_WIDTH_SRC-1:0] src_fifo_data;
 wire src_fifo_last;
@@ -275,6 +279,25 @@ wire [BYTES_PER_BURST_WIDTH-1:0] dest_burst_info_length;
 wire                             dest_burst_info_partial;
 wire [ID_WIDTH-1:0] dest_burst_info_id;
 wire                dest_burst_info_write;
+
+reg src_dest_valid_hs = 1'b0;
+wire src_dest_valid_hs_masked;
+wire src_dest_ready_hs;
+
+wire req_rewind_req_valid;
+wire [ID_WIDTH+3-1:0] req_rewind_req_data;
+
+wire completion_req_valid;
+wire completion_req_last;
+wire [1:0] completion_transfer_id;
+
+wire rewind_req_valid;
+wire rewind_req_ready;
+wire [ID_WIDTH+3-1:0] rewind_req_data;
+
+reg src_throttler_enabled = 1'b1;
+wire src_throttler_enable;
+wire rewind_state;
 
 /* Unused for now
 wire response_src_valid;
@@ -584,8 +607,6 @@ wire src_address_eot = eot_mem_src[src_address_id];
 assign dbg_src_address_id = src_address_id;
 assign dbg_src_data_id = src_data_id;
 
-assign src_partial_burst = 1'b0;
-
 dmac_src_mm_axi #(
   .ID_WIDTH(ID_WIDTH),
   .DMA_DATA_WIDTH(DMA_DATA_WIDTH_SRC),
@@ -670,6 +691,7 @@ assign src_response_valid = 1'b0;
 assign src_response_resp = 2'b0;
 */
 
+
 dmac_src_axi_stream #(
   .ID_WIDTH(ID_WIDTH),
   .S_AXIS_DATA_WIDTH(DMA_DATA_WIDTH_SRC),
@@ -692,9 +714,15 @@ dmac_src_axi_stream #(
 
   .eot(src_eot),
 
+  .rewind_req_valid(rewind_req_valid),
+  .rewind_req_ready(rewind_req_ready),
+  .rewind_req_data(rewind_req_data),
+
   .bl_valid(src_bl_valid),
   .bl_ready(src_bl_ready),
   .measured_last_burst_length(src_burst_length),
+
+  .block_descr_to_dst(block_descr_to_dst),
 
   .source_id(source_id),
   .source_eot(source_eot),
@@ -712,10 +740,39 @@ dmac_src_axi_stream #(
   .s_axis_xfer_req(s_axis_xfer_req)
 );
 
+util_axis_fifo #(
+  .DATA_WIDTH(ID_WIDTH + 3),
+  .ADDRESS_WIDTH(0),
+  .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
+) i_rewind_req_fifo (
+  .s_axis_aclk(src_clk),
+  .s_axis_aresetn(src_resetn),
+  .s_axis_valid(rewind_req_valid),
+  .s_axis_ready(rewind_req_ready),
+  .s_axis_empty(),
+  .s_axis_data(rewind_req_data),
+  .s_axis_room(),
+
+  .m_axis_aclk(req_clk),
+  .m_axis_aresetn(req_resetn),
+  .m_axis_valid(req_rewind_req_valid),
+  .m_axis_ready(1'b1),
+  .m_axis_data(req_rewind_req_data),
+  .m_axis_level()
+);
+
 end else begin
 
 assign s_axis_ready = 1'b0;
 assign s_axis_xfer_req = 1'b0;
+assign rewind_req_valid = 1'b0;
+assign rewind_req_data = 'h0;
+
+assign req_rewind_req_valid = 'b0;
+assign req_rewind_req_data = 'h0;
+
+assign src_partial_burst = 1'b0;
+assign block_descr_to_dst = 1'b0;
 
 end
 
@@ -736,7 +793,6 @@ assign dbg_src_data_id = 'h00;
 assign src_response_valid = 1'b0;
 assign src_response_resp = 2'b0;
 */
-assign src_partial_burst = 1'b0;
 
 dmac_src_fifo_inf #(
   .ID_WIDTH(ID_WIDTH),
@@ -811,15 +867,37 @@ function compare_id;
   end
 endfunction
 
+sync_event #(.ASYNC_CLK(ASYNC_CLK_REQ_SRC)) sync_rewind (
+  .in_clk(req_clk),
+  .in_event(rewind_state),
+  .out_clk(src_clk),
+  .out_event(src_throttler_enable)
+);
+
+always @(posedge src_clk) begin
+  if (src_resetn == 1'b0) begin
+    src_throttler_enabled <= 'b1;
+  end else if (rewind_req_valid) begin
+    src_throttler_enabled <= 'b0;
+  end else if (src_throttler_enable) begin
+    src_throttler_enabled <= 'b1;
+  end
+end
+
 /*
  * Make sure that we do not request more data than what fits into the
  * store-and-forward burst memory.
+ * Throttler must be blocked during rewind since it does not tolerate
+ * a decrement of the request ID.
  */
 always @(posedge src_clk) begin
   if (src_resetn == 1'b0) begin
     src_throttled_request_id <= 'h00;
+  end else if (rewind_req_valid) begin
+    src_throttled_request_id <= rewind_req_data[ID_WIDTH-1:0];
   end else if (src_throttled_request_id != src_request_id &&
-               compare_id(src_throttled_request_id, src_data_request_id)) begin
+               compare_id(src_throttled_request_id, src_data_request_id) &&
+               src_throttler_enabled) begin
     src_throttled_request_id <= inc_id(src_throttled_request_id);
   end
 end
@@ -909,22 +987,12 @@ axi_register_slice #(
   })
 );
 
-splitter #(
-  .NUM_M(2)
-) i_req_splitter (
-  .clk(req_clk),
-  .resetn(req_resetn),
-  .s_valid(req_valid),
-  .s_ready(req_ready),
-  .m_valid({
-    req_gen_valid,
-    req_src_valid
-  }),
-  .m_ready({
-    req_gen_ready,
-    req_src_ready
-  })
-);
+// Don't let the request generator run in advance more than one descriptor
+// The descriptor FIFO should not block the start of the request generator
+// since it becomes ready earlier.
+assign req_gen_valid = req_valid & req_ready;
+assign req_src_valid = req_valid & req_ready;
+assign req_ready = req_gen_ready & req_src_ready;
 
 util_axis_fifo #(
   .DATA_WIDTH(DMA_ADDRESS_WIDTH_DEST + 1),
@@ -933,12 +1001,12 @@ util_axis_fifo #(
 ) i_dest_req_fifo (
   .s_axis_aclk(src_clk),
   .s_axis_aresetn(src_resetn),
-  .s_axis_valid(src_dest_valid),
-  .s_axis_ready(src_dest_ready),
+  .s_axis_valid(src_dest_valid_hs_masked),
+  .s_axis_ready(src_dest_ready_hs),
   .s_axis_empty(),
   .s_axis_data({
-    src_req_dest_address,
-    src_req_xlast
+    src_req_dest_address_cur,
+    src_req_xlast_cur
   }),
   .s_axis_room(),
 
@@ -986,22 +1054,31 @@ util_axis_fifo #(
   .m_axis_level()
 );
 
-splitter #(
-  .NUM_M(2)
-) i_src_splitter (
-  .clk(src_clk),
-  .resetn(src_resetn),
-  .s_valid(src_req_spltr_valid),
-  .s_ready(src_req_spltr_ready),
-  .m_valid({
-    src_req_valid,
-    src_dest_valid
-  }),
-  .m_ready({
-    src_req_ready,
-    src_dest_ready
-  })
-);
+// Save the descriptor in the source clock domain since the submission to
+// destination is delayed.
+always @(posedge src_clk) begin
+  if (src_req_valid == 1'b1 && src_req_ready == 1'b1) begin
+    src_req_dest_address_cur <= src_req_dest_address;
+    src_req_xlast_cur <= src_req_xlast;
+  end
+end
+
+always @(posedge src_clk) begin
+  if (src_resetn == 1'b0) begin
+    src_dest_valid_hs <= 1'b0;
+  end else if (src_req_valid == 1'b1 && src_req_ready == 1'b1) begin
+    src_dest_valid_hs <= 1'b1;
+  end else if (src_dest_ready_hs == 1'b1) begin
+    src_dest_valid_hs <= 1'b0;
+  end
+end
+
+// Forward the descriptor to the destination only after the source decided to
+// do so
+assign src_dest_valid_hs_masked = src_dest_valid_hs == 1'b1 && block_descr_to_dst == 1'b0;
+assign src_req_spltr_ready = src_req_ready && src_dest_ready_hs;
+assign src_req_valid = src_req_spltr_valid && src_req_spltr_ready;
+
 
 /* Unused for now
 util_axis_fifo #(
@@ -1035,9 +1112,18 @@ dmac_request_generator #(
   .request_id(request_id),
   .response_id(response_id),
 
+  .rewind_req_valid(req_rewind_req_valid),
+  .rewind_req_data(req_rewind_req_data),
+  .rewind_state(rewind_state),
+
+  .completion_req_valid(completion_req_valid),
+  .completion_req_last(completion_req_last),
+  .completion_transfer_id(completion_transfer_id),
+
   .req_valid(req_gen_valid),
   .req_ready(req_gen_ready),
   .req_burst_count(req_length[DMA_LENGTH_WIDTH-1:BYTES_PER_BURST_WIDTH]),
+  .req_xlast(req_xlast),
 
   .enable(req_enable),
 
@@ -1067,7 +1153,12 @@ axi_dmac_response_manager #(
   .measured_burst_length(measured_burst_length),
   .response_partial(response_partial),
   .response_valid(response_valid),
-  .response_ready(response_ready)
+  .response_ready(response_ready),
+
+  .completion_req_valid(completion_req_valid),
+  .completion_req_last(completion_req_last),
+  .completion_transfer_id(completion_transfer_id)
+
 );
 
 
