@@ -36,6 +36,8 @@
 // specific for MOTCON2 ADI board
 // works correctly if the PHY is set with Autonegotiation on
 
+`timescale 1ns/100ps
+
 module util_gmii_to_rgmii #(
 
   parameter PHY_AD = 5'b10000,

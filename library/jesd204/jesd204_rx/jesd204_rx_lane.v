@@ -42,6 +42,8 @@
 // is copyright © 2016-2017, Analog Devices, Inc.”
 //
 
+`timescale 1ns/100ps
+
 module jesd204_rx_lane #(
   parameter DATA_PATH_WIDTH = 4,
   parameter CHAR_INFO_REGISTERED = 0,

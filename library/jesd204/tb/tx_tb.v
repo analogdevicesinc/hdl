@@ -42,6 +42,8 @@
 // is copyright © 2016-2017, Analog Devices, Inc.”
 //
 
+`timescale 1ns/100ps
+
 module tx_tb;
   parameter VCD_FILE = "tx_tb.vcd";
   parameter NUM_LANES = 4;
@@ -57,6 +59,7 @@ module tx_tb;
   reg [31:0] tx_data = 'h00000000;
 
   wire tx_ready;
+  wire tx_valid = 1'b1;
   wire [NUM_LANES-1:0] cfg_lanes_disable;
   wire [NUM_LINKS-1:0] cfg_links_disable;
   wire [7:0] cfg_beats_per_multiframe;
@@ -112,6 +115,8 @@ module tx_tb;
     .OCTETS_PER_FRAME(OCTETS_PER_FRAME),
     .FRAMES_PER_MULTIFRAME(FRAMES_PER_MULTIFRAME)
   ) i_cfg (
+    .clk(clk),
+
     .cfg_lanes_disable(cfg_lanes_disable),
     .cfg_links_disable(cfg_links_disable),
     .cfg_beats_per_multiframe(cfg_beats_per_multiframe),
@@ -159,6 +164,7 @@ module tx_tb;
     .ctrl_manual_sync_request (1'b0),
 
     .tx_ready(tx_ready),
+    .tx_valid(tx_valid),
     .tx_data({NUM_LANES{tx_data}}),
 
     .sync(sync),

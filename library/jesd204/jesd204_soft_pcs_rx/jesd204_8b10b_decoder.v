@@ -42,6 +42,8 @@
 // is copyright © 2016-2017, Analog Devices, Inc.”
 //
 
+`timescale 1ns/100ps
+
 module jesd204_8b10b_decoder (
   input in_disparity,
   input [9:0] in_char,

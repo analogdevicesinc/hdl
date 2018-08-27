@@ -39,6 +39,8 @@
 // Y  = (+065.738/256)*R + (+129.057/256)*G + (+025.064/256)*B +  16;
 // Cb = (-037.945/256)*R + (-074.494/256)*G + (+112.439/256)*B + 128;
 
+`timescale 1ns/100ps
+
 module ad_csc_RGB2CrYCb #(
 
   parameter   DELAY_DATA_WIDTH = 16) (

@@ -40,6 +40,9 @@
  * only able to synchronize multi-bit signals where at max one bit changes per
  * clock cycle (e.g. a gray counter).
  */
+
+`timescale 1ns/100ps
+
 module sync_bits #(
 
   // Number of bits to synchronize

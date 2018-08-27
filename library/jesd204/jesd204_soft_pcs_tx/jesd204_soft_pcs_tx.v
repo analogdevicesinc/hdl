@@ -42,6 +42,8 @@
 // is copyright © 2016-2017, Analog Devices, Inc.”
 //
 
+`timescale 1ns/100ps
+
 module jesd204_soft_pcs_tx #(
   parameter NUM_LANES = 1,
   parameter DATA_PATH_WIDTH = 4,

@@ -42,6 +42,8 @@
 // is copyright © 2016-2017, Analog Devices, Inc.”
 //
 
+`timescale 1ns/100ps
+
 module pipeline_stage #(
   parameter REGISTERED = 1,
   parameter WIDTH = 1

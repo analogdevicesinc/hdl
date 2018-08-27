@@ -42,6 +42,8 @@
 // is copyright © 2016-2017, Analog Devices, Inc.”
 //
 
+`timescale 1ns/100ps
+
 module axi_jesd204_rx_tb;
   parameter VCD_FILE = "axi_jesd204_rx_regmap_tb.vcd";
   parameter NUM_LANES = 2;

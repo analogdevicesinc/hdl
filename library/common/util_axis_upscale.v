@@ -38,6 +38,8 @@
 //    the data format inside a generic AXI converter core.
 //  + Supports multiple channels. Contains a single register stage.
 
+`timescale 1ns/100ps
+
 module util_axis_upscale # (
 
   parameter NUM_OF_CHANNELS = 4,

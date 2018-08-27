@@ -42,6 +42,8 @@
 // is copyright © 2016-2017, Analog Devices, Inc.”
 //
 
+`timescale 1ns/100ps
+
 module jesd204_rx #(
   parameter NUM_LANES = 1,
   parameter NUM_LINKS = 1

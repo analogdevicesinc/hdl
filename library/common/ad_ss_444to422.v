@@ -34,6 +34,8 @@
 // ***************************************************************************
 // Input must be RGB or CrYCb in that order, output is CrY/CbY
 
+`timescale 1ns/100ps
+
 module ad_ss_444to422 #(
 
   parameter   CR_CB_N = 0,

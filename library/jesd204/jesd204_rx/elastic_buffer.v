@@ -42,6 +42,8 @@
 // is copyright © 2016-2017, Analog Devices, Inc.”
 //
 
+`timescale 1ns/100ps
+
 module elastic_buffer #(
   parameter WIDTH = 32,
   parameter SIZE = 256

@@ -42,6 +42,8 @@
 // is copyright © 2016-2017, Analog Devices, Inc.”
 //
 
+`timescale 1ns/100ps
+
 module soft_pcs_loopback_tb;
   parameter VCD_FILE = "soft_pcs_loopback_tb.vcd";
   parameter DATA_PATH_WIDTH = 4;

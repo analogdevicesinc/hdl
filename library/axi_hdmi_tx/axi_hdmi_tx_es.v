@@ -34,6 +34,8 @@
 // ***************************************************************************
 // Transmit HDMI, video dma data in, hdmi separate syncs data out.
 
+`timescale 1ns/100ps
+
 module axi_hdmi_tx_es #(
 
   parameter   DATA_WIDTH = 32) (

@@ -38,6 +38,8 @@
  * single read-write AXI interface. Only supports AXI3 at the moment.
  */
 
+`timescale 1ns/100ps
+
 module axi_rd_wr_combiner (
   input                         clk,
 

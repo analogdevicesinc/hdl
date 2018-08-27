@@ -33,6 +33,8 @@
 // ***************************************************************************
 // ***************************************************************************
 
+`timescale 1ns/100ps
+
 module axi_dmac_regmap_request #(
   parameter DISABLE_DEBUG_REGISTERS = 0,
   parameter BYTES_PER_BEAT_WIDTH_DEST = 1,

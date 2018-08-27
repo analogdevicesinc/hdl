@@ -42,6 +42,8 @@
 // is copyright © 2016-2017, Analog Devices, Inc.”
 //
 
+`timescale 1ns/100ps
+
 module jesd204_ilas_config_static #(
   parameter DID = 8'h00,
   parameter BID = 4'h0,
