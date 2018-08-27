@@ -34,6 +34,8 @@
 // ***************************************************************************
 // software programmable clock generator (still needs a reference input!)
 
+`timescale 1ns/100ps
+
 module axi_clkgen #(
 
   parameter         ID = 0,

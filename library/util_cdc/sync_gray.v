@@ -39,6 +39,9 @@
  * more than one in one clock cycle in the source domain. I.e. the value may
  * change by either -1, 0 or +1.
  */
+
+`timescale 1ns/100ps
+
 module sync_gray #(
 
   // Bit-width of the counter

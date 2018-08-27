@@ -38,6 +38,8 @@
  * if necessary.
  */
 
+`timescale 1ns/100ps
+
 module axi_dmac_resize_src #(
   parameter DATA_WIDTH_SRC = 64,
   parameter DATA_WIDTH_MEM = 64

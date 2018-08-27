@@ -42,6 +42,8 @@
 // is copyright © 2016-2017, Analog Devices, Inc.”
 //
 
+`timescale 1ns/100ps
+
 module jesd204_eof_generator #(
   parameter DATA_PATH_WIDTH = 4,
   parameter MAX_OCTETS_PER_FRAME = 256

@@ -48,6 +48,8 @@
  * cycle.
  */
 
+`timescale 1ns/100ps
+
 module tx_ctrl_phase_tb;
   parameter VCD_FILE = "tx_ctrl_phase.vcd";
   parameter NUM_LANES = 1;

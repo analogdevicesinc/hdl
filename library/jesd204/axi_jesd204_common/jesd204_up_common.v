@@ -42,6 +42,8 @@
 // is copyright © 2016-2017, Analog Devices, Inc.”
 //
 
+`timescale 1ns/100ps
+
 module jesd204_up_common # (
   parameter PCORE_VERSION = 0,
   parameter PCORE_MAGIC = 0,

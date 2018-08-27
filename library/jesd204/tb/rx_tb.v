@@ -42,6 +42,8 @@
 // is copyright © 2016-2017, Analog Devices, Inc.”
 //
 
+`timescale 1ns/100ps
+
 module rx_tb;
   parameter VCD_FILE = "rx_tb.vcd";
   parameter NUM_LANES = 1;

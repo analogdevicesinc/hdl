@@ -42,6 +42,8 @@
 // is copyright © 2016-2017, Analog Devices, Inc.”
 //
 
+`timescale 1ns/100ps
+
 module jesd204_up_rx_lane (
   input up_clk,
   input up_reset_synchronizer,

@@ -42,6 +42,7 @@
 // is copyright © 2016-2017, Analog Devices, Inc.”
 //
 
+`timescale 1ns/100ps
 
 module axi_jesd204_tx #(
   parameter ID = 0,

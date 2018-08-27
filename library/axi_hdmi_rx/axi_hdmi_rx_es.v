@@ -34,6 +34,8 @@
 // ***************************************************************************
 // Receive HDMI, hdmi embedded syncs data in, video dma data out.
 
+`timescale 1ns/100ps
+
 module axi_hdmi_rx_es #(
 
   parameter   DATA_WIDTH = 32) (
