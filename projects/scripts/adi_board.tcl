@@ -240,8 +240,14 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {device_clk {}}} {
     set m_data ${txrx}_data_${xcvr_index}
   }
 
+  if {$jesd204_type == 0} {
+    set num_of_links [get_property CONFIG.NUM_LINKS [get_bd_cells $a_jesd/$txrx]]
+  } else {
+    set num_of_links 1
+  }
+
   create_bd_port -dir I $m_sysref
-  create_bd_port -dir ${ctrl_dir} $m_sync
+  create_bd_port -from [expr $num_of_links - 1] -to 0 -dir ${ctrl_dir} $m_sync
 
   if {$device_clk == {}} {
     set device_clk ${u_xcvr}/${txrx}_out_clk_${index}
