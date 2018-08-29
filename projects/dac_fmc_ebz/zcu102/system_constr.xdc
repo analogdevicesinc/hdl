@@ -15,8 +15,13 @@ set_property  -dict {PACKAGE_PIN  Y1  IOSTANDARD LVCMOS18} [get_ports spi_mosi] 
 set_property  -dict {PACKAGE_PIN  Y2  IOSTANDARD LVCMOS18} [get_ports spi_clk]                          ; ## G09  FMC_HPC0_LA03_P           IO_L22P_T3U_N6_DBC_AD0P_66_Y2
 set_property  -dict {PACKAGE_PIN  AC3 IOSTANDARD LVCMOS18} [get_ports spi_en]                           ; ## D12  FMC_HPC0_LA05_N           IO_L20N_T3L_N3_AD1N_66_AC3
 
+# For AD9135-FMC-EBZ, AD9136-FMC-EBZ, AD9144-FMC-EBZ, AD9152-FMC-EBZ, AD9154-FMC-EBZ
 set_property  -dict {PACKAGE_PIN  U5  IOSTANDARD LVCMOS18} [get_ports dac_txen[0]]                      ; ## H13  FMC_HPC0_LA07_P           IO_L18P_T2U_N10_AD2P_66_U5
 set_property  -dict {PACKAGE_PIN  U4  IOSTANDARD LVCMOS18} [get_ports dac_txen[1]]                      ; ## H14  FMC_HPC0_LA07_N           IO_L18N_T2U_N11_AD2N_66_U4
+
+# For AD9171-FMC-EBZ, AD9172-FMC-EBZ, AD9173-FMC-EBZ
+set_property  -dict {PACKAGE_PIN  AC2 IOSTANDARD LVCMOS18} [get_ports dac_txen[2]]                      ; ## C10  FMC_HPC_LA06_P
+set_property  -dict {PACKAGE_PIN  AC1 IOSTANDARD LVCMOS18} [get_ports dac_txen[3]]                      ; ## C11  FMC_HPC_LA06_N
 
 set_property  -dict {PACKAGE_PIN  G8} [get_ports tx_ref_clk_p]                                          ; ## D04  FMC_HPC0_GBTCLK0_M2C_C_P  MGTREFCLK0P_229_G8
 set_property  -dict {PACKAGE_PIN  G7} [get_ports tx_ref_clk_n]                                          ; ## D05  FMC_HPC0_GBTCLK0_M2C_C_N  MGTREFCLK0N_229_G7
@@ -40,8 +45,8 @@ set_property  -dict {PACKAGE_PIN  N3} [get_ports tx_data_n[7]]                  
 
 # clocks
 
-# Max lane rate of 12.4 Gbps
-create_clock -name tx_ref_clk   -period  3.225 [get_ports tx_ref_clk_p]
+# Max lane rate of 15.4 Gbps
+create_clock -name tx_ref_clk   -period  2.597 [get_ports tx_ref_clk_p]
 
 # Assumption is that REFCLK and SYSREF have similar propagation delay, 
 # and the SYSREF is a source synchronous Center-Aligned signal to REFCLK

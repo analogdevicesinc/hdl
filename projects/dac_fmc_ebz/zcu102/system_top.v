@@ -100,7 +100,7 @@ module system_top (
   output          spi_clk,
   output          spi_en,
 
-  inout   [ 1:0]  dac_txen
+  inout   [ 3:0]  dac_txen
 );
 
   // internal signals
@@ -117,7 +117,13 @@ module system_top (
 
   // spi
 
-  assign spi_en = 1'b0; // make FPGA master on SPI
+  // spi_en is active ...
+  //   ... high for AD9135-FMC-EBZ, AD9136-FMC-EBZ, AD9144-FMC-EBZ,
+  //   ... low for AD9171-FMC-EBZ, AD9172-FMC-EBZ, AD9173-FMC-EBZ
+  // If you are planning to build a bitstream for just one of those boards you
+  // can hardwire the logic level here.
+  //
+  // assign spi_en = 1'bz;
 
   assign spi_csn_dac = spi_csn[1];
   assign spi_csn_clk = spi_csn[0];
@@ -161,13 +167,14 @@ module system_top (
 
   /* FMC GPIOs */
   ad_iobuf #(
-    .DATA_WIDTH(2)
+    .DATA_WIDTH(5)
   ) i_iobuf (
-    .dio_t (gpio_t[32+:2]),
-    .dio_i (gpio_o[32+:2]),
-    .dio_o (gpio_i[32+:2]),
+    .dio_t (gpio_t[32+:5]),
+    .dio_i (gpio_o[32+:5]),
+    .dio_o (gpio_i[32+:5]),
     .dio_p ({
-      dac_txen          /* 32-33 */
+      spi_en,           /* 36 */
+      dac_txen          /* 32-35 */
     })
   );
 

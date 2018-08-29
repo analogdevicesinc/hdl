@@ -35,6 +35,8 @@ source ../../scripts/adi_project_alt.tcl
 
 adi_project_altera dac_fmc_ebz_a10soc
 
+set_global_assignment -name OPTIMIZATION_MODE "HIGH PERFORMANCE EFFORT"
+
 source $ad_hdl_dir/projects/common/a10soc/a10soc_system_assign.tcl
 source $ad_hdl_dir/projects/common/a10soc/a10soc_plddr4_assign.tcl
 
@@ -96,11 +98,18 @@ set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to "tx_sysref(n)"
 
 # gpio
 
+# For AD9135-FMC-EBZ, AD9136-FMC-EBZ, AD9144-FMC-EBZ, AD9152-FMC-EBZ, AD9154-FMC-EBZ
 set_location_assignment PIN_A9   -to dac_txen[0]            ; ## H13  FMCA_LA07_P
 set_location_assignment PIN_B9   -to dac_txen[1]            ; ## H14  FMCA_LA07_N
 
+# For AD9171-FMC-EBZ, AD9172-FMC-EBZ, AD9173-FMC-EBZ
+set_location_assignment PIN_A10  -to dac_txen[2]            ; ## C10  FMCA_LA06_P
+set_location_assignment PIN_B10  -to dac_txen[3]            ; ## C11  FMCA_LA06_N
+
 set_instance_assignment -name IO_STANDARD "1.8 V" -to dac_txen[0]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to dac_txen[1]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to dac_txen[2]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to dac_txen[3]
 
 # spi
 

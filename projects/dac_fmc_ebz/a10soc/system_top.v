@@ -135,7 +135,7 @@ module system_top (
   output  [ 7:0]    tx_serial_data,
 
   // gpio
-  output  [ 1:0]    dac_txen,
+  output  [ 3:0]    dac_txen,
 
   // spi
 
@@ -159,17 +159,23 @@ module system_top (
 
   // assignments
 
+  // spi_en is active ...
+  //   ... high for AD9135-FMC-EBZ, AD9136-FMC-EBZ, AD9144-FMC-EBZ,
+  //   ... low for AD9171-FMC-EBZ, AD9172-FMC-EBZ, AD9173-FMC-EBZ
+  // If you are planning to build a bitstream for just one of those boards you
+  // can hardwire the logic level here.
+  //
+  // assign spi_en = 1'bz;
+
   assign spi_csn_clk = spi_csn_s[0];
   assign spi_csn_dac = spi_csn_s[1];
 
-  assign spi_en = 1'b1;
-
-
   // gpio in & out are separate cores
 
-  assign dac_fifo_bypass = gpio_o[44];
+  assign dac_fifo_bypass = gpio_o[40];
 
-  assign dac_txen = gpio_o[33:32];
+  assign spi_en = gpio_o[36];
+  assign dac_txen = gpio_o[35:32];
 
   assign gpio_i[63:32] = 'h0;
 

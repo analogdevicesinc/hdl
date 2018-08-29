@@ -37,7 +37,7 @@
 # lane rate is less than the maximum specified here you can reduce it, which
 # might improve timing closure.
 
-set MAX_LANE_RATE 12400
+set MAX_LANE_RATE 14200
 set MAX_DEVICE_CLOCK [expr $MAX_LANE_RATE / 40]
 
 proc set_instance_parameter_values {inst values} {
