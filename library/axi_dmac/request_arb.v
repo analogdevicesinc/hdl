@@ -72,6 +72,8 @@ module dmac_request_arb #(
   output response_valid,
   input response_ready,
 
+  output abort_req,
+
   // Master AXI interface
   input                               m_dest_axi_aclk,
   input                               m_dest_axi_aresetn,
@@ -1115,6 +1117,8 @@ dmac_request_generator #(
   .rewind_req_valid(req_rewind_req_valid),
   .rewind_req_data(req_rewind_req_data),
   .rewind_state(rewind_state),
+
+  .abort_req(abort_req),
 
   .completion_req_valid(completion_req_valid),
   .completion_req_last(completion_req_last),

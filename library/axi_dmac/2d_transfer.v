@@ -62,6 +62,8 @@ module dmac_2d_transfer #(
   output reg req_response_valid,
   input req_response_ready,
 
+  input out_abort_req,
+
   output reg out_req_valid,
   input out_req_ready,
   output [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] out_req_dest_address,
@@ -158,6 +160,8 @@ always @(posedge req_aclk) begin
     src_stride <= req_src_stride;
     out_req_sync_transfer_start <= req_sync_transfer_start;
     gen_last <= req_last;
+  end else if (out_abort_req == 1'b1) begin
+    y_length <= 0;
   end else if (out_req_valid == 1'b1 && out_req_ready == 1'b1) begin
     dest_address <= dest_address + dest_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST];
     src_address <= src_address + src_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC];
