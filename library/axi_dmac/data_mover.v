@@ -105,7 +105,7 @@ wire last_load;
 wire last;
 wire early_tlast;
 
-assign xfer_req = active;
+assign xfer_req = active & pending_burst;
 
 assign response_id = id;
 
