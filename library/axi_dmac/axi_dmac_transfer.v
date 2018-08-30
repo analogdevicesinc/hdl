@@ -205,6 +205,7 @@ wire src_enabled;
 wire req_valid_gated;
 wire req_ready_gated;
 
+wire abort_req;
 
 axi_dmac_reset_manager #(
   .ASYNC_CLK_REQ_SRC (ASYNC_CLK_REQ_SRC),
@@ -274,6 +275,7 @@ dmac_2d_transfer #(
   .req_sync_transfer_start (req_sync_transfer_start),
   .req_last (req_last),
 
+  .out_abort_req (abort_req),
   .out_req_valid (dma_req_valid),
   .out_req_ready (dma_req_ready),
   .out_req_dest_address (dma_req_dest_address),
@@ -347,6 +349,8 @@ dmac_request_arb #(
   .response_partial (dma_response_partial),
   .response_valid (dma_response_valid),
   .response_ready (dma_response_ready),
+
+  .abort_req (abort_req),
 
   .req_enable (req_enable),
 
