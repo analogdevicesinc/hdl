@@ -132,6 +132,7 @@ module dmac_dma_write_tb;
     .ctrl_pause(1'b0),
 
     .req_eot(eot),
+    .req_response_ready(1'b1),
 
     .req_valid(req_valid),
     .req_ready(req_ready),

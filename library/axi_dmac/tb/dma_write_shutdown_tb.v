@@ -144,6 +144,7 @@ module dmac_dma_write_shutdown_tb;
     .ctrl_pause(1'b0),
 
     .req_eot(),
+    .req_response_ready(1'b1),
 
     .req_valid(1'b1),
     .req_ready(),

@@ -42,13 +42,14 @@ module dmac_regmap_tb;
   `include "tb_base.v"
 
   localparam DMA_LENGTH_WIDTH = 24;
+  localparam DMA_LENGTH_ALIGN = 3;
   localparam BYTES_PER_BEAT = 1;
   localparam DMA_AXI_ADDR_WIDTH = 32;
 
   localparam LENGTH_ALIGN = 2;
   localparam LENGTH_MASK = {DMA_LENGTH_WIDTH{1'b1}};
   localparam LENGTH_ALIGN_MASK = {LENGTH_ALIGN{1'b1}};
-  localparam STRIDE_MASK = {{DMA_LENGTH_WIDTH-BYTES_PER_BEAT{1'b1}},{BYTES_PER_BEAT{1'b0}}}
+  localparam STRIDE_MASK = {{DMA_LENGTH_WIDTH-BYTES_PER_BEAT{1'b1}},{BYTES_PER_BEAT{1'b0}}};
   localparam ADDR_MASK = {{DMA_AXI_ADDR_WIDTH-BYTES_PER_BEAT{1'b1}},{BYTES_PER_BEAT{1'b0}}};
 
   localparam VAL_DBG_SRC_ADDR = 32'h76543210;
