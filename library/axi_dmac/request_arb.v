@@ -596,15 +596,15 @@ end endgenerate
 
 generate if (DMA_TYPE_SRC == DMA_TYPE_MM_AXI) begin
 
+wire [ID_WIDTH-1:0] src_data_id;
+wire [ID_WIDTH-1:0] src_address_id;
+wire src_address_eot = eot_mem_src[src_address_id];
+
 assign source_id = src_address_id;
 assign source_eot = src_address_eot;
 
 assign src_clk = m_src_axi_aclk;
 assign src_ext_resetn = m_src_axi_aresetn;
-
-wire [ID_WIDTH-1:0] src_data_id;
-wire [ID_WIDTH-1:0] src_address_id;
-wire src_address_eot = eot_mem_src[src_address_id];
 
 assign dbg_src_address_id = src_address_id;
 assign dbg_src_data_id = src_data_id;
@@ -780,13 +780,13 @@ end
 
 if (DMA_TYPE_SRC == DMA_TYPE_FIFO) begin
 
+wire src_eot = eot_mem_src[src_response_id];
+
 assign source_id = src_response_id;
 assign source_eot = src_eot;
 
 assign src_clk = fifo_wr_clk;
 assign src_ext_resetn = 1'b1;
-
-wire src_eot = eot_mem_src[src_response_id];
 
 assign dbg_src_address_id = 'h00;
 assign dbg_src_data_id = 'h00;
