@@ -149,7 +149,7 @@ module system_top (
     .spi_adf4355 (gpio_o[36]),
     .spi_adf4355_ce (gpio_o[37]),
     .spi_clk (spi_clk),
-    .spi_csn (spi_csn),
+    .spi_csn (spi_csn[2:0]),
     .spi_mosi (spi_mosi),
     .spi_miso (spi_miso),
     .spi_adc_csn (spi_adc_csn),
