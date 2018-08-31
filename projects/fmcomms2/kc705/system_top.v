@@ -125,9 +125,6 @@ module system_top (
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
   wire    [ 7:0]  spi_csn;
-  wire            spi_clk;
-  wire            spi_mosi;
-  wire            spi_miso;
   wire            tdd_sync_t;
   wire            tdd_sync_o;
   wire            tdd_sync_i;

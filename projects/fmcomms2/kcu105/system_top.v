@@ -108,9 +108,6 @@ module system_top (
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
   wire    [ 7:0]  spi_csn;
-  // wire            spi_clk; redeclaration
-  wire            spi_mosi;
-  wire            spi_miso;
 
   // defaults
 
@@ -149,7 +146,7 @@ module system_top (
     .c0_ddr4_dqs_t (ddr4_dqs_p),
     .c0_ddr4_odt (ddr4_odt),
     .c0_ddr4_reset_n (ddr4_reset_n),
-    .enable (),
+    .enable (enable),
     .gpio0_i (gpio_i[31:0]),
     .gpio0_o (gpio_o[31:0]),
     .gpio0_t (gpio_t[31:0]),
