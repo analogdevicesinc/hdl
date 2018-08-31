@@ -11,6 +11,9 @@ adi_project_files fmcomms2_kcu105 [list \
   "$ad_hdl_dir/projects/common/kcu105/kcu105_system_constr.xdc" \
   "$ad_hdl_dir/projects/common/kcu105/kcu105_system_lutram_constr.xdc" ]
 
+## To improve timing in DDR4 MIG
+set_property strategy Performance_Retiming [get_runs impl_1]
+
 adi_project_run fmcomms2_kcu105
 source $ad_hdl_dir/library/axi_ad9361/axi_ad9361_delay.tcl
 
