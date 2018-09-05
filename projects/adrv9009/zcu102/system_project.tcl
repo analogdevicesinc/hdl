@@ -10,5 +10,8 @@ adi_project_files adrv9009_zcu102 [list \
   "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/zcu102/zcu102_system_constr.xdc" ]
 
+## To improve timing of the BRAM buffers
+set_property strategy Performance_RefinePlacement [get_runs impl_1]
+
 adi_project_run adrv9009_zcu102
 
