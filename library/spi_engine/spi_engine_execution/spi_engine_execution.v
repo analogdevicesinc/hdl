@@ -41,7 +41,8 @@ module spi_engine_execution #(
   parameter DEFAULT_SPI_CFG = 0,
   parameter DEFAULT_CLK_DIV = 0,
   parameter DATA_WIDTH = 8,                   // Valid data widths values are 8/16/24/32
-  parameter NUM_OF_SDI = 1 ) (
+  parameter NUM_OF_SDI = 1,
+  parameter [0:0] SDO_DEFAULT = 1'b0) (
 
   input clk,
   input resetn,
@@ -358,7 +359,8 @@ always @(posedge clk) begin
         end
 end
 
-assign sdo = data_shift[DATA_WIDTH];
+assign sdo = (inst_d1 == CMD_TRANSFER) ? data_shift[DATA_WIDTH] : SDO_DEFAULT;
+
 assign sdi_data = (NUM_OF_SDI == 1) ? data_shift[(DATA_WIDTH-1):0] :
                   (NUM_OF_SDI == 2) ? {data_shift_1[(DATA_WIDTH-1):0], data_shift[(DATA_WIDTH-1):0]} :
                   (NUM_OF_SDI == 3) ? {data_shift_2[(DATA_WIDTH-1):0], data_shift_1[(DATA_WIDTH-1):0],
