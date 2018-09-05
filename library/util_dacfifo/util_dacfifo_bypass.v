@@ -131,7 +131,7 @@ module util_dacfifo_bypass #(
 
   // write address generation for the asymmetric FIFO
 
-  assign dma_mem_wea_s = dma_xfer_req & dma_valid & dma_ready;
+  assign dma_mem_wea_s = dma_valid & dma_ready;
 
   always @(posedge dma_clk) begin
     if (dma_rst == 1'b1) begin
