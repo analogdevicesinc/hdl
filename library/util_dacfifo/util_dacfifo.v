@@ -70,11 +70,6 @@ module util_dacfifo #(
   reg     [(ADDRESS_WIDTH-1):0]       dma_waddr = 'b0;
   reg     [(ADDRESS_WIDTH-1):0]       dma_waddr_g = 'b0;
   reg     [(ADDRESS_WIDTH-1):0]       dma_lastaddr_g = 'b0;
-  reg     [(ADDRESS_WIDTH-1):0]       dma_raddr_m1 = 'b0;
-  reg     [(ADDRESS_WIDTH-1):0]       dma_raddr_m2 = 'b0;
-  reg     [(ADDRESS_WIDTH-1):0]       dma_raddr = 'b0;
-  reg     [(ADDRESS_WIDTH-1):0]       dma_addr_diff = 'b0;
-  reg                                 dma_ready_fifo = 1'b0;
   reg                                 dma_bypass = 1'b0;
   reg                                 dma_bypass_m1 = 1'b0;
   reg                                 dma_xfer_req_d1 = 1'b0;
@@ -82,7 +77,6 @@ module util_dacfifo #(
   reg                                 dma_xfer_out_fifo = 1'b0;
 
   reg     [(ADDRESS_WIDTH-1):0]       dac_raddr = 'b0;
-  reg     [(ADDRESS_WIDTH-1):0]       dac_raddr_g = 'b0;
   reg     [(ADDRESS_WIDTH-1):0]       dac_waddr = 'b0;
   reg     [(ADDRESS_WIDTH-1):0]       dac_waddr_m1 = 'b0;
   reg     [(ADDRESS_WIDTH-1):0]       dac_waddr_m2 = 'b0;
@@ -108,11 +102,8 @@ module util_dacfifo #(
   wire                                dma_ready_bypass_s;
   wire    [(DATA_WIDTH-1):0]          dac_data_fifo_s;
   wire    [(DATA_WIDTH-1):0]          dac_data_bypass_s;
-  wire    [ADDRESS_WIDTH:0]           dma_addr_diff_s;
   wire    [ADDRESS_WIDTH:0]           dac_addr_diff_s;
   wire    [(ADDRESS_WIDTH-1):0]       dma_waddr_b2g_s;
-  wire    [(ADDRESS_WIDTH-1):0]       dac_raddr_b2g_s;
-  wire    [(ADDRESS_WIDTH-1):0]       dma_raddr_g2b_s;
   wire    [(ADDRESS_WIDTH-1):0]       dac_waddr_g2b_s;
   wire    [(ADDRESS_WIDTH-1):0]       dac_lastaddr_g2b_s;
   wire                                dac_mem_ren_s;
@@ -146,34 +137,6 @@ module util_dacfifo #(
   assign dma_rst_int_s = dma_rst | (dma_xfer_posedge_s & ~dma_init);
 
   // DMA / Write interface
-
-  assign dma_addr_diff_s = {1'b1, dma_waddr} - dma_raddr;
-
-  always @(posedge dma_clk) begin
-    if (dma_rst_int_s == 1'b1) begin
-      dma_addr_diff <= 'b0;
-      dma_raddr_m1 <= 'b0;
-      dma_raddr_m2 <= 'b0;
-      dma_raddr <= 'b0;
-      dma_ready_fifo <= 1'b0;
-    end else begin
-      dma_raddr_m1 <= dac_raddr_g;
-      dma_raddr_m2 <= dma_raddr_m1;
-      dma_raddr <= dma_raddr_g2b_s;
-      dma_addr_diff <= dma_addr_diff_s[ADDRESS_WIDTH-1:0];
-      if (dma_addr_diff >= FIFO_THRESHOLD_HI) begin
-        dma_ready_fifo <= 1'b0;
-      end else begin
-        dma_ready_fifo <= 1'b1;
-      end
-    end
-  end
-
-  ad_g2b #(
-    .DATA_WIDTH (ADDRESS_WIDTH))
-  i_dma_raddr_g2b (
-    .din (dma_raddr_m2),
-    .dout (dma_raddr_g2b_s));
 
   // write address generation
 
@@ -225,7 +188,7 @@ module util_dacfifo #(
 
   // we can reset the DAC side at each positive edge of xfer_req, even if
   // sometimes the reset is redundant
-  assign dac_rst_int_s = dac_xfer_posedge_s | dac_rst;
+  assign dac_rst_int_s = dac_xfer_req | dac_rst;
 
   assign dac_addr_diff_s = {1'b1, dac_waddr} - dac_raddr;
 
@@ -289,7 +252,6 @@ module util_dacfifo #(
   always @(posedge dac_clk) begin
     if (dac_rst_int_s == 1'b1) begin
       dac_raddr <= 'b0;
-      dac_raddr_g <= 'b0;
     end else begin
       if (dac_mem_ren_s == 1'b1) begin
         if (dac_lastaddr == 'b0 || dac_raddr != dac_lastaddr) begin
@@ -298,15 +260,8 @@ module util_dacfifo #(
           dac_raddr <= 'b0;
         end
       end
-      dac_raddr_g <= dac_raddr_b2g_s;
     end
   end
-
-  ad_b2g #(
-    .DATA_WIDTH (ADDRESS_WIDTH))
-  i_dac_raddr_b2g (
-    .din (dac_raddr),
-    .dout (dac_raddr_b2g_s));
 
   // memory instantiation
 
@@ -363,8 +318,9 @@ module util_dacfifo #(
     dac_bypass <= dac_bypass_m1;
   end
 
+  // the util_dacfifo is always ready for the DMA
   always @(posedge dma_clk) begin
-    dma_ready <= (dma_bypass == 1'b1) ? dma_ready_bypass_s : dma_ready_fifo;
+    dma_ready <= (dma_bypass == 1'b1) ? dma_ready_bypass_s : 1'b1;
   end
 
   always @(posedge dac_clk) begin
