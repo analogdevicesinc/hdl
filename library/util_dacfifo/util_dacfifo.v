@@ -234,7 +234,8 @@ module util_dacfifo #(
       dac_lastaddr <= dac_lastaddr_g2b_s;
       dac_xfer_out_fifo_m1 <= dma_xfer_out_fifo;
       dac_xfer_out_fifo <= dac_xfer_out_fifo_m1;
-      dac_xfer_out_fifo_d <= dac_xfer_out_fifo;    // read consume at least one clock cycle
+      if (dac_valid)
+        dac_xfer_out_fifo_d <= dac_xfer_out_fifo;
     end
   end
 
