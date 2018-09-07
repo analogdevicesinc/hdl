@@ -48,26 +48,19 @@ module ad_dds_sine_cordic #(
 
   input                        clk,
   input      [ PHASE_DW-1:0]   angle,
+  input      [         15:0]   scale,
   output reg [CORDIC_DW-1:0]   sine,
   output reg [CORDIC_DW-1:0]   cosine,
   input      [ DELAY_DW-1:0]   ddata_in,
   output reg [ DELAY_DW-1:0]   ddata_out);
-
-  // Local Parameters
-  localparam LUT_FSCALE = 1 << (PHASE_DW);
-
-  // 1.64676025812 =~ system gain
-  localparam X_FSCALE = 1 << (CORDIC_DW);
-  localparam APROX_DW_GAIN_ERR = (CORDIC_DW < 21) ? 4 :
-                                 (CORDIC_DW <= 24) ? 7 : 0;
-  // ((2^N)/2)/1.647...
-  localparam [CORDIC_DW-1:0] X_VALUE = ((X_FSCALE/2)/(1.64676))-APROX_DW_GAIN_ERR;
 
   // Registers Declarations
 
   reg  [CORDIC_DW-1:0] x0  = 'd0;
   reg  [CORDIC_DW-1:0] y0  = 'd0;
   reg  [ PHASE_DW-1:0] z0  = 'd0;
+  reg  [CORDIC_DW-1:0] sine_scale_d;
+  reg  [CORDIC_DW-1:0] sine_scale_n;
 
   // Wires Declarations
 
@@ -76,6 +69,7 @@ module ad_dds_sine_cordic #(
   wire [ PHASE_DW-1:0] z_s       [0:CORDIC_DW-1];
   wire [ DELAY_DW-1:0] data_in_d [0:CORDIC_DW-1];
   wire [ PHASE_DW-1:0] atan_table[0:CORDIC_DW-2];
+  wire [CORDIC_DW-1:0] sine_scale;
   wire [          1:0] quadrant;
 
   // arc tangent LUT
@@ -354,7 +348,19 @@ module ad_dds_sine_cordic #(
       assign atan_table[ 5] = 8'd1;
       assign atan_table[ 6] = 8'd1;
     end
+
+    if (CORDIC_DW > 16) begin
+      assign sine_scale = {scale,{CORDIC_DW-15{1'b0}}};
+    end else begin
+      assign sine_scale = scale[(CORDIC_DW-1):CORDIC_DW-16];
+    end
+
   endgenerate
+
+  always @(posedge clk) begin
+    sine_scale_d <= sine_scale;
+    sine_scale_n <= ({CORDIC_DW{1'b1}} ^ sine_scale) + 1;
+  end
 
   // pre-rotating
 
@@ -365,20 +371,20 @@ module ad_dds_sine_cordic #(
     case (quadrant)
       2'b00,
       2'b11: begin
-         x0 <= X_VALUE;
+         x0 <= sine_scale_d;
          y0 <= 0;
          z0 <= angle;
       end
 
       2'b01: begin
          x0 <= 0;
-         y0 <= X_VALUE;
+         y0 <= sine_scale_d;
          z0 <= {2'b00, angle[PHASE_DW-3:0]};
       end
 
       2'b10: begin
          x0 <= 0;
-         y0 <= -X_VALUE;
+         y0 <= sine_scale_n;
          z0 <= {2'b11, angle[PHASE_DW-3:0]};
       end
     endcase

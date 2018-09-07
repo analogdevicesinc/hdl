@@ -72,10 +72,15 @@ module ad_dds_1 #(
       i_dds_sine (
         .clk (clk),
         .angle (angle),
+        .scale (scale),
         .sine (sine_s),
         .cosine (),
         .ddata_in (1'b0),
         .ddata_out ());
+
+      always @(posedge clk) begin
+         dds_data <= sine_s;
+      end
 
     end else begin
 
@@ -85,29 +90,29 @@ module ad_dds_1 #(
         .sine (sine_s),
         .ddata_in (1'b0),
         .ddata_out ());
+
+      // scale for a sine generator
+
+      ad_mul #(
+        .A_DATA_WIDTH(DDS_D_DW + 1),
+        .B_DATA_WIDTH(17),
+        .DELAY_DATA_WIDTH(1))
+      i_dds_scale (
+        .clk (clk),
+        .data_a ({sine_s[DDS_D_DW-1], sine_s}),
+        .data_b ({scale[15], scale}),
+        .data_p (s1_data_s),
+        .ddata_in (1'b0),
+        .ddata_out ());
+
+      // dds data
+
+      always @(posedge clk) begin
+        //15'h8000 is the maximum scale
+        dds_data <= s1_data_s[DDS_D_DW+13:14];
+      end
     end
   endgenerate
-
-  // scale for a sine generator
-
-  ad_mul #(
-    .A_DATA_WIDTH(DDS_D_DW + 1),
-    .B_DATA_WIDTH(17),
-    .DELAY_DATA_WIDTH(1))
-  i_dds_scale (
-    .clk (clk),
-    .data_a ({sine_s[DDS_D_DW-1], sine_s}),
-    .data_b ({scale[15], scale}),
-    .data_p (s1_data_s),
-    .ddata_in (1'b0),
-    .ddata_out ());
-
-  // dds data
-
-  always @(posedge clk) begin
-    //15'h8000 is the maximum scale
-    dds_data <= s1_data_s[DDS_D_DW+13:14];
-  end
 
 endmodule
 
