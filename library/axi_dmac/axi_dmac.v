@@ -382,7 +382,8 @@ axi_dmac_regmap #(
   .DMA_CYCLIC(CYCLIC),
   .HAS_DEST_ADDR(HAS_DEST_ADDR),
   .HAS_SRC_ADDR(HAS_SRC_ADDR),
-  .DMA_2D_TRANSFER(DMA_2D_TRANSFER)
+  .DMA_2D_TRANSFER(DMA_2D_TRANSFER),
+  .SYNC_TRANSFER_START(SYNC_TRANSFER_START)
 ) i_regmap (
   .s_axi_aclk(s_axi_aclk),
   .s_axi_aresetn(s_axi_aresetn),

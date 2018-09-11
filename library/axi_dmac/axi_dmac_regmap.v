@@ -45,7 +45,8 @@ module axi_dmac_regmap #(
   parameter DMA_CYCLIC = 0,
   parameter HAS_DEST_ADDR = 1,
   parameter HAS_SRC_ADDR = 1,
-  parameter DMA_2D_TRANSFER = 0
+  parameter DMA_2D_TRANSFER = 0,
+  parameter SYNC_TRANSFER_START = 0
 ) (
   // Slave AXI interface
   input s_axi_aclk,
@@ -221,7 +222,8 @@ axi_dmac_regmap_request #(
   .DMA_CYCLIC(DMA_CYCLIC),
   .HAS_DEST_ADDR(HAS_DEST_ADDR),
   .HAS_SRC_ADDR(HAS_SRC_ADDR),
-  .DMA_2D_TRANSFER(DMA_2D_TRANSFER)
+  .DMA_2D_TRANSFER(DMA_2D_TRANSFER),
+  .SYNC_TRANSFER_START(SYNC_TRANSFER_START)
 ) i_regmap_request (
   .clk(s_axi_aclk),
   .reset(~s_axi_aresetn),
