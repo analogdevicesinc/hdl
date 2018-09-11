@@ -185,10 +185,10 @@ end endgenerate
  * one has s_axi_sync set. This will be the first beat that is passsed through.
  */
 always @(posedge clk) begin
-  if (m_axi_valid == 1'b1) begin
-    needs_sync <= 1'b0;
-  end else if (req_ready == 1'b1) begin
+  if (req_ready == 1'b1) begin
     needs_sync <= req_sync_transfer_start;
+  end else if (m_axi_valid == 1'b1) begin
+    needs_sync <= 1'b0;
   end
 end
 
