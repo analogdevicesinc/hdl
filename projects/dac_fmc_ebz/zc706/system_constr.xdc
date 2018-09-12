@@ -76,6 +76,16 @@ set_property  -dict {PACKAGE_PIN  AJ24  IOSTANDARD LVCMOS25} [get_ports dac_txen
 set_property  -dict {PACKAGE_PIN  AG22  IOSTANDARD LVCMOS25} [get_ports dac_txen[2]]                  ; ## C10  FMC_HPC_LA06_P                  IO_L6P_T0_11_AG22
 set_property  -dict {PACKAGE_PIN  AH22  IOSTANDARD LVCMOS25} [get_ports dac_txen[3]]                  ; ## C11  FMC_HPC_LA06_N                  IO_L6P_T0_11_AG22
 
+# PMOD 1 header
+set_property  -dict {PACKAGE_PIN  AJ21  IOSTANDARD LVCMOS25} [get_ports pmod_spi_clk]                 ; ## PMOD1_0_LS                           IO_L3P_T0_DQS_11_AJ21
+set_property  -dict {PACKAGE_PIN  AK21  IOSTANDARD LVCMOS25} [get_ports pmod_spi_csn]                 ; ## PMOD1_1_LS                           IO_L3N_T0_DQS_11_AK21
+set_property  -dict {PACKAGE_PIN  AB21  IOSTANDARD LVCMOS25} [get_ports pmod_spi_mosi]                ; ## PMOD1_2_LS                           IO_L19P_T3_11_AB21
+set_property  -dict {PACKAGE_PIN  AB16  IOSTANDARD LVCMOS25} [get_ports pmod_spi_miso]                ; ## PMOD1_3_LS                           IO_L24N_T3_10_AB16
+set_property  -dict {PACKAGE_PIN   Y20  IOSTANDARD LVCMOS25} [get_ports pmod_gpio[0]]                 ; ## PMOD1_4_LS                           IO_L6P_T0_9_Y20
+set_property  -dict {PACKAGE_PIN  AA20  IOSTANDARD LVCMOS25} [get_ports pmod_gpio[1]]                 ; ## PMOD1_5_LS                           IO_L6N_T0_VREF_9_AA20
+set_property  -dict {PACKAGE_PIN  AC18  IOSTANDARD LVCMOS25} [get_ports pmod_gpio[2]]                 ; ## PMOD1_6_LS                           IO_L11P_T1_SRCC_9_AC18
+set_property  -dict {PACKAGE_PIN  AC19  IOSTANDARD LVCMOS25} [get_ports pmod_gpio[3]]                 ; ## PMOD1_7_LS                           IO_L11N_T1_SRCC_9_AC19
+
 # clocks
 
 # Maximum lane of 10.3125 (Maximum supported by the ZC706)

@@ -100,7 +100,13 @@ module system_top (
   output          spi_clk,
   output          spi_en,
 
-  inout   [ 3:0]  dac_txen
+  inout   [ 3:0]  dac_txen,
+
+  output          pmod_spi_clk,
+  output          pmod_spi_csn,
+  output          pmod_spi_mosi,
+  input           pmod_spi_miso,
+  inout   [ 3:0]  pmod_gpio
 );
 
   // internal signals
@@ -108,7 +114,8 @@ module system_top (
   wire    [94:0]  gpio_i;
   wire    [94:0]  gpio_o;
   wire    [94:0]  gpio_t;
-  wire    [ 2:0]  spi_csn;
+  wire    [ 2:0]  spi0_csn;
+  wire    [ 2:0]  spi1_csn;
   wire            tx_ref_clk;
   wire            tx_sysref;
   wire    [ 1:0]  tx_sync;
@@ -125,8 +132,8 @@ module system_top (
   //
   // assign spi_en = 1'bz;
 
-  assign spi_csn_dac = spi_csn[1];
-  assign spi_csn_clk = spi_csn[0];
+  assign spi_csn_dac = spi0_csn[1];
+  assign spi_csn_clk = spi0_csn[0];
 
   /* JESD204 clocks and control signals */
   IBUFDS_GTE4 i_ibufds_tx_ref_clk (
@@ -180,25 +187,39 @@ module system_top (
 
   assign dac_fifo_bypass = gpio_o[40];
 
+  /* PMOD GPIOs 48-51 */
+  ad_iobuf #(
+    .DATA_WIDTH(4)
+  ) i_iobuf_pmod (
+    .dio_t (gpio_t[48+:4]),
+    .dio_i (gpio_o[48+:4]),
+    .dio_o (gpio_i[48+:4]),
+    .dio_p (pmod_gpio)
+  );
+
+  /* PMOD SPI */
+  assign pmod_spi_csn = spi1_csn[0];
+
   /* Board GPIOS. Buttons, LEDs, etc... */
   assign gpio_i[20: 8] = gpio_bd_i;
   assign gpio_bd_o = gpio_o[7:0];
 
-  assign gpio_i[94:37] = gpio_o[94:37];
+  assign gpio_i[94:52] = gpio_o[94:52];
+  assign gpio_i[47:37] = gpio_o[47:37];
   assign gpio_i[31:21] = gpio_o[31:21];
   assign gpio_i[ 7: 0] = gpio_o[7:0];
 
   system_wrapper i_system_wrapper (
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
-    .spi0_csn (spi_csn),
+    .spi0_csn (spi0_csn),
     .spi0_miso (spi_miso),
     .spi0_mosi (spi_mosi),
     .spi0_sclk (spi_clk),
-    .spi1_csn (),
-    .spi1_miso (1'd0),
-    .spi1_mosi (),
-    .spi1_sclk (),
+    .spi1_csn (spi1_csn),
+    .spi1_miso (pmod_spi_miso),
+    .spi1_mosi (pmod_spi_mosi),
+    .spi1_sclk (pmod_spi_clk),
     .tx_data_0_n (tx_data_n[0]),
     .tx_data_0_p (tx_data_p[0]),
     .tx_data_1_n (tx_data_n[1]),

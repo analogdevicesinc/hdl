@@ -89,7 +89,14 @@ module system_top (
   output                  spi_csn_clk,
   output                  spi_clk,
   input                   spi_miso,
-  output                  spi_mosi);
+  output                  spi_mosi,
+
+  output                  pmod_spi_clk,
+  output                  pmod_spi_csn,
+  output                  pmod_spi_mosi,
+  input                   pmod_spi_miso,
+  inout       [ 3:0]      pmod_gpio
+  );
 
   // internal signals
 
@@ -167,6 +174,22 @@ module system_top (
 
   assign dac_fifo_bypass = gpio_o[40];
 
+  /* PMOD GPIOs 48-51 */
+  ad_iobuf #(
+    .DATA_WIDTH(4)
+  ) i_iobuf_pmod (
+    .dio_t (gpio_t[48+:4]),
+    .dio_i (gpio_o[48+:4]),
+    .dio_o (gpio_i[48+:4]),
+    .dio_p (pmod_gpio)
+  );
+
+  /* PMOD SPI */
+  assign pmod_spi_clk = spi1_clk;
+  assign pmod_spi_csn = spi1_csn[0];
+  assign pmod_spi_mosi = spi1_mosi;
+  assign spi1_miso = pmod_spi_miso;
+
   /* Board GPIOS. Buttons, LEDs, etc... */
   ad_iobuf #(
     .DATA_WIDTH(15)
@@ -177,7 +200,8 @@ module system_top (
     .dio_p (gpio_bd)
   );
 
-  assign gpio_i[63:37] = gpio_o[63:37];
+  assign gpio_i[63:52] = gpio_o[63:52];
+  assign gpio_i[47:37] = gpio_o[47:37];
   assign gpio_i[31:15] = gpio_o[31:15];
 
   system_wrapper i_system_wrapper (
@@ -228,7 +252,7 @@ module system_top (
     .spi1_csn_1_o (spi1_csn[1]),
     .spi1_csn_2_o (spi1_csn[2]),
     .spi1_csn_i (1'b1),
-    .spi1_sdi_i (1'b1),
+    .spi1_sdi_i (spi1_miso),
     .spi1_sdo_i (spi1_mosi),
     .spi1_sdo_o (spi1_mosi),
     .tx_data_0_n (tx_data_n[0]),
