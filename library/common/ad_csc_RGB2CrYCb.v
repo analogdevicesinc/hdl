@@ -60,42 +60,51 @@ module ad_csc_RGB2CrYCb #(
 
   // Cr (red-diff)
 
-  ad_csc_1 #(.DELAY_DATA_WIDTH(DELAY_DATA_WIDTH)) i_csc_1_Cr (
+  ad_csc #(
+    .DELAY_DW(DELAY_DATA_WIDTH),
+    .COLOR_N(3))
+  j_csc_1_Cr (
     .clk (clk),
     .sync (RGB_sync),
     .data (RGB_data),
-    .C1 (17'h00707),
-    .C2 (17'h105e2),
-    .C3 (17'h10124),
-    .C4 (25'h0080000),
-    .csc_sync_1 (CrYCb_sync),
-    .csc_data_1 (CrYCb_data[23:16]));
+    .C1 (17'h7070),
+    .C2 (17'h5e27),
+    .C3 (17'h1248),
+    .C4 (24'h800002),
+    .csc_sync (CrYCb_sync),
+    .csc_data (CrYCb_data[23:16]));
 
   // Y (luma)
 
-  ad_csc_1 #(.DELAY_DATA_WIDTH(1)) i_csc_1_Y (
+  ad_csc #(
+    .DELAY_DW(0),
+    .COLOR_N(1))
+  j_csc_1_Y (
     .clk (clk),
     .sync (1'd0),
     .data (RGB_data),
-    .C1 (17'h0041b),
-    .C2 (17'h00810),
-    .C3 (17'h00191),
-    .C4 (25'h0010000),
-    .csc_sync_1 (),
-    .csc_data_1 (CrYCb_data[15:8]));
+    .C1 (17'h041bd),
+    .C2 (17'h0810e),
+    .C3 (17'h01910),
+    .C4 (24'h100000),
+    .csc_sync (),
+    .csc_data (CrYCb_data[15:8]));
 
   // Cb (blue-diff)
 
-  ad_csc_1 #(.DELAY_DATA_WIDTH(1)) i_csc_1_Cb (
+  ad_csc #(
+    .DELAY_DW(0),
+    .COLOR_N(2))
+  j_csc_1_Cb (
     .clk (clk),
     .sync (1'd0),
     .data (RGB_data),
-    .C1 (17'h1025f),
-    .C2 (17'h104a7),
-    .C3 (17'h00707),
-    .C4 (25'h0080000),
-    .csc_sync_1 (),
-    .csc_data_1 (CrYCb_data[7:0]));
+    .C1 (17'h25f1),
+    .C2 (17'h4a7e),
+    .C3 (17'h7070),
+    .C4 (24'h800002),
+    .csc_sync (),
+    .csc_data (CrYCb_data[7:0]));
 
 endmodule
 
