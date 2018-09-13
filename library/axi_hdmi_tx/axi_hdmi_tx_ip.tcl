@@ -7,9 +7,7 @@ adi_ip_create axi_hdmi_tx
 adi_ip_files axi_hdmi_tx [list \
   "$ad_hdl_dir/library/common/ad_mem.v" \
   "$ad_hdl_dir/library/common/ad_rst.v" \
-  "$ad_hdl_dir/library/common/ad_csc_1_mul.v" \
-  "$ad_hdl_dir/library/common/ad_csc_1_add.v" \
-  "$ad_hdl_dir/library/common/ad_csc_1.v" \
+  "$ad_hdl_dir/library/common/ad_csc.v" \
   "$ad_hdl_dir/library/common/ad_csc_RGB2CrYCb.v" \
   "$ad_hdl_dir/library/common/ad_ss_444to422.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \

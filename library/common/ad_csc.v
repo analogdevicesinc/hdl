@@ -36,78 +36,92 @@
 
 `timescale 1ns/100ps
 
-module ad_csc_1 #(
+module ad_csc #(
 
-  parameter   DELAY_DATA_WIDTH = 16) (
+  parameter   DELAY_DW = 16,
+  parameter   COLOR_N = 1) (
 
   // data
 
-  input                   clk,
-  input       [DW:0]      sync,
-  input       [23:0]      data,
+  input                         clk,
+  input       [DELAY_DW-1:0]    sync,
+  input       [        23:0]    data,
 
   // constants
 
-  input       [16:0]      C1,
-  input       [16:0]      C2,
-  input       [16:0]      C3,
-  input       [24:0]      C4,
+  input  signed     [16:0]      C1,
+  input  signed     [16:0]      C2,
+  input  signed     [16:0]      C3,
+  input  signed     [24:0]      C4,
 
   // sync is delay matched
 
-  output      [DW:0]      csc_sync_1,
-  output      [ 7:0]      csc_data_1);
+  output reg  [DELAY_DW-1:0]    csc_sync,
+  output      [         7:0]    csc_data);
 
-  localparam  DW = DELAY_DATA_WIDTH - 1;
+  localparam  Y  = 1;
+  localparam  Cb = 2;
+  localparam  Cr = 3;
 
   // internal wires
 
-  wire    [24:0]  data_1_m_s;
-  wire    [24:0]  data_2_m_s;
-  wire    [24:0]  data_3_m_s;
-  wire    [DW:0]  sync_3_m_s;
+  reg         [      23:0]  data_d1;
+  reg         [      23:0]  data_d2;
+  reg         [      33:0]  data_1;
+  reg         [      33:0]  data_2;
+  reg         [      33:0]  data_3;
+  reg         [DELAY_DW:0]  sync_1_m;
+  reg         [DELAY_DW:0]  sync_2_m;
+  reg         [DELAY_DW:0]  sync_3_m;
+  reg         [      33:0]  s_data_1;
+  reg         [      33:0]  s_data_2;
+  reg         [      33:0]  s_data_3;
 
-  // c1*R
 
-  ad_csc_1_mul #(.DELAY_DATA_WIDTH(1)) i_mul_c1 (
-    .clk (clk),
-    .data_a (C1),
-    .data_b (data[23:16]),
-    .data_p (data_1_m_s),
-    .ddata_in (1'd0),
-    .ddata_out ());
+  wire signed [33:0]  data_1_s;
+  wire signed [33:0]  data_2_s;
+  wire signed [33:0]  data_3_s;
 
-  // c2*G
 
-  ad_csc_1_mul #(.DELAY_DATA_WIDTH(1)) i_mul_c2 (
-    .clk (clk),
-    .data_a (C2),
-    .data_b (data[15:8]),
-    .data_p (data_2_m_s),
-    .ddata_in (1'd0),
-    .ddata_out ());
+  // Let the tools decide what logic to infer
 
-  // c3*B
+  always @(posedge clk) begin
+    data_d1 <= data;
+    data_d2 <= data_d1;
+    data_1 <= {9'd0,    data[23:16]} * C1; // R
+    data_2 <= {9'd0, data_d1[15: 8]} * C2; // G
+    data_3 <= {9'd0, data_d2[ 7: 0]} * C3; // B
+    sync_1_m <= sync;
+  end
 
-  ad_csc_1_mul #(.DELAY_DATA_WIDTH(DELAY_DATA_WIDTH)) i_mul_c3 (
-    .clk (clk),
-    .data_a (C3),
-    .data_b (data[7:0]),
-    .data_p (data_3_m_s),
-    .ddata_in (sync),
-    .ddata_out (sync_3_m_s));
+  generate
+    if (COLOR_N == Y) begin
+      assign data_1_s = data_1;
+      assign data_2_s = data_2;
+      assign data_3_s = data_3;
+    end
+    if (COLOR_N == Cb) begin
+      assign data_1_s = ~data_1;
+      assign data_2_s = ~data_2;
+      assign data_3_s = data_3;
+    end
+    if (COLOR_N == Cr) begin
+      assign data_1_s = data_1;
+      assign data_2_s = ~data_2;
+      assign data_3_s = ~data_3;
+    end
+  endgenerate
 
-  // sum + c4
+  always @(posedge clk) begin
+    s_data_1 <= data_1_s + C4;
+    s_data_2 <= s_data_1 + data_2_s;
+    s_data_3 <= s_data_2 + data_3_s;
+    sync_2_m <= sync_1_m;
+    sync_3_m <= sync_2_m;
+    csc_sync <= sync_3_m;
+  end
 
-  ad_csc_1_add #(.DELAY_DATA_WIDTH(DELAY_DATA_WIDTH)) i_add_c4 (
-    .clk (clk),
-    .data_1 (data_1_m_s),
-    .data_2 (data_2_m_s),
-    .data_3 (data_3_m_s),
-    .data_4 (C4),
-    .data_p (csc_data_1),
-    .ddata_in (sync_3_m_s),
-    .ddata_out (csc_sync_1));
+    assign csc_data = s_data_3[23:16];
 
 endmodule
 

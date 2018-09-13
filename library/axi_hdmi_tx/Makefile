@@ -5,9 +5,7 @@
 
 LIBRARY_NAME := axi_hdmi_tx
 
-GENERIC_DEPS += ../common/ad_csc_1.v
-GENERIC_DEPS += ../common/ad_csc_1_add.v
-GENERIC_DEPS += ../common/ad_csc_1_mul.v
+GENERIC_DEPS += ../common/ad_csc.v
 GENERIC_DEPS += ../common/ad_csc_RGB2CrYCb.v
 GENERIC_DEPS += ../common/ad_mem.v
 GENERIC_DEPS += ../common/ad_rst.v
