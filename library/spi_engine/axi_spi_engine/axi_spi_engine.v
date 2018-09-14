@@ -265,22 +265,32 @@ always @(posedge clk) begin
                 up_wack_ff <= 1'b0;
                 up_scratch <= 'h00;
                 up_sw_reset <= 1'b1;
-                up_irq_mask <= 'h00;
-                offload0_enable <= 1'b0;
-                offload0_mem_reset <= 1'b0;
         end else begin
                 up_wack_ff <= up_wreq_s;
-                offload0_mem_reset <= 1'b0;
                 if (up_wreq_s) begin
                         case (up_waddr_s)
                         8'h02: up_scratch <= up_wdata_s;
                         8'h10: up_sw_reset <= up_wdata_s;
-                        8'h20: up_irq_mask <= up_wdata_s;
-                        8'h40: offload0_enable <= up_wdata_s[0];
-                        8'h42: offload0_mem_reset <= up_wdata_s[0];
                         endcase
                 end
         end
+end
+
+// the software reset should reset all the registers
+always @(posedge clk) begin
+  if (up_sw_resetn == 1'b0) begin
+    up_irq_mask <= 'h00;
+    offload0_enable <= 1'b0;
+    offload0_mem_reset <= 1'b0;
+  end else begin
+    if (up_wreq_s) begin
+      case (up_waddr_s)
+        8'h20: up_irq_mask <= up_wdata_s;
+        8'h40: offload0_enable <= up_wdata_s[0];
+        8'h42: offload0_mem_reset <= up_wdata_s[0];
+      endcase
+    end
+  end
 end
 
 always @(posedge clk) begin
