@@ -117,26 +117,24 @@ module ad_ip_jesd204_tpl_dac_framer #(
     end
 
     /* Slice channel and pack it into frames */
-    for (i = 0; i < NUM_CHANNELS; i = i + 1) begin: g_frame_data_outer
-      for (j = 0; j < FRAMES_PER_BEAT; j = j + 1) begin: g_frame_data_inner
-        localparam w = BITS_PER_CHANNEL_PER_FRAME;
-        localparam dst_lsb = (i + j * NUM_CHANNELS) * w;
-        localparam src_lsb = (j + i * FRAMES_PER_BEAT) * w;
-
-        assign frame_data_s[dst_lsb+:w] = dac_data_msb[src_lsb+:w];
-      end
-    end
+    ad_perfect_shuffle #(
+      .NUM_GROUPS (NUM_CHANNELS),
+      .WORDS_PER_GROUP (FRAMES_PER_BEAT),
+      .WORD_WIDTH (BITS_PER_CHANNEL_PER_FRAME)
+    ) i_channels_to_frames (
+      .data_in (dac_data_msb),
+      .data_out (frame_data_s)
+    );
 
     /* Slice frame and pack it into lanes */
-    for (i = 0; i < FRAMES_PER_BEAT; i = i + 1) begin: g_link_data_msb_outer
-      for (j = 0; j < NUM_LANES; j = j + 1) begin: g_link_data_msb_inner
-        localparam w = BITS_PER_LANE_PER_FRAME;
-        localparam dst_lsb = (i + j * FRAMES_PER_BEAT) * w;
-        localparam src_lsb = (j + i * NUM_LANES) * w;
-
-        assign link_data_msb_s[dst_lsb+:w] = frame_data_s[src_lsb+:w];
-      end
-    end
+    ad_perfect_shuffle #(
+      .NUM_GROUPS (FRAMES_PER_BEAT),
+      .WORDS_PER_GROUP (NUM_LANES),
+      .WORD_WIDTH (BITS_PER_LANE_PER_FRAME)
+    ) i_frames_to_lanes (
+      .data_in (frame_data_s),
+      .data_out (link_data_msb_s)
+    );
 
     /* Reorder octets LSB first */
     for (i = 0; i < LINK_DATA_WIDTH; i = i + 8) begin: g_link_data

@@ -21,6 +21,7 @@ ad_ip_files axi_ad9144 [list \
   $ad_hdl_dir/library/common/ad_dds_2.v \
   $ad_hdl_dir/library/common/ad_dds_1.v \
   $ad_hdl_dir/library/common/ad_dds.v \
+  $ad_hdl_dir/library/common/ad_perfect_shuffle.v \
   $ad_hdl_dir/library/common/ad_rst.v \
   $ad_hdl_dir/library/common/up_axi.v \
   $ad_hdl_dir/library/common/up_xfer_cntrl.v \
