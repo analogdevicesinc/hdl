@@ -22,6 +22,7 @@ ALTERA_DEPS += ../common/ad_dds_2.v
 ALTERA_DEPS += ../common/ad_dds_cordic_pipe.v
 ALTERA_DEPS += ../common/ad_dds_sine.v
 ALTERA_DEPS += ../common/ad_dds_sine_cordic.v
+ALTERA_DEPS += ../common/ad_perfect_shuffle.v
 ALTERA_DEPS += ../common/ad_rst.v
 ALTERA_DEPS += ../common/up_axi.v
 ALTERA_DEPS += ../common/up_clock_mon.v
