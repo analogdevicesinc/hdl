@@ -98,10 +98,7 @@ ad_connect  axi_hdmi_core/hdmi_16_vsync hdmi_vsync
 ad_connect  axi_hdmi_core/hdmi_16_data_e hdmi_data_e
 ad_connect  axi_hdmi_core/hdmi_16_data hdmi_data
 
-ad_connect  axi_hdmi_core/vdma_valid axi_hdmi_dma/m_axis_valid
-ad_connect  axi_hdmi_core/vdma_data axi_hdmi_dma/m_axis_data
-ad_connect  axi_hdmi_core/vdma_ready axi_hdmi_dma/m_axis_ready
-ad_connect  axi_hdmi_core/vdma_end_of_frame axi_hdmi_dma/m_axis_last
+ad_connect  axi_hdmi_dma/m_axis axi_hdmi_core/s_axis
 ad_connect  sys_cpu_resetn axi_hdmi_dma/s_axi_aresetn
 ad_connect  sys_cpu_resetn axi_hdmi_dma/m_src_axi_aresetn
 ad_connect  sys_cpu_clk axi_hdmi_dma/s_axi_aclk
