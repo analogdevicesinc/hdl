@@ -61,48 +61,45 @@ module ad_csc_RGB2CrYCb #(
   // Cr (red-diff)
 
   ad_csc #(
-    .DELAY_DW(DELAY_DATA_WIDTH),
-    .COLOR_N(3))
+    .DELAY_DW(DELAY_DATA_WIDTH))
   j_csc_1_Cr (
     .clk (clk),
     .sync (RGB_sync),
     .data (RGB_data),
-    .C1 (17'h7070),
-    .C2 (17'h5e27),
-    .C3 (17'h1248),
-    .C4 (24'h800002),
+    .C1 ( 17'd28784),   //  112.439
+    .C2 (-17'd24103),   // -94.154
+    .C3 (-17'd4681),    // -18.285
+    .C4 ( 24'd8388608), //  128
     .csc_sync (CrYCb_sync),
     .csc_data (CrYCb_data[23:16]));
 
   // Y (luma)
 
   ad_csc #(
-    .DELAY_DW(0),
-    .COLOR_N(1))
+    .DELAY_DW(0))
   j_csc_1_Y (
     .clk (clk),
     .sync (1'd0),
     .data (RGB_data),
-    .C1 (17'h041bd),
-    .C2 (17'h0810e),
-    .C3 (17'h01910),
-    .C4 (24'h100000),
+    .C1 (17'd16829),   // 65.739
+    .C2 (17'd33039),   // 129.057
+    .C3 (17'd6416),    // 25.064
+    .C4 (24'd1048576), // 16
     .csc_sync (),
     .csc_data (CrYCb_data[15:8]));
 
   // Cb (blue-diff)
 
   ad_csc #(
-    .DELAY_DW(0),
-    .COLOR_N(2))
+    .DELAY_DW(0))
   j_csc_1_Cb (
     .clk (clk),
     .sync (1'd0),
     .data (RGB_data),
-    .C1 (17'h25f1),
-    .C2 (17'h4a7e),
-    .C3 (17'h7070),
-    .C4 (24'h800002),
+    .C1 (-17'd9714),   // -37.945
+    .C2 (-17'd19070),  // -74.494
+    .C3 ( 17'd28784),  //  112.439
+    .C4 (24'd8388608), //  128
     .csc_sync (),
     .csc_data (CrYCb_data[7:0]));
 
