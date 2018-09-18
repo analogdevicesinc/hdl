@@ -10,9 +10,7 @@ adi_ip_files axi_hdmi_rx [list \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
   "$ad_hdl_dir/library/common/ad_rst.v" \
-  "$ad_hdl_dir/library/common/ad_csc_1.v" \
-  "$ad_hdl_dir/library/common/ad_csc_1_mul.v" \
-  "$ad_hdl_dir/library/common/ad_csc_1_add.v" \
+  "$ad_hdl_dir/library/common/ad_csc.v" \
   "$ad_hdl_dir/library/common/ad_ss_422to444.v" \
   "$ad_hdl_dir/library/common/ad_csc_CrYCb2RGB.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
