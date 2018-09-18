@@ -38,8 +38,7 @@
 
 module ad_csc #(
 
-  parameter   DELAY_DW = 16,
-  parameter   COLOR_N = 1) (
+  parameter   DELAY_DW    = 16) (
 
   // data
 
@@ -52,76 +51,69 @@ module ad_csc #(
   input  signed     [16:0]      C1,
   input  signed     [16:0]      C2,
   input  signed     [16:0]      C3,
-  input  signed     [24:0]      C4,
+  input  signed     [23:0]      C4,
 
   // sync is delay matched
 
-  output reg  [DELAY_DW-1:0]    csc_sync,
-  output      [         7:0]    csc_data);
+  output       [   DELAY_DW-1:0]    csc_sync,
+  output       [            7:0]    csc_data);
 
-  localparam  Y  = 1;
-  localparam  Cb = 2;
-  localparam  Cr = 3;
+
+  localparam PIXEL_WD = 9; // sign extended
+  localparam MUL_DW = MUL_COEF_DW + PIXEL_WD -1;
 
   // internal wires
 
-  reg         [      23:0]  data_d1;
-  reg         [      23:0]  data_d2;
-  reg         [      33:0]  data_1;
-  reg         [      33:0]  data_2;
-  reg         [      33:0]  data_3;
-  reg         [DELAY_DW:0]  sync_1_m;
-  reg         [DELAY_DW:0]  sync_2_m;
-  reg         [DELAY_DW:0]  sync_3_m;
-  reg         [      33:0]  s_data_1;
-  reg         [      33:0]  s_data_2;
-  reg         [      33:0]  s_data_3;
+  reg  signed [        23:0]  data_d1;
+  reg  signed [        23:0]  data_d2;
+  reg  signed [    MUL_DW:0]  data_1;
+  reg  signed [    MUL_DW:0]  data_2;
+  reg  signed [    MUL_DW:0]  data_3;
+  reg  signed [    MUL_DW:0]  s_data_1;
+  reg  signed [    MUL_DW:0]  s_data_2;
+  reg  signed [    MUL_DW:0]  s_data_3;
+  reg         [DELAY_DW-1:0]  sync_1_m;
+  reg         [DELAY_DW-1:0]  sync_2_m;
+  reg         [DELAY_DW-1:0]  sync_3_m;
+  reg         [DELAY_DW-1:0]  sync_4_m;
+  reg         [         7:0]  csc_data_d;
 
 
-  wire signed [33:0]  data_1_s;
-  wire signed [33:0]  data_2_s;
-  wire signed [33:0]  data_3_s;
+  wire signed [8:0]  color1;
+  wire signed [8:0]  color2;
+  wire signed [8:0]  color3;
 
-
-  // Let the tools decide what logic to infer
+  // delay signals
 
   always @(posedge clk) begin
     data_d1 <= data;
     data_d2 <= data_d1;
-    data_1 <= {9'd0,    data[23:16]} * C1; // R
-    data_2 <= {9'd0, data_d1[15: 8]} * C2; // G
-    data_3 <= {9'd0, data_d2[ 7: 0]} * C3; // B
     sync_1_m <= sync;
-  end
-
-  generate
-    if (COLOR_N == Y) begin
-      assign data_1_s = data_1;
-      assign data_2_s = data_2;
-      assign data_3_s = data_3;
-    end
-    if (COLOR_N == Cb) begin
-      assign data_1_s = ~data_1;
-      assign data_2_s = ~data_2;
-      assign data_3_s = data_3;
-    end
-    if (COLOR_N == Cr) begin
-      assign data_1_s = data_1;
-      assign data_2_s = ~data_2;
-      assign data_3_s = ~data_3;
-    end
-  endgenerate
-
-  always @(posedge clk) begin
-    s_data_1 <= data_1_s + C4;
-    s_data_2 <= s_data_1 + data_2_s;
-    s_data_3 <= s_data_2 + data_3_s;
     sync_2_m <= sync_1_m;
     sync_3_m <= sync_2_m;
-    csc_sync <= sync_3_m;
+    sync_4_m <= sync_3_m;
+    csc_sync <= sync_4_m;
   end
 
-    assign csc_data = s_data_3[23:16];
+  assign color1 = {1'd0,    data[23:16]};
+  assign color2 = {1'd0, data_d1[15: 8]};
+  assign color3 = {1'd0, data_d2[ 7: 0]};
+
+  // pipeline DSPs for multiplications and additions
+
+  always @(posedge clk) begin
+    data_1 <= color1 * C1;
+    data_2 <= color2 * C2;
+    data_3 <= color3 * C3;
+  end
+
+  always @(posedge clk) begin
+    s_data_1 <= data_1 + C4;
+    s_data_2 <= s_data_1 + data_2;
+    s_data_3 <= s_data_2 + data_3;
+  end
+
+  assign csc_data = s_data_3[23:16];
 
 endmodule
 
