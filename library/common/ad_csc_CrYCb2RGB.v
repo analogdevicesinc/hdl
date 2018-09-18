@@ -60,42 +60,55 @@ module ad_csc_CrYCb2RGB #(
 
   // red
 
-  ad_csc_1 #(.DELAY_DATA_WIDTH(DELAY_DATA_WIDTH)) i_csc_1_R (
+  ad_csc  #(
+    .DELAY_DW (DELAY_DATA_WIDTH),
+    .MUL_COEF_DW (18),
+    .SUM_COEF_DW (28),
+    .YCbCr_2_RGB (1))
+  i_csc_R (
     .clk (clk),
     .sync (CrYCb_sync),
     .data (CrYCb_data),
-    .C1 (17'h01989),
-    .C2 (17'h012a1),
-    .C3 (17'h00000),
-    .C4 (25'h10deebc),
-    .csc_sync_1 (RGB_sync),
-    .csc_data_1 (RGB_data[23:16]));
+    .C1 ( 18'd52299),
+    .C2 ( 18'd38154),
+    .C3 ( 18'd0),
+    .C4 (-28'd7304675),
+    .csc_sync (RGB_sync),
+    .csc_data (RGB_data[23:16]));
 
   // green
 
-  ad_csc_1 #(.DELAY_DATA_WIDTH(1)) i_csc_1_G (
+  ad_csc  #(
+    .MUL_COEF_DW (18),
+    .SUM_COEF_DW (28),
+    .YCbCr_2_RGB (1))
+  i_csc_G (
     .clk (clk),
     .sync (1'd0),
     .data (CrYCb_data),
-    .C1 (17'h10d01),
-    .C2 (17'h012a1),
-    .C3 (17'h10644),
-    .C4 (25'h0087937),
-    .csc_sync_1 (),
-    .csc_data_1 (RGB_data[15:8]));
+    .C1 (-18'd26639),
+    .C2 ( 18'd38154),
+    .C3 (-18'd12837),
+    .C4 ( 28'd4442554),
+    .csc_sync (),
+    .csc_data (RGB_data[15:8]));
 
   // blue
 
-  ad_csc_1 #(.DELAY_DATA_WIDTH(1)) i_csc_1_B (
+  ad_csc #(
+    .MUL_COEF_DW (18),
+    .SUM_COEF_DW (28),
+    .YCbCr_2_RGB (1))
+  i_csc_B (
     .clk (clk),
     .sync (1'd0),
     .data (CrYCb_data),
-    .C1 (17'h00000),
-    .C2 (17'h012a1),
-    .C3 (17'h02046),
-    .C4 (25'h1114d60),
-    .csc_sync_1 (),
-    .csc_data_1 (RGB_data[7:0]));
+    .C1 ( 18'd0),
+    .C2 ( 18'd38154),
+    .C3 ( 18'd66101),
+    .C4 (-28'd9071362),
+    .csc_sync (),
+    .csc_data (RGB_data[7:0]));
 
 endmodule
 
