@@ -428,11 +428,6 @@ proc axi_dmac_elaborate {} {
 	  if_m_axis_last if_m_axis_xfer_req
   }
 
-  if {[get_parameter_value DMA_TYPE_DEST] == 1 &&
-      [get_parameter_value USE_TLAST_DEST] == 0} {
-    set_port_property m_axis_last termination true
-  }
-
   if {[get_parameter_value DMA_TYPE_SRC] != 1} {
     lappend disabled_intfs \
       if_s_axis_aclk if_s_axis_valid if_s_axis_data if_s_axis_ready \
