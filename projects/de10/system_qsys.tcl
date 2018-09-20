@@ -236,7 +236,7 @@ set_interface_property sys_gpio_arduino EXPORT_OF sys_gpio_arduino.external_conn
 add_instance axi_hdmi_tx_0 axi_hdmi_tx 1.0
 set_instance_parameter_value axi_hdmi_tx_0 {CR_CB_N} {0}
 set_instance_parameter_value axi_hdmi_tx_0 {DEVICE_TYPE} {16}
-set_instance_parameter_value axi_hdmi_tx_0 {EMBEDDED_SYNC} {0}
+set_instance_parameter_value axi_hdmi_tx_0 {INTERFACE} {24_BIT}
 set_instance_parameter_value axi_hdmi_tx_0 {ID} {0}
 
 add_instance pixel_clk_pll altera_pll 17.1
@@ -269,6 +269,7 @@ set_instance_parameter_value video_dmac {AUTO_ASYNC_CLK} {1}
 set_instance_parameter_value video_dmac {AXI_SLICE_DEST} {0}
 set_instance_parameter_value video_dmac {AXI_SLICE_SRC} {0}
 set_instance_parameter_value video_dmac {CYCLIC} {1}
+set_instance_parameter_value video_dmac {USE_TLAST_DEST} {1}
 set_instance_parameter_value video_dmac {DMA_2D_TRANSFER} {1}
 set_instance_parameter_value video_dmac {DMA_DATA_WIDTH_DEST} {64}
 set_instance_parameter_value video_dmac {DMA_DATA_WIDTH_SRC} {64}
@@ -279,20 +280,13 @@ set_instance_parameter_value video_dmac {FIFO_SIZE} {4}
 set_instance_parameter_value video_dmac {ID} {0}
 set_instance_parameter_value video_dmac {SYNC_TRANSFER_START} {0}
 
-add_interface axi_dmac_0_if_m_axis_data conduit end
-set_interface_property axi_dmac_0_if_m_axis_data EXPORT_OF video_dmac.if_m_axis_data
-add_interface axi_dmac_0_if_m_axis_ready conduit end
-set_interface_property axi_dmac_0_if_m_axis_ready EXPORT_OF video_dmac.if_m_axis_ready
-add_interface axi_dmac_0_if_m_axis_valid conduit end
-set_interface_property axi_dmac_0_if_m_axis_valid EXPORT_OF video_dmac.if_m_axis_valid
+add_connection video_dmac.if_m_axis_ready axi_hdmi_tx_0.if_vdma_ready
+add_connection video_dmac.if_m_axis_valid axi_hdmi_tx_0.if_vdma_valid
+add_connection video_dmac.if_m_axis_data  axi_hdmi_tx_0.if_vdma_data
+add_connection video_dmac.if_m_axis_last  axi_hdmi_tx_0.if_vdma_end_of_frame
+
 add_interface axi_hdmi_tx_0_hdmi_if conduit end
 set_interface_property axi_hdmi_tx_0_hdmi_if EXPORT_OF axi_hdmi_tx_0.hdmi_if
-add_interface axi_hdmi_tx_0_if_vdma_fs conduit end
-set_interface_property axi_hdmi_tx_0_if_vdma_fs EXPORT_OF axi_hdmi_tx_0.if_vdma_fs
-add_interface axi_hdmi_tx_0_if_vdma_fs_ret conduit end
-set_interface_property axi_hdmi_tx_0_if_vdma_fs_ret EXPORT_OF axi_hdmi_tx_0.if_vdma_fs_ret
-add_interface axi_hdmi_tx_0_vdma_if avalon_streaming sink
-set_interface_property axi_hdmi_tx_0_vdma_if EXPORT_OF axi_hdmi_tx_0.vdma_if
 
 add_connection pixel_clk_pll.outclk0 axi_hdmi_tx_0.hdmi_clock
 
@@ -367,7 +361,7 @@ ad_cpu_interrupt 3 sys_gpio_1_0.irq
 ad_cpu_interrupt 4 sys_gpio_1_1.irq
 ad_cpu_interrupt 5 sys_gpio_arduino.irq
 ad_cpu_interrupt 6 sys_hps_irq.sender0_irq
-ad_cpu_interrupt 7 video_dmac.interrupt_sender 
+ad_cpu_interrupt 7 video_dmac.interrupt_sender
 
 # cpu interconnects
 
