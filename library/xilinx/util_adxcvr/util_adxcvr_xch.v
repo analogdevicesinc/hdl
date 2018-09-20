@@ -1599,7 +1599,7 @@ module util_adxcvr_xch #(
     .CPLL_CFG2 (16'h0002),
     .CPLL_CFG3 (16'h0000),
     .CPLL_FBDIV (CPLL_FBDIV),
-    .CPLL_FBDIV_45 (5),
+    .CPLL_FBDIV_45 (CPLL_FBDIV_4_5),
     .CPLL_INIT_CFG0 (16'h02b2),
     .CPLL_LOCK_CFG (16'h01e8),
     .CPLL_REFCLK_DIV (1'h1),
