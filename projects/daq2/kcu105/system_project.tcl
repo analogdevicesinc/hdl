@@ -11,6 +11,9 @@ adi_project_files daq2_kcu105 [list \
   "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/kcu105/kcu105_system_constr.xdc" ]
 
+## To improve timing in DDR4 MIG
+set_property strategy Performance_Retiming [get_runs impl_1]
+
 adi_project_run daq2_kcu105
 
 
