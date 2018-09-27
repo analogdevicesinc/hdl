@@ -18,6 +18,8 @@ ad_ip_instance axi_adxcvr axi_adrv9009_tx_xcvr
 ad_ip_parameter axi_adrv9009_tx_xcvr CONFIG.NUM_OF_LANES 4
 ad_ip_parameter axi_adrv9009_tx_xcvr CONFIG.QPLL_ENABLE 1
 ad_ip_parameter axi_adrv9009_tx_xcvr CONFIG.TX_OR_RX_N 1
+ad_ip_parameter axi_adrv9009_tx_xcvr CONFIG.SYS_CLK_SEL 3
+ad_ip_parameter axi_adrv9009_tx_xcvr CONFIG.OUT_CLK_SEL 3
 
 adi_axi_jesd204_tx_create axi_adrv9009_tx_jesd 4
 
@@ -51,6 +53,8 @@ ad_ip_instance axi_adxcvr axi_adrv9009_rx_xcvr
 ad_ip_parameter axi_adrv9009_rx_xcvr CONFIG.NUM_OF_LANES 2
 ad_ip_parameter axi_adrv9009_rx_xcvr CONFIG.QPLL_ENABLE 0
 ad_ip_parameter axi_adrv9009_rx_xcvr CONFIG.TX_OR_RX_N 0
+ad_ip_parameter axi_adrv9009_rx_xcvr CONFIG.SYS_CLK_SEL 0
+ad_ip_parameter axi_adrv9009_rx_xcvr CONFIG.OUT_CLK_SEL 3
 
 adi_axi_jesd204_rx_create axi_adrv9009_rx_jesd 2
 
@@ -85,6 +89,8 @@ ad_ip_instance axi_adxcvr axi_adrv9009_rx_os_xcvr
 ad_ip_parameter axi_adrv9009_rx_os_xcvr CONFIG.NUM_OF_LANES 2
 ad_ip_parameter axi_adrv9009_rx_os_xcvr CONFIG.QPLL_ENABLE 0
 ad_ip_parameter axi_adrv9009_rx_os_xcvr CONFIG.TX_OR_RX_N 0
+ad_ip_parameter axi_adrv9009_rx_os_xcvr CONFIG.SYS_CLK_SEL 0
+ad_ip_parameter axi_adrv9009_rx_os_xcvr CONFIG.OUT_CLK_SEL 3
 
 adi_axi_jesd204_rx_create axi_adrv9009_rx_os_jesd 2
 
@@ -115,6 +121,7 @@ ad_ip_parameter util_adrv9009_xcvr CONFIG.RX_NUM_OF_LANES 4
 ad_ip_parameter util_adrv9009_xcvr CONFIG.TX_NUM_OF_LANES 4
 ad_ip_parameter util_adrv9009_xcvr CONFIG.TX_OUT_DIV 1
 ad_ip_parameter util_adrv9009_xcvr CONFIG.CPLL_FBDIV 4
+ad_ip_parameter util_adrv9009_xcvr CONFIG.CPLL_FBDIV_4_5 5
 ad_ip_parameter util_adrv9009_xcvr CONFIG.RX_CLK25_DIV 10
 ad_ip_parameter util_adrv9009_xcvr CONFIG.TX_CLK25_DIV 10
 ad_ip_parameter util_adrv9009_xcvr CONFIG.RX_PMA_CFG 0x001E7080
