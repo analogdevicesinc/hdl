@@ -66,5 +66,7 @@ ipx::infer_bus_interface hdmi_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_
 ipx::infer_bus_interface hdmi_out_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 ipx::infer_bus_interface vdma_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 
+ipx::associate_bus_interfaces -busif s_axis -clock vdma_clk [ipx::current_core]
+
 ipx::save_core [ipx::current_core]
 
