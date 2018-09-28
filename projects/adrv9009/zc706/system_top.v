@@ -35,6 +35,82 @@
 
 `timescale 1ns/100ps
 
+/*
+Interface to FMC connector overview
+
+system_top                     9009_FMC         FMC                           FPGA
+                              -------------|--------------------------------|-----
+input  ref_clk0_p,   (DNI)   FPGA_REF_CLK+      D4     FMC_HPC_GBTCLK0_M2C_P AD10
+input  ref_clk0_n,   (DNI)   FPGA_REF_CLK-      D5     FMC_HPC_GBTCLK0_M2C_N AD9
+input  ref_clk1_p,           FPGA_REF_CLK+      B20    FMC_HPC_GBTCLK1_M2C_P AA8
+input  ref_clk1_n,           FPGA_REF_CLK-      B21    FMC_HPC_GBTCLK1_M2C_N AA7
+input  rx_data_p[0],         SERDOUT0+          A2     FMC_HPC_DP1_M2C_P     AJ8
+input  rx_data_n[0],         SERDOUT0-          A3     FMC_HPC_DP1_M2C_N     AJ7
+input  rx_data_p[1],         SERDOUT1+          A6     FMC_HPC_DP2_M2C_P     AG8
+input  rx_data_n[1],         SERDOUT1-          A7     FMC_HPC_DP2_M2C_N     AG7
+input  rx_data_p[2],         SERDOUT2+          C6     FMC_HPC_DP0_M2C_P     AH10
+input  rx_data_n[2],         SERDOUT2-          C7     FMC_HPC_DP0_M2C_N     AH9
+input  rx_data_p[3],         SERDOUT3+          A10    FMC_HPC_DP3_M2C_P     AE8
+input  rx_data_n[3],         SERDOUT3-          A11    FMC_HPC_DP3_M2C_N     AE7
+output tx_data_p[0],         SERDIN0+           A22    FMC_HPC_DP1_C2M_P     AK6
+output tx_data_n[0],         SERDIN0-           A23    FMC_HPC_DP1_C2M_N     AK5
+output tx_data_p[1],         SERDIN3+           A26    FMC_HPC_DP2_C2M_P     AJ4
+output tx_data_n[1],         SERDIN3-           A27    FMC_HPC_DP2_C2M_N     AJ3
+output tx_data_p[2],         SERDIN2+           C2     FMC_HPC_DP0_C2M_P     AK10 
+output tx_data_n[2],         SERDIN2-           C3     FMC_HPC_DP0_C2M_N     AK9
+output tx_data_p[3],         SERDIN1+           A30    FMC_HPC_DP3_C2M_P     AK2
+output tx_data_n[3],         SERDIN1-           A31    FMC_HPC_DP3_C2M_N     AK1
+output rx_sync_p,            SYNCINB0+          G9     FMC_HPC_LA03_P        AH19
+output rx_sync_n,            SYNCINB0-          G10    FMC_HPC_LA03_N        AJ19
+output rx_os_sync_p,         SYNCINB1+          G27    FMC_HPC_LA25_P        T29
+output rx_os_sync_n,         SYNCINB1-          G28    FMC_HPC_LA25_N        U29
+input  tx_sync_p,            SYNCOUTB0+         H7     FMC_HPC_LA02_P        AK17
+input  tx_sync_n,            SYNCOUTB0-         H8     FMC_HPC_LA02_N        AK18
+input  tx_sync_1_p,          SYNCOUTB1+         H28    FMC_HPC_LA24_P        T30
+input  tx_sync_1_n,          SYNCOUTB1-         H29    FMC_HPC_LA24_N        U30
+input  sysref_p,             FPGA_SYSREF+       G6     FMC_HPC_LA00_CC_P     AF20
+input  sysref_n,             FPGA_SYSREF-       G7     FMC_HPC_LA00_CC_N     AG20
+
+output sysref_out_p,         FPGA_SYSREF_OUT+   D8     FMC_HPC_LA01_CC_P     AG21
+output sysref_out_n,         FPGA_SYSREF_OUT-   D9     FMC_HPC_LA01_CC_N     AH21
+
+output spi_csn_ad9528,       SPI_CS1            D15    FMC_HPC_LA09_N        AE21
+output spi_csn_adrv9009,     SPI_CS0            D14    FMC_HPC_LA09_P        AD21
+output spi_clk,              SPI_CLK            H13    FMC_HPC_LA07_P        AJ23
+output spi_mosi,             SPI_DIN            H14    FMC_HPC_LA07_N        AJ24
+input  spi_miso,             SPI_DOUT           G12    FMC_HPC_LA08_P        AF19
+
+inout  ad9528_reset_b,       FMC_CLK_RESETB     D26    FMC_HPC_LA26_P        R28
+inout  ad9528_sysref_req,    FMC_SYSREF_REQUEST D27    FMC_HPC_LA26_N        T28
+inout  adrv9009_tx1_enable,  TX1_ENABLE         D17    FMC_HPC_LA13_P        AA22
+inout  adrv9009_tx2_enable,  TX2_ENABLE         C18    FMC_HPC_LA14_P        AC24
+inout  adrv9009_rx1_enable,  RX1_ENABLE         D18    FMC_HPC_LA13_N        AA23
+inout  adrv9009_rx2_enable,  RX2_ENABLE         C19    FMC_HPC_LA14_N        AD24
+inout  adrv9009_test,        TEST               H16    FMC_HPC_LA11_P        AD23    
+inout  adrv9009_reset_b,     RESETB             H10    FMC_HPC_LA04_P        AJ20
+inout  adrv9009_gpint,       GP_INTERRUPT       H11    FMC_HPC_LA04_N        AK20
+
+inout  adrv9009_gpio_00,     GPIO_0             H19    FMC_HPC_LA15_P        Y22
+inout  adrv9009_gpio_01,     GPIO_1             H20    FMC_HPC_LA15_N        Y23
+inout  adrv9009_gpio_02,     GPIO_2             G18    FMC_HPC_LA16_P        AA24
+inout  adrv9009_gpio_03,     GPIO_3             G19    FMC_HPC_LA16_N        AB24
+inout  adrv9009_gpio_04,     GPIO_4             H25    FMC_HPC_LA21_P        W29
+inout  adrv9009_gpio_05,     GPIO_5             H26    FMC_HPC_LA21_N        W30
+inout  adrv9009_gpio_06,     GPIO_6             C22    FMC_HPC_LA18_CC_P     W25
+inout  adrv9009_gpio_07,     GPIO_7             C23    FMC_HPC_LA18_CC_N     W26
+inout  adrv9009_gpio_08,     GPIO_8             G25    FMC_HPC_LA22_N        W28
+inout  adrv9009_gpio_09,     GPIO_9             H22    FMC_HPC_LA19_P        T24
+inout  adrv9009_gpio_10,     GPIO_10            H23    FMC_HPC_LA19_N        T25
+inout  adrv9009_gpio_11,     GPIO_11            G21    FMC_HPC_LA20_P        U25
+inout  adrv9009_gpio_12,     GPIO_12            G22    FMC_HPC_LA20_N        V26
+inout  adrv9009_gpio_13,     GPIO_13            G16    FMC_HPC_LA12_N        AF24
+inout  adrv9009_gpio_14,     GPIO_14            G15    FMC_HPC_LA12_P        AF23 
+inout  adrv9009_gpio_15,     GPIO_15            G24    FMC_HPC_LA22_P        V27
+inout  adrv9009_gpio_16,     GPIO_16            C11    FMC_HPC_LA06_N        AH22
+inout  adrv9009_gpio_17,     GPIO_17            C10    FMC_HPC_LA06_P        AG22
+inout  adrv9009_gpio_18,     GPIO_18            H17    FMC_HPC_LA11_N        AE23
+*/
+
 module system_top (
 
   inout       [14:0]      ddr_addr,
@@ -302,14 +378,6 @@ module system_top (
     .hdmi_vsync (hdmi_vsync),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
-    .ps_intr_00 (1'b0),
-    .ps_intr_01 (1'b0),
-    .ps_intr_02 (1'b0),
-    .ps_intr_03 (1'b0),
-    .ps_intr_04 (1'b0),
-    .ps_intr_05 (1'b0),
-    .ps_intr_06 (1'b0),
-    .ps_intr_07 (1'b0),
     .rx_data_0_n (rx_data_n[0]),
     .rx_data_0_p (rx_data_p[0]),
     .rx_data_1_n (rx_data_n[1]),
