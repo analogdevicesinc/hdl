@@ -188,6 +188,9 @@ for {set n 0} {$n < 16} {incr n} {
     "rate                up_tx_rate_${n}        "\
     "sys_clk_sel         up_tx_sys_clk_sel_${n} "\
     "out_clk_sel         up_tx_out_clk_sel_${n} "\
+    "tx_diffctrl         up_tx_diffctrl_${n}     "\
+    "tx_postcursor       up_tx_postcursor_${n}   "\
+    "tx_precursor        up_tx_precursor_${n}    "\
     "enb                 up_tx_enb_${n}         "\
     "addr                up_tx_addr_${n}        "\
     "wr                  up_tx_wr_${n}          "\

@@ -47,6 +47,9 @@ module axi_adxcvr #(
   parameter   integer QPLL_ENABLE = 1,
   parameter           LPM_OR_DFE_N = 1,
   parameter   [ 2:0]  RATE = 3'd0,
+  parameter   [ 3:0]  TX_DIFFCTRL = 4'd8,
+  parameter   [ 4:0]  TX_POSTCURSOR = 3'd0,
+  parameter   [ 4:0]  TX_PRECURSOR = 3'd0,
   parameter   [ 1:0]  SYS_CLK_SEL = 2'd3,
   parameter   [ 2:0]  OUT_CLK_SEL = 3'd4) (
 
@@ -72,6 +75,9 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_0,
   output  [ 1:0]  up_ch_sys_clk_sel_0,
   output  [ 2:0]  up_ch_out_clk_sel_0,
+  output  [ 3:0]  up_ch_tx_diffctrl_0,
+  output  [ 4:0]  up_ch_tx_postcursor_0,
+  output  [ 4:0]  up_ch_tx_precursor_0,
   output          up_ch_enb_0,
   output  [11:0]  up_ch_addr_0,
   output          up_ch_wr_0,
@@ -94,6 +100,9 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_1,
   output  [ 1:0]  up_ch_sys_clk_sel_1,
   output  [ 2:0]  up_ch_out_clk_sel_1,
+  output  [ 3:0]  up_ch_tx_diffctrl_1,
+  output  [ 4:0]  up_ch_tx_postcursor_1,
+  output  [ 4:0]  up_ch_tx_precursor_1,
   output          up_ch_enb_1,
   output  [11:0]  up_ch_addr_1,
   output          up_ch_wr_1,
@@ -116,6 +125,9 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_2,
   output  [ 1:0]  up_ch_sys_clk_sel_2,
   output  [ 2:0]  up_ch_out_clk_sel_2,
+  output  [ 3:0]  up_ch_tx_diffctrl_2,
+  output  [ 4:0]  up_ch_tx_postcursor_2,
+  output  [ 4:0]  up_ch_tx_precursor_2,
   output          up_ch_enb_2,
   output  [11:0]  up_ch_addr_2,
   output          up_ch_wr_2,
@@ -138,6 +150,9 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_3,
   output  [ 1:0]  up_ch_sys_clk_sel_3,
   output  [ 2:0]  up_ch_out_clk_sel_3,
+  output  [ 3:0]  up_ch_tx_diffctrl_3,
+  output  [ 4:0]  up_ch_tx_postcursor_3,
+  output  [ 4:0]  up_ch_tx_precursor_3,
   output          up_ch_enb_3,
   output  [11:0]  up_ch_addr_3,
   output          up_ch_wr_3,
@@ -167,6 +182,9 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_4,
   output  [ 1:0]  up_ch_sys_clk_sel_4,
   output  [ 2:0]  up_ch_out_clk_sel_4,
+  output  [ 3:0]  up_ch_tx_diffctrl_4,
+  output  [ 4:0]  up_ch_tx_postcursor_4,
+  output  [ 4:0]  up_ch_tx_precursor_4,
   output          up_ch_enb_4,
   output  [11:0]  up_ch_addr_4,
   output          up_ch_wr_4,
@@ -189,6 +207,9 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_5,
   output  [ 1:0]  up_ch_sys_clk_sel_5,
   output  [ 2:0]  up_ch_out_clk_sel_5,
+  output  [ 3:0]  up_ch_tx_diffctrl_5,
+  output  [ 4:0]  up_ch_tx_postcursor_5,
+  output  [ 4:0]  up_ch_tx_precursor_5,
   output          up_ch_enb_5,
   output  [11:0]  up_ch_addr_5,
   output          up_ch_wr_5,
@@ -211,6 +232,9 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_6,
   output  [ 1:0]  up_ch_sys_clk_sel_6,
   output  [ 2:0]  up_ch_out_clk_sel_6,
+  output  [ 3:0]  up_ch_tx_diffctrl_6,
+  output  [ 4:0]  up_ch_tx_postcursor_6,
+  output  [ 4:0]  up_ch_tx_precursor_6,
   output          up_ch_enb_6,
   output  [11:0]  up_ch_addr_6,
   output          up_ch_wr_6,
@@ -233,6 +257,9 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_7,
   output  [ 1:0]  up_ch_sys_clk_sel_7,
   output  [ 2:0]  up_ch_out_clk_sel_7,
+  output  [ 3:0]  up_ch_tx_diffctrl_7,
+  output  [ 4:0]  up_ch_tx_postcursor_7,
+  output  [ 4:0]  up_ch_tx_precursor_7,
   output          up_ch_enb_7,
   output  [11:0]  up_ch_addr_7,
   output          up_ch_wr_7,
@@ -262,6 +289,9 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_8,
   output  [ 1:0]  up_ch_sys_clk_sel_8,
   output  [ 2:0]  up_ch_out_clk_sel_8,
+  output  [ 3:0]  up_ch_tx_diffctrl_8,
+  output  [ 4:0]  up_ch_tx_postcursor_8,
+  output  [ 4:0]  up_ch_tx_precursor_8,
   output          up_ch_enb_8,
   output  [11:0]  up_ch_addr_8,
   output          up_ch_wr_8,
@@ -284,6 +314,9 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_9,
   output  [ 1:0]  up_ch_sys_clk_sel_9,
   output  [ 2:0]  up_ch_out_clk_sel_9,
+  output  [ 3:0]  up_ch_tx_diffctrl_9,
+  output  [ 4:0]  up_ch_tx_postcursor_9,
+  output  [ 4:0]  up_ch_tx_precursor_9,
   output          up_ch_enb_9,
   output  [11:0]  up_ch_addr_9,
   output          up_ch_wr_9,
@@ -306,6 +339,9 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_10,
   output  [ 1:0]  up_ch_sys_clk_sel_10,
   output  [ 2:0]  up_ch_out_clk_sel_10,
+  output  [ 3:0]  up_ch_tx_diffctrl_10,
+  output  [ 4:0]  up_ch_tx_postcursor_10,
+  output  [ 4:0]  up_ch_tx_precursor_10,
   output          up_ch_enb_10,
   output  [11:0]  up_ch_addr_10,
   output          up_ch_wr_10,
@@ -328,6 +364,9 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_11,
   output  [ 1:0]  up_ch_sys_clk_sel_11,
   output  [ 2:0]  up_ch_out_clk_sel_11,
+  output  [ 3:0]  up_ch_tx_diffctrl_11,
+  output  [ 4:0]  up_ch_tx_postcursor_11,
+  output  [ 4:0]  up_ch_tx_precursor_11,
   output          up_ch_enb_11,
   output  [11:0]  up_ch_addr_11,
   output          up_ch_wr_11,
@@ -357,6 +396,9 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_12,
   output  [ 1:0]  up_ch_sys_clk_sel_12,
   output  [ 2:0]  up_ch_out_clk_sel_12,
+  output  [ 3:0]  up_ch_tx_diffctrl_12,
+  output  [ 4:0]  up_ch_tx_postcursor_12,
+  output  [ 4:0]  up_ch_tx_precursor_12,
   output          up_ch_enb_12,
   output  [11:0]  up_ch_addr_12,
   output          up_ch_wr_12,
@@ -379,6 +421,9 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_13,
   output  [ 1:0]  up_ch_sys_clk_sel_13,
   output  [ 2:0]  up_ch_out_clk_sel_13,
+  output  [ 3:0]  up_ch_tx_diffctrl_13,
+  output  [ 4:0]  up_ch_tx_postcursor_13,
+  output  [ 4:0]  up_ch_tx_precursor_13,
   output          up_ch_enb_13,
   output  [11:0]  up_ch_addr_13,
   output          up_ch_wr_13,
@@ -401,6 +446,9 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_14,
   output  [ 1:0]  up_ch_sys_clk_sel_14,
   output  [ 2:0]  up_ch_out_clk_sel_14,
+  output  [ 3:0]  up_ch_tx_diffctrl_14,
+  output  [ 4:0]  up_ch_tx_postcursor_14,
+  output  [ 4:0]  up_ch_tx_precursor_14,
   output          up_ch_enb_14,
   output  [11:0]  up_ch_addr_14,
   output          up_ch_wr_14,
@@ -423,6 +471,9 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_15,
   output  [ 1:0]  up_ch_sys_clk_sel_15,
   output  [ 2:0]  up_ch_out_clk_sel_15,
+  output  [ 3:0]  up_ch_tx_diffctrl_15,
+  output  [ 4:0]  up_ch_tx_postcursor_15,
+  output  [ 4:0]  up_ch_tx_precursor_15,
   output          up_ch_enb_15,
   output  [11:0]  up_ch_addr_15,
   output          up_ch_wr_15,
@@ -533,6 +584,9 @@ module axi_adxcvr #(
   wire    [ 2:0]  up_ch_rate;
   wire    [ 1:0]  up_ch_sys_clk_sel;
   wire    [ 2:0]  up_ch_out_clk_sel;
+  wire    [ 3:0]  up_ch_tx_diffctrl;
+  wire    [ 4:0]  up_ch_tx_postcursor;
+  wire    [ 4:0]  up_ch_tx_precursor;
   wire            up_ch_pll_locked_0_s;
   wire            up_ch_rst_done_0_s;
   wire            up_ch_pll_locked_1_s;
@@ -676,6 +730,9 @@ module axi_adxcvr #(
   assign up_ch_rate_0 = up_ch_rate;
   assign up_ch_sys_clk_sel_0 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_0 = up_ch_out_clk_sel;
+  assign up_ch_tx_diffctrl_0 = up_ch_tx_diffctrl;
+  assign up_ch_tx_postcursor_0 = up_ch_tx_postcursor;
+  assign up_ch_tx_precursor_0 = up_ch_tx_precursor;
 
   axi_adxcvr_mstatus #(
     .XCVR_ID (0),
@@ -736,6 +793,9 @@ module axi_adxcvr #(
   assign up_ch_rate_1 = up_ch_rate;
   assign up_ch_sys_clk_sel_1 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_1 = up_ch_out_clk_sel;
+  assign up_ch_tx_diffctrl_1 = up_ch_tx_diffctrl;
+  assign up_ch_tx_postcursor_1 = up_ch_tx_postcursor;
+  assign up_ch_tx_precursor_1 = up_ch_tx_precursor;
 
   axi_adxcvr_mstatus #(
     .XCVR_ID (1),
@@ -796,6 +856,9 @@ module axi_adxcvr #(
   assign up_ch_rate_2 = up_ch_rate;
   assign up_ch_sys_clk_sel_2 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_2 = up_ch_out_clk_sel;
+  assign up_ch_tx_diffctrl_2 = up_ch_tx_diffctrl;
+  assign up_ch_tx_postcursor_2 = up_ch_tx_postcursor;
+  assign up_ch_tx_precursor_2 = up_ch_tx_precursor;
 
   axi_adxcvr_mstatus #(
     .XCVR_ID (2),
@@ -856,6 +919,9 @@ module axi_adxcvr #(
   assign up_ch_rate_3 = up_ch_rate;
   assign up_ch_sys_clk_sel_3 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_3 = up_ch_out_clk_sel;
+  assign up_ch_tx_diffctrl_3 = up_ch_tx_diffctrl;
+  assign up_ch_tx_postcursor_3 = up_ch_tx_postcursor;
+  assign up_ch_tx_precursor_3 = up_ch_tx_precursor;
 
   axi_adxcvr_mstatus #(
     .XCVR_ID (3),
@@ -936,6 +1002,9 @@ module axi_adxcvr #(
   assign up_ch_rate_4 = up_ch_rate;
   assign up_ch_sys_clk_sel_4 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_4 = up_ch_out_clk_sel;
+  assign up_ch_tx_diffctrl_4 = up_ch_tx_diffctrl;
+  assign up_ch_tx_postcursor_4 = up_ch_tx_postcursor;
+  assign up_ch_tx_precursor_4 = up_ch_tx_precursor;
 
   axi_adxcvr_mstatus #(
     .XCVR_ID (4),
@@ -996,6 +1065,9 @@ module axi_adxcvr #(
   assign up_ch_rate_5 = up_ch_rate;
   assign up_ch_sys_clk_sel_5 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_5 = up_ch_out_clk_sel;
+  assign up_ch_tx_diffctrl_5 = up_ch_tx_diffctrl;
+  assign up_ch_tx_postcursor_5 = up_ch_tx_postcursor;
+  assign up_ch_tx_precursor_5 = up_ch_tx_precursor;
 
   axi_adxcvr_mstatus #(
     .XCVR_ID (5),
@@ -1056,6 +1128,9 @@ module axi_adxcvr #(
   assign up_ch_rate_6 = up_ch_rate;
   assign up_ch_sys_clk_sel_6 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_6 = up_ch_out_clk_sel;
+  assign up_ch_tx_diffctrl_6 = up_ch_tx_diffctrl;
+  assign up_ch_tx_postcursor_6 = up_ch_tx_postcursor;
+  assign up_ch_tx_precursor_6 = up_ch_tx_precursor;
 
   axi_adxcvr_mstatus #(
     .XCVR_ID (6),
@@ -1116,6 +1191,9 @@ module axi_adxcvr #(
   assign up_ch_rate_7 = up_ch_rate;
   assign up_ch_sys_clk_sel_7 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_7 = up_ch_out_clk_sel;
+  assign up_ch_tx_diffctrl_7 = up_ch_tx_diffctrl;
+  assign up_ch_tx_postcursor_7 = up_ch_tx_postcursor;
+  assign up_ch_tx_precursor_7 = up_ch_tx_precursor;
 
   axi_adxcvr_mstatus #(
     .XCVR_ID (7),
@@ -1196,6 +1274,9 @@ module axi_adxcvr #(
   assign up_ch_rate_8 = up_ch_rate;
   assign up_ch_sys_clk_sel_8 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_8 = up_ch_out_clk_sel;
+  assign up_ch_tx_diffctrl_8 = up_ch_tx_diffctrl;
+  assign up_ch_tx_postcursor_8 = up_ch_tx_postcursor;
+  assign up_ch_tx_precursor_8 = up_ch_tx_precursor;
 
   axi_adxcvr_mstatus #(
     .XCVR_ID (8),
@@ -1256,6 +1337,9 @@ module axi_adxcvr #(
   assign up_ch_rate_9 = up_ch_rate;
   assign up_ch_sys_clk_sel_9 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_9 = up_ch_out_clk_sel;
+  assign up_ch_tx_diffctrl_9 = up_ch_tx_diffctrl;
+  assign up_ch_tx_postcursor_9 = up_ch_tx_postcursor;
+  assign up_ch_tx_precursor_9 = up_ch_tx_precursor;
 
   axi_adxcvr_mstatus #(
     .XCVR_ID (9),
@@ -1316,6 +1400,9 @@ module axi_adxcvr #(
   assign up_ch_rate_10 = up_ch_rate;
   assign up_ch_sys_clk_sel_10 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_10 = up_ch_out_clk_sel;
+  assign up_ch_tx_diffctrl_10 = up_ch_tx_diffctrl;
+  assign up_ch_tx_postcursor_10 = up_ch_tx_postcursor;
+  assign up_ch_tx_precursor_10 = up_ch_tx_precursor;
 
   axi_adxcvr_mstatus #(
     .XCVR_ID (10),
@@ -1376,6 +1463,9 @@ module axi_adxcvr #(
   assign up_ch_rate_11 = up_ch_rate;
   assign up_ch_sys_clk_sel_11 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_11 = up_ch_out_clk_sel;
+  assign up_ch_tx_diffctrl_11 = up_ch_tx_diffctrl;
+  assign up_ch_tx_postcursor_11 = up_ch_tx_postcursor;
+  assign up_ch_tx_precursor_11 = up_ch_tx_precursor;
 
   axi_adxcvr_mstatus #(
     .XCVR_ID (11),
@@ -1456,6 +1546,9 @@ module axi_adxcvr #(
   assign up_ch_rate_12 = up_ch_rate;
   assign up_ch_sys_clk_sel_12 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_12 = up_ch_out_clk_sel;
+  assign up_ch_tx_diffctrl_12 = up_ch_tx_diffctrl;
+  assign up_ch_tx_postcursor_12 = up_ch_tx_postcursor;
+  assign up_ch_tx_precursor_12 = up_ch_tx_precursor;
 
   axi_adxcvr_mstatus #(
     .XCVR_ID (12),
@@ -1516,6 +1609,9 @@ module axi_adxcvr #(
   assign up_ch_rate_13 = up_ch_rate;
   assign up_ch_sys_clk_sel_13 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_13 = up_ch_out_clk_sel;
+  assign up_ch_tx_diffctrl_13 = up_ch_tx_diffctrl;
+  assign up_ch_tx_postcursor_13 = up_ch_tx_postcursor;
+  assign up_ch_tx_precursor_13 = up_ch_tx_precursor;
 
   axi_adxcvr_mstatus #(
     .XCVR_ID (13),
@@ -1576,6 +1672,9 @@ module axi_adxcvr #(
   assign up_ch_rate_14 = up_ch_rate;
   assign up_ch_sys_clk_sel_14 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_14 = up_ch_out_clk_sel;
+  assign up_ch_tx_diffctrl_14 = up_ch_tx_diffctrl;
+  assign up_ch_tx_postcursor_14 = up_ch_tx_postcursor;
+  assign up_ch_tx_precursor_14 = up_ch_tx_precursor;
 
   axi_adxcvr_mstatus #(
     .XCVR_ID (14),
@@ -1636,6 +1735,9 @@ module axi_adxcvr #(
   assign up_ch_rate_15 = up_ch_rate;
   assign up_ch_sys_clk_sel_15 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_15 = up_ch_out_clk_sel;
+  assign up_ch_tx_diffctrl_15 = up_ch_tx_diffctrl;
+  assign up_ch_tx_postcursor_15 = up_ch_tx_postcursor;
+  assign up_ch_tx_precursor_15 = up_ch_tx_precursor;
 
   axi_adxcvr_mstatus #(
     .XCVR_ID (15),
@@ -1723,6 +1825,9 @@ module axi_adxcvr #(
     .QPLL_ENABLE (QPLL_ENABLE),
     .LPM_OR_DFE_N (LPM_OR_DFE_N),
     .RATE (RATE),
+    .TX_DIFFCTRL (TX_DIFFCTRL),
+    .TX_POSTCURSOR (TX_POSTCURSOR),
+    .TX_PRECURSOR (TX_PRECURSOR),
     .SYS_CLK_SEL (SYS_CLK_SEL),
     .OUT_CLK_SEL (OUT_CLK_SEL))
   i_up (
@@ -1741,6 +1846,9 @@ module axi_adxcvr #(
     .up_ch_rate (up_ch_rate),
     .up_ch_sys_clk_sel (up_ch_sys_clk_sel),
     .up_ch_out_clk_sel (up_ch_out_clk_sel),
+    .up_ch_tx_diffctrl (up_ch_tx_diffctrl),
+    .up_ch_tx_postcursor (up_ch_tx_postcursor),
+    .up_ch_tx_precursor (up_ch_tx_precursor),
     .up_ch_sel (up_ch_sel),
     .up_ch_enb (up_ch_enb),
     .up_ch_addr (up_ch_addr),

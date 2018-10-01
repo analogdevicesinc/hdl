@@ -46,6 +46,9 @@ module axi_adxcvr_up #(
   parameter   integer QPLL_ENABLE = 1,
   parameter           LPM_OR_DFE_N = 1,
   parameter   [ 2:0]  RATE = 3'd0,
+  parameter   [ 3:0]  TX_DIFFCTRL = 4'd8,
+  parameter   [ 4:0]  TX_POSTCURSOR = 5'd0,
+  parameter   [ 4:0]  TX_PRECURSOR = 5'd0,
   parameter   [ 1:0]  SYS_CLK_SEL = 2'd3,
   parameter   [ 2:0]  OUT_CLK_SEL = 3'd4) (
 
@@ -69,6 +72,9 @@ module axi_adxcvr_up #(
   output  [ 2:0]  up_ch_rate,
   output  [ 1:0]  up_ch_sys_clk_sel,
   output  [ 2:0]  up_ch_out_clk_sel,
+  output  [ 3:0]  up_ch_tx_diffctrl,
+  output  [ 4:0]  up_ch_tx_postcursor,
+  output  [ 4:0]  up_ch_tx_precursor,
   output  [ 7:0]  up_ch_sel,
   output          up_ch_enb,
   output  [11:0]  up_ch_addr,
@@ -128,6 +134,9 @@ module axi_adxcvr_up #(
   reg     [ 2:0]  up_rate = RATE;
   reg     [ 1:0]  up_sys_clk_sel = SYS_CLK_SEL;
   reg     [ 2:0]  up_out_clk_sel = OUT_CLK_SEL;
+  reg     [ 3:0]  up_tx_diffctrl = TX_DIFFCTRL;
+  reg     [ 4:0]  up_tx_postcursor = TX_POSTCURSOR;
+  reg     [ 4:0]  up_tx_precursor = TX_PRECURSOR;
   reg     [ 7:0]  up_icm_sel = 'd0;
   reg             up_icm_enb = 'd0;
   reg             up_icm_wr = 'd0;
@@ -229,6 +238,9 @@ module axi_adxcvr_up #(
   assign up_ch_rate = up_rate;
   assign up_ch_sys_clk_sel = up_sys_clk_sel;
   assign up_ch_out_clk_sel = up_out_clk_sel;
+  assign up_ch_tx_diffctrl = up_tx_diffctrl;
+  assign up_ch_tx_postcursor = up_tx_postcursor;
+  assign up_ch_tx_precursor = up_tx_precursor;
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
@@ -236,12 +248,24 @@ module axi_adxcvr_up #(
       up_rate <= RATE;
       up_sys_clk_sel <= SYS_CLK_SEL;
       up_out_clk_sel <= OUT_CLK_SEL;
+      up_tx_diffctrl <= TX_DIFFCTRL;
+      up_tx_postcursor <= TX_POSTCURSOR;
+      up_tx_precursor <= TX_PRECURSOR;
     end else begin
       if ((up_wreq == 1'b1) && (up_waddr == 10'h008)) begin
         up_lpm_dfe_n <= up_wdata[12];
         up_rate <= up_wdata[10:8];
         up_sys_clk_sel <= up_wdata[5:4];
         up_out_clk_sel <= up_wdata[2:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 10'h030)) begin
+        up_tx_diffctrl <= up_wdata[3:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 10'h031)) begin
+        up_tx_postcursor <= up_wdata[4:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 10'h032)) begin
+        up_tx_precursor <= up_wdata[4:0];
       end
     end
   end
@@ -447,7 +471,7 @@ module axi_adxcvr_up #(
   assign up_rparam_s[31:24] = 8'd0;
 
   // xilinx specific
- 
+
   assign up_rparam_s[23:21] = 3'd0;
   assign up_rparam_s[20:20] = (QPLL_ENABLE == 0) ? 1'b0 : 1'b1;
   assign up_rparam_s[19:16] = XCVR_TYPE[3:0];
@@ -488,6 +512,9 @@ module axi_adxcvr_up #(
           10'h02c: up_rdata_d <= {20'd0, up_ies_hoffset_step};
           10'h02d: up_rdata_d <= up_ies_start_addr;
           10'h02e: up_rdata_d <= {31'd0, up_es_status};
+          10'h030: up_rdata_d <= up_tx_diffctrl;
+          10'h031: up_rdata_d <= up_tx_postcursor;
+          10'h032: up_rdata_d <= up_tx_precursor;
           default: up_rdata_d <= 32'd0;
         endcase
       end else begin
