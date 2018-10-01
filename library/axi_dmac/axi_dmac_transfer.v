@@ -250,10 +250,9 @@ axi_dmac_reset_manager #(
 assign req_valid_gated = req_enable & req_valid;
 assign req_ready = req_enable & req_ready_gated;
 
-generate if (DMA_2D_TRANSFER == 1) begin
-
 dmac_2d_transfer #(
-  .DMA_AXI_ADDR_WIDTH(DMA_AXI_ADDR_WIDTH),
+  .DMA_2D_TRANSFER (DMA_2D_TRANSFER),
+  .DMA_AXI_ADDR_WIDTH (DMA_AXI_ADDR_WIDTH),
   .DMA_LENGTH_WIDTH (DMA_LENGTH_WIDTH),
   .BYTES_PER_BURST_WIDTH (BYTES_PER_BURST_WIDTH),
   .BYTES_PER_BEAT_WIDTH_DEST (BYTES_PER_BEAT_WIDTH_DEST),
@@ -293,27 +292,6 @@ dmac_2d_transfer #(
   .out_response_valid (dma_response_valid),
   .out_response_ready (dma_response_ready)
   );
-
-end else begin
-
-/* Request */
-assign dma_req_valid = req_valid_gated;
-assign req_ready_gated = dma_req_ready;
-
-assign dma_req_dest_address = req_dest_address;
-assign dma_req_src_address = req_src_address;
-assign dma_req_length = req_x_length;
-assign dma_req_sync_transfer_start = req_sync_transfer_start;
-assign dma_req_last = req_last;
-
-/* Response */
-assign req_eot = dma_req_eot;
-assign req_measured_burst_length = dma_req_measured_burst_length;
-assign req_response_partial = dma_response_partial;
-assign req_response_valid = dma_response_valid;
-assign dma_response_ready = req_response_ready;
-
-end endgenerate
 
 dmac_request_arb #(
   .DMA_DATA_WIDTH_SRC (DMA_DATA_WIDTH_SRC),
