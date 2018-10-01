@@ -37,6 +37,7 @@
 
 module dmac_2d_transfer #(
 
+  parameter DMA_2D_TRANSFER = 1,
   parameter DMA_AXI_ADDR_WIDTH = 32,
   parameter DMA_LENGTH_WIDTH = 24,
   parameter BYTES_PER_BURST_WIDTH = 7,
@@ -71,7 +72,7 @@ module dmac_2d_transfer #(
   output [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] out_req_dest_address,
   output [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] out_req_src_address,
   output [DMA_LENGTH_WIDTH-1:0] out_req_length,
-  output reg out_req_sync_transfer_start,
+  output out_req_sync_transfer_start,
   output out_req_last,
 
   input out_eot,
@@ -82,12 +83,15 @@ module dmac_2d_transfer #(
 
 );
 
+generate if (DMA_2D_TRANSFER == 1) begin
+
 reg [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] dest_address = 'h00;
 reg [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] src_address = 'h00;
 reg [DMA_LENGTH_WIDTH-1:0] x_length = 'h00;
 reg [DMA_LENGTH_WIDTH-1:0] y_length = 'h00;
 reg [DMA_LENGTH_WIDTH-1:0] dest_stride = 'h0;
 reg [DMA_LENGTH_WIDTH-1:0] src_stride = 'h00;
+reg sync_transfer_start = 1'b0;
 
 reg gen_last = 'h0;
 
@@ -101,6 +105,7 @@ assign out_req_dest_address = dest_address;
 assign out_req_src_address = src_address;
 assign out_req_length = x_length;
 assign out_last = y_length == 'h00;
+assign out_req_sync_transfer_start = sync_transfer_start;
 
 always @(posedge req_aclk) begin
   if (req_aresetn == 1'b0) begin
@@ -160,7 +165,7 @@ always @(posedge req_aclk) begin
     y_length <= req_y_length;
     dest_stride <= req_dest_stride;
     src_stride <= req_src_stride;
-    out_req_sync_transfer_start <= req_sync_transfer_start;
+    sync_transfer_start <= req_sync_transfer_start;
     gen_last <= req_last;
   end else if (out_abort_req == 1'b1) begin
     y_length <= 0;
@@ -168,7 +173,7 @@ always @(posedge req_aclk) begin
     dest_address <= dest_address + dest_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST];
     src_address <= src_address + src_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC];
     y_length <= y_length - 1'b1;
-    out_req_sync_transfer_start <= 1'b0;
+    sync_transfer_start <= 1'b0;
   end
 end
 
@@ -189,5 +194,30 @@ always @(posedge req_aclk) begin
 end
 
 assign out_req_last = out_last & gen_last;
+
+end else begin
+
+  /* Request */
+  always @(*) begin
+    out_req_valid = req_valid;
+    req_ready = out_req_ready;
+  end
+
+  assign out_req_dest_address = req_dest_address;
+  assign out_req_src_address = req_src_address;
+  assign out_req_length = req_x_length;
+  assign out_req_sync_transfer_start = req_sync_transfer_start;
+  assign out_req_last = req_last;
+
+  /* Response */
+  always @(*) begin
+    req_eot = out_eot;
+    req_measured_burst_length = out_measured_burst_length;
+    req_response_partial = out_response_partial;
+    req_response_valid = out_response_valid;
+    out_response_ready = req_response_ready;
+  end
+
+end endgenerate
 
 endmodule
