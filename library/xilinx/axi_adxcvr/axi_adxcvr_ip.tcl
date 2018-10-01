@@ -50,6 +50,9 @@ for {set n 0} {$n < 16} {incr n} {
     "rate                up_ch_rate_${n}        "\
     "sys_clk_sel         up_ch_sys_clk_sel_${n} "\
     "out_clk_sel         up_ch_out_clk_sel_${n} "\
+    "tx_diffctrl         up_ch_tx_diffctrl_${n}  "\
+    "tx_postcursor       up_ch_tx_postcursor_${n} "\
+    "tx_precursor        up_ch_tx_precursor_${n} "\
     "enb                 up_ch_enb_${n}         "\
     "addr                up_ch_addr_${n}        "\
     "wr                  up_ch_wr_${n}          "\

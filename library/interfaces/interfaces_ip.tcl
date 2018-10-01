@@ -20,6 +20,9 @@ adi_if_ports output    1  lpm_dfe_n
 adi_if_ports output    3  rate
 adi_if_ports output    2  sys_clk_sel
 adi_if_ports output    3  out_clk_sel
+adi_if_ports output    4  tx_diffctrl
+adi_if_ports output    5  tx_postcursor
+adi_if_ports output    5  tx_precursor
 adi_if_ports output    1  enb
 adi_if_ports output   12  addr
 adi_if_ports output    1  wr
