@@ -11,6 +11,11 @@ source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
 source ../common/daq3_bd.tcl
 
+# configure the CPLL's to support 12.33Gbps
+ad_ip_parameter util_daq3_xcvr CONFIG.CPLL_CFG0 0x03fe
+ad_ip_parameter util_daq3_xcvr CONFIG.CPLL_CFG1 0x0021
+ad_ip_parameter util_daq3_xcvr CONFIG.CPLL_CFG2 0x0203
+
 create_bd_port -dir I dac_fifo_bypass
 
 ad_ip_parameter axi_ad9152_xcvr CONFIG.XCVR_TYPE 2
