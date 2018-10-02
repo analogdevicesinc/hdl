@@ -41,21 +41,61 @@ set_property -dict [list \
 	widget {checkBox} \
 ] $param
 
-set_property value_format string [ipx::get_hdl_parameters SPEED_GRADE -of_objects [ipx::current_core]]
-set_property value_format string [ipx::get_user_parameters SPEED_GRADE -of_objects [ipx::current_core]]
-
 set part [get_property PART [current_project]]
-foreach x [list_property $part] {
-  if { $x == "SPEED_GRADE" } {
-    set speed [get_property $x $part]
-    puts $speed
-    set_property value $speed [ipx::get_user_parameters SPEED_GRADE -of_objects [ipx::current_core]]
-    set_property value $speed [ipx::get_hdl_parameters SPEED_GRADE -of_objects [ipx::current_core]]
-  }
-  if { $x == "FAMILY" } {
-    set family [get_property $x $part]
-  }
+
+# capture the device speedgrade
+set speed [get_property SPEED $part]
+
+switch $speed {
+	-1   { set speed_enc 10 }
+	-1L  { set speed_enc 11 }
+	-1H  { set speed_enc 12 }
+	-1HV { set speed_enc 13 }
+	-1LV { set speed_enc 14 }
+	-2   { set speed_enc 20 }
+	-2L  { set speed_enc 21 }
+	-2LV { set speed_enc 22 }
+	-3   { set speed_enc 30 }
+	default {
+		puts "Undefined speed grade \"$speed\"!"
+		exit -1
+	}
 }
+
+set_property value $speed [ipx::get_user_parameters SPEED_GRADE -of_objects [ipx::current_core]]
+set_property value $speed_enc [ipx::get_hdl_parameters SPEED_GRADE -of_objects [ipx::current_core]]
+set_property enablement_value false [ipx::get_user_parameters SPEED_GRADE -of_objects [ipx::current_core]]
+
+# capture device package
+set package_string [get_property PACKAGE $part]
+
+switch -regexp -- $package_string {
+	^rf   { set package_enc 1  }
+	^fl   { set package_enc 2  }
+	^ff   { set package_enc 3  }
+	^fb   { set package_enc 4  }
+	^hc   { set package_enc 5  }
+	^fh   { set package_enc 6  }
+	^cs   { set package_enc 7  }
+	^cp   { set package_enc 8  }
+	^ft   { set package_enc 9  }
+	^fg   { set package_enc 10 }
+	^sb   { set package_enc 11 }
+	^rb   { set package_enc 12 }
+	^rs   { set package_enc 13 }
+	^cl   { set package_enc 14 }
+	^sf   { set package_enc 15 }
+	^ba   { set package_enc 16 }
+	^fa   { set package_enc 17 }
+	default {
+		puts "Undefined pakage \"$package_enc\"!"
+		exit -1
+	}
+}
+
+set_property value $package_string [ipx::get_user_parameters FPGA_DEV_PACKAGE -of_objects [ipx::current_core]]
+set_property value $package_enc [ipx::get_hdl_parameters FPGA_DEV_PACKAGE -of_objects [ipx::current_core]]
+set_property enablement_value false [ipx::get_user_parameters FPGA_DEV_PACKAGE -of_objects [ipx::current_core]]
 
 set_property enablement_tcl_expr {$ENABLE_CLKIN2} [ipx::get_user_parameters CLKIN2_PERIOD -of_objects $cc]
 set_property enablement_tcl_expr {$ENABLE_CLKOUT1} [ipx::get_user_parameters CLK1_DIV -of_objects $cc]

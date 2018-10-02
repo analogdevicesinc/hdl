@@ -39,6 +39,7 @@ module up_clkgen #(
 
   parameter         ID = 0,
   parameter [ 7:0]  FAMILY = 0,
+  parameter [ 7:0]  FPGA_DEV_PACKAGE = 0,
   parameter [ 7:0]  SPEED_GRADE = 0) (
 
   // mmcm reset
@@ -163,7 +164,7 @@ module up_clkgen #(
           8'h00: up_rdata <= PCORE_VERSION;
           8'h01: up_rdata <= ID;
           8'h02: up_rdata <= up_scratch;
-          8'h03: up_rdata <= {16'd0,SPEED_GRADE,FAMILY}; // [16,8,8]
+          8'h07: up_rdata <= {8'd0,FPGA_DEV_PACKAGE,SPEED_GRADE,FAMILY}; // [8,8,8,8]
           8'h10: up_rdata <= {30'd0, up_mmcm_resetn, up_resetn};
           8'h11: up_rdata <= {31'd0, up_clk_sel};
           8'h17: up_rdata <= {31'd0, up_drp_locked};
