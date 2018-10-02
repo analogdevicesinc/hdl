@@ -1892,7 +1892,7 @@ module util_adxcvr_xch #(
     .RX_TUNE_AFE_OS (2'b00),
     .RX_VREG_CTRL (3'b101),
     .RX_VREG_PDB (1'b1),
-    .RX_WIDEMODE_CDR (2'b00),
+    .RX_WIDEMODE_CDR (2'b01),
     .RX_WIDEMODE_CDR_GEN3 (2'b00),
     .RX_WIDEMODE_CDR_GEN4 (2'b01),
     .RX_XCLK_SEL ("RXDES"),
