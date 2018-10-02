@@ -42,7 +42,7 @@ set_property -dict [list \
 ] $param
 
 set_property value_format string [ipx::get_hdl_parameters SPEED_GRADE -of_objects [ipx::current_core]]
-set_property value_format string [ipx::get_hdl_parameters SPEED_GRADE -of_objects [ipx::current_core]]
+set_property value_format string [ipx::get_user_parameters SPEED_GRADE -of_objects [ipx::current_core]]
 
 set part [get_property PART [current_project]]
 foreach x [list_property $part] {
