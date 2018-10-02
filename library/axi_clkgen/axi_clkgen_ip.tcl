@@ -41,6 +41,22 @@ set_property -dict [list \
 	widget {checkBox} \
 ] $param
 
+set_property value_format string [ipx::get_hdl_parameters SPEED_GRADE -of_objects [ipx::current_core]]
+set_property value_format string [ipx::get_hdl_parameters SPEED_GRADE -of_objects [ipx::current_core]]
+
+set part [get_property PART [current_project]]
+foreach x [list_property $part] {
+  if { $x == "SPEED_GRADE" } {
+    set speed [get_property $x $part]
+    puts $speed
+    set_property value $speed [ipx::get_user_parameters SPEED_GRADE -of_objects [ipx::current_core]]
+    set_property value $speed [ipx::get_hdl_parameters SPEED_GRADE -of_objects [ipx::current_core]]
+  }
+  if { $x == "FAMILY" } {
+    set family [get_property $x $part]
+  }
+}
+
 set_property enablement_tcl_expr {$ENABLE_CLKIN2} [ipx::get_user_parameters CLKIN2_PERIOD -of_objects $cc]
 set_property enablement_tcl_expr {$ENABLE_CLKOUT1} [ipx::get_user_parameters CLK1_DIV -of_objects $cc]
 set_property enablement_tcl_expr {$ENABLE_CLKOUT1} [ipx::get_user_parameters CLK1_PHASE -of_objects $cc]

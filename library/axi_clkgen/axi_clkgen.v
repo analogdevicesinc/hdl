@@ -38,6 +38,7 @@ module axi_clkgen #(
 
   parameter         ID = 0,
   parameter         DEVICE_TYPE = 0,
+  parameter         SPEED_GRADE = 0,
   parameter         CLKSEL_EN = 0,
   parameter real    CLKIN_PERIOD  = 5.000,
   parameter real    CLKIN2_PERIOD  = 5.000,
@@ -145,7 +146,9 @@ module axi_clkgen #(
   // processor interface
 
   up_clkgen #(
-    .ID(ID)
+    .ID(ID),
+    .FAMILY(DEVICE_TYPE),
+    .SPEED_GRADE(SPEED_GRADE)
   ) i_up_clkgen (
     .mmcm_rst (mmcm_rst),
     .clk_sel (up_clk_sel_s),
