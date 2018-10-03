@@ -167,12 +167,12 @@ module system_top (
   assign gpio_ctl_0 = gpio_o[41:38];
   assign gpio_bd_o = gpio_o[20:13];
   assign gpio_i[12: 0] = gpio_bd_i;
-  assign gpio_i[21:13] = 'h0;
+  assign gpio_i[21:13] = gpio_o[21:13];
   assign gpio_i[29:22] = gpio_status_0;
   assign gpio_i[37:30] = gpio_status_1;
-  assign gpio_i[63:38] = 'h0;
+  assign gpio_i[63:38] = gpio_o[63:38];
   assign gpio_i[64] = gpio_ad5355_lock;
-  assign gpio_i[94:65] = 'h0;
+  assign gpio_i[94:65] = gpio_o[94:65];
 
   assign spi_ad9361_0 = spi0_csn[0];
   assign spi_ad9361_1 = spi0_csn[1];

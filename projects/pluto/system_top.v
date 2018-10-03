@@ -92,7 +92,7 @@ module system_top (
   wire    [16:0]  gpio_o;
   wire    [16:0]  gpio_t;
 
-  assign gpio_i[16:15] = 'h0;
+  assign gpio_i[16:15] = gpio_o[16:15];
   // instantiations
 
   ad_iobuf #(.DATA_WIDTH(15)) i_iobuf (

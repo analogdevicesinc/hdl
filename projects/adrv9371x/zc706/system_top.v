@@ -233,8 +233,8 @@ module system_top (
     .dio_o (gpio_i[14:0]),
     .dio_p (gpio_bd));
 
-  assign gpio_i[31:15] = 'h0;
-  assign gpio_i[63:60] = 'h0;
+  assign gpio_i[31:15] = gpio_o[31:15];
+  assign gpio_i[63:60] = gpio_o[63:60];
 
   system_wrapper i_system_wrapper (
     .dac_fifo_bypass (gpio_o[60]),

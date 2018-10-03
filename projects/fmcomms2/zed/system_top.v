@@ -144,8 +144,8 @@ module system_top (
               gpio_status,
               gpio_bd}));
 
-  assign gpio_i[63:51] = 'h0;
-  assign gpio_i[48:47] = 'h0;
+  assign gpio_i[63:51] = gpio_o[63:51];
+  assign gpio_i[48:47] = gpio_o[48:47];
 
    ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_iic_scl (
     .dio_t ({iic_mux_scl_t_s,iic_mux_scl_t_s}),

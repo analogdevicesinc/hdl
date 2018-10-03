@@ -87,7 +87,7 @@ module system_top (
     .dio_o (gpio_i[15:0]),
     .dio_p ({gpio_bd[7:4], gpio_bd[15:8], gpio_bd[3:0]}));
 
-  assign gpio_i[63:16] = 'h0;
+  assign gpio_i[63:16] = gpio_o[63:16];
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),

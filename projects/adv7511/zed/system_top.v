@@ -95,7 +95,7 @@ module system_top (
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
 
-  assign gpio_i[63:32] = 'h0;
+  assign gpio_i[63:32] = gpio_o[63:32];
 
   // instantiations
 

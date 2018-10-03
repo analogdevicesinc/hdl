@@ -111,8 +111,8 @@ module system_top (
   assign gain1_o = gpio_o[33];
 
   assign gpio_i[34] = spi_sdi; // Interrupt
-  assign gpio_i[33] = 'h0;
-  assign gpio_i[32] = 'h0;
+  assign gpio_i[33] = gpio_o[33];
+  assign gpio_i[32] = gpio_o[32];
   assign led_clk_o = excitation;
 
   ad_iobuf #(

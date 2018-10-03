@@ -115,7 +115,7 @@ wire            iic_mux_sda_t_s;
     .dio_o ({gpio_i[31:0]}),
     .dio_p (gpio_bd));
 
-  assign gpio_i[63:32] = 'h0;
+  assign gpio_i[63:32] = gpio_o[63:32];
 
    ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_iic_scl (
     .dio_t ({iic_mux_scl_t_s,iic_mux_scl_t_s}),

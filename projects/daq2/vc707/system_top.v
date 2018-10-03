@@ -222,10 +222,10 @@ module system_top (
     .dio_o (gpio_i[20:0]),
     .dio_p (gpio_bd));
 
-  assign gpio_i[63:44] = 'h0;
-  assign gpio_i[39] = 'h0;
-  assign gpio_i[37] = 'h0;
-  assign gpio_i[31:21] = 'h0;
+  assign gpio_i[63:44] = gpio_o[63:44];
+  assign gpio_i[39] = gpio_o[39];
+  assign gpio_i[37] = gpio_o[37];
+  assign gpio_i[31:21] = gpio_o[31:21];
 
   system_wrapper i_system_wrapper (
     .ddr3_addr (ddr3_addr),

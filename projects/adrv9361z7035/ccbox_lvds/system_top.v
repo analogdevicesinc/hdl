@@ -159,9 +159,9 @@ module system_top (
 
   // gpio[31:20] controls misc stuff (keep as io)
 
-  assign gpio_i[31:29] = 'h0;
+  assign gpio_i[31:29] = gpio_o[31:29];
   assign gpio_i[28:28] = imu_ready;
-  assign gpio_i[27:27] = 'h0;
+  assign gpio_i[27:27] = gpio_o[27:27];
 
   // rtc int gpio - 26
 
@@ -193,7 +193,7 @@ module system_top (
 
   // gpio[19:16] controls adp5061 (keep as io)
 
-  assign gpio_i[19] = 'h0;
+  assign gpio_i[19] = gpio_o[19];
 
   ad_iobuf #(.DATA_WIDTH(3)) i_iobuf_adp5061 (
     .dio_t (gpio_t[18:16]),
@@ -210,7 +210,7 @@ module system_top (
   assign oled_dc = gpio_o[11];
   assign oled_rst = gpio_o[10];
   assign imu_rstn = gpio_o[9];
-  assign gpio_i[11:9] = 'h0;
+  assign gpio_i[11:9] = gpio_o[11:9];
 
   ad_iobuf #(.DATA_WIDTH(1)) i_iobuf_imu_sync (
     .dio_t (gpio_t[8]),
@@ -230,14 +230,14 @@ module system_top (
   assign switch_led_r = gpio_o[2];
   assign switch_led_g = gpio_o[1];
   assign switch_led_b = gpio_o[0];
-  assign gpio_i[3:0] = 'h0;
+  assign gpio_i[3:0] = gpio_o[3:0];
 
   // unused gpio - 63:30
 
-  assign gpio_i[63] = 'h0;
-  assign gpio_i[62] = 'h0;
-  assign gpio_i[61] = 'h0;
-  assign gpio_i[60] = 'h0;
+  assign gpio_i[63] = gpio_o[63];
+  assign gpio_i[62] = gpio_o[62];
+  assign gpio_i[61] = gpio_o[61];
+  assign gpio_i[60] = gpio_o[60];
 
   // tsw-part-2 gpio - 59:57
 
@@ -259,7 +259,7 @@ module system_top (
 
   // unused gpio - 55:53
 
-  assign gpio_i[55:53] = 'h0;
+  assign gpio_i[55:53] = gpio_o[55:53];
 
   // rf & clock-select gpio - 52:51
 
