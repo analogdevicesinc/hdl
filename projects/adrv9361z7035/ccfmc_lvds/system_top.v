@@ -227,7 +227,7 @@ module system_top (
 
   // board gpio - 31-0
 
-  assign gpio_i[31:21] = 'h0;
+  assign gpio_i[31:21] = gpio_o[31:21];
 
   ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_bd (
     .dio_t (gpio_t[20:0]),
@@ -237,7 +237,7 @@ module system_top (
 
   // unused gpio - 63-61
 
-  assign gpio_i[63:61] = 'h0;
+  assign gpio_i[63:61] = gpio_o[63:61];
 
   // rf & ad9517 gpio - 60:56
 
@@ -253,7 +253,7 @@ module system_top (
 
   // unused gpio - 55:53
 
-  assign gpio_i[55:53] = 'h0;
+  assign gpio_i[55:53] = gpio_o[55:53];
 
   // rf & clock-select gpio - 52:51
 
@@ -266,7 +266,7 @@ module system_top (
 
   // unused gpio - 50:47
 
-  assign gpio_i[50:47] = 'h0;
+  assign gpio_i[50:47] = gpio_o[50:47];
 
   // ad9361 gpio - 46:32
 

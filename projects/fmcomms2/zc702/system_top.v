@@ -137,10 +137,10 @@ module system_top (
     .dio_o ({gpio_i[15:12], gpio_i[7:0]}),
     .dio_p ({gpio_bd[7:4], gpio_bd[11:8], gpio_bd[3:0]}));
 
-  assign gpio_i[63:51] = 'h0;
-  assign gpio_i[48:47] = 'h0;
-  assign gpio_i[31:16] = 'h0;
-  assign gpio_i[11: 8] = 'h0;
+  assign gpio_i[63:51] = gpio_o[63:51];
+  assign gpio_i[48:47] = gpio_o[48:47];
+  assign gpio_i[31:16] = gpio_o[31:16];
+  assign gpio_i[11: 8] = gpio_o[11: 8];
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),

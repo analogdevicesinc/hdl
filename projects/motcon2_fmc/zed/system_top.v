@@ -171,8 +171,8 @@ module system_top (
   assign pwm_m2_dh_o    = 1'b0;
   assign pwm_m2_dl_o    = 1'b0;
 
-  assign gpio_i[63:35]  = 'h0;
-  assign gpio_i[32]     = 'h0;
+  assign gpio_i[63:35]  = gpio_o[63:35];
+  assign gpio_i[32]     = gpio_o[32];
 
   // instantiations
 

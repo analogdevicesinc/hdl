@@ -120,8 +120,8 @@ module system_top (
     .dio_o (gpio_i[14:0]),
     .dio_p (gpio_bd));
 
-  assign gpio_i[63:32] = 'h0;
-  assign gpio_i[31:15] = 'h0;
+  assign gpio_i[63:32] = gpio_o[63:32];
+  assign gpio_i[31:15] = gpio_o[31:15];
 
   assign spi_adc_clk = spi_clk;
   assign spi_clk_clk = spi_clk;

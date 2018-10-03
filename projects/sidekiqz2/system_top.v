@@ -102,7 +102,7 @@ module system_top (
               gpio_ctl,           // 11: 8
               gpio_status}));     //  7: 0
 
-  assign gpio_i[18:17] = 'h0;
+  assign gpio_i[18:17] = gpio_o[18:17];
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),

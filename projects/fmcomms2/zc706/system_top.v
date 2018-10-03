@@ -159,9 +159,9 @@ module system_top (
     .dio_o (gpio_i[14:0]),
     .dio_p (gpio_bd));
 
-  assign gpio_i[63:51] = 'h0;
-  assign gpio_i[48:47] = 'h0;
-  assign gpio_i[31:15] = 'h0;
+  assign gpio_i[63:51] = gpio_o[63:51];
+  assign gpio_i[48:47] = gpio_o[48:47];
+  assign gpio_i[31:15] = gpio_o[31:15];
 
   ad_iobuf #(.DATA_WIDTH(1)) i_iobuf_tdd_sync (
     .dio_t (tdd_sync_t),

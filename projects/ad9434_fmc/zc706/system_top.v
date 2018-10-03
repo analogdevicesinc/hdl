@@ -99,7 +99,7 @@ module system_top (
 
   // assignments
 
-  assign gpio_i[63:15] = 'h0;
+  assign gpio_i[63:15] = gpio_o[63:15];
 
   // instantiations
 

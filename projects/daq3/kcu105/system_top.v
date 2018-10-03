@@ -213,8 +213,8 @@ module system_top (
     .dio_o (gpio_i[16:0]),
     .dio_p (gpio_bd));
 
-  assign gpio_i[63:40] = 'h0;
-  assign gpio_i[31:17] = 'h0;
+  assign gpio_i[63:40] = gpio_o[63:40];
+  assign gpio_i[31:17] = gpio_o[31:17];
 
   system_wrapper i_system_wrapper (
     .c0_ddr4_act_n (ddr4_act_n),

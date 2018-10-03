@@ -179,10 +179,10 @@ module system_top (
               ad9371_gpio_16,       // 33
               ad9371_gpio_18}));    // 32
 
-  assign gpio_i[ 7: 0] = 'h0;
+  assign gpio_i[ 7: 0] = gpio_o[ 7: 0];
   assign gpio_i[20: 8] = gpio_bd_i;
-  assign gpio_i[31:21] = 'h0;
-  assign gpio_i[94:60] = 'h0;
+  assign gpio_i[31:21] = gpio_o[31:21];
+  assign gpio_i[94:60] = gpio_o[94:60];
 
   assign gpio_bd_o = gpio_o[ 7: 0];
 
