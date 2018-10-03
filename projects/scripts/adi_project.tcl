@@ -78,7 +78,7 @@ proc adi_project_xilinx {project_name {mode 0}} {
   }
   if [regexp "_zcu102$" $project_name] {
     set p_device "xczu9eg-ffvb1156-2-e"
-    set p_board "xilinx.com:zcu102:part0:3.1"
+    set p_board "xilinx.com:zcu102:part0:3.2"
     set sys_zynq 2
   }
 
