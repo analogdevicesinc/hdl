@@ -83,7 +83,6 @@ module system_top (
   wire        [94:0]      gpio_i;
   wire        [94:0]      gpio_o;
   wire        [94:0]      gpio_t;
-  wire        [20:0]      gpio_bd;
   wire        [ 2:0]      spi_csn;
   wire                    spi_mosi;
   wire                    spi_miso;
@@ -155,7 +154,7 @@ module system_top (
     .IB (trig_n),
     .O (trig));
 
-  assign gpio_i[94:40] = gpio_o[94:40];
+  assign gpio_i[94:40] = 'h0;
   assign gpio_i[39] = trig;
 
   ad_iobuf #(.DATA_WIDTH(7)) i_iobuf (
@@ -169,10 +168,10 @@ module system_top (
               dac_irq,          // 34
               clkd_status}));   // 32
 
-  assign gpio_i[31:21] = gpio_o[31:21];
-
-  assign gpio_bd_i = gpio_bd[20:8];
-  assign gpio_bd_o = gpio_bd[ 7:0];
+  assign gpio_i[31:21] = 'h0;
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_i[ 7: 0] = 'h0;
+  assign gpio_bd_o = gpio_o[ 7: 0];
 
   system_wrapper i_system_wrapper (
     .gpio_i (gpio_i),
