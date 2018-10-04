@@ -93,7 +93,9 @@ set_property value s_axi [ipx::get_bus_parameters ASSOCIATED_BUSIF \
 ipx::infer_bus_interface clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 ipx::infer_bus_interface l_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 ipx::infer_bus_interface delay_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
-ipx::infer_bus_interface rst xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+set reset_intf [ipx::infer_bus_interface rst xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]]
+set reset_polarity [ipx::add_bus_parameter "POLARITY" $reset_intf]
+set_property value "ACTIVE_HIGH" $reset_polarity
 
 ipx::infer_bus_interface gps_pps_irq xilinx.com:signal:interrupt_rtl:1.0 [ipx::current_core]
 
