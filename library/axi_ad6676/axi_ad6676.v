@@ -37,7 +37,8 @@
 
 module axi_ad6676 #(
 
-  parameter ID = 0) (
+  parameter ID = 0,
+  parameter NUM_LANES = 2) (
 
   // jesd interface
   // rx_clk is (line-rate/40)
@@ -46,7 +47,7 @@ module axi_ad6676 #(
   input       [ 3:0]      rx_sof,
   input                   rx_valid,
   output                  rx_ready,
-  input       [63:0]      rx_data,
+  input       [32*NUM_LANES-1:0]      rx_data,
 
   // dma interface
 
