@@ -66,19 +66,16 @@ module ad_data_out #(
 
   localparam  NONE = -1;
   localparam  VIRTEX7 = 0;
-  localparam  VIRTEX6 = 1;
   localparam  ULTRASCALE_PLUS = 2;
   localparam  ULTRASCALE = 3;
 
   localparam  IODELAY_CTRL_ENABLED = (IODELAY_ENABLE == 1) ? IODELAY_CTRL : 0;
   localparam  IODELAY_CTRL_SIM_DEVICE = (DEVICE_TYPE == ULTRASCALE_PLUS) ? "ULTRASCALE" :
-    (DEVICE_TYPE == ULTRASCALE) ? "ULTRASCALE" :
-    (DEVICE_TYPE == VIRTEX7) ? "7SERIES" : "VIRTEX6";
+    (DEVICE_TYPE == ULTRASCALE) ? "ULTRASCALE" : "7SERIES";
 
   localparam  IODELAY_DEVICE_TYPE = (IODELAY_ENABLE == 1) ? DEVICE_TYPE : NONE;
   localparam  IODELAY_SIM_DEVICE = (DEVICE_TYPE == ULTRASCALE_PLUS) ? "ULTRASCALE_PLUS_ES1" :
-    (DEVICE_TYPE == ULTRASCALE) ? "ULTRASCALE" :
-    (DEVICE_TYPE == VIRTEX7) ? "7SERIES" : "VIRTEX6";
+    (DEVICE_TYPE == ULTRASCALE) ? "ULTRASCALE" : "7SERIES";
 
   // internal signals
 
@@ -113,7 +110,7 @@ module ad_data_out #(
   endgenerate
 
   generate
-  if ((DEVICE_TYPE == VIRTEX7) || (DEVICE_TYPE == VIRTEX6)) begin
+  if (DEVICE_TYPE == VIRTEX7) begin
   ODDR #(.DDR_CLK_EDGE ("SAME_EDGE")) i_tx_data_oddr (
     .CE (1'b1),
     .R (1'b0),

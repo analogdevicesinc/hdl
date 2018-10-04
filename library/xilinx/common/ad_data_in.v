@@ -70,19 +70,16 @@ module ad_data_in #(
 
   localparam  NONE = -1;
   localparam  VIRTEX7 = 0;
-  localparam  VIRTEX6 = 1;
   localparam  ULTRASCALE_PLUS = 2;
   localparam  ULTRASCALE = 3;
 
   localparam  IODELAY_CTRL_ENABLED = (IODELAY_ENABLE == 1) ? IODELAY_CTRL : 0;
   localparam  IODELAY_CTRL_SIM_DEVICE = (DEVICE_TYPE == ULTRASCALE_PLUS) ? "ULTRASCALE" :
-    (DEVICE_TYPE == ULTRASCALE) ? "ULTRASCALE" :
-    (DEVICE_TYPE == VIRTEX7) ? "7SERIES" : "VIRTEX6";
+    (DEVICE_TYPE == ULTRASCALE) ? "ULTRASCALE" : "7SERIES";
 
   localparam  IODELAY_DEVICE_TYPE = (IODELAY_ENABLE == 1) ? DEVICE_TYPE : NONE;
-  localparam  IODELAY_SIM_DEVICE = (DEVICE_TYPE == ULTRASCALE_PLUS) ? "ULTRASCALE_PLUS_ES1" :
-    (DEVICE_TYPE == ULTRASCALE) ? "ULTRASCALE" :
-    (DEVICE_TYPE == VIRTEX7) ? "7SERIES" : "VIRTEX6";
+  localparam  IODELAY_SIM_DEVICE = (DEVICE_TYPE == ULTRASCALE_PLUS) ? "ULTRASCALE_PLUS" :
+    (DEVICE_TYPE == ULTRASCALE) ? "ULTRASCALE" : "7SERIES";
 
   // internal signals
 
@@ -120,36 +117,6 @@ module ad_data_in #(
   endgenerate
 
   // idelay
-
-  generate
-  if (IODELAY_DEVICE_TYPE == VIRTEX6) begin
-  (* IODELAY_GROUP = IODELAY_GROUP *)
-  IODELAYE1 #(
-    .CINVCTRL_SEL ("FALSE"),
-    .DELAY_SRC ("I"),
-    .HIGH_PERFORMANCE_MODE ("TRUE"),
-    .IDELAY_TYPE ("VAR_LOADABLE"),
-    .IDELAY_VALUE (0),
-    .ODELAY_TYPE ("FIXED"),
-    .ODELAY_VALUE (0),
-    .REFCLK_FREQUENCY (200.0),
-    .SIGNAL_PATTERN ("DATA"))
-  i_rx_data_idelay (
-    .T (1'b1),
-    .CE (1'b0),
-    .INC (1'b0),
-    .CLKIN (1'b0),
-    .DATAIN (1'b0),
-    .ODATAIN (1'b0),
-    .CINVCTRL (1'b0),
-    .C (up_clk),
-    .IDATAIN (rx_data_ibuf_s),
-    .DATAOUT (rx_data_idelay_s),
-    .RST (up_dld),
-    .CNTVALUEIN (up_dwdata),
-    .CNTVALUEOUT (up_drdata));
-  end
-  endgenerate
 
   generate
   if (IODELAY_DEVICE_TYPE == VIRTEX7) begin
@@ -229,7 +196,7 @@ module ad_data_in #(
   endgenerate
 
   generate
-  if ((DEVICE_TYPE == VIRTEX7) || (DEVICE_TYPE == VIRTEX6)) begin
+  if (DEVICE_TYPE == VIRTEX7) begin
   IDDR #(.DDR_CLK_EDGE ("SAME_EDGE")) i_rx_data_iddr (
     .CE (1'b1),
     .R (1'b0),
