@@ -64,7 +64,6 @@ module ad_serdes_out #(
   output  [(DATA_WIDTH-1):0]  data_out_p,
   output  [(DATA_WIDTH-1):0]  data_out_n);
 
-  localparam  DEVICE_6SERIES = 1;
   localparam  DEVICE_7SERIES = 0;
   localparam  DR_OQ_DDR = DDR_OR_SDR_N == 1'b1 ? "DDR": "SDR";
 
@@ -115,82 +114,6 @@ module ad_serdes_out #(
         .TFB (),
         .TBYTEIN (1'b0),
         .TBYTEOUT (),
-        .TCE (1'b0),
-        .RST (rst));
-    end
-
-    if (DEVICE_TYPE == DEVICE_6SERIES) begin
-      OSERDESE1  #(
-        .DATA_RATE_OQ (DR_OQ_DDR),
-        .DATA_RATE_TQ ("SDR"),
-        .DATA_WIDTH (SERDES_FACTOR),
-        .INTERFACE_TYPE ("DEFAULT"),
-        .TRISTATE_WIDTH (1),
-        .SERDES_MODE ("MASTER"))
-      i_serdes_m (
-        .D1 (data_s0[l_inst]),
-        .D2 (data_s1[l_inst]),
-        .D3 (data_s2[l_inst]),
-        .D4 (data_s3[l_inst]),
-        .D5 (data_s4[l_inst]),
-        .D6 (data_s5[l_inst]),
-        .T1 (1'b0),
-        .T2 (1'b0),
-        .T3 (1'b0),
-        .T4 (1'b0),
-        .SHIFTIN1 (serdes_shift1_s[l_inst]),
-        .SHIFTIN2 (serdes_shift2_s[l_inst]),
-        .SHIFTOUT1 (),
-        .SHIFTOUT2 (),
-        .OCE (1'b1),
-        .CLK (clk),
-        .CLKDIV (div_clk),
-        .CLKPERF (1'b0),
-        .CLKPERFDELAY (1'b0),
-        .WC (1'b0),
-        .ODV (1'b0),
-        .OQ (data_out_s[l_inst]),
-        .TQ (),
-        .OCBEXTEND (),
-        .OFB (),
-        .TFB (),
-        .TCE (1'b0),
-        .RST (rst));
-
-      OSERDESE1  #(
-        .DATA_RATE_OQ (DR_OQ_DDR),
-        .DATA_RATE_TQ ("SDR"),
-        .DATA_WIDTH (SERDES_FACTOR),
-        .INTERFACE_TYPE ("DEFAULT"),
-        .TRISTATE_WIDTH (1),
-        .SERDES_MODE ("SLAVE"))
-      i_serdes_s (
-        .D1 (1'b0),
-        .D2 (1'b0),
-        .D3 (data_s6[l_inst]),
-        .D4 (data_s7[l_inst]),
-        .D5 (1'b0),
-        .D6 (1'b0),
-        .T1 (1'b0),
-        .T2 (1'b0),
-        .T3 (1'b0),
-        .T4 (1'b0),
-        .SHIFTIN1 (1'b0),
-        .SHIFTIN2 (1'b0),
-        .SHIFTOUT1 (serdes_shift1_s[l_inst]),
-        .SHIFTOUT2 (serdes_shift2_s[l_inst]),
-        .OCE (1'b1),
-        .CLK (clk),
-        .CLKDIV (div_clk),
-        .CLKPERF (1'b0),
-        .CLKPERFDELAY (1'b0),
-        .WC (1'b0),
-        .ODV (1'b0),
-        .OQ (),
-        .TQ (),
-        .OCBEXTEND (),
-        .OFB (),
-        .TFB (),
         .TCE (1'b0),
         .RST (rst));
     end

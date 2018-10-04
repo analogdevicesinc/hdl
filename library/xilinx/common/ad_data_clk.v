@@ -48,7 +48,6 @@ module ad_data_clk #(
   output              clk);
 
   localparam  VIRTEX7 = 0;
-  localparam  VIRTEX6 = 1;
   localparam  ULTRASCALE_PLUS = 2;
   localparam  ULTRASCALE = 3;
 
@@ -75,19 +74,9 @@ module ad_data_clk #(
   end
   endgenerate
 
-  generate
-  if (DEVICE_TYPE == VIRTEX6) begin
-  BUFR #(.BUFR_DIVIDE("BYPASS")) i_clk_rbuf (
-    .CLR (1'b0),
-    .CE (1'b1),
-    .I (clk_ibuf_s),
-    .O (clk));
-  end else begin
   BUFG i_clk_gbuf (
     .I (clk_ibuf_s),
     .O (clk));
-  end
-  endgenerate
 
 endmodule
 
