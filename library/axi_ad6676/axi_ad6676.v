@@ -88,7 +88,7 @@ module axi_ad6676 #(
 
   ad_ip_jesd204_tpl_adc #(
     .ID (ID),
-    .NUM_LANES (2),
+    .NUM_LANES (NUM_LANES),
     .NUM_CHANNELS (2),
     .CHANNEL_WIDTH (16),
     .TWOS_COMPLEMENT (0)
