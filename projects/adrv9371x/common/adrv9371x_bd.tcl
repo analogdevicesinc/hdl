@@ -24,9 +24,11 @@ ad_ip_parameter axi_ad9371_tx_xcvr CONFIG.LPM_OR_DFE_N 0
 
 adi_axi_jesd204_tx_create axi_ad9371_tx_jesd 4
 
-ad_ip_instance util_upack util_ad9371_tx_upack
-ad_ip_parameter util_ad9371_tx_upack CONFIG.CHANNEL_DATA_WIDTH 32
-ad_ip_parameter util_ad9371_tx_upack CONFIG.NUM_OF_CHANNELS 4
+ad_ip_instance util_upack2 util_ad9371_tx_upack { \
+  NUM_OF_CHANNELS 4 \
+  SAMPLES_PER_CHANNEL 2 \
+  SAMPLE_DATA_WIDTH 16 \
+}
 
 ad_ip_instance axi_dmac axi_ad9371_tx_dma
 ad_ip_parameter axi_ad9371_tx_dma CONFIG.DMA_TYPE_SRC 0
@@ -59,9 +61,11 @@ ad_ip_parameter axi_ad9371_rx_xcvr CONFIG.LPM_OR_DFE_N 1
 
 adi_axi_jesd204_rx_create axi_ad9371_rx_jesd 2
 
-ad_ip_instance util_cpack util_ad9371_rx_cpack
-ad_ip_parameter util_ad9371_rx_cpack CONFIG.CHANNEL_DATA_WIDTH 16
-ad_ip_parameter util_ad9371_rx_cpack CONFIG.NUM_OF_CHANNELS 4
+ad_ip_instance util_cpack2 util_ad9371_rx_cpack { \
+  NUM_OF_CHANNELS 4 \
+  SAMPLES_PER_CHANNEL 1 \
+  SAMPLE_DATA_WIDTH 16 \
+}
 
 ad_ip_instance axi_dmac axi_ad9371_rx_dma
 ad_ip_parameter axi_ad9371_rx_dma CONFIG.DMA_TYPE_SRC 2
@@ -95,9 +99,11 @@ ad_ip_parameter axi_ad9371_rx_os_xcvr CONFIG.LPM_OR_DFE_N 1
 
 adi_axi_jesd204_rx_create axi_ad9371_rx_os_jesd 2
 
-ad_ip_instance util_cpack util_ad9371_rx_os_cpack
-ad_ip_parameter util_ad9371_rx_os_cpack CONFIG.CHANNEL_DATA_WIDTH 32
-ad_ip_parameter util_ad9371_rx_os_cpack CONFIG.NUM_OF_CHANNELS 2
+ad_ip_instance util_cpack2 util_ad9371_rx_os_cpack { \
+  NUM_OF_CHANNELS 2 \
+  SAMPLES_PER_CHANNEL 2 \
+  SAMPLE_DATA_WIDTH 16 \
+}
 
 ad_ip_instance axi_dmac axi_ad9371_rx_os_dma
 ad_ip_parameter axi_ad9371_rx_os_dma CONFIG.DMA_TYPE_SRC 2
@@ -185,23 +191,27 @@ ad_connect  sys_dma_reset axi_ad9371_dacfifo/dma_rst
 
 ad_connect  axi_ad9371_tx_clkgen/clk_0 axi_ad9371_core/dac_clk
 ad_connect  axi_ad9371_tx_jesd/tx_data_tdata axi_ad9371_core/dac_tx_data
-ad_connect  axi_ad9371_tx_clkgen/clk_0 util_ad9371_tx_upack/dac_clk
-ad_connect  axi_ad9371_core/dac_valid_i0 util_ad9371_tx_upack/dac_valid_0
-ad_connect  axi_ad9371_core/dac_enable_i0 util_ad9371_tx_upack/dac_enable_0
-ad_connect  axi_ad9371_core/dac_data_i0 util_ad9371_tx_upack/dac_data_0
-ad_connect  axi_ad9371_core/dac_valid_q0 util_ad9371_tx_upack/dac_valid_1
-ad_connect  axi_ad9371_core/dac_enable_q0 util_ad9371_tx_upack/dac_enable_1
-ad_connect  axi_ad9371_core/dac_data_q0 util_ad9371_tx_upack/dac_data_1
-ad_connect  axi_ad9371_core/dac_valid_i1 util_ad9371_tx_upack/dac_valid_2
-ad_connect  axi_ad9371_core/dac_enable_i1 util_ad9371_tx_upack/dac_enable_2
-ad_connect  axi_ad9371_core/dac_data_i1 util_ad9371_tx_upack/dac_data_2
-ad_connect  axi_ad9371_core/dac_valid_q1 util_ad9371_tx_upack/dac_valid_3
-ad_connect  axi_ad9371_core/dac_enable_q1 util_ad9371_tx_upack/dac_enable_3
-ad_connect  axi_ad9371_core/dac_data_q1 util_ad9371_tx_upack/dac_data_3
+ad_connect  axi_ad9371_tx_clkgen/clk_0 util_ad9371_tx_upack/clk
+ad_connect  axi_ad9371_tx_jesd_rstgen/peripheral_reset util_ad9371_tx_upack/reset
+
+ad_connect  axi_ad9371_core/dac_valid_i0 util_ad9371_tx_upack/fifo_rd_en
+ad_connect  axi_ad9371_core/dac_enable_i0 util_ad9371_tx_upack/enable_0
+ad_connect  axi_ad9371_core/dac_data_i0 util_ad9371_tx_upack/fifo_rd_data_0
+ad_connect  axi_ad9371_core/dac_enable_q0 util_ad9371_tx_upack/enable_1
+ad_connect  axi_ad9371_core/dac_data_q0 util_ad9371_tx_upack/fifo_rd_data_1
+ad_connect  axi_ad9371_core/dac_enable_i1 util_ad9371_tx_upack/enable_2
+ad_connect  axi_ad9371_core/dac_data_i1 util_ad9371_tx_upack/fifo_rd_data_2
+ad_connect  axi_ad9371_core/dac_enable_q1 util_ad9371_tx_upack/enable_3
+ad_connect  axi_ad9371_core/dac_data_q1 util_ad9371_tx_upack/fifo_rd_data_3
+
 ad_connect  axi_ad9371_tx_clkgen/clk_0 axi_ad9371_dacfifo/dac_clk
 ad_connect  axi_ad9371_tx_jesd_rstgen/peripheral_reset axi_ad9371_dacfifo/dac_rst
-ad_connect  util_ad9371_tx_upack/dac_valid axi_ad9371_dacfifo/dac_valid
-ad_connect  util_ad9371_tx_upack/dac_data axi_ad9371_dacfifo/dac_data
+
+# TODO: Add streaming AXI interface for DAC FIFO
+ad_connect  util_ad9371_tx_upack/s_axis_valid VCC
+ad_connect  util_ad9371_tx_upack/s_axis_ready axi_ad9371_dacfifo/dac_valid
+ad_connect  util_ad9371_tx_upack/s_axis_data axi_ad9371_dacfifo/dac_data
+
 ad_connect  sys_dma_clk axi_ad9371_dacfifo/dma_clk
 ad_connect  sys_dma_clk axi_ad9371_tx_dma/m_axis_aclk
 ad_connect  axi_ad9371_dacfifo/dma_valid axi_ad9371_tx_dma/m_axis_valid
@@ -218,25 +228,22 @@ ad_connect  sys_dma_resetn axi_ad9371_tx_dma/m_src_axi_aresetn
 ad_connect  axi_ad9371_rx_clkgen/clk_0 axi_ad9371_core/adc_clk
 ad_connect  axi_ad9371_rx_jesd/rx_sof axi_ad9371_core/adc_rx_sof
 ad_connect  axi_ad9371_rx_jesd/rx_data_tdata axi_ad9371_core/adc_rx_data
-ad_connect  axi_ad9371_rx_clkgen/clk_0 util_ad9371_rx_cpack/adc_clk
-ad_connect  axi_ad9371_rx_jesd_rstgen/peripheral_reset util_ad9371_rx_cpack/adc_rst
-ad_connect  axi_ad9371_core/adc_enable_i0 util_ad9371_rx_cpack/adc_enable_0
-ad_connect  axi_ad9371_core/adc_valid_i0 util_ad9371_rx_cpack/adc_valid_0
-ad_connect  axi_ad9371_core/adc_data_i0 util_ad9371_rx_cpack/adc_data_0
-ad_connect  axi_ad9371_core/adc_enable_q0 util_ad9371_rx_cpack/adc_enable_1
-ad_connect  axi_ad9371_core/adc_valid_q0 util_ad9371_rx_cpack/adc_valid_1
-ad_connect  axi_ad9371_core/adc_data_q0 util_ad9371_rx_cpack/adc_data_1
-ad_connect  axi_ad9371_core/adc_enable_i1 util_ad9371_rx_cpack/adc_enable_2
-ad_connect  axi_ad9371_core/adc_valid_i1 util_ad9371_rx_cpack/adc_valid_2
-ad_connect  axi_ad9371_core/adc_data_i1 util_ad9371_rx_cpack/adc_data_2
-ad_connect  axi_ad9371_core/adc_enable_q1 util_ad9371_rx_cpack/adc_enable_3
-ad_connect  axi_ad9371_core/adc_valid_q1 util_ad9371_rx_cpack/adc_valid_3
-ad_connect  axi_ad9371_core/adc_data_q1 util_ad9371_rx_cpack/adc_data_3
+ad_connect  axi_ad9371_rx_clkgen/clk_0 util_ad9371_rx_cpack/clk
+ad_connect  axi_ad9371_rx_jesd_rstgen/peripheral_reset util_ad9371_rx_cpack/reset
+
+ad_connect  axi_ad9371_core/adc_valid_i0 util_ad9371_rx_cpack/fifo_wr_en
+ad_connect  axi_ad9371_core/adc_enable_i0 util_ad9371_rx_cpack/enable_0
+ad_connect  axi_ad9371_core/adc_data_i0 util_ad9371_rx_cpack/fifo_wr_data_0
+ad_connect  axi_ad9371_core/adc_enable_q0 util_ad9371_rx_cpack/enable_1
+ad_connect  axi_ad9371_core/adc_data_q0 util_ad9371_rx_cpack/fifo_wr_data_1
+ad_connect  axi_ad9371_core/adc_enable_i1 util_ad9371_rx_cpack/enable_2
+ad_connect  axi_ad9371_core/adc_data_i1 util_ad9371_rx_cpack/fifo_wr_data_2
+ad_connect  axi_ad9371_core/adc_enable_q1 util_ad9371_rx_cpack/enable_3
+ad_connect  axi_ad9371_core/adc_data_q1 util_ad9371_rx_cpack/fifo_wr_data_3
+ad_connect  axi_ad9371_core/adc_dovf util_ad9371_rx_cpack/fifo_wr_overflow
+
 ad_connect  axi_ad9371_rx_clkgen/clk_0 axi_ad9371_rx_dma/fifo_wr_clk
-ad_connect  util_ad9371_rx_cpack/adc_valid axi_ad9371_rx_dma/fifo_wr_en
-ad_connect  util_ad9371_rx_cpack/adc_sync axi_ad9371_rx_dma/fifo_wr_sync
-ad_connect  util_ad9371_rx_cpack/adc_data axi_ad9371_rx_dma/fifo_wr_din
-ad_connect  axi_ad9371_rx_dma/fifo_wr_overflow axi_ad9371_core/adc_dovf
+ad_connect  util_ad9371_rx_cpack/packed_fifo_wr axi_ad9371_rx_dma/fifo_wr
 ad_connect  sys_dma_resetn axi_ad9371_rx_dma/m_dest_axi_aresetn
 
 # connections (adc-os)
@@ -244,19 +251,18 @@ ad_connect  sys_dma_resetn axi_ad9371_rx_dma/m_dest_axi_aresetn
 ad_connect  axi_ad9371_rx_os_clkgen/clk_0 axi_ad9371_core/adc_os_clk
 ad_connect  axi_ad9371_rx_os_jesd/rx_sof axi_ad9371_core/adc_rx_os_sof
 ad_connect  axi_ad9371_rx_os_jesd/rx_data_tdata axi_ad9371_core/adc_rx_os_data
-ad_connect  axi_ad9371_rx_os_clkgen/clk_0 util_ad9371_rx_os_cpack/adc_clk
-ad_connect  axi_ad9371_rx_os_jesd_rstgen/peripheral_reset util_ad9371_rx_os_cpack/adc_rst
-ad_connect  axi_ad9371_core/adc_os_enable_i0 util_ad9371_rx_os_cpack/adc_enable_0
-ad_connect  axi_ad9371_core/adc_os_valid_i0 util_ad9371_rx_os_cpack/adc_valid_0
-ad_connect  axi_ad9371_core/adc_os_data_i0 util_ad9371_rx_os_cpack/adc_data_0
-ad_connect  axi_ad9371_core/adc_os_enable_q0 util_ad9371_rx_os_cpack/adc_enable_1
-ad_connect  axi_ad9371_core/adc_os_valid_q0 util_ad9371_rx_os_cpack/adc_valid_1
-ad_connect  axi_ad9371_core/adc_os_data_q0 util_ad9371_rx_os_cpack/adc_data_1
+ad_connect  axi_ad9371_rx_os_clkgen/clk_0 util_ad9371_rx_os_cpack/clk
+ad_connect  axi_ad9371_rx_os_jesd_rstgen/peripheral_reset util_ad9371_rx_os_cpack/reset
+
+ad_connect  axi_ad9371_core/adc_os_valid_i0 util_ad9371_rx_os_cpack/fifo_wr_en
+ad_connect  axi_ad9371_core/adc_os_enable_i0 util_ad9371_rx_os_cpack/enable_0
+ad_connect  axi_ad9371_core/adc_os_data_i0 util_ad9371_rx_os_cpack/fifo_wr_data_0
+ad_connect  axi_ad9371_core/adc_os_enable_q0 util_ad9371_rx_os_cpack/enable_1
+ad_connect  axi_ad9371_core/adc_os_data_q0 util_ad9371_rx_os_cpack/fifo_wr_data_1
+ad_connect  axi_ad9371_core/adc_os_dovf util_ad9371_rx_os_cpack/fifo_wr_overflow
+
 ad_connect  axi_ad9371_rx_os_clkgen/clk_0 axi_ad9371_rx_os_dma/fifo_wr_clk
-ad_connect  util_ad9371_rx_os_cpack/adc_valid axi_ad9371_rx_os_dma/fifo_wr_en
-ad_connect  util_ad9371_rx_os_cpack/adc_sync axi_ad9371_rx_os_dma/fifo_wr_sync
-ad_connect  util_ad9371_rx_os_cpack/adc_data axi_ad9371_rx_os_dma/fifo_wr_din
-ad_connect  axi_ad9371_rx_os_dma/fifo_wr_overflow axi_ad9371_core/adc_os_dovf
+ad_connect  util_ad9371_rx_os_cpack/packed_fifo_wr axi_ad9371_rx_os_dma/fifo_wr
 ad_connect  sys_dma_resetn axi_ad9371_rx_os_dma/m_dest_axi_aresetn
 
 # interconnect (cpu)
