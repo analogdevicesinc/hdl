@@ -16,8 +16,8 @@ LIB_DEPS += axi_ad9152
 LIB_DEPS += axi_ad9680
 LIB_DEPS += axi_dmac
 LIB_DEPS += util_adcfifo
-LIB_DEPS += util_cpack
 LIB_DEPS += util_dacfifo
-LIB_DEPS += util_upack
+LIB_DEPS += util_pack/util_cpack2
+LIB_DEPS += util_pack/util_upack2
 
 include ../../scripts/project-altera.mk

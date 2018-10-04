@@ -31,11 +31,14 @@ add_connection sys_clk.clk axi_ad9152_core.s_axi_clock
 
 # ad9152-unpack
 
-add_instance util_ad9152_upack util_upack
-set_instance_parameter_value util_ad9152_upack {CHANNEL_DATA_WIDTH} {64}
+add_instance util_ad9152_upack util_upack2
 set_instance_parameter_value util_ad9152_upack {NUM_OF_CHANNELS} {2}
+set_instance_parameter_value util_ad9152_upack {SAMPLES_PER_CHANNEL} {4}
+set_instance_parameter_value util_ad9152_upack {SAMPLE_DATA_WIDTH} {16}
+set_instance_parameter_value util_ad9152_upack {INTERFACE_TYPE} {1}
 
-add_connection ad9152_jesd204.link_clk util_ad9152_upack.if_dac_clk
+add_connection ad9152_jesd204.link_clk util_ad9152_upack.clk
+add_connection ad9152_jesd204.link_reset util_ad9152_upack.reset
 add_connection axi_ad9152_core.dac_ch_0 util_ad9152_upack.dac_ch_0
 add_connection axi_ad9152_core.dac_ch_1 util_ad9152_upack.dac_ch_1
 
@@ -46,9 +49,9 @@ set_interface_property tx_fifo_bypass EXPORT_OF avl_ad9152_fifo.if_bypass
 
 add_connection ad9152_jesd204.link_clk avl_ad9152_fifo.if_dac_clk
 add_connection ad9152_jesd204.link_reset avl_ad9152_fifo.if_dac_rst
-add_connection util_ad9152_upack.if_dac_valid avl_ad9152_fifo.if_dac_valid
-add_connection avl_ad9152_fifo.if_dac_data util_ad9152_upack.if_dac_data
-#add_connection avl_ad9152_fifo.if_dac_dunf util_ad9152_upack.if_dac_dunf
+add_connection util_ad9152_upack.if_packed_fifo_rd_en avl_ad9152_fifo.if_dac_valid
+add_connection avl_ad9152_fifo.if_dac_data util_ad9152_upack.if_packed_fifo_rd_data
+add_connection avl_ad9152_fifo.if_dac_dunf axi_ad9152_core.if_dac_dunf
 
 # ad9152-dma
 
@@ -107,12 +110,13 @@ add_connection sys_clk.clk axi_ad9680_core.s_axi_clock
 
 # ad9680-pack
 
-add_instance util_ad9680_cpack util_cpack
-set_instance_parameter_value util_ad9680_cpack {CHANNEL_DATA_WIDTH} {64}
+add_instance util_ad9680_cpack util_cpack2
 set_instance_parameter_value util_ad9680_cpack {NUM_OF_CHANNELS} {2}
+set_instance_parameter_value util_ad9680_cpack {SAMPLES_PER_CHANNEL} {4}
+set_instance_parameter_value util_ad9680_cpack {SAMPLE_DATA_WIDTH} {16}
 
-add_connection sys_clk.clk_reset util_ad9680_cpack.if_adc_rst
-add_connection ad9680_jesd204.link_clk util_ad9680_cpack.if_adc_clk
+add_connection ad9680_jesd204.link_clk util_ad9680_cpack.clk
+add_connection ad9680_jesd204.link_reset util_ad9680_cpack.reset
 add_connection axi_ad9680_core.adc_ch_0 util_ad9680_cpack.adc_ch_0
 add_connection axi_ad9680_core.adc_ch_1 util_ad9680_cpack.adc_ch_1
 
@@ -125,8 +129,8 @@ set_instance_parameter_value ad9680_adcfifo {DMA_ADDRESS_WIDTH} {16}
 
 add_connection sys_clk.clk_reset ad9680_adcfifo.if_adc_rst
 add_connection ad9680_jesd204.link_clk ad9680_adcfifo.if_adc_clk
-add_connection util_ad9680_cpack.if_adc_valid ad9680_adcfifo.if_adc_wr
-add_connection util_ad9680_cpack.if_adc_data ad9680_adcfifo.if_adc_wdata
+add_connection util_ad9680_cpack.if_packed_fifo_wr_en ad9680_adcfifo.if_adc_wr
+add_connection util_ad9680_cpack.if_packed_fifo_wr_data ad9680_adcfifo.if_adc_wdata
 add_connection sys_clk.clk ad9680_adcfifo.if_dma_clk
 
 # ad9680-dma
