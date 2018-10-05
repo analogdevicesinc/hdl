@@ -56,26 +56,29 @@ add_connection util_dac_rfifo.if_dout_unf axi_ad9361.if_dac_dunf
 
 # adc-pack & dac-unpack
 
-add_instance util_adc_pack util_cpack
+add_instance util_adc_pack util_cpack2
 set_instance_parameter_value util_adc_pack {NUM_OF_CHANNELS} {4}
-set_instance_parameter_value util_adc_pack {CHANNEL_DATA_WIDTH} {16}
-add_connection sys_dma_clk.clk util_adc_pack.if_adc_clk
-add_connection sys_dma_clk.clk_reset util_adc_pack.if_adc_rst
+set_instance_parameter_value util_adc_pack {SAMPLE_DATA_WIDTH} {16}
+add_connection sys_dma_clk.clk util_adc_pack.clk
+add_connection sys_dma_clk.clk_reset util_adc_pack.reset
 add_connection util_adc_wfifo.dout_0 util_adc_pack.adc_ch_0
 add_connection util_adc_wfifo.dout_1 util_adc_pack.adc_ch_1
 add_connection util_adc_wfifo.dout_2 util_adc_pack.adc_ch_2
 add_connection util_adc_wfifo.dout_3 util_adc_pack.adc_ch_3
+add_connection util_adc_pack.if_fifo_wr_overflow util_adc_wfifo.if_dout_ovf
 
 # adc-pack & dac-unpack
 
-add_instance util_dac_upack util_upack
+add_instance util_dac_upack util_upack2
 set_instance_parameter_value util_dac_upack {NUM_OF_CHANNELS} {4}
-set_instance_parameter_value util_dac_upack {CHANNEL_DATA_WIDTH} {16}
-add_connection sys_dma_clk.clk util_dac_upack.if_dac_clk
+set_instance_parameter_value util_dac_upack {SAMPLE_DATA_WIDTH} {16}
+add_connection sys_dma_clk.clk util_dac_upack.clk
+add_connection sys_dma_clk.clk_reset util_dac_upack.reset
 add_connection util_dac_upack.dac_ch_0 util_dac_rfifo.din_0
 add_connection util_dac_upack.dac_ch_1 util_dac_rfifo.din_1
 add_connection util_dac_upack.dac_ch_2 util_dac_rfifo.din_2
 add_connection util_dac_upack.dac_ch_3 util_dac_rfifo.din_3
+add_connection util_dac_upack.if_fifo_rd_underflow util_dac_rfifo.if_din_unf
 
 # adc-dma & dac-dma
 
@@ -97,10 +100,10 @@ add_connection sys_clk.clk_reset axi_adc_dma.s_axi_reset
 add_connection sys_dma_clk.clk axi_adc_dma.m_dest_axi_clock
 add_connection sys_dma_clk.clk_reset axi_adc_dma.m_dest_axi_reset
 add_connection sys_dma_clk.clk axi_adc_dma.if_fifo_wr_clk
-add_connection util_adc_pack.if_adc_valid axi_adc_dma.if_fifo_wr_en
-add_connection util_adc_pack.if_adc_sync axi_adc_dma.if_fifo_wr_sync
-add_connection util_adc_pack.if_adc_data axi_adc_dma.if_fifo_wr_din
-add_connection axi_adc_dma.if_fifo_wr_overflow util_adc_wfifo.if_dout_ovf
+add_connection util_adc_pack.if_packed_fifo_wr_en axi_adc_dma.if_fifo_wr_en
+add_connection util_adc_pack.if_packed_fifo_wr_sync axi_adc_dma.if_fifo_wr_sync
+add_connection util_adc_pack.if_packed_fifo_wr_data axi_adc_dma.if_fifo_wr_din
+add_connection axi_adc_dma.if_fifo_wr_overflow util_adc_pack.if_packed_fifo_wr_overflow
 
 # adc-dma & dac-dma
 
@@ -114,17 +117,18 @@ set_instance_parameter_value axi_dac_dma {AXI_SLICE_DEST} {0}
 set_instance_parameter_value axi_dac_dma {AXI_SLICE_SRC} {0}
 set_instance_parameter_value axi_dac_dma {SYNC_TRANSFER_START} {0}
 set_instance_parameter_value axi_dac_dma {CYCLIC} {1}
-set_instance_parameter_value axi_dac_dma {DMA_TYPE_DEST} {2}
+set_instance_parameter_value axi_dac_dma {DMA_TYPE_DEST} {1}
 set_instance_parameter_value axi_dac_dma {DMA_TYPE_SRC} {0}
 set_instance_parameter_value axi_dac_dma {FIFO_SIZE} {4}
 add_connection sys_clk.clk axi_dac_dma.s_axi_clock
 add_connection sys_clk.clk_reset axi_dac_dma.s_axi_reset
 add_connection sys_dma_clk.clk axi_dac_dma.m_src_axi_clock
 add_connection sys_dma_clk.clk_reset axi_dac_dma.m_src_axi_reset
-add_connection sys_dma_clk.clk axi_dac_dma.if_fifo_rd_clk
-add_connection util_dac_upack.if_dac_valid axi_dac_dma.if_fifo_rd_en
-add_connection axi_dac_dma.if_fifo_rd_dout util_dac_upack.if_dac_data
-add_connection axi_dac_dma.if_fifo_rd_underflow util_dac_rfifo.if_din_unf
+add_connection sys_dma_clk.clk axi_dac_dma.if_m_axis_aclk
+
+add_connection util_dac_upack.if_s_axis_valid axi_dac_dma.if_m_axis_valid
+add_connection util_dac_upack.if_s_axis_ready axi_dac_dma.if_m_axis_ready
+add_connection util_dac_upack.if_s_axis_data axi_dac_dma.if_m_axis_data
 
 # interrupts
 
