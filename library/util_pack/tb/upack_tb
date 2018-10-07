@@ -1,0 +1,12 @@
+#!/bin/bash
+
+SOURCE="upack_tb.v"
+SOURCE+=" ../util_upack2/util_upack2_impl.v"
+SOURCE+=" ../util_pack_common/pack_ctrl.v"
+SOURCE+=" ../util_pack_common/pack_interconnect.v"
+SOURCE+=" ../util_pack_common/pack_network.v"
+SOURCE+=" ../util_pack_common/pack_shell.v"
+SOURCE+=" ../../common/ad_perfect_shuffle.v"
+
+cd `dirname $0`
+source run_tb.sh
