@@ -90,12 +90,12 @@ module axi_adxcvr_es (
 
   // addresses
 
-  localparam  [11:0]  ES_DRP_CTRL_ADDR    = (XCVR_TYPE != 0) ? 12'h03c : 12'h03d; // GTH-7 12'h03d
-  localparam  [11:0]  ES_DRP_HOFFSET_ADDR = (XCVR_TYPE != 0) ? 12'h04f : 12'h03c; // GTH-7 12'h03c
-  localparam  [11:0]  ES_DRP_VOFFSET_ADDR = (XCVR_TYPE != 0) ? 12'h097 : 12'h03b; // GTH-7 12'h03b
-  localparam  [11:0]  ES_DRP_STATUS_ADDR  = (XCVR_TYPE != 0) ? 12'h153 : 12'h151; // GTH-7 12'h153
-  localparam  [11:0]  ES_DRP_SCNT_ADDR    = (XCVR_TYPE != 0) ? 12'h152 : 12'h150; // GTH-7 12'h152
-  localparam  [11:0]  ES_DRP_ECNT_ADDR    = (XCVR_TYPE != 0) ? 12'h151 : 12'h14f; // GTH-7 12'h151
+  localparam  [11:0]  ES_DRP_CTRL_ADDR    = (XCVR_TYPE == 0) ? 12'h03d : (XCVR_TYPE == 1) ? 12'h03c : 12'h03c;
+  localparam  [11:0]  ES_DRP_HOFFSET_ADDR = (XCVR_TYPE == 0) ? 12'h03c : (XCVR_TYPE == 1) ? 12'h04f : 12'h04f;
+  localparam  [11:0]  ES_DRP_VOFFSET_ADDR = (XCVR_TYPE == 0) ? 12'h03b : (XCVR_TYPE == 1) ? 12'h097 : 12'h097;
+  localparam  [11:0]  ES_DRP_STATUS_ADDR  = (XCVR_TYPE == 0) ? 12'h151 : (XCVR_TYPE == 1) ? 12'h153 : 12'h253;
+  localparam  [11:0]  ES_DRP_SCNT_ADDR    = (XCVR_TYPE == 0) ? 12'h150 : (XCVR_TYPE == 1) ? 12'h152 : 12'h252;
+  localparam  [11:0]  ES_DRP_ECNT_ADDR    = (XCVR_TYPE == 0) ? 12'h14f : (XCVR_TYPE == 1) ? 12'h151 : 12'h251;
 
   // fsm-states
 
