@@ -313,7 +313,7 @@ module axi_adxcvr_es (
       up_ack <= 1'b0;
     end else begin
       up_req_d <= up_es_req;
-      if (up_fsm == ES_FSM_UPDATE) begin 
+      if (up_fsm == ES_FSM_UPDATE) begin
         up_ack <= up_eos_s | ~up_es_req;
       end else begin
         up_ack <= 1'b0;
@@ -328,77 +328,77 @@ module axi_adxcvr_es (
       up_fsm <= ES_FSM_IDLE;
     end else begin
       case (up_fsm)
-        ES_FSM_IDLE: begin 
+        ES_FSM_IDLE: begin
           if (up_start_s == 1'b1) begin
             up_fsm <= ES_FSM_HOFFSET_READ;
           end else begin
             up_fsm <= ES_FSM_IDLE;
           end
         end
-        ES_FSM_HOFFSET_READ: begin 
+        ES_FSM_HOFFSET_READ: begin
           up_fsm <= ES_FSM_HOFFSET_RRDY;
         end
-        ES_FSM_HOFFSET_RRDY: begin 
+        ES_FSM_HOFFSET_RRDY: begin
           if (up_es_ready == 1'b1) begin
             up_fsm <= ES_FSM_HOFFSET_WRITE;
           end else begin
             up_fsm <= ES_FSM_HOFFSET_RRDY;
           end
         end
-        ES_FSM_HOFFSET_WRITE: begin 
+        ES_FSM_HOFFSET_WRITE: begin
           up_fsm <= ES_FSM_HOFFSET_WRDY;
         end
-        ES_FSM_HOFFSET_WRDY: begin 
+        ES_FSM_HOFFSET_WRDY: begin
           if (up_es_ready == 1'b1) begin
             up_fsm <= ES_FSM_VOFFSET_READ;
           end else begin
             up_fsm <= ES_FSM_HOFFSET_WRDY;
           end
         end
-        ES_FSM_VOFFSET_READ: begin 
+        ES_FSM_VOFFSET_READ: begin
           up_fsm <= ES_FSM_VOFFSET_RRDY;
         end
-        ES_FSM_VOFFSET_RRDY: begin 
+        ES_FSM_VOFFSET_RRDY: begin
           if (up_es_ready == 1'b1) begin
             up_fsm <= ES_FSM_VOFFSET_WRITE;
           end else begin
             up_fsm <= ES_FSM_VOFFSET_RRDY;
           end
         end
-        ES_FSM_VOFFSET_WRITE: begin 
+        ES_FSM_VOFFSET_WRITE: begin
           up_fsm <= ES_FSM_VOFFSET_WRDY;
         end
-        ES_FSM_VOFFSET_WRDY: begin 
+        ES_FSM_VOFFSET_WRDY: begin
           if (up_es_ready == 1'b1) begin
             up_fsm <= ES_FSM_CTRL_READ;
           end else begin
             up_fsm <= ES_FSM_VOFFSET_WRDY;
           end
         end
-        ES_FSM_CTRL_READ: begin 
+        ES_FSM_CTRL_READ: begin
           up_fsm <= ES_FSM_CTRL_RRDY;
         end
-        ES_FSM_CTRL_RRDY: begin 
+        ES_FSM_CTRL_RRDY: begin
           if (up_es_ready == 1'b1) begin
             up_fsm <= ES_FSM_START_WRITE;
           end else begin
             up_fsm <= ES_FSM_CTRL_RRDY;
           end
         end
-        ES_FSM_START_WRITE: begin 
+        ES_FSM_START_WRITE: begin
           up_fsm <= ES_FSM_START_WRDY;
         end
-        ES_FSM_START_WRDY: begin 
+        ES_FSM_START_WRDY: begin
           if (up_es_ready == 1'b1) begin
             up_fsm <= ES_FSM_STATUS_READ;
           end else begin
             up_fsm <= ES_FSM_START_WRDY;
           end
         end
-        ES_FSM_STATUS_READ: begin 
+        ES_FSM_STATUS_READ: begin
           up_fsm <= ES_FSM_STATUS_RRDY;
         end
-        ES_FSM_STATUS_RRDY: begin 
+        ES_FSM_STATUS_RRDY: begin
           if (up_es_ready == 1'b0) begin
             up_fsm <= ES_FSM_STATUS_RRDY;
           end else if (up_es_rdata[3:0] == 4'b0101) begin
@@ -407,47 +407,47 @@ module axi_adxcvr_es (
             up_fsm <= ES_FSM_STATUS_READ;
           end
         end
-        ES_FSM_STOP_WRITE: begin 
+        ES_FSM_STOP_WRITE: begin
           up_fsm <= ES_FSM_STOP_WRDY;
         end
-        ES_FSM_STOP_WRDY: begin 
+        ES_FSM_STOP_WRDY: begin
           if (up_es_ready == 1'b1) begin
             up_fsm <= ES_FSM_SCNT_READ;
           end else begin
             up_fsm <= ES_FSM_STOP_WRDY;
           end
         end
-        ES_FSM_SCNT_READ: begin 
+        ES_FSM_SCNT_READ: begin
           up_fsm <= ES_FSM_SCNT_RRDY;
         end
-        ES_FSM_SCNT_RRDY: begin 
+        ES_FSM_SCNT_RRDY: begin
           if (up_es_ready == 1'b1) begin
             up_fsm <= ES_FSM_ECNT_READ;
           end else begin
             up_fsm <= ES_FSM_SCNT_RRDY;
           end
         end
-        ES_FSM_ECNT_READ: begin 
+        ES_FSM_ECNT_READ: begin
           up_fsm <= ES_FSM_ECNT_RRDY;
         end
-        ES_FSM_ECNT_RRDY: begin 
+        ES_FSM_ECNT_RRDY: begin
           if (up_es_ready == 1'b1) begin
             up_fsm <= ES_FSM_AXI_WRITE;
           end else begin
             up_fsm <= ES_FSM_ECNT_RRDY;
           end
         end
-        ES_FSM_AXI_WRITE: begin 
+        ES_FSM_AXI_WRITE: begin
           up_fsm <= ES_FSM_AXI_READY;
         end
-        ES_FSM_AXI_READY: begin 
+        ES_FSM_AXI_READY: begin
           if (up_axi_bvalid == 1'b1) begin
             up_fsm <= ES_FSM_UPDATE;
           end else begin
             up_fsm <= ES_FSM_AXI_READY;
           end
         end
-        ES_FSM_UPDATE: begin 
+        ES_FSM_UPDATE: begin
           if ((up_eos_s == 1'b1) || (up_es_req == 1'b0)) begin
             up_fsm <= ES_FSM_IDLE;
           end else if (up_ut == 1'b1) begin
