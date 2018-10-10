@@ -60,8 +60,10 @@ module axi_dmac #(
   parameter AXI_ID_WIDTH_DEST = 1,
   parameter DISABLE_DEBUG_REGISTERS = 0,
   parameter ENABLE_DIAGNOSTICS_IF = 0,
-  parameter ALLOW_ASYM_MEM = 0
-) (
+  parameter ALLOW_ASYM_MEM = 0,
+  parameter ENABLE_FRAME_LOCK = 0,
+  parameter MAX_NUM_FRAMES = 8
+  )(
   // Slave AXI interface
   input s_axi_aclk,
   input s_axi_aresetn,
@@ -218,6 +220,14 @@ module axi_dmac #(
   output                                   fifo_rd_underflow,
   output                                   fifo_rd_xfer_req,
 
+  // Frame lock interface
+  // Master mode
+  input  [$clog2(MAX_NUM_FRAMES):0] m_frame_in,
+  output [$clog2(MAX_NUM_FRAMES):0] m_frame_out,
+  // Slave mode
+  input  [$clog2(MAX_NUM_FRAMES):0] s_frame_in,
+  output [$clog2(MAX_NUM_FRAMES):0] s_frame_out,
+
   // Diagnostics interface
   output  [7:0] dest_diag_level_bursts
 );
@@ -308,6 +318,14 @@ localparam BYTES_PER_BURST_WIDTH =
   REAL_MAX_BYTES_PER_BURST > 4 ? 3 :
   REAL_MAX_BYTES_PER_BURST > 2 ? 2 : 1;
 
+// 0 - Master (MM writer) ; 1 - Slave (MM reader)
+localparam FRAME_LOCK_MODE = DMA_TYPE_SRC == 0 && DMA_TYPE_DEST != 0;
+
+localparam MAX_NUM_FRAMES_WIDTH = MAX_NUM_FRAMES > 8 ? 4 :
+                                  MAX_NUM_FRAMES > 4 ? 3 :
+                                  MAX_NUM_FRAMES > 2 ? 2 :
+                                  MAX_NUM_FRAMES > 1 ? 1 : 0;
+
 // ID signals from the DMAC, just for debugging
 wire [ID_WIDTH-1:0] dest_request_id;
 wire [ID_WIDTH-1:0] dest_data_id;
@@ -364,8 +382,13 @@ wire [DMA_LENGTH_WIDTH-1:0] up_dma_req_x_length;
 wire [DMA_LENGTH_WIDTH-1:0] up_dma_req_y_length;
 wire [DMA_LENGTH_WIDTH-1:0] up_dma_req_dest_stride;
 wire [DMA_LENGTH_WIDTH-1:0] up_dma_req_src_stride;
+wire [MAX_NUM_FRAMES_WIDTH:0] up_dma_req_flock_framenum;
+wire [MAX_NUM_FRAMES_WIDTH:0] up_dma_req_flock_distance;
+wire [DMA_AXI_ADDR_WIDTH-1:0] up_dma_req_flock_stride;
+wire up_dma_req_flock_en;
 wire up_dma_req_sync_transfer_start;
 wire up_dma_req_last;
+wire up_dma_req_cyclic;
 
 assign dbg_ids0 = {
   {DBG_ID_PADDING{1'b0}}, dest_response_id,
@@ -393,7 +416,10 @@ axi_dmac_regmap #(
   .HAS_DEST_ADDR(HAS_DEST_ADDR),
   .HAS_SRC_ADDR(HAS_SRC_ADDR),
   .DMA_2D_TRANSFER(DMA_2D_TRANSFER),
-  .SYNC_TRANSFER_START(SYNC_TRANSFER_START)
+  .SYNC_TRANSFER_START(SYNC_TRANSFER_START),
+  .ENABLE_FRAME_LOCK(ENABLE_FRAME_LOCK),
+  .FRAME_LOCK_MODE(FRAME_LOCK_MODE),
+  .MAX_NUM_FRAMES_WIDTH(MAX_NUM_FRAMES_WIDTH)
 ) i_regmap (
   .s_axi_aclk(s_axi_aclk),
   .s_axi_aresetn(s_axi_aresetn),
@@ -434,8 +460,13 @@ axi_dmac_regmap #(
   .request_y_length(up_dma_req_y_length),
   .request_dest_stride(up_dma_req_dest_stride),
   .request_src_stride(up_dma_req_src_stride),
+  .request_flock_framenum(up_dma_req_flock_framenum),
+  .request_flock_distance(up_dma_req_flock_distance),
+  .request_flock_stride(up_dma_req_flock_stride),
+  .request_flock_en(up_dma_req_flock_en),
   .request_sync_transfer_start(up_dma_req_sync_transfer_start),
   .request_last(up_dma_req_last),
+  .request_cyclic(up_dma_req_cyclic),
 
   // DMA response interface
   .response_eot(up_req_eot),
@@ -475,7 +506,11 @@ axi_dmac_transfer #(
   .AXI_LENGTH_WIDTH_SRC(8-(4*DMA_AXI_PROTOCOL_SRC)),
   .AXI_LENGTH_WIDTH_DEST(8-(4*DMA_AXI_PROTOCOL_DEST)),
   .ENABLE_DIAGNOSTICS_IF(ENABLE_DIAGNOSTICS_IF),
-  .ALLOW_ASYM_MEM(ALLOW_ASYM_MEM)
+  .ALLOW_ASYM_MEM(ALLOW_ASYM_MEM),
+  .ENABLE_FRAME_LOCK(ENABLE_FRAME_LOCK),
+  .FRAME_LOCK_MODE(FRAME_LOCK_MODE),
+  .MAX_NUM_FRAMES(MAX_NUM_FRAMES),
+  .MAX_NUM_FRAMES_WIDTH(MAX_NUM_FRAMES_WIDTH)
 ) i_transfer (
   .ctrl_clk(s_axi_aclk),
   .ctrl_resetn(s_axi_aresetn),
@@ -491,8 +526,13 @@ axi_dmac_transfer #(
   .req_y_length(up_dma_req_y_length),
   .req_dest_stride(up_dma_req_dest_stride),
   .req_src_stride(up_dma_req_src_stride),
+  .req_flock_framenum(up_dma_req_flock_framenum),
+  .req_flock_distance(up_dma_req_flock_distance),
+  .req_flock_stride(up_dma_req_flock_stride),
+  .req_flock_en(up_dma_req_flock_en),
   .req_sync_transfer_start(up_dma_req_sync_transfer_start),
   .req_last(up_dma_req_last),
+  .req_cyclic(up_dma_req_cyclic),
 
   .req_eot(up_req_eot),
   .req_measured_burst_length(up_req_measured_burst_length),
@@ -578,6 +618,11 @@ axi_dmac_transfer #(
   .dbg_src_data_id(src_data_id),
   .dbg_src_response_id(src_response_id),
   .dbg_status(dbg_status),
+
+  .m_frame_in (m_frame_in),
+  .m_frame_out (m_frame_out),
+  .s_frame_in (s_frame_in),
+  .s_frame_out (s_frame_out),
 
   .dest_diag_level_bursts(dest_diag_level_bursts)
 );

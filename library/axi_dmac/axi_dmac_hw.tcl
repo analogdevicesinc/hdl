@@ -23,6 +23,7 @@ ad_ip_files axi_dmac [list \
   $ad_hdl_dir/library/common/ad_mem_asym.v \
   inc_id.vh \
   resp.vh \
+  axi_dmac_framelock.v \
   axi_dmac_burst_memory.v \
   axi_dmac_regmap.v \
   axi_dmac_regmap_request.v \
@@ -142,6 +143,18 @@ set_parameter_property SYNC_TRANSFER_START DISPLAY_NAME "Transfer Start Synchron
 set_parameter_property SYNC_TRANSFER_START DISPLAY_HINT boolean
 set_parameter_property SYNC_TRANSFER_START HDL_PARAMETER true
 set_parameter_property SYNC_TRANSFER_START GROUP $group
+
+add_parameter ENABLE_FRAME_LOCK INTEGER 0
+set_parameter_property ENABLE_FRAME_LOCK DISPLAY_NAME "Frame Lock Support"
+set_parameter_property ENABLE_FRAME_LOCK DISPLAY_HINT boolean
+set_parameter_property ENABLE_FRAME_LOCK HDL_PARAMETER true
+set_parameter_property ENABLE_FRAME_LOCK GROUP $group
+
+add_parameter MAX_NUM_FRAMES INTEGER 8
+set_parameter_property MAX_NUM_FRAMES DISPLAY_NAME "Max Number Of Frame Buffers"
+set_parameter_property MAX_NUM_FRAMES HDL_PARAMETER true
+set_parameter_property MAX_NUM_FRAMES ALLOWED_RANGES {4 8 16 32}
+set_parameter_property MAX_NUM_FRAMES GROUP $group
 
 set group "Clock Domain Configuration"
 
@@ -279,6 +292,12 @@ proc axi_dmac_validate {} {
     }
   }
   set_parameter_property MAX_BYTES_PER_BURST ALLOWED_RANGES "1:$max_burst"
+
+  if {([get_parameter_value CYCLIC] == 0 ||
+       [get_parameter_value DMA_2D_TRANSFER] == 0) &&
+       [get_parameter_value ENABLE_FRAME_LOCK] == 1 } {
+    send_message error "ENABLE_FRAME_LOCK can be set only in 2D Cyclic mode !!!"
+  }
 }
 
 # conditional interfaces
@@ -478,6 +497,31 @@ proc axi_dmac_elaborate {} {
   foreach intf $disabled_intfs {
     set_interface_property $intf ENABLED false
   }
+
+  if {[get_parameter_value ENABLE_FRAME_LOCK] == 1} {
+    set_parameter_property MAX_NUM_FRAMES VISIBLE true
+
+    set MAX_NUM_FRAMES [get_parameter_value MAX_NUM_FRAMES]
+    set flock_width [expr int(ceil(log($MAX_NUM_FRAMES)/log(2)))+1]
+    # MM writer is master
+    if {[get_parameter_value DMA_TYPE_DEST] == 0 &&
+        [get_parameter_value DMA_TYPE_SRC] != 0} {
+      add_interface m_frame_lock_if conduit end
+      add_interface_port m_frame_lock_if m_frame_out m2s_flock_if  Output $flock_width
+      add_interface_port m_frame_lock_if m_frame_in  s2m_flock_if   Input $flock_width
+    }
+    # MM reader is slave
+    if {[get_parameter_value DMA_TYPE_SRC]  == 0 &&
+        [get_parameter_value DMA_TYPE_DEST] != 0} {
+      add_interface s_frame_lock_if conduit end
+      add_interface_port s_frame_lock_if s_frame_in  m2s_flock_if Input $flock_width
+      add_interface_port s_frame_lock_if s_frame_out s2m_flock_if Output $flock_width
+    }
+
+  } else {
+    set_parameter_property MAX_NUM_FRAMES VISIBLE false
+  }
+
 }
 
 set group "Debug"

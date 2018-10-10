@@ -97,3 +97,7 @@ adi_if_ports  output   4  rx_gt_ilas_a
 adi_if_ports  output   4  rx_gt_ilas_r
 adi_if_ports  output   4  rx_gt_cgs_k
 
+adi_if_define if_framelock
+adi_if_ports  input    -1  s2m_framelock      none    0
+adi_if_ports  output   -1  m2s_framelock      none    0
+

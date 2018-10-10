@@ -47,7 +47,11 @@ module axi_dmac_regmap_request #(
   parameter HAS_DEST_ADDR = 1,
   parameter HAS_SRC_ADDR = 1,
   parameter DMA_2D_TRANSFER = 0,
-  parameter SYNC_TRANSFER_START = 0
+  parameter SYNC_TRANSFER_START = 0,
+  parameter ENABLE_FRAME_LOCK = 0,
+  parameter FRAME_LOCK_MODE = 0,
+  parameter MAX_NUM_FRAMES_WIDTH = 2
+
 ) (
   input clk,
   input reset,
@@ -76,8 +80,13 @@ module axi_dmac_regmap_request #(
   output [DMA_LENGTH_WIDTH-1:0] request_y_length,
   output [DMA_LENGTH_WIDTH-1:0] request_dest_stride,
   output [DMA_LENGTH_WIDTH-1:0] request_src_stride,
+  output [MAX_NUM_FRAMES_WIDTH:0] request_flock_framenum,
+  output [MAX_NUM_FRAMES_WIDTH:0] request_flock_distance,
+  output [DMA_AXI_ADDR_WIDTH-1:0] request_flock_stride,
+  output request_flock_en,
   output request_sync_transfer_start,
   output request_last,
+  output request_cyclic,
 
   // DMA response interface
   input response_eot,
@@ -104,6 +113,7 @@ reg [DMA_LENGTH_WIDTH-1:0] up_dma_x_length = {DMA_LENGTH_ALIGN{1'b1}};
 reg up_dma_cyclic = DMA_CYCLIC ? 1'b1 : 1'b0;
 reg up_dma_last = 1'b1;
 reg up_dma_enable_tlen_reporting = 1'b0;
+reg up_dma_flock_en = 1'b0;
 
 wire up_tlf_s_ready;
 reg up_tlf_s_valid = 1'b0;
@@ -123,6 +133,7 @@ assign request_src_address = up_dma_src_address;
 assign request_x_length = up_dma_x_length;
 assign request_sync_transfer_start = SYNC_TRANSFER_START ? 1'b1 : 1'b0;
 assign request_last = up_dma_last;
+assign request_cyclic = up_dma_cyclic;
 
 always @(posedge clk) begin
   if (reset == 1'b1) begin
@@ -133,6 +144,7 @@ always @(posedge clk) begin
     up_dma_cyclic <= DMA_CYCLIC ? 1'b1 : 1'b0;
     up_dma_last <= 1'b1;
     up_dma_enable_tlen_reporting <= 1'b0;
+    up_dma_flock_en <= 1'b0;
   end else begin
     if (ctrl_enable == 1'b1) begin
       if (up_wreq == 1'b1 && up_waddr == 9'h102) begin
@@ -150,6 +162,7 @@ always @(posedge clk) begin
         if (DMA_CYCLIC) up_dma_cyclic <= up_wdata[0];
         up_dma_last <= up_wdata[1];
         up_dma_enable_tlen_reporting <= up_wdata[2];
+        if (ENABLE_FRAME_LOCK) up_dma_flock_en <=  up_wdata[3];
       end
       9'h104: up_dma_dest_address <= up_wdata[DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST];
       9'h105: up_dma_src_address <= up_wdata[DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC];
@@ -163,7 +176,7 @@ always @(*) begin
   case (up_raddr)
   9'h101: up_rdata <= up_transfer_id;
   9'h102: up_rdata <= up_dma_req_valid;
-  9'h103: up_rdata <= {29'h00, up_dma_enable_tlen_reporting, up_dma_last, up_dma_cyclic}; // Flags
+  9'h103: up_rdata <= {28'h00, up_dma_flock_en, up_dma_enable_tlen_reporting, up_dma_last, up_dma_cyclic}; // Flags
   9'h104: up_rdata <= HAS_DEST_ADDR ? {up_dma_dest_address,{BYTES_PER_BEAT_WIDTH_DEST{1'b0}}} : 'h00;
   9'h105: up_rdata <= HAS_SRC_ADDR ? {up_dma_src_address,{BYTES_PER_BEAT_WIDTH_SRC{1'b0}}} : 'h00;
   9'h106: up_rdata <= up_dma_x_length;
@@ -176,6 +189,9 @@ always @(*) begin
   9'h112: up_rdata <= up_measured_transfer_length;
   9'h113: up_rdata <= up_tlf_data[MEASURED_LENGTH_WIDTH-1 : 0];   // Length
   9'h114: up_rdata <= up_tlf_data[MEASURED_LENGTH_WIDTH+: 2];  // ID
+  9'h115: up_rdata <= {{(16-MAX_NUM_FRAMES_WIDTH+1){1'b0}},request_flock_distance,
+                       {(16-MAX_NUM_FRAMES_WIDTH+1){1'b0}},request_flock_framenum};
+  9'h116: up_rdata <= request_flock_stride;
   default: up_rdata <= 32'h00;
   endcase
 end
@@ -207,6 +223,41 @@ end else begin
   assign request_dest_stride = 'h0;
   assign request_src_stride = 'h0;
 end
+
+if (ENABLE_FRAME_LOCK == 1) begin
+
+  reg [MAX_NUM_FRAMES_WIDTH:0] up_dma_flock_framenum = 'h0;
+  reg [MAX_NUM_FRAMES_WIDTH:0] up_dma_flock_distance = 'h0;
+  reg [DMA_AXI_ADDR_WIDTH-1:0] up_dma_flock_stride = 'h0;
+
+  always @(posedge clk) begin
+    if (reset == 1'b1) begin
+      up_dma_flock_framenum <= 'h0;
+      up_dma_flock_distance <= 'h0;
+      up_dma_flock_stride <= 'h0;
+    end else if (up_wreq == 1'b1) begin
+      case (up_waddr)
+        9'h115: begin
+          up_dma_flock_framenum <= up_wdata[MAX_NUM_FRAMES_WIDTH:0];
+          up_dma_flock_distance <= up_wdata[16 +: (MAX_NUM_FRAMES_WIDTH+1)];
+        end
+        9'h116: up_dma_flock_stride <= up_wdata[DMA_AXI_ADDR_WIDTH-1:0];
+      endcase
+    end
+  end
+
+  assign request_flock_framenum = up_dma_flock_framenum;
+  assign request_flock_distance = up_dma_flock_distance;
+  assign request_flock_stride = up_dma_flock_stride;
+  assign request_flock_en = up_dma_flock_en;
+
+end else begin
+  assign request_flock_framenum = 'h0;
+  assign request_flock_distance = 'h0;
+  assign request_flock_stride = 'h0;
+  assign request_flock_en = 1'b0;
+end
+
 endgenerate
 
 // In cyclic mode the same transfer is submitted over and over again
