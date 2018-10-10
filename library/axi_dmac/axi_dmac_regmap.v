@@ -48,7 +48,10 @@ module axi_dmac_regmap #(
   parameter HAS_DEST_ADDR = 1,
   parameter HAS_SRC_ADDR = 1,
   parameter DMA_2D_TRANSFER = 0,
-  parameter SYNC_TRANSFER_START = 0
+  parameter SYNC_TRANSFER_START = 0,
+  parameter ENABLE_FRAME_LOCK = 0,
+  parameter FRAME_LOCK_MODE = 0,
+  parameter MAX_NUM_FRAMES_WIDTH = 2
 ) (
   // Slave AXI interface
   input s_axi_aclk,
@@ -94,8 +97,13 @@ module axi_dmac_regmap #(
   output [DMA_LENGTH_WIDTH-1:0] request_y_length,
   output [DMA_LENGTH_WIDTH-1:0] request_dest_stride,
   output [DMA_LENGTH_WIDTH-1:0] request_src_stride,
+  output [MAX_NUM_FRAMES_WIDTH:0] request_flock_framenum,
+  output [MAX_NUM_FRAMES_WIDTH:0] request_flock_distance,
+  output [DMA_AXI_ADDR_WIDTH-1:0] request_flock_stride,
+  output request_flock_en,
   output request_sync_transfer_start,
   output request_last,
+  output request_cyclic,
 
   // DMA response interface
   input response_eot,
@@ -225,7 +233,10 @@ axi_dmac_regmap_request #(
   .HAS_DEST_ADDR(HAS_DEST_ADDR),
   .HAS_SRC_ADDR(HAS_SRC_ADDR),
   .DMA_2D_TRANSFER(DMA_2D_TRANSFER),
-  .SYNC_TRANSFER_START(SYNC_TRANSFER_START)
+  .SYNC_TRANSFER_START(SYNC_TRANSFER_START),
+  .ENABLE_FRAME_LOCK(ENABLE_FRAME_LOCK),
+  .FRAME_LOCK_MODE(FRAME_LOCK_MODE),
+  .MAX_NUM_FRAMES_WIDTH(MAX_NUM_FRAMES_WIDTH)
 ) i_regmap_request (
   .clk(s_axi_aclk),
   .reset(~s_axi_aresetn),
@@ -250,8 +261,13 @@ axi_dmac_regmap_request #(
   .request_y_length(request_y_length),
   .request_dest_stride(request_dest_stride),
   .request_src_stride(request_src_stride),
+  .request_flock_framenum(request_flock_framenum),
+  .request_flock_distance(request_flock_distance),
+  .request_flock_stride(request_flock_stride),
+  .request_flock_en(request_flock_en),
   .request_sync_transfer_start(request_sync_transfer_start),
   .request_last(request_last),
+  .request_cyclic(request_cyclic),
 
   .response_eot(response_eot),
   .response_measured_burst_length(response_measured_burst_length),

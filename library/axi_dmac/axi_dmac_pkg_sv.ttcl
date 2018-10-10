@@ -25,6 +25,9 @@
 <: set axi_id_width_src        [get_property MODELPARAM_VALUE.AXI_ID_WIDTH_SRC] :>
 <: set axi_id_width_dest       [get_property MODELPARAM_VALUE.AXI_ID_WIDTH_DEST] :>
 <: set disable_debug_registers [get_property MODELPARAM_VALUE.DISABLE_DEBUG_REGISTERS] :>
+<: set enable_diagnostics_if   [get_property MODELPARAM_VALUE.ENABLE_DIAGNOSTICS_IF] :>
+<: set enable_frame_lock       [get_property MODELPARAM_VALUE.ENABLE_FRAME_LOCK] :>
+<: set max_num_frames          [get_property MODELPARAM_VALUE.MAX_NUM_FRAMES] :>
 
 <: proc b2i {b} { if {$b==true} {return 1} else {return 0}} :>
 ///////////////////////////////////////////////////////////////////////////
@@ -59,6 +62,9 @@ package <=: ComponentName :>_pkg;
   parameter <=: ComponentName :>_AXI_ID_WIDTH_SRC        = <=: $axi_id_width_src :>;
   parameter <=: ComponentName :>_AXI_ID_WIDTH_DEST       = <=: $axi_id_width_dest :>;
   parameter <=: ComponentName :>_DISABLE_DEBUG_REGISTERS = <=: b2i $disable_debug_registers :>;
+  parameter <=: ComponentName :>_ENABLE_DIAGNOSTICS_IF   = <=: b2i $enable_diagnostics_if :>;
+  parameter <=: ComponentName :>_ENABLE_FRAME_LOCK       = <=: b2i $enable_frame_lock :>;
+  parameter <=: ComponentName :>_MAX_NUM_FRAMES          = <=: $max_num_frames :>;
 //////////////////////////////////////////////////////////////////////////
 
 endpackage : <=: ComponentName :>_pkg
