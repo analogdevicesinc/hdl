@@ -50,6 +50,78 @@ adi_ip_files ad_ip_jesd204_tpl_adc [list \
 
 adi_ip_properties ad_ip_jesd204_tpl_adc
 
-set_property hide_in_gui {1} [ipx::current_core]
+set cc [ipx::current_core]
 
+set_property display_name "JESD204 Transport Layer for ADCs" $cc
+set_property description "JESD204 Transport Layer for ADCs" $cc
+
+adi_add_bus "link" "master" \
+  "xilinx.com:interface:axis_rtl:1.0" \
+  "xilinx.com:interface:axis:1.0" \
+  [list \
+    {"link_ready" "TREADY"} \
+    {"link_valid" "TVALID"} \
+    {"link_data" "TDATA"} \
+  ]
+adi_add_bus_clock "link_clk" "link"
+
+foreach {p v} {
+  "NUM_LANES" "1 2 3 4 8" \
+  "NUM_CHANNELS" "1 2 4 6 8" \
+  "CHANNEL_WIDTH" "12 14 16" \
+} { \
+  set_property -dict [list \
+    "value_validation_type" "list" \
+    "value_validation_list" $v \
+  ] [ipx::get_user_parameters $p -of_objects $cc]
+}
+
+set page0 [ipgui::get_pagespec -name "Page 0" -component $cc]
+
+set general_group [ipgui::add_group -name "General Configuration" -component $cc \
+    -parent $page0 -display_name "General Configuration"]
+
+set p [ipgui::get_guiparamspec -name "ID" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $general_group
+set_property -dict [list \
+  "display_name" "Core ID" \
+] $p
+
+set framer_group [ipgui::add_group -name "JESD204 Framer Configuration" -component $cc \
+    -parent $page0 -display_name "JESD204 Framer Cofiguration"]
+
+set i 0
+
+foreach {k v} { \
+  "NUM_LANES" "Number of Lanes (L)" \
+  "NUM_CHANNELS" "Number of Conveters (M)" \
+  "CHANNEL_WIDTH" "Bits per Sample (N')" \
+  } { \
+  set p [ipgui::get_guiparamspec -name $k -component $cc]
+  ipgui::move_param -component $cc -order $i $p -parent $framer_group
+  set_property -dict [list \
+    WIDGET "comboBox" \
+    DISPLAY_NAME $v \
+  ] $p
+  incr i
+}
+
+set datapath_group [ipgui::add_group -name "Datapath Configuration" -component $cc \
+    -parent $page0 -display_name "Datapath Cofiguration"]
+
+set i 0
+
+foreach {k v w} {
+  "TWOS_COMPLEMENT" "Use twos complement" "checkBox" \
+  } { \
+  set p [ipgui::get_guiparamspec -name $k -component $cc]
+  ipgui::move_param -component $cc -order $i $p -parent $datapath_group
+  set_property -dict [list \
+    WIDGET $w \
+    DISPLAY_NAME $v \
+  ] $p
+  incr i
+}
+
+ipx::create_xgui_files [ipx::current_core]
 ipx::save_core [ipx::current_core]
