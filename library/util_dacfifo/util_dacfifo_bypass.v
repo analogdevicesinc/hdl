@@ -87,8 +87,6 @@ module util_dacfifo_bypass #(
   reg     [(DMA_ADDRESS_WIDTH-1):0]     dac_mem_waddr_m1 = 'd0;
   reg     [(DMA_ADDRESS_WIDTH-1):0]     dac_mem_waddr_m2 = 'd0;
   reg     [(DMA_ADDRESS_WIDTH-1):0]     dac_mem_waddr = 'd0;
-  reg                                   dac_xfer_out = 1'b0;
-  reg                                   dac_xfer_out_m1 = 1'b0;
 
   // internal signals
 
@@ -249,12 +247,8 @@ module util_dacfifo_bypass #(
 
   always @(posedge dac_clk) begin
     if (dac_rst == 1'b1) begin
-      dac_xfer_out_m1 <= 1'b0;
-      dac_xfer_out <= 1'b0;
       dac_dunf <= 1'b0;
     end else begin
-      dac_xfer_out_m1 <= dma_xfer_req;
-      dac_xfer_out <= dac_xfer_out_m1;
       if (dac_valid == 1'b1) begin
         dac_dunf <= dac_mem_empty_s;
       end
