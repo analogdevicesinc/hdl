@@ -164,7 +164,27 @@ module dmac_dma_write_shutdown_tb;
     .fifo_wr_sync(1'b1),
     .fifo_wr_xfer_req(),
 
-    .dbg_status(dbg_status)
+    .dbg_status(dbg_status),
+
+    /* Unused interfaces */
+    .m_src_axi_aclk(1'b0),
+    .m_src_axi_aresetn(1'b0),
+    .m_axi_arready(1'b0),
+    .m_axi_rdata('h00),
+    .m_axi_rlast(1'b0),
+    .m_axi_rvalid(1'b0),
+    .m_axi_rresp(2'b00),
+
+    .s_axis_aclk(1'b0),
+    .s_axis_valid(1'b0),
+    .s_axis_data('h00),
+    .s_axis_user(1'b0),
+    .s_axis_last(1'b0),
+
+    .m_axis_aclk(1'b0),
+    .m_axis_ready(1'b0),
+    .fifo_rd_clk(1'b0),
+    .fifo_rd_en(1'b0)
   );
 
 endmodule

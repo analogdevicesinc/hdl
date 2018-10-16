@@ -148,12 +148,35 @@ module dmac_dma_read_tb;
     .req_dest_stride(24'h00),
     .req_src_stride(24'h00),
     .req_sync_transfer_start(1'b0),
+    .req_last(1'b0),
+    .req_response_ready(1'b0),
 
     .fifo_rd_clk(clk),
     .fifo_rd_en(fifo_rd_en),
     .fifo_rd_valid(fifo_rd_valid),
     .fifo_rd_underflow(fifo_rd_underflow),
-    .fifo_rd_dout(fifo_rd_dout)
+    .fifo_rd_dout(fifo_rd_dout),
+
+    /* Unused interfaces */
+    .m_dest_axi_aclk (1'b0),
+    .m_dest_axi_aresetn(1'b0),
+    .m_axi_awready (1'b0),
+    .m_axi_wready (1'b0),
+    .m_axi_bvalid (1'b0),
+    .m_axi_bresp (2'b00),
+
+    .s_axis_aclk (1'b0),
+    .s_axis_valid (1'b0),
+    .s_axis_data ('h00),
+    .s_axis_user (1'b0),
+    .s_axis_last (1'b0),
+
+    .m_axis_aclk (1'b0),
+    .m_axis_ready (1'b0),
+    .fifo_wr_clk (1'b0),
+    .fifo_wr_en (1'b0),
+    .fifo_wr_din ('h00),
+    .fifo_wr_sync (1'b0)
   );
 
   always @(posedge clk) begin: dout

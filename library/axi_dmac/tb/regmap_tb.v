@@ -375,6 +375,9 @@ module dmac_regmap_tb;
     .request_last(request_last),
 
     .response_eot(response_eot),
+    .response_partial(1'b0),
+    .response_valid(1'b0),
+    .response_measured_burst_length(7'h0),
 
     .dbg_src_addr(VAL_DBG_SRC_ADDR),
     .dbg_dest_addr(VAL_DBG_DEST_ADDR),

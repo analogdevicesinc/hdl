@@ -154,13 +154,34 @@ module dmac_dma_write_tb;
     .req_dest_stride(24'h00),
     .req_src_stride(24'h00),
     .req_sync_transfer_start(1'b0),
+    .req_last(1'b1),
 
     .fifo_wr_clk(clk),
     .fifo_wr_en(fifo_wr_en),
     .fifo_wr_din(fifo_wr_din),
     .fifo_wr_overflow(fifo_wr_overflow),
     .fifo_wr_sync(1'b1),
-    .fifo_wr_xfer_req(fifo_wr_xfer_req)
+    .fifo_wr_xfer_req(fifo_wr_xfer_req),
+
+    /* Unused interfaces */
+    .m_src_axi_aclk(1'b0),
+    .m_src_axi_aresetn(1'b0),
+    .m_axi_arready(1'b0),
+    .m_axi_rdata('h00),
+    .m_axi_rlast(1'b0),
+    .m_axi_rvalid(1'b0),
+    .m_axi_rresp(2'b00),
+
+    .s_axis_aclk(1'b0),
+    .s_axis_valid(1'b0),
+    .s_axis_data('h00),
+    .s_axis_user(1'b0),
+    .s_axis_last(1'b0),
+
+    .m_axis_aclk(1'b0),
+    .m_axis_ready(1'b0),
+    .fifo_rd_clk(1'b0),
+    .fifo_rd_en(1'b0)
   );
 
   always @(posedge clk) begin: fifo_wr
