@@ -92,7 +92,6 @@ localparam DEST_SRC_RATIO_WIDTH = DEST_SRC_RATIO > 64 ? 7 :
 localparam BYTES_PER_BEAT_WIDTH = DEST_SRC_RATIO_WIDTH + BYTES_PER_BEAT_WIDTH_SRC;
 localparam BURST_LEN_WIDTH = BYTES_PER_BURST_WIDTH - BYTES_PER_BEAT_WIDTH;
 
-wire do_acc_st;
 wire do_compl;
 reg req_eot = 1'b0;
 reg req_response_partial = 1'b0;
@@ -100,7 +99,6 @@ reg [BYTES_PER_BURST_WIDTH-1:0] req_response_dest_data_burst_length = 'h0;
 
 wire response_dest_valid;
 reg response_dest_ready = 1'b1;
-wire [1:0] response_dest_resp;
 wire response_dest_resp_eot;
 wire [BYTES_PER_BURST_WIDTH-1:0] response_dest_data_burst_length;
 
