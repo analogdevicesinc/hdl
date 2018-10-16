@@ -212,6 +212,8 @@ wire req_gen_valid;
 wire req_gen_ready;
 wire req_src_valid;
 wire req_src_ready;
+wire src_req_spltr_valid;
+wire src_req_spltr_ready;
 
 wire dest_req_valid;
 wire dest_req_ready;

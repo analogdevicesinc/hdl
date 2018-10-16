@@ -100,6 +100,7 @@ reg [BYTES_PER_BURST_WIDTH-1:0] req_response_dest_data_burst_length = 'h0;
 wire response_dest_valid;
 reg response_dest_ready = 1'b1;
 wire response_dest_resp_eot;
+wire response_dest_partial;
 wire [BYTES_PER_BURST_WIDTH-1:0] response_dest_data_burst_length;
 
 reg [1:0] to_complete_count = 'h0;
