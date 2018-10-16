@@ -72,6 +72,7 @@ module dmac_regmap_tb;
   wire s_axi_awready;
   wire s_axi_wready;
   wire s_axi_bready = 1'b1;
+  wire s_axi_bvalid;
   wire [3:0] s_axi_wstrb = 4'b1111;
   wire [2:0] s_axi_awprot = 3'b000;
   wire [2:0] s_axi_arprot = 3'b000;
@@ -225,6 +226,7 @@ module dmac_regmap_tb;
   endtask
 
   reg request_ready = 1'b0;
+  wire request_valid;
   wire [31:BYTES_PER_BEAT] request_dest_address;
   wire [31:BYTES_PER_BEAT] request_src_address;
   wire [DMA_LENGTH_WIDTH-1:0] request_x_length;

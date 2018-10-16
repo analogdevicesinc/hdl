@@ -50,8 +50,8 @@ module dmac_dma_read_tb;
   wire req_ready;
   reg [23:0] req_length = REQ_LEN_INIT - 1;
 
-  wire awvalid;
-  wire awready;
+  wire arvalid;
+  wire arready;
   wire [31:0] araddr;
   wire [7:0] arlen;
   wire [2:0] arsize;
@@ -64,6 +64,8 @@ module dmac_dma_read_tb;
   wire rready;
   wire [1:0] rresp;
   wire [WIDTH_SRC-1:0] rdata;
+
+  wire eot;
 
   always @(posedge clk) begin
     if (reset != 1'b1 && req_ready == 1'b1) begin

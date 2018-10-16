@@ -67,6 +67,10 @@ module dmac_dma_write_tb;
   reg [WIDTH_SRC-1:0] fifo_wr_din = 'b0;
   reg fifo_wr_rq = 'b0;
   wire fifo_wr_xfer_req;
+  wire fifo_wr_en;
+  wire fifo_wr_overflow;
+
+  wire eot;
 
   wire bready;
   wire bvalid;

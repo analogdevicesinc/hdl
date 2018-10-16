@@ -45,8 +45,8 @@ module dmac_dma_read_shutdown_tb;
 
   reg fifo_clk = 1'b0;
 
-  wire awvalid;
-  wire awready;
+  wire arvalid;
+  wire arready;
   wire [31:0] araddr;
   wire [7:0] arlen;
   wire [2:0] arsize;
