@@ -101,6 +101,10 @@ dmac_data_mover # (
   .response_id(response_id),
   .eot(eot),
 
+  .rewind_req_valid(),
+  .rewind_req_ready(1'b0),
+  .rewind_req_data(),
+
   .bl_valid(bl_valid),
   .bl_ready(bl_ready),
   .measured_last_burst_length(measured_last_burst_length),
