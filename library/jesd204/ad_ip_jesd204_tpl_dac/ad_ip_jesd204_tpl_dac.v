@@ -30,6 +30,7 @@ module ad_ip_jesd204_tpl_dac #(
   parameter SAMPLES_PER_FRAME = 1,
   parameter CONVERTER_RESOLUTION = 16,
   parameter BITS_PER_SAMPLE = 16,
+  parameter OCTETS_PER_BEAT = 4,
   parameter DDS_TYPE = 1,
   parameter DDS_CORDIC_DW = 16,
   parameter DDS_CORDIC_PHASE_DW = 16,
@@ -41,13 +42,13 @@ module ad_ip_jesd204_tpl_dac #(
   input link_clk,
   output link_valid,
   input link_ready,
-  output [NUM_LANES*32-1:0] link_data,
+  output [NUM_LANES*8*OCTETS_PER_BEAT-1:0] link_data,
 
   // dma interface
   output [NUM_CHANNELS-1:0] enable,
 
   output [NUM_CHANNELS-1:0] dac_valid,
-  input [NUM_LANES*32-1:0] dac_ddata,
+  input [NUM_LANES*8*OCTETS_PER_BEAT-1:0] dac_ddata,
   input dac_dunf,
 
   // axi interface
@@ -79,9 +80,6 @@ module ad_ip_jesd204_tpl_dac #(
   output [31:0] s_axi_rdata,
   output [1:0] s_axi_rresp
 );
-
-  /* Static for now */
-  localparam OCTETS_PER_BEAT = 4;
 
   localparam DATA_PATH_WIDTH = OCTETS_PER_BEAT * 8 * NUM_LANES / NUM_CHANNELS / BITS_PER_SAMPLE;
   localparam LINK_DATA_WIDTH = NUM_LANES * OCTETS_PER_BEAT * 8;
