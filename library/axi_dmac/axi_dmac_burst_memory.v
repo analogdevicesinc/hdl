@@ -95,15 +95,7 @@ localparam ADDRESS_WIDTH = BURST_LEN_WIDTH + ID_WIDTH - 1;
 
 localparam AUX_FIFO_SIZE = 2**(ID_WIDTH-1);
 
-localparam DEST_SRC_RATIO = DATA_WIDTH_DEST/DATA_WIDTH_SRC;
-
-localparam DEST_SRC_RATIO_WIDTH = DEST_SRC_RATIO > 64 ? 7 :
-  DEST_SRC_RATIO > 32 ? 6 :
-  DEST_SRC_RATIO > 16 ? 5 :
-  DEST_SRC_RATIO > 8 ? 4 :
-  DEST_SRC_RATIO > 4 ? 3 :
-  DEST_SRC_RATIO > 2 ? 2 :
-  DEST_SRC_RATIO > 1 ? 1 : 0;
+localparam BYTES_PER_BEAT_WIDTH = BYTES_PER_BURST_WIDTH - BURST_LEN_WIDTH;
 
 /*
  * The burst memory is separated into 2**(ID_WIDTH-1) segments. Each segment can
@@ -157,6 +149,8 @@ wire [ID_WIDTH-2:0] src_id_reduced;
 wire src_mem_data_valid;
 wire src_mem_data_last;
 wire [DATA_WIDTH-1:0] src_mem_data;
+wire [BYTES_PER_BEAT_WIDTH-1:0] src_mem_data_valid_bytes;
+wire src_mem_data_partial_burst;
 
 wire dest_beat;
 wire dest_last_beat;
@@ -323,53 +317,13 @@ always @(posedge dest_clk) begin
   dest_burst_info_write <= (dest_burst_valid == 1'b1 && dest_burst_ready == 1'b1);
 end
 
-// If destination is wider track the number of source beats in a destination
-// beat in case the stream is not destination width aligned.
-generate if (DATA_WIDTH_SRC < DATA_WIDTH_DEST) begin
-
-  reg [DEST_SRC_RATIO_WIDTH-1:0] src_num_beats = {DEST_SRC_RATIO_WIDTH{1'b1}};
-  reg [BYTES_PER_BEAT_WIDTH_SRC-1:0] src_data_valid_bytes_d = 'h00;
-  reg src_data_partial_burst_d = 'h0;
-
-  // This counter will hold the number of source beat in a destination beat
-  // minus one
-  always @(posedge src_clk) begin
-    if (src_mem_data_last == 1'b1 && src_mem_data_valid == 1'b1) begin
-      if (src_data_valid) begin
-        src_num_beats  <= {DEST_SRC_RATIO_WIDTH{1'b0}};
-      end else begin
-        src_num_beats  <= {DEST_SRC_RATIO_WIDTH{1'b1}};
-      end
-    end else if (src_data_valid) begin
-      src_num_beats <= src_num_beats + 1'b1;
-    end
-  end
-
-  // Compensate the delay through the resize block
-  always @(posedge src_clk) begin
-    if (src_data_valid == 1'b1) begin
-      src_data_valid_bytes_d <= src_data_valid_bytes;
-      src_data_partial_burst_d <= src_data_partial_burst;
-    end
-  end
-
-  assign src_burst_len_data = {src_data_partial_burst_d,
-                               src_beat_counter,
-                               src_num_beats,
-                               src_data_valid_bytes_d};
-end else begin
-
-  assign src_burst_len_data = {src_data_partial_burst,
-                               src_beat_counter,
-                               src_data_valid_bytes};
-end
-endgenerate
-
 assign dest_burst_len = dest_burst_len_data[BYTES_PER_BURST_WIDTH-1 -: BURST_LEN_WIDTH];
 
 axi_dmac_resize_src #(
   .DATA_WIDTH_SRC (DATA_WIDTH_SRC),
-  .DATA_WIDTH_MEM (DATA_WIDTH)
+  .BYTES_PER_BEAT_WIDTH_SRC (BYTES_PER_BEAT_WIDTH_SRC),
+  .DATA_WIDTH_MEM (DATA_WIDTH),
+  .BYTES_PER_BEAT_WIDTH_MEM (BYTES_PER_BEAT_WIDTH)
 ) i_resize_src (
   .clk (src_clk),
   .reset (src_reset),
@@ -377,11 +331,19 @@ axi_dmac_resize_src #(
   .src_data_valid (src_data_valid),
   .src_data (src_data),
   .src_data_last (src_data_last),
+  .src_data_valid_bytes (src_data_valid_bytes),
+  .src_data_partial_burst (src_data_partial_burst),
 
   .mem_data_valid (src_mem_data_valid),
   .mem_data (src_mem_data),
-  .mem_data_last (src_mem_data_last)
+  .mem_data_last (src_mem_data_last),
+  .mem_data_valid_bytes (src_mem_data_valid_bytes),
+  .mem_data_partial_burst (src_mem_data_partial_burst)
 );
+
+assign src_burst_len_data = {src_mem_data_partial_burst,
+                             src_beat_counter,
+                             src_mem_data_valid_bytes};
 
 ad_mem #(
   .DATA_WIDTH (DATA_WIDTH),
