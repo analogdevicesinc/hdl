@@ -43,6 +43,7 @@ module axi_dmac_burst_memory #(
   parameter ASYNC_CLK = 1,
   parameter BYTES_PER_BEAT_WIDTH_SRC = $clog2(DATA_WIDTH_SRC/8),
   parameter BYTES_PER_BURST_WIDTH = $clog2(MAX_BYTES_PER_BURST),
+  parameter DMA_LENGTH_ALIGN = 3,
   parameter ENABLE_DIAGNOSTICS_IF = 0
 ) (
   input src_clk,
@@ -143,10 +144,10 @@ reg dest_valid = 1'b0;
 reg dest_mem_data_valid = 1'b0;
 reg dest_mem_data_last = 1'b0;
 
-reg [BYTES_PER_BURST_WIDTH+1-1:0] burst_len_mem[0:AUX_FIFO_SIZE-1];
+reg [BYTES_PER_BURST_WIDTH+1-1-DMA_LENGTH_ALIGN:0] burst_len_mem[0:AUX_FIFO_SIZE-1];
 
 wire [BYTES_PER_BURST_WIDTH+1-1:0] src_burst_len_data;
-reg [BYTES_PER_BURST_WIDTH+1-1:0] dest_burst_len_data = 'h00;
+reg [BYTES_PER_BURST_WIDTH+1-1:0] dest_burst_len_data = {DMA_LENGTH_ALIGN{1'b1}};
 
 wire src_beat;
 wire src_last_beat;
@@ -217,7 +218,7 @@ end
 
 always @(posedge src_clk) begin
   if (src_last_beat == 1'b1) begin
-    burst_len_mem[src_id_reduced] <= src_burst_len_data;
+    burst_len_mem[src_id_reduced] <= src_burst_len_data[BYTES_PER_BURST_WIDTH:DMA_LENGTH_ALIGN];
   end
 end
 
@@ -295,7 +296,7 @@ end
 
 always @(posedge dest_clk) begin
   if (dest_burst_valid == 1'b1 && dest_burst_ready == 1'b1) begin
-    dest_burst_len_data <= burst_len_mem[dest_id_reduced_next];
+    dest_burst_len_data[BYTES_PER_BURST_WIDTH:DMA_LENGTH_ALIGN] <= burst_len_mem[dest_id_reduced_next];
   end
 end
 

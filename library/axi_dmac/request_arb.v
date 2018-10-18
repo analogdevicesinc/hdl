@@ -39,6 +39,7 @@ module dmac_request_arb #(
   parameter DMA_DATA_WIDTH_SRC = 64,
   parameter DMA_DATA_WIDTH_DEST = 64,
   parameter DMA_LENGTH_WIDTH = 24,
+  parameter DMA_LENGTH_ALIGN = 3,
   parameter BYTES_PER_BEAT_WIDTH_DEST = $clog2(DMA_DATA_WIDTH_DEST/8),
   parameter BYTES_PER_BEAT_WIDTH_SRC = $clog2(DMA_DATA_WIDTH_SRC/8),
   parameter DMA_TYPE_DEST = 0,
@@ -939,6 +940,7 @@ axi_dmac_burst_memory #(
   .ASYNC_CLK(ASYNC_CLK_SRC_DEST),
   .BYTES_PER_BEAT_WIDTH_SRC(BYTES_PER_BEAT_WIDTH_SRC),
   .BYTES_PER_BURST_WIDTH(BYTES_PER_BURST_WIDTH),
+  .DMA_LENGTH_ALIGN(DMA_LENGTH_ALIGN),
   .ENABLE_DIAGNOSTICS_IF(ENABLE_DIAGNOSTICS_IF)
 ) i_store_and_forward (
   .src_clk(src_clk),
