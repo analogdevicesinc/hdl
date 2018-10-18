@@ -90,6 +90,7 @@ foreach {p v} {
   "BITS_PER_SAMPLE" "12 16" \
   "CONVERTER_RESOLUTION" "11 12 16" \
   "SAMPLES_PER_FRAME" "1 2 3 4 6 8 12 16" \
+  "OCTETS_PER_BEAT" "4 8" \
 } { \
   set_property -dict [list \
     "value_validation_type" "list" \
@@ -119,6 +120,7 @@ foreach {k v} { \
   "BITS_PER_SAMPLE" "Bits per Sample (N')" \
   "CONVERTER_RESOLUTION" "Converter Resolution (N)" \
   "SAMPLES_PER_FRAME" "Samples per Frame (S)" \
+  "OCTETS_PER_BEAT" "Octets per Beat" \
   } { \
   set p [ipgui::get_guiparamspec -name $k -component $cc]
   ipgui::move_param -component $cc -order $i $p -parent $framer_group
