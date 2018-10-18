@@ -65,6 +65,7 @@ module axi_dmac_burst_memory #(
   input dest_data_ready,
   output [DATA_WIDTH_DEST-1:0] dest_data,
   output dest_data_last,
+  output [DATA_WIDTH_DEST/8-1:0] dest_data_strb,
 
   output [BYTES_PER_BURST_WIDTH-1:0] dest_burst_info_length,
   output dest_burst_info_partial,
@@ -114,6 +115,7 @@ localparam ADDRESS_WIDTH_SRC = BURST_LEN_WIDTH_SRC + ID_WIDTH - 1;
 localparam ADDRESS_WIDTH_DEST = BURST_LEN_WIDTH_DEST + ID_WIDTH - 1;
 
 localparam BYTES_PER_BEAT_WIDTH_MEM_SRC = BYTES_PER_BURST_WIDTH - BURST_LEN_WIDTH_SRC;
+localparam BYTES_PER_BEAT_WIDTH_DEST = BYTES_PER_BURST_WIDTH - BURST_LEN_WIDTH_DEST;
 
 /*
  * The burst memory is separated into 2**(ID_WIDTH-1) segments. Each segment can
@@ -153,6 +155,7 @@ wire [BURST_LEN_WIDTH_DEST-1:0] dest_burst_len;
 reg dest_valid = 1'b0;
 reg dest_mem_data_valid = 1'b0;
 reg dest_mem_data_last = 1'b0;
+reg [DATA_WIDTH_MEM_DEST/8-1:0] dest_mem_data_strb = {DATA_WIDTH_MEM_DEST/8{1'b1}};
 
 reg [BYTES_PER_BURST_WIDTH+1-1-DMA_LENGTH_ALIGN:0] burst_len_mem[0:AUX_FIFO_SIZE-1];
 
@@ -294,6 +297,16 @@ always @(posedge dest_clk) begin
   end
 end
 
+always @(posedge dest_clk) begin
+  if (dest_beat == 1'b1) begin
+    if (dest_last == 1'b1) begin
+      dest_mem_data_strb <= {DATA_WIDTH_MEM_DEST/8{1'b1}} >> ~dest_burst_len_data[BYTES_PER_BEAT_WIDTH_DEST-1:0];
+    end else begin
+      dest_mem_data_strb <= {DATA_WIDTH_MEM_DEST/8{1'b1}};
+    end
+  end
+end
+
 assign dest_id_next_inc = inc_id(dest_id_next);
 
 always @(posedge dest_clk) begin
@@ -391,11 +404,13 @@ axi_dmac_resize_dest #(
   .mem_data_ready (dest_mem_data_ready),
   .mem_data (dest_mem_data),
   .mem_data_last (dest_mem_data_last),
+  .mem_data_strb (dest_mem_data_strb),
 
   .dest_data_valid (dest_data_valid),
   .dest_data_ready (dest_data_ready),
   .dest_data (dest_data),
-  .dest_data_last (dest_data_last)
+  .dest_data_last (dest_data_last),
+  .dest_data_strb (dest_data_strb)
 );
 
 sync_bits #(

@@ -45,7 +45,6 @@ module dmac_dma_read_tb;
   `include "tb_base.v"
 
   localparam TRANSFER_ADDR = 32'h80000000;
-  localparam WIDTH_MAX = WIDTH_DEST > WIDTH_SRC ? WIDTH_DEST : WIDTH_SRC;
 
   reg req_valid = 1'b1;
   wire req_ready;
@@ -109,7 +108,7 @@ module dmac_dma_read_tb;
     .DMA_TYPE_DEST(2),
     .DMA_DATA_WIDTH_SRC(WIDTH_SRC),
     .DMA_DATA_WIDTH_DEST(WIDTH_DEST),
-    .DMA_LENGTH_ALIGN($clog2(WIDTH_MAX/8)),
+    .DMA_LENGTH_ALIGN($clog2(WIDTH_DEST/8)),
     .FIFO_SIZE(8)
   ) transfer (
     .m_src_axi_aclk(clk),
