@@ -104,9 +104,6 @@ wire [1:0] response_dest_resp;
 wire response_dest_resp_eot;
 wire [BYTES_PER_BURST_WIDTH-1:0] response_dest_data_burst_length;
 
-wire [BURST_LEN_WIDTH-1:0] burst_lenght;
-reg [BURST_LEN_WIDTH-1:0] burst_pointer_end;
-
 reg [1:0] to_complete_count = 'h0;
 reg [1:0] transfer_id = 'h0;
 reg completion_req_last_found = 1'b0;
@@ -170,27 +167,12 @@ begin
   end
 end
 
-// transform the free running pointer from burst memory into burst length
-assign burst_lenght = req_response_dest_data_burst_length[BYTES_PER_BURST_WIDTH-1 -: BURST_LEN_WIDTH] -
-                      burst_pointer_end - 1'b1;
-
-always @(posedge req_clk)
-begin
-  if (req_resetn == 1'b0) begin
-    burst_pointer_end <= {BURST_LEN_WIDTH{1'b1}};
-  end else if (state == STATE_ACC) begin
-    burst_pointer_end <= req_response_dest_data_burst_length[BYTES_PER_BURST_WIDTH-1 -: BURST_LEN_WIDTH];
-  end
-end
-
 always @(posedge req_clk)
 begin
   if (state == STATE_ZERO_COMPL) begin
     measured_burst_length <= {BYTES_PER_BURST_WIDTH{1'b1}};
   end else if (state == STATE_ACC) begin
-    measured_burst_length[BYTES_PER_BURST_WIDTH-1 -: BURST_LEN_WIDTH] <= burst_lenght;
-    measured_burst_length[BYTES_PER_BEAT_WIDTH-1 : 0] <=
-      req_response_dest_data_burst_length[BYTES_PER_BEAT_WIDTH-1: 0];
+    measured_burst_length <= req_response_dest_data_burst_length;
   end
 end
 

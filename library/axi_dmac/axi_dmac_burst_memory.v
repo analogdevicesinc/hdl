@@ -208,7 +208,7 @@ always @(posedge src_clk) begin
 end
 
 always @(posedge src_clk) begin
-  if (src_reset == 1'b1) begin
+  if (src_reset == 1'b1 || src_last_beat == 1'b1) begin
     src_beat_counter <= 'h00;
   end else if (src_beat == 1'b1) begin
     src_beat_counter <= src_beat_counter + 1'b1;
@@ -307,7 +307,7 @@ always @(posedge dest_clk) begin
 end
 
 always @(posedge dest_clk) begin
-  if (dest_reset == 1'b1) begin
+  if (dest_reset == 1'b1 || dest_last_beat == 1'b1) begin
     dest_beat_counter <= 'h00;
   end else if (dest_beat == 1'b1) begin
     dest_beat_counter <= dest_beat_counter + 1'b1;
