@@ -51,6 +51,7 @@ module dmac_src_mm_axi #(
   output                          req_ready,
   input [DMA_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH] req_address,
   input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
+  input [BYTES_PER_BEAT_WIDTH-1:0]  req_last_beat_bytes,
 
   input                           enable,
   output reg                      enabled = 1'b0,
@@ -73,6 +74,7 @@ module dmac_src_mm_axi #(
 
   output                          fifo_valid,
   output [DMA_DATA_WIDTH-1:0]   fifo_data,
+  output [BYTES_PER_BEAT_WIDTH-1:0] fifo_valid_bytes,
   output                          fifo_last,
 
   // Read address
@@ -107,6 +109,23 @@ assign data_id = id;
 assign response_id = id;
 
 assign measured_last_burst_length = req_last_burst_length;
+
+reg [BYTES_PER_BEAT_WIDTH-1:0] last_beat_bytes;
+reg [BYTES_PER_BEAT_WIDTH-1:0] last_beat_bytes_mem[0:2**ID_WIDTH-1];
+
+assign fifo_valid_bytes = last_beat_bytes_mem[data_id];
+
+always @(posedge m_axi_aclk) begin
+  if (bl_ready_ag == 1'b1 && bl_valid_ag == 1'b1) begin
+    last_beat_bytes <= req_last_beat_bytes;
+  end
+end
+
+
+always @(posedge m_axi_aclk) begin
+  last_beat_bytes_mem[address_id] <= address_eot ? last_beat_bytes :
+                                                   {BYTES_PER_BEAT_WIDTH{1'b1}};
+end
 
 splitter #(
   .NUM_M(3)

@@ -82,8 +82,8 @@ end else begin
   reg valid = 1'b0;
   reg last = 1'b0;
   reg [DATA_WIDTH_MEM-1:0] data = 'h0;
-  reg [BYTES_PER_BEAT_WIDTH_SRC-1:0] valid_bytes;
-  reg partial_burst;
+  reg [BYTES_PER_BEAT_WIDTH_SRC-1:0] valid_bytes = 'h00;
+  reg partial_burst = 1'b0;
   reg [RATIO_WIDTH-1:0] num_beats = {RATIO_WIDTH{1'b1}};
 
   always @(posedge clk) begin
