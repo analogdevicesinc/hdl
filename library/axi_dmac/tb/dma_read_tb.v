@@ -37,15 +37,18 @@
 
 module dmac_dma_read_tb;
   parameter VCD_FILE = {`__FILE__,"cd"};
+  parameter WIDTH_DEST = 32;
+  parameter WIDTH_SRC = 32;
+  parameter REQ_LEN_INC = 4;
+  parameter REQ_LEN_INIT = 4;
 
   `include "tb_base.v"
 
   localparam TRANSFER_ADDR = 32'h80000000;
-  localparam TRANSFER_LEN = 24'h203;
 
   reg req_valid = 1'b1;
   wire req_ready;
-  reg [23:0] req_length = 'h03;
+  reg [23:0] req_length = REQ_LEN_INIT - 1;
 
   wire awvalid;
   wire awready;
@@ -60,18 +63,18 @@ module dmac_dma_read_tb;
   wire rvalid;
   wire rready;
   wire [1:0] rresp;
-  wire [31:0] rdata;
+  wire [WIDTH_SRC-1:0] rdata;
 
   always @(posedge clk) begin
     if (reset != 1'b1 && req_ready == 1'b1) begin
       req_valid <= 1'b1;
-      req_length <= req_length + 4;
+      req_length <= req_length + REQ_LEN_INC;
     end
   end
 
   axi_read_slave #(
-    .DATA_WIDTH(32)
-  ) i_write_slave (
+    .DATA_WIDTH(WIDTH_SRC)
+  ) i_read_slave (
     .clk(clk),
     .reset(reset),
 
@@ -94,16 +97,17 @@ module dmac_dma_read_tb;
   wire fifo_rd_en = 1'b1;
   wire fifo_rd_valid;
   wire fifo_rd_underflow;
-  wire [31:0] fifo_rd_dout;
-  reg [31:0] fifo_rd_dout_cmp = TRANSFER_ADDR;
+  wire [WIDTH_DEST-1:0] fifo_rd_dout;
+  reg [WIDTH_DEST-1:0] fifo_rd_dout_cmp = 'h00;
   reg fifo_rd_dout_mismatch = 1'b0;
-  reg [31:0] fifo_rd_dout_limit = 'h0;
+  reg [23:0] fifo_rd_req_length = REQ_LEN_INIT;
+  reg [23:0] fifo_rd_beat_counter = 'h00;
 
   axi_dmac_transfer #(
     .DMA_TYPE_SRC(0),
     .DMA_TYPE_DEST(2),
-    .DMA_DATA_WIDTH_SRC(32),
-    .DMA_DATA_WIDTH_DEST(32),
+    .DMA_DATA_WIDTH_SRC(WIDTH_SRC),
+    .DMA_DATA_WIDTH_DEST(WIDTH_DEST),
     .FIFO_SIZE(8)
   ) transfer (
     .m_src_axi_aclk(clk),
@@ -134,8 +138,8 @@ module dmac_dma_read_tb;
 
     .req_valid(req_valid),
     .req_ready(req_ready),
-    .req_dest_address(TRANSFER_ADDR[31:2]),
-    .req_src_address(TRANSFER_ADDR[31:2]),
+    .req_dest_address(TRANSFER_ADDR[31:$clog2(WIDTH_DEST/8)]),
+    .req_src_address(TRANSFER_ADDR[31:$clog2(WIDTH_SRC/8)]),
     .req_x_length(req_length),
     .req_y_length(24'h00),
     .req_dest_stride(24'h00),
@@ -149,19 +153,31 @@ module dmac_dma_read_tb;
     .fifo_rd_dout(fifo_rd_dout)
   );
 
-  always @(posedge clk) begin
+  always @(posedge clk) begin: dout
+    integer i;
+
     if (reset == 1'b1) begin
-      fifo_rd_dout_cmp <= TRANSFER_ADDR;
+      for (i = 0; i < WIDTH_DEST; i = i + 8) begin
+        fifo_rd_dout_cmp[i+:8] <= TRANSFER_ADDR[7:0] + i / 8;
+      end
       fifo_rd_dout_mismatch <= 1'b0;
+      fifo_rd_req_length <= REQ_LEN_INIT;
+      fifo_rd_beat_counter <= 'h00;
     end else begin
       fifo_rd_dout_mismatch <= 1'b0;
 
       if (fifo_rd_valid == 1'b1) begin
-        if (fifo_rd_dout_cmp < TRANSFER_ADDR + fifo_rd_dout_limit) begin
-          fifo_rd_dout_cmp <= (fifo_rd_dout_cmp + 'h4);
+        if (fifo_rd_beat_counter + WIDTH_DEST / 8 < fifo_rd_req_length) begin
+          for (i = 0; i < WIDTH_DEST; i = i + 8) begin
+            fifo_rd_dout_cmp[i+:8] <= fifo_rd_dout_cmp[i+:8] + WIDTH_DEST / 8;
+          end
+          fifo_rd_beat_counter <= fifo_rd_beat_counter + WIDTH_DEST / 8;
         end else begin
-          fifo_rd_dout_cmp <= TRANSFER_ADDR;
-          fifo_rd_dout_limit <= fifo_rd_dout_limit + 'h4;
+          for (i = 0; i < WIDTH_DEST; i = i + 8) begin
+            fifo_rd_dout_cmp[i+:8] <= TRANSFER_ADDR[7:0] + i / 8;
+          end
+          fifo_rd_beat_counter <= 'h00;
+          fifo_rd_req_length <= fifo_rd_req_length + REQ_LEN_INC;
         end
         if (fifo_rd_dout_cmp != fifo_rd_dout) begin
           fifo_rd_dout_mismatch <= 1'b1;
