@@ -83,99 +83,53 @@ module axi_ad9162 #(
   output      [ 1:0]      s_axi_rresp,
   input                   s_axi_rready);
 
-  // internal clocks and resets
+  assign dac_clk = tx_clk;
 
-  wire              dac_rst;
-  wire              up_clk;
-  wire              up_rstn;
+  ad_ip_jesd204_tpl_dac #(
+    .ID(ID),
+    .NUM_LANES(8),
+    .NUM_CHANNELS(1),
+    .CONVERTER_RESOLUTION (16),
+    .BITS_PER_SAMPLE (16),
+    .SAMPLES_PER_FRAME (1),
+    .DDS_TYPE (DAC_DDS_TYPE),
+    .DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
+    .DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
+    .DATAPATH_DISABLE(DAC_DATAPATH_DISABLE)
+  ) i_dac_jesd204 (
+    .link_clk (tx_clk),
 
-  // internal signals
+    .link_valid (tx_valid),
+    .link_data (tx_data),
+    .link_ready (tx_ready),
 
-  wire    [255:0]   dac_data_s;
-  wire              up_wreq_s;
-  wire    [ 13:0]   up_waddr_s;
-  wire    [ 31:0]   up_wdata_s;
-  wire              up_wack_s;
-  wire              up_rreq_s;
-  wire    [ 13:0]   up_raddr_s;
-  wire    [ 31:0]   up_rdata_s;
-  wire              up_rack_s;
-
-  // signal name changes
-
-  assign up_clk = s_axi_aclk;
-  assign up_rstn = s_axi_aresetn;
-
-  // defaults
-
-  assign tx_valid = 1'b1;
-
-  // device interface
-
-  axi_ad9162_if i_if (
-    .tx_clk (tx_clk),
-    .tx_data (tx_data),
-    .dac_clk (dac_clk),
-    .dac_rst (dac_rst),
-    .dac_data (dac_data_s));
-
-  // core
-
-  axi_ad9162_core #(
-    .ID (ID),
-    .DAC_DDS_TYPE (DAC_DDS_TYPE),
-    .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
-    .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
-    .DATAPATH_DISABLE (DAC_DATAPATH_DISABLE))
-  i_core (
-    .dac_clk (dac_clk),
-    .dac_rst (dac_rst),
-    .dac_data (dac_data_s),
+    .enable (dac_enable),
     .dac_valid (dac_valid),
-    .dac_enable (dac_enable),
     .dac_ddata (dac_ddata),
     .dac_dunf (dac_dunf),
-    .up_rstn (up_rstn),
-    .up_clk (up_clk),
-    .up_wreq (up_wreq_s),
-    .up_waddr (up_waddr_s),
-    .up_wdata (up_wdata_s),
-    .up_wack (up_wack_s),
-    .up_rreq (up_rreq_s),
-    .up_raddr (up_raddr_s),
-    .up_rdata (up_rdata_s),
-    .up_rack (up_rack_s));
 
-  // up bus interface
-
-  up_axi i_up_axi (
-    .up_rstn (up_rstn),
-    .up_clk (up_clk),
-    .up_axi_awvalid (s_axi_awvalid),
-    .up_axi_awaddr (s_axi_awaddr),
-    .up_axi_awready (s_axi_awready),
-    .up_axi_wvalid (s_axi_wvalid),
-    .up_axi_wdata (s_axi_wdata),
-    .up_axi_wstrb (s_axi_wstrb),
-    .up_axi_wready (s_axi_wready),
-    .up_axi_bvalid (s_axi_bvalid),
-    .up_axi_bresp (s_axi_bresp),
-    .up_axi_bready (s_axi_bready),
-    .up_axi_arvalid (s_axi_arvalid),
-    .up_axi_araddr (s_axi_araddr),
-    .up_axi_arready (s_axi_arready),
-    .up_axi_rvalid (s_axi_rvalid),
-    .up_axi_rresp (s_axi_rresp),
-    .up_axi_rdata (s_axi_rdata),
-    .up_axi_rready (s_axi_rready),
-    .up_wreq (up_wreq_s),
-    .up_waddr (up_waddr_s),
-    .up_wdata (up_wdata_s),
-    .up_wack (up_wack_s),
-    .up_rreq (up_rreq_s),
-    .up_raddr (up_raddr_s),
-    .up_rdata (up_rdata_s),
-    .up_rack (up_rack_s));
+    .s_axi_aclk (s_axi_aclk),
+    .s_axi_aresetn (s_axi_aresetn),
+    .s_axi_awvalid (s_axi_awvalid),
+    .s_axi_awready (s_axi_awready),
+    .s_axi_awaddr (s_axi_awaddr),
+    .s_axi_awprot (s_axi_awprot),
+    .s_axi_wvalid (s_axi_wvalid),
+    .s_axi_wready (s_axi_wready),
+    .s_axi_wdata (s_axi_wdata),
+    .s_axi_wstrb (s_axi_wstrb),
+    .s_axi_bvalid (s_axi_bvalid),
+    .s_axi_bready (s_axi_bready),
+    .s_axi_bresp (s_axi_bresp),
+    .s_axi_arvalid (s_axi_arvalid),
+    .s_axi_arready (s_axi_arready),
+    .s_axi_araddr (s_axi_araddr),
+    .s_axi_arprot (s_axi_arprot),
+    .s_axi_rvalid (s_axi_rvalid),
+    .s_axi_rready (s_axi_rready),
+    .s_axi_rdata (s_axi_rdata),
+    .s_axi_rresp (s_axi_rresp)
+);
 
 endmodule
 
