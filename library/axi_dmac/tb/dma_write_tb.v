@@ -37,12 +37,18 @@
 
 module dmac_dma_write_tb;
   parameter VCD_FILE = {`__FILE__,"cd"};
+  parameter WIDTH_DEST = 32;
+  parameter WIDTH_SRC = 32;
+  parameter REQ_LEN_INC = 4;
+  parameter REQ_LEN_INIT = 4;
 
   `include "tb_base.v"
 
+  localparam TRANSFER_ADDR = 32'h80000000;
+
   reg req_valid = 1'b1;
   wire req_ready;
-  reg [23:0] req_length = 'h03;
+  reg [23:0] req_length = REQ_LEN_INIT - 1;
   wire awvalid;
   wire awready;
   wire [31:0] awaddr;
@@ -55,10 +61,10 @@ module dmac_dma_write_tb;
   wire wlast;
   wire wvalid;
   wire wready;
-  wire [3:0] wstrb;
-  wire [31:0] wdata;
+  wire [WIDTH_DEST/8-1:0] wstrb;
+  wire [WIDTH_DEST-1:0] wdata;
 
-  reg [31:0] fifo_wr_din = 'b0;
+  reg [WIDTH_SRC-1:0] fifo_wr_din = 'b0;
   reg fifo_wr_rq = 'b0;
   wire fifo_wr_xfer_req;
 
@@ -69,12 +75,12 @@ module dmac_dma_write_tb;
   always @(posedge clk) begin
     if (reset != 1'b1 && req_ready == 1'b1) begin
       req_valid <= 1'b1;
-      req_length <= req_length + 'h4;
+      req_length <= req_length + REQ_LEN_INC;
     end
   end
 
   axi_write_slave #(
-    .DATA_WIDTH(32)
+    .DATA_WIDTH(WIDTH_DEST)
   ) i_write_slave (
     .clk(clk),
     .reset(reset),
@@ -100,8 +106,8 @@ module dmac_dma_write_tb;
   );
 
   axi_dmac_transfer #(
-    .DMA_DATA_WIDTH_SRC(32),
-    .DMA_DATA_WIDTH_DEST(32)
+    .DMA_DATA_WIDTH_SRC(WIDTH_SRC),
+    .DMA_DATA_WIDTH_DEST(WIDTH_DEST)
   ) i_transfer (
     .m_dest_axi_aclk (clk),
     .m_dest_axi_aresetn(resetn),
@@ -136,7 +142,8 @@ module dmac_dma_write_tb;
 
     .req_valid(req_valid),
     .req_ready(req_ready),
-    .req_dest_address(30'h7e09000),
+    .req_dest_address(TRANSFER_ADDR[31:$clog2(WIDTH_DEST/8)]),
+    .req_src_address(TRANSFER_ADDR[31:$clog2(WIDTH_SRC/8)]),
     .req_x_length(req_length),
     .req_y_length(24'h00),
     .req_dest_stride(24'h00),
@@ -151,13 +158,19 @@ module dmac_dma_write_tb;
     .fifo_wr_xfer_req(fifo_wr_xfer_req)
   );
 
-  always @(posedge clk) begin
-    if (reset) begin
-      fifo_wr_din <= 'b0;
+  always @(posedge clk) begin: fifo_wr
+    integer i;
+
+    if (reset == 1'b1) begin
+      for (i = 0; i < WIDTH_SRC; i = i + 8) begin
+        fifo_wr_din[i+:8] <= i / 8;
+      end
       fifo_wr_rq <= 'b0;
     end else begin
-      if (fifo_wr_en) begin
-        fifo_wr_din <= fifo_wr_din + 'h4;
+      if (fifo_wr_en == 1'b1) begin
+        for (i = 0; i < WIDTH_SRC; i = i + 8) begin
+          fifo_wr_din[i+:8] <= fifo_wr_din[i+:8] + WIDTH_SRC / 8;
+        end
       end
       fifo_wr_rq <= (($random % 4) == 0);
     end

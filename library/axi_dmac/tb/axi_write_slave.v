@@ -115,15 +115,30 @@ always @(posedge clk) begin
   end
 end
 
-always @(posedge clk) begin
+integer byte_count;
+
+always @(*) begin: count
+  integer i;
+  byte_count = 0;
+  for (i = 0; i < DATA_WIDTH / 8; i = i + 1) begin
+    byte_count = byte_count + wstrb[i];
+  end
+end
+
+always @(posedge clk) begin: gen_data_cmp
+  integer i;
   if (reset) begin
-    data_cmp <= 'h00;
+    for (i = 0; i < DATA_WIDTH; i = i + 8) begin
+      data_cmp[i+:8] <= i/8;
+    end
     failed <= 'b0;
   end else if (wvalid & wready) begin
-    if (data_cmp !== wdata) begin
-      failed <= 1'b1;
+    for (i = 0; i < DATA_WIDTH; i = i + 8) begin
+      if (data_cmp[i+:8] !== wdata[i+:8] && wstrb[i/8] == 1'b1) begin
+        failed <= 1'b1;
+      end
+      data_cmp[i+:8] <= data_cmp[i+:8] + byte_count;
     end
-    data_cmp <= data_cmp + 'h4;
   end
 end
 

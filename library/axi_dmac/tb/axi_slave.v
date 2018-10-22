@@ -36,6 +36,7 @@
 `timescale 1ns/100ps
 
 module axi_slave #(
+  parameter DATA_WIDTH = 32,
   parameter ACCEPTANCE = 3,
   parameter MIN_LATENCY = 16,
   parameter MAX_LATENCY = 32
@@ -91,7 +92,7 @@ reg [7:0] beat_counter = 'h00;
 
 assign beat_stb = req_fifo_level != 0 && timestamp > req_fifo[req_fifo_rd][71:40];
 assign beat_last = beat_stb ? beat_counter == req_fifo[req_fifo_rd][0+:8] : 1'b0;
-assign beat_addr = req_fifo[req_fifo_rd][8+:32] + beat_counter * 4;
+assign beat_addr = req_fifo[req_fifo_rd][8+:32] + beat_counter * DATA_WIDTH / 8;
 
 always @(posedge clk) begin
   if (reset == 1'b1) begin
