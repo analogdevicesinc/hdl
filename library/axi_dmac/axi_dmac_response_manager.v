@@ -242,7 +242,7 @@ always @(posedge req_clk) begin
   if (req_resetn == 1'b0) begin
     transfer_id <= 'h0;
   end else if ((state == STATE_ACC && req_eot) || do_compl) begin
-    transfer_id <= transfer_id + 1;
+    transfer_id <= transfer_id + 1'b1;
   end
 end
 
@@ -251,9 +251,9 @@ always @(posedge req_clk) begin
   if (req_resetn == 1'b0) begin
     to_complete_count <= 'h0;
   end else if (completion_req_valid & ~do_compl) begin
-    to_complete_count <= to_complete_count + 1;
+    to_complete_count <= to_complete_count + 1'b1;
   end else if (~completion_req_valid & do_compl) begin
-    to_complete_count <= to_complete_count - 1;
+    to_complete_count <= to_complete_count - 1'b1;
   end
 end
 

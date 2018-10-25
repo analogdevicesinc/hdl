@@ -97,7 +97,7 @@ end else begin
       if (last_beat == 1'b1) begin
         count <= 'h0;
       end else begin
-        count <= count + 1;
+        count <= count + 1'b1;
       end
     end
   end
