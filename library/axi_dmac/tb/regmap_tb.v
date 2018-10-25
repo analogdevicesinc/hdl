@@ -54,7 +54,7 @@ module dmac_regmap_tb;
 
   localparam VAL_DBG_SRC_ADDR = 32'h76543210;
   localparam VAL_DBG_DEST_ADDR = 32'hfedcba98;
-  localparam VAL_DBG_STATUS = 8'ha5;
+  localparam VAL_DBG_STATUS = 12'h5a5;
   localparam VAL_DBG_IDS0 = 32'h01234567;
   localparam VAL_DBG_IDS1 = 32'h89abcdef;
 
