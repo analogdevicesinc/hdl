@@ -89,7 +89,10 @@ module axi_ad9250 #(
     .ID (ID),
     .NUM_LANES (2),
     .NUM_CHANNELS (2),
-    .CHANNEL_WIDTH (14),
+    .SAMPLES_PER_FRAME (1),
+    .CONVERTER_RESOLUTION (14),
+    .BITS_PER_SAMPLE (16),
+    .OCTETS_PER_BEAT (4),
     .TWOS_COMPLEMENT (1)
   ) i_adc_jesd204 (
     .link_clk (rx_clk),
