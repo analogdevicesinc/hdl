@@ -90,7 +90,10 @@ module axi_ad6676 #(
     .ID (ID),
     .NUM_LANES (NUM_LANES),
     .NUM_CHANNELS (2),
-    .CHANNEL_WIDTH (16),
+    .SAMPLES_PER_FRAME (1),
+    .CONVERTER_RESOLUTION (16),
+    .BITS_PER_SAMPLE (16),
+    .OCTETS_PER_BEAT (4),
     .TWOS_COMPLEMENT (0)
   ) i_adc_jesd204 (
     .link_clk (rx_clk),

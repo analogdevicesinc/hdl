@@ -15,6 +15,7 @@ set_module_property DISPLAY_NAME axi_ad9680
 add_fileset quartus_synth QUARTUS_SYNTH "" "Quartus Synthesis"
 set_fileset_property quartus_synth TOP_LEVEL axi_ad9680
 add_fileset_file ad_rst.v             VERILOG PATH $ad_hdl_dir/library/common/ad_rst.v
+add_fileset_file ad_perfect_shuffle.v VERILOG PATH $ad_hdl_dir/library/common/ad_perfect_shuffle.v
 add_fileset_file ad_pnmon.v           VERILOG PATH $ad_hdl_dir/library/common/ad_pnmon.v
 add_fileset_file ad_datafmt.v         VERILOG PATH $ad_hdl_dir/library/common/ad_datafmt.v
 add_fileset_file up_axi.v             VERILOG PATH $ad_hdl_dir/library/common/up_axi.v

@@ -87,9 +87,12 @@ module axi_ad9680 #(
 
   ad_ip_jesd204_tpl_adc #(
     .ID (ID),
-    .NUM_CHANNELS (2),
-    .CHANNEL_WIDTH (14),
     .NUM_LANES (4),
+    .NUM_CHANNELS (2),
+    .SAMPLES_PER_FRAME (1),
+    .CONVERTER_RESOLUTION (14),
+    .BITS_PER_SAMPLE (16),
+    .OCTETS_PER_BEAT (4),
     .TWOS_COMPLEMENT (1)
   ) i_adc_jesd204 (
     .link_clk (rx_clk),
