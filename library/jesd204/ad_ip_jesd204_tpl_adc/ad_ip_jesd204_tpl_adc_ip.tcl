@@ -27,6 +27,7 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 adi_ip_create ad_ip_jesd204_tpl_adc
 adi_ip_files ad_ip_jesd204_tpl_adc [list \
   "$ad_hdl_dir/library/common/ad_rst.v" \
+  "$ad_hdl_dir/library/common/ad_perfect_shuffle.v" \
   "$ad_hdl_dir/library/common/ad_pnmon.v" \
   "$ad_hdl_dir/library/common/ad_datafmt.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
@@ -68,7 +69,10 @@ adi_add_bus_clock "link_clk" "link"
 foreach {p v} {
   "NUM_LANES" "1 2 3 4 8" \
   "NUM_CHANNELS" "1 2 4 6 8" \
-  "CHANNEL_WIDTH" "12 14 16" \
+  "BITS_PER_SAMPLE" "12 16" \
+  "CONVERTER_RESOLUTION" "11 12 16" \
+  "SAMPLES_PER_FRAME" "1 2 3 4 6 8 12 16" \
+  "OCTETS_PER_BEAT" "4 8" \
 } { \
   set_property -dict [list \
     "value_validation_type" "list" \
@@ -87,15 +91,18 @@ set_property -dict [list \
   "display_name" "Core ID" \
 ] $p
 
-set framer_group [ipgui::add_group -name "JESD204 Framer Configuration" -component $cc \
-    -parent $page0 -display_name "JESD204 Framer Cofiguration"]
+set framer_group [ipgui::add_group -name "JESD204 Deframer Configuration" -component $cc \
+    -parent $page0 -display_name "JESD204 Deframer Cofiguration"]
 
 set i 0
 
 foreach {k v} { \
   "NUM_LANES" "Number of Lanes (L)" \
   "NUM_CHANNELS" "Number of Conveters (M)" \
-  "CHANNEL_WIDTH" "Bits per Sample (N')" \
+  "BITS_PER_SAMPLE" "Bits per Sample (N')" \
+  "CONVERTER_RESOLUTION" "Converter Resolution (N)" \
+  "SAMPLES_PER_FRAME" "Samples per Frame (S)" \
+  "OCTETS_PER_BEAT" "Octets per Beat" \
   } { \
   set p [ipgui::get_guiparamspec -name $k -component $cc]
   ipgui::move_param -component $cc -order $i $p -parent $framer_group

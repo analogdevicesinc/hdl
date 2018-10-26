@@ -24,11 +24,16 @@
 `timescale 1ns/100ps
 
 module ad_ip_jesd204_tpl_adc_core #(
-  parameter NUM_CHANNELS = 1,
-  parameter CHANNEL_WIDTH = 14,
   parameter NUM_LANES = 1,
-  parameter TWOS_COMPLEMENT = 1,
-  parameter DATA_PATH_WIDTH = 1
+  parameter NUM_CHANNELS = 1,
+  parameter SAMPLES_PER_FRAME = 1,
+  parameter CONVERTER_RESOLUTION = 14,
+  parameter BITS_PER_SAMPLE = 16,
+  parameter OCTETS_PER_BEAT = 4,
+  parameter DATA_PATH_WIDTH = 1,
+  parameter LINK_DATA_WIDTH = NUM_LANES * OCTETS_PER_BEAT * 8,
+  parameter DMA_DATA_WIDTH = DATA_PATH_WIDTH * 16 * NUM_CHANNELS,
+  parameter TWOS_COMPLEMENT = 1
 ) (
   input clk,
 
@@ -41,18 +46,19 @@ module ad_ip_jesd204_tpl_adc_core #(
   output [NUM_CHANNELS-1:0] pn_oos,
 
   output [NUM_CHANNELS-1:0] adc_valid,
-  output [NUM_LANES*32-1:0] adc_data,
+  output [DMA_DATA_WIDTH-1:0] adc_data,
 
   input link_valid,
   output link_ready,
-  input [3:0] link_sof,
-  input [NUM_LANES*32-1:0] link_data
+  input [OCTETS_PER_BEAT-1:0] link_sof,
+  input [LINK_DATA_WIDTH-1:0] link_data
 );
   // Raw and formated channel data widths
-  localparam CDW_RAW = CHANNEL_WIDTH * DATA_PATH_WIDTH;
+  localparam CDW_RAW = CONVERTER_RESOLUTION * DATA_PATH_WIDTH;
+  localparam ADC_DATA_WIDTH = CDW_RAW * NUM_CHANNELS;
   localparam CDW_FMT = 16 * DATA_PATH_WIDTH;
 
-  wire [NUM_CHANNELS*CHANNEL_WIDTH*DATA_PATH_WIDTH-1:0] raw_data_s;
+  wire [ADC_DATA_WIDTH-1:0] raw_data_s;
 
   assign link_ready = 1'b1;
   assign adc_valid = {NUM_CHANNELS{1'b1}};
@@ -60,7 +66,12 @@ module ad_ip_jesd204_tpl_adc_core #(
   ad_ip_jesd204_tpl_adc_deframer #(
     .NUM_LANES (NUM_LANES),
     .NUM_CHANNELS (NUM_CHANNELS),
-    .CHANNEL_WIDTH (CHANNEL_WIDTH)
+    .BITS_PER_SAMPLE (BITS_PER_SAMPLE),
+    .CONVERTER_RESOLUTION  (CONVERTER_RESOLUTION),
+    .SAMPLES_PER_FRAME (SAMPLES_PER_FRAME),
+    .OCTETS_PER_BEAT (OCTETS_PER_BEAT),
+    .LINK_DATA_WIDTH (LINK_DATA_WIDTH),
+    .ADC_DATA_WIDTH (ADC_DATA_WIDTH)
   ) i_deframer (
     .clk (clk),
     .link_sof (link_sof),
@@ -72,8 +83,8 @@ module ad_ip_jesd204_tpl_adc_core #(
   genvar i;
   for (i = 0; i < NUM_CHANNELS; i = i + 1) begin: g_channel
     ad_ip_jesd204_tpl_adc_channel #(
-      .CHANNEL_WIDTH (CHANNEL_WIDTH),
       .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
+      .CONVERTER_RESOLUTION (CONVERTER_RESOLUTION),
       .TWOS_COMPLEMENT (TWOS_COMPLEMENT)
     ) i_channel (
       .clk (clk),

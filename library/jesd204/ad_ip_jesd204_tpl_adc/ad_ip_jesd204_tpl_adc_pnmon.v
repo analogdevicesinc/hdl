@@ -24,14 +24,14 @@
 `timescale 1ns/100ps
 
 module ad_ip_jesd204_tpl_adc_pnmon #(
-  parameter CHANNEL_WIDTH = 16,
+  parameter CONVERTER_RESOLUTION = 16,
   parameter DATA_PATH_WIDTH = 1,
   parameter TWOS_COMPLEMENT = 1
 ) (
   input clk,
 
   // data interface
-  input [CHANNEL_WIDTH*DATA_PATH_WIDTH-1:0] data,
+  input [CONVERTER_RESOLUTION*DATA_PATH_WIDTH-1:0] data,
 
   // pn out of sync and error
   output pn_oos,
@@ -41,7 +41,7 @@ module ad_ip_jesd204_tpl_adc_pnmon #(
   input [3:0] pn_seq_sel
 );
 
-  localparam DW = DATA_PATH_WIDTH*CHANNEL_WIDTH-1;
+  localparam DW = DATA_PATH_WIDTH*CONVERTER_RESOLUTION-1;
 
   // Max width of largest PN and data width
   localparam PN_W = DW > 22 ? DW : 22;
@@ -78,10 +78,10 @@ module ad_ip_jesd204_tpl_adc_pnmon #(
   generate
   genvar i;
   for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: g_pn_swizzle
-    localparam src_lsb = i * CHANNEL_WIDTH;
-    localparam src_msb = src_lsb + CHANNEL_WIDTH - 1;
-    localparam dst_lsb = (DATA_PATH_WIDTH - i - 1) * CHANNEL_WIDTH;
-    localparam dst_msb = dst_lsb + CHANNEL_WIDTH - 1;
+    localparam src_lsb = i * CONVERTER_RESOLUTION;
+    localparam src_msb = src_lsb + CONVERTER_RESOLUTION - 1;
+    localparam dst_lsb = (DATA_PATH_WIDTH - i - 1) * CONVERTER_RESOLUTION;
+    localparam dst_msb = dst_lsb + CONVERTER_RESOLUTION - 1;
 
     assign pn_data_in_s[dst_msb] = tc ^ data[src_msb];
     assign pn_data_in_s[dst_msb-1:dst_lsb] = data[src_msb-1:src_lsb];

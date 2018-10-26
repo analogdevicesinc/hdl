@@ -6,6 +6,7 @@
 LIBRARY_NAME := ad_ip_jesd204_tpl_adc
 
 GENERIC_DEPS += ../../common/ad_datafmt.v
+GENERIC_DEPS += ../../common/ad_perfect_shuffle.v
 GENERIC_DEPS += ../../common/ad_pnmon.v
 GENERIC_DEPS += ../../common/ad_rst.v
 GENERIC_DEPS += ../../common/ad_xcvr_rx_if.v
