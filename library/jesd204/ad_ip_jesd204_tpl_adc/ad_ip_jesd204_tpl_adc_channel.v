@@ -24,13 +24,13 @@
 `timescale 1ns/100ps
 
 module ad_ip_jesd204_tpl_adc_channel #(
-  parameter CHANNEL_WIDTH = 14,
+  parameter CONVERTER_RESOLUTION = 14,
   parameter DATA_PATH_WIDTH = 2,
   parameter TWOS_COMPLEMENT = 1
 ) (
   input clk,
 
-  input [CHANNEL_WIDTH*DATA_PATH_WIDTH-1:0] raw_data,
+  input [CONVERTER_RESOLUTION*DATA_PATH_WIDTH-1:0] raw_data,
 
   output [16*DATA_PATH_WIDTH-1:0] fmt_data,
 
@@ -47,7 +47,7 @@ module ad_ip_jesd204_tpl_adc_channel #(
   // instantiations
 
   ad_ip_jesd204_tpl_adc_pnmon #(
-    .CHANNEL_WIDTH (CHANNEL_WIDTH),
+    .CONVERTER_RESOLUTION (CONVERTER_RESOLUTION),
     .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
     .TWOS_COMPLEMENT (TWOS_COMPLEMENT)
   ) i_pnmon (
@@ -63,12 +63,12 @@ module ad_ip_jesd204_tpl_adc_channel #(
   genvar n;
   for (n = 0; n < DATA_PATH_WIDTH; n = n + 1) begin: g_datafmt
     ad_datafmt #(
-      .DATA_WIDTH (CHANNEL_WIDTH)
+      .DATA_WIDTH (CONVERTER_RESOLUTION)
     ) i_ad_datafmt (
       .clk (clk),
 
       .valid (1'b1),
-      .data (raw_data[n*CHANNEL_WIDTH+:CHANNEL_WIDTH]),
+      .data (raw_data[n*CONVERTER_RESOLUTION+:CONVERTER_RESOLUTION]),
       .valid_out (),
       .data_out (fmt_data[n*16+:16]),
 

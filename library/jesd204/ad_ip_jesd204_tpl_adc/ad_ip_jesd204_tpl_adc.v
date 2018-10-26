@@ -25,18 +25,21 @@
 
 module ad_ip_jesd204_tpl_adc #(
   parameter ID = 0,
-  parameter NUM_CHANNELS = 1,
-  parameter CHANNEL_WIDTH = 14,
   parameter NUM_LANES = 1,
+  parameter NUM_CHANNELS = 4,
+  parameter SAMPLES_PER_FRAME = 1,
+  parameter CONVERTER_RESOLUTION = 14,
+  parameter BITS_PER_SAMPLE = 16,
+  parameter OCTETS_PER_BEAT = 4,
   parameter TWOS_COMPLEMENT = 1
 ) (
   // jesd interface
   // link_clk is (line-rate/40)
   input link_clk,
 
-  input [3:0] link_sof,
+  input [OCTETS_PER_BEAT-1:0] link_sof,
   input link_valid,
-  input [NUM_LANES*32-1:0] link_data,
+  input [NUM_LANES*8*OCTETS_PER_BEAT-1:0] link_data,
   output link_ready,
 
   // dma interface
@@ -44,7 +47,7 @@ module ad_ip_jesd204_tpl_adc #(
   output [NUM_CHANNELS-1:0] enable,
 
   output [NUM_CHANNELS-1:0] adc_valid,
-  output [NUM_LANES*32-1:0] adc_data,
+  output [NUM_LANES*8*OCTETS_PER_BEAT-1:0] adc_data,
   input adc_dovf,
 
   // axi interface
@@ -78,8 +81,9 @@ module ad_ip_jesd204_tpl_adc #(
 );
 
   // Number of samples per channel that are processed in parallel.
-  // Assumes 2 octets per sample.
-  localparam DATA_PATH_WIDTH = 2 * NUM_LANES / NUM_CHANNELS;
+  localparam DATA_PATH_WIDTH = OCTETS_PER_BEAT * 8 * NUM_LANES / NUM_CHANNELS / BITS_PER_SAMPLE;
+  localparam LINK_DATA_WIDTH = NUM_LANES * OCTETS_PER_BEAT * 8;
+  localparam DMA_DATA_WIDTH = 16 * DATA_PATH_WIDTH * NUM_CHANNELS;
 
   wire [NUM_CHANNELS-1:0] dfmt_enable_s;
   wire [NUM_CHANNELS-1:0] dfmt_sign_extend_s;
@@ -133,9 +137,14 @@ module ad_ip_jesd204_tpl_adc #(
   );
 
   ad_ip_jesd204_tpl_adc_core #(
-    .NUM_CHANNELS (NUM_CHANNELS),
-    .CHANNEL_WIDTH (CHANNEL_WIDTH),
     .NUM_LANES (NUM_LANES),
+    .NUM_CHANNELS (NUM_CHANNELS),
+    .BITS_PER_SAMPLE (BITS_PER_SAMPLE),
+    .CONVERTER_RESOLUTION  (CONVERTER_RESOLUTION),
+    .SAMPLES_PER_FRAME (SAMPLES_PER_FRAME),
+    .OCTETS_PER_BEAT (OCTETS_PER_BEAT),
+    .LINK_DATA_WIDTH (LINK_DATA_WIDTH),
+    .DMA_DATA_WIDTH (DMA_DATA_WIDTH),
     .TWOS_COMPLEMENT (TWOS_COMPLEMENT),
     .DATA_PATH_WIDTH (DATA_PATH_WIDTH)
   ) i_core (
