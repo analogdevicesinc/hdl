@@ -100,7 +100,11 @@ assign sdo_data_valid = spi_active;
 assign sync_ready = 1'b1;
 
 assign offload_sdi_valid = sdi_data_valid;
-assign sdi_data_ready = offload_sdi_ready;
+
+// we don't want to block the SDI interface after disabling the module
+// so just assert the SDI_READY if the sink module (DMA) is disabled
+assign sdi_data_ready = (spi_enable) ? offload_sdi_ready : 1'b1;
+
 assign offload_sdi_data = sdi_data;
 
 assign cmd = cmd_mem[spi_cmd_rd_addr];
