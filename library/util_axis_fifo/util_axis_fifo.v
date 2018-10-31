@@ -126,6 +126,7 @@ end else begin
   wire [ADDRESS_WIDTH-1:0] m_axis_raddr;
   wire _m_axis_ready;
   wire _m_axis_valid;
+  wire [ADDRESS_WIDTH:0] _m_axis_level;
 
   wire s_mem_write;
   wire m_mem_read;
@@ -158,7 +159,7 @@ end else begin
       .m_axis_ready(_m_axis_ready),
       .m_axis_valid(_m_axis_valid),
       .m_axis_raddr(m_axis_raddr),
-      .m_axis_level(m_axis_level),
+      .m_axis_level(_m_axis_level),
 
       .s_axis_aclk(s_axis_aclk),
       .s_axis_aresetn(s_axis_aresetn),
@@ -188,6 +189,10 @@ end else begin
 
     assign _m_axis_ready = ~valid || m_axis_ready;
     assign m_axis_valid = valid;
+    // the util_axis_fifo is functioning in 'first write fall through' mode,
+    // which means that we need to assure that the value of the level reflects
+    // the actual FIFO level plus the available data, which sits on the bus
+    assign m_axis_level =  (m_axis_valid) ? _m_axis_level + 1'b1 : _m_axis_level;
 
   end else begin
 
