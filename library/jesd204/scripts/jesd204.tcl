@@ -195,3 +195,223 @@ proc adi_axi_jesd204_rx_create {ip_name num_lanes {num_links 1}} {
 
   return -options $resultoptions $resulttext
 }
+
+
+
+
+#                                       L            M                 S                 N & NP
+proc adi_tpl_jesd204_tx_create {ip_name num_of_lanes num_of_converters samples_per_frame sample_width} {
+
+  set link_layer_bytes_per_beat 4
+
+  if {$num_of_lanes < 1 || $num_of_lanes > 8} {
+    return -code 1 "ERROR: Invalid number of JESD204B lanes. (Supported range 1-8)"
+  }
+  # F = (M * N * S) / (L * 8)
+  set bytes_per_frame [expr ($num_of_converters * $sample_width * $samples_per_frame) / ($num_of_lanes * 8)];
+  # one beat per lane must accommodate at least one frame
+  set tpl_bytes_per_beat [expr max($bytes_per_frame, $link_layer_bytes_per_beat)]
+
+  # datapath width = L * 8 * TPL_BYTES_PER_BEAT / (M * N)
+  set samples_per_channel [expr ($num_of_lanes * 8 * $tpl_bytes_per_beat) / ($num_of_converters * $sample_width)];
+
+
+  startgroup
+
+  set result [catch {
+
+    create_bd_cell -type hier $ip_name
+
+    # Control interface
+    create_bd_pin -dir I -type clk "${ip_name}/s_axi_aclk"
+    create_bd_pin -dir I -type rst "${ip_name}/s_axi_aresetn"
+    create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 "${ip_name}/s_axi"
+
+    # Interface to link layer
+    create_bd_pin -dir I -type clk "${ip_name}/link_clk"
+    create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:axis_rtl:1.0 "${ip_name}/link"
+
+    # Interface to application layer
+    create_bd_pin -dir I "${ip_name}/dac_dunf"
+    for {set i 0} {$i < $num_of_converters} {incr i} {
+      create_bd_pin -dir O "${ip_name}/dac_enable_${i}"
+      create_bd_pin -dir O "${ip_name}/dac_valid_${i}"
+      create_bd_pin -dir I "${ip_name}/dac_data_${i}"
+    }
+
+    # Generic TPL core
+    ad_ip_instance ad_ip_jesd204_tpl_dac "${ip_name}/tpl_core" [list \
+      NUM_LANES $num_of_lanes \
+      NUM_CHANNELS $num_of_converters \
+      SAMPLES_PER_FRAME $samples_per_frame \
+      CONVERTER_RESOLUTION $sample_width \
+      BITS_PER_SAMPLE $sample_width  \
+      OCTETS_PER_BEAT $tpl_bytes_per_beat \
+     ]
+
+    # Concatenation and slicer cores
+    ad_ip_instance xlconcat "${ip_name}/data_concat" [list \
+      NUM_PORTS $num_of_converters \
+    ]
+
+    for {set i 0} {$i < $num_of_converters} {incr i} {
+      ad_ip_instance xlslice "${ip_name}/enable_slice_${i}" [list \
+        DIN_WIDTH $num_of_converters \
+        DIN_FROM $i \
+        DIN_TO $i \
+      ]
+      ad_ip_instance xlslice "${ip_name}/valid_slice_${i}" [list \
+        DIN_WIDTH $num_of_converters \
+        DIN_FROM $i \
+        DIN_TO $i \
+      ]
+    }
+
+    # Create connections
+    # TPL configuration interface
+    ad_connect "${ip_name}/s_axi_aclk" "${ip_name}/tpl_core/s_axi_aclk"
+    ad_connect "${ip_name}/s_axi_aresetn" "${ip_name}/tpl_core/s_axi_aresetn"
+    ad_connect "${ip_name}/s_axi" "${ip_name}/tpl_core/s_axi"
+
+    # TPL - link layer
+    ad_connect ${ip_name}/tpl_core/link_clk ${ip_name}/link_clk
+    ad_connect ${ip_name}/tpl_core/link ${ip_name}/link
+
+    # TPL - app layer
+    for {set i 0} {$i < $num_of_converters} {incr i} {
+      ad_connect ${ip_name}/tpl_core/enable ${ip_name}/enable_slice_$i/Din
+      ad_connect ${ip_name}/tpl_core/dac_valid ${ip_name}/valid_slice_$i/Din
+
+      ad_connect ${ip_name}/enable_slice_$i/Dout ${ip_name}/dac_enable_$i
+      ad_connect ${ip_name}/valid_slice_$i/Dout ${ip_name}/dac_valid_$i
+      ad_connect ${ip_name}/dac_data_$i ${ip_name}/data_concat/In$i
+
+    }
+    ad_connect ${ip_name}/data_concat/dout ${ip_name}/tpl_core/dac_ddata
+    ad_connect ${ip_name}/dac_dunf ${ip_name}/tpl_core/dac_dunf
+
+  } resulttext resultoptions]
+
+  dict unset resultoptions -level
+
+  endgroup
+
+  if {$result != 0} {
+    undo -quiet
+  }
+
+  return -options $resultoptions $resulttext
+}
+
+
+#                                       L            M                 S                 N & NP
+proc adi_tpl_jesd204_rx_create {ip_name num_of_lanes num_of_converters samples_per_frame sample_width} {
+
+  set link_layer_bytes_per_beat 4
+
+  if {$num_of_lanes < 1 || $num_of_lanes > 8} {
+    return -code 1 "ERROR: Invalid number of JESD204B lanes. (Supported range 1-8)"
+  }
+  # F = (M * N * S) / (L * 8)
+  set bytes_per_frame [expr ($num_of_converters * $sample_width * $samples_per_frame) / ($num_of_lanes * 8)];
+  # one beat per lane must accommodate at least one frame
+  set tpl_bytes_per_beat [expr max($bytes_per_frame, $link_layer_bytes_per_beat)]
+
+  # datapath width = L * 8 * TPL_BYTES_PER_BEAT / (M * N)
+  set samples_per_channel [expr ($num_of_lanes * 8 * $tpl_bytes_per_beat) / ($num_of_converters * $sample_width)];
+
+
+  startgroup
+
+  set result [catch {
+
+    create_bd_cell -type hier $ip_name
+
+    # Control interface
+    create_bd_pin -dir I -type clk "${ip_name}/s_axi_aclk"
+    create_bd_pin -dir I -type rst "${ip_name}/s_axi_aresetn"
+    create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 "${ip_name}/s_axi"
+
+    # Interface to link layer
+    create_bd_pin -dir I -type clk "${ip_name}/link_clk"
+    #create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:axis_rtl:1.0 "${ip_name}/link"
+    create_bd_pin -dir I "${ip_name}/link_sof"
+    create_bd_pin -dir I "${ip_name}/link_valid"
+    create_bd_pin -dir I "${ip_name}/link_data"
+
+    # Interface to application layer
+    create_bd_pin -dir I "${ip_name}/adc_dovf"
+    for {set i 0} {$i < $num_of_converters} {incr i} {
+      create_bd_pin -dir O "${ip_name}/adc_enable_${i}"
+      create_bd_pin -dir O "${ip_name}/adc_valid_${i}"
+      create_bd_pin -dir O "${ip_name}/adc_data_${i}"
+    }
+
+    # Generic TPL core
+    ad_ip_instance ad_ip_jesd204_tpl_adc "${ip_name}/tpl_core" [list \
+      NUM_LANES $num_of_lanes \
+      NUM_CHANNELS $num_of_converters \
+      SAMPLES_PER_FRAME $samples_per_frame \
+      CONVERTER_RESOLUTION $sample_width \
+      BITS_PER_SAMPLE $sample_width  \
+      OCTETS_PER_BEAT $tpl_bytes_per_beat \
+     ]
+
+    # Slicer cores
+    for {set i 0} {$i < $num_of_converters} {incr i} {
+      ad_ip_instance xlslice ${ip_name}/data_slice_$i [list \
+        DIN_WIDTH [expr $sample_width*$samples_per_channel*$num_of_converters] \
+        DIN_FROM [expr $sample_width*$samples_per_channel*($i+1)-1] \
+        DIN_TO [expr $sample_width*$samples_per_channel*$i] \
+      ]
+
+      ad_ip_instance xlslice "${ip_name}/enable_slice_${i}" [list \
+        DIN_WIDTH $num_of_converters \
+        DIN_FROM $i \
+        DIN_TO $i \
+      ]
+      ad_ip_instance xlslice "${ip_name}/valid_slice_${i}" [list \
+        DIN_WIDTH $num_of_converters \
+        DIN_FROM $i \
+        DIN_TO $i \
+      ]
+    }
+
+    # Create connections
+    # TPL configuration interface
+    ad_connect "${ip_name}/s_axi_aclk" "${ip_name}/tpl_core/s_axi_aclk"
+    ad_connect "${ip_name}/s_axi_aresetn" "${ip_name}/tpl_core/s_axi_aresetn"
+    ad_connect "${ip_name}/s_axi" "${ip_name}/tpl_core/s_axi"
+
+    # TPL - link layer
+    ad_connect ${ip_name}/tpl_core/link_clk ${ip_name}/link_clk
+    #ad_connect ${ip_name}/tpl_core/link ${ip_name}/link
+    ad_connect ${ip_name}/tpl_core/link_sof ${ip_name}/link_sof
+    ad_connect ${ip_name}/tpl_core/link_data ${ip_name}/link_data
+    ad_connect ${ip_name}/tpl_core/link_valid ${ip_name}/link_valid
+
+    # TPL - app layer
+    for {set i 0} {$i < $num_of_converters} {incr i} {
+      ad_connect ${ip_name}/tpl_core/adc_data ${ip_name}/data_slice_$i/Din
+      ad_connect ${ip_name}/tpl_core/enable ${ip_name}/enable_slice_$i/Din
+      ad_connect ${ip_name}/tpl_core/adc_valid ${ip_name}/valid_slice_$i/Din
+
+      ad_connect ${ip_name}/data_slice_$i/Dout ${ip_name}/adc_data_$i
+      ad_connect ${ip_name}/enable_slice_$i/Dout ${ip_name}/adc_enable_$i
+      ad_connect ${ip_name}/valid_slice_$i/Dout ${ip_name}/adc_valid_$i
+
+    }
+    ad_connect ${ip_name}/adc_dovf ${ip_name}/tpl_core/adc_dovf
+
+  } resulttext resultoptions]
+
+  dict unset resultoptions -level
+
+  endgroup
+
+  if {$result != 0} {
+    undo -quiet
+  }
+
+  return -options $resultoptions $resulttext
+}
