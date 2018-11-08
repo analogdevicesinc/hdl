@@ -37,6 +37,7 @@ for {set n 0} {$n < 16} {incr n} {
     "enb                 up_es_enb_${n}         "\
     "addr                up_es_addr_${n}        "\
     "wr                  up_es_wr_${n}          "\
+    "reset               up_es_reset_${n}       "\
     "wdata               up_es_wdata_${n}       "\
     "rdata               up_es_rdata_${n}       "\
     "ready               up_es_ready_${n}       "]
