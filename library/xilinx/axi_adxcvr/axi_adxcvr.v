@@ -63,6 +63,7 @@ module axi_adxcvr #(
   output          up_es_enb_0,
   output  [11:0]  up_es_addr_0,
   output          up_es_wr_0,
+  output          up_es_reset_0,
   output  [15:0]  up_es_wdata_0,
   input   [15:0]  up_es_rdata_0,
   input           up_es_ready_0,
@@ -88,6 +89,7 @@ module axi_adxcvr #(
   output          up_es_enb_1,
   output  [11:0]  up_es_addr_1,
   output          up_es_wr_1,
+  output          up_es_reset_1,
   output  [15:0]  up_es_wdata_1,
   input   [15:0]  up_es_rdata_1,
   input           up_es_ready_1,
@@ -113,6 +115,7 @@ module axi_adxcvr #(
   output          up_es_enb_2,
   output  [11:0]  up_es_addr_2,
   output          up_es_wr_2,
+  output          up_es_reset_2,
   output  [15:0]  up_es_wdata_2,
   input   [15:0]  up_es_rdata_2,
   input           up_es_ready_2,
@@ -138,6 +141,7 @@ module axi_adxcvr #(
   output          up_es_enb_3,
   output  [11:0]  up_es_addr_3,
   output          up_es_wr_3,
+  output          up_es_reset_3,
   output  [15:0]  up_es_wdata_3,
   input   [15:0]  up_es_rdata_3,
   input           up_es_ready_3,
@@ -170,6 +174,7 @@ module axi_adxcvr #(
   output          up_es_enb_4,
   output  [11:0]  up_es_addr_4,
   output          up_es_wr_4,
+  output          up_es_reset_4,
   output  [15:0]  up_es_wdata_4,
   input   [15:0]  up_es_rdata_4,
   input           up_es_ready_4,
@@ -195,6 +200,7 @@ module axi_adxcvr #(
   output          up_es_enb_5,
   output  [11:0]  up_es_addr_5,
   output          up_es_wr_5,
+  output          up_es_reset_5,
   output  [15:0]  up_es_wdata_5,
   input   [15:0]  up_es_rdata_5,
   input           up_es_ready_5,
@@ -220,6 +226,7 @@ module axi_adxcvr #(
   output          up_es_enb_6,
   output  [11:0]  up_es_addr_6,
   output          up_es_wr_6,
+  output          up_es_reset_6,
   output  [15:0]  up_es_wdata_6,
   input   [15:0]  up_es_rdata_6,
   input           up_es_ready_6,
@@ -245,6 +252,7 @@ module axi_adxcvr #(
   output          up_es_enb_7,
   output  [11:0]  up_es_addr_7,
   output          up_es_wr_7,
+  output          up_es_reset_7,
   output  [15:0]  up_es_wdata_7,
   input   [15:0]  up_es_rdata_7,
   input           up_es_ready_7,
@@ -277,6 +285,7 @@ module axi_adxcvr #(
   output          up_es_enb_8,
   output  [11:0]  up_es_addr_8,
   output          up_es_wr_8,
+  output          up_es_reset_8,
   output  [15:0]  up_es_wdata_8,
   input   [15:0]  up_es_rdata_8,
   input           up_es_ready_8,
@@ -302,6 +311,7 @@ module axi_adxcvr #(
   output          up_es_enb_9,
   output  [11:0]  up_es_addr_9,
   output          up_es_wr_9,
+  output          up_es_reset_9,
   output  [15:0]  up_es_wdata_9,
   input   [15:0]  up_es_rdata_9,
   input           up_es_ready_9,
@@ -327,6 +337,7 @@ module axi_adxcvr #(
   output          up_es_enb_10,
   output  [11:0]  up_es_addr_10,
   output          up_es_wr_10,
+  output          up_es_reset_10,
   output  [15:0]  up_es_wdata_10,
   input   [15:0]  up_es_rdata_10,
   input           up_es_ready_10,
@@ -352,6 +363,7 @@ module axi_adxcvr #(
   output          up_es_enb_11,
   output  [11:0]  up_es_addr_11,
   output          up_es_wr_11,
+  output          up_es_reset_11,
   output  [15:0]  up_es_wdata_11,
   input   [15:0]  up_es_rdata_11,
   input           up_es_ready_11,
@@ -384,6 +396,7 @@ module axi_adxcvr #(
   output          up_es_enb_12,
   output  [11:0]  up_es_addr_12,
   output          up_es_wr_12,
+  output          up_es_reset_12,
   output  [15:0]  up_es_wdata_12,
   input   [15:0]  up_es_rdata_12,
   input           up_es_ready_12,
@@ -409,6 +422,7 @@ module axi_adxcvr #(
   output          up_es_enb_13,
   output  [11:0]  up_es_addr_13,
   output          up_es_wr_13,
+  output          up_es_reset_13,
   output  [15:0]  up_es_wdata_13,
   input   [15:0]  up_es_rdata_13,
   input           up_es_ready_13,
@@ -434,6 +448,7 @@ module axi_adxcvr #(
   output          up_es_enb_14,
   output  [11:0]  up_es_addr_14,
   output          up_es_wr_14,
+  output          up_es_reset_14,
   output  [15:0]  up_es_wdata_14,
   input   [15:0]  up_es_rdata_14,
   input           up_es_ready_14,
@@ -459,6 +474,7 @@ module axi_adxcvr #(
   output          up_es_enb_15,
   output  [11:0]  up_es_addr_15,
   output          up_es_wr_15,
+  output          up_es_reset_15,
   output  [15:0]  up_es_wdata_15,
   input   [15:0]  up_es_rdata_15,
   input           up_es_ready_15,
@@ -678,6 +694,24 @@ module axi_adxcvr #(
   wire    [ 9:0]  up_raddr;
   wire    [31:0]  up_rdata;
   wire            up_rack;
+  wire    [15:0]  up_es_reset;
+
+  assign  up_es_reset_0 = up_es_reset[0];
+  assign  up_es_reset_1 = up_es_reset[1];
+  assign  up_es_reset_2 = up_es_reset[2];
+  assign  up_es_reset_3 = up_es_reset[3];
+  assign  up_es_reset_4 = up_es_reset[4];
+  assign  up_es_reset_5 = up_es_reset[5];
+  assign  up_es_reset_6 = up_es_reset[6];
+  assign  up_es_reset_7 = up_es_reset[7];
+  assign  up_es_reset_8 = up_es_reset[8];
+  assign  up_es_reset_9 = up_es_reset[9];
+  assign  up_es_reset_10 = up_es_reset[10];
+  assign  up_es_reset_11 = up_es_reset[11];
+  assign  up_es_reset_12 = up_es_reset[12];
+  assign  up_es_reset_13 = up_es_reset[13];
+  assign  up_es_reset_14 = up_es_reset[14];
+  assign  up_es_reset_15 = up_es_reset[15];
 
   // channel broadcast
 
@@ -1859,6 +1893,7 @@ module axi_adxcvr #(
     .up_es_sel (up_es_sel),
     .up_es_req (up_es_req),
     .up_es_ack (up_es_ack),
+    .up_es_reset (up_es_reset),
     .up_es_pscale (up_es_pscale),
     .up_es_vrange (up_es_vrange),
     .up_es_vstep (up_es_vstep),

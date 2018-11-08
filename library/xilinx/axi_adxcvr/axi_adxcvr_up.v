@@ -87,6 +87,7 @@ module axi_adxcvr_up #(
 
   output  [ 7:0]  up_es_sel,
   output          up_es_req,
+  output  [15:0]  up_es_reset,
   input           up_es_ack,
   output  [ 4:0]  up_es_pscale,
   output  [ 1:0]  up_es_vrange,
@@ -163,6 +164,7 @@ module axi_adxcvr_up #(
   reg             up_ies_status = 'd0;
   reg             up_rreq_d = 'd0;
   reg     [31:0]  up_rdata_d = 'd0;
+  reg     [15:0]  up_es_reset = 'd0;
 
   // internal signals
 
@@ -423,6 +425,7 @@ module axi_adxcvr_up #(
       up_ies_hoffset_step <= 'd0;
       up_ies_start_addr <= 'd0;
       up_ies_status <= 'd0;
+      up_es_reset <= 'd0;
     end else begin
       if ((up_wreq == 1'b1) && (up_waddr == 10'h020)) begin
         up_ies_sel <= up_wdata[7:0];
@@ -455,6 +458,9 @@ module axi_adxcvr_up #(
         up_ies_status <= 1'b1;
       end else if ((up_wreq == 1'b1) && (up_waddr == 10'h02e)) begin
         up_ies_status <= up_ies_status & ~up_wdata[0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 10'h02f)) begin
+        up_es_reset <= up_wdata[15:0];
       end
     end
   end
@@ -512,6 +518,7 @@ module axi_adxcvr_up #(
           10'h02c: up_rdata_d <= {20'd0, up_ies_hoffset_step};
           10'h02d: up_rdata_d <= up_ies_start_addr;
           10'h02e: up_rdata_d <= {31'd0, up_es_status};
+          10'h02f: up_rdata_d <= {16'd0, up_es_reset};
           10'h030: up_rdata_d <= up_tx_diffctrl;
           10'h031: up_rdata_d <= up_tx_postcursor;
           10'h032: up_rdata_d <= up_tx_precursor;

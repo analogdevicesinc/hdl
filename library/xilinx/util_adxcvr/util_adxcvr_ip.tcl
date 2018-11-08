@@ -161,6 +161,7 @@ for {set n 0} {$n < 16} {incr n} {
     "wr                  up_es_wr_${n}          "\
     "wdata               up_es_wdata_${n}       "\
     "rdata               up_es_rdata_${n}       "\
+    "reset               up_es_reset_${n}       "\
     "ready               up_es_ready_${n}       "]
 
   adi_if_infer_bus analog.com:interface:if_xcvr_ch slave up_rx_${n} [list \
