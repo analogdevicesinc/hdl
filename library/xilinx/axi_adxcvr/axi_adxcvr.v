@@ -48,8 +48,8 @@ module axi_adxcvr #(
   parameter           LPM_OR_DFE_N = 1,
   parameter   [ 2:0]  RATE = 3'd0,
   parameter   [ 3:0]  TX_DIFFCTRL = 4'd8,
-  parameter   [ 4:0]  TX_POSTCURSOR = 3'd0,
-  parameter   [ 4:0]  TX_PRECURSOR = 3'd0,
+  parameter   [ 4:0]  TX_POSTCURSOR = 5'd0,
+  parameter   [ 4:0]  TX_PRECURSOR = 5'd0,
   parameter   [ 1:0]  SYS_CLK_SEL = 2'd3,
   parameter   [ 2:0]  OUT_CLK_SEL = 3'd4) (
 
