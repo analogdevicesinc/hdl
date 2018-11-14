@@ -296,9 +296,11 @@ wire src_dest_valid_hs_masked;
 wire src_dest_ready_hs;
 
 wire req_rewind_req_valid;
+wire req_rewind_req_ready;
 wire [ID_WIDTH+3-1:0] req_rewind_req_data;
 
 wire completion_req_valid;
+wire completion_req_ready;
 wire completion_req_last;
 wire [1:0] completion_transfer_id;
 
@@ -772,7 +774,7 @@ util_axis_fifo #(
   .m_axis_aclk(req_clk),
   .m_axis_aresetn(req_resetn),
   .m_axis_valid(req_rewind_req_valid),
-  .m_axis_ready(1'b1),
+  .m_axis_ready(req_rewind_req_ready),
   .m_axis_data(req_rewind_req_data),
   .m_axis_level()
 );
@@ -1137,12 +1139,14 @@ dmac_request_generator #(
   .response_id(response_id),
 
   .rewind_req_valid(req_rewind_req_valid),
+  .rewind_req_ready(req_rewind_req_ready),
   .rewind_req_data(req_rewind_req_data),
   .rewind_state(rewind_state),
 
   .abort_req(abort_req),
 
   .completion_req_valid(completion_req_valid),
+  .completion_req_ready(completion_req_ready),
   .completion_req_last(completion_req_last),
   .completion_transfer_id(completion_transfer_id),
 
@@ -1182,6 +1186,7 @@ axi_dmac_response_manager #(
   .response_ready(response_ready),
 
   .completion_req_valid(completion_req_valid),
+  .completion_req_ready(completion_req_ready),
   .completion_req_last(completion_req_last),
   .completion_transfer_id(completion_transfer_id)
 
