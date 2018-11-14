@@ -66,6 +66,7 @@ module axi_dmac_response_manager #(
 
   // Interface to requester side
   input completion_req_valid,
+  output reg completion_req_ready = 1'b1,
   input completion_req_last,
   input [1:0] completion_transfer_id
 );
@@ -103,6 +104,8 @@ reg response_dest_ready = 1'b1;
 wire [1:0] response_dest_resp;
 wire response_dest_resp_eot;
 wire [BYTES_PER_BURST_WIDTH-1:0] response_dest_data_burst_length;
+
+wire completion_req;
 
 reg [1:0] to_complete_count = 'h0;
 reg [1:0] transfer_id = 'h0;
@@ -192,7 +195,11 @@ always @(*) begin
     end
     STATE_WRITE_RESPR: begin
       if (response_ready == 1'b1) begin
-        nx_state = STATE_IDLE;
+        if (|to_complete_count && transfer_id == completion_transfer_id) begin
+          nx_state = STATE_ZERO_COMPL;
+        end else begin
+          nx_state = STATE_IDLE;
+        end
       end
     end
     STATE_ZERO_COMPL: begin
@@ -225,20 +232,33 @@ end
 
 assign do_compl = (state == STATE_WRITE_ZRCMPL) && response_ready;
 
-// Once the last completion request from request generator is received 
+// Once the last completion request from request generator is received
 // we can wait for completions from the destination side
 always @(posedge req_clk) begin
   if (req_resetn == 1'b0) begin
     completion_req_last_found <= 1'b0;
-  end else if (completion_req_valid) begin
+  end else if (completion_req) begin
     completion_req_last_found <= completion_req_last;
   end else if (state ==STATE_ZERO_COMPL && ~(|to_complete_count)) begin
     completion_req_last_found <= 1'b0;
   end
 end
 
+// Once the last completion is received wit until all completions are done 
+always @(posedge req_clk) begin
+  if (req_resetn == 1'b0) begin
+    completion_req_ready <= 1'b1;
+  end else if (completion_req_valid && completion_req_last) begin
+    completion_req_ready <= 1'b0;
+  end else if (to_complete_count == 0) begin
+    completion_req_ready <= 1'b1;
+  end
+end
+
+assign completion_req = completion_req_ready && completion_req_valid;
+
 // Track transfers so we can tell when did the destination completed all its
-// transfers  
+// transfers
 always @(posedge req_clk) begin
   if (req_resetn == 1'b0) begin
     transfer_id <= 'h0;
@@ -247,13 +267,13 @@ always @(posedge req_clk) begin
   end
 end
 
-// Count how many transfers we need to complete 
+// Count how many transfers we need to complete
 always @(posedge req_clk) begin
   if (req_resetn == 1'b0) begin
     to_complete_count <= 'h0;
-  end else if (completion_req_valid & ~do_compl) begin
+  end else if (completion_req & ~do_compl) begin
     to_complete_count <= to_complete_count + 1;
-  end else if (~completion_req_valid & do_compl) begin
+  end else if (~completion_req & do_compl) begin
     to_complete_count <= to_complete_count - 1;
   end
 end
