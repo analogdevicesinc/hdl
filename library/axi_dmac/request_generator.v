@@ -47,12 +47,14 @@ module dmac_request_generator #(
   input [ID_WIDTH-1:0] response_id,
 
   input rewind_req_valid,
+  output rewind_req_ready,
   input [ID_WIDTH+3-1:0] rewind_req_data,
   output rewind_state,
 
   output abort_req,
 
   output reg completion_req_valid = 1'b0,
+  input completion_req_ready,
   output completion_req_last,
   output [1:0] completion_transfer_id,
 
@@ -172,14 +174,14 @@ always @(*) begin
   nx_completion_req_valid = 0;
   case (state)
     STATE_IDLE: begin
-      if (rewind_req_valid == 1'b1) begin
+      if (rewind_req_valid == 1'b1 && rewind_req_ready == 1'b1) begin
         nx_state = STATE_REWIND_ID;
       end else if (req_valid == 1'b1) begin
         nx_state = STATE_GEN_ID;
       end
     end
     STATE_GEN_ID: begin
-      if (rewind_req_valid == 1'b1) begin
+      if (rewind_req_valid == 1'b1 && rewind_req_ready == 1'b1) begin
         nx_state = STATE_REWIND_ID;
       end else if (eot == 1'b1 && incr_en == 1'b1) begin
         nx_state = STATE_IDLE;
@@ -233,7 +235,7 @@ always @(posedge clk) begin
 end
 
 always @(posedge clk) begin
-  if (rewind_req_valid == 1'b1) begin
+  if (rewind_req_valid == 1'b1 && rewind_req_ready == 1'b1) begin
     {rew_transfer_id, rew_req_xlast, rew_id} <= rewind_req_data;
   end
 end
@@ -249,6 +251,7 @@ assign completion_req_last = cur_req_xlast;
 assign completion_transfer_id = rew_transfer_id;
 
 assign rewind_state = (state == STATE_REWIND_ID);
+assign rewind_req_ready = completion_req_ready;
 
 assign abort_req = (state == STATE_REWIND_ID) && !rew_req_xlast && !cur_req_xlast;
 
