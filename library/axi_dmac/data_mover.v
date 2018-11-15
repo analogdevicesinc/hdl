@@ -136,7 +136,7 @@ generate if (ALLOW_ABORT == 1) begin
    * A 'last' on the external interface indicates the end of an packet. If such a
    * 'last' indicator is observed before the end of the current transfer stop
    * accepting data on the external interface until a new descriptor is
-   * received that is the first segment of a transfer. 
+   * received that is the first segment of a transfer.
    */
   always @(posedge clk) begin
     if (resetn == 1'b0) begin
@@ -165,7 +165,7 @@ generate if (ALLOW_ABORT == 1) begin
   assign rewind_req_valid = early_tlast;
   assign rewind_req_data = {transfer_id,req_xlast_d,id_next};
 
-  // The width of the id must fit the number of transfers that can be in flight 
+  // The width of the id must fit the number of transfers that can be in flight
   // in the burst memory
   always @(posedge clk) begin
     if (resetn == 1'b0) begin
@@ -196,8 +196,12 @@ end
 
 // If we want to support zero delay between transfers we have to assert
 // req_ready on the same cycle on which the last load happens.
+// In case early tlast happens accept the new descriptor only when the rewind
+// request got accepted.
 assign last_load = m_axi_valid && last_eot && eot;
-assign req_ready = last_load || ~active || (transfer_abort_s & rewind_req_ready);
+assign req_ready = (last_load && ~early_tlast) ||
+                   (~active && ~transfer_abort_s) ||
+                   (transfer_abort_s && rewind_req_ready);
 
 always @(posedge clk) begin
   if (req_ready) begin
