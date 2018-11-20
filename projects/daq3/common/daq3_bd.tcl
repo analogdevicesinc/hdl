@@ -156,7 +156,7 @@ for {set i 0} {$i < 2} {incr i} {
 # interconnect (cpu)
 
 ad_cpu_interconnect 0x44A60000 axi_ad9152_xcvr
-ad_cpu_interconnect 0x44A00000 axi_ad9152_core
+ad_cpu_interconnect 0x44A04000 axi_ad9152_core
 ad_cpu_interconnect 0x44A90000 axi_ad9152_jesd
 ad_cpu_interconnect 0x7c420000 axi_ad9152_dma
 ad_cpu_interconnect 0x44A50000 axi_ad9680_xcvr

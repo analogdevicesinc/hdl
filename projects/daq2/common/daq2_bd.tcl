@@ -157,7 +157,7 @@ ad_connect  axi_ad9680_fifo/dma_xfer_req axi_ad9680_dma/s_axis_xfer_req
 # interconnect (cpu)
 
 ad_cpu_interconnect 0x44A60000 axi_ad9144_xcvr
-ad_cpu_interconnect 0x44A00000 axi_ad9144_core
+ad_cpu_interconnect 0x44A04000 axi_ad9144_core
 ad_cpu_interconnect 0x44A90000 axi_ad9144_jesd
 ad_cpu_interconnect 0x7c420000 axi_ad9144_dma
 ad_cpu_interconnect 0x44A50000 axi_ad9680_xcvr
