@@ -33,7 +33,7 @@ module ad_ip_jesd204_tpl_dac_regmap #(
 
   input s_axi_awvalid,
   output s_axi_awready,
-  input [15:0] s_axi_awaddr,
+  input [11:0] s_axi_awaddr,
   input [2:0] s_axi_awprot,
 
   input s_axi_wvalid,
@@ -43,7 +43,7 @@ module ad_ip_jesd204_tpl_dac_regmap #(
 
   input s_axi_arvalid,
   output s_axi_arready,
-  input [15:0] s_axi_araddr,
+  input [11:0] s_axi_araddr,
   input [2:0] s_axi_arprot,
 
   output s_axi_rvalid,
@@ -111,7 +111,7 @@ module ad_ip_jesd204_tpl_dac_regmap #(
     .up_rstn (up_rstn),
 
     .up_axi_awvalid (s_axi_awvalid),
-    .up_axi_awaddr (s_axi_awaddr),
+    .up_axi_awaddr ({4'b0,s_axi_awaddr}),
     .up_axi_awready (s_axi_awready),
     .up_axi_wvalid (s_axi_wvalid),
     .up_axi_wdata (s_axi_wdata),
@@ -121,7 +121,7 @@ module ad_ip_jesd204_tpl_dac_regmap #(
     .up_axi_bresp (s_axi_bresp),
     .up_axi_bready (s_axi_bready),
     .up_axi_arvalid (s_axi_arvalid),
-    .up_axi_araddr (s_axi_araddr),
+    .up_axi_araddr ({4'b0,s_axi_araddr}),
     .up_axi_arready (s_axi_arready),
     .up_axi_rvalid (s_axi_rvalid),
     .up_axi_rresp (s_axi_rresp),
@@ -162,6 +162,7 @@ module ad_ip_jesd204_tpl_dac_regmap #(
   // dac common processor interface
 
   up_dac_common #(
+    .COMMON_ID(6'h0),
     .ID (ID),
     .DRP_DISABLE (1),
     .USERPORTS_DISABLE (1),
@@ -214,6 +215,7 @@ module ad_ip_jesd204_tpl_dac_regmap #(
   genvar i;
   for (i = 0; i < NUM_CHANNELS; i = i + 1) begin: g_channel
     up_dac_channel #(
+      .COMMON_ID(6'h1),
       .CHANNEL_ID (i),
       .USERPORTS_DISABLE (1),
       .IQCORRECTION_DISABLE (1)
