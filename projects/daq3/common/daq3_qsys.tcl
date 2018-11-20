@@ -173,7 +173,7 @@ ad_cpu_interconnect 0x00429000 avl_adxcfg_1.rcfg_s0
 ad_cpu_interconnect 0x0042a000 avl_adxcfg_2.rcfg_s0
 ad_cpu_interconnect 0x0042b000 avl_adxcfg_3.rcfg_s0
 ad_cpu_interconnect 0x0042c000 axi_ad9152_dma.s_axi
-ad_cpu_interconnect 0x00430000 axi_ad9152_core.s_axi
+ad_cpu_interconnect 0x00434000 axi_ad9152_core.s_axi
 
 ad_cpu_interconnect 0x00440000 ad9680_jesd204.link_reconfig
 ad_cpu_interconnect 0x00444000 ad9680_jesd204.link_management
