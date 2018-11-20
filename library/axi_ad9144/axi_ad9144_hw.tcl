@@ -62,7 +62,7 @@ set_parameter_property QUAD_OR_DUAL_N HDL_PARAMETER true
 
 # axi4 slave
 
-ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn
+ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn 12
 
 # transceiver interface
 
