@@ -54,7 +54,7 @@ set_parameter_property ID HDL_PARAMETER true
 
 # axi4 slave
 
-ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn
+ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn 12
 
 # transceiver interface
 
