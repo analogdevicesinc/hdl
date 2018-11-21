@@ -328,7 +328,7 @@ always @(posedge clk)
 begin
   if (response_valid == 1'b1 && response_ready == 1'b1) begin
     up_tlf_s_valid <= up_bl_partial;
-    up_clear_tl <= up_eot;
+    up_clear_tl <= response_eot;
   end else if (up_tlf_s_ready == 1'b1) begin
     up_tlf_s_valid <= 1'b0;
   end
