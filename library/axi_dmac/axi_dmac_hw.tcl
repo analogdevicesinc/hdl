@@ -142,7 +142,16 @@ add_parameter SYNC_TRANSFER_START INTEGER 0
 set_parameter_property SYNC_TRANSFER_START DISPLAY_NAME "Transfer Start Synchronization Support"
 set_parameter_property SYNC_TRANSFER_START DISPLAY_HINT boolean
 set_parameter_property SYNC_TRANSFER_START HDL_PARAMETER true
-set_parameter_property SYNC_TRANSFER_START GROUP $group
+set_parameter_property SYNC_TRANSFER_START GROUP "Source"
+
+set group "2D settings"
+add_display_item "Features" $group "group"
+
+add_parameter  DMA_2D_TLAST_MODE INTEGER 0
+set_parameter_property DMA_2D_TLAST_MODE DISPLAY_NAME "AXIS TLAST function"
+set_parameter_property DMA_2D_TLAST_MODE HDL_PARAMETER true
+set_parameter_property DMA_2D_TLAST_MODE ALLOWED_RANGES { "0:End of Frame" "1:End of Line" }
+set_parameter_property DMA_2D_TLAST_MODE GROUP $group
 
 add_parameter ENABLE_FRAME_LOCK INTEGER 0
 set_parameter_property ENABLE_FRAME_LOCK DISPLAY_NAME "Frame Lock Support"

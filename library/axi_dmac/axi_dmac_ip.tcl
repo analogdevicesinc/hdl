@@ -289,6 +289,13 @@ foreach dir {"SRC" "DEST"} {
 }
 
 set_property -dict [list \
+  "enablement_tcl_expr" "\$DMA_2D_TRANSFER == true" \
+  "value_validation_type" "pairs" \
+  "value_validation_pairs" {"End of Frame" "0" "End of Line" "1"} \
+] \
+[ipx::get_user_parameters DMA_2D_TLAST_MODE -of_objects $cc]
+
+set_property -dict [list \
   "enablement_tcl_expr" "\$DMA_2D_TRANSFER == true && \$CYCLIC == true" \
 ] \
 [ipx::get_user_parameters ENABLE_FRAME_LOCK -of_objects $cc]
@@ -387,14 +394,26 @@ set_property -dict [list \
 	"display_name" "2D Transfer Support" \
 ] $p
 
+set feature_group_2d [ipgui::add_group -name "2D Settings" -component $cc \
+		-parent $feature_group -display_name "2D Settings"]
+
+set p [ipgui::get_guiparamspec -name "DMA_2D_TLAST_MODE" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $feature_group_2d
+set_property -dict [list \
+  "widget" "comboBox" \
+  "display_name" "AXIS TLAST function" \
+  "tooltip" "AXI Stream TLAST port function" \
+] $p
+
 set p [ipgui::get_guiparamspec -name "ENABLE_FRAME_LOCK" -component $cc]
-ipgui::move_param -component $cc -order 2 $p -parent $feature_group
+ipgui::move_param -component $cc -order 1 $p -parent $feature_group_2d
 set_property -dict [list \
   "display_name" "Frame Locking Support" \
+  "tooltip" "Requires Cyclic mode" \
 ] $p
 
 set p [ipgui::get_guiparamspec -name "MAX_NUM_FRAMES" -component $cc]
-ipgui::move_param -component $cc -order 3 $p -parent $feature_group
+ipgui::move_param -component $cc -order 2 $p -parent $feature_group_2d
 set_property -dict [list \
   "widget" "comboBox" \
   "display_name" "Max Number Of Frame Buffers" \

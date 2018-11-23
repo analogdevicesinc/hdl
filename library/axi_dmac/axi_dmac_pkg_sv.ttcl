@@ -8,6 +8,7 @@
 <: set dma_data_width_dest     [get_property MODELPARAM_VALUE.DMA_DATA_WIDTH_DEST] :>
 <: set dma_length_width        [get_property MODELPARAM_VALUE.DMA_LENGTH_WIDTH] :>
 <: set dma_2d_transfer         [get_property MODELPARAM_VALUE.DMA_2D_TRANSFER] :>
+<: set dma_2d_tlast_mode       [get_property MODELPARAM_VALUE.DMA_2D_TLAST_MODE] :>
 <: set async_clk_req_src       [get_property MODELPARAM_VALUE.ASYNC_CLK_REQ_SRC] :>
 <: set async_clk_src_dest      [get_property MODELPARAM_VALUE.ASYNC_CLK_SRC_DEST] :>
 <: set async_clk_dest_req      [get_property MODELPARAM_VALUE.ASYNC_CLK_DEST_REQ] :>
@@ -45,6 +46,7 @@ package <=: ComponentName :>_pkg;
   parameter <=: ComponentName :>_DMA_DATA_WIDTH_DEST     = <=: $dma_data_width_dest :>;
   parameter <=: ComponentName :>_DMA_LENGTH_WIDTH        = <=: $dma_length_width :>;
   parameter <=: ComponentName :>_DMA_2D_TRANSFER         = <=: b2i $dma_2d_transfer :>;
+  parameter <=: ComponentName :>_DMA_2D_TLAST_MODE       = <=: $dma_2d_tlast_mode :>;
   parameter <=: ComponentName :>_ASYNC_CLK_REQ_SRC       = <=: b2i $async_clk_req_src :>;
   parameter <=: ComponentName :>_ASYNC_CLK_SRC_DEST      = <=: b2i $async_clk_src_dest :>;
   parameter <=: ComponentName :>_ASYNC_CLK_DEST_REQ      = <=: b2i $async_clk_dest_req :>;
