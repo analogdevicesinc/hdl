@@ -38,6 +38,7 @@
 module dmac_2d_transfer #(
 
   parameter DMA_2D_TRANSFER = 1,
+  parameter DMA_2D_TLAST_MODE = 0, // 0 - End of Frame; 1 - End of Line
   parameter DMA_AXI_ADDR_WIDTH = 32,
   parameter DMA_LENGTH_WIDTH = 24,
   parameter BYTES_PER_BURST_WIDTH = 7,
@@ -167,7 +168,7 @@ always @(posedge req_aclk) begin
     src_stride <= req_src_stride;
     sync_transfer_start <= req_sync_transfer_start;
     gen_last <= req_last;
-  end else if (out_abort_req == 1'b1) begin
+  end else if (out_abort_req == 1'b1 && DMA_2D_TLAST_MODE == 0) begin
     y_length <= 0;
   end else if (out_req_valid == 1'b1 && out_req_ready == 1'b1) begin
     dest_address <= dest_address + dest_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST];
@@ -193,7 +194,7 @@ always @(posedge req_aclk) begin
   end
 end
 
-assign out_req_last = out_last & gen_last;
+  assign out_req_last = (out_last || (DMA_2D_TLAST_MODE == 1)) & gen_last;
 
 end else begin
 
