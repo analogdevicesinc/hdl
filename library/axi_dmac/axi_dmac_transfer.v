@@ -46,6 +46,7 @@ module axi_dmac_transfer #(
   parameter DMA_TYPE_SRC = 2,
   parameter DMA_AXI_ADDR_WIDTH = 32,
   parameter DMA_2D_TRANSFER = 1,
+  parameter DMA_2D_TLAST_MODE = 0,
   parameter ASYNC_CLK_REQ_SRC = 1,
   parameter ASYNC_CLK_SRC_DEST = 1,
   parameter ASYNC_CLK_DEST_REQ = 1,
@@ -345,6 +346,7 @@ axi_dmac_framelock #(
 
 dmac_2d_transfer #(
   .DMA_2D_TRANSFER (DMA_2D_TRANSFER),
+  .DMA_2D_TLAST_MODE (DMA_2D_TLAST_MODE),
   .DMA_AXI_ADDR_WIDTH (DMA_AXI_ADDR_WIDTH),
   .DMA_LENGTH_WIDTH (DMA_LENGTH_WIDTH),
   .BYTES_PER_BURST_WIDTH (BYTES_PER_BURST_WIDTH),
