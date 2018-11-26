@@ -63,7 +63,8 @@ module axi_dmac_transfer #(
   parameter ENABLE_FRAME_LOCK = 0,
   parameter FRAME_LOCK_MODE = 0,
   parameter MAX_NUM_FRAMES = 4,
-  parameter MAX_NUM_FRAMES_WIDTH = 2
+  parameter MAX_NUM_FRAMES_WIDTH = 2,
+  parameter USE_EXT_SYNC = 0
 ) (
   input ctrl_clk,
   input ctrl_resetn,
@@ -190,6 +191,10 @@ module axi_dmac_transfer #(
   input  [MAX_NUM_FRAMES_WIDTH:0] s_frame_in,
   output [MAX_NUM_FRAMES_WIDTH:0] s_frame_out,
 
+  // External sync interface
+  input src_ext_sync,
+  input dest_ext_sync,
+
   // Diagnostics interface
   output [7:0] dest_diag_level_bursts
 );
@@ -243,6 +248,9 @@ wire req_valid_gated;
 wire req_ready_gated;
 
 wire abort_req;
+
+wire transfer_2d_req_ready;
+wire ext_sync_ready;
 
 axi_dmac_reset_manager #(
   .ASYNC_CLK_REQ_SRC (ASYNC_CLK_REQ_SRC),
@@ -344,6 +352,9 @@ axi_dmac_framelock #(
   .s_frame_out (s_frame_out)
   );
 
+assign flock_req_ready = transfer_2d_req_ready && ext_sync_ready;
+assign ext_sync_valid = flock_req_valid;
+
 dmac_2d_transfer #(
   .DMA_2D_TRANSFER (DMA_2D_TRANSFER),
   .DMA_2D_TLAST_MODE (DMA_2D_TLAST_MODE),
@@ -363,7 +374,7 @@ dmac_2d_transfer #(
   .req_response_ready (flock_response_ready),
 
   .req_valid (flock_req_valid),
-  .req_ready (flock_req_ready),
+  .req_ready (transfer_2d_req_ready),
   .req_dest_address (flock_req_dest_address),
   .req_src_address (flock_req_src_address),
   .req_x_length (flock_req_x_length),
@@ -410,7 +421,8 @@ dmac_request_arb #(
   .AXI_LENGTH_WIDTH_DEST (AXI_LENGTH_WIDTH_DEST),
   .AXI_LENGTH_WIDTH_SRC (AXI_LENGTH_WIDTH_SRC),
   .ENABLE_DIAGNOSTICS_IF(ENABLE_DIAGNOSTICS_IF),
-  .ALLOW_ASYM_MEM (ALLOW_ASYM_MEM)
+  .ALLOW_ASYM_MEM (ALLOW_ASYM_MEM),
+  .USE_EXT_SYNC (USE_EXT_SYNC)
 ) i_request_arb (
   .req_clk (req_clk),
   .req_resetn (req_resetn),
@@ -521,6 +533,12 @@ dmac_request_arb #(
   .dbg_src_address_id (dbg_src_address_id),
   .dbg_src_data_id (dbg_src_data_id),
   .dbg_src_response_id (dbg_src_response_id),
+
+  .src_ext_sync (src_ext_sync),
+  .dest_ext_sync (dest_ext_sync),
+
+  .ext_sync_ready (ext_sync_ready),
+  .ext_sync_valid (ext_sync_valid),
 
   .dest_diag_level_bursts(dest_diag_level_bursts)
 );

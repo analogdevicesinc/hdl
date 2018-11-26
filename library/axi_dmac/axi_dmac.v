@@ -63,7 +63,8 @@ module axi_dmac #(
   parameter ENABLE_DIAGNOSTICS_IF = 0,
   parameter ALLOW_ASYM_MEM = 0,
   parameter ENABLE_FRAME_LOCK = 0,
-  parameter MAX_NUM_FRAMES = 8
+  parameter MAX_NUM_FRAMES = 8,
+  parameter USE_EXT_SYNC = 0
   )(
   // Slave AXI interface
   input s_axi_aclk,
@@ -228,6 +229,10 @@ module axi_dmac #(
   // Slave mode
   input  [$clog2(MAX_NUM_FRAMES):0] s_frame_in,
   output [$clog2(MAX_NUM_FRAMES):0] s_frame_out,
+
+  // External sync interface
+  input src_ext_sync,
+  input dest_ext_sync,
 
   // Diagnostics interface
   output  [7:0] dest_diag_level_bursts
@@ -512,7 +517,8 @@ axi_dmac_transfer #(
   .ENABLE_FRAME_LOCK(ENABLE_FRAME_LOCK),
   .FRAME_LOCK_MODE(FRAME_LOCK_MODE),
   .MAX_NUM_FRAMES(MAX_NUM_FRAMES),
-  .MAX_NUM_FRAMES_WIDTH(MAX_NUM_FRAMES_WIDTH)
+  .MAX_NUM_FRAMES_WIDTH(MAX_NUM_FRAMES_WIDTH),
+  .USE_EXT_SYNC(USE_EXT_SYNC)
 ) i_transfer (
   .ctrl_clk(s_axi_aclk),
   .ctrl_resetn(s_axi_aresetn),
@@ -625,6 +631,9 @@ axi_dmac_transfer #(
   .m_frame_out (m_frame_out),
   .s_frame_in (s_frame_in),
   .s_frame_out (s_frame_out),
+
+  .src_ext_sync (src_ext_sync),
+  .dest_ext_sync (dest_ext_sync),
 
   .dest_diag_level_bursts(dest_diag_level_bursts)
 );

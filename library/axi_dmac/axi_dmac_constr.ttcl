@@ -7,6 +7,7 @@
 <: set async_req_src [getBooleanValue "ASYNC_CLK_REQ_SRC"] :>
 <: set async_src_dest [getBooleanValue "ASYNC_CLK_SRC_DEST"] :>
 <: set disable_debug_registers [getBooleanValue "DISABLE_DEBUG_REGISTERS"] :>
+<: set use_ext_sync [getBooleanValue "USE_EXT_SYNC"] :>
 
 set req_clk [get_clocks -of_objects [get_ports s_axi_aclk]]
 set src_clk [get_clocks -of_objects [get_ports -quiet {fifo_wr_clk s_axis_aclk m_src_axi_aclk}]]
@@ -88,6 +89,18 @@ set_false_path -quiet \
 	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
 		-filter {NAME =~ *sync_rewind/i_sync_in* && IS_SEQUENTIAL}]
 
+<: if {$use_ext_sync} { :>
+set_false_path -quiet \
+	-from $req_clk \
+	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+		-filter {NAME =~ *sync_src_sync/i_sync_out* && IS_SEQUENTIAL}]
+
+set_false_path -quiet \
+	-from $src_clk \
+	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+		-filter {NAME =~ *sync_src_sync/i_sync_in* && IS_SEQUENTIAL}]
+<: } :>
+
 <: } :>
 <: if {$async_dest_req} { :>
 set_max_delay -quiet -datapath_only \
@@ -122,6 +135,18 @@ set_max_delay -quiet -datapath_only \
 		-filter {NAME =~ *i_dest_response_fifo* && IS_SEQUENTIAL}] \
 	-to $req_clk \
 	[get_property -min PERIOD $req_clk]
+
+<: if {$use_ext_sync} { :>
+set_false_path -quiet \
+	-from $req_clk \
+	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+		-filter {NAME =~ *sync_dest_sync/i_sync_out* && IS_SEQUENTIAL}]
+
+set_false_path -quiet \
+	-from $src_clk \
+	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+		-filter {NAME =~ *sync_dest_sync/i_sync_in* && IS_SEQUENTIAL}]
+<: } :>
 
 <: } :>
 <: if {$async_src_dest} { :>

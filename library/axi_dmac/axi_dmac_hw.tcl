@@ -23,6 +23,7 @@ ad_ip_files axi_dmac [list \
   $ad_hdl_dir/library/common/ad_mem_asym.v \
   inc_id.vh \
   resp.vh \
+  axi_dmac_ext_sync.v \
   axi_dmac_framelock.v \
   axi_dmac_burst_memory.v \
   axi_dmac_regmap.v \
@@ -144,26 +145,32 @@ set_parameter_property SYNC_TRANSFER_START DISPLAY_HINT boolean
 set_parameter_property SYNC_TRANSFER_START HDL_PARAMETER true
 set_parameter_property SYNC_TRANSFER_START GROUP "Source"
 
-set group "2D settings"
-add_display_item "Features" $group "group"
+set group_2d "2D settings"
+add_display_item "Features" $group_2d "group"
 
 add_parameter  DMA_2D_TLAST_MODE INTEGER 0
 set_parameter_property DMA_2D_TLAST_MODE DISPLAY_NAME "AXIS TLAST function"
 set_parameter_property DMA_2D_TLAST_MODE HDL_PARAMETER true
 set_parameter_property DMA_2D_TLAST_MODE ALLOWED_RANGES { "0:End of Frame" "1:End of Line" }
-set_parameter_property DMA_2D_TLAST_MODE GROUP $group
+set_parameter_property DMA_2D_TLAST_MODE GROUP $group_2d
 
 add_parameter ENABLE_FRAME_LOCK INTEGER 0
 set_parameter_property ENABLE_FRAME_LOCK DISPLAY_NAME "Frame Lock Support"
 set_parameter_property ENABLE_FRAME_LOCK DISPLAY_HINT boolean
 set_parameter_property ENABLE_FRAME_LOCK HDL_PARAMETER true
-set_parameter_property ENABLE_FRAME_LOCK GROUP $group
+set_parameter_property ENABLE_FRAME_LOCK GROUP $group_2d
 
 add_parameter MAX_NUM_FRAMES INTEGER 8
 set_parameter_property MAX_NUM_FRAMES DISPLAY_NAME "Max Number Of Frame Buffers"
 set_parameter_property MAX_NUM_FRAMES HDL_PARAMETER true
 set_parameter_property MAX_NUM_FRAMES ALLOWED_RANGES {4 8 16 32}
-set_parameter_property MAX_NUM_FRAMES GROUP $group
+set_parameter_property MAX_NUM_FRAMES GROUP $group_2d
+
+add_parameter USE_EXT_SYNC INTEGER 0
+set_parameter_property USE_EXT_SYNC DISPLAY_NAME "External Synchronization Support"
+set_parameter_property USE_EXT_SYNC DISPLAY_HINT boolean
+set_parameter_property USE_EXT_SYNC HDL_PARAMETER true
+set_parameter_property USE_EXT_SYNC GROUP $group
 
 set group "Clock Domain Configuration"
 
@@ -361,6 +368,10 @@ ad_alt_intf signal  fifo_wr_overflow  output  1                       ovf
 ad_alt_intf signal  fifo_wr_sync      input   1                       sync
 ad_alt_intf signal  fifo_wr_xfer_req  output  1                       xfer_req
 
+# External synchronization interface
+ad_alt_intf signal  src_ext_sync      input   1                       src_sync
+ad_alt_intf signal  dest_ext_sync     input   1                       dest_sync
+
 proc add_axi_master_interface {axi_type port suffix} {
   add_interface $port $axi_type start
   set_interface_property $port associatedClock ${port}_clock
@@ -501,6 +512,11 @@ proc axi_dmac_elaborate {} {
 
   if {[get_parameter_value ENABLE_DIAGNOSTICS_IF] != 1} {
     lappend disabled_intfs diagnostics_if
+  }
+
+  if {[get_parameter_value USE_EXT_SYNC] != 1} {
+    lappend disabled_intfs \
+      if_src_ext_sync if_dest_ext_sync
   }
 
   foreach intf $disabled_intfs {

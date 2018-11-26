@@ -9,6 +9,7 @@ adi_ip_files axi_dmac [list \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "inc_id.vh" \
   "resp.vh" \
+  "axi_dmac_ext_sync.v" \
   "axi_dmac_framelock.v" \
   "axi_dmac_burst_memory.v" \
   "axi_dmac_regmap.v" \
@@ -212,6 +213,11 @@ adi_set_bus_dependency "s_framelock" "s_framelock" \
     spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE_DEST')) != 0 and \
     spirit:decode(id('MODELPARAM_VALUE.ENABLE_FRAME_LOCK')) = 1)"
 
+adi_set_ports_dependency "src_ext_sync" \
+  "spirit:decode(id('MODELPARAM_VALUE.USE_EXT_SYNC')) = 1"
+adi_set_ports_dependency "dest_ext_sync" \
+  "spirit:decode(id('MODELPARAM_VALUE.USE_EXT_SYNC')) = 1"
+
 set cc [ipx::current_core]
 
 # The core does not issue narrow bursts
@@ -245,6 +251,7 @@ foreach {k v} { \
 		"AXI_SLICE_DEST" "false" \
 		"DISABLE_DEBUG_REGISTERS" "false" \
     "ENABLE_DIAGNOSTICS_IF" "false" \
+    "USE_EXT_SYNC" "false" \
 	} { \
 	set_property -dict [list \
 			"value_format" "bool" \
@@ -417,6 +424,12 @@ ipgui::move_param -component $cc -order 2 $p -parent $feature_group_2d
 set_property -dict [list \
   "widget" "comboBox" \
   "display_name" "Max Number Of Frame Buffers" \
+] $p
+
+set p [ipgui::get_guiparamspec -name "USE_EXT_SYNC" -component $cc]
+ipgui::move_param -component $cc -order 3 $p -parent $feature_group
+set_property -dict [list \
+	"display_name" "External Synchronization Support" \
 ] $p
 
 set clk_group [ipgui::add_group -name {Clock Domain Configuration} -component $cc \

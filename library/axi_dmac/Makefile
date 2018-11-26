@@ -11,6 +11,7 @@ GENERIC_DEPS += 2d_transfer.v
 GENERIC_DEPS += address_generator.v
 GENERIC_DEPS += axi_dmac.v
 GENERIC_DEPS += axi_dmac_burst_memory.v
+GENERIC_DEPS += axi_dmac_ext_sync.v
 GENERIC_DEPS += axi_dmac_framelock.v
 GENERIC_DEPS += axi_dmac_regmap.v
 GENERIC_DEPS += axi_dmac_regmap_request.v
