@@ -57,7 +57,8 @@ module dmac_request_arb #(
   parameter AXI_LENGTH_WIDTH_SRC = 8,
   parameter AXI_LENGTH_WIDTH_DEST = 8,
   parameter ENABLE_DIAGNOSTICS_IF = 0,
-  parameter ALLOW_ASYM_MEM = 0
+  parameter ALLOW_ASYM_MEM = 0,
+  parameter USE_EXT_SYNC = 0
 )(
   input req_clk,
   input req_resetn,
@@ -178,6 +179,13 @@ module dmac_request_arb #(
   output src_ext_resetn,
   input src_enable,
   output src_enabled,
+
+  // External sync interface
+  input src_ext_sync,
+  input dest_ext_sync,
+
+  output ext_sync_ready,
+  input ext_sync_valid,
 
   // Diagnostics interface
   output  [7:0] dest_diag_level_bursts
@@ -1192,5 +1200,27 @@ axi_dmac_response_manager #(
 
 );
 
+axi_dmac_ext_sync #(
+ .USE_EXT_SYNC (USE_EXT_SYNC),
+ .ASYNC_CLK_REQ_SRC (ASYNC_CLK_REQ_SRC),
+ .ASYNC_CLK_DEST_REQ (ASYNC_CLK_DEST_REQ)
+) i_ext_sync (
+  .req_clk (req_clk),
+  .req_resetn (req_resetn),
+
+  .src_clk (src_clk),
+  .src_resetn (src_resetn),
+
+  .dest_clk (dest_clk),
+  .dest_resetn (dest_resetn),
+
+  // External sync interface
+  .src_ext_sync (src_ext_sync),
+  .dest_ext_sync (dest_ext_sync),
+
+  // Interface to requester
+  .ext_sync_ready (ext_sync_ready),
+  .ext_sync_valid (ext_sync_valid)
+);
 
 endmodule

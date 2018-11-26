@@ -29,6 +29,7 @@
 <: set enable_diagnostics_if   [get_property MODELPARAM_VALUE.ENABLE_DIAGNOSTICS_IF] :>
 <: set enable_frame_lock       [get_property MODELPARAM_VALUE.ENABLE_FRAME_LOCK] :>
 <: set max_num_frames          [get_property MODELPARAM_VALUE.MAX_NUM_FRAMES] :>
+<: set use_ext_sync            [get_property MODELPARAM_VALUE.USE_EXT_SYNC] :>
 
 <: proc b2i {b} { if {$b==true} {return 1} else {return 0}} :>
 ///////////////////////////////////////////////////////////////////////////
@@ -67,6 +68,7 @@ package <=: ComponentName :>_pkg;
   parameter <=: ComponentName :>_ENABLE_DIAGNOSTICS_IF   = <=: b2i $enable_diagnostics_if :>;
   parameter <=: ComponentName :>_ENABLE_FRAME_LOCK       = <=: b2i $enable_frame_lock :>;
   parameter <=: ComponentName :>_MAX_NUM_FRAMES          = <=: $max_num_frames :>;
+  parameter <=: ComponentName :>_USE_EXT_SYNC            = <=: b2i $use_ext_sync:>;
 //////////////////////////////////////////////////////////////////////////
 
 endpackage : <=: ComponentName :>_pkg
