@@ -42,6 +42,8 @@ module util_adxcvr_xcm #(
   parameter   integer XCVR_TYPE = 0,
   parameter   integer QPLL_REFCLK_DIV = 1,
   parameter   integer QPLL_FBDIV_RATIO = 1,
+  parameter   [15:0]  POR_CFG = 16'b0000000000000110,
+  parameter   [15:0]  PPF0_CFG = 16'b0000011000000000,
   parameter   [26:0]  QPLL_CFG = 27'h0680181,
   parameter   [ 9:0]  QPLL_FBDIV =  10'b0000110000,
   parameter   [15:0]  QPLL_CFG0 = 16'b0011001100011100,
@@ -51,8 +53,11 @@ module util_adxcvr_xcm #(
   parameter   [15:0]  QPLL_CFG2_G3 = 16'b0000111111000000,
   parameter   [15:0]  QPLL_CFG3 = 16'b0000000100100000,
   parameter   [15:0]  QPLL_CFG4 = 16'b0000000000000011,
-
+  parameter   [15:0]  QPLL_CP_G3 = 10'b0000011111,
+  parameter   [15:0]  QPLL_LPF = 10'b0100110111,
+  parameter   [15:0]  QPLL_CP = 10'b0001111111,
   parameter   [15:0]  GTY4_PPF0_CFG  = 16'b0000100000000000
+
 ) (
 
   // reset and clocks
@@ -376,8 +381,8 @@ module util_adxcvr_xcm #(
     .BIAS_CFG_RSVD (16'b0000000000000000),
     .COMMON_CFG0 (16'b0000000000000000),
     .COMMON_CFG1 (16'b0000000000000000),
-    .POR_CFG (16'b0000000000000110),
-    .PPF0_CFG (16'b0000011000000000),
+    .POR_CFG (POR_CFG),
+    .PPF0_CFG (PPF0_CFG),
     .PPF1_CFG (16'b0000011000000000),
     .QPLL0CLKOUT_RATE ("HALF"),
     .QPLL0_CFG0 (QPLL_CFG0),
@@ -387,15 +392,15 @@ module util_adxcvr_xcm #(
     .QPLL0_CFG2_G3 (QPLL_CFG2_G3),
     .QPLL0_CFG3 (QPLL_CFG3),
     .QPLL0_CFG4 (QPLL_CFG4),
-    .QPLL0_CP (10'b0001111111),
-    .QPLL0_CP_G3 (10'b0000011111),
+    .QPLL0_CP (QPLL_CP),
+    .QPLL0_CP_G3 (QPLL_CP_G3),
     .QPLL0_FBDIV (QPLL_FBDIV),
     .QPLL0_FBDIV_G3 (160),
     .QPLL0_INIT_CFG0 (16'b0000001010110010),
     .QPLL0_INIT_CFG1 (8'b00000000),
     .QPLL0_LOCK_CFG (16'b0010010111101000),
     .QPLL0_LOCK_CFG_G3 (16'b0010010111101000),
-    .QPLL0_LPF (10'b0100110111),
+    .QPLL0_LPF (QPLL_LPF),
     .QPLL0_LPF_G3 (10'b0111010101),
     .QPLL0_PCI_EN (1'b0),
     .QPLL0_RATE_SW_USE_DRP (1'b1),
