@@ -25,19 +25,16 @@ add_fileset_file axi_adxcvr.v             VERILOG PATH axi_adxcvr.v TOP_LEVEL_FI
 
 add_parameter ID INTEGER 0
 set_parameter_property ID DISPLAY_NAME ID
-set_parameter_property ID TYPE INTEGER
 set_parameter_property ID UNITS None
 set_parameter_property ID HDL_PARAMETER true
 
 add_parameter TX_OR_RX_N INTEGER 0
 set_parameter_property TX_OR_RX_N DISPLAY_NAME TX_OR_RX_N
-set_parameter_property TX_OR_RX_N TYPE INTEGER
 set_parameter_property TX_OR_RX_N UNITS None
 set_parameter_property TX_OR_RX_N HDL_PARAMETER true
 
 add_parameter NUM_OF_LANES INTEGER 4
 set_parameter_property NUM_OF_LANES DISPLAY_NAME NUM_OF_LANES
-set_parameter_property NUM_OF_LANES TYPE INTEGER
 set_parameter_property NUM_OF_LANES UNITS None
 set_parameter_property NUM_OF_LANES HDL_PARAMETER true
 

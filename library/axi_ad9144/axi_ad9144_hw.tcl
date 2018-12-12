@@ -52,14 +52,12 @@ ad_ip_files axi_ad9144 [list \
 add_parameter ID INTEGER 0
 set_parameter_property ID DEFAULT_VALUE 0
 set_parameter_property ID DISPLAY_NAME ID
-set_parameter_property ID TYPE INTEGER
 set_parameter_property ID UNITS None
 set_parameter_property ID HDL_PARAMETER true
 
 add_parameter QUAD_OR_DUAL_N INTEGER 0
 set_parameter_property QUAD_OR_DUAL_N DEFAULT_VALUE 0
 set_parameter_property QUAD_OR_DUAL_N DISPLAY_NAME QUAD_OR_DUAL_N
-set_parameter_property QUAD_OR_DUAL_N TYPE INTEGER
 set_parameter_property QUAD_OR_DUAL_N UNITS None
 set_parameter_property QUAD_OR_DUAL_N HDL_PARAMETER true
 

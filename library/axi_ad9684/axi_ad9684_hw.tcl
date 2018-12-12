@@ -35,7 +35,6 @@ ad_ip_files axi_ad9684 [list \
 add_parameter ID INTEGER 0
 set_parameter_property ID DEFAULT_VALUE 0
 set_parameter_property ID DISPLAY_NAME ID
-set_parameter_property ID TYPE INTEGER
 set_parameter_property ID DESCRIPTION "Instance ID"
 set_parameter_property ID UNITS None
 set_parameter_property ID HDL_PARAMETER true
@@ -51,7 +50,6 @@ set_parameter_property FPGA_TECHNOLOGY HDL_PARAMETER true
 add_parameter OR_STATUS INTEGER 1
 set_parameter_property OR_STATUS DEFAULT_VALUE 1
 set_parameter_property OR_STATUS DISPLAY_NAME OR_STATUS
-set_parameter_property OR_STATUS TYPE INTEGER
 set_parameter_property OR_STATUS DESCRIPTION "This parameter enables the OVER RANGE line at the physical interface"
 set_parameter_property OR_STATUS UNITS None
 set_parameter_property OR_STATUS HDL_PARAMETER true

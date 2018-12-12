@@ -47,7 +47,6 @@ add_fileset_file up_rst_constr.sdc          SDC PATH  $ad_hdl_dir/library/intel/
 add_parameter ID INTEGER 0
 set_parameter_property ID DEFAULT_VALUE 0
 set_parameter_property ID DISPLAY_NAME ID
-set_parameter_property ID TYPE INTEGER
 set_parameter_property ID UNITS None
 set_parameter_property ID HDL_PARAMETER true
 
