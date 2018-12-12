@@ -42,28 +42,23 @@ add_fileset_file axi_hdmi_tx_constr.sdc     SDC PATH axi_hdmi_tx_constr.sdc
 add_parameter ID INTEGER 0
 set_parameter_property ID DEFAULT_VALUE 0
 set_parameter_property ID DISPLAY_NAME ID
-set_parameter_property ID TYPE INTEGER
 set_parameter_property ID UNITS None
 set_parameter_property ID HDL_PARAMETER true
 
 add_parameter CR_CB_N INTEGER 0
 set_parameter_property CR_CB_N DEFAULT_VALUE 0
 set_parameter_property CR_CB_N DISPLAY_NAME CR_CB_N
-set_parameter_property CR_CB_N TYPE INTEGER
 set_parameter_property CR_CB_N UNITS None
 set_parameter_property CR_CB_N HDL_PARAMETER true
 
-add_parameter DEVICE_TYPE INTEGER 0
 set_parameter_property DEVICE_TYPE DEFAULT_VALUE 16
 set_parameter_property DEVICE_TYPE DISPLAY_NAME DEVICE_TYPE
-set_parameter_property DEVICE_TYPE TYPE INTEGER
 set_parameter_property DEVICE_TYPE UNITS None
 set_parameter_property DEVICE_TYPE HDL_PARAMETER true
 
 add_parameter EMBEDDED_SYNC INTEGER 0
 set_parameter_property EMBEDDED_SYNC DEFAULT_VALUE 0
 set_parameter_property EMBEDDED_SYNC DISPLAY_NAME EMBEDDED_SYNC
-set_parameter_property EMBEDDED_SYNC TYPE INTEGER
 set_parameter_property EMBEDDED_SYNC UNITS None
 set_parameter_property EMBEDDED_SYNC HDL_PARAMETER true
 

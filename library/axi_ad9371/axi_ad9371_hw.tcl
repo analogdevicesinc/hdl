@@ -51,21 +51,18 @@ add_fileset_file up_rst_constr.sdc          SDC PATH  $ad_hdl_dir/library/altera
 add_parameter ID INTEGER 0
 set_parameter_property ID DEFAULT_VALUE 0
 set_parameter_property ID DISPLAY_NAME ID
-set_parameter_property ID TYPE INTEGER
 set_parameter_property ID UNITS None
 set_parameter_property ID HDL_PARAMETER true
 
 add_parameter DAC_DATAPATH_DISABLE INTEGER 0
 set_parameter_property DAC_DATAPATH_DISABLE DEFAULT_VALUE 0
 set_parameter_property DAC_DATAPATH_DISABLE DISPLAY_NAME DAC_DATAPATH_DISABLE
-set_parameter_property DAC_DATAPATH_DISABLE TYPE INTEGER
 set_parameter_property DAC_DATAPATH_DISABLE UNITS None
 set_parameter_property DAC_DATAPATH_DISABLE HDL_PARAMETER true
 
 add_parameter ADC_DATAPATH_DISABLE INTEGER 0
 set_parameter_property ADC_DATAPATH_DISABLE DEFAULT_VALUE 0
 set_parameter_property ADC_DATAPATH_DISABLE DISPLAY_NAME ADC_DATAPATH_DISABLE
-set_parameter_property ADC_DATAPATH_DISABLE TYPE INTEGER
 set_parameter_property ADC_DATAPATH_DISABLE UNITS None
 set_parameter_property ADC_DATAPATH_DISABLE HDL_PARAMETER true
 

@@ -23,14 +23,12 @@ add_fileset_file util_bsplit.v VERILOG PATH util_bsplit.v TOP_LEVEL_FILE
 add_parameter CHANNEL_DATA_WIDTH INTEGER 0
 set_parameter_property CHANNEL_DATA_WIDTH DEFAULT_VALUE 32
 set_parameter_property CHANNEL_DATA_WIDTH DISPLAY_NAME CHANNEL_DATA_WIDTH
-set_parameter_property CHANNEL_DATA_WIDTH TYPE INTEGER
 set_parameter_property CHANNEL_DATA_WIDTH UNITS None
 set_parameter_property CHANNEL_DATA_WIDTH HDL_PARAMETER true
 
 add_parameter NUM_OF_CHANNELS INTEGER 0
 set_parameter_property NUM_OF_CHANNELS DEFAULT_VALUE 8
 set_parameter_property NUM_OF_CHANNELS DISPLAY_NAME NUM_OF_CHANNELS
-set_parameter_property NUM_OF_CHANNELS TYPE INTEGER
 set_parameter_property NUM_OF_CHANNELS UNITS None
 set_parameter_property NUM_OF_CHANNELS HDL_PARAMETER true
 
