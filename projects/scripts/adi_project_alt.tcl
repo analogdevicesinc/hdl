@@ -146,7 +146,6 @@ proc adi_project_altera {project_name} {
   # globals
 
   set_global_assignment -name SYNCHRONIZER_IDENTIFICATION AUTO
-  set_global_assignment -name ENABLE_ADVANCED_IO_TIMING ON
   set_global_assignment -name USE_TIMEQUEST_TIMING_ANALYZER ON
   set_global_assignment -name TIMEQUEST_DO_REPORT_TIMING ON
   set_global_assignment -name TIMEQUEST_DO_CCPP_REMOVAL ON
