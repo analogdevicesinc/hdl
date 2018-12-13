@@ -109,11 +109,13 @@ proc adi_project {project_name {parameter_list {}}} {
   puts $QFILE "save_system {system_bd.qsys}"
   close $QFILE
 
+  # create a new qsys design with command-line utilities
   exec -ignorestderr $quartus(quartus_rootpath)/sopc_builder/bin/qsys-script \
-    --script=system_qsys_script.tcl
+    --quartus_project=$project_name --script=system_qsys_script.tcl
+
   exec -ignorestderr $quartus(quartus_rootpath)/sopc_builder/bin/qsys-generate \
-    system_bd.qsys --synthesis=VERILOG --output-directory=system_bd \
-    --family=$family --part=$device
+    system_bd.qsys --synthesis=VERILOG --family=$family --part=$device \
+    --quartus-project=$project_name
 
   # default assignments
 
