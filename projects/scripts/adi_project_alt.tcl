@@ -62,7 +62,6 @@ proc adi_project_altera {project_name} {
   }
 
   # packages used
- 
   load_package flow
 
   # project
@@ -77,7 +76,7 @@ proc adi_project_altera {project_name} {
   set_global_assignment -name IP_SEARCH_PATHS $ad_lib_folders
 
   # project & qsys
- 
+
   set_global_assignment -name FAMILY $family
   set_global_assignment -name DEVICE $device
 
@@ -103,14 +102,16 @@ proc adi_project_altera {project_name} {
   puts $QFILE "save_system {system_bd.qsys}"
   close $QFILE
 
+  # create a new qsys design with command-line utilities
   exec -ignorestderr $quartus(quartus_rootpath)/sopc_builder/bin/qsys-script \
-    --script=system_qsys_script.tcl
+    --quartus_project=$project_name --script=system_qsys_script.tcl
+
   exec -ignorestderr $quartus(quartus_rootpath)/sopc_builder/bin/qsys-generate \
-    system_bd.qsys --synthesis=VERILOG --output-directory=system_bd \
-    --family=$family --part=$device
+    system_bd.qsys --synthesis=VERILOG --family=$family --part=$device \
+    --quartus-project=$project_name
 
   # default assignments
- 
+
   set_global_assignment -name QIP_FILE $system_qip_file
   set_global_assignment -name VERILOG_FILE system_top.v
   set_global_assignment -name SDC_FILE system_constr.sdc
