@@ -6,19 +6,16 @@
 PROJECT_NAME := fsync_zed
 
 M_DEPS += ../common/flock_bd.tcl
-M_DEPS += $(ADI_HDL_DIR)/projects/common/zed/zed_system_bd.tcl
-M_DEPS += $(ADI_HDL_DIR)/library/xilinx/common/ad_iobuf.v
+M_DEPS += ../../common/zed/zed_system_constr.xdc
+M_DEPS += ../../common/zed/zed_system_bd.tcl
+M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
 
 LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_dmac
-LIB_DEPS += axi_hdmi_rx
 LIB_DEPS += axi_hdmi_tx
 LIB_DEPS += axi_i2s_adi
-LIB_DEPS += axi_spdif_rx
 LIB_DEPS += axi_spdif_tx
+LIB_DEPS += frame_combiner
 LIB_DEPS += util_i2c_mixer
 
-ifndef ADI_HDL_DIR
-$(error ADI_HDL_DIR is not set)
-endif
-include $(ADI_HDL_DIR)/projects/scripts/project-xilinx.mk
+include ../../scripts/project-xilinx.mk
