@@ -16,6 +16,7 @@ ALTERA_DEPS += ../altera/common/up_rst_constr.sdc
 ALTERA_DEPS += ../altera/common/up_xfer_cntrl_constr.sdc
 ALTERA_DEPS += ../altera/common/up_xfer_status_constr.sdc
 ALTERA_DEPS += ../common/ad_datafmt.v
+ALTERA_DEPS += ../common/ad_perfect_shuffle.v
 ALTERA_DEPS += ../common/ad_pnmon.v
 ALTERA_DEPS += ../common/ad_rst.v
 ALTERA_DEPS += ../common/ad_xcvr_rx_if.v
