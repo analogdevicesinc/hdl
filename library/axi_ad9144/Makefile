@@ -34,6 +34,7 @@ ALTERA_DEPS += ../jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac.v
 ALTERA_DEPS += ../jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_channel.v
 ALTERA_DEPS += ../jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_core.v
 ALTERA_DEPS += ../jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_framer.v
+ALTERA_DEPS += ../jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_pn.v
 ALTERA_DEPS += ../jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_regmap.v
 ALTERA_DEPS += axi_ad9144_hw.tcl
 

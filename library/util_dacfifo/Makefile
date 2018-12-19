@@ -9,8 +9,8 @@ GENERIC_DEPS += ../common/ad_b2g.v
 GENERIC_DEPS += ../common/ad_g2b.v
 GENERIC_DEPS += ../common/ad_mem.v
 GENERIC_DEPS += ../common/ad_mem_asym.v
-GENERIC_DEPS += util_dacfifo_bypass.v
 GENERIC_DEPS += util_dacfifo.v
+GENERIC_DEPS += util_dacfifo_bypass.v
 
 XILINX_DEPS += util_dacfifo_constr.xdc
 XILINX_DEPS += util_dacfifo_ip.tcl
