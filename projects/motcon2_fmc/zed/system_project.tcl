@@ -10,4 +10,6 @@ adi_project_files motcon2_fmc_zed [list \
   "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc" ]
 
+set_property strategy Performance_ExtraTimingOpt [get_runs impl_1]
+
 adi_project_run motcon2_fmc_zed

@@ -99,6 +99,7 @@
   ad_ip_parameter speed_detector_m1_dma CONFIG.DMA_DATA_WIDTH_DEST 64
   ad_ip_parameter speed_detector_m1_dma CONFIG.DMA_DATA_WIDTH_SRC 32
   ad_ip_parameter speed_detector_m1_dma CONFIG.DMA_AXI_PROTOCOL_DEST 0
+  ad_ip_parameter speed_detector_m1_dma CONFIG.AXI_SLICE_SRC 1
     # speed detector core motor 2
   ad_ip_instance axi_mc_speed speed_detector_m2
     # dma motor 2
@@ -110,6 +111,7 @@
   ad_ip_parameter speed_detector_m2_dma CONFIG.DMA_DATA_WIDTH_DEST 64
   ad_ip_parameter speed_detector_m2_dma CONFIG.DMA_DATA_WIDTH_SRC 32
   ad_ip_parameter speed_detector_m2_dma CONFIG.DMA_AXI_PROTOCOL_DEST 0
+  ad_ip_parameter speed_detector_m2_dma CONFIG.AXI_SLICE_SRC 1
 
   # current monitor peripherals
     # current monitor core motor 1
