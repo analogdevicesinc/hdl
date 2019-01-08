@@ -107,7 +107,7 @@ module up_dac_common #(
 
   // parameters
 
-  localparam  VERSION = 32'h00090062;
+  localparam  VERSION = 32'h00090162;
 
   // internal registers
 

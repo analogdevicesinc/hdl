@@ -75,7 +75,7 @@ module up_clkgen #(
   output  reg [31:0]      up_rdata,
   output  reg             up_rack);
 
-  localparam  PCORE_VERSION = 32'h00040063;
+  localparam  PCORE_VERSION = 32'h00050063;
 
   // internal registers
 

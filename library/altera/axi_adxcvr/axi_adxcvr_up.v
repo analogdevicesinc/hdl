@@ -70,7 +70,7 @@ module axi_adxcvr_up #(
 
   // parameters
 
-  localparam  [31:0]  VERSION = 32'h00100161;
+  localparam  [31:0]  VERSION = 32'h00110161;
 
   // internal registers
 
