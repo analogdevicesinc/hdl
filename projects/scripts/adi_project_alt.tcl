@@ -16,6 +16,19 @@ proc adi_project_altera {project_name} {
   global version
   global quartus
 
+  # check $ALT_NIOS_MMU_ENABLED environment variables
+
+  set mmu_enabled 1
+  if [info exists ::env(ALT_NIOS_MMU_ENABLED)] {
+    set mmu_enabled $::env(ALT_NIOS_MMU_ENABLED)
+  }
+
+  # check $QUARTUS_PRO_ISUSED environment variables
+  set quartus_pro_isused 0
+  if [info exists ::env(QUARTUS_PRO_ISUSED)] {
+    set quartus_pro_isused $::env(QUARTUS_PRO_ISUSED)
+  }
+
   if [regexp "_a10gx$" $project_name] {
     set family "Arria 10"
     set device 10AX115S2F45I1SG
@@ -36,7 +49,7 @@ proc adi_project_altera {project_name} {
 
   if [regexp "de10nano$" $project_name] {
     set family "Cyclone V"
-    set device 5CSEBA6U23I7DK 
+    set device 5CSEBA6U23I7DK
     set system_qip_file system_bd/synthesis/system_bd.qip
   }
 
@@ -82,11 +95,6 @@ proc adi_project_altera {project_name} {
 
   # qsys
 
-  set mmu_enabled 1
-  if [info exists ::env(ALT_NIOS_MMU_ENABLED)] {
-    set mmu_enabled $::env(ALT_NIOS_MMU_ENABLED)
-  }
-
   set QFILE [open "system_qsys_script.tcl" "w"]
   puts $QFILE "set mmu_enabled $mmu_enabled"
   puts $QFILE "set ad_hdl_dir $ad_hdl_dir"
@@ -102,13 +110,29 @@ proc adi_project_altera {project_name} {
   puts $QFILE "save_system {system_bd.qsys}"
   close $QFILE
 
-  # create a new qsys design with command-line utilities
-  exec -ignorestderr $quartus(quartus_rootpath)/sopc_builder/bin/qsys-script \
-    --quartus_project=$project_name --script=system_qsys_script.tcl
+  # check which type of Quartus is used, to call the qsys utilities with the
+  # correct attributes
+  if {$quartus_pro_isused == 1} {
 
-  exec -ignorestderr $quartus(quartus_rootpath)/sopc_builder/bin/qsys-generate \
-    system_bd.qsys --synthesis=VERILOG --family=$family --part=$device \
-    --quartus-project=$project_name
+    exec -ignorestderr $quartus(quartus_rootpath)/sopc_builder/bin/qsys-script \
+      --quartus_project=$project_name --script=system_qsys_script.tcl
+
+    exec -ignorestderr $quartus(quartus_rootpath)/sopc_builder/bin/qsys-generate \
+      system_bd.qsys --synthesis=VERILOG --family=$family --part=$device \
+      --quartus-project=$project_name
+
+  } else {
+
+    exec -ignorestderr $quartus(quartus_rootpath)/sopc_builder/bin/qsys-script \
+      --script=system_qsys_script.tcl
+
+    exec -ignorestderr $quartus(quartus_rootpath)/sopc_builder/bin/qsys-generate \
+      system_bd.qsys --synthesis=VERILOG --family=$family --part=$device \
+
+    # I/O Timing Analysis is available just in Quartus Standard
+    set_global_assignment -name ENABLE_ADVANCED_IO_TIMING ON
+
+  }
 
   # default assignments
 
