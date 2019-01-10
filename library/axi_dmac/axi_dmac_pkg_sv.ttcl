@@ -30,6 +30,7 @@
 <: set enable_frame_lock       [get_property MODELPARAM_VALUE.ENABLE_FRAME_LOCK] :>
 <: set max_num_frames          [get_property MODELPARAM_VALUE.MAX_NUM_FRAMES] :>
 <: set use_ext_sync            [get_property MODELPARAM_VALUE.USE_EXT_SYNC] :>
+<: set has_autorun             [get_property MODELPARAM_VALUE.HAS_AUTORUN] :>
 
 <: proc b2i {b} { if {$b==true} {return 1} else {return 0}} :>
 ///////////////////////////////////////////////////////////////////////////
@@ -68,7 +69,21 @@ package <=: ComponentName :>_pkg;
   parameter <=: ComponentName :>_ENABLE_DIAGNOSTICS_IF   = <=: b2i $enable_diagnostics_if :>;
   parameter <=: ComponentName :>_ENABLE_FRAME_LOCK       = <=: b2i $enable_frame_lock :>;
   parameter <=: ComponentName :>_MAX_NUM_FRAMES          = <=: $max_num_frames :>;
-  parameter <=: ComponentName :>_USE_EXT_SYNC            = <=: b2i $use_ext_sync:>;
+  parameter <=: ComponentName :>_USE_EXT_SYNC            = <=: b2i $use_ext_sync :>;
+  parameter <=: ComponentName :>_HAS_AUTORUN             = <=: b2i $has_autorun :>;
+
+
+  parameter <=: ComponentName :>_DMAC_DEF_FLAGS          = <=: [expr [get_property MODELPARAM_VALUE.DMAC_DEF_FLAGS        ]] :>;
+  parameter <=: ComponentName :>_DMAC_DEF_SRC_ADDR       = <=: [expr [get_property MODELPARAM_VALUE.DMAC_DEF_SRC_ADDR     ]] :>;
+  parameter <=: ComponentName :>_DMAC_DEF_DEST_ADDR      = <=: [expr [get_property MODELPARAM_VALUE.DMAC_DEF_DEST_ADDR    ]] :>;
+  parameter <=: ComponentName :>_DMAC_DEF_X_LENGTH       = <=: [expr [get_property MODELPARAM_VALUE.DMAC_DEF_X_LENGTH     ]] :>;
+  
+  parameter <=: ComponentName :>_DMAC_DEF_Y_LENGTH       = <=: [expr [get_property MODELPARAM_VALUE.DMAC_DEF_Y_LENGTH     ]] :>;
+  parameter <=: ComponentName :>_DMAC_DEF_SRC_STRIDE     = <=: [expr [get_property MODELPARAM_VALUE.DMAC_DEF_SRC_STRIDE   ]] :>;
+  parameter <=: ComponentName :>_DMAC_DEF_DEST_STRIDE    = <=: [expr [get_property MODELPARAM_VALUE.DMAC_DEF_DEST_STRIDE  ]] :>;
+  
+  parameter <=: ComponentName :>_DMAC_DEF_FLOCK_CFG      = <=: [expr [get_property MODELPARAM_VALUE.DMAC_DEF_FLOCK_CFG    ]] :>;
+  parameter <=: ComponentName :>_DMAC_DEF_FLOCK_STRIDE   = <=: [expr [get_property MODELPARAM_VALUE.DMAC_DEF_FLOCK_STRIDE ]] :>;
 //////////////////////////////////////////////////////////////////////////
 
 endpackage : <=: ComponentName :>_pkg

@@ -51,7 +51,17 @@ module axi_dmac_regmap #(
   parameter SYNC_TRANSFER_START = 0,
   parameter ENABLE_FRAME_LOCK = 0,
   parameter FRAME_LOCK_MODE = 0,
-  parameter MAX_NUM_FRAMES_WIDTH = 2
+  parameter MAX_NUM_FRAMES_WIDTH = 2,
+  parameter HAS_AUTORUN = 0,
+  parameter DMAC_DEF_FLAGS = 0,
+  parameter DMAC_DEF_SRC_ADDR = 0,
+  parameter DMAC_DEF_DEST_ADDR = 0,
+  parameter DMAC_DEF_X_LENGTH = 0,
+  parameter DMAC_DEF_Y_LENGTH = 0,
+  parameter DMAC_DEF_SRC_STRIDE = 0,
+  parameter DMAC_DEF_DEST_STRIDE = 0,
+  parameter DMAC_DEF_FLOCK_CFG = 0,
+  parameter DMAC_DEF_FLOCK_STRIDE = 0
 ) (
   // Slave AXI interface
   input s_axi_aclk,
@@ -85,7 +95,7 @@ module axi_dmac_regmap #(
   output reg irq,
 
   // Control interface
-  output reg ctrl_enable = 1'b0,
+  output reg ctrl_enable = HAS_AUTORUN[0],
   output reg ctrl_pause = 1'b0,
 
   // DMA request interface
@@ -174,7 +184,7 @@ end
 
 always @(posedge s_axi_aclk) begin
   if (s_axi_aresetn == 1'b0) begin
-    ctrl_enable <= 1'b0;
+    ctrl_enable <= HAS_AUTORUN[0];
     ctrl_pause <= 1'b0;
     up_irq_mask <= 2'b11;
     up_scratch <= 32'h00;
@@ -236,7 +246,17 @@ axi_dmac_regmap_request #(
   .SYNC_TRANSFER_START(SYNC_TRANSFER_START),
   .ENABLE_FRAME_LOCK(ENABLE_FRAME_LOCK),
   .FRAME_LOCK_MODE(FRAME_LOCK_MODE),
-  .MAX_NUM_FRAMES_WIDTH(MAX_NUM_FRAMES_WIDTH)
+  .MAX_NUM_FRAMES_WIDTH(MAX_NUM_FRAMES_WIDTH),
+  .HAS_AUTORUN(HAS_AUTORUN),
+  .DMAC_DEF_FLAGS(DMAC_DEF_FLAGS),
+  .DMAC_DEF_SRC_ADDR(DMAC_DEF_SRC_ADDR),
+  .DMAC_DEF_DEST_ADDR(DMAC_DEF_DEST_ADDR),
+  .DMAC_DEF_X_LENGTH(DMAC_DEF_X_LENGTH),
+  .DMAC_DEF_Y_LENGTH(DMAC_DEF_Y_LENGTH),
+  .DMAC_DEF_SRC_STRIDE(DMAC_DEF_SRC_STRIDE),
+  .DMAC_DEF_DEST_STRIDE(DMAC_DEF_DEST_STRIDE),
+  .DMAC_DEF_FLOCK_CFG(DMAC_DEF_FLOCK_CFG),
+  .DMAC_DEF_FLOCK_STRIDE(DMAC_DEF_FLOCK_STRIDE)
 ) i_regmap_request (
   .clk(s_axi_aclk),
   .reset(~s_axi_aresetn),
