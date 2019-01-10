@@ -57,7 +57,11 @@ set_qip_strings { "set_instance_assignment -name MESSAGE_DISABLE 276027 -entity 
 
 # parameters
 
+set tab_ip "General settings"
+add_display_item "" $tab_ip GROUP "tab"
+
 set group "General Configuration"
+add_display_item $tab_ip $group "group"
 
 add_parameter ID INTEGER 0
 set_parameter_property ID DISPLAY_NAME "Core ID"
@@ -82,12 +86,15 @@ set_parameter_property MAX_BYTES_PER_BURST DISPLAY_NAME "Maximum bytes per burst
 set_parameter_property MAX_BYTES_PER_BURST HDL_PARAMETER true
 set_parameter_property MAX_BYTES_PER_BURST GROUP $group
 
+set group "Endpoint Configuration"
+add_display_item $tab_ip $group "group"
+
 foreach {suffix group} { \
     "SRC" "Source" \
     "DEST" "Destination" \
   } {
 
-  add_display_item "Endpoint Configuration" $group "group"
+  add_display_item "Endpoint Configuration" $group "group" "tab"
 
   add_parameter DMA_TYPE_$suffix INTEGER 0
   set_parameter_property DMA_TYPE_$suffix DISPLAY_NAME "Type"
@@ -126,6 +133,7 @@ foreach {suffix group} { \
 set_parameter_property DMA_TYPE_SRC DEFAULT_VALUE 2
 
 set group "Features"
+add_display_item $tab_ip $group "group"
 
 add_parameter CYCLIC INTEGER 1
 set_parameter_property CYCLIC DISPLAY_NAME "Cyclic Transfer Support"
@@ -173,6 +181,7 @@ set_parameter_property USE_EXT_SYNC HDL_PARAMETER true
 set_parameter_property USE_EXT_SYNC GROUP $group
 
 set group "Clock Domain Configuration"
+add_display_item $tab_ip $group "group"
 
 add_parameter AUTO_ASYNC_CLK BOOLEAN 1
 set_parameter_property AUTO_ASYNC_CLK DISPLAY_NAME "Automatically Detect Clock Domains"
@@ -314,6 +323,12 @@ proc axi_dmac_validate {} {
        [get_parameter_value ENABLE_FRAME_LOCK] == 1 } {
     send_message error "ENABLE_FRAME_LOCK can be set only in 2D Cyclic mode !!!"
   }
+
+  upvar reg_defaults d
+  foreach p $d {
+    set_parameter_property $p ENABLED [get_parameter_value HAS_AUTORUN]
+  }
+
 }
 
 # conditional interfaces
@@ -550,6 +565,7 @@ proc axi_dmac_elaborate {} {
 }
 
 set group "Debug"
+add_display_item $tab_ip $group "group"
 
 add_parameter DISABLE_DEBUG_REGISTERS INTEGER 0
 set_parameter_property DISABLE_DEBUG_REGISTERS DISPLAY_NAME "Disable debug registers"
@@ -565,3 +581,35 @@ set_parameter_property ENABLE_DIAGNOSTICS_IF GROUP $group
 
 add_interface diagnostics_if conduit end
 add_interface_port diagnostics_if dest_diag_level_bursts dest_diag_level_bursts Output "8"
+
+set tab_ip "Autorun settings"
+add_display_item "" $tab_ip GROUP "tab"
+
+add_parameter HAS_AUTORUN BOOLEAN 0
+set_parameter_property HAS_AUTORUN DISPLAY_NAME "Enable autorun mode"
+set_parameter_property HAS_AUTORUN DISPLAY_HINT boolean
+set_parameter_property HAS_AUTORUN HDL_PARAMETER true
+set_parameter_property HAS_AUTORUN GROUP $tab_ip
+
+set group "Register Defaults"
+add_display_item $tab_ip $group "group"
+
+set reg_defaults [list \
+  "DMAC_DEF_FLAGS"  \
+  "DMAC_DEF_SRC_ADDR"  \
+  "DMAC_DEF_DEST_ADDR" \
+  "DMAC_DEF_X_LENGTH"  \
+  "DMAC_DEF_Y_LENGTH"  \
+  "DMAC_DEF_SRC_STRIDE"  \
+  "DMAC_DEF_DEST_STRIDE"  \
+  "DMAC_DEF_FLOCK_CFG"  \
+  "DMAC_DEF_FLOCK_STRIDE"  \
+]
+
+foreach p $reg_defaults {
+  add_parameter $p STD_LOGIC_VECTOR
+  set_parameter_property $p HDL_PARAMETER true
+  set_parameter_property $p VISIBLE true
+  set_parameter_property $p GROUP $group
+  set_parameter_property $p WIDTH 32
+}

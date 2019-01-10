@@ -252,6 +252,7 @@ foreach {k v} { \
 		"DISABLE_DEBUG_REGISTERS" "false" \
     "ENABLE_DIAGNOSTICS_IF" "false" \
     "USE_EXT_SYNC" "false" \
+    "HAS_AUTORUN" "false" \
 	} { \
 	set_property -dict [list \
 			"value_format" "bool" \
@@ -316,6 +317,7 @@ set_property -dict [list \
 
 # Set up page layout
 set page0 [ipgui::get_pagespec -name "Page 0" -component $cc]
+set_property display_name {General settings} $page0
 set g [ipgui::add_group -name {DMA Endpoint Configuration} -component $cc \
 		-parent $page0 -display_name {DMA Endpoint Configuration} \
 		-layout "horizontal"]
@@ -472,6 +474,56 @@ ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "DMA_AXI_ADDR_
 ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "AXI_ID_WIDTH_SRC" -component $cc]
 ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "AXI_ID_WIDTH_DEST" -component $cc]
 ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "ALLOW_ASYM_MEM" -component $cc]
+
+# add registers default values config page
+set page1 [ipgui::add_page -name {Autorun settings} -component [ipx::current_core] -display_name {Autorun settings}]
+
+set p [ipgui::get_guiparamspec -name "HAS_AUTORUN" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $page1
+set_property -dict [list \
+  "display_name" "Enable autorun mode" \
+  "tooltip" "Start transfer after reset deassertion" \
+] $p
+
+set group [ipgui::add_group -name "Register Defaults" -component $cc \
+  -parent $page1 -display_name "Register Defaults"]
+
+set defaults [list \
+  "DMAC_DEF_FLAGS"  \
+  "DMAC_DEF_SRC_ADDR"  \
+  "DMAC_DEF_DEST_ADDR" \
+  "DMAC_DEF_X_LENGTH"  \
+  "DMAC_DEF_Y_LENGTH"  \
+  "DMAC_DEF_SRC_STRIDE"  \
+  "DMAC_DEF_DEST_STRIDE"  \
+  "DMAC_DEF_FLOCK_CFG"  \
+  "DMAC_DEF_FLOCK_STRIDE"  \
+]
+set order 0
+foreach param $defaults {
+  set_property -dict [list \
+    "enablement_tcl_expr" "\$HAS_AUTORUN == true" \
+    "value" "0x00000000" \
+    "value_bit_string_length" "32" \
+    "value_format" "bitString" \
+  ] [ipx::get_user_parameters $param -of_objects $cc]
+
+  set_property -dict [list \
+    "value" "0x00000000" \
+    "value_bit_string_length" "32" \
+    "value_format" "bitString" \
+  ] [ipx::get_hdl_parameters $param -of_objects $cc]
+
+  set p [ipgui::get_guiparamspec -name $param -component $cc]
+  set_property -dict [list \
+    "display_name" $param \
+    "widget" "hexEdit" \
+  ] $p
+
+  ipgui::move_param $p -component $cc -order $order -parent $group
+
+  incr order
+}
 
 ipx::create_xgui_files [ipx::current_core]
 ipx::save_core $cc

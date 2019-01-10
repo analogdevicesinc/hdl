@@ -64,7 +64,17 @@ module axi_dmac #(
   parameter ALLOW_ASYM_MEM = 0,
   parameter ENABLE_FRAME_LOCK = 0,
   parameter MAX_NUM_FRAMES = 8,
-  parameter USE_EXT_SYNC = 0
+  parameter USE_EXT_SYNC = 0,
+  parameter HAS_AUTORUN = 0,
+  parameter DMAC_DEF_FLAGS = 0,
+  parameter DMAC_DEF_SRC_ADDR = 0,
+  parameter DMAC_DEF_DEST_ADDR = 0,
+  parameter DMAC_DEF_X_LENGTH = 0,
+  parameter DMAC_DEF_Y_LENGTH = 0,
+  parameter DMAC_DEF_SRC_STRIDE = 0,
+  parameter DMAC_DEF_DEST_STRIDE = 0,
+  parameter DMAC_DEF_FLOCK_CFG = 0,
+  parameter DMAC_DEF_FLOCK_STRIDE = 0
   )(
   // Slave AXI interface
   input s_axi_aclk,
@@ -425,7 +435,17 @@ axi_dmac_regmap #(
   .SYNC_TRANSFER_START(SYNC_TRANSFER_START),
   .ENABLE_FRAME_LOCK(ENABLE_FRAME_LOCK),
   .FRAME_LOCK_MODE(FRAME_LOCK_MODE),
-  .MAX_NUM_FRAMES_WIDTH(MAX_NUM_FRAMES_WIDTH)
+  .MAX_NUM_FRAMES_WIDTH(MAX_NUM_FRAMES_WIDTH),
+  .HAS_AUTORUN(HAS_AUTORUN),
+  .DMAC_DEF_FLAGS(DMAC_DEF_FLAGS),
+  .DMAC_DEF_SRC_ADDR(DMAC_DEF_SRC_ADDR),
+  .DMAC_DEF_DEST_ADDR(DMAC_DEF_DEST_ADDR),
+  .DMAC_DEF_X_LENGTH(DMAC_DEF_X_LENGTH),
+  .DMAC_DEF_Y_LENGTH(DMAC_DEF_Y_LENGTH),
+  .DMAC_DEF_SRC_STRIDE(DMAC_DEF_SRC_STRIDE),
+  .DMAC_DEF_DEST_STRIDE(DMAC_DEF_DEST_STRIDE),
+  .DMAC_DEF_FLOCK_CFG(DMAC_DEF_FLOCK_CFG),
+  .DMAC_DEF_FLOCK_STRIDE(DMAC_DEF_FLOCK_STRIDE)
 ) i_regmap (
   .s_axi_aclk(s_axi_aclk),
   .s_axi_aresetn(s_axi_aresetn),
