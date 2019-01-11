@@ -39,7 +39,7 @@ module axi_hdmi_tx #(
 
   parameter   ID = 0,
   parameter   CR_CB_N = 0,
-  parameter   DEVICE_TYPE = 0,
+  parameter   FPGA_TECHNOLOGY = 0,
   parameter   INTERFACE = "16_BIT",
   parameter   OUT_CLK_POLARITY = 0) (
 
@@ -105,9 +105,9 @@ module axi_hdmi_tx #(
   /* 0 = Launch on rising edge, 1 = Launch on falling edge */
 
   localparam  EMBEDDED_SYNC = (INTERFACE == "16_BIT_EMBEDDED_SYNC") ? 1 : 0;
-  localparam  XILINX_7SERIES = 0;
-  localparam  XILINX_ULTRASCALE = 1;
-  localparam  ALTERA_5SERIES = 16;
+  localparam  XILINX_7SERIES = 1;
+  localparam  XILINX_ULTRASCALE = 2;
+  localparam  ALTERA_5SERIES = 101;
 
   // reset and clocks
 
@@ -302,7 +302,7 @@ module axi_hdmi_tx #(
   // hdmi output clock
 
   generate
-  if (DEVICE_TYPE == XILINX_ULTRASCALE) begin
+  if (FPGA_TECHNOLOGY == XILINX_ULTRASCALE) begin
   ODDRE1 #(.SRVAL(1'b0)) i_clk_oddr (
     .SR (1'b0),
     .D1 (~OUT_CLK_POLARITY),
@@ -310,7 +310,7 @@ module axi_hdmi_tx #(
     .C (hdmi_clk),
     .Q (hdmi_out_clk));
   end
-  if (DEVICE_TYPE == ALTERA_5SERIES) begin
+  if (FPGA_TECHNOLOGY == ALTERA_5SERIES) begin
   altddio_out #(.WIDTH(1)) i_clk_oddr (
     .aclr (1'b0),
     .aset (1'b0),
@@ -324,7 +324,7 @@ module axi_hdmi_tx #(
     .oe_out (),
     .dataout (hdmi_out_clk));
   end
-  if (DEVICE_TYPE == XILINX_7SERIES) begin
+  if (FPGA_TECHNOLOGY == XILINX_7SERIES) begin
   ODDR #(.INIT(1'b0)) i_clk_oddr (
     .R (1'b0),
     .S (1'b0),

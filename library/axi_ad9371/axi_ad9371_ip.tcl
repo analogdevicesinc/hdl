@@ -35,15 +35,21 @@ adi_ip_files axi_ad9371 [list \
   "axi_ad9371_rx_os.v" \
   "axi_ad9371_tx_channel.v" \
   "axi_ad9371_tx.v" \
-  "axi_ad9371.v" ]
+  "axi_ad9371.v" \
+  "bd/bd.tcl" ]
 
 adi_ip_properties axi_ad9371
+
+adi_ip_bd axi_ad9371 "bd/bd.tcl $ad_hdl_dir/library/scripts/common_bd.tcl"
 
 set_property driver_value 0 [ipx::get_ports *dovf* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *dac_sync_in* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *dac_tx_ready* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *adc_rx_valid* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *adc_rx_os_valid* -of_objects [ipx::current_core]]
+
+adi_add_auto_fpga_spec_params
+ipx::create_xgui_files [ipx::current_core]
 
 ipx::save_core [ipx::current_core]
 

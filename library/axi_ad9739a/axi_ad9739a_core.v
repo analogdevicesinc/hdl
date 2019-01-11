@@ -38,6 +38,10 @@
 module axi_ad9739a_core #(
 
   parameter   ID = 0,
+  parameter   FPGA_TECHNOLOGY = 0,
+  parameter   FPGA_FAMILY = 0,
+  parameter   SPEED_GRADE = 0,
+  parameter   DEV_PACKAGE = 0,
   parameter   DAC_DDS_TYPE = 1,
   parameter   DAC_DDS_CORDIC_DW = 16,
   parameter   DAC_DDS_CORDIC_PHASE_DW = 16,
@@ -161,7 +165,13 @@ module axi_ad9739a_core #(
 
   // dac common processor interface
 
-  up_dac_common #(.ID(ID)) i_up_dac_common (
+  up_dac_common #(
+    .ID (ID),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .FPGA_FAMILY (FPGA_FAMILY),
+    .SPEED_GRADE (SPEED_GRADE),
+    .DEV_PACKAGE (DEV_PACKAGE)
+  ) i_up_dac_common (
     .mmcm_rst (),
     .dac_clk (dac_div_clk),
     .dac_rst (dac_rst),

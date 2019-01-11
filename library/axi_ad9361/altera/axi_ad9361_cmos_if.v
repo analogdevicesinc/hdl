@@ -37,7 +37,7 @@
 
 module axi_ad9361_cmos_if #(
 
-  parameter   DEVICE_TYPE = 0,
+  parameter   FPGA_TECHNOLOGY = 0,
   parameter   DAC_IODELAY_ENABLE = 0,
   parameter   IO_DELAY_GROUP = "dev_if_delay_group") (
 

@@ -1,6 +1,8 @@
 
 
 package require qsys
+package require quartus::device
+
 source ../scripts/adi_env.tcl
 source ../scripts/adi_ip_alt.tcl
 
@@ -9,6 +11,7 @@ set_module_property DESCRIPTION "AXI AD9371 Interface"
 set_module_property VERSION 1.0
 set_module_property GROUP "Analog Devices"
 set_module_property DISPLAY_NAME axi_ad9371
+set_module_property VALIDATION_CALLBACK info_param_validate
 
 # files
 
@@ -68,6 +71,8 @@ set_parameter_property ADC_DATAPATH_DISABLE DISPLAY_NAME ADC_DATAPATH_DISABLE
 set_parameter_property ADC_DATAPATH_DISABLE TYPE INTEGER
 set_parameter_property ADC_DATAPATH_DISABLE UNITS None
 set_parameter_property ADC_DATAPATH_DISABLE HDL_PARAMETER true
+
+adi_add_auto_fpga_spec_params
 
 # axi4 slave
 

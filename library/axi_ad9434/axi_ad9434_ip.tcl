@@ -26,14 +26,20 @@ adi_ip_files axi_ad9434 [list \
   "axi_ad9434_pnmon.v" \
   "axi_ad9434_core.v" \
   "axi_ad9434_constr.xdc" \
-  "axi_ad9434.v" ]
+  "axi_ad9434.v" \
+  "bd/bd.tcl" ]
 
 adi_ip_properties axi_ad9434
+
+adi_ip_bd axi_ad9122 "bd/bd.tcl $ad_hdl_dir/library/scripts/common_bd.tcl"
 
 set_property driver_value 0 [ipx::get_ports *dovf* -of_objects [ipx::current_core]]
 
 ipx::infer_bus_interface delay_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 ipx::infer_bus_interface adc_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+
+adi_add_auto_fpga_spec_params
+ipx::create_xgui_files [ipx::current_core]
 
 ipx::save_core [ipx::current_core]
 

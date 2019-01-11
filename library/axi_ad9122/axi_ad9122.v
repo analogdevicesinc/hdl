@@ -38,7 +38,10 @@
 module axi_ad9122 #(
 
   parameter   ID = 0,
-  parameter   DEVICE_TYPE = 0,
+  parameter   FPGA_TECHNOLOGY = 0,
+  parameter   FPGA_FAMILY = 0,
+  parameter   SPEED_GRADE = 0,
+  parameter   DEV_PACKAGE = 0,
   parameter   SERDES_OR_DDR_N = 1,
   parameter   MMCM_OR_BUFIO_N = 1,
   parameter   MMCM_CLKIN_PERIOD = 1.667,
@@ -154,7 +157,7 @@ module axi_ad9122 #(
   // device interface
 
   axi_ad9122_if #(
-    .DEVICE_TYPE (DEVICE_TYPE),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .SERDES_OR_DDR_N (SERDES_OR_DDR_N),
     .MMCM_OR_BUFIO_N (MMCM_OR_BUFIO_N),
     .MMCM_CLKIN_PERIOD (MMCM_CLKIN_PERIOD),
@@ -206,6 +209,10 @@ module axi_ad9122 #(
 
   axi_ad9122_core #(
     .ID(ID),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .FPGA_FAMILY (FPGA_FAMILY),
+    .SPEED_GRADE (SPEED_GRADE),
+    .DEV_PACKAGE (DEV_PACKAGE),
     .DAC_DDS_TYPE (DAC_DDS_TYPE),
     .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
     .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),

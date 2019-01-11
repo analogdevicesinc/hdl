@@ -9,11 +9,13 @@ adi_ip_files axi_clkgen [list \
   "$ad_hdl_dir/library/xilinx/common/ad_mmcm_drp.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/common/up_clkgen.v" \
+  "$ad_hdl_dir/library/scripts/common_bd.tcl" \
+  "$ad_hdl_dir/library/scripts/adi_xilinx_device_info_enc.tcl" \
   "bd/bd.tcl" \
   "axi_clkgen.v" ]
 
 adi_ip_properties axi_clkgen
-adi_ip_bd axi_clkgen "bd/bd.tcl"
+adi_ip_bd axi_clkgen "bd/bd.tcl $ad_hdl_dir/library/scripts/common_bd.tcl"
 
 ipx::infer_bus_interface clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 ipx::infer_bus_interface clk2 xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
@@ -40,6 +42,9 @@ set_property -dict [list \
 	display_name {Enable secondary clock output} \
 	widget {checkBox} \
 ] $param
+
+adi_add_auto_fpga_spec_params
+ipx::create_xgui_files [ipx::current_core]
 
 set_property enablement_tcl_expr {$ENABLE_CLKIN2} [ipx::get_user_parameters CLKIN2_PERIOD -of_objects $cc]
 set_property enablement_tcl_expr {$ENABLE_CLKOUT1} [ipx::get_user_parameters CLK1_DIV -of_objects $cc]

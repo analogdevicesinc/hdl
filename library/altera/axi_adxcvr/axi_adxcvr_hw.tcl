@@ -1,5 +1,6 @@
 
 package require qsys
+package require quartus::device
 
 source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_alt.tcl
@@ -10,6 +11,7 @@ set_module_property VERSION 1.0
 set_module_property GROUP "Analog Devices"
 set_module_property DISPLAY_NAME axi_adxcvr
 set_module_property ELABORATION_CALLBACK p_axi_adxcvr
+set_module_property VALIDATION_CALLBACK info_param_validate
 
 # files
 
@@ -38,6 +40,15 @@ set_parameter_property NUM_OF_LANES DISPLAY_NAME NUM_OF_LANES
 set_parameter_property NUM_OF_LANES TYPE INTEGER
 set_parameter_property NUM_OF_LANES UNITS None
 set_parameter_property NUM_OF_LANES HDL_PARAMETER true
+
+adi_add_auto_fpga_spec_params
+
+adi_add_device_spec_param XCVR_TYPE
+adi_add_device_spec_param FPGA_VOLTAGE
+set_parameter_property FPGA_VOLTAGE DISPLAY_UNITS mV
+set_parameter_property FPGA_VOLTAGE_MANUAL DISPLAY_UNITS mV
+adi_add_indep_spec_params_overwrite XCVR_TYPE
+adi_add_indep_spec_params_overwrite FPGA_VOLTAGE
 
 # axi4 slave interface
 

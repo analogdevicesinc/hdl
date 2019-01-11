@@ -39,7 +39,7 @@
 
 module axi_ad9739a_if #(
 
-  parameter   DEVICE_TYPE = 0) (
+  parameter   FPGA_TECHNOLOGY = 0) (
 
   // dac interface
 
@@ -102,7 +102,7 @@ module axi_ad9739a_if #(
     .DDR_OR_SDR_N(1),
     .DATA_WIDTH(14),
     .SERDES_FACTOR(8),
-    .DEVICE_TYPE (DEVICE_TYPE))
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY))
   i_serdes_out_data_a (
     .rst (dac_rst),
     .clk (dac_clk),
@@ -126,7 +126,7 @@ module axi_ad9739a_if #(
     .DDR_OR_SDR_N(1),
     .DATA_WIDTH(14),
     .SERDES_FACTOR(8),
-    .DEVICE_TYPE (DEVICE_TYPE))
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY))
   i_serdes_out_data_b (
     .rst (dac_rst),
     .clk (dac_clk),
@@ -150,7 +150,7 @@ module axi_ad9739a_if #(
     .DDR_OR_SDR_N(1),
     .DATA_WIDTH(1),
     .SERDES_FACTOR(8),
-    .DEVICE_TYPE (DEVICE_TYPE))
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY))
   i_serdes_out_clk (
     .rst (dac_rst),
     .clk (dac_clk),

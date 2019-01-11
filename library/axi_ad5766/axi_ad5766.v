@@ -37,6 +37,10 @@
 
 module axi_ad5766 #(
 
+  parameter   FPGA_TECHNOLOGY = 0,
+  parameter   FPGA_FAMILY = 0,
+  parameter   SPEED_GRADE = 0,
+  parameter   DEV_PACKAGE = 0,
   parameter   ASYNC_SPI_CLK = 0,
   parameter   CMD_MEM_ADDRESS_WIDTH = 4,
   parameter   SDO_MEM_ADDRESS_WIDTH = 4)(
@@ -343,6 +347,10 @@ module axi_ad5766 #(
 
   up_dac_common #(
     .COMMON_ID (0),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .FPGA_FAMILY (FPGA_FAMILY),
+    .SPEED_GRADE (SPEED_GRADE),
+    .DEV_PACKAGE (DEV_PACKAGE), 
     .CONFIG (0),
     .CLK_EDGE_SEL (0),
     .DRP_DISABLE (6'h00),

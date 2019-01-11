@@ -37,8 +37,7 @@
 
 module ad_data_clk #(
 
-  parameter   SINGLE_ENDED = 0,
-  parameter   DEVICE_TYPE = 0) (
+  parameter   SINGLE_ENDED = 0) (
 
   input               rst,
   output              locked,
@@ -46,10 +45,6 @@ module ad_data_clk #(
   input               clk_in_p,
   input               clk_in_n,
   output              clk);
-
-  localparam  VIRTEX7 = 0;
-  localparam  ULTRASCALE_PLUS = 2;
-  localparam  ULTRASCALE = 3;
 
   // internal signals
 

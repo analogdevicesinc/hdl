@@ -38,6 +38,10 @@
 module axi_adrv9009_rx_os #(
 
   parameter   ID = 0,
+  parameter   FPGA_TECHNOLOGY = 0,
+  parameter   FPGA_FAMILY = 0,
+  parameter   SPEED_GRADE = 0,
+  parameter   DEV_PACKAGE = 0,
   parameter   DATAFORMAT_DISABLE = 0,
   parameter   DCFILTER_DISABLE = 0,
   parameter   IQCORRECTION_DISABLE = 0) (
@@ -262,6 +266,10 @@ module axi_adrv9009_rx_os #(
 
   up_adc_common #(
     .ID (ID),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .FPGA_FAMILY (FPGA_FAMILY),
+    .SPEED_GRADE (SPEED_GRADE),
+    .DEV_PACKAGE (DEV_PACKAGE),
     .COMMON_ID ('h20),
     .CONFIG (CONFIG),
     .DRP_DISABLE (1),

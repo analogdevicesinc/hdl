@@ -1,9 +1,13 @@
 
 package require qsys
+package require quartus::device
+
 source ../scripts/adi_env.tcl
 source ../scripts/adi_ip_alt.tcl
 
 ad_ip_create axi_ad9684 {AXI AD9684 Interface} axi_ad9684_elab
+set_module_property VALIDATION_CALLBACK info_param_validate
+
 ad_ip_files axi_ad9684 [list \
     $ad_hdl_dir/library/common/ad_rst.v \
     $ad_hdl_dir/library/common/ad_datafmt.v \
@@ -36,13 +40,13 @@ set_parameter_property ID DESCRIPTION "Instance ID"
 set_parameter_property ID UNITS None
 set_parameter_property ID HDL_PARAMETER true
 
-add_parameter DEVICE_TYPE INTEGER 0
-set_parameter_property DEVICE_TYPE DEFAULT_VALUE 0
-set_parameter_property DEVICE_TYPE DISPLAY_NAME DEVICE_TYPE
-set_parameter_property DEVICE_TYPE TYPE INTEGER
-set_parameter_property DEVICE_TYPE DESCRIPTION "Specify the FPGA device type"
-set_parameter_property DEVICE_TYPE UNITS None
-set_parameter_property DEVICE_TYPE HDL_PARAMETER true
+add_parameter FPGA_TECHNOLOGY INTEGER 0
+set_parameter_property FPGA_TECHNOLOGY DEFAULT_VALUE 0
+set_parameter_property FPGA_TECHNOLOGY DISPLAY_NAME FPGA_TECHNOLOGY
+set_parameter_property FPGA_TECHNOLOGY TYPE INTEGER
+set_parameter_property FPGA_TECHNOLOGY DESCRIPTION "Specify the FPGA device type"
+set_parameter_property FPGA_TECHNOLOGY UNITS None
+set_parameter_property FPGA_TECHNOLOGY HDL_PARAMETER true
 
 add_parameter OR_STATUS INTEGER 1
 set_parameter_property OR_STATUS DEFAULT_VALUE 1
@@ -51,6 +55,8 @@ set_parameter_property OR_STATUS TYPE INTEGER
 set_parameter_property OR_STATUS DESCRIPTION "This parameter enables the OVER RANGE line at the physical interface"
 set_parameter_property OR_STATUS UNITS None
 set_parameter_property OR_STATUS HDL_PARAMETER true
+
+adi_add_auto_fpga_spec_params
 
 # axi4 slave
 

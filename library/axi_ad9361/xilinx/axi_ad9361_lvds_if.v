@@ -37,7 +37,7 @@
 
 module axi_ad9361_lvds_if #(
 
-  parameter   DEVICE_TYPE = 0,
+  parameter   FPGA_TECHNOLOGY = 0,
   parameter   DAC_IODELAY_ENABLE = 0,
   parameter   IO_DELAY_GROUP = "dev_if_delay_group") (
 
@@ -472,7 +472,7 @@ module axi_ad9361_lvds_if #(
   generate
   for (i = 0; i < 6; i = i + 1) begin: g_rx_data
   ad_data_in #(
-    .DEVICE_TYPE (DEVICE_TYPE),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .IODELAY_CTRL (0),
     .IODELAY_GROUP (IO_DELAY_GROUP))
   i_rx_data (
@@ -494,7 +494,7 @@ module axi_ad9361_lvds_if #(
   // receive frame interface, ibuf -> idelay -> iddr
 
   ad_data_in #(
-    .DEVICE_TYPE (DEVICE_TYPE),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .IODELAY_CTRL (1),
     .IODELAY_GROUP (IO_DELAY_GROUP))
   i_rx_frame (
@@ -516,7 +516,7 @@ module axi_ad9361_lvds_if #(
   generate
   for (i = 0; i < 6; i = i + 1) begin: g_tx_data
   ad_data_out #(
-    .DEVICE_TYPE (DEVICE_TYPE),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .IODELAY_ENABLE (DAC_IODELAY_ENABLE),
     .IODELAY_CTRL (0),
     .IODELAY_GROUP (IO_DELAY_GROUP))
@@ -539,7 +539,7 @@ module axi_ad9361_lvds_if #(
   // transmit frame interface, oddr -> obuf
 
   ad_data_out #(
-    .DEVICE_TYPE (DEVICE_TYPE),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .IODELAY_ENABLE (DAC_IODELAY_ENABLE),
     .IODELAY_CTRL (0),
     .IODELAY_GROUP (IO_DELAY_GROUP))
@@ -560,7 +560,7 @@ module axi_ad9361_lvds_if #(
   // transmit clock interface, oddr -> obuf
 
   ad_data_out #(
-    .DEVICE_TYPE (DEVICE_TYPE),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .IODELAY_ENABLE (DAC_IODELAY_ENABLE),
     .IODELAY_CTRL (0),
     .IODELAY_GROUP (IO_DELAY_GROUP))
@@ -582,7 +582,7 @@ module axi_ad9361_lvds_if #(
 
   ad_data_out #(
     .SINGLE_ENDED (1),
-    .DEVICE_TYPE (DEVICE_TYPE),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .IODELAY_ENABLE (DAC_IODELAY_ENABLE),
     .IODELAY_CTRL (0),
     .IODELAY_GROUP (IO_DELAY_GROUP))
@@ -604,7 +604,7 @@ module axi_ad9361_lvds_if #(
 
   ad_data_out #(
     .SINGLE_ENDED (1),
-    .DEVICE_TYPE (DEVICE_TYPE),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .IODELAY_ENABLE (DAC_IODELAY_ENABLE),
     .IODELAY_CTRL (0),
     .IODELAY_GROUP (IO_DELAY_GROUP))
@@ -624,8 +624,7 @@ module axi_ad9361_lvds_if #(
 
   // device clock interface (receive clock)
 
-  ad_data_clk #(
-    .DEVICE_TYPE (DEVICE_TYPE))
+  ad_data_clk
   i_clk (
     .rst (1'd0),
     .locked (),

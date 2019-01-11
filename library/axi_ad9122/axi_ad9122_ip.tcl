@@ -30,9 +30,12 @@ adi_ip_files axi_ad9122 [list \
   "axi_ad9122_core.v" \
   "axi_ad9122_if.v" \
   "axi_ad9122_constr.xdc" \
-  "axi_ad9122.v" ]
+  "axi_ad9122.v" \
+  "bd/bd.tcl" ]
 
 adi_ip_properties axi_ad9122
+
+adi_ip_bd axi_ad9122 "bd/bd.tcl $ad_hdl_dir/library/scripts/common_bd.tcl"
 
 set_property driver_value 0 [ipx::get_ports *dac_sync_in* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *dunf* -of_objects [ipx::current_core]]
@@ -42,6 +45,10 @@ ipx::infer_bus_interface dac_clk_in_n xilinx.com:signal:clock_rtl:1.0 [ipx::curr
 ipx::infer_bus_interface dac_clk_out_p xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 ipx::infer_bus_interface dac_clk_out_n xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 ipx::infer_bus_interface dac_div_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+
+adi_add_auto_fpga_spec_params
+
+ipx::create_xgui_files [ipx::current_core]
 
 ipx::save_core [ipx::current_core]
 

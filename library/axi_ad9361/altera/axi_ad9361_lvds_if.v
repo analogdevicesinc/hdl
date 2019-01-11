@@ -37,7 +37,7 @@
 
 module axi_ad9361_lvds_if #(
 
-  parameter   DEVICE_TYPE = 0,
+  parameter   FPGA_TECHNOLOGY = 0,
   parameter   DAC_IODELAY_ENABLE = 0,
   parameter   IO_DELAY_GROUP = "dev_if_delay_group") (
 
@@ -178,8 +178,8 @@ module axi_ad9361_lvds_if #(
 
   // local parameters
 
-  localparam ARRIA10 = 0;
-  localparam CYCLONE5 = 1;
+  localparam CYCLONE5 = 'h10;
+  localparam ARRIA10  = 'h12;
 
   // unused interface signals
 
@@ -431,7 +431,7 @@ module axi_ad9361_lvds_if #(
   end
 
   generate
-  if (DEVICE_TYPE == CYCLONE5) begin
+  if (FPGA_TECHNOLOGY == CYCLONE5) begin
   axi_ad9361_lvds_if_c5 i_axi_ad9361_lvds_if_c5 (
     .rx_clk_in_p (rx_clk_in_p),
     .rx_clk_in_n (rx_clk_in_n),
@@ -467,7 +467,7 @@ module axi_ad9361_lvds_if #(
   endgenerate
 
   generate
-  if (DEVICE_TYPE == ARRIA10) begin
+  if (FPGA_TECHNOLOGY == ARRIA10) begin
   axi_ad9361_lvds_if_10 i_axi_ad9361_lvds_if_10 (
     .rx_clk_in_p (rx_clk_in_p),
     .rx_clk_in_n (rx_clk_in_n),

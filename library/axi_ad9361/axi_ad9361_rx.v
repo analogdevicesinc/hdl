@@ -41,6 +41,10 @@ module axi_ad9361_rx #(
   // parameters
 
   parameter   ID = 0,
+  parameter   FPGA_TECHNOLOGY = 0,
+  parameter   FPGA_FAMILY = 0,
+  parameter   SPEED_GRADE = 0,
+  parameter   DEV_PACKAGE = 0,
   parameter   MODE_1R1T = 0,
   parameter   CMOS_OR_LVDS_N = 0,
   parameter   PPS_RECEIVER_ENABLE = 0,
@@ -333,6 +337,10 @@ module axi_ad9361_rx #(
 
   up_adc_common #(
     .ID (ID),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .FPGA_FAMILY (FPGA_FAMILY),
+    .SPEED_GRADE (SPEED_GRADE),
+    .DEV_PACKAGE (DEV_PACKAGE),
     .CONFIG (CONFIG),
     .DRP_DISABLE (1),
     .USERPORTS_DISABLE (USERPORTS_DISABLE),

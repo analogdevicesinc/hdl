@@ -42,6 +42,11 @@ module axi_adxcvr_up #(
   parameter   integer ID = 0,
   parameter   integer NUM_OF_LANES = 8,
   parameter   integer XCVR_TYPE = 0,
+  parameter   [ 7:0]  FPGA_TECHNOLOGY = 0,
+  parameter   [ 7:0]  FPGA_FAMILY = 0,
+  parameter   [ 7:0]  SPEED_GRADE = 0,
+  parameter   [ 7:0]  DEV_PACKAGE = 0,
+  parameter   [15:0]  FPGA_VOLTAGE = 0,
   parameter   integer TX_OR_RX_N = 0,
   parameter   integer QPLL_ENABLE = 1,
   parameter           LPM_OR_DFE_N = 1,
@@ -120,7 +125,7 @@ module axi_adxcvr_up #(
 
   // parameters
 
-  localparam  [31:0]  VERSION = 32'h00100161;
+  localparam  [31:0]  VERSION = 32'h00110161;
 
   // internal registers
 
@@ -503,6 +508,7 @@ module axi_adxcvr_up #(
           10'h004: up_rdata_d <= {31'd0, up_resetn};
           10'h005: up_rdata_d <= {31'd0, up_status_int};
           10'h006: up_rdata_d <= {17'd0, up_user_ready_cnt, up_rst_cnt, up_pll_rst_cnt};
+          10'h007: up_rdata_d <= {FPGA_TECHNOLOGY,FPGA_FAMILY,SPEED_GRADE,DEV_PACKAGE}; // [8,8,8,8]
           10'h008: up_rdata_d <= {19'd0, up_lpm_dfe_n, 1'd0, up_rate, 2'd0, up_sys_clk_sel, 1'd0, up_out_clk_sel};
           10'h009: up_rdata_d <= up_rparam_s;
           10'h010: up_rdata_d <= {24'd0, up_icm_sel};
@@ -523,6 +529,7 @@ module axi_adxcvr_up #(
           10'h030: up_rdata_d <= up_tx_diffctrl;
           10'h031: up_rdata_d <= up_tx_postcursor;
           10'h032: up_rdata_d <= up_tx_precursor;
+	  10'h050: up_rdata_d <= {16'd0, FPGA_VOLTAGE};  // mV
           default: up_rdata_d <= 32'd0;
         endcase
       end else begin

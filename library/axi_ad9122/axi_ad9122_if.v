@@ -39,7 +39,7 @@
 
 module axi_ad9122_if #(
 
-  parameter   DEVICE_TYPE = 0,
+  parameter   FPGA_TECHNOLOGY = 0,
   parameter   SERDES_OR_DDR_N = 1,
   parameter   MMCM_OR_BUFIO_N = 1,
   parameter   MMCM_CLKIN_PERIOD = 1.667,
@@ -128,7 +128,7 @@ module axi_ad9122_if #(
   // dac data output serdes(s) & buffers
 
   ad_serdes_out #(
-    .DEVICE_TYPE (DEVICE_TYPE),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .DDR_OR_SDR_N (SERDES_OR_DDR_N),
     .DATA_WIDTH (16))
   i_serdes_out_data (
@@ -151,7 +151,7 @@ module axi_ad9122_if #(
   // dac frame output serdes & buffer
 
   ad_serdes_out #(
-    .DEVICE_TYPE (DEVICE_TYPE),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .DDR_OR_SDR_N (SERDES_OR_DDR_N),
     .DATA_WIDTH (1))
   i_serdes_out_frame (
@@ -174,7 +174,7 @@ module axi_ad9122_if #(
   // dac clock output serdes & buffer
 
   ad_serdes_out #(
-    .DEVICE_TYPE (DEVICE_TYPE),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .DDR_OR_SDR_N (SERDES_OR_DDR_N),
     .DATA_WIDTH (1))
   i_serdes_out_clk (
@@ -199,7 +199,7 @@ module axi_ad9122_if #(
   ad_serdes_clk #(
     .DDR_OR_SDR_N (SERDES_OR_DDR_N),
     .MMCM_OR_BUFR_N (MMCM_OR_BUFIO_N),
-    .DEVICE_TYPE (DEVICE_TYPE),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .MMCM_CLKIN_PERIOD (MMCM_CLKIN_PERIOD),
     .MMCM_VCO_DIV (MMCM_VCO_DIV),
     .MMCM_VCO_MUL (MMCM_VCO_MUL),

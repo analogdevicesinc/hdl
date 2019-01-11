@@ -40,7 +40,7 @@ module ad_data_in #(
   // parameters
 
   parameter   SINGLE_ENDED = 0,
-  parameter   DEVICE_TYPE = 0,
+  parameter   FPGA_TECHNOLOGY = 0,
   parameter   IODELAY_ENABLE = 1,
   parameter   IODELAY_CTRL = 0,
   parameter   IODELAY_GROUP = "dev_if_delay_group") (
@@ -69,17 +69,17 @@ module ad_data_in #(
   // internal parameters
 
   localparam  NONE = -1;
-  localparam  VIRTEX7 = 0;
-  localparam  ULTRASCALE_PLUS = 2;
-  localparam  ULTRASCALE = 3;
+  localparam  SEVEN_SERIES = 1;
+  localparam  ULTRASCALE = 2;
+  localparam  ULTRASCALE_PLUS = 3;
 
   localparam  IODELAY_CTRL_ENABLED = (IODELAY_ENABLE == 1) ? IODELAY_CTRL : 0;
-  localparam  IODELAY_CTRL_SIM_DEVICE = (DEVICE_TYPE == ULTRASCALE_PLUS) ? "ULTRASCALE" :
-    (DEVICE_TYPE == ULTRASCALE) ? "ULTRASCALE" : "7SERIES";
+  localparam  IODELAY_CTRL_SIM_DEVICE = (FPGA_TECHNOLOGY == ULTRASCALE_PLUS) ? "ULTRASCALE" :
+    (FPGA_TECHNOLOGY == ULTRASCALE) ? "ULTRASCALE" : "7SERIES";
 
-  localparam  IODELAY_DEVICE_TYPE = (IODELAY_ENABLE == 1) ? DEVICE_TYPE : NONE;
-  localparam  IODELAY_SIM_DEVICE = (DEVICE_TYPE == ULTRASCALE_PLUS) ? "ULTRASCALE_PLUS" :
-    (DEVICE_TYPE == ULTRASCALE) ? "ULTRASCALE" : "7SERIES";
+  localparam  IODELAY_FPGA_TECHNOLOGY = (IODELAY_ENABLE == 1) ? FPGA_TECHNOLOGY : NONE;
+  localparam  IODELAY_SIM_DEVICE = (FPGA_TECHNOLOGY == ULTRASCALE_PLUS) ? "ULTRASCALE_PLUS" :
+    (FPGA_TECHNOLOGY == ULTRASCALE) ? "ULTRASCALE" : "7SERIES";
 
   // internal signals
 
@@ -119,7 +119,7 @@ module ad_data_in #(
   // idelay
 
   generate
-  if (IODELAY_DEVICE_TYPE == VIRTEX7) begin
+  if (IODELAY_FPGA_TECHNOLOGY == SEVEN_SERIES) begin
   (* IODELAY_GROUP = IODELAY_GROUP *)
   IDELAYE2 #(
     .CINVCTRL_SEL ("FALSE"),
@@ -147,7 +147,7 @@ module ad_data_in #(
   endgenerate
 
   generate
-  if ((IODELAY_DEVICE_TYPE == ULTRASCALE) || (IODELAY_DEVICE_TYPE == ULTRASCALE_PLUS)) begin
+  if ((IODELAY_FPGA_TECHNOLOGY == ULTRASCALE) || (IODELAY_FPGA_TECHNOLOGY == ULTRASCALE_PLUS)) begin
   assign up_drdata = up_drdata_s[8:4];
   (* IODELAY_GROUP = IODELAY_GROUP *)
   IDELAYE3 #(
@@ -175,7 +175,7 @@ module ad_data_in #(
   endgenerate
 
   generate
-  if (IODELAY_DEVICE_TYPE == NONE) begin
+  if (IODELAY_FPGA_TECHNOLOGY == NONE) begin
   assign rx_data_idelay_s = rx_data_ibuf_s;
 	assign up_drdata = 5'd0;
   end
@@ -184,7 +184,7 @@ module ad_data_in #(
   // iddr
 
   generate
-  if ((DEVICE_TYPE == ULTRASCALE) || (DEVICE_TYPE == ULTRASCALE_PLUS)) begin
+  if ((FPGA_TECHNOLOGY == ULTRASCALE) || (FPGA_TECHNOLOGY == ULTRASCALE_PLUS)) begin
   IDDRE1 #(.DDR_CLK_EDGE ("SAME_EDGE")) i_rx_data_iddr (
     .R (1'b0),
     .C (rx_clk),
@@ -196,7 +196,7 @@ module ad_data_in #(
   endgenerate
 
   generate
-  if (DEVICE_TYPE == VIRTEX7) begin
+  if (FPGA_TECHNOLOGY == SEVEN_SERIES) begin
   IDDR #(.DDR_CLK_EDGE ("SAME_EDGE")) i_rx_data_iddr (
     .CE (1'b1),
     .R (1'b0),
