@@ -63,19 +63,20 @@ module util_axis_upscale # (
 
   wire                                        type_s;
   wire                                        signext_s;
-  wire                                        sign_s;
   wire    [(NUM_OF_CHANNELS*UDATA_WIDTH)-1:0] data_out_s;
 
   localparam MSB_WIDTH = UDATA_WIDTH - DATA_WIDTH;
 
   assign type_s = dfmt_enable & dfmt_type;
   assign signext_s = dfmt_enable & dfmt_se;
-  assign sign_s = signext_s & (type_s ^ s_axis_data[(DATA_WIDTH-1)]);
 
   genvar i;
   generate
-  for (i=1; i <= NUM_OF_CHANNELS; i=i+1) begin
+  for (i=1; i <= NUM_OF_CHANNELS; i=i+1) begin : signext_data
 
+    wire sign_s;
+
+    assign sign_s = signext_s & (type_s ^ s_axis_data[(i*DATA_WIDTH-1)]);
     assign data_out_s[(i*UDATA_WIDTH-1):(i*UDATA_WIDTH-MSB_WIDTH)] = {(MSB_WIDTH){sign_s}};
     assign data_out_s[((i-1)*UDATA_WIDTH+DATA_WIDTH-1)] = type_s ^ s_axis_data[(i*DATA_WIDTH-1)];
     assign data_out_s[((i-1)*UDATA_WIDTH+DATA_WIDTH-2):((i-1)*UDATA_WIDTH)] = s_axis_data[(i*DATA_WIDTH-2):((i-1)*DATA_WIDTH)];
