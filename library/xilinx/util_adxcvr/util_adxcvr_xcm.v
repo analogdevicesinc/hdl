@@ -75,6 +75,10 @@ module util_adxcvr_xcm #(
   output  [15:0]  up_cm_rdata,
   output          up_cm_ready);
 
+  localparam GTXE2_TRANSCEIVERS = 2;
+  localparam GTHE3_TRANSCEIVERS = 5;
+  localparam GTHE4_TRANSCEIVERS = 8;
+
   // internal registers
 
   reg             up_enb_int = 'd0;
@@ -136,7 +140,7 @@ module util_adxcvr_xcm #(
   // instantiations
 
   generate
-  if (XCVR_TYPE == 0) begin
+  if (XCVR_TYPE == GTXE2_TRANSCEIVERS) begin
   assign qpll1_locked = 1'b0;
   assign qpll1_clk = 1'b0;
   assign qpll1_ref_clk = 1'b0;
@@ -203,7 +207,7 @@ module util_adxcvr_xcm #(
   endgenerate
 
   generate
-  if (XCVR_TYPE == 1) begin
+  if (XCVR_TYPE == GTHE3_TRANSCEIVERS) begin
   GTHE3_COMMON #(
     .BIAS_CFG0 (16'h0000),
     .BIAS_CFG1 (16'h0000),
@@ -349,7 +353,7 @@ module util_adxcvr_xcm #(
   endgenerate
 
   generate
-  if (XCVR_TYPE == 2) begin
+  if (XCVR_TYPE == GTHE4_TRANSCEIVERS) begin
   GTHE4_COMMON #(
     .AEN_QPLL0_FBDIV (1'b1),
     .AEN_QPLL1_FBDIV (1'b1),

@@ -40,6 +40,12 @@ module axi_adxcvr #(
   // parameters
 
   parameter   integer ID = 0,
+  parameter   [ 7:0]  FPGA_TECHNOLOGY = 0,
+  parameter   [ 7:0]  FPGA_FAMILY = 0,
+  parameter   [ 7:0]  SPEED_GRADE = 0,
+  parameter   [ 7:0]  DEV_PACKAGE = 0,
+  parameter   [15:0]  FPGA_VOLTAGE = 0,
+  parameter   integer XCVR_TYPE = 0,
   parameter   integer TX_OR_RX_N = 0,
   parameter   integer NUM_OF_LANES = 4) (
 
@@ -93,6 +99,12 @@ module axi_adxcvr #(
 
   axi_adxcvr_up #(
     .ID (ID),
+    .XCVR_TYPE (XCVR_TYPE),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .FPGA_FAMILY (FPGA_FAMILY),
+    .SPEED_GRADE (SPEED_GRADE),
+    .DEV_PACKAGE (DEV_PACKAGE),
+    .FPGA_VOLTAGE (FPGA_VOLTAGE),
     .TX_OR_RX_N (TX_OR_RX_N),
     .NUM_OF_LANES (NUM_OF_LANES))
   i_up (

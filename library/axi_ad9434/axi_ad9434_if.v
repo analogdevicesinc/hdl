@@ -37,7 +37,7 @@
 
 module axi_ad9434_if #(
 
-  parameter DEVICE_TYPE = 0,
+  parameter FPGA_TECHNOLOGY = 0,
   parameter IO_DELAY_GROUP = "dev_if_delay_group") (
 
   // device interface
@@ -100,7 +100,7 @@ module axi_ad9434_if #(
 
   // data interface
   ad_serdes_in #(
-    .DEVICE_TYPE(DEVICE_TYPE),
+    .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
     .IODELAY_CTRL(0),
     .IODELAY_GROUP(IO_DELAY_GROUP),
     .DDR_OR_SDR_N(SDR),
@@ -133,7 +133,7 @@ module axi_ad9434_if #(
 
   // over-range interface
   ad_serdes_in #(
-    .DEVICE_TYPE(DEVICE_TYPE),
+    .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
     .IODELAY_CTRL(1),
     .IODELAY_GROUP(IO_DELAY_GROUP),
     .DDR_OR_SDR_N(SDR),
@@ -166,7 +166,7 @@ module axi_ad9434_if #(
 
   // clock input buffers and MMCM_OR_BUFR_N
   ad_serdes_clk #(
-    .DEVICE_TYPE (DEVICE_TYPE),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .CLKIN_DS_OR_SE_N (1),
     .MMCM_OR_BUFR_N (1),
     .MMCM_CLKIN_PERIOD (2),

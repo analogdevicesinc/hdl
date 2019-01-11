@@ -27,9 +27,12 @@ adi_ip_files axi_ad9684 [list \
   "axi_ad9684_if.v" \
   "axi_ad9684_channel.v" \
   "axi_ad9684_constr.xdc" \
-  "axi_ad9684.v"]
+  "axi_ad9684.v" \
+  "bd/bd.tcl" ]
 
 adi_ip_properties axi_ad9684
+
+adi_ip_bd axi_ad9684 "bd/bd.tcl $ad_hdl_dir/library/scripts/common_bd.tcl"
 
 set_property driver_value 0 [ipx::get_ports *dovf* -of_objects [ipx::current_core]]
 
@@ -38,5 +41,8 @@ ipx::infer_bus_interface adc_clk_in_n xilinx.com:signal:clock_rtl:1.0 [ipx::curr
 ipx::infer_bus_interface delay_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 ipx::infer_bus_interface adc_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 ipx::infer_bus_interface adc_rst xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+
+adi_add_auto_fpga_spec_params
+ipx::create_xgui_files [ipx::current_core]
 
 ipx::save_core [ipx::current_core]

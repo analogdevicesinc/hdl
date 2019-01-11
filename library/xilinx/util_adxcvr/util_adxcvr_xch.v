@@ -136,6 +136,10 @@ module util_adxcvr_xch #(
   output  [15:0]  up_tx_rdata,
   output          up_tx_ready);
 
+  localparam GTXE2_TRANSCEIVERS = 2;
+  localparam GTHE3_TRANSCEIVERS = 5;
+  localparam GTHE4_TRANSCEIVERS = 8;
+
   // internal registers
 
   reg     [15:0]  up_es_rdata_int = 'd0;
@@ -291,14 +295,14 @@ module util_adxcvr_xch #(
   // instantiations
 
   generate
-  if (XCVR_TYPE == 0) begin
+  if (XCVR_TYPE == GTXE2_TRANSCEIVERS) begin
   BUFG i_rx_bufg (.I (rx_out_clk_s), .O (rx_out_clk));
   BUFG i_tx_bufg (.I (tx_out_clk_s), .O (tx_out_clk));
   end
   endgenerate
 
   generate
-  if (XCVR_TYPE == 0) begin
+  if (XCVR_TYPE == GTXE2_TRANSCEIVERS) begin
   assign rx_sys_clk_sel_s = up_rx_sys_clk_sel;
   assign tx_sys_clk_sel_s = up_tx_sys_clk_sel;
   assign rx_pll_clk_sel_s = 2'd0;
@@ -307,7 +311,7 @@ module util_adxcvr_xch #(
   endgenerate
 
   generate
-  if (XCVR_TYPE == 0) begin
+  if (XCVR_TYPE == GTXE2_TRANSCEIVERS) begin
   GTXE2_CHANNEL #(
     .ALIGN_COMMA_DOUBLE ("FALSE"),
     .ALIGN_COMMA_ENABLE (10'b1111111111),
@@ -751,7 +755,7 @@ module util_adxcvr_xch #(
   endgenerate
 
   generate
-  if (XCVR_TYPE == 1) begin
+  if (XCVR_TYPE == GTHE3_TRANSCEIVERS) begin
   BUFG_GT i_rx_bufg (
     .CE (1'b1),
     .CEMASK (1'b0),
@@ -773,7 +777,7 @@ module util_adxcvr_xch #(
   endgenerate
 
   generate
-  if (XCVR_TYPE == 1) begin
+  if (XCVR_TYPE == GTHE3_TRANSCEIVERS) begin
   assign rx_sys_clk_sel_s = (up_rx_sys_clk_sel[1] == 0) ? 2'b00 : {1'b1,~up_rx_sys_clk_sel[0]};
   assign tx_sys_clk_sel_s = (up_tx_sys_clk_sel[1] == 0) ? 2'b00 : {1'b1,~up_tx_sys_clk_sel[0]};
   assign rx_pll_clk_sel_s = up_rx_sys_clk_sel;
@@ -782,7 +786,7 @@ module util_adxcvr_xch #(
   endgenerate
 
   generate
-  if (XCVR_TYPE == 1) begin
+  if (XCVR_TYPE == GTHE3_TRANSCEIVERS) begin
   GTHE3_CHANNEL #(
     .ACJTAG_DEBUG_MODE (1'b0),
     .ACJTAG_MODE (1'b0),
@@ -1506,7 +1510,7 @@ module util_adxcvr_xch #(
   endgenerate
 
   generate
-  if (XCVR_TYPE == 2) begin
+  if (XCVR_TYPE == GTHE4_TRANSCEIVERS) begin
   BUFG_GT i_rx_bufg (
     .CE (1'b1),
     .CEMASK (1'b0),
@@ -1528,7 +1532,7 @@ module util_adxcvr_xch #(
   endgenerate
 
   generate
-  if (XCVR_TYPE == 2) begin
+  if (XCVR_TYPE == GTHE4_TRANSCEIVERS) begin
   assign rx_sys_clk_sel_s = (up_rx_sys_clk_sel[1] == 0) ? 2'b00 : {1'b1,~up_rx_sys_clk_sel[0]};
   assign tx_sys_clk_sel_s = (up_tx_sys_clk_sel[1] == 0) ? 2'b00 : {1'b1,~up_tx_sys_clk_sel[0]};
   assign rx_pll_clk_sel_s = up_rx_sys_clk_sel;
@@ -1537,7 +1541,7 @@ module util_adxcvr_xch #(
   endgenerate
 
   generate
-  if (XCVR_TYPE == 2) begin
+  if (XCVR_TYPE == GTHE4_TRANSCEIVERS) begin
   GTHE4_CHANNEL #(
     .ACJTAG_DEBUG_MODE (1'b0),
     .ACJTAG_MODE (1'b0),

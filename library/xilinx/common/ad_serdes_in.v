@@ -37,7 +37,7 @@
 
 module ad_serdes_in #(
 
-  parameter   DEVICE_TYPE = 0,
+  parameter   FPGA_TECHNOLOGY = 0,
   parameter   DDR_OR_SDR_N = 0,
   parameter   SERDES_FACTOR = 8,
   parameter   DATA_WIDTH = 16,
@@ -79,7 +79,9 @@ module ad_serdes_in #(
   input                           delay_rst,
   output                          delay_locked);
 
-  localparam  DEVICE_7SERIES  = 0;
+  localparam  SEVEN_SERIES  = 1;
+  localparam  ULTRASCALE  = 2;
+  localparam  ULTRASCALE_PLUS  = 3;
   localparam  DATA_RATE = (DDR_OR_SDR_N) ? "DDR" : "SDR";
 
   // internal signals
@@ -106,7 +108,7 @@ module ad_serdes_in #(
   // received data interface: ibuf -> idelay -> iserdes
 
   genvar l_inst;
-  generate if (DEVICE_TYPE == DEVICE_7SERIES) begin
+  generate if (FPGA_TECHNOLOGY == SEVEN_SERIES) begin
     for (l_inst = 0; l_inst <= (DATA_WIDTH-1); l_inst = l_inst + 1) begin: g_data
 
       IBUFDS i_ibuf (

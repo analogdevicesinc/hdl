@@ -41,7 +41,10 @@ module axi_ad9361 #(
 
   parameter   ID = 0,
   parameter   MODE_1R1T = 0,
-  parameter   DEVICE_TYPE = 0,
+  parameter   FPGA_TECHNOLOGY = 0,
+  parameter   FPGA_FAMILY = 0,
+  parameter   SPEED_GRADE = 0,
+  parameter   DEV_PACKAGE = 0,
   parameter   TDD_DISABLE = 0,
   parameter   PPS_RECEIVER_ENABLE = 0,
   parameter   CMOS_OR_LVDS_N = 0,
@@ -324,7 +327,7 @@ module axi_ad9361 #(
   assign tx_data_out_n = 6'h3f;
 
   axi_ad9361_cmos_if #(
-    .DEVICE_TYPE (DEVICE_TYPE),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .DAC_IODELAY_ENABLE (DAC_IODELAY_ENABLE),
     .IO_DELAY_GROUP (IO_DELAY_GROUP))
   i_dev_if (
@@ -385,7 +388,7 @@ module axi_ad9361 #(
   assign up_dac_drdata_s[79:50] = 30'd0;
 
   axi_ad9361_lvds_if #(
-    .DEVICE_TYPE (DEVICE_TYPE),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .DAC_IODELAY_ENABLE (DAC_IODELAY_ENABLE),
     .IO_DELAY_GROUP (IO_DELAY_GROUP))
   i_dev_if (
@@ -566,6 +569,10 @@ module axi_ad9361 #(
 
   axi_ad9361_rx #(
     .ID (ID),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .FPGA_FAMILY (FPGA_FAMILY),
+    .SPEED_GRADE (SPEED_GRADE),
+    .DEV_PACKAGE (DEV_PACKAGE),
     .MODE_1R1T (MODE_1R1T),
     .CMOS_OR_LVDS_N (CMOS_OR_LVDS_N),
     .PPS_RECEIVER_ENABLE (PPS_RECEIVER_ENABLE),
@@ -631,6 +638,10 @@ module axi_ad9361 #(
 
   axi_ad9361_tx #(
     .ID (ID),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .FPGA_FAMILY (FPGA_FAMILY),
+    .SPEED_GRADE (SPEED_GRADE),
+    .DEV_PACKAGE (DEV_PACKAGE),
     .MODE_1R1T (MODE_1R1T),
     .CLK_EDGE_SEL (DAC_CLK_EDGE_SEL),
     .CMOS_OR_LVDS_N (CMOS_OR_LVDS_N),

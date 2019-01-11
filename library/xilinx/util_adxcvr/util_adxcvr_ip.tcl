@@ -5,12 +5,17 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
 adi_ip_create util_adxcvr
 adi_ip_files util_adxcvr [list \
+  "$ad_hdl_dir/library/scripts/common_bd.tcl" \
+  "$ad_hdl_dir/library/scripts/adi_xilinx_device_info_enc.tcl" \
   "util_adxcvr_constr.xdc" \
   "util_adxcvr_xcm.v" \
   "util_adxcvr_xch.v" \
-  "util_adxcvr.v" ]
+  "util_adxcvr.v" \
+  "bd/bd.tcl"]
 
 adi_ip_properties_lite util_adxcvr
+
+adi_ip_bd util_adxcvr "bd/bd.tcl $ad_hdl_dir/library/scripts/common_bd.tcl"
 
 ipx::remove_all_bus_interface [ipx::current_core]
 
@@ -804,6 +809,9 @@ set_property enablement_dependency \
   (spirit:decode(id('MODELPARAM_VALUE.RX_NUM_OF_LANES')) > 15)} \
   [ipx::get_ports cpll_ref_clk_15 -of_objects [ipx::current_core]] \
   [ipx::get_ports up_cpll_rst_15 -of_objects [ipx::current_core]]
+
+adi_add_auto_fpga_spec_params
+ipx::create_xgui_files [ipx::current_core]
 
 ipx::save_core [ipx::current_core]
 

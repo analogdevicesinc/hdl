@@ -38,6 +38,10 @@
 module axi_ad9671 #(
 
   parameter ID = 0,
+  parameter   FPGA_TECHNOLOGY = 0,
+  parameter   FPGA_FAMILY = 0,
+  parameter   SPEED_GRADE = 0,
+  parameter   DEV_PACKAGE = 0,
   parameter QUAD_OR_DUAL_N = 1) (
 
   // jesd interface
@@ -220,7 +224,13 @@ module axi_ad9671 #(
 
   // common processor control
 
-  up_adc_common #(.ID (ID)) i_up_adc_common (
+  up_adc_common #(
+    .ID (ID),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .FPGA_FAMILY (FPGA_FAMILY),
+    .SPEED_GRADE (SPEED_GRADE),
+    .DEV_PACKAGE (DEV_PACKAGE)
+  ) i_up_adc_common (
     .mmcm_rst (),
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),

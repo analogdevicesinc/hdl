@@ -17,7 +17,7 @@ ad_ip_files util_adcfifo [list\
 # parameters
 
 ad_ip_parameter DEVICE_FAMILY STRING {Arria 10}
-ad_ip_parameter DEVICE_TYPE INTEGER 1
+ad_ip_parameter FPGA_TECHNOLOGY INTEGER 1
 ad_ip_parameter ADC_DATA_WIDTH INTEGER 256
 ad_ip_parameter DMA_DATA_WIDTH INTEGER 64
 ad_ip_parameter DMA_READY_ENABLE INTEGER 1

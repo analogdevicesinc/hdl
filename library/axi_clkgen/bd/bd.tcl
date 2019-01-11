@@ -1,8 +1,23 @@
+
 proc init {cellpath otherInfo} {
   set ip [get_bd_cells $cellpath]
 
   bd::mark_propagate_override $ip \
-    "CLKIN_PERIOD CLKIN2_PERIOD"
+    "CLKIN_PERIOD \
+     CLKIN2_PERIOD \
+     FPGA_VOLTAGE"
+
+  bd::mark_propagate_only $ip \
+    "FPGA_TECHNOLOGY \
+     FPGA_FAMILY \
+     SPEED_GRADE \
+     DEV_PACKAGE \
+     FPGA_VOLTAGE"
+
+  set ip_path [bd::get_vlnv_dir [get_property VLNV $ip]]
+  source ${ip_path}../scripts/common_bd.tcl
+
+  adi_auto_assign_device_spec $cellpath
 }
 
 proc axi_clkgen_get_infer_period {ip param clk_name} {

@@ -45,7 +45,11 @@ module axi_ad9963_rx #(
   parameter IQCORRECTION_DISABLE = 0,
   parameter SCALECORRECTION_ONLY = 1,
   parameter IODELAY_ENABLE = 0,
-  parameter ID = 0) (
+  parameter ID = 0,
+  parameter FPGA_TECHNOLOGY = 0,
+  parameter FPGA_FAMILY = 0,
+  parameter SPEED_GRADE = 0,
+  parameter DEV_PACKAGE = 0) (
 
   // adc interface
 
@@ -209,6 +213,10 @@ module axi_ad9963_rx #(
 
   up_adc_common #(
     .ID (ID),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .FPGA_FAMILY (FPGA_FAMILY),
+    .SPEED_GRADE (SPEED_GRADE),
+    .DEV_PACKAGE (DEV_PACKAGE),
     .CONFIG (CONFIG),
     .COMMON_ID(6'h00),
     .DRP_DISABLE (1),

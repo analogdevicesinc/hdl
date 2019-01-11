@@ -37,7 +37,7 @@
 
 module axi_ad9684_if #(
 
-  parameter DEVICE_TYPE = 0,
+  parameter FPGA_TECHNOLOGY = 0,
   parameter IO_DELAY_GROUP = "dev_if_delay_group",
   parameter OR_STATUS = 0) (
 
@@ -106,7 +106,7 @@ module axi_ad9684_if #(
   // data interface
 
   ad_serdes_in #(
-    .DEVICE_TYPE(DEVICE_TYPE),
+    .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
     .IODELAY_CTRL(1),
     .IODELAY_GROUP(IO_DELAY_GROUP),
     .DDR_OR_SDR_N(DDR_OR_SDR_N),
@@ -139,7 +139,7 @@ module axi_ad9684_if #(
   generate if (OR_STATUS == 1) begin
 
     ad_serdes_in #(
-      .DEVICE_TYPE(DEVICE_TYPE),
+      .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
       .IODELAY_CTRL(0),
       .IODELAY_GROUP(IO_DELAY_GROUP),
       .DDR_OR_SDR_N(DDR_OR_SDR_N),
@@ -183,7 +183,7 @@ module axi_ad9684_if #(
   // clock input buffers and MMCM_OR_BUFR_N
 
   ad_serdes_clk #(
-    .DEVICE_TYPE (DEVICE_TYPE),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .MMCM_CLKIN_PERIOD (2),
     .MMCM_VCO_DIV (6),
     .MMCM_VCO_MUL (12),

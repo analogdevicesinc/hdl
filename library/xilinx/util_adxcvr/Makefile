@@ -5,6 +5,7 @@
 
 LIBRARY_NAME := util_adxcvr
 
+XILINX_DEPS += bd/bd.tcl
 XILINX_DEPS += util_adxcvr.v
 XILINX_DEPS += util_adxcvr_constr.xdc
 XILINX_DEPS += util_adxcvr_ip.tcl

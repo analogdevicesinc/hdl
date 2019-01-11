@@ -113,9 +113,9 @@ module axi_ad9122_channel #(
     .CLK_RATIO (4))
   i_dds (
     .clk (dac_clk),
-    .rst (dac_rst),
     .dac_dds_format (dac_dds_format),
     .dac_data_sync (dac_data_sync),
+    .dac_valid (1'b1),
     .tone_1_scale (dac_dds_scale_1_s),
     .tone_2_scale (dac_dds_scale_2_s),
     .tone_1_init_offset (dac_dds_init_1_s),

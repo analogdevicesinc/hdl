@@ -241,7 +241,7 @@ module axi_xcvrlb_1 (
     .d_data_status ({rx_pn_err_s, rx_pn_oos_s}));
 
   util_adxcvr_xch #(
-    .XCVR_TYPE (0),
+    .XCVR_TYPE (2),
     .CPLL_FBDIV (2),
     .CPLL_FBDIV_4_5 (5),
     .TX_OUT_DIV (1),

@@ -37,7 +37,7 @@
 
 module util_adcfifo #(
 
-  parameter   DEVICE_TYPE = 0,
+  parameter   FPGA_TECHNOLOGY = 0,
   parameter   ADC_DATA_WIDTH = 256,
   parameter   DMA_DATA_WIDTH =  64,
   parameter   DMA_READY_ENABLE = 1,
@@ -200,7 +200,7 @@ module util_adcfifo #(
   // instantiations
 
   generate
-  if (DEVICE_TYPE == 1) begin
+  if (FPGA_TECHNOLOGY == 1) begin
   alt_mem_asym i_mem_asym (
     .mem_i_wrclock (adc_clk),
     .mem_i_wren (adc_wr_int),

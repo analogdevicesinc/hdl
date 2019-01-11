@@ -38,7 +38,7 @@
 
 module ad_serdes_clk #(
 
-  parameter       DEVICE_TYPE = 0,
+  parameter       FPGA_TECHNOLOGY = 0,
   parameter       DDR_OR_SDR_N = 1,
   parameter       CLKIN_DS_OR_SE_N = 1,
   parameter       SERDES_FACTOR = 8,
@@ -102,7 +102,7 @@ module ad_serdes_clk #(
   generate
   if (MMCM_OR_BUFR_N == 1) begin
     ad_mmcm_drp #(
-      .MMCM_DEVICE_TYPE (DEVICE_TYPE),
+      .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
       .MMCM_CLKIN_PERIOD (MMCM_CLKIN_PERIOD),
       .MMCM_CLKIN2_PERIOD (MMCM_CLKIN_PERIOD),
       .MMCM_VCO_DIV (MMCM_VCO_DIV),

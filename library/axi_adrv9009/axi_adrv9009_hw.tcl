@@ -1,6 +1,8 @@
 
 
 package require qsys
+package require quartus::device
+
 source ../scripts/adi_env.tcl
 source ../scripts/adi_ip_alt.tcl
 
@@ -9,6 +11,7 @@ set_module_property DESCRIPTION "AXI adrv9009 Interface"
 set_module_property VERSION 1.0
 set_module_property GROUP "Analog Devices"
 set_module_property DISPLAY_NAME axi_adrv9009
+set_module_property VALIDATION_CALLBACK info_param_validate
 
 # files
 
@@ -131,6 +134,8 @@ set_parameter_property DAC_IQCORRECTION_DISABLE DISPLAY_NAME DAC_IQCORRECTION_DI
 set_parameter_property DAC_IQCORRECTION_DISABLE TYPE INTEGER
 set_parameter_property DAC_IQCORRECTION_DISABLE UNITS None
 set_parameter_property DAC_IQCORRECTION_DISABLE HDL_PARAMETER true
+
+adi_add_auto_fpga_spec_params
 
 # axi4 slave
 

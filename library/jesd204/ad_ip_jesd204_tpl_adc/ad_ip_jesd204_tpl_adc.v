@@ -25,6 +25,10 @@
 
 module ad_ip_jesd204_tpl_adc #(
   parameter ID = 0,
+  parameter FPGA_TECHNOLOGY = 0,
+  parameter FPGA_FAMILY = 0,
+  parameter SPEED_GRADE = 0,
+  parameter DEV_PACKAGE = 0,
   parameter NUM_LANES = 1,
   parameter NUM_CHANNELS = 4,
   parameter SAMPLES_PER_FRAME = 1,
@@ -98,6 +102,10 @@ module ad_ip_jesd204_tpl_adc #(
   // regmap
   ad_ip_jesd204_tpl_adc_regmap #(
     .ID (ID),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .FPGA_FAMILY (FPGA_FAMILY),
+    .SPEED_GRADE (SPEED_GRADE),
+    .DEV_PACKAGE (DEV_PACKAGE),
     .NUM_CHANNELS (NUM_CHANNELS),
     .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
     .NUM_PROFILES(1)

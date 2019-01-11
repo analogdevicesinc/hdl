@@ -60,6 +60,8 @@ set cc [ipx::current_core]
 set_property display_name "JESD204 Transport Layer for DACs" $cc
 set_property description "JESD204 Transport Layer for DACs" $cc
 
+# ADD missing stuff #######################################################
+
 adi_add_bus "link" "master" \
   "xilinx.com:interface:axis_rtl:1.0" \
   "xilinx.com:interface:axis:1.0" \
