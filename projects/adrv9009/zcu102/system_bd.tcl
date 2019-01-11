@@ -31,14 +31,6 @@ ad_connect sys_cpu_resetn dma_clk_wiz/resetn
 ad_connect sys_dma_clk dma_clk_wiz/clk_out1
 ad_connect sys_dma_rstgen/ext_reset_in sys_rstgen/peripheral_reset
 
-ad_ip_parameter axi_adrv9009_tx_xcvr CONFIG.XCVR_TYPE 2
-ad_ip_parameter axi_adrv9009_rx_xcvr CONFIG.XCVR_TYPE 2
-ad_ip_parameter axi_adrv9009_rx_os_xcvr CONFIG.XCVR_TYPE 2
-
-ad_ip_parameter util_adrv9009_xcvr CONFIG.XCVR_TYPE 2
 ad_ip_parameter util_adrv9009_xcvr CONFIG.QPLL_FBDIV 80
 ad_ip_parameter util_adrv9009_xcvr CONFIG.QPLL_REFCLK_DIV 1
-
-ad_ip_parameter axi_adrv9009_rx_clkgen CONFIG.DEVICE_TYPE 2
-ad_ip_parameter axi_adrv9009_tx_clkgen CONFIG.DEVICE_TYPE 2
 
