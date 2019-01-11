@@ -359,7 +359,7 @@ always @(posedge clk) begin
         end
 end
 
-assign sdo = (inst_d1 == CMD_TRANSFER) ? data_shift[DATA_WIDTH] : SDO_DEFAULT;
+assign sdo = ((inst_d1 == CMD_TRANSFER) && (sdo_enabled)) ? data_shift[DATA_WIDTH] : SDO_DEFAULT;
 
 assign sdi_data = (NUM_OF_SDI == 1) ? data_shift[(DATA_WIDTH-1):0] :
                   (NUM_OF_SDI == 2) ? {data_shift_1[(DATA_WIDTH-1):0], data_shift[(DATA_WIDTH-1):0]} :
