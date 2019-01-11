@@ -100,7 +100,7 @@ proc ad_ip_create {pname pdisplay_name {pelabfunction ""} {pcomposefunction ""}}
   set_module_property DESCRIPTION $pdisplay_name
   set_module_property VERSION 1.0
   set_module_property GROUP "Analog Devices"
-  
+
   if {$pelabfunction ne ""} {
     set_module_property ELABORATION_CALLBACK $pelabfunction
   }
@@ -135,9 +135,186 @@ proc ad_ip_parameter {pname ptype pdefault {phdl true} {properties {}}} {
 ###################################################################################################
 ###################################################################################################
 
+proc adi_add_auto_fpga_spec_params {} {
+
+    global ad_hdl_dir
+    source $ad_hdl_dir/library/scripts/adi_intel_device_info_enc.tcl
+
+    ad_ip_parameter DEVICE STRING "" false {
+      SYSTEM_INFO DEVICE
+      VISIBLE false
+    }
+
+    foreach p $auto_gen_param_list {
+      adi_add_device_spec_param $p
+    }
+}
+
+###################################################################################################
+
+proc adi_add_device_spec_param {param} {
+
+    global auto_gen_param_list
+    global auto_set_param_list
+    global fpga_technology_list
+    global fpga_family_list
+    global speed_grade_list
+    global dev_package_list
+    global xcvr_type_list
+    global fpga_voltage_list
+
+    set group "FPGA info"
+
+    set list_pointer [string tolower $param]
+    set list_pointer [append list_pointer "_list"]
+
+    set enc_list [subst $$list_pointer]
+
+    set ranges ""
+
+    add_parameter $param INTEGER
+    set_parameter_property $param DISPLAY_NAME $param
+    set_parameter_property $param GROUP $group
+    set_parameter_property $param UNITS None
+    set_parameter_property $param HDL_PARAMETER true
+    set_parameter_property $param VISIBLE true
+    set_parameter_property $param DERIVED true
+
+    add_parameter ${param}_MANUAL INTEGER
+    set_parameter_property ${param}_MANUAL DISPLAY_NAME $param
+    set_parameter_property ${param}_MANUAL GROUP $group
+    set_parameter_property ${param}_MANUAL UNITS None
+    set_parameter_property ${param}_MANUAL HDL_PARAMETER false
+    set_parameter_property ${param}_MANUAL VISIBLE false
+    set_parameter_property ${param}_MANUAL DEFAULT_VALUE [lindex $enc_list 0 1]
+
+    foreach i $enc_list {
+     set value [lindex $i 0]
+     set encode [lindex $i 1]
+     append ranges "\"$encode\:$value\" "
+    }
+    set_parameter_property $param ALLOWED_RANGES $ranges
+    set_parameter_property ${param}_MANUAL ALLOWED_RANGES $ranges
+}
+
+###################################################################################################
+
+proc adi_add_indep_spec_params_overwrite {param} {
+    add_parameter ${param}_USER_OVERWRITE BOOLEAN 0
+    set_parameter_property ${param}_USER_OVERWRITE DISPLAY_NAME "Manually overwrite $param parameter"
+    set_parameter_property ${param}_USER_OVERWRITE HDL_PARAMETER false
+    set_parameter_property ${param}_USER_OVERWRITE GROUP {FPGA info}
+}
+
+###################################################################################################
+
+proc info_param_validate {} {
+  global ad_hdl_dir
+  global fpga_technology
+  global fpga_family
+  global speed_grade
+  global dev_package
+  global xcvr_type
+  global fpga_voltage
+
+  source $ad_hdl_dir/library/scripts/adi_intel_device_info_enc.tcl
+
+  set device [get_parameter_value DEVICE]
+  set auto_populate true ;# for future code dev
+
+  set all_ip_param_list [get_parameters]
+  set validate_list ""
+  set independent_overwrite_list ""
+  foreach param $all_ip_param_list {
+    foreach elem [concat $auto_gen_param_list $auto_set_param_list] {
+      if { "$elem" == "$param" } {
+        append validate_list "$param "
+      }
+      if { [regexp ${elem}_USER_OVERWRITE $param] } {
+        append independent_overwrite_list "$elem "
+      }
+    }
+  }
+
+  set indep_overwrite [expr {[llength $independent_overwrite_list] != 0} ? 1 : 0]
+
+  if { $auto_populate == true } {
+
+    get_part_param ;# in adi_intel_device_info_enc.tcl
+
+    # point parameters and assign
+    foreach param $validate_list {
+      set ls_param [string tolower $param]
+      set list_pointer $ls_param
+      append list_pointer "_list"
+      set pointer_to_sys_val [subst $$ls_param]   ;# e.g., $fpga_technology
+      set enc_list_pointer [subst $$list_pointer] ;# e.g., $fpga_technology_list
+
+      # get_part_info returns '{'#value'}'
+      regsub -all "{" $pointer_to_sys_val "" pointer_to_sys_val
+      regsub -all "}" $pointer_to_sys_val "" pointer_to_sys_val
+
+      # the list defines a range or pairs of values
+      set get_list_correspondence 1
+      if { [llength $enc_list_pointer] != 0 } {
+        if { [llength $enc_list_pointer] == 2 } {
+          if { [llength [lindex $enc_list_pointer 0]] == 1 } {
+            set get_list_correspondence 0
+          }
+        }
+      } else {
+        send_message ERROR "No list $list_pointer defined in adi_intel_device_info_enc.tcl for parameter $param"
+      }
+
+      # auto assign parameter value
+      if { $get_list_correspondence } {
+        set matched ""
+        foreach i $enc_list_pointer {
+          if { [regexp ^[lindex $i 0] $pointer_to_sys_val] } {
+            set matched [lindex $i 1]
+          }
+        }
+        if { $matched == "" } {
+          send_message ERROR "Unknown or undefined(adi_intel_device_info_enc.tcl) $param \"$pointer_to_sys_val\" form \"$device\" device"
+        } else {
+          set_parameter_value $param $matched
+        }
+      } else {
+          set_parameter_value $param $pointer_to_sys_val
+      }
+    }
+  } else {
+    foreach p $validate_list {
+      set_parameter_value $p [get_parameter_value ${p}_MANUAL]
+    }
+  }
+
+  # display manual(writable) or auto(non-writable) parametes
+  foreach p $validate_list {
+    set_parameter_property ${p}_MANUAL VISIBLE [expr $auto_populate ? false : true]
+    set_parameter_property $p VISIBLE $auto_populate
+    if { $indep_overwrite == 1 } {
+      foreach p_overwrite $independent_overwrite_list {
+        if { $p == $p_overwrite } {
+          set p_over_val [get_parameter_value ${p}_USER_OVERWRITE]
+          # set the hdl parameter with the independent manual overwritten value
+          if { $p_over_val } {
+            set_parameter_value $p [get_parameter_value ${p}_MANUAL]
+            set_parameter_property ${p}_MANUAL VISIBLE $p_over_val
+            set_parameter_property $p VISIBLE [expr $p_over_val ? false : true]
+          }
+        }
+      }
+    }
+  }
+}
+
+###################################################################################################
+###################################################################################################
+
 proc ad_ip_addfile {pname pfile} {
 
-  set pmodule [file tail $pfile]  
+  set pmodule [file tail $pfile]
 
   regsub {\..$} $pmodule {} mname
   if {$pname eq $mname} {
