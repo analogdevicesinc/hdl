@@ -1,5 +1,8 @@
 ## ###############################################################################################
 ## ###############################################################################################
+
+source $ad_hdl_dir/library/scripts/adi_xilinx_device_info_enc.tcl
+
 ## check tool version
 
 if {![info exists REQUIRED_VIVADO_VERSION]} {
@@ -42,10 +45,13 @@ proc adi_ip_bd {ip_name ip_bd_files} {
   if {$proj_filegroup == {}} {
     set proj_filegroup [ipx::add_file_group -type xilinx_blockdiagram "" [ipx::current_core]]
   }
-  set f [ipx::add_file $ip_bd_files $proj_filegroup]
-  set_property -dict [list \
-    type tclSource \
-  ] $f
+
+  foreach file $ip_bd_files {
+    set f [ipx::add_file $file $proj_filegroup]
+    set_property -dict [list \
+      type tclSource \
+    ] $f
+  }
 }
 
 proc adi_ip_infer_streaming_interfaces {ip_name} {
@@ -302,6 +308,58 @@ proc adi_ip_properties {ip_name} {
     -of_objects [ipx::get_memory_maps s_axi -of_objects [ipx::current_core]]]
   ipx::associate_bus_interfaces -clock s_axi_aclk -reset s_axi_aresetn [ipx::current_core]
   ipx::save_core
+}
+
+proc adi_add_auto_fpga_spec_params {} {
+
+  global auto_set_param_list
+  set cc [ipx::current_core]
+
+  foreach i $auto_set_param_list {
+    if { [ipx::get_user_parameters $i -of_objects $cc -quiet] ne ""} {
+      adi_add_device_spec_param $i
+    }
+  }
+}
+
+proc adi_add_device_spec_param {ip_param} {
+
+  set cc [ipx::current_core]
+
+  set list_pointer [string tolower $ip_param]
+  set list_pointer [append list_pointer "_list"]
+
+  global $list_pointer
+
+  # set j 1D list from the original list
+  foreach i [subst $$list_pointer] {lappend j [lindex $i 0] [lindex $i 1]}
+
+  # set ranges or validation pairs (show x in GUI assign the corresponding y to HDL)
+  if { [llength [subst $$list_pointer]] == 2 && [llength $j] == 4} {
+    set_property -dict [list \
+      "value_validation_type" "range" \
+      "value_validation_range_minimum" [lindex [subst $$list_pointer] 0] \
+      "value_validation_range_maximum" [lindex [subst $$list_pointer] 1] ] \
+    [ipx::get_user_parameters $ip_param -of_objects $cc]
+  } else {
+    set_property -dict [list \
+      "value_validation_type" "pairs" \
+      "value_validation_pairs" $j ] \
+    [ipx::get_user_parameters $ip_param -of_objects $cc]
+  }
+
+  # FPGA info grup
+  set info_group_name "FPGA info"
+  set info_group [ipgui::get_groupspec -name $info_group_name -component $cc -quiet]
+  if { [string trim $info_group] eq "" } {
+    set page0 [ipgui::get_pagespec -name "Page 0" -component $cc]
+    set info_group [ipgui::add_group -name $info_group_name -component $cc \
+        -parent $page0 -display_name $info_group_name]
+  }
+
+  set p [ipgui::get_guiparamspec -name $ip_param -component $cc]
+  set_property -dict [list "widget" "comboBox" ] $p
+  ipgui::move_param -component $cc -order 0 $p -parent $info_group
 }
 
 ## ###############################################################################################
