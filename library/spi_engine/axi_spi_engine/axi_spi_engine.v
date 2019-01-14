@@ -343,7 +343,7 @@ module axi_spi_engine #(
 
     wire spi_reset;
     ad_rst i_spi_resetn (
-      .preset(up_sw_reset),
+      .rst_async(up_sw_reset),
       .clk(spi_clk),
       .rst(spi_reset)
     );
