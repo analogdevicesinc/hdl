@@ -38,6 +38,7 @@
 module axi_spi_engine #(
 
   parameter CMD_FIFO_ADDRESS_WIDTH = 4,
+  parameter SYNC_FIFO_ADDRESS_WIDTH = 4,
   parameter SDO_FIFO_ADDRESS_WIDTH = 5,
   parameter SDI_FIFO_ADDRESS_WIDTH = 5,
   parameter MM_IF_TYPE = 0,
@@ -151,6 +152,9 @@ module axi_spi_engine #(
   wire [(NUM_OF_SDI * DATA_WIDTH-1):0] sdi_fifo_out_data;
   wire sdi_fifo_out_ready;
   wire sdi_fifo_out_valid;
+
+  wire [7:0] sync_fifo_data;
+  wire sync_fifo_valid;
 
   reg up_sw_reset = 1'b1;
   wire up_sw_resetn = ~up_sw_reset;
@@ -326,16 +330,14 @@ module axi_spi_engine #(
       sync_id <= 'h00;
       sync_id_pending <= 1'b0;
     end else begin
-      if (sync_valid == 1'b1) begin
-        sync_id <= sync_data;
+      if (sync_fifo_valid == 1'b1) begin
+        sync_id <= sync_fifo_data;
         sync_id_pending <= 1'b1;
       end else if (up_wreq_s == 1'b1 && up_waddr_s == 8'h21 && up_wdata_s[3] == 1'b1) begin
         sync_id_pending <= 1'b0;
       end
     end
   end
-
-  assign sync_ready = 1'b1;
 
   generate if (ASYNC_SPI_CLK) begin
 
@@ -427,6 +429,26 @@ module axi_spi_engine #(
     .m_axis_valid(sdi_fifo_out_valid),
     .m_axis_data(sdi_fifo_out_data),
     .m_axis_level(sdi_fifo_level)
+  );
+
+  util_axis_fifo #(
+    .DATA_WIDTH(8),
+    .ASYNC_CLK(ASYNC_SPI_CLK),
+    .ADDRESS_WIDTH(SYNC_FIFO_ADDRESS_WIDTH),
+    .S_AXIS_REGISTERED(0)
+  ) i_sync_fifo (
+    .s_axis_aclk(spi_clk),
+    .s_axis_aresetn(spi_resetn),
+    .s_axis_ready(sync_ready),
+    .s_axis_valid(sync_valid),
+    .s_axis_data(sync_data),
+    .s_axis_empty(),
+    .m_axis_aclk(clk),
+    .m_axis_aresetn(up_sw_resetn),
+    .m_axis_ready(1'b1),
+    .m_axis_valid(sync_fifo_valid),
+    .m_axis_data(sync_fifo_data),
+    .m_axis_level()
   );
 
   assign offload0_cmd_wr_en = up_wreq_s == 1'b1 && up_waddr_s == 8'h44;
