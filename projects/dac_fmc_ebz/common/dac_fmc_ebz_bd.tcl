@@ -35,13 +35,21 @@
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
+# 1 - Single link
+# 2 - Dual link
 set NUM_LINKS 2
-set NUM_OF_LANES 8
-set NUM_OF_CHANNELS 2
-set SAMPLE_WIDTH 16
+
+set NUM_OF_LANES_PER_LINK      4 ; # L
+set NUM_OF_CONVERTERS_PER_LINK 2 ; # M
+set SAMPLES_PER_FRAME          2 ; # S
+set SAMPLE_WIDTH              16 ; # N/NP
+
+set NUM_OF_LANES [expr $NUM_LINKS * $NUM_OF_LANES_PER_LINK]
+set NUM_OF_CONVERTERS [expr $NUM_LINKS * $NUM_OF_CONVERTERS_PER_LINK]
+
 
 set DAC_DATA_WIDTH [expr $NUM_OF_LANES * 32]
-set SAMPLES_PER_CHANNEL [expr $DAC_DATA_WIDTH / $NUM_OF_CHANNELS / $SAMPLE_WIDTH]
+set SAMPLES_PER_CHANNEL [expr $DAC_DATA_WIDTH / $NUM_OF_CONVERTERS / $SAMPLE_WIDTH]
 
 # Top level ports
 
@@ -60,14 +68,13 @@ ad_ip_instance axi_adxcvr dac_jesd204_xcvr [list \
 adi_axi_jesd204_tx_create dac_jesd204_link $NUM_OF_LANES $NUM_LINKS
 
 # JESD204 transport layer peripheral
-ad_ip_instance ad_ip_jesd204_tpl_dac dac_jesd204_transport [list \
-  NUM_LANES $NUM_OF_LANES \
-  NUM_CHANNELS $NUM_OF_CHANNELS \
-  SAMPLES_PER_FRAME 2 \
-]
+adi_tpl_jesd204_tx_create dac_jesd204_transport $NUM_OF_LANES \
+                                                $NUM_OF_CONVERTERS \
+                                                $SAMPLES_PER_FRAME \
+                                                $SAMPLE_WIDTH
 
 ad_ip_instance util_upack2 dac_upack [list \
-  NUM_OF_CHANNELS $NUM_OF_CHANNELS \
+  NUM_OF_CHANNELS $NUM_OF_CONVERTERS \
   SAMPLES_PER_CHANNEL $SAMPLES_PER_CHANNEL \
   SAMPLE_DATA_WIDTH $SAMPLE_WIDTH \
 ]
@@ -76,7 +83,7 @@ ad_ip_instance axi_dmac dac_dma [list \
   DMA_TYPE_SRC 0 \
   DMA_TYPE_DEST 1 \
   DMA_DATA_WIDTH_SRC 64 \
-  DMA_DATA_WIDTH_DEST 256 \
+  DMA_DATA_WIDTH_DEST $dac_dma_data_width \
 ]
 
 # shared transceiver core
@@ -84,7 +91,7 @@ ad_ip_instance axi_dmac dac_dma [list \
 ad_ip_instance util_adxcvr util_dac_jesd204_xcvr [list \
   RX_NUM_OF_LANES 0 \
   TX_NUM_OF_LANES $NUM_OF_LANES \
-  TX_LANE_INVERT [expr 0xf0] \
+  TX_LANE_INVERT [expr 0x0F] \
   QPLL_REFCLK_DIV 1 \
   QPLL_FBDIV_RATIO 1 \
   QPLL_FBDIV 0x80 \
@@ -107,7 +114,7 @@ ad_xcvrpll dac_jesd204_xcvr/up_pll_rst util_dac_jesd204_xcvr/up_cpll_rst_*
 # connections (dac)
 
 ad_xcvrcon util_dac_jesd204_xcvr dac_jesd204_xcvr dac_jesd204_link \
-  {5 6 4 7 3 2 1 0} \
+  {0 1 2 3 4 5 6 7} \
   tx_device_clk
 ad_connect tx_device_clk dac_jesd204_transport/link_clk
 ad_connect tx_device_clk dac_upack/clk
@@ -115,33 +122,11 @@ ad_connect tx_device_clk_rstgen/peripheral_reset dac_upack/reset
 
 ad_connect dac_jesd204_link/tx_data dac_jesd204_transport/link
 
-ad_ip_instance xlconcat dac_data_concat [list \
-  NUM_PORTS $NUM_OF_CHANNELS
-]
-
-ad_ip_instance xlslice dac_valid_slice [list \
-  DIN_WIDTH $NUM_OF_CHANNELS \
-  DIN_FROM 0 \
-  DIN_TO 0 \
-]
-
-ad_connect dac_jesd204_transport/dac_valid dac_valid_slice/Din
-ad_connect dac_valid_slice/Dout dac_upack/fifo_rd_en
-
-for {set i 0} {$i < $NUM_OF_CHANNELS} {incr i} {
-  ad_ip_instance xlslice dac_enable_slice_$i [list \
-    DIN_WIDTH $NUM_OF_CHANNELS \
-    DIN_FROM $i \
-    DIN_TO $i \
-  ]
-
-  ad_connect dac_jesd204_transport/enable dac_enable_slice_$i/Din
-
-  ad_connect dac_enable_slice_$i/Dout dac_upack/enable_$i
-  ad_connect dac_upack/fifo_rd_data_$i dac_data_concat/In$i
+ad_connect dac_jesd204_transport/dac_valid_0 dac_upack/fifo_rd_en
+for {set i 0} {$i < $NUM_OF_CONVERTERS} {incr i} {
+  ad_connect dac_upack/fifo_rd_data_$i dac_jesd204_transport/dac_data_$i
+  ad_connect dac_jesd204_transport/dac_enable_$i  dac_upack/enable_$i
 }
-
-ad_connect dac_jesd204_transport/dac_ddata dac_data_concat/dout
 
 ad_connect tx_device_clk axi_dac_fifo/dac_clk
 ad_connect tx_device_clk_rstgen/peripheral_reset axi_dac_fifo/dac_rst
