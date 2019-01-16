@@ -190,7 +190,7 @@ module ad_ip_jesd204_tpl_dac_regmap #(
     .up_drp_ready (1'd0),
     .up_drp_locked (1'd1),
     .up_usr_chanmax (),
-    .dac_usr_chanmax (8'd3),
+    .dac_usr_chanmax (NUM_CHANNELS),
     .up_dac_gpio_in (32'd0),
     .up_dac_gpio_out (),
     .up_dac_ce (),

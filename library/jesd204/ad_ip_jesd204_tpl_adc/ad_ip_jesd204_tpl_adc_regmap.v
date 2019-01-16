@@ -211,7 +211,7 @@ module ad_ip_jesd204_tpl_adc_regmap #(
     .up_drp_ready (1'd0),
     .up_drp_locked (1'd1),
     .up_usr_chanmax_out (),
-    .up_usr_chanmax_in (8'd1),
+    .up_usr_chanmax_in (NUM_CHANNELS),
     .up_adc_gpio_in (32'd0),
     .up_adc_gpio_out (),
     .up_adc_ce (),
