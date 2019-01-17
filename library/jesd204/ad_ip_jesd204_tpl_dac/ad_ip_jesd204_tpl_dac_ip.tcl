@@ -45,6 +45,7 @@ adi_ip_files ad_ip_jesd204_tpl_dac [list \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
+  "../ad_ip_jesd204_tpl_common/up_tpl_common.v" \
   "ad_ip_jesd204_tpl_dac_channel.v" \
   "ad_ip_jesd204_tpl_dac_core.v" \
   "ad_ip_jesd204_tpl_dac_framer.v" \
