@@ -38,7 +38,7 @@
 module up_tpl_common #(
 
   // parameters
-  parameter COMMON_ID = 4'hF,  // Offset of regmap
+  parameter COMMON_ID = 2'h3,  // Offset of regmap
   parameter NUM_PROFILES = 1   // Number of JESD profiles
   )(
 
@@ -56,11 +56,11 @@ module up_tpl_common #(
   input               up_rstn,
   input               up_clk,
   input               up_wreq,
-  input       [13:0]  up_waddr,
+  input        [9:0]  up_waddr,
   input       [31:0]  up_wdata,
   output              up_wack,
   input               up_rreq,
-  input       [13:0]  up_raddr,
+  input        [9:0]  up_raddr,
   output      [31:0]  up_rdata,
   output              up_rack
 );
@@ -77,8 +77,8 @@ module up_tpl_common #(
 
   // decode block select
 
-  assign up_wreq_s = (up_waddr[13:8] == COMMON_ID) ? up_wreq : 1'b0;
-  assign up_rreq_s = (up_raddr[13:8] == COMMON_ID) ? up_rreq : 1'b0;
+  assign up_wreq_s = (up_waddr[9:8] == COMMON_ID) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[9:8] == COMMON_ID) ? up_rreq : 1'b0;
 
   // processor write interface
 

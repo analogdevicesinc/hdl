@@ -100,11 +100,11 @@ module ad_ip_jesd204_tpl_adc_regmap #(
   wire adc_rst;
 
   wire up_wreq_s;
-  wire [13:0] up_waddr_s;
+  wire [9:0] up_waddr_s;
   wire [31:0] up_wdata_s;
   wire [NUM_CHANNELS+1:0] up_wack_s;
   wire up_rreq_s;
-  wire [13:0] up_raddr_s;
+  wire [9:0] up_raddr_s;
   wire [31:0] up_rdata_s[0:NUM_CHANNELS+1];
   wire [NUM_CHANNELS+1:0] up_rack_s;
 
@@ -129,13 +129,14 @@ module ad_ip_jesd204_tpl_adc_regmap #(
   // up bus interface
 
   up_axi #(
-    .AXI_ADDRESS_WIDTH (16)
+    .AXI_ADDRESS_WIDTH (12),
+    .ADDRESS_WIDTH (10)
   ) i_up_axi (
     .up_clk (up_clk),
     .up_rstn (up_rstn),
 
     .up_axi_awvalid (s_axi_awvalid),
-    .up_axi_awaddr ({4'b0,s_axi_awaddr}),
+    .up_axi_awaddr (s_axi_awaddr),
     .up_axi_awready (s_axi_awready),
     .up_axi_wvalid (s_axi_wvalid),
     .up_axi_wdata (s_axi_wdata),
@@ -145,7 +146,7 @@ module ad_ip_jesd204_tpl_adc_regmap #(
     .up_axi_bresp (s_axi_bresp),
     .up_axi_bready (s_axi_bready),
     .up_axi_arvalid (s_axi_arvalid),
-    .up_axi_araddr ({4'b0,s_axi_araddr}),
+    .up_axi_araddr (s_axi_araddr),
     .up_axi_arready (s_axi_arready),
     .up_axi_rvalid (s_axi_rvalid),
     .up_axi_rresp (s_axi_rresp),
@@ -191,6 +192,7 @@ module ad_ip_jesd204_tpl_adc_regmap #(
   // common processor control
 
   up_adc_common #(
+    .COMMON_ID (6'h0),
     .ID (ID),
     .DRP_DISABLE (1),
     .USERPORTS_DISABLE (1),
@@ -233,11 +235,11 @@ module ad_ip_jesd204_tpl_adc_regmap #(
     .up_clk (up_clk),
     .up_rstn (up_rstn),
     .up_wreq (up_wreq_s),
-    .up_waddr (up_waddr_s),
+    .up_waddr ({4'b0,up_waddr_s}),
     .up_wdata (up_wdata_s),
     .up_wack (up_wack_s[0]),
     .up_rreq (up_rreq_s),
-    .up_raddr (up_raddr_s),
+    .up_raddr ({4'b0,up_raddr_s}),
     .up_rdata (up_rdata_s[0]),
     .up_rack (up_rack_s[0])
   );
@@ -246,6 +248,7 @@ module ad_ip_jesd204_tpl_adc_regmap #(
   genvar i;
   for (i = 0; i < NUM_CHANNELS; i = i + 1) begin: g_channel
     up_adc_channel #(
+      .COMMON_ID (6'h1),
       .CHANNEL_ID (i),
       .USERPORTS_DISABLE (1),
       .DCFILTER_DISABLE (1),
@@ -290,11 +293,11 @@ module ad_ip_jesd204_tpl_adc_regmap #(
       .up_clk (up_clk),
       .up_rstn (up_rstn),
       .up_wreq (up_wreq_s),
-      .up_waddr (up_waddr_s),
+      .up_waddr ({4'b0,up_waddr_s}),
       .up_wdata (up_wdata_s),
       .up_wack (up_wack_s[i+1]),
       .up_rreq (up_rreq_s),
-      .up_raddr (up_raddr_s),
+      .up_raddr ({4'b0,up_raddr_s}),
       .up_rdata (up_rdata_s[i+1]),
       .up_rack (up_rack_s[i+1])
     );
@@ -302,7 +305,7 @@ module ad_ip_jesd204_tpl_adc_regmap #(
   endgenerate
 
   up_tpl_common #(
-     .COMMON_ID(4'h3),            // Offset of regmap
+     .COMMON_ID(2'h3),            // Offset of regmap
      .NUM_PROFILES(NUM_PROFILES)  // Number of JESD profiles
     ) i_up_tpl_adc (
 
@@ -328,4 +331,5 @@ module ad_ip_jesd204_tpl_adc_regmap #(
     .up_rdata (up_rdata_s[NUM_CHANNELS+1]),
     .up_rack (up_rack_s[NUM_CHANNELS+1])
   );
+
 endmodule
