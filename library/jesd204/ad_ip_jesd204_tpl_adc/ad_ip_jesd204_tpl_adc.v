@@ -85,6 +85,8 @@ module ad_ip_jesd204_tpl_adc #(
   localparam LINK_DATA_WIDTH = NUM_LANES * OCTETS_PER_BEAT * 8;
   localparam DMA_DATA_WIDTH = 16 * DATA_PATH_WIDTH * NUM_CHANNELS;
 
+  localparam BYTES_PER_FRAME = (NUM_CHANNELS * BITS_PER_SAMPLE * SAMPLES_PER_FRAME) / ( 8 * NUM_LANES);
+
   wire [NUM_CHANNELS-1:0] dfmt_enable_s;
   wire [NUM_CHANNELS-1:0] dfmt_sign_extend_s;
   wire [NUM_CHANNELS-1:0] dfmt_type_s;
@@ -97,7 +99,8 @@ module ad_ip_jesd204_tpl_adc #(
   ad_ip_jesd204_tpl_adc_regmap #(
     .ID (ID),
     .NUM_CHANNELS (NUM_CHANNELS),
-    .DATA_PATH_WIDTH (DATA_PATH_WIDTH)
+    .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
+    .NUM_PROFILES(1)
   ) i_regmap (
     .s_axi_aclk (s_axi_aclk),
     .s_axi_aresetn (s_axi_aresetn),
@@ -133,14 +136,22 @@ module ad_ip_jesd204_tpl_adc #(
 
     .enable (enable),
 
-    .adc_dovf (adc_dovf)
+    .adc_dovf (adc_dovf),
+
+    .jesd_m (NUM_CHANNELS),
+    .jesd_l (NUM_LANES),
+    .jesd_s (SAMPLES_PER_FRAME),
+    .jesd_f (BYTES_PER_FRAME),
+    .jesd_n (CONVERTER_RESOLUTION),
+    .jesd_np (BITS_PER_SAMPLE),
+    .up_profile_sel ()
   );
 
   ad_ip_jesd204_tpl_adc_core #(
     .NUM_LANES (NUM_LANES),
     .NUM_CHANNELS (NUM_CHANNELS),
     .BITS_PER_SAMPLE (BITS_PER_SAMPLE),
-    .CONVERTER_RESOLUTION  (CONVERTER_RESOLUTION),
+    .CONVERTER_RESOLUTION (CONVERTER_RESOLUTION),
     .SAMPLES_PER_FRAME (SAMPLES_PER_FRAME),
     .OCTETS_PER_BEAT (OCTETS_PER_BEAT),
     .LINK_DATA_WIDTH (LINK_DATA_WIDTH),

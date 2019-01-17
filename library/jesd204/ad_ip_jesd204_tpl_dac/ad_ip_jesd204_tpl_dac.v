@@ -85,6 +85,8 @@ module ad_ip_jesd204_tpl_dac #(
   localparam LINK_DATA_WIDTH = NUM_LANES * OCTETS_PER_BEAT * 8;
   localparam DMA_DATA_WIDTH = 16 * DATA_PATH_WIDTH * NUM_CHANNELS;
 
+  localparam BYTES_PER_FRAME = (NUM_CHANNELS * BITS_PER_SAMPLE * SAMPLES_PER_FRAME) / ( 8 * NUM_LANES);
+
   // internal signals
 
   wire dac_sync;
@@ -105,7 +107,8 @@ module ad_ip_jesd204_tpl_dac #(
   ad_ip_jesd204_tpl_dac_regmap #(
     .ID (ID),
     .NUM_CHANNELS (NUM_CHANNELS),
-    .DATA_PATH_WIDTH (DATA_PATH_WIDTH)
+    .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
+    .NUM_PROFILES(1)
   ) i_regmap (
     .s_axi_aclk (s_axi_aclk),
     .s_axi_aresetn (s_axi_aresetn),
@@ -145,7 +148,15 @@ module ad_ip_jesd204_tpl_dac #(
     .dac_dds_incr_1 (dac_dds_incr_1_s),
     .dac_pat_data_0 (dac_pat_data_0_s),
     .dac_pat_data_1 (dac_pat_data_1_s),
-    .dac_data_sel (dac_data_sel_s)
+    .dac_data_sel (dac_data_sel_s),
+
+    .jesd_m (NUM_CHANNELS),
+    .jesd_l (NUM_LANES),
+    .jesd_s (SAMPLES_PER_FRAME),
+    .jesd_f (BYTES_PER_FRAME),
+    .jesd_n (CONVERTER_RESOLUTION),
+    .jesd_np (BITS_PER_SAMPLE),
+    .up_profile_sel ()
   );
 
   // core
