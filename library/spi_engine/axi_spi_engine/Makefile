@@ -5,6 +5,7 @@
 
 LIBRARY_NAME := axi_spi_engine
 
+GENERIC_DEPS += axi_spi_engine_constr.xdc
 GENERIC_DEPS += axi_spi_engine.v
 
 XILINX_DEPS += ../../common/ad_rst.v
