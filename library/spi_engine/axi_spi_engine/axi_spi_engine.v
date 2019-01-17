@@ -120,8 +120,8 @@ module axi_spi_engine #(
   output offload0_sdo_wr_en,
   output [(DATA_WIDTH-1):0] offload0_sdo_wr_data,
 
-  output reg offload0_mem_reset,
-  output reg offload0_enable,
+  output offload0_mem_reset,
+  output offload0_enable,
   input offload0_enabled
   );
 
@@ -278,18 +278,22 @@ module axi_spi_engine #(
     end
   end
 
+  reg offload0_enable_reg;
+  reg offload0_mem_reset_reg;
+  wire offload0_enabled_s;
+
   // the software reset should reset all the registers
   always @(posedge clk) begin
     if (up_sw_resetn == 1'b0) begin
       up_irq_mask <= 'h00;
-      offload0_enable <= 1'b0;
-      offload0_mem_reset <= 1'b0;
+      offload0_enable_reg <= 1'b0;
+      offload0_mem_reset_reg <= 1'b0;
     end else begin
       if (up_wreq_s) begin
         case (up_waddr_s)
           8'h20: up_irq_mask <= up_wdata_s;
-          8'h40: offload0_enable <= up_wdata_s[0];
-          8'h42: offload0_mem_reset <= up_wdata_s[0];
+          8'h40: offload0_enable_reg <= up_wdata_s[0];
+          8'h42: offload0_mem_reset_reg <= up_wdata_s[0];
         endcase
       end
     end
@@ -319,8 +323,8 @@ module axi_spi_engine #(
       8'h36: up_rdata_ff <= sdi_fifo_level;
       8'h3a: up_rdata_ff <= sdi_fifo_out_data;
       8'h3c: up_rdata_ff <= sdi_fifo_out_data; /* PEEK register */
-      8'h40: up_rdata_ff <= {offload0_enable};
-      8'h41: up_rdata_ff <= {offload0_enabled};
+      8'h40: up_rdata_ff <= {offload0_enable_reg};
+      8'h41: up_rdata_ff <= {offload0_enabled_s};
       default: up_rdata_ff <= 'h00;
     endcase
   end
@@ -431,30 +435,122 @@ module axi_spi_engine #(
     .m_axis_level(sdi_fifo_level)
   );
 
-  util_axis_fifo #(
-    .DATA_WIDTH(8),
-    .ASYNC_CLK(ASYNC_SPI_CLK),
-    .ADDRESS_WIDTH(SYNC_FIFO_ADDRESS_WIDTH),
-    .S_AXIS_REGISTERED(0)
-  ) i_sync_fifo (
-    .s_axis_aclk(spi_clk),
-    .s_axis_aresetn(spi_resetn),
-    .s_axis_ready(sync_ready),
-    .s_axis_valid(sync_valid),
-    .s_axis_data(sync_data),
-    .s_axis_empty(),
-    .m_axis_aclk(clk),
-    .m_axis_aresetn(up_sw_resetn),
-    .m_axis_ready(1'b1),
-    .m_axis_valid(sync_fifo_valid),
-    .m_axis_data(sync_fifo_data),
-    .m_axis_level()
-  );
+  generate if (ASYNC_SPI_CLK) begin
 
-  assign offload0_cmd_wr_en = up_wreq_s == 1'b1 && up_waddr_s == 8'h44;
-  assign offload0_cmd_wr_data = up_wdata_s[15:0];
+    // synchronization FIFO for the SYNC interface
+    util_axis_fifo #(
+      .DATA_WIDTH(8),
+      .ASYNC_CLK(ASYNC_SPI_CLK),
+      .ADDRESS_WIDTH(SYNC_FIFO_ADDRESS_WIDTH),
+      .S_AXIS_REGISTERED(0)
+    ) i_sync_fifo (
+      .s_axis_aclk(spi_clk),
+      .s_axis_aresetn(spi_resetn),
+      .s_axis_ready(sync_ready),
+      .s_axis_valid(sync_valid),
+      .s_axis_data(sync_data),
+      .s_axis_empty(),
+      .m_axis_aclk(clk),
+      .m_axis_aresetn(up_sw_resetn),
+      .m_axis_ready(1'b1),
+      .m_axis_valid(sync_fifo_valid),
+      .m_axis_data(sync_fifo_data),
+      .m_axis_level()
+    );
 
-  assign offload0_sdo_wr_en = up_wreq_s == 1'b1 && up_waddr_s == 8'h45;
-  assign offload0_sdo_wr_data = up_wdata_s[7:0];
+    // synchronization FIFO for the offload command interface
+    wire up_offload0_cmd_wr_en_s;
+    wire [15:0] up_offload0_cmd_wr_data_s;
+
+    util_axis_fifo #(
+      .DATA_WIDTH(16),
+      .ASYNC_CLK(ASYNC_SPI_CLK),
+      .ADDRESS_WIDTH(SYNC_FIFO_ADDRESS_WIDTH),
+      .S_AXIS_REGISTERED(0)
+    ) i_offload_cmd_fifo (
+      .s_axis_aclk(clk),
+      .s_axis_aresetn(up_sw_resetn),
+      .s_axis_ready(),
+      .s_axis_valid(up_offload0_cmd_wr_en_s),
+      .s_axis_data(up_offload0_cmd_wr_data_s),
+      .s_axis_empty(),
+      .m_axis_aclk(spi_clk),
+      .m_axis_aresetn(spi_resetn),
+      .m_axis_ready(1'b1),
+      .m_axis_valid(offload0_cmd_wr_en),
+      .m_axis_data(offload0_cmd_wr_data),
+      .m_axis_level()
+    );
+
+    assign up_offload0_cmd_wr_en_s = up_wreq_s == 1'b1 && up_waddr_s == 8'h44;
+    assign up_offload0_cmd_wr_data_s = up_wdata_s[15:0];
+
+    // synchronization FIFO for the offload SDO interface
+    wire up_offload0_sdo_wr_en_s;
+    wire [DATA_WIDTH-1:0] up_offload0_sdo_wr_data_s;
+
+    util_axis_fifo #(
+      .DATA_WIDTH(DATA_WIDTH),
+      .ASYNC_CLK(ASYNC_SPI_CLK),
+      .ADDRESS_WIDTH(SYNC_FIFO_ADDRESS_WIDTH),
+      .S_AXIS_REGISTERED(0)
+    ) i_offload_sdo_fifo (
+      .s_axis_aclk(clk),
+      .s_axis_aresetn(up_sw_resetn),
+      .s_axis_ready(),
+      .s_axis_valid(up_offload0_sdo_wr_en_s),
+      .s_axis_data(up_offload0_sdo_wr_data_s),
+      .s_axis_empty(),
+      .m_axis_aclk(spi_clk),
+      .m_axis_aresetn(spi_resetn),
+      .m_axis_ready(1'b1),
+      .m_axis_valid(offload0_sdo_wr_en),
+      .m_axis_data(offload0_sdo_wr_data),
+      .m_axis_level()
+    );
+
+    assign up_offload0_sdo_wr_en_s = up_wreq_s == 1'b1 && up_waddr_s == 8'h45;
+    assign up_offload0_sdo_wr_data_s = up_wdata_s[DATA_WIDTH-1:0];
+
+  end else begin /* ASYNC_SPI_CLK == 0 */
+
+      assign sync_fifo_valid = sync_valid;
+      assign sync_fifo_data = sync_data;
+
+      assign offload0_cmd_wr_en = up_wreq_s == 1'b1 && up_waddr_s == 8'h44;
+      assign offload0_cmd_wr_data = up_wdata_s[15:0];
+
+      assign offload0_sdo_wr_en = up_wreq_s == 1'b1 && up_waddr_s == 8'h45;
+      assign offload0_sdo_wr_data = up_wdata_s[DATA_WIDTH-1:0];
+
+  end
+  endgenerate
+
+  sync_bits #(
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK (ASYNC_SPI_CLK)
+  ) i_offload_enable_sync (
+    .in (offload0_enable_reg),
+    .out_resetn (spi_resetn),
+    .out_clk (spi_clk),
+    .out (offload0_enable));
+
+  sync_bits #(
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK (ASYNC_SPI_CLK)
+  ) i_offload_enabled_sync (
+    .in (offload0_enabled),
+    .out_resetn (up_sw_resetn),
+    .out_clk (clk),
+    .out (offload0_enabled_s));
+
+  sync_bits #(
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK (ASYNC_SPI_CLK)
+  ) i_offload_mem_reset_sync (
+    .in (offload0_mem_reset_reg),
+    .out_resetn (spi_resetn),
+    .out_clk (spi_clk),
+    .out (offload0_mem_reset));
 
 endmodule
