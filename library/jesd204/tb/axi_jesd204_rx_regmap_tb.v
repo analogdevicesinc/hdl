@@ -44,7 +44,7 @@
 
 `timescale 1ns/100ps
 
-module axi_jesd204_rx_tb;
+module axi_jesd204_rx_regmap_tb;
   parameter VCD_FILE = "axi_jesd204_rx_regmap_tb.vcd";
   parameter NUM_LANES = 2;
   parameter NUM_LINKS = 1;
@@ -73,6 +73,8 @@ module axi_jesd204_rx_tb;
   wire [31:0] s_axi_rdata;
 
   wire [NUM_LANES*32-1:0] core_status_err_statistics_cnt;
+
+  reg [31:0] expected_reg_mem[0:1023];
 
   task write_reg;
   input [31:0] addr;
@@ -134,6 +136,9 @@ module axi_jesd204_rx_tb;
     read_reg(addr, value);
     expected = expected_reg_mem[addr[13:2]];
     match <= value === expected;
+    if (value !== expected) begin
+      $display("Address %h, Expected %h, Found %h", addr, expected, value);
+    end
   end
   endtask
 
@@ -145,7 +150,6 @@ module axi_jesd204_rx_tb;
     end
   end
 
-  reg [31:0] expected_reg_mem[0:1023];
 
   task set_reset_reg_value;
   input [31:0] addr;
@@ -257,7 +261,7 @@ module axi_jesd204_rx_tb;
 
     /* Update the expected values */
     for (i = 0; i < NUM_LANES * 'h20; i = i + 'h20) begin
-      lane = i / 20;;
+      lane = i / 20;
       set_reset_reg_value('h300 + i, 'h20);
       set_reset_reg_value('h310 + i, 'h03020100 | {4{lane,4'h0}});
       set_reset_reg_value('h314 + i, 'h07060504 | {4{lane,4'h0}});
@@ -269,6 +273,7 @@ module axi_jesd204_rx_tb;
 
   integer i;
   initial begin
+    #1;
     initialize_expected_reg_mem();
     @(posedge s_axi_aresetn)
     check_all_registers();

@@ -44,7 +44,7 @@
 
 `timescale 1ns/100ps
 
-module axi_jesd204_tx_tb;
+module axi_jesd204_tx_regmap_tb;
   parameter VCD_FILE = "axi_jesd204_tx_regmap_tb.vcd";
   parameter NUM_LANES = 2;
   parameter NUM_LINKS = 2;
@@ -71,6 +71,8 @@ module axi_jesd204_tx_tb;
   wire [2:0] s_axi_arprot = 3'b000;
   wire [1:0] s_axi_rresp;
   wire [31:0] s_axi_rdata;
+
+  reg [31:0] expected_reg_mem[0:1023];
 
   task write_reg;
   input [31:0] addr;
@@ -143,7 +145,6 @@ module axi_jesd204_tx_tb;
     end
   end
 
-  reg [31:0] expected_reg_mem[0:1023];
 
   task set_reset_reg_value;
   input [31:0] addr;
