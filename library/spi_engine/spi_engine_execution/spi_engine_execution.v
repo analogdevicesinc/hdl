@@ -89,8 +89,9 @@ localparam CMD_MISC = 2'b11;
 localparam MISC_SYNC = 1'b0;
 localparam MISC_SLEEP = 1'b1;
 
-localparam REG_CLK_DIV = 1'b0;
-localparam REG_CONFIG = 1'b1;
+localparam REG_CLK_DIV = 2'b00;
+localparam REG_CONFIG = 2'b01;
+localparam REG_WORD_LENGTH = 2'b10;
 
 localparam BIT_COUNTER_WIDTH = DATA_WIDTH > 16 ? 5 :
                                DATA_WIDTH > 8  ? 4 : 3;
@@ -118,10 +119,12 @@ reg transfer_active = 1'b0;
 wire last_bit;
 wire first_bit;
 reg last_transfer;
+reg [7:0] word_length = DATA_WIDTH;
+reg [7:0] left_aligned = 8'b0;
 wire end_of_word;
 
 assign first_bit = bit_counter == 'h0;
-assign last_bit = bit_counter == DATA_WIDTH - 1;
+assign last_bit = bit_counter == word_length - 1;
 assign end_of_word = last_bit == 1'b1 && ntx_rx == 1'b1 && clk_div_last == 1'b1;
 
 reg [15:0] cmd_d1;
@@ -148,6 +151,7 @@ wire [1:0] inst_d1 = cmd_d1[13:12];
 
 wire exec_cmd = cmd_ready && cmd_valid;
 wire exec_transfer_cmd = exec_cmd && inst == CMD_TRANSFER;
+
 wire exec_write_cmd = exec_cmd && inst == CMD_WRITE;
 wire exec_chipselect_cmd = exec_cmd && inst == CMD_CHIPSELECT;
 wire exec_misc_cmd = exec_cmd && inst == CMD_MISC;
@@ -171,19 +175,27 @@ always @(posedge clk) begin
         end
 end
 
+// Load the interface configurations from the 'Configuration Write'
+// instruction
 always @(posedge clk) begin
         if (resetn == 1'b0) begin
                 cpha <= DEFAULT_SPI_CFG[0];
                 cpol <= DEFAULT_SPI_CFG[1];
                 three_wire <= DEFAULT_SPI_CFG[2];
                 clk_div <= DEFAULT_CLK_DIV;
+                word_length <= DATA_WIDTH;
+                left_aligned <= 8'b0;
         end else if (exec_write_cmd == 1'b1) begin
-                 if (cmd[8] == REG_CONFIG) begin
+                 if (cmd[9:8] == REG_CONFIG) begin
                         cpha <= cmd[0];
                         cpol <= cmd[1];
                         three_wire <= cmd[2];
-                end else if (cmd[8] == REG_CLK_DIV) begin
+                end else if (cmd[9:8] == REG_CLK_DIV) begin
                         clk_div <= cmd[7:0];
+                end else if (cmd[9:8] == REG_WORD_LENGTH) begin
+                        // the max value of this reg must be DATA_WIDTH
+                        word_length <= cmd[7:0];
+                        left_aligned <= DATA_WIDTH - cmd[7:0];
                 end
         end
 end
@@ -343,10 +355,12 @@ always @(posedge clk) begin
         end
 end
 
+// Load the SDO parallel data into the SDO shift register. In case of a custom
+// data width, additional bit shifting must done at load.
 always @(posedge clk) begin
         if (transfer_active == 1'b1 && trigger_tx == 1'b1) begin
                 if (first_bit == 1'b1)
-                  data_shift[DATA_WIDTH:1] <= sdo_data;
+                  data_sdo_shift <= sdo_data << left_aligned;
                 else
                   data_shift[DATA_WIDTH:1] <= data_shift[(DATA_WIDTH-1):0];
                   data_shift_1[DATA_WIDTH:1] <= data_shift_1[(DATA_WIDTH-1):0];
