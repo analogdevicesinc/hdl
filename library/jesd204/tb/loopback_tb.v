@@ -68,6 +68,7 @@ module loopback_tb;
   wire rx_valid;
   wire [NUM_LANES*32-1:0] rx_data;
   reg data_mismatch = 1'b1;
+  wire [NUM_LINKS-1:0] sync;
 
   always @(posedge clk) begin
     if (sync == 1'b0) begin
@@ -98,7 +99,6 @@ module loopback_tb;
   wire [NUM_LANES*4-1:0] phy_charisk_out;
   wire [NUM_LANES*32-1:0] phy_data_in;
   wire [NUM_LANES*4-1:0] phy_charisk_in;
-  wire [NUM_LINKS-1:0] sync;
 
   reg [5:0] sysref_counter = 'h00;
   reg sysref_rx = 1'b0;
