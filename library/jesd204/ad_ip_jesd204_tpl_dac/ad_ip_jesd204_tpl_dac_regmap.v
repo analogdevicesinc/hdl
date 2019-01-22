@@ -277,7 +277,7 @@ module ad_ip_jesd204_tpl_dac_regmap #(
   endgenerate
 
   up_tpl_common #(
-     .COMMON_ID(2'h3),            // Offset of regmap
+     .COMMON_ID(2'h0),            // Offset of regmap
      .NUM_PROFILES(NUM_PROFILES)  // Number of JESD profiles
     ) i_up_tpl_dac (
 
