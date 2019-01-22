@@ -38,7 +38,7 @@
 module up_tpl_common #(
 
   // parameters
-  parameter COMMON_ID = 2'h3,  // Offset of regmap
+  parameter COMMON_ID = 2'h0,  // Offset of regmap
   parameter NUM_PROFILES = 1   // Number of JESD profiles
   )(
 
@@ -77,8 +77,8 @@ module up_tpl_common #(
 
   // decode block select
 
-  assign up_wreq_s = (up_waddr[9:8] == COMMON_ID) ? up_wreq : 1'b0;
-  assign up_rreq_s = (up_raddr[9:8] == COMMON_ID) ? up_rreq : 1'b0;
+  assign up_wreq_s = (up_waddr[9:7] == {COMMON_ID,1'b1}) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[9:7] == {COMMON_ID,1'b1}) ? up_rreq : 1'b0;
 
   // processor write interface
 
@@ -90,7 +90,7 @@ module up_tpl_common #(
       up_profile_sel <= 'd0;
    end else begin
       up_wack_int <= up_wreq_s;
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h00)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h00)) begin
         up_profile_sel <= up_wdata[$clog2(NUM_PROFILES):0];
       end
     end
@@ -108,9 +108,9 @@ module up_tpl_common #(
     end else begin
       up_rack_int <= up_rreq_s;
       if (up_rreq_s == 1'b1) begin
-        case (up_raddr[7:0])
-          8'h00: up_rdata_int <= up_profile_sel;
-          8'h01: up_rdata_int <= NUM_PROFILES;
+        case (up_raddr[6:0])
+          7'h00: up_rdata_int <= up_profile_sel;
+          7'h01: up_rdata_int <= NUM_PROFILES;
          default: up_rdata_int <= up_rdata_jesd_params;
         endcase
       end else begin
@@ -124,11 +124,11 @@ module up_tpl_common #(
     for (i=0; i<NUM_PROFILES; i = i + 1) begin:jesd_param
       up_rdata_jesd_params = 0;
       if (up_rreq_s == 1'b1) begin
-        if (up_raddr[7:0] == 8'h10 + {i[6:0],1'b0}) begin
+        if (up_raddr[6:0] == 7'h10 + {i[5:0],1'b0}) begin
           up_rdata_jesd_params = {jesd_f[i*8+:8], jesd_s[i*8+:8],
                                   jesd_l[i*8+:8], jesd_m[i*8+:8]};
         end
-        if (up_raddr[7:0] == 8'h11 + {i[6:0],1'b0}) begin
+        if (up_raddr[6:0] == 7'h11 + {i[5:0],1'b0}) begin
           up_rdata_jesd_params = {16'b0,jesd_np[i*8+:8], jesd_n[i*8+:8]};
         end
       end
