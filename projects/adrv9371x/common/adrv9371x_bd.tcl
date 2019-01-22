@@ -23,6 +23,10 @@ set RX_OS_SAMPLE_WIDTH 16     ; # N/NP
 
 set RX_OS_SAMPLES_PER_CHANNEL 2 ;  # L * 32 / (M * N)
 
+set dac_fifo_name axi_ad9371_dacfifo
+set dac_data_width [expr 32*$TX_NUM_OF_LANES]
+set dac_dma_data_width 128
+
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
 # ad9371
@@ -70,6 +74,8 @@ ad_ip_parameter axi_ad9371_tx_dma CONFIG.ASYNC_CLK_SRC_DEST 1
 ad_ip_parameter axi_ad9371_tx_dma CONFIG.ASYNC_CLK_REQ_SRC 1
 ad_ip_parameter axi_ad9371_tx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad9371_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_dma_data_width
+
+ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_dma_data_width $dac_fifo_address_width
 
 # adc peripherals
 
