@@ -1,6 +1,10 @@
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
+set adc_fifo_name axi_ad9625_fifo
+set adc_data_width 256
+set adc_dma_data_width 64
+
 # adc peripherals
 
 ad_ip_instance axi_ad9625 axi_ad9625_core
@@ -27,6 +31,8 @@ ad_ip_parameter axi_ad9625_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad9625_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_ad9625_dma CONFIG.DMA_DATA_WIDTH_SRC 64
 ad_ip_parameter axi_ad9625_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+
+ad_adcfifo_create $adc_fifo_name $adc_data_width $adc_dma_data_width $adc_fifo_address_width
 
 ad_ip_instance util_adxcvr util_fmcadc2_xcvr
 ad_ip_parameter util_fmcadc2_xcvr CONFIG.QPLL_FBDIV 0x80 ;# N = 40
