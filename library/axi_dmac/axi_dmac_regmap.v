@@ -112,7 +112,7 @@ module axi_dmac_regmap #(
   input [31:0] dbg_ids1
 );
 
-localparam PCORE_VERSION = 'h00040261;
+localparam PCORE_VERSION = 'h00040262;
 
 // Register interface signals
 reg [31:0] up_rdata = 32'h00;
