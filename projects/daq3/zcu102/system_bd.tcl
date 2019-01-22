@@ -1,9 +1,6 @@
 
 ## FIFO depth is 8Mb - 500k samples
-set dac_fifo_name axi_ad9152_fifo
 set dac_fifo_address_width 16
-set dac_data_width 128
-set dac_dma_data_width 128
 
 ## NOTE: With this configuration the #36Kb BRAM utilization is at ~28%
 

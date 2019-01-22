@@ -1,3 +1,6 @@
+set dac_fifo_name avl_ad9152_fifo
+set dac_data_width 128
+set dac_dma_data_width 128
 
 # ad9152-xcvr
 
@@ -43,6 +46,8 @@ add_connection axi_ad9152_core.dac_ch_0 util_ad9152_upack.dac_ch_0
 add_connection axi_ad9152_core.dac_ch_1 util_ad9152_upack.dac_ch_1
 
 # dac fifo
+
+ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_dma_data_width $dac_fifo_address_width
 
 add_interface tx_fifo_bypass conduit end
 set_interface_property tx_fifo_bypass EXPORT_OF avl_ad9152_fifo.if_bypass
