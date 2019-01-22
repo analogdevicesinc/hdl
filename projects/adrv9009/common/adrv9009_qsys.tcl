@@ -1,3 +1,6 @@
+set dac_fifo_name avl_adrv9009_tx_fifo
+set dac_data_width 128
+set dac_dma_data_width 128
 
 # adrv9009_tx JESD204
 
@@ -116,6 +119,8 @@ add_connection axi_adrv9009.adc_os_ch_3 axi_adrv9009_rx_os_cpack.adc_ch_3
 add_connection axi_adrv9009_rx_os_cpack.if_fifo_wr_overflow axi_adrv9009.if_adc_os_dovf
 
 # dac fifo
+
+ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_dma_data_width $dac_fifo_address_width
 
 add_interface tx_fifo_bypass conduit end
 set_interface_property tx_fifo_bypass EXPORT_OF avl_adrv9009_tx_fifo.if_bypass
