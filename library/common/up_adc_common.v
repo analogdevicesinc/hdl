@@ -148,8 +148,8 @@ module up_adc_common #(
 
   // decode block select
 
-  assign up_wreq_s = (up_waddr[13:8] == COMMON_ID) ? up_wreq : 1'b0;
-  assign up_rreq_s = (up_raddr[13:8] == COMMON_ID) ? up_rreq : 1'b0;
+  assign up_wreq_s = (up_waddr[13:7] == {COMMON_ID,1'b0}) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:7] == {COMMON_ID,1'b0}) ? up_rreq : 1'b0;
 
   // processor write interface
 
@@ -177,13 +177,13 @@ module up_adc_common #(
       up_core_preset <= ~up_resetn;
       up_mmcm_preset <= ~up_mmcm_resetn;
       up_wack_int <= up_wreq_s;
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h02)) begin
         up_scratch <= up_wdata;
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h04)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h04)) begin
         up_pps_irq_mask <= up_wdata[0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h10)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h10)) begin
         up_adc_clk_enb <= up_wdata[2];
         up_mmcm_resetn <= up_wdata[1];
         up_resetn <= up_wdata[0];
@@ -192,10 +192,10 @@ module up_adc_common #(
         if (up_cntrl_xfer_done_s == 1'b1) begin
           up_adc_sync <= 1'b0;
         end
-      end else if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h11)) begin
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h11)) begin
         up_adc_sync <= up_wdata[3];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h11)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h11)) begin
         up_adc_sref_sync <= up_wdata[4];
         up_adc_r1_mode <= up_wdata[2];
         up_adc_ddr_edgesel <= up_wdata[1];
@@ -235,23 +235,23 @@ module up_adc_common #(
         up_drp_wdata_int <= 'd0;
         up_drp_rdata_hold_int <= 'd0;
       end else begin
-        if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1c)) begin
+        if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h1c)) begin
           up_drp_sel_int <= 1'b1;
           up_drp_wr_int <= ~up_wdata[28];
         end else begin
           up_drp_sel_int <= 1'b0;
           up_drp_wr_int <= 1'b0;
         end
-        if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1c)) begin
+        if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h1c)) begin
           up_drp_status_int <= 1'b1;
         end else if (up_drp_ready == 1'b1) begin
           up_drp_status_int <= 1'b0;
         end
-        if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1c)) begin
+        if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h1c)) begin
           up_drp_rwn_int <= up_wdata[28];
           up_drp_addr_int <= up_wdata[27:16];
         end
-        if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1e)) begin
+        if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h1e)) begin
           up_drp_wdata_int <= up_wdata;
         end
         if (up_drp_ready == 1'b1) begin
@@ -277,7 +277,7 @@ module up_adc_common #(
     end else begin
       if (up_status_ovf_s == 1'b1) begin
         up_status_ovf <= 1'b1;
-      end else if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h22)) begin
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h22)) begin
         up_status_ovf <= up_status_ovf & ~up_wdata[2];
       end
     end
@@ -295,7 +295,7 @@ module up_adc_common #(
     if (up_rstn == 0) begin
       up_usr_chanmax_int <= 'd0;
     end else begin
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h28)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h28)) begin
         up_usr_chanmax_int <= up_wdata[7:0];
       end
     end
@@ -315,7 +315,7 @@ module up_adc_common #(
     if (up_rstn == 0) begin
       up_adc_gpio_out_int <= 'd0;
     end else begin
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h2f)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h2f)) begin
         up_adc_gpio_out_int <= up_wdata;
       end
     end
@@ -333,7 +333,7 @@ module up_adc_common #(
     if (up_rstn == 0) begin
       up_adc_start_code <= 'd0;
     end else begin
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h29)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h29)) begin
         up_adc_start_code <= up_wdata[31:0];
       end
     end
@@ -347,7 +347,7 @@ module up_adc_common #(
     if (up_rstn == 0) begin
       up_timer <= 32'd0;
     end else begin
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h40)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h40)) begin
         up_timer <= up_wdata;
       end else if (up_timer > 0) begin
         up_timer <= up_timer - 1'b1;
@@ -367,32 +367,32 @@ module up_adc_common #(
     end else begin
       up_rack_int <= up_rreq_s;
       if (up_rreq_s == 1'b1) begin
-        case (up_raddr[7:0])
-          8'h00: up_rdata_int <= VERSION;
-          8'h01: up_rdata_int <= ID;
-          8'h02: up_rdata_int <= up_scratch;
-          8'h03: up_rdata_int <= CONFIG;
-          8'h04: up_rdata_int <= {31'b0, up_pps_irq_mask};
-          8'h10: up_rdata_int <= {29'd0, up_adc_clk_enb, up_mmcm_resetn, up_resetn};
-          8'h11: up_rdata_int <= {27'd0, up_adc_sref_sync, up_adc_sync, up_adc_r1_mode,
+        case (up_raddr[6:0])
+          7'h00: up_rdata_int <= VERSION;
+          7'h01: up_rdata_int <= ID;
+          7'h02: up_rdata_int <= up_scratch;
+          7'h03: up_rdata_int <= CONFIG;
+          7'h04: up_rdata_int <= {31'b0, up_pps_irq_mask};
+          7'h10: up_rdata_int <= {29'd0, up_adc_clk_enb, up_mmcm_resetn, up_resetn};
+          7'h11: up_rdata_int <= {27'd0, up_adc_sref_sync, up_adc_sync, up_adc_r1_mode,
                                   up_adc_ddr_edgesel, up_adc_pin_mode};
-          8'h15: up_rdata_int <= up_adc_clk_count_s;
-          8'h16: up_rdata_int <= adc_clk_ratio;
-          8'h17: up_rdata_int <= {28'd0, up_status_pn_err, up_status_pn_oos, up_status_or, up_status_s};
-          8'h1a: up_rdata_int <= {31'd0, up_sync_status_s};
-          8'h1c: up_rdata_int <= {3'd0, up_drp_rwn_s, up_drp_addr, 16'b0};
-          8'h1d: up_rdata_int <= {14'd0, up_drp_locked, up_drp_status_s, 16'b0};
-          8'h1e: up_rdata_int <= up_drp_wdata;
-          8'h1f: up_rdata_int <= up_drp_rdata_hold_s;
-          8'h22: up_rdata_int <= {29'd0, up_status_ovf, 2'b0};
-          8'h23: up_rdata_int <= 32'd8;
-          8'h28: up_rdata_int <= {24'd0, up_usr_chanmax_in};
-          8'h29: up_rdata_int <= up_adc_start_code;
-          8'h2e: up_rdata_int <= up_adc_gpio_in;
-          8'h2f: up_rdata_int <= up_adc_gpio_out_int;
-          8'h30: up_rdata_int <= up_pps_rcounter;
-          8'h31: up_rdata_int <= {31'b0, up_pps_status};
-          8'h40: up_rdata_int <= up_timer;
+          7'h15: up_rdata_int <= up_adc_clk_count_s;
+          7'h16: up_rdata_int <= adc_clk_ratio;
+          7'h17: up_rdata_int <= {28'd0, up_status_pn_err, up_status_pn_oos, up_status_or, up_status_s};
+          7'h1a: up_rdata_int <= {31'd0, up_sync_status_s};
+          7'h1c: up_rdata_int <= {3'd0, up_drp_rwn_s, up_drp_addr, 16'b0};
+          7'h1d: up_rdata_int <= {14'd0, up_drp_locked, up_drp_status_s, 16'b0};
+          7'h1e: up_rdata_int <= up_drp_wdata;
+          7'h1f: up_rdata_int <= up_drp_rdata_hold_s;
+          7'h22: up_rdata_int <= {29'd0, up_status_ovf, 2'b0};
+          7'h23: up_rdata_int <= 32'd8;
+          7'h28: up_rdata_int <= {24'd0, up_usr_chanmax_in};
+          7'h29: up_rdata_int <= up_adc_start_code;
+          7'h2e: up_rdata_int <= up_adc_gpio_in;
+          7'h2f: up_rdata_int <= up_adc_gpio_out_int;
+          7'h30: up_rdata_int <= up_pps_rcounter;
+          7'h31: up_rdata_int <= {31'b0, up_pps_status};
+          7'h40: up_rdata_int <= up_timer;
           default: up_rdata_int <= 0;
         endcase
       end else begin
