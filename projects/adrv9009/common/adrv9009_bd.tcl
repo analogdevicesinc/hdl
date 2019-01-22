@@ -23,6 +23,10 @@ set RX_OS_SAMPLE_WIDTH 16     ; # N/NP
 
 set RX_OS_SAMPLES_PER_CHANNEL 1 ;  # L * 32 / (M * N)
 
+set dac_fifo_name axi_adrv9009_dacfifo
+set dac_data_width [expr 32*$TX_NUM_OF_LANES]
+set dac_dma_data_width 128
+
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
 # adrv9009
@@ -70,6 +74,8 @@ ad_ip_parameter axi_adrv9009_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_dma_data_wid
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.MAX_BYTES_PER_BURST 256
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.AXI_SLICE_DEST true
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.AXI_SLICE_SRC true
+
+ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_dma_data_width $dac_fifo_address_width
 
 # adc peripherals
 
