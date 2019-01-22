@@ -1,6 +1,10 @@
 # pl ddr3 (use only when dma is not capable of keeping up).
 # generic fifo interface - existence is oblivious to software.
 
+proc ad_adcfifo_create {adc_fifo_name adc_data_width adc_dma_data_width adc_fifo_address_width} {
+
+upvar ad_hdl_dir ad_hdl_dir
+
 ad_ip_instance proc_sys_reset axi_rstgen
 ad_ip_instance mig_7series axi_ddr_cntrl
 
@@ -38,3 +42,4 @@ ad_connect  axi_ddr_cntrl/device_temp_i GND
 
 assign_bd_address [get_bd_addr_segs -of_objects [get_bd_cells axi_ddr_cntrl]]
 
+}
