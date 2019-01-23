@@ -33,10 +33,7 @@
 # ***************************************************************************
 # ***************************************************************************
 
-set dac_fifo_name axi_dac_fifo
 set dac_fifo_address_width 14
-set dac_data_width 128
-set dac_dma_data_width 128
 
 source $ad_hdl_dir/projects/common/zc706/zc706_system_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl

@@ -37,6 +37,10 @@
 # lane rate is less than the maximum specified here you can reduce it, which
 # might improve timing closure.
 
+set NUM_OF_LANES 8
+set DAC_DATA_WIDTH [expr $NUM_OF_LANES * 32]
+set dac_dma_data_width 128
+
 set MAX_LANE_RATE 14200
 set MAX_DEVICE_CLOCK [expr $MAX_LANE_RATE / 40]
 
@@ -105,6 +109,10 @@ for {set i 0} {$i < $NUM_OF_CHANNELS} {incr i} {
 }
 
 # DAC offload memory
+ad_dacfifo_create avl_dac_fifo \
+                  $DAC_DATA_WIDTH \
+                  $dac_dma_data_width \
+                  $dac_fifo_address_width
 
 set_instance_parameter_value avl_dac_fifo DAC_DATA_WIDTH \
   [expr $NUM_OF_CHANNELS * $SAMPLE_DATA_WIDTH * $SAMPLES_PER_CHANNEL]
@@ -122,7 +130,7 @@ add_connection avl_dac_fifo.if_dac_dunf dac_jesd204_transport.if_dac_dunf
 add_instance dac_dma axi_dmac
 set_instance_parameter_values dac_dma [list \
   DMA_DATA_WIDTH_SRC 128 \
-  DMA_DATA_WIDTH_DEST 128 \
+  DMA_DATA_WIDTH_DEST $dac_dma_data_width \
   CYCLIC 1 \
   DMA_TYPE_DEST 1 \
   DMA_TYPE_SRC 0 \

@@ -75,12 +75,18 @@ ad_ip_instance util_upack2 dac_upack [list \
   SAMPLE_DATA_WIDTH $SAMPLE_WIDTH \
 ]
 
+set dac_dma_data_width $DAC_DATA_WIDTH
 ad_ip_instance axi_dmac dac_dma [list \
   DMA_TYPE_SRC 0 \
   DMA_TYPE_DEST 1 \
   DMA_DATA_WIDTH_SRC 64 \
   DMA_DATA_WIDTH_DEST $dac_dma_data_width \
 ]
+
+ad_dacfifo_create axi_dac_fifo \
+                  $DAC_DATA_WIDTH \
+                  $dac_dma_data_width \
+                  $dac_fifo_address_width
 
 # shared transceiver core
 
