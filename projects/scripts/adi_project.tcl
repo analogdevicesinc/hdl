@@ -24,7 +24,7 @@ set ADI_POWER_OPTIMIZATION 0
 proc adi_project_xilinx {project_name {mode 0}} {
 
   global ad_hdl_dir
-  global ad_phdl_dir
+  global ad_ghdl_dir
   global p_board
   global p_device
   global sys_zynq
@@ -106,8 +106,8 @@ proc adi_project_xilinx {project_name {mode 0}} {
   }
 
   set lib_dirs $ad_hdl_dir/library
-  if {$ad_hdl_dir ne $ad_phdl_dir} {
-    lappend lib_dirs $ad_phdl_dir/library
+  if {$ad_hdl_dir ne $ad_ghdl_dir} {
+    lappend lib_dirs $ad_ghdl_dir/library
   }
 
   set_property ip_repo_paths $lib_dirs [current_fileset]

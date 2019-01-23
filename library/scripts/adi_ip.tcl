@@ -169,7 +169,7 @@ variable ip_constr_files
 proc adi_ip_create {ip_name} {
 
   global ad_hdl_dir
-  global ad_phdl_dir
+  global ad_ghdl_dir
   global ip_constr_files
   global REQUIRED_VIVADO_VERSION
   global IGNORE_VERSION_CHECK
@@ -188,8 +188,8 @@ proc adi_ip_create {ip_name} {
 
   set ip_constr_files ""
   set lib_dirs $ad_hdl_dir/library
-  if {$ad_hdl_dir ne $ad_phdl_dir} {
-    lappend lib_dirs $ad_phdl_dir/library
+  if {$ad_hdl_dir ne $ad_ghdl_dir} {
+    lappend lib_dirs $ad_ghdl_dir/library
   }
 
   set_property ip_repo_paths $lib_dirs [current_fileset]
