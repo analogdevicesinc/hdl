@@ -35,7 +35,9 @@
 
 `timescale 1ns/100ps
 
-module system_top (
+module system_top #(
+    parameter JESD_L = 4
+  ) (
 
   // clock and resets
 
@@ -129,10 +131,10 @@ module system_top (
   output  [  3:0]   gpio_bd_o,
 
   // lane interface
-  input             tx_ref_clk0,
-  input             tx_sysref,
-  input             tx_sync,
-  output  [ 7:0]    tx_serial_data,
+  input                tx_ref_clk,
+  input                tx_sysref,
+  input                tx_sync,
+  output [JESD_L-1:0]  tx_serial_data,
 
   // gpio
   output  [ 3:0]    dac_txen,
@@ -291,7 +293,7 @@ module system_top (
     .sys_spi_SS_n (spi_csn_s),
     .dac_fifo_bypass_bypass (dac_fifo_bypass),
     .tx_serial_data_tx_serial_data (tx_serial_data),
-    .tx_ref_clk_clk (tx_ref_clk0),
+    .tx_ref_clk_clk (tx_ref_clk),
     .tx_sync_export (tx_sync),
     .tx_sysref_export (tx_sysref));
 

@@ -37,9 +37,10 @@
 # lane rate is less than the maximum specified here you can reduce it, which
 # might improve timing closure.
 
-set NUM_OF_LANES 8
+set MODE  $ad_project_params(MODE)
+set DEVICE $ad_project_params(DEVICE)
+set NUM_OF_LANES $ad_project_params(JESD_L)
 set DAC_DATA_WIDTH [expr $NUM_OF_LANES * 32]
-set dac_dma_data_width 128
 
 set MAX_LANE_RATE 14200
 set MAX_DEVICE_CLOCK [expr $MAX_LANE_RATE / 40]
@@ -61,11 +62,10 @@ add_instance dac_jesd204_link adi_jesd204
 set_instance_parameter_values dac_jesd204_link [list \
   ID 0 \
   TX_OR_RX_N 1 \
-  NUM_OF_LANES 8 \
+  NUM_OF_LANES $NUM_OF_LANES \
   LANE_RATE $MAX_LANE_RATE \
   REFCLK_FREQUENCY $MAX_DEVICE_CLOCK \
   SOFT_PCS true \
-  LANE_MAP {7 6 5 4 2 0 1 3} \
   LANE_INVERT 0xf0 \
 ]
 
@@ -80,7 +80,7 @@ export_interface tx_sync dac_jesd204_link.sync
 # DAC Transport Layer Core
 
 add_instance dac_jesd204_transport ad_ip_jesd204_tpl_dac
-apply_preset dac_jesd204_transport "AD9136 Mode 11"
+apply_preset dac_jesd204_transport "${DEVICE} Mode ${MODE}"
 
 add_connection dac_jesd204_link.link_clk dac_jesd204_transport.link_clk
 add_connection dac_jesd204_transport.link_data dac_jesd204_link.link_data
@@ -111,7 +111,7 @@ for {set i 0} {$i < $NUM_OF_CHANNELS} {incr i} {
 # DAC offload memory
 ad_dacfifo_create avl_dac_fifo \
                   $DAC_DATA_WIDTH \
-                  $dac_dma_data_width \
+                  $DAC_DATA_WIDTH \
                   $dac_fifo_address_width
 
 set_instance_parameter_value avl_dac_fifo DAC_DATA_WIDTH \
@@ -130,7 +130,7 @@ add_connection avl_dac_fifo.if_dac_dunf dac_jesd204_transport.if_dac_dunf
 add_instance dac_dma axi_dmac
 set_instance_parameter_values dac_dma [list \
   DMA_DATA_WIDTH_SRC 128 \
-  DMA_DATA_WIDTH_DEST $dac_dma_data_width \
+  DMA_DATA_WIDTH_DEST $DAC_DATA_WIDTH \
   CYCLIC 1 \
   DMA_TYPE_DEST 1 \
   DMA_TYPE_SRC 0 \
@@ -159,7 +159,7 @@ ad_cpu_interconnect 0x00020000 dac_jesd204_link.link_reconfig
 ad_cpu_interconnect 0x00024000 dac_jesd204_link.link_management
 ad_cpu_interconnect 0x00025000 dac_jesd204_link.link_pll_reconfig
 ad_cpu_interconnect 0x00026000 dac_jesd204_link.lane_pll_reconfig
-for {set i 0} {$i < 8} {incr i} {
+for {set i 0} {$i < $NUM_OF_LANES} {incr i} {
   ad_cpu_interconnect [expr 0x00028000 + $i * 0x1000] dac_jesd204_link.phy_reconfig_${i}
 }
 ad_cpu_interconnect 0x00030000 dac_jesd204_transport.s_axi

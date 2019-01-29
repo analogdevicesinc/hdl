@@ -33,7 +33,13 @@
 source ../../scripts/adi_env.tcl
 source ../../scripts/adi_project_alt.tcl
 
-adi_project_altera dac_fmc_ebz_a10soc
+source ../common/config.tcl
+
+adi_project_altera dac_fmc_ebz_a10soc [list \
+  JESD_L    [get_config_param L] \
+  MODE      $mode \
+  DEVICE    $device \
+]
 
 set_global_assignment -name OPTIMIZATION_MODE "HIGH PERFORMANCE EFFORT"
 
@@ -80,8 +86,14 @@ set_location_assignment PIN_F38   -to "tx_serial_data[7](n)"; ## B33  FMCA_HPC_D
 
 set_location_assignment PIN_E12   -to tx_sync               ; ## D08  FMCA_HPC_LA01_P
 set_location_assignment PIN_E13   -to "tx_sync(n)"          ; ## D09  FMCA_HPC_LA01_N
-set_location_assignment PIN_G14   -to tx_sysref             ; ## G06  FMCA_HPC_LA00_P
-set_location_assignment PIN_H14   -to "tx_sysref(n)"        ; ## G07  FMCA_HPC_LA00_N
+# For AD9161/2/4-FMC-EBZ SYSREF is placed in other place
+if {$device_code == 3} {
+  set_location_assignment PIN_C13   -to tx_sysref            ; ## H07  FMCA_HPC_LA02_P
+  set_location_assignment PIN_D13   -to "tx_sysref(n)"       ; ## H08  FMCA_HPC_LA02_N
+} else {
+  set_location_assignment PIN_G14   -to tx_sysref            ; ## G06  FMCA_HPC_LA00_P
+  set_location_assignment PIN_H14   -to "tx_sysref(n)"       ; ## G07  FMCA_HPC_LA00_N
+}
 
 set_instance_assignment -name IO_STANDARD LVDS -to tx_ref_clk0
 set_instance_assignment -name IO_STANDARD LVDS -to "tx_ref_clk0(n)"
