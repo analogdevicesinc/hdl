@@ -29,7 +29,7 @@ set p_device "none"
 set sys_zynq 1
 set ADI_POWER_OPTIMIZATION 0
 
-proc adi_project_xilinx {project_name {mode 0}} {
+proc adi_project_xilinx {project_name {mode 0} {parameter_list {}} } {
 
   global ad_hdl_dir
   global ad_phdl_dir
@@ -144,6 +144,15 @@ proc adi_project_xilinx {project_name {mode 0}} {
   ## of this limit is 100.
   ## Overrides the default limit to 2000.
   set_param messaging.defaultLimit 2000
+
+  # Set parameters of the top level file
+  # Make the same parameters available to system_bd.tcl
+  set proj_params [get_property generic [current_fileset]]
+  foreach {param value} $parameter_list {
+    lappend proj_params $param=$value
+    set ad_project_params($param) $value
+  }
+  set_property generic $proj_params [current_fileset]
 
   create_bd_design "system"
   source system_bd.tcl
