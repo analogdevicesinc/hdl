@@ -35,18 +35,14 @@
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
-# 1 - Single link
-# 2 - Dual link
-set NUM_LINKS 2
+set JESD_M    $ad_project_params(JESD_M)
+set JESD_L    $ad_project_params(JESD_L)
+set NUM_LINKS $ad_project_params(NUM_LINKS)
 
-set NUM_OF_LANES_PER_LINK      4 ; # L
-set NUM_OF_CONVERTERS_PER_LINK 2 ; # M
-set SAMPLES_PER_FRAME          2 ; # S
-set SAMPLE_WIDTH              16 ; # N/NP
-
-set NUM_OF_LANES [expr $NUM_LINKS * $NUM_OF_LANES_PER_LINK]
-set NUM_OF_CONVERTERS [expr $NUM_LINKS * $NUM_OF_CONVERTERS_PER_LINK]
-
+set NUM_OF_CONVERTERS [expr $NUM_LINKS * $JESD_M]
+set NUM_OF_LANES [expr $NUM_LINKS * $JESD_L]
+set SAMPLES_PER_FRAME $ad_project_params(JESD_S)
+set SAMPLE_WIDTH $ad_project_params(JESD_NP)
 
 set DAC_DATA_WIDTH [expr $NUM_OF_LANES * 32]
 set SAMPLES_PER_CHANNEL [expr $DAC_DATA_WIDTH / $NUM_OF_CONVERTERS / $SAMPLE_WIDTH]
@@ -146,9 +142,9 @@ ad_connect axi_dac_fifo/dma_xfer_last dac_dma/m_axis_last
 
 # interconnect (cpu)
 
-ad_cpu_interconnect 0x44A00000 dac_jesd204_xcvr
-ad_cpu_interconnect 0x44A10000 dac_jesd204_transport
-ad_cpu_interconnect 0x44A20000 dac_jesd204_link
+ad_cpu_interconnect 0x44A60000 dac_jesd204_xcvr
+ad_cpu_interconnect 0x44A04000 dac_jesd204_transport
+ad_cpu_interconnect 0x44A90000 dac_jesd204_link
 ad_cpu_interconnect 0x7c420000 dac_dma
 
 # interconnect (mem/dac)
@@ -162,3 +158,9 @@ ad_cpu_interrupt ps-10 mb-15 dac_jesd204_link/irq
 ad_cpu_interrupt ps-12 mb-13 dac_dma/irq
 
 ad_connect axi_dac_fifo/bypass dac_fifo_bypass
+
+# Create dummy outputs for unused Tx lanes
+for {set i $JESD_L} {$i < 8} {incr i} {
+  create_bd_port -dir O tx_data_${i}_n
+  create_bd_port -dir O tx_data_${i}_p
+}

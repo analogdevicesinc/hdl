@@ -14,34 +14,38 @@ set_property  -dict {PACKAGE_PIN  AA2 IOSTANDARD LVCMOS18} [get_ports spi_miso] 
 set_property  -dict {PACKAGE_PIN  Y1  IOSTANDARD LVCMOS18} [get_ports spi_mosi]                         ; ## G10  FMC_HPC0_LA03_N           IO_L22N_T3U_N7_DBC_AD0N_66_Y1
 set_property  -dict {PACKAGE_PIN  Y2  IOSTANDARD LVCMOS18} [get_ports spi_clk]                          ; ## G09  FMC_HPC0_LA03_P           IO_L22P_T3U_N6_DBC_AD0P_66_Y2
 set_property  -dict {PACKAGE_PIN  AC3 IOSTANDARD LVCMOS18} [get_ports spi_en]                           ; ## D12  FMC_HPC0_LA05_N           IO_L20N_T3L_N3_AD1N_66_AC3
+# For AD916(1,2,3,4)-FMC-EBZ
+set_property  -dict {PACKAGE_PIN  W2  IOSTANDARD LVCMOS18} [get_ports spi_csn_clk2]                     ; ## D14  FMC_HPC_LA09_P            IO_L10P_T1_11
 
 # For AD9135-FMC-EBZ, AD9136-FMC-EBZ, AD9144-FMC-EBZ, AD9152-FMC-EBZ, AD9154-FMC-EBZ
-set_property  -dict {PACKAGE_PIN  U5  IOSTANDARD LVCMOS18} [get_ports dac_txen[0]]                      ; ## H13  FMC_HPC0_LA07_P           IO_L18P_T2U_N10_AD2P_66_U5
-set_property  -dict {PACKAGE_PIN  U4  IOSTANDARD LVCMOS18} [get_ports dac_txen[1]]                      ; ## H14  FMC_HPC0_LA07_N           IO_L18N_T2U_N11_AD2N_66_U4
+set_property  -dict {PACKAGE_PIN  U5  IOSTANDARD LVCMOS18} [get_ports dac_ctrl[0]]                      ; ## H13  FMC_HPC0_LA07_P           IO_L18P_T2U_N10_AD2P_66_U5
+set_property  -dict {PACKAGE_PIN  U4  IOSTANDARD LVCMOS18} [get_ports dac_ctrl[3]]                      ; ## H14  FMC_HPC0_LA07_N           IO_L18N_T2U_N11_AD2N_66_U4
 
 # For AD9171-FMC-EBZ, AD9172-FMC-EBZ, AD9173-FMC-EBZ
-set_property  -dict {PACKAGE_PIN  AC2 IOSTANDARD LVCMOS18} [get_ports dac_txen[2]]                      ; ## C10  FMC_HPC0_LA06_P           IO_L19P_T3L_N0_DBC_AD9P_66_AC2
-set_property  -dict {PACKAGE_PIN  AC1 IOSTANDARD LVCMOS18} [get_ports dac_txen[3]]                      ; ## C11  FMC_HPC0_LA06_N           IO_L19N_T3L_N1_DBC_AD9N_66_AC1
+set_property  -dict {PACKAGE_PIN  AC2 IOSTANDARD LVCMOS18} [get_ports dac_ctrl[1]]                      ; ## C10  FMC_HPC0_LA06_P           IO_L19P_T3L_N0_DBC_AD9P_66_AC2
+set_property  -dict {PACKAGE_PIN  AC1 IOSTANDARD LVCMOS18} [get_ports dac_ctrl[2]]                      ; ## C11  FMC_HPC0_LA06_N           IO_L19N_T3L_N1_DBC_AD9N_66_AC1
+# For AD916(1,2,3,4)-FMC-EBZ
+set_property  -dict {PACKAGE_PIN  W1  IOSTANDARD LVCMOS18} [get_ports dac_ctrl[4]]                      ; ## D15  FMC_HPC_LA09_P            IO_L10N_T1_11
 
 set_property  -dict {PACKAGE_PIN  G8} [get_ports tx_ref_clk_p]                                          ; ## D04  FMC_HPC0_GBTCLK0_M2C_C_P  MGTREFCLK0P_229_G8
 set_property  -dict {PACKAGE_PIN  G7} [get_ports tx_ref_clk_n]                                          ; ## D05  FMC_HPC0_GBTCLK0_M2C_C_N  MGTREFCLK0N_229_G7
 
-set_property  -dict {PACKAGE_PIN  G3} [get_ports tx_data_n[0]]                                          ; ## C03  FMC_HPC0_DP0_C2M_N        MGTHTXN2_229_G3
-set_property  -dict {PACKAGE_PIN  G4} [get_ports tx_data_p[0]]                                          ; ## C02  FMC_HPC0_DP0_C2M_P        MGTHTXP2_229_G4
-set_property  -dict {PACKAGE_PIN  H5} [get_ports tx_data_n[1]]                                          ; ## A23  FMC_HPC0_DP1_C2M_N        MGTHTXN1_229_H5
-set_property  -dict {PACKAGE_PIN  H6} [get_ports tx_data_p[1]]                                          ; ## A22  FMC_HPC0_DP1_C2M_P        MGTHTXP1_229_H6
-set_property  -dict {PACKAGE_PIN  F5} [get_ports tx_data_n[2]]                                          ; ## A27  FMC_HPC0_DP2_C2M_N        MGTHTXN3_229_F5
-set_property  -dict {PACKAGE_PIN  F6} [get_ports tx_data_p[2]]                                          ; ## A26  FMC_HPC0_DP2_C2M_P        MGTHTXP3_229_F6
-set_property  -dict {PACKAGE_PIN  K5} [get_ports tx_data_n[3]]                                          ; ## A31  FMC_HPC0_DP3_C2M_N        MGTHTXN0_229_K5
-set_property  -dict {PACKAGE_PIN  K6} [get_ports tx_data_p[3]]                                          ; ## A30  FMC_HPC0_DP3_C2M_P        MGTHTXP0_229_K6
-set_property  -dict {PACKAGE_PIN  M6} [get_ports tx_data_p[4]]                                          ; ## A34  FMC_HPC0_DP4_C2M_P        MGTHTXP3_228_M6
-set_property  -dict {PACKAGE_PIN  M5} [get_ports tx_data_n[4]]                                          ; ## A35  FMC_HPC0_DP4_C2M_N        MGTHTXN3_228_M5
-set_property  -dict {PACKAGE_PIN  P6} [get_ports tx_data_p[5]]                                          ; ## A38  FMC_HPC0_DP5_C2M_P        MGTHTXP1_228_P6
-set_property  -dict {PACKAGE_PIN  P5} [get_ports tx_data_n[5]]                                          ; ## A39  FMC_HPC0_DP5_C2M_N        MGTHTXN1_228_P5
-set_property  -dict {PACKAGE_PIN  R4} [get_ports tx_data_p[6]]                                          ; ## B36  FMC_HPC0_DP6_C2M_P        MGTHTXP0_228_R4
-set_property  -dict {PACKAGE_PIN  R3} [get_ports tx_data_n[6]]                                          ; ## B37  FMC_HPC0_DP6_C2M_N        MGTHTXN0_228_R3
-set_property  -dict {PACKAGE_PIN  N4} [get_ports tx_data_p[7]]                                          ; ## B32  FMC_HPC0_DP7_C2M_P        MGTHTXP2_228_N4
-set_property  -dict {PACKAGE_PIN  N3} [get_ports tx_data_n[7]]                                          ; ## B33  FMC_HPC0_DP7_C2M_N        MGTHTXN2_228_N3
+set_property  -quiet -dict {PACKAGE_PIN  G3} [get_ports tx_data_n[7]]                                   ; ## C03  FMC_HPC0_DP0_C2M_N        MGTHTXN2_229_G3
+set_property  -quiet -dict {PACKAGE_PIN  G4} [get_ports tx_data_p[7]]                                   ; ## C02  FMC_HPC0_DP0_C2M_P        MGTHTXP2_229_G4
+set_property  -quiet -dict {PACKAGE_PIN  H5} [get_ports tx_data_n[6]]                                   ; ## A23  FMC_HPC0_DP1_C2M_N        MGTHTXN1_229_H5
+set_property  -quiet -dict {PACKAGE_PIN  H6} [get_ports tx_data_p[6]]                                   ; ## A22  FMC_HPC0_DP1_C2M_P        MGTHTXP1_229_H6
+set_property  -quiet -dict {PACKAGE_PIN  F5} [get_ports tx_data_n[5]]                                   ; ## A27  FMC_HPC0_DP2_C2M_N        MGTHTXN3_229_F5
+set_property  -quiet -dict {PACKAGE_PIN  F6} [get_ports tx_data_p[5]]                                   ; ## A26  FMC_HPC0_DP2_C2M_P        MGTHTXP3_229_F6
+set_property  -quiet -dict {PACKAGE_PIN  K5} [get_ports tx_data_n[4]]                                   ; ## A31  FMC_HPC0_DP3_C2M_N        MGTHTXN0_229_K5
+set_property  -quiet -dict {PACKAGE_PIN  K6} [get_ports tx_data_p[4]]                                   ; ## A30  FMC_HPC0_DP3_C2M_P        MGTHTXP0_229_K6
+set_property  -quiet -dict {PACKAGE_PIN  M6} [get_ports tx_data_p[2]]                                   ; ## A34  FMC_HPC0_DP4_C2M_P        MGTHTXP3_228_M6
+set_property  -quiet -dict {PACKAGE_PIN  M5} [get_ports tx_data_n[2]]                                   ; ## A35  FMC_HPC0_DP4_C2M_N        MGTHTXN3_228_M5
+set_property  -quiet -dict {PACKAGE_PIN  P6} [get_ports tx_data_p[0]]                                   ; ## A38  FMC_HPC0_DP5_C2M_P        MGTHTXP1_228_P6
+set_property  -quiet -dict {PACKAGE_PIN  P5} [get_ports tx_data_n[0]]                                   ; ## A39  FMC_HPC0_DP5_C2M_N        MGTHTXN1_228_P5
+set_property  -quiet -dict {PACKAGE_PIN  R4} [get_ports tx_data_p[1]]                                   ; ## B36  FMC_HPC0_DP6_C2M_P        MGTHTXP0_228_R4
+set_property  -quiet -dict {PACKAGE_PIN  R3} [get_ports tx_data_n[1]]                                   ; ## B37  FMC_HPC0_DP6_C2M_N        MGTHTXN0_228_R3
+set_property  -quiet -dict {PACKAGE_PIN  N4} [get_ports tx_data_p[3]]                                   ; ## B32  FMC_HPC0_DP7_C2M_P        MGTHTXP2_228_N4
+set_property  -quiet -dict {PACKAGE_PIN  N3} [get_ports tx_data_n[3]]                                   ; ## B33  FMC_HPC0_DP7_C2M_N        MGTHTXN2_228_N3
 
 # PL PMOD 1 header
 set_property  -dict {PACKAGE_PIN  D20 IOSTANDARD LVCMOS33} [get_ports pmod_spi_clk]                     ; ## PMOD1_0                        IO_L8N_HDGC_AD4N_47_D20

@@ -79,7 +79,11 @@ tx_sysref_n   SYSREF2_N       G07  FMC_HPC0_LA00_CC_N        Y3     IO_L13N_T2L_
 tx_sysref_p   SYSREF2_P       G06  FMC_HPC0_LA00_CC_P        Y4     IO_L13P_T2L_N0_GC_QBC_66_Y4
 */
 
-module system_top (
+module system_top #(
+    parameter JESD_L = 4,
+    parameter NUM_LINKS = 2,
+    parameter DEVICE_CODE = 0
+  ) (
 
   input   [12:0]  gpio_bd_i,
   output  [ 7:0]  gpio_bd_o,
@@ -90,17 +94,18 @@ module system_top (
   input           tx_sysref_n,
   input   [ 1:0]  tx_sync_p,
   input   [ 1:0]  tx_sync_n,
-  output  [ 7:0]  tx_data_p,
-  output  [ 7:0]  tx_data_n,
+  output  [JESD_L*NUM_LINKS-1:0] tx_data_p,
+  output  [JESD_L*NUM_LINKS-1:0] tx_data_n,
 
   output          spi_csn_dac,
   output          spi_csn_clk,
+  output          spi_csn_clk2,
   input           spi_miso,
   output          spi_mosi,
   output          spi_clk,
   output          spi_en,
 
-  inout   [ 3:0]  dac_txen,
+  inout   [ 4:0]  dac_ctrl,
 
   output          pmod_spi_clk,
   output          pmod_spi_csn,
@@ -121,6 +126,9 @@ module system_top (
   wire    [ 1:0]  tx_sync;
   wire            tx_device_clk;
   wire            tx_ref_clk_odiv2;
+  wire    [ 7:0]  tx_data_p_loc;
+  wire    [ 7:0]  tx_data_n_loc;
+  wire            tx_sysref_loc;
 
   // spi
 
@@ -132,8 +140,10 @@ module system_top (
   //
   // assign spi_en = 1'bz;
 
-  assign spi_csn_dac = spi0_csn[1];
-  assign spi_csn_clk = spi0_csn[0];
+  //                                        9135/9144/9172    916(1,2,3,4)
+  assign spi_csn_dac  = spi0_csn[1];
+  assign spi_csn_clk  = spi0_csn[0];    //   HMC7044          AD9508
+  assign spi_csn_clk2 = spi0_csn[2];    //   NC               ADF4355
 
   /* JESD204 clocks and control signals */
   IBUFDS_GTE4 i_ibufds_tx_ref_clk (
@@ -174,16 +184,27 @@ module system_top (
 
   /* FMC GPIOs */
   ad_iobuf #(
-    .DATA_WIDTH(5)
+    .DATA_WIDTH(6)
   ) i_iobuf (
-    .dio_t (gpio_t[32+:5]),
-    .dio_i (gpio_o[32+:5]),
-    .dio_o (gpio_i[32+:5]),
+    .dio_t (gpio_t[21+:6]),
+    .dio_i (gpio_o[21+:6]),
+    .dio_o (gpio_i[21+:6]),
     .dio_p ({
-      spi_en,           /* 36 */
-      dac_txen          /* 32-35 */
+      spi_en,            /*      26 */
+      dac_ctrl           /* 25 - 21 */
     })
   );
+
+  /*
+  * Control signals for different FMC boards:
+  *
+  * dac_ctrl  FMC   9144 like    9162 like       9172 like
+  *        0  H13   FMC_TXEN_0   FMC_TXEN_0      FMC_PE_CTRL
+  *        1  C10   NC           NC              FMC_TXEN_0
+  *        2  C11   NC           NC              FMC_TXEN_1
+  *        3  H14   FMC_TXEN_1   NC              NC
+  *        4  D15   NC           FMC_HMC849VCTL  NC          
+  */
 
   assign dac_fifo_bypass = gpio_o[40];
 
@@ -205,8 +226,8 @@ module system_top (
   assign gpio_bd_o = gpio_o[7:0];
 
   assign gpio_i[94:52] = gpio_o[94:52];
-  assign gpio_i[47:37] = gpio_o[47:37];
-  assign gpio_i[31:21] = gpio_o[31:21];
+  assign gpio_i[47:32] = gpio_o[47:32];
+  assign gpio_i[31:27] = gpio_o[31:27];
   assign gpio_i[ 7: 0] = gpio_o[7:0];
 
   system_wrapper i_system_wrapper (
@@ -220,26 +241,34 @@ module system_top (
     .spi1_miso (pmod_spi_miso),
     .spi1_mosi (pmod_spi_mosi),
     .spi1_sclk (pmod_spi_clk),
-    .tx_data_0_n (tx_data_n[0]),
-    .tx_data_0_p (tx_data_p[0]),
-    .tx_data_1_n (tx_data_n[1]),
-    .tx_data_1_p (tx_data_p[1]),
-    .tx_data_2_n (tx_data_n[2]),
-    .tx_data_2_p (tx_data_p[2]),
-    .tx_data_3_n (tx_data_n[3]),
-    .tx_data_3_p (tx_data_p[3]),
-    .tx_data_4_n (tx_data_n[4]),
-    .tx_data_4_p (tx_data_p[4]),
-    .tx_data_5_n (tx_data_n[5]),
-    .tx_data_5_p (tx_data_p[5]),
-    .tx_data_6_n (tx_data_n[6]),
-    .tx_data_6_p (tx_data_p[6]),
-    .tx_data_7_n (tx_data_n[7]),
-    .tx_data_7_p (tx_data_p[7]),
+    .tx_data_0_n (tx_data_n_loc[0]),
+    .tx_data_0_p (tx_data_p_loc[0]),
+    .tx_data_1_n (tx_data_n_loc[1]),
+    .tx_data_1_p (tx_data_p_loc[1]),
+    .tx_data_2_n (tx_data_n_loc[2]),
+    .tx_data_2_p (tx_data_p_loc[2]),
+    .tx_data_3_n (tx_data_n_loc[3]),
+    .tx_data_3_p (tx_data_p_loc[3]),
+    .tx_data_4_n (tx_data_n_loc[4]),
+    .tx_data_4_p (tx_data_p_loc[4]),
+    .tx_data_5_n (tx_data_n_loc[5]),
+    .tx_data_5_p (tx_data_p_loc[5]),
+    .tx_data_6_n (tx_data_n_loc[6]),
+    .tx_data_6_p (tx_data_p_loc[6]),
+    .tx_data_7_n (tx_data_n_loc[7]),
+    .tx_data_7_p (tx_data_p_loc[7]),
     .tx_ref_clk (tx_ref_clk),
     .tx_device_clk (tx_device_clk),
-    .tx_sync_0 (tx_sync),
+    .tx_sync_0 (tx_sync[NUM_LINKS-1:0]),
     .tx_sysref_0 (tx_sysref));
+
+  assign tx_data_p[JESD_L*NUM_LINKS-1:0] = tx_data_p_loc[JESD_L*NUM_LINKS-1:0];
+  assign tx_data_n[JESD_L*NUM_LINKS-1:0] = tx_data_n_loc[JESD_L*NUM_LINKS-1:0];
+
+  // AD9161/2/4-FMC-EBZ works only in single link,
+  // The FMC connector instead of SYNC1 has SYSREF connected to it
+  assign tx_sysref_loc = (DEVICE_CODE == 3) ? tx_sync[1] : tx_sysref;
+
 
 endmodule
 
