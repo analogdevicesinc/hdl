@@ -7,7 +7,7 @@ set family "none"
 set device "none"
 set version "18.1.0"
 
-proc adi_project_altera {project_name} {
+proc adi_project_altera {project_name {parameter_list {}}} {
 
   global ad_hdl_dir
   global ad_phdl_dir
@@ -96,6 +96,7 @@ proc adi_project_altera {project_name} {
   puts $QFILE "set_module_property NAME {system_bd}"
   puts $QFILE "set_project_property DEVICE_FAMILY {$family}"
   puts $QFILE "set_project_property DEVICE $device"
+  puts $QFILE "foreach {param value} {$parameter_list} { set ad_project_params(\$param) \$value }"
   puts $QFILE "source system_qsys.tcl"
   puts $QFILE "set_interconnect_requirement {\$system} {qsys_mm.clockCrossingAdapter} {AUTO}"
   puts $QFILE "set_interconnect_requirement {\$system} {qsys_mm.burstAdapterImplementation} {PER_BURST_TYPE_CONVERTER}"
@@ -152,5 +153,10 @@ proc adi_project_altera {project_name} {
   set_global_assignment -name TIMEQUEST_DO_CCPP_REMOVAL ON
   set_global_assignment -name TIMEQUEST_REPORT_SCRIPT $ad_hdl_dir/projects/scripts/adi_tquest.tcl
   set_global_assignment -name ON_CHIP_BITSTREAM_DECOMPRESSION OFF
+
+  # set top level file parameters
+  foreach {param value} $parameter_list {
+    set_parameter -name $param $value
+  }
 }
 
