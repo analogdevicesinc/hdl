@@ -55,10 +55,14 @@ module util_adxcvr_xcm #(
   // reset and clocks
 
   input           qpll_ref_clk,
+  input           qpll_sel,
   output          qpll2ch_clk,
   output          qpll2ch_ref_clk,
   output          qpll2ch_locked,
-  
+  output          qpll1_clk,
+  output          qpll1_ref_clk,
+  output          qpll1_locked,
+
   // drp interface
 
   input           up_rstn,
@@ -133,6 +137,9 @@ module util_adxcvr_xcm #(
 
   generate
   if (XCVR_TYPE == 0) begin
+  assign qpll1_locked = 1'b0;
+  assign qpll1_clk = 1'b0;
+  assign qpll1_ref_clk = 1'b0;
   GTXE2_COMMON #(
     .BIAS_CFG (64'h0000040000001000),
     .COMMON_CFG (32'h00000000),
@@ -318,15 +325,15 @@ module util_adxcvr_xcm #(
     .QPLL1CLKRSVD0 (1'h0),
     .QPLL1CLKRSVD1 (1'h0),
     .QPLL1FBCLKLOST (),
-    .QPLL1LOCK (),
-    .QPLL1LOCKDETCLK (1'h0),
-    .QPLL1LOCKEN (1'h0),
-    .QPLL1OUTCLK (),
-    .QPLL1OUTREFCLK (),
-    .QPLL1PD (1'h0),
+    .QPLL1LOCK (qpll1_locked),
+    .QPLL1LOCKDETCLK (up_clk),
+    .QPLL1LOCKEN (1'h1),
+    .QPLL1OUTCLK (qpll1_clk),
+    .QPLL1OUTREFCLK (qpll1_ref_clk),
+    .QPLL1PD (~qpll_sel),
     .QPLL1REFCLKLOST (),
     .QPLL1REFCLKSEL (3'h1),
-    .QPLL1RESET (1'h1),
+    .QPLL1RESET (up_qpll_rst),
     .QPLLDMONITOR0 (),
     .QPLLDMONITOR1 (),
     .QPLLRSVD1 (8'h0),
@@ -445,7 +452,7 @@ module util_adxcvr_xcm #(
     .GTNORTHREFCLK10 (1'd0),
     .GTNORTHREFCLK11 (1'd0),
     .GTREFCLK00 (qpll_ref_clk),
-    .GTREFCLK01 (1'd0),
+    .GTREFCLK01 (qpll_ref_clk),
     .GTREFCLK10 (1'd0),
     .GTREFCLK11 (1'd0),
     .GTSOUTHREFCLK00 (1'd0),
@@ -467,7 +474,7 @@ module util_adxcvr_xcm #(
     .QPLL0LOCKEN (1'd1),
     .QPLL0OUTCLK (qpll2ch_clk),
     .QPLL0OUTREFCLK (qpll2ch_ref_clk),
-    .QPLL0PD (1'd0),
+    .QPLL0PD (qpll_sel),
     .QPLL0REFCLKLOST (),
     .QPLL0REFCLKSEL (3'b001),
     .QPLL0RESET (up_qpll_rst),
@@ -475,15 +482,15 @@ module util_adxcvr_xcm #(
     .QPLL1CLKRSVD1 (1'd0),
     .QPLL1FBCLKLOST (),
     .QPLL1FBDIV (8'd0),
-    .QPLL1LOCK (),
-    .QPLL1LOCKDETCLK (1'd0),
-    .QPLL1LOCKEN (1'd0),
-    .QPLL1OUTCLK (),
-    .QPLL1OUTREFCLK (),
-    .QPLL1PD (1'd1),
+    .QPLL1LOCK (qpll1_locked),
+    .QPLL1LOCKDETCLK (up_clk),
+    .QPLL1LOCKEN (1'd1),
+    .QPLL1OUTCLK (qpll1_clk),
+    .QPLL1OUTREFCLK (qpll1_ref_clk),
+    .QPLL1PD (~qpll_sel),
     .QPLL1REFCLKLOST (),
     .QPLL1REFCLKSEL (3'b001),
-    .QPLL1RESET (1'd1),
+    .QPLL1RESET (up_qpll_rst),
     .QPLLDMONITOR0 (),
     .QPLLDMONITOR1 (),
     .QPLLRSVD1 (8'd0),
