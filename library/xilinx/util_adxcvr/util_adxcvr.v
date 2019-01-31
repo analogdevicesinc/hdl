@@ -1071,15 +1071,48 @@ module util_adxcvr #(
   wire            qpll2ch_clk_0;
   wire            qpll2ch_ref_clk_0;
   wire            qpll2ch_locked_0;
+  wire            qpll1_clk_0;
+  wire            qpll1_ref_clk_0;
+  wire            qpll1_locked_0;
+  wire [ 1:0]     sys_clk_sel_0;
+  wire            qpll_sel_0;
   wire            qpll2ch_clk_4;
   wire            qpll2ch_ref_clk_4;
   wire            qpll2ch_locked_4;
+  wire            qpll1_clk_4;
+  wire            qpll1_ref_clk_4;
+  wire            qpll1_locked_4;
+  wire [ 1:0]     sys_clk_sel_4;
+  wire            qpll_sel_4;
   wire            qpll2ch_clk_8;
   wire            qpll2ch_ref_clk_8;
   wire            qpll2ch_locked_8;
+  wire            qpll1_clk_8;
+  wire            qpll1_ref_clk_8;
+  wire            qpll1_locked_8;
+  wire [ 1:0]     sys_clk_sel_8;
+  wire            qpll_sel_8;
   wire            qpll2ch_clk_12;
   wire            qpll2ch_ref_clk_12;
   wire            qpll2ch_locked_12;
+  wire            qpll1_clk_12;
+  wire            qpll1_ref_clk_12;
+  wire            qpll1_locked_12;
+  wire [ 1:0]     sys_clk_sel_12;
+  wire            qpll_sel_12;
+
+  assign        sys_clk_sel_0 = up_tx_sys_clk_sel_0 | up_tx_sys_clk_sel_1 | up_tx_sys_clk_sel_2 | up_tx_sys_clk_sel_3 |
+                                up_rx_sys_clk_sel_0 | up_rx_sys_clk_sel_1 | up_rx_sys_clk_sel_2 | up_rx_sys_clk_sel_3;
+  assign        qpll_sel_0 = sys_clk_sel_0 == 2'd3 ? 0 : 1;
+  assign        sys_clk_sel_4 = up_tx_sys_clk_sel_4 | up_tx_sys_clk_sel_5 | up_tx_sys_clk_sel_6 | up_tx_sys_clk_sel_7 |
+                                up_rx_sys_clk_sel_4 | up_rx_sys_clk_sel_5 | up_rx_sys_clk_sel_6 | up_rx_sys_clk_sel_7;
+  assign        qpll_sel_4 = sys_clk_sel_4 == 2'd3 ? 0 : 1;
+  assign        sys_clk_sel_8 = up_tx_sys_clk_sel_8 | up_tx_sys_clk_sel_9 | up_tx_sys_clk_sel_10 | up_tx_sys_clk_sel_11 |
+                                up_rx_sys_clk_sel_8 | up_rx_sys_clk_sel_9 | up_rx_sys_clk_sel_10 | up_rx_sys_clk_sel_11;
+  assign        qpll_sel_8 = sys_clk_sel_8 == 2'd3 ? 0 : 1;
+  assign        sys_clk_sel_12 = up_tx_sys_clk_sel_12 | up_tx_sys_clk_sel_13 | up_tx_sys_clk_sel_14 | up_tx_sys_clk_sel_15 |
+                                up_rx_sys_clk_sel_12 | up_rx_sys_clk_sel_13 | up_rx_sys_clk_sel_14 | up_rx_sys_clk_sel_15;
+  assign        qpll_sel_12 = sys_clk_sel_12 == 2'd3 ? 0 : 1;
 
   // instantiations
 
@@ -1100,9 +1133,13 @@ module util_adxcvr #(
     .QPLL_CFG4 (QPLL_CFG4))
   i_xcm_0 (
     .qpll_ref_clk (qpll_ref_clk_0),
+    .qpll_sel (qpll_sel_0),
     .qpll2ch_clk (qpll2ch_clk_0),
     .qpll2ch_ref_clk (qpll2ch_ref_clk_0),
     .qpll2ch_locked (qpll2ch_locked_0),
+    .qpll1_clk (qpll1_clk_0),
+    .qpll1_ref_clk (qpll1_ref_clk_0),
+    .qpll1_locked (qpll1_locked_0),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_qpll_rst (up_qpll_rst_0),
@@ -1116,6 +1153,9 @@ module util_adxcvr #(
   assign qpll2ch_clk_0 = 1'd0;
   assign qpll2ch_ref_clk_0 = 1'd0;
   assign qpll2ch_locked_0 = 1'd0;
+  assign qpll1_clk_0 = 1'd0;
+  assign qpll1_ref_clk_0 = 1'd0;
+  assign qpll1_locked_0 = 1'd0;
   assign up_cm_rdata_0 = 16'd0;
   assign up_cm_ready_0 = 1'd0;
   end
@@ -1144,6 +1184,9 @@ module util_adxcvr #(
     .qpll2ch_clk (qpll2ch_clk_0),
     .qpll2ch_ref_clk (qpll2ch_ref_clk_0),
     .qpll2ch_locked (qpll2ch_locked_0),
+    .qpll1_clk (qpll1_clk_0),
+    .qpll1_ref_clk (qpll1_ref_clk_0),
+    .qpll1_locked (qpll1_locked_0),
     .cpll_ref_clk (cpll_ref_clk_0),
     .up_cpll_rst (up_cpll_rst_0),
     .rx_p (rx_0_p),
@@ -1247,6 +1290,9 @@ module util_adxcvr #(
     .qpll2ch_clk (qpll2ch_clk_0),
     .qpll2ch_ref_clk (qpll2ch_ref_clk_0),
     .qpll2ch_locked (qpll2ch_locked_0),
+    .qpll1_clk (qpll1_clk_0),
+    .qpll1_ref_clk (qpll1_ref_clk_0),
+    .qpll1_locked (qpll1_locked_0),
     .cpll_ref_clk (cpll_ref_clk_1),
     .up_cpll_rst (up_cpll_rst_1),
     .rx_p (rx_1_p),
@@ -1350,6 +1396,9 @@ module util_adxcvr #(
     .qpll2ch_clk (qpll2ch_clk_0),
     .qpll2ch_ref_clk (qpll2ch_ref_clk_0),
     .qpll2ch_locked (qpll2ch_locked_0),
+    .qpll1_clk (qpll1_clk_0),
+    .qpll1_ref_clk (qpll1_ref_clk_0),
+    .qpll1_locked (qpll1_locked_0),
     .cpll_ref_clk (cpll_ref_clk_2),
     .up_cpll_rst (up_cpll_rst_2),
     .rx_p (rx_2_p),
@@ -1453,6 +1502,9 @@ module util_adxcvr #(
     .qpll2ch_clk (qpll2ch_clk_0),
     .qpll2ch_ref_clk (qpll2ch_ref_clk_0),
     .qpll2ch_locked (qpll2ch_locked_0),
+    .qpll1_clk (qpll1_clk_0),
+    .qpll1_ref_clk (qpll1_ref_clk_0),
+    .qpll1_locked (qpll1_locked_0),
     .cpll_ref_clk (cpll_ref_clk_3),
     .up_cpll_rst (up_cpll_rst_3),
     .rx_p (rx_3_p),
@@ -1549,9 +1601,13 @@ module util_adxcvr #(
     .QPLL_CFG4 (QPLL_CFG4))
   i_xcm_4 (
     .qpll_ref_clk (qpll_ref_clk_4),
+    .qpll_sel (qpll_sel_4),
     .qpll2ch_clk (qpll2ch_clk_4),
     .qpll2ch_ref_clk (qpll2ch_ref_clk_4),
     .qpll2ch_locked (qpll2ch_locked_4),
+    .qpll1_clk (qpll1_clk_4),
+    .qpll1_ref_clk (qpll1_ref_clk_4),
+    .qpll1_locked (qpll1_locked_4),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_qpll_rst (up_qpll_rst_4),
@@ -1565,6 +1621,9 @@ module util_adxcvr #(
   assign qpll2ch_clk_4 = 1'd0;
   assign qpll2ch_ref_clk_4 = 1'd0;
   assign qpll2ch_locked_4 = 1'd0;
+  assign qpll1_clk_4 = 1'd0;
+  assign qpll1_ref_clk_4 = 1'd0;
+  assign qpll1_locked_4 = 1'd0;
   assign up_cm_rdata_4 = 16'd0;
   assign up_cm_ready_4 = 1'd0;
   end
@@ -1593,6 +1652,9 @@ module util_adxcvr #(
     .qpll2ch_clk (qpll2ch_clk_4),
     .qpll2ch_ref_clk (qpll2ch_ref_clk_4),
     .qpll2ch_locked (qpll2ch_locked_4),
+    .qpll1_clk (qpll1_clk_4),
+    .qpll1_ref_clk (qpll1_ref_clk_4),
+    .qpll1_locked (qpll1_locked_4),
     .cpll_ref_clk (cpll_ref_clk_4),
     .up_cpll_rst (up_cpll_rst_4),
     .rx_p (rx_4_p),
@@ -1696,6 +1758,9 @@ module util_adxcvr #(
     .qpll2ch_clk (qpll2ch_clk_4),
     .qpll2ch_ref_clk (qpll2ch_ref_clk_4),
     .qpll2ch_locked (qpll2ch_locked_4),
+    .qpll1_clk (qpll1_clk_4),
+    .qpll1_ref_clk (qpll1_ref_clk_4),
+    .qpll1_locked (qpll1_locked_4),
     .cpll_ref_clk (cpll_ref_clk_5),
     .up_cpll_rst (up_cpll_rst_5),
     .rx_p (rx_5_p),
@@ -1799,6 +1864,9 @@ module util_adxcvr #(
     .qpll2ch_clk (qpll2ch_clk_4),
     .qpll2ch_ref_clk (qpll2ch_ref_clk_4),
     .qpll2ch_locked (qpll2ch_locked_4),
+    .qpll1_clk (qpll1_clk_4),
+    .qpll1_ref_clk (qpll1_ref_clk_4),
+    .qpll1_locked (qpll1_locked_4),
     .cpll_ref_clk (cpll_ref_clk_6),
     .up_cpll_rst (up_cpll_rst_6),
     .rx_p (rx_6_p),
@@ -1902,6 +1970,9 @@ module util_adxcvr #(
     .qpll2ch_clk (qpll2ch_clk_4),
     .qpll2ch_ref_clk (qpll2ch_ref_clk_4),
     .qpll2ch_locked (qpll2ch_locked_4),
+    .qpll1_clk (qpll1_clk_4),
+    .qpll1_ref_clk (qpll1_ref_clk_4),
+    .qpll1_locked (qpll1_locked_4),
     .cpll_ref_clk (cpll_ref_clk_7),
     .up_cpll_rst (up_cpll_rst_7),
     .rx_p (rx_7_p),
@@ -1998,9 +2069,13 @@ module util_adxcvr #(
     .QPLL_CFG4 (QPLL_CFG4))
   i_xcm_8 (
     .qpll_ref_clk (qpll_ref_clk_8),
+    .qpll_sel (qpll_sel_8),
     .qpll2ch_clk (qpll2ch_clk_8),
     .qpll2ch_ref_clk (qpll2ch_ref_clk_8),
     .qpll2ch_locked (qpll2ch_locked_8),
+    .qpll1_clk (qpll1_clk_8),
+    .qpll1_ref_clk (qpll1_ref_clk_8),
+    .qpll1_locked (qpll1_locked_8),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_qpll_rst (up_qpll_rst_8),
@@ -2014,6 +2089,9 @@ module util_adxcvr #(
   assign qpll2ch_clk_8 = 1'd0;
   assign qpll2ch_ref_clk_8 = 1'd0;
   assign qpll2ch_locked_8 = 1'd0;
+  assign qpll1_clk_8 = 1'd0;
+  assign qpll1_ref_clk_8 = 1'd0;
+  assign qpll1_locked_8 = 1'd0;
   assign up_cm_rdata_8 = 16'd0;
   assign up_cm_ready_8 = 1'd0;
   end
@@ -2042,6 +2120,9 @@ module util_adxcvr #(
     .qpll2ch_clk (qpll2ch_clk_8),
     .qpll2ch_ref_clk (qpll2ch_ref_clk_8),
     .qpll2ch_locked (qpll2ch_locked_8),
+    .qpll1_clk (qpll1_clk_8),
+    .qpll1_ref_clk (qpll1_ref_clk_8),
+    .qpll1_locked (qpll1_locked_8),
     .cpll_ref_clk (cpll_ref_clk_8),
     .up_cpll_rst (up_cpll_rst_8),
     .rx_p (rx_8_p),
@@ -2145,6 +2226,9 @@ module util_adxcvr #(
     .qpll2ch_clk (qpll2ch_clk_8),
     .qpll2ch_ref_clk (qpll2ch_ref_clk_8),
     .qpll2ch_locked (qpll2ch_locked_8),
+    .qpll1_clk (qpll1_clk_8),
+    .qpll1_ref_clk (qpll1_ref_clk_8),
+    .qpll1_locked (qpll1_locked_8),
     .cpll_ref_clk (cpll_ref_clk_9),
     .up_cpll_rst (up_cpll_rst_9),
     .rx_p (rx_9_p),
@@ -2248,6 +2332,9 @@ module util_adxcvr #(
     .qpll2ch_clk (qpll2ch_clk_8),
     .qpll2ch_ref_clk (qpll2ch_ref_clk_8),
     .qpll2ch_locked (qpll2ch_locked_8),
+    .qpll1_clk (qpll1_clk_8),
+    .qpll1_ref_clk (qpll1_ref_clk_8),
+    .qpll1_locked (qpll1_locked_8),
     .cpll_ref_clk (cpll_ref_clk_10),
     .up_cpll_rst (up_cpll_rst_10),
     .rx_p (rx_10_p),
@@ -2351,6 +2438,9 @@ module util_adxcvr #(
     .qpll2ch_clk (qpll2ch_clk_8),
     .qpll2ch_ref_clk (qpll2ch_ref_clk_8),
     .qpll2ch_locked (qpll2ch_locked_8),
+    .qpll1_clk (qpll1_clk_8),
+    .qpll1_ref_clk (qpll1_ref_clk_8),
+    .qpll1_locked (qpll1_locked_8),
     .cpll_ref_clk (cpll_ref_clk_11),
     .up_cpll_rst (up_cpll_rst_11),
     .rx_p (rx_11_p),
@@ -2447,9 +2537,13 @@ module util_adxcvr #(
     .QPLL_CFG4 (QPLL_CFG4))
   i_xcm_12 (
     .qpll_ref_clk (qpll_ref_clk_12),
+    .qpll_sel (qpll_sel_12),
     .qpll2ch_clk (qpll2ch_clk_12),
     .qpll2ch_ref_clk (qpll2ch_ref_clk_12),
     .qpll2ch_locked (qpll2ch_locked_12),
+    .qpll1_clk (qpll1_clk_12),
+    .qpll1_ref_clk (qpll1_ref_clk_12),
+    .qpll1_locked (qpll1_locked_12),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_qpll_rst (up_qpll_rst_12),
@@ -2463,6 +2557,9 @@ module util_adxcvr #(
   assign qpll2ch_clk_12 = 1'd0;
   assign qpll2ch_ref_clk_12 = 1'd0;
   assign qpll2ch_locked_12 = 1'd0;
+  assign qpll1_clk_12 = 1'd0;
+  assign qpll1_ref_clk_12 = 1'd0;
+  assign qpll1_locked_12 = 1'd0;
   assign up_cm_rdata_12 = 16'd0;
   assign up_cm_ready_12 = 1'd0;
   end
@@ -2491,6 +2588,9 @@ module util_adxcvr #(
     .qpll2ch_clk (qpll2ch_clk_12),
     .qpll2ch_ref_clk (qpll2ch_ref_clk_12),
     .qpll2ch_locked (qpll2ch_locked_12),
+    .qpll1_clk (qpll1_clk_12),
+    .qpll1_ref_clk (qpll1_ref_clk_12),
+    .qpll1_locked (qpll1_locked_12),
     .cpll_ref_clk (cpll_ref_clk_12),
     .up_cpll_rst (up_cpll_rst_12),
     .rx_p (rx_12_p),
@@ -2594,6 +2694,9 @@ module util_adxcvr #(
     .qpll2ch_clk (qpll2ch_clk_12),
     .qpll2ch_ref_clk (qpll2ch_ref_clk_12),
     .qpll2ch_locked (qpll2ch_locked_12),
+    .qpll1_clk (qpll1_clk_12),
+    .qpll1_ref_clk (qpll1_ref_clk_12),
+    .qpll1_locked (qpll1_locked_12),
     .cpll_ref_clk (cpll_ref_clk_13),
     .up_cpll_rst (up_cpll_rst_13),
     .rx_p (rx_13_p),
@@ -2697,6 +2800,9 @@ module util_adxcvr #(
     .qpll2ch_clk (qpll2ch_clk_12),
     .qpll2ch_ref_clk (qpll2ch_ref_clk_12),
     .qpll2ch_locked (qpll2ch_locked_12),
+    .qpll1_clk (qpll1_clk_12),
+    .qpll1_ref_clk (qpll1_ref_clk_12),
+    .qpll1_locked (qpll1_locked_12),
     .cpll_ref_clk (cpll_ref_clk_14),
     .up_cpll_rst (up_cpll_rst_14),
     .rx_p (rx_14_p),
@@ -2800,6 +2906,9 @@ module util_adxcvr #(
     .qpll2ch_clk (qpll2ch_clk_12),
     .qpll2ch_ref_clk (qpll2ch_ref_clk_12),
     .qpll2ch_locked (qpll2ch_locked_12),
+    .qpll1_clk (qpll1_clk_12),
+    .qpll1_ref_clk (qpll1_ref_clk_12),
+    .qpll1_locked (qpll1_locked_12),
     .cpll_ref_clk (cpll_ref_clk_15),
     .up_cpll_rst (up_cpll_rst_15),
     .rx_p (rx_15_p),

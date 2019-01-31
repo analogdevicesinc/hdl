@@ -64,6 +64,9 @@ module util_adxcvr_xch #(
   input           qpll2ch_clk,
   input           qpll2ch_ref_clk,
   input           qpll2ch_locked,
+  input           qpll1_clk,
+  input           qpll1_ref_clk,
+  input           qpll1_locked,
   input           cpll_ref_clk,
   input           up_cpll_rst,
 
@@ -175,8 +178,8 @@ module util_adxcvr_xch #(
 
   // pll
 
-  assign up_rx_pll_locked = (up_rx_sys_clk_sel == 2'd3) ? qpll2ch_locked : cpll_locked_s;
-  assign up_tx_pll_locked = (up_tx_sys_clk_sel == 2'd3) ? qpll2ch_locked : cpll_locked_s;
+  assign up_rx_pll_locked = (up_rx_sys_clk_sel == 2'd3) ? qpll2ch_locked : (up_rx_sys_clk_sel == 2'd2) ? qpll1_locked : cpll_locked_s;
+  assign up_tx_pll_locked = (up_tx_sys_clk_sel == 2'd3) ? qpll2ch_locked : (up_tx_sys_clk_sel == 2'd2) ? qpll1_locked : cpll_locked_s;
 
   // drp access
 
@@ -771,8 +774,8 @@ module util_adxcvr_xch #(
 
   generate
   if (XCVR_TYPE == 1) begin
-  assign rx_sys_clk_sel_s = (up_rx_sys_clk_sel == 2'd3) ? 2'b10 : 2'b00;
-  assign tx_sys_clk_sel_s = (up_tx_sys_clk_sel == 2'd3) ? 2'b10 : 2'b00;
+  assign rx_sys_clk_sel_s = (up_rx_sys_clk_sel[1] == 0) ? 2'b00 : {1'b1,~up_rx_sys_clk_sel[0]};
+  assign tx_sys_clk_sel_s = (up_tx_sys_clk_sel[1] == 0) ? 2'b00 : {1'b1,~up_tx_sys_clk_sel[0]};
   assign rx_pll_clk_sel_s = up_rx_sys_clk_sel;
   assign tx_pll_clk_sel_s = up_tx_sys_clk_sel;
   end
@@ -1246,8 +1249,8 @@ module util_adxcvr_xch #(
     .PMARSVDIN (5'h0),
     .QPLL0CLK (qpll2ch_clk),
     .QPLL0REFCLK (qpll2ch_ref_clk),
-    .QPLL1CLK (1'h0),
-    .QPLL1REFCLK (1'h0),
+    .QPLL1CLK (qpll1_clk),
+    .QPLL1REFCLK (qpll1_ref_clk),
     .RESETEXCEPTION (),
     .RESETOVRD (1'h0),
     .RSTCLKENTX (1'h0),
@@ -1526,8 +1529,8 @@ module util_adxcvr_xch #(
 
   generate
   if (XCVR_TYPE == 2) begin
-  assign rx_sys_clk_sel_s = (up_rx_sys_clk_sel == 2'd3) ? 2'b10 : 2'b00;
-  assign tx_sys_clk_sel_s = (up_tx_sys_clk_sel == 2'd3) ? 2'b10 : 2'b00;
+  assign rx_sys_clk_sel_s = (up_rx_sys_clk_sel[1] == 0) ? 2'b00 : {1'b1,~up_rx_sys_clk_sel[0]};
+  assign tx_sys_clk_sel_s = (up_tx_sys_clk_sel[1] == 0) ? 2'b00 : {1'b1,~up_tx_sys_clk_sel[0]};
   assign rx_pll_clk_sel_s = up_rx_sys_clk_sel;
   assign tx_pll_clk_sel_s = up_tx_sys_clk_sel;
   end
@@ -2114,9 +2117,9 @@ module util_adxcvr_xch #(
     .QPLL0CLK (qpll2ch_clk),
     .QPLL0FREQLOCK (1'd0),
     .QPLL0REFCLK (qpll2ch_ref_clk),
-    .QPLL1CLK (1'd0),
+    .QPLL1CLK (qpll1_clk),
     .QPLL1FREQLOCK (1'd0),
-    .QPLL1REFCLK (1'd0),
+    .QPLL1REFCLK (qpll1_ref_clk),
     .RESETEXCEPTION (),
     .RESETOVRD (1'd0),
     .RX8B10BEN (1'd1),
