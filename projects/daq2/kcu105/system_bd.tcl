@@ -21,5 +21,6 @@ sysid_gen_sys_init_file $sys_cstring
 
 ad_ip_parameter util_daq2_xcvr CONFIG.QPLL_FBDIV 20
 ad_ip_parameter util_daq2_xcvr CONFIG.QPLL_REFCLK_DIV 1
-
-
+ad_ip_parameter util_daq2_xcvr CONFIG.CPLL_CFG0 0x67f8
+ad_ip_parameter util_daq2_xcvr CONFIG.CPLL_CFG1 0xa4ac
+ad_ip_parameter util_daq2_xcvr CONFIG.CPLL_CFG2 0x0007
