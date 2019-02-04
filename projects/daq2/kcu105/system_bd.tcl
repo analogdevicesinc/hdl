@@ -16,7 +16,7 @@ ad_ip_parameter axi_ad9144_xcvr CONFIG.XCVR_TYPE 1
 ad_ip_parameter axi_ad9680_xcvr CONFIG.XCVR_TYPE 1
 
 ad_ip_parameter util_daq2_xcvr CONFIG.XCVR_TYPE 1
-ad_ip_parameter util_daq2_xcvr CONFIG.QPLL_FBDIV 20
+ad_ip_parameter util_daq2_xcvr CONFIG.GTH3_QPLL_FBDIV 20
 ad_ip_parameter util_daq2_xcvr CONFIG.QPLL_REFCLK_DIV 1
 
 
