@@ -80,8 +80,6 @@ ad_ip_instance util_adxcvr util_daq3_xcvr
 ad_ip_parameter util_daq3_xcvr CONFIG.RX_NUM_OF_LANES 4
 ad_ip_parameter util_daq3_xcvr CONFIG.TX_NUM_OF_LANES 4
 ad_ip_parameter util_daq3_xcvr CONFIG.QPLL_REFCLK_DIV 1
-ad_ip_parameter util_daq3_xcvr CONFIG.QPLL_FBDIV_RATIO 1
-ad_ip_parameter util_daq3_xcvr CONFIG.QPLL_FBDIV 0x30; # 20
 ad_ip_parameter util_daq3_xcvr CONFIG.RX_OUT_DIV 1
 ad_ip_parameter util_daq3_xcvr CONFIG.TX_OUT_DIV 1
 ad_ip_parameter util_daq3_xcvr CONFIG.RX_DFE_LPM_CFG 0x0904
