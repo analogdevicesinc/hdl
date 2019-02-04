@@ -106,7 +106,6 @@ ad_connect sys_cpu_clk util_dac_jesd204_xcvr/up_clk
 # reference clocks & resets
 
 create_bd_port -dir I tx_ref_clk
-create_bd_port -dir I tx_device_clk
 
 ad_xcvrpll tx_ref_clk util_dac_jesd204_xcvr/qpll_ref_clk_*
 ad_xcvrpll tx_ref_clk util_dac_jesd204_xcvr/cpll_ref_clk_*
@@ -115,12 +114,12 @@ ad_xcvrpll dac_jesd204_xcvr/up_pll_rst util_dac_jesd204_xcvr/up_cpll_rst_*
 
 # connections (dac)
 
-ad_xcvrcon util_dac_jesd204_xcvr dac_jesd204_xcvr dac_jesd204_link \
-  {0 1 2 3 4 5 6 7} \
-  tx_device_clk
-ad_connect tx_device_clk dac_jesd204_transport/link_clk
-ad_connect tx_device_clk dac_upack/clk
-ad_connect tx_device_clk_rstgen/peripheral_reset dac_upack/reset
+ad_xcvrcon util_dac_jesd204_xcvr dac_jesd204_xcvr dac_jesd204_link
+
+
+ad_connect util_dac_jesd204_xcvr/tx_out_clk_0 dac_jesd204_transport/link_clk
+ad_connect util_dac_jesd204_xcvr/tx_out_clk_0 dac_upack/clk
+ad_connect dac_jesd204_link_rstgen/peripheral_reset dac_upack/reset
 
 ad_connect dac_jesd204_link/tx_data dac_jesd204_transport/link
 
@@ -130,8 +129,8 @@ for {set i 0} {$i < $NUM_OF_CONVERTERS} {incr i} {
   ad_connect dac_jesd204_transport/dac_enable_$i  dac_upack/enable_$i
 }
 
-ad_connect tx_device_clk axi_dac_fifo/dac_clk
-ad_connect tx_device_clk_rstgen/peripheral_reset axi_dac_fifo/dac_rst
+ad_connect util_dac_jesd204_xcvr/tx_out_clk_0 axi_dac_fifo/dac_clk
+ad_connect dac_jesd204_link_rstgen/peripheral_reset axi_dac_fifo/dac_rst
 ad_connect dac_upack/s_axis_valid VCC
 ad_connect dac_upack/s_axis_ready axi_dac_fifo/dac_valid
 ad_connect dac_upack/s_axis_data axi_dac_fifo/dac_data

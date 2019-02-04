@@ -95,9 +95,11 @@ set_property  -dict {PACKAGE_PIN  AC19  IOSTANDARD LVCMOS25} [get_ports pmod_gpi
 
 # Maximum lane of 10.3125 (Maximum supported by the ZC706)
 create_clock -name tx_ref_clk   -period  3.879 [get_ports tx_ref_clk_p]
+create_clock -name tx_div_clk   -period  3.879 [get_pins i_system_wrapper/system_i/util_dac_jesd204_xcvr/inst/i_xch_0/i_gtxe2_channel/TXOUTCLK]
 
 # Assumption is that REFCLK and SYSREF have similar propagation delay,
 # and the SYSREF is a source synchronous Center-Aligned signal to REFCLK
 set_input_delay -clock [get_clocks tx_ref_clk] \
   [expr [get_property  PERIOD [get_clocks tx_ref_clk]] / 2] \
   [get_ports {tx_sysref_*}]
+

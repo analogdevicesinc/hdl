@@ -114,7 +114,6 @@ module system_top #(
   wire            spi1_mosi;
   wire            spi1_miso;
   wire            tx_ref_clk;
-  wire            tx_device_clk;
   wire            tx_sysref;
   wire    [ 1:0]  tx_sync;
   wire    [ 7:0]  tx_data_p_loc;
@@ -143,11 +142,6 @@ module system_top #(
     .IB (tx_ref_clk_n),
     .O (tx_ref_clk),
     .ODIV2 ()
-  );
-
-  BUFG i_tx_device_clk (
-    .I (tx_ref_clk),
-    .O (tx_device_clk)
   );
 
   IBUFDS i_ibufds_tx_sysref (
@@ -292,7 +286,6 @@ module system_top #(
     .tx_data_7_n (tx_data_n_loc[7]),
     .tx_data_7_p (tx_data_p_loc[7]),
     .tx_ref_clk (tx_ref_clk),
-    .tx_device_clk (tx_device_clk),
     .tx_sync_0 (tx_sync[NUM_LINKS-1:0]),
     .tx_sysref_0 (tx_sysref_loc),
     .dac_fifo_bypass (dac_fifo_bypass));
