@@ -43,7 +43,7 @@ module util_adxcvr_xch #(
 
   parameter   integer CPLL_FBDIV = 2,
   parameter   integer CPLL_FBDIV_4_5 = 5,
-  parameter   integer CPLL_REFCLK_DIV = 1
+  parameter   integer CPLL_REFCLK_DIV = 1,
 
   // GTHE3 related attributes
 
