@@ -35,7 +35,6 @@ ad_ip_parameter axi_ad9625_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 ad_adcfifo_create $adc_fifo_name $adc_data_width $adc_dma_data_width $adc_fifo_address_width
 
 ad_ip_instance util_adxcvr util_fmcadc2_xcvr
-ad_ip_parameter util_fmcadc2_xcvr CONFIG.QPLL_FBDIV 0x80 ;# N = 40
 ad_ip_parameter util_fmcadc2_xcvr CONFIG.CPLL_FBDIV 1
 ad_ip_parameter util_fmcadc2_xcvr CONFIG.TX_NUM_OF_LANES 0
 ad_ip_parameter util_fmcadc2_xcvr CONFIG.RX_NUM_OF_LANES 8

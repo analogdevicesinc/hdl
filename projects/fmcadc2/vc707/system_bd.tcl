@@ -8,3 +8,6 @@ source $ad_hdl_dir/projects/common/vc707/vc707_system_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/adcfifo_bd.tcl
 source ../common/fmcadc2_bd.tcl
 
+## Board specific GT configuration
+ad_ip_parameter util_fmcadc2_xcvr CONFIG.GTX_QPLL_FBDIV 0x80
+
