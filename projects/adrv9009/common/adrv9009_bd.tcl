@@ -176,7 +176,6 @@ ad_ip_parameter util_adrv9009_xcvr CONFIG.RX_CLK25_DIV 10
 ad_ip_parameter util_adrv9009_xcvr CONFIG.TX_CLK25_DIV 10
 ad_ip_parameter util_adrv9009_xcvr CONFIG.RX_PMA_CFG 0x001E7080
 ad_ip_parameter util_adrv9009_xcvr CONFIG.RX_CDR_CFG 0x0b000023ff10400020
-ad_ip_parameter util_adrv9009_xcvr CONFIG.QPLL_FBDIV 0x080
 
 # xcvr interfaces
 

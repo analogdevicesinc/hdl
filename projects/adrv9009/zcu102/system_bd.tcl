@@ -35,8 +35,9 @@ ad_ip_parameter axi_adrv9009_tx_xcvr CONFIG.XCVR_TYPE 2
 ad_ip_parameter axi_adrv9009_rx_xcvr CONFIG.XCVR_TYPE 2
 ad_ip_parameter axi_adrv9009_rx_os_xcvr CONFIG.XCVR_TYPE 2
 
+## Board specific GT configuration
 ad_ip_parameter util_adrv9009_xcvr CONFIG.XCVR_TYPE 2
-ad_ip_parameter util_adrv9009_xcvr CONFIG.QPLL_FBDIV 80
+ad_ip_parameter util_adrv9009_xcvr CONFIG.GTH4_QPLL_FBDIV 80
 ad_ip_parameter util_adrv9009_xcvr CONFIG.QPLL_REFCLK_DIV 1
 
 ad_ip_parameter axi_adrv9009_rx_clkgen CONFIG.DEVICE_TYPE 2
