@@ -16,9 +16,7 @@ add_fileset quartus_synth QUARTUS_SYNTH "" "Quartus Synthesis"
 set_fileset_property quartus_synth TOP_LEVEL axi_hdmi_tx
 add_fileset_file ad_mem.v                 VERILOG PATH $ad_hdl_dir/library/common/ad_mem.v
 add_fileset_file ad_rst.v                 VERILOG PATH $ad_hdl_dir/library/common/ad_rst.v
-add_fileset_file ad_csc_1_mul.v           VERILOG PATH $ad_hdl_dir/library/common/ad_csc_1_mul.v
-add_fileset_file ad_csc_1_add.v           VERILOG PATH $ad_hdl_dir/library/common/ad_csc_1_add.v
-add_fileset_file ad_csc_1.v               VERILOG PATH $ad_hdl_dir/library/common/ad_csc_1.v
+add_fileset_file ad_csc.v                 VERILOG PATH $ad_hdl_dir/library/common/ad_csc.v
 add_fileset_file ad_csc_RGB2CrYCb.v       VERILOG PATH $ad_hdl_dir/library/common/ad_csc_RGB2CrYCb.v
 add_fileset_file ad_ss_444to422.v         VERILOG PATH $ad_hdl_dir/library/common/ad_ss_444to422.v
 add_fileset_file up_axi.v                 VERILOG PATH $ad_hdl_dir/library/common/up_axi.v
