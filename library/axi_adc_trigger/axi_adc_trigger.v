@@ -85,107 +85,110 @@ module axi_adc_trigger #(
   output      [ 1:0]    s_axi_rresp,
   input                 s_axi_rready);
 
+
+  localparam DW = 15 - SIGN_BITS;
+
   // internal signals
 
-  wire              up_clk;
-  wire              up_rstn;
-  wire    [ 4:0]    up_waddr;
-  wire    [31:0]    up_wdata;
-  wire              up_wack;
-  wire              up_wreq;
-  wire              up_rack;
-  wire    [31:0]    up_rdata;
-  wire              up_rreq;
-  wire    [ 4:0]    up_raddr;
+  wire                  up_clk;
+  wire                  up_rstn;
+  wire         [ 4:0]   up_waddr;
+  wire         [31:0]   up_wdata;
+  wire                  up_wack;
+  wire                  up_wreq;
+  wire                  up_rack;
+  wire         [31:0]   up_rdata;
+  wire                  up_rreq;
+  wire         [ 4:0]   up_raddr;
 
-  wire    [ 1:0]    io_selection;
+  wire         [ 1:0]   io_selection;
 
-  wire    [ 1:0]    low_level;
-  wire    [ 1:0]    high_level;
-  wire    [ 1:0]    any_edge;
-  wire    [ 1:0]    rise_edge;
-  wire    [ 1:0]    fall_edge;
+  wire         [ 1:0]   low_level;
+  wire         [ 1:0]   high_level;
+  wire         [ 1:0]   any_edge;
+  wire         [ 1:0]   rise_edge;
+  wire         [ 1:0]   fall_edge;
 
-  wire    [15:0]    limit_a;
-  wire    [ 1:0]    function_a;
-  wire    [31:0]    hysteresis_a;
-  wire    [ 3:0]    trigger_l_mix_a;
+  wire         [15:0]   limit_a;
+  wire         [ 1:0]   function_a;
+  wire         [31:0]   hysteresis_a;
+  wire         [ 3:0]   trigger_l_mix_a;
 
-  wire    [15:0]    limit_b;
-  wire    [ 1:0]    function_b;
-  wire    [31:0]    hysteresis_b;
-  wire    [ 3:0]    trigger_l_mix_b;
+  wire         [15:0]   limit_b;
+  wire         [ 1:0]   function_b;
+  wire         [31:0]   hysteresis_b;
+  wire         [ 3:0]   trigger_l_mix_b;
 
-  wire    [ 2:0]    trigger_out_mix;
-  wire    [31:0]    trigger_delay;
+  wire         [ 2:0]   trigger_out_mix;
+  wire         [31:0]   trigger_delay;
 
-  wire signed  [15-SIGN_BITS:0]    data_a_cmp;
-  wire    [15:0]    data_b_cmp;
-  wire signed  [15-SIGN_BITS:0]    limit_a_cmp;
-  wire    [15:0]    limit_b_cmp;
+  wire signed  [DW:0]   data_a_cmp;
+  wire signed  [DW:0]   data_b_cmp;
+  wire signed  [DW:0]   limit_a_cmp;
+  wire signed  [DW:0]   limit_b_cmp;
 
-  wire              comp_low_a_s; // signal is over the limit
-  wire              comp_low_b_s; // signal is over the limit
-  wire              passthrough_high_a_s; // trigger when rising through the limit
-  wire              passthrough_low_a_s;  // trigger when fallingh thorugh the limit
-  wire              passthrough_high_b_s; // trigger when rising through the limit
-  wire              passthrough_low_b_s;  // trigger when fallingh thorugh the limit
-  wire              trigger_a_fall_edge;
-  wire              trigger_a_rise_edge;
-  wire              trigger_b_fall_edge;
-  wire              trigger_b_rise_edge;
-  wire              trigger_a_any_edge;
-  wire              trigger_b_any_edge;
-  wire              trigger_out_delayed;
-  wire              streaming;
+  wire                  comp_low_a_s; // signal is over the limit
+  wire                  comp_low_b_s; // signal is over the limit
+  wire                  passthrough_high_a_s; // trigger when rising through the limit
+  wire                  passthrough_low_a_s;  // trigger when fallingh thorugh the limit
+  wire                  passthrough_high_b_s; // trigger when rising through the limit
+  wire                  passthrough_low_b_s;  // trigger when fallingh thorugh the limit
+  wire                  trigger_a_fall_edge;
+  wire                  trigger_a_rise_edge;
+  wire                  trigger_b_fall_edge;
+  wire                  trigger_b_rise_edge;
+  wire                  trigger_a_any_edge;
+  wire                  trigger_b_any_edge;
+  wire                  trigger_out_delayed;
+  wire                  streaming;
 
-  reg               trigger_a_d1; // synchronization flip flop
-  reg               trigger_a_d2; // synchronization flip flop
-  reg               trigger_a_d3;
-  reg               trigger_b_d1; // synchronization flip flop
-  reg               trigger_b_d2; // synchronization flip flop
-  reg               trigger_b_d3;
-  reg               comp_high_a;  // signal is over the limit
-  reg               old_comp_high_a;   // t + 1 version of comp_high_a
-  reg               first_a_h_trigger; // valid hysteresis range on passthrough high trigger limit
-  reg               first_a_l_trigger; // valid hysteresis range on passthrough low trigger limit
-  reg  signed   [15-SIGN_BITS:0]    hyst_a_high_limit;
-  reg  signed   [15-SIGN_BITS:0]    hyst_a_low_limit;
-  reg               comp_high_b;       // signal is over the limit
-  reg               old_comp_high_b;   // t + 1 version of comp_high_b
-  reg               first_b_h_trigger; // valid hysteresis range on passthrough high trigger limit
-  reg               first_b_l_trigger; // valid hysteresis range on passthrough low trigger limit
-  reg  signed   [15-SIGN_BITS:0]    hyst_b_high_limit;
-  reg  signed   [15-SIGN_BITS:0]    hyst_b_low_limit;
+  reg                   trigger_a_d1; // synchronization flip flop
+  reg                   trigger_a_d2; // synchronization flip flop
+  reg                   trigger_a_d3;
+  reg                   trigger_b_d1; // synchronization flip flop
+  reg                   trigger_b_d2; // synchronization flip flop
+  reg                   trigger_b_d3;
+  reg                   comp_high_a;  // signal is over the limit
+  reg                   old_comp_high_a;   // t + 1 version of comp_high_a
+  reg                   first_a_h_trigger; // valid hysteresis range on passthrough high trigger limit
+  reg                   first_a_l_trigger; // valid hysteresis range on passthrough low trigger limit
+  reg signed [DW:0]     hyst_a_high_limit;
+  reg signed [DW:0]     hyst_a_low_limit;
+  reg                   comp_high_b;       // signal is over the limit
+  reg                   old_comp_high_b;   // t + 1 version of comp_high_b
+  reg                   first_b_h_trigger; // valid hysteresis range on passthrough high trigger limit
+  reg                   first_b_l_trigger; // valid hysteresis range on passthrough low trigger limit
+  reg signed [DW:0]     hyst_b_high_limit;
+  reg signed [DW:0]     hyst_b_low_limit;
 
-  reg               trigger_pin_a;
-  reg               trigger_pin_b;
+  reg                   trigger_pin_a;
+  reg                   trigger_pin_b;
 
-  reg               trigger_adc_a;
-  reg               trigger_adc_b;
+  reg                   trigger_adc_a;
+  reg                   trigger_adc_b;
 
-  reg               trigger_a;
-  reg               trigger_b;
+  reg                   trigger_a;
+  reg                   trigger_b;
 
-  reg               trigger_out_mixed;
-  reg               up_triggered;
-  reg               up_triggered_d1;
-  reg               up_triggered_d2;
+  reg                   trigger_out_mixed;
+  reg                   up_triggered;
+  reg                   up_triggered_d1;
+  reg                   up_triggered_d2;
 
-  reg               up_triggered_set;
-  reg               up_triggered_reset;
-  reg               up_triggered_reset_d1;
-  reg               up_triggered_reset_d2;
+  reg                   up_triggered_set;
+  reg                   up_triggered_reset;
+  reg                   up_triggered_reset_d1;
+  reg                   up_triggered_reset_d2;
 
-  reg     [14:0]    data_a_r;
-  reg     [14:0]    data_b_r;
-  reg               data_valid_a_r;
-  reg               data_valid_b_r;
+  reg        [14:0]     data_a_r;
+  reg        [14:0]     data_b_r;
+  reg                   data_valid_a_r;
+  reg                   data_valid_b_r;
 
-  reg     [31:0]    trigger_delay_counter;
-  reg               triggered;
+  reg        [31:0]     trigger_delay_counter;
+  reg                   triggered;
 
-  reg               streaming_on;
+  reg                   streaming_on;
 
   // signal name changes
 
@@ -201,10 +204,10 @@ module axi_adc_trigger #(
   assign trigger_b_rise_edge = (trigger_b_d2 == 1'b1 && trigger_b_d3 == 1'b0) ? 1'b1: 1'b0;
   assign trigger_b_any_edge = trigger_b_rise_edge | trigger_b_fall_edge;
 
-  assign data_a_cmp   = data_a[15-SIGN_BITS:0];
-  assign data_b_cmp   = data_b[15-SIGN_BITS:0];
-  assign limit_a_cmp  = limit_a[15-SIGN_BITS:0];
-  assign limit_b_cmp  = limit_b[15-SIGN_BITS:0];
+  assign data_a_cmp   = data_a[DW:0];
+  assign data_b_cmp   = data_b[DW:0];
+  assign limit_a_cmp  = limit_a[DW:0];
+  assign limit_b_cmp  = limit_b[DW:0];
 
   assign data_a_trig = trigger_delay == 32'h0 ? {trigger_out_mixed | streaming_on, data_a_r} : {trigger_out_delayed |streaming_on, data_a_r};
   assign data_b_trig = trigger_delay == 32'h0 ? {trigger_out_mixed | streaming_on, data_b_r} : {trigger_out_delayed |streaming_on, data_b_r};
@@ -359,8 +362,8 @@ module axi_adc_trigger #(
 
   always @(posedge clk) begin
     if (data_valid_a == 1'b1) begin
-      hyst_a_high_limit <= limit_a_cmp + hysteresis_a[15-SIGN_BITS:0];
-      hyst_a_low_limit  <= limit_a_cmp - hysteresis_a[15-SIGN_BITS:0];
+      hyst_a_high_limit <= limit_a_cmp + hysteresis_a[DW:0];
+      hyst_a_low_limit  <= limit_a_cmp - hysteresis_a[DW:0];
 
       if (data_a_cmp >= limit_a_cmp) begin
         comp_high_a <= 1'b1;
@@ -385,8 +388,8 @@ module axi_adc_trigger #(
 
   always @(posedge clk) begin
     if (data_valid_b == 1'b1) begin
-      hyst_b_high_limit <= limit_b_cmp + hysteresis_b[15-SIGN_BITS:0];
-      hyst_b_low_limit  <= limit_b_cmp - hysteresis_b[15-SIGN_BITS:0];
+      hyst_b_high_limit <= limit_b_cmp + hysteresis_b[DW:0];
+      hyst_b_low_limit  <= limit_b_cmp - hysteresis_b[DW:0];
 
       if (data_b_cmp >= limit_b_cmp) begin
         comp_high_b <= 1'b1;
