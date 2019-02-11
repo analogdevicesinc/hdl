@@ -77,7 +77,7 @@ module axi_adxcvr_up #(
   output     [ 2:0]   up_ch_rate,
   output     [ 1:0]   up_ch_sys_clk_sel,
   output     [ 2:0]   up_ch_out_clk_sel,
-  output     [ 3:0]   up_ch_tx_diffctrl,
+  output     [ 4:0]   up_ch_tx_diffctrl,
   output     [ 4:0]   up_ch_tx_postcursor,
   output     [ 4:0]   up_ch_tx_precursor,
   output     [ 7:0]   up_ch_sel,
@@ -140,7 +140,7 @@ module axi_adxcvr_up #(
   reg     [ 2:0]  up_rate = RATE;
   reg     [ 1:0]  up_sys_clk_sel = SYS_CLK_SEL;
   reg     [ 2:0]  up_out_clk_sel = OUT_CLK_SEL;
-  reg     [ 3:0]  up_tx_diffctrl = TX_DIFFCTRL;
+  reg     [ 4:0]  up_tx_diffctrl = TX_DIFFCTRL;
   reg     [ 4:0]  up_tx_postcursor = TX_POSTCURSOR;
   reg     [ 4:0]  up_tx_precursor = TX_PRECURSOR;
   reg     [ 7:0]  up_icm_sel = 'd0;
@@ -265,7 +265,7 @@ module axi_adxcvr_up #(
         up_out_clk_sel <= up_wdata[2:0];
       end
       if ((up_wreq == 1'b1) && (up_waddr == 10'h030)) begin
-        up_tx_diffctrl <= up_wdata[3:0];
+        up_tx_diffctrl <= up_wdata[4:0];
       end
       if ((up_wreq == 1'b1) && (up_waddr == 10'h031)) begin
         up_tx_postcursor <= up_wdata[4:0];

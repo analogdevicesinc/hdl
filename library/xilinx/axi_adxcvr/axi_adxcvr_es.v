@@ -93,6 +93,7 @@ module axi_adxcvr_es (
   localparam GTXE2 = 2;
   localparam GTHE3 = 5;
   localparam GTHE4 = 8;
+  localparam GTYE4 = 9;
 
   // addresses
 
