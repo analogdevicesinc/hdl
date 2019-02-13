@@ -69,7 +69,8 @@ adi_add_bus "m_axis" "master" \
 	[list {"m_axis_ready" "TREADY"} \
 	  {"m_axis_valid" "TVALID"} \
 	  {"m_axis_data" "TDATA"} \
-	  {"m_axis_last" "TLAST"} ]
+	  {"m_axis_last" "TLAST"} \
+	  {"m_axis_user" "TUSER"} ]
 adi_add_bus_clock "m_axis_aclk" "m_axis"
 
 adi_set_bus_dependency "m_src_axi" "m_src_axi" \

@@ -358,6 +358,7 @@ ad_alt_intf signal  m_axis_data       output  DMA_DATA_WIDTH_DEST     data
 ad_alt_intf signal  m_axis_ready      input   1                       ready
 ad_alt_intf signal  m_axis_last       output  1                       last
 ad_alt_intf signal  m_axis_xfer_req   output  1                       xfer_req
+ad_alt_intf signal  m_axis_user       output  1                       user
 
 ad_alt_intf clock   s_axis_aclk       input   1                       clk
 ad_alt_intf signal  s_axis_valid      input   1                       valid
@@ -479,7 +480,7 @@ proc axi_dmac_elaborate {} {
   if {[get_parameter_value DMA_TYPE_DEST] != 1} {
     lappend disabled_intfs \
       if_m_axis_aclk if_m_axis_valid if_m_axis_data if_m_axis_ready \
-	  if_m_axis_last if_m_axis_xfer_req
+	  if_m_axis_last if_m_axis_user if_m_axis_xfer_req
   }
 
   if {[get_parameter_value DMA_TYPE_DEST] == 1 &&

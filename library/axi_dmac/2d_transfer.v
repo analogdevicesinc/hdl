@@ -75,6 +75,7 @@ module dmac_2d_transfer #(
   output [DMA_LENGTH_WIDTH-1:0] out_req_length,
   output out_req_sync_transfer_start,
   output out_req_last,
+  output out_req_islast,
 
   input out_eot,
   input [BYTES_PER_BURST_WIDTH-1:0] out_measured_burst_length,
@@ -195,6 +196,7 @@ generate if (DMA_2D_TRANSFER == 1) begin
   end
 
   assign out_req_last = (out_last || (DMA_2D_TLAST_MODE == 1)) & gen_last;
+  assign out_req_islast = out_last;
 
 end else begin
 
@@ -209,6 +211,7 @@ end else begin
   assign out_req_length = req_x_length;
   assign out_req_sync_transfer_start = req_sync_transfer_start;
   assign out_req_last = req_last;
+  assign out_req_islast = 1'b1;
 
   /* Response */
   always @(*) begin

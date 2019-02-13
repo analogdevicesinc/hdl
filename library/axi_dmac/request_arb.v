@@ -69,6 +69,7 @@ module dmac_request_arb #(
   input [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] req_src_address,
   input [DMA_LENGTH_WIDTH-1:0] req_length,
   input req_xlast,
+  input req_islast,
   input req_sync_transfer_start,
 
   output eot,
@@ -138,6 +139,7 @@ module dmac_request_arb #(
   input                               m_axis_ready,
   output                              m_axis_valid,
   output [DMA_DATA_WIDTH_DEST-1:0]    m_axis_data,
+  output [0:0]                        m_axis_user,
   output                              m_axis_last,
   output                              m_axis_xfer_req,
 
@@ -230,6 +232,7 @@ wire dest_req_valid;
 wire dest_req_ready;
 wire [DMA_ADDRESS_WIDTH_DEST-1:0] dest_req_dest_address;
 wire dest_req_xlast;
+wire dest_req_islast;
 
 wire dest_response_valid;
 wire dest_response_ready;
@@ -262,9 +265,11 @@ wire [BEATS_PER_BURST_WIDTH_SRC-1:0] src_req_last_burst_length;
 wire [BYTES_PER_BEAT_WIDTH_SRC-1:0] src_req_last_beat_bytes;
 wire src_req_sync_transfer_start;
 wire src_req_xlast;
+wire src_req_islast;
 
 reg [DMA_ADDRESS_WIDTH_DEST-1:0] src_req_dest_address_cur = 'h0;
 reg src_req_xlast_cur = 1'b0;
+reg src_req_islast_cur = 1'b0;
 
 /* TODO
 wire src_response_valid;
@@ -519,6 +524,7 @@ if (DMA_TYPE_DEST == DMA_TYPE_STREAM_AXI) begin
     .req_valid(dest_req_valid),
     .req_ready(dest_req_ready),
     .req_xlast(dest_req_xlast),
+    .req_islast(dest_req_islast),
 
     .response_valid(dest_response_valid),
     .response_ready(dest_response_ready),
@@ -540,6 +546,7 @@ if (DMA_TYPE_DEST == DMA_TYPE_STREAM_AXI) begin
     .m_axis_valid(m_axis_valid),
     .m_axis_ready(m_axis_ready),
     .m_axis_data(m_axis_data),
+    .m_axis_user(m_axis_user),
     .m_axis_last(m_axis_last)
   );
 
@@ -549,6 +556,7 @@ end else begin
   assign m_axis_last = 1'b0;
   assign m_axis_xfer_req = 1'b0;
   assign m_axis_data = 'h00;
+  assign m_axis_user = 'h00;
 
 end
 
@@ -1028,7 +1036,7 @@ assign req_src_valid = req_valid & req_ready;
 assign req_ready = req_gen_ready & req_src_ready;
 
 util_axis_fifo #(
-  .DATA_WIDTH(DMA_ADDRESS_WIDTH_DEST + 1),
+  .DATA_WIDTH(DMA_ADDRESS_WIDTH_DEST + 2),
   .ADDRESS_WIDTH(0),
   .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
 ) i_dest_req_fifo (
@@ -1039,7 +1047,8 @@ util_axis_fifo #(
   .s_axis_empty(),
   .s_axis_data({
     src_req_dest_address_cur,
-    src_req_xlast_cur
+    src_req_xlast_cur,
+    src_req_islast_cur
   }),
   .s_axis_room(),
 
@@ -1049,13 +1058,14 @@ util_axis_fifo #(
   .m_axis_ready(dest_req_ready),
   .m_axis_data({
     dest_req_dest_address,
-    dest_req_xlast
+    dest_req_xlast,
+    dest_req_islast
   }),
   .m_axis_level()
 );
 
 util_axis_fifo #(
-  .DATA_WIDTH(DMA_ADDRESS_WIDTH_DEST + DMA_ADDRESS_WIDTH_SRC + BYTES_PER_BURST_WIDTH + 2),
+  .DATA_WIDTH(DMA_ADDRESS_WIDTH_DEST + DMA_ADDRESS_WIDTH_SRC + BYTES_PER_BURST_WIDTH + 3),
   .ADDRESS_WIDTH(0),
   .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
 ) i_src_req_fifo (
@@ -1069,7 +1079,8 @@ util_axis_fifo #(
     req_src_address,
     req_length[BYTES_PER_BURST_WIDTH-1:0],
     req_sync_transfer_start,
-    req_xlast
+    req_xlast,
+    req_islast
   }),
   .s_axis_room(),
 
@@ -1083,7 +1094,8 @@ util_axis_fifo #(
     src_req_last_burst_length,
     src_req_last_beat_bytes,
     src_req_sync_transfer_start,
-    src_req_xlast
+    src_req_xlast,
+    src_req_islast
   }),
   .m_axis_level()
 );
@@ -1094,6 +1106,7 @@ always @(posedge src_clk) begin
   if (src_req_valid == 1'b1 && src_req_ready == 1'b1) begin
     src_req_dest_address_cur <= src_req_dest_address;
     src_req_xlast_cur <= src_req_xlast;
+    src_req_islast_cur <= src_req_islast;
   end
 end
 

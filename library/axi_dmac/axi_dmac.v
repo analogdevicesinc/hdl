@@ -213,6 +213,7 @@ module axi_dmac #(
   input                                    m_axis_ready,
   output                                   m_axis_valid,
   output [DMA_DATA_WIDTH_DEST-1:0]         m_axis_data,
+  output [0:0]                             m_axis_user,
   output                                   m_axis_last,
   output                                   m_axis_xfer_req,
 
@@ -619,6 +620,7 @@ axi_dmac_transfer #(
   .m_axis_ready(m_axis_ready),
   .m_axis_valid(m_axis_valid),
   .m_axis_data(m_axis_data),
+  .m_axis_user(m_axis_user),
   .m_axis_last(m_axis_last),
   .m_axis_xfer_req(m_axis_xfer_req),
 

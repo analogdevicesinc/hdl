@@ -56,6 +56,7 @@ module dmac_dest_axi_stream #(
   input m_axis_ready,
   output m_axis_valid,
   output [S_AXIS_DATA_WIDTH-1:0] m_axis_data,
+  output reg [0:0] m_axis_user = 1'b1,
   output m_axis_last,
 
   output fifo_ready,
@@ -66,6 +67,7 @@ module dmac_dest_axi_stream #(
   input req_valid,
   output req_ready,
   input req_xlast,
+  input req_islast,
 
   output response_valid,
   input response_ready,
@@ -77,6 +79,7 @@ module dmac_dest_axi_stream #(
 
 reg data_enabled = 1'b0;
 reg req_xlast_d = 1'b0;
+reg req_islast_d = 1'b0;
 reg active = 1'b0;
 
 reg [ID_WIDTH-1:0] id = 'h0;
@@ -112,6 +115,7 @@ end
 always @(posedge s_axis_aclk) begin
   if (req_ready == 1'b1) begin
     req_xlast_d <= req_xlast;
+    req_islast_d <= req_islast;
   end
 end
 
@@ -130,6 +134,14 @@ always @(posedge s_axis_aclk) begin
     id <= 'h00;
   end else if (fifo_last_beat == 1'b1) begin
     id <= inc_id(id);
+  end
+end
+
+always @(posedge s_axis_aclk) begin
+  if (s_axis_aresetn == 1'b0) begin
+    m_axis_user <= 1'b1;
+  end else if (m_axis_valid && m_axis_ready) begin
+    m_axis_user <= m_axis_last && req_islast_d;
   end
 end
 

@@ -154,6 +154,7 @@ module axi_dmac_transfer #(
   input m_axis_ready,
   output m_axis_valid,
   output [DMA_DATA_WIDTH_DEST-1:0] m_axis_data,
+  output [0:0]                     m_axis_user,
   output m_axis_last,
   output m_axis_xfer_req,
 
@@ -211,6 +212,7 @@ wire dma_response_ready;
 wire dma_response_partial;
 wire dma_req_sync_transfer_start;
 wire dma_req_last;
+wire dma_req_islast;
 
 wire [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] flock_req_dest_address;
 wire [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] flock_req_src_address;
@@ -392,6 +394,7 @@ dmac_2d_transfer #(
   .out_req_length (dma_req_length),
   .out_req_sync_transfer_start (dma_req_sync_transfer_start),
   .out_req_last (dma_req_last),
+  .out_req_islast (dma_req_islast),
   .out_eot (dma_req_eot),
   .out_measured_burst_length (dma_req_measured_burst_length),
   .out_response_partial (dma_response_partial),
@@ -433,6 +436,7 @@ dmac_request_arb #(
   .req_src_address (dma_req_src_address),
   .req_length (dma_req_length),
   .req_xlast (dma_req_last),
+  .req_islast (dma_req_islast),
   .req_sync_transfer_start (dma_req_sync_transfer_start),
 
   .eot (dma_req_eot),
@@ -508,6 +512,7 @@ dmac_request_arb #(
   .m_axis_ready (m_axis_ready),
   .m_axis_valid (m_axis_valid),
   .m_axis_data (m_axis_data),
+  .m_axis_user (m_axis_user),
   .m_axis_last (m_axis_last),
   .m_axis_xfer_req (m_axis_xfer_req),
 
