@@ -83,7 +83,7 @@ module ad_ip_jesd204_tpl_adc #(
   // Number of samples per channel that are processed in parallel.
   localparam DATA_PATH_WIDTH = OCTETS_PER_BEAT * 8 * NUM_LANES / NUM_CHANNELS / BITS_PER_SAMPLE;
   localparam LINK_DATA_WIDTH = NUM_LANES * OCTETS_PER_BEAT * 8;
-  localparam DMA_DATA_WIDTH = 16 * DATA_PATH_WIDTH * NUM_CHANNELS;
+  localparam DMA_DATA_WIDTH = BITS_PER_SAMPLE * DATA_PATH_WIDTH * NUM_CHANNELS;
 
   localparam BYTES_PER_FRAME = (NUM_CHANNELS * BITS_PER_SAMPLE * SAMPLES_PER_FRAME) / ( 8 * NUM_LANES);
 
