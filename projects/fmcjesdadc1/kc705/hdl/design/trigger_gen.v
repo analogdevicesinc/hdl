@@ -62,8 +62,8 @@ module trigger_gen #(
     input trig_reset,
     input  [1:0]   trig_level_add,
     input signed [15:0]   trig_level,
-    input signed [13:0]   trig_level_a,
-    input signed [13:0]   trig_level_b,
+    //input signed [13:0]   trig_level_a,
+    //input signed [13:0]   trig_level_b,
     
     output trigger0,
     output trigger1
@@ -166,7 +166,8 @@ endfunction
                 wait_cnt <= 0;
              end
              PULSE0 : begin
-                if (trigger_eval_f(adc_mean_b, {trig_level_b, 4'h0})) begin
+                //if (trigger_eval_f(adc_mean_b, {trig_level_b, 4'h0})) begin
+                if (trigger_eval_f(adc_mean_b, trig_level_a_reg)) begin
                     state <= PULSE1;
                 end 
                 wait_cnt   <=  wait_cnt + 8'hFF; 
