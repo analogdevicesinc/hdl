@@ -631,6 +631,7 @@ axi_dmac_transfer #(
   .m_axis_ready(m_axis_ready),
   .m_axis_valid(m_axis_valid),
   .m_axis_data(m_axis_data),
+  .m_axis_user(m_axis_user),
   .m_axis_last(m_axis_last),
   .m_axis_xfer_req(m_axis_xfer_req),
 
