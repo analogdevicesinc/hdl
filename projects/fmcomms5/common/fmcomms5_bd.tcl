@@ -167,6 +167,7 @@ ad_connect util_ad9361_divclk/clk_out util_ad9361_adc_pack/clk
 ad_connect util_ad9361_divclk_reset/peripheral_reset util_ad9361_adc_pack/reset
 
 ad_connect util_ad9361_adc_fifo/dout_valid_0 util_ad9361_adc_pack/fifo_wr_en
+ad_connect util_ad9361_adc_pack/fifo_wr_overflow util_ad9361_adc_fifo/dout_ovf
 
 for {set i 0} {$i < 8} {incr i} {
   ad_connect util_ad9361_adc_fifo/dout_enable_$i util_ad9361_adc_pack/enable_$i
