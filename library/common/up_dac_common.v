@@ -153,8 +153,8 @@ module up_dac_common #(
 
   // decode block select
 
-  assign up_wreq_s = ({up_waddr[13:7],1'b0} == COMMON_ID) ? up_wreq : 1'b0;
-  assign up_rreq_s = ({up_raddr[13:7],1'b0} == COMMON_ID) ? up_rreq : 1'b0;
+  assign up_wreq_s = (up_waddr[13:7] == {COMMON_ID,1'b0}) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:7] == {COMMON_ID,1'b0}) ? up_rreq : 1'b0;
 
   assign  up_dac_ce = up_dac_clk_enb_int;
 
