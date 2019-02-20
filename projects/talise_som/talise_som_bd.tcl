@@ -279,6 +279,9 @@ ad_mem_hp2_interconnect sys_dma_clk axi_adrv9009_som_rx_dma/m_dest_axi
 ad_mem_hp3_interconnect sys_dma_clk sys_ps8/S_AXI_HP3
 ad_mem_hp3_interconnect sys_dma_clk axi_adrv9009_som_obs_dma/m_dest_axi
 
+ad_connect sys_dma_resetn axi_adrv9009_som_obs_dma/m_dest_axi_aresetn
+ad_connect sys_dma_resetn axi_adrv9009_som_rx_dma/m_dest_axi_aresetn
+
 # interrupts
 
 ad_cpu_interrupt ps-8 mb-8 axi_adrv9009_som_obs_dma/irq
