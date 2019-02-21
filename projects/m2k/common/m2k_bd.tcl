@@ -47,7 +47,7 @@ ad_ip_parameter bram_la CONFIG.Algorithm {Low_Power}
 ad_ip_parameter bram_la CONFIG.Use_Byte_Write_Enable {false}
 ad_ip_parameter bram_la CONFIG.Operating_Mode_A {NO_CHANGE}
 ad_ip_parameter bram_la CONFIG.Register_PortB_Output_of_Memory_Primitives {true}
-ad_ip_parameter bram_la CONFIG.Use_RSTA_Pin {false} 
+ad_ip_parameter bram_la CONFIG.Use_RSTA_Pin {false}
 ad_ip_parameter bram_la CONFIG.Port_B_Clock {100}
 ad_ip_parameter bram_la CONFIG.Port_B_Enable_Rate {100}
 ad_ip_parameter bram_la CONFIG.Write_Width_A {16}
@@ -92,7 +92,7 @@ ad_ip_parameter bram_adc CONFIG.Enable_32bit_Address false
 ad_ip_parameter bram_adc CONFIG.Use_Byte_Write_Enable false
 ad_ip_parameter bram_adc CONFIG.Operating_Mode_A {NO_CHANGE}
 ad_ip_parameter bram_adc CONFIG.Register_PortB_Output_of_Memory_Primitives true
-ad_ip_parameter bram_adc CONFIG.Use_RSTA_Pin {false} 
+ad_ip_parameter bram_adc CONFIG.Use_RSTA_Pin {false}
 ad_ip_parameter bram_adc CONFIG.Port_B_Clock 100
 ad_ip_parameter bram_adc CONFIG.Port_B_Enable_Rate 100
 ad_ip_parameter bram_adc CONFIG.Write_Width_A 32
@@ -144,9 +144,6 @@ ad_ip_instance axi_dac_interpolate axi_dac_interpolate
 ad_ip_parameter axi_dac_interpolate CONFIG.CORRECTION_DISABLE {0}
 
 ad_ip_instance proc_sys_reset logic_analyzer_reset
-
-ad_ip_instance axi_rd_wr_combiner axi_rd_wr_combiner_logic
-ad_ip_instance axi_rd_wr_combiner axi_rd_wr_combiner_converter
 
 ad_connect data_i     logic_analyzer/data_i
 ad_connect trigger_i  logic_analyzer/trigger_i
@@ -293,45 +290,23 @@ ad_cpu_interconnect 0x7C500000 axi_adc_decimate
 ad_cpu_interconnect 0x7C5a0000 axi_dac_interpolate
 
 # Logic analyzer DMA
-ad_connect sys_cpu_clk axi_rd_wr_combiner_logic/clk
 ad_connect sys_cpu_clk logic_analyzer_dmac/m_dest_axi_aclk
 ad_connect sys_cpu_clk pattern_generator_dmac/m_src_axi_aclk
 
-ad_connect logic_analyzer_dmac/m_dest_axi axi_rd_wr_combiner_logic/s_wr_axi
-ad_connect pattern_generator_dmac/m_src_axi axi_rd_wr_combiner_logic/s_rd_axi
-
 ad_mem_hp1_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1
-ad_mem_hp1_interconnect sys_cpu_clk axi_rd_wr_combiner_logic/m_axi
+ad_mem_hp1_interconnect sys_cpu_clk logic_analyzer_dmac/m_dest_axi
+ad_mem_hp1_interconnect sys_cpu_clk pattern_generator_dmac/m_src_axi
 
 # Converter DMA
-ad_connect converter_dma_clk axi_rd_wr_combiner_converter/clk
 ad_connect converter_dma_clk ad9963_adc_dmac/m_dest_axi_aclk
-ad_connect converter_dma_clk ad9963_dac_dmac_a/m_src_axi_aclk
-
-ad_connect ad9963_adc_dmac/m_dest_axi axi_rd_wr_combiner_converter/s_wr_axi
-ad_connect ad9963_dac_dmac_a/m_src_axi axi_rd_wr_combiner_converter/s_rd_axi
 
 ad_mem_hp2_interconnect converter_dma_clk sys_ps7/S_AXI_HP2
-ad_mem_hp2_interconnect converter_dma_clk axi_rd_wr_combiner_converter/m_axi
+ad_mem_hp2_interconnect converter_dma_clk ad9963_adc_dmac/m_dest_axi
+ad_mem_hp2_interconnect converter_dma_clk ad9963_dac_dmac_a/m_src_axi
 
 # Only 16-bit we can run at a slower clock
 ad_mem_hp3_interconnect sys_cpu_clk sys_ps7/S_AXI_HP3
 ad_mem_hp3_interconnect sys_cpu_clk ad9963_dac_dmac_b/m_src_axi
-
-# Map rd-wr combiner
-assign_bd_address [get_bd_addr_segs { \
-  axi_rd_wr_combiner_converter/s_rd_axi/reg0 \
-  axi_rd_wr_combiner_converter/s_wr_axi/reg0 \
-  axi_rd_wr_combiner_logic/s_rd_axi/reg0 \
-  axi_rd_wr_combiner_logic/s_wr_axi/reg0 \
-}]
-
-set_property range 512M [get_bd_addr_segs { \
-  ad9963_dac_dmac_a/m_src_axi/SEG_axi_rd_wr_combiner_converter_reg0 \
-  ad9963_adc_dmac/m_dest_axi/SEG_axi_rd_wr_combiner_converter_reg0 \
-  pattern_generator_dmac/m_src_axi/SEG_axi_rd_wr_combiner_logic_reg0 \
-  logic_analyzer_dmac/m_dest_axi/SEG_axi_rd_wr_combiner_logic_reg0 \
-}]
 
 ad_connect  sys_cpu_resetn logic_analyzer_dmac/m_dest_axi_aresetn
 ad_connect  sys_cpu_resetn pattern_generator_dmac/m_src_axi_aresetn
