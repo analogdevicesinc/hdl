@@ -46,6 +46,7 @@ ad_ip_parameter axi_adrv9009_som_tx_xcvr CONFIG.TX_OR_RX_N 1
 ad_ip_parameter axi_adrv9009_som_tx_xcvr CONFIG.XCVR_TYPE 2
 
 adi_axi_jesd204_tx_create axi_adrv9009_som_tx_jesd $TX_NUM_OF_LANES
+set_property -dict [list CONFIG.SYSREF_IOB {false}] [get_bd_cells axi_adrv9009_som_tx_jesd/tx]
 
 ad_ip_instance util_upack2 util_som_tx_upack [list \
   NUM_OF_CHANNELS $TX_NUM_OF_CONVERTERS \
