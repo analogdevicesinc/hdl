@@ -79,6 +79,7 @@ module axi_rd_wr_combiner (
   input                         m_axi_rvalid,
   input  [ 1:0]                 m_axi_rresp,
   input  [63:0]                 m_axi_rdata,
+  input                         m_axi_rlast,
   output                        m_axi_rready,
 
   // Slave write address
@@ -117,6 +118,7 @@ module axi_rd_wr_combiner (
   output                        s_rd_axi_rvalid,
   output  [ 1:0]                s_rd_axi_rresp,
   output  [63:0]                s_rd_axi_rdata,
+  output                        s_rd_axi_rlast,
   input                         s_rd_axi_rready
 );
 
@@ -151,6 +153,7 @@ assign s_rd_axi_arready = m_axi_arready;
 assign s_rd_axi_rvalid = m_axi_rvalid;
 assign s_rd_axi_rresp = m_axi_rresp;
 assign s_rd_axi_rdata = m_axi_rdata;
+assign s_rd_axi_rlast = m_axi_rlast;
 assign m_axi_rready = s_rd_axi_rready;
 
 endmodule
