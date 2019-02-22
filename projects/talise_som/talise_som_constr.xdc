@@ -132,7 +132,13 @@ set_property -dict {PACKAGE_PIN AL18 IOSTANDARD LVCMOS18}  [get_ports spi_csn_ad
 set_property -dict {PACKAGE_PIN AL17 IOSTANDARD LVCMOS18}  [get_ports spi_csn_adrv9009_b]
 set_property -dict {PACKAGE_PIN AU20 IOSTANDARD LVCMOS18}  [get_ports spi_csn_hmc7044]
 
-create_clock -name tx_ref_clk        -period  4.00 [get_ports core_clk_a_p]
-create_clock -name rx_ref_clk        -period  4.00 [get_ports core_clk_b_p]
+create_clock -name tx_dev_clk        -period  4.00 [get_ports core_clk_a_p]
+create_clock -name rx_dev_clk        -period  4.00 [get_ports core_clk_b_p]
 create_clock -name jesd_tx_ref_clk   -period  4.00 [get_ports ref_clk_a_p]
 create_clock -name jesd_rx_ref_clk   -period  4.00 [get_ports ref_clk_b_p]
+
+set_input_delay -clock rx_dev_clk -max 4    [get_ports sysref_b_p];
+set_input_delay -clock rx_dev_clk -min 4    [get_ports sysref_b_p];
+
+set_input_delay -clock tx_dev_clk -max 4    [get_ports sysref_a_p];
+set_input_delay -clock tx_dev_clk -min 4    [get_ports sysref_a_p];
