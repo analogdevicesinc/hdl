@@ -5,7 +5,7 @@ variable version
 
 set family "none"
 set device "none"
-set version "18.0.0"
+set version "18.1.0"
 
 proc adi_project_altera {project_name} {
 
@@ -36,7 +36,7 @@ proc adi_project_altera {project_name} {
 
   if [regexp "de10nano$" $project_name] {
     set family "Cyclone V"
-    set device 5CSEBA6U23I7DK 
+    set device 5CSEBA6U23I7DK
     set system_qip_file system_bd/synthesis/system_bd.qip
   }
 
@@ -62,7 +62,7 @@ proc adi_project_altera {project_name} {
   }
 
   # packages used
- 
+
   load_package flow
 
   # project
@@ -77,7 +77,7 @@ proc adi_project_altera {project_name} {
   set_global_assignment -name IP_SEARCH_PATHS $ad_lib_folders
 
   # project & qsys
- 
+
   set_global_assignment -name FAMILY $family
   set_global_assignment -name DEVICE $device
 
@@ -126,7 +126,7 @@ proc adi_project_altera {project_name} {
   set_instance_assignment -name MESSAGE_DISABLE 10036 -entity altera_merlin_burst_adapter_new
 
   # default assignments
- 
+
   set_global_assignment -name QIP_FILE $system_qip_file
   set_global_assignment -name VERILOG_FILE system_top.v
   set_global_assignment -name SDC_FILE system_constr.sdc
