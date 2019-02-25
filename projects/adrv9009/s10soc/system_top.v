@@ -117,7 +117,37 @@ module system_top (
   inout             hps_gpio_eth_irq,
   inout             hps_gpio_usb_oci,
   inout   [  1:0]   hps_gpio_btn,
-  inout   [  2:0]   hps_gpio_led
+  inout   [  2:0]   hps_gpio_led,
+
+  // adrv9009-interface
+
+  input             ref_clk0,
+  input             ref_clk1,
+  input   [  3:0]   rx_serial_data,
+  output  [  3:0]   tx_serial_data,
+  output            rx_sync,
+  output            rx_os_sync,
+  input             tx_sync,
+  input             tx_sync_1,
+  input             sysref,
+
+  output            ad9528_reset_b,
+  output            ad9528_sysref_req,
+  output            adrv9009_tx1_enable,
+  output            adrv9009_tx2_enable,
+  output            adrv9009_rx1_enable,
+  output            adrv9009_rx2_enable,
+  output            adrv9009_test,
+  output            adrv9009_reset_b,
+  input             adrv9009_gpint,
+
+  inout   [ 18:0]   adrv9009_gpio,
+
+  output            spi_csn_ad9528,
+  output            spi_csn_adrv9009,
+  output            spi_clk,
+  output            spi_mosi,
+  input             spi_miso
 
 );
 
@@ -125,6 +155,8 @@ module system_top (
 
   wire    [ 63:0]   gpio_i;
   wire    [ 63:0]   gpio_o;
+  wire    [  7:0]   spi_csn_s;
+  wire              dac_fifo_bypass;
 
   // motherboard-gpio
 
@@ -133,6 +165,32 @@ module system_top (
   assign fpga_gpio_led = gpio_o[10:8];
 
   assign gpio_i[63:8]  = gpio_o[63:8];
+
+  // assignments
+
+  assign spi_csn_ad9528 = spi_csn_s[0];
+  assign spi_csn_adrv9009 = spi_csn_s[1];
+
+  // gpio (adrv9009)
+
+  assign gpio_i[63:61] = gpio_o[63:61];
+
+  assign dac_fifo_bypass = gpio_o[60];
+  assign gpio_i[60:60] = gpio_o[60];
+
+  assign ad9528_reset_b = gpio_o[59];
+  assign ad9528_sysref_req = gpio_o[58];
+  assign adrv9009_tx1_enable = gpio_o[57];
+  assign adrv9009_tx2_enable = gpio_o[56];
+  assign adrv9009_rx1_enable = gpio_o[55];
+  assign adrv9009_rx2_enable = gpio_o[54];
+  assign adrv9009_test = gpio_o[53];
+  assign adrv9009_reset_b = gpio_o[52];
+  assign gpio_i[59:52] = gpio_o[59:52];
+
+  assign gpio_i[51:51] = adrv9009_gpint;
+
+  assign gpio_i[50:32] = gpio_o[50:32];
 
   // instantiations
 
@@ -209,10 +267,24 @@ module system_top (
     .sys_hps_ddr_mem_dqs_n                ( hps_ddr_dqs_n ),
     .sys_hps_ddr_mem_dq                   ( hps_ddr_dq ),
     .sys_hps_ddr_mem_dbi_n                ( hps_ddr_dbi_n ),
-    .sys_spi_MISO                         ( 1'b0 ),
-    .sys_spi_MOSI                         ( ),
-    .sys_spi_SCLK                         ( ),
-    .sys_spi_SS_n                         ( )
+    .sys_spi_MISO                         ( spi_miso ),
+    .sys_spi_MOSI                         ( spi_mosi ),
+    .sys_spi_SCLK                         ( spi_clk ),
+    .sys_spi_SS_n                         ( spi_csn_s ),
+    .adrv9009_gpio_export                 ( adrv9009_gpio ),
+    .tx_serial_data_tx_serial_data        ( tx_serial_data ),
+    .tx_fifo_bypass_bypass                ( dac_fifo_bypass ),
+    .tx_ref_clk_clk                       ( ref_clk1 ),
+    .tx_sync_export                       ( tx_sync ),
+    .tx_sysref_export                     ( sysref ),
+    .rx_serial_data_rx_serial_data        ( rx_serial_data[1:0] ),
+    .rx_os_serial_data_rx_serial_data     ( rx_serial_data[3:2] ),
+    .rx_os_ref_clk_clk                    ( ref_clk1 ),
+    .rx_os_sync_export                    ( rx_os_sync ),
+    .rx_os_sysref_export                  ( sysref ),
+    .rx_ref_clk_clk                       ( ref_clk1 ),
+    .rx_sync_export                       ( rx_sync ),
+    .rx_sysref_export                     ( sysref )
   );
 
 endmodule
