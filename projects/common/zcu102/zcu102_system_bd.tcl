@@ -35,6 +35,8 @@ ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL1_REF_CTRL__FREQMHZ 200
 ad_ip_parameter sys_ps8 CONFIG.PSU__USE__IRQ0 1
 ad_ip_parameter sys_ps8 CONFIG.PSU__USE__IRQ1 1
 ad_ip_parameter sys_ps8 CONFIG.PSU__GPIO_EMIO__PERIPHERAL__ENABLE 1
+ad_ip_parameter sys_ps8 CONFIG.PSU__HIGH_ADDRESS__ENABLE 1
+
 
 set_property -dict [list \
   CONFIG.PSU__SPI0__PERIPHERAL__ENABLE 1 \
