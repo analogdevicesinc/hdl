@@ -53,7 +53,7 @@ module axi_dmac #(
   parameter DMA_AXI_PROTOCOL_SRC = 0,
   parameter DMA_TYPE_DEST = 0,
   parameter DMA_TYPE_SRC = 2,
-  parameter DMA_AXI_ADDR_WIDTH = 32,
+  parameter DMA_AXI_ADDR_WIDTH = 64,
   parameter MAX_BYTES_PER_BURST = 128,
   parameter FIFO_SIZE = 8, // In bursts
   parameter AXI_ID_WIDTH_SRC = 1,

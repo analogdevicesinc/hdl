@@ -89,6 +89,9 @@ module axi_dmac_regmap_request #(
 );
 
 localparam MEASURED_LENGTH_WIDTH = (DMA_2D_TRANSFER == 1) ? 32 : DMA_LENGTH_WIDTH;
+localparam HAS_ADDR_HIGH = DMA_AXI_ADDR_WIDTH > 32;
+localparam ADDR_LOW_MSB = HAS_ADDR_HIGH ? 31 : DMA_AXI_ADDR_WIDTH-1;
+localparam ADDR_HIGH_MSB = HAS_ADDR_HIGH ? DMA_AXI_ADDR_WIDTH-32-1 : 0;
 
 // DMA transfer signals
 reg up_dma_req_valid = 1'b0;
@@ -151,9 +154,17 @@ always @(posedge clk) begin
         up_dma_last <= up_wdata[1];
         up_dma_enable_tlen_reporting <= up_wdata[2];
       end
-      9'h104: up_dma_dest_address <= up_wdata[DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST];
-      9'h105: up_dma_src_address <= up_wdata[DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC];
+      9'h104: up_dma_dest_address[ADDR_LOW_MSB:BYTES_PER_BEAT_WIDTH_DEST] <= up_wdata[ADDR_LOW_MSB:BYTES_PER_BEAT_WIDTH_DEST];
+      9'h105: up_dma_src_address[ADDR_LOW_MSB:BYTES_PER_BEAT_WIDTH_SRC] <= up_wdata[ADDR_LOW_MSB:BYTES_PER_BEAT_WIDTH_SRC];
       9'h106: up_dma_x_length[DMA_LENGTH_WIDTH-1:DMA_LENGTH_ALIGN] <= up_wdata[DMA_LENGTH_WIDTH-1:DMA_LENGTH_ALIGN];
+      9'h124:
+        if (HAS_ADDR_HIGH) begin
+          up_dma_dest_address[DMA_AXI_ADDR_WIDTH-1:32] <= up_wdata[ADDR_HIGH_MSB:0];
+        end
+      9'h125:
+        if (HAS_ADDR_HIGH) begin
+          up_dma_src_address[DMA_AXI_ADDR_WIDTH-1:32] <= up_wdata[ADDR_HIGH_MSB:0];
+        end
       endcase
     end
   end
@@ -176,6 +187,8 @@ always @(*) begin
   9'h112: up_rdata <= up_measured_transfer_length;
   9'h113: up_rdata <= up_tlf_data[MEASURED_LENGTH_WIDTH-1 : 0];   // Length
   9'h114: up_rdata <= up_tlf_data[MEASURED_LENGTH_WIDTH+: 2];  // ID
+  9'h124: up_rdata <= HAS_DEST_ADDR ? up_dma_dest_address[DMA_AXI_ADDR_WIDTH-1:32]: 'h00;
+  9'h125: up_rdata <= HAS_SRC_ADDR ? up_dma_src_address[DMA_AXI_ADDR_WIDTH-1:32] : 'h00;
   default: up_rdata <= 32'h00;
   endcase
 end
