@@ -188,6 +188,25 @@ module system_top (
   output              spi_csn_adrv9009_b,
   output              spi_csn_hmc7044,
 
+  input               ddr4_ref_1_clk_n,
+  input               ddr4_ref_1_clk_p,
+
+  output              ddr4_rtl_1_act_n,
+  output      [16:0]  ddr4_rtl_1_adr,
+  output      [1:0]   ddr4_rtl_1_ba,
+  output      [0:0]   ddr4_rtl_1_bg,
+  output      [0:0]   ddr4_rtl_1_ck_c,
+  output      [0:0]   ddr4_rtl_1_ck_t,
+  output      [0:0]   ddr4_rtl_1_cke,
+  output      [0:0]   ddr4_rtl_1_cs_n,
+  inout       [3:0]   ddr4_rtl_1_dm_n,
+  inout       [31:0]  ddr4_rtl_1_dq,
+  inout       [3:0]   ddr4_rtl_1_dqs_c,
+  inout       [3:0]   ddr4_rtl_1_dqs_t,
+  output      [0:0]   ddr4_rtl_1_odt,
+  output              ddr4_rtl_1_reset_n,
+  output              ddr4_rtl_1_par,
+  input               ddr4_rtl_1_alert_n,
   output              spi_clk,
   inout               spi_sdio,
   input               spi_miso
@@ -220,6 +239,14 @@ module system_top (
   assign spi_csn_adrv9009_b = spi_csn[1];
   assign spi_csn_hmc7044 = spi_csn[2];
   assign spi_csn_hmc7044_car = 1'b1;
+
+  talise_som_spi i_spi (
+  .spi_csn(spi_csn),
+  .spi_clk(spi_clk),
+  .spi_mosi(spi_mosi),
+  .spi_miso_i(spi_miso),
+  .spi_miso_o(spi0_miso),
+  .spi_sdio(spi_sdio));
 
   assign tx_sync = tx_sync_a & tx_sync_b;
 
@@ -324,16 +351,6 @@ module system_top (
               pb_gpio_1,          // 1
               pb_gpio_0}));       // 0
 
-  talise_som_spi i_spi (
-  .spi_csn(spi_csn),
-  .spi_clk(spi_clk),
-  .spi_mosi(spi_mosi),
-  .spi_miso_i(spi_miso),
-  .spi_miso_o(spi0_miso),
-
-  .spi_sdio(spi_sdio));
-
-
   IBUFDS_GTE4 i_ibufds_ref_clk_1 (
     .CEB (1'd0),
     .I (ref_clk_a_p),
@@ -402,6 +419,24 @@ module system_top (
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .gpio_t (gpio_t),
+
+    .ddr4_rtl_1_act_n(ddr4_rtl_1_act_n),
+    .ddr4_rtl_1_adr(ddr4_rtl_1_adr),
+    .ddr4_rtl_1_ba(ddr4_rtl_1_ba),
+    .ddr4_rtl_1_bg(ddr4_rtl_1_bg),
+    .ddr4_rtl_1_ck_c(ddr4_rtl_1_ck_c),
+    .ddr4_rtl_1_ck_t(ddr4_rtl_1_ck_t),
+    .ddr4_rtl_1_cke(ddr4_rtl_1_cke),
+    .ddr4_rtl_1_cs_n(ddr4_rtl_1_cs_n),
+    .ddr4_rtl_1_dm_n(ddr4_rtl_1_dm_n),
+    .ddr4_rtl_1_dq(ddr4_rtl_1_dq),
+    .ddr4_rtl_1_dqs_c(ddr4_rtl_1_dqs_c),
+    .ddr4_rtl_1_dqs_t(ddr4_rtl_1_dqs_t),
+    .ddr4_rtl_1_odt(ddr4_rtl_1_odt),
+    .ddr4_rtl_1_reset_n(ddr4_rtl_1_reset_n),
+    .sys_reset(1'b0),
+    .ddr4_ref_1_clk_n(ddr4_ref_1_clk_n),
+    .ddr4_ref_1_clk_p(ddr4_ref_1_clk_p),
     .core_clk_a(core_clk_a),
     .core_clk_b(core_clk_b),
     .ref_clk_a(ref_clk_a),
@@ -444,6 +479,7 @@ module system_top (
     .tx_data_7_p (tx_data_b_p[3]),
     .tx_sync_0 (tx_sync),
     .tx_sysref_0 (sysref_a),
+    .dac_fifo_bypass(gpio_o[90]),
     .spi0_csn(spi_csn),
     .spi0_miso(spi0_miso),
     .spi0_mosi(spi_mosi),
