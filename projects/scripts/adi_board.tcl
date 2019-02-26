@@ -454,7 +454,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     }
     set m_interconnect_index $sys_hp0_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hp0_interconnect]
-    set m_addr_seg [get_bd_addr_segs sys_ps8/S_AXI_HP0_FPD/PLLPD_DDR_LOW]
+    set m_addr_seg [get_bd_addr_segs sys_ps8/SAXIGP2/HP0_DDR_*]
   }
 
   if {($p_sel eq "HP1") && ($sys_zynq == 2)} {
@@ -465,7 +465,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     }
     set m_interconnect_index $sys_hp1_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hp1_interconnect]
-    set m_addr_seg [get_bd_addr_segs sys_ps8/S_AXI_HP1_FPD/HP0_DDR_LOW]
+    set m_addr_seg [get_bd_addr_segs sys_ps8/SAXIGP3/HP1_DDR_*]
   }
 
   if {($p_sel eq "HP2") && ($sys_zynq == 2)} {
@@ -476,7 +476,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     }
     set m_interconnect_index $sys_hp2_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hp2_interconnect]
-    set m_addr_seg [get_bd_addr_segs sys_ps8/S_AXI_HP2_FPD/HP1_DDR_LOW]
+    set m_addr_seg [get_bd_addr_segs sys_ps8/SAXIGP4/HP2_DDR_*]
   }
 
   if {($p_sel eq "HP3") && ($sys_zynq == 2)} {
@@ -487,7 +487,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     }
     set m_interconnect_index $sys_hp3_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hp3_interconnect]
-    set m_addr_seg [get_bd_addr_segs sys_ps8/S_AXI_HP3_FPD/HP2_DDR_LOW]
+    set m_addr_seg [get_bd_addr_segs sys_ps8/SAXIGP5/HP3_DDR_*]
   }
 
   set i_str "S$m_interconnect_index"
