@@ -35,6 +35,43 @@ set OBS_SAMPLE_WIDTH 16     ; # N/NP
 
 set OBS_SAMPLES_PER_CHANNEL 2 ;  # L * 32 / (M * N)
 
+create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddr4_rtl:1.0 ddr4_rtl_1
+create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 ddr4_ref_1
+
+ad_ip_instance ip:ddr4 ddr4_1
+ad_ip_parameter ddr4_1 CONFIG.C0.DDR4_DataWidth {32}
+ad_ip_parameter ddr4_1 CONFIG.C0.DDR4_AxiDataWidth {256}
+ad_ip_parameter ddr4_1 CONFIG.C0.DDR4_AxiAddressWidth {31}
+ad_ip_parameter ddr4_1 CONFIG.C0.DDR4_InputClockPeriod {3332}
+ad_ip_parameter ddr4_1 CONFIG.C0.DDR4_MemoryPart {MT40A512M16HA-083E}
+ad_ip_parameter ddr4_1 CONFIG.C0.BANK_GROUP_WIDTH {1}
+ad_ip_parameter ddr4_1 CONFIG.C0.DDR4_CasLatency {16}
+
+ad_connect ddr4_rtl_1 ddr4_1/C0_DDR4
+
+set_property -dict [list CONFIG.FREQ_HZ {300000000}] [get_bd_intf_ports ddr4_ref_1]
+ad_connect ddr4_ref_1 ddr4_1/C0_SYS_CLK
+
+set dac_fifo_name axi_tx_fifo
+set dac_data_width [expr 32*$TX_NUM_OF_LANES]
+set dac_dma_data_width 256
+set dac_fifo_address_width 31
+
+ad_ip_instance axi_dacfifo $dac_fifo_name
+ad_ip_parameter $dac_fifo_name CONFIG.DAC_DATA_WIDTH $dac_data_width
+ad_ip_parameter $dac_fifo_name CONFIG.DMA_DATA_WIDTH $dac_dma_data_width
+ad_ip_parameter $dac_fifo_name CONFIG.AXI_DATA_WIDTH 256
+ad_ip_parameter $dac_fifo_name CONFIG.AXI_SIZE 5
+ad_ip_parameter $dac_fifo_name CONFIG.AXI_LENGTH 255
+ad_ip_parameter $dac_fifo_name CONFIG.AXI_ADDRESS 0x80000000
+
+create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 ddr4_1_rstgen
+ad_connect ddr4_1_rstgen/slowest_sync_clk ddr4_1/c0_ddr4_ui_clk
+ad_connect ddr4_1/c0_ddr4_ui_clk_sync_rst ddr4_1_rstgen/ext_reset_in
+ad_connect ddr4_1_rstgen/peripheral_aresetn axi_tx_fifo/axi_resetn
+
+ad_connect sys_reset ddr4_1/sys_rst
+
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
 create_bd_port -dir I dac_fifo_bypass
@@ -63,13 +100,10 @@ ad_ip_instance axi_dmac axi_adrv9009_som_tx_dma
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_TYPE_SRC 0
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_TYPE_DEST 1
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.CYCLIC 1
-ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.AXI_SLICE_DEST 1
-ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.ASYNC_CLK_DEST_REQ 1
-ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.ASYNC_CLK_SRC_DEST 1
-ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.ASYNC_CLK_REQ_SRC 1
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_DATA_WIDTH_DEST 256
+ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_dma_data_width
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_DATA_WIDTH_SRC 128
 
 ad_ip_instance axi_adxcvr axi_adrv9009_som_rx_xcvr
@@ -189,7 +223,6 @@ for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
   ad_connect  tx_adrv9009_som_tpl_core/dac_enable_$i  util_som_tx_upack/enable_$i
 }
 
-ad_connect axi_adrv9009_som_tx_dma/m_axis util_som_tx_upack/s_axis
 ad_connect tx_adrv9009_som_tpl_core/dac_dunf util_som_tx_upack/fifo_rd_underflow
 ad_connect sys_dma_resetn axi_adrv9009_som_tx_dma/m_src_axi_aresetn
 
@@ -231,6 +264,23 @@ ad_connect core_clk_a axi_adrv9009_som_tx_dma/m_axis_aclk
 
 ad_connect axi_adrv9009_som_rx_dma/fifo_wr_clk  core_clk_b
 ad_connect util_som_rx_cpack/packed_fifo_wr axi_adrv9009_som_rx_dma/fifo_wr
+
+ad_connect axi_tx_fifo/axi ddr4_1/C0_DDR4_S_AXI
+ad_connect ddr4_1/c0_ddr4_aresetn ddr4_1_rstgen/peripheral_aresetn
+ad_connect core_clk_a axi_tx_fifo/dma_clk
+ad_connect axi_tx_fifo/dma_rst core_clk_a_rstgen/peripheral_reset
+ad_connect axi_tx_fifo/dma_valid axi_adrv9009_som_tx_dma/m_axis_valid
+ad_connect axi_tx_fifo/dma_ready axi_adrv9009_som_tx_dma/m_axis_ready
+ad_connect axi_adrv9009_som_tx_dma/m_axis_data axi_tx_fifo/dma_data
+ad_connect axi_adrv9009_som_tx_dma/m_axis_last axi_tx_fifo/dma_xfer_last
+ad_connect axi_adrv9009_som_tx_dma/m_axis_xfer_req axi_tx_fifo/dma_xfer_req
+ad_connect core_clk_a axi_tx_fifo/dac_clk
+ad_connect axi_tx_fifo/dac_rst core_clk_a_rstgen/peripheral_reset
+ad_connect util_som_tx_upack/s_axis_data axi_tx_fifo/dac_data
+ad_connect util_som_tx_upack/s_axis_ready axi_tx_fifo/dac_valid
+ad_connect axi_tx_fifo/axi_clk ddr4_1/c0_ddr4_ui_clk
+ad_connect dac_fifo_bypass axi_tx_fifo/bypass
+ad_connect util_som_tx_upack/s_axis_valid VCC_1/dout
 
 ad_ip_instance clk_wiz dma_clk_wiz
 ad_ip_parameter dma_clk_wiz CONFIG.PRIMITIVE MMCM
