@@ -205,7 +205,7 @@ ad_connect  sys_rst axi_ddr_cntrl/sys_rst
 ad_connect  sys_clk_p axi_ddr_cntrl/sys_clk_p
 ad_connect  sys_clk_n axi_ddr_cntrl/sys_clk_n
 ad_connect  ddr3 axi_ddr_cntrl/DDR3
-ad_connect  sys_cpu_clk axi_ethernet/ref_clk
+ad_connect  sys_200m_clk axi_ethernet/ref_clk
 ad_connect  sys_cpu_clk axi_ethernet/axis_clk
 ad_connect  phy_sd axi_ethernet/signal_detect
 ad_connect  phy_rstn axi_ethernet/phy_rst_n
