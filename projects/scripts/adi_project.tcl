@@ -46,6 +46,11 @@ proc adi_project_xilinx {project_name {mode 0}} {
     set p_board "xilinx.com:vc707:part0:1.1"
     set sys_zynq 0
   }
+  if [regexp "_vcu118$" $project_name] {
+    set p_device "xcvu9p-flga2104-2L-e"
+    set p_board "xilinx.com:vcu118:part0:2.0"
+    set sys_zynq 0
+  }
   if [regexp "_kcu105$" $project_name] {
     set p_device "xcku040-ffva1156-2-e"
     set p_board "xilinx.com:kcu105:part0:1.1"
