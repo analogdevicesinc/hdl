@@ -252,18 +252,23 @@ always @(posedge clk) begin
   end
 end
 
-always @(posedge clk)
-begin
-  if (response_valid == 1'b1 & response_ready == 1'b1) begin
+always @(posedge clk) begin
+  if (ctrl_enable == 1'b0) begin
+    up_measured_transfer_length <= 'h0;
+  end else if (response_valid == 1'b1 && response_ready == 1'b1) begin
     up_measured_transfer_length <= up_measured_transfer_length + response_measured_burst_length + 1'b1;
-    up_transfer_id_eot_d <= up_transfer_id_eot;
   end else if (up_clear_tl == 1'b1) begin
     up_measured_transfer_length <= 'h0;
   end
 end
 
-always @(posedge clk)
-begin
+always @(posedge clk) begin
+  if (response_valid == 1'b1 && response_ready == 1'b1) begin
+    up_transfer_id_eot_d <= up_transfer_id_eot;
+  end
+end
+
+always @(posedge clk) begin
   if (ctrl_enable == 1'b0) begin
     response_ready <= 1'b1;
   end else if (response_ready == 1'b1) begin
