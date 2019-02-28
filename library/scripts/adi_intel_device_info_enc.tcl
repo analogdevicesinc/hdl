@@ -96,12 +96,31 @@ set speed_grade_list { \
 
 set dev_package_list { \
         { Unknown   0 } \
-        { FBGA      1 } \
-        { UBGA     16 } \
-        { MBGA     17 }}
+        { BGA       1 } \
+        { PGA       2 } \
+        { FBGA      3 } \
+        { HBGA      4 } \
+        { PDIP      5 } \
+        { EQFP      6 } \
+        { PLCC      7 } \
+        { PQFP      8 } \
+        { RQFP      9 } \
+        { TQFP     10 } \
+        { UBGA     11 } \
+        { UFBGA    11 } \
+        { MBGA     12 }}
 
-# FBGA - Fine Pitch Ball Grid Array
-# FBGA - Fine Pitch Ball Grid Array
+# Ball-Grid Array (BGA)
+# Ceramic Pin-Grid Array (PGA)
+# FineLine BGA (FBGA)
+# Hybrid FineLine BGA (HBGA)
+# Plastic Dual In-Line Package (PDIP)
+# Plastic Enhanced Quad Flat Pack (EQFP)
+# Plastic J-Lead Chip Carrier (PLCC)
+# Plastic Quad Flat Pack (PQFP)
+# Power Quad Flat Pack (RQFP)
+# Thin Quad Flat Pack (TQFP)
+# Ultra FineLine BGA (UBGA-UFBGA)
 
 # transceiver speedgrade
 set xcvr_type_list { 0 9 }
