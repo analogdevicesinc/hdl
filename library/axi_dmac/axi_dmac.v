@@ -394,7 +394,7 @@ assign m_src_axi_arid = 'h0;
 assign m_src_axi_arlock = 'h0;
 
 wire up_req_eot;
-wire [BYTES_PER_BURST_WIDTH-1:0] up_req_measured_burst_length;
+wire [BYTES_PER_BURST_WIDTH:0] up_req_measured_burst_length;
 wire up_response_partial;
 wire up_response_valid;
 wire up_response_ready;
