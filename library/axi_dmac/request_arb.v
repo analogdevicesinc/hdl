@@ -73,7 +73,7 @@ module dmac_request_arb #(
   input req_sync_transfer_start,
 
   output eot,
-  output [BYTES_PER_BURST_WIDTH-1:0] measured_burst_length,
+  output [BYTES_PER_BURST_WIDTH:0] measured_burst_length,
   output response_partial,
   output response_valid,
   input response_ready,

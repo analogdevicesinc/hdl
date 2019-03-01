@@ -101,7 +101,7 @@ module axi_dmac_regmap_request #(
 
   // DMA response interface
   input response_eot,
-  input [BYTES_PER_BURST_WIDTH-1:0] response_measured_burst_length,
+  input [BYTES_PER_BURST_WIDTH:0] response_measured_burst_length,
   input response_partial,
   input response_valid,
   output reg response_ready = 1'b1
@@ -154,6 +154,7 @@ reg [MEASURED_LENGTH_WIDTH-1:0] up_measured_transfer_length = 'h0;
 reg up_clear_tl = 1'b0;
 reg [1:0] up_transfer_id_eot_d = 'h0;
 wire up_bl_partial;
+wire [BYTES_PER_BURST_WIDTH:0] response_mbl_p1;
 
 assign request_dest_address = up_dma_dest_address;
 assign request_src_address = up_dma_src_address;
@@ -362,11 +363,13 @@ always @(posedge clk) begin
   end
 end
 
+assign response_mbl_p1 = response_measured_burst_length + 1'b1;
+
 always @(posedge clk) begin
   if (ctrl_enable == 1'b0) begin
     up_measured_transfer_length <= 'h0;
   end else if (response_valid == 1'b1 && response_ready == 1'b1) begin
-    up_measured_transfer_length <= up_measured_transfer_length + response_measured_burst_length + 1'b1;
+    up_measured_transfer_length <= up_measured_transfer_length + response_mbl_p1;
   end else if (up_clear_tl == 1'b1) begin
     up_measured_transfer_length <= 'h0;
   end

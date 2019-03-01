@@ -92,7 +92,7 @@ module axi_dmac_transfer #(
   input req_cyclic,
 
   output req_eot,
-  output [BYTES_PER_BURST_WIDTH-1:0] req_measured_burst_length,
+  output [BYTES_PER_BURST_WIDTH:0] req_measured_burst_length,
   output req_response_partial,
   output req_response_valid,
   input req_response_ready,
@@ -207,7 +207,7 @@ wire dma_req_ready;
 wire [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] dma_req_dest_address;
 wire [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] dma_req_src_address;
 wire [DMA_LENGTH_WIDTH-1:0] dma_req_length;
-wire [BYTES_PER_BURST_WIDTH-1:0] dma_req_measured_burst_length;
+wire [BYTES_PER_BURST_WIDTH:0] dma_req_measured_burst_length;
 wire dma_req_eot;
 wire dma_response_valid;
 wire dma_response_ready;
@@ -226,7 +226,7 @@ wire flock_req_sync_transfer_start;
 wire flock_req_last;
 
 wire flock_req_eot;
-wire [BYTES_PER_BURST_WIDTH-1:0] flock_req_measured_burst_length;
+wire [BYTES_PER_BURST_WIDTH:0] flock_req_measured_burst_length;
 wire flock_response_partial;
 wire flock_response_valid;
 wire flock_response_ready;

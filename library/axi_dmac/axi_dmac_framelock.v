@@ -68,7 +68,7 @@ module axi_dmac_framelock #(
   input req_cyclic,
 
   output req_eot,
-  output [BYTES_PER_BURST_WIDTH-1:0] req_measured_burst_length,
+  output [BYTES_PER_BURST_WIDTH:0] req_measured_burst_length,
   output req_response_partial,
   output req_response_valid,
   input req_response_ready,
@@ -86,7 +86,7 @@ module axi_dmac_framelock #(
   output out_req_last,
 
   input out_eot,
-  input [BYTES_PER_BURST_WIDTH-1:0] out_measured_burst_length,
+  input [BYTES_PER_BURST_WIDTH:0] out_measured_burst_length,
   input out_response_partial,
   input out_response_valid,
   output out_response_ready,
