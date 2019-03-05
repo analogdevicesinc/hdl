@@ -14,8 +14,8 @@ set_property  -dict {PACKAGE_PIN  V11  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [
 set_property  -dict {PACKAGE_PIN  W2   IOSTANDARD LVCMOS18} [get_ports spi_csn_ad9371]                ; ## D14  FMC_HPC0_LA09_P
 set_property  -dict {PACKAGE_PIN  W1   IOSTANDARD LVCMOS18} [get_ports spi_csn_ad9528]                ; ## D15  FMC_HPC0_LA09_N
 set_property  -dict {PACKAGE_PIN  U5   IOSTANDARD LVCMOS18} [get_ports spi_clk]                       ; ## H13  FMC_HPC0_LA07_P
-set_property  -dict {PACKAGE_PIN  U4   IOSTANDARD LVCMOS18} [get_ports spi_mosi]                      ; ## H14  FMC_HPC0_LA07_N
-set_property  -dict {PACKAGE_PIN  V4   IOSTANDARD LVCMOS18} [get_ports spi_miso]                      ; ## G12  FMC_HPC0_LA08_P
+set_property  -dict {PACKAGE_PIN  U4   IOSTANDARD LVCMOS18} [get_ports spi_sdio]                      ; ## H14  FMC_HPC0_LA07_N
+#set_property  -dict {PACKAGE_PIN  V4   IOSTANDARD LVCMOS18} [get_ports spi_miso]                      ; ## G12  FMC_HPC0_LA08_P
 
 set_property  -dict {PACKAGE_PIN  L15  IOSTANDARD LVCMOS18} [get_ports ad9528_reset_b]                ; ## D26  FMC_HPC0_LA26_P
 set_property  -dict {PACKAGE_PIN  K15  IOSTANDARD LVCMOS18} [get_ports ad9528_sysref_req]             ; ## D27  FMC_HPC0_LA26_N

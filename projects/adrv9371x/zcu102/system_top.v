@@ -63,8 +63,8 @@ module system_top (
   output                  spi_csn_ad9528,
   output                  spi_csn_ad9371,
   output                  spi_clk,
-  output                  spi_mosi,
-  input                   spi_miso,
+  inout                   spi_sdio,
+  //input                   spi_miso,
 
   inout                   ad9528_reset_b,
   inout                   ad9528_sysref_req,
@@ -111,6 +111,13 @@ module system_top (
   wire                    sysref;
 
   // instantiations
+
+  adrv9371_spi i_spi_3w (
+    .spi_csn (spi_csn),
+    .spi_clk (spi_clk),
+    .spi_mosi (spi_mosi),
+    .spi_miso (spi_miso),
+    .spi_sdio (spi_sdio));
 
   IBUFDS_GTE4 i_ibufds_rx_ref_clk (
     .CEB (1'd0),
