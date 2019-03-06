@@ -48,12 +48,17 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 adi_ip_create axi_jesd204_common
 
 add_files -fileset [get_filesets sources_1] [list \
+  "../../xilinx/common/up_clock_mon_constr.xdc" \
+  "../../common/up_clock_mon.v" \
   "jesd204_up_common.v" \
   "jesd204_up_sysref.v" \
 ]
 
 adi_ip_properties_lite axi_jesd204_common
 
+adi_ip_add_core_dependencies { \
+  analog.com:user:util_cdc:1.0 \
+}
 set_property display_name "ADI AXI JESD204B Common Library" [ipx::current_core]
 set_property description "ADI AXI JESD204B Common Library" [ipx::current_core]
 set_property hide_in_gui {1} [ipx::current_core]
