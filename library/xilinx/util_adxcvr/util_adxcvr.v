@@ -38,7 +38,7 @@
 
 module util_adxcvr #(
 
-  // gtxe2(0), gthe3(1), gthe4(2)
+  // gtxe2(0), gthe3(1), gthe4(2), gtye4(4)
 
   parameter   integer XCVR_TYPE = 0,
 

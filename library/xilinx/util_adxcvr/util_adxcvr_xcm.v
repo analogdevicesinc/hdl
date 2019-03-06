@@ -622,7 +622,7 @@ module util_adxcvr_xcm #(
       .BGPDB                (1'b1),
       .BGRCALOVRD           (5'b11111),
       .BGRCALOVRDENB        (1'b1),
-      .DRPADDR              (up_addr_int[9:0]),
+      .DRPADDR              ({4'd0, up_addr_int}),
       .DRPCLK               (up_clk),
       .DRPDI                (up_wdata_int),
       .DRPEN                (up_enb_int),
@@ -721,8 +721,8 @@ module util_adxcvr_xcm #(
       .UBMDMTDO             (),
       .UBRSVDOUT            (),
       .UBTXUART             ());
-
   end
+  endgenerate
 
 endmodule
 

@@ -2387,6 +2387,37 @@ module util_adxcvr_xch #(
 
   generate
   if (XCVR_TYPE == 4) begin
+  BUFG_GT i_rx_bufg (
+    .CE (1'b1),
+    .CEMASK (1'b0),
+    .CLR (1'b0),
+    .CLRMASK (1'b0),
+    .DIV (3'd0),
+    .I (rx_out_clk_s),
+    .O (rx_out_clk));
+
+  BUFG_GT i_tx_bufg (
+    .CE (1'b1),
+    .CEMASK (1'b0),
+    .CLR (1'b0),
+    .CLRMASK (1'b0),
+    .DIV (3'd0),
+    .I (tx_out_clk_s),
+    .O (tx_out_clk));
+  end
+  endgenerate
+
+  generate
+  if (XCVR_TYPE == 4) begin
+  assign rx_sys_clk_sel_s = (up_rx_sys_clk_sel[1] == 0) ? 2'b00 : {1'b1,~up_rx_sys_clk_sel[0]};
+  assign tx_sys_clk_sel_s = (up_tx_sys_clk_sel[1] == 0) ? 2'b00 : {1'b1,~up_tx_sys_clk_sel[0]};
+  assign rx_pll_clk_sel_s = up_rx_sys_clk_sel;
+  assign tx_pll_clk_sel_s = up_tx_sys_clk_sel;
+  end
+  endgenerate
+
+  generate
+  if (XCVR_TYPE == 4) begin
     GTYE4_CHANNEL #(
       .ACJTAG_DEBUG_MODE            (1'b0),
       .ACJTAG_MODE                  (1'b0),
@@ -2456,7 +2487,7 @@ module util_adxcvr_xch #(
       .CPLL_CFG2                    (CPLL_CFG2),
       .CPLL_CFG3                    (CPLL_CFG3),
       .CPLL_FBDIV                   (CPLL_FBDIV),
-      .CPLL_FBDIV_45                (CPLL_FBDIV_45),
+      .CPLL_FBDIV_45                (CPLL_FBDIV_4_5),
       .CPLL_INIT_CFG0               (16'b0000001010110010),
       .CPLL_LOCK_CFG                (16'b0000000111101000),
       .CPLL_REFCLK_DIV              (1),
@@ -2669,7 +2700,7 @@ module util_adxcvr_xch #(
       .RXOOB_CFG                    (9'b000000110),
       .RXOOB_CLK_CFG                ("PMA"),
       .RXOSCALRESET_TIME            (5'b00011),
-      .RXOUT_DIV                    (RXOUT_DIV),
+      .RXOUT_DIV                    (RX_OUT_DIV),
       .RXPCSRESET_TIME              (5'b00011),
       .RXPHBEACON_CFG               (16'b0000000000000000),
       .RXPHDLY_CFG                  (16'b0010000001110000),
@@ -2781,7 +2812,7 @@ module util_adxcvr_xch #(
       .TXFIFO_ADDR_CFG              ("LOW"),
       .TXGBOX_FIFO_INIT_RD_ADDR     (4),
       .TXGEARBOX_EN                 ("FALSE"),
-      .TXOUT_DIV                    (TXOUT_DIV),
+      .TXOUT_DIV                    (TX_OUT_DIV),
       .TXPCSRESET_TIME              (5'b00011),
       .TXPHDLY_CFG0                 (16'b0110000001110000),
       .TXPHDLY_CFG1                 (16'b0000000000001111),
@@ -2879,7 +2910,7 @@ module util_adxcvr_xch #(
       .USB_U2_SAS_MIN_COM           (36),
       .USE_PCS_CLK_PHASE_SEL        (1'b0),
       .Y_ALL_MODE                   (1'b0))
-    igtye4_channel (
+    i_gtye4_channel (
       .CDRSTEPDIR                   (1'b0),
       .CDRSTEPSQ                    (1'b0),
       .CDRSTEPSX                    (1'b0),
@@ -2887,8 +2918,8 @@ module util_adxcvr_xch #(
       .CLKRSVD0                     (1'b0),
       .CLKRSVD1                     (1'b0),
       .CPLLFREQLOCK                 (1'b0),
-      .CPLLLOCKDETCLK               (1'b0),
-      .CPLLLOCKEN                   (1'b0),
+      .CPLLLOCKDETCLK               (up_clk),
+      .CPLLLOCKEN                   (1'b1),
       .CPLLPD                       (up_cpll_rst),
       .CPLLREFCLKSEL                (3'b001),
       .CPLLRESET                    (1'b0),
@@ -2929,7 +2960,7 @@ module util_adxcvr_xch #(
       .QPLL0REFCLK                  (qpll2ch_ref_clk),
       .QPLL1CLK                     (qpll1_clk),
       .QPLL1FREQLOCK                (1'b0),
-      .QPLL1REFCLK                  (qpll1_clk),
+      .QPLL1REFCLK                  (qpll1_ref_clk),
       .RESETOVRD                    (1'b0),
       .RX8B10BEN                    (1'b1),
       .RXAFECFOKEN                  (1'b1),
@@ -3024,7 +3055,7 @@ module util_adxcvr_xch #(
       .RXPHDLYRESET                 (1'b0),
       .RXPLLCLKSEL                  (rx_pll_clk_sel_s),
       .RXPMARESET                   (1'b0),
-      .RXPOLARITY                   (RXPOLARITY),
+      .RXPOLARITY                   (RX_POLARITY),
       .RXPRBSCNTRESET               (1'b0),
       .RXPRBSSEL                    (4'b0000),
       .RXPROGDIVRESET               (1'b0),
@@ -3051,7 +3082,7 @@ module util_adxcvr_xch #(
       .TXCTRL0                      (16'b0000000000000000),
       .TXCTRL1                      (16'b0000000000000000),
       .TXCTRL2                      (16'b0000000000000000),
-      .TXDATA                       ({32'd0, tx_data}),
+      .TXDATA                       ({96'd0, tx_data}),
       .TXDATAEXTENDRSVD             (8'b00000000),
       .TXDCCFORCESTART              (1'b0),
       .TXDCCRESET                   (1'b0),
