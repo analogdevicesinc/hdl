@@ -1,0 +1,2 @@
+set_false_path -from [get_pins {i_system_wrapper/system_i/util_axis_fifo_*/inst/i_address_gray/i_waddr_sync/cdc_sync_stage0_reg[*]/C}] -to [get_pins {i_system_wrapper/system_i/util_axis_fifo_*/inst/i_address_gray/i_waddr_sync/cdc_sync_stage1_reg[*]/D}]
+set_false_path -from [get_pins {i_system_wrapper/system_i/util_axis_fifo_*/inst/i_address_gray/i_raddr_sync/cdc_sync_stage0_reg[*]/C}] -to [get_pins {i_system_wrapper/system_i/util_axis_fifo_*/inst/i_address_gray/i_raddr_sync/cdc_sync_stage1_reg[*]/D}]

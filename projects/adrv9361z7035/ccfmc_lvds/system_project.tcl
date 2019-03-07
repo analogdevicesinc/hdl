@@ -11,6 +11,7 @@ adi_project_files adrv9361z7035_ccfmc_lvds [list \
   "../common/adrv9361z7035_constr.xdc" \
   "../common/adrv9361z7035_constr_lvds.xdc" \
   "../common/ccfmc_constr.xdc" \
+  "local_constraints.xdc" \
   "system_top.v" ]
 
 adi_project_run adrv9361z7035_ccfmc_lvds
