@@ -51,7 +51,7 @@ module axi_logic_analyzer_reg (
   output      [17:0]  high_level_enable,
   output      [31:0]  fifo_depth,
   output      [31:0]  trigger_delay,
-  output              trigger_logic,
+  output      [ 6:0]  trigger_logic,
   output              clock_select,
   output      [15:0]  overwrite_enable,
   output      [15:0]  overwrite_data,
@@ -77,7 +77,7 @@ module axi_logic_analyzer_reg (
 
   // internal registers
 
-  reg     [31:0]  up_version = 32'h00010000;
+  reg     [31:0]  up_version = 32'h00020100;
   reg     [31:0]  up_scratch = 0;
   reg     [31:0]  up_divider_counter_la = 0;
   reg     [31:0]  up_divider_counter_pg = 0;
@@ -90,7 +90,7 @@ module axi_logic_analyzer_reg (
   reg     [17:0]  up_high_level_enable = 0;
   reg     [31:0]  up_fifo_depth = 0;
   reg     [31:0]  up_trigger_delay = 0;
-  reg             up_trigger_logic = 0;
+  reg     [ 6:0]  up_trigger_logic = 0;
   reg             up_clock_select = 0;
   reg     [15:0]  up_overwrite_enable = 0;
   reg     [15:0]  up_overwrite_data = 0;
@@ -154,7 +154,7 @@ module axi_logic_analyzer_reg (
         up_fifo_depth <= up_wdata;
       end
       if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'hb)) begin
-        up_trigger_logic <= up_wdata[0];
+        up_trigger_logic <= up_wdata[6:0];
       end
       if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'hc)) begin
         up_clock_select <= up_wdata[0];
@@ -203,7 +203,7 @@ module axi_logic_analyzer_reg (
           5'h8: up_rdata <= {14'h0,up_low_level_enable};
           5'h9: up_rdata <= {14'h0,up_high_level_enable};
           5'ha: up_rdata <= up_fifo_depth;
-          5'hb: up_rdata <= {31'h0,up_trigger_logic};
+          5'hb: up_rdata <= {25'h0,up_trigger_logic};
           5'hc: up_rdata <= {31'h0,up_clock_select};
           5'hd: up_rdata <= {16'h0,up_overwrite_enable};
           5'he: up_rdata <= {16'h0,up_overwrite_data};
@@ -222,7 +222,7 @@ module axi_logic_analyzer_reg (
 
   ad_rst i_core_rst_reg (.rst_async(~up_rstn), .clk(clk), .rstn(), .rst(reset));
 
-   up_xfer_cntrl #(.DATA_WIDTH(285)) i_xfer_cntrl (
+   up_xfer_cntrl #(.DATA_WIDTH(291)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_streaming,             // 1
@@ -230,7 +230,7 @@ module axi_logic_analyzer_reg (
                       up_overwrite_data,        // 16
                       up_overwrite_enable,      // 16
                       up_clock_select,          // 1
-                      up_trigger_logic,         // 1
+                      up_trigger_logic,         // 7
                       up_fifo_depth,            // 32
                       up_trigger_delay,         // 32
                       up_high_level_enable,     // 18
@@ -250,7 +250,7 @@ module axi_logic_analyzer_reg (
                       overwrite_data,         // 16
                       overwrite_enable,       // 16
                       clock_select,           // 1
-                      trigger_logic,          // 1
+                      trigger_logic,          // 7
                       fifo_depth,             // 32
                       trigger_delay,          // 32
                       high_level_enable,      // 18
