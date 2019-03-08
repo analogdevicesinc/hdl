@@ -68,13 +68,12 @@ create_clock -period 12.500 -name data_clk [get_ports {data_bd[0]}]
 
 create_clock -name clk_fpga_0 -period 36 [get_pins "i_system_wrapper/system_i/sys_ps7/inst/PS7_i/FCLKCLK[0]"]
 create_clock -name clk_fpga_1 -period  5 [get_pins "i_system_wrapper/system_i/sys_ps7/inst/PS7_i/FCLKCLK[1]"]
-create_clock -name clk_fpga_2 -period 10 [get_pins "i_system_wrapper/system_i/sys_ps7/inst/PS7_i/FCLKCLK[2]"]
 create_clock -name clk_fpga_3 -period 18 [get_pins "i_system_wrapper/system_i/sys_ps7/inst/PS7_i/FCLKCLK[3]"]
 
 set_false_path -from [get_clocks data_clk] -to [get_pins {i_system_wrapper/system_i/logic_analyzer/inst/data_m1_reg[0]/D}]
 
 set_clock_groups -name exclusive_ -physically_exclusive \
--group  [get_clocks data_clk] -group  [get_clocks clk_fpga_2]
+-group  [get_clocks data_clk] -group  [get_clocks rx_clk]
 
 set_input_jitter clk_fpga_0 0.3
 set_input_jitter clk_fpga_1 0.15
