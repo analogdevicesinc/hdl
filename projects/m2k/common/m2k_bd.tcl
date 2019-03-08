@@ -27,10 +27,9 @@ create_bd_port -dir O -from 11 -to 0 txd
 ad_ip_parameter sys_ps7 CONFIG.PCW_EN_CLK2_PORT 1
 ad_ip_parameter sys_ps7 CONFIG.PCW_EN_CLK3_PORT 1
 ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ 27.778
-ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ 100.0
 ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA3_PERIPHERAL_FREQMHZ 55.556
 
-ad_connect logic_analyzer_clk_in sys_ps7/FCLK_CLK2
+#ad_connect logic_analyzer_clk_in sys_ps7/FCLK_CLK2
 ad_connect converter_dma_clk sys_ps7/FCLK_CLK3
 
 ad_ip_instance axi_logic_analyzer logic_analyzer
@@ -100,8 +99,6 @@ ad_ip_parameter bram_adc CONFIG.Write_Width_B 32
 ad_ip_parameter bram_adc CONFIG.Read_Width_B 32
 ad_ip_parameter bram_adc CONFIG.Write_Depth_A 8192
 
-ad_ip_instance util_extract adc_trigger_extract
-
 # FIXME: Bring this back eventually
 #ad_ip_instance util_cpack util_cpack_ad9963
 #ad_ip_parameter util_cpack_ad9963 CONFIG.NUM_OF_CHANNELS 2
@@ -153,7 +150,7 @@ ad_connect trigger_i  logic_analyzer/trigger_i
 ad_connect data_o     logic_analyzer/data_o
 ad_connect data_t     logic_analyzer/data_t
 
-ad_connect logic_analyzer_clk_in logic_analyzer/clk
+ad_connect axi_ad9963/adc_clk logic_analyzer/clk
 ad_connect logic_analyzer_clk logic_analyzer/clk_out
 
 ad_connect logic_analyzer_clk pattern_generator_dmac/fifo_rd_clk
@@ -183,6 +180,7 @@ ad_connect logic_analyzer_dmac/fifo_wr_en   la_trigger_fifo/data_out_valid
 ad_connect logic_analyzer/fifo_depth la_trigger_fifo/depth
 
 ad_connect logic_analyzer/trigger_out logic_analyzer_dmac/fifo_wr_sync
+ad_connect logic_analyzer/trigger_in adc_trigger/trigger_out_la
 
 ad_connect pattern_generator_dmac/fifo_rd_en      logic_analyzer/dac_read
 ad_connect pattern_generator_dmac/fifo_rd_dout    logic_analyzer/dac_data
@@ -194,7 +192,6 @@ ad_connect axi_ad9963/adc_clk  adc_trigger_fifo/clk
 ad_connect axi_adc_decimate/adc_clk axi_ad9963/adc_clk
 ad_connect axi_adc_decimate/adc_rst axi_ad9963/adc_rst
 
-ad_connect adc_trigger_extract/clk         axi_ad9963/adc_clk
 ad_connect ad9963_adc_dmac/fifo_wr_clk     axi_ad9963/adc_clk
 ad_connect bram_adc/clka                   axi_ad9963/adc_clk
 ad_connect bram_adc/clkb                   axi_ad9963/adc_clk
@@ -230,16 +227,14 @@ ad_connect adc_trigger/data_a_trig       ad9963_adc_concat/In0
 ad_connect adc_trigger/data_b_trig       ad9963_adc_concat/In1
 ad_connect adc_trigger/data_valid_a_trig adc_trigger_fifo/data_in_valid
 ad_connect ad9963_adc_concat/dout        adc_trigger_fifo/data_in
-ad_connect ad9963_adc_concat/dout        adc_trigger_extract/data_in_trigger
 
-ad_connect adc_trigger_fifo/depth          adc_trigger/fifo_depth
+ad_connect adc_trigger_fifo/depth        adc_trigger/fifo_depth
 
-ad_connect adc_trigger_fifo/data_out       adc_trigger_extract/data_in
-ad_connect adc_trigger_fifo/data_out_valid adc_trigger_extract/data_valid
+ad_connect adc_trigger/trigger_in        logic_analyzer/trigger_out_adc
 
-ad_connect adc_trigger_extract/data_out     ad9963_adc_dmac/fifo_wr_din
-ad_connect adc_trigger_extract/trigger_out  ad9963_adc_dmac/fifo_wr_sync
-ad_connect adc_trigger_extract/valid_out    ad9963_adc_dmac/fifo_wr_en
+ad_connect adc_trigger_fifo/data_out        ad9963_adc_dmac/fifo_wr_din
+ad_connect adc_trigger/trigger_out          ad9963_adc_dmac/fifo_wr_sync
+ad_connect adc_trigger_fifo/data_out_valid  ad9963_adc_dmac/fifo_wr_en
 
 ad_connect axi_dac_interpolate/dac_clk      axi_ad9963/dac_clk
 ad_connect axi_dac_interpolate/dac_rst      axi_ad9963/dac_rst
