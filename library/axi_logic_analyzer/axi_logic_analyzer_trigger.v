@@ -42,7 +42,8 @@ module axi_logic_analyzer_trigger (
 
   input       [15:0]    data,
   input                 data_valid,
-  input       [ 1:0]    trigger,
+  input       [ 1:0]    trigger_i,
+  input                 trigger_in,
 
   input       [17:0]    edge_detect_enable,
   input       [17:0]    rise_edge_enable,
@@ -50,9 +51,10 @@ module axi_logic_analyzer_trigger (
   input       [17:0]    low_level_enable,
   input       [17:0]    high_level_enable,
 
-  input                 trigger_logic,
+  input       [ 6:0]    trigger_logic,
 
-  output  reg           trigger_out);
+  output  reg           trigger_out,
+  output  reg           trigger_out_adc);
 
   reg     [ 17:0]   data_m1 = 'd0;
   reg     [ 17:0]   low_level = 'd0;
@@ -60,26 +62,28 @@ module axi_logic_analyzer_trigger (
   reg     [ 17:0]   edge_detect = 'd0;
   reg     [ 17:0]   rise_edge = 'd0;
   reg     [ 17:0]   fall_edge = 'd0;
-  reg     [ 31:0]   delay_count = 'd0;
 
   reg              trigger_active;
+  reg              trigger_active_mux;
   reg              trigger_active_d1;
   reg              trigger_active_d2;
 
   always @(posedge clk) begin
     if (data_valid == 1'b1) begin
-      trigger_active_d1 <= trigger_active;
+      trigger_active_d1 <= trigger_active_mux;
       trigger_active_d2 <= trigger_active_d1;
       trigger_out <= trigger_active_d2;
+      trigger_out_adc <= trigger_active_mux;
     end
   end
+
 
   // trigger logic:
   // 0 OR
   // 1 AND
 
   always @(*) begin
-    case (trigger_logic)
+    case (trigger_logic[0])
       0: trigger_active = |((edge_detect & edge_detect_enable) |
                             (rise_edge & rise_edge_enable) |
                             (fall_edge & fall_edge_enable) |
@@ -94,6 +98,18 @@ module axi_logic_analyzer_trigger (
     endcase
   end
 
+  always @(*) begin
+    case (trigger_logic[6:4])
+      3'd0: trigger_active_mux = trigger_active;
+      3'd1: trigger_active_mux = trigger_in;
+      3'd2: trigger_active_mux = trigger_active & trigger_in;
+      3'd3: trigger_active_mux = trigger_active | trigger_in;
+      3'd4: trigger_active_mux = trigger_active ^ trigger_in;
+      default: trigger_active_mux = 1'b1;
+    endcase
+  end
+
+
   // internal signals
 
   always @(posedge clk) begin
@@ -106,12 +122,12 @@ module axi_logic_analyzer_trigger (
       high_level <= 'd0;
     end else begin
       if (data_valid == 1'b1) begin
-        data_m1 <= {trigger, data} ;
-        edge_detect <= data_m1 ^ {trigger, data};
-        rise_edge <= (data_m1 ^ {trigger, data} ) & {trigger, data};
-        fall_edge <= (data_m1 ^ {trigger, data}) & ~{trigger, data};
-        low_level <= ~{trigger, data};
-        high_level <= {trigger, data};
+        data_m1 <= {trigger_i, data} ;
+        edge_detect <= data_m1 ^ {trigger_i, data};
+        rise_edge <= (data_m1 ^ {trigger_i, data} ) & {trigger_i, data};
+        fall_edge <= (data_m1 ^ {trigger_i, data}) & ~{trigger_i, data};
+        low_level <= ~{trigger_i, data};
+        high_level <= {trigger_i, data};
       end
     end
   end
