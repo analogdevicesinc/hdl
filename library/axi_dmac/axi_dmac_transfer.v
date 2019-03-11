@@ -63,7 +63,7 @@ module axi_dmac_transfer #(
   parameter ENABLE_FRAME_LOCK = 0,
   parameter FRAME_LOCK_MODE = 0,
   parameter MAX_NUM_FRAMES = 4,
-  parameter MAX_NUM_FRAMES_WIDTH = 2,
+  parameter MAX_NUM_FRAMES_MSB = 2,
   parameter USE_EXT_SYNC = 0
 ) (
   input ctrl_clk,
@@ -81,10 +81,10 @@ module axi_dmac_transfer #(
   input [DMA_LENGTH_WIDTH-1:0] req_y_length,
   input [DMA_LENGTH_WIDTH-1:0] req_dest_stride,
   input [DMA_LENGTH_WIDTH-1:0] req_src_stride,
-  input [MAX_NUM_FRAMES_WIDTH:0] req_flock_framenum,
-  input                          req_flock_mode,
-  input                          req_flock_wait_master,
-  input [MAX_NUM_FRAMES_WIDTH:0] req_flock_distance,
+  input [MAX_NUM_FRAMES_MSB:0] req_flock_framenum,
+  input                        req_flock_mode,
+  input                        req_flock_wait_master,
+  input [MAX_NUM_FRAMES_MSB:0] req_flock_distance,
   input [DMA_AXI_ADDR_WIDTH-1:0] req_flock_stride,
   input req_flock_en,
   input req_sync_transfer_start,
@@ -188,11 +188,11 @@ module axi_dmac_transfer #(
 
   // Frame lock interface
   // Master mode
-  input  [MAX_NUM_FRAMES_WIDTH:0] m_frame_in,
-  output [MAX_NUM_FRAMES_WIDTH:0] m_frame_out,
+  input  [MAX_NUM_FRAMES_MSB:0] m_frame_in,
+  output [MAX_NUM_FRAMES_MSB:0] m_frame_out,
   // Slave mode
-  input  [MAX_NUM_FRAMES_WIDTH:0] s_frame_in,
-  output [MAX_NUM_FRAMES_WIDTH:0] s_frame_out,
+  input  [MAX_NUM_FRAMES_MSB:0] s_frame_in,
+  output [MAX_NUM_FRAMES_MSB:0] s_frame_out,
 
   // External sync interface
   input src_ext_sync,
@@ -304,7 +304,7 @@ axi_dmac_framelock #(
   .ENABLE_FRAME_LOCK(ENABLE_FRAME_LOCK),
   .FRAME_LOCK_MODE(FRAME_LOCK_MODE),
   .MAX_NUM_FRAMES(MAX_NUM_FRAMES),
-  .MAX_NUM_FRAMES_WIDTH(MAX_NUM_FRAMES_WIDTH)
+  .MAX_NUM_FRAMES_MSB(MAX_NUM_FRAMES_MSB)
 ) i_dmac_flock (
   .req_aclk (req_clk),
   .req_aresetn (req_resetn),
