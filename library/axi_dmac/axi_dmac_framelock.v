@@ -42,7 +42,7 @@ module axi_dmac_framelock #(
   parameter ENABLE_FRAME_LOCK = 0,
   parameter FRAME_LOCK_MODE = 0, // 0 - Master (MM writer) ; 1 - Slave (MM reader)
   parameter MAX_NUM_FRAMES = 4,
-  parameter MAX_NUM_FRAMES_WIDTH = 2
+  parameter MAX_NUM_FRAMES_MSB = 2
 
 ) (
   input req_aclk,
@@ -57,10 +57,10 @@ module axi_dmac_framelock #(
   input [DMA_LENGTH_WIDTH-1:0] req_y_length,
   input [DMA_LENGTH_WIDTH-1:0] req_dest_stride,
   input [DMA_LENGTH_WIDTH-1:0] req_src_stride,
-  input [MAX_NUM_FRAMES_WIDTH:0] req_flock_framenum,
-  input                          req_flock_mode,  // 0 - Dynamic. 1 - Simple
-  input                          req_flock_wait_master,
-  input [MAX_NUM_FRAMES_WIDTH:0] req_flock_distance,
+  input [MAX_NUM_FRAMES_MSB:0] req_flock_framenum,
+  input                        req_flock_mode,  // 0 - Dynamic. 1 - Simple
+  input                        req_flock_wait_master,
+  input [MAX_NUM_FRAMES_MSB:0] req_flock_distance,
   input [DMA_AXI_ADDR_WIDTH-1:0] req_flock_stride,
   input req_flock_en,
   input req_sync_transfer_start,
@@ -93,11 +93,11 @@ module axi_dmac_framelock #(
 
   // Frame lock interface
   // Master mode
-  input  [MAX_NUM_FRAMES_WIDTH:0] m_frame_in,
-  output [MAX_NUM_FRAMES_WIDTH:0] m_frame_out,
+  input  [MAX_NUM_FRAMES_MSB:0] m_frame_in,
+  output [MAX_NUM_FRAMES_MSB:0] m_frame_out,
   // Slave mode
-  input  [MAX_NUM_FRAMES_WIDTH:0] s_frame_in,
-  output [MAX_NUM_FRAMES_WIDTH:0] s_frame_out
+  input  [MAX_NUM_FRAMES_MSB:0] s_frame_in,
+  output [MAX_NUM_FRAMES_MSB:0] s_frame_out
 
 );
 
@@ -125,13 +125,13 @@ generate if (ENABLE_FRAME_LOCK == 1) begin
                                       BYTES_PER_BEAT_WIDTH_SRC :
                                       BYTES_PER_BEAT_WIDTH_DEST;
 
-  reg [MAX_NUM_FRAMES_WIDTH-1:0] transfer_id = 'h0;
-  reg [MAX_NUM_FRAMES_WIDTH-1:0] cur_frame_id;
+  reg [MAX_NUM_FRAMES_MSB-1:0] transfer_id = 'h0;
+  reg [MAX_NUM_FRAMES_MSB-1:0] cur_frame_id;
   wire resp_eot;
 
   reg [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH] req_address = 'h0;
 
-  wire [MAX_NUM_FRAMES_WIDTH:0] transfer_id_p1;
+  wire [MAX_NUM_FRAMES_MSB:0] transfer_id_p1;
 
   reg wait_distance = 1'b0;
   wire calc_enable;
@@ -173,7 +173,7 @@ generate if (ENABLE_FRAME_LOCK == 1) begin
         transfer_id <= 'h0;
         req_address <= FRAME_LOCK_MODE ? req_src_address : req_dest_address;
       end else begin
-        transfer_id <= transfer_id_p1[MAX_NUM_FRAMES_WIDTH-1:0];
+        transfer_id <= transfer_id_p1[MAX_NUM_FRAMES_MSB-1:0];
         req_address <= req_address + req_flock_stride[DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH];
       end
     end
@@ -217,7 +217,7 @@ generate if (ENABLE_FRAME_LOCK == 1) begin
     // Master mode logic
     reg slave_started;
 
-    wire [MAX_NUM_FRAMES_WIDTH-1:0] s_frame_id;
+    wire [MAX_NUM_FRAMES_MSB-1:0] s_frame_id;
     wire s_frame_id_vld;
 
     // The master will iterate over the buffers one by one in a cyclic way
@@ -225,8 +225,8 @@ generate if (ENABLE_FRAME_LOCK == 1) begin
     // In simple mode will not look at the slave.
 
     assign m_frame_out = {resp_eot, cur_frame_id};
-    assign s_frame_id = m_frame_in[MAX_NUM_FRAMES_WIDTH-1:0];
-    assign s_frame_id_vld = m_frame_in[MAX_NUM_FRAMES_WIDTH];
+    assign s_frame_id = m_frame_in[MAX_NUM_FRAMES_MSB-1:0];
+    assign s_frame_id_vld = m_frame_in[MAX_NUM_FRAMES_MSB];
 
     assign calc_done = s_frame_id != transfer_id ||
                        slave_started == 1'b0 ||
@@ -249,8 +249,8 @@ generate if (ENABLE_FRAME_LOCK == 1) begin
   end else begin
     // Slave mode logic
 
-    wire [MAX_NUM_FRAMES_WIDTH-1:0] target_id;
-    wire [MAX_NUM_FRAMES_WIDTH-1:0] m_frame_id;
+    wire [MAX_NUM_FRAMES_MSB-1:0] target_id;
+    wire [MAX_NUM_FRAMES_MSB-1:0] m_frame_id;
     wire m_frame_id_vld;
 
     // The slave will stay behind and try to keep up with the master at a distance.
@@ -259,8 +259,8 @@ generate if (ENABLE_FRAME_LOCK == 1) begin
     //
 
     assign s_frame_out = {frame_id_vld, cur_frame_id};
-    assign m_frame_id = s_frame_in[MAX_NUM_FRAMES_WIDTH-1:0];
-    assign m_frame_id_vld = s_frame_in[MAX_NUM_FRAMES_WIDTH];
+    assign m_frame_id = s_frame_in[MAX_NUM_FRAMES_MSB-1:0];
+    assign m_frame_id_vld = s_frame_in[MAX_NUM_FRAMES_MSB];
 
 
     assign calc_done = target_id == transfer_id;
@@ -284,10 +284,11 @@ generate if (ENABLE_FRAME_LOCK == 1) begin
     // Keep a log of frame ids the master wrote
     // This may be an better approach for Xilinx where SRL16E blocks are
     // inferred
+    //
     wire [MAX_NUM_FRAMES_MSB:0] req_flock_framenum_m1;
     assign  req_flock_framenum_m1 = req_flock_framenum - 1;
     genvar k;
-    for (k=0;k<MAX_NUM_FRAMES_WIDTH;k=k+1) begin : frame_id_log
+    for (k=0;k<MAX_NUM_FRAMES_MSB;k=k+1) begin : frame_id_log
       reg [MAX_NUM_FRAMES-1 : 0] s_frame_id_log;
       always @(posedge req_aclk) begin
         if (m_frame_id_vld) begin

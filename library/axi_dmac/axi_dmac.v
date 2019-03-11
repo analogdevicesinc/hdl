@@ -348,11 +348,11 @@ localparam BYTES_PER_BURST_WIDTH =
 // 0 - Master (MM writer) ; 1 - Slave (MM reader)
 localparam FRAME_LOCK_MODE = DMA_TYPE_SRC == 0 && DMA_TYPE_DEST != 0;
 
-localparam MAX_NUM_FRAMES_WIDTH = MAX_NUM_FRAMES > 16 ? 5 :
-                                  MAX_NUM_FRAMES > 8 ? 4 :
-                                  MAX_NUM_FRAMES > 4 ? 3 :
-                                  MAX_NUM_FRAMES > 2 ? 2 :
-                                  MAX_NUM_FRAMES > 1 ? 1 : 0;
+localparam MAX_NUM_FRAMES_MSB = MAX_NUM_FRAMES > 16 ? 5 :
+                                MAX_NUM_FRAMES > 8 ? 4 :
+                                MAX_NUM_FRAMES > 4 ? 3 :
+                                MAX_NUM_FRAMES > 2 ? 2 :
+                                MAX_NUM_FRAMES > 1 ? 1 : 0;
 
 // ID signals from the DMAC, just for debugging
 wire [ID_WIDTH-1:0] dest_request_id;
@@ -410,10 +410,10 @@ wire [DMA_LENGTH_WIDTH-1:0] up_dma_req_x_length;
 wire [DMA_LENGTH_WIDTH-1:0] up_dma_req_y_length;
 wire [DMA_LENGTH_WIDTH-1:0] up_dma_req_dest_stride;
 wire [DMA_LENGTH_WIDTH-1:0] up_dma_req_src_stride;
-wire [MAX_NUM_FRAMES_WIDTH:0] up_dma_req_flock_framenum;
-wire                          up_dma_req_flock_mode;
-wire                          up_dma_req_flock_wait_master;
-wire [MAX_NUM_FRAMES_WIDTH:0] up_dma_req_flock_distance;
+wire [MAX_NUM_FRAMES_MSB:0] up_dma_req_flock_framenum;
+wire                        up_dma_req_flock_mode;
+wire                        up_dma_req_flock_wait_master;
+wire [MAX_NUM_FRAMES_MSB:0] up_dma_req_flock_distance;
 wire [DMA_AXI_ADDR_WIDTH-1:0] up_dma_req_flock_stride;
 wire up_dma_req_flock_en;
 wire up_dma_req_sync_transfer_start;
@@ -449,7 +449,7 @@ axi_dmac_regmap #(
   .SYNC_TRANSFER_START(SYNC_TRANSFER_START),
   .ENABLE_FRAME_LOCK(ENABLE_FRAME_LOCK),
   .FRAME_LOCK_MODE(FRAME_LOCK_MODE),
-  .MAX_NUM_FRAMES_WIDTH(MAX_NUM_FRAMES_WIDTH),
+  .MAX_NUM_FRAMES_MSB(MAX_NUM_FRAMES_MSB),
   .HAS_AUTORUN(HAS_AUTORUN),
   .DMAC_DEF_FLAGS(DMAC_DEF_FLAGS),
   .DMAC_DEF_SRC_ADDR(DMAC_DEF_SRC_ADDR),
@@ -553,7 +553,7 @@ axi_dmac_transfer #(
   .ENABLE_FRAME_LOCK(ENABLE_FRAME_LOCK),
   .FRAME_LOCK_MODE(FRAME_LOCK_MODE),
   .MAX_NUM_FRAMES(MAX_NUM_FRAMES),
-  .MAX_NUM_FRAMES_WIDTH(MAX_NUM_FRAMES_WIDTH),
+  .MAX_NUM_FRAMES_MSB(MAX_NUM_FRAMES_MSB),
   .USE_EXT_SYNC(USE_EXT_SYNC)
 ) i_transfer (
   .ctrl_clk(s_axi_aclk),
