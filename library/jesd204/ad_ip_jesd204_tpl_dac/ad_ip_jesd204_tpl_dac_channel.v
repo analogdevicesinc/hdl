@@ -27,6 +27,7 @@ module ad_ip_jesd204_tpl_dac_channel #(
   parameter DATAPATH_DISABLE = 0,
   parameter DATA_PATH_WIDTH = 4,
   parameter CONVERTER_RESOLUTION = 16,
+  parameter BITS_PER_SAMPLE = 16,
   parameter DDS_TYPE = 1,
   parameter DDS_CORDIC_DW = 16,
   parameter DDS_CORDIC_PHASE_DW = 16
@@ -35,7 +36,7 @@ module ad_ip_jesd204_tpl_dac_channel #(
 
   input clk,
 
-  input [DATA_PATH_WIDTH*16-1:0] dma_data,
+  input [DATA_PATH_WIDTH*BITS_PER_SAMPLE-1:0] dma_data,
   output reg [DATA_PATH_WIDTH*CONVERTER_RESOLUTION-1:0] dac_data = 'h00,
 
   // PN data
@@ -93,7 +94,7 @@ module ad_ip_jesd204_tpl_dac_channel #(
     genvar i;
     /* Data is expected to be LSB aligned, drop unused MSBs */
     for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: g_dac_dma_data
-      assign dac_dma_data_s[CR*i+:CR] = dma_data[16*i+:CR];
+      assign dac_dma_data_s[CR*i+:CR] = dma_data[BITS_PER_SAMPLE*i+:CR];
     end
   endgenerate
 
