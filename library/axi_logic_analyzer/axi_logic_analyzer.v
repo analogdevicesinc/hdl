@@ -113,6 +113,7 @@ module axi_logic_analyzer #(
   reg               streaming_on;
 
   reg     [15:0]    adc_data_mn = 'd0;
+  reg     [31:0]    trigger_holdoff_counter = 32'd0;
 
   // internal signals
 
@@ -149,6 +150,9 @@ module axi_logic_analyzer #(
   wire    [31:0]    trigger_delay;
   wire              trigger_out_delayed;
 
+  wire    [31:0]    trigger_holdoff;
+  wire              trigger_out_holdoff;
+
   wire              streaming;
 
   genvar i;
@@ -158,12 +162,12 @@ module axi_logic_analyzer #(
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
 
-  assign trigger_out = trigger_delay == 32'h0 ? trigger_out_s | streaming_on : trigger_out_delayed | streaming_on;
+  assign trigger_out = trigger_delay == 32'h0 ? trigger_out_holdoff | streaming_on : trigger_out_delayed | streaming_on;
   assign trigger_out_delayed = delay_counter == 32'h0 ? 1 : 0;
 
  always @(posedge clk_out) begin
     if (trigger_delay == 0) begin
-      if (streaming == 1'b1 && sample_valid_la == 1'b1 && trigger_out_s == 1'b1) begin
+      if (streaming == 1'b1 && sample_valid_la == 1'b1 && trigger_out_holdoff == 1'b1) begin
         streaming_on <= 1'b1;
       end else if (streaming == 1'b0) begin
         streaming_on <= 1'b0;
@@ -177,8 +181,9 @@ module axi_logic_analyzer #(
     end
   end
 
+
  always @(posedge clk_out) begin
-    if (sample_valid_la == 1'b1 && trigger_out_s == 1'b1) begin
+    if (sample_valid_la == 1'b1 && trigger_out_holdoff == 1'b1) begin
       up_triggered_set <= 1'b1;
     end else if (up_triggered_reset == 1'b1) begin
       up_triggered_set <= 1'b0;
@@ -297,18 +302,37 @@ module axi_logic_analyzer #(
       delay_counter <= 32'h0;
     end else begin
       if (adc_valid == 1'b1) begin
-        triggered <= trigger_out_s | triggered;
+        triggered <= trigger_out_holdoff | triggered;
         if (delay_counter == 32'h0) begin
           delay_counter <= trigger_delay;
           triggered <= 1'b0;
         end else begin
-          if(triggered == 1'b1 || trigger_out_s == 1'b1) begin
+          if(triggered == 1'b1 || trigger_out_holdoff == 1'b1) begin
             delay_counter <= delay_counter - 1;
           end
         end
       end
     end
   end
+
+  // hold off trigger
+  assign trigger_out_holdoff = (trigger_holdoff_counter != 0) ? 0 : trigger_out_s;
+  assign holdoff_cnt_en = |trigger_holdoff;
+
+  always @(posedge clk) begin
+    if (reset == 1'b1) begin
+      trigger_holdoff_counter <= 0;
+    end else begin
+      if (trigger_holdoff_counter != 0) begin
+        trigger_holdoff_counter <= trigger_holdoff_counter - 1'b1;
+      end else if (trigger_out_holdoff == 1'b1) begin
+        trigger_holdoff_counter <= trigger_holdoff;
+      end else begin
+        trigger_holdoff_counter <= trigger_holdoff_counter;
+      end
+    end
+  end
+
 
   axi_logic_analyzer_trigger i_trigger (
     .clk (clk_out),
@@ -344,6 +368,7 @@ module axi_logic_analyzer #(
     .high_level_enable (high_level_enable),
     .fifo_depth (fifo_depth),
     .trigger_delay (trigger_delay),
+    .trigger_holdoff (trigger_holdoff),
     .trigger_logic (trigger_logic),
     .clock_select (clock_select),
     .overwrite_enable (overwrite_enable),
