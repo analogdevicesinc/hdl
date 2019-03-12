@@ -33,7 +33,7 @@ module ad_ip_jesd204_tpl_dac_core #(
   parameter OCTETS_PER_BEAT = 4,
   parameter DATA_PATH_WIDTH = 4,
   parameter LINK_DATA_WIDTH = NUM_LANES * OCTETS_PER_BEAT * 8,
-  parameter DMA_DATA_WIDTH = DATA_PATH_WIDTH * 16 * NUM_CHANNELS,
+  parameter DMA_DATA_WIDTH = DATA_PATH_WIDTH * BITS_PER_SAMPLE * NUM_CHANNELS,
   parameter DDS_TYPE = 1,
   parameter DDS_CORDIC_DW = 16,
   parameter DDS_CORDIC_PHASE_DW = 16
@@ -71,7 +71,7 @@ module ad_ip_jesd204_tpl_dac_core #(
 
   localparam DAC_CDW = CONVERTER_RESOLUTION * DATA_PATH_WIDTH;
   localparam DAC_DATA_WIDTH = DAC_CDW * NUM_CHANNELS;
-  localparam DMA_CDW = DATA_PATH_WIDTH * 16;
+  localparam DMA_CDW = DATA_PATH_WIDTH * BITS_PER_SAMPLE;
 
   assign link_valid = 1'b1;
 
@@ -120,6 +120,7 @@ module ad_ip_jesd204_tpl_dac_core #(
       .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
       .CONVERTER_RESOLUTION (CONVERTER_RESOLUTION),
       .DATAPATH_DISABLE (DATAPATH_DISABLE),
+      .BITS_PER_SAMPLE (BITS_PER_SAMPLE),
       .DDS_TYPE (DDS_TYPE),
       .DDS_CORDIC_DW (DDS_CORDIC_DW),
       .DDS_CORDIC_PHASE_DW (DDS_CORDIC_PHASE_DW)
