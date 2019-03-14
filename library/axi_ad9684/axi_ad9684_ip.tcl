@@ -4,6 +4,8 @@
 source ../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
+adi_init_bd_tcl
+
 adi_ip_create axi_ad9684
 adi_ip_files axi_ad9684 [list \
   "$ad_hdl_dir/library/common/ad_rst.v" \
@@ -32,7 +34,8 @@ adi_ip_files axi_ad9684 [list \
 
 adi_ip_properties axi_ad9684
 
-adi_ip_bd axi_ad9684 "bd/bd.tcl $ad_hdl_dir/library/scripts/common_bd.tcl"
+adi_auto_fill_bd_tcl
+adi_ip_bd axi_ad9684 "bd/bd.tcl"
 
 set_property driver_value 0 [ipx::get_ports *dovf* -of_objects [ipx::current_core]]
 

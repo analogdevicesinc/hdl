@@ -3,6 +3,8 @@
 source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
+adi_init_bd_tcl
+
 adi_ip_create util_adxcvr
 adi_ip_files util_adxcvr [list \
   "$ad_hdl_dir/library/scripts/common_bd.tcl" \
@@ -15,7 +17,8 @@ adi_ip_files util_adxcvr [list \
 
 adi_ip_properties_lite util_adxcvr
 
-adi_ip_bd util_adxcvr "bd/bd.tcl $ad_hdl_dir/library/scripts/common_bd.tcl"
+adi_auto_fill_bd_tcl
+adi_ip_bd util_adxcvr "bd/bd.tcl"
 
 ipx::remove_all_bus_interface [ipx::current_core]
 

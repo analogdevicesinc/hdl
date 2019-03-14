@@ -3,6 +3,8 @@
 source ../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
+adi_init_bd_tcl
+
 adi_ip_create axi_hdmi_tx
 adi_ip_files axi_hdmi_tx [list \
   "$ad_hdl_dir/library/common/ad_mem.v" \
@@ -29,7 +31,8 @@ adi_ip_files axi_hdmi_tx [list \
 
 adi_ip_properties axi_hdmi_tx
 
-adi_ip_bd axi_ad9122 "bd/bd.tcl $ad_hdl_dir/library/scripts/common_bd.tcl"
+adi_auto_fill_bd_tcl
+adi_ip_bd axi_ad9122 "bd/bd.tcl"
 
 set_property driver_value 0 [ipx::get_ports *hsync* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *vsync* -of_objects [ipx::current_core]]

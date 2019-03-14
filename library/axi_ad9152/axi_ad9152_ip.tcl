@@ -3,6 +3,8 @@
 source ../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
+adi_init_bd_tcl
+
 adi_ip_create axi_ad9152
 adi_ip_files axi_ad9152 [list \
   "axi_ad9152.v" \
@@ -10,7 +12,8 @@ adi_ip_files axi_ad9152 [list \
 
 adi_ip_properties axi_ad9152
 
-adi_ip_bd axi_ad9152 "bd/bd.tcl $ad_hdl_dir/library/scripts/common_bd.tcl"
+adi_auto_fill_bd_tcl
+adi_ip_bd axi_ad9152 "bd/bd.tcl"
 
 adi_ip_add_core_dependencies { \
   analog.com:user:ad_ip_jesd204_tpl_dac:1.0 \
