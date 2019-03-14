@@ -45,6 +45,7 @@ module axi_adc_trigger #(
   // interface
 
   input                 clk,
+  input                 reset,
 
   input                 trigger_in,
 
@@ -127,6 +128,8 @@ module axi_adc_trigger #(
   wire         [16:0]   trigger_out_control;
   wire         [31:0]   trigger_delay;
 
+  wire         [31:0]   trigger_holdoff;
+
   wire signed  [DW:0]   data_a_cmp;
   wire signed  [DW:0]   data_b_cmp;
   wire signed  [DW:0]   limit_a_cmp;
@@ -146,6 +149,8 @@ module axi_adc_trigger #(
   wire                  trigger_b_any_edge;
   wire                  trigger_out_delayed;
   wire         [ 1:0]   trigger_up_o_s;
+  wire                  trigger_out_holdoff;
+  wire                  holdoff_cnt_en;
   wire                  streaming;
   wire                  trigger_out_s;
   wire                  embedded_trigger;
@@ -195,7 +200,8 @@ module axi_adc_trigger #(
   reg                   up_triggered_reset_d1;
   reg                   up_triggered_reset_d2;
 
-  reg        [31:0]     trigger_delay_counter;
+  reg        [31:0]     trigger_delay_counter = 32'h0;
+  reg        [31:0]     trigger_holdoff_counter = 32'h0;
   reg                   triggered;
   reg                   trigger_out_m1;
   reg                   trigger_out_m2;
@@ -299,21 +305,23 @@ module axi_adc_trigger #(
   end
 
   assign embedded_trigger = trigger_out_control[16];
-  assign trigger_out_s = (trigger_delay == 32'h0) ? (trigger_out_mixed | streaming_on) :
-                                                  (trigger_out_delayed | streaming_on);
+  assign trigger_out_s = (trigger_delay == 32'h0) ? (trigger_out_holdoff | streaming_on) :
+                                                    (trigger_out_delayed | streaming_on);
+
   assign trigger_out_delayed = (trigger_delay_counter == 32'h0) ? 1 : 0;
 
+  // delay out trigger
   always @(posedge clk) begin
     if (trigger_delay == 0) begin
       trigger_delay_counter <= 32'h0;
     end else begin
       if (data_valid_a == 1'b1) begin
-        triggered <= trigger_out_mixed | triggered;
+        triggered <= trigger_out_holdoff | triggered;
         if (trigger_delay_counter == 0) begin
           trigger_delay_counter <= trigger_delay;
           triggered <= 1'b0;
         end else begin
-          if(triggered == 1'b1 || trigger_out_mixed == 1'b1) begin
+          if(triggered == 1'b1 || trigger_out_holdoff == 1'b1) begin
             trigger_delay_counter <= trigger_delay_counter - 1;
           end
         end
@@ -321,9 +329,10 @@ module axi_adc_trigger #(
     end
   end
 
+
   always @(posedge clk) begin
     if (trigger_delay == 0) begin
-      if (streaming == 1'b1 && data_valid_a == 1'b1 && trigger_out_mixed == 1'b1) begin
+      if (streaming == 1'b1 && data_valid_a == 1'b1 && trigger_out_holdoff == 1'b1) begin
         streaming_on <= 1'b1;
       end else if (streaming == 1'b0) begin
         streaming_on <= 1'b0;
@@ -337,8 +346,25 @@ module axi_adc_trigger #(
     end
   end
 
+  // hold off trigger
+  assign trigger_out_holdoff = (trigger_holdoff_counter != 0) ? 0 : trigger_out_mixed;
+
   always @(posedge clk) begin
-    if (data_valid_a == 1'b1 && trigger_out_mixed == 1'b1) begin
+    if (reset == 1'b1) begin
+      trigger_holdoff_counter <= 0;
+    end else begin
+      if (trigger_holdoff_counter != 0) begin
+        trigger_holdoff_counter <= trigger_holdoff_counter - 1'b1;
+      end else if (trigger_out_holdoff == 1'b1) begin
+        trigger_holdoff_counter <= trigger_holdoff;
+      end else begin
+        trigger_holdoff_counter <= trigger_holdoff_counter;
+      end
+    end
+  end
+
+  always @(posedge clk) begin
+    if (data_valid_a == 1'b1 && trigger_out_holdoff == 1'b1) begin
       up_triggered_set <= 1'b1;
     end else if (up_triggered_reset == 1'b1) begin
       up_triggered_set <= 1'b0;
@@ -522,6 +548,7 @@ module axi_adc_trigger #(
 
   .trigger_out_control(trigger_out_control),
   .trigger_delay(trigger_delay),
+  .trigger_holdoff (trigger_holdoff),
 
   .fifo_depth(fifo_depth),
 

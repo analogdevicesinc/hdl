@@ -62,6 +62,7 @@ module axi_adc_trigger_reg (
   output      [16:0]  trigger_out_control,
   output      [31:0]  fifo_depth,
   output      [31:0]  trigger_delay,
+  output      [31:0]  trigger_holdoff,
 
   output              streaming,
 
@@ -100,6 +101,7 @@ module axi_adc_trigger_reg (
   reg     [16:0]  up_trigger_out_control = 17'h0;
   reg     [31:0]  up_fifo_depth = 32'h0;
   reg     [31:0]  up_trigger_delay = 32'h0;
+  reg     [31:0]  up_trigger_holdoff = 32'h0;
   reg             up_triggered = 1'h0;
   reg             up_streaming = 1'h0;
 
@@ -129,6 +131,7 @@ module axi_adc_trigger_reg (
       up_trigger_out_control <= 'd0;
       up_triggered <= 1'd0;
       up_streaming <= 1'd0;
+      up_trigger_holdoff <= 32'h0;
     end else begin
       up_wack <= up_wreq;
       if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h1)) begin
@@ -184,6 +187,9 @@ module axi_adc_trigger_reg (
       if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h11)) begin
         up_streaming <= up_wdata[0];
       end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h12)) begin
+        up_trigger_holdoff <= up_wdata[31:0];
+      end
     end
   end
 
@@ -215,6 +221,7 @@ module axi_adc_trigger_reg (
           5'hf: up_rdata <= {31'h0,up_triggered};
           5'h10: up_rdata <= up_trigger_delay;
           5'h11: up_rdata <= {31'h0,up_streaming};
+          5'h12: up_rdata <= up_trigger_holdoff;
           default: up_rdata <= 0;
         endcase
       end else begin
@@ -223,7 +230,7 @@ module axi_adc_trigger_reg (
     end
   end
 
-   up_xfer_cntrl #(.DATA_WIDTH(210)) i_xfer_cntrl (
+   up_xfer_cntrl #(.DATA_WIDTH(242)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_streaming,           // 1
@@ -240,6 +247,7 @@ module axi_adc_trigger_reg (
                       up_trigger_l_mix_b,     // 4
                       up_trigger_out_control, // 17
                       up_fifo_depth,          // 32
+                      up_trigger_holdoff,     // 32
                       up_trigger_delay}),     // 32
 
     .up_xfer_done (),
@@ -259,6 +267,7 @@ module axi_adc_trigger_reg (
                       trigger_l_mix_b,    // 4
                       trigger_out_control,// 17
                       fifo_depth,         // 32
+                      trigger_holdoff,    // 32
                       trigger_delay}));   // 32
 
 endmodule
