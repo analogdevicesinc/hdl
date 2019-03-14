@@ -305,7 +305,6 @@ module axi_ad9162_channel #(
   assign dac_dds_data_s[ 15:  0] = (dac_iq_mode_s == 2'b11) ? dac_dds_data_i_s[ 31: 16] : dac_dds_data_i_s[ 15:  0];
   
   ad_dds_2 #(
-    .DISABLE (DATAPATH_DISABLE),
     .DDS_TYPE (DAC_DDS_TYPE),
     .CORDIC_DW (DAC_DDS_CORDIC_DW),
     .PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
@@ -319,7 +318,6 @@ module axi_ad9162_channel #(
     .dds_data (dac_dds_data_i_s[15:0]));
   
   ad_dds_2 #(
-    .DISABLE (DATAPATH_DISABLE),
     .DDS_TYPE (DAC_DDS_TYPE),
     .CORDIC_DW (DAC_DDS_CORDIC_DW),
     .PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
@@ -333,7 +331,6 @@ module axi_ad9162_channel #(
     .dds_data (dac_dds_data_i_s[31:16]));
   
   ad_dds_2 #(
-    .DISABLE (DATAPATH_DISABLE),
     .DDS_TYPE (DAC_DDS_TYPE),
     .CORDIC_DW (DAC_DDS_CORDIC_DW),
     .PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
@@ -347,7 +344,6 @@ module axi_ad9162_channel #(
     .dds_data (dac_dds_data_i_s[47:32]));
   
   ad_dds_2 #(
-    .DISABLE (DATAPATH_DISABLE),
     .DDS_TYPE (DAC_DDS_TYPE),
     .CORDIC_DW (DAC_DDS_CORDIC_DW),
     .PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
@@ -361,7 +357,6 @@ module axi_ad9162_channel #(
     .dds_data (dac_dds_data_i_s[63:48]));
   
   ad_dds_2 #(
-    .DISABLE (DATAPATH_DISABLE),
     .DDS_TYPE (DAC_DDS_TYPE),
     .CORDIC_DW (DAC_DDS_CORDIC_DW),
     .PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
@@ -375,7 +370,6 @@ module axi_ad9162_channel #(
     .dds_data (dac_dds_data_i_s[79:64]));
   
   ad_dds_2 #(
-    .DISABLE (DATAPATH_DISABLE),
     .DDS_TYPE (DAC_DDS_TYPE),
     .CORDIC_DW (DAC_DDS_CORDIC_DW),
     .PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
@@ -389,7 +383,6 @@ module axi_ad9162_channel #(
     .dds_data (dac_dds_data_i_s[95:80]));
   
   ad_dds_2 #(
-    .DISABLE (DATAPATH_DISABLE),
     .DDS_TYPE (DAC_DDS_TYPE),
     .CORDIC_DW (DAC_DDS_CORDIC_DW),
     .PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
@@ -403,7 +396,6 @@ module axi_ad9162_channel #(
     .dds_data (dac_dds_data_i_s[111:96]));
   
   ad_dds_2 #(
-    .DISABLE (DATAPATH_DISABLE),
     .DDS_TYPE (DAC_DDS_TYPE),
     .CORDIC_DW (DAC_DDS_CORDIC_DW),
     .PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
@@ -417,7 +409,6 @@ module axi_ad9162_channel #(
     .dds_data (dac_dds_data_i_s[127:112]));
   
   ad_dds_2 #(
-    .DISABLE (DATAPATH_DISABLE),
     .DDS_TYPE (DAC_DDS_TYPE),
     .CORDIC_DW (DAC_DDS_CORDIC_DW),
     .PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
@@ -431,7 +422,6 @@ module axi_ad9162_channel #(
     .dds_data (dac_dds_data_i_s[143:128]));
   
   ad_dds_2 #(
-    .DISABLE (DATAPATH_DISABLE),
     .DDS_TYPE (DAC_DDS_TYPE),
     .CORDIC_DW (DAC_DDS_CORDIC_DW),
     .PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
@@ -445,7 +435,6 @@ module axi_ad9162_channel #(
     .dds_data (dac_dds_data_i_s[159:144]));
   
   ad_dds_2 #(
-    .DISABLE (DATAPATH_DISABLE),
     .DDS_TYPE (DAC_DDS_TYPE),
     .CORDIC_DW (DAC_DDS_CORDIC_DW),
     .PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
@@ -459,7 +448,6 @@ module axi_ad9162_channel #(
     .dds_data (dac_dds_data_i_s[175:160]));
   
   ad_dds_2 #(
-    .DISABLE (DATAPATH_DISABLE),
     .DDS_TYPE (DAC_DDS_TYPE),
     .CORDIC_DW (DAC_DDS_CORDIC_DW),
     .PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
@@ -473,7 +461,6 @@ module axi_ad9162_channel #(
     .dds_data (dac_dds_data_i_s[191:176]));
   
   ad_dds_2 #(
-    .DISABLE (DATAPATH_DISABLE),
     .DDS_TYPE (DAC_DDS_TYPE),
     .CORDIC_DW (DAC_DDS_CORDIC_DW),
     .PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
@@ -487,7 +474,6 @@ module axi_ad9162_channel #(
     .dds_data (dac_dds_data_i_s[207:192]));
   
   ad_dds_2 #(
-    .DISABLE (DATAPATH_DISABLE),
     .DDS_TYPE (DAC_DDS_TYPE),
     .CORDIC_DW (DAC_DDS_CORDIC_DW),
     .PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
@@ -501,7 +487,6 @@ module axi_ad9162_channel #(
     .dds_data (dac_dds_data_i_s[223:208]));
   
   ad_dds_2 #(
-    .DISABLE (DATAPATH_DISABLE),
     .DDS_TYPE (DAC_DDS_TYPE),
     .CORDIC_DW (DAC_DDS_CORDIC_DW),
     .PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
@@ -515,7 +500,6 @@ module axi_ad9162_channel #(
     .dds_data (dac_dds_data_i_s[239:224]));
   
   ad_dds_2 #(
-    .DISABLE (DATAPATH_DISABLE),
     .DDS_TYPE (DAC_DDS_TYPE),
     .CORDIC_DW (DAC_DDS_CORDIC_DW),
     .PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
