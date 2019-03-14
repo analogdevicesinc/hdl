@@ -7,9 +7,14 @@ HDL_LIBRARY_PATH := $(subst scripts/library.mk,,$(lastword $(MAKEFILE_LIST)))
 
 include $(HDL_LIBRARY_PATH)../quiet.mk
 
+CASE_INCLUDE := $(wildcard temporary_case_dependencies.mk)
+ifneq ($(CASE_INCLUDE),)
+  include temporary_case_dependencies.mk
+endif
+
 VIVADO := vivado -mode batch -source
 
-CLEAN_TARGET := *.cache
+CLEAN_TARGET += *.cache
 CLEAN_TARGET += *.data
 CLEAN_TARGET += *.xpr
 CLEAN_TARGET += *.log

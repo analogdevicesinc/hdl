@@ -310,12 +310,116 @@ proc adi_ip_properties {ip_name} {
   ipx::save_core
 }
 
+# ##############################################################################
+# create/overwrite temporary files containing particular build case dependencies
+# DO NOT USE FOR:
+# - axi_dmac
+# - jesd204
+# - axi_clkgen
+proc adi_init_bd_tcl {} {
+
+  if { [file exists bd] } {
+    file delete -force bd
+  }
+  file mkdir bd
+  set bd_tcl [open "bd/bd.tcl" w]
+  puts $bd_tcl ""
+  close $bd_tcl
+
+  set local_mk [open "temporary_case_dependencies.mk" w]
+  seek $local_mk 0 start
+  puts $local_mk "CLEAN_TARGET += bd"
+  puts $local_mk "CLEAN_TARGET += temporary_case_dependencies.mk"
+  close $local_mk
+}
+
+proc adi_auto_fill_bd_tcl {} {
+
+  global auto_set_param_list
+  global auto_set_param_list_overwritable
+  set cc [ipx::current_core]
+
+  set bd_tcl [open "bd/bd.tcl" r+ ]
+
+  puts $bd_tcl "# SCRIPT AUTO-GENERATED AT BUILD, DO NOT MODIFY!"
+  puts $bd_tcl "proc init {cellpath otherInfo} {"
+  puts $bd_tcl "  set ip \[get_bd_cells \$cellpath\]"
+  puts $bd_tcl ""
+  set auto_set_param ""
+  foreach i $auto_set_param_list {
+    if { [ipx::get_user_parameters $i -of_objects $cc -quiet] ne "" } {
+      append auto_set_param "    $i \\\n"
+    }
+  }
+  if { $auto_set_param ne "" } {
+    puts $bd_tcl "  bd::mark_propagate_only \$ip \" \\"
+    regsub "${i} \\\\" $auto_set_param "$i\"" auto_set_param
+    puts $bd_tcl $auto_set_param
+  }
+
+  set auto_set_overwritable_param ""
+  foreach i $auto_set_param_list_overwritable {
+    if { [ipx::get_user_parameters $i -of_objects $cc -quiet] ne "" } {
+      append auto_set_overwritable_param "    $i \\\n"
+    }
+  }
+  if { $auto_set_overwritable_param ne "" } {
+    puts $bd_tcl "  bd::mark_propagate_override \$ip \" \\"
+    regsub "${i} \\\\" $auto_set_overwritable_param "$i\"" auto_set_overwritable_param
+    puts $bd_tcl $auto_set_overwritable_param
+  }
+  puts $bd_tcl "  adi_auto_assign_device_spec \$cellpath"
+  puts $bd_tcl "}"
+  puts $bd_tcl ""
+  puts $bd_tcl "# auto set parameters defined in auto_set_param_list (adi_xilinx_device_info_enc.tcl)"
+  puts $bd_tcl "proc adi_auto_assign_device_spec {cellpath} {"
+  puts $bd_tcl ""
+  puts $bd_tcl "  set ip \[get_bd_cells \$cellpath\]"
+  puts $bd_tcl "  set ip_param_list \[list_property \$ip\]"
+  puts $bd_tcl "  set ip_path \[bd::get_vlnv_dir \[get_property VLNV \$ip\]\]"
+  puts $bd_tcl ""
+  puts $bd_tcl "  set parent_dir \"../\""
+  puts $bd_tcl "  for {set x 1} {\$x<=4} {incr x} {"
+  puts $bd_tcl "    set linkname \${ip_path}\${parent_dir}scripts/adi_xilinx_device_info_enc.tcl"
+  puts $bd_tcl "    if { \[file exists \$linkname\] } {"
+  puts $bd_tcl "      source \${ip_path}\${parent_dir}/scripts/adi_xilinx_device_info_enc.tcl"
+  puts $bd_tcl "      break"
+  puts $bd_tcl "    }"
+  puts $bd_tcl "    append parent_dir \"../\""
+  puts $bd_tcl "  }"
+  puts $bd_tcl ""
+  puts $bd_tcl "  # Find predefindes auto assignable parameters"
+  puts $bd_tcl "  foreach i \$auto_set_param_list {"
+  puts $bd_tcl "    if { \[lsearch \$ip_param_list \"CONFIG.\$i\"\] > 0 } {"
+  puts $bd_tcl "      set val \[adi_device_spec \$cellpath \$i\]"
+  puts $bd_tcl "      set_property CONFIG.\$i \$val \$ip"
+  puts $bd_tcl "    }"
+  puts $bd_tcl "  }"
+  puts $bd_tcl ""
+  puts $bd_tcl "  # Find predefindes auto assignable/overwritable parameters"
+  puts $bd_tcl "  foreach i \$auto_set_param_list_overwritable {"
+  puts $bd_tcl "    if { \[lsearch \$ip_param_list \"CONFIG.\$i\"\] > 0 } {"
+  puts $bd_tcl "      set val \[adi_device_spec \$cellpath \$i\]"
+  puts $bd_tcl "      set_property CONFIG.\$i \$val \$ip"
+  puts $bd_tcl "    }"
+  puts $bd_tcl "  }"
+  puts $bd_tcl "}"
+  puts $bd_tcl ""
+  close $bd_tcl
+}
+
 proc adi_add_auto_fpga_spec_params {} {
 
   global auto_set_param_list
+  global auto_set_param_list_overwritable
   set cc [ipx::current_core]
 
   foreach i $auto_set_param_list {
+    if { [ipx::get_user_parameters $i -of_objects $cc -quiet] ne ""} {
+      adi_add_device_spec_param $i
+    }
+  }
+  foreach i $auto_set_param_list_overwritable {
     if { [ipx::get_user_parameters $i -of_objects $cc -quiet] ne ""} {
       adi_add_device_spec_param $i
     }
