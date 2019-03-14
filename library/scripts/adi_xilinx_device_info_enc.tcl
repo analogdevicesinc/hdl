@@ -36,6 +36,7 @@
 # adi_xilinx_device_info_enc.tcl
 
 variable auto_set_param_list
+variable auto_set_param_list_overwritable
 variable fpga_series_list
 variable fpga_family_list
 variable speed_grade_list
@@ -44,14 +45,15 @@ variable xcvr_type_list
 variable fpga_voltage_list
 
 # Parameter list for automatic assignament
-set auto_set_param_list {
-          FPGA_VOLTAGE \
-          XCVR_TYPE \
+set auto_set_param_list { \
           DEV_PACKAGE \
           SPEED_GRADE \
           FPGA_FAMILY \
-          FPGA_TECHNOLOGY}
+          FPGA_TECHNOLOGY }
 
+set auto_set_param_list_overwritable { \
+          FPGA_VOLTAGE \
+          XCVR_TYPE }
 
 # List for automatically assigned parameter values and encoded values
 # The list name must be the parameter name (lowercase), appending "_list" to it
