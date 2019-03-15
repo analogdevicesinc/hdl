@@ -58,6 +58,8 @@ module axi_dmac_framelock #(
   input [DMA_LENGTH_WIDTH-1:0] req_dest_stride,
   input [DMA_LENGTH_WIDTH-1:0] req_src_stride,
   input [MAX_NUM_FRAMES_WIDTH:0] req_flock_framenum,
+  input                          req_flock_mode,  // 0 - Dynamic. 1 - Simple
+  input                          req_flock_wait_master,
   input [MAX_NUM_FRAMES_WIDTH:0] req_flock_distance,
   input [DMA_AXI_ADDR_WIDTH-1:0] req_flock_stride,
   input req_flock_en,
@@ -149,7 +151,14 @@ generate if (ENABLE_FRAME_LOCK == 1) begin
     end
   end
 
-  assign calc_enable = ~req_ready & out_req_ready & enable_out_req & prev_buf_done;
+  // if Flock disabled
+  //  Go to the next buffer whenever new descriptor can be pushed to downstream
+  //  logic for optimal streaming.
+  // if Flock enabled
+  //  Go to the next buffer when all data from current buffer is transferred,
+  //  this is signalized by the end of transfer signal (resp_eot)
+  assign calc_enable = ~req_ready & out_req_ready & enable_out_req &
+                      (prev_buf_done | ~req_flock_en);
   assign transfer_id_p1 = transfer_id + 1'b1;
 
   always @(posedge req_aclk) begin
@@ -170,8 +179,8 @@ generate if (ENABLE_FRAME_LOCK == 1) begin
     end
   end
 
-  // Keep a history of the transfer IDs so they can be passed to the slave
-  // once they are completed
+  // Latch the transfer IDs so it can be passed to the slave
+  // once it is completed
   always @(posedge req_aclk) begin
     if (out_req_valid & out_req_ready) begin
       cur_frame_id <= transfer_id;
@@ -212,14 +221,16 @@ generate if (ENABLE_FRAME_LOCK == 1) begin
     wire s_frame_id_vld;
 
     // The master will iterate over the buffers one by one in a cyclic way
-    // and by looking at slave current buffer keeping that untouched.
+    // In dynamic mode will look at slave current buffer keeping that untouched.
+    // In simple mode will not look at the slave.
 
     assign m_frame_out = {resp_eot, cur_frame_id};
     assign s_frame_id = m_frame_in[MAX_NUM_FRAMES_WIDTH-1:0];
     assign s_frame_id_vld = m_frame_in[MAX_NUM_FRAMES_WIDTH];
 
     assign calc_done = s_frame_id != transfer_id ||
-                       slave_started == 1'b0;
+                       slave_started == 1'b0 ||
+                       req_flock_mode == 1'b1;
 
     always @(posedge req_aclk) begin
       if (req_aresetn == 1'b0) begin
@@ -254,8 +265,8 @@ generate if (ENABLE_FRAME_LOCK == 1) begin
 
     assign calc_done = target_id == transfer_id;
 
-    // Slave will start to operate once the master starts to write the frame at
-    // the programmed distance.
+    // If 'wait for master' is enabled the slave will start to operate only
+    // after the master starts to write the frame at the programmed distance.
     //
     always @(posedge req_aclk) begin
       if (req_aresetn == 1'b0) begin
@@ -269,8 +280,12 @@ generate if (ENABLE_FRAME_LOCK == 1) begin
       end
     end
 
+`ifdef XILINX_SRL16
     // Keep a log of frame ids the master wrote
-    //
+    // This may be an better approach for Xilinx where SRL16E blocks are
+    // inferred
+    wire [MAX_NUM_FRAMES_MSB:0] req_flock_framenum_m1;
+    assign  req_flock_framenum_m1 = req_flock_framenum - 1;
     genvar k;
     for (k=0;k<MAX_NUM_FRAMES_WIDTH;k=k+1) begin : frame_id_log
       reg [MAX_NUM_FRAMES-1 : 0] s_frame_id_log;
@@ -279,10 +294,44 @@ generate if (ENABLE_FRAME_LOCK == 1) begin
           s_frame_id_log <= {s_frame_id_log[MAX_NUM_FRAMES-2 : 0], m_frame_id[k]};
         end
       end
-      assign target_id[k] = s_frame_id_log[req_flock_distance];
+      assign target_id[k] = wait_distance ? req_flock_framenum_m1[k] : s_frame_id_log[req_flock_distance];
     end
 
-    assign enable_out_req = ~wait_distance;
+`else
+
+    reg [MAX_NUM_FRAMES_MSB-1:0] s_frame_id_log = 'h0;
+    always @(posedge req_aclk) begin
+      if (m_frame_id_vld) begin
+        s_frame_id_log <= m_frame_id;
+      end
+    end
+
+    wire [MAX_NUM_FRAMES_MSB:0] id_at_distance;
+
+    assign id_at_distance = s_frame_id_log - req_flock_distance;
+    assign target_id = id_at_distance[MAX_NUM_FRAMES_MSB] ? id_at_distance + req_flock_framenum
+                                                          : id_at_distance;
+`endif
+
+    reg m_frame_ready = 1'b0;
+    always @(posedge req_aclk) begin
+      if (req_aresetn == 1'b0) begin
+        m_frame_ready <= 1'b0;
+      end else if (m_frame_id_vld) begin
+        m_frame_ready <= 1'b1;
+      end else if (out_req_valid) begin
+        m_frame_ready <= 1'b0;
+      end
+    end
+
+    // If 'wait for master' is disabled, enable the generation of new request
+    // right away.
+    // In Simple Flock when 'wait for master' is enabled, the slave must wait
+    // until the master completes a buffer. In Dynamic Flock just wait until
+    // the required number of buffers are filled, then enable the request
+    // generation regardless of the master.
+    assign enable_out_req = req_flock_wait_master == 1'b0 ||
+                            ((m_frame_ready | ~req_flock_mode) & ~wait_distance);
 
   end
 

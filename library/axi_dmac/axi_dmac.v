@@ -411,6 +411,8 @@ wire [DMA_LENGTH_WIDTH-1:0] up_dma_req_y_length;
 wire [DMA_LENGTH_WIDTH-1:0] up_dma_req_dest_stride;
 wire [DMA_LENGTH_WIDTH-1:0] up_dma_req_src_stride;
 wire [MAX_NUM_FRAMES_WIDTH:0] up_dma_req_flock_framenum;
+wire                          up_dma_req_flock_mode;
+wire                          up_dma_req_flock_wait_master;
 wire [MAX_NUM_FRAMES_WIDTH:0] up_dma_req_flock_distance;
 wire [DMA_AXI_ADDR_WIDTH-1:0] up_dma_req_flock_stride;
 wire up_dma_req_flock_en;
@@ -499,6 +501,8 @@ axi_dmac_regmap #(
   .request_dest_stride(up_dma_req_dest_stride),
   .request_src_stride(up_dma_req_src_stride),
   .request_flock_framenum(up_dma_req_flock_framenum),
+  .request_flock_mode(up_dma_req_flock_mode),
+  .request_flock_wait_master(up_dma_req_flock_wait_master),
   .request_flock_distance(up_dma_req_flock_distance),
   .request_flock_stride(up_dma_req_flock_stride),
   .request_flock_en(up_dma_req_flock_en),
@@ -567,6 +571,8 @@ axi_dmac_transfer #(
   .req_dest_stride(up_dma_req_dest_stride),
   .req_src_stride(up_dma_req_src_stride),
   .req_flock_framenum(up_dma_req_flock_framenum),
+  .req_flock_mode(up_dma_req_flock_mode),
+  .req_flock_wait_master(up_dma_req_flock_wait_master),
   .req_flock_distance(up_dma_req_flock_distance),
   .req_flock_stride(up_dma_req_flock_stride),
   .req_flock_en(up_dma_req_flock_en),
