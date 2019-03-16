@@ -63,6 +63,7 @@ module ad_ip_jesd204_tpl_dac_regmap #(
   output dac_sync,
 
   output [NUM_CHANNELS*4-1:0] dac_data_sel,
+  output [NUM_CHANNELS*2-1:0] dac_iq_mode,
   output dac_dds_format,
 
   output [NUM_CHANNELS*16-1:0] dac_dds_scale_0,
@@ -176,6 +177,7 @@ module ad_ip_jesd204_tpl_dac_regmap #(
   up_dac_common #(
     .COMMON_ID(6'h0),
     .ID (ID),
+    .COMMON_ID (6'h0),
     .DRP_DISABLE (1),
     .USERPORTS_DISABLE (1),
     .GPIO_DISABLE (1)
@@ -227,7 +229,7 @@ module ad_ip_jesd204_tpl_dac_regmap #(
   genvar i;
   for (i = 0; i < NUM_CHANNELS; i = i + 1) begin: g_channel
     up_dac_channel #(
-      .COMMON_ID(6'h1),
+      .COMMON_ID (6'h1),
       .CHANNEL_ID (i),
       .USERPORTS_DISABLE (1),
       .IQCORRECTION_DISABLE (1)
@@ -243,7 +245,7 @@ module ad_ip_jesd204_tpl_dac_regmap #(
       .dac_pat_data_1 (dac_pat_data_0[16*i+:16]),
       .dac_pat_data_2 (dac_pat_data_1[16*i+:16]),
       .dac_data_sel (dac_data_sel[4*i+:4]),
-      .dac_iq_mode (),
+      .dac_iq_mode (dac_iq_mode[2*i+:2]),
       .dac_iqcor_enb (),
       .dac_iqcor_coeff_1 (),
       .dac_iqcor_coeff_2 (),

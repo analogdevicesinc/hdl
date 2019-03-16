@@ -101,6 +101,7 @@ module ad_ip_jesd204_tpl_dac #(
   wire [NUM_CHANNELS*16-1:0] dac_pat_data_0_s;
   wire [NUM_CHANNELS*16-1:0] dac_pat_data_1_s;
   wire [NUM_CHANNELS*4-1:0] dac_data_sel_s;
+  wire [NUM_CHANNELS*2-1:0] dac_iq_mode_s;
 
   // regmap
 
@@ -149,6 +150,7 @@ module ad_ip_jesd204_tpl_dac #(
     .dac_pat_data_0 (dac_pat_data_0_s),
     .dac_pat_data_1 (dac_pat_data_1_s),
     .dac_data_sel (dac_data_sel_s),
+    .dac_iq_mode (dac_iq_mode_s)
 
     .jesd_m (NUM_CHANNELS),
     .jesd_l (NUM_LANES),
@@ -196,7 +198,8 @@ module ad_ip_jesd204_tpl_dac #(
     .dac_dds_incr_1 (dac_dds_incr_1_s),
     .dac_pat_data_0 (dac_pat_data_0_s),
     .dac_pat_data_1 (dac_pat_data_1_s),
-    .dac_data_sel (dac_data_sel_s)
+    .dac_data_sel (dac_data_sel_s),
+    .dac_iq_mode (dac_iq_mode_s)
   );
 
 endmodule

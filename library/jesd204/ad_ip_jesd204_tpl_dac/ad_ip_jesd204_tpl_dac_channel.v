@@ -49,6 +49,7 @@ module ad_ip_jesd204_tpl_dac_channel #(
   input dac_dds_format,
 
   input [3:0] dac_data_sel,
+  input [1:0] dac_iq_mode,
 
   input [15:0] dac_dds_scale_0,
   input [15:0] dac_dds_init_0,
@@ -66,12 +67,17 @@ module ad_ip_jesd204_tpl_dac_channel #(
   localparam CR = CONVERTER_RESOLUTION;
   localparam CHANNEL_DATA_WIDTH = DATA_PATH_WIDTH * CR;
 
+  // internal registers
+
+  reg [DATA_PATH_WIDTH*CONVERTER_RESOLUTION-1:0] dac_data_d = 'd0;
+
   // internal signals
 
   wire [CHANNEL_DATA_WIDTH-1:0] dac_dds_data_s;
   wire [CHANNEL_DATA_WIDTH-1:0] dac_dma_data_s;
   wire [CHANNEL_DATA_WIDTH-1:0] dac_pat_data_s;
 
+  genvar i;
   generate
     if (DATA_PATH_WIDTH > 1) begin
       assign dac_pat_data_s = {DATA_PATH_WIDTH/2{dac_pat_data_1[0+:CR],dac_pat_data_0[0+:CR]}};
@@ -90,11 +96,28 @@ module ad_ip_jesd204_tpl_dac_channel #(
         dac_pat_data_0[0+:CR] : dac_pat_data_1[0+:CR];
     end
 
-    genvar i;
     /* Data is expected to be LSB aligned, drop unused MSBs */
     for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: g_dac_dma_data
       assign dac_dma_data_s[CR*i+:CR] = dma_data[16*i+:CR];
     end
+  endgenerate
+
+  // dac sample mux
+
+  generate if (DATA_PATH_WIDTH < 4) begin
+    always @(posedge clk) begin
+      dac_data <= dac_data_d;
+    end
+  end else begin
+    for (i = 0; i < DATA_PATH_WIDTH; i = i + 4) begin
+      always @(posedge clk) begin
+        dac_data[(i+3)*CR+:CR] <= (dac_iq_mode[0] == 1'b1) ? dac_data_d[(i+3)*CR+:CR] : dac_data_d[(i+3)*CR+:CR];
+        dac_data[(i+2)*CR+:CR] <= (dac_iq_mode[0] == 1'b1) ? dac_data_d[(i+1)*CR+:CR] : dac_data_d[(i+2)*CR+:CR];
+        dac_data[(i+1)*CR+:CR] <= (dac_iq_mode[0] == 1'b1) ? dac_data_d[(i+2)*CR+:CR] : dac_data_d[(i+1)*CR+:CR];
+        dac_data[(i+0)*CR+:CR] <= (dac_iq_mode[0] == 1'b1) ? dac_data_d[(i+0)*CR+:CR] : dac_data_d[(i+0)*CR+:CR];
+      end
+    end
+  end
   endgenerate
 
   // dac data select
@@ -102,14 +125,14 @@ module ad_ip_jesd204_tpl_dac_channel #(
   always @(posedge clk) begin
     dac_enable <= (dac_data_sel == 4'h2) ? 1'b1 : 1'b0;
     case (dac_data_sel)
-      4'h7: dac_data <= pn15_data;
-      4'h6: dac_data <= pn7_data;
-      4'h5: dac_data <= ~pn15_data;
-      4'h4: dac_data <= ~pn7_data;
-      4'h3: dac_data <= 'h00;
-      4'h2: dac_data <= dac_dma_data_s;
-      4'h1: dac_data <= dac_pat_data_s;
-      default: dac_data <= dac_dds_data_s;
+      4'h7: dac_data_d <= pn15_data;
+      4'h6: dac_data_d <= pn7_data;
+      4'h5: dac_data_d <= ~pn15_data;
+      4'h4: dac_data_d <= ~pn7_data;
+      4'h3: dac_data_d <= 'h00;
+      4'h2: dac_data_d <= dac_dma_data_s;
+      4'h1: dac_data_d <= dac_pat_data_s;
+      default: dac_data_d <= dac_dds_data_s;
     endcase
   end
 
@@ -127,6 +150,7 @@ module ad_ip_jesd204_tpl_dac_channel #(
     .clk (clk),
     .dac_dds_format (dac_dds_format),
     .dac_data_sync (dac_data_sync),
+    .dac_iq_mode (dac_iq_mode),
     .dac_valid (1'b1),
     .tone_1_scale (dac_dds_scale_0),
     .tone_2_scale (dac_dds_scale_1),
