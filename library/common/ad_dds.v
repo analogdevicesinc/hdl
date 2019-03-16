@@ -49,7 +49,7 @@ module ad_dds #(
   parameter CORDIC_DW = 16,
   // range 8-24 (make sure CORDIC_PHASE_DW < CORDIC_DW)
   parameter CORDIC_PHASE_DW = 16,
-  // the clock radtio between the device clock(sample rate) and the dac_core clock
+  // number of consecutive samples per beat
   // 2^N, 1<N<6
   parameter CLK_RATIO = 1) (
 
@@ -58,6 +58,7 @@ module ad_dds #(
   input                               clk,
   input                               dac_dds_format,
   input                               dac_data_sync,
+  input       [                 1:0]  dac_iq_mode,
   input                               dac_valid,
   input       [                15:0]  tone_1_scale,
   input       [                15:0]  tone_2_scale,
@@ -68,10 +69,23 @@ module ad_dds #(
   output  reg [DDS_DW*CLK_RATIO-1:0]  dac_dds_data
   );
 
+  localparam NINETY_DEGREE = {1'b0, 1'b1, {(PHASE_DW-2){1'b0}}};
+
   wire [DDS_DW*CLK_RATIO-1:0] dac_dds_data_s;
 
+  integer j;
   always @(posedge clk) begin
-    dac_dds_data <= dac_dds_data_s;
+    if (dac_iq_mode == 2'b11) begin : iq_swapping
+      for (j=0; j<CLK_RATIO; j=j+1) begin
+        if (j[0] == 0) begin
+          dac_dds_data[DDS_DW*j+:DDS_DW] <= dac_dds_data_s[DDS_DW*(j+1)+:DDS_DW];
+        end else begin
+          dac_dds_data[DDS_DW*j+:DDS_DW] <= dac_dds_data_s[DDS_DW*(j-1)+:DDS_DW];
+        end
+      end
+    end else begin : normal_mode
+      dac_dds_data <= dac_dds_data_s;
+    end
   end
 
   genvar i;
@@ -93,7 +107,7 @@ module ad_dds #(
         dac_dds_incr_1 <= tone_2_freq_word * CLK_RATIO;
       end
 
-      //  phase accumulator
+      //  phase accumulator, support's complex (I/Q) and real mode
       for (i=1; i <= CLK_RATIO; i=i+1) begin: dds_phase
         always @(posedge clk) begin
           if (dac_data_sync == 1'b1) begin
@@ -105,12 +119,25 @@ module ad_dds #(
               dac_dds_phase_1[i] <= dac_dds_phase_1[i-1] + tone_2_freq_word;
             end
           end else if (dac_valid == 1'b1) begin
-            dac_dds_phase_0[i] <= dac_dds_phase_0[i] + dac_dds_incr_0;
-            dac_dds_phase_1[i] <= dac_dds_phase_1[i] + dac_dds_incr_1;
+            if (dac_iq_mode[0]) begin : complex_mode
+              if (i == 1) begin : first_i_sample
+                dac_dds_phase_0[i] <= dac_dds_phase_0[i] + dac_dds_incr_0;
+                dac_dds_phase_1[i] <= dac_dds_phase_1[i] + dac_dds_incr_1;
+              end else if (i[0] == 0) begin : q_sample
+                dac_dds_phase_0[i] <= dac_dds_phase_0[i-1] + NINETY_DEGREE;
+                dac_dds_phase_1[i] <= dac_dds_phase_1[i-1] + NINETY_DEGREE;
+              end else begin : next_i_sample
+                dac_dds_phase_0[i] <= dac_dds_phase_0[i-2] + dac_dds_incr_0;
+                dac_dds_phase_1[i] <= dac_dds_phase_1[i-2] + dac_dds_incr_1;
+              end
+            end else begin : real_mode
+              dac_dds_phase_0[i] <= dac_dds_phase_0[i] + dac_dds_incr_0;
+              dac_dds_phase_1[i] <= dac_dds_phase_1[i] + dac_dds_incr_1;
+            end
           end
         end
 
-        // phase to amplitude convertor
+        // phase to amplitude converter
          ad_dds_2 #(
            .DDS_DW (DDS_DW),
            .PHASE_DW (PHASE_DW),
