@@ -69,6 +69,7 @@ clean:
 	$(MAKE) -C intel/jesd204_phy clean
 	$(MAKE) -C intel/util_clkdiv clean
 	$(MAKE) -C frame_combiner clean
+	$(MAKE) -C io_vip clean
 	$(MAKE) -C jesd204/ad_ip_jesd204_tpl_adc clean
 	$(MAKE) -C jesd204/ad_ip_jesd204_tpl_dac clean
 	$(MAKE) -C jesd204/axi_jesd204_common clean
@@ -180,9 +181,8 @@ lib:
 	$(MAKE) -C intel/common/intel_serdes
 	$(MAKE) -C intel/jesd204_phy
 	$(MAKE) -C intel/util_clkdiv
-=======
 	$(MAKE) -C frame_combiner
->>>>>>> Makefiles: updated makefiles
+	$(MAKE) -C io_vip
 	$(MAKE) -C jesd204/ad_ip_jesd204_tpl_adc
 	$(MAKE) -C jesd204/ad_ip_jesd204_tpl_dac
 	$(MAKE) -C jesd204/axi_jesd204_common
