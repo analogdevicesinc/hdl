@@ -52,8 +52,10 @@ import `PKGIFY(`TH, `MNG_AXI)::*;
 import `PKGIFY(`TH, `DDR_AXI)::*;
 import `PKGIFY(`TH, `SRC_AXI_STRM)::*;
 import `PKGIFY(`TH, `DST_AXI_STRM)::*;
+`ifdef HAS_VDMA
 import `PKGIFY(`TH, `REF_SRC_AXI_STRM)::*;
 import `PKGIFY(`TH, `REF_DST_AXI_STRM)::*;
+`endif
 
 class environment;
 
@@ -62,8 +64,10 @@ class environment;
   `AGENT(`TH, `DDR_AXI, slv_mem_t) ddr_axi_agent;
   `AGENT(`TH, `SRC_AXI_STRM, mst_t) src_axis_agent;
   `AGENT(`TH, `DST_AXI_STRM, slv_t) dst_axis_agent;
+  `ifdef HAS_VDMA
   `AGENT(`TH, `REF_SRC_AXI_STRM, mst_t) ref_src_axis_agent;
   `AGENT(`TH, `REF_DST_AXI_STRM, slv_t) ref_dst_axis_agent;
+  `endif
   // Sequencers
   m_axi_sequencer #(`AGENT(`TH, `MNG_AXI, mst_t)) mng;
   s_axi_sequencer #(`AGENT(`TH, `DDR_AXI, slv_mem_t)) ddr_axi_seq;
@@ -71,12 +75,12 @@ class environment;
                      `AXIS_VIP_PARAMS(`TH, `SRC_AXI_STRM)
                     ) src_axis_seq;
   s_axis_sequencer #(`AGENT(`TH, `DST_AXI_STRM, slv_t)) dst_axis_seq;
-
+  `ifdef HAS_VDMA
   m_axis_sequencer #(`AGENT(`TH, `REF_SRC_AXI_STRM, mst_t),
                      `AXIS_VIP_PARAMS(`TH, `REF_SRC_AXI_STRM)
                     ) ref_src_axis_seq;
   s_axis_sequencer #(`AGENT(`TH, `REF_DST_AXI_STRM, slv_t)) ref_dst_axis_seq;
-
+  `endif
 
   // Register accessors
   dmac_api m_dmac_api;
@@ -93,10 +97,12 @@ class environment;
   function new(
     virtual interface axi_vip_if #(`AXI_VIP_IF_PARAMS(`TH, `MNG_AXI)) mng_vip_if,
     virtual interface axi_vip_if #(`AXI_VIP_IF_PARAMS(`TH, `DDR_AXI)) ddr_vip_if,
-    virtual interface axi4stream_vip_if #(`AXIS_VIP_IF_PARAMS(`TH, `SRC_AXI_STRM)) src_axis_vip_if,
-    virtual interface axi4stream_vip_if #(`AXIS_VIP_IF_PARAMS(`TH, `DST_AXI_STRM)) dst_axis_vip_if,
+  `ifdef HAS_VDMA
     virtual interface axi4stream_vip_if #(`AXIS_VIP_IF_PARAMS(`TH, `REF_SRC_AXI_STRM)) ref_src_axis_vip_if,
-    virtual interface axi4stream_vip_if #(`AXIS_VIP_IF_PARAMS(`TH, `REF_DST_AXI_STRM)) ref_dst_axis_vip_if
+    virtual interface axi4stream_vip_if #(`AXIS_VIP_IF_PARAMS(`TH, `REF_DST_AXI_STRM)) ref_dst_axis_vip_if,
+  `endif
+    virtual interface axi4stream_vip_if #(`AXIS_VIP_IF_PARAMS(`TH, `SRC_AXI_STRM)) src_axis_vip_if,
+    virtual interface axi4stream_vip_if #(`AXIS_VIP_IF_PARAMS(`TH, `DST_AXI_STRM)) dst_axis_vip_if
   );
 
     // Creating the agents
@@ -104,16 +110,20 @@ class environment;
     ddr_axi_agent = new("AXI DDR stub agent", ddr_vip_if);
     src_axis_agent = new("Src AXI stream agent", src_axis_vip_if);
     dst_axis_agent = new("Dest AXI stream agent", dst_axis_vip_if);
+  `ifdef HAS_VDMA
     ref_src_axis_agent = new("Ref Src AXI stream agent", ref_src_axis_vip_if);
     ref_dst_axis_agent = new("Ref Dest AXI stream agent", ref_dst_axis_vip_if);
+  `endif
 
     // Creating the sequencers
     mng = new(mng_agent);
     ddr_axi_seq = new(ddr_axi_agent);
     src_axis_seq = new(src_axis_agent);
     dst_axis_seq = new(dst_axis_agent);
+  `ifdef HAS_VDMA
     ref_src_axis_seq = new(ref_src_axis_agent);
     ref_dst_axis_seq = new(ref_dst_axis_agent);
+  `endif
 
     // Creating the register accessors
     m_dmac_api = new(mng,
@@ -144,8 +154,10 @@ class environment;
     ddr_axi_agent.start_slave();
     src_axis_agent.start_master();
     dst_axis_agent.start_slave();
+  `ifdef HAS_VDMA
     ref_src_axis_agent.start_master();
     ref_dst_axis_agent.start_slave();
+  `endif
 
     // stop monitor on DDR model
     ddr_axi_agent.monitor.item_collected_port.clr_enabled();
@@ -160,7 +172,9 @@ class environment;
   task test();
     fork
       src_axis_seq.run();
+      `ifdef HAS_VDMA
       ref_src_axis_seq.run();
+      `endif
       // DEST AXIS does not have to run, scoreboard connects and
       // gathers packets from the agent
       //  dst_axis_seq.run();
@@ -194,8 +208,10 @@ class environment;
     ddr_axi_agent.stop_slave();
     src_axis_agent.stop_master();
     dst_axis_agent.stop_slave();
+  `ifdef HAS_VDMA
     ref_src_axis_agent.stop_master();
     ref_dst_axis_agent.stop_slave();
+  `endif
   endtask
 
   //============================================================================

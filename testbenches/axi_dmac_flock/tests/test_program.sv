@@ -57,10 +57,12 @@ program test_program;
     //creating environment
     env = new(`TH.`MNG_AXI.inst.IF,
               `TH.`DDR_AXI.inst.IF,
-              `TH.`SRC_AXI_STRM.inst.IF,
-              `TH.`DST_AXI_STRM.inst.IF,
+              `ifdef HAS_VDMA
               `TH.`REF_SRC_AXI_STRM.inst.IF,
-              `TH.`REF_DST_AXI_STRM.inst.IF
+              `TH.`REF_DST_AXI_STRM.inst.IF,
+              `endif
+              `TH.`SRC_AXI_STRM.inst.IF,
+              `TH.`DST_AXI_STRM.inst.IF
     );
 
     #2ps;
@@ -130,7 +132,9 @@ program test_program;
     tready_gen = env.dst_axis_seq.agent.driver.create_ready("tready");
     tready_gen.set_ready_policy(XIL_AXI4STREAM_READY_GEN_NO_BACKPRESSURE);
     env.dst_axis_seq.agent.driver.send_tready(tready_gen);
+    `ifdef HAS_VDMA
     env.ref_dst_axis_seq.agent.driver.send_tready(tready_gen);
+    `endif
 
     // Set no backpressure from DDR
     wready_gen = env.ddr_axi_agent.wr_driver.create_ready("wready");
@@ -159,12 +163,15 @@ program test_program;
 
     env.src_axis_seq.configure(.mode(0),.rand_valid(0));
     env.src_axis_seq.enable();
+    `ifdef HAS_VDMA
     env.ref_src_axis_seq.configure(.mode(0),.rand_valid(0));
     env.ref_src_axis_seq.enable();
+    `endif
 
     env.m_dmac_api.enable_dma();
     env.s_dmac_api.enable_dma();
 
+    `ifdef HAS_VDMA
     // Config S2MM
     //This enables run/stop, Circular_Park, GenlockEn, and GenlockSrc.
     env.mng.RegWrite32(`G_VDMA_BA + 'h30, 'h8b);
@@ -192,6 +199,7 @@ program test_program;
     env.mng.RegWrite32(`G_VDMA_BA + 'h54, m_seg.length);
     //Set MM2S_VSIZE
     env.mng.RegWrite32(`G_VDMA_BA + 'h50, m_seg.ylength);
+    `endif
 
     // Submit transfers to DMACs
     env.m_dmac_api.submit_transfer(m_seg, m_tid);
@@ -217,17 +225,21 @@ program test_program;
                   env.src_axis_seq.update(.bytes_to_generate(m_seg.length),
                                           .gen_last(1),
                                           .gen_sync(l==0));
+                  `ifdef HAS_VDMA
                   env.ref_src_axis_seq.update(.bytes_to_generate(m_seg.length),
                                               .gen_last(1),
                                               .gen_sync(l==0));
+                  `endif
                 end
 
                 // update the AXIS generator data
                 for (int j=0; j<m_seg.get_bytes_in_transfer; j++) begin
                   // ADI DMA frames start from offset 0x00
                   env.src_axis_seq.byte_stream.push_back(frame_count);
+                  `ifdef HAS_VDMA
                   // VDMA frames start from offset 0x80
                   env.ref_src_axis_seq.byte_stream.push_back(frame_count+'h80);
+                  `endif
                 end
               end
             join
@@ -250,14 +262,19 @@ program test_program;
     // Wait until everything is transmitted
     do
       #100;
-    while (env.src_axis_seq.byte_stream.size() > 0 &&
-           env.ref_src_axis_seq.byte_stream.size() > 0);
+    while (env.src_axis_seq.byte_stream.size() > 0
+           `ifdef HAS_VDMA
+             && env.ref_src_axis_seq.byte_stream.size() > 0
+           `endif
+           );
 
     // Shutdown DMACs
     env.m_dmac_api.disable_dma();
     env.s_dmac_api.disable_dma();
     env.src_axis_seq.stop();
+    `ifdef HAS_VDMA
     env.ref_src_axis_seq.stop();
+    `endif
 
   endtask
 
