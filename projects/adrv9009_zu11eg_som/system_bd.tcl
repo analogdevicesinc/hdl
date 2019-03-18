@@ -144,5 +144,5 @@ ad_connect  sys_concat_intc_0/In0 GND
 
 connect_bd_net [get_bd_pins sys_ps8/maxihpm0_lpd_aclk] [get_bd_pins sys_ps8/pl_clk0]
 
-source talise_som_bd.tcl
+source adrv9009_zu11eg_som_bd.tcl
 source carrier_bd.tcl
