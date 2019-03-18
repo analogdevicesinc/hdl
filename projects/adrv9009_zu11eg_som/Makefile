@@ -3,12 +3,12 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := talise_som
+PROJECT_NAME := adrv9009_zu11eg_som
 
-M_DEPS += talise_som_spi.v
-M_DEPS += talise_som_bd.tcl
+M_DEPS += adrv9009_zu11eg_som_spi.v
+M_DEPS += adrv9009_zu11eg_som_bd.tcl
 M_DEPS += carrier_bd.tcl
-M_DEPS += talise_som_constr.xdc
+M_DEPS += adrv9009_zu11eg_som_constr.xdc
 M_DEPS += carrier_constr.xdc
 M_DEPS += ../../library/xilinx/common/ad_iobuf.v
 M_DEPS += ../../library/jesd204/scripts/jesd204.tcl

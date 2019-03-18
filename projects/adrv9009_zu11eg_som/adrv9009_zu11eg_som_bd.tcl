@@ -1,7 +1,7 @@
 
 disconnect_bd_net /sys_cpu_clk [get_bd_pins sys_ps8/maxihpm0_lpd_aclk]
 
-add_files -fileset constrs_1 -norecurse ./talise_som_constr.xdc
+add_files -fileset constrs_1 -norecurse ./adrv9009_zu11eg_som_constr.xdc
 
 create_bd_port -dir I sys_reset
 

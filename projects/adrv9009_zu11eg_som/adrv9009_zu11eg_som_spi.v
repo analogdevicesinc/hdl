@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module talise_som_spi (
+module adrv9009_zu11eg_som_spi (
 
   input       [ 2:0]      spi_csn,
   input                   spi_clk,
