@@ -60,6 +60,7 @@ clean:
 	$(MAKE) -C axi_mc_controller clean
 	$(MAKE) -C axi_mc_current_monitor clean
 	$(MAKE) -C axi_mc_speed clean
+	$(MAKE) -C axi_pulse_gen clean
 	$(MAKE) -C axi_rd_wr_combiner clean
 	$(MAKE) -C axi_spdif_rx clean
 	$(MAKE) -C axi_spdif_tx clean
@@ -168,6 +169,7 @@ lib:
 	$(MAKE) -C axi_mc_controller
 	$(MAKE) -C axi_mc_current_monitor
 	$(MAKE) -C axi_mc_speed
+	$(MAKE) -C axi_pulse_gen
 	$(MAKE) -C axi_rd_wr_combiner
 	$(MAKE) -C axi_spdif_rx
 	$(MAKE) -C axi_spdif_tx
