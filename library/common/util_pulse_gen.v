@@ -42,8 +42,9 @@ module util_pulse_gen #(
   input               clk,
   input               rstn,
 
+  input       [31:0]  pulse_width,
   input       [31:0]  pulse_period,
-  input               pulse_period_en,
+  input               load_config,
 
   output  reg         pulse
 );
@@ -52,14 +53,33 @@ module util_pulse_gen #(
 
   reg     [(PULSE_WIDTH-1):0]  pulse_width_cnt = {PULSE_WIDTH{1'b1}};
   reg     [31:0]               pulse_period_cnt = 32'h0;
+  reg     [31:0]               pulse_period_read = 32'b0;
+  reg     [31:0]               pulse_width_read = 32'b0;
   reg     [31:0]               pulse_period_d = 32'b0;
+  reg     [31:0]               pulse_width_d = 32'b0;
 
   wire                         end_of_period_s;
 
   // flop the desired period
 
   always @(posedge clk) begin
-    pulse_period_d <= (pulse_period_en) ? pulse_period : PULSE_PERIOD;
+    if (rstn == 1'b0) begin
+      pulse_period_d <= PULSE_PERIOD;
+      pulse_width_d <= PULSE_WIDTH;
+      pulse_period_read <= PULSE_PERIOD;
+      pulse_width_read <= PULSE_WIDTH;
+    end else begin
+      // latch the input period/width values
+      if (load_config) begin
+        pulse_period_read <= pulse_period;
+        pulse_width_read <= pulse_width;
+      end
+      // update the current period/width at the end of the period
+      if (end_of_period_s) begin
+        pulse_period_d <= pulse_period_read;
+        pulse_width_d <= pulse_width_read;
+      end
+    end
   end
 
   // a free running pulse generator
