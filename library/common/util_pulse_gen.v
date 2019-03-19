@@ -86,27 +86,25 @@ module util_pulse_gen #(
 
   always @(posedge clk) begin
     if (rstn == 1'b0) begin
-      pulse_period_cnt <= 32'h0;
+      pulse_period_cnt <= PULSE_PERIOD;
     end else begin
-      pulse_period_cnt <= (pulse_period_cnt == pulse_period_d) ? 32'b0 : (pulse_period_cnt + 1);
+      pulse_period_cnt <= (end_of_period_s) ? pulse_period_d : (pulse_period_cnt - 1'b1);
     end
   end
+  assign end_of_period_s = (pulse_period_cnt == 32'b0) ? 1'b1 : 1'b0;
 
-  assign  end_of_period_s = (pulse_period_cnt == pulse_period_d) ? 1'b1 : 1'b0;
 
   // generate pulse with a specified width
 
-  always @(posedge clk) begin
+  always @ (posedge clk) begin
     if (rstn == 1'b0) begin
-      pulse_width_cnt <= 0;
-      pulse <= 0;
+      pulse <= 1'b0;
+    end else if (end_of_period_s) begin
+      pulse <= 1'b0;
+    end else if (pulse_period_cnt == pulse_width_d) begin
+      pulse <= 1'b1;
     end else begin
-      pulse_width_cnt <= (pulse == 1'b1) ? pulse_width_cnt + 1 : {PULSE_WIDTH{1'h0}};
-      if(end_of_period_s == 1'b1) begin
-        pulse <= 1'b1;
-      end else if(pulse_width_cnt == {PULSE_WIDTH{1'b1}}) begin
-        pulse <= 1'b0;
-      end
+      pulse <= pulse;
     end
   end
 
