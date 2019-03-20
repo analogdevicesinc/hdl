@@ -298,10 +298,10 @@ module axi_ad5766 #(
   util_pulse_gen #(.PULSE_WIDTH(1)) i_trigger_gen (
     .clk (spi_clk),
     .rstn (dac_rstn_s),
+    .pulse_width (1'b1),
     .pulse_period (pulse_period_s),
-    .pulse_period_en (1'b1),
+    .load_config (1'b1),
     .pulse (trigger_s)
-
   );
 
   // offset of the sequencer registers are 8'h40
