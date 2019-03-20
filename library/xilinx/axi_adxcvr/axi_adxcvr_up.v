@@ -87,7 +87,6 @@ module axi_adxcvr_up #(
 
   output  [ 7:0]  up_es_sel,
   output          up_es_req,
-  output reg [15:0]  up_es_reset,
   input           up_es_ack,
   output  [ 4:0]  up_es_pscale,
   output  [ 1:0]  up_es_vrange,
@@ -99,6 +98,7 @@ module axi_adxcvr_up #(
   output  [11:0]  up_es_hstep,
   output  [31:0]  up_es_saddr,
   input           up_es_status,
+  output reg [15:0]  up_es_reset = 'h0,
 
   // status
 
