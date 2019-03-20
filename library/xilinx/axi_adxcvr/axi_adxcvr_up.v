@@ -87,7 +87,7 @@ module axi_adxcvr_up #(
 
   output  [ 7:0]  up_es_sel,
   output          up_es_req,
-  output  [15:0]  up_es_reset,
+  output reg [15:0]  up_es_reset,
   input           up_es_ack,
   output  [ 4:0]  up_es_pscale,
   output  [ 1:0]  up_es_vrange,
@@ -164,7 +164,6 @@ module axi_adxcvr_up #(
   reg             up_ies_status = 'd0;
   reg             up_rreq_d = 'd0;
   reg     [31:0]  up_rdata_d = 'd0;
-  reg     [15:0]  up_es_reset = 'd0;
 
   // internal signals
 
@@ -395,6 +394,7 @@ module axi_adxcvr_up #(
       up_ies_hoffset_step <= 'd0;
       up_ies_start_addr <= 'd0;
       up_ies_status <= 'd0;
+      up_es_reset <= 'd0;
     end else begin
       up_ies_sel <= 'd0;
       up_ies_req <= 'd0;
@@ -408,6 +408,7 @@ module axi_adxcvr_up #(
       up_ies_hoffset_step <= 'd0;
       up_ies_start_addr <= 'd0;
       up_ies_status <= 'd0;
+      up_es_reset <= 'd0;
     end
   end
   end else begin
