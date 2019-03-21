@@ -145,7 +145,7 @@ module system_top (
               gpio_1_mode_1,        // 49
               gpio_0_mode_0,        // 48
               sync_in_n,            // 43
-              sync_n,               // 42 
+              sync_n,               // 42
               start_n,              // 41
               reset_n}));           // 40
 
