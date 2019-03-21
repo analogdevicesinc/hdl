@@ -53,7 +53,8 @@ current_bd_instance /spi
   ad_connect axi/spi_resetn execution/resetn
   ad_connect axi/spi_resetn interconnect/resetn
   ad_connect axi/spi_resetn trigger_gen/rstn
-  ad_connect trigger_gen/pulse_period_en GND
+  ad_connect trigger_gen/load_config GND
+  ad_connect trigger_gen/pulse_width GND
   ad_connect trigger_gen/pulse_period GND
 
   ad_connect trigger_gen/pulse offload/trigger
