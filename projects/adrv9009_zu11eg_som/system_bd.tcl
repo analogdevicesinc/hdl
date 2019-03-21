@@ -32,11 +32,6 @@ ad_ip_parameter sys_ps8 CONFIG.PSU__SPI0__PERIPHERAL__IO {EMIO}
 ad_ip_parameter sys_ps8 CONFIG.PSU__SPI0__GRP_SS1__ENABLE 1
 ad_ip_parameter sys_ps8 CONFIG.PSU__SPI0__GRP_SS2__ENABLE 1
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__SPI0_REF_CTRL__FREQMHZ 100
-ad_ip_parameter sys_ps8 CONFIG.PSU__SPI1__PERIPHERAL__ENABLE 1
-ad_ip_parameter sys_ps8 CONFIG.PSU__SPI1__GRP_SS1__ENABLE 1
-ad_ip_parameter sys_ps8 CONFIG.PSU__SPI1__GRP_SS2__ENABLE 1
-ad_ip_parameter sys_ps8 CONFIG.PSU__SPI1__PERIPHERAL__IO {MIO 18 .. 23}
-ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__SPI1_REF_CTRL__FREQMHZ 100
 ad_ip_parameter sys_ps8 CONFIG.PSU__I2C0__PERIPHERAL__ENABLE {1}
 ad_ip_parameter sys_ps8 CONFIG.PSU__I2C0__PERIPHERAL__IO {MIO 14 .. 15}
 ad_ip_parameter sys_ps8 CONFIG.PSU__UART1__PERIPHERAL__ENABLE {1}
