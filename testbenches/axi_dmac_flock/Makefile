@@ -44,6 +44,7 @@ CFG_FILES := $(notdir $(wildcard cfgs/cfg*.tcl))
 TESTS += cfg1:test_program
 TESTS += cfg2_fsync:test_program
 TESTS += cfg2_fsync:test_frame_delay
+TESTS += cfg3_fsync_autorun:test_frame_delay
 
 include ../scripts/project-sim.mk
 

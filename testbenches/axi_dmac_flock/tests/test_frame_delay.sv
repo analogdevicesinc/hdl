@@ -51,6 +51,8 @@ program test_frame_delay;
   int max_frames = `GETPARAM(`TH,`M_DMAC,MAX_NUM_FRAMES);
   int has_sfsync = `GETPARAM(`TH,`M_DMAC,USE_EXT_SYNC);
   int has_dfsync = `GETPARAM(`TH,`S_DMAC,USE_EXT_SYNC);
+  int has_sautorun = `GETPARAM(`TH,`S_DMAC,HAS_AUTORUN);
+  int has_dautorun = `GETPARAM(`TH,`M_DMAC,HAS_AUTORUN);
   int sync_gen_en;
 
   initial begin
@@ -73,35 +75,60 @@ program test_frame_delay;
 
     env.start();
 
-    simpleRegTest;
-
+    if (has_sautorun + has_dautorun == 0) begin
+      simpleRegTest;
+    end
 
     `INFO(("start env"));
     env.run();
 
-    singleTest(
-      .frame_num(10),
-      .num_of_buffers(3),
-      .frame_distance(1),
-      .wr_clk(250000000),
-      .rd_clk(250000000)
-    );
+    // Test non-autorun mode
+    if (has_sautorun + has_dautorun == 0) begin
+      singleTest(
+        .frame_num(10),
+        .num_of_buffers(3),
+        .frame_distance(1),
+        .wr_clk(250000000),
+        .rd_clk(250000000)
+      );
 
-    singleTest(
-      .frame_num(10),
-      .num_of_buffers(5),
-      .frame_distance(3),
-      .wr_clk(250000000),
-      .rd_clk(250000000)
-    );
+      singleTest(
+        .frame_num(10),
+        .num_of_buffers(5),
+        .frame_distance(3),
+        .wr_clk(250000000),
+        .rd_clk(250000000)
+      );
 
-    singleTest(
-      .frame_num(10),
-      .num_of_buffers(8),
-      .frame_distance(7),
-      .wr_clk(250000000),
-      .rd_clk(250000000)
-    );
+      singleTest(
+        .frame_num(10),
+        .num_of_buffers(8),
+        .frame_distance(7),
+        .wr_clk(250000000),
+        .rd_clk(250000000)
+      );
+    end
+
+    // Test autorun mode
+    if (has_sautorun + has_dautorun == 2) begin
+      int autorun_num_of_buffers;
+      int autorun_frame_distance;
+
+      autorun_num_of_buffers =  `GETPARAM(`TH,`S_DMAC,DMAC_DEF_FLOCK_CFG) & 'hFF;
+      autorun_frame_distance = ((`GETPARAM(`TH,`S_DMAC,DMAC_DEF_FLOCK_CFG) >> 16) & 'hFF)+1;
+      singleTest(
+        .frame_num(10),
+        .num_of_buffers(autorun_num_of_buffers),
+        .frame_distance(autorun_frame_distance),
+        .wr_clk(250000000),
+        .rd_clk(250000000),
+        .has_autorun(1)
+      );
+    end
+    if (has_sautorun + has_dautorun == 1) begin
+      `ERROR(("Both DMACs must be set in autorun mode."));
+    end
+
     stop_clocks();
 
     $display("Testbench done !!!");
@@ -114,11 +141,13 @@ program test_frame_delay;
     int num_of_buffers = 3,
     int frame_distance = 1,
     int wr_clk = 250000000,
-    int rd_clk = 250000000
+    int rd_clk = 250000000,
+    int has_autorun = 0
   );
     dma_flocked_2d_segment m_seg, s_seg;
     int m_tid, s_tid;
     int rand_succ = 0;
+    int x_length,y_length,baseaddress;
 
 
     axi4stream_ready_gen tready_gen;
@@ -143,9 +172,19 @@ program test_frame_delay;
 
     m_seg = new;
     m_seg.set_params({`DMAC_PARAMS(`TH, `M_DMAC)});
-    rand_succ = m_seg.randomize() with { dst_addr == 0;
-                                         length == 1024;
-                                         ylength == 8;
+
+    baseaddress = 0;
+    x_length = 1024;
+    y_length = 8;
+    if (has_autorun) begin
+      baseaddress = `GETPARAM(`TH,`M_DMAC,DMAC_DEF_DEST_ADDR);
+      x_length = `GETPARAM(`TH,`M_DMAC,DMAC_DEF_X_LENGTH) + 1;
+      y_length = `GETPARAM(`TH,`M_DMAC,DMAC_DEF_Y_LENGTH) + 1;
+    end
+
+    rand_succ = m_seg.randomize() with { dst_addr == baseaddress;
+                                         length == x_length;
+                                         ylength == y_length;
                                          dst_stride == length; };
     if (rand_succ == 0) `ERROR(("randomization failed"));
 
@@ -164,8 +203,10 @@ program test_frame_delay;
     env.ref_src_axis_seq.enable();
     `endif
 
-    env.m_dmac_api.enable_dma();
-    env.s_dmac_api.enable_dma();
+    if (has_autorun == 0) begin
+      env.m_dmac_api.enable_dma();
+      env.s_dmac_api.enable_dma();
+    end
 
     `ifdef HAS_VDMA
     // Config S2MM
@@ -198,8 +239,10 @@ program test_frame_delay;
     `endif
 
     // Submit transfers to DMACs
-    env.m_dmac_api.submit_transfer(m_seg, m_tid);
-    env.s_dmac_api.submit_transfer(s_seg, s_tid);
+    if (has_autorun == 0) begin
+      env.m_dmac_api.submit_transfer(m_seg, m_tid);
+      env.s_dmac_api.submit_transfer(s_seg, s_tid);
+    end
 
     // Set clock generators
     set_writer_clock(wr_clk);
