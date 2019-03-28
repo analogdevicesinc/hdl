@@ -1,3 +1,4 @@
+*.ip_user_files
 *.cache
 *.data
 *.xpr
