@@ -16,6 +16,12 @@ if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
   set IGNORE_VERSION_CHECK 0
 }
 
+if {[info exists ::env(ADI_USE_OOC_SYNTHESIS)]} {
+  set ADI_USE_OOC_SYNTHESIS 1
+} elseif {![info exists ADI_USE_OOC_SYNTHESIS]} {
+  set ADI_USE_OOC_SYNTHESIS 0
+}
+
 set p_board "not-applicable"
 set p_device "none"
 set sys_zynq 1
@@ -30,6 +36,7 @@ proc adi_project_xilinx {project_name {mode 0}} {
   global sys_zynq
   global REQUIRED_VIVADO_VERSION
   global IGNORE_VERSION_CHECK
+  global ADI_USE_OOC_SYNTHESIS
 
   if [regexp "_ac701$" $project_name] {
     set p_device "xc7a200tfbg676-2"
@@ -128,8 +135,16 @@ proc adi_project_xilinx {project_name {mode 0}} {
   save_bd_design
   validate_bd_design
 
-  set_property synth_checkpoint_mode None [get_files  $project_system_dir/system.bd]
+  if {$ADI_USE_OOC_SYNTHESIS == 1} {
+    set_property synth_checkpoint_mode Hierarchical [get_files  $project_system_dir/system.bd]
+  } else {
+    set_property synth_checkpoint_mode None [get_files  $project_system_dir/system.bd]
+  }
   generate_target {synthesis implementation} [get_files  $project_system_dir/system.bd]
+  if {$ADI_USE_OOC_SYNTHESIS == 1} {
+    export_ip_user_files -of_objects [get_files  $project_system_dir/system.bd] -no_script -sync -force -quiet
+    create_ip_run [get_files  $project_system_dir/system.bd]
+  }
   make_wrapper -files [get_files $project_system_dir/system.bd] -top
 
   if {$mode == 0} {
@@ -147,8 +162,13 @@ proc adi_project_files {project_name project_files} {
 
 proc adi_project_run {project_name} {
   global ADI_POWER_OPTIMIZATION
-
-  launch_runs synth_1
+  global ADI_USE_OOC_SYNTHESIS
+  
+  if {$ADI_USE_OOC_SYNTHESIS == 1} {
+    launch_runs -jobs 4 system_*_synth_1 synth_1
+  } else {
+    launch_runs synth_1
+  }
   wait_on_run synth_1
   open_run synth_1
   report_timing_summary -file timing_synth.log
