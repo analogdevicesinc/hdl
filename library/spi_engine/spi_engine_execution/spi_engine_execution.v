@@ -361,7 +361,9 @@ end
 // Load the SDO parallel data into the SDO shift register. In case of a custom
 // data width, additional bit shifting must done at load.
 always @(posedge clk) begin
-  if (transfer_active == 1'b1 && trigger_tx == 1'b1) begin
+  if ((inst_d1 != CMD_TRANSFER) && (!sdo_enabled)) begin
+    data_sdo_shift <= {DATA_WIDTH{SDO_DEFAULT}};
+  end else if (transfer_active == 1'b1 && trigger_tx == 1'b1) begin
     if (first_bit == 1'b1)
       data_sdo_shift <= sdo_data << left_aligned;
     else
@@ -369,7 +371,7 @@ always @(posedge clk) begin
   end
 end
 
-assign sdo = ((inst_d1 == CMD_TRANSFER) && (sdo_enabled)) ? data_sdo_shift[DATA_WIDTH-1] : SDO_DEFAULT;
+assign sdo = data_sdo_shift[DATA_WIDTH-1];
 
 // In case of an interface with high clock rate (SCLK > 50MHz), one of the
 // next SCLK edge must be used to flop the SDI line, to compensate the overall
@@ -391,7 +393,16 @@ wire trigger_rx_s = (SDI_DELAY == 2'b00) ? trigger_rx :
                     (SDI_DELAY == 2'b11) ? trigger_rx_d3 : trigger_rx;
 
 always @(posedge clk) begin
-  if (trigger_rx_s == 1'b1) begin
+  if (inst_d1 == CMD_CHIPSELECT) begin
+    data_sdi_shift <= {DATA_WIDTH{1'b0}};
+    data_sdi_shift_1 <= {DATA_WIDTH{1'b0}};
+    data_sdi_shift_2 <= {DATA_WIDTH{1'b0}};
+    data_sdi_shift_3 <= {DATA_WIDTH{1'b0}};
+    data_sdi_shift_4 <= {DATA_WIDTH{1'b0}};
+    data_sdi_shift_5 <= {DATA_WIDTH{1'b0}};
+    data_sdi_shift_6 <= {DATA_WIDTH{1'b0}};
+    data_sdi_shift_7 <= {DATA_WIDTH{1'b0}};
+  end else if (trigger_rx_s == 1'b1) begin
     data_sdi_shift <= {data_sdi_shift[(DATA_WIDTH-2):0], sdi};
     data_sdi_shift_1 <= {data_sdi_shift_1[(DATA_WIDTH-2):0], sdi_1};
     data_sdi_shift_2 <= {data_sdi_shift_2[(DATA_WIDTH-2):0], sdi_2};
