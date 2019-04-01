@@ -1,7 +1,7 @@
 
 package require -exact qsys 13.0
-source ../scripts/adi_env.tcl
-source ../scripts/adi_ip_intel.tcl
+source ../../scripts/adi_env.tcl
+source ../../scripts/adi_ip_intel.tcl
 
 
 set_module_property NAME util_clkdiv
@@ -13,8 +13,8 @@ set_module_property DISPLAY_NAME util_clkdiv
 # files
 
 add_fileset quartus_synth QUARTUS_SYNTH "" "Quartus Synthesis"
-set_fileset_property quartus_synth TOP_LEVEL util_clkdiv_alt
-add_fileset_file util_clkdiv_alt.v       VERILOG PATH util_clkdiv_alt.v TOP_LEVEL_FILE
+set_fileset_property quartus_synth TOP_LEVEL util_clkdiv
+add_fileset_file util_clkdiv.v       VERILOG PATH util_clkdiv.v TOP_LEVEL_FILE
 
 # defaults
 

@@ -67,6 +67,7 @@ clean:
 	$(MAKE) -C intel/common/alt_mem_asym clean
 	$(MAKE) -C intel/common/alt_serdes clean
 	$(MAKE) -C intel/jesd204_phy clean
+	$(MAKE) -C intel/util_clkdiv clean
 	$(MAKE) -C jesd204/ad_ip_jesd204_tpl_adc clean
 	$(MAKE) -C jesd204/ad_ip_jesd204_tpl_dac clean
 	$(MAKE) -C jesd204/axi_jesd204_common clean
@@ -90,7 +91,6 @@ clean:
 	$(MAKE) -C util_bsplit clean
 	$(MAKE) -C util_cdc clean
 	$(MAKE) -C util_cic clean
-	$(MAKE) -C util_clkdiv clean
 	$(MAKE) -C util_dacfifo clean
 	$(MAKE) -C util_dec256sinc24b clean
 	$(MAKE) -C util_delay clean
@@ -113,6 +113,7 @@ clean:
 	$(MAKE) -C xilinx/axi_dacfifo clean
 	$(MAKE) -C xilinx/axi_xcvrlb clean
 	$(MAKE) -C xilinx/util_adxcvr clean
+	$(MAKE) -C xilinx/util_clkdiv clean
 
 	$(MAKE) -C interfaces clean
 
@@ -176,6 +177,7 @@ lib:
 	$(MAKE) -C intel/common/alt_mem_asym
 	$(MAKE) -C intel/common/alt_serdes
 	$(MAKE) -C intel/jesd204_phy
+	$(MAKE) -C intel/util_clkdiv
 	$(MAKE) -C jesd204/ad_ip_jesd204_tpl_adc
 	$(MAKE) -C jesd204/ad_ip_jesd204_tpl_dac
 	$(MAKE) -C jesd204/axi_jesd204_common
@@ -221,6 +223,7 @@ lib:
 	$(MAKE) -C xilinx/axi_dacfifo
 	$(MAKE) -C xilinx/axi_xcvrlb
 	$(MAKE) -C xilinx/util_adxcvr
+	$(MAKE) -C xilinx/util_clkdiv
 
 	$(MAKE) -C interfaces
 
