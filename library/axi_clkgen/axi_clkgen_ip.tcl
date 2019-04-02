@@ -9,13 +9,12 @@ adi_ip_files axi_clkgen [list \
   "$ad_hdl_dir/library/xilinx/common/ad_mmcm_drp.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/common/up_clkgen.v" \
-  "$ad_hdl_dir/library/scripts/common_bd.tcl" \
   "$ad_hdl_dir/library/scripts/adi_xilinx_device_info_enc.tcl" \
   "bd/bd.tcl" \
   "axi_clkgen.v" ]
 
 adi_ip_properties axi_clkgen
-adi_ip_bd axi_clkgen "bd/bd.tcl $ad_hdl_dir/library/scripts/common_bd.tcl"
+adi_ip_bd axi_clkgen "bd/bd.tcl"
 
 ipx::infer_bus_interface clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 ipx::infer_bus_interface clk2 xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]

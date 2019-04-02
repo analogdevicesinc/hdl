@@ -48,9 +48,6 @@ proc init {cellpath otherInfo} {
      DEV_PACKAGE \
      FPGA_VOLTAGE"
 
-  set ip_path [bd::get_vlnv_dir [get_property VLNV $ip]]
-  source ${ip_path}../scripts/common_bd.tcl
-
   adi_auto_assign_device_spec $cellpath
 }
 
@@ -66,6 +63,39 @@ proc axi_clkgen_get_infer_period {ip param clk_name} {
   if {$clk_freq != {}} {
     set clk_period [expr 1000000000.0 / $clk_freq]
     set_property "CONFIG.$param" [format "%.6f" $clk_period] $ip
+  }
+}
+
+proc adi_auto_assign_device_spec {cellpath} {
+
+  set ip [get_bd_cells $cellpath]
+  set ip_param_list [list_property $ip]
+  set ip_path [bd::get_vlnv_dir [get_property VLNV $ip]]
+
+  set parent_dir "../"
+  for {set x 1} {$x<=4} {incr x} {
+    set linkname ${ip_path}${parent_dir}scripts/adi_xilinx_device_info_enc.tcl
+    if { [file exists $linkname] } {
+      source ${ip_path}${parent_dir}/scripts/adi_xilinx_device_info_enc.tcl
+      break
+    }
+    append parent_dir "../"
+  }
+
+  # Find predefindes auto assignable parameters
+  foreach i $auto_set_param_list {
+    if { [lsearch $ip_param_list "CONFIG.$i"] > 0 } {
+      set val [adi_device_spec $cellpath $i]
+      set_property CONFIG.$i $val $ip
+    }
+  }
+
+  # Find predefindes auto assignable/overwritable parameters
+  foreach i $auto_set_param_list_overwritable {
+    if { [lsearch $ip_param_list "CONFIG.$i"] > 0 } {
+      set val [adi_device_spec $cellpath $i]
+      set_property CONFIG.$i $val $ip
+    }
   }
 }
 
