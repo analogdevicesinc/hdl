@@ -6,7 +6,6 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 adi_ip_create axi_adxcvr
 adi_ip_files axi_adxcvr [list \
   "$ad_hdl_dir/library/common/up_axi.v" \
-  "$ad_hdl_dir/library/scripts/common_bd.tcl" \
   "$ad_hdl_dir/library/scripts/adi_xilinx_device_info_enc.tcl" \
   "axi_adxcvr_es.v" \
   "axi_adxcvr_up.v" \
