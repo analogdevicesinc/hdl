@@ -3,16 +3,13 @@
 source ../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
-adi_init_bd_tcl
-
 adi_ip_create axi_ad6676
 adi_ip_files axi_ad6676 [list \
-  "axi_ad6676.v" \
-  "bd/bd.tcl" ]
+  "axi_ad6676.v" ]
 
 adi_ip_properties axi_ad6676
 
-adi_auto_fill_bd_tcl
+adi_init_bd_tcl
 adi_ip_bd axi_ad6676 "bd/bd.tcl"
 
 adi_ip_add_core_dependencies { \
