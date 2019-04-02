@@ -318,28 +318,16 @@ proc adi_ip_properties {ip_name} {
 # - axi_clkgen
 proc adi_init_bd_tcl {} {
 
-  if { [file exists bd] } {
-    file delete -force bd
-  }
-  file mkdir bd
-  set bd_tcl [open "bd/bd.tcl" w]
-  puts $bd_tcl ""
-  close $bd_tcl
-
-  set local_mk [open "temporary_case_dependencies.mk" w]
-  seek $local_mk 0 start
-  puts $local_mk "CLEAN_TARGET += bd"
-  puts $local_mk "CLEAN_TARGET += temporary_case_dependencies.mk"
-  close $local_mk
-}
-
-proc adi_auto_fill_bd_tcl {} {
-
   global auto_set_param_list
   global auto_set_param_list_overwritable
   set cc [ipx::current_core]
 
-  set bd_tcl [open "bd/bd.tcl" r+ ]
+  if { [file exists bd] } {
+    file delete -force bd
+  }
+  file mkdir bd
+
+  set bd_tcl [open "bd/bd.tcl" w]
 
   puts $bd_tcl "# SCRIPT AUTO-GENERATED AT BUILD, DO NOT MODIFY!"
   puts $bd_tcl "proc init {cellpath otherInfo} {"
@@ -406,6 +394,15 @@ proc adi_auto_fill_bd_tcl {} {
   puts $bd_tcl "}"
   puts $bd_tcl ""
   close $bd_tcl
+
+  set proj_fileset [get_filesets sources_1]
+  add_files -norecurse -scan_for_includes -fileset $proj_fileset "bd/bd.tcl"
+
+  set local_mk [open "temporary_case_dependencies.mk" w]
+  seek $local_mk 0 start
+  puts $local_mk "CLEAN_TARGET += bd"
+  puts $local_mk "CLEAN_TARGET += temporary_case_dependencies.mk"
+  close $local_mk
 }
 
 proc adi_add_auto_fpga_spec_params {} {

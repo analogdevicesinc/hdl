@@ -3,8 +3,6 @@
 source ../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
-adi_init_bd_tcl
-
 adi_ip_create axi_ad5766
 adi_ip_files axi_ad5766 [list \
     "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
@@ -15,12 +13,11 @@ adi_ip_files axi_ad5766 [list \
     "$ad_hdl_dir/library/common/up_axi.v" \
     "$ad_hdl_dir/library/common/util_pulse_gen.v" \
     "up_ad5766_sequencer.v" \
-    "axi_ad5766.v" \
-    "bd/bd.tcl" ]
+    "axi_ad5766.v" ]
 
 adi_ip_properties axi_ad5766
 
-adi_auto_fill_bd_tcl
+adi_init_bd_tcl
 adi_ip_bd axi_ad5766 "bd/bd.tcl"
 
 adi_ip_add_core_dependencies { \

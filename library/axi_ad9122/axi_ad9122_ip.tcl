@@ -3,8 +3,6 @@
 source ../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
-adi_init_bd_tcl
-
 adi_ip_create axi_ad9122
 adi_ip_files axi_ad9122 [list \
   "$ad_hdl_dir/library/xilinx/common/ad_mul.v" \
@@ -32,12 +30,11 @@ adi_ip_files axi_ad9122 [list \
   "axi_ad9122_core.v" \
   "axi_ad9122_if.v" \
   "axi_ad9122_constr.xdc" \
-  "axi_ad9122.v" \
-  "bd/bd.tcl" ]
+  "axi_ad9122.v" ]
 
 adi_ip_properties axi_ad9122
 
-adi_auto_fill_bd_tcl
+adi_init_bd_tcl
 adi_ip_bd axi_ad9122 "bd/bd.tcl"
 
 set_property driver_value 0 [ipx::get_ports *dac_sync_in* -of_objects [ipx::current_core]]

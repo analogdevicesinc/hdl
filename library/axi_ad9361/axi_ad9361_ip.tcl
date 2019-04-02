@@ -3,8 +3,6 @@
 source ../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
-adi_init_bd_tcl
-
 adi_ip_create axi_ad9361
 adi_ip_files axi_ad9361 [list \
   "$ad_hdl_dir/library/common/ad_rst.v" \
@@ -50,13 +48,12 @@ adi_ip_files axi_ad9361 [list \
   "axi_ad9361_tx.v" \
   "axi_ad9361_tdd.v" \
   "axi_ad9361_tdd_if.v" \
-  "axi_ad9361.v" \
-  "bd/bd.tcl"]
+  "axi_ad9361.v" ]
 
 adi_ip_properties axi_ad9361
 adi_ip_ttcl axi_ad9361 "$ad_hdl_dir/library/common/ad_pps_receiver_constr.ttcl"
 
-adi_auto_fill_bd_tcl
+adi_init_bd_tcl
 adi_ip_bd axi_ad9361 "bd/bd.tcl"
 
 set_property driver_value 0 [ipx::get_ports *rx_clk_in* -of_objects [ipx::current_core]]
