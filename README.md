@@ -19,7 +19,7 @@ Please make sure that you have the [required](https://github.com/analogdevicesin
 
 ### How to build a project
 
-For building a projects, you have to use the [GNU Make tool](https://www.gnu.org/software/make/). If you're a 
+For building a project, you have to use the [GNU Make tool](https://www.gnu.org/software/make/). If you're a 
 Windows user please checkout [this page](https://wiki.analog.com/resources/fpga/docs/build#windows_environment_setup), to see how you can install this tool.
 
 To build a project, checkout the [latest release](https://github.com/analogdevicesinc/hdl/releases), after that just **cd** to the 
