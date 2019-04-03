@@ -1,7 +1,9 @@
 
 # HDL Reference Designs
 
-[Analog Devices Inc.](http://www.analog.com/en/index.html) HDL libraries and projects.
+[Analog Devices Inc.](http://www.analog.com/en/index.html) HDL libraries and projects for various reference design and prototyping systems.
+This repository contains HDL code (Verilog or VHDL) and the required Tcl scripts to create and build a specific FPGA 
+example design using Xilinx and/or Intel tool chain.
 
 ## Support
 
@@ -27,7 +29,7 @@ Please make sure that you have the [required](https://github.com/analogdevicesin
 
 ### How to build a project
 
-For building a project, you have to use the [GNU Make tool](https://www.gnu.org/software/make/). If you're a 
+For building a project (generate a bitstream), you have to use the [GNU Make tool](https://www.gnu.org/software/make/). If you're a 
 Windows user please checkout [this page](https://wiki.analog.com/resources/fpga/docs/build#windows_environment_setup), to see how you can install this tool.
 
 To build a project, checkout the [latest release](https://github.com/analogdevicesinc/hdl/releases), after that just **cd** to the 
