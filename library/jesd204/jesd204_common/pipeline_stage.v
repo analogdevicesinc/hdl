@@ -50,13 +50,21 @@ module pipeline_stage #(
 ) (
   input clk,
   input [WIDTH-1:0] in,
-  output reg [WIDTH-1:0] out
+  output [WIDTH-1:0] out
 );
 
-generate if (REGISTERED == 1) begin
-  always @(posedge clk) out <= in;
+generate if (REGISTERED == 0) begin
+
+  assign out = in;
+
 end else begin
-  always @(*) out <= in;
+
+  (* shreg_extract = "no" *)  reg [REGISTERED*WIDTH-1:0] in_dly;
+
+  always @(posedge clk) in_dly <= {in_dly,in};
+
+  assign out = in_dly[REGISTERED*WIDTH-1 -: WIDTH];
+
 end endgenerate
 
 endmodule

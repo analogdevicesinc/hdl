@@ -46,7 +46,8 @@
 
 module jesd204_rx #(
   parameter NUM_LANES = 1,
-  parameter NUM_LINKS = 1
+  parameter NUM_LINKS = 1,
+  parameter NUM_INPUT_PIPELINE = 1
 ) (
   input clk,
   input reset,
@@ -183,7 +184,7 @@ end
 
 pipeline_stage #(
   .WIDTH(3 * CW + DW),
-  .REGISTERED(1)
+  .REGISTERED(NUM_INPUT_PIPELINE)
 ) i_input_pipeline_stage (
   .clk(clk),
   .in({
