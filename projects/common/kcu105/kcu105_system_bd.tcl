@@ -231,21 +231,12 @@ ad_cpu_interconnect 0x44A70000 axi_spi
 
 # interconnect - memory
 
-#ad_connect sys_mem_resetn axi_ddr_interconnect/ARESETN
-#ad_connect sys_mem_resetn axi_ddr_interconnect/M00_ARESETN
-
 ad_mem_hp0_interconnect sys_mem_clk axi_ddr_cntrl/C0_DDR4_S_AXI
 ad_mem_hp0_interconnect sys_cpu_clk sys_mb/M_AXI_DC
 ad_mem_hp0_interconnect sys_cpu_clk sys_mb/M_AXI_IC
 ad_mem_hp0_interconnect sys_cpu_clk axi_ethernet_dma/M_AXI_SG
 ad_mem_hp0_interconnect sys_cpu_clk axi_ethernet_dma/M_AXI_MM2S
 ad_mem_hp0_interconnect sys_cpu_clk axi_ethernet_dma/M_AXI_S2MM
-
-ad_disconnect  sys_mem_clk axi_mem_interconnect/ACLK
-ad_disconnect  sys_mem_resetn axi_mem_interconnect/ARESETN
-
-ad_connect  sys_cpu_clk axi_mem_interconnect/ACLK
-ad_connect  sys_cpu_resetn axi_mem_interconnect/ARESETN
 
 create_bd_addr_seg -range 0x20000 -offset 0x0 [get_bd_addr_spaces sys_mb/Data] \
   [get_bd_addr_segs sys_dlmb_cntlr/SLMB/Mem] SEG_dlmb_cntlr
