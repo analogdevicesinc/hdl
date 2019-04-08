@@ -154,8 +154,6 @@ module up_axi #(
           up_wsel <= 1'b0;
         end
         up_wreq_int <= 1'b0;
-        up_waddr_int <= up_waddr_int;
-        up_wdata_int <= up_wdata_int;
       end else begin
         up_wsel <= up_axi_awvalid & up_axi_wvalid;
         up_wreq_int <= up_axi_awvalid & up_axi_wvalid;
@@ -221,7 +219,6 @@ module up_axi #(
           up_rsel <= 1'b0;
         end
         up_rreq_int <= 1'b0;
-        up_raddr_int <= up_raddr_int;
       end else begin
         up_rsel <= up_axi_arvalid;
         up_rreq_int <= up_axi_arvalid;
