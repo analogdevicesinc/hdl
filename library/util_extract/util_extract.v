@@ -56,9 +56,6 @@ module util_extract #(
   genvar  n;
 
   reg trigger_d1;
-  reg trigger_d2;
-  reg trigger_d3;
-  reg trigger_d4;
 
   wire [15:0] trigger; // 16 maximum channels
 
@@ -77,9 +74,7 @@ module util_extract #(
     valid_out  <= data_valid;
     if (data_valid == 1'b1) begin
       trigger_d1  <= |trigger;
-      trigger_d2  <= trigger_d1;
-      trigger_d3  <= trigger_d2;
-      trigger_out <= trigger_d3;
+      trigger_out <= trigger_d1;
     end
   end
 
