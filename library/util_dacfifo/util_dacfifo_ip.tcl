@@ -11,9 +11,13 @@ adi_ip_files util_dacfifo [list \
   "$ad_hdl_dir/library/common/ad_g2b.v" \
   "util_dacfifo.v" \
   "util_dacfifo_bypass.v" \
+  "util_dacfifo_ooc.ttcl" \
   "util_dacfifo_constr.xdc"]
 
+
 adi_ip_properties_lite util_dacfifo
+
+adi_ip_ttcl util_dacfifo "util_dacfifo_ooc.ttcl"
 
 ipx::infer_bus_interface dma_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 ipx::infer_bus_interface dma_rst xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]

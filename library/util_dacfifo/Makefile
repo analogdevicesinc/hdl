@@ -13,6 +13,7 @@ GENERIC_DEPS += util_dacfifo.v
 GENERIC_DEPS += util_dacfifo_bypass.v
 
 XILINX_DEPS += util_dacfifo_constr.xdc
+XILINX_DEPS += util_dacfifo_ooc.ttcl
 XILINX_DEPS += util_dacfifo_ip.tcl
 
 ALTERA_DEPS += util_dacfifo_constr.sdc
