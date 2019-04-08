@@ -47,7 +47,7 @@ ad_ip_parameter bram_la CONFIG.Algorithm {Low_Power}
 ad_ip_parameter bram_la CONFIG.Use_Byte_Write_Enable {false}
 ad_ip_parameter bram_la CONFIG.Operating_Mode_A {NO_CHANGE}
 ad_ip_parameter bram_la CONFIG.Register_PortB_Output_of_Memory_Primitives {true}
-ad_ip_parameter bram_la CONFIG.Use_RSTA_Pin {false} 
+ad_ip_parameter bram_la CONFIG.Use_RSTA_Pin {false}
 ad_ip_parameter bram_la CONFIG.Port_B_Clock {100}
 ad_ip_parameter bram_la CONFIG.Port_B_Enable_Rate {100}
 ad_ip_parameter bram_la CONFIG.Write_Width_A {16}
@@ -92,7 +92,7 @@ ad_ip_parameter bram_adc CONFIG.Enable_32bit_Address false
 ad_ip_parameter bram_adc CONFIG.Use_Byte_Write_Enable false
 ad_ip_parameter bram_adc CONFIG.Operating_Mode_A {NO_CHANGE}
 ad_ip_parameter bram_adc CONFIG.Register_PortB_Output_of_Memory_Primitives true
-ad_ip_parameter bram_adc CONFIG.Use_RSTA_Pin {false} 
+ad_ip_parameter bram_adc CONFIG.Use_RSTA_Pin {false}
 ad_ip_parameter bram_adc CONFIG.Port_B_Clock 100
 ad_ip_parameter bram_adc CONFIG.Port_B_Enable_Rate 100
 ad_ip_parameter bram_adc CONFIG.Write_Width_A 32
@@ -300,8 +300,9 @@ ad_connect sys_cpu_clk pattern_generator_dmac/m_src_axi_aclk
 ad_connect logic_analyzer_dmac/m_dest_axi axi_rd_wr_combiner_logic/s_wr_axi
 ad_connect pattern_generator_dmac/m_src_axi axi_rd_wr_combiner_logic/s_rd_axi
 
-ad_mem_hp1_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1
-ad_mem_hp1_interconnect sys_cpu_clk axi_rd_wr_combiner_logic/m_axi
+ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP1 {1}
+ad_connect sys_cpu_clk sys_ps7/S_AXI_HP1_ACLK
+ad_connect axi_rd_wr_combiner_logic/m_axi sys_ps7/S_AXI_HP1
 
 # Converter DMA
 ad_connect converter_dma_clk axi_rd_wr_combiner_converter/clk
@@ -311,12 +312,19 @@ ad_connect converter_dma_clk ad9963_dac_dmac_a/m_src_axi_aclk
 ad_connect ad9963_adc_dmac/m_dest_axi axi_rd_wr_combiner_converter/s_wr_axi
 ad_connect ad9963_dac_dmac_a/m_src_axi axi_rd_wr_combiner_converter/s_rd_axi
 
-ad_mem_hp2_interconnect converter_dma_clk sys_ps7/S_AXI_HP2
-ad_mem_hp2_interconnect converter_dma_clk axi_rd_wr_combiner_converter/m_axi
+ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP2 {1}
+ad_connect converter_dma_clk sys_ps7/S_AXI_HP2_ACLK
+ad_connect axi_rd_wr_combiner_converter/m_axi sys_ps7/S_AXI_HP2
 
 # Only 16-bit we can run at a slower clock
-ad_mem_hp3_interconnect sys_cpu_clk sys_ps7/S_AXI_HP3
-ad_mem_hp3_interconnect sys_cpu_clk ad9963_dac_dmac_b/m_src_axi
+ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP3 {1}
+
+ad_connect sys_cpu_clk sys_ps7/S_AXI_HP3_ACLK
+ad_connect sys_cpu_clk ad9963_dac_dmac_b/m_src_axi_aclk
+ad_connect ad9963_dac_dmac_b/m_src_axi sys_ps7/S_AXI_HP3
+
+create_bd_addr_seg -range 0x20000000 -offset 0x00000000 [get_bd_addr_spaces ad9963_dac_dmac_b/m_src_axi] \
+                    [get_bd_addr_segs sys_ps7/S_AXI_HP3/HP3_DDR_LOWOCM] SEG_sys_ps7_HP3_DDR_LOWOCM
 
 # Map rd-wr combiner
 assign_bd_address [get_bd_addr_segs { \
