@@ -57,6 +57,9 @@ module util_dec256sinc24b (
   reg         word_en = 1'b0;
   reg         enable = 1'b0;
 
+  wire [36:0] acc1_s;
+  wire [36:0] acc2_s;
+  wire [36:0] acc3_s;
   wire [36:0] diff1_s;
   wire [36:0] diff2_s;
   wire [36:0] diff3_s;
@@ -82,11 +85,14 @@ module util_dec256sinc24b (
       acc3 <= 37'd0;
     end else begin
       /* perform accumulation process */
-      acc1 <= acc1 + data_int;
-      acc2 <= acc2 + acc1;
-      acc3 <= acc3 + acc2;
+      acc1 <= acc1_s;
+      acc2 <= acc2_s;
+      acc3 <= acc3_s;
     end
   end
+  assign acc1_s = acc1 + data_int;
+  assign acc2_s = acc2 + acc1;
+  assign acc3_s = acc3 + acc2;
 
   /* decimation stage (MCLKOUT/WORD_CLK) */
 
@@ -118,16 +124,16 @@ module util_dec256sinc24b (
 
   always @(posedge clk) begin
     if (reset == 1'b1) begin
-      acc3_d <= 37'd0;
       diff1_d <= 37'd0;
       diff2_d <= 37'd0;
+      acc3_d <= 37'b0;
     end else if (word_en == 1'b1) begin
-      acc3_d  <= acc3;
+      acc3_d <= acc3;
       diff1_d <= diff1_s;
       diff2_d <= diff2_s;
     end
   end
-  assign diff1_s = acc3 - acc3_d;
+  assign diff1_s = acc3_s - acc3;
   assign diff2_s = diff1_s - diff1_d;
   assign diff3_s = diff2_s - diff2_d;
 
