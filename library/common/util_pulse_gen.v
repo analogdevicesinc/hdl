@@ -96,7 +96,7 @@ module util_pulse_gen #(
   // generate pulse with a specified width
 
   always @ (posedge clk) begin
-    if (end_of_period_s == 1'b1) begin
+    if ((end_of_period_s == 1'b1) || (rstn == 1'b0)) begin
       pulse <= 1'b0;
     end else if (pulse_period_cnt == pulse_width_d) begin
       pulse <= 1'b1;
