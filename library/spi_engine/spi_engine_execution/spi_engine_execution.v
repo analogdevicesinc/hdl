@@ -68,7 +68,7 @@ module spi_engine_execution #(
   output [7:0] sync,
 
   output reg sclk,
-  output sdo,
+  output reg sdo,
   output reg sdo_t,
   input sdi,
   input sdi_1,
@@ -96,6 +96,10 @@ localparam REG_WORD_LENGTH = 2'b10;
 
 localparam BIT_COUNTER_WIDTH = DATA_WIDTH > 16 ? 5 :
                                DATA_WIDTH > 8  ? 4 : 3;
+
+reg sclk_int = 1'b0;
+wire sdo_int_s;
+reg sdo_t_int = 1'b0;
 
 reg idle;
 
@@ -352,9 +356,9 @@ end
 always @(posedge clk) begin
   if (transfer_active == 1'b1 || wait_for_io == 1'b1)
   begin
-    sdo_t <= ~sdo_enabled;
+    sdo_t_int <= ~sdo_enabled;
   end else begin
-    sdo_t <= 1'b1;
+    sdo_t_int <= 1'b1;
   end
 end
 
@@ -371,7 +375,7 @@ always @(posedge clk) begin
   end
 end
 
-assign sdo = data_sdo_shift[DATA_WIDTH-1];
+assign sdo_int_s = data_sdo_shift[DATA_WIDTH-1];
 
 // In case of an interface with high clock rate (SCLK > 50MHz), one of the
 // next SCLK edge must be used to flop the SDI line, to compensate the overall
@@ -448,10 +452,17 @@ end
 
 always @(posedge clk) begin
   if (transfer_active == 1'b1) begin
-    sclk <= cpol ^ cpha ^ ntx_rx;
+    sclk_int <= cpol ^ cpha ^ ntx_rx;
   end else begin
-    sclk <= cpol;
+    sclk_int <= cpol;
   end
+end
+
+// Additional register stage to imrpove timing
+always @(posedge clk) begin
+  sclk <= sclk_int;
+  sdo <= sdo_int_s;
+  sdo_t <= sdo_t_int;
 end
 
 endmodule
