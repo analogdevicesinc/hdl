@@ -139,20 +139,20 @@ sync_bits # (
     .NUM_OF_BITS(1),
     .ASYNC_CLK(1)
 ) i_sync_enable (
-    .in(ctrl_do_enable),
+    .in_bits(ctrl_do_enable),
     .out_clk(spi_clk),
     .out_resetn(1'b1),
-    .out(spi_enable)
+    .out_bits(spi_enable)
 );
 
 sync_bits # (
     .NUM_OF_BITS(1),
     .ASYNC_CLK(1)
 ) i_sync_enabled (
-    .in(spi_enabled),
+    .in_bits(spi_enabled),
     .out_clk(ctrl_clk),
     .out_resetn(1'b1),
-    .out(ctrl_is_enabled)
+    .out_bits(ctrl_is_enabled)
 );
 
 end else begin
@@ -167,10 +167,10 @@ sync_bits #(
   .NUM_OF_BITS(1),
   .ASYNC_CLK(ASYNC_TRIG)
 ) i_sync_trigger (
-  .in(trigger),
+  .in_bits(trigger),
   .out_clk(spi_clk),
   .out_resetn(1'b1),
-  .out(trigger_s)
+  .out_bits(trigger_s)
 );
 
 always @(posedge spi_clk) begin
