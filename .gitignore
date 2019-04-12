@@ -1,3 +1,4 @@
+ipcache
 *.ip_user_files
 *.cache
 *.data

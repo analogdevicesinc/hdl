@@ -117,6 +117,14 @@ proc adi_project_xilinx {project_name {mode 0}} {
     lappend lib_dirs $ad_phdl_dir/library
   }
 
+  # Set a common IP cache for all projects
+  if {$ADI_USE_OOC_SYNTHESIS == 1} {
+    if {[file exists $ad_hdl_dir/ipcache] == 0} {
+      file mkdir $ad_hdl_dir/ipcache
+    }
+    config_ip_cache -import_from_project -use_cache_location $ad_hdl_dir/ipcache
+  }
+
   set_property ip_repo_paths $lib_dirs [current_fileset]
   update_ip_catalog
 
