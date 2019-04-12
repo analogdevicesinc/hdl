@@ -12,6 +12,7 @@ GENERIC_DEPS += jesd204_up_rx.v
 GENERIC_DEPS += jesd204_up_rx_lane.v
 
 XILINX_DEPS += axi_jesd204_rx_constr.xdc
+XILINX_DEPS += axi_jesd204_rx_ooc.ttcl
 XILINX_DEPS += axi_jesd204_rx_ip.tcl
 
 XILINX_DEPS += ../../jesd204/interfaces/jesd204_rx_cfg.xml
