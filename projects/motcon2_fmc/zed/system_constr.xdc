@@ -109,35 +109,6 @@ create_clock -period 8.000 -name rgmii_rxc2 [get_ports eth2_rgmii_rxc]
 
 create_clock -name mdio_mdc -period 400 [get_pins i_system_wrapper/system_i/sys_ps7/inst/PS7_i/EMIOENET0MDIOMDC]
 
-create_generated_clock -name pwm_ctrl_1 -source [get_pins i_system_wrapper/system_i/controller_m1/inst/ref_clk]  \
--divide_by 2 [get_pins i_system_wrapper/system_i/controller_m1/inst/pwm_gen_clk_reg/Q]
-create_generated_clock -name pwm_ctrl_2 -source [get_pins i_system_wrapper/system_i/controller_m2/inst/ref_clk]  \
--divide_by 2 [get_pins i_system_wrapper/system_i/controller_m2/inst/pwm_gen_clk_reg/Q]
-
-create_generated_clock -name cm1_ia -source [get_pins i_system_wrapper/system_i/current_monitor_m1/inst/adc_clk_i]  \
--divide_by 256 [get_pins i_system_wrapper/system_i/current_monitor_m1/inst/ia_if/filter/word_count_reg[7]/Q]
-create_generated_clock -name cm1_ib -source [get_pins i_system_wrapper/system_i/current_monitor_m1/inst/adc_clk_i]  \
--divide_by 256 [get_pins i_system_wrapper/system_i/current_monitor_m1/inst/ib_if/filter/word_count_reg[7]/Q]
-create_generated_clock -name cm1_vbus -source [get_pins i_system_wrapper/system_i/current_monitor_m1/inst/adc_clk_i]  \
--divide_by 256 [get_pins i_system_wrapper/system_i/current_monitor_m1/inst/vbus_if/filter/word_count_reg[7]/Q]
-
-create_generated_clock -name cm2_ia -source [get_pins i_system_wrapper/system_i/current_monitor_m2/inst/adc_clk_i]  \
--divide_by 256 [get_pins i_system_wrapper/system_i/current_monitor_m2/inst/ia_if/filter/word_count_reg[7]/Q]
-create_generated_clock -name cm2_ib -source [get_pins i_system_wrapper/system_i/current_monitor_m2/inst/adc_clk_i]  \
--divide_by 256 [get_pins i_system_wrapper/system_i/current_monitor_m2/inst/ib_if/filter/word_count_reg[7]/Q]
-create_generated_clock -name cm2_vbus -source [get_pins i_system_wrapper/system_i/current_monitor_m2/inst/adc_clk_i]  \
--divide_by 256 [get_pins i_system_wrapper/system_i/current_monitor_m2/inst/vbus_if/filter/word_count_reg[7]/Q]
-
-set_clock_groups -asynchronous \
-    -group [get_clocks {cm1_ia cm1_ib cm1_vbus }]
-
-set_clock_groups -asynchronous \
-    -group [get_clocks {cm2_ia cm2_ib cm2_vbus }]
-
-set_clock_groups -asynchronous \
-        -group [get_clocks {pwm_ctrl_1 }] \
-        -group [get_clocks {pwm_ctrl_2 }]
-
 # Ethernet 1
 #IDELAY
 set_property IDELAY_VALUE 16 [get_cells */*/gmii_to_rgmii_eth1/inst/*delay_rgmii_rx_ctl]

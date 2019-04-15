@@ -16,6 +16,7 @@ GENERIC_DEPS += ad7401.v
 GENERIC_DEPS += axi_mc_current_monitor.v
 GENERIC_DEPS += dec256sinc24b.v
 
+XILINX_DEPS += axi_mc_current_monitor_constr.xdc
 XILINX_DEPS += axi_mc_current_monitor_ip.tcl
 
 include ../scripts/library.mk

@@ -11,6 +11,7 @@ GENERIC_DEPS += control_registers.v
 GENERIC_DEPS += delay.v
 GENERIC_DEPS += motor_driver.v
 
+XILINX_DEPS += axi_mc_controller_constr.xdc
 XILINX_DEPS += axi_mc_controller_ip.tcl
 
 include ../scripts/library.mk
