@@ -223,6 +223,8 @@ for {set i 0} {$i < 4} {incr i} {
   add_connection sys_clk.clk_reset avl_adxcfg_${i}.rcfg_reset_n
   add_connection avl_adxcfg_${i}.rcfg_m0 adrv9009_tx_jesd204.phy_reconfig_${i}
 
+  set_instance_parameter_value avl_adxcfg_${i} {ADDRESS_WIDTH} $xcvr_reconfig_addr_width
+
   if {$i < 2} {
     add_connection avl_adxcfg_${i}.rcfg_m1 adrv9009_rx_jesd204.phy_reconfig_${i}
   } else {
