@@ -260,3 +260,7 @@ ad_cpu_interrupt 5 sys_gpio_in.irq
 ad_cpu_interrupt 6 sys_gpio_bd.irq
 ad_cpu_interrupt 7 sys_spi.irq
 
+# architecture specific global variables
+
+set xcvr_reconfig_addr_width 10
+
