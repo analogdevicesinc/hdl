@@ -63,6 +63,7 @@ set_module_property INTERNAL false
 
 # parameters
 
+ad_ip_parameter DEVICE STRING "Stratix 10" false
 ad_ip_parameter ID NATURAL 0 false
 ad_ip_parameter SOFT_PCS BOOLEAN false false
 ad_ip_parameter TX_OR_RX_N BOOLEAN false false
@@ -78,6 +79,7 @@ proc jesd204_phy_composition_callback {} {
 
   global version
 
+  set device [get_parameter_value "DEVICE"]
   set soft_pcs [get_parameter_value "SOFT_PCS"]
   set tx [get_parameter_value "TX_OR_RX_N"]
   set lane_rate [get_parameter_value "LANE_RATE"]
@@ -91,6 +93,14 @@ proc jesd204_phy_composition_callback {} {
 
   set link_clk_frequency [expr $lane_rate / 40]
 
+  if {[string equal $device "Arria 10"]} {
+    set device_type 1
+  } elseif {[string equal $device "Stratix 10"]} {
+    set device_type 2
+  } else {
+    set device_type 0
+  }
+
   add_instance link_clock clock_source $version
   set_instance_parameter_value link_clock {clockFrequency} [expr $link_clk_frequency*1000000]
   add_interface link_clk clock sink
@@ -98,9 +108,23 @@ proc jesd204_phy_composition_callback {} {
   add_interface link_reset reset sink
   set_interface_property link_reset EXPORT_OF link_clock.clk_in_reset
 
-  add_instance native_phy altera_xcvr_native_a10 19.1
-  set_instance_property native_phy SUPPRESS_ALL_WARNINGS true
-  set_instance_property native_phy SUPPRESS_ALL_INFO_MESSAGES true
+  ## Arria10
+  if {$device_type == 1} {
+    add_instance native_phy altera_xcvr_native_a10 19.1
+    set_instance_parameter_value native_phy {enh_txfifo_mode} "Phase compensation"
+    set_instance_parameter_value native_phy {enh_rxfifo_mode} "Phase compensation"
+    set_instance_property native_phy SUPPRESS_ALL_WARNINGS true
+    set_instance_property native_phy SUPPRESS_ALL_INFO_MESSAGES true
+  ## Stratix 10
+  } elseif {$device_type == 2} {
+    add_instance native_phy altera_xcvr_native_s10_htile $version
+    set_instance_parameter_value native_phy {tx_fifo_mode} "Phase compensation"
+    set_instance_parameter_value native_phy {rx_fifo_mode} "Phase compensation"
+  ## Unsupported device
+  } else {
+    send_message error "Only Arria 10 and Stratix 10 are supported."
+  }
+
   if {$soft_pcs} {
     set_instance_parameter_value native_phy {protocol_mode} "basic_enh"
   } else {
@@ -132,14 +156,12 @@ proc jesd204_phy_composition_callback {} {
         set_instance_parameter_value native_phy {bonded_mode} "not_bonded"
     }
     set_instance_parameter_value native_phy {enable_port_tx_pma_elecidle} 0
-    set_instance_parameter_value native_phy {enh_txfifo_mode} "Phase compensation"
   } else {
     set_instance_parameter_value native_phy {duplex_mode} "rx"
     set_instance_parameter_value native_phy {set_cdr_refclk_freq} $refclk_frequency
     set_instance_parameter_value native_phy {enable_port_rx_is_lockedtodata} 1
     set_instance_parameter_value native_phy {enable_port_rx_is_lockedtoref} 0
     set_instance_parameter_value native_phy {enable_ports_rx_manual_cdr_mode} 0
-    set_instance_parameter_value native_phy {enh_rxfifo_mode} "Phase compensation"
   }
 
   set_instance_parameter_value native_phy {channels} $num_of_lanes
@@ -159,6 +181,7 @@ proc jesd204_phy_composition_callback {} {
   set_instance_parameter_value native_phy {set_prbs_soft_logic_enable} 0
 
   add_instance phy_glue jesd204_phy_glue 1.0
+  set_instance_parameter_value phy_glue DEVICE $device
   set_instance_parameter_value phy_glue TX_OR_RX_N $tx
   set_instance_parameter_value phy_glue SOFT_PCS $soft_pcs
   set_instance_parameter_value phy_glue NUM_OF_LANES $num_of_lanes
@@ -200,7 +223,7 @@ proc jesd204_phy_composition_callback {} {
       add_connection link_clock.clk phy_glue.tx_coreclkin
     }
 
-    if {$soft_pcs} {
+    if { $soft_pcs == true && $device_type == 1 }  {
       add_connection phy_glue.phy_tx_enh_data_valid native_phy.tx_enh_data_valid
     }
 
@@ -218,6 +241,15 @@ proc jesd204_phy_composition_callback {} {
       add_connection phy_glue.phy_tx_datak native_phy.tx_datak
       add_connection phy_glue.phy_tx_polinv native_phy.tx_polinv
     }
+
+    ## Startix 10
+    if {$device_type == 2} {
+      foreach x {analogreset_stat digitalreset_stat} {
+        add_interface ${x} conduit end
+        set_interface_property ${x} EXPORT_OF native_phy.tx_${x}
+      }
+    }
+
   } else {
 
     add_interface ref_clk clock sink
@@ -245,6 +277,15 @@ proc jesd204_phy_composition_callback {} {
       }
       add_connection phy_glue.phy_rx_polinv native_phy.rx_polinv
     }
+
+    ## Startix 10
+    if {$device_type == 2} {
+      foreach x {analogreset_stat digitalreset_stat} {
+        add_interface ${x} conduit end
+        set_interface_property ${x} EXPORT_OF native_phy.rx_${x}
+      }
+    }
+
   }
 
   for {set i 0} {$i < $num_of_lanes} {incr i} {
