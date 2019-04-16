@@ -168,6 +168,7 @@ add_connection sys_dma_clk.clk axi_ad9680_dma.m_dest_axi_clock
 
 for {set i 0} {$i < 4} {incr i} {
   add_instance avl_adxcfg_${i} avl_adxcfg
+  set_instance_parameter_value avl_adxcfg_${i} {ADDRESS_WIDTH} $xcvr_reconfig_addr_width
   add_connection sys_clk.clk avl_adxcfg_${i}.rcfg_clk
   add_connection sys_clk.clk_reset avl_adxcfg_${i}.rcfg_reset_n
   add_connection avl_adxcfg_${i}.rcfg_m0 ad9144_jesd204.phy_reconfig_${i}

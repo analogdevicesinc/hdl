@@ -452,4 +452,7 @@ ad_cpu_interrupt 7 sys_spi.irq
 add_interface sys_flash conduit end
 set_interface_property sys_flash EXPORT_OF sys_flash_bridge.out
 
+# architecture specific global variables
+
+set xcvr_reconfig_addr_width 10
 
