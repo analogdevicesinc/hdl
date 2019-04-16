@@ -336,7 +336,6 @@ ad_connect sys_dma_clk dma_clk_wiz/clk_out1
 ad_connect sys_dma_rstgen/ext_reset_in sys_rstgen/peripheral_reset
 ad_connect sys_dma_clk sys_dma_rstgen/slowest_sync_clk
 ad_connect sys_dma_resetn sys_dma_rstgen/peripheral_aresetn
-ad_connect axi_adrv9009_som_rx_dma/m_dest_axi_aresetn sys_dma_rstgen/peripheral_aresetn
 ad_connect ddr4_0/c0_ddr4_aresetn ddr4_0_rstgen/peripheral_aresetn
 
 # interconnect (cpu)
@@ -369,6 +368,7 @@ ad_mem_hp2_interconnect sys_cpu_clk axi_adrv9009_som_rx_dma/m_dest_axi
 ad_mem_hp3_interconnect sys_dma_clk sys_ps8/S_AXI_HP3
 ad_mem_hp3_interconnect sys_dma_clk axi_adrv9009_som_obs_dma/m_dest_axi
 
+ad_connect sys_cpu_resetn axi_adrv9009_som_rx_dma/m_dest_axi_aresetn
 ad_connect sys_dma_resetn axi_adrv9009_som_obs_dma/m_dest_axi_aresetn
 
 # interrupts
