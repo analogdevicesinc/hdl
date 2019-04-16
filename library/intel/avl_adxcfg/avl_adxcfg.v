@@ -35,7 +35,9 @@
 
 `timescale 1ns/1ps
 
-module avl_adxcfg (
+module avl_adxcfg #(
+
+  parameter ADDRESS_WIDTH = 10) (
 
   // reconfig sharing
 
@@ -44,28 +46,28 @@ module avl_adxcfg (
 
   input           rcfg_in_read_0,
   input           rcfg_in_write_0,
-  input   [ 9:0]  rcfg_in_address_0,
+  input   [ADDRESS_WIDTH-1:0]  rcfg_in_address_0,
   input   [31:0]  rcfg_in_writedata_0,
   output  [31:0]  rcfg_in_readdata_0,
   output          rcfg_in_waitrequest_0,
 
   input           rcfg_in_read_1,
   input           rcfg_in_write_1,
-  input   [ 9:0]  rcfg_in_address_1,
+  input   [ADDRESS_WIDTH-1:0]  rcfg_in_address_1,
   input   [31:0]  rcfg_in_writedata_1,
   output  [31:0]  rcfg_in_readdata_1,
   output          rcfg_in_waitrequest_1,
 
   output          rcfg_out_read_0,
   output          rcfg_out_write_0,
-  output  [ 9:0]  rcfg_out_address_0,
+  output  [ADDRESS_WIDTH-1:0]  rcfg_out_address_0,
   output  [31:0]  rcfg_out_writedata_0,
   input   [31:0]  rcfg_out_readdata_0,
   input           rcfg_out_waitrequest_0,
 
   output          rcfg_out_read_1,
   output          rcfg_out_write_1,
-  output  [ 9:0]  rcfg_out_address_1,
+  output  [ADDRESS_WIDTH-1:0]  rcfg_out_address_1,
   output  [31:0]  rcfg_out_writedata_1,
   input   [31:0]  rcfg_out_readdata_1,
   input           rcfg_out_waitrequest_1);
@@ -75,7 +77,7 @@ module avl_adxcfg (
   reg     [ 1:0]  rcfg_select = 'd0;
   reg             rcfg_read_int = 'd0;
   reg             rcfg_write_int = 'd0;
-  reg     [ 9:0]  rcfg_address_int = 'd0;
+  reg     [ADDRESS_WIDTH-1:0]  rcfg_address_int = 'd0;
   reg     [31:0]  rcfg_writedata_int = 'd0;
   reg     [31:0]  rcfg_readdata_int = 'd0;
   reg             rcfg_waitrequest_int_0 = 'd1;
@@ -109,7 +111,7 @@ module avl_adxcfg (
       rcfg_select <= 2'd0;
       rcfg_read_int <= 1'd0;
       rcfg_write_int <= 1'd0;
-      rcfg_address_int <= 10'd0;
+      rcfg_address_int <= 'd0;
       rcfg_writedata_int <= 32'd0;
       rcfg_readdata_int <= 32'd0;
       rcfg_waitrequest_int_0 <= 1'b1;
@@ -120,7 +122,7 @@ module avl_adxcfg (
           rcfg_select <= 2'd0;
           rcfg_read_int <= 1'b0;
           rcfg_write_int <= 1'b0;
-          rcfg_address_int <= 10'd0;
+          rcfg_address_int <= 'd0;
           rcfg_writedata_int <= 32'd0;
         end
         rcfg_readdata_int <= rcfg_readdata_s;
@@ -148,7 +150,7 @@ module avl_adxcfg (
         rcfg_select <= 2'd0;
         rcfg_read_int <= 1'd0;
         rcfg_write_int <= 1'd0;
-        rcfg_address_int <= 10'd0;
+        rcfg_address_int <= 'd0;
         rcfg_writedata_int <= 32'd0;
         rcfg_readdata_int <= 32'd0;
         rcfg_waitrequest_int_0 <= 1'b1;
