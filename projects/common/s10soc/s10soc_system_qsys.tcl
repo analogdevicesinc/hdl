@@ -179,6 +179,7 @@ set_instance_parameter_value sys_hps_ddr4_cntrl {PHY_DDR4_USER_REF_CLK_FREQ_MHZ}
 set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_BANK_GROUP_WIDTH} {1}
 set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_ALERT_N_PLACEMENT_ENUM} {DDR4_ALERT_N_PLACEMENT_DATA_LANES}
 set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_ALERT_N_DQS_GROUP} {0}
+set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_DQ_WIDTH} {72}
 set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_READ_DBI} {1}
 set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_TCL} {18}
 set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_WTCL} {16}
@@ -204,6 +205,7 @@ set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_TWTR_L_CYC} {9}
 set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_LRDIMM_VREFDQ_VALUE} {}
 set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_SKIP_CA_LEVEL} {0}
 set_instance_parameter_value sys_hps_ddr4_cntrl {SHORT_QSYS_INTERFACE_NAMES} {1}
+set_instance_parameter_value sys_hps_ddr4_cntrl {CTRL_DDR4_ECC_EN} {1}
 
 add_connection sys_hps_ddr4_cntrl.hps_emif sys_hps.hps_emif
 add_interface sys_hps_ddr conduit end
@@ -297,4 +299,8 @@ ad_cpu_interconnect 0x00000040 sys_spi.spi_control_port
 ad_cpu_interrupt 5 sys_gpio_in.irq
 ad_cpu_interrupt 6 sys_gpio_bd.irq
 ad_cpu_interrupt 7 sys_spi.irq
+
+# architecture specific global variables
+
+set xcvr_reconfig_addr_width 11
 

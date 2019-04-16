@@ -24,25 +24,25 @@ set_instance_assignment	-name	IO_STANDARD	"1.8 V"	    -to fpga_gpio_led[1]
 set_instance_assignment	-name	IO_STANDARD	"1.8 V"	    -to fpga_gpio_led[2]
 set_instance_assignment	-name	IO_STANDARD	"1.8 V"	    -to fpga_gpio_led[3]
 
-set_location_assignment	PIN_B23		                    -to fpga_gpio_dpsw[4]
-set_location_assignment	PIN_C23		                    -to fpga_gpio_dpsw[5]
-set_location_assignment	PIN_E23		                    -to fpga_gpio_dpsw[6]
-set_location_assignment	PIN_E24		                    -to fpga_gpio_dpsw[7]
+set_location_assignment	PIN_B23		                    -to fpga_gpio_dpsw[0]
+set_location_assignment	PIN_C23		                    -to fpga_gpio_dpsw[1]
+set_location_assignment	PIN_E23		                    -to fpga_gpio_dpsw[2]
+set_location_assignment	PIN_E24		                    -to fpga_gpio_dpsw[3]
 
-set_instance_assignment	-name	IO_STANDARD	"1.8 V"	    -to fpga_gpio_dpsw[4]
-set_instance_assignment	-name	IO_STANDARD	"1.8 V"	    -to fpga_gpio_dpsw[5]
-set_instance_assignment	-name	IO_STANDARD	"1.8 V"	    -to fpga_gpio_dpsw[6]
-set_instance_assignment	-name	IO_STANDARD	"1.8 V"	    -to fpga_gpio_dpsw[7]
+set_instance_assignment	-name	IO_STANDARD	"1.8 V"	    -to fpga_gpio_dpsw[0]
+set_instance_assignment	-name	IO_STANDARD	"1.8 V"	    -to fpga_gpio_dpsw[1]
+set_instance_assignment	-name	IO_STANDARD	"1.8 V"	    -to fpga_gpio_dpsw[2]
+set_instance_assignment	-name	IO_STANDARD	"1.8 V"	    -to fpga_gpio_dpsw[3]
 
-set_location_assignment	PIN_A26		                    -to fpga_gpio_btn[8]
-set_location_assignment	PIN_A25		                    -to fpga_gpio_btn[9]
-set_location_assignment	PIN_D23		                    -to fpga_gpio_btn[10]
-set_location_assignment	PIN_D24		                    -to fpga_gpio_btn[11]
+set_location_assignment	PIN_A26		                    -to fpga_gpio_btn[0]
+set_location_assignment	PIN_A25		                    -to fpga_gpio_btn[1]
+set_location_assignment	PIN_D23		                    -to fpga_gpio_btn[2]
+set_location_assignment	PIN_D24		                    -to fpga_gpio_btn[3]
 
-set_instance_assignment	-name IO_STANDARD	"1.8 V"	    -to fpga_gpio_btn[8]
-set_instance_assignment	-name IO_STANDARD	"1.8 V"	    -to fpga_gpio_btn[9]
-set_instance_assignment	-name IO_STANDARD	"1.8 V"	    -to fpga_gpio_btn[10]
-set_instance_assignment	-name IO_STANDARD	"1.8 V"	    -to fpga_gpio_btn[11]
+set_instance_assignment	-name IO_STANDARD	"1.8 V"	    -to fpga_gpio_btn[0]
+set_instance_assignment	-name IO_STANDARD	"1.8 V"	    -to fpga_gpio_btn[1]
+set_instance_assignment	-name IO_STANDARD	"1.8 V"	    -to fpga_gpio_btn[2]
+set_instance_assignment	-name IO_STANDARD	"1.8 V"	    -to fpga_gpio_btn[3]
 
 # hps-emac OOBE daughter card
 
@@ -266,26 +266,26 @@ set_instance_assignment -name CURRENT_STRENGTH "8ma" -to hps_usb_stp
 
 # hps-sdmmc OOBE daughter card
 
-set_location_assignment PIN_A31 -to hps_sdmmc_cclk
+set_location_assignment PIN_A31 -to hps_sdmmc_clk
 set_location_assignment PIN_J30 -to hps_sdmmc_cmd
 set_location_assignment PIN_P30 -to hps_sdmmc_data[0]
 set_location_assignment PIN_H30 -to hps_sdmmc_data[1]
 set_location_assignment PIN_D31 -to hps_sdmmc_data[2]
 set_location_assignment PIN_H32 -to hps_sdmmc_data[3]
 
-set_instance_assignment -name IO_STANDARD "1.8V" -to hps_sdmmc_cclk
+set_instance_assignment -name IO_STANDARD "1.8V" -to hps_sdmmc_clk
 set_instance_assignment -name IO_STANDARD "1.8V" -to hps_sdmmc_cmd
-set_instance_assignment -name IO_STANDARD "1.8V" -to hps_sdmmc_d0
-set_instance_assignment -name IO_STANDARD "1.8V" -to hps_sdmmc_d1
-set_instance_assignment -name IO_STANDARD "1.8V" -to hps_sdmmc_d2
-set_instance_assignment -name IO_STANDARD "1.8V" -to hps_sdmmc_d3
+set_instance_assignment -name IO_STANDARD "1.8V" -to hps_sdmmc_data[0]
+set_instance_assignment -name IO_STANDARD "1.8V" -to hps_sdmmc_data[1]
+set_instance_assignment -name IO_STANDARD "1.8V" -to hps_sdmmc_data[2]
+set_instance_assignment -name IO_STANDARD "1.8V" -to hps_sdmmc_data[3]
 
-set_instance_assignment -name CURRENT_STRENGTH "8ma" -to hps_sdmmc_cclk
+set_instance_assignment -name CURRENT_STRENGTH "8ma" -to hps_sdmmc_clk
 set_instance_assignment -name CURRENT_STRENGTH "8ma" -to hps_sdmmc_cmd
-set_instance_assignment -name CURRENT_STRENGTH "8ma" -to hps_sdmmc_d0
-set_instance_assignment -name CURRENT_STRENGTH "8ma" -to hps_sdmmc_d1
-set_instance_assignment -name CURRENT_STRENGTH "8ma" -to hps_sdmmc_d2
-set_instance_assignment -name CURRENT_STRENGTH "8ma" -to hps_sdmmc_d3
+set_instance_assignment -name CURRENT_STRENGTH "8ma" -to hps_sdmmc_data[0]
+set_instance_assignment -name CURRENT_STRENGTH "8ma" -to hps_sdmmc_data[1]
+set_instance_assignment -name CURRENT_STRENGTH "8ma" -to hps_sdmmc_data[2]
+set_instance_assignment -name CURRENT_STRENGTH "8ma" -to hps_sdmmc_data[3]
 
 # hps-uart0 OOBE daughter card
 

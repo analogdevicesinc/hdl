@@ -59,18 +59,18 @@ module system_top (
   output  [  0:0]   hps_ddr_par,
   output  [  0:0]   hps_ddr_cs_n,
   output  [  0:0]   hps_ddr_reset_n,
-  inout   [  7:0]   hps_ddr_dqs_p,
-  inout   [  7:0]   hps_ddr_dqs_n,
-  inout   [  7:0]   hps_ddr_dbi_n,
-  inout   [ 63:0]   hps_ddr_dq,
+  inout   [  8:0]   hps_ddr_dqs_p,
+  inout   [  8:0]   hps_ddr_dqs_n,
+  inout   [  8:0]   hps_ddr_dbi_n,
+  inout   [ 71:0]   hps_ddr_dq,
 
   // hps-ethernet
 
-  input   [  0:0]   hps_emac_rxclk,
-  input   [  0:0]   hps_emac_rxctl,
+  input   [  0:0]   hps_emac_rx_clk,
+  input   [  0:0]   hps_emac_rx_ctl,
   input   [  3:0]   hps_emac_rx,
-  output  [  0:0]   hps_emac_txclk,
-  output  [  0:0]   hps_emac_txctl,
+  output  [  0:0]   hps_emac_tx_clk,
+  output  [  0:0]   hps_emac_tx_ctl,
   output  [  3:0]   hps_emac_tx,
   output  [  0:0]   hps_emac_mdc,
   inout   [  0:0]   hps_emac_mdio,
@@ -162,9 +162,8 @@ module system_top (
 
   assign gpio_i[3:0]   = fpga_gpio_dpsw;
   assign gpio_i[7:4]   = fpga_gpio_btn;
+  assign gpio_i[31:11]  = gpio_o[31:11];
   assign fpga_gpio_led = gpio_o[10:8];
-
-  assign gpio_i[63:8]  = gpio_o[63:8];
 
   // assignments
 
@@ -173,24 +172,20 @@ module system_top (
 
   // gpio (adrv9009)
 
-  assign gpio_i[63:61] = gpio_o[63:61];
+  assign gpio_i[50:32] = gpio_o[50:32];
+  assign gpio_i[51:51] = adrv9009_gpint;
+  assign gpio_i[59:52] = gpio_o[59:52];
+  assign gpio_i[63:60] = gpio_o[63:60];
 
-  assign dac_fifo_bypass = gpio_o[60];
-  assign gpio_i[60:60] = gpio_o[60];
-
-  assign ad9528_reset_b = gpio_o[59];
-  assign ad9528_sysref_req = gpio_o[58];
+  assign dac_fifo_bypass     = gpio_o[60];
+  assign ad9528_reset_b      = gpio_o[59];
+  assign ad9528_sysref_req   = gpio_o[58];
   assign adrv9009_tx1_enable = gpio_o[57];
   assign adrv9009_tx2_enable = gpio_o[56];
   assign adrv9009_rx1_enable = gpio_o[55];
   assign adrv9009_rx2_enable = gpio_o[54];
-  assign adrv9009_test = gpio_o[53];
-  assign adrv9009_reset_b = gpio_o[52];
-  assign gpio_i[59:52] = gpio_o[59:52];
-
-  assign gpio_i[51:51] = adrv9009_gpint;
-
-  assign gpio_i[50:32] = gpio_o[50:32];
+  assign adrv9009_test       = gpio_o[53];
+  assign adrv9009_reset_b    = gpio_o[52];
 
   // instantiations
 
@@ -201,14 +196,14 @@ module system_top (
     .sys_gpio_bd_out_port                 ( gpio_o[31: 0] ),
     .sys_gpio_in_export                   ( gpio_i[63:32] ),
     .sys_gpio_out_export                  ( gpio_o[63:32] ),
-    .sys_hps_io_hps_io_phery_emac0_TX_CLK ( hps_emac_txclk ),
+    .sys_hps_io_hps_io_phery_emac0_TX_CLK ( hps_emac_tx_clk ),
     .sys_hps_io_hps_io_phery_emac0_TXD0   ( hps_emac_tx[0] ),
     .sys_hps_io_hps_io_phery_emac0_TXD1   ( hps_emac_tx[1] ),
     .sys_hps_io_hps_io_phery_emac0_TXD2   ( hps_emac_tx[2] ),
     .sys_hps_io_hps_io_phery_emac0_TXD3   ( hps_emac_tx[3] ),
-    .sys_hps_io_hps_io_phery_emac0_RX_CTL ( hps_emac_rxctl ),
-    .sys_hps_io_hps_io_phery_emac0_TX_CTL ( hps_emac_txctl ),
-    .sys_hps_io_hps_io_phery_emac0_RX_CLK ( hps_emac_rxclk ),
+    .sys_hps_io_hps_io_phery_emac0_RX_CTL ( hps_emac_rx_ctl ),
+    .sys_hps_io_hps_io_phery_emac0_TX_CTL ( hps_emac_tx_ctl ),
+    .sys_hps_io_hps_io_phery_emac0_RX_CLK ( hps_emac_rx_clk ),
     .sys_hps_io_hps_io_phery_emac0_RXD0   ( hps_emac_rx[0] ),
     .sys_hps_io_hps_io_phery_emac0_RXD1   ( hps_emac_rx[1] ),
     .sys_hps_io_hps_io_phery_emac0_RXD2   ( hps_emac_rx[2] ),
