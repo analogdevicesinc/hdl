@@ -37,7 +37,7 @@
 
 module adrv9009_zu11eg_som_spi (
 
-  input       [ 2:0]      spi_csn,
+  input       [ 7:0]      spi_csn,
   input                   spi_clk,
   input                   spi_mosi,
   input                   spi_miso_i,
@@ -60,7 +60,7 @@ module adrv9009_zu11eg_som_spi (
   // check on rising edge and change on falling edge
 
   assign spi_csn_s = & spi_csn;
-  assign spi_enable_s = spi_enable & ~spi_csn[2];
+  assign spi_enable_s = spi_enable & (~spi_csn[2] | ~spi_csn[3]);
 
   always @(posedge spi_clk or posedge spi_csn_s) begin
     if (spi_csn_s == 1'b1) begin

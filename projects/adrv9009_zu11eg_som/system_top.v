@@ -255,13 +255,29 @@ module system_top (
   wire            spi_mosi;
   wire            spi0_miso;
 
-  assign spi_csn_adrv9009_a = spi_csn[0];
-  assign spi_csn_adrv9009_b = spi_csn[1];
-  assign spi_csn_hmc7044 = spi_csn[2];
-  assign spi_csn_hmc7044_car = 1'b1;
+  reg  [7:0]     spi_3_to_8_csn;
+
+  always @(*) begin
+    case (spi_csn)
+      3'h0: spi_3_to_8_csn = 8'b11111110;
+      3'h1: spi_3_to_8_csn = 8'b11111101;
+      3'h2: spi_3_to_8_csn = 8'b11111011;
+      3'h3: spi_3_to_8_csn = 8'b11110111;
+      3'h4: spi_3_to_8_csn = 8'b11101111;
+      3'h5: spi_3_to_8_csn = 8'b11011111;
+      3'h6: spi_3_to_8_csn = 8'b10111111;
+      3'h7: spi_3_to_8_csn = 8'b01111111;
+      default: spi_3_to_8_csn = 8'b11111111;
+    endcase
+  end
+
+  assign spi_csn_adrv9009_a = spi_3_to_8_csn[0];
+  assign spi_csn_adrv9009_b = spi_3_to_8_csn[1];
+  assign spi_csn_hmc7044 = spi_3_to_8_csn[2];
+  assign spi_csn_hmc7044_car = spi_3_to_8_csn[3];
 
   adrv9009_zu11eg_som_spi i_spi (
-  .spi_csn(spi_csn),
+  .spi_csn(spi_3_to_8_csn),
   .spi_clk(spi_clk),
   .spi_mosi(spi_mosi),
   .spi_miso_i(spi_miso),
