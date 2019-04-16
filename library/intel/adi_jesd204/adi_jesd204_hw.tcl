@@ -69,7 +69,7 @@ set_module_property COMPOSITION_CALLBACK jesd204_compose
 # parameters
 
 ad_ip_parameter DEVICE_FAMILY STRING "" false {
-  VISIBLE false
+  VISIBLE true
 }
 
 ad_ip_parameter DEVICE STRING "" false {
@@ -134,67 +134,122 @@ ad_ip_parameter EXT_DEVICE_CLK_EN BOOLEAN 0 false { \
 }
 
 proc create_phy_reset_control {tx num_of_lanes sysclk_frequency} {
-
   global version
 
-  add_instance phy_reset_control altera_xcvr_reset_control $version
-  set_instance_property phy_reset_control SUPPRESS_ALL_WARNINGS true
-  set_instance_parameter_value phy_reset_control {CHANNELS} $num_of_lanes
-  set_instance_parameter_value phy_reset_control {SYS_CLK_IN_MHZ} $sysclk_frequency
-  set_instance_parameter_value phy_reset_control {TX_PLL_ENABLE} $tx
-  set_instance_parameter_value phy_reset_control {TX_ENABLE} $tx
-  set_instance_parameter_value phy_reset_control {RX_ENABLE} [expr !$tx]
-  set_instance_parameter_value phy_reset_control {SYNCHRONIZE_RESET} {0}
-  add_connection sys_clock.clk phy_reset_control.clock
-  add_connection link_reset.out_reset phy_reset_control.reset
-  add_connection sys_clock.clk_reset phy_reset_control.reset
+  set device [get_parameter_value DEVICE_FAMILY]
 
-  if {$tx} {
+  if {[string equal $device "Arria 10"]} {
+
+    add_instance phy_reset_control altera_xcvr_reset_control $version
+    set_instance_property phy_reset_control SUPPRESS_ALL_WARNINGS true
+    set_instance_parameter_value phy_reset_control {SYNCHRONIZE_RESET} {0}
+    set_instance_parameter_value phy_reset_control {CHANNELS} $num_of_lanes
+    set_instance_parameter_value phy_reset_control {SYS_CLK_IN_MHZ} $sysclk_frequency
+    set_instance_parameter_value phy_reset_control {TX_PLL_ENABLE} $tx
+    set_instance_parameter_value phy_reset_control {TX_ENABLE} $tx
+    set_instance_parameter_value phy_reset_control {RX_ENABLE} [expr !$tx]
+
+    add_connection sys_clock.clk phy_reset_control.clock
+    add_connection link_reset.out_reset phy_reset_control.reset
+    add_connection sys_clock.clk_reset phy_reset_control.reset
+
+    if {$tx} {
+      set_instance_parameter_value phy_reset_control {T_PLL_POWERDOWN} {1000}
+      set_instance_parameter_value phy_reset_control {gui_pll_cal_busy} {1}
+      set_instance_parameter_value phy_reset_control {T_TX_ANALOGRESET} {70000}
+      set_instance_parameter_value phy_reset_control {T_TX_DIGITALRESET} {70000}
+
+      add_connection phy_reset_control.tx_ready axi_xcvr.ready
+    } else {
+      set_instance_parameter_value phy_reset_control {T_RX_ANALOGRESET} {70000}
+      set_instance_parameter_value phy_reset_control {T_RX_DIGITALRESET} {4000}
+
+      add_connection phy_reset_control.rx_ready axi_xcvr.ready
+    }
+
+  } elseif {[string equal $device "Stratix 10"]} {
+
+    add_instance phy_reset_control altera_xcvr_reset_control_s10 $version
+    set_instance_parameter_value phy_reset_control {CHANNELS} $num_of_lanes
+    set_instance_parameter_value phy_reset_control {SYS_CLK_IN_MHZ} $sysclk_frequency
+    set_instance_parameter_value phy_reset_control {TX_ENABLE} $tx
+    set_instance_parameter_value phy_reset_control {RX_ENABLE} [expr !$tx]
+    set_instance_parameter_value phy_reset_control {REDUCED_SIM_TIME} {1}
     set_instance_parameter_value phy_reset_control {T_PLL_POWERDOWN} {1000}
-    set_instance_parameter_value phy_reset_control {gui_pll_cal_busy} {1}
-    set_instance_parameter_value phy_reset_control {T_TX_ANALOGRESET} {70000}
-    set_instance_parameter_value phy_reset_control {T_TX_DIGITALRESET} {70000}
+    set_instance_parameter_value phy_reset_control {T_PLL_LOCK_HYST} {1000}
 
-    add_connection phy_reset_control.tx_ready axi_xcvr.ready
+    add_connection sys_clock.clk phy_reset_control.clock
+    add_connection link_reset.out_reset phy_reset_control.reset
+    add_connection sys_clock.clk_reset phy_reset_control.reset
+
+    if {$tx} {
+      set_instance_parameter_value phy_reset_control {gui_pll_cal_busy} {1}
+      set_instance_parameter_value phy_reset_control {TX_MANUAL_RESET} {0}
+      set_instance_parameter_value phy_reset_control {T_TX_ANALOGRESET} {0}
+      set_instance_parameter_value phy_reset_control {T_TX_DIGITALRESET} {20}
+
+      add_connection phy_reset_control.tx_ready axi_xcvr.ready
+    } else {
+      set_instance_parameter_value phy_reset_control {RX_MANUAL_RESET} {0}
+      set_instance_parameter_value phy_reset_control {T_RX_ANALOGRESET} {40}
+      set_instance_parameter_value phy_reset_control {T_RX_DIGITALRESET} {5000}
+
+      add_connection phy_reset_control.rx_ready axi_xcvr.ready
+    }
+
   } else {
-    set_instance_parameter_value phy_reset_control {T_RX_ANALOGRESET} {70000}
-    set_instance_parameter_value phy_reset_control {T_RX_DIGITALRESET} {4000}
-
-    add_connection phy_reset_control.rx_ready axi_xcvr.ready
+    send_message error "Only Arria 10 and Stratix 10 are supported."
   }
 }
 
-proc create_lane_pll {id pllclk_frequency refclk_frequency num_lanes bonding_clocks_en} {
+proc create_lane_pll {id tx_or_rx_n pllclk_frequency refclk_frequency num_lanes bonding_clocks_en} {
 
   global version
 
-  add_instance lane_pll altera_xcvr_atx_pll_a10 $version
-  set_instance_property lane_pll SUPPRESS_ALL_INFO_MESSAGES true
-  set_instance_parameter_value lane_pll {enable_pll_reconfig} {1}
+  set device_family [get_parameter_value "DEVICE_FAMILY"]
+
+  if {$device_family == "Arria 10"} {
+    add_instance lane_pll altera_xcvr_atx_pll_a10 $version
+    if {$num_lanes > 6} {
+      set_instance_parameter_value lane_pll enable_mcgb {true}
+      if {$bonding_clocks_en} {
+          set_instance_parameter_value lane_pll {enable_bonding_clks} {true}
+          set_instance_parameter_value lane_pll {mcgb_div} {1}
+          set_instance_parameter_value lane_pll {set_ref_clk_div} {1}
+          set_instance_parameter_value lane_pll {pma_width} {40}
+      } else {
+          set_instance_parameter_value lane_pll enable_hfreq_clk {true}
+      }
+
+      add_instance glue adi_jesd204_glue 1.0
+      add_connection phy_reset_control.pll_powerdown glue.in_pll_powerdown
+      add_connection glue.out_pll_powerdown lane_pll.pll_powerdown
+      add_connection glue.out_mcgb_rst lane_pll.mcgb_rst
+    } else {
+      add_connection phy_reset_control.pll_powerdown lane_pll.pll_powerdown
+    }
+    set_instance_parameter_value lane_pll {enable_pll_reconfig} {1}
+  } elseif {$device_family == "Stratix 10"} {
+    add_instance lane_pll altera_xcvr_atx_pll_s10_htile $version
+    set_instance_parameter_value lane_pll {rcfg_enable} {1}
+
+    ## tie pll_select to GND
+    add_instance glue adi_jesd204_glue 1.0
+    set_instance_parameter_value glue {IN_PLL_POWERDOWN_EN} {0}
+    if {$tx_or_rx_n} {
+      add_connection glue.out_pll_select_gnd phy_reset_control.pll_select
+    }
+
+  } else {
+    send_message error "Only Arria 10 and Stratix 10 are supported."
+  }
+
   set_instance_parameter_value lane_pll {rcfg_separate_avmm_busy} {1}
   set_instance_parameter_value lane_pll {set_capability_reg_enable} {1}
   set_instance_parameter_value lane_pll {set_user_identifier} $id
   set_instance_parameter_value lane_pll {set_csr_soft_logic_enable} {1}
   set_instance_parameter_value lane_pll {set_output_clock_frequency} $pllclk_frequency
   set_instance_parameter_value lane_pll {set_auto_reference_clock_frequency} $refclk_frequency
-
-  if {$num_lanes > 6} {
-    set_instance_parameter_value lane_pll enable_mcgb {true}    
-    if {$bonding_clocks_en} {
-        set_instance_parameter_value lane_pll {enable_bonding_clks} {true}
-        set_instance_parameter_value lane_pll {mcgb_div} {1}
-        set_instance_parameter_value lane_pll {set_ref_clk_div} {1}
-        set_instance_parameter_value lane_pll {pma_width} {40}
-    } else {
-        set_instance_parameter_value lane_pll enable_hfreq_clk {true}
-    }
-    add_instance glue adi_jesd204_glue
-    add_connection phy_reset_control.pll_powerdown glue.in_pll_powerdown
-    add_connection glue.out_pll_powerdown lane_pll.pll_powerdown
-    add_connection glue.out_mcgb_rst lane_pll.mcgb_rst
-  } else {
-    add_connection phy_reset_control.pll_powerdown lane_pll.pll_powerdown
-  }
 
   add_connection lane_pll.pll_locked phy_reset_control.pll_locked
   add_connection lane_pll.pll_cal_busy phy_reset_control.pll_cal_busy
@@ -207,6 +262,9 @@ proc create_lane_pll {id pllclk_frequency refclk_frequency num_lanes bonding_clo
 
 proc jesd204_get_max_lane_rate {device soft_pcs} {
   if {[string range $device 0 2] == "10A"} {
+    set device_speedgrade [string range $device 13 13]
+    set pma_speedgrade [string range $device 8 8]
+  } elseif {[string range $device 0 1] == "1S"} {
     set device_speedgrade [string range $device 13 13]
     set pma_speedgrade [string range $device 8 8]
   } else {
@@ -242,9 +300,9 @@ proc jesd204_validate {{quiet false}} {
   set num_of_lanes [get_parameter_value "NUM_OF_LANES"]
   set tx_or_rx_n [get_parameter_value "TX_OR_RX_N"]
 
-  if {$device_family != "Arria 10"} {
+  if {$device_family != "Arria 10" && $device_family != "Stratix 10"} {
     if {!$quiet} {
-      send_message error "Only Arria 10 is supported."
+      send_message error "Only Arria 10 and Startix 10 are supported."
     }
     return false
   }
@@ -262,7 +320,7 @@ proc jesd204_validate {{quiet false}} {
   }
 
   set_parameter_property BONDING_CLOCKS_EN VISIBLE [expr ($num_of_lanes > 6) && ($tx_or_rx_n)]
-  
+
   return true
 }
 
@@ -310,22 +368,7 @@ proc jesd204_compose {} {
   add_interface ref_clk clock sink
   set_interface_property ref_clk EXPORT_OF ref_clock.in_clk
 
-  # FIXME: In phase alignment mode manual re-calibration fails
-  add_instance link_pll altera_xcvr_fpll_a10 $version
-  set_instance_property link_pll SUPPRESS_ALL_WARNINGS true
-  set_instance_property link_pll SUPPRESS_ALL_INFO_MESSAGES true
-  set_instance_parameter_value link_pll {gui_fpll_mode} {0}
-  set_instance_parameter_value link_pll {gui_reference_clock_frequency} $refclk_frequency
-  set_instance_parameter_value link_pll {gui_number_of_output_clocks} 1
-#  set_instance_parameter_value link_pll {gui_enable_phase_alignment} 1
-  set_instance_parameter_value link_pll {gui_desired_outclk0_frequency} $linkclk_frequency
-#  set pfdclk_frequency [get_instance_parameter_value link_pll gui_pfd_frequency]
-#  set_instance_parameter_value link_pll {gui_desired_outclk1_frequency} $pfdclk_frequency
-  set_instance_parameter_value link_pll {enable_pll_reconfig} {1}
-  set_instance_parameter_value link_pll {set_capability_reg_enable} {1}
-  set_instance_parameter_value link_pll {set_csr_soft_logic_enable} {1}
-  set_instance_parameter_value link_pll {rcfg_separate_avmm_busy} {1}
-  add_connection ref_clock.out_clk link_pll.pll_refclk0
+  set outclk_name ""
 
   ## link clock configuration (also known as device clock, which will be used
   ## by the upper layers for the data path, it can come from the PCS or external)
@@ -333,14 +376,68 @@ proc jesd204_compose {} {
   add_instance link_clock altera_clock_bridge $version
   set_instance_parameter_value link_clock {EXPLICIT_CLOCK_RATE} [expr $linkclk_frequency*1000000]
   set_instance_parameter_value link_clock {NUM_CLOCK_OUTPUTS} 2
-  add_connection link_pll.outclk0 link_clock.in_clk
-  add_interface link_clk clock source
 
   add_instance link_reset altera_reset_bridge $version
   set_instance_parameter_value link_reset {NUM_RESET_OUTPUTS} 2
+
+  if {$device_family == "Arria 10"} {
+
+    add_instance link_pll altera_xcvr_fpll_a10 $version
+    set_instance_parameter_value link_pll {gui_fpll_mode} {0}
+    set_instance_parameter_value link_pll {gui_reference_clock_frequency} $refclk_frequency
+    set_instance_parameter_value link_pll {gui_number_of_output_clocks} 1
+    set_instance_parameter_value link_pll {gui_desired_outclk0_frequency} $linkclk_frequency
+    set_instance_parameter_value link_pll {enable_pll_reconfig} {1}
+
+    set outclk_name "outclk0"
+
+    add_instance link_pll_reset_control altera_xcvr_reset_control $version
+    set_instance_parameter_value link_pll_reset_control {SYNCHRONIZE_RESET} {0}
+    set_instance_parameter_value link_pll_reset_control {SYS_CLK_IN_MHZ} $sysclk_frequency
+    set_instance_parameter_value link_pll_reset_control {TX_PLL_ENABLE} {1}
+    set_instance_parameter_value link_pll_reset_control {T_PLL_POWERDOWN} {1000}
+    set_instance_parameter_value link_pll_reset_control {TX_ENABLE} {0}
+    set_instance_parameter_value link_pll_reset_control {RX_ENABLE} {0}
+    add_connection sys_clock.clk link_pll_reset_control.clock
+    add_connection link_reset.out_reset link_pll_reset_control.reset
+    add_connection sys_clock.clk_reset link_pll_reset_control.reset
+    add_connection link_pll_reset_control.pll_powerdown link_pll.pll_powerdown
+
+  } elseif {$device_family == "Stratix 10"} {
+
+    send_message info "Instantiate a fpll_s10_htile for link_pll."
+    add_instance link_pll altera_xcvr_fpll_s10_htile 19.1.1
+    ## Primary Use is Core mode
+    set_instance_parameter_value link_pll {set_primary_use} 0
+    ## Basic Mode
+    set_instance_parameter_value link_pll {set_prot_mode} 0
+    set_instance_parameter_value link_pll {message_level} {error}
+    set_instance_parameter_value link_pll {set_refclk_cnt} {1}
+    set_instance_parameter_value link_pll {set_auto_reference_clock_frequency} $refclk_frequency
+    set_instance_parameter_value link_pll {set_output_clock_frequency} $linkclk_frequency
+    set_instance_parameter_value link_pll {set_bw_sel} {medium}
+    set_instance_parameter_value link_pll {rcfg_enable} {1}
+    set_instance_parameter_value link_pll {set_csr_soft_logic_enable} {1}
+    set_instance_parameter_value link_pll {set_capability_reg_enable} {1}
+
+    set outclk_name "outclk_div1"
+
+  } else {
+  ## Unsupported device
+    send_message error "Only Arria 10 and Stratix 10 are supported."
+  }
+
+  add_connection link_pll.$outclk_name link_clock.in_clk
+  add_interface link_clk clock source
+
   add_connection sys_clock.clk link_reset.clk
   add_interface link_reset reset source
   set_interface_property link_reset EXPORT_OF link_reset.out_reset_1
+
+  set_instance_parameter_value link_pll {set_capability_reg_enable} {1}
+  set_instance_parameter_value link_pll {set_csr_soft_logic_enable} {1}
+  set_instance_parameter_value link_pll {rcfg_separate_avmm_busy} {1}
+  add_connection ref_clock.out_clk link_pll.pll_refclk0
 
   add_connection sys_clock.clk_reset link_pll.reconfig_reset0
   add_connection sys_clock.clk link_pll.reconfig_clk0
@@ -360,23 +457,15 @@ proc jesd204_compose {} {
 
   add_interface link_pll_reconfig avalon slave
   set_interface_property link_pll_reconfig EXPORT_OF link_pll.reconfig_avmm0
+  set_interface_property link_pll_reconfig associatedClock sys_clk
+  set_interface_property link_pll_reconfig associatedReset sys_resetn
 
-  add_instance link_pll_reset_control altera_xcvr_reset_control $version
-  set_instance_parameter_value link_pll_reset_control {SYS_CLK_IN_MHZ} $sysclk_frequency
-  set_instance_parameter_value link_pll_reset_control {TX_PLL_ENABLE} {1}
-  set_instance_parameter_value link_pll_reset_control {T_PLL_POWERDOWN} {1000}
-  set_instance_parameter_value link_pll_reset_control {TX_ENABLE} {0}
-  set_instance_parameter_value link_pll_reset_control {RX_ENABLE} {0}
-  set_instance_parameter_value link_pll_reset_control {SYNCHRONIZE_RESET} {0}
-  add_connection sys_clock.clk link_pll_reset_control.clock
-  add_connection link_reset.out_reset link_pll_reset_control.reset
-  add_connection sys_clock.clk_reset link_pll_reset_control.reset
-  add_connection link_pll_reset_control.pll_powerdown link_pll.pll_powerdown
 
   create_phy_reset_control $tx_or_rx_n $num_of_lanes $sysclk_frequency
 
   add_instance phy jesd204_phy 1.0
   set_instance_parameter_value phy ID $id
+  set_instance_parameter_value phy DEVICE $device_family
   set_instance_parameter_value phy SOFT_PCS $soft_pcs
   set_instance_parameter_value phy TX_OR_RX_N $tx_or_rx_n
   set_instance_parameter_value phy LANE_RATE $lane_rate
@@ -406,15 +495,16 @@ proc jesd204_compose {} {
     set_interface_property link_clk EXPORT_OF link_clock.out_clk
   }
 
+  set phy_reset_intfs_s10 {analogreset_stat digitalreset_stat}
+
   if {$tx_or_rx_n} {
     set tx_rx "tx"
     set data_direction sink
     set jesd204_intfs {config control ilas_config event status}
-    set phy_reset_intfs {analogreset digitalreset cal_busy}   
+    set phy_reset_intfs {analogreset digitalreset cal_busy}
 
-    create_lane_pll $id $pllclk_frequency $refclk_frequency $num_of_lanes $bonding_clocks_en
-   
-    if {$num_of_lanes > 6} {          
+    create_lane_pll $id $tx_or_rx_n $pllclk_frequency $refclk_frequency $num_of_lanes $bonding_clocks_en
+    if {$num_of_lanes > 6} {
         if {$bonding_clocks_en} {
             add_connection lane_pll.tx_bonding_clocks phy.bonding_clocks
         } else {
@@ -461,6 +551,14 @@ proc jesd204_compose {} {
     add_connection phy_reset_control.${tx_rx}_${intf} phy.${intf}
   }
 
+  ## connect phy_reset_control interfaces specific to Stratix 10
+  if {$device_family == "Stratix 10"} {
+    foreach intf $phy_reset_intfs_s10 {
+      add_connection phy_reset_control.${tx_rx}_${intf} phy.${intf}
+    }
+
+  }
+
   set lane_map [regexp -all -inline {\S+} $lane_map]
   for {set i 0} {$i < $num_of_lanes} {incr i} {
     if {$lane_map != {}} {
@@ -498,4 +596,5 @@ proc jesd204_compose {} {
 
   add_interface serial_data conduit end
   set_interface_property serial_data EXPORT_OF phy.serial_data
+
 }
