@@ -162,7 +162,7 @@ proc create_phy_reset_control {tx num_of_lanes sysclk_frequency} {
   }
 }
 
-proc create_lane_pll {id pllclk_frequency refclk_frequency num_lanes} {
+proc create_lane_pll {id tx_or_rx_n pllclk_frequency refclk_frequency num_lanes} {
 
   set device_family [get_parameter_value "DEVICE_FAMILY"]
 
@@ -183,6 +183,14 @@ proc create_lane_pll {id pllclk_frequency refclk_frequency num_lanes} {
   } elseif {$device_family == "Stratix 10"} {
     add_instance lane_pll altera_xcvr_atx_pll_s10_htile
     set_instance_parameter_value lane_pll {rcfg_enable} {1}
+
+    ## tie pll_select to GND
+    add_instance glue adi_jesd204_glue
+    set_instance_parameter_value glue {IN_PLL_POWERDOWN_EN} {0}
+    if {$tx_or_rx_n} {
+      add_connection glue.out_pll_select_gnd phy_reset_control.pll_select
+    }
+
   } else {
     send_message error "Only Arria 10 and Stratix 10 are supported."
   }
@@ -443,13 +451,15 @@ proc jesd204_compose {} {
     set_interface_property link_clk EXPORT_OF link_clock.out_clk
   }
 
+  set phy_reset_intfs_s10 {analogreset_stat digitalreset_stat}
+
   if {$tx_or_rx_n} {
     set tx_rx "tx"
     set data_direction sink
     set jesd204_intfs {config control ilas_config event status}
     set phy_reset_intfs {analogreset digitalreset cal_busy}
 
-    create_lane_pll $id $pllclk_frequency $refclk_frequency $num_of_lanes
+    create_lane_pll $id $tx_or_rx_n $pllclk_frequency $refclk_frequency $num_of_lanes
     add_connection lane_pll.tx_serial_clk phy.serial_clk_x1
     if {$num_of_lanes > 6} {
       add_connection lane_pll.mcgb_serial_clk phy.serial_clk_xN
@@ -489,6 +499,14 @@ proc jesd204_compose {} {
 
   foreach intf $phy_reset_intfs {
     add_connection phy_reset_control.${tx_rx}_${intf} phy.${intf}
+  }
+
+  ## connect phy_reset_control interfaces specific to Stratix 10
+  if {$device_type == 2} {
+    foreach intf $phy_reset_intfs_s10 {
+      add_connection phy_reset_control.${tx_rx}_${intf} phy.${intf}
+    }
+
   }
 
   set lane_map [regexp -all -inline {\S+} $lane_map]
