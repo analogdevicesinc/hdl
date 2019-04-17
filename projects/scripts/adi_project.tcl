@@ -22,6 +22,8 @@ if {[info exists ::env(ADI_USE_OOC_SYNTHESIS)]} {
   set ADI_USE_OOC_SYNTHESIS 0
 }
 
+set ADI_USE_INCR_COMP 1
+
 set p_board "not-applicable"
 set p_device "none"
 set sys_zynq 1
@@ -37,6 +39,7 @@ proc adi_project_xilinx {project_name {mode 0}} {
   global REQUIRED_VIVADO_VERSION
   global IGNORE_VERSION_CHECK
   global ADI_USE_OOC_SYNTHESIS
+  global ADI_USE_INCR_COMP
 
   if [regexp "_ac701$" $project_name] {
     set p_device "xc7a200tfbg676-2"
@@ -160,6 +163,13 @@ proc adi_project_xilinx {project_name {mode 0}} {
   } else {
     write_hwdef -file "$project_name.data/$project_name.hwdef"
   }
+
+  if {$ADI_USE_INCR_COMP == 1} {
+    if {[file exists ./reference.dcp]} {
+      set_property incremental_checkpoint ./reference.dcp [get_runs impl_1]
+    }
+  }
+
 }
 
 proc adi_project_files {project_name project_files} {
@@ -171,7 +181,7 @@ proc adi_project_files {project_name project_files} {
 proc adi_project_run {project_name} {
   global ADI_POWER_OPTIMIZATION
   global ADI_USE_OOC_SYNTHESIS
-  
+
   if {$ADI_USE_OOC_SYNTHESIS == 1} {
     launch_runs -jobs 4 system_*_synth_1 synth_1
   } else {
