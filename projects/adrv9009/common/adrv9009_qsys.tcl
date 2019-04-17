@@ -274,4 +274,7 @@ ad_cpu_interrupt 11 axi_adrv9009_tx_dma.interrupt_sender
 ad_cpu_interrupt 12 axi_adrv9009_rx_dma.interrupt_sender
 ad_cpu_interrupt 13 axi_adrv9009_rx_os_dma.interrupt_sender
 ad_cpu_interrupt 14 avl_adrv9009_gpio.irq
+ad_cpu_interrupt 15 adrv9009_tx_jesd204.interrupt
+ad_cpu_interrupt 16 adrv9009_rx_jesd204.interrupt
+ad_cpu_interrupt 17 adrv9009_rx_os_jesd204.interrupt
 
