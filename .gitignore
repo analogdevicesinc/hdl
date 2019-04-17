@@ -1,5 +1,6 @@
 ipcache
 *.ip_user_files
+*.dcp
 *.cache
 *.data
 *.xpr
