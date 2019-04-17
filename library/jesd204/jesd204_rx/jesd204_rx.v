@@ -70,6 +70,7 @@ module jesd204_rx #(
 
   output [32*NUM_LANES-1:0] rx_data,
   output rx_valid,
+  input  rx_ready,
   output [3:0] rx_eof,
   output [3:0] rx_sof,
 

@@ -209,6 +209,7 @@ proc jesd204_rx_elaboration_callback {} {
 
   add_interface_port rx_data rx_data data output [expr 32*$num_lanes]
   add_interface_port rx_data rx_valid valid output 1
+  add_interface_port rx_data rx_ready ready input 1
   set_interface_property rx_data dataBitsPerSymbol [expr 32*$num_lanes]
 
   # phy interfaces
