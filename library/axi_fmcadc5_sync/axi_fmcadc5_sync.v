@@ -38,7 +38,13 @@
 
 `timescale 1ns/100ps
 
-module axi_fmcadc5_sync #(parameter integer ID = 0) (
+module axi_fmcadc5_sync #(
+
+  parameter integer ID = 0,
+  parameter [ 7:0]  FPGA_TECHNOLOGY = 0,
+  parameter [ 7:0]  FPGA_FAMILY = 0,
+  parameter [ 7:0]  SPEED_GRADE = 0,
+  parameter [ 7:0]  DEV_PACKAGE = 0) (
 
     // receive interface
  
@@ -575,6 +581,7 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
           14'h0001: up_rdata <= ID;
           14'h0002: up_rdata <= up_scratch;
           14'h0003: up_rdata <= up_timer;
+	  14'h0007: up_rdata <= {FPGA_TECHNOLOGY,FPGA_FAMILY,SPEED_GRADE,DEV_PACKAGE}; // [8,8,8,8]
           14'h0010: up_rdata <= {31'd0, up_spi_req};
           14'h0011: up_rdata <= {31'd0, up_spi_gnt};
           14'h0012: up_rdata <= {24'd0, up_spi_csn};
@@ -757,7 +764,7 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
   assign rx_sysref = rx_sysref_i;
 
   ad_data_out #(
-    .DEVICE_TYPE (0),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .SINGLE_ENDED (0),
     .IODELAY_ENABLE (1),
     .IODELAY_CTRL (1),

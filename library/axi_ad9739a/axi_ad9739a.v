@@ -38,7 +38,10 @@
 module axi_ad9739a #(
 
   parameter   ID = 0,
-  parameter   DEVICE_TYPE = 0,
+  parameter   FPGA_TECHNOLOGY = 0,
+  parameter   FPGA_FAMILY = 0,
+  parameter   SPEED_GRADE = 0,
+  parameter   DEV_PACKAGE = 0,
   parameter   SERDES_OR_DDR_N = 1,
   parameter   MMCM_OR_BUFIO_N = 1,
   parameter   DAC_DDS_TYPE = 2,
@@ -132,7 +135,7 @@ module axi_ad9739a #(
 
   // device interface
 
-  axi_ad9739a_if #(.DEVICE_TYPE (DEVICE_TYPE)) i_if (
+  axi_ad9739a_if #(.FPGA_TECHNOLOGY (FPGA_TECHNOLOGY)) i_if (
     .dac_clk_in_p (dac_clk_in_p),
     .dac_clk_in_n (dac_clk_in_n),
     .dac_clk_out_p (dac_clk_out_p),
@@ -166,6 +169,10 @@ module axi_ad9739a #(
 
   axi_ad9739a_core #(
     .ID(ID),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .FPGA_FAMILY (FPGA_FAMILY),
+    .SPEED_GRADE (SPEED_GRADE),
+    .DEV_PACKAGE (DEV_PACKAGE),
     .DAC_DDS_TYPE (DAC_DDS_TYPE),
     .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
     .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),

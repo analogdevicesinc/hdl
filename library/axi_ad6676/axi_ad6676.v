@@ -38,7 +38,11 @@
 module axi_ad6676 #(
 
   parameter ID = 0,
-  parameter NUM_LANES = 2) (
+  parameter NUM_LANES = 2,
+  parameter FPGA_TECHNOLOGY = 0,
+  parameter FPGA_FAMILY = 0,
+  parameter SPEED_GRADE = 0,
+  parameter DEV_PACKAGE = 0) (
 
   // jesd interface
   // rx_clk is (line-rate/40)
@@ -88,6 +92,10 @@ module axi_ad6676 #(
 
   ad_ip_jesd204_tpl_adc #(
     .ID (ID),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .FPGA_FAMILY (FPGA_FAMILY),
+    .SPEED_GRADE (SPEED_GRADE),
+    .DEV_PACKAGE (DEV_PACKAGE),
     .NUM_LANES (NUM_LANES),
     .NUM_CHANNELS (2),
     .SAMPLES_PER_FRAME (1),

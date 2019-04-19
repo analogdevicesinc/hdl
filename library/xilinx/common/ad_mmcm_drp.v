@@ -38,7 +38,7 @@
 
 module ad_mmcm_drp #(
 
-  parameter   MMCM_DEVICE_TYPE = 0,
+  parameter   FPGA_TECHNOLOGY = 0,
   parameter   MMCM_CLKIN_PERIOD  = 1.667,
   parameter   MMCM_CLKIN2_PERIOD  = 1.667,
   parameter   MMCM_VCO_DIV  = 6,
@@ -72,8 +72,9 @@ module ad_mmcm_drp #(
   output  reg             up_drp_ready,
   output  reg             up_drp_locked);
 
-  localparam  MMCM_DEVICE_7SERIES = 0;
-  localparam  MMCM_DEVICE_ULTRASCALE = 2;
+  localparam  SEVEN_SERIES = 1;
+  localparam  ULTRASCALE = 2;
+  localparam  ULTRASCALE_PLUS = 3;
 
 
   // internal registers
@@ -110,7 +111,7 @@ module ad_mmcm_drp #(
   // instantiations
 
   generate
-  if (MMCM_DEVICE_TYPE == MMCM_DEVICE_7SERIES) begin
+  if (FPGA_TECHNOLOGY == SEVEN_SERIES) begin
     MMCME2_ADV #(
       .BANDWIDTH ("OPTIMIZED"),
       .CLKOUT4_CASCADE ("FALSE"),
@@ -175,7 +176,7 @@ module ad_mmcm_drp #(
       BUFG i_clk_1_bufg   (.I (mmcm_clk_1_s),   .O (mmcm_clk_1));
       BUFG i_clk_2_bufg   (.I (mmcm_clk_2_s),   .O (mmcm_clk_2));
 
-  end else if (MMCM_DEVICE_TYPE == MMCM_DEVICE_ULTRASCALE) begin
+  end else if (FPGA_TECHNOLOGY == ULTRASCALE) begin
     MMCME3_ADV #(
       .BANDWIDTH ("OPTIMIZED"),
       .CLKOUT4_CASCADE ("FALSE"),
@@ -202,6 +203,73 @@ module ad_mmcm_drp #(
       .CLKIN2_PERIOD (MMCM_CLKIN2_PERIOD),
       .REF_JITTER1 (0.010))
     i_mmcme3 (
+      .CLKIN1 (clk),
+      .CLKFBIN (bufg_fb_clk_s),
+      .CLKFBOUT (mmcm_fb_clk_s),
+      .CLKOUT0 (mmcm_clk_0_s),
+      .CLKOUT1 (mmcm_clk_1_s),
+      .CLKOUT2 (mmcm_clk_2_s),
+      .LOCKED (mmcm_locked_s),
+      .DCLK (up_clk),
+      .DEN (up_drp_sel),
+      .DADDR (up_drp_addr[6:0]),
+      .DWE (up_drp_wr),
+      .DI (up_drp_wdata),
+      .DO (up_drp_rdata_s),
+      .DRDY (up_drp_ready_s),
+      .CLKFBOUTB (),
+      .CLKOUT0B (),
+      .CLKOUT1B (),
+      .CLKOUT2B (),
+      .CLKOUT3 (),
+      .CLKOUT3B (),
+      .CLKOUT4 (),
+      .CLKOUT5 (),
+      .CLKOUT6 (),
+      .CLKIN2 (clk2),
+      .CLKINSEL (clk_sel),
+      .PSCLK (1'b0),
+      .PSEN (1'b0),
+      .PSINCDEC (1'b0),
+      .PSDONE (),
+      .CLKINSTOPPED (),
+      .CLKFBSTOPPED (),
+      .PWRDWN (1'b0),
+      .CDDCREQ (1'b0),
+      .CDDCDONE (),
+      .RST (mmcm_rst));
+
+      BUFG i_fb_clk_bufg  (.I (mmcm_fb_clk_s),  .O (bufg_fb_clk_s));
+      BUFG i_clk_0_bufg   (.I (mmcm_clk_0_s),   .O (mmcm_clk_0));
+      BUFG i_clk_1_bufg   (.I (mmcm_clk_1_s),   .O (mmcm_clk_1));
+      BUFG i_clk_2_bufg   (.I (mmcm_clk_2_s),   .O (mmcm_clk_2));
+
+  end else if (FPGA_TECHNOLOGY == ULTRASCALE_PLUS) begin
+    MMCME4_ADV #(
+      .BANDWIDTH ("OPTIMIZED"),
+      .CLKOUT4_CASCADE ("FALSE"),
+      .COMPENSATION ("AUTO"),
+      .STARTUP_WAIT ("FALSE"),
+
+      .DIVCLK_DIVIDE (MMCM_VCO_DIV),
+      .CLKFBOUT_MULT_F (MMCM_VCO_MUL),
+      .CLKFBOUT_PHASE (0.000),
+      .CLKFBOUT_USE_FINE_PS ("FALSE"),
+      .CLKOUT0_DIVIDE_F (MMCM_CLK0_DIV),
+      .CLKOUT0_PHASE (MMCM_CLK0_PHASE),
+      .CLKOUT0_DUTY_CYCLE (0.500),
+      .CLKOUT0_USE_FINE_PS ("FALSE"),
+      .CLKOUT1_DIVIDE (MMCM_CLK1_DIV),
+      .CLKOUT1_PHASE (MMCM_CLK1_PHASE),
+      .CLKOUT1_DUTY_CYCLE (0.500),
+      .CLKOUT1_USE_FINE_PS ("FALSE"),
+      .CLKOUT2_DIVIDE (MMCM_CLK2_DIV),
+      .CLKOUT2_PHASE (MMCM_CLK2_PHASE),
+      .CLKOUT2_DUTY_CYCLE (0.500),
+      .CLKOUT2_USE_FINE_PS ("FALSE"),
+      .CLKIN1_PERIOD (MMCM_CLKIN_PERIOD),
+      .CLKIN2_PERIOD (MMCM_CLKIN2_PERIOD)
+    ) i_mmcme4 (
       .CLKIN1 (clk),
       .CLKFBIN (bufg_fb_clk_s),
       .CLKFBOUT (mmcm_fb_clk_s),

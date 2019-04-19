@@ -1,6 +1,8 @@
 
 
 package require qsys
+package require quartus::device
+
 source ../scripts/adi_env.tcl
 source ../scripts/adi_ip_alt.tcl
 
@@ -9,6 +11,7 @@ set_module_property DESCRIPTION "AXI HDMI Transmit Interface"
 set_module_property VERSION 1.0
 set_module_property GROUP "Analog Devices"
 set_module_property DISPLAY_NAME axi_hdmi_tx
+set_module_property VALIDATION_CALLBACK info_param_validate
 
 # files
 
@@ -51,12 +54,12 @@ set_parameter_property CR_CB_N TYPE INTEGER
 set_parameter_property CR_CB_N UNITS None
 set_parameter_property CR_CB_N HDL_PARAMETER true
 
-add_parameter DEVICE_TYPE INTEGER 0
-set_parameter_property DEVICE_TYPE DEFAULT_VALUE 16
-set_parameter_property DEVICE_TYPE DISPLAY_NAME DEVICE_TYPE
-set_parameter_property DEVICE_TYPE TYPE INTEGER
-set_parameter_property DEVICE_TYPE UNITS None
-set_parameter_property DEVICE_TYPE HDL_PARAMETER true
+add_parameter FPGA_TECHNOLOGY INTEGER 0
+set_parameter_property FPGA_TECHNOLOGY DEFAULT_VALUE 16
+set_parameter_property FPGA_TECHNOLOGY DISPLAY_NAME FPGA_TECHNOLOGY
+set_parameter_property FPGA_TECHNOLOGY TYPE INTEGER
+set_parameter_property FPGA_TECHNOLOGY UNITS None
+set_parameter_property FPGA_TECHNOLOGY HDL_PARAMETER true
 
 add_parameter EMBEDDED_SYNC INTEGER 0
 set_parameter_property EMBEDDED_SYNC DEFAULT_VALUE 0
@@ -64,6 +67,8 @@ set_parameter_property EMBEDDED_SYNC DISPLAY_NAME EMBEDDED_SYNC
 set_parameter_property EMBEDDED_SYNC TYPE INTEGER
 set_parameter_property EMBEDDED_SYNC UNITS None
 set_parameter_property EMBEDDED_SYNC HDL_PARAMETER true
+
+adi_add_auto_fpga_spec_params
 
 # axi4 slave
 

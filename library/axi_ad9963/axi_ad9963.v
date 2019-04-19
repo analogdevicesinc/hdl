@@ -40,7 +40,10 @@ module axi_ad9963 #(
   // parameters
 
   parameter   ID = 0,
-  parameter   DEVICE_TYPE = 0,
+  parameter   FPGA_TECHNOLOGY = 0,
+  parameter   FPGA_FAMILY = 0,
+  parameter   SPEED_GRADE = 0,
+  parameter   DEV_PACKAGE = 0,
   parameter   ADC_IODELAY_ENABLE = 0,
   parameter   IO_DELAY_GROUP = "dev_if_delay_group",
   parameter   IODELAY_ENABLE = 0,
@@ -177,7 +180,7 @@ module axi_ad9963 #(
   // device interface
 
   axi_ad9963_if #(
-    .DEVICE_TYPE (DEVICE_TYPE),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .ADC_IODELAY_ENABLE (ADC_IODELAY_ENABLE),
     .IO_DELAY_GROUP (IO_DELAY_GROUP))
   i_dev_if (
@@ -210,6 +213,10 @@ module axi_ad9963 #(
 
   axi_ad9963_rx #(
     .ID (ID),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .FPGA_FAMILY (FPGA_FAMILY),
+    .SPEED_GRADE (SPEED_GRADE),
+    .DEV_PACKAGE (DEV_PACKAGE),
     .USERPORTS_DISABLE (ADC_USERPORTS_DISABLE),
     .DATAFORMAT_DISABLE (ADC_DATAFORMAT_DISABLE),
     .DCFILTER_DISABLE (ADC_DCFILTER_DISABLE),
@@ -251,6 +258,10 @@ module axi_ad9963 #(
 
   axi_ad9963_tx #(
     .ID (ID),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .FPGA_FAMILY (FPGA_FAMILY),
+    .SPEED_GRADE (SPEED_GRADE),
+    .DEV_PACKAGE (DEV_PACKAGE),
     .DAC_DDS_TYPE (DAC_DDS_TYPE),
     .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
     .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),

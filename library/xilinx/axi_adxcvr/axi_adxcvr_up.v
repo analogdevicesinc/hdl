@@ -42,6 +42,11 @@ module axi_adxcvr_up #(
   parameter   integer ID = 0,
   parameter   integer NUM_OF_LANES = 8,
   parameter   integer XCVR_TYPE = 0,
+  parameter   [ 7:0]  FPGA_TECHNOLOGY = 0,
+  parameter   [ 7:0]  FPGA_FAMILY = 0,
+  parameter   [ 7:0]  SPEED_GRADE = 0,
+  parameter   [ 7:0]  DEV_PACKAGE = 0,
+  parameter   [15:0]  FPGA_VOLTAGE = 0,
   parameter   integer TX_OR_RX_N = 0,
   parameter   integer QPLL_ENABLE = 1,
   parameter           LPM_OR_DFE_N = 1,
@@ -54,73 +59,73 @@ module axi_adxcvr_up #(
 
   // common
 
-  output  [ 7:0]  up_cm_sel,
-  output          up_cm_enb,
-  output  [11:0]  up_cm_addr,
-  output          up_cm_wr,
-  output  [15:0]  up_cm_wdata,
-  input   [15:0]  up_cm_rdata,
-  input           up_cm_ready,
+  output     [ 7:0]   up_cm_sel,
+  output              up_cm_enb,
+  output     [11:0]   up_cm_addr,
+  output              up_cm_wr,
+  output     [15:0]   up_cm_wdata,
+  input      [15:0]   up_cm_rdata,
+  input               up_cm_ready,
 
   // channel
 
-  input           up_ch_pll_locked,
-  output          up_ch_rst,
-  output          up_ch_user_ready,
-  input           up_ch_rst_done,
-  output          up_ch_lpm_dfe_n,
-  output  [ 2:0]  up_ch_rate,
-  output  [ 1:0]  up_ch_sys_clk_sel,
-  output  [ 2:0]  up_ch_out_clk_sel,
-  output  [ 3:0]  up_ch_tx_diffctrl,
-  output  [ 4:0]  up_ch_tx_postcursor,
-  output  [ 4:0]  up_ch_tx_precursor,
-  output  [ 7:0]  up_ch_sel,
-  output          up_ch_enb,
-  output  [11:0]  up_ch_addr,
-  output          up_ch_wr,
-  output  [15:0]  up_ch_wdata,
-  input   [15:0]  up_ch_rdata,
-  input           up_ch_ready,
+  input               up_ch_pll_locked,
+  output              up_ch_rst,
+  output              up_ch_user_ready,
+  input               up_ch_rst_done,
+  output              up_ch_lpm_dfe_n,
+  output     [ 2:0]   up_ch_rate,
+  output     [ 1:0]   up_ch_sys_clk_sel,
+  output     [ 2:0]   up_ch_out_clk_sel,
+  output     [ 4:0]   up_ch_tx_diffctrl,
+  output     [ 4:0]   up_ch_tx_postcursor,
+  output     [ 4:0]   up_ch_tx_precursor,
+  output     [ 7:0]   up_ch_sel,
+  output              up_ch_enb,
+  output     [11:0]   up_ch_addr,
+  output              up_ch_wr,
+  output     [15:0]   up_ch_wdata,
+  input      [15:0]   up_ch_rdata,
+  input               up_ch_ready,
 
   // eye-scan
 
-  output  [ 7:0]  up_es_sel,
-  output          up_es_req,
-  output  [15:0]  up_es_reset,
-  input           up_es_ack,
-  output  [ 4:0]  up_es_pscale,
-  output  [ 1:0]  up_es_vrange,
-  output  [ 7:0]  up_es_vstep,
-  output  [ 7:0]  up_es_vmax,
-  output  [ 7:0]  up_es_vmin,
-  output  [11:0]  up_es_hmax,
-  output  [11:0]  up_es_hmin,
-  output  [11:0]  up_es_hstep,
-  output  [31:0]  up_es_saddr,
-  input           up_es_status,
+  output     [ 7:0]   up_es_sel,
+  output              up_es_req,
+  output reg [15:0]   up_es_reset = 'h0,
+  input               up_es_ack,
+  output     [ 4:0]   up_es_pscale,
+  output     [ 1:0]   up_es_vrange,
+  output     [ 7:0]   up_es_vstep,
+  output     [ 7:0]   up_es_vmax,
+  output     [ 7:0]   up_es_vmin,
+  output     [11:0]   up_es_hmax,
+  output     [11:0]   up_es_hmin,
+  output     [11:0]   up_es_hstep,
+  output     [31:0]   up_es_saddr,
+  input               up_es_status,
 
   // status
 
-  output          up_status,
-  output          up_pll_rst,
+  output              up_status,
+  output              up_pll_rst,
 
   // bus interface
 
-  input           up_rstn,
-  input           up_clk,
-  input           up_wreq,
-  input   [ 9:0]  up_waddr,
-  input   [31:0]  up_wdata,
-  output          up_wack,
-  input           up_rreq,
-  input   [ 9:0]  up_raddr,
-  output  [31:0]  up_rdata,
-  output          up_rack);
+  input               up_rstn,
+  input               up_clk,
+  input               up_wreq,
+  input      [ 9:0]   up_waddr,
+  input      [31:0]   up_wdata,
+  output              up_wack,
+  input               up_rreq,
+  input      [ 9:0]   up_raddr,
+  output     [31:0]   up_rdata,
+  output              up_rack);
 
   // parameters
 
-  localparam  [31:0]  VERSION = 32'h00100161;
+  localparam  [31:0]  VERSION = 32'h00110161;
 
   // internal registers
 
@@ -135,7 +140,7 @@ module axi_adxcvr_up #(
   reg     [ 2:0]  up_rate = RATE;
   reg     [ 1:0]  up_sys_clk_sel = SYS_CLK_SEL;
   reg     [ 2:0]  up_out_clk_sel = OUT_CLK_SEL;
-  reg     [ 3:0]  up_tx_diffctrl = TX_DIFFCTRL;
+  reg     [ 4:0]  up_tx_diffctrl = TX_DIFFCTRL;
   reg     [ 4:0]  up_tx_postcursor = TX_POSTCURSOR;
   reg     [ 4:0]  up_tx_precursor = TX_PRECURSOR;
   reg     [ 7:0]  up_icm_sel = 'd0;
@@ -164,7 +169,6 @@ module axi_adxcvr_up #(
   reg             up_ies_status = 'd0;
   reg             up_rreq_d = 'd0;
   reg     [31:0]  up_rdata_d = 'd0;
-  reg     [15:0]  up_es_reset = 'd0;
 
   // internal signals
 
@@ -261,7 +265,7 @@ module axi_adxcvr_up #(
         up_out_clk_sel <= up_wdata[2:0];
       end
       if ((up_wreq == 1'b1) && (up_waddr == 10'h030)) begin
-        up_tx_diffctrl <= up_wdata[3:0];
+        up_tx_diffctrl <= up_wdata[4:0];
       end
       if ((up_wreq == 1'b1) && (up_waddr == 10'h031)) begin
         up_tx_postcursor <= up_wdata[4:0];
@@ -395,6 +399,7 @@ module axi_adxcvr_up #(
       up_ies_hoffset_step <= 'd0;
       up_ies_start_addr <= 'd0;
       up_ies_status <= 'd0;
+      up_es_reset <= 'd0;
     end else begin
       up_ies_sel <= 'd0;
       up_ies_req <= 'd0;
@@ -408,6 +413,7 @@ module axi_adxcvr_up #(
       up_ies_hoffset_step <= 'd0;
       up_ies_start_addr <= 'd0;
       up_ies_status <= 'd0;
+      up_es_reset <= 'd0;
     end
   end
   end else begin
@@ -502,6 +508,7 @@ module axi_adxcvr_up #(
           10'h004: up_rdata_d <= {31'd0, up_resetn};
           10'h005: up_rdata_d <= {31'd0, up_status_int};
           10'h006: up_rdata_d <= {17'd0, up_user_ready_cnt, up_rst_cnt, up_pll_rst_cnt};
+          10'h007: up_rdata_d <= {FPGA_TECHNOLOGY,FPGA_FAMILY,SPEED_GRADE,DEV_PACKAGE}; // [8,8,8,8]
           10'h008: up_rdata_d <= {19'd0, up_lpm_dfe_n, 1'd0, up_rate, 2'd0, up_sys_clk_sel, 1'd0, up_out_clk_sel};
           10'h009: up_rdata_d <= up_rparam_s;
           10'h010: up_rdata_d <= {24'd0, up_icm_sel};
@@ -522,6 +529,7 @@ module axi_adxcvr_up #(
           10'h030: up_rdata_d <= up_tx_diffctrl;
           10'h031: up_rdata_d <= up_tx_postcursor;
           10'h032: up_rdata_d <= up_tx_precursor;
+	  10'h050: up_rdata_d <= {16'd0, FPGA_VOLTAGE};  // mV
           default: up_rdata_d <= 32'd0;
         endcase
       end else begin

@@ -132,4 +132,3 @@ set_property  -dict {PACKAGE_PIN  AK30  IOSTANDARD LVCMOS25}  [get_ports gpio_ca
 
 create_clock -name rx_0_clk       -period   4.00 [get_ports rx_clk_in_0_p]
 create_clock -name rx_1_clk       -period   4.00 [get_ports rx_clk_in_1_p]
-create_clock -name ad9361_clk     -period   4.00 [get_pins i_system_wrapper/system_i/axi_ad9361_0/clk]

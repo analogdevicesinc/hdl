@@ -1,0 +1,36 @@
+<: set ComponentName [getComponentNameString] :>
+<: setOutputDirectory "./" :>
+<: setFileName [ttcl_add $ComponentName "_constr"] :>
+<: setFileExtension ".xdc" :>
+<: setFileProcessingOrder late :>
+<: set async_clock [getBooleanValue "ASYNC_CLK_EN"] :>
+
+## False path definitions for ASYNC mode
+<: if { $async_clock } { :>
+
+set_property ASYNC_REG TRUE \
+  [get_cells -hier {*cdc_sync_stage1_reg*}] \
+  [get_cells -hier {*cdc_sync_stage2_reg*}]
+
+  ## it is constrained to a 250MHz external clock, it can be relaxed if required
+  ## max skew must be num_of_synchronization_stages x destination_clock_period_ns
+  set_bus_skew -from [get_cells -hierarchical * -filter {NAME=~*i_pulse_period_sync/cdc_hold_reg*}] \
+               -to [get_cells -hierarchical * -filter {NAME=~*i_pulse_period_sync/out_data_reg*}] \
+                8
+  set_bus_skew -from [get_cells -hierarchical * -filter {NAME=~*i_pulse_width_sync/cdc_hold_reg*}] \
+               -to [get_cells -hierarchical * -filter {NAME=~*i_pulse_width_sync/out_data_reg*}] \
+                8
+
+  set_false_path \
+    -from [get_pins -hierarchical * -filter {NAME=~*i_pulse_period_sync/out_toggle_d1_reg/C}] \
+    -to [get_pins -hierarchical * -filter {NAME=~*i_pulse_period_sync/i_sync_in/cdc_sync_stage1_reg[0]/D}]
+
+  set_false_path \
+    -from [get_pins -hierarchical * -filter {NAME=~*i_pulse_width_sync/out_toggle_d1_reg/C}] \
+    -to [get_pins -hierarchical * -filter {NAME=~*i_pulse_width_sync/i_sync_in/cdc_sync_stage1_reg[0]/D}]
+
+  set_false_path \
+    -from [get_pins -hierarchical * -filter {NAME=~*i_load_config_sync/out_toggle_d1_reg/C}] \
+    -to [get_pins -hierarchical * -filter {NAME=~*i_load_config_sync/i_sync_in/cdc_sync_stage1_reg[0]/D}]
+
+<: } :>

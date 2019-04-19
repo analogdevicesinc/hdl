@@ -1,9 +1,12 @@
 
 package require qsys
+package require quartus::device
+
 source ../scripts/adi_env.tcl
 source ../scripts/adi_ip_alt.tcl
 
 ad_ip_create axi_ad9122 {AXI AD9122 Interface}
+set_module_property VALIDATION_CALLBACK info_param_validate
 
 ad_ip_files axi_ad9122 [list \
     $ad_hdl_dir/library/common/ad_dds_cordic_pipe.v \
@@ -40,12 +43,14 @@ set_parameter_property ID TYPE INTEGER
 set_parameter_property ID UNITS None
 set_parameter_property ID HDL_PARAMETER true
 
-add_parameter DEVICE_TYPE INTEGER 0
-set_parameter_property DEVICE_TYPE DEFAULT_VALUE 0
-set_parameter_property DEVICE_TYPE DISPLAY_NAME DEVICE_TYPE
-set_parameter_property DEVICE_TYPE TYPE INTEGER
-set_parameter_property DEVICE_TYPE UNITS None
-set_parameter_property DEVICE_TYPE HDL_PARAMETER true
+add_parameter FPGA_TECHNOLOGY INTEGER 0
+set_parameter_property FPGA_TECHNOLOGY DEFAULT_VALUE 0
+set_parameter_property FPGA_TECHNOLOGY DISPLAY_NAME FPGA_TECHNOLOGY
+set_parameter_property FPGA_TECHNOLOGY TYPE INTEGER
+set_parameter_property FPGA_TECHNOLOGY UNITS None
+set_parameter_property FPGA_TECHNOLOGY HDL_PARAMETER true
+
+adi_add_auto_fpga_spec_params
 
 # axi4 slave
 

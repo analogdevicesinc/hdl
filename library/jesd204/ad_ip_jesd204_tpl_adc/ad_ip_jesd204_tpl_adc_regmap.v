@@ -25,6 +25,10 @@
 
 module ad_ip_jesd204_tpl_adc_regmap #(
   parameter ID = 0,
+  parameter FPGA_TECHNOLOGY = 0,
+  parameter FPGA_FAMILY = 0,
+  parameter SPEED_GRADE = 0,
+  parameter DEV_PACKAGE = 0,
   parameter NUM_CHANNELS = 1,
   parameter DATA_PATH_WIDTH = 1,
   parameter NUM_PROFILES = 1    // Number of supported JESD profiles
@@ -194,6 +198,10 @@ module ad_ip_jesd204_tpl_adc_regmap #(
   up_adc_common #(
     .COMMON_ID (6'h0),
     .ID (ID),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .FPGA_FAMILY (FPGA_FAMILY),
+    .SPEED_GRADE (SPEED_GRADE),
+    .DEV_PACKAGE (DEV_PACKAGE),
     .DRP_DISABLE (1),
     .USERPORTS_DISABLE (1),
     .GPIO_DISABLE (1),

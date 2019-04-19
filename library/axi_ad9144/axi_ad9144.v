@@ -38,6 +38,10 @@
 module axi_ad9144 #(
 
   parameter   ID = 0,
+  parameter   FPGA_TECHNOLOGY = 0,
+  parameter   FPGA_FAMILY = 0,
+  parameter   SPEED_GRADE = 0,
+  parameter   DEV_PACKAGE = 0,
   parameter   QUAD_OR_DUAL_N = 1,
   parameter   DAC_DDS_TYPE = 1,
   parameter   DAC_DDS_CORDIC_DW = 20,
@@ -130,6 +134,10 @@ module axi_ad9144 #(
 
   ad_ip_jesd204_tpl_dac #(
     .ID (ID),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .FPGA_FAMILY (FPGA_FAMILY),
+    .SPEED_GRADE (SPEED_GRADE),
+    .DEV_PACKAGE (DEV_PACKAGE),
     .NUM_LANES (NUM_CHANNELS * 2),
     .NUM_CHANNELS (NUM_CHANNELS),
     .CONVERTER_RESOLUTION (16),

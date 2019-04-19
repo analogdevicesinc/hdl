@@ -17,6 +17,9 @@ adi_ip_files axi_ad5766 [list \
 
 adi_ip_properties axi_ad5766
 
+adi_init_bd_tcl
+adi_ip_bd axi_ad5766 "bd/bd.tcl"
+
 adi_ip_add_core_dependencies { \
 	analog.com:user:util_cdc:1.0 \
 }
@@ -53,6 +56,9 @@ adi_add_bus "spi_engine_offload_ctrl" "slave" \
 adi_add_bus_clock "ctrl_clk" "spi_engine_offload_ctrl"
 adi_add_bus_clock "spi_clk" "spi_engine_ctrl" "spi_resetn"
 adi_add_bus_clock "dma_clk" "dma_fifo_tx"
+
+adi_add_auto_fpga_spec_params
+ipx::create_xgui_files [ipx::current_core]
 
 ipx::save_core [ipx::current_core]
 

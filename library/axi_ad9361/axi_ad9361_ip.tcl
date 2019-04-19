@@ -53,6 +53,9 @@ adi_ip_files axi_ad9361 [list \
 adi_ip_properties axi_ad9361
 adi_ip_ttcl axi_ad9361 "$ad_hdl_dir/library/common/ad_pps_receiver_constr.ttcl"
 
+adi_init_bd_tcl
+adi_ip_bd axi_ad9361 "bd/bd.tcl"
+
 set_property driver_value 0 [ipx::get_ports *rx_clk_in* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *rx_frame_in* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *rx_data_in* -of_objects [ipx::current_core]]
@@ -98,6 +101,9 @@ set reset_polarity [ipx::add_bus_parameter "POLARITY" $reset_intf]
 set_property value "ACTIVE_HIGH" $reset_polarity
 
 ipx::infer_bus_interface gps_pps_irq xilinx.com:signal:interrupt_rtl:1.0 [ipx::current_core]
+
+adi_add_auto_fpga_spec_params
+ipx::create_xgui_files [ipx::current_core]
 
 ipx::save_core [ipx::current_core]
 

@@ -42,8 +42,9 @@ module util_pulse_gen #(
   input               clk,
   input               rstn,
 
+  input       [31:0]  pulse_width,
   input       [31:0]  pulse_period,
-  input               pulse_period_en,
+  input               load_config,
 
   output  reg         pulse
 );
@@ -52,41 +53,58 @@ module util_pulse_gen #(
 
   reg     [(PULSE_WIDTH-1):0]  pulse_width_cnt = {PULSE_WIDTH{1'b1}};
   reg     [31:0]               pulse_period_cnt = 32'h0;
+  reg     [31:0]               pulse_period_read = 32'b0;
+  reg     [31:0]               pulse_width_read = 32'b0;
   reg     [31:0]               pulse_period_d = 32'b0;
+  reg     [31:0]               pulse_width_d = 32'b0;
 
   wire                         end_of_period_s;
 
   // flop the desired period
 
   always @(posedge clk) begin
-    pulse_period_d <= (pulse_period_en) ? pulse_period : PULSE_PERIOD;
+    if (rstn == 1'b0) begin
+      pulse_period_d <= PULSE_PERIOD;
+      pulse_width_d <= PULSE_WIDTH;
+      pulse_period_read <= PULSE_PERIOD;
+      pulse_width_read <= PULSE_WIDTH;
+    end else begin
+      // latch the input period/width values
+      if (load_config) begin
+        pulse_period_read <= pulse_period;
+        pulse_width_read <= pulse_width;
+      end
+      // update the current period/width at the end of the period
+      if (end_of_period_s) begin
+        pulse_period_d <= pulse_period_read;
+        pulse_width_d <= pulse_width_read;
+      end
+    end
   end
 
   // a free running pulse generator
 
   always @(posedge clk) begin
     if (rstn == 1'b0) begin
-      pulse_period_cnt <= 32'h0;
+      pulse_period_cnt <= PULSE_PERIOD;
     end else begin
-      pulse_period_cnt <= (pulse_period_cnt == pulse_period_d) ? 32'b0 : (pulse_period_cnt + 1);
+      pulse_period_cnt <= (end_of_period_s) ? pulse_period_d : (pulse_period_cnt - 1'b1);
     end
   end
+  assign end_of_period_s = (pulse_period_cnt == 32'b0) ? 1'b1 : 1'b0;
 
-  assign  end_of_period_s = (pulse_period_cnt == pulse_period_d) ? 1'b1 : 1'b0;
 
   // generate pulse with a specified width
 
-  always @(posedge clk) begin
+  always @ (posedge clk) begin
     if (rstn == 1'b0) begin
-      pulse_width_cnt <= 0;
-      pulse <= 0;
+      pulse <= 1'b0;
+    end else if (end_of_period_s) begin
+      pulse <= 1'b0;
+    end else if (pulse_period_cnt == pulse_width_d) begin
+      pulse <= 1'b1;
     end else begin
-      pulse_width_cnt <= (pulse == 1'b1) ? pulse_width_cnt + 1 : {PULSE_WIDTH{1'h0}};
-      if(end_of_period_s == 1'b1) begin
-        pulse <= 1'b1;
-      end else if(pulse_width_cnt == {PULSE_WIDTH{1'b1}}) begin
-        pulse <= 1'b0;
-      end
+      pulse <= pulse;
     end
   end
 

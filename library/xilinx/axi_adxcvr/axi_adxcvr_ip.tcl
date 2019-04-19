@@ -6,6 +6,7 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 adi_ip_create axi_adxcvr
 adi_ip_files axi_adxcvr [list \
   "$ad_hdl_dir/library/common/up_axi.v" \
+  "$ad_hdl_dir/library/scripts/adi_xilinx_device_info_enc.tcl" \
   "axi_adxcvr_es.v" \
   "axi_adxcvr_up.v" \
   "axi_adxcvr_mdrp.v" \
@@ -14,6 +15,9 @@ adi_ip_files axi_adxcvr [list \
 
 adi_ip_properties axi_adxcvr
 adi_ip_infer_mm_interfaces axi_adxcvr
+
+adi_init_bd_tcl
+adi_ip_bd axi_adxcvr "bd/bd.tcl"
 
 set_property driver_value 0 [ipx::get_ports -filter "direction==in" -of_objects [ipx::current_core]]
 
@@ -220,6 +224,9 @@ set_property enablement_dependency \
 
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 15} \
   [ipx::get_bus_interfaces up_ch_15 -of_objects [ipx::current_core]]
+
+adi_add_auto_fpga_spec_params
+ipx::create_xgui_files [ipx::current_core]
 
 ipx::save_core [ipx::current_core]
 

@@ -1,9 +1,12 @@
 ## ###############################################################################################
 ## ###############################################################################################
+
+source $ad_hdl_dir/library/scripts/adi_xilinx_device_info_enc.tcl
+
 ## check tool version
 
 if {![info exists REQUIRED_VIVADO_VERSION]} {
-  set REQUIRED_VIVADO_VERSION "2018.2"
+  set REQUIRED_VIVADO_VERSION "2018.3"
 }
 
 if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
@@ -42,10 +45,13 @@ proc adi_ip_bd {ip_name ip_bd_files} {
   if {$proj_filegroup == {}} {
     set proj_filegroup [ipx::add_file_group -type xilinx_blockdiagram "" [ipx::current_core]]
   }
-  set f [ipx::add_file $ip_bd_files $proj_filegroup]
-  set_property -dict [list \
-    type tclSource \
-  ] $f
+
+  foreach file $ip_bd_files {
+    set f [ipx::add_file $file $proj_filegroup]
+    set_property -dict [list \
+      type tclSource \
+    ] $f
+  }
 }
 
 proc adi_ip_infer_streaming_interfaces {ip_name} {
@@ -302,6 +308,159 @@ proc adi_ip_properties {ip_name} {
     -of_objects [ipx::get_memory_maps s_axi -of_objects [ipx::current_core]]]
   ipx::associate_bus_interfaces -clock s_axi_aclk -reset s_axi_aresetn [ipx::current_core]
   ipx::save_core
+}
+
+# ##############################################################################
+# create/overwrite temporary files containing particular build case dependencies
+# DO NOT USE FOR:
+# - axi_dmac
+# - jesd204
+# - axi_clkgen
+proc adi_init_bd_tcl {} {
+
+  global auto_set_param_list
+  global auto_set_param_list_overwritable
+  set cc [ipx::current_core]
+
+  if { [file exists bd] } {
+    file delete -force bd
+  }
+  file mkdir bd
+
+  set bd_tcl [open "bd/bd.tcl" w]
+
+  puts $bd_tcl "# SCRIPT AUTO-GENERATED AT BUILD, DO NOT MODIFY!"
+  puts $bd_tcl "proc init {cellpath otherInfo} {"
+  puts $bd_tcl "  set ip \[get_bd_cells \$cellpath\]"
+  puts $bd_tcl ""
+  set auto_set_param ""
+  foreach i $auto_set_param_list {
+    if { [ipx::get_user_parameters $i -of_objects $cc -quiet] ne "" } {
+      append auto_set_param "    $i \\\n"
+    }
+  }
+  if { $auto_set_param ne "" } {
+    puts $bd_tcl "  bd::mark_propagate_only \$ip \" \\"
+    regsub "${i} \\\\" $auto_set_param "$i\"" auto_set_param
+    puts $bd_tcl $auto_set_param
+  }
+
+  set auto_set_overwritable_param ""
+  foreach i $auto_set_param_list_overwritable {
+    if { [ipx::get_user_parameters $i -of_objects $cc -quiet] ne "" } {
+      append auto_set_overwritable_param "    $i \\\n"
+    }
+  }
+  if { $auto_set_overwritable_param ne "" } {
+    puts $bd_tcl "  bd::mark_propagate_override \$ip \" \\"
+    regsub "${i} \\\\" $auto_set_overwritable_param "$i\"" auto_set_overwritable_param
+    puts $bd_tcl $auto_set_overwritable_param
+  }
+  puts $bd_tcl "  adi_auto_assign_device_spec \$cellpath"
+  puts $bd_tcl "}"
+  puts $bd_tcl ""
+  puts $bd_tcl "# auto set parameters defined in auto_set_param_list (adi_xilinx_device_info_enc.tcl)"
+  puts $bd_tcl "proc adi_auto_assign_device_spec {cellpath} {"
+  puts $bd_tcl ""
+  puts $bd_tcl "  set ip \[get_bd_cells \$cellpath\]"
+  puts $bd_tcl "  set ip_param_list \[list_property \$ip\]"
+  puts $bd_tcl "  set ip_path \[bd::get_vlnv_dir \[get_property VLNV \$ip\]\]"
+  puts $bd_tcl ""
+  puts $bd_tcl "  set parent_dir \"../\""
+  puts $bd_tcl "  for {set x 1} {\$x<=4} {incr x} {"
+  puts $bd_tcl "    set linkname \${ip_path}\${parent_dir}scripts/adi_xilinx_device_info_enc.tcl"
+  puts $bd_tcl "    if { \[file exists \$linkname\] } {"
+  puts $bd_tcl "      source \${ip_path}\${parent_dir}/scripts/adi_xilinx_device_info_enc.tcl"
+  puts $bd_tcl "      break"
+  puts $bd_tcl "    }"
+  puts $bd_tcl "    append parent_dir \"../\""
+  puts $bd_tcl "  }"
+  puts $bd_tcl ""
+  puts $bd_tcl "  # Find predefindes auto assignable parameters"
+  puts $bd_tcl "  foreach i \$auto_set_param_list {"
+  puts $bd_tcl "    if { \[lsearch \$ip_param_list \"CONFIG.\$i\"\] > 0 } {"
+  puts $bd_tcl "      set val \[adi_device_spec \$cellpath \$i\]"
+  puts $bd_tcl "      set_property CONFIG.\$i \$val \$ip"
+  puts $bd_tcl "    }"
+  puts $bd_tcl "  }"
+  puts $bd_tcl ""
+  puts $bd_tcl "  # Find predefindes auto assignable/overwritable parameters"
+  puts $bd_tcl "  foreach i \$auto_set_param_list_overwritable {"
+  puts $bd_tcl "    if { \[lsearch \$ip_param_list \"CONFIG.\$i\"\] > 0 } {"
+  puts $bd_tcl "      set val \[adi_device_spec \$cellpath \$i\]"
+  puts $bd_tcl "      set_property CONFIG.\$i \$val \$ip"
+  puts $bd_tcl "    }"
+  puts $bd_tcl "  }"
+  puts $bd_tcl "}"
+  puts $bd_tcl ""
+  close $bd_tcl
+
+  set proj_fileset [get_filesets sources_1]
+  add_files -norecurse -scan_for_includes -fileset $proj_fileset "bd/bd.tcl"
+
+  set local_mk [open "temporary_case_dependencies.mk" w]
+  seek $local_mk 0 start
+  puts $local_mk "CLEAN_TARGET += bd"
+  puts $local_mk "CLEAN_TARGET += temporary_case_dependencies.mk"
+  close $local_mk
+}
+
+proc adi_add_auto_fpga_spec_params {} {
+
+  global auto_set_param_list
+  global auto_set_param_list_overwritable
+  set cc [ipx::current_core]
+
+  foreach i $auto_set_param_list {
+    if { [ipx::get_user_parameters $i -of_objects $cc -quiet] ne ""} {
+      adi_add_device_spec_param $i
+    }
+  }
+  foreach i $auto_set_param_list_overwritable {
+    if { [ipx::get_user_parameters $i -of_objects $cc -quiet] ne ""} {
+      adi_add_device_spec_param $i
+    }
+  }
+}
+
+proc adi_add_device_spec_param {ip_param} {
+
+  set cc [ipx::current_core]
+
+  set list_pointer [string tolower $ip_param]
+  set list_pointer [append list_pointer "_list"]
+
+  global $list_pointer
+
+  # set j 1D list from the original list
+  foreach i [subst $$list_pointer] {lappend j [lindex $i 0] [lindex $i 1]}
+
+  # set ranges or validation pairs (show x in GUI assign the corresponding y to HDL)
+  if { [llength [subst $$list_pointer]] == 2 && [llength $j] == 4} {
+    set_property -dict [list \
+      "value_validation_type" "range" \
+      "value_validation_range_minimum" [lindex [subst $$list_pointer] 0] \
+      "value_validation_range_maximum" [lindex [subst $$list_pointer] 1] ] \
+    [ipx::get_user_parameters $ip_param -of_objects $cc]
+  } else {
+    set_property -dict [list \
+      "value_validation_type" "pairs" \
+      "value_validation_pairs" $j ] \
+    [ipx::get_user_parameters $ip_param -of_objects $cc]
+  }
+
+  # FPGA info grup
+  set info_group_name "FPGA info"
+  set info_group [ipgui::get_groupspec -name $info_group_name -component $cc -quiet]
+  if { [string trim $info_group] eq "" } {
+    set page0 [ipgui::get_pagespec -name "Page 0" -component $cc]
+    set info_group [ipgui::add_group -name $info_group_name -component $cc \
+        -parent $page0 -display_name $info_group_name]
+  }
+
+  set p [ipgui::get_guiparamspec -name $ip_param -component $cc]
+  set_property -dict [list "widget" "comboBox" ] $p
+  ipgui::move_param -component $cc -order 0 $p -parent $info_group
 }
 
 ## ###############################################################################################

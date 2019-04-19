@@ -28,6 +28,9 @@ adi_ip_files axi_hdmi_tx [list \
 
 adi_ip_properties axi_hdmi_tx
 
+adi_init_bd_tcl
+adi_ip_bd axi_ad9122 "bd/bd.tcl"
+
 set_property driver_value 0 [ipx::get_ports *hsync* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *vsync* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *data* -of_objects [ipx::current_core]]
@@ -65,6 +68,10 @@ ipx::infer_bus_interface hdmi_out_clk xilinx.com:signal:clock_rtl:1.0 [ipx::curr
 ipx::infer_bus_interface vdma_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 
 ipx::associate_bus_interfaces -busif s_axis -clock vdma_clk [ipx::current_core]
+
+
+adi_add_auto_fpga_spec_params
+ipx::create_xgui_files [ipx::current_core]
 
 ipx::save_core [ipx::current_core]
 

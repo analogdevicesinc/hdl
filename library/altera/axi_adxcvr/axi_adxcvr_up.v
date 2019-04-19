@@ -40,6 +40,12 @@ module axi_adxcvr_up #(
   // parameters
 
   parameter   integer ID = 0,
+  parameter   [ 7:0]  FPGA_TECHNOLOGY = 0,
+  parameter   [ 7:0]  FPGA_FAMILY = 0,
+  parameter   [ 7:0]  SPEED_GRADE = 0,
+  parameter   [ 7:0]  DEV_PACKAGE = 0,
+  parameter   [15:0]  FPGA_VOLTAGE = 0,
+  parameter   integer XCVR_TYPE = 0,
   parameter   integer TX_OR_RX_N = 0,
   parameter   integer NUM_OF_LANES = 4) (
 
@@ -64,7 +70,7 @@ module axi_adxcvr_up #(
 
   // parameters
 
-  localparam  [31:0]  VERSION = 32'h00100161;
+  localparam  [31:0]  VERSION = 32'h00110161;
 
   // internal registers
 
@@ -136,7 +142,8 @@ module axi_adxcvr_up #(
 
   // Specific to Altera
 
-  assign up_rparam_s[31:24] = 8'd0;
+  assign up_rparam_s[31:28] = 8'd0;
+  assign up_rparam_s[27:24] = XCVR_TYPE[3:0];
 
   // Specific to Xilinx
 
@@ -168,6 +175,7 @@ module axi_adxcvr_up #(
           10'h005: up_rdata_d <= {31'd0, up_status_int};
           10'h006: up_rdata_d <= up_status_32_s;
           10'h009: up_rdata_d <= up_rparam_s;
+	  10'h050: up_rdata_d <= {16'd0, FPGA_VOLTAGE};  // mV
           default: up_rdata_d <= 32'd0;
         endcase
       end else begin

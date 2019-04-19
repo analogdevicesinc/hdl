@@ -38,5 +38,4 @@ set_property  -dict {PACKAGE_PIN  G20  IOSTANDARD LVDS_25}  [get_ports tx_data_o
 # clocks
 
 create_clock -name rx_clk       -period  8 [get_ports rx_clk_in_p]
-create_clock -name ad9361_clk   -period  8 [get_pins i_system_wrapper/system_i/axi_ad9361/clk]
 

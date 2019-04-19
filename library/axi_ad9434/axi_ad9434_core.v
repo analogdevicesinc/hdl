@@ -37,7 +37,11 @@
 
 module axi_ad9434_core #(
 
-  parameter ID = 0) (
+  parameter ID = 0,
+  parameter FPGA_TECHNOLOGY = 0,
+  parameter FPGA_FAMILY = 0,
+  parameter SPEED_GRADE = 0,
+  parameter DEV_PACKAGE = 0) (
 
   // device interface
 
@@ -148,6 +152,10 @@ module axi_ad9434_core #(
 
   up_adc_common #(
     .ID(ID),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .FPGA_FAMILY (FPGA_FAMILY),
+    .SPEED_GRADE (SPEED_GRADE),
+    .DEV_PACKAGE (DEV_PACKAGE),
     .CONFIG(0),
     .COMMON_ID(0),
     .DRP_DISABLE(0),

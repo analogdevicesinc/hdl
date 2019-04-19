@@ -37,7 +37,12 @@
 
 module up_clkgen #(
 
-  parameter   ID = 0) (
+  parameter         ID = 0,
+  parameter [ 7:0]  FPGA_TECHNOLOGY = 0,
+  parameter [ 7:0]  FPGA_FAMILY = 0,
+  parameter [ 7:0]  SPEED_GRADE = 0,
+  parameter [ 7:0]  DEV_PACKAGE = 0,
+  parameter [15:0]  FPGA_VOLTAGE = 0) (
 
   // mmcm reset
 
@@ -70,7 +75,7 @@ module up_clkgen #(
   output  reg [31:0]      up_rdata,
   output  reg             up_rack);
 
-  localparam  PCORE_VERSION = 32'h00040063;
+  localparam  PCORE_VERSION = 32'h00050063;
 
   // internal registers
 
@@ -161,11 +166,13 @@ module up_clkgen #(
           8'h00: up_rdata <= PCORE_VERSION;
           8'h01: up_rdata <= ID;
           8'h02: up_rdata <= up_scratch;
+          8'h07: up_rdata <= {FPGA_TECHNOLOGY,FPGA_FAMILY,SPEED_GRADE,DEV_PACKAGE}; // [8,8,8,8]
           8'h10: up_rdata <= {30'd0, up_mmcm_resetn, up_resetn};
           8'h11: up_rdata <= {31'd0, up_clk_sel};
           8'h17: up_rdata <= {31'd0, up_drp_locked};
           8'h1c: up_rdata <= {3'd0, up_drp_rwn, up_drp_addr, up_drp_wdata};
           8'h1d: up_rdata <= {14'd0, up_drp_locked, up_drp_status, up_drp_rdata_hold};
+          8'h50: up_rdata <= {16'd0, FPGA_VOLTAGE}; // mV
           default: up_rdata <= 0;
         endcase
       end else begin

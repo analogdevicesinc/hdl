@@ -27,10 +27,16 @@ adi_ip_files axi_ad9671 [list \
 
 adi_ip_properties axi_ad9671
 
+adi_init_bd_tcl
+adi_ip_bd axi_ad9371 "bd/bd.tcl"
+
 set_property driver_value 0 [ipx::get_ports *rx_valid* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *dovf* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *sync_in* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *raddr_in* -of_objects [ipx::current_core]]
+
+adi_add_auto_fpga_spec_params
+ipx::create_xgui_files [ipx::current_core]
 
 ipx::save_core [ipx::current_core]
 

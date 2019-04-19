@@ -40,6 +40,10 @@ module axi_ad9963_tx #(
   // parameters
 
   parameter   ID = 0,
+  parameter   FPGA_TECHNOLOGY = 0,
+  parameter   FPGA_FAMILY = 0,
+  parameter   SPEED_GRADE = 0,
+  parameter   DEV_PACKAGE = 0,
   parameter   DAC_DDS_TYPE = 1,
   parameter   DAC_DDS_CORDIC_DW = 14,
   parameter   DAC_DDS_CORDIC_PHASE_DW = 13,
@@ -186,6 +190,10 @@ module axi_ad9963_tx #(
 
   up_dac_common #(
     .ID (ID),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .FPGA_FAMILY (FPGA_FAMILY),
+    .SPEED_GRADE (SPEED_GRADE),
+    .DEV_PACKAGE (DEV_PACKAGE),
     .CONFIG(0),
     .CLK_EDGE_SEL(0),
     .COMMON_ID(6'h10),

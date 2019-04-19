@@ -88,14 +88,21 @@ module axi_adxcvr_es (
   parameter   integer XCVR_TYPE = 0;
   parameter   integer TX_OR_RX_N = 0;
 
+  // local parameters
+
+  localparam GTXE2 = 2;
+  localparam GTHE3 = 5;
+  localparam GTHE4 = 8;
+  localparam GTYE4 = 9;
+
   // addresses
 
-  localparam  [11:0]  ES_DRP_CTRL_ADDR    = (XCVR_TYPE == 0) ? 12'h03d : (XCVR_TYPE == 1) ? 12'h03c : 12'h03c;
-  localparam  [11:0]  ES_DRP_HOFFSET_ADDR = (XCVR_TYPE == 0) ? 12'h03c : (XCVR_TYPE == 1) ? 12'h04f : 12'h04f;
-  localparam  [11:0]  ES_DRP_VOFFSET_ADDR = (XCVR_TYPE == 0) ? 12'h03b : (XCVR_TYPE == 1) ? 12'h097 : 12'h097;
-  localparam  [11:0]  ES_DRP_STATUS_ADDR  = (XCVR_TYPE == 0) ? 12'h151 : (XCVR_TYPE == 1) ? 12'h153 : 12'h253;
-  localparam  [11:0]  ES_DRP_SCNT_ADDR    = (XCVR_TYPE == 0) ? 12'h150 : (XCVR_TYPE == 1) ? 12'h152 : 12'h252;
-  localparam  [11:0]  ES_DRP_ECNT_ADDR    = (XCVR_TYPE == 0) ? 12'h14f : (XCVR_TYPE == 1) ? 12'h151 : 12'h251;
+  localparam  [11:0]  ES_DRP_CTRL_ADDR    = (XCVR_TYPE == GTXE2) ? 12'h03d : (XCVR_TYPE == GTHE3) ? 12'h03c : 12'h03c;
+  localparam  [11:0]  ES_DRP_HOFFSET_ADDR = (XCVR_TYPE == GTXE2) ? 12'h03c : (XCVR_TYPE == GTHE3) ? 12'h04f : 12'h04f;
+  localparam  [11:0]  ES_DRP_VOFFSET_ADDR = (XCVR_TYPE == GTXE2) ? 12'h03b : (XCVR_TYPE == GTHE3) ? 12'h097 : 12'h097;
+  localparam  [11:0]  ES_DRP_STATUS_ADDR  = (XCVR_TYPE == GTXE2) ? 12'h151 : (XCVR_TYPE == GTHE3) ? 12'h153 : 12'h253;
+  localparam  [11:0]  ES_DRP_SCNT_ADDR    = (XCVR_TYPE == GTXE2) ? 12'h150 : (XCVR_TYPE == GTHE3) ? 12'h152 : 12'h252;
+  localparam  [11:0]  ES_DRP_ECNT_ADDR    = (XCVR_TYPE == GTXE2) ? 12'h14f : (XCVR_TYPE == GTHE3) ? 12'h151 : 12'h251;
 
   // fsm-states
 
@@ -483,7 +490,7 @@ module axi_adxcvr_es (
           up_enb <= 1'b1;
           up_addr <= ES_DRP_HOFFSET_ADDR;
           up_wr <= 1'b1;
-          if (XCVR_TYPE != 0) begin
+          if (XCVR_TYPE != GTXE2) begin
           up_data <= {up_hindex, up_hdata[3:0]};
           end else begin
           up_data <= {up_hdata[15:12], up_hindex};
@@ -499,7 +506,7 @@ module axi_adxcvr_es (
           up_enb <= 1'b1;
           up_addr <= ES_DRP_VOFFSET_ADDR;
           up_wr <= 1'b1;
-          if (XCVR_TYPE != 0) begin
+          if (XCVR_TYPE != GTXE2) begin
           up_data <= {up_vdata[15:11], up_vindex_s[7], up_ut_s, up_vindex_s[6:0], up_es_vrange};
           end else begin
           up_data <= {up_es_pscale, up_vdata[10:9], up_ut_s, up_vindex_s};
@@ -515,7 +522,7 @@ module axi_adxcvr_es (
           up_enb <= 1'b1;
           up_addr <= ES_DRP_CTRL_ADDR;
           up_wr <= 1'b1;
-          if (XCVR_TYPE != 0) begin
+          if (XCVR_TYPE != GTXE2) begin
           up_data <= {6'd1, 2'b11, up_cdata[7:5], up_es_pscale};
           end else begin
           up_data <= {up_cdata[15:10], 2'b11, up_cdata[7:6], 6'd1};
@@ -531,7 +538,7 @@ module axi_adxcvr_es (
           up_enb <= 1'b1;
           up_addr <= ES_DRP_CTRL_ADDR;
           up_wr <= 1'b1;
-          if (XCVR_TYPE != 0) begin
+          if (XCVR_TYPE != GTXE2) begin
           up_data <= {6'd0, 2'b11, up_cdata[7:5], up_es_pscale};
           end else begin
           up_data <= {up_cdata[15:10], 2'b11, up_cdata[7:6], 6'd0};

@@ -38,5 +38,4 @@ set_property  -dict {PACKAGE_PIN  A17  IOSTANDARD LVDS}     [get_ports tx_data_o
 # clocks
 
 create_clock -name rx_clk       -period  4 [get_ports rx_clk_in_p]
-create_clock -name ad9361_clk   -period  4 [get_pins i_system_wrapper/system_i/axi_ad9361/clk]
 

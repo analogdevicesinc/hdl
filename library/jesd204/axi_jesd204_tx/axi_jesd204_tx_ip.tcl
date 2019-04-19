@@ -47,9 +47,7 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
 adi_ip_create axi_jesd204_tx
 adi_ip_files axi_jesd204_tx [list \
-  "../../xilinx/common/up_clock_mon_constr.xdc" \
   "../../common/up_axi.v" \
-  "../../common/up_clock_mon.v" \
   "axi_jesd204_tx_constr.xdc" \
   "jesd204_up_tx.v" \
   "axi_jesd204_tx.v" \
@@ -63,7 +61,6 @@ set_property PROCESSING_ORDER LATE [ipx::get_files axi_jesd204_tx_constr.xdc \
 
 adi_ip_add_core_dependencies { \
   analog.com:user:axi_jesd204_common:1.0 \
-  analog.com:user:util_cdc:1.0 \
 }
 
 set_property display_name "ADI JESD204B Transmit AXI Interface" [ipx::current_core]

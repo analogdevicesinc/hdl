@@ -1,9 +1,13 @@
 
 package require qsys
+package require quartus::device
+
 source ../scripts/adi_env.tcl
 source ../scripts/adi_ip_alt.tcl
 
 ad_ip_create axi_ad9361 {AXI AD9361 Interface} axi_ad9361_elab
+set_module_property VALIDATION_CALLBACK info_param_validate
+
 ad_ip_files axi_ad9361 [list\
   $ad_hdl_dir/library/altera/common/ad_mul.v \
   $ad_hdl_dir/library/altera/common/ad_dcfilter.v \
@@ -50,10 +54,8 @@ ad_ip_files axi_ad9361 [list\
 
 # parameters
 
-ad_ip_parameter DEVICE_FAMILY STRING {Arria 10}
 ad_ip_parameter ID INTEGER 0
 ad_ip_parameter MODE_1R1T INTEGER 0
-ad_ip_parameter DEVICE_TYPE INTEGER 0
 ad_ip_parameter TDD_DISABLE INTEGER 0
 ad_ip_parameter CMOS_OR_LVDS_N INTEGER 0
 ad_ip_parameter ADC_DATAPATH_DISABLE INTEGER 0
@@ -67,6 +69,8 @@ ad_ip_parameter DAC_DDS_DISABLE INTEGER 0
 ad_ip_parameter DAC_USERPORTS_DISABLE INTEGER 0
 ad_ip_parameter DAC_IQCORRECTION_DISABLE INTEGER 0
 ad_ip_parameter IO_DELAY_GROUP STRING {dev_if_delay_group}
+
+adi_add_auto_fpga_spec_params
 
 # interfaces
 
@@ -165,27 +169,27 @@ ad_alt_intf signal up_adc_gpio_out output 32
 
 proc axi_ad9361_elab {} {
 
-  set m_device_family [get_parameter_value "DEVICE_FAMILY"]
+  set m_fpga_technology [get_parameter_value "FPGA_TECHNOLOGY"]
   set m_cmos_or_lvds_n [get_parameter_value "CMOS_OR_LVDS_N"]
 
-  if {$m_device_family eq "Arria 10"} {
+  if {$m_fpga_technology eq "Arria 10"} {
 
     add_hdl_instance axi_ad9361_serdes_clk alt_serdes
-    set_instance_parameter_value axi_ad9361_serdes_clk {DEVICE_FAMILY} $m_device_family
+    set_instance_parameter_value axi_ad9361_serdes_clk {FPGA_TECHNOLOGY} $m_fpga_technology
     set_instance_parameter_value axi_ad9361_serdes_clk {MODE} {CLK}
     set_instance_parameter_value axi_ad9361_serdes_clk {DDR_OR_SDR_N} {1}
     set_instance_parameter_value axi_ad9361_serdes_clk {SERDES_FACTOR} {4}
     set_instance_parameter_value axi_ad9361_serdes_clk {CLKIN_FREQUENCY} {250.0}
 
     add_hdl_instance axi_ad9361_serdes_in alt_serdes
-    set_instance_parameter_value axi_ad9361_serdes_in {DEVICE_FAMILY} $m_device_family
+    set_instance_parameter_value axi_ad9361_serdes_in {FPGA_TECHNOLOGY} $m_fpga_technology
     set_instance_parameter_value axi_ad9361_serdes_in {MODE} {IN}
     set_instance_parameter_value axi_ad9361_serdes_in {DDR_OR_SDR_N} {1}
     set_instance_parameter_value axi_ad9361_serdes_in {SERDES_FACTOR} {4}
     set_instance_parameter_value axi_ad9361_serdes_in {CLKIN_FREQUENCY} {250.0}
 
     add_hdl_instance axi_ad9361_serdes_out alt_serdes
-    set_instance_parameter_value axi_ad9361_serdes_out {DEVICE_FAMILY} $m_device_family
+    set_instance_parameter_value axi_ad9361_serdes_out {FPGA_TECHNOLOGY} $m_fpga_technology
     set_instance_parameter_value axi_ad9361_serdes_out {MODE} {OUT}
     set_instance_parameter_value axi_ad9361_serdes_out {DDR_OR_SDR_N} {1}
     set_instance_parameter_value axi_ad9361_serdes_out {SERDES_FACTOR} {4}

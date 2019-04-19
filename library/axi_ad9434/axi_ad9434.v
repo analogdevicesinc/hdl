@@ -39,8 +39,10 @@ module axi_ad9434 #(
 
   parameter ID = 0,
   
-  // set to 0 for Xilinx 7 Series or 1 for 6 Series
-  parameter DEVICE_TYPE = 0,
+  parameter FPGA_TECHNOLOGY = 0,
+  parameter FPGA_FAMILY = 0,
+  parameter SPEED_GRADE = 0,
+  parameter DEV_PACKAGE = 0,
   parameter IO_DELAY_GROUP = "dev_if_delay_group") (
 
   // physical interface
@@ -128,7 +130,7 @@ module axi_ad9434 #(
   assign up_rstn = s_axi_aresetn;
 
   axi_ad9434_if #(
-    .DEVICE_TYPE(DEVICE_TYPE),
+    .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
     .IO_DELAY_GROUP(IO_DELAY_GROUP))
   i_if(
     .adc_clk_in_p(adc_clk_in_p),
@@ -160,8 +162,13 @@ module axi_ad9434 #(
     .up_drp_locked(up_drp_locked_s));
 
   // common processor control
-  axi_ad9434_core #(.ID(ID))
-  i_core (
+  axi_ad9434_core #(
+    .ID (ID),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .FPGA_FAMILY (FPGA_FAMILY),
+    .SPEED_GRADE (SPEED_GRADE),
+    .DEV_PACKAGE (DEV_PACKAGE)
+  ) i_core (
     .adc_clk(adc_clk),
     .adc_data(adc_data_if_s),
     .adc_or(adc_or_if_s),
