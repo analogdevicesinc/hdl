@@ -38,7 +38,7 @@
 module system_top (
 
   output              fan_tach,
-  output              fan_pwrm,
+  output              fan_pwm,
   input               i2s_sdata_in,
   output              i2s_sdata_out,
   output              i2s_mclk,
@@ -341,7 +341,7 @@ module system_top (
               hmc7044_car_reset,  // 23
               resetb_ad9545,      // 22
               fan_tach,           // 21
-              fan_pwrm,           // 20
+              fan_pwm,           // 20
               pmod0_d7,           // 19
               pmod0_d6,           // 18
               pmod0_d5,           // 17
@@ -492,6 +492,11 @@ module system_top (
     .tx_sync_0 (tx_sync),
     .tx_sysref_0 (sysref_a),
     .dac_fifo_bypass(gpio_o[90]),
+    .i2s_bclk(i2s_bclk),
+    .i2s_lrclk(i2s_lrclk),
+    .i2s_mclk(i2s_mclk),
+    .i2s_sdata_in(i2s_sdata_in),
+    .i2s_sdata_out(i2s_sdata_out),
     .spi0_csn(spi_csn),
     .spi0_miso(spi0_miso),
     .spi0_mosi(spi_mosi),
