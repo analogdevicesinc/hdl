@@ -4,6 +4,9 @@ add_files -fileset constrs_1 -norecurse ./carrier_constr.xdc
 create_bd_port -dir O -type clk i2s_mclk
 create_bd_intf_port -mode Master -vlnv analog.com:interface:i2s_rtl:1.0 i2s
 
+create_bd_port -dir I axi_fan_tacho_i
+create_bd_port -dir O axi_fan_pwm_o
+
 # 12.288MHz clk
 ad_ip_instance axi_clkgen sys_audio_clkgen
 ad_ip_parameter sys_audio_clkgen CONFIG.ID 6
@@ -55,7 +58,6 @@ ad_connect sys_cpu_resetn axi_i2s_adi/s_axi_aresetn
 ad_connect sys_cpu_resetn axi_i2s_adi/s_axis_aresetn
 ad_connect i2s_tx_dma/m_axis axi_i2s_adi/s_axis
 
-#ad_connect i2s_rx_dma/s_axis axi_i2s_adi/m_axis
 # not connecting tlast
 ad_connect i2s_rx_dma/s_axis_data axi_i2s_adi/m_axis_tdata
 ad_connect i2s_rx_dma/s_axis_valid axi_i2s_adi/m_axis_tvalid
@@ -69,20 +71,32 @@ ad_connect sys_cpu_clk i2s_tx_dma/m_src_axi_aclk
 ad_connect sys_cpu_clk i2s_tx_dma/m_axis_aclk
 ad_connect sys_cpu_resetn i2s_tx_dma/s_axi_aresetn
 ad_connect sys_cpu_resetn i2s_tx_dma/m_src_axi_aresetn
-ad_cpu_interrupt ps-6 mb-6 i2s_tx_dma/irq
 
 ad_connect sys_cpu_clk i2s_rx_dma/s_axi_aclk
 ad_connect sys_cpu_clk i2s_rx_dma/m_dest_axi_aclk
 ad_connect sys_cpu_clk i2s_rx_dma/s_axis_aclk
 ad_connect sys_cpu_resetn i2s_rx_dma/s_axi_aresetn
 ad_connect sys_cpu_resetn i2s_rx_dma/m_dest_axi_aresetn
-ad_cpu_interrupt ps-7 mb-7 i2s_rx_dma/irq
+
+ad_ip_instance axi_fan_control axi_fan_control_0
+ad_ip_parameter axi_fan_control_0 CONFIG.ID 1
+
+ad_connect axi_fan_tacho_i axi_fan_control_0/tacho
+ad_connect axi_fan_pwm_o axi_fan_control_0/pwm
 
 # interconnect
+
 ad_cpu_interconnect 0x41000000 i2s_rx_dma
 ad_cpu_interconnect 0x41001000 i2s_tx_dma
 ad_cpu_interconnect 0x41010000 sys_audio_clkgen
 ad_cpu_interconnect 0x42000000 axi_i2s_adi
+ad_cpu_interconnect 0x80000000 axi_fan_control_0
 
 ad_mem_hp0_interconnect sys_cpu_clk i2s_tx_dma/m_src_axi
 ad_mem_hp0_interconnect sys_cpu_clk i2s_rx_dma/m_dest_axi
+
+# interrupts
+
+ad_cpu_interrupt ps-6 mb-6 i2s_tx_dma/irq
+ad_cpu_interrupt ps-7 mb-7 i2s_rx_dma/irq
+ad_cpu_interrupt ps-14 mb-14 axi_fan_control_0/irq
