@@ -62,7 +62,9 @@ prepare_incremental_compile:
 		if [ -f ./reference.dcp ]; then \
 			echo Using reference checkpoint for incremental compilation; \
 		fi; \
-	fi; 
+	else \
+		rm -f reference.dcp; \
+	fi;
 
 $(PROJECT_NAME).sdk/system_top.hdf: $(M_DEPS)
 	-rm -rf $(CLEAN_TARGET)
