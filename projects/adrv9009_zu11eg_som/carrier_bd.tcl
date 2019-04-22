@@ -86,11 +86,11 @@ ad_connect axi_fan_pwm_o axi_fan_control_0/pwm
 
 # interconnect
 
+ad_cpu_interconnect 0x40000000 axi_fan_control_0
 ad_cpu_interconnect 0x41000000 i2s_rx_dma
 ad_cpu_interconnect 0x41001000 i2s_tx_dma
 ad_cpu_interconnect 0x41010000 sys_audio_clkgen
 ad_cpu_interconnect 0x42000000 axi_i2s_adi
-ad_cpu_interconnect 0x80000000 axi_fan_control_0
 
 ad_mem_hp0_interconnect sys_cpu_clk i2s_tx_dma/m_src_axi
 ad_mem_hp0_interconnect sys_cpu_clk i2s_rx_dma/m_dest_axi

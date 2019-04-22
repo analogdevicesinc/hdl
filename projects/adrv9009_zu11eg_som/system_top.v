@@ -288,6 +288,7 @@ module system_top (
 
   assign gpio_i[94:90] = gpio_o[94:90];
   assign gpio_i[31:28] = gpio_o[31:28];
+  assign gpio_i[21:20] = gpio_o[21:20];
 
   ad_iobuf #(.DATA_WIDTH(58)) i_iobuf (
     .dio_t ({gpio_t[89:32]}),
@@ -353,17 +354,23 @@ module system_top (
               adrv9009_gpio_01_a,       // 33
               adrv9009_gpio_00_a}));    // 32
 
-  ad_iobuf #(.DATA_WIDTH(28)) i_carrier_iobuf (
-    .dio_t ({gpio_t[27:0]}),
-    .dio_i ({gpio_o[27:0]}),
-    .dio_o ({gpio_i[27:22], gpio_i[19:0]}),
+  ad_iobuf #(.DATA_WIDTH(6)) i_carrier_iobuf_0 (
+    .dio_t ({gpio_t[27:22]}),
+    .dio_i ({gpio_o[27:22]}),
+    .dio_o ({gpio_i[27:22]}),
     .dio_p ({
               hmc7044_car_gpio_3, // 27
               hmc7044_car_gpio_2, // 26
               hmc7044_car_gpio_1, // 25
               hmc7044_car_gpio_0, // 24
               hmc7044_car_reset,  // 23
-              resetb_ad9545,      // 22
+              resetb_ad9545}));   // 22
+
+  ad_iobuf #(.DATA_WIDTH(20)) i_carrier_iobuf_1 (
+    .dio_t ({gpio_t[19:0]}),
+    .dio_i ({gpio_o[19:0]}),
+    .dio_o ({gpio_i[19:0]}),
+    .dio_p ({
               pmod0_d7,           // 19
               pmod0_d6,           // 18
               pmod0_d5,           // 17
