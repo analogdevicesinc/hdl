@@ -84,10 +84,10 @@ wire [NUM_LINKS-1:0] up_status_sync;
 sync_bits #(
   .NUM_OF_BITS (NUM_LINKS))
 i_cdc_sync (
-  .in(core_status_sync),
+  .in_bits(core_status_sync),
   .out_clk(up_clk),
   .out_resetn(1'b1),
-  .out(up_status_sync)
+  .out_bits(up_status_sync)
 );
 
 sync_data #(

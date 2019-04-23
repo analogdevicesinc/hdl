@@ -116,8 +116,8 @@ sync_bits #(
 ) i_waddr_sync (
   .out_clk(m_axis_aclk),
   .out_resetn(m_axis_aresetn),
-  .in(s_axis_waddr_gray),
-  .out(m_axis_waddr_gray)
+  .in_bits(s_axis_waddr_gray),
+  .out_bits(m_axis_waddr_gray)
 );
 
 sync_bits #(
@@ -125,8 +125,8 @@ sync_bits #(
 ) i_raddr_sync (
   .out_clk(s_axis_aclk),
   .out_resetn(s_axis_aresetn),
-  .in(m_axis_raddr_gray),
-  .out(s_axis_raddr_gray)
+  .in_bits(m_axis_raddr_gray),
+  .out_bits(s_axis_raddr_gray)
 );
 
 always @(posedge s_axis_aclk)

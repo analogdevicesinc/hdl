@@ -98,10 +98,10 @@ wire [NUM_LINKS-1:0] status_sync_masked;
 sync_bits #(
   .NUM_OF_BITS (NUM_LINKS))
 i_cdc_sync (
-  .in(sync),
+  .in_bits(sync),
   .out_clk(clk),
   .out_resetn(1'b1),
-  .out(status_sync)
+  .out_bits(status_sync)
 );
 assign status_sync_masked = status_sync | cfg_links_disable;
 

@@ -65,10 +65,10 @@ reg [31:0] mem[0:3];
 reg core_ilas_captured = 1'b0;
 
 sync_bits i_cdc_ilas_ready (
-  .in(core_ilas_captured),
+  .in_bits(core_ilas_captured),
   .out_resetn(1'b1),
   .out_clk(up_clk),
-  .out(up_ilas_ready)
+  .out_bits(up_ilas_ready)
 );
 
 always @(posedge core_clk) begin

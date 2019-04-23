@@ -196,30 +196,30 @@ module axi_ad5766 #(
         .NUM_OF_BITS(1),
         .ASYNC_CLK(1)
     ) i_sync_enable (
-        .in(ctrl_do_enable),
+        .in_bits(ctrl_do_enable),
         .out_clk(spi_clk),
         .out_resetn(1'b1),
-        .out(spi_enable_s)
+        .out_bits(spi_enable_s)
     );
 
     sync_bits # (
         .NUM_OF_BITS(1),
         .ASYNC_CLK(1)
     ) i_sync_enabled (
-        .in(spi_enabled),
+        .in_bits(spi_enabled),
         .out_clk(ctrl_clk),
         .out_resetn(1'b1),
-        .out(ctrl_is_enabled)
+        .out_bits(ctrl_is_enabled)
     );
 
     sync_bits # (
         .NUM_OF_BITS(1),
         .ASYNC_CLK(1)
     ) i_sync_mem_reset (
-        .in(ctrl_mem_reset),
+        .in_bits(ctrl_mem_reset),
         .out_clk(spi_clk),
         .out_resetn(1'b1),
-        .out(spi_mem_reset_s)
+        .out_bits(spi_mem_reset_s)
     );
 
   end else begin

@@ -861,8 +861,8 @@ sync_bits #(
 ) i_sync_src_request_id (
   .out_clk(src_clk),
   .out_resetn(1'b1),
-  .in(request_id),
-  .out(src_request_id)
+  .in_bits(request_id),
+  .out_bits(src_request_id)
 );
 
 `include "inc_id.vh"
@@ -926,8 +926,8 @@ sync_bits #(
 ) i_sync_req_response_id (
   .out_clk(req_clk),
   .out_resetn(1'b1),
-  .in(dest_response_id),
-  .out(response_id)
+  .in_bits(dest_response_id),
+  .out_bits(response_id)
 );
 
 axi_register_slice #(
