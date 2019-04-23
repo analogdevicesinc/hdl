@@ -77,12 +77,12 @@ wire up_ilas_ready;
 sync_bits #(
   .NUM_OF_BITS(1)
 ) i_cdc_status_ready (
-  .in({
+  .in_bits({
     core_status_ifs_ready
   }),
   .out_clk(up_clk),
   .out_resetn(1'b1),
-  .out({
+  .out_bits({
     up_status_ifs_ready
   })
 );

@@ -57,17 +57,17 @@ reg in_toggle_d1 = 1'b0;
 reg [NUM_OF_BITS-1:0] cdc_hold;
 
 sync_bits i_sync_out (
-  .in(in_toggle_d1),
+  .in_bits(in_toggle_d1),
   .out_clk(out_clk),
   .out_resetn(1'b1),
-  .out(out_toggle)
+  .out_bits(out_toggle)
 );
 
 sync_bits i_sync_in (
-  .in(out_toggle_d1),
+  .in_bits(out_toggle_d1),
   .out_clk(in_clk),
   .out_resetn(1'b1),
-  .out(in_toggle)
+  .out_bits(in_toggle)
 );
 
 wire in_load = in_toggle == in_toggle_d1;

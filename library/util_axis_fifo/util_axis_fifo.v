@@ -72,8 +72,8 @@ generate if (ADDRESS_WIDTH == 0) begin
   ) i_waddr_sync (
     .out_clk(m_axis_aclk),
     .out_resetn(m_axis_aresetn),
-    .in(s_axis_waddr),
-    .out(m_axis_waddr)
+    .in_bits(s_axis_waddr),
+    .out_bits(m_axis_waddr)
   );
 
   sync_bits #(
@@ -82,8 +82,8 @@ generate if (ADDRESS_WIDTH == 0) begin
   ) i_raddr_sync (
     .out_clk(s_axis_aclk),
     .out_resetn(s_axis_aresetn),
-    .in(m_axis_raddr),
-    .out(s_axis_raddr)
+    .in_bits(m_axis_raddr),
+    .out_bits(s_axis_raddr)
   );
 
   assign m_axis_valid = m_axis_raddr != m_axis_waddr;

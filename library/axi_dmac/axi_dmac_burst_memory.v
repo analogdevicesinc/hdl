@@ -417,20 +417,20 @@ sync_bits #(
   .NUM_OF_BITS (ID_WIDTH),
   .ASYNC_CLK (ASYNC_CLK)
 ) i_dest_sync_id (
-  .in (src_id),
+  .in_bits (src_id),
   .out_clk (dest_clk),
   .out_resetn (1'b1),
-  .out (dest_src_id)
+  .out_bits (dest_src_id)
 );
 
 sync_bits #(
   .NUM_OF_BITS (ID_WIDTH),
   .ASYNC_CLK (ASYNC_CLK)
 ) i_src_sync_id (
-  .in (dest_id),
+  .in_bits (dest_id),
   .out_clk (src_clk),
   .out_resetn (1'b1),
-  .out (src_dest_id)
+  .out_bits (src_dest_id)
 );
 
 assign dest_request_id = dest_src_id;

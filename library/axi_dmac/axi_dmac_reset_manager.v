@@ -267,8 +267,8 @@ sync_bits #(
 ) i_sync_control_dest (
   .out_clk (dest_clk),
   .out_resetn (1'b1),
-  .in (do_enable),
-  .out (dest_enable)
+  .in_bits (do_enable),
+  .out_bits (dest_enable)
 );
 
 sync_bits #(
@@ -277,8 +277,8 @@ sync_bits #(
 ) i_sync_status_dest (
   .out_clk (clk),
   .out_resetn (1'b1),
-  .in (dest_enabled),
-  .out (enabled_dest)
+  .in_bits (dest_enabled),
+  .out_bits (enabled_dest)
 );
 
 sync_bits #(
@@ -287,8 +287,8 @@ sync_bits #(
 ) i_sync_control_src (
   .out_clk (src_clk),
   .out_resetn (1'b1),
-  .in (do_enable),
-  .out (src_enable)
+  .in_bits (do_enable),
+  .out_bits (src_enable)
 );
 
 sync_bits #(
@@ -297,8 +297,8 @@ sync_bits #(
 ) i_sync_status_src (
   .out_clk (clk),
   .out_resetn (1'b1),
-  .in (src_enabled),
-  .out (enabled_src)
+  .in_bits (src_enabled),
+  .out_bits (enabled_src)
 );
 
 endmodule
