@@ -212,14 +212,19 @@ proc adi_project_run {project_name} {
 
   file mkdir $project_name.sdk
 
-  if [expr [get_property SLACK [get_timing_paths]] < 0] {
-    file copy -force $project_name.runs/impl_1/system_top.sysdef $project_name.sdk/system_top_bad_timing.hdf
-  } else {
+  set timing_paths_list [get_property -quiet SLACK [get_timing_paths -quiet]]
+  if {[llength $timing_paths_list] == 0} {
+    puts "no timing paths found"
     file copy -force $project_name.runs/impl_1/system_top.sysdef $project_name.sdk/system_top.hdf
-  }
-
-  if [expr [get_property SLACK [get_timing_paths]] < 0] {
-    return -code error [format "ERROR: Timing Constraints NOT met!"]
+  } else {
+    if [expr [get_property SLACK [get_timing_paths]] < 0] {
+      file copy -force $project_name.runs/impl_1/system_top.sysdef $project_name.sdk/system_top_bad_timing.hdf
+    } else {
+      file copy -force $project_name.runs/impl_1/system_top.sysdef $project_name.sdk/system_top.hdf
+    }
+    if [expr [get_property SLACK [get_timing_paths]] < 0] {
+      return -code error [format "ERROR: Timing Constraints NOT met!"]
+    }
   }
 }
 
