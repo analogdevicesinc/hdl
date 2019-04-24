@@ -191,6 +191,9 @@ foreach port {"s_axis_user" "fifo_wr_sync"} {
 	set_property DRIVER_VALUE "1" [ipx::get_ports $port]
 }
 
+# Infer interrupt
+ipx::infer_bus_interface irq xilinx.com:signal:interrupt_rtl:1.0 [ipx::current_core]
+
 set cc [ipx::current_core]
 
 # The core does not issue narrow bursts
