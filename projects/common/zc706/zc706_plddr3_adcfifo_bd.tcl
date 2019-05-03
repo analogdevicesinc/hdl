@@ -30,7 +30,7 @@ proc ad_adcfifo_create {adc_fifo_name adc_data_width adc_dma_data_width adc_fifo
   ad_ip_parameter $adc_fifo_name CONFIG.AXI_SIZE 6
   ad_ip_parameter $adc_fifo_name CONFIG.AXI_LENGTH 4
   ad_ip_parameter $adc_fifo_name CONFIG.AXI_ADDRESS 0x80000000
-  ad_ip_parameter $adc_fifo_name CONFIG.AXI_ADDRESS_LIMIT 0xa0000000
+  ad_ip_parameter $adc_fifo_name CONFIG.AXI_ADDRESS_LIMIT 0xbfffffff
 
   ad_connect  axi_ddr_cntrl/S_AXI $adc_fifo_name/axi
   ad_connect  axi_ddr_cntrl/ui_clk $adc_fifo_name/axi_clk
