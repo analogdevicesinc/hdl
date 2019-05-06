@@ -210,6 +210,14 @@ proc adi_project_run {project_name} {
   open_run impl_1
   report_timing_summary -file timing_impl.log
 
+  # Look for undefined clocks which do not show up in the timing summary
+  set timing_check [check_timing -override_defaults no_clock -no_header -return_string]
+  regexp {are (\d+) register} $timing_check -> num_regs
+  if {$num_regs > 0} {
+    puts "CRITICAL WARNING: There are $num_regs registers with no clocks !!! See no_clock.log for details."
+    check_timing -override_defaults no_clock -verbose -file no_clock.log
+  }
+
   file mkdir $project_name.sdk
 
   if [expr [get_property SLACK [get_timing_paths]] < 0] {
