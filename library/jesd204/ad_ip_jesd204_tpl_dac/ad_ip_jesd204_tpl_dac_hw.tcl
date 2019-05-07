@@ -55,6 +55,7 @@ ad_ip_files ad_ip_jesd204_tpl_dac [list \
   ad_ip_jesd204_tpl_dac_framer.v \
   ad_ip_jesd204_tpl_dac_pn.v \
   ad_ip_jesd204_tpl_dac_regmap.v \
+  ../ad_ip_jesd204_tpl_common/up_tpl_common.v \
 ]
 
 # parameters
