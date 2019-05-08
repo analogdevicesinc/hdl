@@ -110,9 +110,8 @@ localparam        DRP_READ_TEMP           = 8'h03;
 localparam        DRP_READ_TEMP_WAIT_DRDY = 8'h04;
 localparam        GET_TACHO               = 8'h05;
 localparam        EVAL_TEMP               = 8'h06;
-localparam        EVAL_PWM                = 8'h07;
-localparam        SET_PWM                 = 8'h08;
-localparam        EVAL_TACHO              = 8'h09;
+localparam        SET_PWM                 = 8'h07;
+localparam        EVAL_TACHO              = 8'h08;
 
 reg   [31:0]  up_scratch = 'd0;
 reg   [7:0]   state = INIT;
@@ -409,19 +408,10 @@ always @(posedge up_clk)
           //if no changes are needed make sure to mantain current pwm
           pwm_width_req <= pwm_width;
         end
-        state <= EVAL_PWM;
-      end
-
-      EVAL_PWM : begin
-        //setting alarm for temperature increase
-        if (pwm_width_req > pwm_width) begin
-          temp_increase_alarm <= 1'b1;
-        end
         state <= SET_PWM;
       end
 
       SET_PWM : begin
-        temp_increase_alarm <= 1'b0;
         if ((up_pwm_width != pwm_width) && (up_pwm_width >= pwm_width_req) && (up_pwm_width <= PWM_PERIOD) && (pwm_change_done)) begin
           pwm_width <= up_pwm_width;
           pulse_gen_load_config <= 1'b1;
@@ -429,12 +419,14 @@ always @(posedge up_clk)
         end else if ((pwm_width != pwm_width_req) && (pwm_width_req > up_pwm_width) && (pwm_change_done)) begin
           pwm_width <= pwm_width_req;
           pulse_gen_load_config <= 1'b1;
+          temp_increase_alarm <= 1'b1;
           //clear alarm when pwm duty changes
         end
         state <= EVAL_TACHO;
       end
 
       EVAL_TACHO : begin
+        temp_increase_alarm <= 1'b0;
         //tacho section
         //check if the fan is turning then see if it is turning correctly
         if(counter_overflow & pwm_change_done) begin
@@ -510,7 +502,9 @@ always @(posedge up_clk) begin
     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h23)) begin
       up_tacho_tol <= up_wdata_s;
       up_tacho_en <= 1'b1;
-    end
+    end else if (temp_increase_alarm) begin
+      up_tacho_en <= 1'b0;
+    end 
     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h10)) begin
       up_irq_mask <= up_wdata_s[3:0];
     end
