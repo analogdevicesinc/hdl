@@ -73,7 +73,7 @@ ad_ip_files jesd204_rx [list \
 
 add_parameter NUM_LANES INTEGER 1
 set_parameter_property NUM_LANES DISPLAY_NAME "Number of Lanes"
-set_parameter_property NUM_LANES ALLOWED_RANGES 1:8
+set_parameter_property NUM_LANES ALLOWED_RANGES 1:16
 set_parameter_property NUM_LANES HDL_PARAMETER true
 
 add_parameter NUM_LINKS INTEGER 1
