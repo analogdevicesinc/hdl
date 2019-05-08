@@ -6,6 +6,7 @@
 PROJECT_NAME := dac_fmc_ebz_zc706
 
 M_DEPS += ../common/dac_fmc_ebz_bd.tcl
+M_DEPS += ../common/config.tcl
 M_DEPS += ../../common/zc706/zc706_system_constr.xdc
 M_DEPS += ../../common/zc706/zc706_system_bd.tcl
 M_DEPS += ../../common/xilinx/dacfifo_bd.tcl
