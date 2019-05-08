@@ -69,20 +69,20 @@ ad_connect sys_cpu_clk i2s_tx_dma/m_src_axi_aclk
 ad_connect sys_cpu_clk i2s_tx_dma/m_axis_aclk
 ad_connect sys_cpu_resetn i2s_tx_dma/s_axi_aresetn
 ad_connect sys_cpu_resetn i2s_tx_dma/m_src_axi_aresetn
-ad_cpu_interrupt ps-14 mb-14 i2s_tx_dma/irq
+ad_cpu_interrupt ps-6 mb-6 i2s_tx_dma/irq
 
 ad_connect sys_cpu_clk i2s_rx_dma/s_axi_aclk
 ad_connect sys_cpu_clk i2s_rx_dma/m_dest_axi_aclk
 ad_connect sys_cpu_clk i2s_rx_dma/s_axis_aclk
 ad_connect sys_cpu_resetn i2s_rx_dma/s_axi_aresetn
 ad_connect sys_cpu_resetn i2s_rx_dma/m_dest_axi_aresetn
-ad_cpu_interrupt ps-15 mb-15 i2s_rx_dma/irq
+ad_cpu_interrupt ps-7 mb-7 i2s_rx_dma/irq
 
 # interconnect
-ad_cpu_interconnect 0x80000000 i2s_rx_dma
-ad_cpu_interconnect 0x80001000 i2s_tx_dma
-ad_cpu_interconnect 0x80010000 sys_audio_clkgen
-ad_cpu_interconnect 0x81000000 axi_i2s_adi
+ad_cpu_interconnect 0x41000000 i2s_rx_dma
+ad_cpu_interconnect 0x41001000 i2s_tx_dma
+ad_cpu_interconnect 0x41010000 sys_audio_clkgen
+ad_cpu_interconnect 0x42000000 axi_i2s_adi
 
 ad_mem_hp0_interconnect sys_cpu_clk i2s_tx_dma/m_src_axi
 ad_mem_hp0_interconnect sys_cpu_clk i2s_rx_dma/m_dest_axi
