@@ -21,6 +21,7 @@ create_bd_port -dir I spi_afe_adc_sdi_i
 create_bd_port -dir O laser_driver
 create_bd_port -dir O laser_driver_en_n
 create_bd_port -dir I laser_driver_otw_n
+create_bd_port -dir O -from 1 -to 0 tia_chsel
 
 # adc peripherals - controlled by PS7/SPI0
 
@@ -158,6 +159,7 @@ ad_connect laser_driver axi_laser_driver_0/driver_pulse
 ad_connect laser_driver_en_n axi_laser_driver_0/driver_en_n
 ad_connect laser_driver_otw_n axi_laser_driver_0/driver_otw_n
 ad_connect axi_laser_driver_0/driver_dp_reset util_ad9694_cpack/reset
+ad_connect tia_chsel axi_laser_driver_0/tia_chsel
 
 ad_connect rx_device_clk util_axis_syncgen_0/s_axis_aclk
 ad_connect util_axis_syncgen_0/s_axis_aresetn VCC
