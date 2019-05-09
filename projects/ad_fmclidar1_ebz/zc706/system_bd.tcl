@@ -11,13 +11,16 @@ set ADC_RESOLUTION 8            ; # N & NP
 
 set CHANNEL_DATA_WIDTH [expr 32 * $NUM_OF_LANES / $NUM_OF_CHANNELS]
 set ADC_DATA_WIDTH [expr $CHANNEL_DATA_WIDTH * $NUM_OF_CHANNELS]
-set DMA_DATA_WIDTH [expr $ADC_DATA_WIDTH < 128 ? $ADC_DATA_WIDTH : 128]
+# we have to calculate with an additional dummy channel for TIA
+set DMA_DATA_WIDTH [expr $ADC_DATA_WIDTH > 127 ? 256 : \
+                         $ADC_DATA_WIDTH >  63 ? 128 : 64]
 set SAMPLE_WIDTH [expr $ADC_RESOLUTION > 8 ? 16 : 8]
 
 # add RTL sources which will be instantiated in system_bd directly
 adi_project_files ad_fmclidar1_ebz_zc706 [list \
   "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
-  "$ad_hdl_dir/library/common/util_axis_syncgen.v" ]
+  "../common/util_tia_chsel.v" \
+  "../common/util_axis_syncgen.v" ]
 
 # source all the block designs
 source $ad_hdl_dir/projects/common/zc706/zc706_system_bd.tcl

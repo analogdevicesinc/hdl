@@ -35,7 +35,7 @@ adi_axi_jesd204_rx_create ad9694_jesd $NUM_OF_LANES
 adi_tpl_jesd204_rx_create ad9694_tpl_core $NUM_OF_LANES $NUM_OF_CHANNELS $SAMPLES_PER_FRAME $SAMPLE_WIDTH
 
 ad_ip_instance util_cpack2 util_ad9694_cpack [list \
-  NUM_OF_CHANNELS $NUM_OF_CHANNELS \
+  NUM_OF_CHANNELS [expr $NUM_OF_CHANNELS + 1] \
   SAMPLES_PER_CHANNEL [expr $CHANNEL_DATA_WIDTH / $SAMPLE_WIDTH] \
   SAMPLE_DATA_WIDTH $SAMPLE_WIDTH \
 ]
@@ -95,6 +95,11 @@ ad_ip_instance axi_laser_driver axi_laser_driver_0 [list \
 # its sync signal
 create_bd_cell -type module -reference util_axis_syncgen util_axis_syncgen_0
 set_property -dict [list CONFIG.ASYNC_SYNC {0}] [get_bd_cells util_axis_syncgen_0]
+
+# software needs to know the used TIA channel selection for each transfer, so
+# we create an addition dummy ADC channel whit this information
+create_bd_cell -type module -reference util_tia_chsel util_tia_chsel_0
+set_property -dict [list CONFIG.DATA_WIDTH {32}] [get_bd_cells util_tia_chsel_0]
 
 # reference clocks & resets
 
@@ -167,6 +172,14 @@ ad_connect util_axis_syncgen_0/s_axis_valid util_ad9694_cpack/packed_fifo_wr_en
 ad_connect util_axis_syncgen_0/s_axis_ready VCC
 ad_connect util_axis_syncgen_0/ext_sync axi_laser_driver_0/driver_pulse
 ad_connect util_axis_syncgen_0/s_axis_sync ad9694_dma/s_axis_user
+
+# connect the dummy ADC channel to cpack -- channel is always active
+
+ad_connect rx_device_clk util_tia_chsel_0/clk
+ad_connect util_ad9694_cpack/fifo_wr_data_$NUM_OF_CHANNELS util_tia_chsel_0/adc_data_tia_chsel
+ad_connect axi_laser_driver_0/driver_pulse util_tia_chsel_0/adc_tia_chsel_en
+ad_connect util_ad9694_cpack/enable_$NUM_OF_CHANNELS VCC
+ad_connect axi_laser_driver_0/tia_chsel util_tia_chsel_0/tia_chsel
 
 # interconnect (cpu)
 
