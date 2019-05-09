@@ -152,6 +152,7 @@ module system_top (
   wire            rx_sysref;
   wire            rx_device_clk;
   wire            laser_driver;
+  wire    [ 1:0]  tia_chsel_s;
 
   // instantiations
 
@@ -191,12 +192,11 @@ module system_top (
 
   // GPIO connections to the FMC connector
 
-  ad_iobuf #(.DATA_WIDTH(28)) i_fmc_iobuf (
-    .dio_t ({8'b0, gpio_t[51:38], 3'b0, gpio_t[34:32]}),
-    .dio_i ({gpio_o[59:32]}),
-    .dio_o ({gpio_i[59:32]}),
+  ad_iobuf #(.DATA_WIDTH(20)) i_fmc_iobuf (
+    .dio_t ({gpio_t[51:38], 3'b0, gpio_t[34:32]}),
+    .dio_i ({gpio_o[51:32]}),
+    .dio_o ({gpio_i[51:32]}),
     .dio_p ({
-              afe_sel,          // 59:52 - output only
               laser_gpio,       // 51:38
               afe_adc_convst,   // 37    - output only
               afe_dac_load,     // 36    - output only
@@ -206,6 +206,9 @@ module system_top (
               adc_fda           // 32
             }));
 
+  assign gpio_i[63:52] = 12'b0;
+  assign gpio_i[31:15] = 17'b0;
+
   // GPIO connections for the carrier
 
   ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_bd (
@@ -213,6 +216,13 @@ module system_top (
     .dio_i (gpio_o[14:0]),
     .dio_o (gpio_i[14:0]),
     .dio_p (gpio_bd));
+
+  // TIA multiplexer selection bits
+
+  assign afe_sel[1:0] = tia_chsel_s;
+  assign afe_sel[3:2] = tia_chsel_s;
+  assign afe_sel[5:4] = tia_chsel_s;
+  assign afe_sel[7:6] = tia_chsel_s;
 
   // block design instance
 
@@ -264,6 +274,7 @@ module system_top (
     .laser_driver (laser_driver),
     .laser_driver_en_n (laser_driver_en_n),
     .laser_driver_otw_n (laser_driver_otw_n),
+    .tia_chsel (tia_chsel_s),
     .iic_dac_scl_io (afe_dac_scl),
     .iic_dac_sda_io (afe_dac_sda),
     .spi0_clk_i (spi_adc_clk),
