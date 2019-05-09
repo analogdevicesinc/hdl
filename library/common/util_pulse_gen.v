@@ -46,7 +46,8 @@ module util_pulse_gen #(
   input       [31:0]  pulse_period,
   input               load_config,
 
-  output  reg         pulse
+  output  reg         pulse,
+  output      [31:0]  pulse_counter
 );
 
   // internal registers
@@ -92,7 +93,6 @@ module util_pulse_gen #(
   end
   assign end_of_period_s = (pulse_period_cnt == 32'b0) ? 1'b1 : 1'b0;
 
-
   // generate pulse with a specified width
 
   always @ (posedge clk) begin
@@ -102,5 +102,7 @@ module util_pulse_gen #(
       pulse <= 1'b1;
     end
   end
+
+  assign pulse_counter = pulse_period_cnt;
 
 endmodule
