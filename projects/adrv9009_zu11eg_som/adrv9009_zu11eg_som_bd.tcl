@@ -128,8 +128,8 @@ ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.SYNC_TRANSFER_START 1
-ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.AXI_SLICE_SRC 0
-ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.AXI_SLICE_SRC 1
+ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter axi_adrv9009_som_rx_dma MAX_BYTES_PER_BURST 256
@@ -160,8 +160,8 @@ ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.SYNC_TRANSFER_START 1
-ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.AXI_SLICE_SRC 0
-ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.AXI_SLICE_SRC 1
+ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter axi_adrv9009_som_obs_dma MAX_BYTES_PER_BURST 256
@@ -219,7 +219,6 @@ for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
 }
 
 ad_connect tx_adrv9009_som_tpl_core/dac_dunf util_som_tx_upack/fifo_rd_underflow
-ad_connect sys_dma_resetn axi_adrv9009_som_tx_dma/m_src_axi_aresetn
 
 # connections (adc)
 
@@ -318,16 +317,23 @@ ad_mem_hp0_interconnect sys_cpu_clk axi_adrv9009_som_obs_xcvr/m_axi
 
 # interconnect (mem/dac)
 
-ad_mem_hp1_interconnect sys_dma_clk sys_ps8/S_AXI_HP1
-ad_mem_hp1_interconnect sys_dma_clk axi_adrv9009_som_tx_dma/m_src_axi
-ad_mem_hp2_interconnect sys_dma_clk sys_ps8/S_AXI_HP2
-ad_mem_hp2_interconnect sys_dma_clk axi_adrv9009_som_rx_dma/m_dest_axi
-ad_mem_hp3_interconnect sys_dma_clk sys_ps8/S_AXI_HP3
-ad_mem_hp3_interconnect sys_dma_clk axi_adrv9009_som_obs_dma/m_dest_axi
+ad_ip_parameter sys_ps8 CONFIG.PSU__USE__S_AXI_GP3 1
+ad_connect sys_dma_clk sys_ps8/saxihp1_fpd_aclk
+ad_connect sys_dma_clk axi_adrv9009_som_tx_dma/m_src_axi_aclk
+ad_connect sys_dma_resetn axi_adrv9009_som_tx_dma/m_src_axi_aresetn
+ad_connect axi_adrv9009_som_tx_dma/m_src_axi sys_ps8/S_AXI_HP1_FPD
 
-#ad_connect sys_cpu_resetn axi_adrv9009_som_rx_dma/m_dest_axi_aresetn
-ad_connect sys_dma_resetn axi_adrv9009_som_obs_dma/m_dest_axi_aresetn
+ad_ip_parameter sys_ps8 CONFIG.PSU__USE__S_AXI_GP4 1
+ad_connect sys_dma_clk sys_ps8/saxihp2_fpd_aclk
+ad_connect sys_dma_clk axi_adrv9009_som_rx_dma/m_dest_axi_aclk
 ad_connect sys_dma_resetn axi_adrv9009_som_rx_dma/m_dest_axi_aresetn
+ad_connect axi_adrv9009_som_rx_dma/m_dest_axi sys_ps8/S_AXI_HP2_FPD
+
+ad_ip_parameter sys_ps8 CONFIG.PSU__USE__S_AXI_GP5 1
+ad_connect sys_dma_clk sys_ps8/saxihp3_fpd_aclk
+ad_connect sys_dma_clk axi_adrv9009_som_obs_dma/m_dest_axi_aclk
+ad_connect sys_dma_resetn axi_adrv9009_som_obs_dma/m_dest_axi_aresetn
+ad_connect axi_adrv9009_som_obs_dma/m_dest_axi sys_ps8/S_AXI_HP3_FPD
 
 # interrupts
 
