@@ -130,12 +130,12 @@ ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.SYNC_TRANSFER_START 1
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.AXI_SLICE_DEST 0
-ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.ASYNC_CLK_DEST_REQ 1
-ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.ASYNC_CLK_SRC_DEST 1
-ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.ASYNC_CLK_REQ_SRC 1
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.FIFO_SIZE 32
+ad_ip_parameter axi_adrv9009_som_rx_dma MAX_BYTES_PER_BURST 256
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_DATA_WIDTH_SRC 128
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_DATA_WIDTH_DEST 128
+
 
 ad_ip_instance axi_adxcvr axi_adrv9009_som_obs_xcvr
 ad_ip_parameter axi_adrv9009_som_obs_xcvr CONFIG.NUM_OF_LANES $RX_NUM_OF_LANES
@@ -162,10 +162,9 @@ ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.SYNC_TRANSFER_START 1
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.AXI_SLICE_DEST 0
-ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.ASYNC_CLK_DEST_REQ 1
-ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.ASYNC_CLK_SRC_DEST 1
-ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.ASYNC_CLK_REQ_SRC 1
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.FIFO_SIZE 32
+ad_ip_parameter axi_adrv9009_som_obs_dma MAX_BYTES_PER_BURST 256
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.DMA_DATA_WIDTH_SRC 128
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 
@@ -326,7 +325,7 @@ ad_mem_hp2_interconnect sys_dma_clk axi_adrv9009_som_rx_dma/m_dest_axi
 ad_mem_hp3_interconnect sys_dma_clk sys_ps8/S_AXI_HP3
 ad_mem_hp3_interconnect sys_dma_clk axi_adrv9009_som_obs_dma/m_dest_axi
 
-ad_connect sys_cpu_resetn axi_adrv9009_som_rx_dma/m_dest_axi_aresetn
+#ad_connect sys_cpu_resetn axi_adrv9009_som_rx_dma/m_dest_axi_aresetn
 ad_connect sys_dma_resetn axi_adrv9009_som_obs_dma/m_dest_axi_aresetn
 ad_connect sys_dma_resetn axi_adrv9009_som_rx_dma/m_dest_axi_aresetn
 
