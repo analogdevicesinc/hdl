@@ -319,9 +319,9 @@ ad_mem_hp0_interconnect sys_cpu_clk axi_adrv9009_som_obs_xcvr/m_axi
 
 ad_ip_parameter sys_ps8 CONFIG.PSU__USE__S_AXI_GP3 1
 ad_connect sys_dma_clk sys_ps8/saxihp1_fpd_aclk
-ad_connect sys_dma_clk axi_adrv9009_som_tx_dma/m_src_axi_aclk
-ad_connect sys_dma_resetn axi_adrv9009_som_tx_dma/m_src_axi_aresetn
-ad_connect axi_adrv9009_som_tx_dma/m_src_axi sys_ps8/S_AXI_HP1_FPD
+ad_connect sys_dma_clk axi_adrv9009_som_obs_dma/m_dest_axi_aclk
+ad_connect sys_dma_resetn axi_adrv9009_som_obs_dma/m_dest_axi_aresetn
+ad_connect axi_adrv9009_som_obs_dma/m_dest_axi sys_ps8/S_AXI_HP1_FPD
 
 ad_ip_parameter sys_ps8 CONFIG.PSU__USE__S_AXI_GP4 1
 ad_connect sys_dma_clk sys_ps8/saxihp2_fpd_aclk
@@ -331,9 +331,9 @@ ad_connect axi_adrv9009_som_rx_dma/m_dest_axi sys_ps8/S_AXI_HP2_FPD
 
 ad_ip_parameter sys_ps8 CONFIG.PSU__USE__S_AXI_GP5 1
 ad_connect sys_dma_clk sys_ps8/saxihp3_fpd_aclk
-ad_connect sys_dma_clk axi_adrv9009_som_obs_dma/m_dest_axi_aclk
-ad_connect sys_dma_resetn axi_adrv9009_som_obs_dma/m_dest_axi_aresetn
-ad_connect axi_adrv9009_som_obs_dma/m_dest_axi sys_ps8/S_AXI_HP3_FPD
+ad_connect sys_dma_clk axi_adrv9009_som_tx_dma/m_src_axi_aclk
+ad_connect sys_dma_resetn axi_adrv9009_som_tx_dma/m_src_axi_aresetn
+ad_connect axi_adrv9009_som_tx_dma/m_src_axi sys_ps8/S_AXI_HP3_FPD
 
 # interrupts
 
