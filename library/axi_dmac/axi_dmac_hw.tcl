@@ -107,12 +107,6 @@ foreach {suffix group} { \
   set_parameter_property DMA_DATA_WIDTH_$suffix ALLOWED_RANGES {16 32 64 128 256 512 1024}
   set_parameter_property DMA_DATA_WIDTH_$suffix GROUP $group
 
-  add_parameter USE_TLAST_$suffix INTEGER 0
-  set_parameter_property USE_TLAST_$suffix DISPLAY_NAME "Use TLAST"
-  set_parameter_property USE_TLAST_$suffix HDL_PARAMETER false
-  set_parameter_property USE_TLAST_$suffix DISPLAY_HINT boolean
-  set_parameter_property USE_TLAST_$suffix GROUP $group
-
   add_parameter AXI_SLICE_$suffix INTEGER 0
   set_parameter_property AXI_SLICE_$suffix DISPLAY_NAME "Insert Register Slice"
   set_parameter_property AXI_SLICE_$suffix DISPLAY_HINT boolean
@@ -271,13 +265,6 @@ proc axi_dmac_validate {} {
     set_parameter_property DMA_AXI_PROTOCOL_$suffix VISIBLE $show_axi_protocol
   }
 
-  foreach suffix {SRC DEST} {
-    if {[get_parameter_value DMA_TYPE_$suffix] == 1} {
-      set_parameter_property USE_TLAST_$suffix VISIBLE true
-    } else {
-      set_parameter_property USE_TLAST_$suffix VISIBLE false
-    }
-  }
   set_parameter_property MAX_BYTES_PER_BURST ALLOWED_RANGES "1:$max_burst"
 }
 
@@ -313,7 +300,6 @@ ad_alt_intf clock   s_axis_aclk       input   1                       clk
 ad_alt_intf signal  s_axis_valid      input   1                       valid
 ad_alt_intf signal  s_axis_data       input   DMA_DATA_WIDTH_SRC      data
 ad_alt_intf signal  s_axis_ready      output  1                       ready
-ad_alt_intf signal  s_axis_last       input   1                       last
 ad_alt_intf signal  s_axis_xfer_req   output  1                       xfer_req
 ad_alt_intf signal  s_axis_user       input   1                       user
 
@@ -428,27 +414,16 @@ proc axi_dmac_elaborate {} {
 	  if_m_axis_last if_m_axis_xfer_req
   }
 
-  if {[get_parameter_value DMA_TYPE_DEST] == 1 &&
-      [get_parameter_value USE_TLAST_DEST] == 0} {
-    set_port_property m_axis_last termination true
-  }
-
   if {[get_parameter_value DMA_TYPE_SRC] != 1} {
     lappend disabled_intfs \
       if_s_axis_aclk if_s_axis_valid if_s_axis_data if_s_axis_ready \
-	  if_s_axis_xfer_req if_s_axis_user if_s_axis_last
+	  if_s_axis_xfer_req if_s_axis_user
   }
 
   if {[get_parameter_value DMA_TYPE_SRC] == 1 &&
       [get_parameter_value SYNC_TRANSFER_START] == 0} {
     set_port_property s_axis_user termination true
     set_port_property s_axis_user termination_value 1
-  }
-
-  if {[get_parameter_value DMA_TYPE_SRC] == 1 &&
-      [get_parameter_value USE_TLAST_SRC] == 0} {
-    set_port_property s_axis_last termination true
-    set_port_property s_axis_last termination_value 0
   }
 
   # fifo destination/source
