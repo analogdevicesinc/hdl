@@ -58,6 +58,8 @@ module axi_dmac #(
   parameter FIFO_SIZE = 8, // In bursts
   parameter AXI_ID_WIDTH_SRC = 1,
   parameter AXI_ID_WIDTH_DEST = 1,
+  parameter DMA_AXIS_ID_W = 8,
+  parameter DMA_AXIS_DEST_W = 4,
   parameter DISABLE_DEBUG_REGISTERS = 0,
   parameter ENABLE_DIAGNOSTICS_IF = 0,
   parameter ALLOW_ASYM_MEM = 0
@@ -190,7 +192,11 @@ module axi_dmac #(
   output                                   s_axis_ready,
   input                                    s_axis_valid,
   input  [DMA_DATA_WIDTH_SRC-1:0]          s_axis_data,
+  input  [DMA_DATA_WIDTH_SRC/8-1:0]        s_axis_strb,
+  input  [DMA_DATA_WIDTH_SRC/8-1:0]        s_axis_keep,
   input  [0:0]                             s_axis_user,
+  input  [DMA_AXIS_ID_W-1:0]               s_axis_id,
+  input  [DMA_AXIS_DEST_W-1:0]             s_axis_dest,
   input                                    s_axis_last,
   output                                   s_axis_xfer_req,
 
@@ -199,6 +205,11 @@ module axi_dmac #(
   input                                    m_axis_ready,
   output                                   m_axis_valid,
   output [DMA_DATA_WIDTH_DEST-1:0]         m_axis_data,
+  output [DMA_DATA_WIDTH_DEST/8-1:0]       m_axis_strb,
+  output [DMA_DATA_WIDTH_DEST/8-1:0]       m_axis_keep,
+  output [0:0]                             m_axis_user,
+  output [DMA_AXIS_ID_W-1:0]               m_axis_id,
+  output [DMA_AXIS_DEST_W-1:0]             m_axis_dest,
   output                                   m_axis_last,
   output                                   m_axis_xfer_req,
 
@@ -605,5 +616,11 @@ assign m_src_axi_wvalid = 'h0;
 assign m_src_axi_wdata = 'h0;
 assign m_src_axi_wstrb = 'h0;
 assign m_src_axi_wlast = 'h0;
+
+assign m_axis_keep = {DMA_DATA_WIDTH_DEST/8{1'b1}};
+assign m_axis_strb = {DMA_DATA_WIDTH_DEST/8{1'b1}};
+assign m_axis_id = 'h0;
+assign m_axis_dest = 'h0;
+assign m_axis_user = 'h0;
 
 endmodule
