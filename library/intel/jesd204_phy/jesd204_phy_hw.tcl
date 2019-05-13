@@ -47,6 +47,8 @@ package require qsys
 source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_intel.tcl
 
+set version 19.1
+
 #
 # Instantiates the Arria 10 native PHY and configures it for JESD204 operation.
 # The datapath width is configured for 4 octets per beat.
@@ -57,7 +59,7 @@ source $ad_hdl_dir/library/scripts/adi_ip_intel.tcl
 
 ad_ip_create jesd204_phy "ADI JESD204 PHY"
 set_module_property COMPOSITION_CALLBACK jesd204_phy_composition_callback
-set_module_property INTERNAL true
+set_module_property INTERNAL false
 
 # parameters
 
@@ -73,6 +75,8 @@ ad_ip_parameter LANE_INVERT INTEGER 0 false
 ad_ip_parameter EXT_DEVICE_CLK_EN BOOLEAN false false
 
 proc jesd204_phy_composition_callback {} {
+
+  global version
 
   set device [get_parameter_value "DEVICE"]
   set soft_pcs [get_parameter_value "SOFT_PCS"]
@@ -95,7 +99,7 @@ proc jesd204_phy_composition_callback {} {
     set device_type 0
   }
 
-  add_instance link_clock clock_source
+  add_instance link_clock clock_source $version
   set_instance_parameter_value link_clock {clockFrequency} [expr $link_clk_frequency*1000000]
   add_interface link_clk clock sink
   set_interface_property link_clk EXPORT_OF link_clock.clk_in
@@ -104,14 +108,14 @@ proc jesd204_phy_composition_callback {} {
 
   ## Arria10
   if {$device_type == 1} {
-    add_instance native_phy altera_xcvr_native_a10
+    add_instance native_phy altera_xcvr_native_a10 $version
     set_instance_parameter_value native_phy {enh_txfifo_mode} "Phase compensation"
     set_instance_parameter_value native_phy {enh_rxfifo_mode} "Phase compensation"
     set_instance_property native_phy SUPPRESS_ALL_WARNINGS true
     set_instance_property native_phy SUPPRESS_ALL_INFO_MESSAGES true
   ## Stratix 10
   } elseif {$device_type == 2} {
-    add_instance native_phy altera_xcvr_native_s10_htile
+    add_instance native_phy altera_xcvr_native_s10_htile $version
     set_instance_parameter_value native_phy {tx_fifo_mode} "Phase compensation"
     set_instance_parameter_value native_phy {rx_fifo_mode} "Phase compensation"
   ## Unsupported device
@@ -170,7 +174,7 @@ proc jesd204_phy_composition_callback {} {
   set_instance_parameter_value native_phy {set_csr_soft_logic_enable} 1
   set_instance_parameter_value native_phy {set_prbs_soft_logic_enable} 0
 
-  add_instance phy_glue jesd204_phy_glue
+  add_instance phy_glue jesd204_phy_glue 1.0
   set_instance_parameter_value phy_glue DEVICE $device
   set_instance_parameter_value phy_glue TX_OR_RX_N $tx
   set_instance_parameter_value phy_glue SOFT_PCS $soft_pcs
@@ -278,7 +282,7 @@ proc jesd204_phy_composition_callback {} {
 
     if {$tx} {
       if {$soft_pcs} {
-        add_instance soft_pcs_${i} jesd204_soft_pcs_tx
+        add_instance soft_pcs_${i} jesd204_soft_pcs_tx 1.0
         set_instance_parameter_value soft_pcs_${i} INVERT_OUTPUTS \
           [expr ($lane_invert >> $i) & 1]
         if {$ext_device_clk_en} {
@@ -295,7 +299,7 @@ proc jesd204_phy_composition_callback {} {
       }
     } else {
       if {$soft_pcs} {
-        add_instance soft_pcs_${i} jesd204_soft_pcs_rx
+        add_instance soft_pcs_${i} jesd204_soft_pcs_rx 1.0
         set_instance_parameter_value soft_pcs_${i} REGISTER_INPUTS $register_inputs
         set_instance_parameter_value soft_pcs_${i} INVERT_INPUTS \
           [expr ($lane_invert >> $i) & 1]
