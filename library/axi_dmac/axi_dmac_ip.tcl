@@ -395,6 +395,8 @@ ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "DMA_AXI_ADDR_
 ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "AXI_ID_WIDTH_SRC" -component $cc]
 ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "AXI_ID_WIDTH_DEST" -component $cc]
 ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "ALLOW_ASYM_MEM" -component $cc]
+ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "DMA_AXIS_ID_W" -component $cc]
+ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "DMA_AXIS_DEST_W" -component $cc]
 
 ipx::create_xgui_files [ipx::current_core]
 ipx::save_core $cc
