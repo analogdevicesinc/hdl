@@ -2,7 +2,7 @@
 ## Initialize global variable
 set family "none"
 set device "none"
-set version "18.1.0"
+set version "19.1.0"
 
 ## Create a project.
 #
@@ -115,9 +115,9 @@ proc adi_project {project_name {parameter_list {}}} {
   puts $QFILE "set_project_property DEVICE $device"
   puts $QFILE "foreach {param value} {$parameter_list} { set ad_project_params(\$param) \$value }"
   puts $QFILE "source system_qsys.tcl"
-  puts $QFILE "set_interconnect_requirement {\$system} {qsys_mm.clockCrossingAdapter} {AUTO}"
-  puts $QFILE "set_interconnect_requirement {\$system} {qsys_mm.burstAdapterImplementation} {PER_BURST_TYPE_CONVERTER}"
-  puts $QFILE "set_interconnect_requirement {\$system} {qsys_mm.maxAdditionalLatency} {4}"
+  # puts $QFILE "set_interconnect_requirement {\$system} {qsys_mm.clockCrossingAdapter} {AUTO}"
+  # puts $QFILE "set_interconnect_requirement {\$system} {qsys_mm.burstAdapterImplementation} {PER_BURST_TYPE_CONVERTER}"
+  # puts $QFILE "set_interconnect_requirement {\$system} {qsys_mm.maxAdditionalLatency} {4}"
   puts $QFILE "save_system {system_bd.qsys}"
   close $QFILE
 
