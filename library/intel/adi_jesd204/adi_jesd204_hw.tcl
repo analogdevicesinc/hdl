@@ -46,6 +46,8 @@ package require qsys
 source ../../scripts/adi_env.tcl
 source ../../scripts/adi_ip_intel.tcl
 
+set version 19.1
+
 #
 # Wrapper module that instantiates and connects all the components required to
 # for a JESD204 link.
@@ -132,7 +134,10 @@ ad_ip_parameter EXT_DEVICE_CLK_EN BOOLEAN 0 false { \
 }
 
 proc create_phy_reset_control {tx num_of_lanes sysclk_frequency} {
-  add_instance phy_reset_control altera_xcvr_reset_control
+
+  global version
+
+  add_instance phy_reset_control altera_xcvr_reset_control $version
   set_instance_property phy_reset_control SUPPRESS_ALL_WARNINGS true
   set_instance_parameter_value phy_reset_control {CHANNELS} $num_of_lanes
   set_instance_parameter_value phy_reset_control {SYS_CLK_IN_MHZ} $sysclk_frequency
@@ -160,7 +165,10 @@ proc create_phy_reset_control {tx num_of_lanes sysclk_frequency} {
 }
 
 proc create_lane_pll {id pllclk_frequency refclk_frequency num_lanes bonding_clocks_en} {
-  add_instance lane_pll altera_xcvr_atx_pll_a10
+
+  global version
+
+  add_instance lane_pll altera_xcvr_atx_pll_a10 $version
   set_instance_property lane_pll SUPPRESS_ALL_INFO_MESSAGES true
   set_instance_parameter_value lane_pll {enable_pll_reconfig} {1}
   set_instance_parameter_value lane_pll {rcfg_separate_avmm_busy} {1}
@@ -259,6 +267,9 @@ proc jesd204_validate {{quiet false}} {
 }
 
 proc jesd204_compose {} {
+
+  global version
+
   set id [get_parameter_value "ID"]
   set lane_rate [get_parameter_value "LANE_RATE"]
   set tx_or_rx_n [get_parameter_value "TX_OR_RX_N"]
@@ -286,7 +297,7 @@ proc jesd204_compose {} {
 	  set register_inputs 0;
   }
 
-  add_instance sys_clock clock_source
+  add_instance sys_clock clock_source 19.2
   set_instance_parameter_value sys_clock {clockFrequency} [expr $sysclk_frequency*1000000]
   set_instance_parameter_value sys_clock {resetSynchronousEdges} {deassert}
   add_interface sys_clk clock sink
@@ -294,13 +305,13 @@ proc jesd204_compose {} {
   add_interface sys_resetn reset sink
   set_interface_property sys_resetn EXPORT_OF sys_clock.clk_in_reset
 
-  add_instance ref_clock altera_clock_bridge
+  add_instance ref_clock altera_clock_bridge $version
   set_instance_parameter_value ref_clock {EXPLICIT_CLOCK_RATE} [expr $refclk_frequency*1000000]
   add_interface ref_clk clock sink
   set_interface_property ref_clk EXPORT_OF ref_clock.in_clk
 
   # FIXME: In phase alignment mode manual re-calibration fails
-  add_instance link_pll altera_xcvr_fpll_a10
+  add_instance link_pll altera_xcvr_fpll_a10 $version
   set_instance_property link_pll SUPPRESS_ALL_WARNINGS true
   set_instance_property link_pll SUPPRESS_ALL_INFO_MESSAGES true
   set_instance_parameter_value link_pll {gui_fpll_mode} {0}
@@ -319,14 +330,13 @@ proc jesd204_compose {} {
   ## link clock configuration (also known as device clock, which will be used
   ## by the upper layers for the data path, it can come from the PCS or external)
 
-  add_instance link_clock altera_clock_bridge
+  add_instance link_clock altera_clock_bridge $version
   set_instance_parameter_value link_clock {EXPLICIT_CLOCK_RATE} [expr $linkclk_frequency*1000000]
   set_instance_parameter_value link_clock {NUM_CLOCK_OUTPUTS} 2
   add_connection link_pll.outclk0 link_clock.in_clk
   add_interface link_clk clock source
 
-
-  add_instance link_reset altera_reset_bridge
+  add_instance link_reset altera_reset_bridge $version
   set_instance_parameter_value link_reset {NUM_RESET_OUTPUTS} 2
   add_connection sys_clock.clk link_reset.clk
   add_interface link_reset reset source
@@ -335,7 +345,7 @@ proc jesd204_compose {} {
   add_connection sys_clock.clk_reset link_pll.reconfig_reset0
   add_connection sys_clock.clk link_pll.reconfig_clk0
 
-  add_instance axi_xcvr axi_adxcvr
+  add_instance axi_xcvr axi_adxcvr 1.0
   set_instance_parameter_value axi_xcvr {ID} $id
   set_instance_parameter_value axi_xcvr {TX_OR_RX_N} $tx_or_rx_n
   set_instance_parameter_value axi_xcvr {NUM_OF_LANES} $num_of_lanes
@@ -351,7 +361,7 @@ proc jesd204_compose {} {
   add_interface link_pll_reconfig avalon slave
   set_interface_property link_pll_reconfig EXPORT_OF link_pll.reconfig_avmm0
 
-  add_instance link_pll_reset_control altera_xcvr_reset_control
+  add_instance link_pll_reset_control altera_xcvr_reset_control $version
   set_instance_parameter_value link_pll_reset_control {SYS_CLK_IN_MHZ} $sysclk_frequency
   set_instance_parameter_value link_pll_reset_control {TX_PLL_ENABLE} {1}
   set_instance_parameter_value link_pll_reset_control {T_PLL_POWERDOWN} {1000}
@@ -365,7 +375,7 @@ proc jesd204_compose {} {
 
   create_phy_reset_control $tx_or_rx_n $num_of_lanes $sysclk_frequency
 
-  add_instance phy jesd204_phy
+  add_instance phy jesd204_phy 1.0
   set_instance_parameter_value phy ID $id
   set_instance_parameter_value phy SOFT_PCS $soft_pcs
   set_instance_parameter_value phy TX_OR_RX_N $tx_or_rx_n
@@ -385,7 +395,7 @@ proc jesd204_compose {} {
   ## connect the required device clock
 
   if {$ext_device_clk_en} {
-    add_instance ext_device_clock altera_clock_bridge
+    add_instance ext_device_clock altera_clock_bridge $version
     set_instance_parameter_value ext_device_clock {EXPLICIT_CLOCK_RATE} [expr $linkclk_frequency*1000000]
     set_instance_parameter_value ext_device_clock {NUM_CLOCK_OUTPUTS} 2
     add_interface device_clk clock sink
@@ -423,13 +433,16 @@ proc jesd204_compose {} {
     add_connection ref_clock.out_clk phy.ref_clk
   }
 
-  add_instance axi_jesd204_${tx_rx} axi_jesd204_${tx_rx}
+  add_instance axi_jesd204_${tx_rx} axi_jesd204_${tx_rx} 1.0
   set_instance_parameter_value axi_jesd204_${tx_rx} {NUM_LANES} $num_of_lanes
 
   add_connection sys_clock.clk axi_jesd204_${tx_rx}.s_axi_clock
   add_connection sys_clock.clk_reset axi_jesd204_${tx_rx}.s_axi_reset
 
-  add_instance jesd204_${tx_rx} jesd204_${tx_rx}
+  add_connection link_clock.out_clk_1 axi_jesd204_${tx_rx}.core_clock
+  add_connection link_reset.out_reset axi_jesd204_${tx_rx}.core_reset_ext
+
+  add_instance jesd204_${tx_rx} jesd204_${tx_rx} 1.0
   set_instance_parameter_value jesd204_${tx_rx} {NUM_LANES} $num_of_lanes
 
   if {$ext_device_clk_en} {
