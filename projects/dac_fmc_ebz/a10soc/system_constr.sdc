@@ -32,8 +32,8 @@
 
 create_clock -period "10.000 ns"  -name sys_clk_100mhz      [get_ports {sys_clk}]
 
-# Maximum lane rate of 14.2 Gbps
-create_clock -period  "2.8169 ns" -name tx_ref_clk0         [get_ports {tx_ref_clk0}]
+# Maximum lane rate of 14.2 Gbps however the dacfifo does not meet the 355 MHz requirement, reducing it to 333MHz
+create_clock -period  "3 ns" -name tx_ref_clk         [get_ports {tx_ref_clk}]
 
 # Asynchronous GPIOs
 
