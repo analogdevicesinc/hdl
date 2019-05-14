@@ -1,6 +1,32 @@
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
+# JESD204 TX parameters
+set TX_NUM_OF_LANES 8      ; # L
+set TX_NUM_OF_CONVERTERS 1 ; # M
+set TX_SAMPLES_PER_FRAME 4 ; # S
+set TX_SAMPLE_WIDTH 16     ; # N/NP
+
+set TX_SAMPLES_PER_CHANNEL 2 ; # L * 32 / (M * N)
+
+# JESD204 RX parameters
+set RX_NUM_OF_LANES 8      ; # L
+set RX_NUM_OF_CONVERTERS 1 ; # M
+set RX_SAMPLES_PER_FRAME 4 ; # S
+set RX_SAMPLE_WIDTH 16 ; # N/NP
+
+# Data path FIFO attributes
+
+set adc_fifo_name axi_ad9625_fifo
+set adc_fifo_address_width 18
+set adc_data_width 256
+set adc_dma_data_width 64
+
+set dac_fifo_name axi_ad9162_fifo
+set dac_fifo_address_width 10
+set dac_data_width 256
+set dac_dma_data_width 256
+
 # dac peripherals
 
 ad_ip_instance axi_adxcvr axi_ad9162_xcvr
@@ -8,9 +34,12 @@ ad_ip_parameter axi_ad9162_xcvr CONFIG.NUM_OF_LANES 8
 ad_ip_parameter axi_ad9162_xcvr CONFIG.QPLL_ENABLE 1
 ad_ip_parameter axi_ad9162_xcvr CONFIG.TX_OR_RX_N 1
 
-ad_ip_instance axi_ad9162 axi_ad9162_core
-
 adi_axi_jesd204_tx_create axi_ad9162_jesd 8
+
+adi_tpl_jesd204_tx_create axi_ad9162_core $TX_NUM_OF_LANES \
+                                          $TX_NUM_OF_CONVERTERS \
+                                          $TX_SAMPLES_PER_FRAME \
+                                          $TX_SAMPLE_WIDTH
 
 ad_ip_instance axi_dmac axi_ad9162_dma
 ad_ip_parameter axi_ad9162_dma CONFIG.DMA_TYPE_SRC 0
@@ -24,6 +53,8 @@ ad_ip_parameter axi_ad9162_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_ad9162_dma CONFIG.DMA_DATA_WIDTH_SRC 256
 ad_ip_parameter axi_ad9162_dma CONFIG.DMA_DATA_WIDTH_DEST 256
 
+ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_dma_data_width $dac_fifo_address_width
+
 # adc peripherals
 
 ad_ip_instance axi_adxcvr axi_ad9625_xcvr
@@ -31,7 +62,10 @@ ad_ip_parameter axi_ad9625_xcvr CONFIG.NUM_OF_LANES 8
 ad_ip_parameter axi_ad9625_xcvr CONFIG.QPLL_ENABLE 0
 ad_ip_parameter axi_ad9625_xcvr CONFIG.TX_OR_RX_N 0
 
-ad_ip_instance axi_ad9625 axi_ad9625_core
+adi_tpl_jesd204_rx_create axi_ad9625_core $RX_NUM_OF_LANES \
+                                          $RX_NUM_OF_CONVERTERS \
+                                          $RX_SAMPLES_PER_FRAME \
+                                          $RX_SAMPLE_WIDTH
 
 adi_axi_jesd204_rx_create axi_ad9625_jesd 8
 
@@ -47,6 +81,8 @@ ad_ip_parameter axi_ad9625_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad9625_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_ad9625_dma CONFIG.DMA_DATA_WIDTH_SRC 64
 ad_ip_parameter axi_ad9625_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+
+ad_adcfifo_create $adc_fifo_name $adc_data_width $adc_dma_data_width $adc_fifo_address_width
 
 # shared transceiver core
 
@@ -75,11 +111,11 @@ ad_connect  sys_cpu_clk util_fmcomms11_xcvr/up_clk
 # connections (dac)
 
 ad_xcvrcon  util_fmcomms11_xcvr axi_ad9162_xcvr axi_ad9162_jesd
-ad_connect  util_fmcomms11_xcvr/tx_out_clk_0 axi_ad9162_core/tx_clk
-ad_connect  axi_ad9162_jesd/tx_data_tdata axi_ad9162_core/tx_data
+ad_connect  util_fmcomms11_xcvr/tx_out_clk_0 axi_ad9162_core/link_clk
+ad_connect  axi_ad9162_jesd/tx_data axi_ad9162_core/link
 ad_connect  util_fmcomms11_xcvr/tx_out_clk_0 axi_ad9162_fifo/dac_clk
-ad_connect  axi_ad9162_core/dac_valid axi_ad9162_fifo/dac_valid
-ad_connect  axi_ad9162_core/dac_ddata axi_ad9162_fifo/dac_data
+ad_connect  axi_ad9162_core/dac_valid_0 axi_ad9162_fifo/dac_valid
+ad_connect  axi_ad9162_core/dac_data_0 axi_ad9162_fifo/dac_data
 ad_connect  axi_ad9162_core/dac_dunf axi_ad9162_fifo/dac_dunf
 ad_connect  axi_ad9162_jesd_rstgen/peripheral_reset axi_ad9162_fifo/dac_rst
 ad_connect  sys_cpu_clk axi_ad9162_fifo/dma_clk
@@ -95,14 +131,16 @@ ad_connect  axi_ad9162_fifo/dma_xfer_last axi_ad9162_dma/m_axis_last
 # connections (adc)
 
 ad_xcvrcon  util_fmcomms11_xcvr axi_ad9625_xcvr axi_ad9625_jesd
-ad_connect  util_fmcomms11_xcvr/rx_out_clk_0 axi_ad9625_core/rx_clk
-ad_connect  axi_ad9625_jesd/rx_sof axi_ad9625_core/rx_sof
-ad_connect  axi_ad9625_jesd/rx_data_tdata axi_ad9625_core/rx_data
-ad_connect  axi_ad9625_jesd/rx_data_tvalid axi_ad9625_core/rx_valid
+ad_connect  util_fmcomms11_xcvr/rx_out_clk_0 axi_ad9625_core/link_clk
+
+ad_connect  axi_ad9625_jesd/rx_sof axi_ad9625_core/link_sof
+ad_connect  axi_ad9625_jesd/rx_data_tdata axi_ad9625_core/link_data
+ad_connect  axi_ad9625_jesd/rx_data_tvalid axi_ad9625_core/link_valid
+
 ad_connect  util_fmcomms11_xcvr/rx_out_clk_0 axi_ad9625_fifo/adc_clk
 ad_connect  axi_ad9625_jesd_rstgen/peripheral_reset axi_ad9625_fifo/adc_rst
-ad_connect  axi_ad9625_core/adc_valid axi_ad9625_fifo/adc_wr
-ad_connect  axi_ad9625_core/adc_data axi_ad9625_fifo/adc_wdata
+ad_connect  axi_ad9625_core/adc_valid_0 axi_ad9625_fifo/adc_wr
+ad_connect  axi_ad9625_core/adc_data_0 axi_ad9625_fifo/adc_wdata
 ad_connect  sys_cpu_clk axi_ad9625_fifo/dma_clk
 ad_connect  sys_cpu_clk axi_ad9625_dma/s_axis_aclk
 ad_connect  sys_cpu_resetn axi_ad9625_dma/m_dest_axi_aresetn
