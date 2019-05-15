@@ -3,8 +3,8 @@ source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
 # JESD204 TX parameters
 set TX_NUM_OF_LANES 8      ; # L
-set TX_NUM_OF_CONVERTERS 1 ; # M
-set TX_SAMPLES_PER_FRAME 4 ; # S
+set TX_NUM_OF_CONVERTERS 2 ; # M
+set TX_SAMPLES_PER_FRAME 2 ; # S
 set TX_SAMPLE_WIDTH 16     ; # N/NP
 
 set TX_SAMPLES_PER_CHANNEL 2 ; # L * 32 / (M * N)
