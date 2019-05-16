@@ -52,10 +52,15 @@ proc p_util_adcfifo {} {
   ad_alt_intf signal adc_wovf output 1 ovf
 
   ad_alt_intf clock dma_clk input 1 clk
-  ad_alt_intf signal dma_wr output 1 valid
-  ad_alt_intf signal dma_wdata output DMA_DATA_WIDTH data
-  ad_alt_intf signal dma_wready input 1 ready
   ad_alt_intf signal dma_xfer_req input 1 xfer_req
   ad_alt_intf signal dma_xfer_status output 4 xfer_status
+
+  add_interface m_axis axi4stream start
+  set_interface_property m_axis associatedClock if_dma_clk
+  set_interface_property m_axis associatedReset if_adc_rst
+  add_interface_port m_axis  dma_wr tvalid Output 1
+  add_interface_port m_axis  dma_wready tready Input  1
+  add_interface_port m_axis  dma_wdata tdata  Output DMA_DATA_WIDTH
+
 }
 

@@ -23,11 +23,15 @@ ad_ip_parameter DATA_WIDTH INTEGER 128
 
 ad_alt_intf clock dma_clk input 1 clk
 ad_alt_intf reset dma_rst input 1 if_dma_clk
-ad_alt_intf signal dma_valid input 1 valid
-ad_alt_intf signal dma_data input DATA_WIDTH data
-ad_alt_intf signal dma_ready output 1 ready
 ad_alt_intf signal dma_xfer_req input 1 xfer_req
-ad_alt_intf signal dma_xfer_last input 1 last
+
+add_interface s_axis axi4stream end
+set_interface_property s_axis associatedClock if_dma_clk
+set_interface_property s_axis associatedReset if_dma_rst
+add_interface_port  s_axis  dma_valid      tvalid  Input   1
+add_interface_port  s_axis  dma_xfer_last  tlast   Input   1
+add_interface_port  s_axis  dma_ready      tready  Output  1
+add_interface_port  s_axis  dma_data       tdata   Input   DATA_WIDTH
 
 ad_alt_intf clock dac_clk input 1
 ad_alt_intf reset dac_rst input 1 if_dac_clk
