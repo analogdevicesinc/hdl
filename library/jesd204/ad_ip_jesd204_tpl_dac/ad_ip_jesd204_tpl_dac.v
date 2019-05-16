@@ -55,6 +55,10 @@ module ad_ip_jesd204_tpl_dac #(
   input [NUM_LANES*8*OCTETS_PER_BEAT-1:0] dac_ddata,
   input dac_dunf,
 
+  // external sync, should be on the link_clk clock domain
+
+  input dac_external_sync,
+
   // axi interface
 
   input s_axi_aclk,
@@ -94,6 +98,8 @@ module ad_ip_jesd204_tpl_dac #(
   // internal signals
 
   wire dac_sync;
+  wire dac_external_sync_status;
+  wire dac_external_sync_ctl;
   wire dac_dds_format;
 
   wire [NUM_CHANNELS*16-1:0] dac_dds_scale_0_s;
@@ -146,6 +152,8 @@ module ad_ip_jesd204_tpl_dac #(
     .dac_dunf (dac_dunf),
 
     .dac_sync (dac_sync),
+    .dac_external_sync_ctl (dac_external_sync_ctl),
+    .dac_external_sync_status (dac_external_sync_status),
     .dac_dds_format (dac_dds_format),
 
     .dac_dds_scale_0 (dac_dds_scale_0_s),
@@ -196,6 +204,9 @@ module ad_ip_jesd204_tpl_dac #(
     .dac_ddata (dac_ddata),
 
     .dac_sync (dac_sync),
+    .dac_external_sync_ctl (dac_external_sync_ctl),
+    .dac_external_sync_status (dac_external_sync_status),
+    .dac_external_sync (dac_external_sync),
     .dac_dds_format (dac_dds_format),
 
     .dac_dds_scale_0 (dac_dds_scale_0_s),

@@ -66,6 +66,9 @@ module ad_ip_jesd204_tpl_dac_regmap #(
 
   output dac_sync,
 
+  input dac_external_sync_status,
+  output dac_external_sync_ctl,
+
   output [NUM_CHANNELS*4-1:0] dac_data_sel,
   output dac_dds_format,
 
@@ -191,6 +194,8 @@ module ad_ip_jesd204_tpl_dac_regmap #(
     .dac_clk (link_clk),
     .dac_rst (dac_rst),
     .dac_sync (dac_sync),
+    .dac_external_sync_ctl (dac_external_sync_ctl),
+    .dac_external_sync_status (dac_external_sync_status),
     .dac_frame (),
     .dac_clksel (),
     .dac_par_type (),
