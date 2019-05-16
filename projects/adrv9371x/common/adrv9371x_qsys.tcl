@@ -145,14 +145,12 @@ set_instance_parameter_value axi_ad9371_tx_dma {CYCLIC} {1}
 set_instance_parameter_value axi_ad9371_tx_dma {DMA_TYPE_DEST} {1}
 set_instance_parameter_value axi_ad9371_tx_dma {DMA_TYPE_SRC} {0}
 set_instance_parameter_value axi_ad9371_tx_dma {FIFO_SIZE} {16}
+set_instance_parameter_value axi_ad9371_tx_dma {HAS_AXIS_TLAST} {1}
 add_connection sys_dma_clk.clk avl_ad9371_tx_fifo.if_dma_clk
 add_connection sys_dma_clk.clk_reset avl_ad9371_tx_fifo.if_dma_rst
 add_connection sys_dma_clk.clk axi_ad9371_tx_dma.if_m_axis_aclk
-add_connection axi_ad9371_tx_dma.if_m_axis_valid avl_ad9371_tx_fifo.if_dma_valid
-add_connection axi_ad9371_tx_dma.if_m_axis_data avl_ad9371_tx_fifo.if_dma_data
-add_connection axi_ad9371_tx_dma.if_m_axis_last avl_ad9371_tx_fifo.if_dma_xfer_last
+add_connection axi_ad9371_tx_dma.m_axis avl_ad9371_tx_fifo.s_axis
 add_connection axi_ad9371_tx_dma.if_m_axis_xfer_req avl_ad9371_tx_fifo.if_dma_xfer_req
-add_connection avl_ad9371_tx_fifo.if_dma_ready axi_ad9371_tx_dma.if_m_axis_ready
 add_connection sys_clk.clk axi_ad9371_tx_dma.s_axi_clock
 add_connection sys_clk.clk_reset axi_ad9371_tx_dma.s_axi_reset
 add_connection sys_dma_clk.clk axi_ad9371_tx_dma.m_src_axi_clock
