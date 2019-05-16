@@ -68,15 +68,13 @@ set_instance_parameter_value axi_ad9152_dma {SYNC_TRANSFER_START} {0}
 set_instance_parameter_value axi_ad9152_dma {DMA_TYPE_DEST} {1}
 set_instance_parameter_value axi_ad9152_dma {DMA_TYPE_SRC} {0}
 set_instance_parameter_value axi_ad9152_dma {FIFO_SIZE} {16}
+set_instance_parameter_value axi_ad9152_dma {HAS_AXIS_TLAST} {1}
 
 add_connection sys_clk.clk avl_ad9152_fifo.if_dma_clk
 add_connection sys_clk.clk_reset avl_ad9152_fifo.if_dma_rst
 add_connection sys_clk.clk axi_ad9152_dma.if_m_axis_aclk
-add_connection axi_ad9152_dma.if_m_axis_valid avl_ad9152_fifo.if_dma_valid
-add_connection axi_ad9152_dma.if_m_axis_data avl_ad9152_fifo.if_dma_data
-add_connection axi_ad9152_dma.if_m_axis_last avl_ad9152_fifo.if_dma_xfer_last
+add_connection axi_ad9152_dma.m_axis avl_ad9152_fifo.s_axis
 add_connection axi_ad9152_dma.if_m_axis_xfer_req avl_ad9152_fifo.if_dma_xfer_req
-add_connection avl_ad9152_fifo.if_dma_ready axi_ad9152_dma.if_m_axis_ready
 add_connection sys_clk.clk_reset axi_ad9152_dma.s_axi_reset
 add_connection sys_clk.clk axi_ad9152_dma.s_axi_clock
 add_connection sys_clk.clk_reset axi_ad9152_dma.m_src_axi_reset
@@ -150,9 +148,7 @@ set_instance_parameter_value axi_ad9680_dma {DMA_TYPE_DEST} {0}
 set_instance_parameter_value axi_ad9680_dma {DMA_TYPE_SRC} {1}
 
 add_connection sys_clk.clk axi_ad9680_dma.if_s_axis_aclk
-add_connection ad9680_adcfifo.if_dma_wr axi_ad9680_dma.if_s_axis_valid
-add_connection ad9680_adcfifo.if_dma_wdata axi_ad9680_dma.if_s_axis_data
-add_connection ad9680_adcfifo.if_dma_wready axi_ad9680_dma.if_s_axis_ready
+add_connection ad9680_adcfifo.m_axis axi_ad9680_dma.s_axis
 add_connection ad9680_adcfifo.if_dma_xfer_req axi_ad9680_dma.if_s_axis_xfer_req
 add_connection ad9680_adcfifo.if_adc_wovf axi_ad9680_core.if_adc_dovf
 add_connection sys_clk.clk_reset axi_ad9680_dma.s_axi_reset
