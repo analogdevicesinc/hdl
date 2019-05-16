@@ -37,7 +37,8 @@ module ad_ip_jesd204_tpl_dac_core #(
   parameter DMA_DATA_WIDTH = DATA_PATH_WIDTH * BITS_PER_SAMPLE * NUM_CHANNELS,
   parameter DDS_TYPE = 1,
   parameter DDS_CORDIC_DW = 16,
-  parameter DDS_CORDIC_PHASE_DW = 16
+  parameter DDS_CORDIC_PHASE_DW = 16,
+  parameter EXT_SYNC = 0
 ) (
   // dac interface
   input clk,
@@ -53,6 +54,11 @@ module ad_ip_jesd204_tpl_dac_core #(
   // Configuration interface
 
   input dac_sync,
+
+  input dac_sync_in,
+
+  output dac_sync_in_status,
+
   input dac_dds_format,
 
   input [NUM_CHANNELS*4-1:0] dac_data_sel,
@@ -78,12 +84,30 @@ module ad_ip_jesd204_tpl_dac_core #(
   localparam DAC_DATA_WIDTH = DAC_CDW * NUM_CHANNELS;
   localparam DMA_CDW = DATA_PATH_WIDTH * BITS_PER_SAMPLE;
 
-  assign link_valid = 1'b1;
 
   wire [DAC_DATA_WIDTH-1:0] dac_data_s;
 
   wire [DAC_CDW-1:0] pn7_data;
   wire [DAC_CDW-1:0] pn15_data;
+
+  reg dac_sync_in_d1 ='d0;
+  reg dac_sync_in_arm ='d0;
+  reg dac_sync_d1 = 'd0;
+
+  assign link_valid = 1'b1;
+  assign dac_sync_in_status = dac_sync_in_arm;
+
+  always @(posedge clk) begin
+    dac_sync_d1 <= dac_sync;
+    dac_sync_in_d1 <= dac_sync_in;
+    if ((~dac_sync_d1&dac_sync) == 1'b1) begin
+      dac_sync_in_arm <= 1'b1;
+    end else if ((~dac_sync_in_d1&dac_sync_in) == 1'b1) begin
+      dac_sync_in_arm <= 1'b0;
+    end else if (EXT_SYNC == 1'b0) begin
+      dac_sync_in_arm <= 1'b0;
+    end
+  end
 
   // device interface
 
@@ -107,7 +131,7 @@ module ad_ip_jesd204_tpl_dac_core #(
     .CONVERTER_RESOLUTION (CONVERTER_RESOLUTION)
   ) i_pn_gen (
     .clk (clk),
-    .reset (dac_sync),
+    .reset (dac_sync_in_arm),
 
     .pn7_data (pn7_data),
     .pn15_data (pn15_data)
@@ -115,8 +139,7 @@ module ad_ip_jesd204_tpl_dac_core #(
 
   // dac valid
 
-  assign dac_valid = {NUM_CHANNELS{1'b1}};
-
+  assign dac_valid = {NUM_CHANNELS{~dac_sync_in_arm}};
 
   generate
   genvar i;
@@ -147,7 +170,7 @@ module ad_ip_jesd204_tpl_dac_core #(
       .pn7_data (pn7_data),
       .pn15_data (pn15_data),
 
-      .dac_data_sync (dac_sync),
+      .dac_data_sync (dac_sync_in_arm),
       .dac_dds_format (dac_dds_format),
 
       .dac_data_sel (dac_data_sel[4*i+:4]),
