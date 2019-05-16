@@ -60,6 +60,7 @@ module up_dac_common #(
   input               dac_clk,
   output              dac_rst,
   output              dac_sync,
+  output              dac_external_sync_ctl,
   output              dac_frame,
   output              dac_clksel,
   output              dac_par_type,
@@ -121,6 +122,7 @@ module up_dac_common #(
   reg             up_mmcm_resetn = 'd0;
   reg             up_resetn = 'd0;
   reg             up_dac_sync = 'd0;
+  reg             up_dac_external_sync_ctl = 'd0;
   reg             up_dac_par_type = 'd0;
   reg             up_dac_par_enb = 'd0;
   reg             up_dac_r1_mode = 'd0;
@@ -179,6 +181,7 @@ module up_dac_common #(
       up_mmcm_resetn <= 'd0;
       up_resetn <= 'd0;
       up_dac_sync <= 'd0;
+      up_dac_external_sync_ctl <= 'd0;
       up_dac_par_type <= 'd0;
       up_dac_par_enb <= 'd0;
       up_dac_r1_mode <= 'd0;
@@ -203,11 +206,13 @@ module up_dac_common #(
         up_mmcm_resetn <= up_wdata[1];
         up_resetn <= up_wdata[0];
       end
-      if (up_dac_sync == 1'b1) begin
+      if (up_dac_sync == 1'b1 | up_dac_external_sync_ctl == 1'b1) begin
         if (up_xfer_done_s == 1'b1) begin
           up_dac_sync <= 1'b0;
+          up_dac_external_sync_ctl <= 1'b0;
         end
       end else if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h11)) begin
+        up_dac_external_sync_ctl <= up_wdata[1];
         up_dac_sync <= up_wdata[0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h12)) begin
@@ -384,7 +389,7 @@ module up_dac_common #(
           7'h03: up_rdata_int <= CONFIG;
           7'h07: up_rdata_int <= {FPGA_TECHNOLOGY,FPGA_FAMILY,SPEED_GRADE,DEV_PACKAGE}; // [8,8,8,8]
           7'h10: up_rdata_int <= {29'd0, up_dac_clk_enb, up_mmcm_resetn, up_resetn};
-          7'h11: up_rdata_int <= {31'd0, up_dac_sync};
+          7'h11: up_rdata_int <= {30'd0, up_dac_external_sync_ctl, up_dac_sync};
           7'h12: up_rdata_int <= {24'd0, up_dac_par_type, up_dac_par_enb, up_dac_r1_mode,
                               up_dac_datafmt, 4'd0};
           7'h13: up_rdata_int <= {16'd0, up_dac_datarate};
@@ -419,10 +424,11 @@ module up_dac_common #(
 
   // dac control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(23)) i_xfer_cntrl (
+  up_xfer_cntrl #(.DATA_WIDTH(24)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_data_cntrl ({ up_dac_sync,
+    .up_data_cntrl ({ up_dac_external_sync_ctl,
+                      up_dac_sync,
                       up_dac_clksel,
                       up_dac_frame,
                       up_dac_par_type,
@@ -433,7 +439,8 @@ module up_dac_common #(
     .up_xfer_done (up_xfer_done_s),
     .d_rst (dac_rst),
     .d_clk (dac_clk),
-    .d_data_cntrl ({  dac_sync_s,
+    .d_data_cntrl ({  dac_external_sync_ctl,
+                      dac_sync_s,
                       dac_clksel,
                       dac_frame_s,
                       dac_par_type,
