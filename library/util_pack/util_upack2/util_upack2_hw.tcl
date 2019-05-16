@@ -74,9 +74,12 @@ proc util_upack_elab {} {
   # This is a temporary hack and should be removed once all projects have been
   # updated to use the AXI streaming interface to connect the the upack
   if {$interface_type == 0} {
-    ad_alt_intf signal s_axis_valid input 1 valid
-    ad_alt_intf signal s_axis_ready output 1 ready
-    ad_alt_intf signal s_axis_data input $total_data_width data
+    add_interface s_axis axi4stream end
+    set_interface_property s_axis associatedClock clk
+    set_interface_property s_axis associatedReset reset
+    add_interface_port  s_axis  s_axis_valid tvalid  Input   1
+    add_interface_port  s_axis  s_axis_ready tready  Output  1
+    add_interface_port  s_axis  s_axis_data  tdata   Input   $total_data_width
   } else {
     ad_alt_intf signal packed_fifo_rd_en output 1 valid
     set_port_property packed_fifo_rd_en fragment_list "s_axis_ready"
