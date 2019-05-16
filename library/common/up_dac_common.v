@@ -68,6 +68,7 @@ module up_dac_common #(
   output              dac_datafmt,
   output      [15:0]  dac_datarate,
   input               dac_status,
+  input               dac_sync_in_status,
   input               dac_status_unf,
   input       [31:0]  dac_clk_ratio,
   output              up_dac_ce,
@@ -147,6 +148,7 @@ module up_dac_common #(
   wire            up_rreq_s;
   wire            up_xfer_done_s;
   wire            up_status_s;
+  wire            up_sync_in_status;
   wire            up_status_unf_s;
   wire            dac_sync_s;
   wire            dac_frame_s;
@@ -389,7 +391,7 @@ module up_dac_common #(
           7'h14: up_rdata_int <= {31'd0, up_dac_frame};
           7'h15: up_rdata_int <= up_dac_clk_count_s;
           7'h16: up_rdata_int <= dac_clk_ratio;
-          7'h17: up_rdata_int <= {31'd0, up_status_s};
+          7'h17: up_rdata_int <= {30'd0, up_sync_in_status, up_status_s};
           7'h18: up_rdata_int <= {31'd0, up_dac_clksel};
           7'h1c: up_rdata_int <= {3'd0, up_drp_rwn_s, up_drp_addr, 16'b0};
           7'h1d: up_rdata_int <= {14'd0, up_drp_locked, up_drp_status_s, 16'b0};
@@ -440,14 +442,16 @@ module up_dac_common #(
                       dac_datafmt,
                       dac_datarate}));
 
-  up_xfer_status #(.DATA_WIDTH(2)) i_xfer_status (
+  up_xfer_status #(.DATA_WIDTH(3)) i_xfer_status (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_data_status ({up_status_s,
+    .up_data_status ({up_sync_in_status,
+                      up_status_s,
                       up_status_unf_s}),
     .d_rst (dac_rst),
     .d_clk (dac_clk),
-    .d_data_status ({ dac_status,
+    .d_data_status ({ dac_sync_in_status,
+                      dac_status,
                       dac_status_unf}));
 
   // generate frame and enable

@@ -39,7 +39,8 @@ module ad_ip_jesd204_tpl_dac #(
   parameter DDS_CORDIC_DW = 16,
   parameter DDS_CORDIC_PHASE_DW = 16,
   parameter DATAPATH_DISABLE = 0,
-  parameter IQCORRECTION_DISABLE = 1
+  parameter IQCORRECTION_DISABLE = 1,
+  parameter EXT_SYNC = 0
 ) (
   // jesd interface
   // link_clk is (line-rate/40)
@@ -55,6 +56,10 @@ module ad_ip_jesd204_tpl_dac #(
   output [NUM_CHANNELS-1:0] dac_valid,
   input [NUM_LANES*8*OCTETS_PER_BEAT-1:0] dac_ddata,
   input dac_dunf,
+
+  // external sync, should be on the link_clk clock domain
+
+  input dac_sync_in,
 
   // axi interface
 
@@ -95,6 +100,7 @@ module ad_ip_jesd204_tpl_dac #(
   // internal signals
 
   wire dac_sync;
+  wire dac_sync_in_status;
   wire dac_dds_format;
 
   wire [NUM_CHANNELS*16-1:0] dac_dds_scale_0_s;
@@ -152,6 +158,7 @@ module ad_ip_jesd204_tpl_dac #(
     .dac_dunf (dac_dunf),
 
     .dac_sync (dac_sync),
+    .dac_sync_in_status (dac_sync_in_status),
     .dac_dds_format (dac_dds_format),
 
     .dac_dds_scale_0 (dac_dds_scale_0_s),
@@ -193,7 +200,8 @@ module ad_ip_jesd204_tpl_dac #(
     .DMA_DATA_WIDTH (DMA_DATA_WIDTH),
     .DDS_TYPE (DDS_TYPE),
     .DDS_CORDIC_DW (DDS_CORDIC_DW),
-    .DDS_CORDIC_PHASE_DW (DDS_CORDIC_PHASE_DW)
+    .DDS_CORDIC_PHASE_DW (DDS_CORDIC_PHASE_DW),
+    .EXT_SYNC (EXT_SYNC)
   ) i_core (
     .clk (link_clk),
 
@@ -207,6 +215,8 @@ module ad_ip_jesd204_tpl_dac #(
     .dac_ddata (dac_ddata),
 
     .dac_sync (dac_sync),
+    .dac_sync_in_status (dac_sync_in_status),
+    .dac_sync_in (dac_sync_in),
     .dac_dds_format (dac_dds_format),
 
     .dac_dds_scale_0 (dac_dds_scale_0_s),
