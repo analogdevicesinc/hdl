@@ -7,7 +7,8 @@ set TX_NUM_OF_CONVERTERS 2 ; # M
 set TX_SAMPLES_PER_FRAME 2 ; # S
 set TX_SAMPLE_WIDTH 16     ; # N/NP
 
-set TX_SAMPLES_PER_CHANNEL 2 ; # L * 32 / (M * N)
+set TX_SAMPLES_PER_CHANNEL [expr [expr $TX_NUM_OF_LANES * 32 ] / \
+                                 [expr $TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH]] ; # L * 32 / (M * N)
 
 # JESD204 RX parameters
 set RX_NUM_OF_LANES 8      ; # L
@@ -40,6 +41,12 @@ adi_tpl_jesd204_tx_create axi_ad9162_core $TX_NUM_OF_LANES \
                                           $TX_NUM_OF_CONVERTERS \
                                           $TX_SAMPLES_PER_FRAME \
                                           $TX_SAMPLE_WIDTH
+
+ad_ip_instance util_upack2 util_ad9162_upack [list \
+  NUM_OF_CHANNELS $TX_NUM_OF_CONVERTERS \
+  SAMPLES_PER_CHANNEL $TX_SAMPLES_PER_CHANNEL \
+  SAMPLE_DATA_WIDTH $TX_SAMPLE_WIDTH \
+]
 
 ad_ip_instance axi_dmac axi_ad9162_dma
 ad_ip_parameter axi_ad9162_dma CONFIG.DMA_TYPE_SRC 0
@@ -113,10 +120,17 @@ ad_connect  sys_cpu_clk util_fmcomms11_xcvr/up_clk
 ad_xcvrcon  util_fmcomms11_xcvr axi_ad9162_xcvr axi_ad9162_jesd
 ad_connect  util_fmcomms11_xcvr/tx_out_clk_0 axi_ad9162_core/link_clk
 ad_connect  axi_ad9162_jesd/tx_data axi_ad9162_core/link
+
+ad_connect  util_fmcomms11_xcvr/tx_out_clk_0 util_ad9162_upack/clk
+ad_connect  axi_ad9162_jesd_rstgen/peripheral_reset util_ad9162_upack/reset
+
+ad_connect  axi_ad9162_core/dac_valid_0 util_ad9162_upack/fifo_rd_en
+for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
+  ad_connect  util_ad9162_upack/fifo_rd_data_$i axi_ad9162_core/dac_data_$i
+  ad_connect  axi_ad9162_core/dac_enable_$i  util_ad9162_upack/enable_$i
+}
+
 ad_connect  util_fmcomms11_xcvr/tx_out_clk_0 axi_ad9162_fifo/dac_clk
-ad_connect  axi_ad9162_core/dac_valid_0 axi_ad9162_fifo/dac_valid
-ad_connect  axi_ad9162_core/dac_data_0 axi_ad9162_fifo/dac_data
-ad_connect  axi_ad9162_core/dac_dunf axi_ad9162_fifo/dac_dunf
 ad_connect  axi_ad9162_jesd_rstgen/peripheral_reset axi_ad9162_fifo/dac_rst
 ad_connect  sys_cpu_clk axi_ad9162_fifo/dma_clk
 ad_connect  sys_cpu_reset axi_ad9162_fifo/dma_rst
