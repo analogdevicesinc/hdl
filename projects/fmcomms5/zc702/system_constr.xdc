@@ -132,6 +132,7 @@ set_property  -dict {PACKAGE_PIN  U11   IOSTANDARD LVCMOS25}  [get_ports gpio_ca
 
 create_clock -name rx_0_clk       -period   5.00 [get_ports rx_clk_in_0_p]
 create_clock -name rx_1_clk       -period   5.00 [get_ports rx_clk_in_1_p]
+create_clock -name ref_clk        -period   5.00 [get_ports ref_clk_p]
 
 # gpio (pmods)
 
