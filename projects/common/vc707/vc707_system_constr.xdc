@@ -18,6 +18,9 @@ set_property PACKAGE_PIN AM7 [get_ports sgmii_rxn]
 set_property PACKAGE_PIN AH8 [get_ports mgt_clk_p]
 set_property PACKAGE_PIN AH7 [get_ports mgt_clk_n]
 
+# Define the 125 MHz SGMII clock 
+create_clock -name mgt_clk  -period  8.00  [get_ports mgt_clk_p]
+
 set_property -dict  {PACKAGE_PIN  AJ33  IOSTANDARD  LVCMOS18} [get_ports phy_rstn]
 set_property -dict  {PACKAGE_PIN  AH31  IOSTANDARD  LVCMOS18} [get_ports mdio_mdc]
 set_property -dict  {PACKAGE_PIN  AK33  IOSTANDARD  LVCMOS18} [get_ports mdio_mdio]
