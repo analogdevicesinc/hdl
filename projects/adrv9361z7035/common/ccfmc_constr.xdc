@@ -144,7 +144,10 @@ set_property  -dict {PACKAGE_PIN  AE5}  [get_ports gt_rx_n[1]]                  
 
 ## clocks
 
-create_clock -name ref_clk        -period  4.00 [get_ports gt_ref_clk_0_p]
+create_clock -name ref_clk_0      -period  4.00 [get_ports gt_ref_clk_0_p]
+create_clock -name ref_clk_1      -period  4.00 [get_ports gt_ref_clk_1_p]
+create_clock -name clk0           -period  4.00 [get_ports clk_0_p]
+create_clock -name clk1           -period  4.00 [get_ports clk_1_p]
 create_clock -name xcvr_clk_0     -period  8.00 [get_pins i_system_wrapper/system_i/axi_pz_xcvrlb/inst/g_lanes[0].i_xcvrlb_1/i_xch/i_gtxe2_channel/RXOUTCLK]
 create_clock -name xcvr_clk_1     -period  8.00 [get_pins i_system_wrapper/system_i/axi_pz_xcvrlb/inst/g_lanes[1].i_xcvrlb_1/i_xch/i_gtxe2_channel/RXOUTCLK]
 
