@@ -1,7 +1,16 @@
-###################################################################################################
-###################################################################################################
-# keep interface-mess out of the way - keeping it pretty is a waste of time
 
+## Define an interface for Platform Designer.
+#
+# \param[type] - Type of the interface, valid values are : clock, reset, reset-n,
+# signal, intr
+# \param[name] - The name of the interface
+# \param[dir] - The direction of the interface
+# \param[width] - The width of the interface
+# \param[arg_1] - Optional argument to define the associated clock for a reset
+# interface
+# \param[arg_2] - Optional argument to define the associated reset sink for a
+# reset interface
+#
 proc ad_alt_intf {type name dir width {arg_1 ""} {arg_2 ""}} {
 
   if {([string equal -nocase ${type} "clock"]) && ([string equal -nocase ${dir} "input"])} {
@@ -65,15 +74,28 @@ proc ad_alt_intf {type name dir width {arg_1 ""} {arg_2 ""}} {
   }
 }
 
+## Create a point-to-point conduit interface.
+#
+# \param[if_name] - the name of the interface
+# \param[if_port] - the type of signal for this port, which must be unique
+# \param[port] - the name of the port, this name must match the signal name
+# in HDL
+# \param[dir] - the direction of the signal, expected values: input/output/bidir
+# \param[width] - the width of the port, in bits
+#
 proc ad_conduit {if_name if_port port dir width} {
 
   add_interface $if_name conduit end
   add_interface_port $if_name $port $if_port $dir $width
 }
 
-###################################################################################################
-###################################################################################################
-
+## Create an IP.
+#
+# \param[pname] - name of the IP, general equivalent to the top HDL module name
+# \param[pdisplay_name] - displayed name
+# \param[pelabfunction] - name of the elaboration callback function
+# \param[pcomposefunction] - name of the composition callback function
+#
 proc ad_ip_create {pname pdisplay_name {pelabfunction ""} {pcomposefunction ""}} {
 
   set_module_property NAME $pname
@@ -91,9 +113,15 @@ proc ad_ip_create {pname pdisplay_name {pelabfunction ""} {pcomposefunction ""}}
   }
 }
 
-###################################################################################################
-###################################################################################################
-
+## Create an IP parameter.
+#
+# \param[pname] - name of the IP, general equivalent to the top HDL module name
+# \param[ptype] - the data type of the parameter
+# \param[pdefault] - the initial value of the parameter
+# \param[phdl] - define if the parameter is an HDL parameter or not
+# \param[properties] - can define different properties for the parameter, must be
+# a list of {key, value} pairs
+#
 proc ad_ip_parameter {pname ptype pdefault {phdl true} {properties {}}} {
 
   if {$pname eq "DEVICE_FAMILY"} {
@@ -113,9 +141,10 @@ proc ad_ip_parameter {pname ptype pdefault {phdl true} {properties {}}} {
   }
 }
 
-###################################################################################################
-###################################################################################################
-
+## Adds the generic ADI spec parameters to the current IP, with the help of
+#  adi_add_device_spec_param. The spec parameter list is auto_gen_param_list,
+#  from library/scripts/adi_intel_device_info_enc.tcl.
+#
 proc adi_add_auto_fpga_spec_params {} {
 
     global ad_hdl_dir
@@ -131,8 +160,22 @@ proc adi_add_auto_fpga_spec_params {} {
     }
 }
 
-###################################################################################################
-
+## Generate validation properties for a parameter, using predefined ranges or
+#  set of values (the definition of the ranges can be found in
+#  library/scripts/adi_intel_device_info_enc.tcl).
+#
+#  In Intel callback flow, one cannot directly change a parameter value, the value
+#  can only be calculated/deduced from the environment.
+#  Adding a second parameter with the same name followed by "_MANUAL", will add
+#  in the environment the desired value that is still constrained to a predefined
+#  set. Having the second parameter is not enough, to activate the manual
+#  overwriting of a parameter one must call the adi_add_indep_spec_params_overwrite
+#  process.
+#
+# \param[param] - Name of the HDL parameter. The list of accepted values for
+#  the parameter are defined with the same name as the parameter's one(lower case),
+#  followed by "_list"
+#
 proc adi_add_device_spec_param {param} {
 
     global auto_gen_param_list
@@ -178,8 +221,11 @@ proc adi_add_device_spec_param {param} {
     set_parameter_property ${param}_MANUAL ALLOWED_RANGES $ranges
 }
 
-###################################################################################################
-
+## Creates a boolean type parameter that allows this user to manually overwrite
+#  parameter values.
+#
+# \param[param] - Name of the HDL parameter.
+#
 proc adi_add_indep_spec_params_overwrite {param} {
     add_parameter ${param}_USER_OVERWRITE BOOLEAN 0
     set_parameter_property ${param}_USER_OVERWRITE DISPLAY_NAME "Manually overwrite $param parameter"
@@ -187,8 +233,13 @@ proc adi_add_indep_spec_params_overwrite {param} {
     set_parameter_property ${param}_USER_OVERWRITE GROUP {FPGA info}
 }
 
-###################################################################################################
-
+## In this process the IP parameters are compared against predefined parameter lists
+#  in library/scripts/adi_intel_device_info_enc.tcl. For the matching parameters,
+#  a search is started after a pair *_USER_OVERWRITE(boolean) parameter. If the pair
+#  *_USER_OVERWRITE parameter is found, and its value is true, the target parameter
+#  will take the value of the *_MANUAL parameter. The GUI parameter is set as
+#  writable in the qsys GUI (${parameter_name} is replaced by ${parameter_name}_MANUAL).
+#
 proc info_param_validate {} {
   global ad_hdl_dir
   global fpga_technology
@@ -270,7 +321,7 @@ proc info_param_validate {} {
     }
   }
 
-  # display manual(writable) or auto(non-writable) parametes
+  # display manual(writable) or auto(non-writable) parameters
   foreach p $validate_list {
     set_parameter_property ${p}_MANUAL VISIBLE [expr $auto_populate ? false : true]
     set_parameter_property $p VISIBLE $auto_populate
@@ -290,9 +341,11 @@ proc info_param_validate {} {
   }
 }
 
-###################################################################################################
-###################################################################################################
-
+## Add source files to an IP, automatically find the file type using its extension.
+#
+# \param[pname] - name of the IP, general equivalent to the top HDL module name
+# \param[pfile] - name of the file
+#
 proc ad_ip_addfile {pname pfile} {
 
   set pmodule [file tail $pfile]
@@ -322,6 +375,11 @@ proc ad_ip_addfile {pname pfile} {
   }
 }
 
+## Add source files to an IP, automatically find the file type using its extension.
+#
+# \param[pname] - name of the IP, general equivalent to the top HDL module name
+# \param[pfile] - name of the file
+#
 proc ad_ip_files {pname pfiles {pfunction ""}} {
 
   add_fileset quartus_synth QUARTUS_SYNTH $pfunction ""
@@ -337,9 +395,12 @@ proc ad_ip_files {pname pfiles {pfunction ""}} {
   }
 }
 
-###################################################################################################
-###################################################################################################
-
+## Infer an AXI4 Lite memory mapped interface.
+#
+# \param[aclk] - name of the interface clock
+# \param[arstn] - name fo the interface reset
+# \param[addr_width] - address width of the read and write channels
+#
 proc ad_ip_intf_s_axi {aclk arstn {addr_width 16}} {
 
   add_interface s_axi_clock clock end
@@ -372,7 +433,4 @@ proc ad_ip_intf_s_axi {aclk arstn {addr_width 16}} {
   add_interface_port s_axi s_axi_rdata rdata Output 32
   add_interface_port s_axi s_axi_rready rready Input 1
 }
-
-###################################################################################################
-###################################################################################################
 
