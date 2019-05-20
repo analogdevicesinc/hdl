@@ -40,3 +40,7 @@ set_false_path -to [get_cells -hier -filter {name =~ *rx_sync_mode* && IS_SEQUEN
 set_false_path -to [get_cells -hier -filter {name =~ *rx_sync_disable_1* && IS_SEQUENTIAL}]
 set_false_path -to [get_cells -hier -filter {name =~ *rx_sync_disable_0* && IS_SEQUENTIAL}]
 
+# Define spi clock
+create_generated_clock -name spi_clk  \
+  -source [get_pins -hier up_spi_clk_int_reg/C] \
+  -divide_by 2 [get_pins -hier up_spi_clk_int_reg/Q]
