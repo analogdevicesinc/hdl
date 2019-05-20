@@ -27,6 +27,11 @@ set_property -dict {PACKAGE_PIN  AV14 IOSTANDARD LVCMOS18} [get_ports pb_gpio_1]
 set_property -dict {PACKAGE_PIN  AT11 IOSTANDARD LVCMOS18} [get_ports pb_gpio_2]
 set_property -dict {PACKAGE_PIN  AT12 IOSTANDARD LVCMOS18} [get_ports pb_gpio_3]
 
+set_property -dict {PACKAGE_PIN  AM16 IOSTANDARD LVCMOS18} [get_ports gpio_0_exp_n]
+set_property -dict {PACKAGE_PIN  AL16 IOSTANDARD LVCMOS18} [get_ports gpio_0_exp_p]
+set_property -dict {PACKAGE_PIN  AK17 IOSTANDARD LVCMOS18} [get_ports gpio_1_exp_n]
+set_property -dict {PACKAGE_PIN  AJ17 IOSTANDARD LVCMOS18} [get_ports gpio_1_exp_p]
+
 set_property -dict {PACKAGE_PIN AR19 IOSTANDARD LVCMOS18} [get_ports resetb_ad9545]
 set_property -dict {PACKAGE_PIN AP19 IOSTANDARD LVCMOS18} [get_ports hmc7044_car_reset]
 set_property -dict {PACKAGE_PIN AP20 IOSTANDARD LVCMOS18} [get_ports hmc7044_car_gpio_1]
