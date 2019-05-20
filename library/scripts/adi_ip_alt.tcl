@@ -71,25 +71,6 @@ proc ad_conduit {if_name if_port port dir width} {
   add_interface_port $if_name $port $if_port $dir $width
 }
 
-proc ad_generate_module_inst { inst_name mark source_file target_file } {
-
-  set fp_source [open $source_file "r"]
-  set fp_target [open $target_file "w+"]
-
-  fconfigure $fp_source -buffering line
-
-  while { [gets $fp_source data] >= 0 } {
-
-    # update the required module name
-    regsub $inst_name $data "&_$mark" data
-    puts $data
-    puts $fp_target $data
-  }
-
-  close $fp_source
-  close $fp_target
-}
-
 ###################################################################################################
 ###################################################################################################
 
@@ -390,35 +371,6 @@ proc ad_ip_intf_s_axi {aclk arstn {addr_width 16}} {
   add_interface_port s_axi s_axi_rresp rresp Output 2
   add_interface_port s_axi s_axi_rdata rdata Output 32
   add_interface_port s_axi s_axi_rready rready Input 1
-}
-
-###################################################################################################
-###################################################################################################
-
-proc ad_ip_modfile {ifile ofile flist} {
-
-  global ad_hdl_dir
-
-  set srcfile [open ${ad_hdl_dir}/library/altera/common/${ifile} r]
-  set dstfile [open ${ofile} w]
-
-  regsub {\..$} $ifile {} imodule
-  regsub {\..$} $ofile {} omodule
-
-  while {[gets $srcfile srcline] >= 0} {
-    regsub __${imodule}__ $srcline $omodule dstline
-    set index 0
-    foreach fword $flist {
-      incr index
-      regsub __${imodule}_${index}__ $dstline $fword dstline
-    }
-    puts $dstfile $dstline
-  }
-
-  close $srcfile
-  close $dstfile
-
-  ad_ip_addfile ad_ip_addfile $ofile
 }
 
 ###################################################################################################
