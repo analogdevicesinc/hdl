@@ -241,6 +241,8 @@ adi_tpl_jesd204_tx_create tx_adrv9009_som_tpl_core $TX_NUM_OF_LANES \
                                                $TX_SAMPLES_PER_FRAME \
                                                $TX_SAMPLE_WIDTH
 
+ad_ip_parameter tx_adrv9009_som_tpl_core/dac_tpl_core CONFIG.EXT_SYNC 1
+
 ad_ip_instance axi_dmac axi_adrv9009_som_tx_dma
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_TYPE_SRC 0
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_TYPE_DEST 1
@@ -370,6 +372,7 @@ for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
 }
 
 ad_connect tx_adrv9009_som_tpl_core/dac_dunf util_som_tx_upack/fifo_rd_underflow
+ad_connect tx_sysref_0 tx_adrv9009_som_tpl_core/dac_tpl_core/dac_sync_in
 
 # connections (adc)
 
@@ -378,7 +381,9 @@ ad_connect  axi_adrv9009_som_rx_jesd/rx_sof rx_adrv9009_som_tpl_core/link_sof
 ad_connect  axi_adrv9009_som_rx_jesd/rx_data_tdata rx_adrv9009_som_tpl_core/link_data
 ad_connect  axi_adrv9009_som_rx_jesd/rx_data_tvalid rx_adrv9009_som_tpl_core/link_valid
 ad_connect  core_clk_b util_som_rx_cpack/clk
-ad_connect  core_clk_b_rstgen/peripheral_reset util_som_rx_cpack/reset
+ad_connect  rx_adrv9009_som_tpl_core/adc_tpl_core/adc_rst util_som_rx_cpack/reset
+ad_connect  rx_adrv9009_som_tpl_core/adc_tpl_core/adc_sync_in rx_sysref_0
+
 
 ad_connect rx_adrv9009_som_tpl_core/adc_valid_0 util_som_rx_cpack/fifo_wr_en
 for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
