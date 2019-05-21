@@ -54,6 +54,7 @@ module ad_ip_jesd204_tpl_dac #(
   output [NUM_CHANNELS-1:0] dac_valid,
   input [NUM_LANES*8*OCTETS_PER_BEAT-1:0] dac_ddata,
   input dac_dunf,
+  input dac_sync_ext,   // synchronize multiple TPL instance to an external signal
 
   // axi interface
 
@@ -93,7 +94,8 @@ module ad_ip_jesd204_tpl_dac #(
 
   // internal signals
 
-  wire dac_sync;
+  wire dac_sync_s;
+  wire dac_sync_regmap_s;
   wire dac_dds_format;
 
   wire [NUM_CHANNELS*16-1:0] dac_dds_scale_0_s;
@@ -145,7 +147,7 @@ module ad_ip_jesd204_tpl_dac #(
 
     .dac_dunf (dac_dunf),
 
-    .dac_sync (dac_sync),
+    .dac_sync (dac_sync_regmap_s),
     .dac_dds_format (dac_dds_format),
 
     .dac_dds_scale_0 (dac_dds_scale_0_s),
@@ -166,6 +168,10 @@ module ad_ip_jesd204_tpl_dac #(
     .jesd_np (BITS_PER_SAMPLE),
     .up_profile_sel ()
   );
+
+  // DAC sync generation
+
+  assign dac_sync_s = dac_sync_ext | dac_sync_regmap_s;
 
   // core
 
@@ -195,7 +201,7 @@ module ad_ip_jesd204_tpl_dac #(
     .dac_valid (dac_valid),
     .dac_ddata (dac_ddata),
 
-    .dac_sync (dac_sync),
+    .dac_sync (dac_sync_s),
     .dac_dds_format (dac_dds_format),
 
     .dac_dds_scale_0 (dac_dds_scale_0_s),

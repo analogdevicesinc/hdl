@@ -238,6 +238,7 @@ proc adi_tpl_jesd204_tx_create {ip_name num_of_lanes num_of_converters samples_p
       create_bd_pin -dir O "${ip_name}/dac_valid_${i}"
       create_bd_pin -dir I "${ip_name}/dac_data_${i}"
     }
+    create_bd_pin -dir I "${ip_name}/dac_sync_ext"
 
     # Generic TPL core
     ad_ip_instance ad_ip_jesd204_tpl_dac "${ip_name}/tpl_core" [list \
@@ -289,6 +290,7 @@ proc adi_tpl_jesd204_tx_create {ip_name num_of_lanes num_of_converters samples_p
     }
     ad_connect ${ip_name}/data_concat/dout ${ip_name}/tpl_core/dac_ddata
     ad_connect ${ip_name}/dac_dunf ${ip_name}/tpl_core/dac_dunf
+    ad_connect ${ip_name}/dac_sync_ext ${ip_name}/tpl_core/dac_sync_ext
 
   } resulttext resultoptions]
 
