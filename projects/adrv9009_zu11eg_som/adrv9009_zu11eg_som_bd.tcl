@@ -105,6 +105,10 @@ ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_dma_data_width
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_DATA_WIDTH_SRC 128
 
+# positive edge detection of the TX_SYSREF
+create_bd_cell -type module -reference ad_edge_detect util_tx_sysref_edge
+set_property -dict [list CONFIG.EDGE {0}] [get_bd_cells util_tx_sysref_edge]
+
 ad_ip_instance axi_adxcvr axi_adrv9009_som_rx_xcvr
 ad_ip_parameter axi_adrv9009_som_rx_xcvr CONFIG.NUM_OF_LANES $RX_NUM_OF_LANES
 ad_ip_parameter axi_adrv9009_som_rx_xcvr CONFIG.QPLL_ENABLE 0
@@ -149,6 +153,13 @@ ad_ip_instance util_cpack2 util_som_obs_cpack [list \
   SAMPLES_PER_CHANNEL $OBS_SAMPLES_PER_CHANNEL\
   SAMPLE_DATA_WIDTH $OBS_SAMPLE_WIDTH \
 ]
+
+# a synchronization module, which make sure that the RX/RX_OBS DMA will catch
+# the SYSREF as its sync signal
+create_bd_cell -type module -reference util_axis_syncgen util_rx_sysref_syncgen
+set_property -dict [list CONFIG.ASYNC_SYNC {0}] [get_bd_cells util_rx_sysref_syncgen]
+create_bd_cell -type module -reference util_axis_syncgen util_obs_sysref_syncgen
+set_property -dict [list CONFIG.ASYNC_SYNC {0}] [get_bd_cells util_obs_sysref_syncgen]
 
 adi_tpl_jesd204_rx_create obs_adrv9009_som_tpl_core $OBS_NUM_OF_LANES \
                                                   $OBS_NUM_OF_CONVERTERS \
@@ -220,6 +231,11 @@ for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
 
 ad_connect tx_adrv9009_som_tpl_core/dac_dunf util_som_tx_upack/fifo_rd_underflow
 
+ad_connect core_clk_a util_tx_sysref_edge/clk
+ad_connect core_clk_a_rstgen/peripheral_reset util_tx_sysref_edge/rst
+ad_connect util_tx_sysref_edge/in [get_bd_ports tx_sysref_0]
+ad_connect tx_adrv9009_som_tpl_core/dac_sync_ext util_tx_sysref_edge/out
+
 # connections (adc)
 
 ad_connect  core_clk_b rx_adrv9009_som_tpl_core/link_clk
@@ -258,6 +274,20 @@ ad_connect core_clk_a axi_adrv9009_som_tx_dma/m_axis_aclk
 
 ad_connect axi_adrv9009_som_rx_dma/fifo_wr_clk  core_clk_b
 ad_connect util_som_rx_cpack/packed_fifo_wr axi_adrv9009_som_rx_dma/fifo_wr
+
+ad_connect util_rx_sysref_syncgen/s_axis_aclk core_clk_b
+ad_connect util_rx_sysref_syncgen/s_axis_aresetn VCC
+ad_connect util_rx_sysref_syncgen/s_axis_ready VCC
+ad_connect util_rx_sysref_syncgen/s_axis_valid util_som_rx_cpack/packed_fifo_wr_en
+ad_connect util_rx_sysref_syncgen/ext_sync [get_bd_ports rx_sysref_0]
+ad_connect util_rx_sysref_syncgen/s_axis_sync axi_adrv9009_som_rx_dma/fifo_wr_sync
+
+ad_connect util_obs_sysref_syncgen/s_axis_aclk core_clk_b
+ad_connect util_obs_sysref_syncgen/s_axis_aresetn VCC
+ad_connect util_obs_sysref_syncgen/s_axis_ready VCC
+ad_connect util_obs_sysref_syncgen/s_axis_valid util_som_obs_cpack/packed_fifo_wr_en
+ad_connect util_obs_sysref_syncgen/ext_sync [get_bd_ports rx_sysref_4]
+ad_connect util_obs_sysref_syncgen/s_axis_sync axi_adrv9009_som_obs_dma/fifo_wr_sync
 
 ad_connect axi_tx_fifo/axi ddr4_1/C0_DDR4_S_AXI
 ad_connect ddr4_1/c0_ddr4_aresetn ddr4_1_rstgen/peripheral_aresetn

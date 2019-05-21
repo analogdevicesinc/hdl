@@ -12,6 +12,8 @@ M_DEPS += adrv9009_zu11eg_som_constr.xdc
 M_DEPS += carrier_constr.xdc
 M_DEPS += ../../library/xilinx/common/ad_iobuf.v
 M_DEPS += ../../library/jesd204/scripts/jesd204.tcl
+M_DEPS += ../../library/common/util_axis_syncgen.v
+M_DEPS += ../../library/common/ad_edge_detect.v
 
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_i2s_adi
@@ -25,6 +27,7 @@ LIB_DEPS += jesd204/jesd204_rx
 LIB_DEPS += jesd204/jesd204_tx
 LIB_DEPS += util_pack/util_cpack2
 LIB_DEPS += util_pack/util_upack2
+LIB_DEPS += util_cdc
 LIB_DEPS += xilinx/axi_adxcvr
 LIB_DEPS += xilinx/axi_dacfifo
 LIB_DEPS += xilinx/util_adxcvr
