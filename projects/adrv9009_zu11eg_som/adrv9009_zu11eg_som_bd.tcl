@@ -109,6 +109,11 @@ ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_DATA_WIDTH_SRC 128
 create_bd_cell -type module -reference ad_edge_detect util_tx_sysref_edge
 set_property -dict [list CONFIG.EDGE {0}] [get_bd_cells util_tx_sysref_edge]
 
+# reset generator for upack
+create_bd_cell -type module -reference util_reset_gen util_tx_reset
+set_property -dict [list CONFIG.ASYNC_CLK {0}] [get_bd_cells util_tx_reset]
+set_property CONFIG.POLARITY ACTIVE_HIGH [get_bd_pins util_tx_reset/reset]
+
 ad_ip_instance axi_adxcvr axi_adrv9009_som_rx_xcvr
 ad_ip_parameter axi_adrv9009_som_rx_xcvr CONFIG.NUM_OF_LANES $RX_NUM_OF_LANES
 ad_ip_parameter axi_adrv9009_som_rx_xcvr CONFIG.QPLL_ENABLE 0
@@ -160,6 +165,14 @@ create_bd_cell -type module -reference util_axis_syncgen util_rx_sysref_syncgen
 set_property -dict [list CONFIG.ASYNC_SYNC {0}] [get_bd_cells util_rx_sysref_syncgen]
 create_bd_cell -type module -reference util_axis_syncgen util_obs_sysref_syncgen
 set_property -dict [list CONFIG.ASYNC_SYNC {0}] [get_bd_cells util_obs_sysref_syncgen]
+
+# reset generator for cpack
+create_bd_cell -type module -reference util_reset_gen util_rx_reset
+set_property -dict [list CONFIG.ASYNC_CLK {0}] [get_bd_cells util_rx_reset]
+set_property CONFIG.POLARITY ACTIVE_HIGH [get_bd_pins util_rx_reset/reset]
+create_bd_cell -type module -reference util_reset_gen util_obs_reset
+set_property -dict [list CONFIG.ASYNC_CLK {0}] [get_bd_cells util_obs_reset]
+set_property CONFIG.POLARITY ACTIVE_HIGH [get_bd_pins util_obs_reset/reset]
 
 adi_tpl_jesd204_rx_create obs_adrv9009_som_tpl_core $OBS_NUM_OF_LANES \
                                                   $OBS_NUM_OF_CONVERTERS \
@@ -221,7 +234,9 @@ ad_connect  core_clk_a tx_adrv9009_som_tpl_core/link_clk
 ad_connect  axi_adrv9009_som_tx_jesd/tx_data tx_adrv9009_som_tpl_core/link
 
 ad_connect  core_clk_a util_som_tx_upack/clk
-ad_connect  core_clk_a_rstgen/peripheral_reset util_som_tx_upack/reset
+ad_connect  core_clk_a util_tx_reset/clk
+ad_connect  util_tx_reset/reset util_som_tx_upack/reset
+ad_connect  util_tx_reset/sync_ext_in [get_bd_ports tx_sysref_0]
 
 ad_connect  tx_adrv9009_som_tpl_core/dac_valid_0 util_som_tx_upack/fifo_rd_en
 for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
@@ -233,7 +248,7 @@ ad_connect tx_adrv9009_som_tpl_core/dac_dunf util_som_tx_upack/fifo_rd_underflow
 
 ad_connect core_clk_a util_tx_sysref_edge/clk
 ad_connect core_clk_a_rstgen/peripheral_reset util_tx_sysref_edge/rst
-ad_connect util_tx_sysref_edge/in [get_bd_ports tx_sysref_0]
+ad_connect util_tx_sysref_edge/in util_tx_reset/sync_ext_out
 ad_connect tx_adrv9009_som_tpl_core/dac_sync_ext util_tx_sysref_edge/out
 
 # connections (adc)
@@ -243,7 +258,9 @@ ad_connect  axi_adrv9009_som_rx_jesd/rx_sof rx_adrv9009_som_tpl_core/link_sof
 ad_connect  axi_adrv9009_som_rx_jesd/rx_data_tdata rx_adrv9009_som_tpl_core/link_data
 ad_connect  axi_adrv9009_som_rx_jesd/rx_data_tvalid rx_adrv9009_som_tpl_core/link_valid
 ad_connect  core_clk_b util_som_rx_cpack/clk
-ad_connect  core_clk_b_rstgen/peripheral_reset util_som_rx_cpack/reset
+ad_connect  core_clk_b util_rx_reset/clk
+ad_connect  util_rx_reset/reset util_som_rx_cpack/reset
+ad_connect  util_rx_reset/sync_ext_in [get_bd_ports rx_sysref_0]
 
 ad_connect rx_adrv9009_som_tpl_core/adc_valid_0 util_som_rx_cpack/fifo_wr_en
 for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
@@ -259,7 +276,9 @@ ad_connect  axi_adrv9009_som_obs_jesd/rx_sof obs_adrv9009_som_tpl_core/link_sof
 ad_connect  axi_adrv9009_som_obs_jesd/rx_data_tdata obs_adrv9009_som_tpl_core/link_data
 ad_connect  axi_adrv9009_som_obs_jesd/rx_data_tvalid obs_adrv9009_som_tpl_core/link_valid
 ad_connect  core_clk_a util_som_obs_cpack/clk
-ad_connect  core_clk_a_rstgen/peripheral_reset util_som_obs_cpack/reset
+ad_connect  core_clk_a util_obs_reset/clk
+ad_connect  util_obs_reset/reset util_som_obs_cpack/reset
+ad_connect  util_obs_reset/sync_ext_in [get_bd_ports rx_sysref_4]
 ad_connect  core_clk_a axi_adrv9009_som_obs_dma/fifo_wr_clk
 
 ad_connect  obs_adrv9009_som_tpl_core/adc_valid_0 util_som_obs_cpack/fifo_wr_en
@@ -279,14 +298,14 @@ ad_connect util_rx_sysref_syncgen/s_axis_aclk core_clk_b
 ad_connect util_rx_sysref_syncgen/s_axis_aresetn VCC
 ad_connect util_rx_sysref_syncgen/s_axis_ready VCC
 ad_connect util_rx_sysref_syncgen/s_axis_valid util_som_rx_cpack/packed_fifo_wr_en
-ad_connect util_rx_sysref_syncgen/ext_sync [get_bd_ports rx_sysref_0]
+ad_connect util_rx_sysref_syncgen/ext_sync util_rx_reset/sync_ext_out
 ad_connect util_rx_sysref_syncgen/s_axis_sync axi_adrv9009_som_rx_dma/fifo_wr_sync
 
 ad_connect util_obs_sysref_syncgen/s_axis_aclk core_clk_b
 ad_connect util_obs_sysref_syncgen/s_axis_aresetn VCC
 ad_connect util_obs_sysref_syncgen/s_axis_ready VCC
 ad_connect util_obs_sysref_syncgen/s_axis_valid util_som_obs_cpack/packed_fifo_wr_en
-ad_connect util_obs_sysref_syncgen/ext_sync [get_bd_ports rx_sysref_4]
+ad_connect util_obs_sysref_syncgen/ext_sync util_obs_reset/sync_ext_out
 ad_connect util_obs_sysref_syncgen/s_axis_sync axi_adrv9009_som_obs_dma/fifo_wr_sync
 
 ad_connect axi_tx_fifo/axi ddr4_1/C0_DDR4_S_AXI

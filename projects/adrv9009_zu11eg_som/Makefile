@@ -13,6 +13,7 @@ M_DEPS += carrier_constr.xdc
 M_DEPS += ../../library/xilinx/common/ad_iobuf.v
 M_DEPS += ../../library/jesd204/scripts/jesd204.tcl
 M_DEPS += ../../library/common/util_axis_syncgen.v
+M_DEPS += ../../library/common/util_reset_gen.v
 M_DEPS += ../../library/common/ad_edge_detect.v
 
 LIB_DEPS += axi_dmac

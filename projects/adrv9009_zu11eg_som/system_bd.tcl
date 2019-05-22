@@ -2,7 +2,8 @@
 ## add RTL sources which will be instantiated in system_bd directly
 adi_project_files adrv9009_zu11eg_som [list \
   "$ad_hdl_dir/library/common/ad_edge_detect.v" \
-  "$ad_hdl_dir/library/util_cdc/sync_bits.v" ]
+  "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
+  "$ad_hdl_dir/library/common/util_reset_gen.v" \
   "$ad_hdl_dir/library/common/util_axis_syncgen.v" ]
 
 # create board design
