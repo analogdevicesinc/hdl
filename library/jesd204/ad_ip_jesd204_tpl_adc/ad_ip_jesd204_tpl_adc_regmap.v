@@ -71,6 +71,10 @@ module ad_ip_jesd204_tpl_adc_regmap #(
 
   output [NUM_CHANNELS-1:0] enable,
 
+  input adc_sync_status,
+  output adc_sync,
+  output adc_rst,
+
   // Underflow
   input adc_dovf,
 
@@ -100,8 +104,6 @@ module ad_ip_jesd204_tpl_adc_regmap #(
   // internal clocks & resets
   wire up_clk;
   wire up_rstn;
-
-  wire adc_rst;
 
   wire up_wreq_s;
   wire [9:0] up_waddr_s;
@@ -139,7 +141,7 @@ module ad_ip_jesd204_tpl_adc_regmap #(
     .up_rstn (up_rstn),
 
     .up_axi_awvalid (s_axi_awvalid),
-    .up_axi_awaddr (s_axi_awaddr),
+    .up_axi_awaddr ({4'b0,s_axi_awaddr}),
     .up_axi_awready (s_axi_awready),
     .up_axi_wvalid (s_axi_wvalid),
     .up_axi_wdata (s_axi_wdata),
@@ -149,7 +151,7 @@ module ad_ip_jesd204_tpl_adc_regmap #(
     .up_axi_bresp (s_axi_bresp),
     .up_axi_bready (s_axi_bready),
     .up_axi_arvalid (s_axi_arvalid),
-    .up_axi_araddr (s_axi_araddr),
+    .up_axi_araddr ({4'b0,s_axi_araddr}),
     .up_axi_arready (s_axi_arready),
     .up_axi_rvalid (s_axi_rvalid),
     .up_axi_rresp (s_axi_rresp),
@@ -213,12 +215,12 @@ module ad_ip_jesd204_tpl_adc_regmap #(
     .adc_ddr_edgesel (),
     .adc_pin_mode (),
     .adc_status (adc_status),
-    .adc_sync_status (1'd0),
+    .adc_sync_status (adc_sync_status),
     .adc_status_ovf (adc_dovf),
     .adc_clk_ratio (CLK_RATIO),
     .adc_start_code (),
     .adc_sref_sync (),
-    .adc_sync (),
+    .adc_sync (adc_sync),
 
     .up_status_pn_err (up_status_pn_err),
     .up_status_pn_oos (up_status_pn_oos),
