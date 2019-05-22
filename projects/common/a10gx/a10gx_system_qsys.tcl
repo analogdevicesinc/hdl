@@ -195,10 +195,7 @@ add_connection sys_cpu.instruction_master sys_cpu.debug_mem_slave
 add_connection sys_cpu.instruction_master sys_int_mem.s1
 add_connection sys_cpu.tightly_coupled_instruction_master_0 sys_tlb_mem.s2
 add_connection sys_cpu.tightly_coupled_data_master_0 sys_tlb_mem.s1
-add_connection sys_cpu.instruction_master sys_ddr3_cntrl.ctrl_amm_0
-add_connection sys_cpu.data_master sys_ddr3_cntrl.ctrl_amm_0
-set_connection_parameter_value sys_cpu.data_master/sys_ddr3_cntrl.ctrl_amm_0 baseAddress {0x0}
-set_connection_parameter_value sys_cpu.instruction_master/sys_ddr3_cntrl.ctrl_amm_0 baseAddress {0x0}
+
 set_connection_parameter_value sys_cpu.instruction_master/sys_cpu.debug_mem_slave baseAddress {0x10180800}
 set_connection_parameter_value sys_cpu.instruction_master/sys_int_mem.s1 baseAddress {0x10140000}
 set_connection_parameter_value sys_cpu.tightly_coupled_instruction_master_0/sys_tlb_mem.s2 baseAddress {0x10200000}
@@ -214,7 +211,18 @@ set_connection_parameter_value sys_cpu.instruction_master/sys_flash.uas arbitrat
 set_connection_parameter_value sys_cpu.instruction_master/sys_flash.uas baseAddress {0x11000000}
 set_connection_parameter_value sys_cpu.instruction_master/sys_flash.uas defaultConnection {0}
 
+# clock crossing bridge for sys_cpu data and instruction master memory mapped interface
 
+add_instance mm_ccb_sys_cpu altera_avalon_mm_clock_crossing_bridge
+set_instance_parameter_value mm_ccb_sys_cpu {DATA_WIDTH} {32}
+set_instance_parameter_value mm_ccb_sys_cpu {USE_AUTO_ADDRESS_WIDTH} {1}
+add_connection sys_clk.clk mm_ccb_sys_cpu.s0_clk
+add_connection sys_clk.clk_reset mm_ccb_sys_cpu.s0_reset
+add_connection sys_cpu.data_master mm_ccb_sys_cpu.s0
+add_connection sys_cpu.instruction_master mm_ccb_sys_cpu.s0
+add_connection sys_ddr3_cntrl.emif_usr_clk mm_ccb_sys_cpu.m0_clk
+add_connection sys_ddr3_cntrl.emif_usr_reset_n mm_ccb_sys_cpu.m0_reset
+add_connection  mm_ccb_sys_cpu.m0 sys_ddr3_cntrl.ctrl_amm_0
 
 # cpu/hps handling
 
@@ -403,10 +411,18 @@ ad_cpu_interconnect 0x001814c0 sys_gpio_in.s1
 ad_cpu_interconnect 0x00181500 sys_gpio_out.s1
 ad_cpu_interconnect 0x00181400 sys_spi.spi_control_port
 
-# dma interconnects
+# clock crossing bridge for ethernet dma memory mapped interfaces
 
-ad_dma_interconnect sys_ethernet_dma_tx.mm_read
-ad_dma_interconnect sys_ethernet_dma_rx.mm_write
+add_instance mm_ccb_ethernet_txrx altera_avalon_mm_clock_crossing_bridge
+set_instance_parameter_value mm_ccb_ethernet_txrx {DATA_WIDTH} {64}
+set_instance_parameter_value mm_ccb_ethernet_txrx {USE_AUTO_ADDRESS_WIDTH} {1}
+add_connection sys_clk.clk mm_ccb_ethernet_txrx.s0_clk
+add_connection sys_clk.clk_reset mm_ccb_ethernet_txrx.s0_reset
+add_connection sys_ethernet_dma_rx.mm_write mm_ccb_ethernet_txrx.s0
+add_connection sys_ethernet_dma_tx.mm_read mm_ccb_ethernet_txrx.s0
+add_connection sys_ddr3_cntrl.emif_usr_clk mm_ccb_ethernet_txrx.m0_clk
+add_connection sys_ddr3_cntrl.emif_usr_reset_n mm_ccb_ethernet_txrx.m0_reset
+add_connection mm_ccb_ethernet_txrx.m0 sys_ddr3_cntrl.ctrl_amm_0
 
 # interrupts
 
