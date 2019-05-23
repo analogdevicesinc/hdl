@@ -1,22 +1,6 @@
-###################################################################################################
-###################################################################################################
 
-variable sys_cpu_interconnect_index
-variable sys_hp0_interconnect_index
-variable sys_hp1_interconnect_index
-variable sys_hp2_interconnect_index
-variable sys_hp3_interconnect_index
-variable sys_mem_interconnect_index
-variable sys_mem_clk_index
-
-variable xcvr_index
-variable xcvr_tx_index
-variable xcvr_rx_index
-variable xcvr_instance
-
-###################################################################################################
-###################################################################################################
-
+## Global variables for interconnect interface indexing
+#
 set sys_cpu_interconnect_index 0
 set sys_hp0_interconnect_index -1
 set sys_hp1_interconnect_index -1
@@ -30,9 +14,13 @@ set xcvr_tx_index 0
 set xcvr_rx_index 0
 set xcvr_instance NONE
 
-###################################################################################################
-###################################################################################################
-
+## Add an instance of an IP to the block design.
+#
+# \param[i_ip] - name of the IP
+# \param[i_name] - name of the instance
+# \param[i_params] - a list of the parameters, the list must contain {name, value}
+# pairs
+#
 proc ad_ip_instance {i_ip i_name {i_params {}}} {
 
   set cell [create_bd_cell -type ip -vlnv [get_ipdefs -all -filter "VLNV =~ *:${i_ip}:* && \
@@ -47,14 +35,24 @@ proc ad_ip_instance {i_ip i_name {i_params {}}} {
   }
 }
 
+## Define a parameter value of an IP instance.
+#
+# \param[i_name] - name of the instance
+# \param[i_param] - name of the parameter
+# \param[i_value] - value of the parameter
+#
 proc ad_ip_parameter {i_name i_param i_value} {
 
   set_property ${i_param} ${i_value} [get_bd_cells ${i_name}]
 }
 
-###################################################################################################
-###################################################################################################
-
+## Define the type of an IPI interface object, in general these objects an be:
+#  interface pins, ports or nets; or cells pins, ports or nets.
+#
+# \param[p_name] - name of the object
+#
+# \return - the type of the object
+#
 proc ad_connect_type {p_name} {
 
   set m_name ""
@@ -69,8 +67,20 @@ proc ad_connect_type {p_name} {
   return $m_name
 }
 
+## Connect two IPI interface object together.
+#
+# \param[p_name_1] - first object name
+# \param[p_name_2] - second object name
+#
+# Valid object types are: GND/VCC, net/port/pin names or interface names
+#
+# \return - N/A
+#
 proc ad_connect {p_name_1 p_name_2} {
 
+  ## connect an IPI object to GND or VCC
+  ## instantiate xlconstant with the required width module if there isn't any
+  ## already
   if {($p_name_2 eq "GND") || ($p_name_2 eq "VCC")} {
     set p_size 1
     set p_msb [get_property left [get_bd_pins $p_name_1]]
@@ -128,6 +138,15 @@ proc ad_connect {p_name_1 p_name_2} {
   }
 }
 
+## Disconnect two IPI interface object together.
+#
+# \param[p_name_1] - first object name
+# \param[p_name_2] - second object name
+#
+# Valid object types are: GND/VCC, net/port/pin names or interface names
+#
+# \return - N/A
+#
 proc ad_disconnect {p_name_1 p_name_2} {
 
   set m_name_1 [ad_connect_type $p_name_1]
@@ -153,12 +172,17 @@ proc ad_disconnect {p_name_1 p_name_2} {
   }
 }
 
-###################################################################################################
-###################################################################################################
-
+## Define all the connections between the transceiver IP, the transceiver
+#  configuration IP and the JESD204 Link IP.
 #
-# lane_map maps the logical lane $n onto the physical lane $lane_map[$n]. If no
-# lane map is provided logical lane $n is mapped onto physical lane $n.
+#  \param[u_xcvr] - name of the transceiver IP (util_adxcvr)
+#  \param[a_xcvr] - name of the transceiver configuration IP (axi_adxcvr)
+#  \param[a_jesd] - name of the JESD204 link IP
+#  \param[lane_map] - lane_map maps the logical lane $n onto the physical lane
+#  $lane_map[$n], otherwise logical lane $n is mapped onto physical lane $n.
+#  \param[device_clk] - define a custom device clock, should be a net name
+#  connected to the clock source. If not used, the rx|tx_clk_out_0 is used as
+#  device clock
 #
 proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {device_clk {}}} {
 
@@ -170,16 +194,6 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {device_clk {}}} {
   set no_of_lanes [get_property CONFIG.NUM_OF_LANES [get_bd_cells $a_xcvr]]
   set qpll_enable [get_property CONFIG.QPLL_ENABLE [get_bd_cells $a_xcvr]]
   set tx_or_rx_n [get_property CONFIG.TX_OR_RX_N [get_bd_cells $a_xcvr]]
-
-#  set jesd204_vlnv [get_property VLNV $a_jesd]
-#
-#  if {[string first "analog.com" $jesd204_vlnv] == 0} {
-#    set jesd204_type 0
-#  } elseif {[string first "xilinx.com" $jesd204_vlnv] == 0} {
-#    set jesd204_type 1
-#  } else {
-#    return -code 1 "Unsupported JESD204 core type."
-#  }
 
   set jesd204_bd_type [get_property TYPE [get_bd_cells $a_jesd]]
 
@@ -291,9 +305,6 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {device_clk {}}} {
     ad_connect  ${a_jesd}/sysref $m_sysref
     ad_connect  ${a_jesd}/sync $m_sync
     ad_connect  ${device_clk} ${a_jesd}/device_clk
-#    if {$tx_or_rx_n == 0} {
-#      ad_connect  ${a_xcvr}/up_status ${a_jesd}/phy_ready
-#    }
   } else {
     ad_connect  ${a_jesd}/${txrx}_sysref $m_sysref
     ad_connect  ${a_jesd}/${txrx}_sync $m_sync
@@ -311,6 +322,12 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {device_clk {}}} {
   }
 }
 
+## Connect all the PLL clock and reset ports of the transceiver IP to a clock
+#  or reset source.
+#
+#  \param[m_src] - name of the clock or reset source
+#  \param[m_dst] - name or list of names of the clock or reset sink
+#
 proc ad_xcvrpll {m_src m_dst} {
 
   foreach p_dst [get_bd_pins -quiet $m_dst] {
@@ -318,9 +335,12 @@ proc ad_xcvrpll {m_src m_dst} {
   }
 }
 
-###################################################################################################
-###################################################################################################
-
+## Create an memory mapped interface connection to a MIG or PS7/8 IP, using a
+#  HP0 high speed interface in case of PSx.
+#
+#  \param[p_clk]  - name of the clock or reset source
+#  \param[p_name] - name or list of names of the clock or reset sink
+#
 proc ad_mem_hp0_interconnect {p_clk p_name} {
 
   global sys_zynq
@@ -330,6 +350,12 @@ proc ad_mem_hp0_interconnect {p_clk p_name} {
   if {$sys_zynq >= 1} {ad_mem_hpx_interconnect "HP0" $p_clk $p_name}
 }
 
+## Create an memory mapped interface connection to a MIG or PS7/8 IP, using a
+#  HP1 high speed interface in case of PSx.
+#
+#  \param[p_clk]  - name of the clock or reset source
+#  \param[p_name] - name or list of names of the clock or reset sink
+#
 proc ad_mem_hp1_interconnect {p_clk p_name} {
 
   global sys_zynq
@@ -339,6 +365,12 @@ proc ad_mem_hp1_interconnect {p_clk p_name} {
   if {$sys_zynq >= 1} {ad_mem_hpx_interconnect "HP1" $p_clk $p_name}
 }
 
+## Create an memory mapped interface connection to a MIG or PS7/8 IP, using a
+#  HP2 high speed interface in case of PSx.
+#
+#  \param[p_clk]  - name of the clock or reset source
+#  \param[p_name] - name or list of names of the clock or reset sink
+#
 proc ad_mem_hp2_interconnect {p_clk p_name} {
 
   global sys_zynq
@@ -348,6 +380,12 @@ proc ad_mem_hp2_interconnect {p_clk p_name} {
   if {$sys_zynq >= 1} {ad_mem_hpx_interconnect "HP2" $p_clk $p_name}
 }
 
+## Create an memory mapped interface connection to a MIG or PS7/8 IP, using a
+#  HP3 high speed interface in case of PSx.
+#
+#  \param[p_clk]  - name of the clock or reset source
+#  \param[p_name] - name or list of names of the clock or reset sink
+#
 proc ad_mem_hp3_interconnect {p_clk p_name} {
 
   global sys_zynq
@@ -357,9 +395,15 @@ proc ad_mem_hp3_interconnect {p_clk p_name} {
   if {$sys_zynq >= 1} {ad_mem_hpx_interconnect "HP3" $p_clk $p_name}
 }
 
-###################################################################################################
-###################################################################################################
-
+## Create an memory mapped interface connection to a MIG or PS7/8 IP, proc is
+#  called in the ad_mem_hp[0|1|2|3]_interconnect processes, should never be
+#  directly called in block designs.
+#
+#  \param[p_sel]  - name of the high speed interface, valid values are HP0, HP1
+#  HP2, HP3 or MEM in case of Microblaze
+#  \param[p_clk]  - name of the clock or reset source
+#  \param[p_name] - name or list of names of the clock or reset sink
+#
 proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
 
   global sys_zynq
@@ -524,9 +568,12 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
 
 }
 
-###################################################################################################
-###################################################################################################
-
+## Create an AXI4 Lite memory mapped interface connection for register maps,
+#  instantiates an interconnect and reconfigure it at every process call.
+#
+#  \param[p_address] - address offset of the IP register map
+#  \param[p_name] - name of the IP
+#
 proc ad_cpu_interconnect {p_address p_name} {
 
   global sys_zynq
@@ -694,9 +741,12 @@ proc ad_cpu_interconnect {p_address p_name} {
   }
 }
 
-###################################################################################################
-###################################################################################################
-
+## Connects an IP interrupt port to the system's interrupt controller interface.
+#
+#  \param[p_ps_index] - interrupt index used in PSx based architecture
+#  \param[p_mb_index] - interrupt index used in Microblaze based architecture
+#  \param[p_name] - name of the interrupt port
+#
 proc ad_cpu_interrupt {p_ps_index p_mb_index p_name} {
 
   global sys_zynq
@@ -735,7 +785,4 @@ proc ad_cpu_interrupt {p_ps_index p_mb_index p_name} {
     ad_connect sys_concat_intc/In$p_index $p_name
   }
 }
-
-###################################################################################################
-###################################################################################################
 
