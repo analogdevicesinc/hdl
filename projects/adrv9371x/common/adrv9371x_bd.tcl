@@ -179,13 +179,9 @@ ad_ip_parameter util_ad9371_xcvr CONFIG.QPLL_FBDIV 0x120
 
 # xcvr interfaces
 
-set tx_offset 0
-set rx_offset 0
-set rx_obs_offset  $RX_NUM_OF_LANES
-
-set tx_ref_clk     tx_ref_clk_$tx_offset
-set rx_ref_clk     rx_ref_clk_$rx_offset
-set rx_obs_ref_clk rx_ref_clk_$rx_obs_offset
+set tx_ref_clk     tx_ref_clk_0
+set rx_ref_clk     rx_ref_clk_0
+set rx_obs_ref_clk rx_ref_clk_$RX_NUM_OF_LANES
 
 create_bd_port -dir I $tx_ref_clk
 create_bd_port -dir I $rx_ref_clk
@@ -194,39 +190,32 @@ ad_connect  sys_cpu_resetn util_ad9371_xcvr/up_rstn
 ad_connect  sys_cpu_clk util_ad9371_xcvr/up_clk
 
 # Tx
-ad_xcvrcon  util_ad9371_xcvr axi_ad9371_tx_xcvr axi_ad9371_tx_jesd {1 2 3 0}
-ad_reconct  util_ad9371_xcvr/tx_out_clk_0 axi_ad9371_tx_clkgen/clk
-for {set i 0} {$i < $TX_NUM_OF_LANES} {incr i} {
-  ad_connect  axi_ad9371_tx_clkgen/clk_0 util_ad9371_xcvr/tx_clk_$i
-}
+ad_connect  ad9371_tx_device_clk axi_ad9371_tx_clkgen/clk_0
+ad_xcvrcon  util_ad9371_xcvr axi_ad9371_tx_xcvr axi_ad9371_tx_jesd {1 2 3 0} ad9371_tx_device_clk
+ad_connect  util_ad9371_xcvr/tx_out_clk_0 axi_ad9371_tx_clkgen/clk
 ad_xcvrpll  $tx_ref_clk util_ad9371_xcvr/qpll_ref_clk_0
 ad_xcvrpll  axi_ad9371_tx_xcvr/up_pll_rst util_ad9371_xcvr/up_qpll_rst_0
-ad_connect  axi_ad9371_tx_clkgen/clk_0 axi_ad9371_tx_jesd/device_clk
-ad_connect  axi_ad9371_tx_clkgen/clk_0 axi_ad9371_tx_jesd_rstgen/slowest_sync_clk
 
 # Rx
-ad_xcvrcon  util_ad9371_xcvr axi_ad9371_rx_xcvr axi_ad9371_rx_jesd
-ad_reconct  util_ad9371_xcvr/rx_out_clk_$rx_offset axi_ad9371_rx_clkgen/clk
+ad_connect  ad9371_rx_device_clk axi_ad9371_rx_clkgen/clk_0
+ad_xcvrcon  util_ad9371_xcvr axi_ad9371_rx_xcvr axi_ad9371_rx_jesd {} ad9371_rx_device_clk
+ad_connect  util_ad9371_xcvr/rx_out_clk_0 axi_ad9371_rx_clkgen/clk
 for {set i 0} {$i < $RX_NUM_OF_LANES} {incr i} {
-  set ch [expr $rx_offset+$i]
-  ad_connect  axi_ad9371_rx_clkgen/clk_0 util_ad9371_xcvr/rx_clk_$ch
+  set ch [expr $i]
   ad_xcvrpll  $rx_ref_clk util_ad9371_xcvr/cpll_ref_clk_$ch
   ad_xcvrpll  axi_ad9371_rx_xcvr/up_pll_rst util_ad9371_xcvr/up_cpll_rst_$ch
 }
-ad_connect  axi_ad9371_rx_clkgen/clk_0 axi_ad9371_rx_jesd/device_clk
-ad_connect  axi_ad9371_rx_clkgen/clk_0 axi_ad9371_rx_jesd_rstgen/slowest_sync_clk
 
 # Rx - OBS
-ad_xcvrcon  util_ad9371_xcvr axi_ad9371_rx_os_xcvr axi_ad9371_rx_os_jesd
-ad_reconct  util_ad9371_xcvr/rx_out_clk_$rx_obs_offset axi_ad9371_rx_os_clkgen/clk
+ad_connect  ad9371_rx_os_device_clk axi_ad9371_rx_os_clkgen/clk_0
+ad_xcvrcon  util_ad9371_xcvr axi_ad9371_rx_os_xcvr axi_ad9371_rx_os_jesd {} ad9371_rx_os_device_clk
+ad_connect  util_ad9371_xcvr/rx_out_clk_$RX_NUM_OF_LANES axi_ad9371_rx_os_clkgen/clk
 for {set i 0} {$i < $RX_OS_NUM_OF_LANES} {incr i} {
-  set ch [expr $rx_obs_offset+$i]
-  ad_connect  axi_ad9371_rx_os_clkgen/clk_0 util_ad9371_xcvr/rx_clk_$ch
+  # channel indexing starts from the last RX
+  set ch [expr $RX_NUM_OF_LANES + $i]
   ad_xcvrpll  $rx_obs_ref_clk util_ad9371_xcvr/cpll_ref_clk_$ch
   ad_xcvrpll  axi_ad9371_rx_os_xcvr/up_pll_rst util_ad9371_xcvr/up_cpll_rst_$ch
 }
-ad_connect  axi_ad9371_rx_os_clkgen/clk_0 axi_ad9371_rx_os_jesd/device_clk
-ad_connect  axi_ad9371_rx_os_clkgen/clk_0 axi_ad9371_rx_os_jesd_rstgen/slowest_sync_clk
 
 # dma clock & reset
 
@@ -244,7 +233,7 @@ ad_connect  axi_ad9371_tx_clkgen/clk_0 tx_ad9371_tpl_core/link_clk
 ad_connect  axi_ad9371_tx_jesd/tx_data tx_ad9371_tpl_core/link
 
 ad_connect  axi_ad9371_tx_clkgen/clk_0 util_ad9371_tx_upack/clk
-ad_connect  axi_ad9371_tx_jesd_rstgen/peripheral_reset util_ad9371_tx_upack/reset
+ad_connect  ad9371_tx_device_clk_rstgen/peripheral_reset util_ad9371_tx_upack/reset
 
 ad_connect  tx_ad9371_tpl_core/dac_valid_0 util_ad9371_tx_upack/fifo_rd_en
 for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
@@ -253,7 +242,7 @@ for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
 }
 
 ad_connect  axi_ad9371_tx_clkgen/clk_0 axi_ad9371_dacfifo/dac_clk
-ad_connect  axi_ad9371_tx_jesd_rstgen/peripheral_reset axi_ad9371_dacfifo/dac_rst
+ad_connect  ad9371_tx_device_clk_rstgen/peripheral_reset axi_ad9371_dacfifo/dac_rst
 
 # TODO: Add streaming AXI interface for DAC FIFO
 ad_connect  util_ad9371_tx_upack/s_axis_valid VCC
@@ -278,7 +267,7 @@ ad_connect  axi_ad9371_rx_jesd/rx_sof rx_ad9371_tpl_core/link_sof
 ad_connect  axi_ad9371_rx_jesd/rx_data_tdata rx_ad9371_tpl_core/link_data
 ad_connect  axi_ad9371_rx_jesd/rx_data_tvalid rx_ad9371_tpl_core/link_valid
 ad_connect  axi_ad9371_rx_clkgen/clk_0 util_ad9371_rx_cpack/clk
-ad_connect  axi_ad9371_rx_jesd_rstgen/peripheral_reset util_ad9371_rx_cpack/reset
+ad_connect  ad9371_rx_device_clk_rstgen/peripheral_reset util_ad9371_rx_cpack/reset
 
 ad_connect rx_ad9371_tpl_core/adc_valid_0 util_ad9371_rx_cpack/fifo_wr_en
 for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
@@ -298,7 +287,7 @@ ad_connect  axi_ad9371_rx_os_jesd/rx_sof rx_os_ad9371_tpl_core/link_sof
 ad_connect  axi_ad9371_rx_os_jesd/rx_data_tdata rx_os_ad9371_tpl_core/link_data
 ad_connect  axi_ad9371_rx_os_jesd/rx_data_tvalid rx_os_ad9371_tpl_core/link_valid
 ad_connect  axi_ad9371_rx_os_clkgen/clk_0 util_ad9371_rx_os_cpack/clk
-ad_connect  axi_ad9371_rx_os_jesd_rstgen/peripheral_reset util_ad9371_rx_os_cpack/reset
+ad_connect  ad9371_rx_os_device_clk_rstgen/peripheral_reset util_ad9371_rx_os_cpack/reset
 ad_connect  axi_ad9371_rx_os_clkgen/clk_0 axi_ad9371_rx_os_dma/fifo_wr_clk
 
 ad_connect  rx_os_ad9371_tpl_core/adc_valid_0 util_ad9371_rx_os_cpack/fifo_wr_en
