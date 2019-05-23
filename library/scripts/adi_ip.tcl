@@ -165,7 +165,7 @@ proc adi_add_bus {bus_name mode abs_type bus_type port_maps} {
 # \param[dependency] - Dependency (e.g "PARAMETER_NAME == 1") ??? {spirit:decode(id('MODELPARAM_VALUE.PARAM_NAME')) == CONST}
 #
 proc adi_add_multi_bus {num bus_name_prefix mode abs_type bus_type port_maps dependency} {
-  for {set i 0} {$i < 8} {incr i} {
+  for {set i 0} {$i < $num} {incr i} {
     set bus_name [format "%s%d" $bus_name_prefix $i]
     set bus [ipx::add_bus_interface $bus_name [ipx::current_core]]
 
