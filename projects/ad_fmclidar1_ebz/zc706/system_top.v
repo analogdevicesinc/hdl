@@ -121,7 +121,7 @@ module system_top (
 
   output                  afe_adc_sclk,
   output                  afe_adc_scn,
-  output                  afe_adc_sdo,
+  input                   afe_adc_sdi,
   output                  afe_adc_convst,
 
   // Laser driver differential line
@@ -303,7 +303,7 @@ module system_top (
     .spi_afe_adc_clk_i (1'b0),
     .spi_afe_adc_clk_o (afe_adc_sclk),
     .spi_afe_adc_sdo_i (1'b0),
-    .spi_afe_adc_sdo_o (afe_adc_sdo),
-    .spi_afe_adc_sdi_i (1'b0));
+    .spi_afe_adc_sdo_o (),
+    .spi_afe_adc_sdi_i (afe_adc_sdi));
 
 endmodule

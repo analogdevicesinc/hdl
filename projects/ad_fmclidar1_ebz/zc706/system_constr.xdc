@@ -91,7 +91,7 @@ set_property  -dict {PACKAGE_PIN  AF20  IOSTANDARD LVCMOS25} [get_ports afe_dac_
 set_property  -dict {PACKAGE_PIN  AG20  IOSTANDARD LVCMOS25} [get_ports afe_adc_sclk]          ; ## G07  FMC_HPC_LA00_CC_N
 set_property  -dict {PACKAGE_PIN  AF19  IOSTANDARD LVCMOS25} [get_ports afe_adc_scn]           ; ## G12  FMC_HPC_LA08_P
 set_property  -dict {PACKAGE_PIN  AG19  IOSTANDARD LVCMOS25} [get_ports afe_adc_convst]        ; ## G13  FMC_HPC_LA08_N
-set_property  -dict {PACKAGE_PIN  AF23  IOSTANDARD LVCMOS25} [get_ports afe_adc_sdo]           ; ## G15  FMC_HPC_LA12_P
+set_property  -dict {PACKAGE_PIN  AF23  IOSTANDARD LVCMOS25} [get_ports afe_adc_sdi]           ; ## G15  FMC_HPC_LA12_P
 
 # clocks
 
