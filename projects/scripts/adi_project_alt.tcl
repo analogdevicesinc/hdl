@@ -1,12 +1,17 @@
 
-variable family
-variable device
-variable version
-
+## Initialize global variable
 set family "none"
 set device "none"
 set version "18.1.0"
 
+## Create a project.
+#
+# \param[project_name] - name of the project, must contain a valid carrier name
+# \param[parameter_list] - a list of global parameters (parameters of the
+# system_top module)
+#
+# Supported carrier names are: a10gx, a10soc, c5soc, de10nano, a5soc, a5gt.
+#
 proc adi_project_altera {project_name {parameter_list {}}} {
 
   global ad_hdl_dir
