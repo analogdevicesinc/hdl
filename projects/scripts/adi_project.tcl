@@ -1,34 +1,50 @@
 
-variable p_board
-variable p_device
-variable sys_zynq
-variable p_prcfg_init
-variable p_prcfg_list
-variable p_prcfg_status
-
+## Define the supported tool version
 if {![info exists REQUIRED_VIVADO_VERSION]} {
   set REQUIRED_VIVADO_VERSION "2018.3"
 }
 
+## Define the ADI_IGNORE_VERSION_CHECK environment variable to skip version check
 if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
   set IGNORE_VERSION_CHECK 1
 } elseif {![info exists IGNORE_VERSION_CHECK]} {
   set IGNORE_VERSION_CHECK 0
 }
 
+## Define the ADI_USE_OOC_SYNTHESIS environment variable to enable out of context
+#  synthesis
 if {[info exists ::env(ADI_USE_OOC_SYNTHESIS)]} {
   set ADI_USE_OOC_SYNTHESIS 1
 } elseif {![info exists ADI_USE_OOC_SYNTHESIS]} {
   set ADI_USE_OOC_SYNTHESIS 0
 }
 
+## Set to enable incremental compilation
 set ADI_USE_INCR_COMP 1
 
+## Set to enable power optimization
+set ADI_POWER_OPTIMIZATION 0
+
+## Initialize global variables
 set p_board "not-applicable"
 set p_device "none"
 set sys_zynq 1
-set ADI_POWER_OPTIMIZATION 0
 
+set p_prcfg_init ""
+set p_prcfg_list ""
+set p_prcfg_status ""
+
+## Creates a Xilinx project.
+#
+# \param[project_name] - name of the project
+# \param[mode] - if set non-project mode will be used, otherwise project mode
+# flow, see UG892 for more information
+# \param[parameter_list] - a list of global parameters (parameters of the
+# system_top module)
+#
+# Supported carrier names are: ac701, kc705, vc707, vcu118, kcu105, zed,
+# microzed, zc702, zc706, mitx405, zcu102.
+#
 proc adi_project_xilinx {project_name {mode 0} {parameter_list {}} } {
 
   global ad_hdl_dir
@@ -186,13 +202,24 @@ proc adi_project_xilinx {project_name {mode 0} {parameter_list {}} } {
 
 }
 
+## Add source files to an exiting project.
+#
+# \param[project_name] - name of the project
+# \param[project_files] - list of project files
+#
 proc adi_project_files {project_name project_files} {
 
   add_files -norecurse -fileset sources_1 $project_files
+  # NOTE: top file name is always system_top
   set_property top system_top [current_fileset]
 }
 
+## Run an existing project (generate bit stream).
+#
+# \param[project_name] - name of the project
+#
 proc adi_project_run {project_name} {
+
   global ADI_POWER_OPTIMIZATION
   global ADI_USE_OOC_SYNTHESIS
 
@@ -240,6 +267,13 @@ proc adi_project_run {project_name} {
   }
 }
 
+## Run synthesis on an partial design; use it in Partial Reconfiguration flow.
+#
+# \param[project_name] - project name
+# \param[prcfg_name] - name of the partial design
+# \param[hdl_files] - hdl source of the partial design
+# \param[xdc_files] - XDC constraint source of the partial design
+#
 proc adi_project_synth {project_name prcfg_name hdl_files {xdc_files ""}} {
 
   global p_device
@@ -266,6 +300,13 @@ proc adi_project_synth {project_name prcfg_name hdl_files {xdc_files ""}} {
   }
 }
 
+## Run implementation on an partial design; use it in Partial Reconfiguration
+#  flow.
+#
+# \param[project_name] - project name
+# \param[prcfg_name] - name of the partial design
+# \param[xdc_files] - XDC constraint source of the partial design
+#
 proc adi_project_impl {project_name prcfg_name {xdc_files ""}} {
 
   global p_device
@@ -330,9 +371,16 @@ proc adi_project_impl {project_name prcfg_name {xdc_files ""}} {
   }
 }
 
+## Verify an implemented partial reconfiguration design, checks if all the
+#  partial design are compatible with the base design.
+#
+# \param[project_name] - project name
+#
 proc adi_project_verify {project_name} {
 
+  # checkpoint for the default design
   global p_prcfg_init
+  # list of checkpoints with all the PRs integrated into the default design
   global p_prcfg_list
   global p_prcfg_status
 
