@@ -76,6 +76,7 @@ ad_ip_parameter axi_ddr_cntrl CONFIG.C0_CLOCK_BOARD_INTERFACE default_250mhz_clk
 ad_ip_parameter axi_ddr_cntrl CONFIG.C0_DDR4_BOARD_INTERFACE ddr4_sdram_c1
 ad_ip_parameter axi_ddr_cntrl CONFIG.RESET_BOARD_INTERFACE reset
 ad_ip_parameter axi_ddr_cntrl CONFIG.ADDN_UI_CLKOUT2_FREQ_HZ 250
+ad_ip_parameter axi_ddr_cntrl CONFIG.ADDN_UI_CLKOUT3_FREQ_HZ 500
 
 ad_ip_instance proc_sys_reset axi_ddr_cntrl_rstgen
 
@@ -136,6 +137,13 @@ ad_connect sys_cpu_clk sys_rstgen/slowest_sync_clk
 ad_connect sys_mem_resetn axi_ddr_cntrl_rstgen/peripheral_aresetn
 ad_connect sys_mem_resetn axi_ddr_cntrl/c0_ddr4_aresetn
 ad_connect sys_250m_clk axi_ddr_cntrl/addn_ui_clkout2
+ad_connect sys_500m_clk axi_ddr_cntrl/addn_ui_clkout3
+
+# generic system clocks pointers
+
+set sys_cpu_clk      [get_bd_nets sys_cpu_clk]
+set sys_dma_clk      [get_bd_nets sys_250m_clk]
+set sys_iodelay_clk  [get_bd_nets sys_500m_clk]
 
 # microblaze debug & interrupt
 

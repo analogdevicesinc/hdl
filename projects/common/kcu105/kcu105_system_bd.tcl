@@ -136,6 +136,12 @@ ad_connect  sys_mem_resetn axi_ddr_cntrl_rstgen/peripheral_aresetn
 ad_connect  sys_mem_resetn axi_ddr_cntrl/c0_ddr4_aresetn
 ad_connect  sys_200m_clk axi_ddr_cntrl/addn_ui_clkout2
 
+# generic system clocks pointers
+
+set sys_cpu_clk      [get_bd_nets sys_cpu_clk]
+set sys_dma_clk      [get_bd_nets sys_200m_clk]
+set sys_iodelay_clk  [get_bd_nets sys_200m_clk]
+
 # microblaze
 
 ad_connect  sys_cpu_reset sys_rstgen/peripheral_reset

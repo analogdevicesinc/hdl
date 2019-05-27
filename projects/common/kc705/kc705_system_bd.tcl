@@ -165,6 +165,12 @@ ad_connect sys_cpu_resetn axi_ddr_cntrl/aresetn
 ad_connect sys_cpu_reset  sys_rstgen/peripheral_reset
 ad_connect sys_cpu_resetn sys_rstgen/peripheral_aresetn
 
+# generic system clocks pointers
+
+set sys_cpu_clk      [get_bd_nets sys_cpu_clk]
+set sys_dma_clk      [get_bd_nets sys_200m_clk]
+set sys_iodelay_clk  [get_bd_nets sys_200m_clk]
+
 ad_connect sys_cpu_clk  sys_rstgen/slowest_sync_clk
 ad_connect sys_cpu_clk  sys_mb/Clk
 ad_connect sys_cpu_clk  sys_dlmb/LMB_Clk

@@ -548,7 +548,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     }
   } else {
     set_property CONFIG.NUM_SI $m_interconnect_index $m_interconnect_cell
-    if {[lsearch [get_bd_nets -of_object [get_bd_pins $m_interconnect_cell/ACLK*]] "/$p_clk"] == -1 } {
+    if {[lsearch [get_bd_nets -of_object [get_bd_pins $m_interconnect_cell/ACLK*]] $p_clk] == -1 } {
         incr sys_mem_clk_index
         set_property CONFIG.NUM_CLKS [expr $sys_mem_clk_index +1] $m_interconnect_cell
         ad_connect $p_clk $m_interconnect_cell/ACLK$sys_mem_clk_index
