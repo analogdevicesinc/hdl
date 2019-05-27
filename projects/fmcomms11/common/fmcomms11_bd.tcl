@@ -120,7 +120,7 @@ ad_xcvrpll  rx_ref_clk_0 util_fmcomms11_xcvr/cpll_ref_clk_*
 ad_xcvrpll  axi_ad9162_xcvr/up_pll_rst util_fmcomms11_xcvr/up_qpll_rst_*
 ad_xcvrpll  axi_ad9625_xcvr/up_pll_rst util_fmcomms11_xcvr/up_cpll_rst_*
 ad_connect  sys_cpu_resetn util_fmcomms11_xcvr/up_rstn
-ad_connect  sys_cpu_clk util_fmcomms11_xcvr/up_clk
+ad_connect  $sys_cpu_clk util_fmcomms11_xcvr/up_clk
 
 # connections (dac)
 
@@ -139,9 +139,9 @@ for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
 
 ad_connect  util_fmcomms11_xcvr/tx_out_clk_0 axi_ad9162_fifo/dac_clk
 ad_connect  axi_ad9162_jesd_rstgen/peripheral_reset axi_ad9162_fifo/dac_rst
-ad_connect  sys_cpu_clk axi_ad9162_fifo/dma_clk
+ad_connect  $sys_cpu_clk axi_ad9162_fifo/dma_clk
 ad_connect  sys_cpu_reset axi_ad9162_fifo/dma_rst
-ad_connect  sys_cpu_clk axi_ad9162_dma/m_axis_aclk
+ad_connect  $sys_cpu_clk axi_ad9162_dma/m_axis_aclk
 ad_connect  sys_cpu_resetn axi_ad9162_dma/m_src_axi_aresetn
 ad_connect  util_ad9162_upack/s_axis_valid VCC
 ad_connect  util_ad9162_upack/s_axis_ready axi_ad9162_fifo/dac_valid
@@ -167,8 +167,8 @@ ad_connect  util_fmcomms11_xcvr/rx_out_clk_0 axi_ad9625_fifo/adc_clk
 ad_connect  axi_ad9625_jesd_rstgen/peripheral_reset axi_ad9625_fifo/adc_rst
 ad_connect  axi_ad9625_core/adc_valid_0 axi_ad9625_fifo/adc_wr
 ad_connect  axi_ad9625_core/adc_data_0 axi_ad9625_fifo/adc_wdata
-ad_connect  sys_cpu_clk axi_ad9625_fifo/dma_clk
-ad_connect  sys_cpu_clk axi_ad9625_dma/s_axis_aclk
+ad_connect  $sys_cpu_clk axi_ad9625_fifo/dma_clk
+ad_connect  $sys_cpu_clk axi_ad9625_dma/s_axis_aclk
 ad_connect  sys_cpu_resetn axi_ad9625_dma/m_dest_axi_aresetn
 ad_connect  axi_ad9625_fifo/dma_wr axi_ad9625_dma/s_axis_valid
 ad_connect  axi_ad9625_fifo/dma_wdata axi_ad9625_dma/s_axis_data
@@ -189,15 +189,15 @@ ad_cpu_interconnect 0x7c400000 axi_ad9625_dma
 
 # gt uses hp3, and 100MHz clock for both DRP and AXI4
 
-ad_mem_hp3_interconnect sys_cpu_clk sys_ps7/S_AXI_HP3
-ad_mem_hp3_interconnect sys_cpu_clk axi_ad9625_xcvr/m_axi
+ad_mem_hp3_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP3
+ad_mem_hp3_interconnect $sys_cpu_clk axi_ad9625_xcvr/m_axi
 
 # interconnect (mem/dac)
 
-ad_mem_hp1_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1
-ad_mem_hp1_interconnect sys_cpu_clk axi_ad9162_dma/m_src_axi
-ad_mem_hp2_interconnect sys_cpu_clk sys_ps7/S_AXI_HP2
-ad_mem_hp2_interconnect sys_cpu_clk axi_ad9625_dma/m_dest_axi
+ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
+ad_mem_hp1_interconnect $sys_cpu_clk axi_ad9162_dma/m_src_axi
+ad_mem_hp2_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP2
+ad_mem_hp2_interconnect $sys_cpu_clk axi_ad9625_dma/m_dest_axi
 
 # interrupts
 

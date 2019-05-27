@@ -32,7 +32,7 @@ ad_ip_parameter axi_ad9361 CONFIG.ID 0
 # set to 1 for CORDIC or 2 for POLYNOMIAL
 ad_ip_parameter axi_ad9361 CONFIG.DAC_DDS_TYPE 1
 ad_ip_parameter axi_ad9361 CONFIG.DAC_DDS_CORDIC_DW 14
-ad_connect sys_200m_clk axi_ad9361/delay_clk
+ad_connect $sys_iodelay_clk axi_ad9361/delay_clk
 ad_connect axi_ad9361/l_clk axi_ad9361/clk
 ad_connect rx_clk_in_p axi_ad9361/rx_clk_in_p
 ad_connect rx_clk_in_n axi_ad9361/rx_clk_in_n
@@ -55,7 +55,7 @@ ad_connect up_txnrx axi_ad9361/up_txnrx
 
 ad_ip_instance util_tdd_sync util_ad9361_tdd_sync
 ad_ip_parameter util_ad9361_tdd_sync CONFIG.TDD_SYNC_PERIOD 10000000
-ad_connect sys_cpu_clk util_ad9361_tdd_sync/clk
+ad_connect $sys_cpu_clk util_ad9361_tdd_sync/clk
 ad_connect sys_cpu_resetn util_ad9361_tdd_sync/rstn
 ad_connect util_ad9361_tdd_sync/sync_out axi_ad9361/tdd_sync
 ad_connect util_ad9361_tdd_sync/sync_mode axi_ad9361/tdd_sync_cntr
@@ -208,10 +208,10 @@ ad_connect sys_cpu_resetn axi_ad9361_dac_dma/m_src_axi_aresetn
 ad_cpu_interconnect 0x79020000 axi_ad9361
 ad_cpu_interconnect 0x7C400000 axi_ad9361_adc_dma
 ad_cpu_interconnect 0x7C420000 axi_ad9361_dac_dma
-ad_mem_hp1_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1
-ad_mem_hp1_interconnect sys_cpu_clk axi_ad9361_adc_dma/m_dest_axi
-ad_mem_hp2_interconnect sys_cpu_clk sys_ps7/S_AXI_HP2
-ad_mem_hp2_interconnect sys_cpu_clk axi_ad9361_dac_dma/m_src_axi
+ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
+ad_mem_hp1_interconnect $sys_cpu_clk axi_ad9361_adc_dma/m_dest_axi
+ad_mem_hp2_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP2
+ad_mem_hp2_interconnect $sys_cpu_clk axi_ad9361_dac_dma/m_src_axi
 
 # interrupts
 

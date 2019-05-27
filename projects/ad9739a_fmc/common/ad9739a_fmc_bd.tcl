@@ -49,8 +49,8 @@ ad_cpu_interconnect 0x7c420000 axi_ad9739a_dma
 
 # interconnect (mem/dac)
 
-ad_mem_hp2_interconnect sys_200m_clk sys_ps7/S_AXI_HP2
-ad_mem_hp2_interconnect sys_200m_clk axi_ad9739a_dma/m_src_axi
+ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2
+ad_mem_hp2_interconnect $sys_dma_clk axi_ad9739a_dma/m_src_axi
 ad_connect  sys_cpu_resetn axi_ad9739a_dma/m_src_axi_aresetn
 
 # interrupts

@@ -253,7 +253,7 @@ ad_ip_parameter axi_adc	CONFIG.NUM_OF_CHANNELS 14
 ad_connect processing/overflow axi_adc/adc_dovf
 ad_connect axi_adc/adc_enable processing/channel_enable
 
-connect_bd_net -net sys_cpu_clk \
+connect_bd_net -net $sys_cpu_clk \
 	[get_bd_pins /spi/clk] \
 	[get_bd_pins /processing/clk] \
 	[get_bd_pins /axi_dma/m_dest_axi_aclk] \
@@ -275,5 +275,5 @@ ad_cpu_interconnect 0x44a30000 /axi_dma
 ad_cpu_interrupt "ps-13" "mb-13" /axi_dma/irq
 ad_cpu_interrupt "ps-12" "mb-12" /spi/irq
 
-ad_mem_hp2_interconnect sys_cpu_clk sys_ps7/S_AXI_HP2
-ad_mem_hp2_interconnect sys_cpu_clk axi_dma/m_dest_axi
+ad_mem_hp2_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP2
+ad_mem_hp2_interconnect $sys_cpu_clk axi_dma/m_dest_axi

@@ -25,7 +25,7 @@ ad_ip_parameter axi_ad9434_dma CONFIG.DMA_DATA_WIDTH_SRC 64
 
 # ad9434 connections
 
-ad_connect  sys_200m_clk axi_ad9434/delay_clk
+ad_connect  $sys_iodelay_clk axi_ad9434/delay_clk
 ad_connect  axi_ad9434/adc_clk axi_ad9434_dma/fifo_wr_clk
 
 ad_connect  adc_clk_p  axi_ad9434/adc_clk_in_p
@@ -46,8 +46,8 @@ ad_cpu_interconnect 0x44A30000  axi_ad9434_dma
 
 # memory inteconnect
 
-ad_mem_hp1_interconnect sys_200m_clk sys_ps7/S_AXI_HP1
-ad_mem_hp1_interconnect sys_200m_clk axi_ad9434_dma/m_dest_axi
+ad_mem_hp1_interconnect $sys_dma_clk sys_ps7/S_AXI_HP1
+ad_mem_hp1_interconnect $sys_dma_clk axi_ad9434_dma/m_dest_axi
 ad_connect sys_cpu_resetn axi_ad9434_dma/m_dest_axi_aresetn
 
 # interrupts

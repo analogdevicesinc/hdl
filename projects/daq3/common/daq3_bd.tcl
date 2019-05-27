@@ -88,7 +88,7 @@ ad_ip_parameter util_daq3_xcvr CONFIG.RX_DFE_LPM_CFG 0x0904
 ad_ip_parameter util_daq3_xcvr CONFIG.RX_CDR_CFG 0x0B000023FF10400020
 
 ad_connect  sys_cpu_resetn util_daq3_xcvr/up_rstn
-ad_connect  sys_cpu_clk util_daq3_xcvr/up_clk
+ad_connect  $sys_cpu_clk util_daq3_xcvr/up_clk
 
 # reference clocks & resets
 
@@ -115,9 +115,9 @@ for {set i 0} {$i < 2} {incr i} {
 }
 
 if {$sys_zynq == 0 || $sys_zynq == 1} {
-    ad_connect  sys_cpu_clk axi_ad9152_fifo/dma_clk
+    ad_connect  $sys_cpu_clk axi_ad9152_fifo/dma_clk
     ad_connect  sys_cpu_reset axi_ad9152_fifo/dma_rst
-    ad_connect  sys_cpu_clk axi_ad9152_dma/m_axis_aclk
+    ad_connect  $sys_cpu_clk axi_ad9152_dma/m_axis_aclk
     ad_connect  sys_cpu_resetn axi_ad9152_dma/m_src_axi_aresetn
     ad_connect  axi_ad9152_fifo/bypass GND
 }
@@ -148,8 +148,8 @@ if {$sys_zynq == 0 || $sys_zynq == 1} {
     ad_connect  axi_ad9680_jesd_rstgen/peripheral_reset axi_ad9680_fifo/adc_rst
     ad_connect  axi_ad9680_cpack/packed_fifo_wr_en axi_ad9680_fifo/adc_wr
     ad_connect  axi_ad9680_cpack/packed_fifo_wr_data axi_ad9680_fifo/adc_wdata
-    ad_connect  sys_cpu_clk axi_ad9680_fifo/dma_clk
-    ad_connect  sys_cpu_clk axi_ad9680_dma/s_axis_aclk
+    ad_connect  $sys_cpu_clk axi_ad9680_fifo/dma_clk
+    ad_connect  $sys_cpu_clk axi_ad9680_dma/s_axis_aclk
     ad_connect  sys_cpu_resetn axi_ad9680_dma/m_dest_axi_aresetn
     ad_connect  axi_ad9680_fifo/dma_wr axi_ad9680_dma/s_axis_valid
     ad_connect  axi_ad9680_fifo/dma_wdata axi_ad9680_dma/s_axis_data
@@ -180,12 +180,12 @@ ad_cpu_interconnect 0x7c400000 axi_ad9680_dma
 
 
 if {$sys_zynq == 0 || $sys_zynq == 1} {
-    ad_mem_hp1_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1
-    ad_mem_hp1_interconnect sys_cpu_clk axi_ad9152_dma/m_src_axi
-    ad_mem_hp2_interconnect sys_cpu_clk sys_ps7/S_AXI_HP2
-    ad_mem_hp2_interconnect sys_cpu_clk axi_ad9680_dma/m_dest_axi
-    ad_mem_hp3_interconnect sys_cpu_clk sys_ps7/S_AXI_HP3
-    ad_mem_hp3_interconnect sys_cpu_clk axi_ad9680_xcvr/m_axi
+    ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
+    ad_mem_hp1_interconnect $sys_cpu_clk axi_ad9152_dma/m_src_axi
+    ad_mem_hp2_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP2
+    ad_mem_hp2_interconnect $sys_cpu_clk axi_ad9680_dma/m_dest_axi
+    ad_mem_hp3_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP3
+    ad_mem_hp3_interconnect $sys_cpu_clk axi_ad9680_xcvr/m_axi
 }
 
 # interrupts
