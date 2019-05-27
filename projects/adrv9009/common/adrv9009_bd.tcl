@@ -188,7 +188,7 @@ create_bd_port -dir I $tx_ref_clk
 create_bd_port -dir I $rx_ref_clk
 create_bd_port -dir I $rx_obs_ref_clk
 ad_connect  sys_cpu_resetn util_adrv9009_xcvr/up_rstn
-ad_connect  sys_cpu_clk util_adrv9009_xcvr/up_clk
+ad_connect  $sys_cpu_clk util_adrv9009_xcvr/up_clk
 
 # Tx
 ad_connect adrv9009_tx_device_clk axi_adrv9009_tx_clkgen/clk_0
@@ -223,7 +223,7 @@ for {set i 0} {$i < $RX_OS_NUM_OF_LANES} {incr i} {
 ad_ip_instance proc_sys_reset sys_dma_rstgen
 ad_ip_parameter sys_dma_rstgen CONFIG.C_EXT_RST_WIDTH 1
 
-ad_connect  sys_dma_clk sys_dma_rstgen/slowest_sync_clk
+ad_connect  $sys_dma_clk sys_dma_rstgen/slowest_sync_clk
 ad_connect  sys_dma_resetn sys_dma_rstgen/peripheral_aresetn
 ad_connect  sys_dma_reset sys_dma_rstgen/peripheral_reset
 ad_connect  sys_dma_reset axi_adrv9009_dacfifo/dma_rst
@@ -250,8 +250,8 @@ ad_connect  util_adrv9009_tx_upack/s_axis_valid VCC
 ad_connect  util_adrv9009_tx_upack/s_axis_ready axi_adrv9009_dacfifo/dac_valid
 ad_connect  util_adrv9009_tx_upack/s_axis_data axi_adrv9009_dacfifo/dac_data
 
-ad_connect  sys_dma_clk axi_adrv9009_dacfifo/dma_clk
-ad_connect  sys_dma_clk axi_adrv9009_tx_dma/m_axis_aclk
+ad_connect  $sys_dma_clk axi_adrv9009_dacfifo/dma_clk
+ad_connect  $sys_dma_clk axi_adrv9009_tx_dma/m_axis_aclk
 ad_connect  axi_adrv9009_dacfifo/dma_valid axi_adrv9009_tx_dma/m_axis_valid
 ad_connect  axi_adrv9009_dacfifo/dma_data axi_adrv9009_tx_dma/m_axis_data
 ad_connect  axi_adrv9009_dacfifo/dma_ready axi_adrv9009_tx_dma/m_axis_ready
@@ -321,17 +321,17 @@ ad_cpu_interconnect 0x7c440000 axi_adrv9009_rx_os_dma
 
 # gt uses hp0, and 100MHz clock for both DRP and AXI4
 
-ad_mem_hp0_interconnect sys_cpu_clk axi_adrv9009_rx_xcvr/m_axi
-ad_mem_hp0_interconnect sys_cpu_clk axi_adrv9009_rx_os_xcvr/m_axi
+ad_mem_hp0_interconnect $sys_cpu_clk axi_adrv9009_rx_xcvr/m_axi
+ad_mem_hp0_interconnect $sys_cpu_clk axi_adrv9009_rx_os_xcvr/m_axi
 
 # interconnect (mem/dac)
 
-ad_mem_hp1_interconnect sys_dma_clk sys_ps7/S_AXI_HP1
-ad_mem_hp1_interconnect sys_dma_clk axi_adrv9009_rx_os_dma/m_dest_axi
-ad_mem_hp2_interconnect sys_dma_clk sys_ps7/S_AXI_HP2
-ad_mem_hp2_interconnect sys_dma_clk axi_adrv9009_rx_dma/m_dest_axi
-ad_mem_hp3_interconnect sys_dma_clk sys_ps7/S_AXI_HP3
-ad_mem_hp3_interconnect sys_dma_clk axi_adrv9009_tx_dma/m_src_axi
+ad_mem_hp1_interconnect $sys_dma_clk sys_ps7/S_AXI_HP1
+ad_mem_hp1_interconnect $sys_dma_clk axi_adrv9009_rx_os_dma/m_dest_axi
+ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2
+ad_mem_hp2_interconnect $sys_dma_clk axi_adrv9009_rx_dma/m_dest_axi
+ad_mem_hp3_interconnect $sys_dma_clk sys_ps7/S_AXI_HP3
+ad_mem_hp3_interconnect $sys_dma_clk axi_adrv9009_tx_dma/m_src_axi
 
 # interrupts
 

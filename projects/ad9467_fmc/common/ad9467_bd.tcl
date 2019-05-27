@@ -34,7 +34,7 @@ ad_connect  adc_data_or_n axi_ad9467/adc_or_in_n
 
 ad_connect  axi_ad9467/adc_clk axi_ad9467_dma/fifo_wr_clk
 
-ad_connect  sys_200m_clk axi_ad9467/delay_clk
+ad_connect  $sys_iodelay_clk axi_ad9467/delay_clk
 
 ad_connect  axi_ad9467/adc_valid axi_ad9467_dma/fifo_wr_en
 ad_connect  axi_ad9467/adc_data axi_ad9467_dma/fifo_wr_din
@@ -47,8 +47,8 @@ ad_cpu_interconnect  0x44A30000 axi_ad9467_dma
 
 # memory inteconnect
 
-ad_mem_hp1_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1
-ad_mem_hp1_interconnect sys_cpu_clk axi_ad9467_dma/m_dest_axi
+ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
+ad_mem_hp1_interconnect $sys_cpu_clk axi_ad9467_dma/m_dest_axi
 ad_connect sys_cpu_resetn axi_ad9467_dma/m_dest_axi_aresetn
 
 # interrupts

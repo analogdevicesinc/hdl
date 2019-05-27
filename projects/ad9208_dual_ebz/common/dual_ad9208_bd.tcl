@@ -123,8 +123,8 @@ ad_xcvrpll  axi_ad9208_1_xcvr/up_pll_rst util_adc_1_xcvr/up_cpll_rst_*
 
 ad_connect  sys_cpu_resetn util_adc_0_xcvr/up_rstn
 ad_connect  sys_cpu_resetn util_adc_1_xcvr/up_rstn
-ad_connect  sys_cpu_clk util_adc_0_xcvr/up_clk
-ad_connect  sys_cpu_clk util_adc_1_xcvr/up_clk
+ad_connect  $sys_cpu_clk util_adc_0_xcvr/up_clk
+ad_connect  $sys_cpu_clk util_adc_1_xcvr/up_clk
 
 
 # connections (adc)
@@ -153,8 +153,8 @@ ad_connect  glbl_clk_0 axi_ad9208_fifo/adc_clk
 
 
 # dma clock domain
-ad_connect  sys_cpu_clk axi_ad9208_fifo/dma_clk
-ad_connect  sys_cpu_clk axi_ad9208_dma/s_axis_aclk
+ad_connect  $sys_cpu_clk axi_ad9208_fifo/dma_clk
+ad_connect  $sys_cpu_clk axi_ad9208_dma/s_axis_aclk
 
 # connect resets
 ad_connect  axi_ad9208_0_jesd_rstgen/peripheral_reset axi_ad9208_fifo/adc_rst
@@ -202,9 +202,9 @@ ad_cpu_interconnect 0x7c420000 axi_ad9208_dma
 
 # interconnect (gt/adc)
 
-ad_mem_hp0_interconnect sys_cpu_clk axi_ad9208_0_xcvr/m_axi
-ad_mem_hp0_interconnect sys_cpu_clk axi_ad9208_1_xcvr/m_axi
-ad_mem_hp0_interconnect sys_cpu_clk axi_ad9208_dma/m_dest_axi
+ad_mem_hp0_interconnect $sys_cpu_clk axi_ad9208_0_xcvr/m_axi
+ad_mem_hp0_interconnect $sys_cpu_clk axi_ad9208_1_xcvr/m_axi
+ad_mem_hp0_interconnect $sys_cpu_clk axi_ad9208_dma/m_dest_axi
 
 # interrupts
 

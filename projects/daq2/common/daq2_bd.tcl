@@ -158,8 +158,8 @@ ad_connect  axi_ad9680_cpack/packed_fifo_wr_en axi_ad9680_fifo/adc_wr
 ad_connect  axi_ad9680_cpack/packed_fifo_wr_data axi_ad9680_fifo/adc_wdata
 ad_connect  axi_ad9680_cpack/packed_fifo_wr_overflow axi_ad9680_fifo/adc_wovf
 
-ad_connect  sys_cpu_clk axi_ad9680_fifo/dma_clk
-ad_connect  sys_cpu_clk axi_ad9680_dma/s_axis_aclk
+ad_connect  $sys_cpu_clk axi_ad9680_fifo/dma_clk
+ad_connect  $sys_cpu_clk axi_ad9680_dma/s_axis_aclk
 ad_connect  sys_cpu_resetn axi_ad9680_dma/m_dest_axi_aresetn
 ad_connect  axi_ad9680_fifo/dma_wr axi_ad9680_dma/s_axis_valid
 ad_connect  axi_ad9680_fifo/dma_wdata axi_ad9680_dma/s_axis_data
@@ -179,15 +179,15 @@ ad_cpu_interconnect 0x7c400000 axi_ad9680_dma
 
 # gt uses hp3, and 100MHz clock for both DRP and AXI4
 
-ad_mem_hp3_interconnect sys_cpu_clk sys_ps7/S_AXI_HP3
-ad_mem_hp3_interconnect sys_cpu_clk axi_ad9680_xcvr/m_axi
+ad_mem_hp3_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP3
+ad_mem_hp3_interconnect $sys_cpu_clk axi_ad9680_xcvr/m_axi
 
 # interconnect (mem/dac)
 
-ad_mem_hp1_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1
-ad_mem_hp1_interconnect sys_cpu_clk axi_ad9144_dma/m_src_axi
-ad_mem_hp2_interconnect sys_cpu_clk sys_ps7/S_AXI_HP2
-ad_mem_hp2_interconnect sys_cpu_clk axi_ad9680_dma/m_dest_axi
+ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
+ad_mem_hp1_interconnect $sys_cpu_clk axi_ad9144_dma/m_src_axi
+ad_mem_hp2_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP2
+ad_mem_hp2_interconnect $sys_cpu_clk axi_ad9680_dma/m_dest_axi
 
 # interrupts
 

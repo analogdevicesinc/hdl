@@ -34,8 +34,8 @@ ad_connect    adc_data_or_n    axi_ad9265/adc_or_in_n
 
 ad_connect ad9265_clk axi_ad9265/adc_clk
 
-ad_connect ad9265_clk     axi_ad9265_dma/fifo_wr_clk
-ad_connect sys_200m_clk   axi_ad9265/delay_clk
+ad_connect ad9265_clk         axi_ad9265_dma/fifo_wr_clk
+ad_connect $sys_iodelay_clk   axi_ad9265/delay_clk
 
 ad_connect axi_ad9265/adc_valid  axi_ad9265_dma/fifo_wr_en
 ad_connect axi_ad9265/adc_data   axi_ad9265_dma/fifo_wr_din
@@ -48,8 +48,8 @@ ad_cpu_interconnect 0x44A30000 axi_ad9265_dma
 
 # interconnect (adc)
 
-ad_mem_hp2_interconnect sys_200m_clk sys_ps7/S_AXI_HP2
-ad_mem_hp2_interconnect sys_200m_clk axi_ad9265_dma/m_dest_axi
+ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2
+ad_mem_hp2_interconnect $sys_dma_clk axi_ad9265_dma/m_dest_axi
 ad_connect  sys_cpu_resetn axi_ad9265_dma/m_dest_axi_aresetn
 
 # interrupts

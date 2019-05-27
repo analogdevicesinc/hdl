@@ -54,7 +54,7 @@ ad_xcvrpll  rx_ref_clk_0 util_fmcadc2_xcvr/cpll_ref_clk_*
 ad_xcvrpll  axi_ad9625_xcvr/up_pll_rst util_fmcadc2_xcvr/up_qpll_rst_*
 ad_xcvrpll  axi_ad9625_xcvr/up_pll_rst util_fmcadc2_xcvr/up_cpll_rst_*
 ad_connect  sys_cpu_resetn util_fmcadc2_xcvr/up_rstn
-ad_connect  sys_cpu_clk util_fmcadc2_xcvr/up_clk
+ad_connect  $sys_cpu_clk util_fmcadc2_xcvr/up_clk
 
 # connections (adc)
 
@@ -63,8 +63,8 @@ ad_connect  util_fmcadc2_xcvr/rx_out_clk_0 axi_ad9625_core/rx_clk
 ad_connect  rx_core_clk util_fmcadc2_xcvr/rx_out_clk_0
 ad_connect  axi_ad9625_jesd/rx_data_tdata axi_ad9625_core/rx_data
 ad_connect  axi_ad9625_jesd/rx_sof axi_ad9625_core/rx_sof
-ad_connect  sys_cpu_clk axi_ad9625_fifo/dma_clk
-ad_connect  sys_cpu_clk axi_ad9625_dma/s_axis_aclk
+ad_connect  $sys_cpu_clk axi_ad9625_fifo/dma_clk
+ad_connect  $sys_cpu_clk axi_ad9625_dma/s_axis_aclk
 ad_connect  sys_cpu_resetn axi_ad9625_dma/m_dest_axi_aresetn
 ad_connect  axi_ad9625_core/adc_clk axi_ad9625_fifo/adc_clk
 ad_connect  axi_ad9625_jesd_rstgen/peripheral_reset axi_ad9625_fifo/adc_rst
@@ -85,13 +85,13 @@ ad_cpu_interconnect 0x7c420000 axi_ad9625_dma
 
 # gt uses hp3, and 100MHz clock for both DRP and AXI4
 
-ad_mem_hp3_interconnect sys_cpu_clk sys_ps7/S_AXI_HP3
-ad_mem_hp3_interconnect sys_cpu_clk axi_ad9625_xcvr/m_axi
+ad_mem_hp3_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP3
+ad_mem_hp3_interconnect $sys_cpu_clk axi_ad9625_xcvr/m_axi
 
 # interconnect (mem/adc)
 
-ad_mem_hp2_interconnect sys_cpu_clk sys_ps7/S_AXI_HP2
-ad_mem_hp2_interconnect sys_cpu_clk axi_ad9625_dma/m_dest_axi
+ad_mem_hp2_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP2
+ad_mem_hp2_interconnect $sys_cpu_clk axi_ad9625_dma/m_dest_axi
 
 # interrupts
 

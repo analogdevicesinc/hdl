@@ -182,17 +182,17 @@
 
   # speed detector
     # motor 1
-  ad_connect  sys_cpu_clk speed_detector_m1/ref_clk
+  ad_connect  $sys_cpu_clk speed_detector_m1/ref_clk
 
-  ad_connect  sys_cpu_clk speed_detector_m1_dma/fifo_wr_clk
+  ad_connect  $sys_cpu_clk speed_detector_m1_dma/fifo_wr_clk
 
   ad_connect  position_m1_i speed_detector_m1/position_i
   ad_connect  speed_detector_m1/new_speed_o speed_detector_m1_dma/fifo_wr_en
   ad_connect  speed_detector_m1/speed_o speed_detector_m1_dma/fifo_wr_din
     # motor 2
-  ad_connect sys_cpu_clk speed_detector_m2/ref_clk
+  ad_connect $sys_cpu_clk speed_detector_m2/ref_clk
 
-  ad_connect sys_cpu_clk speed_detector_m2_dma/fifo_wr_clk
+  ad_connect $sys_cpu_clk speed_detector_m2_dma/fifo_wr_clk
 
   ad_connect position_m2_i speed_detector_m2/position_i
   ad_connect speed_detector_m2/new_speed_o speed_detector_m2_dma/fifo_wr_en
@@ -201,9 +201,9 @@
   # current monitor
   ad_connect adc_clk_o current_monitor_m1/adc_clk_o
     # motor 1
-  ad_connect sys_cpu_clk current_monitor_m1/ref_clk
+  ad_connect $sys_cpu_clk current_monitor_m1/ref_clk
 
-  ad_connect sys_cpu_clk current_monitor_m1_dma/fifo_wr_clk
+  ad_connect $sys_cpu_clk current_monitor_m1_dma/fifo_wr_clk
 
   ad_connect current_monitor_m1/adc_clk_i sys_audio_clkgen/clk_out5
   ad_connect adc_m1_ia_dat_i current_monitor_m1/adc_ia_dat_i
@@ -211,7 +211,7 @@
   ad_connect adc_m1_vbus_dat_i current_monitor_m1/adc_vbus_dat_i
 
 
-  ad_connect sys_cpu_clk   current_monitor_m1_pack/clk
+  ad_connect $sys_cpu_clk   current_monitor_m1_pack/clk
   ad_connect sys_cpu_reset current_monitor_m1_pack/reset
 
   ad_connect current_monitor_m1/adc_enable_ia     current_monitor_m1_pack/enable_0
@@ -225,16 +225,16 @@
   ad_connect current_monitor_m1_pack/packed_fifo_wr current_monitor_m1_dma/fifo_wr
 
   # motor 2
-  ad_connect  sys_cpu_clk current_monitor_m2/ref_clk
+  ad_connect  $sys_cpu_clk current_monitor_m2/ref_clk
 
-  ad_connect  sys_cpu_clk current_monitor_m2_dma/fifo_wr_clk
+  ad_connect  $sys_cpu_clk current_monitor_m2_dma/fifo_wr_clk
 
   ad_connect  current_monitor_m2/adc_clk_i sys_audio_clkgen/clk_out5
   ad_connect  adc_m2_ia_dat_i  current_monitor_m2/adc_ia_dat_i
   ad_connect  adc_m2_ib_dat_i  current_monitor_m2/adc_ib_dat_i
   ad_connect  adc_m2_vbus_dat_i current_monitor_m2/adc_vbus_dat_i
 
-  ad_connect sys_cpu_clk current_monitor_m2_pack/clk
+  ad_connect $sys_cpu_clk current_monitor_m2_pack/clk
   ad_connect sys_cpu_reset current_monitor_m2_pack/reset
 
   ad_connect current_monitor_m2/adc_enable_ia     current_monitor_m2_pack/enable_0
@@ -249,7 +249,7 @@
 
   #controller
     # motor 1
-  ad_connect sys_cpu_clk controller_m1/ref_clk
+  ad_connect $sys_cpu_clk controller_m1/ref_clk
   ad_connect controller_m1/ctrl_data_clk sys_audio_clkgen/clk_out5
 
   ad_connect fmc_m1_en_o   controller_m1/fmc_en_o
@@ -272,7 +272,7 @@
   ad_connect controller_m2/pwm_c_i GND
 
     # motor 2
-  ad_connect sys_cpu_clk controller_m2/ref_clk
+  ad_connect $sys_cpu_clk controller_m2/ref_clk
   ad_connect controller_m2/ctrl_data_clk sys_audio_clkgen/clk_out5
 
   ad_connect  fmc_m2_en_o controller_m2/fmc_en_o
@@ -294,7 +294,7 @@
   ad_connect sys_ps7/ENET0_MDIO_T eth_mdio_t
   ad_connect sys_ps7/ENET0_MDIO_I eth_mdio_i
     # phy 1
-  ad_connect sys_200m_clk gmii_to_rgmii_eth1/idelayctrl_clk
+  ad_connect $sys_dma_clk gmii_to_rgmii_eth1/idelayctrl_clk
   ad_connect gmii_to_rgmii_eth1/gmii sys_ps7/GMII_ETHERNET_0
   ad_connect eth1_rgmii gmii_to_rgmii_eth1/rgmii
   ad_connect gmii_to_rgmii_eth1/reset sys_rstgen/peripheral_reset
@@ -344,11 +344,11 @@
   ad_cpu_interconnect  0x43200000 xadc_core
   ad_cpu_interconnect  0x41510000 iic_ee2
 
-  ad_mem_hp2_interconnect sys_cpu_clk sys_ps7/S_AXI_HP2
-  ad_mem_hp2_interconnect sys_cpu_clk speed_detector_m1_dma/m_dest_axi
-  ad_mem_hp2_interconnect sys_cpu_clk speed_detector_m2_dma/m_dest_axi
-  ad_mem_hp2_interconnect sys_cpu_clk current_monitor_m1_dma/m_dest_axi
-  ad_mem_hp2_interconnect sys_cpu_clk current_monitor_m2_dma/m_dest_axi
+  ad_mem_hp2_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP2
+  ad_mem_hp2_interconnect $sys_cpu_clk speed_detector_m1_dma/m_dest_axi
+  ad_mem_hp2_interconnect $sys_cpu_clk speed_detector_m2_dma/m_dest_axi
+  ad_mem_hp2_interconnect $sys_cpu_clk current_monitor_m1_dma/m_dest_axi
+  ad_mem_hp2_interconnect $sys_cpu_clk current_monitor_m2_dma/m_dest_axi
 
   ad_cpu_interrupt ps-7 mb-7 xadc_core/ip2intc_irpt
   ad_cpu_interrupt ps-8 mb-8 current_monitor_m2_dma/irq

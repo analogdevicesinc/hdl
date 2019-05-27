@@ -90,8 +90,8 @@ ad_xcvrpll  axi_ad9625_1_xcvr/up_pll_rst util_fmcadc5_1_xcvr/up_qpll_rst_*
 ad_xcvrpll  axi_ad9625_1_xcvr/up_pll_rst util_fmcadc5_1_xcvr/up_cpll_rst_*
 ad_connect  sys_cpu_resetn util_fmcadc5_0_xcvr/up_rstn
 ad_connect  sys_cpu_resetn util_fmcadc5_1_xcvr/up_rstn
-ad_connect  sys_cpu_clk util_fmcadc5_0_xcvr/up_clk
-ad_connect  sys_cpu_clk util_fmcadc5_1_xcvr/up_clk
+ad_connect  $sys_cpu_clk util_fmcadc5_0_xcvr/up_clk
+ad_connect  $sys_cpu_clk util_fmcadc5_1_xcvr/up_clk
 
 # connections (adc)
 
@@ -116,8 +116,8 @@ ad_connect  util_fmcadc5_0_xcvr/rx_out_clk_0 axi_ad9625_fifo/adc_clk
 ad_connect  axi_ad9625_0_jesd_rstgen/peripheral_reset axi_ad9625_fifo/adc_rst
 ad_connect  axi_ad9625_fifo/adc_wovf axi_ad9625_0_core/adc_dovf
 ad_connect  axi_ad9625_fifo/adc_wovf axi_ad9625_1_core/adc_dovf
-ad_connect  sys_cpu_clk axi_ad9625_fifo/dma_clk
-ad_connect  sys_cpu_clk axi_ad9625_dma/s_axis_aclk
+ad_connect  $sys_cpu_clk axi_ad9625_fifo/dma_clk
+ad_connect  $sys_cpu_clk axi_ad9625_dma/s_axis_aclk
 ad_connect  sys_cpu_resetn axi_ad9625_dma/m_dest_axi_aresetn
 ad_connect  axi_ad9625_fifo/dma_wr axi_ad9625_dma/s_axis_valid
 ad_connect  axi_ad9625_fifo/dma_wdata axi_ad9625_dma/s_axis_data
@@ -136,9 +136,9 @@ ad_cpu_interconnect 0x7c420000 axi_ad9625_dma
 
 # interconnect (gt/adc)
 
-ad_mem_hp0_interconnect sys_cpu_clk axi_ad9625_0_xcvr/m_axi
-ad_mem_hp0_interconnect sys_cpu_clk axi_ad9625_1_xcvr/m_axi
-ad_mem_hp0_interconnect sys_cpu_clk axi_ad9625_dma/m_dest_axi
+ad_mem_hp0_interconnect $sys_cpu_clk axi_ad9625_0_xcvr/m_axi
+ad_mem_hp0_interconnect $sys_cpu_clk axi_ad9625_1_xcvr/m_axi
+ad_mem_hp0_interconnect $sys_cpu_clk axi_ad9625_dma/m_dest_axi
 
 # interrupts
 
@@ -163,7 +163,7 @@ ad_disconnect  spi_sdi_i axi_spi/io1_i
 ad_ip_instance axi_fmcadc5_sync axi_fmcadc5_sync
 ad_cpu_interconnect 0x44a20000 axi_fmcadc5_sync
 ad_connect  sys_cpu_reset axi_fmcadc5_sync/delay_rst
-ad_connect  sys_200m_clk axi_fmcadc5_sync/delay_clk
+ad_connect  $sys_iodelay_clk axi_fmcadc5_sync/delay_clk
 ad_connect  util_fmcadc5_0_xcvr/rx_out_clk_0 axi_fmcadc5_sync/rx_clk
 ad_connect  axi_ad9625_0_core/adc_enable axi_fmcadc5_sync/rx_enable_0
 ad_connect  axi_ad9625_0_core/adc_data axi_fmcadc5_sync/rx_data_0
