@@ -61,6 +61,12 @@ ad_connect  sys_cpu_resetn sys_rstgen/peripheral_aresetn
 ad_connect  sys_cpu_clk sys_rstgen/slowest_sync_clk
 ad_connect  sys_rstgen/ext_reset_in sys_ps7/FCLK_RESET0_N
 
+# generic system clocks pointers
+
+set sys_cpu_clk      [get_bd_nets sys_cpu_clk]
+set sys_dma_clk      [get_bd_nets sys_200m_clk]
+set sys_iodelay_clk  [get_bd_nets sys_200m_clk]
+
 # interface connections
 
 ad_connect  ddr           sys_ps7/DDR
