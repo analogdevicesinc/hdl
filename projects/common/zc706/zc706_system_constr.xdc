@@ -61,3 +61,6 @@ set_property  -dict {PACKAGE_PIN  J15   IOSTANDARD LVCMOS15} [get_ports gpio_bd[
 set_property  -dict {PACKAGE_PIN  J16   IOSTANDARD LVCMOS15} [get_ports gpio_bd[13]]          ; ## XADC_GPIO_2
 set_property  -dict {PACKAGE_PIN  J14   IOSTANDARD LVCMOS15} [get_ports gpio_bd[14]]          ; ## XADC_GPIO_3
 
+# Define SPI clock
+create_clock -name spi0_clk      -period 20   [get_pins -hier */EMIOSPI0SCLKO]
+create_clock -name spi1_clk      -period 20   [get_pins -hier */EMIOSPI1SCLKO]

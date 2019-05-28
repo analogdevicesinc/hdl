@@ -87,3 +87,6 @@ set_property  -dict {PACKAGE_PIN  J15   IOSTANDARD LVCMOS25} [get_ports gpio_bd[
 
 set_property  -dict {PACKAGE_PIN  G17   IOSTANDARD LVCMOS25} [get_ports gpio_bd[31]]      ; ## OTG-RESETN
 
+# Define SPI clock
+create_clock -name spi0_clk      -period 20   [get_pins -hier */EMIOSPI0SCLKO]
+create_clock -name spi1_clk      -period 20   [get_pins -hier */EMIOSPI1SCLKO]
