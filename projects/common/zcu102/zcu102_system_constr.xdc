@@ -25,3 +25,6 @@ set_property  -dict {PACKAGE_PIN  AH13  IOSTANDARD LVCMOS33} [get_ports gpio_bd_
 set_property  -dict {PACKAGE_PIN  AH14  IOSTANDARD LVCMOS33} [get_ports gpio_bd_o[6]]           ; ## GPIO_LED_6
 set_property  -dict {PACKAGE_PIN  AL12  IOSTANDARD LVCMOS33} [get_ports gpio_bd_o[7]]           ; ## GPIO_LED_7
 
+# Define SPI clock
+create_clock -name spi0_clk      -period 20   [get_pins -hier */EMIOSPI0SCLKO]
+create_clock -name spi1_clk      -period 20   [get_pins -hier */EMIOSPI1SCLKO]
