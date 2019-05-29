@@ -187,7 +187,7 @@ set rx_obs_ref_clk rx_ref_clk_$RX_NUM_OF_LANES
 create_bd_port -dir I $tx_ref_clk
 create_bd_port -dir I $rx_ref_clk
 create_bd_port -dir I $rx_obs_ref_clk
-ad_connect  sys_cpu_resetn util_adrv9009_xcvr/up_rstn
+ad_connect  $sys_cpu_resetn util_adrv9009_xcvr/up_rstn
 ad_connect  $sys_cpu_clk util_adrv9009_xcvr/up_clk
 
 # Tx
@@ -218,16 +218,6 @@ for {set i 0} {$i < $RX_OS_NUM_OF_LANES} {incr i} {
   ad_xcvrpll  axi_adrv9009_rx_os_xcvr/up_pll_rst util_adrv9009_xcvr/up_cpll_rst_$ch
 }
 
-# dma clock & reset
-
-ad_ip_instance proc_sys_reset sys_dma_rstgen
-ad_ip_parameter sys_dma_rstgen CONFIG.C_EXT_RST_WIDTH 1
-
-ad_connect  $sys_dma_clk sys_dma_rstgen/slowest_sync_clk
-ad_connect  sys_dma_resetn sys_dma_rstgen/peripheral_aresetn
-ad_connect  sys_dma_reset sys_dma_rstgen/peripheral_reset
-ad_connect  sys_dma_reset axi_adrv9009_dacfifo/dma_rst
-
 # connections (dac)
 
 ad_connect  axi_adrv9009_tx_clkgen/clk_0 tx_adrv9009_tpl_core/link_clk
@@ -251,6 +241,7 @@ ad_connect  util_adrv9009_tx_upack/s_axis_ready axi_adrv9009_dacfifo/dac_valid
 ad_connect  util_adrv9009_tx_upack/s_axis_data axi_adrv9009_dacfifo/dac_data
 
 ad_connect  $sys_dma_clk axi_adrv9009_dacfifo/dma_clk
+ad_connect  $sys_cpu_reset axi_adrv9009_dacfifo/dma_rst
 ad_connect  $sys_dma_clk axi_adrv9009_tx_dma/m_axis_aclk
 ad_connect  axi_adrv9009_dacfifo/dma_valid axi_adrv9009_tx_dma/m_axis_valid
 ad_connect  axi_adrv9009_dacfifo/dma_data axi_adrv9009_tx_dma/m_axis_data
@@ -259,7 +250,7 @@ ad_connect  axi_adrv9009_dacfifo/dma_xfer_req axi_adrv9009_tx_dma/m_axis_xfer_re
 ad_connect  axi_adrv9009_dacfifo/dma_xfer_last axi_adrv9009_tx_dma/m_axis_last
 ad_connect  axi_adrv9009_dacfifo/dac_dunf tx_adrv9009_tpl_core/dac_dunf
 ad_connect  axi_adrv9009_dacfifo/bypass dac_fifo_bypass
-ad_connect  sys_dma_resetn axi_adrv9009_tx_dma/m_src_axi_aresetn
+ad_connect  $sys_dma_resetn axi_adrv9009_tx_dma/m_src_axi_aresetn
 
 # connections (adc)
 
@@ -279,7 +270,7 @@ ad_connect  rx_adrv9009_tpl_core/adc_dovf util_adrv9009_rx_cpack/fifo_wr_overflo
 
 ad_connect  axi_adrv9009_rx_clkgen/clk_0 axi_adrv9009_rx_dma/fifo_wr_clk
 ad_connect  util_adrv9009_rx_cpack/packed_fifo_wr axi_adrv9009_rx_dma/fifo_wr
-ad_connect  sys_dma_resetn axi_adrv9009_rx_dma/m_dest_axi_aresetn
+ad_connect  $sys_dma_resetn axi_adrv9009_rx_dma/m_dest_axi_aresetn
 
 # connections (adc-os)
 
@@ -299,7 +290,7 @@ for {set i 0} {$i < $RX_OS_NUM_OF_CONVERTERS} {incr i} {
 ad_connect  rx_os_adrv9009_tpl_core/adc_dovf util_adrv9009_rx_os_cpack/fifo_wr_overflow
 ad_connect  util_adrv9009_rx_os_cpack/packed_fifo_wr axi_adrv9009_rx_os_dma/fifo_wr
 
-ad_connect  sys_dma_resetn axi_adrv9009_rx_os_dma/m_dest_axi_aresetn
+ad_connect  $sys_dma_resetn axi_adrv9009_rx_os_dma/m_dest_axi_aresetn
 
 # interconnect (cpu)
 
@@ -341,3 +332,4 @@ ad_cpu_interrupt ps-10 mb-15 axi_adrv9009_rx_jesd/irq
 ad_cpu_interrupt ps-11 mb-14 axi_adrv9009_rx_os_dma/irq
 ad_cpu_interrupt ps-12 mb-13- axi_adrv9009_tx_dma/irq
 ad_cpu_interrupt ps-13 mb-12 axi_adrv9009_rx_dma/irq
+
