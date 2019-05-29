@@ -28,6 +28,10 @@ set dac_fifo_address_width 10
 set dac_data_width 256
 set dac_dma_data_width 256
 
+# DAC FIFO bypass
+
+create_bd_port -dir I dac_fifo_bypass
+
 # dac peripherals
 
 ad_ip_instance axi_adxcvr axi_ad9162_xcvr
@@ -141,6 +145,7 @@ ad_connect  axi_ad9162_fifo/dma_ready axi_ad9162_dma/m_axis_ready
 ad_connect  axi_ad9162_fifo/dma_data axi_ad9162_dma/m_axis_data
 ad_connect  axi_ad9162_fifo/dma_valid axi_ad9162_dma/m_axis_valid
 ad_connect  axi_ad9162_fifo/dma_xfer_last axi_ad9162_dma/m_axis_last
+ad_connect  dac_fifo_bypass axi_ad9162_fifo/bypass
 
 # connections (adc)
 
@@ -193,8 +198,4 @@ ad_cpu_interrupt ps-10 mb-15 axi_ad9162_jesd/irq
 ad_cpu_interrupt ps-11 mb-14 axi_ad9625_jesd/irq
 ad_cpu_interrupt ps-12 mb-12 axi_ad9162_dma/irq
 ad_cpu_interrupt ps-13 mb-13 axi_ad9625_dma/irq
-
-# unused
-
-ad_connect  axi_ad9162_fifo/bypass GND
 

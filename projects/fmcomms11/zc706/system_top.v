@@ -306,7 +306,8 @@ module system_top (
     .tx_data_7_p (tx_data_p[7]),
     .tx_ref_clk_0 (trx_ref_clk),
     .tx_sync_0 (tx_sync),
-    .tx_sysref_0 (1'b0));
+    .tx_sysref_0 (1'b0),
+    .dac_fifo_bypass (gpio_o[60]));
 
 endmodule
 
