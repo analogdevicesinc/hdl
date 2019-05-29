@@ -26,6 +26,7 @@ LIB_DEPS += jesd204/axi_jesd204_tx
 LIB_DEPS += jesd204/jesd204_rx
 LIB_DEPS += jesd204/jesd204_tx
 LIB_DEPS += util_dacfifo
+LIB_DEPS += util_pack/util_upack2
 LIB_DEPS += xilinx/axi_adcfifo
 LIB_DEPS += xilinx/axi_adxcvr
 LIB_DEPS += xilinx/util_adxcvr
