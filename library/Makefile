@@ -49,6 +49,7 @@ clean:
 	$(MAKE) -C axi_clkgen clean
 	$(MAKE) -C axi_dac_interpolate clean
 	$(MAKE) -C axi_dmac clean
+	$(MAKE) -C axi_fan_control clean
 	$(MAKE) -C axi_fmcadc5_sync clean
 	$(MAKE) -C axi_generic_adc clean
 	$(MAKE) -C axi_gpreg clean
@@ -158,6 +159,7 @@ lib:
 	$(MAKE) -C axi_clkgen
 	$(MAKE) -C axi_dac_interpolate
 	$(MAKE) -C axi_dmac
+	$(MAKE) -C axi_fan_control
 	$(MAKE) -C axi_fmcadc5_sync
 	$(MAKE) -C axi_generic_adc
 	$(MAKE) -C axi_gpreg
