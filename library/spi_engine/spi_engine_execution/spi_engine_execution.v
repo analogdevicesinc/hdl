@@ -365,7 +365,7 @@ end
 // Load the SDO parallel data into the SDO shift register. In case of a custom
 // data width, additional bit shifting must done at load.
 always @(posedge clk) begin
-  if ((inst_d1 != CMD_TRANSFER) && (!sdo_enabled)) begin
+  if ((inst_d1 == CMD_TRANSFER) && (!sdo_enabled)) begin
     data_sdo_shift <= {DATA_WIDTH{SDO_DEFAULT}};
   end else if (transfer_active == 1'b1 && trigger_tx == 1'b1) begin
     if (first_bit == 1'b1)
