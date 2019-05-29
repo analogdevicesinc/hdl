@@ -66,6 +66,9 @@ ad_ip_parameter sys_mb_debug CONFIG.C_USE_UART 1
 # instance: system reset/clocks
 
 ad_ip_instance proc_sys_reset sys_rstgen
+ad_ip_parameter sys_rstgen CONFIG.C_EXT_RST_WIDTH 1
+ad_ip_instance proc_sys_reset sys_200m_rstgen
+ad_ip_parameter sys_200m_rstgen CONFIG.C_EXT_RST_WIDTH 1
 
 # instance: ddr (mig)
 
@@ -164,12 +167,15 @@ ad_connect sys_concat_intc/dout   axi_intc/intr
 
 ad_connect axi_ddr_cntrl/device_temp_i GND
 ad_connect axi_ddr_cntrl/mmcm_locked   sys_rstgen/dcm_locked
+ad_connect axi_ddr_cntrl/mmcm_locked   sys_200m_rstgen/dcm_locked
 
 ad_connect sys_cpu_clk    axi_ddr_cntrl/ui_addn_clk_0
 ad_connect sys_200m_clk   axi_ddr_cntrl/ui_clk
 ad_connect sys_cpu_resetn axi_ddr_cntrl/aresetn
 ad_connect sys_cpu_reset  sys_rstgen/peripheral_reset
 ad_connect sys_cpu_resetn sys_rstgen/peripheral_aresetn
+ad_connect sys_200m_reset  sys_200m_rstgen/peripheral_reset
+ad_connect sys_200m_resetn sys_200m_rstgen/peripheral_aresetn
 
 # generic system clocks pointers
 
@@ -178,6 +184,7 @@ set sys_dma_clk      [get_bd_nets sys_200m_clk]
 set sys_iodelay_clk  [get_bd_nets sys_200m_clk]
 
 ad_connect sys_cpu_clk  sys_rstgen/slowest_sync_clk
+ad_connect sys_200m_clk sys_200m_rstgen/slowest_sync_clk
 ad_connect sys_cpu_clk  sys_mb/Clk
 ad_connect sys_cpu_clk  sys_dlmb/LMB_Clk
 ad_connect sys_cpu_clk  sys_ilmb/LMB_Clk
@@ -208,6 +215,8 @@ ad_connect sys_concat_intc/In15   GND
 
 ad_connect  sys_rst sys_rstgen/ext_reset_in
 ad_connect  sys_rst axi_ddr_cntrl/sys_rst
+ad_connect  sys_200m_rst sys_200m_rstgen/ext_reset_in
+ad_connect  sys_200m_rst axi_ddr_cntrl/ui_clk_sync_rst
 ad_connect  sys_clk_p axi_ddr_cntrl/sys_clk_p
 ad_connect  sys_clk_n axi_ddr_cntrl/sys_clk_n
 ad_connect  ddr3 axi_ddr_cntrl/DDR3

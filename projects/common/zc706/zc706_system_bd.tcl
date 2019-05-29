@@ -72,6 +72,8 @@ ad_ip_parameter sys_concat_intc CONFIG.NUM_PORTS 16
 
 ad_ip_instance proc_sys_reset sys_rstgen
 ad_ip_parameter sys_rstgen CONFIG.C_EXT_RST_WIDTH 1
+ad_ip_instance proc_sys_reset sys_200m_rstgen
+ad_ip_parameter sys_200m_rstgen CONFIG.C_EXT_RST_WIDTH 1
 
 # hdmi peripherals
 
@@ -110,6 +112,10 @@ ad_connect  sys_cpu_reset sys_rstgen/peripheral_reset
 ad_connect  sys_cpu_resetn sys_rstgen/peripheral_aresetn
 ad_connect  sys_cpu_clk sys_rstgen/slowest_sync_clk
 ad_connect  sys_rstgen/ext_reset_in sys_ps7/FCLK_RESET0_N
+ad_connect  sys_200m_reset sys_200m_rstgen/peripheral_reset
+ad_connect  sys_200m_resetn sys_200m_rstgen/peripheral_aresetn
+ad_connect  sys_200m_clk sys_200m_rstgen/slowest_sync_clk
+ad_connect  sys_200m_rstgen/ext_reset_in sys_ps7/FCLK_RESET1_N
 
 # generic system clocks pointers
 
