@@ -140,6 +140,10 @@ ad_connect  sys_cpu_clk axi_ad9162_fifo/dma_clk
 ad_connect  sys_cpu_reset axi_ad9162_fifo/dma_rst
 ad_connect  sys_cpu_clk axi_ad9162_dma/m_axis_aclk
 ad_connect  sys_cpu_resetn axi_ad9162_dma/m_src_axi_aresetn
+ad_connect  util_ad9162_upack/s_axis_valid VCC
+ad_connect  util_ad9162_upack/s_axis_ready axi_ad9162_fifo/dac_valid
+ad_connect  util_ad9162_upack/s_axis_data axi_ad9162_fifo/dac_data
+ad_connect  axi_ad9162_core/dac_dunf axi_ad9162_fifo/dac_dunf
 ad_connect  axi_ad9162_fifo/dma_xfer_req axi_ad9162_dma/m_axis_xfer_req
 ad_connect  axi_ad9162_fifo/dma_ready axi_ad9162_dma/m_axis_ready
 ad_connect  axi_ad9162_fifo/dma_data axi_ad9162_dma/m_axis_data
