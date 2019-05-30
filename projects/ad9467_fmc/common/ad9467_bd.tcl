@@ -49,7 +49,7 @@ ad_cpu_interconnect  0x44A30000 axi_ad9467_dma
 
 ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
 ad_mem_hp1_interconnect $sys_cpu_clk axi_ad9467_dma/m_dest_axi
-ad_connect sys_cpu_resetn axi_ad9467_dma/m_dest_axi_aresetn
+ad_connect $sys_cpu_resetn axi_ad9467_dma/m_dest_axi_aresetn
 
 # interrupts
 

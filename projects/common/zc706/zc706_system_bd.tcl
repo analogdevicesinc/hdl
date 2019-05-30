@@ -123,6 +123,13 @@ set sys_cpu_clk      [get_bd_nets sys_cpu_clk]
 set sys_dma_clk      [get_bd_nets sys_200m_clk]
 set sys_iodelay_clk  [get_bd_nets sys_200m_clk]
 
+set sys_cpu_reset         [get_bd_nets sys_cpu_reset]
+set sys_cpu_resetn        [get_bd_nets sys_cpu_resetn]
+set sys_dma_reset         [get_bd_nets sys_200m_reset]
+set sys_dma_resetn        [get_bd_nets sys_200m_resetn]
+set sys_iodelay_reset     [get_bd_nets sys_200m_reset]
+set sys_iodelay_resetn    [get_bd_nets sys_200m_resetn]
+
 # interface connections
 
 ad_connect  ddr sys_ps7/DDR

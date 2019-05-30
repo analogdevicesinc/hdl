@@ -55,7 +55,7 @@ ad_xcvrpll  rx_ref_clk_0 util_ad6676_xcvr/qpll_ref_clk_*
 ad_xcvrpll  rx_ref_clk_0 util_ad6676_xcvr/cpll_ref_clk_*
 ad_xcvrpll  axi_ad6676_xcvr/up_pll_rst util_ad6676_xcvr/up_qpll_rst_*
 ad_xcvrpll  axi_ad6676_xcvr/up_pll_rst util_ad6676_xcvr/up_cpll_rst_*
-ad_connect  sys_cpu_resetn util_ad6676_xcvr/up_rstn
+ad_connect  $sys_cpu_resetn util_ad6676_xcvr/up_rstn
 ad_connect  $sys_cpu_clk util_ad6676_xcvr/up_clk
 
 # connections (adc)
@@ -93,7 +93,7 @@ ad_mem_hp3_interconnect $sys_cpu_clk axi_ad6676_xcvr/m_axi
 
 ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2
 ad_mem_hp2_interconnect $sys_dma_clk axi_ad6676_dma/m_dest_axi
-ad_connect  sys_cpu_resetn axi_ad6676_dma/m_dest_axi_aresetn
+ad_connect  $sys_cpu_resetn axi_ad6676_dma/m_dest_axi_aresetn
 
 # interrupts
 

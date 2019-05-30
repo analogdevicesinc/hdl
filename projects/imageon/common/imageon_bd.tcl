@@ -51,7 +51,7 @@ ad_connect  axi_hdmi_rx_core/hdmi_dma_de axi_hdmi_rx_dma/fifo_wr_en
 ad_connect  axi_hdmi_rx_core/hdmi_dma_data axi_hdmi_rx_dma/fifo_wr_din
 ad_connect  axi_hdmi_rx_core/hdmi_dma_ovf axi_hdmi_rx_dma/fifo_wr_overflow
 ad_connect  axi_hdmi_rx_core/hdmi_dma_unf GND
-ad_connect  sys_cpu_resetn axi_hdmi_rx_dma/m_dest_axi_aresetn
+ad_connect  $sys_cpu_resetn axi_hdmi_rx_dma/m_dest_axi_aresetn
 
 ad_cpu_interconnect 0x43100000 axi_hdmi_rx_core
 ad_cpu_interconnect 0x43C20000 axi_hdmi_rx_dma
@@ -79,9 +79,9 @@ ad_ip_parameter axi_spdif_rx_core CONFIG.C_DMA_TYPE 1
 
 ad_ip_parameter sys_ps7 CONFIG.PCW_USE_DMA3 1
 
-ad_connect  sys_cpu_clk axi_spdif_rx_core/DMA_REQ_ACLK
-ad_connect  sys_cpu_clk sys_ps7/DMA3_ACLK
-ad_connect  sys_cpu_resetn axi_spdif_rx_core/DMA_REQ_RSTN
+ad_connect  $sys_cpu_clk axi_spdif_rx_core/DMA_REQ_ACLK
+ad_connect  $sys_cpu_clk sys_ps7/DMA3_ACLK
+ad_connect  $sys_cpu_resetn axi_spdif_rx_core/DMA_REQ_RSTN
 ad_connect  sys_ps7/DMA3_REQ axi_spdif_rx_core/DMA_REQ
 ad_connect  sys_ps7/DMA3_ACK axi_spdif_rx_core/DMA_ACK
 ad_connect  spdif_rx axi_spdif_rx_core/spdif_rx_i

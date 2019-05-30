@@ -261,7 +261,7 @@ connect_bd_net -net $sys_cpu_clk \
 	[get_bd_pins /phase_gen/CLK] \
 	[get_bd_pins /axi_adc/adc_clk]
 
-connect_bd_net -net sys_cpu_resetn \
+connect_bd_net -net $sys_cpu_resetn \
 	[get_bd_pins /spi/resetn] \
 	[get_bd_pins /processing/resetn] \
 	[get_bd_pins /axi_dma/m_dest_axi_aresetn]

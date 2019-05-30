@@ -186,7 +186,7 @@ set rx_obs_ref_clk rx_ref_clk_$RX_NUM_OF_LANES
 create_bd_port -dir I $tx_ref_clk
 create_bd_port -dir I $rx_ref_clk
 create_bd_port -dir I $rx_obs_ref_clk
-ad_connect  sys_cpu_resetn util_ad9371_xcvr/up_rstn
+ad_connect  $sys_cpu_resetn util_ad9371_xcvr/up_rstn
 ad_connect  $sys_cpu_clk util_ad9371_xcvr/up_clk
 
 # Tx
@@ -219,13 +219,7 @@ for {set i 0} {$i < $RX_OS_NUM_OF_LANES} {incr i} {
 
 # dma clock & reset
 
-ad_ip_instance proc_sys_reset sys_dma_rstgen
-ad_ip_parameter sys_dma_rstgen CONFIG.C_EXT_RST_WIDTH 1
-
-ad_connect  $sys_dma_clk sys_dma_rstgen/slowest_sync_clk
-ad_connect  sys_dma_resetn sys_dma_rstgen/peripheral_aresetn
-ad_connect  sys_dma_reset sys_dma_rstgen/peripheral_reset
-ad_connect  sys_dma_reset axi_ad9371_dacfifo/dma_rst
+ad_connect  $sys_dma_reset axi_ad9371_dacfifo/dma_rst
 
 # connections (dac)
 
@@ -258,7 +252,7 @@ ad_connect  axi_ad9371_dacfifo/dma_xfer_req axi_ad9371_tx_dma/m_axis_xfer_req
 ad_connect  axi_ad9371_dacfifo/dma_xfer_last axi_ad9371_tx_dma/m_axis_last
 ad_connect  axi_ad9371_dacfifo/dac_dunf tx_ad9371_tpl_core/dac_dunf
 ad_connect  axi_ad9371_dacfifo/bypass dac_fifo_bypass
-ad_connect  sys_dma_resetn axi_ad9371_tx_dma/m_src_axi_aresetn
+ad_connect  $sys_dma_resetn axi_ad9371_tx_dma/m_src_axi_aresetn
 
 # connections (adc)
 
@@ -278,7 +272,7 @@ ad_connect  rx_ad9371_tpl_core/adc_dovf util_ad9371_rx_cpack/fifo_wr_overflow
 
 ad_connect  axi_ad9371_rx_clkgen/clk_0 axi_ad9371_rx_dma/fifo_wr_clk
 ad_connect  util_ad9371_rx_cpack/packed_fifo_wr axi_ad9371_rx_dma/fifo_wr
-ad_connect  sys_dma_resetn axi_ad9371_rx_dma/m_dest_axi_aresetn
+ad_connect  $sys_dma_resetn axi_ad9371_rx_dma/m_dest_axi_aresetn
 
 # connections (adc-os)
 
@@ -298,7 +292,7 @@ for {set i 0} {$i < $RX_OS_NUM_OF_CONVERTERS} {incr i} {
 ad_connect  rx_os_ad9371_tpl_core/adc_dovf util_ad9371_rx_os_cpack/fifo_wr_overflow
 ad_connect  util_ad9371_rx_os_cpack/packed_fifo_wr axi_ad9371_rx_os_dma/fifo_wr
 
-ad_connect  sys_dma_resetn axi_ad9371_rx_os_dma/m_dest_axi_aresetn
+ad_connect  $sys_dma_resetn axi_ad9371_rx_os_dma/m_dest_axi_aresetn
 
 # interconnect (cpu)
 

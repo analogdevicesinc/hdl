@@ -183,6 +183,13 @@ set sys_cpu_clk      [get_bd_nets sys_cpu_clk]
 set sys_dma_clk      [get_bd_nets sys_200m_clk]
 set sys_iodelay_clk  [get_bd_nets sys_200m_clk]
 
+set sys_cpu_reset         [get_bd_nets sys_cpu_reset]
+set sys_cpu_resetn        [get_bd_nets sys_cpu_resetn]
+set sys_dma_reset         [get_bd_nets sys_200m_reset]
+set sys_dma_resetn        [get_bd_nets sys_200m_resetn]
+set sys_iodelay_reset     [get_bd_nets sys_200m_reset]
+set sys_iodelay_resetn    [get_bd_nets sys_200m_resetn]
+
 ad_connect sys_cpu_clk  sys_rstgen/slowest_sync_clk
 ad_connect sys_200m_clk sys_200m_rstgen/slowest_sync_clk
 ad_connect sys_cpu_clk  sys_mb/Clk

@@ -119,7 +119,7 @@ ad_xcvrpll  tx_ref_clk_0 util_fmcomms11_xcvr/qpll_ref_clk_*
 ad_xcvrpll  rx_ref_clk_0 util_fmcomms11_xcvr/cpll_ref_clk_*
 ad_xcvrpll  axi_ad9162_xcvr/up_pll_rst util_fmcomms11_xcvr/up_qpll_rst_*
 ad_xcvrpll  axi_ad9625_xcvr/up_pll_rst util_fmcomms11_xcvr/up_cpll_rst_*
-ad_connect  sys_cpu_resetn util_fmcomms11_xcvr/up_rstn
+ad_connect  $sys_cpu_resetn util_fmcomms11_xcvr/up_rstn
 ad_connect  $sys_cpu_clk util_fmcomms11_xcvr/up_clk
 
 # connections (dac)
@@ -140,13 +140,14 @@ for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
 ad_connect  util_fmcomms11_xcvr/tx_out_clk_0 axi_ad9162_fifo/dac_clk
 ad_connect  axi_ad9162_jesd_rstgen/peripheral_reset axi_ad9162_fifo/dac_rst
 ad_connect  $sys_cpu_clk axi_ad9162_fifo/dma_clk
-ad_connect  sys_cpu_reset axi_ad9162_fifo/dma_rst
+ad_connect  $sys_cpu_reset axi_ad9162_fifo/dma_rst
 ad_connect  $sys_cpu_clk axi_ad9162_dma/m_axis_aclk
 ad_connect  sys_cpu_resetn axi_ad9162_dma/m_src_axi_aresetn
 ad_connect  util_ad9162_upack/s_axis_valid VCC
 ad_connect  util_ad9162_upack/s_axis_ready axi_ad9162_fifo/dac_valid
 ad_connect  util_ad9162_upack/s_axis_data axi_ad9162_fifo/dac_data
 ad_connect  axi_ad9162_core/dac_dunf axi_ad9162_fifo/dac_dunf
+ad_connect  $sys_cpu_resetn axi_ad9162_dma/m_src_axi_aresetn
 ad_connect  axi_ad9162_fifo/dma_xfer_req axi_ad9162_dma/m_axis_xfer_req
 ad_connect  axi_ad9162_fifo/dma_ready axi_ad9162_dma/m_axis_ready
 ad_connect  axi_ad9162_fifo/dma_data axi_ad9162_dma/m_axis_data
@@ -169,7 +170,7 @@ ad_connect  axi_ad9625_core/adc_valid_0 axi_ad9625_fifo/adc_wr
 ad_connect  axi_ad9625_core/adc_data_0 axi_ad9625_fifo/adc_wdata
 ad_connect  $sys_cpu_clk axi_ad9625_fifo/dma_clk
 ad_connect  $sys_cpu_clk axi_ad9625_dma/s_axis_aclk
-ad_connect  sys_cpu_resetn axi_ad9625_dma/m_dest_axi_aresetn
+ad_connect  $sys_cpu_resetn axi_ad9625_dma/m_dest_axi_aresetn
 ad_connect  axi_ad9625_fifo/dma_wr axi_ad9625_dma/s_axis_valid
 ad_connect  axi_ad9625_fifo/dma_wdata axi_ad9625_dma/s_axis_data
 ad_connect  axi_ad9625_fifo/dma_wready axi_ad9625_dma/s_axis_ready
