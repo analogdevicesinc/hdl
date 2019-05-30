@@ -212,7 +212,7 @@
 
 
   ad_connect $sys_cpu_clk   current_monitor_m1_pack/clk
-  ad_connect sys_cpu_reset current_monitor_m1_pack/reset
+  ad_connect $sys_cpu_reset current_monitor_m1_pack/reset
 
   ad_connect current_monitor_m1/adc_enable_ia     current_monitor_m1_pack/enable_0
   ad_connect current_monitor_m1/adc_enable_ib     current_monitor_m1_pack/enable_1
@@ -235,7 +235,7 @@
   ad_connect  adc_m2_vbus_dat_i current_monitor_m2/adc_vbus_dat_i
 
   ad_connect $sys_cpu_clk current_monitor_m2_pack/clk
-  ad_connect sys_cpu_reset current_monitor_m2_pack/reset
+  ad_connect $sys_cpu_reset current_monitor_m2_pack/reset
 
   ad_connect current_monitor_m2/adc_enable_ia     current_monitor_m2_pack/enable_0
   ad_connect current_monitor_m2/adc_enable_ib     current_monitor_m2_pack/enable_1
@@ -288,7 +288,7 @@
 
   # ethernet
 
-  ad_connect sys_cpu_resetn eth_phy_rst_n
+  ad_connect $sys_cpu_resetn eth_phy_rst_n
   ad_connect sys_ps7/ENET0_MDIO_MDC eth_mdio_mdc
   ad_connect sys_ps7/ENET0_MDIO_O eth_mdio_o
   ad_connect sys_ps7/ENET0_MDIO_T eth_mdio_t
@@ -324,11 +324,11 @@
   # iic
   ad_connect iic_ee2/IIC iic_ee2
 
-  ad_connect  sys_cpu_resetn speed_detector_m1_dma/m_dest_axi_aresetn
-  ad_connect  sys_cpu_resetn speed_detector_m2_dma/m_dest_axi_aresetn
-  ad_connect  sys_cpu_resetn current_monitor_m1_dma/m_dest_axi_aresetn
-  ad_connect  sys_cpu_resetn current_monitor_m2_dma/m_dest_axi_aresetn
-  ad_connect  sys_cpu_resetn xadc_core/s_axi_aresetn
+  ad_connect  $sys_cpu_resetn speed_detector_m1_dma/m_dest_axi_aresetn
+  ad_connect  $sys_cpu_resetn speed_detector_m2_dma/m_dest_axi_aresetn
+  ad_connect  $sys_cpu_resetn current_monitor_m1_dma/m_dest_axi_aresetn
+  ad_connect  $sys_cpu_resetn current_monitor_m2_dma/m_dest_axi_aresetn
+  ad_connect  $sys_cpu_resetn xadc_core/s_axi_aresetn
 
   # address map
   ad_cpu_interconnect  0x40410000 speed_detector_m1

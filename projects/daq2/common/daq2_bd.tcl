@@ -86,8 +86,8 @@ ad_ip_parameter util_daq2_xcvr CONFIG.TX_OUT_DIV 1
 ad_ip_parameter util_daq2_xcvr CONFIG.RX_DFE_LPM_CFG 0x0104
 ad_ip_parameter util_daq2_xcvr CONFIG.RX_CDR_CFG 0x0B000023FF10400020
 
-ad_connect  sys_cpu_resetn util_daq2_xcvr/up_rstn
-ad_connect  sys_cpu_clk util_daq2_xcvr/up_clk
+ad_connect  $sys_cpu_resetn util_daq2_xcvr/up_rstn
+ad_connect  $sys_cpu_clk util_daq2_xcvr/up_clk
 
 # reference clocks & resets
 
@@ -123,10 +123,10 @@ ad_connect  axi_ad9144_upack/s_axis_ready axi_ad9144_fifo/dac_valid
 ad_connect  axi_ad9144_upack/s_axis_data axi_ad9144_fifo/dac_data
 ad_connect  axi_ad9144_core/dac_dunf axi_ad9144_fifo/dac_dunf
 
-ad_connect  sys_cpu_clk axi_ad9144_fifo/dma_clk
-ad_connect  sys_cpu_reset axi_ad9144_fifo/dma_rst
-ad_connect  sys_cpu_clk axi_ad9144_dma/m_axis_aclk
-ad_connect  sys_cpu_resetn axi_ad9144_dma/m_src_axi_aresetn
+ad_connect  $sys_cpu_clk axi_ad9144_fifo/dma_clk
+ad_connect  $sys_cpu_reset axi_ad9144_fifo/dma_rst
+ad_connect  $sys_cpu_clk axi_ad9144_dma/m_axis_aclk
+ad_connect  $sys_cpu_resetn axi_ad9144_dma/m_src_axi_aresetn
 
 ad_connect  axi_ad9144_fifo/dma_xfer_req axi_ad9144_dma/m_axis_xfer_req
 ad_connect  axi_ad9144_fifo/dma_ready axi_ad9144_dma/m_axis_ready
@@ -160,7 +160,7 @@ ad_connect  axi_ad9680_cpack/packed_fifo_wr_overflow axi_ad9680_fifo/adc_wovf
 
 ad_connect  $sys_cpu_clk axi_ad9680_fifo/dma_clk
 ad_connect  $sys_cpu_clk axi_ad9680_dma/s_axis_aclk
-ad_connect  sys_cpu_resetn axi_ad9680_dma/m_dest_axi_aresetn
+ad_connect  $sys_cpu_resetn axi_ad9680_dma/m_dest_axi_aresetn
 ad_connect  axi_ad9680_fifo/dma_wr axi_ad9680_dma/s_axis_valid
 ad_connect  axi_ad9680_fifo/dma_wdata axi_ad9680_dma/s_axis_data
 ad_connect  axi_ad9680_fifo/dma_wready axi_ad9680_dma/s_axis_ready

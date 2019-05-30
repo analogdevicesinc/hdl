@@ -121,8 +121,8 @@ ad_xcvrpll  rx_ref_clk_1 util_adc_1_xcvr/cpll_ref_clk_7
 ad_xcvrpll  axi_ad9208_1_xcvr/up_pll_rst util_adc_1_xcvr/up_qpll_rst_*
 ad_xcvrpll  axi_ad9208_1_xcvr/up_pll_rst util_adc_1_xcvr/up_cpll_rst_*
 
-ad_connect  sys_cpu_resetn util_adc_0_xcvr/up_rstn
-ad_connect  sys_cpu_resetn util_adc_1_xcvr/up_rstn
+ad_connect  $sys_cpu_resetn util_adc_0_xcvr/up_rstn
+ad_connect  $sys_cpu_resetn util_adc_1_xcvr/up_rstn
 ad_connect  $sys_cpu_clk util_adc_0_xcvr/up_clk
 ad_connect  $sys_cpu_clk util_adc_1_xcvr/up_clk
 
@@ -159,7 +159,7 @@ ad_connect  $sys_cpu_clk axi_ad9208_dma/s_axis_aclk
 # connect resets
 ad_connect  axi_ad9208_0_jesd_rstgen/peripheral_reset axi_ad9208_fifo/adc_rst
 ad_connect  axi_ad9208_0_jesd_rstgen/peripheral_reset util_ad9208_cpack/reset
-ad_connect  sys_cpu_resetn axi_ad9208_dma/m_dest_axi_aresetn
+ad_connect  $sys_cpu_resetn axi_ad9208_dma/m_dest_axi_aresetn
 
 
 # connect dataflow

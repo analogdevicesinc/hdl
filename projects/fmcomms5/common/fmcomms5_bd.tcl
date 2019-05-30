@@ -42,7 +42,7 @@ create_bd_port -dir I up_enable_1
 create_bd_port -dir I up_txnrx_1
 
 create_bd_port -dir O sys_100m_resetn
-ad_connect sys_cpu_resetn sys_100m_resetn
+ad_connect $sys_cpu_resetn sys_100m_resetn
 
 # ad9361 core (master)
 
@@ -190,7 +190,7 @@ ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_DATA_WIDTH_SRC 128
 ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 ad_connect util_ad9361_divclk/clk_out axi_ad9361_adc_dma/fifo_wr_clk
 ad_connect util_ad9361_adc_pack/packed_fifo_wr axi_ad9361_adc_dma/fifo_wr
-ad_connect sys_cpu_resetn axi_ad9361_adc_dma/m_dest_axi_aresetn
+ad_connect $sys_cpu_resetn axi_ad9361_adc_dma/m_dest_axi_aresetn
 
 # dac-path rfifo
 
@@ -261,7 +261,7 @@ ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_DATA_WIDTH_SRC 64
 
-ad_connect sys_cpu_resetn axi_ad9361_dac_dma/m_src_axi_aresetn
+ad_connect $sys_cpu_resetn axi_ad9361_dac_dma/m_src_axi_aresetn
 ad_connect util_ad9361_divclk/clk_out axi_ad9361_dac_dma/m_axis_aclk
 ad_connect axi_ad9361_dac_dma/m_axis util_ad9361_dac_upack/s_axis
 
