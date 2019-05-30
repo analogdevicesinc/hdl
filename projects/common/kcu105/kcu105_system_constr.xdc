@@ -55,3 +55,8 @@ create_clock -name phy_clk      -period  1.60 [get_ports phy_clk_p]
 #Setting the Configuration Bank Voltage Select
 set_property CFGBVS GND [current_design]
 set_property CONFIG_VOLTAGE 1.8 [current_design]
+
+# Create SPI clock
+create_generated_clock -name spi_clk  \
+  -source [get_pins i_system_wrapper/system_i/axi_spi/ext_spi_clk] \
+  -divide_by 2 [get_pins i_system_wrapper/system_i/axi_spi/sck_o]
