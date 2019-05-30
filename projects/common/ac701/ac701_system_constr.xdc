@@ -71,3 +71,8 @@ set_property -dict  {PACKAGE_PIN  K25   IOSTANDARD  LVCMOS33  DRIVE 8 SLEW SLOW}
 
 set_property CFGBVS VCCO [current_design]
 set_property CONFIG_VOLTAGE 3.3 [current_design]
+
+# Create SPI clock
+create_generated_clock -name spi_clk  \
+  -source [get_pins i_system_wrapper/system_i/axi_spi/ext_spi_clk] \
+  -divide_by 2 [get_pins i_system_wrapper/system_i/axi_spi/sck_o]

@@ -87,3 +87,8 @@ set_property -dict  {PACKAGE_PIN  L21   IOSTANDARD  LVCMOS25  DRIVE 8 SLEW SLOW}
 #Setting the Configuration Bank Voltage Select
 set_property CFGBVS VCCO [current_design]
 set_property CONFIG_VOLTAGE 2.5 [current_design]
+
+# Create SPI clock
+create_generated_clock -name spi_clk  \
+  -source [get_pins i_system_wrapper/system_i/axi_spi/ext_spi_clk] \
+  -divide_by 2 [get_pins i_system_wrapper/system_i/axi_spi/sck_o]
