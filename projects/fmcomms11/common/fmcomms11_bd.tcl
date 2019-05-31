@@ -14,7 +14,7 @@ set TX_SAMPLES_PER_CHANNEL [expr [expr $TX_NUM_OF_LANES * 32 ] / \
 set RX_NUM_OF_LANES 8      ; # L
 set RX_NUM_OF_CONVERTERS 1 ; # M
 set RX_SAMPLES_PER_FRAME 4 ; # S
-set RX_SAMPLE_WIDTH 16 ; # N/NP
+set RX_SAMPLE_WIDTH 16     ; # N/NP
 
 # Data path FIFO attributes
 
@@ -32,10 +32,11 @@ create_bd_port -dir I dac_fifo_bypass
 
 # dac peripherals
 
-ad_ip_instance axi_adxcvr axi_ad9162_xcvr
-ad_ip_parameter axi_ad9162_xcvr CONFIG.NUM_OF_LANES 8
-ad_ip_parameter axi_ad9162_xcvr CONFIG.QPLL_ENABLE 1
-ad_ip_parameter axi_ad9162_xcvr CONFIG.TX_OR_RX_N 1
+ad_ip_instance axi_adxcvr axi_ad9162_xcvr [list \
+  NUM_OF_LANES 8 \
+  QPLL_ENABLE 1 \
+  TX_OR_RX_N 1 \
+]
 
 adi_axi_jesd204_tx_create axi_ad9162_jesd 8
 
@@ -50,26 +51,28 @@ ad_ip_instance util_upack2 util_ad9162_upack [list \
   SAMPLE_DATA_WIDTH $TX_SAMPLE_WIDTH \
 ]
 
-ad_ip_instance axi_dmac axi_ad9162_dma
-ad_ip_parameter axi_ad9162_dma CONFIG.DMA_TYPE_SRC 0
-ad_ip_parameter axi_ad9162_dma CONFIG.DMA_TYPE_DEST 1
-ad_ip_parameter axi_ad9162_dma CONFIG.ID 1
-ad_ip_parameter axi_ad9162_dma CONFIG.AXI_SLICE_SRC 0
-ad_ip_parameter axi_ad9162_dma CONFIG.AXI_SLICE_DEST 0
-ad_ip_parameter axi_ad9162_dma CONFIG.DMA_LENGTH_WIDTH 24
-ad_ip_parameter axi_ad9162_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_ad9162_dma CONFIG.CYCLIC 0
-ad_ip_parameter axi_ad9162_dma CONFIG.DMA_DATA_WIDTH_SRC 256
-ad_ip_parameter axi_ad9162_dma CONFIG.DMA_DATA_WIDTH_DEST 256
+ad_ip_instance axi_dmac axi_ad9162_dma [list \
+  DMA_TYPE_SRC 0 \
+  DMA_TYPE_DEST 1 \
+  ID 1 \
+  AXI_SLICE_SRC 0 \
+  AXI_SLICE_DEST 0 \
+  DMA_LENGTH_WIDTH 24 \
+  DMA_2D_TRANSFER 0 \
+  CYCLIC 0 \
+  DMA_DATA_WIDTH_SRC 256 \
+  DMA_DATA_WIDTH_DEST 256 \
+]
 
 ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_dma_data_width $dac_fifo_address_width
 
 # adc peripherals
 
-ad_ip_instance axi_adxcvr axi_ad9625_xcvr
-ad_ip_parameter axi_ad9625_xcvr CONFIG.NUM_OF_LANES 8
-ad_ip_parameter axi_ad9625_xcvr CONFIG.QPLL_ENABLE 0
-ad_ip_parameter axi_ad9625_xcvr CONFIG.TX_OR_RX_N 0
+ad_ip_instance axi_adxcvr axi_ad9625_xcvr [list \
+  NUM_OF_LANES 8 \
+  QPLL_ENABLE 0 \
+  TX_OR_RX_N 0 \
+]
 
 adi_tpl_jesd204_rx_create axi_ad9625_core $RX_NUM_OF_LANES \
                                           $RX_NUM_OF_CONVERTERS \
@@ -78,32 +81,34 @@ adi_tpl_jesd204_rx_create axi_ad9625_core $RX_NUM_OF_LANES \
 
 adi_axi_jesd204_rx_create axi_ad9625_jesd 8
 
-ad_ip_instance axi_dmac axi_ad9625_dma
-ad_ip_parameter axi_ad9625_dma CONFIG.DMA_TYPE_SRC 1
-ad_ip_parameter axi_ad9625_dma CONFIG.DMA_TYPE_DEST 0
-ad_ip_parameter axi_ad9625_dma CONFIG.ID 0
-ad_ip_parameter axi_ad9625_dma CONFIG.AXI_SLICE_SRC 0
-ad_ip_parameter axi_ad9625_dma CONFIG.AXI_SLICE_DEST 0
-ad_ip_parameter axi_ad9625_dma CONFIG.SYNC_TRANSFER_START 0
-ad_ip_parameter axi_ad9625_dma CONFIG.DMA_LENGTH_WIDTH 24
-ad_ip_parameter axi_ad9625_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_ad9625_dma CONFIG.CYCLIC 0
-ad_ip_parameter axi_ad9625_dma CONFIG.DMA_DATA_WIDTH_SRC 64
-ad_ip_parameter axi_ad9625_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+ad_ip_instance axi_dmac axi_ad9625_dma [list \
+  DMA_TYPE_SRC 1 \
+  DMA_TYPE_DEST 0 \
+  ID 0 \
+  AXI_SLICE_SRC 0 \
+  AXI_SLICE_DEST 0 \
+  SYNC_TRANSFER_START 0 \
+  DMA_LENGTH_WIDTH 24 \
+  DMA_2D_TRANSFER 0 \
+  CYCLIC 0 \
+  DMA_DATA_WIDTH_SRC 64 \
+  DMA_DATA_WIDTH_DEST 64 \
+]
 
 ad_adcfifo_create $adc_fifo_name $adc_data_width $adc_dma_data_width $adc_fifo_address_width
 
 # shared transceiver core
 
-ad_ip_instance util_adxcvr util_fmcomms11_xcvr
-ad_ip_parameter util_fmcomms11_xcvr CONFIG.QPLL_FBDIV 0x120
-ad_ip_parameter util_fmcomms11_xcvr CONFIG.CPLL_FBDIV 4
-ad_ip_parameter util_fmcomms11_xcvr CONFIG.TX_NUM_OF_LANES 8
-ad_ip_parameter util_fmcomms11_xcvr CONFIG.TX_CLK25_DIV 7
-ad_ip_parameter util_fmcomms11_xcvr CONFIG.RX_NUM_OF_LANES 8
-ad_ip_parameter util_fmcomms11_xcvr CONFIG.RX_CLK25_DIV 7
-ad_ip_parameter util_fmcomms11_xcvr CONFIG.RX_DFE_LPM_CFG 0x0904
-ad_ip_parameter util_fmcomms11_xcvr CONFIG.RX_CDR_CFG 0x03000023ff10400020
+ad_ip_instance util_adxcvr util_fmcomms11_xcvr [list \
+  QPLL_FBDIV 0x120 \
+  CPLL_FBDIV 4 \
+  TX_NUM_OF_LANES 8 \
+  TX_CLK25_DIV 7 \
+  RX_NUM_OF_LANES 8 \
+  RX_CLK25_DIV 7 \
+  RX_DFE_LPM_CFG 0x0904 \
+  RX_CDR_CFG 0x03000023ff10400020 \
+]
 
 # reference clocks & resets
 
