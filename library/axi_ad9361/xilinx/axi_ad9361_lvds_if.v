@@ -120,7 +120,6 @@ module axi_ad9361_lvds_if #(
 
   // internal registers
 
-  reg                 adc_r1_mode_n = 'd0;
   reg                 rx_r1_mode = 'd0;
   reg                 rx_locked_m1 = 'd0;
   reg                 rx_locked = 'd0;
@@ -135,9 +134,6 @@ module axi_ad9361_lvds_if #(
   reg                 adc_valid_p = 'd0;
   reg     [47:0]      adc_data_p = 'd0;
   reg                 adc_status_p = 'd0;
-  reg                 adc_valid_n = 'd0;
-  reg     [47:0]      adc_data_n = 'd0;
-  reg                 adc_status_n = 'd0;
   reg                 adc_valid_int = 'd0;
   reg     [47:0]      adc_data_int = 'd0;
   reg                 adc_status_int = 'd0;
@@ -147,10 +143,6 @@ module axi_ad9361_lvds_if #(
   reg                 tx_frame_p = 'd0;
   reg     [ 5:0]      tx_data_0_p = 'd0;
   reg     [ 5:0]      tx_data_1_p = 'd0;
-  reg     [ 1:0]      tx_clk_n = 'd0;
-  reg                 tx_frame_n = 'd0;
-  reg     [ 5:0]      tx_data_0_n = 'd0;
-  reg     [ 5:0]      tx_data_1_n = 'd0;
   reg     [ 1:0]      tx_clk = 'd0;
   reg                 tx_frame = 'd0;
   reg     [ 5:0]      tx_data_0 = 'd0;
@@ -163,8 +155,6 @@ module axi_ad9361_lvds_if #(
   reg                 txnrx_up = 'd0;
   reg                 enable_int = 'd0;
   reg                 txnrx_int = 'd0;
-  reg                 enable_int_n = 'd0;
-  reg                 txnrx_int_n = 'd0;
   reg                 enable_int_p = 'd0;
   reg                 txnrx_int_p = 'd0;
 
@@ -183,13 +173,9 @@ module axi_ad9361_lvds_if #(
   assign up_drp_locked = 1'd1;
 
   // r1mode
- 
-  always @(negedge clk) begin
-    adc_r1_mode_n <= adc_r1_mode;
-  end
 
   always @(posedge l_clk) begin
-    rx_r1_mode <= adc_r1_mode_n;
+    rx_r1_mode <= adc_r1_mode;
   end
 
   // adc-status
@@ -336,20 +322,14 @@ module axi_ad9361_lvds_if #(
 
   // transfer to common clock
 
-  always @(negedge l_clk) begin
-    adc_valid_n <= adc_valid_p;
-    adc_data_n <= adc_data_p;
-    adc_status_n <= adc_status_p;
-  end
-
   assign adc_valid = adc_valid_int;
   assign adc_data = adc_data_int;
   assign adc_status = adc_status_int;
 
   always @(posedge clk) begin
-    adc_valid_int <= adc_valid_n;
-    adc_data_int <= adc_data_n;
-    adc_status_int <= adc_status_n;
+    adc_valid_int <= adc_valid_p;
+    adc_data_int <= adc_data_p;
+    adc_status_int <= adc_status_p;
   end
 
   // dac-tx interface
@@ -411,18 +391,11 @@ module axi_ad9361_lvds_if #(
 
   // transfer to local clock
 
-  always @(negedge clk) begin
-    tx_clk_n <= tx_clk_p;
-    tx_frame_n <= tx_frame_p;
-    tx_data_0_n <= tx_data_0_p;
-    tx_data_1_n <= tx_data_1_p;
-  end
-
   always @(posedge l_clk) begin
-    tx_clk <= tx_clk_n;
-    tx_frame <= tx_frame_n;
-    tx_data_0 <= tx_data_0_n;
-    tx_data_1 <= tx_data_1_n;
+    tx_clk <= tx_clk_p;
+    tx_frame <= tx_frame_p;
+    tx_data_0 <= tx_data_0_p;
+    tx_data_1 <= tx_data_1_p;
   end
 
   // tdd/ensm control
@@ -456,14 +429,9 @@ module axi_ad9361_lvds_if #(
     end
   end
 
-  always @(negedge clk) begin
-    enable_int_n <= enable_int;
-    txnrx_int_n <= txnrx_int;
-  end
-
   always @(posedge l_clk) begin
-    enable_int_p <= enable_int_n;
-    txnrx_int_p <= txnrx_int_n;
+    enable_int_p <= enable_int;
+    txnrx_int_p <= txnrx_int;
   end
 
   // receive data interface, ibuf -> idelay -> iddr
