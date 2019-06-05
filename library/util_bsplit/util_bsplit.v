@@ -59,7 +59,7 @@ module util_bsplit #(
   wire    [((NUM_OF_CHANNELS_M*CHANNEL_DATA_WIDTH)-1):0]   data_s;
 
   // extend and split
-  
+
   assign data_s[((NUM_OF_CHANNELS_M*CHANNEL_DATA_WIDTH)-1):(NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH)] = 'd0;
   assign data_s[((NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH)-1):0] = data;
 

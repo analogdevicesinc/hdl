@@ -105,7 +105,7 @@ module axi_adcfifo_rd #(
 
   wire                            axi_ready_s;
 
-  // read is way too slow- buffer mode 
+  // read is way too slow- buffer mode
 
   assign axi_ready_s = (~axi_arvalid | axi_arready) & axi_dready;
 

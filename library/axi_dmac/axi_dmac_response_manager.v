@@ -244,7 +244,7 @@ always @(posedge req_clk) begin
   end
 end
 
-// Once the last completion is received wit until all completions are done 
+// Once the last completion is received wit until all completions are done
 always @(posedge req_clk) begin
   if (req_resetn == 1'b0) begin
     completion_req_ready <= 1'b1;

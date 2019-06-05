@@ -76,7 +76,7 @@ module axi_dac_interpolate_filter #(
 
   ad_iqcor #(.Q_OR_I_N (0),
     .DISABLE(CORRECTION_DISABLE),
-    .SCALE_ONLY(1)) 
+    .SCALE_ONLY(1))
   i_ad_iqcor (
     .clk (dac_clk),
     .valid (dac_valid),

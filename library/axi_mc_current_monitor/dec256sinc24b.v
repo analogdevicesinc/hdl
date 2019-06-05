@@ -85,7 +85,7 @@ begin
     end
 end
 
-/*ACCUMULATOR (INTEGRATOR) 
+/*ACCUMULATOR (INTEGRATOR)
 * Perform the accumulation (IIR) at the speed of the modulator.
 * mclkout_i = modulators conversion bit rate */
 always @(negedge mclkout_i or posedge reset_i)
@@ -124,7 +124,7 @@ begin
     word_clk <= word_count[7];
 end
 
-/*DIFFERENTIATOR (including decimation stage) 
+/*DIFFERENTIATOR (including decimation stage)
 * Perform the differentiation stage (FIR) at a lower speed.
 WORD_CLK = output word rate */
 always @(posedge word_clk or posedge reset_i)

@@ -171,7 +171,7 @@ end else begin
     );
 
     // When the clocks are asynchronous instantiate a block RAM
-    // regardless of the requested size to make sure we threat the 
+    // regardless of the requested size to make sure we threat the
     // clock crossing correctly
     ad_mem #(
       .DATA_WIDTH (DATA_WIDTH),

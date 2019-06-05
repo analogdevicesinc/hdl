@@ -122,7 +122,7 @@ module system_top (
   // hps-gpio (max-v-u16)
 
   inout   [  3:0]   hps_gpio,
-          
+
   // gpio (max-v-u21)
 
   input   [  7:0]   gpio_bd_i,
@@ -210,7 +210,7 @@ module system_top (
   assign gpio_i[35:35] = adc_fda;
   assign gpio_i[34:34] = dac_irq;
   assign gpio_i[33:32] = clkd_status;
- 
+
   // board stuff (max-v-u21)
 
   assign gpio_i[31:12] = gpio_o[31:12];

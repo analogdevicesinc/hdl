@@ -7,8 +7,8 @@
 # Michael_Board=KCU105 SN=1280723c031 DV=N8F245_3_0_7 LOCs=2
 #
 ###################################################
-# NOTE: Ensure that the following constraints are  
-# in place for ALL Designs                         
+# NOTE: Ensure that the following constraints are
+# in place for ALL Designs
 ###################################################
 set_property PROHIBIT true [get_bels {SLICE_X23Y295/*LUT}]
 set_property PROHIBIT true [get_bels {SLICE_X29Y282/*LUT}]

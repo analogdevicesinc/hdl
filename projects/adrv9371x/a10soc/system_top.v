@@ -64,7 +64,7 @@ module system_top (
   input             hps_ddr_rzq,
 
   // pl-ddr4
- 
+
   input             sys_ddr_ref_clk,
   output  [  0:0]   sys_ddr_clk_p,
   output  [  0:0]   sys_ddr_clk_n,
@@ -122,7 +122,7 @@ module system_top (
   // hps-gpio (max-v-u16)
 
   inout   [  3:0]   hps_gpio,
-          
+
   // gpio (max-v-u21)
 
   input   [  7:0]   gpio_bd_i,
@@ -148,7 +148,7 @@ module system_top (
   output            ad9371_test,
   output            ad9371_reset_b,
   input             ad9371_gpint,
-                    
+
   inout   [ 18:0]   ad9371_gpio,
 
   output            spi_csn_ad9528,
@@ -193,7 +193,7 @@ module system_top (
   assign gpio_i[51:51] = ad9371_gpint;
 
   assign gpio_i[50:32] = gpio_o[50:32];
-  
+
   // board stuff (max-v-u21)
 
   assign gpio_i[31:14] = gpio_o[31:14];

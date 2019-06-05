@@ -37,7 +37,7 @@
 `timescale 1ns/100ps
 
 module axi_hdmi_rx_core #(
-  
+
   parameter   IO_INTERFACE = 1) (
 
   // hdmi interface

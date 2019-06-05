@@ -50,7 +50,7 @@ module axi_ad9467_pnmon (
   input       [ 3:0]      adc_pnseq_sel);
 
   // internal registers
-  
+
   reg             adc_valid_in = 'd0;
   reg     [31:0]  adc_pn_data_in = 'd0;
   reg     [31:0]  adc_pn_data_pn = 'd0;

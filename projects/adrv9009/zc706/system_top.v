@@ -56,7 +56,7 @@ output tx_data_p[0],         SERDIN0+           A22    FMC_HPC_DP1_C2M_P     AK6
 output tx_data_n[0],         SERDIN0-           A23    FMC_HPC_DP1_C2M_N     AK5
 output tx_data_p[1],         SERDIN3+           A26    FMC_HPC_DP2_C2M_P     AJ4
 output tx_data_n[1],         SERDIN3-           A27    FMC_HPC_DP2_C2M_N     AJ3
-output tx_data_p[2],         SERDIN2+           C2     FMC_HPC_DP0_C2M_P     AK10 
+output tx_data_p[2],         SERDIN2+           C2     FMC_HPC_DP0_C2M_P     AK10
 output tx_data_n[2],         SERDIN2-           C3     FMC_HPC_DP0_C2M_N     AK9
 output tx_data_p[3],         SERDIN1+           A30    FMC_HPC_DP3_C2M_P     AK2
 output tx_data_n[3],         SERDIN1-           A31    FMC_HPC_DP3_C2M_N     AK1
@@ -86,7 +86,7 @@ inout  adrv9009_tx1_enable,  TX1_ENABLE         D17    FMC_HPC_LA13_P        AA2
 inout  adrv9009_tx2_enable,  TX2_ENABLE         C18    FMC_HPC_LA14_P        AC24
 inout  adrv9009_rx1_enable,  RX1_ENABLE         D18    FMC_HPC_LA13_N        AA23
 inout  adrv9009_rx2_enable,  RX2_ENABLE         C19    FMC_HPC_LA14_N        AD24
-inout  adrv9009_test,        TEST               H16    FMC_HPC_LA11_P        AD23    
+inout  adrv9009_test,        TEST               H16    FMC_HPC_LA11_P        AD23
 inout  adrv9009_reset_b,     RESETB             H10    FMC_HPC_LA04_P        AJ20
 inout  adrv9009_gpint,       GP_INTERRUPT       H11    FMC_HPC_LA04_N        AK20
 
@@ -104,7 +104,7 @@ inout  adrv9009_gpio_10,     GPIO_10            H23    FMC_HPC_LA19_N        T25
 inout  adrv9009_gpio_11,     GPIO_11            G21    FMC_HPC_LA20_P        U25
 inout  adrv9009_gpio_12,     GPIO_12            G22    FMC_HPC_LA20_N        V26
 inout  adrv9009_gpio_13,     GPIO_13            G16    FMC_HPC_LA12_N        AF24
-inout  adrv9009_gpio_14,     GPIO_14            G15    FMC_HPC_LA12_P        AF23 
+inout  adrv9009_gpio_14,     GPIO_14            G15    FMC_HPC_LA12_P        AF23
 inout  adrv9009_gpio_15,     GPIO_15            G24    FMC_HPC_LA22_P        V27
 inout  adrv9009_gpio_16,     GPIO_16            C11    FMC_HPC_LA06_N        AH22
 inout  adrv9009_gpio_17,     GPIO_17            C10    FMC_HPC_LA06_P        AG22

@@ -38,7 +38,7 @@
 module axi_ad9625_if #(
 
   parameter   ID = 0) (
-  // jesd interface 
+  // jesd interface
   // rx_clk is (line-rate/40)
 
   input                   rx_clk,

@@ -147,7 +147,7 @@ module axi_ad9963_rx_channel #(
 
   ad_iqcor #(.Q_OR_I_N (Q_OR_I_N),
              .DISABLE(IQCORRECTION_DISABLE == 1),
-             .SCALE_ONLY(SCALECORRECTION_ONLY)) 
+             .SCALE_ONLY(SCALECORRECTION_ONLY))
     i_ad_iqcor (
     .clk (adc_clk),
     .valid (adc_dcfilter_valid_s),
