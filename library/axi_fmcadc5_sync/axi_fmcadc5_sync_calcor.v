@@ -41,7 +41,7 @@
 module axi_fmcadc5_sync_calcor (
 
   // receive interface
- 
+
   input             rx_clk,
   input             rx_enable_0,
   input   [255:0]   rx_data_0,
@@ -102,11 +102,11 @@ module axi_fmcadc5_sync_calcor (
   wire    [ 15:0]   rx_data_1_s[0:15];
 
   // iterations
- 
+
   genvar n;
 
   // offset & gain
- 
+
   assign rx_enable = rx_enable_int;
 
   always @(posedge rx_clk) begin
@@ -196,7 +196,7 @@ module axi_fmcadc5_sync_calcor (
   end
 
   // peak iterations
- 
+
   generate
   for (n = 0; n <= 1; n = n + 1) begin: g_rx_peak_4
   always @(posedge rx_clk) begin

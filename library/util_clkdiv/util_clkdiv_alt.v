@@ -61,13 +61,13 @@ end
 always @(posedge clk) begin
   enable <= ~enable;
 end
-  
+
 generate if (SIM_DEVICE == "CYCLONE5") begin
 	cyclonev_clkena #(
 		.clock_type ("Global Clock"),
 		.ena_register_mode ("falling edge"),
 		.lpm_type ("cyclonev_clkena")
-  ) clock_divider_by_2 ( 
+  ) clock_divider_by_2 (
 	.ena(enable),
 	.enaout(),
 	.inclk(clk),

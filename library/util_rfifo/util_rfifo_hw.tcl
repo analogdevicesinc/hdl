@@ -54,7 +54,7 @@ proc util_rfifo_elab {} {
       add_interface_port din_${n} din_data_${n} data Input DIN_DATA_WIDTH
       set_interface_property din_${n} associatedClock if_din_clk
       set_interface_property din_${n} associatedReset none
-     
+
       add_interface dout_${n} conduit end
       add_interface_port dout_${n} dout_enable_${n} enable Input 1
       add_interface_port dout_${n} dout_valid_${n} valid Input 1

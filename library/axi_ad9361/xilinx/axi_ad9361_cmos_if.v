@@ -168,7 +168,7 @@ module axi_ad9361_cmos_if #(
   assign up_drp_locked = 1'd1;
 
   // r1mode
- 
+
   always @(negedge clk) begin
     adc_r1_mode_n <= adc_r1_mode;
   end
@@ -178,7 +178,7 @@ module axi_ad9361_cmos_if #(
   end
 
   // adc-status
- 
+
   assign delay_locked = locked_s;
 
   always @(posedge l_clk) begin
@@ -187,7 +187,7 @@ module axi_ad9361_cmos_if #(
   end
 
   // frame check
- 
+
   always @(posedge l_clk) begin
     if (rx_r1_mode == 1'd1) begin
       rx_frame <= rx_frame_s;
@@ -197,7 +197,7 @@ module axi_ad9361_cmos_if #(
   end
 
   // data hold
- 
+
   always @(posedge l_clk) begin
     rx_data_1 <= rx_data_1_s;
   end

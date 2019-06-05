@@ -152,27 +152,27 @@ begin
             if (position_i == 3'b101)
             begin
                 position_o <= 100;
-            end 
+            end
             if (position_i == 3'b100)
             begin
                 position_o <= 110;
-            end 
+            end
             if (position_i == 3'b110)
             begin
                 position_o <= 010;
-            end 
+            end
             if (position_i == 3'b010)
             begin
                 position_o <= 011;
-            end 
+            end
             if (position_i == 3'b011)
             begin
                 position_o <= 001;
-            end 
+            end
             if (position_i == 3'b001)
             begin
                 position_o <= 101;
-            end 
+            end
             position_old    <= position_i;
             if (speed_count < MAX_SPEED_COUNT)
             begin

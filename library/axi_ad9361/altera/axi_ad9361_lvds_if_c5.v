@@ -83,7 +83,7 @@ module axi_ad9361_lvds_if_c5 (
   input               tx_txnrx,
 
   // locked (status)
- 
+
   output              locked,
 
   // delay interface
@@ -110,7 +110,7 @@ module axi_ad9361_lvds_if_c5 (
   wire                rx_locked_s;
   wire                tx_core_clk;
   wire                tx_locked_s;
- 
+
   // pll reset
 
   always @(negedge up_rstn or posedge up_clk) begin

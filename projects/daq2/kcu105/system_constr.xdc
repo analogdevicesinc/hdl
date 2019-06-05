@@ -33,8 +33,8 @@ set_property  -dict {PACKAGE_PIN  E10 IOSTANDARD LVCMOS18} [get_ports dac_irq]  
 set_property  -dict {PACKAGE_PIN  K11 IOSTANDARD LVCMOS18} [get_ports adc_fda]                              ; ## H16  FMC_HPC_LA11_P
 set_property  -dict {PACKAGE_PIN  J11 IOSTANDARD LVCMOS18} [get_ports adc_fdb]                              ; ## H17  FMC_HPC_LA11_N
 
-set_property  -dict {PACKAGE_PIN  F8  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [get_ports trig_p]            ; ## H13  FMC_HPC_LA07_P          
-set_property  -dict {PACKAGE_PIN  E8  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [get_ports trig_n]            ; ## H14  FMC_HPC_LA07_N          
+set_property  -dict {PACKAGE_PIN  F8  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [get_ports trig_p]            ; ## H13  FMC_HPC_LA07_P
+set_property  -dict {PACKAGE_PIN  E8  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [get_ports trig_n]            ; ## H14  FMC_HPC_LA07_N
 
 # clocks
 

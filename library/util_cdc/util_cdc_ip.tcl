@@ -2,8 +2,8 @@
 # ***************************************************************************
 # Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
 #
-# Each core or library found in this collection may have its own licensing terms. 
-# The user should keep this in in mind while exploring these cores. 
+# Each core or library found in this collection may have its own licensing terms.
+# The user should keep this in in mind while exploring these cores.
 #
 # Redistribution and use in source and binary forms,
 # with or without modification of this file, are permitted under the terms of either

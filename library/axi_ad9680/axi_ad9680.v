@@ -43,7 +43,7 @@ module axi_ad9680 #(
   parameter SPEED_GRADE = 0,
   parameter DEV_PACKAGE = 0) (
 
-  // jesd interface 
+  // jesd interface
   // rx_clk is (line-rate/40)
 
   input                   rx_clk,

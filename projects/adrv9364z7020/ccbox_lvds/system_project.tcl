@@ -1,7 +1,7 @@
 
-source ../../scripts/adi_env.tcl 
-source $ad_hdl_dir/projects/scripts/adi_project.tcl 
-source $ad_hdl_dir/projects/scripts/adi_board.tcl 
+source ../../scripts/adi_env.tcl
+source $ad_hdl_dir/projects/scripts/adi_project.tcl
+source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 set p_device "xc7z020clg400-1"
 adi_project_xilinx adrv9364z7020_ccbox_lvds

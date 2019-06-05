@@ -183,7 +183,7 @@ module axi_ad9361_lvds_if #(
   assign up_drp_locked = 1'd1;
 
   // r1mode
- 
+
   always @(negedge clk) begin
     adc_r1_mode_n <= adc_r1_mode;
   end
@@ -193,7 +193,7 @@ module axi_ad9361_lvds_if #(
   end
 
   // adc-status
- 
+
   assign delay_locked = locked_s;
 
   always @(posedge l_clk) begin
@@ -202,7 +202,7 @@ module axi_ad9361_lvds_if #(
   end
 
   // altera-equivalence
- 
+
   always @(posedge l_clk) begin
     rx_valid <= ~rx_valid;
     rx_frame <= rx_frame_s;
@@ -211,7 +211,7 @@ module axi_ad9361_lvds_if #(
   end
 
   // frame check
- 
+
   assign rx_frame_d_s = {rx_frame_s, rx_frame};
 
   always @(posedge l_clk) begin
@@ -225,7 +225,7 @@ module axi_ad9361_lvds_if #(
   end
 
   // data hold
- 
+
   always @(posedge l_clk) begin
     if (rx_valid == 1'd1) begin
       rx_data_1_2d <= rx_data_1_s;
@@ -235,7 +235,7 @@ module axi_ad9361_lvds_if #(
   end
 
   // delineation
- 
+
   always @(posedge l_clk) begin
     if (rx_valid == 1'b1) begin
       case ({rx_r1_mode, rx_frame_s, rx_frame})
@@ -323,7 +323,7 @@ module axi_ad9361_lvds_if #(
   end
 
   // adc-status
- 
+
   always @(posedge l_clk) begin
     if (rx_valid == 1'b1) begin
       if (rx_frame_d == rx_frame_d_s) begin

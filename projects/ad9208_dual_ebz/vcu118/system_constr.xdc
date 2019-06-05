@@ -77,20 +77,20 @@ set_property  -dict {PACKAGE_PIN AJ36 IOSTANDARD LVCMOS18} [get_ports  hmc_sync_
 create_clock -name rx_ref_clk_0   -period  1.33 [get_ports rx_ref_clk_0_p]
 create_clock -name rx_ref_clk_1   -period  1.33 [get_ports rx_ref_clk_1_p]
 
-# The Global clock is routed from the REFCLK1 of the dual_ad9208 board 
+# The Global clock is routed from the REFCLK1 of the dual_ad9208 board
 # since GLBLCLK0 and GLBLCLK1 are not connected to global clock capable pins.
 create_clock -name global_clk_0   -period  2.66 [get_ports glbl_clk_0_p]
 
 
-# Constraint SYSREFs 
-# Assumption is that REFCLK and SYSREF have similar propagation delay, 
+# Constraint SYSREFs
+# Assumption is that REFCLK and SYSREF have similar propagation delay,
 # and the SYSREF is a source synchronous Center-Aligned signal to REFCLK
 set_input_delay -clock [get_clocks global_clk_0] \
   [expr [get_property PERIOD [get_clocks global_clk_0]] / 2] \
   [get_ports {rx_sysref_*}]
 
 # Place the sysref capture FFs near Bank 43, they can't be placed into the IOB due pulse width violation.
-# Creating the pblock prevents the tool from placing the FFs on another SLR and not closing timing. 
+# Creating the pblock prevents the tool from placing the FFs on another SLR and not closing timing.
 create_pblock pblock_sysref
 resize_pblock pblock_sysref -add SLICE_X50Y254:SLICE_X50Y278
 add_cells_to_pblock pblock_sysref [get_cells \

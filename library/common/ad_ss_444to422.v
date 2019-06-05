@@ -75,7 +75,7 @@ module ad_ss_444to422 #(
   wire    [ 9:0]  cr_s;
   wire    [ 9:0]  cb_s;
 
-  // fill the data pipe lines, hold the last data on edges 
+  // fill the data pipe lines, hold the last data on edges
 
   always @(posedge clk) begin
     s444_de_d <= s444_de;

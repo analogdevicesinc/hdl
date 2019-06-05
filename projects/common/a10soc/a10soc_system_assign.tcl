@@ -13,8 +13,8 @@ set_global_assignment -name PROGRAMMABLE_POWER_TECHNOLOGY_SETTING "FORCE ALL USE
 
 set_location_assignment PIN_F25   -to hps_ddr_ref_clk
 set_location_assignment PIN_G24   -to "hps_ddr_ref_clk(n)"
-set_location_assignment PIN_B20   -to hps_ddr_clk_p     
-set_location_assignment PIN_B19   -to hps_ddr_clk_n     
+set_location_assignment PIN_B20   -to hps_ddr_clk_p
+set_location_assignment PIN_B19   -to hps_ddr_clk_n
 set_location_assignment PIN_B26   -to hps_ddr_a[0]
 set_location_assignment PIN_C26   -to hps_ddr_a[1]
 set_location_assignment PIN_C22   -to hps_ddr_a[2]

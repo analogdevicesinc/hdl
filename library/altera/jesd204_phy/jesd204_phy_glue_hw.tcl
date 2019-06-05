@@ -191,7 +191,7 @@ proc glue_add_if_port_conduit {num ifname port phy_port dir width} {
     set phy_dir "Input"
     set phy_sig "in"
   }
-  
+
   for {set i 0} {$i < $num} {incr i} {
     set base [expr $sig_offset + $width * $i]
 
@@ -214,7 +214,7 @@ proc glue_add_const_conduit {port width} {
 
   set ifname phy_${port}
   add_interface $ifname conduit end
-  add_interface_port $ifname $ifname $port Output $width 
+  add_interface_port $ifname $ifname $port Output $width
   set_port_property $ifname fragment_list [format "const_out(%d:%d)" \
     [expr $const_offset + $width - 1] $const_offset]
 
@@ -248,7 +248,7 @@ proc jesd204_phy_glue_elab {} {
   glue_add_if_port $num_of_lanes reconfig_avmm reconfig_waitrequest waitrequest Output 1
   glue_add_if_port $num_of_lanes reconfig_avmm reconfig_write write Input 1
   glue_add_if_port $num_of_lanes reconfig_avmm reconfig_writedata writedata Input 32
- 
+
   if {[get_parameter TX_OR_RX_N]} {
     glue_add_if $num_of_lanes tx_clkout clock source
     glue_add_if_port $num_of_lanes tx_clkout tx_clkout clk Output 1
@@ -288,10 +288,10 @@ proc jesd204_phy_glue_elab {} {
 
     glue_add_if $num_of_lanes rx_coreclkin clock sink true
     glue_add_if_port $num_of_lanes rx_coreclkin rx_coreclkin clk Input 1 true
-  
+
     glue_add_if $num_of_lanes rx_clkout clock source
     glue_add_if_port $num_of_lanes rx_clkout rx_clkout clk Output 1
-  
+
     if {$soft_pcs} {
       for {set i 0} {$i < $num_of_lanes} {incr i} {
         add_interface rx_raw_data_${i} conduit start

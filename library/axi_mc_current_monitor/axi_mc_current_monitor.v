@@ -78,7 +78,7 @@ module axi_mc_current_monitor (
     input           s_axi_rready,
     input   [ 2:0]  s_axi_awprot,
     input   [ 2:0]  s_axi_arprot
-  
+
 );
 
 //------------------------------------------------------------------------------

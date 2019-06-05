@@ -40,7 +40,7 @@ module axi_ad9671_if #(
   parameter QUAD_OR_DUAL_N = 1,
   parameter ID = 0) (
 
-  // jesd interface 
+  // jesd interface
   // rx_clk is (line-rate/40)
 
   input                   rx_clk,

@@ -78,7 +78,7 @@ module axi_ad9361_alt_lvds_rx (
   // internal signals
 
   wire    [27:0]  rx_data_s;
- 
+
   // instantiations
 
   assign rx_frame[3] = rx_data_s[24];

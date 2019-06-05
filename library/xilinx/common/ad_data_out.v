@@ -123,7 +123,7 @@ module ad_data_out #(
   endgenerate
 
   // odelay
- 
+
   generate
   if (IODELAY_FPGA_TECHNOLOGY == SEVEN_SERIES) begin
   (* IODELAY_GROUP = IODELAY_GROUP *)

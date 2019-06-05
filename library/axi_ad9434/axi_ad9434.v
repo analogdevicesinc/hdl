@@ -38,7 +38,7 @@
 module axi_ad9434 #(
 
   parameter ID = 0,
-  
+
   parameter FPGA_TECHNOLOGY = 0,
   parameter FPGA_FAMILY = 0,
   parameter SPEED_GRADE = 0,

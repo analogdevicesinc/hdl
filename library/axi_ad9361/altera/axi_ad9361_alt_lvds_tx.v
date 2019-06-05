@@ -86,7 +86,7 @@ module axi_ad9361_alt_lvds_tx (
 
   wire            core_clk;
   wire    [27:0]  tx_data_s;
- 
+
   // instantiations
 
   assign tx_clk_out_n = 1'd0;

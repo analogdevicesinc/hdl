@@ -27,12 +27,12 @@ set_property  -dict {PACKAGE_PIN  T29   IOSTANDARD LVDS_25} [get_ports rx_os_syn
 set_property  -dict {PACKAGE_PIN  U29   IOSTANDARD LVDS_25} [get_ports rx_os_sync_n]                  ; ## G28  FMC_HPC_LA25_N (Sniffer)
 set_property  -dict {PACKAGE_PIN  AK17  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports tx_sync_p]      ; ## H07  FMC_HPC_LA02_P
 set_property  -dict {PACKAGE_PIN  AK18  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports tx_sync_n]      ; ## H08  FMC_HPC_LA02_N
-set_property  -dict {PACKAGE_PIN  AF20  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports sysref_p]       ; ## G06  FMC_HPC_LA00_CC_P       
-set_property  -dict {PACKAGE_PIN  AG20  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports sysref_n]       ; ## G07  FMC_HPC_LA00_CC_N       
+set_property  -dict {PACKAGE_PIN  AF20  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports sysref_p]       ; ## G06  FMC_HPC_LA00_CC_P
+set_property  -dict {PACKAGE_PIN  AG20  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports sysref_n]       ; ## G07  FMC_HPC_LA00_CC_N
 set_property  -dict {PACKAGE_PIN  T30   IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports tx_sync_1_p]    ; ## H28  FMC_HPC_LA24_P
 set_property  -dict {PACKAGE_PIN  U30   IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports tx_sync_1_n]    ; ## H29  FMC_HPC_LA24_N
-set_property  -dict {PACKAGE_PIN  AG21  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports sysref_out_p]   ; ## D08  FMC_HPC_LA01_CC_P       
-set_property  -dict {PACKAGE_PIN  AH21  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports sysref_out_n]   ; ## D09  FMC_HPC_LA01_CC_N              
+set_property  -dict {PACKAGE_PIN  AG21  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports sysref_out_p]   ; ## D08  FMC_HPC_LA01_CC_P
+set_property  -dict {PACKAGE_PIN  AH21  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports sysref_out_n]   ; ## D09  FMC_HPC_LA01_CC_N
 
 set_property  -dict {PACKAGE_PIN  AE21  IOSTANDARD LVCMOS25} [get_ports spi_csn_ad9528]               ; ## D15  FMC_HPC_LA09_N
 set_property  -dict {PACKAGE_PIN  AD21  IOSTANDARD LVCMOS25} [get_ports spi_csn_adrv9009]             ; ## D14  FMC_HPC_LA09_P
@@ -46,7 +46,7 @@ set_property  -dict {PACKAGE_PIN  AA22  IOSTANDARD LVCMOS25} [get_ports adrv9009
 set_property  -dict {PACKAGE_PIN  AC24  IOSTANDARD LVCMOS25} [get_ports adrv9009_tx2_enable]          ; ## C18  FMC_HPC_LA14_P
 set_property  -dict {PACKAGE_PIN  AA23  IOSTANDARD LVCMOS25} [get_ports adrv9009_rx1_enable]          ; ## D18  FMC_HPC_LA13_N
 set_property  -dict {PACKAGE_PIN  AD24  IOSTANDARD LVCMOS25} [get_ports adrv9009_rx2_enable]          ; ## C19  FMC_HPC_LA14_N
-set_property  -dict {PACKAGE_PIN  AD23  IOSTANDARD LVCMOS25} [get_ports adrv9009_test]                ; ## H16  FMC_HPC_LA11_P        
+set_property  -dict {PACKAGE_PIN  AD23  IOSTANDARD LVCMOS25} [get_ports adrv9009_test]                ; ## H16  FMC_HPC_LA11_P
 set_property  -dict {PACKAGE_PIN  AJ20  IOSTANDARD LVCMOS25} [get_ports adrv9009_reset_b]             ; ## H10  FMC_HPC_LA04_P
 set_property  -dict {PACKAGE_PIN  AK20  IOSTANDARD LVCMOS25} [get_ports adrv9009_gpint]               ; ## H11  FMC_HPC_LA04_N
 
@@ -63,10 +63,10 @@ set_property  -dict {PACKAGE_PIN  T24   IOSTANDARD LVCMOS25} [get_ports adrv9009
 set_property  -dict {PACKAGE_PIN  T25   IOSTANDARD LVCMOS25} [get_ports adrv9009_gpio_10]             ; ## H23  FMC_HPC_LA19_N     (LVDS Pairs?)
 set_property  -dict {PACKAGE_PIN  U25   IOSTANDARD LVCMOS25} [get_ports adrv9009_gpio_11]             ; ## G21  FMC_HPC_LA20_P     (LVDS Pairs?)
 set_property  -dict {PACKAGE_PIN  V26   IOSTANDARD LVCMOS25} [get_ports adrv9009_gpio_12]             ; ## G22  FMC_HPC_LA20_N     (LVDS Pairs?)
-set_property  -dict {PACKAGE_PIN  AF24  IOSTANDARD LVCMOS25} [get_ports adrv9009_gpio_13]             ; ## G16  FMC_HPC_LA12_N 
-set_property  -dict {PACKAGE_PIN  AF23  IOSTANDARD LVCMOS25} [get_ports adrv9009_gpio_14]             ; ## G15  FMC_HPC_LA12_P 
+set_property  -dict {PACKAGE_PIN  AF24  IOSTANDARD LVCMOS25} [get_ports adrv9009_gpio_13]             ; ## G16  FMC_HPC_LA12_N
+set_property  -dict {PACKAGE_PIN  AF23  IOSTANDARD LVCMOS25} [get_ports adrv9009_gpio_14]             ; ## G15  FMC_HPC_LA12_P
 set_property  -dict {PACKAGE_PIN  V27   IOSTANDARD LVCMOS25} [get_ports adrv9009_gpio_15]             ; ## G24  FMC_HPC_LA22_P     (LVDS Pairs?)
-set_property  -dict {PACKAGE_PIN  AH22  IOSTANDARD LVCMOS25} [get_ports adrv9009_gpio_16]             ; ## C11  FMC_HPC_LA06_N 
+set_property  -dict {PACKAGE_PIN  AH22  IOSTANDARD LVCMOS25} [get_ports adrv9009_gpio_16]             ; ## C11  FMC_HPC_LA06_N
 set_property  -dict {PACKAGE_PIN  AG22  IOSTANDARD LVCMOS25} [get_ports adrv9009_gpio_17]             ; ## C10  FMC_HPC_LA06_P
 set_property  -dict {PACKAGE_PIN  AE23  IOSTANDARD LVCMOS25} [get_ports adrv9009_gpio_18]             ; ## H17  FMC_HPC_LA11_N
 
