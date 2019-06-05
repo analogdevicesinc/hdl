@@ -42,7 +42,8 @@ module ad_serdes_in #(
   parameter   SERDES_FACTOR = 8,
   parameter   DATA_WIDTH = 16,
   parameter   IODELAY_CTRL = 0,
-  parameter   IODELAY_GROUP = "dev_if_delay_group") (
+  parameter   IODELAY_GROUP = "dev_if_delay_group",
+  parameter   REFCLK_FREQUENCY = 200) (
 
   // reset and clocks
 
@@ -123,7 +124,7 @@ module ad_serdes_in #(
         .HIGH_PERFORMANCE_MODE ("FALSE"),
         .IDELAY_TYPE ("VAR_LOAD"),
         .IDELAY_VALUE (0),
-        .REFCLK_FREQUENCY (200.0),
+        .REFCLK_FREQUENCY (REFCLK_FREQUENCY),
         .PIPE_SEL ("FALSE"),
         .SIGNAL_PATTERN ("DATA"))
       i_idelay (

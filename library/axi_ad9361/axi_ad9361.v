@@ -65,7 +65,8 @@ module axi_ad9361 #(
   parameter   DAC_USERPORTS_DISABLE = 0,
   parameter   DAC_IQCORRECTION_DISABLE = 0,
   parameter   IO_DELAY_GROUP = "dev_if_delay_group",
-  parameter   MIMO_ENABLE = 0) (
+  parameter   MIMO_ENABLE = 0,
+  parameter   DELAY_REFCLK_FREQUENCY = 200) (
 
   // physical interface (receive-lvds)
 
@@ -331,7 +332,8 @@ module axi_ad9361 #(
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .DAC_IODELAY_ENABLE (DAC_IODELAY_ENABLE),
     .IO_DELAY_GROUP (IO_DELAY_GROUP),
-    .CLK_DESKEW (MIMO_ENABLE))
+    .CLK_DESKEW (MIMO_ENABLE),
+    .DELAY_REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
   i_dev_if (
     .rx_clk_in (rx_clk_in),
     .rx_frame_in (rx_frame_in),
@@ -393,7 +395,8 @@ module axi_ad9361 #(
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .DAC_IODELAY_ENABLE (DAC_IODELAY_ENABLE),
     .IO_DELAY_GROUP (IO_DELAY_GROUP),
-    .CLK_DESKEW (MIMO_ENABLE))
+    .CLK_DESKEW (MIMO_ENABLE),
+    .DELAY_REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
   i_dev_if (
     .rx_clk_in_p (rx_clk_in_p),
     .rx_clk_in_n (rx_clk_in_n),

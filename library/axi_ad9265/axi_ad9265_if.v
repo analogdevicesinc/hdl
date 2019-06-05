@@ -40,7 +40,8 @@
 module axi_ad9265_if #(
 
   parameter   FPGA_TECHNOLOGY = 0,
-  parameter   IO_DELAY_GROUP = "adc_if_delay_group") (
+  parameter   IO_DELAY_GROUP = "adc_if_delay_group",
+  parameter   DELAY_REFCLK_FREQUENCY = 200) (
 
   // adc interface (clk, data, over-range)
   // nominal clock 125 MHz, up to 300 MHz
@@ -100,7 +101,8 @@ module axi_ad9265_if #(
   ad_data_in #(
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .IODELAY_CTRL (0),
-    .IODELAY_GROUP (IO_DELAY_GROUP))
+    .IODELAY_GROUP (IO_DELAY_GROUP),
+    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
   i_adc_data (
     .rx_clk (adc_clk),
     .rx_data_in_p (adc_data_in_p[l_inst]),
@@ -122,7 +124,8 @@ module axi_ad9265_if #(
   ad_data_in #(
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .IODELAY_CTRL (1),
-    .IODELAY_GROUP (IO_DELAY_GROUP))
+    .IODELAY_GROUP (IO_DELAY_GROUP),
+    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
   i_adc_or (
     .rx_clk (adc_clk),
     .rx_data_in_p (adc_or_in_p),

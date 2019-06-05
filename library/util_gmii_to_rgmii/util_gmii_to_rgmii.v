@@ -43,7 +43,8 @@ module util_gmii_to_rgmii #(
   parameter PHY_AD = 5'b10000,
   parameter IODELAY_CTRL = 1'b0,
   parameter IDELAY_VALUE = 18,
-  parameter IODELAY_GROUP = "if_delay_group") (
+  parameter IODELAY_GROUP = "if_delay_group",
+  parameter REFCLK_FREQUENCY = 200) (
 
   input                   clk_20m,
   input                   clk_25m,
@@ -214,7 +215,7 @@ module util_gmii_to_rgmii #(
   IDELAYE2 #(
     .IDELAY_TYPE("FIXED"),
     .HIGH_PERFORMANCE_MODE("TRUE"),
-    .REFCLK_FREQUENCY(200.0),
+    .REFCLK_FREQUENCY(REFCLK_FREQUENCY),
     .SIGNAL_PATTERN("DATA"),
     .IDELAY_VALUE (IDELAY_VALUE),
     .DELAY_SRC("IDATAIN")
@@ -238,7 +239,7 @@ module util_gmii_to_rgmii #(
     IDELAYE2 #(
       .IDELAY_TYPE("FIXED"),
       .HIGH_PERFORMANCE_MODE("TRUE"),
-      .REFCLK_FREQUENCY(200.0),
+      .REFCLK_FREQUENCY(REFCLK_FREQUENCY),
       .SIGNAL_PATTERN("DATA"),
       .IDELAY_VALUE (IDELAY_VALUE),
       .DELAY_SRC("IDATAIN")

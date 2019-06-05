@@ -55,7 +55,8 @@ module axi_ad9963 #(
   parameter   ADC_DATAFORMAT_DISABLE = 0,
   parameter   ADC_DCFILTER_DISABLE = 0,
   parameter   ADC_IQCORRECTION_DISABLE = 0,
-  parameter   ADC_SCALECORRECTION_ONLY = 1) (
+  parameter   ADC_SCALECORRECTION_ONLY = 1,
+  parameter   DELAY_REFCLK_FREQUENCY = 200) (
 
   // physical interface (receive)
 
@@ -182,7 +183,8 @@ module axi_ad9963 #(
   axi_ad9963_if #(
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .ADC_IODELAY_ENABLE (ADC_IODELAY_ENABLE),
-    .IO_DELAY_GROUP (IO_DELAY_GROUP))
+    .IO_DELAY_GROUP (IO_DELAY_GROUP),
+    .DELAY_REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
   i_dev_if (
     .trx_clk (trx_clk),
     .trx_iq (trx_iq),
