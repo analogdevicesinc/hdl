@@ -43,7 +43,8 @@ module ad_data_in #(
   parameter   FPGA_TECHNOLOGY = 0,
   parameter   IODELAY_ENABLE = 1,
   parameter   IODELAY_CTRL = 0,
-  parameter   IODELAY_GROUP = "dev_if_delay_group") (
+  parameter   IODELAY_GROUP = "dev_if_delay_group",
+  parameter   REFCLK_FREQUENCY = 200) (
 
   // data interface
 
@@ -127,7 +128,7 @@ module ad_data_in #(
     .HIGH_PERFORMANCE_MODE ("FALSE"),
     .IDELAY_TYPE ("VAR_LOAD"),
     .IDELAY_VALUE (0),
-    .REFCLK_FREQUENCY (200.0),
+    .REFCLK_FREQUENCY (REFCLK_FREQUENCY),
     .PIPE_SEL ("FALSE"),
     .SIGNAL_PATTERN ("DATA"))
   i_rx_data_idelay (
@@ -154,7 +155,7 @@ module ad_data_in #(
     .SIM_DEVICE (IODELAY_SIM_DEVICE),
     .DELAY_SRC ("IDATAIN"),
     .DELAY_TYPE ("VAR_LOAD"),
-    .REFCLK_FREQUENCY (200.0),
+    .REFCLK_FREQUENCY (REFCLK_FREQUENCY),
     .DELAY_FORMAT ("COUNT"))
   i_rx_data_idelay (
     .CASC_RETURN (1'b0),

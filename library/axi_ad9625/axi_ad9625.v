@@ -41,7 +41,8 @@ module axi_ad9625 #(
   parameter FPGA_TECHNOLOGY = 0,
   parameter FPGA_FAMILY = 0,
   parameter SPEED_GRADE = 0,
-  parameter DEV_PACKAGE = 0) (
+  parameter DEV_PACKAGE = 0,
+  parameter DELAY_REFCLK_FREQUENCY = 200) (
 
   // jesd interface
   // rx_clk is (line-rate/40)
@@ -142,7 +143,8 @@ module axi_ad9625 #(
   assign adc_valid = 1'b1;
 
   axi_ad9625_if #(
-    .ID (ID))
+    .ID (ID),
+    .DELAY_REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
   i_if (
     .rx_clk (rx_clk),
     .rx_sof (rx_sof),

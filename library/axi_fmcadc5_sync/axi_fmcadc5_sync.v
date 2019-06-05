@@ -44,7 +44,8 @@ module axi_fmcadc5_sync #(
   parameter [ 7:0]  FPGA_TECHNOLOGY = 0,
   parameter [ 7:0]  FPGA_FAMILY = 0,
   parameter [ 7:0]  SPEED_GRADE = 0,
-  parameter [ 7:0]  DEV_PACKAGE = 0) (
+  parameter [ 7:0]  DEV_PACKAGE = 0,
+  parameter         DELAY_REFCLK_FREQUENCY = 200) (
 
     // receive interface
 
@@ -768,7 +769,8 @@ module axi_fmcadc5_sync #(
     .SINGLE_ENDED (0),
     .IODELAY_ENABLE (1),
     .IODELAY_CTRL (1),
-    .IODELAY_GROUP ("FMCADC5_SYSREF_IODELAY_GROUP"))
+    .IODELAY_GROUP ("FMCADC5_SYSREF_IODELAY_GROUP"),
+    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
   i_rx_sysref (
     .tx_clk (rx_clk),
     .tx_data_p (rx_sysref_e),

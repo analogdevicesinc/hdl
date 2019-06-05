@@ -37,12 +37,13 @@
 
 module axi_ad9467#(
 
-  parameter ID = 0,
+  parameter   ID = 0,
   parameter   FPGA_TECHNOLOGY = 0,
   parameter   FPGA_FAMILY = 0,
   parameter   SPEED_GRADE = 0,
   parameter   DEV_PACKAGE = 0,
-  parameter IO_DELAY_GROUP = "dev_if_delay_group") (
+  parameter   IO_DELAY_GROUP = "dev_if_delay_group",
+  parameter   DELAY_REFCLK_FREQUENCY = 200) (
 
   // physical interface
 
@@ -148,7 +149,8 @@ module axi_ad9467#(
 
   axi_ad9467_if #(
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
-    .IO_DELAY_GROUP (IO_DELAY_GROUP))
+    .IO_DELAY_GROUP (IO_DELAY_GROUP),
+    .DELAY_REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
   i_if (
     .adc_clk_in_p (adc_clk_in_p),
     .adc_clk_in_n (adc_clk_in_n),
