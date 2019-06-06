@@ -124,7 +124,7 @@ ad_connect  sys_cpu_clk util_fmcomms11_xcvr/up_clk
 
 # connections (dac)
 
-ad_xcvrcon  util_fmcomms11_xcvr axi_ad9162_xcvr axi_ad9162_jesd
+ad_xcvrcon  util_fmcomms11_xcvr axi_ad9162_xcvr axi_ad9162_jesd {0 1 2 3 7 4 6 5}
 ad_connect  util_fmcomms11_xcvr/tx_out_clk_0 axi_ad9162_core/link_clk
 ad_connect  axi_ad9162_jesd/tx_data axi_ad9162_core/link
 
@@ -156,7 +156,7 @@ ad_connect  dac_fifo_bypass axi_ad9162_fifo/bypass
 
 # connections (adc)
 
-ad_xcvrcon  util_fmcomms11_xcvr axi_ad9625_xcvr axi_ad9625_jesd
+ad_xcvrcon  util_fmcomms11_xcvr axi_ad9625_xcvr axi_ad9625_jesd {0 1 2 3 7 4 6 5}
 ad_connect  util_fmcomms11_xcvr/rx_out_clk_0 axi_ad9625_core/link_clk
 
 ad_connect  axi_ad9625_jesd/rx_sof axi_ad9625_core/link_sof
