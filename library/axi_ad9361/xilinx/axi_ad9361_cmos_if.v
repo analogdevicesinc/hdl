@@ -150,8 +150,6 @@ module axi_ad9361_cmos_if #(
   reg                 txnrx_up = 'd0;
   reg                 enable_int = 'd0;
   reg                 txnrx_int = 'd0;
-  reg                 enable_int_n = 'd0;
-  reg                 txnrx_int_n = 'd0;
   reg                 enable_int_p = 'd0;
   reg                 txnrx_int_p = 'd0;
 
@@ -421,8 +419,8 @@ module axi_ad9361_cmos_if #(
   end else begin /* CLK_DESKEW == 0 */
 
     always @(posedge l_clk) begin
-      enable_int_p <= enable_int_p;
-      txnrx_int_p <= txnrx_int_p;
+      enable_int_p <= enable_int;
+      txnrx_int_p <= txnrx_int;
     end
 
   end

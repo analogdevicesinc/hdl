@@ -518,8 +518,8 @@ module axi_ad9361_lvds_if #(
   end else begin /* CLK_DESKEW == 0 */
 
     always @(posedge l_clk) begin
-      enable_int_p <= enable_int_p;
-      txnrx_int_p <= txnrx_int_p;
+      enable_int_p <= enable_int;
+      txnrx_int_p <= txnrx_int;
     end
 
   end
