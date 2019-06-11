@@ -69,7 +69,7 @@ ad_ip_parameter DAC_DDS_DISABLE INTEGER 0
 ad_ip_parameter DAC_USERPORTS_DISABLE INTEGER 0
 ad_ip_parameter DAC_IQCORRECTION_DISABLE INTEGER 0
 ad_ip_parameter IO_DELAY_GROUP STRING {dev_if_delay_group}
-ad_ip_parameter MIMO_EN INTEGER 0
+ad_ip_parameter MIMO_ENABLE INTEGER 0
 
 adi_add_auto_fpga_spec_params
 
