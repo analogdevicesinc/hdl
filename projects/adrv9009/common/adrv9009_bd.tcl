@@ -241,7 +241,7 @@ ad_connect  util_adrv9009_tx_upack/s_axis_ready axi_adrv9009_dacfifo/dac_valid
 ad_connect  util_adrv9009_tx_upack/s_axis_data axi_adrv9009_dacfifo/dac_data
 
 ad_connect  $sys_dma_clk axi_adrv9009_dacfifo/dma_clk
-ad_connect  $sys_cpu_reset axi_adrv9009_dacfifo/dma_rst
+ad_connect  $sys_dma_reset axi_adrv9009_dacfifo/dma_rst
 ad_connect  $sys_dma_clk axi_adrv9009_tx_dma/m_axis_aclk
 ad_connect  axi_adrv9009_dacfifo/dma_valid axi_adrv9009_tx_dma/m_axis_valid
 ad_connect  axi_adrv9009_dacfifo/dma_data axi_adrv9009_tx_dma/m_axis_data
