@@ -530,27 +530,27 @@ module axi_spi_engine #(
     .NUM_OF_BITS (1),
     .ASYNC_CLK (ASYNC_SPI_CLK)
   ) i_offload_enable_sync (
-    .in (offload0_enable_reg),
+    .in_bits (offload0_enable_reg),
     .out_resetn (spi_resetn),
     .out_clk (spi_clk),
-    .out (offload0_enable));
+    .out_bits (offload0_enable));
 
   sync_bits #(
     .NUM_OF_BITS (1),
     .ASYNC_CLK (ASYNC_SPI_CLK)
   ) i_offload_enabled_sync (
-    .in (offload0_enabled),
+    .in_bits (offload0_enabled),
     .out_resetn (up_sw_resetn),
     .out_clk (clk),
-    .out (offload0_enabled_s));
+    .out_bits (offload0_enabled_s));
 
   sync_bits #(
     .NUM_OF_BITS (1),
     .ASYNC_CLK (ASYNC_SPI_CLK)
   ) i_offload_mem_reset_sync (
-    .in (offload0_mem_reset_reg),
+    .in_bits (offload0_mem_reset_reg),
     .out_resetn (spi_resetn),
     .out_clk (spi_clk),
-    .out (offload0_mem_reset));
+    .out_bits (offload0_mem_reset));
 
 endmodule
