@@ -178,8 +178,8 @@ module axi_ad9361_lvds_if #(
 
   // local parameters
 
-  localparam CYCLONE5 = 'h10;
-  localparam ARRIA10  = 'h12;
+  localparam CYCLONE5 = 'd101;
+  localparam ARRIA10  = 'd103;
 
   // unused interface signals
 
@@ -202,7 +202,7 @@ module axi_ad9361_lvds_if #(
   end
 
   // r1mode
- 
+
   always @(negedge clk) begin
     adc_r1_mode_n <= adc_r1_mode;
   end
@@ -212,7 +212,7 @@ module axi_ad9361_lvds_if #(
   end
 
   // frame check
- 
+
   always @(posedge l_clk) begin
     if (rx_r1_mode == 1'd1) begin
       rx_frame_d <= rx_frame_s;
@@ -222,7 +222,7 @@ module axi_ad9361_lvds_if #(
   end
 
   // data hold
- 
+
   always @(posedge l_clk) begin
     rx_data_3 <= rx_data_3_s;
     rx_data_2 <= rx_data_2_s;
@@ -230,7 +230,7 @@ module axi_ad9361_lvds_if #(
   end
 
   // delineation
- 
+
   always @(posedge l_clk) begin
     case ({rx_r1_mode, rx_frame_s})
       5'b01111: begin
@@ -313,7 +313,7 @@ module axi_ad9361_lvds_if #(
   end
 
   // adc-status
- 
+
   always @(posedge l_clk) begin
     if (rx_frame_d == rx_frame_s) begin
       adc_status_p <= locked_s;

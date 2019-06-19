@@ -27,6 +27,8 @@ source $ad_hdl_dir/projects/common/a10soc/a10soc_plddr4_assign.tcl
 # constraints
 # ad9361
 
+set_global_assignment -name AUTO_RESERVE_CLKUSR_FOR_CALIBRATION OFF
+
 set_location_assignment PIN_G14   -to  rx_clk_in           ; ## G06   FMCA_HPC_LA00_CC_P
 set_location_assignment PIN_H14   -to  "rx_clk_in(n)"      ; ## G07   FMCA_HPC_LA00_CC_N
 set_location_assignment PIN_E12   -to  rx_frame_in         ; ## D08   FMCA_HPC_LA01_CC_P

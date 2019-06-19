@@ -138,6 +138,7 @@ proc ad_ip_parameter {pname ptype pdefault {phdl true} {properties {}}} {
 proc adi_add_auto_fpga_spec_params {} {
 
     global ad_hdl_dir
+    global auto_gen_param_list
     source $ad_hdl_dir/library/scripts/adi_intel_device_info_enc.tcl
 
     ad_ip_parameter DEVICE STRING "" false {

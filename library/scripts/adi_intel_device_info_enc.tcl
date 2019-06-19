@@ -157,11 +157,17 @@ proc get_part_param {} {
       set xcvr_type "Unknown"
     }
     if {[catch {set fpga_voltage [quartus::device::get_part_info -default_voltage $device]} fid]} {
-      set fpga_voltage "0"
+      set fpga_voltage 0
     }
 
     # user and system values (sys_val)
     regsub {V} $fpga_voltage "" fpga_voltage
+    set fpga_voltage [string trim $fpga_voltage]
+    send_message WARNING "\"get_part_info -default_voltage\" did not return a good \"$fpga_voltage\""
+    if { ![regexp (\d)*.?(\d)*? $fpga_voltage] } {
+      send_message WARNING "\"get_part_info -default_voltage\" did not return a good \"$fpga_voltage\""
+      set fpga_voltage 0
+    }
     set fpga_voltage [expr int([expr $fpga_voltage * 1000])] ;# // V to mV conversion(integer val)
 
 }
