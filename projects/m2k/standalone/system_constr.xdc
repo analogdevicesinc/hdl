@@ -208,3 +208,7 @@ set_property PACKAGE_PIN F2 [get_ports ddr_dqs_n[1]]
 
 set_switching_activity -static_probability 1 -toggle_rate 0 [get_nets i_system_wrapper/system_i/sys_cpu_resetn]
 set_switching_activity -static_probability 0 -toggle_rate 0 [get_nets i_system_wrapper/system_i/logic_analyzer_reset_bus_struct_reset]
+
+# Define SPI clock
+create_clock -name spi0_clk      -period 20   [get_pins -hier */EMIOSPI0SCLKO]
+
