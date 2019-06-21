@@ -39,7 +39,11 @@ module axi_ad9361_lvds_if #(
 
   parameter   FPGA_TECHNOLOGY = 0,
   parameter   DAC_IODELAY_ENABLE = 0,
-  parameter   IO_DELAY_GROUP = "dev_if_delay_group") (
+  parameter   CLK_DESKEW = 0,
+
+  // Dummy parameters, required keep the code consistency(used on Xilinx)
+  parameter   IO_DELAY_GROUP = "dev_if_delay_group",
+  parameter   DELAY_REFCLK_FREQUENCY = 0) (
 
   // physical interface (receive)
 
@@ -122,7 +126,6 @@ module axi_ad9361_lvds_if #(
 
   reg                 up_drp_locked_m1 = 1'd0;
   reg                 up_drp_locked_int = 1'd0;
-  reg                 adc_r1_mode_n = 'd0;
   reg                 rx_r1_mode = 'd0;
   reg     [ 3:0]      rx_frame_d = 'd0;
   reg     [ 5:0]      rx_data_3 = 'd0;
@@ -131,9 +134,6 @@ module axi_ad9361_lvds_if #(
   reg                 adc_valid_p = 'd0;
   reg     [47:0]      adc_data_p = 'd0;
   reg                 adc_status_p = 'd0;
-  reg                 adc_valid_n = 'd0;
-  reg     [47:0]      adc_data_n = 'd0;
-  reg                 adc_status_n = 'd0;
   reg                 adc_valid_int = 'd0;
   reg     [47:0]      adc_data_int = 'd0;
   reg                 adc_status_int = 'd0;
@@ -144,11 +144,6 @@ module axi_ad9361_lvds_if #(
   reg     [ 5:0]      tx_data_1_p = 'd0;
   reg     [ 5:0]      tx_data_2_p = 'd0;
   reg     [ 5:0]      tx_data_3_p = 'd0;
-  reg     [ 3:0]      tx_frame_n = 'd0;
-  reg     [ 5:0]      tx_data_0_n = 'd0;
-  reg     [ 5:0]      tx_data_1_n = 'd0;
-  reg     [ 5:0]      tx_data_2_n = 'd0;
-  reg     [ 5:0]      tx_data_3_n = 'd0;
   reg     [ 3:0]      tx_frame = 'd0;
   reg     [ 5:0]      tx_data_0 = 'd0;
   reg     [ 5:0]      tx_data_1 = 'd0;
@@ -162,8 +157,6 @@ module axi_ad9361_lvds_if #(
   reg                 txnrx_up = 'd0;
   reg                 enable_int = 'd0;
   reg                 txnrx_int = 'd0;
-  reg                 enable_int_n = 'd0;
-  reg                 txnrx_int_n = 'd0;
   reg                 enable_int_p = 'd0;
   reg                 txnrx_int_p = 'd0;
 
@@ -203,13 +196,26 @@ module axi_ad9361_lvds_if #(
 
   // r1mode
 
-  always @(negedge clk) begin
-    adc_r1_mode_n <= adc_r1_mode;
-  end
+  generate if (CLK_DESKEW) begin
 
-  always @(posedge l_clk) begin
-    rx_r1_mode <= adc_r1_mode_n;
+    reg adc_r1_mode_n = 'd0;
+
+    always @(negedge clk) begin
+      adc_r1_mode_n <= adc_r1_mode;
+    end
+
+    always @(posedge l_clk) begin
+      rx_r1_mode <= adc_r1_mode_n;
+    end
+
+  end else begin /* CLK_DESKEW == 0 */
+
+    always @(posedge l_clk) begin
+      rx_r1_mode <= adc_r1_mode;
+    end
+
   end
+endgenerate
 
   // frame check
 
@@ -324,21 +330,38 @@ module axi_ad9361_lvds_if #(
 
   // transfer to common clock
 
-  always @(negedge l_clk) begin
-    adc_valid_n <= adc_valid_p;
-    adc_data_n <= adc_data_p;
-    adc_status_n <= adc_status_p;
+  generate if (CLK_DESKEW) begin
+
+    reg         adc_valid_n = 'd0;
+    reg [47:0]  adc_data_n = 'd0;
+    reg         adc_status_n = 'd0;
+
+    always @(negedge l_clk) begin
+      adc_valid_n <= adc_valid_p;
+      adc_data_n <= adc_data_p;
+      adc_status_n <= adc_status_p;
+    end
+
+    always @(posedge clk) begin
+      adc_valid_int <= adc_valid_n;
+      adc_data_int <= adc_data_n;
+      adc_status_int <= adc_status_n;
+    end
+
+  end else begin /* CLK_DESKEW == 0 */
+
+    always @(posedge l_clk) begin
+      adc_valid_int <= adc_valid_p;
+      adc_data_int <= adc_data_p;
+      adc_status_int <= adc_status_p;
+    end
+
   end
+  endgenerate
 
   assign adc_valid = adc_valid_int;
   assign adc_data = adc_data_int;
   assign adc_status = adc_status_int;
-
-  always @(posedge clk) begin
-    adc_valid_int <= adc_valid_n;
-    adc_data_int <= adc_data_n;
-    adc_status_int <= adc_status_n;
-  end
 
   // dac-tx interface
 
@@ -373,21 +396,42 @@ module axi_ad9361_lvds_if #(
 
   // transfer to local clock
 
-  always @(negedge clk) begin
-    tx_frame_n <= tx_frame_p;
-    tx_data_0_n <= tx_data_0_p;
-    tx_data_1_n <= tx_data_1_p;
-    tx_data_2_n <= tx_data_2_p;
-    tx_data_3_n <= tx_data_3_p;
-  end
+  generate if (CLK_DESKEW) begin
 
-  always @(posedge l_clk) begin
-    tx_frame <= tx_frame_n;
-    tx_data_0 <= tx_data_0_n;
-    tx_data_1 <= tx_data_1_n;
-    tx_data_2 <= tx_data_2_n;
-    tx_data_3 <= tx_data_3_n;
+    reg         tx_frame_n = 'd0;
+    reg [ 5:0]  tx_data_0_n = 'd0;
+    reg [ 5:0]  tx_data_1_n = 'd0;
+    reg [ 5:0]  tx_data_2_n = 'd0;
+    reg [ 5:0]  tx_data_3_n = 'd0;
+
+    always @(negedge clk) begin
+      tx_frame_n <= tx_frame_p;
+      tx_data_0_n <= tx_data_0_p;
+      tx_data_1_n <= tx_data_1_p;
+      tx_data_2_n <= tx_data_2_p;
+      tx_data_3_n <= tx_data_3_p;
+    end
+
+    always @(posedge l_clk) begin
+      tx_frame <= tx_frame_n;
+      tx_data_0 <= tx_data_0_n;
+      tx_data_1 <= tx_data_1_n;
+      tx_data_2 <= tx_data_2_n;
+      tx_data_3 <= tx_data_3_n;
+    end
+
+  end else begin /* CLK_DESKEW == 0 */
+
+    always @(posedge l_clk) begin
+      tx_frame <= tx_frame_p;
+      tx_data_0 <= tx_data_0_p;
+      tx_data_1 <= tx_data_1_p;
+      tx_data_2 <= tx_data_2_p;
+      tx_data_3 <= tx_data_3_p;
+    end
+
   end
+  endgenerate
 
   // tdd/ensm control
 
@@ -420,15 +464,30 @@ module axi_ad9361_lvds_if #(
     end
   end
 
-  always @(negedge clk) begin
-    enable_int_n <= enable_int;
-    txnrx_int_n <= txnrx_int;
-  end
+  generate if (CLK_DESKEW) begin
 
-  always @(posedge l_clk) begin
-    enable_int_p <= enable_int_n;
-    txnrx_int_p <= txnrx_int_n;
+    reg enable_int_n = 'd0;
+    reg txnrx_int_n = 'd0;
+
+    always @(negedge clk) begin
+      enable_int_n <= enable_int;
+      txnrx_int_n <= txnrx_int;
+    end
+
+    always @(posedge l_clk) begin
+      enable_int_p <= enable_int_n;
+      txnrx_int_p <= txnrx_int_n;
+    end
+
+  end else begin /* CLK_DESKEW == 0 */
+
+    always @(posedge l_clk) begin
+      enable_int_p <= enable_int;
+      txnrx_int_p <= txnrx_int;
+    end
+
   end
+  endgenerate
 
   generate
   if (FPGA_TECHNOLOGY == CYCLONE5) begin
