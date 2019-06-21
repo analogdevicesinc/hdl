@@ -171,8 +171,8 @@ module axi_ad9361_lvds_if #(
 
   // local parameters
 
-  localparam CYCLONE5 = 'h10;
-  localparam ARRIA10  = 'h12;
+  localparam CYCLONE5 = 101;
+  localparam ARRIA10  = 103;
 
   // unused interface signals
 
