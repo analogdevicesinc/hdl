@@ -28,6 +28,7 @@ set dac_data_width [expr 32*$TX_NUM_OF_LANES]
 set dac_dma_data_width 128
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
+source $ad_hdl_dir/projects/common/xilinx/adi_fir_filter_bd.tcl
 
 # adrv9009
 
