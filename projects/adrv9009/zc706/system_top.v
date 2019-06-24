@@ -332,6 +332,8 @@ module system_top (
 
   system_wrapper i_system_wrapper (
     .dac_fifo_bypass (gpio_o[60]),
+    .adc_fir_filter_active (gpio_o[61]),
+    .dac_fir_filter_active (gpio_o[62]),
     .ddr3_addr (ddr3_addr),
     .ddr3_ba (ddr3_ba),
     .ddr3_cas_n (ddr3_cas_n),
