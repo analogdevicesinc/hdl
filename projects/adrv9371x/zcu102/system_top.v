@@ -191,6 +191,8 @@ module system_top (
 
   system_wrapper i_system_wrapper (
     .dac_fifo_bypass (gpio_o[60]),
+    .adc_fir_filter_active (gpio_o[61]),
+    .dac_fir_filter_active (gpio_o[62]),
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .gpio_t (gpio_t),

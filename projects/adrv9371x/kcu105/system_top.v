@@ -229,6 +229,8 @@ module system_top (
 
   system_wrapper i_system_wrapper (
     .dac_fifo_bypass (gpio_o[60]),
+    .adc_fir_filter_active (gpio_o[61]),
+    .dac_fir_filter_active (gpio_o[62]),
     .c0_ddr4_act_n (ddr4_act_n),
     .c0_ddr4_adr (ddr4_addr),
     .c0_ddr4_ba (ddr4_ba),
