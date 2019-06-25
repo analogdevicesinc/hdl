@@ -32,5 +32,3 @@ ad_ip_parameter axi_ad9680_dma CONFIG.AXI_SLICE_SRC true
 ad_ip_parameter axi_ad9152_dma CONFIG.AXI_SLICE_DEST true
 ad_ip_parameter axi_ad9152_dma CONFIG.AXI_SLICE_SRC true
 
-set_property -dict [list CONFIG.ADVANCED_PROPERTIES { __view__ { clocking { SW0 { ASSOCIATED_CLK aclk1 } } }}] [get_bd_cells axi_mem_interconnect]
-
