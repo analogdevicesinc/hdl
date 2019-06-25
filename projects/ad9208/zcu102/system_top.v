@@ -88,6 +88,8 @@ module system_top (
   wire            rx_sysref;
   wire            rx_sysref_s;
   wire            rx_sync;
+  wire            rx_ref_core_clk;
+  wire            rx_ref_core_clk_s;
 
   assign spi_miso = | ({spi_sdo_adt7320, spi_miso_adc, spi_miso_adc} & ~spi_csn);
   assign spi_mosi_adc = spi_mosi;
@@ -113,7 +115,17 @@ module system_top (
     .I (rx_ref_clk_p),
     .IB (rx_ref_clk_n),
     .O (rx_ref_clk),
-    .ODIV2 ());
+    .ODIV2 (rx_ref_core_clk_s));
+
+  BUFG_GT i_bufg_gt_ref_core_clk(
+     .I(rx_ref_core_clk_s),
+     .CE (1'b1),
+     .CEMASK(1'b1),
+     .CLR (1'b0),
+     .CLRMASK(1'b1),
+     .DIV (3'b000),
+     .O(rx_ref_core_clk)
+);
 
   IBUFDS i_ibufds_rx_sysref (
     .I (rx_sysref_p),
@@ -175,7 +187,7 @@ system_wrapper i_system_wrapper (
   .rx_data_6_p (rx_data_p[6]),
   .rx_data_7_n (rx_data_n[7]),
   .rx_data_7_p (rx_data_p[7]),
-  .rx_core_clk (rx_core_clk),
+  .rx_core_clk (rx_ref_core_clk),
   .rx_ref_clk_0 (rx_ref_clk),
   .rx_sync_0 (rx_sync),
   .rx_sysref_0 (rx_sysref),
