@@ -21,5 +21,7 @@ LIB_DEPS += util_rfifo
 LIB_DEPS += util_tdd_sync
 LIB_DEPS += util_wfifo
 LIB_DEPS += xilinx/util_clkdiv
+LIB_DEPS += axi_sysid
+LIB_DEPS += sysid_rom
 
 include ../../scripts/project-xilinx.mk

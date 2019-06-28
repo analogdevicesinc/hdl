@@ -134,6 +134,15 @@ ad_ip_parameter axi_linear_flash CONFIG.C_TCEDV_PS_MEM_0 100000
 ad_ip_parameter axi_linear_flash CONFIG.C_TAVDV_PS_MEM_0 100000
 ad_ip_parameter axi_linear_flash CONFIG.C_THZOE_PS_MEM_0 15000
 
+# system id
+
+ad_ip_instance axi_sysid axi_sysid_0
+ad_ip_instance sysid_rom rom_sys_0
+
+ad_connect  axi_sysid_0/rom_addr   	rom_sys_0/rom_addr
+ad_connect  axi_sysid_0/sys_rom_data   	rom_sys_0/rom_data
+ad_connect  sys_cpu_clk                 rom_sys_0/clk
+
 # connections
 
 ad_connect  sys_mb_debug/Debug_SYS_Rst sys_rstgen/mb_debug_sys_rst
@@ -259,6 +268,7 @@ ad_cpu_interconnect 0x41200000 axi_intc
 ad_cpu_interconnect 0x41C00000 axi_timer
 ad_cpu_interconnect 0x40600000 axi_uart
 ad_cpu_interconnect 0x41600000 axi_iic_main
+ad_cpu_interconnect 0x45000000 axi_sysid_0
 ad_cpu_interconnect 0x40000000 axi_gpio
 ad_cpu_interconnect 0x44A70000 axi_spi
 ad_cpu_interconnect 0x60000000 axi_linear_flash

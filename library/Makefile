@@ -53,6 +53,7 @@ clean:
 	$(MAKE) -C axi_rd_wr_combiner clean
 	$(MAKE) -C axi_spdif_rx clean
 	$(MAKE) -C axi_spdif_tx clean
+	$(MAKE) -C axi_sysid clean
 	$(MAKE) -C axi_usb_fx3 clean
 	$(MAKE) -C cn0363/cn0363_dma_sequencer clean
 	$(MAKE) -C cn0363/cn0363_phase_data_sync clean
@@ -84,6 +85,7 @@ clean:
 	$(MAKE) -C spi_engine/spi_engine_execution clean
 	$(MAKE) -C spi_engine/spi_engine_interconnect clean
 	$(MAKE) -C spi_engine/spi_engine_offload clean
+	$(MAKE) -C sysid_rom clean
 	$(MAKE) -C util_adcfifo clean
 	$(MAKE) -C util_axis_fifo clean
 	$(MAKE) -C util_axis_resize clean
@@ -163,6 +165,7 @@ lib:
 	$(MAKE) -C axi_rd_wr_combiner
 	$(MAKE) -C axi_spdif_rx
 	$(MAKE) -C axi_spdif_tx
+	$(MAKE) -C axi_sysid
 	$(MAKE) -C axi_usb_fx3
 	$(MAKE) -C cn0363/cn0363_dma_sequencer
 	$(MAKE) -C cn0363/cn0363_phase_data_sync
@@ -194,6 +197,7 @@ lib:
 	$(MAKE) -C spi_engine/spi_engine_execution
 	$(MAKE) -C spi_engine/spi_engine_interconnect
 	$(MAKE) -C spi_engine/spi_engine_offload
+	$(MAKE) -C sysid_rom
 	$(MAKE) -C util_adcfifo
 	$(MAKE) -C util_axis_fifo
 	$(MAKE) -C util_axis_resize

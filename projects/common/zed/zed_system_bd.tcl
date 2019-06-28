@@ -264,6 +264,7 @@ ad_ip_instance sysid_rom rom_sys_0
 
 ad_connect  axi_sysid_0/rom_addr   	rom_sys_0/rom_addr
 ad_connect  axi_sysid_0/sys_rom_data   	rom_sys_0/rom_data
+ad_connect  sys_cpu_clk                 rom_sys_0/clk
 
 # interrupts
 

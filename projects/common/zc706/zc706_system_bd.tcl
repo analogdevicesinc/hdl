@@ -191,6 +191,15 @@ ad_connect  sys_cpu_resetn sys_audio_clkgen/resetn
 ad_connect  sys_audio_clkgen/clk_out1 axi_spdif_tx_core/spdif_data_clk
 ad_connect  spdif axi_spdif_tx_core/spdif_tx_o
 
+# system id
+
+ad_ip_instance axi_sysid axi_sysid_0
+ad_ip_instance sysid_rom rom_sys_0
+
+ad_connect  axi_sysid_0/rom_addr   	rom_sys_0/rom_addr
+ad_connect  axi_sysid_0/sys_rom_data   	rom_sys_0/rom_data
+ad_connect  sys_cpu_clk                 rom_sys_0/clk
+
 # interrupts
 
 ad_connect  sys_concat_intc/dout sys_ps7/IRQ_F2P
@@ -214,6 +223,7 @@ ad_connect  sys_concat_intc/In0 GND
 # interconnects
 
 ad_cpu_interconnect 0x41600000 axi_iic_main
+ad_cpu_interconnect 0x45000000 axi_sysid_0
 ad_cpu_interconnect 0x79000000 axi_hdmi_clkgen
 ad_cpu_interconnect 0x43000000 axi_hdmi_dma
 ad_cpu_interconnect 0x70e00000 axi_hdmi_core

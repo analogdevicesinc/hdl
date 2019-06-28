@@ -157,6 +157,15 @@ ad_connect  sys_ilmb_cntlr/BRAM_PORT  sys_lmb_bram/BRAM_PORTB
 ad_connect  sys_mb/DLMB   sys_dlmb/LMB_M
 ad_connect  sys_mb/ILMB   sys_ilmb/LMB_M
 
+# system id
+
+ad_ip_instance axi_sysid axi_sysid_0
+ad_ip_instance sysid_rom rom_sys_0
+
+ad_connect  axi_sysid_0/rom_addr   	rom_sys_0/rom_addr
+ad_connect  axi_sysid_0/sys_rom_data   	rom_sys_0/rom_data
+ad_connect  sys_cpu_clk                 rom_sys_0/clk
+
 # microblaze debug & interrupt
 
 ad_connect sys_mb_debug/MBDEBUG_0   sys_mb/DEBUG
@@ -282,6 +291,7 @@ ad_cpu_interconnect 0x41200000 axi_intc
 ad_cpu_interconnect 0x41C00000 axi_timer
 ad_cpu_interconnect 0x40600000 axi_uart
 ad_cpu_interconnect 0x41600000 axi_iic_main
+ad_cpu_interconnect 0x45000000 axi_sysid_0
 ad_cpu_interconnect 0x40000000 axi_gpio
 ad_cpu_interconnect 0x44A70000 axi_spi
 ad_cpu_interconnect 0x60000000 axi_linear_flash
