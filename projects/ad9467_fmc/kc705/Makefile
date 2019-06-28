@@ -14,5 +14,7 @@ M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
 
 LIB_DEPS += axi_ad9467
 LIB_DEPS += axi_dmac
+LIB_DEPS += axi_sysid
+LIB_DEPS += sysid_rom
 
 include ../../scripts/project-xilinx.mk

@@ -218,6 +218,15 @@ ad_connect  gpio1_o axi_gpio/gpio2_io_o
 ad_connect  gpio1_t axi_gpio/gpio2_io_t
 ad_connect  sys_cpu_clk axi_spi/ext_spi_clk
 
+# system id
+
+ad_ip_instance axi_sysid axi_sysid_0
+ad_ip_instance sysid_rom rom_sys_0
+
+ad_connect  axi_sysid_0/rom_addr   	rom_sys_0/rom_addr
+ad_connect  axi_sysid_0/sys_rom_data   	rom_sys_0/rom_data
+ad_connect  sys_cpu_clk                 rom_sys_0/clk
+
 # interrupts
 
 ad_connect  sys_concat_intc/In0 axi_timer/interrupt
@@ -246,6 +255,7 @@ ad_cpu_interconnect 0x40600000 axi_uart
 ad_cpu_interconnect 0x41C00000 axi_timer
 ad_cpu_interconnect 0x41200000 axi_intc
 ad_cpu_interconnect 0x41600000 axi_iic_main
+ad_cpu_interconnect 0x45000000 axi_sysid_0
 ad_cpu_interconnect 0x40000000 axi_gpio
 ad_cpu_interconnect 0x44A70000 axi_spi
 

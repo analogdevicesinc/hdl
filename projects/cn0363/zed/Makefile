@@ -26,5 +26,7 @@ LIB_DEPS += spi_engine/spi_engine_offload
 LIB_DEPS += util_axis_resize
 LIB_DEPS += util_i2c_mixer
 LIB_DEPS += util_sigma_delta_spi
+LIB_DEPS += axi_sysid
+LIB_DEPS += sysid_rom
 
 include ../../scripts/project-xilinx.mk
