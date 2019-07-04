@@ -100,9 +100,9 @@ module system_top (
   // instantiations
 
   ad_iobuf #(.DATA_WIDTH(7)) i_iobuf_adc_cntrl (
-    .dio_t (gpio_t[43:41], gpio_t[37], gpio_t[35:33]}),
-    .dio_i (gpio_o[43:41], gpio_o[37], gpio_o[35:33]}),
-    .dio_o (gpio_i[43:41], gpio_i[37], gpio_i[35:33]}),
+    .dio_t ({gpio_t[43:41], gpio_t[37], gpio_t[35:33]}),
+    .dio_i ({gpio_o[43:41], gpio_o[37], gpio_o[35:33]}),
+    .dio_o ({gpio_i[43:41], gpio_i[37], gpio_i[35:33]}),
     .dio_p ({adc_reset_n,        // 43
              adc_hw_rngsel,      // 42:41
              adc_seq_en,         // 37
@@ -158,18 +158,6 @@ module system_top (
     .hdmi_vsync (hdmi_vsync),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
-    .ps_intr_00 (1'b0),
-    .ps_intr_01 (1'b0),
-    .ps_intr_02 (1'b0),
-    .ps_intr_03 (1'b0),
-    .ps_intr_04 (1'b0),
-    .ps_intr_05 (1'b0),
-    .ps_intr_06 (1'b0),
-    .ps_intr_07 (1'b0),
-    .ps_intr_08 (1'b0),
-    .ps_intr_09 (1'b0),
-    .ps_intr_10 (1'b0),
-    .ps_intr_11 (1'b0),
     .spdif (spdif),
     .rx_cnvst (adc_convst),
     .rx_cs_n (adc_cs_n),
