@@ -83,6 +83,6 @@ set_property  -dict {PACKAGE_PIN  B9    IOSTANDARD  LVCMOS18} [get_ports  tsw_b]
 ## misc
 
 set_property  -dict {PACKAGE_PIN  AC16  IOSTANDARD  LVCMOS25} [get_ports  otg_ctrl]         ; ## U1,AC16,IO_L21_12_JX2_N,JX2,95,OTG_CTRL
-set_property  -dict {PACKAGE_PIN  AC17  IOSTANDARD  LVCMOS25} [get_ports  adp1614_en]       ; ## U1,AC17,IO_L21_12_JX2_P,JX2,93,ADP1614_EN
+set_property  -dict {PACKAGE_PIN  AC17  IOSTANDARD  LVCMOS25 PULLTYPE PULLDOWN} [get_ports  adp1614_en]       ; ## U1,AC17,IO_L21_12_JX2_P,JX2,93,ADP1614_EN
 set_property  -dict {PACKAGE_PIN  D5    IOSTANDARD  LVCMOS18} [get_ports  rtc_int]          ; ## U1,D5,IO_L10_34_JX4_N,JX4,44,TIMER_INT
 
