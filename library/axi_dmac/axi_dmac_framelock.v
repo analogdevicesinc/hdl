@@ -301,15 +301,22 @@ generate if (ENABLE_FRAME_LOCK == 1) begin
 `else
 
     reg [MAX_NUM_FRAMES_MSB-1:0] s_frame_id_log = 'h0;
+    reg s_frame_id_log_vld = 1'b0;
     always @(posedge req_aclk) begin
-      if (m_frame_id_vld) begin
+      if (req_aresetn == 1'b0) begin
+        s_frame_id_log_vld <= 1'b0;
+      end else if (m_frame_id_vld) begin
         s_frame_id_log <= m_frame_id;
+        s_frame_id_log_vld <= 1'b1;
       end
     end
 
     wire [MAX_NUM_FRAMES_MSB:0] id_at_distance;
+    wire [MAX_NUM_FRAMES_MSB:0] s_frame_id_log_qualified;
 
-    assign id_at_distance = s_frame_id_log - req_flock_distance;
+    assign s_frame_id_log_qualified = s_frame_id_log_vld ? s_frame_id_log : req_flock_framenum-1;
+
+    assign id_at_distance = s_frame_id_log_qualified - req_flock_distance;
     assign target_id = id_at_distance[MAX_NUM_FRAMES_MSB] ? id_at_distance + req_flock_framenum
                                                           : id_at_distance;
 `endif
