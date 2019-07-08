@@ -57,8 +57,12 @@ adi_add_bus "s_axis" "slave" \
 	[list {"s_axis_ready" "TREADY"} \
 	  {"s_axis_valid" "TVALID"} \
 	  {"s_axis_data" "TDATA"} \
-	  {"s_axis_last" "TLAST"} \
-	  {"s_axis_user" "TUSER"} ]
+	  {"s_axis_strb" "TSTRB"} \
+	  {"s_axis_keep" "TKEEP"} \
+	  {"s_axis_user" "TUSER"} \
+	  {"s_axis_id" "TID"} \
+	  {"s_axis_dest" "TDEST"} \
+	  {"s_axis_last" "TLAST"}]
 adi_add_bus_clock "s_axis_aclk" "s_axis"
 
 adi_add_bus "m_axis" "master" \
@@ -67,7 +71,12 @@ adi_add_bus "m_axis" "master" \
 	[list {"m_axis_ready" "TREADY"} \
 	  {"m_axis_valid" "TVALID"} \
 	  {"m_axis_data" "TDATA"} \
-	  {"m_axis_last" "TLAST"} ]
+	  {"m_axis_strb" "TSTRB"} \
+	  {"m_axis_keep" "TKEEP"} \
+	  {"m_axis_user" "TUSER"} \
+	  {"m_axis_id" "TID"} \
+	  {"m_axis_dest" "TDEST"} \
+	  {"m_axis_last" "TLAST"}]
 adi_add_bus_clock "m_axis_aclk" "m_axis"
 
 adi_set_bus_dependency "m_src_axi" "m_src_axi" \
