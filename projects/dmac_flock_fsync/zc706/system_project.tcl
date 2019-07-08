@@ -1,10 +1,10 @@
 # load script
 
 source ../../scripts/adi_env.tcl
-source $ad_hdl_dir/projects/scripts/adi_project.tcl
+source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
-adi_project_xilinx flock_zc706
+adi_project flock_zc706
 adi_project_files flock_zc706 [list \
   "system_top.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
