@@ -110,13 +110,13 @@ module util_dacfifo_bypass #(
   // An asymmetric memory to transfer data from DMAC interface to DAC interface
 
   ad_mem_asym_bypass i_mem_asym (
-    .mem_i_wrclock (dma_clk),
-    .mem_i_wren (dma_mem_wea_s),
-    .mem_i_wraddress (dma_mem_waddr),
-    .mem_i_datain (dma_data),
-    .mem_i_rdclock (dac_clk),
-    .mem_i_rdaddress (dac_mem_raddr),
-    .mem_o_dataout (dac_mem_rdata_s));
+    .mem_i_wrclock_clk (dma_clk),
+    .mem_i_wren_wren (dma_mem_wea_s),
+    .mem_i_wraddress_wraddress (dma_mem_waddr),
+    .mem_i_datain_datain (dma_data),
+    .mem_i_rdclock_clk (dac_clk),
+    .mem_i_rdaddress_rdaddress (dac_mem_raddr),
+    .mem_o_dataout_dataout (dac_mem_rdata_s));
 
   // dma reset is brought from dac domain
 
