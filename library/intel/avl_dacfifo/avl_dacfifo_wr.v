@@ -148,13 +148,13 @@ module avl_dacfifo_wr #(
   // interface
 
   ad_mem_asym_wr i_mem_asym (
-    .mem_i_wrclock (dma_clk),
-    .mem_i_wren (dma_mem_wea_s),
-    .mem_i_wraddress (dma_mem_waddr),
-    .mem_i_datain (dma_data),
-    .mem_i_rdclock (avl_clk),
-    .mem_i_rdaddress (avl_mem_raddr),
-    .mem_o_dataout (avl_data_s));
+    .mem_i_wrclock_clk (dma_clk),
+    .mem_i_wren_wren (dma_mem_wea_s),
+    .mem_i_wraddress_wraddress (dma_mem_waddr),
+    .mem_i_datain_datain (dma_data),
+    .mem_i_rdclock_clk (avl_clk),
+    .mem_i_rdaddress_rdaddress (avl_mem_raddr),
+    .mem_o_dataout_dataout (avl_data_s));
 
   // the fifo reset is the dma_xfer_req
 
