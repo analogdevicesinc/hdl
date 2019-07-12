@@ -52,14 +52,14 @@ module ad_serdes_out #(
 
   // data interface
 
-  input   [(DATA_WIDTH-1):0]  data_s0,
+  input   [(DATA_WIDTH-1):0]  data_s0,   // 1st bit to be transmitted
   input   [(DATA_WIDTH-1):0]  data_s1,
   input   [(DATA_WIDTH-1):0]  data_s2,
   input   [(DATA_WIDTH-1):0]  data_s3,
   input   [(DATA_WIDTH-1):0]  data_s4,
   input   [(DATA_WIDTH-1):0]  data_s5,
   input   [(DATA_WIDTH-1):0]  data_s6,
-  input   [(DATA_WIDTH-1):0]  data_s7,
+  input   [(DATA_WIDTH-1):0]  data_s7,   // last bit to be transmitted
   output  [(DATA_WIDTH-1):0]  data_out_se,
   output  [(DATA_WIDTH-1):0]  data_out_p,
   output  [(DATA_WIDTH-1):0]  data_out_n);
@@ -68,6 +68,12 @@ module ad_serdes_out #(
   localparam  ULTRASCALE  = 2;
   localparam  ULTRASCALE_PLUS  = 3;
   localparam  DR_OQ_DDR = DDR_OR_SDR_N == 1'b1 ? "DDR": "SDR";
+
+  localparam SIM_DEVICE = FPGA_TECHNOLOGY == SEVEN_SERIES ? "7SERIES" :
+                          FPGA_TECHNOLOGY == ULTRASCALE ? "ULTRASCALE" :
+                          FPGA_TECHNOLOGY == ULTRASCALE_PLUS ? "ULTRASCALE_PLUS" :
+                          "UNSUPPORTED";
+
 
   // internal signals
 
@@ -117,6 +123,27 @@ module ad_serdes_out #(
         .TBYTEIN (1'b0),
         .TBYTEOUT (),
         .TCE (1'b0),
+        .RST (rst));
+    end
+
+    if (FPGA_TECHNOLOGY == ULTRASCALE || FPGA_TECHNOLOGY == ULTRASCALE_PLUS) begin
+      OSERDESE3  #(
+        .DATA_WIDTH (SERDES_FACTOR),
+        .SIM_DEVICE (SIM_DEVICE))
+      i_serdes (
+        .D ({data_s7[l_inst],
+             data_s6[l_inst],
+             data_s5[l_inst],
+             data_s4[l_inst],
+             data_s3[l_inst],
+             data_s2[l_inst],
+             data_s1[l_inst],
+             data_s0[l_inst]}),
+        .T (4'b0),
+        .CLK (clk),
+        .CLKDIV (div_clk),
+        .OQ (data_out_s[l_inst]),
+        .T_OUT (),
         .RST (rst));
     end
 
