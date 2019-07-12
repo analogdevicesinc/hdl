@@ -15,7 +15,7 @@ set version "18.1.0"
 proc adi_project {project_name {parameter_list {}}} {
 
   global ad_hdl_dir
-  global ad_phdl_dir
+  global ad_ghdl_dir
   global family
   global device
   global version
@@ -76,7 +76,7 @@ proc adi_project {project_name {parameter_list {}}} {
 
   # library paths
 
-  set ad_lib_folders "$ad_hdl_dir/library/**/*;$ad_phdl_dir/library/**/*"
+  set ad_lib_folders "$ad_hdl_dir/library/**/*;$ad_ghdl_dir/library/**/*"
 
   set_user_option -name USER_IP_SEARCH_PATHS $ad_lib_folders
   set_global_assignment -name IP_SEARCH_PATHS $ad_lib_folders
@@ -96,7 +96,7 @@ proc adi_project {project_name {parameter_list {}}} {
   set QFILE [open "system_qsys_script.tcl" "w"]
   puts $QFILE "set mmu_enabled $mmu_enabled"
   puts $QFILE "set ad_hdl_dir $ad_hdl_dir"
-  puts $QFILE "set ad_phdl_dir $ad_phdl_dir"
+  puts $QFILE "set ad_ghdl_dir $ad_ghdl_dir"
   puts $QFILE "package require qsys"
   puts $QFILE "set_module_property NAME {system_bd}"
   puts $QFILE "set_project_property DEVICE_FAMILY {$family}"
