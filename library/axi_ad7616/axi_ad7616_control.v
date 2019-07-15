@@ -69,7 +69,7 @@ module axi_ad7616_control #(
 );
 
 
-  localparam  PCORE_VERSION = 'h0001001;
+  localparam  PCORE_VERSION = 'h00001002;
   localparam  POS_EDGE = 0;
   localparam  NEG_EDGE = 1;
   localparam  SERIAL = 0;
@@ -89,17 +89,10 @@ module axi_ad7616_control #(
   reg     [ 2:0]  chsel_ff = 3'b0;
 
   wire            up_rst;
-  wire            up_rreq_s;
   wire            up_rack_s;
-  wire            up_wreq_s;
 
   wire    [31:0]  up_read_data_s;
   wire            up_read_valid_s;
-
-  // decode block select
-
-  assign up_wreq_s = (up_waddr[13:8] == 6'h01) ? up_wreq : 1'b0;
-  assign up_rreq_s = (up_raddr[13:8] == 6'h01) ? up_rreq : 1'b0;
 
   // the up_[read/write]_data interfaces are valid just in parallel mode
 
@@ -118,32 +111,32 @@ module axi_ad7616_control #(
       up_burst_length <= 5'h0;
       up_write_data <= 16'h0;
     end else begin
-      up_wack <= up_wreq_s;
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
+      up_wack <= up_wreq;
+      if ((up_wreq == 1'b1) && (up_waddr[8:0] == 9'h102)) begin
         up_scratch <= up_wdata;
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h10)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[8:0] == 9'h110)) begin
         up_resetn <= up_wdata[0];
         up_cnvst_en <= up_wdata[1];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h11)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[8:0] == 9'h111)) begin
         up_conv_rate <= up_wdata;
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h12)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[8:0] == 9'h112)) begin
         up_burst_length <= up_wdata;
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h14)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[8:0] == 9'h114)) begin
         up_write_data <= up_wdata;
       end
     end
   end
 
-  assign up_write_req = (up_waddr[7:0] == 8'h14) ? up_wreq_s : 1'h0;
+  assign up_write_req = (up_waddr[8:0] == 9'h114) ? up_wreq : 1'h0;
 
   // processor read interface
 
-  assign up_rack_s = (up_raddr[7:0] == 8'h13) ? up_read_valid_s : up_rreq_s;
-  assign up_read_req = (up_raddr[7:0] == 8'h13) ? up_rreq_s : 1'b0;
+  assign up_rack_s = (up_raddr[8:0] == 9'h113) ? up_read_valid_s : up_rreq;
+  assign up_read_req = (up_raddr[8:0] == 9'h113) ? up_rreq : 1'b0;
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
@@ -152,15 +145,16 @@ module axi_ad7616_control #(
     end else begin
       up_rack <= up_rack_s;
       if (up_rack_s == 1'b1) begin
-        case (up_raddr[7:0])
-          8'h00 : up_rdata = PCORE_VERSION;
-          8'h01 : up_rdata = ID;
-          8'h02 : up_rdata = up_scratch;
-          8'h03 : up_rdata = IF_TYPE;
-          8'h10 : up_rdata = {29'b0, up_cnvst_en, up_resetn};
-          8'h11 : up_rdata = up_conv_rate;
-          8'h12 : up_rdata = {27'b0, up_burst_length};
-          8'h13 : up_rdata = up_read_data_s;
+        case (up_raddr[8:0])
+          9'h100 : up_rdata <= PCORE_VERSION;
+          9'h101 : up_rdata <= ID;
+          9'h102 : up_rdata <= up_scratch;
+          9'h103 : up_rdata <= IF_TYPE;
+          9'h110 : up_rdata <= {29'b0, up_cnvst_en, up_resetn};
+          9'h111 : up_rdata <= up_conv_rate;
+          9'h112 : up_rdata <= {27'b0, up_burst_length};
+          9'h113 : up_rdata <= up_read_data_s;
+          default : up_rdata <= 'h0;
         endcase
       end
     end
