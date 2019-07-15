@@ -401,7 +401,7 @@ module axi_ad5766 #(
   // AXI wrapper
 
   up_axi #(
-    .ADDRESS_WIDTH (14)
+    .AXI_ADDRESS_WIDTH (16)
   ) i_up_axi (
     .up_rstn (up_rstn),
     .up_clk (spi_clk),

@@ -42,7 +42,6 @@ module axi_spi_engine #(
   parameter SDO_FIFO_ADDRESS_WIDTH = 5,
   parameter SDI_FIFO_ADDRESS_WIDTH = 5,
   parameter MM_IF_TYPE = 0,
-  parameter UP_ADDRESS_WIDTH = 14,
   parameter ASYNC_SPI_CLK = 0,
   parameter NUM_OFFLOAD = 0,
   parameter OFFLOAD0_CMD_MEM_ADDRESS_WIDTH = 4,
@@ -80,11 +79,11 @@ module axi_spi_engine #(
   input                           up_clk,
   input                           up_rstn,
   input                           up_wreq,
-  input  [(UP_ADDRESS_WIDTH-1):0] up_waddr,
+  input  [13:0]                   up_waddr,
   input  [31:0]                   up_wdata,
   output                          up_wack,
   input                           up_rreq,
-  input  [(UP_ADDRESS_WIDTH-1):0] up_raddr,
+  input  [13:0]                   up_raddr,
   output [31:0]                   up_rdata,
   output                          up_rack,
 
@@ -165,8 +164,8 @@ module axi_spi_engine #(
   wire                            up_wreq_s;
   wire                            up_rreq_s;
   wire [31:0]                     up_wdata_s;
-  wire [(UP_ADDRESS_WIDTH-1):0]   up_waddr_s;
-  wire [(UP_ADDRESS_WIDTH-1):0]   up_raddr_s;
+  wire [13:0]                     up_waddr_s;
+  wire [13:0]                     up_raddr_s;
 
   // Scratch register
   reg [31:0] up_scratch = 'h00;
@@ -184,7 +183,7 @@ module axi_spi_engine #(
     // interface wrapper
 
     up_axi #(
-      .ADDRESS_WIDTH (UP_ADDRESS_WIDTH)
+      .AXI_ADDRESS_WIDTH (16)
     ) i_up_axi (
       .up_rstn(rstn),
       .up_clk(clk),

@@ -96,7 +96,6 @@ module axi_ad7616 #(
   localparam      SERIAL = 0;
   localparam      PARALLEL = 1;
   localparam      NEG_EDGE = 1;
-  localparam      UP_ADDRESS_WIDTH = 14;
 
   // internal registers
 
@@ -110,9 +109,9 @@ module axi_ad7616 #(
   wire                              up_rstn;
   wire                              up_rst;
   wire                              up_rreq_s;
-  wire    [(UP_ADDRESS_WIDTH-1):0]  up_raddr_s;
+  wire    [13:0]                    up_raddr_s;
   wire                              up_wreq_s;
-  wire    [(UP_ADDRESS_WIDTH-1):0]  up_waddr_s;
+  wire    [13:0]                    up_waddr_s;
   wire    [31:0]                    up_wdata_s;
 
   wire                              up_wack_if_s;
@@ -214,8 +213,7 @@ module axi_ad7616 #(
       .DATA_WIDTH (8),
       .NUM_OF_SDI (NUM_OF_SDI),
       .NUM_OFFLOAD(1),
-      .MM_IF_TYPE(1),
-      .UP_ADDRESS_WIDTH (UP_ADDRESS_WIDTH)
+      .MM_IF_TYPE(1)
     ) i_axi_spi_engine (
       .up_clk (up_clk),
       .up_rstn (up_rstn),
@@ -432,7 +430,7 @@ module axi_ad7616 #(
   // up bus interface
 
   up_axi #(
-    .ADDRESS_WIDTH (UP_ADDRESS_WIDTH)
+    .AXI_ADDRESS_WIDTH (16)
   ) i_up_axi (
     .up_rstn (up_rstn),
     .up_clk (up_clk),

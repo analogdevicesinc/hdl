@@ -132,7 +132,7 @@ module axi_pulse_gen #(
     .pulse (pulse));
 
   up_axi #(
-    .ADDRESS_WIDTH(14))
+    .AXI_ADDRESS_WIDTH(16))
   i_up_axi (
     .up_rstn (up_rstn),
     .up_clk (up_clk),

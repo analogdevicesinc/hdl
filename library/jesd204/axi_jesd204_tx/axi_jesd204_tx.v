@@ -137,8 +137,7 @@ wire [4:0] up_irq_trigger;
 assign up_irq_trigger[4:0] = 5'b00000;
 
 up_axi #(
-  .AXI_ADDRESS_WIDTH (14),
-  .ADDRESS_WIDTH (12)
+  .AXI_ADDRESS_WIDTH (14)
 ) i_up_axi (
   .up_rstn(~up_reset),
   .up_clk(s_axi_aclk),

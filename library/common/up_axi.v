@@ -37,7 +37,6 @@
 
 module up_axi #(
 
-  parameter   ADDRESS_WIDTH = 14,
   parameter   AXI_ADDRESS_WIDTH = 16) (
 
   // reset and clocks
@@ -75,6 +74,10 @@ module up_axi #(
   output  [(ADDRESS_WIDTH-1):0]     up_raddr,
   input   [31:0]                    up_rdata,
   input                             up_rack);
+
+  // local parameters
+
+  localparam   ADDRESS_WIDTH = AXI_ADDRESS_WIDTH - 2;
 
   // internal registers
 
