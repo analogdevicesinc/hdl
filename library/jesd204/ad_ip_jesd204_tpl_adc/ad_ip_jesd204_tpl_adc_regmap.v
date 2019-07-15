@@ -133,8 +133,7 @@ module ad_ip_jesd204_tpl_adc_regmap #(
   // up bus interface
 
   up_axi #(
-    .AXI_ADDRESS_WIDTH (12),
-    .ADDRESS_WIDTH (10)
+    .AXI_ADDRESS_WIDTH (12)
   ) i_up_axi (
     .up_clk (up_clk),
     .up_rstn (up_rstn),

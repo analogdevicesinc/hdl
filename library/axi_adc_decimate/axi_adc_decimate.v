@@ -148,8 +148,7 @@ module axi_adc_decimate #(
     .up_rack (up_rack));
 
  up_axi #(
-    .AXI_ADDRESS_WIDTH(7),
-    .ADDRESS_WIDTH(5)
+    .AXI_ADDRESS_WIDTH(7)
  ) i_up_axi (
     .up_rstn (up_rstn),
     .up_clk (up_clk),

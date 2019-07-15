@@ -138,8 +138,7 @@ wire up_reset;
 wire up_reset_synchronizer;
 
 up_axi #(
-  .AXI_ADDRESS_WIDTH (14),
-  .ADDRESS_WIDTH (12)
+  .AXI_ADDRESS_WIDTH (14)
 ) i_up_axi (
   .up_rstn(~up_reset),
   .up_clk(s_axi_aclk),

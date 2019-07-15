@@ -123,7 +123,6 @@ module axi_adxcvr #(
     .up_rack (up_rack));
 
   up_axi #(
-    .ADDRESS_WIDTH (10),
     .AXI_ADDRESS_WIDTH (12)
   ) i_axi (
     .up_rstn (up_rstn),

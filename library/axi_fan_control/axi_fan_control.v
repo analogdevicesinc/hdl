@@ -183,7 +183,7 @@ assign up_irq_source_clear = (up_wreq_s == 1'b1 && up_waddr_s == 8'h11) ? up_wda
 assign counter_resetn = (pwm_change_done ) ? (!tacho_edge_det) : ((!pwm_change_done) & (!counter_overflow));
 
 up_axi #(
-  .ADDRESS_WIDTH(8))
+  .AXI_ADDRESS_WIDTH(10))
 i_up_axi (
   .up_rstn (s_axi_aresetn),
   .up_clk (up_clk),

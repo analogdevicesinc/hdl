@@ -1927,7 +1927,7 @@ module axi_adxcvr #(
     .up_rdata (up_rdata),
     .up_rack (up_rack));
 
-  up_axi #(.ADDRESS_WIDTH (10)) i_axi (
+  up_axi #(.AXI_ADDRESS_WIDTH (12)) i_axi (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_axi_awvalid (s_axi_awvalid),
