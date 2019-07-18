@@ -15,32 +15,34 @@ set_module_property VALIDATION_CALLBACK info_param_validate
 
 # files
 
-add_fileset quartus_synth QUARTUS_SYNTH "" "Quartus Synthesis"
-set_fileset_property quartus_synth TOP_LEVEL axi_ad9250
-add_fileset_file ad_rst.v             VERILOG PATH $ad_hdl_dir/library/common/ad_rst.v
-add_fileset_file ad_perfect_shuffle.v VERILOG PATH $ad_hdl_dir/library/common/ad_perfect_shuffle.v
-add_fileset_file ad_pnmon.v           VERILOG PATH $ad_hdl_dir/library/common/ad_pnmon.v
-add_fileset_file ad_datafmt.v         VERILOG PATH $ad_hdl_dir/library/common/ad_datafmt.v
-add_fileset_file up_axi.v             VERILOG PATH $ad_hdl_dir/library/common/up_axi.v
-add_fileset_file up_xfer_cntrl.v      VERILOG PATH $ad_hdl_dir/library/common/up_xfer_cntrl.v
-add_fileset_file up_xfer_status.v     VERILOG PATH $ad_hdl_dir/library/common/up_xfer_status.v
-add_fileset_file up_clock_mon.v       VERILOG PATH $ad_hdl_dir/library/common/up_clock_mon.v
-add_fileset_file up_adc_common.v      VERILOG PATH $ad_hdl_dir/library/common/up_adc_common.v
-add_fileset_file up_adc_channel.v     VERILOG PATH $ad_hdl_dir/library/common/up_adc_channel.v
-add_fileset_file ad_xcvr_rx_if.v      VERILOG PATH $ad_hdl_dir/library/common/ad_xcvr_rx_if.v
+ad_ip_files axi_ad9250 [list \
+  $ad_hdl_dir/library/common/ad_perfect_shuffle.v \
+  $ad_hdl_dir/library/common/ad_rst.v \
+  $ad_hdl_dir/library/common/ad_pnmon.v \
+  $ad_hdl_dir/library/common/up_axi.v \
+  $ad_hdl_dir/library/common/up_xfer_cntrl.v \
+  $ad_hdl_dir/library/common/up_xfer_status.v \
+  $ad_hdl_dir/library/common/up_clock_mon.v \
+  $ad_hdl_dir/library/common/up_adc_common.v \
+  $ad_hdl_dir/library/common/up_adc_channel.v \
+  $ad_hdl_dir/library/common/ad_datafmt.v \
+  $ad_hdl_dir/library/common/ad_xcvr_rx_if.v \
+  \
+  $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc.v \
+  $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_channel.v \
+  $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_core.v \
+  $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_deframer.v \
+  $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_pnmon.v \
+  $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_regmap.v \
+  $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_common/up_tpl_common.v \
+  \
+  axi_ad9250.v \
+  $ad_hdl_dir/library/intel/common/up_xfer_cntrl_constr.sdc \
+  $ad_hdl_dir/library/intel/common/up_xfer_status_constr.sdc \
+  $ad_hdl_dir/library/intel/common/up_clock_mon_constr.sdc \
+  $ad_hdl_dir/library/intel/common/up_rst_constr.sdc \
+]
 
-add_fileset_file ad_ip_jesd204_adc_pnmon.v     VERILOG PATH $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_pnmon.v
-add_fileset_file ad_ip_jesd204_adc_channel.v   VERILOG PATH $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_channel.v
-add_fileset_file ad_ip_jesd204_adc_core.v      VERILOG PATH $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_core.v
-add_fileset_file ad_ip_jesd204_adc_deframer.v  VERILOG PATH $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_deframer.v
-add_fileset_file ad_ip_jesd204_adc_regmap.v    VERILOG PATH $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_regmap.v
-add_fileset_file ad_ip_jesd204_adc.v           VERILOG PATH $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc.v
-
-add_fileset_file axi_ad9250.v         VERILOG PATH axi_ad9250.v TOP_LEVEL_FILE
-add_fileset_file up_xfer_cntrl_constr.sdc   SDC PATH  $ad_hdl_dir/library/intel/common/up_xfer_cntrl_constr.sdc
-add_fileset_file up_xfer_status_constr.sdc  SDC PATH  $ad_hdl_dir/library/intel/common/up_xfer_status_constr.sdc
-add_fileset_file up_clock_mon_constr.sdc    SDC PATH  $ad_hdl_dir/library/intel/common/up_clock_mon_constr.sdc
-add_fileset_file up_rst_constr.sdc          SDC PATH  $ad_hdl_dir/library/intel/common/up_rst_constr.sdc
 
 # parameters
 
