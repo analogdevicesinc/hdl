@@ -41,6 +41,7 @@ module ad_serdes_in #(
   parameter   DDR_OR_SDR_N = 0,
   parameter   SERDES_FACTOR = 8,
   parameter   DATA_WIDTH = 16,
+  parameter   DRP_WIDTH = 5,
   parameter   IODELAY_CTRL = 0,
   parameter   IODELAY_GROUP = "dev_if_delay_group",
   parameter   REFCLK_FREQUENCY = 200) (
@@ -71,8 +72,8 @@ module ad_serdes_in #(
 
   input                           up_clk,
   input   [(DATA_WIDTH-1):0]      up_dld,
-  input   [((DATA_WIDTH*5)-1):0]  up_dwdata,
-  output  [((DATA_WIDTH*5)-1):0]  up_drdata,
+  input   [((DATA_WIDTH*DRP_WIDTH)-1):0]  up_dwdata,
+  output  [((DATA_WIDTH*DRP_WIDTH)-1):0]  up_drdata,
 
   // delay-control interface
 
@@ -150,8 +151,8 @@ module ad_serdes_in #(
         .IDATAIN (data_in_ibuf_s[l_inst]),
         .DATAOUT (data_in_idelay_s[l_inst]),
         .LD (up_dld[l_inst]),
-        .CNTVALUEIN (up_dwdata[((5*l_inst)+4):(5*l_inst)]),
-        .CNTVALUEOUT (up_drdata[((5*l_inst)+4):(5*l_inst)]));
+        .CNTVALUEIN (up_dwdata[DRP_WIDTH*l_inst +: DRP_WIDTH]),
+        .CNTVALUEOUT (up_drdata[DRP_WIDTH*l_inst +: DRP_WIDTH]));
 
       ISERDESE2  #(
         .DATA_RATE (DATA_RATE),
@@ -240,13 +241,13 @@ module ad_serdes_in #(
     )
     i_idelay(
        .CASC_OUT (),                                       // 1-bit output: Cascade delay output to ODELAY input cascade
-       .CNTVALUEOUT(up_drdata[((5*l_inst)+4):(5*l_inst)]), // 9-bit output: Counter value output
+       .CNTVALUEOUT (up_drdata[DRP_WIDTH*l_inst +: DRP_WIDTH]), // 9-bit output: Counter value output
        .DATAOUT (data_in_idelay_s[l_inst]),                // 1-bit output: Delayed data output
        .CASC_IN (1'b0),                                    // 1-bit input: Cascade delay input from slave ODELAY CASCADE_OUT
        .CASC_RETURN (1'b0),                                // 1-bit input: Cascade delay returning from slave ODELAY DATAOUT
        .CE (1'b0),                                         // 1-bit input: Active high enable increment/decrement input
        .CLK (div_clk),                                     // 1-bit input: Clock input
-       .CNTVALUEIN(up_dwdata[((5*l_inst)+4):(5*l_inst)]),   // 9-bit input: Counter value input
+       .CNTVALUEIN (up_dwdata[DRP_WIDTH*l_inst +: DRP_WIDTH]),   // 9-bit input: Counter value input
        .DATAIN (1'b0),                                     // 1-bit input: Data input from the logic
        .EN_VTC (en_vtc),                                   // 1-bit input: Keep delay constant over VT
        .IDATAIN (data_in_ibuf_s[l_inst]),                  // 1-bit input: Data input from the IOBUF
