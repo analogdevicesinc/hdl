@@ -68,22 +68,22 @@ set_property  -dict {PACKAGE_PIN  R26   IOSTANDARD LVCMOS25} [get_ports laser_gp
 set_property  -dict {PACKAGE_PIN  N29   IOSTANDARD LVCMOS25} [get_ports laser_gpio[12]]         ; ## G33  FMC_HPC_LA31_P
 set_property  -dict {PACKAGE_PIN  P29   IOSTANDARD LVCMOS25} [get_ports laser_gpio[13]]         ; ## G34  FMC_HPC_LA31_N
 
-# AFE vref selection
+# TIA channel selection
 
-set_property  -dict {PACKAGE_PIN  AH22  IOSTANDARD LVCMOS25} [get_ports afe_sel[0]]            ; ## afe_sel0_1 C11  FMC_HPC_LA06_N
-set_property  -dict {PACKAGE_PIN  AG24  IOSTANDARD LVCMOS25} [get_ports afe_sel[1]]            ; ## afe_sel1_1 C14  FMC_HPC_LA10_P
-set_property  -dict {PACKAGE_PIN  AG25  IOSTANDARD LVCMOS25} [get_ports afe_sel[2]]            ; ## afe_sel0_2 C15  FMC_HPC_LA10_N
-set_property  -dict {PACKAGE_PIN  AC24  IOSTANDARD LVCMOS25} [get_ports afe_sel[3]]            ; ## afe_sel1_2 C18  FMC_HPC_LA14_P
-set_property  -dict {PACKAGE_PIN  AD24  IOSTANDARD LVCMOS25} [get_ports afe_sel[4]]            ; ## afe_sel0_3 C19  FMC_HPC_LA14_N
-set_property  -dict {PACKAGE_PIN  AH23  IOSTANDARD LVCMOS25} [get_ports afe_sel[5]]            ; ## afe_sel1_3 D11  FMC_HPC_LA05_P
-set_property  -dict {PACKAGE_PIN  AH24  IOSTANDARD LVCMOS25} [get_ports afe_sel[6]]            ; ## afe_sel0_4 D12  FMC_HPC_LA05_N
-set_property  -dict {PACKAGE_PIN  AD21  IOSTANDARD LVCMOS25} [get_ports afe_sel[7]]            ; ## afe_sel1_4 D14  FMC_HPC_LA09_P
+set_property  -dict {PACKAGE_PIN  AH22  IOSTANDARD LVCMOS25} [get_ports tia_chsel[0]]           ; ## afe_sel0_1 C11  FMC_HPC_LA06_N
+set_property  -dict {PACKAGE_PIN  AG24  IOSTANDARD LVCMOS25} [get_ports tia_chsel[1]]           ; ## afe_sel1_1 C14  FMC_HPC_LA10_P
+set_property  -dict {PACKAGE_PIN  AG25  IOSTANDARD LVCMOS25} [get_ports tia_chsel[2]]           ; ## afe_sel0_2 C15  FMC_HPC_LA10_N
+set_property  -dict {PACKAGE_PIN  AC24  IOSTANDARD LVCMOS25} [get_ports tia_chsel[3]]           ; ## afe_sel1_2 C18  FMC_HPC_LA14_P
+set_property  -dict {PACKAGE_PIN  AD24  IOSTANDARD LVCMOS25} [get_ports tia_chsel[4]]           ; ## afe_sel0_3 C19  FMC_HPC_LA14_N
+set_property  -dict {PACKAGE_PIN  AH23  IOSTANDARD LVCMOS25} [get_ports tia_chsel[5]]           ; ## afe_sel1_3 D11  FMC_HPC_LA05_P
+set_property  -dict {PACKAGE_PIN  AH24  IOSTANDARD LVCMOS25} [get_ports tia_chsel[6]]           ; ## afe_sel0_4 D12  FMC_HPC_LA05_N
+set_property  -dict {PACKAGE_PIN  AD21  IOSTANDARD LVCMOS25} [get_ports tia_chsel[7]]           ; ## afe_sel1_4 D14  FMC_HPC_LA09_P
 
 # AFE DAC I2C and control
 
 set_property  -dict {PACKAGE_PIN  AE21  IOSTANDARD LVCMOS25} [get_ports afe_dac_sda]           ; ## D15  FMC_HPC_LA09_N
 set_property  -dict {PACKAGE_PIN  AA22  IOSTANDARD LVCMOS25} [get_ports afe_dac_scl]           ; ## D17  FMC_HPC_LA13_P
-set_property  -dict {PACKAGE_PIN  AA23  IOSTANDARD LVCMOS25} [get_ports afe_dac_clr_n]           ; ## D18  FMC_HPC_LA13_N
+set_property  -dict {PACKAGE_PIN  AA23  IOSTANDARD LVCMOS25} [get_ports afe_dac_clr_n]         ; ## D18  FMC_HPC_LA13_N
 set_property  -dict {PACKAGE_PIN  AF20  IOSTANDARD LVCMOS25} [get_ports afe_dac_load]          ; ## G06  FMC_HPC_LA00_CC_P
 
 # AFE ADC SPI and control

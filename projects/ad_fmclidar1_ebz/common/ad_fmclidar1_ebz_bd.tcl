@@ -21,7 +21,7 @@ create_bd_port -dir I spi_afe_adc_sdi_i
 create_bd_port -dir O laser_driver
 create_bd_port -dir O laser_driver_en_n
 create_bd_port -dir I laser_driver_otw_n
-create_bd_port -dir O -from 1 -to 0 tia_chsel
+create_bd_port -dir O -from 7 -to 0 tia_chsel
 
 # adc peripherals - controlled by PS7/SPI0
 

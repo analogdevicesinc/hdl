@@ -72,7 +72,7 @@ module axi_laser_driver #(
   output                  driver_pulse,
   input                   driver_otw_n,
   output                  driver_dp_reset,
-  output reg  [ 1:0]      tia_chsel,
+  output reg  [ 7:0]      tia_chsel,
 
   // interrupt
 
@@ -116,7 +116,7 @@ module axi_laser_driver #(
   wire    [ 1:0]  auto_seq1_s;
   wire    [ 1:0]  auto_seq2_s;
   wire    [ 1:0]  auto_seq3_s;
-  wire    [ 1:0]  manual_select_s;
+  wire    [ 7:0]  manual_select_s;
 
   // local parameters
 
@@ -247,16 +247,16 @@ module axi_laser_driver #(
 
   always @(posedge clk) begin
     if (sequence_en_s == 1'b0) begin
-      tia_chsel <= 2'b0;
+      tia_chsel <= 8'h00;
     end else begin
       if (pulse_counter_s == sequence_offset_s) begin
         if (auto_sequence_s) begin
           case (sequence_counter)
-            2'b00   : tia_chsel <= auto_seq0_s;
-            2'b01   : tia_chsel <= auto_seq1_s;
-            2'b10   : tia_chsel <= auto_seq2_s;
-            2'b11   : tia_chsel <= auto_seq3_s;
-            default : tia_chsel <= 2'b00;
+            2'b00   : tia_chsel <= {auto_seq0_s, auto_seq0_s, auto_seq0_s, auto_seq0_s};
+            2'b01   : tia_chsel <= {auto_seq1_s, auto_seq1_s, auto_seq1_s, auto_seq1_s};
+            2'b10   : tia_chsel <= {auto_seq2_s, auto_seq2_s, auto_seq2_s, auto_seq2_s};
+            2'b11   : tia_chsel <= {auto_seq3_s, auto_seq3_s, auto_seq3_s, auto_seq3_s};
+            default : tia_chsel <= 8'h00;
           endcase
         end else begin
           tia_chsel <= manual_select_s;
