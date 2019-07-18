@@ -49,7 +49,7 @@ module axi_pulse_gen_regmap #(
 
   // control and status signals
 
-  output                  clk,
+  output                  clk_out,
   output                  pulse_gen_resetn,
   output      [31:0]      pulse_width,
   output      [31:0]      pulse_period,
@@ -131,11 +131,11 @@ module axi_pulse_gen_regmap #(
   generate
   if (ASYNC_CLK_EN) begin : counter_external_clock
 
-    assign clk = ext_clk;
+    assign clk_out = ext_clk;
 
     ad_rst i_d_rst_reg (
       .rst_async (up_reset),
-      .clk (clk),
+      .clk (clk_out),
       .rstn (pulse_gen_resetn),
       .rst ());
 
@@ -145,7 +145,7 @@ module axi_pulse_gen_regmap #(
     i_pulse_period_sync (
       .in_clk (up_clk),
       .in_data (up_pulse_period),
-      .out_clk (clk),
+      .out_clk (clk_out),
       .out_data (pulse_period));
 
     sync_data #(
@@ -154,7 +154,7 @@ module axi_pulse_gen_regmap #(
     i_pulse_width_sync (
       .in_clk (up_clk),
       .in_data (up_pulse_width),
-      .out_clk (clk),
+      .out_clk (clk_out),
       .out_data (pulse_width));
 
     sync_event #(
@@ -163,12 +163,12 @@ module axi_pulse_gen_regmap #(
     i_load_config_sync (
       .in_clk (up_clk),
       .in_event (up_load_config),
-      .out_clk (clk),
+      .out_clk (clk_out),
       .out_event (load_config));
 
   end else begin : counter_sys_clock        // counter is running on system clk
 
-    assign clk = up_clk;
+    assign clk_out = up_clk;
     assign pulse_gen_resetn = ~up_reset;
     assign pulse_period = up_pulse_period;
     assign pulse_width = up_pulse_width;
