@@ -138,7 +138,7 @@ module system_top (
 
   // Vref selects for AFE board
 
-  output      [ 7:0]      afe_sel
+  output      [ 7:0]      tia_chsel
 
 );
 
@@ -152,7 +152,6 @@ module system_top (
   wire            rx_sysref;
   wire            rx_device_clk;
   wire            laser_driver;
-  wire    [ 1:0]  tia_chsel_s;
 
   // instantiations
 
@@ -217,13 +216,6 @@ module system_top (
     .dio_o (gpio_i[14:0]),
     .dio_p (gpio_bd));
 
-  // TIA multiplexer selection bits
-
-  assign afe_sel[1:0] = tia_chsel_s;
-  assign afe_sel[3:2] = tia_chsel_s;
-  assign afe_sel[5:4] = tia_chsel_s;
-  assign afe_sel[7:6] = tia_chsel_s;
-
   // block design instance
 
   system_wrapper i_system_wrapper (
@@ -274,7 +266,7 @@ module system_top (
     .laser_driver (laser_driver),
     .laser_driver_en_n (laser_driver_en_n),
     .laser_driver_otw_n (laser_driver_otw_n),
-    .tia_chsel (tia_chsel_s),
+    .tia_chsel (tia_chsel),
     .iic_dac_scl_io (afe_dac_scl),
     .iic_dac_sda_io (afe_dac_sda),
     .spi0_clk_i (spi_adc_clk),

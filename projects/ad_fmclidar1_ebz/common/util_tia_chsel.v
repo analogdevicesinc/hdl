@@ -44,7 +44,7 @@ module util_tia_chsel #(
   input                        adc_tia_chsel_en,
   output      [DATA_WIDTH-1:0] adc_data_tia_chsel,
 
-  input       [ 1:0]           tia_chsel);
+  input       [ 7:0]           tia_chsel);
 
   (* keep = "TRUE" *)reg         [DATA_WIDTH-1:0] adc_data_tia_chsel_int;
 
@@ -53,7 +53,7 @@ module util_tia_chsel #(
     for (i=0; i<DATA_WIDTH/16; i=i+1) begin
       always @(posedge clk) begin
         if (adc_tia_chsel_en)
-          adc_data_tia_chsel_int[i*16+:16] <= {14'h0, tia_chsel};
+          adc_data_tia_chsel_int[i*16+:16] <= {8'h0, tia_chsel};
       end
     end
   endgenerate
