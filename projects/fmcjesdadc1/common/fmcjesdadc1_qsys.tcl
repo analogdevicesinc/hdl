@@ -50,21 +50,23 @@ set_interface_property rx_ip_data_1 EXPORT_OF axi_ad9250_core_1.if_rx_data
 
 # ad9250-pack
 
-add_instance util_ad9250_cpack_0 util_cpack
-set_instance_parameter_value util_ad9250_cpack_0 {CHANNEL_DATA_WIDTH} {32}
+add_instance util_ad9250_cpack_0 util_cpack2
+set_instance_parameter_value util_ad9250_cpack_0 {SAMPLE_DATA_WIDTH} {32}
 set_instance_parameter_value util_ad9250_cpack_0 {NUM_OF_CHANNELS} {2}
+set_instance_parameter_value util_ad9250_cpack_0 {SAMPLES_PER_CHANNEL} {1}
 
-add_connection sys_clk.clk_reset util_ad9250_cpack_0.if_adc_rst
-add_connection ad9250_jesd204.link_clk util_ad9250_cpack_0.if_adc_clk
+add_connection sys_clk.clk_reset util_ad9250_cpack_0.reset
+add_connection ad9250_jesd204.link_clk util_ad9250_cpack_0.clk
 add_connection axi_ad9250_core_0.adc_ch_0 util_ad9250_cpack_0.adc_ch_0
 add_connection axi_ad9250_core_0.adc_ch_1 util_ad9250_cpack_0.adc_ch_1
 
-add_instance util_ad9250_cpack_1 util_cpack
-set_instance_parameter_value util_ad9250_cpack_1 {CHANNEL_DATA_WIDTH} {32}
+add_instance util_ad9250_cpack_1 util_cpack2
+set_instance_parameter_value util_ad9250_cpack_1 {SAMPLE_DATA_WIDTH} {32}
 set_instance_parameter_value util_ad9250_cpack_1 {NUM_OF_CHANNELS} {2}
+set_instance_parameter_value util_ad9250_cpack_1 {SAMPLES_PER_CHANNEL} {1}
 
-add_connection sys_clk.clk_reset util_ad9250_cpack_1.if_adc_rst
-add_connection ad9250_jesd204.link_clk util_ad9250_cpack_1.if_adc_clk
+add_connection sys_clk.clk_reset util_ad9250_cpack_1.reset
+add_connection ad9250_jesd204.link_clk util_ad9250_cpack_1.clk
 add_connection axi_ad9250_core_1.adc_ch_0 util_ad9250_cpack_1.adc_ch_0
 add_connection axi_ad9250_core_1.adc_ch_1 util_ad9250_cpack_1.adc_ch_1
 
@@ -81,10 +83,10 @@ set_instance_parameter_value axi_ad9250_dma_0 {DMA_DATA_WIDTH_DEST} {64}
 set_instance_parameter_value axi_ad9250_dma_0 {CYCLIC} {0}
 set_instance_parameter_value axi_ad9250_dma_0 {DMA_2D_TRANSFER} {0}
 
-add_connection ad9250_jesd204.link_clk axi_ad9250_dma_0.if_fifo_wr_clk
-add_connection util_ad9250_cpack_0.if_adc_valid axi_ad9250_dma_0.if_fifo_wr_en
-add_connection util_ad9250_cpack_0.if_adc_sync axi_ad9250_dma_0.if_fifo_wr_sync
-add_connection util_ad9250_cpack_0.if_adc_data axi_ad9250_dma_0.if_fifo_wr_din
+add_connection ad9250_jesd204.link_clk  axi_ad9250_dma_0.if_fifo_wr_clk
+add_connection util_ad9250_cpack_0.if_packed_fifo_wr_en  axi_ad9250_dma_0.if_fifo_wr_en
+add_connection util_ad9250_cpack_0.if_packed_fifo_wr_sync  axi_ad9250_dma_0.if_fifo_wr_sync
+add_connection util_ad9250_cpack_0.if_packed_fifo_wr_data  axi_ad9250_dma_0.if_fifo_wr_din
 add_connection axi_ad9250_dma_0.if_fifo_wr_overflow axi_ad9250_core_0.if_adc_dovf
 add_connection sys_clk.clk_reset axi_ad9250_dma_0.s_axi_reset
 add_connection sys_clk.clk axi_ad9250_dma_0.s_axi_clock
@@ -101,10 +103,10 @@ set_instance_parameter_value axi_ad9250_dma_1 {DMA_DATA_WIDTH_DEST} {64}
 set_instance_parameter_value axi_ad9250_dma_1 {CYCLIC} {0}
 set_instance_parameter_value axi_ad9250_dma_1 {DMA_2D_TRANSFER} {0}
 
-add_connection ad9250_jesd204.link_clk axi_ad9250_dma_1.if_fifo_wr_clk
-add_connection util_ad9250_cpack_1.if_adc_valid axi_ad9250_dma_1.if_fifo_wr_en
-add_connection util_ad9250_cpack_1.if_adc_sync axi_ad9250_dma_1.if_fifo_wr_sync
-add_connection util_ad9250_cpack_1.if_adc_data axi_ad9250_dma_1.if_fifo_wr_din
+add_connection ad9250_jesd204.link_clk  axi_ad9250_dma_1.if_fifo_wr_clk
+add_connection util_ad9250_cpack_1.if_packed_fifo_wr_en  axi_ad9250_dma_1.if_fifo_wr_en
+add_connection util_ad9250_cpack_1.if_packed_fifo_wr_sync  axi_ad9250_dma_1.if_fifo_wr_sync
+add_connection util_ad9250_cpack_1.if_packed_fifo_wr_data  axi_ad9250_dma_1.if_fifo_wr_din
 add_connection axi_ad9250_dma_1.if_fifo_wr_overflow axi_ad9250_core_1.if_adc_dovf
 add_connection sys_clk.clk_reset axi_ad9250_dma_1.s_axi_reset
 add_connection sys_clk.clk axi_ad9250_dma_1.s_axi_clock

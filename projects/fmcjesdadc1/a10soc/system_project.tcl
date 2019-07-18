@@ -1,8 +1,8 @@
 
 source ../../scripts/adi_env.tcl
-source ../../scripts/adi_project_alt.tcl
+source ../../scripts/adi_project_intel.tcl
 
-adi_project_altera fmcjesdadc1_a10soc
+adi_project fmcjesdadc1_a10soc
 
 source $ad_hdl_dir/projects/common/a10soc/a10soc_system_assign.tcl
 
@@ -36,6 +36,11 @@ set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to rx_d
 set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to rx_data[1]
 set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to rx_data[2]
 set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to rx_data[3]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to rx_sync
+set_instance_assignment -name IO_STANDARD "1.8 V" -to rx_sysref
+set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_csn
+set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_clk
+set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_sdio
 
 execute_flow -compile
 
