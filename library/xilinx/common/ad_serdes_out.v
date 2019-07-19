@@ -51,7 +51,7 @@ module ad_serdes_out #(
   input                       loaden,
 
   // data interface
-
+  input                       data_oe,
   input   [(DATA_WIDTH-1):0]  data_s0,   // 1st bit to be transmitted
   input   [(DATA_WIDTH-1):0]  data_s1,
   input   [(DATA_WIDTH-1):0]  data_s2,
@@ -80,9 +80,12 @@ module ad_serdes_out #(
   wire    [(DATA_WIDTH-1):0]  data_out_s;
   wire    [(DATA_WIDTH-1):0]  serdes_shift1_s;
   wire    [(DATA_WIDTH-1):0]  serdes_shift2_s;
+  wire    [(DATA_WIDTH-1):0]  data_t;
+  wire    buffer_disable;
 
   assign data_out_se =  data_out_s;
 
+  assign buffer_disable = ~data_oe;
   // instantiations
 
   genvar l_inst;
@@ -105,10 +108,10 @@ module ad_serdes_out #(
         .D6 (data_s5[l_inst]),
         .D7 (data_s6[l_inst]),
         .D8 (data_s7[l_inst]),
-        .T1 (1'b0),
-        .T2 (1'b0),
-        .T3 (1'b0),
-        .T4 (1'b0),
+        .T1 (buffer_disable),
+        .T2 (buffer_disable),
+        .T3 (buffer_disable),
+        .T4 (buffer_disable),
         .SHIFTIN1 (1'b0),
         .SHIFTIN2 (1'b0),
         .SHIFTOUT1 (),
@@ -117,13 +120,13 @@ module ad_serdes_out #(
         .CLK (clk),
         .CLKDIV (div_clk),
         .OQ (data_out_s[l_inst]),
-        .TQ (),
+        .TQ (data_t[l_inst]),
         .OFB (),
         .TFB (),
         .TBYTEIN (1'b0),
         .TBYTEOUT (),
-        .TCE (1'b0),
-        .RST (rst));
+        .TCE (1'b1),
+        .RST (rst & data_oe));
     end
 
     if (FPGA_TECHNOLOGY == ULTRASCALE || FPGA_TECHNOLOGY == ULTRASCALE_PLUS) begin
@@ -139,15 +142,16 @@ module ad_serdes_out #(
              data_s2[l_inst],
              data_s1[l_inst],
              data_s0[l_inst]}),
-        .T (4'b0),
+        .T (buffer_disable),
         .CLK (clk),
         .CLKDIV (div_clk),
         .OQ (data_out_s[l_inst]),
-        .T_OUT (),
-        .RST (rst));
+        .T_OUT (data_t[l_inst]),
+        .RST (rst & data_oe));
     end
 
-    OBUFDS i_obuf (
+    OBUFTDS i_obuf (
+      .T (data_t[l_inst]),
       .I (data_out_s[l_inst]),
       .O (data_out_p[l_inst]),
       .OB (data_out_n[l_inst]));
