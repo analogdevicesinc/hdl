@@ -48,7 +48,7 @@ set p_prcfg_status ""
 proc adi_project {project_name {mode 0} {parameter_list {}} } {
 
   global ad_hdl_dir
-  global ad_phdl_dir
+  global ad_ghdl_dir
   global p_board
   global p_device
   global sys_zynq
@@ -137,8 +137,8 @@ proc adi_project {project_name {mode 0} {parameter_list {}} } {
   }
 
   set lib_dirs $ad_hdl_dir/library
-  if {$ad_hdl_dir ne $ad_phdl_dir} {
-    lappend lib_dirs $ad_phdl_dir/library
+  if {$ad_hdl_dir ne $ad_ghdl_dir} {
+    lappend lib_dirs $ad_ghdl_dir/library
   }
 
   # Set a common IP cache for all projects
