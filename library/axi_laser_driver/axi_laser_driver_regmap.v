@@ -86,7 +86,7 @@ module axi_laser_driver_regmap #(
 
   reg             up_sequence_en = 1'b0;
   reg             up_auto_sequence = 1'b1;
-  reg   [31:0]    up_sequence_offset = 32'b1;
+  reg   [31:0]    up_sequence_offset = 32'b0;
   reg   [ 1:0]    up_auto_seq0 = 2'b00;
   reg   [ 1:0]    up_auto_seq1 = 2'b01;
   reg   [ 1:0]    up_auto_seq2 = 2'b10;
@@ -113,11 +113,11 @@ module axi_laser_driver_regmap #(
   always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_wack <= 1'b0;
-      up_driver_en_n <= 1'b1;   // by default laser is disabled
+      up_driver_en_n <= 1'b1;        // by default laser is disabled
       up_irq_mask <= 3'b111;
       up_sequence_en <= 1'b0;
       up_auto_sequence <= 1'b1;
-      up_sequence_offset <= 32'b0;
+      up_sequence_offset <= 32'h19;  // 25*4ns is the default offset for TIA selection
       up_auto_seq0 <= 2'b00;
       up_auto_seq1 <= 2'b01;
       up_auto_seq2 <= 2'b10;
