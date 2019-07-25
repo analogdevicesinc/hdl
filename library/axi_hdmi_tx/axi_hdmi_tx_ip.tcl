@@ -29,7 +29,7 @@ adi_ip_files axi_hdmi_tx [list \
 adi_ip_properties axi_hdmi_tx
 
 adi_init_bd_tcl
-adi_ip_bd axi_ad9122 "bd/bd.tcl"
+adi_ip_bd axi_hdmi_tx "bd/bd.tcl"
 
 set_property driver_value 0 [ipx::get_ports *hsync* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *vsync* -of_objects [ipx::current_core]]
