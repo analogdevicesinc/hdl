@@ -95,7 +95,12 @@ set_property  -dict {PACKAGE_PIN  AF23  IOSTANDARD LVCMOS25} [get_ports afe_adc_
 
 # clocks
 
-create_clock -name rx_device_clk -period  4.00 [get_ports rx_device_clk_p]
-create_clock -name rx_ref_clk   -period  4.00 [get_ports rx_ref_clk_p]
-create_clock -name rx_div_clk   -period  4.00 [get_pins i_system_wrapper/system_i/util_ad9694_xcvr/inst/i_xch_0/i_gtxe2_channel/RXOUTCLK]
+create_clock -period 4.000 -name rx_device_clk [get_ports rx_device_clk_p]
+create_clock -period 4.000 -name rx_ref_clk [get_ports rx_ref_clk_p]
+
+# SYSREF is in phase with the device clock
+
+set_input_delay -clock [get_clocks rx_device_clk] -rise -max 0.200 [get_ports -regexp -filter { NAME =~  ".*sysref.*" && DIRECTION == "IN" }]
+set_input_delay -clock [get_clocks rx_device_clk] -rise -min -0.200 [get_ports -regexp -filter { NAME =~  ".*sysref.*" && DIRECTION == "IN" }]
+set_property IOBDELAY NONE [get_cells -hierarchical -regexp -filter { NAME =~ ".*sysref_r_reg"}]
 
