@@ -67,16 +67,16 @@ set_max_delay -quiet -datapath_only \
 	[get_property -min PERIOD $src_clk]
 
 set_max_delay -quiet -datapath_only \
-	-from $dest_clk \
+	-from $req_clk \
 	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
 		-filter {NAME =~ *i_rewind_req_fifo/i_raddr_sync* && IS_SEQUENTIAL}] \
-	[get_property -min PERIOD $dest_clk]
+	[get_property -min PERIOD $req_clk]
 
 set_max_delay -quiet -datapath_only \
 	-from [get_cells -quiet -hier *cdc_sync_fifo_ram_reg* \
 		-filter {NAME =~ *i_rewind_req_fifo* && IS_SEQUENTIAL}] \
-	-to $dest_clk \
-	[get_property -min PERIOD $dest_clk]
+	-to $req_clk \
+	[get_property -min PERIOD $req_clk]
 
 set_false_path -quiet \
 	-from $req_clk \
