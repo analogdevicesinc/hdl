@@ -108,9 +108,9 @@ module axi_dacfifo_rd #(
   reg                                   axi_data_req = 1'b0;
   reg     [ 4:0]                        axi_read_state = 5'b0;
   reg     [(AXI_MEM_ADDRESS_WIDTH-1):0] axi_mem_waddr = 'd0;
-  reg     [(AXI_MEM_ADDRESS_WIDTH-1):0] axi_mem_laddr = 'd0;
+ (* dont_touch = "true" *) reg     [(AXI_MEM_ADDRESS_WIDTH-1):0] axi_mem_laddr = 'd0;
   reg     [(DAC_MEM_ADDRESS_WIDTH-1):0] axi_mem_waddr_g = 'd0;
-  reg                                   axi_mem_laddr_toggle = 1'b0;
+ (* dont_touch = "true" *) reg                                  axi_mem_laddr_toggle = 1'b0;
   reg     [(DAC_MEM_ADDRESS_WIDTH-1):0] axi_mem_raddr = 'd0;
   reg     [(DAC_MEM_ADDRESS_WIDTH-1):0] axi_mem_raddr_m1 = 'd0;
   reg     [(DAC_MEM_ADDRESS_WIDTH-1):0] axi_mem_raddr_m2 = 'd0;

@@ -57,7 +57,7 @@ module axi_dacfifo_wr #(
 
   input                   dma_xfer_req,
   input                   dma_xfer_last,
-  output  reg [ 3:0]      dma_last_beats,
+ (* dont_touch = "true" *) output  reg [ 3:0]      dma_last_beats,
 
   // last address for read side
 
