@@ -47,22 +47,30 @@ module axi_dac_interpolate_filter #(
   input                 dac_valid,
 
   output  reg [15:0]    dac_int_data,
-  output  reg           dac_int_valid,
+  output                dac_int_valid,
 
   input       [ 2:0]    filter_mask,
   input       [31:0]    interpolation_ratio,
   input       [15:0]    dac_correction_coefficient,
   input                 dac_correction_enable,
-  input                 dma_transfer_suspend
+  input                 dma_transfer_suspend,
+  input                 start_sync_channels,
+  input                 dma_valid,
+  input                 dma_valid_adjacent
 );
 
   // internal signals
 
+  reg               dac_int_valid_d;
   reg               dac_filt_int_valid;
   reg     [15:0]    interp_rate_cic;
   reg     [ 2:0]    filter_mask_d1;
   reg               cic_change_rate;
   reg     [31:0]    interpolation_counter;
+
+  reg               transmit_valid = 1'b1;
+  reg               dma_data_valid = 1'b0;
+  reg               dma_data_valid_adjacent = 1'b0;
 
   reg               filter_enable = 1'b0;
 
@@ -70,6 +78,7 @@ module axi_dac_interpolate_filter #(
   wire    [15:0]    dac_data_corrected;
   wire              dac_fir_valid;
   wire    [35:0]    dac_fir_data;
+
 
   wire              dac_cic_valid;
   wire    [109:0]   dac_cic_data;
@@ -115,23 +124,49 @@ module axi_dac_interpolate_filter #(
     end
   end
 
+  // - for start synchronized, if the channels run until the DMA has data valid
+  // then if the case wait for second channel DMA to have valid data
+  // - for non synchronized channels the start of transmission gets the 2 data
+  // paths randomly ready. Only valid for the case of loading data buffers
+
   always @(posedge dac_clk) begin
     if (interpolation_ratio == 0 || interpolation_ratio == 1) begin
-      dac_int_valid <= dac_filt_int_valid;
+      dac_int_valid_d <= dac_filt_int_valid;
     end else begin
-      if (dac_filt_int_valid == 1'b1) begin
-        if (interpolation_counter  < interpolation_ratio) begin
+      if (dac_filt_int_valid &
+          (!start_sync_channels | !dma_data_valid |
+           (dma_data_valid & dma_data_valid_adjacent))) begin
+        if (interpolation_counter < interpolation_ratio) begin
           interpolation_counter <= interpolation_counter + 1;
-          dac_int_valid <= 1'b0;
+          dac_int_valid_d <= 1'b0;
         end else begin
           interpolation_counter <= 0;
-          dac_int_valid <= 1'b1;
+          dac_int_valid_d <= 1'b1;
         end
       end else begin
-        dac_int_valid <= 1'b0;
+        dac_int_valid_d <= 1'b0;
+        interpolation_counter <= 0;
       end
     end
   end
+
+  always @(posedge dac_clk) begin
+    if (dma_transfer_suspend) begin
+      dma_data_valid <= 1'b0;
+      dma_data_valid_adjacent <=  1'b0;
+    end else begin
+      dma_data_valid <= dma_valid ? 1'b1 : dma_data_valid;
+      dma_data_valid_adjacent <= dma_valid_adjacent ? 1'b1 : dma_data_valid_adjacent;
+    end
+
+    if (start_sync_channels == 1'b0) begin
+      transmit_valid <= 1'b1;
+    end else begin
+      transmit_valid <= (dma_data_valid & dma_data_valid_adjacent) ? 1'b1 : ~dma_data_valid;
+    end
+  end
+
+  assign dac_int_valid = transmit_valid ? dac_int_valid_d : 1'b0;
 
   always @(posedge dac_clk) begin
     case (filter_mask)
