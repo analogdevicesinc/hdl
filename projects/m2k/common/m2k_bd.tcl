@@ -249,8 +249,10 @@ ad_connect ad9963_dac_dmac_b/fifo_rd_clk axi_ad9963/dac_clk
 
 ad_connect axi_dac_interpolate/dac_data_a         ad9963_dac_dmac_a/fifo_rd_dout
 ad_connect axi_dac_interpolate/dac_int_valid_a    ad9963_dac_dmac_a/fifo_rd_en
+ad_connect ad9963_dac_dmac_a/fifo_rd_valid        axi_dac_interpolate/dma_valid_a
 ad_connect axi_dac_interpolate/dac_data_b         ad9963_dac_dmac_b/fifo_rd_dout
 ad_connect axi_dac_interpolate/dac_int_valid_b    ad9963_dac_dmac_b/fifo_rd_en
+ad_connect ad9963_dac_dmac_b/fifo_rd_valid        axi_dac_interpolate/dma_valid_b
 
 ad_connect /axi_ad9963/tx_data    txd
 ad_connect /axi_ad9963/tx_iq      txiq
@@ -349,4 +351,3 @@ ad_cpu_interrupt ps-12 mb-13 pattern_generator_dmac/irq
 ad_cpu_interrupt ps-10 mb-14 ad9963_adc_dmac/irq
 ad_cpu_interrupt ps-9 mb-15 ad9963_dac_dmac_a/irq
 ad_cpu_interrupt ps-8 mb-16 ad9963_dac_dmac_b/irq
-
