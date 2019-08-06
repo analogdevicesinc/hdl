@@ -39,7 +39,10 @@ module axi_xcvrlb #(
 
   // parameters
 
-  parameter   NUM_OF_LANES = 1) (
+  parameter   CPLL_FBDIV = 1,
+  parameter   CPLL_FBDIV_4_5 = 5,
+  parameter   NUM_OF_LANES = 1,
+  parameter   XCVR_TYPE = 2) (
 
   // transceiver interface
 
@@ -79,6 +82,7 @@ module axi_xcvrlb #(
   reg     [31:0]                up_scratch = 'd0;
   reg                           up_resetn = 'd0;
   reg     [31:0]                up_status = 'd0;
+  reg     [31:0]                up_pll_locked = 'd0;
   reg                           up_rack = 'd0;
   reg     [31:0]                up_rdata = 'd0;
 
@@ -92,6 +96,7 @@ module axi_xcvrlb #(
   wire                          up_rreq_s;
   wire    [ 7:0]                up_raddr_s;
   wire    [31:0]                up_status_s;
+  wire    [31:0]                up_pll_locked_s;
 
   // parameters
 
@@ -102,6 +107,7 @@ module axi_xcvrlb #(
   assign up_rstn = s_axi_aresetn;
   assign up_clk = s_axi_aclk;
   assign up_status_s[31:NUM_OF_LANES] = 'd0;
+  assign up_pll_locked_s[31:NUM_OF_LANES] = 'd0;
 
   // register access
 
@@ -111,6 +117,7 @@ module axi_xcvrlb #(
       up_scratch <= 'd0;
       up_resetn <= 'd0;
       up_status <= 'd0;
+      up_pll_locked <= 'd0;
     end else begin
       up_wack <= up_wreq_s;
       if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h02)) begin
@@ -123,6 +130,11 @@ module axi_xcvrlb #(
         up_status <= up_status_s | (up_status & ~up_wdata_s);
       end else begin
         up_status <= up_status_s | up_status;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h06)) begin
+        up_pll_locked <= up_pll_locked_s | (up_pll_locked & ~up_wdata_s);
+      end else begin
+        up_pll_locked <= up_pll_locked_s | up_pll_locked;
       end
     end
   end
@@ -139,6 +151,7 @@ module axi_xcvrlb #(
           10'h002: up_rdata <= up_scratch;
           10'h004: up_rdata <= {31'd0, up_resetn};
           10'h005: up_rdata <= up_status;
+          10'h006: up_rdata <= up_pll_locked;
           default: up_rdata <= 32'd0;
         endcase
       end else begin
@@ -152,7 +165,11 @@ module axi_xcvrlb #(
   genvar n;
   generate
   for (n = 0; n < NUM_OF_LANES; n = n + 1) begin: g_lanes
-  axi_xcvrlb_1 i_xcvrlb_1 (
+  axi_xcvrlb_1 #(
+    .XCVR_TYPE (XCVR_TYPE),
+    .CPLL_FBDIV_4_5(CPLL_FBDIV_4_5),
+    .CPLL_FBDIV(CPLL_FBDIV))
+  i_xcvrlb_1 (
     .ref_clk (ref_clk),
     .rx_p (rx_p[n]),
     .rx_n (rx_n[n]),
@@ -161,7 +178,9 @@ module axi_xcvrlb #(
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_resetn (up_resetn),
-    .up_status (up_status_s[n]));
+    .up_status (up_status_s[n]),
+    .up_pll_locked (up_pll_locked_s[n])
+    );
   end
   endgenerate
 

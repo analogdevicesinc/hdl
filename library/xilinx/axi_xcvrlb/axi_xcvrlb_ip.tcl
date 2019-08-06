@@ -14,6 +14,9 @@ adi_ip_files axi_xcvrlb [list \
 
 adi_ip_properties_lite axi_xcvrlb
 
+adi_init_bd_tcl
+adi_ip_bd axi_xcvrlb "bd/bd.tcl"
+
 ipx::remove_all_bus_interface [ipx::current_core]
 
 set_property driver_value 0 [ipx::get_ports -filter "direction==in" -of_objects [ipx::current_core]]
@@ -54,6 +57,8 @@ set_property slave_memory_map_ref {s_axi} [ipx::get_bus_interfaces s_axi -of_obj
 ipx::add_address_block {axi_lite} [ipx::get_memory_maps s_axi -of_objects [ipx::current_core]]
 set_property range {1024} [ipx::get_address_blocks axi_lite \
   -of_objects [ipx::get_memory_maps s_axi -of_objects [ipx::current_core]]]
+
+adi_add_auto_fpga_spec_params
 
 ipx::save_core [ipx::current_core]
 
