@@ -315,7 +315,7 @@ proc jesd204_compose {} {
     set device_type 0
   }
 
-  add_instance sys_clock clock_source $version
+  add_instance sys_clock clock_source 19.2
   set_instance_parameter_value sys_clock {clockFrequency} [expr $sysclk_frequency*1000000]
   set_instance_parameter_value sys_clock {resetSynchronousEdges} {deassert}
   add_interface sys_clk clock sink
@@ -352,7 +352,7 @@ proc jesd204_compose {} {
   ## Stratix 10
 
     send_message info "Instantiate a fpll_s10_htile for link_pll."
-    add_instance link_pll altera_xcvr_fpll_s10_htile $version
+    add_instance link_pll altera_xcvr_fpll_s10_htile 19.1.1
     ## Primary Use is Core mode
     set_instance_parameter_value link_pll {set_primary_use} 0
     ## Basic Mode

@@ -49,12 +49,12 @@ proc p_intel_mem_asym {} {
   add_interface mem_i_rdaddress conduit end
   add_interface mem_o_dataout   conduit end
 
-  set_interface_property mem_i_wrclock   EXPORT_OF alt_mem.wrclock
-  set_interface_property mem_i_wren      EXPORT_OF alt_mem.wren
-  set_interface_property mem_i_wraddress EXPORT_OF alt_mem.wraddress
-  set_interface_property mem_i_datain    EXPORT_OF alt_mem.data
-  set_interface_property mem_i_rdclock   EXPORT_OF alt_mem.rdclock
-  set_interface_property mem_i_rdaddress EXPORT_OF alt_mem.rdaddress
-  set_interface_property mem_o_dataout   EXPORT_OF alt_mem.q
+  set_interface_property mem_i_wrclock   EXPORT_OF intel_mem.wrclock
+  set_interface_property mem_i_wren      EXPORT_OF intel_mem.wren
+  set_interface_property mem_i_wraddress EXPORT_OF intel_mem.wraddress
+  set_interface_property mem_i_datain    EXPORT_OF intel_mem.data
+  set_interface_property mem_i_rdclock   EXPORT_OF intel_mem.rdclock
+  set_interface_property mem_i_rdaddress EXPORT_OF intel_mem.rdaddress
+  set_interface_property mem_o_dataout   EXPORT_OF intel_mem.q
 }
 
