@@ -286,7 +286,7 @@ module util_dacfifo #(
     if (dac_rst_int_s == 1'b1) begin
       dac_dunf <= 1'b0;
     end else begin
-      dac_dunf <= (dac_bypass == 1'b1) ? (dac_valid & dac_xfer_req & ~dac_mem_ren_s) : 1'b0;
+      dac_dunf <= (dac_bypass == 1'b0) ? (dac_valid & dac_xfer_req & ~dac_mem_ren_s) : dac_dunf_bypass_s;
     end
   end
 
