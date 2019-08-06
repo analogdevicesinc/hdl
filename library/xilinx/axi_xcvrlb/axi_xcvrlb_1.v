@@ -35,7 +35,14 @@
 
 `timescale 1ns/1ps
 
-module axi_xcvrlb_1 (
+module axi_xcvrlb_1 #(
+
+  // parameters
+
+  parameter   CPLL_FBDIV = 1,
+  parameter   CPLL_FBDIV_4_5 = 5,
+  parameter   XCVR_TYPE = 2
+  )(
 
   // transceiver interface
 
@@ -50,7 +57,8 @@ module axi_xcvrlb_1 (
   input           up_rstn,
   input           up_clk,
   input           up_resetn,
-  output          up_status);
+  output          up_status,
+  output          up_pll_locked);
 
   // internal registers
 
@@ -189,6 +197,7 @@ module axi_xcvrlb_1 (
   assign up_rst_s = up_rst_cnt[3];
   assign up_user_ready_s = up_user_ready_cnt[6];
   assign up_pll_locked_s = up_rx_pll_locked_s & up_tx_pll_locked_s;
+  assign up_pll_locked = up_pll_locked_s;
   assign up_rst_done_s = up_rx_rst_done_s & up_tx_rst_done_s;
 
   always @(negedge up_rstn or posedge up_clk) begin
@@ -241,9 +250,9 @@ module axi_xcvrlb_1 (
     .d_data_status ({rx_pn_err_s, rx_pn_oos_s}));
 
   util_adxcvr_xch #(
-    .XCVR_TYPE (2),
-    .CPLL_FBDIV (2),
-    .CPLL_FBDIV_4_5 (5),
+    .XCVR_TYPE (XCVR_TYPE),
+    .CPLL_FBDIV (CPLL_FBDIV),
+    .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
     .TX_OUT_DIV (1),
     .TX_CLK25_DIV (10),
     .RX_OUT_DIV (1),
