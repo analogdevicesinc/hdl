@@ -60,7 +60,7 @@ module axi_adc_trigger #(
   output      [15:0]    data_b_trig,
   output                data_valid_a_trig,
   output                data_valid_b_trig,
-  output reg            trigger_out,
+  output                trigger_out,
   output reg            trigger_out_la,
 
   output      [31:0]    fifo_depth,
@@ -200,6 +200,9 @@ module axi_adc_trigger #(
   reg                   trigger_out_m1;
 
   reg                   streaming_on;
+  reg                   trigger_out_hold;
+  reg                   trigger_out_ack;
+
 
   // signal name changes
 
@@ -270,15 +273,25 @@ module axi_adc_trigger #(
     trigger_o[1] <= (trig_o_hold_cnt_1 == 'd0) ? trigger_o_m[1] : trig_o_hold_1;
   end
 
-  // - keep data in sync with the trigger. The trigger bypasses the variable fifo.
+
+  // keep data in sync with the trigger. The trigger bypasses the variable fifo.
   // The data goes through and it is delayed with 4 clock cycles)
   always @(posedge clk) begin
     trigger_out_m1 <= trigger_out_s;
-    trigger_out <= trigger_out_m1;
+    if (trigger_out_m1 & ~trigger_out_s) begin
+      trigger_out_hold <= 1'b1;
+    end
+    if (trigger_out_ack) begin
+      trigger_out_hold <= 1'b0;
+    end
+
+    trigger_out_ack <= trigger_out_hold & (data_valid_a | data_valid_b);
 
     // triggers logic analyzer
     trigger_out_la <= trigger_out_mixed;
   end
+
+  assign trigger_out = trigger_out_hold | trigger_out_m1;
 
   // the embedded trigger does not require any extra delay, since the util_extract
   // present in this case, delays the trigger with 2 clock cycles
