@@ -85,7 +85,7 @@ ad_ip_parameter BITS_PER_SAMPLE INTEGER 16 false [list \
 
 ad_ip_parameter CONVERTER_RESOLUTION INTEGER 16 true [list \
   DISPLAY_NAME "Converter Resolution (N)" \
-  ALLOWED_RANGES {8 11 12 16} \
+  ALLOWED_RANGES {8 11 12 14 16} \
   UNITS bits \
   GROUP $group \
 ]
