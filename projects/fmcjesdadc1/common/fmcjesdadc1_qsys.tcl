@@ -24,29 +24,39 @@ set_interface_property rx_ip_sof EXPORT_OF ad9250_jesd204.link_sof
 add_interface rx_ip_data avalon_streaming source
 set_interface_property rx_ip_data EXPORT_OF ad9250_jesd204.link_data
 
-# ad9250
+# ad9250 tpl
 
-add_instance axi_ad9250_core_0 axi_ad9250
-set_instance_parameter_value axi_ad9250_core_0 {ID} {0}
+add_instance axi_ad9250_tpl_0 ad_ip_jesd204_tpl_adc
+set_instance_parameter_value axi_ad9250_tpl_0 {ID} {0}
+set_instance_parameter_value axi_ad9250_tpl_0 {NUM_LANES} {2}
+set_instance_parameter_value axi_ad9250_tpl_0 {NUM_CHANNELS} {2}
+set_instance_parameter_value axi_ad9250_tpl_0 {CONVERTER_RESOLUTION} {14}
+set_instance_parameter_value axi_ad9250_tpl_0 {BITS_PER_SAMPLE} {16}
+set_instance_parameter_value axi_ad9250_tpl_0 {TWOS_COMPLEMENT} {1}
 
-add_connection ad9250_jesd204.link_clk axi_ad9250_core_0.if_rx_clk
-add_connection sys_clk.clk_reset axi_ad9250_core_0.s_axi_reset
-add_connection sys_clk.clk axi_ad9250_core_0.s_axi_clock
+add_connection ad9250_jesd204.link_clk axi_ad9250_tpl_0.link_clk
+add_connection sys_clk.clk_reset axi_ad9250_tpl_0.s_axi_reset
+add_connection sys_clk.clk axi_ad9250_tpl_0.s_axi_clock
 add_interface rx_ip_sof_0 conduit end
-set_interface_property rx_ip_sof_0 EXPORT_OF axi_ad9250_core_0.if_rx_sof
+set_interface_property rx_ip_sof_0 EXPORT_OF axi_ad9250_tpl_0.if_link_sof
 add_interface rx_ip_data_0 avalon_streaming sink
-set_interface_property rx_ip_data_0 EXPORT_OF axi_ad9250_core_0.if_rx_data
+set_interface_property rx_ip_data_0 EXPORT_OF axi_ad9250_tpl_0.link_data
 
-add_instance axi_ad9250_core_1 axi_ad9250
-set_instance_parameter_value axi_ad9250_core_1 {ID} {1}
+add_instance axi_ad9250_tpl_1 ad_ip_jesd204_tpl_adc
+set_instance_parameter_value axi_ad9250_tpl_1 {ID} {0}
+set_instance_parameter_value axi_ad9250_tpl_1 {NUM_LANES} {2}
+set_instance_parameter_value axi_ad9250_tpl_1 {NUM_CHANNELS} {2}
+set_instance_parameter_value axi_ad9250_tpl_1 {CONVERTER_RESOLUTION} {14}
+set_instance_parameter_value axi_ad9250_tpl_1 {BITS_PER_SAMPLE} {16}
+set_instance_parameter_value axi_ad9250_tpl_1 {TWOS_COMPLEMENT} {1}
 
-add_connection ad9250_jesd204.link_clk axi_ad9250_core_1.if_rx_clk
-add_connection sys_clk.clk_reset axi_ad9250_core_1.s_axi_reset
-add_connection sys_clk.clk axi_ad9250_core_1.s_axi_clock
+add_connection ad9250_jesd204.link_clk axi_ad9250_tpl_1.link_clk
+add_connection sys_clk.clk_reset axi_ad9250_tpl_1.s_axi_reset
+add_connection sys_clk.clk axi_ad9250_tpl_1.s_axi_clock
 add_interface rx_ip_sof_1 conduit end
-set_interface_property rx_ip_sof_1 EXPORT_OF axi_ad9250_core_1.if_rx_sof
+set_interface_property rx_ip_sof_1 EXPORT_OF axi_ad9250_tpl_1.if_link_sof
 add_interface rx_ip_data_1 avalon_streaming sink
-set_interface_property rx_ip_data_1 EXPORT_OF axi_ad9250_core_1.if_rx_data
+set_interface_property rx_ip_data_1 EXPORT_OF axi_ad9250_tpl_1.link_data
 
 # ad9250-pack
 
@@ -57,8 +67,8 @@ set_instance_parameter_value util_ad9250_cpack_0 {SAMPLES_PER_CHANNEL} {1}
 
 add_connection sys_clk.clk_reset util_ad9250_cpack_0.reset
 add_connection ad9250_jesd204.link_clk util_ad9250_cpack_0.clk
-add_connection axi_ad9250_core_0.adc_ch_0 util_ad9250_cpack_0.adc_ch_0
-add_connection axi_ad9250_core_0.adc_ch_1 util_ad9250_cpack_0.adc_ch_1
+add_connection axi_ad9250_tpl_0.adc_ch_0 util_ad9250_cpack_0.adc_ch_0
+add_connection axi_ad9250_tpl_0.adc_ch_1 util_ad9250_cpack_0.adc_ch_1
 
 add_instance util_ad9250_cpack_1 util_cpack2
 set_instance_parameter_value util_ad9250_cpack_1 {SAMPLE_DATA_WIDTH} {32}
@@ -67,8 +77,8 @@ set_instance_parameter_value util_ad9250_cpack_1 {SAMPLES_PER_CHANNEL} {1}
 
 add_connection sys_clk.clk_reset util_ad9250_cpack_1.reset
 add_connection ad9250_jesd204.link_clk util_ad9250_cpack_1.clk
-add_connection axi_ad9250_core_1.adc_ch_0 util_ad9250_cpack_1.adc_ch_0
-add_connection axi_ad9250_core_1.adc_ch_1 util_ad9250_cpack_1.adc_ch_1
+add_connection axi_ad9250_tpl_1.adc_ch_0 util_ad9250_cpack_1.adc_ch_0
+add_connection axi_ad9250_tpl_1.adc_ch_1 util_ad9250_cpack_1.adc_ch_1
 
 # ad9250-dma
 
@@ -87,7 +97,7 @@ add_connection ad9250_jesd204.link_clk  axi_ad9250_dma_0.if_fifo_wr_clk
 add_connection util_ad9250_cpack_0.if_packed_fifo_wr_en  axi_ad9250_dma_0.if_fifo_wr_en
 add_connection util_ad9250_cpack_0.if_packed_fifo_wr_sync  axi_ad9250_dma_0.if_fifo_wr_sync
 add_connection util_ad9250_cpack_0.if_packed_fifo_wr_data  axi_ad9250_dma_0.if_fifo_wr_din
-add_connection axi_ad9250_dma_0.if_fifo_wr_overflow axi_ad9250_core_0.if_adc_dovf
+add_connection axi_ad9250_dma_0.if_fifo_wr_overflow axi_ad9250_tpl_0.if_adc_dovf
 add_connection sys_clk.clk_reset axi_ad9250_dma_0.s_axi_reset
 add_connection sys_clk.clk axi_ad9250_dma_0.s_axi_clock
 add_connection sys_dma_clk.clk_reset axi_ad9250_dma_0.m_dest_axi_reset
@@ -107,7 +117,7 @@ add_connection ad9250_jesd204.link_clk  axi_ad9250_dma_1.if_fifo_wr_clk
 add_connection util_ad9250_cpack_1.if_packed_fifo_wr_en  axi_ad9250_dma_1.if_fifo_wr_en
 add_connection util_ad9250_cpack_1.if_packed_fifo_wr_sync  axi_ad9250_dma_1.if_fifo_wr_sync
 add_connection util_ad9250_cpack_1.if_packed_fifo_wr_data  axi_ad9250_dma_1.if_fifo_wr_din
-add_connection axi_ad9250_dma_1.if_fifo_wr_overflow axi_ad9250_core_1.if_adc_dovf
+add_connection axi_ad9250_dma_1.if_fifo_wr_overflow axi_ad9250_tpl_1.if_adc_dovf
 add_connection sys_clk.clk_reset axi_ad9250_dma_1.s_axi_reset
 add_connection sys_clk.clk axi_ad9250_dma_1.s_axi_clock
 add_connection sys_dma_clk.clk_reset axi_ad9250_dma_1.m_dest_axi_reset
@@ -138,8 +148,8 @@ ad_cpu_interconnect 0x00038000 avl_adxcfg_0.rcfg_s0
 ad_cpu_interconnect 0x00039000 avl_adxcfg_1.rcfg_s0
 ad_cpu_interconnect 0x0003a000 avl_adxcfg_2.rcfg_s0
 ad_cpu_interconnect 0x0003b000 avl_adxcfg_3.rcfg_s0
-ad_cpu_interconnect 0x00040000 axi_ad9250_core_0.s_axi
-ad_cpu_interconnect 0x00050000 axi_ad9250_core_1.s_axi
+ad_cpu_interconnect 0x00040000 axi_ad9250_tpl_0.s_axi
+ad_cpu_interconnect 0x00050000 axi_ad9250_tpl_1.s_axi
 ad_cpu_interconnect 0x00060000 axi_ad9250_dma_0.s_axi
 ad_cpu_interconnect 0x00070000 axi_ad9250_dma_1.s_axi
 
