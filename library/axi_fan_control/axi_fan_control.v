@@ -93,10 +93,10 @@ localparam        PWM_ONTIME_75           = PWM_PERIOD * 3 / 4;
 
 //tacho params
 localparam        TACHO_TOL_PERCENT       = 25;
-localparam        TACHO_T25               = 3200000; // 32 ms
-localparam        TACHO_T50               = 1280000; // 12.8 ms
-localparam        TACHO_T75               = 720000; // 7.2 ms
-localparam        TACHO_T100              = 640000;
+localparam        TACHO_T25               = 1470000; // 14.7 ms
+localparam        TACHO_T50               = 820000; // 8.2 ms
+localparam        TACHO_T75               = 480000; // 4.8 ms
+localparam        TACHO_T100              = 340000; // 3.4 ms
 localparam        TACHO_T25_TOL           = TACHO_T25 * TACHO_TOL_PERCENT / 100;
 localparam        TACHO_T50_TOL           = TACHO_T50 * TACHO_TOL_PERCENT / 100;
 localparam        TACHO_T75_TOL           = TACHO_T75 * TACHO_TOL_PERCENT / 100;
