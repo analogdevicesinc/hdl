@@ -50,7 +50,7 @@ module util_tia_chsel #(
 
   genvar i;
   generate
-    for (i=0; i<DATA_WIDTH/16; i=i+1) begin
+    for (i=0; i<DATA_WIDTH/16; i=i+1) begin : gen_tia_chsel_samples
       always @(posedge clk) begin
         if (adc_tia_chsel_en)
           adc_data_tia_chsel_int[i*16+:16] <= {8'h0, tia_chsel};

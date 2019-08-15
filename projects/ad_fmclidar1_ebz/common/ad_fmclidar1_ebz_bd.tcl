@@ -23,7 +23,9 @@ create_bd_port -dir O laser_driver_en_n
 create_bd_port -dir I laser_driver_otw_n
 create_bd_port -dir O -from 7 -to 0 tia_chsel
 
-# adc peripherals - controlled by PS7/SPI0
+# NOTE: adc peripherals - controlled by PS7/SPI0
+
+# AD9694 data interface - JESD204B framework
 
 ad_ip_instance axi_adxcvr axi_ad9694_xcvr [list \
   NUM_OF_LANES $NUM_OF_LANES \
