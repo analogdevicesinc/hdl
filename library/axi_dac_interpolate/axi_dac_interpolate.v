@@ -55,6 +55,10 @@ module axi_dac_interpolate #(
   output                dac_int_valid_a,
   output                dac_int_valid_b,
 
+  input       [ 1:0]    trigger_i,
+  input                 trigger_adc,
+  input                 trigger_la,
+
   // axi interface
 
   input                 s_axi_aclk,
@@ -78,6 +82,23 @@ module axi_dac_interpolate #(
   output      [31:0]    s_axi_rdata,
   output      [ 1:0]    s_axi_rresp,
   input                 s_axi_rready);
+
+
+  reg    [ 1:0]    trigger_i_m1;
+  reg    [ 1:0]    trigger_i_m2;
+  reg    [ 1:0]    trigger_i_m3;
+  reg              trigger_adc_m1;
+  reg              trigger_adc_m2;
+  reg              trigger_adc_m3;
+  reg              trigger_la_m1;
+  reg              trigger_la_m2;
+  reg              trigger_la_m3;
+
+  reg    [ 1:0]    any_edge_trigger;
+  reg    [ 1:0]    rise_edge_trigger;
+  reg    [ 1:0]    fall_edge_trigger;
+  reg    [ 1:0]    high_level_trigger;
+  reg    [ 1:0]    low_level_trigger;
 
   // internal signals
 
@@ -104,11 +125,71 @@ module axi_dac_interpolate #(
   wire              dac_correction_enable_b;
   wire    [15:0]    dac_correction_coefficient_a;
   wire    [15:0]    dac_correction_coefficient_b;
+  wire    [19:0]    trigger_config;
+
+  wire    [ 1:0]    en_trigger_pins;
+  wire              en_trigger_adc;
+  wire              en_trigger_la;
+
+  wire    [ 1:0]    low_level;
+  wire    [ 1:0]    high_level;
+  wire    [ 1:0]    any_edge;
+  wire    [ 1:0]    rise_edge;
+  wire    [ 1:0]    fall_edge;
+
+  wire              trigger_active;
+  wire              ext_trigger;
+
 
   // signal name changes
 
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
+
+  // trigger logic
+
+  assign low_level  = trigger_config[1:0];
+  assign high_level = trigger_config[3:2];
+  assign any_edge   = trigger_config[5:4];
+  assign rise_edge  = trigger_config[7:6];
+  assign fall_edge  = trigger_config[9:8];
+
+  assign en_trigger_pins = trigger_config[17:16];
+  assign en_trigger_adc  = trigger_config[18];
+  assign en_trigger_la   = trigger_config[19];
+
+  assign trigger_active = |trigger_config[19:16];
+  assign trigger = (ext_trigger & en_trigger_pins) |
+                   (trigger_adc_m2 & en_trigger_adc) |
+                   (trigger_la_m2 & en_trigger_la);
+
+  assign ext_trigger = |(any_edge_trigger |
+                        rise_edge_trigger |
+                        fall_edge_trigger |
+                        high_level_trigger |
+                        low_level_trigger);
+
+  // sync
+  always @(posedge dac_clk) begin
+   trigger_i_m1 <= trigger_i;
+   trigger_i_m2 <= trigger_i_m1;
+   trigger_i_m3 <= trigger_i_m2;
+
+   trigger_adc_m1 <= trigger_adc;
+   trigger_adc_m2 <= trigger_adc_m1;
+
+   trigger_la_m1 <= trigger_la;
+   trigger_la_m2 <= trigger_la_m1;
+  end
+
+  always @(posedge dac_clk) begin
+   any_edge_trigger <= (trigger_i_m3 ^ trigger_i_m2) & any_edge;
+   rise_edge_trigger <= (~trigger_i_m3 & trigger_i_m2) & rise_edge;
+   fall_edge_trigger <= (trigger_i_m3 & ~trigger_i_m2) & fall_edge;
+   high_level_trigger <= trigger_i_m3 & high_level;
+   low_level_trigger <= ~trigger_i_m3 & low_level;
+  end
+
 
   axi_dac_interpolate_filter #(
     .CORRECTION_DISABLE(CORRECTION_DISABLE))
@@ -126,6 +207,8 @@ module axi_dac_interpolate #(
     .interpolation_ratio (interpolation_ratio_a),
     .dma_transfer_suspend (dma_transfer_suspend),
     .start_sync_channels (start_sync_channels),
+    .trigger (trigger),
+    .trigger_active (trigger_active),
     .dma_valid (dma_valid_a),
     .dma_valid_adjacent (dma_valid_b),
     .dac_correction_enable(dac_correction_enable_a),
@@ -148,6 +231,8 @@ module axi_dac_interpolate #(
     .interpolation_ratio (interpolation_ratio_b),
     .dma_transfer_suspend (dma_transfer_suspend),
     .start_sync_channels (start_sync_channels),
+    .trigger (trigger),
+    .trigger_active (trigger_active),
     .dma_valid (dma_valid_b),
     .dma_valid_adjacent (dma_valid_a),
     .dac_correction_enable(dac_correction_enable_b),
@@ -169,6 +254,7 @@ module axi_dac_interpolate #(
     .dac_correction_enable_b(dac_correction_enable_b),
     .dac_correction_coefficient_a(dac_correction_coefficient_a),
     .dac_correction_coefficient_b(dac_correction_coefficient_b),
+    .trigger_config (trigger_config),
 
     .up_rstn (up_rstn),
     .up_clk (up_clk),
