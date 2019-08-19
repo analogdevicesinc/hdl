@@ -55,6 +55,8 @@ module axi_dac_interpolate_filter #(
   input                 dac_correction_enable,
   input                 dma_transfer_suspend,
   input                 start_sync_channels,
+  input                 trigger,
+  input                 trigger_active,
   input                 dma_valid,
   input                 dma_valid_adjacent
 );
@@ -68,11 +70,12 @@ module axi_dac_interpolate_filter #(
   reg               cic_change_rate;
   reg     [31:0]    interpolation_counter;
 
-  reg               transmit_valid = 1'b1;
+  reg               transmit_ready = 1'b1;
   reg               dma_data_valid = 1'b0;
   reg               dma_data_valid_adjacent = 1'b0;
 
   reg               filter_enable = 1'b0;
+  reg               triggered = 1'b0;
 
   wire              dac_valid_corrected;
   wire    [15:0]    dac_data_corrected;
@@ -154,19 +157,21 @@ module axi_dac_interpolate_filter #(
     if (dma_transfer_suspend) begin
       dma_data_valid <= 1'b0;
       dma_data_valid_adjacent <=  1'b0;
+      triggered <= 1'b0;
     end else begin
       dma_data_valid <= dma_valid ? 1'b1 : dma_data_valid;
       dma_data_valid_adjacent <= dma_valid_adjacent ? 1'b1 : dma_data_valid_adjacent;
+      triggered <= trigger ? 1'b1 : triggered | !trigger_active;
     end
 
     if (start_sync_channels == 1'b0) begin
-      transmit_valid <= 1'b1;
+      transmit_ready <= triggered;
     end else begin
-      transmit_valid <= (dma_data_valid & dma_data_valid_adjacent) ? 1'b1 : ~dma_data_valid;
+      transmit_ready <= (dma_data_valid & dma_data_valid_adjacent) ? triggered : ~dma_data_valid;
     end
   end
 
-  assign dac_int_valid = transmit_valid ? dac_int_valid_d : 1'b0;
+  assign dac_int_valid = transmit_ready ? dac_int_valid_d : 1'b0;
 
   always @(posedge dac_clk) begin
     case (filter_mask)
