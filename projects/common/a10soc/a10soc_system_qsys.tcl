@@ -11,7 +11,7 @@ add_interface sys_rstn reset sink
 set_interface_property sys_rstn EXPORT_OF sys_clk.clk_in_reset
 set_instance_parameter_value sys_clk {clockFrequency} {100000000.0}
 set_instance_parameter_value sys_clk {clockFrequencyKnown} {1}
-set_instance_parameter_value sys_clk {resetSynchronousEdges} {NONE}
+set_instance_parameter_value sys_clk {resetSynchronousEdges} {DEASSERT}
 
 # hps
 # round-about way - qsys-script doesn't support {*}?
@@ -123,6 +123,7 @@ set_interface_property sys_hps_io EXPORT_OF sys_hps.hps_io
 # common dma interfaces
 
 add_instance sys_dma_clk clock_source
+set_instance_parameter_value sys_dma_clk {resetSynchronousEdges} {DEASSERT}
 add_connection sys_clk.clk_reset sys_dma_clk.clk_in_reset
 add_connection sys_hps.h2f_user0_clock sys_dma_clk.clk_in
 add_connection sys_dma_clk.clk sys_hps.f2sdram0_clock
