@@ -72,17 +72,17 @@ proc util_cpack_elab {} {
   ad_interface signal fifo_wr_overflow output 1 ovf
 
   for {set n 0} {$n < $num_channels} {incr n} {
-    add_interface adc_ch_${n} conduit end
-    add_interface_port adc_ch_${n} enable_${n} enable Input 1
-    set_port_property enable_${n} fragment_list "enable(${n}:${n})"
+    add_interface adc_ch_$n conduit end
+    add_interface_port adc_ch_$n enable_$n enable Input 1
+    set_port_property enable_$n fragment_list [format "enable(%d:%d)" $n $n]
 
-    add_interface_port adc_ch_${n} fifo_wr_en_${n} valid Input 1
-    set_port_property fifo_wr_en_${n} fragment_list "fifo_wr_en(${n})"
-    add_interface_port adc_ch_${n} fifo_wr_data_${n} data Input $channel_data_width
-    set_port_property fifo_wr_data_${n} fragment_list [format "fifo_wr_data(%d:%d)" \
+    add_interface_port adc_ch_$n fifo_wr_en_$n valid Input 1
+    set_port_property fifo_wr_en_$n fragment_list [format "fifo_wr_en(%d)" $n]
+    add_interface_port adc_ch_$n fifo_wr_data_$n data Input $channel_data_width
+    set_port_property fifo_wr_data_$n fragment_list [format "fifo_wr_data(%d:%d)" \
       [expr ($n+1) * $channel_data_width - 1] [expr $n * $channel_data_width]]
-    set_interface_property adc_ch_${n} associatedClock clk
-    set_interface_property adc_ch_${n} associatedReset ""
+    set_interface_property adc_ch_$n associatedClock clk
+    set_interface_property adc_ch_$n associatedReset ""
   }
 }
 
