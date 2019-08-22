@@ -20,12 +20,12 @@ LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_hdmi_tx
 LIB_DEPS += axi_spdif_tx
+LIB_DEPS += axi_sysid
 LIB_DEPS += jesd204/axi_jesd204_rx
 LIB_DEPS += jesd204/jesd204_rx
+LIB_DEPS += sysid_rom
 LIB_DEPS += xilinx/axi_adcfifo
 LIB_DEPS += xilinx/axi_adxcvr
 LIB_DEPS += xilinx/util_adxcvr
-LIB_DEPS += axi_sysid
-LIB_DEPS += sysid_rom
 
 include ../../scripts/project-xilinx.mk

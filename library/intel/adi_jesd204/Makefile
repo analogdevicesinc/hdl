@@ -5,6 +5,8 @@
 
 LIBRARY_NAME := adi_jesd204
 
+INTEL_DEPS += adi_jesd204_glue.v
+INTEL_DEPS += adi_jesd204_glue_hw.tcl
 INTEL_DEPS += adi_jesd204_hw.tcl
 
 INTEL_LIB_DEPS += intel/axi_adxcvr
