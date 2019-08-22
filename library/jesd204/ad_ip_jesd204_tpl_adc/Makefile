@@ -34,6 +34,7 @@ INTEL_DEPS += ../../intel/common/up_clock_mon_constr.sdc
 INTEL_DEPS += ../../intel/common/up_rst_constr.sdc
 INTEL_DEPS += ../../intel/common/up_xfer_cntrl_constr.sdc
 INTEL_DEPS += ../../intel/common/up_xfer_status_constr.sdc
+INTEL_DEPS += ../../jesd204/ad_ip_jesd204_tpl_common/up_tpl_common.v
 INTEL_DEPS += ad_ip_jesd204_tpl_adc_hw.tcl
 
 include ../../scripts/library.mk

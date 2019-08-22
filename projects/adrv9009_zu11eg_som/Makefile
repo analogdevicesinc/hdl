@@ -5,18 +5,18 @@
 
 PROJECT_NAME := adrv9009_zu11eg_som
 
+M_DEPS += carrier_bd.tcl
 M_DEPS += adrv9009_zu11eg_som_spi.v
 M_DEPS += adrv9009_zu11eg_som_bd.tcl
-M_DEPS += carrier_bd.tcl
-M_DEPS += adrv9009_zu11eg_som_constr.xdc
 M_DEPS += carrier_constr.xdc
+M_DEPS += adrv9009_zu11eg_som_constr.xdc
 M_DEPS += ../../library/xilinx/common/ad_iobuf.v
 M_DEPS += ../../library/jesd204/scripts/jesd204.tcl
 
-LIB_DEPS += axi_dmac
-LIB_DEPS += axi_i2s_adi
 LIB_DEPS += axi_clkgen
+LIB_DEPS += axi_dmac
 LIB_DEPS += axi_fan_control
+LIB_DEPS += axi_i2s_adi
 LIB_DEPS += jesd204/ad_ip_jesd204_tpl_adc
 LIB_DEPS += jesd204/ad_ip_jesd204_tpl_dac
 LIB_DEPS += jesd204/axi_jesd204_rx
