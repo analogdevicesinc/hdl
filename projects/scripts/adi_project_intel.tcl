@@ -137,6 +137,7 @@ proc adi_project {project_name {parameter_list {}}} {
   set_global_assignment -name VERILOG_FILE system_top.v
   set_global_assignment -name SDC_FILE system_constr.sdc
   set_global_assignment -name TOP_LEVEL_ENTITY system_top
+  set_global_assignment -name ENABLE_HPS_INTERNAL_TIMING ON
 
   # remove altshift_taps
 
