@@ -129,10 +129,9 @@ ad_connect ad9694_tpl_core/adc_valid_0 util_ad9694_cpack/fifo_wr_en
 ad_connect ad9694_tpl_core/adc_dovf GND
 
 ad_connect rx_device_clk ad9694_dma/s_axis_aclk
-ad_connect $sys_cpu_resetn ad9694_dma/m_dest_axi_aresetn
-
 ad_connect util_ad9694_cpack/packed_fifo_wr_en ad9694_dma/s_axis_valid
 ad_connect util_ad9694_cpack/packed_fifo_wr_data ad9694_dma/s_axis_data
+ad_connect $sys_dma_resetn ad9694_dma/m_dest_axi_aresetn
 
 #ad_connect ad9694_tpl_core/adc_dovf axi_ad9694_fifo/adc_wovf
 
