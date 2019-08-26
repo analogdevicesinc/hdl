@@ -46,7 +46,8 @@
 
 module jesd204_tx #(
   parameter NUM_LANES = 1,
-  parameter NUM_LINKS = 1
+  parameter NUM_LINKS = 1,
+  parameter NUM_OUTPUT_PIPELINE = 0
 ) (
   input clk,
   input reset,
@@ -109,6 +110,7 @@ localparam LMFC_COUNTER_WIDTH = MAX_BEATS_PER_MULTIFRAME > 256 ? 9 :
   MAX_BEATS_PER_MULTIFRAME > 2 ? 2 : 1;
 
 localparam DW = DATA_PATH_WIDTH * 8 * NUM_LANES;
+localparam CW = DATA_PATH_WIDTH * NUM_LANES;
 
 wire eof_gen_reset;
 wire [DATA_PATH_WIDTH-1:0] eof;
@@ -120,6 +122,9 @@ wire [DW-1:0] ilas_data;
 wire [DATA_PATH_WIDTH-1:0] ilas_charisk;
 
 wire cfg_generate_eomf = 1'b1;
+
+wire [DW-1:0] phy_data_r;
+wire [CW-1:0] phy_charisk_r;
 
 jesd204_lmfc i_lmfc (
   .clk(clk),
@@ -193,6 +198,21 @@ jesd204_eof_generator #(
   .eomf(eomf)
 );
 
+pipeline_stage #(
+  .WIDTH(CW + DW),
+  .REGISTERED(NUM_OUTPUT_PIPELINE)
+) i_output_pipeline_stage (
+  .clk(clk),
+  .in({
+    phy_data_r,
+    phy_charisk_r
+  }),
+  .out({
+    phy_data,
+    phy_charisk
+  })
+);
+
 generate
 genvar i;
 for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
@@ -218,8 +238,8 @@ for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
     .tx_data(tx_data[D_STOP:D_START]),
     .tx_ready(tx_ready),
 
-    .phy_data(phy_data[D_STOP:D_START]),
-    .phy_charisk(phy_charisk[C_STOP:C_START]),
+    .phy_data(phy_data_r[D_STOP:D_START]),
+    .phy_charisk(phy_charisk_r[C_STOP:C_START]),
 
     .cfg_disable_scrambler(cfg_disable_scrambler)
   );
