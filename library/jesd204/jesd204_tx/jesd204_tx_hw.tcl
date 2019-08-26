@@ -61,6 +61,7 @@ ad_ip_files jesd204_tx [list \
   ../jesd204_common/jesd204_eof_generator.v \
   ../jesd204_common/jesd204_lmfc.v \
   ../jesd204_common/jesd204_scrambler.v \
+  ../jesd204_common/pipeline_stage.v \
   $ad_hdl_dir/library/util_cdc/sync_bits.v \
   $ad_hdl_dir/library/util_cdc/util_cdc_constr.tcl \
 ]
@@ -76,6 +77,11 @@ add_parameter NUM_LINKS INTEGER 1
 set_parameter_property NUM_LINKS DISPLAY_NAME "Number of Links"
 set_parameter_property NUM_LINKS ALLOWED_RANGES 1:8
 set_parameter_property NUM_LINKS HDL_PARAMETER true
+
+add_parameter NUM_OUTPUT_PIPELINE INTEGER 0
+set_parameter_property NUM_OUTPUT_PIPELINE DISPLAY_NAME "Number of output pipeline stages"
+set_parameter_property NUM_OUTPUT_PIPELINE ALLOWED_RANGES 0:3
+set_parameter_property NUM_OUTPUT_PIPELINE HDL_PARAMETER true
 
 # clock
 
