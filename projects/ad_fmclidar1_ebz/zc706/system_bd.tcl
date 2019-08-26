@@ -26,3 +26,10 @@ adi_project_files ad_fmclidar1_ebz_zc706 [list \
 source $ad_hdl_dir/projects/common/zc706/zc706_system_bd.tcl
 source ../common/ad_fmclidar1_ebz_bd.tcl
 
+# System ID instance and configuration
+ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
+ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/mem_init_sys.txt"
+ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
+set sys_cstring "sys rom custom string placeholder"
+sysid_gen_sys_init_file $sys_cstring
+
