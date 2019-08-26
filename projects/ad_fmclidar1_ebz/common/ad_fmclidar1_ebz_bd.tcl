@@ -126,6 +126,7 @@ for {set i 0} {$i < $NUM_OF_CHANNELS} {incr i} {
   ad_connect ad9694_tpl_core/adc_data_$i util_ad9694_cpack/fifo_wr_data_$i
 }
 ad_connect ad9694_tpl_core/adc_valid_0 util_ad9694_cpack/fifo_wr_en
+ad_connect ad9694_tpl_core/adc_dovf GND
 
 ad_connect rx_device_clk ad9694_dma/s_axis_aclk
 ad_connect $sys_cpu_resetn ad9694_dma/m_dest_axi_aresetn
