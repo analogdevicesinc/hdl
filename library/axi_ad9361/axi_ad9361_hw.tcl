@@ -70,6 +70,7 @@ ad_ip_parameter DAC_USERPORTS_DISABLE INTEGER 0
 ad_ip_parameter DAC_IQCORRECTION_DISABLE INTEGER 0
 ad_ip_parameter IO_DELAY_GROUP STRING {dev_if_delay_group}
 ad_ip_parameter MIMO_ENABLE INTEGER 0
+ad_ip_parameter RX_NODPA INTEGER 0
 
 adi_add_auto_fpga_spec_params
 
@@ -178,21 +179,24 @@ proc axi_ad9361_elab {} {
   if {$m_fpga_technology == 103} {
 
     add_hdl_instance axi_ad9361_serdes_clk intel_serdes
-    set_instance_parameter_value axi_ad9361_serdes_clk {DEVICE_FAMILY} $m_fpga_technology
+    set_instance_parameter_value axi_ad9361_serdes_clk {DEVICE_FAMILY} {Arria 10}
     set_instance_parameter_value axi_ad9361_serdes_clk {MODE} {CLK}
     set_instance_parameter_value axi_ad9361_serdes_clk {DDR_OR_SDR_N} {1}
     set_instance_parameter_value axi_ad9361_serdes_clk {SERDES_FACTOR} {4}
     set_instance_parameter_value axi_ad9361_serdes_clk {CLKIN_FREQUENCY} {250.0}
 
+    set rx_serdes_mode IN
+    if {$rx_nodpa == 1} {set rx_serdes_mode IN_NODPA}
+
     add_hdl_instance axi_ad9361_serdes_in intel_serdes
-    set_instance_parameter_value axi_ad9361_serdes_in {DEVICE_FAMILY} $m_fpga_technology
-    set_instance_parameter_value axi_ad9361_serdes_in {MODE} {IN}
+    set_instance_parameter_value axi_ad9361_serdes_in {DEVICE_FAMILY} {Arria 10}
+    set_instance_parameter_value axi_ad9361_serdes_in {MODE} $rx_serdes_mode
     set_instance_parameter_value axi_ad9361_serdes_in {DDR_OR_SDR_N} {1}
     set_instance_parameter_value axi_ad9361_serdes_in {SERDES_FACTOR} {4}
     set_instance_parameter_value axi_ad9361_serdes_in {CLKIN_FREQUENCY} {250.0}
 
     add_hdl_instance axi_ad9361_serdes_out intel_serdes
-    set_instance_parameter_value axi_ad9361_serdes_out {DEVICE_FAMILY} $m_fpga_technology
+    set_instance_parameter_value axi_ad9361_serdes_out {DEVICE_FAMILY} {Arria 10}
     set_instance_parameter_value axi_ad9361_serdes_out {MODE} {OUT}
     set_instance_parameter_value axi_ad9361_serdes_out {DDR_OR_SDR_N} {1}
     set_instance_parameter_value axi_ad9361_serdes_out {SERDES_FACTOR} {4}
@@ -203,6 +207,10 @@ proc axi_ad9361_elab {} {
     set_instance_parameter_value axi_ad9361_data_out {PIN_TYPE_GUI} {Output}
     set_instance_parameter_value axi_ad9361_data_out {SIZE} {1}
     set_instance_parameter_value axi_ad9361_data_out {gui_io_reg_mode} {DDIO}
+
+    add_hdl_instance clk_buffer altclkctrl
+    set_instance_parameter_value clk_buffer {DEVICE_FAMILY} {Arria 10}
+
   }
 
   add_interface device_if conduit end

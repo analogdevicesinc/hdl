@@ -102,6 +102,8 @@ set_property value "ACTIVE_HIGH" $reset_polarity
 
 ipx::infer_bus_interface gps_pps_irq xilinx.com:signal:interrupt_rtl:1.0 [ipx::current_core]
 
+ipgui::remove_param -component [ipx::current_core] [ipgui::get_guiparamspec -name "RX_NODPA" -component [ipx::current_core]]
+
 adi_add_auto_fpga_spec_params
 ipx::create_xgui_files [ipx::current_core]
 

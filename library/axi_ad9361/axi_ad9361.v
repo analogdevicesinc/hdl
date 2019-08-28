@@ -67,7 +67,8 @@ module axi_ad9361 #(
   parameter   IO_DELAY_GROUP = "dev_if_delay_group",
   parameter   MIMO_ENABLE = 0,
   parameter   USE_SSI_CLK = 1,
-  parameter   DELAY_REFCLK_FREQUENCY = 200) (
+  parameter   DELAY_REFCLK_FREQUENCY = 200,
+  parameter   RX_NODPA = 0) (
 
   // physical interface (receive-lvds)
 
@@ -400,7 +401,8 @@ module axi_ad9361 #(
     .IO_DELAY_GROUP (IO_DELAY_GROUP),
     .CLK_DESKEW (MIMO_ENABLE),
     .USE_SSI_CLK (USE_SSI_CLK),
-    .DELAY_REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
+    .DELAY_REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY),
+    .RX_NODPA (RX_NODPA))
   i_dev_if (
     .rx_clk_in_p (rx_clk_in_p),
     .rx_clk_in_n (rx_clk_in_n),
