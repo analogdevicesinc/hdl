@@ -44,4 +44,4 @@
 
 # SYNC~ is a asynchronous interface
 set_false_path \
-  -from [get_registers *|jesd204_rx_ctrl:i_rx_ctrl|sync_n]
+  -from [get_registers *|jesd204_rx_ctrl:i_rx_ctrl|sync_n[0]]
