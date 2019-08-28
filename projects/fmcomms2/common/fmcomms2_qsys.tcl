@@ -8,6 +8,7 @@ set_instance_parameter_value axi_ad9361 {TDD_DISABLE} {0}
 set_instance_parameter_value axi_ad9361 {CMOS_OR_LVDS_N} {0}
 set_instance_parameter_value axi_ad9361 {ADC_DATAPATH_DISABLE} {0}
 set_instance_parameter_value axi_ad9361 {DAC_DATAPATH_DISABLE} {0}
+set_instance_parameter_value axi_ad9361 {RX_NODPA} {1}
 add_interface axi_ad9361_device_if conduit end
 set_interface_property axi_ad9361_device_if EXPORT_OF axi_ad9361.device_if
 add_interface axi_ad9361_up_enable conduit end
