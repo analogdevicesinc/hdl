@@ -15,7 +15,7 @@ ad_ip_parameter DDR_OR_SDR_N INTEGER 1 false
 ad_ip_parameter SERDES_FACTOR INTEGER 8 false
 ad_ip_parameter CLKIN_FREQUENCY FLOAT 500.0 false
 
-set_parameter_property MODE ALLOWED_RANGES {"CLK" "IN" "OUT"}
+set_parameter_property MODE ALLOWED_RANGES {"CLK" "IN" "IN_NODPA" "OUT"}
 set_parameter_property DDR_OR_SDR_N ALLOWED_RANGES {0 1}
 set_parameter_property SERDES_FACTOR ALLOWED_RANGES {4 8}
 set_parameter_property CLKIN_FREQUENCY DISPLAY_UNITS "MHz"
@@ -77,9 +77,13 @@ proc p_intel_serdes {} {
     return
   }
 
-  if {$m_mode == "IN"} {
+  if {$m_mode == "IN" || $m_mode == "IN_NODPA"} {
     add_instance intel_serdes_in altera_lvds
+    if {$m_mode == "IN"} {
     set_instance_parameter_value intel_serdes_in {MODE} {RX_DPA-FIFO}
+    } else {
+    set_instance_parameter_value intel_serdes_in {MODE} {RX_Non-DPA}
+    }
     set_instance_parameter_value intel_serdes_in {NUM_CHANNELS} {1}
     set_instance_parameter_value intel_serdes_in {DATA_RATE} $m_hs_data_rate
     set_instance_parameter_value intel_serdes_in {J_FACTOR} $m_serdes_factor
@@ -94,14 +98,16 @@ proc p_intel_serdes {} {
     set_interface_property loaden EXPORT_OF intel_serdes_in.ext_loaden
     add_interface div_clk conduit end
     set_interface_property div_clk EXPORT_OF intel_serdes_in.ext_coreclock
+    if {$m_mode == "IN"} {
     add_interface hs_phase conduit end
     set_interface_property hs_phase EXPORT_OF intel_serdes_in.ext_vcoph
     add_interface locked conduit end
     set_interface_property locked EXPORT_OF intel_serdes_in.ext_pll_locked
-    add_interface data_s conduit end
-    set_interface_property data_s EXPORT_OF intel_serdes_in.rx_out
     add_interface delay_locked conduit end
     set_interface_property delay_locked EXPORT_OF intel_serdes_in.rx_dpa_locked
+    }
+    add_interface data_s conduit end
+    set_interface_property data_s EXPORT_OF intel_serdes_in.rx_out
     return
   }
 
