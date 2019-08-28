@@ -44,7 +44,8 @@ module axi_ad9361_lvds_if #(
   // Dummy parameters, required keep the code consistency(used on Xilinx)
   parameter   USE_SSI_CLK = 1,
   parameter   IO_DELAY_GROUP = "dev_if_delay_group",
-  parameter   DELAY_REFCLK_FREQUENCY = 0) (
+  parameter   DELAY_REFCLK_FREQUENCY = 0,
+  parameter   RX_NODPA = 0) (
 
   // physical interface (receive)
 
@@ -528,7 +529,9 @@ endgenerate
 
   generate
   if (FPGA_TECHNOLOGY == ARRIA10) begin
-  axi_ad9361_lvds_if_10 i_axi_ad9361_lvds_if_10 (
+  axi_ad9361_lvds_if_10 #(
+    .RX_NODPA (RX_NODPA))
+  i_axi_ad9361_lvds_if_10 (
     .rx_clk_in_p (rx_clk_in_p),
     .rx_clk_in_n (rx_clk_in_n),
     .rx_frame_in_p (rx_frame_in_p),
