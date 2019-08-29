@@ -29,11 +29,11 @@ module ad_ip_jesd204_tpl_adc #(
   parameter FPGA_FAMILY = 0,
   parameter SPEED_GRADE = 0,
   parameter DEV_PACKAGE = 0,
-  parameter NUM_LANES = 1,
-  parameter NUM_CHANNELS = 4,
-  parameter SAMPLES_PER_FRAME = 1,
-  parameter CONVERTER_RESOLUTION = 14,
-  parameter BITS_PER_SAMPLE = 16,
+  parameter [ 7:0] NUM_LANES = 1,
+  parameter [ 7:0] NUM_CHANNELS = 4,
+  parameter [ 7:0] SAMPLES_PER_FRAME = 1,
+  parameter [ 7:0] CONVERTER_RESOLUTION = 14,
+  parameter [ 7:0] BITS_PER_SAMPLE = 16,
   parameter OCTETS_PER_BEAT = 4,
   parameter TWOS_COMPLEMENT = 1
 ) (
@@ -89,7 +89,7 @@ module ad_ip_jesd204_tpl_adc #(
   localparam LINK_DATA_WIDTH = NUM_LANES * OCTETS_PER_BEAT * 8;
   localparam DMA_DATA_WIDTH = BITS_PER_SAMPLE * DATA_PATH_WIDTH * NUM_CHANNELS;
 
-  localparam BYTES_PER_FRAME = (NUM_CHANNELS * BITS_PER_SAMPLE * SAMPLES_PER_FRAME) / ( 8 * NUM_LANES);
+  localparam [ 7:0] BYTES_PER_FRAME = (NUM_CHANNELS * BITS_PER_SAMPLE * SAMPLES_PER_FRAME) / ( 8 * NUM_LANES);
 
   wire [NUM_CHANNELS-1:0] dfmt_enable_s;
   wire [NUM_CHANNELS-1:0] dfmt_sign_extend_s;
