@@ -84,31 +84,19 @@ module system_top (
 
   input           otg_vbusoc,
 
-  inout           ad7768_0_reset,
-  inout           ad7768_0_sync_out,
-  inout           ad7768_0_sync_in,
-  inout   [ 3:0]  ad7768_0_gpio,
+  inout           ad7768_reset,
+  inout           ad7768_sync_out,
+  inout           ad7768_sync_in,
+  inout   [ 3:0]  ad7768_gpio,
 
-  inout           ad7768_1_reset,
-  inout           ad7768_1_sync_out,
-  inout           ad7768_1_sync_in,
-  inout   [ 3:0]  ad7768_1_gpio,
-
-  input           ad7768_0_mclk,
-  input           ad7768_1_mclk,
+  input           ad7768_mclk,
   output          ad7768_mclk_return,
 
-  input           ad7768_0_spi_miso,
-  output          ad7768_0_spi_mosi,
-  output          ad7768_0_spi_sclk,
-  output          ad7768_0_spi_cs,
-  input           ad7768_0_drdy,
-
-  input           ad7768_1_spi_miso,
-  output          ad7768_1_spi_mosi,
-  output          ad7768_1_spi_sclk,
-  output          ad7768_1_spi_cs,
-  input           ad7768_1_drdy);
+  input           ad7768_spi_miso,
+  output          ad7768_spi_mosi,
+  output          ad7768_spi_sclk,
+  output          ad7768_spi_cs,
+  input           ad7768_drdy);
 
   // internal signals
 
@@ -121,51 +109,31 @@ module system_top (
   wire    [ 1:0]  iic_mux_sda_i_s;
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
-  wire            ad7768_0_mclk_s;
-  wire            ad7768_1_mclk_s;
+  wire            ad7768_mclk_s;
 
   // instantiations
 
-  ad_data_clk #(.SINGLE_ENDED (1)) i_ad7768_0_mclk_receiver(
+  ad_data_clk #(.SINGLE_ENDED (1)) i_ad7768_mclk_receiver(
     .rst (1'b1),
     .locked (),
     .clk_in_p (ad7768_0_mclk),
     .clk_in_n (1'd0),
-    .clk(ad7768_0_mclk_s));
-
-  ad_data_clk #(.SINGLE_ENDED (1)) i_ad7768_1_mclk_receiver(
-    .rst (1'b1),
-    .locked (),
-    .clk_in_p (ad7768_1_mclk),
-    .clk_in_n (1'd0),
-    .clk(ad7768_1_mclk_s));
-
-  assign ad7768_mclk_return = ad7768_0_mclk_s;
+    .clk(ad7768_mclk_s));
+  
+  assign ad7768_mclk_return = ad7768_mclk_s;
 
   ad_iobuf #(
     .DATA_WIDTH(7)
-  ) i_iobuf_ad7768_1_gpio (
-    .dio_t(gpio_t[54:48]),
-    .dio_i(gpio_o[54:48]),
-    .dio_o(gpio_i[54:48]),
-    .dio_p({ad7768_1_gpio,
-            ad7768_1_sync_in,
-            ad7768_1_sync_out,
-            ad7768_1_reset}));
-
-  ad_iobuf #(
-    .DATA_WIDTH(7)
-  ) i_iobuf_ad7768_0_gpio (
+  ) i_iobuf_ad7768_gpio (
     .dio_t(gpio_t[38:32]),
     .dio_i(gpio_o[38:32]),
     .dio_o(gpio_i[38:32]),
-    .dio_p({ad7768_0_gpio,
-            ad7768_0_sync_in,
-            ad7768_0_sync_out,
-            ad7768_0_reset}));
+    .dio_p({ad7768_gpio,
+            ad7768_sync_in,
+            ad7768_sync_out,
+            ad7768_reset}));
 
-  assign gpio_i[47:39] = gpio_o[47:39];
-  assign gpio_i[63:55] = gpio_o[63:55];
+  assign gpio_i[63:39] = gpio_o[63:39];
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -175,8 +143,7 @@ module system_top (
     .dio_o(gpio_i[31:0]),
     .dio_p(gpio_bd));
 
-  assign gpio_i[47:39] = gpio_o[47:39];
-  assign gpio_i[63:55] = gpio_o[63:55];
+  assign gpio_i[63:39] = gpio_o[63:39];
 
   ad_iobuf #(
     .DATA_WIDTH(2)
@@ -239,18 +206,30 @@ module system_top (
     .iic_mux_sda_t (iic_mux_sda_t_s),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif),
-    .adc1_spi_sdo (ad7768_0_spi_mosi),
-    .adc1_spi_sdo_t (),
-    .adc1_spi_sdi (ad7768_0_spi_miso),
-    .adc1_spi_cs (ad7768_0_spi_cs),
-    .adc1_spi_sclk (ad7768_0_spi_sclk),
-    .adc1_data_ready (ad7768_0_drdy),
-    .adc2_spi_sdo (ad7768_1_spi_mosi),
-    .adc2_spi_sdo_t (),
-    .adc2_spi_sdi (ad7768_1_spi_miso),
-    .adc2_spi_cs (ad7768_1_spi_cs),
-    .adc2_spi_sclk (ad7768_1_spi_sclk),
-    .adc2_data_ready (ad7768_1_drdy));
+    .spi0_clk_i (1'b0),
+    .spi0_clk_o (),
+    .spi0_csn_0_o (),
+    .spi0_csn_1_o (),
+    .spi0_csn_2_o (),
+    .spi0_csn_i (1'b1),
+    .spi0_sdi_i (1'b0),
+    .spi0_sdo_i (1'b0),
+    .spi0_sdo_o (),
+    .spi1_clk_i (1'b0),
+    .spi1_clk_o (),
+    .spi1_csn_0_o (),
+    .spi1_csn_1_o (),
+    .spi1_csn_2_o (),
+    .spi1_csn_i (1'b1),
+    .spi1_sdi_i (1'b0),
+    .spi1_sdo_i (1'b0),
+    .spi1_sdo_o (),
+    .adc_spi_sdo (ad7768_spi_mosi),
+    .adc_spi_sdo_t (),
+    .adc_spi_sdi (ad7768_spi_miso),
+    .adc_spi_cs (ad7768_spi_cs),
+    .adc_spi_sclk (ad7768_spi_sclk),
+    .adc_data_ready (ad7768_drdy));
 
 endmodule
 
