@@ -200,9 +200,8 @@ proc adi_axi_jesd204_rx_create {ip_name num_lanes {num_links 1}} {
 
 
 #                                       L            M                 S                 N & NP
-proc adi_tpl_jesd204_tx_create {ip_name num_of_lanes num_of_converters samples_per_frame sample_width} {
+proc adi_tpl_jesd204_tx_create {ip_name num_of_lanes num_of_converters samples_per_frame sample_width {link_layer_bytes_per_beat 4}} {
 
-  set link_layer_bytes_per_beat 4
 
   if {$num_of_lanes < 1 || $num_of_lanes > 16} {
     return -code 1 "ERROR: Invalid number of JESD204B lanes. (Supported range 1-16)"
@@ -312,9 +311,8 @@ proc adi_tpl_jesd204_tx_create {ip_name num_of_lanes num_of_converters samples_p
 
 
 #                                       L            M                 S                 N & NP
-proc adi_tpl_jesd204_rx_create {ip_name num_of_lanes num_of_converters samples_per_frame sample_width} {
+proc adi_tpl_jesd204_rx_create {ip_name num_of_lanes num_of_converters samples_per_frame sample_width {link_layer_bytes_per_beat 4}} {
 
-  set link_layer_bytes_per_beat 4
 
   if {$num_of_lanes < 1 || $num_of_lanes > 16} {
     return -code 1 "ERROR: Invalid number of JESD204B lanes. (Supported range 1-16)"
