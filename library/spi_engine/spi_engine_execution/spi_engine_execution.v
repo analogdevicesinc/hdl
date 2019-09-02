@@ -143,6 +143,20 @@ reg [7:0] clk_div = DEFAULT_CLK_DIV;
 wire sdo_enabled = cmd_d1[8];
 wire sdi_enabled = cmd_d1[9];
 
+wire last_sdi_bit = (sdi_counter == word_length-1);
+
+wire trigger_tx = trigger == 1'b1 && ntx_rx == 1'b0;
+wire trigger_rx = trigger == 1'b1 && ntx_rx == 1'b1;
+
+reg trigger_rx_d1 = 1'b0;
+reg trigger_rx_d2 = 1'b0;
+reg trigger_rx_d3 = 1'b0;
+
+wire trigger_rx_s = (SDI_DELAY == 2'b00) ? trigger_rx :
+                    (SDI_DELAY == 2'b01) ? trigger_rx_d1 :
+                    (SDI_DELAY == 2'b10) ? trigger_rx_d2 :
+                    (SDI_DELAY == 2'b11) ? trigger_rx_d3 : trigger_rx;
+
 // supporting max 8 SDI channel
 reg [(DATA_WIDTH-1):0] data_sdo_shift = 'h0;
 reg [(DATA_WIDTH-1):0] data_sdi_shift = 'h0;
@@ -226,8 +240,6 @@ always @(posedge clk) begin
   end
 end
 
-wire trigger_tx = trigger == 1'b1 && ntx_rx == 1'b0;
-wire trigger_rx = trigger == 1'b1 && ntx_rx == 1'b1;
 
 wire sleep_counter_compare = sleep_counter == cmd_d1[7:0] && clk_div_last == 1'b1;
 wire cs_sleep_counter_compare = cs_sleep_counter == cmd_d1[9:8] && clk_div_last == 1'b1;
@@ -381,20 +393,11 @@ assign sdo_int_s = data_sdo_shift[DATA_WIDTH-1];
 // next SCLK edge must be used to flop the SDI line, to compensate the overall
 // delay of the read path
 
-reg trigger_rx_d1 = 1'b0;
-reg trigger_rx_d2 = 1'b0;
-reg trigger_rx_d3 = 1'b0;
-
 always @(posedge clk) begin
   trigger_rx_d1 <= trigger_rx;
   trigger_rx_d2 <= trigger_rx_d1;
   trigger_rx_d3 <= trigger_rx_d2;
 end
-
-wire trigger_rx_s = (SDI_DELAY == 2'b00) ? trigger_rx :
-                    (SDI_DELAY == 2'b01) ? trigger_rx_d1 :
-                    (SDI_DELAY == 2'b10) ? trigger_rx_d2 :
-                    (SDI_DELAY == 2'b11) ? trigger_rx_d3 : trigger_rx;
 
 always @(posedge clk) begin
   if (inst_d1 == CMD_CHIPSELECT) begin
@@ -439,7 +442,6 @@ assign sdi_data = (NUM_OF_SDI == 1) ? data_sdi_shift :
                                        data_sdi_shift_3, data_sdi_shift_2,
                                        data_sdi_shift_1, data_sdi_shift} : data_sdi_shift;
 
-wire last_sdi_bit = (sdi_counter == word_length-1);
 always @(posedge clk) begin
   if (resetn == 1'b0) begin
     sdi_counter <= 8'b0;
@@ -458,7 +460,7 @@ always @(posedge clk) begin
   end
 end
 
-// Additional register stage to imrpove timing
+// Additional register stage to improve timing
 always @(posedge clk) begin
   sclk <= sclk_int;
   sdo <= sdo_int_s;
