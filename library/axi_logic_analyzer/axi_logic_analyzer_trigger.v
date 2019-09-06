@@ -66,13 +66,11 @@ module axi_logic_analyzer_trigger (
   reg              trigger_active;
   reg              trigger_active_mux;
   reg              trigger_active_d1;
-  reg              trigger_active_d2;
 
   always @(posedge clk) begin
     if (data_valid == 1'b1) begin
       trigger_active_d1 <= trigger_active_mux;
-      trigger_active_d2 <= trigger_active_d1;
-      trigger_out <= trigger_active_d2;
+      trigger_out <= trigger_active_d1;
       trigger_out_adc <= trigger_active_mux;
     end
   end
@@ -82,20 +80,22 @@ module axi_logic_analyzer_trigger (
   // 0 OR
   // 1 AND
 
-  always @(*) begin
-    case (trigger_logic[0])
-      0: trigger_active = |((edge_detect & edge_detect_enable) |
-                            (rise_edge & rise_edge_enable) |
-                            (fall_edge & fall_edge_enable) |
-                            (low_level & low_level_enable) |
-                            (high_level & high_level_enable));
-      1: trigger_active = &((edge_detect | ~edge_detect_enable) &
-                            (rise_edge | ~rise_edge_enable) &
-                            (fall_edge | ~fall_edge_enable) &
-                            (low_level | ~low_level_enable) &
-                            (high_level | ~high_level_enable));
-      default: trigger_active = 1'b1;
-    endcase
+  always @(posedge clk) begin
+    if (data_valid == 1'b1) begin
+      case (trigger_logic[0])
+        0: trigger_active <= |((edge_detect & edge_detect_enable) |
+                               (rise_edge & rise_edge_enable) |
+                               (fall_edge & fall_edge_enable) |
+                               (low_level & low_level_enable) |
+                               (high_level & high_level_enable));
+        1: trigger_active <= &((edge_detect | ~edge_detect_enable) &
+                               (rise_edge | ~rise_edge_enable) &
+                               (fall_edge | ~fall_edge_enable) &
+                               (low_level | ~low_level_enable) &
+                               (high_level | ~high_level_enable));
+        default: trigger_active = 1'b1;
+      endcase
+    end
   end
 
   always @(*) begin
