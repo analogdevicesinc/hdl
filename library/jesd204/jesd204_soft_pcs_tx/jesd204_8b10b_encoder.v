@@ -45,6 +45,7 @@
 `timescale 1ns/100ps
 
 module jesd204_8b10b_encoder (
+  input clk,
   input in_disparity,
   input [7:0] in_char,
   input in_charisk,
@@ -69,7 +70,7 @@ reg disparity4b;
 wire disparity4b_in;
 reg alt7;
 
-always @(*) begin
+always @(posedge clk) begin
   if (in_charisk == 1'b1) begin
     // Assume K28.x
     data6b <= 6'b000011;
@@ -241,7 +242,7 @@ always @(*) begin
   end
 end
 
-always @(*) begin
+always @(posedge clk) begin
   if (in_charisk == 1'b1) begin
     alt7 <= 1'b1;
   end else begin
@@ -260,7 +261,7 @@ always @(*) begin
   end
 end
 
-always @(*) begin
+always @(posedge clk) begin
   case (in_char[7:5])
   3'd0: begin
     data4b <= 4'b0010;
@@ -312,7 +313,7 @@ end
 assign disparity4b_in = in_disparity ^ disparity6b;
 assign out_disparity = disparity4b_in ^ disparity4b;
 
-always @(*) begin
+always @(posedge clk) begin
   if (in_disparity == 1'b0 && may_invert6b == 1'b1) begin
     out6b <= ~data6b;
   end else begin

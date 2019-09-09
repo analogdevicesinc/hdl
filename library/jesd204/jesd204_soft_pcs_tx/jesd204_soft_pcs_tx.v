@@ -85,6 +85,7 @@ for (lane = 0; lane < NUM_LANES; lane = lane + 1) begin: gen_lane
     localparam j = DATA_PATH_WIDTH * lane + i;
 
     jesd204_8b10b_encoder i_enc (
+      .clk (clk),
       .in_char(char[j*8+:8]),
       .in_charisk(charisk[j]),
       .out_char(data_s[j*10+:10]),

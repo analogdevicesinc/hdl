@@ -131,6 +131,7 @@ for (lane = 0; lane < NUM_LANES; lane = lane + 1) begin: gen_lane
                                          data_aligned[j*10+:10];
 
     jesd204_8b10b_decoder i_dec (
+      .clk (clk),
       .in_char(in_char),
       .out_char(char_s[j*8+:8]),
       .out_charisk(charisk_s[j]),

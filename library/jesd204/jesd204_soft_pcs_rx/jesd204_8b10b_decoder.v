@@ -45,6 +45,7 @@
 `timescale 1ns/100ps
 
 module jesd204_8b10b_decoder (
+  input clk,
   input in_disparity,
   input [9:0] in_char,
 
@@ -74,7 +75,7 @@ reg notintable_disparity;
 // Only detect K28.X
 wire charisk = in_char[5:0] == 6'b000011 || in_char[5:0] == 6'b111100;
 
-always @(*) begin
+always @(posedge clk) begin
   notintable5b <= 1'b0;
   disparity5b <= 2'b00;
   ignore5b <= 1'b0;
@@ -263,7 +264,7 @@ always @(*) begin
   endcase
 end
 
-always @(*) begin
+always @(posedge clk) begin
   ignore3b <= 1'b0;
 
   case (in_char[9:6])
@@ -305,7 +306,7 @@ always @(*) begin
   endcase
 end
 
-always @(*) begin
+always @(posedge clk) begin
   notintable3b <= 1'b0;
 
   if (charisk == 1'b1) begin
@@ -386,7 +387,7 @@ always @(*) begin
   end
 end
 
-always @(*) begin
+always @(posedge clk) begin
   if (disparity3b == disparity5b && disparity3b != 2'b00) begin
     notintable_disparity <= 1'b1;
   end else begin
@@ -394,7 +395,7 @@ always @(*) begin
   end
 end
 
-always @(*) begin
+always @(posedge clk) begin
   total_disparity <= (ignore3b ? 2'b00 : disparity3b) ^ (ignore5b ? 2'b00 : disparity5b);
 
   if (total_disparity[0] == 1'b0 || out_notintable == 1'b1) begin
