@@ -57,3 +57,16 @@ set_property -dict  {PACKAGE_PIN  AL24  IOSTANDARD  LVCMOS18  DRIVE 8 SLEW SLOW}
 create_generated_clock -name spi_clk  \
   -source [get_pins i_system_wrapper/system_i/axi_spi/ext_spi_clk] \
   -divide_by 2 [get_pins i_system_wrapper/system_i/axi_spi/sck_o]
+
+
+# Balance clocks
+#
+# Minimize skew on synchronous CDC timing paths between clocks originating 
+# from the same MMCM source. (sys_mem_clk and sys_cpu_clk)
+# This is required mostly by the smart interconnect.
+# Property must be applied directly to the output net of BUFGs.
+set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS \
+  [list [get_nets [get_property PARENT [get_nets {i_system_wrapper/system_i/sys_cpu_clk}]]] \
+        [get_nets [get_property PARENT [get_nets {i_system_wrapper/system_i/sys_mem_clk}]]] \
+  ]
+
