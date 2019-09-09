@@ -103,7 +103,7 @@ set_instance_parameter_value sys_hps {EMAC_PTP_REF_CLK} {100}
 set_instance_parameter_value sys_hps {EMIF_BYPASS_CHECK} {0}
 set_instance_parameter_value sys_hps {EMIF_CONDUIT_Enable} {1}
 set_instance_parameter_value sys_hps {F2SDRAM0_Width} {3}
-set_instance_parameter_value sys_hps {F2SDRAM0_ready_latency} {0}
+set_instance_parameter_value sys_hps {F2SDRAM0_ready_latency} {2}
 set_instance_parameter_value sys_hps {F2SDRAM_ADDRESS_WIDTH} {32}
 set_instance_parameter_value sys_hps {F2SINTERRUPT_Enable} {1}
 set_instance_parameter_value sys_hps {GPIO_REF_CLK} {4}
@@ -111,7 +111,7 @@ set_instance_parameter_value sys_hps {GPIO_REF_CLK2} {200}
 set_instance_parameter_value sys_hps {H2F_COLD_RST_Enable} {1}
 set_instance_parameter_value sys_hps {H2F_PENDING_RST_Enable} {1}
 set_instance_parameter_value sys_hps {H2F_USER0_CLK_Enable} {1}
-set_instance_parameter_value sys_hps {H2F_USER0_CLK_FREQ} {200}
+set_instance_parameter_value sys_hps {H2F_USER0_CLK_FREQ} {250}
 set_instance_parameter_value sys_hps {HPS_BOOT} {1}
 set_instance_parameter_value sys_hps {HPS_IO_Enable} $hps_io_list
 set_instance_parameter_value sys_hps {IO_OUTPUT_DELAY12} {17}
