@@ -3,7 +3,7 @@ package require qsys
 source ../scripts/adi_env.tcl
 source ../scripts/adi_ip_intel.tcl
 
-ad_ip_create util_adcfifo {UTIL ADC FIFO Interface}
+ad_ip_create util_adcfifo {UTIL ADC FIFO IP core}
 set_module_property ELABORATION_CALLBACK p_util_adcfifo
 
 # files
@@ -37,7 +37,7 @@ proc p_util_adcfifo {} {
 
   # intel memory
 
-  add_hdl_instance mem_asym intel_mem_asym
+  add_hdl_instance mem_asym intel_mem_asym 1.0
   set_instance_parameter_value mem_asym DEVICE_FAMILY $m_device_family
   set_instance_parameter_value mem_asym A_ADDRESS_WIDTH 0
   set_instance_parameter_value mem_asym A_DATA_WIDTH $m_adc_data_width
@@ -46,22 +46,22 @@ proc p_util_adcfifo {} {
 
   # interfaces
 
-  ad_interface clock adc_clk input 1 adc_clk
-  ad_interface reset adc_rst input 1 if_adc_clk
-  ad_interface signal adc_wr input 1 valid
-  ad_interface signal adc_wdata input ADC_DATA_WIDTH data
-  ad_interface signal adc_wovf output 1 ovf
+  ad_interface clock  adc_clk   input  1
+  ad_interface reset  adc_rst   input  1              if_adc_clk
+  ad_interface signal adc_wr    input  1              valid
+  ad_interface signal adc_wdata input  ADC_DATA_WIDTH data
+  ad_interface signal adc_wovf  output 1              ovf
 
-  ad_interface clock dma_clk input 1 clk
-  ad_interface signal dma_xfer_req input 1 xfer_req
+  ad_interface clock  dma_clk         input  1 clk
+  ad_interface signal dma_xfer_req    input  1 xfer_req
   ad_interface signal dma_xfer_status output 4 xfer_status
 
   add_interface m_axis axi4stream start
   set_interface_property m_axis associatedClock if_dma_clk
   set_interface_property m_axis associatedReset if_adc_rst
-  add_interface_port m_axis  dma_wr tvalid Output 1
+  add_interface_port m_axis  dma_wr     tvalid Output 1
   add_interface_port m_axis  dma_wready tready Input  1
-  add_interface_port m_axis  dma_wdata tdata  Output DMA_DATA_WIDTH
+  add_interface_port m_axis  dma_wdata  tdata  Output DMA_DATA_WIDTH
 
 }
 
