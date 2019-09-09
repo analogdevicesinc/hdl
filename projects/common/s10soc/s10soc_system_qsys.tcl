@@ -240,11 +240,27 @@ proc ad_cpu_interrupt {m_irq m_port} {
   set_connection_parameter_value sys_hps.f2h_irq0/${m_port} irqNumber ${m_irq}
 }
 
-proc ad_cpu_interconnect {m_base m_port} {
+proc ad_cpu_interconnect {m_base m_port {avl_bridge ""} {avl_bridge_base 0x00000000}} {
 
-  add_connection sys_hps.h2f_lw_axi_master ${m_port}
-  set_connection_parameter_value sys_hps.h2f_lw_axi_master/${m_port} baseAddress ${m_base}
-}
+  if {[string equal ${avl_bridge} ""]} {
+    add_connection sys_hps.h2f_lw_axi_master ${m_port}
+    set_connection_parameter_value sys_hps.h2f_lw_axi_master/${m_port} baseAddress ${m_base}
+  } else {
+    if {[lsearch -exact [get_instances] ${avl_bridge}] == -1} {
+      ## Instantiate the bridge and connect the interfaces
+      add_instance ${avl_bridge} altera_avalon_mm_bridge
+      set_instance_parameter_value ${avl_bridge} {USE_AUTO_ADDRESS_WIDTH} {1}
+      ##set_instance_parameter_value ${avl_bridge} {ADDRESS_WIDTH} {17}
+      set_instance_parameter_value ${avl_bridge} {SYNC_RESET} {1}
+      add_connection sys_hps.h2f_lw_axi_master ${avl_bridge}.s0
+      set_connection_parameter_value sys_hps.h2f_lw_axi_master/${avl_bridge}.s0 baseAddress ${avl_bridge_base}
+      add_connection sys_clk.out_clk ${avl_bridge}.clk
+      add_connection sys_resetn.out_reset ${avl_bridge}.reset
+    }
+    add_connection ${avl_bridge}.m0 ${m_port}
+    set_connection_parameter_value ${avl_bridge}.m0/${m_port} baseAddress ${m_base}
+  }
+ }
 
 proc ad_dma_interconnect {m_port} {
 
@@ -305,11 +321,11 @@ set_interface_property sys_spi EXPORT_OF sys_spi.external
 
 # base-addresses
 
-ad_cpu_interconnect 0x000000e0 sys_id.control_slave
-ad_cpu_interconnect 0x000000d0 sys_gpio_bd.s1
-ad_cpu_interconnect 0x00000000 sys_gpio_in.s1
-ad_cpu_interconnect 0x00000020 sys_gpio_out.s1
-ad_cpu_interconnect 0x00000040 sys_spi.spi_control_port
+ad_cpu_interconnect 0x000000e0 sys_id.control_slave "avl_peripheral_mm_bridge"
+ad_cpu_interconnect 0x000000d0 sys_gpio_bd.s1 "avl_peripheral_mm_bridge"
+ad_cpu_interconnect 0x00000000 sys_gpio_in.s1 "avl_peripheral_mm_bridge"
+ad_cpu_interconnect 0x00000020 sys_gpio_out.s1 "avl_peripheral_mm_bridge"
+ad_cpu_interconnect 0x00000040 sys_spi.spi_control_port "avl_peripheral_mm_bridge"
 
 # interrupts
 
