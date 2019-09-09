@@ -89,20 +89,3 @@ set_input_delay -clock [get_clocks global_clk_0] \
   [expr [get_property PERIOD [get_clocks global_clk_0]] / 2] \
   [get_ports {rx_sysref_*}]
 
-# Place the sysref capture FFs near Bank 43, they can't be placed into the IOB due pulse width violation.
-# Creating the pblock prevents the tool from placing the FFs on another SLR and not closing timing.
-create_pblock pblock_sysref
-resize_pblock pblock_sysref -add SLICE_X50Y254:SLICE_X50Y278
-add_cells_to_pblock pblock_sysref [get_cells \
-  [list i_system_wrapper/system_i/axi_ad9208_1_jesd/rx/inst/i_lmfc/sysref_r_reg \
-        i_system_wrapper/system_i/axi_ad9208_0_jesd/rx/inst/i_lmfc/sysref_r_reg]]
-
-# Place the data path in SLR1 for a better timing closure
-create_pblock adc_data_path
-resize_pblock adc_data_path -add CLOCKREGION_X0Y5:CLOCKREGION_X2Y9
-add_cells_to_pblock adc_data_path [get_cells \
-  [list i_system_wrapper/system_i/util_ad9208_cpack \
-        i_system_wrapper/system_i/rx_ad9208_0_tpl_core \
-        i_system_wrapper/system_i/rx_ad9208_1_tpl_core \
-        i_system_wrapper/system_i/axi_ad9208_dma \
-        i_system_wrapper/system_i/axi_ad9208_fifo]] -clear_locs

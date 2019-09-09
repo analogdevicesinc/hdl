@@ -34,10 +34,3 @@ foreach i {0 1} {
 }
 
 
-# Set the smart interconnect to use a lower speed switch to meet timing
-set_property -dict [list CONFIG.ADVANCED_PROPERTIES {  __view__ { \
-    timing { M00_Buffer { AR_SLR_PIPE 1 AW_SLR_PIPE 1 B_SLR_PIPE 1 R_SLR_PIPE 1 W_SLR_PIPE 1 } } \
-    clocking { SW0 { ASSOCIATED_CLK aclk1 } } \
-  } }] [get_bd_cells axi_mem_interconnect]
-
-
