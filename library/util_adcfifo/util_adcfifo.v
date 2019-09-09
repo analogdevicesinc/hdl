@@ -211,13 +211,13 @@ module util_adcfifo #(
   generate
   if (FPGA_TECHNOLOGY == 1) begin
   mem_asym i_mem_asym (
-    .mem_i_wrclock (adc_clk),
-    .mem_i_wren (adc_wr_int),
-    .mem_i_wraddress (adc_waddr_int),
-    .mem_i_datain (adc_wdata_int),
-    .mem_i_rdclock (dma_clk),
-    .mem_i_rdaddress (dma_raddr[DMA_ADDRESS_WIDTH-1:0]),
-    .mem_o_dataout (dma_rdata_s));
+    .mem_i_wrclock_clk (adc_clk),
+    .mem_i_wren_wren (adc_wr_int),
+    .mem_i_wraddress_wraddress (adc_waddr_int),
+    .mem_i_datain_datain (adc_wdata_int),
+    .mem_i_rdclock_clk (dma_clk),
+    .mem_i_rdaddress_rdaddress (dma_raddr[DMA_ADDRESS_WIDTH-1:0]),
+    .mem_o_dataout_dataout (dma_rdata_s));
   end else begin
   ad_mem_asym #(
     .A_ADDRESS_WIDTH (ADC_ADDRESS_WIDTH),
