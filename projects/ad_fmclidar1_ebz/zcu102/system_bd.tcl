@@ -26,6 +26,17 @@ adi_project_files ad_fmclidar1_ebz_zcu102 [list \
 source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl
 source ../common/ad_fmclidar1_ebz_bd.tcl
 
+# I2C for AFE board's DAC
+
+create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 iic_dac
+
+ad_ip_instance axi_iic afe_dac_iic
+ad_connect iic_dac afe_dac_iic/iic
+
+ad_cpu_interconnect 0x7c800000 afe_dac_iic
+
+ad_cpu_interrupt ps-12  mb-14  afe_dac_iic/iic2intc_irpt
+
 # System ID instance and configuration
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
 ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/mem_init_sys.txt"

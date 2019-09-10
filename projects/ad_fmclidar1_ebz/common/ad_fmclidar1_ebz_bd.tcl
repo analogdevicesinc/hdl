@@ -3,7 +3,6 @@ source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
 # interfaces and IO ports
 
-create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 iic_dac
 create_bd_port -dir I spi_vco_csn_i
 create_bd_port -dir O spi_vco_csn_o
 create_bd_port -dir I spi_vco_clk_i
@@ -56,11 +55,6 @@ ad_ip_instance axi_quad_spi axi_spi_vco [list \
   C_NUM_SS_BITS 1 \
   C_SCK_RATIO 8 \
 ]
-
-# I2C for AFE board's DAC
-
-ad_ip_parameter sys_ps7 CONFIG.PCW_QSPI_GRP_IO1_ENABLE 1
-ad_ip_parameter sys_ps7 CONFIG.PCW_I2C1_PERIPHERAL_ENABLE 1
 
 # 3-wire SPI for AFE board's ADC - 12.5MHz SCLK rate
 
@@ -144,8 +138,6 @@ ad_connect spi_vco_clk_o axi_spi_vco/sck_o
 ad_connect spi_vco_sdo_i axi_spi_vco/io0_i
 ad_connect spi_vco_sdo_o axi_spi_vco/io0_o
 ad_connect spi_vco_sdi_i axi_spi_vco/io1_i
-
-ad_connect iic_dac sys_ps7/IIC_1
 
 ad_connect $sys_cpu_clk  axi_spi_afe_adc/ext_spi_clk
 ad_connect spi_afe_adc axi_spi_afe_adc/SPI_0
