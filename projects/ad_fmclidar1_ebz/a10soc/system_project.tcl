@@ -30,8 +30,8 @@ set_location_assignment  PIN_N29  -to rx_ref_clk            ; ## D04  FMCA_HPC_G
 set_location_assignment  PIN_N28  -to "rx_ref_clk(n)"       ; ## D05  FMCA_HPC_GBTCLK0_M2C_N
 
 ## NOTE: Need hardware rework
-set_location_assignment  PIN_E12  -to rx_device_clk         ; ## D08  FMCA_HPC_LA01_CC_P
-set_location_assignment  PIN_E13  -to "rx_device_clk(n)"    ; ## D09  FMCA_HPC_LA01_CC_N
+set_location_assignment  PIN_W5   -to rx_device_clk         ; ## G02  FMCA_HPC_CLK1_M2C_P
+set_location_assignment  PIN_W6   -to "rx_device_clk(n)"    ; ## G03  FMCA_HPC_CLK1_M2C_N
 
 set_location_assignment  PIN_T31  -to rx_data[0]            ; ## C06  FMCA_HPC_DP00_M2C_P
 set_location_assignment  PIN_T30  -to "rx_data[0](n)"       ; ## C07  FMCA_HPC_DP00_M2C_N
@@ -48,8 +48,8 @@ set_location_assignment  PIN_H12  -to rx_sync_1             ; ## H10  FMCA_HPC_L
 set_location_assignment  PIN_H13  -to "rx_sync_1(n)"        ; ## H11  FMCA_HPC_LA04_N
 
 ## NOTE: Need hardware rework
-set_location_assignment  PIN_W5  -to rx_sysref             ; ## G02  FMCA_HPC_CLK1_M2C_P
-set_location_assignment  PIN_W6  -to "rx_sysref(n)"        ; ## G03  FMCA_HPC_CLK1_M2C_N
+set_location_assignment  PIN_E12 -to rx_sysref              ; ## D08  FMCA_HPC_LA01_CC_P
+set_location_assignment  PIN_E13 -to "rx_sysref(n)"         ; ## D09  FMCA_HPC_LA01_CC_N
 
 set_instance_assignment -name IO_STANDARD LVDS -to rx_ref_clk
 set_instance_assignment -name IO_STANDARD LVDS -to "rx_ref_clk(n)"

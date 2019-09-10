@@ -121,7 +121,6 @@ module system_top (
   wire            rx_device_clk;
   wire            laser_driver;
 
-
   // instantiations
 
   IBUFDS_GTE4 i_ibufds_rx_ref_clk (
@@ -174,9 +173,8 @@ module system_top (
               adc_fda           // 32
             }));
 
-  assign gpio_bd_o = gpio_o[ 7: 0];
+  assign gpio_bd_o     = gpio_o[ 7: 0];
   assign gpio_i[20: 8] = gpio_bd_i;
-
   assign gpio_i[ 7: 0] = gpio_o[ 7: 0];
   assign gpio_i[31:21] = gpio_o[31:21];
   assign gpio_i[94:52] = gpio_o[94:52];
