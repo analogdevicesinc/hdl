@@ -4,8 +4,8 @@
 set_property  -dict {PACKAGE_PIN  G8 } [get_ports rx_ref_clk_p]                              ; ## D04  FMC_HPC_GBTCLK0_M2C_P
 set_property  -dict {PACKAGE_PIN  G7 } [get_ports rx_ref_clk_n]                              ; ## D05  FMC_HPC_GBTCLK0_M2C_N
 
-set_property  -dict {PACKAGE_PIN  AB4  IOSTANDARD LVDS} [get_ports rx_device_clk_p]          ; ## D08  FMC_HPC_LA01_CC_P
-set_property  -dict {PACKAGE_PIN  AC4  IOSTANDARD LVDS} [get_ports rx_device_clk_n]          ; ## D09  FMC_HPC_LA01_CC_N
+set_property  -dict {PACKAGE_PIN  T8   IOSTANDARD LVDS} [get_ports rx_device_clk_p]          ; ## D08  FMC_HPC_LA01_CC_P
+set_property  -dict {PACKAGE_PIN  R8   IOSTANDARD LVDS} [get_ports rx_device_clk_n]          ; ## D09  FMC_HPC_LA01_CC_N
 
 set_property  -dict {PACKAGE_PIN  H2 } [get_ports rx_data_p[0]]                              ; ## C06  FMC_HPC_DP0_M2C_P
 set_property  -dict {PACKAGE_PIN  H1 } [get_ports rx_data_n[0]]                              ; ## C07  FMC_HPC_DP0_M2C_N
@@ -20,8 +20,8 @@ set_property  -dict {PACKAGE_PIN  U5   IOSTANDARD LVDS} [get_ports rx_sync0_p]  
 set_property  -dict {PACKAGE_PIN  U4   IOSTANDARD LVDS} [get_ports rx_sync0_n]               ; ## H14  FMC_HPC_LA07_N
 set_property  -dict {PACKAGE_PIN  AA2  IOSTANDARD LVDS} [get_ports rx_sync1_p]               ; ## H10  FMC_HPC_LA04_P
 set_property  -dict {PACKAGE_PIN  AA1  IOSTANDARD LVDS} [get_ports rx_sync1_n]               ; ## H11  FMC_HPC_LA04_N
-set_property  -dict {PACKAGE_PIN  T8   IOSTANDARD LVDS} [get_ports rx_sysref_p]              ; ## G02  FMC_HPC_CLK1_M2C_P
-set_property  -dict {PACKAGE_PIN  R8   IOSTANDARD LVDS} [get_ports rx_sysref_n]              ; ## G03  FMC_HPC_CLK1_M2C_N
+set_property  -dict {PACKAGE_PIN  AB4  IOSTANDARD LVDS} [get_ports rx_sysref_p]              ; ## G02  FMC_HPC_CLK1_M2C_P
+set_property  -dict {PACKAGE_PIN  AC4  IOSTANDARD LVDS} [get_ports rx_sysref_n]              ; ## G03  FMC_HPC_CLK1_M2C_N
 
 # ADC control lines
 
