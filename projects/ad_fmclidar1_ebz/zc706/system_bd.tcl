@@ -26,6 +26,15 @@ adi_project_files ad_fmclidar1_ebz_zc706 [list \
 source $ad_hdl_dir/projects/common/zc706/zc706_system_bd.tcl
 source ../common/ad_fmclidar1_ebz_bd.tcl
 
+# I2C for AFE board's DAC
+
+create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 iic_dac
+
+ad_ip_parameter sys_ps7 CONFIG.PCW_QSPI_GRP_IO1_ENABLE 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_I2C1_PERIPHERAL_ENABLE 1
+
+ad_connect iic_dac sys_ps7/IIC_1
+
 # System ID instance and configuration
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
 ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/mem_init_sys.txt"
