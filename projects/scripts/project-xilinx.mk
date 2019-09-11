@@ -33,11 +33,10 @@ M_DEPS += $(wildcard system_constr.xdc) # Not all projects have this file
 M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_project_xilinx.tcl
 M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_env.tcl
 M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_board.tcl
-M_DEPS += prepare_incremental_compile
 
 M_DEPS += $(foreach dep,$(LIB_DEPS),$(HDL_LIBRARY_PATH)$(dep)/component.xml)
 
-.PHONY: all lib clean clean-all prepare_incremental_compile 
+.PHONY: all lib clean clean-all
 all: lib $(PROJECT_NAME).sdk/system_top.hdf
 
 clean:
@@ -53,7 +52,7 @@ clean-all: clean
 
 MODE ?= "default"
 
-prepare_incremental_compile:
+$(PROJECT_NAME).sdk/system_top.hdf: $(M_DEPS)
 	@if [ $(MODE) = incr ]; then \
 		if [ -f */impl_1/system_top_routed.dcp ]; then \
 			echo Found previous run result at `ls */impl_1/system_top_routed.dcp`; \
@@ -65,8 +64,6 @@ prepare_incremental_compile:
 	else \
 		rm -f reference.dcp; \
 	fi;
-
-$(PROJECT_NAME).sdk/system_top.hdf: $(M_DEPS)
 	-rm -rf $(CLEAN_TARGET)
 	$(call build, \
 		$(VIVADO) system_project.tcl, \
