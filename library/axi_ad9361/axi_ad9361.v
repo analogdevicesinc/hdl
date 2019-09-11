@@ -252,6 +252,7 @@ module axi_ad9361 #(
   wire            dac_data_q0_s;
   wire            dac_data_i1_s;
   wire            dac_data_q1_s;
+  wire            dac_sync_enable;
   wire    [12:0]  up_adc_dld_s;
   wire    [64:0]  up_adc_dwdata_s;
   wire    [64:0]  up_adc_drdata_s;
@@ -506,6 +507,7 @@ module axi_ad9361 #(
   assign up_wack_tdd_s  = 1'b0;
   assign up_rack_tdd_s  = 1'b0;
   assign up_rdata_tdd_s = 32'b0;
+  assign dac_sync_enable = adc_valid_s;
   end
   endgenerate
 
@@ -545,6 +547,9 @@ module axi_ad9361 #(
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_tdd_s),
     .up_rack (up_rack_tdd_s));
+
+  assign dac_sync_enable = adc_valid_s || tdd_mode_s;
+
   end
   endgenerate
 
@@ -673,6 +678,7 @@ module axi_ad9361 #(
     .delay_clk (delay_clk),
     .delay_rst (),
     .delay_locked (delay_locked_s),
+    .dac_sync_enable (dac_sync_enable),
     .dac_sync_in (dac_sync_in),
     .dac_sync_out (dac_sync_out),
     .dac_enable_i0 (dac_enable_i0),
