@@ -77,6 +77,7 @@ module axi_ad9361_tx #(
 
   // master/slave
 
+  input           dac_sync_enable,
   input           dac_sync_in,
   output          dac_sync_out,
 
@@ -160,6 +161,7 @@ module axi_ad9361_tx #(
   // master/slave
 
   assign dac_data_sync_s = (ID == 0) ? dac_sync_out : dac_sync_in;
+  assign dac_sync_out = dac_sync & dac_sync_enable;
 
   always @(posedge dac_clk) begin
     dac_data_sync <= dac_data_sync_s;
@@ -371,7 +373,7 @@ module axi_ad9361_tx #(
     .mmcm_rst (),
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
-    .dac_sync (dac_sync_out),
+    .dac_sync (dac_sync),
     .dac_frame (),
     .dac_clksel (dac_clksel),
     .dac_par_type (),
