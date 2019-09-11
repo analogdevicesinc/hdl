@@ -515,6 +515,7 @@ module axi_spi_engine #(
 
       assign sync_fifo_valid = sync_valid;
       assign sync_fifo_data = sync_data;
+      assign sync_ready = 1'b1;
 
       assign offload0_cmd_wr_en = up_wreq_s == 1'b1 && up_waddr_s == 8'h44;
       assign offload0_cmd_wr_data = up_wdata_s[15:0];
