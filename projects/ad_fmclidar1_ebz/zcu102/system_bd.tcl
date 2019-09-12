@@ -12,7 +12,8 @@ set ADC_RESOLUTION 8            ; # N & NP
 set CHANNEL_DATA_WIDTH [expr 32 * $NUM_OF_LANES / $NUM_OF_CHANNELS]
 set ADC_DATA_WIDTH [expr $CHANNEL_DATA_WIDTH * $NUM_OF_CHANNELS]
 # we have to calculate with an additional dummy channel for TIA
-set DMA_DATA_WIDTH [expr $ADC_DATA_WIDTH > 127 ? 256 : \
+set DMA_DATA_WIDTH [expr $ADC_DATA_WIDTH > 255 ? 512 : \
+                         $ADC_DATA_WIDTH > 127 ? 256 : \
                          $ADC_DATA_WIDTH >  63 ? 128 : 64]
 set SAMPLE_WIDTH [expr $ADC_RESOLUTION > 8 ? 16 : 8]
 
@@ -28,16 +29,25 @@ source ../common/ad_fmclidar1_ebz_bd.tcl
 
 # I2C for AFE board's DAC
 
-create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 iic_dac
+create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 iic_dac_a
+create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 iic_dac_b
 
-ad_ip_instance axi_iic afe_dac_iic
-ad_connect iic_dac afe_dac_iic/iic
+ad_ip_instance axi_iic afe_dac_iic_a
+ad_connect iic_dac_a afe_dac_iic_a/iic
 
-ad_cpu_interconnect 0x7c800000 afe_dac_iic
+ad_cpu_interconnect 0x7C800000 afe_dac_iic_a
 
-ad_cpu_interrupt ps-12  mb-14  afe_dac_iic/iic2intc_irpt
+ad_cpu_interrupt ps-12  mb-14  afe_dac_iic_a/iic2intc_irpt
+
+ad_ip_instance axi_iic afe_dac_iic_b
+ad_connect iic_dac_b afe_dac_iic_b/iic
+
+ad_cpu_interconnect 0x7D800000 afe_dac_iic_b
+
+ad_cpu_interrupt ps-0  mb-14  afe_dac_iic_b/iic2intc_irpt
 
 # System ID instance and configuration
+
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
 ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/mem_init_sys.txt"
 ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
