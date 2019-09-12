@@ -191,7 +191,7 @@ module system_top (
 
   system_bd i_system_bd (
     .sys_clk_clk                          ( sys_clk ),
-    .sys_rstn_reset_n                     ( sys_resetn ),
+    .sys_rstn_reset                       ( sys_resetn ),
     .sys_gpio_bd_in_port                  ( gpio_i[31: 0] ),
     .sys_gpio_bd_out_port                 ( gpio_o[31: 0] ),
     .sys_gpio_in_export                   ( gpio_i[63:32] ),

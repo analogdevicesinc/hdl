@@ -13,8 +13,8 @@ set_instance_parameter_value adrv9009_tx_jesd204 {REFCLK_FREQUENCY} {245.76}
 set_instance_parameter_value adrv9009_tx_jesd204 {NUM_OF_LANES} {4}
 set_instance_parameter_value adrv9009_tx_jesd204 {LANE_MAP} {0 3 2 1}
 
-add_connection sys_clk.clk adrv9009_tx_jesd204.sys_clk
-add_connection sys_clk.clk_reset adrv9009_tx_jesd204.sys_resetn
+add_connection sys_clk.out_clk adrv9009_tx_jesd204.sys_clk
+add_connection sys_resetn.out_reset adrv9009_tx_jesd204.sys_resetn
 add_interface tx_ref_clk clock sink
 set_interface_property tx_ref_clk EXPORT_OF adrv9009_tx_jesd204.ref_clk
 add_interface tx_serial_data conduit end
@@ -34,8 +34,8 @@ set_instance_parameter_value adrv9009_rx_jesd204 {LANE_RATE} {9830.4}
 set_instance_parameter_value adrv9009_rx_jesd204 {REFCLK_FREQUENCY} {245.76}
 set_instance_parameter_value adrv9009_rx_jesd204 {NUM_OF_LANES} {2}
 
-add_connection sys_clk.clk adrv9009_rx_jesd204.sys_clk
-add_connection sys_clk.clk_reset adrv9009_rx_jesd204.sys_resetn
+add_connection sys_clk.out_clk adrv9009_rx_jesd204.sys_clk
+add_connection sys_resetn.out_reset adrv9009_rx_jesd204.sys_resetn
 add_interface rx_ref_clk clock sink
 set_interface_property rx_ref_clk EXPORT_OF adrv9009_rx_jesd204.ref_clk
 add_interface rx_serial_data conduit end
@@ -55,8 +55,8 @@ set_instance_parameter_value adrv9009_rx_os_jesd204 {LANE_RATE} {9830.4}
 set_instance_parameter_value adrv9009_rx_os_jesd204 {REFCLK_FREQUENCY} {245.76}
 set_instance_parameter_value adrv9009_rx_os_jesd204 {NUM_OF_LANES} {2}
 
-add_connection sys_clk.clk adrv9009_rx_os_jesd204.sys_clk
-add_connection sys_clk.clk_reset adrv9009_rx_os_jesd204.sys_resetn
+add_connection sys_clk.out_clk adrv9009_rx_os_jesd204.sys_clk
+add_connection sys_resetn.out_reset adrv9009_rx_os_jesd204.sys_resetn
 add_interface rx_os_ref_clk clock sink
 set_interface_property rx_os_ref_clk EXPORT_OF adrv9009_rx_os_jesd204.ref_clk
 add_interface rx_os_serial_data conduit end
@@ -77,8 +77,8 @@ add_connection adrv9009_rx_jesd204.link_data axi_adrv9009.if_adc_rx_data
 add_connection adrv9009_rx_os_jesd204.link_clk axi_adrv9009.if_adc_os_clk
 add_connection adrv9009_rx_os_jesd204.link_sof axi_adrv9009.if_adc_rx_os_sof
 add_connection adrv9009_rx_os_jesd204.link_data axi_adrv9009.if_adc_rx_os_data
-add_connection sys_clk.clk axi_adrv9009.s_axi_clock
-add_connection sys_clk.clk_reset axi_adrv9009.s_axi_reset
+add_connection sys_clk.out_clk axi_adrv9009.s_axi_clock
+add_connection sys_resetn.out_reset axi_adrv9009.s_axi_reset
 
 # pack(s) & unpack(s)
 
@@ -153,8 +153,8 @@ add_connection sys_dma_clk.clk_reset avl_adrv9009_tx_fifo.if_dma_rst
 add_connection sys_dma_clk.clk axi_adrv9009_tx_dma.if_m_axis_aclk
 add_connection axi_adrv9009_tx_dma.m_axis avl_adrv9009_tx_fifo.s_axis
 add_connection axi_adrv9009_tx_dma.if_m_axis_xfer_req avl_adrv9009_tx_fifo.if_dma_xfer_req
-add_connection sys_clk.clk axi_adrv9009_tx_dma.s_axi_clock
-add_connection sys_clk.clk_reset axi_adrv9009_tx_dma.s_axi_reset
+add_connection sys_clk.out_clk axi_adrv9009_tx_dma.s_axi_clock
+add_connection sys_resetn.out_reset axi_adrv9009_tx_dma.s_axi_reset
 add_connection sys_dma_clk.clk axi_adrv9009_tx_dma.m_src_axi_clock
 add_connection sys_dma_clk.clk_reset axi_adrv9009_tx_dma.m_src_axi_reset
 
@@ -176,8 +176,8 @@ add_connection axi_adrv9009_rx_cpack.if_packed_fifo_wr_en axi_adrv9009_rx_dma.if
 add_connection axi_adrv9009_rx_cpack.if_packed_fifo_wr_sync axi_adrv9009_rx_dma.if_fifo_wr_sync
 add_connection axi_adrv9009_rx_cpack.if_packed_fifo_wr_data axi_adrv9009_rx_dma.if_fifo_wr_din
 add_connection axi_adrv9009_rx_dma.if_fifo_wr_overflow axi_adrv9009_rx_cpack.if_packed_fifo_wr_overflow
-add_connection sys_clk.clk axi_adrv9009_rx_dma.s_axi_clock
-add_connection sys_clk.clk_reset axi_adrv9009_rx_dma.s_axi_reset
+add_connection sys_clk.out_clk axi_adrv9009_rx_dma.s_axi_clock
+add_connection sys_resetn.out_reset axi_adrv9009_rx_dma.s_axi_reset
 add_connection sys_dma_clk.clk axi_adrv9009_rx_dma.m_dest_axi_clock
 add_connection sys_dma_clk.clk_reset axi_adrv9009_rx_dma.m_dest_axi_reset
 
@@ -199,8 +199,8 @@ add_connection axi_adrv9009_rx_os_cpack.if_packed_fifo_wr_en axi_adrv9009_rx_os_
 add_connection axi_adrv9009_rx_os_cpack.if_packed_fifo_wr_sync  axi_adrv9009_rx_os_dma.if_fifo_wr_sync
 add_connection axi_adrv9009_rx_os_cpack.if_packed_fifo_wr_data axi_adrv9009_rx_os_dma.if_fifo_wr_din
 add_connection axi_adrv9009_rx_os_dma.if_fifo_wr_overflow axi_adrv9009_rx_os_cpack.if_packed_fifo_wr_overflow
-add_connection sys_clk.clk axi_adrv9009_rx_os_dma.s_axi_clock
-add_connection sys_clk.clk_reset axi_adrv9009_rx_os_dma.s_axi_reset
+add_connection sys_clk.out_clk axi_adrv9009_rx_os_dma.s_axi_clock
+add_connection sys_resetn.out_reset axi_adrv9009_rx_os_dma.s_axi_reset
 add_connection sys_dma_clk.clk axi_adrv9009_rx_os_dma.m_dest_axi_clock
 add_connection sys_dma_clk.clk_reset axi_adrv9009_rx_os_dma.m_dest_axi_reset
 
@@ -210,8 +210,8 @@ add_instance avl_adrv9009_gpio altera_avalon_pio
 set_instance_parameter_value avl_adrv9009_gpio {direction} {Bidir}
 set_instance_parameter_value avl_adrv9009_gpio {generateIRQ} {1}
 set_instance_parameter_value avl_adrv9009_gpio {width} {19}
-add_connection sys_clk.clk avl_adrv9009_gpio.clk
-add_connection sys_clk.clk_reset avl_adrv9009_gpio.reset
+add_connection sys_clk.out_clk avl_adrv9009_gpio.clk
+add_connection sys_resetn.out_reset avl_adrv9009_gpio.reset
 add_interface adrv9009_gpio conduit end
 set_interface_property adrv9009_gpio EXPORT_OF avl_adrv9009_gpio.external_connection
 
@@ -219,8 +219,8 @@ set_interface_property adrv9009_gpio EXPORT_OF avl_adrv9009_gpio.external_connec
 
 for {set i 0} {$i < 4} {incr i} {
   add_instance avl_adxcfg_${i} avl_adxcfg
-  add_connection sys_clk.clk avl_adxcfg_${i}.rcfg_clk
-  add_connection sys_clk.clk_reset avl_adxcfg_${i}.rcfg_reset_n
+  add_connection sys_clk.out_clk avl_adxcfg_${i}.rcfg_clk
+  add_connection sys_resetn.out_reset avl_adxcfg_${i}.rcfg_reset_n
   add_connection avl_adxcfg_${i}.rcfg_m0 adrv9009_tx_jesd204.phy_reconfig_${i}
 
   set_instance_parameter_value avl_adxcfg_${i} {ADDRESS_WIDTH} $xcvr_reconfig_addr_width

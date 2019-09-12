@@ -125,25 +125,25 @@ set_instance_parameter_value ad9213_dual_pio {edgeType} {RISING}
 
 # system clock and reset
 
-add_connection sys_clk.clk ad9213_rx_0.sys_clk
-add_connection sys_clk.clk ad9213_rx_1.sys_clk
-add_connection sys_clk.clk axi_ad9213_0.s_axi_clock
-add_connection sys_clk.clk axi_ad9213_1.s_axi_clock
-add_connection sys_clk.clk axi_ad9213_dma_0.s_axi_clock
-add_connection sys_clk.clk axi_ad9213_dma_1.s_axi_clock
-add_connection sys_clk.clk adf4371_spi.clk
-add_connection sys_clk.clk ltc6952_spi.clk
-add_connection sys_clk.clk ad9213_dual_pio.clk
+add_connection sys_clk.out_clk ad9213_rx_0.sys_clk
+add_connection sys_clk.out_clk ad9213_rx_1.sys_clk
+add_connection sys_clk.out_clk axi_ad9213_0.s_axi_clock
+add_connection sys_clk.out_clk axi_ad9213_1.s_axi_clock
+add_connection sys_clk.out_clk axi_ad9213_dma_0.s_axi_clock
+add_connection sys_clk.out_clk axi_ad9213_dma_1.s_axi_clock
+add_connection sys_clk.out_clk adf4371_spi.clk
+add_connection sys_clk.out_clk ltc6952_spi.clk
+add_connection sys_clk.out_clk ad9213_dual_pio.clk
 
-add_connection sys_clk.clk_reset ad9213_rx_0.sys_resetn
-add_connection sys_clk.clk_reset ad9213_rx_1.sys_resetn
-add_connection sys_clk.clk_reset axi_ad9213_0.s_axi_reset
-add_connection sys_clk.clk_reset axi_ad9213_1.s_axi_reset
-add_connection sys_clk.clk_reset axi_ad9213_dma_0.s_axi_reset
-add_connection sys_clk.clk_reset axi_ad9213_dma_1.s_axi_reset
-add_connection sys_clk.clk_reset adf4371_spi.reset
-add_connection sys_clk.clk_reset ltc6952_spi.reset
-add_connection sys_clk.clk_reset ad9213_dual_pio.reset
+add_connection sys_resetn.out_reset ad9213_rx_0.sys_resetn
+add_connection sys_resetn.out_reset ad9213_rx_1.sys_resetn
+add_connection sys_resetn.out_reset axi_ad9213_0.s_axi_reset
+add_connection sys_resetn.out_reset axi_ad9213_1.s_axi_reset
+add_connection sys_resetn.out_reset axi_ad9213_dma_0.s_axi_reset
+add_connection sys_resetn.out_reset axi_ad9213_dma_1.s_axi_reset
+add_connection sys_resetn.out_reset adf4371_spi.reset
+add_connection sys_resetn.out_reset ltc6952_spi.reset
+add_connection sys_resetn.out_reset ad9213_dual_pio.reset
 
 # device clock and reset
 
