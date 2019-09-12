@@ -40,7 +40,7 @@ module system_top (
   // clock and resets
 
   input             sys_clk,
-  input             sys_resetn,
+  input             fpga_resetn,
   input             hps_ref_clk,
 
   // hps-ddr4 (72)
@@ -164,12 +164,15 @@ module system_top (
   wire    [ 63:0]   gpio_o;
   wire              spi_mosi_s;
   wire              spi_miso_s;
+  wire              ninit_done_s;
+  wire              h2f_reset_s;
+  wire              sys_resetn_s;
 
   // motherboard-gpio
 
   assign gpio_i[3:0]   = fpga_gpio_dpsw;
   assign gpio_i[7:4]   = fpga_gpio_btn;
-  assign gpio_i[31:11]  = gpio_o[31:11];
+  assign gpio_i[31:11] = gpio_o[31:11];
   assign fpga_gpio_led = gpio_o[10:8];
 
   // assignments
@@ -177,6 +180,10 @@ module system_top (
   assign ad9213_a_rst = gpio_o[32];
   assign ad9213_b_rst = gpio_o[33];
   assign gpio_i[33:32] = gpio_o[33:32];
+
+  // system reset is a combination of external reset, HPS reset and S10 init
+  // done reset
+  assign sys_resetn_s = fpga_resetn & ~h2f_reset_s & ~ninit_done_s;
 
   // instantiations
 
@@ -202,7 +209,9 @@ module system_top (
 
   system_bd i_system_bd (
     .sys_clk_clk                          ( sys_clk ),
-    .sys_rstn_reset_n                     ( sys_resetn ),
+    .sys_rstn_reset_n                     ( sys_resetn_s ),
+	  .h2f_reset_reset                      ( h2f_reset_s ),
+	  .rst_ninit_done_ninit_done            ( ninit_done_s ),
     .sys_gpio_bd_in_port                  ( gpio_i[31: 0] ),
     .sys_gpio_bd_out_port                 ( gpio_o[31: 0] ),
     .sys_gpio_in_export                   ( gpio_i[63:32] ),

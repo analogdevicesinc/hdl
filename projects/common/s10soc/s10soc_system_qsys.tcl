@@ -12,9 +12,14 @@ add_interface sys_clk clock sink
 set_interface_property sys_clk EXPORT_OF sys_clk.in_clk
 
 add_instance sys_resetn altera_reset_bridge 19.1
+set_instance_parameter_value sys_resetn {ACTIVE_LOW_RESET} {1}
 add_connection sys_clk.out_clk sys_resetn.clk
 add_interface sys_rstn reset sink
 set_interface_property sys_rstn EXPORT_OF sys_resetn.in_reset
+
+add_instance s10_reset altera_s10_user_rst_clkgate
+add_interface rst_ninit_done reset source
+set_interface_property rst_ninit_done EXPORT_OF s10_reset.ninit_done
 
 # sysid
 
@@ -159,6 +164,9 @@ add_connection sys_clk.out_clk sys_hps.f2h_axi_clock
 add_connection sys_resetn.out_reset sys_hps.f2h_axi_reset
 add_connection sys_clk.out_clk sys_hps.h2f_axi_clock
 add_connection sys_resetn.out_reset sys_hps.h2f_axi_reset
+
+add_interface h2f_reset reset source
+set_interface_property h2f_reset EXPORT_OF sys_hps.h2f_reset
 
 # common dma interfaces
 

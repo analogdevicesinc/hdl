@@ -3,9 +3,9 @@
 # clocks and resets
 
 set_location_assignment PIN_AW10                  -to sys_clk        ; ## 100 MHz
-set_location_assignment PIN_BC15                  -to sys_resetn
+set_location_assignment PIN_BC15                  -to fpga_resetn
 set_instance_assignment -name IO_STANDARD "1.8 V" -to sys_clk
-set_instance_assignment -name IO_STANDARD "1.8 V" -to sys_resetn
+set_instance_assignment -name IO_STANDARD "1.8 V" -to fpga_resetn
 
 ## 25 MHz on OOBE Daughter Card
 
