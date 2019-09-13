@@ -56,16 +56,32 @@ module axi_logic_analyzer_trigger (
   output  reg           trigger_out,
   output  reg           trigger_out_adc);
 
-  reg     [ 17:0]   data_m1 = 'd0;
-  reg     [ 17:0]   low_level = 'd0;
-  reg     [ 17:0]   high_level = 'd0;
-  reg     [ 17:0]   edge_detect = 'd0;
-  reg     [ 17:0]   rise_edge = 'd0;
-  reg     [ 17:0]   fall_edge = 'd0;
+  reg     [  1:0]   ext_t_m = 'd0;
+  reg     [  1:0]   ext_t_low_level_hold = 'd0;
+  reg     [  1:0]   ext_t_high_level_hold = 'd0;
+  reg     [  1:0]   ext_t_edge_detect_hold = 'd0;
+  reg     [  1:0]   ext_t_rise_edge_hold = 'd0;
+  reg     [  1:0]   ext_t_fall_edge_hold = 'd0;
+  reg               ext_t_low_level_ack = 'd0;
+  reg               ext_t_high_level_ack = 'd0;
+  reg               ext_t_edge_detect_ack = 'd0;
+  reg               ext_t_rise_edge_ack = 'd0;
+  reg               ext_t_fall_edge_ack = 'd0;
+  reg     [ 15:0]   data_m1 = 'd0;
+  reg     [ 15:0]   low_level = 'd0;
+  reg     [ 15:0]   high_level = 'd0;
+  reg     [ 15:0]   edge_detect = 'd0;
+  reg     [ 15:0]   rise_edge = 'd0;
+  reg     [ 15:0]   fall_edge = 'd0;
+  reg     [ 15:0]   low_level_m = 'd0;
+  reg     [ 15:0]   high_level_m = 'd0;
+  reg     [ 15:0]   edge_detect_m = 'd0;
+  reg     [ 15:0]   rise_edge_m = 'd0;
+  reg     [ 15:0]   fall_edge_m = 'd0;
 
-  reg              trigger_active;
-  reg              trigger_active_mux;
-  reg              trigger_active_d1;
+  reg               trigger_active;
+  reg               trigger_active_mux;
+  reg               trigger_active_d1;
 
   always @(posedge clk) begin
     if (data_valid == 1'b1) begin
@@ -80,19 +96,19 @@ module axi_logic_analyzer_trigger (
   // 0 OR
   // 1 AND
 
-  always @(posedge clk) begin
+  always @(*) begin
     if (data_valid == 1'b1) begin
       case (trigger_logic[0])
-        0: trigger_active <= |((edge_detect & edge_detect_enable) |
-                               (rise_edge & rise_edge_enable) |
-                               (fall_edge & fall_edge_enable) |
-                               (low_level & low_level_enable) |
-                               (high_level & high_level_enable));
-        1: trigger_active <= &((edge_detect | ~edge_detect_enable) &
-                               (rise_edge | ~rise_edge_enable) &
-                               (fall_edge | ~fall_edge_enable) &
-                               (low_level | ~low_level_enable) &
-                               (high_level | ~high_level_enable));
+        0: trigger_active = |(({ext_t_edge_detect_hold, edge_detect_m} & edge_detect_enable) |
+                              ({ext_t_rise_edge_hold,   rise_edge_m}   & rise_edge_enable) |
+                              ({ext_t_fall_edge_hold,   fall_edge_m}   & fall_edge_enable) |
+                              ({ext_t_low_level_hold,   low_level_m}   & low_level_enable) |
+                              ({ext_t_high_level_hold , high_level_m}  & high_level_enable));
+        1: trigger_active = &(({ext_t_edge_detect_hold, edge_detect_m} | ~edge_detect_enable) &
+                              ({ext_t_rise_edge_hold,   rise_edge_m}   | ~rise_edge_enable) &
+                              ({ext_t_fall_edge_hold,   fall_edge_m}   | ~fall_edge_enable) &
+                              ({ext_t_low_level_hold,   low_level_m}   | ~low_level_enable) &
+                              ({ext_t_high_level_hold , high_level_m}  | ~high_level_enable));
         default: trigger_active = 1'b1;
       endcase
     end
@@ -109,9 +125,6 @@ module axi_logic_analyzer_trigger (
     endcase
   end
 
-
-  // internal signals
-
   always @(posedge clk) begin
     if (reset == 1'b1) begin
       data_m1 <= 'd0;
@@ -122,16 +135,53 @@ module axi_logic_analyzer_trigger (
       high_level <= 'd0;
     end else begin
       if (data_valid == 1'b1) begin
-        data_m1 <= {trigger_i, data} ;
-        edge_detect <= data_m1 ^ {trigger_i, data};
-        rise_edge <= (data_m1 ^ {trigger_i, data} ) & {trigger_i, data};
-        fall_edge <= (data_m1 ^ {trigger_i, data}) & ~{trigger_i, data};
-        low_level <= ~{trigger_i, data};
-        high_level <= {trigger_i, data};
+        data_m1 <=  data;
+        edge_detect <=  data_m1 ^ data;
+        rise_edge   <= (data_m1 ^ data) & data;
+        fall_edge   <= (data_m1 ^ data) & ~data;
+        low_level   <= ~data;
+        high_level  <= data;
+
+        edge_detect_m <= edge_detect;
+        rise_edge_m   <= rise_edge;
+        fall_edge_m   <= fall_edge;
+        low_level_m   <= low_level;
+        high_level_m  <= high_level;
       end
     end
   end
 
+  // external trigger detect
+
+  always @(posedge clk) begin
+    if (reset == 1'b1) begin
+      ext_t_m <= 'd0;
+      ext_t_edge_detect_hold <= 'd0;
+      ext_t_rise_edge_hold <= 'd0;
+      ext_t_fall_edge_hold <= 'd0;
+      ext_t_low_level_hold <= 'd0;
+      ext_t_high_level_hold <= 'd0;
+    end else begin
+      ext_t_m <=  trigger_i;
+
+      ext_t_edge_detect_hold <= ext_t_edge_detect_ack ? 2'b0 :
+                                (ext_t_m ^ trigger_i) | ext_t_edge_detect_hold;
+      ext_t_rise_edge_hold   <= ext_t_rise_edge_ack   ? 2'b0 :
+                                ((ext_t_m ^ trigger_i) & trigger_i) | ext_t_rise_edge_hold;
+      ext_t_fall_edge_hold   <= ext_t_fall_edge_ack   ? 2'b0 :
+                                ((ext_t_m ^ trigger_i) & ~trigger_i) | ext_t_fall_edge_hold;
+      ext_t_low_level_hold   <= ext_t_low_level_ack   ? 2'b0 :
+                                (~trigger_i) | ext_t_low_level_hold;
+      ext_t_high_level_hold  <= ext_t_high_level_ack  ? 2'b0 :
+                                (trigger_i) | ext_t_high_level_hold;
+
+      ext_t_edge_detect_ack <= data_valid & ( |ext_t_edge_detect_hold);
+      ext_t_rise_edge_ack   <= data_valid & ( |ext_t_rise_edge_hold);
+      ext_t_fall_edge_ack   <= data_valid & ( |ext_t_fall_edge_hold);
+      ext_t_low_level_ack   <= data_valid & ( |ext_t_low_level_hold);
+      ext_t_high_level_ack  <= data_valid & ( |ext_t_high_level_hold);
+    end
+  end
 
 endmodule
 

@@ -256,6 +256,9 @@ module axi_logic_analyzer #(
 
   assign adc_valid = sample_valid_la;
 
+  always @(posedge clk_out) begin
+    trigger_m1 <= trigger_i;
+  end
   // downsampler logic analyzer
 
   always @(posedge clk_out) begin
