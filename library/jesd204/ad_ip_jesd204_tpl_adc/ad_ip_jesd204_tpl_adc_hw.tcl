@@ -76,7 +76,7 @@ ad_ip_parameter NUM_CHANNELS INTEGER 1 true [list \
   GROUP $group \
 ]
 
-ad_ip_parameter BITS_PER_SAMPLE INTEGER 16 false [list \
+ad_ip_parameter BITS_PER_SAMPLE INTEGER 16 true [list \
   DISPLAY_NAME "Bits per Sample (N')" \
   ALLOWED_RANGES {8 12 16} \
   UNITS bits \
