@@ -37,7 +37,8 @@ ad_ip_files util_cpack2_impl [list \
 # parameters
 
 ad_ip_parameter NUM_OF_CHANNELS INTEGER 4 true [list \
-  DISPLAY_NAME "Number of Channels"
+  DISPLAY_NAME "Number of Channels" \
+  ALLOWED_RANGES {2, 4, 8, 16}
 ]
 
 ad_ip_parameter SAMPLES_PER_CHANNEL INTEGER 1 true [list \
