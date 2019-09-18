@@ -40,6 +40,7 @@ module axi_ad9361_cmos_if #(
   parameter   FPGA_TECHNOLOGY = 0,
   parameter   DAC_IODELAY_ENABLE = 0,
   parameter   CLK_DESKEW = 0,
+  parameter   USE_SSI_CLK = 1,
 
   // Dummy parameters, required keep the code consistency(used on Xilinx)
   parameter   IO_DELAY_GROUP = "dev_if_delay_group",

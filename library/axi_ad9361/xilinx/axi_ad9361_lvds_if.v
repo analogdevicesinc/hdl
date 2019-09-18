@@ -41,6 +41,7 @@ module axi_ad9361_lvds_if #(
   parameter   DAC_IODELAY_ENABLE = 0,
   parameter   IO_DELAY_GROUP = "dev_if_delay_group",
   parameter   CLK_DESKEW = 0,
+  parameter   USE_SSI_CLK = 1,
   parameter   DELAY_REFCLK_FREQUENCY = 200) (
 
   // physical interface (receive)
@@ -690,7 +691,7 @@ module axi_ad9361_lvds_if #(
     .delay_locked ());
 
   // device clock interface (receive clock)
-
+  generate if (USE_SSI_CLK == 1) begin
   ad_data_clk
   i_clk (
     .rst (1'd0),
@@ -698,6 +699,10 @@ module axi_ad9361_lvds_if #(
     .clk_in_p (rx_clk_in_p),
     .clk_in_n (rx_clk_in_n),
     .clk (l_clk));
+  end else begin
+    assign l_clk = clk;
+  end
+  endgenerate
 
 endmodule
 
