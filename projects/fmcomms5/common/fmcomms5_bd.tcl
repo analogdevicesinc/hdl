@@ -49,7 +49,6 @@ ad_connect $sys_cpu_resetn sys_100m_resetn
 ad_ip_instance axi_ad9361 axi_ad9361_0
 ad_ip_parameter axi_ad9361_0 CONFIG.ID 0
 ad_ip_parameter axi_ad9361_0 CONFIG.IO_DELAY_GROUP dev_0_if_delay_group
-ad_ip_parameter axi_ad9361_0 CONFIG.MIMO_ENABLE 1
 ad_connect $sys_iodelay_clk axi_ad9361_0/delay_clk
 ad_connect axi_ad9361_0/l_clk axi_ad9361_0/clk
 ad_connect axi_ad9361_0/dac_sync_out axi_ad9361_0/dac_sync_in
@@ -75,7 +74,7 @@ ad_connect up_txnrx_0 axi_ad9361_0/up_txnrx
 ad_ip_instance axi_ad9361 axi_ad9361_1
 ad_ip_parameter axi_ad9361_1 CONFIG.ID 1
 ad_ip_parameter axi_ad9361_1 CONFIG.IO_DELAY_GROUP dev_1_if_delay_group
-ad_ip_parameter axi_ad9361_1 CONFIG.MIMO_ENABLE 1
+ad_ip_parameter axi_ad9361_1 CONFIG.USE_SSI_CLK 0
 ad_connect $sys_iodelay_clk axi_ad9361_1/delay_clk
 ad_connect axi_ad9361_0/l_clk axi_ad9361_1/clk
 ad_connect axi_ad9361_0/dac_sync_out axi_ad9361_1/dac_sync_in
