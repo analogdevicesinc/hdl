@@ -191,6 +191,7 @@ module system_top (
   wire            rx_device_clk_a;
 
   wire            rx_ref_clk_b;
+  wire            rx_sync_b;
   wire            rx_sysref_b;
   wire            rx_device_clk_b;
 
@@ -279,14 +280,14 @@ module system_top (
               laser_gpio_b,       // 67:58
               afe_adc_convst_b,   // 57    - output only
               afe_dac_load_b,     // 56    - output only
-              afe_dac_clr_b_n,    // 55    - output only
+              afe_dac_clr_n_b,    // 55    - output only
               adc_pdwn_b,         // 54
               adc_fdb_b,          // 53
               adc_fda_b,          // 52
               laser_gpio_a,       // 51:38
               afe_adc_convst_a,   // 37    - output only
               afe_dac_load_a,     // 36    - output only
-              afe_dac_clr_a_n,    // 35    - output only
+              afe_dac_clr_n_a,    // 35    - output only
               adc_pdwn_a,         // 34
               adc_fdb_a,          // 33
               adc_fda_a           // 32
@@ -363,6 +364,7 @@ module system_top (
     .rx_data_1_3_p (rx_data_b_p[3]),
     .rx_ref_clk_b (rx_ref_clk_b),
     .rx_device_clk_b (rx_device_clk_b),
+    .rx_sync_1_0 (rx_sync_b),
     .iic_dac_b_scl_io (afe_dac_scl_b),
     .iic_dac_b_sda_io (afe_dac_sda_b),
     .spi_adc_csn_b_i (1'b1),
