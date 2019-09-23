@@ -60,12 +60,6 @@ module system_top (
   inout           fixed_io_ps_porb,
   inout           fixed_io_ps_srstb,
 
-  inout   [31:0]  gpio_bd,
-
-  output          spdif,
-
-  input           otg_vbusoc,
-
   inout           ad7768_0_reset,
   inout           ad7768_0_sync_in,
   
@@ -77,7 +71,9 @@ module system_top (
   output          ad7768_0_spi_mosi,
   output          ad7768_0_spi_sclk,
   output          ad7768_0_spi_cs,
-  input           ad7768_0_drdy,
+  input           ad7768_0_drdy);
+
+	
 
   // internal signals
 
@@ -97,40 +93,12 @@ module system_top (
     .dio_p({
             ad7768_0_fda_dis,
             ad7768_0_fda_mode,
-			ad7768_0_dac_buf_en,
-			ad7768_0_sync_in,
-			ad7768_0_reset}));
+						ad7768_0_dac_buf_en,
+						ad7768_0_sync_in,
+						ad7768_0_reset}));
 
-  assign gpio_i[47:37] = gpio_o[47:37];
-  assign gpio_i[63:55] = gpio_o[63:55];
-
-/*   ad_iobuf #(
-    .DATA_WIDTH(6)
-  ) i_iobuf_ad7768_0_gpio (
-    .dio_t({gpio_t[37:34], 1'b1, gpio_t[32]}),
-    .dio_i({gpio_o[37:34]),
-    .dio_o({gpio_i[37:34]),
-    .dio_p({
-	        
-			ad7768_0_gpio,     // 37:34
-            ad7768_0_sync_in,  // 33 
-            ad7768_0_reset     // 32
-			
-			}));
-
-  assign gpio_i[47:39] = gpio_o[47:39];
-  assign gpio_i[63:55] = gpio_o[63:55]; */
-
-  ad_iobuf #(
-    .DATA_WIDTH(32)
-  ) i_iobuf (
-    .dio_t(gpio_t[31:0]),
-    .dio_i(gpio_o[31:0]),
-    .dio_o(gpio_i[31:0]),
-    .dio_p(gpio_bd));
-
-  assign gpio_i[47:39] = gpio_o[47:39];
-  assign gpio_i[63:55] = gpio_o[63:55];
+	assign gpio_i[31:0] = gpio_o[31:0];
+  assign gpio_i[63:37] = gpio_o[63:37];
 
 
   system_wrapper i_system_wrapper (
@@ -158,15 +126,33 @@ module system_top (
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .gpio_t (gpio_t),
-    .otg_vbusoc (otg_vbusoc),
-    .spdif (spdif),
-    .adc1_spi_sdo (ad7768_0_spi_mosi),
-    .adc1_spi_sdo_t (),
-    .adc1_spi_sdi (ad7768_0_spi_miso),
-    .adc1_spi_cs (ad7768_0_spi_cs),
-    .adc1_spi_sclk (ad7768_0_spi_sclk),
-    .adc1_data_ready (ad7768_0_drdy));
+    .adc_spi_sdo (ad7768_0_spi_mosi),
+    .adc_spi_sdo_t (),
+    .adc_spi_sdi (ad7768_0_spi_miso),
+    .adc_spi_cs (ad7768_0_spi_cs),
+    .adc_spi_sclk (ad7768_0_spi_sclk),
+    .adc_data_ready (ad7768_0_drdy)
+//		.spi0_clk_i (0),
+//		.spi0_clk_o (),
+//		.spi0_csn_0_o (),
+//		.spi0_csn_1_o (),
+//		.spi0_csn_2_o (),
+//		.spi0_csn_i (0),
+//		.spi0_sdi_i (0),
+//		.spi0_sdo_i (0),
+//		.spi0_sdo_o (),
+//		.spi1_clk_i (0),
+//		.spi1_clk_o (),
+//		.spi1_csn_0_o (),
+//		.spi1_csn_1_o (),
+//		.spi1_csn_2_o (),
+//		.spi1_csn_i (0),
+//		.spi1_sdi_i (0),
+//		.spi1_sdo_i (0),
+//		.spi1_sdo_o()
+);
 
+	
 endmodule
 
 // ***************************************************************************

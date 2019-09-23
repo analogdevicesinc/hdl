@@ -5,25 +5,25 @@
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 ddr
 create_bd_intf_port -mode Master -vlnv xilinx.com:display_processing_system7:fixedio_rtl:1.0 fixed_io
 
-create_bd_port -dir O spi0_csn_2_o
-create_bd_port -dir O spi0_csn_1_o
-create_bd_port -dir O spi0_csn_0_o
-create_bd_port -dir I spi0_csn_i
-create_bd_port -dir I spi0_clk_i
-create_bd_port -dir O spi0_clk_o
-create_bd_port -dir I spi0_sdo_i
-create_bd_port -dir O spi0_sdo_o
-create_bd_port -dir I spi0_sdi_i
+# create_bd_port -dir O spi0_csn_2_o
+# create_bd_port -dir O spi0_csn_1_o
+# create_bd_port -dir O spi0_csn_0_o
+# create_bd_port -dir I spi0_csn_i
+# create_bd_port -dir I spi0_clk_i
+# create_bd_port -dir O spi0_clk_o
+# create_bd_port -dir I spi0_sdo_i
+# create_bd_port -dir O spi0_sdo_o
+# create_bd_port -dir I spi0_sdi_i
 
-create_bd_port -dir O spi1_csn_2_o
-create_bd_port -dir O spi1_csn_1_o
-create_bd_port -dir O spi1_csn_0_o
-create_bd_port -dir I spi1_csn_i
-create_bd_port -dir I spi1_clk_i
-create_bd_port -dir O spi1_clk_o
-create_bd_port -dir I spi1_sdo_i
-create_bd_port -dir O spi1_sdo_o
-create_bd_port -dir I spi1_sdi_i
+# create_bd_port -dir O spi1_csn_2_o
+# create_bd_port -dir O spi1_csn_1_o
+# create_bd_port -dir O spi1_csn_0_o
+# create_bd_port -dir I spi1_csn_i
+# create_bd_port -dir I spi1_clk_i
+# create_bd_port -dir O spi1_clk_o
+# create_bd_port -dir I spi1_sdo_i
+# create_bd_port -dir O spi1_sdo_o
+# create_bd_port -dir I spi1_sdi_i
 
 create_bd_port -dir I -from 63 -to 0 gpio_i
 create_bd_port -dir O -from 63 -to 0 gpio_o
@@ -108,15 +108,15 @@ ad_ip_instance processing_system7 sys_ps7 [list \
    PCW_DDR_LPR_TO_CRITICAL_PRIORITY_LEVEL {2} \
    PCW_DDR_PERIPHERAL_CLKSRC {DDR PLL} \
    PCW_DDR_PERIPHERAL_DIVISOR0 {2} \
-   PCW_DDR_PORT0_HPR_ENABLE {0} \
+   PCW_DDR_PORT0_HPR_ENABLE {1} \
    PCW_DDR_PORT1_HPR_ENABLE {0} \
    PCW_DDR_PORT2_HPR_ENABLE {0} \
    PCW_DDR_PORT3_HPR_ENABLE {0} \
-   PCW_DDR_PRIORITY_READPORT_0 {<Select>} \
+   PCW_DDR_PRIORITY_READPORT_0 {EMIO} \
    PCW_DDR_PRIORITY_READPORT_1 {<Select>} \
    PCW_DDR_PRIORITY_READPORT_2 {<Select>} \
    PCW_DDR_PRIORITY_READPORT_3 {<Select>} \
-   PCW_DDR_PRIORITY_WRITEPORT_0 {<Select>} \
+   PCW_DDR_PRIORITY_WRITEPORT_0 {EMIO} \
    PCW_DDR_PRIORITY_WRITEPORT_1 {<Select>} \
    PCW_DDR_PRIORITY_WRITEPORT_2 {<Select>} \
    PCW_DDR_PRIORITY_WRITEPORT_3 {<Select>} \
@@ -179,7 +179,7 @@ ad_ip_instance processing_system7 sys_ps7 [list \
    PCW_EN_EMIO_PJTAG {0} \
    PCW_EN_EMIO_SDIO0 {0} \
    PCW_EN_EMIO_SDIO1 {0} \
-   PCW_EN_EMIO_SPI0 {1} \
+   PCW_EN_EMIO_SPI0 {0} \
    PCW_EN_EMIO_SPI1 {0} \
    PCW_EN_EMIO_SRAM_INT {0} \
    PCW_EN_EMIO_TRACE {0} \
@@ -208,7 +208,7 @@ ad_ip_instance processing_system7 sys_ps7 [list \
    PCW_EN_SDIO0 {1} \
    PCW_EN_SDIO1 {0} \
    PCW_EN_SMC {0} \
-   PCW_EN_SPI0 {1} \
+   PCW_EN_SPI0 {0} \
    PCW_EN_SPI1 {0} \
    PCW_EN_TRACE {0} \
    PCW_EN_TTC0 {0} \
@@ -602,7 +602,7 @@ ad_ip_instance processing_system7 sys_ps7 [list \
    PCW_PACKAGE_DDR_BOARD_DELAY0 {0.223} \
    PCW_PACKAGE_DDR_BOARD_DELAY1 {0.212} \
    PCW_PACKAGE_DDR_BOARD_DELAY2 {0.085} \
-   PCW_PACKACKAGE_DDR_BOARD_DELAY3 {0.092} \
+   PCW_PACKAGE_DDR_BOARD_DELAY3 {0.092} \
    PCW_PACKAGE_DDR_DQS_TO_CLK_DELAY_0 {0.040} \
    PCW_PACKAGE_DDR_DQS_TO_CLK_DELAY_1 {0.058} \
    PCW_PACKAGE_DDR_DQS_TO_CLK_DELAY_2 {-0.009} \
@@ -668,26 +668,6 @@ ad_ip_instance processing_system7 sys_ps7 [list \
    PCW_SMC_PERIPHERAL_DIVISOR0 {1} \
    PCW_SMC_PERIPHERAL_FREQMHZ {100} \
    PCW_SMC_PERIPHERAL_VALID {0} \
-   PCW_SPI0_BASEADDR {0xE0006000} \
-   PCW_SPI0_GRP_SS0_ENABLE {1} \
-   PCW_SPI0_GRP_SS0_IO {EMIO} \
-   PCW_SPI0_GRP_SS1_ENABLE {1} \
-   PCW_SPI0_GRP_SS1_IO {EMIO} \
-   PCW_SPI0_GRP_SS2_ENABLE {1} \
-   PCW_SPI0_GRP_SS2_IO {EMIO} \
-   PCW_SPI0_HIGHADDR {0xE0006FFF} \
-   PCW_SPI0_PERIPHERAL_ENABLE {1} \
-   PCW_SPI0_SPI0_IO {EMIO} \
-   PCW_SPI1_BASEADDR {0xE0007000} \
-   PCW_SPI1_GRP_SS0_ENABLE {0} \
-   PCW_SPI1_GRP_SS0_IO {<Select>} \
-   PCW_SPI1_GRP_SS1_ENABLE {0} \
-   PCW_SPI1_GRP_SS1_IO {<Select>} \
-   PCW_SPI1_GRP_SS2_ENABLE {0} \
-   PCW_SPI1_GRP_SS2_IO {<Select>} \
-   PCW_SPI1_HIGHADDR {0xE0007FFF} \
-   PCW_SPI1_PERIPHERAL_ENABLE {1} \
-   PCW_SPI1_SPI1_IO {EMIO} \
    PCW_SPI_PERIPHERAL_CLKSRC {IO PLL} \
    PCW_SPI_PERIPHERAL_DIVISOR0 {6} \
    PCW_SPI_PERIPHERAL_FREQMHZ {166.666666} \
@@ -943,25 +923,25 @@ ad_connect  fixed_io      sys_ps7/FIXED_IO
 
 # spi connections
 
-ad_connect  spi0_csn_2_o sys_ps7/SPI0_SS2_O
-ad_connect  spi0_csn_1_o sys_ps7/SPI0_SS1_O
-ad_connect  spi0_csn_0_o sys_ps7/SPI0_SS_O
-ad_connect  spi0_csn_i sys_ps7/SPI0_SS_I
-ad_connect  spi0_clk_i sys_ps7/SPI0_SCLK_I
-ad_connect  spi0_clk_o sys_ps7/SPI0_SCLK_O
-ad_connect  spi0_sdo_i sys_ps7/SPI0_MOSI_I
-ad_connect  spi0_sdo_o sys_ps7/SPI0_MOSI_O
-ad_connect  spi0_sdi_i sys_ps7/SPI0_MISO_I
+# ad_connect  spi0_csn_2_o sys_ps7/SPI0_SS2_O
+# ad_connect  spi0_csn_1_o sys_ps7/SPI0_SS1_O
+# ad_connect  spi0_csn_0_o sys_ps7/SPI0_SS_O
+# ad_connect  spi0_csn_i sys_ps7/SPI0_SS_I
+# ad_connect  spi0_clk_i sys_ps7/SPI0_SCLK_I
+# ad_connect  spi0_clk_o sys_ps7/SPI0_SCLK_O
+# ad_connect  spi0_sdo_i sys_ps7/SPI0_MOSI_I
+# ad_connect  spi0_sdo_o sys_ps7/SPI0_MOSI_O
+# ad_connect  spi0_sdi_i sys_ps7/SPI0_MISO_I
 
-ad_connect  spi1_csn_2_o sys_ps7/SPI1_SS2_O
-ad_connect  spi1_csn_1_o sys_ps7/SPI1_SS1_O
-ad_connect  spi1_csn_0_o sys_ps7/SPI1_SS_O
-ad_connect  spi1_csn_i sys_ps7/SPI1_SS_I
-ad_connect  spi1_clk_i sys_ps7/SPI1_SCLK_I
-ad_connect  spi1_clk_o sys_ps7/SPI1_SCLK_O
-ad_connect  spi1_sdo_i sys_ps7/SPI1_MOSI_I
-ad_connect  spi1_sdo_o sys_ps7/SPI1_MOSI_O
-ad_connect  spi1_sdi_i sys_ps7/SPI1_MISO_I
+# ad_connect  spi1_csn_2_o sys_ps7/SPI1_SS2_O
+# ad_connect  spi1_csn_1_o sys_ps7/SPI1_SS1_O
+# ad_connect  spi1_csn_0_o sys_ps7/SPI1_SS_O
+# ad_connect  spi1_csn_i sys_ps7/SPI1_SS_I
+# ad_connect  spi1_clk_i sys_ps7/SPI1_SCLK_I
+# ad_connect  spi1_clk_o sys_ps7/SPI1_SCLK_O
+# ad_connect  spi1_sdo_i sys_ps7/SPI1_MOSI_I
+# ad_connect  spi1_sdo_o sys_ps7/SPI1_MOSI_O
+# ad_connect  spi1_sdi_i sys_ps7/SPI1_MISO_I
 
 # system id
 
