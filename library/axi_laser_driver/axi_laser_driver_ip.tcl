@@ -60,6 +60,9 @@ set_property -dict [list \
  ] \
 [ipx::get_user_parameters PULSE_PERIOD -of_objects $cc]
 
+# Infer interrupt
+ipx::infer_bus_interface irq xilinx.com:signal:interrupt_rtl:1.0 [ipx::current_core]
+
 ## Customize XGUI layout
 
 ## Remove the automatically generated GUI page
