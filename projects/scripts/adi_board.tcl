@@ -856,21 +856,19 @@ proc hexstr_flip {str} {
 proc sysid_gen_sys_init_file {custom_string} {
 
   # git sha
-  set no_git_err "fatal: not a git repository"
-  if {[catch {exec git rev-parse HEAD} gitsha_string]} {
-    if [expr [string match *$no_git_err* $gitsha_string] == 1] {
-      set gitsha_string 0
-    }
+  if {[catch {exec git rev-parse HEAD} gitsha_string] != 0} {
+    set gitsha_string 0
   }
   set gitsha_hex [hexstr_flip [stringtohex $gitsha_string 44]]
 
   #git clean
   set git_clean_string "f"
   if {$gitsha_string != 0} {
-    set git_status [exec git status .]
-      if [expr [string match *modified* $git_status] == 0] {
+    if {[catch {exec git status .} gitstat_string] == 0} {
+      if [expr [string match *modified $gitstat_string] == 0] {
         set git_clean_string "t"
       }
+    }
   }
   set git_clean_hex [hexstr_flip [stringtohex $git_clean_string 4]]
 
