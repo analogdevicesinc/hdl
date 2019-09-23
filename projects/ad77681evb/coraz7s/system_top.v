@@ -59,6 +59,8 @@ module system_top (
   inout           fixed_io_ps_clk,
   inout           fixed_io_ps_porb,
   inout           fixed_io_ps_srstb,
+	
+	inout   [7:0]  gpio_bd,
 
   inout           ad7768_0_reset,
   inout           ad7768_0_sync_in,
@@ -97,8 +99,16 @@ module system_top (
 						ad7768_0_sync_in,
 						ad7768_0_reset}));
 
-	assign gpio_i[31:0] = gpio_o[31:0];
+	assign gpio_i[31:8] = gpio_o[31:8];
   assign gpio_i[63:37] = gpio_o[63:37];
+	
+	ad_iobuf #(
+    .DATA_WIDTH(8)
+  ) i_iobuf (
+    .dio_t(gpio_t[7:0]),
+    .dio_i(gpio_o[7:0]),
+    .dio_o(gpio_i[7:0]),
+    .dio_p(gpio_bd));
 
 
   system_wrapper i_system_wrapper (
