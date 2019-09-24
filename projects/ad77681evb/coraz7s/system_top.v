@@ -60,22 +60,21 @@ module system_top (
   inout           fixed_io_ps_porb,
   inout           fixed_io_ps_srstb,
 	
-	inout   [7:0]  gpio_bd,
+  inout   [1:0]   btn,
+  inout   [5:0]   led,
 
-  inout           ad7768_0_reset,
-  inout           ad7768_0_sync_in,
+  inout           ad7768_reset,
+  inout           ad7768_sync_in,
   
-  inout           ad7768_0_fda_dis,
-  inout           ad7768_0_fda_mode,
-  inout           ad7768_0_dac_buf_en,
+  inout           ad7768_fda_dis,
+  inout           ad7768_fda_mode,
+  inout           ad7768_dac_buf_en,
 
-  input           ad7768_0_spi_miso,
-  output          ad7768_0_spi_mosi,
-  output          ad7768_0_spi_sclk,
-  output          ad7768_0_spi_cs,
-  input           ad7768_0_drdy);
-
-	
+  input           ad7768_spi_miso,
+  output          ad7768_spi_mosi,
+  output          ad7768_spi_sclk,
+  output          ad7768_spi_cs,
+  input           ad7768_drdy);
 
   // internal signals
 
@@ -83,34 +82,42 @@ module system_top (
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
   
-
   // instantiations
 
   ad_iobuf #(
+    .DATA_WIDTH(2)
+  ) i_iobuf_buttons (
+    .dio_t(gpio_t[1:0]),
+    .dio_i(gpio_o[1:0]),
+    .dio_o(gpio_i[1:0]),
+    .dio_p(btn));
+	
+  ad_iobuf #(
+    .DATA_WIDTH(6)
+  ) i_iobuf_leds (
+    .dio_t(gpio_t[7:2]),
+    .dio_i(gpio_o[7:2]),
+    .dio_o(gpio_i[7:2]),
+    .dio_p(led));
+	
+  assign gpio_i[31:8] = gpio_o[31:8];
+	
+  ad_iobuf #(
     .DATA_WIDTH(5)
-  ) i_iobuf_ad7768_0_gpio (
+  ) i_iobuf_ad7768_gpio (
     .dio_t(gpio_t[36:32]),
     .dio_i(gpio_o[36:32]),
     .dio_o(gpio_i[36:32]),
     .dio_p({
-            ad7768_0_fda_dis,
-            ad7768_0_fda_mode,
-						ad7768_0_dac_buf_en,
-						ad7768_0_sync_in,
-						ad7768_0_reset}));
-
-	assign gpio_i[31:8] = gpio_o[31:8];
+            ad7768_fda_dis,
+            ad7768_fda_mode,
+			ad7768_dac_buf_en,
+			ad7768_sync_in,
+			ad7768_reset}));
+			
   assign gpio_i[63:37] = gpio_o[63:37];
 	
-	ad_iobuf #(
-    .DATA_WIDTH(8)
-  ) i_iobuf (
-    .dio_t(gpio_t[7:0]),
-    .dio_i(gpio_o[7:0]),
-    .dio_o(gpio_i[7:0]),
-    .dio_p(gpio_bd));
-
-
+	
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
     .ddr_ba (ddr_ba),
@@ -136,32 +143,31 @@ module system_top (
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .gpio_t (gpio_t),
-    .adc_spi_sdo (ad7768_0_spi_mosi),
+    .adc_spi_sdo (ad7768_spi_mosi),
     .adc_spi_sdo_t (),
-    .adc_spi_sdi (ad7768_0_spi_miso),
-    .adc_spi_cs (ad7768_0_spi_cs),
-    .adc_spi_sclk (ad7768_0_spi_sclk),
-    .adc_data_ready (ad7768_0_drdy),
-		.spi0_clk_i (0),
-		.spi0_clk_o (),
-		.spi0_csn_0_o (),
-		.spi0_csn_1_o (),
-		.spi0_csn_2_o (),
-		.spi0_csn_i (0),
-		.spi0_sdi_i (0),
-		.spi0_sdo_i (0),
-		.spi0_sdo_o (),
-		.spi1_clk_i (0),
-		.spi1_clk_o (),
-		.spi1_csn_0_o (),
-		.spi1_csn_1_o (),
-		.spi1_csn_2_o (),
-		.spi1_csn_i (0),
-		.spi1_sdi_i (0),
-		.spi1_sdo_i (0),
-		.spi1_sdo_o());
+    .adc_spi_sdi (ad7768_spi_miso),
+    .adc_spi_cs (ad7768_spi_cs),
+    .adc_spi_sclk (ad7768_spi_sclk),
+    .adc_data_ready (ad7768_drdy),
+	.spi0_clk_i (0),
+	.spi0_clk_o (),
+	.spi0_csn_0_o (),
+	.spi0_csn_1_o (),
+	.spi0_csn_2_o (),
+	.spi0_csn_i (0),
+	.spi0_sdi_i (0),
+	.spi0_sdo_i (0),
+	.spi0_sdo_o (),
+	.spi1_clk_i (0),
+	.spi1_clk_o (),
+	.spi1_csn_0_o (),
+	.spi1_csn_1_o (),
+	.spi1_csn_2_o (),
+	.spi1_csn_i (0),
+	.spi1_sdi_i (0),
+	.spi1_sdo_i (0),
+	.spi1_sdo_o());
 
-	
 endmodule
 
 // ***************************************************************************

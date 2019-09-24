@@ -29,7 +29,6 @@ create_bd_port -dir I -from 63 -to 0 gpio_i
 create_bd_port -dir O -from 63 -to 0 gpio_o
 create_bd_port -dir O -from 63 -to 0 gpio_t
 
-
 # instance: sys_ps7
 
 ad_ip_instance processing_system7 sys_ps7
@@ -57,7 +56,6 @@ ad_ip_instance proc_sys_reset sys_rstgen
 ad_ip_parameter sys_rstgen CONFIG.C_EXT_RST_WIDTH 1
 ad_ip_instance proc_sys_reset sys_200m_rstgen
 ad_ip_parameter sys_200m_rstgen CONFIG.C_EXT_RST_WIDTH 1
-
 
 # system reset/clock definitions
 
@@ -92,7 +90,6 @@ ad_connect  gpio_i        sys_ps7/GPIO_I
 ad_connect  gpio_o        sys_ps7/GPIO_O
 ad_connect  gpio_t        sys_ps7/GPIO_T
 ad_connect  fixed_io      sys_ps7/FIXED_IO
-
 
 # spi connections
 
