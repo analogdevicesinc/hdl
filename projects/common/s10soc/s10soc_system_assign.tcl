@@ -368,3 +368,6 @@ set_global_assignment -name PWRMGT_SLAVE_DEVICE6_ADDRESS 00
 set_global_assignment -name PWRMGT_SLAVE_DEVICE7_ADDRESS 00
 set_global_assignment -name PWRMGT_VOLTAGE_OUTPUT_FORMAT "AUTO DISCOVERY"
 set_global_assignment -name PWRMGT_TRANSLATED_VOLTAGE_VALUE_UNIT VOLTS
+
+set_global_assignment -name DEVICE_INITIALIZATION_CLOCK OSC_CLK_1_125MHz
+
