@@ -72,7 +72,7 @@ proc ad_dacfifo_create {dac_fifo_name dac_data_width dac_dma_data_width dac_fifo
   set_instance_parameter_value $dac_fifo_name {DMA_MEM_ADDRESS_WIDTH} {12}
   set_instance_parameter_value $dac_fifo_name {AVL_BURST_LENGTH} {64}
 
-  add_connection sys_clk.clk_reset sys_ddr4_cntrl.global_reset_reset_sink
+  add_connection sys_resetn.out_reset sys_ddr4_cntrl.global_reset_reset_sink
   add_connection sys_ddr4_cntrl.emif_usr_reset_reset_source $dac_fifo_name.avl_reset
   add_connection sys_ddr4_cntrl.emif_usr_clk_clock_source $dac_fifo_name.avl_clock
   add_connection $dac_fifo_name.amm_ddr sys_ddr4_cntrl.ctrl_amm_avalon_slave_0
