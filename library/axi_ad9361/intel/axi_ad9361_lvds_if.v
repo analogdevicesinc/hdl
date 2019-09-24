@@ -44,6 +44,7 @@ module axi_ad9361_lvds_if #(
   // Dummy parameters, required keep the code consistency(used on Xilinx)
   parameter   USE_SSI_CLK = 1,
   parameter   IO_DELAY_GROUP = "dev_if_delay_group",
+  parameter   IODELAY_CTRL = 1,
   parameter   DELAY_REFCLK_FREQUENCY = 0,
   parameter   RX_NODPA = 0) (
 

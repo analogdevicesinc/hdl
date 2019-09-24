@@ -40,6 +40,7 @@ module axi_ad9361_lvds_if #(
   parameter   FPGA_TECHNOLOGY = 0,
   parameter   DAC_IODELAY_ENABLE = 0,
   parameter   IO_DELAY_GROUP = "dev_if_delay_group",
+  parameter   IODELAY_CTRL = 1,
   parameter   CLK_DESKEW = 0,
   parameter   USE_SSI_CLK = 1,
   parameter   DELAY_REFCLK_FREQUENCY = 200,
@@ -474,7 +475,7 @@ module axi_ad9361_lvds_if #(
 
   ad_data_in #(
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
-    .IODELAY_CTRL (1),
+    .IODELAY_CTRL (IODELAY_CTRL),
     .IODELAY_GROUP (IO_DELAY_GROUP),
     .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
   i_rx_frame (
