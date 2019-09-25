@@ -380,7 +380,7 @@ module system_top (
     .spi_clkgen_clk_b_o (spi_clkgen_clk_b),
     .spi_clkgen_sdo_b_i (1'b0),
     .spi_clkgen_sdo_b_o (spi_clkgen_mosi_b),
-    .spi_clkgen_sdi_b_i (1'b0),
+    .spi_clkgen_sdi_b_i (spi_clkgen_miso_b),
     .spi_vco_csn_b_i (1'b1),
     .spi_vco_csn_b_o (spi_vco_csn_b),
     .spi_vco_clk_b_i (1'b0),
