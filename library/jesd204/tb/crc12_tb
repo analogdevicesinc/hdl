@@ -1,0 +1,7 @@
+#!/bin/bash
+
+SOURCE="crc12_tb.v"
+SOURCE+=" ../jesd204_common/jesd204_crc12.v"
+
+cd `dirname $0`
+source run_tb.sh
