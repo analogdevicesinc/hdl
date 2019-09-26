@@ -126,14 +126,9 @@ module axi_ad9361_lvds_if #(
   reg                 rx_r1_mode = 'd0;
   reg                 rx_locked_m1 = 'd0;
   reg                 rx_locked = 'd0;
-  reg                 rx_valid = 'd0;
   reg     [ 1:0]      rx_frame = 'd0;
   reg     [ 5:0]      rx_data_1 = 'd0;
   reg     [ 5:0]      rx_data_0 = 'd0;
-  reg     [ 3:0]      rx_frame_d = 'd0;
-  reg     [ 5:0]      rx_data_1_2d = 'd0;
-  reg     [ 5:0]      rx_data_0_2d = 'd0;
-  reg     [ 5:0]      rx_data_1_d = 'd0;
   reg                 adc_valid_p = 'd0;
   reg     [47:0]      adc_data_p = 'd0;
   reg                 adc_status_p = 'd0;
@@ -163,7 +158,6 @@ module axi_ad9361_lvds_if #(
 
   // internal signals
 
-  wire    [ 3:0]      rx_frame_d_s;
   wire    [ 5:0]      rx_data_1_s;
   wire    [ 5:0]      rx_data_0_s;
   wire    [ 1:0]      rx_frame_s;
@@ -210,7 +204,6 @@ module axi_ad9361_lvds_if #(
   // intel-equivalence
 
   always @(posedge l_clk) begin
-    rx_valid <= ~rx_valid;
     rx_frame <= rx_frame_s;
     rx_data_1 <= rx_data_1_s;
     rx_data_0 <= rx_data_0_s;
@@ -218,36 +211,21 @@ module axi_ad9361_lvds_if #(
 
   // frame check
 
-  assign rx_frame_d_s = {rx_frame_s, rx_frame};
-
-  always @(posedge l_clk) begin
-    if (rx_valid == 1'd1) begin
-      if (rx_r1_mode == 1'd1) begin
-        rx_frame_d <= rx_frame_d_s;
-      end else begin
-        rx_frame_d <= ~rx_frame_d_s;
-      end
-    end
-  end
-
-  // data hold
-
-  always @(posedge l_clk) begin
-    if (rx_valid == 1'd1) begin
-      rx_data_1_2d <= rx_data_1_s;
-      rx_data_0_2d <= rx_data_0_s;
-      rx_data_1_d <= rx_data_1;
-    end
-  end
 
   // delineation
+  reg             rx_error_r1 = 'd0;
+  reg             rx_error_r2 = 'd0;
 
   always @(posedge l_clk) begin
-    if (rx_valid == 1'b1) begin
+    rx_error_r1 <= ~((rx_frame_s == 4'b1100) || (rx_frame_s == 4'b0011));
+    rx_error_r2 <= ~((rx_frame_s == 4'b1111) || (rx_frame_s == 4'b1100) ||
+                     (rx_frame_s == 4'b0000) || (rx_frame_s == 4'b0011));
+  end
+
+  always @(posedge l_clk) begin
       case ({rx_r1_mode, rx_frame_s, rx_frame})
         5'b01111: begin
           adc_valid_p <= 1'b0;
-          adc_data_p[47:24] <= 24'd0;
           adc_data_p[23:12] <= {rx_data_1, rx_data_1_s};
           adc_data_p[11: 0] <= {rx_data_0, rx_data_0_s};
         end
@@ -255,43 +233,6 @@ module axi_ad9361_lvds_if #(
           adc_valid_p <= 1'b1;
           adc_data_p[47:36] <= {rx_data_1, rx_data_1_s};
           adc_data_p[35:24] <= {rx_data_0, rx_data_0_s};
-          adc_data_p[23: 0] <= adc_data_p[23:0];
-        end
-        5'b00111: begin
-          adc_valid_p <= 1'b0;
-          adc_data_p[47:24] <= 24'd0;
-          adc_data_p[23:12] <= {rx_data_0, rx_data_0_s};
-          adc_data_p[11: 0] <= {rx_data_1_2d, rx_data_1};
-        end
-        5'b01000: begin
-          adc_valid_p <= 1'b1;
-          adc_data_p[47:36] <= {rx_data_0, rx_data_0_s};
-          adc_data_p[35:24] <= {rx_data_1_2d, rx_data_1};
-          adc_data_p[23: 0] <= adc_data_p[23:0];
-        end
-        5'b00011: begin
-          adc_valid_p <= 1'b0;
-          adc_data_p[47:24] <= 24'd0;
-          adc_data_p[23:12] <= {rx_data_1_2d, rx_data_1};
-          adc_data_p[11: 0] <= {rx_data_0_2d, rx_data_0};
-        end
-        5'b01100: begin
-          adc_valid_p <= 1'b1;
-          adc_data_p[47:36] <= {rx_data_1_2d, rx_data_1};
-          adc_data_p[35:24] <= {rx_data_0_2d, rx_data_0};
-          adc_data_p[23: 0] <= adc_data_p[23:0];
-        end
-        5'b00001: begin
-          adc_valid_p <= 1'b0;
-          adc_data_p[47:24] <= 24'd0;
-          adc_data_p[23:12] <= {rx_data_0_2d, rx_data_0};
-          adc_data_p[11: 0] <= {rx_data_1_d, rx_data_1_2d};
-        end
-        5'b01110: begin
-          adc_valid_p <= 1'b1;
-          adc_data_p[47:36] <= {rx_data_0_2d, rx_data_0};
-          adc_data_p[35:24] <= {rx_data_1_d, rx_data_1_2d};
-          adc_data_p[23: 0] <= adc_data_p[23:0];
         end
         5'b10011: begin
           adc_valid_p <= 1'b1;
@@ -299,44 +240,19 @@ module axi_ad9361_lvds_if #(
           adc_data_p[23:12] <= {rx_data_1, rx_data_1_s};
           adc_data_p[11: 0] <= {rx_data_0, rx_data_0_s};
         end
-        5'b11001: begin
-          adc_valid_p <= 1'b1;
-          adc_data_p[47:24] <= 24'd0;
-          adc_data_p[23:12] <= {rx_data_0, rx_data_0_s};
-          adc_data_p[11: 0] <= {rx_data_1_2d, rx_data_1};
-        end
-        5'b11100: begin
-          adc_valid_p <= 1'b1;
-          adc_data_p[47:24] <= 24'd0;
-          adc_data_p[23:12] <= {rx_data_1_2d, rx_data_1};
-          adc_data_p[11: 0] <= {rx_data_0_2d, rx_data_0};
-        end
-        5'b10110: begin
-          adc_valid_p <= 1'b1;
-          adc_data_p[47:24] <= 24'd0;
-          adc_data_p[23:12] <= {rx_data_0_2d, rx_data_0};
-          adc_data_p[11: 0] <= {rx_data_1_d, rx_data_1_2d};
-        end
         default: begin
           adc_valid_p <= 1'b0;
-          adc_data_p <= 48'd0;
         end
       endcase
-    end else begin
-      adc_valid_p <= 1'b0;
-      adc_data_p <= adc_data_p;
-    end
   end
 
   // adc-status
 
   always @(posedge l_clk) begin
-    if (rx_valid == 1'b1) begin
-      if (rx_frame_d == rx_frame_d_s) begin
-        adc_status_p <= rx_locked;
-      end else begin
-        adc_status_p <= 1'b0;
-      end
+    if (adc_r1_mode == 1'b1) begin
+      adc_status_p <= ~rx_error_r1 & rx_locked;
+    end else begin
+      adc_status_p <= ~rx_error_r2 & rx_locked;
     end
   end
 
