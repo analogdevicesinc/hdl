@@ -17,12 +17,15 @@ current_bd_instance /spi
   ad_ip_instance spi_engine_offload offload
   ad_ip_instance spi_engine_interconnect interconnect
   ad_ip_instance util_pulse_gen trigger_gen
+  ad_ip_instance xlconstant trigger_gen_pulse_width
 
   ad_ip_parameter offload CONFIG.DATA_WIDTH 16
   ad_ip_parameter axi CONFIG.DATA_WIDTH 16
   ad_ip_parameter interconnect CONFIG.DATA_WIDTH 16
   ad_ip_parameter execution CONFIG.DATA_WIDTH 16
-
+  ad_ip_parameter trigger_gen_pulse_width CONFIG.CONST_WIDTH 32
+  ad_ip_parameter trigger_gen_pulse_width CONFIG.CONST_VAL 1
+  
   ## to setup the sample rate of the system change the PULSE_PERIOD value
   ## the acutal sample rate will be PULSE_PERIOD * (1/sys_cpu_clk)
   set cycle_per_sec_100mhz 100000000
@@ -53,12 +56,10 @@ current_bd_instance /spi
   ad_connect axi/spi_resetn execution/resetn
   ad_connect axi/spi_resetn interconnect/resetn
   ad_connect axi/spi_resetn trigger_gen/rstn
-  ad_connect trigger_gen/load_config GND
-  ad_connect trigger_gen/pulse_width GND
-  ad_connect trigger_gen/pulse_period GND
-
+  ad_connect trigger_gen/load_config axi/pulse_gen_load
+  ad_connect trigger_gen/pulse_period axi/pulse_gen_period
+  ad_connect trigger_gen_pulse_width/dout trigger_gen/pulse_width
   ad_connect trigger_gen/pulse offload/trigger
-
   ad_connect resetn axi/s_axi_aresetn
   ad_connect irq axi/irq
 
