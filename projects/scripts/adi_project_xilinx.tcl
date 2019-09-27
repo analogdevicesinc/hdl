@@ -209,7 +209,14 @@ proc adi_project {project_name {mode 0} {parameter_list {}} } {
 #
 proc adi_project_files {project_name project_files} {
 
-  add_files -norecurse -fileset sources_1 $project_files
+  foreach pfile $project_files {
+    if {[string range $pfile [expr 1 + [string last . $pfile]] end] == "xdc"} {
+      add_files -norecurse -fileset constrs_1 $pfile
+    } else {
+      add_files -norecurse -fileset sources_1 $pfile
+    }
+  }
+
   # NOTE: top file name is always system_top
   set_property top system_top [current_fileset]
 }
