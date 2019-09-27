@@ -108,7 +108,7 @@ proc jesd204_phy_composition_callback {} {
 
   ## Arria10
   if {$device_type == 1} {
-    add_instance native_phy altera_xcvr_native_a10 $version
+    add_instance native_phy altera_xcvr_native_a10 19.1
     set_instance_parameter_value native_phy {enh_txfifo_mode} "Phase compensation"
     set_instance_parameter_value native_phy {enh_rxfifo_mode} "Phase compensation"
     set_instance_property native_phy SUPPRESS_ALL_WARNINGS true
@@ -188,7 +188,7 @@ proc jesd204_phy_composition_callback {} {
   set_interface_property reconfig_reset EXPORT_OF phy_glue.reconfig_reset
 
   if {$ext_device_clk_en} {
-    add_instance ext_device_clock altera_clock_bridge
+    add_instance ext_device_clock altera_clock_bridge 19.1
     set_instance_parameter_value ext_device_clock {EXPLICIT_CLOCK_RATE} [expr $link_clk_frequency*1000000]
     set_instance_parameter_value ext_device_clock {NUM_CLOCK_OUTPUTS} 1
     add_interface device_clk clock sink
@@ -238,6 +238,7 @@ proc jesd204_phy_composition_callback {} {
     }
 
   } else {
+
     add_interface ref_clk clock sink
     set_interface_property ref_clk EXPORT_OF phy_glue.rx_cdr_refclk0
 

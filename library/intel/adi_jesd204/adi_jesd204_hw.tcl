@@ -178,7 +178,7 @@ proc create_lane_pll {id tx_or_rx_n pllclk_frequency refclk_frequency num_lanes}
       set_instance_parameter_value lane_pll enable_mcgb {true}
       set_instance_parameter_value lane_pll enable_hfreq_clk {true}
 
-      add_instance glue adi_jesd204_glue $version
+      add_instance glue adi_jesd204_glue 1.0
       add_connection phy_reset_control.pll_powerdown glue.in_pll_powerdown
       add_connection glue.out_pll_powerdown lane_pll.pll_powerdown
       add_connection glue.out_mcgb_rst lane_pll.mcgb_rst
@@ -191,7 +191,7 @@ proc create_lane_pll {id tx_or_rx_n pllclk_frequency refclk_frequency num_lanes}
     set_instance_parameter_value lane_pll {rcfg_enable} {1}
 
     ## tie pll_select to GND
-    add_instance glue adi_jesd204_glue $version
+    add_instance glue adi_jesd204_glue 1.0
     set_instance_parameter_value glue {IN_PLL_POWERDOWN_EN} {0}
     if {$tx_or_rx_n} {
       add_connection glue.out_pll_select_gnd phy_reset_control.pll_select
@@ -448,7 +448,7 @@ proc jesd204_compose {} {
   ## connect the required device clock
 
   if {$ext_device_clk_en} {
-    add_instance ext_device_clock altera_clock_bridge
+    add_instance ext_device_clock altera_clock_bridge $version
     set_instance_parameter_value ext_device_clock {EXPLICIT_CLOCK_RATE} [expr $linkclk_frequency*1000000]
     set_instance_parameter_value ext_device_clock {NUM_CLOCK_OUTPUTS} 2
     add_interface device_clk clock sink
