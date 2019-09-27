@@ -7,17 +7,6 @@ create_bd_intf_port -mode Master -vlnv analog.com:interface:i2s_rtl:1.0 i2s
 create_bd_port -dir I axi_fan_tacho_i
 create_bd_port -dir O axi_fan_pwm_o
 
-# 12.288MHz clk
-ad_ip_instance axi_clkgen sys_audio_clkgen
-ad_ip_parameter sys_audio_clkgen CONFIG.ID 6
-ad_ip_parameter sys_audio_clkgen CONFIG.CLKIN_PERIOD 10
-ad_ip_parameter sys_audio_clkgen CONFIG.VCO_DIV 2
-ad_ip_parameter sys_audio_clkgen CONFIG.VCO_MUL 21
-ad_ip_parameter sys_audio_clkgen CONFIG.CLK0_DIV 85.5
-
-ad_connect sys_cpu_clk sys_audio_clkgen/clk
-ad_connect sys_i2s_mclk sys_audio_clkgen/clk_0
-
 # i2s ip
 ad_ip_instance axi_i2s_adi axi_i2s_adi
 ad_ip_parameter axi_i2s_adi CONFIG.DMA_TYPE 0
@@ -63,8 +52,8 @@ ad_connect i2s_rx_dma/s_axis_data axi_i2s_adi/m_axis_tdata
 ad_connect i2s_rx_dma/s_axis_valid axi_i2s_adi/m_axis_tvalid
 ad_connect i2s_rx_dma/s_axis_ready axi_i2s_adi/m_axis_tready
 ad_connect i2s axi_i2s_adi/I2S
-ad_connect sys_i2s_mclk axi_i2s_adi/data_clk_i
-ad_connect sys_i2s_mclk i2s_mclk
+ad_connect i2s_m_clk axi_i2s_adi/data_clk_i
+ad_connect i2s_m_clk i2s_mclk
 
 ad_connect sys_cpu_clk i2s_tx_dma/s_axi_aclk
 ad_connect sys_cpu_clk i2s_tx_dma/m_src_axi_aclk
@@ -92,7 +81,6 @@ ad_connect axi_fan_pwm_o axi_fan_control_0/pwm
 ad_cpu_interconnect 0x40000000 axi_fan_control_0
 ad_cpu_interconnect 0x41000000 i2s_rx_dma
 ad_cpu_interconnect 0x41001000 i2s_tx_dma
-ad_cpu_interconnect 0x41010000 sys_audio_clkgen
 ad_cpu_interconnect 0x42000000 axi_i2s_adi
 
 ad_mem_hp0_interconnect sys_cpu_clk i2s_tx_dma/m_src_axi
