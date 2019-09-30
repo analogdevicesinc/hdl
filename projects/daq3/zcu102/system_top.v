@@ -171,8 +171,9 @@ module system_top (
 
   assign gpio_i[31:21] = gpio_o[31:21];
 
-  assign gpio_bd_i = gpio_bd[20:8];
-  assign gpio_bd_o = gpio_bd[ 7:0];
+  /* Board GPIOS. Buttons, LEDs, etc... */
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_bd_o = gpio_o[7:0];
 
   system_wrapper i_system_wrapper (
     .gpio_i (gpio_i),
