@@ -174,8 +174,9 @@ module axi_adxcvr_up #(
           10'h004: up_rdata_d <= {31'd0, up_resetn};
           10'h005: up_rdata_d <= {31'd0, up_status_int};
           10'h006: up_rdata_d <= up_status_32_s;
+          10'h007: up_rdata_d <= {FPGA_TECHNOLOGY,FPGA_FAMILY,SPEED_GRADE,DEV_PACKAGE}; // [8,8,8,8]
           10'h009: up_rdata_d <= up_rparam_s;
-	  10'h050: up_rdata_d <= {16'd0, FPGA_VOLTAGE};  // mV
+          10'h050: up_rdata_d <= {16'd0, FPGA_VOLTAGE};  // mV
           default: up_rdata_d <= 32'd0;
         endcase
       end else begin
