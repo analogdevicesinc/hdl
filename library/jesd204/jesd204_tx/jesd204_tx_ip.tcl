@@ -48,6 +48,8 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 adi_ip_create jesd204_tx
 adi_ip_files jesd204_tx [list \
   "jesd204_tx_lane.v" \
+  "jesd204_tx_lane_64b.v" \
+  "jesd204_tx_header.v" \
   "jesd204_tx_ctrl.v" \
   "jesd204_tx_constr.ttcl" \
   "jesd204_tx.v"
@@ -77,8 +79,9 @@ adi_add_multi_bus 16 "tx_phy" "master" \
   "xilinx.com:display_jesd204:jesd204_tx_bus_rtl:1.0" \
   "xilinx.com:display_jesd204:jesd204_tx_bus:1.0" \
   [list \
-    {"phy_data" "txdata" 32} \
-    { "phy_charisk" "txcharisk" 4} \
+    { "phy_data" "txdata" 32 "(spirit:decode(id('MODELPARAM_VALUE.DATA_PATH_WIDTH')) * 8)"} \
+    { "phy_charisk" "txcharisk" 4 "(spirit:decode(id('MODELPARAM_VALUE.DATA_PATH_WIDTH')))"} \
+    { "phy_header" "txheader" 2} \
   ] \
   "(spirit:decode(id('MODELPARAM_VALUE.NUM_LANES')) > {i})"
 
@@ -136,9 +139,43 @@ adi_add_bus "tx_ctrl" "slave" \
 adi_add_bus_clock "clk" "tx_data:tx_cfg:tx_ilas_config:tx_event:tx_status:tx_ctrl" \
   "reset"
 
+adi_set_bus_dependency "tx_ilas_config" "tx_ilas_config" \
+	"(spirit:decode(id('MODELPARAM_VALUE.LINK_MODE')) = 1)"
+
+adi_set_bus_dependency "tx_ctrl" "tx_ctrl" \
+	"(spirit:decode(id('MODELPARAM_VALUE.LINK_MODE')) = 1)"
+
+adi_set_ports_dependency "sync" \
+	"(spirit:decode(id('MODELPARAM_VALUE.LINK_MODE')) = 1)"
+
+
 set cc [ipx::current_core]
 set page0 [ipgui::get_pagespec -name "Page 0" -component $cc]
 
+# Link layer mode
+set p [ipgui::get_guiparamspec -name "LINK_MODE" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $page0
+set_property -dict [list \
+ "display_name" "Link Layer mode" \
+ "tooltip" "Link Layer mode" \
+ "widget" "comboBox" \
+] $p
+
+set_property -dict [list \
+  value_validation_type pairs \
+  value_validation_pairs {64B66B 2 8B10B 1} \
+] [ipx::get_user_parameters $p -of_objects $cc]
+
+
+# Data width selection
+set param [ipx::get_user_parameters DATA_PATH_WIDTH -of_objects $cc]
+set_property -dict [list \
+  enablement_value false \
+  value_tcl_expr {expr $LINK_MODE*4} \
+] $param
+
+
+# SYSREF IOB placement
 set param [ipx::add_user_parameter SYSREF_IOB $cc]
 set_property -dict {value_resolve_type user value_format bool value true} $param
 

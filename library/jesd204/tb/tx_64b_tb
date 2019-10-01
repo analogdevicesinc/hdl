@@ -1,0 +1,11 @@
+#!/bin/bash
+
+SOURCE="tx_64b_tb.v"
+SOURCE+=" ../jesd204_common/jesd204_lmfc.v ../jesd204_common/jesd204_scrambler_64b.v ../jesd204_common/jesd204_crc12.v"
+SOURCE+=" ../jesd204_tx/jesd204_tx.v  ../jesd204_tx/jesd204_tx_lane_64b.v ../jesd204_tx/jesd204_tx_header.v"
+SOURCE+=" ../jesd204_tx_static_config/jesd204_tx_static_config.v ../jesd204_tx_static_config/jesd204_ilas_cfg_static.v"
+SOURCE+=" ../../util_cdc/sync_bits.v"
+SOURCE+=" ../jesd204_common/pipeline_stage.v"
+
+cd `dirname $0`
+source run_tb.sh
