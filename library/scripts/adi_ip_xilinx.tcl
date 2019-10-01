@@ -295,6 +295,7 @@ proc adi_ip_files {ip_name ip_files} {
   foreach m_file $ip_files {
     if {[file extension $m_file] eq ".xdc"} {
       lappend ip_constr_files $m_file
+      add_files -norecurse -fileset constrs_1 $m_file
     }
   }
 
