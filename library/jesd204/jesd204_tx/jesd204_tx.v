@@ -47,13 +47,17 @@
 module jesd204_tx #(
   parameter NUM_LANES = 1,
   parameter NUM_LINKS = 1,
-  parameter NUM_OUTPUT_PIPELINE = 0
+  parameter NUM_OUTPUT_PIPELINE = 0,
+  parameter LINK_MODE = 1, // 2 - 64B/66B;  1 - 8B/10B
+  /* Only 4 is supported at the moment for 8b/10b and 8 for 64b */
+  parameter DATA_PATH_WIDTH = LINK_MODE[1] ? 8 : 4
 ) (
   input clk,
   input reset,
 
-  output [32*NUM_LANES-1:0] phy_data,
-  output [4*NUM_LANES-1:0] phy_charisk,
+  output [DATA_PATH_WIDTH*8*NUM_LANES-1:0] phy_data,
+  output [DATA_PATH_WIDTH*NUM_LANES-1:0] phy_charisk,
+  output [2*NUM_LANES-1:0] phy_header,
 
   input sysref,
   output lmfc_edge,
@@ -61,7 +65,7 @@ module jesd204_tx #(
 
   input [NUM_LINKS-1:0] sync,
 
-  input [32*NUM_LANES-1:0] tx_data,
+  input [DATA_PATH_WIDTH*8*NUM_LANES-1:0] tx_data,
   output tx_ready,
   input tx_valid,
 
@@ -92,8 +96,6 @@ module jesd204_tx #(
   output [1:0] status_state
 );
 
-/* Only 4 is supported at the moment */
-localparam DATA_PATH_WIDTH = 4;
 
 localparam MAX_OCTETS_PER_FRAME = 8;
 localparam MAX_OCTETS_PER_MULTIFRAME =
@@ -111,20 +113,17 @@ localparam LMFC_COUNTER_WIDTH = MAX_BEATS_PER_MULTIFRAME > 256 ? 9 :
 
 localparam DW = DATA_PATH_WIDTH * 8 * NUM_LANES;
 localparam CW = DATA_PATH_WIDTH * NUM_LANES;
+localparam HW = 2 * NUM_LANES;
 
-wire eof_gen_reset;
-wire [DATA_PATH_WIDTH-1:0] eof;
-wire eomf;
 
-wire [NUM_LANES-1:0] lane_cgs_enable;
-
-wire [DW-1:0] ilas_data;
-wire [DATA_PATH_WIDTH-1:0] ilas_charisk;
-
-wire cfg_generate_eomf = 1'b1;
 
 wire [DW-1:0] phy_data_r;
 wire [CW-1:0] phy_charisk_r;
+wire [HW-1:0] phy_header_r;
+
+wire lmc_edge;
+wire lmc_quarter_edge;
+wire eoemb;
 
 jesd204_lmfc i_lmfc (
   .clk(clk),
@@ -142,8 +141,27 @@ jesd204_lmfc i_lmfc (
 
   .lmfc_edge(lmfc_edge),
   .lmfc_clk(lmfc_clk),
-  .lmfc_counter()
+  .lmfc_counter(),
+  .lmc_edge(lmc_edge),
+  .lmc_quarter_edge(lmc_quarter_edge),
+  .eoemb(eoemb)
 );
+
+generate
+genvar i;
+
+if (LINK_MODE[0] == 1) begin : mode_8b10b
+
+wire eof_gen_reset;
+wire [DATA_PATH_WIDTH-1:0] eof;
+wire eomf;
+
+wire [NUM_LANES-1:0] lane_cgs_enable;
+
+wire [DW-1:0] ilas_data;
+wire [DATA_PATH_WIDTH-1:0] ilas_charisk;
+
+wire cfg_generate_eomf = 1'b1;
 
 jesd204_tx_ctrl #(
   .NUM_LANES(NUM_LANES),
@@ -198,23 +216,8 @@ jesd204_eof_generator #(
   .eomf(eomf)
 );
 
-pipeline_stage #(
-  .WIDTH(CW + DW),
-  .REGISTERED(NUM_OUTPUT_PIPELINE)
-) i_output_pipeline_stage (
-  .clk(clk),
-  .in({
-    phy_data_r,
-    phy_charisk_r
-  }),
-  .out({
-    phy_data,
-    phy_charisk
-  })
-);
 
-generate
-genvar i;
+
 for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
 
   localparam D_START = i * DATA_PATH_WIDTH*8;
@@ -244,6 +247,77 @@ for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
     .cfg_disable_scrambler(cfg_disable_scrambler)
   );
 end
+
+assign phy_header_r = 'h0;
+
+end
+
+if (LINK_MODE[1] == 1) begin : mode_64b66b
+  reg tx_ready_loc;
+
+  for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
+    localparam D_START = i * DATA_PATH_WIDTH*8;
+    localparam D_STOP = D_START + DATA_PATH_WIDTH*8-1;
+    localparam H_START = i * 2;
+    localparam H_STOP = H_START + 2 -1;
+    jesd204_tx_lane_64b i_lane(
+      .clk(clk),
+      .reset(reset),
+
+      .tx_data(tx_data[D_STOP:D_START]),
+      .tx_ready(tx_ready_loc),
+
+      .phy_data(phy_data_r[D_STOP:D_START]),
+      .phy_header(phy_header_r[H_STOP:H_START]),
+
+      .lmc_edge(lmc_edge),
+      .lmc_quarter_edge(lmc_quarter_edge),
+      .eoemb(eoemb),
+
+      .cfg_disable_scrambler(cfg_disable_scrambler),
+      .cfg_header_mode(2'b0),
+      .cfg_lane_disable(cfg_lanes_disable[i])
+    );
+  end
+
+  always @(posedge clk) begin
+    if (reset) begin
+      tx_ready_loc <= 1'b0;
+    end else if (lmfc_edge) begin
+      tx_ready_loc <= 1'b1;
+    end
+  end
+
+  assign tx_ready = tx_ready_loc;
+  // Link considered in DATA phase when SYSREF received and LEMC clock started
+  // running
+  assign status_state = {2{tx_ready_loc}};
+
+
+  assign phy_charisk_r = 'h0;
+  assign ilas_config_rd = 'h0;
+  assign ilas_config_addr = 'h0;
+  assign status_sync = 'h0;
+
+end
+
 endgenerate
+
+pipeline_stage #(
+  .WIDTH(CW + DW + HW),
+  .REGISTERED(NUM_OUTPUT_PIPELINE)
+) i_output_pipeline_stage (
+  .clk(clk),
+  .in({
+    phy_data_r,
+    phy_charisk_r,
+    phy_header_r
+  }),
+  .out({
+    phy_data,
+    phy_charisk,
+    phy_header
+  })
+);
 
 endmodule
