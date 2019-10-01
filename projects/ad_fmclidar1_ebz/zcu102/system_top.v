@@ -244,7 +244,7 @@ module system_top (
     .ODIV2 ());
 
   OBUFDS i_obufds_rx_sync0_b (
-    .I (rx_sync_a),
+    .I (rx_sync_b),
     .O (rx_sync0_b_p),
     .OB (rx_sync0_b_n));
 
@@ -365,6 +365,7 @@ module system_top (
     .rx_ref_clk_b (rx_ref_clk_b),
     .rx_device_clk_b (rx_device_clk_b),
     .rx_sync_1_0 (rx_sync_b),
+    .rx_sysref_1_0 (rx_sysref_b),
     .iic_dac_b_scl_io (afe_dac_scl_b),
     .iic_dac_b_sda_io (afe_dac_sda_b),
     .spi_adc_csn_b_i (1'b1),
