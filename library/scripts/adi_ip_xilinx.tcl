@@ -179,12 +179,20 @@ proc adi_add_multi_bus {num bus_name_prefix mode abs_type bus_type port_maps dep
     }
 
     foreach port_map $port_maps {
-      lassign $port_map phys logic width
+      lassign $port_map phys logic width width_dep
       set map [ipx::add_port_map $phys $bus]
       set_property "PHYSICAL_NAME" $phys $map
       set_property "LOGICAL_NAME" $logic $map
       set_property "PHYSICAL_RIGHT" [expr $i*$width] $map
       set_property "PHYSICAL_LEFT" [expr ($i+1)*$width-1] $map
+      if {$width_dep ne ""} {
+        set_property "PHYSICAL_RIGHT_RESOLVE_TYPE" "dependent" $map
+        set_property "PHYSICAL_LEFT_RESOLVE_TYPE" "dependent" $map
+        set width_dep_r "(($width_dep) * $i)"
+        set width_dep_l "(($width_dep) * ($i + 1)-1)"
+        set_property "PHYSICAL_RIGHT_DEPENDENCY" $width_dep_r $map
+        set_property "PHYSICAL_LEFT_DEPENDENCY" $width_dep_l $map
+      }
     }
   }
 }
