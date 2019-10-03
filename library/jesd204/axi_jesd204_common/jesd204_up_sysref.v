@@ -44,7 +44,9 @@
 
 `timescale 1ns/100ps
 
-module jesd204_up_sysref (
+module jesd204_up_sysref #(
+  parameter DATA_PATH_WIDTH = 2
+) (
   input up_clk,
   input up_reset,
 
@@ -126,7 +128,7 @@ always @(posedge up_clk) begin
     end
     12'h041: begin
       /* Aligned to data path width */
-      up_cfg_lmfc_offset <= up_wdata[9:2];
+      up_cfg_lmfc_offset <= up_wdata[9:DATA_PATH_WIDTH];
     end
     endcase
   end

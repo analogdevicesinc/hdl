@@ -53,7 +53,8 @@ module jesd204_up_common # (
   parameter DATA_PATH_WIDTH = 2,
   parameter MAX_OCTETS_PER_FRAME = 256,
   parameter NUM_IRQS = 1,
-  parameter EXTRA_CFG_WIDTH = 1
+  parameter EXTRA_CFG_WIDTH = 1,
+  parameter LINK_MODE = 1 // 2 - 64B/66B;  1 - 8B/10B
 ) (
   input up_clk,
   input ext_resetn,
@@ -215,7 +216,7 @@ always @(*) begin
   /* Core configuration */
   12'h004: up_rdata <= NUM_LANES;
   12'h005: up_rdata <= DATA_PATH_WIDTH;
-  12'h006: up_rdata <= {24'b0, NUM_LINKS[7:0]};
+  12'h006: up_rdata <= {22'b0,LINK_MODE[1:0], NUM_LINKS[7:0]};
   /* 0x07-0x0f reserved for future use */
   /* 0x10-0x1f reserved for core specific HDL configuration information */
 
