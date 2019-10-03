@@ -42,7 +42,7 @@
 # is copyright © 2016-2017, Analog Devices, Inc.”
 #
 
-proc adi_axi_jesd204_tx_create {ip_name num_lanes {num_links 1}} {
+proc adi_axi_jesd204_tx_create {ip_name num_lanes {num_links 1} {link_mode 1}} {
 
   if {$num_lanes < 1 || $num_lanes > 16} {
     return -code 1 "ERROR: Invalid number of JESD204B lanes. (Supported range 1-16)"
@@ -63,15 +63,17 @@ proc adi_axi_jesd204_tx_create {ip_name num_lanes {num_links 1}} {
 
     ad_ip_parameter "${ip_name}/tx_axi" CONFIG.NUM_LANES $num_lanes
     ad_ip_parameter "${ip_name}/tx_axi" CONFIG.NUM_LINKS $num_links
+    ad_ip_parameter "${ip_name}/tx_axi" CONFIG.LINK_MODE $link_mode
     ad_ip_parameter "${ip_name}/tx"     CONFIG.NUM_LANES $num_lanes
     ad_ip_parameter "${ip_name}/tx"     CONFIG.NUM_LINKS $num_links
+    ad_ip_parameter "${ip_name}/tx"     CONFIG.LINK_MODE $link_mode
 
     ad_connect "${ip_name}/tx_axi/core_reset" "${ip_name}/tx/reset"
-    ad_connect "${ip_name}/tx_axi/tx_ctrl" "${ip_name}/tx/tx_ctrl"
+    if {$link_mode == 1} {ad_connect "${ip_name}/tx_axi/tx_ctrl" "${ip_name}/tx/tx_ctrl"}
     ad_connect "${ip_name}/tx_axi/tx_cfg" "${ip_name}/tx/tx_cfg"
     ad_connect "${ip_name}/tx/tx_event" "${ip_name}/tx_axi/tx_event"
     ad_connect "${ip_name}/tx/tx_status" "${ip_name}/tx_axi/tx_status"
-    ad_connect "${ip_name}/tx/tx_ilas_config" "${ip_name}/tx_axi/tx_ilas_config"
+    if {$link_mode == 1} {ad_connect "${ip_name}/tx/tx_ilas_config" "${ip_name}/tx_axi/tx_ilas_config"}
 
     # Control interface
     create_bd_pin -dir I -type clk "${ip_name}/s_axi_aclk"
@@ -86,14 +88,14 @@ proc adi_axi_jesd204_tx_create {ip_name num_lanes {num_links 1}} {
 
     # JESD204 processing
     create_bd_pin -dir I -type clk "${ip_name}/device_clk"
-    create_bd_pin -dir I -from [expr $num_links - 1] -to 0 "${ip_name}/sync"
+    if {$link_mode == 1} {create_bd_pin -dir I -from [expr $num_links - 1] -to 0 "${ip_name}/sync"}
     create_bd_pin -dir I "${ip_name}/sysref"
 
     create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:axis_rtl:1.0 "${ip_name}/tx_data"
 
     ad_connect "${ip_name}/device_clk" "${ip_name}/tx_axi/core_clk"
     ad_connect "${ip_name}/device_clk" "${ip_name}/tx/clk"
-    ad_connect "${ip_name}/sync" "${ip_name}/tx/sync"
+    if {$link_mode == 1} {ad_connect "${ip_name}/sync" "${ip_name}/tx/sync"}
     ad_connect "${ip_name}/sysref" "${ip_name}/tx/sysref"
     ad_connect "${ip_name}/tx_data" "${ip_name}/tx/tx_data"
 
