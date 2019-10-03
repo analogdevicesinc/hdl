@@ -19,9 +19,9 @@ set_global_assignment -name VERILOG_FILE ../../../library/util_cdc/sync_bits.v
 #
 # Changes required:
 #
-# REMOVE:   R575, R576, R621, R633, R361, R365
+# REMOVE:   R575, R576, R621, R633, R612, R613
 #
-# POPULATE: R574, R577, R620, R632, R360, R364
+# POPULATE: R574, R577, R620, R632, R610, R611
 #
 
 # ADC digital interface (JESD204B)
