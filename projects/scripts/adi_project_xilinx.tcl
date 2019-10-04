@@ -253,6 +253,32 @@ proc adi_project_run {project_name} {
   open_run impl_1
   report_timing_summary -file timing_impl.log
 
+  if {[info exists ::env(ADI_GENERATE_UTILIZATION)]} {
+    set csv_file resource_utilization.csv  
+    if {[ catch {
+      xilinx::designutils::report_failfast -csv -file $csv_file -transpose -no_header -ignore_pr -quiet
+      set MMCM [llength [get_cells -hierarchical -filter { PRIMITIVE_TYPE =~ *MMCM* }]]
+      set PLL [llength [get_cells -hierarchical -filter { PRIMITIVE_TYPE =~ *PLL* }]]
+      set worst_slack_setup [get_property SLACK [get_timing_paths -setup]]
+      set worst_slack_hold [get_property SLACK [get_timing_paths -hold]]
+   
+      set fileRead [open $csv_file r]
+      set lines [split [read $fileRead] "\n"]
+      set names_line [lindex $lines end-3]
+      set values_line [lindex $lines end-2]
+      close $fileRead
+
+      set fileWrite [open $csv_file w]
+      puts $fileWrite "$names_line,MMCM*,PLL*,Worst_Setup_Slack,Worst_Hold_Slack"
+      puts $fileWrite "$values_line,$MMCM,$PLL,$worst_slack_setup,$worst_slack_hold"
+      close $fileWrite
+      } issue ] != 0 } {
+        puts "GENERATE_REPORTS: tclapp::xilinx::designutils not installed"
+      }
+  } else {
+    puts "GENERATE_REPORTS: Resource utilization files won't be generated because ADI_GENERATE_UTILIZATION env var is not set"
+  }
+
   # Look for undefined clocks which do not show up in the timing summary
   set timing_check [check_timing -override_defaults no_clock -no_header -return_string]
   if {[regexp { (\d+) register} $timing_check -> num_regs]} {

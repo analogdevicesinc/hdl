@@ -25,6 +25,7 @@ CLEAN_TARGET += .Xil
 CLEAN_TARGET += *.ip_user_files
 CLEAN_TARGET += *.str
 CLEAN_TARGET += mem_init_sys.txt
+CLEAN_TARGET += *.csv
 
 # Common dependencies that all projects have
 M_DEPS += system_project.tcl
