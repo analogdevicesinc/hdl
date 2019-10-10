@@ -53,7 +53,8 @@ module jesd204_tx_static_config #(
   parameter N = 16,
   parameter NP = 16,
   parameter HIGH_DENSITY = 1,
-  parameter SCR = 1
+  parameter SCR = 1,
+  parameter LINK_MODE = 1  // 2 - 64B/66B;  1 - 8B/10B
 ) (
   input clk,
 
@@ -76,7 +77,10 @@ module jesd204_tx_static_config #(
   output [32*NUM_LANES-1:0] ilas_config_data
 );
 
-assign cfg_beats_per_multiframe = (FRAMES_PER_MULTIFRAME * OCTETS_PER_FRAME / 4) - 1;
+/* Only 4 is supported at the moment for 8b/10b and 8 for 64b */
+localparam DATA_PATH_WIDTH = LINK_MODE == 2 ? 8 : 4;
+
+assign cfg_beats_per_multiframe = (FRAMES_PER_MULTIFRAME * OCTETS_PER_FRAME / DATA_PATH_WIDTH) - 1;
 assign cfg_octets_per_frame = OCTETS_PER_FRAME - 1;
 assign cfg_lmfc_offset = 3;
 assign cfg_sysref_oneshot = 1'b0;
