@@ -89,11 +89,12 @@ adi_if_ports output 1 buffer_delay
 adi_if_ports output 1 disable_char_replacement
 adi_if_ports output 1 disable_scrambler
 adi_if_ports output 1 err_statistics_reset
-adi_if_ports output 3 err_statistics_mask
+adi_if_ports output 7 err_statistics_mask
 
 adi_if_define "jesd204_rx_status"
 adi_if_ports output 3 ctrl_state
 adi_if_ports output -1 lane_cgs_state
+adi_if_ports output -1 lane_emb_state
 adi_if_ports output -1 lane_frame_align
 adi_if_ports output -1 lane_ifs_ready
 adi_if_ports output -1 lane_latency_ready
