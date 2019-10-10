@@ -108,7 +108,8 @@ set_false_path \
   -from $core_clk \
   -to [get_pins {i_up_rx/*i_up_rx_lane/i_ilas_mem/i_cdc_ilas_ready/cdc_sync_stage1_reg[0]/D}]
 
-set_max_delay -datapath_only \
+# Use -quiet here since the ILAS mem is missing in non 8b10b configuration
+set_max_delay -quiet -datapath_only \
  -from [get_pins {i_up_rx/gen_lane[*].i_up_rx_lane/i_ilas_mem/mem_reg_*/*/CLK}] \
  -to [get_pins {i_up_rx/gen_lane[*].i_up_rx_lane/i_ilas_mem/up_rdata_reg[*]/D}] \
   [get_property -min PERIOD $axi_clk]

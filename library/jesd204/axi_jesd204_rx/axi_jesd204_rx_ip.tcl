@@ -68,8 +68,8 @@ adi_ip_add_core_dependencies { \
   analog.com:user:axi_jesd204_common:1.0 \
 }
 
-set_property display_name "ADI JESD204B Receive AXI Interface" [ipx::current_core]
-set_property description "ADI JESD204B Receive AXI Interface" [ipx::current_core]
+set_property display_name "ADI JESD204C Receive AXI Interface" [ipx::current_core]
+set_property description "ADI JESD204C Receive AXI Interface" [ipx::current_core]
 
 adi_add_bus "rx_cfg" "master" \
   "analog.com:interface:jesd204_rx_cfg_rtl:1.0" \
@@ -113,6 +113,7 @@ adi_add_bus "rx_status" "slave" \
   { \
     { "core_status_ctrl_state" "ctrl_state" } \
     { "core_status_lane_cgs_state" "lane_cgs_state" } \
+    { "core_status_lane_emb_state" "lane_emb_state" } \
     { "core_status_lane_ifs_ready" "lane_ifs_ready" } \
     { "core_status_lane_latency" "lane_latency" } \
     { "core_status_err_statistics_cnt" "err_statistics_cnt" } \
@@ -125,4 +126,24 @@ adi_add_bus_clock "core_clk" "rx_status:rx_event:rx_ilas_config:rx_cfg" \
 
 set_property DRIVER_VALUE "0" [ipx::get_ports "core_reset_ext"]
 
+adi_set_bus_dependency "rx_ilas_config" "rx_ilas_config" \
+	"(spirit:decode(id('MODELPARAM_VALUE.LINK_MODE')) = 1)"
+set cc [ipx::current_core]
+set page0 [ipgui::get_pagespec -name "Page 0" -component $cc]
+
+# Link layer mode
+set p [ipgui::get_guiparamspec -name "LINK_MODE" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $page0
+set_property -dict [list \
+ "display_name" "Link Layer mode" \
+ "tooltip" "Link Layer mode" \
+ "widget" "comboBox" \
+] $p
+
+set_property -dict [list \
+  value_validation_type pairs \
+  value_validation_pairs {64B66B 2 8B10B 1} \
+] [ipx::get_user_parameters $p -of_objects $cc]
+
+ipx::create_xgui_files [ipx::current_core]
 ipx::save_core [ipx::current_core]
