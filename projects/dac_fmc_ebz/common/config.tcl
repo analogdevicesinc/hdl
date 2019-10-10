@@ -1,7 +1,23 @@
-# Select the device and mode you want the project synthesise for:
+# Select the device and mode you want the project synthesise for, by setting the
+# ADI_DAC_DEVICE and ADI_DAC_MODE environment variables:
+#
+# make ADI_DAC_DEVICE=AD9172 ADI_DAC_MODE=04
 
-set device    AD9172
-set mode      04
+# Default:
+set device AD9172
+set mode   04
+
+if [info exists ::env(ADI_DAC_DEVICE)] {
+  set device $::env(ADI_DAC_DEVICE)
+} else {
+  set env(ADI_DAC_DEVICE) $device
+}
+
+if [info exists ::env(ADI_DAC_MODE)] {
+  set mode $::env(ADI_DAC_MODE)
+} else {
+  set env(ADI_DAC_MODE) $mode
+}
 
 #  1 - Single link
 #  2 - Dual link
