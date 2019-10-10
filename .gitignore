@@ -79,4 +79,16 @@ reconfig_mif
 *.hw
 gui
 .timestamp_intel
-
+temporary_case_dependencies.mk
+*.zip
+*.str
+*.vcd
+*.wlf
+transcript
+tags
+boot_bin
+_info
+_vmake
+*.qdb
+*.qpg
+*.qtl
