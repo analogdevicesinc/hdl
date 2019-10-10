@@ -47,7 +47,8 @@
 module axi_jesd204_rx #(
   parameter ID = 0,
   parameter NUM_LANES = 1,
-  parameter NUM_LINKS = 1
+  parameter NUM_LINKS = 1,
+  parameter LINK_MODE = 1 // 2 - 64B/66B;  1 - 8B/10B
 ) (
   input s_axi_aclk,
   input s_axi_aresetn,
@@ -97,19 +98,22 @@ module axi_jesd204_rx #(
   input core_event_sysref_alignment_error,
   input core_event_sysref_edge,
 
-  output [2:0] core_ctrl_err_statistics_mask,
+  output [6:0] core_ctrl_err_statistics_mask,
   output core_ctrl_err_statistics_reset,
 
   input [32*NUM_LANES-1:0] core_status_err_statistics_cnt,
 
   input [1:0] core_status_ctrl_state,
   input [2*NUM_LANES-1:0] core_status_lane_cgs_state,
+  input [3*NUM_LANES-1:0] core_status_lane_emb_state,
   input [NUM_LANES-1:0] core_status_lane_ifs_ready,
   input [14*NUM_LANES-1:0] core_status_lane_latency
 );
 
 localparam PCORE_VERSION = 32'h00010261; // 1.02.a
 localparam PCORE_MAGIC = 32'h32303452; // 204R
+
+localparam DATA_PATH_WIDTH = LINK_MODE == 2 ? 3 : 2;
 
 /* Register interface signals */
 reg [31:0] up_rdata = 'h0;
@@ -175,9 +179,10 @@ jesd204_up_common #(
   .ID(ID),
   .NUM_LANES(NUM_LANES),
   .NUM_LINKS(NUM_LINKS),
-  .DATA_PATH_WIDTH(2),
+  .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
   .NUM_IRQS(5),
-  .EXTRA_CFG_WIDTH(19)
+  .EXTRA_CFG_WIDTH(19),
+  .LINK_MODE(LINK_MODE)
 ) i_up_common (
   .up_clk(s_axi_aclk),
   .ext_resetn(s_axi_aresetn),
@@ -223,7 +228,9 @@ jesd204_up_common #(
   })
 );
 
-jesd204_up_sysref i_up_sysref (
+jesd204_up_sysref #(
+  .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
+) i_up_sysref (
   .up_clk(s_axi_aclk),
   .up_reset(up_reset),
 
@@ -245,7 +252,8 @@ jesd204_up_sysref i_up_sysref (
 );
 
 jesd204_up_rx #(
-  .NUM_LANES(NUM_LANES)
+  .NUM_LANES(NUM_LANES),
+  .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
 ) i_up_rx (
   .up_clk(s_axi_aclk),
   .up_reset(up_reset),
@@ -271,6 +279,7 @@ jesd204_up_rx #(
 
   .core_status_ctrl_state(core_status_ctrl_state),
   .core_status_lane_cgs_state(core_status_lane_cgs_state),
+  .core_status_lane_emb_state(core_status_lane_emb_state),
   .core_status_lane_ifs_ready(core_status_lane_ifs_ready),
   .core_status_lane_latency(core_status_lane_latency),
 
