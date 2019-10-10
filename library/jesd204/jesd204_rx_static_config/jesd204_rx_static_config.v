@@ -50,7 +50,8 @@ module jesd204_rx_static_config #(
   parameter OCTETS_PER_FRAME = 1,
   parameter FRAMES_PER_MULTIFRAME = 32,
   parameter SCR = 1,
-  parameter BUFFER_EARLY_RELEASE = 0
+  parameter BUFFER_EARLY_RELEASE = 0,
+  parameter LINK_MODE = 1 // 2 - 64B/66B;  1 - 8B/10B
 ) (
   input clk,
 
@@ -68,7 +69,10 @@ module jesd204_rx_static_config #(
   output cfg_disable_char_replacement
 );
 
-assign cfg_beats_per_multiframe = (FRAMES_PER_MULTIFRAME * OCTETS_PER_FRAME / 4) - 1;
+/* Only 4 is supported at the moment for 8b/10b and 8 for 64b */
+localparam DATA_PATH_WIDTH = LINK_MODE == 2 ? 8 : 4;
+
+assign cfg_beats_per_multiframe = (FRAMES_PER_MULTIFRAME * OCTETS_PER_FRAME / DATA_PATH_WIDTH) - 1;
 assign cfg_octets_per_frame = OCTETS_PER_FRAME - 1;
 assign cfg_lmfc_offset = 3;
 assign cfg_sysref_oneshot = 1'b0;
