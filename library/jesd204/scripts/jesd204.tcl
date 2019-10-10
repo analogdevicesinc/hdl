@@ -116,7 +116,7 @@ proc adi_axi_jesd204_tx_create {ip_name num_lanes {num_links 1} {link_mode 1}} {
   return -options $resultoptions $resulttext
 }
 
-proc adi_axi_jesd204_rx_create {ip_name num_lanes {num_links 1}} {
+proc adi_axi_jesd204_rx_create {ip_name num_lanes {num_links 1} {link_mode 1}} {
 
   if {$num_lanes < 1 || $num_lanes > 16} {
     return -code 1 "ERROR: Invalid number of JESD204B lanes. (Supported range 1-16)"
@@ -137,14 +137,16 @@ proc adi_axi_jesd204_rx_create {ip_name num_lanes {num_links 1}} {
 
     ad_ip_parameter "${ip_name}/rx_axi" CONFIG.NUM_LANES $num_lanes
     ad_ip_parameter "${ip_name}/rx_axi" CONFIG.NUM_LINKS $num_links
+    ad_ip_parameter "${ip_name}/rx_axi" CONFIG.LINK_MODE $link_mode
     ad_ip_parameter "${ip_name}/rx"     CONFIG.NUM_LANES $num_lanes
     ad_ip_parameter "${ip_name}/rx"     CONFIG.NUM_LINKS $num_links
+    ad_ip_parameter "${ip_name}/rx"     CONFIG.LINK_MODE $link_mode
 
     ad_connect "${ip_name}/rx_axi/core_reset" "${ip_name}/rx/reset"
     ad_connect "${ip_name}/rx_axi/rx_cfg" "${ip_name}/rx/rx_cfg"
     ad_connect "${ip_name}/rx/rx_event" "${ip_name}/rx_axi/rx_event"
     ad_connect "${ip_name}/rx/rx_status" "${ip_name}/rx_axi/rx_status"
-    ad_connect "${ip_name}/rx/rx_ilas_config" "${ip_name}/rx_axi/rx_ilas_config"
+    if {$link_mode == 1} {ad_connect "${ip_name}/rx/rx_ilas_config" "${ip_name}/rx_axi/rx_ilas_config"}
 
     # Control interface
     create_bd_pin -dir I -type clk "${ip_name}/s_axi_aclk"
@@ -159,9 +161,9 @@ proc adi_axi_jesd204_rx_create {ip_name num_lanes {num_links 1}} {
 
     # JESD204 processing
     create_bd_pin -dir I -type clk "${ip_name}/device_clk"
-    create_bd_pin -dir O -from [expr $num_links - 1] -to 0 "${ip_name}/sync"
+    if {$link_mode == 1} {create_bd_pin -dir O -from [expr $num_links - 1] -to 0 "${ip_name}/sync"}
     create_bd_pin -dir I "${ip_name}/sysref"
-    create_bd_pin -dir O "${ip_name}/phy_en_char_align"
+    if {$link_mode == 1} {create_bd_pin -dir O "${ip_name}/phy_en_char_align"}
 #    create_bd_pin -dir I "${ip_name}/phy_ready"
     create_bd_pin -dir O -from 3 -to 0 "${ip_name}/rx_eof"
     create_bd_pin -dir O -from 3 -to 0 "${ip_name}/rx_sof"
@@ -172,10 +174,10 @@ proc adi_axi_jesd204_rx_create {ip_name num_lanes {num_links 1}} {
 
     ad_connect "${ip_name}/device_clk" "${ip_name}/rx_axi/core_clk"
     ad_connect "${ip_name}/device_clk" "${ip_name}/rx/clk"
-    ad_connect "${ip_name}/rx/sync" "${ip_name}/sync"
+    if {$link_mode == 1} {ad_connect "${ip_name}/rx/sync" "${ip_name}/sync"}
     ad_connect "${ip_name}/sysref" "${ip_name}/rx/sysref"
 #    ad_connect "${ip_name}/phy_ready" "${ip_name}/rx/phy_ready"
-    ad_connect "${ip_name}/rx/phy_en_char_align" "${ip_name}/phy_en_char_align"
+    if {$link_mode == 1} {ad_connect "${ip_name}/rx/phy_en_char_align" "${ip_name}/phy_en_char_align"}
     ad_connect "${ip_name}/rx/rx_data" "${ip_name}/rx_data_tdata"
     ad_connect "${ip_name}/rx/rx_valid" "${ip_name}/rx_data_tvalid"
     ad_connect "${ip_name}/rx/rx_eof" "${ip_name}/rx_eof"
