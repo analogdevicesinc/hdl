@@ -48,9 +48,13 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 adi_ip_create jesd204_rx
 adi_ip_files jesd204_rx [list \
   "jesd204_rx_lane.v" \
+  "jesd204_rx_lane_64b.v" \
+  "jesd204_rx_header.v" \
   "jesd204_rx_cgs.v" \
   "jesd204_rx_ctrl.v" \
+  "jesd204_rx_ctrl_64b.v" \
   "elastic_buffer.v" \
+  "error_monitor.v" \
   "jesd204_ilas_monitor.v" \
   "align_mux.v" \
   "jesd204_lane_latency_monitor.v" \
@@ -80,10 +84,12 @@ adi_add_multi_bus 16 "rx_phy" "slave" \
   "xilinx.com:display_jesd204:jesd204_rx_bus_rtl:1.0" \
   "xilinx.com:display_jesd204:jesd204_rx_bus:1.0" \
   [list \
-    {"phy_data" "rxdata" 32} \
-    { "phy_charisk" "rxcharisk" 4} \
-    { "phy_disperr" "rxdisperr" 4} \
-    { "phy_notintable" "rxnotintable" 4} \
+    { "phy_data" "rxdata" 32 "(spirit:decode(id('MODELPARAM_VALUE.DATA_PATH_WIDTH')) * 8)"} \
+    { "phy_charisk" "rxcharisk" 4 "(spirit:decode(id('MODELPARAM_VALUE.DATA_PATH_WIDTH')))"} \
+    { "phy_disperr" "rxdisperr" 4 "(spirit:decode(id('MODELPARAM_VALUE.DATA_PATH_WIDTH')))"} \
+    { "phy_notintable" "rxnotintable" 4 "(spirit:decode(id('MODELPARAM_VALUE.DATA_PATH_WIDTH')))"} \
+    { "phy_header" "rxheader" 2} \
+    { "phy_block_sync" "rxblock_sync" 1} \
   ] \
   "(spirit:decode(id('MODELPARAM_VALUE.NUM_LANES')) > {i})"
 
@@ -112,6 +118,7 @@ adi_add_bus "rx_status" "master" \
   { \
     { "status_ctrl_state" "ctrl_state" } \
     { "status_lane_cgs_state" "lane_cgs_state" } \
+    { "status_lane_emb_state" "lane_emb_state" } \
     { "status_err_statistics_cnt" "err_statistics_cnt" } \
     { "status_lane_ifs_ready" "lane_ifs_ready" } \
     { "status_lane_latency" "lane_latency" } \
@@ -136,8 +143,38 @@ adi_add_bus "rx_event" "master" \
 
 adi_add_bus_clock "clk" "rx_cfg:rx_ilas_config:rx_event:rx_status:rx_data" "reset"
 
+adi_set_bus_dependency "rx_ilas_config" "rx_ilas_config" \
+	"(spirit:decode(id('MODELPARAM_VALUE.LINK_MODE')) = 1)"
+
+adi_set_ports_dependency "sync" \
+	"(spirit:decode(id('MODELPARAM_VALUE.LINK_MODE')) = 1)"
+
+adi_set_ports_dependency "phy_en_char_align" \
+	"(spirit:decode(id('MODELPARAM_VALUE.LINK_MODE')) = 1)"
+
 set cc [ipx::current_core]
 set page0 [ipgui::get_pagespec -name "Page 0" -component $cc]
+
+# Link layer mode
+set p [ipgui::get_guiparamspec -name "LINK_MODE" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $page0
+set_property -dict [list \
+ "display_name" "Link Layer mode" \
+ "tooltip" "Link Layer mode" \
+ "widget" "comboBox" \
+] $p
+
+set_property -dict [list \
+  value_validation_type pairs \
+  value_validation_pairs {64B66B 2 8B10B 1} \
+] [ipx::get_user_parameters $p -of_objects $cc]
+
+# Data width selection
+set param [ipx::get_user_parameters DATA_PATH_WIDTH -of_objects $cc]
+set_property -dict [list \
+  enablement_value false \
+  value_tcl_expr {expr $LINK_MODE*4} \
+] $param
 
 set param [ipx::add_user_parameter SYSREF_IOB $cc]
 set_property -dict {value_resolve_type user value_format bool value true} $param
