@@ -1,0 +1,16 @@
+#!/bin/bash
+
+SOURCE="loopback_64b_tb.v"
+SOURCE+=" ../jesd204_common/jesd204_lmfc.v ../jesd204_common/jesd204_scrambler.v ../jesd204_common/jesd204_eof_generator.v"
+SOURCE+=" ../jesd204_common/pipeline_stage.v"
+SOURCE+=" ../jesd204_common/jesd204_scrambler_64b.v ../jesd204_common/jesd204_crc12.v"
+SOURCE+=" ../jesd204_rx/jesd204_rx.v ../jesd204_rx/jesd204_rx_ctrl_64b.v ../jesd204_rx/jesd204_rx_lane_64b.v"
+SOURCE+=" ../jesd204_rx/elastic_buffer.v ../jesd204_rx/error_monitor.v ../jesd204_rx/jesd204_rx_header.v"
+SOURCE+=" ../jesd204_rx_static_config/jesd204_rx_static_config.v"
+SOURCE+=" ../jesd204_tx/jesd204_tx.v ../jesd204_tx/jesd204_tx_lane_64b.v ../jesd204_tx/jesd204_tx_header.v"
+SOURCE+=" ../jesd204_tx_static_config/jesd204_tx_static_config.v"
+SOURCE+=" ../jesd204_tx_static_config/jesd204_ilas_cfg_static.v"
+SOURCE+=" ../../util_cdc/sync_bits.v"
+
+cd `dirname $0`
+source run_tb.sh
