@@ -134,35 +134,65 @@ proc create_phy_reset_control {tx num_of_lanes sysclk_frequency} {
   set device [get_parameter_value DEVICE_FAMILY]
 
   if {[string equal $device "Arria 10"]} {
+
     add_instance phy_reset_control altera_xcvr_reset_control $version
     set_instance_parameter_value phy_reset_control {SYNCHRONIZE_RESET} {0}
+    set_instance_parameter_value phy_reset_control {CHANNELS} $num_of_lanes
+    set_instance_parameter_value phy_reset_control {SYS_CLK_IN_MHZ} $sysclk_frequency
+    set_instance_parameter_value phy_reset_control {TX_PLL_ENABLE} $tx
+    set_instance_parameter_value phy_reset_control {TX_ENABLE} $tx
+    set_instance_parameter_value phy_reset_control {RX_ENABLE} [expr !$tx]
+
+    add_connection sys_clock.clk phy_reset_control.clock
+    add_connection link_reset.out_reset phy_reset_control.reset
+    add_connection sys_clock.clk_reset phy_reset_control.reset
+
+    if {$tx} {
+      set_instance_parameter_value phy_reset_control {T_PLL_POWERDOWN} {1000}
+      set_instance_parameter_value phy_reset_control {gui_pll_cal_busy} {1}
+      set_instance_parameter_value phy_reset_control {T_TX_ANALOGRESET} {70000}
+      set_instance_parameter_value phy_reset_control {T_TX_DIGITALRESET} {70000}
+
+      add_connection phy_reset_control.tx_ready axi_xcvr.ready
+    } else {
+      set_instance_parameter_value phy_reset_control {T_RX_ANALOGRESET} {70000}
+      set_instance_parameter_value phy_reset_control {T_RX_DIGITALRESET} {4000}
+
+      add_connection phy_reset_control.rx_ready axi_xcvr.ready
+    }
+
   } elseif {[string equal $device "Stratix 10"]} {
+
     add_instance phy_reset_control altera_xcvr_reset_control_s10 $version
+    set_instance_parameter_value phy_reset_control {CHANNELS} $num_of_lanes
+    set_instance_parameter_value phy_reset_control {SYS_CLK_IN_MHZ} $sysclk_frequency
+    set_instance_parameter_value phy_reset_control {TX_ENABLE} $tx
+    set_instance_parameter_value phy_reset_control {RX_ENABLE} [expr !$tx]
+    set_instance_parameter_value phy_reset_control {REDUCED_SIM_TIME} {1}
+    set_instance_parameter_value phy_reset_control {T_PLL_POWERDOWN} {1000}
+    set_instance_parameter_value phy_reset_control {T_PLL_LOCK_HYST} {0}
+
+    add_connection sys_clock.clk phy_reset_control.clock
+    add_connection link_reset.out_reset phy_reset_control.reset
+    add_connection sys_clock.clk_reset phy_reset_control.reset
+
+    if {$tx} {
+      set_instance_parameter_value phy_reset_control {gui_pll_cal_busy} {1}
+      set_instance_parameter_value phy_reset_control {TX_MANUAL_RESET} {0}
+      set_instance_parameter_value phy_reset_control {T_TX_ANALOGRESET} {0}
+      set_instance_parameter_value phy_reset_control {T_TX_DIGITALRESET} {20}
+
+      add_connection phy_reset_control.tx_ready axi_xcvr.ready
+    } else {
+      set_instance_parameter_value phy_reset_control {RX_MANUAL_RESET} {0}
+      set_instance_parameter_value phy_reset_control {T_RX_ANALOGRESET} {40}
+      set_instance_parameter_value phy_reset_control {T_RX_DIGITALRESET} {5000}
+
+      add_connection phy_reset_control.rx_ready axi_xcvr.ready
+    }
+
   } else {
     send_message error "Only Arria 10 and Stratix 10 are supported."
-  }
-
-  set_instance_parameter_value phy_reset_control {CHANNELS} $num_of_lanes
-  set_instance_parameter_value phy_reset_control {SYS_CLK_IN_MHZ} $sysclk_frequency
-  set_instance_parameter_value phy_reset_control {TX_PLL_ENABLE} $tx
-  set_instance_parameter_value phy_reset_control {TX_ENABLE} $tx
-  set_instance_parameter_value phy_reset_control {RX_ENABLE} [expr !$tx]
-  add_connection sys_clock.clk phy_reset_control.clock
-  add_connection link_reset.out_reset phy_reset_control.reset
-  add_connection sys_clock.clk_reset phy_reset_control.reset
-
-  if {$tx} {
-    set_instance_parameter_value phy_reset_control {T_PLL_POWERDOWN} {1000}
-    set_instance_parameter_value phy_reset_control {gui_pll_cal_busy} {1}
-    set_instance_parameter_value phy_reset_control {T_TX_ANALOGRESET} {70000}
-    set_instance_parameter_value phy_reset_control {T_TX_DIGITALRESET} {70000}
-
-    add_connection phy_reset_control.tx_ready axi_xcvr.ready
-  } else {
-    set_instance_parameter_value phy_reset_control {T_RX_ANALOGRESET} {70000}
-    set_instance_parameter_value phy_reset_control {T_RX_DIGITALRESET} {4000}
-
-    add_connection phy_reset_control.rx_ready axi_xcvr.ready
   }
 }
 
