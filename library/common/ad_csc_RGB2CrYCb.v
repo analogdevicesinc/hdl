@@ -47,14 +47,14 @@ module ad_csc_RGB2CrYCb #(
 
   // R-G-B inputs
 
-  input                   clk,
-  input       [DW:0]      RGB_sync,
-  input       [23:0]      RGB_data,
+  input                               clk,
+  input       [DELAY_DATA_WIDTH-1:0]  RGB_sync,
+  input       [23:0]                  RGB_data,
 
   // Cr-Y-Cb outputs
 
-  output      [DW:0]      CrYCb_sync,
-  output      [23:0]      CrYCb_data);
+  output      [DELAY_DATA_WIDTH-1:0]  CrYCb_sync,
+  output      [23:0]                  CrYCb_data);
 
   localparam  DW = DELAY_DATA_WIDTH - 1;
 
