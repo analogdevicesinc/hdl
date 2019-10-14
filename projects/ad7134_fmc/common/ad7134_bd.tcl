@@ -16,49 +16,38 @@ current_bd_instance /dual_ad7134
   create_bd_intf_pin -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 m_spi
   create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:axis_rtl:1.0 M_AXIS_SAMPLE
 
+  if {$adc_resolution == 16 || $adc_resolution == 24} {
+    set data_width 32
+  } elseif {$adc_resolution == 32} {
+    set data_width 64
+  };
+
   ad_ip_instance spi_engine_execution execution
-  ad_ip_parameter execution CONFIG.DATA_WIDTH $adc_resolution
+  ad_ip_parameter execution CONFIG.DATA_WIDTH $data_width
   ad_ip_parameter execution CONFIG.NUM_OF_CS 1
   ad_ip_parameter execution CONFIG.NUM_OF_SDI $adc_num_of_channels
 
   ad_ip_instance axi_spi_engine axi
-  ad_ip_parameter axi CONFIG.DATA_WIDTH $adc_resolution
+  ad_ip_parameter axi CONFIG.DATA_WIDTH $data_width
   ad_ip_parameter axi CONFIG.NUM_OF_SDI $adc_num_of_channels
   ad_ip_parameter axi CONFIG.NUM_OFFLOAD 1
 
   ad_ip_instance spi_engine_offload offload
-  ad_ip_parameter offload CONFIG.DATA_WIDTH $adc_resolution
+  ad_ip_parameter offload CONFIG.DATA_WIDTH $data_width
   ad_ip_parameter offload CONFIG.NUM_OF_SDI $adc_num_of_channels
   ad_ip_parameter offload CONFIG.ASYNC_TRIG 1
 
   ad_ip_instance spi_engine_interconnect interconnect
-  ad_ip_parameter interconnect CONFIG.DATA_WIDTH $adc_resolution
+  ad_ip_parameter interconnect CONFIG.DATA_WIDTH $data_width
   ad_ip_parameter interconnect CONFIG.NUM_OF_SDI $adc_num_of_channels
-
-  if {$adc_resolution == 24} {
-    ad_ip_instance util_axis_upscale axis_upscaler
-    ad_ip_parameter axis_upscaler CONFIG.NUM_OF_CHANNELS $adc_num_of_channels
-    ad_ip_parameter axis_upscaler CONFIG.DATA_WIDTH 24
-    ad_ip_parameter axis_upscaler CONFIG.UDATA_WIDTH 32
-    ad_connect axis_upscaler/dfmt_enable GND
-    ad_connect axis_upscaler/dfmt_type GND
-    ad_connect axis_upscaler/dfmt_se GND
-  }
 
   ad_connect axi/spi_engine_offload_ctrl0 offload/spi_engine_offload_ctrl
   ad_connect offload/spi_engine_ctrl interconnect/s0_ctrl
   ad_connect axi/spi_engine_ctrl interconnect/s1_ctrl
   ad_connect interconnect/m_ctrl execution/ctrl
-  if {$adc_resolution == 24} {
-    ad_connect offload/offload_sdi axis_upscaler/s_axis
-    ad_connect axis_upscaler/m_axis M_AXIS_SAMPLE
-
-    ad_connect clk axis_upscaler/clk
-    ad_connect axi/spi_resetn axis_upscaler/resetn
-  } else {
-    ad_connect offload/offload_sdi M_AXIS_SAMPLE
-  }
-
+  
+  ad_connect offload/offload_sdi M_AXIS_SAMPLE
+  
   ad_connect execution/spi m_spi
 
   ad_connect clk offload/spi_clk
@@ -89,11 +78,7 @@ ad_ip_parameter axi_ad7134_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_ad7134_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_ad7134_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_ad7134_dma CONFIG.DMA_2D_TRANSFER 0
-if {$adc_resolution == 24} {
-  ad_ip_parameter axi_ad7134_dma CONFIG.DMA_DATA_WIDTH_SRC [expr 32 * $adc_num_of_channels]
-} else {
-  ad_ip_parameter axi_ad7134_dma CONFIG.DMA_DATA_WIDTH_SRC [expr $adc_resolution * $adc_num_of_channels]
-}
+ad_ip_parameter axi_ad7134_dma CONFIG.DMA_DATA_WIDTH_SRC [expr $data_width * $adc_num_of_channels]
 ad_ip_parameter axi_ad7134_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 
 # sdpclk clock generator - default clk0_out is 50 MHz
