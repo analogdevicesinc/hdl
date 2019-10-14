@@ -101,6 +101,7 @@ module axi_laser_driver_regmap #(
   wire  [2:0]     up_irq_pending_s;
   wire  [2:0]     up_irq_trigger_s;
   wire  [2:0]     up_irq_source_clear_s;
+  wire            up_pulse_s;
 
   wire            up_driver_otw_n_enter_s;
   wire            up_driver_otw_n_exit_s;
@@ -200,7 +201,7 @@ module axi_laser_driver_regmap #(
   // temperature warning signal
 
   assign up_irq_pending_s = ~up_irq_mask & up_irq_source;
-  assign up_irq_trigger_s = {up_driver_otw_n_exit_s, up_driver_otw_n_enter_s, up_pulse};
+  assign up_irq_trigger_s = {up_driver_otw_n_exit_s, up_driver_otw_n_enter_s, up_pulse_s};
   assign up_irq_source_clear_s = (up_wreq_int_s == 1'b1 && up_waddr[3:0] == 4'hA) ? up_wdata[2:0] : 3'b000;
 
   always @(posedge up_clk) begin
@@ -237,7 +238,7 @@ module axi_laser_driver_regmap #(
     .in_bits (pulse),
     .out_clk (up_clk),
     .out_resetn (1'b1),
-    .out_bits (up_pulse));
+    .out_bits (up_pulse_s));
 
   sync_bits #(
     .NUM_OF_BITS (2),
