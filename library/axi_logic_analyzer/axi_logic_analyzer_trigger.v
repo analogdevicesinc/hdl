@@ -96,7 +96,7 @@ module axi_logic_analyzer_trigger (
   // 0 OR
   // 1 AND
 
-  always @(*) begin
+  always @(posedge clk) begin
     if (data_valid == 1'b1) begin
       case (trigger_logic[0])
         0: trigger_active = |(({ext_t_edge_detect_hold, edge_detect_m} & edge_detect_enable) |
