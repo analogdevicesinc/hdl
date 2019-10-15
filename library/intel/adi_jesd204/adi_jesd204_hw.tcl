@@ -419,6 +419,7 @@ proc jesd204_compose {} {
   add_connection link_pll.$outclk_name link_clock.in_clk
   add_interface link_clk clock source
 
+
   add_instance link_reset altera_reset_bridge $version
   set_instance_parameter_value link_reset {NUM_RESET_OUTPUTS} 2
   add_connection sys_clock.clk link_reset.clk
@@ -513,19 +514,14 @@ proc jesd204_compose {} {
   add_instance axi_jesd204_${tx_rx} axi_jesd204_${tx_rx} 1.0
   set_instance_parameter_value axi_jesd204_${tx_rx} {NUM_LANES} $num_of_lanes
 
-  add_instance jesd204_${tx_rx} jesd204_${tx_rx} 1.0
-  set_instance_parameter_value jesd204_${tx_rx} {NUM_LANES} $num_of_lanes
-
   add_connection sys_clock.clk axi_jesd204_${tx_rx}.s_axi_clock
   add_connection sys_clock.clk_reset axi_jesd204_${tx_rx}.s_axi_reset
 
-  if {$ext_device_clk_en} {
-    add_connection ext_device_clock.out_clk axi_jesd204_${tx_rx}.core_clock
-    add_connection ext_device_clock.out_clk jesd204_${tx_rx}.clock
-  } else {
-    add_connection link_clock.out_clk_1 axi_jesd204_${tx_rx}.core_clock
-    add_connection link_clock.out_clk_1 jesd204_${tx_rx}.clock
-  }
+  add_connection link_clock.out_clk_1 axi_jesd204_${tx_rx}.core_clock
+  add_connection link_reset.out_reset axi_jesd204_${tx_rx}.core_reset_ext
+
+  add_instance jesd204_${tx_rx} jesd204_${tx_rx} 1.0
+  set_instance_parameter_value jesd204_${tx_rx} {NUM_LANES} $num_of_lanes
 
   if {$ext_device_clk_en} {
     add_connection ext_device_clock.out_clk axi_jesd204_${tx_rx}.core_clock
@@ -551,6 +547,7 @@ proc jesd204_compose {} {
     foreach intf $phy_reset_intfs_s10 {
       add_connection phy_reset_control.${tx_rx}_${intf} phy.${intf}
     }
+
   }
 
   set lane_map [regexp -all -inline {\S+} $lane_map]
