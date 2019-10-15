@@ -52,7 +52,7 @@ module axi_logic_analyzer #(
   input       [ 1:0]    trigger_i,
 
   output                adc_valid,
-  output      [15:0]    adc_data,
+  output reg  [15:0]    adc_data,
 
   input       [15:0]    dac_data,
   input                 dac_valid,
@@ -161,8 +161,6 @@ module axi_logic_analyzer #(
   assign trigger_out = trigger_delay == 32'h0 ? trigger_out_s | streaming_on : trigger_out_delayed | streaming_on;
   assign trigger_out_delayed = delay_counter == 32'h0 ? 1 : 0;
 
-  assign adc_data = adc_data_mn;
-
  always @(posedge clk_out) begin
     if (trigger_delay == 0) begin
       if (streaming == 1'b1 && sample_valid_la == 1'b1 && trigger_out_s == 1'b1) begin
@@ -250,6 +248,7 @@ module axi_logic_analyzer #(
     always @(posedge clk_out) begin
       if (sample_valid_la == 1'b1) begin
         adc_data_mn <= data_m[ADC_PATH_DELAY-2];
+        adc_data <= adc_data_mn;
       end
     end
   endgenerate
