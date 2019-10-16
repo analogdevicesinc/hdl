@@ -148,7 +148,6 @@ module system_top (
   output            spi_clk,
   output            spi_mosi,
   input             spi_miso
-
 );
 
   // internal signals
@@ -166,7 +165,7 @@ module system_top (
   assign gpio_i[3:0]   = fpga_gpio_dpsw;
   assign gpio_i[7:4]   = fpga_gpio_btn;
   assign gpio_i[31:11]  = gpio_o[31:11];
-  assign fpga_gpio_led = gpio_o[10:8];
+  //assign fpga_gpio_led = gpio_o[10:8];
 
   // assignments
 
@@ -193,6 +192,11 @@ module system_top (
   // system reset is a combination of external reset, HPS reset and S10 init
   // done reset
   assign sys_resetn_s = fpga_resetn & ~h2f_reset_s & ~ninit_done_s;
+
+  assign fpga_gpio_led[0] = sys_resetn_s;
+  assign fpga_gpio_led[1] = fpga_resetn;
+  assign fpga_gpio_led[2] = ~h2f_reset_s;
+  assign fpga_gpio_led[3] = ~ninit_done_s;
 
   // instantiations
 
