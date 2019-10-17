@@ -57,10 +57,10 @@ module axi_adc_trigger #(
   input                 data_valid_a,
   input                 data_valid_b,
 
-  output      [15:0]    data_a_trig,
-  output      [15:0]    data_b_trig,
-  output                data_valid_a_trig,
-  output                data_valid_b_trig,
+  output reg  [15:0]    data_a_trig,
+  output reg  [15:0]    data_b_trig,
+  output reg            data_valid_a_trig,
+  output reg            data_valid_b_trig,
   output                trigger_out,
   output                trigger_out_la,
 
@@ -285,24 +285,22 @@ module axi_adc_trigger #(
     end
 
     trigger_out_ack <= trigger_out_hold & (data_valid_a | data_valid_b);
-
-    // triggers logic analyzer
   end
 
   assign trigger_out_la = trigger_out_mixed;
   assign trigger_out = trigger_out_hold | trigger_out_m2;
 
-  // the embedded trigger does not require any extra delay, since the util_extract
-  // present in this case, delays the trigger with 2 clock cycles
-  assign data_a_trig = (embedded_trigger == 1'h0) ? {data_a[14],data_a[14:0]} : {trigger_out_s,data_a[14:0]};
-  assign data_b_trig = (embedded_trigger == 1'h0) ? {data_b[14],data_b[14:0]} : {trigger_out_s,data_b[14:0]};
+  always @(posedge clk) begin
+    data_a_trig <= (embedded_trigger == 1'h0) ? {data_a[14],data_a[14:0]} : {trigger_out_s,data_a[14:0]};
+    data_b_trig <= (embedded_trigger == 1'h0) ? {data_b[14],data_b[14:0]} : {trigger_out_s,data_b[14:0]};
+
+    data_valid_a_trig <= data_valid_a;
+    data_valid_b_trig <= data_valid_b;
+  end
 
   assign embedded_trigger = trigger_out_control[16];
   assign trigger_out_s = (trigger_delay == 32'h0) ? (trigger_out_mixed | streaming_on) :
                                                   (trigger_out_delayed | streaming_on);
-  assign data_valid_a_trig = data_valid_a;
-  assign data_valid_b_trig = data_valid_b;
-
   assign trigger_out_delayed = (trigger_delay_counter == 32'h0) ? 1 : 0;
 
   always @(posedge clk) begin
@@ -386,7 +384,7 @@ module axi_adc_trigger #(
     endcase
   end
 
-  always @(*) begin
+  always @(posedge clk) begin
     case(function_a)
       2'h0: trigger_adc_a = comp_low_a_s;
       2'h1: trigger_adc_a = comp_high_a;
@@ -396,7 +394,7 @@ module axi_adc_trigger #(
     endcase
   end
 
-  always @(*) begin
+  always @(posedge clk) begin
     case(function_b)
       2'h0: trigger_adc_b = comp_low_b_s;
       2'h1: trigger_adc_b = comp_high_b;
