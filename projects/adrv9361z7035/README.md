@@ -8,7 +8,7 @@ This folder contains the ADRV9361Z7035 SOM projects for each of the carrier boar
 |---------------|----------------------------------------------------|
 |ccbob\_cmos    | ADRV9361Z7035\-SOM (CMOS Mode) \+ ADRV1CRR\-BOB    |
 |ccbob\_lvds    | ADRV9361Z7035\-SOM (LVDS Mode) \+ ADRV1CRR\-BOB    |
-|ccbox\_lvds    | ADRV9361Z7035\-SOM (LVDS Mode) \+ ADRV1CRR\-BOX    |
+|ccpackrf\_lvds | ADRV9361Z7035\-SOM (LVDS Mode) \+ ADRV1CRR\-PACKRF |
 |ccfmc\_lvds    | ADRV9361Z7035\-SOM (LVDS Mode) \+ ADRV1CRR\-FMC    |
 |ccpci\_lvds    | ADRV9361Z7035\-SOM (LVDS Mode) \+ ADRV1CRR\-PCI    |
 |ccusb\_lvds    | ADRV9361Z7035\-SOM (LVDS Mode) \+ ADRV1CRR\-USB    |
@@ -19,7 +19,7 @@ This folder contains the ADRV9361Z7035 SOM projects for each of the carrier boar
 |-----------------------------|----------------------------------------|
 |common/adrv9361z7035\_bd.tcl | ADRV9361Z7035\-SOM board design file.  |
 |common/ccbob\_bd.tcl         | carrier, break out board design file.  |
-|common/ccbox\_bd.tcl         | carrier, box board design file.        |
+|common/ccpackrf\_bd.tcl      | carrier, pack rf board design file.    |
 |common/ccfmc\_bd.tcl         | carrier, fmc board design file.        |
 |common/ccpci\_bd.tcl         | carrier, pci-e board design file.      |
 |common/ccusb\_bd.tcl         | carrier, usb board design file.        |
@@ -34,7 +34,7 @@ FMC & BOB carrier designs includes loopback daughtercards for connectivity testi
 |common/adrv9361z7035\_constr\_cmos.xdc  | ADRV9361Z7035\-SOM CMOS mode constraints file.  |
 |common/adrv9361z7035\_constr\_lvds.xdc  | ADRV9361Z7035\-SOM LVDS mode constraints file.  |
 |common/ccbob\_constr.xdc                | carrier, break out board constraints file.      |
-|common/ccbox\_constr.xdc                | carrier, box board constraints file.            |
+|common/ccpackrf\_constr.xdc             | carrier, packrf board constraints file.         |
 |common/ccfmc\_constr.xdc                | carrier, fmc board constraints file.            |
 |common/ccpci\_constr.xdc                | carrier, pci-e board constraints file.          |
 |common/ccusb\_constr.xdc                | carrier, usb board constraints file.            |

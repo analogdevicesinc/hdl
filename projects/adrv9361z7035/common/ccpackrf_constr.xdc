@@ -1,5 +1,5 @@
 
-## constraints (ccbox.a)
+## constraints
 ## rf-gpio
 
 set_property  -dict {PACKAGE_PIN  G5    IOSTANDARD LVCMOS18} [get_ports gpio_rf0]                      ; ## U1,G5,IO_L02_34_JX4_N,JX4,22,RF_GPIO0_BANK34

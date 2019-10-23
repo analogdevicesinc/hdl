@@ -3,10 +3,10 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := adrv9361z7035_ccbox_lvds
+PROJECT_NAME := adrv9361z7035_ccpackrf_lvds
 
-M_DEPS += ../common/ccbox_constr.xdc
-M_DEPS += ../common/ccbox_bd.tcl
+M_DEPS += ../common/ccpackrf_constr.xdc
+M_DEPS += ../common/ccpackrf_bd.tcl
 M_DEPS += ../common/adrv9361z7035_constr_lvds.xdc
 M_DEPS += ../common/adrv9361z7035_constr.xdc
 M_DEPS += ../common/adrv9361z7035_bd.tcl
