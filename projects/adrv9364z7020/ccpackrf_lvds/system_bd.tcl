@@ -1,6 +1,6 @@
 
 source ../common/adrv9364z7020_bd.tcl
-source ../common/ccbox_bd.tcl
+source ../common/ccpackrf_bd.tcl
 
 cfg_ad9361_interface LVDS
 
