@@ -6,6 +6,7 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 adi_ip_create axi_laser_driver
 adi_ip_files axi_laser_driver [list \
   "$ad_hdl_dir/library/common/up_clock_mon.v" \
+  "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
   "axi_laser_driver_constr.xdc" \
   "axi_laser_driver_regmap.v" \
   "axi_laser_driver.v"]
