@@ -4,7 +4,7 @@ source $ad_hdl_dir/library/scripts/adi_xilinx_device_info_enc.tcl
 # check tool version
 
 if {![info exists REQUIRED_VIVADO_VERSION]} {
-  set REQUIRED_VIVADO_VERSION "2018.3"
+  set REQUIRED_VIVADO_VERSION "2019.1"
 }
 
 if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {

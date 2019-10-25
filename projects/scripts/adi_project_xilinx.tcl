@@ -1,7 +1,7 @@
 
 ## Define the supported tool version
 if {![info exists REQUIRED_VIVADO_VERSION]} {
-  set REQUIRED_VIVADO_VERSION "2018.3"
+  set REQUIRED_VIVADO_VERSION "2019.1"
 }
 
 ## Define the ADI_IGNORE_VERSION_CHECK environment variable to skip version check
