@@ -221,6 +221,7 @@ proc create_lane_pll {id tx_or_rx_n pllclk_frequency refclk_frequency num_lanes}
   } elseif {$device_family == "Stratix 10"} {
     add_instance lane_pll altera_xcvr_atx_pll_s10_htile $version
     set_instance_parameter_value lane_pll {rcfg_enable} {1}
+    set_instance_parameter_value lane_pll {bw_sel} {low}
 
     ## tie pll_select to GND
     add_instance glue adi_jesd204_glue 1.0
