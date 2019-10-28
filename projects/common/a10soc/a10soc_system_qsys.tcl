@@ -128,7 +128,6 @@ set_interface_property sys_hps_io EXPORT_OF sys_hps.hps_io
 add_instance sys_dma_clk clock_source
 set_instance_parameter_value sys_dma_clk {resetSynchronousEdges} {DEASSERT}
 set_instance_parameter_value sys_dma_clk {clockFrequencyKnown} {false}
-add_connection sys_clk.clk_reset sys_dma_clk.clk_in_reset
 add_connection sys_resetn.out_reset sys_dma_clk.clk_in_reset
 add_connection sys_hps.h2f_user0_clock sys_dma_clk.clk_in
 add_connection sys_dma_clk.clk sys_hps.f2sdram0_clock
