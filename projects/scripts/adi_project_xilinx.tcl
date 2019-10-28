@@ -59,27 +59,27 @@ proc adi_project {project_name {mode 0} {parameter_list {}} } {
 
   if [regexp "_ac701$" $project_name] {
     set p_device "xc7a200tfbg676-2"
-    set p_board "xilinx.com:ac701:part0:1.0"
+    set p_board "xilinx.com:ac701:part0:1.4"
     set sys_zynq 0
   }
   if [regexp "_kc705$" $project_name] {
     set p_device "xc7k325tffg900-2"
-    set p_board "xilinx.com:kc705:part0:1.1"
+    set p_board "xilinx.com:kc705:part0:1.6"
     set sys_zynq 0
   }
   if [regexp "_vc707$" $project_name] {
     set p_device "xc7vx485tffg1761-2"
-    set p_board "xilinx.com:vc707:part0:1.1"
+    set p_board "xilinx.com:vc707:part0:1.4"
     set sys_zynq 0
   }
   if [regexp "_vcu118$" $project_name] {
     set p_device "xcvu9p-flga2104-2L-e"
-    set p_board "xilinx.com:vcu118:part0:2.0"
+    set p_board "xilinx.com:vcu118:part0:2.3"
     set sys_zynq 0
   }
   if [regexp "_kcu105$" $project_name] {
     set p_device "xcku040-ffva1156-2-e"
-    set p_board "xilinx.com:kcu105:part0:1.1"
+    set p_board "xilinx.com:kcu105:part0:1.6"
     set sys_zynq 0
   }
   if [regexp "_zed$" $project_name] {
@@ -99,12 +99,12 @@ proc adi_project {project_name {mode 0} {parameter_list {}} } {
   }
   if [regexp "_zc702$" $project_name] {
     set p_device "xc7z020clg484-1"
-    set p_board "xilinx.com:zc702:part0:1.2"
+    set p_board "xilinx.com:zc702:part0:1.4"
     set sys_zynq 1
   }
   if [regexp "_zc706$" $project_name] {
     set p_device "xc7z045ffg900-2"
-    set p_board "xilinx.com:zc706:part0:1.2"
+    set p_board "xilinx.com:zc706:part0:1.4"
     set sys_zynq 1
   }
   if [regexp "_mitx045$" $project_name] {
@@ -114,7 +114,7 @@ proc adi_project {project_name {mode 0} {parameter_list {}} } {
   }
   if [regexp "_zcu102$" $project_name] {
     set p_device "xczu9eg-ffvb1156-2-e"
-    set p_board "xilinx.com:zcu102:part0:3.2"
+    set p_board "xilinx.com:zcu102:part0:3.3"
     set sys_zynq 2
   }
 
