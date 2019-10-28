@@ -121,10 +121,12 @@ ad_ip_parameter SOFT_PCS BOOLEAN true false { \
   DISPLAY_NAME "Enable Soft PCS" \
 }
 
-ad_ip_parameter EXT_DEVICE_CLK_EN BOOLEAN 0 false { \
-  DISPLAY_HINT "radio" \
-  DISPLAY_NAME "External Device Clock Enable"\
-  ALLOWED_RANGES { "0:Disabled" "1:Enabled" }
+ad_ip_parameter EXT_DEVICE_CLK_EN BOOLEAN false false { \
+  DISPLAY_NAME "Enable external device clock" \
+}
+
+ad_ip_parameter PHY_RECONFIG_EN BOOLEAN true false { \
+  DISPLAY_NAME "Enable PHY reconfiguration interfaces" \
 }
 
 proc create_phy_reset_control {tx num_of_lanes sysclk_frequency} {
@@ -323,6 +325,7 @@ proc jesd204_compose {} {
   set device_family [get_parameter_value "DEVICE_FAMILY"]
   set device [get_parameter_value "DEVICE"]
   set ext_device_clk_en [get_parameter_value "EXT_DEVICE_CLK_EN"]
+  set phy_reconfig_en [get_parameter_value "PHY_RECONFIG_EN"]
 
   set pllclk_frequency [expr $lane_rate / 2]
   set linkclk_frequency [expr $lane_rate / 40]
@@ -469,11 +472,15 @@ proc jesd204_compose {} {
   set_instance_parameter_value phy REGISTER_INPUTS $register_inputs
   set_instance_parameter_value phy LANE_INVERT $lane_invert
   set_instance_parameter_value phy EXT_DEVICE_CLK_EN $ext_device_clk_en
+  set_instance_parameter_value phy PHY_RECONFIG_EN $phy_reconfig_en
 
   add_connection link_clock.out_clk_1 phy.link_clk
   add_connection link_reset.out_reset phy.link_reset
-  add_connection sys_clock.clk phy.reconfig_clk
-  add_connection sys_clock.clk_reset phy.reconfig_reset
+
+  if {$phy_reconfig_en} {
+    add_connection sys_clock.clk phy.reconfig_clk
+    add_connection sys_clock.clk_reset phy.reconfig_reset
+  }
 
   ## connect the required device clock
 
@@ -558,9 +565,11 @@ proc jesd204_compose {} {
     add_connection jesd204_${tx_rx}.${tx_rx}_phy${j} phy.phy_${i}
   }
 
-  for {set i 0} {$i < $num_of_lanes} {incr i} {
-    add_interface phy_reconfig_${i} avalon slave
-    set_interface_property phy_reconfig_${i} EXPORT_OF phy.reconfig_avmm_${i}
+  if {$phy_reconfig_en} {
+    for {set i 0} {$i < $num_of_lanes} {incr i} {
+      add_interface phy_reconfig_${i} avalon slave
+      set_interface_property phy_reconfig_${i} EXPORT_OF phy.reconfig_avmm_${i}
+    }
   }
 
   add_interface interrupt interrupt end

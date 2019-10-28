@@ -75,6 +75,7 @@ ad_ip_parameter WIDTH NATURAL 20 true { \
 ad_ip_parameter CONST_WIDTH NATURAL 1 true { \
   DERIVED true \
 }
+ad_ip_parameter PHY_RECONFIG_EN BOOLEAN true false
 
 proc glue_add_if {num name type dir {bcast false}} {
   if {$bcast} {
@@ -229,6 +230,7 @@ proc jesd204_phy_glue_elab {} {
   set device [get_parameter DEVICE]
   set soft_pcs [get_parameter SOFT_PCS]
   set num_of_lanes [get_parameter NUM_OF_LANES]
+  set phy_reconfig_en [get_parameter PHY_RECONFIG_EN]
 
   set sig_offset 0
   set const_offset 0
@@ -243,23 +245,30 @@ proc jesd204_phy_glue_elab {} {
     send_message error "Only Arria 10 and Stratix 10 are supported."
   }
 
-  glue_add_if $num_of_lanes reconfig_clk clock sink true
-  glue_add_if_port $num_of_lanes reconfig_clk reconfig_clk clk Input 1 true
+  if {$phy_reconfig_en} {
 
-  glue_add_if $num_of_lanes reconfig_reset reset sink true
-  glue_add_if_port $num_of_lanes reconfig_reset reconfig_reset reset Input 1 true
+    glue_add_if $num_of_lanes reconfig_clk clock sink true
+    glue_add_if_port $num_of_lanes reconfig_clk reconfig_clk clk Input 1 true
 
-  glue_add_if $num_of_lanes reconfig_avmm avalon sink
-  for {set i 0} {$i < $num_of_lanes} {incr i} {
-    set_interface_property reconfig_avmm_${i} associatedClock reconfig_clk
-    set_interface_property reconfig_avmm_${i} associatedReset reconfig_reset
+    glue_add_if $num_of_lanes reconfig_reset reset sink true
+    glue_add_if_port $num_of_lanes reconfig_reset reconfig_reset reset Input 1 true
+
+    glue_add_if $num_of_lanes reconfig_avmm avalon sink
+    for {set i 0} {$i < $num_of_lanes} {incr i} {
+      set_interface_property reconfig_avmm_${i} associatedClock reconfig_clk
+      set_interface_property reconfig_avmm_${i} associatedReset reconfig_reset
+    }
+    glue_add_if_port $num_of_lanes reconfig_avmm reconfig_address address Input $reconfig_avmm_address_width
+    glue_add_if_port $num_of_lanes reconfig_avmm reconfig_read read Input 1
+    glue_add_if_port $num_of_lanes reconfig_avmm reconfig_readdata readdata Output 32
+    glue_add_if_port $num_of_lanes reconfig_avmm reconfig_waitrequest waitrequest Output 1
+    glue_add_if_port $num_of_lanes reconfig_avmm reconfig_write write Input 1
+    glue_add_if_port $num_of_lanes reconfig_avmm reconfig_writedata writedata Input 32
+
+    set_interface_property reconfig_reset associatedClock reconfig_clk
+    set_interface_property reconfig_reset synchronousEdges DEASSERT
+
   }
-  glue_add_if_port $num_of_lanes reconfig_avmm reconfig_address address Input $reconfig_avmm_address_width
-  glue_add_if_port $num_of_lanes reconfig_avmm reconfig_read read Input 1
-  glue_add_if_port $num_of_lanes reconfig_avmm reconfig_readdata readdata Output 32
-  glue_add_if_port $num_of_lanes reconfig_avmm reconfig_waitrequest waitrequest Output 1
-  glue_add_if_port $num_of_lanes reconfig_avmm reconfig_write write Input 1
-  glue_add_if_port $num_of_lanes reconfig_avmm reconfig_writedata writedata Input 32
 
   if {[get_parameter TX_OR_RX_N]} {
     glue_add_if $num_of_lanes tx_clkout clock source
@@ -329,9 +338,6 @@ proc jesd204_phy_glue_elab {} {
     add_interface_port phy_rx_polinv polinv rx_polinv Output $num_of_lanes
     set_port_property polinv TERMINATION $soft_pcs
   }
-
-  set_interface_property reconfig_reset associatedClock reconfig_clk
-  set_interface_property reconfig_reset synchronousEdges DEASSERT
 
   set_parameter_value WIDTH $sig_offset
   set_parameter_value CONST_WIDTH $const_offset

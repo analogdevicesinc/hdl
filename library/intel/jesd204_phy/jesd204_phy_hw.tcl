@@ -73,6 +73,7 @@ ad_ip_parameter NUM_OF_LANES POSITIVE 4 false
 ad_ip_parameter REGISTER_INPUTS INTEGER 0 false
 ad_ip_parameter LANE_INVERT INTEGER 0 false
 ad_ip_parameter EXT_DEVICE_CLK_EN BOOLEAN false false
+ad_ip_parameter PHY_RECONFIG_EN BOOLEAN true false
 
 proc jesd204_phy_composition_callback {} {
 
@@ -88,6 +89,7 @@ proc jesd204_phy_composition_callback {} {
   set register_inputs [get_parameter_value "REGISTER_INPUTS"]
   set lane_invert [get_parameter_value "LANE_INVERT"]
   set ext_device_clk_en [get_parameter_value "EXT_DEVICE_CLK_EN"]
+  set phy_reconfig_en [get_parameter_value "PHY_RECONFIG_EN"]
 
   set link_clk_frequency [expr $lane_rate / 40]
 
@@ -163,7 +165,7 @@ proc jesd204_phy_composition_callback {} {
   set_instance_parameter_value native_phy {enable_simple_interface} 1
   set_instance_parameter_value native_phy {enh_pcs_pma_width} 40
   set_instance_parameter_value native_phy {enh_pld_pcs_width} 40
-  set_instance_parameter_value native_phy {rcfg_enable} 1
+  set_instance_parameter_value native_phy {rcfg_enable} $phy_reconfig_en
   set_instance_parameter_value native_phy {rcfg_shared} 0
   set_instance_parameter_value native_phy {rcfg_jtag_enable} 0
   set_instance_parameter_value native_phy {rcfg_sv_file_enable} 0
@@ -180,12 +182,19 @@ proc jesd204_phy_composition_callback {} {
   set_instance_parameter_value phy_glue SOFT_PCS $soft_pcs
   set_instance_parameter_value phy_glue NUM_OF_LANES $num_of_lanes
   set_instance_parameter_value phy_glue LANE_INVERT $lane_invert
+  set_instance_parameter_value phy_glue PHY_RECONFIG_EN $phy_reconfig_en
 
-  add_interface reconfig_clk clock sink
-  set_interface_property reconfig_clk EXPORT_OF phy_glue.reconfig_clk
+  if {$phy_reconfig_en} {
+    add_interface reconfig_clk clock sink
+    set_interface_property reconfig_clk EXPORT_OF phy_glue.reconfig_clk
 
-  add_interface reconfig_reset reset sink
-  set_interface_property reconfig_reset EXPORT_OF phy_glue.reconfig_reset
+    add_interface reconfig_reset reset sink
+    set_interface_property reconfig_reset EXPORT_OF phy_glue.reconfig_reset
+
+    foreach x {reconfig_clk reconfig_reset reconfig_avmm } {
+      add_connection phy_glue.phy_${x} native_phy.${x}
+    }
+  }
 
   if {$ext_device_clk_en} {
     add_instance ext_device_clock altera_clock_bridge 19.1
@@ -214,8 +223,7 @@ proc jesd204_phy_composition_callback {} {
       add_connection phy_glue.phy_tx_enh_data_valid native_phy.tx_enh_data_valid
     }
 
-    foreach x {reconfig_clk reconfig_reset reconfig_avmm tx_coreclkin \
-      tx_clkout tx_serial_clk0 tx_parallel_data unused_tx_parallel_data} {
+    foreach x {tx_coreclkin tx_clkout tx_serial_clk0 tx_parallel_data unused_tx_parallel_data} {
       add_connection phy_glue.phy_${x} native_phy.${x}
     }
 
@@ -253,8 +261,7 @@ proc jesd204_phy_composition_callback {} {
       set_interface_property ${x} EXPORT_OF native_phy.rx_${x}
     }
 
-    foreach x {reconfig_clk reconfig_reset reconfig_avmm rx_coreclkin \
-      rx_clkout rx_parallel_data rx_cdr_refclk0} {
+    foreach x {rx_coreclkin rx_clkout rx_parallel_data rx_cdr_refclk0} {
       add_connection phy_glue.phy_${x} native_phy.${x}
     }
 
@@ -276,8 +283,11 @@ proc jesd204_phy_composition_callback {} {
   }
 
   for {set i 0} {$i < $num_of_lanes} {incr i} {
-    add_interface reconfig_avmm_${i} avalon slave
-    set_interface_property reconfig_avmm_${i} EXPORT_OF phy_glue.reconfig_avmm_${i}
+
+    if {$phy_reconfig_en} {
+      add_interface reconfig_avmm_${i} avalon slave
+      set_interface_property reconfig_avmm_${i} EXPORT_OF phy_glue.reconfig_avmm_${i}
+    }
 
     add_interface phy_${i} conduit start
 
