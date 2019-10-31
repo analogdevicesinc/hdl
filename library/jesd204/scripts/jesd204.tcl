@@ -44,8 +44,8 @@
 
 proc adi_axi_jesd204_tx_create {ip_name num_lanes {num_links 1}} {
 
-  if {$num_lanes < 1 || $num_lanes > 8} {
-    return -code 1 "ERROR: Invalid number of JESD204B lanes. (Supported range 1-8)"
+  if {$num_lanes < 1 || $num_lanes > 16} {
+    return -code 1 "ERROR: Invalid number of JESD204B lanes. (Supported range 1-16)"
   }
 
   if {$num_links < 1 || $num_links > 8} {
@@ -116,8 +116,8 @@ proc adi_axi_jesd204_tx_create {ip_name num_lanes {num_links 1}} {
 
 proc adi_axi_jesd204_rx_create {ip_name num_lanes {num_links 1}} {
 
-  if {$num_lanes < 1 || $num_lanes > 8} {
-    return -code 1 "ERROR: Invalid number of JESD204B lanes. (Supported range 1-8)"
+  if {$num_lanes < 1 || $num_lanes > 16} {
+    return -code 1 "ERROR: Invalid number of JESD204B lanes. (Supported range 1-16)"
   }
 
   if {$num_links < 1 || $num_links > 8} {

@@ -76,7 +76,7 @@ set_property description "ADI JESD204 Receive" [ipx::current_core]
 #    { "rx_data" "TDATA" } \
 #  }
 
-adi_add_multi_bus 8 "rx_phy" "slave" \
+adi_add_multi_bus 16 "rx_phy" "slave" \
   "xilinx.com:display_jesd204:jesd204_rx_bus_rtl:1.0" \
   "xilinx.com:display_jesd204:jesd204_rx_bus:1.0" \
   [list \
