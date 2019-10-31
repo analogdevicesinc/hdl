@@ -49,7 +49,7 @@ adi_add_bus_clock "clk" "packed_fifo_wr" "reset"
 
 set cc [ipx::current_core]
 
-for {set i 1} {$i < 16} {incr i} {
+for {set i 1} {$i < 32} {incr i} {
   set_property enablement_dependency "spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CHANNELS')) > $i" \
     [ipx::get_ports *_$i -of_objects $cc]
 }
