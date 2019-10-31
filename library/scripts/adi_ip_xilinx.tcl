@@ -244,10 +244,6 @@ proc adi_ip_add_core_dependencies {vlnvs} {
   }
 }
 
-## List of all constraint files
-#
-set ip_constr_files ""
-
 ## Create a project which will be packed as an IP.
 #
 # \param[ip_name] - IP name
@@ -256,7 +252,6 @@ proc adi_ip_create {ip_name} {
 
   global ad_hdl_dir
   global ad_ghdl_dir
-  global ip_constr_files
   global REQUIRED_VIVADO_VERSION
   global IGNORE_VERSION_CHECK
 
@@ -272,7 +267,6 @@ proc adi_ip_create {ip_name} {
   ## Load custom message severity definitions
   source $ad_hdl_dir/projects/scripts/adi_xilinx_msg.tcl
 
-  set ip_constr_files ""
   set lib_dirs $ad_hdl_dir/library
   if {$ad_hdl_dir ne $ad_ghdl_dir} {
     lappend lib_dirs $ad_ghdl_dir/library
@@ -288,19 +282,14 @@ proc adi_ip_create {ip_name} {
 # \param[ip_files] - IP files (*.v *.vhd *.xdc)
 #
 proc adi_ip_files {ip_name ip_files} {
-
-  global ip_constr_files
-
-  set ip_constr_files ""
+  set proj_fileset [get_filesets sources_1]
   foreach m_file $ip_files {
     if {[file extension $m_file] eq ".xdc"} {
-      lappend ip_constr_files $m_file
       add_files -norecurse -fileset constrs_1 $m_file
+    } else {
+      add_files -norecurse -scan_for_includes -fileset $proj_fileset $m_file
     }
   }
-
-  set proj_fileset [get_filesets sources_1]
-  add_files -norecurse -scan_for_includes -fileset $proj_fileset $ip_files
   set_property "top" "$ip_name" $proj_fileset
 }
 
@@ -310,10 +299,12 @@ proc adi_ip_files {ip_name ip_files} {
 #
 proc adi_ip_properties_lite {ip_name} {
 
-  global ip_constr_files
+  global ad_hdl_dir
 
   ipx::package_project -root_dir . -vendor analog.com -library user -taxonomy /Analog_Devices
+
   set_property name $ip_name [ipx::current_core]
+
   set_property vendor_display_name {Analog Devices} [ipx::current_core]
   set_property company_url {http://www.analog.com} [ipx::current_core]
 
@@ -328,24 +319,17 @@ proc adi_ip_properties_lite {ip_name} {
     set s_families "$s_families $i_family Beta"
   }
   set_property supported_families $s_families [ipx::current_core]
-  ipx::save_core
+
+  ipx::save_core [ipx::current_core]
 
   ipx::remove_all_bus_interface [ipx::current_core]
   set memory_maps [ipx::get_memory_maps * -of_objects [ipx::current_core]]
   foreach map $memory_maps {
-    ipx::remove_memory_map [lindex $map 2] [ipx::current_core ]
+    ipx::remove_memory_map [lindex $map 2] [ipx::current_core]
   }
-  ipx::save_core
 
-  set i_filegroup [ipx::get_file_groups -of_objects [ipx::current_core] -filter {NAME =~ *synthesis*}]
-  foreach i_file $ip_constr_files {
-    set i_module [file tail $i_file]
-    regsub {_constr\.xdc} $i_module {} i_module
-    ipx::add_file $i_file $i_filegroup
-    ipx::reorder_files -front $i_file $i_filegroup
-    set_property SCOPED_TO_REF $i_module [ipx::get_files $i_file -of_objects $i_filegroup]
-  }
-  ipx::save_core
+  ipx::update_checksums [ipx::current_core]
+  ipx::save_core [ipx::current_core]
 }
 
 ## Set AXI interface IP proprieties.
