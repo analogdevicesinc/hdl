@@ -345,7 +345,7 @@ module system_top (
     .tx_data_7_p (tx_data_d_p[3]),
     .tx_sync_0 (tx_sync),
     .tx_sysref_0 (sysref_c),
-    //.dac_fifo_bypass(gpio_o[90]),
+    .dac_fifo_bypass(gpio_o[68]),
 
     .spi0_sclk (spi_clk),
     .spi0_csn (spi_csn),
