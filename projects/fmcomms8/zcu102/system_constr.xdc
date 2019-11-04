@@ -10,10 +10,10 @@ set_property PACKAGE_PIN F2 [get_ports {rx_data_c_p[2]}]; # A06 FMC_HPC0_DP2_M2C
 set_property PACKAGE_PIN F1 [get_ports {rx_data_c_n[2]}]; # A07 FMC_HPC0_DP2_M2C_N
 set_property PACKAGE_PIN K2 [get_ports {rx_data_c_p[3]}]; # A10 FMC_HPC0_DP3_M2C_P
 set_property PACKAGE_PIN K1 [get_ports {rx_data_c_n[3]}]; # A11 FMC_HPC0_DP3_M2C_N
-set_property PACKAGE_PIN H6 [get_ports {tx_data_c_p[0]}]; # A22 FMC_HPC0_DP1_C2M_P
-set_property PACKAGE_PIN H5 [get_ports {tx_data_c_n[0]}]; # A23 FMC_HPC0_DP1_C2M_N
-set_property PACKAGE_PIN G4 [get_ports {tx_data_c_p[1]}]; # C02 FMC_HPC0_DP0_C2M_P
-set_property PACKAGE_PIN G3 [get_ports {tx_data_c_n[1]}]; # C03 FMC_HPC0_DP0_C2M_N
+set_property PACKAGE_PIN G4 [get_ports {tx_data_c_p[0]}]; # C02 FMC_HPC0_DP0_C2M_P
+set_property PACKAGE_PIN G3 [get_ports {tx_data_c_n[0]}]; # C03 FMC_HPC0_DP0_C2M_N
+set_property PACKAGE_PIN H6 [get_ports {tx_data_c_p[1]}]; # A22 FMC_HPC0_DP1_C2M_P
+set_property PACKAGE_PIN H5 [get_ports {tx_data_c_n[1]}]; # A23 FMC_HPC0_DP1_C2M_N
 set_property PACKAGE_PIN F6 [get_ports {tx_data_c_p[2]}]; # A26 FMC_HPC0_DP2_C2M_P
 set_property PACKAGE_PIN F5 [get_ports {tx_data_c_n[2]}]; # A27 FMC_HPC0_DP2_C2M_N
 set_property PACKAGE_PIN K6 [get_ports {tx_data_c_p[3]}]; # A30 FMC_HPC0_DP3_C2M_P

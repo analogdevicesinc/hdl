@@ -5,6 +5,8 @@ create_bd_port -dir I ref_clk_d
 create_bd_port -dir I core_clk_c
 create_bd_port -dir I core_clk_d
 
+create_bd_port -dir I dac_fifo_bypass
+
 # TX parameters
 set TX_NUM_OF_LANES 8      ; # L
 set TX_NUM_OF_CONVERTERS 8 ; # M
@@ -30,6 +32,12 @@ set OBS_SAMPLE_WIDTH 16     ; # N/NP
 set OBS_SAMPLES_PER_CHANNEL 2 ;  # L * 32 / (M * N)
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
+
+set dac_fifo_name axi_adrv9009_fmc_tx_fifo
+set dac_data_width 256
+set dac_dma_data_width 256
+
+ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_dma_data_width $dac_fifo_address_width
 
 ad_ip_instance axi_adxcvr axi_adrv9009_fmc_tx_xcvr
 ad_ip_parameter axi_adrv9009_fmc_tx_xcvr CONFIG.NUM_OF_LANES $TX_NUM_OF_LANES
@@ -57,7 +65,7 @@ ad_ip_parameter axi_adrv9009_fmc_tx_dma CONFIG.CYCLIC 1
 ad_ip_parameter axi_adrv9009_fmc_tx_dma CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_adrv9009_fmc_tx_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_adrv9009_fmc_tx_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_adrv9009_fmc_tx_dma CONFIG.DMA_DATA_WIDTH_DEST 128
+ad_ip_parameter axi_adrv9009_fmc_tx_dma CONFIG.DMA_DATA_WIDTH_DEST 256
 ad_ip_parameter axi_adrv9009_fmc_tx_dma CONFIG.DMA_DATA_WIDTH_SRC 128
 ad_ip_parameter axi_adrv9009_fmc_tx_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter axi_adrv9009_fmc_tx_dma CONFIG.MAX_BYTES_PER_BURST 512
@@ -172,6 +180,24 @@ for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
 
 ad_connect tx_adrv9009_fmc_tpl_core/dac_dunf util_fmc_tx_upack/fifo_rd_underflow
 
+ad_connect  core_clk_c axi_adrv9009_fmc_tx_fifo/dac_clk
+ad_connect  core_clk_c_rstgen/peripheral_reset axi_adrv9009_fmc_tx_fifo/dac_rst
+
+ad_connect  util_fmc_tx_upack/s_axis_valid VCC
+ad_connect  util_fmc_tx_upack/s_axis_ready axi_adrv9009_fmc_tx_fifo/dac_valid
+ad_connect  util_fmc_tx_upack/s_axis_data axi_adrv9009_fmc_tx_fifo/dac_data
+
+ad_connect  core_clk_c axi_adrv9009_fmc_tx_fifo/dma_clk
+ad_connect  core_clk_c_rstgen/peripheral_reset axi_adrv9009_fmc_tx_fifo/dma_rst
+ad_connect  core_clk_c axi_adrv9009_fmc_tx_dma/m_axis_aclk
+ad_connect  axi_adrv9009_fmc_tx_fifo/dma_xfer_req axi_adrv9009_fmc_tx_dma/m_axis_xfer_req
+ad_connect  axi_adrv9009_fmc_tx_fifo/dma_ready axi_adrv9009_fmc_tx_dma/m_axis_ready
+ad_connect  axi_adrv9009_fmc_tx_fifo/dma_data axi_adrv9009_fmc_tx_dma/m_axis_data
+ad_connect  axi_adrv9009_fmc_tx_fifo/dma_valid axi_adrv9009_fmc_tx_dma/m_axis_valid
+ad_connect  axi_adrv9009_fmc_tx_fifo/dma_xfer_last axi_adrv9009_fmc_tx_dma/m_axis_last
+
+ad_connect  axi_adrv9009_fmc_tx_fifo/bypass dac_fifo_bypass
+
 ad_connect  core_clk_d rx_adrv9009_fmc_tpl_core/link_clk
 ad_connect  axi_adrv9009_fmc_rx_jesd/rx_sof rx_adrv9009_fmc_tpl_core/link_sof
 ad_connect  axi_adrv9009_fmc_rx_jesd/rx_data_tdata rx_adrv9009_fmc_tpl_core/link_data
@@ -206,9 +232,6 @@ for {set i 0} {$i < $OBS_NUM_OF_CONVERTERS} {incr i} {
 ad_connect  obs_adrv9009_fmc_tpl_core/adc_dovf util_fmc_obs_cpack/fifo_wr_overflow
 ad_connect  util_fmc_obs_cpack/packed_fifo_wr axi_adrv9009_fmc_obs_dma/fifo_wr
 
-ad_connect core_clk_c axi_adrv9009_fmc_tx_dma/m_axis_aclk
-
-ad_connect util_fmc_tx_upack/s_axis_valid VCC_1/dout
 
 ad_cpu_interconnect 0x45A00000 rx_adrv9009_fmc_tpl_core
 ad_cpu_interconnect 0x45A04000 tx_adrv9009_fmc_tpl_core
