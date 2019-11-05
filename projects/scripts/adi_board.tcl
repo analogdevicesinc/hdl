@@ -547,6 +547,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
       ad_connect $p_clk $p_intf_clock
     }
   } else {
+
     set_property CONFIG.NUM_SI $m_interconnect_index $m_interconnect_cell
     if {[lsearch [get_bd_nets -of_object [get_bd_pins $m_interconnect_cell/ACLK*]] [get_bd_nets $p_clk]] == -1 } {
         incr sys_mem_clk_index
@@ -557,7 +558,15 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     if {$p_intf_clock ne ""} {
       ad_connect $p_clk $p_intf_clock
     }
-    assign_bd_address $m_addr_seg
+
+    set mem_mapped [get_bd_addr_segs -of [get_bd_addr_spaces -of  [get_bd_intf_pins -filter {NAME=~ *DLMB*} -of [get_bd_cells /sys_mb]]] -filter {NAME=~ *DDR* || NAME=~ *ddr*}]
+
+    if {$mem_mapped eq ""} {
+      assign_bd_address $m_addr_seg
+    } else {
+      assign_bd_address -offset [get_property OFFSET $mem_mapped] \
+                        -range  [get_property RANGE $mem_mapped] $m_addr_seg
+    }
   }
 
   if {$p_sel eq "MEM"} {set sys_mem_interconnect_index $m_interconnect_index}
