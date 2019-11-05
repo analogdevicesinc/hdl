@@ -9,3 +9,4 @@ set_false_path  -to [get_cells -hier -filter {name =~ *trigger_b_d1_reg*      &&
 set_false_path  -to [get_cells -hier -filter {name =~ *up_triggered_d1*       && IS_SEQUENTIAL}]
 set_false_path  -to [get_cells -hier -filter {name =~ *up_triggered_reset_d1* && IS_SEQUENTIAL}]
 
+set_false_path  -to [get_cells -hier -filter {name =~ *read_window_cnt_m1*      && IS_SEQUENTIAL}]
