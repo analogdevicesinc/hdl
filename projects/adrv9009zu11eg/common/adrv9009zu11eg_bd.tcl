@@ -118,6 +118,15 @@ ad_connect  sys_ps8/emio_spi0_ss_i_n VCC
 ad_connect  sys_ps8/emio_spi0_sclk_i GND
 ad_connect  sys_ps8/emio_spi0_s_i GND
 
+#system ID
+
+ad_ip_instance axi_sysid axi_sysid_0
+ad_ip_instance sysid_rom rom_sys_0
+
+ad_connect  axi_sysid_0/rom_addr rom_sys_0/rom_addr
+ad_connect  axi_sysid_0/sys_rom_data rom_sys_0/rom_data
+ad_connect  sys_cpu_clk rom_sys_0/clk
+
 # interrupts
 
 ad_ip_instance xlconcat sys_concat_intc_0
@@ -443,6 +452,7 @@ ad_cpu_interconnect 0x44A70000 axi_adrv9009_som_obs_jesd
 ad_cpu_interconnect 0x7c400000 axi_adrv9009_som_tx_dma
 ad_cpu_interconnect 0x7c420000 axi_adrv9009_som_rx_dma
 ad_cpu_interconnect 0x7c440000 axi_adrv9009_som_obs_dma
+ad_cpu_interconnect 0x45000000 axi_sysid_0
 
 # gt uses hp0, and 100MHz clock for both DRP and AXI4
 
