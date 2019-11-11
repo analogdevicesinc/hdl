@@ -203,6 +203,7 @@ proc create_lane_pll {id tx_or_rx_n pllclk_frequency refclk_frequency num_lanes}
   global version
 
   set device_family [get_parameter_value "DEVICE_FAMILY"]
+  set num_of_lanes [get_parameter_value "NUM_OF_LANES"]
 
   if {$device_family == "Arria 10"} {
     add_instance lane_pll altera_xcvr_atx_pll_a10 $version
@@ -211,6 +212,7 @@ proc create_lane_pll {id tx_or_rx_n pllclk_frequency refclk_frequency num_lanes}
       set_instance_parameter_value lane_pll enable_hfreq_clk {true}
 
       add_instance glue adi_jesd204_glue 1.0
+      set_instance_parameter_value glue {NUM_OF_LANES} $num_of_lanes
       add_connection phy_reset_control.pll_powerdown glue.in_pll_powerdown
       add_connection glue.out_pll_powerdown lane_pll.pll_powerdown
       add_connection glue.out_mcgb_rst lane_pll.mcgb_rst
@@ -225,6 +227,7 @@ proc create_lane_pll {id tx_or_rx_n pllclk_frequency refclk_frequency num_lanes}
 
     ## tie pll_select to GND
     add_instance glue adi_jesd204_glue 1.0
+    set_instance_parameter_value glue {NUM_OF_LANES} $num_of_lanes
     set_instance_parameter_value glue {IN_PLL_POWERDOWN_EN} {0}
     if {$tx_or_rx_n} {
       add_connection glue.out_pll_select_gnd phy_reset_control.pll_select
@@ -242,7 +245,7 @@ proc create_lane_pll {id tx_or_rx_n pllclk_frequency refclk_frequency num_lanes}
   set_instance_parameter_value lane_pll {set_auto_reference_clock_frequency} $refclk_frequency
 
   add_connection lane_pll.pll_locked phy_reset_control.pll_locked
-  add_connection lane_pll.pll_cal_busy phy_reset_control.pll_cal_busy
+  add_connection glue.out_pll_cal_busy phy_reset_control.pll_cal_busy
   add_connection ref_clock.out_clk lane_pll.pll_refclk0
   add_connection sys_clock.clk lane_pll.reconfig_clk0
   add_connection sys_clock.clk_reset lane_pll.reconfig_reset0
@@ -503,7 +506,7 @@ proc jesd204_compose {} {
     set tx_rx "tx"
     set data_direction sink
     set jesd204_intfs {config control ilas_config event status}
-    set phy_reset_intfs {analogreset digitalreset cal_busy}
+    set phy_reset_intfs {analogreset digitalreset}
 
     create_lane_pll $id $tx_or_rx_n $pllclk_frequency $refclk_frequency $num_of_lanes
     add_connection lane_pll.tx_serial_clk phy.serial_clk_x1
@@ -514,7 +517,7 @@ proc jesd204_compose {} {
     set tx_rx "rx"
     set data_direction source
     set jesd204_intfs {config ilas_config event status}
-    set phy_reset_intfs {analogreset digitalreset cal_busy is_lockedtodata}
+    set phy_reset_intfs {analogreset digitalreset is_lockedtodata}
 
     add_connection ref_clock.out_clk phy.ref_clk
   }
@@ -553,6 +556,15 @@ proc jesd204_compose {} {
       add_connection phy_reset_control.${tx_rx}_${intf} phy.${intf}
     }
 
+  }
+
+  ## connect cal_busy for both TX and RX
+  if {$tx_or_rx_n} {
+    add_connection glue.in_tx_cal_busy phy.cal_busy
+    add_connection glue.in_pll_cal_busy lane_pll.pll_cal_busy
+    add_connection phy_reset_control.tx_cal_busy glue.out_cal_busy
+  } else {
+    add_connection phy_reset_control.rx_cal_busy phy.cal_busy
   }
 
   set lane_map [regexp -all -inline {\S+} $lane_map]

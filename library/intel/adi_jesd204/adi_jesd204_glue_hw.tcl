@@ -59,8 +59,12 @@ ad_ip_files adi_jesd204_glue [list \
 # parameters
 
 ad_ip_parameter IN_PLL_POWERDOWN_EN BOOLEAN 1 false
+ad_ip_parameter NUM_OF_LANES INTEGER 1 true
 
 proc jesd204_phy_glue_elab {} {
+
+  set num_of_lanes [get_parameter NUM_OF_LANES]
+
   add_interface in_pll_powerdown conduit end
   add_interface_port in_pll_powerdown in_pll_powerdown pll_powerdown Input 1
   set_interface_property in_pll_powerdown ENABLED [get_parameter IN_PLL_POWERDOWN_EN]
@@ -72,4 +76,17 @@ proc jesd204_phy_glue_elab {} {
 
   add_interface out_pll_select_gnd conduit end
   add_interface_port out_pll_select_gnd out_pll_select_gnd pll_select Output 1
+
+  add_interface in_tx_cal_busy conduit end
+  add_interface_port in_tx_cal_busy in_tx_cal_busy tx_cal_busy Input $num_of_lanes
+
+  add_interface in_pll_cal_busy conduit end
+  add_interface_port in_pll_cal_busy in_pll_cal_busy pll_cal_busy Input 1
+
+  add_interface out_cal_busy conduit end
+  add_interface_port out_cal_busy out_cal_busy tx_cal_busy Output $num_of_lanes
+
+  add_interface out_pll_cal_busy conduit end
+  add_interface_port out_pll_cal_busy out_pll_cal_busy pll_cal_busy Output 1
+
 }
