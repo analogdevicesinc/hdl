@@ -227,6 +227,7 @@ ad_connect adc_trigger/data_a_trig       ad9963_adc_concat/In0
 ad_connect adc_trigger/data_b_trig       ad9963_adc_concat/In1
 ad_connect adc_trigger/data_valid_a_trig adc_trigger_fifo/data_in_valid
 ad_connect ad9963_adc_concat/dout        adc_trigger_fifo/data_in
+ad_connect axi_ad9963/adc_rst            adc_trigger/reset
 
 ad_connect adc_trigger_fifo/depth        adc_trigger/fifo_depth
 
