@@ -213,3 +213,9 @@ set_input_delay -clock rx_dev_clk -min 4    [get_ports sysref_b_p];
 
 set_input_delay -clock tx_dev_clk -max 4    [get_ports sysref_a_p];
 set_input_delay -clock tx_dev_clk -min 4    [get_ports sysref_a_p];
+
+set_property -dict {PACKAGE_PIN AN21 IOSTANDARD LVCMOS18}  [get_ports spi_clk]
+set_property -dict {PACKAGE_PIN AP21 IOSTANDARD LVCMOS18}  [get_ports spi_sdio]
+set_property -dict {PACKAGE_PIN AR9  IOSTANDARD LVCMOS18}  [get_ports spi_miso]
+
+create_clock -name spi0_clk      -period 40   [get_pins -hier */EMIOSPI0SCLKO]

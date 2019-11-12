@@ -3,15 +3,15 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := adrv9009_zu11eg_som
+PROJECT_NAME := adrv9009zu11eg
 
-M_DEPS += carrier_bd.tcl
-M_DEPS += adrv9009_zu11eg_som_spi.v
-M_DEPS += adrv9009_zu11eg_som_bd.tcl
-M_DEPS += carrier_constr.xdc
-M_DEPS += adrv9009_zu11eg_som_constr.xdc
-M_DEPS += ../../library/xilinx/common/ad_iobuf.v
-M_DEPS += ../../library/jesd204/scripts/jesd204.tcl
+M_DEPS += ../common/adrv2crr_fmc_bd.tcl
+M_DEPS += ../common/adrv9009zu11eg_spi.v
+M_DEPS += ../common/adrv9009zu11eg_bd.tcl
+M_DEPS += ../common/adrv2crr_fmc_constr.xdc
+M_DEPS += ../common/adrv9009zu11eg_constr.xdc
+M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
+M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
 
 LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_dmac
@@ -29,4 +29,4 @@ LIB_DEPS += xilinx/axi_adxcvr
 LIB_DEPS += xilinx/axi_dacfifo
 LIB_DEPS += xilinx/util_adxcvr
 
-include ../scripts/project-xilinx.mk
+include ../../scripts/project-xilinx.mk
