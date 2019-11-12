@@ -252,7 +252,7 @@ module system_top (
   assign spi_csn_hmc7044 = spi_3_to_8_csn[2];
   assign spi_csn_hmc7044_car = spi_3_to_8_csn[3];
 
-  adrv9009_zu11eg_som_spi i_spi (
+  adrv9009zu11eg_spi i_spi (
   .spi_csn(spi_3_to_8_csn),
   .spi_clk(spi_clk),
   .spi_mosi(spi_mosi),
