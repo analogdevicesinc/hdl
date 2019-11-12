@@ -9,6 +9,7 @@ adi_ip_files axi_gpreg [list \
   "$ad_hdl_dir/library/common/up_clock_mon.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
+  "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
   "axi_gpreg_io.v" \
   "axi_gpreg_clock_mon.v" \
   "axi_gpreg.v" ]
