@@ -55,8 +55,7 @@ module util_adxcvr_xcm #(
   parameter   [15:0]  QPLL_CFG4 = 16'b0000000000000011,
   parameter   [15:0]  QPLL_CP_G3 = 10'b0000011111,
   parameter   [15:0]  QPLL_LPF = 10'b0100110111,
-  parameter   [15:0]  QPLL_CP = 10'b0001111111,
-  parameter   [15:0]  GTY4_PPF0_CFG  = 16'b0000100000000000
+  parameter   [15:0]  QPLL_CP = 10'b0001111111
 
 ) (
 
@@ -557,7 +556,7 @@ module util_adxcvr_xcm #(
       .COMMON_CFG0 (16'b0000000000000000),
       .COMMON_CFG1 (16'b0000000000000000),
       .POR_CFG (16'b0000000000000000),
-      .PPF0_CFG (GTY4_PPF0_CFG),
+      .PPF0_CFG (PPF0_CFG),
       .PPF1_CFG (16'b0000011000000000),
       .QPLL0CLKOUT_RATE ("HALF"),
       .QPLL0_CFG0 (QPLL_CFG0),

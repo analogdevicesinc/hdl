@@ -15,6 +15,7 @@ XILINX_DEPS += ../../interfaces/if_xcvr_ch.xml
 XILINX_DEPS += ../../interfaces/if_xcvr_ch_rtl.xml
 XILINX_DEPS += ../../interfaces/if_xcvr_cm.xml
 XILINX_DEPS += ../../interfaces/if_xcvr_cm_rtl.xml
+XILINX_DEPS += bd/bd.tcl
 
 XILINX_INTERFACE_DEPS += interfaces
 
