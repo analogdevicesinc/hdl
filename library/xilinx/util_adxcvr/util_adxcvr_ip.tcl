@@ -9,11 +9,11 @@ adi_ip_files util_adxcvr [list \
   "util_adxcvr_constr.xdc" \
   "util_adxcvr_xcm.v" \
   "util_adxcvr_xch.v" \
-  "util_adxcvr.v" ]
+  "util_adxcvr.v" \
+  "bd/bd.tcl" ]
 
 adi_ip_properties_lite util_adxcvr
 
-adi_init_bd_tcl
 adi_ip_bd util_adxcvr "bd/bd.tcl"
 
 ipx::remove_all_bus_interface [ipx::current_core]
@@ -810,6 +810,34 @@ set_property enablement_dependency \
   [ipx::get_ports up_cpll_rst_15 -of_objects [ipx::current_core]]
 
 adi_add_auto_fpga_spec_params
+set cc [ipx::current_core]
+set param [ipx::get_user_parameters CH_HSPMUX -of_objects $cc]
+set_property -dict [list \
+  value_tcl_expr {[format "0x%x" [expr {$XCVR_TYPE == 8} ? 0x2424 : \
+                                       {$XCVR_TYPE == 9} ? 0x2020 : 0x0]]} \
+] $param
+
+set param [ipx::get_user_parameters PPF0_CFG -of_objects $cc]
+set_property -dict [list \
+  value_tcl_expr {[format "0x%x" [expr {$XCVR_TYPE == 9} ? 0x800 : 0x600]]} \
+] $param
+
+set param [ipx::get_user_parameters RXPI_CFG0 -of_objects $cc]
+set_property -dict [list \
+  value_tcl_expr {[format "0x%x" [expr {$XCVR_TYPE == 8} ? 0x2 : \
+                                       {$XCVR_TYPE == 9} ? 0x100 : 0x0]]} \
+] $param
+
+set param [ipx::get_user_parameters RXPI_CFG1 -of_objects $cc]
+set_property -dict [list \
+  value_tcl_expr {[format "0x%x" [expr {$XCVR_TYPE == 8} ? 0x15 : 0x0]]} \
+] $param
+
+set param [ipx::get_user_parameters RTX_BUF_CML_CTRL -of_objects $cc]
+set_property -dict [list \
+  value_tcl_expr {[format "0x%x" [expr {$XCVR_TYPE == 9} ? 0x3 : 0x0]]} \
+] $param
+
 ipx::create_xgui_files [ipx::current_core]
 
 ipx::save_core [ipx::current_core]
