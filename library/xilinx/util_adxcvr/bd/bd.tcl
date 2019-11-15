@@ -3,7 +3,8 @@ proc init {cellpath otherInfo} {
   set ip [get_bd_cells $cellpath]
 
   bd::mark_propagate_override $ip " \
-    XCVR_TYPE CH_HSPMUX PPF0_CFG RXPI_CFG0 RXPI_CFG1 RTX_BUF_CML_CTRL"
+    XCVR_TYPE CH_HSPMUX PPF0_CFG RXPI_CFG0 RXPI_CFG1 RTX_BUF_CML_CTRL \
+    QPLL_LPF RXCDR_CFG3_GEN2 RXCDR_CFG3_GEN3 RXCDR_CFG3_GEN4 TX_PI_BIASSET"
 
   adi_auto_assign_device_spec $cellpath
 }

@@ -838,6 +838,27 @@ set_property -dict [list \
   value_tcl_expr {[format "0x%x" [expr {$XCVR_TYPE == 9} ? 0x3 : 0x0]]} \
 ] $param
 
+set param [ipx::get_user_parameters QPLL_LPF -of_objects $cc]
+set_property -dict [list \
+  value_tcl_expr {[format "0x%x" [expr {$XCVR_TYPE == 9} ? 0x37f : 0x137]]} \
+] $param
+
+set param [ipx::get_user_parameters RXCDR_CFG3_GEN2 -of_objects $cc]
+set_property -dict [list \
+  value_tcl_expr {[format "0x%x" [expr {$XCVR_TYPE == 9} ? 0x12 : 0x1a ]]} \
+] $param
+
+set param [ipx::get_user_parameters RXCDR_CFG3_GEN4 -of_objects $cc]
+set_property -dict [list \
+  value_tcl_expr {[format "0x%x" [expr {$XCVR_TYPE == 9} ? 0x12 : 0x24 ]]} \
+] $param
+
+set param [ipx::get_user_parameters TX_PI_BIASSET -of_objects $cc]
+set_property -dict [list \
+  value_tcl_expr {expr {$XCVR_TYPE == 9} ? 0 : 1} \
+] $param
+
+
 ipx::create_xgui_files [ipx::current_core]
 
 ipx::save_core [ipx::current_core]
