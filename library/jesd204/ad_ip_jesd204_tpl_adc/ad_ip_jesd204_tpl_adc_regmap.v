@@ -255,8 +255,8 @@ module ad_ip_jesd204_tpl_adc_regmap #(
   genvar i;
   for (i = 0; i < NUM_CHANNELS; i = i + 1) begin: g_channel
     up_adc_channel #(
-      .COMMON_ID (6'h1),
-      .CHANNEL_ID (i),
+      .COMMON_ID (6'h1 + i/16),
+      .CHANNEL_ID (i % 16),
       .USERPORTS_DISABLE (1),
       .DCFILTER_DISABLE (1),
       .IQCORRECTION_DISABLE (1)
