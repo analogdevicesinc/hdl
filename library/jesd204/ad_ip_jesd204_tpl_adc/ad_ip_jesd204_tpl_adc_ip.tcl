@@ -68,8 +68,8 @@ adi_add_bus "link" "master" \
 adi_add_bus_clock "link_clk" "link"
 
 foreach {p v} {
-  "NUM_LANES" "1 2 3 4 8" \
-  "NUM_CHANNELS" "1 2 4 6 8" \
+  "NUM_LANES" "1 2 3 4 8 16" \
+  "NUM_CHANNELS" "1 2 4 6 8 16 32" \
   "BITS_PER_SAMPLE" "8 12 16" \
   "CONVERTER_RESOLUTION" "8 11 12 16" \
   "SAMPLES_PER_FRAME" "1 2 3 4 6 8 12 16" \
