@@ -148,6 +148,15 @@ ad_connect spi1_sdo_i sys_ps7/SPI1_MOSI_I
 ad_connect spi1_sdo_o sys_ps7/SPI1_MOSI_O
 ad_connect spi1_sdi_i sys_ps7/SPI1_MISO_I
 
+# system id
+
+ad_ip_instance axi_sysid axi_sysid_0
+ad_ip_instance sysid_rom rom_sys_0
+
+ad_connect  axi_sysid_0/rom_addr   	rom_sys_0/rom_addr
+ad_connect  axi_sysid_0/sys_rom_data   	rom_sys_0/rom_data
+ad_connect  sys_cpu_clk                 rom_sys_0/clk
+
 # interrupts
 
 ad_connect sys_concat_intc/dout sys_ps7/IRQ_F2P
@@ -170,6 +179,7 @@ ad_connect sys_concat_intc/In0  GND
 
 # interconnects
 
+ad_cpu_interconnect 0x45000000 axi_sysid_0
 ad_cpu_interconnect 0x41600000 axi_iic_main
 
 # ad9361
