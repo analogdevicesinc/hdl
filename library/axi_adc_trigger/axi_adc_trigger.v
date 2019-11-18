@@ -278,23 +278,35 @@ module axi_adc_trigger #(
   end
 
 
-  // keep data in sync with the trigger. The trigger bypasses the variable fifo.
-  // The data goes through and it is delayed with 4 clock cycles)
+  // 1. keep data in sync with the trigger. The trigger bypasses the variable
+  // fifo. The data goes through and it is delayed with 4 clock cycles)
+  // 2. For non max sample rate of the ADC, the trigger signal that originates
+  // from an external source is stored until the valid acknowledges the trigger.
   always @(posedge clk) begin
-    trigger_out_m1 <= trigger_out_s;
-    trigger_out_m2 <= trigger_out_m1;
-    if (trigger_out_m1 & ~trigger_out_s) begin
-      trigger_out_hold <= 1'b1;
-    end
-    if (trigger_out_ack) begin
+    if (reset == 1'b1) begin
+      trigger_out_m1 <= 1'b0;
+      trigger_out_m2 <= 1'b0;
+      trigger_out_ack <= 1'b0;
       trigger_out_hold <= 1'b0;
+    end else begin
+      if (data_out_valid == 1'b1) begin
+        trigger_out_m1 <= trigger_out_s | trigger_out_hold;
+        trigger_out_m2 <= trigger_out_m1;
+        trigger_out_ack <= trigger_out_hold;
+      end
+      if (~trigger_out_m1 & trigger_out_s & ~data_out_valid) begin
+        trigger_out_hold <= 1'b1;
+      end
+      if (trigger_out_ack) begin
+        trigger_out_hold <= 1'b0;
+      end
     end
-
-    trigger_out_ack <= trigger_out_hold & (data_valid_a | data_valid_b);
   end
 
+  assign data_out_valid = data_valid_a | data_valid_b;
+
   assign trigger_out_la = trigger_out_mixed;
-  assign trigger_out = trigger_out_hold | trigger_out_m2;
+  assign trigger_out = trigger_out_m2;
 
   always @(posedge clk) begin
     data_a_trig <= (embedded_trigger == 1'h0) ? {data_a[14],data_a[14:0]} : {trigger_out_s,data_a[14:0]};
