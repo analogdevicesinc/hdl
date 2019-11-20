@@ -21,7 +21,7 @@ set_property  -dict {PACKAGE_PIN  V29   IOSTANDARD LVCMOS18} [get_ports spi_sdio
 # clocks
 
 create_clock -name rx_ref_clk   -period  4.00 [get_ports rx_ref_clk_p]
-create_clock -name rx_div_clk   -period  6.40 [get_pins i_system_wrapper/system_i/util_fmcjesdadc1_xcvr/inst/i_xch_0/i_gtxe2_channel/RXOUTCLK]
+create_clock -name rx_div_clk   -period  8.00 [get_pins i_system_wrapper/system_i/util_fmcjesdadc1_xcvr/inst/i_xch_0/i_gtxe2_channel/RXOUTCLK]
 
 set_property ASYNC_REG TRUE [get_cells -hier -filter {name =~ *sysref_en_m*}]
 set_false_path -to [get_cells -hier -filter {name =~ *sysref_en_m1*  && IS_SEQUENTIAL}]
