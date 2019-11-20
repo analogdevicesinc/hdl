@@ -158,29 +158,30 @@ ad_connect  sys_concat_intc_0/In0 GND
 # ADRV9009 Specific Connections
 # TX parameters
 
-set TX_NUM_OF_LANES 8      ; # L
-set TX_NUM_OF_CONVERTERS 8 ; # M
+set TX_NUM_OF_LANES $ad_project_params(JESD_TX_L) ; # L
+set TX_NUM_OF_CONVERTERS $ad_project_params(JESD_TX_M) ; # M
 set TX_SAMPLES_PER_FRAME 1 ; # S
 set TX_SAMPLE_WIDTH 16     ; # N/NP
 
-set TX_SAMPLES_PER_CHANNEL 2 ; # L * 32 / (M * N)
+set TX_SAMPLES_PER_CHANNEL [expr ($TX_NUM_OF_LANES * 32) / ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)] ; # L * 32 / (M * N)
 
 # RX parameters
 
-set RX_NUM_OF_LANES 4      ; # L
-set RX_NUM_OF_CONVERTERS 8 ; # M
+set RX_NUM_OF_LANES $ad_project_params(JESD_RX_L) ; # L
+set RX_NUM_OF_CONVERTERS $ad_project_params(JESD_RX_M) ; # M
 set RX_SAMPLES_PER_FRAME 1 ; # S
 set RX_SAMPLE_WIDTH 16     ; # N/NP
 
-set RX_SAMPLES_PER_CHANNEL 1 ; # L * 32 / (M * N)
+set RX_SAMPLES_PER_CHANNEL [expr ($RX_NUM_OF_LANES * 32) / ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)] ; # L * 32 / (M * N)
 
 # RX Observation parameters
-set OBS_NUM_OF_LANES 4      ; # L
-set OBS_NUM_OF_CONVERTERS 4 ; # M
+
+set OBS_NUM_OF_LANES $ad_project_params(JESD_OBS_L) ; # L
+set OBS_NUM_OF_CONVERTERS $ad_project_params(JESD_OBS_M) ; # M
 set OBS_SAMPLES_PER_FRAME 1 ; # S
 set OBS_SAMPLE_WIDTH 16     ; # N/NP
 
-set OBS_SAMPLES_PER_CHANNEL 2 ;  # L * 32 / (M * N)
+set OBS_SAMPLES_PER_CHANNEL [expr ($OBS_NUM_OF_LANES * 32) / ($OBS_NUM_OF_CONVERTERS * $OBS_SAMPLE_WIDTH)] ;  # L * 32 / (M * N)
 
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddr4_rtl:1.0 ddr4_rtl_1
 create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 ddr4_ref_1
@@ -201,7 +202,7 @@ ad_connect ddr4_ref_1 ddr4_1/C0_SYS_CLK
 
 set dac_fifo_name axi_tx_fifo
 set dac_data_width [expr 32*$TX_NUM_OF_LANES]
-set dac_dma_data_width 256
+set dac_dma_data_width [expr 32*$TX_NUM_OF_LANES]
 set dac_fifo_address_width 31
 
 ad_ip_instance axi_dacfifo $dac_fifo_name
@@ -278,7 +279,7 @@ ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter axi_adrv9009_som_rx_dma MAX_BYTES_PER_BURST 256
-ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_DATA_WIDTH_SRC 128
+ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_DATA_WIDTH_SRC [expr 32*$RX_NUM_OF_LANES]
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 
 ad_ip_instance axi_adxcvr axi_adrv9009_som_obs_xcvr
@@ -286,7 +287,7 @@ ad_ip_parameter axi_adrv9009_som_obs_xcvr CONFIG.NUM_OF_LANES $RX_NUM_OF_LANES
 ad_ip_parameter axi_adrv9009_som_obs_xcvr CONFIG.QPLL_ENABLE 0
 ad_ip_parameter axi_adrv9009_som_obs_xcvr CONFIG.TX_OR_RX_N 0
 
-adi_axi_jesd204_rx_create axi_adrv9009_som_obs_jesd  $OBS_NUM_OF_LANES
+adi_axi_jesd204_rx_create axi_adrv9009_som_obs_jesd $OBS_NUM_OF_LANES
 
 ad_ip_instance util_cpack2 util_som_obs_cpack [list \
   NUM_OF_CHANNELS $OBS_NUM_OF_CONVERTERS \
@@ -309,7 +310,7 @@ ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter axi_adrv9009_som_obs_dma MAX_BYTES_PER_BURST 256
-ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.DMA_DATA_WIDTH_SRC 128
+ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.DMA_DATA_WIDTH_SRC [expr 32*$OBS_NUM_OF_LANES]
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 
 ad_ip_instance util_adxcvr util_adrv9009_som_xcvr
