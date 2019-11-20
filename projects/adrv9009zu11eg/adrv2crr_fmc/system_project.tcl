@@ -6,7 +6,14 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 set p_device "xczu11eg-ffvf1517-2-i"
 set sys_zynq 2
 
-adi_project adrv9009zu11eg
+adi_project adrv9009zu11eg 0 [list \
+  JESD_RX_M 8 \
+  JESD_RX_L 4 \
+  JESD_TX_M 8 \
+  JESD_TX_L 8 \
+  JESD_OBS_M 4 \
+  JESD_OBS_L 4 \
+]
 adi_project_files adrv9009zu11eg [list \
   "system_top.v" \
   "../common/adrv9009zu11eg_spi.v" \
