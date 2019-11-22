@@ -5,8 +5,8 @@ set_property -dict  {PACKAGE_PIN  L19  IOSTANDARD  LVCMOS12} [get_ports sys_rst]
 
 # clocks
 
-set_property -dict  {PACKAGE_PIN  E12   IOSTANDARD  DIFF_SSTL12} [get_ports sys_clk_p]
-set_property -dict  {PACKAGE_PIN  D12   IOSTANDARD  DIFF_SSTL12} [get_ports sys_clk_n]
+set_property -dict  {PACKAGE_PIN  AW26   IOSTANDARD  LVDS} [get_ports sys_clk_p]
+set_property -dict  {PACKAGE_PIN  AW27   IOSTANDARD  LVDS} [get_ports sys_clk_n]
 
 # ethernet
 
