@@ -184,6 +184,7 @@ proc ad_disconnect {p_name_1 p_name_2} {
 #  connected to the clock source. If not used, the rx|tx_clk_out_0 is used as
 #  device clock
 #
+
 proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {device_clk {}}} {
 
   global xcvr_index
@@ -263,30 +264,27 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {device_clk {}}} {
 
     set m [expr ($n + $index)]
 
-    if {$tx_or_rx_n == 0} {
-      ad_connect  ${a_xcvr}/up_es_${n} ${u_xcvr}/up_es_${m}
-      if {$jesd204_type == 0} {
-        ad_connect  ${a_jesd}/phy_en_char_align ${u_xcvr}/${txrx}_calign_${m}
-      } else {
-        ad_connect  ${a_jesd}/rxencommaalign_out ${u_xcvr}/${txrx}_calign_${m}
-      }
-    }
-
-    if {(($m%4) == 0) && ($qpll_enable == 1)} {
-      ad_connect  ${a_xcvr}/up_cm_${n} ${u_xcvr}/up_cm_${m}
-    }
 
     if {$lane_map != {}} {
       set phys_lane [lindex $lane_map $n]
-      if {$phys_lane != {}} {
-        set phys_lane [expr $phys_lane + $index]
-      }
     } else {
       set phys_lane $m
     }
 
-    ad_connect  ${a_xcvr}/up_ch_${n} ${u_xcvr}/up_${txrx}_${m}
-    ad_connect  ${device_clk} ${u_xcvr}/${txrx}_clk_${m}
+    if {$tx_or_rx_n == 0} {
+      ad_connect  ${a_xcvr}/up_es_${n} ${u_xcvr}/up_es_${phys_lane}
+      if {$jesd204_type == 0} {
+        ad_connect  ${a_jesd}/phy_en_char_align ${u_xcvr}/${txrx}_calign_${phys_lane}
+      } else {
+        ad_connect  ${a_jesd}/rxencommaalign_out ${u_xcvr}/${txrx}_calign_${phys_lane}
+      }
+    }
+
+    if {(($phys_lane%4) == 0) && ($qpll_enable == 1)} {
+      ad_connect  ${a_xcvr}/up_cm_${n} ${u_xcvr}/up_cm_${phys_lane}
+    }
+    ad_connect  ${a_xcvr}/up_ch_${n} ${u_xcvr}/up_${txrx}_${phys_lane}
+    ad_connect  ${device_clk} ${u_xcvr}/${txrx}_clk_${phys_lane}
     if {$phys_lane != {}} {
       if {$jesd204_type == 0} {
         ad_connect  ${u_xcvr}/${txrx}_${phys_lane} ${a_jesd}/${txrx}_phy${n}
@@ -321,7 +319,6 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {device_clk {}}} {
     set xcvr_tx_index [expr ($xcvr_tx_index + $no_of_lanes)]
   }
 }
-
 ## Connect all the PLL clock and reset ports of the transceiver IP to a clock
 #  or reset source.
 #
@@ -821,7 +818,7 @@ proc checksum8bit {hex} {
   return [format %0.2x [expr 255 - [expr "0x[string range [format %0.2x $chks] [expr [string length [format %0.2x $chks]] -2] [expr [string length [format %0.2x $chks]] -1]]"] +1]]
 }
 
-## Flips the characters of a string, four at a time. Used to fix endianness. 
+## Flips the characters of a string, four at a time. Used to fix endianness.
 #
 # \param[str] - string input
 #
@@ -829,7 +826,7 @@ proc checksum8bit {hex} {
 #
 
 proc hexstr_flip {str} {
-  
+
   set fstr {}
   for {set i 0} {$i < [string length $str]} {incr i} {
     if { ($i+1) % 8 == 0} {
@@ -842,7 +839,7 @@ proc hexstr_flip {str} {
           set byte [string index $line $j]
         }
       }
-      append fstr [string reverse $fline]	   
+      append fstr [string reverse $fline]
     }
   }
   return $fstr
@@ -901,7 +898,7 @@ proc sysid_gen_sys_init_file {custom_string} {
 
   # board name
   set boardname_hex [hexstr_flip [stringtohex [lindex [split [current_project] _] 1] 32]]
-  
+
   # custom string
   set custom_hex [hexstr_flip [stringtohex $custom_string 64]]
 
@@ -909,23 +906,23 @@ proc sysid_gen_sys_init_file {custom_string} {
   # not used
   set pr_offset "00000000"
 
-  # init - generate header 
+  # init - generate header
   set comh_hex {}
   append comh_hex $comh_ver_hex
 
   # offset for internal use area
   set offset $table_size
   append comh_hex [format %08s [format %0.2x $offset]]
-  
+
   # offset for projname_hex
   set offset [expr $table_size + $verh_size]
   append comh_hex [format %08s [format %0.2x $offset]]
 
-  # offset for boardname_hex  
+  # offset for boardname_hex
   set offset [expr $offset + [expr [string length $projname_hex] / 8]]
   append comh_hex [format %08s [format %0.2x $offset]]
 
-  # offset for custom_hex  
+  # offset for custom_hex
   set offset [expr $offset + [expr [string length $boardname_hex] / 8]]
   append comh_hex [format %08s [format %0.2x $offset]]
 
