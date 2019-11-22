@@ -3,7 +3,7 @@ source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
-set p_device "xczu11eg-ffvf1517-1-e"
+set p_device "xczu11eg-ffvf1517-2-i"
 set sys_zynq 2
 
 adi_project adrv9009zu11eg

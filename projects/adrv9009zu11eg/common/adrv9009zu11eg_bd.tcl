@@ -189,10 +189,10 @@ ad_ip_instance ip:ddr4 ddr4_1
 ad_ip_parameter ddr4_1 CONFIG.C0.DDR4_DataWidth {32}
 ad_ip_parameter ddr4_1 CONFIG.C0.DDR4_AxiDataWidth {256}
 ad_ip_parameter ddr4_1 CONFIG.C0.DDR4_AxiAddressWidth {31}
-ad_ip_parameter ddr4_1 CONFIG.C0.DDR4_InputClockPeriod {3332}
-ad_ip_parameter ddr4_1 CONFIG.C0.DDR4_MemoryPart {MT40A512M16HA-083E}
+ad_ip_parameter ddr4_1 CONFIG.C0.DDR4_InputClockPeriod {3334}
+ad_ip_parameter ddr4_1 CONFIG.C0.DDR4_MemoryPart {MT40A512M16HA-075E}
 ad_ip_parameter ddr4_1 CONFIG.C0.BANK_GROUP_WIDTH {1}
-ad_ip_parameter ddr4_1 CONFIG.C0.DDR4_CasLatency {16}
+ad_ip_parameter ddr4_1 CONFIG.C0.DDR4_CasLatency {18}
 
 ad_connect ddr4_rtl_1 ddr4_1/C0_DDR4
 
