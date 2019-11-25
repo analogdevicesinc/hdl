@@ -240,44 +240,44 @@ module axi_adc_trigger_reg (
    up_xfer_cntrl #(.DATA_WIDTH(274)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_data_cntrl ({ up_streaming,           // 1
-                      up_trigger_o,           // 2
-                      up_io_selection,        // 8
-                      up_config_trigger_i,    // 10
-                      up_limit_a,             // 16
-                      up_function_a,          // 2
-                      up_hysteresis_a,        // 32
-                      up_trigger_l_mix_a,     // 4
-                      up_limit_b,             // 16
-                      up_function_b,          // 2
-                      up_hysteresis_b,        // 32
-                      up_trigger_l_mix_b,     // 4
-                      up_trigger_out_control, // 17
-                      up_fifo_depth,          // 32
-                      up_trigger_holdoff,     // 32
-                      up_trigger_out_hold_pins,// 32
-                      up_trigger_delay}),     // 32
+    .up_data_cntrl ({ up_streaming,             // 1
+                      up_trigger_o,             // 2
+                      up_io_selection,          // 8
+                      up_config_trigger_i,      // 10
+                      up_limit_a,               // 16
+                      up_function_a,            // 2
+                      up_hysteresis_a,          // 32
+                      up_trigger_l_mix_a,       // 4
+                      up_limit_b,               // 16
+                      up_function_b,            // 2
+                      up_hysteresis_b,          // 32
+                      up_trigger_l_mix_b,       // 4
+                      up_trigger_out_control,   // 17
+                      up_fifo_depth,            // 32
+                      up_trigger_holdoff,       // 32
+                      up_trigger_out_hold_pins, // 32
+                      up_trigger_delay}),       // 32
 
     .up_xfer_done (),
     .d_rst (1'b0),
     .d_clk (clk),
-    .d_data_cntrl ({  streaming,          // 1
-                      trigger_o,          // 2
-                      io_selection,       // 8
-                      config_trigger_i,   // 10
-                      limit_a,            // 16
-                      function_a,         // 2
-                      hysteresis_a,       // 32
-                      trigger_l_mix_a,    // 4
-                      limit_b,            // 16
-                      function_b,         // 2
-                      hysteresis_b,       // 32
-                      trigger_l_mix_b,    // 4
-                      trigger_out_control,// 17
-                      fifo_depth,         // 32
-                      trigger_holdoff,    // 32
-                      trigger_out_hold_pins,// 32
-                      trigger_delay}));   // 32
+    .d_data_cntrl ({  streaming,             // 1
+                      trigger_o,             // 2
+                      io_selection,          // 8
+                      config_trigger_i,      // 10
+                      limit_a,               // 16
+                      function_a,            // 2
+                      hysteresis_a,          // 32
+                      trigger_l_mix_a,       // 4
+                      limit_b,               // 16
+                      function_b,            // 2
+                      hysteresis_b,          // 32
+                      trigger_l_mix_b,       // 4
+                      trigger_out_control,   // 17
+                      fifo_depth,            // 32
+                      trigger_holdoff,       // 32
+                      trigger_out_hold_pins, // 32
+                      trigger_delay}));      // 32
 
 endmodule
 
