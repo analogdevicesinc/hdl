@@ -129,6 +129,7 @@ module axi_adc_trigger #(
   wire         [31:0]   trigger_delay;
 
   wire         [31:0]   trigger_holdoff;
+  wire         [31:0]   trigger_out_hold_pins;
 
   wire signed  [DW:0]   data_a_cmp;
   wire signed  [DW:0]   data_b_cmp;
@@ -260,7 +261,7 @@ module axi_adc_trigger #(
     if (trig_o_hold_cnt_0 != 17'd0) begin
       trig_o_hold_cnt_0 <= trig_o_hold_cnt_0 - 17'd1;
     end else if (trig_o_hold_0 != trigger_o_m[0]) begin
-      trig_o_hold_cnt_0 <= OUT_PIN_HOLD_N;
+      trig_o_hold_cnt_0 <= trigger_out_hold_pins;
       trig_o_hold_0 <= trigger_o_m[0];
     end
 
@@ -268,7 +269,7 @@ module axi_adc_trigger #(
     if (trig_o_hold_cnt_1 != 17'd0) begin
       trig_o_hold_cnt_1 <= trig_o_hold_cnt_1 - 17'd1;
     end else if (trig_o_hold_1 != trigger_o_m[1]) begin
-      trig_o_hold_cnt_1 <= OUT_PIN_HOLD_N;
+      trig_o_hold_cnt_1 <= trigger_out_hold_pins;
       trig_o_hold_1 <= trigger_o_m[1];
     end
 
@@ -591,6 +592,7 @@ module axi_adc_trigger #(
   .trigger_out_control(trigger_out_control),
   .trigger_delay(trigger_delay),
   .trigger_holdoff (trigger_holdoff),
+  .trigger_out_hold_pins (trigger_out_hold_pins),
 
   .fifo_depth(fifo_depth),
 
