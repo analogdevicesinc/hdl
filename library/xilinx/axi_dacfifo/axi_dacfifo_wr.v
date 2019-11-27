@@ -92,12 +92,19 @@ module axi_dacfifo_wr #(
 
   output  reg             axi_werror);
 
-  localparam      MEM_RATIO = AXI_DATA_WIDTH/DMA_DATA_WIDTH;  // Max supported MEM_RATIO is 16
+  `define max(a,b) {(a) > (b) ? (a) : (b)}
+  `define min(a,b) {(a) < (b) ? (a) : (b)}
+
+  localparam      MIN_WIDTH = `min(AXI_DATA_WIDTH, DMA_DATA_WIDTH);
+  localparam      MAX_WIDTH = `max(AXI_DATA_WIDTH, DMA_DATA_WIDTH);
+  localparam      MEM_RATIO = MAX_WIDTH/MIN_WIDTH;
+  localparam      AXI_BIGGER = (MAX_WIDTH == AXI_DATA_WIDTH) ? 1 : 0;
+
   localparam      AXI_MEM_ADDRESS_WIDTH = (MEM_RATIO == 1) ?  DMA_MEM_ADDRESS_WIDTH :
-                                          (MEM_RATIO == 2) ? (DMA_MEM_ADDRESS_WIDTH - 1) :
-                                          (MEM_RATIO == 4) ? (DMA_MEM_ADDRESS_WIDTH - 2) :
-                                          (MEM_RATIO == 8) ? (DMA_MEM_ADDRESS_WIDTH - 3) :
-                                                             (DMA_MEM_ADDRESS_WIDTH - 4);
+                    (MEM_RATIO == 2) ? (DMA_MEM_ADDRESS_WIDTH + ((AXI_BIGGER == 1) ? (-1) : 1)) :
+                    (MEM_RATIO == 4) ? (DMA_MEM_ADDRESS_WIDTH + ((AXI_BIGGER == 1) ? (-2) : 2)) :
+                    (MEM_RATIO == 8) ? (DMA_MEM_ADDRESS_WIDTH + ((AXI_BIGGER == 1) ? (-3) : 3)) :
+                                       (DMA_MEM_ADDRESS_WIDTH + ((AXI_BIGGER == 1) ? (-4) : 4));
 
   localparam      AXI_BYTE_WIDTH = AXI_DATA_WIDTH/8;
   localparam      AXI_AWINCR = (AXI_LENGTH + 1) * AXI_BYTE_WIDTH;
@@ -219,7 +226,7 @@ module axi_dacfifo_wr #(
       dma_last_beats <= 4'b0;
     end else begin
       if (dma_mem_wea_s == 1'b1) begin
-        dma_last_beats <= (dma_last_beats < MEM_RATIO-1) ? dma_last_beats + 4'b1 : 4'b0;
+        dma_last_beats <= (AXI_BIGGER == 1) ? ((dma_last_beats < MEM_RATIO-1) ? dma_last_beats + 4'b1 : 4'b0) : 4'b0;
       end
     end
   end
@@ -228,10 +235,10 @@ module axi_dacfifo_wr #(
 
   assign dma_mem_addr_diff_s = {1'b1, dma_mem_waddr} - dma_mem_raddr_s;
   assign dma_mem_raddr_s = (MEM_RATIO == 1) ?  dma_mem_raddr :
-                           (MEM_RATIO == 2) ? {dma_mem_raddr, 1'b0} :
-                           (MEM_RATIO == 4) ? {dma_mem_raddr, 2'b0} :
-                           (MEM_RATIO == 8) ? {dma_mem_raddr, 3'b0} :
-                                              {dma_mem_raddr, 4'b0};
+                           (MEM_RATIO == 2) ? ((AXI_BIGGER == 1) ? {dma_mem_raddr, 1'b0} : dma_mem_raddr[AXI_MEM_ADDRESS_WIDTH-1:1]) :
+                           (MEM_RATIO == 4) ? ((AXI_BIGGER == 1) ? {dma_mem_raddr, 2'b0} : dma_mem_raddr[AXI_MEM_ADDRESS_WIDTH-1:2]) :
+                           (MEM_RATIO == 8) ? ((AXI_BIGGER == 1) ? {dma_mem_raddr, 3'b0} : dma_mem_raddr[AXI_MEM_ADDRESS_WIDTH-1:3]) :
+                                              ((AXI_BIGGER == 1) ? {dma_mem_raddr, 4'b0} : dma_mem_raddr[AXI_MEM_ADDRESS_WIDTH-1:4]);
   assign dma_mem_last_read_s = dma_mem_last_read_toggle_m[2] ^ dma_mem_last_read_toggle_m[1];
   assign dma_mem_wea_s = dma_xfer_req & dma_valid & dma_ready;
 
@@ -410,10 +417,10 @@ module axi_dacfifo_wr #(
   // ASYNC MEM read control
 
   assign axi_mem_waddr_s = (MEM_RATIO == 1) ? axi_mem_waddr :
-                           (MEM_RATIO == 2) ? axi_mem_waddr[(DMA_MEM_ADDRESS_WIDTH-1):1] :
-                           (MEM_RATIO == 4) ? axi_mem_waddr[(DMA_MEM_ADDRESS_WIDTH-1):2] :
-                           (MEM_RATIO == 8) ? axi_mem_waddr[(DMA_MEM_ADDRESS_WIDTH-1):3] :
-                                              axi_mem_waddr[(DMA_MEM_ADDRESS_WIDTH-1):4];
+                           (MEM_RATIO == 2) ? ((AXI_BIGGER == 1) ? axi_mem_waddr[(DMA_MEM_ADDRESS_WIDTH-1):1] : {axi_mem_waddr, 1'b0}) :
+                           (MEM_RATIO == 4) ? ((AXI_BIGGER == 1) ? axi_mem_waddr[(DMA_MEM_ADDRESS_WIDTH-1):2] : {axi_mem_waddr, 2'b0}) :
+                           (MEM_RATIO == 8) ? ((AXI_BIGGER == 1) ? axi_mem_waddr[(DMA_MEM_ADDRESS_WIDTH-1):3] : {axi_mem_waddr, 3'b0}) :
+                                              ((AXI_BIGGER == 1) ? axi_mem_waddr[(DMA_MEM_ADDRESS_WIDTH-1):4] : {axi_mem_waddr, 4'b0});
   assign axi_mem_addr_diff_s = {1'b1, axi_mem_waddr_s} - axi_mem_raddr;
 
 
