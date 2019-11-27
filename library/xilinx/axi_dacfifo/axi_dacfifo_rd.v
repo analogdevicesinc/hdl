@@ -87,15 +87,26 @@ module axi_dacfifo_rd #(
   output                              dac_xfer_out,
   output  reg                         dac_dunf);
 
+  `define max(a,b) {(a) > (b) ? (a) : (b)}
+  `define min(a,b) {(a) < (b) ? (a) : (b)}
+
+
   localparam  AXI_BYTE_WIDTH = AXI_DATA_WIDTH/8;
   localparam  AXI_ARINCR = (AXI_LENGTH + 1) * AXI_BYTE_WIDTH;
-  localparam  MEM_RATIO = AXI_DATA_WIDTH/DAC_DATA_WIDTH;
-  localparam  AXI_MEM_ADDRESS_WIDTH = (MEM_RATIO == 1) ? DAC_MEM_ADDRESS_WIDTH :
-                                      (MEM_RATIO == 2) ? (DAC_MEM_ADDRESS_WIDTH - 1) :
-                                      (MEM_RATIO == 4) ? (DAC_MEM_ADDRESS_WIDTH - 2) :
-                                                         (DAC_MEM_ADDRESS_WIDTH - 3);
-  localparam  AXI_BUF_THRESHOLD_HI = 2 * (AXI_LENGTH+1);
-  localparam  DAC_BUF_THRESHOLD_HI = 2 * (AXI_LENGTH+1) * MEM_RATIO;
+
+  localparam  MIN_WIDTH = `min(AXI_DATA_WIDTH, DAC_DATA_WIDTH);
+  localparam  MAX_WIDTH = `max(AXI_DATA_WIDTH, DAC_DATA_WIDTH);
+  localparam  MEM_RATIO = MAX_WIDTH/MIN_WIDTH;
+  localparam  AXI_BIGGER = (MAX_WIDTH == AXI_DATA_WIDTH) ? 1 : 0;
+
+  localparam  AXI_MEM_ADDRESS_WIDTH = (MEM_RATIO == 1) ?  DAC_MEM_ADDRESS_WIDTH :
+                (MEM_RATIO == 2) ? (DAC_MEM_ADDRESS_WIDTH + ((AXI_BIGGER == 1) ? (-1) : 1)) :
+                (MEM_RATIO == 4) ? (DAC_MEM_ADDRESS_WIDTH + ((AXI_BIGGER == 1) ? (-2) : 2)) :
+                (MEM_RATIO == 8) ? (DAC_MEM_ADDRESS_WIDTH + ((AXI_BIGGER == 1) ? (-3) : 3)) :
+                                   (DAC_MEM_ADDRESS_WIDTH + ((AXI_BIGGER == 1) ? (-4) : 4));
+
+  localparam  AXI_BUF_THRESHOLD_HI = (AXI_BIGGER) ? (2 * (AXI_LENGTH+1)) : (2 * (AXI_LENGTH+1) * MEM_RATIO);
+  localparam  DAC_BUF_THRESHOLD_HI = (AXI_BIGGER) ? (2 * (AXI_LENGTH+1) * MEM_RATIO) : (2 * (AXI_LENGTH+1));
 
   localparam  IDLE                    = 5'b00001;
   localparam  XFER_STAGING            = 5'b00010;
@@ -298,17 +309,22 @@ module axi_dacfifo_rd #(
     .dout (axi_mem_waddr_b2g_s));
 
   assign axi_mem_raddr_s = (MEM_RATIO == 1) ? axi_mem_raddr :
-                           (MEM_RATIO == 2) ? axi_mem_raddr[(DAC_MEM_ADDRESS_WIDTH-1):1] :
-                           (MEM_RATIO == 4) ? axi_mem_raddr[(DAC_MEM_ADDRESS_WIDTH-1):2] :
-                                              axi_mem_raddr[(DAC_MEM_ADDRESS_WIDTH-1):3];
+                           (MEM_RATIO == 2) ? ((AXI_BIGGER == 1) ? axi_mem_raddr[(DAC_MEM_ADDRESS_WIDTH-1):1] : {axi_mem_raddr, 1'b0}) :
+                           (MEM_RATIO == 4) ? ((AXI_BIGGER == 1) ? axi_mem_raddr[(DAC_MEM_ADDRESS_WIDTH-1):2] : {axi_mem_raddr, 2'b0}) :
+                           (MEM_RATIO == 8) ? ((AXI_BIGGER == 1) ? axi_mem_raddr[(DAC_MEM_ADDRESS_WIDTH-1):3] : {axi_mem_raddr, 3'b0}) :
+                                              ((AXI_BIGGER == 1) ? axi_mem_raddr[(DAC_MEM_ADDRESS_WIDTH-1):4] : {axi_mem_raddr, 4'b0});
   assign axi_mem_waddr_s = (MEM_RATIO == 1) ? axi_mem_waddr :
-                           (MEM_RATIO == 2) ? {axi_mem_waddr, 1'b0} :
-                           (MEM_RATIO == 4) ? {axi_mem_waddr, 2'b0} :
-                                              {axi_mem_waddr, 3'b0};
+                           (MEM_RATIO == 2) ? ((AXI_BIGGER == 1) ? {axi_mem_waddr, 1'b0} : axi_mem_waddr[AXI_MEM_ADDRESS_WIDTH-1:1]) :
+                           (MEM_RATIO == 4) ? ((AXI_BIGGER == 1) ? {axi_mem_waddr, 2'b0} : axi_mem_waddr[AXI_MEM_ADDRESS_WIDTH-1:2]) :
+                           (MEM_RATIO == 8) ? ((AXI_BIGGER == 1) ? {axi_mem_waddr, 3'b0} : axi_mem_waddr[AXI_MEM_ADDRESS_WIDTH-1:3]) :
+                                              ((AXI_BIGGER == 1) ? {axi_mem_waddr, 4'b0} : axi_mem_waddr[AXI_MEM_ADDRESS_WIDTH-1:4]);
+
    assign axi_mem_laddr_s = (MEM_RATIO == 1) ? axi_mem_laddr :
-                            (MEM_RATIO == 2) ? {axi_mem_laddr, 1'b0} :
-                            (MEM_RATIO == 4) ? {axi_mem_laddr, 2'b0} :
-                                               {axi_mem_laddr, 3'b0};
+                            (MEM_RATIO == 2) ? ((AXI_BIGGER == 1) ? {axi_mem_laddr, 1'b0} : axi_mem_laddr[AXI_MEM_ADDRESS_WIDTH-1:1]) :
+                            (MEM_RATIO == 4) ? ((AXI_BIGGER == 1) ? {axi_mem_laddr, 2'b0} : axi_mem_laddr[AXI_MEM_ADDRESS_WIDTH-1:2]) :
+                            (MEM_RATIO == 8) ? ((AXI_BIGGER == 1) ? {axi_mem_laddr, 3'b0} : axi_mem_laddr[AXI_MEM_ADDRESS_WIDTH-1:3]) :
+                                               ((AXI_BIGGER == 1) ? {axi_mem_laddr, 4'b0} : axi_mem_laddr[AXI_MEM_ADDRESS_WIDTH-1:4]);
+
   assign axi_mem_addr_diff_s = {1'b1, axi_mem_waddr} - axi_mem_raddr_s;
 
   always @(posedge axi_clk) begin
