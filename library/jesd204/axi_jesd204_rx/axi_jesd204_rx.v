@@ -110,7 +110,7 @@ module axi_jesd204_rx #(
   input [14*NUM_LANES-1:0] core_status_lane_latency
 );
 
-localparam PCORE_VERSION = 32'h00010261; // 1.02.a
+localparam PCORE_VERSION = 32'h00010361; // 1.03.a
 localparam PCORE_MAGIC = 32'h32303452; // 204R
 
 localparam DATA_PATH_WIDTH = LINK_MODE == 2 ? 3 : 2;
