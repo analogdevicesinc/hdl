@@ -51,7 +51,7 @@ adi_ip_files axi_ad9361 [list \
   "axi_ad9361.v" ]
 
 adi_ip_properties axi_ad9361
-adi_ip_ttcl axi_ad9361 "$ad_hdl_dir/library/common/ad_pps_receiver_constr.ttcl"
+adi_ip_ttcl axi_ad9361 "../common/ad_pps_receiver_constr.ttcl"
 
 adi_init_bd_tcl
 adi_ip_bd axi_ad9361 "bd/bd.tcl"
