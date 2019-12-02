@@ -12,7 +12,7 @@ adi_ip_files axi_laser_driver [list \
   "axi_laser_driver.v"]
 
 adi_ip_properties axi_laser_driver
-adi_ip_ttcl axi_laser_driver "$ad_hdl_dir/library/axi_pulse_gen/axi_pulse_gen_constr.ttcl"
+adi_ip_ttcl axi_laser_driver "../axi_pulse_gen/axi_pulse_gen_constr.ttcl"
 
 adi_ip_add_core_dependencies { \
 	analog.com:user:util_cdc:1.0 \
