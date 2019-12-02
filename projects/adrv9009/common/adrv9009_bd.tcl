@@ -17,11 +17,11 @@ set RX_SAMPLES_PER_CHANNEL 1 ; # L * 32 / (M * N)
 
 # RX Observation parameters
 set RX_OS_NUM_OF_LANES 2      ; # L
-set RX_OS_NUM_OF_CONVERTERS 4 ; # M
+set RX_OS_NUM_OF_CONVERTERS 2 ; # M
 set RX_OS_SAMPLES_PER_FRAME 1 ; # S
 set RX_OS_SAMPLE_WIDTH 16     ; # N/NP
 
-set RX_OS_SAMPLES_PER_CHANNEL 1 ;  # L * 32 / (M * N)
+set RX_OS_SAMPLES_PER_CHANNEL 2 ;  # L * 32 / (M * N)
 
 set dac_fifo_name axi_adrv9009_dacfifo
 set dac_data_width [expr 32*$TX_NUM_OF_LANES]
