@@ -1,0 +1,53 @@
+
+## ADC FIFO depth in samples per converter
+set adc_fifo_samples_per_converter [expr 64*1024]
+## DAC FIFO depth in samples per converter
+set dac_fifo_samples_per_converter [expr 64*1024]
+
+
+source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl
+source $ad_hdl_dir/projects/common/xilinx/adcfifo_bd.tcl
+source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
+source ../common/ad9081_fmca_ebz_bd.tcl
+
+#system ID
+ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
+ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/mem_init_sys.txt"
+ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
+set sys_cstring "sys rom custom string placeholder"
+sysid_gen_sys_init_file $sys_cstring
+
+# Parameters for 15.5Gpbs lane rate
+
+ad_ip_parameter util_mxfe_xcvr CONFIG.RX_CLK25_DIV 31
+ad_ip_parameter util_mxfe_xcvr CONFIG.TX_CLK25_DIV 31
+ad_ip_parameter util_mxfe_xcvr CONFIG.CPLL_CFG0 0x1fa
+ad_ip_parameter util_mxfe_xcvr CONFIG.CPLL_CFG1 0x23
+ad_ip_parameter util_mxfe_xcvr CONFIG.CPLL_CFG2 0x2
+ad_ip_parameter util_mxfe_xcvr CONFIG.CPLL_FBDIV 2
+ad_ip_parameter util_mxfe_xcvr CONFIG.A_TXDIFFCTRL 0xc
+ad_ip_parameter util_mxfe_xcvr CONFIG.RXCDR_CFG0 0x3
+ad_ip_parameter util_mxfe_xcvr CONFIG.RXCDR_CFG2_GEN2 0x265
+ad_ip_parameter util_mxfe_xcvr CONFIG.RXCDR_CFG2_GEN4 0x164
+ad_ip_parameter util_mxfe_xcvr CONFIG.RXCDR_CFG3 0x1A
+ad_ip_parameter util_mxfe_xcvr CONFIG.RXCDR_CFG3_GEN2 0x1A
+ad_ip_parameter util_mxfe_xcvr CONFIG.RXCDR_CFG3_GEN3 0x1A
+ad_ip_parameter util_mxfe_xcvr CONFIG.RXCDR_CFG3_GEN4 0x12
+ad_ip_parameter util_mxfe_xcvr CONFIG.CH_HSPMUX 0x6868
+ad_ip_parameter util_mxfe_xcvr CONFIG.PREIQ_FREQ_BST 1
+ad_ip_parameter util_mxfe_xcvr CONFIG.RXPI_CFG0 0x4
+ad_ip_parameter util_mxfe_xcvr CONFIG.RXPI_CFG1 0x0
+ad_ip_parameter util_mxfe_xcvr CONFIG.TXPI_CFG 0x0
+ad_ip_parameter util_mxfe_xcvr CONFIG.TX_PI_BIASSET 3
+
+ad_ip_parameter util_mxfe_xcvr CONFIG.QPLL_REFCLK_DIV 1
+ad_ip_parameter util_mxfe_xcvr CONFIG.POR_CFG 0x0
+ad_ip_parameter util_mxfe_xcvr CONFIG.QPLL_CFG0 0x333c
+ad_ip_parameter util_mxfe_xcvr CONFIG.QPLL_CFG4 0x45
+ad_ip_parameter util_mxfe_xcvr CONFIG.QPLL_FBDIV 20
+ad_ip_parameter util_mxfe_xcvr CONFIG.PPF0_CFG 0xF00
+ad_ip_parameter util_mxfe_xcvr CONFIG.QPLL_CP 0xFF
+ad_ip_parameter util_mxfe_xcvr CONFIG.QPLL_CP_G3 0xF
+ad_ip_parameter util_mxfe_xcvr CONFIG.QPLL_LPF 0x2FF
+
+
