@@ -259,14 +259,14 @@ proc adi_project_run {project_name} {
   report_timing_summary -file timing_impl.log
 
   if {[info exists ::env(ADI_GENERATE_UTILIZATION)]} {
-    set csv_file resource_utilization.csv  
+    set csv_file resource_utilization.csv
     if {[ catch {
       xilinx::designutils::report_failfast -csv -file $csv_file -transpose -no_header -ignore_pr -quiet
       set MMCM [llength [get_cells -hierarchical -filter { PRIMITIVE_TYPE =~ *MMCM* }]]
       set PLL [llength [get_cells -hierarchical -filter { PRIMITIVE_TYPE =~ *PLL* }]]
       set worst_slack_setup [get_property SLACK [get_timing_paths -setup]]
       set worst_slack_hold [get_property SLACK [get_timing_paths -hold]]
-   
+
       set fileRead [open $csv_file r]
       set lines [split [read $fileRead] "\n"]
       set names_line [lindex $lines end-3]
@@ -282,6 +282,49 @@ proc adi_project_run {project_name} {
       }
   } else {
     puts "GENERATE_REPORTS: Resource utilization files won't be generated because ADI_GENERATE_UTILIZATION env var is not set"
+  }
+
+  if {[info exists ::env(ADI_GENERATE_POWER)]} {
+    set csv_file power_analysis.csv
+    set Layers "8to11"
+    set CapLoad "20"
+    set ToggleRate "15.00000"
+    set StatProb "0.500000"
+
+    set_load $CapLoad [all_outputs]
+    set_operating_conditions -board_layers $Layers
+    set_switching_activity -default_toggle_rate $ToggleRate
+    set_switching_activity -default_static_probability $StatProb
+    set_switching_activity -type lut -toggle_rate $ToggleRate -static_probability $StatProb -all
+    set_switching_activity -type register -toggle_rate $ToggleRate -static_probability $StatProb -all
+    set_switching_activity -type shift_register -toggle_rate $ToggleRate -static_probability $StatProb -all
+    set_switching_activity -type lut_ram -toggle_rate $ToggleRate -static_probability $StatProb -all
+    set_switching_activity -type bram -toggle_rate $ToggleRate -static_probability $StatProb -all
+    set_switching_activity -type dsp -toggle_rate $ToggleRate -static_probability $StatProb -all
+    set_switching_activity -type gt_rxdata -toggle_rate $ToggleRate -static_probability $StatProb -all
+    set_switching_activity -type gt_txdata -toggle_rate $ToggleRate -static_probability $StatProb -all
+    set_switching_activity -type io_output -toggle_rate $ToggleRate -static_probability $StatProb -all
+    set_switching_activity -type bram_enable -toggle_rate $ToggleRate -static_probability $StatProb -all
+    set_switching_activity -type bram_wr_enable -toggle_rate $ToggleRate -static_probability $StatProb -all
+    set_switching_activity -type io_bidir_enable -toggle_rate $ToggleRate -static_probability $StatProb -all
+    report_power -file $csv_file
+
+    set fileRead [open $csv_file r]
+    set filecontent [read $fileRead]
+    set input_list [split $filecontent "\n"]
+
+    set TextList [lsearch -all -inline $input_list "*Total On-Chip Power (W)*"]
+    set on_chip_pwr "[lindex [lindex $TextList 0] 6] W"
+    set TextList [lsearch -all -inline $input_list "*Junction Temperature (C)*"]
+    set junction_temp "[lindex [lindex $TextList 0] 5] *C"
+    close $fileRead
+
+    set fileWrite [open $csv_file w]
+    puts $fileWrite "On-chip_power,Junction_temp"
+    puts $fileWrite "$on_chip_pwr,$junction_temp"
+    close $fileWrite
+  } else {
+    puts "GENERATE_REPORTS: Power analysis files won't be generated because ADI_GENERATE_XPA env var is not set"
   }
 
   # Look for undefined clocks which do not show up in the timing summary
