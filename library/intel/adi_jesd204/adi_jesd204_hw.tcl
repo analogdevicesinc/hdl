@@ -439,9 +439,6 @@ proc jesd204_compose {} {
   add_connection sys_clock.clk axi_jesd204_${tx_rx}.s_axi_clock
   add_connection sys_clock.clk_reset axi_jesd204_${tx_rx}.s_axi_reset
 
-  add_connection link_clock.out_clk_1 axi_jesd204_${tx_rx}.core_clock
-  add_connection link_reset.out_reset axi_jesd204_${tx_rx}.core_reset_ext
-
   add_instance jesd204_${tx_rx} jesd204_${tx_rx} 1.0
   set_instance_parameter_value jesd204_${tx_rx} {NUM_LANES} $num_of_lanes
 
