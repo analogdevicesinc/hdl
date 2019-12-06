@@ -221,6 +221,7 @@ module system_top #(
   system_wrapper i_system_wrapper (
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
+    .dac_fifo_bypass(dac_fifo_bypass),
     .spi0_csn (spi0_csn),
     .spi0_miso (spi_miso),
     .spi0_mosi (spi_mosi),
