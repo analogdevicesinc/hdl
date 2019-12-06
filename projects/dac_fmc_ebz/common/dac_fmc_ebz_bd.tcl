@@ -165,7 +165,7 @@ ad_cpu_interrupt ps-12 mb-13 dac_dma/irq
 ad_connect axi_dac_fifo/bypass dac_fifo_bypass
 
 # Create dummy outputs for unused Tx lanes
-for {set i $JESD_L} {$i < 8} {incr i} {
+for {set i $NUM_OF_LANES} {$i < 8} {incr i} {
   create_bd_port -dir O tx_data_${i}_n
   create_bd_port -dir O tx_data_${i}_p
 }
