@@ -29,7 +29,7 @@ proc p_intel_mem_asym {} {
     set m_size [expr ((2**$m_addr_width_b)*$m_data_width_b)]
   }
 
-  add_instance intel_mem ram_2port
+  add_instance intel_mem ram_2port 1.0
   set_instance_parameter_value intel_mem {GUI_MODE} 0
   set_instance_parameter_value intel_mem {GUI_MEM_IN_BITS} 1
   set_instance_parameter_value intel_mem {GUI_MEMSIZE_BITS} $m_size
