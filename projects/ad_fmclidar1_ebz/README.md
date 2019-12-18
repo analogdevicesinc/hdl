@@ -15,13 +15,26 @@ Currently supported carriers:
 | ------------- | ------------- |
 |  ZC706        |   FMC_HPC     |
 |  ZCU102       |   HPC0        |
-|  Arria10SOC   |   FMCA_HPC    |
+|  Arria10SOC*  |   FMCA_HPC    |
 
 The design is easily portable to any Xilinx or Intel FPGA carrier board, which
 has an FMC HPC connector, and have all the required connections. (See more info
 in [system_constr.xdc](./zc706/system_constr.xdc) or [system_project.tcl](./a10soc/system_project.tcl))
 
 You can find a porting guide in the [wiki.analog.com](https://wiki.analog.com/resources/fpga/docs/hdl/porting_project_quick_start_guide).
+
+### NOTE
+
+The Arria10SOC carrier requires a hardware rework to function correctly.
+The rework connects FMC_A header pins directly to the FPGA so that they can be
+accessed by the fabric.
+
+#### Changes required:
+
+**REMOVE**:   R575, R576, R621, R633, R612, R613
+
+**POPULATE**: R574, R577, R620, R632, R610, R611
+
 
 ### Directory Structure
 
