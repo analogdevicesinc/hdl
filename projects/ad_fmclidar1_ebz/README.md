@@ -114,6 +114,20 @@ parameter and attributes.
 | GT reference clock | 250MHz |
 | Device clock | 250 MHz | 
 
+## Known issues
+
+### The Lidar boards do not power up 
+
+**Problem:** The Lidar boards do not power up because the PG_C2M pull-up resistor value on the carrier (Arria 10) is too high. 
+
+**Solution:** On Arria 10 - place a 4k7 ohms resistor in parallel with R5517.
+
+**Note:** 
+
+1. The PG_C2M can no longer be software controlled. As soon as there is an auxiliary 3V3 on the carrier, the Lidar platform receives the power up command.
+2. This problem only affects Lidar Rev B.
+
+
 ## References
 
 + AD-FMCLIDAR1-EBZ product page: https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/AD-FMCLIDAR1-EBZ.html
