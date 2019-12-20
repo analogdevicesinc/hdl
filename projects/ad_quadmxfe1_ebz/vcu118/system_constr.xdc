@@ -199,3 +199,6 @@ set_property  -dict {PACKAGE_PIN V14   IOSTANDARD LVCMOS18                      
 set_property  -dict {PACKAGE_PIN AK35  IOSTANDARD LVCMOS18 PULLTYPE PULLUP       } [get_ports vadj_1v8_pgood             ];   ## IO_T1U_N12_43_AK35 
 
 
+create_pblock pblock_axi_mem_interconnect
+resize_pblock pblock_axi_mem_interconnect -add CLOCKREGION_X0Y0:CLOCKREGION_X5Y4
+add_cells_to_pblock pblock_axi_mem_interconnect [get_cells [list i_system_wrapper/system_i/axi_mem_interconnect]]
