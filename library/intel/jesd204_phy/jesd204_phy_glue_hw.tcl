@@ -66,6 +66,7 @@ ad_ip_files jesd204_glue [list \
 
 ad_ip_parameter TX_OR_RX_N BOOLEAN false false
 ad_ip_parameter SOFT_PCS BOOLEAN false false
+ad_ip_parameter BONDING_CLOCKS_EN BOOLEAN false false
 ad_ip_parameter NUM_OF_LANES POSITIVE 4 true
 ad_ip_parameter LANE_INVERT INTEGER 0 true
 ad_ip_parameter WIDTH NATURAL 20 true { \
@@ -227,6 +228,7 @@ proc jesd204_phy_glue_elab {} {
 
   set soft_pcs [get_parameter SOFT_PCS]
   set num_of_lanes [get_parameter NUM_OF_LANES]
+  set bonding_clocks_en [get_parameter BONDING_CLOCKS_EN]
 
   set sig_offset 0
   set const_offset 0
@@ -256,7 +258,12 @@ proc jesd204_phy_glue_elab {} {
     glue_add_if $num_of_lanes tx_coreclkin clock sink true
     glue_add_if_port $num_of_lanes tx_coreclkin tx_coreclkin clk Input 1 true
 
-    glue_add_tx_serial_clk $num_of_lanes
+    if {$bonding_clocks_en && $num_of_lanes > 6} {
+        glue_add_if $num_of_lanes tx_bonding_clocks hssi_bonded_clock sink true
+        glue_add_if_port $num_of_lanes tx_bonding_clocks tx_bonding_clocks clk Input 6 true        
+    } else {
+        glue_add_tx_serial_clk $num_of_lanes
+    }
 
     if {$soft_pcs} {
       set unused_width [expr $num_of_lanes * 88]

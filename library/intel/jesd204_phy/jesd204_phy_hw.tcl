@@ -70,6 +70,7 @@ ad_ip_parameter NUM_OF_LANES POSITIVE 4 false
 ad_ip_parameter REGISTER_INPUTS INTEGER 0 false
 ad_ip_parameter LANE_INVERT INTEGER 0 false
 ad_ip_parameter EXT_DEVICE_CLK_EN BOOLEAN false false
+ad_ip_parameter BONDING_CLOCKS_EN BOOLEAN false false
 
 proc jesd204_phy_composition_callback {} {
   set soft_pcs [get_parameter_value "SOFT_PCS"]
@@ -81,6 +82,7 @@ proc jesd204_phy_composition_callback {} {
   set register_inputs [get_parameter_value "REGISTER_INPUTS"]
   set lane_invert [get_parameter_value "LANE_INVERT"]
   set ext_device_clk_en [get_parameter_value "EXT_DEVICE_CLK_EN"]
+  set bonding_clocks_en [get_parameter_value "BONDING_CLOCKS_EN"]
 
   set link_clk_frequency [expr $lane_rate / 40]
 
@@ -120,7 +122,11 @@ proc jesd204_phy_composition_callback {} {
 
   if {$tx} {
     set_instance_parameter_value native_phy {duplex_mode} "tx"
-    set_instance_parameter_value native_phy {bonded_mode} "not_bonded"
+    if {$bonding_clocks_en && $num_of_lanes > 6} {
+        set_instance_parameter_value native_phy {bonded_mode} "pma_only"
+    } else {
+        set_instance_parameter_value native_phy {bonded_mode} "not_bonded"
+    }
     set_instance_parameter_value native_phy {enable_port_tx_pma_elecidle} 0
     set_instance_parameter_value native_phy {enh_txfifo_mode} "Phase compensation"
   } else {
@@ -153,6 +159,7 @@ proc jesd204_phy_composition_callback {} {
   set_instance_parameter_value phy_glue SOFT_PCS $soft_pcs
   set_instance_parameter_value phy_glue NUM_OF_LANES $num_of_lanes
   set_instance_parameter_value phy_glue LANE_INVERT $lane_invert
+  set_instance_parameter_value phy_glue BONDING_CLOCKS_EN $bonding_clocks_en
 
   add_interface reconfig_clk clock sink
   set_interface_property reconfig_clk EXPORT_OF phy_glue.reconfig_clk
@@ -169,12 +176,18 @@ proc jesd204_phy_composition_callback {} {
   }
 
   if {$tx} {
-    add_interface serial_clk_x1 hssi_serial_clock end
-    set_interface_property serial_clk_x1 EXPORT_OF phy_glue.tx_serial_clk_x1
-
-    if {$num_of_lanes > 6} {
-      add_interface serial_clk_xN hssi_serial_clock end
-      set_interface_property serial_clk_xN EXPORT_OF phy_glue.tx_serial_clk_xN
+    if {$bonding_clocks_en && $num_of_lanes > 6} {
+        add_interface bonding_clocks hssi_bonded_clock end
+        set_interface_property bonding_clocks EXPORT_OF phy_glue.tx_bonding_clocks
+        add_connection phy_glue.phy_tx_bonding_clocks native_phy.tx_bonding_clocks
+    } else {
+        add_interface serial_clk_x1 hssi_serial_clock end
+        set_interface_property serial_clk_x1 EXPORT_OF phy_glue.tx_serial_clk_x1
+        if {$num_of_lanes > 6} {
+           add_interface serial_clk_xN hssi_serial_clock end
+           set_interface_property serial_clk_xN EXPORT_OF phy_glue.tx_serial_clk_xN
+        }
+        add_connection phy_glue.phy_tx_serial_clk0 native_phy.tx_serial_clk0
     }
 
     if {$ext_device_clk_en} {
@@ -188,7 +201,7 @@ proc jesd204_phy_composition_callback {} {
     }
 
     foreach x {reconfig_clk reconfig_reset reconfig_avmm tx_coreclkin \
-      tx_clkout tx_serial_clk0 tx_parallel_data unused_tx_parallel_data} {
+      tx_clkout tx_parallel_data unused_tx_parallel_data} {
       add_connection phy_glue.phy_${x} native_phy.${x}
     }
 
