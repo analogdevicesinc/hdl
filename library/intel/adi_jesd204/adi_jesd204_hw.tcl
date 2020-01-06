@@ -81,12 +81,6 @@ ad_ip_parameter TX_OR_RX_N BOOLEAN 0 false { \
   ALLOWED_RANGES { "0:Receive" "1:Transmit" }
 }
 
-ad_ip_parameter BONDING_CLOCKS_EN BOOLEAN 0 false { \
-  DISPLAY_HINT "Clock routing" \
-  DISPLAY_NAME "Clock routing" \
-  ALLOWED_RANGES { "0:x1/xN (Non-bonded)" "1:x6/xN (Bonded)" }
-}
-
 ad_ip_parameter ID NATURAL 0 false { \
   DISPLAY_NAME "Core ID" \
 }
@@ -109,6 +103,12 @@ ad_ip_parameter REFCLK_FREQUENCY FLOAT 500.0 false { \
 ad_ip_parameter NUM_OF_LANES POSITIVE 4 false { \
   DISPLAY_NAME "Number of Lanes" \
   ALLOWED_RANGES 1:8
+}
+
+ad_ip_parameter BONDING_CLOCKS_EN BOOLEAN 0 false { \
+  DISPLAY_HINT "Clock routing" \
+  DISPLAY_NAME "Clock routing" \
+  ALLOWED_RANGES { "0:x1/xN (Non-bonded)" "1:x6/xN (Bonded)" }
 }
 
 ad_ip_parameter LANE_MAP STRING "" false { \
@@ -231,6 +231,7 @@ proc jesd204_validate {{quiet false}} {
   set device_family [get_parameter_value "DEVICE_FAMILY"]
   set device [get_parameter_value "DEVICE"]
   set lane_rate [get_parameter_value "LANE_RATE"]
+  set num_of_lanes [get_parameter_value "NUM_OF_LANES"]
 
   if {$device_family != "Arria 10"} {
     if {!$quiet} {
@@ -251,6 +252,8 @@ proc jesd204_validate {{quiet false}} {
     return false
   }
 
+  set_parameter_property BONDING_CLOCKS_EN VISIBLE [expr $num_of_lanes > 6]
+  
   return true
 }
 
