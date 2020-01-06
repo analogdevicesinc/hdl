@@ -29,7 +29,6 @@ ad_ip_files axi_laser_driver [list \
 add_parameter ID INTEGER 0
 set_parameter_property ID DEFAULT_VALUE 0
 set_parameter_property ID DISPLAY_NAME "Core ID"
-set_parameter_property ID TYPE INTEGER
 set_parameter_property ID UNITS None
 set_parameter_property ID HDL_PARAMETER true
 
@@ -37,21 +36,18 @@ add_parameter ASYNC_CLK_EN INTEGER 0
 set_parameter_property ASYNC_CLK_EN DEFAULT_VALUE 0
 set_parameter_property ASYNC_CLK_EN DISPLAY_NAME "Asynchronous Clocks"
 set_parameter_property ASYNC_CLK_EN DISPLAY_HINT boolean
-set_parameter_property ASYNC_CLK_EN TYPE INTEGER
 set_parameter_property ASYNC_CLK_EN ALLOWED_RANGES { "0:Disabled" "1:Enabled"}
 set_parameter_property ASYNC_CLK_EN HDL_PARAMETER true
 
 add_parameter PULSE_WIDTH INTEGER 0
 set_parameter_property PULSE_WIDTH DEFAULT_VALUE 0
 set_parameter_property PULSE_WIDTH DISPLAY_NAME "PWM pulse width"
-set_parameter_property PULSE_WIDTH TYPE INTEGER
 set_parameter_property PULSE_WIDTH UNITS None
 set_parameter_property PULSE_WIDTH HDL_PARAMETER true
 
 add_parameter PULSE_PERIOD INTEGER 0
 set_parameter_property PULSE_PERIOD DEFAULT_VALUE 0
 set_parameter_property PULSE_PERIOD DISPLAY_NAME "PWM period"
-set_parameter_property PULSE_PERIOD TYPE INTEGER
 set_parameter_property PULSE_PERIOD UNITS None
 set_parameter_property PULSE_PERIOD HDL_PARAMETER true
 
