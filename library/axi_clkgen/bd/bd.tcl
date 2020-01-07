@@ -137,7 +137,7 @@ proc propagate {cellpath otherinfo} {
     set_property CONFIG.FREQ_HZ $clk0_out_freq $clk0_out
 
     if {[get_property "CONFIG.ENABLE_CLKOUT1" $ip] == "true"} {
-      set clk0_out [get_bd_pins "$ip/clk_1"]
+      set clk1_out [get_bd_pins "$ip/clk_1"]
       set clk1_out_freq [expr ($clk_freq + 0.0) * $vco_mul / ($vco_div * $clk1_div)]
       set_property CONFIG.FREQ_HZ $clk1_out_freq $clk1_out
     }
