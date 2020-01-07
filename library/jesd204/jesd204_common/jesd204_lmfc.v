@@ -59,6 +59,12 @@ module jesd204_lmfc (
   output reg lmfc_clk,
   output reg [7:0] lmfc_counter,
 
+  // Local MultiBlock clock edge
+  output reg lmc_edge,
+  output reg lmc_quarter_edge,
+  // End of Extended MultiBlock
+  output reg eoemb,
+
   output reg sysref_edge,
   output reg sysref_alignment_error
 );
@@ -166,6 +172,30 @@ always @(posedge clk) begin
     lmfc_edge <= 1'b1;
   end else begin
     lmfc_edge <= 1'b0;
+  end
+end
+
+// 1 MultiBlock = 32 blocks
+always @(posedge clk) begin
+  if (lmfc_counter[4:0] == 'h00 && lmfc_active == 1'b1) begin
+    lmc_edge <= 1'b1;
+  end else begin
+    lmc_edge <= 1'b0;
+  end
+end
+always @(posedge clk) begin
+  if (lmfc_counter[2:0] == 'h00 && lmfc_active == 1'b1) begin
+    lmc_quarter_edge <= 1'b1;
+  end else begin
+    lmc_quarter_edge <= 1'b0;
+  end
+end
+// End of Extended MultiBlock
+always @(posedge clk) begin
+  if (lmfc_active == 1'b1) begin
+    eoemb <= lmfc_counter[7:5] == cfg_beats_per_multiframe[7:5];
+  end else begin
+    eoemb <= 1'b0;
   end
 end
 
