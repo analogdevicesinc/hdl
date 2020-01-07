@@ -106,8 +106,8 @@ ad_ip_parameter NUM_OF_LANES POSITIVE 4 false { \
 }
 
 ad_ip_parameter BONDING_CLOCKS_EN BOOLEAN 0 false { \
-  DISPLAY_HINT "Clock routing" \
-  DISPLAY_NAME "Clock routing" \
+  DISPLAY_HINT "Clock Network" \
+  DISPLAY_NAME "Clock Network" \
   ALLOWED_RANGES { "0:x1/xN (Non-bonded)" "1:x6/xN (Bonded)" }
 }
 
