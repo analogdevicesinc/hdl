@@ -105,6 +105,12 @@ ad_ip_parameter NUM_OF_LANES POSITIVE 4 false { \
   ALLOWED_RANGES 1:8
 }
 
+ad_ip_parameter BONDING_CLOCKS_EN BOOLEAN 0 false { \
+  DISPLAY_HINT "Clock Network" \
+  DISPLAY_NAME "Clock Network" \
+  ALLOWED_RANGES { "0:x1/xN (Non-bonded)" "1:x6/xN (Bonded)" }
+}
+
 ad_ip_parameter LANE_MAP STRING "" false { \
   DISPLAY_NAME "Lane Mapping" \
 }
@@ -153,7 +159,7 @@ proc create_phy_reset_control {tx num_of_lanes sysclk_frequency} {
   }
 }
 
-proc create_lane_pll {id pllclk_frequency refclk_frequency num_lanes} {
+proc create_lane_pll {id pllclk_frequency refclk_frequency num_lanes bonding_clocks_en} {
   add_instance lane_pll altera_xcvr_atx_pll_a10
   set_instance_property lane_pll SUPPRESS_ALL_INFO_MESSAGES true
   set_instance_parameter_value lane_pll {enable_pll_reconfig} {1}
@@ -163,10 +169,17 @@ proc create_lane_pll {id pllclk_frequency refclk_frequency num_lanes} {
   set_instance_parameter_value lane_pll {set_csr_soft_logic_enable} {1}
   set_instance_parameter_value lane_pll {set_output_clock_frequency} $pllclk_frequency
   set_instance_parameter_value lane_pll {set_auto_reference_clock_frequency} $refclk_frequency
-  if {$num_lanes > 6} {
-    set_instance_parameter_value lane_pll enable_mcgb {true}
-    set_instance_parameter_value lane_pll enable_hfreq_clk {true}
 
+  if {$num_lanes > 6} {
+    set_instance_parameter_value lane_pll enable_mcgb {true}    
+    if {$bonding_clocks_en} {
+        set_instance_parameter_value lane_pll {enable_bonding_clks} {true}
+        set_instance_parameter_value lane_pll {mcgb_div} {1}
+        set_instance_parameter_value lane_pll {set_ref_clk_div} {1}
+        set_instance_parameter_value lane_pll {pma_width} {40}
+    } else {
+        set_instance_parameter_value lane_pll enable_hfreq_clk {true}
+    }
     add_instance glue adi_jesd204_glue
     add_connection phy_reset_control.pll_powerdown glue.in_pll_powerdown
     add_connection glue.out_pll_powerdown lane_pll.pll_powerdown
@@ -218,6 +231,8 @@ proc jesd204_validate {{quiet false}} {
   set device_family [get_parameter_value "DEVICE_FAMILY"]
   set device [get_parameter_value "DEVICE"]
   set lane_rate [get_parameter_value "LANE_RATE"]
+  set num_of_lanes [get_parameter_value "NUM_OF_LANES"]
+  set tx_or_rx_n [get_parameter_value "TX_OR_RX_N"]
 
   if {$device_family != "Arria 10"} {
     if {!$quiet} {
@@ -238,6 +253,8 @@ proc jesd204_validate {{quiet false}} {
     return false
   }
 
+  set_parameter_property BONDING_CLOCKS_EN VISIBLE [expr ($num_of_lanes > 6) && ($tx_or_rx_n)]
+  
   return true
 }
 
@@ -254,6 +271,7 @@ proc jesd204_compose {} {
   set device_family [get_parameter_value "DEVICE_FAMILY"]
   set device [get_parameter_value "DEVICE"]
   set ext_device_clk_en [get_parameter_value "EXT_DEVICE_CLK_EN"]
+  set bonding_clocks_en [get_parameter_value "BONDING_CLOCKS_EN"]
 
   set pllclk_frequency [expr $lane_rate / 2]
   set linkclk_frequency [expr $lane_rate / 40]
@@ -357,6 +375,7 @@ proc jesd204_compose {} {
   set_instance_parameter_value phy REGISTER_INPUTS $register_inputs
   set_instance_parameter_value phy LANE_INVERT $lane_invert
   set_instance_parameter_value phy EXT_DEVICE_CLK_EN $ext_device_clk_en
+  set_instance_parameter_value phy BONDING_CLOCKS_EN $bonding_clocks_en
 
   add_connection link_clock.out_clk_1 phy.link_clk
   add_connection link_reset.out_reset phy.link_reset
@@ -381,12 +400,19 @@ proc jesd204_compose {} {
     set tx_rx "tx"
     set data_direction sink
     set jesd204_intfs {config control ilas_config event status}
-    set phy_reset_intfs {analogreset digitalreset cal_busy}
+    set phy_reset_intfs {analogreset digitalreset cal_busy}   
 
-    create_lane_pll $id $pllclk_frequency $refclk_frequency $num_of_lanes
-    add_connection lane_pll.tx_serial_clk phy.serial_clk_x1
-    if {$num_of_lanes > 6} {
-      add_connection lane_pll.mcgb_serial_clk phy.serial_clk_xN
+    create_lane_pll $id $pllclk_frequency $refclk_frequency $num_of_lanes $bonding_clocks_en
+   
+    if {$num_of_lanes > 6} {          
+        if {$bonding_clocks_en} {
+            add_connection lane_pll.tx_bonding_clocks phy.bonding_clocks
+        } else {
+            add_connection lane_pll.tx_serial_clk   phy.serial_clk_x1
+            add_connection lane_pll.mcgb_serial_clk phy.serial_clk_xN
+        }
+    } else {
+        add_connection lane_pll.tx_serial_clk phy.serial_clk_x1
     }
   } else {
     set tx_rx "rx"
