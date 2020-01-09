@@ -232,6 +232,7 @@ proc jesd204_validate {{quiet false}} {
   set device [get_parameter_value "DEVICE"]
   set lane_rate [get_parameter_value "LANE_RATE"]
   set num_of_lanes [get_parameter_value "NUM_OF_LANES"]
+  set tx_or_rx_n [get_parameter_value "TX_OR_RX_N"]
 
   if {$device_family != "Arria 10"} {
     if {!$quiet} {
@@ -252,7 +253,7 @@ proc jesd204_validate {{quiet false}} {
     return false
   }
 
-  set_parameter_property BONDING_CLOCKS_EN VISIBLE [expr $num_of_lanes > 6]
+  set_parameter_property BONDING_CLOCKS_EN VISIBLE [expr ($num_of_lanes > 6) && ($tx_or_rx_n)]
   
   return true
 }
