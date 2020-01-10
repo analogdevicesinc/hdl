@@ -18,10 +18,10 @@ current_bd_instance /spi_ad40xx
   create_bd_pin -dir O irq
   create_bd_intf_pin -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 m_spi
   create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:axis_rtl:1.0 M_AXIS_SAMPLE
-  
-  if {$adc_resolution == 16 || $adc_resolution == 24} {
+
+  if {$adc_resolution <= 32} {
     set data_width 32
-  } elseif {$adc_resolution == 32} {
+  } else {
     set data_width 64
   };
 
