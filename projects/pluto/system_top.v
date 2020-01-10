@@ -63,8 +63,6 @@ module system_top (
   inout           iic_scl,
   inout           iic_sda,
 
-  inout           gpio_bd,
-
   input           rx_clk_in,
   input           rx_frame_in,
   input   [11:0]  rx_data_in,
@@ -84,7 +82,11 @@ module system_top (
   output          spi_csn,
   output          spi_clk,
   output          spi_mosi,
-  input           spi_miso);
+  input           spi_miso,
+
+  output          pl_spi_clk_o,
+  output          pl_spi_mosi,
+  input           pl_spi_miso);
 
   // internal signals
 
@@ -92,18 +94,18 @@ module system_top (
   wire    [16:0]  gpio_o;
   wire    [16:0]  gpio_t;
 
-  assign gpio_i[16:15] = gpio_o[16:15];
   // instantiations
 
-  ad_iobuf #(.DATA_WIDTH(15)) i_iobuf (
-    .dio_t (gpio_t[14:0]),
-    .dio_i (gpio_o[14:0]),
-    .dio_o (gpio_i[14:0]),
-    .dio_p ({ gpio_bd,            // 14:14
-              gpio_resetb,        // 13:13
+  ad_iobuf #(.DATA_WIDTH(14)) i_iobuf (
+    .dio_t (gpio_t[13:0]),
+    .dio_i (gpio_o[13:0]),
+    .dio_o (gpio_i[13:0]),
+    .dio_p ({ gpio_resetb,        // 13:13
               gpio_en_agc,        // 12:12
               gpio_ctl,           // 11: 8
               gpio_status}));     //  7: 0
+
+  assign gpio_i[16:14] = gpio_o[16:14];
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
@@ -136,6 +138,7 @@ module system_top (
     .rx_clk_in (rx_clk_in),
     .rx_data_in (rx_data_in),
     .rx_frame_in (rx_frame_in),
+
     .spi0_clk_i (1'b0),
     .spi0_clk_o (spi_clk),
     .spi0_csn_0_o (spi_csn),
@@ -145,6 +148,15 @@ module system_top (
     .spi0_sdi_i (spi_miso),
     .spi0_sdo_i (1'b0),
     .spi0_sdo_o (spi_mosi),
+
+    .spi_clk_i(1'b0),
+    .spi_clk_o(pl_spi_clk_o),
+    .spi_csn_i(1'b1),
+    .spi_csn_o(),
+    .spi_sdi_i(pl_spi_miso),
+    .spi_sdo_i(1'b0),
+    .spi_sdo_o(pl_spi_mosi),
+
     .tx_clk_out (tx_clk_out),
     .tx_data_out (tx_data_out),
     .tx_frame_out (tx_frame_out),
