@@ -18,6 +18,14 @@ create_bd_port -dir I -from 16 -to 0 gpio_i
 create_bd_port -dir O -from 16 -to 0 gpio_o
 create_bd_port -dir O -from 16 -to 0 gpio_t
 
+create_bd_port -dir O spi_csn_o
+create_bd_port -dir I spi_csn_i
+create_bd_port -dir I spi_clk_i
+create_bd_port -dir O spi_clk_o
+create_bd_port -dir I spi_sdo_i
+create_bd_port -dir O spi_sdo_o
+create_bd_port -dir I spi_sdi_i
+
 # instance: sys_ps7
 
 ad_ip_instance processing_system7 sys_ps7
@@ -54,6 +62,13 @@ ad_ip_parameter sys_ps7 CONFIG.PCW_USB0_RESET_IO {MIO 52}
 ad_ip_parameter sys_ps7 CONFIG.PCW_USB0_RESET_ENABLE 1
 ad_ip_parameter sys_ps7 CONFIG.PCW_IRQ_F2P_INTR 1
 ad_ip_parameter sys_ps7 CONFIG.PCW_IRQ_F2P_MODE REVERSE
+ad_ip_parameter sys_ps7 CONFIG.PCW_MIO_0_PULLUP {enabled}
+ad_ip_parameter sys_ps7 CONFIG.PCW_MIO_9_PULLUP {enabled}
+ad_ip_parameter sys_ps7 CONFIG.PCW_MIO_10_PULLUP {enabled}
+ad_ip_parameter sys_ps7 CONFIG.PCW_MIO_11_PULLUP {enabled}
+ad_ip_parameter sys_ps7 CONFIG.PCW_MIO_48_PULLUP {enabled}
+ad_ip_parameter sys_ps7 CONFIG.PCW_MIO_49_PULLUP {disabled}
+ad_ip_parameter sys_ps7 CONFIG.PCW_MIO_53_PULLUP {enabled}
 
 # DDR MT41K256M16 HA-125 (32M, 16bit, 8banks)
 
@@ -76,6 +91,13 @@ ad_ip_parameter sys_rstgen CONFIG.C_EXT_RST_WIDTH 1
 
 # system reset/clock definitions
 
+# add external spi
+
+ad_ip_instance axi_quad_spi axi_spi
+ad_ip_parameter axi_spi CONFIG.C_USE_STARTUP 0
+ad_ip_parameter axi_spi CONFIG.C_NUM_SS_BITS 1
+ad_ip_parameter axi_spi CONFIG.C_SCK_RATIO 8
+
 ad_connect  sys_cpu_clk sys_ps7/FCLK_CLK0
 ad_connect  sys_200m_clk sys_ps7/FCLK_CLK1
 ad_connect  sys_cpu_reset sys_rstgen/peripheral_reset
@@ -91,7 +113,7 @@ ad_connect  gpio_o sys_ps7/GPIO_O
 ad_connect  gpio_t sys_ps7/GPIO_T
 ad_connect  fixed_io sys_ps7/FIXED_IO
 
-# spi connections
+# ps7 spi connections
 
 ad_connect  spi0_csn_2_o sys_ps7/SPI0_SS2_O
 ad_connect  spi0_csn_1_o sys_ps7/SPI0_SS1_O
@@ -102,6 +124,17 @@ ad_connect  spi0_clk_o sys_ps7/SPI0_SCLK_O
 ad_connect  spi0_sdo_i sys_ps7/SPI0_MOSI_I
 ad_connect  spi0_sdo_o sys_ps7/SPI0_MOSI_O
 ad_connect  spi0_sdi_i sys_ps7/SPI0_MISO_I
+
+# axi spi connections
+
+ad_connect  sys_cpu_clk  axi_spi/ext_spi_clk
+ad_connect  spi_csn_i  axi_spi/ss_i
+ad_connect  spi_csn_o  axi_spi/ss_o
+ad_connect  spi_clk_i  axi_spi/sck_i
+ad_connect  spi_clk_o  axi_spi/sck_o
+ad_connect  spi_sdo_i  axi_spi/io0_i
+ad_connect  spi_sdo_o  axi_spi/io0_o
+ad_connect  spi_sdi_i  axi_spi/io1_i
 
 # interrupts
 
@@ -229,6 +262,7 @@ ad_connect  axi_ad9361/dac_data_q1 GND
 ad_cpu_interconnect 0x79020000 axi_ad9361
 ad_cpu_interconnect 0x7C400000 axi_ad9361_adc_dma
 ad_cpu_interconnect 0x7C420000 axi_ad9361_dac_dma
+ad_cpu_interconnect 0x7C430000 axi_spi
 
 ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP1 {1}
 ad_connect sys_cpu_clk sys_ps7/S_AXI_HP1_ACLK
@@ -257,5 +291,6 @@ ad_connect sys_cpu_resetn axi_ad9361_dac_dma/m_src_axi_aresetn
 
 ad_cpu_interrupt ps-13 mb-13 axi_ad9361_adc_dma/irq
 ad_cpu_interrupt ps-12 mb-12 axi_ad9361_dac_dma/irq
+ad_cpu_interrupt ps-11 mb-11 axi_spi/ip2intc_irpt
 
 
