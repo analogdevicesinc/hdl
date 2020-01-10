@@ -12,5 +12,7 @@ LIB_DEPS += axi_ad9361
 LIB_DEPS += axi_dmac
 LIB_DEPS += util_fir_dec
 LIB_DEPS += util_fir_int
+LIB_DEPS += util_pack/util_cpack2
+LIB_DEPS += util_pack/util_upack2
 
 include ../scripts/project-xilinx.mk
