@@ -74,9 +74,15 @@ ad_connect sys_cpu_resetn i2s_rx_dma/m_dest_axi_aresetn
 ad_ip_instance axi_fan_control axi_fan_control_0
 ad_ip_parameter axi_fan_control_0 CONFIG.ID 1
 ad_ip_parameter axi_fan_control_0 CONFIG.PWM_FREQUENCY_HZ 1000
+ad_ip_parameter axi_fan_control_0 CONFIG.INTERNAL_SYSMONE 1
+
+ad_ip_instance xlconstant const_gnd_0
+ad_ip_parameter const_gnd_0 CONFIG.CONST_WIDTH {10}
+ad_ip_parameter const_gnd_0 CONFIG.CONST_VAL {0}
 
 ad_connect axi_fan_tacho_i axi_fan_control_0/tacho
 ad_connect axi_fan_pwm_o axi_fan_control_0/pwm
+ad_connect const_gnd_0/dout axi_fan_control_0/temp_in
 
 # interconnect
 

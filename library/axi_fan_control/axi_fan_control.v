@@ -37,20 +37,28 @@
 module axi_fan_control #(
   parameter     ID = 0,
   parameter     PWM_FREQUENCY_HZ  = 5000,
+  parameter     INTERNAL_SYSMONE  = 0,
+  parameter     AVG_POW = 7, //do not exceede 7
 
   //temperature thresholds defined to match sysmon reg values
-  parameter     THRESH_PWM_000    = 16'h8f5e, //TEMP_05
-  parameter     THRESH_PWM_025_L  = 16'h96f0, //TEMP_20
-  parameter     THRESH_PWM_025_H  = 16'ha0ff, //TEMP_40
-  parameter     THRESH_PWM_050_L  = 16'hab03, //TEMP_60
-  parameter     THRESH_PWM_050_H  = 16'hb00a, //TEMP_70
-  parameter     THRESH_PWM_075_L  = 16'hb510, //TEMP_80
-  parameter     THRESH_PWM_075_H  = 16'hba17, //TEMP_90
-  parameter     THRESH_PWM_100    = 16'hbc9b) ( //TEMP_95
+  parameter     TACHO_TOL_PERCENT = 25,
+  parameter     TACHO_T25         = 1470000, // 14.7 ms
+  parameter     TACHO_T50         = 820000, // 8.2 ms
+  parameter     TACHO_T75         = 480000, // 4.8 ms
+  parameter     TACHO_T100        = 340000, // 3.4 ms
+  parameter     TEMP_00_H         = 05,
+  parameter     TEMP_25_L         = 20,
+  parameter     TEMP_25_H         = 40,
+  parameter     TEMP_50_L         = 60,
+  parameter     TEMP_50_H         = 70,
+  parameter     TEMP_75_L         = 80,
+  parameter     TEMP_75_H         = 90,
+  parameter     TEMP_00_L         = 95)(
 
-    input         tacho,
-    output  reg   irq,
-    output        pwm,
+  input       [ 9:0]      temp_in,
+  input                   tacho,
+  output    reg           irq,
+  output                  pwm,
 
   //axi interface
   input                   s_axi_aclk,
@@ -84,7 +92,16 @@ localparam [31:0] CORE_MAGIC              = 32'h46414E43;    // FANC
 localparam        CLK_FREQUENCY           = 100000000;
 localparam        PWM_PERIOD              = CLK_FREQUENCY / PWM_FREQUENCY_HZ;
 localparam        OVERFLOW_LIM            = CLK_FREQUENCY * 5;
-localparam        AVERAGE_DIV             = 128;
+localparam        AVERAGE_DIV             = 2**AVG_POW;
+
+localparam        THRESH_PWM_000          = (INTERNAL_SYSMONE == 1) ? (((TEMP_00_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_00_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_025_L        = (INTERNAL_SYSMONE == 1) ? (((TEMP_25_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_25_L * 41 + 11195) / 20);
+localparam        THRESH_PWM_025_H        = (INTERNAL_SYSMONE == 1) ? (((TEMP_25_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_25_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_050_L        = (INTERNAL_SYSMONE == 1) ? (((TEMP_50_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_50_L * 41 + 11195) / 20);
+localparam        THRESH_PWM_050_H        = (INTERNAL_SYSMONE == 1) ? (((TEMP_50_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_50_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_075_L        = (INTERNAL_SYSMONE == 1) ? (((TEMP_75_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_75_L * 41 + 11195) / 20);
+localparam        THRESH_PWM_075_H        = (INTERNAL_SYSMONE == 1) ? (((TEMP_75_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_75_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_100          = (INTERNAL_SYSMONE == 1) ? (((TEMP_00_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_00_L * 41 + 11195) / 20);
 
 //pwm params
 localparam        PWM_ONTIME_25           = PWM_PERIOD / 4;
@@ -92,11 +109,6 @@ localparam        PWM_ONTIME_50           = PWM_PERIOD / 2;
 localparam        PWM_ONTIME_75           = PWM_PERIOD * 3 / 4;
 
 //tacho params
-localparam        TACHO_TOL_PERCENT       = 25;
-localparam        TACHO_T25               = 1470000; // 14.7 ms
-localparam        TACHO_T50               = 820000; // 8.2 ms
-localparam        TACHO_T75               = 480000; // 4.8 ms
-localparam        TACHO_T100              = 340000; // 3.4 ms
 localparam        TACHO_T25_TOL           = TACHO_T25 * TACHO_TOL_PERCENT / 100;
 localparam        TACHO_T50_TOL           = TACHO_T50 * TACHO_TOL_PERCENT / 100;
 localparam        TACHO_T75_TOL           = TACHO_T75 * TACHO_TOL_PERCENT / 100;
@@ -106,12 +118,13 @@ localparam        TACHO_T100_TOL          = TACHO_T100 * TACHO_TOL_PERCENT / 100
 localparam        INIT                    = 8'h00;
 localparam        DRP_WAIT_EOC            = 8'h01;
 localparam        DRP_WAIT_DRDY           = 8'h02;
-localparam        DRP_READ_TEMP           = 8'h03;
-localparam        DRP_READ_TEMP_WAIT_DRDY = 8'h04;
-localparam        GET_TACHO               = 8'h05;
-localparam        EVAL_TEMP               = 8'h06;
-localparam        SET_PWM                 = 8'h07;
-localparam        EVAL_TACHO              = 8'h08;
+localparam        DRP_WAIT_FSM_EN         = 8'h03;
+localparam        DRP_READ_TEMP           = 8'h04;
+localparam        DRP_READ_TEMP_WAIT_DRDY = 8'h05;
+localparam        GET_TACHO               = 8'h06;
+localparam        EVAL_TEMP               = 8'h07;
+localparam        SET_PWM                 = 8'h08;
+localparam        EVAL_TACHO              = 8'h09;
 
 reg   [31:0]  up_scratch = 'd0;
 reg   [7:0]   state = INIT;
@@ -143,7 +156,27 @@ reg           pwm_change_done = 1'b1;
 reg           pulse_gen_load_config = 'h0;
 reg           tacho_meas_int = 'h0;
 
+reg   [15:0]  presc_reg = 'h0;
 reg   [31:0]  up_pwm_width = 'd0;
+
+reg   [31:0]  up_temp_00_h  = THRESH_PWM_000  ;
+reg   [31:0]  up_temp_25_l  = THRESH_PWM_025_L;
+reg   [31:0]  up_temp_25_h  = THRESH_PWM_025_H;
+reg   [31:0]  up_temp_50_l  = THRESH_PWM_050_L;
+reg   [31:0]  up_temp_50_h  = THRESH_PWM_050_H;
+reg   [31:0]  up_temp_75_l  = THRESH_PWM_075_L;
+reg   [31:0]  up_temp_75_h  = THRESH_PWM_075_H;
+reg   [31:0]  up_temp_100_l = THRESH_PWM_100  ;
+
+reg   [31:0]  up_tacho_25 = TACHO_T25;
+reg   [31:0]  up_tacho_50 = TACHO_T50;
+reg   [31:0]  up_tacho_75 = TACHO_T75;
+reg   [31:0]  up_tacho_100 = TACHO_T100;
+reg   [31:0]  up_tacho_25_tol = TACHO_T25 * TACHO_TOL_PERCENT / 100;
+reg   [31:0]  up_tacho_50_tol = TACHO_T50 * TACHO_TOL_PERCENT / 100;
+reg   [31:0]  up_tacho_75_tol = TACHO_T75 * TACHO_TOL_PERCENT / 100;
+reg   [31:0]  up_tacho_100_tol = TACHO_T100 * TACHO_TOL_PERCENT / 100;
+
 reg           up_wack = 'd0;
 reg   [31:0]  up_rdata = 'd0;
 reg           up_rack = 'd0;
@@ -213,66 +246,70 @@ i_up_axi (
   .up_rdata (up_rdata),
   .up_rack (up_rack));
 
-SYSMONE4 #(
-  .COMMON_N_SOURCE(16'hFFFF),
-  .INIT_40(16'h1000), // config reg 0
-  .INIT_41(16'h2F9F), // config reg 1
-  .INIT_42(16'h1400), // config reg 2
-  .INIT_43(16'h200F), // config reg 3
-  .INIT_44(16'h0000), // config reg 4
-  .INIT_45(16'hE200), // Analog Bus Register
-  .INIT_46(16'h0000), // Sequencer Channel selection (Vuser0-3)
-  .INIT_47(16'h0000), // Sequencer Average selection (Vuser0-3)
-  .INIT_48(16'h0101), // Sequencer channel selection
-  .INIT_49(16'h0000), // Sequencer channel selection
-  .INIT_4A(16'h0000), // Sequencer Average selection
-  .INIT_4B(16'h0000), // Sequencer Average selection
-  .INIT_4C(16'h0000), // Sequencer Bipolar selection
-  .INIT_4D(16'h0000), // Sequencer Bipolar selection
-  .INIT_4E(16'h0000), // Sequencer Acq time selection
-  .INIT_4F(16'h0000), // Sequencer Acq time selection
-  .INIT_50(16'hB794), // Temp alarm trigger
-  .INIT_51(16'h4E81), // Vccint upper alarm limit
-  .INIT_52(16'hA147), // Vccaux upper alarm limit
-  .INIT_53(16'hBF13), // Temp alarm OT upper
-  .INIT_54(16'hAB02), // Temp alarm reset
-  .INIT_55(16'h4963), // Vccint lower alarm limit
-  .INIT_56(16'h9555), // Vccaux lower alarm limit
-  .INIT_57(16'hB00A), // Temp alarm OT reset
-  .INIT_58(16'h4E81), // VCCBRAM upper alarm limit
-  .INIT_5C(16'h4963), // VCCBRAM lower alarm limit
-  .INIT_59(16'h4963), // vccpsintlp upper alarm limit
-  .INIT_5D(16'h451E), // vccpsintlp lower alarm limit
-  .INIT_5A(16'h4963), // vccpsintfp upper alarm limit
-  .INIT_5E(16'h451E), // vccpsintfp lower alarm limit
-  .INIT_5B(16'h9A74), // vccpsaux upper alarm limit
-  .INIT_5F(16'h91EB), // vccpsaux lower alarm limit
-  .INIT_60(16'h4D39), // Vuser0 upper alarm limit
-  .INIT_61(16'h4DA7), // Vuser1 upper alarm limit
-  .INIT_62(16'h9A74), // Vuser2 upper alarm limit
-  .INIT_63(16'h9A74), // Vuser3 upper alarm limit
-  .INIT_68(16'h4C5E), // Vuser0 lower alarm limit
-  .INIT_69(16'h4BF2), // Vuser1 lower alarm limit
-  .INIT_6A(16'h98BF), // Vuser2 lower alarm limit
-  .INIT_6B(16'h98BF), // Vuser3 lower alarm limit
-  .INIT_7A(16'h0000), // DUAL0 Register
-  .INIT_7B(16'h0000), // DUAL1 Register
-  .INIT_7C(16'h0000), // DUAL2 Register
-  .INIT_7D(16'h0000), // DUAL3 Register
-  .SIM_DEVICE("ZYNQ_ULTRASCALE"),
-  .SIM_MONITOR_FILE("design.txt"))
-inst_sysmon (
-  .DADDR(drp_daddr),
-  .DCLK(up_clk),
-  .DEN(drp_den_reg[0]),
-  .DI(drp_di),
-  .DWE(drp_dwe_reg[0]),
-  .RESET(!up_resetn),
-  .DO(drp_do),
-  .DRDY(drp_drdy),
-  .EOC(drp_eoc),
-  .EOS(drp_eos)
-);
+generate
+if (INTERNAL_SYSMONE == 1) begin
+  SYSMONE4 #(
+    .COMMON_N_SOURCE(16'hFFFF),
+    .INIT_40(16'h1000), // config reg 0
+    .INIT_41(16'h2F9F), // config reg 1
+    .INIT_42(16'h1400), // config reg 2
+    .INIT_43(16'h200F), // config reg 3
+    .INIT_44(16'h0000), // config reg 4
+    .INIT_45(16'hE200), // Analog Bus Register
+    .INIT_46(16'h0000), // Sequencer Channel selection (Vuser0-3)
+    .INIT_47(16'h0000), // Sequencer Average selection (Vuser0-3)
+    .INIT_48(16'h0101), // Sequencer channel selection
+    .INIT_49(16'h0000), // Sequencer channel selection
+    .INIT_4A(16'h0000), // Sequencer Average selection
+    .INIT_4B(16'h0000), // Sequencer Average selection
+    .INIT_4C(16'h0000), // Sequencer Bipolar selection
+    .INIT_4D(16'h0000), // Sequencer Bipolar selection
+    .INIT_4E(16'h0000), // Sequencer Acq time selection
+    .INIT_4F(16'h0000), // Sequencer Acq time selection
+    .INIT_50(16'hB794), // Temp alarm trigger
+    .INIT_51(16'h4E81), // Vccint upper alarm limit
+    .INIT_52(16'hA147), // Vccaux upper alarm limit
+    .INIT_53(16'hBF13), // Temp alarm OT upper
+    .INIT_54(16'hAB02), // Temp alarm reset
+    .INIT_55(16'h4963), // Vccint lower alarm limit
+    .INIT_56(16'h9555), // Vccaux lower alarm limit
+    .INIT_57(16'hB00A), // Temp alarm OT reset
+    .INIT_58(16'h4E81), // VCCBRAM upper alarm limit
+    .INIT_5C(16'h4963), // VCCBRAM lower alarm limit
+    .INIT_59(16'h4963), // vccpsintlp upper alarm limit
+    .INIT_5D(16'h451E), // vccpsintlp lower alarm limit
+    .INIT_5A(16'h4963), // vccpsintfp upper alarm limit
+    .INIT_5E(16'h451E), // vccpsintfp lower alarm limit
+    .INIT_5B(16'h9A74), // vccpsaux upper alarm limit
+    .INIT_5F(16'h91EB), // vccpsaux lower alarm limit
+    .INIT_60(16'h4D39), // Vuser0 upper alarm limit
+    .INIT_61(16'h4DA7), // Vuser1 upper alarm limit
+    .INIT_62(16'h9A74), // Vuser2 upper alarm limit
+    .INIT_63(16'h9A74), // Vuser3 upper alarm limit
+    .INIT_68(16'h4C5E), // Vuser0 lower alarm limit
+    .INIT_69(16'h4BF2), // Vuser1 lower alarm limit
+    .INIT_6A(16'h98BF), // Vuser2 lower alarm limit
+    .INIT_6B(16'h98BF), // Vuser3 lower alarm limit
+    .INIT_7A(16'h0000), // DUAL0 Register
+    .INIT_7B(16'h0000), // DUAL1 Register
+    .INIT_7C(16'h0000), // DUAL2 Register
+    .INIT_7D(16'h0000), // DUAL3 Register
+    .SIM_DEVICE("ZYNQ_ULTRASCALE"),
+    .SIM_MONITOR_FILE("design.txt"))
+  inst_sysmon (
+    .DADDR(drp_daddr),
+    .DCLK(up_clk),
+    .DEN(drp_den_reg[0]),
+    .DI(drp_di),
+    .DWE(drp_dwe_reg[0]),
+    .RESET(!up_resetn),
+    .DO(drp_do),
+    .DRDY(drp_drdy),
+    .EOC(drp_eoc),
+    .EOS(drp_eos)
+  );
+end
+endgenerate
 
 //pulse generator instance
 util_pulse_gen #(
@@ -310,11 +347,15 @@ always @(posedge up_clk)
     case (state)
 
       INIT : begin
-        drp_daddr <= 8'h40;
-        // performing read
-        drp_den_reg <= 2'h2;
-        if (drp_eoc == 1'b1) begin
-          state <= DRP_WAIT_EOC;
+        if (INTERNAL_SYSMONE == 1) begin
+          drp_daddr <= 8'h40;
+          // performing read
+          drp_den_reg <= 2'h2;
+          if (drp_eoc == 1'b1) begin
+            state <= DRP_WAIT_EOC;
+          end
+        end else begin
+          state <= DRP_READ_TEMP;
         end
       end
 
@@ -342,25 +383,40 @@ always @(posedge up_clk)
         end
       end
 
-      DRP_READ_TEMP : begin
-        tacho_alarm <= 1'b0;
+      DRP_WAIT_FSM_EN : begin
         tacho_meas_int <= 1'b0;
+        tacho_alarm <= 1'b0;
         pulse_gen_load_config <= 1'b0;
-        drp_daddr <= 8'h00;
-        // performing read
-        drp_den_reg <= 2'h2;
-        if (drp_eos == 1'b1) begin
+        if (presc_reg[15] == 1'b1) begin
+          state <= DRP_READ_TEMP;
+        end
+      end
+
+      DRP_READ_TEMP : begin
+        if (INTERNAL_SYSMONE == 1) begin
+          drp_daddr <= 8'h00;
+          // performing read
+          drp_den_reg <= 2'h2;
+          if (drp_eos == 1'b1) begin
+            state <= DRP_READ_TEMP_WAIT_DRDY;
+          end
+        end else begin
           state <= DRP_READ_TEMP_WAIT_DRDY;
         end
       end
 
       DRP_READ_TEMP_WAIT_DRDY : begin
-        if (drp_drdy == 1'b1) begin
-          sysmone_temp <= drp_do;
-          state <= GET_TACHO;
+        if (INTERNAL_SYSMONE == 1) begin
+          if (drp_drdy == 1'b1) begin
+            sysmone_temp <= drp_do;
+            state <= GET_TACHO;
+          end else begin
+            drp_den_reg <= {1'b0, drp_den_reg[1]};
+            drp_dwe_reg <= {1'b0, drp_dwe_reg[1]};
+          end
         end else begin
-          drp_den_reg <= {1'b0, drp_den_reg[1]};
-          drp_dwe_reg <= {1'b0, drp_dwe_reg[1]};
+          sysmone_temp <= temp_in;
+          state <= GET_TACHO;
         end
       end
 
@@ -384,21 +440,21 @@ always @(posedge up_clk)
       end
 
       EVAL_TEMP : begin
-         //pwm section
+        //pwm section
         //the pwm only has to be changed when passing through these temperature intervals
-        if (sysmone_temp < THRESH_PWM_000) begin
+        if (sysmone_temp < up_temp_00_h) begin
           //PWM DUTY should be 0%
           pwm_width_req <= 1'b0;
-        end else if ((sysmone_temp > THRESH_PWM_025_L) && (sysmone_temp < THRESH_PWM_025_H)) begin
+        end else if ((sysmone_temp > up_temp_25_l) && (sysmone_temp < up_temp_25_h)) begin
           //PWM DUTY should be 25%
           pwm_width_req <= PWM_ONTIME_25;
-        end else if ((sysmone_temp > THRESH_PWM_050_L) && (sysmone_temp < THRESH_PWM_050_H)) begin
+        end else if ((sysmone_temp > up_temp_50_l) && (sysmone_temp < up_temp_50_h)) begin
           //PWM DUTY should be 50%
           pwm_width_req <= PWM_ONTIME_50;
-        end else if ((sysmone_temp > THRESH_PWM_075_L) && (sysmone_temp < THRESH_PWM_075_H)) begin
+        end else if ((sysmone_temp > up_temp_75_l) && (sysmone_temp < up_temp_75_h)) begin
           //PWM DUTY should be 75%
           pwm_width_req <= PWM_ONTIME_75;
-        end else if (sysmone_temp > THRESH_PWM_100) begin
+        end else if (sysmone_temp > up_temp_100_l) begin
           //PWM DUTY should be 100%
           pwm_width_req <= PWM_PERIOD;
           //default to 100% duty cycle after reset if not within temperature intervals described above
@@ -436,59 +492,68 @@ always @(posedge up_clk)
           //check rpm according to the current pwm duty cycle
           //tacho_alarm is only asserted for certain known pwm duty cycles and
           //for timeout
-          up_tacho_avg_sum <= tacho_avg_sum [31:7];
+          up_tacho_avg_sum <= tacho_avg_sum [AVG_POW + 24 : AVG_POW];
           tacho_meas_int <= 1'b1;
           if ((pwm_width == PWM_ONTIME_25) && (up_tacho_en == 0)) begin
-            if ((tacho_avg_sum [31:7] > TACHO_T25 + TACHO_T25_TOL) || (tacho_avg_sum [31:7] < TACHO_T25 - TACHO_T25_TOL)) begin
+            if ((tacho_avg_sum [AVG_POW + 24 : AVG_POW] > up_tacho_25 + up_tacho_25_tol) || (tacho_avg_sum [AVG_POW + 24 : AVG_POW] < up_tacho_25 - up_tacho_25_tol)) begin
               //the fan is turning but not as expected
               tacho_alarm <= 1'b1;
             end
           end else if ((pwm_width == PWM_ONTIME_50) && (up_tacho_en == 0)) begin
-            if ((tacho_avg_sum [31:7] > TACHO_T50 + TACHO_T50_TOL) || (tacho_avg_sum [31:7] < TACHO_T50 - TACHO_T50_TOL)) begin
+            if ((tacho_avg_sum [AVG_POW + 24 : AVG_POW] > up_tacho_50 + up_tacho_50_tol) || (tacho_avg_sum [AVG_POW + 24 : AVG_POW] < up_tacho_50 - up_tacho_50_tol)) begin
               //the fan is turning but not as expected
               tacho_alarm <= 1'b1;
             end
           end else if ((pwm_width == PWM_ONTIME_75) && (up_tacho_en == 0)) begin
-            if ((tacho_avg_sum [31:7] > TACHO_T75 + TACHO_T75_TOL) || (tacho_avg_sum [31:7] < TACHO_T75 - TACHO_T75_TOL)) begin
+            if ((tacho_avg_sum [AVG_POW + 24 : AVG_POW] > up_tacho_75 + up_tacho_75_tol) || (tacho_avg_sum [AVG_POW + 24 : AVG_POW] < up_tacho_75 - up_tacho_75_tol)) begin
               //the fan is turning but not as expected
               tacho_alarm <= 1'b1;
             end
           end else if ((pwm_width == PWM_PERIOD) && (up_tacho_en == 0)) begin
-            if ((tacho_avg_sum [31:7] > TACHO_T100 + TACHO_T100_TOL) || (tacho_avg_sum [31:7] < TACHO_T100 - TACHO_T100_TOL)) begin
+            if ((tacho_avg_sum [AVG_POW + 24 : AVG_POW] > up_tacho_100 + up_tacho_100_tol) || (tacho_avg_sum [AVG_POW + 24 : AVG_POW] < up_tacho_100 - up_tacho_100_tol)) begin
               //the fan is turning but not as expected
               tacho_alarm <= 1'b1;
             end
           end else if ((pwm_width == up_pwm_width) && up_tacho_en) begin
-            if ((tacho_avg_sum [31:7] > up_tacho_val + up_tacho_tol) || (tacho_avg_sum [31:7] < up_tacho_val - up_tacho_tol)) begin
+            if ((tacho_avg_sum [AVG_POW + 24 : AVG_POW] > up_tacho_val + up_tacho_tol) || (tacho_avg_sum [AVG_POW + 24 : AVG_POW] < up_tacho_val - up_tacho_tol)) begin
               //the fan is turning but not as expected
               tacho_alarm <= 1'b1;
             end
           end
         end
-        state <= DRP_READ_TEMP;
+        state <= DRP_WAIT_FSM_EN;
       end
-
       default :
-        state <= DRP_READ_TEMP;
+        state <= DRP_WAIT_FSM_EN;
     endcase
   end
 
 //axi registers write
 always @(posedge up_clk) begin
-  if (s_axi_aresetn == 1'b0) begin
-    up_wack <= 'd0;
+  if (up_resetn == 1'b0) begin
     up_pwm_width <= 'd0;
     up_tacho_val <= 'd0;
     up_tacho_tol <= 'd0;
     up_tacho_en <= 'd0;
     up_scratch <= 'd0;
+    up_temp_00_h <= THRESH_PWM_000;
+    up_temp_25_l <= THRESH_PWM_025_L;
+    up_temp_25_h <= THRESH_PWM_025_H;
+    up_temp_50_l <= THRESH_PWM_050_L;
+    up_temp_50_h <= THRESH_PWM_050_H;
+    up_temp_75_l <= THRESH_PWM_075_L;
+    up_temp_75_h <= THRESH_PWM_075_H;
+    up_temp_100_l <= THRESH_PWM_100;
+    up_tacho_25 <= TACHO_T25;
+    up_tacho_50 <= TACHO_T50;
+    up_tacho_75 <= TACHO_T75;
+    up_tacho_100 <= TACHO_T100;
+    up_tacho_25_tol <= TACHO_T25 * TACHO_TOL_PERCENT / 100;
+    up_tacho_50_tol <= TACHO_T50 * TACHO_TOL_PERCENT / 100;
+    up_tacho_75_tol <= TACHO_T75 * TACHO_TOL_PERCENT / 100;
+    up_tacho_100_tol <= TACHO_T100 * TACHO_TOL_PERCENT / 100;
     up_irq_mask <= 4'b1111;
-    up_resetn <= 1'd0;
   end else begin
-    up_wack <= up_wreq_s;
-    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h20)) begin
-      up_resetn <= up_wdata_s[0];
-    end
     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h02)) begin
       up_scratch <= up_wdata_s;
     end
@@ -504,9 +569,70 @@ always @(posedge up_clk) begin
       up_tacho_en <= 1'b1;
     end else if (temp_increase_alarm) begin
       up_tacho_en <= 1'b0;
-    end 
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h40)) begin
+      up_temp_00_h <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h41)) begin
+      up_temp_25_l <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h42)) begin
+      up_temp_25_h <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h43)) begin
+      up_temp_50_l <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h44)) begin
+     up_temp_50_h <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h45)) begin
+      up_temp_75_l <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h46)) begin
+      up_temp_75_h <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h47)) begin
+      up_temp_100_l <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h50)) begin
+      up_tacho_25 <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h51)) begin
+      up_tacho_50 <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h52)) begin
+      up_tacho_75 <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h53)) begin
+      up_tacho_100 <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h54)) begin
+      up_tacho_25_tol <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h55)) begin
+      up_tacho_50_tol <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h56)) begin
+      up_tacho_75_tol <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h57)) begin
+      up_tacho_100_tol <= up_wdata_s;
+    end
     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h10)) begin
       up_irq_mask <= up_wdata_s[3:0];
+    end
+  end
+end
+
+//writing reset
+always @(posedge up_clk) begin
+  if (s_axi_aresetn == 1'b0) begin
+    up_wack <= 'd0;
+    up_resetn <= 1'd1;
+  end else begin
+    up_wack <= up_wreq_s;
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h20)) begin
+      up_resetn <= up_wdata_s[0];
     end
   end
 end
@@ -524,16 +650,33 @@ always @(posedge up_clk) begin
         8'h01: up_rdata <= ID;
         8'h02: up_rdata <= up_scratch;
         8'h03: up_rdata <= CORE_MAGIC;
-        8'h20: up_rdata <= up_resetn;
-        8'h21: up_rdata <= pwm_width;
-        8'h30: up_rdata <= PWM_PERIOD;
-        8'h31: up_rdata <= up_tacho_avg_sum;
-        8'h32: up_rdata <= sysmone_temp;
-        8'h22: up_rdata <= up_tacho_val;
-        8'h23: up_rdata <= up_tacho_tol;
         8'h10: up_rdata <= up_irq_mask;
         8'h11: up_rdata <= up_irq_pending;
         8'h12: up_rdata <= up_irq_source;
+        8'h20: up_rdata <= up_resetn;
+        8'h21: up_rdata <= pwm_width;
+        8'h22: up_rdata <= up_tacho_val;
+        8'h23: up_rdata <= up_tacho_tol;
+        8'h24: up_rdata <= INTERNAL_SYSMONE;
+        8'h30: up_rdata <= PWM_PERIOD;
+        8'h31: up_rdata <= up_tacho_avg_sum;
+        8'h32: up_rdata <= sysmone_temp;
+        8'h40: up_rdata <= up_temp_00_h;
+        8'h41: up_rdata <= up_temp_25_l;
+        8'h42: up_rdata <= up_temp_25_h;
+        8'h43: up_rdata <= up_temp_50_l;
+        8'h44: up_rdata <= up_temp_50_h;
+        8'h45: up_rdata <= up_temp_75_l;
+        8'h46: up_rdata <= up_temp_75_h;
+        8'h47: up_rdata <= up_temp_100_l;
+        8'h50: up_rdata <= up_tacho_25;
+        8'h51: up_rdata <= up_tacho_50;
+        8'h52: up_rdata <= up_tacho_75;
+        8'h53: up_rdata <= up_tacho_100;
+        8'h54: up_rdata <= up_tacho_25_tol;
+        8'h55: up_rdata <= up_tacho_50_tol;
+        8'h56: up_rdata <= up_tacho_75_tol;
+        8'h57: up_rdata <= up_tacho_100_tol;
         default: up_rdata <= 0;
       endcase
     end else begin
@@ -609,4 +752,16 @@ always @(posedge up_clk) begin
   end
 end
 
+//prescaler; sets the rate at which the fsm is run
+always @(posedge up_clk) begin
+  if (up_resetn  == 1'b0) begin
+    presc_reg <= 'h0;
+  end else begin
+    if (presc_reg == 'h8000) begin
+      presc_reg <= 'h0;
+    end else begin
+      presc_reg <= presc_reg + 1'b1;
+    end
+  end
+end
 endmodule
