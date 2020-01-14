@@ -311,7 +311,7 @@ proc adi_project_run {project_name} {
     puts "GENERATE_REPORTS: Resource utilization files won't be generated because ADI_GENERATE_UTILIZATION env var is not set"
   }
 
-  if {[info exists ::env(ADI_GENERATE_POWER)]} {
+  if {[info exists ::env(ADI_GENERATE_XPA)]} {
     set csv_file power_analysis.csv
     set Layers "8to11"
     set CapLoad "20"
