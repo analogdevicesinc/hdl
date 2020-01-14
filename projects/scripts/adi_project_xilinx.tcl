@@ -59,32 +59,32 @@ proc adi_project {project_name {mode 0} {parameter_list {}} } {
 
   if [regexp "_ac701$" $project_name] {
     set p_device "xc7a200tfbg676-2"
-    set p_board "xilinx.com:ac701:part0:1.4"
+    set p_board [lindex [lsearch -all -inline [get_board_parts] *ac701*] end]
     set sys_zynq 0
   }
   if [regexp "_kc705$" $project_name] {
     set p_device "xc7k325tffg900-2"
-    set p_board "xilinx.com:kc705:part0:1.6"
+    set p_board [lindex [lsearch -all -inline [get_board_parts] *kc705*] end]
     set sys_zynq 0
   }
   if [regexp "_vc707$" $project_name] {
     set p_device "xc7vx485tffg1761-2"
-    set p_board "xilinx.com:vc707:part0:1.4"
+    set p_board [lindex [lsearch -all -inline [get_board_parts] *vc707*] end]
     set sys_zynq 0
   }
   if [regexp "_vcu118$" $project_name] {
     set p_device "xcvu9p-flga2104-2L-e"
-    set p_board "xilinx.com:vcu118:part0:2.3"
+    set p_board [lindex [lsearch -all -inline [get_board_parts] *vcu118*] end]
     set sys_zynq 0
   }
   if [regexp "_kcu105$" $project_name] {
     set p_device "xcku040-ffva1156-2-e"
-    set p_board "xilinx.com:kcu105:part0:1.6"
+    set p_board [lindex [lsearch -all -inline [get_board_parts] *kcu102*] end]
     set sys_zynq 0
   }
   if [regexp "_zed$" $project_name] {
     set p_device "xc7z020clg484-1"
-    set p_board "em.avnet.com:zed:part0:1.3"
+    set p_board [lindex [lsearch -all -inline [get_board_parts] *zed*] end]
     set sys_zynq 1
   }
   if [regexp "_coraz7s$" $project_name] {
@@ -99,12 +99,12 @@ proc adi_project {project_name {mode 0} {parameter_list {}} } {
   }
   if [regexp "_zc702$" $project_name] {
     set p_device "xc7z020clg484-1"
-    set p_board "xilinx.com:zc702:part0:1.4"
+    set p_board [lindex [lsearch -all -inline [get_board_parts] *zc702*] end]
     set sys_zynq 1
   }
   if [regexp "_zc706$" $project_name] {
     set p_device "xc7z045ffg900-2"
-    set p_board "xilinx.com:zc706:part0:1.4"
+    set p_board [lindex [lsearch -all -inline [get_board_parts] *zc706*] end]
     set sys_zynq 1
   }
   if [regexp "_mitx045$" $project_name] {
@@ -114,7 +114,7 @@ proc adi_project {project_name {mode 0} {parameter_list {}} } {
   }
   if [regexp "_zcu102$" $project_name] {
     set p_device "xczu9eg-ffvb1156-2-e"
-    set p_board "xilinx.com:zcu102:part0:3.3"
+    set p_board [lindex [lsearch -all -inline [get_board_parts] *zcu102*] end]
     set sys_zynq 2
   }
 
@@ -259,14 +259,14 @@ proc adi_project_run {project_name} {
   report_timing_summary -file timing_impl.log
 
   if {[info exists ::env(ADI_GENERATE_UTILIZATION)]} {
-    set csv_file resource_utilization.csv  
+    set csv_file resource_utilization.csv
     if {[ catch {
       xilinx::designutils::report_failfast -csv -file $csv_file -transpose -no_header -ignore_pr -quiet
       set MMCM [llength [get_cells -hierarchical -filter { PRIMITIVE_TYPE =~ *MMCM* }]]
       set PLL [llength [get_cells -hierarchical -filter { PRIMITIVE_TYPE =~ *PLL* }]]
       set worst_slack_setup [get_property SLACK [get_timing_paths -setup]]
       set worst_slack_hold [get_property SLACK [get_timing_paths -hold]]
-   
+
       set fileRead [open $csv_file r]
       set lines [split [read $fileRead] "\n"]
       set names_line [lindex $lines end-3]
