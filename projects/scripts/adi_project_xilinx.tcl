@@ -79,7 +79,7 @@ proc adi_project {project_name {mode 0} {parameter_list {}} } {
   }
   if [regexp "_kcu105$" $project_name] {
     set p_device "xcku040-ffva1156-2-e"
-    set p_board [lindex [lsearch -all -inline [get_board_parts] *kcu102*] end]
+    set p_board [lindex [lsearch -all -inline [get_board_parts] *kcu105*] end]
     set sys_zynq 0
   }
   if [regexp "_zed$" $project_name] {
