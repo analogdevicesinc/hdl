@@ -72,9 +72,9 @@ module system_tb();
   always #8 ref_clk <= ~ref_clk;   //125 MHz
 
   initial begin
-    // Asserts all the resets for 100 ns
+    // Asserts all the resets for 1000 ns
     mng_rst = 1'b0;
-    #100;
+    #1000;
     mng_rst = 1'b1;
   end
 
