@@ -86,16 +86,16 @@ program test_program;
     env.mng.RegWrite32(`AXI_JESD_TX+32'h0214,32'h00000001);
     //CONF2
     env.mng.RegWrite32(`AXI_JESD_TX+32'h0240,32'h00000000);
+    // Send an arbitrary ILAS sequence, does not have to match the link
+    // parameters. They should be sent and received on the other side of the
+    // link as is.
+    env.mng.RegWrite32(`AXI_JESD_TX+32'h0314,32'h1f018300);
+    env.mng.RegWrite32(`AXI_JESD_TX+32'h0318,32'h202f0f03);
+    env.mng.RegWrite32(`AXI_JESD_TX+32'h031c,32'h47000000);
+
     //LINK ENABLE
     env.mng.RegWrite32(`AXI_JESD_RX+32'h00c0,32'h00000000);
     env.mng.RegWrite32(`AXI_JESD_TX+32'h00c0,32'h00000000);
-
-    //ILAS
-    env.mng.RegWrite32(`AXI_JESD_RX+32'h0314,32'h1f010000);
-    env.mng.RegWrite32(`AXI_JESD_TX+32'h0314,32'h1f010000);
-    env.mng.RegWrite32(`AXI_JESD_RX+32'h0318,32'h2f2f0f00);
-    env.mng.RegWrite32(`AXI_JESD_TX+32'h0318,32'h2f2f0f00);
-
 
     //PHY INIT
     //REG CTRL
@@ -106,8 +106,12 @@ program test_program;
     env.mng.RegWrite32(`DAC_XCVR+32'h0010,32'h00000001);
 
     #10us;
-    //Read status back
+    // Read status back
     env.mng.RegReadVerify32(`AXI_JESD_RX+32'h0280,3);
+    // Check received ILAS
+    env.mng.RegReadVerify32(`AXI_JESD_RX+32'h0314,32'h1f018300);
+    env.mng.RegReadVerify32(`AXI_JESD_RX+32'h0318,32'h202f0f03);
+    env.mng.RegReadVerify32(`AXI_JESD_RX+32'h031c,32'h47000000);
 
     #10us;
 
