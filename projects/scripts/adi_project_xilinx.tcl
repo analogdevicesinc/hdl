@@ -280,7 +280,34 @@ proc adi_project_run {project_name} {
       } issue ] != 0 } {
         puts "GENERATE_REPORTS: tclapp::xilinx::designutils not installed"
       }
-  } else {
+
+      # Define a list of IPs for which to generate report utilization
+      set IP_list {
+        ad_ip_jesd_204_tpl_adc
+        ad_ip_jesd_204_tpl_dac
+        axi_jesd204_rx
+        axi_jesd204_tx
+        jesd204_rx
+        jesd204_tx
+        axi_adxcvr
+        util_adxcvr
+        axi_dmac
+        util_cpack2
+        util_upack2
+      }
+
+      foreach IP_name $IP_list {
+	set output_file ${IP_name}_resource_utilization.log
+        file delete $output_file
+        foreach IP_instance [ get_cells -quiet -hierarchical -filter " ORIG_REF_NAME =~ $IP_name || REF_NAME =~ $IP_name " ] {
+          report_utilization -hierarchical -hierarchical_depth 1 -cells $IP_instance -file $output_file -append -quiet
+          report_property $IP_instance -file $output_file -append -quiet
+          set report_file [ open $output_file a ]
+          puts $report_file "\n\n\n"
+          close $report_file
+        }
+      }
+    } else {
     puts "GENERATE_REPORTS: Resource utilization files won't be generated because ADI_GENERATE_UTILIZATION env var is not set"
   }
 
