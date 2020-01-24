@@ -116,21 +116,21 @@ set_location_assignment  PIN_G7  -to  laser_driver           ; ## C22  FMCA_HPC_
 set_location_assignment  PIN_H7  -to  "laser_driver(n)"      ; ## C23  FMCA_HPC_LA18_CC_N
 
 set_location_assignment  PIN_G1  -to  laser_driver_en_n      ; ## C26  FMCA_HPC_LA27_P
-set_location_assignment  PIN_H2  -to  laser_driver_otw_n     ; ## C27  FMCA_HPC_LA27_N
+set_location_assignment  PIN_P8  -to  laser_driver_otw_n     ; ## G33  FMCA_HPC_LA31_P
 
-set_location_assignment  PIN_F9  -to  laser_gpio[0]          ; ## D20  FMCA_HPC_LA17_CC_P
-set_location_assignment  PIN_G9  -to  laser_gpio[1]          ; ## D21  FMCA_HPC_LA17_CC_N
-set_location_assignment  PIN_C1  -to  laser_gpio[2]          ; ## D23  FMCA_HPC_LA23_P
-set_location_assignment  PIN_D1  -to  laser_gpio[3]          ; ## D24  FMCA_HPC_LA23_N
-set_location_assignment  PIN_F2  -to  laser_gpio[4]          ; ## D26  FMCA_HPC_LA26_P
-set_location_assignment  PIN_G2  -to  laser_gpio[5]          ; ## D27  FMCA_HPC_LA26_N
-set_location_assignment  PIN_F4  -to  laser_gpio[6]          ; ## G24  FMCA_HPC_LA22_P
-set_location_assignment  PIN_G4  -to  laser_gpio[7]          ; ## G25  FMCA_HPC_LA22_N
-set_location_assignment  PIN_E3  -to  laser_gpio[8]          ; ## G27  FMCA_HPC_LA25_P
-set_location_assignment  PIN_F3  -to  laser_gpio[9]          ; ## G28  FMCA_HPC_LA25_N
-set_location_assignment  PIN_N9  -to  laser_gpio[10]         ; ## G30  FMCA_HPC_LA29_P
-set_location_assignment  PIN_P10 -to  laser_gpio[11]         ; ## G31  FMCA_HPC_LA29_N
-set_location_assignment  PIN_P8  -to  laser_gpio[12]         ; ## G33  FMCA_HPC_LA31_P
+set_location_assignment  PIN_H2  -to  laser_gpio[0]          ; ## C27  FMCA_HPC_LA27_N
+set_location_assignment  PIN_F9  -to  laser_gpio[1]          ; ## D20  FMCA_HPC_LA17_CC_P
+set_location_assignment  PIN_G9  -to  laser_gpio[2]          ; ## D21  FMCA_HPC_LA17_CC_N
+set_location_assignment  PIN_C1  -to  laser_gpio[3]          ; ## D23  FMCA_HPC_LA23_P
+set_location_assignment  PIN_D1  -to  laser_gpio[4]          ; ## D24  FMCA_HPC_LA23_N
+set_location_assignment  PIN_F2  -to  laser_gpio[5]          ; ## D26  FMCA_HPC_LA26_P
+set_location_assignment  PIN_G2  -to  laser_gpio[6]          ; ## D27  FMCA_HPC_LA26_N
+set_location_assignment  PIN_F4  -to  laser_gpio[7]          ; ## G24  FMCA_HPC_LA22_P
+set_location_assignment  PIN_G4  -to  laser_gpio[8]          ; ## G25  FMCA_HPC_LA22_N
+set_location_assignment  PIN_E3  -to  laser_gpio[9]          ; ## G27  FMCA_HPC_LA25_P
+set_location_assignment  PIN_F3  -to  laser_gpio[10]         ; ## G28  FMCA_HPC_LA25_N
+set_location_assignment  PIN_N9  -to  laser_gpio[11]         ; ## G30  FMCA_HPC_LA29_P
+set_location_assignment  PIN_P10 -to  laser_gpio[12]         ; ## G31  FMCA_HPC_LA29_N
 set_location_assignment  PIN_R8  -to  laser_gpio[13]         ; ## G34  FMCA_HPC_LA31_N
 
 set_instance_assignment -name IO_STANDARD LVDS -to  laser_driver
