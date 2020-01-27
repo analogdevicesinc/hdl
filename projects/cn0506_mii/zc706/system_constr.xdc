@@ -1,6 +1,6 @@
 
 set_property -dict {PACKAGE_PIN AE13  IOSTANDARD LVCMOS25} [get_ports mii_rx_clk_a]                ; ## G06 FMC_LPC_LA00_CC_P
-set_property -dict {PACKAGE_PIN AF15  IOSTANDARD LVCMOS25} [get_ports mii_rx_er_a]                 ; ## D08 FMC_LPC_LA01_CC_P
+set_property -dict {PACKAGE_PIN AG15  IOSTANDARD LVCMOS25} [get_ports mii_rx_er_a]                 ; ## D09 FMC_LPC_LA01_CC_N
 set_property -dict {PACKAGE_PIN AA14  IOSTANDARD LVCMOS25} [get_ports mii_rx_dv_a]                 ; ## H14 FMC_LPC_LA07_N
 set_property -dict {PACKAGE_PIN AE12  IOSTANDARD LVCMOS25} [get_ports {mii_rxd_a[0]}]              ; ## H07 FMC_LPC_LA02_P
 set_property -dict {PACKAGE_PIN AF12  IOSTANDARD LVCMOS25} [get_ports {mii_rxd_a[1]}]              ; ## H08 FMC_LPC_LA02_N
@@ -26,7 +26,7 @@ set_property -dict {PACKAGE_PIN AH17  IOSTANDARD LVCMOS25} [get_ports led_al_c_c
 set_property -dict {PACKAGE_PIN AH16  IOSTANDARD LVCMOS25} [get_ports led_al_a_c2m]                ; ## D18 FMC_LPC_LA13_N
 
 set_property -dict {PACKAGE_PIN AE27  IOSTANDARD LVCMOS25} [get_ports mii_rx_clk_b]                ; ## C22 FMC_LPC_LA18_CC_P
-set_property -dict {PACKAGE_PIN AB27  IOSTANDARD LVCMOS25} [get_ports mii_rx_er_b]                 ; ## D20 FMC_LPC_LA17_CC_P
+set_property -dict {PACKAGE_PIN AC27  IOSTANDARD LVCMOS25} [get_ports mii_rx_er_b]                 ; ## D21 FMC_LPC_LA17_CC_N
 set_property -dict {PACKAGE_PIN AG30  IOSTANDARD LVCMOS25} [get_ports mii_rx_dv_b]                 ; ## H29 FMC_LPC_LA24_N
 set_property -dict {PACKAGE_PIN AH26  IOSTANDARD LVCMOS25} [get_ports {mii_rxd_b[0]}]              ; ## H22 FMC_LPC_LA19_P
 set_property -dict {PACKAGE_PIN AH27  IOSTANDARD LVCMOS25} [get_ports {mii_rxd_b[1]}]              ; ## H23 FMC_LPC_LA19_N

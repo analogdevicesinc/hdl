@@ -22,7 +22,7 @@ source $ad_hdl_dir/projects/common/a10soc/a10soc_system_assign.tcl
 #  R633: R0 -> DNI
 
 set_location_assignment PIN_G14    -to  mii_rx_clk_a            ; ## G06 FMCA_HPC_LA00_CC_P
-set_location_assignment PIN_E12    -to  mii_rx_er_a             ; ## D08 FMCA_HPC_LA01_CC_P
+set_location_assignment PIN_E13    -to  mii_rx_er_a             ; ## D09 FMCA_HPC_LA01_CC_N
 set_location_assignment PIN_B9     -to  mii_rx_dv_a             ; ## H14 FMCA_HPC_LA07_N
 set_location_assignment PIN_C13    -to  mii_rxd_a[0]            ; ## H07 FMCA_HPC_LA02_P
 set_location_assignment PIN_D13    -to  mii_rxd_a[1]            ; ## H08 FMCA_HPC_LA02_N
@@ -68,7 +68,7 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to led_al_c_c2m
 set_instance_assignment -name IO_STANDARD "1.8 V" -to led_al_a_c2m
 
 set_location_assignment PIN_G7     -to  mii_rx_clk_b            ; ## C22 FMCA_HPC_LA18_CC_P
-set_location_assignment PIN_F9     -to  mii_rx_er_b             ; ## D20 FMCA_HPC_LA17_CC_P
+set_location_assignment PIN_G9     -to  mii_rx_er_b             ; ## D21 FMCA_HPC_LA17_CC_N
 set_location_assignment PIN_E2     -to  mii_rx_dv_b             ; ## H29 FMCA_HPC_LA24_N
 set_location_assignment PIN_G5     -to  mii_rxd_b[0]            ; ## H22 FMCA_HPC_LA19_P
 set_location_assignment PIN_G6     -to  mii_rxd_b[1]            ; ## H23 FMCA_HPC_LA19_N
