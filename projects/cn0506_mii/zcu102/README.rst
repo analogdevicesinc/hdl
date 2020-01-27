@@ -1,3 +1,0 @@
-- Connect to FMC1
-- Voltage 1.8V
-- MII mode, Connected to PS8's Ethernet 0(PHY 0) and Ethernet 1(PHY 1).

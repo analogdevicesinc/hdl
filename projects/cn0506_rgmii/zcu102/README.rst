@@ -1,3 +1,0 @@
-- Connect to FMC1 (The FMC1 was chosen because of the global clock pin distribution on FMC0)
-- Voltage 1.8V
-- RGMII mode, using a GMII-to-RGMII converter. Connected to PS8's Ethernet 0(PHY 0) and Ethernet 1(PHY 1).
