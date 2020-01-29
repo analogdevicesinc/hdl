@@ -67,7 +67,7 @@
     $finish;
   end
 
-  always @(*) #10 clk <= ~clk;
+  initial forever #10 clk <= ~clk;
   always @(posedge clk) begin
     if (trigger_reset == 1'b1) begin
       reset_shift <= 3'b111;

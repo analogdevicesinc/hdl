@@ -88,6 +88,7 @@ adi_add_bus "rx_cfg" "master" \
     { "core_cfg_buffer_delay" "buffer_delay" } \
     { "core_cfg_disable_char_replacement" "disable_char_replacement" } \
     { "core_cfg_disable_scrambler" "disable_scrambler" } \
+    { "core_cfg_frame_align_err_threshold" "frame_align_err_threshold" } \
   }
 
 adi_add_bus "rx_ilas_config" "slave" \
@@ -116,6 +117,7 @@ adi_add_bus "rx_status" "slave" \
     { "core_status_lane_emb_state" "lane_emb_state" } \
     { "core_status_lane_ifs_ready" "lane_ifs_ready" } \
     { "core_status_lane_latency" "lane_latency" } \
+    { "core_status_lane_frame_align_err_cnt" "lane_frame_align_err_cnt" } \
     { "core_status_err_statistics_cnt" "err_statistics_cnt" } \
   }
 

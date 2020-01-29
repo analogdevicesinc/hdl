@@ -66,7 +66,8 @@ module jesd204_rx_static_config #(
   output [7:0] cfg_buffer_delay,
   output cfg_buffer_early_release,
   output cfg_disable_scrambler,
-  output cfg_disable_char_replacement
+  output cfg_disable_char_replacement,
+  output [7:0] cfg_frame_align_err_threshold
 );
 
 /* Only 4 is supported at the moment for 8b/10b and 8 for 64b */
@@ -83,5 +84,6 @@ assign cfg_lanes_disable = {NUM_LANES{1'b0}};
 assign cfg_links_disable = {NUM_LINKS{1'b0}};
 assign cfg_disable_scrambler = SCR ? 1'b0 : 1'b1;
 assign cfg_disable_char_replacement = cfg_disable_scrambler;
+assign cfg_frame_align_err_threshold = 8'd4;
 
 endmodule

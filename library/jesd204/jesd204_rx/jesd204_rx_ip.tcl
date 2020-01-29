@@ -58,6 +58,8 @@ adi_ip_files jesd204_rx [list \
   "jesd204_ilas_monitor.v" \
   "align_mux.v" \
   "jesd204_lane_latency_monitor.v" \
+  "jesd204_rx_frame_mark.v" \
+  "jesd204_rx_frame_align_monitor.v" \
   "jesd204_rx_constr.ttcl" \
   "jesd204_rx.v" \
 ]
@@ -110,6 +112,7 @@ adi_add_bus "rx_cfg" "slave" \
     { "ctrl_err_statistics_reset" "err_statistics_reset" } \
     { "ctrl_err_statistics_mask" "err_statistics_mask" } \
     { "cfg_disable_scrambler" "disable_scrambler" } \
+    { "cfg_frame_align_err_threshold" "frame_align_err_threshold" } \
   }
 
 adi_add_bus "rx_status" "master" \
@@ -122,6 +125,7 @@ adi_add_bus "rx_status" "master" \
     { "status_err_statistics_cnt" "err_statistics_cnt" } \
     { "status_lane_ifs_ready" "lane_ifs_ready" } \
     { "status_lane_latency" "lane_latency" } \
+    { "status_lane_frame_align_err_cnt" "lane_frame_align_err_cnt" } \
   }
 
 adi_add_bus "rx_ilas_config" "master" \
@@ -181,6 +185,7 @@ set_property -dict [list \
   enablement_value false \
   value_tcl_expr {expr $LINK_MODE*4} \
 ] $param
+
 
 set param [ipx::add_user_parameter SYSREF_IOB $cc]
 set_property -dict {value_resolve_type user value_format bool value true} $param

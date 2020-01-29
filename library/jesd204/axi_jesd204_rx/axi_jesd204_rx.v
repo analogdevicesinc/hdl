@@ -90,6 +90,7 @@ module axi_jesd204_rx #(
   output core_cfg_sysref_disable,
   output core_cfg_buffer_early_release,
   output [7:0] core_cfg_buffer_delay,
+  output [7:0] core_cfg_frame_align_err_threshold,
 
   input [NUM_LANES-1:0] core_ilas_config_valid,
   input [2*NUM_LANES-1:0] core_ilas_config_addr,
@@ -107,7 +108,8 @@ module axi_jesd204_rx #(
   input [2*NUM_LANES-1:0] core_status_lane_cgs_state,
   input [3*NUM_LANES-1:0] core_status_lane_emb_state,
   input [NUM_LANES-1:0] core_status_lane_ifs_ready,
-  input [14*NUM_LANES-1:0] core_status_lane_latency
+  input [14*NUM_LANES-1:0] core_status_lane_latency,
+  input [8*NUM_LANES-1:0] core_status_lane_frame_align_err_cnt
 );
 
 localparam PCORE_VERSION = 32'h00010361; // 1.03.a
@@ -137,6 +139,7 @@ wire up_cfg_sysref_disable;
 wire up_cfg_buffer_early_release;
 wire [7:0] up_cfg_buffer_delay;
 wire [7:0] up_cfg_lmfc_offset;
+wire [7:0] up_cfg_frame_align_err_threshold;
 
 wire up_reset;
 wire up_reset_synchronizer;
@@ -181,7 +184,7 @@ jesd204_up_common #(
   .NUM_LINKS(NUM_LINKS),
   .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
   .NUM_IRQS(5),
-  .EXTRA_CFG_WIDTH(19),
+  .EXTRA_CFG_WIDTH(27),
   .LINK_MODE(LINK_MODE)
 ) i_up_common (
   .up_clk(s_axi_aclk),
@@ -213,6 +216,7 @@ jesd204_up_common #(
   .core_cfg_disable_char_replacement(core_cfg_disable_char_replacement),
 
   .up_extra_cfg({
+    /* 19-26 */ up_cfg_frame_align_err_threshold,
     /*    18 */ up_cfg_sysref_disable,
     /*    17 */ up_cfg_sysref_oneshot,
     /*    16 */ up_cfg_buffer_early_release,
@@ -220,6 +224,7 @@ jesd204_up_common #(
     /* 00-07 */ up_cfg_lmfc_offset
   }),
   .core_extra_cfg({
+    /* 19-26 */ core_cfg_frame_align_err_threshold,
     /*    18 */ core_cfg_sysref_disable,
     /*    17 */ core_cfg_sysref_oneshot,
     /*    16 */ core_cfg_buffer_early_release,
@@ -274,6 +279,8 @@ jesd204_up_rx #(
   .up_cfg_buffer_early_release(up_cfg_buffer_early_release),
   .up_cfg_buffer_delay(up_cfg_buffer_delay),
 
+  .up_cfg_frame_align_err_threshold(up_cfg_frame_align_err_threshold),
+
   .core_ctrl_err_statistics_reset(core_ctrl_err_statistics_reset),
   .core_ctrl_err_statistics_mask(core_ctrl_err_statistics_mask),
 
@@ -282,6 +289,7 @@ jesd204_up_rx #(
   .core_status_lane_emb_state(core_status_lane_emb_state),
   .core_status_lane_ifs_ready(core_status_lane_ifs_ready),
   .core_status_lane_latency(core_status_lane_latency),
+  .core_status_lane_frame_align_err_cnt(core_status_lane_frame_align_err_cnt),
 
   .core_status_err_statistics_cnt(core_status_err_statistics_cnt),
 

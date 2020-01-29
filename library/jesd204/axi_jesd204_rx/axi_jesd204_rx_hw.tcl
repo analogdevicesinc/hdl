@@ -133,6 +133,7 @@ add_interface_port config core_cfg_lmfc_offset lmfc_offset Output 8
 add_interface_port config core_cfg_octets_per_frame octets_per_frame Output 8
 add_interface_port config core_cfg_sysref_disable sysref_disable Output 1
 add_interface_port config core_cfg_sysref_oneshot sysref_oneshot Output 1
+add_interface_port config core_cfg_frame_align_err_threshold frame_align_err_threshold Output 8
 add_interface_port config core_ctrl_err_statistics_reset err_statistics_reset Output 1
 add_interface_port config core_ctrl_err_statistics_mask err_statistics_mask Output 3
 
@@ -146,6 +147,7 @@ add_interface_port status core_status_ctrl_state ctrl_state Input 2
 add_interface_port status core_status_lane_cgs_state lane_cgs_state Input 2*NUM_LANES
 add_interface_port status core_status_lane_ifs_ready lane_ifs_ready Input NUM_LANES
 add_interface_port status core_status_lane_latency lane_latency Input 14*NUM_LANES
+add_interface_port status core_status_lane_frame_align_err_cnt lane_frame_align_err_cnt Input 8*NUM_LANES
 add_interface_port status core_status_err_statistics_cnt err_statistics_cnt Input 32*NUM_LANES
 
 # event interface

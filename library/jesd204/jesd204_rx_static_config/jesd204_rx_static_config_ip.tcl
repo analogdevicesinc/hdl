@@ -63,6 +63,7 @@ adi_add_bus "rx_cfg" "master" \
     { "cfg_sysref_oneshot" "sysref_oneshot" } \
     { "cfg_sysref_disable" "sysref_disable" } \
     { "cfg_buffer_early_release" "buffer_early_release" } \
+    { "cfg_frame_align_err_threshold" "frame_align_err_threshold" } \
   }
 adi_add_bus_clock "clk" "rx_cfg"
 
