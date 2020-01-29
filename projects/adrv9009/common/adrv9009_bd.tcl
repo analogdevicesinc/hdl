@@ -1,11 +1,11 @@
 
 # TX parameters
-set TX_NUM_OF_LANES 4      ; # L
+set TX_NUM_OF_LANES 2      ; # L
 set TX_NUM_OF_CONVERTERS 4 ; # M
 set TX_SAMPLES_PER_FRAME 1 ; # S
 set TX_SAMPLE_WIDTH 16     ; # N/NP
 
-set TX_SAMPLES_PER_CHANNEL 2 ; # L * 32 / (M * N)
+set TX_SAMPLES_PER_CHANNEL 1 ; # L * 32 / (M * N)
 
 # RX parameters
 set RX_NUM_OF_LANES 2      ; # L
@@ -25,7 +25,7 @@ set RX_OS_SAMPLES_PER_CHANNEL 1 ;  # L * 32 / (M * N)
 
 set dac_fifo_name axi_adrv9009_dacfifo
 set dac_data_width [expr 32*$TX_NUM_OF_LANES]
-set dac_dma_data_width 128
+set dac_dma_data_width [expr 32*$TX_NUM_OF_LANES]
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 source $ad_hdl_dir/projects/common/xilinx/adi_fir_filter_bd.tcl
@@ -60,7 +60,7 @@ ad_ip_instance util_upack2 util_adrv9009_tx_upack [list \
   SAMPLE_DATA_WIDTH $TX_SAMPLE_WIDTH \
 ]
 
-ad_add_interpolation_filter "tx_fir_interpolator" 8 $TX_NUM_OF_CONVERTERS 2 {122.88} {15.36} \
+ad_add_interpolation_filter "tx_fir_interpolator" 8 $TX_NUM_OF_CONVERTERS 1 {122.88} {15.36} \
                              "$ad_hdl_dir/library/util_fir_int/coefile_int.coe"
 
 
@@ -202,7 +202,7 @@ ad_connect  $sys_cpu_clk util_adrv9009_xcvr/up_clk
 
 # Tx
 ad_connect adrv9009_tx_device_clk axi_adrv9009_tx_clkgen/clk_0
-ad_xcvrcon util_adrv9009_xcvr axi_adrv9009_tx_xcvr axi_adrv9009_tx_jesd {0 3 2 1} adrv9009_tx_device_clk
+ad_xcvrcon util_adrv9009_xcvr axi_adrv9009_tx_xcvr axi_adrv9009_tx_jesd {} adrv9009_tx_device_clk
 ad_connect util_adrv9009_xcvr/tx_out_clk_0 axi_adrv9009_tx_clkgen/clk
 ad_xcvrpll $tx_ref_clk util_adrv9009_xcvr/qpll_ref_clk_0
 ad_xcvrpll axi_adrv9009_tx_xcvr/up_pll_rst util_adrv9009_xcvr/up_qpll_rst_0
