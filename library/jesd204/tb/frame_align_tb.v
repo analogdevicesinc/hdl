@@ -44,8 +44,8 @@
 
 `timescale 1ns/100ps
 
-module loopback_tb;
-  parameter VCD_FILE = "loopback_tb.vcd";
+module frame_align_tb;
+  parameter VCD_FILE = "frame_align_tb.vcd";
   parameter NUM_LANES = 4;
   parameter NUM_LINKS = 1;
   parameter OCTETS_PER_FRAME = 4;
@@ -53,11 +53,14 @@ module loopback_tb;
   parameter ENABLE_SCRAMBLER = 1;
   parameter BUFFER_EARLY_RELEASE = 1;
   parameter LANE_DELAY = 1;
+  parameter ALIGN_ERROR_PERCENT = 50;
 
   localparam BEATS_PER_MULTIFRAME = OCTETS_PER_FRAME * FRAMES_PER_MULTIFRAME / 4;
   localparam TX_LATENCY = 3;
   localparam RX_LATENCY = 3;
   localparam BASE_LATENCY = TX_LATENCY + RX_LATENCY;
+
+  `define TIMEOUT 1000000
 
   `include "tb_base.v"
 
@@ -97,8 +100,14 @@ module loopback_tb;
 
   wire [NUM_LANES*32-1:0] phy_data_out;
   wire [NUM_LANES*4-1:0] phy_charisk_out;
-  wire [NUM_LANES*32-1:0] phy_data_in;
-  wire [NUM_LANES*4-1:0] phy_charisk_in;
+  wire [NUM_LANES*32-1:0] phy_data_delayed;
+  wire [NUM_LANES*4-1:0] phy_charisk_delayed;
+  reg [NUM_LANES*32-1:0] phy_data_in;
+  reg [NUM_LANES*4-1:0] phy_charisk_in;
+
+  reg align_err_mf;
+  reg align_err_f;
+  reg cur_err;
 
   reg [5:0] sysref_counter = 'h00;
   reg sysref_rx = 1'b0;
@@ -126,14 +135,61 @@ module loopback_tb;
     end
   end
 
+  initial begin
+    align_err_mf = 1'b0;
+    align_err_f = 1'b0;
+
+    #100000;
+    align_err_f = 1'b1;
+    #50000;
+    align_err_f = 1'b0;
+    #100000;
+
+    align_err_mf = 1'b1;
+    #50000;
+    align_err_mf = 1'b0;
+    #100000;
+
+    align_err_f = 1'b1;
+    align_err_mf = 1'b1;
+    #50000;
+    align_err_f = 1'b0;
+    align_err_mf = 1'b0;
+    #100000;
+  end
+
+  always @(posedge clk) begin
+    if(ALIGN_ERROR_PERCENT != 0) begin
+      cur_err <= $urandom_range(99) < ALIGN_ERROR_PERCENT;
+    end else begin
+      cur_err <= 1'b0;
+    end
+  end
+
   genvar i;
   generate for (i = 0; i < NUM_LANES; i = i + 1) begin
     localparam OFF = MAX_LANE_DELAY - (i + LANE_DELAY);
-    assign phy_data_in[32*i+31:32*i] =
+    assign phy_data_delayed[32*i+31:32*i] =
       phy_delay_fifo[(phy_delay_fifo_wr + OFF) % MAX_LANE_DELAY][32*i+31:32*i];
-    assign phy_charisk_in[4*i+3:4*i] =
+    assign phy_charisk_delayed[4*i+3:4*i] =
       phy_delay_fifo[(phy_delay_fifo_wr + OFF) % MAX_LANE_DELAY][4*i+3+NUM_LANES*32:4*i+32*NUM_LANES];
   end endgenerate
+
+  always @(*) begin
+    phy_data_in = phy_data_delayed;
+    phy_charisk_in = phy_charisk_delayed;
+
+    if(cur_err) begin
+      if(align_err_mf) begin
+        phy_data_in = {NUM_LANES*4{8'h7C}};
+        phy_charisk_in = {NUM_LANES*4{1'b1}};
+      end else if(align_err_f) begin
+        phy_data_in = {NUM_LANES*4{8'hFC}};
+        phy_charisk_in = {NUM_LANES*4{1'b1}};
+      end
+    end
+  end
+
 
   wire [NUM_LANES-1:0] tx_cfg_lanes_disable;
   wire [NUM_LINKS-1:0] tx_cfg_links_disable;
@@ -231,8 +287,8 @@ module loopback_tb;
   wire [7:0] rx_cfg_buffer_delay;
   wire [NUM_LANES-1:0] rx_status_lane_ifs_ready;
   wire [NUM_LANES*14-1:0] rx_status_lane_latency;
-  wire [NUM_LANES*32-1:0] rx_status_lane_frame_align_err_cnt;
-  wire [31:0] rx_cfg_frame_align_err_threshold = 32'd4; // TODO: static config
+  wire [NUM_LANES*8-1:0] rx_status_lane_frame_align_err_cnt;
+  wire [7:0] rx_cfg_frame_align_err_threshold;
 
   jesd204_rx_static_config #(
     .NUM_LANES(NUM_LANES),
@@ -253,7 +309,8 @@ module loopback_tb;
     .cfg_disable_scrambler(rx_cfg_disable_scrambler),
     .cfg_disable_char_replacement(rx_cfg_disable_char_replacement),
     .cfg_buffer_delay(rx_cfg_buffer_delay),
-    .cfg_buffer_early_release(rx_cfg_buffer_early_release)
+    .cfg_buffer_early_release(rx_cfg_buffer_early_release),
+    .cfg_frame_align_err_threshold(rx_cfg_frame_align_err_threshold)
   );
 
   jesd204_rx #(

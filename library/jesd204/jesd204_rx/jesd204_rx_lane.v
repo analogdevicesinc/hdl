@@ -49,7 +49,8 @@ module jesd204_rx_lane #(
   parameter CHAR_INFO_REGISTERED = 0,
   parameter ALIGN_MUX_REGISTERED = 0,
   parameter SCRAMBLER_REGISTERED = 0,
-  parameter ELASTIC_BUFFER_SIZE = 256
+  parameter ELASTIC_BUFFER_SIZE = 256,
+  parameter ENABLE_FRAME_ALIGN_CHECK = 0
 ) (
   input clk,
   input reset,
@@ -69,6 +70,8 @@ module jesd204_rx_lane #(
   output buffer_ready_n,
   input buffer_release_n,
 
+  input [7:0] cfg_beats_per_multiframe,
+  input [7:0] cfg_octets_per_frame,
   input cfg_disable_scrambler,
 
   output ilas_config_valid,
@@ -81,7 +84,8 @@ module jesd204_rx_lane #(
 
   output [1:0] status_cgs_state,
   output status_ifs_ready,
-  output [1:0] status_frame_align
+  output [1:0] status_frame_align,
+  output [7:0] status_frame_align_err_cnt
 );
 
 localparam MAX_DATA_PATH_WIDTH = 8;
@@ -236,6 +240,26 @@ pipeline_stage #(
       charisk28_aligned
     })
 );
+
+generate
+if(ENABLE_FRAME_ALIGN_CHECK) begin : gen_frame_align_monitor
+jesd204_rx_frame_align_monitor #(
+  .DATA_PATH_WIDTH  (DATA_PATH_WIDTH)
+) i_align_monitor (
+  .clk                        (clk),
+  .reset                      (buffer_ready_n_s),
+  .cfg_beats_per_multiframe   (cfg_beats_per_multiframe),
+  .cfg_octets_per_frame       (cfg_octets_per_frame),
+  .cfg_disable_scrambler      (cfg_disable_scrambler),
+  .charisk28                  (charisk28_aligned),
+  .data                       (data_aligned),
+  .align_err_cnt              (status_frame_align_err_cnt)
+);
+
+end else begin : gen_no_frame_align_monitor
+  assign status_frame_align_err_cnt = 32'd0;
+end
+endgenerate
 
 jesd204_scrambler #(
   .WIDTH(DATA_PATH_WIDTH*8),

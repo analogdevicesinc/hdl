@@ -88,6 +88,7 @@ adi_if_ports output 1 buffer_early_release
 adi_if_ports output 1 buffer_delay
 adi_if_ports output 1 disable_char_replacement
 adi_if_ports output 1 disable_scrambler
+adi_if_ports output 8 frame_align_err_threshold
 adi_if_ports output 1 err_statistics_reset
 adi_if_ports output 7 err_statistics_mask
 

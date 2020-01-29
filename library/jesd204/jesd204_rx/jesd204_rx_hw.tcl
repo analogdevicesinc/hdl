@@ -62,6 +62,8 @@ ad_ip_files jesd204_rx [list \
   jesd204_rx_cgs.v \
   jesd204_rx_ctrl.v \
   jesd204_rx_lane.v \
+  jesd204_rx_frame_mark.v \
+  jesd204_rx_frame_align_monitor.v \
   jesd204_rx_constr.sdc \
   ../jesd204_common/jesd204_eof_generator.v \
   ../jesd204_common/jesd204_lmfc.v \
@@ -134,6 +136,7 @@ add_interface_port config cfg_lmfc_offset lmfc_offset Input 8
 add_interface_port config cfg_octets_per_frame octets_per_frame Input 8
 add_interface_port config cfg_sysref_disable sysref_disable Input 1
 add_interface_port config cfg_sysref_oneshot sysref_oneshot Input 1
+add_interface_port config cfg_frame_align_err_threshold frame_align_err_threshold Input 8
 add_interface_port config ctrl_err_statistics_reset err_statistics_reset Input 1
 add_interface_port config ctrl_err_statistics_mask err_statistics_mask Input 3
 
@@ -148,6 +151,7 @@ add_interface_port status status_lane_cgs_state lane_cgs_state Output 2*NUM_LANE
 add_interface_port status status_lane_ifs_ready lane_ifs_ready Output NUM_LANES
 add_interface_port status status_lane_latency lane_latency Output 14*NUM_LANES
 add_interface_port status status_err_statistics_cnt err_statistics_cnt Output 32*NUM_LANES
+add_interface_port status status_lane_frame_align_err_cnt lane_frame_align_err_cnt Output 8*NUM_LANES
 
 # event interface
 

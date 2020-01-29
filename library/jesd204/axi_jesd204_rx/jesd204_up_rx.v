@@ -71,6 +71,7 @@ module jesd204_up_rx # (
   input [3*NUM_LANES-1:0] core_status_lane_emb_state,
   input [NUM_LANES-1:0] core_status_lane_ifs_ready,
   input [14*NUM_LANES-1:0] core_status_lane_latency,
+  input [8*NUM_LANES-1:0] core_status_lane_frame_align_err_cnt,
 
   input [32*NUM_LANES-1:0] core_status_err_statistics_cnt,
   output [6:0] core_ctrl_err_statistics_mask,
@@ -78,13 +79,16 @@ module jesd204_up_rx # (
 
   input up_cfg_is_writeable,
   output reg up_cfg_buffer_early_release,
-  output reg [7:0] up_cfg_buffer_delay
+  output reg [7:0] up_cfg_buffer_delay,
+
+  output reg [7:0] up_cfg_frame_align_err_threshold
 );
 
 localparam ELASTIC_BUFFER_SIZE = 256;
 
 wire [1:0] up_status_ctrl_state;
 wire [2*NUM_LANES-1:0] up_status_lane_cgs_state;
+wire [8*NUM_LANES-1:0] up_status_lane_frame_align_err_cnt;
 wire [3*NUM_LANES-1:0] up_status_lane_emb_state;
 wire [31:0] up_lane_rdata[0:NUM_LANES-1];
 wire [32*NUM_LANES-1:0] up_status_err_statistics_cnt;
@@ -93,21 +97,23 @@ reg up_ctrl_err_statistics_reset = 0;
 reg [6:0] up_ctrl_err_statistics_mask = 7'h0;
 
 sync_data #(
-  .NUM_OF_BITS(2+NUM_LANES*(3+2+32))
+  .NUM_OF_BITS(2+NUM_LANES*(3+2+32+8))
 ) i_cdc_status (
   .in_clk(core_clk),
   .in_data({
     core_status_err_statistics_cnt,
     core_status_ctrl_state,
     core_status_lane_cgs_state,
-    core_status_lane_emb_state
+    core_status_lane_emb_state,
+    core_status_lane_frame_align_err_cnt
   }),
   .out_clk(up_clk),
   .out_data({
     up_status_err_statistics_cnt,
     up_status_ctrl_state,
     up_status_lane_cgs_state,
-    up_status_lane_emb_state
+    up_status_lane_emb_state,
+    up_status_lane_frame_align_err_cnt
   })
 );
 
@@ -147,7 +153,12 @@ always @(*) begin
     /* 01-07 */ 7'h0,
     /*    00 */ up_ctrl_err_statistics_reset
   };
-  /* 0x92-0x9f reserved for future use */
+  12'h92: up_rdata <= {
+    /* 08-31 */ 24'h0,
+    /* 00-07 */ up_cfg_frame_align_err_threshold
+  };
+
+  /* 0x93-0x9f reserved for future use */
 
   /* JESD RX status */
   12'ha0: up_rdata <= {
@@ -172,6 +183,7 @@ always @(posedge up_clk) begin
     up_cfg_buffer_delay <= 'h00;
     up_ctrl_err_statistics_mask <= 7'h0;
     up_ctrl_err_statistics_reset <= 1'b0;
+    up_cfg_frame_align_err_threshold <= 8'd4;
   end else if (up_wreq == 1'b1 && up_cfg_is_writeable == 1'b1) begin
     case (up_waddr)
     /* JESD RX configuraton */
@@ -185,6 +197,9 @@ always @(posedge up_clk) begin
     12'h91: begin
       up_ctrl_err_statistics_mask <= up_wdata[14:8];
       up_ctrl_err_statistics_reset <= up_wdata[0];
+    end
+    12'h92: begin
+      up_cfg_frame_align_err_threshold <= up_wdata[7:0];
     end
     endcase
   end
@@ -203,6 +218,7 @@ generate for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
       .up_status_cgs_state(up_status_lane_cgs_state[2*i+1:2*i]),
       .up_status_err_statistics_cnt(up_status_err_statistics_cnt[32*i+31:32*i]),
       .up_status_emb_state(up_status_lane_emb_state[3*i+2:3*i]),
+      .up_status_lane_frame_align_err_cnt(up_status_lane_frame_align_err_cnt[8*i+7:8*i]),
 
       .core_clk(core_clk),
       .core_reset(core_reset),
