@@ -62,10 +62,10 @@ ad_ip_files jesd204_rx [list \
   jesd204_rx_cgs.v \
   jesd204_rx_ctrl.v \
   jesd204_rx_lane.v \
-  jesd204_rx_frame_mark.v \
-  jesd204_rx_frame_align_monitor.v \
+  jesd204_rx_frame_align.v \
   jesd204_rx_constr.sdc \
   ../jesd204_common/jesd204_eof_generator.v \
+  ../jesd204_common/jesd204_frame_mark.v \
   ../jesd204_common/jesd204_lmfc.v \
   ../jesd204_common/jesd204_scrambler.v \
   ../jesd204_common/pipeline_stage.v \
@@ -125,7 +125,7 @@ add_interface config conduit end
 set_interface_property config associatedClock clock
 set_interface_property config associatedReset reset
 
-add_interface_port config cfg_beats_per_multiframe beats_per_multiframe Input 8
+add_interface_port config cfg_octets_per_multiframe octets_per_multiframe Input 10
 add_interface_port config cfg_buffer_delay buffer_delay Input 8
 add_interface_port config cfg_buffer_early_release buffer_early_release Input 1
 add_interface_port config cfg_disable_char_replacement disable_char_replacement Input 1

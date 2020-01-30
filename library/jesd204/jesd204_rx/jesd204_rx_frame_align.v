@@ -44,31 +44,33 @@
 
 `timescale 1ns/100ps
 
-module jesd204_rx_frame_align_monitor #(
+module jesd204_rx_frame_align #(
   parameter DATA_PATH_WIDTH = 4
 ) (
   input                             clk,
   input                             reset,
-  input [7:0]                       cfg_beats_per_multiframe,
+  input [9:0]                       cfg_octets_per_multiframe,
   input [7:0]                       cfg_octets_per_frame,
+  input                             cfg_disable_char_replacement,
   input                             cfg_disable_scrambler,
   input [DATA_PATH_WIDTH-1:0]       charisk28,
   input [DATA_PATH_WIDTH*8-1:0]     data,
 
+  output [DATA_PATH_WIDTH*8-1:0]    data_replaced,
   output reg [7:0]                  align_err_cnt
 );
 
 // Reset alignment error count on good multiframe alignment,
 // or on good frame or multiframe alignment
 // If disabled, misalignments could me masked if
-// due to cfg_beats_per_multiframe mismatch or due to
+// due to cfg_octets_per_multiframe mismatch or due to
 // a slip of a multiple of cfg_octets_per_frame octets
 localparam RESET_COUNT_ON_MF_ONLY = 1'b1;
 
 localparam DPW_LOG2 = DATA_PATH_WIDTH == 8 ? 3 :
   DATA_PATH_WIDTH == 4 ? 2 : 1;
 
-function automatic [DPW_LOG2*2-1:0] count_ones(input [DATA_PATH_WIDTH*2-1:0] val);
+function automatic [DPW_LOG2*2:0] count_ones(input [DATA_PATH_WIDTH*2-1:0] val);
   reg [DPW_LOG2*2-1:0] ii;
   begin
     count_ones = 0;
@@ -88,23 +90,21 @@ reg  [DATA_PATH_WIDTH-1:0]        eomf_err;
 reg  [DATA_PATH_WIDTH-1:0]        eomf_good;
 reg                               align_good;
 reg                               align_err;
-reg  [DPW_LOG2*2-1:0]             cur_align_err_cnt;
+reg  [DPW_LOG2*2:0]               cur_align_err_cnt;
 wire [8:0]                        align_err_cnt_next;
 
 
-jesd204_rx_frame_mark #(
-  .DATA_PATH_WIDTH          (DATA_PATH_WIDTH)
-) frame_mark (
-  .clk                      (clk),
-  .reset                    (reset),
-  .cfg_beats_per_multiframe (cfg_beats_per_multiframe),
-  .cfg_octets_per_frame     (cfg_octets_per_frame),
-  .charisk28                (charisk28),
-  .data                     (data),
-  .sof                      (),
-  .eof                      (eof),
-  .somf                     (),
-  .eomf                     (eomf)
+jesd204_frame_mark #(
+  .DATA_PATH_WIDTH            (DATA_PATH_WIDTH)
+) i_frame_mark (
+  .clk                        (clk),
+  .reset                      (reset),
+  .cfg_octets_per_multiframe  (cfg_octets_per_multiframe),
+  .cfg_octets_per_frame       (cfg_octets_per_frame),
+  .sof                        (),
+  .eof                        (eof),
+  .somf                       (),
+  .eomf                       (eomf)
 );
 
 genvar ii;
@@ -124,8 +124,6 @@ for (ii = 0; ii < DATA_PATH_WIDTH; ii = ii + 1) begin: gen_k_char
     end
   end
 
-  // TODO: support cfg_disable_scrambler
-
   always @(posedge clk) begin
     if(reset) begin
       eomf_err[ii] <= 1'b0;
@@ -133,10 +131,10 @@ for (ii = 0; ii < DATA_PATH_WIDTH; ii = ii + 1) begin: gen_k_char
       eof_err[ii] <= 1'b0;
       eof_good[ii] <= 1'b0;
     end else begin
-      eomf_err[ii]  <= !cfg_disable_scrambler && (char_is_a[ii] && !eomf[ii]);
-      eomf_good[ii] <= !cfg_disable_scrambler && (char_is_a[ii] && eomf[ii]);
-      eof_err[ii]   <= !cfg_disable_scrambler && (char_is_f[ii] && !eof[ii]);
-      eof_good[ii]  <= !cfg_disable_scrambler && (char_is_f[ii] && eof[ii]);
+      eomf_err[ii]  <= char_is_a[ii] && !eomf[ii];
+      eomf_good[ii] <= char_is_a[ii] && eomf[ii];
+      eof_err[ii]   <= char_is_f[ii] && !eof[ii];
+      eof_good[ii]  <= char_is_f[ii] && eof[ii];
     end
   end
 end
@@ -177,5 +175,23 @@ always @(posedge clk) begin
     end
   end
 end
+
+jesd204_frame_align_replace #(
+  .DATA_PATH_WIDTH              (DATA_PATH_WIDTH),
+  .IS_RX                        (1'b1)
+) i_align_replace (
+  .clk                          (clk),
+  .reset                        (reset),
+  .cfg_octets_per_frame         (cfg_octets_per_frame),
+  .cfg_disable_char_replacement (cfg_disable_char_replacement),
+  .cfg_disable_scrambler        (cfg_disable_scrambler),
+  .data                         (data),
+  .eof                          (eof),
+  .rx_char_is_a                 (char_is_a),
+  .rx_char_is_f                 (char_is_f),
+  .tx_eomf                      ({DATA_PATH_WIDTH{1'b0}}),
+  .data_out                     (data_replaced),
+  .charisk_out                  ()
+);
 
 endmodule

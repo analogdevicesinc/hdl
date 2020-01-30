@@ -44,13 +44,16 @@
 
 `timescale 1ns/100ps
 
-module jesd204_lmfc (
+module jesd204_lmfc #(
+  parameter LINK_MODE = 1, // 2 - 64B/66B;  1 - 8B/10B
+  parameter DATA_PATH_WIDTH = 4
+) (
   input clk,
   input reset,
 
   input sysref,
 
-  input [7:0] cfg_beats_per_multiframe,
+  input [9:0] cfg_octets_per_multiframe,
   input [7:0] cfg_lmfc_offset,
   input cfg_sysref_oneshot,
   input cfg_sysref_disable,
@@ -68,6 +71,12 @@ module jesd204_lmfc (
   output reg sysref_edge,
   output reg sysref_alignment_error
 );
+
+localparam DPW_LOG2 = DATA_PATH_WIDTH == 8 ? 3 : DATA_PATH_WIDTH == 4 ? 2 : 1;
+localparam BEATS_PER_MF_WIDTH = 10-DPW_LOG2;
+
+wire [BEATS_PER_MF_WIDTH-1:0]     cfg_beats_per_multiframe = cfg_octets_per_multiframe[9:DPW_LOG2];
+reg  [BEATS_PER_MF_WIDTH:0]       cfg_whole_beats_per_multiframe;
 
 reg sysref_r = 1'b0;
 reg sysref_d1 = 1'b0;
@@ -124,8 +133,21 @@ end
  * setting, finally deassert reset.
  */
 
+/*
+ * For DATA_PATH_WIDTH == 8, F*K%8=4, set
+ * cfg_beats_per_multiframe = cfg_beats_per_multiframe*2
+ * LMFC will be twice the actual length
+ */
 always @(*) begin
-  if (lmfc_counter == cfg_beats_per_multiframe) begin
+  if((LINK_MODE == 1) && (DATA_PATH_WIDTH == 8) && ~cfg_octets_per_multiframe[2]) begin
+    cfg_whole_beats_per_multiframe = cfg_beats_per_multiframe*2;
+  end else begin
+    cfg_whole_beats_per_multiframe = cfg_beats_per_multiframe;
+  end
+end
+
+always @(*) begin
+  if (lmfc_counter == cfg_whole_beats_per_multiframe) begin
     lmfc_counter_next = 'h00;
   end else begin
     lmfc_counter_next = lmfc_counter + 1'b1;
@@ -193,7 +215,7 @@ end
 // End of Extended MultiBlock
 always @(posedge clk) begin
   if (lmfc_active == 1'b1) begin
-    eoemb <= lmfc_counter[7:5] == cfg_beats_per_multiframe[7:5];
+    eoemb <= lmfc_counter[7:5] == cfg_whole_beats_per_multiframe[7:5];
   end else begin
     eoemb <= 1'b0;
   end
@@ -203,9 +225,9 @@ always @(posedge clk) begin
   if (reset == 1'b1) begin
     lmfc_clk_p1 <= 1'b0;
   end else if (lmfc_active == 1'b1) begin
-    if (lmfc_counter == cfg_beats_per_multiframe) begin
+    if (lmfc_counter == cfg_whole_beats_per_multiframe) begin
       lmfc_clk_p1 <= 1'b1;
-    end else if (lmfc_counter == cfg_beats_per_multiframe[7:1]) begin
+    end else if (lmfc_counter == cfg_whole_beats_per_multiframe[7:1]) begin
       lmfc_clk_p1 <= 1'b0;
     end
   end

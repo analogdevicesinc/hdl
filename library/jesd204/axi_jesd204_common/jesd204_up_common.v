@@ -50,7 +50,7 @@ module jesd204_up_common # (
   parameter ID = 0,
   parameter NUM_LANES = 1,
   parameter NUM_LINKS = 1,
-  parameter DATA_PATH_WIDTH = 2,
+  parameter DATA_PATH_WIDTH_LOG2 = 2,
   parameter MAX_OCTETS_PER_FRAME = 256,
   parameter NUM_IRQS = 1,
   parameter EXTRA_CFG_WIDTH = 1,
@@ -84,19 +84,17 @@ module jesd204_up_common # (
 
   output reg [NUM_LANES-1:0] core_cfg_lanes_disable,
   output reg [NUM_LINKS-1:0] core_cfg_links_disable,
-  output reg [7:0] core_cfg_beats_per_multiframe,
+  output reg [9:0] core_cfg_octets_per_multiframe,
   output reg [7:0] core_cfg_octets_per_frame,
   output reg core_cfg_disable_scrambler,
   output reg core_cfg_disable_char_replacement,
   output reg [EXTRA_CFG_WIDTH-1:0] core_extra_cfg
 );
 
-localparam MAX_BEATS_PER_MULTIFRAME = (MAX_OCTETS_PER_FRAME * 32) / DATA_PATH_WIDTH;
-
 reg [31:0] up_scratch = 32'h00000000;
 
 reg [7:0] up_cfg_octets_per_frame = 'h00;
-reg [9-DATA_PATH_WIDTH:0] up_cfg_beats_per_multiframe = 'h00;
+reg [9:0] up_cfg_octets_per_multiframe = 'h00;
 reg [NUM_LANES-1:0] up_cfg_lanes_disable = {NUM_LANES{1'b0}};
 reg [NUM_LINKS-1:0] up_cfg_links_disable = {NUM_LINKS{1'b0}};
 reg up_cfg_disable_char_replacement = 1'b0;
@@ -169,7 +167,7 @@ end
 
 always @(posedge core_clk) begin
   if (core_cfg_transfer_en == 1'b1) begin
-    core_cfg_beats_per_multiframe <= up_cfg_beats_per_multiframe;
+    core_cfg_octets_per_multiframe <= up_cfg_octets_per_multiframe;
     core_cfg_octets_per_frame <= up_cfg_octets_per_frame;
     core_cfg_lanes_disable <= up_cfg_lanes_disable;
     core_cfg_links_disable <= up_cfg_links_disable;
@@ -264,7 +262,7 @@ always @(*) begin
 
   /* Core configuration */
   12'h004: up_rdata = NUM_LANES;
-  12'h005: up_rdata = DATA_PATH_WIDTH;
+  12'h005: up_rdata = DATA_PATH_WIDTH_LOG2;
   12'h006: up_rdata = {22'b0,LINK_MODE[1:0], NUM_LINKS[7:0]};
   /* 0x07-0x0f reserved for future use */
   /* 0x10-0x1f reserved for core specific HDL configuration information */
@@ -287,7 +285,7 @@ always @(*) begin
     /* 24-31 */ 8'h00, /* Reserved for future extensions of octets_per_frame */
     /* 16-23 */ up_cfg_octets_per_frame,
     /* 10-15 */ 6'b000000, /* Reserved for future extensions of beats_per_multiframe */
-    /* 00-09 */ up_cfg_beats_per_multiframe,{DATA_PATH_WIDTH{1'b1}}
+    /* 00-09 */ up_cfg_octets_per_multiframe
   };
   12'h85: up_rdata = {
     /* 02-31 */ 30'h00, /* Reserved for future additions */
@@ -327,7 +325,7 @@ always @(posedge up_clk) begin
     up_reset_core <= 1'b1;
 
     up_cfg_octets_per_frame <= 'h00;
-    up_cfg_beats_per_multiframe <= 'h00;
+    up_cfg_octets_per_multiframe <= 'h00;
     up_cfg_lanes_disable <= {NUM_LANES{1'b0}};
     up_cfg_links_disable <= {NUM_LINKS{1'b0}};
 
@@ -358,7 +356,7 @@ always @(posedge up_clk) begin
       end
       12'h084: begin
         up_cfg_octets_per_frame <= up_wdata[23:16];
-        up_cfg_beats_per_multiframe <= up_wdata[9:DATA_PATH_WIDTH];
+        up_cfg_octets_per_multiframe <= up_wdata[9:0];
       end
       12'h085: begin
         up_cfg_disable_char_replacement <= up_wdata[1];

@@ -44,7 +44,9 @@
 
 `timescale 1ns/100ps
 
-module jesd204_up_rx_lane (
+module jesd204_up_rx_lane #(
+  parameter DATA_PATH_WIDTH = 4
+)(
   input up_clk,
   input up_reset_synchronizer,
 
@@ -62,7 +64,7 @@ module jesd204_up_rx_lane (
 
   input core_ilas_config_valid,
   input [1:0] core_ilas_config_addr,
-  input [31:0] core_ilas_config_data,
+  input [DATA_PATH_WIDTH*8-1:0] core_ilas_config_data,
 
   input core_status_ifs_ready,
   input [13:0] core_status_latency
@@ -133,7 +135,9 @@ always @(*) begin
   end
 end
 
-jesd204_up_ilas_mem i_ilas_mem (
+jesd204_up_ilas_mem #(
+  .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
+) i_ilas_mem (
   .up_clk(up_clk),
 
   .up_rreq(up_rreq),

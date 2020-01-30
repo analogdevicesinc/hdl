@@ -46,7 +46,8 @@
 
 module jesd204_up_rx # (
   parameter NUM_LANES = 1,
-  parameter DATA_PATH_WIDTH = 2
+  parameter DATA_PATH_WIDTH = 4,
+  parameter DATA_PATH_WIDTH_LOG2 = 2
 ) (
   input up_clk,
   input up_reset,
@@ -64,7 +65,7 @@ module jesd204_up_rx # (
 
   input [NUM_LANES-1:0] core_ilas_config_valid,
   input [2*NUM_LANES-1:0] core_ilas_config_addr,
-  input [32*NUM_LANES-1:0] core_ilas_config_data,
+  input [NUM_LANES*DATA_PATH_WIDTH*8-1:0] core_ilas_config_data,
 
   input [1:0] core_status_ctrl_state,
   input [2*NUM_LANES-1:0] core_status_lane_cgs_state,
@@ -189,7 +190,7 @@ always @(posedge up_clk) begin
     /* JESD RX configuraton */
     12'h090: begin
       up_cfg_buffer_early_release <= up_wdata[16];
-      up_cfg_buffer_delay <= up_wdata[9:DATA_PATH_WIDTH];
+      up_cfg_buffer_delay <= up_wdata[9:DATA_PATH_WIDTH_LOG2];
     end
     endcase
   end else if (up_wreq == 1'b1) begin
@@ -207,7 +208,9 @@ end
 
 genvar i;
 generate for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
-    jesd204_up_rx_lane i_up_rx_lane (
+    jesd204_up_rx_lane #(
+      .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
+    ) i_up_rx_lane (
       .up_clk(up_clk),
       .up_reset_synchronizer(up_reset_synchronizer),
 
@@ -225,7 +228,7 @@ generate for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
 
       .core_ilas_config_valid(core_ilas_config_valid[i]),
       .core_ilas_config_addr(core_ilas_config_addr[2*i+1:2*i]),
-      .core_ilas_config_data(core_ilas_config_data[32*i+31:32*i]),
+      .core_ilas_config_data(core_ilas_config_data[(DATA_PATH_WIDTH*8*i)+(DATA_PATH_WIDTH*8)-1:DATA_PATH_WIDTH*8*i]),
 
       .core_status_ifs_ready(core_status_lane_ifs_ready[i]),
       .core_status_latency(core_status_lane_latency[14*i+13:14*i])

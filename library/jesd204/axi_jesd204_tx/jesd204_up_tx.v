@@ -46,7 +46,8 @@
 
 module jesd204_up_tx # (
   parameter NUM_LANES = 1,
-  parameter NUM_LINKS = 1
+  parameter NUM_LINKS = 1,
+  parameter DATA_PATH_WIDTH = 4
 ) (
   input up_clk,
   input up_reset,
@@ -67,7 +68,7 @@ module jesd204_up_tx # (
   input core_clk,
   input core_ilas_config_rd,
   input [1:0] core_ilas_config_addr,
-  output reg [32*NUM_LANES-1:0] core_ilas_config_data,
+  output reg [DATA_PATH_WIDTH*8*NUM_LANES-1:0] core_ilas_config_data,
 
   output core_ctrl_manual_sync_request,
 
@@ -294,6 +295,8 @@ always @(posedge up_clk) begin
   end
 end
 
+generate
+if(DATA_PATH_WIDTH == 4) begin : gen_dp_4
 always @(posedge core_clk) begin
   if (core_ilas_config_rd == 1'b1) begin
     for (i = 0; i < NUM_LANES; i = i + 1) begin
@@ -301,5 +304,15 @@ always @(posedge core_clk) begin
     end
   end
 end
+end else if(DATA_PATH_WIDTH == 8) begin : gen_dp_8
+always @(posedge core_clk) begin
+  if (core_ilas_config_rd == 1'b1) begin
+    for (i = 0; i < NUM_LANES; i = i + 1) begin
+      core_ilas_config_data[i*64+:64] <= {up_cfg_ilas_data[i][{core_ilas_config_addr[0], 1'b1}],up_cfg_ilas_data[i][{core_ilas_config_addr[0], 1'b0}]};
+    end
+  end
+end
+end
+endgenerate
 
 endmodule
