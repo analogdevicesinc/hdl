@@ -84,7 +84,7 @@ module jesd204_rx #(
 
   input [NUM_LANES-1:0] cfg_lanes_disable,
   input [NUM_LINKS-1:0] cfg_links_disable,
-  input [7:0] cfg_beats_per_multiframe,
+  input [9:0] cfg_octets_per_multiframe,
   input [7:0] cfg_octets_per_frame,
   input [7:0] cfg_lmfc_offset,
   input cfg_sysref_disable,
@@ -103,7 +103,7 @@ module jesd204_rx #(
 
   output [NUM_LANES-1:0] ilas_config_valid,
   output [NUM_LANES*2-1:0] ilas_config_addr,
-  output [NUM_LANES*32-1:0] ilas_config_data,
+  output [NUM_LANES*DATA_PATH_WIDTH*8-1:0] ilas_config_data,
 
   output [1:0] status_ctrl_state,
   output [2*NUM_LANES-1:0] status_lane_cgs_state,
@@ -118,18 +118,19 @@ module jesd204_rx #(
  * necessary.
  */
 localparam CHAR_INFO_REGISTERED = 0;
-localparam ALIGN_MUX_REGISTERED = 0;
+localparam ALIGN_MUX_REGISTERED = 1;
 localparam SCRAMBLER_REGISTERED = 0;
 
 /*
  * Maximum number of octets per multiframe for ADI JESD204 DACs is 256 (Adjust
  * as necessary). Divide by data path width.
  */
-localparam MAX_OCTETS_PER_FRAME = 16;
+localparam MAX_OCTETS_PER_FRAME = 32;
 localparam MAX_OCTETS_PER_MULTIFRAME =
   (MAX_OCTETS_PER_FRAME * 32) > 1024 ? 1024 : (MAX_OCTETS_PER_FRAME * 32);
 localparam MAX_BEATS_PER_MULTIFRAME = MAX_OCTETS_PER_MULTIFRAME / DATA_PATH_WIDTH;
 localparam ELASTIC_BUFFER_SIZE = MAX_BEATS_PER_MULTIFRAME;
+localparam DPW_LOG2 = DATA_PATH_WIDTH == 8 ? 3 : DATA_PATH_WIDTH == 4 ? 2 : 1;
 
 localparam LMFC_COUNTER_WIDTH = MAX_BEATS_PER_MULTIFRAME > 256 ? 9 :
   MAX_BEATS_PER_MULTIFRAME > 128 ? 8 :
@@ -145,6 +146,8 @@ localparam DW = 8*DATA_PATH_WIDTH*NUM_LANES;
 localparam CW = DATA_PATH_WIDTH*NUM_LANES;
 localparam HW = 2*NUM_LANES;
 
+wire [7:0] cfg_beats_per_multiframe = cfg_octets_per_multiframe[9:DPW_LOG2];
+
 wire [NUM_LANES-1:0] cgs_reset;
 wire [NUM_LANES-1:0] cgs_ready;
 wire [NUM_LANES-1:0] ifs_reset;
@@ -154,7 +157,6 @@ reg buffer_release_d1 = 1'b0;
 wire [NUM_LANES-1:0] buffer_ready_n;
 wire all_buffer_ready_n;
 
-reg core_reset;
 reg eof_reset = 1'b1;
 
 wire [DW-1:0] phy_data_r;
@@ -171,7 +173,7 @@ wire rx_valid_s = buffer_release_d1;
 wire [7:0] lmfc_counter;
 wire latency_monitor_reset;
 
-wire [2*NUM_LANES-1:0] frame_align;
+wire [3*NUM_LANES-1:0] frame_align;
 wire [NUM_LANES-1:0] ifs_ready;
 
 wire event_data_phase;
@@ -243,11 +245,14 @@ pipeline_stage #(
   })
 );
 
-jesd204_lmfc i_lmfc (
+jesd204_lmfc #(
+  .LINK_MODE(LINK_MODE),
+  .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
+) i_lmfc (
   .clk(clk),
-  .reset(core_reset),
+  .reset(reset),
 
-  .cfg_beats_per_multiframe(cfg_beats_per_multiframe),
+  .cfg_octets_per_multiframe(cfg_octets_per_multiframe),
   .cfg_lmfc_offset(cfg_lmfc_offset),
   .cfg_sysref_oneshot(cfg_sysref_oneshot),
   .cfg_sysref_disable(cfg_sysref_disable),
@@ -264,21 +269,17 @@ jesd204_lmfc i_lmfc (
   .sysref_alignment_error(event_sysref_alignment_error)
 );
 
-jesd204_eof_generator  #(
-  .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
-  .MAX_OCTETS_PER_FRAME(MAX_OCTETS_PER_FRAME)
-) i_eof_gen (
-  .clk(clk),
-  .reset(eof_reset),
-
-  .lmfc_edge(lmfc_edge),
-
-  .cfg_octets_per_frame(cfg_octets_per_frame),
-  .cfg_generate_eomf(1'b0),
-
-  .sof(rx_sof),
-  .eof(rx_eof),
-  .eomf()
+jesd204_frame_mark #(
+  .DATA_PATH_WIDTH            (DATA_PATH_WIDTH)
+) i_frame_mark (
+  .clk                        (clk),
+  .reset                      (eof_reset),
+  .cfg_octets_per_multiframe  (cfg_octets_per_multiframe),
+  .cfg_octets_per_frame       (cfg_octets_per_frame),
+  .sof                        (rx_sof),
+  .eof                        (rx_eof),
+  .somf                       (),
+  .eomf                       ()
 );
 
 generate
@@ -291,10 +292,11 @@ reg unexpected_lane_state_error_d = 1'b0;
 
 jesd204_rx_ctrl #(
   .NUM_LANES(NUM_LANES),
-  .NUM_LINKS(NUM_LINKS)
+  .NUM_LINKS(NUM_LINKS),
+  .ENABLE_FRAME_ALIGN_ERR_RESET(ENABLE_FRAME_ALIGN_ERR_RESET)
 ) i_rx_ctrl (
   .clk(clk),
-  .reset(core_reset),
+  .reset(reset),
 
   .cfg_lanes_disable(cfg_lanes_disable),
   .cfg_links_disable(cfg_links_disable),
@@ -303,6 +305,7 @@ jesd204_rx_ctrl #(
   .phy_en_char_align(phy_en_char_align),
 
   .lmfc_edge(lmfc_edge),
+  .frame_align_err_thresh_met(frame_align_err_thresh_met),
   .sync(sync),
 
   .latency_monitor_reset(latency_monitor_reset),
@@ -316,31 +319,6 @@ jesd204_rx_ctrl #(
 
   .event_data_phase(event_data_phase)
 );
-
-// Reset core when frame alignment errors occur
-if(ENABLE_FRAME_ALIGN_CHECK && ENABLE_FRAME_ALIGN_ERR_RESET) begin : gen_frame_align_err_reset
-
-  reg [7:0] reset_cnt;
-
-  always @(posedge clk) begin
-    if(reset) begin
-      reset_cnt <= 8'h00;
-    end else begin
-      if(|frame_align_err_thresh_met) begin
-        reset_cnt <= 8'hFF;
-      end else if(reset_cnt != 0) begin
-        reset_cnt <= reset_cnt - 1'b1;
-      end
-    end
-
-    core_reset <= reset | (reset_cnt != 0);
-  end
-
-end else begin : gen_no_frame_align_err_reset
-  always @(*) begin
-    core_reset = reset;
-  end
-end
 
 assign err_statistics_reset = ctrl_err_statistics_reset ||
                               event_data_phase;
@@ -361,7 +339,7 @@ for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
     .ENABLE_FRAME_ALIGN_CHECK(ENABLE_FRAME_ALIGN_CHECK)
   ) i_lane (
     .clk(clk),
-    .reset(core_reset),
+    .reset(reset),
 
     .phy_data(phy_data_r[D_STOP:D_START]),
     .phy_charisk(phy_charisk_r[C_STOP:C_START]),
@@ -378,8 +356,9 @@ for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
     .buffer_release_n(buffer_release_n),
     .buffer_ready_n(buffer_ready_n[i]),
 
-    .cfg_beats_per_multiframe(cfg_beats_per_multiframe),
+    .cfg_octets_per_multiframe(cfg_octets_per_multiframe),
     .cfg_octets_per_frame(cfg_octets_per_frame),
+    .cfg_disable_char_replacement(cfg_disable_char_replacement),
     .cfg_disable_scrambler(cfg_disable_scrambler),
 
     .err_statistics_reset(err_statistics_reset),
@@ -392,7 +371,7 @@ for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
 
     .status_cgs_state(status_lane_cgs_state[2*i+1:2*i]),
     .status_ifs_ready(ifs_ready[i]),
-    .status_frame_align(frame_align[2*i+1:2*i]),
+    .status_frame_align(frame_align[3*i+2:3*i]),
 
     .status_frame_align_err_cnt(status_lane_frame_align_err_cnt[8*i+7:8*i])
   );
@@ -411,6 +390,11 @@ for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
           event_frame_alignment_error_per_lane[i] <= 1'b0;
         end
       end
+    end
+  end else begin : gen_no_frame_align_err_thresh
+    always @(*) begin
+      frame_align_err_thresh_met[i] <= 1'b0;
+      event_frame_alignment_error_per_lane[i] <= 1'b0;
     end
   end
 end
@@ -445,7 +429,8 @@ always @(*) begin
 end
 
 jesd204_lane_latency_monitor #(
-  .NUM_LANES(NUM_LANES)
+  .NUM_LANES(NUM_LANES),
+  .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
 ) i_lane_latency_monitor (
   .clk(clk),
   .reset(latency_monitor_reset),
@@ -456,21 +441,19 @@ jesd204_lane_latency_monitor #(
   .lane_latency(status_lane_latency)
 );
 
+assign status_lane_emb_state = 'b0;
+
 end
 
 if (LINK_MODE[1] == 1) begin : mode_64b66b
 
 wire [NUM_LANES-1:0] emb_lock;
 
-always @(*) begin
-  core_reset = reset;
-end
-
 jesd204_rx_ctrl_64b  #(
   .NUM_LANES(NUM_LANES)
 ) i_jesd204_rx_ctrl_64b (
   .clk(clk),
-  .reset(core_reset),
+  .reset(reset),
 
   .cfg_lanes_disable(cfg_lanes_disable),
 
@@ -497,7 +480,7 @@ for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
     .ELASTIC_BUFFER_SIZE(ELASTIC_BUFFER_SIZE)
   ) i_lane (
     .clk(clk),
-    .reset(core_reset),
+    .reset(reset),
 
     .phy_data(phy_data_r[D_STOP:D_START]),
     .phy_header(phy_header_r[H_STOP:H_START]),

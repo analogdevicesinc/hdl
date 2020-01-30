@@ -12,8 +12,7 @@ GENERIC_DEPS += jesd204_lane_latency_monitor.v
 GENERIC_DEPS += jesd204_rx.v
 GENERIC_DEPS += jesd204_rx_cgs.v
 GENERIC_DEPS += jesd204_rx_ctrl.v
-GENERIC_DEPS += jesd204_rx_frame_align_monitor.v
-GENERIC_DEPS += jesd204_rx_frame_mark.v
+GENERIC_DEPS += jesd204_rx_frame_align.v
 GENERIC_DEPS += jesd204_rx_lane.v
 
 XILINX_DEPS += error_monitor.v

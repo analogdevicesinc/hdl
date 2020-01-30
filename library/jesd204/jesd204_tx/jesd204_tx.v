@@ -67,11 +67,13 @@ module jesd204_tx #(
 
   input [DATA_PATH_WIDTH*8*NUM_LANES-1:0] tx_data,
   output tx_ready,
+  output reg [DATA_PATH_WIDTH-1:0] tx_eof,
+  output reg [DATA_PATH_WIDTH-1:0] tx_sof,
   input tx_valid,
 
   input [NUM_LANES-1:0] cfg_lanes_disable,
   input [NUM_LINKS-1:0] cfg_links_disable,
-  input [7:0] cfg_beats_per_multiframe,
+  input [9:0] cfg_octets_per_multiframe,
   input [7:0] cfg_octets_per_frame,
   input [7:0] cfg_lmfc_offset,
   input cfg_sysref_oneshot,
@@ -85,7 +87,7 @@ module jesd204_tx #(
 
   output ilas_config_rd,
   output [1:0] ilas_config_addr,
-  input [32*NUM_LANES-1:0] ilas_config_data,
+  input [NUM_LANES*DATA_PATH_WIDTH*8-1:0] ilas_config_data,
 
   input ctrl_manual_sync_request,
 
@@ -97,7 +99,7 @@ module jesd204_tx #(
 );
 
 
-localparam MAX_OCTETS_PER_FRAME = 8;
+localparam MAX_OCTETS_PER_FRAME = 32;
 localparam MAX_OCTETS_PER_MULTIFRAME =
   (MAX_OCTETS_PER_FRAME * 32) > 1024 ? 1024 : (MAX_OCTETS_PER_FRAME * 32);
 localparam MAX_BEATS_PER_MULTIFRAME = MAX_OCTETS_PER_MULTIFRAME / DATA_PATH_WIDTH;
@@ -115,21 +117,35 @@ localparam DW = DATA_PATH_WIDTH * 8 * NUM_LANES;
 localparam CW = DATA_PATH_WIDTH * NUM_LANES;
 localparam HW = 2 * NUM_LANES;
 
-
-
 wire [DW-1:0] phy_data_r;
 wire [CW-1:0] phy_charisk_r;
 wire [HW-1:0] phy_header_r;
 
+wire eof_gen_reset;
+reg tx_ready_64b;
+wire frame_mark_reset;
+reg [DATA_PATH_WIDTH-1:0] tx_somf;
+reg [DATA_PATH_WIDTH-1:0] tx_eomf;
+reg [DATA_PATH_WIDTH-1:0] tx_sof_early1;
+reg [DATA_PATH_WIDTH-1:0] tx_eof_early1;
+reg [DATA_PATH_WIDTH-1:0] tx_somf_early1;
+reg [DATA_PATH_WIDTH-1:0] tx_eomf_early1;
+wire [DATA_PATH_WIDTH-1:0] tx_sof_early2;
+wire [DATA_PATH_WIDTH-1:0] tx_eof_early2;
+wire [DATA_PATH_WIDTH-1:0] tx_somf_early2;
+wire [DATA_PATH_WIDTH-1:0] tx_eomf_early2;
 wire lmc_edge;
 wire lmc_quarter_edge;
 wire eoemb;
 
-jesd204_lmfc i_lmfc (
+jesd204_lmfc #(
+  .LINK_MODE(LINK_MODE),
+  .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
+) i_lmfc (
   .clk(clk),
   .reset(reset),
 
-  .cfg_beats_per_multiframe(cfg_beats_per_multiframe),
+  .cfg_octets_per_multiframe(cfg_octets_per_multiframe),
   .cfg_lmfc_offset(cfg_lmfc_offset),
   .cfg_sysref_oneshot(cfg_sysref_oneshot),
   .cfg_sysref_disable(cfg_sysref_disable),
@@ -147,21 +163,49 @@ jesd204_lmfc i_lmfc (
   .eoemb(eoemb)
 );
 
+assign frame_mark_reset = (LINK_MODE == 1) ? eof_gen_reset : ~tx_ready_64b;
+
+jesd204_frame_mark #(
+  .DATA_PATH_WIDTH            (DATA_PATH_WIDTH)
+) i_frame_mark (
+  .clk                        (clk),
+  .reset                      (frame_mark_reset),
+  .cfg_octets_per_multiframe  (cfg_octets_per_multiframe),
+  .cfg_octets_per_frame       (cfg_octets_per_frame),
+  .sof                        (tx_sof_early2),
+  .eof                        (tx_eof_early2),
+  .somf                       (tx_somf_early2),
+  .eomf                       (tx_eomf_early2)
+);
+
+always @(posedge clk) begin
+  tx_sof_early1  <= tx_sof_early2;
+  tx_eof_early1  <= tx_eof_early2;
+  tx_somf_early1 <= tx_somf_early2;
+  tx_eomf_early1 <= tx_eomf_early2;
+  tx_sof  <= tx_sof_early1;
+  tx_eof  <= tx_eof_early1;
+  tx_somf <= tx_somf_early1;
+  tx_eomf <= tx_eomf_early1;
+end
+
 generate
 genvar i;
 
 if (LINK_MODE[0] == 1) begin : mode_8b10b
 
-wire eof_gen_reset;
-wire [DATA_PATH_WIDTH-1:0] eof;
-wire eomf;
-
+reg [DATA_PATH_WIDTH-1:0] tx_eof_d;
+reg [DATA_PATH_WIDTH-1:0] tx_eomf_d;
 wire [NUM_LANES-1:0] lane_cgs_enable;
-
 wire [DW-1:0] ilas_data;
-wire [DATA_PATH_WIDTH-1:0] ilas_charisk;
+wire [DATA_PATH_WIDTH*NUM_LANES-1:0] ilas_charisk;
 
 wire cfg_generate_eomf = 1'b1;
+
+always @(posedge clk) begin
+  tx_eof_d <= tx_eof;
+  tx_eomf_d <= tx_eomf;
+end
 
 jesd204_tx_ctrl #(
   .NUM_LANES(NUM_LANES),
@@ -173,6 +217,9 @@ jesd204_tx_ctrl #(
 
   .sync(sync),
   .lmfc_edge(lmfc_edge),
+  .somf(tx_somf),
+  .somf_early2(tx_somf_early2),
+  .eomf(tx_eomf),
 
   .lane_cgs_enable(lane_cgs_enable),
   .eof_reset(eof_gen_reset),
@@ -192,31 +239,12 @@ jesd204_tx_ctrl #(
   .cfg_continuous_ilas(cfg_continuous_ilas),
   .cfg_skip_ilas(cfg_skip_ilas),
   .cfg_mframes_per_ilas(cfg_mframes_per_ilas),
-  .cfg_disable_char_replacement(cfg_disable_char_replacement),
-
+  .cfg_octets_per_multiframe(cfg_octets_per_multiframe),
   .ctrl_manual_sync_request(ctrl_manual_sync_request),
 
   .status_sync(status_sync),
   .status_state(status_state)
 );
-
-jesd204_eof_generator #(
-  .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
-  .MAX_OCTETS_PER_FRAME(MAX_OCTETS_PER_FRAME)
-) i_eof_gen (
-  .clk(clk),
-  .reset(eof_gen_reset),
-
-  .cfg_octets_per_frame(cfg_octets_per_frame),
-  .cfg_generate_eomf(cfg_generate_eomf),
-
-  .lmfc_edge(lmfc_edge),
-  .sof(),
-  .eof(eof),
-  .eomf(eomf)
-);
-
-
 
 for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
 
@@ -230,13 +258,13 @@ for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
   ) i_lane (
     .clk(clk),
 
-    .eof(eof),
-    .eomf(eomf),
+    .eof(tx_eof_d),
+    .eomf(tx_eomf_d),
 
     .cgs_enable(lane_cgs_enable[i]),
 
     .ilas_data(ilas_data[D_STOP:D_START]),
-    .ilas_charisk(ilas_charisk),
+    .ilas_charisk(ilas_charisk[C_STOP:C_START]),
 
     .tx_data(tx_data[D_STOP:D_START]),
     .tx_ready(tx_ready),
@@ -244,6 +272,8 @@ for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
     .phy_data(phy_data_r[D_STOP:D_START]),
     .phy_charisk(phy_charisk_r[C_STOP:C_START]),
 
+    .cfg_octets_per_frame(cfg_octets_per_frame),
+    .cfg_disable_char_replacement(cfg_disable_char_replacement),
     .cfg_disable_scrambler(cfg_disable_scrambler)
   );
 end
@@ -253,7 +283,6 @@ assign phy_header_r = 'h0;
 end
 
 if (LINK_MODE[1] == 1) begin : mode_64b66b
-  reg tx_ready_loc;
 
   for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
     localparam D_START = i * DATA_PATH_WIDTH*8;
@@ -265,7 +294,7 @@ if (LINK_MODE[1] == 1) begin : mode_64b66b
       .reset(reset),
 
       .tx_data(tx_data[D_STOP:D_START]),
-      .tx_ready(tx_ready_loc),
+      .tx_ready(tx_ready_64b),
 
       .phy_data(phy_data_r[D_STOP:D_START]),
       .phy_header(phy_header_r[H_STOP:H_START]),
@@ -282,16 +311,16 @@ if (LINK_MODE[1] == 1) begin : mode_64b66b
 
   always @(posedge clk) begin
     if (reset) begin
-      tx_ready_loc <= 1'b0;
+      tx_ready_64b <= 1'b0;
     end else if (lmfc_edge) begin
-      tx_ready_loc <= 1'b1;
+      tx_ready_64b <= 1'b1;
     end
   end
 
-  assign tx_ready = tx_ready_loc;
+  assign tx_ready = tx_ready_64b;
   // Link considered in DATA phase when SYSREF received and LEMC clock started
   // running
-  assign status_state = {2{tx_ready_loc}};
+  assign status_state = {2{tx_ready_64b}};
 
 
   assign phy_charisk_r = 'h0;

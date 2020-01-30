@@ -46,7 +46,8 @@
 
 module jesd204_rx_ctrl #(
   parameter NUM_LANES = 1,
-  parameter NUM_LINKS = 1
+  parameter NUM_LINKS = 1,
+  parameter ENABLE_FRAME_ALIGN_ERR_RESET = 0
 ) (
   input clk,
   input reset,
@@ -55,8 +56,8 @@ module jesd204_rx_ctrl #(
   input [NUM_LINKS-1:0] cfg_links_disable,
 
   input phy_ready,
-
   output phy_en_char_align,
+
 
   output [NUM_LANES-1:0] cgs_reset,
   input [NUM_LANES-1:0] cgs_ready,
@@ -64,6 +65,7 @@ module jesd204_rx_ctrl #(
   output [NUM_LANES-1:0] ifs_reset,
 
   input lmfc_edge,
+  input [NUM_LANES-1:0] frame_align_err_thresh_met,
 
   output [NUM_LINKS-1:0] sync,
   output reg latency_monitor_reset,
@@ -90,6 +92,7 @@ reg [7:0] good_counter = 'h00;
 
 wire [7:0] good_cnt_limit_s;
 wire       good_cnt_limit_reached_s;
+wire       goto_next_state_s;
 
 assign cgs_reset = cgs_rst;
 assign ifs_reset = ifs_rst;
@@ -125,13 +128,17 @@ always @(*) begin
   STATE_RESET: state_good = 1'b1;
   STATE_WAIT_FOR_PHY: state_good = phy_ready;
   STATE_CGS: state_good = &(cgs_ready | cfg_lanes_disable);
-  STATE_SYNCHRONIZED: state_good = 1'b1;
+  STATE_SYNCHRONIZED: state_good = ENABLE_FRAME_ALIGN_ERR_RESET ?
+                                   &(~frame_align_err_thresh_met | cfg_lanes_disable) :
+                                   1'b1;
   default: state_good = 1'b0;
   endcase
 end
 
 assign good_cnt_limit_s = (state == STATE_CGS) ? 'hff : 'h7;
 assign good_cnt_limit_reached_s = good_counter == good_cnt_limit_s;
+
+assign goto_next_state_s = good_cnt_limit_reached_s || (state == STATE_SYNCHRONIZED);
 
 always @(posedge clk) begin
   if (reset) begin
@@ -167,7 +174,7 @@ always @(posedge clk) begin
   if (reset == 1'b1) begin
     state <= STATE_RESET;
   end else begin
-    if (good_cnt_limit_reached_s) begin
+    if (goto_next_state_s) begin
       state <= next_state;
     end
   end

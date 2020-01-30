@@ -49,7 +49,8 @@ module axi_jesd204_tx #(
   parameter NUM_LANES = 1,
   parameter NUM_LINKS = 1,
   parameter LINK_MODE = 1,  // 2 - 64B/66B;  1 - 8B/10B
-  parameter ENABLE_LINK_STATS = 0
+  parameter ENABLE_LINK_STATS = 0,
+  parameter DATA_PATH_WIDTH = LINK_MODE == 2 ? 8 : 4
 ) (
   input s_axi_aclk,
   input s_axi_aresetn,
@@ -82,7 +83,7 @@ module axi_jesd204_tx #(
 
   output [NUM_LANES-1:0] core_cfg_lanes_disable,
   output [NUM_LINKS-1:0] core_cfg_links_disable,
-  output [7:0] core_cfg_beats_per_multiframe,
+  output [9:0] core_cfg_octets_per_multiframe,
   output [7:0] core_cfg_octets_per_frame,
   output [7:0] core_cfg_lmfc_offset,
   output core_cfg_sysref_oneshot,
@@ -96,7 +97,7 @@ module axi_jesd204_tx #(
 
   input core_ilas_config_rd,
   input [1:0] core_ilas_config_addr,
-  output [32*NUM_LANES-1:0] core_ilas_config_data,
+  output [DATA_PATH_WIDTH*8*NUM_LANES-1:0] core_ilas_config_data,
 
   input core_event_sysref_alignment_error,
   input core_event_sysref_edge,
@@ -107,10 +108,10 @@ module axi_jesd204_tx #(
   input [NUM_LINKS-1:0] core_status_sync
 );
 
-localparam PCORE_VERSION = 32'h00010361; // 1.03.a
+localparam PCORE_VERSION = 32'h00010461; // 1.04.a
 localparam PCORE_MAGIC = 32'h32303454; // 204T
 
-localparam DATA_PATH_WIDTH = LINK_MODE == 2 ? 3 : 2;
+localparam DATA_PATH_WIDTH_LOG2 = (DATA_PATH_WIDTH == 8) ? 3 : 2;
 
 wire up_reset;
 
@@ -178,7 +179,7 @@ jesd204_up_common #(
   .ID(ID),
   .NUM_LANES(NUM_LANES),
   .NUM_LINKS(NUM_LINKS),
-  .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
+  .DATA_PATH_WIDTH_LOG2(DATA_PATH_WIDTH_LOG2),
   .NUM_IRQS(5),
   .EXTRA_CFG_WIDTH(21),
   .MAX_OCTETS_PER_FRAME(8),
@@ -208,7 +209,7 @@ jesd204_up_common #(
   .up_irq_trigger(up_irq_trigger),
   .irq(irq),
 
-  .core_cfg_beats_per_multiframe(core_cfg_beats_per_multiframe),
+  .core_cfg_octets_per_multiframe(core_cfg_octets_per_multiframe),
   .core_cfg_octets_per_frame(core_cfg_octets_per_frame),
   .core_cfg_lanes_disable(core_cfg_lanes_disable),
   .core_cfg_links_disable(core_cfg_links_disable),
@@ -236,7 +237,7 @@ jesd204_up_common #(
 );
 
 jesd204_up_sysref #(
-  .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
+  .DATA_PATH_WIDTH_LOG2(DATA_PATH_WIDTH_LOG2)
 ) i_up_sysref (
   .up_clk(s_axi_aclk),
   .up_reset(up_reset),
@@ -261,7 +262,8 @@ jesd204_up_sysref #(
 
 jesd204_up_tx #(
   .NUM_LANES(NUM_LANES),
-  .NUM_LINKS(NUM_LINKS)
+  .NUM_LINKS(NUM_LINKS),
+  .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
 ) i_up_tx (
   .up_clk(s_axi_aclk),
   .up_reset(up_reset),
