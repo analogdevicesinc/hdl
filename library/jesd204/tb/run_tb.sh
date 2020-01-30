@@ -11,7 +11,7 @@ case "$SIMULATOR" in
         # Xcelium flow
         xmvlog  -NOWARN NONPRT ${SOURCE} || exit 1
         xmelab -access +rc ${NAME}
-        xmsim ${NAME} -run -gui || exit 1
+        xmsim ${NAME} -gui || exit 1
         ;;
     xsim)
         # xsim flow

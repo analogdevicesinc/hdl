@@ -44,102 +44,34 @@
 
 `timescale 1ns/100ps
 
-module jesd204_up_sysref #(
-  parameter DATA_PATH_WIDTH_LOG2 = 2
-) (
-  input up_clk,
-  input up_reset,
+module jesd204_frame_mark_tb;
 
-  input core_clk,
 
-  input [11:0] up_raddr,
-  output reg [31:0] up_rdata,
+parameter VCD_FILE = "jesd204_frame_mark_tb.vcd";
+`define TIMEOUT 1000000
+`include "tb_base.v"
 
-  input up_wreq,
-  input [11:0] up_waddr,
-  input [31:0] up_wdata,
+localparam DATA_PATH_WIDTH = 8;
 
-  input up_cfg_is_writeable,
+wire [9:0]                  cfg_octets_per_multiframe = 23;
+wire [7:0]                  cfg_octets_per_frame = 5;
+wire [DATA_PATH_WIDTH-1:0]  sof;
+wire [DATA_PATH_WIDTH-1:0]  somf;
+wire [DATA_PATH_WIDTH-1:0]  eof;
+wire [DATA_PATH_WIDTH-1:0]  eomf;
 
-  output reg up_cfg_sysref_oneshot,
-  output reg [7:0] up_cfg_lmfc_offset,
-  output reg up_cfg_sysref_disable,
 
-  input core_event_sysref_alignment_error,
-  input core_event_sysref_edge
+jesd204_frame_mark #(
+  .DATA_PATH_WIDTH            (DATA_PATH_WIDTH)
+) frame_mark (
+  .clk                        (clk),
+  .reset                      (reset),
+  .cfg_octets_per_multiframe  (cfg_octets_per_multiframe),
+  .cfg_octets_per_frame       (cfg_octets_per_frame),
+  .sof                        (sof),
+  .eof                        (eof),
+  .somf                       (somf),
+  .eomf                       (eomf)
 );
-
-reg [1:0] up_sysref_status;
-reg [1:0] up_sysref_status_clear;
-wire [1:0] up_sysref_event;
-
-sync_event #(
-  .NUM_OF_EVENTS(2)
-) i_cdc_sysref_event (
-  .in_clk(core_clk),
-  .in_event({
-    core_event_sysref_alignment_error,
-    core_event_sysref_edge
-  }),
-  .out_clk(up_clk),
-  .out_event(up_sysref_event)
-);
-
-always @(posedge up_clk) begin
-  if (up_reset == 1'b1) begin
-    up_sysref_status <= 2'b00;
-  end else begin
-    up_sysref_status <= (up_sysref_status & ~up_sysref_status_clear) | up_sysref_event;
-  end
-end
-
-always @(*) begin
-  case (up_raddr)
-  /* JESD SYSREF configuraton */
-  12'h040: up_rdata = {
-    /* 02-31 */ 30'h00, /* Reserved for future use */
-    /*    01 */ up_cfg_sysref_oneshot,
-    /*    00 */ up_cfg_sysref_disable
-  };
-  12'h041: up_rdata = {
-    /* 10-31 */ 22'h00, /* Reserved for future use */
-    /* 02-09 */ up_cfg_lmfc_offset,
-    /* 00-01 */ 2'b00 /* data path alignment for cfg_lmfc_offset */
-  };
-  12'h042: up_rdata = {
-    /* 02-31 */ 30'h00,
-    /* 00-01 */ up_sysref_status
-  };
-  default: up_rdata = 32'h00000000;
-  endcase
-end
-
-always @(posedge up_clk) begin
-  if (up_reset == 1'b1) begin
-    up_cfg_sysref_oneshot <= 1'b0;
-    up_cfg_lmfc_offset <= 'h00;
-    up_cfg_sysref_disable <= 1'b0;
-  end else if (up_wreq == 1'b1 && up_cfg_is_writeable == 1'b1) begin
-    case (up_waddr)
-    /* JESD SYSREF configuraton */
-    12'h040: begin
-      up_cfg_sysref_oneshot <= up_wdata[1];
-      up_cfg_sysref_disable <= up_wdata[0];
-    end
-    12'h041: begin
-      /* Aligned to data path width */
-      up_cfg_lmfc_offset <= up_wdata[9:DATA_PATH_WIDTH_LOG2];
-    end
-    endcase
-  end
-end
-
-always @(*) begin
-  if (up_wreq == 1'b1 && up_waddr == 12'h042) begin
-    up_sysref_status_clear = up_wdata[1:0];
-  end else begin
-    up_sysref_status_clear = 2'b00;
-  end
-end
 
 endmodule

@@ -58,7 +58,7 @@ adi_add_bus "tx_cfg" "master" \
   "analog.com:interface:jesd204_tx_cfg:1.0" \
   { \
     { "cfg_lanes_disable" "lanes_disable" } \
-    { "cfg_beats_per_multiframe" "beats_per_multiframe" } \
+    { "cfg_octets_per_multiframe" "octets_per_multiframe" } \
     { "cfg_octets_per_frame" "octets_per_frame" } \
     { "cfg_lmfc_offset" "lmfc_offset" } \
     { "cfg_sysref_oneshot" "sysref_oneshot" } \

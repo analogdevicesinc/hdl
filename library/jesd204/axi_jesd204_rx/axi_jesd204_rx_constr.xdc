@@ -122,8 +122,8 @@ set_false_path \
 
 # Use -quiet here since the ILAS mem is missing in non 8b10b configuration
 set_max_delay -quiet -datapath_only \
- -from [get_pins {i_up_rx/gen_lane[*].i_up_rx_lane/i_ilas_mem/mem_reg_*/*/CLK}] \
- -to [get_pins {i_up_rx/gen_lane[*].i_up_rx_lane/i_ilas_mem/up_rdata_reg[*]/D}] \
+ -from [get_pins {i_up_rx/gen_lane[*].i_up_rx_lane/i_ilas_mem/mem_reg*/*/CLK}] \
+ -to [get_pins {i_up_rx/gen_lane[*].i_up_rx_lane/i_ilas_mem/dp_*_gen.up_rdata_reg*/D}] \
   [get_property -min PERIOD $axi_clk]
 
 set_false_path \

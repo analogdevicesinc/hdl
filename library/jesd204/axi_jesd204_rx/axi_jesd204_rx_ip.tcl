@@ -77,7 +77,7 @@ adi_add_bus "rx_cfg" "master" \
   { \
     { "core_cfg_lanes_disable" "lanes_disable" } \
     { "core_cfg_links_disable" "links_disable" } \
-    { "core_cfg_beats_per_multiframe" "beats_per_multiframe" } \
+    { "core_cfg_octets_per_multiframe" "octets_per_multiframe" } \
     { "core_cfg_octets_per_frame" "octets_per_frame" } \
     { "core_cfg_lmfc_offset" "lmfc_offset" } \
     { "core_cfg_sysref_oneshot" "sysref_oneshot" } \

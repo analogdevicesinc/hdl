@@ -91,7 +91,7 @@ adi_add_bus "tx_cfg" "slave" \
   { \
     { "cfg_lanes_disable" "lanes_disable" } \
     { "cfg_links_disable" "links_disable" } \
-    { "cfg_beats_per_multiframe" "beats_per_multiframe" } \
+    { "cfg_octets_per_multiframe" "octets_per_multiframe" } \
     { "cfg_octets_per_frame" "octets_per_frame" } \
     { "cfg_lmfc_offset" "lmfc_offset" } \
     { "cfg_sysref_oneshot" "sysref_oneshot" } \
@@ -170,7 +170,7 @@ set_property -dict [list \
 # Data width selection
 set param [ipx::get_user_parameters DATA_PATH_WIDTH -of_objects $cc]
 set_property -dict [list \
-  enablement_value false \
+  enablement_tcl_expr {$LINK_MODE==1} \
   value_tcl_expr {expr $LINK_MODE*4} \
 ] $param
 
