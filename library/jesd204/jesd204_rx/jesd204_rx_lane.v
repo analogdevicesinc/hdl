@@ -70,8 +70,9 @@ module jesd204_rx_lane #(
   output buffer_ready_n,
   input buffer_release_n,
 
-  input [7:0] cfg_beats_per_multiframe,
+  input [9:0] cfg_octets_per_multiframe,
   input [7:0] cfg_octets_per_frame,
+  input cfg_disable_char_replacement,
   input cfg_disable_scrambler,
 
   output ilas_config_valid,
@@ -84,11 +85,12 @@ module jesd204_rx_lane #(
 
   output [1:0] status_cgs_state,
   output status_ifs_ready,
-  output [1:0] status_frame_align,
+  output [2:0] status_frame_align,
   output [7:0] status_frame_align_err_cnt
 );
 
 localparam MAX_DATA_PATH_WIDTH = 8;
+localparam DPW_LOG2 = DATA_PATH_WIDTH == 8 ? 3 : DATA_PATH_WIDTH == 4 ? 2 : 1;
 
 wire [7:0] char[0:DATA_PATH_WIDTH-1];
 wire [DATA_PATH_WIDTH-1:0] char_is_valid;
@@ -101,13 +103,15 @@ wire cgs_beat_is_cgs = &char_is_cgs;
 wire cgs_beat_has_error = |char_is_error;
 
 reg ifs_ready = 1'b0;
-reg [1:0] frame_align = 'h00;
+reg [2:0] frame_align = 'h00;
+reg [2:0] frame_align_int;
 
 wire [DATA_PATH_WIDTH*8-1:0] phy_data_s;
 wire [DATA_PATH_WIDTH-1:0] charisk28_aligned_s;
 wire [DATA_PATH_WIDTH*8-1:0] data_aligned_s;
 wire [DATA_PATH_WIDTH-1:0] charisk28_aligned;
 wire [DATA_PATH_WIDTH*8-1:0] data_aligned;
+wire [DATA_PATH_WIDTH*8-1:0] data_replaced;
 wire [DATA_PATH_WIDTH*8-1:0] data_scrambled_s;
 wire [DATA_PATH_WIDTH*8-1:0] data_scrambled;
 
@@ -117,6 +121,8 @@ reg  [DATA_PATH_WIDTH-1:0] phy_char_err;
 wire ilas_monitor_reset_s;
 wire ilas_monitor_reset;
 wire buffer_ready_n_s;
+reg  [DPW_LOG2:0] jj;
+reg  align_found;
 
 assign status_ifs_ready = ifs_ready;
 assign status_frame_align = frame_align;
@@ -190,17 +196,20 @@ always @(posedge clk) begin
   end
 end
 
+always @(*) begin
+  align_found = 1'b0;
+  frame_align_int = 0;
+  for(jj = 0; jj < DATA_PATH_WIDTH; jj=jj+1) begin
+    if (!align_found && (char_is_cgs[jj] == 1'b0)) begin
+      align_found = 1'b1;
+      frame_align_int = jj;
+    end
+  end
+end
+
 always @(posedge clk) begin
   if (ifs_ready == 1'b0) begin
-    if (char_is_cgs[0] == 1'b0) begin
-      frame_align <= 'h0;
-    end else if (char_is_cgs[1] == 1'b0) begin
-      frame_align <= 'h1;
-    end else if (char_is_cgs[2] == 1'b0) begin
-      frame_align <= 'h2;
-    end else begin
-      frame_align <= 'h3;
-    end
+    frame_align <= frame_align_int;
   end
 end
 
@@ -213,7 +222,9 @@ pipeline_stage #(
   .out(phy_data_s)
 );
 
-align_mux i_align_mux (
+align_mux #(
+  .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
+) i_align_mux (
   .clk(clk),
   .align(frame_align),
   .in_data(phy_data_s),
@@ -242,22 +253,25 @@ pipeline_stage #(
 );
 
 generate
-if(ENABLE_FRAME_ALIGN_CHECK) begin : gen_frame_align_monitor
-jesd204_rx_frame_align_monitor #(
+if(ENABLE_FRAME_ALIGN_CHECK) begin : gen_frame_align
+jesd204_rx_frame_align #(
   .DATA_PATH_WIDTH  (DATA_PATH_WIDTH)
-) i_align_monitor (
-  .clk                        (clk),
-  .reset                      (buffer_ready_n_s),
-  .cfg_beats_per_multiframe   (cfg_beats_per_multiframe),
-  .cfg_octets_per_frame       (cfg_octets_per_frame),
-  .cfg_disable_scrambler      (cfg_disable_scrambler),
-  .charisk28                  (charisk28_aligned),
-  .data                       (data_aligned),
-  .align_err_cnt              (status_frame_align_err_cnt)
+) i_frame_align (
+  .clk                          (clk),
+  .reset                        (buffer_ready_n_s),
+  .cfg_octets_per_multiframe    (cfg_octets_per_multiframe),
+  .cfg_octets_per_frame         (cfg_octets_per_frame),
+  .cfg_disable_char_replacement (cfg_disable_char_replacement),
+  .cfg_disable_scrambler        (cfg_disable_scrambler),
+  .charisk28                    (charisk28_aligned),
+  .data                         (data_aligned),
+  .data_replaced                (data_replaced),
+  .align_err_cnt                (status_frame_align_err_cnt)
 );
 
 end else begin : gen_no_frame_align_monitor
   assign status_frame_align_err_cnt = 32'd0;
+  assign data_replaced = data_aligned;
 end
 endgenerate
 
@@ -268,7 +282,7 @@ jesd204_scrambler #(
   .clk(clk),
   .reset(buffer_ready_n_s),
   .enable(~cfg_disable_scrambler),
-  .data_in(data_aligned),
+  .data_in(data_replaced),
   .data_out(data_scrambled_s)
 );
 
@@ -306,6 +320,7 @@ jesd204_ilas_monitor #(
 ) i_ilas_monitor (
   .clk(clk),
   .reset(ilas_monitor_reset),
+  .cfg_octets_per_multiframe(cfg_octets_per_multiframe),
   .data(data_aligned),
   .charisk28(charisk28_aligned),
 

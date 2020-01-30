@@ -50,6 +50,7 @@ module jesd204_ilas_monitor #(
   input clk,
   input reset,
 
+  input [9:0] cfg_octets_per_multiframe,
   input [DATA_PATH_WIDTH*8-1:0] data,
   input [DATA_PATH_WIDTH-1:0] charisk28,
 
@@ -60,17 +61,19 @@ module jesd204_ilas_monitor #(
   output data_ready_n
 );
 
-reg [3:0] multi_frame_counter = 'h00;
-reg [7:0] frame_counter = 'h00;
-reg [7:0] length = 'h00;
 
 localparam STATE_ILAS = 1'b1;
 localparam STATE_DATA = 1'b0;
+localparam ILAS_DATA_LENGTH = (DATA_PATH_WIDTH == 4) ? 4 : 2;
 
+wire octets_per_mf_4_mod_8 = (DATA_PATH_WIDTH == 8) && ~cfg_octets_per_multiframe[2];
 reg state = STATE_ILAS;
 reg next_state;
 reg prev_was_last = 1'b0;
-reg frame_length_error = 1'b0;
+wire ilas_config_start;
+reg ilas_config_valid_i;
+reg [1:0] ilas_config_addr_i;
+reg [DATA_PATH_WIDTH*8-1:0] ilas_config_data_i;
 
 assign data_ready_n = next_state;
 
@@ -92,7 +95,7 @@ always @(posedge clk) begin
 end
 
 always @(posedge clk) begin
-  if (reset == 1'b1 || (charisk28[3] == 1'b1 && data[31:29] == 3'h3)) begin
+  if (reset == 1'b1 || (charisk28[DATA_PATH_WIDTH-1] == 1'b1 && data[(DATA_PATH_WIDTH*8)-1:(DATA_PATH_WIDTH*8)-3] == 3'h3)) begin
     prev_was_last <= 1'b1;
   end else begin
     prev_was_last <= 1'b0;
@@ -101,61 +104,59 @@ end
 
 always @(posedge clk) begin
   if (reset == 1'b1) begin
-    multi_frame_counter <= 'h00;
-  end else if (charisk28[0] == 1'b1 && data[7:5] == 3'h0 && state == STATE_ILAS) begin
-    multi_frame_counter <= multi_frame_counter + 1'b1;
-  end
-end
-
-always @(posedge clk) begin
-  if (reset == 1'b1) begin
-    length <= 'h00;
-  end else if (prev_was_last == 1'b1) begin
-    if (length == 'h00) begin
-      length <= frame_counter;
+    ilas_config_valid_i <= 1'b0;
+  end else if (state == STATE_ILAS) begin
+    if (ilas_config_start) begin
+      ilas_config_valid_i <= 1'b1;
+    end else if (ilas_config_addr_i == (ILAS_DATA_LENGTH-1)) begin
+      ilas_config_valid_i <= 1'b0;
     end
   end
 end
 
 always @(posedge clk) begin
-  frame_length_error <= 1'b0;
-  if (prev_was_last == 1'b1) begin
-    if (length != 'h00 && length != frame_counter) begin
-      frame_length_error <= 1'b1;
-    end
+  if (ilas_config_valid_i == 1'b0) begin
+    ilas_config_addr_i <= 1'b0;
+  end else if (ilas_config_valid_i == 1'b1) begin
+    ilas_config_addr_i <= ilas_config_addr_i + 1'b1;
   end
 end
 
 always @(posedge clk) begin
-  if (prev_was_last == 1'b1) begin
-    frame_counter <= 'h00;
-  end else begin
-    frame_counter <= frame_counter + 1'b1;
-  end
+  ilas_config_data_i <= data;
 end
+
+
+generate
+if(DATA_PATH_WIDTH == 4) begin : gen_dp_4
+
+assign ilas_config_start = charisk28[1] && (data[15:13] == 3'h4);
+
+always @(*) begin
+  ilas_config_valid = ilas_config_valid_i;
+  ilas_config_addr = ilas_config_addr_i;
+  ilas_config_data = ilas_config_data_i;
+end
+
+end else begin : gen_dp_8
+
+assign ilas_config_start = octets_per_mf_4_mod_8 ? 
+  (charisk28[5] && (data[47:45] == 3'h4)) :
+  (charisk28[1] && (data[15:13] == 3'h4));
 
 always @(posedge clk) begin
   if (reset == 1'b1) begin
     ilas_config_valid <= 1'b0;
-  end else if (state == STATE_ILAS) begin
-    if (charisk28[1] == 1'b1 && data[15:13] == 3'h4) begin
-      ilas_config_valid <= 1'b1;
-    end else if (ilas_config_addr == 'h3) begin
-      ilas_config_valid <= 1'b0;
-    end
+  end else begin
+    ilas_config_valid <= ilas_config_valid_i;
   end
 end
 
 always @(posedge clk) begin
-  if (ilas_config_valid == 1'b0) begin
-    ilas_config_addr <= 1'b0;
-  end else if (ilas_config_valid == 1'b1) begin
-    ilas_config_addr <= ilas_config_addr + 1'b1;
-  end
+  ilas_config_addr <= ilas_config_addr_i;
+  ilas_config_data <= octets_per_mf_4_mod_8 ? {data[31:0], ilas_config_data_i[63:32]} : ilas_config_data_i;
 end
-
-always @(posedge clk) begin
-  ilas_config_data <= data;
 end
+endgenerate
 
 endmodule

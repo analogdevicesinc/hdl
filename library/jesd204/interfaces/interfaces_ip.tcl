@@ -50,7 +50,7 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 adi_if_define "jesd204_tx_cfg"
 adi_if_ports output -1 lanes_disable
 adi_if_ports output -1 links_disable
-adi_if_ports output 8 beats_per_multiframe
+adi_if_ports output 10 octets_per_multiframe
 adi_if_ports output 8 octets_per_frame
 adi_if_ports output 8 lmfc_offset
 adi_if_ports output 1 continuous_cgs
@@ -81,7 +81,7 @@ adi_if_ports output 1 manual_sync_request
 adi_if_define "jesd204_rx_cfg"
 adi_if_ports output -1 lanes_disable
 adi_if_ports output -1 links_disable
-adi_if_ports output 8 beats_per_multiframe
+adi_if_ports output 10 octets_per_multiframe
 adi_if_ports output 8 octets_per_frame
 adi_if_ports output 8 lmfc_offset
 adi_if_ports output 1 buffer_early_release

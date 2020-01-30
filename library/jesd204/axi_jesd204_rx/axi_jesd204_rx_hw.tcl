@@ -122,7 +122,7 @@ add_interface config conduit end
 set_interface_property config associatedClock core_clock
 set_interface_property config associatedReset core_reset
 
-add_interface_port config core_cfg_beats_per_multiframe beats_per_multiframe Output 8
+add_interface_port config core_cfg_octets_per_multiframe octets_per_multiframe Output 10
 add_interface_port config core_cfg_buffer_delay buffer_delay Output 8
 add_interface_port config core_cfg_buffer_early_release buffer_early_release Output 1
 add_interface_port config core_cfg_disable_char_replacement disable_char_replacement Output 1

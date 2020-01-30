@@ -44,102 +44,62 @@
 
 `timescale 1ns/100ps
 
-module jesd204_up_sysref #(
-  parameter DATA_PATH_WIDTH_LOG2 = 2
-) (
-  input up_clk,
-  input up_reset,
+module jesd204_frame_align_replace_tb;
 
-  input core_clk,
 
-  input [11:0] up_raddr,
-  output reg [31:0] up_rdata,
+parameter VCD_FILE = "jesd204_frame_align_replace_tb.vcd";
+`define TIMEOUT 1000000
+`include "tb_base.v"
 
-  input up_wreq,
-  input [11:0] up_waddr,
-  input [31:0] up_wdata,
+localparam DATA_PATH_WIDTH = 8;
+localparam IS_RX = 1'b1;
 
-  input up_cfg_is_writeable,
+wire [7:0]                    cfg_octets_per_frame = 5;
+wire                          cfg_disable_char_replacement = 1'b0;
+wire                          cfg_disable_scrambler = 1'b1;
+reg [DATA_PATH_WIDTH*8-1:0]   data;
+reg [DATA_PATH_WIDTH-1:0]     eof;
+reg [DATA_PATH_WIDTH-1:0]     eomf;
+reg [DATA_PATH_WIDTH-1:0]     char_is_a;
+reg [DATA_PATH_WIDTH-1:0]     char_is_f;
+wire [DATA_PATH_WIDTH*8-1:0]  data_out;
+wire [DATA_PATH_WIDTH-1:0]    charisk_out;
+reg [31:00] ii;
 
-  output reg up_cfg_sysref_oneshot,
-  output reg [7:0] up_cfg_lmfc_offset,
-  output reg up_cfg_sysref_disable,
-
-  input core_event_sysref_alignment_error,
-  input core_event_sysref_edge
-);
-
-reg [1:0] up_sysref_status;
-reg [1:0] up_sysref_status_clear;
-wire [1:0] up_sysref_event;
-
-sync_event #(
-  .NUM_OF_EVENTS(2)
-) i_cdc_sysref_event (
-  .in_clk(core_clk),
-  .in_event({
-    core_event_sysref_alignment_error,
-    core_event_sysref_edge
-  }),
-  .out_clk(up_clk),
-  .out_event(up_sysref_event)
-);
-
-always @(posedge up_clk) begin
-  if (up_reset == 1'b1) begin
-    up_sysref_status <= 2'b00;
-  end else begin
-    up_sysref_status <= (up_sysref_status & ~up_sysref_status_clear) | up_sysref_event;
-  end
+initial begin
+  #10000;
+  $finish;
 end
 
-always @(*) begin
-  case (up_raddr)
-  /* JESD SYSREF configuraton */
-  12'h040: up_rdata = {
-    /* 02-31 */ 30'h00, /* Reserved for future use */
-    /*    01 */ up_cfg_sysref_oneshot,
-    /*    00 */ up_cfg_sysref_disable
-  };
-  12'h041: up_rdata = {
-    /* 10-31 */ 22'h00, /* Reserved for future use */
-    /* 02-09 */ up_cfg_lmfc_offset,
-    /* 00-01 */ 2'b00 /* data path alignment for cfg_lmfc_offset */
-  };
-  12'h042: up_rdata = {
-    /* 02-31 */ 30'h00,
-    /* 00-01 */ up_sysref_status
-  };
-  default: up_rdata = 32'h00000000;
-  endcase
-end
-
-always @(posedge up_clk) begin
-  if (up_reset == 1'b1) begin
-    up_cfg_sysref_oneshot <= 1'b0;
-    up_cfg_lmfc_offset <= 'h00;
-    up_cfg_sysref_disable <= 1'b0;
-  end else if (up_wreq == 1'b1 && up_cfg_is_writeable == 1'b1) begin
-    case (up_waddr)
-    /* JESD SYSREF configuraton */
-    12'h040: begin
-      up_cfg_sysref_oneshot <= up_wdata[1];
-      up_cfg_sysref_disable <= up_wdata[0];
+initial begin
+  forever begin
+    for(ii = 0; ii < DATA_PATH_WIDTH; ii = ii + 1) begin
+      eof[ii] = $urandom_range(cfg_octets_per_frame) == 0;
+      eomf[ii] = $urandom_range(cfg_octets_per_frame*4) == 0;
+      char_is_a[ii] = $urandom_range(cfg_octets_per_frame*2) == 0;
+      char_is_f[ii] = $urandom_range(cfg_octets_per_frame*2) == 0;
     end
-    12'h041: begin
-      /* Aligned to data path width */
-      up_cfg_lmfc_offset <= up_wdata[9:DATA_PATH_WIDTH_LOG2];
-    end
-    endcase
+    data = {$urandom, $urandom};
+    @(negedge clk);
   end
 end
 
-always @(*) begin
-  if (up_wreq == 1'b1 && up_waddr == 12'h042) begin
-    up_sysref_status_clear = up_wdata[1:0];
-  end else begin
-    up_sysref_status_clear = 2'b00;
-  end
-end
+jesd204_frame_align_replace #(
+  .DATA_PATH_WIDTH              (DATA_PATH_WIDTH),
+  .IS_RX                        (IS_RX)
+) frame_align_replace (
+  .clk                          (clk),
+  .reset                        (reset),
+  .cfg_octets_per_frame         (cfg_octets_per_frame),
+  .cfg_disable_char_replacement (cfg_disable_char_replacement),
+  .cfg_disable_scrambler        (cfg_disable_scrambler),
+  .data                         (data),
+  .eof                          (eof),
+  .rx_char_is_a                 (char_is_a),
+  .rx_char_is_f                 (char_is_f),
+  .tx_eomf                      (eomf),
+  .data_out                     (data_out),
+  .charisk_out                  (charisk_out)
+);
 
 endmodule

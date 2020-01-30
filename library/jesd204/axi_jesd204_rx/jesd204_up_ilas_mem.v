@@ -44,7 +44,9 @@
 
 `timescale 1ns/100ps
 
-module jesd204_up_ilas_mem (
+module jesd204_up_ilas_mem #(
+  parameter DATA_PATH_WIDTH = 4
+)(
   input up_clk,
 
   input up_rreq,
@@ -56,12 +58,14 @@ module jesd204_up_ilas_mem (
 
   input core_ilas_config_valid,
   input [1:0] core_ilas_config_addr,
-  input [31:0] core_ilas_config_data,
+  input [DATA_PATH_WIDTH*8-1:0] core_ilas_config_data,
 
   output up_ilas_ready
 );
 
-reg [31:0] mem[0:3];
+localparam ILAS_DATA_LENGTH = (DATA_PATH_WIDTH == 4) ? 4 : 2;
+
+reg [DATA_PATH_WIDTH*8-1:0] mem[0:ILAS_DATA_LENGTH-1];
 reg core_ilas_captured = 1'b0;
 
 sync_bits i_cdc_ilas_ready (
@@ -75,17 +79,27 @@ always @(posedge core_clk) begin
   if (core_reset == 1'b1) begin
     core_ilas_captured <= 1'b0;
   end else begin
-    if (core_ilas_config_valid == 1'b1 && core_ilas_config_addr == 'h3) begin
+    if (core_ilas_config_valid == 1'b1 && core_ilas_config_addr == ILAS_DATA_LENGTH-1) begin
       core_ilas_captured <= 1'b1;
     end
   end
 end
 
+generate
+if(DATA_PATH_WIDTH == 4)  begin : dp_4_gen
 always @(posedge up_clk) begin
   if (up_rreq == 1'b1) begin
     up_rdata <= mem[up_raddr];
   end
 end
+end else if(DATA_PATH_WIDTH == 8) begin : dp_8_gen
+always @(posedge up_clk) begin
+  if (up_rreq == 1'b1) begin
+    up_rdata <= mem[up_raddr[1]] >> (up_raddr[0]*32);
+  end
+end
+end
+endgenerate
 
 always @(posedge core_clk) begin
   if (core_ilas_config_valid == 1'b1) begin
