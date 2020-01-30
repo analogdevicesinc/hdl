@@ -1,8 +1,8 @@
 
 ## ADC FIFO depth in samples per converter 
-set adc_fifo_samples_per_converter [expr 8*1024]
+set adc_fifo_samples_per_converter [expr 32*1024]
 ## DAC FIFO depth in samples per converter 
-set dac_fifo_samples_per_converter [expr 8*1024]
+set dac_fifo_samples_per_converter [expr 32*1024]
 
 
 source $ad_hdl_dir/projects/common/vcu118/vcu118_system_bd.tcl
