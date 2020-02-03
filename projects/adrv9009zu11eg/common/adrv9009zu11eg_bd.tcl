@@ -348,8 +348,14 @@ ad_connect  sys_cpu_resetn util_adrv9009_som_xcvr/up_rstn
 ad_connect  sys_cpu_clk util_adrv9009_som_xcvr/up_clk
 
 ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_tx_xcvr axi_adrv9009_som_tx_jesd {} core_clk_a
+
+if {$RX_NUM_OF_LANES == 8} {
+ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_rx_xcvr axi_adrv9009_som_rx_jesd {0 1 4 5 8 9 12 13} core_clk_b
+ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_obs_xcvr axi_adrv9009_som_obs_jesd {2 3 6 7 10 11 14 15} core_clk_a
+} else {
 ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_rx_xcvr axi_adrv9009_som_rx_jesd {0 1 4 5} core_clk_b
 ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_obs_xcvr axi_adrv9009_som_obs_jesd {2 3 6 7} core_clk_a
+}
 
 ad_connect  core_clk_a tx_adrv9009_som_tpl_core/link_clk
 ad_connect  axi_adrv9009_som_tx_jesd/tx_data tx_adrv9009_som_tpl_core/link
