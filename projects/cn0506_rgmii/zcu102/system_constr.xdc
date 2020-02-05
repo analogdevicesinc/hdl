@@ -61,3 +61,9 @@ set_property UNAVAILABLE_DURING_CALIBRATION TRUE [get_ports rgmii_txd_b]
 
 set_property UNAVAILABLE_DURING_CALIBRATION TRUE [get_ports link_st_b]
 
+create_clock -period 400.000 -name mdio_clk_a [get_pins i_system_wrapper/system_i/sys_ps8/inst/emio_enet0_mdio_mdc]
+create_clock -period 400.000 -name mdio_clk_b [get_pins i_system_wrapper/system_i/sys_ps8/inst/emio_enet1_mdio_mdc]
+
+set_false_path -setup -to [get_pins i_system_wrapper/system_i/sys_ps8/inst/PS8_i/EMIOENET0MDIOI]
+set_false_path -setup -to [get_pins i_system_wrapper/system_i/sys_ps8/inst/PS8_i/EMIOENET1MDIOI]
+
