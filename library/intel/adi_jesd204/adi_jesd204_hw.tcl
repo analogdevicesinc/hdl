@@ -127,10 +127,12 @@ ad_ip_parameter SOFT_PCS BOOLEAN true false { \
   DISPLAY_NAME "Enable Soft PCS" \
 }
 
+ad_ip_parameter INPUT_PIPELINE BOOLEAN 0 false { \
+  DISPLAY_NAME "Enable input pipeline" \
+}
+
 ad_ip_parameter EXT_DEVICE_CLK_EN BOOLEAN 0 false { \
-  DISPLAY_HINT "radio" \
-  DISPLAY_NAME "External Device Clock Enable"\
-  ALLOWED_RANGES { "0:Disabled" "1:Enabled" }
+  DISPLAY_NAME "External Device Clock Enable" \
 }
 
 proc create_phy_reset_control {tx num_of_lanes sysclk_frequency} {
@@ -294,6 +296,7 @@ proc jesd204_get_max_lane_rate {device soft_pcs} {
 
 proc jesd204_validate {{quiet false}} {
   set soft_pcs [get_parameter_value "SOFT_PCS"]
+  set input_pipeline [get_parameter_value "INPUT_PIPELINE"]
   set device_family [get_parameter_value "DEVICE_FAMILY"]
   set device [get_parameter_value "DEVICE"]
   set lane_rate [get_parameter_value "LANE_RATE"]
@@ -314,6 +317,9 @@ proc jesd204_validate {{quiet false}} {
       send_message error "Lane rate must be in the range 2000-${max_lane_rate} Mbps."
       if {!$soft_pcs} {
         send_message error "Consider enabling soft PCS for a higher maximum lane rate."
+        if {$input_pipeline} {
+          send_message error "Input pipeline can be active just when soft PCS is used."
+        }
       }
     }
     return false
@@ -341,18 +347,13 @@ proc jesd204_compose {} {
   set device [get_parameter_value "DEVICE"]
   set ext_device_clk_en [get_parameter_value "EXT_DEVICE_CLK_EN"]
   set bonding_clocks_en [get_parameter_value "BONDING_CLOCKS_EN"]
+  set input_pipeline [get_parameter_value "INPUT_PIPELINE"]
 
   set pllclk_frequency [expr $lane_rate / 2]
   set linkclk_frequency [expr $lane_rate / 40]
 
   if {![jesd204_validate true]} {
     return
-  }
-
-  if {$lane_rate > 10000} {
-	  set register_inputs 1;
-  } else {
-	  set register_inputs 0;
   }
 
   add_instance sys_clock clock_source 19.2
@@ -471,7 +472,7 @@ proc jesd204_compose {} {
   set_instance_parameter_value phy LANE_RATE $lane_rate
   set_instance_parameter_value phy REFCLK_FREQUENCY $refclk_frequency
   set_instance_parameter_value phy NUM_OF_LANES $num_of_lanes
-  set_instance_parameter_value phy REGISTER_INPUTS $register_inputs
+  set_instance_parameter_value phy REGISTER_INPUTS $input_pipeline
   set_instance_parameter_value phy LANE_INVERT $lane_invert
   set_instance_parameter_value phy EXT_DEVICE_CLK_EN $ext_device_clk_en
   set_instance_parameter_value phy BONDING_CLOCKS_EN $bonding_clocks_en
