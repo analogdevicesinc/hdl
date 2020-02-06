@@ -3,7 +3,7 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := cn0506_zc706
+PROJECT_NAME := cn0506_mii_zc706
 
 M_DEPS += ../common/cn0506_bd.tcl
 M_DEPS += ../../common/zc706/zc706_system_constr.xdc

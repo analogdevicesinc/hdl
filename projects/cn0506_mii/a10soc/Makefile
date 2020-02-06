@@ -3,7 +3,7 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := cn0506_a10soc
+PROJECT_NAME := cn0506_mii_a10soc
 
 M_DEPS += ../common/cn0506_qsys.tcl
 M_DEPS += ../../common/a10soc/a10soc_system_qsys.tcl
