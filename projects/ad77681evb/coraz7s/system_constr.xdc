@@ -15,5 +15,5 @@ set_property -dict {PACKAGE_PIN  V18 IOSTANDARD LVCMOS33}                       
 
 # syncronization and timing
 
-set_property -dict {PACKAGE_PIN  T14 IOSTANDARD LVCMOS33 IOB TRUE}                  [get_ports ad77681_drdy]        ; ## CK_IO2
+set_property -dict {PACKAGE_PIN  T14 IOSTANDARD LVCMOS33}                           [get_ports ad77681_drdy]        ; ## CK_IO2
 set_property -dict {PACKAGE_PIN  R17 IOSTANDARD LVCMOS33}                           [get_ports ad77681_sync_in]     ; ## CK_IO6
