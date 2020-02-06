@@ -59,13 +59,13 @@ module system_top (
   inout           fixed_io_ps_clk,
   inout           fixed_io_ps_porb,
   inout           fixed_io_ps_srstb,
-	
+
   inout   [1:0]   btn,
   inout   [5:0]   led,
 
   inout           ad77681_reset,
   inout           ad77681_sync_in,
-  
+
   inout           ad77681_fda_dis,
   inout           ad77681_fda_mode,
   inout           ad77681_dac_buf_en,
@@ -74,14 +74,14 @@ module system_top (
   output          ad77681_spi_mosi,
   output          ad77681_spi_sclk,
   output          ad77681_spi_cs,
-  input           ad77681_drdy);
+  inout           ad77681_drdy);
 
   // internal signals
 
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
-  
+
   // instantiations
 
   ad_iobuf #(
@@ -91,7 +91,7 @@ module system_top (
     .dio_i(gpio_o[1:0]),
     .dio_o(gpio_i[1:0]),
     .dio_p(btn));
-	
+
   ad_iobuf #(
     .DATA_WIDTH(6)
   ) i_iobuf_leds (
@@ -99,24 +99,25 @@ module system_top (
     .dio_i(gpio_o[7:2]),
     .dio_o(gpio_i[7:2]),
     .dio_p(led));
-	
+
   assign gpio_i[31:8] = gpio_o[31:8];
-	
+
   ad_iobuf #(
-    .DATA_WIDTH(5)
+    .DATA_WIDTH(6)
   ) i_iobuf_ad77681_gpio (
-    .dio_t(gpio_t[36:32]),
-    .dio_i(gpio_o[36:32]),
-    .dio_o(gpio_i[36:32]),
+    .dio_t(gpio_t[37:32]),
+    .dio_i(gpio_o[37:32]),
+    .dio_o(gpio_i[37:32]),
     .dio_p({
+           ad77681_drdy,
            ad77681_fda_dis,
            ad77681_fda_mode,
            ad77681_dac_buf_en,
            ad77681_sync_in,
            ad77681_reset}));
-			
-  assign gpio_i[63:37] = gpio_o[63:37];
-	
+
+  assign gpio_i[63:38] = gpio_o[63:38];
+
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
     .ddr_ba (ddr_ba),
