@@ -3,7 +3,7 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := cn0506_zed
+PROJECT_NAME := cn0506_rgmii_zed
 
 M_DEPS += ../common/cn0506_bd.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
