@@ -3,7 +3,7 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := cn0506_zcu102
+PROJECT_NAME := cn0506_mii_zcu102
 
 M_DEPS += ../common/cn0506_bd.tcl
 M_DEPS += ../../common/zcu102/zcu102_system_constr.xdc
