@@ -9,10 +9,13 @@ set sys_zynq 2
 adi_project adrv9009zu11eg 0 [list \
   JESD_RX_M 8 \
   JESD_RX_L 4 \
+  JESD_RX_S 1 \
   JESD_TX_M 8 \
   JESD_TX_L 8 \
+  JESD_TX_S 1 \
   JESD_OBS_M 4 \
   JESD_OBS_L 4 \
+  JESD_OBS_S 1 \
 ]
 adi_project_files adrv9009zu11eg [list \
   "system_top.v" \
