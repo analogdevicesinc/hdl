@@ -9,10 +9,13 @@ set sys_zynq 2
 adi_project fmcomms8_adrv9009zu11eg 0 [list \
   JESD_RX_M 16 \
   JESD_RX_L 8 \
+  JESD_RX_S 1 \
   JESD_TX_M 16 \
   JESD_TX_L 16 \
+  JESD_TX_S 1 \
   JESD_OBS_M 8 \
   JESD_OBS_L 8 \
+  JESD_OBS_S 1 \
 ]
 
 adi_project_files  fmcomms8_adrv9009zu11eg [list \

@@ -160,7 +160,7 @@ ad_connect  sys_concat_intc_0/In0 GND
 
 set TX_NUM_OF_LANES $ad_project_params(JESD_TX_L); # L
 set TX_NUM_OF_CONVERTERS $ad_project_params(JESD_TX_M) ; # M
-set TX_SAMPLES_PER_FRAME 1 ; # S
+set TX_SAMPLES_PER_FRAME $ad_project_params(JESD_TX_S) ; # S
 set TX_SAMPLE_WIDTH 16     ; # N/NP
 
 set TX_SAMPLES_PER_CHANNEL [expr ($TX_NUM_OF_LANES * 32) / ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)] ; # L * 32 / (M * N)
@@ -169,7 +169,7 @@ set TX_SAMPLES_PER_CHANNEL [expr ($TX_NUM_OF_LANES * 32) / ($TX_NUM_OF_CONVERTER
 
 set RX_NUM_OF_LANES $ad_project_params(JESD_RX_L) ; # L
 set RX_NUM_OF_CONVERTERS $ad_project_params(JESD_RX_M) ; # M
-set RX_SAMPLES_PER_FRAME 1 ; # S
+set RX_SAMPLES_PER_FRAME $ad_project_params(JESD_RX_S) ; # S
 set RX_SAMPLE_WIDTH 16     ; # N/NP
 
 set RX_SAMPLES_PER_CHANNEL [expr ($RX_NUM_OF_LANES * 32) / ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)] ; # L * 32 / (M * N)
@@ -178,7 +178,7 @@ set RX_SAMPLES_PER_CHANNEL [expr ($RX_NUM_OF_LANES * 32) / ($RX_NUM_OF_CONVERTER
 
 set OBS_NUM_OF_LANES $ad_project_params(JESD_OBS_L) ; # L
 set OBS_NUM_OF_CONVERTERS $ad_project_params(JESD_OBS_M) ; # M
-set OBS_SAMPLES_PER_FRAME 1 ; # S
+set OBS_SAMPLES_PER_FRAME $ad_project_params(JESD_OBS_S) ; # S
 set OBS_SAMPLE_WIDTH 16     ; # N/NP
 
 set OBS_SAMPLES_PER_CHANNEL [expr ($OBS_NUM_OF_LANES * 32) / ($OBS_NUM_OF_CONVERTERS * $OBS_SAMPLE_WIDTH)] ;  # L * 32 / (M * N)
