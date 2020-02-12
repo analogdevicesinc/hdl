@@ -15,11 +15,11 @@ set_module_property VALIDATION_CALLBACK info_param_validate
 
 # files
 
-add_fileset quartus_synth QUARTUS_SYNTH "" ""
-set_fileset_property quartus_synth TOP_LEVEL axi_adxcvr
-add_fileset_file up_axi.v                 VERILOG PATH $ad_hdl_dir/library/common/up_axi.v
-add_fileset_file axi_adxcvr_up.v          VERILOG PATH axi_adxcvr_up.v
-add_fileset_file axi_adxcvr.v             VERILOG PATH axi_adxcvr.v TOP_LEVEL_FILE
+ad_ip_files axi_adxcvr [list \
+  $ad_hdl_dir/library/common/up_axi.v \
+  axi_adxcvr_up.v \
+  axi_adxcvr.v \
+]
 
 # parameters
 
