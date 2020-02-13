@@ -14,18 +14,6 @@ set_instance_parameter_value sys_clk {clockFrequency} {100000000.0}
 set_instance_parameter_value sys_clk {clockFrequencyKnown} {1}
 set_instance_parameter_value sys_clk {resetSynchronousEdges} {DEASSERT}
 
-##add_instance sys_clk altera_clock_bridge 19.1
-##set_instance_parameter_value sys_clk {EXPLICIT_CLOCK_RATE} {100000000.0}
-##set_instance_parameter_value sys_clk {NUM_CLOCK_OUTPUTS} {1}
-##add_interface sys_clk clock sink
-##set_interface_property sys_clk EXPORT_OF sys_clk.in_clk
-##
-##add_instance sys_resetn altera_reset_bridge 19.1
-##set_instance_parameter_value sys_resetn {ACTIVE_LOW_RESET} {1}
-##add_connection sys_clk.out_clk sys_resetn.clk
-##add_interface sys_rstn reset sink
-##set_interface_property sys_rstn EXPORT_OF sys_resetn.in_reset
-
 add_instance s10_reset altera_s10_user_rst_clkgate
 add_interface rst_ninit_done reset source
 set_interface_property rst_ninit_done EXPORT_OF s10_reset.ninit_done
@@ -254,18 +242,59 @@ proc ad_cpu_interconnect {m_base m_port {avl_bridge ""} {avl_bridge_base 0x00000
       set_instance_parameter_value ${avl_bridge} {SYNC_RESET} {1}
       add_connection sys_hps.h2f_lw_axi_master ${avl_bridge}.s0
       set_connection_parameter_value sys_hps.h2f_lw_axi_master/${avl_bridge}.s0 baseAddress ${avl_bridge_base}
-      add_connection sys_clk.out_clk ${avl_bridge}.clk
-      add_connection sys_resetn.out_reset ${avl_bridge}.reset
+      add_connection sys_clk.clk ${avl_bridge}.clk
+      add_connection sys_clk.clk_reset ${avl_bridge}.reset
     }
     add_connection ${avl_bridge}.m0 ${m_port}
     set_connection_parameter_value ${avl_bridge}.m0/${m_port} baseAddress ${m_base}
   }
  }
 
+## Connect the memory mapped interface of an ADI DMAC to the hps.f2sdram0 interface
+#  Use an altera_axi_bridge to isolate the bridging logic, which will be generated
+#  either way due to the interface attribute differences.
+#  This will optimize the interconnects in QSYS design, resulting a smaller and
+#  faster logic.
+#
+# \param[m_port] - the interface name which will be connected to the HPS
+#
 proc ad_dma_interconnect {m_port} {
 
-  add_connection ${m_port} sys_hps.f2sdram0_data
-  set_connection_parameter_value ${m_port}/sys_hps.f2sdram0_data baseAddress {0x0}
+  # define the axi_bridge name from the source IP name
+  set axi_bridge ""
+  append axi_bridge [lindex [split $m_port "."] 0] "_bridge"
+  set if_name [lindex [split $m_port "."] 1]
+
+  ## Instantiate the bridge and connect the interfaces
+  add_instance ${axi_bridge} altera_axi_bridge
+  set_instance_parameter_value ${axi_bridge} {SYNC_RESET} {1}
+  set_instance_parameter_value ${axi_bridge} {AXI_VERSION} {AXI4}
+  set_instance_parameter_value ${axi_bridge} {DATA_WIDTH} {128}
+  set_instance_parameter_value ${axi_bridge} {ADDR_WIDTH} {32}
+  ## Naively assuming that this will be used with ADI's DMA only, look for 'src'
+  ## or 'dst' in the name of the bridge to identify the direction of the interface
+  if {[string equal ${if_name} "m_src_axi"]} {
+    set_instance_parameter_value ${axi_bridge} {WRITE_ACCEPTANCE_CAPABILITY} {16}
+    set_instance_parameter_value ${axi_bridge} {READ_ACCEPTANCE_CAPABILITY} {1}
+    set_instance_parameter_value ${axi_bridge} {COMBINED_ACCEPTANCE_CAPABILITY} {16}
+  } elseif {[string equal ${if_name} "m_dest_axi"]} {
+    set_instance_parameter_value ${axi_bridge} {WRITE_ACCEPTANCE_CAPABILITY} {1}
+    set_instance_parameter_value ${axi_bridge} {READ_ACCEPTANCE_CAPABILITY} {16}
+    set_instance_parameter_value ${axi_bridge} {COMBINED_ACCEPTANCE_CAPABILITY} {16}
+  } else {
+    send_message error "Something went terribly wrong. Maybe you're not using an ADI DMA with the ad_dma_interconnect process?"
+  }
+  set_instance_parameter_value ${axi_bridge} {S0_ID_WIDTH} {2}
+  set_instance_parameter_value ${axi_bridge} {M0_ID_WIDTH} {2}
+  set_instance_parameter_value ${axi_bridge} {WRITE_ISSUING_CAPABILITY} {16}
+  set_instance_parameter_value ${axi_bridge} {READ_ISSUING_CAPABILITY} {16}
+  set_instance_parameter_value ${axi_bridge} {COMBINED_ISSUING_CAPABILITY} {16}
+
+  add_connection sys_clk.clk ${axi_bridge}.clk
+  add_connection sys_clk.clk_reset ${axi_bridge}.clk_reset
+  add_connection ${m_port} ${axi_bridge}.s0
+  add_connection ${axi_bridge}.m0 sys_hps.f2sdram0_data
+  set_connection_parameter_value ${axi_bridge}.m0/sys_hps.f2sdram0_data baseAddress {0x0}
 }
 
 # gpio-bd
