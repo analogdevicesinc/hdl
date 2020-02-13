@@ -172,8 +172,10 @@ proc axi_ad9361_elab {} {
 
   set m_fpga_technology [get_parameter_value "FPGA_TECHNOLOGY"]
   set m_cmos_or_lvds_n [get_parameter_value "CMOS_OR_LVDS_N"]
-
-  if {$m_fpga_technology eq "Arria 10"} {
+  set rx_nodpa [get_parameter_value "RX_NODPA"]
+  
+  # 103 - stands for "Arria 10" see adi_intel_device_info_enc.tcl
+  if {$m_fpga_technology == 103} {
 
     add_hdl_instance axi_ad9361_serdes_clk intel_serdes
     set_instance_parameter_value axi_ad9361_serdes_clk {DEVICE_FAMILY} $m_fpga_technology
@@ -197,6 +199,7 @@ proc axi_ad9361_elab {} {
     set_instance_parameter_value axi_ad9361_serdes_out {CLKIN_FREQUENCY} {250.0}
 
     add_hdl_instance axi_ad9361_data_out altera_gpio
+    set_instance_parameter_value axi_ad9361_data_out {DEVICE_FAMILY} {Arria 10}
     set_instance_parameter_value axi_ad9361_data_out {PIN_TYPE_GUI} {Output}
     set_instance_parameter_value axi_ad9361_data_out {SIZE} {1}
     set_instance_parameter_value axi_ad9361_data_out {gui_io_reg_mode} {DDIO}
