@@ -1,11 +1,11 @@
 # Primary clock definitions
 
 # These two reference clocks are connect to the same source on the PCB
-create_clock -name refclk         -period  2.00 [get_ports fpga_clk_m2c_p[0]]
-create_clock -name refclk_replica -period  2.00 [get_ports fpga_clk_m2c_0_replica_n]
+create_clock -name refclk         -period  4.00 [get_ports fpga_clk_m2c_p[0]]
+create_clock -name refclk_replica -period  4.00 [get_ports fpga_clk_m2c_0_replica_n]
 
 # device clock
-create_clock -name device_clk     -period  4.00 [get_ports fpga_clk_m2c_p[4]]
+create_clock -name device_clk     -period  8.00 [get_ports fpga_clk_m2c_p[4]]
 
 # SPI 2 clock
 create_generated_clock -name spi_2_clk  \

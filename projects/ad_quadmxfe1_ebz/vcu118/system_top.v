@@ -345,6 +345,7 @@ module system_top (
     .gpio1_o (gpio_o[63:32]),
     .gpio1_t (gpio_t[63:32]),
     // FMCp
+    // quad 121
     .rx_data_0_n (m2c_n[10]), // {10 15 8 4 11 9 14 13 12 3 1 2 6 0 7 5}
     .rx_data_0_p (m2c_p[10]),
     .rx_data_1_n (m2c_n[15]),
@@ -353,6 +354,7 @@ module system_top (
     .rx_data_2_p (m2c_p[8]),
     .rx_data_3_n (m2c_n[4]),
     .rx_data_3_p (m2c_p[4]),
+    // quad 122
     .rx_data_4_n (m2c_n[11]),
     .rx_data_4_p (m2c_p[11]),
     .rx_data_5_n (m2c_n[9]),
@@ -361,6 +363,7 @@ module system_top (
     .rx_data_6_p (m2c_p[14]),
     .rx_data_7_n (m2c_n[13]),
     .rx_data_7_p (m2c_p[13]),
+    // quad 125
     .rx_data_8_n (m2c_n[12]),
     .rx_data_8_p (m2c_p[12]),
     .rx_data_9_n (m2c_n[3]),
@@ -369,6 +372,7 @@ module system_top (
     .rx_data_10_p (m2c_p[1]),
     .rx_data_11_n (m2c_n[2]),
     .rx_data_11_p (m2c_p[2]),
+    // quad 126
     .rx_data_12_n (m2c_n[6]),
     .rx_data_12_p (m2c_p[6]),
     .rx_data_13_n (m2c_n[0]),
@@ -377,6 +381,7 @@ module system_top (
     .rx_data_14_p (m2c_p[7]),
     .rx_data_15_n (m2c_n[5]),
     .rx_data_15_p (m2c_p[5]),
+    // quad 121
     .tx_data_0_n (c2m_n[12]), // {12 14 10 4 11 9 8 3 1 2 13 15 6 0 7 5}
     .tx_data_0_p (c2m_p[12]),
     .tx_data_1_n (c2m_n[14]),
@@ -385,6 +390,7 @@ module system_top (
     .tx_data_2_p (c2m_p[10]),
     .tx_data_3_n (c2m_n[4]),
     .tx_data_3_p (c2m_p[4]),
+    // quad 122
     .tx_data_4_n (c2m_n[11]),
     .tx_data_4_p (c2m_p[11]),
     .tx_data_5_n (c2m_n[9]),
@@ -393,6 +399,7 @@ module system_top (
     .tx_data_6_p (c2m_p[8]),
     .tx_data_7_n (c2m_n[3]),
     .tx_data_7_p (c2m_p[3]),
+    // quad 125
     .tx_data_8_n (c2m_n[1]),
     .tx_data_8_p (c2m_p[1]),
     .tx_data_9_n (c2m_n[2]),
@@ -401,6 +408,7 @@ module system_top (
     .tx_data_10_p (c2m_p[13]),
     .tx_data_11_n (c2m_n[15]),
     .tx_data_11_p (c2m_p[15]),
+    // quad 126
     .tx_data_12_n (c2m_n[6]),
     .tx_data_12_p (c2m_p[6]),
     .tx_data_13_n (c2m_n[0]),
