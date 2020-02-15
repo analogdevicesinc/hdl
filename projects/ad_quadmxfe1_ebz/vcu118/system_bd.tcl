@@ -17,6 +17,7 @@ ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 set sys_cstring "sys rom custom string placeholder"
 sysid_gen_sys_init_file $sys_cstring
 
+if {$ad_project_params(JESD_MODE) == "8B10B"} {
 # Parameters for 10Gpbs lane rate 
 ad_ip_parameter util_mxfe_xcvr CONFIG.RX_CLK25_DIV 20
 ad_ip_parameter util_mxfe_xcvr CONFIG.TX_CLK25_DIV 20
@@ -50,6 +51,7 @@ ad_ip_parameter util_mxfe_xcvr CONFIG.PPF0_CFG 0x400
 ad_ip_parameter util_mxfe_xcvr CONFIG.QPLL_CP 0xFF
 ad_ip_parameter util_mxfe_xcvr CONFIG.QPLL_CP_G3 0xF
 ad_ip_parameter util_mxfe_xcvr CONFIG.QPLL_LPF 0x27F
+}
 
 # Second SPI controller
 create_bd_port -dir O -from 7 -to 0 spi_2_csn_o
