@@ -5,7 +5,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 adi_project ad_quadmxfe1_ebz_vcu118 0 [list \
   JESD_MODE    [get_env_param JESD_MODE    64B66B ] \
-  RX_RATE      [get_env_param RX_RATE      4.125 ] \
+  RX_RATE      [get_env_param RX_RATE      8.25 ] \
   TX_RATE      [get_env_param TX_RATE      16.5 ] \
   REF_CLK_RATE [get_env_param REF_CLK_RATE 250 ] \
   RX_JESD_M    [get_env_param RX_JESD_M    8 ] \
