@@ -11,6 +11,8 @@ if {$JESD_MODE == "8B10B"} {
   set ADI_PHY_SEL 0
 }
 
+set MAX_LANES_PER_LINK 4
+
 # RX parameters
 set RX_NUM_OF_LINKS $ad_project_params(RX_NUM_LINKS)
 
@@ -60,8 +62,8 @@ set dac_data_width [expr 8*$DATAPATH_WIDTH*$TX_NUM_OF_LANES]
 set dac_dma_data_width [expr 8*$DATAPATH_WIDTH*$TX_NUM_OF_LANES]
 set dac_fifo_address_width [expr int(ceil(log(($dac_fifo_samples_per_converter*$TX_NUM_OF_CONVERTERS) / ($dac_data_width/$TX_SAMPLE_WIDTH))/log(2)))]
 
-
-create_bd_port -dir I device_clk
+create_bd_port -dir I rx_device_clk
+create_bd_port -dir I tx_device_clk
 
 if {$ADI_PHY_SEL == 1} {
 # common xcvr
@@ -107,9 +109,14 @@ create_bd_port -from 0 -to [expr $RX_NUM_OF_LINKS-1] -dir O  rx_sync_0
 create_bd_port -from 0 -to [expr $TX_NUM_OF_LINKS-1] -dir I  tx_sync_0
 
 # reset generator
-ad_ip_instance proc_sys_reset device_clk_rstgen
-ad_connect  device_clk device_clk_rstgen/slowest_sync_clk
-ad_connect  $sys_cpu_resetn device_clk_rstgen/ext_reset_in
+ad_ip_instance proc_sys_reset rx_device_clk_rstgen
+ad_connect  rx_device_clk rx_device_clk_rstgen/slowest_sync_clk
+ad_connect  $sys_cpu_resetn rx_device_clk_rstgen/ext_reset_in
+
+ad_ip_instance proc_sys_reset tx_device_clk_rstgen
+ad_connect  tx_device_clk tx_device_clk_rstgen/slowest_sync_clk
+ad_connect  $sys_cpu_resetn tx_device_clk_rstgen/ext_reset_in
+
 
 # Common PHYs
 # Use two instances since they are located on different SLRS
@@ -121,7 +128,7 @@ ad_ip_instance jesd204_phy jesd204_phy_121_122 [list \
   C_LANES {8} \
   GT_Line_Rate $tx_rate \
   GT_REFCLK_FREQ $ref_clk_rate \
-  DRPCLK_FREQ {100} \
+  DRPCLK_FREQ {50} \
   C_PLL_SELECTION {2} \
   RX_GT_Line_Rate $rx_rate \
   RX_GT_REFCLK_FREQ $ref_clk_rate \
@@ -140,7 +147,7 @@ ad_ip_instance jesd204_phy jesd204_phy_125_126 [list \
   C_LANES {8} \
   GT_Line_Rate $tx_rate \
   GT_REFCLK_FREQ $ref_clk_rate \
-  DRPCLK_FREQ {100} \
+  DRPCLK_FREQ {50} \
   C_PLL_SELECTION {2} \
   RX_GT_Line_Rate $rx_rate \
   RX_GT_REFCLK_FREQ $ref_clk_rate \
@@ -283,11 +290,11 @@ ad_connect  $sys_cpu_clk util_mxfe_xcvr/up_clk
 
 
 # connections (adc)
-ad_xcvrcon  util_mxfe_xcvr axi_mxfe_rx_xcvr axi_mxfe_rx_jesd {13 10 11 9 3 15 12 14 2 5 0 4 8 7 6 1} device_clk
+ad_xcvrcon  util_mxfe_xcvr axi_mxfe_rx_xcvr axi_mxfe_rx_jesd {13 10 11 9 3 15 12 14 2 5 0 4 8 7 6 1} rx_device_clk
 
 
 # connections (dac)
-ad_xcvrcon  util_mxfe_xcvr axi_mxfe_tx_xcvr axi_mxfe_tx_jesd {13 8 9 7 3 15 12 14 6 5 2 4 0 10 1 11} device_clk
+ad_xcvrcon  util_mxfe_xcvr axi_mxfe_tx_xcvr axi_mxfe_tx_jesd {13 8 9 7 3 15 12 14 6 5 2 4 0 10 1 11} tx_device_clk
 
 } else {
 
@@ -298,29 +305,26 @@ ad_connect  ref_clk_q2 jesd204_phy_125_126/cpll_refclk
 ad_connect  ref_clk_q2 jesd204_phy_125_126/qpll0_refclk
 ad_connect  ref_clk_q2 jesd204_phy_125_126/qpll1_refclk
 
-ad_connect  $sys_cpu_clk jesd204_phy_121_122/drpclk
-ad_connect  $sys_cpu_clk jesd204_phy_125_126/drpclk
-
 # device clock domain
-ad_connect  device_clk jesd204_phy_121_122/tx_core_clk
-ad_connect  device_clk jesd204_phy_125_126/tx_core_clk
-ad_connect  device_clk axi_mxfe_tx_jesd/device_clk
+ad_connect  tx_device_clk jesd204_phy_121_122/tx_core_clk
+ad_connect  tx_device_clk jesd204_phy_125_126/tx_core_clk
+ad_connect  tx_device_clk axi_mxfe_tx_jesd/device_clk
 
-ad_connect  device_clk jesd204_phy_121_122/rx_core_clk
-ad_connect  device_clk jesd204_phy_125_126/rx_core_clk
-ad_connect  device_clk axi_mxfe_rx_jesd/device_clk
+ad_connect  rx_device_clk jesd204_phy_121_122/rx_core_clk
+ad_connect  rx_device_clk jesd204_phy_125_126/rx_core_clk
+ad_connect  rx_device_clk axi_mxfe_rx_jesd/device_clk
 
 }
 
 
 # device clock domain
-ad_connect  device_clk rx_mxfe_tpl_core/link_clk
-ad_connect  device_clk util_mxfe_cpack/clk
-ad_connect  device_clk mxfe_adc_fifo/adc_clk
+ad_connect  rx_device_clk rx_mxfe_tpl_core/link_clk
+ad_connect  rx_device_clk util_mxfe_cpack/clk
+ad_connect  rx_device_clk mxfe_adc_fifo/adc_clk
 
-ad_connect  device_clk tx_mxfe_tpl_core/link_clk
-ad_connect  device_clk util_mxfe_upack/clk
-ad_connect  device_clk mxfe_dac_fifo/dac_clk
+ad_connect  tx_device_clk tx_mxfe_tpl_core/link_clk
+ad_connect  tx_device_clk util_mxfe_upack/clk
+ad_connect  tx_device_clk mxfe_dac_fifo/dac_clk
 
 # dma clock domain
 ad_connect  $sys_cpu_clk mxfe_adc_fifo/dma_clk
@@ -329,10 +333,10 @@ ad_connect  $sys_cpu_clk axi_mxfe_rx_dma/s_axis_aclk
 ad_connect  $sys_dma_clk axi_mxfe_tx_dma/m_axis_aclk
 
 # connect resets
-ad_connect  device_clk_rstgen/peripheral_reset mxfe_adc_fifo/adc_rst
-ad_connect  device_clk_rstgen/peripheral_reset mxfe_dac_fifo/dac_rst
-ad_connect  device_clk_rstgen/peripheral_reset util_mxfe_cpack/reset
-ad_connect  device_clk_rstgen/peripheral_reset util_mxfe_upack/reset
+ad_connect  rx_device_clk_rstgen/peripheral_reset mxfe_adc_fifo/adc_rst
+ad_connect  tx_device_clk_rstgen/peripheral_reset mxfe_dac_fifo/dac_rst
+ad_connect  rx_device_clk_rstgen/peripheral_reset util_mxfe_cpack/reset
+ad_connect  tx_device_clk_rstgen/peripheral_reset util_mxfe_upack/reset
 ad_connect  $sys_cpu_resetn axi_mxfe_rx_dma/m_dest_axi_aresetn
 ad_connect  $sys_dma_resetn axi_mxfe_tx_dma/m_src_axi_aresetn
 ad_connect  $sys_dma_reset mxfe_dac_fifo/dma_rst
@@ -409,22 +413,48 @@ ad_connect  jesd204_phy_125_126/rxn_in rx_concat_15_8_n/dout
 #         n     0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 
 #  lane_map = {13 10 11  9  3 15 12 14  2  5  0  4  8  7  6  1}
 #                      logical link                                 physical link
-ad_connect  axi_mxfe_rx_jesd/rx_phy10 jesd204_phy_121_122/gt0_rx ; # 0
-ad_connect  axi_mxfe_rx_jesd/rx_phy15 jesd204_phy_121_122/gt1_rx ; # 1
-ad_connect  axi_mxfe_rx_jesd/rx_phy8  jesd204_phy_121_122/gt2_rx ; # 2
-ad_connect  axi_mxfe_rx_jesd/rx_phy4  jesd204_phy_121_122/gt3_rx ; # 3
-ad_connect  axi_mxfe_rx_jesd/rx_phy11 jesd204_phy_121_122/gt4_rx ; # 4
-ad_connect  axi_mxfe_rx_jesd/rx_phy9  jesd204_phy_121_122/gt5_rx ; # 5
-ad_connect  axi_mxfe_rx_jesd/rx_phy14 jesd204_phy_121_122/gt6_rx ; # 6
-ad_connect  axi_mxfe_rx_jesd/rx_phy13 jesd204_phy_121_122/gt7_rx ; # 7
-ad_connect  axi_mxfe_rx_jesd/rx_phy12 jesd204_phy_125_126/gt0_rx ; # 8
-ad_connect  axi_mxfe_rx_jesd/rx_phy3  jesd204_phy_125_126/gt1_rx ; # 9
-ad_connect  axi_mxfe_rx_jesd/rx_phy1  jesd204_phy_125_126/gt2_rx ; # 10
-ad_connect  axi_mxfe_rx_jesd/rx_phy2  jesd204_phy_125_126/gt3_rx ; # 11
-ad_connect  axi_mxfe_rx_jesd/rx_phy6  jesd204_phy_125_126/gt4_rx ; # 12
-ad_connect  axi_mxfe_rx_jesd/rx_phy0  jesd204_phy_125_126/gt5_rx ; # 13
-ad_connect  axi_mxfe_rx_jesd/rx_phy7  jesd204_phy_125_126/gt6_rx ; # 14 
-ad_connect  axi_mxfe_rx_jesd/rx_phy5  jesd204_phy_125_126/gt7_rx ; # 15
+#ad_connect  axi_mxfe_rx_jesd/rx_phy10 jesd204_phy_121_122/gt0_rx ; # 0
+#ad_connect  axi_mxfe_rx_jesd/rx_phy15 jesd204_phy_121_122/gt1_rx ; # 1
+#ad_connect  axi_mxfe_rx_jesd/rx_phy8  jesd204_phy_121_122/gt2_rx ; # 2
+#ad_connect  axi_mxfe_rx_jesd/rx_phy4  jesd204_phy_121_122/gt3_rx ; # 3
+#ad_connect  axi_mxfe_rx_jesd/rx_phy11 jesd204_phy_121_122/gt4_rx ; # 4
+#ad_connect  axi_mxfe_rx_jesd/rx_phy9  jesd204_phy_121_122/gt5_rx ; # 5
+#ad_connect  axi_mxfe_rx_jesd/rx_phy14 jesd204_phy_121_122/gt6_rx ; # 6
+#ad_connect  axi_mxfe_rx_jesd/rx_phy13 jesd204_phy_121_122/gt7_rx ; # 7
+#ad_connect  axi_mxfe_rx_jesd/rx_phy12 jesd204_phy_125_126/gt0_rx ; # 8
+#ad_connect  axi_mxfe_rx_jesd/rx_phy3  jesd204_phy_125_126/gt1_rx ; # 9
+#ad_connect  axi_mxfe_rx_jesd/rx_phy1  jesd204_phy_125_126/gt2_rx ; # 10
+#ad_connect  axi_mxfe_rx_jesd/rx_phy2  jesd204_phy_125_126/gt3_rx ; # 11
+#ad_connect  axi_mxfe_rx_jesd/rx_phy6  jesd204_phy_125_126/gt4_rx ; # 12
+#ad_connect  axi_mxfe_rx_jesd/rx_phy0  jesd204_phy_125_126/gt5_rx ; # 13
+#ad_connect  axi_mxfe_rx_jesd/rx_phy7  jesd204_phy_125_126/gt6_rx ; # 14 
+#ad_connect  axi_mxfe_rx_jesd/rx_phy5  jesd204_phy_125_126/gt7_rx ; # 15
+
+# logical lane to physical lane map for maximum of lanes per link
+set logic_link(10) jesd204_phy_121_122/gt0_rx ; # 0
+set logic_link(15) jesd204_phy_121_122/gt1_rx ; # 1
+set logic_link(8)  jesd204_phy_121_122/gt2_rx ; # 2
+set logic_link(4)  jesd204_phy_121_122/gt3_rx ; # 3
+set logic_link(11) jesd204_phy_121_122/gt4_rx ; # 4
+set logic_link(9)  jesd204_phy_121_122/gt5_rx ; # 5
+set logic_link(14) jesd204_phy_121_122/gt6_rx ; # 6
+set logic_link(13) jesd204_phy_121_122/gt7_rx ; # 7
+set logic_link(12) jesd204_phy_125_126/gt0_rx ; # 8
+set logic_link(3)  jesd204_phy_125_126/gt1_rx ; # 9
+set logic_link(1)  jesd204_phy_125_126/gt2_rx ; # 10
+set logic_link(2)  jesd204_phy_125_126/gt3_rx ; # 11
+set logic_link(6)  jesd204_phy_125_126/gt4_rx ; # 12
+set logic_link(0)  jesd204_phy_125_126/gt5_rx ; # 13
+set logic_link(7)  jesd204_phy_125_126/gt6_rx ; # 14 
+set logic_link(5)  jesd204_phy_125_126/gt7_rx ; # 15
+set cur_lane 0
+for {set i 0}  {$i < $RX_NUM_OF_LINKS} {incr i} {
+  for {set j 0}  {$j < $RX_JESD_L} {incr j} {
+   ad_connect  axi_mxfe_rx_jesd/rx_phy$cur_lane $logic_link([expr $i*$MAX_LANES_PER_LINK+$j])
+   incr cur_lane
+  }
+}
+
 
 ad_connect  rx_sysref_0  axi_mxfe_rx_jesd/sysref
 
@@ -502,22 +532,48 @@ for {set i 0} {$i < $L} {incr i} {
 #         n     0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 
 #  lane_map = {13  8  9  7  3 15 12 14  6  5  2  4  0 10  1 11}
 #                      logical link                                 physical link
-ad_connect  axi_mxfe_tx_jesd/tx_phy12 jesd204_phy_121_122/gt0_tx ; # 0
-ad_connect  axi_mxfe_tx_jesd/tx_phy14 jesd204_phy_121_122/gt1_tx ; # 1
-ad_connect  axi_mxfe_tx_jesd/tx_phy10 jesd204_phy_121_122/gt2_tx ; # 2
-ad_connect  axi_mxfe_tx_jesd/tx_phy4  jesd204_phy_121_122/gt3_tx ; # 3
-ad_connect  axi_mxfe_tx_jesd/tx_phy11 jesd204_phy_121_122/gt4_tx ; # 4
-ad_connect  axi_mxfe_tx_jesd/tx_phy9  jesd204_phy_121_122/gt5_tx ; # 5
-ad_connect  axi_mxfe_tx_jesd/tx_phy8  jesd204_phy_121_122/gt6_tx ; # 6
-ad_connect  axi_mxfe_tx_jesd/tx_phy3  jesd204_phy_121_122/gt7_tx ; # 7
-ad_connect  axi_mxfe_tx_jesd/tx_phy1  jesd204_phy_125_126/gt0_tx ; # 8
-ad_connect  axi_mxfe_tx_jesd/tx_phy2  jesd204_phy_125_126/gt1_tx ; # 9
-ad_connect  axi_mxfe_tx_jesd/tx_phy13 jesd204_phy_125_126/gt2_tx ; # 10
-ad_connect  axi_mxfe_tx_jesd/tx_phy15 jesd204_phy_125_126/gt3_tx ; # 11
-ad_connect  axi_mxfe_tx_jesd/tx_phy6  jesd204_phy_125_126/gt4_tx ; # 12
-ad_connect  axi_mxfe_tx_jesd/tx_phy0  jesd204_phy_125_126/gt5_tx ; # 13
-ad_connect  axi_mxfe_tx_jesd/tx_phy7  jesd204_phy_125_126/gt6_tx ; # 14 
-ad_connect  axi_mxfe_tx_jesd/tx_phy5  jesd204_phy_125_126/gt7_tx ; # 15
+#ad_connect  axi_mxfe_tx_jesd/tx_phy12 jesd204_phy_121_122/gt0_tx ; # 0
+#ad_connect  axi_mxfe_tx_jesd/tx_phy14 jesd204_phy_121_122/gt1_tx ; # 1
+#ad_connect  axi_mxfe_tx_jesd/tx_phy10 jesd204_phy_121_122/gt2_tx ; # 2
+#ad_connect  axi_mxfe_tx_jesd/tx_phy4  jesd204_phy_121_122/gt3_tx ; # 3
+#ad_connect  axi_mxfe_tx_jesd/tx_phy11 jesd204_phy_121_122/gt4_tx ; # 4
+#ad_connect  axi_mxfe_tx_jesd/tx_phy9  jesd204_phy_121_122/gt5_tx ; # 5
+#ad_connect  axi_mxfe_tx_jesd/tx_phy8  jesd204_phy_121_122/gt6_tx ; # 6
+#ad_connect  axi_mxfe_tx_jesd/tx_phy3  jesd204_phy_121_122/gt7_tx ; # 7
+#ad_connect  axi_mxfe_tx_jesd/tx_phy1  jesd204_phy_125_126/gt0_tx ; # 8
+#ad_connect  axi_mxfe_tx_jesd/tx_phy2  jesd204_phy_125_126/gt1_tx ; # 9
+#ad_connect  axi_mxfe_tx_jesd/tx_phy13 jesd204_phy_125_126/gt2_tx ; # 10
+#ad_connect  axi_mxfe_tx_jesd/tx_phy15 jesd204_phy_125_126/gt3_tx ; # 11
+#ad_connect  axi_mxfe_tx_jesd/tx_phy6  jesd204_phy_125_126/gt4_tx ; # 12
+#ad_connect  axi_mxfe_tx_jesd/tx_phy0  jesd204_phy_125_126/gt5_tx ; # 13
+#ad_connect  axi_mxfe_tx_jesd/tx_phy7  jesd204_phy_125_126/gt6_tx ; # 14 
+#ad_connect  axi_mxfe_tx_jesd/tx_phy5  jesd204_phy_125_126/gt7_tx ; # 15
+
+# logical lane to physical lane map for maximum of lanes per link
+set logic_link(12) jesd204_phy_121_122/gt0_tx ; # 0
+set logic_link(14) jesd204_phy_121_122/gt1_tx ; # 1
+set logic_link(10) jesd204_phy_121_122/gt2_tx ; # 2
+set logic_link(4)  jesd204_phy_121_122/gt3_tx ; # 3
+set logic_link(11) jesd204_phy_121_122/gt4_tx ; # 4
+set logic_link(9)  jesd204_phy_121_122/gt5_tx ; # 5
+set logic_link(8)  jesd204_phy_121_122/gt6_tx ; # 6
+set logic_link(3)  jesd204_phy_121_122/gt7_tx ; # 7
+set logic_link(1)  jesd204_phy_125_126/gt0_tx ; # 8
+set logic_link(2)  jesd204_phy_125_126/gt1_tx ; # 9
+set logic_link(13) jesd204_phy_125_126/gt2_tx ; # 10
+set logic_link(15) jesd204_phy_125_126/gt3_tx ; # 11
+set logic_link(6)  jesd204_phy_125_126/gt4_tx ; # 12
+set logic_link(0)  jesd204_phy_125_126/gt5_tx ; # 13
+set logic_link(7)  jesd204_phy_125_126/gt6_tx ; # 14 
+set logic_link(5)  jesd204_phy_125_126/gt7_tx ; # 15
+set cur_lane 0
+for {set i 0}  {$i < $TX_NUM_OF_LINKS} {incr i} {
+  for {set j 0}  {$j < $TX_JESD_L} {incr j} {
+   ad_connect  axi_mxfe_tx_jesd/tx_phy$cur_lane $logic_link([expr $i*$MAX_LANES_PER_LINK+$j])
+   incr cur_lane
+  }
+}
+
 
 ad_connect  tx_sysref_0  axi_mxfe_tx_jesd/sysref
 
