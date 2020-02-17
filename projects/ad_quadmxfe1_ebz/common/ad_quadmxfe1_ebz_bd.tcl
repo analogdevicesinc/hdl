@@ -342,11 +342,11 @@ ad_connect  $sys_dma_resetn axi_mxfe_tx_dma/m_src_axi_aresetn
 ad_connect  $sys_dma_reset mxfe_dac_fifo/dma_rst
 
 if {$ADI_PHY_SEL == 0} {
-ad_connect  jesd204_phy_121_122/tx_sys_reset GND
-ad_connect  jesd204_phy_125_126/tx_sys_reset GND
+ad_connect  $sys_cpu_reset jesd204_phy_121_122/tx_sys_reset
+ad_connect  $sys_cpu_reset jesd204_phy_125_126/tx_sys_reset
 
-ad_connect  jesd204_phy_121_122/rx_sys_reset GND
-ad_connect  jesd204_phy_125_126/rx_sys_reset GND
+ad_connect  $sys_cpu_reset jesd204_phy_121_122/rx_sys_reset
+ad_connect  $sys_cpu_reset jesd204_phy_125_126/rx_sys_reset
 
 
 ad_connect  axi_mxfe_tx_jesd/tx_axi/core_reset jesd204_phy_121_122/tx_reset_gt
