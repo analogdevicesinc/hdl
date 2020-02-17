@@ -149,6 +149,7 @@ module system_top (
   wire            spi_2_miso;
 
   wire    [3:0]   ref_clk;
+  wire    [3:0]   ref_clk_odiv2;
   wire            sysref;
   wire    [3:0]   tx_syncin;
   wire    [3:0]   rx_syncout;
@@ -168,7 +169,7 @@ module system_top (
     .I (fpga_clk_m2c_p[i]),
     .IB (fpga_clk_m2c_n[i]),
     .O (ref_clk[i]),
-    .ODIV2 ());
+    .ODIV2 (ref_clk_odiv2[i]));
 
   IBUFDS i_ibufds_syncin (
     .I (mxfe_sync1_outb_p[i]),
@@ -200,15 +201,20 @@ module system_top (
     .OB (fpga_sysref_c2m_n),
     .I (sysref));
 
-  IBUFDS i_ibufds_device_clk (
+  IBUFDS i_ibufds_rx_device_clk (
     .I (fpga_clk_m2c_p[4]),
     .IB (fpga_clk_m2c_n[4]),
     .O (fpga_clk_m2c_4));
 
 
-  BUFG i_device_clk (
+  BUFG i_rx_device_clk (
     .I (fpga_clk_m2c_4),
-    .O (device_clk)
+    .O (rx_device_clk)
+  );
+
+  BUFG_GT i_tx_device_clk (
+    .I (ref_clk_odiv2[1]),
+    .O (tx_device_clk)
   );
 
   // spi
@@ -421,7 +427,8 @@ module system_top (
     .ref_clk_q1 (ref_clk[0]),
     .ref_clk_q2 (ref_clk_0_replica),
     .ref_clk_q3 (ref_clk_0_replica),
-    .device_clk (device_clk),
+    .rx_device_clk (rx_device_clk),
+    .tx_device_clk (tx_device_clk),
     .rx_sync_0 (rx_syncout),
     .tx_sync_0 (tx_syncin),
     .rx_sysref_0 (sysref),
