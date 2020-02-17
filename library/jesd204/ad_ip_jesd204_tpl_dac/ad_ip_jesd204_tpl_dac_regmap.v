@@ -40,7 +40,7 @@ module ad_ip_jesd204_tpl_dac_regmap #(
 
   input s_axi_awvalid,
   output s_axi_awready,
-  input [11:0] s_axi_awaddr,
+  input [12:0] s_axi_awaddr,
   input [2:0] s_axi_awprot,
 
   input s_axi_wvalid,
@@ -50,7 +50,7 @@ module ad_ip_jesd204_tpl_dac_regmap #(
 
   input s_axi_arvalid,
   output s_axi_arready,
-  input [11:0] s_axi_araddr,
+  input [12:0] s_axi_araddr,
   input [2:0] s_axi_arprot,
 
   output s_axi_rvalid,
@@ -106,11 +106,11 @@ module ad_ip_jesd204_tpl_dac_regmap #(
 
 
   wire up_wreq_s;
-  wire [9:0] up_waddr_s;
+  wire [10:0] up_waddr_s;
   wire [31:0] up_wdata_s;
   wire [NUM_CHANNELS+1:0] up_wack_s;
   wire up_rreq_s;
-  wire [9:0] up_raddr_s;
+  wire [10:0] up_raddr_s;
   wire [31:0] up_rdata_s[0:NUM_CHANNELS+1];
   wire [NUM_CHANNELS+1:0] up_rack_s;
 
@@ -128,7 +128,7 @@ module ad_ip_jesd204_tpl_dac_regmap #(
   // up bus interface
 
   up_axi #(
-    .AXI_ADDRESS_WIDTH (12)
+    .AXI_ADDRESS_WIDTH (13)
   ) i_up_axi (
     .up_clk (up_clk),
     .up_rstn (up_rstn),
@@ -231,11 +231,11 @@ module ad_ip_jesd204_tpl_dac_regmap #(
     .up_rstn (up_rstn),
 
     .up_wreq (up_wreq_s),
-    .up_waddr ({4'b0,up_waddr_s}),
+    .up_waddr ({3'b0,up_waddr_s}),
     .up_wdata (up_wdata_s),
     .up_wack (up_wack_s[0]),
     .up_rreq (up_rreq_s),
-    .up_raddr ({4'b0,up_raddr_s}),
+    .up_raddr ({3'b0,up_raddr_s}),
     .up_rdata (up_rdata_s[0]),
     .up_rack (up_rack_s[0])
   );
@@ -282,11 +282,11 @@ module ad_ip_jesd204_tpl_dac_regmap #(
       .up_clk (up_clk),
       .up_rstn (up_rstn),
       .up_wreq (up_wreq_s),
-      .up_waddr ({4'b0,up_waddr_s}),
+      .up_waddr ({3'b0,up_waddr_s}),
       .up_wdata (up_wdata_s),
       .up_wack (up_wack_s[i+1]),
       .up_rreq (up_rreq_s),
-      .up_raddr ({4'b0,up_raddr_s}),
+      .up_raddr ({3'b0,up_raddr_s}),
       .up_rdata (up_rdata_s[i+1]),
       .up_rack (up_rack_s[i+1])
     );

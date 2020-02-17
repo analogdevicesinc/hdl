@@ -68,7 +68,7 @@ module ad_ip_jesd204_tpl_dac #(
 
   input s_axi_awvalid,
   output s_axi_awready,
-  input [11:0] s_axi_awaddr,
+  input [12:0] s_axi_awaddr,
   input [2:0] s_axi_awprot,
 
   input s_axi_wvalid,
@@ -82,7 +82,7 @@ module ad_ip_jesd204_tpl_dac #(
 
   input s_axi_arvalid,
   output s_axi_arready,
-  input [11:0] s_axi_araddr,
+  input [12:0] s_axi_araddr,
   input [2:0] s_axi_arprot,
 
   output s_axi_rvalid,
