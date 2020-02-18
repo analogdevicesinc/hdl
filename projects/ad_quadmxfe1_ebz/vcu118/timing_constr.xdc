@@ -5,9 +5,9 @@ create_clock -name refclk         -period  4.00 [get_ports fpga_clk_m2c_p[0]]
 create_clock -name refclk_replica -period  4.00 [get_ports fpga_clk_m2c_0_replica_n]
 
 # rx device clock
-create_clock -name rx_device_clk     -period  4.00 [get_ports fpga_clk_m2c_p[4]]
+create_clock -name rx_device_clk     -period  8.00 [get_ports fpga_clk_m2c_p[4]]
 # tx device clock
-create_clock -name tx_device_clk     -period  4.00 [get_ports fpga_clk_m2c_p[1]]
+create_clock -name tx_device_clk     -period  8.00 [get_ports fpga_clk_m2c_p[1]]
 
 # SPI 2 clock
 create_generated_clock -name spi_2_clk  \
