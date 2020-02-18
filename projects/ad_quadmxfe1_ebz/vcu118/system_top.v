@@ -112,6 +112,12 @@ module system_top (
 
   output  [6:1] hmc425a_v,
 
+  output        ext_hmc7044_sclk,
+  output        ext_hmc7044_slen,
+  inout         ext_hmc7044_sdata,
+  input         ext_hmc7044_miso,
+
+
   output  [3:0] mxfe_sclk,
   output  [3:0] mxfe_cs,
   input   [3:0] mxfe_miso,
@@ -229,13 +235,18 @@ module system_top (
   assign hmc7043_slen = spi_2_csn[4];
   assign hmc7043_sclk = spi_2_clk;
 
+  assign ext_hmc7044_slen = spi_2_csn[5];
+  assign ext_hmc7044_sclk = spi_2_clk;
+
+
   assign spi_miso = ~spi_csn[0] ? mxfe_miso[0] :
                     ~spi_csn[1] ? mxfe_miso[1] :
                     ~spi_csn[2] ? mxfe_miso[2] :
                     ~spi_csn[3] ? mxfe_miso[3] : 1'b0;
 
   assign spi_2_miso =  |(~spi_2_csn[3:0]) ? spi_4371_miso :
-                         ~spi_2_csn[4]    ? spi_hmc_miso : 1'b0;
+                         ~spi_2_csn[4]    ? spi_hmc_miso :
+                         ~spi_2_csn[5]    ? ext_hmc7044_miso : 1'b0;
 
 
    ad_3w_spi #(.NUM_OF_SLAVES(1)) i_spi_hmc (
@@ -253,6 +264,15 @@ module system_top (
     .spi_miso (spi_4371_miso),
     .spi_sdio (adf4371_sdio),
     .spi_dir ());
+
+   ad_3w_spi #(.NUM_OF_SLAVES(1)) i_spi_ext_hmc (
+    .spi_csn (spi_2_csn[5]),
+    .spi_clk (spi_2_clk),
+    .spi_mosi (spi_2_mosi),
+    .spi_miso (),
+    .spi_sdio (ext_hmc7044_sdata),
+    .spi_dir ());
+
 
   // gpios
 
