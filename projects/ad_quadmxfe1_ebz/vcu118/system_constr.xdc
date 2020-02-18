@@ -198,6 +198,12 @@ set_property  -dict {PACKAGE_PIN V14   IOSTANDARD LVCMOS18                      
 
 set_property  -dict {PACKAGE_PIN AK35  IOSTANDARD LVCMOS18 PULLTYPE PULLUP       } [get_ports vadj_1v8_pgood             ];   ## IO_T1U_N12_43_AK35 
 
+# external HMC SPI interface
+set_property  -dict {PACKAGE_PIN AY14  IOSTANDARD LVCMOS12                       } [get_ports ext_hmc7044_sclk          ];  ## 
+set_property  -dict {PACKAGE_PIN AY15  IOSTANDARD LVCMOS12                       } [get_ports ext_hmc7044_slen          ];  ## 
+set_property  -dict {PACKAGE_PIN AW15  IOSTANDARD LVCMOS12                       } [get_ports ext_hmc7044_sdata         ];  ## 
+set_property  -dict {PACKAGE_PIN AV15  IOSTANDARD LVCMOS12                       } [get_ports ext_hmc7044_miso          ];  ## 
+
 
 create_pblock pblock_axi_mem_interconnect
 resize_pblock pblock_axi_mem_interconnect -add CLOCKREGION_X0Y0:CLOCKREGION_X5Y4
