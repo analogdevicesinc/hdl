@@ -205,6 +205,10 @@ set_property  -dict {PACKAGE_PIN AW15  IOSTANDARD LVCMOS12                      
 set_property  -dict {PACKAGE_PIN AV15  IOSTANDARD LVCMOS12                       } [get_ports ext_hmc7044_miso          ];  ## 
 
 
+set_property  -dict {PACKAGE_PIN R32  IOSTANDARD LVDS                           } [get_ports ext_sync_p                 ];  ## IO_L11P_T1U_N8_GC_45_R32 
+set_property  -dict {PACKAGE_PIN P32  IOSTANDARD LVDS                           } [get_ports ext_sync_n                 ];  ## IO_L11N_T1U_N9_GC_45_P32
+
+
 create_pblock pblock_axi_mem_interconnect
 resize_pblock pblock_axi_mem_interconnect -add CLOCKREGION_X0Y0:CLOCKREGION_X5Y4
 add_cells_to_pblock pblock_axi_mem_interconnect [get_cells [list i_system_wrapper/system_i/axi_mem_interconnect]]

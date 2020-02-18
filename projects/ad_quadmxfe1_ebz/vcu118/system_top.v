@@ -132,7 +132,10 @@ module system_top (
   inout  [10:0] mxfe0_gpio,
   inout  [10:0] mxfe1_gpio,
   inout  [10:0] mxfe2_gpio,
-  inout  [10:0] mxfe3_gpio
+  inout  [10:0] mxfe3_gpio,
+
+  input  ext_sync_p,
+  input  ext_sync_n
 
 );
 
@@ -222,6 +225,11 @@ module system_top (
     .I (ref_clk_odiv2[1]),
     .O (tx_device_clk)
   );
+
+  IBUFDS i_ibufds_ext_sync (
+    .I (ext_sync_p),
+    .IB (ext_sync_n),
+    .O (ext_sync));
 
   // spi
 
@@ -459,7 +467,8 @@ module system_top (
     .gpio2_t (gpio_t[95:64]),
     .gpio3_i (gpio_i[127:96]),
     .gpio3_o (gpio_o[127:96]),
-    .gpio3_t (gpio_t[127:96])
+    .gpio3_t (gpio_t[127:96]),
+    .ext_sync (ext_sync)
   );
 
 endmodule
