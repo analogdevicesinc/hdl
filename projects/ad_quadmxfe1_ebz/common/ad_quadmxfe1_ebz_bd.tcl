@@ -65,6 +65,8 @@ set dac_fifo_address_width [expr int(ceil(log(($dac_fifo_samples_per_converter*$
 create_bd_port -dir I rx_device_clk
 create_bd_port -dir I tx_device_clk
 
+create_bd_port -dir I ext_sync
+
 if {$ADI_PHY_SEL == 1} {
 # common xcvr
 ad_ip_instance util_adxcvr util_mxfe_xcvr [list \
@@ -335,18 +337,18 @@ ad_connect  $sys_dma_clk axi_mxfe_tx_dma/m_axis_aclk
 # connect resets
 ad_connect  rx_device_clk_rstgen/peripheral_reset mxfe_adc_fifo/adc_rst
 ad_connect  tx_device_clk_rstgen/peripheral_reset mxfe_dac_fifo/dac_rst
-ad_connect  rx_device_clk_rstgen/peripheral_reset util_mxfe_cpack/reset
+#ad_connect  rx_device_clk_rstgen/peripheral_reset util_mxfe_cpack/reset
 ad_connect  tx_device_clk_rstgen/peripheral_reset util_mxfe_upack/reset
 ad_connect  $sys_cpu_resetn axi_mxfe_rx_dma/m_dest_axi_aresetn
 ad_connect  $sys_dma_resetn axi_mxfe_tx_dma/m_src_axi_aresetn
 ad_connect  $sys_dma_reset mxfe_dac_fifo/dma_rst
 
 if {$ADI_PHY_SEL == 0} {
-ad_connect  $sys_cpu_reset jesd204_phy_121_122/tx_sys_reset
-ad_connect  $sys_cpu_reset jesd204_phy_125_126/tx_sys_reset
+ad_connect  tx_device_clk_rstgen/peripheral_reset jesd204_phy_121_122/tx_sys_reset
+ad_connect  tx_device_clk_rstgen/peripheral_reset jesd204_phy_125_126/tx_sys_reset
 
-ad_connect  $sys_cpu_reset jesd204_phy_121_122/rx_sys_reset
-ad_connect  $sys_cpu_reset jesd204_phy_125_126/rx_sys_reset
+ad_connect  rx_device_clk_rstgen/peripheral_reset jesd204_phy_121_122/rx_sys_reset
+ad_connect  rx_device_clk_rstgen/peripheral_reset jesd204_phy_125_126/rx_sys_reset
 
 
 ad_connect  axi_mxfe_tx_jesd/tx_axi/core_reset jesd204_phy_121_122/tx_reset_gt
@@ -469,6 +471,9 @@ ad_connect  axi_mxfe_rx_jesd/rx_sof rx_mxfe_tpl_core/link_sof
 ad_connect  axi_mxfe_rx_jesd/rx_data_tdata rx_mxfe_tpl_core/link_data
 ad_connect  axi_mxfe_rx_jesd/rx_data_tvalid rx_mxfe_tpl_core/link_valid
 
+ad_connect ext_sync rx_mxfe_tpl_core/tpl_core/adc_external_sync
+ad_connect rx_mxfe_tpl_core/tpl_core/adc_rst_sync util_mxfe_cpack/reset
+
 #
 # rx tpl to cpack
 #
@@ -589,6 +594,8 @@ for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
   ad_connect  util_mxfe_upack/fifo_rd_data_$i tx_mxfe_tpl_core/dac_data_$i
   ad_connect  tx_mxfe_tpl_core/dac_enable_$i  util_mxfe_upack/enable_$i
 }
+
+ad_connect ext_sync tx_mxfe_tpl_core/tpl_core/dac_external_sync
 
 #
 # dac fifo to upack
