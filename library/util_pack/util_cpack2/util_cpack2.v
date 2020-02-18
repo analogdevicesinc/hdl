@@ -75,6 +75,38 @@ module util_cpack2 #(
   input enable_29,
   input enable_30,
   input enable_31,
+  input enable_32,
+  input enable_33,
+  input enable_34,
+  input enable_35,
+  input enable_36,
+  input enable_37,
+  input enable_38,
+  input enable_39,
+  input enable_40,
+  input enable_41,
+  input enable_42,
+  input enable_43,
+  input enable_44,
+  input enable_45,
+  input enable_46,
+  input enable_47,
+  input enable_48,
+  input enable_49,
+  input enable_50,
+  input enable_51,
+  input enable_52,
+  input enable_53,
+  input enable_54,
+  input enable_55,
+  input enable_56,
+  input enable_57,
+  input enable_58,
+  input enable_59,
+  input enable_60,
+  input enable_61,
+  input enable_62,
+  input enable_63,
 
   input fifo_wr_en,
   output fifo_wr_overflow,
@@ -111,7 +143,38 @@ module util_cpack2 #(
   input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_29,
   input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_30,
   input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_31,
-
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_32,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_33,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_34,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_35,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_36,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_37,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_38,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_39,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_40,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_41,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_42,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_43,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_44,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_45,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_46,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_47,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_48,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_49,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_50,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_51,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_52,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_53,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_54,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_55,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_56,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_57,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_58,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_59,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_60,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_61,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_62,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_63,
 
   output packed_fifo_wr_en,
   input packed_fifo_wr_overflow,
@@ -124,7 +187,8 @@ localparam CHANNEL_DATA_WIDTH = SAMPLE_DATA_WIDTH * SAMPLES_PER_CHANNEL;
  * Round up to the next power of two and zero out the additional channels
  * internally.
  */
-localparam REAL_NUM_OF_CHANNELS = NUM_OF_CHANNELS > 16 ? 32 :
+localparam REAL_NUM_OF_CHANNELS = NUM_OF_CHANNELS > 32 ? 64 :
+   NUM_OF_CHANNELS > 16 ? 32 :
    NUM_OF_CHANNELS > 8 ? 16 :
    NUM_OF_CHANNELS > 4 ? 8 :
    NUM_OF_CHANNELS > 2 ? 4 :
@@ -133,11 +197,15 @@ localparam REAL_NUM_OF_CHANNELS = NUM_OF_CHANNELS > 16 ? 32 :
 /* FIXME: Find out how to do this in the IP-XACT */
 
 wire [REAL_NUM_OF_CHANNELS-1:0] enable;
-wire [31:0] enable_s;
+wire [63:0] enable_s;
 wire [CHANNEL_DATA_WIDTH*REAL_NUM_OF_CHANNELS-1:0] fifo_wr_data;
-wire [CHANNEL_DATA_WIDTH*32-1:0] fifo_wr_data_s;
+wire [CHANNEL_DATA_WIDTH*64-1:0] fifo_wr_data_s;
 
 assign enable_s = {
+  enable_63,enable_62,enable_61,enable_60,enable_59,enable_58,enable_57,enable_56,
+  enable_55,enable_54,enable_53,enable_52,enable_51,enable_50,enable_49,enable_48,
+  enable_47,enable_46,enable_45,enable_44,enable_43,enable_42,enable_41,enable_40,
+  enable_39,enable_38,enable_37,enable_36,enable_35,enable_34,enable_33,enable_32,
   enable_31,enable_30,enable_29,enable_28,enable_27,enable_26,enable_25,enable_24,
   enable_23,enable_22,enable_21,enable_20,enable_19,enable_18,enable_17,enable_16,
 	enable_15,enable_14,enable_13,enable_12,enable_11,enable_10,enable_9,enable_8,
@@ -177,6 +245,38 @@ assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*28+:CHANNEL_DATA_WIDTH] = fifo_wr_data_
 assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*29+:CHANNEL_DATA_WIDTH] = fifo_wr_data_29;
 assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*30+:CHANNEL_DATA_WIDTH] = fifo_wr_data_30;
 assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*31+:CHANNEL_DATA_WIDTH] = fifo_wr_data_31;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*32+:CHANNEL_DATA_WIDTH] = fifo_wr_data_32;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*33+:CHANNEL_DATA_WIDTH] = fifo_wr_data_33;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*34+:CHANNEL_DATA_WIDTH] = fifo_wr_data_34;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*35+:CHANNEL_DATA_WIDTH] = fifo_wr_data_35;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*36+:CHANNEL_DATA_WIDTH] = fifo_wr_data_36;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*37+:CHANNEL_DATA_WIDTH] = fifo_wr_data_37;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*38+:CHANNEL_DATA_WIDTH] = fifo_wr_data_38;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*39+:CHANNEL_DATA_WIDTH] = fifo_wr_data_39;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*40+:CHANNEL_DATA_WIDTH] = fifo_wr_data_40;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*41+:CHANNEL_DATA_WIDTH] = fifo_wr_data_41;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*42+:CHANNEL_DATA_WIDTH] = fifo_wr_data_42;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*43+:CHANNEL_DATA_WIDTH] = fifo_wr_data_43;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*44+:CHANNEL_DATA_WIDTH] = fifo_wr_data_44;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*45+:CHANNEL_DATA_WIDTH] = fifo_wr_data_45;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*46+:CHANNEL_DATA_WIDTH] = fifo_wr_data_46;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*47+:CHANNEL_DATA_WIDTH] = fifo_wr_data_47;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*48+:CHANNEL_DATA_WIDTH] = fifo_wr_data_48;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*49+:CHANNEL_DATA_WIDTH] = fifo_wr_data_49;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*50+:CHANNEL_DATA_WIDTH] = fifo_wr_data_50;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*51+:CHANNEL_DATA_WIDTH] = fifo_wr_data_51;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*52+:CHANNEL_DATA_WIDTH] = fifo_wr_data_52;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*53+:CHANNEL_DATA_WIDTH] = fifo_wr_data_53;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*54+:CHANNEL_DATA_WIDTH] = fifo_wr_data_54;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*55+:CHANNEL_DATA_WIDTH] = fifo_wr_data_55;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*56+:CHANNEL_DATA_WIDTH] = fifo_wr_data_56;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*57+:CHANNEL_DATA_WIDTH] = fifo_wr_data_57;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*58+:CHANNEL_DATA_WIDTH] = fifo_wr_data_58;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*59+:CHANNEL_DATA_WIDTH] = fifo_wr_data_59;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*60+:CHANNEL_DATA_WIDTH] = fifo_wr_data_60;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*61+:CHANNEL_DATA_WIDTH] = fifo_wr_data_61;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*62+:CHANNEL_DATA_WIDTH] = fifo_wr_data_62;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*63+:CHANNEL_DATA_WIDTH] = fifo_wr_data_63;
 assign fifo_wr_data = fifo_wr_data_s[0+:REAL_NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH];
 
 util_cpack2_impl #(
