@@ -17,8 +17,8 @@ create_generated_clock -name spi_2_clk  \
 # Constraint SYSREFs
 # Assumption is that REFCLK and SYSREF have similar propagation delay,
 # and the SYSREF is a source synchronous Edge-Aligned signal to REFCLK
-set_input_delay -clock [get_clocks tx_device_clk] \
-  [get_property PERIOD [get_clocks tx_device_clk]] \
+set_input_delay -clock [get_clocks rx_device_clk] \
+  [get_property PERIOD [get_clocks rx_device_clk]] \
   [get_ports {fpga_sysref_m2c_*}]
 
 

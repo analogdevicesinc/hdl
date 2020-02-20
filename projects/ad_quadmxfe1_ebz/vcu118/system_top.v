@@ -166,6 +166,9 @@ module system_top (
   wire            fpga_clk_m2c_4;
   wire            device_clk;
 
+  reg             ext_sync_ms = 1'b0;
+  reg             ext_sync_noms = 1'b0;
+
   assign iic_rstn = 1'b1;
 
   // instantiations
@@ -456,7 +459,7 @@ module system_top (
     .ref_clk_q2 (ref_clk_0_replica),
     .ref_clk_q3 (ref_clk_0_replica),
     .rx_device_clk (rx_device_clk),
-    .tx_device_clk (tx_device_clk),
+    .tx_device_clk (rx_device_clk), // use same device clock for both links
     .rx_sync_0 (rx_syncout),
     .tx_sync_0 (tx_syncin),
     .rx_sysref_0 (sysref),
@@ -468,8 +471,13 @@ module system_top (
     .gpio3_i (gpio_i[127:96]),
     .gpio3_o (gpio_o[127:96]),
     .gpio3_t (gpio_t[127:96]),
-    .ext_sync (ext_sync)
+    .ext_sync (ext_sync_noms)
   );
+
+  always @(posedge rx_device_clk) begin
+    ext_sync_ms <= ext_sync_ms;
+    ext_sync_noms <= ext_sync_ms;
+  end
 
 endmodule
 
