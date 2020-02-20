@@ -240,8 +240,23 @@ proc ad_cpu_interconnect {m_base m_port} {
 
 proc ad_dma_interconnect {m_port} {
 
-  add_connection ${m_port} sys_ddr3_cntrl.ctrl_amm_0
-  set_connection_parameter_value ${m_port}/sys_ddr3_cntrl.ctrl_amm_0  baseAddress {0x0}
+  set avm_bridge ""
+  append avm_bridge [lindex [split $m_port "."] 0] "_bridge"
+  set if_name [lindex [split $m_port "."] 1]
+
+  ## Instantiate an Avalon Pipeline Bridge, in order to isolate the AXI to Avalon
+  ## adapters from the main interconnect
+  add_instance ${avm_bridge} altera_avalon_mm_bridge
+  set_instance_parameter_value ${avm_bridge} {SYNC_RESET} {1}
+  set_instance_parameter_value ${avm_bridge} {DATA_WIDTH} {128}
+  set_instance_parameter_value ${avm_bridge} {USE_AUTO_ADDRESS_WIDTH} {1}
+
+  add_connection sys_clk.clk ${avm_bridge}.clk
+  add_connection sys_clk.clk_reset ${avm_bridge}.reset
+  add_connection ${m_port} ${avm_bridge}.s0
+  add_connection ${avm_bridge}.m0 sys_ddr3_cntrl.ctrl_amm_0
+  set_connection_parameter_value ${avm_bridge}.m0/sys_ddr3_cntrl.ctrl_amm_0 baseAddress {0x0}
+
 }
 
 # common dma interfaces
