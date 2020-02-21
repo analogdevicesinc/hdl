@@ -134,8 +134,7 @@ module system_top (
   inout  [10:0] mxfe2_gpio,
   inout  [10:0] mxfe3_gpio,
 
-  input  ext_sync_p,
-  input  ext_sync_n
+  input  ext_sync
 
 );
 
@@ -166,8 +165,11 @@ module system_top (
   wire            fpga_clk_m2c_4;
   wire            device_clk;
 
+  wire            ext_sync_at_sysref;
+
   reg             ext_sync_ms = 1'b0;
   reg             ext_sync_noms = 1'b0;
+  reg             ext_sync_noms_d1 = 1'b0;
 
   assign iic_rstn = 1'b1;
 
@@ -229,10 +231,6 @@ module system_top (
     .O (tx_device_clk)
   );
 
-  IBUFDS i_ibufds_ext_sync (
-    .I (ext_sync_p),
-    .IB (ext_sync_n),
-    .O (ext_sync));
 
   // spi
 
@@ -471,13 +469,41 @@ module system_top (
     .gpio3_i (gpio_i[127:96]),
     .gpio3_o (gpio_o[127:96]),
     .gpio3_t (gpio_t[127:96]),
-    .ext_sync (ext_sync_noms)
+    .ext_sync (ext_sync_at_sysref)
   );
 
+
+  // TODO : change this with sysref edge from the link layer
+  reg sysref_ms = 1'b0;
+  reg sysref_noms = 1'b0;
+  reg sysref_noms_d1 = 1'b0;
+  reg sync_pendign = 1'b0;  
+
+  wire sysref_edge;
+  assign sysref_edge = sysref_noms & ~sysref_noms_d1;
+
   always @(posedge rx_device_clk) begin
-    ext_sync_ms <= ext_sync_ms;
+    sysref_ms <= sysref;
+    sysref_noms <= sysref_ms;
+    sysref_noms_d1 <= sysref_noms;
+    ext_sync_ms <= ext_sync;
     ext_sync_noms <= ext_sync_ms;
+    ext_sync_noms_d1 <= ext_sync_noms;
   end
+
+  wire ext_sync_edge;
+  assign ext_sync_edge = ext_sync_noms & ~ext_sync_noms_d1;
+  
+  // assumption is the ext_sync is not edge aligned with sysref
+  always @(posedge rx_device_clk) begin
+    if (ext_sync_edge) begin
+      sync_pendign <= 1'b1;
+    end else if (sysref_edge) begin
+      sync_pendign <= 1'b0;
+    end
+  end  
+
+  assign ext_sync_at_sysref = sync_pendign &  sysref_edge;
 
 endmodule
 
