@@ -100,7 +100,10 @@ set dev_package_list { \
         { cl      14 } \
         { sf      15 } \
         { ba      16 } \
-        { fa      17 }}
+        { fa      17 } \
+        { fs      18 } \
+        { fi      19 }}
+
 
 set xcvr_type_list { \
         { Unknown             0 } \
