@@ -88,7 +88,7 @@ module system_top #(
 
   inout       [ 4:0]      dac_ctrl,
 
-  inout                   spi_en,
+  output                  spi_en,
   output                  spi_csn_dac,
   output                  spi_csn_clk,
   output                  spi_csn_clk2,
@@ -128,7 +128,7 @@ module system_top #(
   // If you are planning to build a bitstream for just one of those boards you
   // can hardwire the logic level here.
   //
-  // assign spi_en = 1'bz;
+  assign spi_en = (DEVICE_CODE <= 2);
 
   //                                        9135/9144/9172    916(1,2,3,4)
   assign spi_csn_dac  = spi0_csn[1];
@@ -164,13 +164,12 @@ module system_top #(
 
   /* FMC GPIOs */
   ad_iobuf #(
-    .DATA_WIDTH(6)
+    .DATA_WIDTH(5)
   ) i_iobuf (
-    .dio_t (gpio_t[21+:6]),
-    .dio_i (gpio_o[21+:6]),
-    .dio_o (gpio_i[21+:6]),
+    .dio_t (gpio_t[21+:5]),
+    .dio_i (gpio_o[21+:5]),
+    .dio_o (gpio_i[21+:5]),
     .dio_p ({
-      spi_en,            /*      26 */
       dac_ctrl           /* 25 - 21 */
     })
   );
@@ -215,7 +214,7 @@ module system_top #(
   );
 
   assign gpio_i[63:52] = gpio_o[63:52];
-  assign gpio_i[47:27] = gpio_o[47:27];
+  assign gpio_i[47:26] = gpio_o[47:26];
   assign gpio_i[20:15] = gpio_o[20:15];
 
   system_wrapper i_system_wrapper (
