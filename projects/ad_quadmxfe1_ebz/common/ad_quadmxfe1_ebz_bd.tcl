@@ -11,7 +11,13 @@ if {$JESD_MODE == "8B10B"} {
   set ADI_PHY_SEL 0
 }
 
-set MAX_LANES_PER_LINK 4
+# These are max values specific to the board
+set MAX_RX_LANES_PER_LINK 4
+set MAX_TX_LANES_PER_LINK 4
+set MAX_RX_LINKS 4
+set MAX_TX_LINKS 4
+set MAX_RX_LANES [expr $MAX_RX_LANES_PER_LINK*$MAX_RX_LINKS]
+set MAX_TX_LANES [expr $MAX_TX_LANES_PER_LINK*$MAX_TX_LINKS]
 
 # RX parameters
 set RX_NUM_OF_LINKS $ad_project_params(RX_NUM_LINKS)
@@ -46,8 +52,6 @@ set TX_SAMPLES_PER_FRAME $TX_JESD_S
 set TX_SAMPLE_WIDTH      $TX_JESD_NP
 
 set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8*$DATAPATH_WIDTH / ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)] 
-
-set L [expr max($TX_NUM_OF_LANES,$RX_NUM_OF_LANES)]
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
@@ -93,12 +97,12 @@ ad_ip_instance axi_adxcvr axi_mxfe_tx_xcvr [list \
   SYS_CLK_SEL 0x3 \
 ]
 } else {
-for {set i 0} {$i < $L} {incr i} {
+for {set i 0} {$i < $MAX_RX_LANES} {incr i} {
 create_bd_port -dir I rx_data_${i}_n
 create_bd_port -dir I rx_data_${i}_p
 }
 
-for {set i 0} {$i < $L} {incr i} {
+for {set i 0} {$i < $MAX_TX_LANES} {incr i} {
 create_bd_port -dir O tx_data_${i}_n
 create_bd_port -dir O tx_data_${i}_p
 }
@@ -107,8 +111,8 @@ create_bd_port -dir I rx_sysref_0
 create_bd_port -dir I tx_sysref_0
 
 # unused, keep for port map compatibility with JESD204B
-create_bd_port -from 0 -to [expr $RX_NUM_OF_LINKS-1] -dir O  rx_sync_0
-create_bd_port -from 0 -to [expr $TX_NUM_OF_LINKS-1] -dir I  tx_sync_0
+create_bd_port -from 0 -to [expr $MAX_RX_LINKS-1] -dir O  rx_sync_0
+create_bd_port -from 0 -to [expr $MAX_TX_LINKS-1] -dir I  tx_sync_0
 
 # reset generator
 ad_ip_instance proc_sys_reset rx_device_clk_rstgen
@@ -414,45 +418,29 @@ ad_connect  jesd204_phy_125_126/rxn_in rx_concat_15_8_n/dout
 #  map the logical lane $n onto the physical lane  $lane_map[$n]
 #         n     0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 
 #  lane_map = {13 10 11  9  3 15 12 14  2  5  0  4  8  7  6  1}
-#                      logical link                                 physical link
-#ad_connect  axi_mxfe_rx_jesd/rx_phy10 jesd204_phy_121_122/gt0_rx ; # 0
-#ad_connect  axi_mxfe_rx_jesd/rx_phy15 jesd204_phy_121_122/gt1_rx ; # 1
-#ad_connect  axi_mxfe_rx_jesd/rx_phy8  jesd204_phy_121_122/gt2_rx ; # 2
-#ad_connect  axi_mxfe_rx_jesd/rx_phy4  jesd204_phy_121_122/gt3_rx ; # 3
-#ad_connect  axi_mxfe_rx_jesd/rx_phy11 jesd204_phy_121_122/gt4_rx ; # 4
-#ad_connect  axi_mxfe_rx_jesd/rx_phy9  jesd204_phy_121_122/gt5_rx ; # 5
-#ad_connect  axi_mxfe_rx_jesd/rx_phy14 jesd204_phy_121_122/gt6_rx ; # 6
-#ad_connect  axi_mxfe_rx_jesd/rx_phy13 jesd204_phy_121_122/gt7_rx ; # 7
-#ad_connect  axi_mxfe_rx_jesd/rx_phy12 jesd204_phy_125_126/gt0_rx ; # 8
-#ad_connect  axi_mxfe_rx_jesd/rx_phy3  jesd204_phy_125_126/gt1_rx ; # 9
-#ad_connect  axi_mxfe_rx_jesd/rx_phy1  jesd204_phy_125_126/gt2_rx ; # 10
-#ad_connect  axi_mxfe_rx_jesd/rx_phy2  jesd204_phy_125_126/gt3_rx ; # 11
-#ad_connect  axi_mxfe_rx_jesd/rx_phy6  jesd204_phy_125_126/gt4_rx ; # 12
-#ad_connect  axi_mxfe_rx_jesd/rx_phy0  jesd204_phy_125_126/gt5_rx ; # 13
-#ad_connect  axi_mxfe_rx_jesd/rx_phy7  jesd204_phy_125_126/gt6_rx ; # 14 
-#ad_connect  axi_mxfe_rx_jesd/rx_phy5  jesd204_phy_125_126/gt7_rx ; # 15
-
-# logical lane to physical lane map for maximum of lanes per link
-set logic_link(10) jesd204_phy_121_122/gt0_rx ; # 0
-set logic_link(15) jesd204_phy_121_122/gt1_rx ; # 1
-set logic_link(8)  jesd204_phy_121_122/gt2_rx ; # 2
-set logic_link(4)  jesd204_phy_121_122/gt3_rx ; # 3
-set logic_link(11) jesd204_phy_121_122/gt4_rx ; # 4
-set logic_link(9)  jesd204_phy_121_122/gt5_rx ; # 5
-set logic_link(14) jesd204_phy_121_122/gt6_rx ; # 6
-set logic_link(13) jesd204_phy_121_122/gt7_rx ; # 7
-set logic_link(12) jesd204_phy_125_126/gt0_rx ; # 8
-set logic_link(3)  jesd204_phy_125_126/gt1_rx ; # 9
-set logic_link(1)  jesd204_phy_125_126/gt2_rx ; # 10
-set logic_link(2)  jesd204_phy_125_126/gt3_rx ; # 11
-set logic_link(6)  jesd204_phy_125_126/gt4_rx ; # 12
-set logic_link(0)  jesd204_phy_125_126/gt5_rx ; # 13
-set logic_link(7)  jesd204_phy_125_126/gt6_rx ; # 14 
-set logic_link(5)  jesd204_phy_125_126/gt7_rx ; # 15
+#
+# Logical lane to physical lane map for maximum of lanes per link
+#     logical lane                                physical lane
+set logic_lane(10) jesd204_phy_121_122/gt0_rx ; # 0
+set logic_lane(15) jesd204_phy_121_122/gt1_rx ; # 1
+set logic_lane(8)  jesd204_phy_121_122/gt2_rx ; # 2
+set logic_lane(4)  jesd204_phy_121_122/gt3_rx ; # 3
+set logic_lane(11) jesd204_phy_121_122/gt4_rx ; # 4
+set logic_lane(9)  jesd204_phy_121_122/gt5_rx ; # 5
+set logic_lane(14) jesd204_phy_121_122/gt6_rx ; # 6
+set logic_lane(13) jesd204_phy_121_122/gt7_rx ; # 7
+set logic_lane(12) jesd204_phy_125_126/gt0_rx ; # 8
+set logic_lane(3)  jesd204_phy_125_126/gt1_rx ; # 9
+set logic_lane(1)  jesd204_phy_125_126/gt2_rx ; # 10
+set logic_lane(2)  jesd204_phy_125_126/gt3_rx ; # 11
+set logic_lane(6)  jesd204_phy_125_126/gt4_rx ; # 12
+set logic_lane(0)  jesd204_phy_125_126/gt5_rx ; # 13
+set logic_lane(7)  jesd204_phy_125_126/gt6_rx ; # 14 
+set logic_lane(5)  jesd204_phy_125_126/gt7_rx ; # 15
 set cur_lane 0
 for {set i 0}  {$i < $RX_NUM_OF_LINKS} {incr i} {
   for {set j 0}  {$j < $RX_JESD_L} {incr j} {
-   ad_connect  axi_mxfe_rx_jesd/rx_phy$cur_lane $logic_link([expr $i*$MAX_LANES_PER_LINK+$j])
+   ad_connect  axi_mxfe_rx_jesd/rx_phy$cur_lane $logic_lane([expr $i*$MAX_RX_LANES_PER_LINK+$j])
    incr cur_lane
   }
 }
@@ -504,7 +492,7 @@ ad_connect  mxfe_adc_fifo/dma_xfer_req axi_mxfe_rx_dma/s_axis_xfer_req
 if {$ADI_PHY_SEL == 0} {
 # Tx Physical lanes to PHY
 #
-for {set i 0} {$i < $L} {incr i} {
+for {set i 0} {$i < $MAX_TX_LANES} {incr i} {
   ad_ip_instance xlslice txp_out_slice_$i [list \
     DIN_TO [expr $i % 8] \
     DIN_FROM [expr $i % 8] \
@@ -527,7 +515,7 @@ for {set i 0} {$i < 8} {incr i} {
 }
 
 
-for {set i 0} {$i < $L} {incr i} {
+for {set i 0} {$i < $MAX_TX_LANES} {incr i} {
   ad_connect  txn_out_slice_$i/Dout tx_data_${i}_n
   ad_connect  txp_out_slice_$i/Dout tx_data_${i}_p
 }
@@ -536,45 +524,29 @@ for {set i 0} {$i < $L} {incr i} {
 #  map the logical lane $n onto the physical lane  $lane_map[$n]
 #         n     0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 
 #  lane_map = {13  8  9  7  3 15 12 14  6  5  2  4  0 10  1 11}
-#                      logical link                                 physical link
-#ad_connect  axi_mxfe_tx_jesd/tx_phy12 jesd204_phy_121_122/gt0_tx ; # 0
-#ad_connect  axi_mxfe_tx_jesd/tx_phy14 jesd204_phy_121_122/gt1_tx ; # 1
-#ad_connect  axi_mxfe_tx_jesd/tx_phy10 jesd204_phy_121_122/gt2_tx ; # 2
-#ad_connect  axi_mxfe_tx_jesd/tx_phy4  jesd204_phy_121_122/gt3_tx ; # 3
-#ad_connect  axi_mxfe_tx_jesd/tx_phy11 jesd204_phy_121_122/gt4_tx ; # 4
-#ad_connect  axi_mxfe_tx_jesd/tx_phy9  jesd204_phy_121_122/gt5_tx ; # 5
-#ad_connect  axi_mxfe_tx_jesd/tx_phy8  jesd204_phy_121_122/gt6_tx ; # 6
-#ad_connect  axi_mxfe_tx_jesd/tx_phy3  jesd204_phy_121_122/gt7_tx ; # 7
-#ad_connect  axi_mxfe_tx_jesd/tx_phy1  jesd204_phy_125_126/gt0_tx ; # 8
-#ad_connect  axi_mxfe_tx_jesd/tx_phy2  jesd204_phy_125_126/gt1_tx ; # 9
-#ad_connect  axi_mxfe_tx_jesd/tx_phy13 jesd204_phy_125_126/gt2_tx ; # 10
-#ad_connect  axi_mxfe_tx_jesd/tx_phy15 jesd204_phy_125_126/gt3_tx ; # 11
-#ad_connect  axi_mxfe_tx_jesd/tx_phy6  jesd204_phy_125_126/gt4_tx ; # 12
-#ad_connect  axi_mxfe_tx_jesd/tx_phy0  jesd204_phy_125_126/gt5_tx ; # 13
-#ad_connect  axi_mxfe_tx_jesd/tx_phy7  jesd204_phy_125_126/gt6_tx ; # 14 
-#ad_connect  axi_mxfe_tx_jesd/tx_phy5  jesd204_phy_125_126/gt7_tx ; # 15
-
+#
 # logical lane to physical lane map for maximum of lanes per link
-set logic_link(12) jesd204_phy_121_122/gt0_tx ; # 0
-set logic_link(14) jesd204_phy_121_122/gt1_tx ; # 1
-set logic_link(10) jesd204_phy_121_122/gt2_tx ; # 2
-set logic_link(4)  jesd204_phy_121_122/gt3_tx ; # 3
-set logic_link(11) jesd204_phy_121_122/gt4_tx ; # 4
-set logic_link(9)  jesd204_phy_121_122/gt5_tx ; # 5
-set logic_link(8)  jesd204_phy_121_122/gt6_tx ; # 6
-set logic_link(3)  jesd204_phy_121_122/gt7_tx ; # 7
-set logic_link(1)  jesd204_phy_125_126/gt0_tx ; # 8
-set logic_link(2)  jesd204_phy_125_126/gt1_tx ; # 9
-set logic_link(13) jesd204_phy_125_126/gt2_tx ; # 10
-set logic_link(15) jesd204_phy_125_126/gt3_tx ; # 11
-set logic_link(6)  jesd204_phy_125_126/gt4_tx ; # 12
-set logic_link(0)  jesd204_phy_125_126/gt5_tx ; # 13
-set logic_link(7)  jesd204_phy_125_126/gt6_tx ; # 14 
-set logic_link(5)  jesd204_phy_125_126/gt7_tx ; # 15
+#     logical lane                                physical lane
+set logic_lane(12) jesd204_phy_121_122/gt0_tx ; # 0
+set logic_lane(14) jesd204_phy_121_122/gt1_tx ; # 1
+set logic_lane(10) jesd204_phy_121_122/gt2_tx ; # 2
+set logic_lane(4)  jesd204_phy_121_122/gt3_tx ; # 3
+set logic_lane(11) jesd204_phy_121_122/gt4_tx ; # 4
+set logic_lane(9)  jesd204_phy_121_122/gt5_tx ; # 5
+set logic_lane(8)  jesd204_phy_121_122/gt6_tx ; # 6
+set logic_lane(3)  jesd204_phy_121_122/gt7_tx ; # 7
+set logic_lane(1)  jesd204_phy_125_126/gt0_tx ; # 8
+set logic_lane(2)  jesd204_phy_125_126/gt1_tx ; # 9
+set logic_lane(13) jesd204_phy_125_126/gt2_tx ; # 10
+set logic_lane(15) jesd204_phy_125_126/gt3_tx ; # 11
+set logic_lane(6)  jesd204_phy_125_126/gt4_tx ; # 12
+set logic_lane(0)  jesd204_phy_125_126/gt5_tx ; # 13
+set logic_lane(7)  jesd204_phy_125_126/gt6_tx ; # 14 
+set logic_lane(5)  jesd204_phy_125_126/gt7_tx ; # 15
 set cur_lane 0
 for {set i 0}  {$i < $TX_NUM_OF_LINKS} {incr i} {
   for {set j 0}  {$j < $TX_JESD_L} {incr j} {
-   ad_connect  axi_mxfe_tx_jesd/tx_phy$cur_lane $logic_link([expr $i*$MAX_LANES_PER_LINK+$j])
+   ad_connect  axi_mxfe_tx_jesd/tx_phy$cur_lane $logic_lane([expr $i*$MAX_TX_LANES_PER_LINK+$j])
    incr cur_lane
   }
 }
