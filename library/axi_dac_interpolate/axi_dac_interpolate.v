@@ -49,11 +49,14 @@ module axi_dac_interpolate #(
 
   input                 dma_valid_a,
   input                 dma_valid_b,
+  output                dma_ready_a,
+  output                dma_ready_b,
 
+  input                 dac_enable_a,
+  input                 dac_enable_b,
   output      [15:0]    dac_int_data_a,
   output      [15:0]    dac_int_data_b,
-  output                dac_int_valid_a,
-  output                dac_int_valid_b,
+  output                underflow,
 
   input       [ 1:0]    trigger_i,
   input                 trigger_adc,
@@ -140,6 +143,8 @@ module axi_dac_interpolate #(
   wire              trigger_active;
   wire              ext_trigger;
 
+  wire              underflow_a;
+  wire              underflow_b;
 
   // signal name changes
 
@@ -190,6 +195,7 @@ module axi_dac_interpolate #(
    low_level_trigger <= ~trigger_i_m3 & low_level;
   end
 
+  assign underflow = underflow_a | underflow_b;
 
   axi_dac_interpolate_filter #(
     .CORRECTION_DISABLE(CORRECTION_DISABLE))
@@ -200,8 +206,10 @@ module axi_dac_interpolate #(
     .dac_data (dac_data_a),
     .dac_valid (dac_valid_a),
 
+    .dac_enable (dac_enable_a),
     .dac_int_data (dac_int_data_a),
-    .dac_int_valid (dac_int_valid_a),
+    .dma_ready (dma_ready_a),
+    .underflow (underflow_a),
 
     .filter_mask (filter_mask_a),
     .interpolation_ratio (interpolation_ratio_a),
@@ -223,9 +231,11 @@ module axi_dac_interpolate #(
 
     .dac_data (dac_data_b),
     .dac_valid (dac_valid_b),
+    .underflow (underflow_b),
 
+    .dac_enable (dac_enable_b),
     .dac_int_data (dac_int_data_b),
-    .dac_int_valid (dac_int_valid_b),
+    .dma_ready (dma_ready_b),
 
     .filter_mask (filter_mask_b),
     .interpolation_ratio (interpolation_ratio_b),
