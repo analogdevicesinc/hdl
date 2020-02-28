@@ -261,9 +261,10 @@ ad_connect $sys_dma_resetn axi_adrv9009_fmc_rx_dma/m_dest_axi_aresetn
 ad_connect $sys_dma_resetn axi_adrv9009_fmc_tx_dma/m_src_axi_aresetn
 ad_connect $sys_dma_resetn axi_adrv9009_fmc_obs_dma/m_dest_axi_aresetn
 
-ad_cpu_interrupt ps-2 mb-2 axi_adrv9009_fmc_obs_dma/irq
-ad_cpu_interrupt ps-3 mb-3 axi_adrv9009_fmc_tx_dma/irq
-ad_cpu_interrupt ps-4 mb-4 axi_adrv9009_fmc_rx_dma/irq
-ad_cpu_interrupt ps-5 mb-5 axi_adrv9009_fmc_obs_jesd/irq
-ad_cpu_interrupt ps-6 mb-6 axi_adrv9009_fmc_tx_jesd/irq
-ad_cpu_interrupt ps-7 mb-7 axi_adrv9009_fmc_rx_jesd/irq
+
+ad_cpu_interrupt ps-8 mb-8 axi_adrv9009_fmc_obs_dma/irq
+ad_cpu_interrupt ps-9 mb-9 axi_adrv9009_fmc_tx_dma/irq
+ad_cpu_interrupt ps-10 mb-15 axi_adrv9009_fmc_rx_dma/irq
+ad_cpu_interrupt ps-11 mb-14 axi_adrv9009_fmc_obs_jesd/irq
+ad_cpu_interrupt ps-12 mb-13 axi_adrv9009_fmc_tx_jesd/irq
+ad_cpu_interrupt ps-13 mb-12 axi_adrv9009_fmc_rx_jesd/irq
