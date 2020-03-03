@@ -75,8 +75,8 @@ if {$ADI_PHY_SEL == 1} {
 # common xcvr
 ad_ip_instance util_adxcvr util_mxfe_xcvr [list \
   CPLL_FBDIV_4_5 5 \
-  TX_NUM_OF_LANES $TX_NUM_OF_LANES \
-  RX_NUM_OF_LANES $RX_NUM_OF_LANES \
+  TX_NUM_OF_LANES $MAX_TX_LANES \
+  RX_NUM_OF_LANES $MAX_RX_LANES \
   RX_OUT_DIV 1 \
 ]
 
@@ -296,11 +296,39 @@ ad_connect  $sys_cpu_clk util_mxfe_xcvr/up_clk
 
 
 # connections (adc)
-ad_xcvrcon  util_mxfe_xcvr axi_mxfe_rx_xcvr axi_mxfe_rx_jesd {13 10 11 9 3 15 12 14 2 5 0 4 8 7 6 1} rx_device_clk
+#  map the logical lane $n onto the physical lane  $lane_map[$n]
+#         n     0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 
+#  lane_map = {13 10 11  9  3 15 12 14  2  5  0  4  8  7  6  1}
+
+set max_lane_map {13 10 11  9  3 15 12 14  2  5  0  4  8  7  6  1}
+set lane_map {}
+
+for {set i 0}  {$i < $RX_NUM_OF_LINKS} {incr i} {
+  for {set j 0}  {$j < $RX_JESD_L} {incr j} {
+    set cur_lane [expr $i*$MAX_RX_LANES_PER_LINK+$j]
+    lappend lane_map [lindex $max_lane_map $cur_lane]
+  }
+}
+
+ad_xcvrcon  util_mxfe_xcvr axi_mxfe_rx_xcvr axi_mxfe_rx_jesd $lane_map rx_device_clk
 
 
 # connections (dac)
-ad_xcvrcon  util_mxfe_xcvr axi_mxfe_tx_xcvr axi_mxfe_tx_jesd {13 8 9 7 3 15 12 14 6 5 2 4 0 10 1 11} tx_device_clk
+#  map the logical lane $n onto the physical lane  $lane_map[$n]
+#         n     0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 
+#  lane_map = {13  8  9  7  3 15 12 14  6  5  2  4  0 10  1 11}
+#
+set max_lane_map {13 8 9 7 3 15 12 14 6 5 2 4 0 10 1 11}
+set lane_map {}
+
+for {set i 0}  {$i < $TX_NUM_OF_LINKS} {incr i} {
+  for {set j 0}  {$j < $TX_JESD_L} {incr j} {
+    set cur_lane [expr $i*$MAX_TX_LANES_PER_LINK+$j]
+    lappend lane_map [lindex $max_lane_map $cur_lane]
+  }
+}
+
+ad_xcvrcon  util_mxfe_xcvr axi_mxfe_tx_xcvr axi_mxfe_tx_jesd $lane_map tx_device_clk
 
 } else {
 
