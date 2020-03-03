@@ -95,8 +95,17 @@ module system_top (
   output          spi_mosi,
   input           spi_miso,
 
-  output  [85:0]  gp_out,
-  input   [85:0]  gp_in,
+//  output [85:0]  gp_out,
+//  input  [85:0]  gp_in,
+
+  inout   [21:0]  gpio_p13_c1_io,
+  inout   [21:0]  gpio_p13_c2_io,
+  inout   [21:0]  gpio_p2_c1_io,
+  inout   [21:0]  gpio_p2_c2_io,
+  inout   [23:0]  gpio_p4_p5_c1_io,
+  inout   [23:0]  gpio_p4_p5_c2_io,
+  inout   [15:0]  gpio_p6_p7_c1_io,
+  inout   [17:0]  gpio_p6_p7_c2_io,
 
   input           gt_ref_clk_p,
   input           gt_ref_clk_n,
@@ -109,18 +118,46 @@ module system_top (
   // internal signals
 
   wire            gt_ref_clk;
-  wire    [95:0]  gp_out_s;
-  wire    [95:0]  gp_in_s;
+//  wire    [95:0]  gp_out_s;
+//  wire    [95:0]  gp_in_s;
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
 
+  wire    [21:0]  gpio_p13_c1_i;
+  wire    [21:0]  gpio_p13_c1_o;
+  wire    [21:0]  gpio_p13_c1_t;
+  wire    [21:0]  gpio_p13_c2_i;
+  wire    [21:0]  gpio_p13_c2_o;
+  wire    [21:0]  gpio_p13_c2_t;
+
+  wire    [21:0]  gpio_p2_c1_i;
+  wire    [21:0]  gpio_p2_c1_o;
+  wire    [21:0]  gpio_p2_c1_t;
+  wire    [21:0]  gpio_p2_c2_i;
+  wire    [21:0]  gpio_p2_c2_o;
+  wire    [21:0]  gpio_p2_c2_t;
+
+  wire    [23:0]  gpio_p4_p5_c1_i;
+  wire    [23:0]  gpio_p4_p5_c1_o;
+  wire    [23:0]  gpio_p4_p5_c1_t;
+  wire    [23:0]  gpio_p4_p5_c2_i;
+  wire    [23:0]  gpio_p4_p5_c2_o;
+  wire    [23:0]  gpio_p4_p5_c2_t;
+
+  wire    [15:0]  gpio_p6_p7_c1_i;
+  wire    [15:0]  gpio_p6_p7_c1_o;
+  wire    [15:0]  gpio_p6_p7_c1_t;
+  wire    [17:0]  gpio_p6_p7_c2_i;
+  wire    [17:0]  gpio_p6_p7_c2_o;
+  wire    [17:0]  gpio_p6_p7_c2_t;
+
   // assignments
 
   assign clkout_out = clkout_in;
-  assign gp_out[85:0] = gp_out_s[85:0];
-  assign gp_in_s[95:86] = gp_out_s[95:86];
-  assign gp_in_s[85: 0] = gp_in[85:0];
+//  assign gp_out[85:0] = gp_out_s[85:0];
+//  assign gp_in_s[95:86] = gp_out_s[95:86];
+//  assign gp_in_s[85: 0] = gp_in[85:0];
 
   // instantiations
 
@@ -132,6 +169,54 @@ module system_top (
     .ODIV2 ());
 
   // board gpio - 31-0
+
+  ad_iobuf #(.DATA_WIDTH(22)) gpio_p13_c1_iobuf (
+    .dio_t (gpio_p13_c1_t),
+    .dio_i (gpio_p13_c1_o),
+    .dio_o (gpio_p13_c1_i),
+    .dio_p (gpio_p13_c1_io));
+
+  ad_iobuf #(.DATA_WIDTH(22)) gpio_p13_c2_iobuf (
+    .dio_t (gpio_p13_c2_t),
+    .dio_i (gpio_p13_c2_o),
+    .dio_o (gpio_p13_c2_i),
+    .dio_p (gpio_p13_c2_io));
+
+  ad_iobuf #(.DATA_WIDTH(22)) gpio_p2_c1_iobuf (
+    .dio_t (gpio_p2_c1_t),
+    .dio_i (gpio_p2_c1_o),
+    .dio_o (gpio_p2_c1_i),
+    .dio_p (gpio_p2_c1_io));
+
+  ad_iobuf #(.DATA_WIDTH(22)) gpio_p2_c2_iobuf (
+    .dio_t (gpio_p2_c2_t),
+    .dio_i (gpio_p2_c2_o),
+    .dio_o (gpio_p2_c2_i),
+    .dio_p (gpio_p2_c2_io));
+
+  ad_iobuf #(.DATA_WIDTH(24)) gpio_p4_p5_c1_iobuf (
+    .dio_t (gpio_p4_p5_c1_t),
+    .dio_i (gpio_p4_p5_c1_o),
+    .dio_o (gpio_p4_p5_c1_i),
+    .dio_p (gpio_p4_p5_c1_io));
+
+  ad_iobuf #(.DATA_WIDTH(24)) gpio_p4_p5_c2_iobuf (
+    .dio_t (gpio_p4_p5_c2_t),
+    .dio_i (gpio_p4_p5_c2_o),
+    .dio_o (gpio_p4_p5_c2_i),
+    .dio_p (gpio_p4_p5_c2_io));
+
+  ad_iobuf #(.DATA_WIDTH(16)) gpio_p6_p7_c1_iobuf (
+    .dio_t (gpio_p6_p7_c1_t),
+    .dio_i (gpio_p6_p7_c1_o),
+    .dio_o (gpio_p6_p7_c1_i),
+    .dio_p (gpio_p6_p7_c1_io));
+
+  ad_iobuf #(.DATA_WIDTH(18)) gpio_p6_p7_c2_iobuf (
+    .dio_t (gpio_p6_p7_c2_t),
+    .dio_i (gpio_p6_p7_c2_o),
+    .dio_o (gpio_p6_p7_c2_i),
+    .dio_p (gpio_p6_p7_c2_io));
 
   assign gpio_i[31:20] = gpio_o[31:20];
 
@@ -214,7 +299,6 @@ module system_top (
     .gpio_p6_p7_c2_i (gpio_p6_p7_c2_i),
     .gpio_p6_p7_c2_o (gpio_p6_p7_c2_o),
     .gpio_p6_p7_c2_t (gpio_p6_p7_c2_t),
-    .clkout_in_s (clkout_in),
 
 //   .gp_in_0 (gp_in_s[31:0]),
 //   .gp_in_1 (gp_in_s[63:32]),
