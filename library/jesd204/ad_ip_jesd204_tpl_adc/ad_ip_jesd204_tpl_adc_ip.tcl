@@ -52,6 +52,9 @@ adi_ip_files ad_ip_jesd204_tpl_adc [list \
 
 adi_ip_properties ad_ip_jesd204_tpl_adc
 
+adi_init_bd_tcl
+adi_ip_bd ad_ip_jesd204_tpl_adc "bd/bd.tcl"
+
 set cc [ipx::current_core]
 
 set_property display_name "JESD204 Transport Layer for ADCs" $cc
@@ -130,6 +133,8 @@ foreach {k v w} {
   ] $p
   incr i
 }
+
+adi_add_auto_fpga_spec_params
 
 ipx::create_xgui_files [ipx::current_core]
 ipx::save_core [ipx::current_core]
