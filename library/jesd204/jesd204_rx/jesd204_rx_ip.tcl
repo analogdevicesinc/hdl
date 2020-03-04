@@ -153,6 +153,12 @@ adi_set_ports_dependency "phy_en_char_align" \
 	"(spirit:decode(id('MODELPARAM_VALUE.LINK_MODE')) = 1)"
 
 set cc [ipx::current_core]
+
+set_property -dict [list \
+  driver_value 0 \
+] [ipx::get_ports phy_header -of_objects $cc]
+
+# Arrange GUI page layout
 set page0 [ipgui::get_pagespec -name "Page 0" -component $cc]
 
 # Link layer mode
