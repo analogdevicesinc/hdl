@@ -3,6 +3,7 @@
 
 create_bd_port -dir I adc_clk
 create_bd_port -dir I adc_valid
+create_bd_port -dir I adc_sync
 create_bd_port -dir I -from 31 -to 0 adc_data
 create_bd_port -dir I -from 31 -to 0 adc_gpio_0_i
 create_bd_port -dir O -from 31 -to 0 adc_gpio_0_o
@@ -39,6 +40,7 @@ ad_ip_parameter ad7768_gpio CONFIG.C_INTERRUPT_PRESENT 1
 
 ad_connect  adc_clk ad7768_dma/fifo_wr_clk
 ad_connect  adc_valid ad7768_dma/fifo_wr_en
+ad_connect  adc_sync ad7768_dma/fifo_wr_sync
 ad_connect  adc_data ad7768_dma/fifo_wr_din
 ad_connect  adc_gpio_0_i ad7768_gpio/gpio_io_i
 ad_connect  adc_gpio_0_o ad7768_gpio/gpio_io_o

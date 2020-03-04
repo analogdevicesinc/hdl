@@ -48,6 +48,7 @@ module ad7768_if (
   output                  adc_clk,
   output  reg             adc_valid,
   output  reg [ 31:0]     adc_data,
+  output                  adc_sync,
 
   // control interface
 
@@ -136,6 +137,7 @@ module ad7768_if (
   reg     [ 35:0]   adc_status_clr_m1 = 'd0;
   reg     [ 35:0]   adc_status_clr = 'd0;
   reg     [ 35:0]   adc_status_clr_d = 'd0;
+  reg               adc_valid_d = 'd0;
 
   // internal signals
 
@@ -244,6 +246,11 @@ module ad7768_if (
   end
 
   // data & status
+
+  always @(posedge adc_clk) begin
+    adc_valid_d <= adc_valid;
+  end
+  assign adc_sync = adc_valid & ~adc_valid_d;
 
   always @(posedge adc_clk) begin
     adc_valid <= adc_valid_int & adc_enable_int;
