@@ -223,6 +223,9 @@ add_connection sys_cpu.instruction_master mm_ccb_sys_cpu.s0
 add_connection sys_ddr3_cntrl.emif_usr_clk mm_ccb_sys_cpu.m0_clk
 add_connection sys_ddr3_cntrl.emif_usr_reset_n mm_ccb_sys_cpu.m0_reset
 add_connection  mm_ccb_sys_cpu.m0 sys_ddr3_cntrl.ctrl_amm_0
+set_connection_parameter_value sys_cpu.data_master/mm_ccb_sys_cpu.s0 baseAddress {0x0}
+set_connection_parameter_value sys_cpu.instruction_master/mm_ccb_sys_cpu.s0 baseAddress {0x0}
+set_connection_parameter_value mm_ccb_sys_cpu.m0/sys_ddr3_cntrl.ctrl_amm_0 baseAddress {0x0}
 
 # cpu/hps handling
 
@@ -438,6 +441,9 @@ add_connection sys_ethernet_dma_tx.mm_read mm_ccb_ethernet_txrx.s0
 add_connection sys_ddr3_cntrl.emif_usr_clk mm_ccb_ethernet_txrx.m0_clk
 add_connection sys_ddr3_cntrl.emif_usr_reset_n mm_ccb_ethernet_txrx.m0_reset
 add_connection mm_ccb_ethernet_txrx.m0 sys_ddr3_cntrl.ctrl_amm_0
+set_connection_parameter_value sys_ethernet_dma_rx.mm_write/mm_ccb_ethernet_txrx.s0 baseAddress {0x0}
+set_connection_parameter_value sys_ethernet_dma_tx.mm_read/mm_ccb_ethernet_txrx.s0 baseAddress {0x0}
+set_connection_parameter_value mm_ccb_ethernet_txrx.m0/sys_ddr3_cntrl.ctrl_amm_0 baseAddress {0x0}
 
 # interrupts
 
