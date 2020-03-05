@@ -48,6 +48,12 @@ CLEAN_TARGET += *.dpf
 CLEAN_TARGET += system_qsys_script.tcl
 CLEAN_TARGET += system_bd.qsys
 CLEAN_TARGET += .qsys_edit
+CLEAN_TARGET += *.rpt
+CLEAN_TARGET += *.smsg
+CLEAN_TARGET += *.summary
+CLEAN_TARGET += ip
+CLEAN_TARGET += qdb
+CLEAN_TARGET += tmp-clearbox
 
 M_DEPS += system_top.v
 M_DEPS += system_qsys.tcl
