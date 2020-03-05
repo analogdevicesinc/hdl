@@ -349,7 +349,7 @@ module system_top (
 
     .spi0_sclk (spi_clk),
     .spi0_csn (spi_csn),
-    .spi0_miso (spi_miso),
+    .spi0_miso (spi0_miso),
     .spi0_mosi (spi_mosi),
     .spi1_sclk (),
     .spi1_csn (),
