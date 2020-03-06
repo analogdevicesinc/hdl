@@ -43,7 +43,7 @@ set_instance_parameter_value sys_hps {HPS_IO_Enable} $hps_io_list
 
 add_instance sys_spi_afe_adc altera_avalon_spi
 set_instance_parameter_value sys_spi_afe_adc {clockPhase} {0}
-set_instance_parameter_value sys_spi_afe_adc {clockPolarity} {0}
+set_instance_parameter_value sys_spi_afe_adc {clockPolarity} {1}
 set_instance_parameter_value sys_spi_afe_adc {dataWidth} {8}
 set_instance_parameter_value sys_spi_afe_adc {masterSPI} {1}
 set_instance_parameter_value sys_spi_afe_adc {numberOfSlaves} {8}
