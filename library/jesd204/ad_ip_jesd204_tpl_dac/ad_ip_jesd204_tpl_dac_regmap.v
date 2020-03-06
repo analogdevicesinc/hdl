@@ -25,6 +25,8 @@
 
 module ad_ip_jesd204_tpl_dac_regmap #(
   parameter ID = 0,
+  parameter DATAPATH_DISABLE = 0,
+  parameter IQCORRECTION_DISABLE = 1,
   parameter FPGA_TECHNOLOGY = 0,
   parameter FPGA_FAMILY = 0,
   parameter SPEED_GRADE = 0,
@@ -78,6 +80,10 @@ module ad_ip_jesd204_tpl_dac_regmap #(
 
   output [NUM_CHANNELS*16-1:0] dac_pat_data_0,
   output [NUM_CHANNELS*16-1:0] dac_pat_data_1,
+
+  output [NUM_CHANNELS-1:0]  dac_iqcor_enb,
+  output [NUM_CHANNELS*16-1:0] dac_iqcor_coeff_1,
+  output [NUM_CHANNELS*16-1:0] dac_iqcor_coeff_2,
 
   // Framer interface
   input [NUM_PROFILES*8-1: 0] jesd_m,
@@ -179,6 +185,7 @@ module ad_ip_jesd204_tpl_dac_regmap #(
   up_dac_common #(
     .COMMON_ID(6'h0),
     .ID (ID),
+    .CONFIG((DATAPATH_DISABLE << 6) | (IQCORRECTION_DISABLE << 0)),
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .FPGA_FAMILY (FPGA_FAMILY),
     .SPEED_GRADE (SPEED_GRADE),
@@ -237,7 +244,7 @@ module ad_ip_jesd204_tpl_dac_regmap #(
       .COMMON_ID(6'h1 + i/16),
       .CHANNEL_ID (i % 16),
       .USERPORTS_DISABLE (1),
-      .IQCORRECTION_DISABLE (1)
+      .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE)
     ) i_up_dac_channel (
       .dac_clk (link_clk),
       .dac_rst (dac_rst),
@@ -251,9 +258,9 @@ module ad_ip_jesd204_tpl_dac_regmap #(
       .dac_pat_data_2 (dac_pat_data_1[16*i+:16]),
       .dac_data_sel (dac_data_sel[4*i+:4]),
       .dac_iq_mode (),
-      .dac_iqcor_enb (),
-      .dac_iqcor_coeff_1 (),
-      .dac_iqcor_coeff_2 (),
+      .dac_iqcor_enb (dac_iqcor_enb[i]),
+      .dac_iqcor_coeff_1 (dac_iqcor_coeff_1[16*i+:16]),
+      .dac_iqcor_coeff_2 (dac_iqcor_coeff_2[16*i+:16]),
       .up_usr_datatype_be (),
       .up_usr_datatype_signed (),
       .up_usr_datatype_shift (),

@@ -38,7 +38,8 @@ module ad_ip_jesd204_tpl_dac #(
   parameter DDS_TYPE = 1,
   parameter DDS_CORDIC_DW = 16,
   parameter DDS_CORDIC_PHASE_DW = 16,
-  parameter DATAPATH_DISABLE = 0
+  parameter DATAPATH_DISABLE = 0,
+  parameter IQCORRECTION_DISABLE = 1
 ) (
   // jesd interface
   // link_clk is (line-rate/40)
@@ -105,11 +106,16 @@ module ad_ip_jesd204_tpl_dac #(
   wire [NUM_CHANNELS*16-1:0] dac_pat_data_0_s;
   wire [NUM_CHANNELS*16-1:0] dac_pat_data_1_s;
   wire [NUM_CHANNELS*4-1:0] dac_data_sel_s;
+  wire [NUM_CHANNELS-1:0]  dac_iqcor_enb;
+  wire [NUM_CHANNELS*16-1:0] dac_iqcor_coeff_1;
+  wire [NUM_CHANNELS*16-1:0] dac_iqcor_coeff_2;
 
   // regmap
 
   ad_ip_jesd204_tpl_dac_regmap #(
     .ID (ID),
+    .DATAPATH_DISABLE (DATAPATH_DISABLE),
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .FPGA_FAMILY (FPGA_FAMILY),
     .SPEED_GRADE (SPEED_GRADE),
@@ -158,6 +164,10 @@ module ad_ip_jesd204_tpl_dac #(
     .dac_pat_data_1 (dac_pat_data_1_s),
     .dac_data_sel (dac_data_sel_s),
 
+    .dac_iqcor_enb (dac_iqcor_enb),
+    .dac_iqcor_coeff_1 (dac_iqcor_coeff_1),
+    .dac_iqcor_coeff_2 (dac_iqcor_coeff_2),
+
     .jesd_m (NUM_CHANNELS),
     .jesd_l (NUM_LANES),
     .jesd_s (SAMPLES_PER_FRAME),
@@ -171,6 +181,7 @@ module ad_ip_jesd204_tpl_dac #(
 
   ad_ip_jesd204_tpl_dac_core #(
     .DATAPATH_DISABLE (DATAPATH_DISABLE),
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
     .NUM_LANES (NUM_LANES),
     .NUM_CHANNELS (NUM_CHANNELS),
     .BITS_PER_SAMPLE (BITS_PER_SAMPLE),
@@ -206,7 +217,12 @@ module ad_ip_jesd204_tpl_dac #(
     .dac_dds_incr_1 (dac_dds_incr_1_s),
     .dac_pat_data_0 (dac_pat_data_0_s),
     .dac_pat_data_1 (dac_pat_data_1_s),
-    .dac_data_sel (dac_data_sel_s)
+    .dac_data_sel (dac_data_sel_s),
+
+    .dac_iqcor_enb (dac_iqcor_enb),
+    .dac_iqcor_coeff_1 (dac_iqcor_coeff_1),
+    .dac_iqcor_coeff_2 (dac_iqcor_coeff_2)
+
   );
 
 endmodule
