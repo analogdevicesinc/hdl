@@ -33,6 +33,7 @@ adi_ip_files ad_ip_jesd204_tpl_dac [list \
   "$ad_hdl_dir/library/common/ad_dds_2.v" \
   "$ad_hdl_dir/library/common/ad_dds_1.v" \
   "$ad_hdl_dir/library/common/ad_dds.v" \
+  "$ad_hdl_dir/library/common/ad_iqcor.v" \
   "$ad_hdl_dir/library/common/ad_perfect_shuffle.v" \
   "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
@@ -144,6 +145,7 @@ set i 0
 
 foreach {k v w} {
   "DATAPATH_DISABLE" "Disable Datapath" "checkBox" \
+  "IQCORRECTION_DISABLE" "Disable IQ Correction" "checkBox" \
   "DDS_TYPE" "DDS Type" "comboBox" \
   "DDS_CORDIC_DW" "CORDIC DDS Data Width" "text" \
   "DDS_CORDIC_PHASE_DW" "CORDIC DDS Phase Width" "text" \

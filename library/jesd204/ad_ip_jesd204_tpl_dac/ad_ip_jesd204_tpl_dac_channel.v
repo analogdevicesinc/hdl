@@ -25,12 +25,14 @@
 
 module ad_ip_jesd204_tpl_dac_channel #(
   parameter DATAPATH_DISABLE = 0,
+  parameter IQCORRECTION_DISABLE = 1,
   parameter DATA_PATH_WIDTH = 4,
   parameter CONVERTER_RESOLUTION = 16,
   parameter BITS_PER_SAMPLE = 16,
   parameter DDS_TYPE = 1,
   parameter DDS_CORDIC_DW = 16,
-  parameter DDS_CORDIC_PHASE_DW = 16
+  parameter DDS_CORDIC_PHASE_DW = 16,
+  parameter Q_OR_I_N = 0
 ) (
   // dac interface
 
@@ -59,7 +61,13 @@ module ad_ip_jesd204_tpl_dac_channel #(
   input [15:0] dac_dds_incr_1,
 
   input [15:0] dac_pat_data_0,
-  input [15:0] dac_pat_data_1,
+  input [15:0] dac_pat_data_1, 
+
+  input        dac_iqcor_enb,
+  input [15:0] dac_iqcor_coeff_1,
+  input [15:0] dac_iqcor_coeff_2,
+
+  input [DATA_PATH_WIDTH*BITS_PER_SAMPLE-1:0]  dac_iqcor_data_in,
 
   output reg dac_enable = 1'b0
 );
@@ -72,6 +80,7 @@ module ad_ip_jesd204_tpl_dac_channel #(
   wire [CHANNEL_DATA_WIDTH-1:0] dac_dds_data_s;
   wire [CHANNEL_DATA_WIDTH-1:0] dac_dma_data_s;
   wire [CHANNEL_DATA_WIDTH-1:0] dac_pat_data_s;
+  wire [CHANNEL_DATA_WIDTH-1:0] dac_iqcor_data_s;
 
   generate
     if (DATA_PATH_WIDTH > 1) begin
@@ -98,6 +107,23 @@ module ad_ip_jesd204_tpl_dac_channel #(
     end
   endgenerate
 
+  ad_iqcor #(
+    .Q_OR_I_N (Q_OR_I_N),
+    .DISABLE (IQCORRECTION_DISABLE),
+    .CR (CR),
+    .DPW (DATA_PATH_WIDTH)
+  ) i_ad_iqcor (
+    .clk (clk),
+    .valid (1'b1),
+    .data_in (dac_dma_data_s),
+    .data_iq (dac_iqcor_data_in),
+    .valid_out (),
+    .data_out (dac_iqcor_data_s),
+    .iqcor_enable (dac_iqcor_enb),
+    .iqcor_coeff_1 (dac_iqcor_coeff_1),
+    .iqcor_coeff_2 (dac_iqcor_coeff_2));
+
+
   // dac data select
 
   always @(posedge clk) begin
@@ -108,7 +134,7 @@ module ad_ip_jesd204_tpl_dac_channel #(
       4'h5: dac_data <= ~pn15_data;
       4'h4: dac_data <= ~pn7_data;
       4'h3: dac_data <= 'h00;
-      4'h2: dac_data <= dac_dma_data_s;
+      4'h2: dac_data <= dac_iqcor_data_s;
       4'h1: dac_data <= dac_pat_data_s;
       default: dac_data <= dac_dds_data_s;
     endcase

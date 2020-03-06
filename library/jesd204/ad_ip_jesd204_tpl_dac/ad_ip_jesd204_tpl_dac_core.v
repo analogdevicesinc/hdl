@@ -25,6 +25,7 @@
 
 module ad_ip_jesd204_tpl_dac_core #(
   parameter DATAPATH_DISABLE = 0,
+  parameter IQCORRECTION_DISABLE = 1,
   parameter NUM_LANES = 1,
   parameter NUM_CHANNELS = 1,
   parameter BITS_PER_SAMPLE = 16,
@@ -65,6 +66,10 @@ module ad_ip_jesd204_tpl_dac_core #(
 
   input [NUM_CHANNELS*16-1:0] dac_pat_data_0,
   input [NUM_CHANNELS*16-1:0] dac_pat_data_1,
+
+  input [NUM_CHANNELS-1:0]  dac_iqcor_enb,
+  input [NUM_CHANNELS*16-1:0] dac_iqcor_coeff_1,
+  input [NUM_CHANNELS*16-1:0] dac_iqcor_coeff_2,
 
   output [NUM_CHANNELS-1:0] enable
 );
@@ -116,6 +121,13 @@ module ad_ip_jesd204_tpl_dac_core #(
   generate
   genvar i;
   for (i = 0; i < NUM_CHANNELS; i = i + 1) begin: g_channel
+
+    // Find the pair of the current channel for I/Q channels
+    // Assuming even channels are I, odd channels are Q
+    // Assuming channel count is even other case do not pair channels
+    localparam IQ_PAIR_CH_INDEX = (NUM_CHANNELS%2) ? i :
+                                  (i%2) ? i-1 : i+1;
+
     ad_ip_jesd204_tpl_dac_channel #(
       .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
       .CONVERTER_RESOLUTION (CONVERTER_RESOLUTION),
@@ -123,7 +135,9 @@ module ad_ip_jesd204_tpl_dac_core #(
       .BITS_PER_SAMPLE (BITS_PER_SAMPLE),
       .DDS_TYPE (DDS_TYPE),
       .DDS_CORDIC_DW (DDS_CORDIC_DW),
-      .DDS_CORDIC_PHASE_DW (DDS_CORDIC_PHASE_DW)
+      .DDS_CORDIC_PHASE_DW (DDS_CORDIC_PHASE_DW),
+      .IQCORRECTION_DISABLE(IQCORRECTION_DISABLE),
+      .Q_OR_I_N(i%2)
     ) i_channel (
       .clk (clk),
       .dac_enable (enable[i]),
@@ -146,7 +160,13 @@ module ad_ip_jesd204_tpl_dac_core #(
       .dac_dds_incr_1 (dac_dds_incr_1[16*i+:16]),
 
       .dac_pat_data_0 (dac_pat_data_0[16*i+:16]),
-      .dac_pat_data_1 (dac_pat_data_1[16*i+:16])
+      .dac_pat_data_1 (dac_pat_data_1[16*i+:16]),
+
+      .dac_iqcor_enb (dac_iqcor_enb[i]),
+      .dac_iqcor_coeff_1 (dac_iqcor_coeff_1[16*i+:16]),
+      .dac_iqcor_coeff_2 (dac_iqcor_coeff_2[16*i+:16]),
+      .dac_iqcor_data_in (dac_ddata[DMA_CDW*IQ_PAIR_CH_INDEX+:DMA_CDW])
+
     );
   end
   endgenerate
