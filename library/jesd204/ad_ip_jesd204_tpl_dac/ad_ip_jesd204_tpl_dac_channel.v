@@ -52,6 +52,7 @@ module ad_ip_jesd204_tpl_dac_channel #(
   input dac_dds_format,
 
   input [3:0] dac_data_sel,
+  input       dac_mask_enable,
 
   input [15:0] dac_dds_scale_0,
   input [15:0] dac_dds_init_0,
@@ -127,15 +128,16 @@ module ad_ip_jesd204_tpl_dac_channel #(
   // dac data select
 
   always @(posedge clk) begin
-    dac_enable <= (dac_data_sel == 4'h2) ? 1'b1 : 1'b0;
-    case (dac_data_sel)
-      4'h7: dac_data <= pn15_data;
-      4'h6: dac_data <= pn7_data;
-      4'h5: dac_data <= ~pn15_data;
-      4'h4: dac_data <= ~pn7_data;
-      4'h3: dac_data <= 'h00;
-      4'h2: dac_data <= dac_iqcor_data_s;
-      4'h1: dac_data <= dac_pat_data_s;
+    dac_enable <= dac_mask_enable ? 1'b0 : (dac_data_sel == 4'h2);
+    casex ({dac_mask_enable,dac_data_sel})
+      5'h07: dac_data <= pn15_data;
+      5'h06: dac_data <= pn7_data;
+      5'h05: dac_data <= ~pn15_data;
+      5'h04: dac_data <= ~pn7_data;
+      5'h03: dac_data <= 'h00;
+      5'h02: dac_data <= dac_iqcor_data_s;
+      5'h01: dac_data <= dac_pat_data_s;
+      5'h1x: dac_data <= dac_iqcor_data_s;
       default: dac_data <= dac_dds_data_s;
     endcase
   end

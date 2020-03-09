@@ -5,6 +5,8 @@
 
 LIBRARY_NAME := ad_ip_jesd204_tpl_dac
 
+GENERIC_DEPS += ../../common/ad_mux.v
+GENERIC_DEPS += ../../common/ad_mux_core.v
 GENERIC_DEPS += ../../common/ad_dds.v
 GENERIC_DEPS += ../../common/ad_dds_1.v
 GENERIC_DEPS += ../../common/ad_dds_2.v
