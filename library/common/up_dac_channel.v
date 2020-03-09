@@ -41,9 +41,12 @@ module up_dac_channel #(
 
   parameter   COMMON_ID = 6'h11,
   parameter   CHANNEL_ID = 4'h0,
+  parameter   CHANNEL_NUMBER = 8'b0,
   parameter   DDS_DISABLE = 0,
   parameter   USERPORTS_DISABLE = 0,
-  parameter   IQCORRECTION_DISABLE = 0) (
+  parameter   IQCORRECTION_DISABLE = 0,
+  parameter   XBAR_ENABLE = 0
+) (
 
   // dac interface
 
@@ -58,10 +61,12 @@ module up_dac_channel #(
   output  [15:0]  dac_pat_data_1,
   output  [15:0]  dac_pat_data_2,
   output  [ 3:0]  dac_data_sel,
+  output          dac_mask_enable,
   output  [ 1:0]  dac_iq_mode,
   output          dac_iqcor_enb,
   output  [15:0]  dac_iqcor_coeff_1,
   output  [15:0]  dac_iqcor_coeff_2,
+  output  [7:0]   dac_src_chan_sel,
 
   // user controls
 
@@ -125,6 +130,8 @@ module up_dac_channel #(
   reg     [15:0]  up_dac_iqcor_coeff_tc_1 = 'd0;
   reg     [15:0]  up_dac_iqcor_coeff_tc_2 = 'd0;
   reg     [ 3:0]  up_dac_data_sel_m = 'd0;
+  reg     [ 7:0]  up_dac_src_chan_sel = XBAR_ENABLE ? CHANNEL_NUMBER[7:0] : 8'h0;
+  reg             up_dac_mask_enable = 1'b0;
 
   // internal signals
 
@@ -237,6 +244,8 @@ module up_dac_channel #(
       up_dac_lb_enb <= 'd0;
       up_dac_pn_enb <= 'd0;
       up_dac_data_sel <= 'd0;
+      up_dac_src_chan_sel <= XBAR_ENABLE ? CHANNEL_NUMBER[7:0] : 8'h0;
+      up_dac_mask_enable <= 1'b0;
     end else begin
       if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'h5)) begin
         up_dac_lb_enb <= up_wdata[1];
@@ -244,7 +253,9 @@ module up_dac_channel #(
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'h6)) begin
         up_dac_data_sel <= up_wdata[3:0];
-      end
+        up_dac_mask_enable <= XBAR_ENABLE ? up_wdata[16] : 1'b0;
+        up_dac_src_chan_sel <=  XBAR_ENABLE ? up_wdata[15:8] : 8'h0;
+       end
     end
   end
 
@@ -344,7 +355,7 @@ module up_dac_channel #(
           4'h3: up_rdata_int <= { up_dac_dds_init_2, up_dac_dds_incr_2};
           4'h4: up_rdata_int <= { up_dac_pat_data_2, up_dac_pat_data_1};
           4'h5: up_rdata_int <= { 29'd0, up_dac_iqcor_enb, up_dac_lb_enb, up_dac_pn_enb};
-          4'h6: up_rdata_int <= { 28'd0, up_dac_data_sel_m};
+          4'h6: up_rdata_int <= { 15'b0, up_dac_mask_enable, up_dac_src_chan_sel, 4'b0, up_dac_data_sel_m};
           4'h7: up_rdata_int <= { up_dac_iqcor_coeff_1, up_dac_iqcor_coeff_2};
           4'h8: up_rdata_int <= { 6'd0, dac_usr_datatype_be, dac_usr_datatype_signed,
                                   dac_usr_datatype_shift, dac_usr_datatype_total_bits,
@@ -391,7 +402,7 @@ module up_dac_channel #(
 
   // dac control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(167)) i_xfer_cntrl (
+  up_xfer_cntrl #(.DATA_WIDTH(177)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_dac_iq_mode,
@@ -406,7 +417,9 @@ module up_dac_channel #(
                       up_dac_dds_incr_2,
                       up_dac_pat_data_1,
                       up_dac_pat_data_2,
-                      up_dac_data_sel_m}),
+                      up_dac_data_sel_m,
+                      up_dac_mask_enable,
+                      up_dac_src_chan_sel}),
     .up_xfer_done (),
     .d_rst (dac_rst),
     .d_clk (dac_clk),
@@ -422,7 +435,9 @@ module up_dac_channel #(
                       dac_dds_incr_2,
                       dac_pat_data_1,
                       dac_pat_data_2,
-                      dac_data_sel}));
+                      dac_data_sel,
+                      dac_mask_enable,
+                      dac_src_chan_sel}));
 
 endmodule
 
