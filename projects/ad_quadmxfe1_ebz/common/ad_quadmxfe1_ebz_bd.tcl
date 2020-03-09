@@ -221,6 +221,9 @@ adi_tpl_jesd204_tx_create tx_mxfe_tpl_core $TX_NUM_OF_LANES \
                                            $TX_SAMPLE_WIDTH \
                                            $DATAPATH_WIDTH
 
+ad_ip_parameter tx_mxfe_tpl_core/tpl_core CONFIG.IQCORRECTION_DISABLE 0
+ad_ip_parameter tx_mxfe_tpl_core/tpl_core CONFIG.XBAR_ENABLE 1
+
 ad_ip_instance util_upack2 util_mxfe_upack [list \
   NUM_OF_CHANNELS $TX_NUM_OF_CONVERTERS \
   SAMPLES_PER_CHANNEL $TX_SAMPLES_PER_CHANNEL \
