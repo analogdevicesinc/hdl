@@ -95,24 +95,24 @@ module system_top (
   output          spi_mosi,
   input           spi_miso,
 
-  output  [27:0]  gp_out,
-  input   [27:0]  gp_in
-);
+  inout   [25:0]  gpio_0_c1_io,
+  inout   [27:0]  gpio_0_c2_io);
 
   // internal signals
 
-  wire    [31:0]  gp_out_s;
-  wire    [31:0]  gp_in_s;
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
+  wire    [25:0]  gpio_0_c1_t;
+  wire    [25:0]  gpio_0_c1_o;
+  wire    [25:0]  gpio_0_c1_i;
+  wire    [27:0]  gpio_0_c2_t;
+  wire    [27:0]  gpio_0_c2_o;
+  wire    [27:0]  gpio_0_c2_i;
 
   // assignments
 
   assign clkout_out = clkout_in;
-  assign gp_out[27:0] = gp_out_s[27:0];
-  assign gp_in_s[31:28] = gp_out_s[31:28];
-  assign gp_in_s[27: 0] = gp_in[27:0];
 
   // board gpio - 31-0
 
@@ -143,6 +143,19 @@ module system_top (
               gpio_en_agc,        // 44:44
               gpio_ctl,           // 43:40
               gpio_status}));     // 39:32
+
+
+  ad_iobuf #(.DATA_WIDTH(26)) gpio_0_c1_iobuf (
+    .dio_t (gpio_0_c1_t),
+    .dio_i (gpio_0_c1_o),
+    .dio_o (gpio_0_c1_i),
+    .dio_p (gpio_0_c1_io));
+
+  ad_iobuf #(.DATA_WIDTH(28)) gpio_0_c2_iobuf (
+    .dio_t (gpio_0_c2_t),
+    .dio_i (gpio_0_c2_o),
+    .dio_o (gpio_0_c2_i),
+    .dio_p (gpio_0_c2_io));
 
   // instantiations
 
@@ -175,7 +188,6 @@ module system_top (
     .gpio_0_c2_i (gpio_0_c2_i),
     .gpio_0_c2_o (gpio_0_c2_o),
     .gpio_0_c2_t (gpio_0_c2_t),
-    .clkout_in_s (clkout_in),
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .gpio_t (gpio_t),
