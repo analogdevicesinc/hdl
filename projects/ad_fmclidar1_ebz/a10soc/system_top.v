@@ -233,6 +233,18 @@ module system_top (
     .ext_sync (laser_driver),
     .s_axis_sync (dma_sync_s));
 
+  // IO Buffers for I2C
+
+  wire i2c_0_scl_out;
+  wire i2c_0_scl_in;
+  wire i2c_0_sda_in;
+  wire i2c_0_sda_oe;
+
+  ALT_IOBUF scl_iobuf (.i(1'b0), .oe(i2c_0_scl_out), .o(i2c_0_scl_in), .io(afe_dac_scl));
+  ALT_IOBUF sda_iobuf (.i(1'b0), .oe(i2c_0_sda_oe), .o(i2c_0_sda_in), .io(afe_dac_sda));
+
+  // Block design instance
+
   system_bd i_system_bd (
     .sys_clk_clk (sys_clk),
     .sys_gpio_bd_in_port (gpio_i[31:0]),
@@ -305,6 +317,11 @@ module system_top (
     .sys_hps_out_rstn_reset_n (sys_hps_resetn),
     .sys_hps_rstn_reset_n (sys_resetn),
     .sys_rstn_reset_n (sys_resetn_s),
+    // AFE's DAC I2C interface
+    .sys_hps_i2c_0_sda_i (i2c_0_sda_in),
+    .sys_hps_i2c_0_sda_oe (i2c_0_sda_oe),
+    .sys_hps_i2c_0_scl_out_clk (i2c_0_scl_out),
+    .sys_hps_i2c_0_scl_in_clk (i2c_0_scl_in),
     // SPI interface for ADC (AD9694)
     .sys_spi_MISO (spi_adc_miso),
     .sys_spi_MOSI (spi_adc_mosi),
