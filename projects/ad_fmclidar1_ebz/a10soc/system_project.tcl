@@ -191,6 +191,9 @@ set_instance_assignment -name IO_STANDARD "1.8V" -to afe_dac_scl
 set_instance_assignment -name IO_STANDARD "1.8V" -to afe_dac_clr_n
 set_instance_assignment -name IO_STANDARD "1.8V" -to afe_dac_load
 
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to afe_dac_scl
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to afe_dac_sda
+
 # AFE ADC SPI and control
 
 set_location_assignment  PIN_H14  -to afe_adc_sclk          ; ## G07  FMCA_HPC_LA00_CC_N
