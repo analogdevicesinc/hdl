@@ -99,100 +99,99 @@ module ad_iqcor #(
 
   genvar i;
   generate 
-  for (i=0; i<DPW; i=i+1) begin
+    for (i=0; i<DPW; i=i+1) begin
+      wire    [CR-1:0]  data_i_s;
+      wire    [CR-1:0]  data_q_s;
+      wire    [CR-1:0]  p1_data_i_s;
+      wire              p1_valid_s;
+      wire    [33:0]  p1_data_p_i_s;
+      wire    [33:0]  p1_data_p_q_s;
 
-  wire    [CR-1:0]  data_i_s;
-  wire    [CR-1:0]  data_q_s;
-  wire    [CR-1:0]  p1_data_i_s;
-  wire              p1_valid_s;
-  wire    [33:0]  p1_data_p_i_s;
-  wire    [33:0]  p1_data_p_q_s;
+      wire    [CR-1:0]  p1_data_q_s;
+      wire    [CR-1:0]  p1_data_i_int;
+      wire    [CR-1:0]  p1_data_q_int;
 
-  wire    [CR-1:0]  p1_data_q_s;
-  wire    [CR-1:0]  p1_data_i_int;
-  wire    [CR-1:0]  p1_data_q_int;
-
-  reg             p1_valid = 'd0;
-  reg     [33:0]  p1_data_p = 'd0;
-  reg             valid_int = 'd0;
-  reg     [15:0]  data_int = 'd0;
+      reg             p1_valid = 'd0;
+      reg     [33:0]  p1_data_p = 'd0;
+      reg             valid_int = 'd0;
+      reg     [15:0]  data_int = 'd0;
  
-  // swap i & q
-  assign data_i_s = (Q_OR_I_N == 1 && SCALE_ONLY == 1'b0) ? data_iq[i*CR+:CR] : data_in[i*CR+:CR];
-  assign data_q_s = (Q_OR_I_N == 1) ? data_in[i*CR+:CR] : data_iq[i*CR+:CR];
+      // swap i & q
+      assign data_i_s = (Q_OR_I_N == 1 && SCALE_ONLY == 1'b0) ? data_iq[i*CR+:CR] : data_in[i*CR+:CR];
+      assign data_q_s = (Q_OR_I_N == 1) ? data_in[i*CR+:CR] : data_iq[i*CR+:CR];
 
-  // scaling functions - i
+      // scaling functions - i
 
-  ad_mul #(.DELAY_DATA_WIDTH(CR+1)) i_mul_i (
-    .clk (clk),
-    .data_a ({data_i_s[CR-1], data_i_s, {16-CR{1'b0}}}),
-    .data_b ({iqcor_coeff_1_r[15], iqcor_coeff_1_r}),
-    .data_p (p1_data_p_i_s),
-    .ddata_in ({valid, data_i_s}),
-    .ddata_out ({p1_valid_s, p1_data_i_s}));
+      ad_mul #(.DELAY_DATA_WIDTH(CR+1)) i_mul_i (
+        .clk (clk),
+        .data_a ({data_i_s[CR-1], data_i_s, {16-CR{1'b0}}}),
+        .data_b ({iqcor_coeff_1_r[15], iqcor_coeff_1_r}),
+        .data_p (p1_data_p_i_s),
+        .ddata_in ({valid, data_i_s}),
+        .ddata_out ({p1_valid_s, p1_data_i_s}));
 
-  if (SCALE_ONLY == 0) begin
-    // scaling functions - q
-  
-    ad_mul #(.DELAY_DATA_WIDTH(CR)) i_mul_q (
-      .clk (clk),
-      .data_a ({data_q_s[CR-1], data_q_s, {16-CR{1'b0}}}),
-      .data_b ({iqcor_coeff_2_r[15], iqcor_coeff_2_r}),
-      .data_p (p1_data_p_q_s),
-      .ddata_in (data_q_s),
-      .ddata_out (p1_data_q_s));
-  
-  // sum
-  end else begin
-    assign p1_data_p_q_s = 34'h0;
-    assign p1_data_q_s = {CR{1'b0}};
-  end
+      if (SCALE_ONLY == 0) begin
+        // scaling functions - q
+    
+        ad_mul #(.DELAY_DATA_WIDTH(CR)) i_mul_q (
+          .clk (clk),
+          .data_a ({data_q_s[CR-1], data_q_s, {16-CR{1'b0}}}),
+          .data_b ({iqcor_coeff_2_r[15], iqcor_coeff_2_r}),
+          .data_p (p1_data_p_q_s),
+          .ddata_in (data_q_s),
+          .ddata_out (p1_data_q_s));
+    
+      // sum
+      end else begin
+        assign p1_data_p_q_s = 34'h0;
+        assign p1_data_q_s = {CR{1'b0}};
+      end
 
 
-  if (Q_OR_I_N == 1 && SCALE_ONLY == 0) begin
-    reg [CR-1:0]  p1_data_q = 'd0;
+      if (Q_OR_I_N == 1 && SCALE_ONLY == 0) begin
+        reg [CR-1:0]  p1_data_q = 'd0;
 
-    always @(posedge clk) begin
-      p1_data_q <= p1_data_q_s;
+        always @(posedge clk) begin
+          p1_data_q <= p1_data_q_s;
+        end
+
+        assign p1_data_i_int = {CR{1'b0}};
+        assign p1_data_q_int = p1_data_q;
+
+      // sum
+      end else begin
+        reg [CR-1:0]  p1_data_i = 'd0;
+
+        always @(posedge clk) begin
+          p1_data_i <= p1_data_i_s;
+        end
+
+        assign p1_data_i_int = p1_data_i;
+        assign p1_data_q_int = {CR{1'b0}};
+      end
+
+      always @(posedge clk) begin
+        p1_valid <= p1_valid_s;
+        p1_data_p <= p1_data_p_i_s + p1_data_p_q_s;
+      end
+
+      // output registers
+
+      always @(posedge clk) begin
+        valid_int <= p1_valid;
+        if (iqcor_enable == 1'b1) begin
+          data_int <= p1_data_p[29:14];
+        end else if (Q_OR_I_N == 1 && SCALE_ONLY == 0) begin
+          data_int <= p1_data_q_int;
+        end else begin
+          data_int <= p1_data_i_int;
+        end
+      end
+      
+      assign valid_int_loc[i] = valid_int;
+      assign data_int_loc[i*CR+:CR] = data_int[15-:CR];
+
     end
-
-    assign p1_data_i_int = {CR{1'b0}};
-    assign p1_data_q_int = p1_data_q;
-
-  // sum
-  end else begin
-    reg [CR-1:0]  p1_data_i = 'd0;
-
-    always @(posedge clk) begin
-      p1_data_i <= p1_data_i_s;
-    end
-
-    assign p1_data_i_int = p1_data_i;
-    assign p1_data_q_int = {CR{1'b0}};
-  end
-
-  always @(posedge clk) begin
-    p1_valid <= p1_valid_s;
-    p1_data_p <= p1_data_p_i_s + p1_data_p_q_s;
-  end
-
-  // output registers
-
-  always @(posedge clk) begin
-    valid_int <= p1_valid;
-    if (iqcor_enable == 1'b1) begin
-      data_int <= p1_data_p[29:14];
-    end else if (Q_OR_I_N == 1 && SCALE_ONLY == 0) begin
-      data_int <= p1_data_q_int;
-    end else begin
-      data_int <= p1_data_i_int;
-    end
-  end
-  
-  assign valid_int_loc[i] = valid_int;
-  assign data_int_loc[i*CR+:CR] = data_int[15-:CR];
-
-  end
   endgenerate
 
 endmodule
