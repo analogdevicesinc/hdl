@@ -29,5 +29,7 @@ adi_project_files ad_quadmxfe1_ebz_vcu118 [list \
   "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/vcu118/vcu118_system_constr.xdc" ]
 
+set_property strategy Performance_Explore [get_runs impl_1]
+
 adi_project_run ad_quadmxfe1_ebz_vcu118
 
