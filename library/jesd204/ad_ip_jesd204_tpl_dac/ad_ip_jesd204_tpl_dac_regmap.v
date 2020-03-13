@@ -188,8 +188,8 @@ module ad_ip_jesd204_tpl_dac_regmap #(
 
   // dac common processor interface
   //
-  localparam CONFIG = (XBAR_ENABLE << 10) ||
-                      (DATAPATH_DISABLE << 6) ||
+  localparam CONFIG = (XBAR_ENABLE << 10) |
+                      (DATAPATH_DISABLE << 6) |
                       (IQCORRECTION_DISABLE << 0);
 
   up_dac_common #(
