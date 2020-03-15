@@ -219,6 +219,7 @@ module system_top (
     .sys_gpio_out_export (gpio_o[63:32]),
     .sys_gpio_bd_in_port (gpio_i[31:0]),
     .sys_gpio_bd_out_port (gpio_o[31:0]),
+    .pr_rom_data_nc_rom_data('h0),
     .sys_spi_MISO (spi_miso_s),
     .sys_spi_MOSI (spi_mosi_s),
     .sys_spi_SCLK (spi_clk),
