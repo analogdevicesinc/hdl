@@ -247,12 +247,27 @@ add_connection sys_clk.clk sys_spi.clk
 add_interface sys_spi conduit end
 set_interface_property sys_spi EXPORT_OF sys_spi.external
 
+# system id
+
+add_instance axi_sysid_0 axi_sysid
+add_instance rom_sys_0 sysid_rom
+
+add_connection axi_sysid_0.if_rom_addr      rom_sys_0.if_rom_addr
+add_connection rom_sys_0.if_rom_data        axi_sysid_0.if_sys_rom_data
+add_connection sys_clk.clk                  rom_sys_0.if_clk
+add_connection sys_clk.clk                  axi_sysid_0.s_axi_clock
+add_connection sys_clk.clk_reset            axi_sysid_0.s_axi_reset
+
+add_interface pr_rom_data_nc conduit end
+set_interface_property pr_rom_data_nc EXPORT_OF axi_sysid_0.if_pr_rom_data
+
 # base-addresses
 
 ad_cpu_interconnect 0x000000d0 sys_gpio_bd.s1
 ad_cpu_interconnect 0x00000000 sys_gpio_in.s1
 ad_cpu_interconnect 0x00000020 sys_gpio_out.s1
 ad_cpu_interconnect 0x00000040 sys_spi.spi_control_port
+ad_cpu_interconnect 0x00008000 axi_sysid_0.s_axi
 
 # interrupts
 
