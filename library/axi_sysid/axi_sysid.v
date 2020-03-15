@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module sys_id #(
+module axi_sysid #(
   parameter ROM_WIDTH = 32,
   parameter ROM_ADDR_BITS = 9)(
 
