@@ -134,3 +134,4 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[17]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[18]
 
 execute_flow -compile
+
