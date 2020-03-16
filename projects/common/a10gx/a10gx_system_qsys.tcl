@@ -199,8 +199,8 @@ add_connection sys_cpu.instruction_master sys_ddr3_cntrl.ctrl_amm_0
 add_connection sys_cpu.data_master sys_ddr3_cntrl.ctrl_amm_0
 set_connection_parameter_value sys_cpu.data_master/sys_ddr3_cntrl.ctrl_amm_0 baseAddress {0x0}
 set_connection_parameter_value sys_cpu.instruction_master/sys_ddr3_cntrl.ctrl_amm_0 baseAddress {0x0}
-set_connection_parameter_value sys_cpu.instruction_master/sys_cpu.debug_mem_slave baseAddress {0x10180800}
-set_connection_parameter_value sys_cpu.instruction_master/sys_int_mem.s1 baseAddress {0x10140000}
+set_connection_parameter_value sys_cpu.instruction_master/sys_cpu.debug_mem_slave baseAddress {0x10040000}
+set_connection_parameter_value sys_cpu.instruction_master/sys_int_mem.s1 baseAddress {0x10000000}
 set_connection_parameter_value sys_cpu.tightly_coupled_instruction_master_0/sys_tlb_mem.s2 baseAddress {0x10200000}
 set_connection_parameter_value sys_cpu.tightly_coupled_data_master_0/sys_tlb_mem.s1 baseAddress {0x10200000}
 
@@ -214,20 +214,34 @@ set_connection_parameter_value sys_cpu.instruction_master/sys_flash.uas arbitrat
 set_connection_parameter_value sys_cpu.instruction_master/sys_flash.uas baseAddress {0x11000000}
 set_connection_parameter_value sys_cpu.instruction_master/sys_flash.uas defaultConnection {0}
 
-
-
 # cpu/hps handling
 
 proc ad_cpu_interrupt {m_irq m_port} {
 
   add_connection sys_cpu.irq ${m_port}
   set_connection_parameter_value sys_cpu.irq/${m_port} irqNumber ${m_irq}
+
 }
 
-proc ad_cpu_interconnect {m_base m_port} {
+proc ad_cpu_interconnect {m_base m_port {avl_bridge ""} {avl_bridge_baseaddr 0x10000000}} {
 
-  add_connection sys_cpu.data_master ${m_port}
-  set_connection_parameter_value sys_cpu.data_master/${m_port} baseAddress [expr ($m_base + 0x10000000)]
+  if {[string equal ${avl_bridge} ""]} {
+    add_connection sys_cpu.data_master ${m_port}
+    set_connection_parameter_value sys_cpu.data_master/${m_port} baseAddress [expr $m_base + 0x10000000]
+  } else {
+    if {[lsearch -exact [get_instances] ${avl_bridge}] == -1} {
+      ## Instantiate the bridge and connect the interfaces
+      add_instance ${avl_bridge} altera_avalon_mm_bridge
+      set_instance_parameter_value ${avl_bridge} {USE_AUTO_ADDRESS_WIDTH} {1}
+      set_instance_parameter_value ${avl_bridge} {SYNC_RESET} {1}
+      add_connection sys_cpu.data_master ${avl_bridge}.s0
+      set_connection_parameter_value sys_cpu.data_master/${avl_bridge}.s0 baseAddress [expr $avl_bridge_baseaddr + 0x10000000]
+      add_connection sys_clk.clk ${avl_bridge}.clk
+      add_connection sys_clk.clk_reset ${avl_bridge}.reset
+    }
+    add_connection ${avl_bridge}.m0 ${m_port}
+    set_connection_parameter_value ${avl_bridge}.m0/${m_port} baseAddress ${m_base}
+  }
 }
 
 proc ad_dma_interconnect {m_port} {
@@ -242,7 +256,6 @@ proc ad_dma_interconnect {m_port} {
   set_instance_parameter_value ${avm_bridge} {SYNC_RESET} {1}
   set_instance_parameter_value ${avm_bridge} {DATA_WIDTH} {128}
   set_instance_parameter_value ${avm_bridge} {USE_AUTO_ADDRESS_WIDTH} {1}
-
   add_connection sys_clk.clk ${avm_bridge}.clk
   add_connection sys_clk.clk_reset ${avm_bridge}.reset
   add_connection ${m_port} ${avm_bridge}.s0
@@ -415,23 +428,24 @@ set_interface_property pr_rom_data_nc EXPORT_OF axi_sysid_0.if_pr_rom_data
 
 # base-addresses
 
-ad_cpu_interconnect 0x00180800 sys_cpu.debug_mem_slave
-ad_cpu_interconnect 0x00140000 sys_int_mem.s1
-ad_cpu_interconnect 0x00181000 sys_ethernet.control_port
-ad_cpu_interconnect 0x001814a0 sys_ethernet_dma_rx.csr
-ad_cpu_interconnect 0x001814e0 sys_ethernet_dma_rx.response
-ad_cpu_interconnect 0x00181440 sys_ethernet_dma_rx.descriptor_slave
-ad_cpu_interconnect 0x00181480 sys_ethernet_dma_tx.csr
-ad_cpu_interconnect 0x00181460 sys_ethernet_dma_tx.descriptor_slave
-ad_cpu_interconnect 0x001814e8 sys_id.control_slave
-ad_cpu_interconnect 0x00181420 sys_timer_1.s1
-ad_cpu_interconnect 0x00181520 sys_timer_2.s1
-ad_cpu_interconnect 0x001814f0 sys_uart.avalon_jtag_slave
-ad_cpu_interconnect 0x001814d0 sys_gpio_bd.s1
-ad_cpu_interconnect 0x001814c0 sys_gpio_in.s1
-ad_cpu_interconnect 0x00181500 sys_gpio_out.s1
-ad_cpu_interconnect 0x00181400 sys_spi.spi_control_port
-ad_cpu_interconnect 0x00190000 axi_sysid_0.s_axi
+ad_cpu_interconnect 0x00000000 sys_int_mem.s1
+ad_cpu_interconnect 0x00040000 sys_cpu.debug_mem_slave
+
+ad_cpu_interconnect 0x00000800 sys_ethernet.control_port "avl_mm_peripheral_bridge" 0x00050000
+ad_cpu_interconnect 0x00000C00 sys_ethernet_dma_rx.descriptor_slave "avl_mm_peripheral_bridge"
+ad_cpu_interconnect 0x00000C20 sys_ethernet_dma_tx.descriptor_slave "avl_mm_peripheral_bridge"
+ad_cpu_interconnect 0x00000C40 sys_ethernet_dma_rx.csr "avl_mm_peripheral_bridge"
+ad_cpu_interconnect 0x00000C60 sys_ethernet_dma_tx.csr "avl_mm_peripheral_bridge"
+ad_cpu_interconnect 0x00000C80 sys_ethernet_dma_rx.response "avl_mm_peripheral_bridge"
+ad_cpu_interconnect 0x00000C88 sys_id.control_slave "avl_mm_peripheral_bridge"
+ad_cpu_interconnect 0x00000CA0 sys_spi.spi_control_port "avl_mm_peripheral_bridge"
+ad_cpu_interconnect 0x00000CC0 sys_timer_1.s1 "avl_mm_peripheral_bridge"
+ad_cpu_interconnect 0x00000CE0 sys_timer_2.s1 "avl_mm_peripheral_bridge"
+ad_cpu_interconnect 0x00000D00 sys_gpio_bd.s1 "avl_mm_peripheral_bridge"
+ad_cpu_interconnect 0x00000D10 sys_gpio_in.s1 "avl_mm_peripheral_bridge"
+ad_cpu_interconnect 0x00000D20 sys_gpio_out.s1 "avl_mm_peripheral_bridge"
+ad_cpu_interconnect 0x00000D30 sys_uart.avalon_jtag_slave "avl_mm_peripheral_bridge"
+ad_cpu_interconnect 0x00008000 axi_sysid_0.s_axi "avl_mm_peripheral_bridge"
 
 # dma interconnects
 
