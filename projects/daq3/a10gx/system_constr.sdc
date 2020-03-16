@@ -19,10 +19,3 @@ set_output_delay  -clock [ get_clocks sys_clk_100mhz ] 2   [ get_ports {flash_re
 set_output_delay  -clock [ get_clocks sys_clk_100mhz ] 2   [ get_ports {flash_wen} ]
 set_false_path    -from * -to [get_ports {flash_resetn}]
 
- set current_exe $::TimeQuestInfo(nameofexecutable)
- if { $current_exe == "quartus_fit" } {
-   set_max_delay -from [get_clocks {i_system_bd|sys_ddr3_cntrl_core_usr_clk}] -to [get_clocks {i_system_bd|sys_ddr3_cntrl_core_usr_clk}] 3
-   set_max_delay -from [get_clocks {i_system_bd|sys_ddr3_cntrl_phy_clk_l_0}] -to [get_clocks {i_system_bd|sys_ddr3_cntrl_core_usr_clk}] 3
-   set_max_delay -from [get_clocks {i_system_bd|sys_ddr3_cntrl_phy_clk_l_1}] -to [get_clocks {i_system_bd|sys_ddr3_cntrl_core_usr_clk}] 3
-   set_max_delay -from [get_clocks {i_system_bd|ad9680_jesd204|link_pll|outclk0}] -to [get_clocks {i_system_bd|ad9680_jesd204|link_pll|outclk0}] 3
- }
