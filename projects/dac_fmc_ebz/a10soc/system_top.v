@@ -36,7 +36,10 @@
 `timescale 1ns/100ps
 
 module system_top #(
-    parameter JESD_L = 4
+    parameter JESD_L = 4,
+    parameter MODE = 4,
+    parameter DEVICE = "AD9172",
+    parameter DEVICE_CODE = 1
   ) (
 
   // clock and resets
