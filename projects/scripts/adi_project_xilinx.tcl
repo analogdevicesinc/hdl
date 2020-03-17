@@ -57,6 +57,7 @@ proc adi_project {project_name {mode 0} {parameter_list {}} } {
   global ADI_USE_OOC_SYNTHESIS
   global ADI_USE_INCR_COMP
 
+  set set_board_repo 0
   if [regexp "_ac701$" $project_name] {
     set p_device "xc7a200tfbg676-2"
     set p_board [lindex [lsearch -all -inline [get_board_parts] *ac701*] end]
@@ -78,6 +79,10 @@ proc adi_project {project_name {mode 0} {parameter_list {}} } {
     set sys_zynq 0
   }
   if [regexp "_vcu128$" $project_name] {
+    # The VCU128 is available only in the Board store
+    xhub::refresh_catalog [xhub::get_xstores xilinx_board_store]
+    xhub::install [xhub::get_xitems *vcu128*]
+    set set_board_repo 1
     set p_device "xcvu37p-fsvh2892-2L-e-es1"
     set p_board [lindex [lsearch -all -inline [get_board_parts] *vcu128*] end]
     set sys_zynq 0
@@ -143,6 +148,10 @@ proc adi_project {project_name {mode 0} {parameter_list {}} } {
   }
 
   if {$p_board ne "not-applicable"} {
+    if {$set_board_repo == 1} { 
+      set_property BOARD_PART_REPO_PATHS [get_property LOCAL_ROOT_DIR [xhub::get_xstores xilinx_board_store]] [current_project]
+      set_param board.repoPaths [get_property LOCAL_ROOT_DIR [xhub::get_xstores xilinx_board_store]]
+    }
     set_property board_part $p_board [current_project]
   }
 
@@ -257,6 +266,8 @@ proc adi_project_run {project_name} {
   set_property STEPS.POWER_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]
   set_property STEPS.POST_PLACE_POWER_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]
   }
+
+  set_param board.repoPaths [get_property LOCAL_ROOT_DIR [xhub::get_xstores xilinx_board_store]]
 
   launch_runs impl_1 -to_step write_bitstream
   wait_on_run impl_1
