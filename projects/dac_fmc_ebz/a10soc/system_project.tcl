@@ -42,7 +42,7 @@ adi_project dac_fmc_ebz_a10soc [list \
   DEVICE_CODE   $device_code \
 ]
 
-set_global_assignment -name OPTIMIZATION_MODE "HIGH PERFORMANCE EFFORT"
+set_global_assignment -name OPTIMIZATION_MODE "BALANCED"
 
 source $ad_hdl_dir/projects/common/a10soc/a10soc_system_assign.tcl
 source $ad_hdl_dir/projects/common/a10soc/a10soc_plddr4_assign.tcl
