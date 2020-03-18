@@ -1,0 +1,8 @@
+#!/bin/bash
+
+SOURCE="ad_mux_tb.v"
+SOURCE+=" ../ad_mux.v"
+SOURCE+=" ../ad_mux_core.v"
+
+cd `dirname $0`
+source run_tb.sh
