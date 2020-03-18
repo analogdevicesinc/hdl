@@ -174,11 +174,11 @@ proc axi_ad9361_elab {} {
   set m_fpga_technology [get_parameter_value "FPGA_TECHNOLOGY"]
   set m_cmos_or_lvds_n [get_parameter_value "CMOS_OR_LVDS_N"]
   set rx_nodpa [get_parameter_value "RX_NODPA"]
-  
+
   # 103 - stands for "Arria 10" see adi_intel_device_info_enc.tcl
   if {$m_fpga_technology == 103} {
 
-    add_hdl_instance axi_ad9361_serdes_clk intel_serdes
+    add_hdl_instance axi_ad9361_serdes_clk intel_serdes 1.0
     set_instance_parameter_value axi_ad9361_serdes_clk {DEVICE_FAMILY} {Arria 10}
     set_instance_parameter_value axi_ad9361_serdes_clk {MODE} {CLK}
     set_instance_parameter_value axi_ad9361_serdes_clk {DDR_OR_SDR_N} {1}
@@ -188,27 +188,27 @@ proc axi_ad9361_elab {} {
     set rx_serdes_mode IN
     if {$rx_nodpa == 1} {set rx_serdes_mode IN_NODPA}
 
-    add_hdl_instance axi_ad9361_serdes_in intel_serdes
+    add_hdl_instance axi_ad9361_serdes_in intel_serdes 1.0
     set_instance_parameter_value axi_ad9361_serdes_in {DEVICE_FAMILY} {Arria 10}
     set_instance_parameter_value axi_ad9361_serdes_in {MODE} $rx_serdes_mode
     set_instance_parameter_value axi_ad9361_serdes_in {DDR_OR_SDR_N} {1}
     set_instance_parameter_value axi_ad9361_serdes_in {SERDES_FACTOR} {4}
     set_instance_parameter_value axi_ad9361_serdes_in {CLKIN_FREQUENCY} {250.0}
 
-    add_hdl_instance axi_ad9361_serdes_out intel_serdes
+    add_hdl_instance axi_ad9361_serdes_out intel_serdes 1.0
     set_instance_parameter_value axi_ad9361_serdes_out {DEVICE_FAMILY} {Arria 10}
     set_instance_parameter_value axi_ad9361_serdes_out {MODE} {OUT}
     set_instance_parameter_value axi_ad9361_serdes_out {DDR_OR_SDR_N} {1}
     set_instance_parameter_value axi_ad9361_serdes_out {SERDES_FACTOR} {4}
     set_instance_parameter_value axi_ad9361_serdes_out {CLKIN_FREQUENCY} {250.0}
 
-    add_hdl_instance axi_ad9361_data_out altera_gpio
+    add_hdl_instance axi_ad9361_data_out altera_gpio 19.1
     set_instance_parameter_value axi_ad9361_data_out {DEVICE_FAMILY} {Arria 10}
     set_instance_parameter_value axi_ad9361_data_out {PIN_TYPE_GUI} {Output}
     set_instance_parameter_value axi_ad9361_data_out {SIZE} {1}
     set_instance_parameter_value axi_ad9361_data_out {gui_io_reg_mode} {DDIO}
 
-    add_hdl_instance clk_buffer altclkctrl
+    add_hdl_instance clk_buffer altclkctrl 19.1
     set_instance_parameter_value clk_buffer {DEVICE_FAMILY} {Arria 10}
 
   }
