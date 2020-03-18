@@ -250,11 +250,11 @@ module system_top (
     .axi_ad9361_device_if_rx_frame_in_p (rx_frame_in),
     .axi_ad9361_device_if_rx_frame_in_n (1'b0),
     .axi_ad9361_device_if_tx_clk_out_p (tx_clk_out),
-    .axi_ad9361_device_if_tx_clk_out_n (1'b0),
+    .axi_ad9361_device_if_tx_clk_out_n (),
     .axi_ad9361_device_if_tx_data_out_p (tx_data_out),
-    .axi_ad9361_device_if_tx_data_out_n (6'd0),
+    .axi_ad9361_device_if_tx_data_out_n (),
     .axi_ad9361_device_if_tx_frame_out_p (tx_frame_out),
-    .axi_ad9361_device_if_tx_frame_out_n (1'b0),
+    .axi_ad9361_device_if_tx_frame_out_n (),
     .axi_ad9361_device_if_txnrx (txnrx));
 
 endmodule
