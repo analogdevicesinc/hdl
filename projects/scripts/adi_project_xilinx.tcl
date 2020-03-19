@@ -69,12 +69,8 @@ proc adi_project {project_name {mode 0} {parameter_list {}} } {
     set board [lindex [lsearch -all -inline [get_board_parts] *vcu118*] end]
   }
   if [regexp "_vcu128$" $project_name] {
-    # The VCU128 is available only in the Board store
-    xhub::refresh_catalog [xhub::get_xstores xilinx_board_store]
-    xhub::install [xhub::get_xitems *vcu128*]
-    set set_board_repo 1
-    set p_device "xcvu37p-fsvh2892-2L-e-es1"
-    set p_board [lindex [lsearch -all -inline [get_board_parts] *vcu128*] end]
+    set p_device "xcvu37p-fsvh2892-2L-e"
+    set p_board [lindex [lsearch -all -inline [get_board_parts] *vcu128:part0*] end]
     set sys_zynq 0
   }
   if [regexp "_kcu105$" $project_name] {
@@ -180,10 +176,6 @@ proc adi_project_create {project_name mode parameter_list device {board "not-app
   }
 
   if {$p_board ne "not-applicable"} {
-    if {$set_board_repo == 1} { 
-      set_property BOARD_PART_REPO_PATHS [get_property LOCAL_ROOT_DIR [xhub::get_xstores xilinx_board_store]] [current_project]
-      set_param board.repoPaths [get_property LOCAL_ROOT_DIR [xhub::get_xstores xilinx_board_store]]
-    }
     set_property board_part $p_board [current_project]
   }
 
