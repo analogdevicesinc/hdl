@@ -168,12 +168,12 @@ ad_connect sys_500m_resetn sys_500m_rstgen/peripheral_aresetn
 
 # generic system clocks pointers
 
-set sys_cpu_clk      [get_bd_nets sys_cpu_clk]
+set sys_cpu_clk      [get_bd_pins axi_ddr_cntrl/addn_ui_clkout1]
 set sys_dma_clk      [get_bd_nets sys_250m_clk]
 set sys_iodelay_clk  [get_bd_nets sys_500m_clk]
 
 set sys_cpu_reset         [get_bd_nets sys_cpu_reset]
-set sys_cpu_resetn        [get_bd_nets sys_cpu_resetn]
+set sys_cpu_resetn        [get_bd_pins sys_rstgen/peripheral_aresetn]
 set sys_dma_reset         [get_bd_nets sys_250m_reset]
 set sys_dma_resetn        [get_bd_nets sys_250m_resetn]
 set sys_iodelay_reset     [get_bd_nets sys_500m_reset]
@@ -286,6 +286,9 @@ set_property -dict [list CONFIG.NUM_MI {11}] [get_bd_cells axi_cpu_interconnect]
 connect_bd_intf_net -boundary_type upper [get_bd_intf_pins axi_cpu_interconnect/M10_AXI] [get_bd_intf_pins axi_ddr_cntrl/C0_DDR4_S_AXI_CTRL]
 connect_bd_net [get_bd_pins axi_cpu_interconnect/M10_ACLK] [get_bd_pins axi_ddr_cntrl/c0_ddr4_ui_clk]
 connect_bd_net [get_bd_pins axi_cpu_interconnect/M10_ARESETN] [get_bd_pins axi_ddr_cntrl_rstgen/peripheral_aresetn]
+#fake an ad_cpu_interconnect
+global sys_cpu_interconnect_index
+incr sys_cpu_interconnect_index
 
 # interconnect - memory
 
