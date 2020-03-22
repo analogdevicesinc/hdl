@@ -321,11 +321,9 @@ set_property  PACKAGE_PIN  W7    [get_ports  c2m_3_p[14]]           ;#  Bank  23
 set_property  PACKAGE_PIN  W11   [get_ports  c2m_3_p[15]]           ;#  Bank  231  -  MGTYTXP3_231
 
 
-set_property  -dict {PACKAGE_PIN  BJ52   IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports  device_clk_p]
-set_property  -dict {PACKAGE_PIN  BJ53   IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports  device_clk_n]
+set_property  -dict {PACKAGE_PIN  BL13   IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports  device_clk_p]
 
-set_property  -dict {PACKAGE_PIN  BP23   IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports  sysref_p]
-set_property  -dict {PACKAGE_PIN  BP22   IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports  sysref_n]
+set_property  -dict {PACKAGE_PIN  BM10   IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports  sysref_p]
 
 set_property  -dict {PACKAGE_PIN BF22   IOSTANDARD LVDS                           } [get_ports qmxfe_0_sync_inb_p[0]        ]
 set_property  -dict {PACKAGE_PIN BH21   IOSTANDARD LVDS                           } [get_ports qmxfe_0_sync_inb_p[1]        ]
@@ -352,17 +350,17 @@ set_property  -dict {PACKAGE_PIN  BM22  IOSTANDARD LVDS                         
 set_property  -dict {PACKAGE_PIN  BE10  IOSTANDARD LVDS                           } [get_ports qmxfe_2_sync_inb_p[2]        ]
 set_property  -dict {PACKAGE_PIN  BM24  IOSTANDARD LVDS                           } [get_ports qmxfe_2_sync_inb_p[3]        ]
 
-set_property  -dict {PACKAGE_PIN  BH47  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports qmxfe_2_sync_outb_p[0]       ]
-set_property  -dict {PACKAGE_PIN  BL13  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports qmxfe_2_sync_outb_p[1]       ]
+set_property  -dict {PACKAGE_PIN  BN15  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports qmxfe_2_sync_outb_p[0]       ]
+set_property  -dict {PACKAGE_PIN  BM14  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports qmxfe_2_sync_outb_p[1]       ]
 set_property  -dict {PACKAGE_PIN  BL15  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports qmxfe_2_sync_outb_p[2]       ]
 set_property  -dict {PACKAGE_PIN  BM12  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports qmxfe_2_sync_outb_p[3]       ]
 
-set_property  -dict {PACKAGE_PIN  BE11  IOSTANDARD LVDS                           } [get_ports qmxfe_3_sync_inb_p[0]        ]
+set_property  -dict {PACKAGE_PIN  BP14  IOSTANDARD LVDS                           } [get_ports qmxfe_3_sync_inb_p[0]        ]
 set_property  -dict {PACKAGE_PIN  BF12  IOSTANDARD LVDS                           } [get_ports qmxfe_3_sync_inb_p[1]        ]
 set_property  -dict {PACKAGE_PIN  BG10  IOSTANDARD LVDS                           } [get_ports qmxfe_3_sync_inb_p[2]        ]
 set_property  -dict {PACKAGE_PIN  BG13  IOSTANDARD LVDS                           } [get_ports qmxfe_3_sync_inb_p[3]        ]
 
-set_property  -dict {PACKAGE_PIN  BJ48  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports qmxfe_3_sync_outb_p[0]       ]
+set_property  -dict {PACKAGE_PIN  BP12  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports qmxfe_3_sync_outb_p[0]       ]
 set_property  -dict {PACKAGE_PIN  BJ9   IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports qmxfe_3_sync_outb_p[1]       ]
 set_property  -dict {PACKAGE_PIN  BL8   IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports qmxfe_3_sync_outb_p[2]       ]
 set_property  -dict {PACKAGE_PIN  BM9   IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports qmxfe_3_sync_outb_p[3]       ]
