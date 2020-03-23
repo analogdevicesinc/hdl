@@ -141,7 +141,7 @@ module system_top  (
   // quad mxfe signals
   wire            device_clk_ds;
   wire            device_clk;
-  wire            sysref;
+  wire            sysref_io;
 
   wire    [3:0]   tx_syncin_0;
   wire    [3:0]   rx_syncout_0;
@@ -251,7 +251,7 @@ module system_top  (
   IBUFDS i_ibufds_sysref (
     .I (sysref_p),
     .IB (sysref_n),
-    .O (sysref));
+    .O (sysref_io));
 
   IBUFDS i_ibufds_device_clk (
     .I (device_clk_p),
@@ -262,6 +262,17 @@ module system_top  (
     .I (device_clk_ds),
     .O (device_clk)
   );
+
+  // Capture SYSREF one time with the device clock and distribute it to all
+  // JESD link layer components.
+  // This path is timed with input delay constraint as a source synchronous
+  // interface, while distribution paths are timed with device clock.
+  // This path should not be metastable, the link layer adds enough delays so the signal
+  // can be distributed to all SLRs and meet timing.
+  reg sysref = 1'b0;
+  always @(posedge device_clk) begin
+    sysref <= sysref_io;
+  end
 
   // spi
 
