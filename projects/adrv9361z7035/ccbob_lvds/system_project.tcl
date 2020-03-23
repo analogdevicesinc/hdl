@@ -9,8 +9,10 @@ adi_project_files adrv9361z7035_ccbob_lvds [list \
   "../common/adrv9361z7035_constr.xdc" \
   "../common/adrv9361z7035_constr_lvds.xdc" \
   "../common/ccbob_constr.xdc" \
+  "../common/ccbob_timing.xdc" \
   "system_top.v" ]
 
+set_property used_in_synthesis false [get_files ../common/ccbob_timing.xdc]
 adi_project_run adrv9361z7035_ccbob_lvds
 source $ad_hdl_dir/library/axi_ad9361/axi_ad9361_delay.tcl
 

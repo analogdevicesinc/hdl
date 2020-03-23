@@ -7,6 +7,7 @@
 PROJECT_NAME := adrv9361z7035_ccbob_lvds
 
 M_DEPS += ../common/ccbob_constr.xdc
+M_DEPS += ../common/ccbob_timing.xdc
 M_DEPS += ../common/ccbob_bd.tcl
 M_DEPS += ../common/adrv9361z7035_constr_lvds.xdc
 M_DEPS += ../common/adrv9361z7035_constr.xdc
