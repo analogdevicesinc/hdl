@@ -112,10 +112,7 @@ always @(posedge clk) begin
   if (cgs_enable == 1'b1) begin
     phy_data <= {DATA_PATH_WIDTH{8'hbc}};
   end else begin
-    case (tx_ready)
-    1'b0: phy_data <= ilas_data;
-    default: phy_data <= scrambled_data;
-    endcase
+    phy_data <= (tx_ready) ? scrambled_data : ilas_data;
   end
 end
 
