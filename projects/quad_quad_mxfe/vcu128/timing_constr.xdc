@@ -24,3 +24,10 @@ create_clock -name refclk_q3_3         -period  4.00 [get_ports qmxfe_3_ref_clk_
 
 
 create_clock -name device_clk     -period  4.00 [get_ports device_clk_p]
+
+# Constraint SYSREFs
+# Assumption is that REFCLK and SYSREF have similar propagation delay,
+# and the SYSREF is a source synchronous Edge-Aligned signal to REFCLK
+set_input_delay -clock [get_clocks device_clk] \
+  [get_property PERIOD [get_clocks device_clk]] \
+  [get_ports {sysref_*}]
