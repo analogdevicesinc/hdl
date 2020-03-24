@@ -211,3 +211,7 @@ set_property  -dict {PACKAGE_PIN R32  IOSTANDARD LVCMOS18                       
 create_pblock pblock_axi_mem_interconnect
 add_cells_to_pblock [get_pblocks pblock_axi_mem_interconnect] [get_cells -quiet [list i_system_wrapper/system_i/axi_mem_interconnect]]
 resize_pblock [get_pblocks pblock_axi_mem_interconnect] -add {CLOCKREGION_X0Y0:CLOCKREGION_X5Y4}
+
+create_pblock SLR1
+add_cells_to_pblock [get_pblocks SLR1] [get_cells -quiet [list i_system_wrapper/system_i/util_mxfe_upack]]
+resize_pblock SLR1 -add SLR1:SLR1
