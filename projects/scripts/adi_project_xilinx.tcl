@@ -78,8 +78,9 @@ proc adi_project {project_name {mode 0} {parameter_list {}} } {
     set sys_zynq 0
   }
   if [regexp "_vcu128$" $project_name] {
-    set p_device "xcvu37p-fsvh2892-2L-e"
-    set p_board [lindex [lsearch -all -inline [get_board_parts] *vcu128:part0*] end]
+    set p_device "xcvu37p-fsvh2892-2L-e-es1"
+    set_param board.repoPaths [get_property LOCAL_ROOT_DIR [xhub::get_xstores xilinx_board_store]]
+    set p_board [lindex [lsearch -all -inline [get_board_parts] *vcu128_es:part0*] end]
     set sys_zynq 0
   }
   if [regexp "_kcu105$" $project_name] {
