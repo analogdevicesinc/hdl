@@ -37,6 +37,10 @@
 
 module axi_custom_control (
 
+  // parameters
+
+  // 0x100 < ADDR_OFFSET < 0x3F00
+  parameter ADDR_OFFSET = 32'h800 ) (
 
   // interface
 
@@ -82,9 +86,10 @@ module axi_custom_control (
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
 
-  axi_custom_control_reg custom_control_registers (
+  axi_custom_control_reg #(
+    .ADDR_OFFSET (ADDR_OFFSET))
+  custom_control_registers (
     .clk(clk),
-
     .reg_status_0 (reg_status_0),
     .reg_status_1 (reg_status_1),
     .reg_status_2 (reg_status_2),
