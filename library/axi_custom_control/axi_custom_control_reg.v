@@ -37,7 +37,8 @@
 
 module axi_custom_control_reg #(
 
-  parameter ADDR_OFFSET = 32'h800 ) (    // 0x100 < ADDR_OFFSET < 0x3F00
+  // 0x100 < ADDR_OFFSET < 0x3F00
+  parameter ADDR_OFFSET = 32'h800 ) (
 
   input              clk,
 

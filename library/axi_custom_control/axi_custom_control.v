@@ -37,20 +37,21 @@
 
 module axi_custom_control (
 
-  input      [31:0]  reg_status_0,
-  input      [31:0]  reg_status_1,
-  input      [31:0]  reg_status_2,
-  input      [31:0]  reg_status_3,
-  output     [31:0]  reg_control_0,
-  output     [31:0]  reg_control_1,
-  output     [31:0]  reg_control_2,
-  output     [31:0]  reg_control_3,
 
   // interface
 
+  input       [31:0]    reg_status_0,
+  input       [31:0]    reg_status_1,
+  input       [31:0]    reg_status_2,
+  input       [31:0]    reg_status_3,
+  output      [31:0]    reg_control_0,
+  output      [31:0]    reg_control_1,
+  output      [31:0]    reg_control_2,
+  output      [31:0]    reg_control_3,
+
   input                 clk,
   input                 reset,
-  
+
   // axi interface
 
   input                 s_axi_aclk,
@@ -82,30 +83,29 @@ module axi_custom_control (
   assign up_rstn = s_axi_aresetn;
 
   axi_custom_control_reg custom_control_registers (
+    .clk(clk),
 
-  .clk(clk),
+    .reg_status_0 (reg_status_0),
+    .reg_status_1 (reg_status_1),
+    .reg_status_2 (reg_status_2),
+    .reg_status_3 (reg_status_3),
+    .reg_control_0 (reg_control_0),
+    .reg_control_1 (reg_control_1),
+    .reg_control_2 (reg_control_2),
+    .reg_control_3 (reg_control_3),
 
-  .reg_status_0(reg_status_0),
-  .reg_status_1(reg_status_1),
-  .reg_status_2(reg_status_2),
-  .reg_status_3(reg_status_3),
-  .reg_control_0(reg_control_0),
-  .reg_control_1(reg_control_1),
-  .reg_control_2(reg_control_2),
-  .reg_control_3(reg_control_3),
-  
-  // bus interface
+    // bus interface
 
-  .up_rstn(up_rstn),
-  .up_clk(up_clk),
-  .up_wreq(up_wreq),
-  .up_waddr(up_waddr),
-  .up_wdata(up_wdata),
-  .up_wack(up_wack),
-  .up_rreq(up_rreq),
-  .up_raddr(up_raddr),
-  .up_rdata(up_rdata),
-  .up_rack(up_rack));
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
+    .up_wdata (up_wdata),
+    .up_wack (up_wack),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
+    .up_rdata (up_rdata),
+    .up_rack (up_rack));
 
  up_axi #(
     .AXI_ADDRESS_WIDTH(7)
