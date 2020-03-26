@@ -37,10 +37,10 @@
 
 module axi_custom_control_reg #(
 
-  parameter ADDR_OFFSET = 0x800 ) (    // 0x100 < ADDR_OFFSET < 0x3F00
+  parameter ADDR_OFFSET = 32'h800 ) (    // 0x100 < ADDR_OFFSET < 0x3F00
 
   input              clk,
-  
+
   input      [31:0]  reg_status_0,
   input      [31:0]  reg_status_1,
   input      [31:0]  reg_status_2,
@@ -62,7 +62,7 @@ module axi_custom_control_reg #(
   input       [16:0]  up_raddr,
   output reg  [31:0]  up_rdata,
   output reg          up_rack);
- 
+
 
   // internal registers
 
@@ -74,14 +74,14 @@ module axi_custom_control_reg #(
   reg     [31:0]  up_reg_control_1 = 32'h0;
   reg     [31:0]  up_reg_control_2 = 32'h0;
   reg     [31:0]  up_reg_control_3 = 32'h0;
-  
+
   wire   up_wreq_s;
   wire   up_rreq_s;
-   
+
   assign up_wreq_s = (up_waddr[13:7] == {ADDR_OFFSET[13:8],1'b0}) ? up_wreq : 1'b0;
   assign up_rreq_s = (up_raddr[13:7] == {ADDR_OFFSET[13:8],1'b0}) ? up_rreq : 1'b0;
-  
-  // processor write interface  
+
+  // processor write interface
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
@@ -94,7 +94,7 @@ module axi_custom_control_reg #(
       up_reg_control_1 <= 'd0;
       up_reg_control_2 <= 'd0;
       up_reg_control_3 <= 'd0;
-     
+
     end else begin
       up_wack <= up_wreq_s;
 	  if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h0)) begin
@@ -121,7 +121,7 @@ module axi_custom_control_reg #(
       if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h13)) begin
         up_reg_control_3 <= up_wdata;
       end
-      
+
     end
   end
 
@@ -150,41 +150,41 @@ module axi_custom_control_reg #(
       end
     end
   end
-  
+
    // adc control & status
 
    up_xfer_cntrl #(.DATA_WIDTH(128)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_reg_control_0,         // 32
-                      up_reg_control_1,         // 32      
-                      up_reg_control_2,         // 32     
+                      up_reg_control_1,         // 32
+                      up_reg_control_2,         // 32
                       up_reg_control_3}),       // 32
 
     .up_xfer_done (),
     .d_rst (1'b0),
     .d_clk (clk),
     .d_data_cntrl ({  reg_control_0,            // 32
-                      reg_control_1,            // 32      
-                      reg_control_2,            // 32     
+                      reg_control_1,            // 32
+                      reg_control_2,            // 32
                       reg_control_3}));         // 32
 
   up_xfer_status #(.DATA_WIDTH(128)) i_xfer_status (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_data_status ({ up_reg_status_0,         // 32  
+    .up_data_status ({ up_reg_status_0,         // 32
                        up_reg_status_1,	        // 32
-                       up_reg_status_2,         // 32  
+                       up_reg_status_2,         // 32
                        up_reg_status_3}),       // 32
 
     .up_xfer_done (),
     .d_rst (1'b0),
     .d_clk (clk),
-    .d_data_status ({ reg_status_0,             // 32  
+    .d_data_status ({ reg_status_0,             // 32
                       reg_status_1,	            // 32
-                      reg_status_2,             // 32  
-                      reg_status_3}));          // 32					  
-                     
+                      reg_status_2,             // 32
+                      reg_status_3}));          // 32
+
 endmodule
 
 // ***************************************************************************
