@@ -38,18 +38,45 @@
 module axi_custom_control_reg #(
 
   // 0x100 < ADDR_OFFSET < 0x3F00
-  parameter ADDR_OFFSET = 32'h800 ) (
+  parameter ADDR_OFFSET = 32'h800,
+  parameter N_CONTROL_REG = 4,
+  parameter N_STATUS_REG = 4) (
 
   input              clk,
 
-  input      [31:0]  reg_status_0,
-  input      [31:0]  reg_status_1,
-  input      [31:0]  reg_status_2,
-  input      [31:0]  reg_status_3,
-  output     [31:0]  reg_control_0,
-  output     [31:0]  reg_control_1,
-  output     [31:0]  reg_control_2,
-  output     [31:0]  reg_control_3,
+  input       [31:0]    reg_status_0,
+  input       [31:0]    reg_status_1,
+  input       [31:0]    reg_status_2,
+  input       [31:0]    reg_status_3,
+  input       [31:0]    reg_status_4,
+  input       [31:0]    reg_status_5,
+  input       [31:0]    reg_status_6,
+  input       [31:0]    reg_status_7,
+  input       [31:0]    reg_status_8,
+  input       [31:0]    reg_status_9,
+  input       [31:0]    reg_status_10,
+  input       [31:0]    reg_status_11,
+  input       [31:0]    reg_status_12,
+  input       [31:0]    reg_status_13,
+  input       [31:0]    reg_status_14,
+  input       [31:0]    reg_status_15,
+
+  output      [31:0]    reg_control_0,
+  output      [31:0]    reg_control_1,
+  output      [31:0]    reg_control_2,
+  output      [31:0]    reg_control_3,
+  output      [31:0]    reg_control_4,
+  output      [31:0]    reg_control_5,
+  output      [31:0]    reg_control_6,
+  output      [31:0]    reg_control_7,
+  output      [31:0]    reg_control_8,
+  output      [31:0]    reg_control_9,
+  output      [31:0]    reg_control_10,
+  output      [31:0]    reg_control_11,
+  output      [31:0]    reg_control_12,
+  output      [31:0]    reg_control_13,
+  output      [31:0]    reg_control_14,
+  output      [31:0]    reg_control_15,
 
   // bus interface
 
@@ -64,17 +91,18 @@ module axi_custom_control_reg #(
   output reg  [31:0]  up_rdata,
   output reg          up_rack);
 
-
   // internal registers
 
-  reg     [31:0]  up_reg_status_0 = 32'h0;
-  reg     [31:0]  up_reg_status_1 = 32'h0;
-  reg     [31:0]  up_reg_status_2 = 32'h0;
-  reg     [31:0]  up_reg_status_3 = 32'h0;
-  reg     [31:0]  up_reg_control_0 = 32'h0;
-  reg     [31:0]  up_reg_control_1 = 32'h0;
-  reg     [31:0]  up_reg_control_2 = 32'h0;
-  reg     [31:0]  up_reg_control_3 = 32'h0;
+  genvar i;
+  genvar j;
+
+  generate
+
+  reg     [31:0]  up_reg_control [N_STATUS_REG-1:0];
+
+  wire    [31:0]  up_reg_status_s [N_STATUS_REG-1:0];
+  wire    [31:0]  reg_status_s [N_STATUS_REG-1:0];
+  wire    [31:0]  reg_control_s [N_STATUS_REG-1:0];
 
   wire   up_wreq_s;
   wire   up_rreq_s;
@@ -87,42 +115,20 @@ module axi_custom_control_reg #(
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
       up_wack <= 'd0;
-	  up_reg_status_0 <= 'd0;
-      up_reg_status_1 <= 'd0;
-      up_reg_status_2 <= 'd0;
-      up_reg_status_3 <= 'd0;
-      up_reg_control_0 <= 'd0;
-      up_reg_control_1 <= 'd0;
-      up_reg_control_2 <= 'd0;
-      up_reg_control_3 <= 'd0;
-
     end else begin
       up_wack <= up_wreq_s;
-	  if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h0)) begin
-        up_reg_status_0 <= up_wdata;
-      end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h1)) begin
-        up_reg_status_1 <= up_wdata;
-      end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h2)) begin
-        up_reg_status_2 <= up_wdata;
-      end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h3)) begin
-        up_reg_status_3 <= up_wdata;
-      end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h10)) begin
-        up_reg_control_0 <= up_wdata;
-      end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h11)) begin
-        up_reg_control_1 <= up_wdata;
-      end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h12)) begin
-        up_reg_control_2 <= up_wdata;
-      end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h13)) begin
-        up_reg_control_3 <= up_wdata;
-      end
+    end
+  end
 
+  for (j=0; j<N_CONTROL_REG; j=j+1) begin: reset
+    always @(negedge up_rstn or posedge up_clk) begin
+      if (up_rstn == 0) begin
+        up_reg_control[j] <= 32'd0;
+      end else begin
+        if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h10+j)) begin
+          up_reg_control[j] <= up_wdata;
+        end
+      end
     end
   end
 
@@ -135,56 +141,206 @@ module axi_custom_control_reg #(
     end else begin
       up_rack <= up_rreq_s;
       if (up_rreq_s == 1'b1) begin
-        case (up_raddr[4:0])
-          5'h0: up_rdata <= up_reg_status_0;
-          5'h1: up_rdata <= up_reg_status_1;
-          5'h2: up_rdata <= up_reg_status_2;
-          5'h3: up_rdata <= up_reg_status_3;
-          5'h10: up_rdata <= up_reg_control_0;
-          5'h11: up_rdata <= up_reg_control_1;
-          5'h12: up_rdata <= up_reg_control_2;
-          5'h13: up_rdata <= up_reg_control_3;
-          default: up_rdata <= 0;
-        endcase
+        if (up_raddr[4] == 0) begin
+          if (up_raddr < N_STATUS_REG) begin
+            up_rdata <= reg_status_s[up_raddr];
+          end else begin
+            up_rdata <= 32'b0;
+          end
+        end else begin
+          if (up_raddr < N_CONTROL_REG) begin
+            up_rdata <= up_reg_control[up_raddr[3:0]];
+          end else begin
+            up_rdata <= 32'b0;
+          end
+        end
       end else begin
         up_rdata <= 32'd0;
       end
     end
   end
 
-   // adc control & status
+  // adc control & status
 
-   up_xfer_cntrl #(.DATA_WIDTH(128)) i_xfer_cntrl (
-    .up_rstn (up_rstn),
-    .up_clk (up_clk),
-    .up_data_cntrl ({ up_reg_control_0,         // 32
-                      up_reg_control_1,         // 32
-                      up_reg_control_2,         // 32
-                      up_reg_control_3}),       // 32
+  for (i=0; i<16; i=i+1) begin
+    assign reg_status_s[0]  = reg_status_0;
+    if (i>=1) begin
+      assign reg_status_s[1]  = reg_status_1;
+    end else begin
+      assign reg_status_s[1]  = 32'd0;
+    end
+    if (i>=2) begin
+      assign reg_status_s[2]  = reg_status_2;
+    end else begin
+      assign reg_status_s[2]  = 32'd0;
+    end
+    if (i>=3) begin
+      assign reg_status_s[3]  = reg_status_3;
+    end else begin
+      assign reg_status_s[3]  = 32'd0;
+    end
+    if (i>=4) begin
+      assign reg_status_s[4]  = reg_status_4;
+    end else begin
+      assign reg_status_s[4]  = 32'd0;
+    end
+    if (i>=5) begin
+      assign reg_status_s[5]  = reg_status_5;
+    end else begin
+      assign reg_status_s[5]  = 32'd0;
+    end
+    if (i>=6) begin
+      assign reg_status_s[6]  = reg_status_6;
+    end else begin
+      assign reg_status_s[6]  = 32'd0;
+    end
+    if (i>=7) begin
+      assign reg_status_s[7]  = reg_status_7;
+    end else begin
+      assign reg_status_s[7]  = 32'd0;
+    end
+    if (i>=8) begin
+      assign reg_status_s[8]  = reg_status_8;
+    end else begin
+      assign reg_status_s[8]  = 32'd0;
+    end
+    if (i>=9) begin
+      assign reg_status_s[9]  = reg_status_9;
+    end else begin
+      assign reg_status_s[9]  = 32'd0;
+    end
+    if (i>=10) begin
+      assign reg_status_s[10] = reg_status_10;
+    end else begin
+      assign reg_status_s[10] = 32'd0;
+    end
+    if (i>=11) begin
+      assign reg_status_s[11] = reg_status_11;
+    end else begin
+      assign reg_status_s[11] = 32'd0;
+    end
+    if (i>=12) begin
+      assign reg_status_s[12] = reg_status_12;
+    end else begin
+      assign reg_status_s[12] = 32'd0;
+    end
+    if (i>=13) begin
+      assign reg_status_s[13] = reg_status_13;
+    end else begin
+      assign reg_status_s[13] = 32'd0;
+    end
+    if (i>=14) begin
+      assign reg_status_s[14] = reg_status_14;
+    end else begin
+      assign reg_status_s[14] = 32'd0;
+    end
+    if (i==15) begin
+      assign reg_status_s[15] = reg_status_15;
+    end else begin
+      assign reg_status_s[15] = 32'd0;
+    end
 
-    .up_xfer_done (),
-    .d_rst (1'b0),
-    .d_clk (clk),
-    .d_data_cntrl ({  reg_control_0,            // 32
-                      reg_control_1,            // 32
-                      reg_control_2,            // 32
-                      reg_control_3}));         // 32
+    up_xfer_status #(.DATA_WIDTH(32)) i_xfer_status (
+      .up_rstn (up_rstn),
+      .up_clk (up_clk),
+      .up_data_status (up_reg_status_s[i]),
 
-  up_xfer_status #(.DATA_WIDTH(128)) i_xfer_status (
-    .up_rstn (up_rstn),
-    .up_clk (up_clk),
-    .up_data_status ({ up_reg_status_0,         // 32
-                       up_reg_status_1,	        // 32
-                       up_reg_status_2,         // 32
-                       up_reg_status_3}),       // 32
+      .up_xfer_done (),
+      .d_rst (1'b0),
+      .d_clk (clk),
+      .d_data_status (reg_status_s[i]));
+  end
 
-    .up_xfer_done (),
-    .d_rst (1'b0),
-    .d_clk (clk),
-    .d_data_status ({ reg_status_0,             // 32
-                      reg_status_1,	            // 32
-                      reg_status_2,             // 32
-                      reg_status_3}));          // 32
+  for (j=0; j<16; j=j+1) begin
+    assign reg_control_0  = reg_control_s[0];
+	  if (j>=1) begin
+      assign reg_control_1  = reg_control_s[1];
+    end else begin
+      assign reg_control_1  = 32'd0;
+    end
+	  if (j>=2) begin
+      assign reg_control_2  = reg_control_s[2];
+    end else begin
+      assign reg_control_2  = 32'd0;
+    end
+	  if (j>=3) begin
+      assign reg_control_3  = reg_control_s[3];
+    end else begin
+      assign reg_control_3  = 32'd0;
+    end
+	  if (j>=4) begin
+      assign reg_control_4  = reg_control_s[4];
+    end else begin
+      assign reg_control_4  = 32'd0;
+    end
+	  if (j>=5) begin
+      assign reg_control_5  = reg_control_s[5];
+    end else begin
+      assign reg_control_5  = 32'd0;
+    end
+	  if (j>=6) begin
+      assign reg_control_6  = reg_control_s[6];
+    end else begin
+      assign reg_control_6  = 32'd0;
+    end
+	  if (j>=7) begin
+      assign reg_control_7  = reg_control_s[7];
+    end else begin
+      assign reg_control_7  = 32'd0;
+    end
+	  if (j>=8) begin
+      assign reg_control_8  = reg_control_s[8];
+    end else begin
+      assign reg_control_8  = 32'd0;
+    end
+	  if (j>=9) begin
+      assign reg_control_9  = reg_control_s[9];
+    end else begin
+      assign reg_control_9  = 32'd0;
+    end
+	  if (j>=10) begin
+      assign reg_control_10 = reg_control_s[10];
+    end else begin
+      assign reg_control_10  = 32'd0;
+    end
+	  if (j>=11) begin
+      assign reg_control_11 = reg_control_s[11];
+    end else begin
+      assign reg_control_11  = 32'd0;
+    end
+	  if (j>=12) begin
+      assign reg_control_12 = reg_control_s[12];
+    end else begin
+      assign reg_control_12  = 32'd0;
+    end
+	  if (j>=13) begin
+      assign reg_control_13 = reg_control_s[13];
+    end else begin
+      assign reg_control_13  = 32'd0;
+    end
+	  if (j>=14) begin
+      assign reg_control_14 = reg_control_s[14];
+    end else begin
+      assign reg_control_14  = 32'd0;
+    end
+	  if (j==15) begin
+      assign reg_control_15 = reg_control_s[15];
+    end else begin
+      assign reg_control_15  = 32'd0;
+    end
+
+    up_xfer_cntrl #(.DATA_WIDTH(32)) i_xfer_cntrl (
+      .up_rstn (up_rstn),
+      .up_clk (up_clk),
+      .up_data_cntrl (up_reg_control[i]),
+
+      .up_xfer_done (),
+      .d_rst (1'b0),
+      .d_clk (clk),
+      .d_data_cntrl (reg_control_s[i]));
+
+  end
+  endgenerate
 
 endmodule
 

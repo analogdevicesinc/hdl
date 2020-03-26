@@ -35,26 +35,52 @@
 
 `timescale 1ns/100ps
 
-module axi_custom_control (
+module axi_custom_control #(
 
   // parameters
 
   // 0x100 < ADDR_OFFSET < 0x3F00
-  parameter ADDR_OFFSET = 32'h800 ) (
+  parameter ADDR_OFFSET = 32'h800,
+  parameter N_CONTROL_REG = 4,
+  parameter N_STATUS_REG = 4) (
 
   // interface
+
+  input                 clk,
 
   input       [31:0]    reg_status_0,
   input       [31:0]    reg_status_1,
   input       [31:0]    reg_status_2,
   input       [31:0]    reg_status_3,
+  input       [31:0]    reg_status_4,
+  input       [31:0]    reg_status_5,
+  input       [31:0]    reg_status_6,
+  input       [31:0]    reg_status_7,
+  input       [31:0]    reg_status_8,
+  input       [31:0]    reg_status_9,
+  input       [31:0]    reg_status_10,
+  input       [31:0]    reg_status_11,
+  input       [31:0]    reg_status_12,
+  input       [31:0]    reg_status_13,
+  input       [31:0]    reg_status_14,
+  input       [31:0]    reg_status_15,
+
   output      [31:0]    reg_control_0,
   output      [31:0]    reg_control_1,
   output      [31:0]    reg_control_2,
   output      [31:0]    reg_control_3,
-
-  input                 clk,
-  input                 reset,
+  output      [31:0]    reg_control_4,
+  output      [31:0]    reg_control_5,
+  output      [31:0]    reg_control_6,
+  output      [31:0]    reg_control_7,
+  output      [31:0]    reg_control_8,
+  output      [31:0]    reg_control_9,
+  output      [31:0]    reg_control_10,
+  output      [31:0]    reg_control_11,
+  output      [31:0]    reg_control_12,
+  output      [31:0]    reg_control_13,
+  output      [31:0]    reg_control_14,
+  output      [31:0]    reg_control_15,
 
   // axi interface
 
@@ -80,24 +106,50 @@ module axi_custom_control (
   output      [ 1:0]    s_axi_rresp,
   input                 s_axi_rready);
 
-
   // signal name changes
 
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
 
   axi_custom_control_reg #(
-    .ADDR_OFFSET (ADDR_OFFSET))
+    .ADDR_OFFSET (ADDR_OFFSET),
+    .N_CONTROL_REG (N_CONTROL_REG),
+    .N_STATUS_REG (N_STATUS_REG))
   custom_control_registers (
     .clk(clk),
-    .reg_status_0 (reg_status_0),
-    .reg_status_1 (reg_status_1),
-    .reg_status_2 (reg_status_2),
-    .reg_status_3 (reg_status_3),
-    .reg_control_0 (reg_control_0),
-    .reg_control_1 (reg_control_1),
-    .reg_control_2 (reg_control_2),
-    .reg_control_3 (reg_control_3),
+    .reg_status_0  (reg_status_0),
+    .reg_status_1  (reg_status_1),
+    .reg_status_2  (reg_status_2),
+    .reg_status_3  (reg_status_3),
+    .reg_status_4  (reg_status_4),
+    .reg_status_5  (reg_status_5),
+    .reg_status_6  (reg_status_6),
+    .reg_status_7  (reg_status_7),
+    .reg_status_8  (reg_status_8),
+    .reg_status_9  (reg_status_9),
+    .reg_status_10 (reg_status_10),
+    .reg_status_11 (reg_status_11),
+    .reg_status_12 (reg_status_12),
+    .reg_status_13 (reg_status_13),
+    .reg_status_14 (reg_status_14),
+    .reg_status_15 (reg_status_15),
+
+    .reg_control_0  (reg_control_0),
+    .reg_control_1  (reg_control_1),
+    .reg_control_2  (reg_control_2),
+    .reg_control_3  (reg_control_3),
+    .reg_control_4  (reg_control_4),
+    .reg_control_5  (reg_control_5),
+    .reg_control_6  (reg_control_6),
+    .reg_control_7  (reg_control_7),
+    .reg_control_8  (reg_control_8),
+    .reg_control_9  (reg_control_9),
+    .reg_control_10 (reg_control_10),
+    .reg_control_11 (reg_control_11),
+    .reg_control_12 (reg_control_12),
+    .reg_control_13 (reg_control_13),
+    .reg_control_14 (reg_control_14),
+    .reg_control_15 (reg_control_15),
 
     // bus interface
 
