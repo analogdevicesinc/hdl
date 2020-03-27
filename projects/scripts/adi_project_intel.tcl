@@ -39,7 +39,7 @@ proc adi_project {project_name {parameter_list {}}} {
     set system_qip_file system_bd/synthesis/system_bd.qip
   }
 
-  if [regexp "de10nano$" $project_name] {
+  if [regexp "_de10nano$" $project_name] {
     set family "Cyclone V"
     set device 5CSEBA6U23I7DK
     set system_qip_file system_bd/synthesis/system_bd.qip
