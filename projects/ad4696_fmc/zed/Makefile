@@ -5,8 +5,6 @@
 
 PROJECT_NAME := ad4696_fmc_zed
 
-M_DEPS += system_constr_adaq400x.xdc
-M_DEPS += system_constr_ad4696.xdc
 M_DEPS += ../common/ad4696_bd.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
 M_DEPS += ../../common/zed/zed_system_bd.tcl
