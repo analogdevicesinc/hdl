@@ -135,7 +135,10 @@ module system_top (
   assign gpio_i[33] = ad77681_sync_in;
   assign ad77681_reset = gpio_o[32];
 
-  assign gpio_i[31:0] = gpio_o[31:0];
+  assign gpio_i[11:4] = gpio_bd_i[7:0];
+  assign gpio_bd_o[3:0] = gpio_o[3:0];
+
+  assign gpio_i[31:12] = gpio_o[31:12];
 
   system_bd i_system_bd (
     .sys_clk_clk (sys_clk),
