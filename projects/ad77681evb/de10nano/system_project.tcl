@@ -11,7 +11,7 @@ source $ad_hdl_dir/projects/common/de10nano/de10nano_system_assign.tcl
 
 # SPI interface
 
-set_location_assignment PIN_AH12 -to ad77681_spi_sclk       ; ##   Arduino_IO13
+set_location_assignment PIN_AH12 -to ad77681_spi_sclk      ; ##   Arduino_IO13
 set_location_assignment PIN_AH11 -to ad77681_spi_miso      ; ##   Arduino_IO12
 set_location_assignment PIN_AG16 -to ad77681_spi_mosi      ; ##   Arduino_IO11
 set_location_assignment PIN_AF15 -to ad77681_spi_cs        ; ##   Arduino_IO10
@@ -44,8 +44,7 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ad77681_drdy
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ad77681_sync_in
 
 
-#
 # set optimization to get a better timing closure
-set_global_assignment -name OPTIMIZATION_MODE "HIGH PERFORMANCE EFFORT"
+#set_global_assignment -name OPTIMIZATION_MODE "HIGH PERFORMANCE EFFORT"
 
 execute_flow -compile
