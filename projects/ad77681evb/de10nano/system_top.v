@@ -77,7 +77,7 @@ module system_top (
   inout             sdio_cmd,
   inout   [  3:0]   sdio_d,
 
-  // hps-spim1-lcd
+  // hps-spim1
 
   output            spim1_ss0,
   output            spim1_clk,
@@ -115,14 +115,7 @@ module system_top (
   input            ad77681_fda_dis,
   input            ad77681_fda_mode,
   input            ad77681_dac_buf_en,
-  inout            ad77681_io_int,
-
-  // spi interface
-
-  output           spi_csn,
-  output           spi_clk,
-  output           spi_mosi,
-  input            spi_miso);
+  inout            ad77681_io_int);
 
   // internal signals
 
@@ -206,10 +199,6 @@ module system_top (
     .sys_gpio_bd_out_port (gpio_o[31:0]),
     .sys_gpio_in_export (gpio_i[63:32]),
     .sys_gpio_out_export (gpio_o[63:32]),
-    .sys_spi_MISO (spi_miso),
-    .sys_spi_MOSI (spi_mosi),
-    .sys_spi_SCLK (spi_clk),
-    .sys_spi_SS_n (spi_csn),
     .spi_engine_sdo_sdo (ad77681_spi_mosi),
     .spi_engine_sdo_t_sdo_t (),
     .spi_engine_sdi_sdi (ad77681_spi_miso),
