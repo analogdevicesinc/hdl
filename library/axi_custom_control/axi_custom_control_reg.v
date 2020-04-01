@@ -240,14 +240,14 @@ module axi_custom_control_reg #(
     end
 
   for (i=0; i< N_STATUS_REG; i=i+1) begin
-    up_xfer_status #(.DATA_WIDTH(32)) i_xfer_status (
-      .up_rstn (up_rstn),
-      .up_clk (up_clk),
-      .up_data_status (up_reg_status_s[i]),
-
-      .d_rst (1'b0),
-      .d_clk (clk),
-      .d_data_status (reg_status_s[i]));
+     sync_data #(
+      .NUM_OF_BITS (32),
+      .ASYNC_CLK (1))
+    i_status_sync (
+      .in_clk (clk),
+      .in_data (reg_status_s[i]),
+      .out_clk (up_clk),
+      .out_data (up_reg_status_s[i]));
   end
 
     assign reg_control_0  = reg_control_s[0];
@@ -328,16 +328,14 @@ module axi_custom_control_reg #(
     end
 
   for (j=0; j < N_CONTROL_REG; j=j+1) begin
-    up_xfer_cntrl #(.DATA_WIDTH(32)) i_xfer_cntrl (
-      .up_rstn (up_rstn),
-      .up_clk (up_clk),
-      .up_data_cntrl (up_reg_control[j]),
-
-      .up_xfer_done (),
-      .d_rst (1'b0),
-      .d_clk (clk),
-      .d_data_cntrl (reg_control_s[j]));
-
+    sync_data #(
+      .NUM_OF_BITS (32),
+      .ASYNC_CLK (1))
+    i_control_sync (
+      .in_clk (up_clk),
+      .in_data (up_reg_control[j]),
+      .out_clk (clk),
+      .out_data (reg_control_s[j]));
   end
   endgenerate
 

@@ -5,17 +5,17 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 adi_ip_create axi_custom_control
 adi_ip_files axi_custom_control [list \
-  "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
-  "$ad_hdl_dir/library/common/up_xfer_status.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
-  "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
+  "axi_custom_control_constr.ttcl" \
   "axi_custom_control_reg.v" \
   "axi_custom_control.v" ]
 
 adi_ip_properties axi_custom_control
-ipx::infer_bus_interface clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
-ipx::infer_bus_interface reset xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+adi_ip_ttcl axi_custom_control "axi_custom_control_constr.ttcl"
+
+adi_ip_add_core_dependencies { \
+	analog.com:user:util_cdc:1.0 \
+}
 
 set_property driver_value 0 [ipx::get_ports *reg_status_* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *reg_control_* -of_objects [ipx::current_core]]
@@ -46,8 +46,10 @@ for {set i 1} {$i < 16} {incr i} {
 for {set i 1} {$i < 16} {incr i} {
 	adi_set_ports_dependency "reg_control_$i" \
 		"(spirit:decode(id('MODELPARAM_VALUE.N_CONTROL_REG')) > $i)"
+}
 
-ipx::associate_bus_interfaces -busif s_axis -clock clk [ipx::current_core]
+ipx::infer_bus_interface clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface reset xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
 
 ipx::save_core [ipx::current_core]
 
