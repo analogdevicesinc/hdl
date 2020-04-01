@@ -162,182 +162,181 @@ module axi_custom_control_reg #(
 
   // adc control & status
 
-  for (i=0; i<16; i=i+1) begin
     assign reg_status_s[0]  = reg_status_0;
-    if (i>=1) begin
+    if (N_CONTROL_REG>1) begin
       assign reg_status_s[1]  = reg_status_1;
     end else begin
       assign reg_status_s[1]  = 32'd0;
     end
-    if (i>=2) begin
+    if (N_CONTROL_REG>2) begin
       assign reg_status_s[2]  = reg_status_2;
     end else begin
       assign reg_status_s[2]  = 32'd0;
     end
-    if (i>=3) begin
+    if (N_CONTROL_REG>3) begin
       assign reg_status_s[3]  = reg_status_3;
     end else begin
       assign reg_status_s[3]  = 32'd0;
     end
-    if (i>=4) begin
+    if (N_CONTROL_REG>4) begin
       assign reg_status_s[4]  = reg_status_4;
     end else begin
       assign reg_status_s[4]  = 32'd0;
     end
-    if (i>=5) begin
+    if (N_CONTROL_REG>5) begin
       assign reg_status_s[5]  = reg_status_5;
     end else begin
       assign reg_status_s[5]  = 32'd0;
     end
-    if (i>=6) begin
+    if (N_CONTROL_REG>6) begin
       assign reg_status_s[6]  = reg_status_6;
     end else begin
       assign reg_status_s[6]  = 32'd0;
     end
-    if (i>=7) begin
+    if (N_CONTROL_REG>7) begin
       assign reg_status_s[7]  = reg_status_7;
     end else begin
       assign reg_status_s[7]  = 32'd0;
     end
-    if (i>=8) begin
+    if (N_CONTROL_REG>8) begin
       assign reg_status_s[8]  = reg_status_8;
     end else begin
       assign reg_status_s[8]  = 32'd0;
     end
-    if (i>=9) begin
+    if (N_CONTROL_REG>9) begin
       assign reg_status_s[9]  = reg_status_9;
     end else begin
       assign reg_status_s[9]  = 32'd0;
     end
-    if (i>=10) begin
+    if (N_CONTROL_REG>10) begin
       assign reg_status_s[10] = reg_status_10;
     end else begin
       assign reg_status_s[10] = 32'd0;
     end
-    if (i>=11) begin
+    if (N_CONTROL_REG>11) begin
       assign reg_status_s[11] = reg_status_11;
     end else begin
       assign reg_status_s[11] = 32'd0;
     end
-    if (i>=12) begin
+    if (N_CONTROL_REG>12) begin
       assign reg_status_s[12] = reg_status_12;
     end else begin
       assign reg_status_s[12] = 32'd0;
     end
-    if (i>=13) begin
+    if (N_CONTROL_REG>13) begin
       assign reg_status_s[13] = reg_status_13;
     end else begin
       assign reg_status_s[13] = 32'd0;
     end
-    if (i>=14) begin
+    if (N_CONTROL_REG>14) begin
       assign reg_status_s[14] = reg_status_14;
     end else begin
       assign reg_status_s[14] = 32'd0;
     end
-    if (i==15) begin
+    if (N_CONTROL_REG==15) begin
       assign reg_status_s[15] = reg_status_15;
     end else begin
       assign reg_status_s[15] = 32'd0;
     end
 
+  for (i=0; i< N_STATUS_REG; i=i+1) begin
     up_xfer_status #(.DATA_WIDTH(32)) i_xfer_status (
       .up_rstn (up_rstn),
       .up_clk (up_clk),
       .up_data_status (up_reg_status_s[i]),
 
-      .up_xfer_done (),
       .d_rst (1'b0),
       .d_clk (clk),
       .d_data_status (reg_status_s[i]));
   end
 
-  for (j=0; j<16; j=j+1) begin
     assign reg_control_0  = reg_control_s[0];
-	  if (j>=1) begin
+	  if (N_CONTROL_REG > 1) begin
       assign reg_control_1  = reg_control_s[1];
     end else begin
       assign reg_control_1  = 32'd0;
     end
-	  if (j>=2) begin
+	  if (N_CONTROL_REG > 2) begin
       assign reg_control_2  = reg_control_s[2];
     end else begin
       assign reg_control_2  = 32'd0;
     end
-	  if (j>=3) begin
+	  if (N_CONTROL_REG > 3) begin
       assign reg_control_3  = reg_control_s[3];
     end else begin
       assign reg_control_3  = 32'd0;
     end
-	  if (j>=4) begin
+	  if (N_CONTROL_REG > 4) begin
       assign reg_control_4  = reg_control_s[4];
     end else begin
       assign reg_control_4  = 32'd0;
     end
-	  if (j>=5) begin
+	  if (N_CONTROL_REG> 5) begin
       assign reg_control_5  = reg_control_s[5];
     end else begin
       assign reg_control_5  = 32'd0;
     end
-	  if (j>=6) begin
+	  if (N_CONTROL_REG> 6) begin
       assign reg_control_6  = reg_control_s[6];
     end else begin
       assign reg_control_6  = 32'd0;
     end
-	  if (j>=7) begin
+	  if (N_CONTROL_REG> 7) begin
       assign reg_control_7  = reg_control_s[7];
     end else begin
       assign reg_control_7  = 32'd0;
     end
-	  if (j>=8) begin
+	  if (N_CONTROL_REG>8) begin
       assign reg_control_8  = reg_control_s[8];
     end else begin
       assign reg_control_8  = 32'd0;
     end
-	  if (j>=9) begin
+	  if (N_CONTROL_REG>9) begin
       assign reg_control_9  = reg_control_s[9];
     end else begin
       assign reg_control_9  = 32'd0;
     end
-	  if (j>=10) begin
+	  if (N_CONTROL_REG>10) begin
       assign reg_control_10 = reg_control_s[10];
     end else begin
       assign reg_control_10  = 32'd0;
     end
-	  if (j>=11) begin
+	  if (N_CONTROL_REG>11) begin
       assign reg_control_11 = reg_control_s[11];
     end else begin
       assign reg_control_11  = 32'd0;
     end
-	  if (j>=12) begin
+	  if (N_CONTROL_REG>12) begin
       assign reg_control_12 = reg_control_s[12];
     end else begin
       assign reg_control_12  = 32'd0;
     end
-	  if (j>=13) begin
+	  if (N_CONTROL_REG>13) begin
       assign reg_control_13 = reg_control_s[13];
     end else begin
       assign reg_control_13  = 32'd0;
     end
-	  if (j>=14) begin
+	  if (N_CONTROL_REG>14) begin
       assign reg_control_14 = reg_control_s[14];
     end else begin
       assign reg_control_14  = 32'd0;
     end
-	  if (j==15) begin
+	  if (N_CONTROL_REG==15) begin
       assign reg_control_15 = reg_control_s[15];
     end else begin
       assign reg_control_15  = 32'd0;
     end
 
+  for (j=0; j < N_CONTROL_REG; j=j+1) begin
     up_xfer_cntrl #(.DATA_WIDTH(32)) i_xfer_cntrl (
       .up_rstn (up_rstn),
       .up_clk (up_clk),
-      .up_data_cntrl (up_reg_control[i]),
+      .up_data_cntrl (up_reg_control[j]),
 
       .up_xfer_done (),
       .d_rst (1'b0),
       .d_clk (clk),
-      .d_data_cntrl (reg_control_s[i]));
+      .d_data_cntrl (reg_control_s[j]));
 
   end
   endgenerate
