@@ -5,6 +5,7 @@
 # each.
 
 # Interface:
+#  $NUM_OF_QUAD_MXFES - variable defining the number of QuadMxFE instances
 #  $sys_cpu_clk - global variable pointing to system clock AXI Lite control interface (100MHz)
 #  $sys_cpu_resetn - global variable pointing to active low synchronous reset in system clock domain
 
@@ -50,12 +51,43 @@ proc create_phy_ll_group {H_NAME INDEX {LANE_MAP {}} } {
 
   create_bd_cell -type hier  $H_NAME
 
-  # Physical layer
+  # Physical layer with parameters set for 10Gpbs lane rate 
   ad_ip_instance util_adxcvr $H_NAME/util_mxfe_xcvr [list \
     CPLL_FBDIV_4_5 5 \
     TX_NUM_OF_LANES $MAX_TX_LANES \
     RX_NUM_OF_LANES $MAX_RX_LANES \
     RX_OUT_DIV 1 \
+    RX_CLK25_DIV 20 \
+    TX_CLK25_DIV 20 \
+    CPLL_CFG0 0x3fe \
+    CPLL_CFG1 0x29 \
+    CPLL_CFG2 0x203 \
+    CPLL_FBDIV 2 \
+    A_TXDIFFCTRL 0xc \
+    RXCDR_CFG0 0x3 \
+    RXCDR_CFG2_GEN2 0x265 \
+    RXCDR_CFG2_GEN4 0x164 \
+    RXCDR_CFG3 0x12 \
+    RXCDR_CFG3_GEN2 0x12 \
+    RXCDR_CFG3_GEN3 0x12 \
+    RXCDR_CFG3_GEN4 0x12 \
+    CH_HSPMUX 0x2020 \
+    PREIQ_FREQ_BST 0 \
+    RXPI_CFG0 0x1002 \
+    RXPI_CFG1 0x15 \
+    TXPI_CFG 0x54 \
+    TX_PI_BIASSET 0 \
+    QPLL_REFCLK_DIV 1 \
+    POR_CFG 0x0 \
+    QPLL_CFG0 0x331c \
+    QPLL_CFG2 0xFC1 \
+    QPLL_CFG2_G3 0xFC1 \
+    QPLL_CFG4 0x1 \
+    QPLL_FBDIV 20 \
+    PPF0_CFG 0x400 \
+    QPLL_CP 0xFF \
+    QPLL_CP_G3 0xF \
+    QPLL_LPF 0x27F \
   ]
 
   # Physical layer rx control interface
@@ -98,7 +130,7 @@ proc create_phy_ll_group {H_NAME INDEX {LANE_MAP {}} } {
                                                      $TX_SAMPLE_WIDTH \
                                                      $DATAPATH_WIDTH
 
-  ad_ip_parameter $H_NAME/tx_mxfe_tpl_core CONFIG.DATAPATH_DISABLE 1
+  ad_ip_parameter $H_NAME/tx_mxfe_tpl_core/tpl_core CONFIG.DATAPATH_DISABLE 1
 
   ad_connect  device_clk $H_NAME/rx_mxfe_tpl_core/link_clk
   ad_connect  device_clk $H_NAME/tx_mxfe_tpl_core/link_clk
@@ -166,8 +198,8 @@ proc create_phy_ll_group {H_NAME INDEX {LANE_MAP {}} } {
 
 }
 
-create_phy_ll_group qmxfe0 0
-create_phy_ll_group qmxfe1 1
-create_phy_ll_group qmxfe2 2
-create_phy_ll_group qmxfe3 3
+
+for {set i 0} {$i < $NUM_OF_QUAD_MXFES} {incr i} {
+  create_phy_ll_group qmxfe$i $i
+}
 
