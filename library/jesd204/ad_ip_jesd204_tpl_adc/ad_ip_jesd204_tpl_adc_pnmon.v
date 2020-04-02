@@ -53,6 +53,7 @@ module ad_ip_jesd204_tpl_adc_pnmon #(
   wire [PN_W:0] pn_data_pn_s;
   wire [DW:0] pn_data_in_s;
   wire [PN_W:0] pn_data_init;
+  wire [DW:0] pn_data_in_unmod_msb_s;
 
   wire [DW:0] pn23;
   wire [DW+23:0] full_state_pn23;
@@ -85,6 +86,7 @@ module ad_ip_jesd204_tpl_adc_pnmon #(
 
     assign pn_data_in_s[dst_msb] = tc ^ data[src_msb];
     assign pn_data_in_s[dst_msb-1:dst_lsb] = data[src_msb-1:src_lsb];
+    assign pn_data_in_unmod_msb_s[dst_msb:dst_lsb] = data[src_msb:src_lsb];
   end
   endgenerate
 
@@ -112,7 +114,7 @@ module ad_ip_jesd204_tpl_adc_pnmon #(
   ) i_pnmon (
     .adc_clk (clk),
     .adc_valid_in (1'b1),
-    .adc_data_in (pn_data_in_s),
+    .adc_data_in (pn_data_in_unmod_msb_s),
     .adc_data_pn (pn_data_pn[DW:0]),
     .adc_pn_oos (pn_oos),
     .adc_pn_err (pn_err)
