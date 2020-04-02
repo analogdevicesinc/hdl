@@ -28,7 +28,8 @@ proc init {cellpath otherInfo} {
 
   # Versions earlier than 2017.3 infer sub-optimal asymmetric memory
   # See https://www.xilinx.com/support/answers/69179.html
-  if {[expr [join [lrange [split [version -short] .] 0 1] .] > 2017.2 ]} {
+  regexp {^[0-9]+\.[0-9]+} [version -short] short_version
+  if {[expr $short_version > 2017.2]} {
     set_property "CONFIG.ALLOW_ASYM_MEM" 1 $ip
   }
 }
