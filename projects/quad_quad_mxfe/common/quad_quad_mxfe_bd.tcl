@@ -1,5 +1,6 @@
 # Common block design
 
+set NUM_OF_QUAD_MXFES 4
 
 # IP cores related to JESD framework
 source $ad_hdl_dir/projects/quad_quad_mxfe/common/jesd_cores_bd.tcl
