@@ -195,6 +195,9 @@ proc create_phy_ll_group {H_NAME INDEX {LANE_MAP {}} } {
     ad_connect $H_NAME/tx_mxfe_tpl_core/dac_data_$i ${H_NAME}/dac_data_${i}
   }
 
+  # do not track underflow or overflow
+  ad_connect ${H_NAME}/rx_mxfe_tpl_core/adc_dovf GND
+  ad_connect ${H_NAME}/tx_mxfe_tpl_core/dac_dunf GND
 
 }
 
