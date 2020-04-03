@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="system_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="\$unit_logger_pkg_sv " />
+            <top_module name="axi4stream_vip_pkg" />
+            <top_module name="axi_vip_pkg" />
+            <top_module name="glbl" />
+            <top_module name="logger_pkg" />
+            <top_module name="std" />
+            <top_module name="system_tb" />
+            <top_module name="test_harness_mng_axi_vip_0_pkg" />
+            <top_module name="xil_common_vip_pkg" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="11201094fs"></ZoomStartTime>
+      <ZoomEndTime time="11207916fs"></ZoomEndTime>
+      <Cursor1Time time="11202230fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="231"></NameColumnWidth>
+      <ValueColumnWidth column_width="114"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="77" />
+   <wvobject fp_name="/system_tb/mng_clk" type="logic">
+      <obj_property name="ElementShortName">mng_clk</obj_property>
+      <obj_property name="ObjectShortName">mng_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/ref_clk" type="logic">
+      <obj_property name="ElementShortName">ref_clk</obj_property>
+      <obj_property name="ObjectShortName">ref_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/device_clk" type="logic">
+      <obj_property name="ElementShortName">device_clk</obj_property>
+      <obj_property name="ObjectShortName">device_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/sysref" type="logic">
+      <obj_property name="ElementShortName">sysref</obj_property>
+      <obj_property name="ObjectShortName">sysref</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/mng_rst" type="logic">
+      <obj_property name="ElementShortName">mng_rst</obj_property>
+      <obj_property name="ObjectShortName">mng_rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/dac_data" type="array">
+      <obj_property name="ElementShortName">dac_data[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dac_data[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/c2m_0_n" type="array">
+      <obj_property name="ElementShortName">c2m_0_n[15:0]</obj_property>
+      <obj_property name="ObjectShortName">c2m_0_n[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/c2m_0_p" type="array">
+      <obj_property name="ElementShortName">c2m_0_p[15:0]</obj_property>
+      <obj_property name="ObjectShortName">c2m_0_p[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/m2c_0_n" type="array">
+      <obj_property name="ElementShortName">m2c_0_n[15:0]</obj_property>
+      <obj_property name="ObjectShortName">m2c_0_n[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/m2c_0_p" type="array">
+      <obj_property name="ElementShortName">m2c_0_p[15:0]</obj_property>
+      <obj_property name="ObjectShortName">m2c_0_p[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/tx_syncin_0" type="array">
+      <obj_property name="ElementShortName">tx_syncin_0[3:0]</obj_property>
+      <obj_property name="ObjectShortName">tx_syncin_0[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/rx_syncout_0" type="array">
+      <obj_property name="ElementShortName">rx_syncout_0[3:0]</obj_property>
+      <obj_property name="ObjectShortName">rx_syncout_0[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/ref_clk_0" type="array">
+      <obj_property name="ElementShortName">ref_clk_0[3:0]</obj_property>
+      <obj_property name="ObjectShortName">ref_clk_0[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_0" type="array">
+      <obj_property name="ElementShortName">adc_data_0[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_0[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_1" type="array">
+      <obj_property name="ElementShortName">adc_data_1[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_1[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_10" type="array">
+      <obj_property name="ElementShortName">adc_data_10[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_10[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_11" type="array">
+      <obj_property name="ElementShortName">adc_data_11[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_11[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_12" type="array">
+      <obj_property name="ElementShortName">adc_data_12[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_12[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_13" type="array">
+      <obj_property name="ElementShortName">adc_data_13[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_13[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_14" type="array">
+      <obj_property name="ElementShortName">adc_data_14[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_14[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_15" type="array">
+      <obj_property name="ElementShortName">adc_data_15[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_15[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_16" type="array">
+      <obj_property name="ElementShortName">adc_data_16[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_16[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_17" type="array">
+      <obj_property name="ElementShortName">adc_data_17[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_17[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_18" type="array">
+      <obj_property name="ElementShortName">adc_data_18[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_18[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_19" type="array">
+      <obj_property name="ElementShortName">adc_data_19[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_19[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_2" type="array">
+      <obj_property name="ElementShortName">adc_data_2[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_2[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_20" type="array">
+      <obj_property name="ElementShortName">adc_data_20[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_20[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_21" type="array">
+      <obj_property name="ElementShortName">adc_data_21[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_21[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_22" type="array">
+      <obj_property name="ElementShortName">adc_data_22[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_22[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_23" type="array">
+      <obj_property name="ElementShortName">adc_data_23[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_23[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_24" type="array">
+      <obj_property name="ElementShortName">adc_data_24[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_24[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_25" type="array">
+      <obj_property name="ElementShortName">adc_data_25[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_25[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_26" type="array">
+      <obj_property name="ElementShortName">adc_data_26[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_26[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_27" type="array">
+      <obj_property name="ElementShortName">adc_data_27[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_27[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_28" type="array">
+      <obj_property name="ElementShortName">adc_data_28[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_28[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_29" type="array">
+      <obj_property name="ElementShortName">adc_data_29[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_29[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_3" type="array">
+      <obj_property name="ElementShortName">adc_data_3[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_3[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_30" type="array">
+      <obj_property name="ElementShortName">adc_data_30[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_30[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_31" type="array">
+      <obj_property name="ElementShortName">adc_data_31[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_31[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_4" type="array">
+      <obj_property name="ElementShortName">adc_data_4[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_4[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_5" type="array">
+      <obj_property name="ElementShortName">adc_data_5[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_5[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_6" type="array">
+      <obj_property name="ElementShortName">adc_data_6[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_6[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_7" type="array">
+      <obj_property name="ElementShortName">adc_data_7[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_7[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_8" type="array">
+      <obj_property name="ElementShortName">adc_data_8[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_8[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_data_9" type="array">
+      <obj_property name="ElementShortName">adc_data_9[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_9[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_0" type="array">
+      <obj_property name="ElementShortName">dac_data_0[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_0[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_1" type="array">
+      <obj_property name="ElementShortName">dac_data_1[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_1[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_10" type="array">
+      <obj_property name="ElementShortName">dac_data_10[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_10[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_11" type="array">
+      <obj_property name="ElementShortName">dac_data_11[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_11[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_12" type="array">
+      <obj_property name="ElementShortName">dac_data_12[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_12[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_13" type="array">
+      <obj_property name="ElementShortName">dac_data_13[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_13[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_14" type="array">
+      <obj_property name="ElementShortName">dac_data_14[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_14[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_15" type="array">
+      <obj_property name="ElementShortName">dac_data_15[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_15[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_16" type="array">
+      <obj_property name="ElementShortName">dac_data_16[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_16[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_17" type="array">
+      <obj_property name="ElementShortName">dac_data_17[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_17[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_18" type="array">
+      <obj_property name="ElementShortName">dac_data_18[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_18[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_19" type="array">
+      <obj_property name="ElementShortName">dac_data_19[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_19[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_2" type="array">
+      <obj_property name="ElementShortName">dac_data_2[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_2[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_20" type="array">
+      <obj_property name="ElementShortName">dac_data_20[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_20[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_21" type="array">
+      <obj_property name="ElementShortName">dac_data_21[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_21[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_22" type="array">
+      <obj_property name="ElementShortName">dac_data_22[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_22[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_23" type="array">
+      <obj_property name="ElementShortName">dac_data_23[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_23[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_24" type="array">
+      <obj_property name="ElementShortName">dac_data_24[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_24[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_25" type="array">
+      <obj_property name="ElementShortName">dac_data_25[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_25[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_26" type="array">
+      <obj_property name="ElementShortName">dac_data_26[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_26[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_27" type="array">
+      <obj_property name="ElementShortName">dac_data_27[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_27[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_28" type="array">
+      <obj_property name="ElementShortName">dac_data_28[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_28[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_29" type="array">
+      <obj_property name="ElementShortName">dac_data_29[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_29[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_3" type="array">
+      <obj_property name="ElementShortName">dac_data_3[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_3[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_30" type="array">
+      <obj_property name="ElementShortName">dac_data_30[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_30[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_31" type="array">
+      <obj_property name="ElementShortName">dac_data_31[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_31[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_4" type="array">
+      <obj_property name="ElementShortName">dac_data_4[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_4[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_5" type="array">
+      <obj_property name="ElementShortName">dac_data_5[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_5[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_6" type="array">
+      <obj_property name="ElementShortName">dac_data_6[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_6[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_7" type="array">
+      <obj_property name="ElementShortName">dac_data_7[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_7[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_8" type="array">
+      <obj_property name="ElementShortName">dac_data_8[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_8[0:15]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_data_9" type="array">
+      <obj_property name="ElementShortName">dac_data_9[0:15]</obj_property>
+      <obj_property name="ObjectShortName">dac_data_9[0:15]</obj_property>
+   </wvobject>
+</wave_config>
