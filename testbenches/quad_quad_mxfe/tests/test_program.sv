@@ -42,16 +42,79 @@ import axi_vip_pkg::*;
 import axi4stream_vip_pkg::*;
 import logger_pkg::*;
 
-`define DAC_TPL 32'h44A5_0000
-`define ADC_TPL 32'h44A4_0000
-`define AXI_JESD_RX 32'h44A0_0000
-`define AXI_JESD_TX 32'h44A2_0000
-`define ADC_XCVR 32'h44A1_0000
-`define DAC_XCVR 32'h44A3_0000
+`define AXI_JESD_RX_0 32'h44A0_0000
+`define ADC_XCVR_0    32'h44A1_0000
+`define AXI_JESD_TX_0 32'h44A2_0000
+`define DAC_XCVR_0    32'h44A3_0000
+`define ADC_TPL_0     32'h44A4_0000
+`define DAC_TPL_0     32'h44A5_0000
 
+`define AXI_JESD_RX_1 32'h44A6_0000
+`define ADC_XCVR_1    32'h44A7_0000
+`define AXI_JESD_TX_1 32'h44A8_0000
+`define DAC_XCVR_1    32'h44A9_0000
+`define ADC_TPL_1     32'h44AA_0000
+`define DAC_TPL_1     32'h44AB_0000
 program test_program;
 
   environment env;
+
+
+  //
+  // Configure Link Layer
+  //
+  task SetJesdLink(int BaseAddress);
+
+    //LINK DISABLE
+    env.mng.RegWrite32(BaseAddress + 32'h00c0, 32'h00000001);
+
+    //SYSREFCONF
+    env.mng.RegWrite32(BaseAddress + 32'h0100, 32'h00000000); // Enable SYSREF handling
+
+    //CONF0
+    env.mng.RegWrite32(BaseAddress + 32'h0210, 32'h0003007f); // F = 4 ; K=32
+    //CONF1
+    env.mng.RegWrite32(BaseAddress + 32'h0214, 32'h00000000);  // Scrambler enable
+
+    //ILAS  TODO
+    env.mng.RegWrite32(BaseAddress + 32'h0314, 32'h1f010000);
+    env.mng.RegWrite32(BaseAddress + 32'h0318, 32'h2f2f0f00);
+
+    //LINK ENABLE
+    env.mng.RegWrite32(BaseAddress + 32'h00c0, 32'h00000000);
+  endtask
+
+  //
+  // Tear down Link Layer
+  //
+  task UnSetJesdLink(int BaseAddress);
+    env.mng.RegWrite32(BaseAddress + 32'h00c0, 32'h00000001);
+  endtask
+
+  //
+  // Check Rx Link Layer Status
+  //
+  task CheckRxLink(int BaseAddress);
+    //Read status back
+    // Check SYSREF_STATUS
+    env.mng.RegReadVerify32(BaseAddress + 32'h108,1);
+
+    // Check if in DATA state and SYNC is 1
+    env.mng.RegReadVerify32(BaseAddress + 32'h280,'h3);
+  endtask
+
+  //
+  // Check Tx Link Layer Status
+  //
+  task CheckTxLink(int BaseAddress);
+    //Read status back
+    // Check SYSREF_STATUS
+    env.mng.RegReadVerify32(BaseAddress + 32'h108,1);
+
+    // Check if in DATA state and SYNC is 1
+    env.mng.RegReadVerify32(BaseAddress + 32'h280,'hF3);
+  endtask
+
 
   initial begin
     //creating environment
@@ -62,72 +125,61 @@ program test_program;
     setLoggerVerbosity(6);
     env.start();
 
+    // ---------------
+    // Set up TX first
+    // ---------------
 
     // Configure Transport Layer for DMA data CH0-CH31
     for (int i = 0; i < 32; i++) begin
-      env.mng.RegWrite32(`DAC_TPL+((30'h0106<<2)+(i*'h40)), 32'h00000002);
+      env.mng.RegWrite32(`DAC_TPL_0 + ((30'h0106<<2)+(i*'h40)), 32'h00000002);
+      env.mng.RegWrite32(`DAC_TPL_1 + ((30'h0106<<2)+(i*'h40)), 32'h00000002);
     end
 
     // Pull out TPL cores from reset
-    env.mng.RegWrite32(`DAC_TPL+32'h0040, 32'h00000003);
-    env.mng.RegWrite32(`ADC_TPL+32'h0040, 32'h00000003);
+    env.mng.RegWrite32(`DAC_TPL_0 + 32'h0040, 32'h00000003);
+    env.mng.RegWrite32(`DAC_TPL_1 + 32'h0040, 32'h00000003);
+    env.mng.RegWrite32(`ADC_TPL_0 + 32'h0040, 32'h00000003);
+    env.mng.RegWrite32(`ADC_TPL_1 + 32'h0040, 32'h00000003);
 
 
     //
     // Configure Link Layer
     //
+    SetJesdLink(`AXI_JESD_TX_0);
+    SetJesdLink(`AXI_JESD_TX_1);
 
-    //LINK DISABLE
-    env.mng.RegWrite32(`AXI_JESD_RX+32'h00c0, 32'h00000001);
-    env.mng.RegWrite32(`AXI_JESD_TX+32'h00c0, 32'h00000001);
-
-    //SYSREFCONF
-    env.mng.RegWrite32(`AXI_JESD_RX+32'h0100, 32'h00000000); // Enable SYSREF handling
-    env.mng.RegWrite32(`AXI_JESD_TX+32'h0100, 32'h00000000); // Enable SYSREF handling
-
-    //CONF0
-    env.mng.RegWrite32(`AXI_JESD_RX+32'h0210, 32'h0003007f); // F = 4 ; K=32
-    env.mng.RegWrite32(`AXI_JESD_TX+32'h0210, 32'h0003007f); // F = 4 ; K=32
-    //CONF1
-    env.mng.RegWrite32(`AXI_JESD_RX+32'h0214, 32'h00000000);  // Scrambler enable
-    env.mng.RegWrite32(`AXI_JESD_TX+32'h0214, 32'h00000000);  // Scrambler enable
-
-    //ILAS  TODO
-    env.mng.RegWrite32(`AXI_JESD_RX+32'h0314,32'h1f010000);
-    env.mng.RegWrite32(`AXI_JESD_TX+32'h0314,32'h1f010000);
-    env.mng.RegWrite32(`AXI_JESD_RX+32'h0318,32'h2f2f0f00);
-    env.mng.RegWrite32(`AXI_JESD_TX+32'h0318,32'h2f2f0f00);
-
-    //LINK ENABLE
-    env.mng.RegWrite32(`AXI_JESD_RX+32'h00c0, 32'h00000000);
-    env.mng.RegWrite32(`AXI_JESD_TX+32'h00c0, 32'h00000000);
+    SetJesdLink(`AXI_JESD_RX_0);
+    SetJesdLink(`AXI_JESD_RX_1);
 
 
     //PHY INIT
     //REG CTRL
-    env.mng.RegWrite32(`ADC_XCVR+32'h0020,32'h00001004);   // RXOUTCLK uses DIV2
-    env.mng.RegWrite32(`DAC_XCVR+32'h0020,32'h00001004);
+    env.mng.RegWrite32(`ADC_XCVR_0 + 32'h0020,32'h00001004);   // RXOUTCLK uses DIV2
+    env.mng.RegWrite32(`DAC_XCVR_0 + 32'h0020,32'h00001004);
+    env.mng.RegWrite32(`ADC_XCVR_1 + 32'h0020,32'h00001004);   // RXOUTCLK uses DIV2
+    env.mng.RegWrite32(`DAC_XCVR_1 + 32'h0020,32'h00001004);
 
-    env.mng.RegWrite32(`ADC_XCVR+32'h0010,32'h00000001);
-    env.mng.RegWrite32(`DAC_XCVR+32'h0010,32'h00000001);
+    env.mng.RegWrite32(`ADC_XCVR_0 + 32'h0010,32'h00000001);
+    env.mng.RegWrite32(`DAC_XCVR_0 + 32'h0010,32'h00000001);
+    env.mng.RegWrite32(`ADC_XCVR_1 + 32'h0010,32'h00000001);
+    env.mng.RegWrite32(`DAC_XCVR_1 + 32'h0010,32'h00000001);
 
     #5us;
 
     //Read status back
-    // Check SYSREF_STATUS
-    env.mng.RegReadVerify32(`AXI_JESD_RX+32'h108,1);
-    env.mng.RegReadVerify32(`AXI_JESD_TX+32'h108,1);
+    CheckRxLink(`AXI_JESD_RX_0);
+    CheckRxLink(`AXI_JESD_RX_1);
 
-    // Check if in DATA state and SYNC is 1
-    env.mng.RegReadVerify32(`AXI_JESD_RX+32'h280,'h3);
-    env.mng.RegReadVerify32(`AXI_JESD_TX+32'h280,'hF3);
+    CheckTxLink(`AXI_JESD_TX_0);
+    CheckTxLink(`AXI_JESD_TX_1);
 
     //LINK DISABLE
-    env.mng.RegWrite32(`AXI_JESD_RX+32'h00c0, 32'h00000001);
-    env.mng.RegWrite32(`AXI_JESD_TX+32'h00c0, 32'h00000001);
+    UnSetJesdLink(`AXI_JESD_RX_0);
+    UnSetJesdLink(`AXI_JESD_RX_1);
+    UnSetJesdLink(`AXI_JESD_TX_0);
+    UnSetJesdLink(`AXI_JESD_TX_1);
 
-
-    #1us;
+    `INFO(("Test PASSED !!!"));
 
   end
 

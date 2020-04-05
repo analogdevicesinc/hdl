@@ -84,29 +84,26 @@ module system_tb();
   wire    [3:0]   ref_clk_3;
 
   assign ref_clk_0 = {4{ref_clk}};
-  /*
   assign ref_clk_1 = {4{ref_clk}};
   assign ref_clk_2 = {4{ref_clk}};
   assign ref_clk_3 = {4{ref_clk}};
- */
+
   // Loopback SYNC
   assign tx_syncin_0 = rx_syncout_0;
-  /*
   assign tx_syncin_1 = rx_syncout_1;
   assign tx_syncin_2 = rx_syncout_2;
   assign tx_syncin_3 = rx_syncout_3;
-  */
+
   // Loopback data lines
   assign m2c_0_n = c2m_0_n;
   assign m2c_0_p = c2m_0_p;
-  /*
   assign m2c_1_n = c2m_1_n;
   assign m2c_1_p = c2m_1_p;
   assign m2c_2_n = c2m_2_n;
   assign m2c_2_p = c2m_2_p;
   assign m2c_3_n = c2m_3_n;
   assign m2c_3_p = c2m_3_p;
- */
+
 
   `TEST_PROGRAM test();
 
@@ -197,7 +194,6 @@ module system_tb();
     .tx_sync_0 (tx_syncin_0),
     .rx_sysref_0 (sysref),
     .tx_sysref_0 (sysref),
-/*
     // QUAD 1 signals
 
     // rx quad 1
@@ -281,6 +277,7 @@ module system_tb();
     .tx_sync_1_0 (tx_syncin_1),
     .rx_sysref_1_0 (sysref),
     .tx_sysref_1_0 (sysref),
+/*
     // QUAD 2 signals
 
     // rx quad 1
@@ -482,7 +479,40 @@ module system_tb();
     .dac_data_28  ({8'd28,dac_data[7:0]}),
     .dac_data_29  ({8'd29,dac_data[7:0]}),
     .dac_data_30  ({8'd30,dac_data[7:0]}),
-    .dac_data_31  ({8'd31,dac_data[7:0]})
+    .dac_data_31  ({8'd31,dac_data[7:0]}),
+
+    .dac_data_32  ({8'd32,dac_data[7:0]}),
+    .dac_data_33  ({8'd33,dac_data[7:0]}),
+    .dac_data_34  ({8'd34,dac_data[7:0]}),
+    .dac_data_35  ({8'd35,dac_data[7:0]}),
+    .dac_data_36  ({8'd36,dac_data[7:0]}),
+    .dac_data_37  ({8'd37,dac_data[7:0]}),
+    .dac_data_38  ({8'd38,dac_data[7:0]}),
+    .dac_data_39  ({8'd39,dac_data[7:0]}),
+    .dac_data_40  ({8'd40,dac_data[7:0]}),
+    .dac_data_41  ({8'd41,dac_data[7:0]}),
+    .dac_data_42  ({8'd42,dac_data[7:0]}),
+    .dac_data_43  ({8'd43,dac_data[7:0]}),
+    .dac_data_44  ({8'd44,dac_data[7:0]}),
+    .dac_data_45  ({8'd45,dac_data[7:0]}),
+    .dac_data_46  ({8'd46,dac_data[7:0]}),
+    .dac_data_47  ({8'd47,dac_data[7:0]}),
+    .dac_data_48  ({8'd48,dac_data[7:0]}),
+    .dac_data_49  ({8'd49,dac_data[7:0]}),
+    .dac_data_50  ({8'd50,dac_data[7:0]}),
+    .dac_data_51  ({8'd51,dac_data[7:0]}),
+    .dac_data_52  ({8'd52,dac_data[7:0]}),
+    .dac_data_53  ({8'd53,dac_data[7:0]}),
+    .dac_data_54  ({8'd54,dac_data[7:0]}),
+    .dac_data_55  ({8'd55,dac_data[7:0]}),
+    .dac_data_56  ({8'd56,dac_data[7:0]}),
+    .dac_data_57  ({8'd57,dac_data[7:0]}),
+    .dac_data_58  ({8'd58,dac_data[7:0]}),
+    .dac_data_59  ({8'd59,dac_data[7:0]}),
+    .dac_data_60  ({8'd60,dac_data[7:0]}),
+    .dac_data_61  ({8'd61,dac_data[7:0]}),
+    .dac_data_62  ({8'd62,dac_data[7:0]}),
+    .dac_data_63  ({8'd63,dac_data[7:0]})
 
   );
 

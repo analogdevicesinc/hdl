@@ -56,11 +56,10 @@ set sys_cpu_resetn mng_rstn
 #  DUT
 #  ------------------
 
-# test only one QUAD due simulation performance limitations
-set NUM_OF_QUAD_MXFES 1
+# test only two QUAD MxFEs due simulation performance limitations
+set NUM_OF_QUAD_MXFES 2
 
 source $ad_hdl_dir/projects/quad_quad_mxfe/common/jesd_cores_bd.tcl
-#source $ad_hdl_dir/projects/quad_quad_mxfe/common/data_moovers_bd.tcl
 
 
 #  ------------------
