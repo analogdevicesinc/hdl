@@ -98,7 +98,7 @@ module ad_iqcor #(
   end
 
   genvar i;
-  generate 
+  generate
     for (i=0; i<DPW; i=i+1) begin
       wire    [CR-1:0]  data_i_s;
       wire    [CR-1:0]  data_q_s;
@@ -115,7 +115,7 @@ module ad_iqcor #(
       reg     [33:0]  p1_data_p = 'd0;
       reg             valid_int = 'd0;
       reg     [15:0]  data_int = 'd0;
- 
+
       // swap i & q
       assign data_i_s = (Q_OR_I_N == 1 && SCALE_ONLY == 1'b0) ? data_iq[i*CR+:CR] : data_in[i*CR+:CR];
       assign data_q_s = (Q_OR_I_N == 1) ? data_in[i*CR+:CR] : data_iq[i*CR+:CR];
@@ -132,7 +132,7 @@ module ad_iqcor #(
 
       if (SCALE_ONLY == 0) begin
         // scaling functions - q
-    
+
         ad_mul #(.DELAY_DATA_WIDTH(CR)) i_mul_q (
           .clk (clk),
           .data_a ({data_q_s[CR-1], data_q_s, {16-CR{1'b0}}}),
@@ -140,7 +140,7 @@ module ad_iqcor #(
           .data_p (p1_data_p_q_s),
           .ddata_in (data_q_s),
           .ddata_out (p1_data_q_s));
-    
+
       // sum
       end else begin
         assign p1_data_p_q_s = 34'h0;
@@ -187,7 +187,7 @@ module ad_iqcor #(
           data_int <= p1_data_i_int;
         end
       end
-      
+
       assign valid_int_loc[i] = valid_int;
       assign data_int_loc[i*CR+:CR] = data_int[15-:CR];
 
