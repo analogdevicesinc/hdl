@@ -99,7 +99,7 @@ module ad_iqcor #(
 
   genvar i;
   generate
-    for (i=0; i<DPW; i=i+1) begin
+    for (i=0; i<DPW; i=i+1) begin : g_loop
       wire    [CR-1:0]  data_i_s;
       wire    [CR-1:0]  data_q_s;
       wire    [CR-1:0]  p1_data_i_s;
