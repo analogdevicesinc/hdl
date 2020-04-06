@@ -128,41 +128,52 @@ program test_program;
     // ---------------
     // Set up TX first
     // ---------------
+    //PHY INIT
+    //REG CTRL
+    env.mng.RegWrite32(`DAC_XCVR_0 + 32'h0020,32'h00001004);
+    env.mng.RegWrite32(`DAC_XCVR_1 + 32'h0020,32'h00001004);
 
-    // Configure Transport Layer for DMA data CH0-CH31
+    env.mng.RegWrite32(`DAC_XCVR_0 + 32'h0010,32'h00000001);
+    env.mng.RegWrite32(`DAC_XCVR_1 + 32'h0010,32'h00000001);
+
+    // Configure Transport Layer for DMA data CH0-CH63
     for (int i = 0; i < 32; i++) begin
       env.mng.RegWrite32(`DAC_TPL_0 + ((30'h0106<<2)+(i*'h40)), 32'h00000002);
       env.mng.RegWrite32(`DAC_TPL_1 + ((30'h0106<<2)+(i*'h40)), 32'h00000002);
     end
 
-    // Pull out TPL cores from reset
-    env.mng.RegWrite32(`DAC_TPL_0 + 32'h0040, 32'h00000003);
-    env.mng.RegWrite32(`DAC_TPL_1 + 32'h0040, 32'h00000003);
-    env.mng.RegWrite32(`ADC_TPL_0 + 32'h0040, 32'h00000003);
-    env.mng.RegWrite32(`ADC_TPL_1 + 32'h0040, 32'h00000003);
 
-
-    //
-    // Configure Link Layer
-    //
+    // Configure Tx Link Layer
     SetJesdLink(`AXI_JESD_TX_0);
     SetJesdLink(`AXI_JESD_TX_1);
 
-    SetJesdLink(`AXI_JESD_RX_0);
-    SetJesdLink(`AXI_JESD_RX_1);
 
+    // Pull out TPL cores from reset
+    env.mng.RegWrite32(`DAC_TPL_0 + 32'h0040, 32'h00000003);
+    env.mng.RegWrite32(`DAC_TPL_1 + 32'h0040, 32'h00000003);
+
+
+    // ---------------
+    // Set up RX last
+    // ---------------
 
     //PHY INIT
     //REG CTRL
     env.mng.RegWrite32(`ADC_XCVR_0 + 32'h0020,32'h00001004);   // RXOUTCLK uses DIV2
-    env.mng.RegWrite32(`DAC_XCVR_0 + 32'h0020,32'h00001004);
     env.mng.RegWrite32(`ADC_XCVR_1 + 32'h0020,32'h00001004);   // RXOUTCLK uses DIV2
-    env.mng.RegWrite32(`DAC_XCVR_1 + 32'h0020,32'h00001004);
 
     env.mng.RegWrite32(`ADC_XCVR_0 + 32'h0010,32'h00000001);
-    env.mng.RegWrite32(`DAC_XCVR_0 + 32'h0010,32'h00000001);
     env.mng.RegWrite32(`ADC_XCVR_1 + 32'h0010,32'h00000001);
-    env.mng.RegWrite32(`DAC_XCVR_1 + 32'h0010,32'h00000001);
+
+    // Configure Rx Link Layer
+    SetJesdLink(`AXI_JESD_RX_0);
+    SetJesdLink(`AXI_JESD_RX_1);
+
+    // Pull out TPL cores from reset
+    env.mng.RegWrite32(`ADC_TPL_0 + 32'h0040, 32'h00000003);
+    env.mng.RegWrite32(`ADC_TPL_1 + 32'h0040, 32'h00000003);
+
+
 
     #5us;
 
