@@ -384,24 +384,22 @@ end
 
 assign sdo_int_s = data_sdo_shift[DATA_WIDTH-1];
 
-// In case of an interface with high clock rate (SCLK > 50MHz), one of the
-// next SCLK edge must be used to flop the SDI line, to compensate the overall
-// delay of the read path
+// In case of an interface with high clock rate (SCLK > 50MHz), the latch of
+// the SDI line can be delayed with 1, 2 or 3 SPI core clock cycle.
+// Taking the fact that in high SCLK frequencies the pre-scaler most likely will
+// be set to 0, to reduce the core clock's speed, this delay will mean that SDI will
+// be latched at one of the next consecutive SCLK edge.
 
-reg trigger_rx_d1 = 1'b0;
-reg trigger_rx_d2 = 1'b0;
-reg trigger_rx_d3 = 1'b0;
-
+reg [4:0] trigger_rx_d = 5'b0;
 always @(posedge clk) begin
-  trigger_rx_d1 <= trigger_rx;
-  trigger_rx_d2 <= trigger_rx_d1;
-  trigger_rx_d3 <= trigger_rx_d2;
+  trigger_rx_d[0] <= trigger_rx;
+  trigger_rx_d[4:1] <= trigger_rx_d[3:0];
 end
 
-wire trigger_rx_s = (SDI_DELAY == 2'b00) ? trigger_rx :
-                    (SDI_DELAY == 2'b01) ? trigger_rx_d1 :
-                    (SDI_DELAY == 2'b10) ? trigger_rx_d2 :
-                    (SDI_DELAY == 2'b11) ? trigger_rx_d3 : trigger_rx;
+wire trigger_rx_s = (SDI_DELAY == 2'b00) ? trigger_rx_d[1] :
+                    (SDI_DELAY == 2'b01) ? trigger_rx_d[2] :
+                    (SDI_DELAY == 2'b10) ? trigger_rx_d[3] :
+                    (SDI_DELAY == 2'b11) ? trigger_rx_d[4] : trigger_rx_d[1];
 
 always @(posedge clk) begin
   if (inst_d1 == CMD_CHIPSELECT) begin
@@ -465,7 +463,7 @@ always @(posedge clk) begin
   end
 end
 
-// Additional register stage to imrpove timing
+// Additional register stage to improve timing
 always @(posedge clk) begin
   sclk <= sclk_int;
   sdo <= sdo_int_s;
