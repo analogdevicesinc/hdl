@@ -42,6 +42,7 @@ import axi_vip_pkg::*;
 import axi4stream_vip_pkg::*;
 import logger_pkg::*;
 
+// Addresses should match values form address editor
 `define AXI_JESD_RX_0 32'h44A0_0000
 `define ADC_XCVR_0    32'h44A1_0000
 `define AXI_JESD_TX_0 32'h44A2_0000
@@ -55,10 +56,10 @@ import logger_pkg::*;
 `define DAC_XCVR_1    32'h44A9_0000
 `define ADC_TPL_1     32'h44AA_0000
 `define DAC_TPL_1     32'h44AB_0000
+
 program test_program;
 
   environment env;
-
 
   //
   // Configure Link Layer
@@ -173,8 +174,7 @@ program test_program;
     env.mng.RegWrite32(`ADC_TPL_0 + 32'h0040, 32'h00000003);
     env.mng.RegWrite32(`ADC_TPL_1 + 32'h0040, 32'h00000003);
 
-
-
+    // Wait until link is established
     #5us;
 
     //Read status back

@@ -108,9 +108,9 @@ module system_tb();
   `TEST_PROGRAM test();
 
   test_harness `TH (
-    .mng_rst(mng_rst),
-    .mng_rstn(mng_rstn),
-    .mng_clk(mng_clk),
+    .mng_rst      (mng_rst),
+    .mng_rstn     (mng_rstn),
+    .mng_clk      (mng_clk),
     // QUAD 1 signals
 
     // rx quad 1
@@ -190,10 +190,10 @@ module system_tb();
     .ref_clk_0_q1 (ref_clk_0[1]),
     .ref_clk_0_q2 (ref_clk_0[2]),
     .ref_clk_0_q3 (ref_clk_0[3]),
-    .rx_sync_0 (rx_syncout_0),
-    .tx_sync_0 (tx_syncin_0),
-    .rx_sysref_0 (sysref),
-    .tx_sysref_0 (sysref),
+    .rx_sync_0    (rx_syncout_0),
+    .tx_sync_0    (tx_syncin_0),
+    .rx_sysref_0  (sysref),
+    .tx_sysref_0  (sysref),
     // QUAD 1 signals
 
     // rx quad 1
@@ -269,14 +269,14 @@ module system_tb();
     .tx_data_1_15_n (c2m_1_n[15]),
     .tx_data_1_15_p (c2m_1_p[15]),
 
-    .ref_clk_1_q0 (ref_clk_1[0]),
-    .ref_clk_1_q1 (ref_clk_1[1]),
-    .ref_clk_1_q2 (ref_clk_1[2]),
-    .ref_clk_1_q3 (ref_clk_1[3]),
-    .rx_sync_1_0 (rx_syncout_1),
-    .tx_sync_1_0 (tx_syncin_1),
-    .rx_sysref_1_0 (sysref),
-    .tx_sysref_1_0 (sysref),
+    .ref_clk_1_q0   (ref_clk_1[0]),
+    .ref_clk_1_q1   (ref_clk_1[1]),
+    .ref_clk_1_q2   (ref_clk_1[2]),
+    .ref_clk_1_q3   (ref_clk_1[3]),
+    .rx_sync_1_0    (rx_syncout_1),
+    .tx_sync_1_0    (tx_syncin_1),
+    .rx_sysref_1_0  (sysref),
+    .tx_sysref_1_0  (sysref),
 /*
     // QUAD 2 signals
 
@@ -353,14 +353,14 @@ module system_tb();
     .tx_data_2_15_n (c2m_2_n[15]),
     .tx_data_2_15_p (c2m_2_p[15]),
 
-    .ref_clk_2_q0 (ref_clk_2[0]),
-    .ref_clk_2_q1 (ref_clk_2[1]),
-    .ref_clk_2_q2 (ref_clk_2[2]),
-    .ref_clk_2_q3 (ref_clk_2[3]),
-    .rx_sync_2_0 (rx_syncout_2),
-    .tx_sync_2_0 (tx_syncin_2),
-    .rx_sysref_2_0 (sysref),
-    .tx_sysref_2_0 (sysref),
+    .ref_clk_2_q0   (ref_clk_2[0]),
+    .ref_clk_2_q1   (ref_clk_2[1]),
+    .ref_clk_2_q2   (ref_clk_2[2]),
+    .ref_clk_2_q3   (ref_clk_2[3]),
+    .rx_sync_2_0    (rx_syncout_2),
+    .tx_sync_2_0    (tx_syncin_2),
+    .rx_sysref_2_0  (sysref),
+    .tx_sysref_2_0  (sysref),
 
     // QUAD 3 signals
 
@@ -437,14 +437,14 @@ module system_tb();
     .tx_data_3_15_n (c2m_3_n[15]),
     .tx_data_3_15_p (c2m_3_p[15]),
 
-    .ref_clk_3_q0 (ref_clk_3[0]),
-    .ref_clk_3_q1 (ref_clk_3[1]),
-    .ref_clk_3_q2 (ref_clk_3[2]),
-    .ref_clk_3_q3 (ref_clk_3[3]),
-    .rx_sync_3_0 (rx_syncout_3),
-    .tx_sync_3_0 (tx_syncin_3),
-    .rx_sysref_3_0 (sysref),
-    .tx_sysref_3_0 (sysref),
+    .ref_clk_3_q0   (ref_clk_3[0]),
+    .ref_clk_3_q1   (ref_clk_3[1]),
+    .ref_clk_3_q2   (ref_clk_3[2]),
+    .ref_clk_3_q3   (ref_clk_3[3]),
+    .rx_sync_3_0    (rx_syncout_3),
+    .tx_sync_3_0    (tx_syncin_3),
+    .rx_sysref_3_0  (sysref),
+    .tx_sysref_3_0  (sysref),
 */
     .device_clk (device_clk),
 
@@ -518,12 +518,12 @@ module system_tb();
 
 
   always #10 mng_clk <= ~mng_clk;
-  always #1 ref_clk <= ~ref_clk;   //500 MHz
+  always #1 ref_clk <= ~ref_clk;         //500 MHz
   always #2 device_clk <= ~device_clk;   //250 MHz
-  always #(2*32) sysref <= ~sysref;   //250/32 MHz
+  always #(2*32) sysref <= ~sysref;      //250/32 MHz
 
   initial begin
-    // Asserts all the resets for 100 ns
+    // Asserts all the resets for 1000 ns
     mng_rst = 1'b1;
     mng_rstn = 1'b0;
     #1000;
@@ -532,7 +532,7 @@ module system_tb();
   end
 
   always @(posedge device_clk) begin
-    dac_data[15:0]  <= dac_data[15:0] + 1;
+    dac_data[15:0] <= dac_data[15:0] + 1;
   end
 
 endmodule
