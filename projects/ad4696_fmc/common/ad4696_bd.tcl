@@ -7,7 +7,7 @@ ad_ip_instance axi_clkgen spi_clkgen
 ad_ip_parameter spi_clkgen CONFIG.CLK0_DIV 5
 ad_ip_parameter spi_clkgen CONFIG.VCO_DIV 1
 ad_ip_parameter spi_clkgen CONFIG.VCO_MUL 8
-ad_connect spi_clkgen/clk sys_ps7/FCLK_CLK0
+ad_connect $sys_cpu_clk spi_clkgen/clk
 ad_connect spi_clk spi_clkgen/clk_0
   
 # create a SPI Engine architecture
@@ -47,14 +47,20 @@ current_bd_instance /spi_ad4696
   ad_ip_instance spi_engine_interconnect interconnect
   ad_ip_parameter interconnect CONFIG.DATA_WIDTH $data_width
 
-  ad_ip_instance util_pulse_gen trigger_gen
-
   ## to setup the sample rate of the system change the PULSE_PERIOD value
   ## the acutal sample rate will be PULSE_PERIOD * (1/sys_cpu_clk)
   set sampling_cycle [expr int(ceil(double($spi_clk_ref_frequency * 1000000) / $adc_sampling_rate))]
+  
+  ad_ip_instance axi_pulse_gen trigger_gen
+
   ad_ip_parameter trigger_gen CONFIG.PULSE_PERIOD $sampling_cycle
   ad_ip_parameter trigger_gen CONFIG.PULSE_WIDTH 1
 
+  ad_connect spi_clk trigger_gen/ext_clk
+  ad_connect clk trigger_gen/s_axi_aclk
+  ad_connect resetn trigger_gen/s_axi_aresetn
+  ad_connect trigger_gen/pulse offload/trigger
+  
   ad_connect axi_regmap/spi_engine_offload_ctrl0 offload/spi_engine_offload_ctrl
   ad_connect offload/spi_engine_ctrl interconnect/s0_ctrl
   ad_connect axi_regmap/spi_engine_ctrl interconnect/s1_ctrl
@@ -69,17 +75,10 @@ current_bd_instance /spi_ad4696
   ad_connect clk axi_regmap/s_axi_aclk
   ad_connect spi_clk axi_regmap/spi_clk
   ad_connect spi_clk interconnect/clk
-  ad_connect spi_clk trigger_gen/clk
 
   ad_connect axi_regmap/spi_resetn offload/spi_resetn
   ad_connect axi_regmap/spi_resetn execution/resetn
   ad_connect axi_regmap/spi_resetn interconnect/resetn
-  ad_connect axi_regmap/spi_resetn trigger_gen/rstn
-  ad_connect trigger_gen/load_config GND
-  ad_connect trigger_gen/pulse_width GND
-  ad_connect trigger_gen/pulse_period GND
-
-  ad_connect trigger_gen/pulse offload/trigger
 
   ad_connect resetn axi_regmap/s_axi_aresetn
   ad_connect irq axi_regmap/irq
@@ -97,7 +96,6 @@ ad_ip_parameter axi_ad4696_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_ad4696_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_ad4696_dma CONFIG.DMA_2D_TRANSFER 0
 
-
 ad_ip_parameter axi_ad4696_dma CONFIG.DMA_DATA_WIDTH_SRC $data_width
 ad_ip_parameter axi_ad4696_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
@@ -107,17 +105,17 @@ ad_connect  sys_cpu_resetn spi_ad4696/resetn
 ad_connect  sys_cpu_resetn axi_ad4696_dma/m_dest_axi_aresetn
 
 ad_connect  spi_clk spi_ad4696/spi_clk
-
 ad_connect  spi_ad4696/m_spi ad4696_spi
-
 ad_connect  axi_ad4696_dma/s_axis spi_ad4696/M_AXIS_SAMPLE
 
 ad_cpu_interconnect 0x44a00000 spi_ad4696/axi_regmap
 ad_cpu_interconnect 0x44a30000 axi_ad4696_dma
 ad_cpu_interconnect 0x44a70000 spi_clkgen
+ad_cpu_interconnect 0x44b00000 spi_ad4696/trigger_gen
 
 ad_cpu_interrupt "ps-13" "mb-13" axi_ad4696_dma/irq
 ad_cpu_interrupt "ps-12" "mb-12" /spi_ad4696/irq
 
 ad_mem_hp2_interconnect sys_cpu_clk sys_ps7/S_AXI_HP2
 ad_mem_hp2_interconnect sys_cpu_clk axi_ad4696_dma/m_dest_axi
+

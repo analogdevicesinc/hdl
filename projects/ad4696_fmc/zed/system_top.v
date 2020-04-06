@@ -84,7 +84,7 @@ module system_top (
 
   input           otg_vbusoc,
 
-  // ad400x SPI configuration interface
+  // ad4696 SPI configuration interface
 
   input           ad4696_spi_sdi,
   output          ad4696_spi_sdo,
@@ -94,8 +94,6 @@ module system_top (
   
   input           ad4696_gp0,
   output          ad4696_resetn);
-
-//  inout           ad4696_amp_pd);
 
   // internal signals
 
