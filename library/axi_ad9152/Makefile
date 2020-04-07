@@ -17,6 +17,7 @@ INTEL_DEPS += ../common/ad_dds_2.v
 INTEL_DEPS += ../common/ad_dds_cordic_pipe.v
 INTEL_DEPS += ../common/ad_dds_sine.v
 INTEL_DEPS += ../common/ad_dds_sine_cordic.v
+INTEL_DEPS += ../common/ad_iqcor.v
 INTEL_DEPS += ../common/ad_perfect_shuffle.v
 INTEL_DEPS += ../common/ad_rst.v
 INTEL_DEPS += ../common/up_axi.v
