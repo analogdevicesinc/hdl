@@ -59,6 +59,7 @@ module axi_logic_analyzer_reg (
   output      [15:0]  od_pp_n,
 
   output      [31:0]  trigger_holdoff,
+  output      [19:0]  pg_trigger_config,
 
   input               triggered,
 
@@ -98,6 +99,7 @@ module axi_logic_analyzer_reg (
   reg     [15:0]  up_overwrite_data = 0;
   reg     [15:0]  up_od_pp_n = 0;
   reg     [31:0]  up_trigger_holdoff = 32'h0;
+  reg     [19:0]  up_pg_trigger_config = 20'h0;
   reg             up_triggered = 0;
   reg             up_streaming = 0;
 
@@ -125,6 +127,7 @@ module axi_logic_analyzer_reg (
       up_triggered <= 1'd0;
       up_streaming <= 1'd0;
       up_trigger_holdoff <= 32'h0;
+      up_pg_trigger_config <= 20'd0;
     end else begin
       up_wack <= up_wreq;
       if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h1)) begin
@@ -186,6 +189,9 @@ module axi_logic_analyzer_reg (
       if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h14)) begin
         up_trigger_holdoff <= up_wdata[31:0];
       end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h15)) begin
+        up_pg_trigger_config <= up_wdata[19:0];
+      end
     end
   end
 
@@ -220,6 +226,7 @@ module axi_logic_analyzer_reg (
           5'h12: up_rdata <= {31'h0,up_triggered};
           5'h13: up_rdata <= {31'h0,up_streaming};
           5'h14: up_rdata <= up_trigger_holdoff;
+          5'h15: up_rdata <= {12'h0,up_pg_trigger_config};
           default: up_rdata <= 0;
         endcase
       end else begin
@@ -230,7 +237,7 @@ module axi_logic_analyzer_reg (
 
   ad_rst i_core_rst_reg (.rst_async(~up_rstn), .clk(clk), .rstn(), .rst(reset));
 
-   up_xfer_cntrl #(.DATA_WIDTH(323)) i_xfer_cntrl (
+   up_xfer_cntrl #(.DATA_WIDTH(343)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_streaming,             // 1
@@ -248,6 +255,7 @@ module axi_logic_analyzer_reg (
                       up_rise_edge_enable,      // 18
                       up_edge_detect_enable,    // 18
                       up_io_selection,          // 16
+                      up_pg_trigger_config,     // 20
                       up_divider_counter_pg,    // 32
                       up_divider_counter_la}),  // 32
 
@@ -269,6 +277,7 @@ module axi_logic_analyzer_reg (
                       rise_edge_enable,       // 18
                       edge_detect_enable,     // 18
                       io_selection,           // 16
+                      pg_trigger_config,      // 20
                       divider_counter_pg,     // 32
                       divider_counter_la}));  // 32
 
