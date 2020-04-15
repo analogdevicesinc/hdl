@@ -1,4 +1,6 @@
 
+global ad463x_mode
+
 create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 ad463x_spi
 
 ## To support the 1MSPS (SCLK == 80 MHz), set the spi clock to 160 MHz
@@ -31,7 +33,7 @@ current_bd_instance /spi_ad463x
   ad_ip_instance spi_engine_execution execution
   ad_ip_parameter execution CONFIG.DATA_WIDTH $data_width
   ad_ip_parameter execution CONFIG.NUM_OF_CS 1
-  ad_ip_parameter execution CONFIG.NUM_OF_SDI 1
+
   ad_ip_parameter execution CONFIG.SDO_DEFAULT 1
   ad_ip_parameter execution CONFIG.SDI_DELAY 2
 
@@ -50,7 +52,22 @@ current_bd_instance /spi_ad463x
   ## to setup the sample rate of the system change the PULSE_PERIOD value
   ## the acutal sample rate will be PULSE_PERIOD * (1/sys_cpu_clk)
   set sampling_cycle [expr int(ceil(double($spi_clk_ref_frequency * 1000000) / $adc_sampling_rate))]
-  
+ 
+ if {$ad463x_mode == 0} {
+  ad_ip_parameter execution CONFIG.NUM_OF_SDI 1
+  ad_ip_parameter offload CONFIG.NUM_OF_SDI 1
+  ad_ip_parameter axi_regmap CONFIG.NUM_OF_SDI 1
+  ad_ip_parameter interconnect CONFIG.NUM_OF_SDI 1
+  set dma_width [expr $data_width * 2]
+} elseif {$ad463x_mode == 1} {
+  ad_ip_parameter execution CONFIG.NUM_OF_SDI 2
+  ad_ip_parameter offload CONFIG.NUM_OF_SDI 2
+  ad_ip_parameter axi_regmap CONFIG.NUM_OF_SDI 2
+  ad_ip_parameter interconnect CONFIG.NUM_OF_SDI 2
+  set dma_width [expr $data_width * 2]
+} else {
+  return -code error [format "ERROR: Invalid mode! ..."]
+}
   ad_ip_instance axi_pulse_gen trigger_gen
 
   ad_ip_parameter trigger_gen CONFIG.PULSE_PERIOD $sampling_cycle
@@ -96,8 +113,8 @@ ad_ip_parameter axi_ad463x_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_ad463x_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_ad463x_dma CONFIG.DMA_2D_TRANSFER 0
 
-ad_ip_parameter axi_ad463x_dma CONFIG.DMA_DATA_WIDTH_SRC $data_width
-ad_ip_parameter axi_ad463x_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+ad_ip_parameter axi_ad463x_dma CONFIG.DMA_DATA_WIDTH_SRC $dma_width
+ad_ip_parameter axi_ad463x_dma CONFIG.DMA_DATA_WIDTH_DEST $dma_width
 
 ad_connect  sys_cpu_clk spi_ad463x/clk
 ad_connect  spi_clk axi_ad463x_dma/s_axis_aclk

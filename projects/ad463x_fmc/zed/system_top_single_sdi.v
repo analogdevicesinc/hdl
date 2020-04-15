@@ -86,7 +86,7 @@ module system_top (
 
   // ad463x SPI configuration interface
 
-  input           ad463x_spi_sdi,
+  input           ad463x_spi_sdi0,
   output          ad463x_spi_sdo,
   output          ad463x_spi_sclk,
   output          ad463x_spi_cs,
@@ -209,7 +209,7 @@ module system_top (
     .spi1_sdo_o (),
     .ad463x_spi_sdo (ad463x_spi_sdo),
     .ad463x_spi_sdo_t (),
-    .ad463x_spi_sdi (ad463x_spi_sdi),
+    .ad463x_spi_sdi (ad463x_spi_sdi0),
     .ad463x_spi_cs (ad463x_spi_cs_s),
     .ad463x_spi_sclk (ad463x_spi_sclk),
     .otg_vbusoc (otg_vbusoc),
