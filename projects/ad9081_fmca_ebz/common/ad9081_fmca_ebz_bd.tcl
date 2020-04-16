@@ -131,10 +131,10 @@ ad_ip_instance jesd204_phy jesd204_phy_121 [list \
   GT_Line_Rate $tx_rate \
   GT_REFCLK_FREQ $ref_clk_rate \
   DRPCLK_FREQ {50} \
-  C_PLL_SELECTION {1} \
+  C_PLL_SELECTION $ad_project_params(TX_PLL_SEL) \
   RX_GT_Line_Rate $rx_rate \
   RX_GT_REFCLK_FREQ $ref_clk_rate \
-  RX_PLL_SELECTION {1} \
+  RX_PLL_SELECTION $ad_project_params(RX_PLL_SEL) \
   GT_Location {X0Y8} \
   Tx_JesdVersion {1} \
   Rx_JesdVersion {1} \
@@ -150,10 +150,10 @@ ad_ip_instance jesd204_phy jesd204_phy_126 [list \
   GT_Line_Rate $tx_rate \
   GT_REFCLK_FREQ $ref_clk_rate \
   DRPCLK_FREQ {50} \
-  C_PLL_SELECTION {1} \
+  C_PLL_SELECTION $ad_project_params(TX_PLL_SEL) \
   RX_GT_Line_Rate $rx_rate \
   RX_GT_REFCLK_FREQ $ref_clk_rate \
-  RX_PLL_SELECTION {1} \
+  RX_PLL_SELECTION $ad_project_params(RX_PLL_SEL) \
   GT_Location {X0Y28} \
   Tx_JesdVersion {1} \
   Rx_JesdVersion {1} \
