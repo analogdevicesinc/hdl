@@ -33,8 +33,8 @@ add_instance adrv9009_tx_jesd204 adi_jesd204
 set_instance_parameter_value adrv9009_tx_jesd204 {ID} {0}
 set_instance_parameter_value adrv9009_tx_jesd204 {TX_OR_RX_N} {1}
 set_instance_parameter_value adrv9009_tx_jesd204 {SOFT_PCS} {true}
-set_instance_parameter_value adrv9009_tx_jesd204 {LANE_RATE} {9830.4}
-set_instance_parameter_value adrv9009_tx_jesd204 {REFCLK_FREQUENCY} {245.76}
+set_instance_parameter_value adrv9009_tx_jesd204 {LANE_RATE} {2457.6}
+set_instance_parameter_value adrv9009_tx_jesd204 {REFCLK_FREQUENCY} {122.88}
 set_instance_parameter_value adrv9009_tx_jesd204 {NUM_OF_LANES} $TX_NUM_OF_LANES
 set_instance_parameter_value adrv9009_tx_jesd204 {LANE_MAP} {0 3 2 1}
 
@@ -55,8 +55,8 @@ add_instance adrv9009_rx_jesd204 adi_jesd204
 set_instance_parameter_value adrv9009_rx_jesd204 {ID} {1}
 set_instance_parameter_value adrv9009_rx_jesd204 {TX_OR_RX_N} {0}
 set_instance_parameter_value adrv9009_rx_jesd204 {SOFT_PCS} {true}
-set_instance_parameter_value adrv9009_rx_jesd204 {LANE_RATE} {9830.4}
-set_instance_parameter_value adrv9009_rx_jesd204 {REFCLK_FREQUENCY} {245.76}
+set_instance_parameter_value adrv9009_rx_jesd204 {LANE_RATE} {4915.2}
+set_instance_parameter_value adrv9009_rx_jesd204 {REFCLK_FREQUENCY} {122.88}
 set_instance_parameter_value adrv9009_rx_jesd204 {NUM_OF_LANES} $RX_NUM_OF_LANES
 set_instance_parameter_value adrv9009_rx_jesd204 {INPUT_PIPELINE_STAGES} {1}
 
@@ -77,8 +77,8 @@ add_instance adrv9009_rx_os_jesd204 adi_jesd204
 set_instance_parameter_value adrv9009_rx_os_jesd204 {ID} {1}
 set_instance_parameter_value adrv9009_rx_os_jesd204 {TX_OR_RX_N} {0}
 set_instance_parameter_value adrv9009_rx_os_jesd204 {SOFT_PCS} {true}
-set_instance_parameter_value adrv9009_rx_os_jesd204 {LANE_RATE} {9830.4}
-set_instance_parameter_value adrv9009_rx_os_jesd204 {REFCLK_FREQUENCY} {245.76}
+set_instance_parameter_value adrv9009_rx_os_jesd204 {LANE_RATE} {4915.2}
+set_instance_parameter_value adrv9009_rx_os_jesd204 {REFCLK_FREQUENCY} {122.88}
 set_instance_parameter_value adrv9009_rx_os_jesd204 {NUM_OF_LANES} $RX_OS_NUM_OF_LANES
 set_instance_parameter_value adrv9009_rx_os_jesd204 {INPUT_PIPELINE_STAGES} {1}
 
