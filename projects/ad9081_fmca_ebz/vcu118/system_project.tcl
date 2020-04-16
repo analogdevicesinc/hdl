@@ -18,7 +18,9 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 adi_project ad9081_fmca_ebz_vcu118 0 [list \
   JESD_MODE    [get_env_param JESD_MODE    8B10B ] \
   RX_RATE      [get_env_param RX_RATE      10 ] \
+  RX_PLL_SEL   [get_env_param RX_PLL_SEL   1 ] \
   TX_RATE      [get_env_param TX_RATE      10 ] \
+  TX_PLL_SEL   [get_env_param TX_PLL_SEL   1 ] \
   REF_CLK_RATE [get_env_param REF_CLK_RATE 250 ] \
   RX_JESD_M    [get_env_param RX_JESD_M    8 ] \
   RX_JESD_L    [get_env_param RX_JESD_L    4 ] \
