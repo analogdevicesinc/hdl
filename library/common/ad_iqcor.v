@@ -114,7 +114,7 @@ module ad_iqcor #(
       reg             p1_valid = 'd0;
       reg     [33:0]  p1_data_p = 'd0;
       reg             valid_int = 'd0;
-      reg     [15:0]  data_int = 'd0;
+      reg     [CR-1:0]  data_int = 'd0;
 
       // swap i & q
       assign data_i_s = (Q_OR_I_N == 1 && SCALE_ONLY == 1'b0) ? data_iq[i*CR+:CR] : data_in[i*CR+:CR];
@@ -180,7 +180,7 @@ module ad_iqcor #(
       always @(posedge clk) begin
         valid_int <= p1_valid;
         if (iqcor_enable == 1'b1) begin
-          data_int <= p1_data_p[29:14];
+          data_int <= p1_data_p[29-:CR];
         end else if (Q_OR_I_N == 1 && SCALE_ONLY == 0) begin
           data_int <= p1_data_q_int;
         end else begin
@@ -189,7 +189,7 @@ module ad_iqcor #(
       end
 
       assign valid_int_loc[i] = valid_int;
-      assign data_int_loc[i*CR+:CR] = data_int[15-:CR];
+      assign data_int_loc[i*CR+:CR] = data_int;
 
     end
   endgenerate
