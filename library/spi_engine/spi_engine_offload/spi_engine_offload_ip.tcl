@@ -3,10 +3,13 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 adi_ip_create spi_engine_offload
 adi_ip_files spi_engine_offload [list \
+  "spi_engine_offload_constr.ttcl" \
 	"spi_engine_offload.v" \
 ]
 
 adi_ip_properties_lite spi_engine_offload
+adi_ip_ttcl axi_spi_engine "spi_engine_offload_constr.ttcl"
+
 # Remove all inferred interfaces
 ipx::remove_all_bus_interface [ipx::current_core]
 
