@@ -11,6 +11,7 @@ GENERIC_DEPS += axi_usb_fx3_core.v
 GENERIC_DEPS += axi_usb_fx3_if.v
 GENERIC_DEPS += axi_usb_fx3_reg.v
 
+INTEL_DEPS  += axi_usb_fx3_hw.tcl
 XILINX_DEPS += axi_usb_fx3_ip.tcl
 
 include ../scripts/library.mk

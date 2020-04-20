@@ -32,6 +32,12 @@ proc adi_project {project_name {parameter_list {}}} {
     set device 10AS066N3F40E2SG
     set system_qip_file system_bd/system_bd.qip
   }
+  
+  if [regexp "_hanpilot$" $project_name] {
+    set family "Arria 10"
+    set device 10AS066K3F40E2SG
+    set system_qip_file system_bd/system_bd.qip
+  }
 
   if [regexp "_c5soc$" $project_name] {
     set family "Cyclone V"
