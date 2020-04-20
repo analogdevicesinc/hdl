@@ -1,0 +1,31 @@
+<: set ComponentName [getComponentNameString] :>
+<: setOutputDirectory "./" :>
+<: setFileName [ttcl_add $ComponentName "_constr"] :>
+<: setFileExtension ".xdc" :>
+<: setFileProcessingOrder late :>
+<: set async_spi_clk [getBooleanValue "ASYNC_SPI_CLK"] :>
+
+<: if { $async_spi_clk } { :>
+
+set_property ASYNC_REG TRUE \
+  [get_cells -quiet -hierarchical *cdc_sync_stage1_reg*] \
+  [get_cells -quiet -hierarchical *cdc_sync_stage2_reg*]
+
+set_false_path -quiet \
+  -to [get_cells -quiet -hierarchical -filter {NAME =~ *i_sync_sync_id_load/i_sync_out/cdc_sync_stage1_reg* && IS_SEQUENTIAL}]
+set_false_path -quiet \
+  -to [get_cells -quiet -hierarchical -filter {NAME =~ *i_sync_sync_id_load/i_sync_in/cdc_sync_stage1_reg* && IS_SEQUENTIAL}]
+
+set_false_path -quiet \
+  -to [get_cells -quiet -hierarchical -filter {NAME =~ *i_sync_sync_id/cdc_sync_stage1_reg* && IS_SEQUENTIAL}]
+
+set_false_path -quiet \
+  -to [get_cells -quiet -hierarchical -filter {NAME =~ *i_sync_enable/cdc_sync_stage1_reg* && IS_SEQUENTIAL}]
+
+set_false_path -quiet \
+  -to [get_cells -quiet -hierarchical -filter {NAME =~ *i_sync_enabled/cdc_sync_stage1_reg* && IS_SEQUENTIAL}]
+
+set_false_path -quiet \
+  -to [get_cells -quiet -hierarchical -filter {NAME =~ *i_sync_trigger/cdc_sync_stage1_reg* && IS_SEQUENTIAL}]
+
+<: } :>
