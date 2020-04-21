@@ -88,7 +88,7 @@ end
 generate
 genvar lane;
 genvar i;
-if (REGISTER_INPUTS == 1) begin
+if (REGISTER_INPUTS > 0) begin
   reg                                     patternalign_en_r;
   reg [NUM_LANES*DATA_PATH_WIDTH*10-1:0]  data_r;
   always @(posedge clk) begin
@@ -127,8 +127,18 @@ for (lane = 0; lane < NUM_LANES; lane = lane + 1) begin: gen_lane
 
   for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: gen_dpw
     localparam j = DATA_PATH_WIDTH * lane + i;
-    wire [9:0] in_char = INVERT_INPUTS ? ~data_aligned[j*10+:10] :
-                                         data_aligned[j*10+:10];
+    wire [9:0] in_char;
+    if (REGISTER_INPUTS > 1) begin
+      reg [9:0] in_char_r = 10'b0;
+      always @(posedge clk) begin
+        in_char_r <= INVERT_INPUTS ? ~data_aligned[j*10+:10] :
+                                      data_aligned[j*10+:10];
+      end
+      assign in_char = in_char_r;
+    end else begin
+      assign in_char = INVERT_INPUTS ? ~data_aligned[j*10+:10] :
+                                        data_aligned[j*10+:10];
+    end
 
     jesd204_8b10b_decoder i_dec (
       .in_char(in_char),
