@@ -127,7 +127,7 @@ ad_ip_parameter SOFT_PCS BOOLEAN true false { \
   DISPLAY_NAME "Enable Soft PCS" \
 }
 
-ad_ip_parameter INPUT_PIPELINE BOOLEAN 0 false { \
+ad_ip_parameter INPUT_PIPELINE_STAGES INTEGER 0 false { \
   DISPLAY_NAME "Enable input pipeline" \
 }
 
@@ -296,7 +296,7 @@ proc jesd204_get_max_lane_rate {device soft_pcs} {
 
 proc jesd204_validate {{quiet false}} {
   set soft_pcs [get_parameter_value "SOFT_PCS"]
-  set input_pipeline [get_parameter_value "INPUT_PIPELINE"]
+  set input_pipeline [get_parameter_value "INPUT_PIPELINE_STAGES"]
   set device_family [get_parameter_value "DEVICE_FAMILY"]
   set device [get_parameter_value "DEVICE"]
   set lane_rate [get_parameter_value "LANE_RATE"]
@@ -347,7 +347,7 @@ proc jesd204_compose {} {
   set device [get_parameter_value "DEVICE"]
   set ext_device_clk_en [get_parameter_value "EXT_DEVICE_CLK_EN"]
   set bonding_clocks_en [get_parameter_value "BONDING_CLOCKS_EN"]
-  set input_pipeline [get_parameter_value "INPUT_PIPELINE"]
+  set input_pipeline [get_parameter_value "INPUT_PIPELINE_STAGES"]
 
   set pllclk_frequency [expr $lane_rate / 2]
   set linkclk_frequency [expr $lane_rate / 40]
