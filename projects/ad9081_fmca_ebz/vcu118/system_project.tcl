@@ -15,6 +15,26 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 #  RX_RATE,TX_RATE,REF_CLK_RATE used only in 64B66B mode
 
+#
+# Parameter description:
+#   JESD_MODE : Used link layer encoder mode
+#      64B66B - 64b66b link layer defined in JESD 204C, uses Xilinx IP as Physical layer
+#      8B10B  - 8b10b link layer defined in JESD 204B, uses ADI IP as Physical layer
+#
+#   RX_RATE :  Line rate of the Rx link ( MxFE to FPGA ) used in 64B66B mode
+#   TX_RATE :  Line rate of the Tx link ( FPGA to MxFE ) used in 64B66B mode
+#   [RX/TX]_PLL_SEL :  Used PLL in the Xilinx PHY used in 64B66B mode
+#                      Encoding is:
+#                         0 - CPLL
+#                         1 - QPLL0
+#                         2 - QPLL1
+#   REF_CLK_RATE : Frequency of reference clock in MHz used in 64B66B mode
+#   [RX/TX]_JESD_M : Number of converters per link
+#   [RX/TX]_JESD_L : Number of lanes per link
+#   [RX/TX]_JESD_NP : Number of bits per sample, only 16 is supported
+#   [RX/TX]_NUM_LINKS : Number of links, matches numer of MxFE devices
+#
+
 adi_project ad9081_fmca_ebz_vcu118 0 [list \
   JESD_MODE    [get_env_param JESD_MODE    8B10B ] \
   RX_RATE      [get_env_param RX_RATE      10 ] \
