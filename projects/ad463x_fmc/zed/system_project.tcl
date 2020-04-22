@@ -9,7 +9,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 ##    1 - quad SDO
 ##    
 
-set ad463x_mode 1
+set ad463x_mode 0
 
 adi_project ad463x_fmc_zed
 

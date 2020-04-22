@@ -92,8 +92,8 @@ module system_top (
   output          ad463x_spi_cs,
   output          ad463x_spi_cnv,
   
-  input           ad463x_gp0,
-  output          ad463x_resetn);
+  inout           ad463x_busy,
+  inout           ad463x_resetn);
 
   // internal signals
 
@@ -110,17 +110,19 @@ module system_top (
 
   // instantiations
 
-  assign gpio_i[63:33] = 31'b0;
+  assign gpio_i[63:34] = 31'b0;
   assign ad463x_spi_cs = ad463x_spi_cs_s;
   assign ad463x_spi_cnv = ad463x_spi_cs_s;
 
   ad_iobuf #(
-    .DATA_WIDTH(1)
-  ) i_admp_pd_iobuf (
-    .dio_t(gpio_t[32]),
-    .dio_i(gpio_o[32]),
-    .dio_o(gpio_i[32]),
-    .dio_p(ad463x_resetn));
+    .DATA_WIDTH(2)
+  ) i_ad463x_gpio_iobuf (
+    .dio_t(gpio_t[33:32]),
+    .dio_i(gpio_o[33:32]),
+    .dio_o(gpio_i[33:32]),
+    .dio_p({
+      ad463x_busy, 
+      ad463x_resetn}));
 
   ad_iobuf #(
     .DATA_WIDTH(32)
