@@ -240,58 +240,58 @@ ad_dma_interconnect axi_ad9213_dma_1.m_dest_axi
 ## address Map
 #
 
-ad_cpu_interconnect 0x00020000 ad9213_rx_0.link_reconfig
-ad_cpu_interconnect 0x00024000 ad9213_rx_0.link_management
-
 ##
 ## NOTE: if bridge is used, the address will be bridge_base_addr + peripheral_base_addr
 ##
-ad_cpu_interconnect 0x00006000 ad9213_rx_0.link_pll_reconfig "avl_mm_bridge_0" 0x00040000
-ad_cpu_interconnect 0x0000A000 ad9213_rx_0.phy_reconfig_0    "avl_mm_bridge_0"
-ad_cpu_interconnect 0x0000C000 ad9213_rx_0.phy_reconfig_1    "avl_mm_bridge_0"
-ad_cpu_interconnect 0x00010000 ad9213_rx_0.phy_reconfig_2    "avl_mm_bridge_0"
-ad_cpu_interconnect 0x00012000 ad9213_rx_0.phy_reconfig_3    "avl_mm_bridge_0"
-ad_cpu_interconnect 0x00014000 ad9213_rx_0.phy_reconfig_4    "avl_mm_bridge_0"
-ad_cpu_interconnect 0x00016000 ad9213_rx_0.phy_reconfig_5    "avl_mm_bridge_0"
-ad_cpu_interconnect 0x00018000 ad9213_rx_0.phy_reconfig_6    "avl_mm_bridge_0"
-ad_cpu_interconnect 0x0001A000 ad9213_rx_0.phy_reconfig_7    "avl_mm_bridge_0"
-ad_cpu_interconnect 0x0001C000 ad9213_rx_0.phy_reconfig_8    "avl_mm_bridge_0"
-ad_cpu_interconnect 0x00020000 ad9213_rx_0.phy_reconfig_9    "avl_mm_bridge_0"
-ad_cpu_interconnect 0x00022000 ad9213_rx_0.phy_reconfig_10   "avl_mm_bridge_0"
-ad_cpu_interconnect 0x00024000 ad9213_rx_0.phy_reconfig_11   "avl_mm_bridge_0"
-ad_cpu_interconnect 0x00026000 ad9213_rx_0.phy_reconfig_12   "avl_mm_bridge_0"
-ad_cpu_interconnect 0x00028000 ad9213_rx_0.phy_reconfig_13   "avl_mm_bridge_0"
-ad_cpu_interconnect 0x0002C000 ad9213_rx_0.phy_reconfig_14   "avl_mm_bridge_0"
-ad_cpu_interconnect 0x00030000 ad9213_rx_0.phy_reconfig_15   "avl_mm_bridge_0"
 
-ad_cpu_interconnect 0x00084000 ad9213_rx_1.link_reconfig
-ad_cpu_interconnect 0x00088000 ad9213_rx_1.link_management
-ad_cpu_interconnect 0x0000C000 ad9213_rx_1.link_pll_reconfig "avl_mm_bridge_1" 0x000C0000
-ad_cpu_interconnect 0x00010000 ad9213_rx_1.phy_reconfig_0    "avl_mm_bridge_1"
-ad_cpu_interconnect 0x00012000 ad9213_rx_1.phy_reconfig_1    "avl_mm_bridge_1"
-ad_cpu_interconnect 0x00014000 ad9213_rx_1.phy_reconfig_2    "avl_mm_bridge_1"
-ad_cpu_interconnect 0x00016000 ad9213_rx_1.phy_reconfig_3    "avl_mm_bridge_1"
-ad_cpu_interconnect 0x00018000 ad9213_rx_1.phy_reconfig_4    "avl_mm_bridge_1"
-ad_cpu_interconnect 0x0001C000 ad9213_rx_1.phy_reconfig_5    "avl_mm_bridge_1"
-ad_cpu_interconnect 0x00020000 ad9213_rx_1.phy_reconfig_6    "avl_mm_bridge_1"
-ad_cpu_interconnect 0x00022000 ad9213_rx_1.phy_reconfig_7    "avl_mm_bridge_1"
-ad_cpu_interconnect 0x00024000 ad9213_rx_1.phy_reconfig_8    "avl_mm_bridge_1"
-ad_cpu_interconnect 0x00026000 ad9213_rx_1.phy_reconfig_9    "avl_mm_bridge_1"
-ad_cpu_interconnect 0x00028000 ad9213_rx_1.phy_reconfig_10   "avl_mm_bridge_1"
-ad_cpu_interconnect 0x0002C000 ad9213_rx_1.phy_reconfig_11   "avl_mm_bridge_1"
-ad_cpu_interconnect 0x00030000 ad9213_rx_1.phy_reconfig_12   "avl_mm_bridge_1"
-ad_cpu_interconnect 0x00032000 ad9213_rx_1.phy_reconfig_13   "avl_mm_bridge_1"
-ad_cpu_interconnect 0x00034000 ad9213_rx_1.phy_reconfig_14   "avl_mm_bridge_1"
-ad_cpu_interconnect 0x00036000 ad9213_rx_1.phy_reconfig_15   "avl_mm_bridge_1"
+ad_cpu_interconnect 0x00020000 ad9213_rx_0.link_pll_reconfig "avl_mm_bridge_0" 0x00040000
+ad_cpu_interconnect 0x00000000 ad9213_rx_0.phy_reconfig_0    "avl_mm_bridge_0"
+ad_cpu_interconnect 0x00002000 ad9213_rx_0.phy_reconfig_1    "avl_mm_bridge_0"
+ad_cpu_interconnect 0x00004000 ad9213_rx_0.phy_reconfig_2    "avl_mm_bridge_0"
+ad_cpu_interconnect 0x00006000 ad9213_rx_0.phy_reconfig_3    "avl_mm_bridge_0"
+ad_cpu_interconnect 0x00008000 ad9213_rx_0.phy_reconfig_4    "avl_mm_bridge_0"
+ad_cpu_interconnect 0x0000A000 ad9213_rx_0.phy_reconfig_5    "avl_mm_bridge_0"
+ad_cpu_interconnect 0x0000C000 ad9213_rx_0.phy_reconfig_6    "avl_mm_bridge_0"
+ad_cpu_interconnect 0x0000E000 ad9213_rx_0.phy_reconfig_7    "avl_mm_bridge_0"
+ad_cpu_interconnect 0x00010000 ad9213_rx_0.phy_reconfig_8    "avl_mm_bridge_0"
+ad_cpu_interconnect 0x00012000 ad9213_rx_0.phy_reconfig_9    "avl_mm_bridge_0"
+ad_cpu_interconnect 0x00014000 ad9213_rx_0.phy_reconfig_10   "avl_mm_bridge_0"
+ad_cpu_interconnect 0x00016000 ad9213_rx_0.phy_reconfig_11   "avl_mm_bridge_0"
+ad_cpu_interconnect 0x00018000 ad9213_rx_0.phy_reconfig_12   "avl_mm_bridge_0"
+ad_cpu_interconnect 0x0001A000 ad9213_rx_0.phy_reconfig_13   "avl_mm_bridge_0"
+ad_cpu_interconnect 0x0001C000 ad9213_rx_0.phy_reconfig_14   "avl_mm_bridge_0"
+ad_cpu_interconnect 0x0001E000 ad9213_rx_0.phy_reconfig_15   "avl_mm_bridge_0"
 
-ad_cpu_interconnect 0x00100000 axi_ad9213_0.s_axi
-ad_cpu_interconnect 0x00110000 axi_ad9213_1.s_axi
-ad_cpu_interconnect 0x00120000 axi_ad9213_dma_0.s_axi
-ad_cpu_interconnect 0x00122000 axi_ad9213_dma_1.s_axi
+ad_cpu_interconnect 0x00020000 ad9213_rx_1.link_pll_reconfig "avl_mm_bridge_1" 0x00080000
+ad_cpu_interconnect 0x00000000 ad9213_rx_1.phy_reconfig_0    "avl_mm_bridge_1"
+ad_cpu_interconnect 0x00002000 ad9213_rx_1.phy_reconfig_1    "avl_mm_bridge_1"
+ad_cpu_interconnect 0x00004000 ad9213_rx_1.phy_reconfig_2    "avl_mm_bridge_1"
+ad_cpu_interconnect 0x00006000 ad9213_rx_1.phy_reconfig_3    "avl_mm_bridge_1"
+ad_cpu_interconnect 0x00008000 ad9213_rx_1.phy_reconfig_4    "avl_mm_bridge_1"
+ad_cpu_interconnect 0x0000A000 ad9213_rx_1.phy_reconfig_5    "avl_mm_bridge_1"
+ad_cpu_interconnect 0x0000C000 ad9213_rx_1.phy_reconfig_6    "avl_mm_bridge_1"
+ad_cpu_interconnect 0x0000E000 ad9213_rx_1.phy_reconfig_7    "avl_mm_bridge_1"
+ad_cpu_interconnect 0x00010000 ad9213_rx_1.phy_reconfig_8    "avl_mm_bridge_1"
+ad_cpu_interconnect 0x00012000 ad9213_rx_1.phy_reconfig_9    "avl_mm_bridge_1"
+ad_cpu_interconnect 0x00014000 ad9213_rx_1.phy_reconfig_10   "avl_mm_bridge_1"
+ad_cpu_interconnect 0x00016000 ad9213_rx_1.phy_reconfig_11   "avl_mm_bridge_1"
+ad_cpu_interconnect 0x00018000 ad9213_rx_1.phy_reconfig_12   "avl_mm_bridge_1"
+ad_cpu_interconnect 0x0001A000 ad9213_rx_1.phy_reconfig_13   "avl_mm_bridge_1"
+ad_cpu_interconnect 0x0001C000 ad9213_rx_1.phy_reconfig_14   "avl_mm_bridge_1"
+ad_cpu_interconnect 0x0001E000 ad9213_rx_1.phy_reconfig_15   "avl_mm_bridge_1"
 
-ad_cpu_interconnect 0x00014000 ltc6952_spi.spi_control_port "avl_peripheral_mm_bridge"
-ad_cpu_interconnect 0x00014200 adf4371_spi.spi_control_port "avl_peripheral_mm_bridge"
-ad_cpu_interconnect 0x00014400 ad9213_dual_pio.s1 "avl_peripheral_mm_bridge"
+ad_cpu_interconnect 0x000C0000 ad9213_rx_0.link_reconfig
+ad_cpu_interconnect 0x000C4000 ad9213_rx_0.link_management
+ad_cpu_interconnect 0x000C8000 ad9213_rx_1.link_reconfig
+ad_cpu_interconnect 0x000CC000 ad9213_rx_1.link_management
+ad_cpu_interconnect 0x000D0000 axi_ad9213_0.s_axi
+ad_cpu_interconnect 0x000D1000 axi_ad9213_1.s_axi
+ad_cpu_interconnect 0x000D2000 axi_ad9213_dma_0.s_axi
+ad_cpu_interconnect 0x000D3800 axi_ad9213_dma_1.s_axi
+
+ad_cpu_interconnect 0x00000200 ltc6952_spi.spi_control_port "avl_peripheral_mm_bridge"
+ad_cpu_interconnect 0x00000400 adf4371_spi.spi_control_port "avl_peripheral_mm_bridge"
+ad_cpu_interconnect 0x00000800 ad9213_dual_pio.s1 "avl_peripheral_mm_bridge"
 
 #
 ## interrupts
