@@ -55,7 +55,7 @@ module axi_spi_engine #(
   input         s_axi_aclk,
   input         s_axi_aresetn,
   input         s_axi_awvalid,
-  input  [15:0] s_axi_awaddr,
+  input   [9:0] s_axi_awaddr,
   output        s_axi_awready,
   input   [2:0] s_axi_awprot,
   input         s_axi_wvalid,
@@ -66,7 +66,7 @@ module axi_spi_engine #(
   output [ 1:0] s_axi_bresp,
   input         s_axi_bready,
   input         s_axi_arvalid,
-  input  [15:0] s_axi_araddr,
+  input   [9:0] s_axi_araddr,
   output        s_axi_arready,
   input   [2:0] s_axi_arprot,
   output        s_axi_rvalid,
@@ -79,11 +79,11 @@ module axi_spi_engine #(
   input                           up_clk,
   input                           up_rstn,
   input                           up_wreq,
-  input  [13:0]                   up_waddr,
+  input  [7:0]                   up_waddr,
   input  [31:0]                   up_wdata,
   output                          up_wack,
   input                           up_rreq,
-  input  [13:0]                   up_raddr,
+  input  [7:0]                   up_raddr,
   output [31:0]                   up_rdata,
   output                          up_rack,
 
@@ -165,8 +165,8 @@ module axi_spi_engine #(
   wire                            up_wreq_s;
   wire                            up_rreq_s;
   wire [31:0]                     up_wdata_s;
-  wire [13:0]                     up_waddr_s;
-  wire [13:0]                     up_raddr_s;
+  wire [7:0]                      up_waddr_s;
+  wire [7:0]                      up_raddr_s;
 
   // Scratch register
   reg [31:0] up_scratch = 'h00;
@@ -184,7 +184,7 @@ module axi_spi_engine #(
     // interface wrapper
 
     up_axi #(
-      .AXI_ADDRESS_WIDTH (16)
+      .AXI_ADDRESS_WIDTH (10)
     ) i_up_axi (
       .up_rstn(rstn),
       .up_clk(clk),
