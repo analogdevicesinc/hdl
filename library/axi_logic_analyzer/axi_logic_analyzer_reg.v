@@ -62,8 +62,8 @@ module axi_logic_analyzer_reg (
   output      [19:0]  pg_trigger_config,
 
   input               triggered,
-
   output              streaming,
+  output      [ 9:0]  data_delay_control,
 
  // bus interface
 
@@ -102,6 +102,7 @@ module axi_logic_analyzer_reg (
   reg     [19:0]  up_pg_trigger_config = 20'h0;
   reg             up_triggered = 0;
   reg             up_streaming = 0;
+  reg     [ 9:0]  up_data_delay_control = 10'd0;
 
   wire    [15:0]  up_input_data;
 
@@ -128,6 +129,7 @@ module axi_logic_analyzer_reg (
       up_streaming <= 1'd0;
       up_trigger_holdoff <= 32'h0;
       up_pg_trigger_config <= 20'd0;
+      up_data_delay_control <= 10'h0;
     end else begin
       up_wack <= up_wreq;
       if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h1)) begin
@@ -192,6 +194,9 @@ module axi_logic_analyzer_reg (
       if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h15)) begin
         up_pg_trigger_config <= up_wdata[19:0];
       end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h16)) begin
+        up_data_delay_control <= up_wdata[9:0];
+      end
     end
   end
 
@@ -227,6 +232,7 @@ module axi_logic_analyzer_reg (
           5'h13: up_rdata <= {31'h0,up_streaming};
           5'h14: up_rdata <= up_trigger_holdoff;
           5'h15: up_rdata <= {12'h0,up_pg_trigger_config};
+          5'h16: up_rdata <= {22'h0,up_data_delay_control};
           default: up_rdata <= 0;
         endcase
       end else begin
@@ -237,7 +243,7 @@ module axi_logic_analyzer_reg (
 
   ad_rst i_core_rst_reg (.rst_async(~up_rstn), .clk(clk), .rstn(), .rst(reset));
 
-   up_xfer_cntrl #(.DATA_WIDTH(343)) i_xfer_cntrl (
+   up_xfer_cntrl #(.DATA_WIDTH(353)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_streaming,             // 1
@@ -257,7 +263,8 @@ module axi_logic_analyzer_reg (
                       up_io_selection,          // 16
                       up_pg_trigger_config,     // 20
                       up_divider_counter_pg,    // 32
-                      up_divider_counter_la}),  // 32
+                      up_divider_counter_la,    // 32
+                      up_data_delay_control}),  // 10
 
     .up_xfer_done (),
     .d_rst (1'b0),
@@ -279,7 +286,8 @@ module axi_logic_analyzer_reg (
                       io_selection,           // 16
                       pg_trigger_config,      // 20
                       divider_counter_pg,     // 32
-                      divider_counter_la}));  // 32
+                      divider_counter_la,     // 32
+                      data_delay_control}));  // 10
 
  up_xfer_status #(.DATA_WIDTH(16)) i_xfer_status (
 

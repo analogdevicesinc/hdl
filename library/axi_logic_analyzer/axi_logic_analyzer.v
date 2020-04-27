@@ -35,11 +35,7 @@
 
 `timescale 1ns/100ps
 
-module axi_logic_analyzer #(
-
-  // add sample delays on LA to compensate for adc path delay
-
-  parameter ADC_PATH_DELAY = 19) (
+module axi_logic_analyzer (
 
   // interface
 
@@ -58,6 +54,9 @@ module axi_logic_analyzer #(
   input                 dac_valid,
   output reg            dac_read,
 
+  input       [ 2:0]    external_rate,
+  input                 external_valid,
+  input                 external_decimation_en,
   input                 trigger_in,
   output                trigger_out,
   output                trigger_out_adc,
@@ -128,6 +127,40 @@ module axi_logic_analyzer #(
 
   reg     [15:0]    adc_data_mn = 'd0;
   reg     [31:0]    trigger_holdoff_counter = 32'd0;
+  reg     [ 4:0]    adc_data_delay = 5'd0;
+
+  reg     [15:0]    data_m_0;
+  reg     [15:0]    data_m_1;
+  reg     [15:0]    data_m_2;
+  reg     [15:0]    data_m_3;
+  reg     [15:0]    data_m_4;
+  reg     [15:0]    data_m_5;
+  reg     [15:0]    data_m_6;
+  reg     [15:0]    data_m_7;
+  reg     [15:0]    data_m_8;
+  reg     [15:0]    data_m_9;
+  reg     [15:0]    data_m_10;
+  reg     [15:0]    data_m_11;
+  reg     [15:0]    data_m_12;
+  reg     [15:0]    data_m_13;
+  reg     [15:0]    data_m_14;
+  reg     [15:0]    data_m_15;
+  reg     [15:0]    data_m_16;
+  reg     [15:0]    data_m_17;
+  reg     [15:0]    data_m_18;
+  reg     [15:0]    data_m_19;
+  reg     [15:0]    data_m_20;
+  reg     [15:0]    data_m_21;
+  reg     [15:0]    data_m_22;
+  reg     [15:0]    data_m_23;
+  reg     [15:0]    data_m_24;
+  reg     [15:0]    data_m_25;
+  reg     [15:0]    data_m_26;
+  reg     [15:0]    data_m_27;
+  reg     [15:0]    data_m_28;
+  reg     [15:0]    data_m_29;
+  reg     [15:0]    data_m_30;
+  reg     [15:0]    data_m_31;
 
   // internal signals
 
@@ -181,6 +214,11 @@ module axi_logic_analyzer #(
 
   wire              streaming;
 
+  wire    [ 4:0]    in_data_delay;
+  wire    [ 4:0]    up_data_delay;
+  wire              master_delay_ctrl;
+  wire    [ 9:0]    data_delay_control;
+
   genvar i;
 
   // signal name changes
@@ -189,9 +227,10 @@ module axi_logic_analyzer #(
   assign up_rstn = s_axi_aresetn;
 
   assign trigger_out = trigger_delay == 32'h0 ? trigger_out_holdoff | streaming_on : trigger_out_delayed | streaming_on;
+
   assign trigger_out_delayed = delay_counter == 32'h0 ? 1 : 0;
 
- always @(posedge clk_out) begin
+  always @(posedge clk_out) begin
     if (trigger_delay == 0) begin
       if (streaming == 1'b1 && sample_valid_la == 1'b1 && trigger_out_holdoff == 1'b1) begin
         streaming_on <= 1'b1;
@@ -208,7 +247,7 @@ module axi_logic_analyzer #(
   end
 
 
- always @(posedge clk_out) begin
+  always @(posedge clk_out) begin
     if (sample_valid_la == 1'b1 && trigger_out_holdoff == 1'b1) begin
       up_triggered_set <= 1'b1;
     end else if (up_triggered_reset == 1'b1) begin
@@ -254,41 +293,92 @@ module axi_logic_analyzer #(
 
   // - synchronization
   // - compensate for m2k adc path delay
-  // - transfer data at clock frequency if capture is enabled
 
-  genvar j;
-
-  generate
-
-    reg [15:0] data_m[ADC_PATH_DELAY-2:0];
-
-    always @(posedge clk_out) begin
-      if (sample_valid_la == 1'b1) begin
-        data_m[0] <= data_i;
-      end
+  always @(posedge clk_out) begin
+    data_m_0  <= data_i;
+    data_m_1  <= data_m_0;
+    data_m_2  <= data_m_1;
+    data_m_3  <= data_m_2;
+    data_m_4  <= data_m_3;
+    data_m_5  <= data_m_4;
+    data_m_6  <= data_m_5;
+    data_m_7  <= data_m_6;
+    data_m_8  <= data_m_7;
+    data_m_9  <= data_m_8;
+    data_m_10 <= data_m_9;
+    data_m_11 <= data_m_10;
+    data_m_12 <= data_m_11;
+    data_m_13 <= data_m_12;
+    data_m_14 <= data_m_13;
+    data_m_15 <= data_m_14;
+    data_m_16 <= data_m_15;
+    if (sample_valid_la == 1'b1) begin
+      data_m_17 <= data_m_16;
+      data_m_18 <= data_m_17;
+      data_m_19 <= data_m_18;
+      data_m_20 <= data_m_19;
+      data_m_21 <= data_m_20;
+      data_m_22 <= data_m_21;
+      data_m_23 <= data_m_22;
+      data_m_24 <= data_m_23;
+      data_m_25 <= data_m_24;
+      data_m_26 <= data_m_25;
+      data_m_27 <= data_m_26;
+      data_m_28 <= data_m_27;
+      data_m_29 <= data_m_28;
+      data_m_30 <= data_m_29;
+      data_m_31 <= data_m_30;
     end
+  end
 
-    for (j = 0; j < ADC_PATH_DELAY - 2; j = j + 1) begin
-      always @(posedge clk_out) begin
-        if (sample_valid_la == 1'b1) begin
-          data_m[j+1] <= data_m[j];
-        end
-      end
-    end
+  // adc path 'rate delay' given by axi_adc_decimate
+  always @(posedge clk_out) begin
+    case (external_rate)
+      3'd0:    adc_data_delay <= 5'd1; // 100MSPS
+      3'd1:    adc_data_delay <= 5'd3; // 10MSPS
+      default: adc_data_delay <= 5'd1; // <= 1MSPS
+    endcase
+  end
 
-    always @(posedge clk_out) begin
-      if (sample_valid_la == 1'b1) begin
-        adc_data_mn <= data_m[ADC_PATH_DELAY-2];
-        adc_data <= adc_data_mn;
-      end
+  assign up_data_delay = data_delay_control[4:0];
+  assign rate_gen_select = data_delay_control[8];
+
+  // select if the delay taps number is chosen by the user or automatically
+  assign master_delay_ctrl = data_delay_control[9];
+  assign in_data_delay = master_delay_ctrl ? up_data_delay :
+                         external_decimation_en ? 5'd0 : adc_data_delay;
+
+  always @(posedge clk_out) begin
+    if (sample_valid_la == 1'b1) begin
+      case (in_data_delay)
+        5'd0:  adc_data_mn <= data_m_16;
+        5'd1:  adc_data_mn <= data_m_17;
+        5'd2:  adc_data_mn <= data_m_18;
+        5'd3:  adc_data_mn <= data_m_19;
+        5'd4:  adc_data_mn <= data_m_20;
+        5'd5:  adc_data_mn <= data_m_21;
+        5'd6:  adc_data_mn <= data_m_22;
+        5'd7:  adc_data_mn <= data_m_23;
+        5'd8:  adc_data_mn <= data_m_24;
+        5'd9:  adc_data_mn <= data_m_25;
+        5'd10: adc_data_mn <= data_m_26;
+        5'd11: adc_data_mn <= data_m_27;
+        5'd12: adc_data_mn <= data_m_28;
+        5'd13: adc_data_mn <= data_m_29;
+        5'd14: adc_data_mn <= data_m_30;
+        5'd15: adc_data_mn <= data_m_31;
+        default: adc_data_mn <= data_m_16;
+      endcase
+      adc_data <= adc_data_mn;
     end
-  endgenerate
+  end
 
   assign adc_valid = sample_valid_la;
 
   always @(posedge clk_out) begin
     trigger_m1 <= trigger_i;
   end
+
   // downsampler logic analyzer
 
   always @(posedge clk_out) begin
@@ -296,7 +386,10 @@ module axi_logic_analyzer #(
       sample_valid_la <= 1'b0;
       downsampler_counter_la <= 32'h0;
     end else begin
-      if (downsampler_counter_la < divider_counter_la ) begin
+      if (rate_gen_select) begin
+        downsampler_counter_la <= 32'h0;
+        sample_valid_la <= external_valid;
+      end else if (downsampler_counter_la < divider_counter_la ) begin
         downsampler_counter_la <= downsampler_counter_la + 1;
         sample_valid_la <= 1'b0;
       end else begin
@@ -404,7 +497,6 @@ module axi_logic_analyzer #(
     end
   end
 
-
   axi_logic_analyzer_trigger i_trigger (
     .clk (clk_out),
     .reset (reset),
@@ -446,11 +538,10 @@ module axi_logic_analyzer #(
     .overwrite_data (overwrite_data),
     .input_data (adc_data_mn),
     .od_pp_n (od_pp_n),
-
     .triggered (up_triggered),
     .pg_trigger_config (pg_trigger_config),
-
     .streaming(streaming),
+    .data_delay_control (data_delay_control),
 
     // bus interface
 
