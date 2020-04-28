@@ -112,15 +112,17 @@ reg [1:0] transfer_id = 'h0;
 reg completion_req_last_found = 1'b0;
 
 util_axis_fifo #(
-  .DATA_WIDTH(BYTES_PER_BURST_WIDTH+1+1),
-  .ADDRESS_WIDTH(0),
+  .WR_DATA_WIDTH(BYTES_PER_BURST_WIDTH+1+1),
+  .WR_ADDRESS_WIDTH(0),
+  .RD_DATA_WIDTH(BYTES_PER_BURST_WIDTH+1+1),
+  .RD_ADDRESS_WIDTH(0),
   .ASYNC_CLK(ASYNC_CLK_DEST_REQ)
 ) i_dest_response_fifo (
   .s_axis_aclk(dest_clk),
   .s_axis_aresetn(dest_resetn),
   .s_axis_valid(dest_response_valid),
   .s_axis_ready(dest_response_ready),
-  .s_axis_empty(),
+  .s_axis_full(),
   .s_axis_data({dest_response_data_burst_length,
                 dest_response_partial,
                 dest_response_resp_eot}),
@@ -133,7 +135,8 @@ util_axis_fifo #(
   .m_axis_data({response_dest_data_burst_length,
                 response_dest_partial,
                 response_dest_resp_eot}),
-  .m_axis_level()
+  .m_axis_level(),
+  .m_axis_empty()
 );
 
 always @(posedge req_clk)

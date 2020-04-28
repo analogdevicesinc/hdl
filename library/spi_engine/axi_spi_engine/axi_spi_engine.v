@@ -403,10 +403,12 @@ module axi_spi_engine #(
     `axi_spi_engine_check_watermark(cmd_fifo_room, CMD_FIFO_ADDRESS_WIDTH);
 
   util_axis_fifo #(
-    .DATA_WIDTH(16),
+    .WR_DATA_WIDTH(16),
+    .WR_ADDRESS_WIDTH(CMD_FIFO_ADDRESS_WIDTH),
+    .RD_DATA_WIDTH(16),
+    .RD_ADDRESS_WIDTH(CMD_FIFO_ADDRESS_WIDTH),
     .ASYNC_CLK(ASYNC_SPI_CLK),
-    .ADDRESS_WIDTH(CMD_FIFO_ADDRESS_WIDTH),
-    .S_AXIS_REGISTERED(0)
+    .M_AXIS_REGISTERED(0)
   ) i_cmd_fifo (
     .s_axis_aclk(clk),
     .s_axis_aresetn(up_sw_resetn),
@@ -414,12 +416,14 @@ module axi_spi_engine #(
     .s_axis_valid(cmd_fifo_in_valid),
     .s_axis_data(cmd_fifo_in_data),
     .s_axis_room(cmd_fifo_room),
-    .s_axis_empty(),
+    .s_axis_full(),
+    .s_axis_room(),
     .m_axis_aclk(spi_clk),
     .m_axis_aresetn(spi_resetn),
     .m_axis_ready(cmd_ready),
     .m_axis_valid(cmd_valid),
     .m_axis_data(cmd_data),
+    .m_axis_empty(),
     .m_axis_level()
   );
 

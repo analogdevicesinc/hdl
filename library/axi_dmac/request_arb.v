@@ -423,15 +423,17 @@ dmac_dest_mm_axi #(
 );
 
 util_axis_fifo #(
-  .DATA_WIDTH(BEATS_PER_BURST_WIDTH_SRC),
-  .ADDRESS_WIDTH(0),
+  .WR_DATA_WIDTH(BEATS_PER_BURST_WIDTH_SRC),
+  .WR_ADDRESS_WIDTH(0),
+  .RD_DATA_WIDTH(BEATS_PER_BURST_WIDTH_SRC),
+  .RD_ADDRESS_WIDTH(0),
   .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
 ) i_src_dest_bl_fifo (
   .s_axis_aclk(src_clk),
   .s_axis_aresetn(src_resetn),
   .s_axis_valid(src_bl_valid),
   .s_axis_ready(src_bl_ready),
-  .s_axis_empty(),
+  .s_axis_full(),
   .s_axis_data(src_burst_length),
   .s_axis_room(),
 
@@ -440,7 +442,8 @@ util_axis_fifo #(
   .m_axis_valid(dest_bl_valid),
   .m_axis_ready(dest_bl_ready),
   .m_axis_data(dest_src_burst_length),
-  .m_axis_level()
+  .m_axis_level(),
+  .m_axis_empty()
 );
 
 // Adapt burst length from source width to destination width by either
@@ -759,15 +762,17 @@ dmac_src_axi_stream #(
 assign src_valid_bytes = {BYTES_PER_BEAT_WIDTH_SRC{1'b1}};
 
 util_axis_fifo #(
-  .DATA_WIDTH(ID_WIDTH + 3),
-  .ADDRESS_WIDTH(0),
+  .WR_DATA_WIDTH(ID_WIDTH + 3),
+  .WR_ADDRESS_WIDTH(0),
+  .RD_DATA_WIDTH(ID_WIDTH + 3),
+  .RD_ADDRESS_WIDTH(0),
   .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
 ) i_rewind_req_fifo (
   .s_axis_aclk(src_clk),
   .s_axis_aresetn(src_resetn),
   .s_axis_valid(rewind_req_valid),
   .s_axis_ready(rewind_req_ready),
-  .s_axis_empty(),
+  .s_axis_full(),
   .s_axis_data(rewind_req_data),
   .s_axis_room(),
 
@@ -776,7 +781,8 @@ util_axis_fifo #(
   .m_axis_valid(req_rewind_req_valid),
   .m_axis_ready(req_rewind_req_ready),
   .m_axis_data(req_rewind_req_data),
-  .m_axis_level()
+  .m_axis_level(),
+  .m_axis_empty()
 );
 
 end else begin
@@ -1020,15 +1026,17 @@ assign req_src_valid = req_valid & req_ready;
 assign req_ready = req_gen_ready & req_src_ready;
 
 util_axis_fifo #(
-  .DATA_WIDTH(DMA_ADDRESS_WIDTH_DEST + 1),
-  .ADDRESS_WIDTH(0),
+  .WR_DATA_WIDTH(DMA_ADDRESS_WIDTH_DEST + 1),
+  .WR_ADDRESS_WIDTH(0),
+  .RD_DATA_WIDTH(DMA_ADDRESS_WIDTH_DEST + 1),
+  .RD_ADDRESS_WIDTH(0),
   .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
 ) i_dest_req_fifo (
   .s_axis_aclk(src_clk),
   .s_axis_aresetn(src_resetn),
   .s_axis_valid(src_dest_valid_hs_masked),
   .s_axis_ready(src_dest_ready_hs),
-  .s_axis_empty(),
+  .s_axis_full(),
   .s_axis_data({
     src_req_dest_address_cur,
     src_req_xlast_cur
@@ -1043,19 +1051,22 @@ util_axis_fifo #(
     dest_req_dest_address,
     dest_req_xlast
   }),
-  .m_axis_level()
+  .m_axis_level(),
+  .m_axis_empty()
 );
 
 util_axis_fifo #(
-  .DATA_WIDTH(DMA_ADDRESS_WIDTH_DEST + DMA_ADDRESS_WIDTH_SRC + BYTES_PER_BURST_WIDTH + 2),
-  .ADDRESS_WIDTH(0),
+  .WR_DATA_WIDTH(DMA_ADDRESS_WIDTH_DEST + DMA_ADDRESS_WIDTH_SRC + BYTES_PER_BURST_WIDTH + 2),
+  .WR_ADDRESS_WIDTH(0),
+  .RD_DATA_WIDTH(DMA_ADDRESS_WIDTH_DEST + DMA_ADDRESS_WIDTH_SRC + BYTES_PER_BURST_WIDTH + 2),
+  .RD_ADDRESS_WIDTH(0),
   .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
 ) i_src_req_fifo (
   .s_axis_aclk(req_clk),
   .s_axis_aresetn(req_resetn),
   .s_axis_valid(req_src_valid),
   .s_axis_ready(req_src_ready),
-  .s_axis_empty(),
+  .s_axis_full(),
   .s_axis_data({
     req_dest_address,
     req_src_address,
@@ -1077,7 +1088,8 @@ util_axis_fifo #(
     src_req_sync_transfer_start,
     src_req_xlast
   }),
-  .m_axis_level()
+  .m_axis_level(),
+  .m_axis_empty()
 );
 
 // Save the descriptor in the source clock domain since the submission to
