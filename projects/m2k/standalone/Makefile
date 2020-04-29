@@ -16,7 +16,6 @@ LIB_DEPS += axi_dac_interpolate
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_logic_analyzer
 LIB_DEPS += axi_rd_wr_combiner
-LIB_DEPS += util_extract
 LIB_DEPS += util_var_fifo
 
 include ../../scripts/project-xilinx.mk
