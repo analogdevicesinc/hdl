@@ -50,6 +50,9 @@ adi_add_bus "spi_engine_offload_ctrl0" "master" \
 		{ "offload0_enable" "ENABLE"} \
 		{ "offload0_enabled" "ENABLED"} \
 		{ "offload0_mem_reset" "MEM_RESET"} \
+		{ "offload_sync_ready" "SYNC_READY"} \
+		{ "offload_sync_valid" "SYNC_VALID"} \
+		{ "offload_sync_data" "SYNC_DATA"} \
 	}
 
 adi_add_bus_clock "s_axi_aclk" "spi_engine_offload_ctrl0:s_axi" "s_axi_aresetn"

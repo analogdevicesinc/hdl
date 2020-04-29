@@ -56,6 +56,10 @@ module spi_engine_offload #(
   output ctrl_enabled,
   input ctrl_mem_reset,
 
+  output status_sync_valid,
+  input status_sync_ready,
+  output [7:0] status_sync_data,
+
   input spi_clk,
   input spi_resetn,
 
@@ -98,7 +102,6 @@ wire spi_enable;
 
 assign cmd_valid = spi_active;
 assign sdo_data_valid = spi_active;
-assign sync_ready = 1'b1;
 
 assign offload_sdi_valid = sdi_data_valid;
 
@@ -171,6 +174,15 @@ always @(posedge spi_clk) begin
 end
 
 assign cmd = (cmd_int_s[15:8] == 8'h30) ? {cmd_int_s[15:8], spi_sync_id_counter} : cmd_int_s;
+
+/* 
+ * Forwarded SYNC interface, this can be used to monitor the state of the 
+ * offload command sequence through SPI Engine regmap
+ */	
+
+assign status_sync_data = sync_data;
+assign status_sync_valid = sync_valid;
+assign sync_ready = status_sync_ready;
 
 generate if (ASYNC_SPI_CLK) begin
 

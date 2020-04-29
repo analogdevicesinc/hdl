@@ -46,6 +46,9 @@ adi_add_bus "spi_engine_offload_ctrl" "slave" \
 		{ "ctrl_enable" "ENABLE"} \
 		{ "ctrl_enabled" "ENABLED"} \
 		{ "ctrl_mem_reset" "MEM_RESET"} \
+		{ "status_sync_ready" "SYNC_READY"} \
+		{ "status_sync_valid" "SYNC_VALID"} \
+		{ "status_sync_data" "SYNC_DATA"} \
 	}
 
 adi_add_bus "offload_sdi" "master" \
