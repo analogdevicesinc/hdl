@@ -122,6 +122,13 @@ module axi_spi_engine #(
   output offload0_mem_reset,
   output offload0_enable,
   input offload0_enabled,
+  
+  output offload_sync_ready,
+  input offload_sync_valid,
+  input [7:0] offload_sync_data,
+
+  // PWM control for internal triggering
+  
   output reg [31:0] pulse_gen_period,
   output reg pulse_gen_load);
 
@@ -156,6 +163,9 @@ module axi_spi_engine #(
   wire [7:0] sync_fifo_data;
   wire sync_fifo_valid;
 
+  wire [7:0] offload_sync_fifo_data;
+  wire offload_sync_fifo_valid;
+
   reg up_sw_reset = 1'b1;
   wire up_sw_resetn = ~up_sw_reset;
 
@@ -173,6 +183,9 @@ module axi_spi_engine #(
 
   reg  [7:0] sync_id = 'h00;
   reg        sync_id_pending = 1'b0;
+
+  reg  [7:0] offload_sync_id = 'h00;
+  reg        offload_sync_id_pending = 1'b0;
 
   generate if (MM_IF_TYPE == S_AXI) begin
 
@@ -247,6 +260,7 @@ module axi_spi_engine #(
   wire [3:0] up_irq_pending;
 
   assign up_irq_source = {
+    offload_sync_id_pending,
     sync_id_pending,
     sdi_fifo_almost_full,
     sdo_fifo_almost_empty,
@@ -329,6 +343,7 @@ module axi_spi_engine #(
       8'h21: up_rdata_ff <= up_irq_pending;
       8'h22: up_rdata_ff <= up_irq_source;
       8'h30: up_rdata_ff <= sync_id;
+      8'h31: up_rdata_ff <= offload_sync_id;
       8'h34: up_rdata_ff <= cmd_fifo_room;
       8'h35: up_rdata_ff <= sdo_fifo_room;
       8'h36: up_rdata_ff <= sdi_fifo_level;
@@ -351,6 +366,20 @@ module axi_spi_engine #(
         sync_id_pending <= 1'b1;
       end else if (up_wreq_s == 1'b1 && up_waddr_s == 8'h21 && up_wdata_s[3] == 1'b1) begin
         sync_id_pending <= 1'b0;
+      end
+    end
+  end
+
+  always @(posedge clk) begin
+    if (up_sw_resetn == 1'b0) begin
+      offload_sync_id <= 'h00;
+      offload_sync_id_pending <= 1'b0;
+    end else begin
+      if (offload_sync_fifo_valid == 1'b1) begin
+        offload_sync_id <= offload_sync_fifo_data;
+        offload_sync_id_pending <= 1'b1;
+      end else if (up_wreq_s == 1'b1 && up_waddr_s == 8'h21 && up_wdata_s[3] == 1'b1) begin
+        offload_sync_id_pending <= 1'b0;
       end
     end
   end
@@ -524,6 +553,27 @@ module axi_spi_engine #(
     assign up_offload0_sdo_wr_en_s = up_wreq_s == 1'b1 && up_waddr_s == 8'h45;
     assign up_offload0_sdo_wr_data_s = up_wdata_s[DATA_WIDTH-1:0];
 
+    // synchronization FIFO for the Offload SYNC interface
+    util_axis_fifo #(
+      .DATA_WIDTH(8),
+      .ASYNC_CLK(ASYNC_SPI_CLK),
+      .ADDRESS_WIDTH(SYNC_FIFO_ADDRESS_WIDTH),
+      .S_AXIS_REGISTERED(0)
+    ) i_offload_sync_fifo (
+      .s_axis_aclk(spi_clk),
+      .s_axis_aresetn(spi_resetn),
+      .s_axis_ready(offload_sync_ready),
+      .s_axis_valid(offload_sync_valid),
+      .s_axis_data(offload_sync_data),
+      .s_axis_empty(),
+      .m_axis_aclk(clk),
+      .m_axis_aresetn(up_sw_resetn),
+      .m_axis_ready(1'b1),
+      .m_axis_valid(offload_sync_fifo_valid),
+      .m_axis_data(offload_sync_fifo_data),
+      .m_axis_level()
+    );
+
   end else begin /* ASYNC_SPI_CLK == 0 */
 
       assign sync_fifo_valid = sync_valid;
@@ -535,6 +585,10 @@ module axi_spi_engine #(
 
       assign offload0_sdo_wr_en = up_wreq_s == 1'b1 && up_waddr_s == 8'h45;
       assign offload0_sdo_wr_data = up_wdata_s[DATA_WIDTH-1:0];
+
+      assign offload_sync_fifo_valid = offload_sync_valid;
+      assign offload_sync_fifo_data = offload_sync_data;
+      assign offload_sync_ready = 1'b1;
 
   end
   endgenerate
