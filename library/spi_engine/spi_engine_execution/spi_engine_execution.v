@@ -70,14 +70,7 @@ module spi_engine_execution #(
   output reg sclk,
   output reg sdo,
   output reg sdo_t,
-  input sdi,
-  input sdi_1,
-  input sdi_2,
-  input sdi_3,
-  input sdi_4,
-  input sdi_5,
-  input sdi_6,
-  input sdi_7,
+  input [NUM_OF_SDI-1:0] sdi,
   output reg [NUM_OF_CS-1:0] cs,
   output reg three_wire
 );
@@ -146,16 +139,7 @@ reg [7:0] clk_div = DEFAULT_CLK_DIV;
 wire sdo_enabled = cmd_d1[8];
 wire sdi_enabled = cmd_d1[9];
 
-// supporting max 8 SDI channel
 reg [(DATA_WIDTH-1):0] data_sdo_shift = 'h0;
-reg [(DATA_WIDTH-1):0] data_sdi_shift = 'h0;
-reg [(DATA_WIDTH-1):0] data_sdi_shift_1 = 'h0;
-reg [(DATA_WIDTH-1):0] data_sdi_shift_2 = 'h0;
-reg [(DATA_WIDTH-1):0] data_sdi_shift_3 = 'h0;
-reg [(DATA_WIDTH-1):0] data_sdi_shift_4 = 'h0;
-reg [(DATA_WIDTH-1):0] data_sdi_shift_5 = 'h0;
-reg [(DATA_WIDTH-1):0] data_sdi_shift_6 = 'h0;
-reg [(DATA_WIDTH-1):0] data_sdi_shift_7 = 'h0;
 
 wire [1:0] inst = cmd[13:12];
 wire [1:0] inst_d1 = cmd_d1[13:12];
@@ -401,48 +385,26 @@ wire trigger_rx_s = (SDI_DELAY == 2'b00) ? trigger_rx_d[1] :
                     (SDI_DELAY == 2'b10) ? trigger_rx_d[3] :
                     (SDI_DELAY == 2'b11) ? trigger_rx_d[4] : trigger_rx_d[1];
 
-always @(posedge clk) begin
-  if (inst_d1 == CMD_CHIPSELECT) begin
-    data_sdi_shift <= {DATA_WIDTH{1'b0}};
-    data_sdi_shift_1 <= {DATA_WIDTH{1'b0}};
-    data_sdi_shift_2 <= {DATA_WIDTH{1'b0}};
-    data_sdi_shift_3 <= {DATA_WIDTH{1'b0}};
-    data_sdi_shift_4 <= {DATA_WIDTH{1'b0}};
-    data_sdi_shift_5 <= {DATA_WIDTH{1'b0}};
-    data_sdi_shift_6 <= {DATA_WIDTH{1'b0}};
-    data_sdi_shift_7 <= {DATA_WIDTH{1'b0}};
-  end else if (trigger_rx_s == 1'b1) begin
-    data_sdi_shift <= {data_sdi_shift[(DATA_WIDTH-2):0], sdi};
-    data_sdi_shift_1 <= {data_sdi_shift_1[(DATA_WIDTH-2):0], sdi_1};
-    data_sdi_shift_2 <= {data_sdi_shift_2[(DATA_WIDTH-2):0], sdi_2};
-    data_sdi_shift_3 <= {data_sdi_shift_3[(DATA_WIDTH-2):0], sdi_3};
-    data_sdi_shift_4 <= {data_sdi_shift_4[(DATA_WIDTH-2):0], sdi_4};
-    data_sdi_shift_5 <= {data_sdi_shift_5[(DATA_WIDTH-2):0], sdi_5};
-    data_sdi_shift_6 <= {data_sdi_shift_6[(DATA_WIDTH-2):0], sdi_6};
-    data_sdi_shift_7 <= {data_sdi_shift_7[(DATA_WIDTH-2):0], sdi_7};
-  end
-end
+// Load the serial data into SDI shift register(s), than link it to the output
+// register of the module
+genvar i;
+generate
+  for (i=0; i<NUM_OF_SDI; i=i+1) begin: g_sdi_shift_reg
 
-assign sdi_data = (NUM_OF_SDI == 1) ? data_sdi_shift :
-                  (NUM_OF_SDI == 2) ? {data_sdi_shift_1, data_sdi_shift} :
-                  (NUM_OF_SDI == 3) ? {data_sdi_shift_2, data_sdi_shift_1,
-                                                         data_sdi_shift} :
-                  (NUM_OF_SDI == 4) ? {data_sdi_shift_3, data_sdi_shift_2,
-                                       data_sdi_shift_1, data_sdi_shift} :
-                  (NUM_OF_SDI == 5) ? {data_sdi_shift_4, data_sdi_shift_3,
-                                       data_sdi_shift_2, data_sdi_shift_1,
-                                                         data_sdi_shift} :
-                  (NUM_OF_SDI == 6) ? {data_sdi_shift_5, data_sdi_shift_4,
-                                       data_sdi_shift_3, data_sdi_shift_2,
-                                       data_sdi_shift_1, data_sdi_shift} :
-                  (NUM_OF_SDI == 7) ? {data_sdi_shift_6, data_sdi_shift_5,
-                                       data_sdi_shift_4, data_sdi_shift_3,
-                                       data_sdi_shift_2, data_sdi_shift_1,
-                                                         data_sdi_shift} :
-                  (NUM_OF_SDI == 8) ? {data_sdi_shift_7, data_sdi_shift_6,
-                                       data_sdi_shift_5, data_sdi_shift_4,
-                                       data_sdi_shift_3, data_sdi_shift_2,
-                                       data_sdi_shift_1, data_sdi_shift} : data_sdi_shift;
+    reg [DATA_WIDTH-1:0] data_sdi_shift;
+
+    always @(posedge clk) begin
+      if (inst_d1 == CMD_CHIPSELECT) begin
+        data_sdi_shift <= {DATA_WIDTH{1'b0}};
+      end else if (trigger_rx_s == 1'b1) begin
+        data_sdi_shift <= {data_sdi_shift[DATA_WIDTH-2:0], sdi[i]};
+      end
+    end
+
+    assign sdi_data[((i+1)*DATA_WIDTH)-1:i*DATA_WIDTH] = data_sdi_shift;
+
+  end
+endgenerate
 
 wire last_sdi_bit = (sdi_counter == word_length-1);
 always @(posedge clk) begin

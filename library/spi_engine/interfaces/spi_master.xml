@@ -10,4 +10,5 @@
 	<spirit:isAddressable>false</spirit:isAddressable>
 	<spirit:maxMasters>1</spirit:maxMasters>
 	<spirit:maxSlaves>1</spirit:maxSlaves>
+	<spirit:description>SPI Engine physical interface</spirit:description>
 </spirit:busDefinition>
