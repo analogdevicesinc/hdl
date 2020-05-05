@@ -35,7 +35,9 @@
 
 `timescale 1ns/100ps
 
-module system_top (
+module system_top #(
+  parameter NUM_OF_SDI = 2
+)(
 
   inout   [14:0]  ddr_addr,
   inout   [ 2:0]  ddr_ba,
@@ -76,7 +78,6 @@ module system_top (
   output          i2s_sdata_out,
   input           i2s_sdata_in,
 
-
   inout           iic_scl,
   inout           iic_sda,
   inout   [ 1:0]  iic_mux_scl,
@@ -86,13 +87,13 @@ module system_top (
 
   // ad463x SPI configuration interface
 
-  input           ad463x_spi_sdi0,
+  input [NUM_OF_SDI-1:0]  ad463x_spi_sdi,
   output          ad463x_spi_sdo,
   output          ad463x_spi_sclk,
   output          ad463x_spi_cs,
-  output          ad463x_spi_cnv,
-  
-  inout           ad463x_busy,
+
+  output          ad463x_cnv,
+  input           ad463x_busy,
   inout           ad463x_resetn);
 
   // internal signals
@@ -106,23 +107,18 @@ module system_top (
   wire    [ 1:0]  iic_mux_sda_i_s;
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
-  wire            ad463x_spi_cs_s;
 
   // instantiations
 
-  assign gpio_i[63:34] = 31'b0;
-  assign ad463x_spi_cs = ad463x_spi_cs_s;
-  assign ad463x_spi_cnv = ad463x_spi_cs_s;
+  assign gpio_i[63:33] = 31'b0;
 
   ad_iobuf #(
-    .DATA_WIDTH(2)
+    .DATA_WIDTH(1)
   ) i_ad463x_gpio_iobuf (
-    .dio_t(gpio_t[33:32]),
-    .dio_i(gpio_o[33:32]),
-    .dio_o(gpio_i[33:32]),
-    .dio_p({
-      ad463x_busy, 
-      ad463x_resetn}));
+    .dio_t(gpio_t[32]),
+    .dio_i(gpio_o[32]),
+    .dio_o(gpio_i[32]),
+    .dio_p(ad463x_resetn));
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -211,9 +207,11 @@ module system_top (
     .spi1_sdo_o (),
     .ad463x_spi_sdo (ad463x_spi_sdo),
     .ad463x_spi_sdo_t (),
-    .ad463x_spi_sdi (ad463x_spi_sdi0),
-    .ad463x_spi_cs (ad463x_spi_cs_s),
+    .ad463x_spi_sdi (ad463x_spi_sdi),
+    .ad463x_spi_cs (ad463x_spi_cs),
     .ad463x_spi_sclk (ad463x_spi_sclk),
+    .ad463x_busy (ad463x_busy),
+    .ad463x_cnv (ad463x_cnv),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));
 
