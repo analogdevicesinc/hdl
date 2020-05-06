@@ -65,6 +65,9 @@ current_bd_instance /spi_ad463x
   create_bd_cell -type module -reference ad463x_axis_reorder data_reorder
   set_property -dict [list CONFIG.NUM_OF_SDI $ad463x_num_of_sdi] [get_bd_cells data_reorder]
 
+  create_bd_cell -type module -reference ad_edge_detect busy_capture
+  set_property -dict [list CONFIG.EDGE 1] [get_bd_cells busy_capture]
+
   ## internal connections
 
   # clocks
@@ -78,6 +81,7 @@ current_bd_instance /spi_ad463x
   ad_connect spi_clk cnv_generator/ext_clk
   ad_connect clk cnv_generator/s_axi_aclk
   ad_connect spi_clk data_reorder/axis_aclk
+  ad_connect spi_clk busy_capture/clk
 
   # resets
   #
@@ -87,6 +91,7 @@ current_bd_instance /spi_ad463x
   ad_connect axi_regmap/spi_resetn interconnect/resetn
   ad_connect resetn cnv_generator/s_axi_aresetn
   ad_connect axi_regmap/spi_resetn data_reorder/axis_aresetn
+  ad_connect axi_regmap/spi_resetn busy_capture/rst
 
   # interfaces
   #
@@ -101,7 +106,8 @@ current_bd_instance /spi_ad463x
 
   # synchronization and interrupt
   #
-  ad_connect trigger offload/trigger
+  ad_connect trigger busy_capture/in
+  ad_connect busy_capture/out offload/trigger
   ad_connect cnv cnv_generator/pulse
   ad_connect irq axi_regmap/irq
 

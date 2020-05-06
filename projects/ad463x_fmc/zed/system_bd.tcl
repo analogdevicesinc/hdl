@@ -10,6 +10,7 @@ set adc_sampling_rate 1000000
 # add RTL source that will be instantiated in system_bd directly
 adi_project_files ad463x_fmc_zed [list \
   "../common/ad463x_axis_reorder.v" \
+  "../../../library/common/ad_edge_detect.v" \
 ]
 
 # block design
