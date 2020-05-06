@@ -34,7 +34,6 @@ current_bd_instance /spi_ad463x
   create_bd_pin -dir O cnv
   create_bd_pin -dir O irq
   create_bd_intf_pin -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 m_spi
-  create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:axis_rtl:1.0 M_AXIS_SAMPLE
 
   ## instantiation of the SPI Engine modules
   #
@@ -63,36 +62,49 @@ current_bd_instance /spi_ad463x
   ad_ip_parameter cnv_generator CONFIG.PULSE_PERIOD $sampling_cycle
   ad_ip_parameter cnv_generator CONFIG.PULSE_WIDTH 1
 
+  create_bd_cell -type module -reference ad463x_axis_reorder data_reorder
+  set_property -dict [list CONFIG.NUM_OF_SDI $ad463x_num_of_sdi] [get_bd_cells data_reorder]
+
   ## internal connections
+
+  # clocks
   #
-  ad_connect spi_clk cnv_generator/ext_clk
-  ad_connect clk cnv_generator/s_axi_aclk
-  ad_connect resetn cnv_generator/s_axi_aresetn
-  ad_connect cnv cnv_generator/pulse
-
-  ad_connect ad463x_busy offload/trigger
-
-  ad_connect axi_regmap/spi_engine_offload_ctrl0 offload/spi_engine_offload_ctrl
-  ad_connect offload/spi_engine_ctrl interconnect/s0_ctrl
-  ad_connect axi_regmap/spi_engine_ctrl interconnect/s1_ctrl
-  ad_connect interconnect/m_ctrl execution/ctrl
-  ad_connect offload/offload_sdi M_AXIS_SAMPLE
-
-  ad_connect execution/spi m_spi
-
   ad_connect spi_clk offload/spi_clk
   ad_connect spi_clk offload/ctrl_clk
   ad_connect spi_clk execution/clk
   ad_connect clk axi_regmap/s_axi_aclk
   ad_connect spi_clk axi_regmap/spi_clk
   ad_connect spi_clk interconnect/clk
+  ad_connect spi_clk cnv_generator/ext_clk
+  ad_connect clk cnv_generator/s_axi_aclk
+  ad_connect spi_clk data_reorder/axis_aclk
 
+  # resets
+  #
+  ad_connect resetn axi_regmap/s_axi_aresetn
   ad_connect axi_regmap/spi_resetn offload/spi_resetn
   ad_connect axi_regmap/spi_resetn execution/resetn
   ad_connect axi_regmap/spi_resetn interconnect/resetn
+  ad_connect resetn cnv_generator/s_axi_aresetn
+  ad_connect axi_regmap/spi_resetn data_reorder/axis_aresetn
 
-  ad_connect resetn axi_regmap/s_axi_aresetn
+  # interfaces
+  #
+  ad_connect axi_regmap/spi_engine_offload_ctrl0 offload/spi_engine_offload_ctrl
+  ad_connect offload/spi_engine_ctrl interconnect/s0_ctrl
+  ad_connect axi_regmap/spi_engine_ctrl interconnect/s1_ctrl
+  ad_connect interconnect/m_ctrl execution/ctrl
+  ad_connect offload/offload_sdi_valid data_reorder/s_axis_valid
+  ad_connect offload/offload_sdi_ready data_reorder/s_axis_ready
+  ad_connect offload/offload_sdi_data data_reorder/s_axis_data
+  ad_connect execution/spi m_spi
+
+  # synchronization and interrupt
+  #
+  ad_connect ad463x_busy offload/trigger
+  ad_connect cnv cnv_generator/pulse
   ad_connect irq axi_regmap/irq
+
 
 current_bd_instance /
 
@@ -115,7 +127,10 @@ ad_connect  spi_clk spi_ad463x/spi_clk
 
 ad_connect  spi_ad463x/m_spi ad463x_spi
 
-ad_connect  axi_ad463x_dma/s_axis spi_ad463x/M_AXIS_SAMPLE
+ad_connect  axi_ad463x_dma/s_axis_valid spi_ad463x/data_reorder/m_axis_valid
+ad_connect  axi_ad463x_dma/s_axis_ready spi_ad463x/data_reorder/m_axis_ready
+ad_connect  axi_ad463x_dma/s_axis_data  spi_ad463x/data_reorder/m_axis_data
+
 ad_connect  spi_ad463x/trigger ad463x_busy
 ad_connect  spi_ad463x/cnv ad463x_cnv
 
