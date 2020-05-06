@@ -154,6 +154,9 @@ module up_adc_common #(
   wire                up_drp_rwn_s;
   wire        [31:0]  up_drp_rdata_hold_s;
 
+  wire                adc_rst_n;
+  wire                adc_rst_s;
+
   // decode block select
 
   assign up_wreq_s = (up_waddr[13:7] == {COMMON_ID,1'b0}) ? up_wreq : 1'b0;
@@ -419,11 +422,11 @@ module up_adc_common #(
   // resets
 
   ad_rst i_mmcm_rst_reg (.rst_async(up_mmcm_preset), .clk(up_clk),  .rstn(), .rst(mmcm_rst));
-  ad_rst i_core_rst_reg (.rst_async(up_core_preset), .clk(adc_clk), .rstn(), .rst(adc_rst));
+  ad_rst i_core_rst_reg (.rst_async(up_core_preset), .clk(adc_clk), .rstn(), .rst(adc_rst_s));
 
   // adc control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(43)) i_xfer_cntrl (
+  up_xfer_cntrl #(.DATA_WIDTH(44)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_adc_sdr_ddr_n,
@@ -433,9 +436,10 @@ module up_adc_common #(
                       up_adc_start_code,
                       up_adc_r1_mode,
                       up_adc_ddr_edgesel,
-                      up_adc_pin_mode}),
+                      up_adc_pin_mode,
+                      up_resetn}),
     .up_xfer_done (up_cntrl_xfer_done_s),
-    .d_rst (adc_rst),
+    .d_rst (adc_rst_s),
     .d_clk (adc_clk),
     .d_data_cntrl ({  adc_sdr_ddr_n,
                       adc_num_lanes,
@@ -444,7 +448,13 @@ module up_adc_common #(
                       adc_start_code,
                       adc_r1_mode,
                       adc_ddr_edgesel,
-                      adc_pin_mode}));
+                      adc_pin_mode,
+                      adc_rst_n}));
+
+  // De-assert adc_rst together with an updated control set.
+  // This allows writing the control registers before releasing the reset.
+  // This is important at start-up when stable set of controls is required.
+  assign adc_rst = ~adc_rst_n;
 
   up_xfer_status #(.DATA_WIDTH(3)) i_xfer_status (
     .up_rstn (up_rstn),
@@ -452,7 +462,7 @@ module up_adc_common #(
     .up_data_status ({up_sync_status_s,
                       up_status_s,
                       up_status_ovf_s}),
-    .d_rst (adc_rst),
+    .d_rst (adc_rst_s),
     .d_clk (adc_clk),
     .d_data_status ({ adc_sync_status,
                       adc_status,
@@ -464,7 +474,7 @@ module up_adc_common #(
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_d_count (up_adc_clk_count_s),
-    .d_rst (adc_rst),
+    .d_rst (adc_rst_s),
     .d_clk (adc_clk));
 
 endmodule
