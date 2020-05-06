@@ -101,7 +101,7 @@ current_bd_instance /spi_ad463x
 
   # synchronization and interrupt
   #
-  ad_connect ad463x_busy offload/trigger
+  ad_connect trigger offload/trigger
   ad_connect cnv cnv_generator/pulse
   ad_connect irq axi_regmap/irq
 
