@@ -39,6 +39,7 @@
 module ad_serdes_out #(
 
   parameter   FPGA_TECHNOLOGY = 0,
+  parameter   CMOS_LVDS_N = 0,
   parameter   DDR_OR_SDR_N = 1,
   parameter   SERDES_FACTOR = 8,
   parameter   DATA_WIDTH = 16) (
@@ -150,11 +151,22 @@ module ad_serdes_out #(
         .RST (rst & data_oe));
     end
 
-    OBUFTDS i_obuf (
-      .T (data_t[l_inst]),
-      .I (data_out_s[l_inst]),
-      .O (data_out_p[l_inst]),
-      .OB (data_out_n[l_inst]));
+    if (CMOS_LVDS_N == 0) begin
+
+      OBUFTDS i_obuf (
+        .T (data_t[l_inst]),
+        .I (data_out_s[l_inst]),
+        .O (data_out_p[l_inst]),
+        .OB (data_out_n[l_inst]));
+
+    end else begin
+
+      OBUFT i_obuf (
+        .T (data_t[l_inst]),
+        .I (data_out_s[l_inst]),
+        .O (data_out_p[l_inst]));
+
+    end
 
   end
   endgenerate
