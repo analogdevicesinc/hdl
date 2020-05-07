@@ -51,6 +51,8 @@ module axi_adc_decimate #(
   output      [15:0]    adc_dec_data_b,
   output                adc_dec_valid_a,
   output                adc_dec_valid_b,
+  output      [ 2:0]    adc_data_rate,
+  output                adc_oversampling_en,
 
   // axi interface
 
@@ -100,6 +102,9 @@ module axi_adc_decimate #(
 
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
+
+  assign adc_data_rate = filter_mask;
+  assign adc_oversampling_en = |decimation_ratio;
 
   axi_adc_decimate_filter #(
     .CORRECTION_DISABLE(CORRECTION_DISABLE)
