@@ -19,59 +19,77 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="25430000001fs"></ZoomEndTime>
-      <Cursor1Time time="25188712000fs"></Cursor1Time>
+      <ZoomEndTime time="27430000001fs"></ZoomEndTime>
+      <Cursor1Time time="5928015000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="342"></NameColumnWidth>
-      <ValueColumnWidth column_width="153"></ValueColumnWidth>
+      <ValueColumnWidth column_width="149"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="11" />
+   <WVObjectSize size="14" />
    <wave_markers>
-      <marker label="" time="10964000000" />
+      <marker time="10964000000" label="" />
    </wave_markers>
-   <wvobject type="logic" fp_name="/system_tb/test_harness/ref_clk">
+   <wvobject fp_name="/system_tb/test_harness/ref_clk" type="logic">
       <obj_property name="ElementShortName">ref_clk</obj_property>
       <obj_property name="ObjectShortName">ref_clk</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/system_tb/test_harness/rx_data_0_n">
+   <wvobject fp_name="/system_tb/test_harness/rx_data_0_n" type="logic">
       <obj_property name="ElementShortName">rx_data_0_n</obj_property>
       <obj_property name="ObjectShortName">rx_data_0_n</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/system_tb/test_harness/rx_data_0_p">
+   <wvobject fp_name="/system_tb/test_harness/rx_data_0_p" type="logic">
       <obj_property name="ElementShortName">rx_data_0_p</obj_property>
       <obj_property name="ObjectShortName">rx_data_0_p</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/system_tb/test_harness/rx_sync_0">
+   <wvobject fp_name="/system_tb/test_harness/rx_sync_0" type="array">
       <obj_property name="ElementShortName">rx_sync_0[0:0]</obj_property>
       <obj_property name="ObjectShortName">rx_sync_0[0:0]</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/system_tb/test_harness/rx_sysref_0">
+   <wvobject fp_name="/system_tb/test_harness/rx_sysref_0" type="logic">
       <obj_property name="ElementShortName">rx_sysref_0</obj_property>
       <obj_property name="ObjectShortName">rx_sysref_0</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/system_tb/test_harness/tx_data_0_n">
+   <wvobject fp_name="/system_tb/test_harness/tx_data_0_n" type="logic">
       <obj_property name="ElementShortName">tx_data_0_n</obj_property>
       <obj_property name="ObjectShortName">tx_data_0_n</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/system_tb/test_harness/tx_data_0_p">
+   <wvobject fp_name="/system_tb/test_harness/tx_data_0_p" type="logic">
       <obj_property name="ElementShortName">tx_data_0_p</obj_property>
       <obj_property name="ObjectShortName">tx_data_0_p</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/system_tb/test_harness/tx_sync_0">
+   <wvobject fp_name="/system_tb/test_harness/tx_sync_0" type="array">
       <obj_property name="ElementShortName">tx_sync_0[0:0]</obj_property>
       <obj_property name="ObjectShortName">tx_sync_0[0:0]</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/system_tb/test_harness/tx_sysref_0">
+   <wvobject fp_name="/system_tb/test_harness/tx_sysref_0" type="logic">
       <obj_property name="ElementShortName">tx_sysref_0</obj_property>
       <obj_property name="ObjectShortName">tx_sysref_0</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/system_tb/test_harness/util_jesd204_xcvr/rx_disperr_0">
+   <wvobject fp_name="/system_tb/test_harness/util_jesd204_xcvr/rx_disperr_0" type="array">
       <obj_property name="ElementShortName">rx_disperr_0[3:0]</obj_property>
       <obj_property name="ObjectShortName">rx_disperr_0[3:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/system_tb/test_harness/adc_jesd204_transport/adc_data_0">
+   <wvobject type="divider" fp_name="divider22">
+      <obj_property name="label">DAC TPL DDS</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/dac_jesd204_transport/tpl_core/inst/i_core/\g_channel[0].i_channel /dac_data" type="array">
+      <obj_property name="ElementShortName">dac_data[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dac_data[31:0]</obj_property>
+      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      <obj_property name="CellHeight">100</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider22">
+      <obj_property name="label">ADC TPL</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/system_tb/test_harness/adc_jesd204_transport/adc_data_0" type="array">
       <obj_property name="ElementShortName">adc_data_0[31:0]</obj_property>
       <obj_property name="ObjectShortName">adc_data_0[31:0]</obj_property>
+      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      <obj_property name="CellHeight">100</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
 </wave_config>
