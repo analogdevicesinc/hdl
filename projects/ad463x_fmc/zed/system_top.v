@@ -92,12 +92,14 @@ module system_top #(
   output          ad463x_spi_sclk,
   output          ad463x_spi_cs,
 
+  input           ad463x_ext_clk,
   output          ad463x_cnv,
   input           ad463x_busy,
   inout           ad463x_resetn);
 
   // internal signals
 
+  wire            ext_clk_s;
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
@@ -111,6 +113,16 @@ module system_top #(
   // instantiations
 
   assign gpio_i[63:33] = 31'b0;
+
+  ad_data_clk #(
+    .SINGLE_ENDED (1))
+  i_ext_clk (
+    .rst (1'b0),
+    .locked (),
+    .clk_in_p (ad463x_ext_clk),
+    .clk_in_n (1'b0),
+    .clk (ext_clk_s)
+  );
 
   ad_iobuf #(
     .DATA_WIDTH(1)
@@ -212,6 +224,7 @@ module system_top #(
     .ad463x_spi_sclk (ad463x_spi_sclk),
     .ad463x_busy (ad463x_busy),
     .ad463x_cnv (ad463x_cnv),
+    .ad463x_ext_clk (ext_clk_s),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));
 

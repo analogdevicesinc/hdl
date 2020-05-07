@@ -6,6 +6,7 @@ create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 a
 
 create_bd_port -dir I ad463x_busy
 create_bd_port -dir O ad463x_cnv
+create_bd_port -dir I ad463x_ext_clk
 
 ## To support the 2MSPS (SCLK == 80 MHz), set the spi clock to 160 MHz
 
@@ -30,6 +31,7 @@ current_bd_instance /spi_ad463x
   create_bd_pin -dir I -type clk clk
   create_bd_pin -dir I -type rst resetn
   create_bd_pin -dir I -type clk spi_clk
+  create_bd_pin -dir I -type clk cnv_clk
   create_bd_pin -dir I trigger
   create_bd_pin -dir O cnv
   create_bd_pin -dir O irq
@@ -78,7 +80,7 @@ current_bd_instance /spi_ad463x
   ad_connect clk axi_regmap/s_axi_aclk
   ad_connect spi_clk axi_regmap/spi_clk
   ad_connect spi_clk interconnect/clk
-  ad_connect spi_clk cnv_generator/ext_clk
+  ad_connect cnv_clk cnv_generator/ext_clk
   ad_connect clk cnv_generator/s_axi_aclk
   ad_connect spi_clk data_reorder/axis_aclk
   ad_connect spi_clk busy_capture/clk
@@ -125,6 +127,7 @@ ad_ip_parameter axi_ad463x_dma CONFIG.DMA_DATA_WIDTH_SRC 64
 ad_ip_parameter axi_ad463x_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 ad_connect  sys_cpu_clk spi_ad463x/clk
+ad_connect  ad463x_ext_clk spi_ad463x/cnv_clk
 ad_connect  spi_clk axi_ad463x_dma/s_axis_aclk
 ad_connect  sys_cpu_resetn spi_ad463x/resetn
 ad_connect  sys_cpu_resetn axi_ad463x_dma/m_dest_axi_aresetn
