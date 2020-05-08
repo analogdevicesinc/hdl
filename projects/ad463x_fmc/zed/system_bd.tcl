@@ -1,8 +1,8 @@
 
 source $ad_hdl_dir/projects/common/zed/zed_system_bd.tcl
 
-# specify the spi reference clock frequency in MHz
-set spi_clk_ref_frequency 160
+# specify the CNV generator's reference clock frequency in MHz
+set cnv_ref_clk 100
 
 # specify ADC sampling rate in samples/seconds
 set adc_sampling_rate 1000000
