@@ -47,8 +47,8 @@ module axi_spi_engine #(
   parameter OFFLOAD0_CMD_MEM_ADDRESS_WIDTH = 4,
   parameter OFFLOAD0_SDO_MEM_ADDRESS_WIDTH = 4,
   parameter ID = 0,
-  parameter DATA_WIDTH = 8,
-  parameter NUM_OF_SDI = 1 ) (
+  parameter [15:0] DATA_WIDTH = 8,
+  parameter [ 7:0] NUM_OF_SDI = 1 ) (
 
   // Slave AXI interface
 
@@ -282,7 +282,7 @@ module axi_spi_engine #(
   reg offload0_mem_reset_reg;
   wire offload0_enabled_s;
 
-  
+
   always @(posedge clk) begin
     if ((up_waddr_s == 8'h48) && (up_wreq_s == 1'b1)) begin
       pulse_gen_load <= 1'b1;
@@ -323,7 +323,7 @@ module axi_spi_engine #(
       8'h00: up_rdata_ff <= PCORE_VERSION;
       8'h01: up_rdata_ff <= ID;
       8'h02: up_rdata_ff <= up_scratch;
-      8'h03: up_rdata_ff <= DATA_WIDTH;
+      8'h03: up_rdata_ff <= {8'b0, NUM_OF_SDI, DATA_WIDTH};
       8'h10: up_rdata_ff <= up_sw_reset;
       8'h20: up_rdata_ff <= up_irq_mask;
       8'h21: up_rdata_ff <= up_irq_pending;
