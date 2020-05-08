@@ -50,7 +50,7 @@ module ad463x_axis_reorder #(
 
   output        m_axis_valid,
   input         m_axis_ready,
-  output [(NUM_OF_SDI * 32)-1:0] m_axis_data
+  output [63:0] m_axis_data
 );
 
   // re-packager is always ready
@@ -119,15 +119,41 @@ module ad463x_axis_reorder #(
       assign m_axis_data[i] = (rd_addr) ? axis_data_int[2*i] : axis_data_int[2*i+1];
     end
 
-  end else begin : g_reorder_248_lanes
+  end else if (NUM_OF_SDI == 2) begin : g_reorder_2_lanes
 
     assign m_axis_valid = s_axis_valid;
-    for (i=0; i<32; i=i+1) begin
-      for (j=0; j<NUM_OF_SDI; j=j+1) begin
-        assign m_axis_data[NUM_OF_SDI*i+j] = s_axis_data[i+j*32];
-      end
+    assign m_axis_data = s_axis_data;
+
+  end else if (NUM_OF_SDI == 4) begin : g_reorder_4_lanes
+
+    assign m_axis_valid = s_axis_valid;
+    for (i=0; i<16; i=i+2) begin
+      // first channel
+      assign m_axis_data[2*i+1]  = s_axis_data[32+i];
+      assign m_axis_data[2*i]    = s_axis_data[   i];
+      // second channel
+      assign m_axis_data[2*i+33] = s_axis_data[96+i];
+      assign m_axis_data[2*i+32] = s_axis_data[64+i];
     end
 
+  end else if (NUM_OF_SDI == 8) begin : g_reorder_8_lanes
+
+    assign m_axis_valid = s_axis_valid;
+    for (i=0; i<8; i=i+4) begin
+      // first channel
+      assign m_axis_data[4*i+3]  = s_axis_data[96+i];
+      assign m_axis_data[4*i+2]  = s_axis_data[64+i];
+      assign m_axis_data[4*i+1]  = s_axis_data[32+i];
+      assign m_axis_data[4*i]    = s_axis_data[   i];
+      // second channel
+      assign m_axis_data[4*i+35] = s_axis_data[224+i];
+      assign m_axis_data[4*i+34] = s_axis_data[192+i];
+      assign m_axis_data[4*i+33] = s_axis_data[160+i];
+      assign m_axis_data[4*i+32] = s_axis_data[128+i];
+    end
+
+  end else begin
+    // Invalid configuration, leave everybody in the air
   end
   endgenerate
 
