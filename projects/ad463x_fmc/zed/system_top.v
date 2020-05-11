@@ -95,7 +95,15 @@ module system_top #(
   input           ad463x_ext_clk,
   output          ad463x_cnv,
   input           ad463x_busy,
-  inout           ad463x_resetn);
+  inout           ad463x_resetn,
+
+  // Debug ports
+  output [NUM_OF_SDI-1:0] dbg_spi_sdi,
+  output                  dbg_spi_sdo,
+  output                  dbg_spi_sclk,
+  output                  dbg_spi_cs,
+  output                  dbg_spi_resetn
+);
 
   // internal signals
 
@@ -109,6 +117,14 @@ module system_top #(
   wire    [ 1:0]  iic_mux_sda_i_s;
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
+
+  // Debug port assignments
+  assign dbg_spi_sclk = ad463x_spi_sclk;
+  assign dbg_spi_cs = ad463x_spi_cs;
+  assign dbg_spi_sdo = ad463x_spi_sdo;
+  assign dbg_spi_sdo = ad463x_spi_sdo;
+  assign dbg_spi_sdi = ad463x_spi_sdi;
+  assign dbg_spi_resetn = ad463x_resetn;
 
   // instantiations
 

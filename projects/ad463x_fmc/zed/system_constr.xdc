@@ -10,6 +10,15 @@ set_property -dict {PACKAGE_PIN L21 IOSTANDARD LVCMOS25} [get_ports ad463x_busy]
 set_property -dict {PACKAGE_PIN N19 IOSTANDARD LVCMOS25} [get_ports ad463x_cnv]              ; ## D08  FMC_LPC_LA01_P
 set_property -dict {PACKAGE_PIN L18 IOSTANDARD LVCMOS25} [get_ports ad463x_ext_clk]          ; ## H04  FMC_LPC_CLK0_M2C_P
 
+# debug interfaces through a PMOD
+set_property -dict {PACKAGE_PIN Y11  IOSTANDARD LVCMOS33} [get_ports dbg_spi_sdi[0]]    ; ## JA1
+set_property -dict {PACKAGE_PIN AA11 IOSTANDARD LVCMOS33} [get_ports dbg_spi_sdi[1]]    ; ## JA2
+set_property -dict {PACKAGE_PIN Y10  IOSTANDARD LVCMOS33} [get_ports dbg_spi_sdo]       ; ## JA3
+set_property -dict {PACKAGE_PIN AA9  IOSTANDARD LVCMOS33} [get_ports dbg_spi_sclk]      ; ## JA4
+set_property -dict {PACKAGE_PIN AB11 IOSTANDARD LVCMOS33} [get_ports dbg_spi_cs]        ; ## JA7
+set_property -dict {PACKAGE_PIN AB10 IOSTANDARD LVCMOS33} [get_ports dbg_spi_resetn]    ; ## JA8
+
+
 # external clock, that drives the CNV generator, must have a maximum 100 MHz frequency
 create_clock -name cnv_ext_clk -period  10.0 [get_ports ad463x_ext_clk]
 
