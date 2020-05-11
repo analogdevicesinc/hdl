@@ -584,6 +584,12 @@ proc jesd204_compose {} {
   add_interface link_data avalon_streaming $data_direction
   set_interface_property link_data EXPORT_OF jesd204_${tx_rx}.${tx_rx}_data
 
+  if {$ext_device_clk_en} {
+    set_interface_property link_data associatedClock device_clk
+  } else {
+    set_interface_property link_data associatedClock link_clk
+  }
+
   if {!$tx_or_rx_n} {
     add_interface link_sof conduit end
     set_interface_property link_sof EXPORT_OF jesd204_rx.rx_sof
