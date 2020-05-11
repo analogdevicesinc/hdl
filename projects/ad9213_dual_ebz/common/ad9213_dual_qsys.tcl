@@ -1,10 +1,13 @@
 
-set adc_data_width 512
-set adc_dma_data_width 512
+set adc_data_width 1024
+set adc_dma_data_width 1024
 
 #
 ## IP instantiations and configuration
 #
+
+add_instance device_clk altera_clock_bridge 19.1
+set_instance_parameter_value device_clk {EXPLICIT_CLOCK_RATE} {320312500}
 
 # ad9213_rx_0 JESD204B phy-link layer
 
@@ -17,6 +20,7 @@ set_instance_parameter_value ad9213_rx_0 {SYSCLK_FREQUENCY} {100.0}
 set_instance_parameter_value ad9213_rx_0 {REFCLK_FREQUENCY} {320.3125}
 set_instance_parameter_value ad9213_rx_0 {INPUT_PIPELINE_STAGES} {2}
 set_instance_parameter_value ad9213_rx_0 {NUM_OF_LANES} {16}
+set_instance_parameter_value ad9213_rx_0 {EXT_DEVICE_CLK_EN} {1}
 
 # ad9213_rx_1 JESD204B phy-link layer
 
@@ -29,71 +33,49 @@ set_instance_parameter_value ad9213_rx_1 {SYSCLK_FREQUENCY} {100.0}
 set_instance_parameter_value ad9213_rx_1 {REFCLK_FREQUENCY} {320.3125}
 set_instance_parameter_value ad9213_rx_1 {INPUT_PIPELINE_STAGES} {2}
 set_instance_parameter_value ad9213_rx_1 {NUM_OF_LANES} {16}
+set_instance_parameter_value ad9213_rx_1 {EXT_DEVICE_CLK_EN} {1}
+
+# Link merger
+
+add_instance ad9213_dual_link adi_jesd204_link_merge
+set_instance_parameter_value ad9213_dual_link {NUM_OF_LANES_PER_LINK} {16}
 
 # ad9213_tpl_0 JESD204B transport layer
 
-add_instance axi_ad9213_0 ad_ip_jesd204_tpl_adc
-set_instance_parameter_value axi_ad9213_0 {ID} {0}
-set_instance_parameter_value axi_ad9213_0 {NUM_CHANNELS} {2}
-set_instance_parameter_value axi_ad9213_0 {NUM_LANES} {16}
-set_instance_parameter_value axi_ad9213_0 {BITS_PER_SAMPLE} {16}
-set_instance_parameter_value axi_ad9213_0 {CONVERTER_RESOLUTION} {16}
-set_instance_parameter_value axi_ad9213_0 {TWOS_COMPLEMENT} {1}
-
-add_instance axi_ad9213_1 ad_ip_jesd204_tpl_adc
-set_instance_parameter_value axi_ad9213_1 {ID} {1}
-set_instance_parameter_value axi_ad9213_1 {NUM_CHANNELS} {2}
-set_instance_parameter_value axi_ad9213_1 {NUM_LANES} {16}
-set_instance_parameter_value axi_ad9213_1 {BITS_PER_SAMPLE} {16}
-set_instance_parameter_value axi_ad9213_1 {CONVERTER_RESOLUTION} {16}
-set_instance_parameter_value axi_ad9213_1 {TWOS_COMPLEMENT} {1}
+add_instance axi_ad9213_dual ad_ip_jesd204_tpl_adc
+set_instance_parameter_value axi_ad9213_dual {ID} {0}
+set_instance_parameter_value axi_ad9213_dual {NUM_CHANNELS} {2}
+set_instance_parameter_value axi_ad9213_dual {NUM_LANES} {32}
+set_instance_parameter_value axi_ad9213_dual {BITS_PER_SAMPLE} {16}
+set_instance_parameter_value axi_ad9213_dual {CONVERTER_RESOLUTION} {16}
+set_instance_parameter_value axi_ad9213_dual {TWOS_COMPLEMENT} {1}
 
 # pack(s)
 
-add_instance util_ad9213_cpack_0 util_cpack2
-set_instance_parameter_value util_ad9213_cpack_0 {NUM_OF_CHANNELS} {2}
-set_instance_parameter_value util_ad9213_cpack_0 {SAMPLES_PER_CHANNEL} {16}
-set_instance_parameter_value util_ad9213_cpack_0 {SAMPLE_DATA_WIDTH} {16}
-
-add_instance util_ad9213_cpack_1 util_cpack2
-set_instance_parameter_value util_ad9213_cpack_1 {NUM_OF_CHANNELS} {2}
-set_instance_parameter_value util_ad9213_cpack_1 {SAMPLES_PER_CHANNEL} {16}
-set_instance_parameter_value util_ad9213_cpack_1 {SAMPLE_DATA_WIDTH} {16}
+add_instance util_ad9213_cpack util_cpack2
+set_instance_parameter_value util_ad9213_cpack {NUM_OF_CHANNELS} {2}
+set_instance_parameter_value util_ad9213_cpack {SAMPLES_PER_CHANNEL} {32}
+set_instance_parameter_value util_ad9213_cpack {SAMPLE_DATA_WIDTH} {16}
 
 # ADC FIFO's
 
-ad_adcfifo_create "ad9213_adcfifo_0" $adc_data_width $adc_dma_data_width $adc_fifo_address_width
-ad_adcfifo_create "ad9213_adcfifo_1" $adc_data_width $adc_dma_data_width $adc_fifo_address_width
+ad_adcfifo_create "ad9213_adcfifo" $adc_data_width $adc_dma_data_width $adc_fifo_address_width
 
 # DMA instances
 
-add_instance axi_ad9213_dma_0 axi_dmac
-set_instance_parameter_value axi_ad9213_dma_0 {ID} {0}
-set_instance_parameter_value axi_ad9213_dma_0 {DMA_DATA_WIDTH_SRC} {512}
-set_instance_parameter_value axi_ad9213_dma_0 {DMA_DATA_WIDTH_DEST} {128}
-set_instance_parameter_value axi_ad9213_dma_0 {DMA_LENGTH_WIDTH} {24}
-set_instance_parameter_value axi_ad9213_dma_0 {DMA_2D_TRANSFER} {0}
-set_instance_parameter_value axi_ad9213_dma_0 {AXI_SLICE_DEST} {0}
-set_instance_parameter_value axi_ad9213_dma_0 {AXI_SLICE_SRC} {0}
-set_instance_parameter_value axi_ad9213_dma_0 {SYNC_TRANSFER_START} {0}
-set_instance_parameter_value axi_ad9213_dma_0 {CYCLIC} {0}
-set_instance_parameter_value axi_ad9213_dma_0 {DMA_TYPE_DEST} {0}
-set_instance_parameter_value axi_ad9213_dma_0 {DMA_TYPE_SRC} {1}
-set_instance_parameter_value axi_ad9213_dma_0 {FIFO_SIZE} {8}
-
-add_instance axi_ad9213_dma_1 axi_dmac
-set_instance_parameter_value axi_ad9213_dma_1 {ID} {1}
-set_instance_parameter_value axi_ad9213_dma_1 {DMA_DATA_WIDTH_SRC} {512}
-set_instance_parameter_value axi_ad9213_dma_1 {DMA_DATA_WIDTH_DEST} {128}
-set_instance_parameter_value axi_ad9213_dma_1 {DMA_LENGTH_WIDTH} {24}
-set_instance_parameter_value axi_ad9213_dma_1 {DMA_2D_TRANSFER} {0}
-set_instance_parameter_value axi_ad9213_dma_1 {AXI_SLICE_DEST} {0}
-set_instance_parameter_value axi_ad9213_dma_1 {AXI_SLICE_SRC} {0}
-set_instance_parameter_value axi_ad9213_dma_1 {SYNC_TRANSFER_START} {0}
-set_instance_parameter_value axi_ad9213_dma_1 {CYCLIC} {0}
-set_instance_parameter_value axi_ad9213_dma_1 {DMA_TYPE_DEST} {0}
-set_instance_parameter_value axi_ad9213_dma_1 {DMA_TYPE_SRC} {1}
-set_instance_parameter_value axi_ad9213_dma_1 {FIFO_SIZE} {8}
+add_instance axi_ad9213_dma axi_dmac
+set_instance_parameter_value axi_ad9213_dma {ID} {0}
+set_instance_parameter_value axi_ad9213_dma {DMA_DATA_WIDTH_SRC} {1024}
+set_instance_parameter_value axi_ad9213_dma {DMA_DATA_WIDTH_DEST} {128}
+set_instance_parameter_value axi_ad9213_dma {DMA_LENGTH_WIDTH} {24}
+set_instance_parameter_value axi_ad9213_dma {DMA_2D_TRANSFER} {0}
+set_instance_parameter_value axi_ad9213_dma {AXI_SLICE_DEST} {0}
+set_instance_parameter_value axi_ad9213_dma {AXI_SLICE_SRC} {0}
+set_instance_parameter_value axi_ad9213_dma {SYNC_TRANSFER_START} {0}
+set_instance_parameter_value axi_ad9213_dma {CYCLIC} {0}
+set_instance_parameter_value axi_ad9213_dma {DMA_TYPE_DEST} {0}
+set_instance_parameter_value axi_ad9213_dma {DMA_TYPE_SRC} {1}
+set_instance_parameter_value axi_ad9213_dma {FIFO_SIZE} {8}
 
 # SPI interfaces
 
@@ -129,49 +111,40 @@ set_instance_parameter_value ad9213_dual_pio {edgeType} {RISING}
 
 add_connection sys_clk.clk ad9213_rx_0.sys_clk
 add_connection sys_clk.clk ad9213_rx_1.sys_clk
-add_connection sys_clk.clk axi_ad9213_0.s_axi_clock
-add_connection sys_clk.clk axi_ad9213_1.s_axi_clock
-add_connection sys_clk.clk axi_ad9213_dma_0.s_axi_clock
-add_connection sys_clk.clk axi_ad9213_dma_1.s_axi_clock
+add_connection sys_clk.clk axi_ad9213_dual.s_axi_clock
+add_connection sys_clk.clk axi_ad9213_dma.s_axi_clock
 add_connection sys_clk.clk adf4371_spi.clk
 add_connection sys_clk.clk ltc6952_spi.clk
 add_connection sys_clk.clk ad9213_dual_pio.clk
 
 add_connection sys_clk.clk_reset ad9213_rx_0.sys_resetn
 add_connection sys_clk.clk_reset ad9213_rx_1.sys_resetn
-add_connection sys_clk.clk_reset axi_ad9213_0.s_axi_reset
-add_connection sys_clk.clk_reset axi_ad9213_1.s_axi_reset
-add_connection sys_clk.clk_reset axi_ad9213_dma_0.s_axi_reset
-add_connection sys_clk.clk_reset axi_ad9213_dma_1.s_axi_reset
+add_connection sys_clk.clk_reset axi_ad9213_dual.s_axi_reset
+add_connection sys_clk.clk_reset axi_ad9213_dma.s_axi_reset
 add_connection sys_clk.clk_reset adf4371_spi.reset
 add_connection sys_clk.clk_reset ltc6952_spi.reset
 add_connection sys_clk.clk_reset ad9213_dual_pio.reset
 
 # device clock and reset
 
-add_connection ad9213_rx_0.link_clk axi_ad9213_0.link_clk
-add_connection ad9213_rx_1.link_clk axi_ad9213_1.link_clk
-add_connection ad9213_rx_0.link_clk util_ad9213_cpack_0.clk
-add_connection ad9213_rx_1.link_clk util_ad9213_cpack_1.clk
-add_connection ad9213_rx_0.link_clk ad9213_adcfifo_0.if_adc_clk
-add_connection ad9213_rx_1.link_clk ad9213_adcfifo_1.if_adc_clk
+add_connection device_clk.out_clk ad9213_rx_0.device_clk
+add_connection device_clk.out_clk ad9213_rx_1.device_clk
+add_connection device_clk.out_clk ad9213_dual_link.clk
+add_connection device_clk.out_clk axi_ad9213_dual.link_clk
+add_connection device_clk.out_clk util_ad9213_cpack.clk
+add_connection device_clk.out_clk ad9213_adcfifo.if_adc_clk
 
-add_connection ad9213_rx_0.link_reset util_ad9213_cpack_0.reset
-add_connection ad9213_rx_1.link_reset util_ad9213_cpack_1.reset
-add_connection ad9213_rx_0.link_reset ad9213_adcfifo_0.if_adc_rst
-add_connection ad9213_rx_1.link_reset ad9213_adcfifo_1.if_adc_rst
+add_connection ad9213_rx_0.link_reset util_ad9213_cpack.reset
+add_connection ad9213_rx_0.link_reset ad9213_adcfifo.if_adc_rst
+add_connection ad9213_rx_0.link_reset ad9213_dual_link.rst
 
 # dma clock and reset
 
-add_connection sys_dma_clk.clk ad9213_adcfifo_0.if_dma_clk
-add_connection sys_dma_clk.clk ad9213_adcfifo_1.if_dma_clk
-add_connection sys_dma_clk.clk axi_ad9213_dma_0.if_s_axis_aclk
-add_connection sys_dma_clk.clk axi_ad9213_dma_1.if_s_axis_aclk
-add_connection sys_dma_clk.clk axi_ad9213_dma_0.m_dest_axi_clock
-add_connection sys_dma_clk.clk axi_ad9213_dma_1.m_dest_axi_clock
+add_connection sys_dma_clk.clk ad9213_adcfifo.if_dma_clk
+add_connection sys_dma_clk.clk axi_ad9213_dma.if_s_axis_aclk
+add_connection sys_dma_clk.clk axi_ad9213_dma.m_dest_axi_clock
 
-add_connection sys_dma_clk.clk_reset axi_ad9213_dma_0.m_dest_axi_reset
-add_connection sys_dma_clk.clk_reset axi_ad9213_dma_1.m_dest_axi_reset
+add_connection sys_dma_clk.clk_reset axi_ad9213_dma.m_dest_axi_reset
 
 #
 ## exported signals
@@ -179,6 +152,7 @@ add_connection sys_dma_clk.clk_reset axi_ad9213_dma_1.m_dest_axi_reset
 
 add_interface rx_ref_clk_0            clock     sink
 add_interface rx_ref_clk_1            clock     sink
+add_interface rx_device_clk           clock     sink
 add_interface rx_sysref_0             conduit   end
 add_interface rx_sysref_1             conduit   end
 add_interface rx_sync_0               conduit   end
@@ -191,6 +165,7 @@ add_interface ltc6952_spi             conduit   end
 
 set_interface_property rx_ref_clk_0            EXPORT_OF ad9213_rx_0.ref_clk
 set_interface_property rx_ref_clk_1            EXPORT_OF ad9213_rx_1.ref_clk
+set_interface_property rx_device_clk           EXPORT_OF device_clk.in_clk
 set_interface_property rx_sysref_0             EXPORT_OF ad9213_rx_0.sysref
 set_interface_property rx_sysref_1             EXPORT_OF ad9213_rx_1.sysref
 set_interface_property rx_sync_0               EXPORT_OF ad9213_rx_0.sync
@@ -205,36 +180,31 @@ set_interface_property ltc6952_spi             EXPORT_OF ltc6952_spi.external
 ## data interfaces / data path
 #
 
-# phy/link to tpl
-add_connection ad9213_rx_0.link_sof axi_ad9213_0.if_link_sof
-add_connection ad9213_rx_1.link_sof axi_ad9213_1.if_link_sof
-add_connection ad9213_rx_0.link_data axi_ad9213_0.link_data
-add_connection ad9213_rx_1.link_data axi_ad9213_1.link_data
+# phy/link to tpl - TODO: add a merger wrapper file
+
+add_connection ad9213_rx_0.link_sof ad9213_dual_link.rx0_sof
+add_connection ad9213_rx_1.link_sof ad9213_dual_link.rx1_sof
+add_connection ad9213_rx_0.link_data ad9213_dual_link.rx0_data
+add_connection ad9213_rx_1.link_data ad9213_dual_link.rx1_data
+add_connection ad9213_dual_link.rx_sof axi_ad9213_dual.if_link_sof
+add_connection ad9213_dual_link.rx_data axi_ad9213_dual.link_data
 
 # tpl to pack
-add_connection util_ad9213_cpack_0.adc_ch_0 axi_ad9213_0.adc_ch_0
-add_connection util_ad9213_cpack_0.adc_ch_1 axi_ad9213_0.adc_ch_1
-add_connection util_ad9213_cpack_1.adc_ch_0 axi_ad9213_1.adc_ch_0
-add_connection util_ad9213_cpack_1.adc_ch_1 axi_ad9213_1.adc_ch_1
+add_connection util_ad9213_cpack.adc_ch_0 axi_ad9213_dual.adc_ch_0
+add_connection util_ad9213_cpack.adc_ch_1 axi_ad9213_dual.adc_ch_1
 
 # pack to ADC buffer
-add_connection util_ad9213_cpack_0.if_packed_fifo_wr_data ad9213_adcfifo_0.if_adc_wdata
-add_connection util_ad9213_cpack_0.if_packed_fifo_wr_en ad9213_adcfifo_0.if_adc_wr
-add_connection util_ad9213_cpack_1.if_packed_fifo_wr_data ad9213_adcfifo_1.if_adc_wdata
-add_connection util_ad9213_cpack_1.if_packed_fifo_wr_en ad9213_adcfifo_1.if_adc_wr
+add_connection util_ad9213_cpack.if_packed_fifo_wr_data ad9213_adcfifo.if_adc_wdata
+add_connection util_ad9213_cpack.if_packed_fifo_wr_en ad9213_adcfifo.if_adc_wr
 
 # ADC buffer to DMA
-add_connection ad9213_adcfifo_0.m_axis axi_ad9213_dma_0.s_axis
-add_connection ad9213_adcfifo_1.m_axis axi_ad9213_dma_1.s_axis
+add_connection ad9213_adcfifo.m_axis axi_ad9213_dma.s_axis
 
-add_connection axi_ad9213_dma_0.if_s_axis_xfer_req ad9213_adcfifo_0.if_dma_xfer_req
-add_connection axi_ad9213_0.if_adc_dovf ad9213_adcfifo_0.if_adc_wovf
-add_connection axi_ad9213_dma_1.if_s_axis_xfer_req ad9213_adcfifo_1.if_dma_xfer_req
-add_connection axi_ad9213_1.if_adc_dovf ad9213_adcfifo_1.if_adc_wovf
+add_connection axi_ad9213_dma.if_s_axis_xfer_req ad9213_adcfifo.if_dma_xfer_req
+add_connection axi_ad9213_dual.if_adc_dovf ad9213_adcfifo.if_adc_wovf
 
 # DMA to HPS memory
-ad_dma_interconnect axi_ad9213_dma_0.m_dest_axi
-ad_dma_interconnect axi_ad9213_dma_1.m_dest_axi
+ad_dma_interconnect axi_ad9213_dma.m_dest_axi
 
 #
 ## address Map
@@ -284,10 +254,8 @@ ad_cpu_interconnect 0x000C0000 ad9213_rx_0.link_reconfig
 ad_cpu_interconnect 0x000C4000 ad9213_rx_0.link_management
 ad_cpu_interconnect 0x000C8000 ad9213_rx_1.link_reconfig
 ad_cpu_interconnect 0x000CC000 ad9213_rx_1.link_management
-ad_cpu_interconnect 0x000D0000 axi_ad9213_0.s_axi
-ad_cpu_interconnect 0x000D1000 axi_ad9213_1.s_axi
-ad_cpu_interconnect 0x000D2000 axi_ad9213_dma_0.s_axi
-ad_cpu_interconnect 0x000D3800 axi_ad9213_dma_1.s_axi
+ad_cpu_interconnect 0x000D0000 axi_ad9213_dual.s_axi
+ad_cpu_interconnect 0x000D2000 axi_ad9213_dma.s_axi
 
 ad_cpu_interconnect 0x00000200 ltc6952_spi.spi_control_port "avl_peripheral_mm_bridge"
 ad_cpu_interconnect 0x00000400 adf4371_spi.spi_control_port "avl_peripheral_mm_bridge"
@@ -299,8 +267,7 @@ ad_cpu_interconnect 0x00000800 ad9213_dual_pio.s1 "avl_peripheral_mm_bridge"
 
 ad_cpu_interrupt 11 ad9213_rx_0.interrupt
 ad_cpu_interrupt 12 ad9213_rx_1.interrupt
-ad_cpu_interrupt 13 axi_ad9213_dma_0.interrupt_sender
-ad_cpu_interrupt 14 axi_ad9213_dma_1.interrupt_sender
+ad_cpu_interrupt 13 axi_ad9213_dma.interrupt_sender
 ad_cpu_interrupt 15 ad9213_dual_pio.irq
 ad_cpu_interrupt 16 adf4371_spi.irq
 ad_cpu_interrupt 17 ltc6952_spi.irq

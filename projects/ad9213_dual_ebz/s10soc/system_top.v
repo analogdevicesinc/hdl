@@ -297,6 +297,7 @@ module system_top (
     .ad9213_rx_1_serial_data_rx_serial_data( rx_serial_data_b ),
     .rx_sysref_1_export                   ( rx_sysref_a ),
     .rx_sync_1_export                     ( rx_sync_b ),
+    .rx_device_clk_clk                    ( rx_device_clk_0 ),
     // ad9213_a|b gpio
     .ad9213_dual_pio_export               ( {ad9213_b_gpio, ad9213_a_gpio} ));
 
