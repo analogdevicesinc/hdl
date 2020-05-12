@@ -40,7 +40,7 @@ module system_top (
   // clock and resets
 
   input             sys_clk,
-  input             sys_resetn,
+  input             fpga_resetn,
   input             hps_ref_clk,
 
   // hps-ddr4 (72)
@@ -164,6 +164,9 @@ module system_top (
   wire    [ 63:0]   gpio_o;
   wire              spi_mosi_s;
   wire              spi_miso_s;
+  wire              ninit_done_s;
+  wire              h2f_reset_s;
+  wire              sys_resetn_s;
 
   // motherboard-gpio
 
@@ -200,9 +203,15 @@ module system_top (
     .spi_sdio (adf4371_sdio),
     .spi_dir ());
 
+  // system reset is a combination of external reset, HPS reset and S10 init
+  // done reset
+  assign sys_resetn_s = fpga_resetn & ~h2f_reset_s & ~ninit_done_s;
+
   system_bd i_system_bd (
     .sys_clk_clk                          ( sys_clk ),
-    .sys_rst_reset_n                      ( sys_resetn ),
+    .sys_rst_reset_n                      ( sys_resetn_s ),
+    .h2f_reset_reset                      ( h2f_reset_s ),
+    .rst_ninit_done_ninit_done            ( ninit_done_s ),
     .sys_gpio_bd_in_port                  ( gpio_i[31: 0] ),
     .sys_gpio_bd_out_port                 ( gpio_o[31: 0] ),
     .sys_gpio_in_export                   ( gpio_i[63:32] ),
