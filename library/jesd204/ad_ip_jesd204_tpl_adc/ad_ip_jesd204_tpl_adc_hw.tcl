@@ -119,6 +119,11 @@ ad_ip_parameter OCTETS_PER_FRAME INTEGER 1 false [list \
   GROUP $group \
 ]
 
+ad_ip_parameter COMMON_OUTPUT_IF BOOLEAN 0 false [list \
+  DISPLAY_NAME "Merge the data output into one single streaming interface" \
+  GROUP $group \
+]
+
 set group "Deframer Output Information"
 
 # Parameters in this group are informative only and can be read back after the
@@ -240,6 +245,7 @@ proc p_ad_ip_jesd204_tpl_adc_elab {} {
   set m_num_of_lanes [get_parameter_value "NUM_LANES"]
   set m_num_of_channels [get_parameter_value "NUM_CHANNELS"]
   set channel_bus_witdh [expr 32*$m_num_of_lanes/$m_num_of_channels]
+  set common_out_if [get_parameter_value "COMMON_OUTPUT_IF"]
 
   # link layer interface
 
@@ -251,17 +257,29 @@ proc p_ad_ip_jesd204_tpl_adc_elab {} {
   set_interface_property link_data dataBitsPerSymbol [expr 32*$m_num_of_lanes]
 
   # dma interface
+  if {$common_out_if} {
 
-  for {set i 0} {$i < $m_num_of_channels} {incr i} {
-    add_interface adc_ch_$i conduit end
-    add_interface_port adc_ch_$i adc_enable_$i enable output 1
-    set_port_property adc_enable_$i fragment_list [format "enable(%d:%d)" $i $i]
-    add_interface_port adc_ch_$i adc_valid_$i  valid  output 1
-    set_port_property adc_valid_$i fragment_list [format "adc_valid(%d:%d)" $i $i]
-    add_interface_port adc_ch_$i adc_data_$i   data   output $channel_bus_witdh
-    set_port_property adc_data_$i fragment_list \
-          [format "adc_data(%d:%d)" [expr $channel_bus_witdh*$i+$channel_bus_witdh-1] [expr $channel_bus_witdh*$i]]
-    set_interface_property adc_ch_$i associatedClock link_clk
+      add_interface adc_merged conduit end
+      add_interface_port adc_merged adc_enable enable output 1
+      set_port_property adc_enable fragment_list [format "enable(%d:%d)" 0 0]
+      add_interface_port adc_merged adc_valid valid output 1
+      set_port_property adc_valid fragment_list [format "adc_valid(%d:%d)" 0 0]
+      add_interface_port adc_merged adc_data data output [expr 32*$m_num_of_lanes]
+
+  } else {
+
+    for {set i 0} {$i < $m_num_of_channels} {incr i} {
+      add_interface adc_ch_$i conduit end
+      add_interface_port adc_ch_$i adc_enable_$i enable output 1
+      set_port_property adc_enable_$i fragment_list [format "enable(%d:%d)" $i $i]
+      add_interface_port adc_ch_$i adc_valid_$i  valid  output 1
+      set_port_property adc_valid_$i fragment_list [format "adc_valid(%d:%d)" $i $i]
+      add_interface_port adc_ch_$i adc_data_$i   data   output $channel_bus_witdh
+      set_port_property adc_data_$i fragment_list \
+            [format "adc_data(%d:%d)" [expr $channel_bus_witdh*$i+$channel_bus_witdh-1] [expr $channel_bus_witdh*$i]]
+      set_interface_property adc_ch_$i associatedClock link_clk
+    }
+
   }
 
   ad_interface signal  adc_dovf  input  1 ovf
