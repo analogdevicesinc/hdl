@@ -48,9 +48,11 @@ proc p_util_adcfifo {} {
 
   ad_interface clock  adc_clk   input  1
   ad_interface reset  adc_rst   input  1              if_adc_clk
-  ad_interface signal adc_wr    input  1              valid
-  ad_interface signal adc_wdata input  ADC_DATA_WIDTH data
   ad_interface signal adc_wovf  output 1              ovf
+
+  add_interface adc_wr conduit end
+  add_interface_port adc_wr adc_wr valid input 1
+  add_interface_port adc_wr adc_wdata data input $m_adc_data_width
 
   ad_interface clock  dma_clk         input  1 clk
   ad_interface signal dma_xfer_req    input  1 xfer_req
