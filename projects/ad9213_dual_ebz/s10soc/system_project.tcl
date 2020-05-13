@@ -151,7 +151,4 @@ set_instance_assignment  -name IO_STANDARD LVDS  -to rx_ref_b_clk1
 set_instance_assignment  -name IO_STANDARD LVDS  -to rx_sync_b
 set_instance_assignment  -name INPUT_TERMINATION DIFFERENTIAL -to rx_sync_b
 
-# set optimization to get a better timing closure
-set_global_assignment -name OPTIMIZATION_MODE "HIGH PERFORMANCE EFFORT"
-
 execute_flow -compile
