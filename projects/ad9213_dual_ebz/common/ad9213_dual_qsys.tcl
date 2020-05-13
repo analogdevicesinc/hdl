@@ -79,7 +79,7 @@ set_instance_parameter_value adf4371_spi {clockPhase} {0}
 set_instance_parameter_value adf4371_spi {clockPolarity} {0}
 set_instance_parameter_value adf4371_spi {dataWidth} {8}
 set_instance_parameter_value adf4371_spi {masterSPI} {1}
-set_instance_parameter_value adf4371_spi {numberOfSlaves} {1}
+set_instance_parameter_value adf4371_spi {numberOfSlaves} {2}
 set_instance_parameter_value adf4371_spi {targetClockRate} {10000000.0}
 
 add_instance ltc6952_spi altera_avalon_spi
@@ -87,7 +87,7 @@ set_instance_parameter_value ltc6952_spi {clockPhase} {0}
 set_instance_parameter_value ltc6952_spi {clockPolarity} {0}
 set_instance_parameter_value ltc6952_spi {dataWidth} {8}
 set_instance_parameter_value ltc6952_spi {masterSPI} {1}
-set_instance_parameter_value ltc6952_spi {numberOfSlaves} {1}
+set_instance_parameter_value ltc6952_spi {numberOfSlaves} {2}
 set_instance_parameter_value ltc6952_spi {targetClockRate} {10000000.0}
 
 # ad9213x2 gpio
