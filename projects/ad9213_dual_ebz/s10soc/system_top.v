@@ -147,14 +147,15 @@ module system_top (
   output           ad9213_a_rst,
   output           ad9213_b_rst,
 
-  output           ltc6952_csn,
+  output  [  1:0]  ltc6952_csn,
   output           ltc6952_sclk,
-  input            ltc6952_sdi,
-  output           ltc6952_sdo,
+  output           ltc6952_sdi,
+  input            ltc6952_0_sdo,
+  input            ltc6952_1_sdo,
 
   output           adf4371_sclk,
   inout            adf4371_sdio,
-  output           adf4371_csn
+  output  [  1:0]  adf4371_csn
 
 );
 
@@ -167,18 +168,21 @@ module system_top (
   wire              ninit_done_s;
   wire              h2f_reset_s;
   wire              sys_resetn_s;
+  wire              ltc6952_sdo_s;
+  wire              adf4371_sdi_s;
+  wire              adf4371_sdo_s;
 
   // motherboard-gpio
 
   assign gpio_i[3:0]   = fpga_gpio_dpsw;
   assign gpio_i[7:4]   = fpga_gpio_btn;
-  assign gpio_i[31:11]  = gpio_o[31:11];
+  assign gpio_i[31:11] = gpio_o[31:11];
   assign fpga_gpio_led = gpio_o[10:8];
 
   // assignments
 
-  assign ad9213_a_rst = gpio_o[32];
-  assign ad9213_b_rst = gpio_o[33];
+  assign ad9213_a_rst  = gpio_o[32];
+  assign ad9213_b_rst  = gpio_o[33];
   assign gpio_i[33:32] = gpio_o[33:32];
 
   // instantiations
@@ -194,14 +198,18 @@ module system_top (
     .spi_dir ());
 
   ad_3w_spi #(
-    .NUM_OF_SLAVES(1))
+    .NUM_OF_SLAVES(2))
   i_ad_3w_spi_adf4371 (
     .spi_csn (adf4371_csn),
     .spi_clk (adf4371_sclk),
-    .spi_mosi (adf4371_sdo_s),
-    .spi_miso (adf4371_sdi_s),
+    .spi_mosi (adf4371_sdi_s),
+    .spi_miso (adf4371_sdo_s),
     .spi_sdio (adf4371_sdio),
     .spi_dir ());
+
+  // SDO line (MISO) switching for the two LTC6952
+  assign ltc6952_sdo_s = (ltc6952_csn == 2'b10) ? ltc6952_0_sdo :
+                         (ltc6952_csn == 2'b01) ? ltc6952_1_sdo : 1'b0;
 
   // system reset is a combination of external reset, HPS reset and S10 init
   // done reset
@@ -288,13 +296,13 @@ module system_top (
     .sys_spi_SCLK                         ( ad9213_dual_sclk ),
     .sys_spi_SS_n                         ( ad9213_dual_csn ),
     // SPI interface for the LTC6952
-    .ltc6952_spi_MISO                     ( ltc6952_sdi ),
-    .ltc6952_spi_MOSI                     ( ltc6952_sdo ),
+    .ltc6952_spi_MISO                     ( ltc6952_sdo_s ),
+    .ltc6952_spi_MOSI                     ( ltc6952_sdi ),
     .ltc6952_spi_SCLK                     ( ltc6952_sclk ),
     .ltc6952_spi_SS_n                     ( ltc6952_csn ),
     // SPI interface for the LTC6952
-    .adf4371_spi_MISO                     ( adf4371_sdi_s ),
-    .adf4371_spi_MOSI                     ( adf4371_sdo_s ),
+    .adf4371_spi_MISO                     ( adf4371_sdo_s ),
+    .adf4371_spi_MOSI                     ( adf4371_sdi_s ),
     .adf4371_spi_SCLK                     ( adf4371_sclk ),
     .adf4371_spi_SS_n                     ( adf4371_csn ),
     // JESD204B high-speed interface

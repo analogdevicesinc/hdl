@@ -96,25 +96,31 @@ set_instance_assignment  -name IO_STANDARD "1.8V" -to ad9213_b_rst
 
 ## LTC6952 SPI interface
 
-set_location_assignment  PIN_AU32  -to ltc6952_csn                 ; ## C18 FALA14_P
+set_location_assignment  PIN_AU32  -to ltc6952_csn[0]              ; ## C18 FALA14_P
+set_location_assignment  PIN_AN21  -to ltc6952_csn[1]              ; ## G21 FALA20_P
 set_location_assignment  PIN_AT32  -to ltc6952_sclk                ; ## C19 FALA14_N
 set_location_assignment  PIN_AN17  -to ltc6952_sdi                 ; ## H19 FALA15_P
-set_location_assignment  PIN_AN18  -to ltc6952_sdo                 ; ## H20 FALA15_N
+set_location_assignment  PIN_AN18  -to ltc6952_0_sdo               ; ## H20 FALA15_N
+set_location_assignment  PIN_AP21  -to ltc6952_1_sdo               ; ## G22 FALA20_N
 
 set_instance_assignment  -name IO_STANDARD "1.8V"  -to ltc6952_sdi
-set_instance_assignment  -name IO_STANDARD "1.8V"  -to ltc6952_sdo
+set_instance_assignment  -name IO_STANDARD "1.8V"  -to ltc6952_0_sdo
+set_instance_assignment  -name IO_STANDARD "1.8V"  -to ltc6952_1_sdo
 set_instance_assignment  -name IO_STANDARD "1.8V"  -to ltc6952_sclk
-set_instance_assignment  -name IO_STANDARD "1.8V"  -to ltc6952_csn
+set_instance_assignment  -name IO_STANDARD "1.8V"  -to ltc6952_csn[0]
+set_instance_assignment  -name IO_STANDARD "1.8V"  -to ltc6952_csn[1]
 
 ## ADF4371 SPI interface
 
 set_location_assignment  PIN_BA20 -to adf4371_sclk       ; ## G18 FALA16_P
 set_location_assignment  PIN_BA21 -to adf4371_sdio       ; ## G19 FALA16_N
-set_location_assignment  PIN_BE18 -to adf4371_csn        ; ## H22 FALA19_P
+set_location_assignment  PIN_BE18 -to adf4371_csn[0]     ; ## H22 FALA19_P
+set_location_assignment  PIN_BD18 -to adf4371_csn[1]     ; ## H23 FALA19_N
 
 set_instance_assignment  -name IO_STANDARD "1.8V" -to adf4371_sdio
 set_instance_assignment  -name IO_STANDARD "1.8V" -to adf4371_sclk
-set_instance_assignment  -name IO_STANDARD "1.8V" -to adf4371_csn
+set_instance_assignment  -name IO_STANDARD "1.8V" -to adf4371_csn[0]
+set_instance_assignment  -name IO_STANDARD "1.8V" -to adf4371_csn[1]
 
 ################################################################################
 ## FMCB+ location assignments
