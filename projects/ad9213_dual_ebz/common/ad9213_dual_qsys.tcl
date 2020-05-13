@@ -49,13 +49,8 @@ set_instance_parameter_value axi_ad9213_dual {NUM_LANES} {32}
 set_instance_parameter_value axi_ad9213_dual {BITS_PER_SAMPLE} {16}
 set_instance_parameter_value axi_ad9213_dual {CONVERTER_RESOLUTION} {16}
 set_instance_parameter_value axi_ad9213_dual {TWOS_COMPLEMENT} {1}
-
-# pack(s)
-
-add_instance util_ad9213_cpack util_cpack2
-set_instance_parameter_value util_ad9213_cpack {NUM_OF_CHANNELS} {2}
-set_instance_parameter_value util_ad9213_cpack {SAMPLES_PER_CHANNEL} {32}
-set_instance_parameter_value util_ad9213_cpack {SAMPLE_DATA_WIDTH} {16}
+# NOTE: cpack is not used in this case, merge the output data streams
+set_instance_parameter_value axi_ad9213_dual {COMMON_OUTPUT_IF} {1}
 
 # ADC FIFO's
 
@@ -131,10 +126,8 @@ add_connection device_clk.out_clk ad9213_rx_0.device_clk
 add_connection device_clk.out_clk ad9213_rx_1.device_clk
 add_connection device_clk.out_clk ad9213_dual_link.clk
 add_connection device_clk.out_clk axi_ad9213_dual.link_clk
-add_connection device_clk.out_clk util_ad9213_cpack.clk
 add_connection device_clk.out_clk ad9213_adcfifo.if_adc_clk
 
-add_connection ad9213_rx_0.link_reset util_ad9213_cpack.reset
 add_connection ad9213_rx_0.link_reset ad9213_adcfifo.if_adc_rst
 add_connection ad9213_rx_0.link_reset ad9213_dual_link.rst
 
@@ -180,8 +173,6 @@ set_interface_property ltc6952_spi             EXPORT_OF ltc6952_spi.external
 ## data interfaces / data path
 #
 
-# phy/link to tpl - TODO: add a merger wrapper file
-
 add_connection ad9213_rx_0.link_sof ad9213_dual_link.rx0_sof
 add_connection ad9213_rx_1.link_sof ad9213_dual_link.rx1_sof
 add_connection ad9213_rx_0.link_data ad9213_dual_link.rx0_data
@@ -189,13 +180,8 @@ add_connection ad9213_rx_1.link_data ad9213_dual_link.rx1_data
 add_connection ad9213_dual_link.rx_sof axi_ad9213_dual.if_link_sof
 add_connection ad9213_dual_link.rx_data axi_ad9213_dual.link_data
 
-# tpl to pack
-add_connection util_ad9213_cpack.adc_ch_0 axi_ad9213_dual.adc_ch_0
-add_connection util_ad9213_cpack.adc_ch_1 axi_ad9213_dual.adc_ch_1
-
-# pack to ADC buffer
-add_connection util_ad9213_cpack.if_packed_fifo_wr_data ad9213_adcfifo.if_adc_wdata
-add_connection util_ad9213_cpack.if_packed_fifo_wr_en ad9213_adcfifo.if_adc_wr
+# TPL to ADC buffer
+add_connection axi_ad9213_dual.adc_merged ad9213_adcfifo.adc_wr
 
 # ADC buffer to DMA
 add_connection ad9213_adcfifo.m_axis axi_ad9213_dma.s_axis
