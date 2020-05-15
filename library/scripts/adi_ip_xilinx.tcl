@@ -543,7 +543,7 @@ proc adi_add_device_spec_param {ip_param} {
   # set ranges or validation pairs (show x in GUI assign the corresponding y to HDL)
   if { [llength [subst $$list_pointer]] == 2 && [llength $j] == 4} {
     set_property -dict [list \
-      "value_validation_type" "range" \
+      "value_validation_type" "range_long" \
       "value_validation_range_minimum" [lindex [subst $$list_pointer] 0] \
       "value_validation_range_maximum" [lindex [subst $$list_pointer] 1] ] \
     [ipx::get_user_parameters $ip_param -of_objects $cc]
