@@ -122,14 +122,15 @@ module axi_spi_engine #(
   output offload0_mem_reset,
   output offload0_enable,
   input offload0_enabled,
-  
+
   output offload_sync_ready,
   input offload_sync_valid,
   input [7:0] offload_sync_data,
 
-  // PWM control for internal triggering
-  
+  // Configuration interface conversion start generator (PWM)
+
   output reg [31:0] pulse_gen_period,
+  output reg [31:0] pulse_gen_width,
   output reg pulse_gen_load);
 
   localparam PCORE_VERSION = 'h010071;
@@ -311,7 +312,8 @@ module axi_spi_engine #(
       up_irq_mask <= 'h00;
       offload0_enable_reg <= 1'b0;
       offload0_mem_reset_reg <= 1'b0;
-      pulse_gen_period <= 'h00;
+      pulse_gen_period <= 32'h0;
+      pulse_gen_width <= 32'h0;
     end else begin
       if (up_wreq_s) begin
         case (up_waddr_s)
@@ -319,6 +321,7 @@ module axi_spi_engine #(
           8'h40: offload0_enable_reg <= up_wdata_s[0];
           8'h42: offload0_mem_reset_reg <= up_wdata_s[0];
           8'h48: pulse_gen_period <= up_wdata_s;
+          8'h49: pulse_gen_width <= up_wdata_s;
         endcase
       end
     end
@@ -353,6 +356,7 @@ module axi_spi_engine #(
       8'h40: up_rdata_ff <= {offload0_enable_reg};
       8'h41: up_rdata_ff <= {offload0_enabled_s};
       8'h48: up_rdata_ff <= pulse_gen_period;
+      8'h49: up_rdata_ff <= pulse_gen_width;
       default: up_rdata_ff <= 'h00;
     endcase
   end
