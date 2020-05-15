@@ -7,11 +7,11 @@ proc adi_sim_add_define {value} {
   lappend adi_sim_defines $value
 }
 
-proc adi_sim_project_xilinx {project_name } {
+proc adi_sim_project_xilinx {project_name {part "xc7vx485tffg1157-1"}} {
   global design_name
 
   # Create project
-  create_project ${project_name} ./runs/${project_name} -part xc7vx485tffg1157-1 -force
+  create_project ${project_name} ./runs/${project_name} -part $part -force
 
   # Set project properties
   set_property -name "default_lib" -value "xil_defaultlib" -objects [current_project]
