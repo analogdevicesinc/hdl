@@ -264,10 +264,20 @@ proc adi_ip_create {ip_name} {
   global IGNORE_VERSION_CHECK
 
   set VIVADO_VERSION [version -short]
-  if {[string compare $VIVADO_VERSION $REQUIRED_VIVADO_VERSION] != 0} {
-    puts -nonewline "CRITICAL WARNING: vivado version mismatch; "
-    puts -nonewline "expected $REQUIRED_VIVADO_VERSION, "
-    puts -nonewline "got $VIVADO_VERSION.\n"
+  if {$IGNORE_VERSION_CHECK} {
+    if {[string compare $VIVADO_VERSION $REQUIRED_VIVADO_VERSION] != 0} {
+      puts -nonewline "CRITICAL WARNING: vivado version mismatch; "
+      puts -nonewline "expected $REQUIRED_VIVADO_VERSION, "
+      puts -nonewline "got $VIVADO_VERSION.\n"
+    }
+  } else {
+    if {[string compare $VIVADO_VERSION $REQUIRED_VIVADO_VERSION] != 0} {
+      puts -nonewline "ERROR: vivado version mismatch; "
+      puts -nonewline "expected $REQUIRED_VIVADO_VERSION, "
+      puts -nonewline "got $VIVADO_VERSION.\n"
+      puts -nonewline "This ERROR message can be down-graded to CRITICAL WARNING by setting ADI_IGNORE_VERSION_CHECK environment variable to 1. Be aware that ADI will not support you, if you are using a different tool version.\n"
+      exit 2
+    }
   }
 
   create_project $ip_name . -force
