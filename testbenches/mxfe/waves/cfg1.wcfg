@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="system_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="\$unit_logger_pkg_sv " />
+            <top_module name="axi4stream_vip_pkg" />
+            <top_module name="axi_vip_pkg" />
+            <top_module name="glbl" />
+            <top_module name="logger_pkg" />
+            <top_module name="std" />
+            <top_module name="system_tb" />
+            <top_module name="test_harness_ddr_axi_vip_0_pkg" />
+            <top_module name="test_harness_mng_axi_vip_0_pkg" />
+            <top_module name="xil_common_vip_pkg" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="200381137725fs"></ZoomEndTime>
+      <Cursor1Time time="61078000000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="177"></NameColumnWidth>
+      <ValueColumnWidth column_width="285"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="43" />
+   <wvobject type="logic" fp_name="/system_tb/sysref">
+      <obj_property name="ElementShortName">sysref</obj_property>
+      <obj_property name="ObjectShortName">sysref</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/system_tb/test_harness/axi_mxfe_tx_jesd/tx/inst/i_lmfc/sysref_alignment_error">
+      <obj_property name="ElementShortName">sysref_alignment_error</obj_property>
+      <obj_property name="ObjectShortName">sysref_alignment_error</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/system_tb/test_harness/axi_mxfe_tx_jesd/tx/inst/i_lmfc/lmc_edge">
+      <obj_property name="ElementShortName">lmc_edge</obj_property>
+      <obj_property name="ObjectShortName">lmc_edge</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/system_tb/test_harness/axi_mxfe_tx_jesd/tx/inst/i_lmfc/lmc_quarter_edge">
+      <obj_property name="ElementShortName">lmc_quarter_edge</obj_property>
+      <obj_property name="ObjectShortName">lmc_quarter_edge</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/system_tb/test_harness/axi_mxfe_tx_jesd/tx/inst/i_lmfc/eoemb">
+      <obj_property name="ElementShortName">eoemb</obj_property>
+      <obj_property name="ObjectShortName">eoemb</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/system_tb/test_harness/axi_mxfe_tx_jesd/tx/inst/i_lmfc/lmfc_lemc_edge">
+      <obj_property name="ElementShortName">lmfc_lemc_edge</obj_property>
+      <obj_property name="ObjectShortName">lmfc_lemc_edge</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/system_tb/test_harness/tx_mxfe_tpl_core/tpl_core/inst/i_core/\g_channel[0].i_channel /dac_data">
+      <obj_property name="ElementShortName">dac_data[15:0]</obj_property>
+      <obj_property name="ObjectShortName">dac_data[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="vbus" fp_name="vbus846">
+      <obj_property name="label">DAC DATA CH0 S0</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      <obj_property name="CellHeight">100</obj_property>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/tx_mxfe_tpl_core/tpl_core/inst/i_core/\g_channel[0].i_channel /dac_data[15]">
+         <obj_property name="ElementShortName">[15]</obj_property>
+         <obj_property name="ObjectShortName">[15]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/tx_mxfe_tpl_core/tpl_core/inst/i_core/\g_channel[0].i_channel /dac_data[14]">
+         <obj_property name="ElementShortName">[14]</obj_property>
+         <obj_property name="ObjectShortName">[14]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/tx_mxfe_tpl_core/tpl_core/inst/i_core/\g_channel[0].i_channel /dac_data[13]">
+         <obj_property name="ElementShortName">[13]</obj_property>
+         <obj_property name="ObjectShortName">[13]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/tx_mxfe_tpl_core/tpl_core/inst/i_core/\g_channel[0].i_channel /dac_data[12]">
+         <obj_property name="ElementShortName">[12]</obj_property>
+         <obj_property name="ObjectShortName">[12]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/tx_mxfe_tpl_core/tpl_core/inst/i_core/\g_channel[0].i_channel /dac_data[11]">
+         <obj_property name="ElementShortName">[11]</obj_property>
+         <obj_property name="ObjectShortName">[11]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/tx_mxfe_tpl_core/tpl_core/inst/i_core/\g_channel[0].i_channel /dac_data[10]">
+         <obj_property name="ElementShortName">[10]</obj_property>
+         <obj_property name="ObjectShortName">[10]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/tx_mxfe_tpl_core/tpl_core/inst/i_core/\g_channel[0].i_channel /dac_data[9]">
+         <obj_property name="ElementShortName">[9]</obj_property>
+         <obj_property name="ObjectShortName">[9]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/tx_mxfe_tpl_core/tpl_core/inst/i_core/\g_channel[0].i_channel /dac_data[8]">
+         <obj_property name="ElementShortName">[8]</obj_property>
+         <obj_property name="ObjectShortName">[8]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/tx_mxfe_tpl_core/tpl_core/inst/i_core/\g_channel[0].i_channel /dac_data[7]">
+         <obj_property name="ElementShortName">[7]</obj_property>
+         <obj_property name="ObjectShortName">[7]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/tx_mxfe_tpl_core/tpl_core/inst/i_core/\g_channel[0].i_channel /dac_data[6]">
+         <obj_property name="ElementShortName">[6]</obj_property>
+         <obj_property name="ObjectShortName">[6]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/tx_mxfe_tpl_core/tpl_core/inst/i_core/\g_channel[0].i_channel /dac_data[5]">
+         <obj_property name="ElementShortName">[5]</obj_property>
+         <obj_property name="ObjectShortName">[5]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/tx_mxfe_tpl_core/tpl_core/inst/i_core/\g_channel[0].i_channel /dac_data[4]">
+         <obj_property name="ElementShortName">[4]</obj_property>
+         <obj_property name="ObjectShortName">[4]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/tx_mxfe_tpl_core/tpl_core/inst/i_core/\g_channel[0].i_channel /dac_data[3]">
+         <obj_property name="ElementShortName">[3]</obj_property>
+         <obj_property name="ObjectShortName">[3]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/tx_mxfe_tpl_core/tpl_core/inst/i_core/\g_channel[0].i_channel /dac_data[2]">
+         <obj_property name="ElementShortName">[2]</obj_property>
+         <obj_property name="ObjectShortName">[2]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/tx_mxfe_tpl_core/tpl_core/inst/i_core/\g_channel[0].i_channel /dac_data[1]">
+         <obj_property name="ElementShortName">[1]</obj_property>
+         <obj_property name="ObjectShortName">[1]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/tx_mxfe_tpl_core/tpl_core/inst/i_core/\g_channel[0].i_channel /dac_data[0]">
+         <obj_property name="ElementShortName">[0]</obj_property>
+         <obj_property name="ObjectShortName">[0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="array" fp_name="/system_tb/test_harness/rx_mxfe_tpl_core/adc_data_0">
+      <obj_property name="ElementShortName">adc_data_0[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_0[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="vbus" fp_name="vbus186">
+      <obj_property name="label">ADC DATA CH0_S0</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      <obj_property name="CellHeight">100</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_FIXED</obj_property>
+      <obj_property name="AnalogYRangeMin">-9000.000000</obj_property>
+      <obj_property name="AnalogYRRangeMax">9000.000000</obj_property>
+      <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_LINEAR</obj_property>
+      <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+      <obj_property name="AnalogHorizLine">0.000000</obj_property>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/rx_mxfe_tpl_core/adc_data_0[15]">
+         <obj_property name="ElementShortName">[15]</obj_property>
+         <obj_property name="ObjectShortName">[15]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/rx_mxfe_tpl_core/adc_data_0[14]">
+         <obj_property name="ElementShortName">[14]</obj_property>
+         <obj_property name="ObjectShortName">[14]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/rx_mxfe_tpl_core/adc_data_0[13]">
+         <obj_property name="ElementShortName">[13]</obj_property>
+         <obj_property name="ObjectShortName">[13]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/rx_mxfe_tpl_core/adc_data_0[12]">
+         <obj_property name="ElementShortName">[12]</obj_property>
+         <obj_property name="ObjectShortName">[12]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/rx_mxfe_tpl_core/adc_data_0[11]">
+         <obj_property name="ElementShortName">[11]</obj_property>
+         <obj_property name="ObjectShortName">[11]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/rx_mxfe_tpl_core/adc_data_0[10]">
+         <obj_property name="ElementShortName">[10]</obj_property>
+         <obj_property name="ObjectShortName">[10]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/rx_mxfe_tpl_core/adc_data_0[9]">
+         <obj_property name="ElementShortName">[9]</obj_property>
+         <obj_property name="ObjectShortName">[9]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/rx_mxfe_tpl_core/adc_data_0[8]">
+         <obj_property name="ElementShortName">[8]</obj_property>
+         <obj_property name="ObjectShortName">[8]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/rx_mxfe_tpl_core/adc_data_0[7]">
+         <obj_property name="ElementShortName">[7]</obj_property>
+         <obj_property name="ObjectShortName">[7]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/rx_mxfe_tpl_core/adc_data_0[6]">
+         <obj_property name="ElementShortName">[6]</obj_property>
+         <obj_property name="ObjectShortName">[6]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/rx_mxfe_tpl_core/adc_data_0[5]">
+         <obj_property name="ElementShortName">[5]</obj_property>
+         <obj_property name="ObjectShortName">[5]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/rx_mxfe_tpl_core/adc_data_0[4]">
+         <obj_property name="ElementShortName">[4]</obj_property>
+         <obj_property name="ObjectShortName">[4]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/rx_mxfe_tpl_core/adc_data_0[3]">
+         <obj_property name="ElementShortName">[3]</obj_property>
+         <obj_property name="ObjectShortName">[3]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/rx_mxfe_tpl_core/adc_data_0[2]">
+         <obj_property name="ElementShortName">[2]</obj_property>
+         <obj_property name="ObjectShortName">[2]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/rx_mxfe_tpl_core/adc_data_0[1]">
+         <obj_property name="ElementShortName">[1]</obj_property>
+         <obj_property name="ObjectShortName">[1]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/rx_mxfe_tpl_core/adc_data_0[0]">
+         <obj_property name="ElementShortName">[0]</obj_property>
+         <obj_property name="ObjectShortName">[0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="array" fp_name="/system_tb/test_harness/rx_mxfe_tpl_core/adc_data_1">
+      <obj_property name="ElementShortName">adc_data_1[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_1[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/system_tb/test_harness/rx_mxfe_tpl_core/adc_data_2">
+      <obj_property name="ElementShortName">adc_data_2[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_2[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/system_tb/test_harness/rx_mxfe_tpl_core/adc_data_3">
+      <obj_property name="ElementShortName">adc_data_3[15:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data_3[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/system_tb/test_harness/rx_device_clk">
+      <obj_property name="ElementShortName">rx_device_clk</obj_property>
+      <obj_property name="ObjectShortName">rx_device_clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/system_tb/test_harness/tx_device_clk">
+      <obj_property name="ElementShortName">tx_device_clk</obj_property>
+      <obj_property name="ObjectShortName">tx_device_clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/system_tb/test_harness/axi_mxfe_rx_dma/s_axis_xfer_req">
+      <obj_property name="ElementShortName">s_axis_xfer_req</obj_property>
+      <obj_property name="ObjectShortName">s_axis_xfer_req</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/system_tb/test_harness/axi_mxfe_rx_dma/s_axis_ready">
+      <obj_property name="ElementShortName">s_axis_ready</obj_property>
+      <obj_property name="ObjectShortName">s_axis_ready</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/system_tb/test_harness/axi_mxfe_rx_dma/s_axis_valid">
+      <obj_property name="ElementShortName">s_axis_valid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_valid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/system_tb/test_harness/axi_mxfe_rx_dma/s_axis_data">
+      <obj_property name="ElementShortName">s_axis_data[127:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_data[127:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/system_tb/test_harness/axi_mxfe_rx_dma/s_axis_last">
+      <obj_property name="ElementShortName">s_axis_last</obj_property>
+      <obj_property name="ObjectShortName">s_axis_last</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/system_tb/test_harness/util_mxfe_cpack/enable_0">
+      <obj_property name="ElementShortName">enable_0</obj_property>
+      <obj_property name="ObjectShortName">enable_0</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/system_tb/test_harness/util_mxfe_cpack/fifo_wr_en">
+      <obj_property name="ElementShortName">fifo_wr_en</obj_property>
+      <obj_property name="ObjectShortName">fifo_wr_en</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/system_tb/test_harness/util_mxfe_cpack/packed_fifo_wr_en">
+      <obj_property name="ElementShortName">packed_fifo_wr_en</obj_property>
+      <obj_property name="ObjectShortName">packed_fifo_wr_en</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/system_tb/test_harness/util_mxfe_cpack/packed_fifo_wr_data">
+      <obj_property name="ElementShortName">packed_fifo_wr_data[127:0]</obj_property>
+      <obj_property name="ObjectShortName">packed_fifo_wr_data[127:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/system_tb/test_harness/mxfe_adc_fifo/adc_wr">
+      <obj_property name="ElementShortName">adc_wr</obj_property>
+      <obj_property name="ObjectShortName">adc_wr</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/system_tb/test_harness/mxfe_adc_fifo/adc_wdata">
+      <obj_property name="ElementShortName">adc_wdata[127:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_wdata[127:0]</obj_property>
+   </wvobject>
+   <wvobject type="vbus" fp_name="vbus359">
+      <obj_property name="label">New Virtual Bus 3</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      <obj_property name="CellHeight">100</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+      <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+      <obj_property name="AnalogYRRangeMax">1024.000000</obj_property>
+      <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_LINEAR</obj_property>
+      <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+      <obj_property name="AnalogHorizLine">0.000000</obj_property>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/mxfe_adc_fifo/adc_wdata[15]">
+         <obj_property name="ElementShortName">[15]</obj_property>
+         <obj_property name="ObjectShortName">[15]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/mxfe_adc_fifo/adc_wdata[14]">
+         <obj_property name="ElementShortName">[14]</obj_property>
+         <obj_property name="ObjectShortName">[14]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/mxfe_adc_fifo/adc_wdata[13]">
+         <obj_property name="ElementShortName">[13]</obj_property>
+         <obj_property name="ObjectShortName">[13]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/mxfe_adc_fifo/adc_wdata[12]">
+         <obj_property name="ElementShortName">[12]</obj_property>
+         <obj_property name="ObjectShortName">[12]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/mxfe_adc_fifo/adc_wdata[11]">
+         <obj_property name="ElementShortName">[11]</obj_property>
+         <obj_property name="ObjectShortName">[11]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/mxfe_adc_fifo/adc_wdata[10]">
+         <obj_property name="ElementShortName">[10]</obj_property>
+         <obj_property name="ObjectShortName">[10]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/mxfe_adc_fifo/adc_wdata[9]">
+         <obj_property name="ElementShortName">[9]</obj_property>
+         <obj_property name="ObjectShortName">[9]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/mxfe_adc_fifo/adc_wdata[8]">
+         <obj_property name="ElementShortName">[8]</obj_property>
+         <obj_property name="ObjectShortName">[8]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/mxfe_adc_fifo/adc_wdata[7]">
+         <obj_property name="ElementShortName">[7]</obj_property>
+         <obj_property name="ObjectShortName">[7]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/mxfe_adc_fifo/adc_wdata[6]">
+         <obj_property name="ElementShortName">[6]</obj_property>
+         <obj_property name="ObjectShortName">[6]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/mxfe_adc_fifo/adc_wdata[5]">
+         <obj_property name="ElementShortName">[5]</obj_property>
+         <obj_property name="ObjectShortName">[5]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/mxfe_adc_fifo/adc_wdata[4]">
+         <obj_property name="ElementShortName">[4]</obj_property>
+         <obj_property name="ObjectShortName">[4]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/mxfe_adc_fifo/adc_wdata[3]">
+         <obj_property name="ElementShortName">[3]</obj_property>
+         <obj_property name="ObjectShortName">[3]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/mxfe_adc_fifo/adc_wdata[2]">
+         <obj_property name="ElementShortName">[2]</obj_property>
+         <obj_property name="ObjectShortName">[2]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/mxfe_adc_fifo/adc_wdata[1]">
+         <obj_property name="ElementShortName">[1]</obj_property>
+         <obj_property name="ObjectShortName">[1]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/mxfe_adc_fifo/adc_wdata[0]">
+         <obj_property name="ElementShortName">[0]</obj_property>
+         <obj_property name="ObjectShortName">[0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="logic" fp_name="/system_tb/test_harness/mxfe_adc_fifo/dma_xfer_req">
+      <obj_property name="ElementShortName">dma_xfer_req</obj_property>
+      <obj_property name="ObjectShortName">dma_xfer_req</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/system_tb/test_harness/mxfe_adc_fifo/dma_wr">
+      <obj_property name="ElementShortName">dma_wr</obj_property>
+      <obj_property name="ObjectShortName">dma_wr</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/system_tb/test_harness/axi_mxfe_rx_dma/m_dest_axi_wdata">
+      <obj_property name="ElementShortName">m_dest_axi_wdata[127:0]</obj_property>
+      <obj_property name="ObjectShortName">m_dest_axi_wdata[127:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/system_tb/test_harness/axi_mxfe_rx_dma/m_dest_axi_wvalid">
+      <obj_property name="ElementShortName">m_dest_axi_wvalid</obj_property>
+      <obj_property name="ObjectShortName">m_dest_axi_wvalid</obj_property>
+   </wvobject>
+   <wvobject type="vbus" fp_name="vbus505">
+      <obj_property name="label">New Virtual Bus 4</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      <obj_property name="CellHeight">100</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_FIXED</obj_property>
+      <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+      <obj_property name="AnalogYRRangeMax">1024.000000</obj_property>
+      <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_LINEAR</obj_property>
+      <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+      <obj_property name="AnalogHorizLine">0.000000</obj_property>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/axi_mxfe_rx_dma/m_dest_axi_wdata[15]">
+         <obj_property name="ElementShortName">[15]</obj_property>
+         <obj_property name="ObjectShortName">[15]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/axi_mxfe_rx_dma/m_dest_axi_wdata[14]">
+         <obj_property name="ElementShortName">[14]</obj_property>
+         <obj_property name="ObjectShortName">[14]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/axi_mxfe_rx_dma/m_dest_axi_wdata[13]">
+         <obj_property name="ElementShortName">[13]</obj_property>
+         <obj_property name="ObjectShortName">[13]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/axi_mxfe_rx_dma/m_dest_axi_wdata[12]">
+         <obj_property name="ElementShortName">[12]</obj_property>
+         <obj_property name="ObjectShortName">[12]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/axi_mxfe_rx_dma/m_dest_axi_wdata[11]">
+         <obj_property name="ElementShortName">[11]</obj_property>
+         <obj_property name="ObjectShortName">[11]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/axi_mxfe_rx_dma/m_dest_axi_wdata[10]">
+         <obj_property name="ElementShortName">[10]</obj_property>
+         <obj_property name="ObjectShortName">[10]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/axi_mxfe_rx_dma/m_dest_axi_wdata[9]">
+         <obj_property name="ElementShortName">[9]</obj_property>
+         <obj_property name="ObjectShortName">[9]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/axi_mxfe_rx_dma/m_dest_axi_wdata[8]">
+         <obj_property name="ElementShortName">[8]</obj_property>
+         <obj_property name="ObjectShortName">[8]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/axi_mxfe_rx_dma/m_dest_axi_wdata[7]">
+         <obj_property name="ElementShortName">[7]</obj_property>
+         <obj_property name="ObjectShortName">[7]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/axi_mxfe_rx_dma/m_dest_axi_wdata[6]">
+         <obj_property name="ElementShortName">[6]</obj_property>
+         <obj_property name="ObjectShortName">[6]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/axi_mxfe_rx_dma/m_dest_axi_wdata[5]">
+         <obj_property name="ElementShortName">[5]</obj_property>
+         <obj_property name="ObjectShortName">[5]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/axi_mxfe_rx_dma/m_dest_axi_wdata[4]">
+         <obj_property name="ElementShortName">[4]</obj_property>
+         <obj_property name="ObjectShortName">[4]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/axi_mxfe_rx_dma/m_dest_axi_wdata[3]">
+         <obj_property name="ElementShortName">[3]</obj_property>
+         <obj_property name="ObjectShortName">[3]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/axi_mxfe_rx_dma/m_dest_axi_wdata[2]">
+         <obj_property name="ElementShortName">[2]</obj_property>
+         <obj_property name="ObjectShortName">[2]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/axi_mxfe_rx_dma/m_dest_axi_wdata[1]">
+         <obj_property name="ElementShortName">[1]</obj_property>
+         <obj_property name="ObjectShortName">[1]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/system_tb/test_harness/axi_mxfe_rx_dma/m_dest_axi_wdata[0]">
+         <obj_property name="ElementShortName">[0]</obj_property>
+         <obj_property name="ObjectShortName">[0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="logic" fp_name="/system_tb/test_harness/mxfe_adc_fifo/inst/\genblk1.i_mem_asym /wea">
+      <obj_property name="ElementShortName">wea</obj_property>
+      <obj_property name="ObjectShortName">wea</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/system_tb/test_harness/mxfe_adc_fifo/inst/\genblk1.i_mem_asym /addra">
+      <obj_property name="ElementShortName">addra[13:0]</obj_property>
+      <obj_property name="ObjectShortName">addra[13:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/system_tb/test_harness/mxfe_adc_fifo/inst/\genblk1.i_mem_asym /dina">
+      <obj_property name="ElementShortName">dina[127:0]</obj_property>
+      <obj_property name="ObjectShortName">dina[127:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/system_tb/test_harness/mxfe_adc_fifo/inst/\genblk1.i_mem_asym /reb">
+      <obj_property name="ElementShortName">reb</obj_property>
+      <obj_property name="ObjectShortName">reb</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/system_tb/test_harness/mxfe_adc_fifo/inst/dma_wready_s">
+      <obj_property name="ElementShortName">dma_wready_s</obj_property>
+      <obj_property name="ObjectShortName">dma_wready_s</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/system_tb/test_harness/mxfe_adc_fifo/inst/dma_waddr_int">
+      <obj_property name="ElementShortName">dma_waddr_int[13:0]</obj_property>
+      <obj_property name="ObjectShortName">dma_waddr_int[13:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/system_tb/test_harness/mxfe_adc_fifo/inst/\genblk1.i_mem_asym /addrb">
+      <obj_property name="ElementShortName">addrb[13:0]</obj_property>
+      <obj_property name="ObjectShortName">addrb[13:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/system_tb/test_harness/mxfe_adc_fifo/inst/dma_rd_s">
+      <obj_property name="ElementShortName">dma_rd_s</obj_property>
+      <obj_property name="ObjectShortName">dma_rd_s</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/system_tb/test_harness/mxfe_adc_fifo/inst/\genblk1.i_mem_asym /doutb">
+      <obj_property name="ElementShortName">doutb[127:0]</obj_property>
+      <obj_property name="ObjectShortName">doutb[127:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/system_tb/test_harness/mxfe_adc_fifo/inst/dma_rd">
+      <obj_property name="ElementShortName">dma_rd</obj_property>
+      <obj_property name="ObjectShortName">dma_rd</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/system_tb/test_harness/mxfe_adc_fifo/inst/dma_rd_d">
+      <obj_property name="ElementShortName">dma_rd_d</obj_property>
+      <obj_property name="ObjectShortName">dma_rd_d</obj_property>
+   </wvobject>
+</wave_config>
