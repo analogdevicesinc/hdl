@@ -22,6 +22,7 @@ if [info exists ::env(ADI_GHDL_DIR)] {
 #  default_value - returned vale in case environment variable does not exists
 proc get_env_param {name default_value} {
   if [info exists ::env($name)] {
+    puts "Getting from environment the parameter: $name=$::env($name) "
     return $::env($name)
   } else {
     return $default_value
