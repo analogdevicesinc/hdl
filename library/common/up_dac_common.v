@@ -161,6 +161,9 @@ module up_dac_common #(
   wire            up_drp_rwn_s;
   wire    [31:0]  up_drp_rdata_hold_s;
 
+  wire            dac_rst_n;
+  wire            dac_rst_s;
+
   // decode block select
 
   assign up_wreq_s = (up_waddr[13:7] == {COMMON_ID,1'b0}) ? up_wreq : 1'b0;
@@ -425,11 +428,11 @@ module up_dac_common #(
   // resets
 
   ad_rst i_mmcm_rst_reg (.rst_async(up_mmcm_preset), .clk(up_clk),  .rstn(), .rst(mmcm_rst));
-  ad_rst i_core_rst_reg (.rst_async(up_core_preset), .clk(dac_clk), .rstn(), .rst(dac_rst));
+  ad_rst i_core_rst_reg (.rst_async(up_core_preset), .clk(dac_clk), .rstn(), .rst(dac_rst_s));
 
   // dac control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(29)) i_xfer_cntrl (
+  up_xfer_cntrl #(.DATA_WIDTH(30)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_dac_sdr_ddr_n,
@@ -441,9 +444,10 @@ module up_dac_common #(
                       up_dac_par_enb,
                       up_dac_r1_mode,
                       up_dac_datafmt,
-                      up_dac_datarate}),
+                      up_dac_datarate,
+                      up_resetn}),
     .up_xfer_done (up_xfer_done_s),
-    .d_rst (dac_rst),
+    .d_rst (dac_rst_s),
     .d_clk (dac_clk),
     .d_data_cntrl ({  dac_sdr_ddr_n,
                       dac_num_lanes,
@@ -454,7 +458,13 @@ module up_dac_common #(
                       dac_par_enb,
                       dac_r1_mode,
                       dac_datafmt,
-                      dac_datarate}));
+                      dac_datarate,
+                      dac_rst_n}));
+
+  // De-assert dac_rst together with an updated control set.
+  // This allows writing the control registers before releasing the reset.
+  // This is important at start-up when stable set of controls is required.
+  assign dac_rst = ~dac_rst_n;
 
   up_xfer_status #(.DATA_WIDTH(3)) i_xfer_status (
     .up_rstn (up_rstn),
@@ -462,7 +472,7 @@ module up_dac_common #(
     .up_data_status ({up_sync_in_status,
                       up_status_s,
                       up_status_unf_s}),
-    .d_rst (dac_rst),
+    .d_rst (dac_rst_s),
     .d_clk (dac_clk),
     .d_data_status ({ dac_sync_in_status,
                       dac_status,
@@ -493,7 +503,7 @@ module up_dac_common #(
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_d_count (up_dac_clk_count_s),
-    .d_rst (dac_rst),
+    .d_rst (dac_rst_s),
     .d_clk (dac_clk));
 
 endmodule
