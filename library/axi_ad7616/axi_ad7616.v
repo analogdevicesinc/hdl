@@ -45,8 +45,7 @@ module axi_ad7616 #(
   output                  rx_sclk,
   output                  rx_cs_n,
   output                  rx_sdo,
-  input                   rx_sdi_0,
-  input                   rx_sdi_1,
+  input       [ 1:0]      rx_sdi,
 
   output      [15:0]      rx_db_o,
   input       [15:0]      rx_db_i,
@@ -344,10 +343,7 @@ module axi_ad7616 #(
       .sclk (rx_sclk),
       .sdo (rx_sdo),
       .sdo_t (),
-      .sdi (rx_sdi_0),
-      .sdi_1 (rx_sdi_1),
-      .sdi_2 (1'b0),
-      .sdi_3 (1'b0),
+      .sdi (rx_sdi),
       .cs (rx_cs_n),
       .three_wire ());
 

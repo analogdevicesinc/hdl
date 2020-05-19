@@ -85,8 +85,7 @@ module system_top (
 
   output                  spi_sclk,
   output                  spi_sdo,
-  input                   spi_sdi_0,
-  input                   spi_sdi_1,
+  input       [ 1:0]      spi_sdi,
   output                  spi_cs_n,
 
   output                  adc_reset_n,
@@ -199,8 +198,7 @@ module system_top (
     .rx_cnvst (adc_convst),
     .rx_sclk (spi_sclk),
     .rx_sdo (spi_sdo),
-    .rx_sdi_0 (spi_sdi_0),
-    .rx_sdi_1 (spi_sdi_1),
+    .rx_sdi (spi_sdi),
     .rx_cs_n (spi_cs_n),
     .rx_busy (adc_busy)
   );
