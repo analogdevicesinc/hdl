@@ -5,8 +5,7 @@ global ad7616_if
 
 create_bd_port -dir O rx_sclk
 create_bd_port -dir O rx_sdo
-create_bd_port -dir I rx_sdi_0
-create_bd_port -dir I rx_sdi_1
+create_bd_port -dir I -from 1 -to 0 rx_sdi
 
 create_bd_port -dir O -from 15 -to 0 rx_db_o
 create_bd_port -dir I -from 15 -to 0 rx_db_i
@@ -38,8 +37,7 @@ if {$ad7616_if == 0} {
 
   ad_connect  rx_sclk axi_ad7616/rx_sclk
   ad_connect  rx_sdo axi_ad7616/rx_sdo
-  ad_connect  rx_sdi_0 axi_ad7616/rx_sdi_0
-  ad_connect  rx_sdi_1 axi_ad7616/rx_sdi_1
+  ad_connect  rx_sdi axi_ad7616/rx_sdi
   ad_connect  rx_cs_n axi_ad7616/rx_cs_n
 
   ad_connect  rx_cnvst axi_ad7616/rx_cnvst

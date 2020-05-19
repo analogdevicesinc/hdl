@@ -5,8 +5,8 @@
 
 set_property -dict {PACKAGE_PIN AH12      IOSTANDARD LVCMOS25} [get_ports spi_sclk]            ; ## FMC_LPC_LA03_N
 set_property -dict {PACKAGE_PIN AB12      IOSTANDARD LVCMOS25} [get_ports spi_sdo]             ; ## FMC_LPC_LA06_P
-set_property -dict {PACKAGE_PIN AE13      IOSTANDARD LVCMOS25} [get_ports spi_sdi_0]           ; ## FMC_LPC_LA00_CC_P
-set_property -dict {PACKAGE_PIN AG15      IOSTANDARD LVCMOS25} [get_ports spi_sdi_1]           ; ## FMC_LPC_LA01_CC_N
+set_property -dict {PACKAGE_PIN AE13      IOSTANDARD LVCMOS25} [get_ports spi_sdi[0]]          ; ## FMC_LPC_LA00_CC_P
+set_property -dict {PACKAGE_PIN AG15      IOSTANDARD LVCMOS25} [get_ports spi_sdi[1]]          ; ## FMC_LPC_LA01_CC_N
 set_property -dict {PACKAGE_PIN AK15      IOSTANDARD LVCMOS25} [get_ports spi_cs_n]            ; ## FMC_LPC_LA04_N
 
 # control lines
