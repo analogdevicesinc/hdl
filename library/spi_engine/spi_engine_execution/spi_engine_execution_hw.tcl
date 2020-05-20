@@ -69,40 +69,16 @@ proc p_elaboration {} {
   set_interface_property sync associatedClock if_clk
   set_interface_property sync associatedReset if_resetn
 
-  ## physical SPI interface
+  # physical SPI interface
 
   ad_interface clock sclk output 1
 
-  ad_interface signal sdo output 1
+  ad_interface signal sdo   output 1
   ad_interface signal sdo_t output 1
-
-  ad_interface signal sdi   input 1
-  ad_interface signal sdi_1 input 1
-  ad_interface signal sdi_2 input 1
-  ad_interface signal sdi_3 input 1
-  ad_interface signal sdi_4 input 1
-  ad_interface signal sdi_5 input 1
-  ad_interface signal sdi_6 input 1
-  ad_interface signal sdi_7 input 1
+  ad_interface signal sdi   input  $num_of_sdi
 
   ad_interface signal cs output 1
   ad_interface signal three_wire output 1
-
-  if {$num_of_sdi < 8} {
-    set_interface_property if_sdi_7 ENABLED false
-  } elseif {$num_of_sdi < 7} {
-    set_interface_property if_sdi_6 ENABLED false
-  } elseif {$num_of_sdi < 6} {
-    set_interface_property if_sdi_5 ENABLED false
-  } elseif {$num_of_sdi < 5} {
-    set_interface_property if_sdi_4 ENABLED false
-  } elseif {$num_of_sdi < 4} {
-    set_interface_property if_sdi_3 ENABLED false
-  } elseif {$num_of_sdi < 3} {
-    set_interface_property if_sdi_2 ENABLED false
-  } elseif {$num_of_sdi < 2} {
-    set_interface_property if_sdi_1 ENABLED false
-  }
 
 }
 
