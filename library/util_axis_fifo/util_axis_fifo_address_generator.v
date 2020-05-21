@@ -47,7 +47,7 @@ module util_axis_fifo_address_generator #(
   output reg m_axis_valid = 1'b0,
   output reg m_axis_empty = 1'b0,
   output [RD_ADDRESS_WIDTH-1:0] m_axis_raddr,
-  output reg [RD_ADDRESS_WIDTH:0] m_axis_level = 'b0,
+  output reg [RD_ADDRESS_WIDTH-1:0] m_axis_level = 'b0,
 
   // Write interface - Source side
 
@@ -57,7 +57,7 @@ module util_axis_fifo_address_generator #(
   input s_axis_valid,
   output reg s_axis_full = 1'b0,
   output [WR_ADDRESS_WIDTH-1:0] s_axis_waddr,
-  output reg [WR_ADDRESS_WIDTH:0] s_axis_room = 'b0
+  output reg [WR_ADDRESS_WIDTH-1:0] s_axis_room = 'b0
 );
 
 //------------------------------------------------------------------------------
@@ -68,7 +68,8 @@ localparam WRITE = 1'b1;
 localparam READ = 1'b0;
 localparam WIDER_IF = (WR_ADDRESS_WIDTH >= RD_ADDRESS_WIDTH) ? WRITE : READ;
 localparam ASPECT_RATIO = (WR_ADDRESS_WIDTH >= RD_ADDRESS_WIDTH) ? (WR_ADDRESS_WIDTH - RD_ADDRESS_WIDTH) : (RD_ADDRESS_WIDTH - WR_ADDRESS_WIDTH);
-localparam MAX_ROOM = {1'b1,{WR_ADDRESS_WIDTH{1'b0}}};
+localparam WR_FIFO_DEPTH = {WR_ADDRESS_WIDTH{1'b1}};
+localparam RD_FIFO_DEPTH = {RD_ADDRESS_WIDTH{1'b1}};
 
 //------------------------------------------------------------------------------
 // registers
@@ -90,18 +91,18 @@ wire [WR_ADDRESS_WIDTH:0] m_axis_waddr_reg_s;
 
 wire s_axis_full_s;
 wire s_axis_ready_s;
-wire [WR_ADDRESS_WIDTH:0] s_axis_room_s;
+wire [WR_ADDRESS_WIDTH-1:0] s_axis_room_s;
 
 wire m_axis_empty_s;
 wire m_axis_valid_s;
-wire [RD_ADDRESS_WIDTH:0] m_axis_level_s;
+wire [RD_ADDRESS_WIDTH-1:0] m_axis_level_s;
 
 //------------------------------------------------------------------------------
-// Write address counter
+// Write address counter - count if FIFO is not full
 //------------------------------------------------------------------------------
 
 always @(*) begin
-  if (s_axis_ready && s_axis_valid)
+  if (s_axis_ready && s_axis_valid && ~s_axis_full)
     s_axis_waddr_next <= s_axis_waddr_reg + 1'b1;
   else
     s_axis_waddr_next <= s_axis_waddr_reg;
@@ -116,11 +117,11 @@ begin
 end
 
 //------------------------------------------------------------------------------
-// Read address counter
+// Read address counter - count if FIFO is not empty
 //------------------------------------------------------------------------------
 
 always @(*) begin
-  if (m_axis_ready && m_axis_valid)
+  if (m_axis_ready && m_axis_valid && ~m_axis_empty)
     m_axis_raddr_next <= m_axis_raddr_reg + 1'b1;
   else
     m_axis_raddr_next <= m_axis_raddr_reg;
@@ -185,17 +186,17 @@ endgenerate
 generate
 if (WIDER_IF == WRITE) begin // Write address is wider than read
 
-  // Because the FIFO has a first-fall-through logic, we have to use RADDR-1
-  // for our calculations
-  assign s_axis_full_s = (s_axis_raddr_reg_s[RD_ADDRESS_WIDTH] != s_axis_waddr_next[WR_ADDRESS_WIDTH]) &&
-                         (s_axis_raddr_reg_s[RD_ADDRESS_WIDTH-1:0]-1'b1 == s_axis_waddr_next[WR_ADDRESS_WIDTH-1:ASPECT_RATIO]);
-  assign s_axis_room_s = MAX_ROOM + s_axis_raddr_reg_s[RD_ADDRESS_WIDTH-1:0] - s_axis_waddr_next[WR_ADDRESS_WIDTH-1:ASPECT_RATIO];
+  assign s_axis_full_s = {s_axis_raddr_reg_s[RD_ADDRESS_WIDTH:0], {ASPECT_RATIO{1'b0}}} == {~s_axis_waddr_next[WR_ADDRESS_WIDTH], s_axis_waddr_next[WR_ADDRESS_WIDTH-1:0]};
+  assign s_axis_room_s = (s_axis_raddr_reg_s[RD_ADDRESS_WIDTH] == s_axis_waddr_next[WR_ADDRESS_WIDTH]) ?
+                         (WR_FIFO_DEPTH - s_axis_waddr_next[WR_ADDRESS_WIDTH-1:0] + {s_axis_raddr_reg_s[RD_ADDRESS_WIDTH-1:0], {ASPECT_RATIO{1'b0}}}) :
+                         ({s_axis_raddr_reg_s[RD_ADDRESS_WIDTH-1:0], {ASPECT_RATIO{1'b0}}} - s_axis_waddr_next[WR_ADDRESS_WIDTH-1:0]);
 
 end else begin // Read address is wider than write address
 
-  assign s_axis_full_s = (s_axis_raddr_reg_s[RD_ADDRESS_WIDTH] != s_axis_waddr_next[WR_ADDRESS_WIDTH]) &&
-                         (s_axis_raddr_reg_s[RD_ADDRESS_WIDTH-1:ASPECT_RATIO] == s_axis_waddr_next[WR_ADDRESS_WIDTH-1:0]);
-  assign s_axis_room_s = s_axis_raddr_reg_s[RD_ADDRESS_WIDTH-1:ASPECT_RATIO] - s_axis_waddr_next[WR_ADDRESS_WIDTH-1:0] + MAX_ROOM;
+  assign s_axis_full_s = s_axis_raddr_reg_s[RD_ADDRESS_WIDTH:ASPECT_RATIO] == {~s_axis_waddr_next[WR_ADDRESS_WIDTH], s_axis_waddr_next[WR_ADDRESS_WIDTH-1:0]};
+  assign s_axis_room_s = (s_axis_raddr_reg_s[RD_ADDRESS_WIDTH] == s_axis_waddr_next[WR_ADDRESS_WIDTH]) ?
+                         (WR_FIFO_DEPTH - s_axis_waddr_next[WR_ADDRESS_WIDTH-1:0] + s_axis_raddr_reg_s[RD_ADDRESS_WIDTH-1:ASPECT_RATIO]) :
+                         (s_axis_raddr_reg_s[RD_ADDRESS_WIDTH-1:ASPECT_RATIO] - s_axis_waddr_next[WR_ADDRESS_WIDTH-1:0]);
 
 end
 endgenerate
@@ -207,7 +208,7 @@ begin
   if (s_axis_aresetn == 1'b0) begin
     s_axis_ready <= 1'b1;
     s_axis_full <= 1'b0;
-    s_axis_room <= MAX_ROOM;
+    s_axis_room <= {WR_ADDRESS_WIDTH{1'b1}};
   end else begin
     s_axis_ready <= s_axis_ready_s;
     s_axis_full <= s_axis_full_s;
@@ -228,13 +229,17 @@ if (WIDER_IF == WRITE) begin // Write address is wider than read
 
   assign m_axis_empty_s = m_axis_waddr_reg_s[WR_ADDRESS_WIDTH:ASPECT_RATIO] == m_axis_raddr_next;
   assign m_axis_valid_s = ~m_axis_empty_s;
-  assign m_axis_level_s = m_axis_waddr_reg_s[WR_ADDRESS_WIDTH:ASPECT_RATIO] - m_axis_raddr_next;
+  assign m_axis_level_s = (m_axis_raddr_next[RD_ADDRESS_WIDTH] == m_axis_waddr_reg_s[WR_ADDRESS_WIDTH]) ?
+                           m_axis_waddr_reg_s[WR_ADDRESS_WIDTH-1:ASPECT_RATIO] - m_axis_raddr_next[RD_ADDRESS_WIDTH-1:0] :
+                          (RD_FIFO_DEPTH - m_axis_raddr_next[RD_ADDRESS_WIDTH-1:0] + m_axis_waddr_reg_s[WR_ADDRESS_WIDTH-1:ASPECT_RATIO]);
 
 end else begin // Read address is wider than write address
 
   assign m_axis_empty_s = m_axis_waddr_reg_s == m_axis_raddr_next[RD_ADDRESS_WIDTH:ASPECT_RATIO];
   assign m_axis_valid_s = ~m_axis_empty_s;
-  assign m_axis_level_s = {m_axis_waddr_reg_s, {ASPECT_RATIO{1'b1}}} - m_axis_raddr_next[RD_ADDRESS_WIDTH:0];
+  assign m_axis_level_s = (m_axis_raddr_next[RD_ADDRESS_WIDTH] == m_axis_waddr_reg_s[WR_ADDRESS_WIDTH]) ?
+                           {m_axis_waddr_reg_s[WR_ADDRESS_WIDTH-1:0], {ASPECT_RATIO{1'b1}}} - m_axis_raddr_next[RD_ADDRESS_WIDTH-1:0] :
+                           (RD_FIFO_DEPTH - m_axis_raddr_next[RD_ADDRESS_WIDTH-1:0] + {m_axis_waddr_reg_s[WR_ADDRESS_WIDTH-1:0], {ASPECT_RATIO{1'b1}}});
 
 end
 endgenerate
@@ -244,7 +249,7 @@ begin
   if (m_axis_aresetn == 1'b0) begin
     m_axis_valid <= 1'b0;
     m_axis_empty <= 1'b1;
-    m_axis_level <= 'h0;
+    m_axis_level <= {RD_ADDRESS_WIDTH{1'b0}};
   end else begin
     m_axis_valid <= m_axis_valid_s;
     m_axis_empty <= m_axis_empty_s;

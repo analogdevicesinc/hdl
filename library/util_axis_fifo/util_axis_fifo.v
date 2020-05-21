@@ -47,7 +47,7 @@ module util_axis_fifo #(
   input m_axis_ready,
   output m_axis_valid,
   output [RD_DATA_WIDTH-1:0] m_axis_data,
-  output [RD_ADDRESS_WIDTH:0] m_axis_level,
+  output [RD_ADDRESS_WIDTH-1:0] m_axis_level,
   output m_axis_empty,
 
   input s_axis_aclk,
@@ -55,7 +55,7 @@ module util_axis_fifo #(
   output s_axis_ready,
   input s_axis_valid,
   input [WR_DATA_WIDTH-1:0] s_axis_data,
-  output [WR_ADDRESS_WIDTH:0] s_axis_room,
+  output [WR_ADDRESS_WIDTH-1:0] s_axis_room,
   output s_axis_full
 );
 
