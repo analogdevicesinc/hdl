@@ -74,6 +74,7 @@ module up_adc_common #(
   input       [31:0]  up_pps_rcounter,
   input               up_pps_status,
   output  reg         up_pps_irq_mask,
+  output  reg         up_adc_r1_mode = 'd0,
 
   // channel interface
 
@@ -130,7 +131,6 @@ module up_adc_common #(
   reg                 up_adc_sref_sync = 'd0;
   reg         [4:0]   up_adc_num_lanes = 'd0;
   reg                 up_adc_sdr_ddr_n = 'd0;
-  reg                 up_adc_r1_mode = 'd0;
   reg                 up_adc_ddr_edgesel = 'd0;
   reg                 up_adc_pin_mode = 'd0;
   reg                 up_status_ovf = 'd0;
