@@ -66,19 +66,47 @@ set_interface_property rx_os_sysref EXPORT_OF ad9371_rx_os_jesd204.sysref
 add_interface rx_os_sync conduit end
 set_interface_property rx_os_sync EXPORT_OF ad9371_rx_os_jesd204.sync
 
-# ad9371-core
+# ad9371 TPL cores
 
-add_instance axi_ad9371 axi_ad9371
-add_connection ad9371_tx_jesd204.link_clk axi_ad9371.if_dac_clk
-add_connection axi_ad9371.if_dac_tx_data ad9371_tx_jesd204.link_data
-add_connection ad9371_rx_jesd204.link_clk axi_ad9371.if_adc_clk
-add_connection ad9371_rx_jesd204.link_sof axi_ad9371.if_adc_rx_sof
-add_connection ad9371_rx_jesd204.link_data axi_ad9371.if_adc_rx_data
-add_connection ad9371_rx_os_jesd204.link_clk axi_ad9371.if_adc_os_clk
-add_connection ad9371_rx_os_jesd204.link_sof axi_ad9371.if_adc_rx_os_sof
-add_connection ad9371_rx_os_jesd204.link_data axi_ad9371.if_adc_rx_os_data
-add_connection sys_clk.clk axi_ad9371.s_axi_clock
-add_connection sys_clk.clk_reset axi_ad9371.s_axi_reset
+add_instance axi_ad9371_tx ad_ip_jesd204_tpl_dac
+set_instance_parameter_value axi_ad9371_tx {ID} {0}
+set_instance_parameter_value axi_ad9371_tx {NUM_CHANNELS} {4}
+set_instance_parameter_value axi_ad9371_tx {NUM_LANES} {4}
+set_instance_parameter_value axi_ad9371_tx {BITS_PER_SAMPLE} {16}
+set_instance_parameter_value axi_ad9371_tx {CONVERTER_RESOLUTION} {16}
+
+add_instance axi_ad9371_rx ad_ip_jesd204_tpl_adc
+set_instance_parameter_value axi_ad9371_rx {ID} {0}
+set_instance_parameter_value axi_ad9371_rx {NUM_CHANNELS} {4}
+set_instance_parameter_value axi_ad9371_rx {NUM_LANES} {2}
+set_instance_parameter_value axi_ad9371_rx {BITS_PER_SAMPLE} {16}
+set_instance_parameter_value axi_ad9371_rx {CONVERTER_RESOLUTION} {16}
+set_instance_parameter_value axi_ad9371_rx {TWOS_COMPLEMENT} {1}
+
+add_instance axi_ad9371_rx_os ad_ip_jesd204_tpl_adc
+set_instance_parameter_value axi_ad9371_rx_os {ID} {1}
+set_instance_parameter_value axi_ad9371_rx_os {NUM_CHANNELS} {2}
+set_instance_parameter_value axi_ad9371_rx_os {NUM_LANES} {2}
+set_instance_parameter_value axi_ad9371_rx_os {BITS_PER_SAMPLE} {16}
+set_instance_parameter_value axi_ad9371_rx_os {CONVERTER_RESOLUTION} {16}
+set_instance_parameter_value axi_ad9371_rx_os {TWOS_COMPLEMENT} {1}
+
+add_connection sys_clk.clk axi_ad9371_tx.s_axi_clock
+add_connection sys_clk.clk_reset axi_ad9371_tx.s_axi_reset
+add_connection ad9371_tx_jesd204.link_clk axi_ad9371_tx.link_clk
+add_connection axi_ad9371_tx.link_data ad9371_tx_jesd204.link_data
+
+add_connection sys_clk.clk axi_ad9371_rx.s_axi_clock
+add_connection sys_clk.clk_reset axi_ad9371_rx.s_axi_reset
+add_connection ad9371_rx_jesd204.link_clk axi_ad9371_rx.link_clk
+add_connection ad9371_rx_jesd204.link_sof axi_ad9371_rx.if_link_sof
+add_connection ad9371_rx_jesd204.link_data axi_ad9371_rx.link_data
+
+add_connection sys_clk.clk axi_ad9371_rx_os.s_axi_clock
+add_connection sys_clk.clk_reset axi_ad9371_rx_os.s_axi_reset
+add_connection ad9371_rx_os_jesd204.link_clk axi_ad9371_rx_os.link_clk
+add_connection ad9371_rx_os_jesd204.link_sof axi_ad9371_rx_os.if_link_sof
+add_connection ad9371_rx_os_jesd204.link_data axi_ad9371_rx_os.link_data
 
 # pack(s) & unpack(s)
 
@@ -90,10 +118,10 @@ set_instance_parameter_value axi_ad9371_tx_upack {INTERFACE_TYPE} {1}
 
 add_connection ad9371_tx_jesd204.link_clk axi_ad9371_tx_upack.clk
 add_connection ad9371_tx_jesd204.link_reset axi_ad9371_tx_upack.reset
-add_connection axi_ad9371_tx_upack.dac_ch_0 axi_ad9371.dac_ch_0
-add_connection axi_ad9371_tx_upack.dac_ch_1 axi_ad9371.dac_ch_1
-add_connection axi_ad9371_tx_upack.dac_ch_2 axi_ad9371.dac_ch_2
-add_connection axi_ad9371_tx_upack.dac_ch_3 axi_ad9371.dac_ch_3
+add_connection axi_ad9371_tx_upack.dac_ch_0 axi_ad9371_tx.dac_ch_0
+add_connection axi_ad9371_tx_upack.dac_ch_1 axi_ad9371_tx.dac_ch_1
+add_connection axi_ad9371_tx_upack.dac_ch_2 axi_ad9371_tx.dac_ch_2
+add_connection axi_ad9371_tx_upack.dac_ch_3 axi_ad9371_tx.dac_ch_3
 
 add_instance axi_ad9371_rx_cpack util_cpack2
 set_instance_parameter_value axi_ad9371_rx_cpack {NUM_OF_CHANNELS} {4}
@@ -101,11 +129,11 @@ set_instance_parameter_value axi_ad9371_rx_cpack {SAMPLES_PER_CHANNEL} {1}
 set_instance_parameter_value axi_ad9371_rx_cpack {SAMPLE_DATA_WIDTH} {16}
 add_connection ad9371_rx_jesd204.link_clk axi_ad9371_rx_cpack.clk
 add_connection ad9371_rx_jesd204.link_reset axi_ad9371_rx_cpack.reset
-add_connection axi_ad9371.adc_ch_0 axi_ad9371_rx_cpack.adc_ch_0
-add_connection axi_ad9371.adc_ch_1 axi_ad9371_rx_cpack.adc_ch_1
-add_connection axi_ad9371.adc_ch_2 axi_ad9371_rx_cpack.adc_ch_2
-add_connection axi_ad9371.adc_ch_3 axi_ad9371_rx_cpack.adc_ch_3
-add_connection axi_ad9371_rx_cpack.if_fifo_wr_overflow axi_ad9371.if_adc_dovf
+add_connection axi_ad9371_rx.adc_ch_0 axi_ad9371_rx_cpack.adc_ch_0
+add_connection axi_ad9371_rx.adc_ch_1 axi_ad9371_rx_cpack.adc_ch_1
+add_connection axi_ad9371_rx.adc_ch_2 axi_ad9371_rx_cpack.adc_ch_2
+add_connection axi_ad9371_rx.adc_ch_3 axi_ad9371_rx_cpack.adc_ch_3
+add_connection axi_ad9371_rx_cpack.if_fifo_wr_overflow axi_ad9371_rx.if_adc_dovf
 
 add_instance axi_ad9371_rx_os_cpack util_cpack2
 set_instance_parameter_value axi_ad9371_rx_os_cpack {NUM_OF_CHANNELS} {2}
@@ -113,9 +141,9 @@ set_instance_parameter_value axi_ad9371_rx_os_cpack {SAMPLES_PER_CHANNEL} {2}
 set_instance_parameter_value axi_ad9371_rx_os_cpack {SAMPLE_DATA_WIDTH} {16}
 add_connection ad9371_rx_os_jesd204.link_clk axi_ad9371_rx_os_cpack.clk
 add_connection ad9371_rx_os_jesd204.link_reset axi_ad9371_rx_os_cpack.reset
-add_connection axi_ad9371.adc_os_ch_0 axi_ad9371_rx_os_cpack.adc_ch_0
-add_connection axi_ad9371.adc_os_ch_1 axi_ad9371_rx_os_cpack.adc_ch_1
-add_connection axi_ad9371_rx_os_cpack.if_fifo_wr_overflow axi_ad9371.if_adc_os_dovf
+add_connection axi_ad9371_rx_os.adc_ch_0 axi_ad9371_rx_os_cpack.adc_ch_0
+add_connection axi_ad9371_rx_os.adc_ch_1 axi_ad9371_rx_os_cpack.adc_ch_1
+add_connection axi_ad9371_rx_os_cpack.if_fifo_wr_overflow axi_ad9371_rx_os.if_adc_dovf
 
 # dac fifo
 
@@ -128,7 +156,7 @@ add_connection ad9371_tx_jesd204.link_clk avl_ad9371_tx_fifo.if_dac_clk
 add_connection ad9371_tx_jesd204.link_reset avl_ad9371_tx_fifo.if_dac_rst
 add_connection axi_ad9371_tx_upack.if_packed_fifo_rd_en avl_ad9371_tx_fifo.if_dac_valid
 add_connection avl_ad9371_tx_fifo.if_dac_data axi_ad9371_tx_upack.if_packed_fifo_rd_data
-add_connection avl_ad9371_tx_fifo.if_dac_dunf axi_ad9371.if_dac_dunf
+add_connection avl_ad9371_tx_fifo.if_dac_dunf axi_ad9371_tx.if_dac_dunf
 
 # dac & adc dma
 
@@ -255,7 +283,9 @@ ad_cpu_interconnect 0x00048000 avl_adxcfg_2.rcfg_s1
 ad_cpu_interconnect 0x00049000 avl_adxcfg_3.rcfg_s1
 ad_cpu_interconnect 0x0004c000 axi_ad9371_rx_os_dma.s_axi
 
-ad_cpu_interconnect 0x00050000 axi_ad9371.s_axi
+ad_cpu_interconnect 0x00050000 axi_ad9371_rx.s_axi
+ad_cpu_interconnect 0x00054000 axi_ad9371_tx.s_axi
+ad_cpu_interconnect 0x00058000 axi_ad9371_rx_os.s_axi
 ad_cpu_interconnect 0x00060000 avl_ad9371_gpio.s1
 
 # dma interconnects
