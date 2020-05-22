@@ -156,7 +156,7 @@ ad_ip_parameter TWOS_COMPLEMENT boolean 1 true [list \
 
 # axi4 slave
 
-ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn
+ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn 12
 
 # core clock and start of frame
 
