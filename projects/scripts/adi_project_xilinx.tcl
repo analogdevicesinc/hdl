@@ -266,7 +266,7 @@ proc adi_project_run {project_name} {
   launch_runs impl_1 -to_step write_bitstream
   wait_on_run impl_1
   open_run impl_1
-  report_timing_summary -file timing_impl.log
+  report_timing_summary -warn_on_violation -file timing_impl.log
 
   if {[info exists ::env(ADI_GENERATE_UTILIZATION)]} {
     set csv_file resource_utilization.csv
@@ -381,7 +381,9 @@ proc adi_project_run {project_name} {
 
   file mkdir $project_name.sdk
 
-  if [expr [string match *VIOLATED* $[report_timing_summary -return_string]] == 1] {
+  set timing_string $[report_timing_summary -return_string]
+  if { [string match "*VIOLATED*" $timing_string] == 1 ||
+       [string match "*Timing constraints are not met*" $timing_string] == 1} {
     file copy -force $project_name.runs/impl_1/system_top.sysdef $project_name.sdk/system_top_bad_timing.hdf
     return -code error [format "ERROR: Timing Constraints NOT met!"]
   } else {
