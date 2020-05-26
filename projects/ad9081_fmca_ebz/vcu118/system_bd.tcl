@@ -60,3 +60,9 @@ ad_ip_parameter util_mxfe_xcvr CONFIG.QPLL_LPF 0x2ff
   ad_connect  /axi_ddr_cntrl/addn_ui_clkout4 jesd204_phy_126/drpclk  
 }
 
+# Second timer for benchmarking
+ad_ip_instance axi_timer axi_timer2
+ad_cpu_interrupt ps-13 mb-5 axi_timer2/interrupt
+
+ad_cpu_interconnect 0x41D00000 axi_timer2
+
