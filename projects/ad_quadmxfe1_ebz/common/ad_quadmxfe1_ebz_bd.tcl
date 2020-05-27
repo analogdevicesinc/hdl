@@ -203,7 +203,7 @@ ad_ip_instance axi_dmac axi_mxfe_rx_dma [list \
   MAX_BYTES_PER_BURST 4096 \
   CYCLIC 0 \
   DMA_DATA_WIDTH_SRC $adc_dma_data_width \
-  DMA_DATA_WIDTH_DEST $adc_dma_data_width \
+  DMA_DATA_WIDTH_DEST 512 \
 ]
 
 # dac peripherals
@@ -242,7 +242,7 @@ ad_ip_instance axi_dmac axi_mxfe_tx_dma [list \
   DMA_LENGTH_WIDTH 24 \
   DMA_2D_TRANSFER 0 \
   CYCLIC 1 \
-  DMA_DATA_WIDTH_SRC $dac_dma_data_width \
+  DMA_DATA_WIDTH_SRC 512 \
   DMA_DATA_WIDTH_DEST $dac_dma_data_width \
   MAX_BYTES_PER_BURST 4096 \
 ]
