@@ -199,6 +199,8 @@ always @(posedge s_axi_aclk) begin
     9'h001: up_rdata <= ID;
     9'h002: up_rdata <= up_scratch;
     9'h003: up_rdata <= 32'h444d4143; // "DMAC"
+    9'h004: up_rdata <= {BYTES_PER_BEAT_WIDTH_SRC[15:0],
+                        BYTES_PER_BEAT_WIDTH_DEST[15:0]};
     9'h020: up_rdata <= up_irq_mask;
     9'h021: up_rdata <= up_irq_pending;
     9'h022: up_rdata <= up_irq_source;
