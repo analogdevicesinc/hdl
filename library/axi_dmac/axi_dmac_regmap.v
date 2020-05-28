@@ -41,6 +41,8 @@ module axi_dmac_regmap #(
   parameter BYTES_PER_BEAT_WIDTH_DEST = 1,
   parameter BYTES_PER_BEAT_WIDTH_SRC = 1,
   parameter BYTES_PER_BURST_WIDTH = 7,
+  parameter DMA_TYPE_DEST = 0,
+  parameter DMA_TYPE_SRC = 2,
   parameter DMA_AXI_ADDR_WIDTH = 32,
   parameter DMA_LENGTH_WIDTH = 24,
   parameter DMA_LENGTH_ALIGN = 3,
@@ -199,8 +201,8 @@ always @(posedge s_axi_aclk) begin
     9'h001: up_rdata <= ID;
     9'h002: up_rdata <= up_scratch;
     9'h003: up_rdata <= 32'h444d4143; // "DMAC"
-    9'h004: up_rdata <= {BYTES_PER_BEAT_WIDTH_SRC[15:0],
-                        BYTES_PER_BEAT_WIDTH_DEST[15:0]};
+    9'h004: up_rdata <= {DMA_TYPE_SRC[1:0],BYTES_PER_BEAT_WIDTH_SRC[13:0],
+                        DMA_TYPE_DEST[1:0],BYTES_PER_BEAT_WIDTH_DEST[13:0]};
     9'h020: up_rdata <= up_irq_mask;
     9'h021: up_rdata <= up_irq_pending;
     9'h022: up_rdata <= up_irq_source;
