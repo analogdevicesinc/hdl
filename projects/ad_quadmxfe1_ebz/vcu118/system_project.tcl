@@ -43,6 +43,8 @@ adi_project ad_quadmxfe1_ebz_vcu118 0 [list \
   TX_JESD_S    [get_env_param TX_JESD_S    1 ] \
   TX_JESD_NP   [get_env_param TX_JESD_NP   16 ] \
   TX_NUM_LINKS [get_env_param TX_NUM_LINKS 4 ] \
+  RX_KS_PER_CHANNEL [get_env_param RX_KS_PER_CHANNEL 32 ] \
+  TX_KS_PER_CHANNEL [get_env_param TX_KS_PER_CHANNEL 16 ] \
 ]
 
 adi_project_files ad_quadmxfe1_ebz_vcu118 [list \
