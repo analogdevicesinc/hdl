@@ -9,7 +9,7 @@ module ad_mux_tb;
   parameter EN_REG = 1;   // Enable register at output of each mux
 
   localparam MUX_SZ = CH_CNT < REQ_MUX_SZ ? CH_CNT : REQ_MUX_SZ;
-  localparam NUM_STAGES = $clog2(CH_CNT) / $clog2(MUX_SZ);
+  localparam NUM_STAGES = $clog2(CH_CNT) / $clog2(MUX_SZ) + |($clog2(CH_CNT) % $clog2(MUX_SZ));
   localparam DW = CH_W*CH_CNT;
 
   `include "tb_base.v"
