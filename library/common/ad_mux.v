@@ -57,7 +57,8 @@ module ad_mux #(
 localparam MUX_SZ = CH_CNT < REQ_MUX_SZ ? CH_CNT : REQ_MUX_SZ;
 localparam CLOG2_CH_CNT = $clog2(CH_CNT);
 localparam CLOG2_MUX_SZ = $clog2(MUX_SZ);
-localparam NUM_STAGES = $clog2(CH_CNT) / $clog2(MUX_SZ);
+localparam NUM_STAGES = ($clog2(CH_CNT) / $clog2(MUX_SZ)) + // divide and round up
+                       |($clog2(CH_CNT) % $clog2(MUX_SZ));
 
 wire [NUM_STAGES*DW+CH_W-1:0] mux_in;
 wire [NUM_STAGES*CLOG2_CH_CNT-1:0] ch_sel_pln;
