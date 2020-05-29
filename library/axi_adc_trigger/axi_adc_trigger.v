@@ -479,7 +479,8 @@ module axi_adc_trigger #(
       4'h6: trigger_out_mixed = trigger_a | trigger_in;
       4'h7: trigger_out_mixed = trigger_b | trigger_in;
       4'h8: trigger_out_mixed = trigger_a | trigger_b | trigger_in;
-      default: trigger_out_mixed = trigger_a;
+      4'hf: trigger_out_mixed = 1'b0; // trigger disable
+      default: trigger_out_mixed = 1'b0;
     endcase
   end
 
