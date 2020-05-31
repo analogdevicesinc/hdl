@@ -54,6 +54,8 @@ module ad_mux #(
   output [CH_W-1:0] data_out
 );
 
+`define MIN(A,B) (A<B?A:B)
+
 localparam MUX_SZ = CH_CNT < REQ_MUX_SZ ? CH_CNT : REQ_MUX_SZ;
 localparam CLOG2_CH_CNT = $clog2(CH_CNT);
 localparam CLOG2_MUX_SZ = $clog2(MUX_SZ);
@@ -95,7 +97,9 @@ generate
       end
     end
 
-    for (j = 0; j < MUX_SZ**(NUM_STAGES-i); j = j + MUX_SZ) begin: g_mux
+    localparam MAX_RANGE_PER_STAGE=MUX_SZ**(NUM_STAGES-i);
+
+    for (j = 0; j < `MIN(MAX_RANGE_PER_STAGE,CH_CNT); j = j + MUX_SZ) begin: g_mux
 
       ad_mux_core #(
         .CH_W (CH_W),
