@@ -1,6 +1,7 @@
 # de10nano
 # clocks (V11, Y13, E11 - PL 50MHz)
 # clocks (E20, D20 - HPS 25MHz)
+# clocks (G4 - HPS USB 60MHz)
 
 set_location_assignment PIN_V11 -to sys_clk
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sys_clk

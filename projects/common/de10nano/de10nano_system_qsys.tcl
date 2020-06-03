@@ -37,6 +37,8 @@ set_instance_parameter_value sys_hps {UART1_PinMuxing} {Unused}
 set_instance_parameter_value sys_hps {UART1_Mode} {N/A}
 set_instance_parameter_value sys_hps {I2C0_PinMuxing} {FPGA}
 set_instance_parameter_value sys_hps {I2C0_Mode} {Full}
+set_instance_parameter_value sys_hps {I2C1_PinMuxing} {FPGA}
+set_instance_parameter_value sys_hps {I2C1_Mode} {Full}
 set_instance_parameter_value sys_hps {desired_cfg_clk_mhz} {80.0}
 set_instance_parameter_value sys_hps {S2FCLK_USER0CLK_Enable} {1}
 set_instance_parameter_value sys_hps {S2FCLK_USER1CLK_Enable} {1}
@@ -105,6 +107,12 @@ add_interface sys_hps_i2c0_clk clock source
 set_interface_property sys_hps_i2c0_clk EXPORT_OF sys_hps.i2c0_clk
 add_interface sys_hps_i2c0_scl_in clock sink
 set_interface_property sys_hps_i2c0_scl_in EXPORT_OF sys_hps.i2c0_scl_in
+add_interface sys_hps_i2c1 conduit end
+set_interface_property sys_hps_i2c1 EXPORT_OF sys_hps.i2c1
+add_interface sys_hps_i2c1_clk clock source
+set_interface_property sys_hps_i2c1_clk EXPORT_OF sys_hps.i2c1_clk
+add_interface sys_hps_i2c1_scl_in clock sink
+set_interface_property sys_hps_i2c1_scl_in EXPORT_OF sys_hps.i2c1_scl_in
 
 # cpu/hps handling
 
@@ -204,8 +212,8 @@ set_interface_property sys_spi EXPORT_OF sys_spi.external
 
 add_instance ltc2308_spi altera_avalon_spi
 set_instance_parameter_value ltc2308_spi {clockPhase} {0}
-set_instance_parameter_value ltc2308_spi {clockPolarity} {1}
-set_instance_parameter_value ltc2308_spi {dataWidth} {8}
+set_instance_parameter_value ltc2308_spi {clockPolarity} {0}
+set_instance_parameter_value ltc2308_spi {dataWidth} {12}
 set_instance_parameter_value ltc2308_spi {masterSPI} {1}
 set_instance_parameter_value ltc2308_spi {numberOfSlaves} {1}
 set_instance_parameter_value ltc2308_spi {targetClockRate} {50000000.0}
