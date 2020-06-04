@@ -11,5 +11,5 @@ adi_project_files cn0540_coraz7s [list \
     "system_constr.xdc" \
     "$ad_hdl_dir/projects/common/coraz7s/coraz7s_system_constr.xdc"]
 
-#adi_project_run cn0540_coraz7s
+adi_project_run cn0540_coraz7s
 
