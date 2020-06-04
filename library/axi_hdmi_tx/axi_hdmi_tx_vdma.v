@@ -111,7 +111,7 @@ module axi_hdmi_tx_vdma (
 
   // hdmi frame sync
 
-  always @(posedge vdma_clk or posedge vdma_rst) begin
+  always @(posedge vdma_clk) begin
     if (vdma_rst == 1'b1) begin
       vdma_fs_toggle_m1 <= 1'd0;
       vdma_fs_toggle_m2 <= 1'd0;
@@ -126,7 +126,7 @@ module axi_hdmi_tx_vdma (
 
   // dma frame sync
 
-  always @(posedge vdma_clk or posedge vdma_rst) begin
+  always @(posedge vdma_clk) begin
     if (vdma_rst == 1'b1) begin
       vdma_end_of_frame_d <= 1'b0;
       vdma_fs <=  1'b0;
@@ -197,7 +197,7 @@ module axi_hdmi_tx_vdma (
   assign vdma_ovf_s = (vdma_addr_diff < BUF_THRESHOLD_LO) ? vdma_almost_full : 1'b0;
   assign vdma_unf_s = (vdma_addr_diff > BUF_THRESHOLD_HI) ? vdma_almost_empty : 1'b0;
 
-  always @(posedge vdma_clk or posedge vdma_rst) begin
+  always @(posedge vdma_clk) begin
     if (vdma_rst == 1'b1) begin
       vdma_raddr_g_m1 <= 9'd0;
       vdma_raddr_g_m2 <= 9'd0;
