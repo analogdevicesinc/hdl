@@ -141,7 +141,7 @@ wire sdi_enabled = cmd_d1[9];
 
 reg [(DATA_WIDTH-1):0] data_sdo_shift = 'h0;
 
-reg [4:0] trigger_rx_d = 5'b0;
+reg [SDI_DELAY+1:0] trigger_rx_d = {(SDI_DELAY+1){1'b0}};
 
 wire [1:0] inst = cmd[13:12];
 wire [1:0] inst_d1 = cmd_d1[13:12];
@@ -391,13 +391,10 @@ assign sdo_int_s = data_sdo_shift[DATA_WIDTH-1];
 
 always @(posedge clk) begin
   trigger_rx_d[0] <= trigger_rx;
-  trigger_rx_d[4:1] <= trigger_rx_d[3:0];
+  trigger_rx_d[SDI_DELAY+1:1] <= trigger_rx_d[SDI_DELAY:0];
 end
 
-assign trigger_rx_s = (SDI_DELAY == 2'b00) ? trigger_rx_d[1] :
-                      (SDI_DELAY == 2'b01) ? trigger_rx_d[2] :
-                      (SDI_DELAY == 2'b10) ? trigger_rx_d[3] :
-                      (SDI_DELAY == 2'b11) ? trigger_rx_d[4] : trigger_rx_d[1];
+assign trigger_rx_s = trigger_rx_d[SDI_DELAY+1];
 
 // Load the serial data into SDI shift register(s), then link it to the output
 // register of the module
