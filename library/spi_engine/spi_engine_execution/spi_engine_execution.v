@@ -136,8 +136,8 @@ reg cpha = DEFAULT_SPI_CFG[0];
 reg cpol = DEFAULT_SPI_CFG[1];
 reg [7:0] clk_div = DEFAULT_CLK_DIV;
 
-wire sdo_enabled = cmd_d1[8];
-wire sdi_enabled = cmd_d1[9];
+reg sdo_enabled = 1'b0;
+reg sdi_enabled = 1'b0;
 
 reg [(DATA_WIDTH-1):0] data_sdo_shift = 'h0;
 
@@ -168,6 +168,13 @@ wire trigger_rx_s;
 wire last_sdi_bit;
 
 assign cmd_ready = idle;
+
+always @(posedge clk) begin
+  if (exec_transfer_cmd) begin
+    sdo_enabled <= cmd[8];
+    sdi_enabled <= cmd[9];
+  end
+end
 
 always @(posedge clk) begin
   if (cmd_ready)
