@@ -1,31 +1,46 @@
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
-set adc_fifo_name axi_ad9680_fifo
-set adc_data_width 128
-set adc_dma_data_width 64
+set TX_NUM_OF_LANES 4           ; # L
+set TX_NUM_OF_CONVERTERS 2      ; # M
+set TX_SAMPLES_PER_FRAME 1      ; # S
+set TX_SAMPLE_WIDTH 16          ; # N/NP
+
+set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 32 / ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)]
 
 set dac_fifo_name axi_ad9144_fifo
-set dac_data_width 128
-set dac_dma_data_width 128
+set dac_data_width [expr $TX_SAMPLE_WIDTH * $TX_NUM_OF_CONVERTERS * $TX_SAMPLES_PER_CHANNEL]
+
+set RX_NUM_OF_LANES 4           ; # L
+set RX_NUM_OF_CONVERTERS 2      ; # M
+set RX_SAMPLES_PER_FRAME 1      ; # S
+set RX_SAMPLE_WIDTH 16          ; # N/NP
+
+set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 32 / ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)]
+
+set adc_fifo_name axi_ad9680_fifo
+set adc_data_width [expr $RX_SAMPLE_WIDTH * $RX_NUM_OF_CONVERTERS * $RX_SAMPLES_PER_CHANNEL]
+set adc_dma_data_width 64
 
 # dac peripherals
 
 ad_ip_instance axi_adxcvr axi_ad9144_xcvr
-ad_ip_parameter axi_ad9144_xcvr CONFIG.NUM_OF_LANES 4
+ad_ip_parameter axi_ad9144_xcvr CONFIG.NUM_OF_LANES $TX_NUM_OF_LANES
 ad_ip_parameter axi_ad9144_xcvr CONFIG.QPLL_ENABLE 1
 ad_ip_parameter axi_ad9144_xcvr CONFIG.TX_OR_RX_N 1
 
-adi_axi_jesd204_tx_create axi_ad9144_jesd 4
+adi_axi_jesd204_tx_create axi_ad9144_jesd $TX_NUM_OF_LANES
 
-ad_ip_instance axi_ad9144 axi_ad9144_core
-ad_ip_parameter axi_ad9144_core CONFIG.QUAD_OR_DUAL_N 0
+adi_tpl_jesd204_tx_create axi_ad9144_tpl $TX_NUM_OF_LANES \
+                                         $TX_NUM_OF_CONVERTERS \
+                                         $TX_SAMPLES_PER_FRAME \
+                                         $TX_SAMPLE_WIDTH \
 
-ad_ip_instance util_upack2 axi_ad9144_upack { \
-  NUM_OF_CHANNELS 2 \
-  SAMPLES_PER_CHANNEL 4 \
-  SAMPLE_DATA_WIDTH 16 \
-}
+ad_ip_instance util_upack2 axi_ad9144_upack [list \
+  NUM_OF_CHANNELS $TX_NUM_OF_CONVERTERS \
+  SAMPLES_PER_CHANNEL $TX_SAMPLES_PER_CHANNEL \
+  SAMPLE_DATA_WIDTH $TX_SAMPLE_WIDTH \
+]
 
 ad_ip_instance axi_dmac axi_ad9144_dma
 ad_ip_parameter axi_ad9144_dma CONFIG.DMA_TYPE_SRC 0
@@ -37,26 +52,30 @@ ad_ip_parameter axi_ad9144_dma CONFIG.DMA_LENGTH_WIDTH 24
 ad_ip_parameter axi_ad9144_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad9144_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_ad9144_dma CONFIG.DMA_DATA_WIDTH_SRC 128
-ad_ip_parameter axi_ad9144_dma CONFIG.DMA_DATA_WIDTH_DEST 128
+ad_ip_parameter axi_ad9144_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_data_width
 
-ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_dma_data_width $dac_fifo_address_width
+ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_data_width $dac_fifo_address_width
 
 # adc peripherals
 
 ad_ip_instance axi_adxcvr axi_ad9680_xcvr
-ad_ip_parameter axi_ad9680_xcvr CONFIG.NUM_OF_LANES 4
+ad_ip_parameter axi_ad9680_xcvr CONFIG.NUM_OF_LANES $RX_NUM_OF_LANES
 ad_ip_parameter axi_ad9680_xcvr CONFIG.QPLL_ENABLE 0
 ad_ip_parameter axi_ad9680_xcvr CONFIG.TX_OR_RX_N 0
 
-adi_axi_jesd204_rx_create axi_ad9680_jesd 4
+adi_axi_jesd204_rx_create axi_ad9680_jesd $RX_NUM_OF_LANES
 
-ad_ip_instance axi_ad9680 axi_ad9680_core
 
-ad_ip_instance util_cpack2 axi_ad9680_cpack { \
-  NUM_OF_CHANNELS 2 \
-  SAMPLES_PER_CHANNEL 4 \
-  SAMPLE_DATA_WIDTH 16 \
-}
+adi_tpl_jesd204_rx_create axi_ad9680_tpl $RX_NUM_OF_LANES \
+                                         $RX_NUM_OF_CONVERTERS \
+                                         $RX_SAMPLES_PER_FRAME \
+                                         $RX_SAMPLE_WIDTH \
+
+ad_ip_instance util_cpack2 axi_ad9680_cpack [list \
+  NUM_OF_CHANNELS $RX_NUM_OF_CONVERTERS \
+  SAMPLES_PER_CHANNEL $RX_SAMPLES_PER_CHANNEL \
+  SAMPLE_DATA_WIDTH $RX_SAMPLE_WIDTH \
+]
 
 ad_ip_instance axi_dmac axi_ad9680_dma
 ad_ip_parameter axi_ad9680_dma CONFIG.DMA_TYPE_SRC 1
@@ -68,7 +87,7 @@ ad_ip_parameter axi_ad9680_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_ad9680_dma CONFIG.DMA_LENGTH_WIDTH 24
 ad_ip_parameter axi_ad9680_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad9680_dma CONFIG.CYCLIC 0
-ad_ip_parameter axi_ad9680_dma CONFIG.DMA_DATA_WIDTH_SRC 64
+ad_ip_parameter axi_ad9680_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_dma_data_width
 ad_ip_parameter axi_ad9680_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 ad_adcfifo_create $adc_fifo_name $adc_data_width $adc_dma_data_width $adc_fifo_address_width
@@ -76,8 +95,8 @@ ad_adcfifo_create $adc_fifo_name $adc_data_width $adc_dma_data_width $adc_fifo_a
 # shared transceiver core
 
 ad_ip_instance util_adxcvr util_daq2_xcvr
-ad_ip_parameter util_daq2_xcvr CONFIG.RX_NUM_OF_LANES 4
-ad_ip_parameter util_daq2_xcvr CONFIG.TX_NUM_OF_LANES 4
+ad_ip_parameter util_daq2_xcvr CONFIG.RX_NUM_OF_LANES $RX_NUM_OF_LANES
+ad_ip_parameter util_daq2_xcvr CONFIG.TX_NUM_OF_LANES $TX_NUM_OF_LANES
 ad_ip_parameter util_daq2_xcvr CONFIG.QPLL_REFCLK_DIV 1
 ad_ip_parameter util_daq2_xcvr CONFIG.QPLL_FBDIV_RATIO 1
 ad_ip_parameter util_daq2_xcvr CONFIG.QPLL_FBDIV 0x30; # 20
@@ -102,16 +121,16 @@ ad_xcvrpll  axi_ad9680_xcvr/up_pll_rst util_daq2_xcvr/up_cpll_rst_*
 # connections (dac)
 
 ad_xcvrcon  util_daq2_xcvr axi_ad9144_xcvr axi_ad9144_jesd {0 2 3 1}
-ad_connect  util_daq2_xcvr/tx_out_clk_0 axi_ad9144_core/tx_clk
-ad_connect  axi_ad9144_jesd/tx_data_tdata axi_ad9144_core/tx_data
+ad_connect  util_daq2_xcvr/tx_out_clk_0 axi_ad9144_tpl/link_clk
+ad_connect  axi_ad9144_jesd/tx_data axi_ad9144_tpl/link
 ad_connect  util_daq2_xcvr/tx_out_clk_0 axi_ad9144_upack/clk
 ad_connect  axi_ad9144_jesd_rstgen/peripheral_reset axi_ad9144_upack/reset
 
 
-ad_connect  axi_ad9144_core/dac_valid_0 axi_ad9144_upack/fifo_rd_en
-for {set i 0} {$i < 2} {incr i} {
-  ad_connect  axi_ad9144_core/dac_enable_$i axi_ad9144_upack/enable_$i
-  ad_connect  axi_ad9144_core/dac_ddata_$i axi_ad9144_upack/fifo_rd_data_$i
+ad_connect  axi_ad9144_tpl/dac_valid_0 axi_ad9144_upack/fifo_rd_en
+for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
+  ad_connect  axi_ad9144_tpl/dac_enable_$i axi_ad9144_upack/enable_$i
+  ad_connect  axi_ad9144_tpl/dac_data_$i axi_ad9144_upack/fifo_rd_data_$i
 }
 
 ad_connect  util_daq2_xcvr/tx_out_clk_0 axi_ad9144_fifo/dac_clk
@@ -121,7 +140,7 @@ ad_connect  axi_ad9144_jesd_rstgen/peripheral_reset axi_ad9144_fifo/dac_rst
 ad_connect  axi_ad9144_upack/s_axis_valid VCC
 ad_connect  axi_ad9144_upack/s_axis_ready axi_ad9144_fifo/dac_valid
 ad_connect  axi_ad9144_upack/s_axis_data axi_ad9144_fifo/dac_data
-ad_connect  axi_ad9144_core/dac_dunf axi_ad9144_fifo/dac_dunf
+ad_connect  axi_ad9144_tpl/dac_dunf axi_ad9144_fifo/dac_dunf
 
 ad_connect  $sys_cpu_clk axi_ad9144_fifo/dma_clk
 ad_connect  $sys_cpu_reset axi_ad9144_fifo/dma_rst
@@ -137,19 +156,20 @@ ad_connect  axi_ad9144_fifo/dma_xfer_last axi_ad9144_dma/m_axis_last
 # connections (adc)
 
 ad_xcvrcon  util_daq2_xcvr axi_ad9680_xcvr axi_ad9680_jesd
-ad_connect  util_daq2_xcvr/rx_out_clk_0 axi_ad9680_core/rx_clk
-ad_connect  axi_ad9680_jesd/rx_sof axi_ad9680_core/rx_sof
-ad_connect  axi_ad9680_jesd/rx_data_tdata axi_ad9680_core/rx_data
+ad_connect  util_daq2_xcvr/rx_out_clk_0 axi_ad9680_tpl/link_clk
+ad_connect  axi_ad9680_jesd/rx_sof axi_ad9680_tpl/link_sof
+ad_connect  axi_ad9680_jesd/rx_data_tdata axi_ad9680_tpl/link_data
+ad_connect  axi_ad9680_jesd/rx_data_tvalid axi_ad9680_tpl/link_valid
 
 ad_connect  util_daq2_xcvr/rx_out_clk_0 axi_ad9680_cpack/clk
 ad_connect  axi_ad9680_jesd_rstgen/peripheral_reset axi_ad9680_cpack/reset
 
-ad_connect  axi_ad9680_core/adc_valid_0 axi_ad9680_cpack/fifo_wr_en
-ad_connect  axi_ad9680_core/adc_enable_0 axi_ad9680_cpack/enable_0
-ad_connect  axi_ad9680_core/adc_data_0 axi_ad9680_cpack/fifo_wr_data_0
-ad_connect  axi_ad9680_core/adc_enable_1 axi_ad9680_cpack/enable_1
-ad_connect  axi_ad9680_core/adc_data_1 axi_ad9680_cpack/fifo_wr_data_1
-ad_connect  axi_ad9680_core/adc_dovf axi_ad9680_cpack/fifo_wr_overflow
+ad_connect  axi_ad9680_tpl/adc_valid_0 axi_ad9680_cpack/fifo_wr_en
+for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
+  ad_connect  axi_ad9680_tpl/adc_enable_$i axi_ad9680_cpack/enable_$i
+  ad_connect  axi_ad9680_tpl/adc_data_$i axi_ad9680_cpack/fifo_wr_data_$i
+}
+ad_connect  axi_ad9680_tpl/adc_dovf axi_ad9680_cpack/fifo_wr_overflow
 
 ad_connect  util_daq2_xcvr/rx_out_clk_0 axi_ad9680_fifo/adc_clk
 ad_connect  axi_ad9680_jesd_rstgen/peripheral_reset axi_ad9680_fifo/adc_rst
@@ -169,11 +189,11 @@ ad_connect  axi_ad9680_fifo/dma_xfer_req axi_ad9680_dma/s_axis_xfer_req
 # interconnect (cpu)
 
 ad_cpu_interconnect 0x44A60000 axi_ad9144_xcvr
-ad_cpu_interconnect 0x44A04000 axi_ad9144_core
+ad_cpu_interconnect 0x44A04000 axi_ad9144_tpl
 ad_cpu_interconnect 0x44A90000 axi_ad9144_jesd
 ad_cpu_interconnect 0x7c420000 axi_ad9144_dma
 ad_cpu_interconnect 0x44A50000 axi_ad9680_xcvr
-ad_cpu_interconnect 0x44A10000 axi_ad9680_core
+ad_cpu_interconnect 0x44A10000 axi_ad9680_tpl
 ad_cpu_interconnect 0x44AA0000 axi_ad9680_jesd
 ad_cpu_interconnect 0x7c400000 axi_ad9680_dma
 
