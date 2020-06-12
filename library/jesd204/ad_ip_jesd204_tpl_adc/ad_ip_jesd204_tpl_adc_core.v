@@ -48,6 +48,11 @@ module ad_ip_jesd204_tpl_adc_core #(
   output [NUM_CHANNELS-1:0] adc_valid,
   output [DMA_DATA_WIDTH-1:0] adc_data,
 
+  input adc_sync,
+  output adc_sync_status,
+  input adc_sync_in,
+  output adc_rst_sync,
+
   input link_valid,
   output link_ready,
   input [OCTETS_PER_BEAT-1:0] link_sof,
@@ -60,8 +65,26 @@ module ad_ip_jesd204_tpl_adc_core #(
 
   wire [ADC_DATA_WIDTH-1:0] raw_data_s;
 
+  reg adc_sync_armed = 1'b0;
+  reg adc_sync_in_d1 = 1'b0;
+  reg adc_sync_d1 = 1'b0;
+
   assign link_ready = 1'b1;
-  assign adc_valid = {NUM_CHANNELS{1'b1}};
+  assign adc_valid = {NUM_CHANNELS{link_valid}};
+  assign adc_sync_status = adc_sync_armed;
+  assign adc_rst_sync = adc_sync_armed;
+
+  always @(posedge clk) begin
+    adc_sync_in_d1 <= adc_sync_in;
+    adc_sync_d1 <= adc_sync;
+    if ((~adc_sync_d1 & adc_sync) == 1'b1) begin
+      adc_sync_armed <= ~adc_sync_armed;
+    end else if ((~adc_sync_in_d1 & adc_sync_in) == 1'b1) begin
+      adc_sync_armed <= 1'b0;
+    end
+  end
+
+  // synchronization logic
 
   ad_ip_jesd204_tpl_adc_deframer #(
     .NUM_LANES (NUM_LANES),

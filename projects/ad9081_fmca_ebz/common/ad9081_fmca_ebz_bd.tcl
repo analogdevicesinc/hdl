@@ -1,14 +1,33 @@
+#
+# Parameter description:
+#   JESD_MODE : Used link layer encoder mode
+#      64B66B - 64b66b link layer defined in JESD 204C, uses Xilinx IP as Physical layer
+#      8B10B  - 8b10b link layer defined in JESD 204B, uses ADI IP as Physical layer
+#
+#   RX_RATE :  Line rate of the Rx link ( MxFE to FPGA ) used in 64B66B mode
+#   TX_RATE :  Line rate of the Tx link ( FPGA to MxFE ) used in 64B66B mode
+#   [RX/TX]_PLL_SEL :  Used PLL in the Xilinx PHY used in 64B66B mode
+#                      Encoding is:
+#                         0 - CPLL
+#                         1 - QPLL0
+#                         2 - QPLL1
+#   REF_CLK_RATE : Frequency of reference clock in MHz used in 64B66B mode
+#   [RX/TX]_JESD_M : Number of converters per link
+#   [RX/TX]_JESD_L : Number of lanes per link
+#   [RX/TX]_JESD_NP : Number of bits per sample, only 16 is supported
+#   [RX/TX]_NUM_LINKS : Number of links, matches numer of MxFE devices
+#
 
 # Common parameter for TX and RX
-set JESD_MODE  $ad_project_params(JESD_MODE) 
+set JESD_MODE  $ad_project_params(JESD_MODE)
 
 if {$JESD_MODE == "8B10B"} {
-  set DATAPATH_WIDTH 4   
-  set ENCODER_SEL 1  
+  set DATAPATH_WIDTH 4
+  set ENCODER_SEL 1
   set ADI_PHY_SEL 1
 } else {
-  set DATAPATH_WIDTH 8   
-  set ENCODER_SEL 2   
+  set DATAPATH_WIDTH 8
+  set ENCODER_SEL 2
   set ADI_PHY_SEL 0
 }
 
@@ -29,14 +48,12 @@ set RX_JESD_L     $ad_project_params(RX_JESD_L)
 set RX_JESD_S     $ad_project_params(RX_JESD_S)
 set RX_JESD_NP    $ad_project_params(RX_JESD_NP)
 
-
 set RX_NUM_OF_LANES      [expr $RX_JESD_L * $RX_NUM_LINKS]
 set RX_NUM_OF_CONVERTERS [expr $RX_JESD_M * $RX_NUM_LINKS]
 set RX_SAMPLES_PER_FRAME $RX_JESD_S
 set RX_SAMPLE_WIDTH      $RX_JESD_NP
 
 set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 8*$DATAPATH_WIDTH / ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)]
-
 
 # TX parameters
 set TX_NUM_LINKS $ad_project_params(TX_NUM_LINKS)
@@ -119,11 +136,10 @@ ad_ip_instance proc_sys_reset tx_device_clk_rstgen
 ad_connect  tx_device_clk tx_device_clk_rstgen/slowest_sync_clk
 ad_connect  $sys_cpu_resetn tx_device_clk_rstgen/ext_reset_in
 
-
 # Common PHYs
 # Use two instances since they are located on different SLRS
-set rx_rate $ad_project_params(RX_RATE) 
-set tx_rate $ad_project_params(TX_RATE) 
+set rx_rate $ad_project_params(RX_RATE)
+set tx_rate $ad_project_params(TX_RATE)
 set ref_clk_rate $ad_project_params(REF_CLK_RATE)
 
 ad_ip_instance jesd204_phy jesd204_phy_121 [list \
@@ -131,10 +147,10 @@ ad_ip_instance jesd204_phy jesd204_phy_121 [list \
   GT_Line_Rate $tx_rate \
   GT_REFCLK_FREQ $ref_clk_rate \
   DRPCLK_FREQ {50} \
-  C_PLL_SELECTION {1} \
+  C_PLL_SELECTION $ad_project_params(TX_PLL_SEL) \
   RX_GT_Line_Rate $rx_rate \
   RX_GT_REFCLK_FREQ $ref_clk_rate \
-  RX_PLL_SELECTION {1} \
+  RX_PLL_SELECTION $ad_project_params(RX_PLL_SEL) \
   GT_Location {X0Y8} \
   Tx_JesdVersion {1} \
   Rx_JesdVersion {1} \
@@ -150,10 +166,10 @@ ad_ip_instance jesd204_phy jesd204_phy_126 [list \
   GT_Line_Rate $tx_rate \
   GT_REFCLK_FREQ $ref_clk_rate \
   DRPCLK_FREQ {50} \
-  C_PLL_SELECTION {1} \
+  C_PLL_SELECTION $ad_project_params(TX_PLL_SEL) \
   RX_GT_Line_Rate $rx_rate \
   RX_GT_REFCLK_FREQ $ref_clk_rate \
-  RX_PLL_SELECTION {1} \
+  RX_PLL_SELECTION $ad_project_params(RX_PLL_SEL) \
   GT_Location {X0Y28} \
   Tx_JesdVersion {1} \
   Rx_JesdVersion {1} \
@@ -166,7 +182,6 @@ ad_ip_instance jesd204_phy jesd204_phy_126 [list \
 }
 
 # adc peripherals
-
 
 adi_axi_jesd204_rx_create axi_mxfe_rx_jesd $RX_NUM_OF_LANES $RX_NUM_LINKS $ENCODER_SEL
 
@@ -200,8 +215,6 @@ ad_ip_parameter axi_mxfe_rx_dma CONFIG.MAX_BYTES_PER_BURST 4096
 ad_ip_parameter axi_mxfe_rx_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_dma_data_width
 ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_DATA_WIDTH_DEST $adc_dma_data_width
-
-
 
 # dac peripherals
 
@@ -256,10 +269,8 @@ for {set i 0} {$i < [expr max($TX_NUM_OF_LANES,$RX_NUM_OF_LANES)]} {incr i} {
 ad_xcvrpll  axi_mxfe_tx_xcvr/up_pll_rst util_mxfe_xcvr/up_qpll_rst_*
 ad_xcvrpll  axi_mxfe_rx_xcvr/up_pll_rst util_mxfe_xcvr/up_cpll_rst_*
 
-
 ad_connect  $sys_cpu_resetn util_mxfe_xcvr/up_rstn
 ad_connect  $sys_cpu_clk util_mxfe_xcvr/up_clk
-
 
 # connections (adc)
 
@@ -310,11 +321,11 @@ ad_connect  $sys_dma_resetn axi_mxfe_tx_dma/m_src_axi_aresetn
 ad_connect  $sys_dma_reset  mxfe_dac_fifo/dma_rst
 
 if {$ADI_PHY_SEL == 0} {
-ad_connect  $sys_cpu_reset jesd204_phy_121/tx_sys_reset
-ad_connect  $sys_cpu_reset jesd204_phy_126/tx_sys_reset
+ad_connect  tx_device_clk_rstgen/peripheral_reset jesd204_phy_121/tx_sys_reset
+ad_connect  tx_device_clk_rstgen/peripheral_reset jesd204_phy_126/tx_sys_reset
 
-ad_connect  $sys_cpu_reset jesd204_phy_121/rx_sys_reset 
-ad_connect  $sys_cpu_reset jesd204_phy_126/rx_sys_reset
+ad_connect  rx_device_clk_rstgen/peripheral_reset jesd204_phy_121/rx_sys_reset
+ad_connect  rx_device_clk_rstgen/peripheral_reset jesd204_phy_126/rx_sys_reset
 
 ad_connect  axi_mxfe_tx_jesd/tx_axi/core_reset jesd204_phy_121/tx_reset_gt
 ad_connect  axi_mxfe_rx_jesd/rx_axi/core_reset jesd204_phy_121/rx_reset_gt
@@ -371,7 +382,6 @@ for {set j 0}  {$j < $RX_NUM_OF_LANES} {incr j} {
  ad_connect  axi_mxfe_rx_jesd/rx_phy$j $logic_lane($j)
 }
 
-
 ad_connect  rx_sysref_0  axi_mxfe_rx_jesd/sysref
 
 }
@@ -395,7 +405,6 @@ ad_connect  mxfe_adc_fifo/dma_wr axi_mxfe_rx_dma/s_axis_valid
 ad_connect  mxfe_adc_fifo/dma_wdata axi_mxfe_rx_dma/s_axis_data
 ad_connect  mxfe_adc_fifo/dma_wready axi_mxfe_rx_dma/s_axis_ready
 ad_connect  mxfe_adc_fifo/dma_xfer_req axi_mxfe_rx_dma/s_axis_xfer_req
-
 
 # connect dac dataflow
 #
@@ -423,7 +432,6 @@ for {set i 0} {$i < 4} {incr i} {
   ad_connect  jesd204_phy_126/txn_out  txn_out_slice_[expr $i+4]/Din
   ad_connect  jesd204_phy_126/txp_out  txp_out_slice_[expr $i+4]/Din
 }
-
 
 for {set i 0} {$i < $MAX_TX_LANES} {incr i} {
   ad_connect  txn_out_slice_$i/Dout tx_data_${i}_n
@@ -472,7 +480,6 @@ ad_connect  mxfe_dac_fifo/dac_dunf tx_mxfe_tpl_core/dac_dunf
 create_bd_port -dir I dac_fifo_bypass
 ad_connect  mxfe_dac_fifo/bypass dac_fifo_bypass
 
-
 # interconnect (cpu)
 if {$ADI_PHY_SEL == 1} {
 ad_cpu_interconnect 0x44a60000 axi_mxfe_rx_xcvr
@@ -506,7 +513,6 @@ ad_cpu_interrupt ps-13 mb-12 axi_mxfe_rx_dma/irq
 ad_cpu_interrupt ps-12 mb-13 axi_mxfe_tx_dma/irq
 ad_cpu_interrupt ps-11 mb-14 axi_mxfe_rx_jesd/irq
 ad_cpu_interrupt ps-10 mb-15 axi_mxfe_tx_jesd/irq
-
 
 if {$ADI_PHY_SEL == 1} {
 # Create dummy outputs for unused Tx lanes

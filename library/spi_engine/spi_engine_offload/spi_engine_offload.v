@@ -92,6 +92,7 @@ reg [SDO_MEM_ADDRESS_WIDTH-1:0] spi_sdo_rd_addr = 'h00;
 reg [15:0] cmd_mem[0:2**CMD_MEM_ADDRESS_WIDTH-1];
 reg [(DATA_WIDTH-1):0] sdo_mem[0:2**SDO_MEM_ADDRESS_WIDTH-1];
 
+wire [15:0] cmd_int_s;
 wire [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_rd_addr_next;
 wire spi_enable;
 
@@ -107,8 +108,69 @@ assign sdi_data_ready = (spi_enable) ? offload_sdi_ready : 1'b1;
 
 assign offload_sdi_data = sdi_data;
 
-assign cmd = cmd_mem[spi_cmd_rd_addr];
+assign cmd_int_s = cmd_mem[spi_cmd_rd_addr];
 assign sdo_data = sdo_mem[spi_sdo_rd_addr];
+
+/* SYNC ID counter. The offload module increments the sync_id on each
+ * transaction. The initial value of the sync_id is the value of the last
+ * sync_id command loaded into the command buffer.
+ */
+
+reg [ 7:0] ctrl_sync_id_init = 8'b0;
+reg        ctrl_sync_id_load = 1'b0;
+reg [ 7:0] spi_sync_id_counter = 8'b0;
+
+wire [ 7:0] spi_sync_id_init_s;
+
+always @(posedge ctrl_clk) begin
+  if (ctrl_mem_reset == 1'b1) begin
+    ctrl_sync_id_init <= 8'b0;
+    ctrl_sync_id_load <= 1'b0;
+  end else begin
+    if (ctrl_cmd_wr_en && (ctrl_cmd_wr_data[15:8] == 8'h30)) begin
+      ctrl_sync_id_init <= ctrl_cmd_wr_data;
+      ctrl_sync_id_load <= 1'b1;
+    end else begin
+      ctrl_sync_id_load <= 1'b0;
+    end
+  end
+end
+
+wire spi_sync_id_load_s;
+
+sync_event # (
+    .NUM_OF_EVENTS(1),
+    .ASYNC_CLK(1)
+) i_sync_sync_id_load (
+    .in_clk (ctrl_clk),
+    .in_event(ctrl_sync_id_load),
+    .out_clk(spi_clk),
+    .out_event(spi_sync_id_load_s)
+);
+
+sync_bits # (
+    .NUM_OF_BITS(8),
+    .ASYNC_CLK(1)
+) i_sync_sync_id (
+    .in_bits(ctrl_sync_id_init),
+    .out_clk(spi_clk),
+    .out_resetn(1'b1),
+    .out_bits(spi_sync_id_init_s)
+);
+
+always @(posedge spi_clk) begin
+  if (spi_resetn == 1'b0) begin
+    spi_sync_id_counter <= 8'b0;
+  end else begin
+    if (spi_sync_id_load_s) begin
+      spi_sync_id_counter <= spi_sync_id_init_s;
+    end else if(cmd_valid && cmd_ready && (cmd[15:8] == 8'h30)) begin
+      spi_sync_id_counter <= spi_sync_id_counter + 1'b1;
+    end
+  end
+end
+
+assign cmd = (cmd_int_s[15:8] == 8'h30) ? {cmd_int_s[15:8], spi_sync_id_counter} : cmd_int_s;
 
 generate if (ASYNC_SPI_CLK) begin
 

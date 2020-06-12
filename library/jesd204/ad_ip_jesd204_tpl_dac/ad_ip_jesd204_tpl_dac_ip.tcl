@@ -145,6 +145,7 @@ set i 0
 
 foreach {k v w} {
   "DATAPATH_DISABLE" "Disable Datapath" "checkBox" \
+  "EXT_SYNC" "Enable external SYNC" "checkBox" \
   "IQCORRECTION_DISABLE" "Disable IQ Correction" "checkBox" \
   "DDS_TYPE" "DDS Type" "comboBox" \
   "DDS_CORDIC_DW" "CORDIC DDS Data Width" "text" \
