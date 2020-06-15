@@ -72,7 +72,7 @@ ad_ip_parameter NUM_LANES INTEGER 1 true [list \
 ad_ip_parameter NUM_CHANNELS INTEGER 1 true [list \
   DISPLAY_NAME "Number of Converters (M)" \
   DISPLAY_UNITS "converters" \
-  ALLOWED_RANGES {1 2 4 6 8} \
+  ALLOWED_RANGES {1 2 4 6 8 16 32 64} \
   GROUP $group \
 ]
 
@@ -114,7 +114,7 @@ ad_ip_parameter SAMPLES_PER_FRAME_MANUAL INTEGER 1 false [list \
 ad_ip_parameter OCTETS_PER_FRAME INTEGER 1 false [list \
   DISPLAY_NAME "Octets per Frame (F)" \
   DISPLAY_UNITS "octets" \
-  ALLOWED_RANGES {1 2 4} \
+  ALLOWED_RANGES {1 2 4 8 12 16} \
   DERIVED true \
   GROUP $group \
 ]
