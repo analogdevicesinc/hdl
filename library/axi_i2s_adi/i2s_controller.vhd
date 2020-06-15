@@ -78,34 +78,34 @@ entity i2s_controller is
 end i2s_controller;
 
 architecture Behavioral of i2s_controller is
-constant NUM_TX			: integer := C_HAS_TX * C_NUM_CH;
-constant NUM_RX			: integer := C_HAS_RX * C_NUM_CH;
+constant NUM_TX	: integer := C_HAS_TX * C_NUM_CH;
+constant NUM_RX	: integer := C_HAS_RX * C_NUM_CH;
 
-signal enable			: Boolean;
+signal enable : Boolean;
 
-signal cdc_sync_stage0_tick	: std_logic;
-signal cdc_sync_stage1_tick	: std_logic;
-signal cdc_sync_stage2_tick	: std_logic;
-signal cdc_sync_stage3_tick	: std_logic;
+signal cdc_sync_stage0_tick : std_logic := '0';
+signal cdc_sync_stage1_tick : std_logic := '0';
+signal cdc_sync_stage2_tick : std_logic := '0';
+signal cdc_sync_stage3_tick : std_logic := '0';
 
-signal BCLK_O_int		: std_logic;
-signal LRCLK_O_int		: std_logic;
+signal BCLK_O_int : std_logic;
+signal LRCLK_O_int : std_logic;
 
-signal tx_bclk			: std_logic;
-signal tx_lrclk			: std_logic;
-signal tx_sdata			: std_logic_vector(C_NUM_CH - 1 downto 0);
-signal tx_tick			: std_logic;
-signal tx_channel_sync		: std_logic;
-signal tx_frame_sync		: std_logic;
+signal tx_bclk : std_logic;
+signal tx_lrclk : std_logic;
+signal tx_sdata	: std_logic_vector(C_NUM_CH - 1 downto 0);
+signal tx_tick : std_logic;
+signal tx_channel_sync : std_logic;
+signal tx_frame_sync : std_logic;
 
-signal const_1      : std_logic;
-signal bclk_tick		: std_logic;
+signal const_1 : std_logic;
+signal bclk_tick : std_logic;
 
-signal rx_bclk			: std_logic;
-signal rx_lrclk			: std_logic;
-signal rx_sdata			: std_logic_vector(NUM_RX - 1 downto 0);
-signal rx_channel_sync		: std_logic;
-signal rx_frame_sync		: std_logic;
+signal rx_bclk : std_logic;
+signal rx_lrclk	: std_logic;
+signal rx_sdata	: std_logic_vector(NUM_RX - 1 downto 0);
+signal rx_channel_sync : std_logic;
+signal rx_frame_sync : std_logic;
 
 signal tx_sync_fifo_out : std_logic_vector(3 + NUM_TX downto 0);
 signal tx_sync_fifo_in : std_logic_vector(3 + NUM_TX downto 0);
