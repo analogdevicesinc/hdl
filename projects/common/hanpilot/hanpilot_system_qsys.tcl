@@ -106,8 +106,8 @@ set_instance_parameter_value sys_hps_ddr4_cntrl {CTRL_DDR4_WR_TO_RD_SAME_CHIP_DE
 set_instance_parameter_value sys_hps_ddr4_cntrl {CTRL_DDR4_WR_TO_WR_DIFF_CHIP_DELTA_CYCS} {0}
 set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_ABSTRACT_PHY} {0}
 set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_BYPASS_DEFAULT_PATTERN} {0}
-set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_BYPASS_REPEAT_STAGE} {1}
-set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_BYPASS_STRESS_STAGE} {1}
+#set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_BYPASS_REPEAT_STAGE} {1}
+#set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_BYPASS_STRESS_STAGE} {1}
 set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_BYPASS_USER_STAGE} {1}
 set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_CAL_ADDR0} {0}
 set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_CAL_ADDR1} {8}
@@ -125,8 +125,8 @@ set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_SIM_CAL_MODE_ENUM} {S
 set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_SKIP_CA_DESKEW} {0}
 set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_SKIP_CA_LEVEL} {0}
 set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_SKIP_VREF_CAL} {0}
-set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_TG_BE_PATTERN_LENGTH} {8}
-set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_TG_DATA_PATTERN_LENGTH} {8}
+#set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_TG_BE_PATTERN_LENGTH} {8}
+#set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_TG_DATA_PATTERN_LENGTH} {8}
 set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_USE_TG_AVL_2} {0}
 set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_ECLIPSE_DEBUG} {0}
 set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_ENABLE_HPS_EMIF_DEBUG} {0}

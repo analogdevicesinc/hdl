@@ -2,7 +2,7 @@
 ## Initialize global variable
 set family "none"
 set device "none"
-set version "19.2.0"
+set version "19.4.0"
 
 ## Create a project.
 #

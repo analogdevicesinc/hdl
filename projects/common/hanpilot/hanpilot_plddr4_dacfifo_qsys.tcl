@@ -31,8 +31,8 @@ proc ad_dacfifo_create {dac_fifo_name dac_data_width dac_dma_data_width dac_fifo
   set_instance_parameter_value sys_ddr4_cntrl {BOARD_DDR4_USE_DEFAULT_SLEW_RATES} {1}
   set_instance_parameter_value sys_ddr4_cntrl {DIAG_DDR4_ABSTRACT_PHY} {0}
   set_instance_parameter_value sys_ddr4_cntrl {DIAG_DDR4_BYPASS_DEFAULT_PATTERN} {0}
-  set_instance_parameter_value sys_ddr4_cntrl {DIAG_DDR4_BYPASS_REPEAT_STAGE} {1}
-  set_instance_parameter_value sys_ddr4_cntrl {DIAG_DDR4_BYPASS_STRESS_STAGE} {1}
+#   set_instance_parameter_value sys_ddr4_cntrl {DIAG_DDR4_BYPASS_REPEAT_STAGE} {1}
+#   set_instance_parameter_value sys_ddr4_cntrl {DIAG_DDR4_BYPASS_STRESS_STAGE} {1}
   set_instance_parameter_value sys_ddr4_cntrl {DIAG_DDR4_BYPASS_USER_STAGE} {1}
   set_instance_parameter_value sys_ddr4_cntrl {DIAG_DDR4_CAL_ADDR0} {0}
   set_instance_parameter_value sys_ddr4_cntrl {DIAG_DDR4_CAL_ADDR1} {8}
@@ -50,8 +50,8 @@ proc ad_dacfifo_create {dac_fifo_name dac_data_width dac_dma_data_width dac_fifo
   set_instance_parameter_value sys_ddr4_cntrl {DIAG_DDR4_SKIP_CA_DESKEW} {0}
   set_instance_parameter_value sys_ddr4_cntrl {DIAG_DDR4_SKIP_CA_LEVEL} {0}
   set_instance_parameter_value sys_ddr4_cntrl {DIAG_DDR4_SKIP_VREF_CAL} {0}
-  set_instance_parameter_value sys_ddr4_cntrl {DIAG_DDR4_TG_BE_PATTERN_LENGTH} {8}
-  set_instance_parameter_value sys_ddr4_cntrl {DIAG_DDR4_TG_DATA_PATTERN_LENGTH} {8}
+#   set_instance_parameter_value sys_ddr4_cntrl {DIAG_DDR4_TG_BE_PATTERN_LENGTH} {8}
+#   set_instance_parameter_value sys_ddr4_cntrl {DIAG_DDR4_TG_DATA_PATTERN_LENGTH} {8}
   set_instance_parameter_value sys_ddr4_cntrl {DIAG_DDR4_USE_TG_AVL_2} {0}
   set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_AC_PARITY_LATENCY} {DDR4_AC_PARITY_LATENCY_DISABLE}
   set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_AC_PERSISTENT_ERROR} {0}

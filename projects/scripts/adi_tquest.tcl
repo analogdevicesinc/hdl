@@ -31,7 +31,11 @@ if {$slack > 0} {
 }
 
 if {$slack < 0} {
-  set sof_files [glob *.sof]
+  if { [file exists *.sof] == 1} {
+    set sof_files [glob *.sof]
+  } else {
+    set sof_files [glob output_files/*.sof]
+  }
   foreach sof_file $sof_files {
     set root_sof_file [file rootname $sof_file]
     set new_sof_file [append root_sof_file "_timing.sof"]
