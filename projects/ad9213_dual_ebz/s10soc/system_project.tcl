@@ -148,8 +148,8 @@ set_location_assignment  PIN_AN43  -to rx_serial_data_b[15]        ; ## Y22 FBD1
 
 ## clocks and synchronization signals
 
-set_location_assignment  PIN_AP41  -to rx_ref_b_clk0               ; ## D04 FBGBT_CLK0_M2C_P
-set_location_assignment  PIN_AF41  -to rx_ref_b_clk1               ; ## L12 FBGBT_CLK2_M2C_P
+set_location_assignment  PIN_AK41  -to rx_ref_b_clk0               ; ## B20 FAGBTCLK1_M2C_P
+set_location_assignment  PIN_AM41  -to rx_ref_b_clk1               ; ## L08 FAGBTCLK3_M2C_P
 set_location_assignment  PIN_BC30  -to rx_sync_b                   ; ## H10 FBLA_04_P
 
 set_instance_assignment  -name IO_STANDARD LVDS  -to rx_ref_b_clk0
