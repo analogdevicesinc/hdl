@@ -7,7 +7,7 @@ set adc_dma_data_width 1024
 #
 
 add_instance device_clk altera_clock_bridge 19.1
-set_instance_parameter_value device_clk {EXPLICIT_CLOCK_RATE} {320312500}
+set_instance_parameter_value device_clk {EXPLICIT_CLOCK_RATE} {312500000}
 
 # ad9213_rx_0 JESD204B phy-link layer
 
@@ -15,9 +15,9 @@ add_instance ad9213_rx_0 adi_jesd204
 set_instance_parameter_value ad9213_rx_0 {ID} {0}
 set_instance_parameter_value ad9213_rx_0 {TX_OR_RX_N} {0}
 set_instance_parameter_value ad9213_rx_0 {SOFT_PCS} {true}
-set_instance_parameter_value ad9213_rx_0 {LANE_RATE} {12812.5}
+set_instance_parameter_value ad9213_rx_0 {LANE_RATE} {12500.0}
 set_instance_parameter_value ad9213_rx_0 {SYSCLK_FREQUENCY} {100.0}
-set_instance_parameter_value ad9213_rx_0 {REFCLK_FREQUENCY} {320.3125}
+set_instance_parameter_value ad9213_rx_0 {REFCLK_FREQUENCY} {312.5}
 set_instance_parameter_value ad9213_rx_0 {INPUT_PIPELINE_STAGES} {2}
 set_instance_parameter_value ad9213_rx_0 {NUM_OF_LANES} {16}
 set_instance_parameter_value ad9213_rx_0 {EXT_DEVICE_CLK_EN} {1}
@@ -28,9 +28,9 @@ add_instance ad9213_rx_1 adi_jesd204
 set_instance_parameter_value ad9213_rx_1 {ID} {1}
 set_instance_parameter_value ad9213_rx_1 {TX_OR_RX_N} {0}
 set_instance_parameter_value ad9213_rx_1 {SOFT_PCS} {true}
-set_instance_parameter_value ad9213_rx_1 {LANE_RATE} {12812.5}
+set_instance_parameter_value ad9213_rx_1 {LANE_RATE} {12500.0}
 set_instance_parameter_value ad9213_rx_1 {SYSCLK_FREQUENCY} {100.0}
-set_instance_parameter_value ad9213_rx_1 {REFCLK_FREQUENCY} {320.3125}
+set_instance_parameter_value ad9213_rx_1 {REFCLK_FREQUENCY} {312.5}
 set_instance_parameter_value ad9213_rx_1 {INPUT_PIPELINE_STAGES} {2}
 set_instance_parameter_value ad9213_rx_1 {NUM_OF_LANES} {16}
 set_instance_parameter_value ad9213_rx_1 {EXT_DEVICE_CLK_EN} {1}
