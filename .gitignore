@@ -1,4 +1,6 @@
 ipcache
+qdb
+output_files
 *.ip_user_files
 *.dcp
 *.cache
