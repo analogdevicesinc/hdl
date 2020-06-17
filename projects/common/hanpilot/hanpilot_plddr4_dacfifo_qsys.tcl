@@ -4,9 +4,9 @@ proc ad_dacfifo_create {dac_fifo_name dac_data_width dac_dma_data_width dac_fifo
 
   add_instance sys_ddr4_cntrl altera_emif
   set_instance_parameter_value sys_ddr4_cntrl {PROTOCOL_ENUM} {PROTOCOL_DDR4}
-  set_instance_parameter_value sys_ddr4_cntrl {PHY_DDR4_MEM_CLK_FREQ_MHZ} {1066.666}
-  set_instance_parameter_value sys_ddr4_cntrl {PHY_DDR4_DEFAULT_REF_CLK_FREQ} {1}
-  set_instance_parameter_value sys_ddr4_cntrl {PHY_DDR4_USER_REF_CLK_FREQ_MHZ} {233.333}
+  set_instance_parameter_value sys_ddr4_cntrl {PHY_DDR4_MEM_CLK_FREQ_MHZ} {1066.667}
+  set_instance_parameter_value sys_ddr4_cntrl {PHY_DDR4_DEFAULT_REF_CLK_FREQ} {0}
+  set_instance_parameter_value sys_ddr4_cntrl {PHY_DDR4_USER_REF_CLK_FREQ_MHZ} {266.667}
   set_instance_parameter_value sys_ddr4_cntrl {PHY_DDR4_RATE_ENUM} {RATE_QUARTER}
   set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_FORMAT_ENUM} {MEM_FORMAT_DISCRETE}
   set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_DQ_WIDTH} {32}
@@ -19,8 +19,8 @@ proc ad_dacfifo_create {dac_fifo_name dac_data_width dac_dma_data_width dac_fifo
   set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_ALERT_N_PLACEMENT_ENUM} {DDR4_ALERT_N_PLACEMENT_DATA_LANES}
   set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_ALERT_N_AC_LANE} {0}
   set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_ALERT_N_AC_PIN} {0}
-  set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_TCL} {20}
-  set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_WTCL} {16}
+  set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_TCL} {15}
+  set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_WTCL} {14}
   set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_RTT_NOM_ENUM} {DDR4_RTT_NOM_RZQ_4}
   set_instance_parameter_value sys_ddr4_cntrl {PHY_DDR4_IO_VOLTAGE} {1.2}
   set_instance_parameter_value sys_ddr4_cntrl {PHY_DDR4_DEFAULT_IO} {0}

@@ -1,7 +1,10 @@
 
-create_clock -period "10.000 ns"  -name sys_clk_100mhz      [get_ports {sys_clk}]
-create_clock -period  "8.138 ns"  -name ref_clk0            [get_ports {ref_clk0}]
-create_clock -period  "8.138 ns"  -name ref_clk1            [get_ports {ref_clk1}]
+create_clock -period "10.000 ns"   -name sys_clk_100mhz      [get_ports {sys_clk}]
+create_clock -period "266.666 MHz" -name plddr4_dacfifo      [get_ports {sys_ddr_ref_clk}]
+create_clock -period  "8.138 ns"   -name ref_clk0            [get_ports {ref_clk0}]
+create_clock -period  "8.138 ns"   -name ref_clk1            [get_ports {ref_clk1}]
+
+set_clock_groups -asynchronous -group [get_clocks {sys_ddr_ref_clk}]
 
 derive_pll_clocks
 derive_clock_uncertainty

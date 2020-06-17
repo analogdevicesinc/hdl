@@ -9,7 +9,7 @@ add_interface sys_rstn reset sink
 set_interface_property sys_rstn EXPORT_OF sys_clk.clk_in_reset
 set_instance_parameter_value sys_clk {clockFrequency} {100000000.0}
 set_instance_parameter_value sys_clk {clockFrequencyKnown} {1}
-set_instance_parameter_value sys_clk {resetSynchronousEdges} {NONE}
+set_instance_parameter_value sys_clk {resetSynchronousEdges} {DEASSERT}
 
 add_instance sys_hps altera_arria10_hps
 set_instance_parameter_value sys_hps {MPU_EVENTS_Enable} {0}
@@ -32,7 +32,7 @@ set_instance_parameter_value sys_hps {I2C0_PinMuxing} {IO}
 set_instance_parameter_value sys_hps {I2C0_Mode} {default}
 set_instance_parameter_value sys_hps {F2H_COLD_RST_Enable} {1}
 set_instance_parameter_value sys_hps {H2F_USER0_CLK_Enable} {1}
-set_instance_parameter_value sys_hps {H2F_USER0_CLK_FREQ} {200}
+set_instance_parameter_value sys_hps {H2F_USER0_CLK_FREQ} {175}
 set_instance_parameter_value sys_hps {CLK_SDMMC_SOURCE} {1}
 
 add_interface sys_hps_rstn reset sink
@@ -222,7 +222,7 @@ set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_SPD_145_DB_MDQ_DRV} {2
 set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_SPD_148_DRAM_DRV} {0}
 set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_SPD_149_DRAM_RTT_WR_NOM} {20}
 set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_SPD_152_DRAM_RTT_PARK} {39}
-set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_SPEEDBIN_ENUM} {DDR4_SPEEDBIN_2400}
+set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_SPEEDBIN_ENUM} {DDR4_SPEEDBIN_2133}
 set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_TCCD_L_CYC} {6}
 set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_TCCD_S_CYC} {4}
 set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_TCL} {20}

@@ -70,7 +70,7 @@ module system_top (
   output  [  0:0]   sys_ddr_clk_n,
   output  [ 16:0]   sys_ddr_a,
   output  [  1:0]   sys_ddr_ba,
-  output  [  0:0]   sys_ddr_bg,
+  output  [  1:0]   sys_ddr_bg,
   output  [  0:0]   sys_ddr_cke,
   output  [  0:0]   sys_ddr_cs_n,
   output  [  0:0]   sys_ddr_odt,
@@ -78,10 +78,10 @@ module system_top (
   output  [  0:0]   sys_ddr_act_n,
   output  [  0:0]   sys_ddr_par,
   input   [  0:0]   sys_ddr_alert_n,
-  inout   [  3:0]   sys_ddr_dqs_p,
-  inout   [  3:0]   sys_ddr_dqs_n,
-  inout   [ 31:0]   sys_ddr_dq,
-  inout   [  3:0]   sys_ddr_dbi_n,
+  inout   [  8:0]   sys_ddr_dqs_p,
+  inout   [  8:0]   sys_ddr_dqs_n,
+  inout   [ 71:0]   sys_ddr_dq,
+  inout   [  8:0]   sys_ddr_dbi_n,
   input             sys_ddr_rzq,
 
   // hps-ethernet

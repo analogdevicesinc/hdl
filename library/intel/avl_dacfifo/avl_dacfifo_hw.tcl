@@ -16,17 +16,17 @@ ad_ip_files avl_dacfifo [list\
   avl_dacfifo_constr.sdc]
 
 # parameters
-
+  
 ad_ip_parameter DEVICE_FAMILY STRING {Arria 10}
 ad_ip_parameter DAC_DATA_WIDTH INTEGER 64
 ad_ip_parameter DAC_MEM_ADDRESS_WIDTH INTEGER 8
 ad_ip_parameter DMA_DATA_WIDTH INTEGER 64
 ad_ip_parameter DMA_MEM_ADDRESS_WIDTH INTEGER 8
 ad_ip_parameter AVL_DATA_WIDTH INTEGER 512
-ad_ip_parameter AVL_ADDRESS_WIDTH INTEGER 25
 ad_ip_parameter AVL_BURST_LENGTH INTEGER 127
 ad_ip_parameter AVL_BASE_ADDRESS INTEGER 0
 ad_ip_parameter AVL_ADDRESS_LIMIT INTEGER 0x800000
+ad_ip_parameter AVL_ADDRESS_WIDTH INTEGER 25
 
 # interfaces
 
@@ -59,8 +59,9 @@ set_interface_property avl_reset associatedclock avl_clock
 add_interface_port avl_reset avl_reset reset input 1
 
 add_interface amm_ddr avalon master
-add_interface_port amm_ddr avl_address address output 25
+
 add_interface_port amm_ddr avl_burstcount burstcount output 7
+add_interface_port amm_ddr avl_address address output AVL_ADDRESS_WIDTH
 add_interface_port amm_ddr avl_byteenable byteenable output 64
 add_interface_port amm_ddr avl_read read output 1
 add_interface_port amm_ddr avl_readdata readdata input 512

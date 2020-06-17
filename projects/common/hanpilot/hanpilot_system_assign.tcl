@@ -9,6 +9,13 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to sys_resetn
 set_global_assignment -name HPS_EARLY_IO_RELEASE ON
 set_global_assignment -name PROGRAMMABLE_POWER_TECHNOLOGY_SETTING "FORCE ALL USED TILES TO HIGH SPEED"
 
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
+
+set_global_assignment -name MAX_CORE_JUNCTION_TEMP 100
+set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
+set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
+set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
+
 
 # hps-ddr4 (32)
 
@@ -455,7 +462,3 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_gpio[2]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_gpio[3]
 # set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_gpio[4]
 # set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_gpio[5]
-
-#set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
-#fix for ddr clocking region issues
-#set_global_assignment -name AUTO_RESERVE_CLKUSR_FOR_CALIBRATION OFF

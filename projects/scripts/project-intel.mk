@@ -54,6 +54,7 @@ CLEAN_TARGET += *.summary
 CLEAN_TARGET += ip
 CLEAN_TARGET += qdb
 CLEAN_TARGET += tmp-clearbox
+CLEAN_TARGET += output_files
 
 M_DEPS += system_top.v
 M_DEPS += system_qsys.tcl

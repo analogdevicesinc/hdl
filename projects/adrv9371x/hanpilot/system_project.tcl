@@ -5,7 +5,7 @@ source ../../scripts/adi_project_intel.tcl
 adi_project adrv9371x_hanpilot
 
 source $ad_hdl_dir/projects/common/hanpilot/hanpilot_system_assign.tcl
-source $ad_hdl_dir/projects/common/hanpilot/hanpilot_plddr4_assign.tcl
+source $ad_hdl_dir/projects/common/hanpilot/hanpilot_sodimm_plddr4_assign.tcl
 
 # ad9371
 
@@ -141,5 +141,9 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[15]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[16]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[17]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[18]
+
+#fix for ddr clocking region issues
+set_global_assignment -name AUTO_RESERVE_CLKUSR_FOR_CALIBRATION OFF
+set_global_assignment -name OPTIMIZATION_MODE "SUPERIOR PERFORMANCE WITH MAXIMUM PLACEMENT EFFORT"
 
 execute_flow -compile
