@@ -215,7 +215,7 @@ set_instance_parameter_value axi_hdmi_tx_0 {ID} {0}
 
 add_instance pixel_clk_pll altera_pll
 set_instance_parameter_value pixel_clk_pll {gui_operation_mode} {direct}
-set_instance_parameter_value pixel_clk_pll {gui_output_clock_frequency0} {108.0}
+set_instance_parameter_value pixel_clk_pll {gui_output_clock_frequency0} {148.5}
 set_instance_parameter_value pixel_clk_pll {gui_phase_shift0} {0}
 set_instance_parameter_value pixel_clk_pll {gui_phase_shift_deg0} {0.0}
 set_instance_parameter_value pixel_clk_pll {gui_phout_division} {1}
