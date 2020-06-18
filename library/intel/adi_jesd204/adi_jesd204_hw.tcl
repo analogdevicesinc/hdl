@@ -242,6 +242,10 @@ proc create_lane_pll {id tx_or_rx_n pllclk_frequency refclk_frequency num_lanes 
       add_connection glue.out_pll_select_gnd phy_reset_control.pll_select
     }
 
+    if {$num_lanes > 6} {
+      set_instance_parameter_value lane_pll enable_mcgb {true}
+      set_instance_parameter_value lane_pll enable_hfreq_clk {true}
+    }
   } else {
     send_message error "Only Arria 10 and Stratix 10 are supported."
   }
