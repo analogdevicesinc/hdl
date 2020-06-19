@@ -124,7 +124,11 @@ module system_top (
   input                   vadj_err,
   output                  platform_status,
 
-  inout                   tdd_sync
+  inout                   tdd_sync,
+
+  //debug hdr
+  output       [9:0]      proto_hdr
+
 );
   // internal registers
   reg         [  2:0] mcs_sync_m = 'd0;
@@ -290,8 +294,18 @@ module system_top (
     .spi1_sclk (),
     .spi1_csn (),
     .spi1_miso (1'b0),
-    .spi1_mosi ()
+    .spi1_mosi (),
+
+    // debug
+    .adc1_div_clk (proto_hdr[0]),
+    .adc2_div_clk (proto_hdr[1]),
+    .dac1_div_clk (proto_hdr[2]),
+    .dac2_div_clk (proto_hdr[3])
+
   );
+
+  assign proto_hdr[9:4] = {'b0};
+
 endmodule
 
 // ***************************************************************************
