@@ -234,12 +234,6 @@ set_location_assignment PIN_M4   -to fpga_i2c_sda
 set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_i2c_scl
 set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_i2c_sda
 
-# sma clk out
-# set_location_assignment PIN_AN21 -to sma_clkout
-# set_location_assignment PIN_AM21   -to "sma_clkout(n)"
-# set_instance_assignment -name IO_STANDARD "1.8 V" -to sma_clkout
-# set_instance_assignment -name IO_STANDARD LVDS -to "sma_clkout(n)"
-
 # gpio
 
 # leds

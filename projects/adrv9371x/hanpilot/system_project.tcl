@@ -7,6 +7,12 @@ adi_project adrv9371x_hanpilot
 source $ad_hdl_dir/projects/common/hanpilot/hanpilot_system_assign.tcl
 source $ad_hdl_dir/projects/common/hanpilot/hanpilot_sodimm_plddr4_assign.tcl
 
+# sma clk out
+set_location_assignment PIN_AN21 -to sma_clkout
+set_location_assignment PIN_AM21   -to "sma_clkout(n)"
+set_instance_assignment -name IO_STANDARD "1.8 V" -to sma_clkout
+set_instance_assignment -name IO_STANDARD LVDS -to "sma_clkout(n)"
+
 # ad9371
 
 set_location_assignment PIN_P31   -to ref_clk0               ; ## D04  FMC_HPC_GBTCLK0_M2C_P (NC)

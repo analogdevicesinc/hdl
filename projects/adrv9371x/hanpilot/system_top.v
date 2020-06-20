@@ -155,7 +155,7 @@ module system_top (
   inout             mpu_int,
   
   //sma
-//   output            sma_clkout,
+  output            sma_clkout,
 
   // ad9371-interface
   
@@ -268,8 +268,8 @@ module system_top (
   system_bd i_system_bd (
     .ad9371_gpio_export (ad9371_gpio),
     .sys_clk_clk (sys_clk),
-//     .sma_iopll_refclk_clk(sys_clk),
-//     .sma_iopll_out_extclk_out(sma_clkout),
+    .sma_iopll_refclk_clk(sys_clk),
+    .sma_iopll_out_extclk_out(sma_clkout),
     .sys_ddr_mem_mem_ck (sys_ddr_clk_p),
     .sys_ddr_mem_mem_ck_n (sys_ddr_clk_n),
     .sys_ddr_mem_mem_a (sys_ddr_a),
