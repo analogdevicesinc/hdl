@@ -177,7 +177,7 @@ always @(posedge clk) begin
 end
 
 always @(posedge clk) begin
-  if (cmd_ready)
+  if (cmd_ready & cmd_valid)
    cmd_d1 <= cmd;
 end
 
@@ -405,6 +405,8 @@ assign trigger_rx_s = trigger_rx_d[SDI_DELAY+1];
 
 // Load the serial data into SDI shift register(s), then link it to the output
 // register of the module
+
+wire cs_active_s = (inst_d1 == CMD_CHIPSELECT) & ~(&cmd_d1[NUM_OF_CS-1:0]);
 genvar i;
 generate
   for (i=0; i<NUM_OF_SDI; i=i+1) begin: g_sdi_shift_reg
@@ -412,7 +414,7 @@ generate
     reg [DATA_WIDTH-1:0] data_sdi_shift;
 
     always @(posedge clk) begin
-      if (inst_d1 == CMD_CHIPSELECT) begin
+      if (cs_active_s) begin
         data_sdi_shift <= {DATA_WIDTH{1'b0}};
       end else if (trigger_rx_s == 1'b1) begin
         data_sdi_shift <= {data_sdi_shift[DATA_WIDTH-2:0], sdi[i]};
