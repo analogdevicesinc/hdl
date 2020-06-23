@@ -122,8 +122,8 @@ add_connection sys_clk.clk_reset ad9213_dual_pio.reset
 
 # device clock and reset
 
-add_connection device_clk.out_clk ad9213_rx_0.device_clk
-add_connection device_clk.out_clk ad9213_rx_1.device_clk
+add_connection device_clk.out_clk ad9213_rx_0.link_clk
+add_connection device_clk.out_clk ad9213_rx_1.link_clk
 add_connection device_clk.out_clk ad9213_dual_link.clk
 add_connection device_clk.out_clk axi_ad9213_dual.link_clk
 add_connection device_clk.out_clk ad9213_adcfifo.if_adc_clk
@@ -200,8 +200,7 @@ ad_dma_interconnect axi_ad9213_dma.m_dest_axi
 ## NOTE: if bridge is used, the address will be bridge_base_addr + peripheral_base_addr
 ##
 
-ad_cpu_interconnect 0x00020000 ad9213_rx_0.link_pll_reconfig "avl_mm_bridge_0" 0x00040000
-ad_cpu_interconnect 0x00000000 ad9213_rx_0.phy_reconfig_0    "avl_mm_bridge_0"
+ad_cpu_interconnect 0x00000000 ad9213_rx_0.phy_reconfig_0    "avl_mm_bridge_0" 0x00040000
 ad_cpu_interconnect 0x00002000 ad9213_rx_0.phy_reconfig_1    "avl_mm_bridge_0"
 ad_cpu_interconnect 0x00004000 ad9213_rx_0.phy_reconfig_2    "avl_mm_bridge_0"
 ad_cpu_interconnect 0x00006000 ad9213_rx_0.phy_reconfig_3    "avl_mm_bridge_0"
@@ -218,8 +217,7 @@ ad_cpu_interconnect 0x0001A000 ad9213_rx_0.phy_reconfig_13   "avl_mm_bridge_0"
 ad_cpu_interconnect 0x0001C000 ad9213_rx_0.phy_reconfig_14   "avl_mm_bridge_0"
 ad_cpu_interconnect 0x0001E000 ad9213_rx_0.phy_reconfig_15   "avl_mm_bridge_0"
 
-ad_cpu_interconnect 0x00020000 ad9213_rx_1.link_pll_reconfig "avl_mm_bridge_1" 0x00080000
-ad_cpu_interconnect 0x00000000 ad9213_rx_1.phy_reconfig_0    "avl_mm_bridge_1"
+ad_cpu_interconnect 0x00000000 ad9213_rx_1.phy_reconfig_0    "avl_mm_bridge_1" 0x00080000
 ad_cpu_interconnect 0x00002000 ad9213_rx_1.phy_reconfig_1    "avl_mm_bridge_1"
 ad_cpu_interconnect 0x00004000 ad9213_rx_1.phy_reconfig_2    "avl_mm_bridge_1"
 ad_cpu_interconnect 0x00006000 ad9213_rx_1.phy_reconfig_3    "avl_mm_bridge_1"
