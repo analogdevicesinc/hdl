@@ -38,7 +38,9 @@
 
 module ad_pnmon #(
 
-  parameter DATA_WIDTH = 16) (
+  parameter DATA_WIDTH = 16,
+  parameter OOS_THRESHOLD = 16,
+  parameter ALLOW_ZERO_MASKING = 0) (
 
   // adc interface
 
@@ -47,10 +49,15 @@ module ad_pnmon #(
   input   [(DATA_WIDTH-1):0]  adc_data_in,
   input   [(DATA_WIDTH-1):0]  adc_data_pn,
 
+  input                       adc_pattern_has_zero,
+
   // pn out of sync and error
 
   output                      adc_pn_oos,
-  output                      adc_pn_err);
+  output                      adc_pn_err
+);
+
+  localparam CNT_W = $clog2(OOS_THRESHOLD);
 
   // internal registers
 
@@ -59,7 +66,7 @@ module ad_pnmon #(
   reg                         adc_pn_match_z = 'd0;
   reg                         adc_pn_oos_int = 'd0;
   reg                         adc_pn_err_int = 'd0;
-  reg     [ 3:0]              adc_pn_oos_count = 'd0;
+  reg  [CNT_W-1:0]            adc_pn_oos_count = 'd0;
 
   // internal signals
 
@@ -68,14 +75,21 @@ module ad_pnmon #(
   wire                        adc_pn_match_s;
   wire                        adc_pn_update_s;
   wire                        adc_pn_err_s;
+  wire                        adc_valid_zero;
 
   // make sure data is not 0, sequence will fail.
 
   assign adc_pn_match_d_s = (adc_data_in == adc_data_pn) ? 1'b1 : 1'b0;
-  assign adc_pn_match_z_s = (adc_data_in == 'd0) ? 1'b0 : 1'b1;
-  assign adc_pn_match_s = adc_pn_match_d & adc_pn_match_z;
+  assign adc_pn_match_z_s = (adc_data_in == 'd0) ? 1'b1 : 1'b0;
+  assign adc_pn_match_s = adc_pn_match_d & ~adc_pn_match_z;
   assign adc_pn_update_s = ~(adc_pn_oos_int ^ adc_pn_match_s);
-  assign adc_pn_err_s = ~(adc_pn_oos_int | adc_pn_match_s);
+
+  // Ignore sporadic zeros in middle of pattern if not out of sync
+  // but OOS_THRESHOLD consecutive zeros would assert out of sync.
+  assign adc_valid_zero = ALLOW_ZERO_MASKING & adc_pattern_has_zero &
+                          ~adc_pn_oos_int & adc_pn_match_z_s;
+  assign adc_pn_err_s = ~(adc_pn_oos_int | adc_pn_match_s | adc_valid_zero);
+
 
   // pn oos and counters (16 to clear and set).
 
@@ -88,7 +102,7 @@ module ad_pnmon #(
     adc_pn_match_z <= adc_pn_match_z_s;
     if (adc_valid_d == 1'b1) begin
       adc_pn_err_int <= adc_pn_err_s;
-      if ((adc_pn_update_s == 1'b1) && (adc_pn_oos_count >= 15)) begin
+      if ((adc_pn_update_s == 1'b1) && (adc_pn_oos_count >= OOS_THRESHOLD-1)) begin
         adc_pn_oos_int <= ~adc_pn_oos_int;
       end
       if (adc_pn_update_s == 1'b1) begin
