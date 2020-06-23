@@ -72,7 +72,6 @@ ad_ip_parameter REFCLK_FREQUENCY FLOAT 500.0 false
 ad_ip_parameter NUM_OF_LANES POSITIVE 4 false
 ad_ip_parameter REGISTER_INPUTS INTEGER 0 false
 ad_ip_parameter LANE_INVERT INTEGER 0 false
-ad_ip_parameter EXT_DEVICE_CLK_EN BOOLEAN false false
 ad_ip_parameter BONDING_CLOCKS_EN BOOLEAN false false
 
 proc jesd204_phy_composition_callback {} {
@@ -88,7 +87,6 @@ proc jesd204_phy_composition_callback {} {
   set num_of_lanes [get_parameter_value "NUM_OF_LANES"]
   set register_inputs [get_parameter_value "REGISTER_INPUTS"]
   set lane_invert [get_parameter_value "LANE_INVERT"]
-  set ext_device_clk_en [get_parameter_value "EXT_DEVICE_CLK_EN"]
   set bonding_clocks_en [get_parameter_value "BONDING_CLOCKS_EN"]
 
   set link_clk_frequency [expr $lane_rate / 40]
@@ -194,14 +192,6 @@ proc jesd204_phy_composition_callback {} {
   add_interface reconfig_reset reset sink
   set_interface_property reconfig_reset EXPORT_OF phy_glue.reconfig_reset
 
-  if {$ext_device_clk_en} {
-    add_instance ext_device_clock altera_clock_bridge 19.1
-    set_instance_parameter_value ext_device_clock {EXPLICIT_CLOCK_RATE} [expr $link_clk_frequency*1000000]
-    set_instance_parameter_value ext_device_clock {NUM_CLOCK_OUTPUTS} 1
-    add_interface device_clk clock sink
-    set_interface_property device_clk EXPORT_OF ext_device_clock.in_clk
-  }
-
   if {$tx} {
     if {$bonding_clocks_en && $num_of_lanes > 6} {
         add_interface bonding_clocks hssi_bonded_clock end
@@ -217,11 +207,7 @@ proc jesd204_phy_composition_callback {} {
         add_connection phy_glue.phy_tx_serial_clk0 native_phy.tx_serial_clk0
     }
 
-    if {$ext_device_clk_en} {
-      add_connection ext_device_clock.out_clk phy_glue.tx_coreclkin
-    } else {
-      add_connection link_clock.clk phy_glue.tx_coreclkin
-    }
+    add_connection link_clock.clk phy_glue.tx_coreclkin
 
     if { $soft_pcs == true && $device_type == 1 }  {
       add_connection phy_glue.phy_tx_enh_data_valid native_phy.tx_enh_data_valid
@@ -255,11 +241,7 @@ proc jesd204_phy_composition_callback {} {
     add_interface ref_clk clock sink
     set_interface_property ref_clk EXPORT_OF phy_glue.rx_cdr_refclk0
 
-    if {$ext_device_clk_en} {
-      add_connection ext_device_clock.out_clk phy_glue.rx_coreclkin
-    } else {
-      add_connection link_clock.clk phy_glue.rx_coreclkin
-    }
+    add_connection link_clock.clk phy_glue.rx_coreclkin
 
     foreach x {serial_data analogreset digitalreset cal_busy is_lockedtodata} {
       add_interface ${x} conduit end
@@ -299,11 +281,7 @@ proc jesd204_phy_composition_callback {} {
         add_instance soft_pcs_${i} jesd204_soft_pcs_tx 1.0
         set_instance_parameter_value soft_pcs_${i} INVERT_OUTPUTS \
           [expr ($lane_invert >> $i) & 1]
-        if {$ext_device_clk_en} {
-          add_connection ext_device_clock.out_clk soft_pcs_${i}.clock
-        } else {
-          add_connection link_clock.clk soft_pcs_${i}.clock
-        }
+        add_connection link_clock.clk soft_pcs_${i}.clock
         add_connection link_clock.clk_reset soft_pcs_${i}.reset
         add_connection soft_pcs_${i}.tx_raw_data phy_glue.tx_raw_data_${i}
 
@@ -317,11 +295,7 @@ proc jesd204_phy_composition_callback {} {
         set_instance_parameter_value soft_pcs_${i} REGISTER_INPUTS $register_inputs
         set_instance_parameter_value soft_pcs_${i} INVERT_INPUTS \
           [expr ($lane_invert >> $i) & 1]
-        if {$ext_device_clk_en} {
-          add_connection ext_device_clock.out_clk soft_pcs_${i}.clock
-        } else {
-          add_connection link_clock.clk soft_pcs_${i}.clock
-        }
+        add_connection link_clock.clk soft_pcs_${i}.clock
         add_connection link_clock.clk_reset soft_pcs_${i}.reset
         add_connection phy_glue.rx_raw_data_${i} soft_pcs_${i}.rx_raw_data
 

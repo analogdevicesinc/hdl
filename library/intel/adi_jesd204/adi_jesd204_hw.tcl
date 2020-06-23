@@ -369,7 +369,17 @@ proc jesd204_compose {} {
   add_interface ref_clk clock sink
   set_interface_property ref_clk EXPORT_OF ref_clock.in_clk
 
-  set outclk_name ""
+  ## axi_xcvr for LINK/PHY reset control and monitor
+  add_instance axi_xcvr axi_adxcvr 1.0
+  set_instance_parameter_value axi_xcvr {ID} $id
+  set_instance_parameter_value axi_xcvr {TX_OR_RX_N} $tx_or_rx_n
+  set_instance_parameter_value axi_xcvr {NUM_OF_LANES} $num_of_lanes
+
+  add_connection sys_clock.clk axi_xcvr.s_axi_clock
+  add_connection sys_clock.clk_reset axi_xcvr.s_axi_reset
+
+  add_interface link_management axi4lite slave
+  set_interface_property link_management EXPORT_OF axi_xcvr.s_axi
 
   ## link clock configuration (also known as device clock, which will be used
   ## by the upper layers for the data path, it can come from the PCS or external)
@@ -381,89 +391,95 @@ proc jesd204_compose {} {
   add_instance link_reset altera_reset_bridge $version
   set_instance_parameter_value link_reset {NUM_RESET_OUTPUTS} 2
 
-  if {$device_family == "Arria 10"} {
+  if {$ext_device_clk_en} {
 
-    add_instance link_pll altera_xcvr_fpll_a10 $version
-    set_instance_parameter_value link_pll {gui_fpll_mode} {0}
-    set_instance_parameter_value link_pll {gui_reference_clock_frequency} $refclk_frequency
-    set_instance_parameter_value link_pll {gui_number_of_output_clocks} 1
-    set_instance_parameter_value link_pll {gui_desired_outclk0_frequency} $linkclk_frequency
-    set_instance_parameter_value link_pll {enable_pll_reconfig} {1}
-
-    set outclk_name "outclk0"
-
-    add_instance link_pll_reset_control altera_xcvr_reset_control $version
-    set_instance_parameter_value link_pll_reset_control {SYNCHRONIZE_RESET} {0}
-    set_instance_parameter_value link_pll_reset_control {SYS_CLK_IN_MHZ} $sysclk_frequency
-    set_instance_parameter_value link_pll_reset_control {TX_PLL_ENABLE} {1}
-    set_instance_parameter_value link_pll_reset_control {T_PLL_POWERDOWN} {1000}
-    set_instance_parameter_value link_pll_reset_control {TX_ENABLE} {0}
-    set_instance_parameter_value link_pll_reset_control {RX_ENABLE} {0}
-    add_connection sys_clock.clk link_pll_reset_control.clock
-    add_connection link_reset.out_reset link_pll_reset_control.reset
-    add_connection sys_clock.clk_reset link_pll_reset_control.reset
-    add_connection link_pll_reset_control.pll_powerdown link_pll.pll_powerdown
-
-  } elseif {$device_family == "Stratix 10"} {
-
-    send_message info "Instantiate a fpll_s10_htile for link_pll."
-    add_instance link_pll altera_xcvr_fpll_s10_htile 19.1.1
-    ## Primary Use is Core mode
-    set_instance_parameter_value link_pll {set_primary_use} 0
-    ## Basic Mode
-    set_instance_parameter_value link_pll {set_prot_mode} 0
-    set_instance_parameter_value link_pll {message_level} {error}
-    set_instance_parameter_value link_pll {set_refclk_cnt} {1}
-    set_instance_parameter_value link_pll {set_auto_reference_clock_frequency} $refclk_frequency
-    set_instance_parameter_value link_pll {set_output_clock_frequency} $linkclk_frequency
-    set_instance_parameter_value link_pll {set_bw_sel} {medium}
-    set_instance_parameter_value link_pll {rcfg_enable} {1}
-    set_instance_parameter_value link_pll {set_csr_soft_logic_enable} {1}
-    set_instance_parameter_value link_pll {set_capability_reg_enable} {1}
-
-    set outclk_name "outclk_div1"
+    ## Device clock (link clock) is external
+    add_interface link_clk clock sink
+    set_interface_property link_clk EXPORT_OF link_clock.in_clk
 
   } else {
-  ## Unsupported device
-    send_message error "Only Arria 10 and Stratix 10 are supported."
-  }
 
-  add_connection link_pll.$outclk_name link_clock.in_clk
-  add_interface link_clk clock source
+    ## Device clock (link clock) is internal
+    if {$device_family == "Arria 10"} {
+
+      add_instance link_pll altera_xcvr_fpll_a10 $version
+      set_instance_parameter_value link_pll {gui_fpll_mode} {0}
+      set_instance_parameter_value link_pll {gui_reference_clock_frequency} $refclk_frequency
+      set_instance_parameter_value link_pll {gui_number_of_output_clocks} 1
+      set_instance_parameter_value link_pll {gui_desired_outclk0_frequency} $linkclk_frequency
+      set_instance_parameter_value link_pll {enable_pll_reconfig} {1}
+
+      add_connection link_pll.outclk0 link_clock.in_clk
+
+      add_instance link_pll_reset_control altera_xcvr_reset_control $version
+      set_instance_parameter_value link_pll_reset_control {SYNCHRONIZE_RESET} {0}
+      set_instance_parameter_value link_pll_reset_control {SYS_CLK_IN_MHZ} $sysclk_frequency
+      set_instance_parameter_value link_pll_reset_control {TX_PLL_ENABLE} {1}
+      set_instance_parameter_value link_pll_reset_control {T_PLL_POWERDOWN} {1000}
+      set_instance_parameter_value link_pll_reset_control {TX_ENABLE} {0}
+      set_instance_parameter_value link_pll_reset_control {RX_ENABLE} {0}
+      add_connection sys_clock.clk link_pll_reset_control.clock
+      add_connection link_reset.out_reset link_pll_reset_control.reset
+      add_connection sys_clock.clk_reset link_pll_reset_control.reset
+      add_connection link_pll_reset_control.pll_powerdown link_pll.pll_powerdown
+
+    } elseif {$device_family == "Stratix 10"} {
+
+      send_message info "Instantiate a fpll_s10_htile for link_pll."
+      add_instance link_pll altera_xcvr_fpll_s10_htile 19.1.1
+      ## Primary Use is Core mode
+      set_instance_parameter_value link_pll {set_primary_use} 0
+      ## Basic Mode
+      set_instance_parameter_value link_pll {set_prot_mode} 0
+      set_instance_parameter_value link_pll {message_level} {error}
+      set_instance_parameter_value link_pll {set_refclk_cnt} {1}
+      set_instance_parameter_value link_pll {set_auto_reference_clock_frequency} $refclk_frequency
+      set_instance_parameter_value link_pll {set_output_clock_frequency} $linkclk_frequency
+      set_instance_parameter_value link_pll {set_bw_sel} {medium}
+      set_instance_parameter_value link_pll {rcfg_enable} {1}
+      set_instance_parameter_value link_pll {set_csr_soft_logic_enable} {1}
+      set_instance_parameter_value link_pll {set_capability_reg_enable} {1}
+
+      add_connection link_pll.outclk_div1 link_clock.in_clk
+
+    } else {
+    ## Unsupported device
+      send_message error "Only Arria 10 and Stratix 10 are supported."
+    }
+
+    ## Enable Link PLL reconfiguration
+    set_instance_parameter_value link_pll {set_capability_reg_enable} {1}
+    set_instance_parameter_value link_pll {set_csr_soft_logic_enable} {1}
+    set_instance_parameter_value link_pll {rcfg_separate_avmm_busy} {1}
+    add_connection ref_clock.out_clk link_pll.pll_refclk0
+
+    add_connection sys_clock.clk_reset link_pll.reconfig_reset0
+    add_connection sys_clock.clk link_pll.reconfig_clk0
+
+    add_interface link_pll_reconfig avalon slave
+    set_interface_property link_pll_reconfig EXPORT_OF link_pll.reconfig_avmm0
+    set_interface_property link_pll_reconfig associatedClock sys_clk
+    set_interface_property link_pll_reconfig associatedReset sys_resetn
+
+    ## Link PLL status to axi_xcvr
+    add_connection link_pll.pll_locked axi_xcvr.core_pll_locked
+
+    ## Export the internal device clock to expose it for other IPs
+    add_interface link_clk clock source
+    set_interface_property link_clk EXPORT_OF link_clock.out_clk
+
+  } ; ## $ext_device_clk_en == 0
 
   add_connection sys_clock.clk link_reset.clk
   add_interface link_reset reset source
   set_interface_property link_reset EXPORT_OF link_reset.out_reset_1
 
-  set_instance_parameter_value link_pll {set_capability_reg_enable} {1}
-  set_instance_parameter_value link_pll {set_csr_soft_logic_enable} {1}
-  set_instance_parameter_value link_pll {rcfg_separate_avmm_busy} {1}
-  add_connection ref_clock.out_clk link_pll.pll_refclk0
-
-  add_connection sys_clock.clk_reset link_pll.reconfig_reset0
-  add_connection sys_clock.clk link_pll.reconfig_clk0
-
-  add_instance axi_xcvr axi_adxcvr 1.0
-  set_instance_parameter_value axi_xcvr {ID} $id
-  set_instance_parameter_value axi_xcvr {TX_OR_RX_N} $tx_or_rx_n
-  set_instance_parameter_value axi_xcvr {NUM_OF_LANES} $num_of_lanes
-
-  add_connection sys_clock.clk axi_xcvr.s_axi_clock
-  add_connection sys_clock.clk_reset axi_xcvr.s_axi_reset
   add_connection axi_xcvr.if_up_rst link_reset.in_reset
-  add_connection link_pll.pll_locked axi_xcvr.core_pll_locked
 
-  add_interface link_management axi4lite slave
-  set_interface_property link_management EXPORT_OF axi_xcvr.s_axi
-
-  add_interface link_pll_reconfig avalon slave
-  set_interface_property link_pll_reconfig EXPORT_OF link_pll.reconfig_avmm0
-  set_interface_property link_pll_reconfig associatedClock sys_clk
-  set_interface_property link_pll_reconfig associatedReset sys_resetn
-
-
+  ## PHY reset controller instance
   create_phy_reset_control $tx_or_rx_n $num_of_lanes $sysclk_frequency
 
+  ## PHY instance
   add_instance phy jesd204_phy 1.0
   set_instance_parameter_value phy ID $id
   set_instance_parameter_value phy DEVICE $device_family
@@ -474,7 +490,6 @@ proc jesd204_compose {} {
   set_instance_parameter_value phy NUM_OF_LANES $num_of_lanes
   set_instance_parameter_value phy REGISTER_INPUTS $input_pipeline
   set_instance_parameter_value phy LANE_INVERT $lane_invert
-  set_instance_parameter_value phy EXT_DEVICE_CLK_EN $ext_device_clk_en
   set_instance_parameter_value phy BONDING_CLOCKS_EN $bonding_clocks_en
 
   add_connection link_clock.out_clk_1 phy.link_clk
@@ -483,18 +498,6 @@ proc jesd204_compose {} {
   add_connection sys_clock.clk_reset phy.reconfig_reset
 
   ## connect the required device clock
-
-  if {$ext_device_clk_en} {
-    add_instance ext_device_clock altera_clock_bridge $version
-    set_instance_parameter_value ext_device_clock {EXPLICIT_CLOCK_RATE} [expr $linkclk_frequency*1000000]
-    set_instance_parameter_value ext_device_clock {NUM_CLOCK_OUTPUTS} 2
-    add_interface device_clk clock sink
-    set_interface_property device_clk EXPORT_OF ext_device_clock.in_clk
-    add_connection ext_device_clock.out_clk phy.device_clk
-    set_interface_property link_clk EXPORT_OF ext_device_clock.out_clk_1
-  } else {
-    set_interface_property link_clk EXPORT_OF link_clock.out_clk
-  }
 
   set phy_reset_intfs_s10 {analogreset_stat digitalreset_stat}
 
@@ -533,13 +536,8 @@ proc jesd204_compose {} {
   add_instance jesd204_${tx_rx} jesd204_${tx_rx} 1.0
   set_instance_parameter_value jesd204_${tx_rx} {NUM_LANES} $num_of_lanes
 
-  if {$ext_device_clk_en} {
-    add_connection ext_device_clock.out_clk axi_jesd204_${tx_rx}.core_clock
-    add_connection ext_device_clock.out_clk jesd204_${tx_rx}.clock
-  } else {
-    add_connection link_clock.out_clk_1 axi_jesd204_${tx_rx}.core_clock
-    add_connection link_clock.out_clk_1 jesd204_${tx_rx}.clock
-  }
+  add_connection link_clock.out_clk_1 axi_jesd204_${tx_rx}.core_clock
+  add_connection link_clock.out_clk_1 jesd204_${tx_rx}.clock
 
   add_connection link_reset.out_reset axi_jesd204_${tx_rx}.core_reset_ext
   add_connection axi_jesd204_${tx_rx}.core_reset jesd204_${tx_rx}.reset
@@ -583,12 +581,7 @@ proc jesd204_compose {} {
 
   add_interface link_data avalon_streaming $data_direction
   set_interface_property link_data EXPORT_OF jesd204_${tx_rx}.${tx_rx}_data
-
-  if {$ext_device_clk_en} {
-    set_interface_property link_data associatedClock device_clk
-  } else {
-    set_interface_property link_data associatedClock link_clk
-  }
+  set_interface_property link_data associatedClock link_clk
 
   if {!$tx_or_rx_n} {
     add_interface link_sof conduit end
