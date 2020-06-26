@@ -111,6 +111,7 @@ module system_top (
   inout             hdmi_i2c_scl,
   inout             hdmi_i2c_sda
 
+  //// audio
   // hdmi_i2s
   // hdmi_lrclk
   // hdmi_mclk
