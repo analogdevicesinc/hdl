@@ -41,7 +41,7 @@ set_instance_parameter_value sys_hps {desired_cfg_clk_mhz} {80.0}
 set_instance_parameter_value sys_hps {S2FCLK_USER0CLK_Enable} {1}
 set_instance_parameter_value sys_hps {S2FCLK_USER2CLK_Enable} {1}
 set_instance_parameter_value sys_hps {S2FCLK_USER1CLK_FREQ} {100.0}
-set_instance_parameter_value sys_hps {S2FCLK_USER2CLK_FREQ} {133.3}
+set_instance_parameter_value sys_hps {S2FCLK_USER2CLK_FREQ} {100.0}
 
 set_instance_parameter_value sys_hps {HPS_PROTOCOL} {DDR3}
 set_instance_parameter_value sys_hps {MEM_CLK_FREQ} {400.0}
@@ -214,14 +214,17 @@ set_instance_parameter_value axi_hdmi_tx_0 {INTERFACE} {24_BIT}
 set_instance_parameter_value axi_hdmi_tx_0 {ID} {0}
 
 add_instance pixel_clk_pll altera_pll
+set_instance_parameter_value pixel_clk_pll {gui_feedback_clock} {Global Clock}
 set_instance_parameter_value pixel_clk_pll {gui_operation_mode} {direct}
-set_instance_parameter_value pixel_clk_pll {gui_output_clock_frequency0} {148.5}
+set_instance_parameter_value pixel_clk_pll {gui_output_clock_frequency0} {74.25}
+#set_instance_parameter_value pixel_clk_pll {gui_output_clock_frequency0} {148.352}
 set_instance_parameter_value pixel_clk_pll {gui_phase_shift0} {0}
 set_instance_parameter_value pixel_clk_pll {gui_phase_shift_deg0} {0.0}
 set_instance_parameter_value pixel_clk_pll {gui_phout_division} {1}
 set_instance_parameter_value pixel_clk_pll {gui_pll_auto_reset} {Off}
 set_instance_parameter_value pixel_clk_pll {gui_pll_bandwidth_preset} {Auto}
-set_instance_parameter_value pixel_clk_pll {gui_pll_mode} {Integer-N PLL}
+set_instance_parameter_value pixel_clk_pll {gui_pll_mode} {Fractional-N PLL}
+#set_instance_parameter_value pixel_clk_pll {gui_pll_mode} {Integer-N PLL}
 set_instance_parameter_value pixel_clk_pll {gui_ps_units0} {ps}
 set_instance_parameter_value pixel_clk_pll {gui_refclk_switch} {0}
 set_instance_parameter_value pixel_clk_pll {gui_reference_clock_frequency} {50.0}
