@@ -1,0 +1,3 @@
+- Connect to FMC1
+- VADJ 1.8V
+- MII mode, connected to PS8's Ethernet 1
