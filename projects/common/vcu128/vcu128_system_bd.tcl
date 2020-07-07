@@ -80,6 +80,7 @@ ad_ip_parameter sys_500m_rstgen CONFIG.C_EXT_RST_WIDTH 1
 ad_ip_instance ip:ddr4 axi_ddr_cntrl
 ad_ip_parameter axi_ddr_cntrl CONFIG.C0_CLOCK_BOARD_INTERFACE {default_100mhz_clk}
 ad_ip_parameter axi_ddr_cntrl CONFIG.C0_DDR4_BOARD_INTERFACE {ddr4_sdram}
+ad_ip_parameter axi_ddr_cntrl ONFIG.RESET_BOARD_INTERFACE {reset}
 ad_ip_parameter axi_ddr_cntrl CONFIG.C0.DDR4_Clamshell {true} 
 ad_ip_parameter axi_ddr_cntrl CONFIG.C0.DDR4_InputClockPeriod {10000}
 ad_ip_parameter axi_ddr_cntrl CONFIG.C0.DDR4_CLKOUT0_DIVIDE {3}
