@@ -280,16 +280,14 @@ ad_cpu_interconnect 0x41600000 axi_iic_main
 ad_cpu_interconnect 0x45000000 axi_sysid_0
 ad_cpu_interconnect 0x44A70000 axi_spi
 ad_cpu_interconnect 0x41400000 sys_mb_debug
+ad_cpu_interconnect 0x45100000 axi_ddr_cntrl C0_DDR4_S_AXI_CTRL
 
-# Workaround for DDR controller with control interface
-# DDR contoller has two axi slave interface and the ad_cpu_interconnect can't decide which one to use
-set_property -dict [list CONFIG.NUM_MI {11}] [get_bd_cells axi_cpu_interconnect]
-connect_bd_intf_net -boundary_type upper [get_bd_intf_pins axi_cpu_interconnect/M10_AXI] [get_bd_intf_pins axi_ddr_cntrl/C0_DDR4_S_AXI_CTRL]
+## Workaround for DDR controller with control interface
+## DDR contoller control interface runs at UI clock not CPU clock
+disconnect_bd_net /sys_cpu_clk [get_bd_pins axi_cpu_interconnect/M10_ACLK]
+disconnect_bd_net /sys_cpu_resetn [get_bd_pins axi_cpu_interconnect/M10_ARESETN]
 connect_bd_net [get_bd_pins axi_cpu_interconnect/M10_ACLK] [get_bd_pins axi_ddr_cntrl/c0_ddr4_ui_clk]
 connect_bd_net [get_bd_pins axi_cpu_interconnect/M10_ARESETN] [get_bd_pins axi_ddr_cntrl_rstgen/peripheral_aresetn]
-#fake an ad_cpu_interconnect
-global sys_cpu_interconnect_index
-incr sys_cpu_interconnect_index
 
 # interconnect - memory
 
@@ -299,18 +297,6 @@ ad_mem_hp0_interconnect sys_cpu_clk sys_mb/M_AXI_IC
 ad_mem_hp0_interconnect sys_cpu_clk axi_ethernet_dma/M_AXI_SG
 ad_mem_hp0_interconnect sys_cpu_clk axi_ethernet_dma/M_AXI_MM2S
 ad_mem_hp0_interconnect sys_cpu_clk axi_ethernet_dma/M_AXI_S2MM
-
-# Workaround. 
-# Limit DDR segment to 2G amd map it to the upper part of the address range for everyone
-# DDR is 4.5GB but we can't use all due te 32bit processor 
-set_property range 2G [get_bd_addr_segs {axi_ethernet_dma/Data_MM2S/SEG_axi_ddr_cntrl_C0_DDR4_ADDRESS_BLOCK}]
-set_property offset 0x80000000 [get_bd_addr_segs {axi_ethernet_dma/Data_MM2S/SEG_axi_ddr_cntrl_C0_DDR4_ADDRESS_BLOCK}]
-set_property range 2G [get_bd_addr_segs {axi_ethernet_dma/Data_SG/SEG_axi_ddr_cntrl_C0_DDR4_ADDRESS_BLOCK}]
-set_property offset 0x80000000 [get_bd_addr_segs {axi_ethernet_dma/Data_SG/SEG_axi_ddr_cntrl_C0_DDR4_ADDRESS_BLOCK}]
-set_property range 2G [get_bd_addr_segs {axi_ethernet_dma/Data_S2MM/SEG_axi_ddr_cntrl_C0_DDR4_ADDRESS_BLOCK}]
-set_property offset 0x80000000 [get_bd_addr_segs {axi_ethernet_dma/Data_S2MM/SEG_axi_ddr_cntrl_C0_DDR4_ADDRESS_BLOCK}]
-set_property offset 0x80000000 [get_bd_addr_segs {sys_mb/Instruction/SEG_axi_ddr_cntrl_C0_DDR4_ADDRESS_BLOCK}]
-
 
 create_bd_addr_seg -range 0x80000 -offset 0x0 [get_bd_addr_spaces sys_mb/Data] \
   [get_bd_addr_segs sys_dlmb_cntlr/SLMB/Mem] SEG_dlmb_cntlr
