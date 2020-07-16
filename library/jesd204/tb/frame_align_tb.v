@@ -314,7 +314,9 @@ module frame_align_tb;
   );
 
   jesd204_rx #(
-    .NUM_LANES(NUM_LANES)
+    .NUM_LANES(NUM_LANES),
+    .ENABLE_FRAME_ALIGN_CHECK(1),
+    .ENABLE_FRAME_ALIGN_ERR_RESET(1)
   ) i_rx (
     .clk(clk),
     .reset(reset),

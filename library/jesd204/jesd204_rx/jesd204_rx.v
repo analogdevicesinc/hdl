@@ -52,7 +52,7 @@ module jesd204_rx #(
   /* Only 4 is supported at the moment for 8b/10b and 8 for 64b */
   parameter DATA_PATH_WIDTH = LINK_MODE == 2 ? 8 : 4,
   parameter ENABLE_FRAME_ALIGN_CHECK = 1,
-  parameter ENABLE_FRAME_ALIGN_ERR_RESET = 1
+  parameter ENABLE_FRAME_ALIGN_ERR_RESET = 0
 ) (
   input clk,
   input reset,
