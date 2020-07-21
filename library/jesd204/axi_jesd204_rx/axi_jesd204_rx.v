@@ -114,7 +114,7 @@ module axi_jesd204_rx #(
   input [8*NUM_LANES-1:0] core_status_lane_frame_align_err_cnt
 );
 
-localparam PCORE_VERSION = 32'h00010361; // 1.03.a
+localparam PCORE_VERSION = 32'h00010461; // 1.04.a
 localparam PCORE_MAGIC = 32'h32303452; // 204R
 
 localparam DATA_PATH_WIDTH = LINK_MODE == 2 ? 3 : 2;
