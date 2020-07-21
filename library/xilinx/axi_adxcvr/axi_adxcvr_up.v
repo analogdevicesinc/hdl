@@ -230,7 +230,7 @@ module axi_adxcvr_up #(
       end else if (up_user_ready_cnt[6] == 1'b0) begin
         up_user_ready_cnt <= up_user_ready_cnt + 1'b1;
       end
-      if (up_resetn == 1'b0) begin
+      if ((up_resetn == 1'b0) || (up_ch_pll_locked == 1'b0)) begin
         up_status_int <= 1'b0;
       end else if (up_ch_rst_done == 1'b1) begin
         up_status_int <= 1'b1;
