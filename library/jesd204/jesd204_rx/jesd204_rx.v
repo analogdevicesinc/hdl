@@ -70,6 +70,7 @@ module jesd204_rx #(
 
   output event_sysref_alignment_error,
   output event_sysref_edge,
+  output event_frame_alignment_error,
 
   output [NUM_LINKS-1:0] sync,
 
@@ -173,6 +174,7 @@ wire [2*NUM_LANES-1:0] frame_align;
 wire [NUM_LANES-1:0] ifs_ready;
 
 reg [NUM_LANES-1:0] frame_align_err_thresh_met = {NUM_LANES{1'b0}};
+reg [NUM_LANES-1:0] event_frame_alignment_error_per_lane = {NUM_LANES{1'b0}};
 
 reg buffer_release_opportunity = 1'b0;
 
@@ -383,14 +385,20 @@ for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
     .status_frame_align_err_cnt(status_lane_frame_align_err_cnt[8*i+7:8*i])
   );
 
-  if(ENABLE_FRAME_ALIGN_CHECK && ENABLE_FRAME_ALIGN_ERR_RESET) begin : gen_frame_align_err_thresh
+  if(ENABLE_FRAME_ALIGN_CHECK) begin : gen_frame_align_err_thresh
     always @(posedge clk) begin
-      frame_align_err_thresh_met[i] <= status_lane_frame_align_err_cnt[8*i+7:8*i] >= cfg_frame_align_err_threshold;
+      if (status_lane_frame_align_err_cnt[8*i+7:8*i] >= cfg_frame_align_err_threshold) begin
+        frame_align_err_thresh_met[i] <= 1'b1;
+        event_frame_alignment_error_per_lane[i] <= ~frame_align_err_thresh_met[i];
+      end else begin
+        frame_align_err_thresh_met[i] <= 1'b0;
+        event_frame_alignment_error_per_lane[i] <= 1'b0;
+      end
     end
   end
 end
 
-
+assign event_frame_alignment_error = |event_frame_alignment_error_per_lane;
 
 /* Delay matching based on the number of pipeline stages */
 reg [NUM_LANES-1:0] ifs_ready_d1 = 1'b0;
@@ -503,6 +511,7 @@ assign ilas_config_addr = 'b0;
 assign ilas_config_data = 'b0;
 assign status_lane_cgs_state = 'b0;
 assign status_lane_ifs_ready = {NUM_LANES{1'b1}};
+assign event_frame_alignment_error = 1'b0;
 
 end
 

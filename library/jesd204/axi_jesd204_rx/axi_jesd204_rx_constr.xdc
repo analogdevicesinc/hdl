@@ -84,6 +84,18 @@ set_false_path \
   -from [get_pins {i_up_sysref/i_cdc_sysref_event/cdc_hold_reg*/C}] \
   -to [get_pins {i_up_sysref/i_cdc_sysref_event/out_event_reg*/D}]
 
+set_false_path \
+  -from [get_pins {i_sync_frame_align_err/in_toggle_d1_reg/C}] \
+  -to [get_pins {i_sync_frame_align_err/i_sync_out/cdc_sync_stage1_reg[0]/D}]
+
+set_false_path \
+  -from [get_pins {i_sync_frame_align_err/out_toggle_d1_reg/C}] \
+  -to [get_pins {i_sync_frame_align_err/i_sync_in/cdc_sync_stage1_reg[0]/D}]
+
+set_false_path \
+  -from [get_pins {i_sync_frame_align_err/cdc_hold_reg*/C}] \
+  -to [get_pins {i_sync_frame_align_err/out_event_reg*/D}]
+
 # Don't place them too far appart
 set_max_delay -datapath_only \
   -from [get_pins {i_up_rx/i_cdc_status/cdc_hold_reg[*]/C}] \

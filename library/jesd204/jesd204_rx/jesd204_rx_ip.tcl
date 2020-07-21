@@ -143,6 +143,7 @@ adi_add_bus "rx_event" "master" \
   { \
     { "event_sysref_alignment_error" "sysref_alignment_error" } \
     { "event_sysref_edge" "sysref_edge" } \
+    { "event_frame_alignment_error" "frame_alignment_error" } \
   }
 
 adi_add_bus_clock "clk" "rx_cfg:rx_ilas_config:rx_event:rx_status:rx_data" "reset"

@@ -98,6 +98,7 @@ module axi_jesd204_rx #(
 
   input core_event_sysref_alignment_error,
   input core_event_sysref_edge,
+  input core_event_frame_alignment_error,
 
   output [6:0] core_ctrl_err_statistics_mask,
   output core_ctrl_err_statistics_reset,
@@ -131,7 +132,7 @@ wire [31:0] up_rdata_common;
 wire [31:0] up_rdata_sysref;
 wire [31:0] up_rdata_rx;
 
-wire [4:0] up_irq_trigger = 5'b00000;
+wire [4:0] up_irq_trigger;
 
 wire up_cfg_is_writeable;
 wire up_cfg_sysref_oneshot;
@@ -143,6 +144,16 @@ wire [7:0] up_cfg_frame_align_err_threshold;
 
 wire up_reset;
 wire up_reset_synchronizer;
+wire up_event_frame_alignment_error;
+
+sync_event i_sync_frame_align_err (
+  .in_clk(core_clk),
+  .in_event(core_event_frame_alignment_error),
+  .out_clk(s_axi_aclk),
+  .out_event(up_event_frame_alignment_error)
+);
+
+assign up_irq_trigger = {4'b0,up_event_frame_alignment_error};
 
 up_axi #(
   .AXI_ADDRESS_WIDTH (14)
