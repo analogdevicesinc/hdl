@@ -107,6 +107,7 @@ adi_add_bus "rx_event" "slave" \
     { "core_event_sysref_alignment_error" "sysref_alignment_error" } \
     { "core_event_sysref_edge" "sysref_edge" } \
     { "core_event_frame_alignment_error" "frame_alignment_error" } \
+    { "core_event_unexpected_lane_state_error" "unexpected_lane_state_error" } \
   }
 
 adi_add_bus "rx_status" "slave" \
