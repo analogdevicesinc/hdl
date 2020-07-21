@@ -71,6 +71,7 @@ module jesd204_rx #(
   output event_sysref_alignment_error,
   output event_sysref_edge,
   output event_frame_alignment_error,
+  output event_unexpected_lane_state_error,
 
   output [NUM_LINKS-1:0] sync,
 
@@ -282,6 +283,9 @@ genvar i;
 
 if (LINK_MODE[0] == 1) begin : mode_8b10b
 
+wire unexpected_lane_state_error;
+reg unexpected_lane_state_error_d = 1'b0;
+
 jesd204_rx_ctrl #(
   .NUM_LANES(NUM_LANES),
   .NUM_LINKS(NUM_LINKS)
@@ -400,6 +404,15 @@ end
 
 assign event_frame_alignment_error = |event_frame_alignment_error_per_lane;
 
+/* If one of the enabled lanes falls out of DATA phase while the link is in DATA phase
+ * report an error event */
+assign unexpected_lane_state_error = |(~(cgs_ready|cfg_lanes_disable)) & &status_ctrl_state;
+always @(posedge clk) begin
+  unexpected_lane_state_error_d <= unexpected_lane_state_error;
+end
+assign event_unexpected_lane_state_error = unexpected_lane_state_error & ~unexpected_lane_state_error_d;
+
+
 /* Delay matching based on the number of pipeline stages */
 reg [NUM_LANES-1:0] ifs_ready_d1 = 1'b0;
 reg [NUM_LANES-1:0] ifs_ready_d2 = 1'b0;
@@ -454,7 +467,8 @@ jesd204_rx_ctrl_64b  #(
   .all_emb_lock(all_emb_lock),
   .buffer_release_n(buffer_release_n),
 
-  .status_state(status_ctrl_state)
+  .status_state(status_ctrl_state),
+  .event_unexpected_lane_state_error(event_unexpected_lane_state_error)
 );
 
 for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane

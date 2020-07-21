@@ -59,7 +59,8 @@ module jesd204_rx_ctrl_64b #(
   output all_emb_lock,
   input buffer_release_n,
 
-  output [1:0] status_state
+  output [1:0] status_state,
+  output reg event_unexpected_lane_state_error
 );
 
 
@@ -86,6 +87,7 @@ assign all_emb_lock = &emb_lock_masked;
 always @(*) begin
   next_state = state;
   rst_good_cnt = 1'b1;
+  event_unexpected_lane_state_error = 1'b0;
   case (state)
     STATE_RESET:
       next_state = STATE_WAIT_BS;
@@ -108,8 +110,10 @@ always @(*) begin
     STATE_DATA:
       if (~all_block_sync) begin
         next_state = STATE_WAIT_BS;
+        event_unexpected_lane_state_error = 1'b1;
       end else if (~all_emb_lock | buffer_release_n) begin
         next_state = STATE_BLOCK_SYNC;
+        event_unexpected_lane_state_error = 1'b1;
       end
   endcase
 end

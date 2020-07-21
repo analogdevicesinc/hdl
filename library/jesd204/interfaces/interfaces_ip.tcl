@@ -111,3 +111,4 @@ adi_if_define "jesd204_rx_event"
 adi_if_ports output 1 sysref_alignment_error
 adi_if_ports output 1 sysref_edge
 adi_if_ports output 1 frame_alignment_error
+adi_if_ports output 1 unexpected_lane_state_error
