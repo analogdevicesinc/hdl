@@ -107,6 +107,21 @@ set_property -dict [list \
  ] \
  [ipx::get_hdl_parameters SDI_DELAY -of_objects $cc]
 
+## ECHO SCLK
+set_property -dict [list \
+  "value_format" "bool" \
+  "value" "false" \
+ ] \
+ [ipx::get_user_parameters ECHO_SCLK -of_objects $cc]
+set_property -dict [list \
+  "value_format" "bool" \
+  "value" "false" \
+ ] \
+ [ipx::get_hdl_parameters ECHO_SCLK -of_objects $cc]
+
+## echo_sclk should be active only when ECHO_SCLK is set
+adi_set_ports_dependency echo_sclk ECHO_SCLK 0
+
 ## Customize IP Layout
 
 ## Remove the automatically generated GUI page
@@ -175,6 +190,15 @@ set_property -dict [list \
   "display_name" "MOSI default level" \
   "tooltip" "\[SDO_DEFAULT\] Define the default voltage level on MOSI"
 ] [ipgui::get_guiparamspec -name "SDO_DEFAULT" -component $cc]
+
+set custom_clocking_group [ipgui::add_group -name "Custom clocking options" -component $cc \
+    -parent $page0 -display_name "Custom clocking options" ]
+
+ipgui::add_param -name "ECHO_SCLK" -component $cc -parent $custom_clocking_group
+set_property -dict [list \
+  "display_name" "Echoed SCLK" \
+  "tooltip" "\[ECHO_SCLK\] Activate echo SCLK option (hardware support required)"
+] [ipgui::get_guiparamspec -name "ECHO_SCLK" -component $cc]
 
 ## Create and save the XGUI file
 ipx::create_xgui_files $cc

@@ -1,10 +1,13 @@
-proc spi_engine_create {{name "hier_spi_engine"} {data_width 32} {async_spi_clk 1} {num_cs 1} {num_sdi 1} {sdi_delay 2}} {
+proc spi_engine_create {{name "spi_engine"} {data_width 32} {async_spi_clk 1} {num_cs 1} {num_sdi 1} {sdi_delay 0} {echo_sclk 0}} {
 
   create_bd_cell -type hier $name
   current_bd_instance /$name
 
   if {$async_spi_clk == 1} {
     create_bd_pin -dir I -type clk spi_clk
+  }
+  if {$echo_sclk == 1} {
+    create_bd_pin -dir I -type clk echo_sclk
   }
   create_bd_pin -dir I -type clk clk
   create_bd_pin -dir I -type rst resetn
@@ -19,6 +22,7 @@ proc spi_engine_create {{name "hier_spi_engine"} {data_width 32} {async_spi_clk 
   ad_ip_parameter execution CONFIG.NUM_OF_SDI $num_sdi
   ad_ip_parameter execution CONFIG.SDO_DEFAULT 1
   ad_ip_parameter execution CONFIG.SDI_DELAY $sdi_delay
+  ad_ip_parameter execution CONFIG.ECHO_SCLK $echo_sclk
 
   ad_ip_instance axi_spi_engine axi_regmap
   ad_ip_parameter axi_regmap CONFIG.DATA_WIDTH $data_width
@@ -58,6 +62,10 @@ proc spi_engine_create {{name "hier_spi_engine"} {data_width 32} {async_spi_clk 
     ad_connect clk execution/clk
     ad_connect clk axi_regmap/spi_clk
     ad_connect clk interconnect/clk
+  }
+
+  if {$echo_sclk == 1} {
+    ad_connect echo_sclk execution/echo_sclk
   }
 
   ad_connect axi_regmap/spi_resetn offload/spi_resetn
