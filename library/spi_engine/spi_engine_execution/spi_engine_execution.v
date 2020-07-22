@@ -43,6 +43,7 @@ module spi_engine_execution #(
   parameter DATA_WIDTH = 8,                   // Valid data widths values are 8/16/24/32
   parameter NUM_OF_SDI = 1,
   parameter [0:0] SDO_DEFAULT = 1'b0,
+  parameter ECHO_SCLK = 0,
   parameter [1:0] SDI_DELAY = 2'b00) (
 
   input clk,
@@ -67,6 +68,7 @@ module spi_engine_execution #(
   output reg sync_valid,
   output [7:0] sync,
 
+  input      echo_sclk,
   output reg sclk,
   output reg sdo,
   output reg sdo_t,
@@ -318,15 +320,6 @@ always @(posedge clk) begin
     sdo_data_ready <= 1'b0;
 end
 
-always @(posedge clk) begin
-  if (resetn == 1'b0)
-    sdi_data_valid <= 1'b0;
-  else if (sdi_enabled == 1'b1 && last_sdi_bit == 1'b1 && trigger_rx_s == 1'b1)
-    sdi_data_valid <= 1'b1;
-  else if (sdi_data_ready == 1'b1)
-    sdi_data_valid <= 1'b0;
-end
-
 assign io_ready1 = (sdi_data_valid == 1'b0 || sdi_data_ready == 1'b1) &&
         (sdo_enabled == 1'b0 || last_transfer == 1'b1 || sdo_data_valid == 1'b1);
 assign io_ready2 = (sdi_enabled == 1'b0 || sdi_data_ready == 1'b1) &&
@@ -404,10 +397,65 @@ assign trigger_rx_s = trigger_rx_d[SDI_DELAY+1];
 
 // Load the serial data into SDI shift register(s), then link it to the output
 // register of the module
+// NOTE: ECHO_SCLK mode can be used when the SCLK line is looped back to the FPGA
+// through an other level shifter, in order to remove the round-trip timing delays
+// introduced by the level shifters. This can improve the timing significantly
+// on higher SCLK rates.
 
 wire cs_active_s = (inst_d1 == CMD_CHIPSELECT) & ~(&cmd_d1[NUM_OF_CS-1:0]);
 genvar i;
 generate
+if (ECHO_SCLK == 1) begin : g_echo_sclk_miso_latch
+
+  for (i=0; i<NUM_OF_SDI; i=i+1) begin: g_sdi_shift_reg
+
+    reg [DATA_WIDTH-1:0] data_sdi_shift_n;
+
+    always @(negedge echo_sclk) begin
+      if (cs_active_s) begin
+        data_sdi_shift_n <= 0;
+      end else begin
+          data_sdi_shift_n <= {data_sdi_shift_n, sdi[i]};
+      end
+    end
+
+    assign sdi_data[i*DATA_WIDTH+:DATA_WIDTH] = data_sdi_shift_n;
+
+  end
+
+  assign last_sdi_bit = (sdi_counter == word_length);
+  always @(negedge echo_sclk or posedge cs_active_s) begin
+    if (cs_active_s == 1'b1) begin
+      sdi_counter <= 8'b0;
+    end else begin
+      sdi_counter <= last_sdi_bit ? 8'b0 : sdi_counter + 1'b1;
+    end
+  end
+
+  // sdi_data_valid is synchronous to SPI clock, so synchronize the
+  // last_sdi_bit to SPI clock
+
+  reg [2:0] last_sdi_bit_m = 2'b0;
+  always @(posedge clk) begin
+    last_sdi_bit_m = {last_sdi_bit_m, last_sdi_bit};
+  end
+
+  always @(posedge clk) begin
+    if (resetn == 1'b0) begin
+      sdi_data_valid <= 1'b0;
+    end else if (sdi_enabled == 1'b1 &&
+                 last_sdi_bit_m[2] == 1'b0 &&
+                 last_sdi_bit_m[1] == 1'b1) begin
+      sdi_data_valid <= 1'b1;
+    end else if (sdi_data_ready == 1'b1 && sdi_data_valid == 1'b1) begin
+      sdi_data_valid <= 1'b0;
+    end
+  end
+
+end /* g_echo_sclk_miso_latch */
+else
+begin : g_sclk_miso_latch
+
   for (i=0; i<NUM_OF_SDI; i=i+1) begin: g_sdi_shift_reg
 
     reg [DATA_WIDTH-1:0] data_sdi_shift;
@@ -425,18 +473,30 @@ generate
     assign sdi_data[i*DATA_WIDTH+:DATA_WIDTH] = data_sdi_shift;
 
   end
-endgenerate
 
-assign last_sdi_bit = (sdi_counter == word_length-1);
-always @(posedge clk) begin
-  if (resetn == 1'b0) begin
-    sdi_counter <= 8'b0;
-  end else begin
-    if (trigger_rx_s == 1'b1) begin
-      sdi_counter <= last_sdi_bit ? 8'b0 : sdi_counter + 1'b1;
+  assign last_sdi_bit = (sdi_counter == word_length-1);
+  always @(posedge clk) begin
+    if (resetn == 1'b0) begin
+      sdi_counter <= 8'b0;
+    end else begin
+      if (trigger_rx_s == 1'b1) begin
+        sdi_counter <= last_sdi_bit ? 8'b0 : sdi_counter + 1'b1;
+      end
     end
   end
-end
+
+  always @(posedge clk) begin
+    if (resetn == 1'b0)
+      sdi_data_valid <= 1'b0;
+    else if (sdi_enabled == 1'b1 && last_sdi_bit == 1'b1 && trigger_rx_s == 1'b1)
+      sdi_data_valid <= 1'b1;
+    else if (sdi_data_ready == 1'b1)
+      sdi_data_valid <= 1'b0;
+  end
+
+end /* g_sclk_miso_latch */
+endgenerate
+
 
 always @(posedge clk) begin
   if (transfer_active == 1'b1) begin
