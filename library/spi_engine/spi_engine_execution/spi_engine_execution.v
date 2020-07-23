@@ -269,7 +269,7 @@ always @(posedge clk) begin
           idle <= 1'b1;
       end
       CMD_CHIPSELECT: begin
-        if (cs_sleep_counter_compare2)
+        if (cs_sleep_counter_compare)
           idle <= 1'b1;
       end
       CMD_MISC: begin
