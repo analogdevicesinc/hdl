@@ -134,7 +134,18 @@ module system_top (
   inout  [10:0] mxfe2_gpio,
   inout  [10:0] mxfe3_gpio,
 
-  input  ext_sync
+  input  ext_sync,
+
+  // PMOD1 for calibration board 
+  output pmod1_adc_sync_n,
+  output pmod1_adc_sdi,
+  input  pmod1_adc_sdo,
+  output pmod1_adc_sclk,
+
+  output pmod1_5045_v2,
+  output pmod1_5045_v1,
+  output pmod1_ctrl_ind,
+  output pmod1_ctrl_rx_combined
 
 );
 
@@ -238,6 +249,10 @@ module system_top (
   assign mxfe_mosi = {4{spi_mosi}};
   assign mxfe_sclk = {4{spi_clk}};
 
+  assign pmod1_adc_sync_n = spi_csn[4];
+  assign pmod1_adc_sdi = spi_mosi;
+  assign pmod1_adc_sclk = spi_clk;
+
   assign adf4371_cs = spi_2_csn[3:0];
   assign adf4371_sclk = spi_2_clk;
 
@@ -251,7 +266,9 @@ module system_top (
   assign spi_miso = ~spi_csn[0] ? mxfe_miso[0] :
                     ~spi_csn[1] ? mxfe_miso[1] :
                     ~spi_csn[2] ? mxfe_miso[2] :
-                    ~spi_csn[3] ? mxfe_miso[3] : 1'b0;
+                    ~spi_csn[3] ? mxfe_miso[3] :
+                    ~pmod1_adc_sync_n ? pmod1_adc_sdo :
+                    1'b0;
 
   assign spi_2_miso =  |(~spi_2_csn[3:0]) ? spi_4371_miso :
                          ~spi_2_csn[4]    ? spi_hmc_miso :
@@ -324,6 +341,11 @@ module system_top (
     .gpio_i(gpio_i[127:64]),
     .gpio_o(gpio_o[127:64])
   );
+
+  assign pmod1_5045_v2 = gpio_o[120];
+  assign pmod1_5045_v1 = gpio_o[121];
+  assign pmod1_ctrl_ind = gpio_o[122];
+  assign pmod1_ctrl_rx_combined = gpio_o[123];
 
   system_wrapper i_system_wrapper (
     .sys_rst (sys_rst),

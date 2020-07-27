@@ -207,6 +207,17 @@ set_property  -dict {PACKAGE_PIN AV15  IOSTANDARD LVCMOS12                      
 
 set_property  -dict {PACKAGE_PIN R32  IOSTANDARD LVCMOS18                       } [get_ports ext_sync                   ]; ## IO_L11P_T1U_N8_GC_45_R32 
 
+# PMOD1 calibration board connector
+set_property  -dict {PACKAGE_PIN N28   IOSTANDARD LVCMOS12                      } [get_ports pmod1_adc_sync_n           ]; ## PMOD1_0 J53.1
+set_property  -dict {PACKAGE_PIN M30   IOSTANDARD LVCMOS12                      } [get_ports pmod1_adc_sdi              ]; ## PMOD1_1 J53.3
+set_property  -dict {PACKAGE_PIN N30   IOSTANDARD LVCMOS12                      } [get_ports pmod1_adc_sdo              ]; ## PMOD1_2 J53.5
+set_property  -dict {PACKAGE_PIN P30   IOSTANDARD LVCMOS12                      } [get_ports pmod1_adc_sclk             ]; ## PMOD1_3 J53.7
+
+set_property  -dict {PACKAGE_PIN P29   IOSTANDARD LVCMOS12                      } [get_ports pmod1_5045_v2              ]; ## PMOD1_4 J53.2
+set_property  -dict {PACKAGE_PIN L31   IOSTANDARD LVCMOS12                      } [get_ports pmod1_5045_v1              ]; ## PMOD1_5 J53.4
+set_property  -dict {PACKAGE_PIN M31   IOSTANDARD LVCMOS12                      } [get_ports pmod1_ctrl_ind             ]; ## PMOD1_6 J53.6
+set_property  -dict {PACKAGE_PIN R29   IOSTANDARD LVCMOS12                      } [get_ports pmod1_ctrl_rx_combined     ]; ## PMOD1_7 J53.8
+
 
 create_pblock pblock_axi_mem_interconnect
 add_cells_to_pblock [get_pblocks pblock_axi_mem_interconnect] [get_cells -quiet [list i_system_wrapper/system_i/axi_mem_interconnect]]
