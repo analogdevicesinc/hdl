@@ -133,23 +133,19 @@ module axi_dac_interpolate_filter #(
   // paths randomly ready, only when using data buffers
 
   always @(posedge dac_clk) begin
-    if (interpolation_ratio == 0) begin
-      dac_int_ready <= dac_filt_int_valid;
-    end else begin
-      if (dac_filt_int_valid &
-          (!start_sync_channels & dma_valid |
-          (dma_valid & dma_valid_adjacent))) begin
-        if (interpolation_counter < interpolation_ratio) begin
-          interpolation_counter <= interpolation_counter + 1;
-          dac_int_ready <= 1'b0;
-        end else begin
-          interpolation_counter <= 0;
-          dac_int_ready <= 1'b1;
-        end
-      end else begin
-        dac_int_ready <= 1'b0;
+    if (dac_filt_int_valid &
+        (!start_sync_channels & dma_valid |
+        (dma_valid & dma_valid_adjacent))) begin
+      if (interpolation_counter == interpolation_ratio) begin
         interpolation_counter <= 0;
+        dac_int_ready <= 1'b1;
+      end else begin
+        interpolation_counter <= interpolation_counter + 1;
+        dac_int_ready <= 1'b0;
       end
+    end else begin
+      dac_int_ready <= 1'b0;
+      interpolation_counter <= 0;
     end
   end
 
