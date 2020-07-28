@@ -133,7 +133,7 @@ module axi_dac_interpolate_filter #(
   // paths randomly ready, only when using data buffers
 
   always @(posedge dac_clk) begin
-    if (interpolation_ratio == 0 || interpolation_ratio == 1) begin
+    if (interpolation_ratio == 0) begin
       dac_int_ready <= dac_filt_int_valid;
     end else begin
       if (dac_filt_int_valid &
