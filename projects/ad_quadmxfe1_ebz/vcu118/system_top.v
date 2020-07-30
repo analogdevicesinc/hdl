@@ -167,6 +167,11 @@ module system_top (
   wire            spi_2_mosi;
   wire            spi_2_miso;
 
+  wire            spi_3_clk;
+  wire    [ 7:0]  spi_3_csn;
+  wire            spi_3_mosi;
+  wire            spi_3_miso;
+
   wire    [3:0]   ref_clk;
   wire    [3:0]   ref_clk_odiv2;
   wire            sysref;
@@ -249,10 +254,6 @@ module system_top (
   assign mxfe_mosi = {4{spi_mosi}};
   assign mxfe_sclk = {4{spi_clk}};
 
-  assign pmod1_adc_sync_n = spi_csn[4];
-  assign pmod1_adc_sdi = spi_mosi;
-  assign pmod1_adc_sclk = spi_clk;
-
   assign adf4371_cs = spi_2_csn[3:0];
   assign adf4371_sclk = spi_2_clk;
 
@@ -262,18 +263,21 @@ module system_top (
   assign ext_hmc7044_slen = spi_2_csn[5];
   assign ext_hmc7044_sclk = spi_2_clk;
 
+  assign pmod1_adc_sync_n = spi_3_csn[0];
+  assign pmod1_adc_sdi = spi_3_mosi;
+  assign pmod1_adc_sclk = spi_3_clk;
 
   assign spi_miso = ~spi_csn[0] ? mxfe_miso[0] :
                     ~spi_csn[1] ? mxfe_miso[1] :
                     ~spi_csn[2] ? mxfe_miso[2] :
                     ~spi_csn[3] ? mxfe_miso[3] :
-                    ~pmod1_adc_sync_n ? pmod1_adc_sdo :
                     1'b0;
 
   assign spi_2_miso =  |(~spi_2_csn[3:0]) ? spi_4371_miso :
                          ~spi_2_csn[4]    ? spi_hmc_miso :
                          ~spi_2_csn[5]    ? ext_hmc7044_miso : 1'b0;
 
+  assign spi_3_miso =  ~pmod1_adc_sync_n ? pmod1_adc_sdo : 1'b0;
 
    ad_3w_spi #(.NUM_OF_SLAVES(1)) i_spi_hmc (
     .spi_csn (spi_2_csn[4]),
@@ -394,6 +398,14 @@ module system_top (
     .spi_2_sdi_i (spi_2_miso),
     .spi_2_sdo_i (spi_2_mosi),
     .spi_2_sdo_o (spi_2_mosi),
+
+    .spi_3_clk_i (spi_3_clk),
+    .spi_3_clk_o (spi_3_clk),
+    .spi_3_csn_i (spi_3_csn),
+    .spi_3_csn_o (spi_3_csn),
+    .spi_3_sdi_i (spi_3_miso),
+    .spi_3_sdo_i (spi_3_mosi),
+    .spi_3_sdo_o (spi_3_mosi),
 
     .gpio0_i (gpio_i[31:0]),
     .gpio0_o (gpio_o[31:0]),
