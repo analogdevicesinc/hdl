@@ -48,6 +48,14 @@ module ad7768_if (
   output                  adc_clk,
   output  reg             adc_valid,
   output  reg [ 31:0]     adc_data,
+  output  reg [ 31:0]     adc_ch_data_0,
+  output  reg [ 31:0]     adc_ch_data_1,
+  output  reg [ 31:0]     adc_ch_data_2,
+  output  reg [ 31:0]     adc_ch_data_3,
+  output  reg [ 31:0]     adc_ch_data_4,
+  output  reg [ 31:0]     adc_ch_data_5,
+  output  reg [ 31:0]     adc_ch_data_6,
+  output  reg [ 31:0]     adc_ch_data_7,
   output                  adc_sync,
 
   // control interface
@@ -268,7 +276,7 @@ module ad7768_if (
       adc_status[2] <= adc_data_int[27] & adc_enable_int;
       adc_status[1] <= adc_data_int[31] & adc_enable_int;
       adc_status[0] <= adc_seq_foos;
-    end 
+    end
   end
 
   // crc- not much useful at the interface, since it is post-framing
