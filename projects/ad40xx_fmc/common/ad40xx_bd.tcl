@@ -30,7 +30,7 @@ current_bd_instance /spi_ad40xx
   ad_ip_parameter execution CONFIG.NUM_OF_CS 1
   ad_ip_parameter execution CONFIG.NUM_OF_SDI 1
   ad_ip_parameter execution CONFIG.SDO_DEFAULT 1
-  ad_ip_parameter execution CONFIG.SDI_DELAY 2
+  ad_ip_parameter execution CONFIG.SDI_DELAY 1
 
   ad_ip_instance axi_spi_engine axi_regmap
   ad_ip_parameter axi_regmap CONFIG.DATA_WIDTH $data_width
