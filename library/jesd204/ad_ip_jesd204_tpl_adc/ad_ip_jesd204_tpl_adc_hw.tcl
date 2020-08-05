@@ -259,12 +259,8 @@ proc p_ad_ip_jesd204_tpl_adc_elab {} {
   # dma interface
   if {$common_out_if} {
 
-      add_interface adc_merged conduit end
-      add_interface_port adc_merged adc_enable enable output 1
-      set_port_property adc_enable fragment_list [format "enable(%d:%d)" 0 0]
-      add_interface_port adc_merged adc_valid valid output 1
-      set_port_property adc_valid fragment_list [format "adc_valid(%d:%d)" 0 0]
-      add_interface_port adc_merged adc_data data output [expr 32*$m_num_of_lanes]
+      ad_interface signal adc_valid output 1 valid
+      ad_interface signal adc_data output [expr 32*$m_num_of_lanes] data
 
   } else {
 
