@@ -52,10 +52,6 @@ set_instance_parameter_value axi_ad9213_dual {TWOS_COMPLEMENT} {1}
 # NOTE: cpack is not used in this case, merge the output data streams
 set_instance_parameter_value axi_ad9213_dual {COMMON_OUTPUT_IF} {1}
 
-# ADC FIFO's
-
-ad_adcfifo_create "ad9213_adcfifo" $adc_data_width $adc_dma_data_width $adc_fifo_address_width
-
 # DMA instances
 
 add_instance axi_ad9213_dma axi_dmac
@@ -69,8 +65,8 @@ set_instance_parameter_value axi_ad9213_dma {AXI_SLICE_SRC} {0}
 set_instance_parameter_value axi_ad9213_dma {SYNC_TRANSFER_START} {0}
 set_instance_parameter_value axi_ad9213_dma {CYCLIC} {0}
 set_instance_parameter_value axi_ad9213_dma {DMA_TYPE_DEST} {0}
-set_instance_parameter_value axi_ad9213_dma {DMA_TYPE_SRC} {1}
-set_instance_parameter_value axi_ad9213_dma {FIFO_SIZE} {8}
+set_instance_parameter_value axi_ad9213_dma {DMA_TYPE_SRC} {2}
+set_instance_parameter_value axi_ad9213_dma {FIFO_SIZE} {32}
 
 # SPI interfaces
 
@@ -126,15 +122,12 @@ add_connection device_clk.out_clk ad9213_rx_0.link_clk
 add_connection device_clk.out_clk ad9213_rx_1.link_clk
 add_connection device_clk.out_clk ad9213_dual_link.clk
 add_connection device_clk.out_clk axi_ad9213_dual.link_clk
-add_connection device_clk.out_clk ad9213_adcfifo.if_adc_clk
+add_connection device_clk.out_clk axi_ad9213_dma.if_fifo_wr_clk
 
-add_connection ad9213_rx_0.link_reset ad9213_adcfifo.if_adc_rst
 add_connection ad9213_rx_0.link_reset ad9213_dual_link.rst
 
 # dma clock and reset
 
-add_connection sys_dma_clk.clk ad9213_adcfifo.if_dma_clk
-add_connection sys_dma_clk.clk axi_ad9213_dma.if_s_axis_aclk
 add_connection sys_dma_clk.clk axi_ad9213_dma.m_dest_axi_clock
 
 add_connection sys_dma_clk.clk_reset axi_ad9213_dma.m_dest_axi_reset
@@ -180,14 +173,10 @@ add_connection ad9213_rx_1.link_data ad9213_dual_link.rx1_data
 add_connection ad9213_dual_link.rx_sof axi_ad9213_dual.if_link_sof
 add_connection ad9213_dual_link.rx_data axi_ad9213_dual.link_data
 
-# TPL to ADC buffer
-add_connection axi_ad9213_dual.adc_merged ad9213_adcfifo.adc_wr
-
-# ADC buffer to DMA
-add_connection ad9213_adcfifo.m_axis axi_ad9213_dma.s_axis
-
-add_connection axi_ad9213_dma.if_s_axis_xfer_req ad9213_adcfifo.if_dma_xfer_req
-add_connection axi_ad9213_dual.if_adc_dovf ad9213_adcfifo.if_adc_wovf
+# TPL to DMA
+add_connection axi_ad9213_dual.if_adc_valid axi_ad9213_dma.if_fifo_wr_en
+add_connection axi_ad9213_dual.if_adc_data axi_ad9213_dma.if_fifo_wr_din
+add_connection axi_ad9213_dual.if_adc_dovf axi_ad9213_dma.if_fifo_wr_overflow
 
 # DMA to HPS memory
 ad_dma_interconnect axi_ad9213_dma.m_dest_axi
