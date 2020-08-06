@@ -84,6 +84,7 @@ module util_adxcvr_xcm #(
   output          up_cm_ready);
 
   localparam GTXE2_TRANSCEIVERS = 2;
+  localparam GTHE2_TRANSCEIVERS = 3;
   localparam GTHE3_TRANSCEIVERS = 5;
   localparam GTHE4_TRANSCEIVERS = 8;
   localparam GTYE4_TRANSCEIVERS = 9;
@@ -213,6 +214,83 @@ module util_adxcvr_xcm #(
     .QPLLRSVD2 (5'h1f),
     .RCALENB (1'h1));
   end
+  endgenerate
+
+  generate 
+  if (XCVR_TYPE == GTHE2_TRANSCEIVERS) begin
+  GTHE2_COMMON #(
+    // Simulation attributes
+    .SIM_RESET_SPEEDUP   ("TRUE"),
+    .SIM_QPLLREFCLK_SEL  (3'b001),
+    .SIM_VERSION         ("2.0"),
+    
+    //----------------COMMON BLOCK Attributes---------------
+    .BIAS_CFG                  (64'h0000040000001050),
+    .COMMON_CFG                (32'h0000005C),
+    .QPLL_CFG                  (27'h04801C7),
+    .QPLL_CLKOUT_CFG           (4'b1111),
+    .QPLL_COARSE_FREQ_OVRD     (6'b010000),
+    .QPLL_COARSE_FREQ_OVRD_EN  (1'b0),
+    .QPLL_CP                   (10'b0000011111),
+    .QPLL_CP_MONITOR_EN        (1'b0),
+    .QPLL_DMONITOR_SEL         (1'b0),
+    .QPLL_FBDIV                (10'b0010000000),
+    .QPLL_FBDIV_MONITOR_EN     (1'b0),
+    .QPLL_FBDIV_RATIO          (QPLL_FBDIV_RATIO),
+    .QPLL_INIT_CFG             (24'h000006),
+    .QPLL_LOCK_CFG             (16'h05E8),
+    .QPLL_LPF                  (4'b1111),
+    .QPLL_REFCLK_DIV           (1),
+    .RSVD_ATTR0                (16'h0000),
+    .RSVD_ATTR1                (16'h0000),
+    .QPLL_RP_COMP              (1'b0),
+    .QPLL_VTRL_RESET           (2'b00),
+    .RCAL_CFG                  (2'b00))
+  i_gthe2_common (
+    //----------- Common Block  - Dynamic Reconfiguration Port (DRP) -----------
+    .DRPADDR                   (1'h00),
+    .DRPCLK                    (1'b0),
+    .DRPDI                     (1'h0000),
+    .DRPDO                     (),
+    .DRPEN                     (1'b0),
+    .DRPRDY                    (),
+    .DRPWE                     (1'b0),
+    //-------------------- Common Block  - Ref Clock Ports ---------------------
+    .GTGREFCLK                 (1'b0),
+    .GTNORTHREFCLK0            (1'b0),
+    .GTNORTHREFCLK1            (1'b0),
+    .GTREFCLK0                 (qpll_ref_clk),
+    .GTREFCLK1                 (1'b0),
+    .GTSOUTHREFCLK0            (),
+    .GTSOUTHREFCLK1            (1'b0),
+    //----------------------- Common Block  - QPLL Ports -----------------------
+    .QPLLDMONITOR              (),
+    //--------------------- Common Block - Clocking Ports ----------------------
+    .QPLLOUTCLK                (qpll2ch_clk),
+    .QPLLOUTREFCLK             (qpll2ch_ref_clk),
+    .REFCLKOUTMONITOR          (),
+    //----------------------- Common Block - QPLL Ports ------------------------
+    .BGRCALOVRDENB             (1'b1),
+    .PMARSVDOUT                (),
+    .QPLLFBCLKLOST             (),
+    .QPLLLOCK                  (qpll2ch_locked),
+    .QPLLLOCKDETCLK            (up_clk),
+    .QPLLLOCKEN                (1'b1),
+    .QPLLOUTRESET              (1'b0),
+    .QPLLPD                    (1'b0),
+    .QPLLREFCLKLOST            (),
+    .QPLLREFCLKSEL             (3'b001),
+    .QPLLRESET                 (up_qpll_rst),
+    .QPLLRSVD1                 (16'b0000000000000000),
+    .QPLLRSVD2                 (5'b11111),
+    //------------------------------- QPLL Ports -------------------------------
+    .BGBYPASSB                 (1'b1),
+    .BGMONITORENB              (1'b1),
+    .BGPDB                     (1'b1),
+    .BGRCALOVRD                (5'b11111),
+    .PMARSVD                   (8'b00000000),
+    .RCALENB                   (1'b1));
+  end 
   endgenerate
 
   generate
