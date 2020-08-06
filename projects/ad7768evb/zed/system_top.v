@@ -107,7 +107,6 @@ module system_top (
 
   wire            adc_clk;
   wire            adc_valid;
-  wire            adc_sync;
   wire    [31:0]  adc_data_0;
   wire    [31:0]  adc_data_1;
   wire    [31:0]  adc_data_2;
@@ -186,7 +185,6 @@ module system_top (
     .data_in (data_in),
     .adc_clk (adc_clk),
     .adc_valid (adc_valid),
-    .adc_sync (adc_sync),
     .adc_ch_data_0 (adc_data_0),
     .adc_ch_data_1 (adc_data_1),
     .adc_ch_data_2 (adc_data_2),
@@ -211,7 +209,6 @@ module system_top (
     .adc_gpio_1_o (adc_gpio_o[63:32]),
     .adc_gpio_1_t (adc_gpio_t[63:32]),
     .adc_valid (adc_valid),
-    .adc_sync (adc_sync),
     .ddr_addr (ddr_addr),
     .ddr_ba (ddr_ba),
     .ddr_cas_n (ddr_cas_n),

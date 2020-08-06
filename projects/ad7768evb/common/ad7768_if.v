@@ -56,7 +56,6 @@ module ad7768_if (
   output  reg [ 31:0]     adc_ch_data_5,
   output  reg [ 31:0]     adc_ch_data_6,
   output  reg [ 31:0]     adc_ch_data_7,
-  output                  adc_sync,
 
   // control interface
 
@@ -258,7 +257,6 @@ module ad7768_if (
   always @(posedge adc_clk) begin
     adc_valid_d <= adc_valid;
   end
-  assign adc_sync = adc_valid & ~adc_valid_d;
 
   always @(posedge adc_clk) begin
     adc_valid <= adc_valid_int & adc_enable_int;

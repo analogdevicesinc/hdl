@@ -3,7 +3,6 @@
 
 create_bd_port -dir I adc_clk
 create_bd_port -dir I adc_valid
-create_bd_port -dir I adc_sync
 create_bd_port -dir I -from 31 -to 0 adc_data_0
 create_bd_port -dir I -from 31 -to 0 adc_data_1
 create_bd_port -dir I -from 31 -to 0 adc_data_2
@@ -72,7 +71,6 @@ for {set i 0} {$i < 8} {incr i} {
 # interconnects
 
 ad_connect  adc_clk ad7768_dma/fifo_wr_clk
-#ad_connect  adc_sync ad7768_dma/fifo_wr_sync
 ad_connect  sys_cpu_resetn ad7768_dma/m_dest_axi_aresetn
 ad_connect  util_ad7768_adc_pack/packed_fifo_wr ad7768_dma/fifo_wr
 ad_connect  util_ad7768_adc_pack/fifo_wr_overflow axi_ad7768_adc/adc_dovf
