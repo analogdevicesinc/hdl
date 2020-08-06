@@ -109,7 +109,7 @@ set xcvr_type_list { \
         { Unknown             0 } \
         { GTPE2_NOT_SUPPORTED 1 } \
         { GTXE2               2 } \
-        { GTHE2_NOT_SUPPORTED 3 } \
+        { GTHE2               3 } \
         { GTZE2_NOT_SUPPORTED 4 } \
         { GTHE3               5 } \
         { GTYE3_NOT_SUPPORTED 6 } \
