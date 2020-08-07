@@ -15,6 +15,7 @@ M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/axi_ad9361/axi_ad9361_delay.tcl
 
+LIB_DEPS += axi_clock_monitor
 LIB_DEPS += axi_ad9361
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_gpreg
