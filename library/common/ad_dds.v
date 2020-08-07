@@ -104,7 +104,7 @@ module ad_dds #(
                                sync_min_pulse_m[1] & !sync_min_pulse_m[CLK_RATIO];
       end
 
-      for (i=1; i <= CLK_RATIO; i=i+1) begin: sync_delay
+      for (i=1; i < CLK_RATIO; i=i+1) begin: sync_delay
         always @(posedge clk) begin
           sync_min_pulse_m[i+1] <= sync_min_pulse_m[i];
         end
