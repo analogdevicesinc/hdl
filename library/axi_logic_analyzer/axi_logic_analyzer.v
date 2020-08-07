@@ -125,42 +125,11 @@ module axi_logic_analyzer (
   reg    [ 1:0]     high_level_trigger = 1'd0;
   reg    [ 1:0]     low_level_trigger = 1'd0;
 
-  reg     [15:0]    adc_data_mn = 'd0;
-  reg     [31:0]    trigger_holdoff_counter = 32'd0;
-  reg     [ 4:0]    adc_data_delay = 5'd0;
+  reg    [31:0]     trigger_holdoff_counter = 32'd0;
+  reg    [ 4:0]     adc_data_delay = 5'd0;
 
-  reg     [15:0]    data_m_0;
-  reg     [15:0]    data_m_1;
-  reg     [15:0]    data_m_2;
-  reg     [15:0]    data_m_3;
-  reg     [15:0]    data_m_4;
-  reg     [15:0]    data_m_5;
-  reg     [15:0]    data_m_6;
-  reg     [15:0]    data_m_7;
-  reg     [15:0]    data_m_8;
-  reg     [15:0]    data_m_9;
-  reg     [15:0]    data_m_10;
-  reg     [15:0]    data_m_11;
-  reg     [15:0]    data_m_12;
-  reg     [15:0]    data_m_13;
-  reg     [15:0]    data_m_14;
-  reg     [15:0]    data_m_15;
-  reg     [15:0]    data_m_16;
-  reg     [15:0]    data_m_17;
-  reg     [15:0]    data_m_18;
-  reg     [15:0]    data_m_19;
-  reg     [15:0]    data_m_20;
-  reg     [15:0]    data_m_21;
-  reg     [15:0]    data_m_22;
-  reg     [15:0]    data_m_23;
-  reg     [15:0]    data_m_24;
-  reg     [15:0]    data_m_25;
-  reg     [15:0]    data_m_26;
-  reg     [15:0]    data_m_27;
-  reg     [15:0]    data_m_28;
-  reg     [15:0]    data_m_29;
-  reg     [15:0]    data_m_30;
-  reg     [15:0]    data_m_31;
+  reg    [16:0]     data_fixed_delay [0:15];
+  reg    [15:0]     data_dynamic_delay [0:15];
 
   // internal signals
 
@@ -218,6 +187,7 @@ module axi_logic_analyzer (
   wire    [ 4:0]    up_data_delay;
   wire              master_delay_ctrl;
   wire    [ 9:0]    data_delay_control;
+  wire    [15:0]    adc_data_mn;
 
   genvar i;
 
@@ -294,42 +264,28 @@ module axi_logic_analyzer (
   // - synchronization
   // - compensate for m2k adc path delay
 
-  always @(posedge clk_out) begin
-    data_m_0  <= data_i;
-    data_m_1  <= data_m_0;
-    data_m_2  <= data_m_1;
-    data_m_3  <= data_m_2;
-    data_m_4  <= data_m_3;
-    data_m_5  <= data_m_4;
-    data_m_6  <= data_m_5;
-    data_m_7  <= data_m_6;
-    data_m_8  <= data_m_7;
-    data_m_9  <= data_m_8;
-    data_m_10 <= data_m_9;
-    data_m_11 <= data_m_10;
-    data_m_12 <= data_m_11;
-    data_m_13 <= data_m_12;
-    data_m_14 <= data_m_13;
-    data_m_15 <= data_m_14;
-    data_m_16 <= data_m_15;
-    if (sample_valid_la == 1'b1) begin
-      data_m_17 <= data_m_16;
-      data_m_18 <= data_m_17;
-      data_m_19 <= data_m_18;
-      data_m_20 <= data_m_19;
-      data_m_21 <= data_m_20;
-      data_m_22 <= data_m_21;
-      data_m_23 <= data_m_22;
-      data_m_24 <= data_m_23;
-      data_m_25 <= data_m_24;
-      data_m_26 <= data_m_25;
-      data_m_27 <= data_m_26;
-      data_m_28 <= data_m_27;
-      data_m_29 <= data_m_28;
-      data_m_30 <= data_m_29;
-      data_m_31 <= data_m_30;
+  // 17 clock cycles delay
+  generate
+  for (i = 0 ; i < 16; i = i + 1) begin
+    always @(posedge clk_out) begin
+      if (reset == 1'b1) begin
+        data_fixed_delay[i] <= 'd0;
+      end else begin
+        data_fixed_delay[i] <= {data_fixed_delay[i][15:0], data_i[i]};
+      end
     end
   end
+
+  // dynamic sample delay (1 to 16)
+  for (i = 0 ; i < 16; i = i + 1) begin
+    always @(posedge clk_out) begin
+      if (sample_valid_la == 1'b1) begin
+        data_dynamic_delay[i] <= {data_dynamic_delay[i][14:0], data_fixed_delay[i][16]};
+      end
+    end
+    assign adc_data_mn[i] = data_dynamic_delay[i][in_data_delay[3:0]];
+  end
+  endgenerate
 
   // adc path 'rate delay' given by axi_adc_decimate
   always @(posedge clk_out) begin
@@ -350,25 +306,6 @@ module axi_logic_analyzer (
 
   always @(posedge clk_out) begin
     if (sample_valid_la == 1'b1) begin
-      case (in_data_delay)
-        5'd0:  adc_data_mn <= data_m_16;
-        5'd1:  adc_data_mn <= data_m_17;
-        5'd2:  adc_data_mn <= data_m_18;
-        5'd3:  adc_data_mn <= data_m_19;
-        5'd4:  adc_data_mn <= data_m_20;
-        5'd5:  adc_data_mn <= data_m_21;
-        5'd6:  adc_data_mn <= data_m_22;
-        5'd7:  adc_data_mn <= data_m_23;
-        5'd8:  adc_data_mn <= data_m_24;
-        5'd9:  adc_data_mn <= data_m_25;
-        5'd10: adc_data_mn <= data_m_26;
-        5'd11: adc_data_mn <= data_m_27;
-        5'd12: adc_data_mn <= data_m_28;
-        5'd13: adc_data_mn <= data_m_29;
-        5'd14: adc_data_mn <= data_m_30;
-        5'd15: adc_data_mn <= data_m_31;
-        default: adc_data_mn <= data_m_16;
-      endcase
       adc_data <= adc_data_mn;
     end
   end
