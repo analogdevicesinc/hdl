@@ -107,8 +107,8 @@ set dev_package_list { \
         { RQFP      9 } \
         { TQFP     10 } \
         { UBGA     11 } \
-        { UFBGA    11 } \
-        { MBGA     12 }}
+        { UFBGA    12 } \
+        { MBGA     13 }}
 
 # Ball-Grid Array (BGA)
 # Ceramic Pin-Grid Array (PGA)
