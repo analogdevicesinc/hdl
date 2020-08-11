@@ -170,6 +170,10 @@ proc adi_project {project_name {parameter_list {}}} {
 
   }
 
+  # source MESSAGE-DISABLE definitions - to ignore invalid critical warnings
+
+  source $ad_hdl_dir/projects/scripts/adi_intel_msg.tcl
+
   # default assignments
 
   set_global_assignment -name QIP_FILE $system_qip_file
