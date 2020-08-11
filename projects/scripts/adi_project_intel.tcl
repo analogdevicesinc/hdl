@@ -4,6 +4,13 @@ set family "none"
 set device "none"
 set version "19.3.0"
 
+## Define the ADI_IGNORE_VERSION_CHECK environment variable to skip version check
+if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
+  set IGNORE_VERSION_CHECK 1
+} elseif {![info exists IGNORE_VERSION_CHECK]} {
+  set IGNORE_VERSION_CHECK 0
+}
+
 ## Create a project.
 #
 # \param[project_name] - name of the project, must contain a valid carrier name
@@ -20,6 +27,7 @@ proc adi_project {project_name {parameter_list {}}} {
   global device
   global version
   global quartus
+  global IGNORE_VERSION_CHECK
 
   # check $ALT_NIOS_MMU_ENABLED environment variables
 
@@ -73,10 +81,20 @@ proc adi_project {project_name {parameter_list {}}} {
   # version check
 
   set m_version [lindex $quartus(version) 1]
-  if {[string compare $m_version $version] != 0} {
-    puts -nonewline "Critical Warning: quartus version mismatch; "
-    puts -nonewline "expected $version, "
-    puts -nonewline "got $m_version.\n"
+  if {$IGNORE_VERSION_CHECK} {
+    if {[string compare $m_version $version] != 0} {
+      puts -nonewline "CRITICAL WARNING: Quartus version mismatch; "
+      puts -nonewline "expected $version, "
+      puts -nonewline "got $m_version.\n"
+    }
+  } else {
+    if {[string compare $m_version $version] != 0} {
+      puts -nonewline "ERROR: Quartus version mismatch; "
+      puts -nonewline "expected $version, "
+      puts -nonewline "got $m_version.\n"
+      puts -nonewline "This ERROR message can be down-graded to CRITICAL WARNING by setting ADI_IGNORE_VERSION_CHECK environment variable to 1. Be aware that ADI will not support you, if you are using a different tool version.\n"
+      exit 2
+    }
   }
 
   # packages used
