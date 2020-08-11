@@ -133,4 +133,8 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[16]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[17]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[18]
 
+## improve timing - there are occasional timing failure with a small negative slack
+#  at no-MMU configuration
+set_global_assignment -name OPTIMIZATION_MODE "AGGRESSIVE PERFORMANCE"
+
 execute_flow -compile
