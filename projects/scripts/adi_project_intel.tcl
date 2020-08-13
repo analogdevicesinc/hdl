@@ -134,9 +134,15 @@ proc adi_project {project_name {parameter_list {}}} {
   puts $QFILE "set_project_property DEVICE $device"
   puts $QFILE "foreach {param value} {$parameter_list} { set ad_project_params(\$param) \$value }"
   puts $QFILE "source system_qsys.tcl"
-  puts $QFILE "set_domain_assignment {\$system} {qsys_mm.maxAdditionalLatency} {4}"
-  puts $QFILE "set_domain_assignment {\$system} {qsys_mm.clockCrossingAdapter} {AUTO}"
-  puts $QFILE "set_domain_assignment {\$system} {qsys_mm.burstAdapterImplementation} {PER_BURST_TYPE_CONVERTER}"
+  if {$quartus_pro_isused == 1} {
+    puts $QFILE "set_domain_assignment {\$system} {qsys_mm.maxAdditionalLatency} {4}"
+    puts $QFILE "set_domain_assignment {\$system} {qsys_mm.clockCrossingAdapter} {AUTO}"
+    puts $QFILE "set_domain_assignment {\$system} {qsys_mm.burstAdapterImplementation} {PER_BURST_TYPE_CONVERTER}"
+  } else {
+    puts $QFILE "set_interconnect_requirement {\$system} {qsys_mm.maxAdditionalLatency} {4}"
+    puts $QFILE "set_interconnect_requirement {\$system} {qsys_mm.clockCrossingAdapter} {AUTO}"
+    puts $QFILE "set_interconnect_requirement {\$system} {qsys_mm.burstAdapterImplementation} {PER_BURST_TYPE_CONVERTER}"
+  }
   puts $QFILE "save_system {system_bd.qsys}"
   close $QFILE
 
