@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2020 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -47,15 +47,14 @@ module ad7768_if (
 
   output                  adc_clk,
   output  reg             adc_valid,
-  output  reg [ 31:0]     adc_data,
-  output  reg [ 31:0]     adc_ch_data_0,
-  output  reg [ 31:0]     adc_ch_data_1,
-  output  reg [ 31:0]     adc_ch_data_2,
-  output  reg [ 31:0]     adc_ch_data_3,
-  output  reg [ 31:0]     adc_ch_data_4,
-  output  reg [ 31:0]     adc_ch_data_5,
-  output  reg [ 31:0]     adc_ch_data_6,
-  output  reg [ 31:0]     adc_ch_data_7,
+  output  reg [ 31:0]     adc_data_0,
+  output  reg [ 31:0]     adc_data_1,
+  output  reg [ 31:0]     adc_data_2,
+  output  reg [ 31:0]     adc_data_3,
+  output  reg [ 31:0]     adc_data_4,
+  output  reg [ 31:0]     adc_data_5,
+  output  reg [ 31:0]     adc_data_6,
+  output  reg [ 31:0]     adc_data_7,
 
   // control interface
 
@@ -99,14 +98,14 @@ module ad7768_if (
   reg               adc_valid_8 = 'd0;
   reg     [ 31:0]   adc_data_8 = 'd0;
   reg     [  7:0]   adc_ch_valid_d = 'd0;
-  reg     [255:0]   adc_ch_data_d0 = 'd0;
-  reg     [255:0]   adc_ch_data_d1 = 'd0;
-  reg     [255:0]   adc_ch_data_d2 = 'd0;
-  reg     [255:0]   adc_ch_data_d3 = 'd0;
-  reg     [255:0]   adc_ch_data_d4 = 'd0;
-  reg     [255:0]   adc_ch_data_d5 = 'd0;
-  reg     [255:0]   adc_ch_data_d6 = 'd0;
-  reg     [255:0]   adc_ch_data_d7 = 'd0;
+  reg     [ 31:0]   adc_ch_data_d0 = 'd0;
+  reg     [ 31:0]   adc_ch_data_d1 = 'd0;
+  reg     [ 31:0]   adc_ch_data_d2 = 'd0;
+  reg     [ 31:0]   adc_ch_data_d3 = 'd0;
+  reg     [ 31:0]   adc_ch_data_d4 = 'd0;
+  reg     [ 31:0]   adc_ch_data_d5 = 'd0;
+  reg     [ 31:0]   adc_ch_data_d6 = 'd0;
+  reg     [ 31:0]   adc_ch_data_d7 = 'd0;
   reg               adc_ch_valid_0 = 'd0;
   reg               adc_ch_valid_1 = 'd0;
   reg               adc_ch_valid_2 = 'd0;
@@ -115,6 +114,7 @@ module ad7768_if (
   reg               adc_ch_valid_5 = 'd0;
   reg               adc_ch_valid_6 = 'd0;
   reg               adc_ch_valid_7 = 'd0;
+  reg               adc_ch_valid = 'd0;
   reg     [ 31:0]   adc_ch_data_0 = 'd0;
   reg     [ 31:0]   adc_ch_data_1 = 'd0;
   reg     [ 31:0]   adc_ch_data_2 = 'd0;
@@ -123,8 +123,6 @@ module ad7768_if (
   reg     [ 31:0]   adc_ch_data_5 = 'd0;
   reg     [ 31:0]   adc_ch_data_6 = 'd0;
   reg     [ 31:0]   adc_ch_data_7 = 'd0;
-  reg               adc_ch_valid = 'd0;
-  reg     [255:0]   adc_ch_data = 'd0;
   reg     [  8:0]   adc_cnt_p = 'd0;
   reg               adc_valid_p = 'd0;
   reg     [255:0]   adc_data_p = 'd0;
@@ -260,7 +258,6 @@ module ad7768_if (
 
   always @(posedge adc_clk) begin
     adc_valid <= adc_valid_int & adc_enable_int;
-    adc_data <= {{8{adc_data_int[23]}}, adc_data_int[23:0]};
     adc_seq <= adc_seq_int;
     if ((adc_crc_enable == 1'b1) && (adc_crc_scnt_int == 4'd0)) begin
       adc_status[4] <= adc_crc_mismatch_8[7] & adc_enable_int;
@@ -390,63 +387,6 @@ module ad7768_if (
     end
   end
 
-  // data (interleaving)
-
-  always @(posedge adc_clk) begin
-    adc_valid_8 <=  adc_ch_valid_0 | adc_ch_valid_1 | adc_ch_valid_2 | adc_ch_valid_3 |
-                    adc_ch_valid_4 | adc_ch_valid_5 | adc_ch_valid_6 | adc_ch_valid_7;
-    adc_data_8 <= adc_ch_data_0 | adc_ch_data_1 | adc_ch_data_2 | adc_ch_data_3 |
-                  adc_ch_data_4 | adc_ch_data_5 | adc_ch_data_6 | adc_ch_data_7;
-  end
-
-  always @(posedge adc_clk) begin
-    adc_ch_valid_d <= {adc_ch_valid_d[6:0], adc_ch_valid};
-    adc_ch_data_d0[((32*0)+31):(32*0)] <= adc_ch_data[((32*0)+31):(32*0)];
-    adc_ch_data_d0[((32*7)+31):(32*1)] <= adc_ch_data_d0[((32*6)+31):(32*0)];
-    adc_ch_data_d1[((32*0)+31):(32*0)] <= adc_ch_data[((32*1)+31):(32*1)];
-    adc_ch_data_d1[((32*7)+31):(32*1)] <= adc_ch_data_d1[((32*6)+31):(32*0)];
-    adc_ch_data_d2[((32*0)+31):(32*0)] <= adc_ch_data[((32*2)+31):(32*2)];
-    adc_ch_data_d2[((32*7)+31):(32*1)] <= adc_ch_data_d2[((32*6)+31):(32*0)];
-    adc_ch_data_d3[((32*0)+31):(32*0)] <= adc_ch_data[((32*3)+31):(32*3)];
-    adc_ch_data_d3[((32*7)+31):(32*1)] <= adc_ch_data_d3[((32*6)+31):(32*0)];
-    adc_ch_data_d4[((32*0)+31):(32*0)] <= adc_ch_data[((32*4)+31):(32*4)];
-    adc_ch_data_d4[((32*7)+31):(32*1)] <= adc_ch_data_d4[((32*6)+31):(32*0)];
-    adc_ch_data_d5[((32*0)+31):(32*0)] <= adc_ch_data[((32*5)+31):(32*5)];
-    adc_ch_data_d5[((32*7)+31):(32*1)] <= adc_ch_data_d5[((32*6)+31):(32*0)];
-    adc_ch_data_d6[((32*0)+31):(32*0)] <= adc_ch_data[((32*6)+31):(32*6)];
-    adc_ch_data_d6[((32*7)+31):(32*1)] <= adc_ch_data_d6[((32*6)+31):(32*0)];
-    adc_ch_data_d7[((32*0)+31):(32*0)] <= adc_ch_data[((32*7)+31):(32*7)];
-    adc_ch_data_d7[((32*7)+31):(32*1)] <= adc_ch_data_d7[((32*6)+31):(32*0)];
-  end
-
-  always @(posedge adc_clk) begin
-    adc_ch_valid_0 <= adc_ch_valid_d[0];
-    adc_ch_valid_1 <= adc_ch_valid_d[1] & ~adc_format[1];
-    adc_ch_valid_2 <= adc_ch_valid_d[2] & ~adc_format[1] & ~adc_format[0];
-    adc_ch_valid_3 <= adc_ch_valid_d[3] & ~adc_format[1] & ~adc_format[0];
-    adc_ch_valid_4 <= adc_ch_valid_d[4] & ~adc_format[1] & ~adc_format[0];
-    adc_ch_valid_5 <= adc_ch_valid_d[5] & ~adc_format[1] & ~adc_format[0];
-    adc_ch_valid_6 <= adc_ch_valid_d[6] & ~adc_format[1] & ~adc_format[0];
-    adc_ch_valid_7 <= adc_ch_valid_d[7] & ~adc_format[1] & ~adc_format[0];
-    adc_ch_data_0 <= adc_ch_data_d0[((32*0)+31):(32*0)];
-    adc_ch_data_1 <= adc_ch_data_d1[((32*1)+31):(32*1)];
-    adc_ch_data_2 <= adc_ch_data_d2[((32*2)+31):(32*2)];
-    adc_ch_data_3 <= adc_ch_data_d3[((32*3)+31):(32*3)];
-    adc_ch_data_4 <= adc_ch_data_d4[((32*4)+31):(32*4)];
-    adc_ch_data_5 <= adc_ch_data_d5[((32*5)+31):(32*5)];
-    adc_ch_data_6 <= adc_ch_data_d6[((32*6)+31):(32*6)];
-    adc_ch_data_7 <= adc_ch_data_d7[((32*7)+31):(32*7)];
-  end
-
-  always @(posedge adc_clk) begin
-    adc_ch_valid <= adc_valid_p;
-    if (adc_valid_p == 1'b1) begin
-      adc_ch_data <= adc_data_p;
-    end else begin
-      adc_ch_data <= 256'd0;
-    end
-  end
-
   // data (common)
 
   assign adc_cnt_enable_1_s = (adc_cnt_p <= 9'h01f) ? 1'b1 : 1'b0;
@@ -494,6 +434,67 @@ module ad7768_if (
 
   end
   endgenerate
+
+  always @(posedge adc_clk) begin
+    adc_valid_8 <=  adc_ch_valid_0 | adc_ch_valid_1 | adc_ch_valid_2 | adc_ch_valid_3 |
+                    adc_ch_valid_4 | adc_ch_valid_5 | adc_ch_valid_6 | adc_ch_valid_7;
+    adc_data_8 <= adc_ch_data_0 | adc_ch_data_1 | adc_ch_data_2 | adc_ch_data_3 |
+                  adc_ch_data_4 | adc_ch_data_5 | adc_ch_data_6 | adc_ch_data_7;
+  end
+
+  always @(posedge adc_clk) begin
+    adc_ch_valid_d <= {adc_ch_valid_d[6:0], adc_ch_valid};
+    adc_ch_data_d0 <= adc_data_0;
+	adc_ch_data_d1 <= adc_data_1;
+	adc_ch_data_d2 <= adc_data_2;
+	adc_ch_data_d3 <= adc_data_3;
+	adc_ch_data_d4 <= adc_data_4;
+	adc_ch_data_d5 <= adc_data_5;
+	adc_ch_data_d6 <= adc_data_6;
+	adc_ch_data_d7 <= adc_data_7;
+  end
+
+  always @(posedge adc_clk) begin
+    adc_ch_valid_0 <= adc_ch_valid_d[0];
+    adc_ch_valid_1 <= adc_ch_valid_d[1] & ~adc_format[1];
+    adc_ch_valid_2 <= adc_ch_valid_d[2] & ~adc_format[1] & ~adc_format[0];
+    adc_ch_valid_3 <= adc_ch_valid_d[3] & ~adc_format[1] & ~adc_format[0];
+    adc_ch_valid_4 <= adc_ch_valid_d[4] & ~adc_format[1] & ~adc_format[0];
+    adc_ch_valid_5 <= adc_ch_valid_d[5] & ~adc_format[1] & ~adc_format[0];
+    adc_ch_valid_6 <= adc_ch_valid_d[6] & ~adc_format[1] & ~adc_format[0];
+    adc_ch_valid_7 <= adc_ch_valid_d[7] & ~adc_format[1] & ~adc_format[0];
+    adc_ch_data_0 <= adc_ch_data_d0;
+    adc_ch_data_1 <= adc_ch_data_d1;
+    adc_ch_data_2 <= adc_ch_data_d2;
+    adc_ch_data_3 <= adc_ch_data_d3;
+    adc_ch_data_4 <= adc_ch_data_d4;
+    adc_ch_data_5 <= adc_ch_data_d5;
+    adc_ch_data_6 <= adc_ch_data_d6;
+    adc_ch_data_7 <= adc_ch_data_d7;
+  end
+
+  always @(posedge adc_clk) begin
+    adc_ch_valid <= adc_valid_p;
+    if (adc_valid_p == 1'b1) begin
+      adc_data_0 <= adc_data_p[((32*0)+31):(32*0)];
+	  adc_data_1 <= adc_data_p[((32*1)+31):(32*1)];
+	  adc_data_2 <= adc_data_p[((32*2)+31):(32*2)];
+	  adc_data_3 <= adc_data_p[((32*3)+31):(32*3)];
+	  adc_data_4 <= adc_data_p[((32*4)+31):(32*4)];
+	  adc_data_5 <= adc_data_p[((32*5)+31):(32*5)];
+	  adc_data_6 <= adc_data_p[((32*6)+31):(32*6)];
+	  adc_data_7 <= adc_data_p[((32*7)+31):(32*7)];
+    end else begin
+      adc_data_0 <= 32'd0;
+	  adc_data_1 <= 32'd0;
+	  adc_data_2 <= 32'd0;
+	  adc_data_3 <= 32'd0;
+	  adc_data_4 <= 32'd0;
+	  adc_data_5 <= 32'd0;
+	  adc_data_6 <= 32'd0;
+	  adc_data_7 <= 32'd0;
+    end
+  end
 
   // ready (single shot or continous)
 

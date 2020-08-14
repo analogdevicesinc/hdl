@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2020 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -185,14 +185,14 @@ module system_top (
     .data_in (data_in),
     .adc_clk (adc_clk),
     .adc_valid (adc_valid),
-    .adc_ch_data_0 (adc_data_0),
-    .adc_ch_data_1 (adc_data_1),
-    .adc_ch_data_2 (adc_data_2),
-    .adc_ch_data_3 (adc_data_3),
-    .adc_ch_data_4 (adc_data_4),
-    .adc_ch_data_5 (adc_data_5),
-    .adc_ch_data_6 (adc_data_6),
-    .adc_ch_data_7 (adc_data_7),
+    .adc_data_0 (adc_data_0),
+    .adc_data_1 (adc_data_1),
+    .adc_data_2 (adc_data_2),
+    .adc_data_3 (adc_data_3),
+    .adc_data_4 (adc_data_4),
+    .adc_data_5 (adc_data_5),
+    .adc_data_6 (adc_data_6),
+    .adc_data_7 (adc_data_7),
     .up_sshot (up_sshot),
     .up_format (up_format),
     .up_crc_enable (up_crc_enable),
