@@ -125,6 +125,7 @@ proc adi_project {project_name {parameter_list {}}} {
   }
 
   set QFILE [open "system_qsys_script.tcl" "w"]
+  puts $QFILE "set project_name $project_name"
   puts $QFILE "set mmu_enabled $mmu_enabled"
   puts $QFILE "set ad_hdl_dir $ad_hdl_dir"
   puts $QFILE "set ad_ghdl_dir $ad_ghdl_dir"
