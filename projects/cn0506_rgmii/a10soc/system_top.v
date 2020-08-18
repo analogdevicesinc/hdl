@@ -251,6 +251,7 @@ module system_top (
     .sys_gpio_in_export (gpio_i[63:32]),
     .sys_gpio_out_export (gpio_o[63:32]),
     .sys_hps_ddr_mem_ck (hps_ddr_clk_p),
+    .pr_rom_data_nc_rom_data('h0),
     .sys_hps_ddr_mem_ck_n (hps_ddr_clk_n),
     .sys_hps_ddr_mem_a (hps_ddr_a),
     .sys_hps_ddr_mem_act_n (hps_ddr_act_n),
