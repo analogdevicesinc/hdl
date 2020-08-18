@@ -215,6 +215,7 @@ module system_top (
     .sys_gpio_bd_out_port (sys_gpio_bd_o),
     .sys_gpio_in_export (sys_gpio_i),
     .sys_gpio_out_export (sys_gpio_o),
+    .pr_rom_data_nc_rom_data('h0),
     .sys_hps_h2f_reset_reset_n (sys_resetn),
     .sys_hps_hps_io_hps_io_emac1_inst_TX_CLK (eth1_tx_clk),
     .sys_hps_hps_io_hps_io_emac1_inst_TXD0 (eth1_tx_d[0]),
