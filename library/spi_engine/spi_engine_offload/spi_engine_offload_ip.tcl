@@ -75,6 +75,11 @@ set_property -dict [list \
   "value" "false" \
  ] \
  [ipx::get_user_parameters ASYNC_SPI_CLK -of_objects $cc]
+set_property -dict [list \
+  "value_format" "bool" \
+  "value" "false" \
+ ] \
+ [ipx::get_hdl_parameters ASYNC_SPI_CLK -of_objects $cc]
 
 ## ASYNC_TRIG
 set_property -dict [list \
@@ -82,6 +87,11 @@ set_property -dict [list \
   "value" "false" \
  ] \
  [ipx::get_user_parameters ASYNC_TRIG -of_objects $cc]
+set_property -dict [list \
+  "value_format" "bool" \
+  "value" "false" \
+ ] \
+ [ipx::get_hdl_parameters ASYNC_TRIG -of_objects $cc]
 
 ## NUM_OF_SDI
 set_property -dict [list \
