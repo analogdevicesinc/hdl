@@ -149,6 +149,11 @@ set_property -dict [list \
   "value" "false" \
  ] \
  [ipx::get_user_parameters ASYNC_SPI_CLK -of_objects $cc]
+set_property -dict [list \
+  "value_format" "bool" \
+  "value" "false" \
+ ] \
+ [ipx::get_hdl_parameters ASYNC_SPI_CLK -of_objects $cc]
 
 ## NUM_OFFLOAD
 set_property -dict [list \

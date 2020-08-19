@@ -101,6 +101,11 @@ set_property -dict [list \
   "value" "false" \
  ] \
  [ipx::get_user_parameters SDI_DELAY -of_objects $cc]
+set_property -dict [list \
+  "value_format" "bool" \
+  "value" "false" \
+ ] \
+ [ipx::get_hdl_parameters SDI_DELAY -of_objects $cc]
 
 ## Customize IP Layout
 
