@@ -69,6 +69,7 @@ set_instance_parameter_value axi_ad9213_dma {CYCLIC} {0}
 set_instance_parameter_value axi_ad9213_dma {DMA_TYPE_DEST} {0}
 set_instance_parameter_value axi_ad9213_dma {DMA_TYPE_SRC} {2}
 set_instance_parameter_value axi_ad9213_dma {FIFO_SIZE} {32}
+set_instance_parameter_value axi_ad9213_dma {MAX_BYTES_PER_BURST} {256}
 
 # SPI interfaces
 
