@@ -21,6 +21,7 @@ set_instance_parameter_value ad9213_rx_0 {REFCLK_FREQUENCY} {312.5}
 set_instance_parameter_value ad9213_rx_0 {INPUT_PIPELINE_STAGES} {2}
 set_instance_parameter_value ad9213_rx_0 {NUM_OF_LANES} {16}
 set_instance_parameter_value ad9213_rx_0 {EXT_DEVICE_CLK_EN} {1}
+set_instance_parameter_value ad9213_rx_0 {LANE_MAP} {0 1 2 7 14 13 15 4 8 3 10 6 12 5 9 11}
 
 # ad9213_rx_1 JESD204B phy-link layer
 
@@ -34,6 +35,7 @@ set_instance_parameter_value ad9213_rx_1 {REFCLK_FREQUENCY} {312.5}
 set_instance_parameter_value ad9213_rx_1 {INPUT_PIPELINE_STAGES} {2}
 set_instance_parameter_value ad9213_rx_1 {NUM_OF_LANES} {16}
 set_instance_parameter_value ad9213_rx_1 {EXT_DEVICE_CLK_EN} {1}
+set_instance_parameter_value ad9213_rx_1 {LANE_MAP} {1 5 0 8 10 4 12 3 2 7 6 14 15 13 11 9}
 
 # Link merger
 
