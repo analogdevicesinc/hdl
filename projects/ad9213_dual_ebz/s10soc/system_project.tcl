@@ -157,4 +157,6 @@ set_instance_assignment  -name IO_STANDARD LVDS  -to rx_ref_b_clk1
 set_instance_assignment  -name IO_STANDARD LVDS  -to rx_sync_b
 set_instance_assignment  -name INPUT_TERMINATION DIFFERENTIAL -to rx_sync_b
 
+set_global_assignment -name OPTIMIZATION_MODE "AGGRESSIVE PERFORMANCE"
+
 execute_flow -compile
