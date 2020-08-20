@@ -170,22 +170,24 @@ add_connection sys_clk.clk_reset vga_pll.reset
 
 # display (vga-frame-reader)
 
-add_instance vga_frame_reader alt_vip_vfr
-set_instance_parameter_value vga_frame_reader {BITS_PER_PIXEL_PER_COLOR_PLANE} {8}
-set_instance_parameter_value vga_frame_reader {NUMBER_OF_CHANNELS_IN_PARALLEL} {4}
-set_instance_parameter_value vga_frame_reader {NUMBER_OF_CHANNELS_IN_SEQUENCE} {1}
-set_instance_parameter_value vga_frame_reader {MAX_IMAGE_WIDTH} {1360}
-set_instance_parameter_value vga_frame_reader {MAX_IMAGE_HEIGHT} {768}
+add_instance vga_frame_reader alt_vip_cl_vfb
+set_instance_parameter_value vga_frame_reader {BITS_PER_SYMBOL} {8}
+set_instance_parameter_value vga_frame_reader {NUMBER_OF_COLOR_PLANES} {4}
+set_instance_parameter_value vga_frame_reader {MAX_WIDTH} {1360}
+set_instance_parameter_value vga_frame_reader {MAX_HEIGHT} {768}
 set_instance_parameter_value vga_frame_reader {MEM_PORT_WIDTH} {128}
-set_instance_parameter_value vga_frame_reader {RMASTER_FIFO_DEPTH} {64}
-set_instance_parameter_value vga_frame_reader {RMASTER_BURST_TARGET} {32}
+set_instance_parameter_value vga_frame_reader {READ_FIFO_DEPTH} {64}
+set_instance_parameter_value vga_frame_reader {READ_BURST_TARGET} {32}
 set_instance_parameter_value vga_frame_reader {CLOCKS_ARE_SEPARATE} {1}
-add_connection sys_clk.clk vga_frame_reader.clock_master
-add_connection sys_clk.clk_reset vga_frame_reader.clock_master_reset
-add_connection vga_frame_reader.avalon_master sys_hps.f2h_sdram0_data
-set_connection_parameter_value vga_frame_reader.avalon_master/sys_hps.f2h_sdram0_data baseAddress {0x0000}
-add_connection vga_pll.outclk0 vga_frame_reader.clock_reset
-add_connection sys_clk.clk_reset vga_frame_reader.clock_reset_reset
+set_instance_parameter_value vga_frame_reader {READER_RUNTIME_CONTROL} {1}
+set_instance_parameter_value vga_frame_reader {IS_FRAME_READER} {1}
+set_instance_parameter_value vga_frame_reader {IS_FRAME_WRITER} {0}
+add_connection sys_clk.clk vga_frame_reader.mem_clock
+add_connection sys_clk.clk_reset vga_frame_reader.mem_reset
+add_connection vga_frame_reader.mem_master_rd sys_hps.f2h_sdram0_data
+set_connection_parameter_value vga_frame_reader.mem_master_rd/sys_hps.f2h_sdram0_data baseAddress {0x0000}
+add_connection vga_pll.outclk0 vga_frame_reader.main_clock
+add_connection sys_clk.clk_reset vga_frame_reader.main_reset
 
 # display (vga-out-clock)
 
@@ -197,7 +199,7 @@ set_interface_property vga_out_clk EXPORT_OF vga_out_clock.out_clk
 
 # display (vga-out-data)
 
-add_instance vga_out_data alt_vip_itc
+add_instance vga_out_data alt_vip_cl_cvo
 set_instance_parameter_value vga_out_data {H_ACTIVE_PIXELS} {1360}
 set_instance_parameter_value vga_out_data {V_ACTIVE_LINES} {768}
 set_instance_parameter_value vga_out_data {BPS} {8}
@@ -231,9 +233,9 @@ set_instance_parameter_value vga_out_data {USE_CONTROL} {0}
 set_instance_parameter_value vga_out_data {GENERATE_SYNC} {0}
 set_instance_parameter_value vga_out_data {NO_OF_MODES} {1}
 set_instance_parameter_value vga_out_data {STD_WIDTH} {1}
-add_connection vga_pll.outclk0 vga_out_data.is_clk_rst
-add_connection sys_clk.clk_reset vga_out_data.is_clk_rst_reset
-add_connection vga_frame_reader.avalon_streaming_source vga_out_data.din
+add_connection vga_pll.outclk0 vga_out_data.main_clock
+add_connection sys_clk.clk_reset vga_out_data.main_reset
+add_connection vga_frame_reader.dout vga_out_data.din
 add_interface vga_out_data conduit end
 set_interface_property vga_out_data EXPORT_OF vga_out_data.clocked_video
 
@@ -295,12 +297,12 @@ set_interface_property sys_spi EXPORT_OF sys_spi.external
 
 ad_cpu_interrupt 0 sys_gpio_bd.irq
 ad_cpu_interrupt 1 sys_spi.irq
-ad_cpu_interrupt 4 vga_frame_reader.interrupt_sender
+ad_cpu_interrupt 4 vga_frame_reader.control_interrupt
 
 # cpu interconnects
 
 ad_cpu_interconnect 0x00108000 sys_spi.spi_control_port
-ad_cpu_interconnect 0x00009000 vga_frame_reader.avalon_slave
+ad_cpu_interconnect 0x00009000 vga_frame_reader.control
 ad_cpu_interconnect 0x00010000 sys_id.control_slave
 ad_cpu_interconnect 0x00010080 sys_gpio_bd.s1
 ad_cpu_interconnect 0x00010100 sys_gpio_in.s1
