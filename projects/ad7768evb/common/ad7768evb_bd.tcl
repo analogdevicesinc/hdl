@@ -3,14 +3,6 @@
 
 create_bd_port -dir I adc_clk
 create_bd_port -dir I adc_valid
-# create_bd_port -dir I -from 31 -to 0 adc_data_0
-# create_bd_port -dir I -from 31 -to 0 adc_data_1
-# create_bd_port -dir I -from 31 -to 0 adc_data_2
-# create_bd_port -dir I -from 31 -to 0 adc_data_3
-# create_bd_port -dir I -from 31 -to 0 adc_data_4
-# create_bd_port -dir I -from 31 -to 0 adc_data_5
-# create_bd_port -dir I -from 31 -to 0 adc_data_6
-# create_bd_port -dir I -from 31 -to 0 adc_data_7
 create_bd_port -dir I -from 31 -to 0 adc_gpio_0_i
 create_bd_port -dir O -from 31 -to 0 adc_gpio_0_o
 create_bd_port -dir O -from 31 -to 0 adc_gpio_0_t
@@ -43,6 +35,7 @@ ad_ip_parameter ad7768_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter ad7768_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter ad7768_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter ad7768_dma CONFIG.DMA_DATA_WIDTH_SRC $dma_width_src
+ad_ip_parameter ad7768_dma CONFIG.DMA_DATA_WIDTH_DEST $dma_width_src
 
 # ps7-hp1
 
