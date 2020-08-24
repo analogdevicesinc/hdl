@@ -36,7 +36,9 @@
 
 module up_tdd_cntrl #(
 
-  parameter   ID = 0) (
+  parameter   ID = 0,
+  parameter   BASE_ADDRESS = 6'h20
+) (
 
   input                   clk,
   input                   rst,
@@ -145,8 +147,8 @@ module up_tdd_cntrl #(
 
   // decode block select
 
-  assign up_wreq_s = (up_waddr[13:8] == 6'h20) ? up_wreq : 1'b0;
-  assign up_rreq_s = (up_raddr[13:8] == 6'h20) ? up_rreq : 1'b0;
+  assign up_wreq_s = (up_waddr[13:8] == BASE_ADDRESS[5:0]) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == BASE_ADDRESS[5:0]) ? up_rreq : 1'b0;
 
   // processor write interface
 
