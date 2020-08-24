@@ -17,6 +17,9 @@ adi_ip_files axi_adrv9001 [list \
   "$ad_hdl_dir/library/common/ad_dds_2.v" \
   "$ad_hdl_dir/library/common/ad_dds.v" \
   "$ad_hdl_dir/library/common/ad_datafmt.v" \
+  "$ad_hdl_dir/library/common/up_tdd_cntrl.v" \
+  "$ad_hdl_dir/library/common/ad_tdd_control.v" \
+  "$ad_hdl_dir/library/common/ad_addsub.v" \
   "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
   "$ad_hdl_dir/library/common/up_xfer_status.v" \
@@ -47,6 +50,7 @@ adi_ip_files axi_adrv9001 [list \
   "axi_adrv9001_tx_channel.v" \
   "axi_adrv9001_core.v" \
   "axi_adrv9001_constr.xdc" \
+  "axi_adrv9001_tdd.v" \
   "axi_adrv9001.v" ]
 
 adi_ip_properties axi_adrv9001
