@@ -45,6 +45,16 @@ create_bd_port -dir O tx2_qdata_out_p
 create_bd_port -dir O tx2_strobe_out_n
 create_bd_port -dir O tx2_strobe_out_p
 
+create_bd_port -dir O rx1_enable
+create_bd_port -dir O rx2_enable
+create_bd_port -dir O tx1_enable
+create_bd_port -dir O tx2_enable
+
+create_bd_port -dir I gpio_rx1_enable_in
+create_bd_port -dir I gpio_rx2_enable_in
+create_bd_port -dir I gpio_tx1_enable_in
+create_bd_port -dir I gpio_tx2_enable_in
+
 # adrv9001
 
 ad_ip_instance axi_adrv9001 axi_adrv9001
@@ -178,6 +188,16 @@ ad_connect tx2_qdata_out_n   axi_adrv9001/tx2_qdata_out_n_qdata2
 ad_connect tx2_qdata_out_p   axi_adrv9001/tx2_qdata_out_p_qdata3
 ad_connect tx2_strobe_out_n  axi_adrv9001/tx2_strobe_out_n_NC
 ad_connect tx2_strobe_out_p  axi_adrv9001/tx2_strobe_out_p_strobe_out
+
+ad_connect rx1_enable        axi_adrv9001/rx1_enable
+ad_connect rx2_enable        axi_adrv9001/rx2_enable
+ad_connect tx1_enable        axi_adrv9001/tx1_enable
+ad_connect tx2_enable        axi_adrv9001/tx2_enable
+
+ad_connect gpio_rx1_enable_in  axi_adrv9001/gpio_rx1_enable_in
+ad_connect gpio_rx2_enable_in  axi_adrv9001/gpio_rx2_enable_in
+ad_connect gpio_tx1_enable_in  axi_adrv9001/gpio_tx1_enable_in
+ad_connect gpio_tx2_enable_in  axi_adrv9001/gpio_tx2_enable_in
 
 # RX1_RX2 - CPACK - RX_DMA1
 ad_connect  axi_adrv9001/adc_1_rst       util_adc_1_pack/reset
