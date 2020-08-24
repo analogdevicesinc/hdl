@@ -38,6 +38,7 @@
 module axi_adrv9001 #(
   parameter ID = 0,
   parameter CMOS_LVDS_N = 0,
+  parameter TDD_DISABLE = 0,
   parameter IO_DELAY_GROUP = "dev_if_delay_group",
   parameter FPGA_TECHNOLOGY = 0,
   parameter FPGA_FAMILY = 0,
@@ -89,6 +90,11 @@ module axi_adrv9001 #(
   output                  tx2_qdata_out_p_qdata3,
   output                  tx2_strobe_out_n_NC,
   output                  tx2_strobe_out_p_strobe_out,
+
+  output                  rx1_enable,
+  output                  rx2_enable,
+  output                  tx1_enable,
+  output                  tx2_enable,
 
   input                   delay_clk,
 
@@ -146,6 +152,14 @@ module axi_adrv9001 #(
   output                  dac_2_enable_q0,
   input       [15:0]      dac_2_data_q0,
   input                   dac_2_dunf,
+
+  // TDD interface
+  input                   tdd_sync,
+
+  input                   gpio_rx1_enable_in,
+  input                   gpio_rx2_enable_in,
+  input                   gpio_tx1_enable_in,
+  input                   gpio_tx2_enable_in,
 
   // axi interface
   input                   s_axi_aclk,
@@ -360,6 +374,7 @@ module axi_adrv9001 #(
     .NUM_LANES (NUM_LANES),
     .CMOS_LVDS_N (CMOS_LVDS_N),
     .DRP_WIDTH (DRP_WIDTH),
+    .TDD_DISABLE (TDD_DISABLE),
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .FPGA_FAMILY (FPGA_FAMILY),
     .SPEED_GRADE (SPEED_GRADE),
@@ -456,6 +471,15 @@ module axi_adrv9001 #(
     .delay_rx2_rst (delay_rx2_rst),
     .delay_rx2_locked (delay_rx2_locked),
 
+    // TDD interface
+    .tdd_sync (tdd_sync),
+    .tdd_rx1_rf_en (tdd_rx1_rf_en),
+    .tdd_tx1_rf_en (tdd_tx1_rf_en),
+    .tdd_if1_mode (tdd_if1_mode),
+    .tdd_rx2_rf_en (tdd_rx2_rf_en),
+    .tdd_tx2_rf_en (tdd_tx2_rf_en),
+    .tdd_if2_mode (tdd_if2_mode),
+
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq_s),
@@ -481,6 +505,11 @@ module axi_adrv9001 #(
   assign dac_1_valid_q1 = dac_1_valid;
   assign dac_2_valid_i0 = dac_2_valid;
   assign dac_2_valid_q0 = dac_2_valid;
+
+  assign rx1_enable = tdd_if1_mode ? tdd_rx1_rf_en : gpio_rx1_enable_in;
+  assign rx2_enable = tdd_if2_mode ? tdd_rx2_rf_en : gpio_rx2_enable_in;
+  assign tx1_enable = tdd_if1_mode ? tdd_tx1_rf_en : gpio_tx1_enable_in;
+  assign tx2_enable = tdd_if2_mode ? tdd_tx2_rf_en : gpio_tx2_enable_in;
 
   // up bus interface
   up_axi #(

@@ -67,6 +67,8 @@ module axi_adrv9001_tx #(
   output                  dac_sdr_ddr_n,
   output                  dac_r1_mode,
 
+  input                   tdd_tx_valid,
+
   // master/slave
   input                   dac_sync_in,
   output                  dac_sync_out,
@@ -157,7 +159,7 @@ module axi_adrv9001_tx #(
     if (dac_rst == 1'b1) begin
       dac_valid_int <= 1'b0;
     end else begin
-      dac_valid_int <= (dac_rate_cnt == 16'd0) ? 1'b1 : 1'b0;
+      dac_valid_int <= (dac_rate_cnt == 16'd0) ? tdd_tx_valid : 1'b0;
     end
   end
 

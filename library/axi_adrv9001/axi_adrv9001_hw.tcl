@@ -17,6 +17,9 @@ ad_ip_files axi_adrv9001 [list\
   "$ad_hdl_dir/library/common/ad_dds.v" \
   "$ad_hdl_dir/library/common/ad_datafmt.v" \
   "$ad_hdl_dir/library/common/ad_rst.v" \
+  "$ad_hdl_dir/library/common/up_tdd_cntrl.v" \
+  "$ad_hdl_dir/library/common/ad_tdd_control.v" \
+  "$ad_hdl_dir/library/common/ad_addsub.v" \
   "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
   "$ad_hdl_dir/library/common/up_xfer_status.v" \
   "$ad_hdl_dir/library/common/up_clock_mon.v" \
@@ -46,6 +49,7 @@ ad_ip_files axi_adrv9001 [list\
   "axi_adrv9001_tx_channel.v" \
   "axi_adrv9001_core.v" \
   "axi_adrv9001_constr.sdc" \
+  "axi_adrv9001_tdd.v" \
   "axi_adrv9001.v" ]
 
 # parameters
@@ -163,6 +167,13 @@ add_interface_port dac_2_ch_1 dac_2_data_q0 data Input 16
 
 ad_interface signal dac_2_dunf input 1 unf
 
+add_interface tdd_if conduit end
+add_interface_port tdd_if gpio_rx1_enable_in rx1_enable_in Input 1
+add_interface_port tdd_if gpio_rx2_enable_in rx2_enable_in Input 1
+add_interface_port tdd_if gpio_tx1_enable_in tx1_enable_in Input 1
+add_interface_port tdd_if gpio_tx2_enable_in tx2_enable_in Input 1
+add_interface_port tdd_if tdd_sync tdd_sync_in Input 1
+
 # updates
 
 proc axi_adrv9001_elab {} {
@@ -197,6 +208,7 @@ proc axi_adrv9001_elab {} {
     add_interface_port device_if rx1_qdata_in_n_qdata2     rx1_qdata_in_n_qdata2     Input 1
     add_interface_port device_if rx1_qdata_in_p_qdata3     rx1_qdata_in_p_qdata3     Input 1
     add_interface_port device_if rx1_strobe_in_p_strobe_in rx1_strobe_in_p_strobe_in Input 1
+    add_interface_port device_if rx1_enable                rx1_enable                Output 1
 
     add_interface_port device_if rx2_dclk_in_p_dclk_in     rx2_dclk_in_p_dclk_in     Input 1
     add_interface_port device_if rx2_idata_in_n_idata0     rx2_idata_in_n_idata0     Input 1
@@ -204,6 +216,7 @@ proc axi_adrv9001_elab {} {
     add_interface_port device_if rx2_qdata_in_n_qdata2     rx2_qdata_in_n_qdata2     Input 1
     add_interface_port device_if rx2_qdata_in_p_qdata3     rx2_qdata_in_p_qdata3     Input 1
     add_interface_port device_if rx2_strobe_in_p_strobe_in rx2_strobe_in_p_strobe_in Input 1
+    add_interface_port device_if rx2_enable                rx2_enable                Output 1
 
     add_interface_port device_if tx1_dclk_out_p_dclk_out     tx1_dclk_out_p_dclk_out     Output 1
     add_interface_port device_if tx1_dclk_in_p_dclk_in       tx1_dclk_in_p_dclk_in       Input 1
@@ -212,6 +225,7 @@ proc axi_adrv9001_elab {} {
     add_interface_port device_if tx1_qdata_out_n_qdata2      tx1_qdata_out_n_qdata2      Output 1
     add_interface_port device_if tx1_qdata_out_p_qdata3      tx1_qdata_out_p_qdata3      Output 1
     add_interface_port device_if tx1_strobe_out_p_strobe_out tx1_strobe_out_p_strobe_out Output 1
+    add_interface_port device_if tx1_enable                  tx1_enable                  Output 1
 
     add_interface_port device_if tx2_dclk_out_p_dclk_out     tx2_dclk_out_p_dclk_out     Output 1
     add_interface_port device_if tx2_dclk_in_p_dclk_in       tx2_dclk_in_p_dclk_in       Input 1
@@ -220,6 +234,7 @@ proc axi_adrv9001_elab {} {
     add_interface_port device_if tx2_qdata_out_n_qdata2      tx2_qdata_out_n_qdata2      Output 1
     add_interface_port device_if tx2_qdata_out_p_qdata3      tx2_qdata_out_p_qdata3      Output 1
     add_interface_port device_if tx2_strobe_out_p_strobe_out tx2_strobe_out_p_strobe_out Output 1
+    add_interface_port device_if tx2_enable                  tx2_enable                  Output 1
   }
 }
 
