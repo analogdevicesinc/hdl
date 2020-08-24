@@ -78,7 +78,7 @@ module system_top (
 
   input                   rx1_dclk_in_n,
   input                   rx1_dclk_in_p,
-  inout                   rx1_enable,
+  output                  rx1_enable,
   input                   rx1_idata_in_n,
   input                   rx1_idata_in_p,
   input                   rx1_qdata_in_n,
@@ -88,7 +88,7 @@ module system_top (
 
   input                   rx2_dclk_in_n,
   input                   rx2_dclk_in_p,
-  inout                   rx2_enable,
+  output                  rx2_enable,
   input                   rx2_idata_in_n,
   input                   rx2_idata_in_p,
   input                   rx2_qdata_in_n,
@@ -100,7 +100,7 @@ module system_top (
   output                  tx1_dclk_out_p,
   input                   tx1_dclk_in_n,
   input                   tx1_dclk_in_p,
-  inout                   tx1_enable,
+  output                  tx1_enable,
   output                  tx1_idata_out_n,
   output                  tx1_idata_out_p,
   output                  tx1_qdata_out_n,
@@ -112,7 +112,7 @@ module system_top (
   output                  tx2_dclk_out_p,
   input                   tx2_dclk_in_n,
   input                   tx2_dclk_in_p,
-  inout                   tx2_enable,
+  output                  tx2_enable,
   output                  tx2_idata_out_n,
   output                  tx2_idata_out_p,
   output                  tx2_qdata_out_n,
@@ -132,6 +132,10 @@ module system_top (
   wire        [94:0]      gpio_i;
   wire        [94:0]      gpio_o;
   wire        [94:0]      gpio_t;
+  wire                    gpio_rx1_enable_in;
+  wire                    gpio_rx2_enable_in;
+  wire                    gpio_tx1_enable_in;
+  wire                    gpio_tx2_enable_in;
   wire        [ 2:0]      spi_csn;
 
   wire fpga_ref_clk;
@@ -167,36 +171,37 @@ module system_top (
 
   assign platform_status = vadj_err;
 
-  ad_iobuf #(.DATA_WIDTH(20)) i_iobuf (
-    .dio_t ({gpio_t[51:32]}),
-    .dio_i ({gpio_o[51:32]}),
-    .dio_o ({gpio_i[51:32]}),
-    .dio_p ({tx2_enable,
-             tx1_enable,
-             rx2_enable,
-             rx1_enable,
-             sm_fan_tach,
-             reset_trx,
-             mode,
-             gp_int,
-             dgpio_11,
-             dgpio_10,
-             dgpio_9,
-             dgpio_8,
-             dgpio_7,
-             dgpio_6,
-             dgpio_5,
-             dgpio_4,
-             dgpio_3,
-             dgpio_2,
-             dgpio_1,
+  ad_iobuf #(.DATA_WIDTH(16)) i_iobuf (
+    .dio_t ({gpio_t[47:32]}),
+    .dio_i ({gpio_o[47:32]}),
+    .dio_o ({gpio_i[47:32]}),
+    .dio_p ({sm_fan_tach,  // 47 
+             reset_trx,    // 46
+             mode,         // 45
+             gp_int,       // 44
+             dgpio_11,     // 43
+             dgpio_10,     // 42
+             dgpio_9,      // 41
+             dgpio_8,      // 40
+             dgpio_7,      // 39
+             dgpio_6,      // 38
+             dgpio_5,      // 37
+             dgpio_4,      // 36
+             dgpio_3,      // 35
+             dgpio_2,      // 34
+             dgpio_1,      // 33
              dgpio_0 }));  // 32
+
+  assign gpio_rx1_enable_in = gpio_o[48];
+  assign gpio_rx2_enable_in = gpio_o[49];
+  assign gpio_tx1_enable_in = gpio_o[50];
+  assign gpio_tx2_enable_in = gpio_o[51];
 
   assign gpio_i[ 7: 0] = gpio_o[ 7: 0];
   assign gpio_i[20: 8] = gpio_bd_i;
   assign gpio_bd_o = gpio_o[ 7: 0];
 
-  assign gpio_i[54:52] = gpio_o[54:52];
+  assign gpio_i[54:48] = gpio_o[54:48];
   assign gpio_i[55] = vadj_err;
   assign gpio_i[94:56] = gpio_o[94:56];
   assign gpio_i[31:21] = gpio_o[31:21];
@@ -248,6 +253,16 @@ module system_top (
     .tx2_qdata_out_p (tx2_qdata_out_p),
     .tx2_strobe_out_n (tx2_strobe_out_n),
     .tx2_strobe_out_p (tx2_strobe_out_p),
+
+    .rx1_enable (rx1_enable),
+    .rx2_enable (rx2_enable),
+    .tx1_enable (tx1_enable),
+    .tx2_enable (tx2_enable),
+
+    .gpio_rx1_enable_in (gpio_rx1_enable_in),
+    .gpio_rx2_enable_in (gpio_rx2_enable_in),
+    .gpio_tx1_enable_in (gpio_tx1_enable_in),
+    .gpio_tx2_enable_in (gpio_tx2_enable_in),
 
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
