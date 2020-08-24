@@ -11,3 +11,5 @@ ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 set sys_cstring "CMOS_LVDS_N=${ad_project_params(CMOS_LVDS_N)}"
 sysid_gen_sys_init_file $sys_cstring
 
+set_property strategy Flow_RunPostRoutePhysOpt [get_runs impl_1]
+
