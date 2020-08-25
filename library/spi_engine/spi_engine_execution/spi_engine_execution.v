@@ -435,7 +435,7 @@ if (ECHO_SCLK == 1) begin : g_echo_sclk_miso_latch
   // sdi_data_valid is synchronous to SPI clock, so synchronize the
   // last_sdi_bit to SPI clock
 
-  reg [2:0] last_sdi_bit_m = 2'b0;
+  reg [2:0] last_sdi_bit_m = 3'b0;
   always @(posedge clk) begin
     last_sdi_bit_m = {last_sdi_bit_m, last_sdi_bit};
   end
