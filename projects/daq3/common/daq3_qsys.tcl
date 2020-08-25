@@ -88,6 +88,7 @@ set_instance_parameter_value ad9680_jesd204 {TX_OR_RX_N} {0}
 set_instance_parameter_value ad9680_jesd204 {LANE_RATE} {12333.3}
 set_instance_parameter_value ad9680_jesd204 {REFCLK_FREQUENCY} {616.665}
 set_instance_parameter_value ad9680_jesd204 {NUM_OF_LANES} {4}
+set_instance_parameter_value ad9680_jesd204 {INPUT_PIPELINE_STAGES} {1}
 
 add_connection sys_clk.clk ad9680_jesd204.sys_clk
 add_connection sys_clk.clk_reset ad9680_jesd204.sys_resetn
