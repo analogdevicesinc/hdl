@@ -118,7 +118,6 @@ module ad_dds #(
       // phase accumulator
       for (i=1; i <= CLK_RATIO; i=i+1) begin: dds_phase
         always @(posedge clk) begin
-          if (dac_valid == 1'b1) begin
             if (dac_data_sync == 1'b1) begin
               dac_dds_phase_0[i] <= 'd0;
               dac_dds_phase_1[i] <= 'd0;
@@ -130,11 +129,10 @@ module ad_dds #(
                 dac_dds_phase_0[i] <= dac_dds_phase_0[i-1] + tone_1_freq_word;
                 dac_dds_phase_1[i] <= dac_dds_phase_1[i-1] + tone_2_freq_word;
               end
-            end else begin
+            end else if (dac_valid == 1'b1) begin
               dac_dds_phase_0[i] <= dac_dds_phase_0[i] + dac_dds_incr_0;
               dac_dds_phase_1[i] <= dac_dds_phase_1[i] + dac_dds_incr_1;
             end
-          end
         end
 
         // phase to amplitude convertor
