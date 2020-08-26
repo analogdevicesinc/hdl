@@ -121,8 +121,8 @@ module system_top (
   output                  tx2_strobe_out_p,
 
   inout                   sm_fan_tach,
-  output                  vadj_test_1,
-  output                  vadj_test_2
+  input                   vadj_err,
+  output                  platform_status
 );
   // internal registers
   reg         [  2:0] mcs_sync_m = 'd0;
@@ -165,7 +165,7 @@ module system_top (
   //
   assign mssi_sync = gpio_o[54];
 
-  assign {vadj_test_2,vadj_test_1} = 2'b11;
+  assign platform_status = vadj_err;
 
   ad_iobuf #(.DATA_WIDTH(20)) i_iobuf (
     .dio_t ({gpio_t[51:32]}),
@@ -196,7 +196,9 @@ module system_top (
   assign gpio_i[20: 8] = gpio_bd_i;
   assign gpio_bd_o = gpio_o[ 7: 0];
 
-  assign gpio_i[94:52] = gpio_o[94:52];
+  assign gpio_i[54:52] = gpio_o[54:52];
+  assign gpio_i[55] = vadj_err;
+  assign gpio_i[94:56] = gpio_o[94:56];
   assign gpio_i[31:21] = gpio_o[31:21];
 
   assign spi_en = spi_csn[0];
