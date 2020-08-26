@@ -36,8 +36,8 @@ set_property  -dict {PACKAGE_PIN Y10   IOSTANDARD LVCMOS18}  [get_ports spi_en] 
 set_property  -dict {PACKAGE_PIN W2    IOSTANDARD LVCMOS18}  [get_ports tx1_enable]                        ; #FMC_HPC0_LA09_P      IO_L24P_T3U_N10_66
 set_property  -dict {PACKAGE_PIN U9    IOSTANDARD LVCMOS18}  [get_ports tx2_enable]                        ; #FMC_HPC0_LA29_P      IO_L9P_T1L_N4_AD12P_67
 
-set_property  -dict {PACKAGE_PIN V8    IOSTANDARD LVCMOS18}  [get_ports vadj_test_1]                       ; #FMC_HPC0_LA31_P      IO_L7P_T1L_N0_QBC_AD13P_67
-set_property  -dict {PACKAGE_PIN V7    IOSTANDARD LVCMOS18}  [get_ports vadj_test_2]                       ; #FMC_HPC0_LA31_N      IO_L7N_T1L_N1_QBC_AD13N_67
+set_property  -dict {PACKAGE_PIN V8    IOSTANDARD LVCMOS18}  [get_ports vadj_err]                          ; #FMC_HPC0_LA31_P      IO_L7P_T1L_N0_QBC_AD13P_67
+set_property  -dict {PACKAGE_PIN V7    IOSTANDARD LVCMOS18}  [get_ports platform_status]                   ; #FMC_HPC0_LA31_N      IO_L7N_T1L_N1_QBC_AD13N_67
 
 set_property UNAVAILABLE_DURING_CALIBRATION TRUE [get_ports tx1_strobe_out_p]
 set_property UNAVAILABLE_DURING_CALIBRATION TRUE [get_ports tx2_idata_out_p]
