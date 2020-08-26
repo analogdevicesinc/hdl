@@ -154,8 +154,8 @@ module system_top (
   output                  tx2_strobe_out_p,
 
   inout                   sm_fan_tach,
-  output                  vadj_test_1,
-  output                  vadj_test_2
+  input                   vadj_err,
+  output                  platform_status
 );
 
   // internal registers
@@ -171,6 +171,9 @@ module system_top (
   wire    [ 1:0]  iic_mux_sda_i_s;
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
+  wire            spi_clk_s;
+  wire            spi_en_s;
+  wire            spi_dio_s;
 
   // instantiations
 
@@ -178,7 +181,7 @@ module system_top (
   //
   assign mssi_sync = gpio_o[54];
 
-  assign {vadj_test_2,vadj_test_1} = 2'b11;
+  assign platform_status = vadj_err;
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -189,7 +192,7 @@ module system_top (
     .dio_p(gpio_bd));
 
   ad_iobuf #(.DATA_WIDTH(20)) i_iobuf (
-    .dio_t ({gpio_t[51:32]}),
+    .dio_t (vadj_err ? {20{1'b1}} : gpio_t[51:32]),
     .dio_i ({gpio_o[51:32]}),
     .dio_o ({gpio_i[51:32]}),
     .dio_p ({tx2_enable,  // 51
@@ -213,7 +216,9 @@ module system_top (
              dgpio_1,     // 33
              dgpio_0 })); // 32
 
-  assign gpio_i[63:52] = gpio_o[63:52];
+  assign gpio_i[54:52] = gpio_o[54:52];
+  assign gpio_i[55] = vadj_err;
+  assign gpio_i[63:56] = gpio_o[63:56];
 
    ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_iic_scl (
     .dio_t ({iic_mux_scl_t_s,iic_mux_scl_t_s}),
@@ -276,7 +281,7 @@ module system_top (
     .ref_clk (1'b0),
     .mssi_sync (mssi_sync),
 
-    .tx_output_enable (1'b1),
+    .tx_output_enable (~vadj_err),
 
     .rx1_dclk_in_n (rx1_dclk_in_n),
     .rx1_dclk_in_p (rx1_dclk_in_p),
@@ -319,14 +324,14 @@ module system_top (
     .tx2_strobe_out_p (tx2_strobe_out_p),
 
     .spi0_clk_i (1'b0),
-    .spi0_clk_o (spi_clk),
-    .spi0_csn_0_o (spi_en),
+    .spi0_clk_o (spi_clk_s),
+    .spi0_csn_0_o (spi_en_s),
     .spi0_csn_1_o (),
     .spi0_csn_2_o (),
     .spi0_csn_i (1'b1),
     .spi0_sdi_i (spi_do),
     .spi0_sdo_i (1'b0),
-    .spi0_sdo_o (spi_dio),
+    .spi0_sdo_o (spi_dio_s),
     .spi1_clk_i (1'b0),
     .spi1_clk_o (),
     .spi1_csn_0_o (),
@@ -337,6 +342,11 @@ module system_top (
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o ()
   );
+
+ assign spi_clk = vadj_err ? 1'bz : spi_clk_s;
+ assign spi_en  = vadj_err ? 1'bz : spi_en_s;
+ assign spi_dio = vadj_err ? 1'bz : spi_dio_s;
+
 endmodule
 
 // ***************************************************************************

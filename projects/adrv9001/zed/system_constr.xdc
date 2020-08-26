@@ -34,8 +34,8 @@ set_property  -dict {PACKAGE_PIN J16  IOSTANDARD LVCMOS18}  [get_ports spi_en]  
 set_property  -dict {PACKAGE_PIN R20  IOSTANDARD LVCMOS18}  [get_ports tx1_enable]        ; # D14 FMC_HPC0_LA09_P      IO_L17P_T2_34
 set_property  -dict {PACKAGE_PIN C17  IOSTANDARD LVCMOS18}  [get_ports tx2_enable]        ; # G30 FMC_HPC0_LA29_P      IO_L11P_T1_SRCC_35
 
-set_property  -dict {PACKAGE_PIN B16  IOSTANDARD LVCMOS18}  [get_ports vadj_test_1]       ; # G33 FMC_HPC0_LA31_P      IO_L8P_T1_AD10P_35
-set_property  -dict {PACKAGE_PIN B17  IOSTANDARD LVCMOS18}  [get_ports vadj_test_2]       ; # G34 FMC_HPC0_LA31_N      IO_L8N_T1_AD10N_35
+set_property  -dict {PACKAGE_PIN B16  IOSTANDARD LVCMOS18}  [get_ports vadj_err]          ; # G33 FMC_HPC0_LA31_P      IO_L8P_T1_AD10P_35
+set_property  -dict {PACKAGE_PIN B17  IOSTANDARD LVCMOS18}  [get_ports platform_status]   ; # G34 FMC_HPC0_LA31_N      IO_L8N_T1_AD10N_35
 
 # redefine contraints from common file for VADJ 1.8V
 set_property  -dict {PACKAGE_PIN  L16   IOSTANDARD LVCMOS18} [get_ports otg_vbusoc]
