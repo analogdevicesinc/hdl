@@ -118,21 +118,21 @@ module ad_dds #(
       // phase accumulator
       for (i=1; i <= CLK_RATIO; i=i+1) begin: dds_phase
         always @(posedge clk) begin
-            if (dac_data_sync == 1'b1) begin
-              dac_dds_phase_0[i] <= 'd0;
-              dac_dds_phase_1[i] <= 'd0;
-            end else if (sync_min_pulse_m[1] == 1'b1) begin
-              if (i == 1) begin
-                dac_dds_phase_0[1] <= tone_1_init_offset;
-                dac_dds_phase_1[1] <= tone_2_init_offset;
-              end else if (CLK_RATIO > 1)begin
-                dac_dds_phase_0[i] <= dac_dds_phase_0[i-1] + tone_1_freq_word;
-                dac_dds_phase_1[i] <= dac_dds_phase_1[i-1] + tone_2_freq_word;
-              end
-            end else if (dac_valid == 1'b1) begin
-              dac_dds_phase_0[i] <= dac_dds_phase_0[i] + dac_dds_incr_0;
-              dac_dds_phase_1[i] <= dac_dds_phase_1[i] + dac_dds_incr_1;
+          if (dac_data_sync == 1'b1) begin
+            dac_dds_phase_0[i] <= 'd0;
+            dac_dds_phase_1[i] <= 'd0;
+          end else if (sync_min_pulse_m[1] == 1'b1) begin
+            if (i == 1) begin
+              dac_dds_phase_0[1] <= tone_1_init_offset;
+              dac_dds_phase_1[1] <= tone_2_init_offset;
+            end else if (CLK_RATIO > 1)begin
+              dac_dds_phase_0[i] <= dac_dds_phase_0[i-1] + tone_1_freq_word;
+              dac_dds_phase_1[i] <= dac_dds_phase_1[i-1] + tone_2_freq_word;
             end
+          end else if (dac_valid == 1'b1) begin
+            dac_dds_phase_0[i] <= dac_dds_phase_0[i] + dac_dds_incr_0;
+            dac_dds_phase_1[i] <= dac_dds_phase_1[i] + dac_dds_incr_1;
+          end
         end
 
         // phase to amplitude convertor
