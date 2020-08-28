@@ -56,6 +56,8 @@ module axi_ad9963_tx_channel #(
   output reg  [11:0]  dac_data,
   output reg  [11:0]  dac_data_out,
   input       [11:0]  dac_data_in,
+  input               dma_valid,
+  output              out_data_valid,
 
   // processor interface
 
@@ -85,9 +87,11 @@ module axi_ad9963_tx_channel #(
   // internal registers
 
   reg             dac_valid_sel = 'd0;
+  reg             data_source_valid = 'd0;
   reg     [23:0]  dac_test_data = 'd0;
   reg     [15:0]  dac_test_counter = 'd0;
   reg     [15:0]  dac_pat_data = 'd0;
+  reg             dma_valid_m = 1'd0;
 
   // internal signals
 
@@ -107,9 +111,12 @@ module axi_ad9963_tx_channel #(
   wire    [15:0]  dac_iqcor_coeff_1_s;
   wire    [15:0]  dac_iqcor_coeff_2_s;
 
+  assign out_data_valid = dac_iqcor_valid_s;
+
   // dac iq correction
 
   always @(posedge dac_clk) begin
+    data_source_valid <= dac_data_sel_s == 4'h2 ? dma_valid_m : dac_valid;
     dac_enable <= (dac_data_sel_s == 4'h2) ? 1'b1 : 1'b0;
     if (dac_iqcor_valid_s == 1'b1) begin
       dac_data <= dac_iqcor_data_s[15:4];
@@ -118,12 +125,12 @@ module axi_ad9963_tx_channel #(
 
   generate
   if (DATAPATH_DISABLE == 1) begin
-  assign dac_iqcor_valid_s = dac_valid;
+  assign dac_iqcor_valid_s = data_source_valid;
   assign dac_iqcor_data_s = {dac_data_out, 4'd0};
   end else begin
   ad_iqcor #(.Q_OR_I_N (Q_OR_I_N)) i_ad_iqcor (
     .clk (dac_clk),
-    .valid (dac_valid),
+    .valid (data_source_valid),
     .data_in ({dac_data_out, 4'd0}),
     .data_iq ({dac_data_in, 4'd0}),
     .valid_out (dac_iqcor_valid_s),
@@ -146,6 +153,7 @@ module axi_ad9963_tx_channel #(
       4'h1: dac_data_out <= dac_pat_data[15:4];
       default: dac_data_out <= dac_dds_data_s;
     endcase
+    dma_valid_m <= dma_valid;
   end
 
  function [23:0] pn23;
@@ -202,7 +210,7 @@ module axi_ad9963_tx_channel #(
     .clk (dac_clk),
     .dac_dds_format (dac_dds_format),
     .dac_data_sync (dac_data_sync),
-    .dac_valid (1'b1),
+    .dac_valid (dac_valid),
     .tone_1_scale (dac_dds_scale_1_s),
     .tone_2_scale (dac_dds_scale_2_s),
     .tone_1_init_offset (dac_dds_init_1_s),
