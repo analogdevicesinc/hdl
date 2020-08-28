@@ -49,6 +49,8 @@ module axi_dac_interpolate_filter #(
   input                 dac_enable,
   output  reg [15:0]    dac_int_data,
   output                dma_ready,
+  output                dac_valid_out,
+  input                 sync_stop_channels,
   output                underflow,
 
   input       [ 2:0]    filter_mask,
@@ -59,6 +61,8 @@ module axi_dac_interpolate_filter #(
   input                 start_sync_channels,
   input                 trigger,
   input                 trigger_active,
+  input                 en_start_trigger,
+  input                 en_stop_trigger,
   input                 dma_valid,
   input                 dma_valid_adjacent
 );
@@ -78,6 +82,8 @@ module axi_dac_interpolate_filter #(
 
   reg               filter_enable = 1'b0;
   reg               transfer = 1'b0;
+  reg     [15:0]    dma_valid_m = 16'd0;
+  reg               stop_transfer = 1'd0;
 
   wire              dac_valid_corrected;
   wire    [15:0]    dac_data_corrected;
@@ -86,6 +92,9 @@ module axi_dac_interpolate_filter #(
 
   wire              dac_cic_valid;
   wire    [109:0]   dac_cic_data;
+
+  wire              dma_valid_ch_sync;
+  wire              dma_valid_ch;
 
   ad_iqcor #(.Q_OR_I_N (0),
     .DISABLE(CORRECTION_DISABLE),
@@ -119,6 +128,21 @@ module axi_dac_interpolate_filter #(
     .filter_out (dac_cic_data),
     .ce_out (dac_cic_valid));
 
+  assign dma_valid_ch_sync = sync_stop_channels ?
+                             dma_valid & dma_valid_adjacent & !dma_transfer_suspend :
+                             dma_valid & !dma_transfer_suspend;
+
+  assign dma_valid_ch = dma_valid_ch_sync & !stop_transfer;
+  always @(posedge dac_clk) begin
+    if (dac_rst == 1'b1) begin
+      dma_valid_m <= 'd0;
+    end else begin
+      dma_valid_m <= {dma_valid_m[14:0], dma_valid_ch};
+    end
+  end
+
+  assign dac_valid_out = dma_valid_m[4'h5];
+
   always @(posedge dac_clk) begin
     filter_mask_d1 <= filter_mask;
     if (filter_mask_d1 != filter_mask) begin
@@ -151,7 +175,7 @@ module axi_dac_interpolate_filter #(
 
   always @(posedge dac_clk) begin
     if (dma_transfer_suspend == 1'b0) begin
-      transfer <= trigger ? 1'b1 : transfer | !trigger_active;
+      transfer <= trigger ? 1'b1 : transfer | !(trigger_active & en_start_trigger);
     end else begin
       transfer <= 1'b0;
     end
@@ -160,6 +184,11 @@ module axi_dac_interpolate_filter #(
     end else begin
       transmit_ready <= dma_valid & dma_valid_adjacent & transfer;
     end
+  end
+
+  always @(posedge dac_clk) begin
+    stop_transfer <= !en_stop_trigger | dma_transfer_suspend ? 1'b0 :
+                     stop_transfer | (trigger_active & trigger & transfer);
   end
 
   assign dma_ready = transmit_ready ? dac_int_ready : 1'b0;
