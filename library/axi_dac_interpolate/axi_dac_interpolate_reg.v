@@ -50,6 +50,7 @@ module axi_dac_interpolate_reg(
   output      [15:0]  dac_correction_coefficient_a,
   output      [15:0]  dac_correction_coefficient_b,
   output      [19:0]  trigger_config,
+  output      [ 1:0]  lsample_hold_config,
  // bus interface
 
   input               up_rstn,
@@ -77,6 +78,7 @@ module axi_dac_interpolate_reg(
   reg     [15:0]  up_correction_coefficient_a = 16'h0;
   reg     [15:0]  up_correction_coefficient_b = 16'h0;
   reg     [19:0]  up_trigger_config = 20'h0;
+  reg     [ 1:0]  up_lsample_hold_config = 2'h0;
 
   wire    [ 1:0]  flags;
 
@@ -96,6 +98,7 @@ module axi_dac_interpolate_reg(
       up_correction_coefficient_a <= 'd0;
       up_correction_coefficient_b <= 'd0;
       up_trigger_config <= 'd0;
+      up_lsample_hold_config <= 'h0;
     end else begin
       up_wack <= up_wreq;
       if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h1)) begin
@@ -128,6 +131,9 @@ module axi_dac_interpolate_reg(
       if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h18)) begin
         up_trigger_config <= up_wdata[19:0];
       end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h19)) begin
+        up_lsample_hold_config <= up_wdata[1:0];
+      end
     end
   end
 
@@ -152,6 +158,7 @@ module axi_dac_interpolate_reg(
           5'h16: up_rdata <= {16'h0,up_correction_coefficient_a};
           5'h17: up_rdata <= {16'h0,up_correction_coefficient_b};
           5'h18: up_rdata <= {12'h0,up_trigger_config};
+          5'h19: up_rdata <= {30'h0,up_lsample_hold_config};
           default: up_rdata <= 0;
         endcase
       end else begin
@@ -160,7 +167,7 @@ module axi_dac_interpolate_reg(
     end
   end
 
-   up_xfer_cntrl #(.DATA_WIDTH(126)) i_xfer_cntrl (
+   up_xfer_cntrl #(.DATA_WIDTH(128)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_config[1],               // 1
@@ -168,6 +175,7 @@ module axi_dac_interpolate_reg(
                       up_correction_coefficient_b,// 16
                       up_correction_coefficient_a,// 16
                       up_trigger_config,          // 20
+                      up_lsample_hold_config,     //  2
                       up_flags,                   //  2
                       up_interpolation_ratio_b,   // 32
                       up_interpolation_ratio_a,   // 32
@@ -182,6 +190,7 @@ module axi_dac_interpolate_reg(
                       dac_correction_coefficient_b, // 16
                       dac_correction_coefficient_a, // 16
                       trigger_config,               // 20
+                      lsample_hold_config,          // 2
                       flags,                        // 2
                       dac_interpolation_ratio_b,    // 32
                       dac_interpolation_ratio_a,    // 32
