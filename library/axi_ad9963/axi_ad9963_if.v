@@ -72,9 +72,11 @@ module axi_ad9963_if #(
 
   // transmit data path interface
 
-  input               dac_valid,
+  input               out_valid_q,
+  input               out_valid_i,
   input       [23:0]  dac_data,
   input               up_dac_ce,
+  input               tx_sample_hold,
 
   // delay interface
 
@@ -91,6 +93,7 @@ module axi_ad9963_if #(
   reg     [11:0]  rx_data_p = 0;
   reg     [11:0]  tx_data_p = 'd0;
   reg     [11:0]  tx_data_n = 'd0;
+  reg     [23:0]  constant_sample = 'd0;
 
   // internal signals
 
@@ -115,9 +118,23 @@ module axi_ad9963_if #(
   end
 
   always @(posedge dac_clk) begin
-    if(dac_valid == 1'b1) begin
-      tx_data_p   <= dac_data[11:0] ;
-      tx_data_n   <= dac_data[23:12];
+    if (dac_rst == 1'b1) begin
+        tx_data_p <= 24'd0;
+        tx_data_n <= 24'd0;
+        constant_sample <= 24'd0;
+    end else begin
+      if(out_valid_i == 1'b1) begin
+        tx_data_p <= dac_data[11: 0];
+        constant_sample[11: 0] <= tx_sample_hold ? dac_data[11: 0] : 12'd0;
+      end else begin
+        tx_data_p <= constant_sample[11:0] ;
+      end
+      if(out_valid_q == 1'b1) begin
+        tx_data_n <= dac_data[23:12];
+        constant_sample[23:12] <= tx_sample_hold ? dac_data[23:12] : 12'd0;
+      end else begin
+        tx_data_n <= constant_sample[23:12];
+      end
     end
   end
 

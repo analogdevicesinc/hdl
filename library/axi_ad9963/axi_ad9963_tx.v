@@ -53,7 +53,6 @@ module axi_ad9963_tx #(
 
   input               dac_clk,
   output              dac_rst,
-  output reg          dac_valid,
   output      [23:0]  dac_data,
   input       [23:0]  adc_data,
 
@@ -67,9 +66,13 @@ module axi_ad9963_tx #(
   output              dac_enable_i,
   output reg          dac_valid_i,
   input       [15:0]  dac_data_i,
+  input               dma_valid_i,
+  output              out_valid_i,
   output              dac_enable_q,
   output reg          dac_valid_q,
   input       [15:0]  dac_data_q,
+  input               dma_valid_q,
+  output              out_valid_q,
   input               dac_dunf,
 
   output              up_dac_ce,
@@ -104,13 +107,11 @@ module axi_ad9963_tx #(
 
   always @(posedge dac_clk) begin
     if (dac_rst == 1'b1) begin
-      dac_valid <= 1'b0;
       dac_valid_i <= 1'b0;
       dac_valid_q <= 1'b0;
     end else begin
-      dac_valid <= 1'b1;
-      dac_valid_i <= dac_valid;
-      dac_valid_q <= dac_valid;
+      dac_valid_i <= 1'b1;
+      dac_valid_q <= 1'b1;
     end
   end
 
@@ -134,7 +135,7 @@ module axi_ad9963_tx #(
   i_tx_channel_0 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
-    .dac_valid (dac_valid),
+    .dac_valid (dac_valid_i),
     .dma_data (dac_data_i),
     .adc_data (adc_data[11:0]),
     .dac_data (dac_data[11:0]),
@@ -143,6 +144,8 @@ module axi_ad9963_tx #(
     .dac_enable (dac_enable_i),
     .dac_data_sync (dac_data_sync_s),
     .dac_dds_format (dac_dds_format_s),
+    .dma_valid (dma_valid_i),
+    .out_data_valid (out_valid_i),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq),
@@ -166,7 +169,7 @@ module axi_ad9963_tx #(
   i_tx_channel_1 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
-    .dac_valid (dac_valid),
+    .dac_valid (dac_valid_q),
     .dma_data (dac_data_q),
     .adc_data (adc_data[23:12]),
     .dac_data (dac_data[23:12]),
@@ -175,6 +178,8 @@ module axi_ad9963_tx #(
     .dac_enable (dac_enable_q),
     .dac_data_sync (dac_data_sync_s),
     .dac_dds_format (dac_dds_format_s),
+    .dma_valid (dma_valid_q),
+    .out_data_valid (out_valid_q),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq),
