@@ -172,6 +172,7 @@ signal I2S_RESET_REG			: std_logic_vector(31 downto 0);
 signal I2S_CONTROL_REG			: std_logic_vector(31 downto 0);
 signal I2S_CLK_CONTROL_REG		: std_logic_vector(31 downto 0);
 signal PERIOD_LEN_REG			: std_logic_vector(31 downto 0);
+signal PAUSE_REG    			: std_logic_vector(31 downto 0);
 
 constant FIFO_AWIDTH			: integer := integer(ceil(log2(real(NUM_OF_CHANNEL * 8))));
 
@@ -198,7 +199,14 @@ signal rd_ack : std_logic;
 signal tx_fifo_stb : std_logic;
 signal rx_fifo_ack : std_logic;
 signal cnt : integer range 0 to 2**16-1;
+
+signal s_axis_tvalid_s : std_logic;
+signal s_axis_tready_s : std_logic;
+
 begin
+
+  s_axis_tvalid_s <= s_axis_tvalid and not PAUSE_REG(0);
+  s_axis_tready <= s_axis_tready_s and not PAUSE_REG(0);
 
   const_1 <= '1';
 
@@ -226,10 +234,10 @@ begin
 				enable => tx_enable,
 
 				s_axis_aclk => s_axis_aclk,
-				s_axis_tready => s_axis_tready,
+				s_axis_tready => s_axis_tready_s,
 				s_axis_tdata => s_axis_tdata(31 downto 8),
 				s_axis_tlast => s_axis_tlast,
-				s_axis_tvalid => s_axis_tvalid,
+				s_axis_tvalid => s_axis_tvalid_s,
 
 				out_stb => tx_stb,
 				out_ack => tx_ack,
@@ -276,8 +284,6 @@ begin
 		m_axis_tvalid <= '0';
 		m_axis_tkeep <= (others => '0');
 	end generate;
-
-
 
 	pl330_dma_tx_gen: if DMA_TYPE = 1 and HAS_TX = 1 generate
 		tx_fifo_stb <= '1' when wr_addr = 11 and wr_stb = '1' else '0';
@@ -447,7 +453,8 @@ begin
 		case rd_addr is
 			when 1 => rd_data <=  I2S_CONTROL_REG and x"00000003";
 			when 2 => rd_data <=  I2S_CLK_CONTROL_REG and x"00ff00ff";
-			when 6 => rd_data <= PERIOD_LEN_REG and x"0000ffff";
+			when 3 => rd_data <=  PAUSE_REG and x"00000003";
+			when 6 => rd_data <=  PERIOD_LEN_REG and x"0000ffff";
 			when 10 => rd_data <= rx_sample & std_logic_vector(to_unsigned(cnt, 8));
 			when others => rd_data <= (others => '0');
 		end case;
@@ -461,6 +468,7 @@ begin
 				I2S_CONTROL_REG <= (others => '0');
 				I2S_CLK_CONTROL_REG <= (others => '0');
 				PERIOD_LEN_REG <= (others => '0');
+				PAUSE_REG <= (others => '0');
 			else
 				-- Auto-clear the Reset Register bits
 				I2S_RESET_REG(0) <= '0';
@@ -471,6 +479,7 @@ begin
 						when 0 => I2S_RESET_REG <= wr_data;
 						when 1 => I2S_CONTROL_REG <= wr_data;
 						when 2 => I2S_CLK_CONTROL_REG <= wr_data;
+						when 3 => PAUSE_REG <= wr_data;
 						when 6 => PERIOD_LEN_REG <= wr_data;
 						when others => null;
 					end case;

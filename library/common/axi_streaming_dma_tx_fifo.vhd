@@ -42,7 +42,7 @@ use work.dma_fifo;
 entity axi_streaming_dma_tx_fifo is
 	generic (
 		RAM_ADDR_WIDTH : integer := 3;
-		FIFO_DWIDTH : integer := 32 
+		FIFO_DWIDTH : integer := 32
 	);
 	port (
 		clk		: in std_logic;
@@ -68,6 +68,7 @@ end;
 
 architecture imp of axi_streaming_dma_tx_fifo is
 	signal in_ack			: std_logic;
+	signal in_stb_s			: std_logic;
 	signal drain_dma		: Boolean;
 begin
 
@@ -80,7 +81,7 @@ begin
 			clk => clk,
 			resetn => resetn,
 			fifo_reset => fifo_reset,
-			in_stb => s_axis_tvalid,
+			in_stb => in_stb_s,
 			in_ack => in_ack,
 			in_data => s_axis_tdata,
 			out_stb => out_stb,
@@ -108,4 +109,6 @@ begin
 	end process;
 
 	s_axis_tready <= '1' when in_ack = '1' or drain_dma else '0';
+	in_stb_s <= '1' when s_axis_tvalid = '1' and not drain_dma else '0';
+
 end;
