@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2020 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -35,7 +35,11 @@
 
 `timescale 1ns/100ps
 
-module axi_generic_adc (
+module axi_generic_adc #(
+
+  parameter   NUM_OF_CHANNELS = 2,
+  parameter   ID = 0)(
+
   input adc_clk,
   output [NUM_OF_CHANNELS-1:0] adc_enable,
   input adc_dovf,
@@ -64,8 +68,6 @@ module axi_generic_adc (
 
 );
 
-parameter NUM_OF_CHANNELS = 2;
-parameter ID = 0;
 
 reg  [31:0] up_rdata = 'd0;
 reg        up_rack = 'd0;
