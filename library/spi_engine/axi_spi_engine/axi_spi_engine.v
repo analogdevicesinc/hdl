@@ -154,6 +154,7 @@ module axi_spi_engine #(
   wire sdo_fifo_in_ready;
   wire sdo_fifo_in_valid;
 
+  wire sdi_fifo_out_data_msb_s;
   wire [SDI_FIFO_ADDRESS_WIDTH:0] sdi_fifo_level;
   wire sdi_fifo_almost_full;
 
@@ -335,6 +336,15 @@ module axi_spi_engine #(
     end
   end
 
+  generate
+  if (NUM_OF_SDI > 1) begin
+    // Only the first two SDI data can be recovered through AXI regmap
+    assign sdi_fifo_out_data_msb_s = sdi_fifo_out_data[DATA_WIDTH+:DATA_WIDTH];
+  end else begin
+    assign sdi_fifo_out_data_msb_s = sdi_fifo_out_data;
+  end
+  endgenerate
+
   always @(posedge clk) begin
     case (up_raddr_s)
       8'h00: up_rdata_ff <= PCORE_VERSION;
@@ -350,8 +360,8 @@ module axi_spi_engine #(
       8'h34: up_rdata_ff <= cmd_fifo_room;
       8'h35: up_rdata_ff <= sdo_fifo_room;
       8'h36: up_rdata_ff <= sdi_fifo_level;
-      8'h3a: up_rdata_ff <= sdi_fifo_out_data;
-      8'h3b: up_rdata_ff <= (NUM_OF_SDI*DATA_WIDTH > 32) ? sdi_fifo_out_data[NUM_OF_SDI*DATA_WIDTH-1:32] : sdi_fifo_out_data; /* store SDI's 32 bits MSB, if exists */
+      8'h3a: up_rdata_ff <= sdi_fifo_out_data[DATA_WIDTH-1:0];
+      8'h3b: up_rdata_ff <= sdi_fifo_out_data_msb_s; /* store SDI's 32 bits MSB, if exists */
       8'h3c: up_rdata_ff <= sdi_fifo_out_data; /* PEEK register */
       8'h40: up_rdata_ff <= {offload0_enable_reg};
       8'h41: up_rdata_ff <= {offload0_enabled_s};
