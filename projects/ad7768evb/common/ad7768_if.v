@@ -47,7 +47,24 @@ module ad7768_if (
 
   output                  adc_clk,
   output  reg             adc_valid,
+  output  reg             adc_valid_0,
+  output  reg             adc_valid_1,
+  output  reg             adc_valid_2,
+  output  reg             adc_valid_3,
+  output  reg             adc_valid_4,
+  output  reg             adc_valid_5,
+  output  reg             adc_valid_6,
+  output  reg             adc_valid_7,
+  output  reg             adc_valid_pp,
   output  reg [ 31:0]     adc_data,
+  output  reg [ 31:0]     adc_data_0,
+  output  reg [ 31:0]     adc_data_1,
+  output  reg [ 31:0]     adc_data_2,
+  output  reg [ 31:0]     adc_data_3,
+  output  reg [ 31:0]     adc_data_4,
+  output  reg [ 31:0]     adc_data_5,
+  output  reg [ 31:0]     adc_data_6,
+  output  reg [ 31:0]     adc_data_7,
   output                  adc_sync,
 
   // control interface
@@ -197,6 +214,9 @@ module ad7768_if (
   assign up_status[ 7: 4] = {1'd0, adc_status_1};
   assign up_status[ 3: 0] = {1'd0, adc_status_0};
 
+  assign adc_ready_in_s = ready_in;
+  assign adc_clk = clk_in;
+
   always @(posedge adc_clk) begin
     if (adc_valid == 1'b1) begin
       adc_status_8 <= adc_status_8 | adc_status[1:0];
@@ -255,7 +275,41 @@ module ad7768_if (
   always @(posedge adc_clk) begin
     adc_valid <= adc_valid_int & adc_enable_int;
     adc_data <= {{8{adc_data_int[23]}}, adc_data_int[23:0]};
+    if (adc_ch_valid_0 == 1'b1) begin
+      adc_data_0 <= adc_ch_data_0;
+    end
+    if (adc_ch_valid_1 == 1'b1) begin
+      adc_data_1 <= adc_ch_data_1;
+    end
+    if (adc_ch_valid_2 == 1'b1) begin
+      adc_data_2 <= adc_ch_data_2;
+    end
+    if (adc_ch_valid_3 == 1'b1) begin
+      adc_data_3 <= adc_ch_data_3;
+    end
+    if (adc_ch_valid_4 == 1'b1) begin
+      adc_data_4 <= adc_ch_data_4;
+    end
+    if (adc_ch_valid_5 == 1'b1) begin
+      adc_data_5 <= adc_ch_data_5;
+    end
+    if (adc_ch_valid_6 == 1'b1) begin
+      adc_data_6 <= adc_ch_data_6;
+    end
+    if (adc_ch_valid_7 == 1'b1) begin
+      adc_data_7 <= adc_ch_data_7;
+    end
     adc_seq <= adc_seq_int;
+    adc_valid_0 <= adc_ch_valid_7;
+    adc_valid_1 <= adc_ch_valid_7;
+    adc_valid_2 <= adc_ch_valid_7;
+    adc_valid_3 <= adc_ch_valid_7;
+    adc_valid_4 <= adc_ch_valid_7;
+    adc_valid_5 <= adc_ch_valid_7;
+    adc_valid_6 <= adc_ch_valid_7;
+    adc_valid_7 <= adc_ch_valid_7;
+    adc_valid_pp <= adc_valid_0 | adc_valid_1 | adc_valid_2 | adc_valid_3 |
+	            adc_valid_4 | adc_valid_5 | adc_valid_6 | adc_valid_7;
     if ((adc_crc_enable == 1'b1) && (adc_crc_scnt_int == 4'd0)) begin
       adc_status[4] <= adc_crc_mismatch_8[7] & adc_enable_int;
       adc_status[3] <= 1'b0;
@@ -268,7 +322,7 @@ module ad7768_if (
       adc_status[2] <= adc_data_int[27] & adc_enable_int;
       adc_status[1] <= adc_data_int[31] & adc_enable_int;
       adc_status[0] <= adc_seq_foos;
-    end 
+    end
   end
 
   // crc- not much useful at the interface, since it is post-framing
@@ -441,6 +495,7 @@ module ad7768_if (
     end
   end
 
+
   // data (common)
 
   assign adc_cnt_enable_1_s = (adc_cnt_p <= 9'h01f) ? 1'b1 : 1'b0;
@@ -482,9 +537,7 @@ module ad7768_if (
     adc_data_d2[n] <= adc_data_d1[n];
   end
 
-  IBUF i_ibuf_data (
-    .I (data_in[n]),
-    .O (adc_data_in_s[n]));
+  assign adc_data_in_s[n] = data_in[n];
 
   end
   endgenerate
@@ -496,20 +549,6 @@ module ad7768_if (
     adc_ready <= adc_sshot ~^ adc_ready_d1;
     adc_ready_d <= adc_ready;
   end
-
-  IBUF i_ibuf_ready (
-    .I (ready_in),
-    .O (adc_ready_in_s));
-
-  // clock (use bufg delay ~4ns on 29ns)
-
-  BUFG i_bufg_clk (
-    .I (adc_clk_in_s),
-    .O (adc_clk));
-
-  IBUFG i_ibufg_clk (
-    .I (clk_in),
-    .O (adc_clk_in_s));
 
   // control signals
 
