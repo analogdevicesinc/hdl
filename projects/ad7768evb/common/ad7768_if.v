@@ -197,6 +197,9 @@ module ad7768_if (
   assign up_status[ 7: 4] = {1'd0, adc_status_1};
   assign up_status[ 3: 0] = {1'd0, adc_status_0};
 
+  assign adc_ready_in_s = ready_in;
+  assign adc_clk = clk_in;
+
   always @(posedge adc_clk) begin
     if (adc_valid == 1'b1) begin
       adc_status_8 <= adc_status_8 | adc_status[1:0];
@@ -268,7 +271,7 @@ module ad7768_if (
       adc_status[2] <= adc_data_int[27] & adc_enable_int;
       adc_status[1] <= adc_data_int[31] & adc_enable_int;
       adc_status[0] <= adc_seq_foos;
-    end 
+    end
   end
 
   // crc- not much useful at the interface, since it is post-framing
@@ -482,9 +485,7 @@ module ad7768_if (
     adc_data_d2[n] <= adc_data_d1[n];
   end
 
-  IBUF i_ibuf_data (
-    .I (data_in[n]),
-    .O (adc_data_in_s[n]));
+  assign adc_data_in_s[n] = data_in[n];
 
   end
   endgenerate
@@ -496,20 +497,6 @@ module ad7768_if (
     adc_ready <= adc_sshot ~^ adc_ready_d1;
     adc_ready_d <= adc_ready;
   end
-
-  IBUF i_ibuf_ready (
-    .I (ready_in),
-    .O (adc_ready_in_s));
-
-  // clock (use bufg delay ~4ns on 29ns)
-
-  BUFG i_bufg_clk (
-    .I (adc_clk_in_s),
-    .O (adc_clk));
-
-  IBUFG i_ibufg_clk (
-    .I (clk_in),
-    .O (adc_clk_in_s));
 
   // control signals
 
