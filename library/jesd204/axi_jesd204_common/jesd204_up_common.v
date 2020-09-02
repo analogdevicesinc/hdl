@@ -54,7 +54,8 @@ module jesd204_up_common # (
   parameter MAX_OCTETS_PER_FRAME = 256,
   parameter NUM_IRQS = 1,
   parameter EXTRA_CFG_WIDTH = 1,
-  parameter LINK_MODE = 1 // 2 - 64B/66B;  1 - 8B/10B
+  parameter LINK_MODE = 1, // 2 - 64B/66B;  1 - 8B/10B
+  parameter ENABLE_LINK_STATS = 0
 ) (
   input up_clk,
   input ext_resetn,
@@ -202,6 +203,54 @@ always @(posedge up_clk) begin
   end
 end
 
+/* Count link enable */
+wire [8*16-1:0] up_irq_event_cnt_bus;
+wire [15:0] up_link_enable_cnt_s;
+
+genvar i;
+generate if (ENABLE_LINK_STATS == 1) begin : g_link_stats
+
+  reg [15:0] up_link_enable_cnt = 'h0;
+  reg up_reset_core_d1 = 'b1;
+
+  wire up_stat_clear;
+
+  assign up_stat_clear = (up_waddr == 12'h0b0 && up_wreq && up_wdata[0]);
+
+  always @(posedge up_clk) begin
+    up_reset_core_d1 <= up_reset_core;
+    if (up_stat_clear) begin
+      up_link_enable_cnt <= 'h0;
+    end else begin
+      if (~up_reset_core & up_reset_core_d1) begin
+        up_link_enable_cnt <= up_link_enable_cnt + 16'd1;
+      end
+    end
+  end
+  assign up_link_enable_cnt_s = up_link_enable_cnt;
+
+  /* Count IRQ events for max 8 interrupt sources */
+
+  for (i = 0; i < NUM_IRQS; i=i+1) begin : irq_cnt
+
+    reg [15:0] up_irq_event_cnt = 'h0;
+
+    always @(posedge up_clk) begin
+      if (up_stat_clear) begin
+        up_irq_event_cnt <= 'h0;
+      end else if (up_irq_trigger[i]) begin
+        up_irq_event_cnt <= up_irq_event_cnt + 16'd1;
+      end
+    end
+
+    assign up_irq_event_cnt_bus[i*16 +: 16] = up_irq_event_cnt;
+
+  end
+end else begin : g_no_link_stats
+  assign up_irq_event_cnt_bus = 'h0;
+  assign up_link_enable_cnt_s = 'h0;
+end
+endgenerate
 
 wire [20:0] clk_mon_count;
 
@@ -249,6 +298,14 @@ always @(*) begin
   /* 0x87-0x8f reserved for future use */
 
   /* 0x90-0x9f reserved for core specific configuration options */
+
+  /* 0xb0 Stat control */
+  12'h0b1: up_rdata <= up_link_enable_cnt_s;
+  /* 0xb4-0xb7 IRQ Stat, max 8 interrupt sources */
+  12'h0b4: up_rdata <= up_irq_event_cnt_bus[0*32 +: 32];
+  12'h0b5: up_rdata <= up_irq_event_cnt_bus[1*32 +: 32];
+  12'h0b6: up_rdata <= up_irq_event_cnt_bus[2*32 +: 32];
+  12'h0b7: up_rdata <= up_irq_event_cnt_bus[3*32 +: 32];
 
   default: up_rdata <= 'h00;
   endcase

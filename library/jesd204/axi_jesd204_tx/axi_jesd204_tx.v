@@ -48,7 +48,8 @@ module axi_jesd204_tx #(
   parameter ID = 0,
   parameter NUM_LANES = 1,
   parameter NUM_LINKS = 1,
-  parameter LINK_MODE = 1  // 2 - 64B/66B;  1 - 8B/10B
+  parameter LINK_MODE = 1,  // 2 - 64B/66B;  1 - 8B/10B
+  parameter ENABLE_LINK_STATS = 0
 ) (
   input s_axi_aclk,
   input s_axi_aresetn,
@@ -181,7 +182,8 @@ jesd204_up_common #(
   .NUM_IRQS(5),
   .EXTRA_CFG_WIDTH(21),
   .MAX_OCTETS_PER_FRAME(8),
-  .LINK_MODE(LINK_MODE)
+  .LINK_MODE(LINK_MODE),
+  .ENABLE_LINK_STATS(ENABLE_LINK_STATS)
 ) i_up_common (
   .up_clk(s_axi_aclk),
   .ext_resetn(s_axi_aresetn),
