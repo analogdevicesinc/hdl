@@ -68,19 +68,13 @@ module jesd204_rx_ctrl #(
   output [NUM_LINKS-1:0] sync,
   output reg latency_monitor_reset,
 
-  output reg [1:0] status_state
+  output [1:0] status_state
 );
-
-localparam STATUS_STATE_RESET = 2'h1;
-localparam STATUS_STATE_WAIT_FOR_PHY = 2'h1;
-localparam STATUS_STATE_CGS = 2'h2;
-localparam STATUS_STATE_SYNCHRONIZED = 2'h3;
 
 localparam STATE_RESET = 0;
 localparam STATE_WAIT_FOR_PHY = 1;
 localparam STATE_CGS = 2;
-localparam STATE_DEGLITCH = 3;
-localparam STATE_SYNCHRONIZED = 4;
+localparam STATE_SYNCHRONIZED = 3;
 
 reg [2:0] state = STATE_RESET;
 reg [2:0] next_state = STATE_RESET;
@@ -91,24 +85,17 @@ reg [NUM_LINKS-1:0] sync_n = {NUM_LINKS{1'b1}};
 reg en_align = 1'b0;
 reg state_good = 1'b0;
 
-reg [2:0] good_counter = 'h00;
-reg [9:0] deglitch_counter = 'h3ff;
+reg [7:0] good_counter = 'h00;
+
+wire [7:0] good_cnt_limit_s;
+wire       good_cnt_limit_reached_s;
 
 assign cgs_reset = cgs_rst;
 assign ifs_reset = ifs_rst;
 assign sync = sync_n;
 assign phy_en_char_align = en_align;
 
-always @(posedge clk) begin
-  case (state)
-  STATE_RESET: status_state <= STATUS_STATE_RESET;
-  STATE_WAIT_FOR_PHY: status_state <= STATUS_STATE_WAIT_FOR_PHY;
-  STATE_CGS: status_state <= STATUS_STATE_CGS;
-  STATE_DEGLITCH: status_state <= STATUS_STATE_CGS;
-  STATE_SYNCHRONIZED: status_state <= STATUS_STATE_SYNCHRONIZED;
-  default: status_state <= STATUS_STATE_RESET;
-  endcase
-end
+assign status_state = state;
 
 always @(posedge clk) begin
   case (state)
@@ -132,33 +119,28 @@ always @(posedge clk) begin
   endcase
 end
 
-always @(posedge clk) begin
-  case (state)
-  STATE_DEGLITCH: begin
-    if (deglitch_counter != 'h00) begin
-      deglitch_counter <= deglitch_counter - 1'b1;
-    end
-  end
-  default: begin
-    deglitch_counter <= 'h3f;
-  end
-  endcase
-end
-
 always @(*) begin
   case (state)
   STATE_RESET: state_good <= 1'b1;
   STATE_WAIT_FOR_PHY: state_good <= phy_ready;
   STATE_CGS: state_good <= &(cgs_ready | cfg_lanes_disable);
-  STATE_DEGLITCH: state_good <= deglitch_counter == 'h00;
   STATE_SYNCHRONIZED: state_good <= 1'b1;
   default: state_good <= 1'b0;
   endcase
 end
 
+assign good_cnt_limit_s = (state == STATE_CGS) ? 'hff : 'h7;
+assign good_cnt_limit_reached_s = good_counter == good_cnt_limit_s;
+
 always @(posedge clk) begin
-  if (state_good == 1'b1) begin
-    good_counter <= good_counter + 1'b1;
+  if (reset) begin
+    good_counter <= 'h00;
+  end else if (state_good == 1'b1) begin
+    if (good_cnt_limit_reached_s) begin
+      good_counter <= 'h00;
+    end else begin
+      good_counter <= good_counter + 1'b1;
+    end
   end else begin
     good_counter <= 'h00;
   end
@@ -175,8 +157,7 @@ always @(*) begin
   case (state)
   STATE_RESET: next_state <= STATE_WAIT_FOR_PHY;
   STATE_WAIT_FOR_PHY: next_state <= STATE_CGS;
-  STATE_CGS: next_state <= STATE_DEGLITCH;
-  STATE_DEGLITCH: next_state <= STATE_SYNCHRONIZED;
+  STATE_CGS: next_state <= STATE_SYNCHRONIZED;
   default: next_state <= state_good ? state : STATE_RESET;
   endcase
 end
@@ -185,7 +166,7 @@ always @(posedge clk) begin
   if (reset == 1'b1) begin
     state <= STATE_RESET;
   end else begin
-    if (good_counter == 'h7) begin
+    if (good_cnt_limit_reached_s) begin
       state <= next_state;
     end
   end
