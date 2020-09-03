@@ -400,7 +400,7 @@ for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
   if(ENABLE_FRAME_ALIGN_CHECK) begin : gen_frame_align_err_thresh
     always @(posedge clk) begin
       if (status_lane_frame_align_err_cnt[8*i+7:8*i] >= cfg_frame_align_err_threshold) begin
-        frame_align_err_thresh_met[i] <= 1'b1;
+        frame_align_err_thresh_met[i] <= cgs_ready[i];
         event_frame_alignment_error_per_lane[i] <= ~frame_align_err_thresh_met[i];
       end else begin
         frame_align_err_thresh_met[i] <= 1'b0;
