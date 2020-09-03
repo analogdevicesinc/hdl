@@ -68,7 +68,8 @@ module jesd204_rx_ctrl #(
   output [NUM_LINKS-1:0] sync,
   output reg latency_monitor_reset,
 
-  output [1:0] status_state
+  output [1:0] status_state,
+  output event_data_phase
 );
 
 localparam STATE_RESET = 0;
@@ -171,5 +172,9 @@ always @(posedge clk) begin
     end
   end
 end
+
+assign event_data_phase = state == STATE_CGS &&
+                          next_state == STATE_SYNCHRONIZED &&
+                          good_cnt_limit_reached_s;
 
 endmodule

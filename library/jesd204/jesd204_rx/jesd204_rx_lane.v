@@ -78,7 +78,7 @@ module jesd204_rx_lane #(
   output [1:0] ilas_config_addr,
   output [DATA_PATH_WIDTH*8-1:0] ilas_config_data,
 
-  input ctrl_err_statistics_reset,
+  input err_statistics_reset,
   input [2:0]ctrl_err_statistics_mask,
   output reg [31:0] status_err_statistics_cnt,
 
@@ -175,7 +175,7 @@ end
 endfunction
 
 always @(posedge clk) begin
-  if (reset == 1'b1 || ctrl_err_statistics_reset == 1'b1) begin
+  if (reset == 1'b1 || err_statistics_reset == 1'b1) begin
     status_err_statistics_cnt <= 32'h0;
   end else if (status_err_statistics_cnt[31:5] != 27'h7ffffff) begin
     status_err_statistics_cnt <= status_err_statistics_cnt + num_set_bits(phy_char_err);
