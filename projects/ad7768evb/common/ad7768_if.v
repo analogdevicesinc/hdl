@@ -157,9 +157,6 @@ module ad7768_if (
   wire              adc_cnt_enable_4_s;
   wire              adc_cnt_enable_8_s;
   wire              adc_cnt_enable_s;
-  wire    [  7:0]   adc_data_in_s;
-  wire              adc_ready_in_s;
-  wire              adc_clk_in_s;
   wire    [ 35:0]   adc_status_clr_s;
 
   // function (crc)
@@ -424,13 +421,9 @@ module ad7768_if (
   end
 
   always @(posedge adc_clk) begin
-    adc_data_d1[n] <= adc_data_in_s[n];
+    adc_data_d1[n] <= data_in[n];
     adc_data_d2[n] <= adc_data_d1[n];
   end
-
-  IBUF i_ibuf_data (
-    .I (data_in[n]),
-    .O (adc_data_in_s[n]));
 
   end
   endgenerate
@@ -499,24 +492,15 @@ module ad7768_if (
   // ready (single shot or continous)
 
   always @(posedge adc_clk) begin
-    adc_ready_d1 <= adc_ready_in_s;
+    adc_ready_d1 <= ready_in;
     adc_ready <= adc_sshot ~^ adc_ready_d1;
     adc_ready_d <= adc_ready;
   end
 
-  IBUF i_ibuf_ready (
-    .I (ready_in),
-    .O (adc_ready_in_s));
+  // clock (use delay ~4ns on 29ns)
 
-  // clock (use bufg delay ~4ns on 29ns)
-
-  BUFG i_bufg_clk (
-    .I (adc_clk_in_s),
-    .O (adc_clk));
-
-  IBUFG i_ibufg_clk (
-    .I (clk_in),
-    .O (adc_clk_in_s));
+  assign adc_clk_in_s = clk_in;	
+  assign adc_clk = adc_clk_in_s;
 
   // control signals
 
