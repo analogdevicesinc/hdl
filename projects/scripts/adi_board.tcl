@@ -902,11 +902,13 @@ proc sysid_gen_sys_init_file {custom_string} {
   # set version
   set comh_ver_hex "00000001"
 
-  # project name
-  set projname_hex [hexstr_flip [stringtohex [lindex [split [current_project] _] 0] 32]]
+  set boardname [lindex [split [current_project] _] [expr [llength [split [current_project] _]] - 1]]
 
   # board name
-  set boardname_hex [hexstr_flip [stringtohex [lindex [split [current_project] _] 1] 32]]
+  set boardname_hex [hexstr_flip [stringtohex $boardname 32]]
+  
+  # project name
+  set projname_hex [hexstr_flip [stringtohex [string trimright [string trimright [current_project] $boardname] _] 32]]
 
   # custom string
   set custom_hex [hexstr_flip [stringtohex $custom_string 64]]
