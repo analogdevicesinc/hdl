@@ -47,32 +47,74 @@ proc p_elaboration {} {
   add_interface interrupt_sender interrupt end
   add_interface_port interrupt_sender irq irq Output 1
 
+  # Microprocessor interface
+
+  ad_interface clock   up_clk    input                  1
+  ad_interface reset   up_rstn   input                  1   if_up_clk
+  ad_interface signal  up_wreq   input                  1
+  ad_interface signal  up_wack   output                 1
+  ad_interface signal  up_waddr  input                 14
+  ad_interface signal  up_wdata  input                 32
+  ad_interface signal  up_rreq   input                  1
+  ad_interface signal  up_rack   output                 1
+  ad_interface signal  up_raddr  output                14
+  ad_interface signal  up_rdata  output                32
+
+  # AXI Memory Mapped interface
+
+  ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn 16
+
+  set disabled_intfs {}
   if {$mm_if_type} {
 
-    # Microprocessor interface
+    # uProcessor interface active for regmap, deactivate S_AXI
+    lappend disabled_intfs s_axi
 
-    ad_interface clock   up_clk    input                  1
-    ad_interface reset   up_rstn   input                  1   if_up_clk
-    ad_interface signal  up_wreq   input                  1
-    ad_interface signal  up_wack   output                 1
-    ad_interface signal  up_waddr  input                 14
-    ad_interface signal  up_wdata  input                 32
-    ad_interface signal  up_rreq   input                  1
-    ad_interface signal  up_rack   output                 1
-    ad_interface signal  up_raddr  output                14
-    ad_interface signal  up_rdata  output                32
+    set_port_property s_axi_aclk termination true
+    set_port_property s_axi_aresetn termination true
+    set_port_property s_axi_aresetn termination_value 1
+    set_port_property s_axi_awvalid termination true
+    set_port_property s_axi_awaddr termination true
+    set_port_property s_axi_awprot termination true
+    set_port_property s_axi_wvalid termination true
+    set_port_property s_axi_wdata termination true
+    set_port_property s_axi_wstrb termination true
+    set_port_property s_axi_bready termination true
+    set_port_property s_axi_arvalid termination true
+    set_port_property s_axi_araddr termination true
+    set_port_property s_axi_arprot termination true
+    set_port_property s_axi_rready termination true
 
   } else {
-
-    # AXI Memory Mapped interface
-
-    ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn 16
 
     set_interface_property interrupt_sender associatedAddressablePoint s_axi
     set_interface_property interrupt_sender associatedClock s_axi_clock
     set_interface_property interrupt_sender associatedReset s_axi_reset
     set_interface_property interrupt_sender ENABLED true
 
+    # AXI4 Slave is active for regmap, deactivate uP
+    lappend disabled_intfs if_up_clk if_up_rstn if_up_wreq if_up_wack if_up_waddr \
+       if_up_wdata if_up_rreq if_up_rack if_up_raddr if_up_rdata
+
+    set_port_property up_clk termination true
+    set_port_property up_rstn termination true
+    set_port_property up_rstn termination_value 1
+    set_port_property up_wreq termination true
+    set_port_property up_waddr termination true
+    set_port_property up_wdata termination true
+    set_port_property up_rreq termination true
+    set_port_property up_raddr termination true
+
+  }
+
+  ad_interface signal  pulse_gen_period  output  32
+  ad_interface signal  pulse_gen_width   output  32
+  ad_interface signal  pulse_gen_load    output   1
+
+  lappend disabled_intfs if_pulse_gen_period if_pulse_gen_width if_pulse_gen_load
+
+  foreach interface $disabled_intfs {
+    set_interface_property $interface ENABLED false
   }
 
   # SPI Engine interfaces
@@ -131,6 +173,14 @@ proc p_elaboration {} {
   ad_interface signal  offload0_mem_reset  output  1   reset
   ad_interface signal  offload0_enable     output  1   enable
   ad_interface signal  offload0_enabled    input   1   enabled
+
+  add_interface offload_sync axi4stream end
+  add_interface_port offload_sync offload_sync_valid  tvalid input   1
+  add_interface_port offload_sync offload_sync_ready  tready output  1
+  add_interface_port offload_sync offload_sync_data   tdata  input   8
+
+  set_interface_property offload_sync associatedClock if_spi_clk
+  set_interface_property offload_sync associatedReset if_spi_resetn
 
 }
 
