@@ -80,7 +80,7 @@ module system_top (
   inout       [ 1:0]      iic_mux_scl,
   inout       [ 1:0]      iic_mux_sda,
 
-  inout                   spi_sdo,
+  output                  spi_sdo,
   input                   spi_sdi,
   output      [ 1:0]      spi_cs,
   output                  spi_sclk,
@@ -103,8 +103,6 @@ module system_top (
   wire            iic_mux_sda_t_s;
   wire    [23:0]  offload_sdi_data;
 
-  wire spi_sdo_o;
-  wire spi_sdo_t;
   wire excitation;
 
   assign gain0_o = gpio_o[32];
@@ -114,15 +112,6 @@ module system_top (
   assign gpio_i[33] = gpio_o[33];
   assign gpio_i[32] = gpio_o[32];
   assign led_clk_o = excitation;
-
-  ad_iobuf #(
-    .DATA_WIDTH(1)
-  ) i_sdo_iobuf (
-    .dio_t(spi_sdo_t),
-    .dio_i(spi_sdo_o),
-    .dio_o(),
-    .dio_p(spi_sdo)
-  );
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -194,8 +183,8 @@ module system_top (
     .iic_mux_sda_i (iic_mux_sda_i_s),
     .iic_mux_sda_o (iic_mux_sda_o_s),
     .iic_mux_sda_t (iic_mux_sda_t_s),
-    .spi_sdo (spi_sdo_o),
-    .spi_sdo_t (spi_sdo_t),
+    .spi_sdo (spi_sdo),
+    .spi_sdo_t (),
     .spi_sdi (spi_sdi),
     .spi_cs (spi_cs),
     .spi_sclk (spi_sclk),
