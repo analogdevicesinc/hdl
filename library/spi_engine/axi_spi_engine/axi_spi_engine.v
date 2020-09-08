@@ -405,7 +405,8 @@ module axi_spi_engine #(
     ad_rst i_spi_resetn (
       .rst_async(up_sw_reset),
       .clk(spi_clk),
-      .rst(spi_reset)
+      .rst(spi_reset),
+      .rstn()
     );
     assign spi_resetn = ~spi_reset;
   end else begin
@@ -439,7 +440,8 @@ module axi_spi_engine #(
     .m_axis_aresetn(spi_resetn),
     .m_axis_ready(cmd_ready),
     .m_axis_valid(cmd_valid),
-    .m_axis_data(cmd_data)
+    .m_axis_data(cmd_data),
+    .m_axis_level()
   );
 
   assign sdo_fifo_in_valid = up_wreq_s == 1'b1 && up_waddr_s == 8'h39;
@@ -464,7 +466,8 @@ module axi_spi_engine #(
     .m_axis_aresetn(spi_resetn),
     .m_axis_ready(sdo_data_ready),
     .m_axis_valid(sdo_data_valid),
-    .m_axis_data(sdo_data)
+    .m_axis_data(sdo_data),
+    .m_axis_level()
   );
 
   assign sdi_fifo_out_ready = up_rreq_s == 1'b1 && up_raddr_s == 8'h3a;
@@ -482,6 +485,7 @@ module axi_spi_engine #(
     .s_axis_ready(sdi_data_ready),
     .s_axis_valid(sdi_data_valid),
     .s_axis_data(sdi_data),
+    .s_axis_room(),
     .s_axis_empty(),
     .m_axis_aclk(clk),
     .m_axis_aresetn(up_sw_resetn),
@@ -505,6 +509,7 @@ module axi_spi_engine #(
       .s_axis_ready(sync_ready),
       .s_axis_valid(sync_valid),
       .s_axis_data(sync_data),
+      .s_axis_room(),
       .s_axis_empty(),
       .m_axis_aclk(clk),
       .m_axis_aresetn(up_sw_resetn),
@@ -529,6 +534,7 @@ module axi_spi_engine #(
       .s_axis_ready(),
       .s_axis_valid(up_offload0_cmd_wr_en_s),
       .s_axis_data(up_offload0_cmd_wr_data_s),
+      .s_axis_room(),
       .s_axis_empty(),
       .m_axis_aclk(spi_clk),
       .m_axis_aresetn(spi_resetn),
@@ -556,6 +562,7 @@ module axi_spi_engine #(
       .s_axis_ready(),
       .s_axis_valid(up_offload0_sdo_wr_en_s),
       .s_axis_data(up_offload0_sdo_wr_data_s),
+      .s_axis_room(),
       .s_axis_empty(),
       .m_axis_aclk(spi_clk),
       .m_axis_aresetn(spi_resetn),
@@ -580,6 +587,7 @@ module axi_spi_engine #(
       .s_axis_ready(offload_sync_ready),
       .s_axis_valid(offload_sync_valid),
       .s_axis_data(offload_sync_data),
+      .s_axis_room(),
       .s_axis_empty(),
       .m_axis_aclk(clk),
       .m_axis_aresetn(up_sw_resetn),
