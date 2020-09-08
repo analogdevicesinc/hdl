@@ -15,6 +15,8 @@ ad_ip_parameter DEFAULT_SPI_CFG INTEGER 0
 ad_ip_parameter DEFAULT_CLK_DIV INTEGER 0
 ad_ip_parameter DATA_WIDTH INTEGER 8
 ad_ip_parameter NUM_OF_SDI INTEGER 1
+ad_ip_parameter SDI_DELAY INTEGER 0
+ad_ip_parameter SDO_DEFAULT INTEGER 0
 
 proc p_elaboration {} {
 
