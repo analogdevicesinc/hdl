@@ -41,6 +41,9 @@ set_property -dict {PACKAGE_PIN AK30  IOSTANDARD LVCMOS25} [get_ports led_bl_a_c
 set_property -dict {PACKAGE_PIN AE18  IOSTANDARD LVCMOS25} [get_ports led_br_c_c2m]                ; ## G18 FMC_LPC_LA16_P
 set_property -dict {PACKAGE_PIN AE17  IOSTANDARD LVCMOS25} [get_ports led_br_a_c2m]                ; ## G19 FMC_LPC_LA16_N
 
+create_clock -name rmii_ref_clk_a  -period 20.0 [get_ports rmii_rx_ref_clk_a]
+create_clock -name rmii_ref_clk_b  -period 20.0 [get_ports rmii_rx_ref_clk_b]
+
 create_clock -name rmii_rx_clk_0   -period  20 [get_pins i_system_wrapper/system_i/mii_to_rmii_0/U0/rmii2mac_rx_clk_bi_reg/Q]
 create_clock -name rmii_rx_clk_1   -period  20 [get_pins i_system_wrapper/system_i/mii_to_rmii_1/U0/rmii2mac_rx_clk_bi_reg/Q]
 create_clock -name rmii_tx_clk_0   -period  20 [get_pins i_system_wrapper/system_i/mii_to_rmii_0/U0/rmii2mac_tx_clk_bi_reg/Q]
