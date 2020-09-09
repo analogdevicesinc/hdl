@@ -43,15 +43,15 @@ module ad_ss_422to444 #(
 
   // 422 inputs
 
-  input                   clk,
-  input                   s422_de,
-  input       [DW:0]      s422_sync,
-  input       [15:0]      s422_data,
+  input                               clk,
+  input                               s422_de,
+  input       [DELAY_DATA_WIDTH-1:0]  s422_sync,
+  input       [                15:0]  s422_data,
 
   // 444 outputs
 
-  output  reg [DW:0]      s444_sync,
-  output  reg [23:0]      s444_data);
+  output  reg [DELAY_DATA_WIDTH-1:0]  s444_sync,
+  output  reg [                23:0]  s444_data);
 
   localparam  DW = DELAY_DATA_WIDTH - 1;
 
