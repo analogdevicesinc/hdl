@@ -110,6 +110,7 @@ module axi_ad9963_rx_pnmon (
     .adc_valid_in (adc_valid),
     .adc_data_in (adc_pn_data_in),
     .adc_data_pn (adc_pn_data_pn),
+    .adc_pattern_has_zero (1'b0),
     .adc_pn_oos (adc_pn_oos),
     .adc_pn_err (adc_pn_err));
 
