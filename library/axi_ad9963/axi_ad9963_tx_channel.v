@@ -93,7 +93,7 @@ module axi_ad9963_tx_channel #(
 
   wire            dac_iqcor_valid_s;
   wire    [15:0]  dac_iqcor_data_s;
-  wire    [15:0]  dac_dds_data_s;
+  wire    [11:0]  dac_dds_data_s;
   wire    [15:0]  dac_dds_scale_1_s;
   wire    [15:0]  dac_dds_init_1_s;
   wire    [15:0]  dac_dds_incr_1_s;
