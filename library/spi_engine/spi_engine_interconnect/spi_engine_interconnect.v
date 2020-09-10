@@ -133,7 +133,7 @@ end
 
 always @(posedge clk) begin
   if (resetn == 1'b0) begin
-    idle = 1'b1;
+    idle <= 1'b1;
   end else begin
     if (m_sync_valid == 1'b1 && m_sync_ready == 1'b1) begin
       idle <= 1'b1;
