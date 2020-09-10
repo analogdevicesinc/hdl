@@ -135,10 +135,10 @@ module system_top (
   // use crystal
 
   assign mclk = 1'b0;
-  assign up_sshot = gpio_o[36];
-  assign up_format = gpio_o[35:34];
-  assign up_crc_enable = gpio_o[33];
-  assign up_crc_4_or_16_n = gpio_o[32];
+  assign up_sshot = gpio_o[57];
+  assign up_format = gpio_o[56:55];
+  assign up_crc_enable = gpio_o[54];
+  assign up_crc_4_or_16_n = gpio_o[53];
 
   // instantiations
 
@@ -162,10 +162,10 @@ module system_top (
     .dio_o (gpio_i[31:0]),
     .dio_p (gpio_bd));
 
-  assign gpio_i[36:32] = 5'b0;
-  assign gpio_i[39:37] = gpio_o[39:37];
+  //assign gpio_i[36:32] = 5'b0;
+  assign gpio_i[39:36] = gpio_o[39:36];
   assign gpio_i[47:44] = gpio_o[47:44];
-  assign gpio_i[63:53] = gpio_o[63:53];
+  assign gpio_i[63:58] = gpio_o[63:58];
 
   ad_iobuf #(.DATA_WIDTH(2)) i_iic_mux_scl (
     .dio_t ({iic_mux_scl_t_s, iic_mux_scl_t_s}),
@@ -197,8 +197,8 @@ module system_top (
     .up_format (up_format),
     .up_crc_enable (up_crc_enable),
     .up_crc_4_or_16_n (up_crc_4_or_16_n),
-    .up_status_clr (adc_gpio_o[32:0]),
-    .up_status (adc_gpio_i[32:0]));
+    .up_status_clr (adc_gpio_o[35:0]),
+    .up_status (adc_gpio_i[35:0]));
 
   system_wrapper i_system_wrapper (
     .adc_clk (adc_clk),
