@@ -46,7 +46,6 @@ ad_ip_parameter bram_la CONFIG.Algorithm {Low_Power}
 ad_ip_parameter bram_la CONFIG.Use_Byte_Write_Enable {false}
 ad_ip_parameter bram_la CONFIG.Operating_Mode_A {NO_CHANGE}
 ad_ip_parameter bram_la CONFIG.Register_PortB_Output_of_Memory_Primitives {true}
-ad_ip_parameter bram_la CONFIG.Use_RSTA_Pin {false}
 ad_ip_parameter bram_la CONFIG.Port_B_Clock {100}
 ad_ip_parameter bram_la CONFIG.Port_B_Enable_Rate {100}
 ad_ip_parameter bram_la CONFIG.Write_Width_A {16}
@@ -91,7 +90,6 @@ ad_ip_parameter bram_adc CONFIG.Enable_32bit_Address false
 ad_ip_parameter bram_adc CONFIG.Use_Byte_Write_Enable false
 ad_ip_parameter bram_adc CONFIG.Operating_Mode_A {NO_CHANGE}
 ad_ip_parameter bram_adc CONFIG.Register_PortB_Output_of_Memory_Primitives true
-ad_ip_parameter bram_adc CONFIG.Use_RSTA_Pin {false}
 ad_ip_parameter bram_adc CONFIG.Port_B_Clock 100
 ad_ip_parameter bram_adc CONFIG.Port_B_Enable_Rate 100
 ad_ip_parameter bram_adc CONFIG.Write_Width_A 32
