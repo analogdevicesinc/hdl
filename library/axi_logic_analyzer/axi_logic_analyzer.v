@@ -126,7 +126,7 @@ module axi_logic_analyzer (
   reg    [ 1:0]     low_level_trigger = 1'd0;
 
   reg    [31:0]     trigger_holdoff_counter = 32'd0;
-  reg    [ 4:0]     adc_data_delay = 5'd0;
+  reg    [ 3:0]     adc_data_delay = 4'd0;
 
   reg    [16:0]     data_fixed_delay [0:15];
   reg    [15:0]     data_dynamic_delay [0:15];
@@ -183,8 +183,8 @@ module axi_logic_analyzer (
 
   wire              streaming;
 
-  wire    [ 4:0]    in_data_delay;
-  wire    [ 4:0]    up_data_delay;
+  wire    [ 3:0]    in_data_delay;
+  wire    [ 3:0]    up_data_delay;
   wire              master_delay_ctrl;
   wire    [ 9:0]    data_delay_control;
   wire    [15:0]    adc_data_mn;
@@ -290,19 +290,19 @@ module axi_logic_analyzer (
   // adc path 'rate delay' given by axi_adc_decimate
   always @(posedge clk_out) begin
     case (external_rate)
-      3'd0:    adc_data_delay <= 5'd1; // 100MSPS
-      3'd1:    adc_data_delay <= 5'd3; // 10MSPS
-      default: adc_data_delay <= 5'd1; // <= 1MSPS
+      3'd0:    adc_data_delay <= 4'd1; // 100MSPS
+      3'd1:    adc_data_delay <= 4'd3; // 10MSPS
+      default: adc_data_delay <= 4'd1; // <= 1MSPS
     endcase
   end
 
-  assign up_data_delay = data_delay_control[4:0];
+  assign up_data_delay = data_delay_control[3:0];
   assign rate_gen_select = data_delay_control[8];
 
   // select if the delay taps number is chosen by the user or automatically
   assign master_delay_ctrl = data_delay_control[9];
   assign in_data_delay = master_delay_ctrl ? up_data_delay :
-                         external_decimation_en ? 5'd0 : adc_data_delay;
+                         external_decimation_en ? 4'd0 : adc_data_delay;
 
   always @(posedge clk_out) begin
     if (sample_valid_la == 1'b1) begin
