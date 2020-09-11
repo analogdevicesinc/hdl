@@ -155,6 +155,7 @@ module axi_adrv9001 #(
 
   // TDD interface
   input                   tdd_sync,
+  output                  tdd_sync_cntr,
 
   input                   gpio_rx1_enable_in,
   input                   gpio_rx2_enable_in,
@@ -473,6 +474,7 @@ module axi_adrv9001 #(
 
     // TDD interface
     .tdd_sync (tdd_sync),
+    .tdd_sync_cntr (tdd_sync_cntr),
     .tdd_rx1_rf_en (tdd_rx1_rf_en),
     .tdd_tx1_rf_en (tdd_tx1_rf_en),
     .tdd_if1_mode (tdd_if1_mode),
