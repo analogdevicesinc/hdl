@@ -143,6 +143,7 @@ module axi_ad9001_core #(
 
   // TDD interface
   input                   tdd_sync,
+  output                  tdd_sync_cntr,
 
   output                  tdd_rx1_rf_en,
   output                  tdd_tx1_rf_en,
@@ -536,7 +537,7 @@ module axi_ad9001_core #(
     .tdd_enabled (tdd_if1_mode),
     .tdd_status (8'h0),
     .tdd_sync (tdd_sync),
-    .tdd_sync_cntr (),
+    .tdd_sync_cntr (tdd_sync_cntr1),
     .tdd_tx_valid (tdd_tx1_valid),
     .tdd_rx_valid (tdd_rx1_valid),
     .up_rstn (up_rstn),
@@ -562,7 +563,7 @@ module axi_ad9001_core #(
     .tdd_enabled (tdd_if2_mode_loc),
     .tdd_status (8'h0),
     .tdd_sync (tdd_sync),
-    .tdd_sync_cntr (),
+    .tdd_sync_cntr (tdd_sync_cntr2),
     .tdd_tx_valid (tdd_tx2_valid),
     .tdd_rx_valid (tdd_rx2_valid),
     .up_rstn (up_rstn),
@@ -579,6 +580,8 @@ module axi_ad9001_core #(
   assign tdd_rx2_rf_en = tx1_r1_mode&rx1_r1_mode ? tdd_rx2_rf_en_loc : tdd_rx1_rf_en;
   assign tdd_tx2_rf_en = tx1_r1_mode&rx1_r1_mode ? tdd_tx2_rf_en_loc : tdd_tx1_rf_en;
   assign tdd_if2_mode = tx1_r1_mode&rx1_r1_mode ? tdd_if2_mode_loc : tdd_if1_mode;
+
+  assign tdd_sync_cntr = tdd_sync_cntr1 | tdd_sync_cntr2;
 
   end else begin
     assign up_wack_s[6] = 1'b0;
