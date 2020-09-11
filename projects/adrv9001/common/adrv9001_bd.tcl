@@ -55,6 +55,9 @@ create_bd_port -dir I gpio_rx2_enable_in
 create_bd_port -dir I gpio_tx1_enable_in
 create_bd_port -dir I gpio_tx2_enable_in
 
+create_bd_port -dir I tdd_sync
+create_bd_port -dir O tdd_sync_cntr
+
 # adrv9001
 
 ad_ip_instance axi_adrv9001 axi_adrv9001
@@ -198,6 +201,9 @@ ad_connect gpio_rx1_enable_in  axi_adrv9001/gpio_rx1_enable_in
 ad_connect gpio_rx2_enable_in  axi_adrv9001/gpio_rx2_enable_in
 ad_connect gpio_tx1_enable_in  axi_adrv9001/gpio_tx1_enable_in
 ad_connect gpio_tx2_enable_in  axi_adrv9001/gpio_tx2_enable_in
+
+ad_connect tdd_sync axi_adrv9001/tdd_sync
+ad_connect tdd_sync_cntr axi_adrv9001/tdd_sync_cntr
 
 # RX1_RX2 - CPACK - RX_DMA1
 ad_connect  axi_adrv9001/adc_1_rst       util_adc_1_pack/reset
