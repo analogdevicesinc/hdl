@@ -175,10 +175,10 @@ end
 
 assign cmd = (cmd_int_s[15:8] == 8'h30) ? {cmd_int_s[15:8], spi_sync_id_counter} : cmd_int_s;
 
-/* 
- * Forwarded SYNC interface, this can be used to monitor the state of the 
+/*
+ * Forwarded SYNC interface, this can be used to monitor the state of the
  * offload command sequence through SPI Engine regmap
- */	
+ */
 
 assign status_sync_data = sync_data;
 assign status_sync_valid = sync_valid;
@@ -256,7 +256,9 @@ always @(posedge spi_clk) begin
     spi_active <= 1'b0;
   end else begin
     if (spi_active == 1'b0) begin
-      if (trigger_s == 1'b1 && spi_enable == 1'b1)
+      // start offload when we have a valid trigger, offload is enabled and
+      // the DMA is enabled
+      if (trigger_s == 1'b1 && spi_enable == 1'b1 && offload_sdi_ready == 1'b1)
         spi_active <= 1'b1;
     end else if (cmd_ready == 1'b1 && spi_cmd_rd_addr_next == ctrl_cmd_wr_addr) begin
       spi_active <= 1'b0;
