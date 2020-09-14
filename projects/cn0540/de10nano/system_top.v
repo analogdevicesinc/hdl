@@ -160,6 +160,7 @@ module system_top (
 
   // unused
   assign gpio_i[63:42] = gpio_o[63:42];
+  assign gpio_i[37] = gpio_o[37];
 
   // GPIO outputs
   assign ltc2308_cs = gpio_o[41];
@@ -174,7 +175,6 @@ module system_top (
   assign gpio_bd_o[7:0] = gpio_o[7:0];
 
   // GPIO inputs
-  assign gpio_i[37] = cn0540_drdy;
   assign gpio_i[38] = cn0540_sw_ff;
 
   assign gpio_i[31:14] = gpio_o[31:14];
