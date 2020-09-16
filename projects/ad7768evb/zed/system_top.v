@@ -119,12 +119,12 @@ module system_top (
   wire    [ 1:0]  up_format;
   wire            up_crc_enable;
   wire            up_crc_4_or_16_n;
-  wire    [63:0]  adc_gpio_i;
-  wire    [63:0]  adc_gpio_o;
-  wire    [63:0]  adc_gpio_t;
-  wire    [63:0]  gpio_i;
-  wire    [63:0]  gpio_o;
-  wire    [63:0]  gpio_t;
+  wire    [127:0]  adc_gpio_i;
+  wire    [127:0]  adc_gpio_o;
+  wire    [127:0]  adc_gpio_t;
+  wire    [127:0]  gpio_i;
+  wire    [127:0]  gpio_o;
+  wire    [127:0]  gpio_t;
   wire    [ 1:0]  iic_mux_scl_i_s;
   wire    [ 1:0]  iic_mux_scl_o_s;
   wire            iic_mux_scl_t_s;
@@ -135,26 +135,28 @@ module system_top (
   // use crystal
 
   assign mclk = 1'b0;
-  assign up_sshot = gpio_o[57];
-  assign up_format = gpio_o[56:55];
-  assign up_crc_enable = gpio_o[54];
-  assign up_crc_4_or_16_n = gpio_o[53];
+  assign up_status_clr = gpio_o[99:64];
+  assign up_status = gpio_i[99:64];
+  assign up_sshot = gpio_o[46];
+  assign up_format = gpio_o[45:44];
+  assign up_crc_enable = gpio_o[43];
+  assign up_crc_4_or_16_n = gpio_o[42];
 
   // instantiations
 
   ad_iobuf #(.DATA_WIDTH(9)) i_iobuf (
-    .dio_t ({gpio_t[52:48], gpio_t[43:40]}),
-    .dio_i ({gpio_o[52:48], gpio_o[43:40]}),
-    .dio_o ({gpio_i[52:48], gpio_i[43:40]}),
-    .dio_p ({ gpio_4_filter,        // 52
-              gpio_3_mode_3,        // 51
-              gpio_2_mode_2,        // 50
-              gpio_1_mode_1,        // 49
-              gpio_0_mode_0,        // 48
-              sync_in_n,            // 43
-              sync_n,               // 42
-              start_n,              // 41
-              reset_n}));           // 40
+    .dio_t (gpio_t[41:33]),
+    .dio_i (gpio_o[41:33]),
+    .dio_o (gpio_i[41:33]),
+    .dio_p ({ gpio_4_filter,        // 41
+              gpio_3_mode_3,        // 40
+              gpio_2_mode_2,        // 39
+              gpio_1_mode_1,        // 38
+              gpio_0_mode_0,        // 37
+              sync_in_n,            // 36
+              sync_n,               // 35
+              start_n,              // 34
+              reset_n}));           // 33
 
   ad_iobuf #(.DATA_WIDTH(32)) i_iobuf_bd (
     .dio_t (gpio_t[31:0]),
@@ -162,10 +164,8 @@ module system_top (
     .dio_o (gpio_i[31:0]),
     .dio_p (gpio_bd));
 
-  //assign gpio_i[36:32] = 5'b0;
-  assign gpio_i[39:36] = gpio_o[39:36];
-  assign gpio_i[47:44] = gpio_o[47:44];
-  assign gpio_i[63:58] = gpio_o[63:58];
+  assign gpio_i[127:100] = gpio_o[127:100];
+  assign gpio_i[63:47] = gpio_o[63:47];
 
   ad_iobuf #(.DATA_WIDTH(2)) i_iic_mux_scl (
     .dio_t ({iic_mux_scl_t_s, iic_mux_scl_t_s}),
@@ -197,12 +197,12 @@ module system_top (
     .up_format (up_format),
     .up_crc_enable (up_crc_enable),
     .up_crc_4_or_16_n (up_crc_4_or_16_n),
-    .up_status_clr (adc_gpio_o[35:0]),
-    .up_status (adc_gpio_i[35:0]));
+    .up_status_clr (up_status_clr),
+    .up_status (up_status));
 
   system_wrapper i_system_wrapper (
     .adc_clk (adc_clk),
-	.adc_data_0 (adc_data_0),
+    .adc_data_0 (adc_data_0),
     .adc_data_1 (adc_data_1),
     .adc_data_2 (adc_data_2),
     .adc_data_3 (adc_data_3),
@@ -216,6 +216,12 @@ module system_top (
     .adc_gpio_1_i (adc_gpio_i[63:32]),
     .adc_gpio_1_o (adc_gpio_o[63:32]),
     .adc_gpio_1_t (adc_gpio_t[63:32]),
+    .adc_gpio_2_i (adc_gpio_i[95:64]),
+    .adc_gpio_2_o (adc_gpio_o[95:64]),
+    .adc_gpio_2_t (adc_gpio_t[95:64]),
+	.adc_gpio_3_i (adc_gpio_i[127:65]),
+    .adc_gpio_3_o (adc_gpio_o[127:65]),
+    .adc_gpio_3_t (adc_gpio_t[127:65]),
     .adc_valid (adc_valid),
     .ddr_addr (ddr_addr),
     .ddr_ba (ddr_ba),

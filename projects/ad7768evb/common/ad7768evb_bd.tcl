@@ -1,4 +1,3 @@
-
 # ad7768 interface
 
 create_bd_port -dir I adc_clk
@@ -9,6 +8,12 @@ create_bd_port -dir O -from 31 -to 0 adc_gpio_0_t
 create_bd_port -dir I -from 31 -to 0 adc_gpio_1_i
 create_bd_port -dir O -from 31 -to 0 adc_gpio_1_o
 create_bd_port -dir O -from 31 -to 0 adc_gpio_1_t
+create_bd_port -dir I -from 31 -to 0 adc_gpio_2_i
+create_bd_port -dir O -from 31 -to 0 adc_gpio_2_o
+create_bd_port -dir O -from 31 -to 0 adc_gpio_2_t
+create_bd_port -dir I -from 31 -to 0 adc_gpio_3_i
+create_bd_port -dir O -from 31 -to 0 adc_gpio_3_o
+create_bd_port -dir O -from 31 -to 0 adc_gpio_3_t
 
 for {set i 0} {$i < $num_of_channels} {incr i} {
   create_bd_port -dir I -from 31 -to 0 adc_data_$i
@@ -49,6 +54,12 @@ ad_ip_parameter ad7768_gpio CONFIG.C_GPIO_WIDTH 32
 ad_ip_parameter ad7768_gpio CONFIG.C_GPIO2_WIDTH 32
 ad_ip_parameter ad7768_gpio CONFIG.C_INTERRUPT_PRESENT 1
 
+ad_ip_instance axi_gpio ad7768_gpio_2
+ad_ip_parameter ad7768_gpio_2 CONFIG.C_IS_DUAL 1
+ad_ip_parameter ad7768_gpio_2 CONFIG.C_GPIO_WIDTH 32
+ad_ip_parameter ad7768_gpio_2 CONFIG.C_GPIO2_WIDTH 32
+ad_ip_parameter ad7768_gpio_2 CONFIG.C_INTERRUPT_PRESENT 1
+
 # adc-path channel pack
 
 ad_ip_instance util_cpack2 util_ad7768_adc_pack
@@ -88,6 +99,12 @@ ad_connect  adc_gpio_0_t ad7768_gpio/gpio_io_t
 ad_connect  adc_gpio_1_i ad7768_gpio/gpio2_io_i
 ad_connect  adc_gpio_1_o ad7768_gpio/gpio2_io_o
 ad_connect  adc_gpio_1_t ad7768_gpio/gpio2_io_t
+ad_connect  adc_gpio_2_i ad7768_gpio_2/gpio_io_i
+ad_connect  adc_gpio_2_o ad7768_gpio_2/gpio_io_o
+ad_connect  adc_gpio_2_t ad7768_gpio_2/gpio_io_t
+ad_connect  adc_gpio_3_i ad7768_gpio_2/gpio2_io_i
+ad_connect  adc_gpio_3_o ad7768_gpio_2/gpio2_io_o
+ad_connect  adc_gpio_3_t ad7768_gpio_2/gpio2_io_t
 
 # interrupts
 
@@ -99,6 +116,7 @@ ad_cpu_interrupt ps-12 mb-12  ad7768_gpio/ip2intc_irpt
 ad_cpu_interconnect 0x43c00000 axi_ad7768_adc
 ad_cpu_interconnect 0x7C400000 ad7768_dma
 ad_cpu_interconnect 0x7C420000 ad7768_gpio
+ad_cpu_interconnect 0x7C440000 ad7768_gpio_2
 
 
 ad_mem_hp1_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1
