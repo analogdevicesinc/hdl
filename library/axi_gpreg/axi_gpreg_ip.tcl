@@ -9,12 +9,13 @@ adi_ip_files axi_gpreg [list \
   "$ad_hdl_dir/library/common/up_clock_mon.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
   "axi_gpreg_io.v" \
+  "axi_gpreg_constr.ttcl" \
   "axi_gpreg_clock_mon.v" \
   "axi_gpreg.v" ]
 
 adi_ip_properties axi_gpreg
+adi_ip_ttcl axi_gpreg "axi_gpreg_constr.ttcl"
 
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_IO')) > 0} \
   [ipx::get_ports up_gp_*_0 -of_objects [ipx::current_core]]
