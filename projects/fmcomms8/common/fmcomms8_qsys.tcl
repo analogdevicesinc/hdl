@@ -204,8 +204,8 @@ set_instance_parameter_value axi_fmcomms8_tx_dma {DMA_DATA_WIDTH_DEST} [expr $TX
                                                                              $TX_SAMPLES_PER_CHANNEL]
 set_instance_parameter_value axi_fmcomms8_tx_dma {DMA_LENGTH_WIDTH} {24}
 set_instance_parameter_value axi_fmcomms8_tx_dma {DMA_2D_TRANSFER} {0}
-set_instance_parameter_value axi_fmcomms8_tx_dma {AXI_SLICE_DEST} {0}
-set_instance_parameter_value axi_fmcomms8_tx_dma {AXI_SLICE_SRC} {0}
+set_instance_parameter_value axi_fmcomms8_tx_dma {AXI_SLICE_DEST} {1}
+set_instance_parameter_value axi_fmcomms8_tx_dma {AXI_SLICE_SRC} {1}
 set_instance_parameter_value axi_fmcomms8_tx_dma {SYNC_TRANSFER_START} {0}
 set_instance_parameter_value axi_fmcomms8_tx_dma {CYCLIC} {1}
 set_instance_parameter_value axi_fmcomms8_tx_dma {DMA_TYPE_DEST} {1}
@@ -231,8 +231,8 @@ set_instance_parameter_value axi_fmcomms8_rx_dma {DMA_DATA_WIDTH_SRC} [expr $RX_
 set_instance_parameter_value axi_fmcomms8_rx_dma {DMA_DATA_WIDTH_DEST} {128}
 set_instance_parameter_value axi_fmcomms8_rx_dma {DMA_LENGTH_WIDTH} {24}
 set_instance_parameter_value axi_fmcomms8_rx_dma {DMA_2D_TRANSFER} {0}
-set_instance_parameter_value axi_fmcomms8_rx_dma {AXI_SLICE_DEST} {0}
-set_instance_parameter_value axi_fmcomms8_rx_dma {AXI_SLICE_SRC} {0}
+set_instance_parameter_value axi_fmcomms8_rx_dma {AXI_SLICE_DEST} {1}
+set_instance_parameter_value axi_fmcomms8_rx_dma {AXI_SLICE_SRC} {1}
 set_instance_parameter_value axi_fmcomms8_rx_dma {SYNC_TRANSFER_START} {1}
 set_instance_parameter_value axi_fmcomms8_rx_dma {CYCLIC} {0}
 set_instance_parameter_value axi_fmcomms8_rx_dma {DMA_TYPE_DEST} {0}
@@ -245,8 +245,8 @@ add_connection axi_fmcomms8_rx_cpack.if_packed_fifo_wr_data axi_fmcomms8_rx_dma.
 add_connection axi_fmcomms8_rx_dma.if_fifo_wr_overflow axi_fmcomms8_rx_cpack.if_packed_fifo_wr_overflow
 add_connection sys_clk.clk axi_fmcomms8_rx_dma.s_axi_clock
 add_connection sys_clk.clk_reset axi_fmcomms8_rx_dma.s_axi_reset
-add_connection sys_dma_clk.clk axi_fmcomms8_rx_dma.m_dest_axi_clock
-add_connection sys_dma_clk.clk_reset axi_fmcomms8_rx_dma.m_dest_axi_reset
+add_connection sys_dma_clk_2.clk axi_fmcomms8_rx_dma.m_dest_axi_clock
+add_connection sys_dma_clk_2.clk_reset axi_fmcomms8_rx_dma.m_dest_axi_reset
 
 add_instance axi_fmcomms8_rx_os_dma axi_dmac
 set_instance_parameter_value axi_fmcomms8_rx_os_dma {ID} {0}
@@ -254,8 +254,8 @@ set_instance_parameter_value axi_fmcomms8_rx_os_dma {DMA_DATA_WIDTH_SRC} [expr 3
 set_instance_parameter_value axi_fmcomms8_rx_os_dma {DMA_DATA_WIDTH_DEST} {128}
 set_instance_parameter_value axi_fmcomms8_rx_os_dma {DMA_LENGTH_WIDTH} {24}
 set_instance_parameter_value axi_fmcomms8_rx_os_dma {DMA_2D_TRANSFER} {0}
-set_instance_parameter_value axi_fmcomms8_rx_os_dma {AXI_SLICE_DEST} {0}
-set_instance_parameter_value axi_fmcomms8_rx_os_dma {AXI_SLICE_SRC} {0}
+set_instance_parameter_value axi_fmcomms8_rx_os_dma {AXI_SLICE_DEST} {1}
+set_instance_parameter_value axi_fmcomms8_rx_os_dma {AXI_SLICE_SRC} {1}
 set_instance_parameter_value axi_fmcomms8_rx_os_dma {SYNC_TRANSFER_START} {1}
 set_instance_parameter_value axi_fmcomms8_rx_os_dma {CYCLIC} {0}
 set_instance_parameter_value axi_fmcomms8_rx_os_dma {DMA_TYPE_DEST} {0}
@@ -268,8 +268,8 @@ add_connection axi_fmcomms8_rx_os_cpack.if_packed_fifo_wr_data axi_fmcomms8_rx_o
 add_connection axi_fmcomms8_rx_os_dma.if_fifo_wr_overflow axi_fmcomms8_rx_os_cpack.if_packed_fifo_wr_overflow
 add_connection sys_clk.clk axi_fmcomms8_rx_os_dma.s_axi_clock
 add_connection sys_clk.clk_reset axi_fmcomms8_rx_os_dma.s_axi_reset
-add_connection sys_dma_clk.clk axi_fmcomms8_rx_os_dma.m_dest_axi_clock
-add_connection sys_dma_clk.clk_reset axi_fmcomms8_rx_os_dma.m_dest_axi_reset
+add_connection sys_dma_clk_2.clk axi_fmcomms8_rx_os_dma.m_dest_axi_clock
+add_connection sys_dma_clk_2.clk_reset axi_fmcomms8_rx_os_dma.m_dest_axi_reset
 
 # fmcomms8 gpio
 
@@ -354,8 +354,8 @@ ad_cpu_interconnect 0x00060000 avl_fmcomms8_gpio.s1
 # dma interconnects
 
 ad_dma_interconnect axi_fmcomms8_tx_dma.m_src_axi
-ad_dma_interconnect axi_fmcomms8_rx_dma.m_dest_axi
-ad_dma_interconnect axi_fmcomms8_rx_os_dma.m_dest_axi
+ad_dma_interconnect_2 axi_fmcomms8_rx_dma.m_dest_axi
+ad_dma_interconnect_2 axi_fmcomms8_rx_os_dma.m_dest_axi
 
 # interrupts
 
