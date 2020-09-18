@@ -94,6 +94,7 @@ set_instance_parameter_value sys_hps {S2F_Width} {0}
 set_instance_parameter_value sys_hps {LWH2F_Enable} {1}
 set_instance_parameter_value sys_hps {F2SDRAM_PORT_CONFIG} {6}
 set_instance_parameter_value sys_hps {F2SDRAM0_ENABLED} {1}
+set_instance_parameter_value sys_hps {F2SDRAM2_ENABLED} {1}
 set_instance_parameter_value sys_hps {F2SINTERRUPT_Enable} {1}
 set_instance_parameter_value sys_hps {HPS_IO_Enable} $hps_io_list
 set_instance_parameter_value sys_hps {SDMMC_PinMuxing} {IO}
@@ -109,6 +110,8 @@ set_instance_parameter_value sys_hps {I2C1_Mode} {default}
 set_instance_parameter_value sys_hps {F2H_COLD_RST_Enable} {1}
 set_instance_parameter_value sys_hps {H2F_USER0_CLK_Enable} {1}
 set_instance_parameter_value sys_hps {H2F_USER0_CLK_FREQ} {175}
+set_instance_parameter_value sys_hps {H2F_USER1_CLK_Enable} {1}
+set_instance_parameter_value sys_hps {H2F_USER1_CLK_FREQ} {250}
 set_instance_parameter_value sys_hps {CLK_SDMMC_SOURCE} {1}
 
 add_interface sys_hps_rstn reset sink
@@ -124,11 +127,19 @@ set_interface_property sys_hps_io EXPORT_OF sys_hps.hps_io
 
 add_instance sys_dma_clk clock_source
 set_instance_parameter_value sys_dma_clk {resetSynchronousEdges} {DEASSERT}
-set_instance_parameter_value sys_dma_clk {clockFrequencyKnown} {false}
+set_instance_parameter_value sys_dma_clk {clockFrequencyKnown} {true}
 add_connection sys_clk.clk_reset sys_dma_clk.clk_in_reset
 add_connection sys_hps.h2f_user0_clock sys_dma_clk.clk_in
 add_connection sys_dma_clk.clk sys_hps.f2sdram0_clock
 add_connection sys_dma_clk.clk_reset sys_hps.f2sdram0_reset
+
+add_instance sys_dma_clk_2 clock_source
+set_instance_parameter_value sys_dma_clk_2 {resetSynchronousEdges} {DEASSERT}
+set_instance_parameter_value sys_dma_clk_2 {clockFrequencyKnown} {true}
+add_connection sys_clk.clk_reset sys_dma_clk_2.clk_in_reset
+add_connection sys_hps.h2f_user1_clock sys_dma_clk_2.clk_in
+add_connection sys_dma_clk_2.clk sys_hps.f2sdram2_clock
+add_connection sys_dma_clk_2.clk_reset sys_hps.f2sdram2_reset
 
 # ddr4 interface
 
@@ -194,6 +205,12 @@ proc ad_dma_interconnect {m_port} {
 
   add_connection ${m_port} sys_hps.f2sdram0_data
   set_connection_parameter_value ${m_port}/sys_hps.f2sdram0_data baseAddress {0x0}
+}
+
+proc ad_dma_interconnect_2 {m_port} {
+
+  add_connection ${m_port} sys_hps.f2sdram2_data
+  set_connection_parameter_value ${m_port}/sys_hps.f2sdram2_data baseAddress {0x0}
 }
 
 # gpio-bd
