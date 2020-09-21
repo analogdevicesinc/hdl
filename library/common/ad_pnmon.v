@@ -67,6 +67,7 @@ module ad_pnmon #(
   reg                         adc_pn_oos_int = 'd0;
   reg                         adc_pn_err_int = 'd0;
   reg  [CNT_W-1:0]            adc_pn_oos_count = 'd0;
+  reg                         adc_valid_zero_d = 'b0;
 
   // internal signals
 
@@ -88,7 +89,7 @@ module ad_pnmon #(
   // but OOS_THRESHOLD consecutive zeros would assert out of sync.
   assign adc_valid_zero = ALLOW_ZERO_MASKING & adc_pattern_has_zero &
                           ~adc_pn_oos_int & adc_pn_match_z_s;
-  assign adc_pn_err_s = ~(adc_pn_oos_int | adc_pn_match_s | adc_valid_zero);
+  assign adc_pn_err_s = ~(adc_pn_oos_int | adc_pn_match_s | adc_valid_zero_d);
 
 
   // pn oos and counters (16 to clear and set).
@@ -100,6 +101,7 @@ module ad_pnmon #(
     adc_valid_d <= adc_valid_in;
     adc_pn_match_d <= adc_pn_match_d_s;
     adc_pn_match_z <= adc_pn_match_z_s;
+    adc_valid_zero_d <= adc_valid_zero;
     if (adc_valid_d == 1'b1) begin
       adc_pn_err_int <= adc_pn_err_s;
       if ((adc_pn_update_s == 1'b1) && (adc_pn_oos_count >= OOS_THRESHOLD-1)) begin
