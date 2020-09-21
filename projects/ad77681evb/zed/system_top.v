@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2020 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -89,9 +89,6 @@ module system_top (
   inout           ad7768_sync_in,
   inout   [ 3:0]  ad7768_gpio,
 
-  input           ad7768_mclk,
-  output          ad7768_mclk_return,
-
   input           ad7768_spi_miso,
   output          ad7768_spi_mosi,
   output          ad7768_spi_sclk,
@@ -109,18 +106,8 @@ module system_top (
   wire    [ 1:0]  iic_mux_sda_i_s;
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
-  wire            ad7768_mclk_s;
 
   // instantiations
-
-  ad_data_clk #(.SINGLE_ENDED (1)) i_ad7768_mclk_receiver(
-    .rst (1'b1),
-    .locked (),
-    .clk_in_p (ad7768_0_mclk),
-    .clk_in_n (1'd0),
-    .clk(ad7768_mclk_s));
-  
-  assign ad7768_mclk_return = ad7768_mclk_s;
 
   ad_iobuf #(
     .DATA_WIDTH(7)

@@ -19,7 +19,4 @@ set_property -dict {PACKAGE_PIN  N17 IOSTANDARD LVCMOS25}                       
 set_property -dict {PACKAGE_PIN  J18 IOSTANDARD LVCMOS25 IOB TRUE}                  [get_ports ad7768_drdy]        ; ## FMC_LPC_LA05_P
 set_property -dict {PACKAGE_PIN  L19 IOSTANDARD LVCMOS25}                           [get_ports ad7768_sync_out]    ; ## FMC_LPC_CLK0_M2C_N
 set_property -dict {PACKAGE_PIN  L21 IOSTANDARD LVCMOS25}                           [get_ports ad7768_sync_in]     ; ## FMC_LPC_LA06_P
-set_property -dict {PACKAGE_PIN  M19 IOSTANDARD LVCMOS25}                           [get_ports ad7768_mclk]        ; ## FMC_LPC_LA00_CC_P
-
-set_property -dict {PACKAGE_PIN  L18 IOSTANDARD LVCMOS25}                           [get_ports ad7768_mclk_return]   ; ## FMC_LPC_CLK0_M2C_P
 
