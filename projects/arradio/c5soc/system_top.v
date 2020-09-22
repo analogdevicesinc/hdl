@@ -134,7 +134,6 @@ module system_top (
 
   output  [  3:0]   gpio_ctl,
   input   [  7:0]   gpio_status,
-  input             ad9361_clk_out,
   output            ad9361_resetb,
   output            ad9361_en_agc,
   output            ad9361_sync,
