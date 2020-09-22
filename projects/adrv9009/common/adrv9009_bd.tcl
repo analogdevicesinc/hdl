@@ -23,8 +23,8 @@ set RX_OS_NUM_OF_CONVERTERS 2 ; # M
 set RX_OS_SAMPLES_PER_FRAME 1 ; # S
 set RX_OS_SAMPLE_WIDTH 16     ; # N/NP
 
-set RX_OS_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 32 / \
-                                   ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)] ; # L * 32 / (M * N)
+set RX_OS_SAMPLES_PER_CHANNEL [expr $RX_OS_NUM_OF_LANES * 32 / \
+                                   ($RX_OS_NUM_OF_CONVERTERS * $RX_OS_SAMPLE_WIDTH)] ; # L * 32 / (M * N)
 
 set dac_fifo_name axi_adrv9009_dacfifo
 set dac_data_width [expr $TX_SAMPLE_WIDTH * $TX_NUM_OF_CONVERTERS * $TX_SAMPLES_PER_CHANNEL]
