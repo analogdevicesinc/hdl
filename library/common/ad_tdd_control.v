@@ -92,8 +92,8 @@ module ad_tdd_control#(
   output      [23:0]      tdd_counter_status);
 
 
-  localparam          ON = 1;
-  localparam          OFF = 0;
+  localparam  [ 0:0]      ON = 1;
+  localparam  [ 0:0]      OFF = 0;
 
   // tdd control related
 
