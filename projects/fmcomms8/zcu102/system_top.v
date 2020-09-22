@@ -67,7 +67,6 @@ module system_top (
   inout               adrv9009_tx2_enable_c,
   inout               adrv9009_rx1_enable_c,
   inout               adrv9009_rx2_enable_c,
-  inout               adrv9009_test_c,
   inout               adrv9009_reset_b_c,
   inout               adrv9009_gpint_c,
 
@@ -105,7 +104,6 @@ module system_top (
   inout               adrv9009_tx2_enable_d,
   inout               adrv9009_rx1_enable_d,
   inout               adrv9009_rx2_enable_d,
-  inout               adrv9009_test_d,
   inout               adrv9009_reset_b_d,
   inout               adrv9009_gpint_d,
 
