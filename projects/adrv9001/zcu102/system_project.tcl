@@ -7,11 +7,11 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 # other case returns the default value specified in its second parameter field.
 #
 #   How to use over-writable parameters from the environment:
-#    
+#
 #    e.g.
-#      make CMOS_LVDS_N=0 
+#      make CMOS_LVDS_N=0
 #     or
-#      make CMOS_LVDS_N=1 
+#      make CMOS_LVDS_N=1
 #
 #
 # Parameter description:
@@ -28,7 +28,7 @@ adi_project adrv9001_zcu102 0 [list \
 adi_project_files {} [list \
   "system_top.v" \
   "system_constr.xdc"\
-  "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
+  "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/zcu102/zcu102_system_constr.xdc" ]
 
 if {$CMOS_LVDS_N == 0} {

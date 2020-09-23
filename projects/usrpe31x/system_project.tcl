@@ -9,7 +9,7 @@ adi_project usrpe31x
 adi_project_files usrpe31x [list \
   "system_top.v" \
   "system_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v"]
+  "$ad_hdl_dir/library/common/ad_iobuf.v"]
 
 adi_project_run usrpe31x
 source $ad_hdl_dir/library/axi_ad9361/axi_ad9361_delay.tcl

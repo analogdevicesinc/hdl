@@ -22,7 +22,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   [RX/TX]_JESD_NP : Number of bits per sample, only 16 is supported
 #   [RX/TX]_NUM_LINKS : Number of links, matches numer of MxFE devices
 #
-#  
+#
 #  !!! For this carrier only 8B10B mode is supported !!!
 #
 
@@ -45,7 +45,7 @@ adi_project_files ad9081_fmca_ebz_zcu102 [list \
   "system_constr.xdc"\
   "timing_constr.xdc"\
   "../../../library/common/ad_3w_spi.v"\
-  "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
+  "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/zcu102/zcu102_system_constr.xdc" ]
 
 

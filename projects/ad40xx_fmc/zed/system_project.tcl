@@ -25,13 +25,13 @@ adi_project ad40xx_fmc_zed
 
 if {$ad40xx_adaq400x_n == 1} {
   adi_project_files ad40xx_fmc_zed [list \
-      "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
+      "$ad_hdl_dir/library/common/ad_iobuf.v" \
       "system_top_ad40xx.v" \
       "system_constr_ad40xx.xdc" \
       "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc"]
 } elseif {$ad40xx_adaq400x_n == 0} {
   adi_project_files ad40xx_fmc_zed [list \
-      "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
+      "$ad_hdl_dir/library/common/ad_iobuf.v" \
       "system_top_adaq400x.v" \
       "system_constr_adaq400x.xdc" \
       "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc"]

@@ -23,7 +23,7 @@ adi_project ad7616_sdz_zed
 if { $ad7616_if == 0 } {
 
   adi_project_files ad7616_sdz_zed [list \
-    "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
+    "$ad_hdl_dir/library/common/ad_iobuf.v" \
     "system_top_si.v" \
     "serial_if_constr.xdc" \
     "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc"]
@@ -31,7 +31,7 @@ if { $ad7616_if == 0 } {
 } elseif { $ad7616_if == 1 } {
 
   adi_project_files ad7616_sdz_zed [list \
-    "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
+    "$ad_hdl_dir/library/common/ad_iobuf.v" \
     "system_top_pi.v" \
     "parallel_if_constr.xdc" \
     "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc"]

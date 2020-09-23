@@ -24,7 +24,7 @@ adi_project_files  fmcomms8_adrv9009zu11eg [list \
   "../common/adrv9009zu11eg_spi.v" \
   "../common/adrv9009zu11eg_constr.xdc" \
   "../common/adrv2crr_fmc_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
+  "$ad_hdl_dir/library/common/ad_iobuf.v" \
  ]
 
 adi_project_run fmcomms8_adrv9009zu11eg

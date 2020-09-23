@@ -10,7 +10,7 @@ source $ad_hdl_dir/projects/common/a10soc/a10soc_plddr4_assign.tcl
 # files
 
 set_global_assignment -name VERILOG_FILE ../common/fmcomms8_spi.v
-set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/xilinx/common/ad_iobuf.v
+set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/ad_iobuf.v
 
 # fmcomms8
 

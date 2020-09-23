@@ -7,7 +7,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 # other case use the default value
 #
 #   Use over-writable parameters from the environment.
-#    
+#
 #    e.g.
 #      make JESD_MODE=64B66B RX_RATE=24.75 TX_RATE=12.375 REF_CLK_RATE=375 RX_JESD_L=4 TX_JESD_L=4
 #      make JESD_MODE=64B66B RX_RATE=16.22016 TX_RATE=16.22016 REF_CLK_RATE=245.76 RX_JESD_M=8 RX_JESD_L=2 TX_JESD_M=16 TX_JESD_L=4
@@ -59,7 +59,7 @@ adi_project_files ad9081_fmca_ebz_vcu118 [list \
   "system_constr.xdc"\
   "timing_constr.xdc"\
   "../../../library/common/ad_3w_spi.v"\
-  "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
+  "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/vcu118/vcu118_system_constr.xdc" ]
 
 
