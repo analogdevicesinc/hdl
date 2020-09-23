@@ -8,6 +8,15 @@ create_bd_port -dir I adc_data_ready
 ad_ip_instance axi_iic axi_iic_cn0540
 ad_connect iic_cn0540 axi_iic_cn0540/iic
 
+# Generate a 80MHz spi_clk for the SPI Engine (targeted SCLK is 20MHz)
+
+ad_ip_instance axi_clkgen spi_clkgen
+ad_ip_parameter spi_clkgen CONFIG.CLK0_DIV 10
+ad_ip_parameter spi_clkgen CONFIG.VCO_DIV 1
+ad_ip_parameter spi_clkgen CONFIG.VCO_MUL 8
+ad_connect $sys_cpu_clk spi_clkgen/clk
+ad_connect spi_clk spi_clkgen/clk_0
+
 # create a SPI Engine architecture for ADC
 
 create_bd_cell -type hier spi_adc
@@ -87,7 +96,7 @@ ad_connect  $sys_cpu_resetn spi_adc/resetn
 ad_connect  $sys_cpu_resetn axi_cn0540_dma/m_dest_axi_aresetn
 
 ad_connect  spi_adc/m_spi adc_spi
-ad_connect  $sys_dma_clk spi_adc/spi_clk
+ad_connect  spi_clk spi_adc/spi_clk
 ad_connect  axi_cn0540_dma/s_axis spi_adc/M_AXIS_SAMPLE
 
 # AXI address definitions
@@ -95,8 +104,9 @@ ad_connect  axi_cn0540_dma/s_axis spi_adc/M_AXIS_SAMPLE
 ad_cpu_interconnect 0x44a00000 spi_adc/axi_regmap
 ad_cpu_interconnect 0x44a30000 axi_cn0540_dma
 ad_cpu_interconnect 0x44a40000 axi_iic_cn0540
+ad_cpu_interconnect 0x44a70000 spi_clkgen
 
-ad_connect $sys_dma_clk axi_cn0540_dma/s_axis_aclk
+ad_connect spi_clk axi_cn0540_dma/s_axis_aclk
 
 # interrupts
 
