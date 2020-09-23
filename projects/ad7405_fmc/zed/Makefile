@@ -10,7 +10,7 @@ M_DEPS += system_constr_differential.xdc
 M_DEPS += ../common/ad7405_bd.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
 M_DEPS += ../../common/zed/zed_system_bd.tcl
-M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
+M_DEPS += ../../../library/common/ad_iobuf.v
 
 LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_dmac

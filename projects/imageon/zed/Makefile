@@ -7,7 +7,7 @@ PROJECT_NAME := imageon_zed
 
 M_DEPS += ../common/imageon_bd.tcl
 M_DEPS += ../../common/zed/zed_system_bd.tcl
-M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
+M_DEPS += ../../../library/common/ad_iobuf.v
 
 LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_dmac

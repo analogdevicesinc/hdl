@@ -12,7 +12,7 @@ M_DEPS += ../../common/a10soc/a10soc_system_qsys.tcl
 M_DEPS += ../../common/a10soc/a10soc_system_assign.tcl
 M_DEPS += ../../common/a10soc/a10soc_plddr4_dacfifo_qsys.tcl
 M_DEPS += ../../common/a10soc/a10soc_plddr4_assign.tcl
-M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
+M_DEPS += ../../../library/common/ad_iobuf.v
 
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_sysid

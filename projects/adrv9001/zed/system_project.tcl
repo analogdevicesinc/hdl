@@ -10,7 +10,7 @@ adi_project_files adrv9001_zed [list \
   "system_top.v" \
   "system_constr.xdc" \
   "cmos_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
+  "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc" ]
 
 set_property PROCESSING_ORDER LATE [get_files system_constr.xdc]

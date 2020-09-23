@@ -7,7 +7,7 @@ PROJECT_NAME := m2k
 
 M_DEPS += ../common/m2k_spi.v
 M_DEPS += ../common/m2k_bd.tcl
-M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
+M_DEPS += ../../../library/common/ad_iobuf.v
 
 LIB_DEPS += axi_ad9963
 LIB_DEPS += axi_adc_decimate

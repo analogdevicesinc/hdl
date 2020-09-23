@@ -11,8 +11,8 @@ M_DEPS += ../../common/xilinx/dacfifo_bd.tcl
 M_DEPS += ../../common/xilinx/adcfifo_bd.tcl
 M_DEPS += ../../common/vcu118/vcu118_system_constr.xdc
 M_DEPS += ../../common/vcu118/vcu118_system_bd.tcl
-M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
+M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/common/ad_3w_spi.v
 
 LIB_DEPS += axi_dmac

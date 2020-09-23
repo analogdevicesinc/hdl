@@ -11,9 +11,9 @@ M_DEPS += ../../common/zc706/zc706_system_constr.xdc
 M_DEPS += ../../common/zc706/zc706_system_bd.tcl
 M_DEPS += ../../common/zc706/zc706_plddr3_constr.xdc
 M_DEPS += ../../common/zc706/zc706_plddr3_adcfifo_bd.tcl
-M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
 M_DEPS += ../../../library/common/ad_sysref_gen.v
+M_DEPS += ../../../library/common/ad_iobuf.v
 
 LIB_DEPS += axi_ad9625
 LIB_DEPS += axi_clkgen

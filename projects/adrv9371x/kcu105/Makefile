@@ -13,10 +13,10 @@ M_DEPS += ../../common/kcu105/kcu105_system_mig.tcl
 M_DEPS += ../../common/kcu105/kcu105_system_lutram_constr.xdc
 M_DEPS += ../../common/kcu105/kcu105_system_constr.xdc
 M_DEPS += ../../common/kcu105/kcu105_system_bd.tcl
-M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
 M_DEPS += ../../../library/util_cdc/sync_bits.v
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
 M_DEPS += ../../../library/common/util_pulse_gen.v
+M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/common/ad_bus_mux.v
 
 LIB_DEPS += axi_clkgen

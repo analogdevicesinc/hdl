@@ -7,7 +7,7 @@ adi_project fmcomms5_zc702
 adi_project_files fmcomms5_zc702 [list \
   "system_top.v" \
   "system_constr.xdc"\
-  "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
+  "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/zc702/zc702_system_constr.xdc" ]
 
 adi_project_run fmcomms5_zc702

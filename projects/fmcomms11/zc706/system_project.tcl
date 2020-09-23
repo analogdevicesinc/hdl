@@ -8,7 +8,7 @@ adi_project_files fmcomms11_zc706 [list \
   "../common/fmcomms11_spi.v" \
   "system_top.v" \
   "system_constr.xdc"\
-  "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
+  "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/zc706/zc706_plddr3_constr.xdc" \
   "$ad_hdl_dir/projects/common/zc706/zc706_system_constr.xdc" ]
 

@@ -8,7 +8,7 @@ adi_project_files daq3_kcu105 [list \
   "../common/daq3_spi.v" \
   "system_top.v" \
   "system_constr.xdc"\
-  "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
+  "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/kcu105/kcu105_system_constr.xdc" ]
 
 ## To improve timing in DDR4 MIG
