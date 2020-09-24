@@ -76,8 +76,6 @@ set_instance_assignment -name IO_STANDARD "1.8 V"     -to hps_emac_tx[3]
 set_instance_assignment -name IO_STANDARD "1.8 V"     -to hps_emac_mdc
 set_instance_assignment -name IO_STANDARD "1.8 V"     -to hps_emac_mdio
 
-set_instance_assignment -name CURRENT_STRENGTH "4ma"  -to hps_emac_rx_clk
-set_instance_assignment -name CURRENT_STRENGTH "8ma"  -to hps_emac_rx_ctl
 set_instance_assignment -name CURRENT_STRENGTH "4ma"  -to hps_emac_tx_clk
 set_instance_assignment -name CURRENT_STRENGTH "8ma"  -to hps_emac_tx_ctl
 set_instance_assignment -name CURRENT_STRENGTH "8ma"  -to hps_emac_tx[0]
@@ -294,7 +292,6 @@ set_location_assignment PIN_F32 -to hps_uart_tx
 
 set_instance_assignment -name IO_STANDARD "1.8V" -to hps_uart_rx
 set_instance_assignment -name IO_STANDARD "1.8V" -to hps_uart_tx
-set_instance_assignment -name CURRENT_STRENGTH "8ma" -to hps_uart_rx
 set_instance_assignment -name CURRENT_STRENGTH "8ma" -to hps_uart_tx
 
 # hps-gpio OOBE daughter card
