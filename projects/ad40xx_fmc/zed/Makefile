@@ -11,6 +11,7 @@ M_DEPS += ../common/ad40xx_bd.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
 M_DEPS += ../../common/zed/zed_system_bd.tcl
 M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
+M_DEPS += ../common/config.tcl
 
 LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_dmac

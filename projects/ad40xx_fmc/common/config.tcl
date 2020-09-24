@@ -37,3 +37,4 @@ proc get_config_param {param} {
 
   return [lindex $params($device,$mode) $index]
 }
+
