@@ -155,7 +155,9 @@ module system_top (
 
   inout                   sm_fan_tach,
   input                   vadj_err,
-  output                  platform_status
+  output                  platform_status,
+
+  inout                   tdd_sync
 );
 
   // internal registers
@@ -182,6 +184,9 @@ module system_top (
   wire            rx2_enable_s;
   wire            tx1_enable_s;
   wire            tx2_enable_s;
+  wire            tdd_sync_loc;
+  wire            tdd_sync_i;
+  wire            tdd_sync_cntr;
 
   // instantiations
 
@@ -228,6 +233,13 @@ module system_top (
   assign gpio_i[54:48] = gpio_o[54:48];
   assign gpio_i[55] = vadj_err;
   assign gpio_i[63:56] = gpio_o[63:56];
+
+  assign tdd_sync_loc = gpio_o[56];
+
+  // tdd_sync_loc - local sync signal from a GPIO or other source
+  // tdd_sync - external sync 
+  assign tdd_sync_i = tdd_sync_cntr ? tdd_sync_loc : tdd_sync;
+  assign tdd_sync = tdd_sync_cntr ? tdd_sync_loc : 1'bz;
 
    ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_iic_scl (
     .dio_t ({iic_mux_scl_t_s,iic_mux_scl_t_s}),
@@ -341,6 +353,9 @@ module system_top (
     .gpio_rx2_enable_in (gpio_rx2_enable_in),
     .gpio_tx1_enable_in (gpio_tx1_enable_in),
     .gpio_tx2_enable_in (gpio_tx2_enable_in),
+
+    .tdd_sync (tdd_sync_i),
+    .tdd_sync_cntr (tdd_sync_cntr),
 
     .spi0_clk_i (1'b0),
     .spi0_clk_o (spi_clk_s),
