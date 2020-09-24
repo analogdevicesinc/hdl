@@ -130,4 +130,7 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_clk
 set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_sdio
 set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_dir
 
+# set optimization to get a better timing closure
+set_global_assignment -name OPTIMIZATION_MODE "HIGH PERFORMANCE EFFORT"
+
 execute_flow -compile
