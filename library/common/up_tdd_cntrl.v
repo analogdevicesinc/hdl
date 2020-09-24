@@ -340,6 +340,8 @@ module up_tdd_cntrl #(
           8'h3b: up_rdata <= { 8'h0, up_tdd_tx_dp_off_2};
           default: up_rdata <= 32'h0;
         endcase
+      end else begin
+        up_rdata <= 32'h0;
       end
     end
   end
