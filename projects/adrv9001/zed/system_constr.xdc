@@ -57,3 +57,7 @@ set_property  -dict {PACKAGE_PIN  R15   IOSTANDARD LVCMOS18} [get_ports gpio_bd[
 set_property  -dict {PACKAGE_PIN  K15   IOSTANDARD LVCMOS18} [get_ports gpio_bd[29]]      ; ## XADC-GIO2
 set_property  -dict {PACKAGE_PIN  J15   IOSTANDARD LVCMOS18} [get_ports gpio_bd[30]]      ; ## XADC-GIO3
 set_property  -dict {PACKAGE_PIN  G17   IOSTANDARD LVCMOS18} [get_ports gpio_bd[31]]      ; ## OTG-RESETN
+
+set_property  -dict {PACKAGE_PIN  Y11   IOSTANDARD LVCMOS33} [get_ports  tdd_sync]        ; ## JA1.JA1 
+
+
