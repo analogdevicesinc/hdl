@@ -89,9 +89,9 @@ for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: gen_char
 
   always @(*) begin
     if (i == DATA_PATH_WIDTH-1 && eomf == 1'b1) begin
-      char_align[i] <= 8'h7c; // /A/
+      char_align[i] = 8'h7c; // /A/
     end else begin
-      char_align[i] <= 8'hfc; // /F/
+      char_align[i] = 8'hfc; // /F/
     end
   end
 

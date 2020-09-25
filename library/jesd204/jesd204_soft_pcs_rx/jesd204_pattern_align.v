@@ -82,20 +82,20 @@ always @(*) begin
   for (i = 0; i < DATA_PATH_WIDTH*10+3; i = i + 1) begin
     if (i < DATA_PATH_WIDTH*10+1) begin
       case (align[3:2])
-      2'b00: aligned_data_stage1[i] <= full_data[i];
-      2'b01: aligned_data_stage1[i] <= full_data[i+4];
-      2'b10: aligned_data_stage1[i] <= full_data[i+8];
-      default: aligned_data_stage1[i] <= 1'b0;
+      2'b00: aligned_data_stage1[i] = full_data[i];
+      2'b01: aligned_data_stage1[i] = full_data[i+4];
+      2'b10: aligned_data_stage1[i] = full_data[i+8];
+      default: aligned_data_stage1[i] = 1'b0;
       endcase
     end else begin
       case (align[2])
-      1'b0: aligned_data_stage1[i] <= full_data[i];
-      default: aligned_data_stage1[i] <= full_data[i+4];
+      1'b0: aligned_data_stage1[i] = full_data[i];
+      default: aligned_data_stage1[i] = full_data[i+4];
       endcase
     end
   end
 
-  aligned_data_stage2 <= aligned_data_stage1[align[1:0]+:DATA_PATH_WIDTH*10];
+  aligned_data_stage2 = aligned_data_stage1[align[1:0]+:DATA_PATH_WIDTH*10];
 end
 
 always @(posedge clk) begin
