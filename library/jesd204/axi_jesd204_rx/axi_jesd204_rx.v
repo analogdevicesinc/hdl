@@ -162,7 +162,8 @@ sync_event #(
 
 assign up_irq_trigger = {3'b0,
                          up_event_unexpected_lane_state_error,
-                         up_event_frame_alignment_error};
+                         up_event_frame_alignment_error} &
+                        {5{~up_cfg_is_writeable}};
 
 up_axi #(
   .AXI_ADDRESS_WIDTH (14)
