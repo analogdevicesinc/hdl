@@ -30,7 +30,6 @@ set_property  -dict {PACKAGE_PIN  G16  IOSTANDARD LVCMOS25} [get_ports data_bd[1
 set_property  -dict {PACKAGE_PIN  E21  IOSTANDARD LVCMOS25} [get_ports data_bd[14]]   ; ## C26  FMC_LPC_LA27_P
 set_property  -dict {PACKAGE_PIN  D21  IOSTANDARD LVCMOS25} [get_ports data_bd[15]]   ; ## C27  FMC_LPC_LA27_P
 
-
 set_property  -dict {PACKAGE_PIN  M19  IOSTANDARD LVCMOS25} [get_ports rx_clk]        ; ## G06  FMC_LPC_LA00_CC_P 
 set_property  -dict {PACKAGE_PIN  L17  IOSTANDARD LVCMOS25} [get_ports rxiq]          ; ## D17  FMC_LPC_LA13_P
 set_property  -dict {PACKAGE_PIN  P17  IOSTANDARD LVCMOS25} [get_ports rxd[0]]        ; ## H07  FMC_LPC_LA02_P
@@ -72,9 +71,3 @@ create_clock -name clk_fpga_3 -period 18 [get_pins "i_system_wrapper/system_i/sy
 
 set_clock_groups -name exclusive_ -physically_exclusive \
 -group  [get_clocks data_clk] -group  [get_clocks rx_clk]
-
-
-#set_clock_groups -name exclusive_ -physically_exclusive \
-#-group  [get_clocks data_clk] -group  [get_clocks clk_fpga_2]
-
-#set_false_path -from [get_clocks data_clk] -to [get_pins {i_system_wrapper/system_i/logic_analyzer/inst/data_m1_reg[0]/D}]
