@@ -257,66 +257,66 @@ wire [20:0] clk_mon_count;
 always @(*) begin
   case (up_raddr)
   /* Standard registers */
-  12'h000: up_rdata <= PCORE_VERSION;
-  12'h001: up_rdata <= ID;
-  12'h002: up_rdata <= up_scratch;
-  12'h003: up_rdata <= PCORE_MAGIC;
+  12'h000: up_rdata = PCORE_VERSION;
+  12'h001: up_rdata = ID;
+  12'h002: up_rdata = up_scratch;
+  12'h003: up_rdata = PCORE_MAGIC;
 
   /* Core configuration */
-  12'h004: up_rdata <= NUM_LANES;
-  12'h005: up_rdata <= DATA_PATH_WIDTH;
-  12'h006: up_rdata <= {22'b0,LINK_MODE[1:0], NUM_LINKS[7:0]};
+  12'h004: up_rdata = NUM_LANES;
+  12'h005: up_rdata = DATA_PATH_WIDTH;
+  12'h006: up_rdata = {22'b0,LINK_MODE[1:0], NUM_LINKS[7:0]};
   /* 0x07-0x0f reserved for future use */
   /* 0x10-0x1f reserved for core specific HDL configuration information */
 
   /* IRQ block */
-  12'h020: up_rdata <= up_irq_enable;
-  12'h021: up_rdata <= up_irq_pending;
-  12'h022: up_rdata <= up_irq_source;
+  12'h020: up_rdata = up_irq_enable;
+  12'h021: up_rdata = up_irq_pending;
+  12'h022: up_rdata = up_irq_source;
   /* 0x23-0x30 reserved for future use */
 
   /* JESD common control */
-  12'h030: up_rdata <= up_reset_core;
-  12'h031: up_rdata <= {up_core_reset_ext, up_reset_synchronizer}; /* core ready */
-  12'h032: up_rdata <= {11'h00, clk_mon_count}; /* Make it 16.16 */
+  12'h030: up_rdata = up_reset_core;
+  12'h031: up_rdata = {up_core_reset_ext, up_reset_synchronizer}; /* core ready */
+  12'h032: up_rdata = {11'h00, clk_mon_count}; /* Make it 16.16 */
   /* 0x32-0x34 reserver for future use */
 
-  12'h080: up_rdata <= up_cfg_lanes_disable;
+  12'h080: up_rdata = up_cfg_lanes_disable;
   /* 0x82-0x83 reserved for future lane disable bits (max 128 lanes) */
-  12'h084: up_rdata <= {
+  12'h084: up_rdata = {
     /* 24-31 */ 8'h00, /* Reserved for future extensions of octets_per_frame */
     /* 16-23 */ up_cfg_octets_per_frame,
     /* 10-15 */ 6'b000000, /* Reserved for future extensions of beats_per_multiframe */
     /* 00-09 */ up_cfg_beats_per_multiframe,{DATA_PATH_WIDTH{1'b1}}
   };
-  12'h85: up_rdata <= {
+  12'h85: up_rdata = {
     /* 02-31 */ 30'h00, /* Reserved for future additions */
     /*    01 */ up_cfg_disable_char_replacement, /* Disable character replacement */
     /*    00 */ up_cfg_disable_scrambler /* Disable scrambler */
   };
-  12'h086: up_rdata <= up_cfg_links_disable;
+  12'h086: up_rdata = up_cfg_links_disable;
   /* 0x87-0x8f reserved for future use */
 
   /* 0x90-0x9f reserved for core specific configuration options */
 
   /* 0xb0 Stat control */
-  12'h0b1: up_rdata <= up_link_enable_cnt_s;
+  12'h0b1: up_rdata = up_link_enable_cnt_s;
   /* 0xb4-0xb7 IRQ Stat, max 8 interrupt sources */
-  12'h0b4: up_rdata <= up_irq_event_cnt_bus[0*32 +: 32];
-  12'h0b5: up_rdata <= up_irq_event_cnt_bus[1*32 +: 32];
-  12'h0b6: up_rdata <= up_irq_event_cnt_bus[2*32 +: 32];
-  12'h0b7: up_rdata <= up_irq_event_cnt_bus[3*32 +: 32];
+  12'h0b4: up_rdata = up_irq_event_cnt_bus[0*32 +: 32];
+  12'h0b5: up_rdata = up_irq_event_cnt_bus[1*32 +: 32];
+  12'h0b6: up_rdata = up_irq_event_cnt_bus[2*32 +: 32];
+  12'h0b7: up_rdata = up_irq_event_cnt_bus[3*32 +: 32];
 
-  default: up_rdata <= 'h00;
+  default: up_rdata = 'h00;
   endcase
 end
 
 /* IRQ pending register is write-1-to-clear */
 always @(*) begin
   if (up_wreq == 1'b1 && up_waddr == 12'h21) begin
-    up_irq_clear <= up_wdata[NUM_IRQS-1:0];
+    up_irq_clear = up_wdata[NUM_IRQS-1:0];
   end else begin
-    up_irq_clear <= {NUM_IRQS{1'b0}};
+    up_irq_clear = {NUM_IRQS{1'b0}};
   end
 end
 

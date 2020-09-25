@@ -137,23 +137,23 @@ localparam LANE_BASE_ADDR = 'h300 / 32;
 always @(*) begin
   case (up_raddr)
   /* Core configuration */
-  12'h010: up_rdata <= ELASTIC_BUFFER_SIZE; /* Elastic buffer size in octets */
+  12'h010: up_rdata = ELASTIC_BUFFER_SIZE; /* Elastic buffer size in octets */
 
   /* JESD RX configuraton */
-  12'h090: up_rdata <= {
+  12'h090: up_rdata = {
     /* 17-31 */ 15'h00, /* Reserved for future additions */
     /*    16 */ up_cfg_buffer_early_release, /* Release buffer as soon as all lanes are ready. */
     /* 10-15 */ 6'b0000, /* Reserved for future extensions of buffer_delay */
     /* 02-09 */ up_cfg_buffer_delay, /* Buffer release delay */
     /* 00-01 */ 2'b00 /* Data path width alignment */
   };
-  12'h91: up_rdata <= {
+  12'h91: up_rdata = {
     /* 15-31 */ 17'h00, /* Reserved for future additions */
     /* 08-14 */ up_ctrl_err_statistics_mask,
     /* 01-07 */ 7'h0,
     /*    00 */ up_ctrl_err_statistics_reset
   };
-  12'h92: up_rdata <= {
+  12'h92: up_rdata = {
     /* 08-31 */ 24'h0,
     /* 00-07 */ up_cfg_frame_align_err_threshold
   };
@@ -161,7 +161,7 @@ always @(*) begin
   /* 0x93-0x9f reserved for future use */
 
   /* JESD RX status */
-  12'ha0: up_rdata <= {
+  12'ha0: up_rdata = {
     /* 04-31 */ 28'h00, /* Reserved for future additions */
     /* 02-03 */ 2'b00, /* Reserved for future extensions of ctrl_state */
     /* 00-01 */ up_status_ctrl_state /* State of the internal state machine */
@@ -169,9 +169,9 @@ always @(*) begin
   default: begin
     if (up_raddr[11:3] >= LANE_BASE_ADDR &&
         up_raddr[11:3] < LANE_BASE_ADDR + NUM_LANES) begin
-      up_rdata <= up_lane_rdata[up_raddr[11:3] - LANE_BASE_ADDR];
+      up_rdata = up_lane_rdata[up_raddr[11:3] - LANE_BASE_ADDR];
     end else begin
-      up_rdata <= 'h00;
+      up_rdata = 'h00;
     end
   end
   endcase

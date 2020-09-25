@@ -111,15 +111,15 @@ genvar ii;
 generate
 for (ii = 0; ii < DATA_PATH_WIDTH; ii = ii + 1) begin: gen_k_char
   always @(*) begin
-    char_is_a[ii] <= 1'b0;
-    char_is_f[ii] <= 1'b0;
+    char_is_a[ii] = 1'b0;
+    char_is_f[ii] = 1'b0;
 
     if(charisk28[ii]) begin
       if(data[ii*8+7:ii*8+5] == 3'd3) begin
-        char_is_a[ii] <= 1'b1;
+        char_is_a[ii] = 1'b1;
       end
       if(data[ii*8+7:ii*8+5] == 3'd7) begin
-        char_is_f[ii] <= 1'b1;
+        char_is_f[ii] = 1'b1;
       end
     end
   end

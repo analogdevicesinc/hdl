@@ -129,20 +129,20 @@ for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: gen_char
   assign char_is_valid[i] = ~(phy_notintable[i] | phy_disperr[i]);
 
   always @(*) begin
-    char_is_error[i] <= ~char_is_valid[i];
+    char_is_error[i] = ~char_is_valid[i];
 
-    char_is_cgs[i] <= 1'b0;
-    charisk28[i] <= 1'b0;
-    unexpected_char[i] <= 1'b0;
+    char_is_cgs[i] = 1'b0;
+    charisk28[i] = 1'b0;
+    unexpected_char[i] = 1'b0;
 
     if (phy_charisk[i] == 1'b1 && char_is_valid[i] == 1'b1) begin
       if (char[i][4:0] == 'd28) begin
-        charisk28[i] <= 1'b1;
+        charisk28[i] = 1'b1;
         if (char[i][7:5] == 'd5) begin
-          char_is_cgs[i] <= 1'b1;
+          char_is_cgs[i] = 1'b1;
         end
       end else begin
-        unexpected_char[i] <= 1'b1;
+        unexpected_char[i] = 1'b1;
       end
     end
   end

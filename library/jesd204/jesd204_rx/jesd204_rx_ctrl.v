@@ -122,11 +122,11 @@ end
 
 always @(*) begin
   case (state)
-  STATE_RESET: state_good <= 1'b1;
-  STATE_WAIT_FOR_PHY: state_good <= phy_ready;
-  STATE_CGS: state_good <= &(cgs_ready | cfg_lanes_disable);
-  STATE_SYNCHRONIZED: state_good <= 1'b1;
-  default: state_good <= 1'b0;
+  STATE_RESET: state_good = 1'b1;
+  STATE_WAIT_FOR_PHY: state_good = phy_ready;
+  STATE_CGS: state_good = &(cgs_ready | cfg_lanes_disable);
+  STATE_SYNCHRONIZED: state_good = 1'b1;
+  default: state_good = 1'b0;
   endcase
 end
 
@@ -156,10 +156,10 @@ end
 
 always @(*) begin
   case (state)
-  STATE_RESET: next_state <= STATE_WAIT_FOR_PHY;
-  STATE_WAIT_FOR_PHY: next_state <= STATE_CGS;
-  STATE_CGS: next_state <= STATE_SYNCHRONIZED;
-  default: next_state <= state_good ? state : STATE_RESET;
+  STATE_RESET: next_state = STATE_WAIT_FOR_PHY;
+  STATE_WAIT_FOR_PHY: next_state = STATE_CGS;
+  STATE_CGS: next_state = STATE_SYNCHRONIZED;
+  default: next_state = state_good ? state : STATE_RESET;
   endcase
 end
 

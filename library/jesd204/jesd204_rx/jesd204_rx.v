@@ -438,9 +438,9 @@ end
 
 always @(*) begin
   case (SCRAMBLER_REGISTERED + ALIGN_MUX_REGISTERED)
-  1: ifs_ready_mux <= ifs_ready_d1;
-  2: ifs_ready_mux <= ifs_ready_d2;
-  default: ifs_ready_mux <= ifs_ready;
+  1: ifs_ready_mux = ifs_ready_d1;
+  2: ifs_ready_mux = ifs_ready_d2;
+  default: ifs_ready_mux = ifs_ready;
   endcase
 end
 

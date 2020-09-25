@@ -126,9 +126,9 @@ end
 
 always @(*) begin
   if (lmfc_counter == cfg_beats_per_multiframe) begin
-    lmfc_counter_next <= 'h00;
+    lmfc_counter_next = 'h00;
   end else begin
-    lmfc_counter_next <= lmfc_counter + 1'b1;
+    lmfc_counter_next = lmfc_counter + 1'b1;
   end
 end
 
