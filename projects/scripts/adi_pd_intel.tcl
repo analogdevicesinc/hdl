@@ -95,7 +95,7 @@ proc rev_by_string {str} {
 # \param[custom_string] - string input
 #
 
-proc sysid_gen_sys_init_file {custom_string} {
+proc sysid_gen_sys_init_file {{custom_string {}}} {
 
   global project_name;
   puts "project_name: $project_name";
