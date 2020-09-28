@@ -67,8 +67,10 @@ module jesd204_tx #(
 
   input [DATA_PATH_WIDTH*8*NUM_LANES-1:0] tx_data,
   output tx_ready,
-  output reg [DATA_PATH_WIDTH-1:0] tx_eof,
-  output reg [DATA_PATH_WIDTH-1:0] tx_sof,
+  output [DATA_PATH_WIDTH-1:0] tx_eof,
+  output [DATA_PATH_WIDTH-1:0] tx_sof,
+  output [DATA_PATH_WIDTH-1:0] tx_somf,
+  output [DATA_PATH_WIDTH-1:0] tx_eomf,
   input tx_valid,
 
   input [NUM_LANES-1:0] cfg_lanes_disable,
@@ -122,18 +124,21 @@ wire [CW-1:0] phy_charisk_r;
 wire [HW-1:0] phy_header_r;
 
 wire eof_gen_reset;
+wire tx_ready_64b_next;
 reg tx_ready_64b;
 wire frame_mark_reset;
-reg [DATA_PATH_WIDTH-1:0] tx_somf;
-reg [DATA_PATH_WIDTH-1:0] tx_eomf;
-reg [DATA_PATH_WIDTH-1:0] tx_sof_early1;
-reg [DATA_PATH_WIDTH-1:0] tx_eof_early1;
-reg [DATA_PATH_WIDTH-1:0] tx_somf_early1;
-reg [DATA_PATH_WIDTH-1:0] tx_eomf_early1;
-wire [DATA_PATH_WIDTH-1:0] tx_sof_early2;
-wire [DATA_PATH_WIDTH-1:0] tx_eof_early2;
-wire [DATA_PATH_WIDTH-1:0] tx_somf_early2;
-wire [DATA_PATH_WIDTH-1:0] tx_eomf_early2;
+wire [DATA_PATH_WIDTH-1:0] tx_sof_fm;
+wire [DATA_PATH_WIDTH-1:0] tx_eof_fm;
+wire [DATA_PATH_WIDTH-1:0] tx_somf_fm;
+wire [DATA_PATH_WIDTH-1:0] tx_eomf_fm;
+reg [DATA_PATH_WIDTH-1:0] tx_sof_fm_d1;
+reg [DATA_PATH_WIDTH-1:0] tx_eof_fm_d1;
+reg [DATA_PATH_WIDTH-1:0] tx_somf_fm_d1;
+reg [DATA_PATH_WIDTH-1:0] tx_eomf_fm_d1;
+reg [DATA_PATH_WIDTH-1:0] tx_sof_fm_d2;
+reg [DATA_PATH_WIDTH-1:0] tx_eof_fm_d2;
+reg [DATA_PATH_WIDTH-1:0] tx_somf_fm_d2;
+reg [DATA_PATH_WIDTH-1:0] tx_eomf_fm_d2;
 wire lmc_edge;
 wire lmc_quarter_edge;
 wire eoemb;
@@ -163,7 +168,7 @@ jesd204_lmfc #(
   .eoemb(eoemb)
 );
 
-assign frame_mark_reset = (LINK_MODE == 1) ? eof_gen_reset : ~tx_ready_64b;
+assign frame_mark_reset = (LINK_MODE == 1) ? eof_gen_reset : ~tx_ready_64b_next;
 
 jesd204_frame_mark #(
   .DATA_PATH_WIDTH            (DATA_PATH_WIDTH)
@@ -172,30 +177,35 @@ jesd204_frame_mark #(
   .reset                      (frame_mark_reset),
   .cfg_octets_per_multiframe  (cfg_octets_per_multiframe),
   .cfg_octets_per_frame       (cfg_octets_per_frame),
-  .sof                        (tx_sof_early2),
-  .eof                        (tx_eof_early2),
-  .somf                       (tx_somf_early2),
-  .eomf                       (tx_eomf_early2)
+  .sof                        (tx_sof_fm),
+  .eof                        (tx_eof_fm),
+  .somf                       (tx_somf_fm),
+  .eomf                       (tx_eomf_fm)
 );
 
 always @(posedge clk) begin
-  tx_sof_early1  <= tx_sof_early2;
-  tx_eof_early1  <= tx_eof_early2;
-  tx_somf_early1 <= tx_somf_early2;
-  tx_eomf_early1 <= tx_eomf_early2;
-  tx_sof  <= tx_sof_early1;
-  tx_eof  <= tx_eof_early1;
-  tx_somf <= tx_somf_early1;
-  tx_eomf <= tx_eomf_early1;
+  tx_sof_fm_d1  <= tx_sof_fm;
+  tx_eof_fm_d1  <= tx_eof_fm;
+  tx_somf_fm_d1 <= tx_somf_fm;
+  tx_eomf_fm_d1 <= tx_eomf_fm;
+  tx_sof_fm_d2  <= tx_sof_fm_d1;
+  tx_eof_fm_d2  <= tx_eof_fm_d1;
+  tx_somf_fm_d2 <= tx_somf_fm_d1;
+  tx_eomf_fm_d2 <= tx_eomf_fm_d1;
 end
+
+assign tx_sof = (LINK_MODE == 1) ? tx_sof_fm_d2 : tx_sof_fm;
+assign tx_eof = (LINK_MODE == 1) ? tx_eof_fm_d2 : tx_eof_fm;
+assign tx_somf = (LINK_MODE == 1) ? tx_somf_fm_d2 : tx_somf_fm;
+assign tx_eomf = (LINK_MODE == 1) ? tx_eomf_fm_d2 : tx_eomf_fm;
 
 generate
 genvar i;
 
 if (LINK_MODE[0] == 1) begin : mode_8b10b
 
-reg [DATA_PATH_WIDTH-1:0] tx_eof_d;
-reg [DATA_PATH_WIDTH-1:0] tx_eomf_d;
+reg [DATA_PATH_WIDTH-1:0] tx_eof_fm_d3;
+reg [DATA_PATH_WIDTH-1:0] tx_eomf_fm_d3;
 wire [NUM_LANES-1:0] lane_cgs_enable;
 wire [DW-1:0] ilas_data;
 wire [DATA_PATH_WIDTH*NUM_LANES-1:0] ilas_charisk;
@@ -203,8 +213,8 @@ wire [DATA_PATH_WIDTH*NUM_LANES-1:0] ilas_charisk;
 wire cfg_generate_eomf = 1'b1;
 
 always @(posedge clk) begin
-  tx_eof_d <= tx_eof;
-  tx_eomf_d <= tx_eomf;
+  tx_eof_fm_d3 <= tx_eof_fm_d2;
+  tx_eomf_fm_d3 <= tx_eomf_fm_d2;
 end
 
 jesd204_tx_ctrl #(
@@ -217,9 +227,9 @@ jesd204_tx_ctrl #(
 
   .sync(sync),
   .lmfc_edge(lmfc_edge),
-  .somf(tx_somf),
-  .somf_early2(tx_somf_early2),
-  .eomf(tx_eomf),
+  .somf(tx_somf_fm_d2),
+  .somf_early2(tx_somf_fm),
+  .eomf(tx_eomf_fm_d2),
 
   .lane_cgs_enable(lane_cgs_enable),
   .eof_reset(eof_gen_reset),
@@ -258,8 +268,8 @@ for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
   ) i_lane (
     .clk(clk),
 
-    .eof(tx_eof_d),
-    .eomf(tx_eomf_d),
+    .eof(tx_eof_fm_d3),
+    .eomf(tx_eomf_fm_d3),
 
     .cgs_enable(lane_cgs_enable[i]),
 
@@ -309,11 +319,13 @@ if (LINK_MODE[1] == 1) begin : mode_64b66b
     );
   end
 
+  assign tx_ready_64b_next = reset ? 1'b0 : (lmfc_edge || tx_ready_64b);
+
   always @(posedge clk) begin
     if (reset) begin
       tx_ready_64b <= 1'b0;
-    end else if (lmfc_edge) begin
-      tx_ready_64b <= 1'b1;
+    end else begin
+      tx_ready_64b <= tx_ready_64b_next;
     end
   end
 
