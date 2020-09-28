@@ -12,8 +12,8 @@ source ../common/daq3_bd.tcl
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
 ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/mem_init_sys.txt"
 ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
-set sys_cstring "sys rom custom string placeholder"
-sysid_gen_sys_init_file $sys_cstring
+
+sysid_gen_sys_init_file
 
 # configure the CPLL's to support 12.33Gbps
 ad_ip_parameter util_daq3_xcvr CONFIG.CPLL_CFG0 0x03fe
