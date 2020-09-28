@@ -859,7 +859,7 @@ proc hexstr_flip {str} {
 # \param[custom_string] - string input
 #
 
-proc sysid_gen_sys_init_file {custom_string} {
+proc sysid_gen_sys_init_file {{custom_string {}}} {
 
   # git sha
   if {[catch {exec git rev-parse HEAD} gitsha_string] != 0} {
