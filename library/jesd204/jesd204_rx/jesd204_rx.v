@@ -81,6 +81,8 @@ module jesd204_rx #(
   output rx_valid,
   output [DATA_PATH_WIDTH-1:0] rx_eof,
   output [DATA_PATH_WIDTH-1:0] rx_sof,
+  output [DATA_PATH_WIDTH-1:0] rx_eomf,
+  output [DATA_PATH_WIDTH-1:0] rx_somf,
 
   input [NUM_LANES-1:0] cfg_lanes_disable,
   input [NUM_LINKS-1:0] cfg_links_disable,
@@ -278,8 +280,8 @@ jesd204_frame_mark #(
   .cfg_octets_per_frame       (cfg_octets_per_frame),
   .sof                        (rx_sof),
   .eof                        (rx_eof),
-  .somf                       (),
-  .eomf                       ()
+  .somf                       (rx_somf),
+  .eomf                       (rx_eomf)
 );
 
 generate

@@ -108,7 +108,7 @@ module axi_jesd204_tx #(
   input [NUM_LINKS-1:0] core_status_sync
 );
 
-localparam PCORE_VERSION = 32'h00010461; // 1.04.a
+localparam PCORE_VERSION = 32'h00010561; // 1.04.a
 localparam PCORE_MAGIC = 32'h32303454; // 204T
 
 localparam DATA_PATH_WIDTH_LOG2 = (DATA_PATH_WIDTH == 8) ? 3 : 2;
