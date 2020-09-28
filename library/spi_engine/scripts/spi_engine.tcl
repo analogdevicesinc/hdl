@@ -1,4 +1,4 @@
-proc spi_engine_create {{name "hier_spi_engine"} {data_width 32} {async_spi_clk 1} {num_cs 1} {num_sdi 1} {sdi_delay 2}} {
+proc spi_engine_create {{name "spi_engine"} {data_width 32} {async_spi_clk 1} {num_cs 1} {num_sdi 1} {sdi_delay 0}} {
 
   create_bd_cell -type hier $name
   current_bd_instance /$name
