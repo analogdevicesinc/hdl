@@ -116,7 +116,7 @@ module axi_jesd204_rx #(
   input [8*NUM_LANES-1:0] core_status_lane_frame_align_err_cnt
 );
 
-localparam PCORE_VERSION = 32'h00010561; // 1.05.a
+localparam PCORE_VERSION = 32'h00010661; // 1.06.a
 localparam PCORE_MAGIC = 32'h32303452; // 204R
 
 localparam DATA_PATH_WIDTH_LOG2 = (DATA_PATH_WIDTH == 8) ? 3 : 2;
@@ -135,7 +135,7 @@ wire [31:0] up_rdata_common;
 wire [31:0] up_rdata_sysref;
 wire [31:0] up_rdata_rx;
 
-wire [4:0] up_irq_trigger;
+wire [4:0] up_irq_trigger = 5'b00000;
 
 wire up_cfg_is_writeable;
 wire up_cfg_sysref_oneshot;
