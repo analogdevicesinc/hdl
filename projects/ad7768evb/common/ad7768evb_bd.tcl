@@ -110,6 +110,7 @@ ad_connect  adc_gpio_3_t ad7768_gpio_2/gpio2_io_t
 
 ad_cpu_interrupt ps-13 mb-13  ad7768_dma/irq
 ad_cpu_interrupt ps-12 mb-12  ad7768_gpio/ip2intc_irpt
+ad_cpu_interrupt ps-10 mb-10  ad7768_gpio_2/ip2intc_irpt
 
 # cpu / memory interconnects
 
