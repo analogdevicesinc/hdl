@@ -240,7 +240,7 @@ end endgenerate
 
 assign spi_cmd_rd_addr_next = spi_cmd_rd_addr + 1;
 
-wire trigger_s;
+(* mark_debug = "true" *)wire trigger_s;
 sync_bits #(
   .NUM_OF_BITS(1),
   .ASYNC_CLK(ASYNC_TRIG)

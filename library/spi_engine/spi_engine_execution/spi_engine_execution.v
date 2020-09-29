@@ -95,6 +95,18 @@ localparam BIT_COUNTER_WIDTH = DATA_WIDTH > 16 ? 5 :
 localparam BIT_COUNTER_CARRY = 2** (BIT_COUNTER_WIDTH + 1);
 localparam BIT_COUNTER_CLEAR = {{8{1'b1}}, {BIT_COUNTER_WIDTH{1'b0}}, 1'b1};
 
+// Debug
+(* mark_debug = "true" *)wire dbg_cmd_ready = cmd_ready;
+(* mark_debug = "true" *)wire dbg_cmd_valid = cmd_valid;
+(* mark_debug = "true" *)wire [15:0] dbg_cmd = cmd;
+(* mark_debug = "true" *)wire dbg_sdi_data_ready = sdi_data_ready;
+(* mark_debug = "true" *)wire dbg_sdi_data_valid = sdi_data_valid;
+(* mark_debug = "true" *)wire [NUM_OF_SDI*DATA_WIDTH-1:0] dbg_sdi_data = sdi_data;
+(* mark_debug = "true" *)wire dbg_sync_ready = sync_ready;
+(* mark_debug = "true" *)wire dbg_sync_valid = sync_valid;
+(* mark_debug = "true" *)wire [7:0] dbg_sync = sync;
+(* mark_debug = "true" *)wire dbg_sclk_int = sclk_int;
+
 reg sclk_int = 1'b0;
 wire sdo_int_s;
 reg sdo_t_int = 1'b0;
