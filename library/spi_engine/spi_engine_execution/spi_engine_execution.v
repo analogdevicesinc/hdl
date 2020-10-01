@@ -421,17 +421,18 @@ if (ECHO_SCLK == 1) begin : g_echo_sclk_miso_latch
 
   for (i=0; i<NUM_OF_SDI; i=i+1) begin: g_sdi_shift_reg
 
-    reg [DATA_WIDTH-1:0] data_sdi_shift_n;
+    reg [DATA_WIDTH-1:0] data_sdi_shift;
 
+    // TODO: Maybe define an asynchronous reset here
     always @(negedge echo_sclk) begin
       if (cs_active_s) begin
-        data_sdi_shift_n <= 0;
+        data_sdi_shift <= 0;
       end else begin
-          data_sdi_shift_n <= {data_sdi_shift_n, sdi[i]};
+        data_sdi_shift <= {data_sdi_shift, sdi[i]};
       end
     end
 
-    assign sdi_data[i*DATA_WIDTH+:DATA_WIDTH] = data_sdi_shift_n;
+    assign sdi_data[i*DATA_WIDTH+:DATA_WIDTH] = data_sdi_shift;
 
   end
 
