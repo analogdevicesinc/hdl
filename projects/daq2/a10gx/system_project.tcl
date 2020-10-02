@@ -95,6 +95,6 @@ set_location_assignment PIN_AN19  -to spi_dir               ; ## G13  FMCA_LA08_
 
 ## improve timing - there are occasional timing failure with a small negative slack
 #  at no-MMU configuration
-set_global_assignment -name OPTIMIZATION_MODE "AGGRESSIVE PERFORMANCE"
+set_global_assignment -name OPTIMIZATION_MODE "SUPERIOR PERFORMANCE"
 
 execute_flow -compile
