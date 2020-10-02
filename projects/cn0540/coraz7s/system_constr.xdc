@@ -35,6 +35,6 @@ create_generated_clock -name spi_clk -source [get_pins -filter name=~*CLKIN1 -of
 create_generated_clock -name SCLK_clk -source [get_pins -hier -filter name=~*sclk_reg/C] -edges {1 3 5} [get_ports cn0540_spi_sclk]
 
 # input delays for MISO lines (SDO for the device)
-set_input_delay -clock [get_clocks SCLK_clk] -max  0.6 [get_ports cn0540_spi_miso] -clock_fall
-set_input_delay -clock [get_clocks SCLK_clk] -min  0.1 [get_ports cn0540_spi_miso] -clock_fall
+set_input_delay -clock [get_clocks spi_clk] [get_property PERIOD [get_clocks spi_clk]] \
+		[get_ports -filter {NAME =~ "cn0540_spi_miso"}]
 
