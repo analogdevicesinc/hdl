@@ -577,9 +577,9 @@ module axi_ad9001_core #(
     .up_rdata (up_rdata_s[7]),
     .up_rack (up_rack_s[7]));
 
-  assign tdd_rx2_rf_en = tx1_r1_mode&rx1_r1_mode ? tdd_rx2_rf_en_loc : tdd_rx1_rf_en;
-  assign tdd_tx2_rf_en = tx1_r1_mode&rx1_r1_mode ? tdd_tx2_rf_en_loc : tdd_tx1_rf_en;
-  assign tdd_if2_mode = tx1_r1_mode&rx1_r1_mode ? tdd_if2_mode_loc : tdd_if1_mode;
+  assign tdd_rx2_rf_en = rx1_r1_mode ? tdd_rx2_rf_en_loc : tdd_rx1_rf_en;
+  assign tdd_tx2_rf_en = tx1_r1_mode ? tdd_tx2_rf_en_loc : tdd_tx1_rf_en;
+  assign tdd_if2_mode = tx1_r1_mode||rx1_r1_mode ? tdd_if2_mode_loc : tdd_if1_mode;
 
   assign tdd_sync_cntr = tdd_sync_cntr1 | tdd_sync_cntr2;
 
