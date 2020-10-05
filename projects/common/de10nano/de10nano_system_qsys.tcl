@@ -14,8 +14,9 @@ set_interface_property sys_rst EXPORT_OF sys_clk.clk_in_reset
 
 add_instance sys_hps altera_hps
 set_instance_parameter_value sys_hps {MPU_EVENTS_Enable} {0}
-set_instance_parameter_value sys_hps {F2SDRAM_Type} {AXI-3}
-set_instance_parameter_value sys_hps {F2SDRAM_Width} {64}
+set_instance_parameter_value sys_hps {F2SCLK_SDRAMCLK_Enable} {0}
+set_instance_parameter_value sys_hps {F2SDRAM_Type} {AXI-3 AXI-3}
+set_instance_parameter_value sys_hps {F2SDRAM_Width} {128 128}
 set_instance_parameter_value sys_hps {F2SINTERRUPT_Enable} {1}
 set_instance_parameter_value sys_hps {EMAC0_PinMuxing} {Unused}
 set_instance_parameter_value sys_hps {EMAC0_Mode} {N/A}
@@ -130,8 +131,8 @@ proc ad_cpu_interconnect {m_base m_port} {
 
 proc ad_dma_interconnect {m_port} {
 
-  add_connection ${m_port} sys_hps.f2h_sdram0_data
-  set_connection_parameter_value ${m_port}/sys_hps.f2h_sdram0_data baseAddress {0x0000}
+  add_connection ${m_port} sys_hps.f2h_sdram1_data
+  set_connection_parameter_value ${m_port}/sys_hps.f2h_sdram1_data baseAddress {0x0000}
 
 }
 
@@ -140,7 +141,7 @@ proc ad_dma_interconnect {m_port} {
 add_instance sys_dma_clk clock_source
 add_connection sys_hps.h2f_user0_clock sys_dma_clk.clk_in
 add_connection sys_clk.clk_reset sys_dma_clk.clk_in_reset
-add_connection sys_dma_clk.clk sys_hps.f2h_sdram0_clock
+add_connection sys_dma_clk.clk sys_hps.f2h_sdram1_clock
 
 # internal memory
 
@@ -232,9 +233,13 @@ set_instance_parameter_value axi_hdmi_tx_0 {ID} {0}
 add_instance pixel_clk_pll altera_pll
 set_instance_parameter_value pixel_clk_pll {gui_feedback_clock} {Global Clock}
 set_instance_parameter_value pixel_clk_pll {gui_operation_mode} {direct}
-set_instance_parameter_value pixel_clk_pll {gui_output_clock_frequency0} {74.25}
+set_instance_parameter_value pixel_clk_pll {gui_number_of_clocks} {2}
+set_instance_parameter_value pixel_clk_pll {gui_output_clock_frequency0} {148.5}
+set_instance_parameter_value pixel_clk_pll {gui_output_clock_frequency1} {200}
 set_instance_parameter_value pixel_clk_pll {gui_phase_shift0} {0}
+set_instance_parameter_value pixel_clk_pll {gui_phase_shift1} {0}
 set_instance_parameter_value pixel_clk_pll {gui_phase_shift_deg0} {0.0}
+set_instance_parameter_value pixel_clk_pll {gui_phase_shift_deg1} {0.0}
 set_instance_parameter_value pixel_clk_pll {gui_phout_division} {1}
 set_instance_parameter_value pixel_clk_pll {gui_pll_auto_reset} {Off}
 set_instance_parameter_value pixel_clk_pll {gui_pll_bandwidth_preset} {Auto}
@@ -261,11 +266,11 @@ set_instance_parameter_value video_dmac {CYCLIC} {1}
 set_instance_parameter_value video_dmac {HAS_AXIS_TLAST} {1}
 set_instance_parameter_value video_dmac {DMA_2D_TRANSFER} {1}
 set_instance_parameter_value video_dmac {DMA_DATA_WIDTH_DEST} {64}
-set_instance_parameter_value video_dmac {DMA_DATA_WIDTH_SRC} {64}
+set_instance_parameter_value video_dmac {DMA_DATA_WIDTH_SRC} {128}
 set_instance_parameter_value video_dmac {DMA_LENGTH_WIDTH} {24}
 set_instance_parameter_value video_dmac {DMA_TYPE_DEST} {1}
 set_instance_parameter_value video_dmac {DMA_TYPE_SRC} {0}
-set_instance_parameter_value video_dmac {FIFO_SIZE} {4}
+set_instance_parameter_value video_dmac {FIFO_SIZE} {8}
 set_instance_parameter_value video_dmac {ID} {0}
 set_instance_parameter_value video_dmac {SYNC_TRANSFER_START} {0}
 
@@ -288,28 +293,24 @@ set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_recon
 set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_reconfig.reconfig_to_pll startPortLSB {0}
 set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_reconfig.reconfig_to_pll width {0}
 
-add_connection sys_clk.clk       pixel_clk_pll.refclk
-add_connection sys_clk.clk_reset pixel_clk_pll.reset
+add_connection sys_clk.clk           pixel_clk_pll.refclk
+add_connection sys_clk.clk           pixel_clk_pll_reconfig.mgmt_clk
+add_connection sys_clk.clk           axi_hdmi_tx_0.s_axi_clock
+add_connection sys_clk.clk           video_dmac.s_axi_clock
+add_connection pixel_clk_pll.outclk1 video_dmac.m_src_axi_clock
+add_connection pixel_clk_pll.outclk1 video_dmac.if_m_axis_aclk
+add_connection pixel_clk_pll.outclk1 sys_hps.f2h_sdram0_clock
+add_connection pixel_clk_pll.outclk1 axi_hdmi_tx_0.vdma_clock
+add_connection pixel_clk_pll.outclk0 axi_hdmi_tx_0.hdmi_clock
 
-add_connection sys_clk.clk       pixel_clk_pll_reconfig.mgmt_clk
-add_connection sys_clk.clk_reset pixel_clk_pll_reconfig.mgmt_reset
+add_connection sys_clk.clk_reset     pixel_clk_pll.reset
+add_connection sys_clk.clk_reset     pixel_clk_pll_reconfig.mgmt_reset
+add_connection sys_clk.clk_reset     axi_hdmi_tx_0.s_axi_reset
+add_connection sys_clk.clk_reset     video_dmac.m_src_axi_reset
+add_connection sys_clk.clk_reset     video_dmac.s_axi_reset
 
-add_connection sys_clk.clk       axi_hdmi_tx_0.s_axi_clock
-add_connection sys_clk.clk_reset axi_hdmi_tx_0.s_axi_reset
-
-add_connection sys_clk.clk       video_dmac.s_axi_clock
-add_connection sys_clk.clk_reset video_dmac.s_axi_reset
-
-add_connection pixel_clk_pll.outclk0   axi_hdmi_tx_0.hdmi_clock
-add_connection sys_hps.h2f_user2_clock axi_hdmi_tx_0.vdma_clock
-add_connection sys_hps.h2f_user2_clock video_dmac.if_m_axis_aclk
-add_connection sys_hps.h2f_user2_clock video_dmac.m_src_axi_clock
-add_connection sys_clk.clk_reset       video_dmac.m_src_axi_reset
-
-add_connection video_dmac.m_src_axi sys_hps.f2h_axi_slave
-set_connection_parameter_value video_dmac.m_src_axi/sys_hps.f2h_axi_slave arbitrationPriority {1}
-set_connection_parameter_value video_dmac.m_src_axi/sys_hps.f2h_axi_slave baseAddress {0x0000}
-set_connection_parameter_value video_dmac.m_src_axi/sys_hps.f2h_axi_slave defaultConnection {0}
+add_connection video_dmac.m_src_axi sys_hps.f2h_sdram0_data
+set_connection_parameter_value video_dmac.m_src_axi/sys_hps.f2h_sdram0_data baseAddress {0x0000}
 
 # interrupts
 
