@@ -230,6 +230,9 @@ set_instance_parameter_value axi_hdmi_tx_0 {CR_CB_N} {0}
 set_instance_parameter_value axi_hdmi_tx_0 {INTERFACE} {24_BIT}
 set_instance_parameter_value axi_hdmi_tx_0 {ID} {0}
 
+add_interface axi_hdmi_tx_0_hdmi_if conduit end
+set_interface_property axi_hdmi_tx_0_hdmi_if EXPORT_OF axi_hdmi_tx_0.hdmi_if
+
 add_instance pixel_clk_pll altera_pll
 set_instance_parameter_value pixel_clk_pll {gui_feedback_clock} {Global Clock}
 set_instance_parameter_value pixel_clk_pll {gui_operation_mode} {direct}
@@ -255,6 +258,20 @@ set_instance_parameter_value pixel_clk_pll_reconfig {ENABLE_BYTEENABLE} {0}
 set_instance_parameter_value pixel_clk_pll_reconfig {ENABLE_MIF} {0}
 set_instance_parameter_value pixel_clk_pll_reconfig {MIF_FILE_NAME} {}
 
+add_connection pixel_clk_pll.reconfig_from_pll pixel_clk_pll_reconfig.reconfig_from_pll
+set_connection_parameter_value pixel_clk_pll.reconfig_from_pll/pixel_clk_pll_reconfig.reconfig_from_pll endPort {}
+set_connection_parameter_value pixel_clk_pll.reconfig_from_pll/pixel_clk_pll_reconfig.reconfig_from_pll endPortLSB {0}
+set_connection_parameter_value pixel_clk_pll.reconfig_from_pll/pixel_clk_pll_reconfig.reconfig_from_pll startPort {}
+set_connection_parameter_value pixel_clk_pll.reconfig_from_pll/pixel_clk_pll_reconfig.reconfig_from_pll startPortLSB {0}
+set_connection_parameter_value pixel_clk_pll.reconfig_from_pll/pixel_clk_pll_reconfig.reconfig_from_pll width {0}
+
+add_connection pixel_clk_pll.reconfig_to_pll pixel_clk_pll_reconfig.reconfig_to_pll
+set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_reconfig.reconfig_to_pll endPort {}
+set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_reconfig.reconfig_to_pll endPortLSB {0}
+set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_reconfig.reconfig_to_pll startPort {}
+set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_reconfig.reconfig_to_pll startPortLSB {0}
+set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_reconfig.reconfig_to_pll width {0}
+
 add_instance video_dmac axi_dmac
 set_instance_parameter_value video_dmac {ASYNC_CLK_DEST_REQ_MANUAL} {1}
 set_instance_parameter_value video_dmac {ASYNC_CLK_REQ_SRC_MANUAL} {1}
@@ -275,23 +292,6 @@ set_instance_parameter_value video_dmac {ID} {0}
 set_instance_parameter_value video_dmac {SYNC_TRANSFER_START} {0}
 
 add_connection video_dmac.m_axis axi_hdmi_tx_0.vdma_if axi4stream
-
-add_interface axi_hdmi_tx_0_hdmi_if conduit end
-set_interface_property axi_hdmi_tx_0_hdmi_if EXPORT_OF axi_hdmi_tx_0.hdmi_if
-
-add_connection pixel_clk_pll.reconfig_from_pll pixel_clk_pll_reconfig.reconfig_from_pll
-set_connection_parameter_value pixel_clk_pll.reconfig_from_pll/pixel_clk_pll_reconfig.reconfig_from_pll endPort {}
-set_connection_parameter_value pixel_clk_pll.reconfig_from_pll/pixel_clk_pll_reconfig.reconfig_from_pll endPortLSB {0}
-set_connection_parameter_value pixel_clk_pll.reconfig_from_pll/pixel_clk_pll_reconfig.reconfig_from_pll startPort {}
-set_connection_parameter_value pixel_clk_pll.reconfig_from_pll/pixel_clk_pll_reconfig.reconfig_from_pll startPortLSB {0}
-set_connection_parameter_value pixel_clk_pll.reconfig_from_pll/pixel_clk_pll_reconfig.reconfig_from_pll width {0}
-
-add_connection pixel_clk_pll.reconfig_to_pll pixel_clk_pll_reconfig.reconfig_to_pll
-set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_reconfig.reconfig_to_pll endPort {}
-set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_reconfig.reconfig_to_pll endPortLSB {0}
-set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_reconfig.reconfig_to_pll startPort {}
-set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_reconfig.reconfig_to_pll startPortLSB {0}
-set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_reconfig.reconfig_to_pll width {0}
 
 add_connection sys_clk.clk           pixel_clk_pll.refclk
 add_connection sys_clk.clk           pixel_clk_pll_reconfig.mgmt_clk
