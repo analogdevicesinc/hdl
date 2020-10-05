@@ -6,7 +6,7 @@ set_instance_parameter_value axi_dmac_0 {DMA_TYPE_SRC} {1}
 set_instance_parameter_value axi_dmac_0 {DMA_TYPE_DEST} {0}
 set_instance_parameter_value axi_dmac_0 {CYCLIC} {0}
 set_instance_parameter_value axi_dmac_0 {DMA_DATA_WIDTH_SRC} {32}
-set_instance_parameter_value axi_dmac_0 {DMA_DATA_WIDTH_DEST} {64}
+set_instance_parameter_value axi_dmac_0 {DMA_DATA_WIDTH_DEST} {128}
 
 # axi_spi_engine
 
