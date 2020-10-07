@@ -236,6 +236,7 @@ module system_top (
 
     .sys_hps_rstn_reset_n (sys_resetn),
     .sys_rstn_reset_n (sys_resetn_s),
+    .pr_rom_data_nc_rom_data('h0),
 
     .sys_spi_MISO (spi_miso),
     .sys_spi_MOSI (spi_mosi),
