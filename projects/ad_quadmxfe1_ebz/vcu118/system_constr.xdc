@@ -224,5 +224,5 @@ add_cells_to_pblock [get_pblocks pblock_axi_mem_interconnect] [get_cells -quiet 
 resize_pblock [get_pblocks pblock_axi_mem_interconnect] -add {CLOCKREGION_X0Y0:CLOCKREGION_X5Y4}
 
 create_pblock SLR1
-add_cells_to_pblock [get_pblocks SLR1] [get_cells -quiet [list i_system_wrapper/system_i/util_mxfe_upack]]
+add_cells_to_pblock [get_pblocks SLR1] [get_cells -quiet [list i_system_wrapper/system_i/util_mxfe_upack i_system_wrapper/system_i/tx_mxfe_tpl_core]]
 resize_pblock SLR1 -add SLR1:SLR1
