@@ -202,13 +202,13 @@ proc axi_ad9361_elab {} {
     set_instance_parameter_value axi_ad9361_serdes_out {SERDES_FACTOR} {4}
     set_instance_parameter_value axi_ad9361_serdes_out {CLKIN_FREQUENCY} {250.0}
 
-    add_hdl_instance axi_ad9361_data_out altera_gpio 19.1
+    add_hdl_instance axi_ad9361_data_out altera_gpio 18.1
     set_instance_parameter_value axi_ad9361_data_out {DEVICE_FAMILY} {Arria 10}
     set_instance_parameter_value axi_ad9361_data_out {PIN_TYPE_GUI} {Output}
     set_instance_parameter_value axi_ad9361_data_out {SIZE} {1}
     set_instance_parameter_value axi_ad9361_data_out {gui_io_reg_mode} {DDIO}
 
-    add_hdl_instance clk_buffer altclkctrl 19.1
+    add_hdl_instance clk_buffer altclkctrl 18.1
     set_instance_parameter_value clk_buffer {DEVICE_FAMILY} {Arria 10}
 
   }
