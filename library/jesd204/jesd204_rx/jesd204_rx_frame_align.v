@@ -45,7 +45,8 @@
 `timescale 1ns/100ps
 
 module jesd204_rx_frame_align #(
-  parameter DATA_PATH_WIDTH = 4
+  parameter DATA_PATH_WIDTH = 4,
+  parameter ENABLE_CHAR_REPLACE = 0
 ) (
   input                             clk,
   input                             reset,
@@ -178,7 +179,8 @@ end
 
 jesd204_frame_align_replace #(
   .DATA_PATH_WIDTH              (DATA_PATH_WIDTH),
-  .IS_RX                        (1'b1)
+  .IS_RX                        (1'b1),
+  .ENABLED                      (ENABLE_CHAR_REPLACE)
 ) i_align_replace (
   .clk                          (clk),
   .reset                        (reset),

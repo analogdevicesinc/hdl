@@ -45,7 +45,8 @@
 `timescale 1ns/100ps
 
 module jesd204_tx_lane #(
-  parameter DATA_PATH_WIDTH = 4
+  parameter DATA_PATH_WIDTH = 4,
+  parameter ENABLE_CHAR_REPLACE = 1'b0
 ) (
   input clk,
 
@@ -119,7 +120,8 @@ pipeline_stage #(
 
 jesd204_frame_align_replace #(
   .DATA_PATH_WIDTH              (DATA_PATH_WIDTH),
-  .IS_RX                        (1'b0)
+  .IS_RX                        (1'b0),
+  .ENABLED                      (ENABLE_CHAR_REPLACE)
 ) i_align_replace (
   .clk                          (clk),
   .reset                        (~tx_ready_d),
