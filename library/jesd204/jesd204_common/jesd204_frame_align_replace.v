@@ -50,7 +50,8 @@
 
 module jesd204_frame_align_replace #(
   parameter DATA_PATH_WIDTH = 4,
-  parameter IS_RX = 1'b1
+  parameter IS_RX = 1'b1,
+  parameter ENABLED = 1'b1
 ) (
   input                             clk,
   input                             reset,
@@ -239,7 +240,7 @@ for (ii = 0; ii < DATA_PATH_WIDTH; ii = ii + 1) begin: gen_replace_byte
 end
 endgenerate
 
-assign data_out = (cfg_disable_char_replacement || !cfg_disable_scrambler) ? data : data_replaced;
-assign charisk_out = (IS_RX || !cfg_disable_scrambler || cfg_disable_char_replacement) ? 'b0 : char_is_align;
+assign data_out = (cfg_disable_char_replacement || !cfg_disable_scrambler || ENABLED==0) ? data : data_replaced;
+assign charisk_out = (IS_RX || !cfg_disable_scrambler || cfg_disable_char_replacement || ENABLED==0) ? 'b0 : char_is_align;
 
 endmodule
