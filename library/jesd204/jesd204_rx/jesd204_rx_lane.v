@@ -50,7 +50,8 @@ module jesd204_rx_lane #(
   parameter ALIGN_MUX_REGISTERED = 0,
   parameter SCRAMBLER_REGISTERED = 0,
   parameter ELASTIC_BUFFER_SIZE = 256,
-  parameter ENABLE_FRAME_ALIGN_CHECK = 0
+  parameter ENABLE_FRAME_ALIGN_CHECK = 0,
+  parameter ENABLE_CHAR_REPLACE = 0
 ) (
   input clk,
   input reset,
@@ -255,7 +256,8 @@ pipeline_stage #(
 generate
 if(ENABLE_FRAME_ALIGN_CHECK) begin : gen_frame_align
 jesd204_rx_frame_align #(
-  .DATA_PATH_WIDTH  (DATA_PATH_WIDTH)
+  .DATA_PATH_WIDTH  (DATA_PATH_WIDTH),
+  .ENABLE_CHAR_REPLACE (ENABLE_CHAR_REPLACE)
 ) i_frame_align (
   .clk                          (clk),
   .reset                        (buffer_ready_n_s),

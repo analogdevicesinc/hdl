@@ -52,7 +52,8 @@ module jesd204_rx #(
   /* Only 4 is supported at the moment for 8b/10b and 8 for 64b */
   parameter DATA_PATH_WIDTH = LINK_MODE == 2 ? 8 : 4,
   parameter ENABLE_FRAME_ALIGN_CHECK = 1,
-  parameter ENABLE_FRAME_ALIGN_ERR_RESET = 0
+  parameter ENABLE_FRAME_ALIGN_ERR_RESET = 0,
+  parameter ENABLE_CHAR_REPLACE = 0
 ) (
   input clk,
   input reset,
@@ -338,7 +339,8 @@ for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
     .ALIGN_MUX_REGISTERED(ALIGN_MUX_REGISTERED),
     .SCRAMBLER_REGISTERED(SCRAMBLER_REGISTERED),
     .ELASTIC_BUFFER_SIZE(ELASTIC_BUFFER_SIZE),
-    .ENABLE_FRAME_ALIGN_CHECK(ENABLE_FRAME_ALIGN_CHECK)
+    .ENABLE_FRAME_ALIGN_CHECK(ENABLE_FRAME_ALIGN_CHECK),
+    .ENABLE_CHAR_REPLACE(ENABLE_CHAR_REPLACE)
   ) i_lane (
     .clk(clk),
     .reset(reset),
