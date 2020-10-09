@@ -89,11 +89,11 @@ module ad_ip_jesd204_tpl_dac_framer #(
    * ordered in either case. That means lower bits are in the LSBs.
    */
 
-  localparam FRAMES_PER_BEAT = OCTETS_PER_BEAT * 8 / BITS_PER_LANE_PER_FRAME;
-  localparam SAMPLES_PER_BEAT = DAC_DATA_WIDTH / CONVERTER_RESOLUTION;
   localparam BITS_PER_CHANNEL_PER_FRAME = BITS_PER_SAMPLE * SAMPLES_PER_FRAME;
   localparam BITS_PER_LANE_PER_FRAME = BITS_PER_CHANNEL_PER_FRAME *
                                        NUM_CHANNELS / NUM_LANES;
+  localparam FRAMES_PER_BEAT = OCTETS_PER_BEAT * 8 / BITS_PER_LANE_PER_FRAME;
+  localparam SAMPLES_PER_BEAT = DAC_DATA_WIDTH / CONVERTER_RESOLUTION;
   localparam TAIL_BITS = BITS_PER_SAMPLE - CONVERTER_RESOLUTION;
 
   wire [LINK_DATA_WIDTH-1:0] link_data_msb_s;
