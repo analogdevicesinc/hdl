@@ -50,7 +50,8 @@ module jesd204_tx #(
   parameter NUM_OUTPUT_PIPELINE = 0,
   parameter LINK_MODE = 1, // 2 - 64B/66B;  1 - 8B/10B
   /* Only 4 is supported at the moment for 8b/10b and 8 for 64b */
-  parameter DATA_PATH_WIDTH = LINK_MODE[1] ? 8 : 4
+  parameter DATA_PATH_WIDTH = LINK_MODE[1] ? 8 : 4,
+  parameter ENABLE_CHAR_REPLACE = 1'b0
 ) (
   input clk,
   input reset,
@@ -264,7 +265,8 @@ for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
   localparam C_STOP = C_START + DATA_PATH_WIDTH-1;
 
   jesd204_tx_lane #(
-    .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
+    .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
+    .ENABLE_CHAR_REPLACE(ENABLE_CHAR_REPLACE)
   ) i_lane (
     .clk(clk),
 
