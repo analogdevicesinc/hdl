@@ -102,7 +102,7 @@ module axi_ad6676 #(
     .CONVERTER_RESOLUTION (16),
     .BITS_PER_SAMPLE (16),
     .OCTETS_PER_BEAT (4),
-    .TWOS_COMPLEMENT (0)
+    .TWOS_COMPLEMENT (1)
   ) i_adc_jesd204 (
     .link_clk (rx_clk),
 
