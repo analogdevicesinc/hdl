@@ -1,5 +1,6 @@
 
 source $ad_hdl_dir/projects/common/zed/zed_system_bd.tcl
+source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 # specify the spi reference clock frequency in MHz
 set spi_clk_ref_frequency 160
@@ -14,7 +15,7 @@ adi_project_files ad469x_fmc_zed [list \
 	"../../../library/common/ad_edge_detect.v" \
 	"../../../library/util_cdc/sync_bits.v" \
 ]
-	
+
 source ../common/ad469x_bd.tcl
 
 #system ID

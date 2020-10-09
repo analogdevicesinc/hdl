@@ -1,6 +1,7 @@
 
 source ../common/adrv9009zu11eg_bd.tcl
 source ../common/adrv2crr_fmc_bd.tcl
+source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 create_bd_port -dir I ref_clk_c
 create_bd_port -dir I ref_clk_d

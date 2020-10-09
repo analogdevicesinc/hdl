@@ -10,7 +10,7 @@ set LANE_RATE [expr {($ADC_RESOLUTION * $NUM_OF_CHANNELS *$SAMPLE_RATE_MHZ * 1.2
 
 source $ad_hdl_dir/projects/common/a10soc/a10soc_system_qsys.tcl
 source ../common/ad_fmclidar1_ebz_qsys.tcl
-source $ad_hdl_dir/projects/scripts/adi_pd_intel.tcl
+source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 #system ID
 set_instance_parameter_value axi_sysid_0 {ROM_ADDR_BITS} {9}

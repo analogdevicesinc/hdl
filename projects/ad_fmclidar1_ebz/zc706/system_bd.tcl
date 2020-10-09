@@ -25,6 +25,7 @@ adi_project_files ad_fmclidar1_ebz_zc706 [list \
 # source all the block designs
 source $ad_hdl_dir/projects/common/zc706/zc706_system_bd.tcl
 source ../common/ad_fmclidar1_ebz_bd.tcl
+source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 # I2C for AFE board's DAC
 

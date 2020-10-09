@@ -1,6 +1,7 @@
 
 source ../common/adrv9364z7020_bd.tcl
 source ../common/ccbob_bd.tcl
+source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 ad_ip_parameter util_ad9361_divclk CONFIG.SEL_0_DIV 2
 ad_ip_parameter util_ad9361_divclk CONFIG.SEL_1_DIV 1

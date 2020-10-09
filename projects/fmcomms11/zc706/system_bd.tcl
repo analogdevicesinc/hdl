@@ -16,6 +16,7 @@ set dac_fifo_address_width 15
 set adc_fifo_address_width 15
 
 source ../common/fmcomms11_bd.tcl
+source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 #system ID
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
