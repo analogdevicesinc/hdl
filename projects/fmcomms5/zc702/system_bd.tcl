@@ -1,5 +1,6 @@
 
 source $ad_hdl_dir/projects/common/zc702/zc702_system_bd.tcl
+source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 #system ID
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9

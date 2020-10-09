@@ -1,6 +1,7 @@
 
 source ../common/adrv9361z7035_bd.tcl
 source ../common/ccpackrf_bd.tcl
+source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 cfg_ad9361_interface LVDS
 

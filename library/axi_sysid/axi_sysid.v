@@ -33,7 +33,7 @@ module axi_sysid #(
 
 localparam          AXI_ADDRESS_WIDTH    = 12;
 localparam  [31:0]  CORE_VERSION         = {16'h0001,     /* MAJOR */
-                                              8'h00,      /* MINOR */
+                                              8'h01,      /* MINOR */
                                               8'h61};     /* PATCH */
 localparam  [31:0]  CORE_MAGIC           = 32'h53594944;  // SYID
 

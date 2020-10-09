@@ -5,6 +5,7 @@ set adc_fifo_address_width 13
 source $ad_hdl_dir/projects/common/vcu118/vcu118_system_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/adcfifo_bd.tcl
 source ../common/dual_ad9208_bd.tcl
+source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 #system ID
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9

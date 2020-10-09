@@ -1,6 +1,7 @@
 
 source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl
 source ../common/fmcomms2_bd.tcl
+source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 #system ID
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
