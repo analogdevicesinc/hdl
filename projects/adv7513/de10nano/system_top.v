@@ -109,14 +109,14 @@ module system_top (
   output  [ 23:0]   hdmi_data,
 
   inout             hdmi_i2c_scl,
-  inout             hdmi_i2c_sda
+  inout             hdmi_i2c_sda,
 
-  // hdmi_i2s
-  // hdmi_lrclk
-  // hdmi_mclk
-  // hdmi_sclk
+  output            ltc2308_cs,
+  output            ltc2308_sclk,
+  output            ltc2308_mosi,
+  input             ltc2308_miso
 
-  );
+);
 
   // internal signals
 
@@ -137,6 +137,8 @@ module system_top (
   assign gpio_bd_o[3:0] = gpio_o[3:0];
 
   assign gpio_i[31:12] = gpio_o[31:12];
+
+  assign ltc2308_cs = gpio_o[41];
 
   ALT_IOBUF scl_iobuf (
     .i(1'b0),
@@ -216,6 +218,10 @@ module system_top (
     .sys_gpio_bd_out_port (gpio_o[31:0]),
     .sys_gpio_in_export (gpio_i[63:32]),
     .sys_gpio_out_export (gpio_o[63:32]),
+    .ltc2308_spi_MISO (ltc2308_miso),
+    .ltc2308_spi_MOSI (ltc2308_mosi),
+    .ltc2308_spi_SCLK (ltc2308_sclk),
+    .ltc2308_spi_SS_n (),
     .axi_hdmi_tx_0_hdmi_if_h_clk (hdmi_out_clk),
     .axi_hdmi_tx_0_hdmi_if_h24_hsync (hdmi_hsync),
     .axi_hdmi_tx_0_hdmi_if_h24_vsync (hdmi_vsync),
