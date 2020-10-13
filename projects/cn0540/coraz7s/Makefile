@@ -12,6 +12,7 @@ M_DEPS += ../../common/coraz7s/coraz7s_system_bd.tcl
 M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
 
 LIB_DEPS += axi_dmac
+LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_sysid
 LIB_DEPS += spi_engine/axi_spi_engine
 LIB_DEPS += spi_engine/spi_engine_execution
