@@ -28,6 +28,7 @@ XILINX_DEPS += ../xilinx/common/up_xfer_status_constr.xdc
 XILINX_DEPS += axi_hdmi_tx_constr.xdc
 XILINX_DEPS += axi_hdmi_tx_ip.tcl
 
+INTEL_DEPS += ../../library/scripts/adi_intel_device_info_enc.tcl
 INTEL_DEPS += ../intel/common/ad_mul.v
 INTEL_DEPS += ../intel/common/up_clock_mon_constr.sdc
 INTEL_DEPS += ../intel/common/up_rst_constr.sdc
