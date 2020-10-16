@@ -1,0 +1,7 @@
+#!/bin/bash
+
+SOURCE="ad_pack_tb.v"
+SOURCE+=" ../ad_pack.v"
+
+cd `dirname $0`
+source run_tb.sh
