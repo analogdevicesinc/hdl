@@ -294,34 +294,33 @@ for {set i 0} {$i < 4} {incr i} {
 
 # addresses
 
-ad_cpu_interconnect 0x00020000 adrv9009_tx_jesd204.link_reconfig
-ad_cpu_interconnect 0x00024000 adrv9009_tx_jesd204.link_management
-ad_cpu_interconnect 0x00026000 adrv9009_tx_jesd204.link_pll_reconfig
-ad_cpu_interconnect 0x00028000 adrv9009_tx_jesd204.lane_pll_reconfig
-ad_cpu_interconnect 0x0002a000 avl_adxcfg_0.rcfg_s0
-ad_cpu_interconnect 0x0002c000 avl_adxcfg_1.rcfg_s0
-ad_cpu_interconnect 0x0002e000 avl_adxcfg_2.rcfg_s0
-ad_cpu_interconnect 0x00030000 avl_adxcfg_3.rcfg_s0
-ad_cpu_interconnect 0x00032000 axi_adrv9009_tx_dma.s_axi
+ad_cpu_interconnect 0x00000000 adrv9009_tx_jesd204.link_reconfig        "axi_mm_bridge_0" 0x00060000
+ad_cpu_interconnect 0x00004000 adrv9009_rx_jesd204.link_reconfig        "axi_mm_bridge_0"
+ad_cpu_interconnect 0x00008000 adrv9009_rx_os_jesd204.link_reconfig     "axi_mm_bridge_0"
+ad_cpu_interconnect 0x0000C000 adrv9009_tx_jesd204.link_management      "axi_mm_bridge_0"
+ad_cpu_interconnect 0x0000D000 adrv9009_rx_jesd204.link_management      "axi_mm_bridge_0"
+ad_cpu_interconnect 0x0000E000 adrv9009_rx_os_jesd204.link_management   "axi_mm_bridge_0"
+ad_cpu_interconnect 0x0000F000 axi_adrv9009_rx.s_axi                    "axi_mm_bridge_0"
+ad_cpu_interconnect 0x00013000 axi_adrv9009_tx.s_axi                    "axi_mm_bridge_0"
+ad_cpu_interconnect 0x00017000 axi_adrv9009_rx_os.s_axi                 "axi_mm_bridge_0"
+ad_cpu_interconnect 0x0001B000 axi_adrv9009_tx_dma.s_axi                "axi_mm_bridge_0"
+ad_cpu_interconnect 0x0001B800 axi_adrv9009_rx_dma.s_axi                "axi_mm_bridge_0"
+ad_cpu_interconnect 0x0001C000 axi_adrv9009_rx_os_dma.s_axi             "axi_mm_bridge_0"
 
-ad_cpu_interconnect 0x00040000 adrv9009_rx_jesd204.link_reconfig
-ad_cpu_interconnect 0x00044000 adrv9009_rx_jesd204.link_management
-ad_cpu_interconnect 0x00046000 adrv9009_rx_jesd204.link_pll_reconfig
-ad_cpu_interconnect 0x00048000 avl_adxcfg_0.rcfg_s1
-ad_cpu_interconnect 0x0004a000 avl_adxcfg_1.rcfg_s1
-ad_cpu_interconnect 0x0004c000 axi_adrv9009_rx_dma.s_axi
+ad_cpu_interconnect 0x00000000 adrv9009_tx_jesd204.link_pll_reconfig    "avl_mm_bridge_tx" 0x00080000
+ad_cpu_interconnect 0x00001000 adrv9009_tx_jesd204.lane_pll_reconfig    "avl_mm_bridge_tx"
+ad_cpu_interconnect 0x00002000 avl_adxcfg_0.rcfg_s0                     "avl_mm_bridge_tx"
+ad_cpu_interconnect 0x00003000 avl_adxcfg_1.rcfg_s0                     "avl_mm_bridge_tx"
+ad_cpu_interconnect 0x00004000 avl_adxcfg_2.rcfg_s0                     "avl_mm_bridge_tx"
+ad_cpu_interconnect 0x00005000 avl_adxcfg_3.rcfg_s0                     "avl_mm_bridge_tx"
 
-ad_cpu_interconnect 0x00050000 adrv9009_rx_os_jesd204.link_reconfig
-ad_cpu_interconnect 0x00054000 adrv9009_rx_os_jesd204.link_management
-ad_cpu_interconnect 0x00056000 adrv9009_rx_os_jesd204.link_pll_reconfig
-ad_cpu_interconnect 0x00058000 avl_adxcfg_2.rcfg_s1
-ad_cpu_interconnect 0x0005a000 avl_adxcfg_3.rcfg_s1
-ad_cpu_interconnect 0x0005c000 axi_adrv9009_rx_os_dma.s_axi
-
-ad_cpu_interconnect 0x00060000 axi_adrv9009_rx.s_axi
-ad_cpu_interconnect 0x00064000 axi_adrv9009_tx.s_axi
-ad_cpu_interconnect 0x00068000 axi_adrv9009_rx_os.s_axi
-ad_cpu_interconnect 0x00070000 avl_adrv9009_gpio.s1
+ad_cpu_interconnect 0x00000000 adrv9009_rx_jesd204.link_pll_reconfig    "avl_mm_bridge_rx" 0x00090000
+ad_cpu_interconnect 0x00001000 adrv9009_rx_os_jesd204.link_pll_reconfig "avl_mm_bridge_rx"
+ad_cpu_interconnect 0x00002000 avl_adxcfg_0.rcfg_s1                     "avl_mm_bridge_rx"
+ad_cpu_interconnect 0x00003000 avl_adxcfg_1.rcfg_s1                     "avl_mm_bridge_rx"
+ad_cpu_interconnect 0x00004000 avl_adxcfg_2.rcfg_s1                     "avl_mm_bridge_rx"
+ad_cpu_interconnect 0x00005000 avl_adxcfg_3.rcfg_s1                     "avl_mm_bridge_rx"
+ad_cpu_interconnect 0x00006000 avl_adrv9009_gpio.s1                     "avl_mm_bridge_rx"
 
 # dma interconnects
 
