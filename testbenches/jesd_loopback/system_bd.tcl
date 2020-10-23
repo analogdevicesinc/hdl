@@ -38,6 +38,11 @@ source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
 global ad_project_params
 
+# transfer tcl parameters as defines to verilog
+foreach {k v} [array get ad_project_params] {
+  adi_sim_add_define $k=$v
+}
+
 set NUM_OF_CONVERTERS $ad_project_params(JESD_M)
 set NUM_OF_LANES $ad_project_params(JESD_L)
 set SAMPLES_PER_FRAME $ad_project_params(JESD_S)
@@ -46,6 +51,7 @@ set SAMPLE_WIDTH $ad_project_params(JESD_NP)
 set DAC_DATA_WIDTH [expr $NUM_OF_LANES * 32]
 set SAMPLES_PER_CHANNEL [expr $DAC_DATA_WIDTH / $NUM_OF_CONVERTERS / $SAMPLE_WIDTH]
 
+set MAX_CONVERTERS 16
 
 
 # TX JESD204 PHY layer peripheral
@@ -90,8 +96,8 @@ ad_ip_instance util_adxcvr util_jesd204_xcvr [list \
   CPLL_FBDIV 4 \
   RX_CLK25_DIV 5 \
   TX_CLK25_DIV 5 \
-  RX_OUT_DIV 2 \
-  TX_OUT_DIV 2 \
+  RX_OUT_DIV 1 \
+  TX_OUT_DIV 1 \
 ]
 
 ad_xcvrcon util_jesd204_xcvr dac_jesd204_xcvr dac_jesd204_link
@@ -118,6 +124,16 @@ ad_connect util_jesd204_xcvr/tx_out_clk_0 dac_jesd204_transport/link_clk
 ad_connect util_jesd204_xcvr/tx_out_clk_0 adc_jesd204_transport/link_clk
 
 
+# Create dummy outputs for unused Tx lanes
+for {set i $NUM_OF_LANES} {$i < 8} {incr i} {
+  create_bd_port -dir O tx_data_${i}_n
+  create_bd_port -dir O tx_data_${i}_p
+}
+# Create dummy outputs for unused Rx lanes
+for {set i $NUM_OF_LANES} {$i < 8} {incr i} {
+  create_bd_port -dir I rx_data_${i}_n
+  create_bd_port -dir I rx_data_${i}_p
+}
 
 #  ------------------
 #  Test harness
@@ -193,11 +209,19 @@ ad_connect mng_rst dac_jesd204_link_rstgen/ext_reset_in
 
 assign_bd_address
 
-create_bd_port -dir I -from 31 -to 0 dac_data_0
-create_bd_port -dir O link_clk
+for {set i 0} {$i < $NUM_OF_CONVERTERS} {incr i} {
+  create_bd_port -dir I -from [expr $SAMPLES_PER_CHANNEL*$SAMPLE_WIDTH-1] -to 0 dac_data_$i
+  ad_connect dac_data_$i dac_jesd204_transport/dac_data_$i
+}
 
-ad_connect dac_data_0 dac_jesd204_transport/dac_data_0
+# Create dummy input channels
+for {set i $NUM_OF_CONVERTERS} {$i < $MAX_CONVERTERS} {incr i} {
+  create_bd_port -dir I -from [expr $SAMPLES_PER_CHANNEL*$SAMPLE_WIDTH-1] -to 0 dac_data_$i
+}
+
+create_bd_port -dir O link_clk
 ad_connect util_jesd204_xcvr/tx_out_clk_0 link_clk
+
 
 make_bd_pins_external  [get_bd_pins /dac_jesd204_transport/dac_dunf]
 make_bd_pins_external  [get_bd_pins /adc_jesd204_transport/adc_dovf]

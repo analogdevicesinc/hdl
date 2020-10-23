@@ -53,7 +53,7 @@ program test_program;
 
   environment env;
 
-  int use_dds = 1;
+  int use_dds = 0;
 
   initial begin
     //creating environment
@@ -64,19 +64,22 @@ program test_program;
     setLoggerVerbosity(6);
     env.start();
 
-
-    if (use_dds) begin
-      // Select DDS as source
-      env.mng.RegWrite32(`DAC_TPL+32'h0418, 32'h00000000);
-      // Configure tone amplitude and frequency
-      env.mng.RegWrite32(`DAC_TPL+32'h0400, 32'h00000fff);
-      env.mng.RegWrite32(`DAC_TPL+32'h0404, 32'h00000100);
-    end else begin
-      // Set DMA as source for DAC TPL
-      env.mng.RegWrite32(`DAC_TPL+32'h0418,32'h00000002);
+    for (int i = 0; i < `JESD_M; i++) begin
+      if (use_dds) begin
+        // Select DDS as source
+        env.mng.RegWrite32(`DAC_TPL+'h40*i+32'h0418, 32'h00000000);
+        // Configure tone amplitude and frequency
+        env.mng.RegWrite32(`DAC_TPL+'h40*i+32'h0400, 32'h00000fff);
+        env.mng.RegWrite32(`DAC_TPL+'h40*i+32'h0404, 32'h00000100);
+      end else begin
+        // Set DMA as source for DAC TPL
+        env.mng.RegWrite32(`DAC_TPL+'h40*i+32'h0418,32'h00000002);
+      end
     end
 
-    env.mng.RegWrite32(`ADC_TPL+32'h0400,32'h00000051);
+    for (int i = 0; i < `JESD_M; i++) begin
+      env.mng.RegWrite32(`ADC_TPL+'h40*i+32'h0400,32'h0000001);
+    end
 
 
     env.mng.RegWrite32(`DAC_TPL+32'h0040,32'h00000003);
@@ -90,12 +93,12 @@ program test_program;
     env.mng.RegWrite32(`AXI_JESD_TX+32'h00c0,32'h00000001);
 
     //SYSREFCONF
-    env.mng.RegWrite32(`AXI_JESD_RX+32'h0100,32'h00000001);
-    env.mng.RegWrite32(`AXI_JESD_TX+32'h0100,32'h00000001);
+    env.mng.RegWrite32(`AXI_JESD_RX+32'h0100,32'h00000000); // Enable SYSREF handling
+    env.mng.RegWrite32(`AXI_JESD_TX+32'h0100,32'h00000000);
 
     //CONF0
-    env.mng.RegWrite32(`AXI_JESD_RX+32'h0210,32'h0001001f);
-    env.mng.RegWrite32(`AXI_JESD_TX+32'h0210,32'h0001001f);
+    env.mng.RegWrite32(`AXI_JESD_RX+32'h0210,(`JESD_F-1)<<16 | (`JESD_F*`JESD_K-1));
+    env.mng.RegWrite32(`AXI_JESD_TX+32'h0210,(`JESD_F-1)<<16 | (`JESD_F*`JESD_K-1));
     //CONF1
     env.mng.RegWrite32(`AXI_JESD_RX+32'h0214,32'h00000001);
     env.mng.RegWrite32(`AXI_JESD_TX+32'h0214,32'h00000001);
@@ -114,8 +117,8 @@ program test_program;
 
     //PHY INIT
     //REG CTRL
-    env.mng.RegWrite32(`ADC_XCVR+32'h0020,32'h00001004);   // RXOUTCLK uses DIV2
-    env.mng.RegWrite32(`DAC_XCVR+32'h0020,32'h00001004);
+    env.mng.RegWrite32(`ADC_XCVR+32'h0020,32'h00001003);   // RXOUTCLK uses DIV1
+    env.mng.RegWrite32(`DAC_XCVR+32'h0020,32'h00001003);
 
     env.mng.RegWrite32(`ADC_XCVR+32'h0010,32'h00000001);
     env.mng.RegWrite32(`DAC_XCVR+32'h0010,32'h00000001);
