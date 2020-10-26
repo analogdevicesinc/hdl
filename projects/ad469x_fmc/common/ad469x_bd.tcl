@@ -49,8 +49,8 @@ ad_connect busy_capture/rst GND
 ad_connect busy_sync/out_resetn $hier_spi_engine/axi_regmap/spi_resetn
 ad_connect spi_clk busy_sync/out_clk
 ad_connect busy_sync/in_bits ad469x_spi_busy
-ad_connect busy_sync/out_bits busy_capture/in
-ad_connect busy_capture/out $hier_spi_engine/offload/trigger
+ad_connect busy_sync/out_bits busy_capture/signal_in
+ad_connect busy_capture/signal_out $hier_spi_engine/offload/trigger
 
 # dma to receive data stream
 
