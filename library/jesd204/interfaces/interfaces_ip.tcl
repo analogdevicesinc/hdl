@@ -52,13 +52,18 @@ adi_if_ports output -1 lanes_disable
 adi_if_ports output -1 links_disable
 adi_if_ports output 10 octets_per_multiframe
 adi_if_ports output 8 octets_per_frame
-adi_if_ports output 8 lmfc_offset
 adi_if_ports output 1 continuous_cgs
 adi_if_ports output 1 continuous_ilas
 adi_if_ports output 1 skip_ilas
 adi_if_ports output 8 mframes_per_ilas
 adi_if_ports output 1 disable_char_replacement
 adi_if_ports output 1 disable_scrambler
+adi_if_ports output 10 device_octets_per_multiframe
+adi_if_ports output 8 device_octets_per_frame
+adi_if_ports output 8 device_beats_per_multiframe
+adi_if_ports output 8 device_lmfc_offset
+adi_if_ports output 1 device_sysref_oneshot
+adi_if_ports output 1 device_sysref_disable
 
 adi_if_define "jesd204_tx_ilas_config"
 adi_if_ports output 1 rd
@@ -83,12 +88,17 @@ adi_if_ports output -1 lanes_disable
 adi_if_ports output -1 links_disable
 adi_if_ports output 10 octets_per_multiframe
 adi_if_ports output 8 octets_per_frame
-adi_if_ports output 8 lmfc_offset
-adi_if_ports output 1 buffer_early_release
-adi_if_ports output 1 buffer_delay
 adi_if_ports output 1 disable_char_replacement
 adi_if_ports output 1 disable_scrambler
 adi_if_ports output 8 frame_align_err_threshold
+adi_if_ports output 10 device_octets_per_multiframe
+adi_if_ports output 8 device_octets_per_frame
+adi_if_ports output 8 device_beats_per_multiframe
+adi_if_ports output 8 device_lmfc_offset
+adi_if_ports output 1 device_sysref_oneshot
+adi_if_ports output 1 device_sysref_disable
+adi_if_ports output 1 device_buffer_early_release
+adi_if_ports output 1 device_buffer_delay
 adi_if_ports output 1 err_statistics_reset
 adi_if_ports output 7 err_statistics_mask
 

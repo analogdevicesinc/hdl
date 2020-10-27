@@ -62,6 +62,8 @@ module jesd204_tx_ctrl #(
   output reg eof_reset,
 
   output reg tx_ready,
+  output tx_ready_nx,
+  output tx_next_mf_ready,
 
   output reg [DATA_PATH_WIDTH*8*NUM_LANES-1:0] ilas_data,
   output reg [DATA_PATH_WIDTH*NUM_LANES-1:0] ilas_charisk,
@@ -102,11 +104,11 @@ reg ilas_reset = 1'b1;
 reg ilas_data_reset = 1'b1;
 reg sync_request = 1'b0;
 reg sync_request_received = 1'b0;
+reg last_ilas_mframe = 1'b0;
 reg [7:0] mframe_counter = 'h00;
 reg [ILAS_COUNTER_WIDTH-1:0] ilas_counter = 'h00;
 wire ilas_config_rd_start;
 reg ilas_config_rd_d1 = 1'b1;
-reg last_ilas_mframe = 1'b0;
 reg cgs_enable = 1'b1;
 wire [DATA_PATH_WIDTH*8-1:0] ilas_default_data;
 
@@ -123,6 +125,7 @@ i_cdc_sync (
   .out_resetn(1'b1),
   .out_bits(status_sync)
 );
+
 assign status_sync_masked = status_sync | cfg_links_disable;
 
 always @(posedge clk) begin
@@ -234,6 +237,9 @@ always @(posedge clk) begin
     end
   end
 end
+
+assign tx_next_mf_ready = sync_request_received & last_ilas_mframe & ~cfg_continuous_ilas;
+assign tx_ready_nx = tx_ready | (tx_next_mf_ready & lmfc_edge_d2);
 
 always @(posedge clk) begin
   if (ilas_reset == 1'b1) begin

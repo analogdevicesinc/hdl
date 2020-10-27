@@ -54,6 +54,7 @@ module jesd204_lmfc #(
   input sysref,
 
   input [9:0] cfg_octets_per_multiframe,
+  input [7:0] cfg_beats_per_multiframe,
   input [7:0] cfg_lmfc_offset,
   input cfg_sysref_oneshot,
   input cfg_sysref_disable,
@@ -75,7 +76,7 @@ module jesd204_lmfc #(
 localparam DPW_LOG2 = DATA_PATH_WIDTH == 8 ? 3 : DATA_PATH_WIDTH == 4 ? 2 : 1;
 localparam BEATS_PER_MF_WIDTH = 10-DPW_LOG2;
 
-wire [BEATS_PER_MF_WIDTH-1:0]     cfg_beats_per_multiframe = cfg_octets_per_multiframe[9:DPW_LOG2];
+//wire [BEATS_PER_MF_WIDTH-1:0]     cfg_beats_per_multiframe = cfg_octets_per_multiframe[9:DPW_LOG2];
 reg  [BEATS_PER_MF_WIDTH:0]       cfg_whole_beats_per_multiframe;
 
 reg sysref_r = 1'b0;
