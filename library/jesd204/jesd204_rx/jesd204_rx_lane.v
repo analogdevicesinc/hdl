@@ -46,15 +46,20 @@
 
 module jesd204_rx_lane #(
   parameter DATA_PATH_WIDTH = 4,
+  parameter TPL_DATA_PATH_WIDTH = 4,
   parameter CHAR_INFO_REGISTERED = 0,
   parameter ALIGN_MUX_REGISTERED = 0,
   parameter SCRAMBLER_REGISTERED = 0,
   parameter ELASTIC_BUFFER_SIZE = 256,
   parameter ENABLE_FRAME_ALIGN_CHECK = 0,
-  parameter ENABLE_CHAR_REPLACE = 0
+  parameter ENABLE_CHAR_REPLACE = 0,
+  parameter ASYNC_CLK = 0
 ) (
   input clk,
   input reset,
+
+  input device_clk,
+  input device_reset,
 
   input [DATA_PATH_WIDTH*8-1:0] phy_data,
   input [DATA_PATH_WIDTH-1:0] phy_charisk,
@@ -66,7 +71,7 @@ module jesd204_rx_lane #(
 
   input ifs_reset,
 
-  output [DATA_PATH_WIDTH*8-1:0] rx_data,
+  output [TPL_DATA_PATH_WIDTH*8-1:0] rx_data,
 
   output buffer_ready_n,
   input buffer_release_n,
@@ -304,11 +309,16 @@ pipeline_stage #(
 );
 
 elastic_buffer #(
-  .WIDTH(DATA_PATH_WIDTH*8),
-  .SIZE(ELASTIC_BUFFER_SIZE)
+  .IWIDTH(DATA_PATH_WIDTH*8),
+  .OWIDTH(TPL_DATA_PATH_WIDTH*8),
+  .SIZE(ELASTIC_BUFFER_SIZE),
+  .ASYNC_CLK(ASYNC_CLK)
 ) i_elastic_buffer (
   .clk(clk),
   .reset(reset),
+
+  .device_clk(device_clk),
+  .device_reset(device_reset),
 
   .wr_data(data_scrambled),
   .rd_data(rx_data),

@@ -51,10 +51,15 @@ module jesd204_tx #(
   parameter LINK_MODE = 1, // 2 - 64B/66B;  1 - 8B/10B
   /* Only 4 is supported at the moment for 8b/10b and 8 for 64b */
   parameter DATA_PATH_WIDTH = LINK_MODE[1] ? 8 : 4,
-  parameter ENABLE_CHAR_REPLACE = 1'b0
+  parameter TPL_DATA_PATH_WIDTH = LINK_MODE[1] ? 8 : 4,
+  parameter ENABLE_CHAR_REPLACE = 1'b0,
+  parameter ASYNC_CLK = 1
 ) (
   input clk,
   input reset,
+
+  input device_clk,
+  input device_reset,
 
   output [DATA_PATH_WIDTH*8*NUM_LANES-1:0] phy_data,
   output [DATA_PATH_WIDTH*NUM_LANES-1:0] phy_charisk,
@@ -66,21 +71,18 @@ module jesd204_tx #(
 
   input [NUM_LINKS-1:0] sync,
 
-  input [DATA_PATH_WIDTH*8*NUM_LANES-1:0] tx_data,
+  input [TPL_DATA_PATH_WIDTH*8*NUM_LANES-1:0] tx_data,
   output tx_ready,
-  output [DATA_PATH_WIDTH-1:0] tx_eof,
-  output [DATA_PATH_WIDTH-1:0] tx_sof,
-  output [DATA_PATH_WIDTH-1:0] tx_somf,
-  output [DATA_PATH_WIDTH-1:0] tx_eomf,
+  output [TPL_DATA_PATH_WIDTH-1:0] tx_eof,
+  output [TPL_DATA_PATH_WIDTH-1:0] tx_sof,
+  output [TPL_DATA_PATH_WIDTH-1:0] tx_somf,
+  output [TPL_DATA_PATH_WIDTH-1:0] tx_eomf,
   input tx_valid,
 
   input [NUM_LANES-1:0] cfg_lanes_disable,
   input [NUM_LINKS-1:0] cfg_links_disable,
   input [9:0] cfg_octets_per_multiframe,
   input [7:0] cfg_octets_per_frame,
-  input [7:0] cfg_lmfc_offset,
-  input cfg_sysref_oneshot,
-  input cfg_sysref_disable,
   input cfg_continuous_cgs,
   input cfg_continuous_ilas,
   input cfg_skip_ilas,
@@ -88,14 +90,21 @@ module jesd204_tx #(
   input cfg_disable_char_replacement,
   input cfg_disable_scrambler,
 
+  input [9:0] device_cfg_octets_per_multiframe,
+  input [7:0] device_cfg_octets_per_frame,
+  input [7:0] device_cfg_beats_per_multiframe,
+  input [7:0] device_cfg_lmfc_offset,
+  input device_cfg_sysref_oneshot,
+  input device_cfg_sysref_disable,
+
   output ilas_config_rd,
   output [1:0] ilas_config_addr,
   input [NUM_LANES*DATA_PATH_WIDTH*8-1:0] ilas_config_data,
 
   input ctrl_manual_sync_request,
 
-  output event_sysref_edge,
-  output event_sysref_alignment_error,
+  output device_event_sysref_edge,
+  output device_event_sysref_alignment_error,
 
   output [NUM_LINKS-1:0] status_sync,
   output [1:0] status_state
@@ -106,6 +115,8 @@ localparam MAX_OCTETS_PER_FRAME = 32;
 localparam MAX_OCTETS_PER_MULTIFRAME =
   (MAX_OCTETS_PER_FRAME * 32) > 1024 ? 1024 : (MAX_OCTETS_PER_FRAME * 32);
 localparam MAX_BEATS_PER_MULTIFRAME = MAX_OCTETS_PER_MULTIFRAME / DATA_PATH_WIDTH;
+
+localparam DPW_LOG2 = DATA_PATH_WIDTH == 8 ? 3 : DATA_PATH_WIDTH == 4 ? 2 : 1;
 
 localparam LMFC_COUNTER_WIDTH = MAX_BEATS_PER_MULTIFRAME > 256 ? 9 :
   MAX_BEATS_PER_MULTIFRAME > 128 ? 8 :
@@ -140,34 +151,190 @@ reg [DATA_PATH_WIDTH-1:0] tx_sof_fm_d2;
 reg [DATA_PATH_WIDTH-1:0] tx_eof_fm_d2;
 reg [DATA_PATH_WIDTH-1:0] tx_somf_fm_d2;
 reg [DATA_PATH_WIDTH-1:0] tx_eomf_fm_d2;
+wire lmfc_edge_synced;
 wire lmc_edge;
 wire lmc_quarter_edge;
 wire eoemb;
+wire [DATA_PATH_WIDTH*8*NUM_LANES-1:0] gearbox_data;
+wire tx_ready_nx;
+wire link_lmfc_edge;
+wire link_lmfc_clk;
+wire device_lmfc_edge;
+wire device_lmfc_clk;
+wire device_lmc_edge;
+wire device_lmc_quarter_edge;
+wire device_eoemb;
+wire tx_next_mf_ready;
+wire link_tx_ready;
+
+wire [7:0] cfg_beats_per_multiframe = cfg_octets_per_multiframe >> DPW_LOG2;
+wire [7:0] device_cfg_beats_per_multiframe_s;
+
+// If input and output widths are symmetric keep the calculation for backwards
+// compatibility of the software.
+assign device_cfg_beats_per_multiframe_s = (TPL_DATA_PATH_WIDTH == DATA_PATH_WIDTH) ?
+                                   device_cfg_octets_per_multiframe >> DPW_LOG2 :
+                                   device_cfg_beats_per_multiframe;
 
 jesd204_lmfc #(
   .LINK_MODE(LINK_MODE),
-  .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
+  .DATA_PATH_WIDTH(TPL_DATA_PATH_WIDTH)
 ) i_lmfc (
-  .clk(clk),
-  .reset(reset),
+  .clk(device_clk),
+  .reset(device_reset),
 
-  .cfg_octets_per_multiframe(cfg_octets_per_multiframe),
-  .cfg_lmfc_offset(cfg_lmfc_offset),
-  .cfg_sysref_oneshot(cfg_sysref_oneshot),
-  .cfg_sysref_disable(cfg_sysref_disable),
+  .cfg_octets_per_multiframe(device_cfg_octets_per_multiframe),
+  .cfg_lmfc_offset(device_cfg_lmfc_offset),
+  .cfg_beats_per_multiframe(device_cfg_beats_per_multiframe_s),
+  .cfg_sysref_oneshot(device_cfg_sysref_oneshot),
+  .cfg_sysref_disable(device_cfg_sysref_disable),
 
   .sysref(sysref),
 
-  .sysref_edge(event_sysref_edge),
-  .sysref_alignment_error(event_sysref_alignment_error),
+  .sysref_edge(device_event_sysref_edge),
+  .sysref_alignment_error(device_event_sysref_alignment_error),
 
-  .lmfc_edge(lmfc_edge),
-  .lmfc_clk(lmfc_clk),
+  .lmfc_edge(device_lmfc_edge),
+  .lmfc_clk(device_lmfc_clk),
   .lmfc_counter(),
-  .lmc_edge(lmc_edge),
-  .lmc_quarter_edge(lmc_quarter_edge),
-  .eoemb(eoemb)
+  .lmc_edge(device_lmc_edge),
+  .lmc_quarter_edge(device_lmc_quarter_edge),
+  .eoemb(device_eoemb)
 );
+
+generate
+if (ASYNC_CLK) begin : dual_lmfc_mode
+
+  reg link_lmfc_reset = 1'b1;
+  reg device_lmfc_edge_d1 = 1'b0;
+  reg device_tx_ready = 1'b0;
+
+  jesd204_lmfc #(
+    .LINK_MODE(LINK_MODE),
+    .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
+  ) i_link_lmfc (
+    .clk(clk),
+    .reset(link_lmfc_reset),
+
+    .cfg_octets_per_multiframe(cfg_octets_per_multiframe),
+    .cfg_lmfc_offset('h0),
+    .cfg_beats_per_multiframe(cfg_beats_per_multiframe),
+    .cfg_sysref_oneshot(1'b0),
+    .cfg_sysref_disable(1'b1),
+
+    .sysref(sysref),
+
+    .sysref_edge(),
+    .sysref_alignment_error(),
+
+    .lmfc_edge(link_lmfc_edge),
+    .lmfc_clk(link_lmfc_clk),
+    .lmfc_counter(),
+    .lmc_edge(lmc_edge),
+    .lmc_quarter_edge(lmc_quarter_edge),
+    .eoemb(eoemb)
+  );
+
+  sync_bits #(
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK(ASYNC_CLK)
+  ) i_link_reset_done_cdc (
+    .in_bits(~reset),
+    .out_clk(device_clk),
+    .out_resetn(~device_reset),
+    .out_bits(link_reset_n)
+  );
+
+  sync_event #(
+    .NUM_OF_EVENTS (1)
+  ) i_sync_lmfc (
+    .in_clk(device_clk),
+    .in_event(device_lmfc_edge & link_reset_n),
+    .out_clk(clk),
+    .out_event(lmfc_edge_synced)
+  );
+
+  always @(posedge clk) begin
+    if (reset) begin
+      link_lmfc_reset <= 1'b1;
+    end else if (lmfc_edge_synced) begin
+      link_lmfc_reset <= 1'b0;
+    end
+  end
+
+  jesd204_tx_gearbox #(
+    .IN_DATA_PATH_WIDTH(TPL_DATA_PATH_WIDTH),
+    .OUT_DATA_PATH_WIDTH(DATA_PATH_WIDTH),
+    .NUM_LANES(NUM_LANES),
+    .DEPTH(8)
+  ) i_tx_gearbox(
+    .link_clk(clk),
+    .reset(reset),
+    .device_clk(device_clk),
+    .device_reset(device_reset),
+    .device_data(tx_data),
+    .device_lmfc_edge(device_lmfc_edge_d1),
+    .link_data(gearbox_data),
+    .output_ready(tx_ready_nx)
+  );
+
+  always @(posedge device_clk) begin
+    device_lmfc_edge_d1 <= device_lmfc_edge;
+  end
+
+  sync_bits #(
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK(ASYNC_CLK)
+  ) i_next_mf_ready_cdc (
+    .in_bits(tx_next_mf_ready),
+    .out_clk(device_clk),
+    .out_resetn(1'b1),
+    .out_bits(device_tx_next_mf_ready)
+  );
+
+  always @(posedge device_clk) begin
+    if (device_reset) begin
+      device_tx_ready <= 1'b0;
+    end else if (device_lmfc_edge & device_tx_next_mf_ready) begin
+      device_tx_ready <= 1'b1;
+    end
+  end
+
+  jesd204_frame_mark #(
+    .DATA_PATH_WIDTH(TPL_DATA_PATH_WIDTH)
+  ) i_device_frame_mark (
+    .clk(device_clk),
+    .reset(~device_tx_ready),
+    .cfg_octets_per_multiframe(device_cfg_octets_per_multiframe),
+    .cfg_beats_per_multiframe(device_cfg_beats_per_multiframe_s),
+    .cfg_octets_per_frame(device_cfg_octets_per_frame),
+    .sof(tx_sof),
+    .eof(tx_eof),
+    .somf(tx_somf),
+    .eomf(tx_eomf)
+  );
+
+  assign tx_ready = device_tx_ready;
+
+end else begin
+  assign link_lmfc_edge = device_lmfc_edge;
+  assign link_lmfc_clk = device_lmfc_clk;
+  assign lmc_edge = device_lmc_edge;
+  assign lmc_quarter_edge = device_lmc_quarter_edge;
+  assign eoemb = device_eoemb;
+  assign gearbox_data = tx_data;
+
+  assign tx_sof = (LINK_MODE == 1) ? tx_sof_fm_d2 : tx_sof_fm;
+  assign tx_eof = (LINK_MODE == 1) ? tx_eof_fm_d2 : tx_eof_fm;
+  assign tx_somf = (LINK_MODE == 1) ? tx_somf_fm_d2 : tx_somf_fm;
+  assign tx_eomf = (LINK_MODE == 1) ? tx_eomf_fm_d2 : tx_eomf_fm;
+  assign tx_ready = link_tx_ready;
+
+end
+endgenerate
+
+assign lmfc_edge = device_lmfc_edge;
+assign lmfc_clk = device_lmfc_clk;
 
 assign frame_mark_reset = (LINK_MODE == 1) ? eof_gen_reset : ~tx_ready_64b_next;
 
@@ -177,6 +344,7 @@ jesd204_frame_mark #(
   .clk                        (clk),
   .reset                      (frame_mark_reset),
   .cfg_octets_per_multiframe  (cfg_octets_per_multiframe),
+  .cfg_beats_per_multiframe   (cfg_beats_per_multiframe),
   .cfg_octets_per_frame       (cfg_octets_per_frame),
   .sof                        (tx_sof_fm),
   .eof                        (tx_eof_fm),
@@ -194,11 +362,6 @@ always @(posedge clk) begin
   tx_somf_fm_d2 <= tx_somf_fm_d1;
   tx_eomf_fm_d2 <= tx_eomf_fm_d1;
 end
-
-assign tx_sof = (LINK_MODE == 1) ? tx_sof_fm_d2 : tx_sof_fm;
-assign tx_eof = (LINK_MODE == 1) ? tx_eof_fm_d2 : tx_eof_fm;
-assign tx_somf = (LINK_MODE == 1) ? tx_somf_fm_d2 : tx_somf_fm;
-assign tx_eomf = (LINK_MODE == 1) ? tx_eomf_fm_d2 : tx_eomf_fm;
 
 generate
 genvar i;
@@ -227,7 +390,7 @@ jesd204_tx_ctrl #(
   .reset(reset),
 
   .sync(sync),
-  .lmfc_edge(lmfc_edge),
+  .lmfc_edge(link_lmfc_edge),
   .somf(tx_somf_fm_d2),
   .somf_early2(tx_somf_fm),
   .eomf(tx_eomf_fm_d2),
@@ -235,7 +398,9 @@ jesd204_tx_ctrl #(
   .lane_cgs_enable(lane_cgs_enable),
   .eof_reset(eof_gen_reset),
 
-  .tx_ready(tx_ready),
+  .tx_ready(link_tx_ready),
+  .tx_ready_nx(tx_ready_nx),
+  .tx_next_mf_ready(tx_next_mf_ready),
 
   .ilas_data(ilas_data),
   .ilas_charisk(ilas_charisk),
@@ -278,8 +443,8 @@ for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
     .ilas_data(ilas_data[D_STOP:D_START]),
     .ilas_charisk(ilas_charisk[C_STOP:C_START]),
 
-    .tx_data(tx_data[D_STOP:D_START]),
-    .tx_ready(tx_ready),
+    .tx_data(gearbox_data[D_STOP:D_START]),
+    .tx_ready(link_tx_ready),
 
     .phy_data(phy_data_r[D_STOP:D_START]),
     .phy_charisk(phy_charisk_r[C_STOP:C_START]),
@@ -305,7 +470,7 @@ if (LINK_MODE[1] == 1) begin : mode_64b66b
       .clk(clk),
       .reset(reset),
 
-      .tx_data(tx_data[D_STOP:D_START]),
+      .tx_data(gearbox_data[D_STOP:D_START]),
       .tx_ready(tx_ready_64b),
 
       .phy_data(phy_data_r[D_STOP:D_START]),
@@ -321,7 +486,7 @@ if (LINK_MODE[1] == 1) begin : mode_64b66b
     );
   end
 
-  assign tx_ready_64b_next = reset ? 1'b0 : (lmfc_edge || tx_ready_64b);
+  assign tx_ready_64b_next = reset ? 1'b0 : (link_lmfc_edge || tx_ready_64b);
 
   always @(posedge clk) begin
     if (reset) begin
@@ -331,7 +496,10 @@ if (LINK_MODE[1] == 1) begin : mode_64b66b
     end
   end
 
-  assign tx_ready = tx_ready_64b;
+  assign tx_ready_nx = tx_ready_64b_next;
+  assign tx_next_mf_ready = 1'b1;
+
+  assign link_tx_ready = tx_ready_64b;
   // Link considered in DATA phase when SYSREF received and LEMC clock started
   // running
   assign status_state = {2{tx_ready_64b}};

@@ -94,6 +94,7 @@ reg                               align_err;
 reg  [DPW_LOG2*2:0]               cur_align_err_cnt;
 wire [8:0]                        align_err_cnt_next;
 
+wire [7:0] cfg_beats_per_multiframe = cfg_octets_per_multiframe>>DPW_LOG2;
 
 jesd204_frame_mark #(
   .DATA_PATH_WIDTH            (DATA_PATH_WIDTH)
@@ -101,6 +102,7 @@ jesd204_frame_mark #(
   .clk                        (clk),
   .reset                      (reset),
   .cfg_octets_per_multiframe  (cfg_octets_per_multiframe),
+  .cfg_beats_per_multiframe   (cfg_beats_per_multiframe),
   .cfg_octets_per_frame       (cfg_octets_per_frame),
   .sof                        (),
   .eof                        (eof),

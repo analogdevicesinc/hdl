@@ -43,9 +43,13 @@
 //
 
 // Limitations:
-//   DATA_PATH_WIDTH = 4, 8
-//   F*K=4, multiples of DATA_PATH_WIDTH
-//   F=1,2,3,4,6, and multiples of DATA_PATH_WIDTH
+//  for DATA_PATH_WIDTH = 4, 8
+//    F*K=4, multiples of DATA_PATH_WIDTH
+//    F=1,2,3,4,6, and multiples of DATA_PATH_WIDTH
+//  for DATA_PATH_WIDTH = 6
+//    F=3,6
+//  for DATA_PATH_WIDTH = 12
+//    F=3,6,12
 
 `timescale 1ns/100ps
 
@@ -55,6 +59,7 @@ module jesd204_frame_mark #(
   input                             clk,
   input                             reset,
   input [9:0]                       cfg_octets_per_multiframe,
+  input [7:0]                       cfg_beats_per_multiframe,
   input [7:0]                       cfg_octets_per_frame,
 
   output reg [DATA_PATH_WIDTH-1:0]  sof,
@@ -75,7 +80,6 @@ localparam CW = MAX_OCTETS_PER_FRAME > 128 ? 8 :
 localparam BEATS_PER_FRAME_WIDTH = CW-DPW_LOG2;
 localparam BEATS_PER_MF_WIDTH = 10-DPW_LOG2;
 
-wire [BEATS_PER_MF_WIDTH-1:0]     cfg_beats_per_multiframe = cfg_octets_per_multiframe[9:DPW_LOG2];
 // For DATA_PATH_WIDTH = 8, special case if F*K%8=4
 wire                              octets_per_mf_4_mod_8 = (DATA_PATH_WIDTH == 8) && ~cfg_octets_per_multiframe[2];
 reg [BEATS_PER_MF_WIDTH-1:0]      cur_beats_per_multiframe;
@@ -113,6 +117,21 @@ initial begin
   eof_f_6[0] = {4'b0000};
   eof_f_6[1] = {4'b0010};
   eof_f_6[2] = {4'b1000};
+end
+end else if(DATA_PATH_WIDTH == 6) begin : gen_dp_6
+initial begin
+  sof_f_3[0] = {6'b001001};
+  sof_f_3[1] = {6'b001001};
+  sof_f_3[2] = {6'b001001};
+  eof_f_3[0] = {6'b100100};
+  eof_f_3[1] = {6'b100100};
+  eof_f_3[2] = {6'b100100};
+  sof_f_6[0] = {6'b000001};
+  sof_f_6[1] = {6'b000001};
+  sof_f_6[2] = {6'b000001};
+  eof_f_6[0] = {6'b100000};
+  eof_f_6[1] = {6'b100000};
+  eof_f_6[2] = {6'b100000};
 end
 end else if(DATA_PATH_WIDTH == 8) begin : gen_dp_8
 initial begin
@@ -232,7 +251,7 @@ end
 assign cur_somf = beat_cnt_mf == 0;
 assign cur_eomf = beat_cnt_mf == cur_beats_per_multiframe;
 
-if(DATA_PATH_WIDTH == 4) begin : gen_mf_dp_4
+if(DATA_PATH_WIDTH == 4 || DATA_PATH_WIDTH == 6) begin : gen_mf_dp_4_6
 always @(*) begin
   cur_beats_per_multiframe = cfg_beats_per_multiframe;
   somf = {{DATA_PATH_WIDTH-1{1'b0}}, cur_somf};
