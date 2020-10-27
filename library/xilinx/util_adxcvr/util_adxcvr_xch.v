@@ -1088,8 +1088,8 @@ module util_adxcvr_xch #(
     .RXSYNC_OVRD                            (1'b0),
     .RXSYNC_SKIP_DA                         (1'b0),
     //----------------TX Buffer Attributes---------------
-    .TXSYNC_MULTILANE                       (TXSYNC_MULTILANE_IN),
-    .TXSYNC_OVRD                            (TXSYNC_OVRD_IN),
+    .TXSYNC_MULTILANE                       (1'b0),
+    .TXSYNC_OVRD                            (1'b0),
     .TXSYNC_SKIP_DA                         (1'b0)) 
   i_gthe2_channel (
     //------------------------------- CPLL Ports -------------------------------

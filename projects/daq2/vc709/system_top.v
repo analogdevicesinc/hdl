@@ -45,7 +45,7 @@ module system_top (
   output          uart_sout,
 
   output          ddr3_reset_n,
-  output  [13:0]  ddr3_addr,
+  output  [15:0]  ddr3_addr,
   output  [ 2:0]  ddr3_ba,
   output          ddr3_cas_n,
   output          ddr3_ras_n,
@@ -116,9 +116,9 @@ module system_top (
 
   // internal signals
 
-  wire    [18:0]  gpio_i;
-  wire    [11:0]  gpio_o;
-  wire    [ 2:0]  spi_csn;
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [ 7:0]  spi_csn;
   wire            spi_mosi;
   wire            spi_miso;
   wire            trig;
@@ -177,7 +177,7 @@ module system_top (
     .O (tx_sync));
 
   daq2_spi i_spi (
-    .spi_csn (spi_csn),
+    .spi_csn (spi_csn[2:0]),
     .spi_clk (spi_clk),
     .spi_mosi (spi_mosi),
     .spi_miso (spi_miso),
@@ -195,7 +195,7 @@ module system_top (
   assign clkd_sync = gpio_o[8];
   assign gpio_bd_o = gpio_o[7:0];
 
-  assign gpio_i[94:19] = gpio_o[94:19];
+  assign gpio_i[63:19] = gpio_o[63:19];
   assign gpio_i[18:18] = trig;
   assign gpio_i[17:17] = adc_fdb;
   assign gpio_i[16:16] = adc_fda;
@@ -219,9 +219,12 @@ module system_top (
     .ddr3_ras_n (ddr3_ras_n),
     .ddr3_reset_n (ddr3_reset_n),
     .ddr3_we_n (ddr3_we_n),
-    .gpio_i (gpio_i),
-    .gpio_o (gpio_o),
-    .gpio_t (),
+    .gpio0_i (gpio_i[31:0]),
+    .gpio0_o (gpio_o[31:0]),
+    .gpio0_t (),
+    ,gpio1_i (gpio_i[63:32]),    
+    .gpio1_o (gpio_o[63:32]),
+    .gpio1_t (),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
     .linear_flash_addr (linear_flash_addr),
@@ -230,36 +233,38 @@ module system_top (
     .linear_flash_dq_io (linear_flash_dq_io),
     .linear_flash_oen (linear_flash_oen),
     .linear_flash_wen (linear_flash_wen),
-    .rx_data_0_n (rx_data_n[0]),
-    .rx_data_0_p (rx_data_p[0]),
-    .rx_data_1_n (rx_data_n[1]),
-    .rx_data_1_p (rx_data_p[1]),
-    .rx_data_2_n (rx_data_n[2]),
-    .rx_data_2_p (rx_data_p[2]),
-    .rx_data_3_n (rx_data_n[3]),
-    .rx_data_3_p (rx_data_p[3]),
-    .rx_ref_clk_0 (rx_ref_clk),
-    .rx_sync_0 (rx_sync),
-    .rx_sysref_0 (rx_sysref),
-    .spi0_csn (spi_csn),
-    .spi0_miso (spi_miso),
-    .spi0_mosi (spi_mosi),
-    .spi0_sclk (spi_clk),
-    .spi1_csn (),
-    .spi1_miso (1'd0),
-    .spi1_mosi (),
-    .spi1_sclk (),
-    .tx_data_0_n (tx_data_n[0]),
-    .tx_data_0_p (tx_data_p[0]),
-    .tx_data_1_n (tx_data_n[1]),
-    .tx_data_1_p (tx_data_p[1]),
-    .tx_data_2_n (tx_data_n[2]),
-    .tx_data_2_p (tx_data_p[2]),
-    .tx_data_3_n (tx_data_n[3]),
-    .tx_data_3_p (tx_data_p[3]),
-    .tx_ref_clk_0 (tx_ref_clk),
-    .tx_sync_0 (tx_sync),
-    .tx_sysref_0 (tx_sysref),
+    //.rx_data_0_n (rx_data_n[0]),
+    //.rx_data_0_p (rx_data_p[0]),
+    //.rx_data_1_n (rx_data_n[1]),
+    //.rx_data_1_p (rx_data_p[1]),
+    //.rx_data_2_n (rx_data_n[2]),
+    //.rx_data_2_p (rx_data_p[2]),
+    //.rx_data_3_n (rx_data_n[3]),
+    //.rx_data_3_p (rx_data_p[3]),
+    //.rx_ref_clk_0 (rx_ref_clk),
+    //.rx_sync_0 (rx_sync),
+    //.rx_sysref_0 (rx_sysref),
+    .spi_clk_i (),
+    .spi_clk_o (spi_clk),    
+    .spi_csn_i (),
+    .spi_csn_o (spi_csn),
+    .spi_sdi_i (spi_miso),
+    .spi_sdo_i (1'd0),
+    .spi_sdo_o (spi_mosi),        
+    .sys_clk_n (sys_clk_n),
+    .sys_clk_p (sys_clk_p),
+    .sys_rst   (sys_rst),    
+    //.tx_data_0_n (tx_data_n[0]),
+    //.tx_data_0_p (tx_data_p[0]),
+    //.tx_data_1_n (tx_data_n[1]),
+    //.tx_data_1_p (tx_data_p[1]),
+    //.tx_data_2_n (tx_data_n[2]),
+    //.tx_data_2_p (tx_data_p[2]),
+    //.tx_data_3_n (tx_data_n[3]),
+    //.tx_data_3_p (tx_data_p[3]),
+    //.tx_ref_clk_0 (tx_ref_clk),
+    //.tx_sync_0 (tx_sync),
+    //.tx_sysref_0 (tx_sysref),
     .uart_sin (uart_sin),
     .uart_sout (uart_sout));
 
