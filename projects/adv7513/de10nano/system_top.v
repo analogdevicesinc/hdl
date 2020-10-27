@@ -99,8 +99,8 @@ module system_top (
 
   // board gpio
 
-  output  [  3:0]   gpio_bd_o,
-  input   [  7:0]   gpio_bd_i,
+  output  [  7:0]   gpio_bd_o,
+  input   [  5:0]   gpio_bd_i,
 
   output            hdmi_out_clk,
   output            hdmi_vsync,
@@ -132,12 +132,10 @@ module system_top (
   // instantiations
 
   assign gpio_i[63:32] = gpio_o[63:32];
-
-  assign gpio_i[11:4] = gpio_bd_i[7:0];
-  assign gpio_bd_o[3:0] = gpio_o[3:0];
-
   assign gpio_i[31:12] = gpio_o[31:12];
+  assign gpio_i[11:4] = gpio_bd_i[5:0];
 
+  assign gpio_bd_o[7:0] = gpio_o[7:0];
   assign ltc2308_cs = gpio_o[41];
 
   ALT_IOBUF scl_iobuf (

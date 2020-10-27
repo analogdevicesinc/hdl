@@ -47,6 +47,19 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to gpio_bd_i[5]
 
 set_location_assignment PIN_A22 -to uart0_rx
 set_location_assignment PIN_B21 -to uart0_tx
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to uart0_rx
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to uart0_tx
+
+# hps spi master
+
+set_location_assignment PIN_C16 -to spim1_ss0
+set_location_assignment PIN_C19 -to spim1_clk
+set_location_assignment PIN_B16 -to spim1_mosi
+set_location_assignment PIN_B19 -to spim1_miso
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spim1_ss0
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spim1_clk
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spim1_mosi
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spim1_miso
 
 # SPI interface for ltc2308
 
