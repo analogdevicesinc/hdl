@@ -180,12 +180,16 @@ proc ad_disconnect {p_name_1 p_name_2} {
 #  \param[a_jesd] - name of the JESD204 link IP
 #  \param[lane_map] - lane_map maps the logical lane $n onto the physical lane
 #  $lane_map[$n], otherwise logical lane $n is mapped onto physical lane $n.
-#  \param[device_clk] - define a custom device clock, should be a net name
+#  \param[link_clk] - define a custom link clock, should be a net name
 #  connected to the clock source. If not used, the rx|tx_clk_out_0 is used as
+#  link clock. This should be lane rate / (encoder_ratio*datapath width in bits) 
+#  where encoder_ratio is 10/8 for 8b10b encoding or 66/64 for 64b66b link layer.
+#  \param[device_clk] - define a custom device clock, should be a net name
+#  connected to the clock source. If not used, the link_clk is used as
 #  device clock
 #
 
-proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {device_clk {}}} {
+proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}}} {
 
   global xcvr_index
   global xcvr_tx_index
@@ -244,10 +248,18 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {device_clk {}}} {
   create_bd_port -dir I $m_sysref
   create_bd_port -from [expr $num_of_links - 1] -to 0 -dir ${ctrl_dir} $m_sync
 
-  if {$device_clk == {}} {
-    set device_clk ${u_xcvr}/${txrx}_out_clk_${index}
+  if {$link_clk == {}} {
+    set link_clk ${u_xcvr}/${txrx}_out_clk_${index}
     set rst_gen [regsub -all "/" ${a_jesd}_rstgen "_"]
     set create_rst_gen 1
+  } else {
+    set rst_gen ${link_clk}_rstgen
+    # Only create one reset gen per clock
+    set create_rst_gen [expr {[get_bd_cells -quiet ${rst_gen}] == {}}]
+  }
+
+  if {$device_clk == {}} {
+    set device_clk $link_clk
   } else {
     set rst_gen ${device_clk}_rstgen
     # Only create one reset gen per clock
@@ -284,7 +296,7 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {device_clk {}}} {
       ad_connect  ${a_xcvr}/up_cm_${n} ${u_xcvr}/up_cm_${n}
     }
     ad_connect  ${a_xcvr}/up_ch_${n} ${u_xcvr}/up_${txrx}_${phys_lane}
-    ad_connect  ${device_clk} ${u_xcvr}/${txrx}_clk_${phys_lane}
+    ad_connect  ${link_clk} ${u_xcvr}/${txrx}_clk_${phys_lane}
     if {$phys_lane != {}} {
       if {$jesd204_type == 0} {
         ad_connect  ${u_xcvr}/${txrx}_${phys_lane} ${a_jesd}/${txrx}_phy${n}
@@ -303,6 +315,7 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {device_clk {}}} {
     ad_connect  ${a_jesd}/sysref $m_sysref
     ad_connect  ${a_jesd}/sync $m_sync
     ad_connect  ${device_clk} ${a_jesd}/device_clk
+    ad_connect  ${link_clk} ${a_jesd}/link_clk
   } else {
     ad_connect  ${a_jesd}/${txrx}_sysref $m_sysref
     ad_connect  ${a_jesd}/${txrx}_sync $m_sync

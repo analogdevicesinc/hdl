@@ -32,8 +32,9 @@ module ad_ip_jesd204_tpl_dac #(
   parameter NUM_LANES = 4,
   parameter NUM_CHANNELS = 2,
   parameter SAMPLES_PER_FRAME = 1,
-  parameter CONVERTER_RESOLUTION = 16,
-  parameter BITS_PER_SAMPLE = 16,
+  parameter CONVERTER_RESOLUTION = 16, // JESD_N
+  parameter BITS_PER_SAMPLE = 16,      // JESD_NP
+  parameter DMA_BITS_PER_SAMPLE = 16,
   parameter OCTETS_PER_BEAT = 4,
   parameter DDS_TYPE = 1,
   parameter DDS_CORDIC_DW = 16,
@@ -55,7 +56,7 @@ module ad_ip_jesd204_tpl_dac #(
   output [NUM_CHANNELS-1:0] enable,
 
   output [NUM_CHANNELS-1:0] dac_valid,
-  input [NUM_LANES*8*OCTETS_PER_BEAT-1:0] dac_ddata,
+  input [DMA_BITS_PER_SAMPLE * OCTETS_PER_BEAT * 8 * NUM_LANES / BITS_PER_SAMPLE-1:0] dac_ddata,
   input dac_dunf,
 
   // external sync, should be on the link_clk clock domain
@@ -94,7 +95,7 @@ module ad_ip_jesd204_tpl_dac #(
 
   localparam DATA_PATH_WIDTH = OCTETS_PER_BEAT * 8 * NUM_LANES / NUM_CHANNELS / BITS_PER_SAMPLE;
   localparam LINK_DATA_WIDTH = NUM_LANES * OCTETS_PER_BEAT * 8;
-  localparam DMA_DATA_WIDTH = BITS_PER_SAMPLE * DATA_PATH_WIDTH * NUM_CHANNELS;
+  localparam DMA_DATA_WIDTH = DMA_BITS_PER_SAMPLE * DATA_PATH_WIDTH * NUM_CHANNELS;
 
   localparam BYTES_PER_FRAME = (NUM_CHANNELS * BITS_PER_SAMPLE * SAMPLES_PER_FRAME) / ( 8 * NUM_LANES);
 
@@ -118,6 +119,8 @@ module ad_ip_jesd204_tpl_dac #(
   wire [NUM_CHANNELS*16-1:0] dac_iqcor_coeff_1;
   wire [NUM_CHANNELS*16-1:0] dac_iqcor_coeff_2;
   wire [NUM_CHANNELS*8-1:0] dac_src_chan_sel;
+
+  reg [LINK_DATA_WIDTH-1:0] dac_ddata_cr;
 
   // regmap
 
@@ -205,7 +208,6 @@ module ad_ip_jesd204_tpl_dac #(
     .OCTETS_PER_BEAT (OCTETS_PER_BEAT),
     .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
     .LINK_DATA_WIDTH (LINK_DATA_WIDTH),
-    .DMA_DATA_WIDTH (DMA_DATA_WIDTH),
     .DDS_TYPE (DDS_TYPE),
     .DDS_CORDIC_DW (DDS_CORDIC_DW),
     .DDS_CORDIC_PHASE_DW (DDS_CORDIC_PHASE_DW),
@@ -220,7 +222,7 @@ module ad_ip_jesd204_tpl_dac #(
     .enable (enable),
 
     .dac_valid (dac_valid),
-    .dac_ddata (dac_ddata),
+    .dac_ddata (dac_ddata_cr),
 
     .dac_sync (dac_sync),
     .dac_sync_in_status (dac_sync_in_status),
@@ -245,5 +247,13 @@ module ad_ip_jesd204_tpl_dac #(
     .dac_src_chan_sel (dac_src_chan_sel)
 
   );
+
+  // Drop DMA padding bits from the MSB
+  integer i;
+  always @(*) begin
+    for (i=0;i<NUM_CHANNELS*DATA_PATH_WIDTH;i=i+1) begin
+      dac_ddata_cr[i*BITS_PER_SAMPLE +: BITS_PER_SAMPLE] = dac_ddata[i*DMA_BITS_PER_SAMPLE +: BITS_PER_SAMPLE];
+    end
+  end
 
 endmodule

@@ -34,6 +34,7 @@ module ad_ip_jesd204_tpl_adc #(
   parameter SAMPLES_PER_FRAME = 1,
   parameter CONVERTER_RESOLUTION = 14,
   parameter BITS_PER_SAMPLE = 16,
+  parameter DMA_BITS_PER_SAMPLE = 16,
   parameter OCTETS_PER_BEAT = 4,
   parameter TWOS_COMPLEMENT = 1
 ) (
@@ -51,7 +52,7 @@ module ad_ip_jesd204_tpl_adc #(
   output [NUM_CHANNELS-1:0] enable,
 
   output [NUM_CHANNELS-1:0] adc_valid,
-  output [NUM_LANES*8*OCTETS_PER_BEAT-1:0] adc_data,
+  output [DMA_BITS_PER_SAMPLE * OCTETS_PER_BEAT * 8 * NUM_LANES / BITS_PER_SAMPLE-1:0] adc_data,
   input adc_dovf,
 
   input adc_sync_in,
@@ -90,7 +91,7 @@ module ad_ip_jesd204_tpl_adc #(
   // Number of samples per channel that are processed in parallel.
   localparam DATA_PATH_WIDTH = OCTETS_PER_BEAT * 8 * NUM_LANES / NUM_CHANNELS / BITS_PER_SAMPLE;
   localparam LINK_DATA_WIDTH = NUM_LANES * OCTETS_PER_BEAT * 8;
-  localparam DMA_DATA_WIDTH = BITS_PER_SAMPLE * DATA_PATH_WIDTH * NUM_CHANNELS;
+  localparam DMA_DATA_WIDTH = DMA_BITS_PER_SAMPLE * DATA_PATH_WIDTH * NUM_CHANNELS;
 
   localparam BYTES_PER_FRAME = (NUM_CHANNELS * BITS_PER_SAMPLE * SAMPLES_PER_FRAME) / ( 8 * NUM_LANES);
 
@@ -180,7 +181,8 @@ module ad_ip_jesd204_tpl_adc #(
     .LINK_DATA_WIDTH (LINK_DATA_WIDTH),
     .DMA_DATA_WIDTH (DMA_DATA_WIDTH),
     .TWOS_COMPLEMENT (TWOS_COMPLEMENT),
-    .DATA_PATH_WIDTH (DATA_PATH_WIDTH)
+    .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
+    .DMA_BITS_PER_SAMPLE (DMA_BITS_PER_SAMPLE)
   ) i_core (
     .clk (link_clk),
 

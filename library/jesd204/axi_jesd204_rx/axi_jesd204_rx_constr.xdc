@@ -44,6 +44,7 @@
 
 set axi_clk [get_clocks -of_objects [get_ports s_axi_aclk]]
 set core_clk [get_clocks -of_objects [get_ports core_clk]]
+set device_clk [get_clocks -of_objects [get_ports device_clk]]
 
 set_property ASYNC_REG TRUE \
   [get_cells -hier {*cdc_sync_stage1_reg*}] \
@@ -131,6 +132,10 @@ set_false_path \
   -to [get_pins {i_up_common/core_reset_vector_reg[*]/PRE}]
 
 set_false_path \
+  -from [get_pins {i_up_common/up_reset_core_reg/C}] \
+  -to [get_pins {i_up_common/device_reset_vector_reg[*]/PRE}]
+
+set_false_path \
   -from [get_pins {i_up_common/core_reset_vector_reg[0]/C}] \
   -to [get_pins {i_up_common/up_reset_synchronizer_vector_reg[*]/PRE}]
 
@@ -143,11 +148,21 @@ set_max_delay -datapath_only \
   [get_property -min PERIOD $core_clk]
 
 set_max_delay -datapath_only \
+  -from [get_pins {i_up_common/up_cfg_*_reg*/C}] \
+  -to [get_pins {i_up_common/device_cfg_*_reg*/D}] \
+  [get_property -min PERIOD $device_clk]
+
+set_max_delay -datapath_only \
   -from [get_pins {i_up_rx/up_cfg_*_reg*/C}] \
   -to [get_pins {i_up_common/core_extra_cfg_reg[*]/D}] \
   [get_property -min PERIOD $core_clk]
 
 set_max_delay -datapath_only \
+  -from [get_pins {i_up_rx/up_cfg_*_reg*/C}] \
+  -to [get_pins {i_up_common/device_extra_cfg_reg[*]/D}] \
+  [get_property -min PERIOD $device_clk]
+
+set_max_delay -datapath_only \
   -from [get_pins {i_up_sysref/up_cfg_*_reg*/C}] \
-  -to [get_pins {i_up_common/core_extra_cfg_reg[*]/D}] \
-  [get_property -min PERIOD $core_clk]
+  -to [get_pins {i_up_common/device_extra_cfg_reg[*]/D}] \
+  [get_property -min PERIOD $device_clk]

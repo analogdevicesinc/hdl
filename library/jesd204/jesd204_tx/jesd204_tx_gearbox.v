@@ -44,79 +44,101 @@
 
 `timescale 1ns/100ps
 
-module elastic_buffer #(
-  parameter IWIDTH = 32,
-  parameter OWIDTH = 48,
-  parameter SIZE = 256,
-  parameter ASYNC_CLK = 0
-) (
-  input clk,
-  input reset,
+// Constraints:
+//   - IN_DATA_PATH_WIDTH >= OUT_DATA_PATH_WIDTH
+//
 
+module jesd204_tx_gearbox #(
+  parameter IN_DATA_PATH_WIDTH = 6,
+  parameter OUT_DATA_PATH_WIDTH = 4,
+  parameter NUM_LANES = 1,
+  parameter DEPTH = 16
+) (
+  input link_clk,
+  input reset,
   input device_clk,
   input device_reset,
-
-  input [IWIDTH-1:0] wr_data,
-
-  output reg [OWIDTH-1:0] rd_data,
-
-  input ready_n,
-  input do_release_n
+  input [NUM_LANES*IN_DATA_PATH_WIDTH*8-1:0] device_data,
+  input device_lmfc_edge,
+  output [NUM_LANES*OUT_DATA_PATH_WIDTH*8-1:0] link_data,
+  input output_ready
 );
 
-localparam ADDR_WIDTH = SIZE > 128 ? 7 :
-  SIZE > 64 ? 6 :
-  SIZE > 32 ? 5 :
-  SIZE > 16 ? 4 :
-  SIZE > 8 ? 3 :
-  SIZE > 4 ? 2 :
-  SIZE > 2 ? 1 : 0;
+localparam MEM_W = IN_DATA_PATH_WIDTH*8*NUM_LANES;
+localparam D_LOG2 = $clog2(DEPTH);
 
-localparam WIDTH = OWIDTH >= IWIDTH ? OWIDTH : IWIDTH;
+reg [MEM_W-1:0] mem [0:DEPTH-1];
+reg [D_LOG2-1:0]  in_addr ='h00;
+reg [D_LOG2-1:0]  out_addr = 'b0;
+reg               mem_rd_valid = 'b0;
+reg [MEM_W-1:0]  mem_rd_data;
 
-reg [ADDR_WIDTH:0] wr_addr = 'h00;
-reg [ADDR_WIDTH:0] rd_addr = 'h00;
-(* ram_style = "distributed" *) reg [WIDTH-1:0] mem[0:SIZE - 1];
+wire                mem_wr_en = 1'b1;
+wire                mem_rd_en;
+wire [D_LOG2-1:0]  in_out_addr;
+wire [D_LOG2-1:0]  out_in_addr;
+wire [NUM_LANES-1:0] unpacker_ready;
+wire output_ready_sync;
 
-wire mem_wr;
-wire [WIDTH-1:0] mem_wr_data;
+sync_bits i_sync_ready (
+  .in_bits(output_ready),
+  .out_resetn(~device_reset),
+  .out_clk(device_clk),
+  .out_bits(output_ready_sync)
+);
 
-generate if ((OWIDTH > IWIDTH) && ASYNC_CLK) begin
-  ad_pack #(
-    .I_W(IWIDTH/8),
-    .O_W(OWIDTH/8),
-    .UNIT_W(8)
-  ) i_ad_pack (
-    .clk(clk),
-    .reset(ready_n),
-    .idata(wr_data),
-    .ivalid(1'b1),
-
-    .odata(mem_wr_data),
-    .ovalid(mem_wr)
-  );
-end else begin
-  assign mem_wr = 1'b1;
-  assign mem_wr_data = wr_data;
-end
-endgenerate
-
-always @(posedge clk) begin
-  if (ready_n == 1'b1) begin
-    wr_addr <= 'h00;
-  end else if (mem_wr) begin
-    mem[wr_addr] <= mem_wr_data;
-    wr_addr <= wr_addr + 1'b1;
+always @(posedge device_clk) begin
+  if (device_lmfc_edge & ~output_ready_sync) begin
+    in_addr <= 'h01;
+  end else if (mem_wr_en) begin
+    in_addr <= in_addr + 1;
   end
 end
 
 always @(posedge device_clk) begin
-  if (do_release_n == 1'b1) begin
-    rd_addr <= 'h00;
-  end else begin
-    rd_addr <= rd_addr + 1'b1;
-    rd_data <= mem[rd_addr];
+  if (mem_wr_en) begin
+    mem[in_addr] <= device_data;
   end
 end
 
+assign mem_rd_en = output_ready&unpacker_ready[0];
+
+always @(posedge link_clk) begin
+  if (mem_rd_en) begin
+    mem_rd_data <= mem[out_addr];
+  end
+  mem_rd_valid <= mem_rd_en;
+end
+
+always @(posedge link_clk) begin
+  if (reset) begin
+    out_addr <= 'b0;
+  end else if (mem_rd_en) begin
+    out_addr <= out_addr + 1;
+  end
+end
+
+genvar i;
+generate for (i = 0; i < NUM_LANES; i=i+1) begin: unpacker
+
+ad_upack #(
+  .I_W(IN_DATA_PATH_WIDTH),
+  .O_W(OUT_DATA_PATH_WIDTH),
+  .UNIT_W(8),
+  .O_REG(0)
+) i_ad_upack (
+  .clk(link_clk),
+  .reset(reset),
+  .idata(mem_rd_data[i*IN_DATA_PATH_WIDTH*8+:IN_DATA_PATH_WIDTH*8]),
+  .ivalid(mem_rd_valid),
+  .iready(unpacker_ready[i]),
+
+  .odata(link_data[i*OUT_DATA_PATH_WIDTH*8+:OUT_DATA_PATH_WIDTH*8]),
+  .ovalid()
+);
+
+end
+endgenerate
+
 endmodule
+
