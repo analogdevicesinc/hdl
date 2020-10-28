@@ -158,8 +158,9 @@ module system_top (
   wire            spi_mosi;
   wire            spi0_miso;
 
+  // The csn bus from the SPI controller needs to be decoded as 
+  // is-decoded-cs = <1> is set in the device tree.
   reg  [7:0]     spi_3_to_8_csn;
-
   always @(*) begin
     case (spi_csn)
       3'h0: spi_3_to_8_csn = 8'b11111110;
