@@ -152,7 +152,6 @@ ad_connect sys_concat_intc/dout   axi_intc/intr
 
 # defaults (peripherals)
 
-#ad_connect axi_ddr_cntrl/device_temp GND
 ad_connect axi_ddr_cntrl/mmcm_locked   sys_rstgen/dcm_locked
 ad_connect axi_ddr_cntrl/mmcm_locked   sys_200m_rstgen/dcm_locked
 
@@ -189,7 +188,11 @@ ad_connect sys_cpu_clk  axi_spi/ext_spi_clk
 # defaults (interrupts)
 
 ad_connect sys_concat_intc/In0    axi_timer/interrupt
+ad_connect sys_concat_intc/In1    GND
+ad_connect sys_concat_intc/In2    GND
+ad_connect sys_concat_intc/In3    GND
 ad_connect sys_concat_intc/In4    axi_uart/interrupt
+ad_connect sys_concat_intc/In5    GND
 ad_connect sys_concat_intc/In6    GND
 ad_connect sys_concat_intc/In7    GND
 ad_connect sys_concat_intc/In8    GND

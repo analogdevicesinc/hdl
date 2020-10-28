@@ -36,6 +36,23 @@ set_property  -dict {PACKAGE_PIN  E9 } [get_ports rx_ref_clk_n]                 
 set_property  -dict {PACKAGE_PIN  G10} [get_ports tx_ref_clk_p]                                             ; ## D04 FMC1_HPC_GBTCLK0_M2C_P
 set_property  -dict {PACKAGE_PIN  G9 } [get_ports tx_ref_clk_n]                                             ; ## D05 FMC1_HPC_GBTCLK0_M2C_N
 
+set_property  -dict {PACKAGE_PIN  A6 } [get_ports rx_data_p[0]]                                             ; ## A10  FMC1_HPC_DP3_M2C_P
+set_property  -dict {PACKAGE_PIN  A5 } [get_ports rx_data_n[0]]                                             ; ## A11  FMC1_HPC_DP3_M2C_N
+set_property  -dict {PACKAGE_PIN  D8 } [get_ports rx_data_p[1]]                                             ; ## C06  FMC1_HPC_DP0_M2C_P
+set_property  -dict {PACKAGE_PIN  D7 } [get_ports rx_data_n[1]]                                             ; ## C07  FMC1_HPC_DP0_M2C_N
+set_property  -dict {PACKAGE_PIN  B8 } [get_ports rx_data_p[2]]                                             ; ## A06  FMC1_HPC_DP2_M2C_P
+set_property  -dict {PACKAGE_PIN  B7 } [get_ports rx_data_n[2]]                                             ; ## A07  FMC1_HPC_DP2_M2C_N
+set_property  -dict {PACKAGE_PIN  C6 } [get_ports rx_data_p[3]]                                             ; ## A02  FMC1_HPC_DP1_M2C_P
+set_property  -dict {PACKAGE_PIN  C5 } [get_ports rx_data_n[3]]                                             ; ## A03  FMC1_HPC_DP1_M2C_N
+set_property  -dict {PACKAGE_PIN  B4 } [get_ports tx_data_p[0]]                                             ; ## A30  FMC1_HPC_DP3_C2M_P 
+set_property  -dict {PACKAGE_PIN  B3 } [get_ports tx_data_n[0]]                                             ; ## A31  FMC1_HPC_DP3_C2M_N 
+set_property  -dict {PACKAGE_PIN  E2 } [get_ports tx_data_p[1]]                                             ; ## C02  FMC1_HPC_DP0_C2M_P 
+set_property  -dict {PACKAGE_PIN  E1 } [get_ports tx_data_n[1]]                                             ; ## C03  FMC1_HPC_DP0_C2M_N 
+set_property  -dict {PACKAGE_PIN  C2 } [get_ports tx_data_p[2]]                                             ; ## A26  FMC1_HPC_DP2_C2M_P 
+set_property  -dict {PACKAGE_PIN  C1 } [get_ports tx_data_n[2]]                                             ; ## A27  FMC1_HPC_DP2_C2M_N 
+set_property  -dict {PACKAGE_PIN  D4 } [get_ports tx_data_p[3]]                                             ; ## A22  FMC1_HPC_DP1_C2M_P 
+set_property  -dict {PACKAGE_PIN  D3 } [get_ports tx_data_n[3]]                                             ; ## A23  FMC1_HPC_DP1_C2M_N 
+
 set_property  LOC GTHE2_CHANNEL_X1Y32  [get_cells -hierarchical -filter {NAME =~ *util_daq2_xcvr/inst/i_xch_0/i_gthe2_channel}]
 set_property  LOC GTHE2_CHANNEL_X1Y34  [get_cells -hierarchical -filter {NAME =~ *util_daq2_xcvr/inst/i_xch_1/i_gthe2_channel}]
 set_property  LOC GTHE2_CHANNEL_X1Y35  [get_cells -hierarchical -filter {NAME =~ *util_daq2_xcvr/inst/i_xch_2/i_gthe2_channel}]
