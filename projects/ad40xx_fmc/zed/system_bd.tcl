@@ -1,6 +1,6 @@
 
 source $ad_hdl_dir/projects/common/zed/zed_system_bd.tcl
-source $ad_hdl_dir/projects/scripts/adi_pd_intel.tcl
+source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 # specify the spi reference clock frequency in MHz
 set spi_clk_ref_frequency 166
