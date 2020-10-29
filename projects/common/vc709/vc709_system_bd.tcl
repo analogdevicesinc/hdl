@@ -4,11 +4,8 @@ create_bd_port -dir I sys_clk_p
 create_bd_port -dir I sys_clk_n
 
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 ddr3
-
 create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 mgt_clk
-
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:emc_rtl:1.0 linear_flash
-
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 iic_main
 
 create_bd_port -dir I uart_sin
@@ -70,7 +67,7 @@ ad_ip_instance mig_7series axi_ddr_cntrl
 set axi_ddr_cntrl_dir [get_property IP_DIR [get_ips [get_property CONFIG.Component_Name [get_bd_cells axi_ddr_cntrl]]]]
 file copy -force $ad_hdl_dir/projects/common/vc709/vc709_system_mig.prj "$axi_ddr_cntrl_dir/"
 ad_ip_parameter axi_ddr_cntrl CONFIG.XML_INPUT_FILE vc709_system_mig.prj
-ad_ip_parameter axi_ddr_cntrl CONFIG.RESET_BOARD_INTERFACE Custom
+#ad_ip_parameter axi_ddr_cntrl CONFIG.RESET_BOARD_INTERFACE Custom
 
 # instance: default peripherals
 

@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2020 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -188,20 +188,21 @@ module system_top (
     .I (trig_p),
     .IB (trig_n),
     .O (trig));
-
-  assign adc_pd = gpio_o[11];
-  assign dac_txen = gpio_o[10];
-  assign dac_reset = gpio_o[9];
-  assign clkd_sync = gpio_o[8];
+  
   assign gpio_bd_o = gpio_o[7:0];
-
-  assign gpio_i[63:19] = gpio_o[63:19];
-  assign gpio_i[18:18] = trig;
-  assign gpio_i[17:17] = adc_fdb;
-  assign gpio_i[16:16] = adc_fda;
-  assign gpio_i[15:15] = dac_irq;
-  assign gpio_i[14:13] = clkd_status;
   assign gpio_i[12: 0] = gpio_bd_i;
+  assign gpio_i[31:13] = gpio_o[31:13];
+
+  assign adc_pd = gpio_o[35];
+  assign dac_txen = gpio_o[34];
+  assign dac_reset = gpio_o[33];
+  assign clkd_sync = gpio_o[32];
+  assign gpio_i[37:37] = trig;
+  assign gpio_i[36:36] = adc_fdb;
+  assign gpio_i[35:35] = adc_fda;
+  assign gpio_i[34:34] = dac_irq;
+  assign gpio_i[33:32] = clkd_status;
+  assign gpio_i[63:38] = gpio_o[63:38];
 
   system_wrapper i_system_wrapper (
     .ddr3_addr (ddr3_addr),
