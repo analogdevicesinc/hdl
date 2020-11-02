@@ -34,7 +34,7 @@ set p_prcfg_init ""
 set p_prcfg_list ""
 set p_prcfg_status ""
 
-## Creates a Xilinx project.
+## Creates a Xilinx project for a given board
 #
 # \param[project_name] - name of the project
 # \param[mode] - if set non-project mode will be used, otherwise project mode
@@ -47,6 +47,72 @@ set p_prcfg_status ""
 #
 proc adi_project {project_name {mode 0} {parameter_list {}} } {
 
+  # Determine the device based on the board name
+  if [regexp "_ac701$" $project_name] {
+    set device "xc7a200tfbg676-2"
+    set board [lindex [lsearch -all -inline [get_board_parts] *ac701*] end]
+  }
+  if [regexp "_kc705$" $project_name] {
+    set device "xc7k325tffg900-2"
+    set board [lindex [lsearch -all -inline [get_board_parts] *kc705*] end]
+  }
+  if [regexp "_vc707$" $project_name] {
+    set device "xc7vx485tffg1761-2"
+    set board [lindex [lsearch -all -inline [get_board_parts] *vc707*] end]
+  }
+  if [regexp "_vcu118$" $project_name] {
+    set device "xcvu9p-flga2104-2L-e"
+    set board [lindex [lsearch -all -inline [get_board_parts] *vcu118*] end]
+  }
+  if [regexp "_kcu105$" $project_name] {
+    set device "xcku040-ffva1156-2-e"
+    set board [lindex [lsearch -all -inline [get_board_parts] *kcu105*] end]
+  }
+  if [regexp "_zed$" $project_name] {
+    set device "xc7z020clg484-1"
+    set board [lindex [lsearch -all -inline [get_board_parts] *zed*] end]
+  }
+  if [regexp "_coraz7s$" $project_name] {
+    set device "xc7z007sclg400-1"
+    set board "not-applicable"
+  }
+  if [regexp "_microzed$" $project_name] {
+    set device "xc7z010clg400-1"
+    set board "not-applicable"
+  }
+  if [regexp "_zc702$" $project_name] {
+    set device "xc7z020clg484-1"
+    set board [lindex [lsearch -all -inline [get_board_parts] *zc702*] end]
+  }
+  if [regexp "_zc706$" $project_name] {
+    set device "xc7z045ffg900-2"
+    set board [lindex [lsearch -all -inline [get_board_parts] *zc706*] end]
+  }
+  if [regexp "_mitx045$" $project_name] {
+    set device "xc7z045ffg900-2"
+    set board "not-applicable"
+  }
+  if [regexp "_zcu102$" $project_name] {
+    set device "xczu9eg-ffvb1156-2-e"
+    set board [lindex [lsearch -all -inline [get_board_parts] *zcu102*] end]
+  }
+
+  adi_project_create $project_name $mode $parameter_list $device $board
+}
+
+
+## Creates a Xilinx project.
+#
+# \param[project_name] - name of the project
+# \param[mode] - if set non-project mode will be used, otherwise project mode
+# flow, see UG892 for more information
+# \param[parameter_list] - a list of global parameters (parameters of the
+# system_top module)
+# \param[device] - Canonical Xilinx device string
+# \param[board] - board BSP name (optional)
+#
+proc adi_project_create {project_name mode parameter_list device {board "not-applicable"}}  {
+
   global ad_hdl_dir
   global ad_ghdl_dir
   global p_board
@@ -57,65 +123,15 @@ proc adi_project {project_name {mode 0} {parameter_list {}} } {
   global ADI_USE_OOC_SYNTHESIS
   global ADI_USE_INCR_COMP
 
-  if [regexp "_ac701$" $project_name] {
-    set p_device "xc7a200tfbg676-2"
-    set p_board [lindex [lsearch -all -inline [get_board_parts] *ac701*] end]
-    set sys_zynq 0
-  }
-  if [regexp "_kc705$" $project_name] {
-    set p_device "xc7k325tffg900-2"
-    set p_board [lindex [lsearch -all -inline [get_board_parts] *kc705*] end]
-    set sys_zynq 0
-  }
-  if [regexp "_vc707$" $project_name] {
-    set p_device "xc7vx485tffg1761-2"
-    set p_board [lindex [lsearch -all -inline [get_board_parts] *vc707*] end]
-    set sys_zynq 0
-  }
-  if [regexp "_vcu118$" $project_name] {
-    set p_device "xcvu9p-flga2104-2L-e"
-    set p_board [lindex [lsearch -all -inline [get_board_parts] *vcu118*] end]
-    set sys_zynq 0
-  }
-  if [regexp "_kcu105$" $project_name] {
-    set p_device "xcku040-ffva1156-2-e"
-    set p_board [lindex [lsearch -all -inline [get_board_parts] *kcu105*] end]
-    set sys_zynq 0
-  }
-  if [regexp "_zed$" $project_name] {
-    set p_device "xc7z020clg484-1"
-    set p_board [lindex [lsearch -all -inline [get_board_parts] *zed*] end]
+  set p_device $device
+  set p_board $board
+
+  if [regexp "^xc7z" $device] {
     set sys_zynq 1
-  }
-  if [regexp "_coraz7s$" $project_name] {
-    set p_device "xc7z007sclg400-1"
-    set p_board "not-applicable"
-    set sys_zynq 1
-  }
-  if [regexp "_microzed$" $project_name] {
-    set p_device "xc7z010clg400-1"
-    set p_board "not-applicable"
-    set sys_zynq 1
-  }
-  if [regexp "_zc702$" $project_name] {
-    set p_device "xc7z020clg484-1"
-    set p_board [lindex [lsearch -all -inline [get_board_parts] *zc702*] end]
-    set sys_zynq 1
-  }
-  if [regexp "_zc706$" $project_name] {
-    set p_device "xc7z045ffg900-2"
-    set p_board [lindex [lsearch -all -inline [get_board_parts] *zc706*] end]
-    set sys_zynq 1
-  }
-  if [regexp "_mitx045$" $project_name] {
-    set p_device "xc7z045ffg900-2"
-    set p_board "not-applicable"
-    set sys_zynq 1
-  }
-  if [regexp "_zcu102$" $project_name] {
-    set p_device "xczu9eg-ffvb1156-2-e"
-    set p_board [lindex [lsearch -all -inline [get_board_parts] *zcu102*] end]
+  } elseif [regexp "^xczu" $device]  {
     set sys_zynq 2
+  } else {
+    set sys_zynq 0
   }
 
   set VIVADO_VERSION [version -short]
