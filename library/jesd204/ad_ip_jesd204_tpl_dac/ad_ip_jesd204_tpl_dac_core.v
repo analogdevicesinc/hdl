@@ -91,6 +91,7 @@ module ad_ip_jesd204_tpl_dac_core #(
   wire [DAC_CDW-1:0] pn15_data;
 
   reg dac_sync_in_d1 ='d0;
+  reg dac_sync_in_d2 ='d0;
   reg dac_sync_in_arm ='d0;
   reg dac_sync_d1 = 'd0;
 
@@ -100,9 +101,10 @@ module ad_ip_jesd204_tpl_dac_core #(
   always @(posedge clk) begin
     dac_sync_d1 <= dac_sync;
     dac_sync_in_d1 <= dac_sync_in;
+    dac_sync_in_d2 <= dac_sync_in_d1;
     if ((~dac_sync_d1&dac_sync) == 1'b1) begin
-      dac_sync_in_arm <= 1'b1;
-    end else if ((~dac_sync_in_d1&dac_sync_in) == 1'b1) begin
+      dac_sync_in_arm <= ~dac_sync_in_arm;
+    end else if ((~dac_sync_in_d2&dac_sync_in_d1) == 1'b1) begin
       dac_sync_in_arm <= 1'b0;
     end else if (EXT_SYNC == 1'b0) begin
       dac_sync_in_arm <= 1'b0;
