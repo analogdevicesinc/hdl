@@ -35,7 +35,12 @@
 
 `timescale 1ns/100ps
 
-module util_sigma_delta_spi (
+module util_sigma_delta_spi #(
+
+  parameter NUM_OF_CS = 1,
+  parameter CS_PIN = 0,
+  parameter IDLE_TIMEOUT = 63 ) (
+
   input clk,
   input resetn,
 
@@ -53,12 +58,7 @@ module util_sigma_delta_spi (
   input m_sdi,
   output [NUM_OF_CS-1:0] m_cs,
 
-  output reg data_ready
-);
-
-parameter NUM_OF_CS = 1;
-parameter CS_PIN = 0;
-parameter IDLE_TIMEOUT = 63;
+  output reg data_ready);
 
 /*
  * For converters from the ADI SigmaDelta family the data ready interrupt signal

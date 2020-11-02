@@ -65,17 +65,17 @@ end
 
 always @(*) begin
   case (align)
-  'h0: out_data <= in_data_d1;
-  'h1: out_data <= {in_data[7:0],in_data_d1[31:8]};
-  'h2: out_data <= {in_data[15:0],in_data_d1[31:16]};
-  'h3: out_data <= {in_data[23:0],in_data_d1[31:24]};
+  'h0: out_data = in_data_d1;
+  'h1: out_data = {in_data[7:0],in_data_d1[31:8]};
+  'h2: out_data = {in_data[15:0],in_data_d1[31:16]};
+  'h3: out_data = {in_data[23:0],in_data_d1[31:24]};
   endcase
 
   case (align)
-  'h0: out_charisk <= in_charisk_d1;
-  'h1: out_charisk <= {in_charisk[0:0],in_charisk_d1[3:1]};
-  'h2: out_charisk <= {in_charisk[1:0],in_charisk_d1[3:2]};
-  'h3: out_charisk <= {in_charisk[2:0],in_charisk_d1[3:3]};
+  'h0: out_charisk = in_charisk_d1;
+  'h1: out_charisk = {in_charisk[0:0],in_charisk_d1[3:1]};
+  'h2: out_charisk = {in_charisk[1:0],in_charisk_d1[3:2]};
+  'h3: out_charisk = {in_charisk[2:0],in_charisk_d1[3:3]};
   endcase
 end
 

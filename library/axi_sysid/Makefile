@@ -10,4 +10,6 @@ GENERIC_DEPS += axi_sysid.v
 
 XILINX_DEPS += axi_sysid_ip.tcl
 
+INTEL_DEPS += axi_sysid_hw.tcl
+
 include ../scripts/library.mk

@@ -76,9 +76,9 @@ assign feedback = full_state[WIDTH-1+15:15] ^ full_state[WIDTH-1+14:14] ^ swizzl
 
 always @(*) begin
   if (enable == 1'b0) begin
-    swizzle_out <= swizzle_in;
+    swizzle_out = swizzle_in;
   end else begin
-    swizzle_out <= feedback;
+    swizzle_out = feedback;
   end
 end
 

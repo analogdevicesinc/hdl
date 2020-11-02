@@ -96,21 +96,21 @@ end
 always @(*) begin
   case (up_raddr)
   /* JESD SYSREF configuraton */
-  12'h040: up_rdata <= {
+  12'h040: up_rdata = {
     /* 02-31 */ 30'h00, /* Reserved for future use */
     /*    01 */ up_cfg_sysref_oneshot,
     /*    00 */ up_cfg_sysref_disable
   };
-  12'h041: up_rdata <= {
+  12'h041: up_rdata = {
     /* 10-31 */ 22'h00, /* Reserved for future use */
     /* 02-09 */ up_cfg_lmfc_offset,
     /* 00-01 */ 2'b00 /* data path alignment for cfg_lmfc_offset */
   };
-  12'h042: up_rdata <= {
+  12'h042: up_rdata = {
     /* 02-31 */ 30'h00,
     /* 00-01 */ up_sysref_status
   };
-  default: up_rdata <= 32'h00000000;
+  default: up_rdata = 32'h00000000;
   endcase
 end
 
@@ -136,9 +136,9 @@ end
 
 always @(*) begin
   if (up_wreq == 1'b1 && up_waddr == 12'h042) begin
-    up_sysref_status_clear <= up_wdata[1:0];
+    up_sysref_status_clear = up_wdata[1:0];
   end else begin
-    up_sysref_status_clear <= 2'b00;
+    up_sysref_status_clear = 2'b00;
   end
 end
 

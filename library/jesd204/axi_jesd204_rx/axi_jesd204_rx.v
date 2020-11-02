@@ -48,7 +48,8 @@ module axi_jesd204_rx #(
   parameter ID = 0,
   parameter NUM_LANES = 1,
   parameter NUM_LINKS = 1,
-  parameter LINK_MODE = 1 // 2 - 64B/66B;  1 - 8B/10B
+  parameter LINK_MODE = 1, // 2 - 64B/66B;  1 - 8B/10B
+  parameter ENABLE_LINK_STATS = 0
 ) (
   input s_axi_aclk,
   input s_axi_aresetn,
@@ -161,7 +162,8 @@ sync_event #(
 
 assign up_irq_trigger = {3'b0,
                          up_event_unexpected_lane_state_error,
-                         up_event_frame_alignment_error};
+                         up_event_frame_alignment_error} &
+                        {5{~up_cfg_is_writeable}};
 
 up_axi #(
   .AXI_ADDRESS_WIDTH (14)
@@ -204,7 +206,8 @@ jesd204_up_common #(
   .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
   .NUM_IRQS(5),
   .EXTRA_CFG_WIDTH(27),
-  .LINK_MODE(LINK_MODE)
+  .LINK_MODE(LINK_MODE),
+  .ENABLE_LINK_STATS(ENABLE_LINK_STATS)
 ) i_up_common (
   .up_clk(s_axi_aclk),
   .ext_resetn(s_axi_aresetn),

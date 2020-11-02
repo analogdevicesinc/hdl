@@ -174,6 +174,9 @@ wire latency_monitor_reset;
 wire [2*NUM_LANES-1:0] frame_align;
 wire [NUM_LANES-1:0] ifs_ready;
 
+wire event_data_phase;
+wire err_statistics_reset;
+
 reg [NUM_LANES-1:0] frame_align_err_thresh_met = {NUM_LANES{1'b0}};
 reg [NUM_LANES-1:0] event_frame_alignment_error_per_lane = {NUM_LANES{1'b0}};
 
@@ -309,7 +312,9 @@ jesd204_rx_ctrl #(
 
   .ifs_reset(ifs_reset),
 
-  .status_state(status_ctrl_state)
+  .status_state(status_ctrl_state),
+
+  .event_data_phase(event_data_phase)
 );
 
 // Reset core when frame alignment errors occur
@@ -336,6 +341,9 @@ end else begin : gen_no_frame_align_err_reset
     core_reset = reset;
   end
 end
+
+assign err_statistics_reset = ctrl_err_statistics_reset ||
+                              event_data_phase;
 
 for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
 
@@ -374,7 +382,7 @@ for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
     .cfg_octets_per_frame(cfg_octets_per_frame),
     .cfg_disable_scrambler(cfg_disable_scrambler),
 
-    .ctrl_err_statistics_reset(ctrl_err_statistics_reset),
+    .err_statistics_reset(err_statistics_reset),
     .ctrl_err_statistics_mask(ctrl_err_statistics_mask[2:0]),
     .status_err_statistics_cnt(status_err_statistics_cnt[32*i+31:32*i]),
 
@@ -391,12 +399,17 @@ for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
 
   if(ENABLE_FRAME_ALIGN_CHECK) begin : gen_frame_align_err_thresh
     always @(posedge clk) begin
-      if (status_lane_frame_align_err_cnt[8*i+7:8*i] >= cfg_frame_align_err_threshold) begin
-        frame_align_err_thresh_met[i] <= 1'b1;
-        event_frame_alignment_error_per_lane[i] <= ~frame_align_err_thresh_met[i];
-      end else begin
+      if (reset) begin
         frame_align_err_thresh_met[i] <= 1'b0;
         event_frame_alignment_error_per_lane[i] <= 1'b0;
+      end else begin
+        if (status_lane_frame_align_err_cnt[8*i+7:8*i] >= cfg_frame_align_err_threshold) begin
+          frame_align_err_thresh_met[i] <= cgs_ready[i];
+          event_frame_alignment_error_per_lane[i] <= ~frame_align_err_thresh_met[i];
+        end else begin
+          frame_align_err_thresh_met[i] <= 1'b0;
+          event_frame_alignment_error_per_lane[i] <= 1'b0;
+        end
       end
     end
   end
@@ -425,9 +438,9 @@ end
 
 always @(*) begin
   case (SCRAMBLER_REGISTERED + ALIGN_MUX_REGISTERED)
-  1: ifs_ready_mux <= ifs_ready_d1;
-  2: ifs_ready_mux <= ifs_ready_d2;
-  default: ifs_ready_mux <= ifs_ready;
+  1: ifs_ready_mux = ifs_ready_d1;
+  2: ifs_ready_mux = ifs_ready_d2;
+  default: ifs_ready_mux = ifs_ready;
   endcase
 end
 

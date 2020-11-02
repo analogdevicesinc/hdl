@@ -45,7 +45,7 @@ module up_dac_common #(
   parameter [ 7:0]  SPEED_GRADE = 0,
   parameter [ 7:0]  DEV_PACKAGE = 0,
   parameter         CONFIG = 0,
-  parameter         CLK_EDGE_SEL = 1'b0,
+  parameter [ 0:0]  CLK_EDGE_SEL = 1'b0,
   parameter         COMMON_ID = 6'h10,
   parameter         DRP_DISABLE = 0,
   parameter         USERPORTS_DISABLE = 0,

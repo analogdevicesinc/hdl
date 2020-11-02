@@ -13,54 +13,54 @@ current_bd_instance /spi
   create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:axis_rtl:1.0 M_AXIS_SAMPLE
 
   ad_ip_instance spi_engine_execution execution
-  ad_ip_instance axi_spi_engine axi
-  ad_ip_instance spi_engine_offload offload
-  ad_ip_instance spi_engine_interconnect interconnect
-  ad_ip_instance util_pulse_gen trigger_gen
-  ad_ip_instance xlconstant trigger_gen_pulse_width
-
-  ad_ip_parameter offload CONFIG.DATA_WIDTH 16
-  ad_ip_parameter axi CONFIG.DATA_WIDTH 16
-  ad_ip_parameter interconnect CONFIG.DATA_WIDTH 16
   ad_ip_parameter execution CONFIG.DATA_WIDTH 16
-  ad_ip_parameter trigger_gen_pulse_width CONFIG.CONST_WIDTH 32
-  ad_ip_parameter trigger_gen_pulse_width CONFIG.CONST_VAL 1
-  
+  ad_ip_parameter execution CONFIG.NUM_OF_CS 1
+
+  ad_ip_instance axi_spi_engine axi
+  ad_ip_parameter axi CONFIG.DATA_WIDTH 16
+  ad_ip_parameter axi CONFIG.NUM_OFFLOAD 1
+
+  ad_ip_instance spi_engine_offload offload
+  ad_ip_parameter offload CONFIG.DATA_WIDTH 16
+
+  ad_ip_instance spi_engine_interconnect interconnect
+  ad_ip_parameter interconnect CONFIG.DATA_WIDTH 16
+
   ## to setup the sample rate of the system change the PULSE_PERIOD value
-  ## the acutal sample rate will be PULSE_PERIOD * (1/sys_cpu_clk)
+  ## the actual sample rate will be PULSE_PERIOD * (1/sys_cpu_clk)
   set cycle_per_sec_100mhz 100000000
   set sampling_cycle [expr int(ceil(double($cycle_per_sec_100mhz) / $adc_sampling_rate))]
+  ad_ip_instance axi_pulse_gen trigger_gen
+  ad_ip_parameter trigger_gen CONFIG.ASYNC_CLK_EN 0
   ad_ip_parameter trigger_gen CONFIG.PULSE_PERIOD $sampling_cycle
   ad_ip_parameter trigger_gen CONFIG.PULSE_WIDTH 1
 
-  ad_ip_parameter execution CONFIG.NUM_OF_CS 1
-  ad_ip_parameter axi CONFIG.NUM_OFFLOAD 1
-
-  ad_connect axi/spi_engine_offload_ctrl0 offload/spi_engine_offload_ctrl
-  ad_connect offload/spi_engine_ctrl interconnect/s0_ctrl
-  ad_connect axi/spi_engine_ctrl interconnect/s1_ctrl
-  ad_connect interconnect/m_ctrl execution/ctrl
-  ad_connect offload/offload_sdi M_AXIS_SAMPLE
-
-  ad_connect execution/spi m_spi
-
+  # clocks
   ad_connect clk offload/spi_clk
   ad_connect clk offload/ctrl_clk
   ad_connect clk execution/clk
   ad_connect clk axi/s_axi_aclk
   ad_connect clk axi/spi_clk
   ad_connect clk interconnect/clk
-  ad_connect clk trigger_gen/clk
+  ad_connect clk trigger_gen/s_axi_aclk
 
+  # resets
+  ad_connect resetn axi/s_axi_aresetn
+  ad_connect resetn trigger_gen/s_axi_aresetn
   ad_connect axi/spi_resetn offload/spi_resetn
   ad_connect axi/spi_resetn execution/resetn
   ad_connect axi/spi_resetn interconnect/resetn
-  ad_connect axi/spi_resetn trigger_gen/rstn
-  ad_connect trigger_gen/load_config axi/pulse_gen_load
-  ad_connect trigger_gen/pulse_period axi/pulse_gen_period
-  ad_connect trigger_gen_pulse_width/dout trigger_gen/pulse_width
+
+  # interfaces
+  ad_connect axi/spi_engine_offload_ctrl0 offload/spi_engine_offload_ctrl
+  ad_connect offload/spi_engine_ctrl interconnect/s0_ctrl
+  ad_connect axi/spi_engine_ctrl interconnect/s1_ctrl
+  ad_connect interconnect/m_ctrl execution/ctrl
+  ad_connect offload/offload_sdi M_AXIS_SAMPLE
+  ad_connect execution/spi m_spi
+
   ad_connect trigger_gen/pulse offload/trigger
-  ad_connect resetn axi/s_axi_aresetn
+
   ad_connect irq axi/irq
 
 current_bd_instance /
@@ -84,6 +84,7 @@ ad_connect  spi/m_spi spi
 ad_connect  axi_adaq7980_dma/s_axis spi/M_AXIS_SAMPLE
 
 ad_cpu_interconnect 0x44a00000 spi/axi
+ad_cpu_interconnect 0x44a10000 spi/trigger_gen
 ad_cpu_interconnect 0x44a30000 axi_adaq7980_dma
 
 ad_connect sys_cpu_clk axi_adaq7980_dma/s_axis_aclk

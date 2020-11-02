@@ -28,7 +28,6 @@ proc checksum8bit {hex} {
     if { ($i+1) % 2 == 0} {
       append byte [string index $hex $i];
       set chks [expr $chks + "0x$byte"];
-      puts $chks;
     } else {
       set byte [string index $hex $i];
       }
@@ -50,10 +49,8 @@ proc hexstr_flip {str} {
   set byte {};
   for {set i 0} {$i < [string length $str]} {incr i} {
     if {[expr ($i+1) % 8] == 0} {
-      puts "ti: $i";
       append line [string index $str $i];
       set line_d $line;
-      puts "line_d $line_d"
       set fline {};
       for {set j 0} {$j < [string length $line]} {incr j} {
         if {[expr ($j+1) % 2] == 0} {
@@ -65,9 +62,7 @@ proc hexstr_flip {str} {
       append fstr [rev_by_string $fline];
       set line {};
     } else {
-      puts "fi: $i";
       append line [string index $str $i];
-      puts "line: $line";
     }
   };
   return $fstr;
@@ -95,16 +90,14 @@ proc rev_by_string {str} {
 # \param[custom_string] - string input
 #
 
-proc sysid_gen_sys_init_file {custom_string} {
+proc sysid_gen_sys_init_file {{custom_string {}}} {
 
   global project_name;
-  puts "project_name: $project_name";
 
   if {[catch {exec git rev-parse HEAD} gitsha_string] != 0} {
     set gitsha_string 0;
   }
   set gitsha_hex [hexstr_flip [stringtohex $gitsha_string 44]];
-  puts "gitsha_hex $gitsha_hex"
 
   set git_clean_string "f";
   if {$gitsha_string != 0} {
@@ -115,15 +108,11 @@ proc sysid_gen_sys_init_file {custom_string} {
     }
   }
   set git_clean_hex [hexstr_flip [stringtohex $git_clean_string 4]];
-  puts "git_clean_hex $git_clean_hex"
-
   set vadj_check_string "vadj";
   set vadj_check_hex [hexstr_flip [stringtohex $vadj_check_string 4]];
-  puts "vadj_check_hex $vadj_check_hex"
 
   set thetime [clock seconds];
   set timedate_hex [hexstr_flip [stringtohex $thetime 12]];
-  puts "timedate_hex $timedate_hex"
 
   set verh_hex {};
   set verh_size 448;
@@ -138,13 +127,8 @@ proc sysid_gen_sys_init_file {custom_string} {
   set comh_ver_hex "00000001";
 
   set projname_hex [hexstr_flip [stringtohex [lindex [split $project_name _] 0] 32]];
-  puts "projname_hex $projname_hex"
-
   set boardname_hex [hexstr_flip [stringtohex [lindex [split $project_name) _] 1] 32]];
-  puts "boardname_hex $boardname_hex"
-
   set custom_hex [hexstr_flip [stringtohex $custom_string 64]];
-  puts "custom_hex $custom_hex"
 
   set pr_offset "00000000";
 

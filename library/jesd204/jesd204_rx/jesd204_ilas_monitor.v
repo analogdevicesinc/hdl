@@ -75,10 +75,10 @@ reg frame_length_error = 1'b0;
 assign data_ready_n = next_state;
 
 always @(*) begin
-  next_state <= state;
+  next_state = state;
   if (reset == 1'b0 && prev_was_last == 1'b1) begin
     if (charisk28[0] != 1'b1 || data[7:5] != 3'h0) begin
-      next_state <= STATE_DATA;
+      next_state = STATE_DATA;
     end
   end
 end

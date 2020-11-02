@@ -169,8 +169,8 @@ module axi_ad7616_control #(
   ) i_ad_edge_detect (
     .clk (up_clk),
     .rst (up_rst),
-    .in (busy),
-    .out (end_of_conv)
+    .signal_in (busy),
+    .signal_out (end_of_conv)
   );
 
   // convertion start generator

@@ -102,13 +102,13 @@ end
 always @(*) begin
   if (up_raddr[2] == 1'b1) begin
     if (up_ilas_ready == 1'b1) begin
-      up_rdata <= up_ilas_rdata;
+      up_rdata = up_ilas_rdata;
     end else begin
-      up_rdata <= 'h00;
+      up_rdata = 'h00;
     end
   end else begin
     case (up_raddr[1:0])
-    2'b00: up_rdata <= {
+    2'b00: up_rdata = {
       /* 11-31 */ 21'h0, /* Reserved for future use */
       /* 08-10 */ up_status_emb_state,
       /* 06-07 */ 2'h00,
@@ -117,18 +117,18 @@ always @(*) begin
       /* 02-03 */ 2'b00, /* Reserved for future extensions of cgs_state */
       /* 00-01 */ up_status_cgs_state
     };
-    2'b01: up_rdata <= {
+    2'b01: up_rdata = {
       /* 14-31 */ 18'h00, /* Reserved for future use */
       /* 00-13 */ up_status_latency
     };
-    2'b10: up_rdata <= {
+    2'b10: up_rdata = {
       /* 00-31 */ up_status_err_statistics_cnt
     };
-    2'b11: up_rdata <= {
+    2'b11: up_rdata = {
       /* 08-31 */ 24'h0, /* Reserved for future use */
       /* 00-07 */ up_status_lane_frame_align_err_cnt
     };
-    default: up_rdata <= 'h00;
+    default: up_rdata = 'h00;
     endcase
   end
 end

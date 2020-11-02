@@ -15,10 +15,10 @@ M_DEPS += ../../common/kc705/kc705_system_bd.tcl
 M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
 
-LIB_DEPS += axi_ad9144
-LIB_DEPS += axi_ad9680
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_sysid
+LIB_DEPS += jesd204/ad_ip_jesd204_tpl_adc
+LIB_DEPS += jesd204/ad_ip_jesd204_tpl_dac
 LIB_DEPS += jesd204/axi_jesd204_rx
 LIB_DEPS += jesd204/axi_jesd204_tx
 LIB_DEPS += jesd204/jesd204_rx
