@@ -404,8 +404,9 @@ module up_dac_common #(
           7'h14: up_rdata_int <= {31'd0, up_dac_frame};
           7'h15: up_rdata_int <= up_dac_clk_count_s;
           7'h16: up_rdata_int <= dac_clk_ratio;
-          7'h17: up_rdata_int <= {30'd0, up_sync_in_status, up_status_s};
+          7'h17: up_rdata_int <= {31'd0, up_status_s};
           7'h18: up_rdata_int <= {31'd0, up_dac_clksel};
+          7'h1a: up_rdata_int <= {31'd0, up_sync_in_status};
           7'h1c: up_rdata_int <= {3'd0, up_drp_rwn_s, up_drp_addr, 16'b0};
           7'h1d: up_rdata_int <= {14'd0, up_drp_locked, up_drp_status_s, 16'b0};
           7'h1e: up_rdata_int <= up_drp_wdata;
