@@ -122,3 +122,5 @@ set_input_delay -clock rx_fmc_dev_clk -min 4    [get_ports sysref_c_p];
 
 set_input_delay -clock tx_fmc_dev_clk -max 4    [get_ports sysref_d_p];
 set_input_delay -clock tx_fmc_dev_clk -min 4    [get_ports sysref_d_p];
+
+create_clock -name spi1_clk      -period 40   [get_pins -hier */EMIOSPI1SCLKO]
