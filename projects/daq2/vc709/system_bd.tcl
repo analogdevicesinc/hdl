@@ -21,6 +21,10 @@ ad_ip_parameter util_daq2_xcvr CONFIG.RXPI_CFG0 0x0
 ad_ip_parameter util_daq2_xcvr CONFIG.RXPI_CFG1 0x3
 ad_ip_parameter util_daq2_xcvr CONFIG.TXPI_CFG0 0x0
 ad_ip_parameter util_daq2_xcvr CONFIG.TXPI_CFG1 0x0
+ad_ip_parameter util_daq2_xcvr CONFIG.QPLL_CFG 0x4801C7
+ad_ip_parameter util_daq2_xcvr CONFIG.QPLL_FBDIV 0x80
+ad_ip_parameter util_daq2_xcvr CONFIG.QPLL_LPF 0xF
+ad_ip_parameter util_daq2_xcvr CONFIG.QPLL_CP 0x1F
 
 #system ID
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
