@@ -78,6 +78,7 @@ module util_adcfifo #(
   reg                                   adc_wr_int = 'd0;
   reg         [ADC_DATA_WIDTH-1:0]      adc_wdata_int = 'd0;
   reg         [ADC_ADDRESS_WIDTH-1:0]   adc_waddr_int = 'd0;
+  reg         [ADC_ADDRESS_WIDTH-1:0]   adc_waddr_int_c = 'd0;
   reg                                   adc_capture_arm = 1'b0;
   reg                                   dma_rd = 'd0;
   reg                                   dma_rd_d = 'd0;
@@ -149,11 +150,13 @@ module util_adcfifo #(
       adc_wr_int <= 'd0;
       adc_wdata_int <= 'd0;
       adc_waddr_int <= 'd0;
+      adc_waddr_int_c <= 'd0;
     end else begin
       adc_wr_int <= adc_wr & adc_xfer_enable;
       adc_wdata_int <= adc_wdata;
       if (adc_wr_int == 1'b1) begin
         adc_waddr_int <= adc_waddr_int_s;
+        adc_waddr_int_c <= adc_waddr_int_s;
       end
     end
   end
@@ -170,7 +173,7 @@ module util_adcfifo #(
   ) i_dma_waddr_sync (
     .in_clk (adc_clk),
     .in_resetn (1'b1),
-    .in_count (adc_waddr_int),
+    .in_count (adc_waddr_int_c),
     .out_resetn (1'b1),
     .out_clk (dma_clk),
     .out_count (dma_waddr_int_s));
