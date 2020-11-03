@@ -140,4 +140,8 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_miso
 set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_csn_clk
 set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_csn_dac
 
+## improve timing - there are occasional timing failure with a small negative slack
+#  at no-MMU configuration
+set_global_assignment -name OPTIMIZATION_MODE "AGGRESSIVE PERFORMANCE"
+
 execute_flow -compile

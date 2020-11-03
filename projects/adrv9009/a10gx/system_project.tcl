@@ -138,7 +138,8 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to adrv9009_gpio[16]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to adrv9009_gpio[17]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to adrv9009_gpio[18]
 
-# set optimization to get a better timing closure
-#set_global_assignment -name OPTIMIZATION_MODE "HIGH PERFORMANCE EFFORT"
+## improve timing - there are occasional timing failure with a small negative slack
+#  at no-MMU configuration
+set_global_assignment -name OPTIMIZATION_MODE "AGGRESSIVE PERFORMANCE"
 
 execute_flow -compile
