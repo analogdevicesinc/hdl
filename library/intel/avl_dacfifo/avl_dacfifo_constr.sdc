@@ -33,7 +33,8 @@ set_false_path  -to   [get_registers *util_dacfifo_bypass:i_dacfifo_bypass|dac_x
 
 set_false_path  -to [get_registers *avl_dacfifo:*avl_dma_xfer_req_m1*]
 set_false_path  -to [get_registers *avl_dacfifo:*dac_xfer_out_m1*]
-set_false_path  -to [get_registers *avl_dacfifo:*bypass_m1*]
+set_false_path  -to [get_registers *|dac_bypass_m1]
+set_false_path  -to [get_registers *|dma_bypass_m1]
 
 set_false_path  -to [get_registers *util_dacfifo_bypass:i_dacfifo_bypass|dma_rst_m1*]
 
