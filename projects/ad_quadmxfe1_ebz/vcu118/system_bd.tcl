@@ -10,8 +10,10 @@ source $ad_hdl_dir/projects/common/xilinx/adcfifo_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
 source ../common/ad_quadmxfe1_ebz_bd.tcl
 
-# Set SPI clock to 100/16 =  6.25 MHz
-ad_ip_parameter axi_spi CONFIG.C_SCK_RATIO 16
+# Set SPI clock to 250/8 =  31.25 MHz
+disconnect_bd_net /sys_cpu_clk [get_bd_pins axi_spi/ext_spi_clk]
+ad_connect $sys_dma_clk  axi_spi/ext_spi_clk
+ad_ip_parameter axi_spi CONFIG.C_SCK_RATIO 8
 
 #system ID
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
