@@ -498,7 +498,6 @@ ad_cpu_interconnect 0x7c430000 axi_mxfe_tx_dma
 # interconnect (gt/adc)
 
 if {$ADI_PHY_SEL == 1} {
-ad_mem_hp0_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP0
 ad_mem_hp0_interconnect $sys_cpu_clk axi_mxfe_rx_xcvr/m_axi
 }
 

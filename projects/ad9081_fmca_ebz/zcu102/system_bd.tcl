@@ -8,6 +8,9 @@ set dac_fifo_samples_per_converter [expr 64*1024]
 source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/adcfifo_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
+
+ad_mem_hp0_interconnect $sys_cpu_clk sys_ps8/S_AXI_HP0
+
 source ../common/ad9081_fmca_ebz_bd.tcl
 
 #system ID
