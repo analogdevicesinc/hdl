@@ -49,9 +49,6 @@ entity axi_streaming_dma_tx_fifo is
 		resetn		: in std_logic;
 		fifo_reset	: in std_logic;
 
-		-- Enable DMA interface
-		enable		: in Boolean;
-
 		-- Write port
 		s_axis_aclk	: in std_logic;
 		s_axis_tready	: out std_logic;
@@ -67,9 +64,7 @@ entity axi_streaming_dma_tx_fifo is
 end;
 
 architecture imp of axi_streaming_dma_tx_fifo is
-	signal in_ack			: std_logic;
-	signal in_stb_s			: std_logic;
-	signal drain_dma		: Boolean;
+
 begin
 
 	fifo: entity dma_fifo
@@ -81,34 +76,12 @@ begin
 			clk => clk,
 			resetn => resetn,
 			fifo_reset => fifo_reset,
-			in_stb => in_stb_s,
-			in_ack => in_ack,
+			in_stb => s_axis_tvalid,
+			in_ack => s_axis_tready,
 			in_data => s_axis_tdata,
 			out_stb => out_stb,
 			out_ack => out_ack,
 			out_data => out_data
 		);
-
-	drain_process: process (s_axis_aclk) is
-		variable enable_d1 : Boolean;
-	begin
-		if rising_edge(s_axis_aclk) then
-			if resetn = '0' then
-				drain_dma <= False;
-			else
-				if s_axis_tlast = '1' then
-					drain_dma <= False;
-				elsif not enable_d1 and enable then
-					drain_dma <= False;
-				elsif enable_d1 and not enable then
-					drain_dma <= True;
-				end if;
-				enable_d1 := enable;
-			end if;
-		end if;
-	end process;
-
-	s_axis_tready <= '1' when in_ack = '1' or drain_dma else '0';
-	in_stb_s <= '1' when s_axis_tvalid = '1' and not drain_dma else '0';
 
 end;

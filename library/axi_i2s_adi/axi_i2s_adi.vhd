@@ -231,7 +231,6 @@ begin
 				clk => s_axi_aclk,
 				resetn => s_axi_aresetn,
 				fifo_reset => tx_fifo_reset,
-				enable => tx_enable,
 
 				s_axis_aclk => s_axis_aclk,
 				s_axis_tready => s_axis_tready_s,
