@@ -68,6 +68,7 @@ ad_connect axi_ad9152_fifo/bypass dac_fifo_bypass
 ad_connect sys_dma_resetn axi_ad9680_dma/m_dest_axi_aresetn
 ad_connect axi_ad9680_dma/fifo_wr_clk util_daq3_xcvr/rx_out_clk_0
 ad_connect axi_ad9680_cpack/packed_fifo_wr axi_ad9680_dma/fifo_wr
+ad_connect axi_ad9680_cpack/fifo_wr_overflow axi_ad9680_tpl_core/adc_dovf
 
 ad_mem_hp0_interconnect sys_cpu_clk sys_ps7/S_AXI_HP0
 ad_mem_hp0_interconnect sys_cpu_clk axi_ad9680_xcvr/m_axi
