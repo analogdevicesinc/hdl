@@ -10,6 +10,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #    e.g.
 #      make RX_JESD_L=4 RX_JESD_M=8 RX_JESD_S=1 TX_JESD_L=4 TX_JESD_M=8 TX_JESD_S=1
 #      make RX_JESD_L=8 RX_JESD_M=4 RX_JESD_S=1 TX_JESD_L=8 TX_JESD_M=4 TX_JESD_S=1
+#      make RX_JESD_L=2 RX_JESD_M=8 RX_JESD_S=1 RX_JESD_NP=12 TX_JESD_L=2 TX_JESD_M=8 TX_JESD_S=1 TX_JESD_NP=12
 
 #
 # Parameter description:
@@ -27,7 +28,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   REF_CLK_RATE : Frequency of reference clock in MHz used in 64B66B mode
 #   [RX/TX]_JESD_M : Number of converters per link
 #   [RX/TX]_JESD_L : Number of lanes per link
-#   [RX/TX]_JESD_NP : Number of bits per sample, only 16 is supported
+#   [RX/TX]_JESD_NP : Number of bits per sample
 #   [RX/TX]_NUM_LINKS : Number of links
 #
 #  

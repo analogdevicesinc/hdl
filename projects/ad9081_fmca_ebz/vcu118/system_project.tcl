@@ -11,6 +11,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #    e.g.
 #      make JESD_MODE=64B66B RX_RATE=24.75 TX_RATE=12.375 REF_CLK_RATE=375 RX_JESD_L=4 TX_JESD_L=4
 #      make JESD_MODE=64B66B RX_RATE=16.22016 TX_RATE=16.22016 REF_CLK_RATE=245.76 RX_JESD_M=8 RX_JESD_L=2 TX_JESD_M=16 TX_JESD_L=4
+#      make JESD_MODE=64B66B RX_RATE=24.75 TX_RATE=24.75 REF_CLK_RATE=250 RX_JESD_M=4 RX_JESD_L=4 RX_JESD_S=2 RX_JESD_NP=12 TX_JESD_M=4 TX_JESD_L=4 TX_JESD_S=2 TX_JESD_NP=12
 #      make JESD_MODE=8B10B  RX_JESD_L=4 RX_JESD_M=8 TX_JESD_L=4 TX_JESD_M=8
 
 #  RX_RATE,TX_RATE,REF_CLK_RATE used only in 64B66B mode
@@ -31,8 +32,8 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   REF_CLK_RATE : Frequency of reference clock in MHz used in 64B66B mode
 #   [RX/TX]_JESD_M : Number of converters per link
 #   [RX/TX]_JESD_L : Number of lanes per link
-#   [RX/TX]_JESD_NP : Number of bits per sample, only 16 is supported
-#   [RX/TX]_NUM_LINKS : Number of links, matches numer of MxFE devices
+#   [RX/TX]_JESD_NP : Number of bits per sample
+#   [RX/TX]_NUM_LINKS : Number of links
 #
 
 adi_project ad9081_fmca_ebz_vcu118 0 [list \
@@ -52,6 +53,8 @@ adi_project ad9081_fmca_ebz_vcu118 0 [list \
   TX_JESD_S    [get_env_param TX_JESD_S    1 ] \
   TX_JESD_NP   [get_env_param TX_JESD_NP   16 ] \
   TX_NUM_LINKS [get_env_param TX_NUM_LINKS 1 ] \
+  RX_KS_PER_CHANNEL [get_env_param RX_KS_PER_CHANNEL 64 ] \
+  TX_KS_PER_CHANNEL [get_env_param TX_KS_PER_CHANNEL 64 ] \
 ]
 
 adi_project_files ad9081_fmca_ebz_vcu118 [list \
