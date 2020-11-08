@@ -94,6 +94,8 @@ module axi_gpreg #(
   // core clock
 
   input             clk,
+  output            reset_out,
+
   // axi interface
 
   input             s_axi_aclk,
@@ -143,6 +145,7 @@ module axi_gpreg #(
   reg     [ 31:0]   up_rdata_d = 'd0;
   reg               up_wack = 'd0;
   reg     [ 31:0]   up_scratch = 'd0;
+  reg               up_reset_core = 'd0;
   reg               up_rack = 'd0;
   reg     [ 31:0]   up_rdata = 'd0;
 
@@ -236,10 +239,14 @@ module axi_gpreg #(
     if (up_rstn == 0) begin
       up_wack <= 'd0;
       up_scratch <= 'd0;
+      up_reset_core <= 'd0;
     end else begin
       up_wack <= up_wreq_s;
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
         up_scratch <= up_wdata;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h03)) begin
+        up_reset_core <= up_wdata[0];
       end
     end
   end
@@ -257,6 +264,7 @@ module axi_gpreg #(
           8'h00: up_rdata <= PCORE_VERSION;
           8'h01: up_rdata <= ID;
           8'h02: up_rdata <= up_scratch;
+          8'h03: up_rdata <= up_reset_core;
           default: up_rdata <= 0;
         endcase
       end else begin
