@@ -129,11 +129,11 @@ module axi_gpreg_clock_mon #(
 
   generate
   if (BUF_ENABLE == 1) begin
-  BUFG i_bufg (
-    .I (d_clk),
-    .O (d_clk_g));
+    BUFG i_bufg (
+      .I (d_clk),
+      .O (d_clk_g));
   end else begin
-  assign d_clk_g = d_clk;
+    assign d_clk_g = d_clk;
   end
   endgenerate
 

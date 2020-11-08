@@ -49,9 +49,7 @@ module axi_gpreg #(
   parameter   integer BUF_ENABLE_4 = 1,
   parameter   integer BUF_ENABLE_5 = 1,
   parameter   integer BUF_ENABLE_6 = 1,
-  parameter   integer BUF_ENABLE_7 = 1)
-
- (
+  parameter   integer BUF_ENABLE_7 = 1) (
 
   // io
 
@@ -301,13 +299,13 @@ module axi_gpreg #(
   // gpio
 
   if (NUM_OF_IO < 8) begin
-  for (n = NUM_OF_IO; n < 8; n = n + 1) begin: g_unused_io
-  assign up_gp_ioenb_s[n] = 32'd0;
-  assign up_gp_out_s[n] = 32'd0;
-  assign up_wack_s[n] = 1'd0;
-  assign up_rdata_s[n] = 32'd0;
-  assign up_rack_s[n] = 1'd0;
-  end
+    for (n = NUM_OF_IO; n < 8; n = n + 1) begin: g_unused_io
+      assign up_gp_ioenb_s[n] = 32'd0;
+      assign up_gp_out_s[n] = 32'd0;
+      assign up_wack_s[n] = 1'd0;
+      assign up_rdata_s[n] = 32'd0;
+      assign up_rack_s[n] = 1'd0;
+    end
   end
 
   for (n = 0; n < NUM_OF_IO; n = n + 1) begin: g_io
@@ -334,11 +332,11 @@ module axi_gpreg #(
   // clock monitors
 
   if (NUM_OF_CLK_MONS < 8) begin
-  for (n = NUM_OF_CLK_MONS; n < 8; n = n + 1) begin: g_unused_clock_mon
-  assign up_wack_s[(8+n)] = 1'd0;
-  assign up_rdata_s[(8+n)] = 32'd0;
-  assign up_rack_s[(8+n)] = 1'd0;
-  end
+    for (n = NUM_OF_CLK_MONS; n < 8; n = n + 1) begin: g_unused_clock_mon
+      assign up_wack_s[(8+n)] = 1'd0;
+      assign up_rdata_s[(8+n)] = 32'd0;
+      assign up_rack_s[(8+n)] = 1'd0;
+    end
   end
 
   for (n = 0; n < NUM_OF_CLK_MONS; n = n + 1) begin: g_clock_mon
