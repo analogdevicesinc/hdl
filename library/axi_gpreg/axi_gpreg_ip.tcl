@@ -53,6 +53,12 @@ set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CL
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CLK_MONS')) > 7} \
   [ipx::get_ports d_clk_7 -of_objects [ipx::current_core]]
 
+# Standalone(axi_interface) - or part of a subcore(read/write interaface)
+set_property widget {checkBox} [ipgui::get_guiparamspec -name "STAND_ALONE" -component [ipx::current_core] ]
+set_property value true [ipx::get_user_parameters STAND_ALONE -of_objects [ipx::current_core]]
+set_property value true [ipx::get_hdl_parameters STAND_ALONE -of_objects [ipx::current_core]]
+set_property value_format bool [ipx::get_user_parameters STAND_ALONE -of_objects [ipx::current_core]]
+set_property value_format bool [ipx::get_hdl_parameters STAND_ALONE -of_objects [ipx::current_core]]
 
 # Destination clock
 set_property widget {checkBox} [ipgui::get_guiparamspec -name "DESTINATION_CLK" -component [ipx::current_core] ]
@@ -60,6 +66,15 @@ set_property value true [ipx::get_user_parameters DESTINATION_CLK -of_objects [i
 set_property value true [ipx::get_hdl_parameters DESTINATION_CLK -of_objects [ipx::current_core]]
 set_property value_format bool [ipx::get_user_parameters DESTINATION_CLK -of_objects [ipx::current_core]]
 set_property value_format bool [ipx::get_hdl_parameters DESTINATION_CLK -of_objects [ipx::current_core]]
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.STAND_ALONE')) = 0} \
+  [ipx::get_ports up_*_ext -of_objects [ipx::current_core]]
+
+adi_set_bus_dependency "s_axi" "s_axi" \
+	"(spirit:decode(id('MODELPARAM_VALUE.STAND_ALONE')) = 1)"
+
+#set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.STAND_ALONE')) = 1} \
+  [ipx::get_ports s_axi* -of_objects [ipx::current_core]]
+
 set_property driver_value 0 [ipx::get_ports -filter "direction==in" -of_objects [ipx::current_core]]
 
 ipx::save_core [ipx::current_core]

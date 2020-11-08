@@ -39,6 +39,7 @@ module axi_gpreg #(
 
   parameter   integer ID = 0,
   parameter   integer DESTINATION_CLK = 1,
+  parameter   integer STAND_ALONE = 1,
   parameter   integer NUM_OF_IO = 8,
   parameter   integer NUM_OF_CLK_MONS = 8,
   parameter   integer BUF_ENABLE_0 = 1,
@@ -115,7 +116,18 @@ module axi_gpreg #(
   output  [  1:0]   s_axi_rresp,
   input             s_axi_rready,
   input   [ 2:0]    s_axi_awprot,
-  input   [ 2:0]    s_axi_arprot);
+  input   [ 2:0]    s_axi_arprot,
+
+  input             up_clk_ext,
+  input             up_rstn_ext,
+  input             up_wreq_ext,
+  input   [16:0]    up_waddr_ext,
+  input   [31:0]    up_wdata_ext,
+  output            up_wack_ext,
+  input             up_rreq_ext,
+  input   [16:0]    up_raddr_ext,
+  output  [31:0]    up_rdata_ext,
+  output            up_rack_ext);
 
 
   // version
@@ -152,11 +164,6 @@ module axi_gpreg #(
   wire    [ 16:0]   up_wack_s;
   wire    [ 16:0]   up_rack_s;
   wire    [ 31:0]   up_rdata_s[16:0];
-
-  // signal name changes
-
-  assign up_rstn = s_axi_aresetn;
-  assign up_clk = s_axi_aclk;
 
   // split-up interfaces
 
@@ -282,6 +289,7 @@ module axi_gpreg #(
   end else begin
     assign reset_out = up_reset_core;
   end
+
   // gpio
 
   if (NUM_OF_IO < 8) begin
@@ -343,36 +351,66 @@ module axi_gpreg #(
     .up_rack (up_rack_s[(8+n)]));
   end
 
-  endgenerate
+  if (STAND_ALONE == 1'b1) begin
 
-  up_axi i_up_axi (
-    .up_rstn (up_rstn),
-    .up_clk (up_clk),
-    .up_axi_awvalid (s_axi_awvalid),
-    .up_axi_awaddr (s_axi_awaddr),
-    .up_axi_awready (s_axi_awready),
-    .up_axi_wvalid (s_axi_wvalid),
-    .up_axi_wdata (s_axi_wdata),
-    .up_axi_wstrb (s_axi_wstrb),
-    .up_axi_wready (s_axi_wready),
-    .up_axi_bvalid (s_axi_bvalid),
-    .up_axi_bresp (s_axi_bresp),
-    .up_axi_bready (s_axi_bready),
-    .up_axi_arvalid (s_axi_arvalid),
-    .up_axi_araddr (s_axi_araddr),
-    .up_axi_arready (s_axi_arready),
-    .up_axi_rvalid (s_axi_rvalid),
-    .up_axi_rresp (s_axi_rresp),
-    .up_axi_rdata (s_axi_rdata),
-    .up_axi_rready (s_axi_rready),
-    .up_wreq (up_wreq),
-    .up_waddr (up_waddr),
-    .up_wdata (up_wdata),
-    .up_wack (up_wack_d),
-    .up_rreq (up_rreq),
-    .up_raddr (up_raddr),
-    .up_rdata (up_rdata_d),
-    .up_rack (up_rack_d));
+    assign up_clk = s_axi_aclk;
+    assign up_rstn = s_axi_aresetn;
+
+    up_axi #(
+      .AXI_ADDRESS_WIDTH(7)
+    ) i_up_axi (
+      .up_rstn (up_rstn),
+      .up_clk (up_clk),
+      .up_axi_awvalid (s_axi_awvalid),
+      .up_axi_awaddr (s_axi_awaddr),
+      .up_axi_awready (s_axi_awready),
+      .up_axi_wvalid (s_axi_wvalid),
+      .up_axi_wdata (s_axi_wdata),
+      .up_axi_wstrb (s_axi_wstrb),
+      .up_axi_wready (s_axi_wready),
+      .up_axi_bvalid (s_axi_bvalid),
+      .up_axi_bresp (s_axi_bresp),
+      .up_axi_bready (s_axi_bready),
+      .up_axi_arvalid (s_axi_arvalid),
+      .up_axi_araddr (s_axi_araddr),
+      .up_axi_arready (s_axi_arready),
+      .up_axi_rvalid (s_axi_rvalid),
+      .up_axi_rresp (s_axi_rresp),
+      .up_axi_rdata (s_axi_rdata),
+      .up_axi_rready (s_axi_rready),
+      .up_wreq (up_wreq),
+      .up_waddr (up_waddr),
+      .up_wdata (up_wdata),
+      .up_wack (up_wack_d),
+      .up_rreq (up_rreq),
+      .up_raddr (up_raddr),
+      .up_rdata (up_rdata_d),
+      .up_rack (up_rack_d));
+
+  end else begin
+    assign s_axi_awready = 1'd0;
+    assign s_axi_wready = 1'd0;
+    assign s_axi_bvalid = 1'd0;
+    assign s_axi_bresp = 2'd0;
+    assign s_axi_arready = 1'd0;
+    assign s_axi_rvalid = 1'd0;
+    assign s_axi_rdata = 32'd0;
+    assign s_axi_rresp = 2'd0;
+
+    assign up_clk = up_clk_ext;
+    assign up_rstn = up_rstn_ext;
+
+    assign up_wreq = up_wreq_ext;
+    assign up_waddr = up_waddr_ext;
+    assign up_wdata = up_wdata_ext;
+    assign up_wack_ext = up_wack_d;
+    assign up_rreq = up_rreq_ext;
+    assign up_raddr = up_raddr_ext;
+    assign up_rdata_ext = up_rdata_d;
+    assign up_rack_ext = up_rack_d;
+  end
+
+  endgenerate
 
 endmodule
 
