@@ -16,6 +16,9 @@ adi_ip_files axi_gpreg [list \
 
 adi_ip_properties axi_gpreg
 
+adi_ip_add_core_dependencies { \
+	analog.com:user:util_cdc:1.0 \
+}
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_IO')) > 0} \
   [ipx::get_ports up_gp_*_0 -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_IO')) > 1} \
@@ -50,6 +53,13 @@ set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CL
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CLK_MONS')) > 7} \
   [ipx::get_ports d_clk_7 -of_objects [ipx::current_core]]
 
+
+# Destination clock
+set_property widget {checkBox} [ipgui::get_guiparamspec -name "DESTINATION_CLK" -component [ipx::current_core] ]
+set_property value true [ipx::get_user_parameters DESTINATION_CLK -of_objects [ipx::current_core]]
+set_property value true [ipx::get_hdl_parameters DESTINATION_CLK -of_objects [ipx::current_core]]
+set_property value_format bool [ipx::get_user_parameters DESTINATION_CLK -of_objects [ipx::current_core]]
+set_property value_format bool [ipx::get_hdl_parameters DESTINATION_CLK -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports -filter "direction==in" -of_objects [ipx::current_core]]
 
 ipx::save_core [ipx::current_core]

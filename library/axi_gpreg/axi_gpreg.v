@@ -38,6 +38,7 @@
 module axi_gpreg #(
 
   parameter   integer ID = 0,
+  parameter   integer DESTINATION_CLK = 1,
   parameter   integer NUM_OF_IO = 8,
   parameter   integer NUM_OF_CLK_MONS = 8,
   parameter   integer BUF_ENABLE_0 = 1,
@@ -89,6 +90,9 @@ module axi_gpreg #(
   input             d_clk_6,
   input             d_clk_7,
 
+  // core clock
+
+  input             clk,
   // axi interface
 
   input             s_axi_aclk,
@@ -259,6 +263,25 @@ module axi_gpreg #(
   genvar n;
   generate
 
+  // core clock
+
+  if (DESTINATION_CLK == 1) begin
+    assign core_clk = clk;
+  end else begin
+    assign core_clk = up_clk;
+  end
+
+  // core reset
+
+  if (DESTINATION_CLK == 1) begin
+    ad_rst i_d_rst_reg (
+      .rst_async (up_reset_core),
+      .clk (clk),
+      .rstn (),
+      .rst (reset_out));
+  end else begin
+    assign reset_out = up_reset_core;
+  end
   // gpio
 
   if (NUM_OF_IO < 8) begin
@@ -272,10 +295,14 @@ module axi_gpreg #(
   end
 
   for (n = 0; n < NUM_OF_IO; n = n + 1) begin: g_io
-  axi_gpreg_io #(.ID (16+n)) i_gpreg_io (
-    .up_gp_ioenb (up_gp_ioenb_s[n]),
-    .up_gp_out (up_gp_out_s[n]),
-    .up_gp_in (up_gp_in_s[n]),
+  axi_gpreg_io #(
+    .ID (16+n),
+    .ASINC_DEST_CLK (DESTINATION_CLK))
+  i_gpreg_io (
+    .clk (core_clk),
+    .gp_ioenb (up_gp_ioenb_s[n]),
+    .gp_out (up_gp_out_s[n]),
+    .gp_in (up_gp_in_s[n]),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq),

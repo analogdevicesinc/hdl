@@ -37,13 +37,14 @@
 
 module axi_gpreg_io #(
 
-  parameter   ID = 0) (
+  parameter   ID = 0,
+  parameter   ASINC_DEST_CLK = 1) (
 
-  // gpio
+  input                   clk,
 
-  output  reg [31:0]      up_gp_ioenb,
-  output  reg [31:0]      up_gp_out,
-  input       [31:0]      up_gp_in,
+  output      [31:0]      gp_ioenb,
+  output      [31:0]      gp_out,
+  input       [31:0]      gp_in,
 
   // bus interface
 
@@ -61,10 +62,14 @@ module axi_gpreg_io #(
 
   // internal registers
 
+  reg   [31:0]    up_gp_ioenb = 'd0;
+  reg   [31:0]    up_gp_out = 'd0;
+
   // internal signals
 
   wire            up_wreq_s;
   wire            up_rreq_s;
+  wire  [31:0]    up_gp_in;
 
   // decode block select
 
@@ -109,6 +114,24 @@ module axi_gpreg_io #(
       end
     end
   end
+
+  sync_data #(
+    .NUM_OF_BITS (64),
+    .ASYNC_CLK (ASINC_DEST_CLK))
+  i_control_sync (
+    .in_clk (up_clk),
+    .in_data ({up_gp_ioenb,up_gp_out}),
+    .out_clk (clk),
+    .out_data ({gp_ioenb,gp_out}));
+
+  sync_data #(
+    .NUM_OF_BITS (32),
+    .ASYNC_CLK (ASINC_DEST_CLK))
+  i_status_sync (
+    .in_clk (clk),
+    .in_data (gp_in),
+    .out_clk (up_clk),
+    .out_data (up_gp_in));
 
 endmodule
 
