@@ -345,10 +345,10 @@ module system_top (
     .dio_i ({gpio_o[27:22]}),
     .dio_o ({gpio_i[27:22]}),
     .dio_p ({
-              hmc7044_car_gpio_3, // 27
-              hmc7044_car_gpio_2, // 26
-              hmc7044_car_gpio_1, // 25
-              hmc7044_car_gpio_0, // 24
+              hmc7044_car_gpio_4, // 27
+              hmc7044_car_gpio_3, // 26
+              hmc7044_car_gpio_2, // 25
+              hmc7044_car_gpio_1, // 24
               hmc7044_car_reset,  // 23
               resetb_ad9545}));   // 22
 
