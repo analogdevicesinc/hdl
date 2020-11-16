@@ -6,6 +6,7 @@
 PROJECT_NAME := ad9208_dual_ebz_vcu118
 
 M_DEPS += ../common/dual_ad9208_bd.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../daq3/common/daq3_spi.v
 M_DEPS += ../../common/xilinx/adcfifo_bd.tcl
 M_DEPS += ../../common/vcu118/vcu118_system_constr.xdc

@@ -5,6 +5,7 @@
 
 PROJECT_NAME := adv7511_zc702
 
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zc702/zc702_system_constr.xdc
 M_DEPS += ../../common/zc702/zc702_system_bd.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v

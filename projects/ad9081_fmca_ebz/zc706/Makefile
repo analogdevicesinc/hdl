@@ -11,11 +11,14 @@ M_DEPS += ../../common/zc706/zc706_system_constr.xdc
 M_DEPS += ../../common/zc706/zc706_system_bd.tcl
 M_DEPS += ../../common/xilinx/dacfifo_bd.tcl
 M_DEPS += ../../common/xilinx/adcfifo_bd.tcl
-M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
+M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/common/ad_3w_spi.v
 
+LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_dmac
+LIB_DEPS += axi_hdmi_tx
+LIB_DEPS += axi_spdif_tx
 LIB_DEPS += axi_sysid
 LIB_DEPS += jesd204/ad_ip_jesd204_tpl_adc
 LIB_DEPS += jesd204/ad_ip_jesd204_tpl_dac

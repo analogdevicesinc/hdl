@@ -6,7 +6,7 @@
 PROJECT_NAME := adrv9371x_a10soc
 
 M_DEPS += ../common/adrv9371x_qsys.tcl
-M_DEPS += ../../scripts/adi_pd_intel.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/a10soc/a10soc_system_qsys.tcl
 M_DEPS += ../../common/a10soc/a10soc_system_assign.tcl
 M_DEPS += ../../common/a10soc/a10soc_plddr4_dacfifo_qsys.tcl

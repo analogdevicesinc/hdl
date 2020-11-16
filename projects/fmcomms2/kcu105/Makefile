@@ -6,6 +6,7 @@
 PROJECT_NAME := fmcomms2_kcu105
 
 M_DEPS += ../common/fmcomms2_bd.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/kcu105/kcu105_system_mig.tcl
 M_DEPS += ../../common/kcu105/kcu105_system_lutram_constr.xdc
 M_DEPS += ../../common/kcu105/kcu105_system_constr.xdc

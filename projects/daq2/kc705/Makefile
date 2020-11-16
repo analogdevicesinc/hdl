@@ -7,6 +7,7 @@ PROJECT_NAME := daq2_kc705
 
 M_DEPS += ../common/daq2_spi.v
 M_DEPS += ../common/daq2_bd.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/xilinx/dacfifo_bd.tcl
 M_DEPS += ../../common/xilinx/adcfifo_bd.tcl
 M_DEPS += ../../common/kc705/kc705_system_mig.prj

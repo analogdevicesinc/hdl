@@ -6,6 +6,7 @@
 PROJECT_NAME := adaq7980_sdz_zed
 
 M_DEPS += ../common/adaq7980_bd.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
 M_DEPS += ../../common/zed/zed_system_bd.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v

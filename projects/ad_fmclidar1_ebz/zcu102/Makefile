@@ -8,6 +8,7 @@ PROJECT_NAME := ad_fmclidar1_ebz_zcu102
 M_DEPS += ../common/util_tia_chsel.v
 M_DEPS += ../common/util_axis_syncgen.v
 M_DEPS += ../common/ad_fmclidar1_ebz_bd.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zcu102/zcu102_system_constr.xdc
 M_DEPS += ../../common/zcu102/zcu102_system_bd.tcl
 M_DEPS += ../../../library/util_cdc/sync_bits.v

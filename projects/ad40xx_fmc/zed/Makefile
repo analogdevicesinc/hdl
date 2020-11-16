@@ -8,6 +8,7 @@ PROJECT_NAME := ad40xx_fmc_zed
 M_DEPS += system_constr_adaq400x.xdc
 M_DEPS += system_constr_ad40xx.xdc
 M_DEPS += ../common/ad40xx_bd.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
 M_DEPS += ../../common/zed/zed_system_bd.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v

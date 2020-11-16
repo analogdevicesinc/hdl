@@ -7,7 +7,7 @@ PROJECT_NAME := dac_fmc_ebz_a10soc
 
 M_DEPS += ../common/dac_fmc_ebz_qsys.tcl
 M_DEPS += ../common/config.tcl
-M_DEPS += ../../scripts/adi_pd_intel.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/a10soc/a10soc_system_qsys.tcl
 M_DEPS += ../../common/a10soc/a10soc_system_assign.tcl
 M_DEPS += ../../common/a10soc/a10soc_plddr4_dacfifo_qsys.tcl

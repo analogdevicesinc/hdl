@@ -7,6 +7,7 @@ PROJECT_NAME := daq2_zc706
 
 M_DEPS += ../common/daq2_spi.v
 M_DEPS += ../common/daq2_bd.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zc706/zc706_system_constr.xdc
 M_DEPS += ../../common/zc706/zc706_system_bd.tcl
 M_DEPS += ../../common/zc706/zc706_plddr3_constr.xdc

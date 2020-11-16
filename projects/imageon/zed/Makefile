@@ -6,6 +6,7 @@
 PROJECT_NAME := imageon_zed
 
 M_DEPS += ../common/imageon_bd.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zed/zed_system_bd.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
 

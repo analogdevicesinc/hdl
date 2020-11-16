@@ -7,6 +7,7 @@ PROJECT_NAME := daq2_kcu105
 
 M_DEPS += ../common/daq2_spi.v
 M_DEPS += ../common/daq2_bd.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/xilinx/dacfifo_bd.tcl
 M_DEPS += ../../common/xilinx/adcfifo_bd.tcl
 M_DEPS += ../../common/kcu105/kcu105_system_constr.xdc

@@ -6,6 +6,7 @@
 PROJECT_NAME := fmcomms5_zc702
 
 M_DEPS += ../common/fmcomms5_bd.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zc702/zc702_system_constr.xdc
 M_DEPS += ../../common/zc702/zc702_system_bd.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v

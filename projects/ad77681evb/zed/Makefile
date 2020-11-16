@@ -6,6 +6,7 @@
 PROJECT_NAME := ad77681evb_zed
 
 M_DEPS += ../common/ad77681evb_bd.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
 M_DEPS += ../../common/zed/zed_system_bd.tcl
 M_DEPS += ../../../library/xilinx/common/ad_data_clk.v

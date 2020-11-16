@@ -10,6 +10,7 @@ M_DEPS += ../common/ccpackrf_bd.tcl
 M_DEPS += ../common/adrv9364z7020_constr_lvds.xdc
 M_DEPS += ../common/adrv9364z7020_constr.xdc
 M_DEPS += ../common/adrv9364z7020_bd.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/common/ad_adl5904_rst.v
 M_DEPS += ../../../library/axi_ad9361/axi_ad9361_delay.tcl

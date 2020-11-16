@@ -6,6 +6,7 @@
 PROJECT_NAME := ad9656_fmc_zcu102
 
 M_DEPS += ../common/ad9656_fmc_bd.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zcu102/zcu102_system_constr.xdc
 M_DEPS += ../../common/zcu102/zcu102_system_bd.tcl
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl

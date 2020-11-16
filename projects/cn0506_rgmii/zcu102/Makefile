@@ -6,6 +6,7 @@
 PROJECT_NAME := cn0506_rgmii_zcu102
 
 M_DEPS += ../common/cn0506_bd.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zcu102/zcu102_system_constr.xdc
 M_DEPS += ../../common/zcu102/zcu102_system_bd.tcl
 
