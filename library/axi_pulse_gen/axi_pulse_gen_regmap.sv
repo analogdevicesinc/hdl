@@ -40,8 +40,10 @@ module axi_pulse_gen_regmap #(
   parameter [31:0] CORE_MAGIC = 0,
   parameter [31:0] CORE_VERSION = 0,
   parameter [ 0:0] ASYNC_CLK_EN = 1,
-  parameter        PULSE_WIDTH = 7,
-  parameter        PULSE_PERIOD = 10 )(
+  parameter        N_PULSES = 4,
+  parameter [31:0] PULSE_WIDTH_G[1:16] = '{16{32'd0}},
+  parameter [31:0] PULSE_PERIOD_G[1:16] = '{16{32'd0}},
+  parameter [31:0] PULSE_OFFSET_G[1:16] = '{16{32'd0}} )(
 
   // external clock
 
@@ -51,8 +53,9 @@ module axi_pulse_gen_regmap #(
 
   output                  clk_out,
   output                  pulse_gen_resetn,
-  output      [31:0]      pulse_width,
-  output      [31:0]      pulse_period,
+  output    [31:0]        pulse_width  [1:N_PULSES],
+  output    [31:0]        pulse_period [1:N_PULSES],
+  output    [31:0]        pulse_offset [1:N_PULSES],
   output                  load_config,
 
   // processor interface
@@ -72,19 +75,28 @@ module axi_pulse_gen_regmap #(
   // internal registers
 
   reg     [31:0]  up_scratch = 'd0;
-  reg     [31:0]  up_pulse_width = 'd0;
-  reg     [31:0]  up_pulse_period = 'd0;
+  reg     [31:0]  up_pulse_width[1:N_PULSES] = PULSE_WIDTH_G[1:N_PULSES];
+  reg     [31:0]  up_pulse_period[1:N_PULSES] = PULSE_PERIOD_G[1:N_PULSES];
+  reg     [31:0]  up_pulse_offset[1:N_PULSES] = PULSE_OFFSET_G[1:N_PULSES];
   reg             up_load_config = 1'b0;
   reg             up_reset;
+
+  integer i = 32'd0;
+  integer x = 32'd0;
+
+  genvar n;
+  generate
 
   always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_wack <= 'd0;
       up_scratch <= 'd0;
-      up_pulse_period <= PULSE_PERIOD;
-      up_pulse_width <= PULSE_WIDTH;
       up_load_config <= 1'b0;
       up_reset <= 1'b1;
+
+      up_pulse_width = PULSE_WIDTH_G[1:N_PULSES];
+      up_pulse_period = PULSE_PERIOD_G[1:N_PULSES];
+      up_pulse_offset = PULSE_OFFSET_G[1:N_PULSES];
     end else begin
       up_wack <= up_wreq;
       if ((up_wreq == 1'b1) && (up_waddr == 14'h2)) begin
@@ -97,10 +109,22 @@ module axi_pulse_gen_regmap #(
         up_load_config <= 1'b0;
       end
       if ((up_wreq == 1'b1) && (up_waddr == 14'h5)) begin
-        up_pulse_period <= up_wdata;
+        up_pulse_period[0] <= up_wdata;
       end
       if ((up_wreq == 1'b1) && (up_waddr == 14'h6)) begin
-        up_pulse_width <= up_wdata;
+        up_pulse_width[0] <= up_wdata;
+      end
+
+      for (x = 1; x <= N_PULSES; x = x + 1) begin
+        if ((up_wreq == 1'b1) && (up_waddr == 10 + x)) begin
+          up_pulse_period[x] <= up_wdata;
+        end
+        if ((up_wreq == 1'b1) && (up_waddr == 20 + x)) begin
+          up_pulse_width[x] <= up_wdata;
+        end
+        if ((up_wreq == 1'b1) && (up_waddr == 30 + x)) begin
+          up_pulse_offset[x] <= up_wdata;
+        end
       end
     end
   end
@@ -112,23 +136,42 @@ module axi_pulse_gen_regmap #(
     end else begin
       up_rack <= up_rreq;
       if (up_rreq == 1'b1) begin
-        case (up_raddr)
-          14'h0: up_rdata <= CORE_VERSION;
-          14'h1: up_rdata <= ID;
-          14'h2: up_rdata <= up_scratch;
-          14'h3: up_rdata <= CORE_MAGIC;
-          14'h4: up_rdata <= up_reset;
-          14'h5: up_rdata <= up_pulse_period;
-          14'h6: up_rdata <= up_pulse_width;
-          default: up_rdata <= 0;
-        endcase
+        if (up_raddr[13:4] == 10'd0) begin
+          case (up_raddr)
+            14'h0: up_rdata <= CORE_VERSION;
+            14'h1: up_rdata <= ID;
+            14'h2: up_rdata <= up_scratch;
+            14'h3: up_rdata <= CORE_MAGIC;
+            14'h4: up_rdata <= up_reset;
+            14'h5: up_rdata <= up_pulse_period[0];
+            14'h6: up_rdata <= up_pulse_width[0];
+            default: up_rdata <= 0;
+          endcase
+        end else if (up_raddr[13:4] == 10'd1) begin
+          if (up_raddr < N_PULSES) begin
+            up_rdata <= up_pulse_period[up_raddr[3:0]];
+          end else begin
+            up_rdata <= 32'b0;
+          end
+        end else if (up_raddr[13:4] == 10'd2) begin
+          if (up_raddr < N_PULSES) begin
+            up_rdata <= up_pulse_width[up_raddr[3:0]];
+          end else begin
+            up_rdata <= 32'b0;
+          end
+        end else if (up_raddr[13:4] == 10'd1) begin
+          if (up_raddr < N_PULSES) begin
+            up_rdata <= up_pulse_offset[up_raddr[3:0]];
+          end else begin
+            up_rdata <= 32'b0;
+          end
+        end
       end else begin
         up_rdata <= 32'd0;
       end
     end
   end
 
-  generate
   if (ASYNC_CLK_EN) begin : counter_external_clock
 
     assign clk_out = ext_clk;
@@ -139,23 +182,20 @@ module axi_pulse_gen_regmap #(
       .rstn (pulse_gen_resetn),
       .rst ());
 
-    sync_data #(
-      .NUM_OF_BITS (32),
-      .ASYNC_CLK (1))
-    i_pulse_period_sync (
-      .in_clk (up_clk),
-      .in_data (up_pulse_period),
-      .out_clk (clk_out),
-      .out_data (pulse_period));
-
-    sync_data #(
-      .NUM_OF_BITS (32),
-      .ASYNC_CLK (1))
-    i_pulse_width_sync (
-      .in_clk (up_clk),
-      .in_data (up_pulse_width),
-      .out_clk (clk_out),
-      .out_data (pulse_width));
+    for (n = 1; n <= N_PULSES; n = n + 1) begin
+      sync_data #(
+        .NUM_OF_BITS (96),
+        .ASYNC_CLK (1))
+      i_pulse_phase (
+        .in_clk (up_clk),
+        .in_data ({up_pulse_period[n],
+                   up_pulse_width[n],
+                   up_pulse_offset[n]}),
+        .out_clk (clk_out),
+        .out_data ({pulse_period[n],
+                    pulse_width[n],
+                    pulse_offset[n]}));
+    end
 
     sync_event #(
       .NUM_OF_EVENTS (1),
@@ -170,10 +210,12 @@ module axi_pulse_gen_regmap #(
 
     assign clk_out = up_clk;
     assign pulse_gen_resetn = ~up_reset;
-    assign pulse_period = up_pulse_period;
-    assign pulse_width = up_pulse_width;
     assign load_config = up_load_config;
-
+    for (n = 1; n <= N_PULSES; n = n + 1) begin
+      assign pulse_period[n] = up_pulse_period[n];
+      assign pulse_width[n] = up_pulse_width[n];
+      assign pulse_offset[n] = up_pulse_offset[n];
+    end
   end
   endgenerate
 
