@@ -70,7 +70,7 @@ architecture Behavioral of i2s_clkgen is
 	signal lrclk_tick : Boolean;
 begin
 
-	reset_int <= resetn = '0' or not enable;
+--	reset_int <= resetn = '0' or not enable;
 
 	bclk <= bclk_int;
 	lrclk <= lrclk_int;
@@ -82,10 +82,11 @@ begin
 	begin
 		if rising_edge(clk) then
 			prev_bclk_div_rate <= bclk_div_rate;
-			if reset_int then -- or (bclk_div_rate /= prev_bclk_div_rate) then
+			if (resetn = '0')then -- or (bclk_div_rate /= prev_bclk_div_rate) then
+--			if reset_int then -- or (bclk_div_rate /= prev_bclk_div_rate) then
 				bclk_int <= '1';
 				bclk_count <= bclk_div_rate;
-			else
+			elsif (enable) then
 				if tick = '1' then
 					if bclk_count = bclk_div_rate then
 						bclk_count <= 0;
@@ -111,10 +112,11 @@ begin
 		if rising_edge(clk) then
 			prev_lrclk_div_rate <= lrclk_div_rate;
 			-- Reset
-			if reset_int then -- or lrclk_div_rate /= prev_lrclk_div_rate then
+			if (resetn = '0') then -- or lrclk_div_rate /= prev_lrclk_div_rate then
+--			if reset_int then -- or lrclk_div_rate /= prev_lrclk_div_rate then
 				lrclk_int <= '1';
 				lrclk_count <= lrclk_div_rate;
-			else
+			elsif (enable) then
 				if lrclk_tick then
 					if lrclk_count = lrclk_div_rate then
 						lrclk_count <= 0;

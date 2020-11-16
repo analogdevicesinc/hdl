@@ -71,7 +71,7 @@ architecture Behavioral of i2s_tx is
 	signal bclk_d1 : std_logic;
 begin
 
-	reset_int <= resetn = '0' or not enable;
+--	reset_int <= resetn = '0' or not enable;
 
 	process (clk)
 	begin
@@ -97,9 +97,11 @@ begin
 	serialize_data: process(clk)
 	begin
 		if rising_edge(clk) then
-			if reset_int then
+			if resetn = '0' then
+--			if reset_int then
 				data_int(i)(31 downto 0) <= (others => '0');
-			elsif bit_sync = '1' then
+			elsif (bit_sync = '1' and enable) then
+--			elsif bit_sync = '1' then
 				if channel_sync_int = '1' then
 					data_int(i)(31 downto 32-C_SLOT_WIDTH) <= data;
 					data_int(i)(31-C_SLOT_WIDTH downto 0) <= (others => '0');
@@ -116,9 +118,11 @@ begin
 	enable_sync: process (clk)
 	begin
 		if rising_edge(clk) then
-			if reset_int then
+			if resetn = '0' then
+--			if reset_int then
 				enable_int <= False;
-			else
+			elsif (enable) then
+--			else
 				if enable and frame_sync_int = '1' and stb = '1' then
 					enable_int <= True;
 				elsif not enable then

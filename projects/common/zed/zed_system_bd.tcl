@@ -73,8 +73,8 @@ ad_ip_parameter sys_ps7 CONFIG.PCW_IRQ_F2P_INTR 1
 ad_ip_parameter sys_ps7 CONFIG.PCW_GPIO_EMIO_GPIO_ENABLE 1
 ad_ip_parameter sys_ps7 CONFIG.PCW_GPIO_EMIO_GPIO_IO 64
 ad_ip_parameter sys_ps7 CONFIG.PCW_USE_DMA0 1
-ad_ip_parameter sys_ps7 CONFIG.PCW_USE_DMA1 1
-ad_ip_parameter sys_ps7 CONFIG.PCW_USE_DMA2 1
+#ad_ip_parameter sys_ps7 CONFIG.PCW_USE_DMA1 1
+#ad_ip_parameter sys_ps7 CONFIG.PCW_USE_DMA2 1
 ad_ip_parameter sys_ps7 CONFIG.PCW_IRQ_F2P_MODE REVERSE
 ad_ip_parameter sys_ps7 CONFIG.PCW_SPI0_PERIPHERAL_ENABLE 1
 ad_ip_parameter sys_ps7 CONFIG.PCW_SPI0_SPI0_IO EMIO
@@ -129,8 +129,36 @@ ad_ip_parameter axi_spdif_tx_core CONFIG.DMA_TYPE 1
 ad_ip_parameter axi_spdif_tx_core CONFIG.S_AXI_ADDRESS_WIDTH 16
 
 ad_ip_instance axi_i2s_adi axi_i2s_adi
-ad_ip_parameter axi_i2s_adi CONFIG.DMA_TYPE 1
-ad_ip_parameter axi_i2s_adi CONFIG.S_AXI_ADDRESS_WIDTH 16
+ad_ip_parameter axi_i2s_adi CONFIG.DMA_TYPE 0
+ad_ip_parameter axi_i2s_adi CONFIG.S_AXI_ADDRESS_WIDTH 32
+
+# i2s adi dma
+
+ad_ip_instance axi_dmac i2s_tx_dma
+ad_ip_parameter i2s_tx_dma CONFIG.DMA_TYPE_SRC 0
+ad_ip_parameter i2s_tx_dma CONFIG.DMA_TYPE_DEST 1
+ad_ip_parameter i2s_tx_dma CONFIG.CYCLIC 1
+ad_ip_parameter i2s_tx_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter i2s_tx_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter i2s_tx_dma CONFIG.ASYNC_CLK_DEST_REQ 0
+ad_ip_parameter i2s_tx_dma CONFIG.ASYNC_CLK_SRC_DEST 0
+ad_ip_parameter i2s_tx_dma CONFIG.ASYNC_CLK_REQ_SRC 0
+ad_ip_parameter i2s_tx_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter i2s_tx_dma CONFIG.DMA_DATA_WIDTH_DEST 32
+ad_ip_parameter i2s_tx_dma CONFIG.DMA_DATA_WIDTH_SRC 64
+
+ad_ip_instance axi_dmac i2s_rx_dma
+ad_ip_parameter i2s_rx_dma CONFIG.DMA_TYPE_SRC 1
+ad_ip_parameter i2s_rx_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter i2s_rx_dma CONFIG.CYCLIC 1
+ad_ip_parameter i2s_rx_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter i2s_rx_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter i2s_rx_dma CONFIG.ASYNC_CLK_DEST_REQ 0
+ad_ip_parameter i2s_rx_dma CONFIG.ASYNC_CLK_SRC_DEST 0
+ad_ip_parameter i2s_rx_dma CONFIG.ASYNC_CLK_REQ_SRC 0
+ad_ip_parameter i2s_rx_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter i2s_rx_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+ad_ip_parameter i2s_rx_dma CONFIG.DMA_DATA_WIDTH_SRC 32
 
 # iic (fmc)
 
@@ -240,22 +268,52 @@ ad_connect  spdif             axi_spdif_tx_core/spdif_tx_o
 
 # i2s audio
 
-ad_connect  sys_cpu_clk axi_i2s_adi/DMA_REQ_RX_ACLK
-ad_connect  sys_cpu_clk axi_i2s_adi/DMA_REQ_TX_ACLK
-ad_connect  sys_cpu_clk sys_ps7/DMA1_ACLK
-ad_connect  sys_cpu_clk sys_ps7/DMA2_ACLK
+#ad_connect  sys_cpu_clk axi_i2s_adi/DMA_REQ_RX_ACLK
+#ad_connect  sys_cpu_clk axi_i2s_adi/DMA_REQ_TX_ACLK
+#ad_connect  sys_cpu_clk sys_ps7/DMA1_ACLK
+#ad_connect  sys_cpu_clk sys_ps7/DMA2_ACLK
 
 ad_connect  sys_audio_clkgen/clk_out1   i2s_mclk
-ad_connect  sys_audio_clkgen/clk_out1   axi_i2s_adi/DATA_CLK_I
+#ad_connect  sys_audio_clkgen/clk_out1   axi_i2s_adi/DATA_CLK_I
 
-ad_connect  i2s axi_i2s_adi/I2S
+#ad_connect  i2s axi_i2s_adi/I2S
 
-ad_connect  sys_ps7/DMA1_REQ   axi_i2s_adi/DMA_REQ_TX
-ad_connect  sys_ps7/DMA1_ACK   axi_i2s_adi/DMA_ACK_TX
-ad_connect  sys_cpu_resetn     axi_i2s_adi/DMA_REQ_TX_RSTN
-ad_connect  sys_ps7/DMA2_REQ   axi_i2s_adi/DMA_REQ_RX
-ad_connect  sys_ps7/DMA2_ACK   axi_i2s_adi/DMA_ACK_RX
-ad_connect  sys_cpu_resetn     axi_i2s_adi/DMA_REQ_RX_RSTN
+#ad_connect  sys_ps7/DMA1_REQ   axi_i2s_adi/DMA_REQ_TX
+#ad_connect  sys_ps7/DMA1_ACK   axi_i2s_adi/DMA_ACK_TX
+#ad_connect  sys_cpu_resetn     axi_i2s_adi/DMA_REQ_TX_RSTN
+#ad_connect  sys_ps7/DMA2_REQ   axi_i2s_adi/DMA_REQ_RX
+#ad_connect  sys_ps7/DMA2_ACK   axi_i2s_adi/DMA_ACK_RX
+#ad_connect  sys_cpu_resetn     axi_i2s_adi/DMA_REQ_RX_RSTN
+
+# i2s connections
+
+ad_connect sys_cpu_clk axi_i2s_adi/s_axi_aclk
+ad_connect sys_cpu_clk axi_i2s_adi/s_axis_aclk
+ad_connect sys_cpu_clk axi_i2s_adi/m_axis_aclk
+ad_connect sys_cpu_resetn axi_i2s_adi/s_axi_aresetn
+ad_connect sys_cpu_resetn axi_i2s_adi/s_axis_aresetn
+ad_connect i2s_tx_dma/m_axis axi_i2s_adi/s_axis
+
+# not connecting tlast
+
+ad_connect i2s_rx_dma/s_axis_data axi_i2s_adi/m_axis_tdata
+ad_connect i2s_rx_dma/s_axis_valid axi_i2s_adi/m_axis_tvalid
+ad_connect i2s_rx_dma/s_axis_ready axi_i2s_adi/m_axis_tready
+ad_connect i2s axi_i2s_adi/I2S
+#ad_connect i2s_m_clk i2s_mclk
+ad_connect i2s_mclk axi_i2s_adi/data_clk_i
+
+ad_connect sys_cpu_clk i2s_tx_dma/s_axi_aclk
+ad_connect sys_cpu_clk i2s_tx_dma/m_src_axi_aclk
+ad_connect sys_cpu_clk i2s_tx_dma/m_axis_aclk
+ad_connect sys_cpu_resetn i2s_tx_dma/s_axi_aresetn
+ad_connect sys_cpu_resetn i2s_tx_dma/m_src_axi_aresetn
+
+ad_connect sys_cpu_clk i2s_rx_dma/s_axi_aclk
+ad_connect sys_cpu_clk i2s_rx_dma/m_dest_axi_aclk
+ad_connect sys_cpu_clk i2s_rx_dma/s_axis_aclk
+ad_connect sys_cpu_resetn i2s_rx_dma/s_axi_aresetn
+ad_connect sys_cpu_resetn i2s_rx_dma/m_dest_axi_aresetn
 
 # system id
 
@@ -296,6 +354,13 @@ ad_cpu_interconnect 0x70e00000 axi_hdmi_core
 ad_cpu_interconnect 0x75c00000 axi_spdif_tx_core
 ad_cpu_interconnect 0x77600000 axi_i2s_adi
 ad_cpu_interconnect 0x41620000 axi_iic_fmc
+ad_cpu_interconnect 0x77700000 i2s_rx_dma
+ad_cpu_interconnect 0x77801000 i2s_tx_dma
+
+ad_cpu_interrupt ps-6 mb-6 i2s_tx_dma/irq
+ad_cpu_interrupt ps-7 mb-7 i2s_rx_dma/irq
 
 ad_mem_hp0_interconnect sys_cpu_clk sys_ps7/S_AXI_HP0
 ad_mem_hp0_interconnect sys_cpu_clk axi_hdmi_dma/m_src_axi
+ad_mem_hp0_interconnect sys_cpu_clk i2s_tx_dma/m_src_axi
+ad_mem_hp0_interconnect sys_cpu_clk i2s_rx_dma/m_dest_axi

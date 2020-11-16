@@ -203,6 +203,21 @@ signal cnt : integer range 0 to 2**16-1;
 signal s_axis_tvalid_s : std_logic;
 signal s_axis_tready_s : std_logic;
 
+
+attribute mark_debug : string;
+attribute mark_debug of data_clk_i : signal is "true";
+attribute mark_debug of bclk_o : signal is "true";
+attribute mark_debug of lrclk_o : signal is "true";
+attribute mark_debug of sdata_o : signal is "true";
+attribute mark_debug of sdata_i : signal is "true";
+
+attribute mark_debug of I2S_RESET_REG : signal is "true";
+attribute mark_debug of I2S_CONTROL_REG : signal is "true";
+attribute mark_debug of I2S_CLK_CONTROL_REG : signal is "true";
+attribute mark_debug of PERIOD_LEN_REG : signal is "true";
+attribute mark_debug of PAUSE_REG : signal is "true";
+
+
 begin
 
   s_axis_tvalid_s <= s_axis_tvalid and not PAUSE_REG(0);
@@ -231,7 +246,8 @@ begin
 				clk => s_axi_aclk,
 				resetn => s_axi_aresetn,
 				fifo_reset => tx_fifo_reset,
-
+				enable => tx_enable,
+				
 				s_axis_aclk => s_axis_aclk,
 				s_axis_tready => s_axis_tready_s,
 				s_axis_tdata => s_axis_tdata(31 downto 8),

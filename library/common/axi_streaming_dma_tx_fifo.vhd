@@ -49,6 +49,9 @@ entity axi_streaming_dma_tx_fifo is
 		resetn		: in std_logic;
 		fifo_reset	: in std_logic;
 
+                -- Enable DMA interface
+                enable		: in Boolean;
+
 		-- Write port
 		s_axis_aclk	: in std_logic;
 		s_axis_tready	: out std_logic;
@@ -64,6 +67,19 @@ entity axi_streaming_dma_tx_fifo is
 end;
 
 architecture imp of axi_streaming_dma_tx_fifo is
+
+    attribute mark_debug : string;
+    attribute mark_debug of fifo_reset : signal is "true";
+    attribute mark_debug of resetn : signal is "true";
+
+    attribute mark_debug of out_stb : signal is "true";
+    attribute mark_debug of out_ack : signal is "true";
+    attribute mark_debug of out_data : signal is "true";
+
+    attribute mark_debug of s_axis_tready : signal is "true";
+    attribute mark_debug of s_axis_tdata : signal is "true";
+    attribute mark_debug of s_axis_tvalid : signal is "true";
+    attribute mark_debug of s_axis_tlast : signal is "true";
 
 begin
 

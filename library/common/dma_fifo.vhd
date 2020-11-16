@@ -53,7 +53,7 @@ entity dma_fifo is
 		in_data		: in  std_logic_vector(FIFO_DWIDTH-1 downto 0);
 
 		-- Read port
-		out_stb		: out std_logic;	
+		out_stb		: out std_logic;
 		out_ack		: in  std_logic;
 		out_data	: out std_logic_vector(FIFO_DWIDTH-1 downto 0)
 	);
@@ -67,6 +67,11 @@ architecture imp of dma_fifo is
 	signal wr_addr			: natural range 0 to FIFO_MAX;
 	signal rd_addr			: natural range 0 to FIFO_MAX;
 	signal not_full, not_empty	: Boolean;
+        signal free_cnt_s         : integer range 0 to FIFO_MAX + 1;
+
+        attribute mark_debug : string;
+        attribute mark_debug of free_cnt_s : signal is "true";
+        attribute mark_debug of data_fifo : signal is "true";
 
 begin
 	in_ack <= '1' when not_full else '0';
@@ -107,6 +112,7 @@ begin
 				not_full <= not (free_cnt = 0);
 				not_empty <= not (free_cnt = FIFO_MAX + 1);
 			end if;
+                        free_cnt_s <= free_cnt;
 		end if;
 	end process;
 end;
