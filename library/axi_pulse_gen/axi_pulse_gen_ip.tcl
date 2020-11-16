@@ -9,9 +9,14 @@ adi_ip_files axi_pulse_gen [list \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "$ad_hdl_dir/library/common/util_pulse_gen.v" \
+  "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
+  "$ad_hdl_dir/library/util_cdc/sync_data.v" \
+  "$ad_hdl_dir/library/util_cdc/sync_event.v" \
+  "axi_pulse_gen_tb.v" \
   "axi_pulse_gen_constr.ttcl" \
   "axi_pulse_gen_regmap.sv" \
   "axi_pulse_gen.sv"]
+
 
 adi_ip_properties axi_pulse_gen
 adi_ip_ttcl axi_pulse_gen "axi_pulse_gen_constr.ttcl"
@@ -19,7 +24,6 @@ adi_ip_ttcl axi_pulse_gen "axi_pulse_gen_constr.ttcl"
 adi_ip_add_core_dependencies { \
 	analog.com:user:util_cdc:1.0 \
 }
-
 
 set cc [ipx::current_core]
 
