@@ -7,6 +7,7 @@ PROJECT_NAME := ad9081_fmca_ebz_zcu102
 
 M_DEPS += timing_constr.xdc
 M_DEPS += ../common/ad9081_fmca_ebz_bd.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zcu102/zcu102_system_constr.xdc
 M_DEPS += ../../common/zcu102/zcu102_system_bd.tcl
 M_DEPS += ../../common/xilinx/dacfifo_bd.tcl

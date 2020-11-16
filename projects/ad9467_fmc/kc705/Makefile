@@ -7,6 +7,7 @@ PROJECT_NAME := ad9467_fmc_kc705
 
 M_DEPS += ../common/ad9467_spi.v
 M_DEPS += ../common/ad9467_bd.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/kc705/kc705_system_mig.prj
 M_DEPS += ../../common/kc705/kc705_system_constr.xdc
 M_DEPS += ../../common/kc705/kc705_system_bd.tcl

@@ -7,6 +7,7 @@ PROJECT_NAME := fmcomms11_zc706
 
 M_DEPS += ../common/fmcomms11_spi.v
 M_DEPS += ../common/fmcomms11_bd.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zc706/zc706_system_constr.xdc
 M_DEPS += ../../common/zc706/zc706_system_bd.tcl
 M_DEPS += ../../common/zc706/zc706_plddr3_constr.xdc

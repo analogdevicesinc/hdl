@@ -7,6 +7,7 @@ PROJECT_NAME := daq3_zcu102
 
 M_DEPS += ../common/daq3_spi.v
 M_DEPS += ../common/daq3_bd.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zcu102/zcu102_system_constr.xdc
 M_DEPS += ../../common/zcu102/zcu102_system_bd.tcl
 M_DEPS += ../../common/xilinx/dacfifo_bd.tcl

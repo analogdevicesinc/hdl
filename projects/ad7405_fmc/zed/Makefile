@@ -8,6 +8,7 @@ PROJECT_NAME := ad7405_fmc_zed
 M_DEPS += system_constr_singlended.xdc
 M_DEPS += system_constr_differential.xdc
 M_DEPS += ../common/ad7405_bd.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
 M_DEPS += ../../common/zed/zed_system_bd.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v

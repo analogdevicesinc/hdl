@@ -6,6 +6,7 @@
 PROJECT_NAME := adrv9371x_kcu105
 
 M_DEPS += ../common/adrv9371x_bd.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/xilinx/dacfifo_bd.tcl
 M_DEPS += ../../common/xilinx/adi_fir_filter_constr.xdc
 M_DEPS += ../../common/xilinx/adi_fir_filter_bd.tcl

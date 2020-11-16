@@ -8,6 +8,7 @@ PROJECT_NAME := ad7616_sdz_zed
 M_DEPS += serial_if_constr.xdc
 M_DEPS += parallel_if_constr.xdc
 M_DEPS += ../common/ad7616_bd.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
 M_DEPS += ../../common/zed/zed_system_bd.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v

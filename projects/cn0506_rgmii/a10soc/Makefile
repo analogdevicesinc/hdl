@@ -6,7 +6,7 @@
 PROJECT_NAME := cn0506_rgmii_a10soc
 
 M_DEPS += ../common/cn0506_qsys.tcl
-M_DEPS += ../../scripts/adi_pd_intel.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/a10soc/a10soc_system_qsys.tcl
 M_DEPS += ../../common/a10soc/a10soc_system_assign.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v

@@ -7,6 +7,7 @@ PROJECT_NAME := fmcjesdadc1_vc707
 
 M_DEPS += ../common/fmcjesdadc1_spi.v
 M_DEPS += ../common/fmcjesdadc1_bd.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/vc707/vc707_system_mig.prj
 M_DEPS += ../../common/vc707/vc707_system_constr.xdc
 M_DEPS += ../../common/vc707/vc707_system_bd.tcl

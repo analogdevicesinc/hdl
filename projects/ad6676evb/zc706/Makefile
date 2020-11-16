@@ -6,6 +6,7 @@
 PROJECT_NAME := ad6676evb_zc706
 
 M_DEPS += ../common/ad6676evb_bd.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zc706/zc706_system_constr.xdc
 M_DEPS += ../../common/zc706/zc706_system_bd.tcl
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
