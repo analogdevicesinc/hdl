@@ -298,7 +298,7 @@ util_axis_fifo #(
   .s_axis_aresetn(ctrl_enable),
   .s_axis_valid(up_tlf_s_valid),
   .s_axis_ready(up_tlf_s_ready),
-  .s_axis_empty(),
+  .s_axis_full(),
   .s_axis_data({up_transfer_id_eot_d, up_measured_transfer_length}),
   .s_axis_room(),
 
@@ -307,7 +307,8 @@ util_axis_fifo #(
   .m_axis_valid(up_tlf_valid),
   .m_axis_ready(up_tlf_rd & up_tlf_valid),
   .m_axis_data(up_tlf_data),
-  .m_axis_level()
+  .m_axis_level(),
+  .m_axis_empty ()
 );
 
 endmodule

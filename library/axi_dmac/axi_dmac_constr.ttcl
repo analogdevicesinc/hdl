@@ -38,13 +38,13 @@ set_false_path -quiet \
 set_max_delay -quiet -datapath_only \
 	-from $req_clk \
 	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
-		-filter {NAME =~ *i_src_req_fifo/i_waddr_sync* && IS_SEQUENTIAL}] \
+		-filter {NAME =~ *i_src_req_fifo/zerodeep.i_waddr_sync* && IS_SEQUENTIAL}] \
 	[get_property -min PERIOD $req_clk]
 
 set_max_delay -quiet -datapath_only \
 	-from $src_clk \
 	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
-		-filter {NAME =~ *i_src_req_fifo/i_raddr_sync* && IS_SEQUENTIAL}] \
+		-filter {NAME =~ *i_src_req_fifo/zerodeep.i_raddr_sync* && IS_SEQUENTIAL}] \
 	[get_property -min PERIOD $src_clk]
 
 set_max_delay -quiet -datapath_only \
@@ -63,13 +63,13 @@ set_max_delay -quiet -datapath_only \
 set_max_delay -quiet -datapath_only \
 	-from $src_clk \
 	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
-		-filter {NAME =~ *i_rewind_req_fifo/i_waddr_sync* && IS_SEQUENTIAL}] \
+		-filter {NAME =~ *i_rewind_req_fifo/zerodeep.i_waddr_sync* && IS_SEQUENTIAL}] \
 	[get_property -min PERIOD $src_clk]
 
 set_max_delay -quiet -datapath_only \
 	-from $req_clk \
 	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
-		-filter {NAME =~ *i_rewind_req_fifo/i_raddr_sync* && IS_SEQUENTIAL}] \
+		-filter {NAME =~ *i_rewind_req_fifo/zerodeep.i_raddr_sync* && IS_SEQUENTIAL}] \
 	[get_property -min PERIOD $req_clk]
 
 set_max_delay -quiet -datapath_only \
@@ -109,13 +109,13 @@ set_false_path -quiet \
 set_max_delay -quiet -datapath_only \
 	-from $dest_clk \
 	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
-		-filter {NAME =~ *i_dest_response_fifo/i_waddr_sync* && IS_SEQUENTIAL}] \
+		-filter {NAME =~ *i_dest_response_fifo/zerodeep.i_waddr_sync* && IS_SEQUENTIAL}] \
 	[get_property -min PERIOD $dest_clk]
 
 set_max_delay -quiet -datapath_only \
 	-from $req_clk \
 	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
-		-filter {NAME =~ *i_dest_response_fifo/i_raddr_sync* && IS_SEQUENTIAL}] \
+		-filter {NAME =~ *i_dest_response_fifo/zerodeep.i_raddr_sync* && IS_SEQUENTIAL}] \
 	[get_property -min PERIOD $req_clk]
 set_max_delay -quiet -datapath_only \
 	-from [get_cells -quiet -hier *cdc_sync_fifo_ram_reg* \
@@ -153,13 +153,13 @@ set_max_delay -quiet -datapath_only \
 set_max_delay -quiet -datapath_only \
 	-from $src_clk \
 	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
-		-filter {NAME =~ *i_dest_req_fifo/i_waddr_sync* && IS_SEQUENTIAL}] \
+		-filter {NAME =~ *i_dest_req_fifo/zerodeep.i_waddr_sync* && IS_SEQUENTIAL}] \
 	[get_property -min PERIOD $src_clk]
 
 set_max_delay -quiet -datapath_only \
 	-from $dest_clk \
 	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
-		-filter {NAME =~ *i_dest_req_fifo/i_raddr_sync* && IS_SEQUENTIAL}] \
+		-filter {NAME =~ *i_dest_req_fifo/zerodeep.i_raddr_sync* && IS_SEQUENTIAL}] \
 	[get_property -min PERIOD $dest_clk]
 
 set_max_delay -quiet -datapath_only \
@@ -171,13 +171,13 @@ set_max_delay -quiet -datapath_only \
 set_max_delay -quiet -datapath_only \
 	-from $src_clk \
 	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
-		-filter {NAME =~ *i_src_dest_bl_fifo/i_waddr_sync* && IS_SEQUENTIAL}] \
+		-filter {NAME =~ *i_src_dest_bl_fifo/zerodeep.i_waddr_sync* && IS_SEQUENTIAL}] \
 	[get_property -min PERIOD $src_clk]
 
 set_max_delay -quiet -datapath_only \
 	-from $dest_clk \
 	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
-		-filter {NAME =~ *i_src_dest_bl_fifo/i_raddr_sync* && IS_SEQUENTIAL}] \
+		-filter {NAME =~ *i_src_dest_bl_fifo/zerodeep.i_raddr_sync* && IS_SEQUENTIAL}] \
 	[get_property -min PERIOD $dest_clk]
 
 set_max_delay -quiet -datapath_only \
