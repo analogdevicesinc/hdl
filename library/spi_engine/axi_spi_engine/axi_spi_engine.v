@@ -404,9 +404,9 @@ module axi_spi_engine #(
 
   util_axis_fifo #(
     .DATA_WIDTH(16),
-    .ASYNC_CLK(ASYNC_SPI_CLK),
     .ADDRESS_WIDTH(CMD_FIFO_ADDRESS_WIDTH),
-    .S_AXIS_REGISTERED(0)
+    .ASYNC_CLK(ASYNC_SPI_CLK),
+    .M_AXIS_REGISTERED(0)
   ) i_cmd_fifo (
     .s_axis_aclk(clk),
     .s_axis_aresetn(up_sw_resetn),
@@ -414,12 +414,14 @@ module axi_spi_engine #(
     .s_axis_valid(cmd_fifo_in_valid),
     .s_axis_data(cmd_fifo_in_data),
     .s_axis_room(cmd_fifo_room),
-    .s_axis_empty(),
+    .s_axis_full(),
+    .s_axis_room(),
     .m_axis_aclk(spi_clk),
     .m_axis_aresetn(spi_resetn),
     .m_axis_ready(cmd_ready),
     .m_axis_valid(cmd_valid),
     .m_axis_data(cmd_data),
+    .m_axis_empty(),
     .m_axis_level()
   );
 
@@ -432,7 +434,7 @@ module axi_spi_engine #(
     .DATA_WIDTH(DATA_WIDTH),
     .ASYNC_CLK(ASYNC_SPI_CLK),
     .ADDRESS_WIDTH(SDO_FIFO_ADDRESS_WIDTH),
-    .S_AXIS_REGISTERED(0)
+    .M_AXIS_REGISTERED(0)
   ) i_sdo_fifo (
     .s_axis_aclk(clk),
     .s_axis_aresetn(up_sw_resetn),
@@ -457,7 +459,7 @@ module axi_spi_engine #(
     .DATA_WIDTH(NUM_OF_SDI * DATA_WIDTH),
     .ASYNC_CLK(ASYNC_SPI_CLK),
     .ADDRESS_WIDTH(SDI_FIFO_ADDRESS_WIDTH),
-    .S_AXIS_REGISTERED(0)
+    .M_AXIS_REGISTERED(0)
   ) i_sdi_fifo (
     .s_axis_aclk(spi_clk),
     .s_axis_aresetn(spi_resetn),
@@ -481,7 +483,7 @@ module axi_spi_engine #(
       .DATA_WIDTH(8),
       .ASYNC_CLK(ASYNC_SPI_CLK),
       .ADDRESS_WIDTH(SYNC_FIFO_ADDRESS_WIDTH),
-      .S_AXIS_REGISTERED(0)
+      .M_AXIS_REGISTERED(0)
     ) i_sync_fifo (
       .s_axis_aclk(spi_clk),
       .s_axis_aresetn(spi_resetn),
@@ -506,7 +508,7 @@ module axi_spi_engine #(
       .DATA_WIDTH(16),
       .ASYNC_CLK(ASYNC_SPI_CLK),
       .ADDRESS_WIDTH(SYNC_FIFO_ADDRESS_WIDTH),
-      .S_AXIS_REGISTERED(0)
+      .M_AXIS_REGISTERED(0)
     ) i_offload_cmd_fifo (
       .s_axis_aclk(clk),
       .s_axis_aresetn(up_sw_resetn),
@@ -534,7 +536,7 @@ module axi_spi_engine #(
       .DATA_WIDTH(DATA_WIDTH),
       .ASYNC_CLK(ASYNC_SPI_CLK),
       .ADDRESS_WIDTH(SYNC_FIFO_ADDRESS_WIDTH),
-      .S_AXIS_REGISTERED(0)
+      .M_AXIS_REGISTERED(0)
     ) i_offload_sdo_fifo (
       .s_axis_aclk(clk),
       .s_axis_aresetn(up_sw_resetn),
@@ -559,7 +561,7 @@ module axi_spi_engine #(
       .DATA_WIDTH(8),
       .ASYNC_CLK(ASYNC_SPI_CLK),
       .ADDRESS_WIDTH(SYNC_FIFO_ADDRESS_WIDTH),
-      .S_AXIS_REGISTERED(0)
+      .M_AXIS_REGISTERED(0)
     ) i_offload_sync_fifo (
       .s_axis_aclk(spi_clk),
       .s_axis_aresetn(spi_resetn),
