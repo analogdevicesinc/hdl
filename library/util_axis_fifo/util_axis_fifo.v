@@ -38,7 +38,9 @@ module util_axis_fifo #(
   parameter DATA_WIDTH = 64,
   parameter ADDRESS_WIDTH = 5,
   parameter ASYNC_CLK = 1,
-  parameter M_AXIS_REGISTERED = 1
+  parameter M_AXIS_REGISTERED = 1,
+  parameter [ADDRESS_WIDTH-1:0] ALMOST_EMPTY_THRESHOLD = 16,
+  parameter [ADDRESS_WIDTH-1:0] ALMOST_FULL_THRESHOLD = 16
 ) (
   input m_axis_aclk,
   input m_axis_aresetn,
@@ -48,6 +50,7 @@ module util_axis_fifo #(
   output m_axis_tlast,
   output [ADDRESS_WIDTH-1:0] m_axis_level,
   output m_axis_empty,
+  output m_axis_almost_empty,
 
   input s_axis_aclk,
   input s_axis_aresetn,
@@ -56,7 +59,8 @@ module util_axis_fifo #(
   input [DATA_WIDTH-1:0] s_axis_data,
   input s_axis_tlast,
   output [ADDRESS_WIDTH-1:0] s_axis_room,
-  output s_axis_full
+  output s_axis_full,
+  output s_axis_almost_full
 );
 
 generate if (ADDRESS_WIDTH == 0) begin : zerodeep /* it's not a real FIFO, just a 1 stage pipeline */
@@ -93,8 +97,11 @@ generate if (ADDRESS_WIDTH == 0) begin : zerodeep /* it's not a real FIFO, just 
 
       assign m_axis_valid = m_axis_raddr != m_axis_waddr;
       assign m_axis_level = ~m_axis_ready;
+      assign m_axis_empty = 0;
+      assign m_axis_almost_empty = 0;
       assign s_axis_ready = s_axis_raddr == s_axis_waddr;
-      assign s_axis_empty = ~s_axis_valid;
+      assign s_axis_full = 0;
+      assign s_axis_almost_full = 0;
       assign s_axis_room = s_axis_ready;
 
       always @(posedge s_axis_aclk) begin
@@ -148,8 +155,10 @@ generate if (ADDRESS_WIDTH == 0) begin : zerodeep /* it's not a real FIFO, just 
     assign m_axis_tlast = axis_tlast_d;
     assign s_axis_ready = m_axis_ready | ~m_axis_valid;
     assign m_axis_empty = 1'b0;
+    assign m_axis_almost_empty = 1'b0;
     assign m_axis_level = 1'b0;
     assign s_axis_full  = 1'b0;
+    assign s_axis_almost_full  = 1'b0;
     assign s_axis_room  = 1'b0;
 
   end
@@ -183,7 +192,9 @@ end else begin : fifo /* ADDRESS_WIDTH != 0 - this is a real FIFO implementation
 
   util_axis_fifo_address_generator #(
     .ASYNC_CLK(ASYNC_CLK),
-    .ADDRESS_WIDTH(ADDRESS_WIDTH))
+    .ADDRESS_WIDTH(ADDRESS_WIDTH),
+    .ALMOST_EMPTY_THRESHOLD (ALMOST_EMPTY_THRESHOLD),
+    .ALMOST_FULL_THRESHOLD (ALMOST_FULL_THRESHOLD))
   i_address_gray (
     .m_axis_aclk(m_axis_aclk),
     .m_axis_aresetn(m_axis_aresetn),
@@ -192,11 +203,13 @@ end else begin : fifo /* ADDRESS_WIDTH != 0 - this is a real FIFO implementation
     .m_axis_raddr(m_axis_raddr),
     .m_axis_level(m_axis_level),
     .m_axis_empty(m_axis_empty),
+    .m_axis_almost_empty(m_axis_almost_empty),
     .s_axis_aclk(s_axis_aclk),
     .s_axis_aresetn(s_axis_aresetn),
     .s_axis_ready(s_axis_ready),
     .s_axis_valid(s_axis_valid),
     .s_axis_full(s_axis_full),
+    .s_axis_almost_full(s_axis_almost_full),
     .s_axis_waddr(s_axis_waddr),
     .s_axis_room(s_axis_room)
   );
