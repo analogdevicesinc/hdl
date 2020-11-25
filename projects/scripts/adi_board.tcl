@@ -358,7 +358,8 @@ proc ad_mem_hp0_interconnect {p_clk p_name} {
 
   global sys_zynq
 
-  if {($sys_zynq == 0) && ($p_name eq "sys_ps7/S_AXI_HP0")} {return}
+  if {($sys_zynq <= 0) && ($p_name eq "sys_ps7/S_AXI_HP0")} {return}
+  if {$sys_zynq == -1} {ad_mem_hpx_interconnect "SIM" $p_clk $p_name}
   if {$sys_zynq == 0} {ad_mem_hpx_interconnect "MEM" $p_clk $p_name}
   if {$sys_zynq >= 1} {ad_mem_hpx_interconnect "HP0" $p_clk $p_name}
 }
@@ -373,7 +374,8 @@ proc ad_mem_hp1_interconnect {p_clk p_name} {
 
   global sys_zynq
 
-  if {($sys_zynq == 0) && ($p_name eq "sys_ps7/S_AXI_HP1")} {return}
+  if {($sys_zynq <= 0) && ($p_name eq "sys_ps7/S_AXI_HP1")} {return}
+  if {$sys_zynq == -1} {ad_mem_hpx_interconnect "SIM" $p_clk $p_name}
   if {$sys_zynq == 0} {ad_mem_hpx_interconnect "MEM" $p_clk $p_name}
   if {$sys_zynq >= 1} {ad_mem_hpx_interconnect "HP1" $p_clk $p_name}
 }
@@ -388,7 +390,8 @@ proc ad_mem_hp2_interconnect {p_clk p_name} {
 
   global sys_zynq
 
-  if {($sys_zynq == 0) && ($p_name eq "sys_ps7/S_AXI_HP2")} {return}
+  if {($sys_zynq <= 0) && ($p_name eq "sys_ps7/S_AXI_HP2")} {return}
+  if {$sys_zynq == -1} {ad_mem_hpx_interconnect "SIM" $p_clk $p_name}
   if {$sys_zynq == 0} {ad_mem_hpx_interconnect "MEM" $p_clk $p_name}
   if {$sys_zynq >= 1} {ad_mem_hpx_interconnect "HP2" $p_clk $p_name}
 }
@@ -403,7 +406,8 @@ proc ad_mem_hp3_interconnect {p_clk p_name} {
 
   global sys_zynq
 
-  if {($sys_zynq == 0) && ($p_name eq "sys_ps7/S_AXI_HP3")} {return}
+  if {($sys_zynq <= 0) && ($p_name eq "sys_ps7/S_AXI_HP3")} {return}
+  if {$sys_zynq == -1} {ad_mem_hpx_interconnect "SIM" $p_clk $p_name}
   if {$sys_zynq == 0} {ad_mem_hpx_interconnect "MEM" $p_clk $p_name}
   if {$sys_zynq >= 1} {ad_mem_hpx_interconnect "HP3" $p_clk $p_name}
 }
@@ -413,7 +417,7 @@ proc ad_mem_hp3_interconnect {p_clk p_name} {
 #  directly called in block designs.
 #
 #  \param[p_sel]  - name of the high speed interface, valid values are HP0, HP1
-#  HP2, HP3 or MEM in case of Microblaze
+#  HP2, HP3, MEM in case of Microblaze, or SIM in case of simulation
 #  \param[p_clk]  - name of the clock or reset source
 #  \param[p_name] - name or list of names of the clock or reset sink
 #
@@ -430,6 +434,15 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
 
   set p_name_int $p_name
   set p_clk_source [get_bd_pins -filter {DIR == O} -of_objects [get_bd_nets $p_clk]]
+
+  if {$p_sel eq "SIM"} {
+    if {$sys_mem_interconnect_index < 0} {
+      ad_ip_instance smartconnect axi_mem_interconnect
+    }
+    set m_interconnect_index $sys_mem_interconnect_index
+    set m_interconnect_cell [get_bd_cells axi_mem_interconnect]
+    set m_addr_seg [get_bd_addr_segs -of_objects [get_bd_cells ddr_axi_vip]]
+  }
 
   if {$p_sel eq "MEM"} {
     if {$sys_mem_interconnect_index < 0} {
@@ -572,7 +585,13 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
       ad_connect $p_clk $p_intf_clock
     }
 
-    set mem_mapped [get_bd_addr_segs -of [get_bd_addr_spaces -of  [get_bd_intf_pins -filter {NAME=~ *DLMB*} -of [get_bd_cells /sys_mb]]] -filter {NAME=~ *DDR* || NAME=~ *ddr*}]
+    set mem_mapped ""
+    if {$p_sel eq "MEM"} {
+      set mem_mapped [get_bd_addr_segs -of [get_bd_addr_spaces -of  [get_bd_intf_pins -filter {NAME=~ *DLMB*} -of [get_bd_cells /sys_mb]]] -filter {NAME=~ *DDR* || NAME=~ *ddr*}]
+    }
+    if {$p_sel eq "SIM"} {
+      set mem_mapped [get_bd_addr_segs -of [get_bd_addr_spaces -of  [get_bd_intf_pins -filter {NAME=~ *M_AXI*} -of [get_bd_cells /mng_axi_vip]]] -filter {NAME=~ *DDR* || NAME=~ *ddr*}]
+    }
 
     if {$mem_mapped eq ""} {
       assign_bd_address $m_addr_seg
@@ -582,6 +601,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     }
   }
 
+  if {$p_sel eq "SIM"} {set sys_mem_interconnect_index $m_interconnect_index}
   if {$p_sel eq "MEM"} {set sys_mem_interconnect_index $m_interconnect_index}
   if {$p_sel eq "HP0"} {set sys_hp0_interconnect_index $m_interconnect_index}
   if {$p_sel eq "HP1"} {set sys_hp1_interconnect_index $m_interconnect_index}
@@ -631,6 +651,13 @@ proc ad_cpu_interconnect {p_address p_name} {
       ad_connect sys_cpu_resetn axi_cpu_interconnect/S00_ARESETN
       ad_connect axi_cpu_interconnect/S00_AXI sys_mb/M_AXI_DP
     }
+    if {$sys_zynq == -1} {
+      ad_connect sys_cpu_clk axi_cpu_interconnect/ACLK
+      ad_connect sys_cpu_clk axi_cpu_interconnect/S00_ACLK
+      ad_connect sys_cpu_resetn axi_cpu_interconnect/ARESETN
+      ad_connect sys_cpu_resetn axi_cpu_interconnect/S00_ARESETN
+      ad_connect axi_cpu_interconnect/S00_AXI mng_axi_vip/M_AXI
+    }
   }
 
   if {$sys_zynq == 2} {
@@ -641,6 +668,9 @@ proc ad_cpu_interconnect {p_address p_name} {
   }
   if {$sys_zynq == 0} {
     set sys_addr_cntrl_space [get_bd_addr_spaces sys_mb/Data]
+  }
+  if {$sys_zynq == -1} {
+    set sys_addr_cntrl_space [get_bd_addr_spaces mng_axi_vip/Master_AXI]
   }
 
   set sys_cpu_interconnect_index [expr $sys_cpu_interconnect_index + 1]
@@ -773,7 +803,7 @@ proc ad_cpu_interrupt {p_ps_index p_mb_index p_name} {
 
   global sys_zynq
 
-  if {$sys_zynq == 0} {set p_index_int $p_mb_index}
+  if {$sys_zynq <= 0} {set p_index_int $p_mb_index}
   if {$sys_zynq >= 1} {set p_index_int $p_ps_index}
 
   set p_index [regsub -all {[^0-9]} $p_index_int ""]
