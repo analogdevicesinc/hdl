@@ -186,7 +186,12 @@ module adrv9001_tx #(
         .CLR (mssi_sync),
         .CE (1'b1),
         .I (tx_dclk_in_s),
-        .O (dac_clk_div));
+        .O (dac_clk_div_s));
+
+      BUFG I_bufg (
+        .I (dac_clk_div_s),
+        .O (dac_clk_div)
+      );
 
       assign ssi_rst = mssi_sync;
 
