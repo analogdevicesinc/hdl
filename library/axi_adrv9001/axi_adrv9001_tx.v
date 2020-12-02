@@ -37,6 +37,7 @@
 
 module axi_adrv9001_tx #(
   parameter   ID = 0,
+  parameter   ENABLED = 1,
   parameter   CMOS_LVDS_N = 0,
   parameter   COMMON_BASE_ADDR = 'h10,
   parameter   CHANNEL_BASE_ADDR = 'h11,
@@ -100,6 +101,33 @@ module axi_adrv9001_tx #(
   output  reg [ 31:0]     up_rdata,
   output  reg             up_rack
 );
+generate
+if (ENABLED == 0) begin : core_disabled
+
+  assign dac_rst = 1'b0;
+  assign dac_data_valid_A = 1'b0;
+  assign dac_data_i_A = 16'b0;
+  assign dac_data_q_A = 16'b0;
+  assign dac_data_valid_B = 1'b0;
+  assign dac_data_i_B = 16'b0;
+  assign dac_data_q_B = 16'b0;
+  assign dac_single_lane = 1'b0;
+  assign dac_sdr_ddr_n = 1'b0;
+  assign dac_r1_mode = 1'b0;
+  assign dac_sync_out = 1'b0;
+  assign dac_valid = 1'b0;
+  assign dac_enable_i0 = 1'b0;
+  assign dac_enable_q0 = 1'b0;
+  assign dac_enable_i1 = 1'b0;
+  assign dac_enable_q1 = 1'b0;
+
+  always @(*) begin
+    up_wack = 1'b0;
+    up_rdata = 32'b0;
+    up_rack = 1'b0;
+  end
+
+end else begin : core_enabled
 
   // configuration settings
 
@@ -376,6 +404,9 @@ module axi_adrv9001_tx #(
     .up_rack (up_rack_s[4]));
 
   assign dac_single_lane = dac_num_lanes[0];
+
+end
+endgenerate
 
 endmodule
 
