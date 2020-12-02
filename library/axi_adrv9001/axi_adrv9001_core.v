@@ -41,6 +41,9 @@ module axi_ad9001_core #(
   parameter NUM_LANES = 3,
   parameter DRP_WIDTH = 5,
   parameter TDD_DISABLE = 0,
+  parameter DDS_DISABLE = 0,
+  parameter INDEPENDENT_1R1T_SUPPORT = 1,
+  parameter COMMON_2R2T_SUPPORT = 1,
   parameter FPGA_TECHNOLOGY = 0,
   parameter FPGA_FAMILY = 0,
   parameter SPEED_GRADE = 0,
@@ -262,10 +265,11 @@ module axi_ad9001_core #(
 
   axi_adrv9001_rx #(
     .ID (ID),
+    .ENABLED (1),
     .CMOS_LVDS_N (CMOS_LVDS_N),
     .COMMON_BASE_ADDR(6'h00),
     .CHANNEL_BASE_ADDR(6'h01),
-    .MODE_R1 (0),
+    .MODE_R1 (COMMON_2R2T_SUPPORT==0),
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .FPGA_FAMILY (FPGA_FAMILY),
     .SPEED_GRADE (SPEED_GRADE),
@@ -321,6 +325,7 @@ module axi_ad9001_core #(
 
   axi_adrv9001_rx #(
     .ID (ID),
+    .ENABLED (INDEPENDENT_1R1T_SUPPORT),
     .CMOS_LVDS_N (CMOS_LVDS_N),
     .COMMON_BASE_ADDR(6'h04),
     .CHANNEL_BASE_ADDR(6'h05),
@@ -374,15 +379,16 @@ module axi_ad9001_core #(
 
   axi_adrv9001_tx #(
     .ID (ID),
+    .ENABLED (1),
     .CMOS_LVDS_N (CMOS_LVDS_N),
     .COMMON_BASE_ADDR ('h08),
     .CHANNEL_BASE_ADDR ('h09),
-    .MODE_R1 (0),
+    .MODE_R1 (COMMON_2R2T_SUPPORT==0),
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .FPGA_FAMILY (FPGA_FAMILY),
     .SPEED_GRADE (SPEED_GRADE),
     .DEV_PACKAGE (DEV_PACKAGE),
-    .DDS_DISABLE (0),
+    .DDS_DISABLE (DDS_DISABLE),
     .IQCORRECTION_DISABLE (1),
     .DAC_DDS_TYPE (DAC_DDS_TYPE),
     .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
@@ -425,6 +431,7 @@ module axi_ad9001_core #(
 
   axi_adrv9001_tx #(
     .ID (ID),
+    .ENABLED (INDEPENDENT_1R1T_SUPPORT),
     .CMOS_LVDS_N (CMOS_LVDS_N),
     .COMMON_BASE_ADDR ('h10),
     .CHANNEL_BASE_ADDR ('h11),
@@ -433,7 +440,7 @@ module axi_ad9001_core #(
     .FPGA_FAMILY (FPGA_FAMILY),
     .SPEED_GRADE (SPEED_GRADE),
     .DEV_PACKAGE (DEV_PACKAGE),
-    .DDS_DISABLE (0),
+    .DDS_DISABLE (DDS_DISABLE),
     .IQCORRECTION_DISABLE (1),
     .DAC_DDS_TYPE (DAC_DDS_TYPE),
     .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
