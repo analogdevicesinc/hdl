@@ -58,7 +58,8 @@ module jesd204_tx_static_config #(
   parameter SYSREF_DISABLE = 0,
   parameter SYSREF_ONE_SHOT = 0,
   /* Only 4, 8 are supported at the moment for 8b/10b and 8 for 64b */
-  parameter DATA_PATH_WIDTH = LINK_MODE == 2 ? 8 : 4
+  parameter DATA_PATH_WIDTH = LINK_MODE == 2 ? 8 : 4,
+  parameter TPL_DATA_PATH_WIDTH = LINK_MODE == 2 ? 8 : 4
 ) (
   input clk,
 
@@ -66,9 +67,6 @@ module jesd204_tx_static_config #(
   output [NUM_LINKS-1:0] cfg_links_disable,
   output [9:0] cfg_octets_per_multiframe,
   output [7:0] cfg_octets_per_frame,
-  output [7:0] cfg_lmfc_offset,
-  output cfg_sysref_oneshot,
-  output cfg_sysref_disable,
   output cfg_continuous_cgs,
   output cfg_continuous_ilas,
   output cfg_skip_ilas,
@@ -76,24 +74,36 @@ module jesd204_tx_static_config #(
   output cfg_disable_char_replacement,
   output cfg_disable_scrambler,
 
+  output [9:0] device_cfg_octets_per_multiframe,
+  output [7:0] device_cfg_octets_per_frame,
+  output [7:0] device_cfg_beats_per_multiframe,
+  output [7:0] device_cfg_lmfc_offset,
+  output device_cfg_sysref_oneshot,
+  output device_cfg_sysref_disable,
+
   input ilas_config_rd,
   input [1:0] ilas_config_addr,
   output [NUM_LANES*DATA_PATH_WIDTH*8-1:0] ilas_config_data
 );
 
+assign cfg_lanes_disable = {NUM_LANES{1'b0}};
+assign cfg_links_disable = {NUM_LINKS{1'b0}};
 assign cfg_octets_per_multiframe = (FRAMES_PER_MULTIFRAME * OCTETS_PER_FRAME) - 1;
 assign cfg_octets_per_frame = OCTETS_PER_FRAME - 1;
-assign cfg_lmfc_offset = 1;
-assign cfg_sysref_oneshot = SYSREF_ONE_SHOT;
-assign cfg_sysref_disable = SYSREF_DISABLE;
 assign cfg_continuous_cgs = 1'b0;
 assign cfg_continuous_ilas = 1'b0;
 assign cfg_skip_ilas = 1'b0;
 assign cfg_mframes_per_ilas = 3;
-assign cfg_disable_scrambler = SCR ? 1'b0 : 1'b1;
 assign cfg_disable_char_replacement = 1'b0;
-assign cfg_lanes_disable = {NUM_LANES{1'b0}};
-assign cfg_links_disable = {NUM_LINKS{1'b0}};
+assign cfg_disable_scrambler = SCR ? 1'b0 : 1'b1;
+
+assign device_cfg_octets_per_multiframe = (FRAMES_PER_MULTIFRAME * OCTETS_PER_FRAME) - 1;
+assign device_cfg_octets_per_frame = OCTETS_PER_FRAME - 1;
+assign device_cfg_beats_per_multiframe = ((FRAMES_PER_MULTIFRAME * OCTETS_PER_FRAME) /
+                                          TPL_DATA_PATH_WIDTH) - 1;
+assign device_cfg_lmfc_offset = 1;
+assign device_cfg_sysref_oneshot = SYSREF_ONE_SHOT;
+assign device_cfg_sysref_disable = SYSREF_DISABLE;
 
 jesd204_ilas_config_static #(
   .DID(8'h00),
