@@ -54,7 +54,6 @@ module jesd204_up_common # (
   parameter NUM_IRQS = 1,
   parameter EXTRA_CFG_WIDTH = 1,
   parameter DEV_EXTRA_CFG_WIDTH = 1,
-  parameter LINK_MODE = 1, // 2 - 64B/66B;  1 - 8B/10B
   parameter ENABLE_LINK_STATS = 0
 ) (
   input up_clk,
@@ -98,7 +97,11 @@ module jesd204_up_common # (
 
   output reg [9:0] device_cfg_octets_per_multiframe = 'h00,
   output reg [7:0] device_cfg_octets_per_frame = 'h00,
-  output reg [7:0] device_cfg_beats_per_multiframe = 'h00
+  output reg [7:0] device_cfg_beats_per_multiframe = 'h00,
+
+  input [31:0] status_synth_params0,
+  input [31:0] status_synth_params1,
+  input [31:0] status_synth_params2
 );
 
 reg [31:0] up_scratch = 32'h00000000;
@@ -296,9 +299,9 @@ always @(*) begin
   12'h003: up_rdata = PCORE_MAGIC;
 
   /* Core configuration */
-  12'h004: up_rdata = NUM_LANES;
-  12'h005: up_rdata = DATA_PATH_WIDTH_LOG2;
-  12'h006: up_rdata = {22'b0,LINK_MODE[1:0], NUM_LINKS[7:0]};
+  12'h004: up_rdata = status_synth_params0;
+  12'h005: up_rdata = status_synth_params1;
+  12'h006: up_rdata = status_synth_params2;
   /* 0x07-0x0f reserved for future use */
   /* 0x10-0x1f reserved for core specific HDL configuration information */
 

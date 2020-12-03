@@ -121,7 +121,11 @@ module jesd204_rx #(
   output [NUM_LANES-1:0] status_lane_ifs_ready,
   output [14*NUM_LANES-1:0] status_lane_latency,
   output [3*NUM_LANES-1:0] status_lane_emb_state,
-  output [8*NUM_LANES-1:0] status_lane_frame_align_err_cnt
+  output [8*NUM_LANES-1:0] status_lane_frame_align_err_cnt,
+
+  output [31:0] status_synth_params0,
+  output [31:0] status_synth_params1,
+  output [31:0] status_synth_params2
 );
 
 /*
@@ -600,5 +604,21 @@ end
 
 endgenerate
 
+// Core static parameters
+assign status_synth_params0 = {NUM_LANES};
+assign status_synth_params1 = {
+                 /*31:16 */  16'b0,
+                 /*15: 8 */  3'b0,TPL_DATA_PATH_WIDTH[4:0],
+                 /* 7: 0 */  4'b0,DPW_LOG2[3:0]};
+assign status_synth_params2 = {
+                 /*31:19 */  13'b0,
+                 /*   18 */  ENABLE_CHAR_REPLACE[0],
+                 /*   17 */  ENABLE_FRAME_ALIGN_ERR_RESET[0],
+                 /*   16 */  ENABLE_FRAME_ALIGN_CHECK[0],
+                 /*15:13 */  3'b0,
+                 /*   12 */  ASYNC_CLK[0],
+                 /*11:10 */  2'b0,
+                 /* 9: 8 */  LINK_MODE[1:0],
+                 /* 7: 0 */  NUM_LINKS[7:0]};
 
 endmodule

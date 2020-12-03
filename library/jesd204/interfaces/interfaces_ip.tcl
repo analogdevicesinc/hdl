@@ -73,6 +73,9 @@ adi_if_ports input 32 data
 adi_if_define "jesd204_tx_status"
 adi_if_ports output 1 state
 adi_if_ports output 1 sync
+adi_if_ports output -1 synth_params0
+adi_if_ports output -1 synth_params1
+adi_if_ports output -1 synth_params2
 
 adi_if_define "jesd204_tx_event"
 adi_if_ports output 1 sysref_alignment_error
@@ -111,6 +114,9 @@ adi_if_ports output -1 lane_ifs_ready
 adi_if_ports output -1 lane_latency_ready
 adi_if_ports output -1 lane_latency
 adi_if_ports output -1 err_statistics_cnt
+adi_if_ports output -1 synth_params0
+adi_if_ports output -1 synth_params1
+adi_if_ports output -1 synth_params2
 
 adi_if_define "jesd204_rx_ilas_config"
 adi_if_ports output -1 valid
