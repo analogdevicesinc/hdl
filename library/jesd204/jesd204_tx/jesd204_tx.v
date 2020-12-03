@@ -107,7 +107,11 @@ module jesd204_tx #(
   output device_event_sysref_alignment_error,
 
   output [NUM_LINKS-1:0] status_sync,
-  output [1:0] status_state
+  output [1:0] status_state,
+
+  output [31:0] status_synth_params0,
+  output [31:0] status_synth_params1,
+  output [31:0] status_synth_params2
 );
 
 
@@ -530,5 +534,19 @@ pipeline_stage #(
     phy_header
   })
 );
+
+// Core static parameters
+assign status_synth_params0 = {NUM_LANES};
+assign status_synth_params1 = {
+                 /*31:16 */  16'b0,
+                 /*15: 8 */  3'b0,TPL_DATA_PATH_WIDTH[4:0],
+                 /* 7: 0 */  4'b0,DPW_LOG2[3:0]};
+assign status_synth_params2 = {
+                 /*31:16 */  16'b0,
+                 /*15:13 */  3'b0,
+                 /*   12 */  ASYNC_CLK[0],
+                 /*11:10 */  2'b0,
+                 /* 9: 8 */  LINK_MODE[1:0],
+                 /* 7: 0 */  NUM_LINKS[7:0]};
 
 endmodule

@@ -112,7 +112,11 @@ module axi_jesd204_tx #(
   output core_ctrl_manual_sync_request,
 
   input [1:0] core_status_state,
-  input [NUM_LINKS-1:0] core_status_sync
+  input [NUM_LINKS-1:0] core_status_sync,
+
+  input [31:0] status_synth_params0,
+  input [31:0] status_synth_params1,
+  input [31:0] status_synth_params2
 );
 
 localparam PCORE_VERSION = 32'h00010561; // 1.04.a
@@ -186,12 +190,9 @@ jesd204_up_common #(
   .ID(ID),
   .NUM_LANES(NUM_LANES),
   .NUM_LINKS(NUM_LINKS),
-  .DATA_PATH_WIDTH_LOG2(DATA_PATH_WIDTH_LOG2),
   .NUM_IRQS(5),
   .EXTRA_CFG_WIDTH(11),
   .DEV_EXTRA_CFG_WIDTH(10),
-  .MAX_OCTETS_PER_FRAME(10),
-  .LINK_MODE(LINK_MODE),
   .ENABLE_LINK_STATS(ENABLE_LINK_STATS)
 ) i_up_common (
   .up_clk(s_axi_aclk),
@@ -253,7 +254,12 @@ jesd204_up_common #(
     /*    09 */ device_cfg_sysref_disable,
     /*    08 */ device_cfg_sysref_oneshot,
     /* 00-07 */ device_cfg_lmfc_offset
-  })
+  }),
+
+  .status_synth_params0(status_synth_params0),
+  .status_synth_params1(status_synth_params1),
+  .status_synth_params2(status_synth_params2)
+
 );
 
 jesd204_up_sysref #(

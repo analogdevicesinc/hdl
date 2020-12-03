@@ -132,6 +132,9 @@ adi_add_bus "rx_status" "master" \
     { "status_lane_ifs_ready" "lane_ifs_ready" } \
     { "status_lane_latency" "lane_latency" } \
     { "status_lane_frame_align_err_cnt" "lane_frame_align_err_cnt" } \
+    { "status_synth_params0" "synth_params0" } \
+    { "status_synth_params1" "synth_params1" } \
+    { "status_synth_params2" "synth_params2" } \
   }
 
 adi_add_bus "rx_ilas_config" "master" \
