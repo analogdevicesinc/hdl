@@ -127,7 +127,7 @@ module axi_jesd204_rx #(
   input [31:0] status_synth_params2
 );
 
-localparam PCORE_VERSION = 32'h00010661; // 1.06.a
+localparam PCORE_VERSION = 32'h00010761; // 1.07.a
 localparam PCORE_MAGIC = 32'h32303452; // 204R
 
 localparam DATA_PATH_WIDTH_LOG2 = (DATA_PATH_WIDTH == 8) ? 3 : 2;
