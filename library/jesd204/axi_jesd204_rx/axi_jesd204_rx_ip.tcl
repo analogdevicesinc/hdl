@@ -124,6 +124,9 @@ adi_add_bus "rx_status" "slave" \
     { "core_status_lane_latency" "lane_latency" } \
     { "core_status_lane_frame_align_err_cnt" "lane_frame_align_err_cnt" } \
     { "core_status_err_statistics_cnt" "err_statistics_cnt" } \
+    { "status_synth_params0" "synth_params0" } \
+    { "status_synth_params1" "synth_params1" } \
+    { "status_synth_params2" "synth_params2" } \
   }
 
 ipx::infer_bus_interface irq xilinx.com:signal:interrupt_rtl:1.0 [ipx::current_core]

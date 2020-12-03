@@ -114,6 +114,9 @@ adi_add_bus "tx_status" "slave" \
   { \
     { "core_status_state" "state" } \
     { "core_status_sync" "sync" } \
+    { "status_synth_params0" "synth_params0" } \
+    { "status_synth_params1" "synth_params1" } \
+    { "status_synth_params2" "synth_params2" } \
   }
 
 adi_add_bus "tx_ctrl" "master" \

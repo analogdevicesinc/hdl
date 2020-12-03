@@ -120,7 +120,11 @@ module axi_jesd204_rx #(
   input [3*NUM_LANES-1:0] core_status_lane_emb_state,
   input [NUM_LANES-1:0] core_status_lane_ifs_ready,
   input [14*NUM_LANES-1:0] core_status_lane_latency,
-  input [8*NUM_LANES-1:0] core_status_lane_frame_align_err_cnt
+  input [8*NUM_LANES-1:0] core_status_lane_frame_align_err_cnt,
+
+  input [31:0] status_synth_params0,
+  input [31:0] status_synth_params1,
+  input [31:0] status_synth_params2
 );
 
 localparam PCORE_VERSION = 32'h00010661; // 1.06.a
@@ -211,11 +215,9 @@ jesd204_up_common #(
   .ID(ID),
   .NUM_LANES(NUM_LANES),
   .NUM_LINKS(NUM_LINKS),
-  .DATA_PATH_WIDTH_LOG2(DATA_PATH_WIDTH_LOG2),
   .NUM_IRQS(5),
   .EXTRA_CFG_WIDTH(8),
   .DEV_EXTRA_CFG_WIDTH(19),
-  .LINK_MODE(LINK_MODE),
   .ENABLE_LINK_STATS(ENABLE_LINK_STATS)
 ) i_up_common (
   .up_clk(s_axi_aclk),
@@ -273,7 +275,12 @@ jesd204_up_common #(
     /*    16 */ device_cfg_buffer_early_release,
     /* 15-08 */ device_cfg_buffer_delay,
     /* 00-07 */ device_cfg_lmfc_offset
-  })
+  }),
+
+  .status_synth_params0(status_synth_params0),
+  .status_synth_params1(status_synth_params1),
+  .status_synth_params2(status_synth_params2)
+
 );
 
 jesd204_up_sysref #(
