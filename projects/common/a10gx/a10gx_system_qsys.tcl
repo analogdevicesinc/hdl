@@ -176,7 +176,7 @@ set_instance_parameter_value sys_cpu {mmu_autoAssignTlbPtrSz} {0}
 set_instance_parameter_value sys_cpu {mmu_TLBMissExcOffset} {4096}
 set_instance_parameter_value sys_cpu {resetSlave} {sys_flash.uas}
 set_instance_parameter_value sys_cpu {mmu_TLBMissExcSlave} {sys_tlb_mem.s2}
-set_instance_parameter_value sys_cpu {exceptionSlave} {sys_ddr3_cntrl.ctrl_amm_0}
+set_instance_parameter_value sys_cpu {exceptionSlave} {sys_int_mem.s1}
 set_instance_parameter_value sys_cpu {breakSlave} {sys_cpu.jtag_debug_module}
 set_instance_parameter_value sys_cpu {mul_32_impl} {3}
 set_instance_parameter_value sys_cpu {shift_rot_impl} {0}
