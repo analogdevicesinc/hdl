@@ -60,6 +60,13 @@ ad_ip_parameter ID INTEGER 0 true [list \
   GROUP $group \
 ]
 
+ad_ip_parameter OCTETS_PER_BEAT INTEGER 4 true [list \
+  DISPLAY_NAME "Datapath width" \
+  DISPLAY_UNITS "octets" \
+  ALLOWED_RANGES {4 6 8 12} \
+  GROUP $group \
+]
+
 set group "JESD204 Deframer Configuration"
 
 ad_ip_parameter NUM_LANES INTEGER 1 true [list \
@@ -79,6 +86,13 @@ ad_ip_parameter NUM_CHANNELS INTEGER 1 true [list \
 ad_ip_parameter BITS_PER_SAMPLE INTEGER 16 true [list \
   DISPLAY_NAME "Bits per Sample (N')" \
   ALLOWED_RANGES {8 12 16} \
+  UNITS bits \
+  GROUP $group \
+]
+
+ad_ip_parameter DMA_BITS_PER_SAMPLE INTEGER 16 true [list \
+  DISPLAY_NAME "DMA Bits per Sample" \
+  ALLOWED_RANGES {8 16} \
   UNITS bits \
   GROUP $group \
 ]
@@ -114,7 +128,7 @@ ad_ip_parameter SAMPLES_PER_FRAME_MANUAL INTEGER 1 false [list \
 ad_ip_parameter OCTETS_PER_FRAME INTEGER 1 false [list \
   DISPLAY_NAME "Octets per Frame (F)" \
   DISPLAY_UNITS "octets" \
-  ALLOWED_RANGES {1 2 4 8 12 16} \
+  ALLOWED_RANGES {1 2 3 4 6 8 12 16} \
   DERIVED true \
   GROUP $group \
 ]
@@ -237,30 +251,37 @@ proc p_ad_ip_jesd204_tpl_adc_elab {} {
 
   # read core parameters
 
-  set m_num_of_lanes [get_parameter_value "NUM_LANES"]
-  set m_num_of_channels [get_parameter_value "NUM_CHANNELS"]
-  set channel_bus_witdh [expr 32*$m_num_of_lanes/$m_num_of_channels]
+  set L [get_parameter_value "NUM_LANES"]
+  set M [get_parameter_value "NUM_CHANNELS"]
+  set NP [get_parameter_value "BITS_PER_SAMPLE"]
+  set OPB [get_parameter_value "OCTETS_PER_BEAT"]
+  set DMA_BPS [get_parameter_value "DMA_BITS_PER_SAMPLE"]
+
+  # The DMA interface is rounded to nearest power of two bytes per sample,
+  # e.g NP=12 is padded into 16 bits 
+  set samples_per_beat_per_channel [expr ($OPB * 8 * $L / ($M * $NP))]
+  set channel_bus_width [expr $samples_per_beat_per_channel*$DMA_BPS]
 
   # link layer interface
 
   add_interface link_data avalon_streaming sink
-  add_interface_port link_data link_data  data  input  [expr 32*$m_num_of_lanes]
+  add_interface_port link_data link_data  data  input  [expr $OPB*8*$L]
   add_interface_port link_data link_valid valid input  1
   add_interface_port link_data link_ready ready output 1
   set_interface_property link_data associatedClock link_clk
-  set_interface_property link_data dataBitsPerSymbol [expr 32*$m_num_of_lanes]
+  set_interface_property link_data dataBitsPerSymbol [expr $OPB*8*$L]
 
   # dma interface
 
-  for {set i 0} {$i < $m_num_of_channels} {incr i} {
+  for {set i 0} {$i < $M} {incr i} {
     add_interface adc_ch_$i conduit end
     add_interface_port adc_ch_$i adc_enable_$i enable output 1
     set_port_property adc_enable_$i fragment_list [format "enable(%d:%d)" $i $i]
     add_interface_port adc_ch_$i adc_valid_$i  valid  output 1
     set_port_property adc_valid_$i fragment_list [format "adc_valid(%d:%d)" $i $i]
-    add_interface_port adc_ch_$i adc_data_$i   data   output $channel_bus_witdh
+    add_interface_port adc_ch_$i adc_data_$i   data   output $channel_bus_width
     set_port_property adc_data_$i fragment_list \
-          [format "adc_data(%d:%d)" [expr $channel_bus_witdh*$i+$channel_bus_witdh-1] [expr $channel_bus_witdh*$i]]
+          [format "adc_data(%d:%d)" [expr $channel_bus_width*$i+$channel_bus_width-1] [expr $channel_bus_width*$i]]
     set_interface_property adc_ch_$i associatedClock link_clk
   }
 
