@@ -227,9 +227,12 @@ module frame_align_tb;
   wire [NUM_LINKS-1:0] tx_cfg_links_disable;
   wire [9:0] tx_cfg_octets_per_multiframe;
   wire [7:0] tx_cfg_octets_per_frame;
-  wire [7:0] tx_cfg_lmfc_offset;
-  wire tx_cfg_sysref_disable;
-  wire tx_cfg_sysref_oneshot;
+  wire [7:0] tx_device_cfg_lmfc_offset;
+  wire [9:0] tx_device_cfg_octets_per_multiframe;
+  wire [7:0] tx_device_cfg_octets_per_frame;
+  wire [7:0] tx_device_cfg_beats_per_multiframe;
+  wire tx_device_cfg_sysref_disable;
+  wire tx_device_cfg_sysref_oneshot;
   wire tx_cfg_continuous_cgs;
   wire tx_cfg_continuous_ilas;
   wire tx_cfg_skip_ilas;
@@ -262,7 +265,8 @@ module frame_align_tb;
     .LINK_MODE(1),
     .SYSREF_DISABLE(SYSREF_DISABLE),
     .SYSREF_ONE_SHOT(SYSREF_ONE_SHOT),
-    .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
+    .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
+    .TPL_DATA_PATH_WIDTH(DATA_PATH_WIDTH)
   ) i_tx_cfg (
     .clk(clk),
 
@@ -270,15 +274,19 @@ module frame_align_tb;
     .cfg_links_disable(tx_cfg_links_disable),
     .cfg_octets_per_multiframe(tx_cfg_octets_per_multiframe),
     .cfg_octets_per_frame(tx_cfg_octets_per_frame),
-    .cfg_lmfc_offset(tx_cfg_lmfc_offset),
-    .cfg_sysref_disable(tx_cfg_sysref_disable),
-    .cfg_sysref_oneshot(tx_cfg_sysref_oneshot),
     .cfg_continuous_cgs(tx_cfg_continuous_cgs),
     .cfg_continuous_ilas(tx_cfg_continuous_ilas),
     .cfg_skip_ilas(tx_cfg_skip_ilas),
     .cfg_mframes_per_ilas(tx_cfg_mframes_per_ilas),
     .cfg_disable_char_replacement(tx_cfg_disable_char_replacement),
     .cfg_disable_scrambler(tx_cfg_disable_scrambler),
+
+    .device_cfg_octets_per_multiframe(tx_device_cfg_octets_per_multiframe),
+    .device_cfg_octets_per_frame(tx_device_cfg_octets_per_frame),
+    .device_cfg_beats_per_multiframe(tx_device_cfg_beats_per_multiframe),
+    .device_cfg_lmfc_offset(tx_device_cfg_lmfc_offset),
+    .device_cfg_sysref_disable(tx_device_cfg_sysref_disable),
+    .device_cfg_sysref_oneshot(tx_device_cfg_sysref_oneshot),
 
     .ilas_config_rd(tx_ilas_config_rd),
     .ilas_config_addr(tx_ilas_config_addr),
@@ -290,10 +298,16 @@ module frame_align_tb;
     .NUM_LINKS(NUM_LINKS),
     .NUM_OUTPUT_PIPELINE(0),
     .LINK_MODE(1),
-    .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
+    .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
+    .TPL_DATA_PATH_WIDTH(DATA_PATH_WIDTH),
+    .ASYNC_CLK(0),
+    .ENABLE_CHAR_REPLACE(1)
   ) i_tx (
     .clk(clk),
     .reset(reset),
+
+    .device_clk(clk),
+    .device_reset(reset),
 
     .phy_data(phy_data_out),
     .phy_charisk(phy_charisk_out),
@@ -309,15 +323,14 @@ module frame_align_tb;
     .tx_ready(tx_ready),
     .tx_eof(tx_eof),
     .tx_sof(tx_sof),
+    .tx_somf(),
+    .tx_eomf(),
     .tx_valid(1'b1),
 
     .cfg_lanes_disable(tx_cfg_lanes_disable),
     .cfg_links_disable(tx_cfg_links_disable),
     .cfg_octets_per_multiframe(tx_cfg_octets_per_multiframe),
     .cfg_octets_per_frame(tx_cfg_octets_per_frame),
-    .cfg_lmfc_offset(tx_cfg_lmfc_offset),
-    .cfg_sysref_disable(tx_cfg_sysref_disable),
-    .cfg_sysref_oneshot(tx_cfg_sysref_oneshot),
     .cfg_continuous_cgs(tx_cfg_continuous_cgs),
     .cfg_continuous_ilas(tx_cfg_continuous_ilas),
     .cfg_skip_ilas(tx_cfg_skip_ilas),
@@ -325,31 +338,44 @@ module frame_align_tb;
     .cfg_disable_char_replacement(tx_cfg_disable_char_replacement),
     .cfg_disable_scrambler(tx_cfg_disable_scrambler),
 
+    .device_cfg_octets_per_multiframe(tx_device_cfg_octets_per_multiframe),
+    .device_cfg_octets_per_frame(tx_device_cfg_octets_per_frame),
+    .device_cfg_beats_per_multiframe(tx_device_cfg_beats_per_multiframe),
+    .device_cfg_lmfc_offset(tx_device_cfg_lmfc_offset),
+    .device_cfg_sysref_disable(tx_device_cfg_sysref_disable),
+    .device_cfg_sysref_oneshot(tx_device_cfg_sysref_oneshot),
+
     .ilas_config_rd(tx_ilas_config_rd),
     .ilas_config_addr(tx_ilas_config_addr),
     .ilas_config_data(tx_ilas_config_data),
 
     .ctrl_manual_sync_request(1'b0),
 
-
-    .event_sysref_edge (tx_event_sysref_edge),
-    .event_sysref_alignment_error (tx_event_sysref_alignment_error),
+    .device_event_sysref_edge (tx_event_sysref_edge),
+    .device_event_sysref_alignment_error (tx_event_sysref_alignment_error),
 
     .status_sync (tx_status_sync),
-    .status_state (tx_status_state)
+    .status_state (tx_status_state),
+
+    .status_synth_params0(),
+    .status_synth_params1(),
+    .status_synth_params2()
   );
 
   wire [NUM_LANES-1:0] rx_cfg_lanes_disable;
   wire [NUM_LINKS-1:0] rx_cfg_links_disable;
   wire [9:0] rx_cfg_octets_per_multiframe;
   wire [7:0] rx_cfg_octets_per_frame;
-  wire [7:0] rx_cfg_lmfc_offset;
-  wire rx_cfg_sysref_disable;
-  wire rx_cfg_sysref_oneshot;
+  wire [7:0] rx_device_cfg_lmfc_offset;
+  wire [9:0] rx_device_cfg_octets_per_multiframe;
+  wire [7:0] rx_device_cfg_octets_per_frame;
+  wire [7:0] rx_device_cfg_beats_per_multiframe;
+  wire rx_device_cfg_sysref_disable;
+  wire rx_device_cfg_sysref_oneshot;
+  wire rx_device_cfg_buffer_early_release;
+  wire [7:0] rx_device_cfg_buffer_delay;
   wire rx_cfg_disable_scrambler;
   wire rx_cfg_disable_char_replacement;
-  wire rx_cfg_buffer_early_release;
-  wire [7:0] rx_cfg_buffer_delay;
   wire [NUM_LANES-1:0] rx_status_lane_ifs_ready;
   wire [NUM_LANES*14-1:0] rx_status_lane_latency;
   wire [NUM_LANES*8-1:0] rx_status_lane_frame_align_err_cnt;
@@ -376,7 +402,8 @@ module frame_align_tb;
     .LINK_MODE(1),
     .SYSREF_DISABLE(SYSREF_DISABLE),
     .SYSREF_ONE_SHOT(SYSREF_ONE_SHOT),
-    .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
+    .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
+    .TPL_DATA_PATH_WIDTH(DATA_PATH_WIDTH)
   ) i_rx_cfg (
     .clk(clk),
 
@@ -384,14 +411,18 @@ module frame_align_tb;
     .cfg_links_disable(rx_cfg_links_disable),
     .cfg_octets_per_multiframe(rx_cfg_octets_per_multiframe),
     .cfg_octets_per_frame(rx_cfg_octets_per_frame),
-    .cfg_lmfc_offset(rx_cfg_lmfc_offset),
-    .cfg_sysref_disable(rx_cfg_sysref_disable),
-    .cfg_sysref_oneshot(rx_cfg_sysref_oneshot),
     .cfg_disable_scrambler(rx_cfg_disable_scrambler),
     .cfg_disable_char_replacement(rx_cfg_disable_char_replacement),
-    .cfg_buffer_delay(rx_cfg_buffer_delay),
-    .cfg_buffer_early_release(rx_cfg_buffer_early_release),
-    .cfg_frame_align_err_threshold(rx_cfg_frame_align_err_threshold)
+    .cfg_frame_align_err_threshold(rx_cfg_frame_align_err_threshold),
+
+    .device_cfg_octets_per_multiframe(rx_device_cfg_octets_per_multiframe),
+    .device_cfg_octets_per_frame(rx_device_cfg_octets_per_frame),
+    .device_cfg_beats_per_multiframe(rx_device_cfg_beats_per_multiframe),
+    .device_cfg_lmfc_offset(rx_device_cfg_lmfc_offset),
+    .device_cfg_sysref_disable(rx_device_cfg_sysref_disable),
+    .device_cfg_sysref_oneshot(rx_device_cfg_sysref_oneshot),
+    .device_cfg_buffer_early_release(rx_device_cfg_buffer_early_release),
+    .device_cfg_buffer_delay(rx_device_cfg_buffer_delay)
   );
 
   jesd204_rx #(
@@ -401,10 +432,16 @@ module frame_align_tb;
     .LINK_MODE(1),
     .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
     .ENABLE_FRAME_ALIGN_CHECK(1),
-    .ENABLE_FRAME_ALIGN_ERR_RESET(1)
+    .ENABLE_FRAME_ALIGN_ERR_RESET(1),
+    .TPL_DATA_PATH_WIDTH(DATA_PATH_WIDTH),
+    .ASYNC_CLK(0),
+    .ENABLE_CHAR_REPLACE(1)
   ) i_rx (
     .clk(clk),
     .reset(reset),
+
+    .device_clk(clk),
+    .device_reset(reset),
 
     .phy_data(phy_data_in),
     .phy_header({2*NUM_LANES{1'b0}}),
@@ -417,8 +454,10 @@ module frame_align_tb;
     .lmfc_edge(rx_lmfc_edge),
     .lmfc_clk(rx_lmfc_clk),
 
-    .event_sysref_alignment_error(rx_event_sysref_alignment_error),
-    .event_sysref_edge(rx_event_sysref_edge),
+    .device_event_sysref_alignment_error(rx_event_sysref_alignment_error),
+    .device_event_sysref_edge(rx_event_sysref_edge),
+    .event_frame_alignment_error(),
+    .event_unexpected_lane_state_error(),
 
     .sync(sync),
 
@@ -428,18 +467,24 @@ module frame_align_tb;
     .rx_valid(rx_valid),
     .rx_eof(rx_eof),
     .rx_sof(rx_sof),
+    .rx_eomf(),
+    .rx_somf(),
 
     .cfg_lanes_disable(rx_cfg_lanes_disable),
     .cfg_links_disable(rx_cfg_links_disable),
     .cfg_octets_per_multiframe(rx_cfg_octets_per_multiframe),
     .cfg_octets_per_frame(rx_cfg_octets_per_frame),
-    .cfg_lmfc_offset(rx_cfg_lmfc_offset),
-    .cfg_sysref_disable(rx_cfg_sysref_disable),
-    .cfg_sysref_oneshot(rx_cfg_sysref_oneshot),
-    .cfg_buffer_early_release(rx_cfg_buffer_early_release),
-    .cfg_buffer_delay(rx_cfg_buffer_delay),
     .cfg_disable_char_replacement(rx_cfg_disable_char_replacement),
     .cfg_disable_scrambler(rx_cfg_disable_scrambler),
+
+    .device_cfg_octets_per_multiframe(rx_device_cfg_octets_per_multiframe),
+    .device_cfg_octets_per_frame(rx_device_cfg_octets_per_frame),
+    .device_cfg_beats_per_multiframe(rx_device_cfg_beats_per_multiframe),
+    .device_cfg_lmfc_offset(rx_device_cfg_lmfc_offset),
+    .device_cfg_sysref_disable(rx_device_cfg_sysref_disable),
+    .device_cfg_sysref_oneshot(rx_device_cfg_sysref_oneshot),
+    .device_cfg_buffer_early_release(rx_device_cfg_buffer_early_release),
+    .device_cfg_buffer_delay(rx_device_cfg_buffer_delay),
 
     .ctrl_err_statistics_reset(1'b0),
     .ctrl_err_statistics_mask(7'b0),
@@ -458,7 +503,11 @@ module frame_align_tb;
     .status_lane_ifs_ready(rx_status_lane_ifs_ready),
     .status_lane_latency(rx_status_lane_latency),
     .status_lane_emb_state(),
-    .status_lane_frame_align_err_cnt(rx_status_lane_frame_align_err_cnt)
+    .status_lane_frame_align_err_cnt(rx_status_lane_frame_align_err_cnt),
+
+    .status_synth_params0(),
+    .status_synth_params1(),
+    .status_synth_params2()
   );
 
   assign cur_data_mismatch = (rx_data & rx_mask) !== ({NUM_LANES{rx_ref_data}} & rx_mask);

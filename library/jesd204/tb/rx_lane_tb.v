@@ -63,7 +63,7 @@ module rx_lane_tb;
 
   wire [1:0] status_cgs_state;
   wire status_ifs_ready;
-  wire [1:0] status_frame_align;
+  wire [2:0] status_frame_align;
 
   integer counter = 'h00;
   wire [31:0] counter2 = (counter - 'h20) * 4;
@@ -116,6 +116,9 @@ module rx_lane_tb;
     .clk(clk),
     .reset(1'b0),
 
+    .device_clk(clk),
+    .device_reset(1'b0),
+
     .phy_data(data),
     .phy_charisk(charisk),
     .phy_disperr(disperr),
@@ -131,18 +134,23 @@ module rx_lane_tb;
     .buffer_release_n(buffer_release_n),
     .buffer_ready_n(buffer_ready_n),
 
+    .cfg_octets_per_multiframe(10'd31),
+    .cfg_octets_per_frame(8'd3),
+    .cfg_disable_char_replacement(1'b0),
     .cfg_disable_scrambler(1'b0),
+
     .ilas_config_valid(ilas_config_valid),
     .ilas_config_addr(ilas_config_addr),
     .ilas_config_data(ilas_config_data),
 
-    .ctrl_err_statistics_reset(1'b0),
+    .err_statistics_reset(1'b0),
     .ctrl_err_statistics_mask(3'h7),
     .status_err_statistics_cnt(status_err_statistics_cnt),
 
     .status_cgs_state(status_cgs_state),
     .status_ifs_ready(status_ifs_ready),
-    .status_frame_align(status_frame_align)
+    .status_frame_align(status_frame_align),
+    .status_frame_align_err_cnt()
   );
 
 endmodule

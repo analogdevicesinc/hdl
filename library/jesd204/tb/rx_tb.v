@@ -139,13 +139,19 @@ module rx_tb;
 
   wire [NUM_LANES-1:0] cfg_lanes_disable;
   wire [NUM_LINKS-1:0] cfg_links_disable;
-  wire [7:0] cfg_beats_per_multiframe;
+  wire [9:0] cfg_octets_per_multiframe;
   wire [7:0] cfg_octets_per_frame;
-  wire [7:0] cfg_lmfc_offset;
-  wire cfg_sysref_oneshot;
-  wire cfg_sysref_disable;
+  wire [7:0] device_cfg_lmfc_offset;
+  wire [9:0] device_cfg_octets_per_multiframe;
+  wire [7:0] device_cfg_octets_per_frame;
+  wire [7:0] device_cfg_beats_per_multiframe;
+  wire device_cfg_sysref_disable;
+  wire device_cfg_sysref_oneshot;
+  wire device_cfg_buffer_early_release;
+  wire [7:0] device_cfg_buffer_delay;
   wire cfg_disable_scrambler;
-  wire cfg_buffer_early_release;
+  wire cfg_disable_char_replacement;
+  wire [7:0] cfg_frame_align_err_threshold;
 
   always @(posedge clk) begin
     if ($urandom % 400 == 0)
@@ -171,13 +177,20 @@ module rx_tb;
 
     .cfg_lanes_disable(cfg_lanes_disable),
     .cfg_links_disable(cfg_links_disable),
-    .cfg_beats_per_multiframe(cfg_beats_per_multiframe),
+    .cfg_octets_per_multiframe(cfg_octets_per_multiframe),
     .cfg_octets_per_frame(cfg_octets_per_frame),
-    .cfg_lmfc_offset(cfg_lmfc_offset),
-    .cfg_sysref_oneshot(cfg_sysref_oneshot),
-    .cfg_sysref_disable(cfg_sysref_disable),
     .cfg_disable_scrambler(cfg_disable_scrambler),
-    .cfg_buffer_early_release(cfg_buffer_early_release)
+    .cfg_disable_char_replacement(cfg_disable_char_replacement),
+    .cfg_frame_align_err_threshold(cfg_frame_align_err_threshold),
+
+    .device_cfg_octets_per_multiframe(device_cfg_octets_per_multiframe),
+    .device_cfg_octets_per_frame(device_cfg_octets_per_frame),
+    .device_cfg_beats_per_multiframe(device_cfg_beats_per_multiframe),
+    .device_cfg_lmfc_offset(device_cfg_lmfc_offset),
+    .device_cfg_sysref_disable(device_cfg_sysref_disable),
+    .device_cfg_sysref_oneshot(device_cfg_sysref_oneshot),
+    .device_cfg_buffer_early_release(device_cfg_buffer_early_release),
+    .device_cfg_buffer_delay(device_cfg_buffer_delay)
   );
 
   jesd204_rx #(
@@ -187,29 +200,75 @@ module rx_tb;
     .clk(clk),
     .reset(reset),
 
-    .cfg_lanes_disable(cfg_lanes_disable),
-    .cfg_links_disable(cfg_links_disable),
-    .cfg_beats_per_multiframe(cfg_beats_per_multiframe),
-    .cfg_octets_per_frame(cfg_octets_per_frame),
-    .cfg_lmfc_offset(cfg_lmfc_offset),
-    .cfg_sysref_oneshot(cfg_sysref_oneshot),
-    .cfg_sysref_disable(cfg_sysref_disable),
-    .cfg_disable_scrambler(cfg_disable_scrambler),
-    .cfg_buffer_early_release(cfg_buffer_early_release),
-
-    .ctrl_err_statistics_reset(1'b0),
-    .ctrl_err_statistics_mask(3'h7),
-
-    .status_err_statistics_cnt(status_err_statistics_cnt),
-
-    .phy_en_char_align(en_align),
+    .device_clk(clk),
+    .device_reset(reset),
 
     .phy_data({NUM_LANES{data}}),
+    .phy_header({2*NUM_LANES{1'b0}}),
     .phy_charisk({NUM_LANES{charisk}}),
     .phy_notintable({NUM_LANES{notintable}}),
     .phy_disperr({NUM_LANES{disperr}}),
+    .phy_block_sync({NUM_LANES{1'b0}}),
+
+    .sysref(sysref),
+    .lmfc_edge(),
+    .lmfc_clk(),
+
+    .device_event_sysref_alignment_error(),
+    .device_event_sysref_edge(),
+    .event_frame_alignment_error(),
+    .event_unexpected_lane_state_error(),
+
     .sync(sync),
-    .sysref(sysref)
+
+    .phy_en_char_align(en_align),
+
+    .rx_data(),
+    .rx_valid(),
+    .rx_eof(),
+    .rx_sof(),
+    .rx_eomf(),
+    .rx_somf(),
+
+    .cfg_lanes_disable(cfg_lanes_disable),
+    .cfg_links_disable(cfg_links_disable),
+    .cfg_octets_per_multiframe(cfg_octets_per_multiframe),
+    .cfg_octets_per_frame(cfg_octets_per_frame),
+    .cfg_disable_char_replacement(cfg_disable_char_replacement),
+    .cfg_disable_scrambler(cfg_disable_scrambler),
+
+    .device_cfg_octets_per_multiframe(device_cfg_octets_per_multiframe),
+    .device_cfg_octets_per_frame(device_cfg_octets_per_frame),
+    .device_cfg_beats_per_multiframe(device_cfg_beats_per_multiframe),
+    .device_cfg_lmfc_offset(device_cfg_lmfc_offset),
+    .device_cfg_sysref_disable(device_cfg_sysref_disable),
+    .device_cfg_sysref_oneshot(device_cfg_sysref_oneshot),
+    .device_cfg_buffer_early_release(device_cfg_buffer_early_release),
+    .device_cfg_buffer_delay(device_cfg_buffer_delay),
+
+    .ctrl_err_statistics_reset(1'b0),
+    .ctrl_err_statistics_mask(7'h7),
+
+    .cfg_frame_align_err_threshold(cfg_frame_align_err_threshold),
+
+    .status_err_statistics_cnt(status_err_statistics_cnt),
+
+    .ilas_config_valid(),
+    .ilas_config_addr(),
+    .ilas_config_data(),
+
+    .status_ctrl_state(),
+    .status_lane_cgs_state(),
+
+    .status_lane_ifs_ready(),
+    .status_lane_latency(),
+    .status_lane_emb_state(),
+    .status_lane_frame_align_err_cnt(),
+
+    .status_synth_params0(),
+    .status_synth_params1(),
+    .status_synth_params2()
+
   );
 
 endmodule
