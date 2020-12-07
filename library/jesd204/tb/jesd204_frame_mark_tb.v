@@ -54,6 +54,7 @@ parameter VCD_FILE = "jesd204_frame_mark_tb.vcd";
 localparam DATA_PATH_WIDTH = 8;
 
 wire [9:0]                  cfg_octets_per_multiframe = 23;
+wire [7:0]                  cfg_beats_per_multiframe = 2;
 wire [7:0]                  cfg_octets_per_frame = 5;
 wire [DATA_PATH_WIDTH-1:0]  sof;
 wire [DATA_PATH_WIDTH-1:0]  somf;
@@ -67,6 +68,7 @@ jesd204_frame_mark #(
   .clk                        (clk),
   .reset                      (reset),
   .cfg_octets_per_multiframe  (cfg_octets_per_multiframe),
+  .cfg_beats_per_multiframe   (cfg_beats_per_multiframe),
   .cfg_octets_per_frame       (cfg_octets_per_frame),
   .sof                        (sof),
   .eof                        (eof),

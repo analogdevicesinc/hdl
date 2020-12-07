@@ -12,6 +12,7 @@ SOURCE+=" ../jesd204_tx/jesd204_tx.v ../jesd204_tx/jesd204_tx_ctrl.v ../jesd204_
 SOURCE+=" ../jesd204_tx_static_config/jesd204_tx_static_config.v"
 SOURCE+=" ../jesd204_tx_static_config/jesd204_ilas_cfg_static.v"
 SOURCE+=" ../../util_cdc/sync_bits.v"
+SOURCE+=" ../../util_cdc/sync_event.v"
 
 cd `dirname $0`
 source run_tb.sh
