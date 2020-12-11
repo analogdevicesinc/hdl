@@ -62,6 +62,10 @@ set_false_path \
   -to [get_registers {*|jesd204_up_common:i_up_common|core_reset_vector[*]}]
 
 set_false_path \
+  -from [get_registers {*|jesd204_up_common:i_up_common|up_reset_core}] \
+  -to [get_registers {*|jesd204_up_common:i_up_common|device_reset_vector[*]}]
+
+set_false_path \
   -from [get_registers {*|jesd204_up_common:i_up_common|core_reset_vector[0]}] \
   -to [get_registers {*|jesd204_up_common:i_up_common|up_reset_synchronizer_vector[*]}]
 
@@ -73,9 +77,17 @@ set_false_path \
   -to [get_registers {*|jesd204_up_common:i_up_common|core_cfg_*}]
 
 set_false_path \
+  -from [get_registers {*|jesd204_up_common:i_up_common|up_cfg_*}] \
+  -to [get_registers {*|jesd204_up_common:i_up_common|device_cfg_*}]
+
+set_false_path \
   -from [get_registers {*|jesd204_up_rx:i_up_rx|up_cfg_*}] \
   -to [get_registers {*|jesd204_up_common:i_up_common|core_extra_cfg[*]}]
 
 set_false_path \
+  -from [get_registers {*|jesd204_up_rx:i_up_rx|up_cfg_*}] \
+  -to [get_registers {*|jesd204_up_common:i_up_common|device_extra_cfg[*]}]
+
+set_false_path \
   -from [get_registers {*|jesd204_up_sysref:i_up_sysref|up_cfg_*}] \
-  -to [get_registers {*|jesd204_up_common:i_up_common|core_extra_cfg[*]}]
+  -to [get_registers {*|jesd204_up_common:i_up_common|device_extra_cfg[*]}]
