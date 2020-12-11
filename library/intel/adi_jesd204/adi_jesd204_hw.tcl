@@ -135,6 +135,12 @@ ad_ip_parameter EXT_DEVICE_CLK_EN BOOLEAN 0 false { \
   DISPLAY_NAME "External Device Clock Enable" \
 }
 
+ad_ip_parameter TPL_DATA_PATH_WIDTH INTEGER 4 false { \
+  DISPLAY_NAME "Transport layer datapath width" \
+  DISPLAY_UNITS "octets" \
+  ALLOWED_RANGES {4 6 8 12} \
+}
+
 proc create_phy_reset_control {tx num_of_lanes sysclk_frequency} {
   global version
 
@@ -348,9 +354,13 @@ proc jesd204_compose {} {
   set ext_device_clk_en [get_parameter_value "EXT_DEVICE_CLK_EN"]
   set bonding_clocks_en [get_parameter_value "BONDING_CLOCKS_EN"]
   set input_pipeline [get_parameter_value "INPUT_PIPELINE_STAGES"]
+  set tpl_data_path_width [get_parameter_value "TPL_DATA_PATH_WIDTH"]
 
   set pllclk_frequency [expr $lane_rate / 2]
   set linkclk_frequency [expr $lane_rate / 40]
+  set deviceclk_frequency [expr $linkclk_frequency * 4 / $tpl_data_path_width]
+
+  set dual_clk_mode [expr $tpl_data_path_width > 4]
 
   if {![jesd204_validate true]} {
     return
@@ -366,6 +376,7 @@ proc jesd204_compose {} {
 
   add_instance ref_clock altera_clock_bridge $version
   set_instance_parameter_value ref_clock {EXPLICIT_CLOCK_RATE} [expr $refclk_frequency*1000000]
+  set_instance_parameter_value ref_clock {NUM_CLOCK_OUTPUTS} 2
   add_interface ref_clk clock sink
   set_interface_property ref_clk EXPORT_OF ref_clock.in_clk
 
@@ -380,6 +391,28 @@ proc jesd204_compose {} {
 
   add_instance link_reset altera_reset_bridge $version
   set_instance_parameter_value link_reset {NUM_RESET_OUTPUTS} 2
+
+  if {$dual_clk_mode} {
+    if {$ext_device_clk_en} {
+      set link_clock          link_clock.out_clk
+      set device_clock        ext_device_clock.out_clk
+      set device_clock_export ext_device_clock.out_clk_1
+    } else {
+      set link_clock          link_clock.out_clk
+      set device_clock        ref_clock.out_clk
+      set device_clock_export ref_clock.out_clk_1
+    }
+  } else {
+    if {$ext_device_clk_en} {
+      set link_clock          ext_device_clock.out_clk
+      set device_clock        ext_device_clock.out_clk
+      set device_clock_export ext_device_clock.out_clk_1
+    } else {
+      set link_clock          link_clock.out_clk
+      set device_clock        link_clock.out_clk
+      set device_clock_export link_clock.out_clk_1
+    }
+  }
 
   if {$device_family == "Arria 10"} {
 
@@ -477,10 +510,8 @@ proc jesd204_compose {} {
   set_instance_parameter_value phy NUM_OF_LANES $num_of_lanes
   set_instance_parameter_value phy REGISTER_INPUTS $input_pipeline
   set_instance_parameter_value phy LANE_INVERT $lane_invert
-  set_instance_parameter_value phy EXT_DEVICE_CLK_EN $ext_device_clk_en
   set_instance_parameter_value phy BONDING_CLOCKS_EN $bonding_clocks_en
 
-  add_connection link_clock.out_clk_1 phy.link_clk
   add_connection link_reset.out_reset phy.link_reset
   add_connection sys_clock.clk phy.reconfig_clk
   add_connection sys_clock.clk_reset phy.reconfig_reset
@@ -489,22 +520,20 @@ proc jesd204_compose {} {
 
   if {$ext_device_clk_en} {
     add_instance ext_device_clock altera_clock_bridge $version
-    set_instance_parameter_value ext_device_clock {EXPLICIT_CLOCK_RATE} [expr $linkclk_frequency*1000000]
+    set_instance_parameter_value ext_device_clock {EXPLICIT_CLOCK_RATE} [expr $deviceclk_frequency*1000000]
     set_instance_parameter_value ext_device_clock {NUM_CLOCK_OUTPUTS} 2
     add_interface device_clk clock sink
     set_interface_property device_clk EXPORT_OF ext_device_clock.in_clk
-    add_connection ext_device_clock.out_clk phy.device_clk
-    set_interface_property link_clk EXPORT_OF ext_device_clock.out_clk_1
-  } else {
-    set_interface_property link_clk EXPORT_OF link_clock.out_clk
   }
+  add_connection $link_clock phy.link_clk
+  set_interface_property link_clk EXPORT_OF $device_clock_export
 
   set phy_reset_intfs_s10 {analogreset_stat digitalreset_stat}
 
   if {$tx_or_rx_n} {
     set tx_rx "tx"
     set data_direction sink
-    set jesd204_intfs {config control ilas_config event status}
+    set jesd204_intfs {config device_config control ilas_config device_event status}
     set phy_reset_intfs {analogreset digitalreset cal_busy}
 
     create_lane_pll $id $tx_or_rx_n $pllclk_frequency $refclk_frequency $num_of_lanes $bonding_clocks_en
@@ -521,7 +550,7 @@ proc jesd204_compose {} {
   } else {
     set tx_rx "rx"
     set data_direction source
-    set jesd204_intfs {config ilas_config event status}
+    set jesd204_intfs {config device_config ilas_config device_event status}
     set phy_reset_intfs {analogreset digitalreset cal_busy is_lockedtodata}
 
     add_connection ref_clock.out_clk phy.ref_clk
@@ -535,17 +564,17 @@ proc jesd204_compose {} {
 
   add_instance jesd204_${tx_rx} jesd204_${tx_rx} 1.0
   set_instance_parameter_value jesd204_${tx_rx} {NUM_LANES} $num_of_lanes
+  set_instance_parameter_value jesd204_${tx_rx} {ASYNC_CLK} $dual_clk_mode
+  set_instance_parameter_value jesd204_${tx_rx} {TPL_DATA_PATH_WIDTH} $tpl_data_path_width
 
-  if {$ext_device_clk_en} {
-    add_connection ext_device_clock.out_clk axi_jesd204_${tx_rx}.core_clock
-    add_connection ext_device_clock.out_clk jesd204_${tx_rx}.clock
-  } else {
-    add_connection link_clock.out_clk_1 axi_jesd204_${tx_rx}.core_clock
-    add_connection link_clock.out_clk_1 jesd204_${tx_rx}.clock
-  }
+  add_connection $link_clock axi_jesd204_${tx_rx}.core_clock
+  add_connection $device_clock axi_jesd204_${tx_rx}.device_clock
+  add_connection $link_clock jesd204_${tx_rx}.clock
+  add_connection $device_clock jesd204_${tx_rx}.device_clock
 
   add_connection link_reset.out_reset axi_jesd204_${tx_rx}.core_reset_ext
   add_connection axi_jesd204_${tx_rx}.core_reset jesd204_${tx_rx}.reset
+  add_connection axi_jesd204_${tx_rx}.device_reset jesd204_${tx_rx}.device_reset
 
   foreach intf $jesd204_intfs {
     add_connection axi_jesd204_${tx_rx}.${intf} jesd204_${tx_rx}.${intf}
