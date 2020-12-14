@@ -197,7 +197,7 @@ module axi_generic_adc #(
   generate
   genvar i;
 
-  for (i = 0; i < NUM_OF_CHANNELS; i=i+1) begin
+  for (i = 0; i < NUM_OF_CHANNELS; i=i+1) begin : inst_channel
     up_adc_channel #(
       .CHANNEL_ID(i)
     ) i_up_adc_channel (
