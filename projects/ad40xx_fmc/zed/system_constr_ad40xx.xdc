@@ -12,6 +12,6 @@ set_property -dict {PACKAGE_PIN P22 IOSTANDARD LVCMOS25} [get_ports ad40xx_amp_p
 # execution's shift register, because we load new data into the shift register
 # in every DATA_WIDTH's x 2 cycle. (worst case scenario)
 # Set a multi-cycle delay of 2 spi_clk cycle, slightly over constraining the path.
-set_multicycle_path 2 -setup -from [get_cells -hierarchical -filter {NAME=~*/i_sdo_fifo/i_mem/m_ram_reg}] -to [get_pins -hierarchical -filter {NAME=~*/data_sdo_shift_reg[*]/D}]
-set_multicycle_path 1 -hold  -from [get_cells -hierarchical -filter {NAME=~*/i_sdo_fifo/i_mem/m_ram_reg}] -to [get_pins -hierarchical -filter {NAME=~*/data_sdo_shift_reg[*]/D}]
+set_multicycle_path 2 -setup -from [get_cells -hierarchical -filter {NAME=~*/i_sdo_fifo/fifo.async_clocks.i_mem/m_ram_reg}] -to [get_pins -hierarchical -filter {NAME=~*/data_sdo_shift_reg[*]/D}]
+set_multicycle_path 1 -hold  -from [get_cells -hierarchical -filter {NAME=~*/i_sdo_fifo/fifo.async_clocks.i_mem/m_ram_reg}] -to [get_pins -hierarchical -filter {NAME=~*/data_sdo_shift_reg[*]/D}]
 

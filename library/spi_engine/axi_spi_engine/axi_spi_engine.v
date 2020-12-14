@@ -415,7 +415,6 @@ module axi_spi_engine #(
     .s_axis_data(cmd_fifo_in_data),
     .s_axis_room(cmd_fifo_room),
     .s_axis_full(),
-    .s_axis_room(),
     .m_axis_aclk(spi_clk),
     .m_axis_aresetn(spi_resetn),
     .m_axis_ready(cmd_ready),
@@ -442,13 +441,14 @@ module axi_spi_engine #(
     .s_axis_valid(sdo_fifo_in_valid),
     .s_axis_data(sdo_fifo_in_data),
     .s_axis_room(sdo_fifo_room),
-    .s_axis_empty(),
+    .s_axis_full(),
     .m_axis_aclk(spi_clk),
     .m_axis_aresetn(spi_resetn),
     .m_axis_ready(sdo_data_ready),
     .m_axis_valid(sdo_data_valid),
     .m_axis_data(sdo_data),
-    .m_axis_level()
+    .m_axis_level(),
+    .m_axis_empty()
   );
 
   assign sdi_fifo_out_ready = up_rreq_s == 1'b1 && up_raddr_s == 8'h3a;
@@ -467,13 +467,14 @@ module axi_spi_engine #(
     .s_axis_valid(sdi_data_valid),
     .s_axis_data(sdi_data),
     .s_axis_room(),
-    .s_axis_empty(),
+    .s_axis_full(),
     .m_axis_aclk(clk),
     .m_axis_aresetn(up_sw_resetn),
     .m_axis_ready(sdi_fifo_out_ready),
     .m_axis_valid(sdi_fifo_out_valid),
     .m_axis_data(sdi_fifo_out_data),
-    .m_axis_level(sdi_fifo_level)
+    .m_axis_level(sdi_fifo_level),
+    .m_axis_empty()
   );
 
   generate if (ASYNC_SPI_CLK) begin
@@ -491,13 +492,14 @@ module axi_spi_engine #(
       .s_axis_valid(sync_valid),
       .s_axis_data(sync_data),
       .s_axis_room(),
-      .s_axis_empty(),
+      .s_axis_full(),
       .m_axis_aclk(clk),
       .m_axis_aresetn(up_sw_resetn),
       .m_axis_ready(1'b1),
       .m_axis_valid(sync_fifo_valid),
       .m_axis_data(sync_fifo_data),
-      .m_axis_level()
+      .m_axis_level(),
+      .m_axis_empty()
     );
 
     // synchronization FIFO for the offload command interface
@@ -516,13 +518,14 @@ module axi_spi_engine #(
       .s_axis_valid(up_offload0_cmd_wr_en_s),
       .s_axis_data(up_offload0_cmd_wr_data_s),
       .s_axis_room(),
-      .s_axis_empty(),
+      .s_axis_full(),
       .m_axis_aclk(spi_clk),
       .m_axis_aresetn(spi_resetn),
       .m_axis_ready(1'b1),
       .m_axis_valid(offload0_cmd_wr_en),
       .m_axis_data(offload0_cmd_wr_data),
-      .m_axis_level()
+      .m_axis_level(),
+      .m_axis_empty()
     );
 
     assign up_offload0_cmd_wr_en_s = up_wreq_s == 1'b1 && up_waddr_s == 8'h44;
@@ -544,13 +547,14 @@ module axi_spi_engine #(
       .s_axis_valid(up_offload0_sdo_wr_en_s),
       .s_axis_data(up_offload0_sdo_wr_data_s),
       .s_axis_room(),
-      .s_axis_empty(),
+      .s_axis_full(),
       .m_axis_aclk(spi_clk),
       .m_axis_aresetn(spi_resetn),
       .m_axis_ready(1'b1),
       .m_axis_valid(offload0_sdo_wr_en),
       .m_axis_data(offload0_sdo_wr_data),
-      .m_axis_level()
+      .m_axis_level(),
+      .m_axis_empty()
     );
 
     assign up_offload0_sdo_wr_en_s = up_wreq_s == 1'b1 && up_waddr_s == 8'h45;
@@ -569,13 +573,14 @@ module axi_spi_engine #(
       .s_axis_valid(offload_sync_valid),
       .s_axis_data(offload_sync_data),
       .s_axis_room(),
-      .s_axis_empty(),
+      .s_axis_full(),
       .m_axis_aclk(clk),
       .m_axis_aresetn(up_sw_resetn),
       .m_axis_ready(1'b1),
       .m_axis_valid(offload_sync_fifo_valid),
       .m_axis_data(offload_sync_fifo_data),
-      .m_axis_level()
+      .m_axis_level(),
+      .m_axis_empty()
     );
 
   end else begin /* ASYNC_SPI_CLK == 0 */
