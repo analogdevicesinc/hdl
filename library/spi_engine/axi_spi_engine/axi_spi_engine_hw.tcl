@@ -6,9 +6,7 @@ source ../../scripts/adi_ip_intel.tcl
 ad_ip_create axi_spi_engine {AXI SPI Engine} p_elaboration
 ad_ip_files axi_spi_engine [list\
   $ad_hdl_dir/library/util_axis_fifo/util_axis_fifo.v \
-  $ad_hdl_dir/library/util_axis_fifo/address_sync.v \
-  $ad_hdl_dir/library/util_axis_fifo/address_gray_pipelined.v \
-  $ad_hdl_dir/library/util_axis_fifo/address_gray.v \
+  $ad_hdl_dir/library/util_axis_fifo/util_axis_fifo_address_generator.v \
   $ad_hdl_dir/library/util_cdc/sync_bits.v \
   $ad_hdl_dir/library/util_cdc/sync_gray.v \
   $ad_hdl_dir/library/common/ad_mem.v \
