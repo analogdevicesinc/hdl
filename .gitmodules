@@ -1,0 +1,3 @@
+[submodule "testbenches"]
+	path = testbenches
+	url = https://github.com/ronagyl/testbenches
