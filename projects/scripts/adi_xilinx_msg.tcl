@@ -96,6 +96,13 @@ set_msg_config -id {IP_Flow 19-459} -new_severity INFO
 ## reach to the order of thousends. Downgrade to INFO.
 set_msg_config -id {Synth 8-3331} -new_severity INFO
 
+## [Synth 8-2490] overwriting previous definition of module xxxx
+## Vivado version 2020.1 changed the way it adds modules as source files and
+## the above critical error is generated after synthesis. Also discussed in
+## AR# 58282: https://www.xilinx.com/support/answers/58282.html.
+## Downgrade to WARNING.
+set_msg_config -id {Synth 8-2490} -new_severity WARNING
+
 ################################################################################
 ## Implementation related messages
 ## IDs : [Place 30-xxxx]
