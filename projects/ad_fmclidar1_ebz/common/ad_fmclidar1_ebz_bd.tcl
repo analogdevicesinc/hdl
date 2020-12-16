@@ -33,7 +33,12 @@ ad_ip_instance axi_adxcvr axi_ad9694_xcvr [list \
 ]
 
 adi_axi_jesd204_rx_create ad9694_jesd $NUM_OF_LANES
-adi_tpl_jesd204_rx_create ad9694_tpl_core $NUM_OF_LANES $NUM_OF_CHANNELS $SAMPLES_PER_FRAME $SAMPLE_WIDTH
+adi_tpl_jesd204_rx_create ad9694_tpl_core $NUM_OF_LANES \
+                                          $NUM_OF_CHANNELS \
+                                          $SAMPLES_PER_FRAME \
+                                          $SAMPLE_WIDTH \
+                                          4 \
+                                          $SAMPLE_WIDTH
 
 ad_ip_instance util_cpack2 util_ad9694_cpack [list \
   NUM_OF_CHANNELS [expr $NUM_OF_CHANNELS + 1] \
