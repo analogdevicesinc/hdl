@@ -95,6 +95,7 @@ add_instance axi_ad9694 ad_ip_jesd204_tpl_adc
 set_instance_parameter_value axi_ad9694 {NUM_LANES} $NUM_OF_LANES
 set_instance_parameter_value axi_ad9694 {NUM_CHANNELS} $NUM_OF_CHANNELS
 set_instance_parameter_value axi_ad9694 {BITS_PER_SAMPLE} $ADC_RESOLUTION
+set_instance_parameter_value axi_ad9694 {DMA_BITS_PER_SAMPLE} $ADC_RESOLUTION
 set_instance_parameter_value axi_ad9694 {CONVERTER_RESOLUTION} $ADC_RESOLUTION
 set_instance_parameter_value axi_ad9694 {SAMPLES_PER_FRAME} {1}
 set_instance_parameter_value axi_ad9694 {OCTETS_PER_FRAME} {1}
