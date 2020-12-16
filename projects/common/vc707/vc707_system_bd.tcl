@@ -9,7 +9,7 @@ create_bd_port -dir O -type rst phy_rstn
 create_bd_port -dir I phy_sd
 create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 mgt_clk
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:sgmii_rtl:1.0 sgmii
-create_bd_intf_port -mode Master -vlnv xilinx.com:interface:mdio_io:1.0 mdio
+create_bd_intf_port -mode Master -vlnv xilinx.com:interface:mdio_rtl:1.0 mdio
 
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 gpio_lcd
 
