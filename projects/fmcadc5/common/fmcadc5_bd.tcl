@@ -104,6 +104,7 @@ delete_bd_objs [get_bd_cells axi_ad9625_1_jesd_rstgen]
 
 ad_xcvrpll  util_fmcadc5_0_xcvr/rx_out_clk_0 util_fmcadc5_1_xcvr/rx_clk_*
 ad_connect  util_fmcadc5_0_xcvr/rx_out_clk_0 axi_ad9625_1_jesd/device_clk
+ad_connect  util_fmcadc5_0_xcvr/rx_out_clk_0 axi_ad9625_1_jesd/link_clk
 ad_connect  util_fmcadc5_0_xcvr/rx_out_clk_0 axi_ad9625_0_core/rx_clk
 ad_connect  axi_ad9625_0_jesd/rx_sof axi_ad9625_0_core/rx_sof
 ad_connect  axi_ad9625_0_jesd/rx_data_tdata axi_ad9625_0_core/rx_data
