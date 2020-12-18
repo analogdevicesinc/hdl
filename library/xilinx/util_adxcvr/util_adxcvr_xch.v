@@ -134,6 +134,10 @@ module util_adxcvr_xch #(
   input           up_rx_rst,
   input           up_rx_user_ready,
   output          up_rx_rst_done,
+  input   [ 3:0]  up_rx_prbssel,
+  input           up_rx_prbscntreset,
+  output          up_rx_prbserr,
+  output          up_rx_prbslocked,
   input           up_rx_lpm_dfe_n,
   input   [ 2:0]  up_rx_rate,
   input   [ 1:0]  up_rx_sys_clk_sel,
@@ -148,6 +152,8 @@ module util_adxcvr_xch #(
   input           up_tx_rst,
   input           up_tx_user_ready,
   output          up_tx_rst_done,
+  input           up_tx_prbsforceerr,
+  input   [ 3:0]  up_tx_prbssel,
   input           up_tx_lpm_dfe_n,
   input   [ 2:0]  up_tx_rate,
   input   [ 1:0]  up_tx_sys_clk_sel,
@@ -160,7 +166,8 @@ module util_adxcvr_xch #(
   input           up_tx_wr,
   input   [15:0]  up_tx_wdata,
   output  [15:0]  up_tx_rdata,
-  output          up_tx_ready);
+  output          up_tx_ready
+);
 
   localparam GTXE2_TRANSCEIVERS = 2;
   localparam GTHE3_TRANSCEIVERS = 5;
@@ -318,6 +325,52 @@ module util_adxcvr_xch #(
     tx_rate_m1 <= up_tx_rate;
     tx_rate_m2 <= tx_rate_m1;
   end
+
+  // Rx PRBS interface logic
+  wire        rx_prbscntreset;
+  wire        rx_prbserr;
+  wire        rx_prbslocked;
+  wire [ 3:0] rx_prbssel;
+  reg         rx_prbserr_sticky = 1'b0;
+
+  sync_bits #(.NUM_OF_BITS(5)) i_sync_bits_rx_prbs_in (
+    .in_bits ({up_rx_prbssel,
+               up_rx_prbscntreset}),
+    .out_resetn (1'b1),
+    .out_clk (rx_clk),
+    .out_bits ({rx_prbssel,
+                rx_prbscntreset})
+  );
+
+  always @(posedge rx_clk) begin
+    if (rx_prbscntreset) begin
+      rx_prbserr_sticky <= 1'b0;
+    end else if (rx_prbserr) begin
+      rx_prbserr_sticky <= 1'b1;
+    end
+  end
+
+  sync_bits #(.NUM_OF_BITS(2)) i_sync_bits_rx_prbs_out (
+    .in_bits ({rx_prbslocked,
+               rx_prbserr_sticky}),
+    .out_resetn (up_rstn),
+    .out_clk (up_clk),
+    .out_bits ({up_rx_prbslocked,
+                up_rx_prbserr})
+  );
+
+  // Tx PRBS interface logic
+  wire        tx_prbsforceerr;
+  wire [ 3:0] tx_prbssel;
+
+    sync_bits #(.NUM_OF_BITS(5)) i_sync_bits_tx_prbs_in (
+    .in_bits ({up_tx_prbssel,
+               up_tx_prbsforceerr}),
+    .out_resetn (1'b1),
+    .out_clk (rx_clk),
+    .out_bits ({tx_prbssel,
+                tx_prbsforceerr})
+  );
 
   // instantiations
 
@@ -703,9 +756,9 @@ module util_adxcvr_xch #(
     .RXPHOVRDEN (1'h0),
     .RXPMARESET (1'h0),
     .RXPOLARITY (RX_POLARITY),
-    .RXPRBSCNTRESET (1'h0),
-    .RXPRBSERR (),
-    .RXPRBSSEL (3'h0),
+    .RXPRBSCNTRESET (rx_prbscntreset),
+    .RXPRBSERR (rx_prbserr),
+    .RXPRBSSEL (rx_prbssel[2:0]),
     .RXQPIEN (1'h0),
     .RXRATE (rx_rate_m2),
     .RXRESETDONE (rx_rst_done_s),
@@ -762,8 +815,8 @@ module util_adxcvr_xch #(
     .TXPOLARITY (TX_POLARITY),
     .TXPOSTCURSOR (up_tx_postcursor),
     .TXPOSTCURSORINV (1'h0),
-    .TXPRBSFORCEERR (1'h0),
-    .TXPRBSSEL (3'd0),
+    .TXPRBSFORCEERR (tx_prbsforceerr),
+    .TXPRBSSEL (tx_prbssel[2:0]),
     .TXPRECURSOR (up_tx_precursor),
     .TXPRECURSORINV (1'h0),
     .TXQPIBIASEN (1'h0),
@@ -778,6 +831,8 @@ module util_adxcvr_xch #(
     .TXUSERRDY (up_tx_user_ready),
     .TXUSRCLK (tx_clk),
     .TXUSRCLK2 (tx_clk));
+  // Emulate PRBS lock 
+  assign rx_prbslocked = ~rx_prbserr_sticky;
   end
   endgenerate
 
@@ -1414,10 +1469,10 @@ module util_adxcvr_xch #(
     .RXPMARESET (1'h0),
     .RXPMARESETDONE (),
     .RXPOLARITY (RX_POLARITY),
-    .RXPRBSCNTRESET (1'h0),
-    .RXPRBSERR (),
-    .RXPRBSLOCKED (),
-    .RXPRBSSEL (4'h0),
+    .RXPRBSCNTRESET (rx_prbscntreset),
+    .RXPRBSERR (rx_prbserr),
+    .RXPRBSLOCKED (rx_prbslocked),
+    .RXPRBSSEL (rx_prbssel),
     .RXPRGDIVRESETDONE (),
     .RXPROGDIVRESET (1'h0),
     .RXQPIEN (1'h0),
@@ -1507,8 +1562,8 @@ module util_adxcvr_xch #(
     .TXPOLARITY (TX_POLARITY),
     .TXPOSTCURSOR (up_tx_postcursor),
     .TXPOSTCURSORINV (1'h0),
-    .TXPRBSFORCEERR (1'h0),
-    .TXPRBSSEL (4'h0),
+    .TXPRBSFORCEERR (tx_prbsforceerr),
+    .TXPRBSSEL (tx_prbssel),
     .TXPRECURSOR (up_tx_precursor),
     .TXPRECURSORINV (1'h0),
     .TXPRGDIVRESETDONE (),
@@ -2291,10 +2346,10 @@ module util_adxcvr_xch #(
     .RXPMARESET (1'd0),
     .RXPMARESETDONE (),
     .RXPOLARITY (RX_POLARITY),
-    .RXPRBSCNTRESET (1'd0),
-    .RXPRBSERR (),
-    .RXPRBSLOCKED (),
-    .RXPRBSSEL (4'd0),
+    .RXPRBSCNTRESET (rx_prbscntreset),
+    .RXPRBSERR (rx_prbserr),
+    .RXPRBSLOCKED (rx_prbslocked),
+    .RXPRBSSEL (rx_prbssel),
     .RXPRGDIVRESETDONE (),
     .RXPROGDIVRESET (1'd0),
     .RXQPIEN (1'd0),
@@ -2391,8 +2446,8 @@ module util_adxcvr_xch #(
     .TXPMARESETDONE (),
     .TXPOLARITY (TX_POLARITY),
     .TXPOSTCURSOR (up_tx_postcursor),
-    .TXPRBSFORCEERR (1'd0),
-    .TXPRBSSEL (4'd0),
+    .TXPRBSFORCEERR (tx_prbsforceerr),
+    .TXPRBSSEL (tx_prbssel),
     .TXPRECURSOR (up_tx_precursor),
     .TXPRGDIVRESETDONE (),
     .TXPROGDIVRESET (up_tx_rst),
@@ -3089,8 +3144,8 @@ module util_adxcvr_xch #(
       .RXPLLCLKSEL (rx_pll_clk_sel_s),
       .RXPMARESET (1'b0),
       .RXPOLARITY (RX_POLARITY),
-      .RXPRBSCNTRESET (1'b0),
-      .RXPRBSSEL (4'b0000),
+      .RXPRBSCNTRESET (rx_prbscntreset),
+      .RXPRBSSEL (rx_prbssel),
       .RXPROGDIVRESET (1'b0),
       .RXRATE (rx_rate_m2),
       .RXRATEMODE (1'b0),
@@ -3161,8 +3216,8 @@ module util_adxcvr_xch #(
       .TXPMARESET (1'b0),
       .TXPOLARITY (TX_POLARITY),
       .TXPOSTCURSOR (up_tx_postcursor),
-      .TXPRBSFORCEERR (1'b0),
-      .TXPRBSSEL (4'b0000),
+      .TXPRBSFORCEERR (tx_prbsforceerr),
+      .TXPRBSSEL (tx_prbssel),
       .TXPRECURSOR (up_tx_precursor),
       .TXPROGDIVRESET (up_tx_rst),
       .TXRATE (tx_rate_m2),
@@ -3246,8 +3301,8 @@ module util_adxcvr_xch #(
       .RXPHALIGNDONE (),
       .RXPHALIGNERR (),
       .RXPMARESETDONE (),
-      .RXPRBSERR (),
-      .RXPRBSLOCKED (),
+      .RXPRBSERR (rx_prbserr),
+      .RXPRBSLOCKED (rx_prbslocked),
       .RXPRGDIVRESETDONE (),
       .RXRATEDONE (),
       .RXRECCLKOUT (),

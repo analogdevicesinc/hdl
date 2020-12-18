@@ -73,6 +73,11 @@ module axi_adxcvr_up #(
   output              up_ch_rst,
   output              up_ch_user_ready,
   input               up_ch_rst_done,
+  output              up_ch_prbsforceerr,
+  output     [ 3:0]   up_ch_prbssel,
+  output              up_ch_prbscntreset,
+  input               up_ch_prbserr,
+  input               up_ch_prbslocked,
   output              up_ch_lpm_dfe_n,
   output     [ 2:0]   up_ch_rate,
   output     [ 1:0]   up_ch_sys_clk_sel,
@@ -169,6 +174,9 @@ module axi_adxcvr_up #(
   reg             up_ies_status = 'd0;
   reg             up_rreq_d = 'd0;
   reg     [31:0]  up_rdata_d = 'd0;
+  reg      [3:0]  up_prbssel = 'd0;
+  reg             up_prbscntreset = 'd1;
+  reg             up_prbsforceerr = 'd0;
 
   // internal signals
 
@@ -247,6 +255,9 @@ module axi_adxcvr_up #(
   assign up_ch_tx_diffctrl = up_tx_diffctrl;
   assign up_ch_tx_postcursor = up_tx_postcursor;
   assign up_ch_tx_precursor = up_tx_precursor;
+  assign up_ch_prbssel = up_prbssel;
+  assign up_ch_prbscntreset = up_prbscntreset;
+  assign up_ch_prbsforceerr = up_prbsforceerr;
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
@@ -257,6 +268,9 @@ module axi_adxcvr_up #(
       up_tx_diffctrl <= TX_DIFFCTRL;
       up_tx_postcursor <= TX_POSTCURSOR;
       up_tx_precursor <= TX_PRECURSOR;
+      up_prbssel <= 4'b0;
+      up_prbscntreset <= 1'b1;
+      up_prbsforceerr <= 1'b0;
     end else begin
       if ((up_wreq == 1'b1) && (up_waddr == 10'h008)) begin
         up_lpm_dfe_n <= up_wdata[12];
@@ -272,6 +286,11 @@ module axi_adxcvr_up #(
       end
       if ((up_wreq == 1'b1) && (up_waddr == 10'h032)) begin
         up_tx_precursor <= up_wdata[4:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 10'h060)) begin
+        up_prbssel <= up_wdata[3:0];
+        up_prbscntreset <= up_wdata[8];
+        up_prbsforceerr <= up_wdata[15];
       end
     end
   end
@@ -527,7 +546,14 @@ module axi_adxcvr_up #(
           10'h030: up_rdata_d <= up_tx_diffctrl;
           10'h031: up_rdata_d <= up_tx_postcursor;
           10'h032: up_rdata_d <= up_tx_precursor;
-	  10'h050: up_rdata_d <= {16'd0, FPGA_VOLTAGE};  // mV
+          10'h050: up_rdata_d <= {16'd0, FPGA_VOLTAGE};  // mV
+          10'h060: up_rdata_d <= {8'b0,
+                                  7'b0,up_prbsforceerr,
+                                  7'b0,up_prbscntreset,
+                                  4'b0,up_prbssel};
+          10'h061: up_rdata_d <= {16'b0,
+                                  7'b0,up_ch_prbserr,
+                                  7'b0,up_ch_prbslocked};
           default: up_rdata_d <= 32'd0;
         endcase
       end else begin
