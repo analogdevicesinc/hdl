@@ -51,6 +51,11 @@ for {set n 0} {$n < 16} {incr n} {
     "rst                 up_ch_rst_${n}         "\
     "user_ready          up_ch_user_ready_${n}  "\
     "rst_done            up_ch_rst_done_${n}    "\
+    "prbsforceerr        up_ch_prbsforceerr_${n}"\
+    "prbssel             up_ch_prbssel_${n}     "\
+    "prbscntreset        up_ch_prbscntreset_${n}"\
+    "prbserr             up_ch_prbserr_${n}     "\
+    "prbslocked          up_ch_prbslocked_${n}  "\
     "lpm_dfe_n           up_ch_lpm_dfe_n_${n}   "\
     "rate                up_ch_rate_${n}        "\
     "sys_clk_sel         up_ch_sys_clk_sel_${n} "\

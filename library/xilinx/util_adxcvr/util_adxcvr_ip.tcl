@@ -16,6 +16,10 @@ adi_ip_properties_lite util_adxcvr
 
 adi_ip_bd util_adxcvr "bd/bd.tcl"
 
+adi_ip_add_core_dependencies { \
+	analog.com:user:util_cdc:1.0 \
+}
+
 ipx::remove_all_bus_interface [ipx::current_core]
 
 ipx::infer_bus_interface up_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
@@ -173,6 +177,10 @@ for {set n 0} {$n < 16} {incr n} {
     "rst                 up_rx_rst_${n}         "\
     "user_ready          up_rx_user_ready_${n}  "\
     "rst_done            up_rx_rst_done_${n}    "\
+    "prbssel             up_rx_prbssel_${n}     "\
+    "prbscntreset        up_rx_prbscntreset_${n}"\
+    "prbserr             up_rx_prbserr_${n}     "\
+    "prbslocked          up_rx_prbslocked_${n}  "\
     "lpm_dfe_n           up_rx_lpm_dfe_n_${n}   "\
     "rate                up_rx_rate_${n}        "\
     "sys_clk_sel         up_rx_sys_clk_sel_${n} "\
@@ -189,6 +197,8 @@ for {set n 0} {$n < 16} {incr n} {
     "rst                 up_tx_rst_${n}         "\
     "user_ready          up_tx_user_ready_${n}  "\
     "rst_done            up_tx_rst_done_${n}    "\
+    "prbsforceerr        up_tx_prbsforceerr_${n}"\
+    "prbssel             up_tx_prbssel_${n}     "\
     "lpm_dfe_n           up_tx_lpm_dfe_n_${n}   "\
     "rate                up_tx_rate_${n}        "\
     "sys_clk_sel         up_tx_sys_clk_sel_${n} "\
