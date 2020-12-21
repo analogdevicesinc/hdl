@@ -61,7 +61,7 @@ generate if (ADDRESS_WIDTH == 0) begin : zerodeep /* it's not a real FIFO, just 
 
   if (ASYNC_CLK) begin
 
-      reg [DATA_WIDTH-1:0] cdc_sync_fifo_ram;
+      (* KEEP = "yes" *) reg [DATA_WIDTH-1:0] cdc_sync_fifo_ram;
       reg s_axis_waddr = 1'b0;
       reg m_axis_raddr = 1'b0;
 
