@@ -184,7 +184,10 @@ proc adi_project_create {project_name mode parameter_list device {board "not-app
   update_ip_catalog
 
   ## Load custom message severity definitions
-  source $ad_hdl_dir/projects/scripts/adi_xilinx_msg.tcl
+
+  if {![info exists ::env(ADI_DISABLE_MESSAGE_SUPPRESION)]} {
+    source $ad_hdl_dir/projects/scripts/adi_xilinx_msg.tcl
+  }
 
   ## In Vivado there is a limit for the number of warnings and errors which are
   ## displayed by the tool for a particular error or warning; the default value
