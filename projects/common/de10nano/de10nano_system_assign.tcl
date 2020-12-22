@@ -47,8 +47,11 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to gpio_bd_i[5]
 
 set_location_assignment PIN_A22 -to uart0_rx
 set_location_assignment PIN_B21 -to uart0_tx
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to uart0_rx
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to uart0_tx
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to uart0_rx
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to uart0_tx
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to hps_conv_usb_n
 
 # hps spi master
 

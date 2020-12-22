@@ -96,6 +96,7 @@ module system_top (
 
   input             uart0_rx,
   output            uart0_tx,
+  inout             hps_conv_usb_n,
 
   // board gpio
 
@@ -257,6 +258,7 @@ module system_top (
     .sys_hps_hps_io_hps_io_spim1_inst_MOSI (spim1_mosi),
     .sys_hps_hps_io_hps_io_spim1_inst_MISO (spim1_miso),
     .sys_hps_hps_io_hps_io_spim1_inst_SS0 (spim1_ss0),
+    .sys_hps_hps_io_hps_io_gpio_inst_GPIO09 (hps_conv_usb_n),
     .sys_hps_i2c1_sda (i2c1_sda),
     .sys_hps_i2c1_out_data (i2c1_sda_oe),
     .sys_hps_i2c1_clk_clk (i2c1_scl_oe),
