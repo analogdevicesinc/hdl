@@ -40,6 +40,8 @@ set_instance_parameter_value sys_hps {I2C0_PinMuxing} {FPGA}
 set_instance_parameter_value sys_hps {I2C0_Mode} {Full}
 set_instance_parameter_value sys_hps {I2C1_PinMuxing} {FPGA}
 set_instance_parameter_value sys_hps {I2C1_Mode} {Full}
+set_instance_parameter_value sys_hps {GPIO_Enable} {No No No No No No No No No Yes No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No}
+set_instance_parameter_value sys_hps {LOANIO_Enable} {No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No No}
 set_instance_parameter_value sys_hps {desired_cfg_clk_mhz} {80.0}
 set_instance_parameter_value sys_hps {S2FCLK_USER0CLK_Enable} {1}
 set_instance_parameter_value sys_hps {S2FCLK_USER1CLK_Enable} {1}
