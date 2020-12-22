@@ -283,7 +283,10 @@ proc adi_ip_create {ip_name} {
   create_project $ip_name . -force
 
   ## Load custom message severity definitions
-  source $ad_hdl_dir/projects/scripts/adi_xilinx_msg.tcl
+
+  if {![info exists ::env(ADI_DISABLE_MESSAGE_SUPPRESION)]} {
+    source $ad_hdl_dir/projects/scripts/adi_xilinx_msg.tcl
+  }
 
   set lib_dirs $ad_hdl_dir/library
   if {$ad_hdl_dir ne $ad_ghdl_dir} {
