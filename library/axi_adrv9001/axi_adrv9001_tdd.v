@@ -64,8 +64,8 @@ module axi_adrv9001_tdd #(
 
   // tx/rx data flow control
 
-  output  reg             tdd_tx_valid,
-  output  reg             tdd_rx_valid,
+  output  reg             tdd_tx_valid = 1'b1,
+  output  reg             tdd_rx_valid = 1'b1,
 
   // bus interface
 
