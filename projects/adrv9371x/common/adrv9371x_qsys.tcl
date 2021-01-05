@@ -2,13 +2,17 @@ set dac_fifo_name avl_ad9371_tx_fifo
 set dac_data_width 128
 set dac_dma_data_width 128
 
+# NOTE: The real lane rate is 4915.2 Gbps (Tx/RX/Rx_Obs), with a real reference
+# clock frequency of 122.88 MHz. A round up needed because the fPLL's
+# configuration interface does not support fractional numbers.
+
 # ad9371_tx JESD204
 
 add_instance ad9371_tx_jesd204 adi_jesd204
 set_instance_parameter_value ad9371_tx_jesd204 {ID} {0}
 set_instance_parameter_value ad9371_tx_jesd204 {TX_OR_RX_N} {1}
-set_instance_parameter_value ad9371_tx_jesd204 {LANE_RATE} {4915.2}
-set_instance_parameter_value ad9371_tx_jesd204 {REFCLK_FREQUENCY} {122.88}
+set_instance_parameter_value ad9371_tx_jesd204 {LANE_RATE} {4920}
+set_instance_parameter_value ad9371_tx_jesd204 {REFCLK_FREQUENCY} {123}
 set_instance_parameter_value ad9371_tx_jesd204 {NUM_OF_LANES} {4}
 set_instance_parameter_value ad9371_tx_jesd204 {LANE_MAP} {3 0 1 2}
 set_instance_parameter_value ad9371_tx_jesd204 {SOFT_PCS} {false}
@@ -29,8 +33,8 @@ set_interface_property tx_sync EXPORT_OF ad9371_tx_jesd204.sync
 add_instance ad9371_rx_jesd204 adi_jesd204
 set_instance_parameter_value ad9371_rx_jesd204 {ID} {1}
 set_instance_parameter_value ad9371_rx_jesd204 {TX_OR_RX_N} {0}
-set_instance_parameter_value ad9371_rx_jesd204 {LANE_RATE} {4915.2}
-set_instance_parameter_value ad9371_rx_jesd204 {REFCLK_FREQUENCY} {122.88}
+set_instance_parameter_value ad9371_rx_jesd204 {LANE_RATE} {4920}
+set_instance_parameter_value ad9371_rx_jesd204 {REFCLK_FREQUENCY} {123}
 set_instance_parameter_value ad9371_rx_jesd204 {NUM_OF_LANES} {2}
 set_instance_parameter_value ad9371_rx_jesd204 {SOFT_PCS} {false}
 
@@ -50,8 +54,8 @@ set_interface_property rx_sync EXPORT_OF ad9371_rx_jesd204.sync
 add_instance ad9371_rx_os_jesd204 adi_jesd204
 set_instance_parameter_value ad9371_rx_os_jesd204 {ID} {1}
 set_instance_parameter_value ad9371_rx_os_jesd204 {TX_OR_RX_N} {0}
-set_instance_parameter_value ad9371_rx_os_jesd204 {LANE_RATE} {4915.2}
-set_instance_parameter_value ad9371_rx_os_jesd204 {REFCLK_FREQUENCY} {122.88}
+set_instance_parameter_value ad9371_rx_os_jesd204 {LANE_RATE} {4920}
+set_instance_parameter_value ad9371_rx_os_jesd204 {REFCLK_FREQUENCY} {123}
 set_instance_parameter_value ad9371_rx_os_jesd204 {SOFT_PCS} {false}
 set_instance_parameter_value ad9371_rx_os_jesd204 {NUM_OF_LANES} {2}
 
