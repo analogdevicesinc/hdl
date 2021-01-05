@@ -8,10 +8,6 @@ adi_project cn0501_de10nano
 
 source $ad_hdl_dir/projects/common/de10nano/de10nano_system_assign.tcl
 
-# files
-
-set_global_assignment -name VERILOG_FILE ../../ad7768evb/common/ad7768_if.v
-
 # I2C
 
 set_location_assignment PIN_AG11  -to i2c_scl             ; ##   Arduino_IO15
