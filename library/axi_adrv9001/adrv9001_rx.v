@@ -269,6 +269,6 @@ module adrv9001_rx #(
   endgenerate
 
   assign adc_clk = adc_clk_in_fast;
-  assign adc_valid = 1'b1;
+  assign adc_valid = ~adc_rst;
 
 endmodule
