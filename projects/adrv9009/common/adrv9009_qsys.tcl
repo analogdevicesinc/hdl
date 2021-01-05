@@ -27,14 +27,18 @@ set dac_fifo_name avl_adrv9009_tx_fifo
 set dac_data_width 128
 set dac_dma_data_width 128
 
+# NOTE: The real lane rate is 2457.6 Gbps (Tx) and 4915.2 Gbps (RX/Rx_Obs),
+# with a real reference clock frequency of 122.88 MHz. A round up needed
+# because the fPLL's configuration interface does not support fractional numbers.
+
 # adrv9009_tx JESD204
 
 add_instance adrv9009_tx_jesd204 adi_jesd204
 set_instance_parameter_value adrv9009_tx_jesd204 {ID} {0}
 set_instance_parameter_value adrv9009_tx_jesd204 {TX_OR_RX_N} {1}
 set_instance_parameter_value adrv9009_tx_jesd204 {SOFT_PCS} {true}
-set_instance_parameter_value adrv9009_tx_jesd204 {LANE_RATE} {2457.6}
-set_instance_parameter_value adrv9009_tx_jesd204 {REFCLK_FREQUENCY} {122.88}
+set_instance_parameter_value adrv9009_tx_jesd204 {LANE_RATE} {2460}
+set_instance_parameter_value adrv9009_tx_jesd204 {REFCLK_FREQUENCY} {123}
 set_instance_parameter_value adrv9009_tx_jesd204 {NUM_OF_LANES} $TX_NUM_OF_LANES
 set_instance_parameter_value adrv9009_tx_jesd204 {LANE_MAP} {0 3 2 1}
 
@@ -55,8 +59,8 @@ add_instance adrv9009_rx_jesd204 adi_jesd204
 set_instance_parameter_value adrv9009_rx_jesd204 {ID} {1}
 set_instance_parameter_value adrv9009_rx_jesd204 {TX_OR_RX_N} {0}
 set_instance_parameter_value adrv9009_rx_jesd204 {SOFT_PCS} {true}
-set_instance_parameter_value adrv9009_rx_jesd204 {LANE_RATE} {4915.2}
-set_instance_parameter_value adrv9009_rx_jesd204 {REFCLK_FREQUENCY} {122.88}
+set_instance_parameter_value adrv9009_rx_jesd204 {LANE_RATE} {4920}
+set_instance_parameter_value adrv9009_rx_jesd204 {REFCLK_FREQUENCY} {123}
 set_instance_parameter_value adrv9009_rx_jesd204 {NUM_OF_LANES} $RX_NUM_OF_LANES
 set_instance_parameter_value adrv9009_rx_jesd204 {INPUT_PIPELINE_STAGES} {1}
 
@@ -77,8 +81,8 @@ add_instance adrv9009_rx_os_jesd204 adi_jesd204
 set_instance_parameter_value adrv9009_rx_os_jesd204 {ID} {1}
 set_instance_parameter_value adrv9009_rx_os_jesd204 {TX_OR_RX_N} {0}
 set_instance_parameter_value adrv9009_rx_os_jesd204 {SOFT_PCS} {true}
-set_instance_parameter_value adrv9009_rx_os_jesd204 {LANE_RATE} {4915.2}
-set_instance_parameter_value adrv9009_rx_os_jesd204 {REFCLK_FREQUENCY} {122.88}
+set_instance_parameter_value adrv9009_rx_os_jesd204 {LANE_RATE} {4920}
+set_instance_parameter_value adrv9009_rx_os_jesd204 {REFCLK_FREQUENCY} {123}
 set_instance_parameter_value adrv9009_rx_os_jesd204 {NUM_OF_LANES} $RX_OS_NUM_OF_LANES
 set_instance_parameter_value adrv9009_rx_os_jesd204 {INPUT_PIPELINE_STAGES} {1}
 
