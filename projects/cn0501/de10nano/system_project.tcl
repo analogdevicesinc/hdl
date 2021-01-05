@@ -8,7 +8,7 @@ source $ad_hdl_dir/projects/common/de10nano/de10nano_system_assign.tcl
 
 # files
 
-set_global_assignment -name VERILOG_FILE ../../ad7768evb/common/ad7768_if.v
+#set_global_assignment -name VERILOG_FILE ../../ad7768evb/common/ad7768_if.v
 
 # I2C
 
