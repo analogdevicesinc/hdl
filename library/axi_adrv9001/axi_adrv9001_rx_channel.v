@@ -235,13 +235,10 @@ module axi_adrv9001_rx_channel #(
   );
 
   // reference nibble ramp and full ramp generator
+  // next value is always the currently received value incremented 
   always @(posedge adc_clk) begin
     if (adc_valid_in_s) begin
-      if (adc_pn_oos_s) begin
-        full_ramp_counter <= adc_data_in_s + 16'd1;
-      end else begin
-        full_ramp_counter <= full_ramp_counter + 16'd1;
-      end
+      full_ramp_counter <= adc_data_in_s + 16'd1;
     end
   end
 
