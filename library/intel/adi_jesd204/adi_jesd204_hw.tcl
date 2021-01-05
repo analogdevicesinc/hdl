@@ -356,7 +356,7 @@ proc jesd204_compose {} {
     return
   }
 
-  add_instance sys_clock clock_source 19.2
+  add_instance sys_clock clock_source 19.3
   set_instance_parameter_value sys_clock {clockFrequency} [expr $sysclk_frequency*1000000]
   set_instance_parameter_value sys_clock {resetSynchronousEdges} {deassert}
   add_interface sys_clk clock sink

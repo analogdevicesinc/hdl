@@ -101,7 +101,7 @@ proc jesd204_phy_composition_callback {} {
     set device_type 0
   }
 
-  add_instance link_clock clock_source $version
+  add_instance link_clock clock_source 19.3
   set_instance_parameter_value link_clock {clockFrequency} [expr $link_clk_frequency*1000000]
   add_interface link_clk clock sink
   set_interface_property link_clk EXPORT_OF link_clock.clk_in
