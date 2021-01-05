@@ -232,6 +232,7 @@ module axi_adrv9001_if #(
   adrv9001_rx_link #(
     .CMOS_LVDS_N (CMOS_LVDS_N)
   ) i_rx_1_link (
+    .adc_rst (rx1_rst),
     .adc_clk_div (adc_1_clk_div),
     .adc_data_0 (adc_1_data_0),
     .adc_data_1 (adc_1_data_1),
@@ -292,6 +293,7 @@ module axi_adrv9001_if #(
   adrv9001_rx_link #(
     .CMOS_LVDS_N (CMOS_LVDS_N)
   ) i_rx_2_link (
+    .adc_rst (rx2_rst),
     .adc_clk_div (adc_2_clk_div),
     .adc_data_0 (adc_2_data_0),
     .adc_data_1 (adc_2_data_1),
