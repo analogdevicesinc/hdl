@@ -210,11 +210,8 @@ module system_top (
   assign gpio_i[11: 4] = gpio_bd_i;
   assign gpio_bd_o = gpio_o[3:0];
 
-  ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_mdio (
-    .dio_t ({hps_emac_mdo_o_e_b,hps_emac_mdo_o_e_a}),
-    .dio_i ({hps_emac_mdo_o_b,hps_emac_mdo_o_a}),
-    .dio_o ({hps_emac_mdi_i_b,hps_emac_mdi_i_a}),
-    .dio_p ({mdio_fmc_b,mdio_fmc_a}));
+  ALT_IOBUF md_iobuf_a (.i(hps_emac_mdo_o_a), .oe(hps_emac_mdo_o_e_a), .o(hps_emac_mdi_i_a), .io(mdio_fmc_a));
+  ALT_IOBUF md_iobuf_b (.i(hps_emac_mdo_o_b), .oe(hps_emac_mdo_o_e_b), .o(hps_emac_mdi_i_b), .io(mdio_fmc_b));
 
   // peripheral reset
 

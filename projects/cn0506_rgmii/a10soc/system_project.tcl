@@ -6,9 +6,6 @@ adi_project cn0506_rgmii_a10soc
 
 source $ad_hdl_dir/projects/common/a10soc/a10soc_system_assign.tcl
 
-# files
-set_global_assignment -name VERILOG_FILE ../../../library/common/ad_iobuf.v
-
 set_location_assignment PIN_G14    -to  rgmii_rxc_a               ; ## G06 FMCA_HPC_LA00_CC_P
 set_location_assignment PIN_B9     -to  rgmii_rx_ctl_a            ; ## H14 FMCA_HPC_LA07_N
 set_location_assignment PIN_C13    -to  rgmii_rxd_a[0]            ; ## H07 FMCA_HPC_LA02_P
