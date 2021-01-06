@@ -240,11 +240,8 @@ module system_top (
   wire i2c_0_sda_in;
   wire i2c_0_sda_oe;
 
-  ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_i2c (
-    .dio_t ({i2c_0_scl_out,i2c_0_sda_oe}),
-    .dio_i (2'b0),
-    .dio_o ({i2c_0_scl_in,i2c_0_sda_in}),
-    .dio_p ({afe_dac_scl,afe_dac_sda}));
+  ALT_IOBUF scl_iobuf (.i(1'b0), .oe(i2c_0_scl_out), .o(i2c_0_scl_in), .io(afe_dac_scl));
+  ALT_IOBUF sda_iobuf (.i(1'b0), .oe(i2c_0_sda_oe), .o(i2c_0_sda_in), .io(afe_dac_sda));
 
   // Block design instance
 
