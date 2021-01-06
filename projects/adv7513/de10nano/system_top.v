@@ -138,11 +138,17 @@ module system_top (
   assign gpio_bd_o[7:0] = gpio_o[7:0];
   assign ltc2308_cs = gpio_o[41];
 
-  ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_hdmi_i2c (
-    .dio_t ({i2c0_out_clk,i2c0_out_data}),
-    .dio_i (2'b0),
-    .dio_o ({i2c0_scl_in_clk,i2c0_sda}),
-    .dio_p ({hdmi_i2c_scl,hdmi_i2c_sda}));
+  ALT_IOBUF scl_iobuf (
+    .i(1'b0),
+    .oe(i2c0_out_clk),
+    .o(i2c0_scl_in_clk),
+    .io(hdmi_i2c_scl));
+
+  ALT_IOBUF sda_iobuf (
+    .i(1'b0),
+    .oe(i2c0_out_data),
+    .o(i2c0_sda),
+    .io(hdmi_i2c_sda));
 
   system_bd i_system_bd (
     .sys_clk_clk (sys_clk),

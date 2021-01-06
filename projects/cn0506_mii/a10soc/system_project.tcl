@@ -6,9 +6,6 @@ adi_project cn0506_mii_a10soc
 
 source $ad_hdl_dir/projects/common/a10soc/a10soc_system_assign.tcl
 
-# files
-set_global_assignment -name VERILOG_FILE ../../../library/common/ad_iobuf.v
-
 # Note: This projects requires a hardware rework to function correctly.
 # The rework connects FMC header pins directly to the FPGA so that they can be
 # accessed by the fabric.
