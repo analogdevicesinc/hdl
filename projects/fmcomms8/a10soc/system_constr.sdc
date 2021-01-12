@@ -1,9 +1,9 @@
 
 create_clock -period "10.000 ns"  -name sys_clk_100mhz      [get_ports {sys_clk}]
-create_clock -period  "4.069 ns"  -name ref_clk_c           [get_ports {ref_clk_c}]
-create_clock -period  "4.069 ns"  -name ref_clk_d           [get_ports {ref_clk_d}]
-create_clock -period  "4.069 ns"  -name core_clk_c          [get_ports {core_clk_c}]
-create_clock -period  "4.069 ns"  -name core_clk_d          [get_ports {core_clk_d}]
+create_clock -period  "4.06504065 ns"  -name ref_clk_c      [get_ports {ref_clk_c}]
+create_clock -period  "4.06504065 ns"  -name ref_clk_d      [get_ports {ref_clk_d}]
+create_clock -period  "4.06504065 ns"  -name core_clk_c     [get_ports {core_clk_c}]
+create_clock -period  "4.06504065 ns"  -name core_clk_d     [get_ports {core_clk_d}]
 create_clock -period  "100 ns"    -name spi_clk             [get_nets {i_system_bd|sys_spi|sys_spi|SCLK_reg}]
 
 derive_pll_clocks

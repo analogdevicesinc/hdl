@@ -27,13 +27,17 @@ set dac_fifo_name avl_fmcomms8_tx_fifo
 set dac_data_width 256
 set dac_dma_data_width 256
 
+# NOTE: The real lane rate is 9830.4 Gbps (Tx/Rx/Rx_Obs), with a real reference
+# clock frequency of 245.76 MHz. A round up needed because the fPLL's configuration
+# interface does not support fractional numbers.
+
 # JESD204B/C clock bridges
 
  add_instance core_clk_c altera_clock_bridge
- set_instance_parameter_value core_clk_c {EXPLICIT_CLOCK_RATE} {245760000}
+ set_instance_parameter_value core_clk_c {EXPLICIT_CLOCK_RATE} {246000000}
 
  add_instance core_clk_d altera_clock_bridge
- set_instance_parameter_value core_clk_d {EXPLICIT_CLOCK_RATE} {245760000}
+ set_instance_parameter_value core_clk_d {EXPLICIT_CLOCK_RATE} {246000000}
 
 # fmcomms8_tx JESD204
 
@@ -41,8 +45,8 @@ add_instance fmcomms8_tx_jesd204 adi_jesd204
 set_instance_parameter_value fmcomms8_tx_jesd204 {ID} {0}
 set_instance_parameter_value fmcomms8_tx_jesd204 {TX_OR_RX_N} {1}
 set_instance_parameter_value fmcomms8_tx_jesd204 {SOFT_PCS} {true}
-set_instance_parameter_value fmcomms8_tx_jesd204 {LANE_RATE} {9830.4}
-set_instance_parameter_value fmcomms8_tx_jesd204 {REFCLK_FREQUENCY} {245.76}
+set_instance_parameter_value fmcomms8_tx_jesd204 {LANE_RATE} {9840}
+set_instance_parameter_value fmcomms8_tx_jesd204 {REFCLK_FREQUENCY} {246}
 set_instance_parameter_value fmcomms8_tx_jesd204 {NUM_OF_LANES} $TX_NUM_OF_LANES
 set_instance_parameter_value fmcomms8_tx_jesd204 {LANE_MAP} {1 0 2 3 4 5 6 7}
 set_instance_parameter_value fmcomms8_tx_jesd204 {EXT_DEVICE_CLK_EN} {1}
@@ -64,8 +68,8 @@ add_instance fmcomms8_rx_jesd204 adi_jesd204
 set_instance_parameter_value fmcomms8_rx_jesd204 {ID} {1}
 set_instance_parameter_value fmcomms8_rx_jesd204 {TX_OR_RX_N} {0}
 set_instance_parameter_value fmcomms8_rx_jesd204 {SOFT_PCS} {true}
-set_instance_parameter_value fmcomms8_rx_jesd204 {LANE_RATE} {9830.4}
-set_instance_parameter_value fmcomms8_rx_jesd204 {REFCLK_FREQUENCY} {245.76}
+set_instance_parameter_value fmcomms8_rx_jesd204 {LANE_RATE} {9840}
+set_instance_parameter_value fmcomms8_rx_jesd204 {REFCLK_FREQUENCY} {246}
 set_instance_parameter_value fmcomms8_rx_jesd204 {NUM_OF_LANES} $RX_NUM_OF_LANES
 set_instance_parameter_value fmcomms8_rx_jesd204 {EXT_DEVICE_CLK_EN} {1}
 
@@ -86,8 +90,8 @@ add_instance fmcomms8_rx_os_jesd204 adi_jesd204
 set_instance_parameter_value fmcomms8_rx_os_jesd204 {ID} {1}
 set_instance_parameter_value fmcomms8_rx_os_jesd204 {TX_OR_RX_N} {0}
 set_instance_parameter_value fmcomms8_rx_os_jesd204 {SOFT_PCS} {true}
-set_instance_parameter_value fmcomms8_rx_os_jesd204 {LANE_RATE} {9830.4}
-set_instance_parameter_value fmcomms8_rx_os_jesd204 {REFCLK_FREQUENCY} {245.76}
+set_instance_parameter_value fmcomms8_rx_os_jesd204 {LANE_RATE} {9840}
+set_instance_parameter_value fmcomms8_rx_os_jesd204 {REFCLK_FREQUENCY} {246}
 set_instance_parameter_value fmcomms8_rx_os_jesd204 {NUM_OF_LANES} $RX_OS_NUM_OF_LANES
 set_instance_parameter_value fmcomms8_rx_os_jesd204 {EXT_DEVICE_CLK_EN} {1}
 
