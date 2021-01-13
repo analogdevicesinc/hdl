@@ -1,0 +1,30 @@
+<: set ComponentName [getComponentNameString] :>
+<: setOutputDirectory "./" :>
+<: setFileName [ttcl_add $ComponentName "_constr"] :>
+<: setFileExtension ".xdc" :>
+<: setFileProcessingOrder late :>
+<: set echo_sclk [getBooleanValue "ECHO_SCLK"] :>
+
+# Relax the timing between the SDI shift register and DMA. The shift register
+# runs at negative edge of echoSCLK and the DMA runs at spi_clk. Registers
+# will have valid data at worst case (fastest rate) in every 8 echoSCLK cycle.
+
+set_multicycle_path -setup -from [get_pins -hier -filter {name=~*data_sdi_shift_reg[*]/C}] 8
+set_multicycle_path -hold -from [get_pins -hier -filter {name=~*data_sdi_shift_reg[*]/C}] 7
+
+# word_length is updated before transfer, never changes during transfer, therefor
+# it's safe to define a false path between word_length and sdi_counter
+set_false_path -from [get_cells -hierarchical -filter {NAME=~*word_length_reg[*]}] -to [get_cells -hierarchical -filter {NAME=~*sdi_counter_reg[*]}]
+
+<: if { $echo_sclk } { :>
+
+## SDI counter runs on echo_SCLK but sdi_data_valid is generated with spi_clk which
+#  is synchronous to SCLK. The last_sdi_bit should be transferred into spi_clk domain.
+set_property ASYNC_REG true [get_cells -hier {*last_sdi_bit_m_reg[0]}]
+set_property ASYNC_REG true [get_cells -hier {*last_sdi_bit_m_reg[1]}]
+set_false_path -to [get_cells -hier -filter {name =~ *last_sdi_bit_m_reg[0]* && IS_SEQUENTIAL}]
+
+# SDI shift registers are reset asynchronously after a negative edge of CSN - define the reset line as a false path
+set_false_path -to [get_pins -hierarchical -filter {NAME=~*g_echo_sclk_miso_latch.*.data_sdi_shift_reg[*]/CLR}]
+
+<: } :>
