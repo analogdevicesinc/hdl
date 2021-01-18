@@ -13,6 +13,7 @@ all: lib
 
 
 clean:
+	$(MAKE) -C ad463x_data_capture clean
 	$(MAKE) -C axi_ad5766 clean
 	$(MAKE) -C axi_ad6676 clean
 	$(MAKE) -C axi_ad7616 clean
@@ -135,6 +136,7 @@ clean-all:clean
 
 
 lib:
+	$(MAKE) -C ad463x_data_capture
 	$(MAKE) -C axi_ad5766
 	$(MAKE) -C axi_ad6676
 	$(MAKE) -C axi_ad7616
