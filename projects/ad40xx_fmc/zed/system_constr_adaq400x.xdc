@@ -8,8 +8,12 @@ set_property -dict {PACKAGE_PIN Y11  IOSTANDARD LVCMOS33} [get_ports adaq400x_sp
 
 ## There is a multi-cycle path between the axi_spi_engine's SDO_FIFO and the
 # execution's shift register, because we load new data into the shift register
-# in every DATA_WIDTH's x 2 cycle. (worst case scenario)
-# Set a multi-cycle delay of 2 spi_clk cycle, slightly over constraining the path.
-set_multicycle_path 2 -setup -from [get_cells -hierarchical -filter {NAME=~*/i_sdo_fifo/i_mem/m_ram_reg}] -to [get_pins -hierarchical -filter {NAME=~*/data_sdo_shift_reg[*]/D}]
-set_multicycle_path 1 -hold -from [get_cells -hierarchical -filter {NAME=~*/i_sdo_fifo/i_mem/m_ram_reg}] -to [get_pins -hierarchical -filter {NAME=~*/data_sdo_shift_reg[*]/D}]
+# in every DATA_WIDTH's x 8 cycle. (worst case scenario)
+# Set a multi-cycle delay of 8 spi_clk cycle, slightly over constraining the path.
+
+set_multicycle_path -setup 8 -to [get_cells -hierarchical -filter {NAME=~*/data_sdo_shift_reg[*]}] -from [get_clocks clk_fpga_2]
+set_multicycle_path -hold  7 -to [get_cells -hierarchical -filter {NAME=~*/data_sdo_shift_reg[*]}] -from [get_clocks clk_fpga_2]
+
+set_multicycle_path -setup 8 -to [get_cells -hierarchical -filter {NAME=~*/execution/inst/left_aligned_reg*}] -from [get_clocks clk_fpga_2]
+set_multicycle_path -hold  7 -to [get_cells -hierarchical -filter {NAME=~*/execution/inst/left_aligned_reg*}] -from [get_clocks clk_fpga_2]
 
