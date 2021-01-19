@@ -1,34 +1,53 @@
 
-set TPL_DATA_PATH_WIDTH 4
-set SAMPLE_RATE 123
+set TPL_DATA_PATH_WIDTH 6
+set SAMPLE_RATE 245.76
+set REF_CLK_RATE 122.88
+
+set TX_NUM_OF_LANES 2      ; # L
+set TX_NUM_OF_CONVERTERS 4 ; # M
+set TX_SAMPLE_WIDTH 12     ; # N/NP
+set TX_SAMPLES_PER_FRAME 1 ; # S
+set TX_DMA_SAMPLE_WIDTH 16 ; #
+
+set RX_NUM_OF_LANES 2      ; # L
+set RX_NUM_OF_CONVERTERS 4 ; # M
+set RX_SAMPLE_WIDTH 12     ; # N/NP
+set RX_SAMPLES_PER_FRAME 1 ; # S
+set RX_DMA_SAMPLE_WIDTH 16 ; #
+
+set RX_OS_NUM_OF_LANES 1      ; # L
+set RX_OS_NUM_OF_CONVERTERS 2 ; # M
+set RX_OS_SAMPLE_WIDTH 12     ; # N/NP
+set RX_OS_SAMPLES_PER_FRAME 2 ; # S
+set RX_OS_DMA_SAMPLE_WIDTH 16 ; #
 
 # TX parameters
-set TX_NUM_OF_LANES 4      ; # L
-set TX_NUM_OF_CONVERTERS 4 ; # M
-set TX_SAMPLE_WIDTH 16     ; # N/NP
-set TX_SAMPLES_PER_FRAME 1 ; # S 
-set TX_DMA_SAMPLE_WIDTH 16 ; # 
+#set TX_NUM_OF_LANES 4      ; # L
+#set TX_NUM_OF_CONVERTERS 4 ; # M
+#set TX_SAMPLE_WIDTH 16     ; # N/NP
+#set TX_SAMPLES_PER_FRAME 1 ; # S
+#set TX_DMA_SAMPLE_WIDTH 16 ; #
 
 set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8 * $TPL_DATA_PATH_WIDTH / \
-                                ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)] ; # TPL width / number of samples 
+                                ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)] ; # TPL width / number of samples
 
 
 # RX parameters
-set RX_NUM_OF_LANES 2      ; # L
-set RX_NUM_OF_CONVERTERS 4 ; # M
-set RX_SAMPLE_WIDTH 16     ; # N/NP
-set RX_SAMPLES_PER_FRAME 1 ; # S 
-set RX_DMA_SAMPLE_WIDTH 16 ; # 
+#set RX_NUM_OF_LANES 2      ; # L
+#set RX_NUM_OF_CONVERTERS 4 ; # M
+#set RX_SAMPLE_WIDTH 16     ; # N/NP
+#set RX_SAMPLES_PER_FRAME 1 ; # S
+#set RX_DMA_SAMPLE_WIDTH 16 ; #
 
 set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 8 * $TPL_DATA_PATH_WIDTH / \
-                                ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)] ; # 
+                                ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)] ; #
 
 # RX Observation parameters
-set RX_OS_NUM_OF_LANES 2      ; # L
-set RX_OS_NUM_OF_CONVERTERS 2 ; # M
-set RX_OS_SAMPLE_WIDTH 16     ; # N/NP
-set RX_OS_SAMPLES_PER_FRAME 1 ; # S 
-set RX_OS_DMA_SAMPLE_WIDTH 16 ; # 
+#set RX_OS_NUM_OF_LANES 2      ; # L
+#set RX_OS_NUM_OF_CONVERTERS 2 ; # M
+#set RX_OS_SAMPLE_WIDTH 16     ; # N/NP
+#set RX_OS_SAMPLES_PER_FRAME 1 ; # S
+#set RX_OS_DMA_SAMPLE_WIDTH 16 ; #
 
 set RX_OS_SAMPLES_PER_CHANNEL [expr $RX_OS_NUM_OF_LANES * 8 * $TPL_DATA_PATH_WIDTH / \
                                    ($RX_OS_NUM_OF_CONVERTERS * $RX_OS_SAMPLE_WIDTH)] ; #
@@ -53,7 +72,7 @@ set_instance_parameter_value adrv9009_tx_jesd204 {ID} {0}
 set_instance_parameter_value adrv9009_tx_jesd204 {TX_OR_RX_N} {1}
 set_instance_parameter_value adrv9009_tx_jesd204 {SOFT_PCS} {true}
 set_instance_parameter_value adrv9009_tx_jesd204 {LANE_RATE} $TX_LANE_RATE
-set_instance_parameter_value adrv9009_tx_jesd204 {REFCLK_FREQUENCY} {123}
+set_instance_parameter_value adrv9009_tx_jesd204 {REFCLK_FREQUENCY} $REF_CLK_RATE
 set_instance_parameter_value adrv9009_tx_jesd204 {NUM_OF_LANES} $TX_NUM_OF_LANES
 if {$TX_NUM_OF_LANES==4} {set_instance_parameter_value adrv9009_tx_jesd204 {LANE_MAP} {0 3 2 1}}
 set_instance_parameter_value adrv9009_tx_jesd204 {TPL_DATA_PATH_WIDTH} $TPL_DATA_PATH_WIDTH
@@ -76,7 +95,7 @@ set_instance_parameter_value adrv9009_rx_jesd204 {ID} {1}
 set_instance_parameter_value adrv9009_rx_jesd204 {TX_OR_RX_N} {0}
 set_instance_parameter_value adrv9009_rx_jesd204 {SOFT_PCS} {true}
 set_instance_parameter_value adrv9009_rx_jesd204 {LANE_RATE} $RX_LANE_RATE
-set_instance_parameter_value adrv9009_rx_jesd204 {REFCLK_FREQUENCY} {123}
+set_instance_parameter_value adrv9009_rx_jesd204 {REFCLK_FREQUENCY} $REF_CLK_RATE
 set_instance_parameter_value adrv9009_rx_jesd204 {NUM_OF_LANES} $RX_NUM_OF_LANES
 set_instance_parameter_value adrv9009_rx_jesd204 {INPUT_PIPELINE_STAGES} {1}
 set_instance_parameter_value adrv9009_rx_jesd204 {TPL_DATA_PATH_WIDTH} $TPL_DATA_PATH_WIDTH
@@ -99,7 +118,7 @@ set_instance_parameter_value adrv9009_rx_os_jesd204 {ID} {1}
 set_instance_parameter_value adrv9009_rx_os_jesd204 {TX_OR_RX_N} {0}
 set_instance_parameter_value adrv9009_rx_os_jesd204 {SOFT_PCS} {true}
 set_instance_parameter_value adrv9009_rx_os_jesd204 {LANE_RATE} $RX_OS_LANE_RATE
-set_instance_parameter_value adrv9009_rx_os_jesd204 {REFCLK_FREQUENCY} {123}
+set_instance_parameter_value adrv9009_rx_os_jesd204 {REFCLK_FREQUENCY} $REF_CLK_RATE
 set_instance_parameter_value adrv9009_rx_os_jesd204 {NUM_OF_LANES} $RX_OS_NUM_OF_LANES
 set_instance_parameter_value adrv9009_rx_os_jesd204 {INPUT_PIPELINE_STAGES} {1}
 set_instance_parameter_value adrv9009_rx_os_jesd204 {TPL_DATA_PATH_WIDTH} $TPL_DATA_PATH_WIDTH
