@@ -162,7 +162,7 @@ ad_xcvrpll  axi_adrv9009_fmc_obs_xcvr/up_pll_rst util_adrv9009_fmc_xcvr/up_cpll_
 ad_connect  sys_cpu_resetn util_adrv9009_fmc_xcvr/up_rstn
 ad_connect  sys_cpu_clk util_adrv9009_fmc_xcvr/up_clk
 
-ad_xcvrcon  util_adrv9009_fmc_xcvr axi_adrv9009_fmc_tx_xcvr axi_adrv9009_fmc_tx_jesd {} core_clk_c
+ad_xcvrcon  util_adrv9009_fmc_xcvr axi_adrv9009_fmc_tx_xcvr axi_adrv9009_fmc_tx_jesd {1 0 2 3 4 5 6 7} core_clk_c
 ad_xcvrcon  util_adrv9009_fmc_xcvr axi_adrv9009_fmc_rx_xcvr axi_adrv9009_fmc_rx_jesd {0 1 4 5} core_clk_d
 ad_xcvrcon  util_adrv9009_fmc_xcvr axi_adrv9009_fmc_obs_xcvr axi_adrv9009_fmc_obs_jesd {2 3 6 7} core_clk_c
 
