@@ -11,6 +11,9 @@ set RX_JESD_S     $ad_project_params(RX_JESD_S)
 set RX_JESD_NP    $ad_project_params(RX_JESD_NP)
 
 set RX_TPL_DATA_PATH_WIDTH 4
+if {$RX_JESD_NP==12} {
+  set RX_TPL_DATA_PATH_WIDTH 6
+}
 
 set RX_NUM_OF_LANES      [expr $RX_JESD_L * $RX_NUM_OF_LINKS]
 set RX_NUM_OF_CONVERTERS [expr $RX_JESD_M * $RX_NUM_OF_LINKS]
@@ -31,6 +34,9 @@ set TX_JESD_S     $ad_project_params(TX_JESD_S)
 set TX_JESD_NP    $ad_project_params(TX_JESD_NP)
 
 set TX_TPL_DATA_PATH_WIDTH 4
+if {$TX_JESD_NP==12} {
+  set TX_TPL_DATA_PATH_WIDTH 6
+}
 
 set TX_NUM_OF_LANES      [expr $TX_JESD_L * $TX_NUM_OF_LINKS]
 set TX_NUM_OF_CONVERTERS [expr $TX_JESD_M * $TX_NUM_OF_LINKS]
@@ -79,6 +85,8 @@ set_instance_parameter_value mxfe_rx_jesd204 {REFCLK_FREQUENCY} {250.0}
 set_instance_parameter_value mxfe_rx_jesd204 {INPUT_PIPELINE_STAGES} {2}
 set_instance_parameter_value mxfe_rx_jesd204 {NUM_OF_LANES} $RX_NUM_OF_LANES
 set_instance_parameter_value mxfe_rx_jesd204 {EXT_DEVICE_CLK_EN} {1}
+set_instance_parameter_value mxfe_rx_jesd204 {TPL_DATA_PATH_WIDTH} $RX_TPL_DATA_PATH_WIDTH
+
 
 add_instance mxfe_rx_tpl ad_ip_jesd204_tpl_adc
 set_instance_parameter_value mxfe_rx_tpl {ID} {0}
@@ -87,6 +95,8 @@ set_instance_parameter_value mxfe_rx_tpl {NUM_LANES} $RX_NUM_OF_LANES
 set_instance_parameter_value mxfe_rx_tpl {BITS_PER_SAMPLE} $RX_SAMPLE_WIDTH
 set_instance_parameter_value mxfe_rx_tpl {CONVERTER_RESOLUTION} $RX_SAMPLE_WIDTH
 set_instance_parameter_value mxfe_rx_tpl {TWOS_COMPLEMENT} {1}
+set_instance_parameter_value mxfe_rx_tpl {OCTETS_PER_BEAT} $RX_TPL_DATA_PATH_WIDTH
+set_instance_parameter_value mxfe_rx_tpl {DMA_BITS_PER_SAMPLE} $RX_DMA_SAMPLE_WIDTH
 
 # TX JESD204 PHY+Link
 
@@ -99,6 +109,8 @@ set_instance_parameter_value mxfe_tx_jesd204 {SYSCLK_FREQUENCY} {100.0}
 set_instance_parameter_value mxfe_tx_jesd204 {REFCLK_FREQUENCY} {250.0}
 set_instance_parameter_value mxfe_tx_jesd204 {NUM_OF_LANES} $TX_NUM_OF_LANES
 set_instance_parameter_value mxfe_tx_jesd204 {EXT_DEVICE_CLK_EN} {1}
+set_instance_parameter_value mxfe_tx_jesd204 {TPL_DATA_PATH_WIDTH} $TX_TPL_DATA_PATH_WIDTH
+
 
 add_instance mxfe_tx_tpl ad_ip_jesd204_tpl_dac
 set_instance_parameter_value mxfe_tx_tpl {ID} {0}
@@ -106,6 +118,8 @@ set_instance_parameter_value mxfe_tx_tpl {NUM_CHANNELS} $TX_NUM_OF_CONVERTERS
 set_instance_parameter_value mxfe_tx_tpl {NUM_LANES} $TX_NUM_OF_LANES
 set_instance_parameter_value mxfe_tx_tpl {BITS_PER_SAMPLE} $TX_SAMPLE_WIDTH
 set_instance_parameter_value mxfe_tx_tpl {CONVERTER_RESOLUTION} $TX_SAMPLE_WIDTH
+set_instance_parameter_value mxfe_tx_tpl {OCTETS_PER_BEAT} $TX_TPL_DATA_PATH_WIDTH
+set_instance_parameter_value mxfe_tx_tpl {DMA_BITS_PER_SAMPLE} $TX_DMA_SAMPLE_WIDTH
 
 # pack(s) & unpack(s)
 
