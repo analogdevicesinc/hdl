@@ -363,11 +363,11 @@ module util_adxcvr_xch #(
   wire        tx_prbsforceerr;
   wire [ 3:0] tx_prbssel;
 
-    sync_bits #(.NUM_OF_BITS(5)) i_sync_bits_tx_prbs_in (
+  sync_bits #(.NUM_OF_BITS(5)) i_sync_bits_tx_prbs_in (
     .in_bits ({up_tx_prbssel,
                up_tx_prbsforceerr}),
     .out_resetn (1'b1),
-    .out_clk (rx_clk),
+    .out_clk (tx_clk),
     .out_bits ({tx_prbssel,
                 tx_prbsforceerr})
   );
