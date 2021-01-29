@@ -349,7 +349,11 @@ ad_xcvrpll  axi_adrv9009_som_obs_xcvr/up_pll_rst util_adrv9009_som_xcvr/up_cpll_
 ad_connect  sys_cpu_resetn util_adrv9009_som_xcvr/up_rstn
 ad_connect  sys_cpu_clk util_adrv9009_som_xcvr/up_clk
 
+if {$TX_NUM_OF_LANES == 16} {
+ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_tx_xcvr axi_adrv9009_som_tx_jesd {0 1 2 3 4 5 6 7 9 8 10 11 12 13 14 15 16} core_clk_a
+} else {
 ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_tx_xcvr axi_adrv9009_som_tx_jesd {} core_clk_a
+}
 
 if {$RX_NUM_OF_LANES == 8} {
 ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_rx_xcvr axi_adrv9009_som_rx_jesd {0 1 4 5 8 9 12 13} core_clk_b
