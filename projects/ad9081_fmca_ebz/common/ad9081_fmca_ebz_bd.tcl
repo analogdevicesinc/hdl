@@ -380,11 +380,11 @@ ad_connect  $sys_dma_resetn axi_mxfe_tx_dma/m_src_axi_aresetn
 ad_connect  $sys_dma_reset  mxfe_dac_fifo/dma_rst
 
 if {$ADI_PHY_SEL == 0} {
-ad_connect  tx_device_clk_rstgen/peripheral_reset jesd204_phy_121/tx_sys_reset
-ad_connect  tx_device_clk_rstgen/peripheral_reset jesd204_phy_126/tx_sys_reset
+ad_connect  jesd204_phy_121/tx_sys_reset GND
+ad_connect  jesd204_phy_126/tx_sys_reset GND
 
-ad_connect  rx_device_clk_rstgen/peripheral_reset jesd204_phy_121/rx_sys_reset
-ad_connect  rx_device_clk_rstgen/peripheral_reset jesd204_phy_126/rx_sys_reset
+ad_connect  jesd204_phy_121/rx_sys_reset GND
+ad_connect  jesd204_phy_126/rx_sys_reset GND
 
 ad_connect  axi_mxfe_tx_jesd/tx_axi/device_reset jesd204_phy_121/tx_reset_gt
 ad_connect  axi_mxfe_rx_jesd/rx_axi/device_reset jesd204_phy_121/rx_reset_gt
