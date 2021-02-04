@@ -40,3 +40,4 @@ case "$SIMULATOR" in
 		../run/run_${NAME}
 		;;
 esac
+
