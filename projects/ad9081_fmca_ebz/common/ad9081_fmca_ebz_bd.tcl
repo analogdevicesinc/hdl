@@ -282,6 +282,7 @@ ad_ip_parameter axi_mxfe_tx_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_LENGTH_WIDTH 24
 ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_mxfe_tx_dma CONFIG.CYCLIC 1
+ad_ip_parameter axi_mxfe_tx_dma CONFIG.MAX_BYTES_PER_BURST 4096
 ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_DATA_WIDTH_SRC $dac_dma_data_width
 ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_dma_data_width
 
