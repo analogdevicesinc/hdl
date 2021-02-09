@@ -35,7 +35,7 @@ adi_add_bus "m_axis" "master" \
 	}
 
 adi_add_bus_clock "m_axis_aclk" "m_axis" "m_axis_aresetn"
-adi_add_bus_clock "s_axis_aclk" "s_axis" "m_axis_aresetn"
+adi_add_bus_clock "s_axis_aclk" "s_axis" "s_axis_aresetn"
 
 ## TODO: Validate RD_ADDRESS_WIDTH
 
