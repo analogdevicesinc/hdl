@@ -39,6 +39,7 @@ module axi_adrv9001_tx #(
   parameter   ID = 0,
   parameter   ENABLED = 1,
   parameter   CMOS_LVDS_N = 0,
+  parameter   USE_RX_CLK_FOR_TX = 0,
   parameter   COMMON_BASE_ADDR = 'h10,
   parameter   CHANNEL_BASE_ADDR = 'h11,
   parameter   MODE_R1 = 1,
@@ -131,7 +132,8 @@ end else begin : core_enabled
 
   // configuration settings
 
-  localparam  CONFIG =  (CMOS_LVDS_N * 128) +
+  localparam  CONFIG =  (USE_RX_CLK_FOR_TX * 1024) +
+                        (CMOS_LVDS_N * 128) +
                         (MODE_R1 * 16) +
                         (DDS_DISABLE * 64) +
                         (IQCORRECTION_DISABLE * 1);
