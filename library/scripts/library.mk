@@ -27,6 +27,7 @@ CLEAN_TARGET += *.hw
 CLEAN_TARGET += *.sim
 CLEAN_TARGET += .Xil
 CLEAN_TARGET += .timestamp_intel
+CLEAN_TARGET += *.hbs
 
 GENERIC_DEPS += $(HDL_LIBRARY_PATH)scripts/adi_env.tcl
 
