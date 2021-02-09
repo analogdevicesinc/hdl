@@ -23,6 +23,7 @@ adi_add_bus "s_axis" "slave" \
 		{"s_axis_valid" "TVALID"} \
 		{"s_axis_ready" "TREADY"} \
 		{"s_axis_data" "TDATA"} \
+		{"s_axis_tlast" "TLAST"} \
 	}
 
 adi_add_bus "m_axis" "master" \
@@ -32,6 +33,7 @@ adi_add_bus "m_axis" "master" \
 		{"m_axis_valid" "TVALID"} \
 		{"m_axis_ready" "TREADY"} \
 		{"m_axis_data" "TDATA"} \
+		{"m_axis_tlast" "TLAST"} \
 	}
 
 adi_add_bus_clock "m_axis_aclk" "m_axis" "m_axis_aresetn"
