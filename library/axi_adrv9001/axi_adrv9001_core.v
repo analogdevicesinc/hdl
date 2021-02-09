@@ -38,6 +38,7 @@
 module axi_ad9001_core #(
   parameter ID = 0,
   parameter CMOS_LVDS_N = 0,
+  parameter USE_RX_CLK_FOR_TX = 0,
   parameter NUM_LANES = 3,
   parameter DRP_WIDTH = 5,
   parameter TDD_DISABLE = 0,
@@ -399,6 +400,7 @@ module axi_ad9001_core #(
     .ID (ID),
     .ENABLED (1),
     .CMOS_LVDS_N (CMOS_LVDS_N),
+    .USE_RX_CLK_FOR_TX (USE_RX_CLK_FOR_TX),
     .COMMON_BASE_ADDR ('h08),
     .CHANNEL_BASE_ADDR ('h09),
     .MODE_R1 (COMMON_2R2T_SUPPORT==0),
@@ -451,6 +453,7 @@ module axi_ad9001_core #(
     .ID (ID),
     .ENABLED (INDEPENDENT_1R1T_SUPPORT),
     .CMOS_LVDS_N (CMOS_LVDS_N),
+    .USE_RX_CLK_FOR_TX (USE_RX_CLK_FOR_TX),
     .COMMON_BASE_ADDR ('h10),
     .CHANNEL_BASE_ADDR ('h11),
     .MODE_R1 (1),
