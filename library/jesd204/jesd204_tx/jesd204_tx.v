@@ -542,8 +542,9 @@ assign status_synth_params1 = {
                  /*15: 8 */  3'b0,TPL_DATA_PATH_WIDTH[4:0],
                  /* 7: 0 */  4'b0,DPW_LOG2[3:0]};
 assign status_synth_params2 = {
-                 /*31:16 */  16'b0,
-                 /*15:13 */  3'b0,
+                 /*31:19 */  13'b0,
+                 /*   18 */  ENABLE_CHAR_REPLACE[0],
+                 /*17:13 */  5'b0,
                  /*   12 */  ASYNC_CLK[0],
                  /*11:10 */  2'b0,
                  /* 9: 8 */  LINK_MODE[1:0],
