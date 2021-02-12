@@ -24,10 +24,6 @@ set_property -dict {PACKAGE_PIN  T14 IOSTANDARD LVCMOS33}                       
 set_property -dict {PACKAGE_PIN  P16 IOSTANDARD LVCMOS33}                           [get_ports cn0540_scl]         ; ## CK_SCL
 set_property -dict {PACKAGE_PIN  P15 IOSTANDARD LVCMOS33}                           [get_ports cn0540_sda]         ; ## CK_SDA
 
-# relax the timing between the SDO FIFO and shift-register
-set_multicycle_path 2 -setup -from [get_cells -hierarchical -filter {NAME=~*/i_sdo_fifo/i_mem/m_ram_reg}] -to [get_pins -hierarchical -filter {NAME=~*/data_sdo_shift_reg[*]/D}]
-set_multicycle_path 1 -hold  -from [get_cells -hierarchical -filter {NAME=~*/i_sdo_fifo/i_mem/m_ram_reg}] -to [get_pins -hierarchical -filter {NAME=~*/data_sdo_shift_reg[*]/D}]
-
 # rename auto-generated clock for SPI Engine to spi_clk - 80MHz
 create_generated_clock -name spi_clk -source [get_pins -filter name=~*CLKIN1 -of [get_cells -hier -filter name=~*spi_clkgen*i_mmcm]] -master_clock clk_fpga_0 [get_pins -filter name=~*CLKOUT0 -of [get_cells -hier -filter name=~*spi_clkgen*i_mmcm]]
 
