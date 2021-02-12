@@ -251,9 +251,9 @@ module axi_spi_engine #(
   endgenerate
 
   // IRQ handling
-  reg [3:0] up_irq_mask = 'h0;
-  wire [3:0] up_irq_source;
-  wire [3:0] up_irq_pending;
+  reg [4:0] up_irq_mask = 5'h0;
+  wire [4:0] up_irq_source;
+  wire [4:0] up_irq_pending;
 
   assign up_irq_source = {
     offload_sync_id_pending,
@@ -372,7 +372,7 @@ module axi_spi_engine #(
       if (offload_sync_fifo_valid == 1'b1) begin
         offload_sync_id <= offload_sync_fifo_data;
         offload_sync_id_pending <= 1'b1;
-      end else if (up_wreq_s == 1'b1 && up_waddr_s == 8'h21 && up_wdata_s[3] == 1'b1) begin
+      end else if (up_wreq_s == 1'b1 && up_waddr_s == 8'h21 && up_wdata_s[4] == 1'b1) begin
         offload_sync_id_pending <= 1'b0;
       end
     end
