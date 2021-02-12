@@ -134,14 +134,14 @@ module axi_spi_engine #(
   wire clk;
   wire rstn;
 
-  wire [CMD_FIFO_ADDRESS_WIDTH:0] cmd_fifo_room;
+  wire [CMD_FIFO_ADDRESS_WIDTH-1:0] cmd_fifo_room;
   wire cmd_fifo_almost_empty;
 
   wire [15:0] cmd_fifo_in_data;
   wire cmd_fifo_in_ready;
   wire cmd_fifo_in_valid;
 
-  wire [SDO_FIFO_ADDRESS_WIDTH:0] sdo_fifo_room;
+  wire [SDO_FIFO_ADDRESS_WIDTH-1:0] sdo_fifo_room;
   wire sdo_fifo_almost_empty;
 
   wire [(DATA_WIDTH-1):0] sdo_fifo_in_data;
@@ -149,7 +149,7 @@ module axi_spi_engine #(
   wire sdo_fifo_in_valid;
 
   wire sdi_fifo_out_data_msb_s;
-  wire [SDI_FIFO_ADDRESS_WIDTH:0] sdi_fifo_level;
+  wire [SDI_FIFO_ADDRESS_WIDTH-1:0] sdi_fifo_level;
   wire sdi_fifo_almost_full;
 
   wire [(NUM_OF_SDI * DATA_WIDTH-1):0] sdi_fifo_out_data;
@@ -400,7 +400,7 @@ module axi_spi_engine #(
   assign cmd_fifo_in_valid = up_wreq_s == 1'b1 && up_waddr_s == 8'h38;
   assign cmd_fifo_in_data = up_wdata_s[15:0];
   assign cmd_fifo_almost_empty =
-    `axi_spi_engine_check_watermark(cmd_fifo_room, CMD_FIFO_ADDRESS_WIDTH);
+    `axi_spi_engine_check_watermark(cmd_fifo_room, CMD_FIFO_ADDRESS_WIDTH-1);
 
   util_axis_fifo #(
     .DATA_WIDTH(16),
@@ -427,7 +427,7 @@ module axi_spi_engine #(
   assign sdo_fifo_in_valid = up_wreq_s == 1'b1 && up_waddr_s == 8'h39;
   assign sdo_fifo_in_data = up_wdata_s[(DATA_WIDTH-1):0];
   assign sdo_fifo_almost_empty =
-    `axi_spi_engine_check_watermark(sdo_fifo_room, SDO_FIFO_ADDRESS_WIDTH);
+    `axi_spi_engine_check_watermark(sdo_fifo_room, SDO_FIFO_ADDRESS_WIDTH-1);
 
   util_axis_fifo #(
     .DATA_WIDTH(DATA_WIDTH),
@@ -453,7 +453,7 @@ module axi_spi_engine #(
 
   assign sdi_fifo_out_ready = up_rreq_s == 1'b1 && up_raddr_s == 8'h3a;
   assign sdi_fifo_almost_full =
-    `axi_spi_engine_check_watermark(sdi_fifo_level, SDI_FIFO_ADDRESS_WIDTH);
+    `axi_spi_engine_check_watermark(sdi_fifo_level, SDI_FIFO_ADDRESS_WIDTH-1);
 
   util_axis_fifo #(
     .DATA_WIDTH(NUM_OF_SDI * DATA_WIDTH),
