@@ -327,7 +327,7 @@ end else begin : core_enabled
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_data_in_req (),
-    .dac_data_in (dac_data_q0),
+    .dac_data_in (dac_data_q1),
     .dac_data_out_req (dac_data_valid_B),
     .dac_data_out (dac_data_q_B[15:0]),
     .dac_data_iq_in (dac_data_iq_i1_s),
