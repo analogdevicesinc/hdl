@@ -24,4 +24,7 @@ set_false_path -quiet \
 set_false_path -quiet \
   -to [get_cells -quiet -hierarchical -filter {NAME =~ *i_offload_mem_reset_sync/cdc_sync_stage1_reg* && IS_SEQUENTIAL}]
 
+set_false_path -quiet \
+  -to [get_cells -quiet -hierarchical -filter {NAME =~ *i_fifo_status/cdc_sync_stage1_reg* && IS_SEQUENTIAL}]
+
 <: } :>
