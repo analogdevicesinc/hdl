@@ -227,11 +227,11 @@ end else begin : fifo /* ADDRESS_WIDTH != 0 - this is a real FIFO implementation
       .clka(s_axis_aclk),
       .wea(s_mem_write),
       .addra(s_axis_waddr),
-      .dina({s_axis_data, s_axis_tlast}),
+      .dina({s_axis_tlast, s_axis_data}),
       .clkb(m_axis_aclk),
       .reb(m_mem_read),
       .addrb(m_axis_raddr),
-      .doutb({m_axis_data, m_axis_tlast})
+      .doutb({m_axis_tlast, m_axis_data})
     );
 
     assign _m_axis_ready = ~valid || m_axis_ready;
@@ -245,7 +245,7 @@ end else begin : fifo /* ADDRESS_WIDTH != 0 - this is a real FIFO implementation
     // Let the synthesizer decide what to infer (distributed or block RAM)
     always @(posedge s_axis_aclk) begin
       if (s_mem_write)
-        ram[s_axis_waddr] <= {s_axis_data, s_axis_tlast};
+        ram[s_axis_waddr] <= {s_axis_tlast, s_axis_data};
     end
 
     if (M_AXIS_REGISTERED == 1) begin
@@ -258,15 +258,15 @@ end else begin : fifo /* ADDRESS_WIDTH != 0 - this is a real FIFO implementation
       end
 
       assign _m_axis_ready = ~valid || m_axis_ready;
-      assign m_axis_data = data[DATA_WIDTH:1];
-      assign m_axis_tlast = data[0];
+      assign m_axis_data = data[DATA_WIDTH-1:0];
+      assign m_axis_tlast = data[DATA_WIDTH];
       assign m_axis_valid = valid;
 
     end else begin
 
       assign _m_axis_ready = m_axis_ready;
       assign m_axis_valid = _m_axis_valid;
-      assign {m_axis_data, m_axis_tlast} = ram[m_axis_raddr];
+      assign {m_axis_tlast, m_axis_data} = ram[m_axis_raddr];
 
     end
   end
