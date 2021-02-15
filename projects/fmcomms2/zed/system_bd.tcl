@@ -12,3 +12,5 @@ sysid_gen_sys_init_file
 
 ad_ip_parameter axi_ad9361 CONFIG.ADC_INIT_DELAY 23
 
+ad_ip_parameter axi_ad9361 CONFIG.TDD_DISABLE 1
+
