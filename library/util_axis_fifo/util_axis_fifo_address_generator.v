@@ -170,7 +170,7 @@ endgenerate
 //------------------------------------------------------------------------------
 
 wire [ADDRESS_WIDTH:0] s_axis_fifo_fill = s_axis_waddr_reg - s_axis_raddr_reg;
-assign s_axis_full  =  (s_axis_fifo_fill == { 1'b1, {ADDRESS_WIDTH{1'b0}}});
+assign s_axis_full = (s_axis_fifo_fill == {ADDRESS_WIDTH{1'b1}});
 assign s_axis_almost_full = s_axis_fifo_fill > {1'b0, ~ALMOST_FULL_THRESHOLD};
 assign s_axis_ready = ~s_axis_full;
 assign s_axis_room = ~s_axis_fifo_fill;
