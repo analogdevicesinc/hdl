@@ -47,8 +47,10 @@ create_clock -name rx2_dclk_out   -period  12.5 [get_ports rx2_dclk_in_p]
 create_clock -name tx1_dclk_out   -period  12.5 [get_ports tx1_dclk_in_p]
 create_clock -name tx2_dclk_out   -period  12.5 [get_ports tx2_dclk_in_p]
 
-set_clock_latency -source -early 2 [get_clocks rx1_dclk_out]
-set_clock_latency -source -early 2 [get_clocks rx2_dclk_out]
+set_clock_latency -source -early -0.25 [get_clocks rx1_dclk_out]
+set_clock_latency -source -early -0.25 [get_clocks rx2_dclk_out]
 
-set_clock_latency -source -late 5 [get_clocks rx1_dclk_out]
-set_clock_latency -source -late 5 [get_clocks rx2_dclk_out]
+set_clock_latency -source -late 0.25 [get_clocks rx1_dclk_out]
+set_clock_latency -source -late 0.25 [get_clocks rx2_dclk_out]
+
+
