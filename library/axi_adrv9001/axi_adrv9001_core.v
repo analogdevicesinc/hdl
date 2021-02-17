@@ -205,13 +205,31 @@ module axi_ad9001_core #(
   // rx1_r1_mode should be 0 only when rx1_clk and rx2_clk have the same frequency
   // tx1_r1_mode should be 0 only when tx1_clk and tx2_clk have the same frequency
 
-  assign rx2_rst = rx1_r1_mode ? rx2_rst_loc : rx1_rst;
-  assign rx2_single_lane = rx1_r1_mode ? rx2_single_lane_loc : rx1_single_lane;
-  assign rx2_sdr_ddr_n = rx1_r1_mode ? rx2_sdr_ddr_n_loc : rx1_sdr_ddr_n;
+  sync_bits #(
+    .NUM_OF_BITS (3),
+    .ASYNC_CLK (1))
+  i_rx1_ctrl_sync (
+    .in_bits ({rx1_sdr_ddr_n,rx1_single_lane,rx1_rst}),
+    .out_clk (rx2_clk),
+    .out_resetn (1'b1),
+    .out_bits ({rx1_sdr_ddr_n_s,rx1_single_lane_s,rx1_rst_s}));
 
-  assign tx2_rst = tx1_r1_mode ? tx2_rst_loc : tx1_rst;
-  assign tx2_single_lane = tx1_r1_mode ? tx2_single_lane_loc : tx1_single_lane;
-  assign tx2_sdr_ddr_n = tx1_r1_mode ? tx2_sdr_ddr_n_loc : tx1_sdr_ddr_n;
+  sync_bits #(
+    .NUM_OF_BITS (3),
+    .ASYNC_CLK (1))
+  i_tx1_ctrl_sync (
+    .in_bits ({tx1_sdr_ddr_n,tx1_single_lane,tx1_rst}),
+    .out_clk (tx2_clk),
+    .out_resetn (1'b1),
+    .out_bits ({tx1_sdr_ddr_n_s,tx1_single_lane_s,tx1_rst_s}));
+
+  assign rx2_rst = rx1_r1_mode ? rx2_rst_loc : rx1_rst_s;
+  assign rx2_single_lane = rx1_r1_mode ? rx2_single_lane_loc : rx1_single_lane_s;
+  assign rx2_sdr_ddr_n = rx1_r1_mode ? rx2_sdr_ddr_n_loc : rx1_sdr_ddr_n_s;
+
+  assign tx2_rst = tx1_r1_mode ? tx2_rst_loc : tx1_rst_s;
+  assign tx2_single_lane = tx1_r1_mode ? tx2_single_lane_loc : tx1_single_lane_s;
+  assign tx2_sdr_ddr_n = tx1_r1_mode ? tx2_sdr_ddr_n_loc : tx1_sdr_ddr_n_s;
 
   assign tx1_data_valid = tx1_data_valid_A_d;
   assign tx1_data_i = tx1_data_i_A_d;
@@ -562,7 +580,7 @@ module axi_ad9001_core #(
     .BASE_ADDRESS (6'h13)
   ) i_tdd_2 (
     .clk (rx2_clk),
-    .rst (rx2_rst),
+    .rst (rx2_rst_loc),
     .tdd_rx_vco_en (),
     .tdd_tx_vco_en (),
     .tdd_rx_rf_en (tdd_rx2_rf_en_loc),

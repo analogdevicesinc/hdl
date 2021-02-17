@@ -35,6 +35,8 @@ ad_ip_files axi_adrv9001 [list\
   "$ad_hdl_dir/library/intel/common/up_xfer_status_constr.sdc" \
   "$ad_hdl_dir/library/intel/common/up_clock_mon_constr.sdc" \
   "$ad_hdl_dir/library/intel/common/up_rst_constr.sdc" \
+  "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
+  "$ad_hdl_dir/library/util_cdc/util_cdc_constr.tcl" \
   "intel/adrv9001_rx.v" \
   "intel/adrv9001_tx.v" \
   "adrv9001_pack.v" \
