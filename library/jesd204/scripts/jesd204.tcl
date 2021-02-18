@@ -459,3 +459,24 @@ proc adi_tpl_jesd204_rx_create {ip_name num_of_lanes num_of_converters samples_p
 
   return -options $resultoptions $resulttext
 }
+
+# Calculate Link Layer interface width towards Transport Layer
+# TPL width must be set to an integer multiple of F
+proc adi_jesd204_calc_tpl_width {link_datapath_width jesd_l jesd_m jesd_s jesd_np} {
+
+  set jesd_f [expr ($jesd_m*$jesd_s*$jesd_np)/(8*$jesd_l)]
+
+  # For F=3,6,12 get first pow 2 multiple of F greater than link_datapath_width
+  if {$jesd_f % 3 == 0} {
+    set np12_datapath_width $jesd_f
+    while {$np12_datapath_width < $link_datapath_width} {
+        set np12_datapath_width [expr 2*$np12_datapath_width]
+    }
+    return $np12_datapath_width
+  } else {
+    return [expr max($jesd_f,$link_datapath_width)]
+  }
+
+}
+
+
