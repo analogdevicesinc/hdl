@@ -131,7 +131,7 @@ jesd204_rx_header i_rx_header (
 
 jesd204_crc12 i_crc12 (
   .clk(clk),
-  .reset(reset),
+  .reset(1'b0),
   .init(eomb),
   .data_in(phy_data),
   .crc12(crc12_calculated)
@@ -187,7 +187,7 @@ jesd204_scrambler_64b #(
   .DESCRAMBLE(1)
 ) i_descrambler (
   .clk(clk),
-  .reset(reset),
+  .reset(1'b0),
   .enable(~cfg_disable_scrambler),
   .data_in(phy_data),
   .data_out(data_descrambled_s)
