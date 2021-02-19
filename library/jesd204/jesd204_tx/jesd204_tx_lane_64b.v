@@ -89,7 +89,7 @@ jesd204_scrambler_64b #(
   .DESCRAMBLE(0)
 ) i_scrambler (
   .clk(clk),
-  .reset(reset),
+  .reset(1'b0),
   .enable(~cfg_disable_scrambler),
   .data_in(tx_data_msb_s),
   .data_out(scrambled_data_r)
