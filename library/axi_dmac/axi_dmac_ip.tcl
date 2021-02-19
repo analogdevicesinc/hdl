@@ -258,7 +258,7 @@ set_property -dict [list \
 foreach dir {"SRC" "DEST"} {
 	set_property -dict [list \
 		"value_validation_type" "list" \
-		"value_validation_list" "16 32 64 128 256 512 1024" \
+		"value_validation_list" "16 32 64 128 256 512 1024 2048" \
 	] \
 	[ipx::get_user_parameters DMA_DATA_WIDTH_${dir} -of_objects $cc]
 
@@ -308,6 +308,7 @@ foreach {dir group} [list "SRC" $src_group "DEST" $dest_group] {
 	ipgui::move_param -component $cc -order 2 $p -parent $group
 	set_property -dict [list \
 		"display_name" "Bus Width" \
+    "tooltip" "Bus Width: For Memory-Mapped interface the valid range is 32-1024 bits" \
 	] $p
 
 	set p [ipgui::get_guiparamspec -name "AXI_SLICE_${dir}" -component $cc]
