@@ -31,6 +31,7 @@ module ad_ip_jesd204_tpl_adc_core #(
   parameter BITS_PER_SAMPLE = 16,
   parameter DMA_BITS_PER_SAMPLE = 16,
   parameter OCTETS_PER_BEAT = 4,
+  parameter EN_FRAME_ALIGN = 0,
   parameter DATA_PATH_WIDTH = 1,
   parameter LINK_DATA_WIDTH = NUM_LANES * OCTETS_PER_BEAT * 8,
   parameter DMA_DATA_WIDTH = DATA_PATH_WIDTH * DMA_BITS_PER_SAMPLE * NUM_CHANNELS,
@@ -94,6 +95,7 @@ module ad_ip_jesd204_tpl_adc_core #(
     .CONVERTER_RESOLUTION  (CONVERTER_RESOLUTION),
     .SAMPLES_PER_FRAME (SAMPLES_PER_FRAME),
     .OCTETS_PER_BEAT (OCTETS_PER_BEAT),
+    .EN_FRAME_ALIGN (EN_FRAME_ALIGN),
     .LINK_DATA_WIDTH (LINK_DATA_WIDTH),
     .ADC_DATA_WIDTH (ADC_DATA_WIDTH)
   ) i_deframer (
