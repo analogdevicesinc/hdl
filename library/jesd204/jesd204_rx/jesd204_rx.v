@@ -48,6 +48,7 @@ module jesd204_rx #(
   parameter NUM_LANES = 1,
   parameter NUM_LINKS = 1,
   parameter NUM_INPUT_PIPELINE = 1,
+  parameter NUM_OUTPUT_PIPELINE = 1,
   parameter LINK_MODE = 1, // 2 - 64B/66B;  1 - 8B/10B
   /* Only 4 is supported at the moment for 8b/10b and 8 for 64b */
   parameter DATA_PATH_WIDTH = LINK_MODE == 2 ? 8 : 4,
@@ -262,7 +263,7 @@ pipeline_stage #(
 
 pipeline_stage #(
   .WIDTH(ODW+2),
-  .REGISTERED(1)
+  .REGISTERED(NUM_OUTPUT_PIPELINE)
 ) i_output_pipeline_stage (
   .clk(device_clk),
   .in({
