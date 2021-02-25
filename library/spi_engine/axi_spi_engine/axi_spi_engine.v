@@ -171,7 +171,7 @@ module axi_spi_engine #(
   wire                            up_wreq_s;
   wire                            up_rreq_s;
   wire [31:0]                     up_wdata_s;
-  wire [13:0]                     up_waddr_s;
+  wire [7:0]                     up_waddr_s;
   wire [13:0]                     up_raddr_s;
 
   // Scratch register
@@ -193,7 +193,7 @@ module axi_spi_engine #(
     // interface wrapper
 
     up_axi #(
-      .AXI_ADDRESS_WIDTH (16)
+      .AXI_ADDRESS_WIDTH (10)
     ) i_up_axi (
       .up_rstn(rstn),
       .up_clk(clk),
