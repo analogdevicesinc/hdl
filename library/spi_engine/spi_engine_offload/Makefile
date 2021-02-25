@@ -18,6 +18,7 @@ XILINX_DEPS += ../../spi_engine/interfaces/spi_engine_offload_ctrl_rtl.xml
 XILINX_LIB_DEPS += util_cdc
 
 INTEL_DEPS += ../../util_cdc/sync_bits.v
+INTEL_DEPS += ../../util_cdc/sync_event.v
 INTEL_DEPS += spi_engine_offload_hw.tcl
 
 include ../../scripts/library.mk
