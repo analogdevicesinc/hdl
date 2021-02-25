@@ -24,28 +24,24 @@ add_fileset_file util_wfifo_constr.sdc  SDC     PATH util_wfifo_constr.sdc
 add_parameter NUM_OF_CHANNELS INTEGER 0
 set_parameter_property NUM_OF_CHANNELS DEFAULT_VALUE 4
 set_parameter_property NUM_OF_CHANNELS DISPLAY_NAME NUM_OF_CHANNELS
-set_parameter_property NUM_OF_CHANNELS TYPE INTEGER
 set_parameter_property NUM_OF_CHANNELS UNITS None
 set_parameter_property NUM_OF_CHANNELS HDL_PARAMETER true
 
 add_parameter DIN_DATA_WIDTH INTEGER 0
 set_parameter_property DIN_DATA_WIDTH DEFAULT_VALUE 32
 set_parameter_property DIN_DATA_WIDTH DISPLAY_NAME DIN_DATA_WIDTH
-set_parameter_property DIN_DATA_WIDTH TYPE INTEGER
 set_parameter_property DIN_DATA_WIDTH UNITS None
 set_parameter_property DIN_DATA_WIDTH HDL_PARAMETER true
 
 add_parameter DOUT_DATA_WIDTH INTEGER 0
 set_parameter_property DOUT_DATA_WIDTH DEFAULT_VALUE 64
 set_parameter_property DOUT_DATA_WIDTH DISPLAY_NAME DOUT_DATA_WIDTH
-set_parameter_property DOUT_DATA_WIDTH TYPE INTEGER
 set_parameter_property DOUT_DATA_WIDTH UNITS None
 set_parameter_property DOUT_DATA_WIDTH HDL_PARAMETER true
 
 add_parameter DIN_ADDRESS_WIDTH INTEGER 0
 set_parameter_property DIN_ADDRESS_WIDTH DEFAULT_VALUE 8
 set_parameter_property DIN_ADDRESS_WIDTH DISPLAY_NAME DIN_ADDRESS_WIDTH
-set_parameter_property DIN_ADDRESS_WIDTH TYPE INTEGER
 set_parameter_property DIN_ADDRESS_WIDTH UNITS None
 set_parameter_property DIN_ADDRESS_WIDTH HDL_PARAMETER true
 

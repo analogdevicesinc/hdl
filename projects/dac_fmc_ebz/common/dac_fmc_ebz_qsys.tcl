@@ -80,7 +80,7 @@ export_interface tx_sync dac_jesd204_link.sync
 # DAC Transport Layer Core
 
 add_instance dac_jesd204_transport ad_ip_jesd204_tpl_dac
-apply_preset dac_jesd204_transport "${DEVICE} Mode ${MODE}"
+apply_instance_preset dac_jesd204_transport "${DEVICE} Mode ${MODE}"
 
 add_connection dac_jesd204_link.link_clk dac_jesd204_transport.link_clk
 add_connection dac_jesd204_transport.link_data dac_jesd204_link.link_data

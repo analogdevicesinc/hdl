@@ -2,7 +2,7 @@
 ## Initialize global variable
 set family "none"
 set device "none"
-set version "18.1.0"
+set version "19.2.0"
 
 ## Create a project.
 #
@@ -20,6 +20,19 @@ proc adi_project {project_name {parameter_list {}}} {
   global device
   global version
   global quartus
+
+  # check $ALT_NIOS_MMU_ENABLED environment variables
+
+  set mmu_enabled 1
+  if [info exists ::env(ALT_NIOS_MMU_ENABLED)] {
+    set mmu_enabled $::env(ALT_NIOS_MMU_ENABLED)
+  }
+
+  # check $QUARTUS_PRO_ISUSED environment variables
+  set quartus_pro_isused 1
+  if [info exists ::env(QUARTUS_PRO_ISUSED)] {
+    set quartus_pro_isused $::env(QUARTUS_PRO_ISUSED)
+  }
 
   if [regexp "_a10gx$" $project_name] {
     set family "Arria 10"
@@ -109,33 +122,35 @@ proc adi_project {project_name {parameter_list {}}} {
   puts $QFILE "set_project_property DEVICE $device"
   puts $QFILE "foreach {param value} {$parameter_list} { set ad_project_params(\$param) \$value }"
   puts $QFILE "source system_qsys.tcl"
-  puts $QFILE "set_interconnect_requirement {\$system} {qsys_mm.clockCrossingAdapter} {AUTO}"
-  puts $QFILE "set_interconnect_requirement {\$system} {qsys_mm.burstAdapterImplementation} {PER_BURST_TYPE_CONVERTER}"
-  puts $QFILE "set_interconnect_requirement {\$system} {qsys_mm.maxAdditionalLatency} {4}"
+  puts $QFILE "set_domain_assignment {\$system} {qsys_mm.maxAdditionalLatency} {4}"
+  puts $QFILE "set_domain_assignment {\$system} {qsys_mm.clockCrossingAdapter} {AUTO}"
+  puts $QFILE "set_domain_assignment {\$system} {qsys_mm.burstAdapterImplementation} {PER_BURST_TYPE_CONVERTER}"
   puts $QFILE "save_system {system_bd.qsys}"
   close $QFILE
 
-  exec -ignorestderr $quartus(quartus_rootpath)/sopc_builder/bin/qsys-script \
-    --script=system_qsys_script.tcl
-  exec -ignorestderr $quartus(quartus_rootpath)/sopc_builder/bin/qsys-generate \
-    system_bd.qsys --synthesis=VERILOG --output-directory=system_bd \
-    --family=$family --part=$device
+  # check which type of Quartus is used, to call the qsys utilities with the
+  # correct attributes
+  if {$quartus_pro_isused == 1} {
 
-  # ignored warnings and such
+    exec -ignorestderr $quartus(quartus_rootpath)/sopc_builder/bin/qsys-script \
+      --quartus_project=$project_name --script=system_qsys_script.tcl
 
-  set_global_assignment -name MESSAGE_DISABLE 17951 ; ## unused RX channels
-  set_global_assignment -name MESSAGE_DISABLE 18655 ; ## unused TX channels
-  set_global_assignment -name MESSAGE_DISABLE 114001 ; ## Time value $x truncated to $y
+    exec -ignorestderr $quartus(quartus_rootpath)/sopc_builder/bin/qsys-generate \
+      system_bd.qsys --synthesis=VERILOG --family=$family --part=$device \
+      --quartus-project=$project_name
 
-  # The Merlin cores are especially spammy, lets hope non of these warnings is
-  # an actual issue...
-  foreach entity {altera_merlin_axi_master_ni altera_merlin_axi_slave_ni \
-                  altera_merlin_traffic_limiter altera_merlin_burst_adapter_new} {
-    ## truncated value
-    set_instance_assignment -name MESSAGE_DISABLE 10230 -entity $entity
+  } else {
+
+    exec -ignorestderr $quartus(quartus_rootpath)/sopc_builder/bin/qsys-script \
+      --script=system_qsys_script.tcl
+
+    exec -ignorestderr $quartus(quartus_rootpath)/sopc_builder/bin/qsys-generate \
+      system_bd.qsys --synthesis=VERILOG --family=$family --part=$device \
+
+    # I/O Timing Analysis is available just in Quartus Standard
+    set_global_assignment -name ENABLE_ADVANCED_IO_TIMING ON
+
   }
-  ## assigned a value but never read
-  set_instance_assignment -name MESSAGE_DISABLE 10036 -entity altera_merlin_burst_adapter_new
 
   # default assignments
 
@@ -159,7 +174,6 @@ proc adi_project {project_name {parameter_list {}}} {
   # globals
 
   set_global_assignment -name SYNCHRONIZER_IDENTIFICATION AUTO
-  set_global_assignment -name ENABLE_ADVANCED_IO_TIMING ON
   set_global_assignment -name USE_TIMEQUEST_TIMING_ANALYZER ON
   set_global_assignment -name TIMEQUEST_DO_REPORT_TIMING ON
   set_global_assignment -name TIMEQUEST_DO_CCPP_REMOVAL ON

@@ -29,7 +29,7 @@ proc p_intel_mem_asym {} {
     set m_size [expr ((2**$m_addr_width_b)*$m_data_width_b)]
   }
 
-  add_instance intel_mem ram_2port
+  add_instance intel_mem ram_2port 1.0
   set_instance_parameter_value intel_mem {GUI_MODE} 0
   set_instance_parameter_value intel_mem {GUI_MEM_IN_BITS} 1
   set_instance_parameter_value intel_mem {GUI_MEMSIZE_BITS} $m_size
@@ -41,9 +41,20 @@ proc p_intel_mem_asym {} {
   set_instance_parameter_value intel_mem {GUI_RAM_BLOCK_TYPE} {M20K}
   set_instance_parameter_value intel_mem {GUI_CLOCK_TYPE} 1
 
-  add_interface mem_i conduit end
-  add_interface mem_o conduit end
-  set_interface_property mem_i EXPORT_OF intel_mem.ram_input
-  set_interface_property mem_o EXPORT_OF intel_mem.ram_output
+  add_interface mem_i_wrclock   clock   end
+  add_interface mem_i_wren      conduit end
+  add_interface mem_i_wraddress conduit end
+  add_interface mem_i_datain    conduit end
+  add_interface mem_i_rdclock   clock   end
+  add_interface mem_i_rdaddress conduit end
+  add_interface mem_o_dataout   conduit end
+
+  set_interface_property mem_i_wrclock   EXPORT_OF intel_mem.wrclock
+  set_interface_property mem_i_wren      EXPORT_OF intel_mem.wren
+  set_interface_property mem_i_wraddress EXPORT_OF intel_mem.wraddress
+  set_interface_property mem_i_datain    EXPORT_OF intel_mem.data
+  set_interface_property mem_i_rdclock   EXPORT_OF intel_mem.rdclock
+  set_interface_property mem_i_rdaddress EXPORT_OF intel_mem.rdaddress
+  set_interface_property mem_o_dataout   EXPORT_OF intel_mem.q
 }
 

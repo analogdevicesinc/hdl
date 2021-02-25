@@ -43,7 +43,7 @@ proc p_intel_serdes {} {
   ## arria 10 only
 
   if {$m_mode == "CLK"} {
-    add_instance intel_serdes_pll altera_iopll
+    add_instance intel_serdes_pll altera_iopll 19.1
     set_instance_parameter_value intel_serdes_pll {gui_reference_clock_frequency} $m_clkin_frequency
     set_instance_parameter_value intel_serdes_pll {gui_use_locked} {1}
     set_instance_parameter_value intel_serdes_pll {gui_operation_mode} {lvds}
@@ -78,7 +78,7 @@ proc p_intel_serdes {} {
   }
 
   if {$m_mode == "IN" || $m_mode == "IN_NODPA"} {
-    add_instance intel_serdes_in altera_lvds
+    add_instance intel_serdes_in altera_lvds 19.1
     if {$m_mode == "IN"} {
     set_instance_parameter_value intel_serdes_in {MODE} {RX_DPA-FIFO}
     } else {
@@ -112,7 +112,7 @@ proc p_intel_serdes {} {
   }
 
   if {$m_mode == "OUT"} {
-    add_instance intel_serdes_out altera_lvds
+    add_instance intel_serdes_out altera_lvds 19.1
     set_instance_parameter_value intel_serdes_out {MODE} {TX}
     set_instance_parameter_value intel_serdes_out {NUM_CHANNELS} {1}
     set_instance_parameter_value intel_serdes_out {DATA_RATE} $m_hs_data_rate

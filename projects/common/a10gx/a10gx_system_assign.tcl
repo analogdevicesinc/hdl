@@ -163,8 +163,6 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to eth_mdc
 set_instance_assignment -name IO_STANDARD "1.8 V" -to eth_mdio
 set_instance_assignment -name IO_STANDARD "1.8 V" -to eth_intn
 
-set_instance_assignment -name GLOBAL_SIGNAL "GLOBAL CLOCK" -to eth_ref_clk
-
 # flash
 
 set_location_assignment PIN_BB12 -to flash_addr[0]

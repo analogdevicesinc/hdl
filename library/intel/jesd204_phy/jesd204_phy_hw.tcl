@@ -47,6 +47,8 @@ package require qsys
 source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_intel.tcl
 
+set version 19.2
+
 #
 # Instantiates the Arria 10 native PHY and configures it for JESD204 operation.
 # The datapath width is configured for 4 octets per beat.
@@ -57,7 +59,7 @@ source $ad_hdl_dir/library/scripts/adi_ip_intel.tcl
 
 ad_ip_create jesd204_phy "ADI JESD204 PHY"
 set_module_property COMPOSITION_CALLBACK jesd204_phy_composition_callback
-set_module_property INTERNAL true
+set_module_property INTERNAL false
 
 # parameters
 
@@ -73,6 +75,9 @@ ad_ip_parameter EXT_DEVICE_CLK_EN BOOLEAN false false
 ad_ip_parameter BONDING_CLOCKS_EN BOOLEAN false false
 
 proc jesd204_phy_composition_callback {} {
+
+  global version
+
   set soft_pcs [get_parameter_value "SOFT_PCS"]
   set tx [get_parameter_value "TX_OR_RX_N"]
   set lane_rate [get_parameter_value "LANE_RATE"]
@@ -86,15 +91,14 @@ proc jesd204_phy_composition_callback {} {
 
   set link_clk_frequency [expr $lane_rate / 40]
 
-  add_instance link_clock clock_source
+  add_instance link_clock clock_source $version
   set_instance_parameter_value link_clock {clockFrequency} [expr $link_clk_frequency*1000000]
   add_interface link_clk clock sink
   set_interface_property link_clk EXPORT_OF link_clock.clk_in
   add_interface link_reset reset sink
   set_interface_property link_reset EXPORT_OF link_clock.clk_in_reset
 
-
-  add_instance native_phy altera_xcvr_native_a10
+  add_instance native_phy altera_xcvr_native_a10 19.1
   set_instance_property native_phy SUPPRESS_ALL_WARNINGS true
   set_instance_property native_phy SUPPRESS_ALL_INFO_MESSAGES true
   if {$soft_pcs} {
@@ -154,7 +158,7 @@ proc jesd204_phy_composition_callback {} {
   set_instance_parameter_value native_phy {set_csr_soft_logic_enable} 1
   set_instance_parameter_value native_phy {set_prbs_soft_logic_enable} 0
 
-  add_instance phy_glue jesd204_phy_glue
+  add_instance phy_glue jesd204_phy_glue 1.0
   set_instance_parameter_value phy_glue TX_OR_RX_N $tx
   set_instance_parameter_value phy_glue SOFT_PCS $soft_pcs
   set_instance_parameter_value phy_glue NUM_OF_LANES $num_of_lanes
@@ -168,7 +172,7 @@ proc jesd204_phy_composition_callback {} {
   set_interface_property reconfig_reset EXPORT_OF phy_glue.reconfig_reset
 
   if {$ext_device_clk_en} {
-    add_instance ext_device_clock altera_clock_bridge
+    add_instance ext_device_clock altera_clock_bridge 19.1
     set_instance_parameter_value ext_device_clock {EXPLICIT_CLOCK_RATE} [expr $link_clk_frequency*1000000]
     set_instance_parameter_value ext_device_clock {NUM_CLOCK_OUTPUTS} 1
     add_interface device_clk clock sink
@@ -215,6 +219,7 @@ proc jesd204_phy_composition_callback {} {
       add_connection phy_glue.phy_tx_polinv native_phy.tx_polinv
     }
   } else {
+
     add_interface ref_clk clock sink
     set_interface_property ref_clk EXPORT_OF phy_glue.rx_cdr_refclk0
 
@@ -250,7 +255,7 @@ proc jesd204_phy_composition_callback {} {
 
     if {$tx} {
       if {$soft_pcs} {
-        add_instance soft_pcs_${i} jesd204_soft_pcs_tx
+        add_instance soft_pcs_${i} jesd204_soft_pcs_tx 1.0
         set_instance_parameter_value soft_pcs_${i} INVERT_OUTPUTS \
           [expr ($lane_invert >> $i) & 1]
         if {$ext_device_clk_en} {
@@ -267,7 +272,7 @@ proc jesd204_phy_composition_callback {} {
       }
     } else {
       if {$soft_pcs} {
-        add_instance soft_pcs_${i} jesd204_soft_pcs_rx
+        add_instance soft_pcs_${i} jesd204_soft_pcs_rx 1.0
         set_instance_parameter_value soft_pcs_${i} REGISTER_INPUTS $register_inputs
         set_instance_parameter_value soft_pcs_${i} INVERT_INPUTS \
           [expr ($lane_invert >> $i) & 1]
