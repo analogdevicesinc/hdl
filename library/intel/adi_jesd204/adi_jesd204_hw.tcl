@@ -42,11 +42,9 @@
 # is copyright © 2016-2017, Analog Devices, Inc.”
 #
 
-package require qsys
+package require qsys 14.0
 source ../../scripts/adi_env.tcl
 source ../../scripts/adi_ip_intel.tcl
-
-set version 19.1
 
 #
 # Wrapper module that instantiates and connects all the components required to
@@ -142,13 +140,12 @@ ad_ip_parameter TPL_DATA_PATH_WIDTH INTEGER 4 false { \
 }
 
 proc create_phy_reset_control {tx num_of_lanes sysclk_frequency} {
-  global version
 
   set device [get_parameter_value DEVICE_FAMILY]
 
   if {[string equal $device "Arria 10"]} {
 
-    add_instance phy_reset_control altera_xcvr_reset_control $version
+    add_instance phy_reset_control altera_xcvr_reset_control
     set_instance_property phy_reset_control SUPPRESS_ALL_WARNINGS true
     set_instance_parameter_value phy_reset_control {SYNCHRONIZE_RESET} {0}
     set_instance_parameter_value phy_reset_control {CHANNELS} $num_of_lanes
@@ -177,7 +174,7 @@ proc create_phy_reset_control {tx num_of_lanes sysclk_frequency} {
 
   } elseif {[string equal $device "Stratix 10"]} {
 
-    add_instance phy_reset_control altera_xcvr_reset_control_s10 $version
+    add_instance phy_reset_control altera_xcvr_reset_control_s10
     set_instance_parameter_value phy_reset_control {CHANNELS} $num_of_lanes
     set_instance_parameter_value phy_reset_control {SYS_CLK_IN_MHZ} $sysclk_frequency
     set_instance_parameter_value phy_reset_control {TX_ENABLE} $tx
@@ -212,12 +209,10 @@ proc create_phy_reset_control {tx num_of_lanes sysclk_frequency} {
 
 proc create_lane_pll {id tx_or_rx_n pllclk_frequency refclk_frequency num_lanes bonding_clocks_en} {
 
-  global version
-
   set device_family [get_parameter_value "DEVICE_FAMILY"]
 
   if {$device_family == "Arria 10"} {
-    add_instance lane_pll altera_xcvr_atx_pll_a10 $version
+    add_instance lane_pll altera_xcvr_atx_pll_a10
     if {$num_lanes > 6} {
       set_instance_parameter_value lane_pll enable_mcgb {true}
       if {$bonding_clocks_en} {
@@ -229,7 +224,7 @@ proc create_lane_pll {id tx_or_rx_n pllclk_frequency refclk_frequency num_lanes 
           set_instance_parameter_value lane_pll enable_hfreq_clk {true}
       }
 
-      add_instance glue adi_jesd204_glue 1.0
+      add_instance glue adi_jesd204_glue
       add_connection phy_reset_control.pll_powerdown glue.in_pll_powerdown
       add_connection glue.out_pll_powerdown lane_pll.pll_powerdown
       add_connection glue.out_mcgb_rst lane_pll.mcgb_rst
@@ -238,11 +233,11 @@ proc create_lane_pll {id tx_or_rx_n pllclk_frequency refclk_frequency num_lanes 
     }
     set_instance_parameter_value lane_pll {enable_pll_reconfig} {1}
   } elseif {$device_family == "Stratix 10"} {
-    add_instance lane_pll altera_xcvr_atx_pll_s10_htile $version
+    add_instance lane_pll altera_xcvr_atx_pll_s10_htile
     set_instance_parameter_value lane_pll {rcfg_enable} {1}
 
     ## tie pll_select to GND
-    add_instance glue adi_jesd204_glue 1.0
+    add_instance glue adi_jesd204_glue
     set_instance_parameter_value glue {IN_PLL_POWERDOWN_EN} {0}
     if {$tx_or_rx_n} {
       add_connection glue.out_pll_select_gnd phy_reset_control.pll_select
@@ -338,8 +333,6 @@ proc jesd204_validate {{quiet false}} {
 
 proc jesd204_compose {} {
 
-  global version
-
   set id [get_parameter_value "ID"]
   set lane_rate [get_parameter_value "LANE_RATE"]
   set tx_or_rx_n [get_parameter_value "TX_OR_RX_N"]
@@ -366,7 +359,7 @@ proc jesd204_compose {} {
     return
   }
 
-  add_instance sys_clock clock_source 19.3
+  add_instance sys_clock clock_source
   set_instance_parameter_value sys_clock {clockFrequency} [expr $sysclk_frequency*1000000]
   set_instance_parameter_value sys_clock {resetSynchronousEdges} {deassert}
   add_interface sys_clk clock sink
@@ -374,7 +367,7 @@ proc jesd204_compose {} {
   add_interface sys_resetn reset sink
   set_interface_property sys_resetn EXPORT_OF sys_clock.clk_in_reset
 
-  add_instance ref_clock altera_clock_bridge $version
+  add_instance ref_clock altera_clock_bridge
   set_instance_parameter_value ref_clock {EXPLICIT_CLOCK_RATE} [expr $refclk_frequency*1000000]
   set_instance_parameter_value ref_clock {NUM_CLOCK_OUTPUTS} 2
   add_interface ref_clk clock sink
@@ -385,11 +378,11 @@ proc jesd204_compose {} {
   ## link clock configuration (also known as device clock, which will be used
   ## by the upper layers for the data path, it can come from the PCS or external)
 
-  add_instance link_clock altera_clock_bridge $version
+  add_instance link_clock altera_clock_bridge
   set_instance_parameter_value link_clock {EXPLICIT_CLOCK_RATE} [expr $linkclk_frequency*1000000]
   set_instance_parameter_value link_clock {NUM_CLOCK_OUTPUTS} 2
 
-  add_instance link_reset altera_reset_bridge $version
+  add_instance link_reset altera_reset_bridge
   set_instance_parameter_value link_reset {NUM_RESET_OUTPUTS} 2
 
   if {$dual_clk_mode} {
@@ -416,7 +409,7 @@ proc jesd204_compose {} {
 
   if {$device_family == "Arria 10"} {
 
-    add_instance link_pll altera_xcvr_fpll_a10 $version
+    add_instance link_pll altera_xcvr_fpll_a10
     set_instance_parameter_value link_pll {gui_fpll_mode} {0}
     set_instance_parameter_value link_pll {gui_reference_clock_frequency} $refclk_frequency
     set_instance_parameter_value link_pll {gui_number_of_output_clocks} 2
@@ -428,7 +421,7 @@ proc jesd204_compose {} {
 
     set outclk_name "outclk0"
 
-    add_instance link_pll_reset_control altera_xcvr_reset_control $version
+    add_instance link_pll_reset_control altera_xcvr_reset_control
     set_instance_parameter_value link_pll_reset_control {SYNCHRONIZE_RESET} {0}
     set_instance_parameter_value link_pll_reset_control {SYS_CLK_IN_MHZ} $sysclk_frequency
     set_instance_parameter_value link_pll_reset_control {TX_PLL_ENABLE} {1}
@@ -443,7 +436,7 @@ proc jesd204_compose {} {
   } elseif {$device_family == "Stratix 10"} {
 
     send_message info "Instantiate a fpll_s10_htile for link_pll."
-    add_instance link_pll altera_xcvr_fpll_s10_htile 19.1.1
+    add_instance link_pll altera_xcvr_fpll_s10_htile
     ## Primary Use is Core mode
     set_instance_parameter_value link_pll {set_primary_use} 0
     ## Basic Mode
@@ -479,7 +472,7 @@ proc jesd204_compose {} {
   add_connection sys_clock.clk_reset link_pll.reconfig_reset0
   add_connection sys_clock.clk link_pll.reconfig_clk0
 
-  add_instance axi_xcvr axi_adxcvr 1.0
+  add_instance axi_xcvr axi_adxcvr
   set_instance_parameter_value axi_xcvr {ID} $id
   set_instance_parameter_value axi_xcvr {TX_OR_RX_N} $tx_or_rx_n
   set_instance_parameter_value axi_xcvr {NUM_OF_LANES} $num_of_lanes
@@ -500,7 +493,7 @@ proc jesd204_compose {} {
 
   create_phy_reset_control $tx_or_rx_n $num_of_lanes $sysclk_frequency
 
-  add_instance phy jesd204_phy 1.0
+  add_instance phy jesd204_phy
   set_instance_parameter_value phy ID $id
   set_instance_parameter_value phy DEVICE $device_family
   set_instance_parameter_value phy SOFT_PCS $soft_pcs
@@ -519,7 +512,7 @@ proc jesd204_compose {} {
   ## connect the required device clock
 
   if {$ext_device_clk_en} {
-    add_instance ext_device_clock altera_clock_bridge $version
+    add_instance ext_device_clock altera_clock_bridge
     set_instance_parameter_value ext_device_clock {EXPLICIT_CLOCK_RATE} [expr $deviceclk_frequency*1000000]
     set_instance_parameter_value ext_device_clock {NUM_CLOCK_OUTPUTS} 2
     add_interface device_clk clock sink
@@ -556,13 +549,13 @@ proc jesd204_compose {} {
     add_connection ref_clock.out_clk phy.ref_clk
   }
 
-  add_instance axi_jesd204_${tx_rx} axi_jesd204_${tx_rx} 1.0
+  add_instance axi_jesd204_${tx_rx} axi_jesd204_${tx_rx}
   set_instance_parameter_value axi_jesd204_${tx_rx} {NUM_LANES} $num_of_lanes
 
   add_connection sys_clock.clk axi_jesd204_${tx_rx}.s_axi_clock
   add_connection sys_clock.clk_reset axi_jesd204_${tx_rx}.s_axi_reset
 
-  add_instance jesd204_${tx_rx} jesd204_${tx_rx} 1.0
+  add_instance jesd204_${tx_rx} jesd204_${tx_rx}
   set_instance_parameter_value jesd204_${tx_rx} {NUM_LANES} $num_of_lanes
   set_instance_parameter_value jesd204_${tx_rx} {ASYNC_CLK} $dual_clk_mode
   set_instance_parameter_value jesd204_${tx_rx} {TPL_DATA_PATH_WIDTH} $tpl_data_path_width

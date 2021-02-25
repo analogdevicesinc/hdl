@@ -1,5 +1,5 @@
 
-package require qsys
+package require qsys 14.0
 
 set_module_property NAME avl_adxcfg
 set_module_property DESCRIPTION "Avalon ADXCFG Core"

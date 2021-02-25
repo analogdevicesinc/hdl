@@ -42,7 +42,7 @@
 # is copyright © 2016-2017, Analog Devices, Inc.”
 #
 
-package require qsys
+package require qsys 14.0
 
 source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_intel.tcl
