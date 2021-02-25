@@ -63,10 +63,10 @@ set dac_fifo_address_width [expr int(ceil(log(($dac_fifo_samples_per_converter*$
 
 # JESD204B clock bridges
 
-add_instance tx_device_clk altera_clock_bridge 19.1
+add_instance tx_device_clk altera_clock_bridge
 set_instance_parameter_value tx_device_clk {EXPLICIT_CLOCK_RATE} {250000000}
 
-add_instance rx_device_clk altera_clock_bridge 19.1
+add_instance rx_device_clk altera_clock_bridge
 set_instance_parameter_value rx_device_clk {EXPLICIT_CLOCK_RATE} {250000000}
 
 #
