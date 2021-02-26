@@ -207,9 +207,9 @@ assign src_data_request_id = src_dest_id;
 
 always @(*) begin
   if (src_last_beat == 1'b1) begin
-    src_id_next <= inc_id(src_id);
+    src_id_next = inc_id(src_id);
   end else begin
-    src_id_next <= src_id;
+    src_id_next = src_id;
   end
 end
 
