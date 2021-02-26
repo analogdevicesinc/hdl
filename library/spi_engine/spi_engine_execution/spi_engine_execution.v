@@ -500,7 +500,7 @@ if (ECHO_SCLK == 1) begin : g_echo_sclk_miso_latch
                  last_sdi_bit_m[3] == 1'b0 &&
                  last_sdi_bit_m[2] == 1'b1) begin
       sdi_data_valid <= 1'b1;
-    end else if (sdi_data_ready == 1'b1 && sdi_data_valid == 1'b1) begin
+    end else if (sdi_data_ready == 1'b1) begin
       sdi_data_valid <= 1'b0;
     end
   end
