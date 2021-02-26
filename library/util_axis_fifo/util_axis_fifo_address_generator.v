@@ -96,7 +96,7 @@ wire [ADDRESS_WIDTH-1:0] m_axis_level_s;
 // Write address counter
 //------------------------------------------------------------------------------
 
-assign s_axis_write_s = s_axis_ready && s_axis_valid;
+assign s_axis_write_s = s_axis_ready && s_axis_valid && ~s_axis_full;
 always @(posedge s_axis_aclk)
 begin
   if (!s_axis_aresetn)
@@ -110,7 +110,7 @@ end
 // Read address counter
 //------------------------------------------------------------------------------
 
-assign m_axis_read_s = m_axis_ready && m_axis_valid;
+assign m_axis_read_s = m_axis_ready && m_axis_valid && ~m_axis_empty;
 always @(posedge m_axis_aclk)
 begin
   if (!m_axis_aresetn)

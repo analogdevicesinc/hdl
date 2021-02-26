@@ -40,13 +40,16 @@ module util_axis_fifo #(
   parameter ASYNC_CLK = 1,
   parameter M_AXIS_REGISTERED = 1,
   parameter [ADDRESS_WIDTH-1:0] ALMOST_EMPTY_THRESHOLD = 16,
-  parameter [ADDRESS_WIDTH-1:0] ALMOST_FULL_THRESHOLD = 16
+  parameter [ADDRESS_WIDTH-1:0] ALMOST_FULL_THRESHOLD = 16,
+  parameter TLAST_EN = 0,
+  parameter TKEEP_EN = 0
 ) (
   input m_axis_aclk,
   input m_axis_aresetn,
   input m_axis_ready,
   output m_axis_valid,
   output [DATA_WIDTH-1:0] m_axis_data,
+  output [DATA_WIDTH/8-1:0] m_axis_tkeep,
   output m_axis_tlast,
   output [ADDRESS_WIDTH-1:0] m_axis_level,
   output m_axis_empty,
@@ -57,18 +60,26 @@ module util_axis_fifo #(
   output s_axis_ready,
   input s_axis_valid,
   input [DATA_WIDTH-1:0] s_axis_data,
+  input [DATA_WIDTH/8-1:0] s_axis_tkeep,
   input s_axis_tlast,
   output [ADDRESS_WIDTH-1:0] s_axis_room,
   output s_axis_full,
   output s_axis_almost_full
 );
 
+localparam MEM_WORD = (TKEEP_EN & TLAST_EN) ? (DATA_WIDTH+DATA_WIDTH/8+1) :
+                      (TKEEP_EN)            ? (DATA_WIDTH+DATA_WIDTH/8)   :
+                      (TLAST_EN)            ? (DATA_WIDTH+1)              :
+                                              (DATA_WIDTH);
+
+wire [MEM_WORD-1:0] s_axis_data_int_s;
+wire [MEM_WORD-1:0] m_axis_data_int_s;
+
 generate if (ADDRESS_WIDTH == 0) begin : zerodeep /* it's not a real FIFO, just a 1 stage pipeline */
 
   if (ASYNC_CLK) begin
 
       (* KEEP = "yes" *) reg [DATA_WIDTH-1:0] cdc_sync_fifo_ram;
-      reg axis_tlast_d;
       reg s_axis_waddr = 1'b0;
       reg m_axis_raddr = 1'b0;
 
@@ -107,7 +118,6 @@ generate if (ADDRESS_WIDTH == 0) begin : zerodeep /* it's not a real FIFO, just 
       always @(posedge s_axis_aclk) begin
         if (s_axis_ready == 1'b1 && s_axis_valid == 1'b1)
           cdc_sync_fifo_ram <= s_axis_data;
-          axis_tlast_d <= s_axis_tlast;
       end
 
       always @(posedge s_axis_aclk) begin
@@ -128,31 +138,55 @@ generate if (ADDRESS_WIDTH == 0) begin : zerodeep /* it's not a real FIFO, just 
       end
 
       assign m_axis_data = cdc_sync_fifo_ram;
-      assign m_axis_tlast = axis_tlast_d;
 
-  end else begin /* !ASYNC_CLK */
+      // TLAST support
+      if (TLAST_EN) begin
+
+        reg axis_tlast_d;
+
+        always @(posedge s_axis_aclk) begin
+          if (s_axis_ready == 1'b1 && s_axis_valid == 1'b1)
+            axis_tlast_d <= s_axis_tlast;
+        end
+        assign m_axis_tlast = axis_tlast_d;
+
+      end
+
+      // TKEEP support
+      if (TKEEP_EN) begin
+
+        reg axis_tkeep_d;
+
+        always @(posedge s_axis_aclk) begin
+          if (s_axis_ready == 1'b1 && s_axis_valid == 1'b1)
+            axis_tkeep_d <= s_axis_tkeep;
+        end
+        assign m_axis_tkeep = axis_tkeep_d;
+
+      end
+
+
+  end /* zerodeep */
+  else
+  begin /* !ASYNC_CLK */
 
     // Note: In this mode, the write and read interface must have a symmetric
     // aspect ratio
     reg [DATA_WIDTH-1:0] axis_data_d;
     reg                  axis_valid_d;
-    reg                  axis_tlast_d;
 
     always @(posedge s_axis_aclk) begin
       if (!s_axis_aresetn) begin
         axis_data_d <= {DATA_WIDTH{1'b0}};
         axis_valid_d <= 1'b0;
-        axis_tlast_d <= 1'b0;
       end else if (s_axis_ready) begin
         axis_data_d <= s_axis_data;
         axis_valid_d <= s_axis_valid;
-        axis_tlast_d <= s_axis_tlast;
       end
     end
 
     assign m_axis_data = axis_data_d;
     assign m_axis_valid = axis_valid_d;
-    assign m_axis_tlast = axis_tlast_d;
     assign s_axis_ready = m_axis_ready | ~m_axis_valid;
     assign m_axis_empty = 1'b0;
     assign m_axis_almost_empty = 1'b0;
@@ -161,7 +195,36 @@ generate if (ADDRESS_WIDTH == 0) begin : zerodeep /* it's not a real FIFO, just 
     assign s_axis_almost_full  = 1'b0;
     assign s_axis_room  = 1'b0;
 
-  end
+    // TLAST support
+    if (TLAST_EN) begin
+      reg  axis_tlast_d;
+
+      always @(posedge s_axis_aclk) begin
+        if (!s_axis_aresetn) begin
+          axis_tlast_d <= 1'b0;
+        end else if (s_axis_ready) begin
+          axis_tlast_d <= s_axis_tlast;
+        end
+      end
+      assign m_axis_tlast = axis_tlast_d;
+    end
+
+    // TKEEP support
+    if (TKEEP_EN) begin
+      reg  axis_tkeep_d;
+
+      always @(posedge s_axis_aclk) begin
+        if (!s_axis_aresetn) begin
+          axis_tkeep_d <= 1'b0;
+        end else if (s_axis_ready) begin
+          axis_tkeep_d <= s_axis_tkeep;
+        end
+      end
+      assign m_axis_tkeep = axis_tkeep_d;
+    
+    end
+   
+   end /* !ASYNC_CLK */
 
 end else begin : fifo /* ADDRESS_WIDTH != 0 - this is a real FIFO implementation */
 
@@ -214,6 +277,25 @@ end else begin : fifo /* ADDRESS_WIDTH != 0 - this is a real FIFO implementation
     .s_axis_room(s_axis_room)
   );
 
+  // TLAST and TKEEP support
+  if (TLAST_EN & TKEEP_EN) begin
+    assign s_axis_data_int_s = {s_axis_tkeep, s_axis_tlast, s_axis_data};
+    assign m_axis_tkeep = m_axis_data_int_s[MEM_WORD-1-:DATA_WIDTH/8];
+    assign m_axis_tlast = m_axis_data_int_s[DATA_WIDTH];
+    assign m_axis_data = m_axis_data_int_s[DATA_WIDTH-1:0];
+  end else if (TKEEP_EN) begin
+    assign s_axis_data_int_s = {s_axis_tkeep, s_axis_data};
+    assign m_axis_tkeep = m_axis_data_int_s[MEM_WORD-1-:DATA_WIDTH/8];
+    assign m_axis_data = m_axis_data_int_s[DATA_WIDTH-1:0];
+  end else if (TLAST_EN) begin
+    assign s_axis_data_int_s = {s_axis_tlast, s_axis_data};
+    assign m_axis_tlast = m_axis_data_int_s[DATA_WIDTH];
+    assign m_axis_data = m_axis_data_int_s[DATA_WIDTH-1:0];
+  end else begin
+    assign s_axis_data_int_s = {s_axis_data};
+    assign m_axis_data = m_axis_data_int_s[DATA_WIDTH-1:0];
+  end
+
   if (ASYNC_CLK == 1) begin : async_clocks /* Asynchronous WRITE/READ clocks */
 
     // The assumption is that in this mode the M_AXIS_REGISTERED is 1
@@ -221,17 +303,17 @@ end else begin : fifo /* ADDRESS_WIDTH != 0 - this is a real FIFO implementation
     // regardless of the requested size to make sure we threat the
     // clock crossing correctly
     ad_mem #(
-      .DATA_WIDTH (DATA_WIDTH+1),
+      .DATA_WIDTH (MEM_WORD),
       .ADDRESS_WIDTH (ADDRESS_WIDTH))
     i_mem (
       .clka(s_axis_aclk),
       .wea(s_mem_write),
       .addra(s_axis_waddr),
-      .dina({s_axis_tlast, s_axis_data}),
+      .dina(s_axis_data_int_s),
       .clkb(m_axis_aclk),
       .reb(m_mem_read),
       .addrb(m_axis_raddr),
-      .doutb({m_axis_tlast, m_axis_data})
+      .doutb(m_axis_data_int_s)
     );
 
     assign _m_axis_ready = ~valid || m_axis_ready;
@@ -239,18 +321,18 @@ end else begin : fifo /* ADDRESS_WIDTH != 0 - this is a real FIFO implementation
 
   end else begin : sync_clocks /* Synchronous WRITE/READ clocks */
 
-    reg [DATA_WIDTH:0] ram[0:2**ADDRESS_WIDTH-1];
+    reg [MEM_WORD-1:0] ram[0:2**ADDRESS_WIDTH-1];
 
     // When the clocks are synchronous use behavioral modeling for the SDP RAM
     // Let the synthesizer decide what to infer (distributed or block RAM)
     always @(posedge s_axis_aclk) begin
       if (s_mem_write)
-        ram[s_axis_waddr] <= {s_axis_tlast, s_axis_data};
+        ram[s_axis_waddr] <= s_axis_data_int_s;
     end
 
     if (M_AXIS_REGISTERED == 1) begin
 
-      reg [DATA_WIDTH:0] data;
+      reg [MEM_WORD-1:0] data;
 
       always @(posedge m_axis_aclk) begin
         if (m_mem_read)
@@ -258,15 +340,14 @@ end else begin : fifo /* ADDRESS_WIDTH != 0 - this is a real FIFO implementation
       end
 
       assign _m_axis_ready = ~valid || m_axis_ready;
-      assign m_axis_data = data[DATA_WIDTH-1:0];
-      assign m_axis_tlast = data[DATA_WIDTH];
+      assign m_axis_data_int_s = data;
       assign m_axis_valid = valid;
 
     end else begin
 
       assign _m_axis_ready = m_axis_ready;
       assign m_axis_valid = _m_axis_valid;
-      assign {m_axis_tlast, m_axis_data} = ram[m_axis_raddr];
+      assign m_axis_data_int_s = ram[m_axis_raddr];
 
     end
   end
