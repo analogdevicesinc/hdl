@@ -79,7 +79,8 @@ set fpga_family_list { \
         { GX        2 } \
         { GT        3 } \
         { GZ        4 } \
-        { "SE Base" 5 }}
+        { "SE Base" 5 } \
+        { TX        6 }}
 
        #technology 5 generation
        # family Arria SX
