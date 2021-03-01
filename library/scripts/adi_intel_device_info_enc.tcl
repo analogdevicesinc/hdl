@@ -51,7 +51,8 @@ set fpga_family_list { \
         { GT        3 } \
         { GZ        4 } \
         { "SE Base" 5 } \
-        { "I-Series with HPS only" 6}}
+        { "I-Series with HPS only" 6} \
+        { TX        6 }}
 
        #technology 5 generation
        # family Arria SX
