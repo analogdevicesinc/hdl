@@ -35,6 +35,7 @@ module ad_ip_jesd204_tpl_dac #(
   parameter CONVERTER_RESOLUTION = 16, // JESD_N
   parameter BITS_PER_SAMPLE = 16,      // JESD_NP
   parameter DMA_BITS_PER_SAMPLE = 16,
+  parameter PADDING_TO_MSB_LSB_N = 0,
   parameter OCTETS_PER_BEAT = 4,
   parameter DDS_TYPE = 1,
   parameter DDS_CORDIC_DW = 16,
@@ -135,6 +136,7 @@ module ad_ip_jesd204_tpl_dac #(
     .DEV_PACKAGE (DEV_PACKAGE),
     .NUM_CHANNELS (NUM_CHANNELS),
     .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
+    .PADDING_TO_MSB_LSB_N (PADDING_TO_MSB_LSB_N),
     .NUM_PROFILES(1)
   ) i_regmap (
     .s_axi_aclk (s_axi_aclk),
@@ -248,11 +250,15 @@ module ad_ip_jesd204_tpl_dac #(
 
   );
 
-  // Drop DMA padding bits from the MSB
+  // Drop DMA padding bits from the LSB or MSB based on configuration
   integer i;
   always @(*) begin
     for (i=0;i<NUM_CHANNELS*DATA_PATH_WIDTH;i=i+1) begin
-      dac_ddata_cr[i*BITS_PER_SAMPLE +: BITS_PER_SAMPLE] = dac_ddata[i*DMA_BITS_PER_SAMPLE +: BITS_PER_SAMPLE];
+      if (PADDING_TO_MSB_LSB_N==1) begin
+        dac_ddata_cr[i*BITS_PER_SAMPLE +: BITS_PER_SAMPLE] = dac_ddata[i*DMA_BITS_PER_SAMPLE +: BITS_PER_SAMPLE];
+      end else begin
+        dac_ddata_cr[i*BITS_PER_SAMPLE +: BITS_PER_SAMPLE] = dac_ddata[((i+1)*DMA_BITS_PER_SAMPLE)-1 -: BITS_PER_SAMPLE];
+      end
     end
   end
 
