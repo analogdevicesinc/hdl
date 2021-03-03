@@ -116,6 +116,7 @@ clean:
 	$(MAKE) -C util_mfifo clean
 	$(MAKE) -C util_pack/util_cpack2 clean
 	$(MAKE) -C util_pack/util_upack2 clean
+	$(MAKE) -C util_pad clean
 	$(MAKE) -C util_pulse_gen clean
 	$(MAKE) -C util_rfifo clean
 	$(MAKE) -C util_sigma_delta_spi clean
@@ -239,6 +240,7 @@ lib:
 	$(MAKE) -C util_mfifo
 	$(MAKE) -C util_pack/util_cpack2
 	$(MAKE) -C util_pack/util_upack2
+	$(MAKE) -C util_pad
 	$(MAKE) -C util_pulse_gen
 	$(MAKE) -C util_rfifo
 	$(MAKE) -C util_sigma_delta_spi
