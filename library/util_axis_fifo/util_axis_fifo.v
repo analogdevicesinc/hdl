@@ -42,7 +42,8 @@ module util_axis_fifo #(
   parameter [ADDRESS_WIDTH-1:0] ALMOST_EMPTY_THRESHOLD = 16,
   parameter [ADDRESS_WIDTH-1:0] ALMOST_FULL_THRESHOLD = 16,
   parameter TLAST_EN = 0,
-  parameter TKEEP_EN = 0
+  parameter TKEEP_EN = 0,
+  parameter REMOVE_NULL_BEAT_EN = 0
 ) (
   input m_axis_aclk,
   input m_axis_aresetn,
@@ -221,9 +222,9 @@ generate if (ADDRESS_WIDTH == 0) begin : zerodeep /* it's not a real FIFO, just 
         end
       end
       assign m_axis_tkeep = axis_tkeep_d;
-    
+
     end
-   
+
    end /* !ASYNC_CLK */
 
 end else begin : fifo /* ADDRESS_WIDTH != 0 - this is a real FIFO implementation */
@@ -250,7 +251,12 @@ end else begin : fifo /* ADDRESS_WIDTH != 0 - this is a real FIFO implementation
     end
   end
 
-  assign s_mem_write = s_axis_ready & s_axis_valid;
+  if (REMOVE_NULL_BEAT_EN) begin
+    // remove NULL bytes from the stream - NOTE: TKEEP is all-LOW or all-HIGH
+    assign s_mem_write = s_axis_ready & s_axis_valid & (&s_axis_tkeep);
+  end else begin
+    assign s_mem_write = s_axis_ready & s_axis_valid;
+  end
   assign m_mem_read = (~valid || m_axis_ready) && _m_axis_valid;
 
   util_axis_fifo_address_generator #(
