@@ -147,7 +147,7 @@ module axi_dac_interpolate #(
 
   wire              trigger_active;
   wire              trigger;
-  wire              ext_trigger;
+  wire    [ 1:0]    ext_trigger;
 
   wire              underflow_a;
   wire              underflow_b;
@@ -175,15 +175,15 @@ module axi_dac_interpolate #(
   assign en_trigger_la    = trigger_config[19];
 
   assign trigger_active = |trigger_config[19:16];
-  assign trigger = (ext_trigger & en_trigger_pins) |
+  assign trigger = (|(ext_trigger & en_trigger_pins)) |
                    (trigger_adc_m2 & en_trigger_adc) |
                    (trigger_la_m2 & en_trigger_la);
 
-  assign ext_trigger = |(any_edge_trigger |
-                        rise_edge_trigger |
-                        fall_edge_trigger |
-                        high_level_trigger |
-                        low_level_trigger);
+  assign ext_trigger = any_edge_trigger |
+                       rise_edge_trigger |
+                       fall_edge_trigger |
+                       high_level_trigger |
+                       low_level_trigger;
 
   // sync
   always @(posedge dac_clk) begin
