@@ -52,6 +52,7 @@ module axi_dac_interpolate_filter #(
   output                dac_valid_out,
   input                 sync_stop_channels,
   output                underflow,
+  input                 last_sample,
 
   input       [ 2:0]    filter_mask,
   input       [31:0]    interpolation_ratio,
@@ -63,6 +64,7 @@ module axi_dac_interpolate_filter #(
   input                 trigger_active,
   input                 en_start_trigger,
   input                 en_stop_trigger,
+  input                 rearme_after_buffer,
   input                 dma_valid,
   input                 dma_valid_adjacent
 );
@@ -173,6 +175,8 @@ module axi_dac_interpolate_filter #(
     end
   end
 
+  assign rearme_trigger = last_sample & rearme_after_buffer;
+
   always @(posedge dac_clk) begin
     if (dma_transfer_suspend == 1'b1 || rearme_trigger == 1'b1) begin
       transfer <= 1'b0;
@@ -180,8 +184,6 @@ module axi_dac_interpolate_filter #(
       transfer <= trigger ? 1'b0 : transfer;
     end else begin
       transfer <= trigger ? 1'b1 : transfer | !(trigger_active & en_start_trigger);
-    end else begin
-      transfer <= 1'b0;
     end
 
     if (start_sync_channels == 1'b0) begin
