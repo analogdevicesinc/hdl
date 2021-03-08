@@ -478,7 +478,7 @@ proc adi_project_synth {project_name prcfg_name hdl_files {xdc_files ""}} {
     read_verilog $hdl_files
     read_xdc $xdc_files
 
-    synth_design -mode default -top system_top -part $p_device > $p_prefix.synth.rds
+    synth_design -flatten_hierarchy none -top system_top -part $p_device > $p_prefix.synth.rds
     write_checkpoint -force $p_prefix.synth.dcp
     close_project
 
