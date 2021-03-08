@@ -77,7 +77,7 @@ module axi_dac_interpolate_reg(
   reg     [1:0]   up_config = 2'h0;
   reg     [15:0]  up_correction_coefficient_a = 16'h0;
   reg     [15:0]  up_correction_coefficient_b = 16'h0;
-  reg     [19:0]  up_trigger_config = 20'h0;
+  reg     [19:0]  up_trigger_config = 20'h4000;
   reg     [ 1:0]  up_lsample_hold_config = 2'h0;
 
   wire    [ 1:0]  flags;
@@ -97,7 +97,7 @@ module axi_dac_interpolate_reg(
       up_config <= 'd0;
       up_correction_coefficient_a <= 'd0;
       up_correction_coefficient_b <= 'd0;
-      up_trigger_config <= 'd0;
+      up_trigger_config <= 20'h4000;
       up_lsample_hold_config <= 'h0;
     end else begin
       up_wack <= up_wreq;
