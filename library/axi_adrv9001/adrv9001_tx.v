@@ -64,6 +64,7 @@ module adrv9001_tx #(
   input                   rx_ssi_rst,
 
   // internal resets and clocks
+  output     [31:0]       dac_clk_ratio,
 
   input                   dac_rst,
   output                  dac_clk_div,
@@ -239,5 +240,7 @@ module adrv9001_tx #(
   end
 
   endgenerate
+
+  assign dac_clk_ratio = 4;
 
 endmodule

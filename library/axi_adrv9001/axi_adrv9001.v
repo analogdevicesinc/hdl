@@ -253,6 +253,8 @@ module axi_adrv9001 #(
   wire                              delay_rx2_rst;
   wire                              delay_rx1_locked;
   wire                              delay_rx2_locked;
+  wire                       [31:0] adc_clk_ratio;
+  wire                       [31:0] dac_clk_ratio;
 
   axi_adrv9001_if #(
     .CMOS_LVDS_N (CMOS_LVDS_N),
@@ -334,6 +336,7 @@ module axi_adrv9001 #(
     //
 
     // ADC interface
+    .adc_clk_ratio (adc_clk_ratio),
     .rx1_clk (adc_1_clk),
     .rx1_rst (adc_1_rst),
     .rx1_data_valid (rx1_data_valid),
@@ -353,6 +356,7 @@ module axi_adrv9001 #(
     .rx2_sdr_ddr_n (rx2_sdr_ddr_n),
 
     // DAC interface
+    .dac_clk_ratio (dac_clk_ratio),
     .tx1_clk (dac_1_clk),
     .tx1_rst (dac_1_rst),
     .tx1_data_valid (tx1_data_valid),
@@ -407,6 +411,8 @@ module axi_adrv9001 #(
     .rx2_single_lane (rx2_single_lane),
     .rx2_sdr_ddr_n (rx2_sdr_ddr_n),
 
+    .adc_clk_ratio (adc_clk_ratio),
+
     //DAC interface
     .tx1_clk (dac_1_clk),
     .tx1_rst (dac_1_rst),
@@ -426,6 +432,7 @@ module axi_adrv9001 #(
     .tx2_single_lane (tx2_single_lane),
     .tx2_sdr_ddr_n (tx2_sdr_ddr_n),
 
+    .dac_clk_ratio (dac_clk_ratio),
     //
     // User layer interface
     //

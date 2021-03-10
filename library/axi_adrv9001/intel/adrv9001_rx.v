@@ -64,6 +64,8 @@ module adrv9001_rx #(
   output      [7:0]       adc_data_strobe,
   output                  adc_valid,
 
+  output     [31:0]       adc_clk_ratio,
+
   // delay interface (for IDELAY macros)
   input                             up_clk,
   input   [NUM_LANES-1:0]           up_adc_dld,
@@ -139,6 +141,7 @@ module adrv9001_rx #(
   // No clock divider, qualifier used instead
   assign adc_clk_div = rx_clk;
   assign adc_clk = rx_clk;
+  assign adc_clk_ratio = 1;
 
   // Drive unused signals
   assign delay_locked = 'b0;
