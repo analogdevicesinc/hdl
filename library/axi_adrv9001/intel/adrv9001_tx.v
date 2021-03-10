@@ -65,6 +65,8 @@ module adrv9001_tx #(
 
   // internal resets and clocks
 
+  output     [31:0]       dac_clk_ratio,
+
   input                   dac_rst,
   output                  dac_clk_div,
 
@@ -131,5 +133,7 @@ module adrv9001_tx #(
   // No clock divider, qualifier used instead
   assign dac_clk_div = tx_clk;
   assign dac_clk = tx_clk;
+
+  assign dac_clk_ratio = 1;
 
 endmodule

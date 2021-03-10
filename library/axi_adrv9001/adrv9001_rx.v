@@ -64,6 +64,8 @@ module adrv9001_rx #(
   output      [7:0]       adc_data_strobe,
   output                  adc_valid,
 
+  output     [31:0]       adc_clk_ratio,
+
   // delay interface (for IDELAY macros)
   input                             up_clk,
   input   [NUM_LANES-1:0]           up_adc_dld,
@@ -270,5 +272,6 @@ module adrv9001_rx #(
 
   assign adc_clk = adc_clk_in_fast;
   assign adc_valid = 1'b1;
+  assign adc_clk_ratio = 4;
 
 endmodule

@@ -108,6 +108,9 @@ module axi_adrv9001_if #(
 
   // upper layer data interface
 
+  output [ 31:0]    adc_clk_ratio,
+  output [ 31:0]    dac_clk_ratio,
+
   output            rx1_clk,
   input             rx1_rst,
   output            rx1_data_valid,
@@ -214,6 +217,8 @@ module axi_adrv9001_if #(
     .adc_data_3 (adc_1_data_3),
     .adc_data_strobe (adc_1_data_strobe),
     .adc_valid (adc_1_valid),
+
+    .adc_clk_ratio (adc_clk_ratio),
 
     .up_clk (up_clk),
     .up_adc_dld (up_rx1_dld),
@@ -345,6 +350,8 @@ module axi_adrv9001_if #(
    .dac_data_strb (dac_1_data_strobe),
    .dac_data_clk (dac_1_data_clk),
    .dac_data_valid (dac_1_data_valid),
+
+   .dac_clk_ratio (dac_clk_ratio),
 
    .mssi_sync (mssi_sync)
   );

@@ -92,6 +92,9 @@ module axi_ad9001_core #(
   output                  tx2_single_lane,
   output                  tx2_sdr_ddr_n,
 
+  input       [ 31:0]     adc_clk_ratio,
+  input       [ 31:0]     dac_clk_ratio,
+
   // DMA interface
   output                  adc_1_valid,
   output                  adc_1_enable_i0,
@@ -311,6 +314,8 @@ module axi_ad9001_core #(
     .adc_sdr_ddr_n (rx1_sdr_ddr_n),
     .adc_r1_mode (rx1_r1_mode),
 
+    .adc_clk_ratio (adc_clk_ratio),
+
     .dac_data_valid_A (tx1_data_valid_A),
     .dac_data_i_A (tx1_data_i_A),
     .dac_data_q_A (tx1_data_q_A),
@@ -370,6 +375,8 @@ module axi_ad9001_core #(
     .adc_single_lane (rx2_single_lane_loc),
     .adc_sdr_ddr_n (rx2_sdr_ddr_n_loc),
 
+    .adc_clk_ratio (adc_clk_ratio),
+
     .dac_data_valid_A (tx2_data_valid_A),
     .dac_data_i_A (tx2_data_i_A),
     .dac_data_q_A (tx2_data_q_A),
@@ -426,6 +433,7 @@ module axi_ad9001_core #(
     .dac_sdr_ddr_n (tx1_sdr_ddr_n),
     .dac_r1_mode (tx1_r1_mode),
     .tdd_tx_valid (tdd_tx1_valid),
+    .dac_clk_ratio (dac_clk_ratio),
     .dac_sync_in (1'b0),
     .dac_sync_out (),
     .dac_enable_i0 (dac_1_enable_i0),
@@ -490,6 +498,7 @@ module axi_ad9001_core #(
     .dac_data_q1 (16'b0),
     .dac_dunf (dac_2_dunf),
     .tdd_tx_valid (tdd_tx2_valid),
+    .dac_clk_ratio (dac_clk_ratio),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq),

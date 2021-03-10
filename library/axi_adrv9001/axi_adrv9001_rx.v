@@ -65,6 +65,8 @@ module axi_adrv9001_rx #(
   output                  adc_sdr_ddr_n,
   output                  adc_r1_mode,
 
+  input       [ 31:0]     adc_clk_ratio,
+
   // dac loopback interface
   input                   dac_data_valid_A,
   input       [ 15:0]     dac_data_i_A,
@@ -354,7 +356,7 @@ end else begin : core_enabled
     .adc_status (1'b1),
     .adc_sync_status (1'd0),
     .adc_status_ovf (adc_dovf),
-    .adc_clk_ratio (32'd1),
+    .adc_clk_ratio (adc_clk_ratio),
     .adc_start_code (),
     .adc_sref_sync (),
     .adc_sync (),

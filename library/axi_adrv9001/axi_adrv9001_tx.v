@@ -71,6 +71,8 @@ module axi_adrv9001_tx #(
 
   input                   tdd_tx_valid,
 
+  input       [ 31:0]     dac_clk_ratio,
+
   // master/slave
   input                   dac_sync_in,
   output                  dac_sync_out,
@@ -378,7 +380,7 @@ end else begin : core_enabled
     .dac_datarate (dac_datarate_s),
     .dac_status (1'b1),
     .dac_status_unf (dac_dunf),
-    .dac_clk_ratio (32'd2),
+    .dac_clk_ratio (dac_clk_ratio),
     .up_dac_ce (),
     .up_pps_rcounter(32'h0),
     .up_pps_status(1'b0),
