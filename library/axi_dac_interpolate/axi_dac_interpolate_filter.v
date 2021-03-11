@@ -134,7 +134,8 @@ module axi_dac_interpolate_filter #(
                              dma_valid & dma_valid_adjacent & !dma_transfer_suspend :
                              dma_valid & !dma_transfer_suspend;
 
-  assign dma_valid_ch = dma_valid_ch_sync;
+  assign dma_valid_ch = dma_valid_ch_sync & transmit_ready;
+
   always @(posedge dac_clk) begin
     if (dac_rst == 1'b1) begin
       dma_valid_m <= 'd0;
