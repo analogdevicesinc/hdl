@@ -150,7 +150,7 @@ up_adc_common #(.ID(ID)) i_up_adc_common (
   .up_drp_ready (1'd0),
   .up_drp_locked (1'd1),
   .up_usr_chanmax_out (),
-  .up_usr_chanmax_in (8'd0),
+  .up_usr_chanmax_in (NUM_OF_CHANNELS),
   .up_adc_gpio_in (32'b0),
   .up_adc_gpio_out (),
   .up_rstn (up_rstn),
