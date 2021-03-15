@@ -34,5 +34,8 @@ LIB_DEPS += util_pack/util_upack2
 LIB_DEPS += xilinx/axi_adcfifo
 LIB_DEPS += xilinx/axi_adxcvr
 LIB_DEPS += xilinx/util_adxcvr
+LIB_DEPS += util_axis_fifo_asym
+LIB_DEPS += data_offload
+LIB_DEPS += util_fifo2axi_bridge
 
 include ../../scripts/project-xilinx.mk
