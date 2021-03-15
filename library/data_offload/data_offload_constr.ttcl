@@ -1,0 +1,177 @@
+<: set ComponentName [getComponentNameString] :>
+<: setOutputDirectory "./" :>
+<: setFileName [ttcl_add $ComponentName "_constr"] :>
+<: setFileExtension ".xdc" :>
+<: setFileProcessingOrder late :>
+<: set mem_type [getBooleanValue "MEM_TYPE"] :>
+<: set tx_enable [getBooleanValue "TX_OR_RXN_PATH"] :>
+
+## for all synchronization registers from util_cdc modules
+set_property ASYNC_REG TRUE \
+  [get_cells -hier {*cdc_sync_stage1_reg*}] \
+  [get_cells -hier {*cdc_sync_stage2_reg*}]
+
+## For RX in case of BRAMs
+<: if { $tx_enable == 0 } { :>
+
+set_false_path \
+  -to [get_pins -hierarchical * -filter {NAME=~*/i_sync_wr_sync/cdc_sync_stage1_reg[*]/D}]
+  
+<: if { !$mem_type } { :>
+
+  set_false_path \
+    -from [get_pins -hierarchical * -filter {NAME=~*adc_init_sync.i_rd_init_ack_sync/in_toggle_d1_reg/C}] \
+    -to [get_pins -hierarchical * -filter {NAME=~*adc_init_sync.i_rd_init_ack_sync/i_sync_out/cdc_sync_stage1_reg[*]/D}]
+
+  set_false_path \
+    -from [get_pins -hierarchical * -filter {NAME=~*adc_init_sync.i_rd_init_ack_sync/out_toggle_d1_reg/C}] \
+    -to [get_pins -hierarchical * -filter {NAME=~*adc_init_sync.i_rd_init_ack_sync/i_sync_in/cdc_sync_stage1_reg[*]/D}]
+
+<: } :>
+
+<: } :>
+
+## For TX in case of BRAMs
+<: if { $tx_enable == 1 } { :>
+
+set_false_path \
+  -to [get_pins -hierarchical * -filter {NAME=~*/i_sync_rd_sync/cdc_sync_stage1_reg[*]/D}]
+  
+<: if { !$mem_type } { :>
+
+  set_false_path \
+    -from [get_pins -hierarchical * -filter {NAME=~*dac_init_sync.i_wr_init_ack_sync/in_toggle_d1_reg/C}] \
+    -to [get_pins -hierarchical * -filter {NAME=~*dac_init_sync.i_wr_init_ack_sync/i_sync_out/cdc_sync_stage1_reg[*]/D}]
+
+  set_false_path \
+    -from [get_pins -hierarchical * -filter {NAME=~*dac_init_sync.i_wr_init_ack_sync/out_toggle_d1_reg/C}] \
+    -to [get_pins -hierarchical * -filter {NAME=~*dac_init_sync.i_wr_init_ack_sync/i_sync_in/cdc_sync_stage1_reg[*]/D}]
+
+<: } :>
+
+<: } :>
+
+## For external DDRx memory
+ 
+<: if { $mem_type == 1 } { :>
+
+  set_false_path \
+    -from [get_cells -hierarchical * -filter {NAME=~*/i_sync_src_transfer_length/cdc_hold_reg[*]}] \
+    -to [get_cells -hierarchical * -filter {NAME=~*/i_sync_src_transfer_length/out_data_reg[*]}]
+  
+  set_false_path \
+    -from [get_pins -hierarchical * -filter {NAME=~*/i_sync_src_transfer_length/in_toggle_d1_reg/C}] \
+    -to [get_pins -hierarchical * -filter {NAME=~*/i_sync_src_transfer_length/i_sync_out/cdc_sync_stage1_reg[*]/D}]
+  
+  set_false_path \
+    -from [get_pins -hierarchical * -filter {NAME=~*/i_sync_src_transfer_length/out_toggle_d1_reg/C}] \
+    -to [get_pins -hierarchical * -filter {NAME=~*/i_sync_src_transfer_length/i_sync_in/cdc_sync_stage1_reg[*]/D}]
+  
+  set_false_path \
+    -to [get_pins -hierarchical * -filter {NAME=~*i_ddr_calib_done_sync/cdc_sync_stage1_reg[0]/D}]
+
+<: } :>
+
+## Common constraints
+
+set_false_path \
+  -from [get_pins -hierarchical * -filter {NAME=~*/i_xfer_status/in_toggle_d1_reg/C}] \
+  -to [get_pins -hierarchical * -filter {NAME=~*/i_xfer_status/i_sync_out/cdc_sync_stage1_reg[*]/D}]
+
+set_false_path \
+  -from [get_pins -hierarchical * -filter {NAME=~*/i_xfer_status/out_toggle_d1_reg/C}] \
+  -to [get_pins -hierarchical * -filter {NAME=~*/i_xfer_status/i_sync_in/cdc_sync_stage1_reg[*]/D}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*/i_xfer_status/cdc_hold_reg[*]}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*/i_xfer_status/out_data_reg[*]}]
+
+set_false_path \
+  -from [get_pins -hierarchical * -filter {NAME=~*/i_dst_fsm_status/in_toggle_d1_reg/C}] \
+  -to [get_pins -hierarchical * -filter {NAME=~*/i_dst_fsm_status/i_sync_out/cdc_sync_stage1_reg[*]/D}]
+
+set_false_path \
+  -from [get_pins -hierarchical * -filter {NAME=~*/i_dst_fsm_status/out_toggle_d1_reg/C}] \
+  -to [get_pins -hierarchical * -filter {NAME=~*/i_dst_fsm_status/i_sync_in/cdc_sync_stage1_reg[*]/D}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*/i_dst_fsm_status/cdc_hold_reg[*]}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*/i_dst_fsm_status/out_data_reg[*]}]
+
+set_false_path \
+  -from [get_pins -hierarchical * -filter {NAME=~*/i_src_fsm_status/in_toggle_d1_reg/C}] \
+  -to [get_pins -hierarchical * -filter {NAME=~*/i_src_fsm_status/i_sync_out/cdc_sync_stage1_reg[*]/D}]
+
+set_false_path \
+  -from [get_pins -hierarchical * -filter {NAME=~*/i_src_fsm_status/out_toggle_d1_reg/C}] \
+  -to [get_pins -hierarchical * -filter {NAME=~*/i_src_fsm_status/i_sync_in/cdc_sync_stage1_reg[*]/D}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*/i_src_fsm_status/cdc_hold_reg[*]}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*/i_src_fsm_status/out_data_reg[*]}]
+
+set_false_path \
+  -from [get_pins -hierarchical * -filter {NAME=~*/i_wr_empty_sync/in_toggle_d1_reg/C}] \
+  -to [get_pins -hierarchical * -filter {NAME=~*/i_wr_empty_sync/i_sync_out/cdc_sync_stage1_reg[*]/D}]
+
+set_false_path \
+  -from [get_pins -hierarchical * -filter {NAME=~*/i_wr_empty_sync/out_toggle_d1_reg/C}] \
+  -to [get_pins -hierarchical * -filter {NAME=~*/i_wr_empty_sync/i_sync_in/cdc_sync_stage1_reg[*]/D}]
+
+set_false_path \
+  -from [get_pins -hierarchical * -filter {NAME=~*/i_rd_full_sync/in_toggle_d1_reg/C}] \
+  -to [get_pins -hierarchical * -filter {NAME=~*/i_rd_full_sync/i_sync_out/cdc_sync_stage1_reg[*]/D}]
+
+set_false_path \
+  -from [get_pins -hierarchical * -filter {NAME=~*/i_rd_full_sync/out_toggle_d1_reg/C}] \
+  -to [get_pins -hierarchical * -filter {NAME=~*/i_rd_full_sync/i_sync_in/cdc_sync_stage1_reg[*]/D}]
+
+set_false_path \
+  -from [get_pins -hierarchical * -filter {NAME=~*/i_rd_wr_last_sync/out_toggle_d1_reg/C}] \
+  -to [get_pins -hierarchical * -filter {NAME=~*/i_rd_wr_last_sync/i_sync_in/cdc_sync_stage1_reg[*]/D}]
+
+set_false_path \
+  -from [get_pins -hierarchical * -filter {NAME=~*/i_rd_wr_last_sync/in_toggle_d1_reg/C}] \
+  -to [get_pins -hierarchical * -filter {NAME=~*/i_rd_wr_last_sync/i_sync_out/cdc_sync_stage1_reg[*]/D}]
+
+set_false_path \
+  -from [get_pins -hierarchical * -filter {NAME=~*i_sync_xfer_control/in_toggle_d1_reg/C}] \
+  -to [get_pins -hierarchical * -filter {NAME=~*i_sync_xfer_control/i_sync_out/cdc_sync_stage1_reg[*]/D}]
+
+set_false_path \
+  -from [get_pins -hierarchical * -filter {NAME=~*i_sync_xfer_control/out_toggle_d1_reg/C}] \
+  -to [get_pins -hierarchical * -filter {NAME=~*i_sync_xfer_control/i_sync_in/cdc_sync_stage1_reg[*]/D}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_sync_xfer_control/cdc_hold_reg[*]}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_sync_xfer_control/out_data_reg[*]}]
+
+
+set_false_path \
+  -to [get_pins -hierarchical * -filter {NAME=~*i_rd_init_req_sync/cdc_sync_stage1_reg[*]/D}]
+
+set_false_path \
+  -to [get_pins -hierarchical * -filter {NAME=~*i_wr_init_req_sync/cdc_sync_stage1_reg[*]/D}]
+
+set_false_path \
+  -to [get_pins -hierarchical * -filter {NAME=~*/i_rd_last_address/cdc_sync_stage1_reg[*]/D}]
+
+set_false_path \
+  -to [get_pins -hierarchical * -filter {NAME=~*/i_rd_last_keep/cdc_sync_stage1_reg[*]/D}]
+
+set_false_path \
+  -to [get_pins -hierarchical * -filter {NAME=~*i_src_xfer_control/cdc_sync_stage1_reg[*]/D}]
+
+set_false_path \
+  -to [get_pins -hierarchical * -filter {NAME=~*i_dst_xfer_control/cdc_sync_stage1_reg[*]/D}]
+
+set_false_path \
+  -to [get_pins -hierarchical * -filter {NAME=~*i_dst_oneshot_sync/cdc_sync_stage1_reg[0]/D}]
+
+## Constraints for the bypass module
+
+set_false_path \
+  -to [get_pins -hierarchical * -filter {NAME=~*i_waddr_sync_gray/cdc_sync_stage1_reg[*]/D}]
+
+set_false_path \
+  -to [get_pins -hierarchical * -filter {NAME=~*i_raddr_sync_gray/cdc_sync_stage1_reg[*]/D}]
