@@ -53,4 +53,6 @@ set_clock_latency -source -early -0.25 [get_clocks rx2_dclk_out]
 set_clock_latency -source -late 0.25 [get_clocks rx1_dclk_out]
 set_clock_latency -source -late 0.25 [get_clocks rx2_dclk_out]
 
+set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_tx_1_phy/i_dac_clk_in_ibuf/O]
+set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_tx_2_phy/i_dac_clk_in_ibuf/O]
 
