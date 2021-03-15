@@ -1,3 +1,6 @@
+source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
+source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
+
 # default ports
 
 create_bd_port -dir O -from 2 -to 0 spi0_csn
@@ -9,7 +12,7 @@ create_bd_port -dir I -from 94 -to 0 gpio_i
 create_bd_port -dir O -from 94 -to 0 gpio_o
 create_bd_port -dir O -from 94 -to 0 gpio_t
 
-create_bd_port -dir I sys_reset
+#create_bd_port -dir I sys_reset
 
 create_bd_port -dir I ref_clk_a
 create_bd_port -dir I ref_clk_b
@@ -183,44 +186,83 @@ set OBS_SAMPLE_WIDTH 16     ; # N/NP
 
 set OBS_SAMPLES_PER_CHANNEL [expr ($OBS_NUM_OF_LANES * 32) / ($OBS_NUM_OF_CONVERTERS * $OBS_SAMPLE_WIDTH)] ;  # L * 32 / (M * N)
 
-create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddr4_rtl:1.0 ddr4_rtl_1
-create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 ddr4_ref_1
+# PL side DDR4 controller with TX data offload instance - 8 GByte
 
-ad_ip_instance ip:ddr4 ddr4_1
-ad_ip_parameter ddr4_1 CONFIG.C0.DDR4_DataWidth {32}
-ad_ip_parameter ddr4_1 CONFIG.C0.DDR4_AxiDataWidth {256}
-ad_ip_parameter ddr4_1 CONFIG.C0.DDR4_AxiAddressWidth {31}
-ad_ip_parameter ddr4_1 CONFIG.C0.DDR4_InputClockPeriod {3334}
-ad_ip_parameter ddr4_1 CONFIG.C0.DDR4_MemoryPart {MT40A512M16HA-075E}
-ad_ip_parameter ddr4_1 CONFIG.C0.BANK_GROUP_WIDTH {1}
-ad_ip_parameter ddr4_1 CONFIG.C0.DDR4_CasLatency {18}
+create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddr4_rtl:1.0 ddr4_if_tx_offload
+create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 ddr4_ref_clk_tx_offload
 
-ad_connect ddr4_rtl_1 ddr4_1/C0_DDR4
+ad_ip_instance ip:ddr4 ddr4_tx_offload
+ad_ip_parameter ddr4_tx_offload CONFIG.C0.DDR4_DataWidth {32}
+ad_ip_parameter ddr4_tx_offload CONFIG.C0.DDR4_AxiDataWidth {256}
+ad_ip_parameter ddr4_tx_offload CONFIG.C0.DDR4_AxiAddressWidth {31}
+ad_ip_parameter ddr4_tx_offload CONFIG.C0.DDR4_InputClockPeriod {3334}
+ad_ip_parameter ddr4_tx_offload CONFIG.C0.DDR4_MemoryPart {MT40A512M16HA-075E}
+ad_ip_parameter ddr4_tx_offload CONFIG.C0.BANK_GROUP_WIDTH {1}
+ad_ip_parameter ddr4_tx_offload CONFIG.C0.DDR4_CasLatency {18}
 
-set_property -dict [list CONFIG.FREQ_HZ {300000000}] [get_bd_intf_ports ddr4_ref_1]
-ad_connect ddr4_ref_1 ddr4_1/C0_SYS_CLK
+ad_connect ddr4_if_tx_offload ddr4_tx_offload/C0_DDR4
 
-set dac_fifo_name axi_tx_fifo
-set dac_data_width [expr 32*$TX_NUM_OF_LANES]
-set dac_dma_data_width [expr 32*$TX_NUM_OF_LANES]
-set dac_fifo_address_width 31
+set_property -dict [list CONFIG.FREQ_HZ {300000000}] [get_bd_intf_ports ddr4_ref_clk_tx_offload]
+ad_connect ddr4_ref_clk_tx_offload ddr4_tx_offload/C0_SYS_CLK
 
-ad_ip_instance axi_dacfifo $dac_fifo_name
-ad_ip_parameter $dac_fifo_name CONFIG.DAC_DATA_WIDTH $dac_data_width
-ad_ip_parameter $dac_fifo_name CONFIG.DMA_DATA_WIDTH $dac_dma_data_width
-ad_ip_parameter $dac_fifo_name CONFIG.AXI_DATA_WIDTH 256
-ad_ip_parameter $dac_fifo_name CONFIG.AXI_SIZE 5
-ad_ip_parameter $dac_fifo_name CONFIG.AXI_LENGTH 255
-ad_ip_parameter $dac_fifo_name CONFIG.AXI_ADDRESS 0x80000000
+ad_data_offload_create axi_tx_offload_control \
+                       1 \
+                       1 \
+                       [expr 2 * 1024 * 1024 * 1024] \
+                       [expr 32*$TX_NUM_OF_LANES] \
+                       [expr 32*$TX_NUM_OF_LANES] \
+                       256 \
+                       31
 
-create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 ddr4_1_rstgen
-ad_connect ddr4_1_rstgen/slowest_sync_clk ddr4_1/c0_ddr4_ui_clk
-ad_connect ddr4_1/c0_ddr4_ui_clk_sync_rst ddr4_1_rstgen/ext_reset_in
-ad_connect ddr4_1_rstgen/peripheral_aresetn axi_tx_fifo/axi_resetn
+ad_ip_instance proc_sys_reset axi_tx_offload_rstgen
+ad_connect axi_tx_offload_rstgen/slowest_sync_clk ddr4_tx_offload/c0_ddr4_ui_clk
+ad_connect ddr4_tx_offload/c0_ddr4_ui_clk_sync_rst axi_tx_offload_rstgen/ext_reset_in
+ad_connect ddr4_tx_offload/c0_ddr4_ui_clk axi_tx_offload_control/fifo2axi_bridge/axi_clk
+ad_connect axi_tx_offload_rstgen/peripheral_aresetn axi_tx_offload_control/fifo2axi_bridge/axi_resetn
+ad_connect ddr4_tx_offload/C0_DDR4_S_AXI axi_tx_offload_control/fifo2axi_bridge/ddr_axi
+ad_connect sys_rstgen/peripheral_reset ddr4_tx_offload/sys_rst
 
-ad_connect sys_reset ddr4_1/sys_rst
+assign_bd_address [get_bd_addr_segs -of_objects [get_bd_cells ddr4_tx_offload]]
 
-source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
+# PL side DDR4 controller with RX data offload instance - 8 GByte
+
+create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddr4_rtl:1.0 ddr4_if_rx_offload
+create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 ddr4_ref_clk_rx_offload
+
+ad_ip_instance ip:ddr4 ddr4_rx_offload
+ad_ip_parameter ddr4_rx_offload CONFIG.C0.DDR4_DataWidth {32}
+ad_ip_parameter ddr4_rx_offload CONFIG.C0.DDR4_AxiDataWidth {256}
+ad_ip_parameter ddr4_rx_offload CONFIG.C0.DDR4_AxiAddressWidth {31}
+ad_ip_parameter ddr4_rx_offload CONFIG.C0.DDR4_InputClockPeriod {3334}
+ad_ip_parameter ddr4_rx_offload CONFIG.C0.DDR4_MemoryPart {MT40A512M16HA-075E}
+ad_ip_parameter ddr4_rx_offload CONFIG.C0.BANK_GROUP_WIDTH {1}
+ad_ip_parameter ddr4_rx_offload CONFIG.C0.DDR4_CasLatency {18}
+
+ad_connect ddr4_if_rx_offload ddr4_rx_offload/C0_DDR4
+
+set_property -dict [list CONFIG.FREQ_HZ {300000000}] [get_bd_intf_ports ddr4_ref_clk_rx_offload]
+ad_connect ddr4_ref_clk_rx_offload ddr4_rx_offload/C0_SYS_CLK
+
+ad_data_offload_create axi_rx_offload_control \
+                       0 \
+                       1 \
+                       [expr 2 * 1024 * 1024 * 1024] \
+                       [expr 32*$RX_NUM_OF_LANES] \
+                       [expr 32*$RX_NUM_OF_LANES] \
+                       256 \
+                       31
+
+ad_ip_instance proc_sys_reset axi_rx_offload_rstgen
+ad_connect axi_rx_offload_rstgen/slowest_sync_clk ddr4_rx_offload/c0_ddr4_ui_clk
+ad_connect ddr4_rx_offload/c0_ddr4_ui_clk_sync_rst axi_rx_offload_rstgen/ext_reset_in
+ad_connect ddr4_rx_offload/c0_ddr4_ui_clk axi_rx_offload_control/fifo2axi_bridge/axi_clk
+ad_connect axi_rx_offload_rstgen/peripheral_aresetn axi_rx_offload_control/fifo2axi_bridge/axi_resetn
+ad_connect ddr4_rx_offload/C0_DDR4_S_AXI axi_rx_offload_control/fifo2axi_bridge/ddr_axi
+ad_connect sys_rstgen/peripheral_reset ddr4_rx_offload/sys_rst
+
+assign_bd_address [get_bd_addr_segs -of_objects [get_bd_cells ddr4_rx_offload]]
+
+# JESD204 components
 
 ad_ip_instance axi_adxcvr axi_adrv9009_som_tx_xcvr
 ad_ip_parameter axi_adrv9009_som_tx_xcvr CONFIG.NUM_OF_LANES $TX_NUM_OF_LANES
@@ -250,7 +292,7 @@ ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.CYCLIC 1
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_dma_data_width
+ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_DATA_WIDTH_DEST [expr 32 * $TX_NUM_OF_LANES]
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_DATA_WIDTH_SRC 128
 
 ad_ip_instance axi_adxcvr axi_adrv9009_som_rx_xcvr
@@ -272,7 +314,7 @@ adi_tpl_jesd204_rx_create rx_adrv9009_som_tpl_core $RX_NUM_OF_LANES \
                                                $RX_SAMPLE_WIDTH
 
 ad_ip_instance axi_dmac axi_adrv9009_som_rx_dma
-ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_TYPE_SRC 2
+ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_TYPE_SRC 1
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.SYNC_TRANSFER_START 1
@@ -412,29 +454,38 @@ for {set i 0} {$i < $OBS_NUM_OF_CONVERTERS} {incr i} {
   ad_connect  obs_adrv9009_som_tpl_core/adc_data_$i util_som_obs_cpack/fifo_wr_data_$i
 }
 ad_connect  obs_adrv9009_som_tpl_core/adc_dovf util_som_obs_cpack/fifo_wr_overflow
-ad_connect  util_som_obs_cpack/packed_fifo_wr axi_adrv9009_som_obs_dma/fifo_wr
 
-ad_connect core_clk_a axi_adrv9009_som_tx_dma/m_axis_aclk
+ad_connect sys_cpu_clk axi_tx_offload_control/s_axi_aclk
+ad_connect core_clk_a axi_tx_offload_control/m_axis_aclk
+ad_connect sys_dma_clk axi_tx_offload_control/s_axis_aclk
+ad_connect sys_dma_clk axi_adrv9009_som_tx_dma/m_axis_aclk
 
-ad_connect axi_adrv9009_som_rx_dma/fifo_wr_clk  core_clk_b
-ad_connect util_som_rx_cpack/packed_fifo_wr axi_adrv9009_som_rx_dma/fifo_wr
+ad_connect sys_cpu_resetn axi_tx_offload_control/s_axi_aresetn
+ad_connect core_clk_a_rstgen/peripheral_aresetn axi_tx_offload_control/m_axis_aresetn
+ad_connect sys_dma_resetn axi_tx_offload_control/s_axis_aresetn
 
-ad_connect axi_tx_fifo/axi ddr4_1/C0_DDR4_S_AXI
-ad_connect ddr4_1/c0_ddr4_aresetn ddr4_1_rstgen/peripheral_aresetn
-ad_connect core_clk_a axi_tx_fifo/dma_clk
-ad_connect axi_tx_fifo/dma_rst core_clk_a_rstgen/peripheral_reset
-ad_connect axi_tx_fifo/dma_valid axi_adrv9009_som_tx_dma/m_axis_valid
-ad_connect axi_tx_fifo/dma_ready axi_adrv9009_som_tx_dma/m_axis_ready
-ad_connect axi_adrv9009_som_tx_dma/m_axis_data axi_tx_fifo/dma_data
-ad_connect axi_adrv9009_som_tx_dma/m_axis_last axi_tx_fifo/dma_xfer_last
-ad_connect axi_adrv9009_som_tx_dma/m_axis_xfer_req axi_tx_fifo/dma_xfer_req
-ad_connect core_clk_a axi_tx_fifo/dac_clk
-ad_connect axi_tx_fifo/dac_rst core_clk_a_rstgen/peripheral_reset
-ad_connect util_som_tx_upack/s_axis_data axi_tx_fifo/dac_data
-ad_connect util_som_tx_upack/s_axis_ready axi_tx_fifo/dac_valid
-ad_connect axi_tx_fifo/axi_clk ddr4_1/c0_ddr4_ui_clk
-ad_connect dac_fifo_bypass axi_tx_fifo/bypass
-ad_connect util_som_tx_upack/s_axis_valid VCC_1/dout
+ad_connect sys_cpu_clk axi_rx_offload_control/s_axi_aclk
+ad_connect core_clk_b axi_rx_offload_control/s_axis_aclk
+ad_connect sys_dma_clk axi_rx_offload_control/m_axis_aclk
+ad_connect sys_dma_clk axi_adrv9009_som_rx_dma/s_axis_aclk
+
+ad_connect sys_cpu_resetn axi_rx_offload_control/s_axi_aresetn
+ad_connect core_clk_b_rstgen/peripheral_aresetn axi_rx_offload_control/s_axis_aresetn
+ad_connect sys_dma_resetn axi_rx_offload_control/m_axis_aresetn
+
+ad_connect util_som_tx_upack/s_axis axi_tx_offload_control/m_axis
+ad_connect axi_tx_offload_control/s_axis axi_adrv9009_som_tx_dma/m_axis
+ad_connect axi_tx_offload_control/init_req axi_adrv9009_som_tx_dma/m_axis_xfer_req
+ad_connect axi_tx_offload_control/sync_ext GND
+
+ad_connect util_som_rx_cpack/packed_fifo_wr_en axi_rx_offload_control/s_axis_tvalid
+ad_connect util_som_rx_cpack/packed_fifo_wr_data axi_rx_offload_control/s_axis_tdata
+ad_connect axi_rx_offload_control/m_axis axi_adrv9009_som_rx_dma/s_axis
+ad_connect axi_rx_offload_control/init_req axi_adrv9009_som_rx_dma/s_axis_xfer_req
+ad_connect axi_rx_offload_control/sync_ext GND
+
+## NOTE: software reconfigurable
+## ad_connect dac_fifo_bypass axi_tx_fifo/bypass
 
 ad_ip_instance clk_wiz dma_clk_wiz
 ad_ip_parameter dma_clk_wiz CONFIG.PRIMITIVE MMCM
@@ -469,6 +520,8 @@ ad_cpu_interconnect 0x7c400000 axi_adrv9009_som_tx_dma
 ad_cpu_interconnect 0x7c420000 axi_adrv9009_som_rx_dma
 ad_cpu_interconnect 0x7c440000 axi_adrv9009_som_obs_dma
 ad_cpu_interconnect 0x45000000 axi_sysid_0
+ad_cpu_interconnect 0x7c480000 axi_tx_offload_control
+ad_cpu_interconnect 0x7c4C0000 axi_rx_offload_control
 
 # gt uses hp0, and 100MHz clock for both DRP and AXI4
 
@@ -511,5 +564,5 @@ create_bd_addr_seg -range 0x80000000 -offset 0x00000000 \
     [get_bd_addr_spaces axi_adrv9009_som_rx_dma/m_dest_axi] [get_bd_addr_segs sys_ps8/SAXIGP4/HP2_DDR_LOW] SEG_sys_ps8_HP2_DDR_LOW
 create_bd_addr_seg -range 0x80000000 -offset 0x00000000 \
     [get_bd_addr_spaces axi_adrv9009_som_tx_dma/m_src_axi] [get_bd_addr_segs sys_ps8/SAXIGP5/HP3_DDR_LOW] SEG_sys_ps8_HP3_DDR_LOW
-create_bd_addr_seg -range 0x80000000 -offset 0x80000000 \
-    [get_bd_addr_spaces axi_tx_fifo/axi] [get_bd_addr_segs ddr4_1/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_ddr4_1_C0_DDR4_ADDRESS_BLOCK
+#create_bd_addr_seg -range 0x80000000 -offset 0x80000000 \
+#    [get_bd_addr_spaces axi_tx_fifo/axi] [get_bd_addr_segs ddr4_1/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_ddr4_1_C0_DDR4_ADDRESS_BLOCK
