@@ -49,9 +49,9 @@ module ad_axis_inf_rx #(
 
   // xilinx interface
 
-  output  reg                     inf_valid,
-  output  reg                     inf_last,
-  output  reg [(DATA_WIDTH-1):0]  inf_data,
+  output  reg                     inf_valid = 1'b0,
+  output  reg                     inf_last = 1'b0,
+  output  reg [(DATA_WIDTH-1):0]  inf_data = {DATA_WIDTH{1'b0}},
   input                           inf_ready);
 
   // internal registers
