@@ -61,6 +61,7 @@ clean:
 	$(MAKE) -C cn0363/cn0363_dma_sequencer clean
 	$(MAKE) -C cn0363/cn0363_phase_data_sync clean
 	$(MAKE) -C cordic_demod clean
+	$(MAKE) -C data_offload clean
 	$(MAKE) -C intel/adi_jesd204 clean
 	$(MAKE) -C intel/avl_adxcfg clean
 	$(MAKE) -C intel/avl_adxcvr clean
@@ -177,6 +178,7 @@ lib:
 	$(MAKE) -C cn0363/cn0363_dma_sequencer
 	$(MAKE) -C cn0363/cn0363_phase_data_sync
 	$(MAKE) -C cordic_demod
+	$(MAKE) -C data_offload
 	$(MAKE) -C intel/adi_jesd204
 	$(MAKE) -C intel/avl_adxcfg
 	$(MAKE) -C intel/avl_adxcvr
