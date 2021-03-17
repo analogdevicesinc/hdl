@@ -290,7 +290,7 @@ module axi_adxcvr_up #(
       if ((up_wreq == 1'b1) && (up_waddr == 10'h060)) begin
         up_prbssel <= up_wdata[3:0];
         up_prbscntreset <= up_wdata[8];
-        up_prbsforceerr <= up_wdata[15];
+        up_prbsforceerr <= up_wdata[16];
       end
     end
   end
