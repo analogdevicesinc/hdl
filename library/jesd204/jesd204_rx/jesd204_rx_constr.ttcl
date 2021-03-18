@@ -61,10 +61,6 @@ set_property IOB <=: $sysref_iob :> \
 
 <: if {$async_clk} { :>
 
-set_property ASYNC_REG TRUE \
-  [get_cells {i_lmfc/cdc_sync_stage1_reg}] \
-  [get_cells {i_lmfc/cdc_sync_stage1_reg}]
-
 set link_clk [get_clocks -of_objects [get_ports -quiet {clk}]]
 set device_clk [get_clocks -of_objects [get_ports -quiet {device_clk}]]
 
