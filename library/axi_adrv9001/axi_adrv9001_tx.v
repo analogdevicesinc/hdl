@@ -67,7 +67,7 @@ module axi_adrv9001_tx #(
 
   output                  dac_single_lane,
   output                  dac_sdr_ddr_n,
-  output                  dac_r1_mode,
+  output                  up_dac_r1_mode,
 
   input                   tdd_tx_valid,
 
@@ -116,7 +116,7 @@ if (ENABLED == 0) begin : core_disabled
   assign dac_data_q_B = 16'b0;
   assign dac_single_lane = 1'b0;
   assign dac_sdr_ddr_n = 1'b0;
-  assign dac_r1_mode = 1'b0;
+  assign up_dac_r1_mode = 1'b0;
   assign dac_sync_out = 1'b0;
   assign dac_valid = 1'b0;
   assign dac_enable_i0 = 1'b0;
@@ -375,7 +375,8 @@ end else begin : core_enabled
     .dac_clksel (),
     .dac_par_type (),
     .dac_par_enb (),
-    .dac_r1_mode (dac_r1_mode),
+    .dac_r1_mode (),
+    .up_dac_r1_mode (up_dac_r1_mode),
     .dac_datafmt (dac_dds_format_s),
     .dac_datarate (dac_datarate_s),
     .dac_status (1'b1),

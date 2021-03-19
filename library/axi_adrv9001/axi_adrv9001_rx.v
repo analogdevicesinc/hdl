@@ -63,7 +63,7 @@ module axi_adrv9001_rx #(
 
   output                  adc_single_lane,
   output                  adc_sdr_ddr_n,
-  output                  adc_r1_mode,
+  output                  up_adc_r1_mode,
 
   input       [ 31:0]     adc_clk_ratio,
 
@@ -110,7 +110,7 @@ if (ENABLED == 0) begin : core_disabled
   assign adc_rst = 1'b0;
   assign adc_single_lane = 1'b0;
   assign adc_sdr_ddr_n = 1'b0;
-  assign adc_r1_mode = 1'b0;
+  assign up_adc_r1_mode = 1'b0;
   assign adc_valid = 1'b0;
   assign adc_enable_i0 = 1'b0;
   assign adc_data_i0 = 16'b0;
@@ -156,7 +156,6 @@ end else begin : core_enabled
   wire    [  4:0]   up_wack_s;
   wire    [  4:0]   up_rack_s;
   wire    [ 31:0]   up_rdata_s[0:4];
-  wire              up_adc_r1_mode;
   wire              adc_valid_out_i0;
   wire              adc_valid_out_i1;
 
@@ -350,7 +349,7 @@ end else begin : core_enabled
     .mmcm_rst (),
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
-    .adc_r1_mode (adc_r1_mode),
+    .adc_r1_mode (),
     .adc_ddr_edgesel (),
     .adc_pin_mode (),
     .adc_status (1'b1),
