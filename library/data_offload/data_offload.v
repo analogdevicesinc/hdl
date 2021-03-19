@@ -252,10 +252,8 @@ module data_offload #(
   // interface)
   generate
   if (MEM_TYPE == 1'b1) begin
-    assign fifo_dst_ready_int_s = fifo_dst_ready;
-    assign dst_mem_valid_int_s = dst_mem_valid_s & m_axis_ready;
+    assign dst_mem_valid_int_s = dst_mem_valid_s;
   end else begin
-    assign fifo_dst_ready_int_s = 1'b1;
     // Compensate the 1 cycle READ latency of the BRAM
     always @(posedge m_axis_aclk) begin
       dst_mem_valid_d <= dst_mem_valid_s;
@@ -263,6 +261,8 @@ module data_offload #(
     assign dst_mem_valid_int_s = dst_mem_valid_d;
   end
   endgenerate
+
+  assign fifo_dst_ready_int_s = fifo_dst_ready & m_axis_ready;
 
   assign fifo_src_wdata = s_axis_data;
   assign fifo_dst_ren = dst_mem_valid_s;
