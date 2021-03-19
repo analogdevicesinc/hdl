@@ -72,7 +72,7 @@ proc ad_data_offload_create {instance_name datapath_type mem_type mem_size sourc
       ad_connect storage_unit/reb i_data_offload/fifo_dst_ren
       ad_connect storage_unit/addrb i_data_offload/fifo_dst_raddr
       ad_connect storage_unit/doutb i_data_offload/fifo_dst_rdata
-      ad_connect i_data_offload/fifo_dst_ready VCC
+      ad_connect i_data_offload/fifo_dst_ready VCC     ; ## BRAM is always ready
       ad_connect i_data_offload/ddr_calib_done VCC
 
     } elseif {$mem_type == 1} {
@@ -89,7 +89,7 @@ proc ad_data_offload_create {instance_name datapath_type mem_type mem_size sourc
         AXI_DATA_WIDTH $ddr_data_width \
         AXI_ADDR_WIDTH $ddr_addr_width \
         AXI_ADDRESS 0x00000000 \
-        AXI_ADDRESS_LIMIT 0xffffffff \
+        AXI_ADDRESS_LIMIT [expr { pow(2, $ddr_addr_width) } - 1] \
         REMOVE_NULL_BEAT_EN $datapath_type \
       ]
 
