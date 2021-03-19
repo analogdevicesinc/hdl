@@ -77,6 +77,7 @@ module up_dac_common #(
   input       [31:0]  up_pps_rcounter,
   input               up_pps_status,
   output  reg         up_pps_irq_mask,
+  output  reg         up_dac_r1_mode = 'd0,
 
   // drp interface
 
@@ -127,7 +128,6 @@ module up_dac_common #(
   reg             up_dac_sdr_ddr_n = 'd0;
   reg             up_dac_par_type = 'd0;
   reg             up_dac_par_enb = 'd0;
-  reg             up_dac_r1_mode = 'd0;
   reg             up_dac_datafmt = 'd0;
   reg     [15:0]  up_dac_datarate = 'd0;
   reg             up_dac_frame = 'd0;
