@@ -186,10 +186,12 @@ module axi_ad9001_core #(
   wire           tx2_data_valid_A;
   wire   [15:0]  tx2_data_i_A;
   wire   [15:0]  tx2_data_q_A;
+  wire           up_rx1_r1_mode;
   wire           rx1_r1_mode;
   wire           rx2_rst_loc;
   wire           rx2_single_lane_loc;
   wire           rx2_sdr_ddr_n_loc;
+  wire           up_tx1_r1_mode;
   wire           tx1_r1_mode;
   wire           tx2_rst_loc;
   wire           tx2_single_lane_loc;
@@ -210,22 +212,22 @@ module axi_ad9001_core #(
   // tx1_r1_mode should be 0 only when tx1_clk and tx2_clk have the same frequency
 
   sync_bits #(
-    .NUM_OF_BITS (3),
+    .NUM_OF_BITS (4),
     .ASYNC_CLK (1))
   i_rx1_ctrl_sync (
-    .in_bits ({rx1_sdr_ddr_n,rx1_single_lane,rx1_rst}),
+    .in_bits ({up_rx1_r1_mode,rx1_sdr_ddr_n,rx1_single_lane,rx1_rst}),
     .out_clk (rx2_clk),
     .out_resetn (1'b1),
-    .out_bits ({rx1_sdr_ddr_n_s,rx1_single_lane_s,rx1_rst_s}));
+    .out_bits ({rx1_r1_mode,rx1_sdr_ddr_n_s,rx1_single_lane_s,rx1_rst_s}));
 
   sync_bits #(
-    .NUM_OF_BITS (3),
+    .NUM_OF_BITS (4),
     .ASYNC_CLK (1))
   i_tx1_ctrl_sync (
-    .in_bits ({tx1_sdr_ddr_n,tx1_single_lane,tx1_rst}),
+    .in_bits ({up_tx1_r1_mode,tx1_sdr_ddr_n,tx1_single_lane,tx1_rst}),
     .out_clk (tx2_clk),
     .out_resetn (1'b1),
-    .out_bits ({tx1_sdr_ddr_n_s,tx1_single_lane_s,tx1_rst_s}));
+    .out_bits ({tx1_r1_mode,tx1_sdr_ddr_n_s,tx1_single_lane_s,tx1_rst_s}));
 
   assign rx2_rst = rx1_r1_mode ? rx2_rst_loc : rx1_rst_s;
   assign rx2_single_lane = rx1_r1_mode ? rx2_single_lane_loc : rx1_single_lane_s;
@@ -312,7 +314,7 @@ module axi_ad9001_core #(
 
     .adc_single_lane (rx1_single_lane),
     .adc_sdr_ddr_n (rx1_sdr_ddr_n),
-    .adc_r1_mode (rx1_r1_mode),
+    .up_adc_r1_mode (up_rx1_r1_mode),
 
     .adc_clk_ratio (adc_clk_ratio),
 
@@ -431,7 +433,7 @@ module axi_ad9001_core #(
     .dac_data_q_B (tx1_data_q_B),
     .dac_single_lane (tx1_single_lane),
     .dac_sdr_ddr_n (tx1_sdr_ddr_n),
-    .dac_r1_mode (tx1_r1_mode),
+    .up_dac_r1_mode (up_tx1_r1_mode),
     .tdd_tx_valid (tdd_tx1_valid),
     .dac_clk_ratio (dac_clk_ratio),
     .dac_sync_in (1'b0),
