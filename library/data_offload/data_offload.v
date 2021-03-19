@@ -91,7 +91,6 @@ module data_offload #(
   input                                       s_axis_last,
   input  [SRC_DATA_WIDTH/8-1:0]               s_axis_tkeep,
 
-
   // AXI4 stream master for destination stream (RX_DMA or DAC) -- Destination
   // interface
 
@@ -119,11 +118,11 @@ module data_offload #(
   output                                      fifo_src_wlast,
 
   output                                      fifo_dst_ren,
+  input                                       fifo_dst_ready,
   output                                      fifo_dst_resetn,
   output  [DST_ADDR_WIDTH-1:0]                fifo_dst_raddr,
   input   [DST_DATA_WIDTH-1:0]                fifo_dst_rdata,
   output                                      fifo_dst_rlast,
-  input                                       fifo_dst_ready,
 
   // Status and monitor
 
@@ -406,7 +405,7 @@ always @(posedge s_axis_aclk) begin
   end
 end
 // transfer length is in bytes, but counter monitors the source data beats
-assign src_wr_last_beat_s = (src_transfer_length_s == 32'h0) ? MEM_SIZE[31:SRC_BEAT_BYTE] : src_transfer_length_s[31:SRC_BEAT_BYTE];
+assign src_wr_last_beat_s = (src_transfer_length_s == 32'h0) ? MEM_SIZE[31:SRC_BEAT_BYTE]-1 : src_transfer_length_s[31:SRC_BEAT_BYTE];
 assign src_wr_last_int_s = (src_data_counter == src_wr_last_beat_s) ?  1'b1 : 1'b0;
 
 endmodule
