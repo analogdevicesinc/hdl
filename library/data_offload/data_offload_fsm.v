@@ -35,7 +35,7 @@
 `timescale 1ns/100ps
 
 /* This module controls the read and write access to the storage unit. It is
-* used for bot transmit and receive use cases
+* used for both transmit and receive use cases
 */
 
 module data_offload_fsm #(
@@ -209,7 +209,7 @@ module data_offload_fsm #(
   assign wr_init_req_pos_s = ~wr_init_req_d & wr_init_req_s;
 
   // status bits
-  assign wr_full = (wr_addr == {WR_ADDRESS_WIDTH{1'b1}}) ? 1'b1 : 1'b0;
+  assign wr_full = (wr_addr == {{(WR_ADDRESS_WIDTH-1){1'b1}}, 1'b0}) ? 1'b1 : 1'b0;
 
   // generate INIT acknowledge signal in WRITE domain (in case of ADCs)
   assign wr_init_ack_s = (wr_fsm_state == WR_SYNC) ? 1'b1 : 1'b0;
