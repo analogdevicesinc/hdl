@@ -1,7 +1,7 @@
 
 ## Offload attributes
 set adc_offload_type 1                      ; ## PL_DDR
-set adc_offload_size 4294967295             ; ## 4 Gbyte
+set adc_offload_size 1073741824             ; ## 1 Gbyte
 
 set dac_offload_type 0                      ; ## BRAM
 set dac_offload_size 512000                 ; ## 512 kbyte
