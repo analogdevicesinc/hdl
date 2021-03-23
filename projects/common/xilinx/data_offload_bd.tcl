@@ -105,7 +105,6 @@ proc ad_data_offload_create {instance_name datapath_type mem_type mem_size sourc
       ad_connect fifo2axi_bridge/fifo_dst_ren i_data_offload/fifo_dst_ren
       ad_connect fifo2axi_bridge/fifo_dst_raddr i_data_offload/fifo_dst_raddr
       ad_connect fifo2axi_bridge/fifo_dst_rdata i_data_offload/fifo_dst_rdata
-      ad_connect fifo2axi_bridge/fifo_dst_rlast i_data_offload/fifo_dst_rlast
       ad_connect fifo2axi_bridge/fifo_dst_ready i_data_offload/fifo_dst_ready
 
     }

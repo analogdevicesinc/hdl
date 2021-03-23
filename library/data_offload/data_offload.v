@@ -122,7 +122,6 @@ module data_offload #(
   output                                      fifo_dst_resetn,
   output  [DST_ADDR_WIDTH-1:0]                fifo_dst_raddr,
   input   [DST_DATA_WIDTH-1:0]                fifo_dst_rdata,
-  output                                      fifo_dst_rlast,
 
   // Status and monitor
 
@@ -179,7 +178,6 @@ module data_offload #(
   wire                                        m_axis_valid_s;
   wire                                        m_axis_last_s;
   wire  [DST_DATA_WIDTH-1:0]                  m_axis_data_s;
-  wire                                        dst_mem_last_s;
   wire                                        dst_mem_valid_s;
   wire                                        dst_mem_valid_int_s;
   wire                                        m_axis_reset_int_s;
@@ -208,7 +206,6 @@ module data_offload #(
   end
   endgenerate
   assign fifo_src_wlast = src_wr_last_s;
-  assign fifo_dst_rlast = dst_mem_last_s;
 
   // Offload FSM and control
   data_offload_fsm #(
@@ -233,7 +230,7 @@ module data_offload #(
     .rd_ready (fifo_dst_ready_int_s),
     .rd_valid (dst_mem_valid_s),
     .rd_addr (fifo_dst_raddr),
-    .rd_last (dst_mem_last_s),
+    .rd_last (),
     .rd_tkeep (m_axis_tkeep),
     .rd_oneshot (oneshot_s),
     .init_req (init_req),
@@ -273,7 +270,7 @@ module data_offload #(
     .rst (m_axis_reset_int_s),
     .valid (dst_mem_valid_int_s),
     .data (fifo_dst_rdata),
-    .last (dst_mem_last_s),
+    .last (1'b0),
     .inf_valid (m_axis_valid_s),
     .inf_last (m_axis_last_s),
     .inf_data (m_axis_data_s),

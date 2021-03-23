@@ -238,7 +238,7 @@ module data_offload_fsm #(
     if (wr_resetn_in == 1'b0) begin
       wr_last_addr <= {WR_ADDRESS_WIDTH{1'b1}};
     end else begin
-      wr_last_addr <= (wr_last && wr_valid_out) ? wr_addr : wr_last_addr;
+      wr_last_addr <= (wr_valid_out) ? wr_addr : wr_last_addr;
     end
   end
 
