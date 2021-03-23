@@ -45,11 +45,12 @@ module prcfg_dac#(
   input       [31:0]      control,
   output      [31:0]      status,
 
-  // FIFO interface
+  // FIFO interface side
   output  reg             src_dac_enable,
   input       [15:0]      src_dac_data,
   output  reg             src_dac_valid,
 
+  // UPACK interface side
   input                   dst_dac_enable,
   output  reg [15:0]      dst_dac_data,
   input                   dst_dac_valid);
