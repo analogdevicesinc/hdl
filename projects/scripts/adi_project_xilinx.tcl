@@ -551,15 +551,15 @@ proc adi_project_impl {project_name prcfg_name {xdc_files ""}} {
   write_checkpoint -force $p_prefix.${prcfg_name}_impl_bb.dcp
   open_checkpoint $p_prefix.${prcfg_name}_impl.dcp -part $p_device
   write_bitstream -force -bin_file -file $p_prefix.${prcfg_name}.bit
-  write_sysdef -hwdef $p_prefix.hwdef -bitfile $p_prefix.${prcfg_name}.bit -file $p_prefix.${prcfg_name}.hdf
-  file copy -force $p_prefix.${prcfg_name}.hdf $project_name.sdk/system_top.${prcfg_name}.hdf
+  write_sysdef -hwdef $p_prefix.hwdef -bitfile $p_prefix.${prcfg_name}.bit -file $p_prefix.${prcfg_name}.xsa
+  file copy -force $p_prefix.${prcfg_name}.xsa $project_name.sdk/system_top.${prcfg_name}.xsa
 
   if {$prcfg_name ne "default"} {
     lappend p_prcfg_list "$p_prefix.${prcfg_name}_impl.dcp"
   }
 
   if {$prcfg_name eq "default"} {
-    file copy -force $p_prefix.${prcfg_name}.hdf $project_name.sdk/system_top.hdf
+    file copy -force $p_prefix.${prcfg_name}.xsa $project_name.sdk/system_top.xsa
   }
 }
 
