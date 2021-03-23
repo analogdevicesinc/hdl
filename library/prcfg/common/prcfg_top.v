@@ -52,56 +52,44 @@ module prcfg_top#(
   // TX side
   input                   dma_dac_0_enable,
   output      [(DBUS_WIDTH-1):0]  dma_dac_0_data,
-  input                   dma_dac_0_valid,
+  input                   dma_dac_rd_enable,
   input                   dma_dac_1_enable,
   output      [(DBUS_WIDTH-1):0]  dma_dac_1_data,
-  input                   dma_dac_1_valid,
   input                   dma_dac_2_enable,
   output      [(DBUS_WIDTH-1):0]  dma_dac_2_data,
-  input                   dma_dac_2_valid,
   input                   dma_dac_3_enable,
-  output      [(DBUS_WIDTH-1):0]  dma_dac_3_data,
-  input                   dma_dac_3_valid,
+  output      [(DBUS_WIDTH-1):0]  dma_dac_3_data,  
 
   output                  core_dac_0_enable,
   input       [(DBUS_WIDTH-1):0]  core_dac_0_data,
-  output                  core_dac_0_valid,
+  output                  core_dac_0_valid,  
   output                  core_dac_1_enable,
   input       [(DBUS_WIDTH-1):0]  core_dac_1_data,
-  output                  core_dac_1_valid,
   output                  core_dac_2_enable,
-  input       [(DBUS_WIDTH-1):0]  core_dac_2_data,
-  output                  core_dac_2_valid,
+  input       [(DBUS_WIDTH-1):0]  core_dac_2_data,  
   output                  core_dac_3_enable,
   input       [(DBUS_WIDTH-1):0]  core_dac_3_data,
-  output                  core_dac_3_valid,
 
   // RX side
   input                   dma_adc_0_enable,
   input       [(DBUS_WIDTH-1):0]  dma_adc_0_data,
-  input                   dma_adc_0_valid,
+  input                   dma_adc_wr_en,
   input                   dma_adc_1_enable,
   input       [(DBUS_WIDTH-1):0]  dma_adc_1_data,
-  input                   dma_adc_1_valid,
   input                   dma_adc_2_enable,
-  input       [(DBUS_WIDTH-1):0]  dma_adc_2_data,
-  input                   dma_adc_2_valid,
+  input       [(DBUS_WIDTH-1):0]  dma_adc_2_data,  
   input                   dma_adc_3_enable,
-  input       [(DBUS_WIDTH-1):0]  dma_adc_3_data,
-  input                   dma_adc_3_valid,
+  input       [(DBUS_WIDTH-1):0]  dma_adc_3_data,  
 
   output                  core_adc_0_enable,
   output      [(DBUS_WIDTH-1):0]  core_adc_0_data,
   output                  core_adc_0_valid,
   output                  core_adc_1_enable,
-  output      [(DBUS_WIDTH-1):0]  core_adc_1_data,
-  output                  core_adc_1_valid,
+  output      [(DBUS_WIDTH-1):0]  core_adc_1_data,  
   output                  core_adc_2_enable,
   output      [(DBUS_WIDTH-1):0]  core_adc_2_data,
-  output                  core_adc_2_valid,
   output                  core_adc_3_enable,
-  output      [(DBUS_WIDTH-1):0]  core_adc_3_data,
-  output                  core_adc_3_valid);
+  output      [(DBUS_WIDTH-1):0]  core_adc_3_data);
 
   localparam  ENABELED    = 1;
   localparam  DATA_WIDTH  = 16;
@@ -139,12 +127,12 @@ module prcfg_top#(
             .clk(clk),
             .control(adc_gpio_input),
             .status(adc_gpio_out_s[l_inst]),
-            .src_adc_enable(core_adc_enable_s[l_inst]),
-            .src_adc_valid(core_adc_valid_s[l_inst]),
-            .src_adc_data(core_adc_data_s[l_inst]),
-            .dst_adc_enable(dma_adc_enable_s[l_inst]),
-            .dst_adc_valid(dma_adc_valid_s[l_inst]),
-            .dst_adc_data(dma_adc_data_s[l_inst])
+            .src_adc_enable(dma_adc_enable_s[l_inst]), //core_adc_enable_s[l_inst]),
+            .src_adc_valid(dma_adc_valid_s[l_inst]), //core_adc_valid_s[l_inst]),
+            .src_adc_data(dma_adc_data_s[l_inst]), //core_adc_data_s[l_inst]),
+            .dst_adc_enable(core_adc_enable_s[l_inst]), //dma_adc_enable_s[l_inst]),
+            .dst_adc_valid(core_adc_valid_s[l_inst]), //dma_adc_valid_s[l_inst]),
+            .dst_adc_data(core_adc_data_s[l_inst]) //dma_adc_data_s[l_inst])
           );
       end
       if(DAC_EN == ENABELED) begin
@@ -156,7 +144,7 @@ module prcfg_top#(
           .status(dac_gpio_out_s[l_inst]),
           .src_dac_enable(core_dac_enable_s[l_inst]),
           .src_dac_data(core_dac_data_s[l_inst]),
-          .src_dac_valid(core_dac_valid_s[l_inst]),
+          .src_dac_valid(core_dac_valid_s[l_inst]),          
           .dst_dac_enable(dma_dac_enable_s[l_inst]),
           .dst_dac_data(dma_dac_data_s[l_inst]),
           .dst_dac_valid(dma_dac_valid_s[l_inst])
@@ -191,77 +179,47 @@ module prcfg_top#(
   assign core_dac_0_valid = core_dac_valid_s[0];
   assign core_dac_data_s[0] = core_dac_0_data;
   assign core_dac_1_enable = core_dac_enable_s[1];
-  assign core_dac_1_valid = core_dac_valid_s[1];
   assign core_dac_data_s[1] = core_dac_1_data;
   assign core_dac_2_enable = core_dac_enable_s[2];
-  assign core_dac_2_valid = core_dac_valid_s[2];
   assign core_dac_data_s[2] = core_dac_2_data;
   assign core_dac_3_enable = core_dac_enable_s[3];
-  assign core_dac_3_valid = core_dac_valid_s[3];
   assign core_dac_data_s[3] = core_dac_3_data;
 
   assign dma_dac_enable_s[0] = dma_dac_0_enable;
-  assign dma_dac_valid_s[0] = dma_dac_0_valid;
+  assign dma_dac_valid_s[0] = dma_dac_rd_enable;
   assign dma_dac_0_data = dma_dac_data_s[0];
   assign dma_dac_enable_s[1] = dma_dac_1_enable;
-  assign dma_dac_valid_s[1] = dma_dac_1_valid;
+  assign dma_dac_valid_s[1] = dma_dac_rd_enable;
   assign dma_dac_1_data = dma_dac_data_s[1];
   assign dma_dac_enable_s[2] = dma_dac_2_enable;
-  assign dma_dac_valid_s[2] = dma_dac_2_valid;
+  assign dma_dac_valid_s[2] = dma_dac_rd_enable;
   assign dma_dac_2_data = dma_dac_data_s[2];
   assign dma_dac_enable_s[3] = dma_dac_3_enable;
-  assign dma_dac_valid_s[3] = dma_dac_3_valid;
+  assign dma_dac_valid_s[3] = dma_dac_rd_enable;
   assign dma_dac_3_data = dma_dac_data_s[3];
 
   assign core_adc_0_enable = core_adc_enable_s[0];
-//  assign core_adc_enable_s[0] = core_adc_0_enable;
   assign core_adc_0_valid = core_adc_valid_s[0];
-//  assign core_adc_valid_s[0] = core_adc_0_valid;
   assign core_adc_0_data = core_adc_data_s[0];
-//  assign core_adc_data_s[0] = core_adc_0_data;
   assign core_adc_1_enable = core_adc_enable_s[1];
-//  assign core_adc_enable_s[1] = core_adc_1_enable;
-  assign core_adc_1_valid = core_adc_valid_s[1];
-//  assign core_adc_valid_s[1] = core_adc_1_valid;
   assign core_adc_1_data = core_adc_data_s[1];
-//  assign core_adc_data_s[1] = core_adc_1_data;
   assign core_adc_2_enable = core_adc_enable_s[2];
-//  assign core_adc_enable_s[2] = core_adc_2_enable;
-  assign core_adc_2_valid = core_adc_valid_s[2];
-//  assign core_adc_valid_s[2] = core_adc_2_valid;
   assign core_adc_2_data = core_adc_data_s[2];
-//  assign core_adc_data_s[2] = core_adc_2_data;
   assign core_adc_3_enable = core_adc_enable_s[3];
-//  assign core_adc_enable_s[3] = core_adc_3_enable;
-  assign core_adc_3_valid = core_adc_valid_s[3];
-//  assign core_adc_valid_s[3] = core_adc_3_valid;
   assign core_adc_3_data = core_adc_data_s[3];
-//  assign core_adc_data_s[3] = core_adc_3_data;
 
   assign dma_adc_enable_s[0] = dma_adc_0_enable;
-//  assign dma_adc_0_enable = dma_adc_enable_s[0];
-  assign dma_adc_valid_s[0] = dma_adc_0_valid;
-//  assign dma_adc_0_valid = dma_adc_valid_s[0];
+  assign dma_adc_valid_s[0] = dma_adc_wr_en;
   assign dma_adc_data_s[0] = dma_adc_0_data;
-//  assign dma_adc_0_data = dma_adc_data_s[0];
-  assign dma_adc_enable_s[1] = dma_adc_1_enable;
-//  assign dma_adc_1_enable = dma_adc_enable_s[1];
-  assign dma_adc_valid_s[1] = dma_adc_1_valid;
-//  assign dma_adc_1_valid = dma_adc_valid_s[1];
+  assign dma_adc_enable_s[1] = dma_adc_1_enable;  
+  assign dma_adc_valid_s[1] = dma_adc_wr_en;
   assign dma_adc_data_s[1] = dma_adc_1_data;
-//  assign dma_adc_1_data = dma_adc_data_s[1];
   assign dma_adc_enable_s[2] = dma_adc_2_enable;
-//  assign dma_adc_2_enable = dma_adc_enable_s[2];
-  assign dma_adc_valid_s[2] = dma_adc_2_valid;
-//  assign dma_adc_2_valid = dma_adc_valid_s[2];
+  assign dma_adc_valid_s[2] = dma_adc_wr_en;
   assign dma_adc_data_s[2] = dma_adc_2_data;
-//  assign dma_adc_2_data = dma_adc_data_s[2];
   assign dma_adc_enable_s[3] = dma_adc_3_enable;
-//  assign dma_adc_3_enable = dma_adc_enable_s[3];
-  assign dma_adc_valid_s[3] = dma_adc_3_valid;
-//  assign dma_adc_3_valid = dma_adc_valid_s[3];
+  assign dma_adc_valid_s[3] = dma_adc_wr_en;
   assign dma_adc_data_s[3] = dma_adc_3_data;
-//  assign dma_adc_3_data = dma_adc_data_s[3];
 
 endmodule
 

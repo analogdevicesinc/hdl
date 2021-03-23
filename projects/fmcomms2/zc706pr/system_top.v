@@ -117,49 +117,46 @@ module system_top (
   wire            clk;
   wire            dma_dac_i0_enable;
   wire    [15:0]  dma_dac_i0_data;
-  wire            dma_dac_valid;
   wire            dma_dac_q0_enable;
   wire    [15:0]  dma_dac_q0_data;
   wire            dma_dac_i1_enable;
   wire    [15:0]  dma_dac_i1_data;
   wire            dma_dac_q1_enable;
   wire    [15:0]  dma_dac_q1_data;
+  wire            dma_dac_rd_enable;
+  wire            dma_dac_rd_valid;
+  wire            dma_dac_rd_underflow;
   wire            core_dac_i0_enable;
   wire    [15:0]  core_dac_i0_data;
   wire            core_dac_i0_valid;
   wire            core_dac_q0_enable;
-  wire    [15:0]  core_dac_q0_data;
-  wire            core_dac_q0_valid;
+  wire    [15:0]  core_dac_q0_data;  
   wire            core_dac_i1_enable;
-  wire    [15:0]  core_dac_i1_data;
-  wire            core_dac_i1_valid;
+  wire    [15:0]  core_dac_i1_data;  
   wire            core_dac_q1_enable;
-  wire    [15:0]  core_dac_q1_data;
-  wire            core_dac_q1_valid;
+  wire    [15:0]  core_dac_q1_data;  
+  wire            core_dac_valid_in;
+  wire            core_dac_underflow;
   wire            dma_adc_i0_enable;
-  wire    [15:0]  dma_adc_i0_data;
-  wire            dma_adc_i0_valid;
+  wire    [15:0]  dma_adc_i0_data;  
   wire            dma_adc_q0_enable;
   wire    [15:0]  dma_adc_q0_data;
-  wire            dma_adc_q0_valid;
   wire            dma_adc_i1_enable;
   wire    [15:0]  dma_adc_i1_data;
-  wire            dma_adc_i1_valid;
   wire            dma_adc_q1_enable;
   wire    [15:0]  dma_adc_q1_data;
   wire            dma_adc_q1_valid;
+  wire            dma_adc_wr_enable;
+  wire            dma_adc_wr_overflow;
   wire            core_adc_i0_enable;
   wire    [15:0]  core_adc_i0_data;
   wire            core_adc_i0_valid;
   wire            core_adc_q0_enable;
-  wire    [15:0]  core_adc_q0_data;
-  wire            core_adc_q0_valid;
+  wire    [15:0]  core_adc_q0_data;  
   wire            core_adc_i1_enable;
   wire    [15:0]  core_adc_i1_data;
-  wire            core_adc_i1_valid;
   wire            core_adc_q1_enable;
-  wire    [15:0]  core_adc_q1_data;
-  wire            core_adc_q1_valid;
+  wire    [15:0]  core_adc_q1_data;  
   wire    [31:0]  adc_gpio_input;
   wire    [31:0]  adc_gpio_output;
   wire    [31:0]  dac_gpio_input;
@@ -204,49 +201,46 @@ module system_top (
     .dac_gpio_output (dac_gpio_output),
     .dma_dac_i0_enable (core_dac_i0_enable),
     .dma_dac_i0_data (core_dac_i0_data),
-    .dma_dac_i0_valid (core_dac_i0_valid),
+    .dma_dac_rd_enable (core_dac_i0_valid),
     .dma_dac_q0_enable (core_dac_q0_enable),
-    .dma_dac_q0_data (core_dac_q0_data),
-    .dma_dac_q0_valid (core_dac_q0_valid),
+    .dma_dac_q0_data (core_dac_q0_data),    
     .dma_dac_i1_enable (core_dac_i1_enable),
-    .dma_dac_i1_data (core_dac_i1_data),
-    .dma_dac_i1_valid (core_dac_i1_valid),
+    .dma_dac_i1_data (core_dac_i1_data),    
     .dma_dac_q1_enable (core_dac_q1_enable),
     .dma_dac_q1_data (core_dac_q1_data),
-    .dma_dac_q1_valid (core_dac_q1_valid),
+    .dma_dac_rd_valid (core_dac_valid_in),
+    .dma_dac_rd_underflow (core_dac_underflow),   
     .core_dac_i0_enable (dma_dac_i0_enable),
     .core_dac_i0_data (dma_dac_i0_data),
-    .core_dac_valid (dma_dac_valid),
+    .core_dac_i0_valid (dma_dac_rd_enable),
+    .core_dac_valid_in (dma_dac_rd_valid),
     .core_dac_q0_enable (dma_dac_q0_enable),
     .core_dac_q0_data (dma_dac_q0_data),
     .core_dac_i1_enable (dma_dac_i1_enable), 
     .core_dac_i1_data (dma_dac_i1_data),
     .core_dac_q1_enable (dma_dac_q1_enable),
     .core_dac_q1_data (dma_dac_q1_data),
+    .core_dac_underflow (dma_dac_rd_underflow),
     .dma_adc_i0_enable (core_adc_i0_enable),
     .dma_adc_i0_data (core_adc_i0_data),
-    .dma_adc_i0_valid (core_adc_i0_valid),
+    .dma_adc_wr_en (core_adc_i0_valid),
     .dma_adc_q0_enable (core_adc_q0_enable),
-    .dma_adc_q0_data (core_adc_q0_data),
-    .dma_adc_q0_valid (core_adc_q0_valid),
+    .dma_adc_q0_data (core_adc_q0_data),    
     .dma_adc_i1_enable (core_adc_i1_enable),
-    .dma_adc_i1_data (core_adc_i1_data),
-    .dma_adc_i1_valid (core_adc_i1_valid),
+    .dma_adc_i1_data (core_adc_i1_data),    
     .dma_adc_q1_enable (core_adc_q1_enable),
-    .dma_adc_q1_data (core_adc_q1_data),
-    .dma_adc_q1_valid (core_adc_q1_valid),
+    .dma_adc_q1_data (core_adc_q1_data),    
+    .dma_adc_wr_overflow (core_adc_overflow),
     .core_adc_i0_enable (dma_adc_i0_enable),
     .core_adc_i0_data (dma_adc_i0_data),
-    .core_adc_i0_valid (dma_adc_i0_valid),
+    .core_adc_i0_valid (dma_adc_wr_enable),
     .core_adc_q0_enable (dma_adc_q0_enable),
-    .core_adc_q0_data (dma_adc_q0_data),
-    .core_adc_q0_valid (dma_adc_q0_valid),
+    .core_adc_q0_data (dma_adc_q0_data),    
     .core_adc_i1_enable (dma_adc_i1_enable),
-    .core_adc_i1_data (dma_adc_i1_data),
-    .core_adc_i1_valid (dma_adc_i1_valid),
+    .core_adc_i1_data (dma_adc_i1_data),    
     .core_adc_q1_enable (dma_adc_q1_enable),
     .core_adc_q1_data (dma_adc_q1_data),
-    .core_adc_q1_valid (dma_adc_q1_valid));
+    .core_adc_overflow (dma_adc_wr_overflow));
 
   (* keep_hierarchy = "yes" *) system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
@@ -325,49 +319,49 @@ module system_top (
     .up_dac_gpio_out (dac_gpio_input),
     .dma_dac_i0_enable (dma_dac_i0_enable),
     .dma_dac_i0_data (dma_dac_i0_data),
-    .dma_dac_valid (dma_dac_valid),
+    .dma_dac_rd_enable (dma_dac_rd_enable),
     .dma_dac_q0_enable (dma_dac_q0_enable),
     .dma_dac_q0_data (dma_dac_q0_data),
     .dma_dac_i1_enable (dma_dac_i1_enable),
     .dma_dac_i1_data (dma_dac_i1_data),
     .dma_dac_q1_enable (dma_dac_q1_enable),
     .dma_dac_q1_data (dma_dac_q1_data),
+    .dma_dac_rd_valid (dma_dac_rd_valid),
+    .dma_dac_rd_underflow (dma_dac_rd_underflow),
     .core_dac_i0_enable (core_dac_i0_enable),
     .core_dac_i0_data (core_dac_i0_data),
     .core_dac_i0_valid (core_dac_i0_valid),
     .core_dac_q0_enable (core_dac_q0_enable),
-    .core_dac_q0_data (core_dac_q0_data),
-    .core_dac_q0_valid (core_dac_q0_valid),
+    .core_dac_q0_data (core_dac_q0_data),    
     .core_dac_i1_enable (core_dac_i1_enable),
-    .core_dac_i1_data (core_dac_i1_data),
-    .core_dac_i1_valid (core_dac_i1_valid),
+    .core_dac_i1_data (core_dac_i1_data),    
     .core_dac_q1_enable (core_dac_q1_enable),
     .core_dac_q1_data (core_dac_q1_data),
-    .core_dac_q1_valid (core_dac_q1_valid),
+    .core_dac_i0_valid_in (core_dac_valid_in),
+    .core_dac_q0_valid_in (core_dac_valid_in),
+    .core_dac_i1_valid_in (core_dac_valid_in),
+    .core_dac_q1_valid_in (core_dac_valid_in),
+    .core_dac_underflow (core_dac_underflow),    
     .dma_adc_i0_enable (dma_adc_i0_enable),
     .dma_adc_i0_data (dma_adc_i0_data),
-    .dma_adc_i0_valid (dma_adc_i0_valid),
+    .dma_adc_wr_en (dma_adc_wr_enable),    
     .dma_adc_q0_enable (dma_adc_q0_enable),
-    .dma_adc_q0_data (dma_adc_q0_data),
-    .dma_adc_q0_valid (dma_adc_q0_valid),
+    .dma_adc_q0_data (dma_adc_q0_data),    
     .dma_adc_i1_enable (dma_adc_i1_enable),
-    .dma_adc_i1_data (dma_adc_i1_data),
-    .dma_adc_i1_valid (dma_adc_i1_valid),
+    .dma_adc_i1_data (dma_adc_i1_data),    
     .dma_adc_q1_enable (dma_adc_q1_enable),
     .dma_adc_q1_data (dma_adc_q1_data),
-    .dma_adc_q1_valid (dma_adc_q1_valid),
+    .dma_adc_wr_overflow (dma_adc_wr_overflow),    
     .core_adc_i0_enable (core_adc_i0_enable),
     .core_adc_i0_data (core_adc_i0_data),
     .core_adc_i0_valid (core_adc_i0_valid),
     .core_adc_q0_enable (core_adc_q0_enable),
-    .core_adc_q0_data (core_adc_q0_data),
-    .core_adc_q0_valid (core_adc_q0_valid),
+    .core_adc_q0_data (core_adc_q0_data),    
     .core_adc_i1_enable (core_adc_i1_enable),
-    .core_adc_i1_data (core_adc_i1_data),
-    .core_adc_i1_valid (core_adc_i1_valid),
+    .core_adc_i1_data (core_adc_i1_data),    
     .core_adc_q1_enable (core_adc_q1_enable),
     .core_adc_q1_data (core_adc_q1_data),
-    .core_adc_q1_valid (core_adc_q1_valid));
+    .core_adc_overflow (core_adc_overflow));
 
 endmodule
 
