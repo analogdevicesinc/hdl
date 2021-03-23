@@ -89,7 +89,7 @@ proc ad_data_offload_create {instance_name datapath_type mem_type mem_size sourc
         AXI_DATA_WIDTH $ddr_data_width \
         AXI_ADDR_WIDTH $ddr_addr_width \
         AXI_ADDRESS 0x00000000 \
-        AXI_ADDRESS_LIMIT [expr { pow(2, $ddr_addr_width) } - 1] \
+        AXI_ADDRESS_LIMIT [format 0x%X [expr int([expr { pow(2, 30) }]) - 1]] \
         REMOVE_NULL_BEAT_EN $datapath_type \
       ]
 
