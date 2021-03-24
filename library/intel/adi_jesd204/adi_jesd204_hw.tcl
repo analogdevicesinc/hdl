@@ -4,6 +4,7 @@
 ###############################################################################
 
 package require qsys 14.0
+package require quartus::device
 source ../../../scripts/adi_env.tcl
 source ../../scripts/adi_ip_intel.tcl
 
@@ -321,6 +322,8 @@ proc jesd204_compose {} {
   set input_pipeline [get_parameter_value "INPUT_PIPELINE_STAGES"]
   set tpl_data_path_width [get_parameter_value "TPL_DATA_PATH_WIDTH"]
 
+  set sip_tile [quartus::device::get_part_info -sip_tile $device]
+
   set pllclk_frequency [expr $lane_rate / 2]
   set linkclk_frequency [expr $lane_rate / 40]
   set deviceclk_frequency [expr $linkclk_frequency * 4 / $tpl_data_path_width]
@@ -405,7 +408,7 @@ proc jesd204_compose {} {
     add_connection sys_clock.clk_reset link_pll_reset_control.reset
     add_connection link_pll_reset_control.pll_powerdown link_pll.pll_powerdown
 
-  } elseif {$device_family == "Stratix 10"} {
+  } elseif {$device_family == "Stratix 10" && $sip_tile == "H-Tile"} {
 
     send_message info "Instantiate a fpll_s10_htile for link_pll."
     add_instance link_pll altera_xcvr_fpll_s10_htile
@@ -423,6 +426,10 @@ proc jesd204_compose {} {
     set_instance_parameter_value link_pll {set_capability_reg_enable} {1}
 
     set outclk_name "outclk_div1"
+
+  } elseif {$device_family == "Stratix 10" && $sip_tile == "E-Tile"} {
+
+    ## No fPLL here, PLL embedded in Native PHY
 
   } else {
   ## Unsupported device
