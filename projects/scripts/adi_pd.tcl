@@ -119,6 +119,8 @@ proc sysid_gen_sys_init_file {{custom_string {}}} {
     } else {
       set gitbranch_string [lindex $gitbranch_string [expr [lsearch -exact $gitbranch_string "*"] + 1]];
 	}
+  } else {
+    set gitbranch_string "";
   }
 
   set git_clean_hex [hexstr_flip [stringtohex $git_clean_string 4]];
