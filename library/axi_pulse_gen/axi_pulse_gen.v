@@ -129,6 +129,7 @@ module axi_pulse_gen #(
     .pulse_width (pulse_width_s),
     .pulse_period (pulse_period_s),
     .load_config (load_config_s),
+    .sync (1'b0),
     .pulse (pulse));
 
   up_axi #(
