@@ -78,9 +78,9 @@ add_interface link_rx conduit end
 add_interface_port link_rx o_phy_data char Output 64
 add_interface_port link_rx o_phy_header header Output 2
 add_interface_port link_rx o_phy_block_sync block_sync Output 1
-add_interface_port link_rx o_phy_charisk charisk Output 4
-add_interface_port link_rx o_phy_disperr disperr Output 4
-add_interface_port link_rx o_phy_notintable notintable Output 4
+add_interface_port link_rx o_phy_charisk charisk Output 8
+add_interface_port link_rx o_phy_disperr disperr Output 8
+add_interface_port link_rx o_phy_notintable notintable Output 8
 add_interface_port link_rx o_phy_patternalign_en patternalign_en Input 1
 
 add_interface phy_rx_parallel_data conduit end
