@@ -285,27 +285,31 @@ proc jesd204_rx_elaboration_callback {} {
     set_port_property rx_phy${i}_data fragment_list \
       [format "phy_data(%d:%d)" [expr (8*$phy_width)*($i+1)-1] [expr 8*$phy_width*$i]]
 
-    add_interface_port rx_phy${i} rx_phy${i}_header header Input 2
-    set_port_property rx_phy${i}_header fragment_list \
-      [format "phy_header(%d:%d)" [expr 2*($i+1)-1] [expr 2*$i]]
+    if {[get_parameter_value "LINK_MODE"]==1} {
+      add_interface_port rx_phy${i} rx_phy${i}_charisk charisk Input $phy_width
+      set_port_property rx_phy${i}_charisk fragment_list \
+        [format "phy_charisk(%d:%d)" [expr $phy_width*($i+1)-1] [expr $phy_width*$i]]
 
-    add_interface_port rx_phy${i} rx_phy${i}_charisk charisk Input $phy_width
-    set_port_property rx_phy${i}_charisk fragment_list \
-      [format "phy_charisk(%d:%d)" [expr $phy_width*($i+1)-1] [expr $phy_width*$i]]
+      add_interface_port rx_phy${i} rx_phy${i}_disperr disperr Input $phy_width
+      set_port_property rx_phy${i}_disperr fragment_list \
+        [format "phy_disperr(%d:%d)" [expr $phy_width*($i+1)-1] [expr $phy_width*$i]]
 
-    add_interface_port rx_phy${i} rx_phy${i}_disperr disperr Input $phy_width
-    set_port_property rx_phy${i}_disperr fragment_list \
-      [format "phy_disperr(%d:%d)" [expr $phy_width*($i+1)-1] [expr $phy_width*$i]]
+      add_interface_port rx_phy${i} rx_phy${i}_notintable notintable Input $phy_width
+      set_port_property rx_phy${i}_notintable fragment_list \
+        [format "phy_notintable(%d:%d)" [expr $phy_width*($i+1)-1] [expr $phy_width*$i]]
 
-    add_interface_port rx_phy${i} rx_phy${i}_notintable notintable Input $phy_width
-    set_port_property rx_phy${i}_notintable fragment_list \
-      [format "phy_notintable(%d:%d)" [expr $phy_width*($i+1)-1] [expr $phy_width*$i]]
+      add_interface_port rx_phy${i} rx_phy${i}_patternalign_en patternalign_en Output 1
+      set_port_property rx_phy${i}_patternalign_en fragment_list "phy_en_char_align"
+    }
 
-    add_interface_port rx_phy${i} rx_phy${i}_block_sync block_sync Input 1
-    set_port_property rx_phy${i}_block_sync fragment_list \
-      [format "phy_header(%d:%d)" [expr 1*($i+1)-1] [expr 1*$i]]
+    if {[get_parameter_value "LINK_MODE"]==2} {
+      add_interface_port rx_phy${i} rx_phy${i}_header header Input 2
+      set_port_property rx_phy${i}_header fragment_list \
+        [format "phy_header(%d:%d)" [expr 2*($i+1)-1] [expr 2*$i]]
 
-    add_interface_port rx_phy${i} rx_phy${i}_patternalign_en patternalign_en Output 1
-    set_port_property rx_phy${i}_patternalign_en fragment_list "phy_en_char_align"
+      add_interface_port rx_phy${i} rx_phy${i}_block_sync block_sync Input 1
+      set_port_property rx_phy${i}_block_sync fragment_list \
+        [format "phy_header(%d:%d)" [expr 1*($i+1)-1] [expr 1*$i]]
+    }
   }
 }
