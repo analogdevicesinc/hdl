@@ -225,13 +225,17 @@ proc jesd204_tx_elaboration_callback {} {
     set_port_property tx_phy${i}_data fragment_list \
       [format "phy_data(%d:%d)" [expr (8*$phy_width)*($i+1)-1] [expr 8*$phy_width*$i]]
 
-    add_interface_port tx_phy${i} tx_phy${i}_charisk charisk Output $phy_width
-    set_port_property tx_phy${i}_charisk fragment_list \
-      [format "phy_charisk(%d:%d)" [expr $phy_width*($i+1)-1] [expr $phy_width*$i]]
+    if {[get_parameter_value "LINK_MODE"]==1} {
+      add_interface_port tx_phy${i} tx_phy${i}_charisk charisk Output $phy_width
+      set_port_property tx_phy${i}_charisk fragment_list \
+        [format "phy_charisk(%d:%d)" [expr $phy_width*($i+1)-1] [expr $phy_width*$i]]
+    }
 
-    add_interface_port tx_phy${i} tx_phy${i}_header header Output 2
-    set_port_property tx_phy${i}_header fragment_list \
-      [format "phy_header(%d:%d)" [expr 2*($i+1)-1] [expr 2*$i]]
+    if {[get_parameter_value "LINK_MODE"]==2} {
+      add_interface_port tx_phy${i} tx_phy${i}_header header Output 2
+      set_port_property tx_phy${i}_header fragment_list \
+        [format "phy_header(%d:%d)" [expr 2*($i+1)-1] [expr 2*$i]]
+    }
   }
 
 }
