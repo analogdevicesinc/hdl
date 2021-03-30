@@ -10,7 +10,7 @@ source $ad_hdl_dir/library/scripts/adi_ip_intel.tcl
 
 ad_ip_create jesd204_rx "ADI JESD204 Receive" jesd204_rx_elaboration_callback
 
-set_module_property INTERNAL true
+set_module_property INTERNAL false
 
 # files
 
