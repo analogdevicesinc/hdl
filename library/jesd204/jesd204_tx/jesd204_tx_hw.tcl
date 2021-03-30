@@ -49,7 +49,7 @@ source $ad_hdl_dir/library/scripts/adi_ip_intel.tcl
 
 ad_ip_create jesd204_tx "ADI JESD204 Transmit" jesd204_tx_elaboration_callback
 
-set_module_property INTERNAL true
+set_module_property INTERNAL false
 
 # files
 
