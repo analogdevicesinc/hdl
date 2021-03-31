@@ -8,10 +8,13 @@ Data offload module for high-speed converters:
 **NOTE**: This IP will always have a storage unit (internal or external to the FPGA) and is
 designed to handle high data rates. If your data paths will run in a lower data
 rate, and your intention is just to transfer the data to another clock domain or
-to adjust the bus width of the data path, you must to use another IP.
+to adjust the bus width of the data path, you may want to check out the util_axis_fifo or
+util_axis_fifo_asym IPs.
+
+The initialization and data transfer looks as follows:
 
   * in case of DAC, the DMA initialize the storage unit, after that the controller
-will push the data to the DAC interface in one-shot or cyclic way, until the next initialization
+will push the data to the DAC interface in one-shot or cyclic way
 
   * in case of ADC, the DMA request a transfer, the controller will save the data into
 the storage unit, after that will push it to the DMA
@@ -48,7 +51,7 @@ URAM, external memory etc.)
 
 ## Block diagram
 
-![Generic Block Diagram](./docs/do_arch.svg)
+![Generic Block Diagram](./docs/generic_bd.svg)
 
 ## Parameters
 
@@ -57,27 +60,18 @@ URAM, external memory etc.)
 |ID                    |  integer    |    0       | Instance ID number | 
 |MEM_TYPE              |  [ 0:0]     |    0       | Define the used storage type: FPGA RAM - 0; external DDR - 1 |
 |MEM_SIZE              |  [31:0]     |   1024     | Define the size of the storage element |
-|RX_ENABLE             |  [ 0:0]     |    1       | Enable/disable the ADC path |
-|RX_FRONTEND_IF        |  [ 0:0]     |    0       | M_AXIS - 0; FIFO_RD - 1 (FRONTEND is the DMA side) |
-|RX_BACKEND_IF         |  [ 0:0]     |    0       | S_AXIS - 0; FIFO_WR - 1 (BACKEND is the device side) |
-|RX_FRONTEND_DATA_WIDTH|  integer    |    64      | The data width of the RX frontend interface, it depends of the dma configuration |
-|RX_BACKEND_DATA_WIDTH |  integer    |    64      | The data width of the RX backend interface, it depends of the device core configuration |
-|RX_RAW_DATA_EN        |  [ 0:0]     |    1       | Enables a gearbox module in the RX path, so only the raw samples will be stored in the memory. |
-|TX_ENABLE             |  [ 0:0]     |    1       | Enable/disable the DAC path |
-|TX_FRONTEND_IF        |  [ 0:0]     |    0       | S_AXIS - 0; FIFO_WR - 1 (FRONTEND is the DMA side) |
-|TX_BACKEND_IF         |  [ 0:0]     |    0       | M_AXIS - 0; FIFO_RD - 1 (BACKEND is the device side) |
-|TX_FRONTEND_DATA_WIDTH|  integer    |    64      | The data width of the TX frontend interface, it depends of the dma configuration |
-|TX_BACKEND_DATA_WIDTH |  integer    |    64      | The data width of the TX backend interface, it depends of the device core configuration |
-|TX_RAW_DATA_EN        |  [ 0:0]     |    1       | Enables a gearbox module in the TX path, so only the raw samples will be stored in the memory. |
-|MEMC_UIF_TYPE         |  [ 0:0]     |    0       | AXI_MM - 0; AVL_MM - 1 |
 |MEMC_UIF_DATA_WIDTH   |  [ 0:0]     |   512      | The valid data depends on the DDRx memory controller IP. |
-|MEMC_UIF_ADDRESS_WIDTH|  integer    |    25      | The valid data depends on the DDRx memory controller IP. |
-|MEMC_RX_BADDRESS      |  [31:0]     |32'h000000  | DDR base address for the ADC data. |
-|MEMC_TX_BADDRESS      |  [31:0]     |32'h100000  | DDR base address for the DAC data. |
+|TX_OR_RXN_PATH        |  [ 0:0]     |    1       | If set TX path enabled, otherwise RX |
+|SRC_DATA_WIDTH        |  integer    |    64      | The data width of the source interface |
+|SRC_RAW_DATA_EN       |  [ 0:0]     |     0      | Enable if the data path does extend samples to 16 bits | 
+|SRC_ADDR_WIDTH        |  integer    |    8       | The address width of the source interface, should be defined relative to the MEM_SIZE (MEM_SIZE/SRC_DATA_WIDTH/8) |
+|DST_ADDR_WIDTH        |  integer    |    7       | The address width of the source interface, should be defined relative to the MEM_SIZE (MEM_SIZE/DST_DATA_WIDTH/8) |
+|DST_DATA_WIDTH        |  integer    |    64      | The data width of the destination interface |
+|DST_RAW_DATA_EN       |  [ 0:0]     |     0      | Enable if the data path does extend samples to 16 bits | 
+|DST_CYCLIC_EN         |  [ 0:0]     |     0      | Enables CYCLIC mode for destinations like DAC | 
+|AUTO_BRINUP           |  [ 0:0]     |     0      | If enabled the IP runs automatically after bootup | 
 
 ## Interfaces
-
-![Interfaces](../../docs/block_diagrams/data_offload/interface.svg)
 
 ### AXI4 Lite Memory Mapped Slave (S_AXI4_LITE)
 
@@ -145,10 +139,11 @@ input                   s_axi_rready
 
 ### Supported data interfaces
 
-**NOTE**: All the data interfaces for the streams should be supported by both
-frontend (DMA) and backend (device) side. Although in general the FIFO_RD and
-FIFO_WR interfaces can be found in the device side, and the AXIS interfaces on
-the DMA side.
+**NOTE**: To simplify the design both the source and destination data interface is
+an AXI4 streaming interface. A FIFO write (ADC) interface can be treated as AXI4
+stream where only the master controles the data rate (s_axis_ready is always asserted), 
+and a FIFO read (DAC) interface can be treated as an AXI4 stream where only the slave
+controles the data rate. (m_axis_valid is always asserted).
 
 #### AXI4 Stream interface (S_AXIS | M_AXIS)
 
@@ -157,11 +152,6 @@ the transmit DMA or ADC device.
 
 * The AXI Stream Master (M_AXIS) interface is used to transmit AXI stream
 to receive DMA or DAC device
-
-**NOTE**: In all cases the data stream is controlled by the device. Although the
-generic AXI Stream interface standard supports back-pressure, in our cases none
-the DAC, nore the ADC can wait for data. The DMA always have to be ready, samples
-will be lost otherwise!
 
 ```verilog
 // NOTE: this reference is a master interface
@@ -188,57 +178,38 @@ and **axis_tkeep** will be used to indicate a partial last beat. This informatio
 should be transferred from the source domain to the sink domain, so we can read
 back the data from memory correctly.
 
-#### ADI FIFO interface
+#### FIFO source and destination interface to the storage unit
 
-This is non-blocking (no back-pressure) interface for the device cores.
+This is non-blocking (no back-pressure) interface for the storage unit,
+having an address bus too, so an ad_mem module can be connected directly to controller IP.
 
-To understand the motivation behind the name, let's look at a simple FIFO and its
-interfaces:
-
-![Simple FIFO](../../docs/block_diagrams/data_offload/simple_fifo.svg)
-
-A FIFO in general has a **write** and a **read** interface. In each case the
-interface is controlled by an external logic. Meaning that the FIFO will always
-act as slave. The only difference between the two interfaces is that in case of
-the **write** interface the data is driven by the master (we are writing into
-the FIFO), and in case of the **read** interface the data is driven by the slave
-(we are reading from the FIFO).
-
-To adapt this concept in our case, the device, which can be an ADC or a DAC,
-will always be the master. This means, that an ADC core will have a **fifo write**
-interface, and a DAC core will have a **fifo read** interface.
-
-In the same time, this means, that a processing core, which wants to interface
-a device core, need to have a **salve fifo write** or a **slave fifo read**
-interface, in other words needs to act as a FIFO.
-
-**Note:** The processing core (or DMA) can have an AXI stream interface too. To
-connect an AXIS stream interface to a FIFO interface the following mapping should
-be respected:
-
- * **fifo write to AXIS slave**:
 ```verilog
-  // the processing unit should always be READY, otherwise will lose data
-  assign s_axis_valid = fifo_wr_valid;
-  assign s_axis_data = fifo_wr_data;
+// This is a FIFO source interface - it's clocked on the source clock (s_axis_aclk)
+// Reset signal
+output                         fifo_src_resetn
+// write enable signal
+output                         fifo_src_wen
+// address bus for internal memory
+output   [SRC_ADDR_WIDTH-1:0]  fifo_src_waddr
+// source data bus
+output   [SRC_DATA_WIDTH-1:0]  fifo_src_wdata
+// write last, indicates the last valid transfer
+output                         fifo_src_wlast
 ```
 
- * **fifo read to AXIS master**:
 ```verilog
-  // the processing unit should drive the data bus with the next valid data,
-  // as the READY gets asserted
-  assign m_axis_ready = fifo_rd_valid;
-  assign fifo_rd_data = m_axis_data;
+// This is a FIFO destination interface - it's clocked on the destination clock (m_axis_aclk)
+// Reset signal
+output                         fifo_dst_resetn
+// read enable signal
+output                         fifo_dst_ren
+// indicate if the storage is ready to accept read requests
+output                         fifo_dst_ready,
+// address bus for internal memory
+output   [DST_ADDR_WIDTH-1:0]  fifo_dst_raddr
+// destination data bus
+output   [DST_DATA_WIDTH-1:0]  fifo_dst_rdata
 ```
-
-User should be aware that in this case the AXI stream interface will loose the
-back pressure capability. The processing unit should be designed to compensate this
-scarcity.
-
-**NOTE**: the data stream should arrive in packed format to the core. The core
-does not care about number of channels or samples per beat. Result of this
-constraint is that the FIFO interface of the **Data Offload** module does not
-have any **enable** signals.
 
 ```verilog
 // This is a Slave FIFO Read interface
@@ -252,163 +223,6 @@ input                     fifo_rd_valid
 output  [DATA_WIDTH-1:0]  fifo_rd_data
 // indicates an underflow, the source (offload FIFO in this case) can not produce the data fast enough
 output                    fifo_rd_unf
-```
-
-```verilog
-// This is a Slave FIFO Write interface
-// device digital interface clock, or core clock
-input                     fifo_wr_clk
-// enables the channel -- in our case this is redundant -- maybe we do neet to use it at all
-input                     fifo_wr_enable
-// validates the data on the bus, it's driven by the device, indicates when the core drives the bus with new data
-input                     fifo_wr_valid
-// primary payload, its data width is equal with the channel's data width
-input   [DATA_WIDTH-1:0]  fifo_wr_data
-// indicates an overflow, the sink (offload FIFO in this case) can not consume the data fast enough
-output                    fifo_wr_ovf
-```
-
-#### AXI4 Memory Mapped master (M_AXI_MM)
-
-An AXI4 Memory Mapped interface, which transfer data into/from the external DDRx
-memory. This interface will be used explicitly with Xilinx FPGAs, to interface
-the MC (Memory Controller).
-
-```verilog
-/* clocks and resets */
-
-// clock signal of the interface, this is an independent clock from the sys_cpu, in general 200 MHz
-input                                 axi_clk
-// synchronous active low reset
-input                                 axi_resetn
-
-/* write address channel */
-
-// validates the address on the bus
-output                                axi_awvalid
-// write address ID, this signal is the identification tag for the write address group of signals
-output      [ 3:0]                    axi_awid
-// burst type, this must use INCR (incrementing address burst) -- 2'b01
-output      [ 1:0]                    axi_awburst
-// lock type, atomic characteristics of the transfer -- must be set to 1'b0
-output                                axi_awlock
-// indicates the bufferable, cacheable, write-through, write-back, and allocate attributes -- 4'b0011 recommended by Xilinx, IP as slaves in general ignores
-output      [ 3:0]                    axi_awcache
-// protection type -- not used in the core, recommended value 3'b000
-output      [ 2:0]                    axi_awprot
-// not implemented in Xilinx Endpoint IP
-output      [ 3:0]                    axi_awqos
-// not implemented in Xilinx Endpoint IP
-output      [ 3:0]                    axi_awuser
-// up to 256 beats for incrementing (INCR)
-output      [ 7:0]                    axi_awlen
-// transfer width 8 to 1024 supported, in general the MIG core has 512 bits interface
-output      [ 2:0]                    axi_awsize
-// write address
-output      [ 31:0]                   axi_awaddr
-// write ready, indicates that the slave can accept the address
-input                                 axi_awready
-
-/* write data channel */
-
-// validate the data on the bus
-output                                axi_wvalid
-// write data
-output      [AXI_DATA_WIDTH-1:0]      axi_wdata
-/8)-1:0]  axi_wstrb   // write strobe, indicates which byte lanes to update
-output      [(AXI_DATA_WIDTH
-// fully supported, this signal indicates the last transfer in a write burst
-output                                axi_wlast
-// not implemented in Xilinx Endpoint IP
-output      [ 3:0]                    axi_wuser
-// write ready, indicates that the slave can accept the data
-input                                 axi_wready
-
-/* write response channel */
-
-// validates the write response of the slave
-input                                 axi_bvalid
-// the identification tag of the write response, the BID value must match the AWID
-input       [ 3:0]                    axi_bid
-// write response, indicate the status of the transfer
-input       [ 1:0]                    axi_bresp
-// not implemented in Xilinx Endpoint IP
-input       [ 3:0]                    axi_buser
-// response ready, indicates that the master can accept the data
-output                                axi_bready
-
-/* read address channel */
-
-// validates the address on the bus
-output                                axi_arvalid
-// read address ID, this signal is the identification tag for the read address group of signals
-output      [ 3:0]                    axi_arid
-// burst type, this must use INCR (incrementing address burst) -- 2'b01
-output      [ 1:0]                    axi_arburst
-// lock type, atomic characteristics of the transfer -- must be set to 1'b0
-output                                axi_arlock
-// indicates the bufferable, cacheable, write-through, write-back, and allocate attributes -- 4'b0011 recommended by Xilinx, IP as slaves in general ignores
-output      [ 3:0]                    axi_arcache
-// protection type -- not used in the core
-output      [ 2:0]                    axi_arprot
-// not implemented in Xilinx Endpoint IP
-output      [ 3:0]                    axi_arqos
-// not implemented in Xilinx Endpoint IP
-output      [ 3:0]                    axi_aruser
-// up to 256 beats for incrementing (INCR)
-output      [ 7:0]                    axi_arlen
-// transfer width 8 to 1024 supported, in general the MIG core has 512 bits interface
-output      [ 2:0]                    axi_arsize
-// read address
-output      [ 31:0]                   axi_araddr
-// read ready, indicates that the slave can accept the address
-input                                 axi_arready
-
-/* read data channel */
-
-// validate the data on the bus
-input                                 axi_rvalid
-// the RID is generated by the slave and must match by the ARID value
-input       [ 3:0]                    axi_rid
-// not implemented in Xilinx Endpoint IP
-input       [ 3:0]                    axi_ruser
-// read response, indicate the status of the transfer
-input       [ 1:0]                    axi_rresp
-// indicates the last transfer in a read burst
-input                                 axi_rlast
-// read data drivers by the slave
-input       [AXI_DATA_WIDTH-1:0]      axi_rdata
-// read ready, indicates that the master can accept the data
-output                                axi_rready
-```
-
-### Avalon Memory Mapped master (AVL_MM)
-
-An Avalon Memory Mapped interface which transfer data into/from an external DDR4
-memory. This interface will be used explicitly with Intel FPGAs.
-
-```verilog
-// interface clock and reset
-input                                 avl_clk
-input                                 avl_reset
-// address for read or write
-output  reg [(AVL_ADDRESS_WIDTH-1):0] avl_address
-// indicate the number of transfers in each burst
-output  reg [  6:0]                   avl_burstcount
-// enables specific byte lanes during transfers on interfaces fo width greater than 8 bits [3]
-output  reg [ 63:0]                   avl_byteenable
-// asserted to indicate a read transfer (request)
-output                                avl_read
-// read data, driven from the slave to the master
-input       [(AVL_DATA_WIDTH-1):0]    avl_readdata
-// used for variable-latency, pipelined read transfers, to validate the data on the bus
-input                                 avl_readdata_valid
-// or waitrequest_n in specs, indicates the availability of the slave
-input                                 avl_ready
-// asserted to indicate a write transfer
-output                                avl_write
-// write data, driven from the master to the slave
-output      [(AVL_DATA_WIDTH-1):0]    avl_writedata
 ```
 
 ###  Initialization request interface
@@ -611,11 +425,11 @@ the AXI stream interface)
 
 ### RX control FSM for internal RAM mode
 
-![RX_control FMS for internal RAM mode](../../docs/block_diagrams/data_offload/rx_bram_fsm.svg)
+![RX_control FMS for internal RAM mode](../../docs/rx_bram_fsm.svg)
 
 ### TX control FSM for internal RAM mode
 
-![TX_control FMS for internal RAM mode](../../docs/block_diagrams/data_offload/tx_bram_fsm.svg)
+![TX_control FMS for internal RAM mode](../../docs/tx_bram_fsm.svg)
 
 **TODO** FSMs for the external DDR mode
 
