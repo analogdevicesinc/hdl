@@ -51,45 +51,61 @@ module prcfg_top#(
 
   // TX side
   input                   dma_dac_0_enable,
-  output      [(DBUS_WIDTH-1):0]  dma_dac_0_data,
+  //output      [(DBUS_WIDTH-1):0]  dma_dac_0_data,
+  output      [(DATA_WIDTH-1):0]  dma_dac_0_data,
   input                   dma_dac_rd_enable,
   input                   dma_dac_1_enable,
-  output      [(DBUS_WIDTH-1):0]  dma_dac_1_data,
+  //output      [(DBUS_WIDTH-1):0]  dma_dac_1_data,
+  output      [(DATA_WIDTH-1):0]  dma_dac_1_data,
   input                   dma_dac_2_enable,
-  output      [(DBUS_WIDTH-1):0]  dma_dac_2_data,
+  //output      [(DBUS_WIDTH-1):0]  dma_dac_2_data,
+  output      [(DATA_WIDTH-1):0]  dma_dac_2_data,
   input                   dma_dac_3_enable,
-  output      [(DBUS_WIDTH-1):0]  dma_dac_3_data,  
+  //output      [(DBUS_WIDTH-1):0]  dma_dac_3_data, 
+  output      [(DATA_WIDTH-1):0]  dma_dac_3_data, 
 
   output                  core_dac_0_enable,
-  input       [(DBUS_WIDTH-1):0]  core_dac_0_data,
+  //input       [(DBUS_WIDTH-1):0]  core_dac_0_data,
+  input       [(DATA_WIDTH-1):0]  core_dac_0_data,
   output                  core_dac_0_valid,  
   output                  core_dac_1_enable,
-  input       [(DBUS_WIDTH-1):0]  core_dac_1_data,
+  //input       [(DBUS_WIDTH-1):0]  core_dac_1_data,
+  input       [(DATA_WIDTH-1):0]  core_dac_1_data,
   output                  core_dac_2_enable,
-  input       [(DBUS_WIDTH-1):0]  core_dac_2_data,  
+  //input       [(DBUS_WIDTH-1):0]  core_dac_2_data,
+  input       [(DATA_WIDTH-1):0]  core_dac_2_data,  
   output                  core_dac_3_enable,
-  input       [(DBUS_WIDTH-1):0]  core_dac_3_data,
+  //input       [(DBUS_WIDTH-1):0]  core_dac_3_data,
+  input       [(DATA_WIDTH-1):0]  core_dac_3_data,
 
   // RX side
   input                   dma_adc_0_enable,
-  input       [(DBUS_WIDTH-1):0]  dma_adc_0_data,
+  //input       [(DBUS_WIDTH-1):0]  dma_adc_0_data,
+  input       [(DATA_WIDTH-1):0]  dma_adc_0_data,
   input                   dma_adc_wr_en,
   input                   dma_adc_1_enable,
-  input       [(DBUS_WIDTH-1):0]  dma_adc_1_data,
+  //input       [(DBUS_WIDTH-1):0]  dma_adc_1_data,
+  input       [(DATA_WIDTH-1):0]  dma_adc_1_data,
   input                   dma_adc_2_enable,
-  input       [(DBUS_WIDTH-1):0]  dma_adc_2_data,  
+  //input       [(DBUS_WIDTH-1):0]  dma_adc_2_data, 
+  input       [(DATA_WIDTH-1):0]  dma_adc_2_data, 
   input                   dma_adc_3_enable,
-  input       [(DBUS_WIDTH-1):0]  dma_adc_3_data,  
+  //input       [(DBUS_WIDTH-1):0]  dma_adc_3_data, 
+  input       [(DATA_WIDTH-1):0]  dma_adc_3_data, 
 
   output                  core_adc_0_enable,
-  output      [(DBUS_WIDTH-1):0]  core_adc_0_data,
+  //output      [(DBUS_WIDTH-1):0]  core_adc_0_data,
+  output      [(DATA_WIDTH-1):0]  core_adc_0_data,
   output                  core_adc_0_valid,
   output                  core_adc_1_enable,
-  output      [(DBUS_WIDTH-1):0]  core_adc_1_data,  
+  //output      [(DBUS_WIDTH-1):0]  core_adc_1_data,
+  output      [(DATA_WIDTH-1):0]  core_adc_1_data,  
   output                  core_adc_2_enable,
-  output      [(DBUS_WIDTH-1):0]  core_adc_2_data,
+  //output      [(DBUS_WIDTH-1):0]  core_adc_2_data,
+  output      [(DATA_WIDTH-1):0]  core_adc_2_data,
   output                  core_adc_3_enable,
-  output      [(DBUS_WIDTH-1):0]  core_adc_3_data);
+  //output      [(DBUS_WIDTH-1):0]  core_adc_3_data
+  output      [(DATA_WIDTH-1):0]  core_adc_3_data);
 
   localparam  ENABELED    = 1;
   localparam  DATA_WIDTH  = 16;
@@ -105,16 +121,20 @@ module prcfg_top#(
 
   wire    [(NUM_CHANNEL - 1):0]     core_adc_enable_s;
   wire    [(NUM_CHANNEL - 1):0]     core_adc_valid_s;
-  wire    [(NUM_CHANNEL - 1):0]     core_adc_data_s[15:0];
+  //wire    [(NUM_CHANNEL - 1):0]     core_adc_data_s[15:0];
+  wire    [(DATA_WIDTH - 1):0]      core_adc_data_s[(NUM_CHANNEL - 1):0];
   wire    [(NUM_CHANNEL - 1):0]     dma_adc_enable_s;
   wire    [(NUM_CHANNEL - 1):0]     dma_adc_valid_s;
-  wire    [(NUM_CHANNEL - 1):0]     dma_adc_data_s[15:0];
+  //wire    [(NUM_CHANNEL - 1):0]     dma_adc_data_s[15:0];
+  wire    [(DATA_WIDTH - 1):0]      dma_adc_data_s[(NUM_CHANNEL - 1):0];
   wire    [(NUM_CHANNEL - 1):0]     core_dac_enable_s;
   wire    [(NUM_CHANNEL - 1):0]     core_dac_valid_s;
-  wire    [(NUM_CHANNEL - 1):0]     core_dac_data_s[15:0];
+  //wire    [(NUM_CHANNEL - 1):0]     core_dac_data_s[15:0];
+  wire    [(DATA_WIDTH - 1):0]      core_dac_data_s[(NUM_CHANNEL - 1):0];
   wire    [(NUM_CHANNEL - 1):0]     dma_dac_enable_s;
   wire    [(NUM_CHANNEL - 1):0]     dma_dac_valid_s;
-  wire    [(NUM_CHANNEL - 1):0]     dma_dac_data_s[15:0];
+  //wire    [(NUM_CHANNEL - 1):0]     dma_dac_data_s[15:0];
+  wire    [(DATA_WIDTH - 1):0]      dma_dac_data_s[(NUM_CHANNEL - 1):0];
 
   genvar l_inst;
 
