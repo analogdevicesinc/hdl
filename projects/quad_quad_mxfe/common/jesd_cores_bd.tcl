@@ -130,7 +130,7 @@ proc create_phy_ll_group {H_NAME INDEX {LANE_MAP {}} } {
                                                      $TX_SAMPLE_WIDTH \
                                                      $DATAPATH_WIDTH
 
-  ad_ip_parameter $H_NAME/tx_mxfe_tpl_core/tpl_core CONFIG.DATAPATH_DISABLE 1
+  ad_ip_parameter $H_NAME/tx_mxfe_tpl_core/dac_tpl_core CONFIG.DATAPATH_DISABLE 1
 
   ad_connect  device_clk $H_NAME/rx_mxfe_tpl_core/link_clk
   ad_connect  device_clk $H_NAME/tx_mxfe_tpl_core/link_clk

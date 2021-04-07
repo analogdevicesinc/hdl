@@ -9,7 +9,7 @@ M_DEPS += timing_constr.xdc
 M_DEPS += ../common/quad_quad_mxfe_bd.tcl
 M_DEPS += ../../common/vcu128/vcu128_system_constr.xdc
 M_DEPS += ../../common/vcu128/vcu128_system_bd.tcl
-M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
+M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
 M_DEPS += ../../../library/common/ad_3w_spi.v
 
