@@ -18,6 +18,7 @@ ad_ip_files util_dacfifo [list\
 ad_ip_parameter DEVICE_FAMILY STRING {Arria 10}
 ad_ip_parameter ADDRESS_WIDTH INTEGER 6
 ad_ip_parameter DATA_WIDTH INTEGER 128
+ad_ip_parameter ENABLE_SINGLE_SHOT_CONTROL INTEGER 0
 
 # interfaces
 
@@ -41,4 +42,5 @@ ad_interface signal dac_xfer_out output 1 xfer_req
 ad_interface signal dac_dunf output 1 unf
 
 ad_interface signal bypass input 1 bypass
+ad_interface signal single_shot_output input 1 single_shot_output
 

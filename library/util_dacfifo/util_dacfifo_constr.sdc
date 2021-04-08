@@ -1,5 +1,6 @@
 
 set_false_path -to [get_registers *dac_bypass_m1*]
+set_false_path -to [get_registers *dac_single_shot_output_m1*]
 set_false_path -to [get_registers *dma_bypass_m1*]
 
 set_false_path -from [get_registers *dac_raddr_g*] -to [get_registers *dma_raddr_m1*]
