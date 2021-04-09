@@ -111,6 +111,9 @@ module system_top  #(
   wire            tx_device_clk;
   wire            rx_device_clk;
 
+  wire            dac_fifo_bypass;
+  wire            dac_fifo_single_shot_output;
+
   assign iic_rstn = 1'b1;
 
   // instantiations
@@ -204,6 +207,7 @@ module system_top  #(
   assign txen[0]          = gpio_o[58];
   assign txen[1]          = gpio_o[59];
   assign dac_fifo_bypass  = gpio_o[60];
+  assign dac_fifo_single_shot_output = gpio_o[61];
 
   /* Board GPIOS. Buttons, LEDs, etc... */
   assign gpio_i[20: 8] = gpio_bd_i;
@@ -267,7 +271,8 @@ module system_top  #(
     .tx_sync_0 (tx_syncin),
     .rx_sysref_0 (sysref),
     .tx_sysref_0 (sysref),
-    .dac_fifo_bypass (dac_fifo_bypass)
+    .dac_fifo_bypass (dac_fifo_bypass),
+    .dac_fifo_single_shot_output (dac_fifo_single_shot_output)
   );
 
   assign rx_data_p_loc[TX_JESD_L*TX_NUM_LINKS-1:0] = rx_data_p[TX_JESD_L*TX_NUM_LINKS-1:0];

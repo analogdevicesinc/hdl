@@ -19,6 +19,8 @@ ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
 ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/mem_init_sys.txt"
 ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 
+ad_ip_parameter mxfe_dac_fifo CONFIG.ENABLE_SINGLE_SHOT_CONTROL "1"
+
 sysid_gen_sys_init_file
 
 # Parameters for 15.5Gpbs lane rate

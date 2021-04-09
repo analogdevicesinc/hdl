@@ -540,6 +540,9 @@ ad_connect  mxfe_dac_fifo/dac_dunf tx_mxfe_tpl_core/dac_dunf
 create_bd_port -dir I dac_fifo_bypass
 ad_connect  mxfe_dac_fifo/bypass dac_fifo_bypass
 
+create_bd_port -dir I dac_fifo_single_shot_output
+ad_connect  mxfe_dac_fifo/single_shot_output dac_fifo_single_shot_output
+
 # interconnect (cpu)
 if {$ADI_PHY_SEL == 1} {
 ad_cpu_interconnect 0x44a60000 axi_mxfe_rx_xcvr
