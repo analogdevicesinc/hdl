@@ -6,6 +6,7 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 adi_ip_create util_adxcvr
 adi_ip_files util_adxcvr [list \
   "$ad_hdl_dir/library/scripts/adi_xilinx_device_info_enc.tcl" \
+  "$ad_hdl_dir/library/jesd204/jesd204_common/sync_header_align.v" \
   "util_adxcvr_constr.xdc" \
   "util_adxcvr_xcm.v" \
   "util_adxcvr_xch.v" \
@@ -19,6 +20,30 @@ adi_ip_bd util_adxcvr "bd/bd.tcl"
 adi_ip_add_core_dependencies { \
 	analog.com:user:util_cdc:1.0 \
 }
+set cc [ipx::current_core]
+
+# Arrange GUI page layout
+set page0 [ipgui::get_pagespec -name "Page 0" -component $cc]
+# Link layer mode
+set p [ipgui::get_guiparamspec -name "LINK_MODE" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $page0
+set_property -dict [list \
+ "display_name" "Link Layer mode" \
+ "tooltip" "Link Layer mode" \
+ "widget" "comboBox" \
+] $p
+
+set_property -dict [list \
+  value_validation_type pairs \
+  value_validation_pairs {64B66B 2 8B10B 1} \
+] [ipx::get_user_parameters $p -of_objects $cc]
+
+# Data width selection
+set param [ipx::get_user_parameters DATA_PATH_WIDTH -of_objects $cc]
+set_property -dict [list \
+  enablement_tcl_expr {$LINK_MODE==1} \
+  value_tcl_expr {expr $LINK_MODE*4} \
+] $param
 
 ipx::remove_all_bus_interface [ipx::current_core]
 
@@ -231,6 +256,12 @@ for {set n 0} {$n < 16} {incr n} {
   ipx::add_port_map rxdata [ipx::get_bus_interfaces rx_${n} -of_objects [ipx::current_core]]
   set_property physical_name rx_data_${n} [ipx::get_port_maps rxdata -of_objects \
     [ipx::get_bus_interfaces rx_${n} -of_objects [ipx::current_core]]]
+  ipx::add_port_map rxheader [ipx::get_bus_interfaces rx_${n} -of_objects [ipx::current_core]]
+  set_property physical_name rx_header_${n} [ipx::get_port_maps rxheader -of_objects \
+    [ipx::get_bus_interfaces rx_${n} -of_objects [ipx::current_core]]]
+  ipx::add_port_map rxblock_sync [ipx::get_bus_interfaces rx_${n} -of_objects [ipx::current_core]]
+  set_property physical_name rx_block_sync_${n} [ipx::get_port_maps rxblock_sync -of_objects \
+    [ipx::get_bus_interfaces rx_${n} -of_objects [ipx::current_core]]]
 
   ipx::add_bus_interface tx_${n} [ipx::current_core]
   set_property abstraction_type_vlnv xilinx.com:display_jesd204:jesd204_tx_bus_rtl:1.0 \
@@ -243,6 +274,9 @@ for {set n 0} {$n < 16} {incr n} {
     [ipx::get_bus_interfaces tx_${n} -of_objects [ipx::current_core]]]
   ipx::add_port_map txdata [ipx::get_bus_interfaces tx_${n} -of_objects [ipx::current_core]]
   set_property physical_name tx_data_${n} [ipx::get_port_maps txdata -of_objects \
+    [ipx::get_bus_interfaces tx_${n} -of_objects [ipx::current_core]]]
+  ipx::add_port_map txheader [ipx::get_bus_interfaces tx_${n} -of_objects [ipx::current_core]]
+  set_property physical_name tx_header_${n} [ipx::get_port_maps txheader -of_objects \
     [ipx::get_bus_interfaces tx_${n} -of_objects [ipx::current_core]]]
 
 }
