@@ -12,6 +12,8 @@
 #   [RX/TX]_NUM_LINKS : Number of links, matches numer of MxFE devices
 #
 
+source ../../common/xilinx/data_offload_bd.tcl
+
 # Common parameter for TX and RX
 set JESD_MODE  $ad_project_params(JESD_MODE)
 set RX_LANE_RATE $ad_project_params(RX_LANE_RATE)
@@ -100,7 +102,7 @@ set adc_data_width [expr $RX_DMA_SAMPLE_WIDTH*$RX_NUM_OF_CONVERTERS*$RX_SAMPLES_
 set adc_dma_data_width $adc_data_width
 set adc_fifo_address_width [expr int(ceil(log(($adc_fifo_samples_per_converter*$RX_NUM_OF_CONVERTERS) / ($adc_data_width/$RX_DMA_SAMPLE_WIDTH))/log(2)))]
 
-set dac_fifo_name mxfe_dac_fifo
+set dac_data_offload_name mxfe_tx_data_offload
 set dac_data_width [expr $TX_DMA_SAMPLE_WIDTH*$TX_NUM_OF_CONVERTERS*$TX_SAMPLES_PER_CHANNEL]
 set dac_dma_data_width $dac_data_width
 set dac_fifo_address_width [expr int(ceil(log(($dac_fifo_samples_per_converter*$TX_NUM_OF_CONVERTERS) / ($dac_data_width/$TX_DMA_SAMPLE_WIDTH))/log(2)))]
@@ -195,7 +197,15 @@ ad_ip_instance util_upack2 util_mxfe_upack [list \
   SAMPLE_DATA_WIDTH $TX_DMA_SAMPLE_WIDTH \
 ]
 
-ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_dma_data_width $dac_fifo_address_width
+set data_offload_size [expr $dac_data_width / 8 * 2**$dac_fifo_address_width]
+ad_data_offload_create $dac_data_offload_name \
+                       1 \
+                       0 \
+                       $data_offload_size \
+                       $dac_data_width \
+                       $dac_data_width
+
+ad_connect $dac_data_offload_name/sync_ext GND
 
 ad_ip_instance axi_dmac axi_mxfe_tx_dma
 ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_TYPE_SRC 0
@@ -244,23 +254,25 @@ ad_connect  rx_device_clk mxfe_adc_fifo/adc_clk
 
 ad_connect  tx_device_clk tx_mxfe_tpl_core/link_clk
 ad_connect  tx_device_clk util_mxfe_upack/clk
-ad_connect  tx_device_clk mxfe_dac_fifo/dac_clk
+ad_connect  tx_device_clk $dac_data_offload_name/m_axis_aclk
 
-# dma clock domain
+# Clocks
 ad_connect  $sys_cpu_clk mxfe_adc_fifo/dma_clk
-ad_connect  $sys_dma_clk mxfe_dac_fifo/dma_clk
+ad_connect  $sys_dma_clk $dac_data_offload_name/s_axis_aclk
 
 ad_connect  $sys_cpu_clk axi_mxfe_rx_dma/s_axis_aclk
 ad_connect  $sys_dma_clk axi_mxfe_tx_dma/m_axis_aclk
+ad_connect  $sys_cpu_clk $dac_data_offload_name/s_axi_aclk
 
-# connect resets
+# Resets
 ad_connect  rx_device_clk_rstgen/peripheral_reset mxfe_adc_fifo/adc_rst
-ad_connect  tx_device_clk_rstgen/peripheral_reset mxfe_dac_fifo/dac_rst
+ad_connect  $sys_dma_resetn $dac_data_offload_name/s_axis_aresetn
+ad_connect  tx_device_clk_rstgen/peripheral_aresetn  $dac_data_offload_name/m_axis_aresetn
 ad_connect  rx_device_clk_rstgen/peripheral_reset util_mxfe_cpack/reset
 ad_connect  tx_device_clk_rstgen/peripheral_reset util_mxfe_upack/reset
 ad_connect  $sys_cpu_resetn axi_mxfe_rx_dma/m_dest_axi_aresetn
 ad_connect  $sys_dma_resetn axi_mxfe_tx_dma/m_src_axi_aresetn
-ad_connect  $sys_dma_reset  mxfe_dac_fifo/dma_rst
+ad_connect $sys_cpu_resetn $dac_data_offload_name/s_axi_aresetn
 
 #
 # connect adc dataflow
@@ -299,20 +311,15 @@ for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
   ad_connect  tx_mxfe_tpl_core/dac_enable_$i  util_mxfe_upack/enable_$i
 }
 
-# TODO: Add streaming AXI interface for DAC FIFO
-ad_connect  util_mxfe_upack/s_axis_valid VCC
-ad_connect  util_mxfe_upack/s_axis_ready mxfe_dac_fifo/dac_valid
-ad_connect  util_mxfe_upack/s_axis_data mxfe_dac_fifo/dac_data
+ad_connect $dac_data_offload_name/s_axis axi_mxfe_tx_dma/m_axis
 
-ad_connect  mxfe_dac_fifo/dma_valid axi_mxfe_tx_dma/m_axis_valid
-ad_connect  mxfe_dac_fifo/dma_data axi_mxfe_tx_dma/m_axis_data
-ad_connect  mxfe_dac_fifo/dma_ready axi_mxfe_tx_dma/m_axis_ready
-ad_connect  mxfe_dac_fifo/dma_xfer_req axi_mxfe_tx_dma/m_axis_xfer_req
-ad_connect  mxfe_dac_fifo/dma_xfer_last axi_mxfe_tx_dma/m_axis_last
-ad_connect  mxfe_dac_fifo/dac_dunf tx_mxfe_tpl_core/dac_dunf
+ad_connect  util_mxfe_upack/s_axis $dac_data_offload_name/m_axis
+ad_connect  util_mxfe_upack/s_axis_valid VCC
+
+ad_connect $dac_data_offload_name/init_req axi_mxfe_tx_dma/m_axis_xfer_req
+ad_connect tx_mxfe_tpl_core/dac_dunf GND
 
 create_bd_port -dir I dac_fifo_bypass
-ad_connect  mxfe_dac_fifo/bypass dac_fifo_bypass
 
 # interconnect (cpu)
 ad_cpu_interconnect 0x44a60000 axi_mxfe_rx_xcvr
@@ -323,6 +330,7 @@ ad_cpu_interconnect 0x44a90000 axi_mxfe_rx_jesd
 ad_cpu_interconnect 0x44b90000 axi_mxfe_tx_jesd
 ad_cpu_interconnect 0x7c420000 axi_mxfe_rx_dma
 ad_cpu_interconnect 0x7c430000 axi_mxfe_tx_dma
+ad_cpu_interconnect 0x7c440000 $dac_data_offload_name
 
 # interconnect (gt/adc)
 

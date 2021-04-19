@@ -26,8 +26,8 @@ proc ad_data_offload_create {instance_name datapath_type mem_type mem_size sourc
     create_bd_pin -dir O init_ack
     create_bd_pin -dir I sync_ext
 
-    set source_max_address [expr ($mem_size * 8) / $source_dwidth]
-    set source_awidth [log2 $source_max_address]
+    set source_addresses [expr ($mem_size * 8) / $source_dwidth]
+    set source_awidth [log2 $source_addresses]
     set destination_max_address [expr ($mem_size * 8) / $destination_dwidth]
     set destination_awidth [log2 $destination_max_address]
 
@@ -133,13 +133,5 @@ proc ad_data_offload_create {instance_name datapath_type mem_type mem_size sourc
 }
 
 proc log2 {x} {
-  if {$x <= 0} {error "log2 requires a positive argument"}
-  if {$x < 2} {
-    return $x
-  } else {
-    for {set i 0} {$x > 0} {incr i} {
-      set x [expr $x >> 1]
-    }
-    return $i
-  }
+  return [tcl::mathfunc::int [tcl::mathfunc::ceil [expr [tcl::mathfunc::log $x] / [tcl::mathfunc::log 2]]]]
 }
