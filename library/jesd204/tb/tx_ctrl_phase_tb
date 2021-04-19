@@ -5,4 +5,4 @@ SOURCE+=" ../jesd204_tx/jesd204_tx_ctrl.v"
 SOURCE+=" ../../util_cdc/sync_bits.v"
 
 cd `dirname $0`
-source run_tb.sh
+source ../../common/tb/run_tb.sh

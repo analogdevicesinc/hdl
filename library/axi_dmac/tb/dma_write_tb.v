@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module dmac_dma_write_tb;
+module dma_write_tb;
   parameter VCD_FILE = {`__FILE__,"cd"};
   parameter WIDTH_DEST = 32;
   parameter WIDTH_SRC = 32;
