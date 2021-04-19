@@ -42,6 +42,7 @@ module axi_adxcvr_up #(
   parameter   integer ID = 0,
   parameter   integer NUM_OF_LANES = 8,
   parameter   integer XCVR_TYPE = 0,
+  parameter   integer LINK_MODE = 1, // 2 - 64B/66B;  1 - 8B/10B
   parameter   [ 7:0]  FPGA_TECHNOLOGY = 0,
   parameter   [ 7:0]  FPGA_FAMILY = 0,
   parameter   [ 7:0]  SPEED_GRADE = 0,
@@ -130,7 +131,7 @@ module axi_adxcvr_up #(
 
   // parameters
 
-  localparam  [31:0]  VERSION = 32'h00110261;
+  localparam  [31:0]  VERSION = 32'h00110361;
 
   // internal registers
 
@@ -507,7 +508,9 @@ module axi_adxcvr_up #(
 
   // generic
 
-  assign up_rparam_s[15: 9] = 7'd0;
+  assign up_rparam_s[15:14] = 2'd0;
+  assign up_rparam_s[13:12] = LINK_MODE[1:0];
+  assign up_rparam_s[11: 9] = 3'd0;
   assign up_rparam_s[ 8: 8] = (TX_OR_RX_N == 0) ? 1'b0 : 1'b1;
   assign up_rparam_s[ 7: 0] = NUM_OF_LANES;
 

@@ -43,6 +43,7 @@ module axi_adxcvr #(
   parameter   integer ID = 0,
   parameter   integer NUM_OF_LANES = 8,
   parameter   integer XCVR_TYPE = 0,
+  parameter   integer LINK_MODE = 1, // 2 - 64B/66B;  1 - 8B/10B
   parameter           FPGA_TECHNOLOGY = 0,
   parameter           FPGA_FAMILY = 0,
   parameter           SPEED_GRADE = 0,
@@ -2117,6 +2118,7 @@ module axi_adxcvr #(
 
   axi_adxcvr_up #(
     .ID (ID),
+    .LINK_MODE (LINK_MODE),
     .NUM_OF_LANES (NUM_OF_LANES),
     .XCVR_TYPE (XCVR_TYPE),
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
