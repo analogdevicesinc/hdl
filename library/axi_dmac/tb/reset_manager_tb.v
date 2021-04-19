@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module dmac_reset_manager_tb;
+module reset_manager_tb;
   parameter VCD_FILE = {`__FILE__,"cd"};
 
   `define TIMEOUT 1000000

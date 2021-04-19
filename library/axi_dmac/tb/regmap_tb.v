@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module dmac_regmap_tb;
+module regmap_tb;
   parameter VCD_FILE = {`__FILE__,"cd"};
 
   `define TIMEOUT 1000000

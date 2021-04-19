@@ -9,4 +9,4 @@ SOURCE+=" ../jesd204_rx/jesd204_ilas_monitor.v ../jesd204_rx/align_mux.v ../jesd
 SOURCE+=" ../jesd204_rx/jesd204_rx_ctrl.v ../jesd204_rx/elastic_buffer.v"
 
 cd `dirname $0`
-source run_tb.sh
+source ../../common/tb/run_tb.sh

@@ -15,4 +15,4 @@ SOURCE+=" ../../util_cdc/sync_event.v"
 SOURCE+=" ../../common/ad_mem_asym.v"
 
 cd `dirname $0`
-source run_tb.sh
+source ../../common/tb/run_tb.sh
