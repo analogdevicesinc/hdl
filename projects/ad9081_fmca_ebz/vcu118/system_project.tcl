@@ -9,29 +9,17 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   Use over-writable parameters from the environment.
 #
 #    e.g.
-#      make JESD_MODE=64B66B RX_RATE=24.75 TX_RATE=12.375 REF_CLK_RATE=375 RX_JESD_L=4 TX_JESD_L=4
-#      make JESD_MODE=64B66B RX_RATE=16.22016 TX_RATE=16.22016 REF_CLK_RATE=245.76 RX_JESD_M=8 RX_JESD_L=2 TX_JESD_M=16 TX_JESD_L=4
-#      make JESD_MODE=64B66B RX_RATE=16.50 TX_RATE=16.50 REF_CLK_RATE=250 RX_JESD_M=4 RX_JESD_L=4 RX_JESD_S=1 RX_JESD_NP=16 TX_JESD_M=4 TX_JESD_L=4 TX_JESD_S=1 TX_JESD_NP=16 RX_PLL_SEL=2 TX_PLL_SEL=2
-#      make JESD_MODE=64B66B RX_RATE=24.75 TX_RATE=24.75 REF_CLK_RATE=375 RX_JESD_M=4 RX_JESD_L=4 RX_JESD_S=2 RX_JESD_NP=12 TX_JESD_M=4 TX_JESD_L=4 TX_JESD_S=2 TX_JESD_NP=12
-#      make JESD_MODE=64B66B RX_RATE=16.50 TX_RATE=16.50 REF_CLK_RATE=250 RX_JESD_M=4 RX_JESD_L=4 RX_JESD_S=2 RX_JESD_NP=12 TX_JESD_M=4 TX_JESD_L=4 TX_JESD_S=2 TX_JESD_NP=12 RX_PLL_SEL=2 TX_PLL_SEL=2
+#      make JESD_MODE=64B66B RX_JESD_L=4 TX_JESD_L=4
+#      make JESD_MODE=64B66B RX_JESD_M=8 RX_JESD_L=2 TX_JESD_M=16 TX_JESD_L=4
+#      make JESD_MODE=64B66B RX_JESD_M=4 RX_JESD_L=4 RX_JESD_S=1 RX_JESD_NP=16 TX_JESD_M=4 TX_JESD_L=4 TX_JESD_S=1 TX_JESD_NP=16
+#      make JESD_MODE=64B66B RX_JESD_M=4 RX_JESD_L=4 RX_JESD_S=2 RX_JESD_NP=12 TX_JESD_M=4 TX_JESD_L=4 TX_JESD_S=2 TX_JESD_NP=12
 #      make JESD_MODE=8B10B  RX_JESD_L=4 RX_JESD_M=8 TX_JESD_L=4 TX_JESD_M=8
-
-#  RX_RATE,TX_RATE,REF_CLK_RATE used only in 64B66B mode
 
 #
 # Parameter description:
 #   JESD_MODE : Used link layer encoder mode
-#      64B66B - 64b66b link layer defined in JESD 204C, uses Xilinx IP as Physical layer
-#      8B10B  - 8b10b link layer defined in JESD 204B, uses ADI IP as Physical layer
-#
-#   RX_RATE :  Line rate of the Rx link ( MxFE to FPGA ) used in 64B66B mode
-#   TX_RATE :  Line rate of the Tx link ( FPGA to MxFE ) used in 64B66B mode
-#   [RX/TX]_PLL_SEL :  Used PLL in the Xilinx PHY used in 64B66B mode
-#                      Encoding is:
-#                         0 - CPLL
-#                         1 - QPLL0
-#                         2 - QPLL1
-#   REF_CLK_RATE : Frequency of reference clock in MHz used in 64B66B mode
+#      64B66B - 64b66b link layer defined in JESD 204C
+#      8B10B  - 8b10b link layer defined in JESD 204B
 #   [RX/TX]_JESD_M : Number of converters per link
 #   [RX/TX]_JESD_L : Number of lanes per link
 #   [RX/TX]_JESD_NP : Number of bits per sample
@@ -40,11 +28,6 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 adi_project ad9081_fmca_ebz_vcu118 0 [list \
   JESD_MODE    [get_env_param JESD_MODE    8B10B ] \
-  RX_RATE      [get_env_param RX_RATE      10 ] \
-  RX_PLL_SEL   [get_env_param RX_PLL_SEL   1 ] \
-  TX_RATE      [get_env_param TX_RATE      10 ] \
-  TX_PLL_SEL   [get_env_param TX_PLL_SEL   1 ] \
-  REF_CLK_RATE [get_env_param REF_CLK_RATE 250 ] \
   RX_JESD_M    [get_env_param RX_JESD_M    8 ] \
   RX_JESD_L    [get_env_param RX_JESD_L    4 ] \
   RX_JESD_S    [get_env_param RX_JESD_S    1 ] \
@@ -67,6 +50,11 @@ adi_project_files ad9081_fmca_ebz_vcu118 [list \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/vcu118/vcu118_system_constr.xdc" ]
 
+# Avoid critical warning in OOC mode from the clock definitions
+# since at that stage the submodules are not stiched together yet
+if {$ADI_USE_OOC_SYNTHESIS == 1} {
+  set_property used_in_synthesis false [get_files timing_constr.xdc]
+}
 
 adi_project_run ad9081_fmca_ebz_vcu118
 
