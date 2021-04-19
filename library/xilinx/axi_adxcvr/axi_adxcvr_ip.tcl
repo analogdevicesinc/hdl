@@ -19,6 +19,24 @@ adi_ip_infer_mm_interfaces axi_adxcvr
 adi_init_bd_tcl
 adi_ip_bd axi_adxcvr "bd/bd.tcl"
 
+set cc [ipx::current_core]
+
+# Arrange GUI page layout
+set page0 [ipgui::get_pagespec -name "Page 0" -component $cc]
+# Link layer mode
+set p [ipgui::get_guiparamspec -name "LINK_MODE" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $page0
+set_property -dict [list \
+ "display_name" "Link Layer mode" \
+ "tooltip" "Link Layer mode" \
+ "widget" "comboBox" \
+] $p
+
+set_property -dict [list \
+  value_validation_type pairs \
+  value_validation_pairs {64B66B 2 8B10B 1} \
+] [ipx::get_user_parameters $p -of_objects $cc]
+
 set_property driver_value 0 [ipx::get_ports -filter "direction==in" -of_objects [ipx::current_core]]
 
 set_property master_address_space_ref m_axi \
