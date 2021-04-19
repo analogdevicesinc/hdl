@@ -41,6 +41,10 @@ module util_adxcvr_xch #(
 
   parameter   integer XCVR_TYPE = 0,
 
+  parameter LINK_MODE = 1, // 2 - 64B/66B;  1 - 8B/10B
+  /* Only 4 is supported at the moment for 8b/10b and 8 for 64b */
+  parameter DATA_PATH_WIDTH = LINK_MODE == 2 ? 8 : 4,
+
   parameter   integer CPLL_FBDIV = 2,
   parameter   integer CPLL_FBDIV_4_5 = 5,
   parameter   [15:0]  CPLL_CFG0 = 16'b0000000111111010,
@@ -75,14 +79,18 @@ module util_adxcvr_xch #(
   parameter   [ 5:0]  RXCDR_CFG3_GEN2 = 6'b011010,
   parameter   [15:0]  RXCDR_CFG3_GEN3 = 16'b0000000000010010,
   parameter   [15:0]  RXCDR_CFG3_GEN4 = 16'b0000000000100100,
+  parameter   [15:0]  RXDFE_KH_CFG2 = 16'h0200,
+  parameter   [15:0]  RXDFE_KH_CFG3 = 16'h4101,
   parameter   [ 1:0]  RX_WIDEMODE_CDR = 2'b00,
   parameter   [ 0:0]  RX_XMODE_SEL = 1'b1,
   parameter   integer TXDRV_FREQBAND = 0,
+  parameter   [15:0]  TXFE_CFG0 = 16'b0000001111000010,
   parameter   [15:0]  TXFE_CFG1 = 16'b0110110000000000,
   parameter   [15:0]  TXFE_CFG2 = 16'b0110110000000000,
   parameter   [15:0]  TXFE_CFG3 = 16'b0110110000000000,
   parameter   [15:0]  TXPI_CFG0 = 16'b0000001100000000,
   parameter   [15:0]  TXPI_CFG1 = 16'b0001000000000000,
+  parameter   integer TXSWBST_EN = 0,
   parameter   integer RX_POLARITY = 0) (
 
   // pll interface
@@ -101,23 +109,26 @@ module util_adxcvr_xch #(
   input           rx_p,
   input           rx_n,
 
-  output          rx_out_clk,
-  input           rx_clk,
-  output  [ 3:0]  rx_charisk,
-  output  [ 3:0]  rx_disperr,
-  output  [ 3:0]  rx_notintable,
-  output  [31:0]  rx_data,
-  input           rx_calign,
+  output                           rx_out_clk,
+  input                            rx_clk,
+  output  [DATA_PATH_WIDTH-1:0]    rx_charisk,
+  output  [DATA_PATH_WIDTH-1:0]    rx_disperr,
+  output  [DATA_PATH_WIDTH-1:0]    rx_notintable,
+  output  [DATA_PATH_WIDTH*8-1:0]  rx_data,
+  input                            rx_calign,
+  output  [1:0]                    rx_header,
+  output                           rx_block_sync,
 
   // transmit
 
   output          tx_p,
   output          tx_n,
 
-  output          tx_out_clk,
-  input           tx_clk,
-  input   [ 3:0]  tx_charisk,
-  input   [31:0]  tx_data,
+  output                           tx_out_clk,
+  input                            tx_clk,
+  input   [DATA_PATH_WIDTH-1:0]    tx_charisk,
+  input   [DATA_PATH_WIDTH*8-1:0]  tx_data,
+  input   [1:0]                    tx_header,
 
   // up interface
 
@@ -831,7 +842,7 @@ module util_adxcvr_xch #(
     .TXUSERRDY (up_tx_user_ready),
     .TXUSRCLK (tx_clk),
     .TXUSRCLK2 (tx_clk));
-  // Emulate PRBS lock 
+  // Emulate PRBS lock
   assign rx_prbslocked = ~rx_prbserr_sticky;
   end
   endgenerate
@@ -2506,6 +2517,66 @@ module util_adxcvr_xch #(
 
   generate
   if (XCVR_TYPE == GTYE4_TRANSCEIVERS) begin
+
+    localparam ALIGN_COMMA_ENABLE  = LINK_MODE[1] ? 10'b0000000000 : 10'b1111111111;
+    localparam ALIGN_MCOMMA_DET = LINK_MODE[1] ? "FALSE" : "TRUE";
+    localparam ALIGN_PCOMMA_DET = LINK_MODE[1] ? "FALSE" : "TRUE";
+    localparam CBCC_DATA_SOURCE_SEL = LINK_MODE[1] ? "ENCODED" : "DECODED";
+    localparam DEC_MCOMMA_DETECT = LINK_MODE[1] ? "FALSE" : "TRUE";
+    localparam DEC_PCOMMA_DETECT = LINK_MODE[1] ? "FALSE" : "TRUE";
+    localparam RXBUF_EN = LINK_MODE[1] ? "FALSE" : "TRUE";
+    localparam TXBUF_EN = LINK_MODE[1] ? "FALSE" : "TRUE";
+    localparam RX_DATA_WIDTH = LINK_MODE[1] ? 64 : 40;
+    localparam TX_DATA_WIDTH = LINK_MODE[1] ? 64 : 40;
+    localparam GEARBOX_MODE = LINK_MODE[1] ? 5'b10001 : 5'b00000;
+    localparam GEARBOX_EN = LINK_MODE[1] ? "TRUE" : "FALSE";
+    localparam RX_INT_DATAWIDTH = LINK_MODE[1] ? 2 : 1;
+    localparam TX_INT_DATAWIDTH = LINK_MODE[1] ? 2 : 1;
+    localparam RX8B10BEN = LINK_MODE[1] ? 0 : 1;
+    localparam TX8B10BEN = LINK_MODE[1] ? 0 : 1;
+    localparam TX_RXDETECT_CFG = LINK_MODE[1] ? 14'h032 : 14'b00000000110010;
+    localparam RXGBOX_FIFO_INIT_RD_ADDR = LINK_MODE[1] ? 3 : 4;
+    localparam RXBUF_THRESH_UNDFLW = LINK_MODE[1] ? 4 : 3;
+    localparam RX_EYESCAN_VS_RANGE = LINK_MODE[1] ? 2 : 0;
+    localparam TXPHDLY_CFG1 = LINK_MODE[1] ? 16'h000E : 16'h000F;
+    localparam TXPH_CFG = LINK_MODE[1] ? 16'h0723 : 16'h0323;
+
+    wire [1:0] rx_header_s;
+    wire [127:0] rx_data_s;
+    wire [127:0] tx_data_s;
+    wire rx_bitslip_s;
+
+    if (LINK_MODE[1]) begin
+
+      reg [3:0] rx_bitslip_d = 'h0;
+      reg rx_bitslip_req_s_d = 1'b0;
+      always @(posedge rx_clk) begin
+         rx_bitslip_d <= {rx_bitslip_d,rx_bitslip_s};
+         rx_bitslip_req_s_d <= rx_bitslip_req_s;
+      end
+      assign rx_bitslip_s = rx_bitslip_req_s & ~rx_bitslip_req_s_d;
+
+      // Sync header alignment
+      sync_header_align i_sync_header_align (
+        .clk(rx_clk),
+        .reset(~rx_rst_done_s),
+        .i_data({rx_header_s,rx_data_s[63:0]}),
+        .i_slip(rx_bitslip_req_s),
+        .i_slip_done(rx_bitslip_d[3]),
+        .o_data(rx_data),
+        .o_header(rx_header),
+        .o_block_sync(rx_block_sync)
+      );
+      assign tx_data_s = {64'd0, tx_data};
+
+    end else begin
+
+      assign {rx_data_open_s, rx_data} = rx_data_s;
+      assign rx_bitslip_s = 1'b0;
+      assign tx_data_s = {96'd0, tx_data};
+
+    end
+
     GTYE4_CHANNEL #(
       .ACJTAG_DEBUG_MODE (1'b0),
       .ACJTAG_MODE (1'b0),
@@ -2514,18 +2585,18 @@ module util_adxcvr_xch #(
       .ADAPT_CFG1 (16'b1111101100011100),
       .ADAPT_CFG2 (16'b0000000000000000),
       .ALIGN_COMMA_DOUBLE ("FALSE"),
-      .ALIGN_COMMA_ENABLE (10'b1111111111),
+      .ALIGN_COMMA_ENABLE (ALIGN_COMMA_ENABLE),
       .ALIGN_COMMA_WORD (1),
-      .ALIGN_MCOMMA_DET ("TRUE"),
+      .ALIGN_MCOMMA_DET (ALIGN_MCOMMA_DET),
       .ALIGN_MCOMMA_VALUE (10'b1010000011),
-      .ALIGN_PCOMMA_DET ("TRUE"),
+      .ALIGN_PCOMMA_DET (ALIGN_PCOMMA_DET),
       .ALIGN_PCOMMA_VALUE (10'b0101111100),
       .A_RXOSCALRESET (1'b0),
       .A_RXPROGDIVRESET (1'b0),
       .A_RXTERMINATION (1'b1),
       .A_TXDIFFCTRL (5'b01100),
       .A_TXPROGDIVRESET (1'b0),
-      .CBCC_DATA_SOURCE_SEL ("DECODED"),
+      .CBCC_DATA_SOURCE_SEL (CBCC_DATA_SOURCE_SEL),
       .CDR_SWAP_MODE_EN (1'b0),
       .CFOK_PWRSVE_EN (1'b1),
       .CHAN_BOND_KEEP_ALIGN ("FALSE"),
@@ -2583,8 +2654,8 @@ module util_adxcvr_xch #(
       .CTLE3_OCAP_EXT_EN (1'b0),
       .DDI_CTRL (2'b00),
       .DDI_REALIGN_WAIT (15),
-      .DEC_MCOMMA_DETECT ("TRUE"),
-      .DEC_PCOMMA_DETECT ("TRUE"),
+      .DEC_MCOMMA_DETECT (DEC_MCOMMA_DETECT),
+      .DEC_PCOMMA_DETECT (DEC_PCOMMA_DETECT),
       .DEC_VALID_COMMA_ONLY ("FALSE"),
       .DELAY_ELEC (1'b0),
       .DMONITOR_CFG0 (10'b0000000000),
@@ -2630,7 +2701,7 @@ module util_adxcvr_xch #(
       .FTS_DESKEW_SEQ_ENABLE (4'b1111),
       .FTS_LANE_DESKEW_CFG (4'b1111),
       .FTS_LANE_DESKEW_EN ("FALSE"),
-      .GEARBOX_MODE (5'b00000),
+      .GEARBOX_MODE (GEARBOX_MODE),
       .ISCAN_CK_PH_SEL2 (1'b0),
       .LOCAL_MASTER (1'b1),
       .LPBK_BIAS_CTRL (4),
@@ -2681,14 +2752,14 @@ module util_adxcvr_xch #(
       .RXBUF_ADDR_MODE ("FAST"),
       .RXBUF_EIDLE_HI_CNT (4'b1000),
       .RXBUF_EIDLE_LO_CNT (4'b0000),
-      .RXBUF_EN ("TRUE"),
+      .RXBUF_EN (RXBUF_EN),
       .RXBUF_RESET_ON_CB_CHANGE ("TRUE"),
       .RXBUF_RESET_ON_COMMAALIGN ("FALSE"),
       .RXBUF_RESET_ON_EIDLE ("FALSE"),
       .RXBUF_RESET_ON_RATE_CHANGE ("TRUE"),
       .RXBUF_THRESH_OVFLW (57),
       .RXBUF_THRESH_OVRD ("TRUE"),
-      .RXBUF_THRESH_UNDFLW (3),
+      .RXBUF_THRESH_UNDFLW (RXBUF_THRESH_UNDFLW),
       .RXCDRFREQRESET_TIME (5'b00001),
       .RXCDRPHRESET_TIME (5'b00001),
       .RXCDR_CFG0 (16'b0000000000000011),
@@ -2726,7 +2797,7 @@ module util_adxcvr_xch #(
       .RXCKCAL2_S_LOOP_RST_CFG (16'b0000000000000000),
       .RXCKCAL2_X_LOOP_RST_CFG (16'b0000000000000000),
       .RXDFELPMRESET_TIME (7'b0001111),
-      .RXDFELPM_KL_CFG0 (15'b000000000000000 ),
+      .RXDFELPM_KL_CFG0 (15'b000000000000000),
       .RXDFELPM_KL_CFG1 (16'b1010000010000010),
       .RXDFELPM_KL_CFG2 (16'b0000000100000000),
       .RXDFE_CFG0 (16'b0000101000000000),
@@ -2764,8 +2835,8 @@ module util_adxcvr_xch #(
       .RXDFE_HF_CFG1 (16'b1000000000000010),
       .RXDFE_KH_CFG0 (16'b1000000000000000),
       .RXDFE_KH_CFG1 (16'b1111111000000000),
-      .RXDFE_KH_CFG2 (16'b0000001000000000),
-      .RXDFE_KH_CFG3 (16'b0100000100000001),
+      .RXDFE_KH_CFG2 (RXDFE_KH_CFG2),
+      .RXDFE_KH_CFG3 (RXDFE_KH_CFG3),
       .RXDFE_OS_CFG0 (16'b0010000000000000),
       .RXDFE_OS_CFG1 (16'b1000000000000000),
       .RXDFE_UT_CFG0 (16'b0000000000000000),
@@ -2776,8 +2847,8 @@ module util_adxcvr_xch #(
       .RXDLY_CFG (16'b0000000000010000),
       .RXDLY_LCFG (16'b0000000000110000),
       .RXELECIDLE_CFG ("SIGCFG_4"),
-      .RXGBOX_FIFO_INIT_RD_ADDR (4),
-      .RXGEARBOX_EN ("FALSE"),
+      .RXGBOX_FIFO_INIT_RD_ADDR (RXGBOX_FIFO_INIT_RD_ADDR),
+      .RXGEARBOX_EN (GEARBOX_EN),
       .RXISCANRESET_TIME (5'b00001),
       .RXLPM_CFG (16'b0000000000000000),
       .RXLPM_GC_CFG (16'b1111100000000000),
@@ -2796,7 +2867,7 @@ module util_adxcvr_xch #(
       .RXPHSLIP_CFG (16'b1001100100110011),
       .RXPH_MONITOR_SEL (5'b00000),
       .RXPI_CFG0 (RXPI_CFG0),
-      .RXPI_CFG1 (16'b0000000001010100),
+      .RXPI_CFG1 (RXPI_CFG1),
       .RXPMACLK_SEL ("DATA"),
       .RXPMARESET_TIME (5'b00011),
       .RXPRBS_ERR_LOOPBACK (1'b0),
@@ -2820,7 +2891,7 @@ module util_adxcvr_xch #(
       .RX_CM_TRIM (10),
       .RX_CTLE_PWR_SAVING (1'b0),
       .RX_CTLE_RES_CTRL (4'b0000),
-      .RX_DATA_WIDTH (40),
+      .RX_DATA_WIDTH (RX_DATA_WIDTH),
       .RX_DDI_SEL (6'b000000),
       .RX_DEFER_RESET_BUF_EN ("TRUE"),
       .RX_DEGEN_CTRL (3'b100),
@@ -2839,11 +2910,11 @@ module util_adxcvr_xch #(
       .RX_EN_SUM_RCAL_B (0),
       .RX_EYESCAN_VS_CODE (7'b0000000),
       .RX_EYESCAN_VS_NEG_DIR (1'b0),
-      .RX_EYESCAN_VS_RANGE (2'b00),
+      .RX_EYESCAN_VS_RANGE (RX_EYESCAN_VS_RANGE),
       .RX_EYESCAN_VS_UT_SIGN (1'b0),
       .RX_FABINT_USRCLK_FLOP (1'b0),
       .RX_I2V_FILTER_EN (1'b1),
-      .RX_INT_DATAWIDTH (1),
+      .RX_INT_DATAWIDTH (RX_INT_DATAWIDTH),
       .RX_PMA_POWER_SAVE (1'b0),
       .RX_PMA_RSV0 (16'b0000000000101111),
       .RX_PROGDIV_CFG (0.0),
@@ -2888,23 +2959,23 @@ module util_adxcvr_xch #(
       .TRANS_TIME_RATE (8'b00001110),
       .TST_RSV0 (8'b00000000),
       .TST_RSV1 (8'b00000000),
-      .TXBUF_EN ("TRUE"),
+      .TXBUF_EN (TXBUF_EN),
       .TXBUF_RESET_ON_RATE_CHANGE ("TRUE"),
       .TXDLY_CFG (16'b1000000000010000),
       .TXDLY_LCFG (16'b0000000000110000),
       .TXDRV_FREQBAND (TXDRV_FREQBAND),
-      .TXFE_CFG0 (16'b0000001111000010),
+      .TXFE_CFG0 (TXFE_CFG0),
       .TXFE_CFG1 (TXFE_CFG1),
       .TXFE_CFG2 (TXFE_CFG2),
       .TXFE_CFG3 (TXFE_CFG3),
       .TXFIFO_ADDR_CFG ("LOW"),
       .TXGBOX_FIFO_INIT_RD_ADDR (4),
-      .TXGEARBOX_EN ("FALSE"),
+      .TXGEARBOX_EN (GEARBOX_EN),
       .TXOUT_DIV (TX_OUT_DIV),
       .TXPCSRESET_TIME (5'b00011),
       .TXPHDLY_CFG0 (16'b0110000001110000),
-      .TXPHDLY_CFG1 (16'b0000000000001111),
-      .TXPH_CFG (16'b0000001100100011),
+      .TXPHDLY_CFG1 (TXPHDLY_CFG1),
+      .TXPH_CFG (TXPH_CFG),
       .TXPH_CFG2 (16'b0000000000000000),
       .TXPH_MONITOR_SEL (5'b00000),
       .TXPI_CFG0 (TXPI_CFG0),
@@ -2917,14 +2988,14 @@ module util_adxcvr_xch #(
       .TXPMARESET_TIME (5'b00011),
       .TXREFCLKDIV2_SEL (1'b0),
       .TXSWBST_BST (1),
-      .TXSWBST_EN (0),
+      .TXSWBST_EN (TXSWBST_EN),
       .TXSWBST_MAG (4),
       .TXSYNC_MULTILANE (1'b1),
       .TXSYNC_OVRD (1'b0),
       .TXSYNC_SKIP_DA (1'b0),
       .TX_CLK25_DIV (TX_CLK25_DIV),
       .TX_CLKMUX_EN (1'b1),
-      .TX_DATA_WIDTH (40),
+      .TX_DATA_WIDTH (TX_DATA_WIDTH),
       .TX_DCC_LOOP_RST_CFG (16'b0000000000000100),
       .TX_DEEMPH0 (6'b000000),
       .TX_DEEMPH1 (6'b000000),
@@ -2937,7 +3008,7 @@ module util_adxcvr_xch #(
       .TX_FABINT_USRCLK_FLOP (1'b0),
       .TX_FIFO_BYP_EN (1'b0),
       .TX_IDLE_DATA_ZERO (1'b0),
-      .TX_INT_DATAWIDTH (1),
+      .TX_INT_DATAWIDTH (TX_INT_DATAWIDTH),
       .TX_LOOPBACK_DRIVE_HIZ ("FALSE"),
       .TX_MAINCURSOR_SEL (1'b0),
       .TX_MARGIN_FULL_0 (7'b1011000),
@@ -2960,7 +3031,7 @@ module util_adxcvr_xch #(
       .TX_PROGCLK_SEL ("PREPI"),
       .TX_PROGDIV_CFG (0.0),
       .TX_PROGDIV_RATE (16'b0000000000000001),
-      .TX_RXDETECT_CFG (14'b00000000110010  ),
+      .TX_RXDETECT_CFG (TX_RXDETECT_CFG),
       .TX_RXDETECT_REF (5),
       .TX_SAMPLE_PERIOD (3'b111),
       .TX_SW_MEAS (2'b00),
@@ -3050,7 +3121,7 @@ module util_adxcvr_xch #(
       .QPLL1FREQLOCK (1'b0),
       .QPLL1REFCLK (qpll1_ref_clk),
       .RESETOVRD (1'b0),
-      .RX8B10BEN (1'b1),
+      .RX8B10BEN (RX8B10BEN),
       .RXAFECFOKEN (1'b1),
       .RXBUFRESET (1'b0),
       .RXCDRFREQRESET (1'b0),
@@ -3116,7 +3187,7 @@ module util_adxcvr_xch #(
       .RXDLYSRESET (1'b0),
       .RXELECIDLEMODE (2'b11),
       .RXEQTRAINING (1'b0),
-      .RXGEARBOXSLIP (1'b0),
+      .RXGEARBOXSLIP (rx_bitslip_s),
       .RXLATCLK (1'b0),
       .RXLPMEN (up_rx_lpm_dfe_n),
       .RXLPMGCHOLD (1'b0),
@@ -3163,14 +3234,14 @@ module util_adxcvr_xch #(
       .SIGVALIDCLK (1'b0),
       .TSTIN (20'b00000000000000000000),
       .TX8B10BBYPASS (1'b0),
-      .TX8B10BEN (1'b1),
+      .TX8B10BEN (TX8B10BEN),
       .TXCOMINIT (1'b0),
       .TXCOMSAS (1'b0),
       .TXCOMWAKE (1'b0),
       .TXCTRL0 (16'b0000000000000000),
       .TXCTRL1 (16'b0000000000000000),
       .TXCTRL2 ({4'd0, tx_charisk}),
-      .TXDATA ({96'd0, tx_data}),
+      .TXDATA (tx_data_s),
       .TXDATAEXTENDRSVD (8'b00000000),
       .TXDCCFORCESTART (1'b0),
       .TXDCCRESET (1'b0),
@@ -3184,7 +3255,7 @@ module util_adxcvr_xch #(
       .TXDLYSRESET (1'b0),
       .TXDLYUPDOWN (1'b0),
       .TXELECIDLE (1'b0),
-      .TXHEADER (5'b00000),
+      .TXHEADER ({4'b0,tx_header}),
       .TXINHIBIT (1'b0),
       .TXLATCLK (1'b0),
       .TXLFPSTRESET (1'b0),
@@ -3280,13 +3351,13 @@ module util_adxcvr_xch #(
       .RXCTRL1 ({rx_disperr_open_s, rx_disperr}),
       .RXCTRL2 (),
       .RXCTRL3 ({rx_notintable_open_s, rx_notintable}),
-      .RXDATA ({rx_data_open_s, rx_data}),
+      .RXDATA (rx_data_s),
       .RXDATAEXTENDRSVD (),
       .RXDATAVALID (),
       .RXDLYSRESETDONE (),
       .RXELECIDLE (),
-      .RXHEADER (),
-      .RXHEADERVALID (),
+      .RXHEADER (rx_header_s),
+      .RXHEADERVALID (rx_headervalid_s),
       .RXLFPSTRESETDET (),
       .RXLFPSU2LPEXITDET (),
       .RXLFPSU3WAKEDET (),
