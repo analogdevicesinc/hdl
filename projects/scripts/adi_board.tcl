@@ -200,6 +200,14 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}
   set qpll_enable [get_property CONFIG.QPLL_ENABLE [get_bd_cells $a_xcvr]]
   set tx_or_rx_n [get_property CONFIG.TX_OR_RX_N [get_bd_cells $a_xcvr]]
 
+  set link_mode_u [get_property CONFIG.LINK_MODE [get_bd_cells $u_xcvr]]
+  set link_mode_a [get_property CONFIG.LINK_MODE [get_bd_cells $a_xcvr]]
+
+  if {$link_mode_u != $link_mode_a} {
+     puts "CRITICAL WARNING: LINK_MODE parameter mismatch between $u_xcvr ($link_mode_u) and $a_xcvr ($link_mode_a)"
+  }
+  set link_mode $link_mode_u
+
   set jesd204_bd_type [get_property TYPE [get_bd_cells $a_jesd]]
 
   if {$jesd204_bd_type == "hier"} {
@@ -286,7 +294,9 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}
     if {$tx_or_rx_n == 0} {
       ad_connect  ${a_xcvr}/up_es_${n} ${u_xcvr}/up_es_${phys_lane}
       if {$jesd204_type == 0} {
-        ad_connect  ${a_jesd}/phy_en_char_align ${u_xcvr}/${txrx}_calign_${phys_lane}
+        if {$link_mode == 1} {
+          ad_connect  ${a_jesd}/phy_en_char_align ${u_xcvr}/${txrx}_calign_${phys_lane}
+        }
       } else {
         ad_connect  ${a_jesd}/rxencommaalign_out ${u_xcvr}/${txrx}_calign_${phys_lane}
       }
@@ -313,7 +323,9 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}
 
   if {$jesd204_type == 0} {
     ad_connect  ${a_jesd}/sysref $m_sysref
-    ad_connect  ${a_jesd}/sync $m_sync
+    if {$link_mode == 1} {
+      ad_connect  ${a_jesd}/sync $m_sync
+    }
     ad_connect  ${device_clk} ${a_jesd}/device_clk
     ad_connect  ${link_clk} ${a_jesd}/link_clk
   } else {
