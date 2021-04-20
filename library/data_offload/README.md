@@ -320,7 +320,7 @@ In general there are at least two different clock in the data offload module:
   * Memory Controller user clock : user interface clock of the DDRx controller (**optional**)
   * Device clock : the digital interface clock of the converter
 
-![Clocks](../../docs/block_diagrams/data_offload/clocks.svg)
+![Clocks](./docs/clocks.svg)
 
 A general frequency relationship of the above clocks are:
 
@@ -342,7 +342,7 @@ write from or into the storage at the speed of the device.
 
 ## Data path
 
-![Data path](../../docs/block_diagrams/data_offload/datapath.svg)
+![Data path](./docs/datapath.svg)
 
   * The data path should be designed to support any kind of difference between
 the source, memory and sink data width.
@@ -409,7 +409,7 @@ Boards with FPGA side DDR3/4 SODIMMs/HILO: ZC706, ZCU102, A10SOC
 
 ### Internal cyclic buffer support for the TX path
 
-![Data path with external storage](../../docs/block_diagrams/data_offload/architecture_DDR.svg)
+![Data path with external storage](./docs/architecture_DDR.svg)
 
 * On the front end side if the TX path, a special buffer will handle the data
 width up/down conversions and run in cyclic mode if the length of the data set
@@ -425,11 +425,11 @@ the AXI stream interface)
 
 ### RX control FSM for internal RAM mode
 
-![RX_control FMS for internal RAM mode](../../docs/rx_bram_fsm.svg)
+![RX_control FMS for internal RAM mode](./docs/rx_bram_fsm.svg)
 
 ### TX control FSM for internal RAM mode
 
-![TX_control FMS for internal RAM mode](../../docs/tx_bram_fsm.svg)
+![TX_control FMS for internal RAM mode](./docs/tx_bram_fsm.svg)
 
 **TODO** FSMs for the external DDR mode
 
