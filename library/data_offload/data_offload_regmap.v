@@ -90,7 +90,7 @@ module data_offload_regmap #(
 
   // local parameters
 
-  localparam [31:0] CORE_VERSION = 32'h00000100;  // 0.01.0
+  localparam [31:0] CORE_VERSION = 32'h00010061;  // 1.00.a
   localparam [31:0] CORE_MAGIC = 32'h44414F46;    // DAOF
 
   // internal registers
