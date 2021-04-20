@@ -264,53 +264,38 @@ into or from the memory.
 
 ## Register Map
 
-|  WORD  |  BYTE    |   BITS   |    NAME             | CLK_DOMAIN | TYPE  |       DESCRIPTION       |
-|-------:|:--------:|:--------:|:-------------------:|:----------:|:-----:|:-----------------------:|
-| 0x0000 |  0x0000  |          |     VERSION         |  SYS       |  RO   |  Version number         |
-|        |          | [31:16]  | MAJOR               |            |       |                         |
-|        |          | [15: 8]  | MINOR               |            |       |                         |
-|        |          | [ 7: 0]  | PATCH               |            |       |                         |
-| 0x0001 |  0x0004  |          | PERIPHERAL_ID       |  SYS       |  RO   |  Value of the IP configuration parameter |
-| 0x0002 |  0x0008  |          | SCRATCH             |  SYS       |  RW   |  Scratch register       |
-| 0x0003 |  0x000C  |          | IDENTIFICATION      |  SYS       |  RO   |  Peripheral identification. Default value: 0x44414F46 - ('D','A','O','F') |
-| 0x0004 |  0x0010  |          | CONFIGURATION       |  SYS       |  RO   |  Core configuration registers |
-|        |          | [ 2: 2]  | MEMORY_TYPE         |            |       |  The used storage type (embedded or external) |
-|        |          | [ 1: 1]  | TX_PATH             |            |       |  TX path synthesized/implemented    |
-|        |          | [ 0: 0]  | RX_PATH             |  SYS       |       |  RX path synthesized/implemented    |
-| 0x0005 |  0x0014  |          | CONFIG_RX_SIZE_LSB  |  SYS       |  RO   |  32bits LSB of the receive memory size register |
-| 0x0006 |  0x0018  |          | CONFIG_RX_SIZE_MSB  |  SYS       |  RO   |  2bits MSB of the receive memory size register |
-|        |          | [ 1: 0]  | RX_SIZE_MSB         |  SYS       |       |    |
-| 0x0007 |  0x001C  |          | CONFIG_TX_SIZE_LSB  |  SYS       |  RO   |  32bits LSB of the transmit memory size register |
-| 0x0008 |  0x0020  |          | CONFIG_TX_SIZE_MSB  |  SYS       |  RO   |  2bits MSB of the transmit memory size register |
-|        |          | [ 1: 0]  | TX_SIZE_MSB         |  SYS       |       |    |
-| 0x0020 |  0x0080  |          | MEM_PHY_STATE       |  DDR       |  RO   |  Status bits of the memory controller IP |
-|        |          | [ 0: 0]  | CALIB_COMPLETE      |            |       |  Indicates that the memory initialization and calibration have completed successfully |
-| 0x0021 |  0x0084  |          | RESET_OFFLOAD       |    ALL     |  RW   |  Reset all the internal address registers and state machines |
-|        |          | [ 1: 1]  | RESET_TX            |            |       |                         |
-|        |          | [ 0: 0]  | RESET_RX            |            |       |                         |
-| 0x0022 |  0x0088  |          | RX_CONTROL_REG      | RX/RX_DMA  |  RW   |  A global control register |
-|        |          | [ 0: 0]  | OFFLOAD_BYPASS      |            |       |  Bypass the offload storage, the data path consist just of a CDC FIFO |
-| 0x0023 |  0x008C  |          | TX_CONTROL_REG      | TX/TX_DMA  |  RW   |  A global control register |
-|        |          | [ 1: 1]  | ONESHOT_EN          |            |       |  By default the TX path runs on CYCLIC mode, set this bit to switch it to ONE-SHOT mode |
-|        |          | [ 0: 0]  | OFFLOAD_BYPASS      |            |       |  Bypass the offload storage, the data path consist just of a CDC FIFO |
-| 0x0040 |  0x0100  |          | SYNC_OFFLOAD        |            |  RW1P |  Synchronization setup for RX and TX path |
-|        |          | [ 1: 1]  | TX_SYNC             | TX         |       |  Synchronize the TX data transfer |
-|        |          | [ 0: 0]  | RX_SYNC             | RX         |       |  Synchronize the RX data capture |
-| 0x0041 |  0x0104  |          | SYNC_RX_CONFIG      |            |  RW   |  Synchronization setup for RX path |
-|        |          | [ 1: 0]  | SYNC_CONFIG         | RX         |       |  Auto - '0'; hardware - '1'; software - '2' |
-| 0x0042 |  0x0108  |          | SYNC_TX_CONFIG      |            |  RW   |  Synchronization setup for TX path
-|        |          | [ 1: 0]  | SYNC_CONFIG         |  TX        |       |  Auto - '0'; hardware - '1'; software - '2' |
-| 0x0080 |  0x0200  |          | RX_FSM_DBG          | RX_DMA     |  RW   |  Debug register for the RX offload FSM |
-|        |          | [15: 8]  | CONTROL_FSM         |            |       |  Force the offload state machine into a required state |
-|        |          | [ 7: 0]  | FSM_STATE           |            |       |  The current state of the offload state machine |
-| 0x0081 |  0x0204  |          | TX_FSM_DBG          | TX_DMA     |  RW   |  Debug register for the TX offload FSM |
-|        |          | [16:16]  | NO_TLAST            |            |       |  This bits gets asserted, if the memory is empty and the DMA trying to read out data |
-|        |          | [15: 8]  | CONTROL_FSM         |            |       |  Force the offload state machine into a required state |
-|        |          | [ 7: 0]  | FSM_STATE           |            |       |  The current state of the offload state machine |
-| 0x0082 |  0x0204  |          | RX_SAMPLE_COUNT_LSB | RX_DMA     |  RO   |  Stored sample count for the RX path (32 LSB) |
-| 0x0083 |  0x0208  |          | RX_SAMPLE_COUNT_MSB | RX_DMA     |  RO   |  Stored sample count for the RX path (32 MSB) |
-| 0x0084 |  0x020C  |          | TX_SAMPLE_COUNT_LSB | TX_DMA     |  RO   |  Stored sample count for the TX path (32 LSB) |
-| 0x0085 |  0x0210  |          | TX_SAMPLE_COUNT_MSB | TX_DMA     |  RO   |  Stored sample count for the TX path (32 MSB) |
+|  WORD  |  BYTE    |   BITS   |    NAME               | TYPE  | CLOCK DOMAIN |       DESCRIPTION       |
+|-------:|:--------:|:--------:|:---------------------:|:-----:|:------------:|:-----------------------:|
+| 0x0000 |  0x0000  |          | `VERSION`             |  RO   |  SYS         |  Version number         |
+|        |          | [31:16]  | `MAJOR`               |       |              |                         |
+|        |          | [15: 8]  | `MINOR`               |       |              |                         |
+|        |          | [ 7: 0]  | `PATCH`               |       |              |                         |
+| 0x0001 |  0x0004  |          | `PERIPHERAL_ID`       |  RO   |  SYS         |  Value of the IP configuration parameter |
+| 0x0002 |  0x0008  |          | `SCRATCH`             |  RW   |  SYS         |  Scratch register       |
+| 0x0003 |  0x000C  |          | `IDENTIFICATION`      |  RO   |  SYS         |  Peripheral identification. Default value: 0x44414F46 - ('D','A','O','F') |
+| 0x0004 |  0x0010  |          | `SYNTHESIS_CONFIG`    |  RO   |  SYS         |  Core configuration registers |
+|        |          | [ 1: 1]  | `TX_OR_RXN_PATH`      |       |              |  RX Path => 0, TX => 1  |
+|        |          | [ 0: 0]  | `MEMORY_TYPE`         |       |              |  The used storage type (embedded => 0 or external => 1) |
+| 0x0005 |  0x0014  |          | `MEMORY_SIZE_LSB`     |  RO   |  SYS         |  32bits LSB of the memory size register |
+| 0x0006 |  0x0018  |          | `MEMORY_SIZE_MSB`     |  RO   |  SYS         |  2bits MSB of the memory size register |
+|        |          | [ 1: 0]  | `MEMORY_SIZE_MSB`     |       |              |                         |
+| 0x0007 |  0x001C  |          | `TRANSFER_LENGTH`     |  RW   |  SRC         |  Transfer length        |
+| 0x0020 |  0x0080  |          | `MEM_PHY_STATE`       |  RO   |  DDR         |  Status bits of the memory controller IP |
+|        |          | [ 0: 0]  | `CALIB_COMPLETE`      |       |              |  Indicates that the memory initialization and calibration have completed successfully |
+| 0x0021 |  0x0084  |          | `RESETN_OFFLOAD`      |  RW   |  DST/SRC     |  Reset all the internal address registers and state machines |
+|        |          | [ 0: 0]  | `RESETN`              |       |              |                         |
+| 0x0022 |  0x0088  |          | `CONTROL`             |  RW   |  DST         |  A global control register |
+|        |          | [ 1: 1]  | `ONESHOT_EN`          |       |              |  By default the TX path runs on CYCLIC mode, set this bit to switch it to ONE-SHOT mode |
+|        |          | [ 0: 0]  | `OFFLOAD_BYPASS`      |       |              |  Bypass the offload storage, the data path consist just of a CDC FIFO |
+| 0x0040 |  0x0100  |          | `SYNC_TRIGGER`        |  RW1C |  SRC         |  Synchronization setup for RX and TX path |
+|        |          | [ 0: 0]  | `SYNC_TRIGGER`        |       |              |  Trigger the data capture |
+| 0x0041 |  0x0104  |          | `SYNC_CONFIG`         |  RW   |  SRC         |  Synchronization setup |
+|        |          | [ 1: 0]  | `SYNC_CONFIG`         |       |              |  Auto - '0'; hardware - '1'; software - '2' |
+| 0x0080 |  0x0200  |          | `FSM_DBG`             |  RO   |              |  Debug register for the offload FSM |
+|        |          | [ 5: 4]  | `FSM_STATE_READ`      |       |  SRC         |  The current state of the read-offload state machine |
+|        |          | [ 1: 0]  | `FSM_STATE_WRITE`     |       |  DST         |  The current state of the write-offload state machine |
+| 0x0081 |  0x0204  |          | `SAMPLE_COUNT_LSB`    |  RO   |  SRC         |  Stored sample count (32 LSB) |
+| 0x0082 |  0x0208  |          | `SAMPLE_COUNT_MSB`    |  RO   |  SRC         |  Stored sample count (32 MSB) |
 
 ## Clock tree
 

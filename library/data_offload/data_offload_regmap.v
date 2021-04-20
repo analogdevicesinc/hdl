@@ -183,15 +183,16 @@ module data_offload_regmap #(
 
         /* Configuration Register */
         14'h004:  up_rdata <= {
-                          31'b0,
-           /*   0   */    MEM_TYPE
+                          30'b0,
+           /*   1   */    TX_OR_RXN_PATH[0],
+           /*   0   */    MEM_TYPE[0]
         };
         /* Configuration Storage Unit Size LSB Register */
         14'h005:  up_rdata <= MEM_SIZE[31:0];
 
         /* Configuration Storage Unit Size MSB Register */
         14'h006:  up_rdata <= {
-                          29'b0,
+                          30'b0,
            /* 00-01 */    MEM_SIZE[33:32]
         };
 
@@ -232,7 +233,7 @@ module data_offload_regmap #(
 
         /* FMS Debug Register */
         14'h080:  up_rdata <= {
-                          16'b0,
+                          24'b0,
            /* 07-06 */    2'b0,
            /* 05-04 */    up_rd_fsm_status_s,
            /* 03-02 */    2'b0,
