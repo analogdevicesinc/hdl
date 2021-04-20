@@ -164,7 +164,6 @@ module system_top #(
   wire    [ 63:0]   gpio_i;
   wire    [ 63:0]   gpio_o;
   wire    [  7:0]   spi_csn_s;
-  wire              dac_fifo_bypass;
 
   // assignments
 
@@ -210,7 +209,6 @@ module system_top #(
   assign rxen[1]          = gpio_o[57];
   assign txen[0]          = gpio_o[58];
   assign txen[1]          = gpio_o[59];
-  assign dac_fifo_bypass  = gpio_o[60];
 
   // board stuff (max-v-u21)
 
@@ -319,8 +317,7 @@ module system_top #(
     .rx_ref_clk_clk (fpga_refclk_in),
     .rx_sync_export (fpga_syncout),
     .rx_sysref_export (sysref2),
-    .rx_device_clk_clk (clkin6),
-    .tx_fifo_bypass_bypass (dac_fifo_bypass)
+    .rx_device_clk_clk (clkin6)
 
   );
 
