@@ -233,7 +233,6 @@ module system_top  #(
   assign rxen[1]          = gpio_o[57];
   assign txen[0]          = gpio_o[58];
   assign txen[1]          = gpio_o[59];
-  assign dac_fifo_bypass  = gpio_o[60];
 
   /* Board GPIOS. Buttons, LEDs, etc... */
   ad_iobuf #(
@@ -340,8 +339,7 @@ module system_top  #(
     .rx_sync_0 (rx_syncout),
     .tx_sync_0 (tx_syncin),
     .rx_sysref_0 (sysref),
-    .tx_sysref_0 (sysref),
-    .dac_fifo_bypass (dac_fifo_bypass)
+    .tx_sysref_0 (sysref)
   );
 
   assign rx_data_p_loc[TX_JESD_L*TX_NUM_LINKS-1:0] = rx_data_p[TX_JESD_L*TX_NUM_LINKS-1:0];

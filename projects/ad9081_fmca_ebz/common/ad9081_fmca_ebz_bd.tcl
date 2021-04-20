@@ -319,8 +319,6 @@ ad_connect  util_mxfe_upack/s_axis_valid VCC
 ad_connect $dac_data_offload_name/init_req axi_mxfe_tx_dma/m_axis_xfer_req
 ad_connect tx_mxfe_tpl_core/dac_dunf GND
 
-create_bd_port -dir I dac_fifo_bypass
-
 # interconnect (cpu)
 ad_cpu_interconnect 0x44a60000 axi_mxfe_rx_xcvr
 ad_cpu_interconnect 0x44b60000 axi_mxfe_tx_xcvr
