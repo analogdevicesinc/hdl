@@ -53,6 +53,7 @@ adi_ip_files jesd204_tx [list \
   "jesd204_tx_gearbox.v" \
   "jesd204_tx_ctrl.v" \
   "jesd204_tx_constr.ttcl" \
+  "jesd204_tx_ooc.ttcl" \
   "../../common/ad_upack.v" \
   "jesd204_tx.v" \
   "bd/bd.tcl"
@@ -60,6 +61,7 @@ adi_ip_files jesd204_tx [list \
 
 adi_ip_properties_lite jesd204_tx
 adi_ip_ttcl jesd204_tx "jesd204_tx_constr.ttcl"
+adi_ip_ttcl jesd204_tx "jesd204_tx_ooc.ttcl"
 adi_ip_bd jesd204_tx "bd/bd.tcl"
 
 adi_ip_add_core_dependencies { \

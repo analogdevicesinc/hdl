@@ -60,6 +60,7 @@ adi_ip_files jesd204_rx [list \
   "jesd204_lane_latency_monitor.v" \
   "jesd204_rx_frame_align.v" \
   "jesd204_rx_constr.ttcl" \
+  "jesd204_rx_ooc.ttcl" \
   "jesd204_rx.v" \
   "../../common/ad_pack.v" \
   "bd/bd.tcl"
@@ -67,6 +68,7 @@ adi_ip_files jesd204_rx [list \
 
 adi_ip_properties_lite jesd204_rx
 adi_ip_ttcl jesd204_rx "jesd204_rx_constr.ttcl"
+adi_ip_ttcl jesd204_rx "jesd204_rx_ooc.ttcl"
 adi_ip_bd jesd204_rx "bd/bd.tcl"
 
 adi_ip_add_core_dependencies { \
