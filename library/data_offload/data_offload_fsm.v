@@ -147,7 +147,7 @@ module data_offload_fsm #(
       case (wr_fsm_state)
 
           WR_IDLE: begin
-            if (wr_init_req_pos_s) begin
+            if (wr_init_req_s) begin
               wr_fsm_state <= (TX_OR_RXN_PATH) ? WR_WRITE_TO_MEM : WR_SYNC;
             end else begin
               wr_fsm_state <= WR_IDLE;
