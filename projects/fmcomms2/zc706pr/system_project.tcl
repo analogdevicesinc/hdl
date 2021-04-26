@@ -4,6 +4,11 @@ source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
+# mode variable tells the script to build either a full design from
+# which a boot.bin file can be generated or a partial reconfigurable
+# design
+# mode = 0 - full design (boot.bin file can be created)
+# mode = 1 - partial reconfigurable design 
 set mode 1
 if {$::argc > 0} {
   set mode [lindex $argv 0]
