@@ -164,6 +164,7 @@ module system_top (
   wire            tdd_sync_t;
   wire            tdd_sync_o;
   wire            tdd_sync_i;
+  wire            clk_buf;
 
   // instantiations
 
@@ -191,10 +192,15 @@ module system_top (
     .dio_o (tdd_sync_i),
     .dio_p (tdd_sync));
 
+  BUFG clk_bufg (
+    .I (clk),
+    .O (clk_buf)
+  ); 
+
   // prcfg instance
 
-  (* keep_hierarchy = "yes" *) prcfg i_prcfg (
-    .clk (clk),
+  prcfg i_prcfg (
+    .clk (clk_buf),
     .adc_gpio_input (adc_gpio_input),
     .adc_gpio_output (adc_gpio_output),
     .dac_gpio_input (dac_gpio_input),
@@ -242,7 +248,7 @@ module system_top (
     .core_adc_q1_data (dma_adc_q1_data),
     .core_adc_overflow (dma_adc_wr_overflow));
 
-  (* keep_hierarchy = "yes" *) system_wrapper i_system_wrapper (
+  system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
     .ddr_ba (ddr_ba),
     .ddr_cas_n (ddr_cas_n),

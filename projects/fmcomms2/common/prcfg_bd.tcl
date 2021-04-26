@@ -64,7 +64,6 @@ create_bd_port -dir O  -from 31 -to 0 up_adc_gpio_out
 
 # re-wiring, split between ad9361 core & upack/cpack modules
 
-#ad_connect  axi_ad9361_clk clk
 ad_connect  util_ad9361_divclk/clk_out clk
 
 ad_reconct  util_ad9361_dac_upack/enable_0 dma_dac_i0_enable
