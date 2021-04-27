@@ -115,10 +115,11 @@ module data_offload_fsm #(
   reg                         rd_isempty;
   reg                         rd_init_req_d;
   reg                         wr_init_req_d;
+  reg                         wr_ready_d;
 
   // internal signals
 
-  wire                        wr_full;
+  wire                        wr_almost_full;
   wire                        wr_init_req_s;
   wire                        wr_init_req_pos_s;
   wire                        wr_init_ack_s;
@@ -135,6 +136,7 @@ module data_offload_fsm #(
   wire                        rd_sync_internal_s;
   wire                        wr_sync_external_s;
   wire                        rd_sync_external_s;
+  wire                        wr_oneshot;
 
   (* DONT_TOUCH = "TRUE" *) reg [1:0] wr_fsm_state = 2'b00;
   (* DONT_TOUCH = "TRUE" *) reg [1:0] rd_fsm_state = 2'b00;
@@ -181,7 +183,7 @@ module data_offload_fsm #(
           end
 
           WR_WRITE_TO_MEM: begin
-            if ((wr_full || wr_last) && wr_valid_out) begin
+            if ((wr_almost_full || wr_last) && wr_valid_out) begin
               wr_fsm_state <= WR_WAIT_TO_END;
             end else begin
               wr_fsm_state <= WR_WRITE_TO_MEM;
@@ -189,7 +191,7 @@ module data_offload_fsm #(
           end
 
           WR_WAIT_TO_END: begin
-            if ((wr_isempty_s) || (wr_init_req_pos_s)) begin
+            if (wr_isempty_s && (wr_oneshot || wr_init_req_s)) begin
               wr_fsm_state <= WR_IDLE;
             end else begin
               wr_fsm_state <= WR_WAIT_TO_END;
@@ -209,7 +211,8 @@ module data_offload_fsm #(
   assign wr_init_req_pos_s = ~wr_init_req_d & wr_init_req_s;
 
   // status bits
-  assign wr_full = (wr_addr == {{(WR_ADDRESS_WIDTH-1){1'b1}}, 1'b0}) ? 1'b1 : 1'b0;
+  assign wr_almost_full = (wr_addr == {{(WR_ADDRESS_WIDTH-1){1'b1}}, 1'b0}) ? 1'b1 : 1'b0;
+  assign wr_full = &wr_addr;
 
   // generate INIT acknowledge signal in WRITE domain (in case of ADCs)
   assign wr_init_ack_s = (wr_fsm_state == WR_SYNC) ? 1'b1 : 1'b0;
@@ -253,10 +256,14 @@ module data_offload_fsm #(
       end
     end
   end
+  
+  always @(posedge wr_clk) begin
+    wr_ready_d <= wr_ready;
+  end
 
   // flush out the DMA if the transfer is bigger than the storage size
   assign wr_ready = ((wr_fsm_state == WR_WRITE_TO_MEM) ||
-                     ((wr_fsm_state == WR_WAIT_TO_END) && wr_valid_in)) ? 1'b1 : 1'b0;
+                     ((wr_fsm_state == WR_WAIT_TO_END) && wr_valid_in && wr_ready_d && wr_full)) ? 1'b1 : 1'b0;
 
   // write control
   assign wr_valid_out = (wr_fsm_state == WR_WRITE_TO_MEM) & wr_valid_in;
@@ -282,7 +289,7 @@ module data_offload_fsm #(
       case (rd_fsm_state)
 
         RD_IDLE: begin
-          if ((rd_isfull_s) || (rd_wr_last_s)) begin
+          if (((!TX_OR_RXN_PATH) & rd_isfull_s) || (rd_wr_last_s)) begin
             if (TX_OR_RXN_PATH) begin
               rd_fsm_state <= RD_SYNC;
             end else begin
@@ -321,7 +328,7 @@ module data_offload_fsm #(
 
         // read until empty or next init_req
         RD_READ_FROM_MEM : begin
-          if ((rd_empty_s && rd_oneshot && rd_ready && rd_last) || (rd_init_req_neg_s)) begin
+          if ((rd_empty_s && (rd_init_req_s || (rd_oneshot && rd_last)) && rd_ready)) begin
             rd_fsm_state <= RD_IDLE;
           end else begin
             rd_fsm_state <= RD_READ_FROM_MEM;
@@ -354,7 +361,6 @@ module data_offload_fsm #(
   end
 
   // read address generation
-  assign rd_reading_s = (rd_fsm_state == RD_READ_FROM_MEM) ? 1'b1 : 1'b0;
   always @(posedge rd_clk) begin
     if (rd_fsm_state != RD_READ_FROM_MEM) begin
       rd_addr <= 'b0;
@@ -413,7 +419,7 @@ module data_offload_fsm #(
     .ASYNC_CLK(1))
   i_rd_full_sync (
     .in_clk (wr_clk),
-    .in_event (wr_full),
+    .in_event (wr_almost_full),
     .out_clk (rd_clk),
     .out_event (rd_isfull_s)
   );
@@ -423,10 +429,21 @@ module data_offload_fsm #(
     .ASYNC_CLK (1))
   i_rd_wr_last_sync (
     .in_clk (wr_clk),
-    .in_event ((wr_last & wr_valid_out)),
+    .in_event ((wr_last & wr_valid_in)),
     .out_clk (rd_clk),
     .out_event (rd_wr_last_s)
   );
+
+  sync_bits #(
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK (1))
+  i_wr_oneshot_sync (
+    .in_bits (rd_oneshot),
+    .out_clk (wr_clk),
+    .out_resetn (1'b1),
+    .out_bits (wr_oneshot)
+  );
+
 
   sync_bits #(
     .NUM_OF_BITS (1),

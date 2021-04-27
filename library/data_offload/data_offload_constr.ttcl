@@ -154,6 +154,9 @@ set_false_path \
   -to [get_pins -hierarchical * -filter {NAME=~*i_wr_init_req_sync/cdc_sync_stage1_reg[*]/D}]
 
 set_false_path \
+  -to [get_pins -hierarchical * -filter {NAME=~*i_wr_oneshot_sync/cdc_sync_stage1_reg[*]/D}]
+
+set_false_path \
   -to [get_pins -hierarchical * -filter {NAME=~*/i_rd_last_address/cdc_sync_stage1_reg[*]/D}]
 
 set_false_path \
