@@ -365,7 +365,7 @@ module data_offload_fsm #(
     if (rd_fsm_state != RD_READ_FROM_MEM) begin
       rd_addr <= 'b0;
     end else begin
-      if (rd_ready && rd_valid) begin
+      if (rd_valid) begin
         if (rd_oneshot)
           rd_addr <= (rd_last_addr == rd_addr) ? rd_addr : rd_addr + 1'b1;
         else
