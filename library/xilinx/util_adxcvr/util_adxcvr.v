@@ -42,6 +42,9 @@ module util_adxcvr #(
 
   parameter   integer XCVR_TYPE = 0,
 
+  parameter   real RX_LANE_RATE = 12.5,
+  parameter   real TX_LANE_RATE = 12.5,
+
   parameter LINK_MODE = 1, // 2 - 64B/66B;  1 - 8B/10B
   /* Only 4 is supported at the moment for 8b/10b and 8 for 64b */
   parameter DATA_PATH_WIDTH = LINK_MODE == 2 ? 8 : 4,
