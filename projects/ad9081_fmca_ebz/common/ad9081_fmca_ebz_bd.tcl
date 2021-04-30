@@ -4,6 +4,8 @@
 #      64B66B - 64b66b link layer defined in JESD 204C
 #      8B10B  - 8b10b link layer defined in JESD 204B
 #
+#   RX_LANE_RATE :  Lane rate of the Rx link ( MxFE to FPGA )
+#   TX_LANE_RATE :  Lane rate of the Tx link ( FPGA to MxFE )
 #   [RX/TX]_JESD_M : Number of converters per link
 #   [RX/TX]_JESD_L : Number of lanes per link
 #   [RX/TX]_JESD_NP : Number of bits per sample
@@ -12,6 +14,8 @@
 
 # Common parameter for TX and RX
 set JESD_MODE  $ad_project_params(JESD_MODE)
+set RX_LANE_RATE $ad_project_params(RX_LANE_RATE)
+set TX_LANE_RATE $ad_project_params(TX_LANE_RATE)
 
 if {$JESD_MODE == "8B10B"} {
   set DATAPATH_WIDTH 4
@@ -111,6 +115,8 @@ ad_ip_parameter util_mxfe_xcvr CONFIG.TX_NUM_OF_LANES $TX_NUM_OF_LANES
 ad_ip_parameter util_mxfe_xcvr CONFIG.RX_NUM_OF_LANES $RX_NUM_OF_LANES
 ad_ip_parameter util_mxfe_xcvr CONFIG.RX_OUT_DIV 1
 ad_ip_parameter util_mxfe_xcvr CONFIG.LINK_MODE $ENCODER_SEL
+ad_ip_parameter util_mxfe_xcvr CONFIG.RX_LANE_RATE $RX_LANE_RATE
+ad_ip_parameter util_mxfe_xcvr CONFIG.TX_LANE_RATE $TX_LANE_RATE
 
 ad_ip_instance axi_adxcvr axi_mxfe_rx_xcvr
 ad_ip_parameter axi_mxfe_rx_xcvr CONFIG.ID 0
