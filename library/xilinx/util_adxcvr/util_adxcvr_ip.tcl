@@ -45,6 +45,30 @@ set_property -dict [list \
   value_tcl_expr {expr $LINK_MODE*4} \
 ] $param
 
+set p [ipgui::get_guiparamspec -name "RX_LANE_RATE" -component $cc]
+ipgui::move_param -component $cc -order 1 $p -parent $page0
+set_property -dict [list \
+ display_name {Rx Lane Rate (Gbps)} \
+ widget {textEdit} \
+] $p
+set_property -dict [list \
+ value_resolve_type user \
+ value 12.5 \
+ value_format float \
+] [ipx::get_user_parameters $p -of_objects $cc]
+
+set p [ipgui::get_guiparamspec -name "TX_LANE_RATE" -component $cc]
+ipgui::move_param -component $cc -order 2 $p -parent $page0
+set_property -dict [list \
+ display_name {Tx Lane Rate (Gbps)} \
+ widget {textEdit} \
+] $p
+set_property -dict [list \
+ value_resolve_type user \
+ value 12.5 \
+ value_format float \
+] [ipx::get_user_parameters $p -of_objects $cc]
+
 ipx::remove_all_bus_interface [ipx::current_core]
 
 ipx::infer_bus_interface up_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
