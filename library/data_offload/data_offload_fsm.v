@@ -64,7 +64,7 @@ module data_offload_fsm #(
   input                               rd_ready,
   output  reg                         rd_valid = 1'b0,
   output  reg [RD_ADDRESS_WIDTH-1:0]  rd_addr,
-  output  reg                         rd_last,
+  output                              rd_last,
   output  reg [RD_DATA_WIDTH/8-1:0]   rd_tkeep,
   input                               rd_oneshot,   // 0 - CYCLIC; 1 - ONE_SHOT;
 
@@ -375,18 +375,12 @@ module data_offload_fsm #(
   end
 
   assign rd_empty_s = (rd_addr == rd_last_addr) ? 1'b1 : 1'b0;
+  assign rd_last = rd_oneshot & rd_empty_s;
   always @(posedge rd_clk) begin
     if (rd_resetn_in == 1'b0) begin
-      rd_last <= 1'b0;
       rd_isempty <= 1'b0;
     end else begin
       rd_isempty <= rd_empty_s;
-      if (rd_empty_s & ~rd_isempty) begin
-        // in CYCLIC mode rd_last stays low
-        rd_last <= rd_oneshot;
-      end else if (rd_last & rd_ready & rd_valid)begin
-        rd_last <= 1'b0;
-      end
     end
   end
 
@@ -394,7 +388,7 @@ module data_offload_fsm #(
     if (rd_resetn_in == 1'b0) begin
       rd_valid <= 1'b0;
     end else begin
-      if ((rd_ready) && (rd_fsm_state == RD_READ_FROM_MEM)) begin
+      if ((rd_ready) && (rd_fsm_state == RD_READ_FROM_MEM) && !(rd_valid && rd_last && rd_oneshot)) begin
         rd_valid <= 1'b1;
       end else begin
         rd_valid <= 1'b0;
