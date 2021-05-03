@@ -52,7 +52,9 @@ module ad_axis_inf_rx #(
   output  reg                     inf_valid = 1'b0,
   output  reg                     inf_last = 1'b0,
   output  reg [(DATA_WIDTH-1):0]  inf_data = {DATA_WIDTH{1'b0}},
-  input                           inf_ready);
+  input                           inf_ready,
+
+  output                          int_not_full);
 
   // internal registers
 
@@ -126,6 +128,7 @@ module ad_axis_inf_rx #(
   // read interface
 
   assign inf_ready_s = inf_ready | ~inf_valid;
+  assign int_not_full = inf_ready_s;
 
   always @(rcnt or wlast_0 or wdata_0 or wlast_1 or wdata_1 or
     wlast_2 or wdata_2 or wlast_3 or wdata_3 or wlast_4 or wdata_4 or

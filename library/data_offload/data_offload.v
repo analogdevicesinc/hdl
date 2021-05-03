@@ -186,6 +186,8 @@ module data_offload #(
   wire                                        src_wr_last_int_s;
   wire  [31:0]                                src_wr_last_beat_s;
 
+  wire                                        int_not_full;
+
   assign src_clk = s_axis_aclk;
   assign dst_clk = m_axis_aclk;
 
@@ -258,7 +260,7 @@ module data_offload #(
   end
   endgenerate
 
-  assign fifo_dst_ready_int_s = fifo_dst_ready & m_axis_ready;
+  assign fifo_dst_ready_int_s = fifo_dst_ready & int_not_full;
 
   assign fifo_src_wdata = s_axis_data;
   assign fifo_dst_ren = dst_mem_valid_s;
@@ -274,7 +276,8 @@ module data_offload #(
     .inf_valid (m_axis_valid_s),
     .inf_last (m_axis_last_s),
     .inf_data (m_axis_data_s),
-    .inf_ready (m_axis_ready));
+    .inf_ready (m_axis_ready),
+    .int_not_full(int_not_full));
 
   assign m_axis_valid = (dst_bypass_s) ? valid_bypass_s : m_axis_valid_s;
   assign m_axis_data  = (dst_bypass_s) ? data_bypass_s  : m_axis_data_s;
