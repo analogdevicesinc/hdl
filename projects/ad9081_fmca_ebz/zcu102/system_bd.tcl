@@ -11,7 +11,7 @@ source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
 
 ad_mem_hp0_interconnect $sys_cpu_clk sys_ps8/S_AXI_HP0
 
-source ../common/ad9081_fmca_ebz_bd.tcl
+source $ad_hdl_dir/projects/ad9081_fmca_ebz/common/ad9081_fmca_ebz_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 #system ID
