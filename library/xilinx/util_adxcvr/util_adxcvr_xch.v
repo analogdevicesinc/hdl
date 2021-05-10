@@ -3233,7 +3233,7 @@ module util_adxcvr_xch #(
       .RXUSRCLK2 (rx_clk),
       .SIGVALIDCLK (1'b0),
       .TSTIN (20'b00000000000000000000),
-      .TX8B10BBYPASS (1'b0),
+      .TX8B10BBYPASS (8'b0),
       .TX8B10BEN (TX8B10BEN),
       .TXCOMINIT (1'b0),
       .TXCOMSAS (1'b0),
