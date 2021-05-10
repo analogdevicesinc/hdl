@@ -3272,7 +3272,7 @@ module util_adxcvr_xch #(
       .TXPDELECIDLEMODE (1'b0),
       .TXPHALIGN (1'b0),
       .TXPHALIGNEN (1'b0),
-      .TXPHDLYPD (1'b0),
+      .TXPHDLYPD (1'b1),
       .TXPHDLYRESET (1'b0),
       .TXPHDLYTSTCLK (1'b0),
       .TXPHINIT (1'b0),
