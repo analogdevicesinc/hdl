@@ -57,6 +57,10 @@ ad_ip_parameter util_mxfe_xcvr CONFIG.QPLL_LPF 0x2ff
 
 # 204C params 16.5Gbps..24.75Gpbs
 if {$ad_project_params(JESD_MODE) == "64B66B"} {
+
+  # Set higher swing for the diff driver, other case 16.5Gbps won't work
+  ad_ip_parameter axi_mxfe_tx_xcvr CONFIG.TX_DIFFCTRL 0xC
+
   # Lane rate indepentent parameters
   ad_ip_parameter util_mxfe_xcvr CONFIG.RXCDR_CFG3_GEN2 0x12
   ad_ip_parameter util_mxfe_xcvr CONFIG.RXCDR_CFG3_GEN3 0x12
@@ -68,6 +72,17 @@ if {$ad_project_params(JESD_MODE) == "64B66B"} {
   ad_ip_parameter util_mxfe_xcvr CONFIG.TX_PI_BIASSET 2
   ad_ip_parameter util_mxfe_xcvr CONFIG.RXDFE_KH_CFG2 0x281C
   ad_ip_parameter util_mxfe_xcvr CONFIG.RXDFE_KH_CFG3 0x4120
+
+  # Lane rate indepentent QPLL parameters
+  ad_ip_parameter util_mxfe_xcvr CONFIG.PPF0_CFG 0x600
+  ad_ip_parameter util_mxfe_xcvr CONFIG.QPLL_CFG0 0x331c
+
+  # Lane rate dependent QPLL params (these match for 16.5 Gbps and 24.75 Gpbs)
+  ad_ip_parameter util_mxfe_xcvr CONFIG.PPF1_CFG 0x400
+  ad_ip_parameter util_mxfe_xcvr CONFIG.QPLL_LPF 0x33f
+  ad_ip_parameter util_mxfe_xcvr CONFIG.QPLL_CFG2 0x0FC1
+  ad_ip_parameter util_mxfe_xcvr CONFIG.QPLL_CFG2_G3 0x0FC1
+  ad_ip_parameter util_mxfe_xcvr CONFIG.QPLL_CFG4 0x03
 
   # set dividers for 24.75Gbps, are overwritten by software
   ad_ip_parameter util_mxfe_xcvr CONFIG.RX_CLK25_DIV 10
