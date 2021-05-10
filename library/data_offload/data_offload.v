@@ -38,7 +38,7 @@ module data_offload #(
 
   parameter          ID = 0,
   parameter   [ 0:0] MEM_TYPE = 1'b0,               // 1'b0 -FPGA RAM; 1'b1 - external memory
-  parameter   [33:0] MEM_SIZE = 1023,               // memory size in bytes -1 - max 16 GB
+  parameter   [31:0] MEM_SIZE = 1023,               // memory size in bytes -1 - max 16 GB
   parameter          MEMC_UIF_DATA_WIDTH = 512,
   parameter          MEMC_UIF_ADDRESS_WIDTH = 31,
   parameter   [31:0] MEMC_BADDRESS = 32'h00000000,
