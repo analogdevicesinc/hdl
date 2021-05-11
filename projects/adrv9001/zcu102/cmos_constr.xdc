@@ -53,6 +53,18 @@ set_clock_latency -source -early -0.25 [get_clocks rx2_dclk_out]
 set_clock_latency -source -late 0.25 [get_clocks rx1_dclk_out]
 set_clock_latency -source -late 0.25 [get_clocks rx2_dclk_out]
 
+create_pblock SSI_REGION
+add_cells_to_pblock [get_pblocks SSI_REGION] [get_cells -quiet [list \
+    i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_rx_1_phy/i_clk_buf_fast \
+    i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_rx_1_phy/i_div_clk_buf \
+    i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_rx_2_phy/i_clk_buf_fast \
+    i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_rx_2_phy/i_div_clk_buf \
+    i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_tx_1_phy/i_dac_clk_in_gbuf \
+    i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_tx_1_phy/i_dac_div_clk_rbuf \
+    i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_tx_2_phy/i_dac_clk_in_gbuf \
+    i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_tx_2_phy/i_dac_div_clk_rbuf \
+    ]]
+resize_pblock SSI_REGION -add CLOCKREGION_X3Y2:CLOCKREGION_X3Y3
+
 set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_tx_1_phy/i_dac_clk_in_ibuf/O]
 set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_tx_2_phy/i_dac_clk_in_ibuf/O]
-
