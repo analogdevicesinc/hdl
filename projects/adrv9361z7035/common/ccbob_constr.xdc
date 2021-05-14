@@ -11,8 +11,8 @@ set_property  -dict {PACKAGE_PIN  D8      IOSTANDARD  LVCMOS18} [get_ports  gpio
 set_property  -dict {PACKAGE_PIN  F9      IOSTANDARD  LVCMOS18} [get_ports  gpio_bd[2]]   ; ## (lb: gpio_bd[6])   U1,F9,IO_L09_34_JX4_P,JX4,41,PB_GPIO_2,P6,26
 set_property  -dict {PACKAGE_PIN  E8      IOSTANDARD  LVCMOS18} [get_ports  gpio_bd[3]]   ; ## (lb: gpio_bd[12])  U1,E8,IO_L09_34_JX4_N,JX4,43,PB_GPIO_3,P6,28
 set_property  -dict {PACKAGE_PIN  A8      IOSTANDARD  LVCMOS18} [get_ports  gpio_bd[4]]   ; ## (lb: gpio_bd[0])   U1,A8,IO_L17_34_JX4_N,JX4,69,LED_GPIO_0,P7,16
-set_property  -dict {PACKAGE_PIN  W14     IOSTANDARD  LVCMOS25} [get_ports  gpio_bd[5]]   ; ## (lb: gpio_bd[1])   U1,W17,IO_25_12_JX4,JX4,16,LED_GPIO_2,P13,3
-set_property  -dict {PACKAGE_PIN  W17     IOSTANDARD  LVCMOS25} [get_ports  gpio_bd[6]]   ; ## (lb: gpio_bd[2])   U1,W14,IO_00_12_JX4,JX4,14,LED_GPIO_1,P13,4
+set_property  -dict {PACKAGE_PIN  W14     IOSTANDARD  LVCMOS25} [get_ports  gpio_bd[5]]   ; ## (lb: gpio_bd[1])   U1,W14,IO_00_12_JX4,JX4,14,LED_GPIO_1,P13,4
+set_property  -dict {PACKAGE_PIN  W17     IOSTANDARD  LVCMOS25} [get_ports  gpio_bd[6]]   ; ## (lb: gpio_bd[2])   U1,W17,IO_25_12_JX4,JX4,16,LED_GPIO_2,P13,3
 set_property  -dict {PACKAGE_PIN  Y16     IOSTANDARD  LVCMOS25} [get_ports  gpio_bd[7]]   ; ## (lb: i2c_scl)      U1,Y16,IO_L23_12_JX2_P,JX2,97,LED_GPIO_3,P2,4 (U1,AF24,SCL,JX2,17,I2C_SCL,P2,14)
 set_property  -dict {PACKAGE_PIN  Y15     IOSTANDARD  LVCMOS25} [get_ports  gpio_bd[8]]   ; ## (lb: none)         U1,Y15,IO_L23_12_JX2_N,JX2,99,DIP_GPIO_0
 set_property  -dict {PACKAGE_PIN  W16     IOSTANDARD  LVCMOS25} [get_ports  gpio_bd[9]]   ; ## (lb: none)         U1,W16,IO_L24_12_JX4_P,JX4,13,DIP_GPIO_1
