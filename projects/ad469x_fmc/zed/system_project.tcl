@@ -14,11 +14,8 @@ adi_project ad469x_fmc_zed 0 [list \
 
 adi_project_files ad469x_fmc_zed [list \
     "../../../library/common/ad_iobuf.v" \
-    "../../../library/common/ad_edge_detect.v" \
-    "../../../library/util_cdc/sync_bits.v" \
     "../../common/zed/zed_system_constr.xdc" \
     "system_top.v" \
-    "system_constr.xdc" \
-    ]
+    "system_constr.xdc"]
 
 adi_project_run ad469x_fmc_zed
