@@ -7,6 +7,7 @@ PROJECT_NAME := ad469x_fmc_zed
 
 M_DEPS += ../common/config.tcl
 M_DEPS += ../common/ad469x_bd.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
 M_DEPS += ../../common/zed/zed_system_bd.tcl
 M_DEPS += ../../../library/util_cdc/sync_bits.v
