@@ -183,7 +183,7 @@ module data_offload_fsm #(
           end
 
           WR_WRITE_TO_MEM: begin
-            if ((wr_almost_full || wr_last) && wr_valid_out) begin
+            if ((wr_full || wr_last) && wr_valid_out) begin
               wr_fsm_state <= WR_WAIT_TO_END;
             end else begin
               wr_fsm_state <= WR_WRITE_TO_MEM;

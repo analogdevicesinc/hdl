@@ -38,7 +38,7 @@ module data_offload #(
 
   parameter          ID = 0,
   parameter   [ 0:0] MEM_TYPE = 1'b0,               // 1'b0 -FPGA RAM; 1'b1 - external memory
-  parameter   [31:0] MEM_SIZE = 1023,               // memory size in bytes -1 - max 16 GB
+  parameter   [33:0] MEM_SIZE = 1024,               // memory size in bytes -1 - max 16 GB
   parameter          MEMC_UIF_DATA_WIDTH = 512,
   parameter          MEMC_UIF_ADDRESS_WIDTH = 31,
   parameter   [31:0] MEMC_BADDRESS = 32'h00000000,
@@ -182,9 +182,9 @@ module data_offload #(
   wire                                        dst_mem_valid_int_s;
   wire                                        m_axis_reset_int_s;
 
-  wire  [31:0]                                src_transfer_length_s;
+  wire  [33:0]                                src_transfer_length_s;
   wire                                        src_wr_last_int_s;
-  wire  [31:0]                                src_wr_last_beat_s;
+  wire  [33:0]                                src_wr_last_beat_s;
 
   wire                                        int_not_full;
 
@@ -193,7 +193,7 @@ module data_offload #(
 
   // internal registers
 
-  reg [31:0] src_data_counter = 0;
+  reg [33:0] src_data_counter = 0;
   reg        dst_mem_valid_d = 1'b0;
 
   generate
@@ -405,7 +405,7 @@ always @(posedge s_axis_aclk) begin
   end
 end
 // transfer length is in bytes, but counter monitors the source data beats
-assign src_wr_last_beat_s = (src_transfer_length_s == 32'h0) ? MEM_SIZE[31:SRC_BEAT_BYTE]-1 : src_transfer_length_s[31:SRC_BEAT_BYTE];
+assign src_wr_last_beat_s = (src_transfer_length_s == 'h0) ? MEM_SIZE[33:SRC_BEAT_BYTE]-1 : src_transfer_length_s[33:SRC_BEAT_BYTE]-1;
 assign src_wr_last_int_s = (src_data_counter == src_wr_last_beat_s) ?  1'b1 : 1'b0;
 
 endmodule
