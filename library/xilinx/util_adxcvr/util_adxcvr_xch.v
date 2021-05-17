@@ -383,6 +383,69 @@ module util_adxcvr_xch #(
                 tx_prbsforceerr})
   );
 
+  // 204C specific logic
+  localparam ALIGN_COMMA_ENABLE  = LINK_MODE[1] ? 10'b0000000000 : 10'b1111111111;
+  localparam ALIGN_MCOMMA_DET = LINK_MODE[1] ? "FALSE" : "TRUE";
+  localparam ALIGN_PCOMMA_DET = LINK_MODE[1] ? "FALSE" : "TRUE";
+  localparam CBCC_DATA_SOURCE_SEL = LINK_MODE[1] ? "ENCODED" : "DECODED";
+  localparam DEC_MCOMMA_DETECT = LINK_MODE[1] ? "FALSE" : "TRUE";
+  localparam DEC_PCOMMA_DETECT = LINK_MODE[1] ? "FALSE" : "TRUE";
+  localparam RXBUF_EN = LINK_MODE[1] ? "FALSE" : "TRUE";
+  localparam TXBUF_EN = LINK_MODE[1] ? "FALSE" : "TRUE";
+  localparam RX_DATA_WIDTH = LINK_MODE[1] ? 64 : 40;
+  localparam TX_DATA_WIDTH = LINK_MODE[1] ? 64 : 40;
+  localparam GEARBOX_MODE = LINK_MODE[1] ? 5'b10001 : 5'b00000;
+  localparam GEARBOX_EN = LINK_MODE[1] ? "TRUE" : "FALSE";
+  localparam RX_INT_DATAWIDTH = LINK_MODE[1] ? 2 : 1;
+  localparam TX_INT_DATAWIDTH = LINK_MODE[1] ? 2 : 1;
+  localparam RX8B10BEN = LINK_MODE[1] ? 0 : 1;
+  localparam TX8B10BEN = LINK_MODE[1] ? 0 : 1;
+  localparam TX_RXDETECT_CFG = LINK_MODE[1] ? 14'h032 : 14'b00000000110010;
+  localparam RXGBOX_FIFO_INIT_RD_ADDR = LINK_MODE[1] ? 3 : 4;
+  localparam RXBUF_THRESH_UNDFLW = LINK_MODE[1] ? 4 : 3;
+  localparam RX_EYESCAN_VS_RANGE = LINK_MODE[1] ? 2 : 0;
+  localparam TXPHDLY_CFG1 = LINK_MODE[1] ? 16'h000E : 16'h000F;
+  localparam TXPH_CFG = LINK_MODE[1] ? 16'h0723 : 16'h0323;
+
+  wire [1:0] rx_header_s;
+  wire [127:0] rx_data_s;
+  wire [127:0] tx_data_s;
+  wire rx_bitslip_s;
+
+  generate
+    if (LINK_MODE[1]) begin
+
+      reg [3:0] rx_bitslip_d = 'h0;
+      reg rx_bitslip_req_s_d = 1'b0;
+      always @(posedge rx_clk) begin
+         rx_bitslip_d <= {rx_bitslip_d,rx_bitslip_s};
+         rx_bitslip_req_s_d <= rx_bitslip_req_s;
+      end
+      assign rx_bitslip_s = rx_bitslip_req_s & ~rx_bitslip_req_s_d;
+
+      // Sync header alignment
+      sync_header_align i_sync_header_align (
+        .clk(rx_clk),
+        .reset(~rx_rst_done_s),
+        .i_data({rx_header_s,rx_data_s[63:0]}),
+        .i_slip(rx_bitslip_req_s),
+        .i_slip_done(rx_bitslip_d[3]),
+        .o_data(rx_data),
+        .o_header(rx_header),
+        .o_block_sync(rx_block_sync)
+      );
+      assign tx_data_s = {64'd0, tx_data};
+
+    end else begin
+
+      assign {rx_data_open_s, rx_data} = rx_data_s;
+      assign rx_bitslip_s = 1'b0;
+      assign tx_data_s = {96'd0, tx_data};
+
+    end
+
+  endgenerate
+
   // instantiations
 
   generate
@@ -2517,65 +2580,6 @@ module util_adxcvr_xch #(
 
   generate
   if (XCVR_TYPE == GTYE4_TRANSCEIVERS) begin
-
-    localparam ALIGN_COMMA_ENABLE  = LINK_MODE[1] ? 10'b0000000000 : 10'b1111111111;
-    localparam ALIGN_MCOMMA_DET = LINK_MODE[1] ? "FALSE" : "TRUE";
-    localparam ALIGN_PCOMMA_DET = LINK_MODE[1] ? "FALSE" : "TRUE";
-    localparam CBCC_DATA_SOURCE_SEL = LINK_MODE[1] ? "ENCODED" : "DECODED";
-    localparam DEC_MCOMMA_DETECT = LINK_MODE[1] ? "FALSE" : "TRUE";
-    localparam DEC_PCOMMA_DETECT = LINK_MODE[1] ? "FALSE" : "TRUE";
-    localparam RXBUF_EN = LINK_MODE[1] ? "FALSE" : "TRUE";
-    localparam TXBUF_EN = LINK_MODE[1] ? "FALSE" : "TRUE";
-    localparam RX_DATA_WIDTH = LINK_MODE[1] ? 64 : 40;
-    localparam TX_DATA_WIDTH = LINK_MODE[1] ? 64 : 40;
-    localparam GEARBOX_MODE = LINK_MODE[1] ? 5'b10001 : 5'b00000;
-    localparam GEARBOX_EN = LINK_MODE[1] ? "TRUE" : "FALSE";
-    localparam RX_INT_DATAWIDTH = LINK_MODE[1] ? 2 : 1;
-    localparam TX_INT_DATAWIDTH = LINK_MODE[1] ? 2 : 1;
-    localparam RX8B10BEN = LINK_MODE[1] ? 0 : 1;
-    localparam TX8B10BEN = LINK_MODE[1] ? 0 : 1;
-    localparam TX_RXDETECT_CFG = LINK_MODE[1] ? 14'h032 : 14'b00000000110010;
-    localparam RXGBOX_FIFO_INIT_RD_ADDR = LINK_MODE[1] ? 3 : 4;
-    localparam RXBUF_THRESH_UNDFLW = LINK_MODE[1] ? 4 : 3;
-    localparam RX_EYESCAN_VS_RANGE = LINK_MODE[1] ? 2 : 0;
-    localparam TXPHDLY_CFG1 = LINK_MODE[1] ? 16'h000E : 16'h000F;
-    localparam TXPH_CFG = LINK_MODE[1] ? 16'h0723 : 16'h0323;
-
-    wire [1:0] rx_header_s;
-    wire [127:0] rx_data_s;
-    wire [127:0] tx_data_s;
-    wire rx_bitslip_s;
-
-    if (LINK_MODE[1]) begin
-
-      reg [3:0] rx_bitslip_d = 'h0;
-      reg rx_bitslip_req_s_d = 1'b0;
-      always @(posedge rx_clk) begin
-         rx_bitslip_d <= {rx_bitslip_d,rx_bitslip_s};
-         rx_bitslip_req_s_d <= rx_bitslip_req_s;
-      end
-      assign rx_bitslip_s = rx_bitslip_req_s & ~rx_bitslip_req_s_d;
-
-      // Sync header alignment
-      sync_header_align i_sync_header_align (
-        .clk(rx_clk),
-        .reset(~rx_rst_done_s),
-        .i_data({rx_header_s,rx_data_s[63:0]}),
-        .i_slip(rx_bitslip_req_s),
-        .i_slip_done(rx_bitslip_d[3]),
-        .o_data(rx_data),
-        .o_header(rx_header),
-        .o_block_sync(rx_block_sync)
-      );
-      assign tx_data_s = {64'd0, tx_data};
-
-    end else begin
-
-      assign {rx_data_open_s, rx_data} = rx_data_s;
-      assign rx_bitslip_s = 1'b0;
-      assign tx_data_s = {96'd0, tx_data};
-
-    end
 
     GTYE4_CHANNEL #(
       .ACJTAG_DEBUG_MODE (1'b0),
