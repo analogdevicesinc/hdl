@@ -200,6 +200,8 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}
   set qpll_enable [get_property CONFIG.QPLL_ENABLE [get_bd_cells $a_xcvr]]
   set tx_or_rx_n [get_property CONFIG.TX_OR_RX_N [get_bd_cells $a_xcvr]]
 
+  set xcvr_type [get_property CONFIG.XCVR_TYPE [get_bd_cells $u_xcvr]]
+
   set link_mode_u [get_property CONFIG.LINK_MODE [get_bd_cells $u_xcvr]]
   set link_mode_a [get_property CONFIG.LINK_MODE [get_bd_cells $a_xcvr]]
 
@@ -256,8 +258,18 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}
   create_bd_port -dir I $m_sysref
   create_bd_port -from [expr $num_of_links - 1] -to 0 -dir ${ctrl_dir} $m_sync
 
+  set use_2x_clk 0
   if {$link_clk == {}} {
-    set link_clk ${u_xcvr}/${txrx}_out_clk_${index}
+    # For 204C modes on GTH a 2x clock is required to drive the PCS 
+    # In such case set the xcvr out clock to be the double of the lane rate/66(40)
+    # and use the secondary div2 clock output for the link clock
+    if {$link_mode == 2 && ($xcvr_type == 5 || $xcvr_type == 8)} {
+      set link_clk ${u_xcvr}/${txrx}_out_clk_div2_${index}
+      set link_clk_2x ${u_xcvr}/${txrx}_out_clk_${index}
+      set use_2x_clk 1
+    } else {
+      set link_clk ${u_xcvr}/${txrx}_out_clk_${index}
+    }
     set rst_gen [regsub -all "/" ${a_jesd}_rstgen "_"]
     set create_rst_gen 1
   } else {
@@ -307,6 +319,9 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}
     }
     ad_connect  ${a_xcvr}/up_ch_${n} ${u_xcvr}/up_${txrx}_${phys_lane}
     ad_connect  ${link_clk} ${u_xcvr}/${txrx}_clk_${phys_lane}
+    if {$use_2x_clk == 1} {
+      ad_connect  ${link_clk_2x} ${u_xcvr}/${txrx}_clk_2x_${phys_lane}
+    }
     if {$phys_lane != {}} {
       if {$jesd204_type == 0} {
         ad_connect  ${u_xcvr}/${txrx}_${phys_lane} ${a_jesd}/${txrx}_phy${n}
