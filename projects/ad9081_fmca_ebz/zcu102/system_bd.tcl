@@ -59,7 +59,7 @@ if {$ad_project_params(RX_LANE_RATE) < 12} {
   ad_ip_parameter util_mxfe_xcvr CONFIG.RX_WIDEMODE_CDR 0x0
   ad_ip_parameter util_mxfe_xcvr CONFIG.RXPI_CFG0 0x200
   ad_ip_parameter util_mxfe_xcvr CONFIG.RXPI_CFG1 0xFD
-  
+
   ad_ip_parameter util_mxfe_xcvr CONFIG.RXCDR_CFG3 0x12
   ad_ip_parameter util_mxfe_xcvr CONFIG.RXCDR_CFG3_GEN2 0x12
   ad_ip_parameter util_mxfe_xcvr CONFIG.RXCDR_CFG3_GEN3 0x12
