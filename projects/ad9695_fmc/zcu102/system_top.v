@@ -42,6 +42,10 @@ module system_top (
 
   input                   ref_clk0_p,
   input                   ref_clk0_n,
+
+  input                   sysref_p,
+  input                   sysref_n,
+
   input       [ 3:0]      rx_data_p,
   input       [ 3:0]      rx_data_n,
   output                  rx_sync_p,
@@ -73,6 +77,8 @@ module system_top (
   wire                    rx_ref_core_clk0_s;
   wire                    rx_ref_core_clk0;
   wire         [2:0]      spi1_csn;
+  wire                    sysref_s;
+  wire                    sysref_0;
 
   assign gpio_i[94:35] = gpio_o[94:35];
   assign gpio_i[31:21] = gpio_o[31:21];
@@ -108,6 +114,22 @@ module system_top (
     .DIV (3'b000),
     .O(rx_ref_core_clk0));
 
+  IBUFDS_GTE4 i_ibufds_sysref (
+    .CEB (1'd0),
+    .I (sysref_p),
+    .IB (sysref_n),
+    .O (),
+    .ODIV2 (sysref_s));
+
+  BUFG_GT i_bufg_gt_sysref(
+    .I(sysref_s),
+    .CE (1'b1),
+    .CEMASK(1'b1),
+    .CLR (1'b0),
+    .CLRMASK(1'b1),
+    .DIV (3'b000),
+    .O(sysref_0));
+
   OBUFDS i_obufds_rx_sync (
     .I (rx_sync),
     .O (rx_sync_p),
@@ -128,7 +150,7 @@ module system_top (
     .rx_ref_clk_0 (ref_clk0),
     .rx_core_clk_0 (rx_ref_core_clk0),
     .rx_sync_0 (rx_sync),
-    .rx_sysref_0 ('h0),
+    .rx_sysref_0 (sysref_0),
     .spi0_sclk (spi_clk),
     .spi0_csn (spi_csn),
     .spi0_miso (spi_miso),
