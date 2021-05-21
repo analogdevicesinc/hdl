@@ -526,7 +526,7 @@ module axi_adxcvr_up #(
           10'h001: up_rdata_d <= ID;
           10'h002: up_rdata_d <= up_scratch;
           10'h004: up_rdata_d <= {31'd0, up_resetn};
-          10'h005: up_rdata_d <= {31'd0, up_status_int};
+          10'h005: up_rdata_d <= {27'd0, ~up_ch_pll_locked, 3'b0, up_status_int};
           10'h006: up_rdata_d <= {17'd0, up_user_ready_cnt, up_rst_cnt, up_pll_rst_cnt};
           10'h007: up_rdata_d <= {FPGA_TECHNOLOGY,FPGA_FAMILY,SPEED_GRADE,DEV_PACKAGE}; // [8,8,8,8]
           10'h008: up_rdata_d <= {19'd0, up_lpm_dfe_n, 1'd0, up_rate, 2'd0, up_sys_clk_sel, 1'd0, up_out_clk_sel};
