@@ -16,4 +16,4 @@ resize_pblock [get_pblocks pb_prcfg] -add {DSP48_X4Y60:DSP48_X4Y79}
 set_property SNAPPING_MODE ON [get_pblocks pb_prcfg]
 set_property RESET_AFTER_RECONFIG 1 [get_pblocks pb_prcfg]
 
-set_case_analysis 0 [get_pins i_system_wrapper/system_i/util_ad9361_divclk_sel_Res]
+#set_case_analysis 0 [get_pins i_system_wrapper/system_i/util_ad9361_divclk_sel_Res]

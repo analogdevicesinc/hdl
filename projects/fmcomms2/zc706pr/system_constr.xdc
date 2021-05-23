@@ -1,0 +1,5 @@
+set_case_analysis 0 [get_pins i_system_wrapper/system_i/util_ad9361_divclk/inst/clk_sel]
+set_case_analysis 0 [get_pins i_system_wrapper/system_i/axi_ad9361_adc_r1_mode]
+set_case_analysis 0 [get_pins i_system_wrapper/system_i/axi_ad9361_dac_r1_mode]
+set_case_analysis 0 [get_pins i_system_wrapper/system_i/axi_ad9361/inst/i_rx/i_up_adc_common/i_xfer_cntrl/d_data_cntrl[3]]
+set_case_analysis 0 [get_pins i_system_wrapper/system_i/axi_ad9361/inst/i_tx/i_up_dac_common/i_xfer_cntrl/d_data_cntrl[18]]
