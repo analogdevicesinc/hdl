@@ -103,7 +103,7 @@ module axi_dac_interpolate_filter #(
     .SCALE_ONLY(1))
   i_ad_iqcor (
     .clk (dac_clk),
-    .valid (dac_valid),
+    .valid (dma_valid & dac_valid),
     .data_in (dac_data),
     .data_iq (16'h0),
     .valid_out (dac_valid_corrected),
