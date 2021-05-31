@@ -174,7 +174,7 @@ module axi_jesd204_rx_regmap_tb;
     set_reset_reg_value('hc0, 'h1); /* Core reset */
     set_reset_reg_value('hc4, 'h1); /* Core state */
 //    set_reset_reg_value('hc8, 'h28000); /* clock monitor */
-    set_reset_reg_value('h210, 'h0); /* OCTETS_PER_MULTIFRAME  */
+    set_reset_reg_value('h210, 'h3); /* OCTETS_PER_MULTIFRAME  */
     set_reset_reg_value('h248, 'h4); /* FRAME_ALIGN_ERR_THRESHOLD */
 
     /* Lane error statistics */

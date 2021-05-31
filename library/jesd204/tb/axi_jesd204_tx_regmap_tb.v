@@ -171,7 +171,7 @@ module axi_jesd204_tx_regmap_tb;
     set_reset_reg_value('hc0, 'h1); /* Link disable */
     set_reset_reg_value('hc4, 'h1); /* Core state */
 //    set_reset_reg_value('hc8, 'h80000); /* clock monitor */
-    set_reset_reg_value('h210, 'h0); /* OCTETS_PER_MULTIFRAME */
+    set_reset_reg_value('h210, 'h3); /* OCTETS_PER_MULTIFRAME */
 
     set_reset_reg_value('h244, 'h3); /* MFRAMES_PER_ILAS */
   end
@@ -250,7 +250,7 @@ module axi_jesd204_tx_regmap_tb;
     /* Check JESD common config */
     write_reg_and_update('h210, 32'hff03ff);
     check_all_registers();
-    write_reg_and_update('h214, 32'h00);
+    write_reg_and_update('h214, 32'h03);
     check_all_registers();
 
     /* Check links disable */
