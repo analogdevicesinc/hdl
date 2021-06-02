@@ -2,7 +2,7 @@
 ## Initialize global variable
 set family "none"
 set device "none"
-set version "20.1.0"
+set version "20.4.0"
 
 ## Define the ADI_IGNORE_VERSION_CHECK environment variable to skip version check
 if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
