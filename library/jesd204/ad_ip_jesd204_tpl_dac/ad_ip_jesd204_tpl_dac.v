@@ -66,7 +66,7 @@ module ad_ip_jesd204_tpl_dac #(
 
   // axi interface
 
-  input s_axi_aclk,
+  (* keep = "TRUE" *)input s_axi_aclk,
   input s_axi_aresetn,
 
   input s_axi_awvalid,

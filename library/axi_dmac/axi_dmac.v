@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module axi_dmac #(
+(* keep_hierarchy = "yes" *) module axi_dmac #(
 
   parameter ID = 0,
   parameter DMA_DATA_WIDTH_SRC = 64,
@@ -65,7 +65,7 @@ module axi_dmac #(
   parameter ALLOW_ASYM_MEM = 0
 ) (
   // Slave AXI interface
-  input s_axi_aclk,
+  (* keep = "TRUE" *)input s_axi_aclk,
   input s_axi_aresetn,
 
   input         s_axi_awvalid,

@@ -34,7 +34,7 @@ module ad_ip_jesd204_tpl_adc_regmap #(
   parameter NUM_PROFILES = 1    // Number of supported JESD profiles
 ) (
   // axi interface
-  input s_axi_aclk,
+  (* keep = "TRUE" *)input s_axi_aclk,
   input s_axi_aresetn,
   input s_axi_awvalid,
   input [12:0] s_axi_awaddr,

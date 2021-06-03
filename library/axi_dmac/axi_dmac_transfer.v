@@ -130,7 +130,7 @@ module axi_dmac_transfer #(
   input [1:0] m_axi_rresp,
 
   // Slave streaming AXI interface
-  input s_axis_aclk,
+  (* keep = "TRUE" *)input s_axis_aclk,
   output s_axis_ready,
   input s_axis_valid,
   input [DMA_DATA_WIDTH_SRC-1:0] s_axis_data,
@@ -139,7 +139,7 @@ module axi_dmac_transfer #(
   output s_axis_xfer_req,
 
   // Master streaming AXI interface
-  input m_axis_aclk,
+  (* keep = "TRUE" *)input m_axis_aclk,
   input m_axis_ready,
   output m_axis_valid,
   output [DMA_DATA_WIDTH_DEST-1:0] m_axis_data,

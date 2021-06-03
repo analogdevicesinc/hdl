@@ -42,7 +42,7 @@ module util_axis_fifo_address_generator #(
 ) (
   // Read interface - Sink side
 
-  input m_axis_aclk,
+  (* keep = "TRUE" *)input m_axis_aclk,
   input m_axis_aresetn,
   input m_axis_ready,
   output m_axis_valid,
@@ -53,7 +53,7 @@ module util_axis_fifo_address_generator #(
 
   // Write interface - Source side
 
-  input s_axis_aclk,
+  (* keep = "TRUE" *)input s_axis_aclk,
   input s_axis_aresetn,
   output s_axis_ready,
   input s_axis_valid,

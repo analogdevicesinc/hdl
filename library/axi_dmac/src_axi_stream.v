@@ -42,7 +42,7 @@ module dmac_src_axi_stream #(
   parameter LENGTH_WIDTH = 24,
   parameter BEATS_PER_BURST_WIDTH = 4)(
 
-  input s_axis_aclk,
+  (* keep = "TRUE" *)input s_axis_aclk,
   input s_axis_aresetn,
 
   input enable,

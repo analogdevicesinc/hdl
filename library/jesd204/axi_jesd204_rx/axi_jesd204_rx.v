@@ -52,7 +52,7 @@ module axi_jesd204_rx #(
   parameter ENABLE_LINK_STATS = 0,
   parameter DATA_PATH_WIDTH = LINK_MODE == 2 ? 8 : 4
 ) (
-  input s_axi_aclk,
+  (* keep = "TRUE" *)input s_axi_aclk,
   input s_axi_aresetn,
 
   input s_axi_awvalid,

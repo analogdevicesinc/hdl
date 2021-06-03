@@ -41,7 +41,7 @@ module dmac_dest_axi_stream #(
   parameter S_AXIS_DATA_WIDTH = 64,
   parameter BEATS_PER_BURST_WIDTH = 4)(
 
-  input s_axis_aclk,
+  (* keep = "TRUE" *)input s_axis_aclk,
   input s_axis_aresetn,
 
   input enable,

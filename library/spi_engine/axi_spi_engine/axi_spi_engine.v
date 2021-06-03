@@ -52,7 +52,7 @@ module axi_spi_engine #(
 
   // Slave AXI interface
 
-  input         s_axi_aclk,
+(* keep="true" *)  input         s_axi_aclk,
   input         s_axi_aresetn,
   input         s_axi_awvalid,
   input  [15:0] s_axi_awaddr,

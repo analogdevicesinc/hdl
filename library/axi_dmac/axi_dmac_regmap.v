@@ -53,7 +53,7 @@ module axi_dmac_regmap #(
   parameter SYNC_TRANSFER_START = 0
 ) (
   // Slave AXI interface
-  input s_axi_aclk,
+(* keep = "true" *)  input s_axi_aclk,
   input s_axi_aresetn,
 
   input s_axi_awvalid,

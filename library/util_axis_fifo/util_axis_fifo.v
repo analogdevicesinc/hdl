@@ -45,7 +45,7 @@ module util_axis_fifo #(
   parameter TKEEP_EN = 0,
   parameter REMOVE_NULL_BEAT_EN = 0
 ) (
-  input m_axis_aclk,
+  (* keep = "TRUE" *)input m_axis_aclk,
   input m_axis_aresetn,
   input m_axis_ready,
   output m_axis_valid,
@@ -56,7 +56,7 @@ module util_axis_fifo #(
   output m_axis_empty,
   output m_axis_almost_empty,
 
-  input s_axis_aclk,
+  (* keep = "TRUE" *)input s_axis_aclk,
   input s_axis_aresetn,
   output s_axis_ready,
   input s_axis_valid,

@@ -37,7 +37,7 @@ module ad_ip_jesd204_tpl_dac_regmap #(
   parameter PADDING_TO_MSB_LSB_N = 0,
   parameter NUM_PROFILES = 1    // Number of supported JESD profiles
 ) (
-  input s_axi_aclk,
+  (* keep = "TRUE" *) input s_axi_aclk,
   input s_axi_aresetn,
 
   input s_axi_awvalid,

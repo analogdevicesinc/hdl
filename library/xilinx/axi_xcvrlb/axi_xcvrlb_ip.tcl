@@ -17,6 +17,10 @@ adi_ip_properties_lite axi_xcvrlb
 adi_init_bd_tcl
 adi_ip_bd axi_xcvrlb "bd/bd.tcl"
 
+adi_ip_add_core_dependencies { \
+	analog.com:user:util_cdc:1.0 \
+}
+
 ipx::remove_all_bus_interface [ipx::current_core]
 
 set_property driver_value 0 [ipx::get_ports -filter "direction==in" -of_objects [ipx::current_core]]
