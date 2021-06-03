@@ -14,7 +14,6 @@ M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
 M_DEPS += ../../../library/common/ad_sysref_gen.v
 M_DEPS += ../../../library/common/ad_iobuf.v
 
-LIB_DEPS += axi_ad9250
 LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_hdmi_tx
