@@ -48,7 +48,11 @@ module axi_spi_engine #(
   parameter OFFLOAD0_SDO_MEM_ADDRESS_WIDTH = 4,
   parameter ID = 0,
   parameter [15:0] DATA_WIDTH = 8,
-  parameter [ 7:0] NUM_OF_SDI = 1 ) (
+  parameter [ 7:0] NUM_OF_SDI = 1,
+  parameter CFG_INFO_0 = 0,
+  parameter CFG_INFO_1 = 0,
+  parameter CFG_INFO_2 = 0,
+  parameter CFG_INFO_3 = 0) (
 
   // Slave AXI interface
 
@@ -349,6 +353,10 @@ module axi_spi_engine #(
       8'h3c: up_rdata_ff <= sdi_fifo_out_data; /* PEEK register */
       8'h40: up_rdata_ff <= {offload0_enable_reg};
       8'h41: up_rdata_ff <= {offload0_enabled_s};
+      8'h80: up_rdata_ff <= CFG_INFO_0;
+      8'h81: up_rdata_ff <= CFG_INFO_1;
+      8'h82: up_rdata_ff <= CFG_INFO_2;
+      8'h83: up_rdata_ff <= CFG_INFO_3;
       default: up_rdata_ff <= 'h00;
     endcase
   end
@@ -466,7 +474,7 @@ module axi_spi_engine #(
     .ADDRESS_WIDTH(SDI_FIFO_ADDRESS_WIDTH),
     .M_AXIS_REGISTERED(0),
     .ALMOST_EMPTY_THRESHOLD(1),
-    .ALMOST_FULL_THRESHOLD(1)
+    .ALMOST_FULL_THRESHOLD(31)
   ) i_sdi_fifo (
     .s_axis_aclk(spi_clk),
     .s_axis_aresetn(spi_resetn),
