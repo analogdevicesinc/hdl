@@ -39,7 +39,7 @@ module axi_pwm_gen #(
   parameter  ID = 0,
   parameter  ASYNC_CLK_EN = 1,
   parameter  N_PWMS = 1,
-  parameter  PWM_0_EXT_SYNC = 0,
+  parameter  PWM_EXT_SYNC = 0,
   parameter  EXT_ASYNC_SYNC = 0,
   parameter  PULSE_0_WIDTH = 7,
   parameter  PULSE_1_WIDTH = 7,
@@ -49,6 +49,7 @@ module axi_pwm_gen #(
   parameter  PULSE_1_PERIOD = 10,
   parameter  PULSE_2_PERIOD = 10,
   parameter  PULSE_3_PERIOD = 10,
+  parameter  PULSE_0_OFFSET = 0,
   parameter  PULSE_1_OFFSET = 0,
   parameter  PULSE_2_OFFSET = 0,
   parameter  PULSE_3_OFFSET = 0)(
@@ -93,14 +94,13 @@ module axi_pwm_gen #(
 
   // internal registers
 
-  reg             sync_0;
-  reg             sync_1;
-  reg             sync_2;
-  reg             sync_3;
-  reg             sync_active_0;
-  reg             sync_active_1;
-  reg             sync_active_2;
-  reg             sync_active_3;
+  reg             sync_0 = 1'b0;
+  reg             sync_1 = 1'b0;
+  reg             sync_2 = 1'b0;
+  reg             sync_3 = 1'b0;
+  reg   [31:0]    offset_cnt = 32'd0;
+  reg             offset_alignment = 1'b0;
+  reg             pause_cnt_d = 1'b0;
 
   // internal signals
 
@@ -118,10 +118,12 @@ module axi_pwm_gen #(
   wire   [127:0]  pwm_width_s;
   wire   [127:0]  pwm_period_s;
   wire   [127:0]  pwm_offset_s;
-  wire   [ 31:0]  pwm_counter[0:N_PWMS-1];
+  wire   [ 31:0]  pwm_counter[0:3];
   wire            load_config_s;
   wire            pwm_gen_resetn;
   wire            ext_sync_s;
+  wire            pause_cnt;
+  wire            offset_alignment_ready;
 
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
@@ -140,6 +142,7 @@ module axi_pwm_gen #(
     .PULSE_1_PERIOD (PULSE_1_PERIOD),
     .PULSE_2_PERIOD (PULSE_2_PERIOD),
     .PULSE_3_PERIOD (PULSE_3_PERIOD),
+    .PULSE_0_OFFSET (PULSE_0_OFFSET),
     .PULSE_1_OFFSET (PULSE_1_OFFSET),
     .PULSE_2_OFFSET (PULSE_2_OFFSET),
     .PULSE_3_OFFSET (PULSE_3_OFFSET))
@@ -162,6 +165,59 @@ module axi_pwm_gen #(
     .up_rdata (up_rdata_s),
     .up_rack (up_rack_s));
 
+  // external sync
+
+  generate
+
+    reg ext_sync_m0 = 1'b1;
+    reg ext_sync_m1 = 1'b1;
+
+    if (EXT_ASYNC_SYNC) begin
+      always @(posedge clk) begin
+        if (pwm_gen_resetn == 1'b0) begin
+          ext_sync_m0 <=  1'b1;
+          ext_sync_m1 <=  1'b1;
+        end else begin
+          ext_sync_m0 <= (PWM_EXT_SYNC == 1) ? ext_sync : 0;
+          ext_sync_m1 <= ext_sync_m0;
+        end
+      end
+      assign ext_sync_s = ext_sync_m1;
+    end else begin
+      assign ext_sync_s = (PWM_EXT_SYNC == 1) ? ext_sync : 0;
+    end
+
+  endgenerate
+
+  // offset counter
+
+  always @(posedge clk) begin
+    if (offset_alignment) begin
+      offset_cnt <= 32'd0;
+    end else begin
+      offset_cnt <= offset_cnt + 1'b1;
+    end
+
+    if (pwm_gen_resetn == 1'b0) begin
+      pause_cnt_d <= 1'b0;
+      offset_alignment <= 1'b0;
+    end else begin
+      pause_cnt_d <= pause_cnt_d;
+
+      // when using external sync an offset alignment can be done only
+      // after all pwm counters are paused(load_config)/reseated
+      offset_alignment <= (load_config_s == 1'b1) ? 1'b1 :
+                          offset_alignment &
+                          (ext_sync_s ? 1'b1 : !offset_alignment_ready);
+    end
+  end
+
+  assign pause_cnt = ((pwm_counter[0] == 32'd1 ||
+                       pwm_counter[1] == 32'd1 ||
+                       pwm_counter[2] == 32'd1 ||
+                       pwm_counter[3] == 32'd1) ? 1'b1 : 1'b0);
+  assign offset_alignment_ready = !pause_cnt_d & pause_cnt;
+
   axi_pwm_gen_1  #(
     .PULSE_WIDTH (PULSE_0_WIDTH),
     .PULSE_PERIOD (PULSE_0_PERIOD))
@@ -177,37 +233,13 @@ module axi_pwm_gen #(
 
   always @(posedge clk) begin
     if (pwm_gen_resetn == 1'b0) begin
-      sync_active_0 <= 1'b1;
       sync_0 <= 1'b1;
     end else begin
-      sync_active_0 <= PWM_0_EXT_SYNC;
-      if (sync_active_0) begin
-        sync_0 <= ext_sync_s;
-      end else begin
-        sync_0 <= 1'b0;
-      end
+      sync_0 <= (offset_cnt == pwm_offset_s[31:0]) ? 1'b0 : 1'b1;
     end
   end
 
   generate
-
-    reg ext_sync_m0 = 1'b1;
-    reg ext_sync_m1 = 1'b1;
-
-    if (EXT_ASYNC_SYNC) begin
-      always @(posedge clk) begin
-        if (pwm_gen_resetn == 1'b0) begin
-          ext_sync_m0 <=  1'b1;
-          ext_sync_m1 <=  1'b1;
-        end else begin
-          ext_sync_m0 <= ext_sync;
-          ext_sync_m1 <= ext_sync_m0;
-        end
-      end
-      assign ext_sync_s = ext_sync_m1;
-    end else begin
-      assign ext_sync_s = ext_sync;
-    end
 
     if (N_PWMS >= 2) begin
       axi_pwm_gen_1  #(
@@ -225,19 +257,14 @@ module axi_pwm_gen #(
 
       always @(posedge clk) begin
         if (pwm_gen_resetn == 1'b0) begin
-          sync_active_1 <= 1'b1;
           sync_1 <= 1'b1;
         end else begin
-          sync_active_1 <= |pwm_offset_s[63:32];
-          if (sync_active_1) begin
-            sync_1 <= (pwm_counter[0] == pwm_offset_s[63:32]) ? 1'b0 : 1'b1;
-          end else begin
-            sync_1 <= 1'b0;
-          end
+          sync_1 <= (offset_cnt == pwm_offset_s[63:32]) ? 1'b0 : 1'b1;
         end
       end
     end else begin
       assign pwm_1 = 1'b0;
+      assign pwm_counter[1] = 32'd1;
     end
 
     if (N_PWMS >= 3) begin
@@ -256,19 +283,14 @@ module axi_pwm_gen #(
 
       always @(posedge clk) begin
         if (pwm_gen_resetn == 1'b0) begin
-          sync_active_2 <= 1'b1;
           sync_2 <= 1'b1;
         end else begin
-          sync_active_2 <= |pwm_offset_s[95:64];
-          if (sync_active_2) begin
-            sync_2 <= (pwm_counter[0] == pwm_offset_s[95:64]) ? 1'b0 : 1'b1;
-          end else begin
-            sync_2 <= 1'b0;
-          end
+          sync_2 <= (offset_cnt == pwm_offset_s[95:64]) ? 1'b0 : 1'b1;
         end
       end
     end else begin
       assign pwm_2 = 1'b0;
+      assign pwm_counter[2] = 32'd1;
     end
 
     if (N_PWMS >= 4) begin
@@ -287,19 +309,14 @@ module axi_pwm_gen #(
 
       always @(posedge clk) begin
         if (pwm_gen_resetn == 1'b0) begin
-          sync_active_3 <= 1'b1;
           sync_3 <= 1'b1;
         end else begin
-          sync_active_3 <= |pwm_offset_s[127:96];
-          if (sync_active_3) begin
-            sync_3 <= (pwm_counter[0] == pwm_offset_s[127:96]) ? 1'b0 : 1'b1;
-          end else begin
-            sync_3 <= 1'b0;
-          end
+          sync_3 <= (offset_cnt == pwm_offset_s[127:96]) ? 1'b0 : 1'b1;
         end
       end
     end else begin
       assign pwm_3 = 1'b0;
+      assign pwm_counter[3] = 32'd1;
     end
   endgenerate
 

@@ -50,6 +50,7 @@ module axi_pwm_gen_regmap #(
   parameter  PULSE_2_PERIOD = 10,
   parameter  PULSE_3_PERIOD = 10,
   parameter  PULSE_0_EXT_SYNC = 0,
+  parameter  PULSE_0_OFFSET = 0,
   parameter  PULSE_1_OFFSET = 0,
   parameter  PULSE_2_OFFSET = 0,
   parameter  PULSE_3_OFFSET = 0)(
@@ -92,7 +93,7 @@ module axi_pwm_gen_regmap #(
   reg     [31:0]  up_pwm_period_1 = PULSE_1_PERIOD;
   reg     [31:0]  up_pwm_period_2 = PULSE_2_PERIOD;
   reg     [31:0]  up_pwm_period_3 = PULSE_3_PERIOD;
-  reg     [31:0]  up_pwm_offset_0 = 32'd0;
+  reg     [31:0]  up_pwm_offset_0 = PULSE_0_OFFSET;
   reg     [31:0]  up_pwm_offset_1 = PULSE_1_OFFSET;
   reg     [31:0]  up_pwm_offset_2 = PULSE_2_OFFSET;
   reg     [31:0]  up_pwm_offset_3 = PULSE_3_OFFSET;
@@ -111,7 +112,7 @@ module axi_pwm_gen_regmap #(
       up_pwm_period_1 <= PULSE_1_PERIOD;
       up_pwm_period_2 <= PULSE_2_PERIOD;
       up_pwm_period_3 <= PULSE_3_PERIOD;
-      up_pwm_offset_0 <= 32'd0;
+      up_pwm_offset_0 <= PULSE_0_OFFSET;
       up_pwm_offset_1 <= PULSE_1_OFFSET;
       up_pwm_offset_2 <= PULSE_2_OFFSET;
       up_pwm_offset_3 <= PULSE_3_OFFSET;

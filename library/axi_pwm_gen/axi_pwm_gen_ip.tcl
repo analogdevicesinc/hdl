@@ -68,7 +68,7 @@ set_property -dict [list \
 
 ipgui::add_param -name "EXT_ASYNC_SYNC" -component $cc -parent $page0
 set_property -dict [list \
-  "display_name" "External sync signal for pwm_0 is asynchronous" \
+  "display_name" "External sync signal is asynchronous" \
   "tooltip" "NOTE: If active the ext_sync will be delayed 2 clock cycles." \
   "widget" "checkBox" \
 ] [ipgui::get_guiparamspec -name "EXT_ASYNC_SYNC" -component $cc]
@@ -78,8 +78,22 @@ set_property -dict [list \
   "display_name" "Number of pwms" \
 ] [ipgui::get_guiparamspec -name "N_PWMS" -component $cc]
 
+ipgui::add_param -name "PWM_EXT_SYNC" -component $cc -parent $page0
+set_property -dict [list \
+  "display_name" "External sync" \
+  "tooltip" "NOTE: If active the whole pwm gen module will be waiting for the ext_sync to be set low. A load config or reset must be used before deaserting the ext_sync" \
+  "widget" "checkBox" \
+] [ipgui::get_guiparamspec -name "PWM_EXT_SYNC" -component $cc]
+
+ipgui::add_param -name "EXT_ASYNC_SYNC" -component $cc -parent $page0
+set_property -dict [list \
+  "display_name" "External sync signal is asynchronous" \
+  "tooltip" "NOTE: If active the ext_sync will be delayed 2 clock cycles." \
+  "widget" "checkBox" \
+] [ipgui::get_guiparamspec -name "EXT_ASYNC_SYNC" -component $cc]
+
 # Maximum 4 pwms
-for {set i 1} {$i < 4} {incr i} {
+for {set i 0} {$i < 4} {incr i} {
   ipgui::add_param -name "PULSE_${i}_WIDTH" -component $cc -parent $page0
   set_property -dict [list \
     "display_name" "PULSE $i width" \
@@ -106,27 +120,18 @@ for {set i 1} {$i < 4} {incr i} {
    ] \
   [ipx::get_user_parameters PULSE_${i}_PERIOD -of_objects $cc]
 
-  if { $i == 1 } {
-    ipgui::add_param -name "PWM_0_EXT_SYNC" -component $cc -parent $page0
-    set_property -dict [list \
-      "display_name" "Main pwm(1) sync" \
-      "tooltip" "NOTE: If active the whole pwm gen module will be waiting for the ext_sync to be set high." \
-      "widget" "checkBox" \
-    ] [ipgui::get_guiparamspec -name "PWM_0_EXT_SYNC" -component $cc]
-  } else {
-    ipgui::add_param -name "PULSE_${i}_OFFSET" -component $cc -parent $page0
-    set_property -dict [list \
-      "display_name" "PULSE ${i} offset" \
-      "tooltip" "Offset of the generated signal referenced to PULSE 1. The unit interval is the system or external clock period." \
-    ] [ipgui::get_guiparamspec -name "PULSE_${i}_OFFSET" -component $cc]
+  ipgui::add_param -name "PULSE_${i}_OFFSET" -component $cc -parent $page0
+  set_property -dict [list \
+    "display_name" "PULSE ${i} offset" \
+    "tooltip" "Offset of the generated signal referenced to PULSE 1. The unit interval is the system or external clock period." \
+  ] [ipgui::get_guiparamspec -name "PULSE_${i}_OFFSET" -component $cc]
 
-    set_property -dict [list \
-      "value_validation_type" "range_long" \
-      "value_validation_range_minimum" "0" \
-      "value_validation_range_maximum" "2147483647" \
-     ] \
-    [ipx::get_user_parameters PULSE_${i}_OFFSET -of_objects $cc]
-  }
+  set_property -dict [list \
+    "value_validation_type" "range_long" \
+    "value_validation_range_minimum" "0" \
+    "value_validation_range_maximum" "2147483647" \
+   ] \
+  [ipx::get_user_parameters PULSE_${i}_OFFSET -of_objects $cc]
 }
 
 for {set i 1} {$i < 4} {incr i} {
@@ -135,7 +140,7 @@ for {set i 1} {$i < 4} {incr i} {
 }
 
 adi_set_ports_dependency "ext_sync" \
-	"(spirit:decode(id('MODELPARAM_VALUE.PWM_0_EXT_SYNC')) == 1)"
+	"(spirit:decode(id('MODELPARAM_VALUE.PWM_EXT_SYNC')) == 1)"
 
 set_property driver_value 0 [ipx::get_ports -filter "direction==in" -of_objects $cc]
 
