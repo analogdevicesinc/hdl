@@ -96,6 +96,7 @@ module up_tdd_cntrl #(
   output  reg             up_rack);
 
   localparam  PCORE_VERSION = 32'h00010061;
+  localparam  PCORE_MAGIC = 32'h54444443; // "TDDC", big endian
 
   // internal registers
 
@@ -303,6 +304,7 @@ module up_tdd_cntrl #(
           8'h00: up_rdata <= PCORE_VERSION;
           8'h01: up_rdata <= ID;
           8'h02: up_rdata <= up_scratch;
+          8'h03: up_rdata <= PCORE_MAGIC;
           8'h10: up_rdata <= {28'h0, up_tdd_gated_tx_dmapath,
                                      up_tdd_gated_rx_dmapath,
                                      up_tdd_tx_only,
