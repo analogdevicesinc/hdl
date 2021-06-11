@@ -56,6 +56,7 @@ clean:
 	$(MAKE) -C axi_spdif_rx clean
 	$(MAKE) -C axi_spdif_tx clean
 	$(MAKE) -C axi_sysid clean
+	$(MAKE) -C axi_tdd clean
 	$(MAKE) -C axi_usb_fx3 clean
 	$(MAKE) -C cn0363/cn0363_dma_sequencer clean
 	$(MAKE) -C cn0363/cn0363_phase_data_sync clean
@@ -170,6 +171,7 @@ lib:
 	$(MAKE) -C axi_spdif_rx
 	$(MAKE) -C axi_spdif_tx
 	$(MAKE) -C axi_sysid
+	$(MAKE) -C axi_tdd
 	$(MAKE) -C axi_usb_fx3
 	$(MAKE) -C cn0363/cn0363_dma_sequencer
 	$(MAKE) -C cn0363/cn0363_phase_data_sync
