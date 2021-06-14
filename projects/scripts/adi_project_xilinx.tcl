@@ -435,7 +435,7 @@ proc adi_project_synth {project_name prcfg_name hdl_files {xdc_files ""}} {
     read_verilog $hdl_files
     read_xdc $xdc_files
 
-    synth_design -mode default -top system_top -part $p_device > $p_prefix.synth.rds
+    synth_design -flatten_hierarchy none -top system_top -part $p_device > $p_prefix.synth.rds
     write_checkpoint -force $p_prefix.synth.dcp
     close_project
 
@@ -508,15 +508,15 @@ proc adi_project_impl {project_name prcfg_name {xdc_files ""}} {
   write_checkpoint -force $p_prefix.${prcfg_name}_impl_bb.dcp
   open_checkpoint $p_prefix.${prcfg_name}_impl.dcp -part $p_device
   write_bitstream -force -bin_file -file $p_prefix.${prcfg_name}.bit
-  write_sysdef -hwdef $p_prefix.hwdef -bitfile $p_prefix.${prcfg_name}.bit -file $p_prefix.${prcfg_name}.hdf
-  file copy -force $p_prefix.${prcfg_name}.hdf $project_name.sdk/system_top.${prcfg_name}.hdf
+  write_sysdef -hwdef $p_prefix.hwdef -bitfile $p_prefix.${prcfg_name}.bit -file $p_prefix.${prcfg_name}.xsa
+  file copy -force $p_prefix.${prcfg_name}.xsa $project_name.sdk/system_top.${prcfg_name}.xsa
 
   if {$prcfg_name ne "default"} {
     lappend p_prcfg_list "$p_prefix.${prcfg_name}_impl.dcp"
   }
 
   if {$prcfg_name eq "default"} {
-    file copy -force $p_prefix.${prcfg_name}.hdf $project_name.sdk/system_top.hdf
+    file copy -force $p_prefix.${prcfg_name}.xsa $project_name.sdk/system_top.xsa
   }
 }
 
