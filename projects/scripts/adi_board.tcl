@@ -1,4 +1,6 @@
 
+package require math
+
 ## Global variables for interconnect interface indexing
 #
 set sys_cpu_interconnect_index 0
@@ -67,6 +69,86 @@ proc ad_connect_type {p_name} {
   return $m_name
 }
 
+## Get type of object, for internal use only!
+proc ad_connect_int_class {p_name} {
+
+  set m_name ""
+
+  if {$m_name eq ""} {set m_name [get_bd_intf_pins  -quiet $p_name]}
+  if {$m_name eq ""} {set m_name [get_bd_pins       -quiet $p_name]}
+  # All ports can be handled as pins
+  # if {$m_name eq ""} {set m_name [get_bd_intf_ports -quiet $p_name]}
+  # if {$m_name eq ""} {set m_name [get_bd_ports      -quiet $p_name]}
+  if {$m_name eq ""} {set m_name [get_bd_intf_nets  -quiet $p_name]}
+  if {$m_name eq ""} {set m_name [get_bd_nets       -quiet $p_name]}
+
+  if {!($m_name eq "")} {
+    return [get_property CLASS $m_name]
+  }
+
+  if {$p_name eq "GND" || $p_name eq "VCC"} {
+    return "const"
+  }
+
+  return "newnet"
+}
+
+## Get constant source, for internal use only!
+proc ad_connect_int_get_const {name width} {
+  switch $name {
+    GND {
+      set value 0
+    }
+    VCC {
+      set value [expr (1 << $width) - 1]
+    }
+    default {
+      error "ERROR: ad_connect_int_get_const: Unhandled constant name $name"
+    }
+  }
+
+  set cell_name "$name\_$width"
+
+  set cell [get_bd_cells -quiet $cell_name]
+  if {$cell eq ""} {
+    # Create new constant source
+    ad_ip_instance xlconstant $cell_name
+    set cell [get_bd_cells -quiet $cell_name]
+    set_property CONFIG.CONST_WIDTH $width $cell
+    set_property CONFIG.CONST_VAL $value $cell
+  }
+
+  return $cell
+}
+
+## Determine pin/port/net width, for internal use only!
+proc ad_connect_int_width {obj} {
+  if {$obj eq ""} {
+    error "ERROR: ad_connect_int_width: No object provided."
+  }
+
+  set classname [get_property -quiet CLASS $obj]
+  if {$classname eq ""} {
+    error "ERROR: ad_connect_int_width: Cannot determine width of class-less object: $obj"
+  }
+  if {[string first intf $classname] != -1} {
+    error "ERROR: ad_connect_int_width: Cannot determine width of interface object: $obj ($classname)"
+  }
+
+  if {([get_property -quiet LEFT $obj] eq "") || ([get_property -quiet RIGHT $obj] eq "")} {
+    return 1
+  }
+
+  set left [get_property LEFT $obj]
+  set right [get_property RIGHT $obj]
+
+  set high [::math::max $left $right]
+  set low [::math::min $left $right]
+
+  return [expr {1 + $high - $low}]
+}
+
+
 ## Connect two IPI interface object together.
 #
 # \param[p_name_1] - first object name
@@ -76,66 +158,95 @@ proc ad_connect_type {p_name} {
 #
 # \return - N/A
 #
-proc ad_connect {p_name_1 p_name_2} {
+proc ad_connect {name_a name_b} {
+  set type_a [ad_connect_int_class $name_a]
+  set type_b [ad_connect_int_class $name_b]
 
-  ## connect an IPI object to GND or VCC
-  ## instantiate xlconstant with the required width module if there isn't any
-  ## already
-  if {($p_name_2 eq "GND") || ($p_name_2 eq "VCC")} {
-    set p_size 1
-    set p_msb [get_property left [get_bd_pins $p_name_1]]
-    set p_lsb [get_property right [get_bd_pins $p_name_1]]
-    if {($p_msb ne "") && ($p_lsb ne "")} {
-      set p_size [expr (($p_msb + 1) - $p_lsb)]
+  set obj_a [ad_connect_type $name_a]
+  set obj_b [ad_connect_type $name_b]
+
+  if {!([string first intf $type_a]+1) != !([string first intf $type_b]+1)} {
+    error "ERROR: ad_connect: Cannot connect non-interface to interface: $name_a ($type_a) <-/-> $name_b ($type_b)"
+  }
+
+  if {(($type_a eq "bd_net") && ($type_b eq "bd_net")) || (($type_a eq "bd_intf_net") && ($type_b eq "bd_intf_net"))} {
+  }
+
+  switch $type_a,$type_b {
+    newnet,newnet {
+      error "ERROR: ad_connect: Cannot create connection between two new nets: $name_a <-/-> $name_b"
     }
-    set p_cell_name "$p_name_2\_$p_size"
-    if {[get_bd_cells -quiet $p_cell_name] eq ""} {
-      if {$p_name_2 eq "VCC"} {
-        set p_value [expr (1 << $p_size) - 1]
-      } else {
-        set p_value 0
-      }
-      ad_ip_instance xlconstant $p_cell_name
-      set_property CONFIG.CONST_WIDTH $p_size [get_bd_cells $p_cell_name]
-      set_property CONFIG.CONST_VAL $p_value [get_bd_cells $p_cell_name]
+    const,const {
+      error "ERROR: ad_connect: Cannot connect constant to constant: $name_a <-/-> $name_b"
     }
-    puts "connect_bd_net $p_cell_name/dout $p_name_1"
-    connect_bd_net [get_bd_pins $p_name_1] [get_bd_pins $p_cell_name/dout]
-    return
-  }
-
-  set m_name_1 [ad_connect_type $p_name_1]
-  set m_name_2 [ad_connect_type $p_name_2]
-
-  if {$m_name_1 eq ""} {
-    if {[get_property CLASS $m_name_2] eq "bd_intf_pin"} {
-      puts "create_bd_intf_net $p_name_1"
-      create_bd_intf_net $p_name_1
+    bd_net,bd_net -
+    bd_intf_net,bd_intf_net {
+      error "ERROR: ad_connect: Cannot connect (intf) net to (intf) net: $name_a ($type_a) <-/-> $name_b ($type_b)"
     }
-    if {[get_property CLASS $m_name_2] eq "bd_pin"} {
-      puts "create_bd_net $p_name_1"
-      create_bd_net $p_name_1
+    bd_net,newnet -
+    newnet,bd_net {
+      error "ERROR: ad_connect: Cannot connect existing net to new net: $name_a ($type_a) <-/-> $name_b ($type_b)"
     }
-    set m_name_1 [ad_connect_type $p_name_1]
+    const,newnet -
+    newnet,const {
+      error "ERROR: ad_connect: Cannot connect new network to constant, instead you should connect to the constant directly: $name_a ($type_a) <-/-> $name_b ($type_b)"
+    }
+
+    bd_pin,bd_pin {
+      connect_bd_net $obj_a $obj_b
+      puts "connect_bd_pin $obj_a $obj_b"
+      return
+    }
+    bd_net,bd_pin {
+      connect_bd_net -net $obj_a $obj_b
+      puts "connect_bd_net -net $obj_a $obj_b"
+      return
+    }
+    bd_pin,bd_net {
+      connect_bd_net -net $obj_b $obj_a
+      puts "connect_bd_net -net $obj_b $obj_a"
+      return
+    }
+    bd_pin,newnet {
+      connect_bd_net -net $name_b $obj_a
+      puts "connect_bd_net -net $name_b $obj_a"
+      return
+    }
+    newnet,bd_pin {
+      connect_bd_net -net $name_a $obj_b
+      puts "connect_bd_net -net $name_a $obj_b"
+      return
+    }
+    bd_intf_pin,bd_intf_pin {
+      connect_bd_intf_net $obj_a $obj_b
+      puts "connect_bd_net -net $name_a $obj_b"
+      return
+    }
+    const,bd_pin -
+    const,bd_net {
+      # Handled after the switch statement
+    }
+    bd_net,const -
+    bd_pin,const {
+      # Swap vars
+      set tmp $obj_a
+      set obj_a $obj_b
+      set obj_b $tmp
+      set tmp $name_a
+      set name_a $name_b
+      set name_b $tmp
+      # Handled after the switch statement
+    }
+    default {
+      error "ERROR: ad_connect: Cannot connect, case unhandled: $name_a ($type_a) <-/-> $name_b ($type_b)"
+    }
   }
 
-  if {[get_property CLASS $m_name_1] eq "bd_intf_pin"} {
-    puts "connect_bd_intf_net $m_name_1 $m_name_2"
-    connect_bd_intf_net $m_name_1 $m_name_2
-    return
-  }
-
-  if {[get_property CLASS $m_name_1] eq "bd_pin"} {
-    puts "connect_bd_net $m_name_1 $m_name_2"
-    connect_bd_net $m_name_1 $m_name_2
-    return
-  }
-
-  if {[get_property CLASS $m_name_1] eq "bd_net"} {
-    puts "connect_bd_net -net $m_name_1 $m_name_2"
-    connect_bd_net -net $m_name_1 $m_name_2
-    return
-  }
+  # Continue working on nets that connect to constant. obj_b is the net/pin
+  set width [ad_connect_int_width $obj_b]
+  set cell [ad_connect_int_get_const $name_a $width]
+  connect_bd_net [get_bd_pin $cell/dout] $obj_b
+  puts "connect_bd_net [get_bd_pin $cell/dout] $obj_b"
 }
 
 ## Disconnect two IPI interface object together.
@@ -182,7 +293,7 @@ proc ad_disconnect {p_name_1 p_name_2} {
 #  $lane_map[$n], otherwise logical lane $n is mapped onto physical lane $n.
 #  \param[link_clk] - define a custom link clock, should be a net name
 #  connected to the clock source. If not used, the rx|tx_clk_out_0 is used as
-#  link clock. This should be lane rate / (encoder_ratio*datapath width in bits) 
+#  link clock. This should be lane rate / (encoder_ratio*datapath width in bits)
 #  where encoder_ratio is 10/8 for 8b10b encoding or 66/64 for 64b66b link layer.
 #  \param[device_clk] - define a custom device clock, should be a net name
 #  connected to the clock source. If not used, the link_clk is used as
