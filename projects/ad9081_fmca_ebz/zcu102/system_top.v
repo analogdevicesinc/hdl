@@ -40,7 +40,8 @@ module system_top  #(
     parameter TX_JESD_L = 8,
     parameter TX_NUM_LINKS = 1,
     parameter RX_JESD_L = 8,
-    parameter RX_NUM_LINKS = 1
+    parameter RX_NUM_LINKS = 1,
+    parameter SHARED_DEVCLK = 0
   ) (
 
   input  [12:0] gpio_bd_i,
@@ -109,6 +110,7 @@ module system_top  #(
   wire            clkin6;
   wire            clkin10;
   wire            tx_device_clk;
+  wire            rx_device_clk_internal;
   wire            rx_device_clk;
 
   assign iic_rstn = 1'b1;
@@ -161,8 +163,11 @@ module system_top  #(
 
   BUFG i_rx_device_clk (
     .I (clkin10),
-    .O (rx_device_clk)
+    .O (rx_device_clk_internal)
   );
+
+  assign rx_device_clk = SHARED_DEVCLK ? tx_device_clk : rx_device_clk_internal;
+
   // spi
 
   assign spi0_csb   = spi0_csn[0];
