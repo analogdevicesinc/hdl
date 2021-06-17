@@ -43,7 +43,8 @@ module ad_mem_asym #(
   parameter   A_ADDRESS_WIDTH =  8,
   parameter   A_DATA_WIDTH = 256,
   parameter   B_ADDRESS_WIDTH =   10,
-  parameter   B_DATA_WIDTH =  64) (
+  parameter   B_DATA_WIDTH =  64,
+  parameter   CASCADE_HEIGHT = -1) (
 
   input                             clka,
   input                             wea,
@@ -82,7 +83,7 @@ module ad_mem_asym #(
 
   // internal registers
 
-  (* ram_style = "block" *)
+  (* ram_style = "block", cascade_height = CASCADE_HEIGHT *)
   reg      [MEM_DATA_WIDTH-1:0]    m_ram[0:MEM_SIZE-1];
 
   //---------------------------------------------------------------------------
