@@ -334,7 +334,6 @@ for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
 ad_connect $dac_data_offload_name/s_axis axi_mxfe_tx_dma/m_axis
 
 ad_connect  util_mxfe_upack/s_axis $dac_data_offload_name/m_axis
-ad_connect  util_mxfe_upack/s_axis_valid VCC
 
 ad_connect $dac_data_offload_name/init_req axi_mxfe_tx_dma/m_axis_xfer_req
 ad_connect $adc_data_offload_name/init_req axi_mxfe_rx_dma/s_axis_xfer_req
@@ -385,7 +384,7 @@ if {$TDD_SUPPORT} {
   ad_connect tx_device_clk_rstgen/peripheral_aresetn tdd_sync_0/rstn
   ad_connect tdd_sync_0/sync_in GND
   ad_connect tdd_sync_0/sync_mode GND
-  ad_ip_parameter tdd_sync_0 CONFIG.TDD_SYNC_PERIOD 400000000; # More or less 1 PPS ;)
+  ad_ip_parameter tdd_sync_0 CONFIG.TDD_SYNC_PERIOD 250000000; # More or less 1 PPS ;)
 
   ad_ip_instance axi_tdd axi_tdd_0
   ad_connect tx_device_clk axi_tdd_0/clk
@@ -398,9 +397,30 @@ if {$TDD_SUPPORT} {
 
   delete_bd_objs [get_bd_nets mxfe_adc_fifo_dma_wr]
 
-  ad_connect $dac_data_offload_name/sync_ext axi_tdd_0/tdd_tx_valid
-  ad_connect $adc_data_offload_name/sync_ext axi_tdd_0/tdd_rx_valid
+  ad_connect axi_tdd_0/tdd_tx_valid $dac_data_offload_name/sync_ext
+  ad_connect axi_tdd_0/tdd_rx_valid $adc_data_offload_name/sync_ext
+
+  delete_bd_objs [get_bd_nets rx_device_clk_rstgen_peripheral_reset]
+
+  ad_ip_instance util_vector_logic cpack_rst_logic
+  ad_ip_parameter cpack_rst_logic CONFIG.C_OPERATION {OR}
+  ad_ip_parameter cpack_rst_logic CONFIG.C_SIZE {1}
+
+  if {[get_files -quiet "ad_edge_detect.v"] == ""} {
+    add_files -norecurse -fileset sources_1 "$ad_hdl_dir/library/common/ad_edge_detect.v"
+  }
+
+  create_bd_cell -type module -reference ad_edge_detect mxfe_cpack_edge_detector
+  ad_connect rx_device_clk mxfe_cpack_edge_detector/clk
+  ad_connect rx_device_clk_rstgen/peripheral_reset mxfe_cpack_edge_detector/rst
+
+  ad_connect axi_tdd_0/tdd_rx_valid mxfe_cpack_edge_detector/signal_in
+
+  ad_connect rx_device_clk_rstgen/peripheral_reset cpack_rst_logic/Op1
+  ad_connect mxfe_cpack_edge_detector/signal_out cpack_rst_logic/Op2
+  ad_connect cpack_rst_logic/Res util_mxfe_cpack/reset
+
 } else {
-  ad_connect $dac_data_offload_name/sync_ext GND
-  ad_connect $adc_data_offload_name/sync_ext GND
+  ad_connect GND $dac_data_offload_name/sync_ext
+  ad_connect GND $adc_data_offload_name/sync_ext
 }
