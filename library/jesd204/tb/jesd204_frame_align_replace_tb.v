@@ -66,10 +66,6 @@ wire [DATA_PATH_WIDTH*8-1:0]  data_out;
 wire [DATA_PATH_WIDTH-1:0]    charisk_out;
 reg [31:00] ii;
 
-initial begin
-  #10000;
-  $finish;
-end
 
 initial begin
   forever begin

@@ -38,15 +38,15 @@
 // or publication in which you use this JESD204 HDL core. (You are not required
 // to do so; it is up to your common sense to decide whether you want to comply
 // with this request or not.) For general publications, we suggest referencing :
-// ‚ÄúThe design and implementation of the JESD204 HDL Core used in this project
-// is copyright ¬© 2016-2017, Analog Devices, Inc.‚Äù
+// ìThe design and implementation of the JESD204 HDL Core used in this project
+// is copyright © 2016-2017, Analog Devices, Inc.î
 //
 
 `timescale 1ns/100ps
 
 module frame_align_tb;
   parameter VCD_FILE = "frame_align_tb.vcd";
-  parameter NUM_LANES = 4;
+  parameter NUM_LANES = 1;
   parameter NUM_LINKS = 1;
   parameter OCTETS_PER_FRAME = 3;
   parameter FRAMES_PER_MULTIFRAME = 8;
@@ -84,6 +84,7 @@ module frame_align_tb;
   wire [DATA_PATH_WIDTH-1:0] rx_sof;
   wire cur_data_mismatch;
   reg data_mismatch = 1'b1;
+  reg enable_checker = 1'b0;
   wire [NUM_LINKS-1:0] sync;
 
   always @(posedge clk) begin
@@ -133,8 +134,8 @@ module frame_align_tb;
   reg  [NUM_LANES*DATA_PATH_WIDTH*8-1:0] phy_data_in;
   reg  [NUM_LANES*DATA_PATH_WIDTH-1:0] phy_charisk_in;
 
-  reg align_err_mf;
-  reg align_err_f;
+  reg align_err_mf = 1'b0;
+  reg align_err_f = 1'b0;
   reg cur_err;
 
   reg [9:0] sysref_counter = 'h00;
@@ -167,9 +168,8 @@ module frame_align_tb;
   end
 
   initial begin
-    align_err_mf = 1'b0;
-    align_err_f = 1'b0;
-
+    #10000;
+    enable_checker = 1'b1;
     #100000;
     align_err_f = 1'b1;
     #50000;
@@ -187,7 +187,6 @@ module frame_align_tb;
     align_err_f = 1'b0;
     align_err_mf = 1'b0;
     #100000;
-    $finish;
   end
 
   always @(posedge clk) begin
@@ -509,7 +508,89 @@ module frame_align_tb;
     .status_synth_params1(),
     .status_synth_params2()
   );
+  
+  wire m_axis_aresetn;
+  wire m_axis_ready;
+  wire m_axis_valid;
+  wire [DATA_PATH_WIDTH*8-1:0] m_axis_data;
+  wire [DATA_PATH_WIDTH-1:0] m_axis_tkeep;
+  wire m_axis_tlast;
+  wire [DATA_PATH_WIDTH-1:0] m_axis_level;
+  wire m_axis_empty;
+  wire m_axis_almost_empty;
 
+  wire s_axis_aresetn;
+  wire s_axis_ready;
+  wire s_axis_valid;
+  wire [DATA_PATH_WIDTH-1:0] s_axis_tkeep;
+  wire s_axis_tlast;
+  wire [DATA_PATH_WIDTH-1:0] s_axis_room;
+  wire s_axis_full;
+  wire s_axis_almost_full;
+  wire error_inject = (align_err_f | align_err_mf);
+  
+  reg invalid_data = 1'b0;
+  reg read_flag = 1'b1;
+  
+  assign s_axis_aresetn = ~error_inject;
+  assign m_axis_aresetn = ~error_inject;
+  assign m_axis_ready = rx_valid; 
+  assign s_axis_valid = tx_ready;
+  
+  //util_axis_fifo instance
+  util_axis_fifo #(
+    .DATA_WIDTH(DATA_PATH_WIDTH*8),
+    .ADDRESS_WIDTH(DATA_PATH_WIDTH),
+    .ASYNC_CLK(0),
+    .M_AXIS_REGISTERED(0),
+    .ALMOST_EMPTY_THRESHOLD(16),
+    .ALMOST_FULL_THRESHOLD(16),
+    .TLAST_EN(0),
+    .TKEEP_EN(0),
+    .REMOVE_NULL_BEAT_EN(0)
+  ) some_fifo(
+    //rx is master so rx is "reading" from fifo
+    .m_axis_aclk(clk),
+    .m_axis_aresetn(m_axis_aresetn),
+    .m_axis_ready(m_axis_ready),
+    .m_axis_valid(m_axis_valid),
+    .m_axis_data(m_axis_data),
+    .m_axis_tkeep(m_axis_tkeep),
+    .m_axis_tlast(m_axis_tlast),
+    .m_axis_level(m_axis_level),
+    .m_axis_empty(m_axis_empty),
+    .m_axis_almost_empty(m_axis_almost_empty),
+    //tx is slave so tx writes in fifo
+    .s_axis_aclk(clk),
+    .s_axis_aresetn(s_axis_aresetn),
+    .s_axis_ready(s_axis_ready),
+    .s_axis_valid(s_axis_valid),
+    .s_axis_data(tx_data),
+    .s_axis_tkeep(s_axis_tkeep),
+    .s_axis_tlast(s_axis_tlast),
+    .s_axis_room(s_axis_room),
+    .s_axis_full(s_axis_full),
+    .s_axis_almost_full(s_axis_almost_full)
+);
+          
+  always @ (negedge error_inject) begin
+    //get fifo out of reset
+    #5000; //wait for tx_ready to rise up
+    if ((rx_valid == 0 || tx_ready == 0) && enable_checker == 1) begin
+      read_flag <= 1'b0;
+    end
+  end
+
+  always @(posedge clk) begin
+    if (rx_valid == 1 && error_inject == 0) begin
+      //remove from the queue first element and compare to rx_data
+      //compare the data sent by tx with the data recieved
+      if(rx_data[DATA_PATH_WIDTH*8-1:0] !== m_axis_data) begin 
+        invalid_data <= 1'b1;
+      end
+    end 
+  end
+  
   assign cur_data_mismatch = (rx_data & rx_mask) !== ({NUM_LANES{rx_ref_data}} & rx_mask);
 
   always @(posedge clk) begin
@@ -538,11 +619,9 @@ module frame_align_tb;
   end endgenerate
 
   always @(*) begin
-    if (rx_valid !== 1'b1 || tx_ready !== 1'b1 || data_mismatch == 1'b1 ||
-        &lane_latency_match != 1'b1) begin
+    if ((rx_valid == 1'b1 && invalid_data == 1'b1) || read_flag == 1'b0) begin
       failed <= 1'b1;
-    end else begin
-      failed <= 1'b0;
-    end
+    end 
   end
+
 endmodule
