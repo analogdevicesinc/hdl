@@ -116,7 +116,7 @@ module axi_adxcvr_mdrp (
       up_rdata_i <= 16'd0;
       up_ready_i <= 1'b0;
     end else begin
-      if (up_ready_in == 1'b1) begin
+      if (up_ready_in == 1'b1 || XCVR_ID == 0) begin
         up_rdata_i <= up_rdata_in;
         up_ready_i <= 1'b1;
       end else if (up_enb == 1'b1) begin
