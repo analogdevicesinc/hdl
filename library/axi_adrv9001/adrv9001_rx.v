@@ -200,12 +200,26 @@ module adrv9001_rx #(
       .CE (1'b1),
       .I (clk_in_s),
       .O (adc_clk_div_s));
-
+    /*
     BUFG I_bufg (
       .I (adc_clk_div_s),
       .O (adc_clk_div)
     );
-    assign ssi_rst = mssi_sync;
+    */
+    assign adc_clk_div = adc_clk_div_s;
+
+    xpm_cdc_async_rst
+    # (
+       .DEST_SYNC_FF    (10), // DECIMAL; range: 2-10
+       .INIT_SYNC_FF    ( 0), // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
+       .RST_ACTIVE_HIGH ( 1)  // DECIMAL; 0=active low reset, 1=active high reset
+      )
+    rst_syncro
+    (
+     .src_arst (mssi_sync  ),
+     .dest_clk (adc_clk_div),
+     .dest_arst(ssi_rst    )
+    );
 
   end else begin
     wire adc_clk_in;

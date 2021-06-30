@@ -137,6 +137,15 @@ module ad_serdes_in #(
     end
   endgenerate
 
+  reg [6:0] serdes_rst_seq;
+  wire      serdes_rst     = serdes_rst_seq [6];
+
+  always @ (posedge div_clk)
+  begin
+      if   (rst) serdes_rst_seq [6:0] <= 7'b0001110;
+      else       serdes_rst_seq [6:0] <= {serdes_rst_seq [5:0], 1'b0};
+  end
+
   generate if (FPGA_TECHNOLOGY == SEVEN_SERIES) begin
     for (l_inst = 0; l_inst <= (DATA_WIDTH-1); l_inst = l_inst + 1) begin: g_data
 
@@ -208,7 +217,7 @@ module ad_serdes_in #(
         .DDLY (data_in_idelay_s[l_inst]),
         .OFB (1'b0),
         .OCLKB (1'b0),
-        .RST (rst),
+        .RST (serdes_rst),
         .SHIFTIN1 (1'b0),
         .SHIFTIN2 (1'b0));
       end /* g_data */
@@ -303,7 +312,7 @@ module ad_serdes_in #(
        .D (data_in_idelay_s[l_inst]), // 1-bit input: Serial Data Input
        .FIFO_RD_CLK (div_clk),        // 1-bit input: FIFO read clock
        .FIFO_RD_EN (1'b1),            // 1-bit input: Enables reading the FIFO when asserted
-       .RST (rst)                     // 1-bit input: Asynchronous Reset
+       .RST (serdes_rst)             // 1-bit input: Asynchronous Reset
     );
    end
   end

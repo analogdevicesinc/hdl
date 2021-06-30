@@ -89,6 +89,15 @@ module ad_serdes_out #(
   assign buffer_disable = ~data_oe;
   // instantiations
 
+  reg [6:0] serdes_rst_seq;
+  wire      serdes_rst     = serdes_rst_seq [6];
+
+  always @ (posedge div_clk)
+  begin
+      if   (rst) serdes_rst_seq [6:0] <= 7'b0001110;
+      else       serdes_rst_seq [6:0] <= {serdes_rst_seq [5:0], 1'b0};
+  end
+
   genvar l_inst;
   generate
   for (l_inst = 0; l_inst <= (DATA_WIDTH-1); l_inst = l_inst + 1) begin: g_data
@@ -127,7 +136,7 @@ module ad_serdes_out #(
         .TBYTEIN (1'b0),
         .TBYTEOUT (),
         .TCE (1'b1),
-        .RST (rst & data_oe));
+        .RST (serdes_rst));
     end
 
     if (FPGA_TECHNOLOGY == ULTRASCALE || FPGA_TECHNOLOGY == ULTRASCALE_PLUS) begin
@@ -148,7 +157,7 @@ module ad_serdes_out #(
         .CLKDIV (div_clk),
         .OQ (data_out_s[l_inst]),
         .T_OUT (data_t[l_inst]),
-        .RST (rst & data_oe));
+        .RST (serdes_rst));
     end
 
     if (CMOS_LVDS_N == 0) begin
