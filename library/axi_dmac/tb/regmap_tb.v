@@ -175,7 +175,7 @@ module regmap_tb;
     set_reset_reg_value('h10, 32'h00002101); /* Interface Description*/
     set_reset_reg_value('h80, 'h3); /* IRQ mask */
 
-    set_reset_reg_value('h40c, 'h7); /* Flags */
+    set_reset_reg_value('h40c, 'h3); /* Flags */
     set_reset_reg_value('h418, LENGTH_ALIGN_MASK); /* Length alignment */
 
     set_reset_reg_value('h434, VAL_DBG_DEST_ADDR);
