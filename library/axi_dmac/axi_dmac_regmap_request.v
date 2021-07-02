@@ -103,7 +103,7 @@ reg [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC]  up_dma_src_address = 'h00;
 reg [DMA_LENGTH_WIDTH-1:0] up_dma_x_length = {DMA_LENGTH_ALIGN{1'b1}};
 reg up_dma_cyclic = DMA_CYCLIC ? 1'b1 : 1'b0;
 reg up_dma_last = 1'b1;
-reg up_dma_enable_tlen_reporting = 1'b1;
+reg up_dma_enable_tlen_reporting = 1'b0;
 
 wire up_tlf_s_ready;
 reg up_tlf_s_valid = 1'b0;
@@ -132,7 +132,7 @@ always @(posedge clk) begin
     up_dma_req_valid <= 1'b0;
     up_dma_cyclic <= DMA_CYCLIC ? 1'b1 : 1'b0;
     up_dma_last <= 1'b1;
-    up_dma_enable_tlen_reporting <= 1'b1;
+    up_dma_enable_tlen_reporting <= 1'b0;
   end else begin
     if (ctrl_enable == 1'b1) begin
       if (up_wreq == 1'b1 && up_waddr == 9'h102) begin
@@ -301,20 +301,14 @@ util_axis_fifo #(
   .s_axis_full(),
   .s_axis_data({up_transfer_id_eot_d, up_measured_transfer_length}),
   .s_axis_room(),
-  .s_axis_tkeep(),
-  .s_axis_tlast(),
-  .s_axis_almost_full(),
-
+  
   .m_axis_aclk(clk),
   .m_axis_aresetn(ctrl_enable),
   .m_axis_valid(up_tlf_valid),
   .m_axis_ready(up_tlf_rd & up_tlf_valid),
   .m_axis_data(up_tlf_data),
   .m_axis_level(),
-  .m_axis_empty (),
-  .m_axis_tkeep (),
-  .m_axis_tlast (),
-  .m_axis_almost_empty ()
-);
+  .m_axis_empty ()
+  );
 
 endmodule
