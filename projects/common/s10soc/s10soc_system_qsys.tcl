@@ -92,7 +92,6 @@ set_instance_parameter_value sys_hps {CLK_S2F_USER0_SOURCE} {1}
 set_instance_parameter_value sys_hps {CLK_S2F_USER1_SOURCE} {1}
 set_instance_parameter_value sys_hps {CLK_SDMMC_SOURCE} {0}
 set_instance_parameter_value sys_hps {CTI_Enable} {0}
-set_instance_parameter_value sys_hps {CUSTOM_MPU_CLK} {800}
 set_instance_parameter_value sys_hps {DMA_Enable} {No No No No No No No No}
 set_instance_parameter_value sys_hps {EMAC0_CLK} {250}
 set_instance_parameter_value sys_hps {EMAC0_Mode} {RGMII_with_MDIO}
@@ -111,8 +110,7 @@ set_instance_parameter_value sys_hps {GPIO_REF_CLK2} {200}
 set_instance_parameter_value sys_hps {H2F_COLD_RST_Enable} {1}
 set_instance_parameter_value sys_hps {H2F_PENDING_RST_Enable} {1}
 set_instance_parameter_value sys_hps {H2F_USER0_CLK_Enable} {1}
-set_instance_parameter_value sys_hps {H2F_USER0_CLK_FREQ} {250}
-set_instance_parameter_value sys_hps {HPS_BOOT} {1}
+set_instance_parameter_value sys_hps {H2F_USER0_CLK_FREQ} {100}
 set_instance_parameter_value sys_hps {HPS_IO_Enable} $hps_io_list
 set_instance_parameter_value sys_hps {IO_OUTPUT_DELAY12} {17}
 set_instance_parameter_value sys_hps {L3_MAIN_FREE_CLK} {400}
@@ -120,7 +118,7 @@ set_instance_parameter_value sys_hps {L4_SYS_FREE_CLK} {1}
 set_instance_parameter_value sys_hps {LWH2F_ADDRESS_WIDTH} {21}
 set_instance_parameter_value sys_hps {LWH2F_Enable} {1}
 set_instance_parameter_value sys_hps {LWH2F_ready_latency} {0}
-set_instance_parameter_value sys_hps {MPU_CLK_VCCL} {1}
+set_instance_parameter_value sys_hps {MPU_CLK_VCCL} {2}
 set_instance_parameter_value sys_hps {MPU_EVENTS_Enable} {0}
 set_instance_parameter_value sys_hps {PSI_CLK_FREQ} {500}
 set_instance_parameter_value sys_hps {S2F_ready_latency} {0}
@@ -186,7 +184,7 @@ set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_ALERT_N_PLACEMENT_ENUM
 set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_ALERT_N_DQS_GROUP} {0}
 set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_DQ_WIDTH} {72}
 set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_READ_DBI} {1}
-set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_TCL} {18}
+set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_TCL} {20}
 set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_WTCL} {16}
 set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_RTT_NOM_ENUM} {DDR4_RTT_NOM_RZQ_4}
 set_instance_parameter_value sys_hps_ddr4_cntrl {PHY_DDR4_DEFAULT_IO} {0}
@@ -195,22 +193,30 @@ set_instance_parameter_value sys_hps_ddr4_cntrl {PHY_DDR4_USER_AC_MODE_ENUM} {OU
 set_instance_parameter_value sys_hps_ddr4_cntrl {PHY_DDR4_USER_CK_IO_STD_ENUM} {IO_STD_SSTL_12}
 set_instance_parameter_value sys_hps_ddr4_cntrl {PHY_DDR4_USER_CK_MODE_ENUM} {OUT_OCT_40_CAL}
 set_instance_parameter_value sys_hps_ddr4_cntrl {PHY_DDR4_USER_DATA_IO_STD_ENUM} {IO_STD_POD_12}
-set_instance_parameter_value sys_hps_ddr4_cntrl {PHY_DDR4_USER_DATA_OUT_MODE_ENUM} {OUT_OCT_40_CAL}
-set_instance_parameter_value sys_hps_ddr4_cntrl {PHY_DDR4_USER_DATA_IN_MODE_ENUM} {IN_OCT_60_CAL}
+set_instance_parameter_value sys_hps_ddr4_cntrl {PHY_DDR4_USER_DATA_OUT_MODE_ENUM} {OUT_OCT_48_CAL}
+set_instance_parameter_value sys_hps_ddr4_cntrl {PHY_DDR4_USER_DATA_IN_MODE_ENUM} {IN_OCT_120_CAL}
 set_instance_parameter_value sys_hps_ddr4_cntrl {PHY_DDR4_USER_PLL_REF_CLK_IO_STD_ENUM} {IO_STD_LVDS}
 set_instance_parameter_value sys_hps_ddr4_cntrl {PHY_DDR4_USER_RZQ_IO_STD_ENUM} {IO_STD_CMOS_12}
-set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_SPEEDBIN_ENUM} {DDR4_SPEEDBIN_2400}
-set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_TRCD_NS} {15.00}
-set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_TRP_NS} {15.00}
-set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_TRRD_S_CYC} {7}
+set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_SPEEDBIN_ENUM} {DDR4_SPEEDBIN_2666}
+set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_TRCD_NS} {13.50}
+set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_TRP_NS} {13.50}
+set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_TRRD_S_CYC} {6}
 set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_TRRD_L_CYC} {8}
 set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_TFAW_NS} {30.0}
 set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_TWTR_S_CYC} {3}
 set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_TWTR_L_CYC} {9}
 set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_LRDIMM_VREFDQ_VALUE} {}
-set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_SKIP_CA_LEVEL} {0}
+set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_SKIP_CA_LEVEL} {1}
 set_instance_parameter_value sys_hps_ddr4_cntrl {SHORT_QSYS_INTERFACE_NAMES} {1}
 set_instance_parameter_value sys_hps_ddr4_cntrl {CTRL_DDR4_ECC_EN} {1}
+set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_VDIVW_TOTAL} {120}
+set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_TQH_UI} {0.74}
+set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_TDQSCK_PS} {170}
+set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_TQSH_CYC} {0.4}
+set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_TMRD_CK_CYC} {9}
+set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_TRFC_NS} {350.0}
+set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_TDQSQ_UI} {0.18}
+set_instance_parameter_value sys_hps_ddr4_cntrl {MEM_DDR4_TDIVW_TOTAL_UI} {0.22}
 
 add_connection sys_hps_ddr4_cntrl.hps_emif sys_hps.hps_emif
 add_interface sys_hps_ddr conduit end
