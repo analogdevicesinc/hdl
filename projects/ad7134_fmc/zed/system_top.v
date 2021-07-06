@@ -95,7 +95,7 @@ module system_top (
 
   output          ad713x_dclk,
   input   [ 7:0]  ad713x_din,
-  input           ad713x_odr,
+  output          ad713x_odr,
 
   // ad713x GPIO lines
 

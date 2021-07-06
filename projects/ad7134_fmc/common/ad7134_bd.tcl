@@ -1,6 +1,6 @@
 
 create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 ad713x_di
-create_bd_port -dir I ad713x_odr
+create_bd_port -dir O ad713x_odr
 create_bd_port -dir O ad713x_sdpclk
 
 # create a SPI Engine architecture for the parallel data interface of AD713x
@@ -45,9 +45,9 @@ current_bd_instance /dual_ad7134
   ad_connect offload/spi_engine_ctrl interconnect/s0_ctrl
   ad_connect axi/spi_engine_ctrl interconnect/s1_ctrl
   ad_connect interconnect/m_ctrl execution/ctrl
-  
+
   ad_connect offload/offload_sdi M_AXIS_SAMPLE
-  
+
   ad_connect execution/spi m_spi
 
   ad_connect clk offload/spi_clk
@@ -81,6 +81,16 @@ ad_ip_parameter axi_ad7134_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad7134_dma CONFIG.DMA_DATA_WIDTH_SRC [expr $data_width * $adc_num_of_channels]
 ad_ip_parameter axi_ad7134_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 
+# odr generator
+
+ad_ip_instance axi_pwm_gen odr_generator
+ad_ip_parameter odr_generator CONFIG.N_PWMS 1
+ad_ip_parameter odr_generator CONFIG.PULSE_0_PERIOD 10000
+ad_ip_parameter odr_generator CONFIG.PULSE_0_WIDTH 4
+
+ad_connect odr_generator/pwm_0 ad713x_odr
+ad_connect $sys_cpu_clk odr_generator/ext_clk
+
 # sdpclk clock generator - default clk0_out is 50 MHz
 
 ad_ip_instance axi_clkgen axi_sdp_clkgen
@@ -103,7 +113,7 @@ ad_connect  ad713x_sdpclk axi_sdp_clkgen/clk_0
 ad_cpu_interconnect 0x44a00000 dual_ad7134/axi
 ad_cpu_interconnect 0x44a30000 axi_ad7134_dma
 ad_cpu_interconnect 0x44a40000 axi_sdp_clkgen
-
+ad_cpu_interconnect 0x44b00000 odr_generator
 
 ad_cpu_interrupt "ps-13" "mb-13" axi_ad7134_dma/irq
 ad_cpu_interrupt "ps-12" "mb-12" dual_ad7134/irq
