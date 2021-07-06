@@ -13,6 +13,7 @@ M_DEPS += ../../common/zed/zed_system_bd.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
 
 LIB_DEPS += axi_clkgen
+LIB_DEPS += axi_pwm_gen
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_hdmi_tx
 LIB_DEPS += axi_i2s_adi
