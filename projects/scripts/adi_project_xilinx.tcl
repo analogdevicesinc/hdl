@@ -1,7 +1,7 @@
 
 ## Define the supported tool version
 if {![info exists REQUIRED_VIVADO_VERSION]} {
-  set REQUIRED_VIVADO_VERSION "2020.1"
+  set REQUIRED_VIVADO_VERSION "2019.1"
 }
 
 ## Define the ADI_IGNORE_VERSION_CHECK environment variable to skip version check
@@ -409,10 +409,10 @@ proc adi_project_run {project_name} {
   set timing_string $[report_timing_summary -return_string]
   if { [string match "*VIOLATED*" $timing_string] == 1 ||
        [string match "*Timing constraints are not met*" $timing_string] == 1} {
-    write_hw_platform -fixed -force  -include_bit -file $project_name.sdk/system_top_bad_timing.xsa
+    file copy -force $project_name.runs/impl_1/system_top.sysdef $project_name.sdk/system_top_bad_timing.hdf
     return -code error [format "ERROR: Timing Constraints NOT met!"]
   } else {
-    write_hw_platform -fixed -force  -include_bit -file $project_name.sdk/system_top.xsa
+    file copy -force $project_name.runs/impl_1/system_top.sysdef $project_name.sdk/system_top.hdf
   }
 }
 
