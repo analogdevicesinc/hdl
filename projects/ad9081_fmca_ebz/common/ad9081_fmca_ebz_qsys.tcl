@@ -251,7 +251,6 @@ add_interface rx_device_clk   clock   sink
 add_interface tx_serial_data  conduit end
 add_interface tx_sysref       conduit end
 add_interface tx_sync         conduit end
-add_interface tx_fifo_bypass  conduit end
 add_interface tx_device_clk   clock   sink
 
 set_interface_property rx_ref_clk       EXPORT_OF mxfe_rx_jesd204.ref_clk
@@ -264,7 +263,6 @@ set_interface_property tx_ref_clk       EXPORT_OF mxfe_tx_jesd204.ref_clk
 set_interface_property tx_sysref        EXPORT_OF mxfe_tx_jesd204.sysref
 set_interface_property tx_sync          EXPORT_OF mxfe_tx_jesd204.sync
 set_interface_property tx_serial_data   EXPORT_OF mxfe_tx_jesd204.serial_data
-set_interface_property tx_fifo_bypass   EXPORT_OF $dac_fifo_name.if_bypass
 set_interface_property tx_device_clk    EXPORT_OF tx_device_clk.in_clk
 
 #

@@ -60,9 +60,15 @@
           <spirit:width>1</spirit:width>
           <spirit:direction>in</spirit:direction>
         </spirit:onMaster>
-        <spirit:onSlave>
-          <spirit:presence>required</spirit:presence>
-        </spirit:onSlave>
+      </spirit:wire>
+    </spirit:port>
+    <spirit:port>
+      <spirit:logicalName>XFER_REQ</spirit:logicalName>
+      <spirit:wire>
+        <spirit:onMaster>
+          <spirit:width>1</spirit:width>
+          <spirit:direction>in</spirit:direction>
+        </spirit:onMaster>
       </spirit:wire>
     </spirit:port>
   </spirit:ports>

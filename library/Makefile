@@ -61,6 +61,7 @@ clean:
 	$(MAKE) -C cn0363/cn0363_dma_sequencer clean
 	$(MAKE) -C cn0363/cn0363_phase_data_sync clean
 	$(MAKE) -C cordic_demod clean
+	$(MAKE) -C data_offload clean
 	$(MAKE) -C intel/adi_jesd204 clean
 	$(MAKE) -C intel/avl_adxcfg clean
 	$(MAKE) -C intel/avl_adxcvr clean
@@ -100,6 +101,7 @@ clean:
 	$(MAKE) -C util_dec256sinc24b clean
 	$(MAKE) -C util_delay clean
 	$(MAKE) -C util_extract clean
+	$(MAKE) -C util_fifo2axi_bridge clean
 	$(MAKE) -C util_fir_dec clean
 	$(MAKE) -C util_fir_int clean
 	$(MAKE) -C util_gmii_to_rgmii clean
@@ -176,6 +178,7 @@ lib:
 	$(MAKE) -C cn0363/cn0363_dma_sequencer
 	$(MAKE) -C cn0363/cn0363_phase_data_sync
 	$(MAKE) -C cordic_demod
+	$(MAKE) -C data_offload
 	$(MAKE) -C intel/adi_jesd204
 	$(MAKE) -C intel/avl_adxcfg
 	$(MAKE) -C intel/avl_adxcvr
@@ -215,6 +218,7 @@ lib:
 	$(MAKE) -C util_dec256sinc24b
 	$(MAKE) -C util_delay
 	$(MAKE) -C util_extract
+	$(MAKE) -C util_fifo2axi_bridge
 	$(MAKE) -C util_fir_dec
 	$(MAKE) -C util_fir_int
 	$(MAKE) -C util_gmii_to_rgmii

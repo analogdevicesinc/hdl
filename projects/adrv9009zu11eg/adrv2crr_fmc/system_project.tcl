@@ -22,4 +22,7 @@ adi_project_files adrv9009zu11eg [list \
   "../common/adrv2crr_fmc_constr.xdc" \
   "$ad_hdl_dir/library/common/ad_iobuf.v" ]
 
+## To improve timing in DDR4 MIG
+set_property strategy Performance_ExploreWithRemap [get_runs impl_1]
+
 adi_project_run adrv9009zu11eg
