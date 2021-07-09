@@ -1,4 +1,12 @@
 
+# RX parameters for each converter
+set RX_NUM_OF_LANES 4      ; # L
+set RX_NUM_OF_CONVERTERS 2 ; # M
+set RX_SAMPLES_PER_FRAME 2 ; # S
+set RX_SAMPLE_WIDTH 16     ; # N/NP
+
+set RX_SAMPLES_PER_CHANNEL 4 ; # L * 32 / (M * N)
+
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
 # adc peripherals
@@ -17,20 +25,27 @@ ad_ip_instance util_bsplit data_bsplit
 ad_ip_parameter data_bsplit CONFIG.CHANNEL_DATA_WIDTH 64
 ad_ip_parameter data_bsplit CONFIG.NUM_OF_CHANNELS 2
 
-ad_ip_instance axi_ad9250 axi_ad9250_0_core
-ad_ip_instance axi_ad9250 axi_ad9250_1_core
+adi_tpl_jesd204_rx_create axi_ad9250_0_core [expr $RX_NUM_OF_LANES/2] \
+                                            $RX_NUM_OF_CONVERTERS \
+                                            $RX_SAMPLES_PER_FRAME \
+                                            $RX_SAMPLE_WIDTH
 
-ad_ip_instance util_cpack2 axi_ad9250_0_cpack { \
-  NUM_OF_CHANNELS 2 \
-  SAMPLES_PER_CHANNEL 2 \
-  SAMPLE_DATA_WIDTH 16 \
-}
+adi_tpl_jesd204_rx_create axi_ad9250_1_core [expr $RX_NUM_OF_LANES/2] \
+                                            $RX_NUM_OF_CONVERTERS \
+                                            $RX_SAMPLES_PER_FRAME \
+                                            $RX_SAMPLE_WIDTH
 
-ad_ip_instance util_cpack2 axi_ad9250_1_cpack { \
+ad_ip_instance util_cpack2 axi_ad9250_0_cpack [list \
   NUM_OF_CHANNELS 2 \
-  SAMPLES_PER_CHANNEL 2 \
-  SAMPLE_DATA_WIDTH 16 \
-}
+  SAMPLES_PER_CHANNEL [expr $RX_SAMPLES_PER_CHANNEL/2] \
+  SAMPLE_DATA_WIDTH $RX_SAMPLE_WIDTH \
+]
+
+ad_ip_instance util_cpack2 axi_ad9250_1_cpack [list \
+  NUM_OF_CHANNELS 2 \
+  SAMPLES_PER_CHANNEL [expr $RX_SAMPLES_PER_CHANNEL/2] \
+  SAMPLE_DATA_WIDTH $RX_SAMPLE_WIDTH \
+]
 
 ad_ip_instance axi_dmac axi_ad9250_0_dma
 ad_ip_parameter axi_ad9250_0_dma CONFIG.DMA_TYPE_SRC 2
@@ -95,23 +110,29 @@ ad_connect  util_fmcjesdadc1_xcvr/rx_out_clk_0 rx_core_clk
 
 ad_connect  axi_ad9250_jesd/rx_data_tdata data_bsplit/data
 
-for {set i 0} {$i < 2} {incr i} {
-  ad_connect  util_fmcjesdadc1_xcvr/rx_out_clk_0 axi_ad9250_${i}_core/rx_clk
-  ad_connect  axi_ad9250_jesd/rx_sof axi_ad9250_${i}_core/rx_sof
-  ad_connect  axi_ad9250_${i}_core/rx_data data_bsplit/split_data_${i}
+for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
+  
+  ad_connect axi_ad9250_${i}_core/adc_valid_0 axi_ad9250_${i}_cpack/fifo_wr_en   
+    
+  ad_connect axi_ad9250_${i}_core/adc_enable_0 axi_ad9250_${i}_cpack/enable_0
+  ad_connect axi_ad9250_${i}_core/adc_enable_1 axi_ad9250_${i}_cpack/enable_1    
+
+  ad_connect  util_fmcjesdadc1_xcvr/rx_out_clk_0 axi_ad9250_${i}_core/link_clk
+  ad_connect  axi_ad9250_jesd/rx_sof axi_ad9250_${i}_core/link_sof
+  ad_connect  axi_ad9250_${i}_core/link_data data_bsplit/split_data_${i}
 
   ad_connect  util_fmcjesdadc1_xcvr/rx_out_clk_0 axi_ad9250_${i}_cpack/clk
   ad_connect  axi_ad9250_jesd_rstgen/peripheral_reset axi_ad9250_${i}_cpack/reset
 
   ad_connect  axi_ad9250_${i}_core/adc_dovf axi_ad9250_${i}_cpack/fifo_wr_overflow
-  ad_connect  axi_ad9250_${i}_core/adc_valid_a axi_ad9250_${i}_cpack/fifo_wr_en
-  ad_connect  axi_ad9250_${i}_core/adc_enable_a axi_ad9250_${i}_cpack/enable_0
-  ad_connect  axi_ad9250_${i}_core/adc_data_a axi_ad9250_${i}_cpack/fifo_wr_data_0
-  ad_connect  axi_ad9250_${i}_core/adc_enable_b axi_ad9250_${i}_cpack/enable_1
-  ad_connect  axi_ad9250_${i}_core/adc_data_b axi_ad9250_${i}_cpack/fifo_wr_data_1
+  ad_connect  axi_ad9250_${i}_core/adc_data_0 axi_ad9250_${i}_cpack/fifo_wr_data_0
+  ad_connect  axi_ad9250_${i}_core/adc_data_1 axi_ad9250_${i}_cpack/fifo_wr_data_1
 
-  ad_connect  axi_ad9250_${i}_core/adc_clk axi_ad9250_${i}_dma/fifo_wr_clk
+  ad_connect  axi_ad9250_${i}_core/link_clk axi_ad9250_${i}_dma/fifo_wr_clk
   ad_connect  axi_ad9250_${i}_dma/fifo_wr axi_ad9250_${i}_cpack/packed_fifo_wr
+
+  ad_connect  axi_ad9250_${i}_core/link_valid axi_ad9250_jesd/rx_data_tvalid  
+
 }
 
 # interconnect (cpu)
