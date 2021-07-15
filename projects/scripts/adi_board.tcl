@@ -169,9 +169,6 @@ proc ad_connect {name_a name_b} {
     error "ERROR: ad_connect: Cannot connect non-interface to interface: $name_a ($type_a) <-/-> $name_b ($type_b)"
   }
 
-  if {(($type_a eq "bd_net") && ($type_b eq "bd_net")) || (($type_a eq "bd_intf_net") && ($type_b eq "bd_intf_net"))} {
-  }
-
   switch $type_a,$type_b {
     newnet,newnet {
       error "ERROR: ad_connect: Cannot create connection between two new nets: $name_a <-/-> $name_b"
@@ -194,7 +191,7 @@ proc ad_connect {name_a name_b} {
 
     bd_pin,bd_pin {
       connect_bd_net $obj_a $obj_b
-      puts "connect_bd_pin $obj_a $obj_b"
+      puts "connect_bd_net $obj_a $obj_b"
       return
     }
     bd_net,bd_pin {
@@ -219,7 +216,7 @@ proc ad_connect {name_a name_b} {
     }
     bd_intf_pin,bd_intf_pin {
       connect_bd_intf_net $obj_a $obj_b
-      puts "connect_bd_net -net $name_a $obj_b"
+      puts "connect_bd_intf_net $obj_a $obj_b"
       return
     }
     const,bd_pin -
