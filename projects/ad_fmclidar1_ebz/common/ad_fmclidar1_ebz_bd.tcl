@@ -137,7 +137,6 @@ ad_connect $sys_dma_resetn ad9694_dma/m_dest_axi_aresetn
 #ad_connect ad9694_tpl_core/adc_dovf axi_ad9694_fifo/adc_wovf
 
 ad_connect $sys_cpu_clk  axi_spi_vco/ext_spi_clk
-ad_connect spi_vco axi_spi_vco/SPI_0
 ad_connect spi_vco_csn_i axi_spi_vco/ss_i
 ad_connect spi_vco_csn_o axi_spi_vco/ss_o
 ad_connect spi_vco_clk_i axi_spi_vco/sck_i
@@ -147,7 +146,6 @@ ad_connect spi_vco_sdo_o axi_spi_vco/io0_o
 ad_connect spi_vco_sdi_i axi_spi_vco/io1_i
 
 ad_connect $sys_cpu_clk  axi_spi_afe_adc/ext_spi_clk
-ad_connect spi_afe_adc axi_spi_afe_adc/SPI_0
 ad_connect spi_afe_adc_csn_i axi_spi_afe_adc/ss_i
 ad_connect spi_afe_adc_csn_o axi_spi_afe_adc/ss_o
 ad_connect spi_afe_adc_clk_i axi_spi_afe_adc/sck_i
