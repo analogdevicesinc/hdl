@@ -609,7 +609,7 @@ endgenerate
 assign status_synth_params0 = {NUM_LANES};
 assign status_synth_params1 = {
                  /*31:16 */  16'b0,
-                 /*15: 8 */  3'b0,TPL_DATA_PATH_WIDTH[4:0],
+                 /*15: 8 */  1'b0,TPL_DATA_PATH_WIDTH[6:0],
                  /* 7: 0 */  4'b0,DPW_LOG2[3:0]};
 assign status_synth_params2 = {
                  /*31:19 */  13'b0,
