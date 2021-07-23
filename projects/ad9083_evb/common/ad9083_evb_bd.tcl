@@ -8,13 +8,7 @@ set RX_SAMPLES_PER_FRAME 1   ; # S
 set RX_SAMPLE_WIDTH 16       ; # N/NP
 set RX_SAMPLES_PER_CHANNEL 1 ; # L * 32 / (M * N)
 
-# fifo size should provide 64ks/ch
-# (256*2^16)/16[ch]/16[N/NP]=64ks
-
-set adc_fifo_name axi_ad9083_fifo
-set adc_data_width 256
 set adc_dma_data_width 256
-set adc_fifo_address_width 16
 
 # adc peripherals
 # rx_out_clk = ref_clk
@@ -43,10 +37,8 @@ adi_tpl_jesd204_rx_create rx_ad9083_tpl_core $RX_NUM_OF_LANES \
                                                $RX_SAMPLES_PER_FRAME \
                                                $RX_SAMPLE_WIDTH
 
-ad_adcfifo_create $adc_fifo_name $adc_data_width $adc_dma_data_width $adc_fifo_address_width
-
 ad_ip_instance axi_dmac axi_ad9083_rx_dma [list \
-  DMA_TYPE_SRC 1 \
+  DMA_TYPE_SRC 2 \
   DMA_TYPE_DEST 0 \
   CYCLIC 0 \
   SYNC_TRANSFER_START 0 \
@@ -54,8 +46,9 @@ ad_ip_instance axi_dmac axi_ad9083_rx_dma [list \
   MAX_BYTES_PER_BURST 4096 \
   AXI_SLICE_DEST 1 \
   AXI_SLICE_SRC 1 \
-  DMA_LENGTH_WIDTH 24 \
-  DMA_DATA_WIDTH_DEST $adc_dma_data_width \
+  FIFO_SIZE 32\
+  DMA_LENGTH_WIDTH 31 \
+  DMA_DATA_WIDTH_DEST 128 \
   DMA_DATA_WIDTH_SRC $adc_dma_data_width \
 ]
 
@@ -120,21 +113,25 @@ for {set i 0} {$i < $RX_NUM_OF_LANES} {incr i} {
 
 ad_xcvrpll  axi_ad9083_rx_xcvr/up_pll_rst util_ad9083_xcvr/up_qpll_rst_*
 
+ad_ip_instance clk_wiz dma_clk_generator
+ad_ip_parameter dma_clk_generator CONFIG.PRIMITIVE MMCM
+ad_ip_parameter dma_clk_generator CONFIG.RESET_TYPE ACTIVE_LOW
+ad_ip_parameter dma_clk_generator CONFIG.USE_LOCKED false
+ad_ip_parameter dma_clk_generator CONFIG.CLKOUT1_REQUESTED_OUT_FREQ 332.9
+ad_ip_parameter dma_clk_generator CONFIG.PRIM_SOURCE No_buffer
+
+ad_connect $sys_cpu_clk dma_clk_generator/clk_in1
+ad_connect $sys_cpu_resetn dma_clk_generator/resetn
+
+ad_disconnect sys_250m_clk sys_ps8/pl_clk1
+
+ad_connect $sys_dma_clk dma_clk_generator/clk_out1
+ad_connect axi_ad9083_rx_dma/fifo_wr util_ad9083_rx_cpack/packed_fifo_wr
+
 # connections (adc)
 
 ad_connect $sys_dma_resetn axi_ad9083_rx_dma/m_dest_axi_aresetn
-ad_connect ad9083_rx_device_clk_rstgen/peripheral_reset axi_ad9083_fifo/adc_rst
-ad_connect ad9083_rx_device_clk axi_ad9083_fifo/adc_clk
-ad_connect $sys_dma_clk axi_ad9083_fifo/dma_clk
-ad_connect $sys_dma_clk axi_ad9083_rx_dma/s_axis_aclk
-
-ad_connect util_ad9083_rx_cpack/packed_fifo_wr_data axi_ad9083_fifo/adc_wdata
-ad_connect util_ad9083_rx_cpack/packed_fifo_wr_en axi_ad9083_fifo/adc_wr
-
-ad_connect axi_ad9083_fifo/dma_wr axi_ad9083_rx_dma/s_axis_valid
-ad_connect axi_ad9083_fifo/dma_wdata axi_ad9083_rx_dma/s_axis_data
-ad_connect axi_ad9083_fifo/dma_wready axi_ad9083_rx_dma/s_axis_ready
-ad_connect axi_ad9083_fifo/dma_xfer_req axi_ad9083_rx_dma/s_axis_xfer_req
+ad_connect ad9083_rx_device_clk axi_ad9083_rx_dma/fifo_wr_clk
 
 ad_connect ad9083_rx_device_clk rx_ad9083_tpl_core/link_clk
 ad_connect ad9083_rx_device_clk util_ad9083_rx_cpack/clk

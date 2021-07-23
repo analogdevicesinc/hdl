@@ -1,6 +1,5 @@
 
 source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl
-source $ad_hdl_dir/projects/common/xilinx/adcfifo_bd.tcl
 source ../common/ad9083_evb_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
