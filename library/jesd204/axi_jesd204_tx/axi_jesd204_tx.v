@@ -95,7 +95,7 @@ module axi_jesd204_tx #(
   output core_cfg_disable_char_replacement,
   output core_cfg_disable_scrambler,
 
-  output [7:0] device_cfg_octets_per_multiframe,
+  output [9:0] device_cfg_octets_per_multiframe,
   output [7:0] device_cfg_octets_per_frame,
   output [7:0] device_cfg_beats_per_multiframe,
   output [7:0] device_cfg_lmfc_offset,
