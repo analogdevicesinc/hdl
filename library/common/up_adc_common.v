@@ -71,6 +71,8 @@ module up_adc_common #(
   output              adc_sync,
   output       [4:0]  adc_num_lanes,
   output              adc_sdr_ddr_n,
+  output              adc_symb_op,
+  output              adc_symb_8_16b,
   input       [31:0]  up_pps_rcounter,
   input               up_pps_status,
   output  reg         up_pps_irq_mask,
@@ -131,6 +133,8 @@ module up_adc_common #(
   reg                 up_adc_sref_sync = 'd0;
   reg         [4:0]   up_adc_num_lanes = 'd0;
   reg                 up_adc_sdr_ddr_n = 'd0;
+  reg                 up_adc_symb_op = 'd0;
+  reg                 up_adc_symb_8_16b = 'd0;
   reg                 up_adc_ddr_edgesel = 'd0;
   reg                 up_adc_pin_mode = 'd0;
   reg                 up_status_ovf = 'd0;
@@ -181,6 +185,8 @@ module up_adc_common #(
       up_adc_sref_sync <= 'd0;
       up_adc_num_lanes <= 'd0;
       up_adc_sdr_ddr_n <= 'd0;
+      up_adc_symb_op <= 'd0;
+      up_adc_symb_8_16b <= 'd0;
       up_adc_r1_mode <= 'd0;
       up_adc_ddr_edgesel <= 'd0;
       up_adc_pin_mode <= 'd0;
@@ -210,6 +216,8 @@ module up_adc_common #(
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h11)) begin
         up_adc_sdr_ddr_n <= up_wdata[16];
+	  up_adc_symb_op <= up_wdata[15];
+	  up_adc_symb_8_16b <= up_wdata[14];
         up_adc_num_lanes <= up_wdata[12:8];
         up_adc_sref_sync <= up_wdata[4];
         up_adc_r1_mode <= up_wdata[2];
@@ -391,7 +399,8 @@ module up_adc_common #(
           7'h07: up_rdata_int <= {FPGA_TECHNOLOGY,FPGA_FAMILY,SPEED_GRADE,DEV_PACKAGE}; // [8,8,8,8]
           7'h10: up_rdata_int <= {29'd0, up_adc_clk_enb, up_mmcm_resetn, up_resetn};
           7'h11: up_rdata_int <= {15'd0, up_adc_sdr_ddr_n,
-                                  3'd0, up_adc_num_lanes,
+		                    up_adc_symb_op, up_adc_symb_8_16b,
+                                  1'd0, up_adc_num_lanes,
                                   3'd0, up_adc_sref_sync,
                                   up_adc_sync, up_adc_r1_mode, up_adc_ddr_edgesel, up_adc_pin_mode};
           7'h15: up_rdata_int <= up_adc_clk_count_s;
@@ -426,10 +435,12 @@ module up_adc_common #(
 
   // adc control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(44)) i_xfer_cntrl (
+  up_xfer_cntrl #(.DATA_WIDTH(46)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_adc_sdr_ddr_n,
+                      up_adc_symb_op,
+		        up_adc_symb_8_16b,
                       up_adc_num_lanes,
                       up_adc_sref_sync,
                       up_adc_sync,
@@ -442,6 +453,8 @@ module up_adc_common #(
     .d_rst (adc_rst_s),
     .d_clk (adc_clk),
     .d_data_cntrl ({  adc_sdr_ddr_n,
+                      adc_symb_op,
+		        adc_symb_8_16b,
                       adc_num_lanes,
                       adc_sref_sync,
                       adc_sync,

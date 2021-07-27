@@ -56,7 +56,9 @@ module adrv9001_rx_link #(
 
   // Config interface
   input         rx_sdr_ddr_n,
-  input         rx_single_lane
+  input         rx_single_lane,
+  input         rx_symb_op,
+  input         rx_symb_8_16b
 );
 
   wire [7:0] data_0;
@@ -232,7 +234,9 @@ module adrv9001_rx_link #(
   wire [15:0] rx_data16_0_packed;
   wire [15:0] rx_data16_1_packed;
   wire        rx_data16_0_packed_valid;
+  wire        rx_data16_1_packed_valid;
   wire        rx_data16_0_packed_osof;
+  wire        rx_data16_1_packed_osof;
 
   wire [31:0] rx_data32_0_packed;
   wire        rx_data32_0_packed_valid;
@@ -308,7 +312,8 @@ module adrv9001_rx_link #(
     .idata (rx_data8_1_aligned),
     .sof (rx_data8_strobe_aligned[7]),
     .odata (rx_data16_1_packed),
-    .ovalid ()
+    .ovalid (rx_data16_1_paked_valid),
+    .osof (rx_data16_1_packed_osof)
   );
 
   adrv9001_pack #(
@@ -320,16 +325,17 @@ module adrv9001_rx_link #(
     .idata (rx_data16_0_packed),
     .sof (rx_data16_0_packed_osof),
     .odata (rx_data32_0_packed),
-    .ovalid (rx_data32_0_packed_valid)
+    .ovalid (rx_data32_0_packed_valid),
+    .osof (rx_data32_0_packed_osof)
   );
 
   generate if (CMOS_LVDS_N) begin
     assign rx_data_i = ~rx_single_lane ? {rx_data8_1_aligned,rx_data8_0_aligned} :
-                                          rx_data32_0_packed[31:16];
+                                         (rx_symb_op ? rx_data16_0_packed : rx_data32_0_packed[31:16]);
     assign rx_data_q = ~rx_single_lane ? {rx_data8_3_aligned,rx_data8_2_aligned} :
-                                          rx_data32_0_packed[15:0];
-    assign rx_data_valid = ~rx_single_lane ? rx_data8_0_aligned_valid :
-                                             rx_data32_0_packed_valid;
+                                         (rx_symb_op ? 'b0 : rx_data32_0_packed[15:0]);
+    assign rx_data_valid = ~rx_single_lane ? rx_data8_0_aligned_valid : 
+                                             (rx_symb_op ? (rx_symb_8_16b ? rx_data8_0_aligned_valid : rx_data16_0_packed_valid) : rx_data32_0_packed_valid);
   end else begin
     assign rx_data_i = ~rx_single_lane ? rx_data16_0_packed :
                                          rx_data32_0_packed[31:16];
