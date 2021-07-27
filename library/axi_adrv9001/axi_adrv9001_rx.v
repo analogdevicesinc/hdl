@@ -63,6 +63,8 @@ module axi_adrv9001_rx #(
 
   output                  adc_single_lane,
   output                  adc_sdr_ddr_n,
+  output                  adc_symb_op,
+  output                  adc_symb_8_16b,
   output                  up_adc_r1_mode,
 
   input       [ 31:0]     adc_clk_ratio,
@@ -110,6 +112,8 @@ if (ENABLED == 0) begin : core_disabled
   assign adc_rst = 1'b0;
   assign adc_single_lane = 1'b0;
   assign adc_sdr_ddr_n = 1'b0;
+  assign adc_symb_op = 1'b0;
+  assign adc_symb_8_16b = 1'b0;
   assign up_adc_r1_mode = 1'b0;
   assign adc_valid = 1'b0;
   assign adc_enable_i0 = 1'b0;
@@ -361,6 +365,8 @@ end else begin : core_enabled
     .adc_sync (),
     .adc_num_lanes (adc_num_lanes),
     .adc_sdr_ddr_n (adc_sdr_ddr_n),
+    .adc_symb_op (adc_symb_op),
+    .adc_symb_8_16b (adc_symb_8_16b),
     .up_pps_rcounter(32'h0),
     .up_pps_status(1'b0),
     .up_pps_irq_mask(),

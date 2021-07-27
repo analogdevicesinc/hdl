@@ -61,6 +61,8 @@ module up_dac_common #(
   output              dac_rst,
   output      [4:0]   dac_num_lanes,
   output              dac_sdr_ddr_n,
+  output              dac_symb_op,
+  output              dac_symb_8_16b,
   output              dac_sync,
   output              dac_frame,
   output              dac_clksel,
@@ -126,6 +128,8 @@ module up_dac_common #(
   reg             up_dac_sync = 'd0;
   reg      [4:0]  up_dac_num_lanes = 'd0;
   reg             up_dac_sdr_ddr_n = 'd0;
+  reg             up_dac_symb_op = 'd0;
+  reg             up_dac_symb_8_16b = 'd0;
   reg             up_dac_par_type = 'd0;
   reg             up_dac_par_enb = 'd0;
   reg             up_dac_datafmt = 'd0;
@@ -188,6 +192,8 @@ module up_dac_common #(
       up_dac_sync <= 'd0;
       up_dac_num_lanes <= 'd0;
       up_dac_sdr_ddr_n <= 'd0;
+      up_dac_symb_op <= 'd0;
+      up_dac_symb_8_16b <= 'd0;
       up_dac_par_type <= 'd0;
       up_dac_par_enb <= 'd0;
       up_dac_r1_mode <= 'd0;
@@ -220,7 +226,9 @@ module up_dac_common #(
         up_dac_sync <= up_wdata[0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h12)) begin
-        up_dac_sdr_ddr_n <= up_wdata[16];
+	  up_dac_sdr_ddr_n <= up_wdata[16];
+	  up_dac_symb_op <= up_wdata[15];
+	  up_dac_symb_8_16b <= up_wdata[14];
         up_dac_num_lanes <= up_wdata[12:8];
         up_dac_par_type <= up_wdata[7];
         up_dac_par_enb <= up_wdata[6];
@@ -397,7 +405,8 @@ module up_dac_common #(
           7'h10: up_rdata_int <= {29'd0, up_dac_clk_enb, up_mmcm_resetn, up_resetn};
           7'h11: up_rdata_int <= {31'd0, up_dac_sync};
           7'h12: up_rdata_int <= {15'd0, up_dac_sdr_ddr_n,
-                                  3'd0, up_dac_num_lanes,
+		                    up_dac_symb_op, up_dac_symb_8_16b,
+		                    1'd0, up_dac_num_lanes,
                                   up_dac_par_type, up_dac_par_enb, up_dac_r1_mode, up_dac_datafmt,
                                   4'd0};
           7'h13: up_rdata_int <= {16'd0, up_dac_datarate};
@@ -433,10 +442,12 @@ module up_dac_common #(
 
   // dac control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(30)) i_xfer_cntrl (
+  up_xfer_cntrl #(.DATA_WIDTH(32)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_dac_sdr_ddr_n,
+    		        up_dac_symb_op,
+		        up_dac_symb_8_16b,
                       up_dac_num_lanes,
                       up_dac_sync,
                       up_dac_clksel,
@@ -451,6 +462,8 @@ module up_dac_common #(
     .d_rst (dac_rst_s),
     .d_clk (dac_clk),
     .d_data_cntrl ({  dac_sdr_ddr_n,
+                      dac_symb_op,
+		        dac_symb_8_16b,
                       dac_num_lanes,
                       dac_sync_s,
                       dac_clksel,

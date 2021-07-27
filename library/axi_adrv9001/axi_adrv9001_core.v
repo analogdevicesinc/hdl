@@ -63,6 +63,8 @@ module axi_ad9001_core #(
 
   output                  rx1_single_lane,
   output                  rx1_sdr_ddr_n,
+  output                  rx1_symb_op,
+  output                  rx1_symb_8_16b,
 
   input                   rx2_clk,
   output                  rx2_rst,
@@ -72,6 +74,8 @@ module axi_ad9001_core #(
 
   output                  rx2_single_lane,
   output                  rx2_sdr_ddr_n,
+  output                  rx2_symb_op,
+  output                  rx2_symb_8_16b,
 
   // DAC interface
   input                   tx1_clk,
@@ -82,7 +86,9 @@ module axi_ad9001_core #(
 
   output                  tx1_single_lane,
   output                  tx1_sdr_ddr_n,
-
+  output                  tx1_symb_op,
+  output                  tx1_symb_8_16b,
+  
   input                   tx2_clk,
   output                  tx2_rst,
   output                  tx2_data_valid,
@@ -91,7 +97,9 @@ module axi_ad9001_core #(
 
   output                  tx2_single_lane,
   output                  tx2_sdr_ddr_n,
-
+  output                  tx2_symb_op,
+  output                  tx2_symb_8_16b,
+ 
   input       [ 31:0]     adc_clk_ratio,
   input       [ 31:0]     dac_clk_ratio,
 
@@ -191,11 +199,15 @@ module axi_ad9001_core #(
   wire           rx2_rst_loc;
   wire           rx2_single_lane_loc;
   wire           rx2_sdr_ddr_n_loc;
+  wire           rx2_symb_op_loc;
+  wire           rx2_symb_8_16b_loc;
   wire           up_tx1_r1_mode;
   wire           tx1_r1_mode;
   wire           tx2_rst_loc;
   wire           tx2_single_lane_loc;
   wire           tx2_sdr_ddr_n_loc;
+  wire           tx2_symb_op_loc;
+  wire           tx2_symb_8_16b_loc;
 
   reg            tx1_data_valid_A_d;
   reg    [15:0]  tx1_data_i_A_d;
@@ -212,31 +224,34 @@ module axi_ad9001_core #(
   // tx1_r1_mode should be 0 only when tx1_clk and tx2_clk have the same frequency
 
   sync_bits #(
-    .NUM_OF_BITS (4),
+    .NUM_OF_BITS (6),
     .ASYNC_CLK (1))
   i_rx1_ctrl_sync (
-    .in_bits ({up_rx1_r1_mode,rx1_sdr_ddr_n,rx1_single_lane,rx1_rst}),
+    .in_bits ({up_rx1_r1_mode,rx1_symb_op,rx1_symb_8_16b,rx1_sdr_ddr_n,rx1_single_lane,rx1_rst}),
     .out_clk (rx2_clk),
     .out_resetn (1'b1),
-    .out_bits ({rx1_r1_mode,rx1_sdr_ddr_n_s,rx1_single_lane_s,rx1_rst_s}));
+    .out_bits ({rx1_r1_mode,rx1_symb_op_s,rx1_symb_8_16b_s,rx1_sdr_ddr_n_s,rx1_single_lane_s,rx1_rst_s}));
 
   sync_bits #(
-    .NUM_OF_BITS (4),
+    .NUM_OF_BITS (6),
     .ASYNC_CLK (1))
   i_tx1_ctrl_sync (
-    .in_bits ({up_tx1_r1_mode,tx1_sdr_ddr_n,tx1_single_lane,tx1_rst}),
+    .in_bits ({up_tx1_r1_mode,tx1_symb_op,tx1_symb_8_16b,tx1_sdr_ddr_n,tx1_single_lane,tx1_rst}),
     .out_clk (tx2_clk),
     .out_resetn (1'b1),
-    .out_bits ({tx1_r1_mode,tx1_sdr_ddr_n_s,tx1_single_lane_s,tx1_rst_s}));
+    .out_bits ({tx1_r1_mode,tx1_symb_op_s,tx1_symb_8_16b_s,tx1_sdr_ddr_n_s,tx1_single_lane_s,tx1_rst_s}));
 
   assign rx2_rst = rx1_r1_mode ? rx2_rst_loc : rx1_rst_s;
   assign rx2_single_lane = rx1_r1_mode ? rx2_single_lane_loc : rx1_single_lane_s;
   assign rx2_sdr_ddr_n = rx1_r1_mode ? rx2_sdr_ddr_n_loc : rx1_sdr_ddr_n_s;
+  assign rx2_symb_op = rx1_r1_mode ? rx2_symb_op_loc : rx1_symb_op_s;
+  assign rx2_symb_8_16b = rx1_r1_mode ? rx2_symb_8_16b_loc : rx1_symb_8_16b_s;
 
   assign tx2_rst = tx1_r1_mode ? tx2_rst_loc : tx1_rst_s;
   assign tx2_single_lane = tx1_r1_mode ? tx2_single_lane_loc : tx1_single_lane_s;
   assign tx2_sdr_ddr_n = tx1_r1_mode ? tx2_sdr_ddr_n_loc : tx1_sdr_ddr_n_s;
-
+  assign tx2_symb_op = tx1_r1_mode ? tx2_symb_op_loc : tx1_symb_op_s;
+  assign tx2_symb_8_16b = tx1_r1_mode ? tx2_symb_8_16b_loc : tx1_symb_8_16b_s;
   assign tx1_data_valid = tx1_data_valid_A_d;
   assign tx1_data_i = tx1_data_i_A_d;
   assign tx1_data_q = tx1_data_q_A_d;
@@ -314,6 +329,8 @@ module axi_ad9001_core #(
 
     .adc_single_lane (rx1_single_lane),
     .adc_sdr_ddr_n (rx1_sdr_ddr_n),
+    .adc_symb_op (rx1_symb_op),
+    .adc_symb_8_16b (rx1_symb_8_16b),
     .up_adc_r1_mode (up_rx1_r1_mode),
 
     .adc_clk_ratio (adc_clk_ratio),
@@ -376,6 +393,8 @@ module axi_ad9001_core #(
 
     .adc_single_lane (rx2_single_lane_loc),
     .adc_sdr_ddr_n (rx2_sdr_ddr_n_loc),
+    .adc_symb_op (rx2_symb_op_loc),
+    .adc_symb_8_16b (rx2_symb_8_16b_loc),
 
     .adc_clk_ratio (adc_clk_ratio),
 
@@ -433,6 +452,8 @@ module axi_ad9001_core #(
     .dac_data_q_B (tx1_data_q_B),
     .dac_single_lane (tx1_single_lane),
     .dac_sdr_ddr_n (tx1_sdr_ddr_n),
+    .dac_symb_op (tx1_symb_op),
+    .dac_symb_8_16b (tx1_symb_8_16b),
     .up_dac_r1_mode (up_tx1_r1_mode),
     .tdd_tx_valid (tdd_tx1_valid),
     .dac_clk_ratio (dac_clk_ratio),
@@ -487,6 +508,8 @@ module axi_ad9001_core #(
     .dac_data_q_B (),
     .dac_single_lane (tx2_single_lane_loc),
     .dac_sdr_ddr_n (tx2_sdr_ddr_n_loc),
+    .dac_symb_op (tx2_symb_op_loc),
+    .dac_symb_8_16b (tx2_symb_8_16b_loc),
     .dac_sync_in (1'b0),
     .dac_sync_out (),
     .dac_valid (dac_2_valid),

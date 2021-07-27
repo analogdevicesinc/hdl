@@ -246,6 +246,8 @@ module axi_adrv9001_rx_channel #(
                         adc_pnseq_sel == 4'd5 ? pn15_data :
                         adc_pnseq_sel == 4'd10 ? {4{full_ramp_counter[3:0]}} :
                         adc_pnseq_sel == 4'd11 ? full_ramp_counter : 'h0;
+  assign valid_seq_sel = adc_pnseq_sel == 4'd4 || adc_pnseq_sel == 4'd5 || 
+                         adc_pnseq_sel == 4'd10 || adc_pnseq_sel == 4'd11;
 
   ad_pnmon #(
     .DATA_WIDTH (DATA_WIDTH),
@@ -283,8 +285,8 @@ module axi_adrv9001_rx_channel #(
     .adc_iqcor_coeff_2 (adc_iqcor_coeff_2_s),
     .adc_pnseq_sel (adc_pnseq_sel),
     .adc_data_sel (adc_data_sel_s),
-    .adc_pn_err (adc_pn_err_s),
-    .adc_pn_oos (adc_pn_oos_s),
+    .adc_pn_err (adc_pn_err_s & valid_seq_sel),
+    .adc_pn_oos (adc_pn_oos_s & valid_seq_sel),
     .adc_or (1'd0),
     .up_adc_pn_err (up_adc_pn_err),
     .up_adc_pn_oos (up_adc_pn_oos),
