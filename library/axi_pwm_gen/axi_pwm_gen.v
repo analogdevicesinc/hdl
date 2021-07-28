@@ -192,7 +192,7 @@ module axi_pwm_gen #(
   // offset counter
 
   always @(posedge clk) begin
-    if (offset_alignment) begin
+    if (offset_alignment ==  1'b1 || pwm_gen_resetn == 1'b0) begin
       offset_cnt <= 32'd0;
     end else begin
       offset_cnt <= offset_cnt + 1'b1;
