@@ -98,7 +98,7 @@ module axi_pwm_gen_regmap #(
   reg     [31:0]  up_pwm_offset_2 = PULSE_2_OFFSET;
   reg     [31:0]  up_pwm_offset_3 = PULSE_3_OFFSET;
   reg             up_load_config = 1'b0;
-  reg             up_reset;
+  reg             up_reset = 1'b1;
 
   always @(posedge up_clk) begin
     if (up_rstn == 0) begin
