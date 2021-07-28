@@ -14,10 +14,13 @@ if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
 ## Define the ADI_USE_OOC_SYNTHESIS environment variable to enable out of context
 #  synthesis
 if {[info exists ::env(ADI_USE_OOC_SYNTHESIS)]} {
-  set ADI_USE_OOC_SYNTHESIS 1
+  if {[string equal $::env(ADI_USE_OOC_SYNTHESIS) n]} {
+     set ADI_USE_OOC_SYNTHESIS 0
+  } else {
+     set ADI_USE_OOC_SYNTHESIS 1
+  }
 } elseif {![info exists ADI_USE_OOC_SYNTHESIS]} {
-  set ADI_USE_OOC_SYNTHESIS 0
-
+   set ADI_USE_OOC_SYNTHESIS 1
 }
 
 ## Set number of parallel out of context jobs through environment variable
