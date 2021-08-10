@@ -15,6 +15,7 @@ LIB_DEPS += axi_dmac
 LIB_DEPS += axi_hdmi_tx
 LIB_DEPS += axi_spdif_tx
 LIB_DEPS += axi_sysid
+LIB_DEPS += mii_to_rmii_ad
 LIB_DEPS += sysid_rom
 
 include ../../scripts/project-xilinx.mk

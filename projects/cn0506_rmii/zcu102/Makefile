@@ -10,6 +10,7 @@ M_DEPS += ../../common/zcu102/zcu102_system_constr.xdc
 M_DEPS += ../../common/zcu102/zcu102_system_bd.tcl
 
 LIB_DEPS += axi_sysid
+LIB_DEPS += mii_to_rmii_ad
 LIB_DEPS += sysid_rom
 
 include ../../scripts/project-xilinx.mk

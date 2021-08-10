@@ -18,7 +18,7 @@ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:rmii_rtl:1.0 RMII_PH
 make_bd_intf_pins_external  [get_bd_intf_pins sys_ps7/MDIO_ETHERNET_0]
 make_bd_intf_pins_external  [get_bd_intf_pins sys_ps7/MDIO_ETHERNET_1]
 
-ad_ip_instance mii_to_rmii mii_to_rmii_0
+ad_ip_instance mii_to_rmii_ad mii_to_rmii_0
 ad_ip_parameter mii_to_rmii_0 CONFIG.C_MODE 1
 ad_ip_parameter mii_to_rmii_0 CONFIG.C_SPEED_100 1
 ad_ip_parameter mii_to_rmii_0 CONFIG.C_FIXED_SPEED 0
@@ -28,7 +28,7 @@ ad_connect mii_to_rmii_0/ref_clk ref_clk_50_a
 
 ad_connect mii_to_rmii_0/RMII_PHY_M RMII_PHY_M_0
 
-ad_ip_instance mii_to_rmii mii_to_rmii_1
+ad_ip_instance mii_to_rmii_ad mii_to_rmii_1
 ad_ip_parameter mii_to_rmii_1 CONFIG.C_MODE 1
 ad_ip_parameter mii_to_rmii_1 CONFIG.C_SPEED_100 1
 ad_ip_parameter mii_to_rmii_1 CONFIG.C_FIXED_SPEED 0
