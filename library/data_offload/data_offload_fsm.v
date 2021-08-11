@@ -44,7 +44,10 @@ module data_offload_fsm #(
   parameter WR_ADDRESS_WIDTH = 4,
   parameter WR_DATA_WIDTH = 128,
   parameter RD_ADDRESS_WIDTH = 4,
-  parameter RD_DATA_WIDTH = 128)(
+  parameter RD_DATA_WIDTH = 128,
+  parameter SYNC_EXT_ADD_INTERNAL_CDC = 1) (
+
+  input                               up_clk,
 
   // write control interface
   input                               wr_clk,
@@ -132,8 +135,6 @@ module data_offload_fsm #(
   wire                        rd_init_ack_s;
   wire [WR_ADDRESS_WIDTH-1:0] rd_wr_last_addr_s;
   wire [WR_DATA_WIDTH/8-1:0]  rd_wr_last_tkeep_s;
-  wire                        wr_sync_internal_s;
-  wire                        rd_sync_internal_s;
   wire                        wr_sync_external_s;
   wire                        rd_sync_external_s;
   wire                        wr_oneshot;
@@ -171,7 +172,7 @@ module data_offload_fsm #(
                   end
                 end
                 SOFTWARE: begin
-                  if (wr_sync_internal_s) begin
+                  if (sync_internal) begin
                     wr_fsm_state <= WR_WRITE_TO_MEM;
                   end
                 end
@@ -256,7 +257,7 @@ module data_offload_fsm #(
       end
     end
   end
-  
+
   always @(posedge wr_clk) begin
     wr_ready_d <= wr_ready;
   end
@@ -315,7 +316,7 @@ module data_offload_fsm #(
                 end
               end
               SOFTWARE: begin
-                if (rd_sync_internal_s) begin
+                if (sync_internal) begin
                   rd_fsm_state <= RD_READ_FROM_MEM;
                 end
               end
@@ -555,24 +556,27 @@ module data_offload_fsm #(
       end
   end
 
+  // When SYNC_EXT_ADD_INTERNAL_CDC is deasserted, one of these signals will end
+  // up being synchronized to the "wrong" clock domain. This shouldn't matter
+  // because the incorrectly synchronized signal is guarded by a synthesis constant.
   sync_bits #(
-    .NUM_OF_BITS (2),
-    .ASYNC_CLK (1))
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK (SYNC_EXT_ADD_INTERNAL_CDC))
   i_sync_wr_sync (
-    .in_bits ({ sync_internal, sync_external }),
+    .in_bits ({ sync_external }),
     .out_clk (wr_clk),
     .out_resetn (1'b1),
-    .out_bits ({ wr_sync_internal_s, wr_sync_external_s })
+    .out_bits ({ wr_sync_external_s })
   );
 
   sync_bits #(
-    .NUM_OF_BITS (2),
-    .ASYNC_CLK (1))
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK (SYNC_EXT_ADD_INTERNAL_CDC))
   i_sync_rd_sync (
-    .in_bits ({ sync_internal, sync_external }),
+    .in_bits ({ sync_external }),
     .out_clk (rd_clk),
     .out_resetn (1'b1),
-    .out_bits ({ rd_sync_internal_s, rd_sync_external_s })
+    .out_bits ({ rd_sync_external_s })
   );
 
 endmodule

@@ -5,6 +5,7 @@
 <: setFileProcessingOrder late :>
 <: set mem_type [getBooleanValue "MEM_TYPE"] :>
 <: set tx_enable [getBooleanValue "TX_OR_RXN_PATH"] :>
+<: set internal_cdc [getBooleanValue "SYNC_EXT_ADD_INTERNAL_CDC"] :>
 
 ## for all synchronization registers from util_cdc modules
 set_property ASYNC_REG TRUE \
@@ -14,9 +15,23 @@ set_property ASYNC_REG TRUE \
 ## For RX in case of BRAMs
 <: if { $tx_enable == 0 } { :>
 
+<: if { $internal_cdc } { :>
+  set_false_path \
+    -to [get_pins -hierarchical * -filter {NAME=~*/i_sync_wr_sync/cdc_sync_stage1_reg[*]/D}]
+<: } :>
+
 set_false_path \
-  -to [get_pins -hierarchical * -filter {NAME=~*/i_sync_wr_sync/cdc_sync_stage1_reg[*]/D}]
-  
+  -from [get_cells -hierarchical * -filter {NAME=~*/i_sync_src_transfer_length/cdc_hold_reg[*]}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*/i_sync_src_transfer_length/out_data_reg[*]}]
+
+set_false_path \
+  -from [get_pins -hierarchical * -filter {NAME=~*/i_sync_src_transfer_length/in_toggle_d1_reg/C}] \
+  -to [get_pins -hierarchical * -filter {NAME=~*/i_sync_src_transfer_length/i_sync_out/cdc_sync_stage1_reg[*]/D}]
+
+set_false_path \
+  -from [get_pins -hierarchical * -filter {NAME=~*/i_sync_src_transfer_length/out_toggle_d1_reg/C}] \
+  -to [get_pins -hierarchical * -filter {NAME=~*/i_sync_src_transfer_length/i_sync_in/cdc_sync_stage1_reg[*]/D}]
+
 <: if { !$mem_type } { :>
 
   set_false_path \
@@ -34,9 +49,12 @@ set_false_path \
 ## For TX in case of BRAMs
 <: if { $tx_enable == 1 } { :>
 
+<: if { $internal_cdc } { :>
 set_false_path \
   -to [get_pins -hierarchical * -filter {NAME=~*/i_sync_rd_sync/cdc_sync_stage1_reg[*]/D}]
-  
+<: } :>
+
+
 <: if { !$mem_type } { :>
 
   set_false_path \
@@ -52,21 +70,9 @@ set_false_path \
 <: } :>
 
 ## For external DDRx memory
- 
+
 <: if { $mem_type == 1 } { :>
 
-  set_false_path \
-    -from [get_cells -hierarchical * -filter {NAME=~*/i_sync_src_transfer_length/cdc_hold_reg[*]}] \
-    -to [get_cells -hierarchical * -filter {NAME=~*/i_sync_src_transfer_length/out_data_reg[*]}]
-  
-  set_false_path \
-    -from [get_pins -hierarchical * -filter {NAME=~*/i_sync_src_transfer_length/in_toggle_d1_reg/C}] \
-    -to [get_pins -hierarchical * -filter {NAME=~*/i_sync_src_transfer_length/i_sync_out/cdc_sync_stage1_reg[*]/D}]
-  
-  set_false_path \
-    -from [get_pins -hierarchical * -filter {NAME=~*/i_sync_src_transfer_length/out_toggle_d1_reg/C}] \
-    -to [get_pins -hierarchical * -filter {NAME=~*/i_sync_src_transfer_length/i_sync_in/cdc_sync_stage1_reg[*]/D}]
-  
   set_false_path \
     -to [get_pins -hierarchical * -filter {NAME=~*i_ddr_calib_done_sync/cdc_sync_stage1_reg[0]/D}]
 
