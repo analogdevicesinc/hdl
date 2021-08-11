@@ -55,7 +55,8 @@ module data_offload #(
   parameter          DST_RAW_DATA_EN = 1'b0,        // TBD
   parameter          DST_CYCLIC_EN = 1'b0,          // 1'b1 - CYCLIC mode enabled; 1'b0 - CYCLIC mode disabled
 
-  parameter          AUTO_BRINGUP = 1) (
+  parameter          AUTO_BRINGUP = 1,
+  parameter          SYNC_EXT_ADD_INTERNAL_CDC = 1) (
 
   // AXI4 Slave for configuration
 
@@ -215,8 +216,10 @@ module data_offload #(
     .WR_ADDRESS_WIDTH (SRC_ADDR_WIDTH),
     .WR_DATA_WIDTH (SRC_DATA_WIDTH),
     .RD_ADDRESS_WIDTH (DST_ADDR_WIDTH),
-    .RD_DATA_WIDTH (DST_DATA_WIDTH))
+    .RD_DATA_WIDTH (DST_DATA_WIDTH),
+    .SYNC_EXT_ADD_INTERNAL_CDC (SYNC_EXT_ADD_INTERNAL_CDC ))
   i_data_offload_fsm (
+    .up_clk (up_clk),
     .wr_clk (src_clk),
     .wr_resetn_in (src_rstn),
     .wr_resetn_out (fifo_src_resetn),

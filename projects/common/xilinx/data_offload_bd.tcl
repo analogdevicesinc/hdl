@@ -1,5 +1,13 @@
 
-proc ad_data_offload_create {instance_name datapath_type mem_type mem_size source_dwidth destination_dwidth {ddr_data_width 0} {ddr_addr_width 0}} {
+proc ad_data_offload_create {instance_name
+                             datapath_type
+                             mem_type
+                             mem_size
+                             source_dwidth
+                             destination_dwidth
+                             {ddr_data_width 0}
+                             {ddr_addr_width 0}
+                             {shared_devclk 0}} {
 
   global ad_hdl_dir
   global sys_cpu_resetn
@@ -44,6 +52,7 @@ proc ad_data_offload_create {instance_name datapath_type mem_type mem_size sourc
       DST_DATA_WIDTH $destination_dwidth \
       DST_ADDR_WIDTH $destination_awidth \
       DST_CYCLIC_EN $datapath_type \
+      SYNC_EXT_ADD_INTERNAL_CDC [expr {!$shared_devclk}] \
     ]
 
     if {$mem_type == 0} {
