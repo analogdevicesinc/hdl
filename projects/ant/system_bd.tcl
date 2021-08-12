@@ -86,7 +86,7 @@ ad_ip_parameter sys_ps7 CONFIG.PCW_MIO_53_PULLUP {enabled}
 # DDR MT41K256M16 HA-125 (32M, 16bit, 8banks)
 
 ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_PARTNO {MT41J256M16 RE-125}
-ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_BUS_WIDTH {16 Bit}
+ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_BUS_WIDTH {32 Bit}
 ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_USE_INTERNAL_VREF 0
 ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_TRAIN_WRITE_LEVEL 1
 ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_TRAIN_READ_GATE 1
@@ -325,7 +325,7 @@ ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP1 {1}
 ad_connect sys_cpu_clk sys_ps7/S_AXI_HP1_ACLK
 ad_connect axi_ad9361_adc_dma/m_dest_axi sys_ps7/S_AXI_HP1
 
-create_bd_addr_seg -range 0x20000000 -offset 0x00000000 \
+create_bd_addr_seg -range 0x40000000 -offset 0x00000000 \
                     [get_bd_addr_spaces axi_ad9361_adc_dma/m_dest_axi] \
                     [get_bd_addr_segs sys_ps7/S_AXI_HP1/HP1_DDR_LOWOCM] \
                     SEG_sys_ps7_HP1_DDR_LOWOCM
@@ -334,7 +334,7 @@ ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP2 {1}
 ad_connect sys_cpu_clk sys_ps7/S_AXI_HP2_ACLK
 ad_connect axi_ad9361_dac_dma/m_src_axi sys_ps7/S_AXI_HP2
 
-create_bd_addr_seg -range 0x20000000 -offset 0x00000000 \
+create_bd_addr_seg -range 0x40000000 -offset 0x00000000 \
                     [get_bd_addr_spaces axi_ad9361_dac_dma/m_src_axi] \
                     [get_bd_addr_segs sys_ps7/S_AXI_HP2/HP2_DDR_LOWOCM] \
                     SEG_sys_ps7_HP2_DDR_LOWOCM
