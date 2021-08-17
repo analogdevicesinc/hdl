@@ -23,6 +23,7 @@ create_bd_port -dir I dac_fifo_bypass
 
 ad_ip_instance zynq_ultra_ps_e sys_ps8
 
+ad_ip_parameter sys_ps8 CONFIG.PSU__PSS_REF_CLK__FREQMHZ 33.333333333
 ad_ip_parameter sys_ps8 CONFIG.PSU__USE__M_AXI_GP0 0
 ad_ip_parameter sys_ps8 CONFIG.PSU__USE__M_AXI_GP1 0
 ad_ip_parameter sys_ps8 CONFIG.PSU__USE__M_AXI_GP2 1
