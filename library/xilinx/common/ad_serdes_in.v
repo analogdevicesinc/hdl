@@ -45,11 +45,14 @@ module ad_serdes_in #(
   parameter   DRP_WIDTH = 5,
   parameter   IODELAY_CTRL = 0,
   parameter   IODELAY_GROUP = "dev_if_delay_group",
-  parameter   REFCLK_FREQUENCY = 200) (
+  parameter   REFCLK_FREQUENCY = 200,
+  parameter   EXT_SERDES_RESET = 0
+) (
 
   // reset and clocks
 
   input                           rst,
+  input                           ext_serdes_rst,
   input                           clk,
   input                           div_clk,
   input                           loaden,
@@ -138,7 +141,8 @@ module ad_serdes_in #(
   endgenerate
 
   reg [6:0] serdes_rst_seq;
-  wire      serdes_rst     = serdes_rst_seq [6];
+  wire      serdes_rst     = EXT_SERDES_RESET == 1 ? ext_serdes_rst :
+                               serdes_rst_seq [6];
 
   always @ (posedge div_clk)
   begin
