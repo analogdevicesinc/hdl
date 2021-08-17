@@ -38,6 +38,7 @@
 // Packer:
 //   - pack I_W number of data units into O_W number of data units
 //   - data unit defined in bits by UNIT_W e.g 8 is a byte
+//   - align data to LSB or MSB
 //
 // Constraints:
 //   - O_W >= I_W
@@ -52,16 +53,27 @@
 //  O_W = 6
 //  UNIT_W = 8
 //
+//  Data aligned to LSB
+//  
 //  idata : [B3,B2,B1,B0],[B7,B6,B5,B4],[B11,B10,B9,B8]
 //  odata:                             [B5,B4,B3,B2,B1,B0],[B11,B10,B9,B8,B7,B6]
 //
+//
+//  or
+//
+//  Data aligned to MSB
+//  
+//  idata : [B0,B1,B2,B3],[B4,B5,B6,B7],[B8,B9,B10,B11]
+//  odata:                             [B0,B1,B2,B3,B4,B5],[B6,B7,B8,B9,B10,B11]
+
 
 module ad_pack #(
   parameter I_W = 4,
   parameter O_W = 6,
   parameter UNIT_W = 8,
   parameter I_REG = 0,
-  parameter O_REG = 1
+  parameter O_REG = 1,
+  parameter ALIGN_TO_MSB = 0
 ) (
   input                   clk,
   input                   reset,
@@ -77,7 +89,7 @@ localparam SH_W = ((O_W/I_W)+|(O_W % I_W))*I_W;
 localparam STEP = O_W % I_W;
 
 reg [O_W*UNIT_W-1:0] idata_packed;
-reg [SH_W*UNIT_W-1:0] idata_d = 'h0;
+reg [I_W*UNIT_W-1:0] idata_d = 'h0;
 reg ivalid_d  = 'h0;
 reg [SH_W*UNIT_W-1:0] idata_dd = 'h0;
 reg [SH_W-1:0] in_use = 'b0;
@@ -105,9 +117,20 @@ generate
   end
 endgenerate
 
-assign idata_dd_nx = {idata_d,idata_dd[SH_W*UNIT_W-1:I_W*UNIT_W]};
-assign in_use_nx = {{I_W{ivalid_d}},in_use[SH_W-1:I_W]};
+assign idata_dd_nx = ALIGN_TO_MSB ?
+                     {idata_dd,idata_d} :
+                     {idata_d,idata_dd[SH_W*UNIT_W-1:I_W*UNIT_W]};
+assign in_use_nx = ALIGN_TO_MSB ?
+                     {in_use,{I_W{ivalid_d}}} :
+                     {{I_W{ivalid_d}},in_use[SH_W-1:I_W]};
 
+// Keep track of accumulated elements, 
+// at every output valid, the number of elements that are left in the
+// storage is changing if O_W is not integer multiple of I_W,
+// these are packed together with future data.
+// If the number of accumulated elements from previous operation together
+// with the current input word form an output word a valid data can be
+// generated. 
 always @(posedge clk) begin
   if (reset) begin
     in_use <= 'h0;
@@ -123,6 +146,17 @@ always @(posedge clk) begin
 end
 
 integer i;
+generate
+
+// Location of the output data in the storage differs from operation to
+// operation and is tracked by the in_use register. 
+// Depending on the ALIGN_TO_MSB parameter either (1) the left most bits will be
+// output or (0) the right most ones.
+// out_mask represents the bits that are currently outputted, these get
+// removed from the in_use register for the next operation 
+
+if (ALIGN_TO_MSB == 0) begin  // Data aligned to LSB
+
 always @(*) begin
   out_mask = 'b0;
   idata_packed = 'bx;
@@ -142,6 +176,31 @@ always @(*) begin
 end
 
 assign pack_wr = ivalid_d & |in_use_nx[SH_W-O_W:0];
+
+end else begin  // Data aligned to MSB
+
+always @(*) begin
+  out_mask = 'b0;
+  idata_packed = 'bx;
+  if (STEP>0) begin
+    for (i = O_W-1 ; i <= SH_W-1; i=i+STEP) begin
+      if (in_use_nx[i]) begin
+        out_mask = {O_W{1'b1}} << (i-O_W+1);
+        idata_packed = idata_dd_nx >> (i-O_W+1)*UNIT_W;
+      end
+    end
+  end else begin
+    if (in_use_nx[SH_W]) begin
+      out_mask = {O_W{1'b1}} << (SH_W-O_W);
+      idata_packed = idata_dd_nx[SH_W*UNIT_W-1:-O_W*UNIT_W];
+    end
+  end
+end
+
+assign pack_wr = ivalid_d & |in_use_nx[SH_W-1:O_W-1];
+
+end
+endgenerate
 
 generate
   if (O_REG) begin : o_reg

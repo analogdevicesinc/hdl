@@ -6,7 +6,8 @@ module ad_pack_tb;
   parameter I_W = 4;   // Width of input channel
   parameter O_W = 6;   // Width of output channel
   parameter UNIT_W = 8;
-  parameter VECT_W = 1024*8;  // Multiple of 8
+  parameter VECT_W = 256*UNIT_W*O_W;  // Multiple of output width
+  parameter ALIGN_TO_MSB = 0;
 
   `include "tb_base.v"
 
@@ -22,7 +23,8 @@ module ad_pack_tb;
   ad_pack #(
     .I_W(I_W),
     .O_W(O_W),
-    .UNIT_W(UNIT_W)
+    .UNIT_W(UNIT_W),
+    .ALIGN_TO_MSB(ALIGN_TO_MSB)
   ) DUT (
     .clk(clk),
     .reset(reset),
@@ -63,6 +65,38 @@ module ad_pack_tb;
   end
   endtask
 
+  task test_msb();
+  begin
+    @(posedge clk);
+    i = VECT_W/(I_W*UNIT_W)-1;
+    j = VECT_W/(O_W*UNIT_W)-1;
+    while (i >= 0) begin
+      @(posedge clk);
+      if ($urandom % 2 == 0) begin
+        idata <= input_vector[i*(I_W*UNIT_W) +: (I_W*UNIT_W)];
+        ivalid <= 1'b1;
+        i = i - 1;
+      end else begin
+        idata <= 'bx;
+        ivalid <= 1'b0;
+      end
+    end
+    @(posedge clk);
+    idata <= 'bx;
+    ivalid <= 1'b0;
+
+    // Check output vector
+    repeat (20) @(posedge clk);
+    for (i=0; i<(VECT_W/(O_W*UNIT_W))*(O_W*UNIT_W)/8; i=i+1) begin
+      if (input_vector[i*8+:8] !== output_vector[i*8+:8]) begin
+        failed <= 1'b1;
+        $display("i=%d Expected=%x Found=%x",i,input_vector[i*8+:8],output_vector[i*8+:8]);
+      end
+    end
+  end
+  endtask
+
+
   initial begin
 
     @(negedge reset);
@@ -72,7 +106,10 @@ module ad_pack_tb;
       input_vector[i*8+:8] = i[7:0];
     end
 
-    test();
+    if (ALIGN_TO_MSB)
+      test_msb();
+    else
+      test();
 
     do_trigger_reset();
     @(negedge reset);
@@ -82,15 +119,24 @@ module ad_pack_tb;
       input_vector[i*8+:8] = $urandom;
     end
 
-    test();
+    if (ALIGN_TO_MSB)
+      test_msb();
+    else
+      test();
 
   end
 
   always @(posedge clk) begin
     if (ovalid) begin
-      if (j < VECT_W/(O_W*UNIT_W)) begin
-        output_vector[j*(O_W*UNIT_W) +: (O_W*UNIT_W)] = odata;
-        j = j + 1;
+      output_vector[j*(O_W*UNIT_W) +: (O_W*UNIT_W)] = odata;
+      if (ALIGN_TO_MSB) begin
+        if (j > 0) begin
+          j = j - 1;
+        end
+      end else begin
+        if (j < VECT_W/(O_W*UNIT_W)) begin
+          j = j + 1;
+        end
       end
     end
   end
