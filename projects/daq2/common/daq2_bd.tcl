@@ -149,7 +149,7 @@ ad_connect  util_daq2_xcvr/tx_out_clk_0 axi_ad9144_tpl/link_clk
 ad_connect  axi_ad9144_jesd/tx_data axi_ad9144_tpl/link
 ad_connect  util_daq2_xcvr/tx_out_clk_0 axi_ad9144_upack/clk
 ad_connect  axi_ad9144_jesd_rstgen/peripheral_reset axi_ad9144_upack/reset
-
+ad_connect  axi_ad9144_tpl/dac_dunf axi_ad9144_upack/fifo_rd_underflow
 
 ad_connect  axi_ad9144_tpl/dac_valid_0 axi_ad9144_upack/fifo_rd_en
 for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
