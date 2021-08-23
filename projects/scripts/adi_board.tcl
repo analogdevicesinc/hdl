@@ -368,7 +368,7 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}
 
   set use_2x_clk 0
   if {$link_clk == {}} {
-    # For 204C modes on GTH a 2x clock is required to drive the PCS 
+    # For 204C modes on GTH a 2x clock is required to drive the PCS
     # In such case set the xcvr out clock to be the double of the lane rate/66(40)
     # and use the secondary div2 clock output for the link clock
     if {$link_mode == 2 && ($xcvr_type == 5 || $xcvr_type == 8)} {
@@ -762,35 +762,24 @@ proc ad_cpu_interconnect {p_address p_name} {
   }
 
   if {$sys_cpu_interconnect_index == 0} {
-    ad_ip_instance axi_interconnect axi_cpu_interconnect
+    ad_ip_instance smartconnect axi_cpu_interconnect [ list \
+      NUM_MI 1 \
+      NUM_SI 1 \
+    ]
+    ad_connect sys_cpu_clk axi_cpu_interconnect/aclk
+    ad_connect sys_cpu_resetn axi_cpu_interconnect/aresetn
     if {$sys_zynq == 2} {
       ad_connect sys_cpu_clk sys_ps8/maxihpm0_lpd_aclk
-      ad_connect sys_cpu_clk axi_cpu_interconnect/ACLK
-      ad_connect sys_cpu_clk axi_cpu_interconnect/S00_ACLK
-      ad_connect sys_cpu_resetn axi_cpu_interconnect/ARESETN
-      ad_connect sys_cpu_resetn axi_cpu_interconnect/S00_ARESETN
       ad_connect axi_cpu_interconnect/S00_AXI sys_ps8/M_AXI_HPM0_LPD
     }
     if {$sys_zynq == 1} {
       ad_connect sys_cpu_clk sys_ps7/M_AXI_GP0_ACLK
-      ad_connect sys_cpu_clk axi_cpu_interconnect/ACLK
-      ad_connect sys_cpu_clk axi_cpu_interconnect/S00_ACLK
-      ad_connect sys_cpu_resetn axi_cpu_interconnect/ARESETN
-      ad_connect sys_cpu_resetn axi_cpu_interconnect/S00_ARESETN
       ad_connect axi_cpu_interconnect/S00_AXI sys_ps7/M_AXI_GP0
     }
     if {$sys_zynq == 0} {
-      ad_connect sys_cpu_clk axi_cpu_interconnect/ACLK
-      ad_connect sys_cpu_clk axi_cpu_interconnect/S00_ACLK
-      ad_connect sys_cpu_resetn axi_cpu_interconnect/ARESETN
-      ad_connect sys_cpu_resetn axi_cpu_interconnect/S00_ARESETN
       ad_connect axi_cpu_interconnect/S00_AXI sys_mb/M_AXI_DP
     }
     if {$sys_zynq == -1} {
-      ad_connect sys_cpu_clk axi_cpu_interconnect/ACLK
-      ad_connect sys_cpu_clk axi_cpu_interconnect/S00_ACLK
-      ad_connect sys_cpu_resetn axi_cpu_interconnect/ARESETN
-      ad_connect sys_cpu_resetn axi_cpu_interconnect/S00_ARESETN
       ad_connect axi_cpu_interconnect/S00_AXI mng_axi_vip/M_AXI
     }
   }
@@ -892,11 +881,9 @@ proc ad_cpu_interconnect {p_address p_name} {
 
   set_property CONFIG.NUM_MI $sys_cpu_interconnect_index [get_bd_cells axi_cpu_interconnect]
 
-  ad_connect sys_cpu_clk axi_cpu_interconnect/${i_str}_ACLK
   if {$p_intf_clock ne ""} {
     ad_connect sys_cpu_clk ${p_intf_clock}
   }
-  ad_connect sys_cpu_resetn axi_cpu_interconnect/${i_str}_ARESETN
   if {$p_intf_reset ne ""} {
     ad_connect sys_cpu_resetn ${p_intf_reset}
   }
