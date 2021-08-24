@@ -329,17 +329,7 @@ proc adi_ip_properties_lite {ip_name} {
   set_property vendor_display_name {Analog Devices} [ipx::current_core]
   set_property company_url {http://www.analog.com} [ipx::current_core]
 
-  set i_families ""
-  foreach i_part [get_parts] {
-    lappend i_families [get_property FAMILY $i_part]
-  }
-  set i_families [lsort -unique $i_families]
-  set s_families [get_property supported_families [ipx::current_core]]
-  foreach i_family $i_families {
-    set s_families "$s_families $i_family Production"
-    set s_families "$s_families $i_family Beta"
-  }
-  set_property supported_families $s_families [ipx::current_core]
+  set_property AUTO_FAMILY_SUPPORT_LEVEL level_2 [ipx::current_core]
 
   ipx::save_core [ipx::current_core]
 
