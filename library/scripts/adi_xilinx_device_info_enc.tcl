@@ -61,14 +61,18 @@ set fpga_technology_list { \
         { Unknown     0 } \
         { 7series     1 } \
         { ultrascale  2 } \
-        { ultrascale+ 3 }}
+        { ultrascale+ 3 } \
+        { versal      4 }}
 
 set fpga_family_list { \
-        { Unknown 0 } \
-        { artix   1 } \
-        { kintex  2 } \
-        { virtex  3 } \
-        { zynq    4 }}
+        { Unknown      0 } \
+        { artix        1 } \
+        { kintex       2 } \
+        { virtex       3 } \
+        { zynq         4 } \
+        { versalprime  5 } \
+        { versalaicore 6 } \
+      }
 
 set speed_grade_list { \
         { Unknown 0  } \
@@ -80,6 +84,7 @@ set speed_grade_list { \
         { -2      20 } \
         { -2L     21 } \
         { -2LV    22 } \
+        { -2MP    23 } \
         { -3      30 }}
 
 set dev_package_list { \
@@ -102,7 +107,8 @@ set dev_package_list { \
         { ba      16 } \
         { fa      17 } \
         { fs      18 } \
-        { fi      19 }}
+        { fi      19 } \
+        { vs      20 }}
 
 
 set xcvr_type_list { \
@@ -136,10 +142,11 @@ proc adi_device_spec {cellpath param} {
   switch -regexp -- $param {
       FPGA_TECHNOLOGY {
           switch  -regexp -- $part {
-             ^xc7    {set series_name 7series}
-             ^xczu   {set series_name ultrascale+}
-             ^xc.u.p {set series_name ultrascale+}
-             ^xc.u   {set series_name ultrascale }
+             ^xc7          {set series_name 7series}
+             ^xczu         {set series_name ultrascale+}
+             ^xc.u.p       {set series_name ultrascale+}
+             ^xc.u         {set series_name ultrascale }
+             ^xcv[ecmph]   {set series_name versal}
              default {
                  puts "Undefined fpga technology for \"$part\"!"
                  exit -1
