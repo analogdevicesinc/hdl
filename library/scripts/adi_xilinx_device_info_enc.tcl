@@ -120,7 +120,9 @@ set xcvr_type_list { \
         { GTRE4_NOT_SUPPORTED 7 } \
         { GTHE4               8 } \
         { GTYE4               9 } \
-        { GTME4_NOT_SUPPORTED 10}}
+        { GTME4_NOT_SUPPORTED 10} \
+        { GTYE5               11} \
+      }
 
 set fpga_voltage_list {0 5000} ;# 0 to 5000mV
 
