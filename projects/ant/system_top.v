@@ -45,7 +45,7 @@ module system_top (
   inout           ddr_cke,
   inout           ddr_cs_n,
   inout   [ 1:0]  ddr_dm,
-  inout   [15:0]  ddr_dq,
+  inout   [31:0]  ddr_dq,
   inout   [ 1:0]  ddr_dqs_n,
   inout   [ 1:0]  ddr_dqs_p,
   inout           ddr_odt,
