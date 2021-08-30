@@ -19,10 +19,10 @@ current_bd_instance /spi_ad40xx
   create_bd_intf_pin -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 m_spi
   create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:axis_rtl:1.0 M_AXIS_SAMPLE
 
-  if {$adc_resolution <= 32} {
-    set data_width 32
+  if {$ADC_RESOLUTION <= 16} {
+    set data_width 16
   } else {
-    set data_width 64
+    set data_width 32
   };
 
   ad_ip_instance spi_engine_execution execution
@@ -48,7 +48,7 @@ current_bd_instance /spi_ad40xx
 
   ## to setup the sample rate of the system change the PULSE_PERIOD value
   ## the acutal sample rate will be PULSE_PERIOD * (1/sys_cpu_clk)
-  set sampling_cycle [expr int(ceil(double($spi_clk_ref_frequency * 1000000) / $adc_sampling_rate))]
+  set sampling_cycle [expr int(ceil(double($spi_clk_ref_frequency * 1000000) / $ADC_SAMPLING_RATE))]
   ad_ip_parameter trigger_gen CONFIG.PULSE_PERIOD $sampling_cycle
   ad_ip_parameter trigger_gen CONFIG.PULSE_WIDTH 1
 
