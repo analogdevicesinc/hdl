@@ -110,7 +110,15 @@ proc adi_project {project_name {mode 0} {parameter_list {}} } {
     set device "xczu9eg-ffvb1156-2-e"
     set board [lindex [lsearch -all -inline [get_board_parts] *zcu102*] end]
   }
-
+  if [regexp "_vmk180_es1$" $project_name] {
+    enable_beta_device xcvm*
+    set device "xcvm1802-vsva2197-2MP-e-S-es1"
+    set board [lindex [lsearch -all -inline [get_board_parts] *vmk180_es*] end]
+  }
+  if [regexp "_vmk180$" $project_name] {
+    set device "xcvm1802-vsva2197-2MP-e-S"
+    set board [lindex [lsearch -all -inline [get_board_parts] *vmk180*] end]
+  }
   adi_project_create $project_name $mode $parameter_list $device $board
 }
 
@@ -147,6 +155,8 @@ proc adi_project_create {project_name mode parameter_list device {board "not-app
     set sys_zynq 1
   } elseif [regexp "^xczu" $p_device]  {
     set sys_zynq 2
+  } elseif [regexp "^xcv\[ecmph\]" $p_device]  {
+    set sys_zynq 3
   } else {
     set sys_zynq 0
   }
