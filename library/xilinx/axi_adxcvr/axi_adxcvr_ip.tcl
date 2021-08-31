@@ -90,6 +90,10 @@ for {set n 0} {$n < 16} {incr n} {
 
 }
 
+ipx::infer_bus_interface up_pll_rst xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+ipx::add_bus_parameter POLARITY [ipx::get_bus_interfaces up_pll_rst -of_objects [ipx::current_core]]
+set_property VALUE ACTIVE_HIGH [ipx::get_bus_parameters POLARITY -of [ipx::get_bus_interfaces up_pll_rst]]
+
 ipx::infer_bus_interface s_axi_aclk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 ipx::infer_bus_interface s_axi_aresetn xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
 
