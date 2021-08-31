@@ -169,6 +169,11 @@ add_interface_port dac_2_ch_1 dac_2_data_q0 data Input 16
 
 ad_interface signal dac_2_dunf input 1 unf
 
+set_interface_property dac_2_ch_0 associatedClock if_dac_2_clk
+set_interface_property dac_2_ch_1 associatedClock if_dac_2_clk
+set_interface_property dac_2_ch_0 associatedReset dac_2_rst
+set_interface_property dac_2_ch_1 associatedReset dac_2_rst
+
 add_interface tdd_if conduit end
 add_interface_port tdd_if gpio_rx1_enable_in rx1_enable_in Input 1
 add_interface_port tdd_if gpio_rx2_enable_in rx2_enable_in Input 1
