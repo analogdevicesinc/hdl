@@ -204,6 +204,29 @@ ipx::infer_bus_interface up_tx_rst_12 xilinx.com:signal:reset_rtl:1.0 [ipx::curr
 ipx::infer_bus_interface up_tx_rst_13 xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
 ipx::infer_bus_interface up_tx_rst_14 xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
 ipx::infer_bus_interface up_tx_rst_15 xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+
+ipx::infer_bus_interface up_cpll_rst_0 xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface up_cpll_rst_1 xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface up_cpll_rst_2 xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface up_cpll_rst_3 xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface up_cpll_rst_4 xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface up_cpll_rst_5 xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface up_cpll_rst_6 xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface up_cpll_rst_7 xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface up_cpll_rst_8 xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface up_cpll_rst_9 xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface up_cpll_rst_10 xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface up_cpll_rst_11 xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface up_cpll_rst_12 xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface up_cpll_rst_13 xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface up_cpll_rst_14 xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface up_cpll_rst_15 xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+
+ipx::infer_bus_interface up_qpll_rst_0 xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface up_qpll_rst_4 xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface up_qpll_rst_8 xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface up_qpll_rst_12 xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+
 set_property driver_value 0 [ipx::get_ports -filter "direction==in" -of_objects [ipx::current_core]]
 
 for {set n 0} {$n < 16} {incr n} {
