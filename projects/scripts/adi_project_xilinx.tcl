@@ -112,6 +112,9 @@ proc adi_project {project_name {mode 0} {parameter_list {}} } {
   }
   if [regexp "_vmk180_es1$" $project_name] {
     enable_beta_device xcvm*
+    xhub::refresh_catalog [xhub::get_xstores xilinx_board_store]
+    xhub::install [xhub::get_xitems xilinx.com:xilinx_board_store:vmk180_es:*] -quiet
+    set_param board.repoPaths [get_property LOCAL_ROOT_DIR [xhub::get_xstores xilinx_board_store]]
     set device "xcvm1802-vsva2197-2MP-e-S-es1"
     set board [lindex [lsearch -all -inline [get_board_parts] *vmk180_es*] end]
   }
@@ -309,6 +312,8 @@ proc adi_project_run {project_name} {
   set_property STEPS.POWER_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]
   set_property STEPS.POST_PLACE_POWER_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]
   }
+
+  set_param board.repoPaths [get_property LOCAL_ROOT_DIR [xhub::get_xstores xilinx_board_store]]
 
   launch_runs impl_1 -to_step write_bitstream
   wait_on_run impl_1
