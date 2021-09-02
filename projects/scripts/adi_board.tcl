@@ -493,10 +493,12 @@ proc ad_mem_hp0_interconnect {p_clk p_name} {
 
   global sys_zynq
 
-  if {($sys_zynq <= 0) && ($p_name eq "sys_ps7/S_AXI_HP0")} {return}
+  if {($sys_zynq != 1 && $sys_zynq != 2) && ($p_name eq "sys_ps7/S_AXI_HP0")} {return}
   if {$sys_zynq == -1} {ad_mem_hpx_interconnect "SIM" $p_clk $p_name}
   if {$sys_zynq == 0} {ad_mem_hpx_interconnect "MEM" $p_clk $p_name}
-  if {$sys_zynq >= 1} {ad_mem_hpx_interconnect "HP0" $p_clk $p_name}
+  if {$sys_zynq == 1} {ad_mem_hpx_interconnect "HP0" $p_clk $p_name}
+  if {$sys_zynq == 2} {ad_mem_hpx_interconnect "HP0" $p_clk $p_name}
+  if {$sys_zynq == 3} {ad_mem_hpx_interconnect "NOC" $p_clk $p_name}
 }
 
 ## Create an memory mapped interface connection to a MIG or PS7/8 IP, using a
@@ -509,10 +511,12 @@ proc ad_mem_hp1_interconnect {p_clk p_name} {
 
   global sys_zynq
 
-  if {($sys_zynq <= 0) && ($p_name eq "sys_ps7/S_AXI_HP1")} {return}
+  if {($sys_zynq != 1 && $sys_zynq != 2) && ($p_name eq "sys_ps7/S_AXI_HP1")} {return}
   if {$sys_zynq == -1} {ad_mem_hpx_interconnect "SIM" $p_clk $p_name}
   if {$sys_zynq == 0} {ad_mem_hpx_interconnect "MEM" $p_clk $p_name}
-  if {$sys_zynq >= 1} {ad_mem_hpx_interconnect "HP1" $p_clk $p_name}
+  if {$sys_zynq == 1} {ad_mem_hpx_interconnect "HP1" $p_clk $p_name}
+  if {$sys_zynq == 2} {ad_mem_hpx_interconnect "HP1" $p_clk $p_name}
+  if {$sys_zynq == 3} {ad_mem_hpx_interconnect "NOC" $p_clk $p_name}
 }
 
 ## Create an memory mapped interface connection to a MIG or PS7/8 IP, using a
@@ -525,10 +529,12 @@ proc ad_mem_hp2_interconnect {p_clk p_name} {
 
   global sys_zynq
 
-  if {($sys_zynq <= 0) && ($p_name eq "sys_ps7/S_AXI_HP2")} {return}
+  if {($sys_zynq != 1 && $sys_zynq != 2) && ($p_name eq "sys_ps7/S_AXI_HP2")} {return}
   if {$sys_zynq == -1} {ad_mem_hpx_interconnect "SIM" $p_clk $p_name}
   if {$sys_zynq == 0} {ad_mem_hpx_interconnect "MEM" $p_clk $p_name}
-  if {$sys_zynq >= 1} {ad_mem_hpx_interconnect "HP2" $p_clk $p_name}
+  if {$sys_zynq == 1} {ad_mem_hpx_interconnect "HP2" $p_clk $p_name}
+  if {$sys_zynq == 2} {ad_mem_hpx_interconnect "HP2" $p_clk $p_name}
+  if {$sys_zynq == 3} {ad_mem_hpx_interconnect "NOC" $p_clk $p_name}
 }
 
 ## Create an memory mapped interface connection to a MIG or PS7/8 IP, using a
@@ -541,10 +547,12 @@ proc ad_mem_hp3_interconnect {p_clk p_name} {
 
   global sys_zynq
 
-  if {($sys_zynq <= 0) && ($p_name eq "sys_ps7/S_AXI_HP3")} {return}
+  if {($sys_zynq != 1 && $sys_zynq != 2) && ($p_name eq "sys_ps7/S_AXI_HP3")} {return}
   if {$sys_zynq == -1} {ad_mem_hpx_interconnect "SIM" $p_clk $p_name}
   if {$sys_zynq == 0} {ad_mem_hpx_interconnect "MEM" $p_clk $p_name}
-  if {$sys_zynq >= 1} {ad_mem_hpx_interconnect "HP3" $p_clk $p_name}
+  if {$sys_zynq == 1} {ad_mem_hpx_interconnect "HP3" $p_clk $p_name}
+  if {$sys_zynq == 2} {ad_mem_hpx_interconnect "HP3" $p_clk $p_name}
+  if {$sys_zynq == 3} {ad_mem_hpx_interconnect "NOC" $p_clk $p_name}
 }
 
 ## Create an memory mapped interface connection to a MIG or PS7/8 IP, proc is
@@ -676,6 +684,13 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     set m_addr_seg [get_bd_addr_segs sys_ps8/SAXIGP5/HP3_DDR_*]
   }
 
+  if {$p_sel eq "NOC"} {
+    set m_interconnect_index [get_property CONFIG.NUM_SI [get_bd_cells axi_noc_0]]
+    set m_interconnect_cell [get_bd_cells axi_noc_0]
+    set m_addr_seg [get_bd_addr_segs  axi_noc_0/S[format "%02s" [expr $m_interconnect_index +1]]_AXI/C0_DDR_LOW0]
+    set sys_mem_clk_index [expr [get_property CONFIG.NUM_CLKS [get_bd_cells axi_noc_0]]-1]
+  }
+
   set i_str "S$m_interconnect_index"
   if {$m_interconnect_index < 10} {
     set i_str "S0$m_interconnect_index"
@@ -710,14 +725,28 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
   } else {
 
     set_property CONFIG.NUM_SI $m_interconnect_index $m_interconnect_cell
-    if {[lsearch [get_bd_nets -of_object [get_bd_pins $m_interconnect_cell/ACLK*]] [get_bd_nets $p_clk]] == -1 } {
+    set clk_index [lsearch [get_bd_nets -of_object [get_bd_pins $m_interconnect_cell/ACLK*]] [get_bd_nets $p_clk]]
+    if { $clk_index == -1 } {
         incr sys_mem_clk_index
         set_property CONFIG.NUM_CLKS [expr $sys_mem_clk_index +1] $m_interconnect_cell
         ad_connect $p_clk $m_interconnect_cell/ACLK$sys_mem_clk_index
+        set asocc_clk_pin  $m_interconnect_cell/ACLK$sys_mem_clk_index
+    } else {
+      set asocc_clk_pin [lindex [get_bd_pins $m_interconnect_cell/ACLK*] $clk_index]
     }
     ad_connect $m_interconnect_cell/${i_str}_AXI $p_name_int
     if {$p_intf_clock ne ""} {
       ad_connect $p_clk $p_intf_clock
+    }
+
+    if {$p_sel eq "NOC"} {
+      set_property -dict [list CONFIG.CONNECTIONS {MC_0 { read_bw {1720} write_bw {1720} read_avg_burst {4} write_avg_burst {4}} }] [get_bd_intf_pins /axi_noc_0/${i_str}_AXI]
+      # Add the new bus as associated to the clock pin, append new if other exists
+      set clk_asoc_port [get_property CONFIG.ASSOCIATED_BUSIF [get_bd_pins $asocc_clk_pin]]
+      if {$clk_asoc_port != {}} {
+       set clk_asoc_port ${clk_asoc_port}:
+      }
+      set_property -dict [list CONFIG.ASSOCIATED_BUSIF ${clk_asoc_port}${i_str}_AXI] [get_bd_pins $asocc_clk_pin]
     }
 
     set mem_mapped ""
@@ -768,6 +797,10 @@ proc ad_cpu_interconnect {p_address p_name} {
     ]
     ad_connect sys_cpu_clk axi_cpu_interconnect/aclk
     ad_connect sys_cpu_resetn axi_cpu_interconnect/aresetn
+    if {$sys_zynq == 3} {
+      ad_connect sys_cpu_clk sys_cips/m_axi_fpd_aclk
+      ad_connect axi_cpu_interconnect/S00_AXI sys_cips/M_AXI_FPD
+    }
     if {$sys_zynq == 2} {
       ad_connect sys_cpu_clk sys_ps8/maxihpm0_lpd_aclk
       ad_connect axi_cpu_interconnect/S00_AXI sys_ps8/M_AXI_HPM0_LPD
@@ -784,6 +817,9 @@ proc ad_cpu_interconnect {p_address p_name} {
     }
   }
 
+  if {$sys_zynq == 3} {
+    set sys_addr_cntrl_space [get_bd_addr_spaces /sys_cips/M_AXI_FPD]
+  }
   if {$sys_zynq == 2} {
     set sys_addr_cntrl_space [get_bd_addr_spaces sys_ps8/Data]
   }
@@ -897,6 +933,18 @@ proc ad_cpu_interconnect {p_address p_name} {
       if {$p_seg_range < 0x1000} {
         set p_seg_range 0x1000
       }
+      if {$sys_zynq == 3} {
+        if {($p_address >= 0x44000000) && ($p_address <= 0x4fffffff)} {
+          # place axi peripherics in A400_0000-AFFF_FFFF range
+          set p_address [expr ($p_address + 0x60000000)]
+        } elseif {($p_address >= 0x70000000) && ($p_address <= 0x7fffffff)} {
+          # place axi peripherics in B000_0000-BFFF_FFFF range
+          set p_address [expr ($p_address + 0x40000000)]
+        } else {
+          error "ERROR: ad_cpu_interconnect : Cannot map ($p_address) to aperture, \
+                Addess out of range 0x4400_0000 - 0X4FFF_FFFF; 0x7000_0000 - 0X7FFF_FFFF !"
+        }
+      }
       if {$sys_zynq == 2} {
         if {($p_address >= 0x40000000) && ($p_address <= 0x4fffffff)} {
           set p_address [expr ($p_address + 0x40000000)]
@@ -930,6 +978,13 @@ proc ad_cpu_interrupt {p_ps_index p_mb_index p_name} {
 
   set p_index [regsub -all {[^0-9]} $p_index_int ""]
   set m_index [expr ($p_index - 8)]
+
+  if {$sys_zynq == 3} {
+   if {$p_index < 0 || $p_index > 15} {
+      error "ERROR: ad_cpu_interrupt : Interrupt index ($p_index) out of range 0-15 "
+    }
+    ad_connect $p_name sys_cips/pl_ps_irq$p_index
+  }
 
   if {($sys_zynq == 2) && ($p_index <= 7)} {
     set p_net [get_bd_nets -of_objects [get_bd_pins sys_concat_intc_0/In$p_index]]
