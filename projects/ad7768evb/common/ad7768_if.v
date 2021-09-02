@@ -138,6 +138,7 @@ module ad7768_if (
   reg     [  8:0]   adc_cnt_p = 'd0;
   reg               adc_valid_p = 'd0;
   reg     [255:0]   adc_data_p = 'd0;
+  reg     [255:0]   adc_data_p2 = 'd0;
   reg     [  7:0]   adc_data_d1 = 'd0;
   reg     [  7:0]   adc_data_d2 = 'd0;
   reg               adc_ready_d1 = 'd0;
@@ -155,6 +156,7 @@ module ad7768_if (
   reg     [ 35:0]   adc_status_clr = 'd0;
   reg     [ 35:0]   adc_status_clr_d = 'd0;
   reg               adc_valid_d = 'd0;
+  reg               sync_ss = 1'h0;
 
   // internal signals
 
@@ -270,7 +272,17 @@ module ad7768_if (
   always @(posedge adc_clk) begin
     adc_valid_d <= adc_valid;
   end
-  assign adc_sync = adc_valid & ~adc_valid_d;
+
+  assign adc_sync = adc_valid & ~adc_valid_d & sync_ss;
+
+  always @(posedge adc_clk) begin
+    if (adc_ready_in_s) begin
+      sync_ss <= 1'h1;
+    end else if (adc_sync) begin
+      sync_ss <= 1'h0;
+    end
+  end
+
 
   always @(posedge adc_clk) begin
     adc_valid <= adc_valid_int & adc_enable_int;
@@ -357,7 +369,7 @@ module ad7768_if (
     adc_valid_int <= adc_valid_8;
     adc_data_int <= adc_data_8;
     adc_seq_int <= adc_seq_8[23:21];
-    adc_enable_int <= adc_enable_8[7] & adc_valid_8;
+    adc_enable_int <= adc_valid_8;
     adc_crc_scnt_int <= adc_crc_scnt_8;
   end
 
@@ -469,13 +481,24 @@ module ad7768_if (
 
   always @(posedge adc_clk) begin
     adc_ch_valid_0 <= adc_ch_valid_d[0];
-    adc_ch_valid_1 <= adc_ch_valid_d[1] & ~adc_format[1];
-    adc_ch_valid_2 <= adc_ch_valid_d[2] & ~adc_format[1] & ~adc_format[0];
-    adc_ch_valid_3 <= adc_ch_valid_d[3] & ~adc_format[1] & ~adc_format[0];
-    adc_ch_valid_4 <= adc_ch_valid_d[4] & ~adc_format[1] & ~adc_format[0];
-    adc_ch_valid_5 <= adc_ch_valid_d[5] & ~adc_format[1] & ~adc_format[0];
-    adc_ch_valid_6 <= adc_ch_valid_d[6] & ~adc_format[1] & ~adc_format[0];
-    adc_ch_valid_7 <= adc_ch_valid_d[7] & ~adc_format[1] & ~adc_format[0];
+    adc_ch_valid_1 <= adc_ch_valid_d[1];
+    adc_ch_valid_2 <= adc_ch_valid_d[2];
+    adc_ch_valid_3 <= adc_ch_valid_d[3];
+    adc_ch_valid_4 <= adc_ch_valid_d[4];
+    adc_ch_valid_5 <= adc_ch_valid_d[5];
+    adc_ch_valid_6 <= adc_ch_valid_d[6];
+    adc_ch_valid_7 <= adc_ch_valid_d[7];
+
+//    adc_ch_valid_1 <= adc_ch_valid_d[1] & ~adc_format[1];
+//    adc_ch_valid_2 <= adc_ch_valid_d[2] & ~adc_format[1] & ~adc_format[0];
+//    adc_ch_valid_3 <= adc_ch_valid_d[3] & ~adc_format[1] & ~adc_format[0];
+//    adc_ch_valid_4 <= adc_ch_valid_d[4] & ~adc_format[1] & ~adc_format[0];
+//    adc_ch_valid_5 <= adc_ch_valid_d[5] & ~adc_format[1] & ~adc_format[0];
+//    adc_ch_valid_6 <= adc_ch_valid_d[6] & ~adc_format[1] & ~adc_format[0];
+//    adc_ch_valid_7 <= adc_ch_valid_d[7] & ~adc_format[1] & ~adc_format[0];
+
+
+
     adc_ch_data_0 <= adc_ch_data_d0[((32*0)+31):(32*0)];
     adc_ch_data_1 <= adc_ch_data_d1[((32*1)+31):(32*1)];
     adc_ch_data_2 <= adc_ch_data_d2[((32*2)+31):(32*2)];
@@ -511,26 +534,28 @@ module ad7768_if (
     end else if (adc_cnt_enable_s == 1'b1) begin
       adc_cnt_p <= adc_cnt_p + 1'b1;
     end
-    if (adc_cnt_p[4:0] == 5'h1f) begin
+    if (adc_cnt_p[6:0] == 6'h7f) begin
+//    if (adc_cnt_p[4:0] == 5'h1f) begin
       adc_valid_p <= 1'b1;
     end else begin
       adc_valid_p <= 1'b0;
     end
   end
 
+
   // data (individual lanes)
 
-  genvar n;
+genvar n;
   generate
   for (n = 0; n < 8; n = n + 1) begin: g_data
 
-  always @(posedge adc_clk) begin
-    if (adc_cnt_p[4:0] == 5'h00) begin
-      adc_data_p[((32*n)+31):(32*n)] <= {31'd0, adc_data_d2[n]};
-    end else begin
-      adc_data_p[((32*n)+31):(32*n)] <= {adc_data_p[((32*n)+30):(32*n)], adc_data_d2[n]};
-    end
-  end
+//  always @(posedge adc_clk) begin
+//    if (adc_cnt_p[4:0] == 5'h00) begin
+//      adc_data_p[((32*n)+31):(32*n)] <= {31'd0, adc_data_d2[n]};
+//    end else begin
+//      adc_data_p[((32*n)+31):(32*n)] <= {adc_data_p[((32*n)+30):(32*n)], adc_data_d2[n]};
+//    end
+//  end
 
   always @(posedge adc_clk) begin
     adc_data_d1[n] <= adc_data_in_s[n];
@@ -539,6 +564,21 @@ module ad7768_if (
 
   assign adc_data_in_s[n] = data_in[n];
 
+  end
+  endgenerate
+
+
+  genvar m;
+  generate
+  for (m = 0; m < 2; m = m + 1) begin: g_data1
+    always @(posedge adc_clk) begin
+      if (adc_cnt_p[4:0] == 5'h00) begin
+//        adc_data_p[ 255 : 64 ] <= {adc_data_p [ 191 : 0 ]};
+        adc_data_p[ 255 : 64 ] <= {adc_data_p [ 191 : 2 ], adc_data_d2[1], adc_data_d2[0]};
+      end else begin
+        adc_data_p[ ((32*m)+31) : (32*m) ] <= {adc_data_p[ ((32*m)+30) : (32*m) ], adc_data_d2[m]};
+      end
+    end
   end
   endgenerate
 

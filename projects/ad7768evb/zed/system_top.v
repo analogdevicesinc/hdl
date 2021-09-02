@@ -139,7 +139,8 @@ module system_top (
 
   assign mclk = 1'b0;
   assign up_sshot = gpio_o[36];
-  assign up_format = gpio_o[35:34];
+  assign up_format = 'h1;
+//  assign up_format = gpio_o[35:34];
   assign up_crc_enable = gpio_o[33];
   assign up_crc_4_or_16_n = gpio_o[32];
 
