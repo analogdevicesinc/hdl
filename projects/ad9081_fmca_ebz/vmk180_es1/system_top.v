@@ -99,9 +99,9 @@ module system_top  #(
 
   // internal signals
 
-  wire    [94:0]  gpio_i;
-  wire    [94:0]  gpio_o;
-  wire    [94:0]  gpio_tn;
+  wire    [95:0]  gpio_i;
+  wire    [95:0]  gpio_o;
+  wire    [95:0]  gpio_t;
 /*
   wire    [ 2:0]  spi0_csn;
 
@@ -227,9 +227,15 @@ module system_top  #(
   assign gpio_i[7:0] = gpio_o[7:0];
 */
   system_wrapper i_system_wrapper (
-    .gpio_i (gpio_i),
-    .gpio_o (gpio_o),
-    .gpio_tn (gpio_tn),
+    .gpio0_i (gpio_i[31:0]),
+    .gpio0_o (gpio_o[31:0]),
+    .gpio0_t (gpio_t[31:0]),
+    .gpio1_i (gpio_i[63:32]),
+    .gpio1_o (gpio_o[63:32]),
+    .gpio1_t (gpio_t[63:32]),
+    .gpio2_i (gpio_i[95:64]),
+    .gpio2_o (gpio_o[95:64]),
+    .gpio2_t (gpio_t[95:64]),
     .sys_clk0_0_clk_n (sys_clk_n),
     .sys_clk0_0_clk_p (sys_clk_p),
     .CH0_DDR4_0_0_act_n (ddr4_act_n),

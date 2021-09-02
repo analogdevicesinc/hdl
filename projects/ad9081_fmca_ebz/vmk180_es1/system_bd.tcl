@@ -11,16 +11,16 @@ source $ad_hdl_dir/projects/common/vmk180_es1/vmk180_es1_system_bd.tcl
 #
 #ad_mem_hp0_interconnect $sys_cpu_clk sys_ps8/S_AXI_HP0
 #
-#source $ad_hdl_dir/projects/ad9081_fmca_ebz/common/ad9081_fmca_ebz_bd.tcl
-#source $ad_hdl_dir/projects/scripts/adi_pd.tcl
-#
-##system ID
-#ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
-#ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/mem_init_sys.txt"
-#ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
-#
-#sysid_gen_sys_init_file
-#
+source $ad_hdl_dir/projects/ad9081_fmca_ebz/common/ad9081_fmca_ebz_bd.tcl
+source $ad_hdl_dir/projects/scripts/adi_pd.tcl
+
+#system ID
+ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
+ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/mem_init_sys.txt"
+ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
+
+sysid_gen_sys_init_file
+
 ## Parameters for 15.5Gpbs lane rate
 #
 #ad_ip_parameter util_mxfe_xcvr CONFIG.RX_CLK25_DIV 31
