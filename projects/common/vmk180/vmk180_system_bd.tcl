@@ -12,9 +12,15 @@ create_bd_port -dir O spi1_sclk
 create_bd_port -dir O spi1_mosi
 create_bd_port -dir I spi1_miso
 
-create_bd_port -dir I -from 31 -to 0 gpio_i
-create_bd_port -dir O -from 31 -to 0 gpio_o
-create_bd_port -dir O -from 31 -to 0 gpio_tn
+create_bd_port -dir I -from 31 -to 0 gpio0_i
+create_bd_port -dir O -from 31 -to 0 gpio0_o
+create_bd_port -dir O -from 31 -to 0 gpio0_t
+create_bd_port -dir I -from 31 -to 0 gpio1_i
+create_bd_port -dir O -from 31 -to 0 gpio1_o
+create_bd_port -dir O -from 31 -to 0 gpio1_t
+create_bd_port -dir I -from 31 -to 0 gpio2_i
+create_bd_port -dir O -from 31 -to 0 gpio2_o
+create_bd_port -dir O -from 31 -to 0 gpio2_t
 
 # instance: versal_cips
 create_bd_cell -type ip -vlnv xilinx.com:ip:versal_cips:2.1 sys_cips
@@ -64,7 +70,6 @@ set_property -dict [list \
   CONFIG.PS_WWDT0_CLOCK_IO {APB} \
   CONFIG.PS_USE_M_AXI_GP0 {1} \
   CONFIG.PS_M_AXI_GP0_DATA_WIDTH {32} \
-  CONFIG.PS_USE_IRQ_8 {1} \
 ] [get_bd_cells sys_cips]
 
 # NOC
@@ -94,9 +99,16 @@ set_property -dict [list \
   CONFIG.MC_F1_LPDDR4_MR11 {0x000} \
   CONFIG.MC_F1_LPDDR4_MR13 {0x000} \
   CONFIG.MC_F1_LPDDR4_MR22 {0x000} \
+  CONFIG.sys_clk0_BOARD_INTERFACE {ddr4_dimm1_sma_clk} \
 ] [get_bd_cells axi_noc_0]
 
 set_property CONFIG.FREQ_HZ 200000000 [get_bd_intf_ports /sys_clk0_0]
+
+set_property -dict [list CONFIG.ASSOCIATED_BUSIF {S01_AXI}] [get_bd_pins /axi_noc_0/aclk1]
+set_property -dict [list CONFIG.ASSOCIATED_BUSIF {S02_AXI}] [get_bd_pins /axi_noc_0/aclk2]
+set_property -dict [list CONFIG.ASSOCIATED_BUSIF {S03_AXI}] [get_bd_pins /axi_noc_0/aclk3]
+set_property -dict [list CONFIG.ASSOCIATED_BUSIF {S04_AXI}] [get_bd_pins /axi_noc_0/aclk4]
+set_property -dict [list CONFIG.ASSOCIATED_BUSIF {S05_AXI}] [get_bd_pins /axi_noc_0/aclk5]
 
 # processor system reset instances for all the three system clocks
 
@@ -120,13 +132,34 @@ ad_connect  sys_cpu_resetn sys_rstgen/peripheral_aresetn
 ad_connect  sys_350m_reset sys_350m_rstgen/peripheral_reset
 ad_connect  sys_350m_resetn sys_350m_rstgen/peripheral_aresetn
 
-ad_connect  sys_cpu_clk sys_cips/m_axi_fpd_aclk
-
 # gpio
+ad_ip_instance util_vector_logic gpio_t_inverter [list \
+  C_OPERATION {not} \
+  C_SIZE {32} \
+]
+ad_connect  sys_cips/lpd_gpio_tn  gpio_t_inverter/Op1
 
-ad_connect gpio_i sys_cips/lpd_gpio_i
-ad_connect gpio_o sys_cips/lpd_gpio_o
-ad_connect gpio_tn sys_cips/lpd_gpio_tn
+ad_connect gpio0_i sys_cips/lpd_gpio_i
+ad_connect gpio0_o sys_cips/lpd_gpio_o
+ad_connect gpio0_t gpio_t_inverter/Res
+
+# gpio extension witn 64 IOs
+ad_ip_instance axi_gpio axi_gpio
+ad_ip_parameter axi_gpio CONFIG.C_IS_DUAL 1
+ad_ip_parameter axi_gpio CONFIG.C_GPIO_WIDTH 32
+ad_ip_parameter axi_gpio CONFIG.C_GPIO2_WIDTH 32
+ad_ip_parameter axi_gpio CONFIG.C_INTERRUPT_PRESENT 1
+
+ad_connect gpio1_i axi_gpio/gpio_io_i
+ad_connect gpio1_o axi_gpio/gpio_io_o
+ad_connect gpio1_t axi_gpio/gpio_io_t
+ad_connect gpio2_i axi_gpio/gpio2_io_i
+ad_connect gpio2_o axi_gpio/gpio2_io_o
+ad_connect gpio2_t axi_gpio/gpio2_io_t
+
+ad_cpu_interconnect 0x44000000 axi_gpio
+
+ad_cpu_interrupt ps-0 mb-xx axi_gpio/ip2intc_irpt
 
 ## generic system clocks&resets pointers
 
@@ -156,4 +189,39 @@ ad_connect  sys_cips/spi1_s_i GND
 ad_connect  sys_cips/spi1_ss_o_n spi1_csn
 ad_connect  sys_cips/spi1_ss_i_n VCC
 
+# system id
+
+ad_ip_instance axi_sysid axi_sysid_0
+ad_ip_instance sysid_rom rom_sys_0
+
+ad_connect  axi_sysid_0/rom_addr   	    rom_sys_0/rom_addr
+ad_connect  axi_sysid_0/sys_rom_data   	rom_sys_0/rom_data
+ad_connect  sys_cpu_clk                 rom_sys_0/clk
+
+ad_cpu_interconnect 0x45000000 axi_sysid_0
+
 # interrupts
+
+
+## non-coherent PS-NOC ports ##
+set_property -dict [list CONFIG.PS_USE_PS_NOC_NCI_0 {1} CONFIG.PS_USE_PS_NOC_NCI_1 {1}] [get_bd_cells sys_cips]
+set_property -dict [list CONFIG.NUM_SI {8}] [get_bd_cells axi_noc_0]
+
+connect_bd_intf_net [get_bd_intf_pins sys_cips/FPD_AXI_NOC_0] [get_bd_intf_pins axi_noc_0/S06_AXI]
+connect_bd_intf_net [get_bd_intf_pins sys_cips/FPD_AXI_NOC_1] [get_bd_intf_pins axi_noc_0/S07_AXI]
+
+set_property -dict [list CONFIG.CATEGORY {ps_nci}] [get_bd_intf_pins /axi_noc_0/S06_AXI]
+set_property -dict [list CONFIG.CATEGORY {ps_nci}] [get_bd_intf_pins /axi_noc_0/S07_AXI]
+
+set_property -dict [list CONFIG.CONNECTIONS {MC_0 { read_bw {1720} write_bw {1720} read_avg_burst {4} write_avg_burst {4}} }] [get_bd_intf_pins /axi_noc_0/S06_AXI]
+set_property -dict [list CONFIG.CONNECTIONS {MC_0 { read_bw {1720} write_bw {1720} read_avg_burst {4} write_avg_burst {4}} }] [get_bd_intf_pins /axi_noc_0/S07_AXI]
+
+assign_bd_address -target_address_space /sys_cips/DATA_NCI0 [get_bd_addr_segs axi_noc_0/S06_AXI/C0_DDR_LOW0] -force
+assign_bd_address -target_address_space /sys_cips/DATA_NCI1 [get_bd_addr_segs axi_noc_0/S07_AXI/C0_DDR_LOW0] -force
+
+set_property -dict [list CONFIG.NUM_CLKS {8}] [get_bd_cells axi_noc_0]
+set_property -dict [list CONFIG.ASSOCIATED_BUSIF {S06_AXI}] [get_bd_pins /axi_noc_0/aclk6]
+set_property -dict [list CONFIG.ASSOCIATED_BUSIF {S07_AXI}] [get_bd_pins /axi_noc_0/aclk7]
+
+connect_bd_net [get_bd_pins sys_cips/fpd_axi_noc_axi0_clk] [get_bd_pins axi_noc_0/aclk6]
+connect_bd_net [get_bd_pins sys_cips/fpd_axi_noc_axi1_clk] [get_bd_pins axi_noc_0/aclk7]
