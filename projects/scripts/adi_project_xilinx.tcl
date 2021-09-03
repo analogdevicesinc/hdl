@@ -313,6 +313,8 @@ proc adi_project_run {project_name} {
   set_property STEPS.POST_PLACE_POWER_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]
   }
 
+  set_param board.repoPaths [get_property LOCAL_ROOT_DIR [xhub::get_xstores xilinx_board_store]]
+
   launch_runs impl_1 -to_step write_bitstream
   wait_on_run impl_1
   open_run impl_1
