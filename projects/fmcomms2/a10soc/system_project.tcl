@@ -136,5 +136,7 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_clk
 set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_mosi
 set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_miso
 
+# set_instance_assignment -name GLOBAL_SIGNAL "GLOBAL CLOCK" -to "rx_clk_in"  
+
 execute_flow -compile
 

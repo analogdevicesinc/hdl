@@ -109,6 +109,7 @@ module axi_ad9361_lvds_if_10  #(
   wire                lvds_loaden;
   wire    [ 7:0]      lvds_phase;
   wire                rx_clk;
+  wire                ref_clk;
 
   // pll reset
 
@@ -199,88 +200,47 @@ module axi_ad9361_lvds_if_10  #(
 
   genvar i;
   generate
-  for (i = 0; i < 6; i = i + 1) begin: g_rx_data
     if (RX_NODPA == 0) begin
       axi_ad9361_serdes_in i_rx_data (
-        .data_in_export (rx_data_in_p[i]),
+        .data_in_export ({rx_frame_in_p, rx_data_in_p}),
         .clk_export (lvds_clk),
+        .pll_arst_export(~locked_s),
         .loaden_export (lvds_loaden),
         .div_clk_export (clk),
         .hs_phase_export (lvds_phase),
-        .locked_export (rx_data_locked_s[i]),
-        .data_s_export (rx_data_s[((i*4)+3):(i*4)]),
-        .delay_locked_export (rx_delay_locked_s[i]));
+        .locked_export (rx_data_locked_s),
+        .data_s_export (rx_data_s),
+        .delay_locked_export (rx_delay_locked_s) );
+
     end else begin
+      assign rx_data_locked_s = 6'b111111;
+      assign rx_delay_locked_s = 6'b111111;
+    
       axi_ad9361_serdes_in i_rx_data (
-        .data_in_export (rx_data_in_p[i]),
+        .data_in_export ({rx_frame_in_p, rx_data_in_p}),
         .clk_export (lvds_clk),
+        .pll_arst_export(~locked_s),
         .loaden_export (lvds_loaden),
         .div_clk_export (clk),
-        .data_s_export (rx_data_s[((i*4)+3):(i*4)]));
-
-      assign rx_data_locked_s[i] = 1'b1;
-      assign rx_delay_locked_s[i] = 1'b1;
-
-    end
-  end
-
-    if (RX_NODPA == 0) begin
-
-      axi_ad9361_serdes_in i_rx_frame (
-        .data_in_export (rx_frame_in_p),
-        .clk_export (lvds_clk),
-        .loaden_export (lvds_loaden),
-        .div_clk_export (clk),
-        .hs_phase_export (lvds_phase),
-        .locked_export (rx_data_locked_s[6]),
-        .data_s_export (rx_data_s[27:24]),
-        .delay_locked_export (rx_delay_locked_s[6]));
-
-     assign rx_clk = rx_clk_in_p;
-
-    end else begin
-
-      axi_ad9361_serdes_in i_rx_frame (
-        .data_in_export (rx_frame_in_p),
-        .clk_export (lvds_clk),
-        .loaden_export (lvds_loaden),
-        .div_clk_export (clk),
-        .data_s_export (rx_data_s[27:24]) );
-
-      assign rx_data_locked_s[6] = 1'b1;
-      assign rx_delay_locked_s[6] = 1'b1;
-
-      clk_buffer clk_buf (
-        .inclk (rx_clk_in_p),
-        .outclk (rx_clk));
+        .data_s_export (rx_data_s) );
 
     end
   endgenerate
 
-  generate
-  for (i = 0; i < 6; i = i + 1) begin: g_tx_data
   axi_ad9361_serdes_out i_tx_data (
-    .data_out_export (tx_data_out_p[i]),
+    .data_out_export ({tx_frame_out_p, tx_data_out_p}),
     .clk_export (lvds_clk),
     .loaden_export (lvds_loaden),
     .div_clk_export (clk),
-    .data_s_export (tx_data_s[((i*4)+3):(i*4)]));
-  end
-  endgenerate
+    .data_s_export (tx_data_s),
+    .tx_clk_out_export (tx_clk_out_p));
 
-  axi_ad9361_serdes_out i_tx_frame (
-    .data_out_export (tx_frame_out_p),
-    .clk_export (lvds_clk),
-    .loaden_export (lvds_loaden),
-    .div_clk_export (clk),
-    .data_s_export (tx_data_s[27:24]));
-
-  axi_ad9361_serdes_out i_tx_clk (
-    .data_out_export (tx_clk_out_p),
-    .clk_export (lvds_clk),
-    .loaden_export (lvds_loaden),
-    .div_clk_export (clk),
-    .data_s_export (4'b1010));
+//   axi_ad9361_serdes_out_1x i_tx_clk (
+//     .data_out_export (tx_clk_out_p),
+//     .clk_export (lvds_clk),
+//     .loaden_export (lvds_loaden),
+//     .div_clk_clk (clk),
+//     .data_s_export (4'b1010));
 
   axi_ad9361_data_out i_enable (
     .ck (clk),
@@ -291,6 +251,10 @@ module axi_ad9361_lvds_if_10  #(
     .ck (clk),
     .din ({tx_txnrx, tx_txnrx}),
     .pad_out (txnrx));
+
+  clk_buffer clk_buf (
+      .inclk (rx_clk_in_p),
+      .outclk (rx_clk));
 
   axi_ad9361_serdes_clk i_clk (
     .rst_reset (pll_rst),

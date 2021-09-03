@@ -564,6 +564,44 @@ endgenerate
     .up_rstn (up_rstn));
   end
   endgenerate
+  
+//   generate
+//   if (FPGA_TECHNOLOGY == ARRIA10) begin
+//   axi_ad9361_lvds_if_10_hanpilot #(
+//     .RX_NODPA (RX_NODPA))
+//   i_axi_ad9361_lvds_if_10 (
+//     .rx_clk_in_p (rx_clk_in_p),
+//     .rx_clk_in_n (rx_clk_in_n),
+//     .rx_frame_in_p (rx_frame_in_p),
+//     .rx_frame_in_n (rx_frame_in_n),
+//     .rx_data_in_p (rx_data_in_p),
+//     .rx_data_in_n (rx_data_in_n),
+//     .tx_clk_out_p (tx_clk_out_p),
+//     .tx_clk_out_n (tx_clk_out_n),
+//     .tx_frame_out_p (tx_frame_out_p),
+//     .tx_frame_out_n (tx_frame_out_n),
+//     .tx_data_out_p (tx_data_out_p),
+//     .tx_data_out_n (tx_data_out_n),
+//     .enable (enable),
+//     .txnrx (txnrx),
+//     .clk (l_clk),
+//     .rx_frame (rx_frame_s),
+//     .rx_data_0 (rx_data_0_s),
+//     .rx_data_1 (rx_data_1_s),
+//     .rx_data_2 (rx_data_2_s),
+//     .rx_data_3 (rx_data_3_s),
+//     .tx_frame (tx_frame),
+//     .tx_data_0 (tx_data_0),
+//     .tx_data_1 (tx_data_1),
+//     .tx_data_2 (tx_data_2),
+//     .tx_data_3 (tx_data_3),
+//     .tx_enable (enable_int_p),
+//     .tx_txnrx (txnrx_int_p),
+//     .locked (locked_s),
+//     .up_clk (up_clk),
+//     .up_rstn (up_rstn));
+//   end
+//   endgenerate
 
 endmodule
 

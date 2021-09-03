@@ -71,6 +71,7 @@ ad_ip_parameter DAC_IQCORRECTION_DISABLE INTEGER 0
 ad_ip_parameter IO_DELAY_GROUP STRING {dev_if_delay_group}
 ad_ip_parameter MIMO_ENABLE INTEGER 0
 ad_ip_parameter RX_NODPA INTEGER 0
+ad_ip_parameter NUMBER_OF_CHANNELS INTEGER 6
 
 adi_add_auto_fpga_spec_params
 
@@ -174,6 +175,7 @@ proc axi_ad9361_elab {} {
   set m_fpga_technology [get_parameter_value "FPGA_TECHNOLOGY"]
   set m_cmos_or_lvds_n [get_parameter_value "CMOS_OR_LVDS_N"]
   set rx_nodpa [get_parameter_value "RX_NODPA"]
+  set m_number_of_channels [get_parameter_value "NUMBER_OF_CHANNELS"]
 
   # 103 - stands for "Arria 10" see adi_intel_device_info_enc.tcl
   if {$m_fpga_technology == 103} {
@@ -184,6 +186,13 @@ proc axi_ad9361_elab {} {
     set_instance_parameter_value axi_ad9361_serdes_clk {DDR_OR_SDR_N} {1}
     set_instance_parameter_value axi_ad9361_serdes_clk {SERDES_FACTOR} {4}
     set_instance_parameter_value axi_ad9361_serdes_clk {CLKIN_FREQUENCY} {250.0}
+#     
+#     add_hdl_instance axi_ad9361_serdes_clk_1x intel_serdes 1.0
+#     set_instance_parameter_value axi_ad9361_serdes_clk_1x {DEVICE_FAMILY} {Arria 10}
+#     set_instance_parameter_value axi_ad9361_serdes_clk_1x {MODE} {CLK_1X}
+#     set_instance_parameter_value axi_ad9361_serdes_clk_1x {DDR_OR_SDR_N} {1}
+#     set_instance_parameter_value axi_ad9361_serdes_clk_1x {SERDES_FACTOR} {4}
+#     set_instance_parameter_value axi_ad9361_serdes_clk_1x {CLKIN_FREQUENCY} {250.0}
 
     set rx_serdes_mode IN
     if {$rx_nodpa == 1} {set rx_serdes_mode IN_NODPA}
@@ -194,6 +203,15 @@ proc axi_ad9361_elab {} {
     set_instance_parameter_value axi_ad9361_serdes_in {DDR_OR_SDR_N} {1}
     set_instance_parameter_value axi_ad9361_serdes_in {SERDES_FACTOR} {4}
     set_instance_parameter_value axi_ad9361_serdes_in {CLKIN_FREQUENCY} {250.0}
+    set_instance_parameter_value axi_ad9361_serdes_in {NUMBER_OF_CHANNELS} {7}
+    
+#     add_hdl_instance axi_ad9361_serdes_in_1x intel_serdes 1.0
+#     set_instance_parameter_value axi_ad9361_serdes_in_1x {DEVICE_FAMILY} {Arria 10}
+#     set_instance_parameter_value axi_ad9361_serdes_in_1x {MODE} $rx_serdes_mode
+#     set_instance_parameter_value axi_ad9361_serdes_in_1x {DDR_OR_SDR_N} {1}
+#     set_instance_parameter_value axi_ad9361_serdes_in_1x {SERDES_FACTOR} {4}
+#     set_instance_parameter_value axi_ad9361_serdes_in_1x {CLKIN_FREQUENCY} {250.0}
+#     set_instance_parameter_value axi_ad9361_serdes_in_1x {NUMBER_OF_CHANNELS} {1}
 
     add_hdl_instance axi_ad9361_serdes_out intel_serdes 1.0
     set_instance_parameter_value axi_ad9361_serdes_out {DEVICE_FAMILY} {Arria 10}
@@ -201,8 +219,17 @@ proc axi_ad9361_elab {} {
     set_instance_parameter_value axi_ad9361_serdes_out {DDR_OR_SDR_N} {1}
     set_instance_parameter_value axi_ad9361_serdes_out {SERDES_FACTOR} {4}
     set_instance_parameter_value axi_ad9361_serdes_out {CLKIN_FREQUENCY} {250.0}
+    set_instance_parameter_value axi_ad9361_serdes_out {NUMBER_OF_CHANNELS} {8}
+    
+#     add_hdl_instance axi_ad9361_serdes_out_1x intel_serdes 1.0
+#     set_instance_parameter_value axi_ad9361_serdes_out_1x {DEVICE_FAMILY} {Arria 10}
+#     set_instance_parameter_value axi_ad9361_serdes_out_1x {MODE} {OUT}
+#     set_instance_parameter_value axi_ad9361_serdes_out_1x {DDR_OR_SDR_N} {1}
+#     set_instance_parameter_value axi_ad9361_serdes_out_1x {SERDES_FACTOR} {4}
+#     set_instance_parameter_value axi_ad9361_serdes_out_1x {CLKIN_FREQUENCY} {250.0}
+#     set_instance_parameter_value axi_ad9361_serdes_out_1x {NUMBER_OF_CHANNELS} {1}
 
-    add_hdl_instance axi_ad9361_data_out altera_gpio 19.1
+    add_hdl_instance axi_ad9361_data_out altera_gpio 19.3
     set_instance_parameter_value axi_ad9361_data_out {DEVICE_FAMILY} {Arria 10}
     set_instance_parameter_value axi_ad9361_data_out {PIN_TYPE_GUI} {Output}
     set_instance_parameter_value axi_ad9361_data_out {SIZE} {1}
