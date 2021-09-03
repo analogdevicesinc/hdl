@@ -687,7 +687,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
   if {$p_sel eq "NOC"} {
     set m_interconnect_index [get_property CONFIG.NUM_SI [get_bd_cells axi_noc_0]]
     set m_interconnect_cell [get_bd_cells axi_noc_0]
-    set m_addr_seg [get_bd_addr_segs  axi_noc_0/S08_AXI/C0_DDR_LOW0]
+    set m_addr_seg [get_bd_addr_segs  axi_noc_0/S[format "%02s" [expr $m_interconnect_index +1]]_AXI/C0_DDR_LOW0]
     set sys_mem_clk_index [expr [get_property CONFIG.NUM_CLKS [get_bd_cells axi_noc_0]]-1]
   }
 
