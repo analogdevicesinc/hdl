@@ -1,6 +1,4 @@
 
-create_clock -period 5.000 -name sys_clk_p [get_ports sys_clk_p]
-
 set_property PACKAGE_PIN AR47 [get_ports ddr4_act_n]
 set_property PACKAGE_PIN AL46 [get_ports {ddr4_adr[0]}]
 set_property PACKAGE_PIN AU44 [get_ports {ddr4_adr[1]}]
