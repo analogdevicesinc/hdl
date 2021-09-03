@@ -14,6 +14,7 @@ ad_ip_parameter MODE STRING "CLK" false
 ad_ip_parameter DDR_OR_SDR_N INTEGER 1 false
 ad_ip_parameter SERDES_FACTOR INTEGER 8 false
 ad_ip_parameter CLKIN_FREQUENCY FLOAT 500.0 false
+ad_ip_parameter NUMBER_OF_CHANNELS INTEGER 1 false
 
 set_parameter_property MODE ALLOWED_RANGES {"CLK" "IN" "IN_NODPA" "OUT"}
 set_parameter_property DDR_OR_SDR_N ALLOWED_RANGES {0 1}
@@ -26,6 +27,7 @@ proc p_intel_serdes {} {
   set m_ddr_or_sdr_n [get_parameter_value "DDR_OR_SDR_N"]
   set m_serdes_factor [get_parameter_value "SERDES_FACTOR"]
   set m_clkin_frequency [get_parameter_value "CLKIN_FREQUENCY"]
+  set m_number_of_channels [get_parameter_value "NUMBER_OF_CHANNELS"]
 
   set m_hs_data_rate [expr ($m_clkin_frequency * ($m_ddr_or_sdr_n + 1))]
   set m_ls_data_rate [expr ($m_hs_data_rate/$m_serdes_factor)]
@@ -43,7 +45,7 @@ proc p_intel_serdes {} {
   ## arria 10 only
 
   if {$m_mode == "CLK"} {
-    add_instance intel_serdes_pll altera_iopll 19.1
+    add_instance intel_serdes_pll altera_iopll 19.3
     set_instance_parameter_value intel_serdes_pll {gui_reference_clock_frequency} $m_clkin_frequency
     set_instance_parameter_value intel_serdes_pll {gui_use_locked} {1}
     set_instance_parameter_value intel_serdes_pll {gui_operation_mode} {lvds}
@@ -84,12 +86,12 @@ proc p_intel_serdes {} {
     } else {
     set_instance_parameter_value intel_serdes_in {MODE} {RX_Non-DPA}
     }
-    set_instance_parameter_value intel_serdes_in {NUM_CHANNELS} {1}
+    set_instance_parameter_value intel_serdes_in {NUM_CHANNELS} $m_number_of_channels
     set_instance_parameter_value intel_serdes_in {DATA_RATE} $m_hs_data_rate
     set_instance_parameter_value intel_serdes_in {J_FACTOR} $m_serdes_factor
     set_instance_parameter_value intel_serdes_in {USE_EXTERNAL_PLL} {true}
     set_instance_parameter_value intel_serdes_in {INCLOCK_FREQUENCY} $m_clkin_frequency
-    set_instance_parameter_value intel_serdes_in {PLL_USE_RESET} {false}
+    set_instance_parameter_value intel_serdes_in {PLL_USE_RESET} {true}
     add_interface data_in conduit end
     set_interface_property data_in EXPORT_OF intel_serdes_in.rx_in
     add_interface clk conduit end
@@ -98,6 +100,8 @@ proc p_intel_serdes {} {
     set_interface_property loaden EXPORT_OF intel_serdes_in.ext_loaden
     add_interface div_clk conduit end
     set_interface_property div_clk EXPORT_OF intel_serdes_in.ext_coreclock
+    add_interface pll_arst conduit end
+    set_interface_property pll_arst EXPORT_OF intel_serdes_in.pll_areset
     if {$m_mode == "IN"} {
     add_interface hs_phase conduit end
     set_interface_property hs_phase EXPORT_OF intel_serdes_in.ext_vcoph
@@ -114,11 +118,11 @@ proc p_intel_serdes {} {
   if {$m_mode == "OUT"} {
     add_instance intel_serdes_out altera_lvds 19.1
     set_instance_parameter_value intel_serdes_out {MODE} {TX}
-    set_instance_parameter_value intel_serdes_out {NUM_CHANNELS} {1}
+    set_instance_parameter_value intel_serdes_out {NUM_CHANNELS} $m_number_of_channels
     set_instance_parameter_value intel_serdes_out {DATA_RATE} $m_hs_data_rate
     set_instance_parameter_value intel_serdes_out {J_FACTOR} $m_serdes_factor
     set_instance_parameter_value intel_serdes_out {TX_EXPORT_CORECLOCK} {false}
-    set_instance_parameter_value intel_serdes_out {TX_USE_OUTCLOCK} {false}
+    set_instance_parameter_value intel_serdes_out {TX_USE_OUTCLOCK} {true}
     set_instance_parameter_value intel_serdes_out {USE_EXTERNAL_PLL} {true}
     set_instance_parameter_value intel_serdes_out {INCLOCK_FREQUENCY} $m_clkin_frequency
     set_instance_parameter_value intel_serdes_out {PLL_USE_RESET} {false}
@@ -132,6 +136,8 @@ proc p_intel_serdes {} {
     set_interface_property div_clk EXPORT_OF intel_serdes_out.ext_coreclock
     add_interface data_s conduit end
     set_interface_property data_s EXPORT_OF intel_serdes_out.tx_in
+    add_interface tx_clk_out conduit end
+    set_interface_property tx_clk_out EXPORT_OF intel_serdes_out.tx_outclock
     return
   }
 }

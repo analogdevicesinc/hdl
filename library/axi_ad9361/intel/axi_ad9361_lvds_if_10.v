@@ -198,7 +198,6 @@ module axi_ad9361_lvds_if_10  #(
 
   // instantiations
 
-  genvar i;
   generate
     if (RX_NODPA == 0) begin
       axi_ad9361_serdes_in i_rx_data (
