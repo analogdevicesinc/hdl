@@ -37,9 +37,9 @@
 
 
 module system_top  #(
-    parameter TX_JESD_L = 8,
+    parameter TX_JESD_L = 4,
     parameter TX_NUM_LINKS = 1,
-    parameter RX_JESD_L = 8,
+    parameter RX_JESD_L = 4,
     parameter RX_NUM_LINKS = 1
   ) (
   input         sys_clk_n,
@@ -57,7 +57,7 @@ module system_top  #(
   inout   [7:0] ddr4_dqs_c,
   inout   [7:0] ddr4_dqs_t,
   output        ddr4_odt,
-  output        ddr4_reset_n/*,
+  output        ddr4_reset_n,
 
   // FMC HPC IOs
   input  [1:0]  agc0,
@@ -94,7 +94,7 @@ module system_top  #(
   input         sysref2_n,
   input         sysref2_p,
   output [1:0]  txen
-*/
+
 );
 
   // internal signals
@@ -102,7 +102,7 @@ module system_top  #(
   wire    [95:0]  gpio_i;
   wire    [95:0]  gpio_o;
   wire    [95:0]  gpio_t;
-/*
+
   wire    [ 2:0]  spi0_csn;
 
   wire    [ 2:0]  spi1_csn;
@@ -124,11 +124,9 @@ module system_top  #(
   wire            tx_device_clk;
   wire            rx_device_clk;
 
-  assign iic_rstn = 1'b1;
-
   // instantiations
 
-  IBUFDS_GTE4 i_ibufds_ref_clk (
+  IBUFDS_GTE5 i_ibufds_ref_clk (
     .CEB (1'd0),
     .I (fpga_refclk_in_p),
     .IB (fpga_refclk_in_n),
@@ -216,16 +214,15 @@ module system_top  #(
   assign rxen[1]          = gpio_o[57];
   assign txen[0]          = gpio_o[58];
   assign txen[1]          = gpio_o[59];
-*/
+
   /* Board GPIOS. Buttons, LEDs, etc... */
-/*  assign gpio_i[20: 8] = gpio_bd_i;
-  assign gpio_bd_o = gpio_o[7:0];
+//  assign gpio_i[20: 8] = gpio_bd_i;
+//  assign gpio_bd_o = gpio_o[7:0];
 
   // Unused GPIOs
   assign gpio_i[94:54] = gpio_o[94:54];
-  assign gpio_i[31:21] = gpio_o[31:21];
-  assign gpio_i[7:0] = gpio_o[7:0];
-*/
+  assign gpio_i[31:0] = gpio_o[31:0];
+
   system_wrapper i_system_wrapper (
     .gpio0_i (gpio_i[31:0]),
     .gpio0_o (gpio_o[31:0]),
@@ -251,63 +248,38 @@ module system_top  #(
     .CH0_DDR4_0_0_dqs_c (ddr4_dqs_c),
     .CH0_DDR4_0_0_dqs_t (ddr4_dqs_t),
     .CH0_DDR4_0_0_odt (ddr4_odt),
-    .CH0_DDR4_0_0_reset_n (ddr4_reset_n)//,
-    //.spi0_csn (spi0_csn),
-    //.spi0_miso (spi0_miso),
-    //.spi0_mosi (spi0_mosi),
-    //.spi0_sclk (spi0_sclk),
-    //.spi1_csn (spi1_csn),
-    //.spi1_miso (spi1_miso),
-    //.spi1_mosi (spi1_mosi),
-    //.spi1_sclk (spi1_sclk),
-    //// FMC HPC
-    //.rx_data_0_n (rx_data_n_loc[0]),
-    //.rx_data_0_p (rx_data_p_loc[0]),
-    //.rx_data_1_n (rx_data_n_loc[1]),
-    //.rx_data_1_p (rx_data_p_loc[1]),
-    //.rx_data_2_n (rx_data_n_loc[2]),
-    //.rx_data_2_p (rx_data_p_loc[2]),
-    //.rx_data_3_n (rx_data_n_loc[3]),
-    //.rx_data_3_p (rx_data_p_loc[3]),
-    //.rx_data_4_n (rx_data_n_loc[4]),
-    //.rx_data_4_p (rx_data_p_loc[4]),
-    //.rx_data_5_n (rx_data_n_loc[5]),
-    //.rx_data_5_p (rx_data_p_loc[5]),
-    //.rx_data_6_n (rx_data_n_loc[6]),
-    //.rx_data_6_p (rx_data_p_loc[6]),
-    //.rx_data_7_n (rx_data_n_loc[7]),
-    //.rx_data_7_p (rx_data_p_loc[7]),
-    //.tx_data_0_n (tx_data_n_loc[0]),
-    //.tx_data_0_p (tx_data_p_loc[0]),
-    //.tx_data_1_n (tx_data_n_loc[1]),
-    //.tx_data_1_p (tx_data_p_loc[1]),
-    //.tx_data_2_n (tx_data_n_loc[2]),
-    //.tx_data_2_p (tx_data_p_loc[2]),
-    //.tx_data_3_n (tx_data_n_loc[3]),
-    //.tx_data_3_p (tx_data_p_loc[3]),
-    //.tx_data_4_n (tx_data_n_loc[4]),
-    //.tx_data_4_p (tx_data_p_loc[4]),
-    //.tx_data_5_n (tx_data_n_loc[5]),
-    //.tx_data_5_p (tx_data_p_loc[5]),
-    //.tx_data_6_n (tx_data_n_loc[6]),
-    //.tx_data_6_p (tx_data_p_loc[6]),
-    //.tx_data_7_n (tx_data_n_loc[7]),
-    //.tx_data_7_p (tx_data_p_loc[7]),
-    //.ref_clk_q0 (ref_clk),
-    //.ref_clk_q1 (ref_clk),
-    //.rx_device_clk (rx_device_clk),
-    //.tx_device_clk (tx_device_clk),
+    .CH0_DDR4_0_0_reset_n (ddr4_reset_n),
+    .spi0_csn (spi0_csn),
+    .spi0_miso (spi0_miso),
+    .spi0_mosi (spi0_mosi),
+    .spi0_sclk (spi0_sclk),
+    .spi1_csn (spi1_csn),
+    .spi1_miso (spi1_miso),
+    .spi1_mosi (spi1_mosi),
+    .spi1_sclk (spi1_sclk),
+    // FMC HPC
+    // TODO: Max 4 lanes
+    .GT_Serial_0_gtx_p (tx_data_p_loc[3:0]),
+    .GT_Serial_0_gtx_n (tx_data_n_loc[3:0]),
+    .GT_Serial_0_grx_p (rx_data_p_loc[3:0]),
+    .GT_Serial_0_grx_n (rx_data_n_loc[3:0]),
+
+    .ref_clk_q0 (ref_clk),
+    .ref_clk_q1 (ref_clk),
+    .rx_device_clk (rx_device_clk),
+    .tx_device_clk (tx_device_clk),
     //.rx_sync_0 (rx_syncout),
     //.tx_sync_0 (tx_syncin),
-    //.rx_sysref_0 (sysref),
-    //.tx_sysref_0 (sysref)
+    .rx_sysref_0 (sysref),
+    .tx_sysref_0 (sysref)
   );
 
-//  assign rx_data_p_loc[RX_JESD_L*RX_NUM_LINKS-1:0] = rx_data_p[RX_JESD_L*RX_NUM_LINKS-1:0];
-//  assign rx_data_n_loc[RX_JESD_L*RX_NUM_LINKS-1:0] = rx_data_n[RX_JESD_L*RX_NUM_LINKS-1:0];
 
-//  assign tx_data_p[TX_JESD_L*TX_NUM_LINKS-1:0] = tx_data_p_loc[TX_JESD_L*TX_NUM_LINKS-1:0];
-//  assign tx_data_n[TX_JESD_L*TX_NUM_LINKS-1:0] = tx_data_n_loc[TX_JESD_L*TX_NUM_LINKS-1:0];
+  assign rx_data_p_loc[RX_JESD_L*RX_NUM_LINKS-1:0] = rx_data_p[RX_JESD_L*RX_NUM_LINKS-1:0];
+  assign rx_data_n_loc[RX_JESD_L*RX_NUM_LINKS-1:0] = rx_data_n[RX_JESD_L*RX_NUM_LINKS-1:0];
+
+  assign tx_data_p[TX_JESD_L*TX_NUM_LINKS-1:0] = tx_data_p_loc[TX_JESD_L*TX_NUM_LINKS-1:0];
+  assign tx_data_n[TX_JESD_L*TX_NUM_LINKS-1:0] = tx_data_n_loc[TX_JESD_L*TX_NUM_LINKS-1:0];
 
 
 endmodule
