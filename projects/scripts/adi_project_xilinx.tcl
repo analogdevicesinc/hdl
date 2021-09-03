@@ -122,6 +122,10 @@ proc adi_project {project_name {mode 0} {parameter_list {}} } {
     set device "xcvm1802-vsva2197-2MP-e-S"
     set board [lindex [lsearch -all -inline [get_board_parts] *vmk180*] end]
   }
+  if [regexp "_vck190$" $project_name] {
+    set device "xcvc1902-vsva2197-2MP-e-S"
+    set board [lindex [lsearch -all -inline [get_board_parts] *vck190*] end]
+  }
   adi_project_create $project_name $mode $parameter_list $device $board
 }
 
