@@ -66,6 +66,12 @@ adi_add_bus "TX_GT_IP_Interface" "master" \
    { "txuserrdy" "ch_txuserrdy" } \
    { "txmstreset" "ch_txmstreset" } \
    { "txresetdone" "ch_txresetdone" } \
+   { "txdiffctrl" "ch_txdiffctrl" } \
+   { "txelecidle" "ch_txelecidle" } \
+   { "txinhibit" "ch_txinhibit" } \
+   { "txpd" "ch_txpd" } \
+   { "txpostcursor" "ch_txpostcursor" } \
+   { "txprecursor" "ch_txprecursor" } \
   }
 
 adi_add_bus "TX" "slave" \

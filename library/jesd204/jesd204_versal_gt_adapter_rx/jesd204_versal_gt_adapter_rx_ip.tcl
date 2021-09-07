@@ -68,6 +68,8 @@ adi_add_bus "RX_GT_IP_Interface" "master" \
    { "rxuserrdy" "ch_rxuserrdy" } \
    { "rxmstreset" "ch_rxmstreset" } \
    { "rxresetdone" "ch_rxresetdone" } \
+   { "rxpolarity" "ch_rxpolarity" } \
+   { "rxpd" "ch_rxpd" } \
 
   }
 

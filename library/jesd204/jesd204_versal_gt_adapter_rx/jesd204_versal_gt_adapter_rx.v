@@ -95,7 +95,7 @@ module  jesd204_versal_gt_adapter_rx (
   //output         rxoobreset,
   //input          rxosintdone,
   //output [4 : 0] rxpcsresetmask,
-  //output [1 : 0] rxpd,
+  output   [1 : 0] rxpd,
   //input          rxphaligndone,
   //input          rxphalignerr,
   //output         rxphalignreq,
@@ -108,7 +108,7 @@ module  jesd204_versal_gt_adapter_rx (
   //output         rxphshift180,
   //input          rxphshift180done,
   //output [6 : 0] rxpmaresetmask,
-  //output         rxpolarity,
+  output           rxpolarity,
   //output         rxprbscntreset,
   //input          rxprbserr,
   //input          rxprbslocked,
@@ -181,6 +181,9 @@ module  jesd204_versal_gt_adapter_rx (
 
   // Master reset not used
   assign rxmstreset = 1'b0;
+
+  assign rxpd = 2'b0;
+  assign rxpolarity = 1'b0;
 
   assign gtrxreset = up_rst;
   assign rxprogdivreset = up_rst;

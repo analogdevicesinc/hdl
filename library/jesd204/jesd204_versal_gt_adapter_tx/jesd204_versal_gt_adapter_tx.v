@@ -61,8 +61,8 @@ module  jesd204_versal_gt_adapter_tx (
 //  output          txlatclk,
 //  output          txphdlytstclk,
 //  output          txdlyalignreq,
-//  output          txelecidle,
-//  output          txinhibit,
+    output          txelecidle,
+    output          txinhibit,
 //  output          txmldchaindone,
 //  output          txmldchainreq,
 //  output          txoneszeros,
@@ -97,7 +97,7 @@ module  jesd204_versal_gt_adapter_tx (
 //  output [15 : 0] txctrl0,
 //  output [15 : 0] txctrl1,
 //  output  [1 : 0] txdeemph,
-//  output  [1 : 0] txpd,
+  output    [1 : 0] txpd,
 //  output  [1 : 0] txresetmode,
   output            txmstreset,
 //  output          txmstdatapathreset,
@@ -105,10 +105,10 @@ module  jesd204_versal_gt_adapter_tx (
 //  output  [2 : 0] txmargin,
 //  output  [2 : 0] txpmaresetmask,
 //  output  [3 : 0] txprbssel,
-//  output  [4 : 0] txdiffctrl,
+  output    [4 : 0] txdiffctrl,
 //  output  [4 : 0] txpippmstepsize,
-//  output  [4 : 0] txpostcursor,
-//  output  [4 : 0] txprecursor,
+  output    [4 : 0] txpostcursor,
+  output    [4 : 0] txprecursor,
 //  output  [6 : 0] txmaincursor,
 //  output  [7 : 0] txctrl2,
 //  output  [7 : 0] txrate,
@@ -170,6 +170,12 @@ module  jesd204_versal_gt_adapter_tx (
   // TODO : Select locked status correctly
   assign up_pll_locked = hsclk_lcplllocked | hsclk_rplllocked;
 
+  assign txdiffctrl = up_diffctrl;
+  assign txpd = 2'b0;
+  assign txelecidle = 1'b0;
+  assign txinhibit = 1'b0;
+  assign txpostcursor = up_postcursor;
+  assign txprecursor = up_precursor;
 
   // No DRP yet
   assign up_rdata = 16'h0;
