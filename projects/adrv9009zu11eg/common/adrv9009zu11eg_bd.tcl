@@ -260,6 +260,7 @@ ad_ip_parameter axi_adrv9009_som_rx_xcvr CONFIG.QPLL_ENABLE 0
 ad_ip_parameter axi_adrv9009_som_rx_xcvr CONFIG.TX_OR_RX_N 0
 
 adi_axi_jesd204_rx_create axi_adrv9009_som_rx_jesd $RX_NUM_OF_LANES
+ad_ip_parameter axi_adrv9009_som_rx_jesd/rx_axi CONFIG.ENABLE_LINK_STATS 1
 
 ad_ip_instance util_cpack2 util_som_rx_cpack [list \
   NUM_OF_CHANNELS $RX_NUM_OF_CONVERTERS \
@@ -291,6 +292,7 @@ ad_ip_parameter axi_adrv9009_som_obs_xcvr CONFIG.QPLL_ENABLE 0
 ad_ip_parameter axi_adrv9009_som_obs_xcvr CONFIG.TX_OR_RX_N 0
 
 adi_axi_jesd204_rx_create axi_adrv9009_som_obs_jesd $OBS_NUM_OF_LANES
+ad_ip_parameter axi_adrv9009_som_obs_jesd/rx_axi CONFIG.ENABLE_LINK_STATS 1
 
 ad_ip_instance util_cpack2 util_som_obs_cpack [list \
   NUM_OF_CHANNELS $OBS_NUM_OF_CONVERTERS \
