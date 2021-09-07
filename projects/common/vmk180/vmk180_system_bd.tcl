@@ -72,6 +72,18 @@ set_property -dict [list \
   CONFIG.PS_M_AXI_GP0_DATA_WIDTH {32} \
 ] [get_bd_cells sys_cips]
 
+# TODO check extra cfg  
+set_property -dict [list \
+  CONFIG.PMC_GPIO0_MIO_PERIPHERAL_ENABLE	{1} \
+  CONFIG.PMC_GPIO1_MIO_PERIPHERAL_ENABLE	{1} \
+  CONFIG.PS_GEM0_ROUTE_THROUGH_FPD	{1} \
+  CONFIG.PS_GEM1_ROUTE_THROUGH_FPD	{1} \
+  CONFIG.PMC_GPIO0_MIO_PERIPHERAL_ENABLE	{1} \
+  CONFIG.PMC_GPIO1_MIO_PERIPHERAL_ENABLE	{1} \
+  CONFIG.PS_GPIO2_MIO_PERIPHERAL_ENABLE	{1} \
+] [get_bd_cells sys_cips]
+
+
 # NOC
 set_property -dict [list \
   CONFIG.MC_BOARD_INTRF_EN {true} \
