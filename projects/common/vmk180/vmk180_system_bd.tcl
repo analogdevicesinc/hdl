@@ -24,12 +24,8 @@ create_bd_port -dir O -from 31 -to 0 gpio2_t
 
 # instance: versal_cips
 create_bd_cell -type ip -vlnv xilinx.com:ip:versal_cips:2.1 sys_cips
-apply_bd_automation -rule xilinx.com:bd_rule:versal_cips -config { configure_noc {Add new AXI NoC} num_ddr {1} pcie0_lane_width {None} pcie0_mode {None} pcie0_port_type {Endpoint Device} pcie1_lane_width {None} pcie1_mode {None} pcie1_port_type {Endpoint Device} pl_clocks {1} pl_resets {1}}  [get_bd_cells sys_cips]
-
 set_property -dict [list \
-  CONFIG.PMC_QSPI_GRP_FBCLK_ENABLE {1} \
-  CONFIG.PMC_QSPI_PERIPHERAL_ENABLE {1} \
-  CONFIG.PMC_QSPI_PERIPHERAL_MODE {Dual Parallel} \
+  CONFIG.PS_BOARD_INTERFACE	cips_fixed_io \
   CONFIG.PMC_SD1_PERIPHERAL_ENABLE {1} \
   CONFIG.PMC_SD1_SLOT_TYPE {SD 3.0} \
   CONFIG.PMC_SD1_PERIPHERAL_IO {PMC_MIO 26 .. 36} \
@@ -39,18 +35,8 @@ set_property -dict [list \
   CONFIG.PS_USE_PMCPL_CLK1 {1} \
   CONFIG.PMC_CRP_PL1_REF_CTRL_FREQMHZ {350} \
   CONFIG.PS_GPIO_EMIO_PERIPHERAL_ENABLE {1} \
-  CONFIG.PS_ENET0_PERIPHERAL_ENABLE {1} \
-  CONFIG.PS_ENET0_GRP_MDIO_ENABLE {1} \
-  CONFIG.PS_ENET0_PERIPHERAL_IO {PS_MIO 0 .. 11} \
-  CONFIG.PS_ENET0_GRP_MDIO_IO {PS_MIO 24 .. 25} \
-  CONFIG.PS_ENET1_PERIPHERAL_ENABLE {1} \
-  CONFIG.PS_ENET1_GRP_MDIO_ENABLE {0} \
-  CONFIG.PS_ENET1_PERIPHERAL_IO {PS_MIO 12 .. 23} \
-  CONFIG.PS_ENET1_GRP_MDIO_IO {PMC_MIO 50 .. 51} \
-  CONFIG.PS_I2C0_PERIPHERAL_ENABLE {1} \
-  CONFIG.PS_I2C0_PERIPHERAL_IO {PMC_MIO 46 .. 47} \
-  CONFIG.PS_I2C1_PERIPHERAL_ENABLE {1} \
-  CONFIG.PS_I2C1_PERIPHERAL_IO {PMC_MIO 44 .. 45} \
+  CONFIG.PS_USE_M_AXI_GP0 {1} \
+  CONFIG.PS_M_AXI_GP0_DATA_WIDTH {128} \
   CONFIG.PS_SPI0_GRP_SS1_ENABLE {1} \
   CONFIG.PS_SPI0_GRP_SS2_ENABLE {1} \
   CONFIG.PS_SPI0_PERIPHERAL_ENABLE {1} \
@@ -59,30 +45,9 @@ set_property -dict [list \
   CONFIG.PS_SPI1_GRP_SS2_ENABLE {1} \
   CONFIG.PS_SPI1_PERIPHERAL_ENABLE {1} \
   CONFIG.PS_SPI1_PERIPHERAL_IO {EMIO} \
-  CONFIG.PS_TTC1_PERIPHERAL_ENABLE {1} \
-  CONFIG.PS_TTC2_PERIPHERAL_ENABLE {1} \
-  CONFIG.PS_TTC3_PERIPHERAL_ENABLE {1} \
-  CONFIG.PS_UART0_PERIPHERAL_ENABLE {1} \
-  CONFIG.PS_UART0_PERIPHERAL_IO {PMC_MIO 42 .. 43} \
-  CONFIG.PS_USB3_PERIPHERAL_ENABLE {1} \
-  CONFIG.PS_WWDT0_PERIPHERAL_ENABLE {1} \
-  CONFIG.PS_WWDT0_PERIPHERAL_IO {EMIO} \
-  CONFIG.PS_WWDT0_CLOCK_IO {APB} \
-  CONFIG.PS_USE_M_AXI_GP0 {1} \
-  CONFIG.PS_M_AXI_GP0_DATA_WIDTH {32} \
 ] [get_bd_cells sys_cips]
 
-# TODO check extra cfg  
-set_property -dict [list \
-  CONFIG.PMC_GPIO0_MIO_PERIPHERAL_ENABLE	{1} \
-  CONFIG.PMC_GPIO1_MIO_PERIPHERAL_ENABLE	{1} \
-  CONFIG.PS_GEM0_ROUTE_THROUGH_FPD	{1} \
-  CONFIG.PS_GEM1_ROUTE_THROUGH_FPD	{1} \
-  CONFIG.PMC_GPIO0_MIO_PERIPHERAL_ENABLE	{1} \
-  CONFIG.PMC_GPIO1_MIO_PERIPHERAL_ENABLE	{1} \
-  CONFIG.PS_GPIO2_MIO_PERIPHERAL_ENABLE	{1} \
-] [get_bd_cells sys_cips]
-
+apply_bd_automation -rule xilinx.com:bd_rule:versal_cips -config { configure_noc {Add new AXI NoC} num_ddr {1} pcie0_lane_width {None} pcie0_mode {None} pcie0_port_type {Endpoint Device} pcie1_lane_width {None} pcie1_mode {None} pcie1_port_type {Endpoint Device} pl_clocks {1} pl_resets {1}}  [get_bd_cells sys_cips]
 
 # NOC
 set_property -dict [list \
@@ -214,26 +179,3 @@ ad_cpu_interconnect 0x45000000 axi_sysid_0
 
 # interrupts
 
-
-## non-coherent PS-NOC ports ##
-set_property -dict [list CONFIG.PS_USE_PS_NOC_NCI_0 {1} CONFIG.PS_USE_PS_NOC_NCI_1 {1}] [get_bd_cells sys_cips]
-set_property -dict [list CONFIG.NUM_SI {8}] [get_bd_cells axi_noc_0]
-
-connect_bd_intf_net [get_bd_intf_pins sys_cips/FPD_AXI_NOC_0] [get_bd_intf_pins axi_noc_0/S06_AXI]
-connect_bd_intf_net [get_bd_intf_pins sys_cips/FPD_AXI_NOC_1] [get_bd_intf_pins axi_noc_0/S07_AXI]
-
-set_property -dict [list CONFIG.CATEGORY {ps_nci}] [get_bd_intf_pins /axi_noc_0/S06_AXI]
-set_property -dict [list CONFIG.CATEGORY {ps_nci}] [get_bd_intf_pins /axi_noc_0/S07_AXI]
-
-set_property -dict [list CONFIG.CONNECTIONS {MC_0 { read_bw {1720} write_bw {1720} read_avg_burst {4} write_avg_burst {4}} }] [get_bd_intf_pins /axi_noc_0/S06_AXI]
-set_property -dict [list CONFIG.CONNECTIONS {MC_0 { read_bw {1720} write_bw {1720} read_avg_burst {4} write_avg_burst {4}} }] [get_bd_intf_pins /axi_noc_0/S07_AXI]
-
-assign_bd_address -target_address_space /sys_cips/DATA_NCI0 [get_bd_addr_segs axi_noc_0/S06_AXI/C0_DDR_LOW0] -force
-assign_bd_address -target_address_space /sys_cips/DATA_NCI1 [get_bd_addr_segs axi_noc_0/S07_AXI/C0_DDR_LOW0] -force
-
-set_property -dict [list CONFIG.NUM_CLKS {8}] [get_bd_cells axi_noc_0]
-set_property -dict [list CONFIG.ASSOCIATED_BUSIF {S06_AXI}] [get_bd_pins /axi_noc_0/aclk6]
-set_property -dict [list CONFIG.ASSOCIATED_BUSIF {S07_AXI}] [get_bd_pins /axi_noc_0/aclk7]
-
-connect_bd_net [get_bd_pins sys_cips/fpd_axi_noc_axi0_clk] [get_bd_pins axi_noc_0/aclk6]
-connect_bd_net [get_bd_pins sys_cips/fpd_axi_noc_axi1_clk] [get_bd_pins axi_noc_0/aclk7]
