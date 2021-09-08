@@ -70,7 +70,9 @@ set fpga_family_list { \
         { kintex       2 } \
         { virtex       3 } \
         { zynq         4 } \
-        { versalprime  5 }}
+        { versalprime  5 } \
+        { versalaicore 6 } \
+      }
 
 set speed_grade_list { \
         { Unknown 0  } \
