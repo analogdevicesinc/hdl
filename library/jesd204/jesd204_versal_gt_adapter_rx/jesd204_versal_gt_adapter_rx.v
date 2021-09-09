@@ -87,7 +87,7 @@ module  jesd204_versal_gt_adapter_rx (
   //input          rxelecidle,
   //output         rxeqtraining,
   //input          rxfinealigndone,
-  //input  [1 : 0] rxheadervalid,
+  input    [1 : 0] rxheadervalid,
   //output         rxlpmen,
   //output         rxmldchaindone,
   //output         rxmldchainreq,
@@ -223,7 +223,7 @@ module  jesd204_versal_gt_adapter_rx (
   // Sync header alignment
   sync_header_align i_sync_header_align (
     .clk(usr_clk),
-    .reset(~rxresetdone),
+    .reset(~rxheadervalid[0]),
     .i_data({rxheader[1:0],rxdata[63:0]}),
     .i_slip(rx_bitslip_req_s),
     .i_slip_done(rx_bitslip_done_cnt[4]),

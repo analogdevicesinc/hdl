@@ -62,6 +62,7 @@ adi_add_bus "RX_GT_IP_Interface" "master" \
   { \
    { "rxdata" "ch_rxdata" } \
    { "rxheader" "ch_rxheader" } \
+   { "rxheadervalid" "ch_rxheadervalid" } \
    { "rxgearboxslip" "ch_rxgearboxslip" } \
    { "gtrxreset" "ch_gtrxreset" } \
    { "rxprogdivreset" "ch_rxprogdivreset" } \
