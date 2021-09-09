@@ -50,12 +50,12 @@ module  jesd204_versal_gt_adapter_rx (
   input    [5 : 0] rxheader,
   output           rxgearboxslip,
   //output         rxlatclk,
-  output           gtrxreset,
-  output           rxprogdivreset,
-  output           rxuserrdy,
+  //output           gtrxreset,
+  //output           rxprogdivreset,
+  //output           rxuserrdy,
   //input          rxprogdivresetdone,
   //input          rxpmaresetdone,
-  input            rxresetdone,
+  //input            rxresetdone,
   //input  [7 : 0] rx10gstat,
   //input  [2 : 0] rxbufstatus,
   //input          rxbyteisaligned,
@@ -95,7 +95,7 @@ module  jesd204_versal_gt_adapter_rx (
   //output         rxoobreset,
   //input          rxosintdone,
   //output [4 : 0] rxpcsresetmask,
-  output   [1 : 0] rxpd,
+  //output   [1 : 0] rxpd,
   //input          rxphaligndone,
   //input          rxphalignerr,
   //output         rxphalignreq,
@@ -108,14 +108,14 @@ module  jesd204_versal_gt_adapter_rx (
   //output         rxphshift180,
   //input          rxphshift180done,
   //output [6 : 0] rxpmaresetmask,
-  output           rxpolarity,
+  //output           rxpolarity,
   //output         rxprbscntreset,
   //input          rxprbserr,
   //input          rxprbslocked,
   //output [3 : 0] rxprbssel,
   //output [7 : 0] rxrate,
   //output [1 : 0] rxresetmode,
-  output           rxmstreset,
+  //output           rxmstreset,
   //output         rxmstdatapathreset,
   //input          rxmstresetdone,
   //output         rxslide,
@@ -151,57 +151,57 @@ module  jesd204_versal_gt_adapter_rx (
   output          rx_block_sync,
 
   // Other GTY signals
-  input           hsclk_lcplllocked,
-  input           hsclk_rplllocked,
-  input           usr_clk,
-  output          ilo_reset,
+  //input           hsclk_lcplllocked,
+  //input           hsclk_rplllocked,
+  input           usr_clk//,
+  //output          ilo_reset,
 
   // Control interface
-  output          up_pll_locked,
-  input           up_rst,
-  input           up_user_ready,
-  output          up_rst_done,
-  input           up_prbsforceerr,
-  input   [ 3:0]  up_prbssel,
-  input           up_lpm_dfe_n,
-  input   [ 2:0]  up_rate,
-  input   [ 1:0]  up_sys_clk_sel,
-  input   [ 2:0]  up_out_clk_sel,
-  input   [ 4:0]  up_diffctrl,
-  input   [ 4:0]  up_postcursor,
-  input   [ 4:0]  up_precursor,
-  input           up_enb,
-  input   [11:0]  up_addr,
-  input           up_wr,
-  input   [15:0]  up_wdata,
-  output  [15:0]  up_rdata,
-  output          up_ready
+  //output          up_pll_locked,
+  //input           up_rst,
+  //input           up_user_ready,
+  //output          up_rst_done,
+  //input           up_prbsforceerr,
+  //input   [ 3:0]  up_prbssel,
+  //input           up_lpm_dfe_n,
+  //input   [ 2:0]  up_rate,
+  //input   [ 1:0]  up_sys_clk_sel,
+  //input   [ 2:0]  up_out_clk_sel,
+  //input   [ 4:0]  up_diffctrl,
+  //input   [ 4:0]  up_postcursor,
+  //input   [ 4:0]  up_precursor,
+  //input           up_enb,
+  //input   [11:0]  up_addr,
+  //input           up_wr,
+  //input   [15:0]  up_wdata,
+  //output  [15:0]  up_rdata,
+  //output          up_ready
 
 );
 
-  // Master reset not used
-  assign rxmstreset = 1'b0;
+  //// Master reset not used
+  //assign rxmstreset = 1'b0;
 
-  assign rxpd = 2'b0;
-  assign rxpolarity = 1'b0;
+  //assign rxpd = 2'b0;
+  //assign rxpolarity = 1'b0;
 
-  assign gtrxreset = up_rst;
-  assign rxprogdivreset = up_rst;
-  assign ilo_reset = up_rst;
+  //assign gtrxreset = up_rst;
+  //assign rxprogdivreset = up_rst;
+  //assign ilo_reset = up_rst;
 
-  // Assert rxuserrdy only when usr_clk is active
-  reg [2:0] usr_rdy = 3'b0;
-  always @(posedge usr_clk or negedge up_user_ready) begin
-    if (~up_user_ready)
-      usr_rdy <= 3'b0;
-    else
-      usr_rdy <= {1'b1,usr_rdy[2:1]};
-  end
-  assign rxuserrdy = usr_rdy[0];
+  //// Assert rxuserrdy only when usr_clk is active
+  //reg [2:0] usr_rdy = 3'b0;
+  //always @(posedge usr_clk or negedge up_user_ready) begin
+  //  if (~up_user_ready)
+  //    usr_rdy <= 3'b0;
+  //  else
+  //    usr_rdy <= {1'b1,usr_rdy[2:1]};
+  //end
+  //assign rxuserrdy = usr_rdy[0];
 
-  assign up_rst_done = rxresetdone;
-  // TODO : Select locked status correctly
-  assign up_pll_locked = hsclk_lcplllocked | hsclk_rplllocked;
+  //assign up_rst_done = rxresetdone;
+  //// TODO : Select locked status correctly
+  //assign up_pll_locked = hsclk_lcplllocked | hsclk_rplllocked;
 
   // Sync header alignment
   reg [4:0] rx_bitslip_done_cnt = 'h0;
@@ -232,8 +232,8 @@ module  jesd204_versal_gt_adapter_rx (
     .o_block_sync(rx_block_sync)
   );
 
-  // No DRP yet
-  assign up_rdata = 16'h0;
-  assign up_ready = 1'b1;
+  //// No DRP yet
+  //assign up_rdata = 16'h0;
+  //assign up_ready = 1'b1;
 
 endmodule

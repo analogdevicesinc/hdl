@@ -48,9 +48,9 @@ module  jesd204_versal_gt_adapter_tx (
   output  [127 : 0] txdata,
   output    [5 : 0] txheader,
 //  output  [6 : 0] txsequence,
-  output            gttxreset,
-  output            txprogdivreset,
-  output            txuserrdy,
+//  output            gttxreset,
+//  output            txprogdivreset,
+//  output            txuserrdy,
 //  output  [1 : 0] txphalignresetmask,
 //  output          txcominit,
 //  output          txcomsas,
@@ -61,8 +61,8 @@ module  jesd204_versal_gt_adapter_tx (
 //  output          txlatclk,
 //  output          txphdlytstclk,
 //  output          txdlyalignreq,
-    output          txelecidle,
-    output          txinhibit,
+//    output          txelecidle,
+//    output          txinhibit,
 //  output          txmldchaindone,
 //  output          txmldchainreq,
 //  output          txoneszeros,
@@ -97,88 +97,88 @@ module  jesd204_versal_gt_adapter_tx (
 //  output [15 : 0] txctrl0,
 //  output [15 : 0] txctrl1,
 //  output  [1 : 0] txdeemph,
-  output    [1 : 0] txpd,
+//  output    [1 : 0] txpd,
 //  output  [1 : 0] txresetmode,
-  output            txmstreset,
+//  output            txmstreset,
 //  output          txmstdatapathreset,
 //  input           txmstresetdone,
 //  output  [2 : 0] txmargin,
 //  output  [2 : 0] txpmaresetmask,
 //  output  [3 : 0] txprbssel,
-  output    [4 : 0] txdiffctrl,
+//  output    [4 : 0] txdiffctrl,
 //  output  [4 : 0] txpippmstepsize,
-  output    [4 : 0] txpostcursor,
-  output    [4 : 0] txprecursor,
+//  output    [4 : 0] txpostcursor,
+//  output    [4 : 0] txprecursor,
 //  output  [6 : 0] txmaincursor,
 //  output  [7 : 0] txctrl2,
 //  output  [7 : 0] txrate,
 //  input           txprogdivresetdone,
 //  input           txpmaresetdone,
-  input             txresetdone,
+//  input             txresetdone,
 
   // Interface to Link layer core
   input      [63:0] tx_data,
   input       [1:0] tx_header,
 
   // Other GTY signals
-  input             hsclk_lcplllocked,
-  input             hsclk_rplllocked,
-  input             usr_clk,
+//  input             hsclk_lcplllocked,
+//  input             hsclk_rplllocked,
+  input             usr_clk//,
 
-  // Control interface
-  output          up_pll_locked,
-  input           up_rst,
-  input           up_user_ready,
-  output          up_rst_done,
-  input           up_prbsforceerr,
-  input   [ 3:0]  up_prbssel,
-  input           up_lpm_dfe_n,
-  input   [ 2:0]  up_rate,
-  input   [ 1:0]  up_sys_clk_sel,
-  input   [ 2:0]  up_out_clk_sel,
-  input   [ 4:0]  up_diffctrl,
-  input   [ 4:0]  up_postcursor,
-  input   [ 4:0]  up_precursor,
-  input           up_enb,
-  input   [11:0]  up_addr,
-  input           up_wr,
-  input   [15:0]  up_wdata,
-  output  [15:0]  up_rdata,
-  output          up_ready
+//  // Control interface
+//  output          up_pll_locked,
+//  input           up_rst,
+//  input           up_user_ready,
+//  output          up_rst_done,
+//  input           up_prbsforceerr,
+//  input   [ 3:0]  up_prbssel,
+//  input           up_lpm_dfe_n,
+//  input   [ 2:0]  up_rate,
+//  input   [ 1:0]  up_sys_clk_sel,
+//  input   [ 2:0]  up_out_clk_sel,
+//  input   [ 4:0]  up_diffctrl,
+//  input   [ 4:0]  up_postcursor,
+//  input   [ 4:0]  up_precursor,
+//  input           up_enb,
+//  input   [11:0]  up_addr,
+//  input           up_wr,
+//  input   [15:0]  up_wdata,
+//  output  [15:0]  up_rdata,
+//  output          up_ready
 
 );
 
   assign txdata = {64'b0,tx_data};
   assign txheader = {4'b0,tx_header};
 
-  // Master reset not used
-  assign txmstreset = 1'b0;
-  assign gttxreset = up_rst;
-  assign txprogdivreset = up_rst;
-
-  // Assert txuserrdy only when usr_clk is active
-  reg [2:0] usr_rdy = 3'b0;
-  always @(posedge usr_clk or negedge up_user_ready) begin
-    if (~up_user_ready)
-      usr_rdy <= 3'b0;
-    else
-      usr_rdy <= {1'b1,usr_rdy[2:1]};
-  end
-  assign txuserrdy = usr_rdy[0];
-
-  assign up_rst_done = txresetdone;
-  // TODO : Select locked status correctly
-  assign up_pll_locked = hsclk_lcplllocked | hsclk_rplllocked;
-
-  assign txdiffctrl = up_diffctrl;
-  assign txpd = 2'b0;
-  assign txelecidle = 1'b0;
-  assign txinhibit = 1'b0;
-  assign txpostcursor = up_postcursor;
-  assign txprecursor = up_precursor;
-
-  // No DRP yet
-  assign up_rdata = 16'h0;
-  assign up_ready = 1'b1;
+//  // Master reset not used
+//  assign txmstreset = 1'b0;
+//  assign gttxreset = up_rst;
+//  assign txprogdivreset = up_rst;
+//
+//  // Assert txuserrdy only when usr_clk is active
+//  reg [2:0] usr_rdy = 3'b0;
+//  always @(posedge usr_clk or negedge up_user_ready) begin
+//    if (~up_user_ready)
+//      usr_rdy <= 3'b0;
+//    else
+//      usr_rdy <= {1'b1,usr_rdy[2:1]};
+//  end
+//  assign txuserrdy = usr_rdy[0];
+//
+//  assign up_rst_done = txresetdone;
+//  // TODO : Select locked status correctly
+//  assign up_pll_locked = hsclk_lcplllocked | hsclk_rplllocked;
+//
+//  assign txdiffctrl = up_diffctrl;
+//  assign txpd = 2'b0;
+//  assign txelecidle = 1'b0;
+//  assign txinhibit = 1'b0;
+//  assign txpostcursor = up_postcursor;
+//  assign txprecursor = up_precursor;
+//
+//  // No DRP yet
+//  assign up_rdata = 16'h0;
+//  assign up_ready = 1'b1;
 
 endmodule

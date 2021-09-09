@@ -56,23 +56,22 @@ adi_ip_properties_lite jesd204_versal_gt_adapter_rx
 set_property display_name "ADI JESD204 Versal Transceiver Rx Lane Adapter" [ipx::current_core]
 set_property description "ADI JESD204 Versal Transceiver Rx Lane Adapter" [ipx::current_core]
 
-adi_add_bus "RX_GT_IP_Interface" "master" \
-  "xilinx.com:interface:gt_rx_interface_rtl:1.0" \
-  "xilinx.com:interface:gt_rx_interface:1.0" \
-  { \
-   { "rxdata" "ch_rxdata" } \
-   { "rxheader" "ch_rxheader" } \
-   { "rxheadervalid" "ch_rxheadervalid" } \
-   { "rxgearboxslip" "ch_rxgearboxslip" } \
-   { "gtrxreset" "ch_gtrxreset" } \
-   { "rxprogdivreset" "ch_rxprogdivreset" } \
-   { "rxuserrdy" "ch_rxuserrdy" } \
-   { "rxmstreset" "ch_rxmstreset" } \
-   { "rxresetdone" "ch_rxresetdone" } \
-   { "rxpolarity" "ch_rxpolarity" } \
-   { "rxpd" "ch_rxpd" } \
-
-  }
+#adi_add_bus "RX_GT_IP_Interface" "master" \
+#  "xilinx.com:interface:gt_rx_interface_rtl:1.0" \
+#  "xilinx.com:interface:gt_rx_interface:1.0" \
+#  { \
+#   { "rxdata" "ch_rxdata" } \
+#   { "rxheader" "ch_rxheader" } \
+#   { "rxheadervalid" "ch_rxheadervalid" } \
+#   { "rxgearboxslip" "ch_rxgearboxslip" } \
+#   { "gtrxreset" "ch_gtrxreset" } \
+#   { "rxprogdivreset" "ch_rxprogdivreset" } \
+#   { "rxuserrdy" "ch_rxuserrdy" } \
+#   { "rxmstreset" "ch_rxmstreset" } \
+#   { "rxresetdone" "ch_rxresetdone" } \
+#   { "rxpolarity" "ch_rxpolarity" } \
+#   { "rxpd" "ch_rxpd" } \
+#  }
 
 adi_add_bus "RX" "master" \
   "xilinx.com:display_jesd204:jesd204_rx_bus_rtl:1.0" \
@@ -83,26 +82,26 @@ adi_add_bus "RX" "master" \
    { "rx_block_sync" "rxblock_sync" } \
   }
 
-# Control interface
-adi_if_infer_bus analog.com:interface:if_xcvr_ch slave up_rx [list \
-  "pll_locked          up_pll_locked  "\
-  "rst                 up_rst         "\
-  "user_ready          up_user_ready  "\
-  "rst_done            up_rst_done    "\
-  "prbsforceerr        up_prbsforceerr"\
-  "prbssel             up_prbssel     "\
-  "lpm_dfe_n           up_lpm_dfe_n   "\
-  "rate                up_rate        "\
-  "sys_clk_sel         up_sys_clk_sel "\
-  "out_clk_sel         up_out_clk_sel "\
-  "tx_diffctrl         up_diffctrl     "\
-  "tx_postcursor       up_postcursor   "\
-  "tx_precursor        up_precursor    "\
-  "enb                 up_enb         "\
-  "addr                up_addr        "\
-  "wr                  up_wr          "\
-  "wdata               up_wdata       "\
-  "rdata               up_rdata       "\
-  "ready               up_ready       "]
+## Control interface
+#adi_if_infer_bus analog.com:interface:if_xcvr_ch slave up_rx [list \
+#  "pll_locked          up_pll_locked  "\
+#  "rst                 up_rst         "\
+#  "user_ready          up_user_ready  "\
+#  "rst_done            up_rst_done    "\
+#  "prbsforceerr        up_prbsforceerr"\
+#  "prbssel             up_prbssel     "\
+#  "lpm_dfe_n           up_lpm_dfe_n   "\
+#  "rate                up_rate        "\
+#  "sys_clk_sel         up_sys_clk_sel "\
+#  "out_clk_sel         up_out_clk_sel "\
+#  "tx_diffctrl         up_diffctrl     "\
+#  "tx_postcursor       up_postcursor   "\
+#  "tx_precursor        up_precursor    "\
+#  "enb                 up_enb         "\
+#  "addr                up_addr        "\
+#  "wr                  up_wr          "\
+#  "wdata               up_wdata       "\
+#  "rdata               up_rdata       "\
+#  "ready               up_ready       "]
 
 ipx::save_core [ipx::current_core]
