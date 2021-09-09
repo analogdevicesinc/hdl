@@ -92,3 +92,8 @@ _vmake
 *.qdb
 *.qpg
 *.qtl
+*.xpe
+*.gen*
+*.xsa
+*.pdi
+
