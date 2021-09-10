@@ -55,9 +55,5 @@ adi_project_files ad9081_fmca_ebz_vck190 [list \
 
 set_property strategy Performance_Explore [get_runs impl_1]
 
-add_files -fileset utils_1 -norecurse drc.tcl
-set_property STEPS.PLACE_DESIGN.TCL.PRE [ get_files drc.tcl -of [get_fileset utils_1] ] [get_runs impl_1]
-set_property STEPS.WRITE_DEVICE_IMAGE.TCL.PRE [ get_files drc.tcl -of [get_fileset utils_1] ] [get_runs impl_1]
-
 adi_project_run ad9081_fmca_ebz_vck190
 
