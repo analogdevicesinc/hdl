@@ -27,6 +27,7 @@ CLEAN_TARGET += *.str
 CLEAN_TARGET += mem_init_sys.txt
 CLEAN_TARGET += *.csv
 CLEAN_TARGET += *.hbs
+CLEAN_TARGET += *.gen
 
 # Common dependencies that all projects have
 M_DEPS += system_project.tcl
