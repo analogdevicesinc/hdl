@@ -11,6 +11,11 @@ you may be subject, under such license terms. This agreement does not limit your
 rights under, or grant you rights that supersede, the license terms of any
 particular module.
 
+This HDL repository also includes a build system / recipe / scripts based on various
+makefiles and TCL scripts. The build system is released under a seperate license
+(BSD 1 Clause) from the HDL modules. This allows you to create your own HDL blocks
+and incorporated them into this build system.
+
 The mere aggregation of these modules (putting them side by side in the same
 source code repository or on a hard disk) does not mean that there is one master
 license for all the files. It is up to you, the user, to ensure that during the
