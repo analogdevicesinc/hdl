@@ -19,17 +19,17 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 ##    1 - EVAL-AD40XX-FMCZ
 ##    0 - EVAL-ADAQ400x
 ##
-set ad40xx_adaq400x_n 1
+set AD40XX_ADAQ400X_N [get_env_param AD40XX_ADAQ400X_N 1]
 
 adi_project ad40xx_fmc_zed
 
-if {$ad40xx_adaq400x_n == 1} {
+if {$AD40XX_ADAQ400X_N == 1} {
   adi_project_files ad40xx_fmc_zed [list \
       "$ad_hdl_dir/library/common/ad_iobuf.v" \
       "system_top_ad40xx.v" \
       "system_constr_ad40xx.xdc" \
       "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc"]
-} elseif {$ad40xx_adaq400x_n == 0} {
+} elseif {$AD40XX_ADAQ400X_N == 0} {
   adi_project_files ad40xx_fmc_zed [list \
       "$ad_hdl_dir/library/common/ad_iobuf.v" \
       "system_top_adaq400x.v" \
