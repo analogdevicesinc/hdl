@@ -51,7 +51,7 @@ set_property -dict [list \
      RXPROGDIV_FREQ_SOURCE LCPLL \
      RXPROGDIV_FREQ_VAL 375.000 \
      INS_LOSS_NYQ 12 \
-     RX_EQ_MODE DFE \
+     RX_EQ_MODE LPM \
      RX_COUPLING AC \
      RX_TERMINATION PROGRAMMABLE \
      RX_RATE_GROUP A \
@@ -164,6 +164,11 @@ set_property -dict [list \
 ] [get_bd_cells gt_bridge_ip_0]
 
 apply_bd_automation -rule xilinx.com:bd_rule:gt_ips -config { DataPath_Interface_Connection {Auto} Lane0_selection {NULL} Lane10_selection {NULL} Lane11_selection {NULL} Lane12_selection {NULL} Lane13_selection {NULL} Lane14_selection {NULL} Lane15_selection {NULL} Lane16_selection {NULL} Lane17_selection {NULL} Lane18_selection {NULL} Lane19_selection {NULL} Lane1_selection {NULL} Lane2_selection {NULL} Lane3_selection {NULL} Lane4_selection {NULL} Lane5_selection {NULL} Lane6_selection {NULL} Lane7_selection {NULL} Lane8_selection {NULL} Lane9_selection {NULL} Quad0_selection {NULL} Quad10_selection {NULL} Quad11_selection {NULL} Quad12_selection {NULL} Quad13_selection {NULL} Quad14_selection {NULL} Quad15_selection {NULL} Quad16_selection {NULL} Quad17_selection {NULL} Quad18_selection {NULL} Quad19_selection {NULL} Quad1_selection {NULL} Quad2_selection {NULL} Quad3_selection {NULL} Quad4_selection {NULL} Quad5_selection {NULL} Quad6_selection {NULL} Quad7_selection {NULL} Quad8_selection {NULL} Quad9_selection {NULL}}  [get_bd_cells gt_bridge_ip_0]
+
+set_property -dict [list CONFIG.REG_CONF_INTF {AXI_LITE}] [get_bd_cells gt_quad_base]
+make_bd_intf_pins_external  [get_bd_intf_pins gt_quad_base/AXI_LITE]
+make_bd_pins_external  [get_bd_pins gt_quad_base/s_axi_lite_clk]
+make_bd_pins_external  [get_bd_pins gt_quad_base/s_axi_lite_resetn]
 
 validate_bd_design
 

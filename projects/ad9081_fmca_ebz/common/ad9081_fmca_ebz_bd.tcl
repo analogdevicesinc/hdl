@@ -11,11 +11,11 @@
 #   [RX/TX]_JESD_NP : Number of bits per sample
 #   [RX/TX]_NUM_LINKS : Number of links, matches numer of MxFE devices
 #
-if {$ADI_PHY_SEL == {}} {
+if {![info exists ADI_PHY_SEL]} {
   set ADI_PHY_SEL 1
 }
 
-source ../../common/xilinx/data_offload_bd.tcl
+source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
 
 # Common parameter for TX and RX
 set JESD_MODE  $ad_project_params(JESD_MODE)
@@ -399,6 +399,9 @@ ad_connect tx_mxfe_tpl_core/dac_dunf GND
 if {$ADI_PHY_SEL == 1} {
 ad_cpu_interconnect 0x44a60000 axi_mxfe_rx_xcvr
 ad_cpu_interconnect 0x44b60000 axi_mxfe_tx_xcvr
+} else {
+ad_cpu_interconnect 0x44a60000 jesd204_phy
+ad_connect $sys_cpu_resetn jesd204_phy/s_axi_lite_resetn_0
 }
 ad_cpu_interconnect 0x44a10000 rx_mxfe_tpl_core
 ad_cpu_interconnect 0x44b10000 tx_mxfe_tpl_core
