@@ -148,8 +148,15 @@ module  jesd204_versal_gt_adapter_tx (
 
 );
 
-  assign txdata = {64'b0,tx_data};
-  assign txheader = {4'b0,tx_header};
+  wire [63:0] tx_data_flip;
+  genvar i;
+  for (i = 0; i < 64; i=i+1) begin
+    assign tx_data_flip[63-i] = tx_data[i];
+  end
+
+  assign txdata = {64'b0,tx_data_flip};
+  // Flip header bits and data
+  assign txheader = {4'b0,tx_header[0],tx_header[1]};
 
 //  // Master reset not used
 //  assign txmstreset = 1'b0;
