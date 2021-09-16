@@ -71,6 +71,7 @@ proc ad_data_offload_create {instance_name
         CONFIG.A_ADDRESS_WIDTH $source_awidth \
         CONFIG.B_DATA_WIDTH $destination_dwidth \
         CONFIG.B_ADDRESS_WIDTH $destination_awidth \
+        CONFIG.CASCADE_HEIGHT 1 \
       ] [get_bd_cells storage_unit]
 
       ad_connect storage_unit/clka i_data_offload/s_axis_aclk
