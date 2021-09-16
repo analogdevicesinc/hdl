@@ -105,6 +105,7 @@ foreach {k v} { \
     "SRC_RAW_DATA_EN" "false" \
     "DST_RAW_DATA_EN" "false" \
     "DST_CYCLIC_EN" "true" \
+    "SYNC_EXT_ADD_INTERNAL_CDC" "true" \
   } { \
   set_property -dict [list \
       "value_format" "bool" \
@@ -228,6 +229,11 @@ set_property -dict [list \
   "display_name" "Destination Cyclic Mode Enabled" \
 ] [ipgui::get_guiparamspec -name "DST_CYCLIC_EN" -component $cc]
 set_property enablement_tcl_expr {$TX_OR_RXN_PATH == 1} [ipx::get_user_parameters DST_CYCLIC_EN -of_objects $cc]
+
+ipgui::add_param -name "SYNC_EXT_ADD_INTERNAL_CDC" -component $cc -parent $features_group
+set_property -dict [list \
+  "display_name" "Generate CDC Circuit for sync_ext" \
+] [ipgui::get_guiparamspec -name "SYNC_EXT_ADD_INTERNAL_CDC" -component $cc]
 
 ## Create and save the XGUI file
 ipx::create_xgui_files $cc
