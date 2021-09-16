@@ -227,6 +227,14 @@ ipx::infer_bus_interface up_qpll_rst_4 xilinx.com:signal:reset_rtl:1.0 [ipx::cur
 ipx::infer_bus_interface up_qpll_rst_8 xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
 ipx::infer_bus_interface up_qpll_rst_12 xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
 
+for {set n 0} {$n < 16} {incr n} {
+
+  if {($n%4) == 0} {
+	ipx::associate_bus_interfaces -clock cpll_ref_clk_${n} -reset up_qpll_rst_${n} -remove [ipx::current_core]
+  }
+  ipx::associate_bus_interfaces -clock cpll_ref_clk_${n} -reset up_cpll_rst_${n} -remove [ipx::current_core]
+}
+
 set_property driver_value 0 [ipx::get_ports -filter "direction==in" -of_objects [ipx::current_core]]
 
 for {set n 0} {$n < 16} {incr n} {
