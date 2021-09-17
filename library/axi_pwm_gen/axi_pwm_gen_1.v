@@ -55,10 +55,10 @@ module axi_pwm_gen_1 #(
   // internal registers
 
   reg     [31:0]               pulse_period_cnt = 32'h0;
-  reg     [31:0]               pulse_period_read = 32'b0;
-  reg     [31:0]               pulse_width_read = 32'b0;
-  reg     [31:0]               pulse_period_d = 32'b0;
-  reg     [31:0]               pulse_width_d = 32'b0;
+  reg     [31:0]               pulse_period_read =  PULSE_PERIOD;
+  reg     [31:0]               pulse_width_read = PULSE_WIDTH;
+  reg     [31:0]               pulse_period_d = PULSE_PERIOD;
+  reg     [31:0]               pulse_width_d = PULSE_WIDTH;
   reg                          phase_align_armed = 1'b1;
 
   // internal wires
@@ -76,10 +76,10 @@ module axi_pwm_gen_1 #(
 
   always @(posedge clk) begin
     if (rstn == 1'b0) begin
-      pulse_period_d <= PULSE_PERIOD;
-      pulse_width_d <= PULSE_WIDTH;
-      pulse_period_read <= PULSE_PERIOD;
-      pulse_width_read <= PULSE_WIDTH;
+      pulse_period_d <= pulse_period;
+      pulse_width_d <= pulse_width;
+      pulse_period_read <= pulse_period;
+      pulse_width_read <= pulse_width;
     end else begin
       // load the input period/width values
       if (load_config) begin

@@ -1,5 +1,6 @@
 ####################################################################################
-## Copyright 2018(c) Analog Devices, Inc.
+## Copyright (c) 2018 - 2021 Analog Devices, Inc.
+## SPDX short identifier: BSD-1-Clause
 ####################################################################################
 
 # Assumes this file is in projects/scripts/project-toplevel.mk
