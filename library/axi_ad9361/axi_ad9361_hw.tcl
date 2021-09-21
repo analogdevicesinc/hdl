@@ -34,7 +34,7 @@ ad_ip_files axi_ad9361 [list\
   $ad_hdl_dir/library/common/up_dac_common.v \
   $ad_hdl_dir/library/common/up_dac_channel.v \
   $ad_hdl_dir/library/common/up_tdd_cntrl.v \
-  intel/axi_ad9361_lvds_if_10.v \
+  intel/axi_ad9361_lvds_if_10_hanpilot.v \
   intel/axi_ad9361_lvds_if_c5.v \
   intel/axi_ad9361_lvds_if.v \
   intel/axi_ad9361_cmos_if.v \
@@ -71,8 +71,6 @@ ad_ip_parameter DAC_IQCORRECTION_DISABLE INTEGER 0
 ad_ip_parameter IO_DELAY_GROUP STRING {dev_if_delay_group}
 ad_ip_parameter MIMO_ENABLE INTEGER 0
 ad_ip_parameter RX_NODPA INTEGER 0
-ad_ip_parameter NUMBER_OF_RX_CHANNELS INTEGER 6
-ad_ip_parameter NUMBER_OF_TX_CHANNELS INTEGER 6
 
 adi_add_auto_fpga_spec_params
 
@@ -85,9 +83,9 @@ ad_interface signal dac_sync_out output 1
 ad_interface signal tdd_sync input 1
 ad_interface signal tdd_sync_cntr output 1
 
-ad_interface clock delay_clk input 1
-ad_interface clock l_clk output 1
-ad_interface clock clk input 1
+ad_interface clock clk_in_p input 1
+ad_interface clock clk_in_n input 1
+ad_interface clock clk clk 1
 
 ad_interface reset rst output 1 if_clk
 set_interface_property if_rst associatedResetSinks s_axi_reset
@@ -176,52 +174,93 @@ proc axi_ad9361_elab {} {
   set m_fpga_technology [get_parameter_value "FPGA_TECHNOLOGY"]
   set m_cmos_or_lvds_n [get_parameter_value "CMOS_OR_LVDS_N"]
   set rx_nodpa [get_parameter_value "RX_NODPA"]
-  set m_number_of_rx_channels [get_parameter_value "NUMBER_OF_RX_CHANNELS"]
-  set m_number_of_tx_channels [get_parameter_value "NUMBER_OF_TX_CHANNELS"]
   
   # 103 - stands for "Arria 10" see adi_intel_device_info_enc.tcl
   if {$m_fpga_technology == 103} {
-
-    add_hdl_instance axi_ad9361_serdes_clk intel_serdes 1.0
-    set_instance_parameter_value axi_ad9361_serdes_clk {DEVICE_FAMILY} {Arria 10}
-    set_instance_parameter_value axi_ad9361_serdes_clk {MODE} {CLK}
-    set_instance_parameter_value axi_ad9361_serdes_clk {DDR_OR_SDR_N} {1}
-    set_instance_parameter_value axi_ad9361_serdes_clk {SERDES_FACTOR} {4}
-    set_instance_parameter_value axi_ad9361_serdes_clk {CLKIN_FREQUENCY} {250.0}
-
-    set rx_serdes_mode IN
-    if {$rx_nodpa == 1} {set rx_serdes_mode IN_NODPA}
-
-    add_hdl_instance axi_ad9361_serdes_in intel_serdes 1.0
-    set_instance_parameter_value axi_ad9361_serdes_in {DEVICE_FAMILY} {Arria 10}
-    set_instance_parameter_value axi_ad9361_serdes_in {MODE} $rx_serdes_mode
-    set_instance_parameter_value axi_ad9361_serdes_in {DDR_OR_SDR_N} {1}
-    set_instance_parameter_value axi_ad9361_serdes_in {SERDES_FACTOR} {4}
-    set_instance_parameter_value axi_ad9361_serdes_in {CLKIN_FREQUENCY} {250.0}
-    set_instance_parameter_value axi_ad9361_serdes_in {NUMBER_OF_CHANNELS} $m_number_of_rx_channels
+#     add_hdl_instance i_intel_iopll intel_gpio_ad 1.0
+#     set_instance_parameter_value i_intel_iopll {DEVICE_FAMILY} {Arria 10}
+#     set_instance_parameter_value i_intel_iopll {MODE} {CLK}
+#     set_instance_parameter_value i_intel_iopll {DDR_OR_SDR_N} {1}
+     
+    add_hdl_instance intel_iddr_full_diff altera_gpio 19.3
+    set_instance_parameter_value intel_iddr_full_diff {DEVICE_FAMILY} {Arria 10}
+    set_instance_parameter_value intel_iddr_full_diff {PIN_TYPE_GUI} {Input}
+    set_instance_parameter_value intel_iddr_full_diff {SIZE} {6}
+    set_instance_parameter_value intel_iddr_full_diff {gui_areset_mode} {None}
+    set_instance_parameter_value intel_iddr_full_diff {gui_bus_hold} {0}
+    set_instance_parameter_value intel_iddr_full_diff {gui_diff_buff} {0}
+    set_instance_parameter_value intel_iddr_full_diff {gui_enable_cke} {0}
+    set_instance_parameter_value intel_iddr_full_diff {gui_enable_migratable_port_names} {0}
+    set_instance_parameter_value intel_iddr_full_diff {gui_enable_termination_ports} {0}
+    set_instance_parameter_value intel_iddr_full_diff {gui_io_reg_mode} {DDIO}
+    set_instance_parameter_value intel_iddr_full_diff {gui_open_drain} {0}
+    set_instance_parameter_value intel_iddr_full_diff {gui_pseudo_diff} {0}
+    set_instance_parameter_value intel_iddr_full_diff {gui_separate_io_clks} {0}
+    set_instance_parameter_value intel_iddr_full_diff {gui_sreset_mode} {None}
+    set_instance_parameter_value intel_iddr_full_diff {gui_use_oe} {0}
+    set_instance_parameter_value intel_iddr_full_diff {gui_hr_logic} {0}
     
-    add_hdl_instance axi_ad9361_serdes_out intel_serdes 1.0
-    set_instance_parameter_value axi_ad9361_serdes_out {DEVICE_FAMILY} {Arria 10}
-    set_instance_parameter_value axi_ad9361_serdes_out {MODE} {OUT}
-    set_instance_parameter_value axi_ad9361_serdes_out {DDR_OR_SDR_N} {1}
-    set_instance_parameter_value axi_ad9361_serdes_out {SERDES_FACTOR} {4}
-    set_instance_parameter_value axi_ad9361_serdes_out {CLKIN_FREQUENCY} {250.0}
-    set_instance_parameter_value axi_ad9361_serdes_out {NUMBER_OF_CHANNELS} $m_number_of_tx_channels
+    add_hdl_instance intel_iddr_diff altera_gpio 19.3
+    set_instance_parameter_value intel_iddr_diff {DEVICE_FAMILY} {Arria 10}
+    set_instance_parameter_value intel_iddr_diff {PIN_TYPE_GUI} {Input}
+    set_instance_parameter_value intel_iddr_diff {SIZE} {1}
+    set_instance_parameter_value intel_iddr_diff {gui_areset_mode} {None}
+    set_instance_parameter_value intel_iddr_diff {gui_bus_hold} {0}
+    set_instance_parameter_value intel_iddr_diff {gui_diff_buff} {0}
+    set_instance_parameter_value intel_iddr_diff {gui_enable_cke} {0}
+    set_instance_parameter_value intel_iddr_diff {gui_enable_migratable_port_names} {0}
+    set_instance_parameter_value intel_iddr_diff {gui_enable_termination_ports} {0}
+    set_instance_parameter_value intel_iddr_diff {gui_io_reg_mode} {DDIO}
+    set_instance_parameter_value intel_iddr_diff {gui_open_drain} {0}
+    set_instance_parameter_value intel_iddr_diff {gui_pseudo_diff} {0}
+    set_instance_parameter_value intel_iddr_diff {gui_separate_io_clks} {0}
+    set_instance_parameter_value intel_iddr_diff {gui_sreset_mode} {None}
+    set_instance_parameter_value intel_iddr_diff {gui_use_oe} {0}
+    set_instance_parameter_value intel_iddr_diff {gui_hr_logic} {0}
     
-#     add_hdl_instance axi_ad9361_serdes_out_1x intel_serdes 1.0
-#     set_instance_parameter_value axi_ad9361_serdes_out_1x {DEVICE_FAMILY} {Arria 10}
-#     set_instance_parameter_value axi_ad9361_serdes_out_1x {MODE} {OUT}
-#     set_instance_parameter_value axi_ad9361_serdes_out_1x {DDR_OR_SDR_N} {1}
-#     set_instance_parameter_value axi_ad9361_serdes_out_1x {SERDES_FACTOR} {4}
-#     set_instance_parameter_value axi_ad9361_serdes_out_1x {CLKIN_FREQUENCY} {250.0}
-#     set_instance_parameter_value axi_ad9361_serdes_out_1x {NUMBER_OF_CHANNELS} {1}
-
+    add_hdl_instance intel_oddr_full_diff altera_gpio 19.3
+    set_instance_parameter_value intel_oddr_full_diff {DEVICE_FAMILY} {Arria 10}
+    set_instance_parameter_value intel_oddr_full_diff {PIN_TYPE_GUI} {Output}
+    set_instance_parameter_value intel_oddr_full_diff {SIZE} {6}
+    set_instance_parameter_value intel_oddr_full_diff {gui_areset_mode} {None}
+    set_instance_parameter_value intel_oddr_full_diff {gui_bus_hold} {0}
+    set_instance_parameter_value intel_oddr_full_diff {gui_diff_buff} {0}
+    set_instance_parameter_value intel_oddr_full_diff {gui_enable_cke} {0}
+    set_instance_parameter_value intel_oddr_full_diff {gui_enable_migratable_port_names} {0}
+    set_instance_parameter_value intel_oddr_full_diff {gui_enable_termination_ports} {0}
+    set_instance_parameter_value intel_oddr_full_diff {gui_io_reg_mode} {DDIO}
+    set_instance_parameter_value intel_oddr_full_diff {gui_open_drain} {0}
+    set_instance_parameter_value intel_oddr_full_diff {gui_pseudo_diff} {0}
+    set_instance_parameter_value intel_oddr_full_diff {gui_separate_io_clks} {0}
+    set_instance_parameter_value intel_oddr_full_diff {gui_sreset_mode} {None}
+    set_instance_parameter_value intel_oddr_full_diff {gui_use_oe} {0}
+    set_instance_parameter_value intel_oddr_full_diff {gui_hr_logic} {0}
+    
+    add_hdl_instance intel_oddr_diff altera_gpio 19.3
+    set_instance_parameter_value intel_oddr_diff {DEVICE_FAMILY} {Arria 10}
+    set_instance_parameter_value intel_oddr_diff {PIN_TYPE_GUI} {Output}
+    set_instance_parameter_value intel_oddr_diff {SIZE} {1}
+    set_instance_parameter_value intel_oddr_diff {gui_areset_mode} {None}
+    set_instance_parameter_value intel_oddr_diff {gui_bus_hold} {0}
+    set_instance_parameter_value intel_oddr_diff {gui_diff_buff} {0}
+    set_instance_parameter_value intel_oddr_diff {gui_enable_cke} {0}
+    set_instance_parameter_value intel_oddr_diff {gui_enable_migratable_port_names} {0}
+    set_instance_parameter_value intel_oddr_diff {gui_enable_termination_ports} {0}
+    set_instance_parameter_value intel_oddr_diff {gui_io_reg_mode} {DDIO}
+    set_instance_parameter_value intel_oddr_diff {gui_open_drain} {0}
+    set_instance_parameter_value intel_oddr_diff {gui_pseudo_diff} {0}
+    set_instance_parameter_value intel_oddr_diff {gui_separate_io_clks} {0}
+    set_instance_parameter_value intel_oddr_diff {gui_sreset_mode} {None}
+    set_instance_parameter_value intel_oddr_diff {gui_use_oe} {0}
+    set_instance_parameter_value intel_oddr_diff {gui_hr_logic} {0}
+    
     add_hdl_instance axi_ad9361_data_out altera_gpio 19.3
     set_instance_parameter_value axi_ad9361_data_out {DEVICE_FAMILY} {Arria 10}
     set_instance_parameter_value axi_ad9361_data_out {PIN_TYPE_GUI} {Output}
     set_instance_parameter_value axi_ad9361_data_out {SIZE} {1}
     set_instance_parameter_value axi_ad9361_data_out {gui_io_reg_mode} {DDIO}
-
+    set_instance_parameter_value axi_ad9361_data_out {gui_hr_logic} {0}
+    
     add_hdl_instance clk_buffer altclkctrl 19.1
     set_instance_parameter_value clk_buffer {DEVICE_FAMILY} {Arria 10}
 

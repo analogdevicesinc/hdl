@@ -68,9 +68,7 @@ module axi_ad9361 #(
   parameter   MIMO_ENABLE = 0,
   parameter   USE_SSI_CLK = 1,
   parameter   DELAY_REFCLK_FREQUENCY = 200,
-  parameter   RX_NODPA = 0,
-  parameter   NUMBER_OF_RX_CHANNELS = 0,
-  parameter   NUMBER_OF_TX_CHANNELS = 0) (
+  parameter   RX_NODPA = 0) (
 
   // physical interface (receive-lvds)
 

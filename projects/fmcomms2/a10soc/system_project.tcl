@@ -7,6 +7,9 @@ adi_project fmcomms2_a10soc
 source $ad_hdl_dir/projects/common/a10soc/a10soc_system_assign.tcl
 source $ad_hdl_dir/projects/common/a10soc/a10soc_plddr4_assign.tcl
 
+set_global_assignment -name ROUTER_CLOCKING_TOPOLOGY_ANALYSIS ON
+set_global_assignment -name OPTIMIZATION_MODE "HIGH PERFORMANCE EFFORT"
+
 # lane interface
 
 # Note: This projects requires a hardware rework to function correctly.
@@ -66,27 +69,18 @@ set_instance_assignment -name IO_STANDARD LVDS               -to rx_clk_in
 set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to rx_clk_in
 set_instance_assignment -name IO_STANDARD LVDS               -to rx_frame_in
 set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to rx_frame_in
-set_instance_assignment -name IO_STANDARD LVDS               -to rx_data_in[0]
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to rx_data_in[0]
-set_instance_assignment -name IO_STANDARD LVDS               -to rx_data_in[1]
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to rx_data_in[1]
-set_instance_assignment -name IO_STANDARD LVDS               -to rx_data_in[2]
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to rx_data_in[2]
-set_instance_assignment -name IO_STANDARD LVDS               -to rx_data_in[3]
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to rx_data_in[3]
-set_instance_assignment -name IO_STANDARD LVDS               -to rx_data_in[4]
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to rx_data_in[4]
-set_instance_assignment -name IO_STANDARD LVDS               -to rx_data_in[5]
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to rx_data_in[5]
+set_instance_assignment -name INPUT_DELAY_CHAIN 45           -to rx_frame_in
+set_instance_assignment -name IO_STANDARD LVDS               -to rx_data_in
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to rx_data_in
+set_instance_assignment -name INPUT_DELAY_CHAIN 45           -to rx_data_in
+
 
 set_instance_assignment -name IO_STANDARD LVDS               -to tx_clk_out
+set_instance_assignment -name OUTPUT_DELAY_CHAIN 2           -to tx_clk_out
 set_instance_assignment -name IO_STANDARD LVDS               -to tx_frame_out
-set_instance_assignment -name IO_STANDARD LVDS               -to tx_data_out[0]
-set_instance_assignment -name IO_STANDARD LVDS               -to tx_data_out[1]
-set_instance_assignment -name IO_STANDARD LVDS               -to tx_data_out[2]
-set_instance_assignment -name IO_STANDARD LVDS               -to tx_data_out[3]
-set_instance_assignment -name IO_STANDARD LVDS               -to tx_data_out[4]
-set_instance_assignment -name IO_STANDARD LVDS               -to tx_data_out[5]
+set_instance_assignment -name OUTPUT_DELAY_CHAIN 2           -to tx_frame_out
+set_instance_assignment -name IO_STANDARD LVDS               -to tx_data_out
+set_instance_assignment -name OUTPUT_DELAY_CHAIN 2           -to tx_data_out
 
 
 set_location_assignment PIN_C3   -to   gpio_status[0]                   ; ## G21  FMCA_HPC_LA20_P
@@ -136,7 +130,7 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_clk
 set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_mosi
 set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_miso
 
-# set_instance_assignment -name GLOBAL_SIGNAL "GLOBAL CLOCK" -to "rx_clk_in"  
+set_instance_assignment -name GLOBAL_SIGNAL "GLOBAL CLOCK" -to "rx_clk_in"  
 
 execute_flow -compile
 

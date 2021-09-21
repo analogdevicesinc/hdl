@@ -39,10 +39,12 @@ module axi_ad9361_lvds_if #(
 
   parameter   FPGA_TECHNOLOGY = 0,
   parameter   DAC_IODELAY_ENABLE = 0,
-  parameter   IO_DELAY_GROUP = "dev_if_delay_group",
   parameter   CLK_DESKEW = 0,
+
+  // Dummy parameters, required keep the code consistency(used on Xilinx)
   parameter   USE_SSI_CLK = 1,
-  parameter   DELAY_REFCLK_FREQUENCY = 200,
+  parameter   IO_DELAY_GROUP = "dev_if_delay_group",
+  parameter   DELAY_REFCLK_FREQUENCY = 0,
   parameter   RX_NODPA = 0) (
 
   // physical interface (receive)
@@ -77,7 +79,7 @@ module axi_ad9361_lvds_if #(
   // receive data path interface
 
   output              adc_valid,
-  output  [47:0]      adc_data,
+  output      [47:0]  adc_data,
   output              adc_status,
   input               adc_r1_mode,
   input               adc_ddr_edgesel,
@@ -124,33 +126,33 @@ module axi_ad9361_lvds_if #(
 
   // internal registers
 
-  reg                 rx_r1_mode = 'd0;
+  reg                 r_hr_ref_clk = 'd0;
   reg                 rx_locked_m1 = 'd0;
+  reg                 rx_locked = 'd0;
   reg                 up_drp_locked_m1 = 1'd0;
   reg                 up_drp_locked_int = 1'd0;
-  reg                 rx_locked = 'd0;
-  reg     [ 3:0]      rx_frame = 'd0;
+  reg                 rx_r1_mode = 'd0;
+  reg     [ 3:0]      rx_frame  = 'd0;
   reg     [11:0]      rx_data_1 = 'd0;
   reg     [11:0]      rx_data_0 = 'd0;
-  reg     [ 3:0]      rx_frame_m1 = 'd0;
-  reg     [11:0]      rx_data_1_m1 = 'd0;
-  reg     [11:0]      rx_data_0_m1 = 'd0;
   reg                 adc_valid_p = 'd0;
   reg     [47:0]      adc_data_p = 'd0;
   reg                 adc_status_p = 'd0;
   reg                 adc_valid_int = 'd0;
   reg     [47:0]      adc_data_int = 'd0;
   reg                 adc_status_int = 'd0;
-  reg     [ 1:0]      tx_data_sel = 'd0;
+  reg                 tx_valid = 'd0;
   reg     [47:0]      tx_data = 'd0;
-  reg     [ 1:0]      tx_clk_p = 'd0;
-  reg                 tx_frame_p = 'd0;
+  reg     [ 3:0]      tx_frame_p = 'd0;
   reg     [ 5:0]      tx_data_0_p = 'd0;
   reg     [ 5:0]      tx_data_1_p = 'd0;
-  reg     [ 1:0]      tx_clk = 'd0;
-  reg                 tx_frame = 'd0;
+  reg     [ 5:0]      tx_data_2_p = 'd0;
+  reg     [ 5:0]      tx_data_3_p = 'd0;
+  reg     [ 3:0]      tx_frame = 'd0;
   reg     [ 5:0]      tx_data_0 = 'd0;
   reg     [ 5:0]      tx_data_1 = 'd0;
+  reg     [ 5:0]      tx_data_2 = 'd0;
+  reg     [ 5:0]      tx_data_3 = 'd0;
   reg                 up_enable_int = 'd0;
   reg                 up_txnrx_int = 'd0;
   reg                 enable_up_m1 = 'd0;
@@ -161,16 +163,29 @@ module axi_ad9361_lvds_if #(
   reg                 txnrx_int = 'd0;
   reg                 enable_int_p = 'd0;
   reg                 txnrx_int_p = 'd0;
-  
-  wire                s_ref_clk;
-  wire                f_clk;
+
   // internal signals
 
+  wire                f_clk;
+  wire                locked_s;
+  wire    [ 3:0]      rx_frame_s;
+  wire    [ 5:0]      rx_data_3_s;
+  wire    [ 5:0]      rx_data_2_s;
   wire    [ 5:0]      rx_data_1_s;
   wire    [ 5:0]      rx_data_0_s;
-  wire    [ 1:0]      rx_frame_s;
 
-  wire                locked_s;
+  // local parameters
+
+  localparam CYCLONE5 = 101;
+  localparam ARRIA10  = 103;
+
+  // unused interface signals
+
+  assign up_adc_drdata = 35'b0;
+  assign up_dac_drdata = 50'b0;
+//   assign delay_locked = 1'b1;
+
+  // drp locked must be on up-clock
 
   assign up_drp_locked = up_drp_locked_int;
 
@@ -182,6 +197,13 @@ module axi_ad9361_lvds_if #(
       up_drp_locked_m1 <= locked_s;
       up_drp_locked_int <= up_drp_locked_m1;
     end
+  end
+
+  assign delay_locked = locked_s;
+
+  always @(posedge l_clk) begin
+    rx_locked_m1 <= locked_s;
+    rx_locked <= rx_locked_m1;
   end
 
   // r1mode
@@ -205,32 +227,16 @@ module axi_ad9361_lvds_if #(
     end
 
   end
-  endgenerate
+endgenerate
 
-  // adc-status
-  assign locked_s = 1'b1;
-  
-  assign delay_locked = locked_s;
+  // intel-equivalence
 
   always @(posedge l_clk) begin
-    rx_locked_m1 <= locked_s;
-    rx_locked <= rx_locked_m1;
-  end
-
-  // metastability fix for intel
-
-  always @(negedge l_clk) begin
-    rx_frame_m1  <= ({rx_frame_m1[1:0], rx_frame_s});
-    rx_data_1_m1 <= ({rx_data_1_m1[5:0], rx_data_1_s});
-    rx_data_0_m1 <= ({rx_data_0_m1[5:0], rx_data_0_s});
+    rx_frame  <= rx_frame_s;
+    rx_data_1 <= ({rx_data_1_s, rx_data_3_s});
+    rx_data_0 <= ({rx_data_0_s, rx_data_2_s});
   end
   
-  always @(posedge l_clk) begin
-    rx_frame  <= rx_frame_m1;
-    rx_data_1 <= rx_data_1_m1;
-    rx_data_0 <= rx_data_0_m1;
-  end
-
   // frame check
 
   reg             rx_error_r1 = 'd0;
@@ -238,8 +244,7 @@ module axi_ad9361_lvds_if #(
 
   always @(posedge l_clk) begin
     rx_error_r1 <= ~((rx_frame == 4'b1100) || (rx_frame == 4'b0011));
-    rx_error_r2 <= ~((rx_frame == 4'b1111) || (rx_frame == 4'b0000) ||
-                     (rx_frame == 4'b0011) || (rx_frame == 4'b1100));
+    rx_error_r2 <= ~((rx_frame == 4'b1111) || (rx_frame == 4'b0000));
   end
 
   // delineation
@@ -298,112 +303,86 @@ module axi_ad9361_lvds_if #(
       adc_status_int <= adc_status_n;
     end
 
-    assign adc_valid = adc_valid_int;
-    assign adc_data = adc_data_int;
-    assign adc_status = adc_status_int;
-
   end else begin /* CLK_DESKEW == 0 */
 
-    always @(posedge clk) begin
+    always @(posedge l_clk) begin
       adc_valid_int <= adc_valid_p;
       adc_data_int <= adc_data_p;
       adc_status_int <= adc_status_p;
     end
 
-    assign adc_valid = adc_valid_int;
-    assign adc_data = adc_data_int;
-    assign adc_status = adc_status_int;
-
   end
   endgenerate
+
+  assign adc_valid = adc_valid_int;
+  assign adc_data = adc_data_int;
+  assign adc_status = adc_status_int;
 
   // dac-tx interface
 
   always @(posedge clk) begin
-    if (dac_valid == 1'b1) begin
-      tx_data_sel <= 2'b00;
-    end else begin
-      tx_data_sel <= tx_data_sel + 1'b1;
-    end
+    tx_valid <= dac_valid;
     if (dac_valid == 1'b1) begin
       tx_data <= dac_data;
     end
   end
 
   always @(posedge clk) begin
-    tx_clk_p <= {~dac_clksel, dac_clksel};
-  end
-
-  always @(posedge clk) begin
-    case ({dac_r1_mode, tx_data_sel})
-      3'b000: begin
-        tx_frame_p <= 1'b1;
-        tx_data_0_p <= tx_data[11:6];
-        tx_data_1_p <= tx_data[23:18];
-      end
-      3'b001: begin
-        tx_frame_p <= 1'b1;
-        tx_data_0_p <= tx_data[5:0];
-        tx_data_1_p <= tx_data[17:12];
-      end
-      3'b010: begin
-        tx_frame_p <= 1'b0;
-        tx_data_0_p <= tx_data[35:30];
-        tx_data_1_p <= tx_data[47:42];
-      end
-      3'b011: begin
-        tx_frame_p <= 1'b0;
-        tx_data_0_p <= tx_data[29:24];
-        tx_data_1_p <= tx_data[41:36];
-      end
-      3'b100: begin
-        tx_frame_p <= 1'b1;
-        tx_data_0_p <= tx_data[11:6];
-        tx_data_1_p <= tx_data[23:18];
-      end
-      3'b101: begin
-        tx_frame_p <= 1'b0;
-        tx_data_0_p <= tx_data[5:0];
-        tx_data_1_p <= tx_data[17:12];
-      end
-      default: begin
-        tx_frame_p <= 1'b0;
-        tx_data_0_p <= 6'd0;
-        tx_data_1_p <= 6'd0;
-      end
-    endcase
+    if (dac_r1_mode == 1'b1) begin
+      tx_frame_p <= 4'b0011;
+      tx_data_0_p <= tx_data[11: 6];
+      tx_data_1_p <= tx_data[23:18];
+      tx_data_2_p <= tx_data[ 5: 0];
+      tx_data_3_p <= tx_data[17:12];
+    end else if (tx_valid == 1'b1) begin
+      tx_frame_p <= 4'b1111;
+      tx_data_0_p <= tx_data[11: 6];
+      tx_data_1_p <= tx_data[23:18];
+      tx_data_2_p <= tx_data[ 5: 0];
+      tx_data_3_p <= tx_data[17:12];
+    end else begin
+      tx_frame_p <= 4'b0000;
+      tx_data_0_p <= tx_data[35:30];
+      tx_data_1_p <= tx_data[47:42];
+      tx_data_2_p <= tx_data[29:24];
+      tx_data_3_p <= tx_data[41:36];
+    end
   end
 
   // transfer to local clock
 
   generate if (CLK_DESKEW) begin
 
-    reg [ 1:0]  tx_clk_n = 'd0;
     reg         tx_frame_n = 'd0;
     reg [ 5:0]  tx_data_0_n = 'd0;
     reg [ 5:0]  tx_data_1_n = 'd0;
+    reg [ 5:0]  tx_data_2_n = 'd0;
+    reg [ 5:0]  tx_data_3_n = 'd0;
 
     always @(negedge clk) begin
-      tx_clk_n <= tx_clk_p;
       tx_frame_n <= tx_frame_p;
       tx_data_0_n <= tx_data_0_p;
       tx_data_1_n <= tx_data_1_p;
+      tx_data_2_n <= tx_data_2_p;
+      tx_data_3_n <= tx_data_3_p;
     end
 
     always @(posedge l_clk) begin
-      tx_clk <= tx_clk_n;
       tx_frame <= tx_frame_n;
       tx_data_0 <= tx_data_0_n;
       tx_data_1 <= tx_data_1_n;
+      tx_data_2 <= tx_data_2_n;
+      tx_data_3 <= tx_data_3_n;
     end
 
   end else begin /* CLK_DESKEW == 0 */
 
     always @(posedge l_clk) begin
-      tx_clk <= tx_clk_p;
       tx_frame <= tx_frame_p;
       tx_data_0 <= tx_data_0_p;
       tx_data_1 <= tx_data_1_p;
+      tx_data_2 <= tx_data_2_p;
+      tx_data_3 <= tx_data_3_p;
     end
 
   end
@@ -465,217 +444,108 @@ module axi_ad9361_lvds_if #(
   end
   endgenerate
 
-  // receive data interface, ibuf -> idelay -> iddr
-  
-  intel_iddr_full_diff iddr_rx (
-  .ck (l_clk),
-  .pad_in (rx_data_in_p),
-  .dout ({rx_data_1_s, rx_data_0_s}));
-  
-  intel_iddr_diff iddr_frame (
-  .ck (l_clk),
-  .pad_in (rx_frame_in_p),
-  .dout (rx_frame_s));
+  generate
+  if (FPGA_TECHNOLOGY == CYCLONE5) begin
+  axi_ad9361_lvds_if_c5 i_axi_ad9361_lvds_if_c5 (
+    .rx_clk_in_p (rx_clk_in_p),
+    .rx_clk_in_n (rx_clk_in_n),
+    .rx_frame_in_p (rx_frame_in_p),
+    .rx_frame_in_n (rx_frame_in_n),
+    .rx_data_in_p (rx_data_in_p),
+    .rx_data_in_n (rx_data_in_n),
+    .tx_clk_out_p (tx_clk_out_p),
+    .tx_clk_out_n (tx_clk_out_n),
+    .tx_frame_out_p (tx_frame_out_p),
+    .tx_frame_out_n (tx_frame_out_n),
+    .tx_data_out_p (tx_data_out_p),
+    .tx_data_out_n (tx_data_out_n),
+    .enable (enable),
+    .txnrx (txnrx),
+    .clk (l_clk),
+    .rx_frame (rx_frame_s),
+    .rx_data_0 (rx_data_0_s),
+    .rx_data_1 (rx_data_1_s),
+    .rx_data_2 (rx_data_2_s),
+    .rx_data_3 (rx_data_3_s),
+    .tx_frame (tx_frame),
+    .tx_data_0 (tx_data_0),
+    .tx_data_1 (tx_data_1),
+    .tx_data_2 (tx_data_2),
+    .tx_data_3 (tx_data_3),
+    .tx_enable (enable_int_p),
+    .tx_txnrx (txnrx_int_p),
+    .locked (locked_s),
+    .up_clk (up_clk),
+    .up_rstn (up_rstn));
+  end
+  endgenerate
 
-  genvar i;
-//   generate
-//   for (i = 0; i < 6; i = i + 1) begin: g_rx_data
-//   ad_data_in #(
-//     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
-//     .IODELAY_ENABLE (0),
-//     .IODELAY_CTRL (0),
-//     .IODELAY_GROUP (IO_DELAY_GROUP),
-//     .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
-//   i_rx_data (
-//     .rx_clk (l_clk),
-//     .rx_data_in_p (rx_data_in_p[i]),
-//     .rx_data_in_n (rx_data_in_n[i]),
-//     .rx_data_p (rx_data_1_s[i]),
-//     .rx_data_n (rx_data_0_s[i]),
-//     .up_clk (up_clk),
-//     .up_dld (up_adc_dld[i]),
-//     .up_dwdata (up_adc_dwdata[((i*5)+4):(i*5)]),
-//     .up_drdata (up_adc_drdata[((i*5)+4):(i*5)]),
-//     .delay_clk (delay_clk),
-//     .delay_rst (delay_rst),
-//     .delay_locked ());
-//   end
-//   endgenerate
-
-  // receive frame interface, ibuf -> idelay -> iddr
-
-//   ad_data_in #(
-//     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
-//     .IODELAY_ENABLE (0),
-//     .IODELAY_CTRL (0),
-//     .IODELAY_GROUP (IO_DELAY_GROUP),
-//     .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
-//   i_rx_frame (
-//     .rx_clk (l_clk),
-//     .rx_data_in_p (rx_frame_in_p),
-//     .rx_data_in_n (rx_frame_in_n),
-//     .rx_data_p (rx_frame_s[1]),
-//     .rx_data_n (rx_frame_s[0]),
-//     .up_clk (up_clk),
-//     .up_dld (up_adc_dld[6]),
-//     .up_dwdata (up_adc_dwdata[34:30]),
-//     .up_drdata (up_adc_drdata[34:30]),
-//     .delay_clk (delay_clk),
-//     .delay_rst (delay_rst),
-//     .delay_locked (locked_s));
-
-  // transmit data interface, oddr -> obuf
-
-//   generate
-//   for (i = 0; i < 6; i = i + 1) begin: g_tx_data
-//   ad_data_out #(
-//     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
-//     .IODELAY_ENABLE (0),
-//     .IODELAY_CTRL (0),
-//     .IODELAY_GROUP (IO_DELAY_GROUP),
-//     .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
-//   i_tx_data (
-//     .tx_clk (l_clk),
-//     .tx_data_p (tx_data_1[i]),
-//     .tx_data_n (tx_data_0[i]),
-//     .tx_data_out_p (tx_data_out_p[i]),
-//     .tx_data_out_n (tx_data_out_n[i]),
-//     .up_clk (up_clk),
-//     .up_dld (up_dac_dld[i]),
-//     .up_dwdata (up_dac_dwdata[((i*5)+4):(i*5)]),
-//     .up_drdata (up_dac_drdata[((i*5)+4):(i*5)]),
-//     .delay_clk (delay_clk),
-//     .delay_rst (delay_rst),
-//     .delay_locked ());
-//   end
-//   endgenerate
-
-  intel_oddr_full_diff oddr_tx (
-  .ck (l_clk),
-  .pad_out (tx_data_out_p),
-  .din ({tx_data_1, tx_data_0}));
-  
-  intel_oddr_diff oddr_frame (
-  .ck (l_clk),
-  .pad_out (tx_frame_out_p),
-  .din ({tx_frame, tx_frame}));
-
-  // transmit frame interface, oddr -> obuf
-
-//   ad_data_out #(
-//     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
-//     .IODELAY_ENABLE (0),
-//     .IODELAY_CTRL (0),
-//     .IODELAY_GROUP (IO_DELAY_GROUP),
-//     .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
-//   i_tx_frame (
-//     .tx_clk (l_clk),
-//     .tx_data_p (tx_frame),
-//     .tx_data_n (tx_frame),
-//     .tx_data_out_p (tx_frame_out_p),
-//     .tx_data_out_n (tx_frame_out_n),
-//     .up_clk (up_clk),
-//     .up_dld (up_dac_dld[6]),
-//     .up_dwdata (up_dac_dwdata[34:30]),
-//     .up_drdata (up_dac_drdata[34:30]),
-//     .delay_clk (delay_clk),
-//     .delay_rst (delay_rst),
-//     .delay_locked ());
-
-  // transmit clock interface, oddr -> obuf
-
-//   ad_data_out #(
-//     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
-//     .IODELAY_ENABLE (0),
-//     .IODELAY_CTRL (0),
-//     .IODELAY_GROUP (IO_DELAY_GROUP),
-//     .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
-//   i_tx_clk (
-//     .tx_clk (l_clk),
-//     .tx_data_p (tx_clk[1]),
-//     .tx_data_n (tx_clk[0]),
-//     .tx_data_out_p (tx_clk_out_p),
-//     .tx_data_out_n (tx_clk_out_n),
-//     .up_clk (up_clk),
-//     .up_dld (up_dac_dld[7]),
-//     .up_dwdata (up_dac_dwdata[39:35]),
-//     .up_drdata (up_dac_drdata[39:35]),
-//     .delay_clk (delay_clk),
-//     .delay_rst (delay_rst),
-//     .delay_locked ());
-
-  // enable, oddr -> obuf
-
-//   ad_data_out #(
-//     .SINGLE_ENDED (1),
-//     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
-//     .IODELAY_ENABLE (0),
-//     .IODELAY_CTRL (0),
-//     .IODELAY_GROUP (IO_DELAY_GROUP),
-//     .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
-//   i_enable (
-//     .tx_clk (l_clk),
-//     .tx_data_p (enable_int_p),
-//     .tx_data_n (enable_int_p),
-//     .tx_data_out_p (enable),
-//     .tx_data_out_n (),
-//     .up_clk (up_clk),
-//     .up_dld (up_dac_dld[8]),
-//     .up_dwdata (up_dac_dwdata[44:40]),
-//     .up_drdata (up_dac_drdata[44:40]),
-//     .delay_clk (delay_clk),
-//     .delay_rst (delay_rst),
-//     .delay_locked ());
-
-  // txnrx, oddr -> obuf
-
-//   ad_data_out #(
-//     .SINGLE_ENDED (1),
-//     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
-//     .IODELAY_ENABLE (0),
-//     .IODELAY_CTRL (0),
-//     .IODELAY_GROUP (IO_DELAY_GROUP),
-//     .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
-//   i_txnrx (
-//     .tx_clk (l_clk),
-//     .tx_data_p (txnrx_int_p),
-//     .tx_data_n (txnrx_int_p),
-//     .tx_data_out_p (txnrx),
-//     .tx_data_out_n (),
-//     .up_clk (up_clk),
-//     .up_dld (up_dac_dld[9]),
-//     .up_dwdata (up_dac_dwdata[49:45]),
-//     .up_drdata (up_dac_drdata[49:45]),
-//     .delay_clk (delay_clk),
-//     .delay_rst (delay_rst),
-//     .delay_locked ());
-
-  axi_ad9361_data_out i_tx_clk (
-    .ck (l_clk),
-    .din (2'b10),
-    .pad_out (tx_clk_out_p));
-
-  axi_ad9361_data_out i_enable (
-    .ck (l_clk),
-    .din ({enable_int_p, enable_int_p}),
-    .pad_out (enable));
-
-  axi_ad9361_data_out i_txnrx (
-    .ck (l_clk),
-    .din ({txnrx_int_p, txnrx_int_p}),
-    .pad_out (txnrx));
-
-  // device clock interface (receive clock)
-  clk_buffer clk_buf (
-    .inclk (rx_clk_in_p),
-    .outclk (l_clk));
+  generate
+  if (FPGA_TECHNOLOGY == ARRIA10) begin
+    wire s_ref_clk;
     
-//   i_intel_iopll i_iopll (
-//     .rst_reset(mmcm_rst),
-//     .locked_export(locked_s),
-//     .ref_clk_clk(s_ref_clk),
-//     .f_clk_clk(l_clk));
+    intel_iddr_full_diff iddr_rx (
+      .ck_fr (f_clk),
+      .ck_hr (l_clk),
+      .pad_in (rx_data_in_p),
+      .dout ({rx_data_3_s, rx_data_2_s, rx_data_1_s, rx_data_0_s}));
+    
+    intel_iddr_diff iddr_frame (
+      .ck_fr (f_clk),
+      .ck_hr (l_clk),
+      .pad_in (rx_frame_in_p),
+      .dout (rx_frame_s));
+    
+    intel_oddr_full_diff oddr_tx (
+      .ck_fr (f_clk),
+      .ck_hr (l_clk),
+      .pad_out (tx_data_out_p),
+      .din ({tx_data_3, tx_data_2, tx_data_1, tx_data_0}));
+      
+    intel_oddr_diff oddr_frame (
+      .ck_fr (f_clk),
+      .ck_hr (l_clk),
+      .pad_out (tx_frame_out_p),
+      .din (tx_frame));
+      
+    axi_ad9361_data_out i_enable (
+      .ck (f_clk),
+      .din ({enable_int_p, enable_int_p}),
+      .pad_out (enable));
+
+    axi_ad9361_data_out i_txnrx (
+      .ck (f_clk),
+      .din ({txnrx_int_p, txnrx_int_p}),
+      .pad_out (txnrx));
+      
+    axi_ad9361_data_out i_txclk (
+      .ck (f_clk),
+      .din (2'b10),
+      .pad_out (tx_clk_out_p));
+
+    // device clock interface (receive clock)
+    clk_buffer clk_buf (
+      .inclk (rx_clk_in_p),
+      .outclk (s_ref_clk));
+      
+//     always @(posedge s_ref_clk) begin
+//       r_hr_ref_clk <= ~r_hr_ref_clk;
+//     end
+//     
+//     assign f_clk = s_ref_clk;
+//     assign l_clk = r_hr_ref_clk;
+//     assign locked_s = 1'b1;     
+//
+    i_intel_iopll i_iopll (
+      .rst_reset(~up_rstn),
+      .locked_export(locked_s),
+      .ref_clk_clk(s_ref_clk),
+      .f_clk_clk(f_clk),
+      .h_clk_clk(l_clk));
+  end
+  endgenerate
 
 endmodule
+
 // ***************************************************************************
 // ***************************************************************************

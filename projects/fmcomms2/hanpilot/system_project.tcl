@@ -7,6 +7,9 @@ adi_project fmcomms2_hanpilot
 source $ad_hdl_dir/projects/common/hanpilot/hanpilot_system_assign.tcl
 # source $ad_hdl_dir/projects/common/hanpilot/hanpilot_plddr4_assign.tcl
 
+set_global_assignment -name ROUTER_CLOCKING_TOPOLOGY_ANALYSIS ON
+set_global_assignment -name OPTIMIZATION_MODE "HIGH PERFORMANCE EFFORT"
+
 # constraints
 # ad9361
 # BANK 3G
@@ -50,27 +53,18 @@ set_instance_assignment -name IO_STANDARD LVDS               -to rx_clk_in
 set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to rx_clk_in
 set_instance_assignment -name IO_STANDARD LVDS               -to rx_frame_in
 set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to rx_frame_in
-set_instance_assignment -name IO_STANDARD LVDS               -to rx_data_in[0]
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to rx_data_in[0]
-set_instance_assignment -name IO_STANDARD LVDS               -to rx_data_in[1]
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to rx_data_in[1]
-set_instance_assignment -name IO_STANDARD LVDS               -to rx_data_in[2]
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to rx_data_in[2]
-set_instance_assignment -name IO_STANDARD LVDS               -to rx_data_in[3]
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to rx_data_in[3]
-set_instance_assignment -name IO_STANDARD LVDS               -to rx_data_in[4]
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to rx_data_in[4]
-set_instance_assignment -name IO_STANDARD LVDS               -to rx_data_in[5]
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to rx_data_in[5]
+set_instance_assignment -name INPUT_DELAY_CHAIN 45           -to rx_frame_in
+set_instance_assignment -name IO_STANDARD LVDS               -to rx_data_in
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to rx_data_in
+set_instance_assignment -name INPUT_DELAY_CHAIN 45           -to rx_data_in
+
 
 set_instance_assignment -name IO_STANDARD LVDS               -to tx_clk_out
+set_instance_assignment -name OUTPUT_DELAY_CHAIN 2           -to tx_clk_out
 set_instance_assignment -name IO_STANDARD LVDS               -to tx_frame_out
-set_instance_assignment -name IO_STANDARD LVDS               -to tx_data_out[0]
-set_instance_assignment -name IO_STANDARD LVDS               -to tx_data_out[1]
-set_instance_assignment -name IO_STANDARD LVDS               -to tx_data_out[2]
-set_instance_assignment -name IO_STANDARD LVDS               -to tx_data_out[3]
-set_instance_assignment -name IO_STANDARD LVDS               -to tx_data_out[4]
-set_instance_assignment -name IO_STANDARD LVDS               -to tx_data_out[5]
+set_instance_assignment -name OUTPUT_DELAY_CHAIN 2           -to tx_frame_out
+set_instance_assignment -name IO_STANDARD LVDS               -to tx_data_out
+set_instance_assignment -name OUTPUT_DELAY_CHAIN 2           -to tx_data_out
 
 
 set_location_assignment PIN_F7   -to   gpio_status[0]                   ; ## G21  FMCA_HPC_LA20_P
@@ -85,11 +79,11 @@ set_location_assignment PIN_R11  -to   gpio_ctl[0]                      ; ## H28
 set_location_assignment PIN_R12  -to   gpio_ctl[1]                      ; ## H29  FMCA_HPC_LA24_N
 set_location_assignment PIN_F2   -to   gpio_ctl[2]                      ; ## G27  FMCA_HPC_LA25_P
 set_location_assignment PIN_G2   -to   gpio_ctl[3]                      ; ## G28  FMCA_HPC_LA25_N
-set_location_assignment PIN_R8   -to   gpio_en_agc                      ; ## H22  FMCA_HPC_LA19_P
-set_location_assignment PIN_P9   -to   gpio_sync                        ; ## H23  FMCA_HPC_LA19_N
+set_location_assignment PIN_R8   -to   gpio_en_agc                      ; ## H22  FMCA_HPC_LA10_P
+set_location_assignment PIN_P9   -to   gpio_sync                        ; ## H23  FMCA_HPC_LA10_N
 set_location_assignment PIN_J6   -to   gpio_resetb                      ; ## H31  FMCA_HPC_LA28_P
 set_location_assignment PIN_E5   -to   enable                           ; ## G18  FMCA_HPC_LA16_P
-set_location_assignment PIN_F5   -to   txnrx                            ; ## G19  FMCA_HPC_LA16_N
+set_location_assignment PIN_F5   -to   txnrx                            ; ## G10  FMCA_HPC_LA16_N
 
 set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_status[0]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_status[1]
@@ -120,7 +114,7 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_clk
 set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_mosi
 set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_miso
 
-set_instance_assignment -name GLOBAL_SIGNAL "GLOBAL CLOCK" -to "rx_clk_in" 
+set_instance_assignment -name GLOBAL_SIGNAL "GLOBAL CLOCK" -to "rx_clk_in"
 
 execute_flow -compile
 
