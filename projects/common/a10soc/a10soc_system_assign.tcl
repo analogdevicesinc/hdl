@@ -9,6 +9,8 @@ set_instance_assignment -name IO_STANDARD LVDS -to "sys_clk(n)"
 set_instance_assignment -name IO_STANDARD "1.8 V" -to sys_resetn
 set_global_assignment -name PROGRAMMABLE_POWER_TECHNOLOGY_SETTING "FORCE ALL USED TILES TO HIGH SPEED"
 
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
+
 # hps-ddr4 (32)
 
 set_location_assignment PIN_F25   -to hps_ddr_ref_clk

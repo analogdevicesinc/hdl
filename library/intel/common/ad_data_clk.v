@@ -36,7 +36,8 @@
 `timescale 1ns/100ps
 
 module ad_data_clk #(
-
+  parameter   FPGA_TECHNOLOGY = 103,
+  parameter   GLOBAL_CLOCK = 1,
   parameter   SINGLE_ENDED = 0) (
 
   input               rst,
@@ -45,28 +46,50 @@ module ad_data_clk #(
   input               clk_in_p,
   input               clk_in_n,
   output              clk);
+  
+  // local parameters
 
-  // internal signals
-
-  wire                clk_ibuf_s;
-
+  localparam CYCLONE5 = 101;
+  localparam ARRIA10  = 103;
+  
   // defaults
-
+  
   assign locked = 1'b1;
 
   // instantiations
 
   generate
-  if (SINGLE_ENDED == 1) begin
-    // not tested or supported
-    clk = 0;
-  end else begin
-  clk_buffer clk_buf (
-    .inclk (clk_in_p),
-    .outclk (clk));
+  if (FPGA_TECHNOLOGY == CYCLONE5) begin
+    //don't have one to test 
+    assign clk = 0;
   end
   endgenerate
-
+  
+  generate
+  if (FPGA_TECHNOLOGY == ARRIA10) begin
+    if(GLOBAL_CLOCK == 1) begin
+    twentynm_clkena #(
+      .clock_type("Global Clock"),
+      .en_register_mode("always enabled"),
+      .lpm_type("twentynm_clkena"))
+    clk_buf ( 
+      .ena(1'b1),
+      .enaout(),
+      .inclk(clk_in_p),
+      .outclk(clk));
+    end else begin
+    twentynm_clkena #(
+      .clock_type("Large Periphery Clock"),
+      .en_register_mode("always enabled"),
+      .lpm_type("twentynm_clkena"))
+    clk_buf ( 
+      .ena(1'b1),
+      .enaout(),
+      .inclk(clk_in_p),
+      .outclk(clk));
+    end
+  end
+  endgenerate
 endmodule
 
 // ***************************************************************************

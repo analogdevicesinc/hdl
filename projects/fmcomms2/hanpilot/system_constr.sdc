@@ -12,19 +12,19 @@ set_input_delay -max 0.25 -clock {rx_clk_virtual_250mhz} [get_ports rx_data_in*]
 set_input_delay -max -add_delay 0.25 -clock {rx_clk_virtual_250mhz} -clock_fall [get_ports rx_data_in*]
 
 set_input_delay -max 0.25 -clock {rx_clk_virtual_250mhz} [get_ports rx_frame_in]
-set_input_delay -max -add_delay 0.25 -clock {rx_clk_virtual_250mhz} -clock_fall [get_ports rx_frame_in]
+set_input_delay -max -add_delay 0.25 -clock {rx_clk_virtual_250mhz} -clock_fall [get_ports rx_frame_in*]
 
-set_input_delay -min -add_delay 0.5 -clock {rx_clk_virtual_250mhz} [get_ports rx_data_in*]
-set_input_delay -min -add_delay 0.5 -clock {rx_clk_virtual_250mhz} -clock_fall [get_ports rx_data_in*]
+set_input_delay -min -add_delay 0.25 -clock {rx_clk_virtual_250mhz} [get_ports rx_data_in*]
+set_input_delay -min -add_delay 0.25 -clock {rx_clk_virtual_250mhz} -clock_fall [get_ports rx_data_in*]
 
-set_input_delay -min -add_delay 0.5 -clock {rx_clk_virtual_250mhz} [get_ports rx_frame_in]
-set_input_delay -min -add_delay 0.5 -clock {rx_clk_virtual_250mhz} -clock_fall [get_ports rx_frame_in]
+set_input_delay -min -add_delay 0.25 -clock {rx_clk_virtual_250mhz} [get_ports rx_frame_in*]
+set_input_delay -min -add_delay 0.25 -clock {rx_clk_virtual_250mhz} -clock_fall [get_ports rx_frame_in*]
 
 set_output_delay 0.25 -clock {tx_clk_250mhz} [get_ports tx_data_out*]
 set_output_delay -add_delay 0.25 -clock {tx_clk_250mhz} -clock_fall [get_ports tx_data_out*]
 
-set_output_delay 0.25 -clock {tx_clk_250mhz} [get_ports tx_frame_out]
-set_output_delay -add_delay 0.25 -clock {tx_clk_250mhz} -clock_fall [get_ports tx_frame_out]
+set_output_delay 0.25 -clock {tx_clk_250mhz} [get_ports tx_frame_out*]
+set_output_delay -add_delay 0.25 -clock {tx_clk_250mhz} -clock_fall [get_ports tx_frame_out*]
 
 set_false_path -from {rx_clk_250mhz} -to  [get_ports tx_data_out*]
 set_false_path -from {rx_clk_250mhz} -to  [get_ports tx_frame_out*]

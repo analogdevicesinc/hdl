@@ -36,6 +36,8 @@ GENERIC_DEPS += axi_ad9361_tdd.v
 GENERIC_DEPS += axi_ad9361_tdd_if.v
 GENERIC_DEPS += axi_ad9361_tx.v
 GENERIC_DEPS += axi_ad9361_tx_channel.v
+GENERIC_DEPS += axi_ad9361_cmos_if.v
+GENERIC_DEPS += axi_ad9361_lvds_if.v
 
 XILINX_DEPS += ../common/ad_pps_receiver_constr.ttcl
 XILINX_DEPS += ../xilinx/common/ad_data_clk.v
@@ -49,8 +51,6 @@ XILINX_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
 XILINX_DEPS += ../xilinx/common/up_xfer_status_constr.xdc
 XILINX_DEPS += axi_ad9361_constr.xdc
 XILINX_DEPS += axi_ad9361_ip.tcl
-XILINX_DEPS += xilinx/axi_ad9361_cmos_if.v
-XILINX_DEPS += xilinx/axi_ad9361_lvds_if.v
 
 INTEL_DEPS += ../intel/common/ad_dcfilter.v
 INTEL_DEPS += ../intel/common/ad_mul.v
@@ -58,11 +58,10 @@ INTEL_DEPS += ../intel/common/up_clock_mon_constr.sdc
 INTEL_DEPS += ../intel/common/up_rst_constr.sdc
 INTEL_DEPS += ../intel/common/up_xfer_cntrl_constr.sdc
 INTEL_DEPS += ../intel/common/up_xfer_status_constr.sdc
+INTEL_DEPS += ../intel/common/ad_data_clk.v
+INTEL_DEPS += ../intel/common/ad_data_in.v
+INTEL_DEPS += ../intel/common/ad_data_out.v
 INTEL_DEPS += axi_ad9361_constr.sdc
 INTEL_DEPS += axi_ad9361_hw.tcl
-INTEL_DEPS += intel/axi_ad9361_cmos_if.v
-INTEL_DEPS += intel/axi_ad9361_lvds_if.v
-INTEL_DEPS += intel/axi_ad9361_lvds_if_10.v
-INTEL_DEPS += intel/axi_ad9361_lvds_if_c5.v
 
 include ../scripts/library.mk

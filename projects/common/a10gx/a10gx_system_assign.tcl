@@ -8,6 +8,8 @@ set_instance_assignment -name IO_STANDARD LVDS -to sys_clk
 set_instance_assignment -name IO_STANDARD "1.8 V" -to sys_resetn
 set_global_assignment -name PROGRAMMABLE_POWER_TECHNOLOGY_SETTING "FORCE ALL USED TILES TO HIGH SPEED"
 
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
+
 # ddr3
 
 set_location_assignment PIN_F34   -to ddr3_ref_clk

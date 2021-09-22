@@ -218,13 +218,13 @@ module axi_ad9361_lvds_if #(
   reg             rx_error_r2 = 'd0;
 
   always @(posedge l_clk) begin
-    rx_error_r1 <= ~((rx_frame_s == 4'b1100) || (rx_frame_s == 4'b0011));
-    rx_error_r2 <= ~((rx_frame_s == 4'b1111) || (rx_frame_s == 4'b1100) ||
-                     (rx_frame_s == 4'b0000) || (rx_frame_s == 4'b0011));
+    rx_error_r1 <= ~(({rx_frame, rx_frame_s} == 4'b1100) || ({rx_frame, rx_frame_s} == 4'b0011));
+    rx_error_r2 <= ~(({rx_frame, rx_frame_s} == 4'b1111) || ({rx_frame, rx_frame_s} == 4'b1100) ||
+                     ({rx_frame, rx_frame_s} == 4'b0000) || ({rx_frame, rx_frame_s} == 4'b0011));
   end
 
   always @(posedge l_clk) begin
-      case ({rx_r1_mode, rx_frame_s, rx_frame})
+      case ({rx_r1_mode, rx_frame, rx_frame_s})
         5'b01111: begin
           adc_valid_p <= 1'b0;
           adc_data_p[23:12] <= {rx_data_1, rx_data_1_s};

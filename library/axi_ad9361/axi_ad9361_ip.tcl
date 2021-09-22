@@ -39,8 +39,8 @@ adi_ip_files axi_ad9361 [list \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
   "axi_ad9361_constr.xdc" \
-  "xilinx/axi_ad9361_lvds_if.v" \
-  "xilinx/axi_ad9361_cmos_if.v" \
+  "axi_ad9361_lvds_if.v" \
+  "axi_ad9361_cmos_if.v" \
   "axi_ad9361_rx_pnmon.v" \
   "axi_ad9361_rx_channel.v" \
   "axi_ad9361_rx.v" \
