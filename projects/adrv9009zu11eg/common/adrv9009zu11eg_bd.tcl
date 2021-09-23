@@ -222,7 +222,7 @@ ad_connect ddr4_tx_offload/c0_ddr4_ui_clk axi_tx_offload_control/fifo2axi_bridge
 ad_connect axi_tx_offload_rstgen/peripheral_aresetn axi_tx_offload_control/fifo2axi_bridge/axi_resetn
 ad_connect ddr4_tx_offload/C0_DDR4_S_AXI axi_tx_offload_control/fifo2axi_bridge/ddr_axi
 ad_connect sys_rstgen/peripheral_reset ddr4_tx_offload/sys_rst
-ad_connect axi_tx_offload_control/i_data_offload/ddr_calib_done ddr4_tx_offload/init_calib_complete
+ad_connect axi_tx_offload_control/i_data_offload/ddr_calib_done ddr4_tx_offload/c0_init_calib_complete
 
 assign_bd_address [get_bd_addr_segs -of_objects [get_bd_cells ddr4_tx_offload]]
 
@@ -261,7 +261,7 @@ ad_connect ddr4_rx_offload/c0_ddr4_ui_clk axi_rx_offload_control/fifo2axi_bridge
 ad_connect axi_rx_offload_rstgen/peripheral_aresetn axi_rx_offload_control/fifo2axi_bridge/axi_resetn
 ad_connect ddr4_rx_offload/C0_DDR4_S_AXI axi_rx_offload_control/fifo2axi_bridge/ddr_axi
 ad_connect sys_rstgen/peripheral_reset ddr4_rx_offload/sys_rst
-ad_connect axi_rx_offload_control/i_data_offload/ddr_calib_done ddr4_rx_offload/init_calib_complete
+ad_connect axi_rx_offload_control/i_data_offload/ddr_calib_done ddr4_rx_offload/c0_init_calib_complete
 
 assign_bd_address [get_bd_addr_segs -of_objects [get_bd_cells ddr4_rx_offload]]
 
