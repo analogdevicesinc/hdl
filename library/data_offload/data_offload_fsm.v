@@ -329,8 +329,14 @@ module data_offload_fsm #(
 
         // read until empty or next init_req
         RD_READ_FROM_MEM : begin
-          if ((rd_empty_s && (rd_init_req_s || (rd_oneshot && rd_last)) && rd_ready)) begin
-            rd_fsm_state <= RD_IDLE;
+          if (rd_empty_s && rd_ready) begin
+            if (rd_init_req_s || (rd_oneshot && rd_last)) begin
+              rd_fsm_state <= RD_IDLE;
+            end else if (TX_OR_RXN_PATH && sync_config && (!rd_oneshot)) begin
+              rd_fsm_state <= RD_SYNC;
+            end else begin
+              rd_fsm_state <= RD_READ_FROM_MEM;
+            end
           end else begin
             rd_fsm_state <= RD_READ_FROM_MEM;
           end
