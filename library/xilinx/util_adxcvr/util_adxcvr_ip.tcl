@@ -231,10 +231,8 @@ for {set n 0} {$n < 16} {incr n} {
 
   if {($n%4) == 0} {
 	ipx::associate_bus_interfaces -clock cpll_ref_clk_${n} -reset up_qpll_rst_${n} -remove [ipx::current_core]
-	ipx::associate_bus_interfaces -clock up_clk -reset up_qpll_rst_${n} [ipx::current_core]
   }
   ipx::associate_bus_interfaces -clock cpll_ref_clk_${n} -reset up_cpll_rst_${n} -remove [ipx::current_core]
-  ipx::associate_bus_interfaces -clock up_clk -reset up_cpll_rst_${n} [ipx::current_core]
 }
 
 set_property driver_value 0 [ipx::get_ports -filter "direction==in" -of_objects [ipx::current_core]]
