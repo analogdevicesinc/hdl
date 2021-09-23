@@ -12,8 +12,6 @@ M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zcu102/zcu102_system_constr.xdc
 M_DEPS += ../../common/zcu102/zcu102_system_bd.tcl
 M_DEPS += ../../common/xilinx/data_offload_bd.tcl
-M_DEPS += ../../common/xilinx/dacfifo_bd.tcl
-M_DEPS += ../../common/xilinx/adcfifo_bd.tcl
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
 
@@ -27,8 +25,6 @@ LIB_DEPS += jesd204/axi_jesd204_tx
 LIB_DEPS += jesd204/jesd204_rx
 LIB_DEPS += jesd204/jesd204_tx
 LIB_DEPS += sysid_rom
-LIB_DEPS += util_adcfifo
-LIB_DEPS += util_dacfifo
 LIB_DEPS += util_fifo2axi_bridge
 LIB_DEPS += util_pack/util_cpack2
 LIB_DEPS += util_pack/util_upack2
