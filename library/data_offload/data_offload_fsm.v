@@ -55,7 +55,7 @@ module data_offload_fsm #(
   output  reg                         wr_resetn_out,
   input                               wr_valid_in,
   output                              wr_valid_out,
-  output                              wr_ready,
+  output  reg                         wr_ready,
   output  reg [WR_ADDRESS_WIDTH-1:0]  wr_addr,
   input                               wr_last,
   input       [WR_DATA_WIDTH/8-1:0]   wr_tkeep,
@@ -260,11 +260,10 @@ module data_offload_fsm #(
 
   always @(posedge wr_clk) begin
     wr_ready_d <= wr_ready;
+    // flush out the DMA if the transfer is bigger than the storage size
+    wr_ready <= ((wr_fsm_state == WR_WRITE_TO_MEM) ||
+                ((wr_fsm_state == WR_WAIT_TO_END) && wr_ready_d && !(wr_valid_in && wr_last))) ? 1'b1 : 1'b0;
   end
-
-  // flush out the DMA if the transfer is bigger than the storage size
-  assign wr_ready = ((wr_fsm_state == WR_WRITE_TO_MEM) ||
-                     ((wr_fsm_state == WR_WAIT_TO_END) && wr_valid_in && wr_ready_d && wr_full)) ? 1'b1 : 1'b0;
 
   // write control
   assign wr_valid_out = (wr_fsm_state == WR_WRITE_TO_MEM) & wr_valid_in;
