@@ -1,15 +1,15 @@
 
 ## Offload attributes
-set adc_offload_type 1                      ; ## PL_DDR
-set adc_offload_size 1073741824             ; ## 1 Gbyte
+set adc_offload_type 1                              ; ## PL_DDR
+set adc_offload_size [expr 1 * 1024 * 1024 * 1024]  ; ## 1 Gbyte
 
-set dac_offload_type 0                      ; ## BRAM
-set dac_offload_size 512000                 ; ## 512 kbyte
+set dac_offload_type 0                              ; ## BRAM
+set dac_offload_size [expr 1 * 1024 * 1024]         ; ## 1 MByte
 
 set plddr_offload_axi_data_width 512
 set plddr_offload_axi_addr_width 30
 
-## NOTE: With this configuration the #36Kb BRAM utilization is at ~51%
+## NOTE: With this configuration the #36Kb BRAM utilization is at ~52%
 
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 source $ad_hdl_dir/projects/common/zc706/zc706_system_bd.tcl
