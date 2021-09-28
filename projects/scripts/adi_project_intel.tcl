@@ -2,7 +2,11 @@
 ## Initialize global variable
 set family "none"
 set device "none"
-set version "21.2.0"
+
+## Define the supported tool version
+if {![info exists REQUIRED_QUARTUS_VERSION]} {
+  set REQUIRED_QUARTUS_VERSION "21.2.0"
+}
 
 ## Define the ADI_IGNORE_VERSION_CHECK environment variable to skip version check
 if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
@@ -25,9 +29,10 @@ proc adi_project {project_name {parameter_list {}}} {
   global ad_ghdl_dir
   global family
   global device
-  global version
+  global REQUIRED_QUARTUS_VERSION
   global quartus
   global IGNORE_VERSION_CHECK
+  global QUARTUS_PRO_ISUSED
 
   # check $ALT_NIOS_MMU_ENABLED environment variables
 
@@ -38,8 +43,10 @@ proc adi_project {project_name {parameter_list {}}} {
 
   # check $QUARTUS_PRO_ISUSED environment variables
   set quartus_pro_isused 1
-  if [info exists ::env(QUARTUS_PRO_ISUSED)] {
+  if {[info exists ::env(QUARTUS_PRO_ISUSED)]} {
     set quartus_pro_isused $::env(QUARTUS_PRO_ISUSED)
+  } elseif {[info exists QUARTUS_PRO_ISUSED]} {
+    set quartus_pro_isused $QUARTUS_PRO_ISUSED
   }
 
   if [regexp "_a10gx$" $project_name] {
@@ -88,15 +95,15 @@ proc adi_project {project_name {parameter_list {}}} {
 
   set m_version [lindex $quartus(version) 1]
   if {$IGNORE_VERSION_CHECK} {
-    if {[string compare $m_version $version] != 0} {
+    if {[string compare $m_version $REQUIRED_QUARTUS_VERSION] != 0} {
       puts -nonewline "CRITICAL WARNING: Quartus version mismatch; "
-      puts -nonewline "expected $version, "
+      puts -nonewline "expected $REQUIRED_QUARTUS_VERSION, "
       puts -nonewline "got $m_version.\n"
     }
   } else {
-    if {[string compare $m_version $version] != 0} {
+    if {[string compare $m_version $REQUIRED_QUARTUS_VERSION] != 0} {
       puts -nonewline "ERROR: Quartus version mismatch; "
-      puts -nonewline "expected $version, "
+      puts -nonewline "expected $REQUIRED_QUARTUS_VERSION, "
       puts -nonewline "got $m_version.\n"
       puts -nonewline "This ERROR message can be down-graded to CRITICAL WARNING by setting ADI_IGNORE_VERSION_CHECK environment variable to 1. Be aware that ADI will not support you, if you are using a different tool version.\n"
       exit 2
