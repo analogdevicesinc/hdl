@@ -69,7 +69,7 @@ localparam BIT_SH_HUNT = 0;
 localparam BIT_SH_SLIP = 1;
 localparam BIT_SH_LOCK = 2;
 
-localparam RX_THRESH_SH_ERR = 16;
+localparam RX_THRESH_SH_ERR = 8;
 localparam LOG2_RX_THRESH_SH_ERR = $clog2(RX_THRESH_SH_ERR);
 
 reg [2:0] state = STATE_SH_HUNT;
