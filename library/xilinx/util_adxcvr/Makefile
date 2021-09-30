@@ -6,6 +6,7 @@
 
 LIBRARY_NAME := util_adxcvr
 
+XILINX_DEPS += ../../jesd204/jesd204_common/sync_header_align.v
 XILINX_DEPS += bd/bd.tcl
 XILINX_DEPS += util_adxcvr.v
 XILINX_DEPS += util_adxcvr_constr.xdc
@@ -17,6 +18,8 @@ XILINX_DEPS += ../../interfaces/if_xcvr_ch.xml
 XILINX_DEPS += ../../interfaces/if_xcvr_ch_rtl.xml
 XILINX_DEPS += ../../interfaces/if_xcvr_cm.xml
 XILINX_DEPS += ../../interfaces/if_xcvr_cm_rtl.xml
+
+XILINX_LIB_DEPS += util_cdc
 
 XILINX_INTERFACE_DEPS += interfaces
 
