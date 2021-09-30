@@ -209,8 +209,11 @@ module system_top  #(
   assign txen[0]    = gpio_o[58];
   assign txen[1]    = gpio_o[59];
 
+  reg gpio_led_reg_0 = 1'b0;
+  wire gt_reset;
+
   /* Board GPIOS. Buttons, LEDs, etc... */
-  assign gpio_led = gpio_o[3:0];
+  assign gpio_led = {gpio_o[3:1],gpio_led_reg_0};
   assign gpio_i[3:0] = gpio_o[3:0];
   assign gpio_i[7: 4] = gpio_dip_sw;
   assign gpio_i[9: 8] = gpio_pb;
@@ -219,11 +222,19 @@ module system_top  #(
   assign gpio_i[94:54] = gpio_o[94:54];
   assign gpio_i[31:10] = gpio_o[31:10];
 
-  reg ext_pll_lock,ext_pll_lock_d;
+  reg ext_pll_lock_ms = 1'b0;
+  reg ext_pll_lock = 1'b0;
+  reg ext_pll_lock_d = 1'b0;
 
   always @(posedge tx_device_clk) begin
-    ext_pll_lock <= gpio_i[43];
+    ext_pll_lock_ms <= gpio_i[43];
+    ext_pll_lock <= ext_pll_lock_ms;
     ext_pll_lock_d <= ext_pll_lock;
+
+    if (~ext_pll_lock)
+      gpio_led_reg_0 <= 1'b0;
+    else if (gt_reset)
+      gpio_led_reg_0 <= 1'b1;
   end
 
   assign gt_reset = ext_pll_lock & ~ext_pll_lock_d;
