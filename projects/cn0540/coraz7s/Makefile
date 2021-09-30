@@ -7,6 +7,7 @@
 PROJECT_NAME := cn0540_coraz7s
 
 M_DEPS += ../common/cn0540_bd.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/coraz7s/coraz7s_system_ps7.tcl
 M_DEPS += ../../common/coraz7s/coraz7s_system_constr.xdc
 M_DEPS += ../../common/coraz7s/coraz7s_system_bd.tcl

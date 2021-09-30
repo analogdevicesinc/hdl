@@ -6,6 +6,7 @@
 
 LIBRARY_NAME := axi_adrv9001
 
+GENERIC_DEPS += ../common/ad_addsub.v
 GENERIC_DEPS += ../common/ad_datafmt.v
 GENERIC_DEPS += ../common/ad_dds.v
 GENERIC_DEPS += ../common/ad_dds_1.v
@@ -16,6 +17,7 @@ GENERIC_DEPS += ../common/ad_dds_sine_cordic.v
 GENERIC_DEPS += ../common/ad_pngen.v
 GENERIC_DEPS += ../common/ad_pnmon.v
 GENERIC_DEPS += ../common/ad_rst.v
+GENERIC_DEPS += ../common/ad_tdd_control.v
 GENERIC_DEPS += ../common/up_adc_channel.v
 GENERIC_DEPS += ../common/up_adc_common.v
 GENERIC_DEPS += ../common/up_axi.v
@@ -23,6 +25,7 @@ GENERIC_DEPS += ../common/up_clock_mon.v
 GENERIC_DEPS += ../common/up_dac_channel.v
 GENERIC_DEPS += ../common/up_dac_common.v
 GENERIC_DEPS += ../common/up_delay_cntrl.v
+GENERIC_DEPS += ../common/up_tdd_cntrl.v
 GENERIC_DEPS += ../common/up_xfer_cntrl.v
 GENERIC_DEPS += ../common/up_xfer_status.v
 GENERIC_DEPS += adrv9001_aligner4.v
@@ -35,6 +38,7 @@ GENERIC_DEPS += axi_adrv9001_core.v
 GENERIC_DEPS += axi_adrv9001_if.v
 GENERIC_DEPS += axi_adrv9001_rx.v
 GENERIC_DEPS += axi_adrv9001_rx_channel.v
+GENERIC_DEPS += axi_adrv9001_tdd.v
 GENERIC_DEPS += axi_adrv9001_tx.v
 GENERIC_DEPS += axi_adrv9001_tx_channel.v
 
@@ -59,6 +63,7 @@ INTEL_DEPS += ../intel/common/up_clock_mon_constr.sdc
 INTEL_DEPS += ../intel/common/up_rst_constr.sdc
 INTEL_DEPS += ../intel/common/up_xfer_cntrl_constr.sdc
 INTEL_DEPS += ../intel/common/up_xfer_status_constr.sdc
+INTEL_DEPS += ../util_cdc/sync_bits.v
 INTEL_DEPS += axi_adrv9001_constr.sdc
 INTEL_DEPS += axi_adrv9001_hw.tcl
 INTEL_DEPS += intel/adrv9001_rx.v

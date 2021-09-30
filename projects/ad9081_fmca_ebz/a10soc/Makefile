@@ -8,10 +8,11 @@ PROJECT_NAME := ad9081_fmca_ebz_a10soc
 
 M_DEPS += ../common/ad9081_fmca_ebz_qsys.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
-M_DEPS += ../../common/a10soc/a10soc_system_qsys.tcl
-M_DEPS += ../../common/a10soc/a10soc_system_assign.tcl
 M_DEPS += ../../common/intel/dacfifo_qsys.tcl
 M_DEPS += ../../common/intel/adcfifo_qsys.tcl
+M_DEPS += ../../common/a10soc/a10soc_system_qsys.tcl
+M_DEPS += ../../common/a10soc/a10soc_system_assign.tcl
+M_DEPS += ../../../library/common/ad_3w_spi.v
 
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_sysid
