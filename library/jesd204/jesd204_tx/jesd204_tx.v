@@ -141,7 +141,7 @@ wire [HW-1:0] phy_header_r;
 
 wire eof_gen_reset;
 wire tx_ready_64b_next;
-reg tx_ready_64b;
+reg tx_ready_64b = 1'b0;
 wire frame_mark_reset;
 wire [DATA_PATH_WIDTH-1:0] tx_sof_fm;
 wire [DATA_PATH_WIDTH-1:0] tx_eof_fm;
