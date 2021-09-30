@@ -100,6 +100,10 @@ adi_add_multi_bus 16 "rx_phy" "slave" \
   ] \
   "(spirit:decode(id('MODELPARAM_VALUE.NUM_LANES')) > {i})"
 
+set_property driver_value 0 [ipx::get_ports phy_charisk -of_objects [ipx::current_core]]
+set_property driver_value 0 [ipx::get_ports phy_disperr -of_objects [ipx::current_core]]
+set_property driver_value 0 [ipx::get_ports phy_notintable -of_objects [ipx::current_core]]
+
 adi_add_bus "rx_cfg" "slave" \
   "analog.com:interface:jesd204_rx_cfg_rtl:1.0" \
   "analog.com:interface:jesd204_rx_cfg:1.0" \
