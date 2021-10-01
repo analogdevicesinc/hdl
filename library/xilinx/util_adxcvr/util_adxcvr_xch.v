@@ -153,6 +153,8 @@ module util_adxcvr_xch #(
   input           up_rx_prbscntreset,
   output          up_rx_prbserr,
   output          up_rx_prbslocked,
+  output  [ 1:0]  up_rx_bufstatus,
+  input           up_rx_bufstatus_rst,
   input           up_rx_lpm_dfe_n,
   input   [ 2:0]  up_rx_rate,
   input   [ 1:0]  up_rx_sys_clk_sel,
@@ -167,6 +169,7 @@ module util_adxcvr_xch #(
   input           up_tx_rst,
   input           up_tx_user_ready,
   output          up_tx_rst_done,
+  output  [ 1:0]  up_tx_bufstatus,
   input           up_tx_prbsforceerr,
   input   [ 3:0]  up_tx_prbssel,
   input           up_tx_lpm_dfe_n,
@@ -390,7 +393,49 @@ module util_adxcvr_xch #(
     .out_bits ({tx_prbssel,
                 tx_prbsforceerr})
   );
+  
+  // Bufstatus 
+  reg         rx_bufstatus_sticky_0 = 1'b0;
+  reg         rx_bufstatus_sticky_1 = 1'b0;
+  
+  wire        rx_bufstatus_rst;
+  wire [ 1:0] rx_bufstatus;
+  wire [ 1:0] rx_bufstatus_s;
+  wire [ 1:0] tx_bufstatus;
+  wire [ 1:0] tx_bufstatus_s;
+  
+  sync_bits #(.NUM_OF_BITS(1)) i_sync_bits_rx_bufstatus_in (
+    .in_bits (up_rx_bufstatus_rst),
+    .out_resetn (1'b1),
+    .out_clk (rx_clk),
+    .out_bits (rx_bufstatus_rst)
+  );
 
+  always @(posedge rx_clk) begin
+    if (rx_bufstatus_rst) begin
+      rx_bufstatus_sticky_0 <= 1'b0;
+    end else if (rx_bufstatus_s[0]) begin
+      rx_bufstatus_sticky_0 <= 1'b1;
+    end
+  end
+  
+  always @(posedge rx_clk) begin
+    if (rx_bufstatus_rst) begin
+      rx_bufstatus_sticky_1 <= 1'b0;
+    end else if (rx_bufstatus_s[1]) begin
+      rx_bufstatus_sticky_1 <= 1'b1;
+    end
+  end
+  
+  sync_bits #(.NUM_OF_BITS(4)) i_sync_bits_bufstatus_out (
+      .in_bits ({rx_bufstatus,
+                 tx_bufstatus}),
+      .out_resetn (up_rstn),
+      .out_clk (up_clk),
+      .out_bits ({up_rx_bufstatus,
+                  up_tx_bufstatus})
+    );
+  
   // 204C specific logic
   localparam ALIGN_COMMA_ENABLE  = LINK_MODE[1] ? 10'b0000000000 : 10'b1111111111;
   localparam ALIGN_MCOMMA_DET = LINK_MODE[1] ? "FALSE" : "TRUE";
@@ -448,7 +493,12 @@ module util_adxcvr_xch #(
                          (XCVR_TYPE==GTHE4_TRANSCEIVERS) ? rx_clk_2x : rx_clk;
       assign tx_usrclk = (XCVR_TYPE==GTHE3_TRANSCEIVERS) ||
                          (XCVR_TYPE==GTHE4_TRANSCEIVERS) ? tx_clk_2x : tx_clk;
-
+						 
+      assign rx_bufstatus[0] = rx_bufstatus_sticky_0;
+      assign rx_bufstatus[1] = rx_bufstatus_sticky_1;
+	  
+      assign tx_bufstatus = tx_bufstatus_s;
+	  
     end else begin
 
       assign {rx_data_open_s, rx_data} = rx_data_s;
@@ -457,9 +507,13 @@ module util_adxcvr_xch #(
 
       assign rx_usrclk = rx_clk;
       assign tx_usrclk = tx_clk;
-
+	  
+      assign rx_bufstatus[0] = rx_bufstatus_sticky_1;
+      assign rx_bufstatus[1] = rx_bufstatus_sticky_1;
+	  
+      assign tx_bufstatus[0] = tx_bufstatus_s[1];
+      assign tx_bufstatus[1] = tx_bufstatus_s[1];
     end
-
   endgenerate
 
   // instantiations
@@ -773,7 +827,7 @@ module util_adxcvr_xch #(
     .RESETOVRD (1'h0),
     .RX8B10BEN (1'h1),
     .RXBUFRESET (1'h0),
-    .RXBUFSTATUS (),
+    .RXBUFSTATUS (rx_bufstatus_s),
     .RXBYTEISALIGNED (),
     .RXBYTEREALIGN (),
     .RXCDRFREQRESET (1'h0),
@@ -863,7 +917,7 @@ module util_adxcvr_xch #(
     .TX8B10BBYPASS (8'h0),
     .TX8B10BEN (1'h1),
     .TXBUFDIFFCTRL (3'h4),
-    .TXBUFSTATUS (),
+    .TXBUFSTATUS (tx_bufstatus_s),
     .TXCHARDISPMODE (8'h0),
     .TXCHARDISPVAL (8'h0),
     .TXCHARISK ({4'd0, tx_charisk}),
@@ -1450,7 +1504,7 @@ module util_adxcvr_xch #(
     .RSTCLKENTX (1'h0),
     .RX8B10BEN (RX8B10BEN),
     .RXBUFRESET (1'h0),
-    .RXBUFSTATUS (),
+    .RXBUFSTATUS (rx_bufstatus_s),
     .RXBYTEISALIGNED (),
     .RXBYTEREALIGN (),
     .RXCDRFREQRESET (1'h0),
@@ -1615,7 +1669,7 @@ module util_adxcvr_xch #(
     .TX8B10BBYPASS (8'h0),
     .TX8B10BEN (TX8B10BEN),
     .TXBUFDIFFCTRL (3'h0),
-    .TXBUFSTATUS (),
+    .TXBUFSTATUS (tx_bufstatus_s),
     .TXCOMFINISH (),
     .TXCOMINIT (1'h0),
     .TXCOMSAS (1'h0),
@@ -2339,7 +2393,7 @@ module util_adxcvr_xch #(
     .RX8B10BEN (RX8B10BEN),
     .RXAFECFOKEN (1'b1),
     .RXBUFRESET (1'd0),
-    .RXBUFSTATUS (),
+    .RXBUFSTATUS (rx_bufstatus_s),
     .RXBYTEISALIGNED (),
     .RXBYTEREALIGN (),
     .RXCDRFREQRESET (1'd0),
@@ -2510,7 +2564,7 @@ module util_adxcvr_xch #(
     .TSTIN (20'd0),
     .TX8B10BBYPASS (8'd0),
     .TX8B10BEN (RX8B10BEN),
-    .TXBUFSTATUS (),
+    .TXBUFSTATUS (tx_bufstatus_s),
     .TXCOMFINISH (),
     .TXCOMINIT (1'd0),
     .TXCOMSAS (1'd0),
@@ -3388,7 +3442,7 @@ module util_adxcvr_xch #(
       .PINRSRVDAS (),
       .POWERPRESENT (),
       .RESETEXCEPTION (),
-      .RXBUFSTATUS (),
+      .RXBUFSTATUS (rx_bufstatus_s),
       .RXBYTEISALIGNED (),
       .RXBYTEREALIGN (),
       .RXCDRLOCK (),
@@ -3443,7 +3497,7 @@ module util_adxcvr_xch #(
       .RXSYNCDONE (),
       .RXSYNCOUT (),
       .RXVALID (),
-      .TXBUFSTATUS (),
+      .TXBUFSTATUS (tx_bufstatus_s),
       .TXCOMFINISH (),
       .TXDCCDONE (),
       .TXDLYSRESETDONE (),

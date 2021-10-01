@@ -24,4 +24,17 @@ set_false_path \
 # sync bits i_sync_bits_rx_prbs_out
 set_false_path \
   -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
-    -filter {NAME =~ *i_sync_bits_rx_prbs_out* && IS_SEQUENTIAL}]
+    -filter {NAME =~ *i_sync_bits_rx_prbs_out* && IS_SEQUENTIAL}
+    ]
+
+# sync bits i_sync_bits_rx_bufstatus_in
+set_false_path \
+  -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+    -filter {NAME =~ *i_sync_bits_rx_bufstatus_in* && IS_SEQUENTIAL}
+    ]
+
+# sync bits i_sync_bits_bufstatus_out
+set_false_path \
+  -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+    -filter {NAME =~ *i_sync_bits_bufstatus_out* && IS_SEQUENTIAL}]
+    

@@ -79,6 +79,8 @@ module axi_adxcvr_up #(
   output              up_ch_prbscntreset,
   input               up_ch_prbserr,
   input               up_ch_prbslocked,
+  input      [ 1:0]   up_ch_bufstatus,
+  output              up_ch_bufstatus_rst,
   output              up_ch_lpm_dfe_n,
   output     [ 2:0]   up_ch_rate,
   output     [ 1:0]   up_ch_sys_clk_sel,
@@ -131,7 +133,7 @@ module axi_adxcvr_up #(
 
   // parameters
 
-  localparam  [31:0]  VERSION = 32'h00110461;
+  localparam  [31:0]  VERSION = 32'h00110561;
 
   // internal registers
 
@@ -178,6 +180,7 @@ module axi_adxcvr_up #(
   reg      [3:0]  up_prbssel = 'd0;
   reg             up_prbscntreset = 'd1;
   reg             up_prbsforceerr = 'd0;
+  reg             up_bufstatus_rst = 'd1;
 
   // internal signals
 
@@ -204,9 +207,11 @@ module axi_adxcvr_up #(
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
       up_resetn <= 'd0;
+      up_bufstatus_rst <= 1'b1;
     end else begin
       if ((up_wreq == 1'b1) && (up_waddr == 10'h004)) begin
         up_resetn <= up_wdata[0];
+        up_bufstatus_rst <= up_wdata[1];
       end
     end
   end
@@ -259,6 +264,7 @@ module axi_adxcvr_up #(
   assign up_ch_prbssel = up_prbssel;
   assign up_ch_prbscntreset = up_prbscntreset;
   assign up_ch_prbsforceerr = up_prbsforceerr;
+  assign up_ch_bufstatus_rst = up_bufstatus_rst;
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
@@ -525,8 +531,8 @@ module axi_adxcvr_up #(
           10'h000: up_rdata_d <= VERSION;
           10'h001: up_rdata_d <= ID;
           10'h002: up_rdata_d <= up_scratch;
-          10'h004: up_rdata_d <= {31'd0, up_resetn};
-          10'h005: up_rdata_d <= {27'd0, ~up_ch_pll_locked, 3'b0, up_status_int};
+          10'h004: up_rdata_d <= {30'd0, up_bufstatus_rst, up_resetn};
+          10'h005: up_rdata_d <= {25'd0, up_ch_bufstatus[1], up_ch_bufstatus[0], ~up_ch_pll_locked, 3'b0, up_status_int};
           10'h006: up_rdata_d <= {17'd0, up_user_ready_cnt, up_rst_cnt, up_pll_rst_cnt};
           10'h007: up_rdata_d <= {FPGA_TECHNOLOGY,FPGA_FAMILY,SPEED_GRADE,DEV_PACKAGE}; // [8,8,8,8]
           10'h008: up_rdata_d <= {19'd0, up_lpm_dfe_n, 1'd0, up_rate, 2'd0, up_sys_clk_sel, 1'd0, up_out_clk_sel};
