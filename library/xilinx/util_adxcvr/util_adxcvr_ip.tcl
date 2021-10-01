@@ -269,6 +269,8 @@ for {set n 0} {$n < 16} {incr n} {
     "prbscntreset        up_rx_prbscntreset_${n}"\
     "prbserr             up_rx_prbserr_${n}     "\
     "prbslocked          up_rx_prbslocked_${n}  "\
+    "bufstatus           up_rx_bufstatus_${n}   "\
+    "bufstatus_rst       up_rx_bufstatus_rst_${n}"\
     "lpm_dfe_n           up_rx_lpm_dfe_n_${n}   "\
     "rate                up_rx_rate_${n}        "\
     "sys_clk_sel         up_rx_sys_clk_sel_${n} "\
@@ -287,6 +289,7 @@ for {set n 0} {$n < 16} {incr n} {
     "rst_done            up_tx_rst_done_${n}    "\
     "prbsforceerr        up_tx_prbsforceerr_${n}"\
     "prbssel             up_tx_prbssel_${n}     "\
+    "bufstatus           up_tx_bufstatus_${n}   "\
     "lpm_dfe_n           up_tx_lpm_dfe_n_${n}   "\
     "rate                up_tx_rate_${n}        "\
     "sys_clk_sel         up_tx_sys_clk_sel_${n} "\

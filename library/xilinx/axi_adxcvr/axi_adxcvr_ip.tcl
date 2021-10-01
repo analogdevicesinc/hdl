@@ -76,6 +76,8 @@ for {set n 0} {$n < 16} {incr n} {
     "prbscntreset        up_ch_prbscntreset_${n}"\
     "prbserr             up_ch_prbserr_${n}     "\
     "prbslocked          up_ch_prbslocked_${n}  "\
+    "bufstatus           up_ch_bufstatus_${n}   "\
+    "bufstatus_rst       up_ch_bufstatus_rst_${n}"\
     "lpm_dfe_n           up_ch_lpm_dfe_n_${n}   "\
     "rate                up_ch_rate_${n}        "\
     "sys_clk_sel         up_ch_sys_clk_sel_${n} "\
