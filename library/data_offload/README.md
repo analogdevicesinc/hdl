@@ -385,12 +385,12 @@ Boards with FPGA side DDR3/4 SODIMMs/HILO: ZC706, ZCU102, A10SOC
 
 |                              |  ZC706    |  ZCU102    |   A10SOC   |
 |------------------------------|:---------:|:----------:|:----------:|
-| Max data throughputs (MT/s)  |   1600    |   2666     |    2133    |
+| Max data throughputs (MT/s)  |   1600    |   2400     |    2133    |
 | DDRx reference clocks        |  200 MHz  |  300 MHz   |    133 MHz |
 | DDRx Data bus width          |    64     |   16       |     64     |
 | Memory to FPGA clock ratio   |    4:1    |   4:1      |    4:1     |
 | UI type & burst length       | AXI4-256  | AXI4-256   | Avalon Memory Map |
-| UI data width                |    512    |   512      |    512     |
+| UI data width                |    512    |   128      |    512     |
 
 ### Internal cyclic buffer support for the TX path
 
