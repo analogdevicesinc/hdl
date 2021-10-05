@@ -78,6 +78,11 @@ $(PROJECT_NAME).sdk/system_top.xsa: $(M_DEPS)
 		$(HL)$(PROJECT_NAME)$(NC) project)
 
 lib:
+	@if [ -n "${REQUIRED_VIVADO_VERSION+set}" ]; then \
+		export REQUIRED_VIVADO_VERSION = $REQUIRED_VIVADO_VERSION; \
+	fi; \
+
 	@for lib in $(LIB_DEPS); do \
 		$(MAKE) -C $(HDL_LIBRARY_PATH)$${lib} xilinx || exit $$?; \
 	done
+
