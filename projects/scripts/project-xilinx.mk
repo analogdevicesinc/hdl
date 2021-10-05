@@ -79,5 +79,10 @@ $(PROJECT_NAME).sdk/system_top.xsa: $(M_DEPS)
 
 lib:
 	@for lib in $(LIB_DEPS); do \
-		$(MAKE) -C $(HDL_LIBRARY_PATH)$${lib} xilinx || exit $$?; \
+		if [ -n "${REQUIRED_VIVADO_VERSION}" ]; then \
+			$(MAKE) -C $(HDL_LIBRARY_PATH)$${lib} xilinx REQUIRED_VIVADO_VERSION=${REQUIRED_VIVADO_VERSION} || exit $$?; \
+		else \
+			$(MAKE) -C $(HDL_LIBRARY_PATH)$${lib} xilinx || exit $$?; \
+		fi; \
 	done
+
