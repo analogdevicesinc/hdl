@@ -6,7 +6,6 @@
 
 PROJECT_NAME := ad9082_fmca_ebz_zc706
 
-M_DEPS += ../../../library/common/ad_edge_detect.v
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zc706/zc706_system_constr.xdc
 M_DEPS += ../../common/zc706/zc706_system_bd.tcl
@@ -21,6 +20,7 @@ M_DEPS += ../../ad9081_fmca_ebz/common/versal_transceiver.tcl
 M_DEPS += ../../ad9081_fmca_ebz/common/ad9081_fmca_ebz_bd.tcl
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
+M_DEPS += ../../../library/common/ad_edge_detect.v
 M_DEPS += ../../../library/common/ad_3w_spi.v
 
 LIB_DEPS += axi_clkgen
