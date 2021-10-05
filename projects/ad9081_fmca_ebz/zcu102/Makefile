@@ -7,7 +7,6 @@
 PROJECT_NAME := ad9081_fmca_ebz_zcu102
 
 M_DEPS += timing_constr.xdc
-M_DEPS += ../../../library/common/ad_edge_detect.v
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zcu102/zcu102_system_constr.xdc
 M_DEPS += ../../common/zcu102/zcu102_system_bd.tcl
@@ -18,6 +17,7 @@ M_DEPS += ../../ad9081_fmca_ebz/common/versal_transceiver.tcl
 M_DEPS += ../../ad9081_fmca_ebz/common/ad9081_fmca_ebz_bd.tcl
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
+M_DEPS += ../../../library/common/ad_edge_detect.v
 M_DEPS += ../../../library/common/ad_3w_spi.v
 
 LIB_DEPS += axi_dmac
