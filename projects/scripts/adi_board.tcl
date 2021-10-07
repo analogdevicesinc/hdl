@@ -790,13 +790,29 @@ proc ad_cpu_interconnect {p_address p_name} {
     set i_str "M0$sys_cpu_interconnect_index"
   }
 
+  set use_smart_connect 1
+  # SmartConnect has higher resource utilization and worse timing closure on older families
+  if {$sys_zynq == 1} {
+    set use_smart_connect 0
+  }
+
   if {$sys_cpu_interconnect_index == 0} {
-    ad_ip_instance smartconnect axi_cpu_interconnect [ list \
-      NUM_MI 1 \
-      NUM_SI 1 \
-    ]
-    ad_connect sys_cpu_clk axi_cpu_interconnect/aclk
-    ad_connect sys_cpu_resetn axi_cpu_interconnect/aresetn
+
+    if {$use_smart_connect == 1} {
+      ad_ip_instance smartconnect axi_cpu_interconnect [ list \
+        NUM_MI 1 \
+        NUM_SI 1 \
+      ]
+      ad_connect sys_cpu_clk axi_cpu_interconnect/aclk
+      ad_connect sys_cpu_resetn axi_cpu_interconnect/aresetn
+    } else {
+      ad_ip_instance axi_interconnect axi_cpu_interconnect
+      ad_connect sys_cpu_clk axi_cpu_interconnect/ACLK
+      ad_connect sys_cpu_clk axi_cpu_interconnect/S00_ACLK
+      ad_connect sys_cpu_resetn axi_cpu_interconnect/ARESETN
+      ad_connect sys_cpu_resetn axi_cpu_interconnect/S00_ARESETN
+    }
+
     if {$sys_zynq == 3} {
       ad_connect sys_cpu_clk sys_cips/m_axi_fpd_aclk
       ad_connect axi_cpu_interconnect/S00_AXI sys_cips/M_AXI_FPD
@@ -917,6 +933,10 @@ proc ad_cpu_interconnect {p_address p_name} {
 
   set_property CONFIG.NUM_MI $sys_cpu_interconnect_index [get_bd_cells axi_cpu_interconnect]
 
+  if {$use_smart_connect == 0} {
+    ad_connect sys_cpu_clk axi_cpu_interconnect/${i_str}_ACLK
+    ad_connect sys_cpu_resetn axi_cpu_interconnect/${i_str}_ARESETN
+  }
   if {$p_intf_clock ne ""} {
     ad_connect sys_cpu_clk ${p_intf_clock}
   }
