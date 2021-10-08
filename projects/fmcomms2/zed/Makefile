@@ -14,6 +14,8 @@ M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/axi_ad9361/axi_ad9361_delay.tcl
 
 LIB_DEPS += axi_ad9361
+LIB_DEPS += axi_trigger
+LIB_DEPS += axi_adc_trigger
 LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_hdmi_tx
@@ -26,6 +28,7 @@ LIB_DEPS += util_pack/util_cpack2
 LIB_DEPS += util_pack/util_upack2
 LIB_DEPS += util_rfifo
 LIB_DEPS += util_tdd_sync
+LIB_DEPS += util_var_fifo
 LIB_DEPS += util_wfifo
 LIB_DEPS += xilinx/util_clkdiv
 
