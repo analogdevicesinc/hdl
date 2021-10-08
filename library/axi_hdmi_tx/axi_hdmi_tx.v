@@ -107,6 +107,7 @@ module axi_hdmi_tx #(
   localparam  EMBEDDED_SYNC = (INTERFACE == "16_BIT_EMBEDDED_SYNC") ? 1 : 0;
   localparam  XILINX_7SERIES = 1;
   localparam  XILINX_ULTRASCALE = 2;
+  localparam  XILINX_ULTRASCALE_PLUS = 3;
   localparam  INTEL_5SERIES = 101;
 
   // reset and clocks
@@ -302,7 +303,7 @@ module axi_hdmi_tx #(
   // hdmi output clock
 
   generate
-  if (FPGA_TECHNOLOGY == XILINX_ULTRASCALE) begin
+  if (FPGA_TECHNOLOGY == XILINX_ULTRASCALE || FPGA_TECHNOLOGY == XILINX_ULTRASCALE_PLUS) begin
   ODDRE1 #(.SRVAL(1'b0)) i_clk_oddr (
     .SR (1'b0),
     .D1 (~OUT_CLK_POLARITY),
