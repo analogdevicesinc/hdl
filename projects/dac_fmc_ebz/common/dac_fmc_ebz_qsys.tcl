@@ -114,9 +114,6 @@ ad_dacfifo_create avl_dac_fifo \
                   $DAC_DATA_WIDTH \
                   $dac_fifo_address_width
 
-set_instance_parameter_value avl_dac_fifo DAC_DATA_WIDTH \
-  [expr $NUM_OF_CHANNELS * $SAMPLE_DATA_WIDTH * $SAMPLES_PER_CHANNEL]
-
 export_interface dac_fifo_bypass avl_dac_fifo.if_bypass
 
 add_connection dac_jesd204_link.link_clk avl_dac_fifo.if_dac_clk
@@ -154,13 +151,13 @@ add_connection sys_dma_clk.clk dac_dma.m_src_axi_clock
 
 ad_cpu_interconnect 0x00020000 dac_jesd204_link.link_reconfig
 ad_cpu_interconnect 0x00024000 dac_jesd204_link.link_management
-ad_cpu_interconnect 0x00025000 dac_jesd204_link.link_pll_reconfig
-ad_cpu_interconnect 0x00026000 dac_jesd204_link.lane_pll_reconfig
+ad_cpu_interconnect 0x00026000 dac_jesd204_link.link_pll_reconfig
+ad_cpu_interconnect 0x00028000 dac_jesd204_link.lane_pll_reconfig
 for {set i 0} {$i < $NUM_OF_LANES} {incr i} {
-  ad_cpu_interconnect [expr 0x00028000 + $i * 0x1000] dac_jesd204_link.phy_reconfig_${i}
+  ad_cpu_interconnect [expr 0x00030000 + $i * 0x2000] dac_jesd204_link.phy_reconfig_${i}
 }
-ad_cpu_interconnect 0x00030000 dac_jesd204_transport.s_axi
-ad_cpu_interconnect 0x00040000 dac_dma.s_axi
+ad_cpu_interconnect 0x00040000 dac_jesd204_transport.s_axi
+ad_cpu_interconnect 0x00050000 dac_dma.s_axi
 
 # dma interconnects
 
