@@ -259,12 +259,12 @@ module data_offload_fsm #(
   end
 
   always @(posedge wr_clk) begin
-    wr_ready_d <= wr_ready;
+    wr_ready_d <= wr_ready && !(wr_valid_in && wr_last);
   end
 
   // flush out the DMA if the transfer is bigger than the storage size
   assign wr_ready = ((wr_fsm_state == WR_WRITE_TO_MEM) ||
-                     ((wr_fsm_state == WR_WAIT_TO_END) && wr_valid_in && wr_ready_d && wr_full)) ? 1'b1 : 1'b0;
+                     (TX_OR_RXN_PATH && ((wr_fsm_state == WR_WAIT_TO_END) && wr_ready_d))) ? 1'b1 : 1'b0;
 
   // write control
   assign wr_valid_out = (wr_fsm_state == WR_WRITE_TO_MEM) & wr_valid_in;
