@@ -14,6 +14,8 @@ adi_ip_files axi_ad7616 [list \
 
 adi_ip_properties axi_ad7616
 
+set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_ad7616} [ipx::current_core]
+
 adi_ip_add_core_dependencies { \
     analog.com:user:spi_engine_execution:1.0 \
     analog.com:user:axi_spi_engine:1.0 \

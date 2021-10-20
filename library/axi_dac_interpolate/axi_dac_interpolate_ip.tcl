@@ -19,6 +19,8 @@ adi_ip_files axi_dac_interpolate [list \
 
 adi_ip_properties axi_dac_interpolate
 
+set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_dac_interpolate} [ipx::current_core]
+
 ipx::infer_bus_interface dac_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 ipx::infer_bus_interface dac_rst xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
 

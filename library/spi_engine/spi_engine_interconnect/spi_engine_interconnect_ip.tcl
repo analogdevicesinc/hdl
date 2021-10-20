@@ -9,6 +9,8 @@ adi_ip_files spi_engine_interconnect [list \
 
 adi_ip_properties_lite spi_engine_interconnect
 
+set_property company_url {https://wiki.analog.com/resources/fpga/peripherals/spi_engine/interconnect} [ipx::current_core]
+
 # Remove all inferred interfaces
 ipx::remove_all_bus_interface [ipx::current_core]
 

@@ -56,6 +56,8 @@ adi_ip_ttcl axi_ad9361 "../common/ad_pps_receiver_constr.ttcl"
 adi_init_bd_tcl
 adi_ip_bd axi_ad9361 "bd/bd.tcl"
 
+set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_ad9361} [ipx::current_core]
+
 set_property driver_value 0 [ipx::get_ports *rx_clk_in* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *rx_frame_in* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *rx_data_in* -of_objects [ipx::current_core]]

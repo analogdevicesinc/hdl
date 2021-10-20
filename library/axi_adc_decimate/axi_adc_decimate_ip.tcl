@@ -18,6 +18,8 @@ adi_ip_files axi_adc_decimate [list \
 
 adi_ip_properties axi_adc_decimate
 
+set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_adc_decimate} [ipx::current_core]
+
 adi_ip_add_core_dependencies { \
   analog.com:user:util_cic:1.0 \
 }

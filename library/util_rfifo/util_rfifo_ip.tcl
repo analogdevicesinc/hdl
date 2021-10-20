@@ -11,6 +11,8 @@ adi_ip_files util_rfifo [list \
 
 adi_ip_properties_lite util_rfifo
 
+set_property company_url {https://wiki.analog.com/resources/fpga/docs/util_rfifo} [ipx::current_core]
+
 ipx::remove_all_bus_interface [ipx::current_core]
 set_property driver_value 0 [ipx::get_ports *dout_enable* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *dout_valid* -of_objects [ipx::current_core]]

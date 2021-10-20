@@ -19,6 +19,7 @@ adi_ip_files axi_tdd [list \
 adi_ip_properties axi_tdd
 set_property display_name "ADI AXI TDD Controller" [ipx::current_core]
 set_property description "ADI AXI TDD Controller" [ipx::current_core]
+set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_tdd} [ipx::current_core]
 
 adi_init_bd_tcl
 
