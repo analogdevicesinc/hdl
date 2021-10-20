@@ -228,33 +228,21 @@ module adrv9001_rx #(
     reg mssi_sync_2d = 1'b0;
     reg mssi_sync_3d = 1'b0;
     reg mssi_sync_edge = 1'b0;
-    reg mssi_sync_out_neg = 1'b0;
     always @(posedge adc_clk_in) begin
       mssi_sync_d <= mssi_sync;
       mssi_sync_2d <= mssi_sync_d;
       mssi_sync_3d <= mssi_sync_2d;
       mssi_sync_edge <= mssi_sync_2d & ~mssi_sync_3d;
     end
-    always @(negedge adc_clk_in) begin
-      mssi_sync_out_neg <= mssi_sync_edge;
-    end
 
-    assign ssi_sync_out = mssi_sync_out_neg;
+    assign ssi_sync_out = mssi_sync_edge;
 
     reg ssi_rst_pos;
     always @(posedge adc_clk_in) begin
       ssi_rst_pos <= ssi_sync_in;
     end
 
-    BUFGCE #(
-       .CE_TYPE ("SYNC"),
-       .IS_CE_INVERTED (1'b0),
-       .IS_I_INVERTED (1'b0)
-    ) i_clk_buf (
-       .O (adc_clk_in),
-       .CE (1'b1),
-       .I (clk_in_s)
-    );
+    assign adc_clk_in = clk_in_s;
 
     BUFGCE #(
        .CE_TYPE ("SYNC"),
