@@ -113,3 +113,18 @@ adi_if_ports  output  -1  response_measured_length
 adi_if_ports  input    1  response_eot
 adi_if_ports  input    1  status_underflow
 adi_if_ports  input    1  status_overflow
+
+adi_if_define if_delay_ctrl_tx
+adi_if_ports  output   1  delay_rst
+adi_if_ports  input    1  delay_locked
+adi_if_ports  output  -1  up_dld
+adi_if_ports  output  -1  up_dwdata
+adi_if_ports  input   -1  up_drdata
+
+adi_if_define if_delay_ctrl_rx
+adi_if_ports  input    1  delay_rst
+adi_if_ports  output   1  delay_locked
+adi_if_ports  input   -1  up_dld
+adi_if_ports  input   -1  up_dwdata
+adi_if_ports  output  -1  up_drdata
+
