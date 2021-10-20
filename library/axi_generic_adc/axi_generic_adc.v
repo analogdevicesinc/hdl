@@ -38,7 +38,11 @@
 module axi_generic_adc #(
 
   parameter   NUM_OF_CHANNELS = 2,
-  parameter   ID = 0)(
+  parameter   ID = 0,
+  parameter   HAS_DELAY_CTRL = 0,
+  parameter   DELAY_CTRL_NUM_LANES = 1,
+  parameter   DELAY_CTRL_DRP_WIDTH = 5
+)(
 
   input adc_clk,
   output [NUM_OF_CHANNELS-1:0] adc_enable,
@@ -64,10 +68,19 @@ module axi_generic_adc #(
   output  [31:0]  s_axi_rdata,
   input    s_axi_rready,
   input   [ 2:0]  s_axi_awprot,
-  input   [ 2:0]  s_axi_arprot
+  input   [ 2:0]  s_axi_arprot,
+
+  input           delay_clk,
+  output          delay_rst,
+  input           delay_locked,
+
+  output  [DELAY_CTRL_NUM_LANES-1:0]                      up_dld,
+  output  [DELAY_CTRL_DRP_WIDTH*DELAY_CTRL_NUM_LANES-1:0] up_dwdata,
+  input   [DELAY_CTRL_DRP_WIDTH*DELAY_CTRL_NUM_LANES-1:0] up_drdata
 
 );
 
+localparam NUM_OF_UP_SPACES = 1 + NUM_OF_CHANNELS + HAS_DELAY_CTRL;
 
 reg  [31:0] up_rdata = 'd0;
 reg        up_rack = 'd0;
@@ -85,9 +98,9 @@ wire        up_sel_s;
 wire        up_wr_s;
 wire [13:0] up_addr_s;
 wire [31:0] up_wdata_s;
-wire [31:0] up_rdata_s[0:NUM_OF_CHANNELS];
-wire        up_rack_s[0:NUM_OF_CHANNELS];
-wire        up_wack_s[0:NUM_OF_CHANNELS];
+wire [31:0] up_rdata_s[0:NUM_OF_UP_SPACES-1];
+wire        up_rack_s[0:NUM_OF_UP_SPACES-1];
+wire        up_wack_s[0:NUM_OF_UP_SPACES-1];
 
 reg [31:0]  up_rdata_r;
 reg         up_rack_r;
@@ -102,7 +115,7 @@ begin
   up_rdata_r = 'h00;
   up_rack_r = 'h00;
   up_wack_r = 'h00;
-  for (j = 0; j <= NUM_OF_CHANNELS; j=j+1) begin
+  for (j = 0; j < NUM_OF_UP_SPACES; j=j+1) begin
     up_rack_r = up_rack_r | up_rack_s[j];
     up_wack_r = up_wack_r | up_wack_s[j];
     up_rdata_r = up_rdata_r | up_rdata_s[j];
@@ -244,7 +257,33 @@ for (i = 0; i < NUM_OF_CHANNELS; i=i+1) begin
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_s[i]),
     .up_rack (up_rack_s[i]));
-end
+
+  end
+
+  // adc delay control
+  up_delay_cntrl #(
+    .DISABLE (HAS_DELAY_CTRL==0),
+    .DATA_WIDTH(DELAY_CTRL_NUM_LANES),
+    .DRP_WIDTH(DELAY_CTRL_DRP_WIDTH),
+    .BASE_ADDRESS(6'h02))
+  i_delay_cntrl(
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_locked (delay_locked),
+    .up_dld (up_dld),
+    .up_dwdata (up_dwdata),
+    .up_drdata (up_drdata),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq_s),
+    .up_waddr (up_waddr_s),
+    .up_wdata (up_wdata_s),
+    .up_wack (up_wack_s[NUM_OF_CHANNELS+HAS_DELAY_CTRL]),
+    .up_rreq (up_rreq_s),
+    .up_raddr (up_raddr_s),
+    .up_rdata (up_rdata_s[NUM_OF_CHANNELS+HAS_DELAY_CTRL]),
+    .up_rack (up_rack_s[NUM_OF_CHANNELS+HAS_DELAY_CTRL]));
+
 
 endgenerate
 
