@@ -190,9 +190,9 @@ always @(*) begin
       end
     end
   end else begin
-    if (in_use_nx[SH_W]) begin
-      out_mask = {O_W{1'b1}} << (SH_W-O_W);
-      idata_packed = idata_dd_nx[SH_W*UNIT_W-1:-O_W*UNIT_W];
+    if (in_use_nx[SH_W-1]) begin
+      out_mask = {O_W{1'b1}};
+      idata_packed = idata_dd_nx;
     end
   end
 end
