@@ -289,7 +289,7 @@ proc adi_ip_create {ip_name} {
     }
   }
 
-  create_project $ip_name . -force
+  create_project $ip_name . -force -part xc7z020clg484-1
 
   ## Load custom message severity definitions
 
