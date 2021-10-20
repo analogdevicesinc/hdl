@@ -10,6 +10,9 @@ adi_ip_files spi_engine_execution [list \
 
 adi_ip_properties_lite spi_engine_execution
 adi_ip_ttcl spi_engine_execution "spi_engine_execution_constr.ttcl"
+
+set_property company_url {https://wiki.analog.com/resources/fpga/peripherals/spi_engine/engine} [ipx::current_core]
+
 # Remove all inferred interfaces
 ipx::remove_all_bus_interface [ipx::current_core]
 

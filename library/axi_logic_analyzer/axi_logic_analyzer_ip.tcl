@@ -19,6 +19,8 @@ adi_ip_files axi_logic_analyzer [list \
 
 adi_ip_properties axi_logic_analyzer
 
+set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_logic_analyzer} [ipx::current_core]
+
 ipx::infer_bus_interface clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 ipx::infer_bus_interface clk_out xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 

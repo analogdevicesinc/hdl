@@ -20,6 +20,8 @@ adi_ip_add_core_dependencies { \
 	analog.com:user:util_cdc:1.0 \
 }
 
+set_property company_url {https://wiki.analog.com/resources/fpga/peripherals/spi_engine/axi} [ipx::current_core]
+
 ## Interface definitions
 
 adi_add_bus "spi_engine_ctrl" "master" \

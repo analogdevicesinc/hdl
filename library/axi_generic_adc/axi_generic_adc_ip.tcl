@@ -18,6 +18,8 @@ adi_ip_files axi_generic_adc [list \
 
 adi_ip_properties axi_generic_adc
 
+set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_adc_ip} [ipx::current_core]
+
 ipx::infer_bus_interface adc_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 
 ipx::save_core [ipx::current_core]

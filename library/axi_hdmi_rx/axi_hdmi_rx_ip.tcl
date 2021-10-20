@@ -25,6 +25,8 @@ adi_ip_files axi_hdmi_rx [list \
 
 adi_ip_properties axi_hdmi_rx
 
+set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_hdmi_rx} [ipx::current_core]
+
 ipx::infer_bus_interface hdmi_rx_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 ipx::infer_bus_interface hdmi_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 

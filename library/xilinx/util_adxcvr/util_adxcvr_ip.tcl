@@ -17,6 +17,8 @@ adi_ip_properties_lite util_adxcvr
 
 adi_ip_bd util_adxcvr "bd/bd.tcl"
 
+set_property company_url {https://wiki.analog.com/resources/fpga/docs/util_xcvr} [ipx::current_core]
+
 adi_ip_add_core_dependencies { \
 	analog.com:user:util_cdc:1.0 \
 }

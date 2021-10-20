@@ -19,6 +19,8 @@ adi_ip_infer_mm_interfaces axi_adxcvr
 adi_init_bd_tcl
 adi_ip_bd axi_adxcvr "bd/bd.tcl"
 
+set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_adxcvr} [ipx::current_core]
+
 set cc [ipx::current_core]
 
 # Arrange GUI page layout

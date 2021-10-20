@@ -18,6 +18,7 @@ adi_ip_add_core_dependencies { \
 
 set_property display_name "ADI AXI Stream FIFO" [ipx::current_core]
 set_property description  "ADI AXI Stream FIFO" [ipx::current_core]
+set_property company_url {https://wiki.analog.com/resources/fpga/docs/util_axis_fifo} [ipx::current_core]
 
 ## Interface definitions
 

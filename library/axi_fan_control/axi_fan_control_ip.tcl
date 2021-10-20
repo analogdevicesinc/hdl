@@ -10,6 +10,9 @@ adi_ip_files axi_fan_control [list \
   "axi_fan_control.v"]
 
 adi_ip_properties axi_fan_control
+
+set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_fan_control} [ipx::current_core]
+
 set cc [ipx::current_core]
 
 ipx::save_core $cc

@@ -11,6 +11,8 @@ adi_ip_files util_wfifo [list \
 
 adi_ip_properties_lite util_wfifo
 
+set_property company_url {https://wiki.analog.com/resources/fpga/docs/util_wfifo} [ipx::current_core]
+
 ipx::remove_all_bus_interface [ipx::current_core]
 set_property driver_value 0 [ipx::get_ports *din_enable* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *din_valid* -of_objects [ipx::current_core]]

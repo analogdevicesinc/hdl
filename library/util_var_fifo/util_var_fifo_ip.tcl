@@ -9,6 +9,8 @@ adi_ip_files util_var_fifo [list \
 
 adi_ip_properties_lite util_var_fifo
 
+set_property company_url {https://wiki.analog.com/resources/fpga/docs/util_var_fifo} [ipx::current_core]
+
 ipx::infer_bus_interface clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 ipx::infer_bus_interface rst xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
 

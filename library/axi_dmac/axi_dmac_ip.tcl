@@ -43,6 +43,8 @@ adi_ip_ttcl axi_dmac "axi_dmac_constr.ttcl"
 adi_ip_sim_ttcl axi_dmac "axi_dmac_pkg_sv.ttcl"
 adi_ip_bd axi_dmac "bd/bd.tcl"
 
+set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_dmac} [ipx::current_core]
+
 adi_ip_add_core_dependencies { \
 	analog.com:user:util_axis_fifo:1.0 \
 	analog.com:user:util_cdc:1.0 \

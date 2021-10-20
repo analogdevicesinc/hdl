@@ -9,6 +9,9 @@ adi_ip_files axi_sysid [list \
   "axi_sysid.v"]
 
 adi_ip_properties axi_sysid
+
+set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_sysid} [ipx::current_core]
+
 set cc [ipx::current_core]
 
 ipx::save_core $cc

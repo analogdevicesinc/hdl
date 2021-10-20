@@ -12,6 +12,8 @@ adi_ip_properties axi_ad9144
 adi_init_bd_tcl
 adi_ip_bd axi_ad9144 "bd/bd.tcl"
 
+set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_ad9144} [ipx::current_core]
+
 adi_ip_add_core_dependencies { \
   analog.com:user:ad_ip_jesd204_tpl_dac:1.0 \
 }

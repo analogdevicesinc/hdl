@@ -9,6 +9,8 @@ adi_ip_files util_axis_fifo_asym [list \
 
 adi_ip_properties_lite util_axis_fifo_asym
 
+set_property company_url {https://wiki.analog.com/resources/fpga/docs/util_axis_fifo_asym} [ipx::current_core]
+
 adi_ip_add_core_dependencies { \
 	analog.com:user:util_cdc:1.0 \
 	analog.com:user:util_axis_fifo:1.0 \

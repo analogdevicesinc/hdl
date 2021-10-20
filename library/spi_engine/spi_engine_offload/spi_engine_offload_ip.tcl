@@ -10,6 +10,8 @@ adi_ip_files spi_engine_offload [list \
 adi_ip_properties_lite spi_engine_offload
 adi_ip_ttcl axi_spi_engine "spi_engine_offload_constr.ttcl"
 
+set_property company_url {https://wiki.analog.com/resources/fpga/peripherals/spi_engine/offload} [ipx::current_core]
+
 # Remove all inferred interfaces
 ipx::remove_all_bus_interface [ipx::current_core]
 

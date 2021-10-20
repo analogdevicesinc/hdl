@@ -61,6 +61,8 @@ adi_ip_properties ad_ip_jesd204_tpl_dac
 adi_init_bd_tcl
 adi_ip_bd ad_ip_jesd204_tpl_dac "bd/bd.tcl"
 
+set_property company_url {https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_tpl_dac} [ipx::current_core]
+
 set cc [ipx::current_core]
 
 set_property display_name "JESD204 Transport Layer for DACs" $cc
