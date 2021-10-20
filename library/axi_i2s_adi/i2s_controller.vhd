@@ -83,7 +83,7 @@ constant NUM_RX			: integer := C_HAS_RX * C_NUM_CH;
 
 signal enable			: Boolean;
 
-signal cdc_sync_stage0_tick	: std_logic;
+signal cdc_sync_stage0_tick	: std_logic := '0';
 signal cdc_sync_stage1_tick	: std_logic;
 signal cdc_sync_stage2_tick	: std_logic;
 signal cdc_sync_stage3_tick	: std_logic;
