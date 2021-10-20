@@ -63,7 +63,7 @@ architecture impl of fifo_synchronizer is
 	signal rd_addr : natural range 0 to DEPTH - 1;
 	signal wr_addr : natural range 0 to DEPTH - 1;
 
-	signal cdc_sync_stage0_tick : std_logic;
+	signal cdc_sync_stage0_tick : std_logic := '0';
 	signal cdc_sync_stage1_tick : std_logic;
 	signal cdc_sync_stage2_tick : std_logic;
 	signal cdc_sync_stage3_tick : std_logic;
