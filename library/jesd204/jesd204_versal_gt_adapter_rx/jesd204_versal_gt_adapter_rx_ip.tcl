@@ -65,4 +65,14 @@ adi_add_bus "RX" "master" \
    { "rx_block_sync" "rxblock_sync" } \
   }
 
+adi_add_bus "RX_GT_IP_Interface" "master" \
+  "xilinx.com:interface:gt_rx_interface_rtl:1.0" \
+  "xilinx.com:interface:gt_rx_interface:1.0" \
+  { \
+   { "rxdata" "ch_rxdata" } \
+   { "rxheader" "ch_rxheader" } \
+   { "rxheadervalid" "ch_rxheadervalid" } \
+   { "rxgearboxslip" "ch_rxgearboxslip" } \
+  }
+
 ipx::save_core [ipx::current_core]
