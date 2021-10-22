@@ -55,6 +55,14 @@ adi_ip_properties_lite jesd204_versal_gt_adapter_tx
 set_property display_name "ADI JESD204 Versal Transceiver Tx Lane Adapter" [ipx::current_core]
 set_property description "ADI JESD204 Versal Transceiver Tx Lane Adapter" [ipx::current_core]
 
+adi_add_bus "TX_GT_IP_Interface" "master" \
+  "xilinx.com:interface:gt_tx_interface_rtl:1.0" \
+  "xilinx.com:interface:gt_tx_interface:1.0" \
+  { \
+   { "txdata" "ch_txdata" } \
+   { "txheader" "ch_txheader" } \
+  }
+
 adi_add_bus "TX" "slave" \
   "xilinx.com:display_jesd204:jesd204_tx_bus_rtl:1.0" \
   "xilinx.com:display_jesd204:jesd204_tx_bus:1.0" \
