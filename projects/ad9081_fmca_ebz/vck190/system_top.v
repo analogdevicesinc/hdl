@@ -127,6 +127,12 @@ module system_top  #(
   wire            rx_device_clk;
 
   // instantiations
+  IBUFDS_GTE5 i_ibufds_ref_clk (
+    .CEB (1'd0),
+    .I (fpga_refclk_in_p),
+    .IB (fpga_refclk_in_n),
+    .O (ref_clk),
+    .ODIV2 ());
 
   IBUFDS i_ibufds_sysref (
     .I (sysref2_p),
@@ -239,7 +245,7 @@ module system_top  #(
 
   wire gt_reset_pls;
   assign gt_reset_pls = ext_pll_lock & ~ext_pll_lock_d;
-  
+
   reg [4:0] rst_gen = 'b0;
   always @(posedge tx_device_clk) begin
      rst_gen <= {rst_gen,gt_reset_pls};
@@ -287,8 +293,8 @@ module system_top  #(
     .GT_Serial_0_grx_p (rx_data_p_loc[3:0]),
     .GT_Serial_0_grx_n (rx_data_n_loc[3:0]),
 
-    .gt_bridge_ip_0_diff_gt_ref_clock_0_clk_p(fpga_refclk_in_p),
-    .gt_bridge_ip_0_diff_gt_ref_clock_0_clk_n(fpga_refclk_in_n),
+    .ref_clk_q0 (ref_clk),
+    .ref_clk_q1 (ref_clk),
 
     .rx_device_clk (rx_device_clk),
     .tx_device_clk (tx_device_clk),
