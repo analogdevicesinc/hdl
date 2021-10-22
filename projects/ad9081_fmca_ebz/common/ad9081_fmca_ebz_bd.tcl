@@ -135,7 +135,7 @@ if {$ADI_PHY_SEL == 1} {
 } else {
   source $ad_hdl_dir/projects/ad9081_fmca_ebz/common/versal_transceiver.tcl
 
-  create_bd_cell -type container -reference jesd_phy jesd204_phy
+  create_versal_phy jesd204_phy $TX_NUM_OF_LANES
 
   create_bd_port -dir I gt_reset
 
@@ -291,40 +291,22 @@ if {$ADI_PHY_SEL == 1} {
   ad_xcvrcon  util_mxfe_xcvr axi_mxfe_tx_xcvr axi_mxfe_tx_jesd {} {} tx_device_clk
 } else {
 
-  make_bd_intf_pins_external  [get_bd_intf_pins jesd204_phy/gt_bridge_ip_0_diff_gt_ref_clock]
+  ad_connect ref_clk_q0 jesd204_phy/GT_REFCLK
 
-
-  set rx_link_clock  jesd204_phy/rxusrclk_gt_bridge_ip_0
-  set tx_link_clock  jesd204_phy/txusrclk_gt_bridge_ip_0
+  set rx_link_clock  jesd204_phy/rxusrclk_out
+  set tx_link_clock  jesd204_phy/txusrclk_out
 
   # Connect PHY to Link Layer
   for {set j 0}  {$j < $RX_NUM_OF_LANES} {incr j} {
-    ad_ip_instance jesd204_versal_gt_adapter_tx tx_adapt_${j}
-    ad_connect  axi_mxfe_tx_jesd/tx_phy${j} tx_adapt_${j}/TX
-    ad_connect  tx_adapt_${j}/txdata jesd204_phy/ch${j}_txdata_ext
-    ad_connect  tx_adapt_${j}/txheader jesd204_phy/ch${j}_txheader_ext
+    ad_connect  axi_mxfe_tx_jesd/tx_phy${j} jesd204_phy/tx${j}
 
-    ad_ip_instance jesd204_versal_gt_adapter_rx rx_adapt_${j}
-    ad_connect  axi_mxfe_rx_jesd/rx_phy${j} rx_adapt_${j}/RX
-    ad_connect  rx_adapt_${j}/rxdata  jesd204_phy/ch${j}_rxdata_ext
-    ad_connect  rx_adapt_${j}/rxheader jesd204_phy/ch${j}_rxheader_ext
-    ad_connect  rx_adapt_${j}/rxheadervalid jesd204_phy/ch${j}_rxheadervalid_ext
-    ad_connect  rx_adapt_${j}/rxgearboxslip  jesd204_phy/ch${j}_rxgearboxslip_ext
+    ad_connect  axi_mxfe_rx_jesd/rx_phy${j} jesd204_phy/rx${j}
 
-    # link clock to adapter
-    ad_connect $rx_link_clock  rx_adapt_${j}/usr_clk
-    ad_connect $tx_link_clock  tx_adapt_${j}/usr_clk
   }
 
-  ad_connect $sys_cpu_clk jesd204_phy/apb3clk_quad
-  ad_connect $sys_cpu_clk jesd204_phy/apb3clk_gt_bridge_ip_0
+  ad_connect $sys_cpu_clk jesd204_phy/apb3clk
 
-  ad_connect GND jesd204_phy/rate_sel_gt_bridge_ip_0
-
-  ad_connect GND jesd204_phy/reset_rx_pll_and_datapath_in
-  ad_connect GND jesd204_phy/reset_tx_pll_and_datapath_in
-
-  ad_connect gt_reset jesd204_phy/gt_reset_gt_bridge_ip_0
+  ad_connect gt_reset jesd204_phy/gtreset_in
 
   ad_connect axi_mxfe_rx_jesd/rx_axi/device_reset jesd204_phy/reset_rx_datapath_in
   ad_connect axi_mxfe_tx_jesd/tx_axi/device_reset jesd204_phy/reset_tx_datapath_in
@@ -513,3 +495,4 @@ if {$TDD_SUPPORT} {
   ad_connect GND $dac_data_offload_name/sync_ext
   ad_connect GND $adc_data_offload_name/sync_ext
 }
+

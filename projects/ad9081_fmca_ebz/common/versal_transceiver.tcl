@@ -1,22 +1,43 @@
 
-set top_design [current_bd_design]
+# TODO: This works only up to 4 lanes on 64B66B
+proc create_versal_phy {
+  {ip_name versal_phy}
+  {num_lanes 2}
+  {lane_rate 11.88}
+  {ref_clock 360}
+} {
 
-create_bd_design "jesd_phy"
+set num_quads [expr round(1.0*$num_lanes/4)]
+set progdiv_clock [format %.3f [expr $lane_rate * 1000 / 66]]
 
-create_bd_cell -type ip -vlnv xilinx.com:ip:gt_bridge_ip:1.1 gt_bridge_ip_0
+create_bd_cell -type hier ${ip_name}
+
+# Common interface
+create_bd_pin -dir O ${ip_name}/rxusrclk_out -type clk
+create_bd_pin -dir O ${ip_name}/txusrclk_out -type clk
+
+create_bd_pin -dir I ${ip_name}/GT_REFCLK -type clk
+
+create_bd_pin -dir I ${ip_name}/apb3clk -type clk
+create_bd_pin -dir I ${ip_name}/gtreset_in
+create_bd_pin -dir I ${ip_name}/reset_rx_datapath_in
+create_bd_pin -dir I ${ip_name}/reset_tx_datapath_in
+
+ad_ip_instance gt_bridge_ip ${ip_name}/gt_bridge_ip_0
 
 set_property -dict [list \
   CONFIG.BYPASS_MODE {true} \
+  CONFIG.IP_NO_OF_LANES ${num_lanes} \
   CONFIG.IP_PRESET {GTY-JESD204_64B66B} \
-  CONFIG.IP_LR0_SETTINGS { \
+  CONFIG.IP_LR0_SETTINGS [list \
      PRESET GTY-JESD204_64B66B \
      INTERNAL_PRESET JESD204_64B66B \
      GT_TYPE GTY \
      GT_DIRECTION DUPLEX \
-     TX_LINE_RATE 11.88 \
+     TX_LINE_RATE $lane_rate \
      TX_PLL_TYPE LCPLL \
-     TX_REFCLK_FREQUENCY 360 \
-     TX_ACTUAL_REFCLK_FREQUENCY 360.000000000000 \
+     TX_REFCLK_FREQUENCY $ref_clock \
+     TX_ACTUAL_REFCLK_FREQUENCY $ref_clock \
      TX_FRACN_ENABLED true \
      TX_FRACN_NUMERATOR 0 \
      TX_REFCLK_SOURCE R0 \
@@ -29,16 +50,16 @@ set_property -dict [list \
      TX_OUTCLK_SOURCE TXPROGDIVCLK \
      TXPROGDIV_FREQ_ENABLE true \
      TXPROGDIV_FREQ_SOURCE LCPLL \
-     TXPROGDIV_FREQ_VAL 180.000 \
+     TXPROGDIV_FREQ_VAL $progdiv_clock \
      TX_DIFF_SWING_EMPH_MODE CUSTOM \
      TX_64B66B_SCRAMBLER false \
      TX_64B66B_ENCODER false \
      TX_64B66B_CRC false \
      TX_RATE_GROUP A \
-     RX_LINE_RATE 11.88 \
+     RX_LINE_RATE $lane_rate \
      RX_PLL_TYPE LCPLL \
-     RX_REFCLK_FREQUENCY 360 \
-     RX_ACTUAL_REFCLK_FREQUENCY 360.000000000000 \
+     RX_REFCLK_FREQUENCY $ref_clock \
+     RX_ACTUAL_REFCLK_FREQUENCY $ref_clock \
      RX_FRACN_ENABLED true \
      RX_FRACN_NUMERATOR 0 \
      RX_REFCLK_SOURCE R0 \
@@ -49,7 +70,7 @@ set_property -dict [list \
      RX_OUTCLK_SOURCE RXPROGDIVCLK \
      RXPROGDIV_FREQ_ENABLE true \
      RXPROGDIV_FREQ_SOURCE LCPLL \
-     RXPROGDIV_FREQ_VAL 180.000 \
+     RXPROGDIV_FREQ_VAL $progdiv_clock \
      INS_LOSS_NYQ 12 \
      RX_EQ_MODE LPM \
      RX_COUPLING AC \
@@ -160,15 +181,79 @@ set_property -dict [list \
      RESET_SEQUENCE_INTERVAL 0 \
      RX_COMMA_PRESET NONE \
      RX_COMMA_VALID_ONLY 0 \
-     } \
-] [get_bd_cells gt_bridge_ip_0]
+     ] \
+] [get_bd_cells ${ip_name}/gt_bridge_ip_0]
 
-apply_bd_automation -rule xilinx.com:bd_rule:gt_ips -config { DataPath_Interface_Connection {Auto} Lane0_selection {NULL} Lane10_selection {NULL} Lane11_selection {NULL} Lane12_selection {NULL} Lane13_selection {NULL} Lane14_selection {NULL} Lane15_selection {NULL} Lane16_selection {NULL} Lane17_selection {NULL} Lane18_selection {NULL} Lane19_selection {NULL} Lane1_selection {NULL} Lane2_selection {NULL} Lane3_selection {NULL} Lane4_selection {NULL} Lane5_selection {NULL} Lane6_selection {NULL} Lane7_selection {NULL} Lane8_selection {NULL} Lane9_selection {NULL} Quad0_selection {NULL} Quad10_selection {NULL} Quad11_selection {NULL} Quad12_selection {NULL} Quad13_selection {NULL} Quad14_selection {NULL} Quad15_selection {NULL} Quad16_selection {NULL} Quad17_selection {NULL} Quad18_selection {NULL} Quad19_selection {NULL} Quad1_selection {NULL} Quad2_selection {NULL} Quad3_selection {NULL} Quad4_selection {NULL} Quad5_selection {NULL} Quad6_selection {NULL} Quad7_selection {NULL} Quad8_selection {NULL} Quad9_selection {NULL}}  [get_bd_cells gt_bridge_ip_0]
+ad_ip_instance gt_quad_base ${ip_name}/gt_quad_base_0
+create_bd_intf_pin -mode Master -vlnv	xilinx.com:interface:gt_rtl:1.0 ${ip_name}/GT_Serial
+ad_connect ${ip_name}/gt_quad_base_0/GT_Serial ${ip_name}/GT_Serial
 
-validate_bd_design
+ad_ip_instance bufg_gt ${ip_name}/bufg_gt_rx
+ad_ip_instance bufg_gt ${ip_name}/bufg_gt_tx
 
-save_bd_design
-close_bd_design [current_bd_design]
+ad_connect ${ip_name}/gt_quad_base_0/ch0_rxoutclk ${ip_name}/bufg_gt_rx/outclk
+ad_connect ${ip_name}/gt_quad_base_0/ch0_txoutclk ${ip_name}/bufg_gt_tx/outclk
 
-current_bd_design [get_bd_designs $top_design]
+ad_connect ${ip_name}/bufg_gt_rx/usrclk ${ip_name}/gt_bridge_ip_0/gt_rxusrclk
+ad_connect ${ip_name}/bufg_gt_tx/usrclk ${ip_name}/gt_bridge_ip_0/gt_txusrclk
+
+ad_connect ${ip_name}/gt_bridge_ip_0/rxusrclk_out ${ip_name}/rxusrclk_out
+ad_connect ${ip_name}/gt_bridge_ip_0/txusrclk_out ${ip_name}/txusrclk_out
+
+for {set j 0} {$j < $num_lanes} {incr j} {
+  ad_ip_instance jesd204_versal_gt_adapter_tx ${ip_name}/tx_adapt_${j}
+  ad_connect ${ip_name}/tx_adapt_${j}/TX_GT_IP_Interface ${ip_name}/gt_bridge_ip_0/GT_TX${j}_EXT
+
+  # TODO: This works only up to 4 lanes
+  ad_connect ${ip_name}/gt_bridge_ip_0/GT_TX${j} ${ip_name}/gt_quad_base_0/TX${j}_GT_IP_Interface
+  create_bd_intf_pin -mode Slave -vlnv xilinx.com:display_jesd204:jesd204_tx_bus_rtl:1.0 ${ip_name}/tx${j}
+  ad_connect ${ip_name}/tx${j} ${ip_name}/tx_adapt_${j}/TX
+
+  ad_connect ${ip_name}/bufg_gt_tx/usrclk ${ip_name}/tx_adapt_${j}/usr_clk
+
+}
+
+for {set j 0} {$j < $num_lanes} {incr j} {
+  ad_ip_instance jesd204_versal_gt_adapter_rx ${ip_name}/rx_adapt_${j}
+  ad_connect ${ip_name}/rx_adapt_${j}/RX_GT_IP_Interface ${ip_name}/gt_bridge_ip_0/GT_RX${j}_EXT
+
+  # TODO: This works only up to 4 lanes
+  ad_connect ${ip_name}/gt_bridge_ip_0/GT_RX${j} ${ip_name}/gt_quad_base_0/RX${j}_GT_IP_Interface
+  create_bd_intf_pin -mode Master -vlnv xilinx.com:display_jesd204:jesd204_rx_bus_rtl:1.0 ${ip_name}/rx${j}
+  ad_connect ${ip_name}/rx${j} ${ip_name}/rx_adapt_${j}/RX
+
+  ad_connect ${ip_name}/bufg_gt_rx/usrclk ${ip_name}/rx_adapt_${j}/usr_clk
+
+}
+
+for {set i 0} {$i < $num_quads} {incr i} {
+  for {set j 0} {$j < 4} {incr j} {
+    ad_connect ${ip_name}/bufg_gt_rx/usrclk ${ip_name}/gt_quad_base_${i}/ch${j}_rxusrclk
+    ad_connect ${ip_name}/bufg_gt_tx/usrclk ${ip_name}/gt_quad_base_${i}/ch${j}_txusrclk
+  }
+}
+
+# Clocks and resets
+ad_connect ${ip_name}/apb3clk ${ip_name}/gt_bridge_ip_0/apb3clk
+ad_connect ${ip_name}/gtreset_in           ${ip_name}/gt_bridge_ip_0/gtreset_in
+ad_connect ${ip_name}/reset_rx_datapath_in ${ip_name}/gt_bridge_ip_0/reset_rx_datapath_in
+ad_connect ${ip_name}/reset_tx_datapath_in ${ip_name}/gt_bridge_ip_0/reset_tx_datapath_in
+
+ad_ip_instance xlconcat ${ip_name}/xlconcat_0 [list \
+   NUM_PORTS $num_quads \
+ ]
+ad_ip_instance util_reduced_logic ${ip_name}/util_reduced_logic_0 [list \
+   C_SIZE $num_quads \
+ ]
+
+for {set j 0} {$j < $num_quads} {incr j} {
+  ad_connect ${ip_name}/xlconcat_0/In${j} ${ip_name}/gt_quad_base_${j}/gtpowergood
+  ad_connect ${ip_name}/apb3clk ${ip_name}/gt_quad_base_${j}/apb3clk
+  ad_connect ${ip_name}/GT_REFCLK ${ip_name}/gt_quad_base_${j}/GT_REFCLK0
+}
+
+ad_connect ${ip_name}/xlconcat_0/dout ${ip_name}/util_reduced_logic_0/Op1
+ad_connect ${ip_name}/util_reduced_logic_0/Res ${ip_name}/gt_bridge_ip_0/gtpowergood
+
+}
 
