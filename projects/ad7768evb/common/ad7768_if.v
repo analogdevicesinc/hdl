@@ -138,7 +138,6 @@ module ad7768_if (
   reg     [  8:0]   adc_cnt_p = 'd0;
   reg               adc_valid_p = 'd0;
   reg     [255:0]   adc_data_p = 'd0;
-  reg     [255:0]   adc_data_p2 = 'd0;
   reg     [  7:0]   adc_data_d1 = 'd0;
   reg     [  7:0]   adc_data_d2 = 'd0;
   reg               adc_ready_d1 = 'd0;
@@ -282,7 +281,6 @@ module ad7768_if (
       sync_ss <= 1'h0;
     end
   end
-
 
   always @(posedge adc_clk) begin
     adc_valid <= adc_valid_int & adc_enable_int;
@@ -497,8 +495,6 @@ module ad7768_if (
 //    adc_ch_valid_6 <= adc_ch_valid_d[6] & ~adc_format[1] & ~adc_format[0];
 //    adc_ch_valid_7 <= adc_ch_valid_d[7] & ~adc_format[1] & ~adc_format[0];
 
-
-
     adc_ch_data_0 <= adc_ch_data_d0[((32*0)+31):(32*0)];
     adc_ch_data_1 <= adc_ch_data_d1[((32*1)+31):(32*1)];
     adc_ch_data_2 <= adc_ch_data_d2[((32*2)+31):(32*2)];
@@ -512,7 +508,18 @@ module ad7768_if (
   always @(posedge adc_clk) begin
     adc_ch_valid <= adc_valid_p;
     if (adc_valid_p == 1'b1) begin
-      adc_ch_data <= adc_data_p;
+      if (up_format == 'h0) begin
+        adc_ch_data <= adc_data_p;
+      end else if (up_format == 'h1) begin
+          adc_ch_data [31:0]    <= adc_data_p [95:64];
+          adc_ch_data [63:32]   <= adc_data_p [31:0];
+          adc_ch_data [95:64]   <= adc_data_p [223:192];
+          adc_ch_data [127:96]  <= adc_data_p [159:128];
+          adc_ch_data [159:128] <= adc_data_p [127:96];
+          adc_ch_data [191:160] <= adc_data_p [63:32];
+          adc_ch_data [223:192] <= adc_data_p [255:224];
+          adc_ch_data [255:224] <= adc_data_p [191:160];
+      end
     end else begin
       adc_ch_data <= 256'd0;
     end
@@ -534,11 +541,20 @@ module ad7768_if (
     end else if (adc_cnt_enable_s == 1'b1) begin
       adc_cnt_p <= adc_cnt_p + 1'b1;
     end
-    if (adc_cnt_p[6:0] == 6'h7f) begin
-//    if (adc_cnt_p[4:0] == 5'h1f) begin
-      adc_valid_p <= 1'b1;
-    end else begin
-      adc_valid_p <= 1'b0;
+    if (up_format == 'h0) begin
+  //    if (adc_cnt_p[6:0] == 6'h7f) begin
+      if (adc_cnt_p[4:0] == 5'h1f) begin
+        adc_valid_p <= 1'b1;
+      end else begin
+        adc_valid_p <= 1'b0;
+      end
+    end else if (up_format == 'h1) begin
+      if (adc_cnt_p[6:0] == 6'h7f) begin
+//      if (adc_cnt_p[4:0] == 5'h1f) begin
+        adc_valid_p <= 1'b1;
+      end else begin
+        adc_valid_p <= 1'b0;
+      end
     end
   end
 
@@ -561,27 +577,56 @@ genvar n;
     adc_data_d1[n] <= adc_data_in_s[n];
     adc_data_d2[n] <= adc_data_d1[n];
   end
-
   assign adc_data_in_s[n] = data_in[n];
-
   end
-  endgenerate
+endgenerate
 
 
-  genvar m;
-  generate
-  for (m = 0; m < 2; m = m + 1) begin: g_data1
-    always @(posedge adc_clk) begin
+//  genvar m;
+//  generate
+//  for (m = 0; m < 2; m = m + 1) begin: g_data1
+//    always @(posedge adc_clk) begin
+//      if (adc_cnt_p[4:0] == 5'h00) begin
+//        adc_data_p[ 255 : 64 ] <= {adc_data_p [ 191 : 2 ], adc_data_d2[1], adc_data_d2[0]};
+//      end else begin
+//        adc_data_p[ ((32*m)+31) : (32*m) ] <= {adc_data_p[ ((32*m)+30) : (32*m) ], adc_data_d2[m]};
+//      end
+//    end
+//  end
+//  endgenerate
+
+  always @(posedge adc_clk) begin
+    if (up_format == 'h0) begin
       if (adc_cnt_p[4:0] == 5'h00) begin
-//        adc_data_p[ 255 : 64 ] <= {adc_data_p [ 191 : 0 ]};
+        adc_data_p[255:224] <= {31'd0, adc_data_d2[7]};
+        adc_data_p[223:192] <= {31'd0, adc_data_d2[6]};
+        adc_data_p[191:160] <= {31'd0, adc_data_d2[5]};
+        adc_data_p[159:128] <= {31'd0, adc_data_d2[4]};
+        adc_data_p[127:96]  <= {31'd0, adc_data_d2[3]};
+        adc_data_p[95:64]   <= {31'd0, adc_data_d2[2]};
+        adc_data_p[63:32]   <= {31'd0, adc_data_d2[1]};
+        adc_data_p[31:0]    <= {31'd0, adc_data_d2[0]};
+      end else begin
+        adc_data_p[255:224] <= {adc_data_p[254:224], adc_data_d2[7]};
+        adc_data_p[223:192] <= {adc_data_p[222:192], adc_data_d2[6]};
+        adc_data_p[191:160] <= {adc_data_p[190:160], adc_data_d2[5]};
+        adc_data_p[159:128] <= {adc_data_p[158:128], adc_data_d2[4]};
+        adc_data_p[127:96]  <= {adc_data_p[126:96], adc_data_d2[3]};
+        adc_data_p[95:64]   <= {adc_data_p[94:64], adc_data_d2[2]};
+        adc_data_p[63:32]   <= {adc_data_p[62:32], adc_data_d2[1]};
+        adc_data_p[31:0]    <= {adc_data_p[30:0], adc_data_d2[0]};
+      end
+    end else if (up_format == 'h1) begin
+      if (adc_cnt_p[4:0] == 5'h00) begin
         adc_data_p[ 255 : 64 ] <= {adc_data_p [ 191 : 2 ], adc_data_d2[1], adc_data_d2[0]};
       end else begin
-        adc_data_p[ ((32*m)+31) : (32*m) ] <= {adc_data_p[ ((32*m)+30) : (32*m) ], adc_data_d2[m]};
+        // m=1
+        adc_data_p[63:32] <= {adc_data_p[62:32], adc_data_d2[1]};
+        // m=0
+        adc_data_p[31:0] <= {adc_data_p[30:0], adc_data_d2[0]};
       end
     end
   end
-  endgenerate
-
   // ready (single shot or continous)
 
   always @(posedge adc_clk) begin
