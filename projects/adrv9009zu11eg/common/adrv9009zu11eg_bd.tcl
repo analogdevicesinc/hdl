@@ -187,7 +187,7 @@ set OBS_SAMPLE_WIDTH 16     ; # N/NP
 
 set OBS_SAMPLES_PER_CHANNEL [expr ($OBS_NUM_OF_LANES * 32) / ($OBS_NUM_OF_CONVERTERS * $OBS_SAMPLE_WIDTH)] ;  # L * 32 / (M * N)
 
-# PL side DDR4 controller with TX data offload instance (4 GByte)
+# PL side DDR4 controller with TX data offload instance (2 GByte)
 
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddr4_rtl:1.0 ddr4_if_tx_offload
 create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 ddr4_ref_clk_tx_offload
@@ -223,10 +223,11 @@ ad_connect axi_tx_offload_rstgen/peripheral_aresetn axi_tx_offload_control/fifo2
 ad_connect ddr4_tx_offload/C0_DDR4_S_AXI axi_tx_offload_control/fifo2axi_bridge/ddr_axi
 ad_connect sys_rstgen/peripheral_reset ddr4_tx_offload/sys_rst
 ad_connect axi_tx_offload_control/i_data_offload/ddr_calib_done ddr4_tx_offload/c0_init_calib_complete
+ad_connect ddr4_tx_offload/c0_ddr4_aresetn axi_tx_offload_rstgen/peripheral_aresetn
 
 assign_bd_address [get_bd_addr_segs -of_objects [get_bd_cells ddr4_tx_offload]]
 
-# PL side DDR4 controller with RX data offload instance (4 GByte)
+# PL side DDR4 controller with RX data offload instance (2 GByte)
 
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddr4_rtl:1.0 ddr4_if_rx_offload
 create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 ddr4_ref_clk_rx_offload
@@ -248,7 +249,7 @@ ad_connect ddr4_ref_clk_rx_offload ddr4_rx_offload/C0_SYS_CLK
 ad_data_offload_create axi_rx_offload_control \
                        0 \
                        1 \
-                       [expr 2 * 1024 * 1024 * 1024] \
+                       [expr (2 * 1024 * 1024 * 1024) - 1] \
                        [expr 32 * $RX_NUM_OF_LANES] \
                        [expr 32 * $RX_NUM_OF_LANES] \
                        256 \
@@ -260,8 +261,9 @@ ad_connect ddr4_rx_offload/c0_ddr4_ui_clk_sync_rst axi_rx_offload_rstgen/ext_res
 ad_connect ddr4_rx_offload/c0_ddr4_ui_clk axi_rx_offload_control/fifo2axi_bridge/axi_clk
 ad_connect axi_rx_offload_rstgen/peripheral_aresetn axi_rx_offload_control/fifo2axi_bridge/axi_resetn
 ad_connect ddr4_rx_offload/C0_DDR4_S_AXI axi_rx_offload_control/fifo2axi_bridge/ddr_axi
-ad_connect sys_rstgen/peripheral_reset ddr4_rx_offload/sys_rst
 ad_connect axi_rx_offload_control/i_data_offload/ddr_calib_done ddr4_rx_offload/c0_init_calib_complete
+ad_connect sys_rstgen/peripheral_reset ddr4_rx_offload/sys_rst
+ad_connect ddr4_rx_offload/c0_ddr4_aresetn axi_rx_offload_rstgen/peripheral_aresetn
 
 assign_bd_address [get_bd_addr_segs -of_objects [get_bd_cells ddr4_rx_offload]]
 
@@ -481,8 +483,8 @@ ad_connect axi_tx_offload_control/s_axis axi_adrv9009_som_tx_dma/m_axis
 ad_connect axi_tx_offload_control/init_req axi_adrv9009_som_tx_dma/m_axis_xfer_req
 ad_connect axi_tx_offload_control/sync_ext GND
 
-ad_connect util_som_rx_cpack/packed_fifo_wr_en axi_rx_offload_control/s_axis_tvalid
-ad_connect util_som_rx_cpack/packed_fifo_wr_data axi_rx_offload_control/s_axis_tdata
+ad_connect util_som_rx_cpack/packed_fifo_wr_en axi_rx_offload_control/i_data_offload/s_axis_valid
+ad_connect util_som_rx_cpack/packed_fifo_wr_data axi_rx_offload_control/i_data_offload/s_axis_data
 ad_connect axi_rx_offload_control/m_axis axi_adrv9009_som_rx_dma/s_axis
 ad_connect axi_rx_offload_control/init_req axi_adrv9009_som_rx_dma/s_axis_xfer_req
 ad_connect axi_rx_offload_control/sync_ext GND
