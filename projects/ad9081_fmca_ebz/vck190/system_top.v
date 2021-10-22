@@ -226,7 +226,15 @@ module system_top  #(
     ext_pll_lock_d <= ext_pll_lock;
   end
 
-  assign gt_reset = ext_pll_lock & ~ext_pll_lock_d;
+  wire gt_reset_pls;
+  assign gt_reset_pls = ext_pll_lock & ~ext_pll_lock_d;
+
+  reg [4:0] rst_gen = 'b0;
+  reg gt_reset;
+  always @(posedge tx_device_clk) begin
+     rst_gen <= {rst_gen,gt_reset_pls};
+     gt_reset <= |rst_gen;
+  end
 
   system_wrapper i_system_wrapper (
     .gpio0_i (gpio_i[31:0]),
