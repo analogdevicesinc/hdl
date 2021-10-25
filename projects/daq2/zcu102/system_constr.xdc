@@ -38,8 +38,23 @@ set_property LOC GTHE4_COMMON_X1Y2 [get_cells -hierarchical -filter {NAME =~ *i_
 
 create_clock -name tx_ref_clk   -period  2.00 [get_ports tx_ref_clk_p]
 create_clock -name rx_ref_clk   -period  2.00 [get_ports rx_ref_clk_p]
-create_clock -name tx_div_clk   -period  4.00 [get_pins i_system_wrapper/system_i/util_daq2_xcvr/inst/i_xch_0/i_gthe4_channel/TXOUTCLK]
-create_clock -name rx_div_clk   -period  4.00 [get_pins i_system_wrapper/system_i/util_daq2_xcvr/inst/i_xch_0/i_gthe4_channel/RXOUTCLK]
+
+# For transceiver output clocks use reference clock divided by two
+# This will help autoderive the clocks correcly
+set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/TXSYSCLKSEL[0]]
+set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/TXSYSCLKSEL[1]]
+set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/TXOUTCLKSEL[0]]
+set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/TXOUTCLKSEL[1]]
+set_case_analysis -quiet 1 [get_pins -quiet -hier *_channel/TXOUTCLKSEL[2]]
+
+set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXSYSCLKSEL[0]]
+set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXSYSCLKSEL[1]]
+set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[0]]
+set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[1]]
+set_case_analysis -quiet 1 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[2]]
+
+create_clock -name tx_div_clk   [get_pins i_system_wrapper/system_i/util_daq2_xcvr/inst/i_xch_0/i_gthe4_channel/TXOUTCLK]
+create_clock -name rx_div_clk   [get_pins i_system_wrapper/system_i/util_daq2_xcvr/inst/i_xch_0/i_gthe4_channel/RXOUTCLK]
 
 # pin assignments below are for reference only and are ignored by the tool!
 

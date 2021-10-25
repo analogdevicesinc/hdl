@@ -40,8 +40,23 @@ set_property  -dict {PACKAGE_PIN  E8  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [g
 
 create_clock -name tx_ref_clk   -period  1.60 [get_ports tx_ref_clk_p]
 create_clock -name rx_ref_clk   -period  1.60 [get_ports rx_ref_clk_p]
-create_clock -name tx_div_clk   -period  3.20 [get_pins i_system_wrapper/system_i/util_daq3_xcvr/inst/i_xch_0/i_gthe3_channel/TXOUTCLK]
-create_clock -name rx_div_clk   -period  3.20 [get_pins i_system_wrapper/system_i/util_daq3_xcvr/inst/i_xch_0/i_gthe3_channel/RXOUTCLK]
+
+# For transceiver output clocks use reference clock divided by two
+# This will help autoderive the clocks correcly
+set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/TXSYSCLKSEL[0]]
+set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/TXSYSCLKSEL[1]]
+set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/TXOUTCLKSEL[0]]
+set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/TXOUTCLKSEL[1]]
+set_case_analysis -quiet 1 [get_pins -quiet -hier *_channel/TXOUTCLKSEL[2]]
+
+set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXSYSCLKSEL[0]]
+set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXSYSCLKSEL[1]]
+set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[0]]
+set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[1]]
+set_case_analysis -quiet 1 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[2]]
+
+create_clock -name tx_div_clk   [get_pins i_system_wrapper/system_i/util_daq3_xcvr/inst/i_xch_0/i_gthe3_channel/TXOUTCLK]
+create_clock -name rx_div_clk   [get_pins i_system_wrapper/system_i/util_daq3_xcvr/inst/i_xch_0/i_gthe3_channel/RXOUTCLK]
 
 # gt pin assignments below are for reference only and are ignored by the tool!
 

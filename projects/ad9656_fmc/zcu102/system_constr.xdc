@@ -31,6 +31,15 @@ set_property  -dict {PACKAGE_PIN  V1   IOSTANDARD LVCMOS18}  [get_ports spi_csn_
 # clocks
 
 create_clock  -name rx_ref_clk  -period 8.00  [get_ports ref_clk0_p]
+
+# For transceiver output clocks use reference clock divided by two
+# This will help autoderive the clocks correcly
+set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXSYSCLKSEL[0]]
+set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXSYSCLKSEL[1]]
+set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[0]]
+set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[1]]
+set_case_analysis -quiet 1 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[2]]
+
 create_generated_clock  -name rx_div_clk  [get_pins  i_system_wrapper/system_i/util_ad9656_xcvr/inst/i_xch_0/i_gthe4_channel/RXOUTCLK]
 
 # SYSREF input
