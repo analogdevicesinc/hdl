@@ -52,9 +52,23 @@ set_property  -dict {PACKAGE_PIN  AC3  IOSTANDARD LVCMOS18} [get_ports ad9371_gp
 create_clock -name tx_ref_clk     -period  8.00 [get_ports ref_clk0_p]
 create_clock -name rx_ref_clk     -period  8.00 [get_ports ref_clk1_p]
 
-create_clock -name tx_div_clk     -period  8.00 [get_pins i_system_wrapper/system_i/util_ad9371_xcvr/inst/i_xch_0/i_gthe4_channel/TXOUTCLK]
-create_clock -name rx_div_clk     -period  8.00 [get_pins i_system_wrapper/system_i/util_ad9371_xcvr/inst/i_xch_0/i_gthe4_channel/RXOUTCLK]
-create_clock -name rx_os_div_clk  -period  8.00 [get_pins i_system_wrapper/system_i/util_ad9371_xcvr/inst/i_xch_2/i_gthe4_channel/RXOUTCLK]
+# For transceiver output clocks use reference clock 
+# This will help autoderive the clocks correcly
+set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/TXSYSCLKSEL[0]]
+set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/TXSYSCLKSEL[1]]
+set_case_analysis -quiet 1 [get_pins -quiet -hier *_channel/TXOUTCLKSEL[0]]
+set_case_analysis -quiet 1 [get_pins -quiet -hier *_channel/TXOUTCLKSEL[1]]
+set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/TXOUTCLKSEL[2]]
+
+set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXSYSCLKSEL[0]]
+set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXSYSCLKSEL[1]]
+set_case_analysis -quiet 1 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[0]]
+set_case_analysis -quiet 1 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[1]]
+set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[2]]
+
+create_clock -name tx_div_clk     [get_pins i_system_wrapper/system_i/util_ad9371_xcvr/inst/i_xch_0/i_gthe4_channel/TXOUTCLK]
+create_clock -name rx_div_clk     [get_pins i_system_wrapper/system_i/util_ad9371_xcvr/inst/i_xch_0/i_gthe4_channel/RXOUTCLK]
+create_clock -name rx_os_div_clk  [get_pins i_system_wrapper/system_i/util_ad9371_xcvr/inst/i_xch_2/i_gthe4_channel/RXOUTCLK]
 
 # pin assignments for JESD204 lanes and reference clocks
 
