@@ -497,10 +497,8 @@ if {$TDD_SUPPORT} {
   ad_connect GND $adc_data_offload_name/sync_ext
 }
 
-set duplicate_link 0
-
-if {$duplicate_link == 1} { 
-group_bd_cells hier_0 [get_bd_cells util_mxfe_cpack] [get_bd_cells rx_adapt_1] [get_bd_cells axi_mxfe_rx_dma] [get_bd_cells tx_adapt_0] [get_bd_cells tx_adapt_1] [get_bd_cells rx_adapt_0] [get_bd_cells util_mxfe_upack] [get_bd_cells axi_mxfe_tx_dma] [get_bd_cells rx_mxfe_tpl_core] [get_bd_cells axi_mxfe_rx_jesd] [get_bd_cells mxfe_rx_data_offload] [get_bd_cells tx_mxfe_tpl_core] [get_bd_cells axi_mxfe_tx_jesd] [get_bd_cells jesd204_phy] [get_bd_cells mxfe_tx_data_offload] [get_bd_cells util_mxfe_xcvr] [get_bd_cells axi_mxfe_rx_xcvr] [get_bd_cells axi_mxfe_tx_xcvr]
+if {$zcu102_duplicate_link == 1} {
+group_bd_cells hier_0 [get_bd_cells util_mxfe_cpack] [get_bd_cells axi_mxfe_rx_dma] [get_bd_cells util_mxfe_upack] [get_bd_cells axi_mxfe_tx_dma] [get_bd_cells rx_mxfe_tpl_core] [get_bd_cells axi_mxfe_rx_jesd] [get_bd_cells mxfe_rx_data_offload] [get_bd_cells tx_mxfe_tpl_core] [get_bd_cells axi_mxfe_tx_jesd] [get_bd_cells jesd204_phy] [get_bd_cells mxfe_tx_data_offload] [get_bd_cells util_mxfe_xcvr] [get_bd_cells axi_mxfe_rx_xcvr] [get_bd_cells axi_mxfe_tx_xcvr]
 
 
 copy_bd_objs /  [get_bd_cells {hier_0}]
@@ -571,4 +569,80 @@ connect_bd_net [get_bd_pins hier_1/irq3] [get_bd_pins xlconcat_0/In3]
 
 assign_bd_address
 
+}
+
+if {$versal_duplicate_link == 1} {
+
+group_bd_cells hier_0 [get_bd_cells util_mxfe_cpack] [get_bd_cells axi_mxfe_rx_dma] [get_bd_cells util_mxfe_upack] [get_bd_cells axi_mxfe_tx_dma] [get_bd_cells rx_mxfe_tpl_core] [get_bd_cells axi_mxfe_rx_jesd] [get_bd_cells mxfe_rx_data_offload] [get_bd_cells tx_mxfe_tpl_core] [get_bd_cells axi_mxfe_tx_jesd] [get_bd_cells jesd204_phy] [get_bd_cells mxfe_tx_data_offload] [get_bd_cells util_mxfe_xcvr] [get_bd_cells axi_mxfe_rx_xcvr] [get_bd_cells axi_mxfe_tx_xcvr]
+
+startgroup
+set_property -dict [list CONFIG.NUM_MI {18}] [get_bd_cells axi_cpu_interconnect]
+endgroup
+set_property location {3 1685 1856} [get_bd_cells hier_1]
+connect_bd_intf_net -boundary_type upper [get_bd_intf_pins hier_1/s_axi] [get_bd_intf_pins axi_cpu_interconnect/M10_AXI]
+connect_bd_intf_net -boundary_type upper [get_bd_intf_pins hier_1/s_axi1] [get_bd_intf_pins axi_cpu_interconnect/M11_AXI]
+connect_bd_intf_net -boundary_type upper [get_bd_intf_pins hier_1/s_axi2] [get_bd_intf_pins axi_cpu_interconnect/M12_AXI]
+connect_bd_intf_net -boundary_type upper [get_bd_intf_pins hier_1/s_axi3] [get_bd_intf_pins axi_cpu_interconnect/M13_AXI]
+connect_bd_intf_net -boundary_type upper [get_bd_intf_pins hier_1/s_axi4] [get_bd_intf_pins axi_cpu_interconnect/M14_AXI]
+connect_bd_intf_net -boundary_type upper [get_bd_intf_pins hier_1/s_axi5] [get_bd_intf_pins axi_cpu_interconnect/M15_AXI]
+connect_bd_intf_net -boundary_type upper [get_bd_intf_pins hier_1/s_axi6] [get_bd_intf_pins axi_cpu_interconnect/M16_AXI]
+connect_bd_intf_net -boundary_type upper [get_bd_intf_pins hier_1/s_axi7] [get_bd_intf_pins axi_cpu_interconnect/M17_AXI]
+connect_bd_net [get_bd_ports rx_device_clk] [get_bd_pins hier_1/rx_device_clk]
+connect_bd_net [get_bd_pins hier_1/reset] [get_bd_pins rx_device_clk_rstgen/peripheral_reset]
+connect_bd_net [get_bd_pins hier_1/apb3clk] [get_bd_pins sys_cips/pl0_ref_clk]
+connect_bd_net [get_bd_pins hier_1/s_axi_aresetn] [get_bd_pins sys_rstgen/peripheral_aresetn]
+connect_bd_net [get_bd_pins hier_1/m_axis_aclk] [get_bd_pins sys_cips/pl1_ref_clk]
+connect_bd_net [get_bd_pins hier_1/m_axis_aresetn] [get_bd_pins sys_350m_rstgen/peripheral_aresetn]
+connect_bd_net [get_bd_ports tx_device_clk] [get_bd_pins hier_1/tx_device_clk]
+connect_bd_net [get_bd_pins hier_1/reset1] [get_bd_pins tx_device_clk_rstgen/peripheral_reset]
+connect_bd_net [get_bd_ports rx_sysref_0] [get_bd_pins hier_1/rx_sysref_0]
+connect_bd_net [get_bd_pins hier_1/s_axis_aresetn] [get_bd_pins rx_device_clk_rstgen/peripheral_aresetn]
+connect_bd_net [get_bd_pins hier_1/s_axis_tlast] [get_bd_pins rx_device_clk_rstgen/peripheral_aresetn]
+connect_bd_net [get_bd_pins hier_1/s_axis_tkeep] [get_bd_pins GND_1/dout]
+disconnect_bd_net /rx_device_clk_rstgen_peripheral_aresetn [get_bd_pins hier_1/s_axis_tlast]
+connect_bd_net [get_bd_pins hier_1/s_axis_tlast] [get_bd_pins GND_1/dout]
+disconnect_bd_net /GND_1_dout [get_bd_pins hier_1/s_axis_tkeep]
+connect_bd_net [get_bd_pins hier_1/s_axis_tkeep] [get_bd_pins VCC_1/dout]
+connect_bd_net [get_bd_ports tx_sysref_0] [get_bd_pins hier_1/tx_sysref_0]
+connect_bd_net [get_bd_ports ref_clk_q1] [get_bd_pins hier_1/ref_clk_q0]
+connect_bd_net [get_bd_ports gt_reset] [get_bd_pins hier_1/gt_reset]
+connect_bd_net [get_bd_pins hier_1/m_axis_aresetn1] [get_bd_pins tx_device_clk_rstgen/peripheral_aresetn]
+startgroup
+set_property -dict [list CONFIG.NUM_SI {10}] [get_bd_cells axi_noc_0]
+set_property -dict [list CONFIG.ASSOCIATED_BUSIF {S08_AXI:S09_AXI:S00_AXI:S07_AXI:S06_AXI}] [get_bd_pins /axi_noc_0/aclk0]
+set_property -dict [list CONFIG.ASSOCIATED_BUSIF {S01_AXI}] [get_bd_pins /axi_noc_0/aclk1]
+set_property -dict [list CONFIG.ASSOCIATED_BUSIF {}] [get_bd_pins /axi_noc_0/aclk6]
+endgroup
+connect_bd_intf_net -boundary_type upper [get_bd_intf_pins hier_1/m_dest_axi] [get_bd_intf_pins axi_noc_0/S08_AXI]
+connect_bd_intf_net -boundary_type upper [get_bd_intf_pins hier_1/m_src_axi] [get_bd_intf_pins axi_noc_0/S09_AXI]
+set_property -dict [list CONFIG.CONNECTIONS {MC_0 { read_bw {1720} write_bw {1720} read_avg_burst {4} write_avg_burst {4}} }] [get_bd_intf_pins /axi_noc_0/S08_AXI]
+set_property -dict [list CONFIG.CONNECTIONS {MC_0 { read_bw {1720} write_bw {1720} read_avg_burst {4} write_avg_burst {4}} }] [get_bd_intf_pins /axi_noc_0/S09_AXI]
+startgroup
+make_bd_intf_pins_external  [get_bd_intf_pins hier_1/GT_Serial_0]
+endgroup
+startgroup
+create_bd_cell -type ip -vlnv xilinx.com:ip:axi_intc:4.1 axi_intc_0
+endgroup
+set_property location {4 2183 1936} [get_bd_cells axi_intc_0]
+startgroup
+set_property -dict [list CONFIG.NUM_MI {19}] [get_bd_cells axi_cpu_interconnect]
+endgroup
+connect_bd_intf_net [get_bd_intf_pins axi_cpu_interconnect/M18_AXI] [get_bd_intf_pins axi_intc_0/s_axi]
+connect_bd_net [get_bd_pins axi_intc_0/s_axi_aclk] [get_bd_pins sys_cips/pl0_ref_clk]
+connect_bd_net [get_bd_pins axi_intc_0/s_axi_aresetn] [get_bd_pins sys_rstgen/peripheral_aresetn]
+startgroup
+set_property -dict [list CONFIG.C_IRQ_CONNECTION {1}] [get_bd_cells axi_intc_0]
+endgroup
+connect_bd_net [get_bd_pins sys_cips/pl_ps_irq15] [get_bd_pins axi_intc_0/irq]
+startgroup
+create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 xlconcat_0
+endgroup
+set_property -dict [list CONFIG.NUM_PORTS {4}] [get_bd_cells xlconcat_0]
+connect_bd_net [get_bd_pins hier_1/irq] [get_bd_pins xlconcat_0/In0]
+connect_bd_net [get_bd_pins hier_1/irq1] [get_bd_pins xlconcat_0/In1]
+connect_bd_net [get_bd_pins hier_1/irq2] [get_bd_pins xlconcat_0/In2]
+connect_bd_net [get_bd_pins hier_1/irq3] [get_bd_pins xlconcat_0/In3]
+connect_bd_net [get_bd_pins xlconcat_0/dout] [get_bd_pins axi_intc_0/intr]
+
+assign_bd_address
 }

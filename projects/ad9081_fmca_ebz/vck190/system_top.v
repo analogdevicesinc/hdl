@@ -73,10 +73,10 @@ module system_top  #(
   input         clkin10_p,
   input         fpga_refclk_in_n,
   input         fpga_refclk_in_p,
-  input  [RX_JESD_L*RX_NUM_LINKS-1:0]  rx_data_n,
-  input  [RX_JESD_L*RX_NUM_LINKS-1:0]  rx_data_p,
-  output [TX_JESD_L*TX_NUM_LINKS-1:0]  tx_data_n,
-  output [TX_JESD_L*TX_NUM_LINKS-1:0]  tx_data_p,
+  input  [7:0]  rx_data_n,
+  input  [7:0]  rx_data_p,
+  output [7:0]  tx_data_n,
+  output [7:0]  tx_data_p,
   input  [TX_NUM_LINKS-1:0]  fpga_syncin_n,
   input  [TX_NUM_LINKS-1:0]  fpga_syncin_p,
   output [RX_NUM_LINKS-1:0]  fpga_syncout_n,
@@ -288,10 +288,15 @@ module system_top  #(
     .spi1_sclk (spi1_sclk),
     // FMC HPC
     // TODO: Max 4 lanes
-    .GT_Serial_0_gtx_p (tx_data_p_loc[3:0]),
-    .GT_Serial_0_gtx_n (tx_data_n_loc[3:0]),
-    .GT_Serial_0_grx_p (rx_data_p_loc[3:0]),
-    .GT_Serial_0_grx_n (rx_data_n_loc[3:0]),
+    .GT_Serial_0_gtx_p (tx_data_p[3:0]),
+    .GT_Serial_0_gtx_n (tx_data_n[3:0]),
+    .GT_Serial_0_grx_p (rx_data_p[3:0]),
+    .GT_Serial_0_grx_n (rx_data_n[3:0]),
+
+    .GT_Serial_0_0_gtx_p (tx_data_p[7:4]),
+    .GT_Serial_0_0_gtx_n (tx_data_n[7:4]),
+    .GT_Serial_0_0_grx_p (rx_data_p[7:4]),
+    .GT_Serial_0_0_grx_n (rx_data_n[7:4]),
 
     .ref_clk_q0 (ref_clk),
     .ref_clk_q1 (ref_clk),
@@ -304,12 +309,6 @@ module system_top  #(
     .tx_sysref_0 (sysref),
     .gt_reset (gt_reset)
   );
-
-  assign rx_data_p_loc[RX_JESD_L*RX_NUM_LINKS-1:0] = rx_data_p[RX_JESD_L*RX_NUM_LINKS-1:0];
-  assign rx_data_n_loc[RX_JESD_L*RX_NUM_LINKS-1:0] = rx_data_n[RX_JESD_L*RX_NUM_LINKS-1:0];
-
-  assign tx_data_p[TX_JESD_L*TX_NUM_LINKS-1:0] = tx_data_p_loc[TX_JESD_L*TX_NUM_LINKS-1:0];
-  assign tx_data_n[TX_JESD_L*TX_NUM_LINKS-1:0] = tx_data_n_loc[TX_JESD_L*TX_NUM_LINKS-1:0];
 
 endmodule
 

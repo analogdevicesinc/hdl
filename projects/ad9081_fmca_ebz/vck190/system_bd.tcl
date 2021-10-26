@@ -4,6 +4,9 @@ set adc_fifo_samples_per_converter [expr $ad_project_params(RX_KS_PER_CHANNEL)*1
 ## DAC FIFO depth in samples per converter
 set dac_fifo_samples_per_converter [expr $ad_project_params(TX_KS_PER_CHANNEL)*1024]
 
+set zcu102_duplicate_link 0
+set versal_duplicate_link 1
+
 source $ad_hdl_dir/projects/common/vck190/vck190_system_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/adcfifo_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
