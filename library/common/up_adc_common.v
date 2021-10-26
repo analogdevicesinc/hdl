@@ -216,8 +216,8 @@ module up_adc_common #(
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h11)) begin
         up_adc_sdr_ddr_n <= up_wdata[16];
-	  up_adc_symb_op <= up_wdata[15];
-	  up_adc_symb_8_16b <= up_wdata[14];
+        up_adc_symb_op <= up_wdata[15];
+        up_adc_symb_8_16b <= up_wdata[14];
         up_adc_num_lanes <= up_wdata[12:8];
         up_adc_sref_sync <= up_wdata[4];
         up_adc_r1_mode <= up_wdata[2];
@@ -399,7 +399,7 @@ module up_adc_common #(
           7'h07: up_rdata_int <= {FPGA_TECHNOLOGY,FPGA_FAMILY,SPEED_GRADE,DEV_PACKAGE}; // [8,8,8,8]
           7'h10: up_rdata_int <= {29'd0, up_adc_clk_enb, up_mmcm_resetn, up_resetn};
           7'h11: up_rdata_int <= {15'd0, up_adc_sdr_ddr_n,
-		                    up_adc_symb_op, up_adc_symb_8_16b,
+                                  up_adc_symb_op, up_adc_symb_8_16b,
                                   1'd0, up_adc_num_lanes,
                                   3'd0, up_adc_sref_sync,
                                   up_adc_sync, up_adc_r1_mode, up_adc_ddr_edgesel, up_adc_pin_mode};
@@ -440,7 +440,7 @@ module up_adc_common #(
     .up_clk (up_clk),
     .up_data_cntrl ({ up_adc_sdr_ddr_n,
                       up_adc_symb_op,
-		        up_adc_symb_8_16b,
+                      up_adc_symb_8_16b,
                       up_adc_num_lanes,
                       up_adc_sref_sync,
                       up_adc_sync,
@@ -454,7 +454,7 @@ module up_adc_common #(
     .d_clk (adc_clk),
     .d_data_cntrl ({  adc_sdr_ddr_n,
                       adc_symb_op,
-		        adc_symb_8_16b,
+                      adc_symb_8_16b,
                       adc_num_lanes,
                       adc_sref_sync,
                       adc_sync,
