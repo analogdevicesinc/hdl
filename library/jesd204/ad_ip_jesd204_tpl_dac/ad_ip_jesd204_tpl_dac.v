@@ -103,6 +103,7 @@ module ad_ip_jesd204_tpl_dac #(
   // internal signals
 
   wire dac_sync;
+  wire dac_ext_sync_arm;
   wire dac_sync_in_status;
   wire dac_dds_format;
 
@@ -167,6 +168,7 @@ module ad_ip_jesd204_tpl_dac #(
     .dac_dunf (dac_dunf),
 
     .dac_sync (dac_sync),
+    .dac_ext_sync_arm (dac_ext_sync_arm),
     .dac_sync_in_status (dac_sync_in_status),
     .dac_dds_format (dac_dds_format),
 
@@ -227,6 +229,7 @@ module ad_ip_jesd204_tpl_dac #(
     .dac_ddata (dac_ddata_cr),
 
     .dac_sync (dac_sync),
+    .dac_ext_sync_arm (dac_ext_sync_arm),
     .dac_sync_in_status (dac_sync_in_status),
     .dac_sync_in (dac_sync_in),
     .dac_dds_format (dac_dds_format),

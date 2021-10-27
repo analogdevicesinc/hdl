@@ -69,6 +69,7 @@ module ad_ip_jesd204_tpl_dac_regmap #(
   input dac_dunf,
 
   output dac_sync,
+  output dac_ext_sync_arm,
 
   input dac_sync_in_status,
 
@@ -210,6 +211,7 @@ module ad_ip_jesd204_tpl_dac_regmap #(
     .dac_clk (link_clk),
     .dac_rst (dac_rst),
     .dac_sync (dac_sync),
+    .dac_ext_sync_arm (dac_ext_sync_arm),
     .dac_sync_in_status (dac_sync_in_status),
     .dac_frame (),
     .dac_clksel (),

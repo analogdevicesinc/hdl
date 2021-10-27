@@ -54,6 +54,7 @@ module ad_ip_jesd204_tpl_dac_core #(
   // Configuration interface
 
   input dac_sync,
+  input dac_ext_sync_arm,
 
   input dac_sync_in,
 
@@ -94,24 +95,30 @@ module ad_ip_jesd204_tpl_dac_core #(
 
   reg dac_sync_in_d1 ='d0;
   reg dac_sync_in_d2 ='d0;
-  reg dac_sync_in_arm ='d0;
-  reg dac_sync_d1 = 'd0;
+  reg dac_sync_in_armed ='d0;
+  reg dac_ext_sync_arm_d1 = 'd0;
 
   assign link_valid = 1'b1;
-  assign dac_sync_in_status = dac_sync_in_arm;
+  assign dac_sync_in_status = dac_sync_in_armed;
 
+  // External sync
   always @(posedge clk) begin
-    dac_sync_d1 <= dac_sync;
+    dac_ext_sync_arm_d1 <= dac_ext_sync_arm;
+
     dac_sync_in_d1 <= dac_sync_in;
     dac_sync_in_d2 <= dac_sync_in_d1;
-    if ((~dac_sync_d1&dac_sync) == 1'b1) begin
-      dac_sync_in_arm <= ~dac_sync_in_arm;
-    end else if ((~dac_sync_in_d2&dac_sync_in_d1) == 1'b1) begin
-      dac_sync_in_arm <= 1'b0;
-    end else if (EXT_SYNC == 1'b0) begin
-      dac_sync_in_arm <= 1'b0;
+
+    if (EXT_SYNC == 1'b0) begin
+      dac_sync_in_armed <= 1'b0;
+    end else if (~dac_ext_sync_arm_d1 & dac_ext_sync_arm) begin
+      dac_sync_in_armed <= ~dac_sync_in_armed;
+    end else if (~dac_sync_in_d2 & dac_sync_in_d1) begin
+      dac_sync_in_armed <= 1'b0;
     end
   end
+
+  // Sync either from external or software source
+  assign dac_sync_int = dac_sync_in_armed | dac_sync;
 
   // device interface
 
@@ -135,7 +142,7 @@ module ad_ip_jesd204_tpl_dac_core #(
     .CONVERTER_RESOLUTION (CONVERTER_RESOLUTION)
   ) i_pn_gen (
     .clk (clk),
-    .reset (dac_sync_in_arm),
+    .reset (dac_sync_int),
 
     .pn7_data (pn7_data),
     .pn15_data (pn15_data)
@@ -143,7 +150,7 @@ module ad_ip_jesd204_tpl_dac_core #(
 
   // dac valid
 
-  assign dac_valid = {NUM_CHANNELS{~dac_sync_in_arm}};
+  assign dac_valid = {NUM_CHANNELS{~dac_sync_int}};
 
   generate
   genvar i;
@@ -192,7 +199,7 @@ module ad_ip_jesd204_tpl_dac_core #(
       .pn7_data (pn7_data),
       .pn15_data (pn15_data),
 
-      .dac_data_sync (dac_sync_in_arm),
+      .dac_data_sync (dac_sync_int),
       .dac_dds_format (dac_dds_format),
 
       .dac_data_sel (dac_data_sel[4*i+:4]),
