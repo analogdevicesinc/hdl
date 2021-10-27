@@ -575,6 +575,8 @@ if {$versal_duplicate_link == 1} {
 
 group_bd_cells hier_0 [get_bd_cells util_mxfe_cpack] [get_bd_cells axi_mxfe_rx_dma] [get_bd_cells util_mxfe_upack] [get_bd_cells axi_mxfe_tx_dma] [get_bd_cells rx_mxfe_tpl_core] [get_bd_cells axi_mxfe_rx_jesd] [get_bd_cells mxfe_rx_data_offload] [get_bd_cells tx_mxfe_tpl_core] [get_bd_cells axi_mxfe_tx_jesd] [get_bd_cells jesd204_phy] [get_bd_cells mxfe_tx_data_offload] [get_bd_cells util_mxfe_xcvr] [get_bd_cells axi_mxfe_rx_xcvr] [get_bd_cells axi_mxfe_tx_xcvr]
 
+copy_bd_objs /  [get_bd_cells {hier_0}]
+
 startgroup
 set_property -dict [list CONFIG.NUM_MI {18}] [get_bd_cells axi_cpu_interconnect]
 endgroup
