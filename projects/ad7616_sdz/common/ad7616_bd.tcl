@@ -1,5 +1,8 @@
 
-global ad7616_if
+# system level parameters
+set SI_OR_PI $ad_project_params(SI_OR_PI)
+
+puts "build parameters: SI_OR_PI: $SI_OR_PI"
 
 # data interfaces
 
@@ -22,7 +25,7 @@ create_bd_port -dir I rx_busy
 # instantiation
 
 ad_ip_instance axi_ad7616 axi_ad7616
-ad_ip_parameter axi_ad7616 CONFIG.IF_TYPE $ad7616_if
+ad_ip_parameter axi_ad7616 CONFIG.IF_TYPE $SI_OR_PI
 
 ad_ip_instance axi_dmac axi_ad7616_dma
 ad_ip_parameter axi_ad7616_dma CONFIG.DMA_TYPE_SRC 2
@@ -33,7 +36,7 @@ ad_ip_parameter axi_ad7616_dma CONFIG.DMA_DATA_WIDTH_SRC 16
 ad_ip_parameter axi_ad7616_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 # interface connections
-if {$ad7616_if == 0} {
+if {$SI_OR_PI == 0} {
 
   ad_connect  rx_sclk axi_ad7616/rx_sclk
   ad_connect  rx_sdo axi_ad7616/rx_sdo
