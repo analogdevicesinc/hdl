@@ -6,7 +6,15 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 ##--------------------------------------------------------------
 # IMPORTANT: Set AD7616 operation and interface mode
 #
-#    ad7616_if  - Defines the interface type (serial OR parallel)
+# The get_env_param procedure retrieves parameter value from the environment if exists,
+# other case returns the default value specified in its second parameter field.
+#
+#   How to use over-writable parameters from the environment:
+#
+#    e.g.
+#      make SI_OR_PI=0
+#
+#    SI_OR_PI  - Defines the interface type (serial OR parallel)
 #
 # LEGEND: Serial    - 0
 #         Parallel  - 1
@@ -16,31 +24,33 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #
 ##--------------------------------------------------------------
 
-set ad7616_if   0
+if {[info exists ::env(SI_OR_PI)]} {
+  set S_SI_OR_PI [get_env_param SI_OR_PI 0]
+} elseif {![info exists SI_OR_PI]} {
+  set S_SI_OR_PI 0
+}
 
-adi_project ad7616_sdz_zc706
+adi_project ad7616_sdz_zc706 0 [list \
+  SI_OR_PI  $S_SI_OR_PI \
+]
 
-if { $ad7616_if == 0 } {
+adi_project_files ad7616_sdz_zc706 [list \
+  "$ad_hdl_dir/library/common/ad_iobuf.v" \
+  "$ad_hdl_dir/projects/common/zc706/zc706_system_constr.xdc"]
 
-  adi_project_files ad7616_sdz_zc706 [list \
-    "$ad_hdl_dir/library/common/ad_iobuf.v" \
-    "system_top_si.v" \
-    "serial_if_constr.xdc" \
-    "$ad_hdl_dir/projects/common/zc706/zc706_system_constr.xdc"]
-
-} elseif { $ad7616_if == 1 } {
-
-  adi_project_files ad7616_sdz_zc706 [list \
-    "$ad_hdl_dir/library/common/ad_iobuf.v" \
-    "system_top_pi.v" \
-    "parallel_if_constr.xdc" \
-    "$ad_hdl_dir/projects/common/zc706/zc706_system_constr.xdc"]
-
-} else {
-
-  return -code error [format "ERROR: Invalid interface type! Define as \'serial\' or \'parallel\' ..."]
-
+switch $S_SI_OR_PI {
+  0 {
+    adi_project_files ad7616_sdz_zc706 [list \
+      "system_top_si.v" \
+      "serial_if_constr.xdc"
+    ]
+  }
+  1 {
+    adi_project_files ad7616_sdz_zc706 [list \
+      "system_top_pi.v" \
+      "parallel_if_constr.xdc"
+    ]
+  }
 }
 
 adi_project_run ad7616_sdz_zc706
-
