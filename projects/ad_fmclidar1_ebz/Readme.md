@@ -127,16 +127,16 @@ parameter and attributes.
 1. The PG_C2M can no longer be software controlled. As soon as there is an auxiliary 3V3 on the carrier, the Lidar platform receives the power up command.
 2. This problem only affects Lidar Rev B.
 
-
-## References
-
-+ AD-FMCLIDAR1-EBZ product page: https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/AD-FMCLIDAR1-EBZ.html
-+ AD-FMCLIDAR1-EBZ user guide: https://wiki.analog.com/resources/eval/user-guides/ad-fmclidar1-ebz
-+ ADI's FPGA Reference Designs HDL User Guide: https://wiki.analog.com/resources/fpga/docs/hdl
-+ ADI's JESD204B Interface Framework: https://wiki.analog.com/resources/fpga/peripherals/jesd204
-+ axi_laser_driver IP Core: https://wiki.analog.com/resources/fpga/docs/axi_laser_driver
-
 ## Support
 
 For technical support please visit [FPGA Referece Designs](https://ez.analog.com/fpga/) community in EngineerZone.
 
+
+# AD_FMCLIDAR1_EBZ HDL Project
+
+Here are some pointers to help you:
+  * [Board Product Page](https://www.analog.com/AD-FMCLIDAR1-EBZ)
+  * Parts : []()
+  * Project Doc: https://wiki.analog.com/resources/eval/user-guides/ad-fmclidar1-ebz
+  * HDL Doc: https://wiki.analog.com/resources/fpga/docs/hdl
+  * Linux Drivers: https://wiki.analog.com/resources/fpga/docs/axi_laser_driver
