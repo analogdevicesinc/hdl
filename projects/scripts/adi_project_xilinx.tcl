@@ -129,6 +129,11 @@ proc adi_project {project_name {mode 0} {parameter_list {}} } {
     set device "xcvc1902-vsva2197-2MP-e-S"
     set board [lindex [lsearch -all -inline [get_board_parts] *vck190*] end]
   }
+  if [regexp "_vc709$" $project_name] {
+    set device "xc7vx690tffg1761-2"  
+    set board [lindex [lsearch -all -inline [get_board_parts] *vc709*] end]
+  }
+
   adi_project_create $project_name $mode $parameter_list $device $board
 }
 
