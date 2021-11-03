@@ -25,9 +25,7 @@ adi_tpl_jesd204_rx_create axi_ad9250_core $RX_NUM_OF_LANES \
                                             $RX_NUM_OF_CONVERTERS \
                                             $RX_SAMPLES_PER_FRAME \
                                             $RX_SAMPLE_WIDTH
-ad_ip_parameter axi_ad9250_core CONFIG.CONVERTER_RESOLUTION 14
-ad_ip_parameter axi_ad9250_core CONFIG.BITS_PER_SAMPLE 16
-ad_ip_parameter axi_ad9250_core CONFIG.DMA_BITS_PER_SAMPLE 16
+ad_ip_parameter axi_ad9250_core/adc_tpl_core CONFIG.CONVERTER_RESOLUTION 14
 
 ad_ip_instance util_cpack2 axi_ad9250_cpack [list \
   NUM_OF_CHANNELS $RX_NUM_OF_CONVERTERS \
