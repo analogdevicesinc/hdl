@@ -26,6 +26,8 @@ echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>" > $xmlFile
 echo -e "<testsuite>" >> $xmlFile
 echo -e "\t<testcase name=\"${NAME}\" time=\"${DURATION}\" classname=\"component_tb\">" >> $xmlFile
 if [[ "$ERRS" ]]; then
+	#replace < with &lt; and > with &gt; in ERRS to not broke created xml
+	ERRS=$(echo $ERRS | sed 's/</&lt;/g' | sed 's/>/&gt;/g')
 	echo -e "\t\t<failure>\n\"$ERRS\"\n\t\t</failure>" >> $xmlFile
 elif [[ "$SUCCESS" ]]; then
 	echo -e "\t\t<passed/>" >> $xmlFile
