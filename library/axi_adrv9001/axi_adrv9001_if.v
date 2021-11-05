@@ -40,6 +40,8 @@ module axi_adrv9001_if #(
   parameter FPGA_TECHNOLOGY = 0,
   parameter NUM_LANES = 3,
   parameter DRP_WIDTH = 5,
+  parameter RX_USE_BUFG = 0,
+  parameter TX_USE_BUFG = 0,
   parameter IO_DELAY_GROUP = "dev_if_delay_group",
   parameter USE_RX_CLK_FOR_TX = 0
 ) (
@@ -205,6 +207,7 @@ module axi_adrv9001_if #(
       .NUM_LANES (NUM_LANES),
       .DRP_WIDTH (DRP_WIDTH),
       .IODELAY_CTRL (1),
+      .USE_BUFG (RX_USE_BUFG),
       .IO_DELAY_GROUP ({IO_DELAY_GROUP,"_rx"})
     ) i_rx_1_phy (
     .rx_dclk_in_n_NC (rx1_dclk_in_n_NC),
@@ -270,6 +273,7 @@ module axi_adrv9001_if #(
       .NUM_LANES (NUM_LANES),
       .DRP_WIDTH (DRP_WIDTH),
       .IODELAY_CTRL (0),
+      .USE_BUFG (RX_USE_BUFG),
       .IO_DELAY_GROUP ({IO_DELAY_GROUP,"_rx"})
     ) i_rx_2_phy (
     .rx_dclk_in_n_NC (rx2_dclk_in_n_NC),
@@ -331,6 +335,7 @@ module axi_adrv9001_if #(
    .CMOS_LVDS_N (CMOS_LVDS_N),
    .NUM_LANES (TX_NUM_LANES),
    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+   .USE_BUFG (TX_USE_BUFG),
    .USE_RX_CLK_FOR_TX (USE_RX_CLK_FOR_TX)
   ) i_tx_1_phy (
 
@@ -398,6 +403,7 @@ module axi_adrv9001_if #(
    .CMOS_LVDS_N (CMOS_LVDS_N),
    .NUM_LANES (TX_NUM_LANES),
    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+   .USE_BUFG (TX_USE_BUFG),
    .USE_RX_CLK_FOR_TX (USE_RX_CLK_FOR_TX)
   ) i_tx_2_phy (
 

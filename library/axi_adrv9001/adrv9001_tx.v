@@ -39,6 +39,7 @@ module adrv9001_tx #(
   parameter CMOS_LVDS_N = 0,
   parameter NUM_LANES = 4,
   parameter FPGA_TECHNOLOGY = 0,
+  parameter USE_BUFG = 0,
   parameter USE_RX_CLK_FOR_TX = 0
 ) (
   input                   ref_clk,
@@ -188,13 +189,15 @@ module adrv9001_tx #(
         .CE (1'b1),
         .I (tx_dclk_in_s),
         .O (dac_clk_div_s));
-/*
-      BUFG I_bufg (
-        .I (dac_clk_div_s),
-        .O (dac_clk_div)
-      );
-*/
-      assign dac_clk_div = dac_clk_div_s;
+
+      if (USE_BUFG == 1) begin
+        BUFG I_bufg (
+         .I (dac_clk_div_s),
+         .O (dac_clk_div)
+        );
+      end else begin
+        assign dac_clk_div = dac_clk_div_s;
+      end
 
       xpm_cdc_async_rst
       # (

@@ -41,6 +41,7 @@ module adrv9001_rx #(
   parameter NUM_LANES = 3,
   parameter DRP_WIDTH = 5,
   parameter IODELAY_CTRL = 0,
+  parameter USE_BUFG = 0,
   parameter IO_DELAY_GROUP = "dev_if_delay_group"
 ) (
   // device interface
@@ -200,13 +201,15 @@ module adrv9001_rx #(
       .CE (1'b1),
       .I (clk_in_s),
       .O (adc_clk_div_s));
-    /*
-    BUFG I_bufg (
-      .I (adc_clk_div_s),
-      .O (adc_clk_div)
-    );
-    */
-    assign adc_clk_div = adc_clk_div_s;
+
+    if (USE_BUFG == 1) begin
+      BUFG I_bufg (
+        .I (adc_clk_div_s),
+        .O (adc_clk_div)
+      );
+    end else begin
+      assign adc_clk_div = adc_clk_div_s;
+    end
 
     xpm_cdc_async_rst
     # (

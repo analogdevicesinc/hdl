@@ -42,6 +42,8 @@ module axi_adrv9001 #(
   parameter DDS_DISABLE = 0,
   parameter INDEPENDENT_1R1T_SUPPORT = 1,
   parameter COMMON_2R2T_SUPPORT = 1,
+  parameter RX_USE_BUFG = 0,
+  parameter TX_USE_BUFG = 0,
   parameter IO_DELAY_GROUP = "dev_if_delay_group",
   parameter FPGA_TECHNOLOGY = 0,
   parameter FPGA_FAMILY = 0,
@@ -269,6 +271,8 @@ module axi_adrv9001 #(
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .NUM_LANES (NUM_LANES),
     .DRP_WIDTH (DRP_WIDTH),
+    .RX_USE_BUFG (RX_USE_BUFG),
+    .TX_USE_BUFG (TX_USE_BUFG),
     .IO_DELAY_GROUP (IO_DELAY_GROUP),
    .USE_RX_CLK_FOR_TX (USE_RX_CLK_FOR_TX)
   ) i_if(
