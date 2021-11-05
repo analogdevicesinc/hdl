@@ -39,6 +39,7 @@ module ad_data_out #(
 
   parameter   FPGA_TECHNOLOGY = 0,
   parameter   SINGLE_ENDED = 0,
+  parameter   IDDR_CLK_EDGE ="SAME_EDGE",
   parameter   IODELAY_ENABLE = 0,
   parameter   IODELAY_CTRL = 0,
   parameter   IODELAY_GROUP = "dev_if_delay_group",
@@ -112,7 +113,7 @@ module ad_data_out #(
 
   generate
   if (FPGA_TECHNOLOGY == SEVEN_SERIES) begin
-  ODDR #(.DDR_CLK_EDGE ("SAME_EDGE")) i_tx_data_oddr (
+  ODDR #(.DDR_CLK_EDGE ("IDDR_CLK_EDGE")) i_tx_data_oddr (
     .CE (1'b1),
     .R (1'b0),
     .S (1'b0),
