@@ -602,25 +602,45 @@ module system_top (
     .IB (sysref_d_n),
     .O (sysref_d));
 
-  IBUFGDS i_rx_clk_ibufg_1 (
+  IBUFDS i_rx_clk_ibuf_1 (
     .I (core_clk_a_p),
     .IB (core_clk_a_n),
-    .O (core_clk_a));
+    .O (core_clk_a_ds));
 
-  IBUFGDS i_rx_clk_ibufg_2 (
+  BUFG i_clk_bufg_1 (
+    .I (core_clk_a_ds),
+    .O (core_clk_a)
+  );
+
+  IBUFDS i_rx_clk_ibuf_2 (
     .I (core_clk_b_p),
     .IB (core_clk_b_n),
-    .O (core_clk_b));
+    .O (core_clk_b_ds));
 
-  IBUFGDS i_rx_clk_ibufg_3 (
+  BUFG i_clk_bufg_2 (
+    .I (core_clk_b_ds),
+    .O (core_clk_b)
+  );
+
+  IBUFDS i_rx_clk_ibuf_3 (
     .I (core_clk_c_p),
     .IB (core_clk_c_n),
-    .O (core_clk_c));
+    .O (core_clk_c_ds));
 
-  IBUFGDS i_rx_clk_ibufg_4 (
+  BUFG i_clk_bufg_3 (
+    .I (core_clk_c_ds),
+    .O (core_clk_c)
+  );
+
+  IBUFDS i_rx_clk_ibufg_4 (
     .I (core_clk_d_p),
     .IB (core_clk_d_n),
-    .O (core_clk_d));
+    .O (core_clk_d_ds));
+
+  BUFG i_clk_bufg_4 (
+    .I (core_clk_d_ds),
+    .O (core_clk_d)
+  );
 
   IBUFDS i_ibufds_tx_sync_1 (
     .I (tx_sync_a_p),
