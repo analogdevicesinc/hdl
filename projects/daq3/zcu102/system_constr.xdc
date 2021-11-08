@@ -60,8 +60,8 @@ set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[0]]
 set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[1]]
 set_case_analysis -quiet 1 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[2]]
 
-create_clock -name tx_div_clk   [get_pins i_system_wrapper/system_i/util_daq3_xcvr/inst/i_xch_0/i_gthe4_channel/TXOUTCLK]
-create_clock -name rx_div_clk   [get_pins i_system_wrapper/system_i/util_daq3_xcvr/inst/i_xch_0/i_gthe4_channel/RXOUTCLK]
+create_generated_clock -name tx_div_clk   [get_pins i_system_wrapper/system_i/util_daq3_xcvr/inst/i_xch_0/i_gthe4_channel/TXOUTCLK]
+create_generated_clock -name rx_div_clk   [get_pins i_system_wrapper/system_i/util_daq3_xcvr/inst/i_xch_0/i_gthe4_channel/RXOUTCLK]
 
 # pin assignments below are for reference only and are ignored by the tool!
 
