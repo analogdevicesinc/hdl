@@ -114,6 +114,7 @@ clean:
 	$(MAKE) -C util_gmii_to_rgmii clean
 	$(MAKE) -C util_i2c_mixer clean
 	$(MAKE) -C util_mfifo clean
+	$(MAKE) -C util_mii_to_rmii clean
 	$(MAKE) -C util_pack/util_cpack2 clean
 	$(MAKE) -C util_pack/util_upack2 clean
 	$(MAKE) -C util_pulse_gen clean
@@ -237,6 +238,7 @@ lib:
 	$(MAKE) -C util_gmii_to_rgmii
 	$(MAKE) -C util_i2c_mixer
 	$(MAKE) -C util_mfifo
+	$(MAKE) -C util_mii_to_rmii
 	$(MAKE) -C util_pack/util_cpack2
 	$(MAKE) -C util_pack/util_upack2
 	$(MAKE) -C util_pulse_gen
