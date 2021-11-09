@@ -38,7 +38,7 @@ module data_offload_regmap #(
 
   parameter ID = 0,
   parameter [ 0:0] MEM_TYPE = 1'b0,
-  parameter [33:0] MEM_SIZE = 1024,
+  parameter [35:0] MEM_SIZE = 35'h000000400,
   parameter TX_OR_RXN_PATH = 0,
   parameter AUTO_BRINGUP = 0) (
 
