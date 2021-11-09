@@ -94,9 +94,16 @@ set_property -dict [list \
 
 ## MEM_SIZE - 8GB??
 set_property -dict [list \
-  "value_validation_type" "range_long" \
-  "value_validation_range_minimum" "2" \
-  "value_validation_range_maximum" "8589934592" \
+  "value_validation_type" "pairs" \
+  "value_validation_pairs" { \
+      "128 MB" "134217728" \
+      "256 MB" "268435456" \
+      "512 MB" "536870912" \
+      "1 GB"   "1073741824" \
+      "2 GB"   "2147483648" \
+      "4 GB"   "4294967296" \
+      "8 GB"   "8589934592" \
+    } \
  ] \
  [ipx::get_user_parameters MEM_SIZE -of_objects $cc]
 
