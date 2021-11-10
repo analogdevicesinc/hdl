@@ -1,6 +1,3 @@
-# Common parameter for TX and RX
-set SAMPLE_RATE $ad_project_params(SAMPLE_RATE)
-
 # RX parameters
 set RX_NUM_OF_LINKS $ad_project_params(RX_NUM_LINKS)
 
@@ -47,9 +44,9 @@ set TX_DMA_SAMPLE_WIDTH  16
 set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8*$TX_TPL_DATA_PATH_WIDTH / \
                                 ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)]
 
-#Lane Rate = I/Q Sample Rate x M x N' x (10 \ 8) \ L
-set TX_LANE_RATE [expr ($SAMPLE_RATE*$TX_NUM_OF_CONVERTERS*$TX_SAMPLE_WIDTH*10)/(8*$TX_NUM_OF_LANES)]
-set RX_LANE_RATE [expr ($SAMPLE_RATE*$RX_NUM_OF_CONVERTERS*$RX_SAMPLE_WIDTH*10)/(8*$RX_NUM_OF_LANES)]
+# Lane Rate = I/Q Sample Rate x M x N' x (10 \ 8) \ L
+set TX_LANE_RATE [expr $ad_project_params(RX_LANE_RATE)*1000]
+set RX_LANE_RATE [expr $ad_project_params(TX_LANE_RATE)*1000]
 
 set adc_fifo_name mxfe_adc_fifo
 set adc_data_width [expr 8*$RX_TPL_DATA_PATH_WIDTH*$RX_NUM_OF_LANES*$RX_DMA_SAMPLE_WIDTH/$RX_SAMPLE_WIDTH]
