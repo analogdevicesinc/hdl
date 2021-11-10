@@ -8,12 +8,15 @@ source ../../scripts/adi_project_intel.tcl
 #   Use over-writable parameters from the environment.
 #
 #    e.g.
-#      make RX_JESD_L=4 RX_JESD_M=8 RX_JESD_S=1 RX_JESD_NP=16 TX_JESD_L=4 TX_JESD_M=8 TX_JESD_S=1 TX_JESD_NP=16 SAMPLE_RATE=250
-#      make RX_JESD_L=8 RX_JESD_M=4 RX_JESD_S=1 RX_JESD_NP=16 TX_JESD_L=8 TX_JESD_M=4 TX_JESD_S=1 TX_JESD_NP=16 SAMPLE_RATE=250
-#      make RX_JESD_L=2 RX_JESD_M=8 RX_JESD_S=1 RX_JESD_NP=12 TX_JESD_L=2 TX_JESD_M=8 TX_JESD_S=1 TX_JESD_NP=12 SAMPLE_RATE=166.66666667
+#      make RX_RATE=10 TX_RATE=10 RX_JESD_L=4 RX_JESD_M=8 RX_JESD_S=1 RX_JESD_NP=16 TX_JESD_L=4 TX_JESD_M=8 TX_JESD_S=1 TX_JESD_NP=16
+#      make RX_RATE=2.5 TX_RATE=2.5 RX_JESD_L=8 RX_JESD_M=4 RX_JESD_S=1 RX_JESD_NP=16 TX_JESD_L=8 TX_JESD_M=4 TX_JESD_S=1 TX_JESD_NP=16
+#      make RX_RATE=10 TX_RATE=10 RX_JESD_L=2 RX_JESD_M=8 RX_JESD_S=1 RX_JESD_NP=12 TX_JESD_L=2 TX_JESD_M=8 TX_JESD_S=1 TX_JESD_NP=12
+#
+# Lane Rate = I/Q Sample Rate x M x N' x (10 \ 8) \ L
 
 adi_project ad9081_fmca_ebz_a10soc [list \
-  SAMPLE_RATE        [get_env_param SAMPLE_RATE  250] \
+  RX_LANE_RATE       [get_env_param RX_RATE      10 ] \
+  TX_LANE_RATE       [get_env_param TX_RATE      10 ] \
   RX_JESD_M          [get_env_param RX_JESD_M    8 ] \
   RX_JESD_L          [get_env_param RX_JESD_L    4 ] \
   RX_JESD_S          [get_env_param RX_JESD_S    1 ] \
