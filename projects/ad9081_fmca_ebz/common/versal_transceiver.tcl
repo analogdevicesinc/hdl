@@ -20,8 +20,8 @@ create_bd_pin -dir I ${ip_name}/GT_REFCLK -type clk
 
 create_bd_pin -dir I ${ip_name}/apb3clk -type clk
 create_bd_pin -dir I ${ip_name}/gtreset_in
-create_bd_pin -dir I ${ip_name}/reset_rx_datapath_in
-create_bd_pin -dir I ${ip_name}/reset_tx_datapath_in
+create_bd_pin -dir I ${ip_name}/reset_rx_pll_and_datapath_in
+create_bd_pin -dir I ${ip_name}/reset_tx_pll_and_datapath_in
 
 ad_ip_instance gt_bridge_ip ${ip_name}/gt_bridge_ip_0
 
@@ -236,8 +236,8 @@ for {set i 0} {$i < $num_quads} {incr i} {
 # Clocks and resets
 ad_connect ${ip_name}/apb3clk ${ip_name}/gt_bridge_ip_0/apb3clk
 ad_connect GND ${ip_name}/gt_bridge_ip_0/gtreset_in
-ad_connect ${ip_name}/reset_rx_datapath_in ${ip_name}/gt_bridge_ip_0/reset_rx_pll_and_datapath_in
-ad_connect ${ip_name}/reset_tx_datapath_in ${ip_name}/gt_bridge_ip_0/reset_tx_pll_and_datapath_in
+ad_connect ${ip_name}/reset_rx_pll_and_datapath_in ${ip_name}/gt_bridge_ip_0/reset_rx_pll_and_datapath_in
+ad_connect ${ip_name}/reset_tx_pll_and_datapath_in ${ip_name}/gt_bridge_ip_0/reset_tx_pll_and_datapath_in
 
 ad_ip_instance xlconcat ${ip_name}/xlconcat_0 [list \
    NUM_PORTS $num_quads \
