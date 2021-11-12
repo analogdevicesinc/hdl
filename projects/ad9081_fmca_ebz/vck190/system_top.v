@@ -225,15 +225,6 @@ module system_top  #(
   assign gpio_i[94:54] = gpio_o[94:54];
   assign gpio_i[31:10] = gpio_o[31:10];
 
-  reg ext_pll_lock,ext_pll_lock_d;
-
-  always @(posedge tx_device_clk) begin
-    ext_pll_lock <= gpio_i[43];
-    ext_pll_lock_d <= ext_pll_lock;
-  end
-
-  assign gt_reset = ext_pll_lock & ~ext_pll_lock_d;
-
   system_wrapper i_system_wrapper (
     .gpio0_i (gpio_i[31:0]),
     .gpio0_o (gpio_o[31:0]),
@@ -283,8 +274,7 @@ module system_top  #(
     .rx_sync_0 (rx_syncout),
     .tx_sync_0 (tx_syncin),
     .rx_sysref_0 (sysref),
-    .tx_sysref_0 (sysref),
-    .gt_reset (gt_reset)
+    .tx_sysref_0 (sysref)
   );
 
   assign rx_data_p_loc[RX_JESD_L*RX_NUM_LINKS-1:0] = rx_data_p[RX_JESD_L*RX_NUM_LINKS-1:0];

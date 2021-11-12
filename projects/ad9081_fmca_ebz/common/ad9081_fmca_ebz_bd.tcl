@@ -137,8 +137,6 @@ if {$ADI_PHY_SEL == 1} {
 
   create_versal_phy jesd204_phy $TX_NUM_OF_LANES
 
-  create_bd_port -dir I gt_reset
-
 }
 
 if {$ADI_PHY_SEL == 1} {
@@ -305,8 +303,6 @@ if {$ADI_PHY_SEL == 1} {
   }
 
   ad_connect $sys_cpu_clk jesd204_phy/apb3clk
-
-  ad_connect gt_reset jesd204_phy/gtreset_in
 
   ad_connect axi_mxfe_rx_jesd/rx_axi/device_reset jesd204_phy/reset_rx_pll_and_datapath_in
   ad_connect axi_mxfe_tx_jesd/tx_axi/device_reset jesd204_phy/reset_tx_pll_and_datapath_in
