@@ -39,6 +39,7 @@ module adrv9001_tx #(
   parameter CMOS_LVDS_N = 0,
   parameter NUM_LANES = 4,
   parameter FPGA_TECHNOLOGY = 0,
+  parameter USE_BUFG = 0,
   parameter USE_RX_CLK_FOR_TX = 0
 ) (
   input                   ref_clk,

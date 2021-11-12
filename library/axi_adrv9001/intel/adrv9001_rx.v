@@ -41,6 +41,7 @@ module adrv9001_rx #(
   parameter NUM_LANES = 3,
   parameter DRP_WIDTH = 5,
   parameter IODELAY_CTRL = 0,
+  parameter USE_BUFG = 0,
   parameter IO_DELAY_GROUP = "dev_if_delay_group"
 ) (
   // device interface
