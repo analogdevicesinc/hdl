@@ -43,15 +43,15 @@ module axi_ltc2387 #(
   parameter SPEED_GRADE = 1,
   parameter DEV_PACKAGE = 1,
   parameter IO_DELAY_GROUP = "adc_if_delay_group",
-  parameter IODELAY_CTRL = 1,
   parameter DELAY_REFCLK_FREQUENCY = 200,
   parameter USERPORTS_DISABLE = 0,
   parameter DATAFORMAT_DISABLE = 0,
   parameter ADC_INIT_DELAY = 22,
   parameter ADC_RES = 16,
   parameter OUT_RES = 16,
-  parameter TWOLANES = 1
-) (
+  parameter TWOLANES = 1) (
+
+
   input                     delay_clk,
 
   // adc interface
@@ -93,8 +93,8 @@ module axi_ltc2387 #(
   output      [31:0]        s_axi_rdata,
   input                     s_axi_rready,
   input       [ 2:0]        s_axi_awprot,
-  input       [ 2:0]        s_axi_arprot
-);
+  input       [ 2:0]        s_axi_arprot);
+
 
   // internal signals
 
@@ -126,7 +126,6 @@ module axi_ltc2387 #(
 
   wire            adc_rst;
   wire            adc_clk;
-  wire            adc_enable;
   wire            up_clk;
   wire            up_rstn;
   wire            delay_rst;
@@ -160,9 +159,8 @@ module axi_ltc2387 #(
     .IO_DELAY_GROUP (IO_DELAY_GROUP),
     .DELAY_REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY),
     .RESOLUTION (ADC_RES),
-    .IODELAY_CTRL(IODELAY_CTRL),
-    .TWOLANES (TWOLANES)
-  ) i_if (
+    .TWOLANES (TWOLANES))
+  i_if (
     .clk (ref_clk),
     .clk_gate (clk_gate),
     .da_p (da_p),
@@ -188,8 +186,8 @@ module axi_ltc2387 #(
     .OUT_RES (OUT_RES),
     .TWOLANES (TWOLANES),
     .USERPORTS_DISABLE (USERPORTS_DISABLE),
-    .DATAFORMAT_DISABLE (DATAFORMAT_DISABLE)
-  ) i_channel (
+    .DATAFORMAT_DISABLE (DATAFORMAT_DISABLE))
+  i_channel (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_data_in (adc_data_ch_s),
@@ -216,8 +214,8 @@ module axi_ltc2387 #(
   up_delay_cntrl #(
     .INIT_DELAY (ADC_INIT_DELAY),
     .DATA_WIDTH(2),
-    .BASE_ADDRESS(6'h02)
-  ) i_delay_cntrl (
+    .BASE_ADDRESS(6'h02))
+  i_delay_cntrl (
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
     .delay_locked (delay_locked_s),
@@ -248,8 +246,8 @@ module axi_ltc2387 #(
     .DRP_DISABLE (6'h00),
     .USERPORTS_DISABLE (USERPORTS_DISABLE),
     .GPIO_DISABLE (0),
-    .START_CODE_DISABLE(0)
-  ) i_up_adc_common (
+    .START_CODE_DISABLE(0))
+  i_up_adc_common (
     .mmcm_rst (),
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
@@ -263,11 +261,7 @@ module axi_ltc2387 #(
     .adc_start_code (),
     .adc_sref_sync (),
     .adc_sync (),
-    .adc_ext_sync_arm(),
-    .adc_ext_sync_disarm(),
-    .adc_ext_sync_manual_req(),
     .adc_num_lanes (),
-    .adc_custom_control(),
     .adc_sdr_ddr_n (),
     .adc_symb_op (),
     .adc_symb_8_16b (),
@@ -283,7 +277,7 @@ module axi_ltc2387 #(
     .up_drp_wr (),
     .up_drp_addr (),
     .up_drp_wdata (),
-    .up_drp_rdata (32'b0),
+    .up_drp_rdata (16'b0),
     .up_drp_ready (1'b0),
     .up_drp_locked (1'b1),
     .up_usr_chanmax_out (),
@@ -300,6 +294,7 @@ module axi_ltc2387 #(
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_s[1]),
     .up_rack (up_rack_s[1]));
+
 
   // up bus interface
 
@@ -333,3 +328,7 @@ module axi_ltc2387 #(
     .up_rack (up_rack));
 
 endmodule
+
+// ***************************************************************************
+// ***************************************************************************
+

@@ -39,13 +39,12 @@
 
 module axi_ltc2387_if #(
 
-  parameter FPGA_TECHNOLOGY = 1,
-  parameter IO_DELAY_GROUP = "adc_if_delay_group",
-  parameter IODELAY_CTRL = 1,
-  parameter DELAY_REFCLK_FREQUENCY = 200,
-  parameter [0:0] TWOLANES = 1, // 0 for Single Lane, 1 for Two Lanes
-  parameter RESOLUTION = 16     // 16 or 18 bits
-) (
+  parameter   FPGA_TECHNOLOGY = 1,
+  parameter   IO_DELAY_GROUP = "adc_if_delay_group",
+  parameter   DELAY_REFCLK_FREQUENCY = 200,
+  parameter   [0:0] TWOLANES = 1, // 0 for Single Lane, 1 for Two Lanes
+  parameter   RESOLUTION = 16)(    // 16 or 18 bits
+
   // delay interface
 
   input                    up_clk,
@@ -68,8 +67,7 @@ module axi_ltc2387_if #(
   input                    db_n,
 
   output                      adc_valid,
-  output reg [RESOLUTION-1:0] adc_data
-);
+  output reg [RESOLUTION-1:0] adc_data);
 
   localparam   ONE_L_WIDTH = (RESOLUTION == 18) ? 9 : 8;
   localparam   TWO_L_WIDTH = (RESOLUTION == 18) ? 5 : 4;
@@ -91,7 +89,7 @@ module axi_ltc2387_if #(
   reg [WIDTH:0] adc_data_da_n = 'b0;
   reg [WIDTH:0] adc_data_db_p = 'b0;
   reg [WIDTH:0] adc_data_db_n = 'b0;
-  reg [2:0]     clk_gate_d = 'b0;
+  reg [2:0]     clk_gate_d = 1'b0;
 
   // assignments
 
@@ -180,10 +178,10 @@ module axi_ltc2387_if #(
   ad_data_in #(
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .IDDR_CLK_EDGE("OPPOSITE_EDGE"),
-    .IODELAY_CTRL (IODELAY_CTRL),
+    .IODELAY_CTRL (1),
     .IODELAY_GROUP (IO_DELAY_GROUP),
-    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY)
-  ) i_rx_da (
+    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
+  i_rx_da (
     .rx_clk (dco),
     .rx_data_in_p (da_p),
     .rx_data_in_n (da_n),
@@ -199,11 +197,11 @@ module axi_ltc2387_if #(
 
   ad_data_in #(
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
-    .IDDR_CLK_EDGE("OPPOSITE_EDGE"),
     .IODELAY_CTRL (0),
+    .IDDR_CLK_EDGE("OPPOSITE_EDGE"),
     .IODELAY_GROUP (IO_DELAY_GROUP),
-    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY)
-  ) i_rx_db (
+    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
+  i_rx_db (
     .rx_clk (dco),
     .rx_data_in_p (db_p),
     .rx_data_in_n (db_n),
@@ -231,3 +229,6 @@ module axi_ltc2387_if #(
     .O (dco));
 
 endmodule
+
+// ***************************************************************************
+// ***************************************************************************

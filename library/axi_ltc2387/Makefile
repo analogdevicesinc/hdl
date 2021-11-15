@@ -7,6 +7,7 @@
 LIBRARY_NAME := axi_ltc2387
 
 GENERIC_DEPS += ../common/ad_datafmt.v
+GENERIC_DEPS += ../common/ad_pnmon.v
 GENERIC_DEPS += ../common/ad_rst.v
 GENERIC_DEPS += ../common/up_adc_channel.v
 GENERIC_DEPS += ../common/up_adc_common.v
