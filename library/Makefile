@@ -46,6 +46,7 @@ clean:
 	$(MAKE) -C axi_intr_monitor clean
 	$(MAKE) -C axi_laser_driver clean
 	$(MAKE) -C axi_logic_analyzer clean
+	$(MAKE) -C axi_ltc2387 clean
 	$(MAKE) -C axi_pulse_gen clean
 	$(MAKE) -C axi_pwm_gen clean
 	$(MAKE) -C axi_rd_wr_combiner clean
@@ -164,6 +165,7 @@ lib:
 	$(MAKE) -C axi_intr_monitor
 	$(MAKE) -C axi_laser_driver
 	$(MAKE) -C axi_logic_analyzer
+	$(MAKE) -C axi_ltc2387
 	$(MAKE) -C axi_pulse_gen
 	$(MAKE) -C axi_pwm_gen
 	$(MAKE) -C axi_rd_wr_combiner
