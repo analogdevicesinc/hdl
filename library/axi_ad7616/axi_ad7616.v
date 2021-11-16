@@ -207,6 +207,9 @@ module axi_ad7616 #(
     wire                                    offload0_mem_reset_s;
     wire                                    offload0_enable_s;
     wire                                    offload0_enabled_s;
+    wire                                    offload_sync_ready_s;
+    wire                                    offload_sync_valid_s;
+    wire  [ 7:0]                            offload_sync_data_s;
 
     axi_spi_engine #(
       .DATA_WIDTH (8),
@@ -239,6 +242,9 @@ module axi_ad7616 #(
       .sync_ready (s0_sync_ready_s),
       .sync_valid (s0_sync_valid_s),
       .sync_data (s0_sync_s),
+      .offload_sync_ready (offload_sync_ready_s),
+      .offload_sync_valid (offload_sync_valid_s),
+      .offload_sync_data (offload_sync_data_s),
       .offload0_cmd_wr_en (offload0_cmd_wr_en_s),
       .offload0_cmd_wr_data (offload0_cmd_wr_data_s),
       .offload0_sdo_wr_en (offload0_sdo_wr_en_s),
@@ -274,6 +280,9 @@ module axi_ad7616 #(
       .sync_valid (s1_sync_valid_s),
       .sync_ready (s1_sync_ready_s),
       .sync_data (s1_sync_s),
+      .status_sync_ready (offload_sync_ready_s),
+      .status_sync_valid (offload_sync_valid_s),
+      .status_sync_data (offload_sync_data_s),
       .offload_sdi_valid (m_axis_valid_s),
       .offload_sdi_ready (m_axis_ready_s),
       .offload_sdi_data (m_axis_data_s));
