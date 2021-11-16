@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2021 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -143,7 +143,7 @@ module system_top (
               gpio_ctl,
               gpio_status,
               gpio_bd}));
-	
+
   assign gpio_i[63:51] = gpio_o[63:51];
   assign gpio_i[48:47] = gpio_o[48:47];
   assign gpio_i[0] = gpio_bd[0];

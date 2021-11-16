@@ -92,14 +92,3 @@ ad_ip_parameter axi_ad9361 CONFIG.TDD_DISABLE 1
 
 # interrupts
 ad_cpu_interrupt ps-10 mb-11 trigger_dmac/irq
-
-set top_ila [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.2 top_ila]
-set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $top_ila
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $top_ila
-set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $top_ila
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $top_ila
-set_property -dict [list CONFIG.C_PROBE1_WIDTH {16}] $top_ila
-
-ad_connect top_ila/clk util_ad9361_divclk/clk_out
-ad_connect top_ila/probe0 axi_trigger/trigger_out
-ad_connect top_ila/probe1 util_ad9361_adc_fifo/dout_data_0
