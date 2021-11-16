@@ -280,12 +280,12 @@ module system_top  #(
 
   assign hmc_sync         = gpio_o[54];
   assign rstb             = gpio_o[55];
-  assign rxen[0]          = TDD_SUPPORT ? tdd_rx_mxfe_en : gpio_o[56];
-  assign rxen[1]          = TDD_SUPPORT ? tdd_rx_mxfe_en : gpio_o[57];
-  assign txen[0]          = TDD_SUPPORT ? tdd_tx_mxfe_en : gpio_o[58];
-  assign txen[1]          = TDD_SUPPORT ? tdd_tx_mxfe_en : gpio_o[59];
+  assign rxen[0]          = tdd_support ? tdd_rx_mxfe_en : gpio_o[56];
+  assign rxen[1]          = tdd_support ? tdd_rx_mxfe_en : gpio_o[57];
+  assign txen[0]          = tdd_support ? tdd_tx_mxfe_en : gpio_o[58];
+  assign txen[1]          = tdd_support ? tdd_tx_mxfe_en : gpio_o[59];
 
-  assign tr = TDD_SUPPORT ? tdd_tx_stingray_en : gpio_t[62] ? 1'bz : gpio_o[62];
+  assign tr = tdd_support ? tdd_tx_stingray_en : gpio_t[62] ? 1'bz : gpio_o[62];
 
   // PMOD GPIOs
   assign pmod0_0_1_PA_ON       = pwr_up_mask ? 1'b0 : gpio_t[61] ? 1'bz : gpio_o[61];
@@ -300,26 +300,26 @@ module system_top  #(
 
   // XUD GPIOs
   ad_iobuf #(.DATA_WIDTH(10)) i_xud_iobuf (
-    .dio_t ({TDD_SUPPORT ? 1'b1 : gpio_t[76],    // 76   TDD_EXT_TRIG
-             TDD_SUPPORT ? 1'b0 : gpio_t[75],    // 75   TDD_XUD1_STINGRAY_SYNC 
-             TDD_SUPPORT ? 1'b0 : gpio_t[74],    // 74   TDD_RX_SYNC
-             TDD_SUPPORT ? 1'b0 : gpio_t[73],    // 73   TDD_TX_SYNC
+    .dio_t ({tdd_support ? 1'b1 : gpio_t[76],    // 76   TDD_EXT_TRIG
+             tdd_support ? 1'b0 : gpio_t[75],    // 75   TDD_XUD1_STINGRAY_SYNC 
+             tdd_support ? 1'b0 : gpio_t[74],    // 74   TDD_RX_SYNC
+             tdd_support ? 1'b0 : gpio_t[73],    // 73   TDD_TX_SYNC
              gpio_t[72],    // 72
-             TDD_SUPPORT ? 1'b0 : gpio_t[71],    // 71   TRX3
-             TDD_SUPPORT ? 1'b0 : gpio_t[70],    // 70   TRX2
-             TDD_SUPPORT ? 1'b0 : gpio_t[69],    // 69   TRX1
-             TDD_SUPPORT ? 1'b0 : gpio_t[68],    // 68   TRX0
+             tdd_support ? 1'b0 : gpio_t[71],    // 71   TRX3
+             tdd_support ? 1'b0 : gpio_t[70],    // 70   TRX2
+             tdd_support ? 1'b0 : gpio_t[69],    // 69   TRX1
+             tdd_support ? 1'b0 : gpio_t[68],    // 68   TRX0
              gpio_t[67]     // 67
             }),
     .dio_i ({gpio_o[76],   // 76   TDD_EXT_TRIG
-             TDD_SUPPORT ? tdd_tx_stingray_en : gpio_o[75],   // 75   TDD_XUD1_STINGRAY_SYNC 
-             TDD_SUPPORT ? tdd_rx_mxfe_en : gpio_o[74],       // 74   TDD_RX_SYNC
-             TDD_SUPPORT ? tdd_tx_mxfe_en : gpio_o[73],       // 73   TDD_TX_SYNC
+             tdd_support ? tdd_tx_stingray_en : gpio_o[75],   // 75   TDD_XUD1_STINGRAY_SYNC 
+             tdd_support ? tdd_rx_mxfe_en : gpio_o[74],       // 74   TDD_RX_SYNC
+             tdd_support ? tdd_tx_mxfe_en : gpio_o[73],       // 73   TDD_TX_SYNC
              gpio_o[72],   // 72
-             TDD_SUPPORT ? tdd_tx_stingray_en : gpio_o[71],   // 71   TRX3
-             TDD_SUPPORT ? tdd_tx_stingray_en : gpio_o[70],   // 70   TRX2
-             TDD_SUPPORT ? tdd_tx_stingray_en : gpio_o[69],   // 69   TRX1
-             TDD_SUPPORT ? tdd_tx_stingray_en : gpio_o[68],   // 68   TRX0
+             tdd_support ? tdd_tx_stingray_en : gpio_o[71],   // 71   TRX3
+             tdd_support ? tdd_tx_stingray_en : gpio_o[70],   // 70   TRX2
+             tdd_support ? tdd_tx_stingray_en : gpio_o[69],   // 69   TRX1
+             tdd_support ? tdd_tx_stingray_en : gpio_o[68],   // 68   TRX0
              gpio_o[67]    // 67
             }),
     .dio_o ({gpio_i[76],
@@ -345,6 +345,7 @@ module system_top  #(
              fmc_bob_xud1_gpio0}       // 67
              ));
 
+  assign tdd_support = TDD_SUPPORT ? tdd_enabled : 1'b0;
   assign tdd_sync = gpio_i[76];
 
   assign fmc_bob_xud1_imu_rst = gpio_o[77];
@@ -424,6 +425,7 @@ module system_top  #(
     .spi_pmod_sdo_i (spi_pmod_mosi),
     .spi_pmod_sdo_o (spi_pmod_mosi),
     .tdd_sync (tdd_sync),
+    .tdd_enabled (tdd_enabled),
     .tdd_rx_mxfe_en (tdd_rx_mxfe_en),
     .tdd_tx_mxfe_en (tdd_tx_mxfe_en),
     .tdd_tx_stingray_en (tdd_tx_stingray_en)

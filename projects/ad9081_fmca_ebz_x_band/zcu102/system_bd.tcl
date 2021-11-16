@@ -110,6 +110,7 @@ ad_cpu_interconnect 0x45200000 axi_spi_pmod
 
 # Connect TDD
 create_bd_port -dir I tdd_sync
+create_bd_port -dir O tdd_enabled
 create_bd_port -dir O tdd_rx_mxfe_en
 create_bd_port -dir O tdd_tx_mxfe_en
 create_bd_port -dir O tdd_tx_stingray_en
@@ -120,6 +121,7 @@ ad_disconnect tdd_sync_0/sync_mode GND
 ad_connect tdd_sync_0/sync_in tdd_sync
 ad_connect tdd_sync_0/sync_mode VCC
 
+ad_connect axi_tdd_0/tdd_enabled tdd_enabled
 ad_connect axi_tdd_0/tdd_rx_rf_en tdd_rx_mxfe_en
 ad_connect axi_tdd_0/tdd_tx_rf_en tdd_tx_mxfe_en
 # repurpose tdd_tx_vco_en as XUD1A and Stingray TR
