@@ -41,45 +41,45 @@ module digital_trigger #(
 
   parameter  [ 9:0]  DW = 10'd16) (
 
-  // io signals
+  // IO signals
 
-  input              clk,
-  input              rst,
+  input            clk,
+  input            rst,
 
-  input              selected,
+  input            selected,
 
-  input  [DW-1 : 0]  current_data,
-  input  [DW-1 : 0]  prev_data,
+  input  [DW-1:0]  current_data,
+  input  [DW-1:0]  prev_data,
 
   // masks
-  input  [DW-1 : 0]  edge_detect_enable,
-  input  [DW-1 : 0]  rise_edge_enable,
-  input  [DW-1 : 0]  fall_edge_enable,
-  input  [DW-1 : 0]  low_level_enable,
-  input  [DW-1 : 0]  high_level_enable,
+  input  [DW-1:0]  edge_detect_enable,
+  input  [DW-1:0]  rise_edge_enable,
+  input  [DW-1:0]  fall_edge_enable,
+  input  [DW-1:0]  low_level_enable,
+  input  [DW-1:0]  high_level_enable,
 
   // condition for internal trigger
   // OR(0) / AND(1): the internal trigger condition
-  input              trigger_int_cond,
+  input            trigger_int_cond,
 
-  output             trigger_out
+  output           trigger_out
 );
 
   // internal registers
 
-  reg    [DW-1 : 0]  edge_detect = 'h0;
-  reg    [DW-1 : 0]  rise_edge = 'h0;
-  reg    [DW-1 : 0]  fall_edge = 'h0;
-  reg    [DW-1 : 0]  low_level = 'h0;
-  reg    [DW-1 : 0]  high_level = 'h0;
+  reg    [DW-1:0]  edge_detect = 'h0;
+  reg    [DW-1:0]  rise_edge = 'h0;
+  reg    [DW-1:0]  fall_edge = 'h0;
+  reg    [DW-1:0]  low_level = 'h0;
+  reg    [DW-1:0]  high_level = 'h0;
 
-  reg    [DW-1 : 0]  edge_detect_m = 'h0;
-  reg    [DW-1 : 0]  rise_edge_m = 'h0;
-  reg    [DW-1 : 0]  fall_edge_m = 'h0;
-  reg    [DW-1 : 0]  low_level_m = 'h0;
-  reg    [DW-1 : 0]  high_level_m = 'h0;
+  reg    [DW-1:0]  edge_detect_m = 'h0;
+  reg    [DW-1:0]  rise_edge_m = 'h0;
+  reg    [DW-1:0]  fall_edge_m = 'h0;
+  reg    [DW-1:0]  low_level_m = 'h0;
+  reg    [DW-1:0]  high_level_m = 'h0;
 
-  reg                int_trigger_active = 'h0;
+  reg              int_trigger_active = 'h0;
 
   // assignments
 
@@ -100,7 +100,7 @@ module digital_trigger #(
         rise_edge   <= (prev_data ^ current_data) & current_data;
         fall_edge   <= (prev_data ^ current_data) & ~current_data;
         low_level   <= ~current_data;
-        high_level <=  current_data;
+        high_level  <=  current_data;
 
         edge_detect_m <= edge_detect;
         rise_edge_m   <= rise_edge;

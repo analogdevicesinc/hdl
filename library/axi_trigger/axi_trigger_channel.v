@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module channel_trigger #(
+module axi_trigger_channel #(
 
   // parameters
 
@@ -44,15 +44,15 @@ module channel_trigger #(
 
   // IO ports
 
-  input              clk,
-  input              rst,
+  input            clk,
+  input            rst,
 
-  input              selected,
+  input            selected,
 
   input  [DW-1:0]  current_data,
   input  [DW-1:0]  limit,
 
-  input  [  31:0]    hysteresis,
+  input  [  31:0]  hysteresis,
 
   // masks
   input  [DW-1:0]  edge_detect_enable,
@@ -63,7 +63,7 @@ module channel_trigger #(
 
   // condition for internal trigger
   // OR(0) / AND(1): the internal trigger condition
-  input              trigger_int_cond,
+  input            trigger_int_cond,
 
   // condition for the internal analog triggering;
   // comparison between the probe and the limit
@@ -71,33 +71,33 @@ module channel_trigger #(
   // 1 - higher than the limit
   // 2 - passing through high limit
   // 3 - passing through low limit
-  input    [ 1:0]    trigger_adc_rel,
+  input  [   1:0]  trigger_adc_rel,
 
   // type of triggering to be applied on input
   // 0 - analog triggering
   // 1 - digital triggering
   // 2 - disable
-  input    [  1:0]  trigger_type,
+  input  [   1:0]  trigger_type,
 
-  output             trigger_out
+  output           trigger_out
 );
 
   // local parameters
 
   localparam DIGITAL_TRIGGER = 1;
-  localparam ANALOG_TRIGGER = 0;
+  localparam ANALOG_TRIGGER  = 0;
 
   // internal wires
 
-  wire               trigger_out_adc;
-  wire               trigger_out_dig;
+  wire             trigger_out_adc;
+  wire             trigger_out_dig;
 
   // internal registers
 
-  reg    [DW-1 : 0]  prev_data = 'h0;
+  reg    [DW-1:0]  prev_data = 'h0;
 
-  reg                int_trigger_active = 'h0;
-  reg                trigger_out_int = 'h0;
+  reg              int_trigger_active = 'h0;
+  reg              trigger_out_int = 'h0;
 
   // assignments
 
@@ -126,7 +126,6 @@ module channel_trigger #(
 
   generate
     if (CHANNEL_TRIGGER == DIGITAL_TRIGGER) begin
-      // digital trigger
       digital_trigger #(
         .DW (DW)
       ) digital_data_triggering (
@@ -145,7 +144,6 @@ module channel_trigger #(
       );
     end
     if (CHANNEL_TRIGGER == ANALOG_TRIGGER) begin
-      // adc trigger
       adc_trigger #(
         .DW (DW)
       ) analog_data_triggering (
@@ -160,16 +158,6 @@ module channel_trigger #(
       );
     end
   endgenerate
-
-  //
-  my_ila i_ila (
-    .clk(clk),
-    .probe0(selected),
-    .probe1(trigger_out_adc),
-    .probe2(current_data),
-    .probe3(limit));
-  //
-
 endmodule
 
 // ***************************************************************************

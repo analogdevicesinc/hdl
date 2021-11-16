@@ -53,33 +53,33 @@ module adc_trigger #(
   input  [  31:0]  hysteresis,
 
 
-  input   [ 1:0]    trigger_adc_rel,
+  input  [   1:0]  trigger_adc_rel,
 
-  output            trigger_out
+  output           trigger_out
 );
 
   // internal signals
 
-  wire signed [DW-1 : 0] data_comp;
-  wire signed [DW-1 : 0] limit_comp;
-  wire                   comp_low;
+  wire signed [DW-1:0] data_comp;
+  wire signed [DW-1:0] limit_comp;
+  wire                 comp_low;
 
   // internal registers
 
-  reg                    int_trigger_active = 'h0;
+  reg                  int_trigger_active = 'h0;
 
-  reg                    comp_high = 'h0;
+  reg                  comp_high = 'h0;
 
-  reg                    old_comp_high = 'h0;   // t + 1 version of comp_high
+  reg                  old_comp_high = 'h0; // t + 1 version of comp_high
 
-  reg                    hyst_high_limit_pass = 'h0; // valid hysteresis range on passthrough high trigger limit
-  reg                    hyst_low_limit_pass = 'h0; // valid hysteresis range on passthrough low trigger limit
+  reg                  hyst_high_limit_pass = 'h0; // valid hysteresis range on passthrough high trigger limit
+  reg                  hyst_low_limit_pass = 'h0; // valid hysteresis range on passthrough low trigger limit
 
-  reg                    passthrough_high = 'h0; // trigger when rising through the limit
-  reg                    passthrough_low = 'h0;  // trigger when falling thorugh the limit
+  reg                  passthrough_high = 'h0; // trigger when rising through the limit
+  reg                  passthrough_low = 'h0; // trigger when falling thorugh the limit
 
-  reg signed [DW-1:0]    hyst_high_limit = 'h0;
-  reg signed [DW-1:0]    hyst_low_limit = 'h0;
+  reg signed [DW-1:0]  hyst_high_limit = 'h0;
+  reg signed [DW-1:0]  hyst_low_limit = 'h0;
 
   // assignments
 
@@ -104,13 +104,13 @@ module adc_trigger #(
   // compare data
   always @ (posedge clk) begin
     if (rst == 1'b1) begin
-      comp_high <= 1'b0;
-      old_comp_high <= 1'b0;
+      comp_high        <= 1'b0;
+      old_comp_high    <= 1'b0;
       passthrough_high <= 1'b0;
-      passthrough_low <= 1'b0;
-      hyst_low_limit  <= {DW{1'b0}};
-      hyst_high_limit <= {DW{1'b0}};
-      hyst_low_limit_pass <= 1'b0;
+      passthrough_low  <= 1'b0;
+      hyst_low_limit   <= {DW{1'b0}};
+      hyst_high_limit  <= {DW{1'b0}};
+      hyst_low_limit_pass  <= 1'b0;
       hyst_high_limit_pass <= 1'b0;
     end else begin
       if (selected == 1'b1) begin

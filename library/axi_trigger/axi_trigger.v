@@ -91,8 +91,8 @@ module axi_trigger #(
 
   // internal signals
 
-  wire      [ 3:0]   trigger_out_aux;
-  wire      [ 3:0]   in_data_en;
+  wire   [    3:0]   trigger_out_aux;
+  wire   [    3:0]   in_data_en;
 
   // condition for internal trigger
   // bit 3: OR(0) / AND(1): the internal trigger condition,
@@ -102,14 +102,13 @@ module axi_trigger #(
   //     2 - internal AND external trigger
   //     3 - internal OR external trigger
   //     4 - internal XOR external trigger
-
-  wire      [ 3:0]   triggers_rel;
+  wire   [    3:0]   triggers_rel;
 
   // type of triggering to be applied on input
   // 0 - analog triggering
   // 1 - digital triggering
   // 2 - uP trigger(internal)
-  wire      [ 1:0]   trigger_type;
+  wire   [    1:0]   trigger_type;
 
   // condition for the internal analog triggering,
   // compare between the channel and the limit
@@ -117,10 +116,10 @@ module axi_trigger #(
   // 1 - higher than the limit
   // 2 - passing through high limit
   // 3 - passing through low limit
-  wire      [ 1:0]   trigger_adc_0;
-  wire      [ 1:0]   trigger_adc_1;
-  wire      [ 1:0]   trigger_adc_2;
-  wire      [ 1:0]   trigger_adc_3;
+  wire   [    1:0]   trigger_adc_0;
+  wire   [    1:0]   trigger_adc_1;
+  wire   [    1:0]   trigger_adc_2;
+  wire   [    1:0]   trigger_adc_3;
 
   // masks for data that comes from PROBE 0
   wire   [DW0-1:0]   edge_detect_enable_0;
@@ -151,27 +150,27 @@ module axi_trigger #(
   wire   [DW3-1:0]   high_level_enable_3;
 
   // limits for analog data to compare with
-  wire      [31:0]   limit_0;
-  wire      [31:0]   limit_1;
-  wire      [31:0]   limit_2;
-  wire      [31:0]   limit_3;
+  wire   [   31:0]   limit_0;
+  wire   [   31:0]   limit_1;
+  wire   [   31:0]   limit_2;
+  wire   [   31:0]   limit_3;
 
   // hysteresis values to determine range
-  wire      [31:0]   hysteresis_0;
-  wire      [31:0]   hysteresis_1;
-  wire      [31:0]   hysteresis_2;
-  wire      [31:0]   hysteresis_3;
+  wire   [   31:0]   hysteresis_0;
+  wire   [   31:0]   hysteresis_1;
+  wire   [   31:0]   hysteresis_2;
+  wire   [   31:0]   hysteresis_3;
 
   wire               up_clk;
   wire               up_rstn;
-  wire      [ 4:0]   up_waddr;
-  wire      [31:0]   up_wdata;
+  wire   [    4:0]   up_waddr;
+  wire   [   31:0]   up_wdata;
   wire               up_wack;
   wire               up_wreq;
   wire               up_rack;
-  wire      [31:0]   up_rdata;
+  wire   [   31:0]   up_rdata;
   wire               up_rreq;
-  wire      [ 4:0]   up_raddr;
+  wire   [    4:0]   up_raddr;
 
   // internal registers
 
@@ -181,18 +180,18 @@ module axi_trigger #(
   reg                trigger_int = 'h0;
 
   // inputs delayed with 1 clock cycle
-  reg    [DW0-1 : 0] data_in0_d1 = 'h0;
-  reg    [DW1-1 : 0] data_in1_d1 = 'h0;
-  reg    [DW2-1 : 0] data_in2_d1 = 'h0;
-  reg    [DW3-1 : 0] data_in3_d1 = 'h0;
-  reg    [15    : 0] in_data_en_d1 = 'h0;
+  reg    [DW0-1:0]   data_in0_d1 = 'h0;
+  reg    [DW1-1:0]   data_in1_d1 = 'h0;
+  reg    [DW2-1:0]   data_in2_d1 = 'h0;
+  reg    [DW3-1:0]   data_in3_d1 = 'h0;
+  reg    [   15:0]   in_data_en_d1 = 'h0;
 
   // inputs delayed with 2 clock cycles
-  reg    [DW0-1 : 0] data_in0_d2 = 'h0;
-  reg    [DW1-1 : 0] data_in1_d2 = 'h0;
-  reg    [DW2-1 : 0] data_in2_d2 = 'h0;
-  reg    [DW3-1 : 0] data_in3_d2 = 'h0;
-  reg    [15    : 0] in_data_en_d2 = 'h0;
+  reg    [DW0-1:0]   data_in0_d2 = 'h0;
+  reg    [DW1-1:0]   data_in1_d2 = 'h0;
+  reg    [DW2-1:0]   data_in2_d2 = 'h0;
+  reg    [DW3-1:0]   data_in3_d2 = 'h0;
+  reg    [   15:0]   in_data_en_d2 = 'h0;
 
   // assign outputs
   assign out_data_en = in_data_en_d2;

@@ -217,7 +217,7 @@ module trigger_ip_regmap (
       if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h1)) begin
           up_scratch <= up_wdata;
       end
-	  if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h2)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h2)) begin
           up_in_data_en <= up_wdata[3:0];
       end
       if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h3)) begin

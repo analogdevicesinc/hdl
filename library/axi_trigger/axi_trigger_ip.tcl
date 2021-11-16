@@ -21,10 +21,10 @@ adi_ip_files axi_trigger [list \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "axi_trigger.v" \
-  "channel_trigger.v" \
+  "axi_trigger_channel.v" \
   "adc_trigger.v" \
   "digital_trigger.v" \
-  "trigger_ip_regmap.v" ]
+  "axi_trigger_regmap.v" ]
 
 adi_ip_properties axi_trigger
 
