@@ -249,7 +249,7 @@ ad_connect ddr4_ref_clk_rx_offload ddr4_rx_offload/C0_SYS_CLK
 ad_data_offload_create axi_rx_offload_control \
                        0 \
                        1 \
-                       [expr (2 * 1024 * 1024 * 1024) - 1] \
+                       [expr 2 * 1024 * 1024 * 1024] \
                        [expr 32 * $RX_NUM_OF_LANES] \
                        [expr 32 * $RX_NUM_OF_LANES] \
                        256 \
@@ -264,6 +264,7 @@ ad_connect ddr4_rx_offload/C0_DDR4_S_AXI axi_rx_offload_control/fifo2axi_bridge/
 ad_connect axi_rx_offload_control/i_data_offload/ddr_calib_done ddr4_rx_offload/c0_init_calib_complete
 ad_connect sys_rstgen/peripheral_reset ddr4_rx_offload/sys_rst
 ad_connect ddr4_rx_offload/c0_ddr4_aresetn axi_rx_offload_rstgen/peripheral_aresetn
+ad_connect VCC axi_rx_offload_control/i_data_offload/m_axis_ready
 
 assign_bd_address [get_bd_addr_segs -of_objects [get_bd_cells ddr4_rx_offload]]
 
