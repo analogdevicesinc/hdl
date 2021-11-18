@@ -15,9 +15,9 @@ M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
 M_DEPS += ../../../library/common/ad_sysref_gen.v
 M_DEPS += ../../../library/common/ad_iobuf.v
 
-LIB_DEPS += axi_ad6676
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_sysid
+LIB_DEPS += jesd204/ad_ip_jesd204_tpl_adc
 LIB_DEPS += jesd204/axi_jesd204_rx
 LIB_DEPS += jesd204/jesd204_rx
 LIB_DEPS += sysid_rom

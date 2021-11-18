@@ -1,6 +1,12 @@
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
+# JESD204B interface configuration parameters
+set RX_NUM_OF_LANES 2
+set RX_NUM_OF_CONVERTERS 2
+set RX_SAMPLES_PER_FRAME 1
+set RX_SAMPLE_WIDTH 16
+
 # adc peripherals
 
 ad_ip_instance axi_adxcvr axi_ad6676_xcvr
@@ -13,7 +19,11 @@ ad_ip_parameter axi_ad6676_xcvr CONFIG.OUT_CLK_SEL 0x4
 
 adi_axi_jesd204_rx_create axi_ad6676_jesd 2
 
-ad_ip_instance axi_ad6676 axi_ad6676_core
+#ad_ip_instance axi_ad6676 axi_ad6676_core
+adi_tpl_jesd204_rx_create axi_ad6676_core $RX_NUM_OF_LANES \
+                                          $RX_NUM_OF_CONVERTERS \
+                                          $RX_SAMPLES_PER_FRAME \
+                                          $RX_SAMPLE_WIDTH \
 
 ad_ip_instance util_cpack2 axi_ad6676_cpack { \
   NUM_OF_CHANNELS 2 \
@@ -61,10 +71,11 @@ ad_connect  $sys_cpu_clk util_ad6676_xcvr/up_clk
 # connections (adc)
 
 ad_xcvrcon  util_ad6676_xcvr axi_ad6676_xcvr axi_ad6676_jesd
-ad_connect  util_ad6676_xcvr/rx_out_clk_0 axi_ad6676_core/rx_clk
+ad_connect  util_ad6676_xcvr/rx_out_clk_0 axi_ad6676_core/link_clk
 ad_connect  util_ad6676_xcvr/rx_out_clk_0 rx_core_clk
-ad_connect  axi_ad6676_jesd/rx_sof axi_ad6676_core/rx_sof
-ad_connect  axi_ad6676_jesd/rx_data_tdata axi_ad6676_core/rx_data
+ad_connect  axi_ad6676_jesd/rx_sof axi_ad6676_core/link_sof
+ad_connect  axi_ad6676_jesd/rx_data_tdata axi_ad6676_core/link_data
+ad_connect  axi_ad6676_jesd/rx_data_tvalid axi_ad6676_core/link_valid
 
 ad_connect  util_ad6676_xcvr/rx_out_clk_0 axi_ad6676_cpack/clk
 ad_connect  axi_ad6676_jesd_rstgen/peripheral_reset axi_ad6676_cpack/reset
@@ -74,7 +85,7 @@ for {set i 0} {$i < 2} {incr i} {
   ad_connect  axi_ad6676_core/adc_enable_${i} axi_ad6676_cpack/enable_${i}
   ad_connect  axi_ad6676_core/adc_data_${i} axi_ad6676_cpack/fifo_wr_data_${i}
 }
-ad_connect  axi_ad6676_core/adc_clk axi_ad6676_dma/fifo_wr_clk
+ad_connect  axi_ad6676_core/link_clk axi_ad6676_dma/fifo_wr_clk
 ad_connect  axi_ad6676_dma/fifo_wr axi_ad6676_cpack/packed_fifo_wr
 
 # interconnect (cpu)
