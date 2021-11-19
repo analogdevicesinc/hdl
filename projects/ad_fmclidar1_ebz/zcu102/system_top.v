@@ -119,6 +119,7 @@ module system_top (
   wire            rx_sync;
   wire            rx_sysref;
   wire            rx_device_clk;
+  wire            rx_device_clk_ds;
   wire            laser_driver;
 
   // instantiations
@@ -140,9 +141,13 @@ module system_top (
     .O (rx_sync1_p),
     .OB (rx_sync1_n));
 
-  IBUFGDS i_rx_device_clk (
+  IBUFDS i_rx_device_clk_ds (
     .I (rx_device_clk_p),
     .IB (rx_device_clk_n),
+    .O (rx_device_clk_ds));
+  
+  BUFG  i_rx_device_clk (
+    .I (rx_device_clk_ds),
     .O (rx_device_clk));
 
   IBUFDS i_rx_sysref (
