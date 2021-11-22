@@ -27,12 +27,10 @@ set tx_device_clk [expr $tx_link_clk*$tx_ll_width/$tx_tpl_width]
 set rx_device_clk_period [expr 1000/$rx_device_clk]
 set tx_device_clk_period [expr 1000/$tx_device_clk]
 
-# refclk and refclk_replica are connect to the same source on the PCB
 # Set reference clock to same frequency as the link clock, 
 # this will ease the XCVR out clocks propagation calculation.
 # TODO: this restricts RX_LANE_RATE=TX_LANE_RATE
 create_clock -name refclk         -period  $rx_link_clk_period [get_ports fpga_refclk_in_p]
-create_clock -name refclk_replica -period  $rx_link_clk_period [get_ports fpga_refclk_in_replica_p]
 
 # device clock
 create_clock -name rx_device_clk     -period  $rx_device_clk_period [get_ports clkin8_p]
