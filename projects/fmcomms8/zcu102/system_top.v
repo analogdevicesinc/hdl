@@ -145,11 +145,13 @@ module system_top (
 
   wire            ref_clk_c;
   wire            core_clk_c;
+  wire            core_clk_c_ds;
   wire            rx_sync_rx;
   wire            tx_sync_c;
   wire            sysref_c;
   wire            ref_clk_d;
   wire            core_clk_d;
+  wire            core_clk_d_ds; 
   wire            rx_sync_obs;
   wire            rx_os_sync_d;
   wire            tx_sync_d;
@@ -257,14 +259,22 @@ module system_top (
     .IB (sysref_d_n),
     .O (sysref_d));
 
-  IBUFGDS i_rx_clk_ibufg_1 (
+  IBUFDS i_rx_clk_ibuf_1 (
     .I (core_clk_c_p),
     .IB (core_clk_c_n),
+    .O (core_clk_c_ds));
+
+  BUFG i_rx_clk_ibufg_1 (
+    .I (core_clk_c_ds),
     .O (core_clk_c));
 
-  IBUFGDS i_rx_clk_ibufg_2 (
+  IBUFDS i_rx_clk_ibuf_2 (
     .I (core_clk_d_p),
     .IB (core_clk_d_n),
+    .O (core_clk_d_ds));
+
+  BUFG i_rx_clk_ibufg_2(
+    .I (core_clk_d_ds),
     .O (core_clk_d));
 
   IBUFDS i_ibufds_tx_sync_1 (
