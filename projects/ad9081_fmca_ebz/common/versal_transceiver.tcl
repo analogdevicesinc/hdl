@@ -19,7 +19,6 @@ create_bd_pin -dir O ${ip_name}/txusrclk_out -type clk
 create_bd_pin -dir I ${ip_name}/GT_REFCLK -type clk
 
 create_bd_pin -dir I ${ip_name}/apb3clk -type clk
-create_bd_pin -dir I ${ip_name}/gtreset_in
 create_bd_pin -dir I ${ip_name}/reset_rx_pll_and_datapath_in
 create_bd_pin -dir I ${ip_name}/reset_tx_pll_and_datapath_in
 
