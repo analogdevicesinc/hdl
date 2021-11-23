@@ -17,5 +17,5 @@ jobs:
   - checkout: self
     fetchDepth: 50
     clean: true
-  - script: ./scripts/ci/run-build.sh
+  - script: ./projects/scripts/ci/run-build.sh
     displayName: 'Checkpatch Script'
