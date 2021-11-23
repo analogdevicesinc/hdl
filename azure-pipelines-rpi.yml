@@ -1,0 +1,21 @@
+trigger:
+- add_pr_check 
+
+pr:
+- add_pr_check 
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+jobs:
+- job: checkpatch
+  condition: eq(variables['Build.Reason'], 'PullRequest')
+  variables:
+    BUILD_TYPE: checkpatch
+    TARGET_BRANCH: $[ variables['System.PullRequest.TargetBranch'] ]
+  steps:
+  - checkout: self
+    fetchDepth: 50
+    clean: true
+  - script: ./scripts/ci/run-build.sh
+    displayName: 'Checkpatch Script'
