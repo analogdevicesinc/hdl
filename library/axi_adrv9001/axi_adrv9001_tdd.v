@@ -37,6 +37,7 @@
 
 module axi_adrv9001_tdd #(
   parameter   ID = 0,
+  parameter   ENABLED = 1,
   parameter   BASE_ADDRESS = 6'h20
 ) (
 
@@ -79,6 +80,9 @@ module axi_adrv9001_tdd #(
   input       [13:0]      up_raddr,
   output      [31:0]      up_rdata,
   output                  up_rack);
+
+  generate
+  if (ENABLED == 1) begin
 
   // internal signals
 
@@ -254,5 +258,14 @@ module axi_adrv9001_tdd #(
     .tdd_rx_rf_en(tdd_rx_rf_en),
     .tdd_tx_rf_en(tdd_tx_rf_en),
     .tdd_counter_status(tdd_counter_status));
+  end else begin
+    assign up_wack = 1'b0;
+    assign up_rack = 1'b0;
+    assign up_rdata = 32'h0;
+    assign tdd_rx_rf_en = 1'b1;
+    assign tdd_tx_rf_en = 1'b1;
+    assign tdd_enabled = 1'b0;
+  end
+  endgenerate
 
 endmodule
