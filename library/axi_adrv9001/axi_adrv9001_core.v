@@ -563,6 +563,7 @@ module axi_ad9001_core #(
   up_delay_cntrl #(
     .DATA_WIDTH(NUM_LANES),
     .DRP_WIDTH(DRP_WIDTH),
+    .DISABLE(DISABLE_RX2_SSI),
     .BASE_ADDRESS(6'h06))
   i_delay_cntrl_rx2 (
     .delay_clk (delay_clk),
@@ -582,15 +583,13 @@ module axi_ad9001_core #(
     .up_rdata (up_rdata_s[5]),
     .up_rack (up_rack_s[5]));
 
-  generate
-  if (TDD_DISABLE == 0) begin
-
   wire tdd_rx2_rf_en_loc;
   wire tdd_tx2_rf_en_loc;
   wire tdd_if2_mode_loc;
 
   axi_adrv9001_tdd #(
-    .BASE_ADDRESS (6'h12)
+    .BASE_ADDRESS (6'h12),
+    .ENABLED (TDD_DISABLE==0)
   ) i_tdd_1 (
     .clk (rx1_clk),
     .rst (rx1_rst),
@@ -616,7 +615,8 @@ module axi_ad9001_core #(
     .up_rack (up_rack_s[6]));
 
   axi_adrv9001_tdd #(
-    .BASE_ADDRESS (6'h13)
+    .BASE_ADDRESS (6'h13),
+    .ENABLED(TDD_DISABLE == 0 && (DISABLE_RX2_SSI == 0 || DISABLE_TX2_SSI == 0))
   ) i_tdd_2 (
     .clk (rx2_clk),
     .rst (rx2_rst_loc),
@@ -646,26 +646,6 @@ module axi_ad9001_core #(
   assign tdd_if2_mode = tx1_r1_mode||rx1_r1_mode ? tdd_if2_mode_loc : tdd_if1_mode;
 
   assign tdd_sync_cntr = tdd_sync_cntr1 | tdd_sync_cntr2;
-
-  end else begin
-    assign up_wack_s[6] = 1'b0;
-    assign up_rack_s[6] = 1'b0;
-    assign up_rdata_s[6] = 32'h0;
-    assign up_wack_s[7] = 1'b0;
-    assign up_rack_s[7] = 1'b0;
-    assign up_rdata_s[7] = 32'h0;
-    assign tdd_rx1_rf_en = 1'b1;
-    assign tdd_tx1_rf_en = 1'b1;
-    assign tdd_if1_mode = 1'b0;
-    assign tdd_tx1_valid = 1'b1;
-    assign tdd_rx1_valid = 1'b1;
-    assign tdd_rx2_rf_en = 1'b1;
-    assign tdd_tx2_rf_en = 1'b1;
-    assign tdd_if2_mode = 1'b0;
-    assign tdd_tx2_valid = 1'b1;
-    assign tdd_rx2_valid = 1'b1;
-  end
-  endgenerate
 
 endmodule
 
