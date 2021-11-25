@@ -77,6 +77,18 @@ ipx::add_bus_parameter POLARITY [ipx::get_bus_interfaces adc_2_rst -of_objects [
 ipx::add_bus_parameter POLARITY [ipx::get_bus_interfaces dac_1_rst -of_objects [ipx::current_core]]
 ipx::add_bus_parameter POLARITY [ipx::get_bus_interfaces dac_2_rst -of_objects [ipx::current_core]]
 
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.INDEPENDENT_1R1T_SUPPORT')) == 1 && spirit:decode(id('MODELPARAM_VALUE.DISABLE_TX2_SSI')) == 0} \
+  [ipx::get_ports dac_2* -of_objects [ipx::current_core]]
+
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.INDEPENDENT_1R1T_SUPPORT')) == 1 && spirit:decode(id('MODELPARAM_VALUE.DISABLE_RX2_SSI')) == 0} \
+  [ipx::get_ports adc_2* -of_objects [ipx::current_core]]
+
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.DISABLE_TX2_SSI')) == 0} \
+  [ipx::get_ports *tx2_* -of_objects [ipx::current_core]]
+
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.DISABLE_RX2_SSI')) == 0} \
+  [ipx::get_ports *rx2_* -of_objects [ipx::current_core]]
+
 adi_add_auto_fpga_spec_params
 ipx::create_xgui_files [ipx::current_core]
 
