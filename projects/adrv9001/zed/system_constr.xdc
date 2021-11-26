@@ -22,7 +22,7 @@ set_property  -dict {PACKAGE_PIN L17  IOSTANDARD LVCMOS18}  [get_ports mode]    
 set_property  -dict {PACKAGE_PIN M17  IOSTANDARD LVCMOS18}  [get_ports reset_trx]         ; # D18 FMC_HPC0_LA13_N      IO_L4N_T0_34
 
 set_property  -dict {PACKAGE_PIN R19  IOSTANDARD LVCMOS18}  [get_ports rx1_enable]        ; # C14 FMC_HPC0_LA10_P      IO_L22P_T3_34
-#set_property  -dict {PACKAGE_PIN E18  IOSTANDARD LVCMOS18}  [get_ports rx2_enable]        ; # D27 FMC_HPC0_LA26_N      IO_L5N_T0_AD9N_35
+set_property  -dict {PACKAGE_PIN E18  IOSTANDARD LVCMOS18}  [get_ports rx2_enable]        ; # D27 FMC_HPC0_LA26_N      IO_L5N_T0_AD9N_35
 
 set_property  -dict {PACKAGE_PIN L19  IOSTANDARD LVCMOS18}  [get_ports sm_fan_tach]       ; # H05 FMC_HPC0_CLK0_M2C_N  IO_L12N_T1_MRCC_34
 
@@ -32,7 +32,7 @@ set_property  -dict {PACKAGE_PIN P21  IOSTANDARD LVCMOS18}  [get_ports spi_do]  
 set_property  -dict {PACKAGE_PIN J16  IOSTANDARD LVCMOS18}  [get_ports spi_en]            ; # H19 FMC_HPC0_LA15_P      IO_L2P_T0_34
 
 set_property  -dict {PACKAGE_PIN R20  IOSTANDARD LVCMOS18}  [get_ports tx1_enable]        ; # D14 FMC_HPC0_LA09_P      IO_L17P_T2_34
-#set_property  -dict {PACKAGE_PIN C17  IOSTANDARD LVCMOS18}  [get_ports tx2_enable]        ; # G30 FMC_HPC0_LA29_P      IO_L11P_T1_SRCC_35
+set_property  -dict {PACKAGE_PIN C17  IOSTANDARD LVCMOS18}  [get_ports tx2_enable]        ; # G30 FMC_HPC0_LA29_P      IO_L11P_T1_SRCC_35
 
 set_property  -dict {PACKAGE_PIN B16  IOSTANDARD LVCMOS18}  [get_ports vadj_err]          ; # G33 FMC_HPC0_LA31_P      IO_L8P_T1_AD10P_35
 set_property  -dict {PACKAGE_PIN B17  IOSTANDARD LVCMOS18}  [get_ports platform_status]   ; # G34 FMC_HPC0_LA31_N      IO_L8N_T1_AD10N_35

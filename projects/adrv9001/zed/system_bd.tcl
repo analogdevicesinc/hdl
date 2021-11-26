@@ -5,10 +5,6 @@ source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 ad_ip_parameter axi_adrv9001 CONFIG.RX_USE_BUFG 1
 ad_ip_parameter axi_adrv9001 CONFIG.TX_USE_BUFG 1
-ad_ip_parameter axi_adrv9001 CONFIG.INDEPENDENT_1R1T_SUPPORT 0
-ad_ip_parameter axi_adrv9001 CONFIG.COMMON_2R2T_SUPPORT 0
-ad_ip_parameter axi_adrv9001 CONFIG.DISABLE_RX2_SSI 1
-ad_ip_parameter axi_adrv9001 CONFIG.DISABLE_TX2_SSI 1
 
 #system ID
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
