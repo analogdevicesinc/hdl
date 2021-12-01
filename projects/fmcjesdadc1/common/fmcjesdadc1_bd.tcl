@@ -22,9 +22,9 @@ ad_ip_parameter axi_ad9250_xcvr CONFIG.SYS_CLK_SEL 0x0
 adi_axi_jesd204_rx_create axi_ad9250_jesd $RX_NUM_OF_LANES
 
 adi_tpl_jesd204_rx_create axi_ad9250_core $RX_NUM_OF_LANES \
-                                            $RX_NUM_OF_CONVERTERS \
-                                            $RX_SAMPLES_PER_FRAME \
-                                            $RX_SAMPLE_WIDTH
+                                          $RX_NUM_OF_CONVERTERS \
+                                          $RX_SAMPLES_PER_FRAME \
+                                          $RX_SAMPLE_WIDTH
 ad_ip_parameter axi_ad9250_core/adc_tpl_core CONFIG.CONVERTER_RESOLUTION 14
 
 ad_ip_instance util_cpack2 axi_ad9250_cpack [list \
@@ -79,13 +79,13 @@ create_bd_port -dir O rx_core_clk
 
 ad_xcvrcon  util_fmcjesdadc1_xcvr axi_ad9250_xcvr axi_ad9250_jesd
 ad_connect  util_fmcjesdadc1_xcvr/rx_out_clk_0 rx_core_clk
- 
-ad_connect axi_ad9250_core/adc_valid_0 axi_ad9250_cpack/fifo_wr_en   
-    
+
+ad_connect axi_ad9250_core/adc_valid_0 axi_ad9250_cpack/fifo_wr_en
+
 ad_connect axi_ad9250_core/adc_enable_0 axi_ad9250_cpack/enable_0
 ad_connect axi_ad9250_core/adc_enable_1 axi_ad9250_cpack/enable_1
 ad_connect axi_ad9250_core/adc_enable_2 axi_ad9250_cpack/enable_2
-ad_connect axi_ad9250_core/adc_enable_3 axi_ad9250_cpack/enable_3    
+ad_connect axi_ad9250_core/adc_enable_3 axi_ad9250_cpack/enable_3
 
 ad_connect  util_fmcjesdadc1_xcvr/rx_out_clk_0 axi_ad9250_core/link_clk
 ad_connect  axi_ad9250_jesd/rx_sof axi_ad9250_core/link_sof
@@ -103,7 +103,7 @@ ad_connect  axi_ad9250_core/adc_data_3 axi_ad9250_cpack/fifo_wr_data_3
 ad_connect  axi_ad9250_core/link_clk axi_ad9250_dma/fifo_wr_clk
 ad_connect  axi_ad9250_dma/fifo_wr axi_ad9250_cpack/packed_fifo_wr
 
-ad_connect  axi_ad9250_core/link_valid axi_ad9250_jesd/rx_data_tvalid  
+ad_connect  axi_ad9250_core/link_valid axi_ad9250_jesd/rx_data_tvalid
 
 # interconnect (cpu)
 
