@@ -12,14 +12,14 @@ source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 # adc peripherals
 
 ad_ip_instance axi_adxcvr axi_ad9250_xcvr
-ad_ip_parameter axi_ad9250_xcvr CONFIG.NUM_OF_LANES 4
+ad_ip_parameter axi_ad9250_xcvr CONFIG.NUM_OF_LANES $RX_NUM_OF_LANES
 ad_ip_parameter axi_ad9250_xcvr CONFIG.QPLL_ENABLE 0
 ad_ip_parameter axi_ad9250_xcvr CONFIG.TX_OR_RX_N 0
 ad_ip_parameter axi_ad9250_xcvr CONFIG.LPM_OR_DFE_N 0
 ad_ip_parameter axi_ad9250_xcvr CONFIG.OUT_CLK_SEL 0x2
 ad_ip_parameter axi_ad9250_xcvr CONFIG.SYS_CLK_SEL 0x0
 
-adi_axi_jesd204_rx_create axi_ad9250_jesd 4
+adi_axi_jesd204_rx_create axi_ad9250_jesd $RX_NUM_OF_LANES
 
 adi_tpl_jesd204_rx_create axi_ad9250_core $RX_NUM_OF_LANES \
                                             $RX_NUM_OF_CONVERTERS \
@@ -55,7 +55,7 @@ ad_ip_parameter util_fmcjesdadc1_xcvr CONFIG.CPLL_FBDIV 2
 ad_ip_parameter util_fmcjesdadc1_xcvr CONFIG.TX_NUM_OF_LANES 0
 ad_ip_parameter util_fmcjesdadc1_xcvr CONFIG.TX_OUT_DIV 1
 ad_ip_parameter util_fmcjesdadc1_xcvr CONFIG.TX_CLK25_DIV 10
-ad_ip_parameter util_fmcjesdadc1_xcvr CONFIG.RX_NUM_OF_LANES 4
+ad_ip_parameter util_fmcjesdadc1_xcvr CONFIG.RX_NUM_OF_LANES $RX_NUM_OF_LANES
 ad_ip_parameter util_fmcjesdadc1_xcvr CONFIG.RX_OUT_DIV 1
 ad_ip_parameter util_fmcjesdadc1_xcvr CONFIG.RX_CLK25_DIV 10
 ad_ip_parameter util_fmcjesdadc1_xcvr CONFIG.RX_DFE_LPM_CFG 0x0904
