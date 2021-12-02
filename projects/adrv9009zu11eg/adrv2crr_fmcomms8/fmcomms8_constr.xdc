@@ -124,3 +124,7 @@ set_input_delay -clock tx_fmc_dev_clk -max 4    [get_ports sysref_d_p];
 set_input_delay -clock tx_fmc_dev_clk -min 4    [get_ports sysref_d_p];
 
 create_clock -name spi1_clk      -period 40   [get_pins -hier */EMIOSPI1SCLKO]
+
+set_max_delay -from [get_pins fmcomms8_spi/spi_enable_reg/C] -to [get_pins i_system_wrapper/system_i/sys_ps8/inst/PS8_i/EMIOSPI1MI] 40.0
+set_min_delay -from [get_pins fmcomms8_spi/spi_enable_reg/C] -to [get_pins i_system_wrapper/system_i/sys_ps8/inst/PS8_i/EMIOSPI1MI] 0.0
+
