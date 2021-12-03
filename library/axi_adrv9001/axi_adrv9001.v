@@ -51,11 +51,16 @@ module axi_adrv9001 #(
   parameter FPGA_FAMILY = 0,
   parameter SPEED_GRADE = 0,
   parameter DEV_PACKAGE = 0,
+  parameter EXT_SYNC = 0,
   parameter USE_RX_CLK_FOR_TX = 0
 ) (
   input                   ref_clk,
   input                   mssi_sync,
   input                   tx_output_enable,
+
+  // external synchronization signals
+  input                   adc_sync_in,
+  input                   dac_sync_in,
 
   // physical interface
   input                   rx1_dclk_in_n_NC,
@@ -416,7 +421,8 @@ module axi_adrv9001 #(
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .FPGA_FAMILY (FPGA_FAMILY),
     .SPEED_GRADE (SPEED_GRADE),
-    .DEV_PACKAGE (DEV_PACKAGE)
+    .DEV_PACKAGE (DEV_PACKAGE),
+    .EXT_SYNC (EXT_SYNC)
   ) i_core (
     // ADC interface
     .rx1_clk (adc_1_clk),
@@ -529,6 +535,10 @@ module axi_adrv9001 #(
     .tdd_rx2_rf_en (tdd_rx2_rf_en),
     .tdd_tx2_rf_en (tdd_tx2_rf_en),
     .tdd_if2_mode (tdd_if2_mode),
+
+    .ref_clk (ref_clk),
+    .adc_sync_in (adc_sync_in),
+    .dac_sync_in (dac_sync_in),
 
     .up_rstn (up_rstn),
     .up_clk (up_clk),

@@ -51,6 +51,7 @@ module axi_ad9001_core #(
   parameter FPGA_FAMILY = 0,
   parameter SPEED_GRADE = 0,
   parameter DEV_PACKAGE = 0,
+  parameter EXT_SYNC = 0,
 
   parameter DAC_DDS_TYPE = 1,
   parameter DAC_DDS_CORDIC_DW = 20,
@@ -90,7 +91,7 @@ module axi_ad9001_core #(
   output                  tx1_sdr_ddr_n,
   output                  tx1_symb_op,
   output                  tx1_symb_8_16b,
-  
+
   input                   tx2_clk,
   output                  tx2_rst,
   output                  tx2_data_valid,
@@ -101,7 +102,7 @@ module axi_ad9001_core #(
   output                  tx2_sdr_ddr_n,
   output                  tx2_symb_op,
   output                  tx2_symb_8_16b,
- 
+
   input       [ 31:0]     adc_clk_ratio,
   input       [ 31:0]     dac_clk_ratio,
 
@@ -169,6 +170,11 @@ module axi_ad9001_core #(
   output                  tdd_tx2_rf_en,
   output                  tdd_if2_mode,
 
+  // external syncronization signals
+  input                   adc_sync_in,
+  input                   dac_sync_in,
+  input                   ref_clk,
+
   // processor interface
 
   input                   up_rstn,
@@ -210,6 +216,10 @@ module axi_ad9001_core #(
   wire           tx2_sdr_ddr_n_loc;
   wire           tx2_symb_op_loc;
   wire           tx2_symb_8_16b_loc;
+  wire           adc_sync;
+  wire           adc_sync_m;
+  wire           dac_sync_m;
+  wire           dac_sync_out_1;
 
   reg            tx1_data_valid_A_d;
   reg    [15:0]  tx1_data_i_A_d;
@@ -220,6 +230,14 @@ module axi_ad9001_core #(
   reg            tx2_data_valid_A_d;
   reg    [15:0]  tx2_data_i_A_d;
   reg    [15:0]  tx2_data_q_A_d;
+  reg            sync_adc_valid = 1'b1;
+  reg            adc_sync_armed = 1'b0;
+  reg            adc_sync_in_d1 = 1'b0;
+  reg            adc_sync_d1 = 1'b0;
+  reg            dac_sync_arm = 1'b0;
+  reg            dac_ext_sync_arm_d = 1'b0;
+  reg            dac_sync_in_d1 = 1'b0;
+  reg            external_dac_sync = 1'b0;
 
   // rx1_r1_mode and tx1_r1_mode considered static during operation
   // rx1_r1_mode should be 0 only when rx1_clk and rx2_clk have the same frequency
@@ -304,6 +322,59 @@ module axi_ad9001_core #(
     end
   end
 
+  sync_event #(
+    .NUM_OF_EVENTS (1),
+    .ASYNC_CLK (1))
+  i_rx_external_sync (
+    .in_clk (ref_clk),
+    .in_event (adc_sync_in),
+    .out_clk (rx1_clk),
+    .out_event (adc_sync_m));
+
+  always @(posedge rx1_clk) begin
+    if (rx1_rst == 1'b1) begin
+      adc_sync_armed <= 1'b0;
+      adc_sync_in_d1 <= 1'b0;
+      adc_sync_d1 <= 1'b0;
+      sync_adc_valid <= 1'b1;
+    end else begin
+      adc_sync_in_d1 <= adc_sync_m;
+      adc_sync_d1 <= adc_sync;
+      if (~adc_sync_d1 & adc_sync) begin
+        sync_adc_valid <= 1'b0;
+        adc_sync_armed <= 1'b1;
+      end else if (~adc_sync_in_d1 & adc_sync_m & adc_sync_armed) begin
+        sync_adc_valid <= 1'b1;
+        adc_sync_armed <= 1'b0;
+      end
+    end
+  end
+
+  sync_event #(
+    .NUM_OF_EVENTS (1),
+    .ASYNC_CLK (1))
+  i_tx_external_sync (
+    .in_clk (ref_clk),
+    .in_event (dac_sync_in),
+    .out_clk (tx1_clk),
+    .out_event (dac_sync_m));
+
+  always @(posedge tx1_clk) begin
+    if (tx1_rst == 1'b1) begin
+      dac_ext_sync_arm_d <= 1'b0;
+      dac_sync_in_d1 <= 1'b0;
+      external_dac_sync <= 1'b0;
+    end else begin
+      dac_sync_in_d1 <= dac_sync_m;
+      dac_ext_sync_arm_d <= dac_ext_sync_arm;
+      if (~dac_ext_sync_arm_d & dac_ext_sync_arm) begin
+        external_dac_sync <= ~external_dac_sync;
+      end else if (~dac_sync_in_d1 & dac_sync_m) begin
+        external_dac_sync <= 1'b0;
+      end
+    end
+  end
+
   axi_adrv9001_rx #(
     .ID (ID),
     .ENABLED (1),
@@ -321,11 +392,11 @@ module axi_ad9001_core #(
   i_rx1 (
     .adc_rst (rx1_rst),
     .adc_clk (rx1_clk),
-    .adc_valid_A (rx1_data_valid & tdd_rx1_valid),
+    .adc_valid_A (rx1_data_valid & tdd_rx1_valid & sync_adc_valid),
     .adc_data_i_A (rx1_data_i),
     .adc_data_q_A (rx1_data_q),
 
-    .adc_valid_B (rx2_data_valid & tdd_rx1_valid),
+    .adc_valid_B (rx2_data_valid & tdd_rx1_valid & sync_adc_valid),
     .adc_data_i_B (rx2_data_i),
     .adc_data_q_B (rx2_data_q),
 
@@ -357,6 +428,7 @@ module axi_ad9001_core #(
     .adc_data_q1 (adc_1_data_q1[15:0]),
 
     .adc_dovf (adc_1_dovf),
+    .adc_sync (adc_sync),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq),
@@ -385,7 +457,7 @@ module axi_ad9001_core #(
   i_rx2 (
     .adc_rst (rx2_rst_loc),
     .adc_clk (rx2_clk),
-    .adc_valid_A (rx2_data_valid & tdd_rx2_valid),
+    .adc_valid_A (rx2_data_valid & tdd_rx2_valid & sync_adc_valid),
     .adc_data_i_A (rx2_data_i),
     .adc_data_q_A (rx2_data_q),
 
@@ -438,6 +510,7 @@ module axi_ad9001_core #(
     .FPGA_FAMILY (FPGA_FAMILY),
     .SPEED_GRADE (SPEED_GRADE),
     .DEV_PACKAGE (DEV_PACKAGE),
+    .EXT_SYNC (EXT_SYNC),
     .DDS_DISABLE (DDS_DISABLE),
     .IQCORRECTION_DISABLE (1),
     .DAC_DDS_TYPE (DAC_DDS_TYPE),
@@ -459,8 +532,9 @@ module axi_ad9001_core #(
     .up_dac_r1_mode (up_tx1_r1_mode),
     .tdd_tx_valid (tdd_tx1_valid),
     .dac_clk_ratio (dac_clk_ratio),
-    .dac_sync_in (1'b0),
-    .dac_sync_out (),
+    .dac_sync_in (external_dac_sync | dac_sync_out_1),
+    .dac_sync_out (dac_sync_out_1),
+    .dac_ext_sync_arm (dac_ext_sync_arm),
     .dac_enable_i0 (dac_1_enable_i0),
     .dac_valid (dac_1_valid),
     .dac_data_i0 (dac_1_data_i0[15:0]),
@@ -494,6 +568,7 @@ module axi_ad9001_core #(
     .FPGA_FAMILY (FPGA_FAMILY),
     .SPEED_GRADE (SPEED_GRADE),
     .DEV_PACKAGE (DEV_PACKAGE),
+    .EXT_SYNC (EXT_SYNC),
     .DDS_DISABLE (DDS_DISABLE),
     .IQCORRECTION_DISABLE (1),
     .DAC_DDS_TYPE (DAC_DDS_TYPE),
@@ -512,7 +587,7 @@ module axi_ad9001_core #(
     .dac_sdr_ddr_n (tx2_sdr_ddr_n_loc),
     .dac_symb_op (tx2_symb_op_loc),
     .dac_symb_8_16b (tx2_symb_8_16b_loc),
-    .dac_sync_in (1'b0),
+    .dac_sync_in (external_dac_sync | dac_sync_out_1),
     .dac_sync_out (),
     .dac_valid (dac_2_valid),
     .dac_enable_i0 (dac_2_enable_i0),
