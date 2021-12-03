@@ -93,6 +93,8 @@ module axi_adrv9001_rx #(
 
   input                   adc_dovf,
 
+  output                  adc_sync,
+
   // processor interface
   input                   up_rstn,
   input                   up_clk,
@@ -362,7 +364,7 @@ end else begin : core_enabled
     .adc_clk_ratio (adc_clk_ratio),
     .adc_start_code (),
     .adc_sref_sync (),
-    .adc_sync (),
+    .adc_sync (adc_sync),
     .adc_num_lanes (adc_num_lanes),
     .adc_sdr_ddr_n (adc_sdr_ddr_n),
     .adc_symb_op (adc_symb_op),

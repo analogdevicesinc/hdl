@@ -47,6 +47,7 @@ module axi_adrv9001_tx #(
   parameter   FPGA_FAMILY = 0,
   parameter   SPEED_GRADE = 0,
   parameter   DEV_PACKAGE = 0,
+  parameter   EXT_SYNC = 0,
   parameter   DISABLE = 0,
   parameter   DDS_DISABLE = 0,
   parameter   IQCORRECTION_DISABLE = 0,
@@ -78,6 +79,7 @@ module axi_adrv9001_tx #(
   // master/slave
   input                   dac_sync_in,
   output                  dac_sync_out,
+  output                  dac_ext_sync_arm,
 
   // dma interface
   output                  dac_valid,
@@ -166,7 +168,7 @@ end else begin : core_enabled
 
   // master/slave
 
-  assign dac_data_sync_s = (ID == 0) ? dac_sync_out : dac_sync_in;
+  assign dac_data_sync_s = (EXT_SYNC == 0) ? dac_sync_out : dac_sync_in;
 
   always @(posedge dac_clk) begin
     dac_data_sync <= dac_data_sync_s;
@@ -377,6 +379,7 @@ end else begin : core_enabled
     .dac_symb_op (dac_symb_op),
     .dac_symb_8_16b (dac_symb_8_16b),
     .dac_sync (dac_sync_out),
+    .dac_ext_sync_arm (dac_ext_sync_arm),
     .dac_frame (),
     .dac_clksel (),
     .dac_par_type (),
