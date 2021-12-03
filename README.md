@@ -51,7 +51,14 @@ more information.
 
   * If you want to use the most stable code base, always use the [latest release branch](https://github.com/analogdevicesinc/hdl/releases).
 
-  * If you want to use the greatest and latest, check out the master branch.
+  * If you want to use the greatest and latest, check out the [master branch](https://github.com/analogdevicesinc/hdl/tree/master).
+
+## Use already built files
+
+You can download already built files and use them as they are. They are available on [this link]( https://swdownloads.analog.com/cse/hdl_builds/master/latest_boot_partition.tar.gz).  
+The files are built from [master branch](https://github.com/analogdevicesinc/hdl/tree/master) whenever there are new commits in HDL or Linux repositories.  
+
+> :warning: Pay attention when using already built files, since they are not tested in HW!
 
 ## License
 
