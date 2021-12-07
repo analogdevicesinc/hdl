@@ -1,14 +1,21 @@
+#
+# Parameter description:
+#   RX_JESD_M : Number of converters per link
+#   RX_JESD_L : Number of lanes per link
+#   RX_JESD_S : Number of samples per frame
+#   RX_JESD_NP : Number of bits per sample
+#
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
 # JESD204B interface configuration parameters
-set RX_NUM_OF_LANES 8
-set RX_NUM_OF_CONVERTERS 1
-set RX_SAMPLES_PER_FRAME 4
-set RX_SAMPLE_WIDTH 16
+set RX_NUM_OF_LANES  $ad_project_params(RX_JESD_L)
+set RX_NUM_OF_CONVERTERS  $ad_project_params(RX_JESD_M)
+set RX_SAMPLES_PER_FRAME  $ad_project_params(RX_JESD_S)
+set RX_SAMPLE_WIDTH  $ad_project_params(RX_JESD_NP)
 
 set adc_fifo_name axi_ad9625_fifo
-set adc_data_width 256
+set adc_data_width [expr 32*$RX_NUM_OF_LANES]
 set adc_dma_data_width 64
 
 # adc peripherals
@@ -18,10 +25,10 @@ adi_tpl_jesd204_rx_create axi_ad9625_core $RX_NUM_OF_LANES \
                                           $RX_SAMPLES_PER_FRAME \
                                           $RX_SAMPLE_WIDTH \
 
-adi_axi_jesd204_rx_create axi_ad9625_jesd 8
+adi_axi_jesd204_rx_create axi_ad9625_jesd $RX_NUM_OF_LANES
 
 ad_ip_instance axi_adxcvr axi_ad9625_xcvr
-ad_ip_parameter axi_ad9625_xcvr CONFIG.NUM_OF_LANES 8
+ad_ip_parameter axi_ad9625_xcvr CONFIG.NUM_OF_LANES $RX_NUM_OF_LANES
 ad_ip_parameter axi_ad9625_xcvr CONFIG.QPLL_ENABLE 0
 ad_ip_parameter axi_ad9625_xcvr CONFIG.TX_OR_RX_N 0
 ad_ip_parameter axi_ad9625_xcvr CONFIG.LPM_OR_DFE_N 1
@@ -47,7 +54,7 @@ ad_ip_instance util_adxcvr util_fmcadc2_xcvr
 ad_ip_parameter util_fmcadc2_xcvr CONFIG.QPLL_FBDIV 0x80 ;# N = 40
 ad_ip_parameter util_fmcadc2_xcvr CONFIG.CPLL_FBDIV 1
 ad_ip_parameter util_fmcadc2_xcvr CONFIG.TX_NUM_OF_LANES 0
-ad_ip_parameter util_fmcadc2_xcvr CONFIG.RX_NUM_OF_LANES 8
+ad_ip_parameter util_fmcadc2_xcvr CONFIG.RX_NUM_OF_LANES $RX_NUM_OF_LANES
 ad_ip_parameter util_fmcadc2_xcvr CONFIG.RX_OUT_DIV 1
 ad_ip_parameter util_fmcadc2_xcvr CONFIG.RX_CLK25_DIV 25
 ad_ip_parameter util_fmcadc2_xcvr CONFIG.RX_DFE_LPM_CFG 0x0904
@@ -108,3 +115,8 @@ ad_mem_hp2_interconnect $sys_cpu_clk axi_ad9625_dma/m_dest_axi
 ad_cpu_interrupt ps-12 mb-13 axi_ad9625_jesd/irq
 ad_cpu_interrupt ps-13 mb-12 axi_ad9625_dma/irq
 
+# Create dummy outputs for unused Rx lanes
+for {set i $RX_NUM_OF_LANES} {$i < 8} {incr i} {
+    create_bd_port -dir I rx_data_${i}_n
+    create_bd_port -dir I rx_data_${i}_p
+}
