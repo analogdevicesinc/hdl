@@ -1,0 +1,86 @@
+
+add_instance altera_fpga_mii2rmii_0 altera_fpga_mii2rmii
+set_instance_parameter_value altera_fpga_mii2rmii_0 {RX_FIXED_THROUGHPUT} {1}
+set_instance_parameter_value altera_fpga_mii2rmii_0 {MBPS} {1}
+set_instance_parameter_value altera_fpga_mii2rmii_0 {MAC_SPEED} {1}
+
+add_instance altera_fpga_mii2rmii_1 altera_fpga_mii2rmii
+set_instance_parameter_value altera_fpga_mii2rmii_1 {RX_FIXED_THROUGHPUT} {1}
+set_instance_parameter_value altera_fpga_mii2rmii_1 {MBPS} {1}
+set_instance_parameter_value altera_fpga_mii2rmii_1 {MAC_SPEED} {1}
+
+add_instance clk_bridge_0 altera_clock_bridge
+add_instance clk_bridge_1 altera_clock_bridge
+
+set_instance_parameter_value sys_hps {CLK_EMAC_PTP_SOURCE} {1}
+set_instance_parameter_value sys_hps {EMAC_PTP_REF_CLK} {100}
+set_instance_parameter_value sys_hps {EMAC1_CLK} {50}
+set_instance_parameter_value sys_hps {EMAC1_Mode} {RMII_with_MDIO}
+set_instance_parameter_value sys_hps {EMAC1_PTP} {0}
+set_instance_parameter_value sys_hps {EMAC1_PinMuxing} {FPGA}
+set_instance_parameter_value sys_hps {EMAC1_SWITCH_Enable} {0}
+set_instance_parameter_value sys_hps {EMAC2_CLK} {50}
+set_instance_parameter_value sys_hps {EMAC2_Mode} {RMII_with_MDIO}
+set_instance_parameter_value sys_hps {EMAC2_PTP} {0}
+set_instance_parameter_value sys_hps {EMAC2_PinMuxing} {FPGA}
+set_instance_parameter_value sys_hps {EMAC2_SWITCH_Enable} {0}
+set_instance_parameter_value sys_hps {FPGA_PERIPHERAL_OUTPUT_CLOCK_FREQ_EMAC1_GTX_CLK} {125}
+set_instance_parameter_value sys_hps {FPGA_PERIPHERAL_OUTPUT_CLOCK_FREQ_EMAC1_MD_CLK} {2.5}
+set_instance_parameter_value sys_hps {FPGA_PERIPHERAL_OUTPUT_CLOCK_FREQ_EMAC2_GTX_CLK} {125}
+set_instance_parameter_value sys_hps {FPGA_PERIPHERAL_OUTPUT_CLOCK_FREQ_EMAC2_MD_CLK} {2.5}
+set_instance_parameter_value sys_hps {FPGA_PERIPHERAL_OUTPUT_CLOCK_FREQ_I2C0_CLK} {100}
+set_instance_parameter_value sys_hps {FPGA_PERIPHERAL_OUTPUT_CLOCK_FREQ_I2C1_CLK} {100}
+set_instance_parameter_value sys_hps {FPGA_PERIPHERAL_OUTPUT_CLOCK_FREQ_I2CEMAC1_CLK} {100}
+set_instance_parameter_value sys_hps {FPGA_PERIPHERAL_OUTPUT_CLOCK_FREQ_I2CEMAC2_CLK} {100}
+set_instance_parameter_value sys_hps {FPGA_PERIPHERAL_OUTPUT_CLOCK_FREQ_QSPI_SCLK_OUT} {100}
+set_instance_parameter_value sys_hps {FPGA_PERIPHERAL_OUTPUT_CLOCK_FREQ_SDMMC_CCLK} {100}
+set_instance_parameter_value sys_hps {FPGA_PERIPHERAL_OUTPUT_CLOCK_FREQ_SPIM0_SCLK_OUT} {100}
+set_instance_parameter_value sys_hps {FPGA_PERIPHERAL_OUTPUT_CLOCK_FREQ_SPIM1_SCLK_OUT} {100}
+
+# exported interfaces
+
+add_interface sys_hps_emac1 conduit end
+set_interface_property sys_hps_emac1 EXPORT_OF sys_hps.emac1
+add_interface sys_hps_emac1_md_clk clock source
+set_interface_property sys_hps_emac1_md_clk EXPORT_OF sys_hps.emac1_md_clk
+add_interface sys_hps_emac2 conduit end
+set_interface_property sys_hps_emac2 EXPORT_OF sys_hps.emac2
+add_interface sys_hps_emac2_md_clk clock source
+set_interface_property sys_hps_emac2_md_clk EXPORT_OF sys_hps.emac2_md_clk
+
+add_interface altera_fpga_mii2rmii_0_rmii_interface conduit end
+set_interface_property altera_fpga_mii2rmii_0_rmii_interface EXPORT_OF altera_fpga_mii2rmii_0.rmii_interface
+add_interface altera_fpga_mii2rmii_1_rmii_interface conduit end
+set_interface_property altera_fpga_mii2rmii_1_rmii_interface EXPORT_OF altera_fpga_mii2rmii_1.rmii_interface
+add_interface altera_fpga_mii2rmii_0_mii_interface conduit end
+set_interface_property altera_fpga_mii2rmii_0_mii_interface EXPORT_OF altera_fpga_mii2rmii_0.mii_interface
+add_interface altera_fpga_mii2rmii_1_mii_interface conduit end
+set_interface_property altera_fpga_mii2rmii_1_mii_interface EXPORT_OF altera_fpga_mii2rmii_1.mii_interface
+add_interface altera_fpga_mii2rmii_0_MACSPEED conduit end
+set_interface_property altera_fpga_mii2rmii_0_MACSPEED EXPORT_OF altera_fpga_mii2rmii_0.MACSPEED
+add_interface altera_fpga_mii2rmii_1_MACSPEED conduit end
+set_interface_property altera_fpga_mii2rmii_1_MACSPEED EXPORT_OF altera_fpga_mii2rmii_1.MACSPEED
+
+add_interface clk_bridge_0_in_clk conduit end
+add_interface clk_bridge_1_in_clk conduit end
+
+set_interface_property clk_bridge_0_in_clk EXPORT_OF clk_bridge_0.in_clk
+
+set_interface_property clk_bridge_1_in_clk EXPORT_OF clk_bridge_1.in_clk
+
+# connections
+
+add_connection clk_bridge_0.out_clk altera_fpga_mii2rmii_0.clock_sink
+add_connection clk_bridge_1.out_clk altera_fpga_mii2rmii_1.clock_sink
+
+add_connection sys_clk.clk sys_hps.emac_ptp_ref_clock
+
+add_connection sys_hps.emac1_rx_reset altera_fpga_mii2rmii_0.reset_sink
+add_connection sys_hps.emac1_tx_reset altera_fpga_mii2rmii_0.reset_sink
+add_connection sys_hps.emac2_rx_reset altera_fpga_mii2rmii_1.reset_sink
+add_connection sys_hps.emac2_tx_reset altera_fpga_mii2rmii_1.reset_sink
+
+add_connection altera_fpga_mii2rmii_0.pcs_mac_rx_clock_connection sys_hps.emac1_rx_clk_in
+add_connection altera_fpga_mii2rmii_0.pcs_mac_tx_clock_connection sys_hps.emac1_tx_clk_in
+add_connection altera_fpga_mii2rmii_1.pcs_mac_rx_clock_connection sys_hps.emac2_rx_clk_in
+add_connection altera_fpga_mii2rmii_1.pcs_mac_tx_clock_connection sys_hps.emac2_tx_clk_in
