@@ -128,3 +128,12 @@ adi_if_ports  input   -1  up_dld
 adi_if_ports  input   -1  up_dwdata
 adi_if_ports  output  -1  up_drdata
 
+adi_if_define if_phy_ctrl_tx
+adi_if_ports  output   1  ddr_edgesel
+adi_if_ports  output  -1  num_lanes
+adi_if_ports  output   1  sdr_ddr_n
+
+adi_if_define if_phy_ctrl_rx
+adi_if_ports  input   1  ddr_edgesel
+adi_if_ports  input  -1  num_lanes
+adi_if_ports  input   1  sdr_ddr_n
