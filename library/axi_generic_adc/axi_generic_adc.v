@@ -48,6 +48,11 @@ module axi_generic_adc #(
   output [NUM_OF_CHANNELS-1:0] adc_enable,
   input adc_dovf,
 
+  // Configuration interface
+  output       adc_ddr_edgesel,
+  output [4:0] adc_num_lanes,
+  output       adc_sdr_ddr_n,
+
   input    s_axi_aclk,
   input    s_axi_aresetn,
   input    s_axi_awvalid,
@@ -139,7 +144,7 @@ up_adc_common #(.ID(ID)) i_up_adc_common (
   .adc_clk (adc_clk),
   .adc_rst (adc_rst),
   .adc_r1_mode (),
-  .adc_ddr_edgesel (),
+  .adc_ddr_edgesel (adc_ddr_edgesel),
   .adc_pin_mode (),
   .adc_status ('h00),
   .adc_sync_status (1'b1),
@@ -148,6 +153,8 @@ up_adc_common #(.ID(ID)) i_up_adc_common (
   .adc_start_code (),
   .adc_sref_sync (),
   .adc_sync (),
+  .adc_num_lanes (adc_num_lanes),
+  .adc_sdr_ddr_n (adc_sdr_ddr_n),
   .up_pps_rcounter (32'b0),
   .up_pps_status (1'b0),
   .up_pps_irq_mask (),
