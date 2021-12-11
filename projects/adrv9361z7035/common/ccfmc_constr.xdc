@@ -137,10 +137,10 @@ set_property  -dict {PACKAGE_PIN  AA2}  [get_ports gt_tx_p[0]]                  
 set_property  -dict {PACKAGE_PIN  AA1}  [get_ports gt_tx_n[0]]                                        ; ## U1,AA1,MGTXTX0_112_JX3_N,JX3,10,FMC_GBT_TX_N,P2,C3
 set_property  -dict {PACKAGE_PIN  AB4}  [get_ports gt_rx_p[0]]                                        ; ## U1,AB4,MGTXRX0_112_JX1_P,JX1,88,FMC_GBT_RX_P,P2,C6
 set_property  -dict {PACKAGE_PIN  AB3}  [get_ports gt_rx_n[0]]                                        ; ## U1,AB3,MGTXRX0_112_JX1_N,JX1,90,FMC_GBT_RX_N,P2,C7
-set_property  -dict {PACKAGE_PIN  AF4}  [get_ports gt_tx_p[1]]                                        ; ## U1,Y4,MGTXRX1_112_JX1_P,JX1,91,SFP_GBT_RX_P,P1,13
-set_property  -dict {PACKAGE_PIN  AF3}  [get_ports gt_tx_n[1]]                                        ; ## U1,Y3,MGTXRX1_112_JX1_N,JX1,93,SFP_GBT_RX_N,P1,12
-set_property  -dict {PACKAGE_PIN  AE6}  [get_ports gt_rx_p[1]]                                        ; ## U1,W2,MGTXTX1_112_JX3_P,JX3,13,SFP_GBT_TX_P,P1,18
-set_property  -dict {PACKAGE_PIN  AE5}  [get_ports gt_rx_n[1]]                                        ; ## U1,W1,MGTXTX1_112_JX3_N,JX3,15,SFP_GBT_TX_N,P1,19
+set_property  -dict {PACKAGE_PIN  W2}   [get_ports gt_tx_p[1]]                                        ; ## U1,Y4,MGTXRX1_112_JX1_P,JX1,91,SFP_GBT_RX_P,P1,13
+set_property  -dict {PACKAGE_PIN  W1}   [get_ports gt_tx_n[1]]                                        ; ## U1,Y3,MGTXRX1_112_JX1_N,JX1,93,SFP_GBT_RX_N,P1,12
+set_property  -dict {PACKAGE_PIN  Y4}   [get_ports gt_rx_p[1]]                                        ; ## U1,W2,MGTXTX1_112_JX3_P,JX3,13,SFP_GBT_TX_P,P1,18
+set_property  -dict {PACKAGE_PIN  Y3}   [get_ports gt_rx_n[1]]                                        ; ## U1,W1,MGTXTX1_112_JX3_N,JX3,15,SFP_GBT_TX_N,P1,19
 
 ## clocks
 
