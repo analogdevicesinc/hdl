@@ -151,6 +151,7 @@ ad_mem_hp0_interconnect sys_cpu_clk axi_hdmi_dma/m_src_axi
 
 ad_ip_instance axi_xcvrlb axi_pz_xcvrlb
 ad_ip_parameter axi_pz_xcvrlb CONFIG.NUM_OF_LANES 2
+ad_ip_parameter axi_pz_xcvrlb CONFIG.CPLL_FBDIV 2
 
 create_bd_port -dir I gt_ref_clk_0
 create_bd_port -dir I -from 1 -to 0 gt_rx_p
@@ -167,29 +168,78 @@ ad_connect  axi_pz_xcvrlb/tx_n gt_tx_n
 
 # un-used io (regular)
 
-ad_ip_instance axi_gpreg axi_gpreg
-ad_ip_parameter axi_gpreg CONFIG.NUM_OF_CLK_MONS 3
-ad_ip_parameter axi_gpreg CONFIG.NUM_OF_IO 2
-ad_ip_parameter axi_gpreg CONFIG.BUF_ENABLE_0 1
-ad_ip_parameter axi_gpreg CONFIG.BUF_ENABLE_1 1
-ad_ip_parameter axi_gpreg CONFIG.BUF_ENABLE_2 1
+create_bd_port -dir I -from 31 -to 0 gpio_lb_00_i
+create_bd_port -dir O -from 31 -to 0 gpio_lb_00_o
+create_bd_port -dir O -from 31 -to 0 gpio_lb_00_t
+create_bd_port -dir I -from 31 -to 0 gpio_lb_01_i
+create_bd_port -dir O -from 31 -to 0 gpio_lb_01_o
+create_bd_port -dir O -from 31 -to 0 gpio_lb_01_t
 
-create_bd_port -dir I -from 31 -to 0 gp_in_0
-create_bd_port -dir I -from 31 -to 0 gp_in_1
-create_bd_port -dir O -from 31 -to 0 gp_out_0
-create_bd_port -dir O -from 31 -to 0 gp_out_1
+create_bd_port -dir I -from 3 -to 0 gpio_lb_10_i
+create_bd_port -dir O -from 3 -to 0 gpio_lb_10_o
+create_bd_port -dir O -from 3 -to 0 gpio_lb_10_t
+create_bd_port -dir I -from 5 -to 0 gpio_lb_11_i
+create_bd_port -dir O -from 5 -to 0 gpio_lb_11_o
+create_bd_port -dir O -from 5 -to 0 gpio_lb_11_t
+
+create_bd_port -dir I -from 9 -to 0 gpio_lb_20_i
+create_bd_port -dir O -from 9 -to 0 gpio_lb_20_o
+create_bd_port -dir O -from 9 -to 0 gpio_lb_20_t
+create_bd_port -dir I -from 21 -to 0 gpio_lb_21_i
+create_bd_port -dir O -from 21 -to 0 gpio_lb_21_o
+create_bd_port -dir O -from 21 -to 0 gpio_lb_21_t
+
+ad_ip_instance axi_gpio gpio_lb_0
+ad_ip_parameter gpio_lb_0 CONFIG.C_IS_DUAL 1
+
+ad_ip_instance axi_gpio gpio_lb_1
+ad_ip_parameter gpio_lb_1 CONFIG.C_IS_DUAL 1
+ad_ip_parameter gpio_lb_1 CONFIG.C_GPIO_WIDTH 4
+ad_ip_parameter gpio_lb_1 CONFIG.C_GPIO2_WIDTH 6
+
+ad_ip_instance axi_gpio gpio_lb_2
+ad_ip_parameter gpio_lb_2 CONFIG.C_IS_DUAL 1
+ad_ip_parameter gpio_lb_2 CONFIG.C_GPIO_WIDTH 10
+ad_ip_parameter gpio_lb_2 CONFIG.C_GPIO2_WIDTH 22
+
+#
+ad_connect  gpio_lb_00_i gpio_lb_0/gpio_io_i
+ad_connect  gpio_lb_00_o gpio_lb_0/gpio_io_o
+ad_connect  gpio_lb_00_t gpio_lb_0/gpio_io_t
+ad_connect  gpio_lb_01_i gpio_lb_0/gpio2_io_i
+ad_connect  gpio_lb_01_o gpio_lb_0/gpio2_io_o
+ad_connect  gpio_lb_01_t gpio_lb_0/gpio2_io_t
+
+ad_connect  gpio_lb_10_i gpio_lb_1/gpio_io_i
+ad_connect  gpio_lb_10_o gpio_lb_1/gpio_io_o
+ad_connect  gpio_lb_10_t gpio_lb_1/gpio_io_t
+ad_connect  gpio_lb_11_i gpio_lb_1/gpio2_io_i
+ad_connect  gpio_lb_11_o gpio_lb_1/gpio2_io_o
+ad_connect  gpio_lb_11_t gpio_lb_1/gpio2_io_t
+
+ad_connect  gpio_lb_20_i gpio_lb_2/gpio_io_i
+ad_connect  gpio_lb_20_o gpio_lb_2/gpio_io_o
+ad_connect  gpio_lb_20_t gpio_lb_2/gpio_io_t
+ad_connect  gpio_lb_21_i gpio_lb_2/gpio2_io_i
+ad_connect  gpio_lb_21_o gpio_lb_2/gpio2_io_o
+ad_connect  gpio_lb_21_t gpio_lb_2/gpio2_io_t
+
 create_bd_port -dir I clk_0
 create_bd_port -dir I clk_1
 create_bd_port -dir I gt_ref_clk_1
 
-ad_connect  clk_0 axi_gpreg/d_clk_0
-ad_connect  clk_1 axi_gpreg/d_clk_1
-ad_connect  gt_ref_clk_1 axi_gpreg/d_clk_2
-ad_connect  gp_in_0 axi_gpreg/up_gp_in_0
-ad_connect  gp_in_1 axi_gpreg/up_gp_in_1
-ad_connect  gp_out_0 axi_gpreg/up_gp_out_0
-ad_connect  gp_out_1 axi_gpreg/up_gp_out_1
-ad_cpu_interconnect 0x41200000 axi_gpreg
+ad_ip_instance axi_clock_monitor clk_monitor_0
+ad_ip_parameter clk_monitor_0 CONFIG.NUM_OF_CLOCKS 4
+
+ad_connect  clk_0 clk_monitor_0/clock_0
+ad_connect  clk_1 clk_monitor_0/clock_1
+ad_connect  gt_ref_clk_0 clk_monitor_0/clock_2
+ad_connect  gt_ref_clk_1 clk_monitor_0/clock_3
+
+ad_cpu_interconnect 0x41300000 gpio_lb_0
+ad_cpu_interconnect 0x41310000 gpio_lb_1
+ad_cpu_interconnect 0x41320000 gpio_lb_2
+ad_cpu_interconnect 0x41330000 clk_monitor_0
 
 ## temporary (remove ila indirectly)
 

@@ -98,8 +98,13 @@ module system_top (
   input           clk_0_n,
   input           clk_1_p,
   input           clk_1_n,
-  output  [53:0]  gp_out,
-  input   [53:0]  gp_in,
+
+  inout   [31:0]  gpio_lb_00_tri_io,
+  inout   [31:0]  gpio_lb_01_tri_io,
+  inout   [3:0]  gpio_lb_10_tri_io,
+  inout   [5:0]  gpio_lb_11_tri_io,
+  inout   [9:0]  gpio_lb_20_tri_io,
+  inout   [21:0]  gpio_lb_21_tri_io,
 
   input           gt_ref_clk_0_p,
   input           gt_ref_clk_0_n,
@@ -176,6 +181,27 @@ module system_top (
   wire            tdd_sync_o;
   wire            tdd_sync_t;
 
+  wire    [31:0]  gpio_lb_00_i;
+  wire    [31:0]  gpio_lb_00_o;
+  wire    [31:0]  gpio_lb_00_t;
+  wire    [31:0]  gpio_lb_01_i;
+  wire    [31:0]  gpio_lb_01_o;
+  wire    [31:0]  gpio_lb_01_t;
+
+  wire    [ 3:0]  gpio_lb_10_i;
+  wire    [ 3:0]  gpio_lb_10_o;
+  wire    [ 3:0]  gpio_lb_10_t;
+  wire    [ 5:0]  gpio_lb_11_i;
+  wire    [ 5:0]  gpio_lb_11_o;
+  wire    [ 5:0]  gpio_lb_11_t;
+
+  wire    [9:0]  gpio_lb_20_i;
+  wire    [9:0]  gpio_lb_20_o;
+  wire    [9:0]  gpio_lb_20_t;
+  wire    [21:0]  gpio_lb_21_i;
+  wire    [21:0]  gpio_lb_21_o;
+  wire    [21:0]  gpio_lb_21_t;
+
   // assignments
 
   assign fan_pwm = 1'b1;
@@ -187,12 +213,6 @@ module system_top (
   assign ad9517_clk = spi_clk_s;
   assign ad9517_mosi = spi_mosi_s;
   assign spi_miso_s = (~spi_csn_s[0] & spi_miso) | (~spi_csn_s[1] & ad9517_miso);
-
-  // loopback signals
-
-  assign gp_out[53:0] = gp_out_s[53:0];
-  assign gp_in_s[63:54] = gp_out_s[63:54];
-  assign gp_in_s[53:0] = gp_in[53:0];
 
   // instantiations
 
@@ -303,6 +323,42 @@ module system_top (
     .rf_peak_det_n (gpio_rf3),
     .rf_peak_rst (gpio_rf1));
 
+  ad_iobuf #(.DATA_WIDTH(32)) gpio_lb_00_iobuf (
+    .dio_t (gpio_lb_00_t),
+    .dio_i (gpio_lb_00_o),
+    .dio_o (gpio_lb_00_i),
+    .dio_p (gpio_lb_00_tri_io));
+
+  ad_iobuf #(.DATA_WIDTH(32)) gpio_lb_01_iobuf (
+    .dio_t (gpio_lb_01_t),
+    .dio_i (gpio_lb_01_o),
+    .dio_o (gpio_lb_01_i),
+    .dio_p (gpio_lb_01_tri_io));
+
+  ad_iobuf #(.DATA_WIDTH(4)) gpio_lb_10_iobuf (
+    .dio_t (gpio_lb_10_t),
+    .dio_i (gpio_lb_10_o),
+    .dio_o (gpio_lb_10_i),
+    .dio_p (gpio_lb_10_tri_io));
+
+  ad_iobuf #(.DATA_WIDTH(6)) gpio_lb_11_iobuf (
+    .dio_t (gpio_lb_11_t),
+    .dio_i (gpio_lb_11_o),
+    .dio_o (gpio_lb_11_i),
+    .dio_p (gpio_lb_11_tri_io));
+
+  ad_iobuf #(.DATA_WIDTH(10)) gpio_lb_20_iobuf (
+    .dio_t (gpio_lb_20_t),
+    .dio_i (gpio_lb_20_o),
+    .dio_o (gpio_lb_20_i),
+    .dio_p (gpio_lb_20_tri_io));
+
+  ad_iobuf #(.DATA_WIDTH(22)) gpio_lb_21_iobuf (
+    .dio_t (gpio_lb_21_t),
+    .dio_i (gpio_lb_21_o),
+    .dio_o (gpio_lb_21_i),
+    .dio_p (gpio_lb_21_tri_io));
+
   // instantiations
 
   system_wrapper i_system_wrapper (
@@ -339,10 +395,24 @@ module system_top (
     .fixed_io_ps_clk (fixed_io_ps_clk),
     .fixed_io_ps_porb (fixed_io_ps_porb),
     .fixed_io_ps_srstb (fixed_io_ps_srstb),
-    .gp_in_0 (gp_in_s[31:0]),
-    .gp_in_1 (gp_in_s[63:32]),
-    .gp_out_0 (gp_out_s[31:0]),
-    .gp_out_1 (gp_out_s[63:32]),
+    .gpio_lb_00_i(gpio_lb_00_i),
+    .gpio_lb_00_o(gpio_lb_00_o),
+    .gpio_lb_00_t(gpio_lb_00_t),
+    .gpio_lb_01_i(gpio_lb_01_i),
+    .gpio_lb_01_o(gpio_lb_01_o),
+    .gpio_lb_01_t(gpio_lb_01_t),
+    .gpio_lb_10_i(gpio_lb_10_i),
+    .gpio_lb_10_o(gpio_lb_10_o),
+    .gpio_lb_10_t(gpio_lb_10_t),
+    .gpio_lb_11_i(gpio_lb_11_i),
+    .gpio_lb_11_o(gpio_lb_11_o),
+    .gpio_lb_11_t(gpio_lb_11_t),
+    .gpio_lb_20_i(gpio_lb_20_i),
+    .gpio_lb_20_o(gpio_lb_20_o),
+    .gpio_lb_20_t(gpio_lb_20_t),
+    .gpio_lb_21_i(gpio_lb_21_i),
+    .gpio_lb_21_o(gpio_lb_21_o),
+    .gpio_lb_21_t(gpio_lb_21_t),
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .gpio_t (gpio_t),
