@@ -288,6 +288,19 @@ module system_top (
     .sys_spi_MOSI (spi_mosi),
     .sys_spi_SCLK (spi_clk),
     .sys_spi_SS_n (spi_csn),
+
+    //added 
+
+    .axi_hdmi_tx_0_hdmi_if_h_clk (vga_clk),
+    .axi_hdmi_tx_0_hdmi_if_h24_hsync (vga_hsync),
+    .axi_hdmi_tx_0_hdmi_if_h24_vsync (vga_vsync),
+    // .axi_hdmi_tx_0_hdmi_if_h24_data_e (hdmi_data_e),
+    .axi_hdmi_tx_0_hdmi_if_h24_data ({vga_red, vga_grn, vga_blu}));
+    
+    
+
+    
+    /*
     .vga_out_clk_clk (vga_clk),
     .vga_out_data_vid_clk (vga_clk),
     .vga_out_data_vid_data ({vga_red, vga_grn, vga_blu}),
@@ -298,6 +311,8 @@ module system_top (
     .vga_out_data_vid_f (),
     .vga_out_data_vid_h (),
     .vga_out_data_vid_v ());
+    */
+
 
 endmodule
 
