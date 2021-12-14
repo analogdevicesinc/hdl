@@ -40,7 +40,9 @@ ipx::infer_bus_interface adc_clk_in_p xilinx.com:signal:clock_rtl:1.0 [ipx::curr
 ipx::infer_bus_interface adc_clk_in_n xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 ipx::infer_bus_interface delay_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 ipx::infer_bus_interface adc_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
-ipx::infer_bus_interface adc_rst xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+set reset_intf [ipx::infer_bus_interface adc_rst xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]]
+set reset_polarity [ipx::add_bus_parameter "POLARITY" $reset_intf]
+set_property value "ACTIVE_HIGH" $reset_polarity
 
 adi_add_auto_fpga_spec_params
 ipx::create_xgui_files [ipx::current_core]
