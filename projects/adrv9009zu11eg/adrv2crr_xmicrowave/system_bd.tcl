@@ -103,7 +103,7 @@ ad_cpu_interconnect 0x46000000 axi_xmicrowave_gpio
 # interrupts
 
 ad_cpu_interrupt "ps-1" "mb-1" axi_iic_1/iic2intc_irpt
-ad_cpu_interrupt "ps-2" "mb-2" axi_iic_1/iic2intc_irpt
+ad_cpu_interrupt "ps-2" "mb-2" axi_iic_2/iic2intc_irpt
 ad_cpu_interrupt "ps-3" "mb-3" axi_spi1/ip2intc_irpt
 ad_cpu_interrupt "ps-4" "mb-4" axi_spi2/ip2intc_irpt
 ad_cpu_interrupt "ps-5" "mb-5" axi_xmicrowave_gpio/ip2intc_irpt
