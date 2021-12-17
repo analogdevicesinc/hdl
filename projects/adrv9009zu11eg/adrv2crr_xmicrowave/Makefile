@@ -6,7 +6,6 @@
 
 PROJECT_NAME := adrv9009zu11eg_xmicrowave
 
-M_DEPS += system_constr.xdc
 M_DEPS += ../common/adrv9009zu11eg_spi.v
 M_DEPS += ../common/adrv9009zu11eg_constr.xdc
 M_DEPS += ../common/adrv9009zu11eg_bd.tcl
@@ -27,8 +26,6 @@ LIB_DEPS += jesd204/axi_jesd204_tx
 LIB_DEPS += jesd204/jesd204_rx
 LIB_DEPS += jesd204/jesd204_tx
 LIB_DEPS += sysid_rom
-LIB_DEPS += data_offload
-LIB_DEPS += util_fifo2axi_bridge
 LIB_DEPS += util_pack/util_cpack2
 LIB_DEPS += util_pack/util_upack2
 LIB_DEPS += xilinx/axi_adxcvr
