@@ -66,15 +66,22 @@ module ad_ip_jesd204_tpl_adc_core #(
   localparam CDW_FMT = DMA_BITS_PER_SAMPLE * DATA_PATH_WIDTH;
 
   wire [ADC_DATA_WIDTH-1:0] raw_data_s;
+  wire link_valid_tmp;
 
   reg adc_sync_armed = 1'b0;
   reg adc_sync_in_d1 = 1'b0;
   reg adc_sync_d1 = 1'b0;
+  reg link_valid_d = 1'b0;
 
   assign link_ready = 1'b1;
-  assign adc_valid = {NUM_CHANNELS{link_valid}};
+  assign link_valid_tmp = EN_FRAME_ALIGN ? link_valid_d : link_valid;
+  assign adc_valid = {NUM_CHANNELS{link_valid_tmp}};
   assign adc_sync_status = adc_sync_armed;
   assign adc_rst_sync = adc_sync_armed;
+
+  always @(posedge clk) begin
+    link_valid_d <= link_valid;
+  end
 
   always @(posedge clk) begin
     adc_sync_in_d1 <= adc_sync_in;
