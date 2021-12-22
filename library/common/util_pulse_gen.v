@@ -58,8 +58,6 @@ module util_pulse_gen #(
   reg     [31:0]               pulse_period_d = 32'b0;
   reg     [31:0]               pulse_width_d = 32'b0;
 
-  wire                         end_of_period_s;
-
   // flop the desired period
 
   always @(posedge clk) begin
@@ -75,7 +73,7 @@ module util_pulse_gen #(
         pulse_width_read <= pulse_width;
       end
       // update the current period/width at the end of the period
-      if (end_of_period_s) begin
+      if (pulse_period_cnt == 32'h1) begin
         pulse_period_d <= pulse_period_read;
         pulse_width_d <= pulse_width_read;
       end
@@ -85,18 +83,17 @@ module util_pulse_gen #(
   // a free running counter
 
   always @(posedge clk) begin
-    if (pulse_period_cnt == 1'b0) begin
+    if (pulse_period_cnt == 'b0) begin
       pulse_period_cnt <= pulse_period_d;
     end else begin
-      pulse_period_cnt <= pulse_period_cnt - 1'b1;
+      pulse_period_cnt <= pulse_period_cnt - 32'b1;
     end
   end
-  assign end_of_period_s = (pulse_period_cnt == 32'b0) ? 1'b1 : 1'b0;
 
   // generate pulse with a specified width
 
   always @ (posedge clk) begin
-    if ((end_of_period_s == 1'b1) || (rstn == 1'b0)) begin
+    if ((pulse_period_cnt == 'h0) || (rstn == 1'b0)) begin
       pulse <= 1'b0;
     end else if (pulse_period_cnt == pulse_width_d) begin
       pulse <= 1'b1;
