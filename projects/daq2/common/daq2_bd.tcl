@@ -1,24 +1,33 @@
+#
+# Parameter description:
+#   [RX/TX]_JESD_M : Number of converters per link
+#   [RX/TX]_JESD_L : Number of lanes per link
+#   [RX/TX]_JESD_S : Number of samples per frame
+#
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
 
 # JESD204B interface configurations
 
-set TX_NUM_OF_LANES 4           ; # L
-set TX_NUM_OF_CONVERTERS 2      ; # M
-set TX_SAMPLES_PER_FRAME 1      ; # S
-set TX_SAMPLE_WIDTH 16          ; # N/NP
+set TX_NUM_OF_LANES $ad_project_params(TX_JESD_L)           ; # L
+set TX_NUM_OF_CONVERTERS $ad_project_params(TX_JESD_M)      ; # M
+set TX_SAMPLES_PER_FRAME $ad_project_params(TX_JESD_S)      ; # S
+set TX_SAMPLE_WIDTH 16                                      ; # N/NP
 set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 32 / ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)]
 
 set dac_data_width [expr $TX_SAMPLE_WIDTH * $TX_NUM_OF_CONVERTERS * $TX_SAMPLES_PER_CHANNEL]
 
-set RX_NUM_OF_LANES 4           ; # L
-set RX_NUM_OF_CONVERTERS 2      ; # M
-set RX_SAMPLES_PER_FRAME 1      ; # S
-set RX_SAMPLE_WIDTH 16          ; # N/NP
+set RX_NUM_OF_LANES $ad_project_params(RX_JESD_L)           ; # L
+set RX_NUM_OF_CONVERTERS $ad_project_params(RX_JESD_M)      ; # M
+set RX_SAMPLES_PER_FRAME $ad_project_params(RX_JESD_S)      ; # S
+set RX_SAMPLE_WIDTH 16                                      ; # N/NP
 set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 32 / ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)]
 
 set adc_data_width [expr $RX_SAMPLE_WIDTH * $RX_NUM_OF_CONVERTERS * $RX_SAMPLES_PER_CHANNEL]
+
+set MAX_TX_NUM_OF_LANES 4
+set MAX_RX_NUM_OF_LANES 4
 
 # dac peripherals
 
@@ -36,9 +45,9 @@ adi_tpl_jesd204_tx_create axi_ad9144_tpl $TX_NUM_OF_LANES \
                                          $TX_SAMPLE_WIDTH \
 
 ad_ip_instance util_upack2 axi_ad9144_upack [list \
-  NUM_OF_CHANNELS 2 \
-  SAMPLES_PER_CHANNEL 4 \
-  SAMPLE_DATA_WIDTH 16 \
+  NUM_OF_CHANNELS $TX_NUM_OF_CONVERTERS \
+  SAMPLES_PER_CHANNEL $TX_SAMPLES_PER_CHANNEL \
+  SAMPLE_DATA_WIDTH $TX_SAMPLE_WIDTH \
 ]
 
 ad_ip_instance axi_dmac axi_ad9144_dma [list \
@@ -118,8 +127,8 @@ ad_connect axi_ad9680_offload/sync_ext GND
 # shared transceiver core
 
 ad_ip_instance util_adxcvr util_daq2_xcvr [list \
-  RX_NUM_OF_LANES $RX_NUM_OF_LANES \
-  TX_NUM_OF_LANES $TX_NUM_OF_LANES \
+  RX_NUM_OF_LANES $MAX_RX_NUM_OF_LANES \
+  TX_NUM_OF_LANES $MAX_TX_NUM_OF_LANES \
   QPLL_REFCLK_DIV 1 \
   QPLL_FBDIV_RATIO 1 \
   QPLL_FBDIV 0x30 \
@@ -144,7 +153,7 @@ ad_xcvrpll  axi_ad9680_xcvr/up_pll_rst util_daq2_xcvr/up_cpll_rst_*
 
 # connections (dac)
 
-ad_xcvrcon  util_daq2_xcvr axi_ad9144_xcvr axi_ad9144_jesd {0 2 3 1}
+ad_xcvrcon  util_daq2_xcvr axi_ad9144_xcvr axi_ad9144_jesd {0 2 3 1} {} {} $MAX_TX_NUM_OF_LANES
 ad_connect  util_daq2_xcvr/tx_out_clk_0 axi_ad9144_tpl/link_clk
 ad_connect  axi_ad9144_jesd/tx_data axi_ad9144_tpl/link
 ad_connect  util_daq2_xcvr/tx_out_clk_0 axi_ad9144_upack/clk
@@ -172,7 +181,7 @@ ad_connect axi_ad9144_offload/s_axis axi_ad9144_dma/m_axis
 
 # connections (adc)
 
-ad_xcvrcon  util_daq2_xcvr axi_ad9680_xcvr axi_ad9680_jesd
+ad_xcvrcon  util_daq2_xcvr axi_ad9680_xcvr axi_ad9680_jesd {} {} {} $MAX_RX_NUM_OF_LANES
 ad_connect  util_daq2_xcvr/rx_out_clk_0 axi_ad9680_tpl/link_clk
 ad_connect  axi_ad9680_jesd/rx_sof axi_ad9680_tpl/link_sof
 ad_connect  axi_ad9680_jesd/rx_data_tdata axi_ad9680_tpl/link_data
@@ -234,4 +243,3 @@ ad_cpu_interrupt ps-10 mb-15 axi_ad9144_jesd/irq
 ad_cpu_interrupt ps-11 mb-14 axi_ad9680_jesd/irq
 ad_cpu_interrupt ps-12 mb-13 axi_ad9144_dma/irq
 ad_cpu_interrupt ps-13 mb-12 axi_ad9680_dma/irq
-
