@@ -372,7 +372,10 @@ module axi_hdmi_tx_core #(
     if ((hdmi_rst == 1'b1) || (hdmi_fs_ret == 1'b1)) begin
       hdmi_tpm_data <= 'd0;
     end else if (hdmi_de_2d == 1'b1) begin
-      hdmi_tpm_data <= hdmi_tpm_data + 1'b1;
+      hdmi_tpm_data[7:0] <= hdmi_tpm_data[7:0] + 1'b1;
+      hdmi_tpm_data[15:8] <= hdmi_tpm_data[15:8] + 3'b111;
+      hdmi_tpm_data[23:16] <=~hdmi_tpm_data[7:0];
+    
     end
     hdmi_tpm_oos <= hdmi_tpm_mismatch_s;
   end

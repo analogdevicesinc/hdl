@@ -18,7 +18,7 @@ set_interface_property sys_rst EXPORT_OF sys_clk.clk_in_reset
 add_instance sys_hps altera_hps
 set_instance_parameter_value sys_hps {MPU_EVENTS_Enable} {0}
 set_instance_parameter_value sys_hps {F2SDRAM_Type} {AXI-3 AXI-3 AXI-3}
-set_instance_parameter_value sys_hps {F2SDRAM_Width} {64 128 64}
+set_instance_parameter_value sys_hps {F2SDRAM_Width} {64 64 64}
 set_instance_parameter_value sys_hps {F2SINTERRUPT_Enable} {1}
 set_instance_parameter_value sys_hps {EMAC0_PinMuxing} {Unused}
 set_instance_parameter_value sys_hps {EMAC0_Mode} {N/A}
@@ -166,30 +166,6 @@ set_instance_parameter_value axi_hdmi_tx_0 {ID} {0}
 add_interface axi_hdmi_tx_0_hdmi_if conduit end
 set_interface_property axi_hdmi_tx_0_hdmi_if EXPORT_OF axi_hdmi_tx_0.hdmi_if
 
-
-#add_instance pixel_clk_pll altera_pll
-#set_instance_parameter_value pixel_clk_pll {gui_feedback_clock} {Global Clock}
-#set_instance_parameter_value pixel_clk_pll {gui_operation_mode} {direct}
-#set_instance_parameter_value pixel_clk_pll {gui_number_of_clocks} {2}
-#set_instance_parameter_value pixel_clk_pll {gui_output_clock_frequency0} {148.5}
-#set_instance_parameter_value pixel_clk_pll {gui_output_clock_frequency1} {200}
-#set_instance_parameter_value pixel_clk_pll {gui_phase_shift0} {0}
-#set_instance_parameter_value pixel_clk_pll {gui_phase_shift1} {0}
-#set_instance_parameter_value pixel_clk_pll {gui_phase_shift_deg0} {0.0}
-#set_instance_parameter_value pixel_clk_pll {gui_phase_shift_deg1} {0.0}
-#set_instance_parameter_value pixel_clk_pll {gui_phout_division} {1}
-#set_instance_parameter_value pixel_clk_pll {gui_pll_auto_reset} {Off}
-#set_instance_parameter_value pixel_clk_pll {gui_pll_bandwidth_preset} {Auto}
-#set_instance_parameter_value pixel_clk_pll {gui_pll_mode} {Fractional-N PLL}
-#set_instance_parameter_value pixel_clk_pll {gui_ps_units0} {ps}
-#set_instance_parameter_value pixel_clk_pll {gui_refclk_switch} {0}
-#set_instance_parameter_value pixel_clk_pll {gui_reference_clock_frequency} {50.0}
-#set_instance_parameter_value pixel_clk_pll {gui_switchover_delay} {0}
-#set_instance_parameter_value pixel_clk_pll {gui_en_reconf} {1}
-
-
-
-
 # display (vga-pll)
 
 add_instance pixel_clk_pll altera_pll
@@ -197,7 +173,7 @@ set_instance_parameter_value pixel_clk_pll {gui_device_speed_grade} {2}
 set_instance_parameter_value pixel_clk_pll {gui_reference_clock_frequency} {50.0}
 set_instance_parameter_value pixel_clk_pll {gui_use_locked} {0}
 set_instance_parameter_value pixel_clk_pll {gui_number_of_clocks} {2}
-set_instance_parameter_value pixel_clk_pll {gui_output_clock_frequency0} {85.5}
+set_instance_parameter_value pixel_clk_pll {gui_output_clock_frequency0} {85.86}
 set_instance_parameter_value pixel_clk_pll {gui_output_clock_frequency1} {100.0}
 set_instance_parameter_value pixel_clk_pll {gui_en_reconf} {1}
 
