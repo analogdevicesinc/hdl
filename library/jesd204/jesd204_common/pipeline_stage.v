@@ -59,7 +59,7 @@ generate if (REGISTERED == 0) begin
 
 end else begin
 
-  (* shreg_extract = "no" *)  reg [REGISTERED*WIDTH-1:0] in_dly;
+  (* shreg_extract = "no" *)  reg [REGISTERED*WIDTH-1:0] in_dly = {REGISTERED*WIDTH{1'b0}};
 
   always @(posedge clk) in_dly <= {in_dly,in};
 
