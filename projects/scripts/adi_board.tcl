@@ -295,9 +295,13 @@ proc ad_disconnect {p_name_1 p_name_2} {
 #  \param[device_clk] - define a custom device clock, should be a net name
 #  connected to the clock source. If not used, the link_clk is used as
 #  device clock
+#  \param[num_of_max_lanes] - maximum number of used lanes at physical layer per link,
+#  this parameter is used only when the project is parameterized in order to connect the unused lanes
+#  to the util_adxcvr block. If not used, the number of connected lanes will be defined
+#  by the axi_adxcvr.
 #
 
-proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}}} {
+proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}} {num_of_max_lanes -1}} {
 
   global xcvr_index
   global xcvr_tx_index
@@ -337,6 +341,11 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}
   set data_dir "I"
   set ctrl_dir "O"
   set index $xcvr_rx_index
+  set max_no_of_lanes $no_of_lanes
+
+  if {$num_of_max_lanes != -1} {
+    set max_no_of_lanes $num_of_max_lanes
+  }
 
   if {$tx_or_rx_n == 1} {
 
@@ -444,6 +453,27 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}
     ad_connect  ${u_xcvr}/${txrx}_${m}_n ${m_data}_${m}_n
   }
 
+  for {set n $no_of_lanes} {$n < $max_no_of_lanes} {incr n} {
+
+    set m [expr ($n + $index)]
+
+    if {$lane_map != {}} {
+      set phys_lane [lindex $lane_map $n]
+    } else {
+      set phys_lane $m
+    }
+
+    create_bd_port -dir ${data_dir} ${m_data}_${m}_p
+    create_bd_port -dir ${data_dir} ${m_data}_${m}_n
+    ad_connect  ${u_xcvr}/${txrx}_${m}_p ${m_data}_${m}_p
+    ad_connect  ${u_xcvr}/${txrx}_${m}_n ${m_data}_${m}_n
+    ad_connect  ${link_clk} ${u_xcvr}/${txrx}_clk_${phys_lane}
+
+    if {$tx_or_rx_n == 0} {
+      ad_connect  ${a_jesd}/phy_en_char_align ${u_xcvr}/${txrx}_calign_${phys_lane}
+    }
+  }
+  
   if {$jesd204_type == 0} {
     ad_connect  ${a_jesd}/sysref $m_sysref
     if {$link_mode == 1} {
@@ -460,11 +490,11 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}
   }
 
   if {$tx_or_rx_n == 0} {
-    set xcvr_rx_index [expr ($xcvr_rx_index + $no_of_lanes)]
+    set xcvr_rx_index [expr ($xcvr_rx_index + $max_no_of_lanes)]
   }
 
   if {$tx_or_rx_n == 1} {
-    set xcvr_tx_index [expr ($xcvr_tx_index + $no_of_lanes)]
+    set xcvr_tx_index [expr ($xcvr_tx_index + $max_no_of_lanes)]
   }
 }
 ## Connect all the PLL clock and reset ports of the transceiver IP to a clock
