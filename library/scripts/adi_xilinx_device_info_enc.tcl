@@ -144,7 +144,7 @@ proc adi_device_spec {cellpath param} {
           switch  -regexp -- $part {
              ^xc7          {set series_name 7series}
              ^xczu         {set series_name ultrascale+}
-             ^xc.u.p       {set series_name ultrascale+}
+             ^xc.u..?p     {set series_name ultrascale+}
              ^xck26        {set series_name ultrascale+}
              ^xc.u         {set series_name ultrascale }
              ^xcv[ecmph]   {set series_name versal}
