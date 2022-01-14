@@ -112,7 +112,7 @@ module axi_ad9122_channel #(
     .CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
     .CLK_RATIO (4))
   i_dds (
-    .clk (dac_clk),
+    .clk (dac_div_clk),
     .dac_dds_format (dac_dds_format),
     .dac_data_sync (dac_data_sync),
     .dac_valid (1'b1),
