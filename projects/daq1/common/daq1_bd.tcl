@@ -59,8 +59,8 @@ ad_ip_parameter axi_ad9684_dma CONFIG.CYCLIC 0
 
 ad_ip_instance util_cpack2 util_cpack_ad9684 [list \
   NUM_OF_CHANNELS 2 \
-  SAMPLES_PER_CHANNEL 16 \
-  SAMPLE_DATA_WIDTH 2 \
+  SAMPLES_PER_CHANNEL 2 \
+  SAMPLE_DATA_WIDTH 16 \
 ]
 
 #ad_adcfifo_create "axi_ad9684_fifo" $adc_data_width $adc_dma_data_width $adc_fifo_address_width
