@@ -24,6 +24,8 @@ create_bd_port -dir O tdd_sync_o
 create_bd_port -dir I tdd_sync_i
 create_bd_port -dir O tdd_sync_t
 
+create_bd_port -dir I tdd_sync_ext
+
 # ad9361 core
 
 ad_ip_instance axi_ad9361 axi_ad9361
@@ -84,6 +86,13 @@ ad_connect axi_ad9361/l_clk util_ad9361_divclk/clk
 ad_ip_instance proc_sys_reset util_ad9361_divclk_reset
 ad_connect sys_rstgen/peripheral_aresetn util_ad9361_divclk_reset/ext_reset_in
 ad_connect util_ad9361_divclk/clk_out util_ad9361_divclk_reset/slowest_sync_clk
+
+# External TDD
+
+ad_ip_instance axi_tdd axi_tdd_0
+ad_connect axi_ad9361/l_clk axi_tdd_0/clk
+ad_connect util_ad9361_divclk_reset/peripheral_reset axi_tdd_0/rst
+ad_connect tdd_sync_ext axi_tdd_0/tdd_sync
 
 # adc-path wfifo
 
@@ -199,7 +208,7 @@ ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 ad_connect util_ad9361_divclk/clk_out axi_ad9361_dac_dma/m_axis_aclk
-ad_connect axi_ad9361_dac_dma/m_axis util_ad9361_dac_upack/s_axis
+# ad_connect axi_ad9361_dac_dma/m_axis util_ad9361_dac_upack/s_axis
 
 ad_connect $sys_cpu_resetn axi_ad9361_dac_dma/m_src_axi_aresetn
 
@@ -208,6 +217,7 @@ ad_connect $sys_cpu_resetn axi_ad9361_dac_dma/m_src_axi_aresetn
 ad_cpu_interconnect 0x79020000 axi_ad9361
 ad_cpu_interconnect 0x7C400000 axi_ad9361_adc_dma
 ad_cpu_interconnect 0x7C420000 axi_ad9361_dac_dma
+ad_cpu_interconnect 0x7C430000 axi_tdd_0
 ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
 ad_mem_hp1_interconnect $sys_cpu_clk axi_ad9361_adc_dma/m_dest_axi
 ad_mem_hp2_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP2
@@ -217,4 +227,21 @@ ad_mem_hp2_interconnect $sys_cpu_clk axi_ad9361_dac_dma/m_src_axi
 
 ad_cpu_interrupt ps-13 mb-12 axi_ad9361_adc_dma/irq
 ad_cpu_interrupt ps-12 mb-13 axi_ad9361_dac_dma/irq
+
+# Interceptor
+
+add_files -norecurse  $ad_hdl_dir/projects/fmcomms2/common/fmcomms2_dma_interceptor.v
+
+create_bd_cell -type module -reference fmcomms2_dma_interceptor dma_interceptor
+ad_connect VCC dma_interceptor/enable
+ad_connect util_ad9361_divclk/clk_out dma_interceptor/axis_aclk
+ad_connect util_ad9361_divclk_reset/peripheral_aresetn dma_interceptor/aresetn
+ad_connect dma_interceptor/adc_dma_sync axi_ad9361_adc_dma/fifo_wr_sync
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.SYNC_TRANSFER_START	{true}
+
+ad_connect axi_ad9361_dac_dma/m_axis dma_interceptor/s_axis
+ad_connect dma_interceptor/m_axis util_ad9361_dac_upack/s_axis
+
+ad_connect axi_tdd_0/tdd_active dma_interceptor/tdd_active
+ad_connect axi_tdd_0/tdd_rx_rf_en TXDATA
 
