@@ -98,8 +98,8 @@ module axi_ad9684_if #(
 
   genvar          l_inst;
 
-  // adc_clk is 1:2 of the sampling clock
-  // f_max = 250 MHz
+  // adc_clk is 1:4 of the sampling clock
+  // f_max = 125 MHz
 
   assign  adc_clk = adc_div_clk;
 
@@ -110,6 +110,7 @@ module axi_ad9684_if #(
     .IODELAY_CTRL(1),
     .IODELAY_GROUP(IO_DELAY_GROUP),
     .DDR_OR_SDR_N(DDR_OR_SDR_N),
+    .SERDES_FACTOR(4),
     .DATA_WIDTH(14))
   i_adc_data (
     .rst(adc_rst),
@@ -143,6 +144,7 @@ module axi_ad9684_if #(
       .IODELAY_CTRL(0),
       .IODELAY_GROUP(IO_DELAY_GROUP),
       .DDR_OR_SDR_N(DDR_OR_SDR_N),
+      .SERDES_FACTOR(4),
       .DATA_WIDTH(1))
     i_adc_or (
       .rst(adc_rst),
@@ -188,7 +190,7 @@ module axi_ad9684_if #(
     .MMCM_VCO_DIV (6),
     .MMCM_VCO_MUL (12),
     .MMCM_CLK0_DIV (2),
-    .MMCM_CLK1_DIV (4))
+    .MMCM_CLK1_DIV (8))
   i_serdes_clk (
     .rst (rst),
     .clk_in_p (adc_clk_in_p),
