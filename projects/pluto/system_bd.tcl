@@ -30,6 +30,8 @@ create_bd_port -dir I spi_sdo_i
 create_bd_port -dir O spi_sdo_o
 create_bd_port -dir I spi_sdi_i
 
+create_bd_port -dir O txdata_o
+
 # instance: sys_ps7
 
 ad_ip_instance processing_system7 sys_ps7
@@ -100,7 +102,8 @@ ad_ip_parameter sys_rstgen CONFIG.C_EXT_RST_WIDTH 1
 ad_ip_instance axi_quad_spi axi_spi
 ad_ip_parameter axi_spi CONFIG.C_USE_STARTUP 0
 ad_ip_parameter axi_spi CONFIG.C_NUM_SS_BITS 1
-ad_ip_parameter axi_spi CONFIG.C_SCK_RATIO 8
+ad_ip_parameter axi_spi CONFIG.C_SCK_RATIO 16
+ad_ip_parameter axi_spi CONFIG.Multiples16 8
 
 ad_connect  sys_cpu_clk sys_ps7/FCLK_CLK0
 ad_connect  sys_200m_clk sys_ps7/FCLK_CLK1
@@ -132,6 +135,7 @@ ad_connect  spi0_sdi_i sys_ps7/SPI0_MISO_I
 # axi spi connections
 
 ad_connect  sys_cpu_clk  axi_spi/ext_spi_clk
+
 ad_connect  spi_csn_i  axi_spi/ss_i
 ad_connect  spi_csn_o  axi_spi/ss_o
 ad_connect  spi_clk_i  axi_spi/sck_i
@@ -159,16 +163,6 @@ ad_connect  sys_concat_intc/In3 GND
 ad_connect  sys_concat_intc/In2 GND
 ad_connect  sys_concat_intc/In1 GND
 ad_connect  sys_concat_intc/In0 GND
-
-# iic
-
-create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 iic_main
-
-ad_ip_instance axi_iic axi_iic_main
-
-ad_connect  iic_main axi_iic_main/iic
-ad_cpu_interconnect 0x41600000 axi_iic_main
-ad_cpu_interrupt ps-15 mb-15 axi_iic_main/iic2intc_irpt
 
 # ad9361
 
@@ -288,7 +282,7 @@ ad_connect axi_ad9361/dac_data_i1 tx_upack/fifo_rd_data_2
 ad_connect axi_ad9361/dac_enable_q1 tx_upack/enable_3
 ad_connect axi_ad9361/dac_data_q1 tx_upack/fifo_rd_data_3
 
-ad_connect tx_upack/s_axis  axi_ad9361_dac_dma/m_axis
+# ad_connect tx_upack/s_axis  axi_ad9361_dac_dma/m_axis
 
 ad_ip_instance util_vector_logic logic_or [list \
   C_OPERATION {or} \
@@ -306,12 +300,29 @@ ad_connect  axi_ad9361/l_clk axi_ad9361_adc_dma/fifo_wr_clk
 ad_connect  axi_ad9361/l_clk axi_ad9361_dac_dma/m_axis_aclk
 ad_connect  cpack/fifo_wr_overflow axi_ad9361/adc_dovf
 
+# External TDD
+
+ad_ip_instance util_tdd_sync util_tdd_sync_0
+ad_ip_parameter util_tdd_sync_0 CONFIG.TDD_SYNC_PERIOD 100000000
+ad_connect sys_cpu_clk util_tdd_sync_0/clk
+ad_connect sys_cpu_resetn util_tdd_sync_0/rstn
+ad_connect util_tdd_sync_0/sync_mode GND
+ad_connect util_tdd_sync_0/sync_in GND
+
+ad_ip_instance axi_tdd axi_tdd_0
+ad_connect axi_ad9361/l_clk axi_tdd_0/clk
+ad_connect axi_ad9361/rst axi_tdd_0/rst
+ad_connect util_tdd_sync_0/sync_out axi_tdd_0/tdd_sync
+
+ad_connect axi_tdd_0/tdd_rx_rf_en txdata_o
+
 # interconnects
 
 ad_cpu_interconnect 0x79020000 axi_ad9361
 ad_cpu_interconnect 0x7C400000 axi_ad9361_adc_dma
 ad_cpu_interconnect 0x7C420000 axi_ad9361_dac_dma
 ad_cpu_interconnect 0x7C430000 axi_spi
+ad_cpu_interconnect 0x7C440000 axi_tdd_0
 
 ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP1 {1}
 ad_connect sys_cpu_clk sys_ps7/S_AXI_HP1_ACLK
@@ -342,4 +353,26 @@ ad_cpu_interrupt ps-13 mb-13 axi_ad9361_adc_dma/irq
 ad_cpu_interrupt ps-12 mb-12 axi_ad9361_dac_dma/irq
 ad_cpu_interrupt ps-11 mb-11 axi_spi/ip2intc_irpt
 
+# Interceptor
 
+ad_ip_instance xlslice interceptor_slice [list \
+    DIN_FROM    14 \
+    DIN_TO      14 \
+    DIN_WIDTH   17 \
+    DOUT_WIDTH   1 ]
+
+ad_connect sys_ps7/GPIO_O interceptor_slice/Din
+
+add_files -norecurse dma_interceptor.v
+
+create_bd_cell -type module -reference dma_interceptor dma_interceptor_0
+ad_connect interceptor_slice/Dout dma_interceptor_0/enable
+ad_connect axi_ad9361/l_clk dma_interceptor_0/axis_aclk
+ad_connect axi_ad9361/rst dma_interceptor_0/reset
+ad_connect dma_interceptor_0/adc_dma_sync axi_ad9361_adc_dma/fifo_wr_sync
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.SYNC_TRANSFER_START {true}
+
+ad_connect axi_ad9361_dac_dma/m_axis dma_interceptor_0/s_axis
+ad_connect dma_interceptor_0/m_axis tx_upack/s_axis
+
+ad_connect axi_tdd_0/tdd_active dma_interceptor_0/tdd_active

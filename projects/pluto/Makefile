@@ -12,10 +12,14 @@ M_DEPS += ../../library/common/util_pulse_gen.v
 M_DEPS += ../../library/common/ad_iobuf.v
 M_DEPS += ../../library/common/ad_bus_mux.v
 M_DEPS += ../../library/axi_ad9361/axi_ad9361_delay.tcl
+M_DEPS += dma_interceptor.v
 
 LIB_DEPS += axi_ad9361
 LIB_DEPS += axi_dmac
+LIB_DEPS += axi_tdd
+LIB_DEPS += util_tdd_sync
 LIB_DEPS += util_pack/util_cpack2
 LIB_DEPS += util_pack/util_upack2
+LIB_DEPS += xilinx/util_clkdiv
 
 include ../scripts/project-xilinx.mk
