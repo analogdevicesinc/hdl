@@ -47,14 +47,14 @@ ad_ip_instance axi_ad9684 axi_ad9684_core
 ad_ip_parameter axi_ad9684_core CONFIG.OR_STATUS 0
 
 ad_ip_instance axi_dmac axi_ad9684_dma
-ad_ip_parameter axi_ad9684_dma CONFIG.DMA_TYPE_SRC 1
+ad_ip_parameter axi_ad9684_dma CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter axi_ad9684_dma CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_ad9684_dma CONFIG.ID 1
 ad_ip_parameter axi_ad9684_dma CONFIG.AXI_SLICE_SRC true
 ad_ip_parameter axi_ad9684_dma CONFIG.AXI_SLICE_DEST true
 ad_ip_parameter axi_ad9684_dma CONFIG.DMA_LENGTH_WIDTH 24
 ad_ip_parameter axi_ad9684_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_ad9684_dma CONFIG.FIFO_SIZE 16
+ad_ip_parameter axi_ad9684_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter axi_ad9684_dma CONFIG.CYCLIC 0
 
 ad_ip_instance util_cpack2 util_cpack_ad9684 [list \
@@ -63,7 +63,7 @@ ad_ip_instance util_cpack2 util_cpack_ad9684 [list \
   SAMPLE_DATA_WIDTH 2 \
 ]
 
-ad_adcfifo_create "axi_ad9684_fifo" $adc_data_width $adc_dma_data_width $adc_fifo_address_width
+#ad_adcfifo_create "axi_ad9684_fifo" $adc_data_width $adc_dma_data_width $adc_fifo_address_width
 
 # connections (dac)
 
@@ -94,7 +94,7 @@ ad_connect  axi_ad9122_dma/m_axis util_upack_ad9122/s_axis
 # connections (adc)
 
 ad_connect  sys_200m_clk axi_ad9684_core/delay_clk
-ad_connect  sys_cpu_clk axi_ad9684_dma/s_axis_aclk
+#ad_connect  sys_cpu_clk axi_ad9684_dma/s_axis_aclk
 ad_connect  axi_ad9684_core/adc_clk util_cpack_ad9684/clk
 
 ad_connect  adc_clk_in_p axi_ad9684_core/adc_clk_in_p
@@ -112,18 +112,21 @@ ad_connect  axi_ad9684_core/adc_enable_1 util_cpack_ad9684/enable_1
 ad_connect  axi_ad9684_core/adc_data_1 util_cpack_ad9684/fifo_wr_data_1
 ad_connect  util_cpack_ad9684/fifo_wr_overflow axi_ad9684_core/adc_dovf
 
-ad_connect  sys_cpu_clk axi_ad9684_fifo/dma_clk
-ad_connect  axi_ad9684_core/adc_clk axi_ad9684_fifo/adc_clk
-ad_connect  axi_ad9684_core/adc_rst axi_ad9684_fifo/adc_rst
+#ad_connect  sys_cpu_clk axi_ad9684_fifo/dma_clk
+#ad_connect  axi_ad9684_core/adc_clk axi_ad9684_fifo/adc_clk
+#ad_connect  axi_ad9684_core/adc_rst axi_ad9684_fifo/adc_rst
+#
+#ad_connect  axi_ad9684_fifo/dma_wr axi_ad9684_dma/s_axis_valid
+#ad_connect  axi_ad9684_fifo/dma_wdata axi_ad9684_dma/s_axis_data
+#ad_connect  axi_ad9684_fifo/dma_wready axi_ad9684_dma/s_axis_ready
+#ad_connect  axi_ad9684_fifo/dma_xfer_req axi_ad9684_dma/s_axis_xfer_req
 
-ad_connect  axi_ad9684_fifo/dma_wr axi_ad9684_dma/s_axis_valid
-ad_connect  axi_ad9684_fifo/dma_wdata axi_ad9684_dma/s_axis_data
-ad_connect  axi_ad9684_fifo/dma_wready axi_ad9684_dma/s_axis_ready
-ad_connect  axi_ad9684_fifo/dma_xfer_req axi_ad9684_dma/s_axis_xfer_req
+#ad_connect  util_cpack_ad9684/packed_fifo_wr_en       axi_ad9684_fifo/adc_wr
+#ad_connect  util_cpack_ad9684/packed_fifo_wr_data     axi_ad9684_fifo/adc_wdata
+#ad_connect  util_cpack_ad9684/packed_fifo_wr_overflow axi_ad9684_fifo/adc_wovf
 
-ad_connect  util_cpack_ad9684/packed_fifo_wr_en axi_ad9684_fifo/adc_wr
-ad_connect  util_cpack_ad9684/packed_fifo_wr_data axi_ad9684_fifo/adc_wdata
-ad_connect  util_cpack_ad9684/packed_fifo_wr_overflow axi_ad9684_fifo/adc_wovf
+ad_connect  util_cpack_ad9684/packed_fifo_wr axi_ad9684_dma/fifo_wr
+ad_connect  axi_ad9684_core/adc_clk  axi_ad9684_dma/fifo_wr_clk
 
 # memory interconnect
 
