@@ -51,9 +51,6 @@ set_property  -dict {PACKAGE_PIN  P9   IOSTANDARD LVCMOS18} [get_ports gpio_rese
 set_property  -dict {PACKAGE_PIN  K12  IOSTANDARD LVCMOS18} [get_ports enable]
 set_property  -dict {PACKAGE_PIN  K11  IOSTANDARD LVCMOS18} [get_ports txnrx]
 
-set_property  -dict {PACKAGE_PIN  M14  IOSTANDARD LVCMOS18 PULLTYPE PULLUP} [get_ports iic_scl]
-set_property  -dict {PACKAGE_PIN  N14  IOSTANDARD LVCMOS18 PULLTYPE PULLUP} [get_ports iic_sda]
-
 set_property  -dict {PACKAGE_PIN  E12  IOSTANDARD LVCMOS18  PULLTYPE PULLUP} [get_ports spi_csn]
 set_property  -dict {PACKAGE_PIN  E11  IOSTANDARD LVCMOS18} [get_ports spi_clk]
 set_property  -dict {PACKAGE_PIN  E13  IOSTANDARD LVCMOS18} [get_ports spi_mosi]
@@ -66,6 +63,9 @@ set_property  -dict {PACKAGE_PIN  K13  IOSTANDARD LVCMOS18} [get_ports pl_spi_mo
 set_property  -dict {PACKAGE_PIN  P8   IOSTANDARD LVCMOS18} [get_ports clk_out]
 
 create_clock -name rx_clk -period  16.27 [get_ports rx_clk_in]
+
+set_property  -dict {PACKAGE_PIN  M14   IOSTANDARD LVCMOS18}                    [get_ports pl_gpio1]
+set_property  -dict {PACKAGE_PIN  N14   IOSTANDARD LVCMOS18 PULLTYPE PULLUP}    [get_ports pl_gpio3]
 
 # probably gone in 2016.4
 
