@@ -5,7 +5,7 @@ set adc_dma_data_width 64
 
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 source $ad_hdl_dir/projects/common/zc706/zc706_system_bd.tcl
-source $ad_hdl_dir/projects/common/zc706/zc706_plddr3_adcfifo_bd.tcl
+#source $ad_hdl_dir/projects/common/zc706/zc706_plddr3_adcfifo_bd.tcl
 source ../common/daq1_bd.tcl
 
 # System ID
