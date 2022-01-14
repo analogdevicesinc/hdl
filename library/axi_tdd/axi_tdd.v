@@ -52,6 +52,7 @@ module axi_tdd (
   // status signal
 
   output                  tdd_enabled,
+  output                  tdd_active,
 
   // sync signal
 
@@ -102,6 +103,7 @@ module axi_tdd (
   assign up_rstn = s_axi_aresetn;
 
   wire              tdd_enable_s;
+  wire              tdd_active_s;
   wire              tdd_secondary_s;
   wire    [ 7:0]    tdd_burst_count_s;
   wire              tdd_rx_only_s;
@@ -147,6 +149,7 @@ module axi_tdd (
   reg               tdd_rf_overlap;
 
   assign  tdd_enabled = tdd_enable_s;
+  assign  tdd_active = tdd_active_s;
 
   // syncronization control signal
 
@@ -248,6 +251,7 @@ module axi_tdd (
     .clk(clk),
     .rst(rst),
     .tdd_enable(tdd_enable_s),
+    .tdd_active(tdd_active_s),
     .tdd_secondary(tdd_secondary_s),
     .tdd_counter_init(tdd_counter_init_s),
     .tdd_frame_length(tdd_frame_length_s),

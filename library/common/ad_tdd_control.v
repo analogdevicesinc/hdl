@@ -48,6 +48,7 @@ module ad_tdd_control#(
   // TDD timing signals
 
   input                   tdd_enable,
+  output                  tdd_active,
   input                   tdd_secondary,
   input                   tdd_tx_only,
   input                   tdd_rx_only,
@@ -104,6 +105,8 @@ module ad_tdd_control#(
 
   reg             tdd_cstate = OFF;
   reg             tdd_cstate_next = OFF;
+
+  assign tdd_active = tdd_cstate == ON ? 1'b1 : 1'b0;
 
   reg             counter_at_tdd_vco_rx_on_1 = 1'b0;
   reg             counter_at_tdd_vco_rx_off_1 = 1'b0;
