@@ -80,7 +80,7 @@ if { ![file exists $xsa_file] } {
 # uboot file exists
 if { $uboot_file == "" } {
     if {[catch {set uboot_file "[glob "./u-boot*.elf"]" } fid]} {
-      puts stderr "ERROR: $fid\n\rNOTE: you must have a the u-boot.elf in [pwd]\n\
+      puts stderr "ERROR: $fid\n\rNOTE: you must have the u-boot.elf in [pwd]\n\
       \rSee: https://wiki.analog.com/resources/fpga/docs/build\n"
    }
 }
