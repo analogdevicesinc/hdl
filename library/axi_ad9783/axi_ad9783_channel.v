@@ -86,8 +86,8 @@ module axi_ad9783_channel #(
   wire    [15:0]   dac_pat_data_2_s;
   wire    [ 3:0]   dac_data_sel_s;
 
-  reg     [23:0]  dac_prbs_data = 'd0;
-  reg     [15:0]  dac_prbs_counter = 'd0;
+  reg     [23:0]   dac_prbs_data = 'd0;
+  reg     [15:0]   dac_prbs_counter = 'd0;
 
 
   // pn23 function
@@ -171,7 +171,9 @@ module axi_ad9783_channel #(
 
   // single channel processor
 
-  up_dac_channel #(.CHANNEL_ID(CHANNEL_ID)) i_up_dac_channel (
+  up_dac_channel #(
+    .CHANNEL_ID(CHANNEL_ID))
+  i_up_dac_channel (
     .dac_clk (dac_div_clk),
     .dac_rst (dac_rst),
     .dac_dds_scale_1 (dac_dds_scale_1_s),
