@@ -113,12 +113,12 @@ module axi_ad9783_core #(
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
       up_rdata <= 'd0;
-      up_rack <= 'd0;
-      up_wack <= 'd0;
+      up_rack  <= 'd0;
+      up_wack  <= 'd0;
     end else begin
       up_rdata <= up_rdata_s | up_rdata_0_s | up_rdata_1_s;
-      up_rack <= up_rack_s | up_rack_0_s | up_rack_1_s;
-      up_wack <= up_wack_s | up_wack_0_s | up_wack_1_s;
+      up_rack  <= up_rack_s | up_rack_0_s | up_rack_1_s;
+      up_wack  <= up_wack_s | up_wack_0_s | up_wack_1_s;
     end
   end
 
@@ -187,8 +187,8 @@ module axi_ad9783_core #(
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .FPGA_FAMILY (FPGA_FAMILY),
     .SPEED_GRADE (SPEED_GRADE),
-    .DEV_PACKAGE (DEV_PACKAGE)
-  ) i_up_dac_common (
+    .DEV_PACKAGE (DEV_PACKAGE))
+  i_up_dac_common (
     .mmcm_rst (),
     .dac_clk (dac_div_clk),
     .dac_rst (dac_rst),

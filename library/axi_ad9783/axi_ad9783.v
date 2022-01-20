@@ -42,13 +42,10 @@ module axi_ad9783 #(
   parameter   FPGA_FAMILY = 0,
   parameter   SPEED_GRADE = 0,
   parameter   DEV_PACKAGE = 0,
-  parameter   SERDES_OR_DDR_N = 1,
-  parameter   MMCM_OR_BUFIO_N = 1,
   parameter   DAC_DDS_TYPE = 2,
   parameter   DAC_DDS_CORDIC_DW = 16,
   parameter   DAC_DDS_CORDIC_PHASE_DW = 16,
-  parameter   DAC_DATAPATH_DISABLE = 0,
-  parameter   IO_DELAY_GROUP = "dev_if_delay_group") (
+  parameter   DAC_DATAPATH_DISABLE = 0) (
 
   // dac interface
   // from dco1_p
@@ -126,7 +123,7 @@ module axi_ad9783 #(
 
   // signal name changes
 
-  assign up_clk = s_axi_aclk;
+  assign up_clk  = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
   assign dac_rst = dac_rst_s;
 
