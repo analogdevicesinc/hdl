@@ -12,12 +12,9 @@ M_DEPS += ../../common/zcu102/zcu102_system_constr.xdc
 M_DEPS += ../../common/zcu102/zcu102_system_bd.tcl
 
 LIB_DEPS += axi_ad9783
-LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_dmac
-LIB_DEPS += axi_hdmi_tx
-LIB_DEPS += axi_spdif_tx
 LIB_DEPS += axi_sysid
-LIB_DEPS += util_pack/util_upack2
 LIB_DEPS += sysid_rom
+LIB_DEPS += util_pack/util_upack2
 
 include ../../scripts/project-xilinx.mk
