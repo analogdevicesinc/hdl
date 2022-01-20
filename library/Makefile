@@ -32,6 +32,7 @@ clean:
 	$(MAKE) -C axi_ad9680 clean
 	$(MAKE) -C axi_ad9684 clean
 	$(MAKE) -C axi_ad9739a clean
+	$(MAKE) -C axi_ad9783 clean
 	$(MAKE) -C axi_ad9963 clean
 	$(MAKE) -C axi_adc_decimate clean
 	$(MAKE) -C axi_adc_trigger clean
@@ -156,6 +157,7 @@ lib:
 	$(MAKE) -C axi_ad9680
 	$(MAKE) -C axi_ad9684
 	$(MAKE) -C axi_ad9739a
+	$(MAKE) -C axi_ad9783
 	$(MAKE) -C axi_ad9963
 	$(MAKE) -C axi_adc_decimate
 	$(MAKE) -C axi_adc_trigger
