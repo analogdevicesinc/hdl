@@ -87,9 +87,11 @@ module ad_dds #(
 
       reg  [PHASE_DW-1:0]  dac_dds_phase_0[1:CLK_RATIO];
       reg  [PHASE_DW-1:0]  dac_dds_phase_1[1:CLK_RATIO];
+      reg  [PHASE_DW-1:0]  dac_dds_phase_0_m[1:CLK_RATIO];
+      reg  [PHASE_DW-1:0]  dac_dds_phase_1_m[1:CLK_RATIO];
       reg  [PHASE_DW-1:0]  dac_dds_incr_0 = 'd0;
       reg  [PHASE_DW-1:0]  dac_dds_incr_1 = 'd0;
-      reg                  sync_min_pulse_m[1:CLK_RATIO];
+      reg  [CLK_RATIO :1]  sync_min_pulse_m = 'd0;
 
       // For scenarios where the synchronization signal comes from an external
       // source and it is high for a longer period of time, the phase
@@ -133,6 +135,14 @@ module ad_dds #(
             dac_dds_phase_0[i] <= dac_dds_phase_0[i] + dac_dds_incr_0;
             dac_dds_phase_1[i] <= dac_dds_phase_1[i] + dac_dds_incr_1;
           end
+
+          if (dac_data_sync == 1'b1 || sync_min_pulse_m[1]) begin
+            dac_dds_phase_0_m[i] <= 'd0;
+            dac_dds_phase_1_m[i] <= 'd0;
+          end else begin
+            dac_dds_phase_0_m[i] <= dac_dds_phase_0[i];
+            dac_dds_phase_1_m[i] <= dac_dds_phase_1[i];
+          end
         end
 
         // phase to amplitude convertor
@@ -145,9 +155,9 @@ module ad_dds #(
          i_dds_2 (
           .clk (clk),
           .dds_format (dac_dds_format),
-          .dds_phase_0 (dac_dds_phase_0[i]),
+          .dds_phase_0 (dac_dds_phase_0_m[i]),
           .dds_scale_0 (tone_1_scale),
-          .dds_phase_1 (dac_dds_phase_1[i]),
+          .dds_phase_1 (dac_dds_phase_1_m[i]),
           .dds_scale_1 (tone_2_scale),
           .dds_data (dac_dds_data_s[(DDS_DW*i)-1:DDS_DW*(i-1)]));
       end
