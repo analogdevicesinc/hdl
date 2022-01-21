@@ -138,7 +138,8 @@ module ad_ip_jesd204_tpl_dac #(
     .NUM_CHANNELS (NUM_CHANNELS),
     .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
     .PADDING_TO_MSB_LSB_N (PADDING_TO_MSB_LSB_N),
-    .NUM_PROFILES(1)
+    .NUM_PROFILES(1),
+    .EXT_SYNC (EXT_SYNC)
   ) i_regmap (
     .s_axi_aclk (s_axi_aclk),
     .s_axi_aresetn (s_axi_aresetn),

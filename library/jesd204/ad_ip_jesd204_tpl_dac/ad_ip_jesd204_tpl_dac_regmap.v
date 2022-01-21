@@ -35,7 +35,8 @@ module ad_ip_jesd204_tpl_dac_regmap #(
   parameter NUM_CHANNELS = 2,
   parameter DATA_PATH_WIDTH = 16,
   parameter PADDING_TO_MSB_LSB_N = 0,
-  parameter NUM_PROFILES = 1    // Number of supported JESD profiles
+  parameter NUM_PROFILES = 1,    // Number of supported JESD profiles
+  parameter EXT_SYNC = 0
 ) (
   input s_axi_aclk,
   input s_axi_aresetn,
@@ -191,7 +192,8 @@ module ad_ip_jesd204_tpl_dac_regmap #(
 
   // dac common processor interface
   //
-  localparam CONFIG = (PADDING_TO_MSB_LSB_N << 11) |
+  localparam CONFIG = (EXT_SYNC << 12) |
+                      (PADDING_TO_MSB_LSB_N << 11) |
                       (XBAR_ENABLE << 10) |
                       (DATAPATH_DISABLE << 6) |
                       (IQCORRECTION_DISABLE << 0);
