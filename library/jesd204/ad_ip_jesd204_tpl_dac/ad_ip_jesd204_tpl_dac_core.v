@@ -55,6 +55,7 @@ module ad_ip_jesd204_tpl_dac_core #(
 
   input dac_sync,
   input dac_ext_sync_arm,
+  input dac_ext_sync_disarm,
 
   input dac_sync_in,
 
@@ -97,6 +98,7 @@ module ad_ip_jesd204_tpl_dac_core #(
   reg dac_sync_in_d2 ='d0;
   reg dac_sync_in_armed ='d0;
   reg dac_ext_sync_arm_d1 = 'd0;
+  reg dac_ext_sync_disarm_d1 = 'd0;
 
   assign link_valid = 1'b1;
   assign dac_sync_in_status = dac_sync_in_armed;
@@ -104,14 +106,17 @@ module ad_ip_jesd204_tpl_dac_core #(
   // External sync
   always @(posedge clk) begin
     dac_ext_sync_arm_d1 <= dac_ext_sync_arm;
+    dac_ext_sync_disarm_d1 <= dac_ext_sync_disarm;
 
     dac_sync_in_d1 <= dac_sync_in;
     dac_sync_in_d2 <= dac_sync_in_d1;
 
     if (EXT_SYNC == 1'b0) begin
       dac_sync_in_armed <= 1'b0;
+    end else if (~dac_ext_sync_disarm_d1 & dac_ext_sync_disarm) begin
+      dac_sync_in_armed <= 1'b0;
     end else if (~dac_ext_sync_arm_d1 & dac_ext_sync_arm) begin
-      dac_sync_in_armed <= ~dac_sync_in_armed;
+      dac_sync_in_armed <= 1'b1;
     end else if (~dac_sync_in_d2 & dac_sync_in_d1) begin
       dac_sync_in_armed <= 1'b0;
     end
