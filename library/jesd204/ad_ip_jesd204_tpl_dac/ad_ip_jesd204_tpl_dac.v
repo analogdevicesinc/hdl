@@ -60,9 +60,13 @@ module ad_ip_jesd204_tpl_dac #(
   input [DMA_BITS_PER_SAMPLE * OCTETS_PER_BEAT * 8 * NUM_LANES / BITS_PER_SAMPLE-1:0] dac_ddata,
   input dac_dunf,
 
+  output dac_rst,
+
   // external sync, should be on the link_clk clock domain
 
   input dac_sync_in,
+  output dac_sync_manual_req_out,
+  input dac_sync_manual_req_in,
 
   // axi interface
 
@@ -138,7 +142,8 @@ module ad_ip_jesd204_tpl_dac #(
     .NUM_CHANNELS (NUM_CHANNELS),
     .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
     .PADDING_TO_MSB_LSB_N (PADDING_TO_MSB_LSB_N),
-    .NUM_PROFILES(1)
+    .NUM_PROFILES(1),
+    .EXT_SYNC (EXT_SYNC)
   ) i_regmap (
     .s_axi_aclk (s_axi_aclk),
     .s_axi_aresetn (s_axi_aresetn),
@@ -169,6 +174,8 @@ module ad_ip_jesd204_tpl_dac #(
 
     .dac_sync (dac_sync),
     .dac_ext_sync_arm (dac_ext_sync_arm),
+    .dac_ext_sync_disarm (dac_ext_sync_disarm),
+    .dac_ext_sync_manual_req (dac_sync_manual_req_out),
     .dac_sync_in_status (dac_sync_in_status),
     .dac_dds_format (dac_dds_format),
 
@@ -227,11 +234,14 @@ module ad_ip_jesd204_tpl_dac #(
 
     .dac_valid (dac_valid),
     .dac_ddata (dac_ddata_cr),
+    .dac_rst (dac_rst),
 
     .dac_sync (dac_sync),
     .dac_ext_sync_arm (dac_ext_sync_arm),
+    .dac_ext_sync_disarm (dac_ext_sync_disarm),
     .dac_sync_in_status (dac_sync_in_status),
     .dac_sync_in (dac_sync_in),
+    .dac_sync_manual_req (dac_sync_manual_req_in),
     .dac_dds_format (dac_dds_format),
 
     .dac_dds_scale_0 (dac_dds_scale_0_s),

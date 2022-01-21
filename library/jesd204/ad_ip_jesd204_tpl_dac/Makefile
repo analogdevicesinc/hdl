@@ -23,6 +23,7 @@ GENERIC_DEPS += ../../common/up_dac_channel.v
 GENERIC_DEPS += ../../common/up_dac_common.v
 GENERIC_DEPS += ../../common/up_xfer_cntrl.v
 GENERIC_DEPS += ../../common/up_xfer_status.v
+GENERIC_DEPS += ../../common/util_ext_sync.v
 GENERIC_DEPS += ../ad_ip_jesd204_tpl_common/up_tpl_common.v
 GENERIC_DEPS += ad_ip_jesd204_tpl_dac.v
 GENERIC_DEPS += ad_ip_jesd204_tpl_dac_channel.v
