@@ -1,4 +1,4 @@
-set REQUIRED_QUARTUS_VERSION 18.1.0
+set REQUIRED_QUARTUS_VERSION 20.1.1
 set QUARTUS_PRO_ISUSED 0
 
 source ../../scripts/adi_env.tcl
