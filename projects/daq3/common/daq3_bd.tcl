@@ -1,11 +1,17 @@
+#
+# Parameter description:
+#   [RX/TX]_JESD_M : Number of converters per link
+#   [RX/TX]_JESD_L : Number of lanes per link
+#   [RX/TX]_JESD_S : Number of samples per frame
+#
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
 # TX parameters
-set TX_NUM_OF_LANES 4      ; # L
-set TX_NUM_OF_CONVERTERS 2 ; # M
-set TX_SAMPLES_PER_FRAME 1 ; # S
-set TX_SAMPLE_WIDTH 16     ; # N/NP
+set TX_NUM_OF_LANES $ad_project_params(TX_JESD_L)      ; # L
+set TX_NUM_OF_CONVERTERS $ad_project_params(TX_JESD_M) ; # M
+set TX_SAMPLES_PER_FRAME $ad_project_params(TX_JESD_S) ; # S
+set TX_SAMPLE_WIDTH 16                                 ; # N/NP
 
 set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 32 / \
                                 ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)] ; # L * 32 / (M * N)
@@ -14,16 +20,19 @@ set dac_fifo_name axi_ad9152_fifo
 set dac_data_width [expr $TX_SAMPLE_WIDTH * $TX_NUM_OF_CONVERTERS * $TX_SAMPLES_PER_CHANNEL]
 
 # RX parameters
-set RX_NUM_OF_LANES 4      ; # L
-set RX_NUM_OF_CONVERTERS 2 ; # M
-set RX_SAMPLES_PER_FRAME 1 ; # S
-set RX_SAMPLE_WIDTH 16     ; # N/NP
+set RX_NUM_OF_LANES $ad_project_params(RX_JESD_L)      ; # L
+set RX_NUM_OF_CONVERTERS $ad_project_params(RX_JESD_M) ; # M
+set RX_SAMPLES_PER_FRAME $ad_project_params(RX_JESD_S) ; # S
+set RX_SAMPLE_WIDTH 16                                 ; # N/NP
 
 set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 32 / \
                                 ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)] ; # L * 32 / (M * N)
 
 set adc_fifo_name axi_ad9680_fifo
 set adc_data_width [expr $RX_SAMPLE_WIDTH * $RX_NUM_OF_CONVERTERS * $RX_SAMPLES_PER_CHANNEL]
+
+set MAX_TX_NUM_OF_LANES 4
+set MAX_RX_NUM_OF_LANES 4
 
 # dac peripherals
 
@@ -99,8 +108,8 @@ if {$sys_zynq == 0 || $sys_zynq == 1} {
 # shared transceiver core
 
 ad_ip_instance util_adxcvr util_daq3_xcvr
-ad_ip_parameter util_daq3_xcvr CONFIG.RX_NUM_OF_LANES $RX_NUM_OF_LANES
-ad_ip_parameter util_daq3_xcvr CONFIG.TX_NUM_OF_LANES $TX_NUM_OF_LANES
+ad_ip_parameter util_daq3_xcvr CONFIG.RX_NUM_OF_LANES $MAX_RX_NUM_OF_LANES
+ad_ip_parameter util_daq3_xcvr CONFIG.TX_NUM_OF_LANES $MAX_TX_NUM_OF_LANES
 ad_ip_parameter util_daq3_xcvr CONFIG.QPLL_REFCLK_DIV 1
 ad_ip_parameter util_daq3_xcvr CONFIG.QPLL_FBDIV_RATIO 1
 ad_ip_parameter util_daq3_xcvr CONFIG.QPLL_FBDIV 0x30; # 20
@@ -124,7 +133,7 @@ ad_xcvrpll  axi_ad9680_xcvr/up_pll_rst util_daq3_xcvr/up_cpll_rst_*
 
 # connections (dac)
 
-ad_xcvrcon  util_daq3_xcvr axi_ad9152_xcvr axi_ad9152_jesd {0 2 3 1}
+ad_xcvrcon  util_daq3_xcvr axi_ad9152_xcvr axi_ad9152_jesd {0 2 3 1} {} {} $MAX_TX_NUM_OF_LANES
 ad_connect  util_daq3_xcvr/tx_out_clk_0 axi_ad9152_tpl_core/link_clk
 ad_connect  axi_ad9152_jesd/tx_data axi_ad9152_tpl_core/link
 ad_connect  util_daq3_xcvr/tx_out_clk_0 axi_ad9152_upack/clk
@@ -160,7 +169,7 @@ ad_connect  axi_ad9152_fifo/dma_xfer_last axi_ad9152_dma/m_axis_last
 
 # connections (adc)
 
-ad_xcvrcon  util_daq3_xcvr axi_ad9680_xcvr axi_ad9680_jesd
+ad_xcvrcon  util_daq3_xcvr axi_ad9680_xcvr axi_ad9680_jesd {} {} {} $MAX_RX_NUM_OF_LANES
 ad_connect  util_daq3_xcvr/rx_out_clk_0 axi_ad9680_tpl_core/link_clk
 ad_connect  axi_ad9680_jesd/rx_sof axi_ad9680_tpl_core/link_sof
 ad_connect  axi_ad9680_jesd/rx_data_tdata axi_ad9680_tpl_core/link_data
