@@ -270,7 +270,8 @@ module system_top  #(
     .rx_sync_0 (rx_syncout),
     .tx_sync_0 (tx_syncin),
     .rx_sysref_0 (sysref),
-    .tx_sysref_0 (sysref)
+    .tx_sysref_0 (sysref),
+    .ext_sync_in (gpio_o[60])
   );
 
   assign rx_data_p_loc[RX_JESD_L*RX_NUM_LINKS-1:0] = rx_data_p[RX_JESD_L*RX_NUM_LINKS-1:0];
