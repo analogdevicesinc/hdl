@@ -492,3 +492,28 @@ if {$TDD_SUPPORT} {
   ad_connect GND $adc_data_offload_name/sync_ext
 }
 
+#
+# Sync at TPL level 
+#
+
+create_bd_port -dir I ext_sync_in
+
+# Enable ADC external sync
+ad_ip_parameter rx_mxfe_tpl_core/adc_tpl_core CONFIG.EXT_SYNC 1
+ad_connect ext_sync_in rx_mxfe_tpl_core/adc_tpl_core/adc_sync_in
+
+# Enable DAC external sync
+ad_ip_parameter tx_mxfe_tpl_core/dac_tpl_core CONFIG.EXT_SYNC 1
+ad_connect ext_sync_in tx_mxfe_tpl_core/dac_tpl_core/dac_sync_in
+
+ad_ip_instance util_vector_logic manual_sync_or [list \
+  C_SIZE 1 \
+  C_OPERATION {or} \
+]
+
+ad_connect rx_mxfe_tpl_core/adc_tpl_core/adc_sync_manual_req_out manual_sync_or/Op1
+ad_connect tx_mxfe_tpl_core/dac_tpl_core/dac_sync_manual_req_out manual_sync_or/Op2
+
+ad_connect manual_sync_or/Res tx_mxfe_tpl_core/dac_tpl_core/dac_sync_manual_req_in
+ad_connect manual_sync_or/Res rx_mxfe_tpl_core/adc_tpl_core/adc_sync_manual_req_in
+
