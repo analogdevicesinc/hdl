@@ -58,6 +58,7 @@ module ad_ip_jesd204_tpl_dac_core #(
   input dac_ext_sync_disarm,
 
   input dac_sync_in,
+  input dac_sync_manual_req,
 
   output dac_sync_in_status,
 
@@ -108,7 +109,7 @@ module ad_ip_jesd204_tpl_dac_core #(
     dac_ext_sync_arm_d1 <= dac_ext_sync_arm;
     dac_ext_sync_disarm_d1 <= dac_ext_sync_disarm;
 
-    dac_sync_in_d1 <= dac_sync_in;
+    dac_sync_in_d1 <= dac_sync_in | dac_sync_manual_req;
     dac_sync_in_d2 <= dac_sync_in_d1;
 
     if (EXT_SYNC == 1'b0) begin

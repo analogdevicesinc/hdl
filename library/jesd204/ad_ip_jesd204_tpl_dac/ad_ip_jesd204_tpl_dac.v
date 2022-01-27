@@ -63,6 +63,8 @@ module ad_ip_jesd204_tpl_dac #(
   // external sync, should be on the link_clk clock domain
 
   input dac_sync_in,
+  output dac_sync_manual_req_out,
+  input dac_sync_manual_req_in,
 
   // axi interface
 
@@ -171,6 +173,7 @@ module ad_ip_jesd204_tpl_dac #(
     .dac_sync (dac_sync),
     .dac_ext_sync_arm (dac_ext_sync_arm),
     .dac_ext_sync_disarm (dac_ext_sync_disarm),
+    .dac_ext_sync_manual_req (dac_sync_manual_req_out),
     .dac_sync_in_status (dac_sync_in_status),
     .dac_dds_format (dac_dds_format),
 
@@ -235,6 +238,7 @@ module ad_ip_jesd204_tpl_dac #(
     .dac_ext_sync_disarm (dac_ext_sync_disarm),
     .dac_sync_in_status (dac_sync_in_status),
     .dac_sync_in (dac_sync_in),
+    .dac_sync_manual_req (dac_sync_manual_req_in),
     .dac_dds_format (dac_dds_format),
 
     .dac_dds_scale_0 (dac_dds_scale_0_s),
