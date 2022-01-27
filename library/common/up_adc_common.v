@@ -69,6 +69,9 @@ module up_adc_common #(
   output      [31:0]  adc_start_code,
   output              adc_sref_sync,
   output              adc_sync,
+  output              adc_ext_sync_arm,
+  output              adc_ext_sync_disarm,
+  output              adc_ext_sync_manual_req,
   output       [4:0]  adc_num_lanes,
   output              adc_sdr_ddr_n,
   output              adc_symb_op,
@@ -130,6 +133,9 @@ module up_adc_common #(
   reg                 up_mmcm_resetn = 'd0;
   reg                 up_resetn = 'd0;
   reg                 up_adc_sync = 'd0;
+  reg                 up_adc_ext_sync_arm = 'd0;
+  reg                 up_adc_ext_sync_disarm = 'd0;
+  reg                 up_adc_ext_sync_manual_req = 'd0;
   reg                 up_adc_sref_sync = 'd0;
   reg         [4:0]   up_adc_num_lanes = 'd0;
   reg                 up_adc_sdr_ddr_n = 'd0;
@@ -182,6 +188,9 @@ module up_adc_common #(
       up_mmcm_resetn <= 'd0;
       up_resetn <= 'd0;
       up_adc_sync <= 'd0;
+      up_adc_ext_sync_arm <= 'd0;
+      up_adc_ext_sync_disarm <= 'd0;
+      up_adc_ext_sync_manual_req <= 'd0;
       up_adc_sref_sync <= 'd0;
       up_adc_num_lanes <= 'd0;
       up_adc_sdr_ddr_n <= 'd0;
@@ -213,6 +222,27 @@ module up_adc_common #(
         end
       end else if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h11)) begin
         up_adc_sync <= up_wdata[3];
+      end
+      if (up_adc_ext_sync_arm == 1'b1) begin
+        if (up_cntrl_xfer_done_s == 1'b1) begin
+          up_adc_ext_sync_arm <= 1'b0;
+        end
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h12)) begin
+        up_adc_ext_sync_arm <= up_wdata[1];
+      end
+      if (up_adc_ext_sync_disarm == 1'b1) begin
+        if (up_cntrl_xfer_done_s == 1'b1) begin
+          up_adc_ext_sync_disarm <= 1'b0;
+        end
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h12)) begin
+        up_adc_ext_sync_disarm <= up_wdata[2];
+      end
+      if (up_adc_ext_sync_manual_req == 1'b1) begin
+        if (up_cntrl_xfer_done_s == 1'b1) begin
+          up_adc_ext_sync_manual_req <= 1'b0;
+        end
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h12)) begin
+        up_adc_ext_sync_manual_req <= up_wdata[8];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h11)) begin
         up_adc_sdr_ddr_n <= up_wdata[16];
@@ -403,6 +433,10 @@ module up_adc_common #(
                                   1'd0, up_adc_num_lanes,
                                   3'd0, up_adc_sref_sync,
                                   up_adc_sync, up_adc_r1_mode, up_adc_ddr_edgesel, up_adc_pin_mode};
+          7'h12: up_rdata_int <= {20'd0,
+                                  3'b0, up_adc_ext_sync_manual_req,
+                                  4'b0,
+                                  1'b0, up_adc_ext_sync_disarm, up_adc_ext_sync_arm, 1'b0};
           7'h15: up_rdata_int <= up_adc_clk_count_s;
           7'h16: up_rdata_int <= adc_clk_ratio;
           7'h17: up_rdata_int <= {28'd0, up_status_pn_err, up_status_pn_oos, up_status_or, up_status_s};
@@ -435,7 +469,7 @@ module up_adc_common #(
 
   // adc control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(46)) i_xfer_cntrl (
+  up_xfer_cntrl #(.DATA_WIDTH(49)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_adc_sdr_ddr_n,
@@ -443,6 +477,9 @@ module up_adc_common #(
                       up_adc_symb_8_16b,
                       up_adc_num_lanes,
                       up_adc_sref_sync,
+                      up_adc_ext_sync_arm,
+                      up_adc_ext_sync_disarm,
+                      up_adc_ext_sync_manual_req,
                       up_adc_sync,
                       up_adc_start_code,
                       up_adc_r1_mode,
@@ -457,6 +494,9 @@ module up_adc_common #(
                       adc_symb_8_16b,
                       adc_num_lanes,
                       adc_sref_sync,
+                      adc_ext_sync_arm,
+                      adc_ext_sync_disarm,
+                      adc_ext_sync_manual_req,
                       adc_sync,
                       adc_start_code,
                       adc_r1_mode,
