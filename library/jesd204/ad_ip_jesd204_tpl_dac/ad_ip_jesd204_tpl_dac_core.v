@@ -95,36 +95,21 @@ module ad_ip_jesd204_tpl_dac_core #(
   wire [DAC_CDW-1:0] pn7_data;
   wire [DAC_CDW-1:0] pn15_data;
 
-  reg dac_sync_in_d1 ='d0;
-  reg dac_sync_in_d2 ='d0;
-  reg dac_sync_in_armed ='d0;
-  reg dac_ext_sync_arm_d1 = 'd0;
-  reg dac_ext_sync_disarm_d1 = 'd0;
-
   assign link_valid = 1'b1;
-  assign dac_sync_in_status = dac_sync_in_armed;
+  assign dac_sync_in_status = dac_sync_armed;
 
-  // External sync
-  always @(posedge clk) begin
-    dac_ext_sync_arm_d1 <= dac_ext_sync_arm;
-    dac_ext_sync_disarm_d1 <= dac_ext_sync_disarm;
-
-    dac_sync_in_d1 <= dac_sync_in | dac_sync_manual_req;
-    dac_sync_in_d2 <= dac_sync_in_d1;
-
-    if (EXT_SYNC == 1'b0) begin
-      dac_sync_in_armed <= 1'b0;
-    end else if (~dac_ext_sync_disarm_d1 & dac_ext_sync_disarm) begin
-      dac_sync_in_armed <= 1'b0;
-    end else if (~dac_ext_sync_arm_d1 & dac_ext_sync_arm) begin
-      dac_sync_in_armed <= 1'b1;
-    end else if (~dac_sync_in_d2 & dac_sync_in_d1) begin
-      dac_sync_in_armed <= 1'b0;
-    end
-  end
+  util_ext_sync #(
+    .ENABLED (EXT_SYNC)
+  ) i_util_ext_sync (
+    .clk (clk),
+    .ext_sync_arm (dac_ext_sync_arm),
+    .ext_sync_disarm (dac_ext_sync_disarm),
+    .sync_in (dac_sync_in | dac_sync_manual_req),
+    .sync_armed (dac_sync_armed)
+  );
 
   // Sync either from external or software source
-  assign dac_sync_int = dac_sync_in_armed | dac_sync;
+  assign dac_sync_int = dac_sync_armed | dac_sync;
 
   // device interface
 

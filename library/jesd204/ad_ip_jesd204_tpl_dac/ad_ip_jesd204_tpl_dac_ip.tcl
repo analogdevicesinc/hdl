@@ -44,6 +44,7 @@ adi_ip_files ad_ip_jesd204_tpl_dac [list \
   "$ad_hdl_dir/library/common/up_clock_mon.v" \
   "$ad_hdl_dir/library/common/up_dac_common.v" \
   "$ad_hdl_dir/library/common/up_dac_channel.v" \
+  "$ad_hdl_dir/library/common/util_ext_sync.v" \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
@@ -79,6 +80,10 @@ adi_add_bus "link" "master" \
     {"link_data" "TDATA"} \
   ]
 adi_add_bus_clock "link_clk" "link"
+
+adi_set_ports_dependency "dac_sync_in"             "EXT_SYNC == 1"
+adi_set_ports_dependency "dac_sync_manual_req_out" "EXT_SYNC == 1"
+adi_set_ports_dependency "dac_sync_manual_req_in"  "EXT_SYNC == 1"
 
 set_property -dict [list \
   "value_validation_type" "pairs" \
