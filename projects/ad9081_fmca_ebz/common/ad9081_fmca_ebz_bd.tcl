@@ -347,8 +347,6 @@ ad_connect  $sys_dma_resetn $adc_data_offload_name/m_axis_aresetn
 ad_connect  tx_device_clk_rstgen/peripheral_aresetn $dac_data_offload_name/m_axis_aresetn
 ad_connect  $sys_dma_resetn $dac_data_offload_name/s_axis_aresetn
 
-ad_connect  rx_device_clk_rstgen/peripheral_reset util_mxfe_cpack/reset
-ad_connect  tx_device_clk_rstgen/peripheral_reset util_mxfe_upack/reset
 ad_connect  $sys_dma_resetn axi_mxfe_rx_dma/m_dest_axi_aresetn
 ad_connect  $sys_dma_resetn axi_mxfe_tx_dma/m_src_axi_aresetn
 ad_connect  $sys_cpu_resetn $dac_data_offload_name/s_axi_aresetn
@@ -445,6 +443,57 @@ if {$ADI_PHY_SEL == 1} {
   make_bd_intf_pins_external  [get_bd_intf_pins jesd204_phy/GT_Serial]
 }
 
+#
+# Sync at TPL level 
+#
+
+create_bd_port -dir I ext_sync_in
+
+# Enable ADC external sync
+ad_ip_parameter rx_mxfe_tpl_core/adc_tpl_core CONFIG.EXT_SYNC 1
+ad_connect ext_sync_in rx_mxfe_tpl_core/adc_tpl_core/adc_sync_in
+
+# Enable DAC external sync
+ad_ip_parameter tx_mxfe_tpl_core/dac_tpl_core CONFIG.EXT_SYNC 1
+ad_connect ext_sync_in tx_mxfe_tpl_core/dac_tpl_core/dac_sync_in
+
+ad_ip_instance util_vector_logic manual_sync_or [list \
+  C_SIZE 1 \
+  C_OPERATION {or} \
+]
+
+ad_connect rx_mxfe_tpl_core/adc_tpl_core/adc_sync_manual_req_out manual_sync_or/Op1
+ad_connect tx_mxfe_tpl_core/dac_tpl_core/dac_sync_manual_req_out manual_sync_or/Op2
+
+ad_connect manual_sync_or/Res tx_mxfe_tpl_core/dac_tpl_core/dac_sync_manual_req_in
+ad_connect manual_sync_or/Res rx_mxfe_tpl_core/adc_tpl_core/adc_sync_manual_req_in
+
+# Reset pack cores
+ad_ip_instance util_reduced_logic cpack_rst_logic
+ad_ip_parameter cpack_rst_logic config.c_operation {or}
+ad_ip_parameter cpack_rst_logic config.c_size {2}
+
+ad_ip_instance xlconcat cpack_reset_sources
+ad_ip_parameter cpack_reset_sources config.num_ports {2}
+ad_connect rx_device_clk_rstgen/peripheral_reset cpack_reset_sources/in0
+ad_connect rx_mxfe_tpl_core/adc_tpl_core/adc_rst cpack_reset_sources/in1
+
+ad_connect cpack_reset_sources/dout cpack_rst_logic/op1
+ad_connect cpack_rst_logic/res util_mxfe_cpack/reset
+
+# Reset unpack cores
+ad_ip_instance util_reduced_logic upack_rst_logic
+ad_ip_parameter upack_rst_logic config.c_operation {or}
+ad_ip_parameter upack_rst_logic config.c_size {2}
+
+ad_ip_instance xlconcat upack_reset_sources
+ad_ip_parameter upack_reset_sources config.num_ports {2}
+ad_connect tx_device_clk_rstgen/peripheral_reset upack_reset_sources/in0
+ad_connect tx_mxfe_tpl_core/dac_tpl_core/dac_rst upack_reset_sources/in1
+
+ad_connect upack_reset_sources/dout upack_rst_logic/op1
+ad_connect upack_rst_logic/res util_mxfe_upack/reset
+
 if {$TDD_SUPPORT} {
   ad_ip_instance util_tdd_sync tdd_sync_0
   ad_connect tx_device_clk tdd_sync_0/clk
@@ -467,11 +516,8 @@ if {$TDD_SUPPORT} {
   ad_connect axi_tdd_0/tdd_tx_valid $dac_data_offload_name/sync_ext
   ad_connect axi_tdd_0/tdd_rx_valid $adc_data_offload_name/sync_ext
 
-  delete_bd_objs [get_bd_nets rx_device_clk_rstgen_peripheral_reset]
-
-  ad_ip_instance util_vector_logic cpack_rst_logic
-  ad_ip_parameter cpack_rst_logic CONFIG.C_OPERATION {OR}
-  ad_ip_parameter cpack_rst_logic CONFIG.C_SIZE {1}
+  ad_ip_parameter cpack_rst_logic CONFIG.C_SIZE {3}
+  ad_ip_parameter cpack_reset_sources CONFIG.NUM_PORTS {3}
 
   if {[get_files -quiet "ad_edge_detect.v"] == ""} {
     add_files -norecurse -fileset sources_1 "$ad_hdl_dir/library/common/ad_edge_detect.v"
@@ -483,9 +529,7 @@ if {$TDD_SUPPORT} {
 
   ad_connect axi_tdd_0/tdd_rx_valid mxfe_cpack_edge_detector/signal_in
 
-  ad_connect rx_device_clk_rstgen/peripheral_reset cpack_rst_logic/Op1
-  ad_connect mxfe_cpack_edge_detector/signal_out cpack_rst_logic/Op2
-  ad_connect cpack_rst_logic/Res util_mxfe_cpack/reset
+  ad_connect mxfe_cpack_edge_detector/signal_out cpack_reset_sources/In2
 
 } else {
   ad_connect GND $dac_data_offload_name/sync_ext
