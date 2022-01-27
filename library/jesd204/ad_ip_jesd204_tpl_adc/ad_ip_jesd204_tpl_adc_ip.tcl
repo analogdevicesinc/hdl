@@ -36,6 +36,7 @@ adi_ip_files ad_ip_jesd204_tpl_adc [list \
   "$ad_hdl_dir/library/common/up_clock_mon.v" \
   "$ad_hdl_dir/library/common/up_adc_common.v" \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
+  "$ad_hdl_dir/library/common/util_ext_sync.v" \
   "$ad_hdl_dir/library/common/ad_xcvr_rx_if.v" \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
@@ -71,6 +72,10 @@ adi_add_bus "link" "master" \
     {"link_data" "TDATA"} \
   ]
 adi_add_bus_clock "link_clk" "link"
+
+adi_set_ports_dependency "adc_sync_in"             "EXT_SYNC == 1"
+adi_set_ports_dependency "adc_sync_manual_req_out" "EXT_SYNC == 1"
+adi_set_ports_dependency "adc_sync_manual_req_in"  "EXT_SYNC == 1"
 
 foreach {p v} {
   "NUM_LANES" "1 2 3 4 6 8 12 16" \
@@ -128,6 +133,7 @@ set i 0
 
 foreach {k v w} {
   "TWOS_COMPLEMENT" "Use twos complement" "checkBox" \
+  "EXT_SYNC" "Enable external sync" "checkBox" \
   } { \
   set p [ipgui::get_guiparamspec -name $k -component $cc]
   ipgui::move_param -component $cc -order $i $p -parent $datapath_group

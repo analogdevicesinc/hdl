@@ -31,7 +31,8 @@ module ad_ip_jesd204_tpl_adc_regmap #(
   parameter DEV_PACKAGE = 0,
   parameter NUM_CHANNELS = 1,
   parameter DATA_PATH_WIDTH = 1,
-  parameter NUM_PROFILES = 1    // Number of supported JESD profiles
+  parameter NUM_PROFILES = 1,    // Number of supported JESD profiles
+  parameter EXT_SYNC = 0
 ) (
   // axi interface
   input s_axi_aclk,
@@ -73,6 +74,9 @@ module ad_ip_jesd204_tpl_adc_regmap #(
 
   input adc_sync_status,
   output adc_sync,
+  output adc_ext_sync_arm,
+  output adc_ext_sync_disarm,
+  output adc_ext_sync_manual_req,
   output adc_rst,
 
   // Underflow
@@ -195,6 +199,9 @@ module ad_ip_jesd204_tpl_adc_regmap #(
   end
 
   // common processor control
+  //
+  localparam CONFIG = (EXT_SYNC << 12);
+
 
   up_adc_common #(
     .COMMON_ID (6'h0),
@@ -206,7 +213,8 @@ module ad_ip_jesd204_tpl_adc_regmap #(
     .DRP_DISABLE (1),
     .USERPORTS_DISABLE (1),
     .GPIO_DISABLE (1),
-    .START_CODE_DISABLE (1)
+    .START_CODE_DISABLE (1),
+    .CONFIG (CONFIG)
   ) i_up_adc_common (
     .mmcm_rst (),
     .adc_clk (link_clk),
@@ -221,6 +229,9 @@ module ad_ip_jesd204_tpl_adc_regmap #(
     .adc_start_code (),
     .adc_sref_sync (),
     .adc_sync (adc_sync),
+    .adc_ext_sync_arm (adc_ext_sync_arm),
+    .adc_ext_sync_disarm (adc_ext_sync_disarm),
+    .adc_ext_sync_manual_req (adc_ext_sync_manual_req),
 
     .up_status_pn_err (up_status_pn_err),
     .up_status_pn_oos (up_status_pn_oos),
