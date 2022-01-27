@@ -17,6 +17,7 @@ GENERIC_DEPS += ../../common/up_axi.v
 GENERIC_DEPS += ../../common/up_clock_mon.v
 GENERIC_DEPS += ../../common/up_xfer_cntrl.v
 GENERIC_DEPS += ../../common/up_xfer_status.v
+GENERIC_DEPS += ../../common/util_ext_sync.v
 GENERIC_DEPS += ad_ip_jesd204_tpl_adc.v
 GENERIC_DEPS += ad_ip_jesd204_tpl_adc_channel.v
 GENERIC_DEPS += ad_ip_jesd204_tpl_adc_core.v
