@@ -103,7 +103,7 @@ ad_connect spi_adc/spi_clk axi_ad77681_dma/s_axis_aclk
 # interrupts
 
 ad_cpu_interrupt "ps-13" "mb-13" axi_ad77681_dma/irq
-ad_cpu_interrupt "ps-11" "mb-11" spi_adc/irq
+ad_cpu_interrupt "ps-12" "mb-12" spi_adc/irq
 
 # memory interconnects
 
