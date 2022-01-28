@@ -298,7 +298,7 @@ create_bd_port -dir I s_1v8_mgtravtt_sns_n
 # adrv9001
 
 ad_ip_instance axi_adrv9001 axi_adrv9001
-ad_ip_parameter axi_adrv9001 CONFIG.CMOS_LVDS_N 0
+ad_ip_parameter axi_adrv9001 CONFIG.CMOS_LVDS_N $ad_project_params(CMOS_LVDS_N)
 ad_ip_parameter axi_adrv9001 CONFIG.USE_RX_CLK_FOR_TX 0
 ad_ip_parameter axi_adrv9001 CONFIG.EXT_SYNC 1
 
