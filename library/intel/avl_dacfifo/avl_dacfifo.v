@@ -100,9 +100,9 @@ module avl_dacfifo #(
   wire                                  dma_ready_bypass_s;
   wire                                  avl_read_s;
   wire                                  avl_write_s;
-  wire        [ 24:0]                   avl_wr_address_s;
-  wire        [ 24:0]                   avl_rd_address_s;
-  wire        [ 24:0]                   avl_last_address_s;
+  wire        [(AVL_ADDRESS_WIDTH-1):0] avl_wr_address_s;
+  wire        [(AVL_ADDRESS_WIDTH-1):0] avl_rd_address_s;
+  wire        [(AVL_ADDRESS_WIDTH-1):0] avl_last_address_s;
   wire        [  6:0]                   avl_last_burstcount_s;
   wire        [  7:0]                   dma_last_beats_s;
   wire        [  6:0]                   avl_wr_burstcount_s;
@@ -123,6 +123,7 @@ module avl_dacfifo #(
     .DMA_DATA_WIDTH (DMA_DATA_WIDTH),
     .AVL_DDR_BASE_ADDRESS (AVL_BASE_ADDRESS),
     .DMA_MEM_ADDRESS_WIDTH(DMA_MEM_ADDRESS_WIDTH),
+    .AVL_DDR_ADDRESS_LIMIT (AVL_ADDRESS_LIMIT),
     .AVL_BURST_LENGTH (AVL_BURST_LENGTH)
   ) i_wr (
     .dma_clk (dma_clk),

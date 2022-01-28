@@ -67,7 +67,7 @@ proc ad_dacfifo_create {dac_fifo_name dac_data_width dac_dma_data_width dac_fifo
   set_instance_parameter_value $dac_fifo_name {AVL_DATA_WIDTH} {512}
   set_instance_parameter_value $dac_fifo_name {AVL_ADDRESS_WIDTH} {25}
   set_instance_parameter_value $dac_fifo_name {AVL_BASE_ADDRESS} {0}
-  set_instance_parameter_value $dac_fifo_name {AVL_ADDRESS_LIMIT} {0x8fffffff}
+  set_instance_parameter_value $dac_fifo_name {AVL_ADDRESS_LIMIT} {0x2000000}
   set_instance_parameter_value $dac_fifo_name {DAC_MEM_ADDRESS_WIDTH} {12}
   set_instance_parameter_value $dac_fifo_name {DMA_MEM_ADDRESS_WIDTH} {12}
   set_instance_parameter_value $dac_fifo_name {AVL_BURST_LENGTH} {64}

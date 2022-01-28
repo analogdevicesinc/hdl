@@ -59,15 +59,15 @@ set_interface_property avl_reset associatedclock avl_clock
 add_interface_port avl_reset avl_reset reset input 1
 
 add_interface amm_ddr avalon master
-add_interface_port amm_ddr avl_address address output 25
-add_interface_port amm_ddr avl_burstcount burstcount output 7
-add_interface_port amm_ddr avl_byteenable byteenable output 64
-add_interface_port amm_ddr avl_read read output 1
-add_interface_port amm_ddr avl_readdata readdata input 512
-add_interface_port amm_ddr avl_readdata_valid readdatavalid input 1
-add_interface_port amm_ddr avl_ready waitrequest_n input 1
-add_interface_port amm_ddr avl_write write output 1
-add_interface_port amm_ddr avl_writedata writedata output 512
+add_interface_port  amm_ddr  avl_address         address        output  AVL_ADDRESS_WIDTH
+add_interface_port  amm_ddr  avl_burstcount      burstcount     output  7
+add_interface_port  amm_ddr  avl_byteenable      byteenable     output  AVL_DATA_WIDTH/8
+add_interface_port  amm_ddr  avl_read            read           output  1
+add_interface_port  amm_ddr  avl_readdata        readdata       input   AVL_DATA_WIDTH
+add_interface_port  amm_ddr  avl_readdata_valid  readdatavalid  input   1
+add_interface_port  amm_ddr  avl_ready           waitrequest_n  input   1
+add_interface_port  amm_ddr  avl_write           write          output  1
+add_interface_port  amm_ddr  avl_writedata       writedata      output  AVL_DATA_WIDTH
 
 set_interface_property amm_ddr associatedClock avl_clock
 set_interface_property amm_ddr associatedReset avl_reset
