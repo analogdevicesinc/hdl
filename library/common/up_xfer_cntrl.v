@@ -91,7 +91,7 @@ module up_xfer_cntrl #(
       up_xfer_state_m2 <= up_xfer_state_m1;
       up_xfer_state <= up_xfer_state_m2;
       up_xfer_count <= up_xfer_count + 1'd1;
-      up_xfer_done_int <= (up_xfer_count == 6'd1) ? ~up_xfer_enable_s : 1'b0;
+      up_xfer_done_int <= (up_xfer_count == 6'd0) ? ~up_xfer_enable_s : 1'b0;
       if ((up_xfer_count == 6'd1) && (up_xfer_enable_s == 1'b0)) begin
         up_xfer_toggle <= ~up_xfer_toggle;
         up_xfer_data <= up_data_cntrl;
