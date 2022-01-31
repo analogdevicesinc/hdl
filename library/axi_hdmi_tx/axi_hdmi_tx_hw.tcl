@@ -94,6 +94,18 @@ add_interface_port vdma_if vdma_data          tdata  Input 64
 add_interface_port vdma_if vdma_ready         tready Output 1
 add_interface_port vdma_if vdma_end_of_frame  tlast  Input 1
 
+#vga port
+add_interface vga_if conduit end
+set_interface_property vga_if associatedClock hdmi_clock
+
+add_interface_port vga_if hdmi_out_clk v_clk      Output 1
+add_interface_port vga_if  vga_hsync   vga_hsync  Output 1
+add_interface_port vga_if  vga_vsync   vga_vsync  Output 1
+add_interface_port vga_if  vga_red     vga_red    Output 8
+add_interface_port vga_if  vga_green   vga_green  Output 8
+add_interface_port vga_if  vga_blue    vga_blue   Output 8
+
+
 proc add_out_interface {} {
 
   set interface [get_parameter_value INTERFACE]

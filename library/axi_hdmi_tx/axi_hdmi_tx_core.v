@@ -61,6 +61,14 @@ module axi_hdmi_tx_core #(
   output  reg             hdmi_24_data_e,
   output  reg [23:0]      hdmi_24_data,
 
+  // VGA interface 
+
+  output  reg             vga_hsync,
+  output  reg             vga_vsync,
+  output  reg [7:0]       vga_red,
+  output  reg [7:0]       vga_green,
+  output  reg [7:0]       vga_blue,
+
   // 36-bit interface
 
   output  reg             hdmi_36_hsync,
@@ -471,6 +479,14 @@ module axi_hdmi_tx_core #(
     hdmi_24_vsync <= hdmi_clip_vs_d;
     hdmi_24_data_e <= hdmi_clip_de_d;
     hdmi_24_data <= hdmi_clip_data;
+
+    //VGA INTERFACE SIGNALS 
+    vga_hsync <= hdmi_clip_hs_d;
+    vga_vsync <= hdmi_clip_vs_d;
+    vga_red   <= hdmi_clip_data[23:16];
+    vga_green <= hdmi_clip_data[15:8];
+    vga_blue  <= hdmi_clip_data[7:0];
+
 
     hdmi_16_hsync <= hdmi_16_hsync_d;
     hdmi_16_vsync <= hdmi_16_vsync_d;

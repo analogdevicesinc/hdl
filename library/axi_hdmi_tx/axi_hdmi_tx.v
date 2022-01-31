@@ -70,6 +70,15 @@ module axi_hdmi_tx #(
   output                  hdmi_36_data_e,
   output      [35:0]      hdmi_36_data,
 
+  // VGA interface 
+
+  output  reg             vga_hsync,
+  output  reg             vga_vsync,
+  output  reg [7:0]       vga_red,
+  output  reg [7:0]       vga_green,
+  output  reg [7:0]       vga_blue,
+
+
   // vdma interface
 
   input                   vdma_clk,
@@ -269,6 +278,11 @@ module axi_hdmi_tx #(
     .hdmi_24_vsync (hdmi_24_vsync),
     .hdmi_24_data_e (hdmi_24_data_e),
     .hdmi_24_data (hdmi_24_data),
+    .vga_hsync(vga_hsync),
+    .vga_vsync(vga_vsync),
+    .vga_red(vga_red),
+    .vga_green(vga_green),
+    .vga_blue(vga_blue),
     .hdmi_36_hsync (hdmi_36_hsync),
     .hdmi_36_vsync (hdmi_36_vsync),
     .hdmi_36_data_e (hdmi_36_data_e),

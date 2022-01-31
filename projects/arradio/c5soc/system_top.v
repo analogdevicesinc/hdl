@@ -290,8 +290,10 @@ module system_top (
     .sys_spi_SS_n (spi_csn),
  
 
-    .axi_hdmi_tx_0_hdmi_if_h_clk (vga_clk),
-	 .axi_hdmi_tx_0_hdmi_if_h24_data ({vga_red, vga_grn, vga_blu}),
+    .vga_out_vga_if_v_clk (vga_clk),
+	  .vga_out_vga_if_vga_red (vga_red),
+    .vga_out_vga_if_vga_green (vga_grn),
+    .vga_out_vga_if_vga_blue (vga_blu),
     .axi_hdmi_tx_0_hdmi_if_h24_hsync (vga_hsync),
     .axi_hdmi_tx_0_hdmi_if_h24_vsync (vga_vsync));
     

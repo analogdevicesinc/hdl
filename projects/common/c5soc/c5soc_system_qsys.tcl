@@ -112,228 +112,203 @@
 
  # cpu/hps handling
 
- proc ad_cpu_interrupt {m_irq m_port} {
+proc ad_cpu_interrupt {m_irq m_port} {
 
-   add_connection sys_hps.f2h_irq0 ${m_port}
-     set_connection_parameter_value sys_hps.f2h_irq0/${m_port} irqNumber ${m_irq}
-     }
+  add_connection sys_hps.f2h_irq0 ${m_port}
+  set_connection_parameter_value sys_hps.f2h_irq0/${m_port} irqNumber ${m_irq}
+}
 
-     proc ad_cpu_interconnect {m_base m_port} {
+proc ad_cpu_interconnect {m_base m_port} {
 
-       add_connection sys_hps.h2f_lw_axi_master ${m_port}
-         set_connection_parameter_value sys_hps.h2f_lw_axi_master/${m_port} baseAddress ${m_base}
-         }
+  add_connection sys_hps.h2f_lw_axi_master ${m_port}
+  set_connection_parameter_value sys_hps.h2f_lw_axi_master/${m_port} baseAddress ${m_base}
+}
 
-         proc ad_dma_interconnect {m_port m_id} {
+proc ad_dma_interconnect {m_port m_id} {
 
-           if {${m_id} == 1} {
-               add_connection ${m_port} sys_hps.f2h_sdram1_data
-                   set_connection_parameter_value ${m_port}/sys_hps.f2h_sdram1_data baseAddress {0x0000}
-                       return
-                         }
+  if {${m_id} == 1} {
+    add_connection ${m_port} sys_hps.f2h_sdram1_data
+    set_connection_parameter_value ${m_port}/sys_hps.f2h_sdram1_data baseAddress {0x0000}
+    return
+  }
 
-                           add_connection ${m_port} sys_hps.f2h_sdram2_data
-                             set_connection_parameter_value ${m_port}/sys_hps.f2h_sdram2_data baseAddress {0x0000}
-                             }
+  add_connection ${m_port} sys_hps.f2h_sdram2_data
+  set_connection_parameter_value ${m_port}/sys_hps.f2h_sdram2_data baseAddress {0x0000}
+ }
 
-                             # common dma interfaces
+ # common dma interfaces
 
-                             add_instance sys_dma_clk clock_source
-                             add_connection sys_hps.h2f_user0_clock sys_dma_clk.clk_in
-                             add_connection sys_clk.clk_reset sys_dma_clk.clk_in_reset
-                             add_connection sys_dma_clk.clk sys_hps.f2h_sdram1_clock
-                             add_connection sys_dma_clk.clk sys_hps.f2h_sdram2_clock
+ add_instance sys_dma_clk clock_source
+ add_connection sys_hps.h2f_user0_clock sys_dma_clk.clk_in
+ add_connection sys_clk.clk_reset sys_dma_clk.clk_in_reset
+ add_connection sys_dma_clk.clk sys_hps.f2h_sdram1_clock
+ add_connection sys_dma_clk.clk sys_hps.f2h_sdram2_clock
 
-                             # internal memory
+ # internal memory
 
-                             add_instance sys_int_mem altera_avalon_onchip_memory2
-                             set_instance_parameter_value sys_int_mem {dualPort} {0}
-                             set_instance_parameter_value sys_int_mem {dataWidth} {64}
-                             set_instance_parameter_value sys_int_mem {memorySize} {65536.0}
-                             set_instance_parameter_value sys_int_mem {initMemContent} {0}
-                             add_connection sys_clk.clk sys_int_mem.clk1
-                             add_connection sys_clk.clk_reset sys_int_mem.reset1
-                             add_connection sys_hps.h2f_axi_master sys_int_mem.s1
-                             set_connection_parameter_value sys_hps.h2f_axi_master/sys_int_mem.s1 baseAddress {0x0000}
+ add_instance sys_int_mem altera_avalon_onchip_memory2
+ set_instance_parameter_value sys_int_mem {dualPort} {0}
+ set_instance_parameter_value sys_int_mem {dataWidth} {64}
+ set_instance_parameter_value sys_int_mem {memorySize} {65536.0}
+ set_instance_parameter_value sys_int_mem {initMemContent} {0}
+ add_connection sys_clk.clk sys_int_mem.clk1
+ add_connection sys_clk.clk_reset sys_int_mem.reset1
+ add_connection sys_hps.h2f_axi_master sys_int_mem.s1
+ set_connection_parameter_value sys_hps.h2f_axi_master/sys_int_mem.s1 baseAddress {0x0000}
 
-                             # hdmi
+ # vga (HDMI_TX IP)
 
-                             add_instance axi_hdmi_tx_0 axi_hdmi_tx 1.0
-                             set_instance_parameter_value axi_hdmi_tx_0 {CR_CB_N} {0}
-                             set_instance_parameter_value axi_hdmi_tx_0 {INTERFACE} {24_BIT}
-                             set_instance_parameter_value axi_hdmi_tx_0 {ID} {0}
+ add_instance vga_out axi_hdmi_tx 
+ set_instance_parameter_value vga_out {CR_CB_N} {0}
+ set_instance_parameter_value vga_out {INTERFACE} {24_BIT}
+ set_instance_parameter_value vga_out {ID} {0}
+ add_interface vga_out_vga_if conduit end
+ set_interface_property vga_out_vga_if EXPORT_OF vga_out.vga_if
 
-                             add_interface axi_hdmi_tx_0_hdmi_if conduit end
-                             set_interface_property axi_hdmi_tx_0_hdmi_if EXPORT_OF axi_hdmi_tx_0.hdmi_if
+ # display (vga-pll)
 
-                             # display (vga-pll)
+ add_instance pixel_clk_pll altera_pll
+ set_instance_parameter_value pixel_clk_pll {gui_device_speed_grade} {2}
+ set_instance_parameter_value pixel_clk_pll {gui_reference_clock_frequency} {50.0}
+ set_instance_parameter_value pixel_clk_pll {gui_use_locked} {0}
+ set_instance_parameter_value pixel_clk_pll {gui_number_of_clocks} {2}
+ set_instance_parameter_value pixel_clk_pll {gui_output_clock_frequency0} {65.00}
+ set_instance_parameter_value pixel_clk_pll {gui_output_clock_frequency1} {100.0}
+ set_instance_parameter_value pixel_clk_pll {gui_en_reconf} {1}
+ add_instance pixel_clk_pll_reconfig altera_pll_reconfig
+ set_instance_parameter_value pixel_clk_pll_reconfig {ENABLE_BYTEENABLE} {0}
+ set_instance_parameter_value pixel_clk_pll_reconfig {ENABLE_MIF} {0}
+ set_instance_parameter_value pixel_clk_pll_reconfig {MIF_FILE_NAME} {}
+ add_connection pixel_clk_pll.reconfig_from_pll pixel_clk_pll_reconfig.reconfig_from_pll
+ set_connection_parameter_value pixel_clk_pll.reconfig_from_pll/pixel_clk_pll_reconfig.reconfig_from_pll endPort {}
+ set_connection_parameter_value pixel_clk_pll.reconfig_from_pll/pixel_clk_pll_reconfig.reconfig_from_pll endPortLSB {0}
+ set_connection_parameter_value pixel_clk_pll.reconfig_from_pll/pixel_clk_pll_reconfig.reconfig_from_pll startPort {}
+ set_connection_parameter_value pixel_clk_pll.reconfig_from_pll/pixel_clk_pll_reconfig.reconfig_from_pll startPortLSB {0}
+ set_connection_parameter_value pixel_clk_pll.reconfig_from_pll/pixel_clk_pll_reconfig.reconfig_from_pll width {0}
+ add_connection pixel_clk_pll.reconfig_to_pll pixel_clk_pll_reconfig.reconfig_to_pll
+ set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_reconfig.reconfig_to_pll endPort {}
+ set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_reconfig.reconfig_to_pll endPortLSB {0}
+ set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_reconfig.reconfig_to_pll startPort {}
+ set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_reconfig.reconfig_to_pll startPortLSB {0}
+ set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_reconfig.reconfig_to_pll width {0}
+ add_instance video_dmac axi_dmac
+ set_instance_parameter_value video_dmac {ASYNC_CLK_DEST_REQ_MANUAL} {1}
+ set_instance_parameter_value video_dmac {ASYNC_CLK_REQ_SRC_MANUAL} {1}
+ set_instance_parameter_value video_dmac {ASYNC_CLK_SRC_DEST_MANUAL} {1}
+ set_instance_parameter_value video_dmac {AUTO_ASYNC_CLK} {1}
+ set_instance_parameter_value video_dmac {AXI_SLICE_DEST} {0}
+ set_instance_parameter_value video_dmac {AXI_SLICE_SRC} {0}
+ set_instance_parameter_value video_dmac {CYCLIC} {1}
+ set_instance_parameter_value video_dmac {HAS_AXIS_TLAST} {1}
+ set_instance_parameter_value video_dmac {DMA_2D_TRANSFER} {1}
+ set_instance_parameter_value video_dmac {DMA_DATA_WIDTH_DEST} {64}
+ set_instance_parameter_value video_dmac {DMA_DATA_WIDTH_SRC} {128}
+ set_instance_parameter_value video_dmac {DMA_LENGTH_WIDTH} {24}
+ set_instance_parameter_value video_dmac {DMA_TYPE_DEST} {1}
+ set_instance_parameter_value video_dmac {DMA_TYPE_SRC} {0}
+ set_instance_parameter_value video_dmac {FIFO_SIZE} {8}
+ set_instance_parameter_value video_dmac {ID} {0}
+ set_instance_parameter_value video_dmac {SYNC_TRANSFER_START} {0}
+ add_connection video_dmac.m_axis vga_out.vdma_if axi4stream
+ add_connection sys_clk.clk           pixel_clk_pll.refclk
+ add_connection sys_clk.clk           pixel_clk_pll_reconfig.mgmt_clk
+ add_connection sys_clk.clk           vga_out.s_axi_clock
+ add_connection sys_clk.clk           video_dmac.s_axi_clock
+ add_connection pixel_clk_pll.outclk1 video_dmac.m_src_axi_clock
+ add_connection pixel_clk_pll.outclk1 video_dmac.if_m_axis_aclk
+ add_connection pixel_clk_pll.outclk1 sys_hps.f2h_sdram0_clock
+ add_connection pixel_clk_pll.outclk1 vga_out.vdma_clock
+ add_connection pixel_clk_pll.outclk0 vga_out.hdmi_clock
+ add_connection sys_clk.clk_reset     pixel_clk_pll.reset
+ add_connection sys_clk.clk_reset     pixel_clk_pll_reconfig.mgmt_reset
+ add_connection sys_clk.clk_reset     vga_out.s_axi_reset
+ add_connection sys_clk.clk_reset     video_dmac.m_src_axi_reset
+ add_connection sys_clk.clk_reset     video_dmac.s_axi_reset
+ add_connection video_dmac.m_src_axi sys_hps.f2h_sdram0_data
+ set_connection_parameter_value video_dmac.m_src_axi/sys_hps.f2h_sdram0_data baseAddress {0x0000}
 
-                             add_instance pixel_clk_pll altera_pll
-                             set_instance_parameter_value pixel_clk_pll {gui_device_speed_grade} {2}
-                             set_instance_parameter_value pixel_clk_pll {gui_reference_clock_frequency} {50.0}
-                             set_instance_parameter_value pixel_clk_pll {gui_use_locked} {0}
-                             set_instance_parameter_value pixel_clk_pll {gui_number_of_clocks} {2}
-                             set_instance_parameter_value pixel_clk_pll {gui_output_clock_frequency0} {65.00}
-                             set_instance_parameter_value pixel_clk_pll {gui_output_clock_frequency1} {100.0}
-                             set_instance_parameter_value pixel_clk_pll {gui_en_reconf} {1}
+ # id
 
+ add_instance sys_id altera_avalon_sysid_qsys
+ set_instance_parameter_value sys_id {id} {-1395322110}
+ add_connection sys_clk.clk sys_id.clk
+ add_connection sys_clk.clk_reset sys_id.reset
 
+ # gpio-bd
 
+ add_instance sys_gpio_bd altera_avalon_pio
+ set_instance_parameter_value sys_gpio_bd {direction} {InOut}
+ set_instance_parameter_value sys_gpio_bd {generateIRQ} {1}
+ set_instance_parameter_value sys_gpio_bd {width} {32}
+ add_connection sys_clk.clk sys_gpio_bd.clk
+ add_connection sys_clk.clk_reset sys_gpio_bd.reset
+ add_interface sys_gpio_bd conduit end
+ set_interface_property sys_gpio_bd EXPORT_OF sys_gpio_bd.external_connection
 
+ # gpio-in
 
-                             add_instance pixel_clk_pll_reconfig altera_pll_reconfig
-                             set_instance_parameter_value pixel_clk_pll_reconfig {ENABLE_BYTEENABLE} {0}
-                             set_instance_parameter_value pixel_clk_pll_reconfig {ENABLE_MIF} {0}
-                             set_instance_parameter_value pixel_clk_pll_reconfig {MIF_FILE_NAME} {}
+ add_instance sys_gpio_in altera_avalon_pio
+ set_instance_parameter_value sys_gpio_in {direction} {Input}
+ set_instance_parameter_value sys_gpio_in {generateIRQ} {1}
+ set_instance_parameter_value sys_gpio_in {width} {32}
+ add_connection sys_clk.clk_reset sys_gpio_in.reset
+ add_connection sys_clk.clk sys_gpio_in.clk
+ add_interface sys_gpio_in conduit end
+ set_interface_property sys_gpio_in EXPORT_OF sys_gpio_in.external_connection
 
-                             add_connection pixel_clk_pll.reconfig_from_pll pixel_clk_pll_reconfig.reconfig_from_pll
-                             set_connection_parameter_value pixel_clk_pll.reconfig_from_pll/pixel_clk_pll_reconfig.reconfig_from_pll endPort {}
-                             set_connection_parameter_value pixel_clk_pll.reconfig_from_pll/pixel_clk_pll_reconfig.reconfig_from_pll endPortLSB {0}
-                             set_connection_parameter_value pixel_clk_pll.reconfig_from_pll/pixel_clk_pll_reconfig.reconfig_from_pll startPort {}
-                             set_connection_parameter_value pixel_clk_pll.reconfig_from_pll/pixel_clk_pll_reconfig.reconfig_from_pll startPortLSB {0}
-                             set_connection_parameter_value pixel_clk_pll.reconfig_from_pll/pixel_clk_pll_reconfig.reconfig_from_pll width {0}
+ # gpio-out
 
-                             add_connection pixel_clk_pll.reconfig_to_pll pixel_clk_pll_reconfig.reconfig_to_pll
-                             set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_reconfig.reconfig_to_pll endPort {}
-                             set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_reconfig.reconfig_to_pll endPortLSB {0}
-                             set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_reconfig.reconfig_to_pll startPort {}
-                             set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_reconfig.reconfig_to_pll startPortLSB {0}
-                             set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_reconfig.reconfig_to_pll width {0}
+ add_instance sys_gpio_out altera_avalon_pio
+ set_instance_parameter_value sys_gpio_out {direction} {Output}
+ set_instance_parameter_value sys_gpio_out {generateIRQ} {0}
+ set_instance_parameter_value sys_gpio_out {width} {32}
+ add_connection sys_clk.clk_reset sys_gpio_out.reset
+ add_connection sys_clk.clk sys_gpio_out.clk
+ add_interface sys_gpio_out conduit end
+ set_interface_property sys_gpio_out EXPORT_OF sys_gpio_out.external_connection
 
+ # spi
 
-                             add_instance video_dmac axi_dmac
-                             set_instance_parameter_value video_dmac {ASYNC_CLK_DEST_REQ_MANUAL} {1}
-                             set_instance_parameter_value video_dmac {ASYNC_CLK_REQ_SRC_MANUAL} {1}
-                             set_instance_parameter_value video_dmac {ASYNC_CLK_SRC_DEST_MANUAL} {1}
-                             set_instance_parameter_value video_dmac {AUTO_ASYNC_CLK} {1}
-                             set_instance_parameter_value video_dmac {AXI_SLICE_DEST} {0}
-                             set_instance_parameter_value video_dmac {AXI_SLICE_SRC} {0}
-                             set_instance_parameter_value video_dmac {CYCLIC} {1}
-                             set_instance_parameter_value video_dmac {HAS_AXIS_TLAST} {1}
-                             set_instance_parameter_value video_dmac {DMA_2D_TRANSFER} {1}
-                             set_instance_parameter_value video_dmac {DMA_DATA_WIDTH_DEST} {64}
-                             set_instance_parameter_value video_dmac {DMA_DATA_WIDTH_SRC} {128}
-                             set_instance_parameter_value video_dmac {DMA_LENGTH_WIDTH} {24}
-                             set_instance_parameter_value video_dmac {DMA_TYPE_DEST} {1}
-                             set_instance_parameter_value video_dmac {DMA_TYPE_SRC} {0}
-                             set_instance_parameter_value video_dmac {FIFO_SIZE} {8}
-                             set_instance_parameter_value video_dmac {ID} {0}
-                             set_instance_parameter_value video_dmac {SYNC_TRANSFER_START} {0}
+ add_instance sys_spi altera_avalon_spi
+ set_instance_parameter_value sys_spi {clockPhase} {0}
+ set_instance_parameter_value sys_spi {clockPolarity} {1}
+ set_instance_parameter_value sys_spi {dataWidth} {8}
+ set_instance_parameter_value sys_spi {masterSPI} {1}
+ set_instance_parameter_value sys_spi {numberOfSlaves} {1}
+ set_instance_parameter_value sys_spi {targetClockRate} {50000000.0}
+ add_connection sys_clk.clk sys_spi.clk
+ add_connection sys_clk.clk_reset sys_spi.reset
+ add_interface sys_spi conduit end
+ set_interface_property sys_spi EXPORT_OF sys_spi.external
 
-                             add_connection video_dmac.m_axis axi_hdmi_tx_0.vdma_if axi4stream
+ # system id
 
-                             add_connection sys_clk.clk           pixel_clk_pll.refclk
-                             add_connection sys_clk.clk           pixel_clk_pll_reconfig.mgmt_clk
-                             add_connection sys_clk.clk           axi_hdmi_tx_0.s_axi_clock
-                             add_connection sys_clk.clk           video_dmac.s_axi_clock
-                             add_connection pixel_clk_pll.outclk1 video_dmac.m_src_axi_clock
-                             add_connection pixel_clk_pll.outclk1 video_dmac.if_m_axis_aclk
-                             add_connection pixel_clk_pll.outclk1 sys_hps.f2h_sdram0_clock
-                             add_connection pixel_clk_pll.outclk1 axi_hdmi_tx_0.vdma_clock
-                             add_connection pixel_clk_pll.outclk0 axi_hdmi_tx_0.hdmi_clock
+ add_instance axi_sysid_0 axi_sysid
+ add_instance rom_sys_0 sysid_rom
+ add_connection axi_sysid_0.if_rom_addr rom_sys_0.if_rom_addr
+ add_connection rom_sys_0.if_rom_data axi_sysid_0.if_sys_rom_data
+ add_connection sys_clk.clk rom_sys_0.if_clk
+ add_connection sys_clk.clk axi_sysid_0.s_axi_clock
+ add_connection sys_clk.clk_reset axi_sysid_0.s_axi_reset
+ add_interface pr_rom_data_nc conduit end
+ set_interface_property pr_rom_data_nc EXPORT_OF axi_sysid_0.if_pr_rom_data
 
-                             add_connection sys_clk.clk_reset     pixel_clk_pll.reset
-                             add_connection sys_clk.clk_reset     pixel_clk_pll_reconfig.mgmt_reset
-                             add_connection sys_clk.clk_reset     axi_hdmi_tx_0.s_axi_reset
-                             add_connection sys_clk.clk_reset     video_dmac.m_src_axi_reset
-                             add_connection sys_clk.clk_reset     video_dmac.s_axi_reset
+ # interrupts
 
-                             add_connection video_dmac.m_src_axi sys_hps.f2h_sdram0_data
-                             set_connection_parameter_value video_dmac.m_src_axi/sys_hps.f2h_sdram0_data baseAddress {0x0000}
+ ad_cpu_interrupt 0 sys_gpio_bd.irq
+ ad_cpu_interrupt 1 sys_spi.irq
+ ad_cpu_interrupt 7 video_dmac.interrupt_sender
 
-                             # id
+ # cpu interconnects
 
+ ad_cpu_interconnect 0x00108000 sys_spi.spi_control_port
+ ad_cpu_interconnect 0x00010000 sys_id.control_slave
+ ad_cpu_interconnect 0x00010080 sys_gpio_bd.s1
+ ad_cpu_interconnect 0x00010100 sys_gpio_in.s1
+ ad_cpu_interconnect 0x00108030 sys_gpio_out.s1
 
-                             add_instance sys_id altera_avalon_sysid_qsys
-                             set_instance_parameter_value sys_id {id} {-1395322110}
-                             add_connection sys_clk.clk sys_id.clk
-                             add_connection sys_clk.clk_reset sys_id.reset
-
-                             # gpio-bd
-
-                             add_instance sys_gpio_bd altera_avalon_pio
-                             set_instance_parameter_value sys_gpio_bd {direction} {InOut}
-                             set_instance_parameter_value sys_gpio_bd {generateIRQ} {1}
-                             set_instance_parameter_value sys_gpio_bd {width} {32}
-                             add_connection sys_clk.clk sys_gpio_bd.clk
-                             add_connection sys_clk.clk_reset sys_gpio_bd.reset
-                             add_interface sys_gpio_bd conduit end
-                             set_interface_property sys_gpio_bd EXPORT_OF sys_gpio_bd.external_connection
-
-                             # gpio-in
-
-                             add_instance sys_gpio_in altera_avalon_pio
-                             set_instance_parameter_value sys_gpio_in {direction} {Input}
-                             set_instance_parameter_value sys_gpio_in {generateIRQ} {1}
-                             set_instance_parameter_value sys_gpio_in {width} {32}
-                             add_connection sys_clk.clk_reset sys_gpio_in.reset
-                             add_connection sys_clk.clk sys_gpio_in.clk
-                             add_interface sys_gpio_in conduit end
-                             set_interface_property sys_gpio_in EXPORT_OF sys_gpio_in.external_connection
-
-                             # gpio-out
-
-                             add_instance sys_gpio_out altera_avalon_pio
-                             set_instance_parameter_value sys_gpio_out {direction} {Output}
-                             set_instance_parameter_value sys_gpio_out {generateIRQ} {0}
-                             set_instance_parameter_value sys_gpio_out {width} {32}
-                             add_connection sys_clk.clk_reset sys_gpio_out.reset
-                             add_connection sys_clk.clk sys_gpio_out.clk
-                             add_interface sys_gpio_out conduit end
-                             set_interface_property sys_gpio_out EXPORT_OF sys_gpio_out.external_connection
-
-                             # spi
-
-                             add_instance sys_spi altera_avalon_spi
-                             set_instance_parameter_value sys_spi {clockPhase} {0}
-                             set_instance_parameter_value sys_spi {clockPolarity} {1}
-                             set_instance_parameter_value sys_spi {dataWidth} {8}
-                             set_instance_parameter_value sys_spi {masterSPI} {1}
-                             set_instance_parameter_value sys_spi {numberOfSlaves} {1}
-                             set_instance_parameter_value sys_spi {targetClockRate} {50000000.0}
-                             add_connection sys_clk.clk sys_spi.clk
-                             add_connection sys_clk.clk_reset sys_spi.reset
-                             add_interface sys_spi conduit end
-                             set_interface_property sys_spi EXPORT_OF sys_spi.external
-
-                             # system id
-
-                             add_instance axi_sysid_0 axi_sysid
-                             add_instance rom_sys_0 sysid_rom
-
-                             add_connection axi_sysid_0.if_rom_addr rom_sys_0.if_rom_addr
-                             add_connection rom_sys_0.if_rom_data axi_sysid_0.if_sys_rom_data
-                             add_connection sys_clk.clk rom_sys_0.if_clk
-                             add_connection sys_clk.clk axi_sysid_0.s_axi_clock
-                             add_connection sys_clk.clk_reset axi_sysid_0.s_axi_reset
-
-                             add_interface pr_rom_data_nc conduit end
-                             set_interface_property pr_rom_data_nc EXPORT_OF axi_sysid_0.if_pr_rom_data
-
-                             # interrupts
-
-                             ad_cpu_interrupt 0 sys_gpio_bd.irq
-                             ad_cpu_interrupt 1 sys_spi.irq
-
-                             ad_cpu_interrupt 7 video_dmac.interrupt_sender
-
-
-
-                             # cpu interconnects
-
-                             ad_cpu_interconnect 0x00108000 sys_spi.spi_control_port
-
-                             ad_cpu_interconnect 0x00010000 sys_id.control_slave
-                             ad_cpu_interconnect 0x00010080 sys_gpio_bd.s1
-                             ad_cpu_interconnect 0x00010100 sys_gpio_in.s1
-                             ad_cpu_interconnect 0x00108030 sys_gpio_out.s1
-
-
-                            
-                             ad_cpu_interconnect 0x00110800 video_dmac.s_axi
-                             ad_cpu_interconnect 0x00130000 axi_hdmi_tx_0.s_axi
-                             ad_cpu_interconnect 0x00118900 pixel_clk_pll_reconfig.mgmt_avalon_slave
-                             ad_cpu_interconnect 0x00140000 axi_sysid_0.s_axi
-                                                 
-
-                             
+ ad_cpu_interconnect 0x00110800 video_dmac.s_axi
+ ad_cpu_interconnect 0x00130000 vga_out.s_axi
+ ad_cpu_interconnect 0x00118900 pixel_clk_pll_reconfig.mgmt_avalon_slave
+ ad_cpu_interconnect 0x00140000 axi_sysid_0.s_axi
+                   
