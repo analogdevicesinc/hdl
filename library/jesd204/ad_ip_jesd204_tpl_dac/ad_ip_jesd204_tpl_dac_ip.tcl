@@ -142,6 +142,7 @@ foreach {k v w} {
   "IQCORRECTION_DISABLE" "Disable IQ Correction" "checkBox" \
   "XBAR_ENABLE" "Enable user data XBAR" "checkBox" \
   "DDS_TYPE" "DDS Type" "comboBox" \
+  "DDS_PHASE_DW" "DDS Phase Width" "text" \
   "DDS_CORDIC_DW" "CORDIC DDS Data Width" "text" \
   "DDS_CORDIC_PHASE_DW" "CORDIC DDS Phase Width" "text" \
   } { \

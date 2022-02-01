@@ -52,6 +52,7 @@ module ad_ip_jesd204_tpl_dac #(
   parameter DDS_TYPE = 1,
   parameter DDS_CORDIC_DW = 16,
   parameter DDS_CORDIC_PHASE_DW = 16,
+  parameter DDS_PHASE_DW = 16,
   parameter DATAPATH_DISABLE = 0,
   parameter IQCORRECTION_DISABLE = 1,
   parameter EXT_SYNC = 0,
@@ -125,11 +126,11 @@ module ad_ip_jesd204_tpl_dac #(
   wire dac_dds_format;
 
   wire [NUM_CHANNELS*16-1:0] dac_dds_scale_0_s;
-  wire [NUM_CHANNELS*16-1:0] dac_dds_init_0_s;
-  wire [NUM_CHANNELS*16-1:0] dac_dds_incr_0_s;
   wire [NUM_CHANNELS*16-1:0] dac_dds_scale_1_s;
-  wire [NUM_CHANNELS*16-1:0] dac_dds_init_1_s;
-  wire [NUM_CHANNELS*16-1:0] dac_dds_incr_1_s;
+  wire [NUM_CHANNELS*DDS_PHASE_DW-1:0] dac_dds_init_0_s;
+  wire [NUM_CHANNELS*DDS_PHASE_DW-1:0] dac_dds_incr_0_s;
+  wire [NUM_CHANNELS*DDS_PHASE_DW-1:0] dac_dds_init_1_s;
+  wire [NUM_CHANNELS*DDS_PHASE_DW-1:0] dac_dds_incr_1_s;
   wire [NUM_CHANNELS*16-1:0] dac_pat_data_0_s;
   wire [NUM_CHANNELS*16-1:0] dac_pat_data_1_s;
   wire [NUM_CHANNELS*4-1:0] dac_data_sel_s;
@@ -156,7 +157,8 @@ module ad_ip_jesd204_tpl_dac #(
     .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
     .PADDING_TO_MSB_LSB_N (PADDING_TO_MSB_LSB_N),
     .NUM_PROFILES(1),
-    .EXT_SYNC (EXT_SYNC)
+    .EXT_SYNC (EXT_SYNC),
+    .DDS_PHASE_DW (DDS_PHASE_DW)
   ) i_regmap (
     .s_axi_aclk (s_axi_aclk),
     .s_axi_aresetn (s_axi_aresetn),
@@ -234,6 +236,7 @@ module ad_ip_jesd204_tpl_dac #(
     .DDS_TYPE (DDS_TYPE),
     .DDS_CORDIC_DW (DDS_CORDIC_DW),
     .DDS_CORDIC_PHASE_DW (DDS_CORDIC_PHASE_DW),
+    .DDS_PHASE_DW (DDS_PHASE_DW),
     .EXT_SYNC (EXT_SYNC)
   ) i_core (
     .clk (link_clk),
