@@ -41,7 +41,7 @@ module ad_dds #(
   parameter DISABLE = 0,
   // range 8-24
   parameter DDS_DW = 16,
-  // range 8-16 (FIX ME)
+  // range 8-32
   parameter PHASE_DW = 16,
   // set 1 for CORDIC or 2 for Polynomial
   parameter DDS_TYPE = 1,
@@ -62,8 +62,8 @@ module ad_dds #(
   input                               dac_valid,
   input       [                15:0]  tone_1_scale,
   input       [                15:0]  tone_2_scale,
-  input       [                15:0]  tone_1_init_offset,
-  input       [                15:0]  tone_2_init_offset,
+  input       [        PHASE_DW-1:0]  tone_1_init_offset,
+  input       [        PHASE_DW-1:0]  tone_2_init_offset,
   input       [        PHASE_DW-1:0]  tone_1_freq_word,
   input       [        PHASE_DW-1:0]  tone_2_freq_word,
   output  reg [DDS_DW*CLK_RATIO-1:0]  dac_dds_data
