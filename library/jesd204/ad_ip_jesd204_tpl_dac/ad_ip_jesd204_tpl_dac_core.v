@@ -50,6 +50,7 @@ module ad_ip_jesd204_tpl_dac_core #(
   parameter DDS_TYPE = 1,
   parameter DDS_CORDIC_DW = 16,
   parameter DDS_CORDIC_PHASE_DW = 16,
+  parameter DDS_PHASE_DW = 16,
   parameter EXT_SYNC = 0
 ) (
 
@@ -82,11 +83,11 @@ module ad_ip_jesd204_tpl_dac_core #(
   input [NUM_CHANNELS-1:0]   dac_mask_enable,
 
   input [NUM_CHANNELS*16-1:0] dac_dds_scale_0,
-  input [NUM_CHANNELS*16-1:0] dac_dds_init_0,
-  input [NUM_CHANNELS*16-1:0] dac_dds_incr_0,
   input [NUM_CHANNELS*16-1:0] dac_dds_scale_1,
-  input [NUM_CHANNELS*16-1:0] dac_dds_init_1,
-  input [NUM_CHANNELS*16-1:0] dac_dds_incr_1,
+  input [NUM_CHANNELS*DDS_PHASE_DW-1:0] dac_dds_init_0,
+  input [NUM_CHANNELS*DDS_PHASE_DW-1:0] dac_dds_incr_0,
+  input [NUM_CHANNELS*DDS_PHASE_DW-1:0] dac_dds_init_1,
+  input [NUM_CHANNELS*DDS_PHASE_DW-1:0] dac_dds_incr_1,
 
   input [NUM_CHANNELS*16-1:0] dac_pat_data_0,
   input [NUM_CHANNELS*16-1:0] dac_pat_data_1,
@@ -195,6 +196,7 @@ module ad_ip_jesd204_tpl_dac_core #(
       .DDS_TYPE (DDS_TYPE),
       .DDS_CORDIC_DW (DDS_CORDIC_DW),
       .DDS_CORDIC_PHASE_DW (DDS_CORDIC_PHASE_DW),
+      .DDS_PHASE_DW (DDS_PHASE_DW),
       .IQCORRECTION_DISABLE(IQCORRECTION_DISABLE),
       .Q_OR_I_N(i%2)
     ) i_channel (
@@ -213,11 +215,11 @@ module ad_ip_jesd204_tpl_dac_core #(
       .dac_mask_enable (dac_mask_enable[i]),
 
       .dac_dds_scale_0 (dac_dds_scale_0[16*i+:16]),
-      .dac_dds_init_0 (dac_dds_init_0[16*i+:16]),
-      .dac_dds_incr_0 (dac_dds_incr_0[16*i+:16]),
       .dac_dds_scale_1 (dac_dds_scale_1[16*i+:16]),
-      .dac_dds_init_1 (dac_dds_init_1[16*i+:16]),
-      .dac_dds_incr_1 (dac_dds_incr_1[16*i+:16]),
+      .dac_dds_init_0 (dac_dds_init_0[DDS_PHASE_DW*i+:DDS_PHASE_DW]),
+      .dac_dds_incr_0 (dac_dds_incr_0[DDS_PHASE_DW*i+:DDS_PHASE_DW]),
+      .dac_dds_init_1 (dac_dds_init_1[DDS_PHASE_DW*i+:DDS_PHASE_DW]),
+      .dac_dds_incr_1 (dac_dds_incr_1[DDS_PHASE_DW*i+:DDS_PHASE_DW]),
 
       .dac_pat_data_0 (dac_pat_data_0[16*i+:16]),
       .dac_pat_data_1 (dac_pat_data_1[16*i+:16]),
