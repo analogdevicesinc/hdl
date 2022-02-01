@@ -73,15 +73,17 @@ module ad_ip_jesd204_tpl_adc_core #(
   wire link_valid_tmp;
 
   reg link_valid_d = 1'b0;
+  reg link_valid_dd = 1'b0;
 
   assign link_ready = 1'b1;
-  assign link_valid_tmp = EN_FRAME_ALIGN ? link_valid_d : link_valid;
+  assign link_valid_tmp = EN_FRAME_ALIGN ? link_valid_dd : link_valid_d;
   assign adc_valid = {NUM_CHANNELS{link_valid_tmp & ~adc_sync_armed}};
   assign adc_sync_status = adc_sync_armed;
   assign adc_rst_sync = adc_sync_armed;
 
   always @(posedge clk) begin
     link_valid_d <= link_valid;
+    link_valid_dd <= link_valid_d;
   end
 
   // synchronization logic
