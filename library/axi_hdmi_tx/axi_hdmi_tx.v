@@ -72,11 +72,11 @@ module axi_hdmi_tx #(
 
   // VGA interface 
 
-  output  reg             vga_hsync,
-  output  reg             vga_vsync,
-  output  reg [7:0]       vga_red,
-  output  reg [7:0]       vga_green,
-  output  reg [7:0]       vga_blue,
+  output                  vga_hsync,
+  output                  vga_vsync,
+  output      [7:0]       vga_red,
+  output      [7:0]       vga_green,
+  output      [7:0]       vga_blue,
 
 
   // vdma interface
