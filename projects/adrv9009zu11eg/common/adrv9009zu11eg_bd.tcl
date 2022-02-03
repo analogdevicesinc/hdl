@@ -272,6 +272,8 @@ adi_tpl_jesd204_rx_create rx_adrv9009_som_tpl_core $RX_NUM_OF_LANES \
                                                $RX_SAMPLES_PER_FRAME \
                                                $RX_SAMPLE_WIDTH
 
+ad_ip_parameter rx_adrv9009_som_tpl_core/adc_tpl_core CONFIG.EXT_SYNC 1
+
 ad_ip_instance axi_dmac axi_adrv9009_som_rx_dma
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_TYPE_DEST 0
@@ -302,6 +304,8 @@ adi_tpl_jesd204_rx_create obs_adrv9009_som_tpl_core $OBS_NUM_OF_LANES \
                                                   $OBS_NUM_OF_CONVERTERS \
                                                   $OBS_SAMPLES_PER_FRAME \
                                                   $OBS_SAMPLE_WIDTH
+
+ad_ip_parameter obs_adrv9009_som_tpl_core/adc_tpl_core CONFIG.EXT_SYNC 1
 
 ad_ip_instance axi_dmac axi_adrv9009_som_obs_dma
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.DMA_TYPE_SRC 2
@@ -454,6 +458,11 @@ ad_connect sys_dma_clk dma_clk_wiz/clk_out1
 ad_connect sys_dma_rstgen/ext_reset_in sys_rstgen/peripheral_reset
 ad_connect sys_dma_clk sys_dma_rstgen/slowest_sync_clk
 ad_connect sys_dma_resetn sys_dma_rstgen/peripheral_aresetn
+
+# Loop back manual sync lines for each TPL
+ad_connect tx_adrv9009_som_tpl_core/dac_tpl_core/dac_sync_manual_req_out tx_adrv9009_som_tpl_core/dac_tpl_core/dac_sync_manual_req_in
+ad_connect rx_adrv9009_som_tpl_core/adc_tpl_core/adc_sync_manual_req_out rx_adrv9009_som_tpl_core/adc_tpl_core/adc_sync_manual_req_in
+ad_connect obs_adrv9009_som_tpl_core/adc_tpl_core/adc_sync_manual_req_out obs_adrv9009_som_tpl_core/adc_tpl_core/adc_sync_manual_req_in
 
 # interconnect (cpu)
 
