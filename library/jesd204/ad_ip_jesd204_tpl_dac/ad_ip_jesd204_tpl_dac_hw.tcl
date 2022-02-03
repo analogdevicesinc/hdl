@@ -46,6 +46,7 @@ ad_ip_files ad_ip_jesd204_tpl_dac [list \
   $ad_hdl_dir/library/common/up_clock_mon.v \
   $ad_hdl_dir/library/common/up_dac_common.v \
   $ad_hdl_dir/library/common/up_dac_channel.v \
+  $ad_hdl_dir/library/common/util_ext_sync.v \
   \
   $ad_hdl_dir/library/intel/common/up_xfer_cntrl_constr.sdc \
   $ad_hdl_dir/library/intel/common/up_xfer_status_constr.sdc \
