@@ -39,7 +39,8 @@ module system_top  #(
     parameter TX_JESD_L = 4,
     parameter TX_NUM_LINKS = 1,
     parameter RX_JESD_L = 4,
-    parameter RX_NUM_LINKS = 1
+    parameter RX_NUM_LINKS = 1,
+    parameter SHARED_DEVCLK = 0
   ) (
   input         sys_clk_n,
   input         sys_clk_p,
@@ -124,7 +125,11 @@ module system_top  #(
   wire            clkin6;
   wire            clkin10;
   wire            tx_device_clk;
+  wire            rx_device_clk_internal;
   wire            rx_device_clk;
+
+  reg sysref_reg_ms = 1'b0;
+  reg sysref_reg = 1'b0;
 
   // instantiations
   IBUFDS_GTE5 i_ibufds_ref_clk (
@@ -173,8 +178,11 @@ module system_top  #(
 
   BUFG i_rx_device_clk (
     .I (clkin10),
-    .O (rx_device_clk)
+    .O (rx_device_clk_internal)
   );
+
+  assign rx_device_clk = SHARED_DEVCLK ? tx_device_clk : rx_device_clk_internal;
+
   // spi
 
   assign spi0_csb   = spi0_csn[0];
@@ -273,9 +281,15 @@ module system_top  #(
     .tx_device_clk (tx_device_clk),
     .rx_sync_0 (rx_syncout),
     .tx_sync_0 (tx_syncin),
-    .rx_sysref_0 (sysref),
-    .tx_sysref_0 (sysref)
+    .rx_sysref_0 (SHARED_DEVCLK ? sysref_reg : sysref),
+    .tx_sysref_0 (SHARED_DEVCLK ? sysref_reg : sysref)
   );
+
+  // Capture sysref in a singe place
+  always @(posedge tx_device_clk) begin
+    sysref_reg_ms <= sysref;
+    sysref_reg <= sysref_reg_ms;
+  end
 
   assign rx_data_p_loc[RX_JESD_L*RX_NUM_LINKS-1:0] = rx_data_p[RX_JESD_L*RX_NUM_LINKS-1:0];
   assign rx_data_n_loc[RX_JESD_L*RX_NUM_LINKS-1:0] = rx_data_n[RX_JESD_L*RX_NUM_LINKS-1:0];
