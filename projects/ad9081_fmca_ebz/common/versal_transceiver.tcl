@@ -56,7 +56,7 @@ set_property -dict [list \
      TX_64B66B_CRC false \
      TX_RATE_GROUP A \
      RX_LINE_RATE $lane_rate \
-     RX_PLL_TYPE LCPLL \
+     RX_PLL_TYPE RPLL \
      RX_REFCLK_FREQUENCY $ref_clock \
      RX_ACTUAL_REFCLK_FREQUENCY $ref_clock \
      RX_FRACN_ENABLED true \
@@ -68,7 +68,7 @@ set_property -dict [list \
      RX_BUFFER_MODE 1 \
      RX_OUTCLK_SOURCE RXPROGDIVCLK \
      RXPROGDIV_FREQ_ENABLE true \
-     RXPROGDIV_FREQ_SOURCE LCPLL \
+     RXPROGDIV_FREQ_SOURCE RPLL \
      RXPROGDIV_FREQ_VAL $progdiv_clock \
      INS_LOSS_NYQ 12 \
      RX_EQ_MODE LPM \
