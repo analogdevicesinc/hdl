@@ -160,7 +160,7 @@ proc ad_dma_interconnect {m_port m_id} {
 
  add_instance vga_out axi_hdmi_tx 
  set_instance_parameter_value vga_out {CR_CB_N} {0}
- set_instance_parameter_value vga_out {INTERFACE} {24_BIT}
+ set_instance_parameter_value vga_out {INTERFACE} {VGA_INTERFACE}
  set_instance_parameter_value vga_out {ID} {0}
  add_interface vga_out_vga_if conduit end
  set_interface_property vga_out_vga_if EXPORT_OF vga_out.vga_if

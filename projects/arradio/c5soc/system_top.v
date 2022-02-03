@@ -291,11 +291,11 @@ module system_top (
  
 
     .vga_out_vga_if_v_clk (vga_clk),
-	  .vga_out_vga_if_vga_red (vga_red),
+    .vga_out_vga_if_vga_red (vga_red),
     .vga_out_vga_if_vga_green (vga_grn),
     .vga_out_vga_if_vga_blue (vga_blu),
-    .axi_hdmi_tx_0_hdmi_if_h24_hsync (vga_hsync),
-    .axi_hdmi_tx_0_hdmi_if_h24_vsync (vga_vsync));
+    .vga_out_vga_if_vga_hsync(vga_hsync),
+    .vga_out_vga_if_vga_vsync(vga_vsync));
     
     
 

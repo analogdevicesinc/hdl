@@ -72,10 +72,12 @@ adi_add_device_spec_param "FPGA_TECHNOLOGY"
 
 ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn
 
-# hdmi interface
+# hdmi clock  interface
 
-# add_interface hdmi_clock clock end
-# add_interface_port hdmi_clock hdmi_clk clk Input 1
+add_interface hdmi_clock clock end
+add_interface_port hdmi_clock hdmi_clk clk Input 1
+
+# hdmi interface
 
 # add_interface hdmi_if conduit end
 # set_interface_property hdmi_if associatedClock hdmi_clock
@@ -112,8 +114,6 @@ proc add_out_interface {} {
   set interface [get_parameter_value INTERFACE]
   switch $interface {
     "16_BIT" {
-        add_interface hdmi_clock clock end
-        add_interface_port hdmi_clock hdmi_clk clk Input 1
         add_interface hdmi_if conduit end
         set_interface_property hdmi_if associatedClock hdmi_clock
         add_interface_port hdmi_if hdmi_out_clk h_clk Output 1
@@ -123,8 +123,6 @@ proc add_out_interface {} {
         add_interface_port hdmi_if hdmi_16_data h16_data Output 16
       }
     "24_BIT" {
-        add_interface hdmi_clock clock end
-        add_interface_port hdmi_clock hdmi_clk clk Input 1
         add_interface hdmi_if conduit end
         set_interface_property hdmi_if associatedClock hdmi_clock
         add_interface_port hdmi_if hdmi_out_clk h_clk Output 1
@@ -134,8 +132,6 @@ proc add_out_interface {} {
         add_interface_port hdmi_if hdmi_24_data h24_data Output 24
       }
     "36_BIT" {
-        add_interface hdmi_clock clock end
-        add_interface_port hdmi_clock hdmi_clk clk Input 1
         add_interface hdmi_if conduit end
         set_interface_property hdmi_if associatedClock hdmi_clock
         add_interface_port hdmi_if hdmi_out_clk h_clk Output 1
@@ -145,8 +141,6 @@ proc add_out_interface {} {
         add_interface_port hdmi_if hdmi_36_data h36_data Output 36
       }
     "16_BIT_EMBEDDED_SYNC" {
-        add_interface hdmi_clock clock end
-        add_interface_port hdmi_clock hdmi_clk clk Input 1
         add_interface hdmi_if conduit end
         set_interface_property hdmi_if associatedClock hdmi_clock
         add_interface_port hdmi_if hdmi_out_clk h_clk Output 1
