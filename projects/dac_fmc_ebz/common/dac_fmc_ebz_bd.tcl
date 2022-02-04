@@ -47,6 +47,7 @@ set SAMPLE_WIDTH $ad_project_params(JESD_NP)
 set DAC_DATA_WIDTH [expr $NUM_OF_LANES * 32]
 set SAMPLES_PER_CHANNEL [expr $DAC_DATA_WIDTH / $NUM_OF_CONVERTERS / $SAMPLE_WIDTH]
 
+set MAX_NUM_OF_LANES 8
 # Top level ports
 
 create_bd_port -dir I dac_fifo_bypass
@@ -92,7 +93,7 @@ ad_dacfifo_create axi_dac_fifo \
 
 ad_ip_instance util_adxcvr util_dac_jesd204_xcvr [list \
   RX_NUM_OF_LANES 0 \
-  TX_NUM_OF_LANES $NUM_OF_LANES \
+  TX_NUM_OF_LANES $MAX_NUM_OF_LANES \
   TX_LANE_INVERT [expr 0x0F] \
   QPLL_REFCLK_DIV 1 \
   QPLL_FBDIV_RATIO 1 \
@@ -105,16 +106,21 @@ ad_connect sys_cpu_clk util_dac_jesd204_xcvr/up_clk
 
 # reference clocks & resets
 
-create_bd_port -dir I tx_ref_clk
+for {set i 0} {$i < $MAX_NUM_OF_LANES} {incr i} {
+  if {$i % 4 == 0} {
+    create_bd_port -dir I tx_ref_clk_${i}
+    ad_xcvrpll tx_ref_clk_${i} util_dac_jesd204_xcvr/qpll_ref_clk_${i}
+    set quad_ref_clk tx_ref_clk_${i}
+  }
+  ad_xcvrpll $quad_ref_clk util_dac_jesd204_xcvr/cpll_ref_clk_${i}
+}
 
-ad_xcvrpll tx_ref_clk util_dac_jesd204_xcvr/qpll_ref_clk_*
-ad_xcvrpll tx_ref_clk util_dac_jesd204_xcvr/cpll_ref_clk_*
 ad_xcvrpll dac_jesd204_xcvr/up_pll_rst util_dac_jesd204_xcvr/up_qpll_rst_*
 ad_xcvrpll dac_jesd204_xcvr/up_pll_rst util_dac_jesd204_xcvr/up_cpll_rst_*
 
 # connections (dac)
 
-ad_xcvrcon util_dac_jesd204_xcvr dac_jesd204_xcvr dac_jesd204_link
+ad_xcvrcon util_dac_jesd204_xcvr dac_jesd204_xcvr dac_jesd204_link {} {} {} $MAX_NUM_OF_LANES
 
 
 ad_connect util_dac_jesd204_xcvr/tx_out_clk_0 dac_jesd204_transport/link_clk
@@ -164,8 +170,3 @@ ad_cpu_interrupt ps-12 mb-13 dac_dma/irq
 
 ad_connect axi_dac_fifo/bypass dac_fifo_bypass
 
-# Create dummy outputs for unused Tx lanes
-for {set i $NUM_OF_LANES} {$i < 8} {incr i} {
-  create_bd_port -dir O tx_data_${i}_n
-  create_bd_port -dir O tx_data_${i}_p
-}
