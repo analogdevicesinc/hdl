@@ -17,6 +17,7 @@ clean:
 	$(MAKE) -C axi_ad5766 clean
 	$(MAKE) -C axi_ad6676 clean
 	$(MAKE) -C axi_ad7616 clean
+	$(MAKE) -C axi_ad7768 clean
 	$(MAKE) -C axi_ad9122 clean
 	$(MAKE) -C axi_ad9144 clean
 	$(MAKE) -C axi_ad9152 clean
@@ -143,6 +144,7 @@ lib:
 	$(MAKE) -C axi_ad5766
 	$(MAKE) -C axi_ad6676
 	$(MAKE) -C axi_ad7616
+	$(MAKE) -C axi_ad7768
 	$(MAKE) -C axi_ad9122
 	$(MAKE) -C axi_ad9144
 	$(MAKE) -C axi_ad9152
