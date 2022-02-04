@@ -36,8 +36,6 @@
 `timescale 1ns/100ps
 
 module system_top #(
-    parameter JESD_L = 4,
-    parameter NUM_LINKS = 2,
     parameter DEVICE_CODE = 0
   ) (
 
@@ -83,8 +81,8 @@ module system_top #(
   input                   tx_sysref_n,
   input       [ 1:0]      tx_sync_p,
   input       [ 1:0]      tx_sync_n,
-  output      [JESD_L*NUM_LINKS-1:0] tx_data_p,
-  output      [JESD_L*NUM_LINKS-1:0] tx_data_n,
+  output      [ 7:0]      tx_data_p,
+  output      [ 7:0]      tx_data_n,
 
   inout       [ 4:0]      dac_ctrl,
 
@@ -116,8 +114,6 @@ module system_top #(
   wire            tx_ref_clk;
   wire            tx_sysref;
   wire    [ 1:0]  tx_sync;
-  wire    [ 7:0]  tx_data_p_loc;
-  wire    [ 7:0]  tx_data_n_loc;
   wire            tx_sysref_loc;
 
   // spi
@@ -268,29 +264,27 @@ module system_top #(
     .spi1_sdi_i (spi1_miso),
     .spi1_sdo_i (spi1_mosi),
     .spi1_sdo_o (spi1_mosi),
-    .tx_data_0_n (tx_data_n_loc[0]),
-    .tx_data_0_p (tx_data_p_loc[0]),
-    .tx_data_1_n (tx_data_n_loc[1]),
-    .tx_data_1_p (tx_data_p_loc[1]),
-    .tx_data_2_n (tx_data_n_loc[2]),
-    .tx_data_2_p (tx_data_p_loc[2]),
-    .tx_data_3_n (tx_data_n_loc[3]),
-    .tx_data_3_p (tx_data_p_loc[3]),
-    .tx_data_4_n (tx_data_n_loc[4]),
-    .tx_data_4_p (tx_data_p_loc[4]),
-    .tx_data_5_n (tx_data_n_loc[5]),
-    .tx_data_5_p (tx_data_p_loc[5]),
-    .tx_data_6_n (tx_data_n_loc[6]),
-    .tx_data_6_p (tx_data_p_loc[6]),
-    .tx_data_7_n (tx_data_n_loc[7]),
-    .tx_data_7_p (tx_data_p_loc[7]),
-    .tx_ref_clk (tx_ref_clk),
+    .tx_data_0_n (tx_data_n[0]),
+    .tx_data_0_p (tx_data_p[0]),
+    .tx_data_1_n (tx_data_n[1]),
+    .tx_data_1_p (tx_data_p[1]),
+    .tx_data_2_n (tx_data_n[2]),
+    .tx_data_2_p (tx_data_p[2]),
+    .tx_data_3_n (tx_data_n[3]),
+    .tx_data_3_p (tx_data_p[3]),
+    .tx_data_4_n (tx_data_n[4]),
+    .tx_data_4_p (tx_data_p[4]),
+    .tx_data_5_n (tx_data_n[5]),
+    .tx_data_5_p (tx_data_p[5]),
+    .tx_data_6_n (tx_data_n[6]),
+    .tx_data_6_p (tx_data_p[6]),
+    .tx_data_7_n (tx_data_n[7]),
+    .tx_data_7_p (tx_data_p[7]),
+    .tx_ref_clk_0 (tx_ref_clk),
+    .tx_ref_clk_4 (tx_ref_clk),
     .tx_sync_0 (tx_sync[NUM_LINKS-1:0]),
     .tx_sysref_0 (tx_sysref_loc),
     .dac_fifo_bypass (dac_fifo_bypass));
-
-  assign tx_data_p[JESD_L*NUM_LINKS-1:0] = tx_data_p_loc[JESD_L*NUM_LINKS-1:0];
-  assign tx_data_n[JESD_L*NUM_LINKS-1:0] = tx_data_n_loc[JESD_L*NUM_LINKS-1:0];
 
   // AD9161/2/4-FMC-EBZ works only in single link,
   // The FMC connector instead of SYNC1 has SYSREF connected to it
