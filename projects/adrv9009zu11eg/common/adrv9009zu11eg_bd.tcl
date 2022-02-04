@@ -372,7 +372,7 @@ ad_connect  core_clk_a tx_adrv9009_som_tpl_core/link_clk
 ad_connect  axi_adrv9009_som_tx_jesd/tx_data tx_adrv9009_som_tpl_core/link
 
 ad_connect  core_clk_a util_som_tx_upack/clk
-ad_connect  core_clk_a_rstgen/peripheral_reset util_som_tx_upack/reset
+ad_connect  tx_adrv9009_som_tpl_core/dac_tpl_core/dac_rst util_som_tx_upack/reset
 
 ad_connect  tx_adrv9009_som_tpl_core/dac_valid_0 util_som_tx_upack/fifo_rd_en
 for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
@@ -408,7 +408,7 @@ ad_connect  axi_adrv9009_som_obs_jesd/rx_sof obs_adrv9009_som_tpl_core/link_sof
 ad_connect  axi_adrv9009_som_obs_jesd/rx_data_tdata obs_adrv9009_som_tpl_core/link_data
 ad_connect  axi_adrv9009_som_obs_jesd/rx_data_tvalid obs_adrv9009_som_tpl_core/link_valid
 ad_connect  core_clk_a util_som_obs_cpack/clk
-ad_connect  core_clk_a_rstgen/peripheral_reset util_som_obs_cpack/reset
+ad_connect  obs_adrv9009_som_tpl_core/adc_tpl_core/adc_rst util_som_obs_cpack/reset
 ad_connect  core_clk_a axi_adrv9009_som_obs_dma/fifo_wr_clk
 
 ad_connect  obs_adrv9009_som_tpl_core/adc_valid_0 util_som_obs_cpack/fifo_wr_en
