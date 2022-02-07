@@ -81,12 +81,12 @@ module system_top (
   output          spi_mosi,
   input           spi_miso,
 
+  output          pl_gpio0,
   output          pl_gpio1,
   output          pl_gpio3,
   output          pl_gpio4,
 
-  output          pl_spi_clk_o,
-  output          pl_spi_mosi);
+  output          pl_spi_clk_o);
 
   // internal signals
 
@@ -154,9 +154,9 @@ module system_top (
     .spi_csn_o(pl_gpio3),
     .spi_sdi_i(pl_spi_miso),
     .spi_sdo_i(1'b0),
-    .spi_sdo_o(pl_spi_mosi),
+    .spi_sdo_o(pl_gpio1),
 
-    .txdata_o(pl_gpio1),
+    .txdata_o(pl_gpio0),
 
     .tx_clk_out (tx_clk_out),
     .tx_data_out (tx_data_out),
