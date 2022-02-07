@@ -42,7 +42,7 @@ module axi_hdmi_tx_es #(
 
   // hdmi interface
 
-  input                   hdmi_clk,
+  input                   reference_clk,
   input                   hdmi_hs_de,
   input                   hdmi_vs_de,
   input       [(DATA_WIDTH-1):0]  hdmi_data_de,
@@ -73,7 +73,7 @@ module axi_hdmi_tx_es #(
   assign hdmi_sav_s = (hdmi_vs_de == 1) ? {BYTE_WIDTH{8'h80}} : {BYTE_WIDTH{8'hab}};
   assign hdmi_eav_s = (hdmi_vs_de == 1) ? {BYTE_WIDTH{8'h9d}} : {BYTE_WIDTH{8'hb6}};
 
-  always @(posedge hdmi_clk) begin
+  always @(posedge reference_clk) begin
     hdmi_hs_de_d <= hdmi_hs_de;
     case ({hdmi_hs_de_4d, hdmi_hs_de_3d, hdmi_hs_de_2d,
       hdmi_hs_de_d, hdmi_hs_de})

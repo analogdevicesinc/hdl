@@ -43,9 +43,9 @@ module axi_hdmi_tx_core #(
 
   // hdmi interface
 
-  input                   hdmi_clk,
-  input                   hdmi_rst,
-
+  
+  input                   reference_clk,
+  input                   reference_rst,
   // 16-bit interface
 
   output  reg             hdmi_16_hsync,
@@ -62,7 +62,7 @@ module axi_hdmi_tx_core #(
   output  reg [23:0]      hdmi_24_data,
 
   // VGA interface 
-
+  
   output  reg             vga_hsync,
   output  reg             vga_vsync,
   output  reg [7:0]       vga_red,
@@ -217,8 +217,8 @@ module axi_hdmi_tx_core #(
 
   // status and enable
 
-  always @(posedge hdmi_clk) begin
-    if (hdmi_rst == 1'b1) begin
+  always @(posedge reference_clk) begin
+    if (reference_rst == 1'b1) begin
       hdmi_status <= 1'b0;
       hdmi_enable <= 1'b0;
     end else begin
@@ -236,7 +236,7 @@ module axi_hdmi_tx_core #(
 
   // hdmi counters
 
-  always @(posedge hdmi_clk) begin
+  always @(posedge reference_clk) begin
     if (hdmi_hs_count >= hdmi_hl_width_s) begin
       hdmi_hs_count <= 0;
     end else begin
@@ -253,8 +253,8 @@ module axi_hdmi_tx_core #(
 
   // hdmi start of frame
 
-  always @(posedge hdmi_clk) begin
-    if (hdmi_rst == 1'b1) begin
+  always @(posedge reference_clk) begin
+    if (reference_rst == 1'b1) begin
       hdmi_fs_toggle <= 1'b0;
       hdmi_fs <= 1'b0;
     end else begin
@@ -281,8 +281,8 @@ module axi_hdmi_tx_core #(
 
   assign hdmi_fs_ret_s = hdmi_fs_ret_toggle_m2 ^ hdmi_fs_ret_toggle_m3;
 
-  always @(posedge hdmi_clk or posedge hdmi_rst) begin
-    if (hdmi_rst == 1'b1) begin
+  always @(posedge reference_clk or posedge reference_rst) begin
+    if (reference_rst == 1'b1) begin
       hdmi_fs_ret_toggle_m1 <= 1'd0;
       hdmi_fs_ret_toggle_m2 <= 1'd0;
       hdmi_fs_ret_toggle_m3 <= 1'd0;
@@ -293,14 +293,14 @@ module axi_hdmi_tx_core #(
     end
   end
 
-  always @(posedge hdmi_clk) begin
+  always @(posedge reference_clk) begin
       hdmi_fs_ret <= hdmi_fs_ret_s;
       hdmi_fs_waddr <= vdma_fs_waddr;
   end
 
   // hdmi sync signals
 
-  always @(posedge hdmi_clk) begin
+  always @(posedge reference_clk) begin
     if (EMBEDDED_SYNC == 1) begin
       hdmi_hs <= 1'b0;
       if (hdmi_hs_count <= hdmi_he_width_s) begin
@@ -341,8 +341,8 @@ module axi_hdmi_tx_core #(
 
   assign hdmi_de_s = hdmi_hs_de & hdmi_vs_de;
 
-  always @(posedge hdmi_clk) begin
-    if (hdmi_rst == 1'b1) begin
+  always @(posedge reference_clk) begin
+    if (reference_rst == 1'b1) begin
       hdmi_raddr <= 10'd0;
     end else if (hdmi_fs == 1'b1) begin
       hdmi_raddr <= {hdmi_fs_waddr, 1'b0};
@@ -354,7 +354,7 @@ module axi_hdmi_tx_core #(
 
   // control and data pipe line
 
-  always @(posedge hdmi_clk) begin
+  always @(posedge reference_clk) begin
     hdmi_hs_d <= hdmi_hs;
     hdmi_vs_d <= hdmi_vs;
     hdmi_hs_de_d <= hdmi_hs_de;
@@ -376,8 +376,8 @@ module axi_hdmi_tx_core #(
   assign hdmi_tpm_mismatch_s = (hdmi_data_2d_s == hdmi_tpm_data) ? 1'b0 : hdmi_de_2d;
   assign hdmi_tpg_data_s = hdmi_tpm_data;
 
-  always @(posedge hdmi_clk) begin
-    if ((hdmi_rst == 1'b1) || (hdmi_fs_ret == 1'b1)) begin
+  always @(posedge reference_clk) begin
+    if ((reference_rst == 1'b1) || (hdmi_fs_ret == 1'b1)) begin
       hdmi_tpm_data <= 'd0;
     end else if (hdmi_de_2d == 1'b1) begin
       hdmi_tpm_data[7:0] <= hdmi_tpm_data[7:0] + 1'b1;
@@ -390,7 +390,7 @@ module axi_hdmi_tx_core #(
 
   // hdmi data select
 
-  always @(posedge hdmi_clk) begin
+  always @(posedge reference_clk) begin
     hdmi_hsync <= hdmi_hs_2d;
     hdmi_vsync <= hdmi_vs_2d;
     hdmi_hsync_data_e <= hdmi_hs_de_2d;
@@ -406,7 +406,7 @@ module axi_hdmi_tx_core #(
 
   // Color space conversion bypass (RGB/YCbCr)
 
-  always @(posedge hdmi_clk) begin
+  always @(posedge reference_clk) begin
     if (hdmi_csc_bypass == 1'b1) begin
       hdmi_24_csc_hsync <= hdmi_hsync;
       hdmi_24_csc_vsync <= hdmi_vsync;
@@ -426,7 +426,7 @@ module axi_hdmi_tx_core #(
 
   // hdmi clipping
 
-  always @(posedge hdmi_clk) begin
+  always @(posedge reference_clk) begin
     hdmi_clip_hs_d <= hdmi_24_csc_hsync;
     hdmi_clip_vs_d <= hdmi_24_csc_vsync;
     hdmi_clip_hs_de_d <= hdmi_24_csc_hsync_data_e;
@@ -466,7 +466,7 @@ module axi_hdmi_tx_core #(
 
   // hdmi csc 16, 24 and 36 outputs
 
-  always @(posedge hdmi_clk) begin
+  always @(posedge reference_clk) begin
 
     hdmi_36_hsync <= hdmi_clip_hs_d;
     hdmi_36_vsync <= hdmi_clip_vs_d;
@@ -513,7 +513,7 @@ module axi_hdmi_tx_core #(
 
   // hdmi embedded sync
 
-  always @(posedge hdmi_clk) begin
+  always @(posedge reference_clk) begin
     hdmi_es_hs_de <= hdmi_16_hsync_data_e_d;
     hdmi_es_vs_de <= hdmi_16_vsync_data_e_d;
     if (hdmi_16_data_e_d == 1'b0) begin
@@ -535,7 +535,7 @@ module axi_hdmi_tx_core #(
     .wea (vdma_wr),
     .addra (vdma_waddr),
     .dina (vdma_wdata),
-    .clkb (hdmi_clk),
+    .clkb (reference_clk),
     .reb (1'b1),
     .addrb (hdmi_raddr[9:1]),
     .doutb (hdmi_rdata_s));
@@ -543,7 +543,7 @@ module axi_hdmi_tx_core #(
   // color space coversion, RGB to CrYCb
 
   ad_csc_RGB2CrYCb #(.DELAY_DATA_WIDTH(5)) i_csc_RGB2CrYCb (
-    .clk (hdmi_clk),
+    .clk (reference_clk),
     .RGB_sync ({hdmi_hsync,
       hdmi_vsync,
       hdmi_hsync_data_e,
@@ -560,7 +560,7 @@ module axi_hdmi_tx_core #(
   // sub sampling, 444 to 422
 
   ad_ss_444to422 #(.DELAY_DATA_WIDTH(5), .CR_CB_N(CR_CB_N)) i_ss_444to422 (
-    .clk (hdmi_clk),
+    .clk (reference_clk),
     .s444_de (hdmi_clip_de_d),
     .s444_sync ({hdmi_clip_hs_d,
       hdmi_clip_vs_d,
@@ -578,7 +578,7 @@ module axi_hdmi_tx_core #(
   // embedded sync
 
   axi_hdmi_tx_es #(.DATA_WIDTH(16)) i_es (
-    .hdmi_clk (hdmi_clk),
+    .reference_clk (reference_clk),
     .hdmi_hs_de (hdmi_es_hs_de),
     .hdmi_vs_de (hdmi_es_vs_de),
     .hdmi_data_de (hdmi_es_data),

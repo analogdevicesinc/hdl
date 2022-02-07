@@ -74,8 +74,8 @@ ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn
 
 # hdmi clock  interface
 
-add_interface hdmi_clock clock end
-add_interface_port hdmi_clock hdmi_clk clk Input 1
+add_interface reference_clk clock end
+add_interface_port reference_clk reference_clk clk Input 1
 
 # hdmi interface
 
@@ -115,8 +115,8 @@ proc add_out_interface {} {
   switch $interface {
     "16_BIT" {
         add_interface hdmi_if conduit end
-        set_interface_property hdmi_if associatedClock hdmi_clock
-        add_interface_port hdmi_if hdmi_out_clk h_clk Output 1
+        set_interface_property hdmi_if associatedClock reference_clk
+        add_interface_port hdmi_if hdmi_out_clk  h_clk Output 1
         add_interface_port hdmi_if hdmi_16_hsync h16_hsync Output 1
         add_interface_port hdmi_if hdmi_16_vsync h16_vsync Output 1
         add_interface_port hdmi_if hdmi_16_data_e h16_data_e Output 1
@@ -124,7 +124,7 @@ proc add_out_interface {} {
       }
     "24_BIT" {
         add_interface hdmi_if conduit end
-        set_interface_property hdmi_if associatedClock hdmi_clock
+        set_interface_property hdmi_if associatedClock reference_clk
         add_interface_port hdmi_if hdmi_out_clk h_clk Output 1
         add_interface_port hdmi_if hdmi_24_hsync h24_hsync Output 1
         add_interface_port hdmi_if hdmi_24_vsync h24_vsync Output 1
@@ -133,7 +133,7 @@ proc add_out_interface {} {
       }
     "36_BIT" {
         add_interface hdmi_if conduit end
-        set_interface_property hdmi_if associatedClock hdmi_clock
+        set_interface_property hdmi_if associatedClock reference_clk
         add_interface_port hdmi_if hdmi_out_clk h_clk Output 1
         add_interface_port hdmi_if hdmi_36_hsync h36_hsync Output 1
         add_interface_port hdmi_if hdmi_36_vsync h36_vsync Output 1
@@ -142,19 +142,19 @@ proc add_out_interface {} {
       }
     "16_BIT_EMBEDDED_SYNC" {
         add_interface hdmi_if conduit end
-        set_interface_property hdmi_if associatedClock hdmi_clock
+        set_interface_property hdmi_if associatedClock reference_clk
         add_interface_port hdmi_if hdmi_out_clk h_clk Output 1
         add_interface_port hdmi_if hdmi_16_es_data h16_es_data Output 16
       }
     "VGA_INTERFACE" {
         add_interface vga_if conduit end
-        set_interface_property vga_if associatedClock hdmi_clock
-        add_interface_port vga_if hdmi_out_clk v_clk      Output 1
-        add_interface_port vga_if  vga_hsync   vga_hsync  Output 1
-        add_interface_port vga_if  vga_vsync   vga_vsync  Output 1
-        add_interface_port vga_if  vga_red     vga_red    Output 8
-        add_interface_port vga_if  vga_green   vga_green  Output 8
-        add_interface_port vga_if  vga_blue    vga_blue   Output 8
+        set_interface_property vga_if associatedClock reference_clk
+        add_interface_port vga_if  vga_out_clk vga_clk      Output 1
+        add_interface_port vga_if  vga_hsync   vga_hsync    Output 1
+        add_interface_port vga_if  vga_vsync   vga_vsync    Output 1
+        add_interface_port vga_if  vga_red     vga_red      Output 8
+        add_interface_port vga_if  vga_green   vga_green    Output 8
+        add_interface_port vga_if  vga_blue    vga_blue     Output 8
      }
 
   }

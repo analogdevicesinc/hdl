@@ -53,6 +53,10 @@ set_property value_format string [ipx::get_hdl_parameters INTERFACE -of_objects 
 set_property value_validation_list {16_BIT 24_BIT 36_BIT 16_BIT_EMBEDDED_SYNC VGA_INTERFACE} \
   [ipx::get_user_parameters INTERFACE -of_objects [ipx::current_core]]
 
+
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.INTERFACE')) == "16_BIT" || spirit:decode(id('MODELPARAM_VALUE.INTERFACE')) == "24_BIT" || spirit:decode(id('MODELPARAM_VALUE.INTERFACE')) == "36_BIT" || spirit:decode(id('MODELPARAM_VALUE.INTERFACE')) == "16_BIT_EMBEDDED_SYNC" } \
+  [ipx::get_ports *hdmi_out_clk* -of_objects [ipx::current_core]]
+
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.INTERFACE')) == "16_BIT"} \
   [ipx::get_ports *hdmi_16* -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.INTERFACE')) == "24_BIT"} \
@@ -72,8 +76,9 @@ adi_add_bus "s_axis" "slave" \
            {"vdma_data" "TDATA"} \
            {"vdma_end_of_frame" "TLAST"} ]
 
-ipx::infer_bus_interface hdmi_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface reference_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 ipx::infer_bus_interface hdmi_out_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface vga_out_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 ipx::infer_bus_interface vdma_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 
 ipx::associate_bus_interfaces -busif s_axis -clock vdma_clk [ipx::current_core]
