@@ -14,7 +14,11 @@ create_bd_port -dir O clk_gate
 # adc peripheral
 
 ad_ip_instance axi_ltc2387 axi_ltc2387
+<<<<<<< HEAD
 ad_ip_parameter axi_ltc2387 CONFIG.ADC_RES 18
+=======
+ad_ip_parameter axi_ltc2387 CONFIG.ADC_RES $adc_resolution
+>>>>>>> cn0577: Initial commit
 ad_ip_parameter axi_ltc2387 CONFIG.OUT_RES 32
 ad_ip_parameter axi_ltc2387 CONFIG.TWOLANES $two_lanes
 ad_ip_parameter axi_ltc2387 CONFIG.ADC_INIT_DELAY 27

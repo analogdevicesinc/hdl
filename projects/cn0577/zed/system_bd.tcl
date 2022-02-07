@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+=======
+# specify ADC resolution -- the design supports 16/18 bit resolutions
+set adc_resolution 18
+
+>>>>>>> cn0577: Initial commit
 # specify number of channels -- the design supports one lane/two lanes
 set two_lanes 1
 

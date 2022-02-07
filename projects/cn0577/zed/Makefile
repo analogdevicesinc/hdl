@@ -10,6 +10,10 @@ M_DEPS += ../common/cn0577_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
 M_DEPS += ../../common/zed/zed_system_bd.tcl
+<<<<<<< HEAD
+=======
+M_DEPS += ../../../library/xilinx/common/ad_data_out.v
+>>>>>>> cn0577: Initial commit
 M_DEPS += ../../../library/xilinx/common/ad_data_clk.v
 M_DEPS += ../../../library/common/ad_iobuf.v
 

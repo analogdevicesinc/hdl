@@ -101,7 +101,11 @@ module system_top (
   output                  twolanes_cntrl
 );
 
+<<<<<<< HEAD
   // internal signals
+=======
+// internal signals
+>>>>>>> cn0577: Initial commit
 
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
@@ -124,21 +128,33 @@ module system_top (
   assign gpio_i[63:34] = gpio_o[63:34];
   assign twolanes_cntrl = 1'b1;
   assign cnv_en = cnv;
+<<<<<<< HEAD
 
   // instantiations
 
   ad_data_clk #(
     .SINGLE_ENDED (0)
   ) i_ref_clk (
+=======
+// instantiations
+
+ad_data_clk #(
+  .SINGLE_ENDED (0))
+  i_ref_clk (
+>>>>>>> cn0577: Initial commit
     .rst (1'b0),
     .locked (),
     .clk_in_p (ref_clk_p),
     .clk_in_n (ref_clk_n),
     .clk (clk_s));
 
+<<<<<<< HEAD
   ODDR #(
     .DDR_CLK_EDGE ("SAME_EDGE")
   ) i_tx_clk_oddr (
+=======
+ODDR #(.DDR_CLK_EDGE ("SAME_EDGE")) i_tx_clk_oddr (
+>>>>>>> cn0577: Initial commit
     .CE (1'b1),
     .R (1'b0),
     .S (1'b0),
@@ -147,9 +163,13 @@ module system_top (
     .D2 (1'b0),
     .Q (ltc_clk));
 
+<<<<<<< HEAD
   ODDR #(
     .DDR_CLK_EDGE ("SAME_EDGE")
   ) i_cnv_oddr (
+=======
+ODDR #(.DDR_CLK_EDGE ("SAME_EDGE")) i_cnv_oddr (
+>>>>>>> cn0577: Initial commit
     .CE (1'b1),
     .R (1'b0),
     .S (1'b0),
@@ -158,11 +178,16 @@ module system_top (
     .D2 (cnv),
     .Q (cnv_s));
 
+<<<<<<< HEAD
   OBUFDS i_tx_data_obuf (
+=======
+OBUFDS i_tx_data_obuf (
+>>>>>>> cn0577: Initial commit
     .I (ltc_clk),
     .O (clk_p),
     .OB (clk_n));
 
+<<<<<<< HEAD
   OBUFDS OBUFDS_cnv (
     .O (cnv_p),
     .OB (cnv_n),
@@ -179,11 +204,26 @@ module system_top (
   ad_iobuf #(
     .DATA_WIDTH(32)
   ) iobuf_gpio_bd (
+=======
+OBUFDS OBUFDS_cnv (
+    .O(cnv_p),
+    .OB(cnv_n),
+    .I(cnv_s));
+
+ad_iobuf #(.DATA_WIDTH(2)) iobuf_gpio_cn0577 (
+    .dio_i (gpio_o[33:32]),
+    .dio_o (gpio_i[33:32]),
+    .dio_t (gpio_t[33:32]),
+    .dio_p ({pd_cntrl,testpat_cntrl}));
+
+ad_iobuf #(.DATA_WIDTH(32)) iobuf_gpio_bd (
+>>>>>>> cn0577: Initial commit
     .dio_i (gpio_o[31:0]),
     .dio_o (gpio_i[31:0]),
     .dio_t (gpio_t[31:0]),
     .dio_p (gpio_bd));
 
+<<<<<<< HEAD
   ad_iobuf #(
     .DATA_WIDTH(2)
   ) i_iic_mux_scl (
@@ -216,6 +256,40 @@ module system_top (
     .ddr_ras_n (ddr_ras_n),
     .ddr_reset_n (ddr_reset_n),
     .ddr_we_n (ddr_we_n),
+=======
+ad_iobuf #(
+  .DATA_WIDTH(2)
+  ) i_iic_mux_scl (
+    .dio_t({iic_mux_scl_t_s, iic_mux_scl_t_s}),
+    .dio_i(iic_mux_scl_o_s),
+    .dio_o(iic_mux_scl_i_s),
+    .dio_p(iic_mux_scl));
+
+ad_iobuf #(
+  .DATA_WIDTH(2)
+  ) i_iic_mux_sda (
+    .dio_t({iic_mux_sda_t_s, iic_mux_sda_t_s}),
+    .dio_i(iic_mux_sda_o_s),
+    .dio_o(iic_mux_sda_i_s),
+    .dio_p(iic_mux_sda));
+
+system_wrapper i_system_wrapper (
+    .ddr_addr(ddr_addr),
+    .ddr_ba(ddr_ba),
+    .ddr_cas_n(ddr_cas_n),
+    .ddr_ck_n(ddr_ck_n),
+    .ddr_ck_p(ddr_ck_p),
+    .ddr_cke(ddr_cke),
+    .ddr_cs_n(ddr_cs_n),
+    .ddr_dm(ddr_dm),
+    .ddr_dq(ddr_dq),
+    .ddr_dqs_n(ddr_dqs_n),
+    .ddr_dqs_p(ddr_dqs_p),
+    .ddr_odt(ddr_odt),
+    .ddr_ras_n(ddr_ras_n),
+    .ddr_reset_n(ddr_reset_n),
+    .ddr_we_n(ddr_we_n),
+>>>>>>> cn0577: Initial commit
     .fixed_io_ddr_vrn (fixed_io_ddr_vrn),
     .fixed_io_ddr_vrp (fixed_io_ddr_vrp),
     .fixed_io_mio (fixed_io_mio),
@@ -275,3 +349,9 @@ module system_top (
     .spi1_sdo_o ());
 
 endmodule
+<<<<<<< HEAD
+=======
+
+// ***************************************************************************
+// ***************************************************************************
+>>>>>>> cn0577: Initial commit
