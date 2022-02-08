@@ -187,11 +187,8 @@ module system_top (
   assign ga0 = 1'b0;
   assign ga1 = 1'b0;
 
-  ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_i2c (
-    .dio_t ({i2c0_out_clk,i2c0_out_data}),
-    .dio_i (2'b0),
-    .dio_o ({i2c0_scl_in_clk,i2c0_sda}),
-    .dio_p ({scl,sda}));
+  ALT_IOBUF scl_iobuf (.i(1'b0), .oe(i2c0_out_clk), .o(i2c0_scl_in_clk), .io(scl));
+  ALT_IOBUF sda_iobuf (.i(1'b0), .oe(i2c0_out_data), .o(i2c0_sda), .io(sda));
 
   // instantiations
 
