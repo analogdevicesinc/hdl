@@ -197,6 +197,7 @@ adi_tpl_jesd204_rx_create rx_mxfe_tpl_core $RX_NUM_OF_LANES \
                                            $RX_DMA_SAMPLE_WIDTH
 
 ad_ip_parameter rx_mxfe_tpl_core/adc_tpl_core CONFIG.EN_FRAME_ALIGN 0
+ad_ip_parameter rx_mxfe_tpl_core/adc_tpl_core CONFIG.EXT_SYNC 1
 
 ad_ip_instance util_cpack2 util_mxfe_cpack [list \
   NUM_OF_CHANNELS $RX_NUM_OF_CONVERTERS \
