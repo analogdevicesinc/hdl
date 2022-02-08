@@ -42,9 +42,9 @@ adi_add_bus "phy_ctrl" "master" \
   "analog.com:interface:if_phy_ctrl_tx_rtl:1.0" \
   "analog.com:interface:if_phy_ctrl_tx:1.0" \
   { \
-    { "dc_ddr_edgesel" "ddr_edgesel" } \
-    { "adc_num_lanes" "num_lanes" } \
-    { "adc_sdr_ddr_n" "sdr_ddr_n" } \
+    { "up_adc_ddr_edgesel" "ddr_edgesel" } \
+    { "up_adc_num_lanes" "num_lanes" } \
+    { "up_adc_sdr_ddr_n" "sdr_ddr_n" } \
   }
 
 ipx::save_core [ipx::current_core]
