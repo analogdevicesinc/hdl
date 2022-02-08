@@ -6,9 +6,6 @@ adi_project arradio_c5soc
 
 source $ad_hdl_dir/projects/common/c5soc/c5soc_system_assign.tcl
 
-# files
-set_global_assignment -name VERILOG_FILE ../../../library/common/ad_iobuf.v
-
 # ad9361 interface
 
 set_location_assignment PIN_H15 -to rx_clk_in               ; ##  HSMC_CLKIN_p2   P201.156

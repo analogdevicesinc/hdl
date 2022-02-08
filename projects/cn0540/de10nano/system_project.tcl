@@ -15,7 +15,6 @@ source $ad_hdl_dir/projects/common/de10nano/de10nano_system_assign.tcl
 set_global_assignment -name MESSAGE_DISABLE 15003
 
 # files
-set_global_assignment -name VERILOG_FILE ../../../library/common/ad_iobuf.v
 
 # SPI interface for ad7768-1
 
