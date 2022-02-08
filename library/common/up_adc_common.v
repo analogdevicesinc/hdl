@@ -84,6 +84,11 @@ module up_adc_common #(
   output  reg         up_pps_irq_mask,
   output  reg         up_adc_r1_mode = 'd0,
 
+  // controls in up clock domain
+  output  reg         up_adc_ddr_edgesel = 1'b0,
+  output  reg  [4:0]  up_adc_num_lanes = 5'b0,
+  output  reg         up_adc_sdr_ddr_n = 1'b0,
+
   // channel interface
 
   output              up_adc_ce,
@@ -141,11 +146,8 @@ module up_adc_common #(
   reg                 up_adc_ext_sync_disarm = 'd0;
   reg                 up_adc_ext_sync_manual_req = 'd0;
   reg                 up_adc_sref_sync = 'd0;
-  reg         [4:0]   up_adc_num_lanes = 'd0;
-  reg                 up_adc_sdr_ddr_n = 'd0;
   reg                 up_adc_symb_op = 'd0;
   reg                 up_adc_symb_8_16b = 'd0;
-  reg                 up_adc_ddr_edgesel = 'd0;
   reg                 up_adc_pin_mode = 'd0;
   reg                 up_status_ovf = 'd0;
   reg         [ 7:0]  up_usr_chanmax_int = 'd0;
