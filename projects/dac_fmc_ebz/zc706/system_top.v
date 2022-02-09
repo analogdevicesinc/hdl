@@ -36,6 +36,7 @@
 `timescale 1ns/100ps
 
 module system_top #(
+    parameter NUM_LINKS = 2,
     parameter DEVICE_CODE = 0
   ) (
 
