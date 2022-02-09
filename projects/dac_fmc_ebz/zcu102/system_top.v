@@ -80,6 +80,7 @@ tx_sysref_p   SYSREF2_P       G06  FMC_HPC0_LA00_CC_P        Y4     IO_L13P_T2L_
 */
 
 module system_top #(
+    parameter NUM_LINKS = 2,
     parameter DEVICE_CODE = 0
   ) (
 
