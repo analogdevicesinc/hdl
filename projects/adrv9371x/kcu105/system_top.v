@@ -158,12 +158,18 @@ module system_top (
     .O (ref_clk0),
     .ODIV2 ());
 
-  IBUFDS_GTE3 i_ibufds_ref_clk1 (
+  IBUFDS_GTE3 #(
+    .REFCLK_HROW_CK_SEL(2'b00) // ODIV2 = O
+  ) i_ibufds_ref_clk1 (
     .CEB (1'd0),
     .I (ref_clk1_p),
     .IB (ref_clk1_n),
     .O (ref_clk1),
-    .ODIV2 ());
+    .ODIV2 (ref_clk1_odiv2));
+
+  BUFG_GT i_bufg_ref_clk (
+    .I (ref_clk1_odiv2),
+    .O (ref_clk1_bufg));
 
   OBUFDS i_obufds_rx_sync (
     .I (rx_sync),
@@ -299,7 +305,8 @@ module system_top (
     .tx_sync_0 (tx_sync),
     .tx_sysref_0 (sysref),
     .uart_sin (uart_sin),
-    .uart_sout (uart_sout));
+    .uart_sout (uart_sout),
+    .ref_clk (ref_clk1_bufg));
 
 endmodule
 
