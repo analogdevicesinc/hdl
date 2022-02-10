@@ -96,9 +96,9 @@ module system_top (
   output                  cnv_p,
   output                  cnv_n,
   output                  cnv_en,
-  output                  pd_cntrl,
-  output                  testpat_cntrl,
-  output                  twolanes_cntrl
+  input                  pd_cntrl,
+  input                  testpat_cntrl,
+  input                  twolanes_cntrl
 );
 
 <<<<<<< HEAD
@@ -126,7 +126,7 @@ module system_top (
   wire            ltc_clk;
 
   assign gpio_i[63:34] = gpio_o[63:34];
-  assign twolanes_cntrl = 1'b1;
+//  assign twolanes_cntrl = 1'b1;
   assign cnv_en = cnv;
 <<<<<<< HEAD
 
@@ -210,11 +210,11 @@ OBUFDS OBUFDS_cnv (
     .OB(cnv_n),
     .I(cnv_s));
 
-ad_iobuf #(.DATA_WIDTH(2)) iobuf_gpio_cn0577 (
-    .dio_i (gpio_o[33:32]),
-    .dio_o (gpio_i[33:32]),
-    .dio_t (gpio_t[33:32]),
-    .dio_p ({pd_cntrl,testpat_cntrl}));
+//ad_iobuf #(.DATA_WIDTH(2)) iobuf_gpio_cn0577 (
+//    .dio_i (gpio_o[33:32]),
+//    .dio_o (gpio_i[33:32]),
+//    .dio_t (gpio_t[33:32]),
+//    .dio_p ({pd_cntrl,testpat_cntrl}));
 
 ad_iobuf #(.DATA_WIDTH(32)) iobuf_gpio_bd (
 >>>>>>> cn0577: Initial commit
