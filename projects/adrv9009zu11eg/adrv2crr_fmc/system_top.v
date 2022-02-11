@@ -52,12 +52,14 @@ module system_top (
   inout               pmod0_d5,
   inout               pmod0_d6,
   inout               pmod0_d7,
-  output              gpio_0_exp_n, //CS0n
+  output              gpio_0_exp_n, //CS_HMC7044
   output              gpio_0_exp_p, //MOSI
   input               gpio_1_exp_n, //MISO
   output              gpio_1_exp_p, //SCK
-  output              gpio_2_exp_n, //CS2n
-  output              gpio_2_exp_p, //CS2p
+  output              gpio_2_exp_n, //CS_AD9545
+  inout               gpio_3_exp_n, //RESET_HMC7044
+  inout               gpio_3_exp_p, //RESET_AD9545
+  inout               gpio_4_exp_n, //VCXO_SELECT
   output              led_gpio_0,
   output              led_gpio_1,
   output              led_gpio_2,
@@ -265,10 +267,9 @@ module system_top (
   assign spi_csn_hmc7044_car = spi_3_to_8_csn[3];
   assign gpio_0_exp_n = spi_3_to_8_csn[4];
   assign gpio_1_exp_p = spi_clk;
-  assign gpio_0_exp_p = spi_3_to_8_csn[4] == 1'b0 ?  spi_mosi : 1'bZ;
-  assign spi_miso_s = spi_3_to_8_csn[4] == 1'b0 ? gpio_1_exp_n : spi_miso;
+  assign gpio_0_exp_p = spi_mosi;
+  assign spi_miso_s = ((spi_3_to_8_csn[4] == 1'b0) | (spi_3_to_8_csn[5] == 1'b0))? gpio_1_exp_n : spi_miso;
   assign gpio_2_exp_n = spi_3_to_8_csn[5];
-  assign gpio_2_exp_p = spi_3_to_8_csn[6];
 
   adrv9009zu11eg_spi i_spi (
   .spi_csn(spi_3_to_8_csn),
@@ -280,15 +281,18 @@ module system_top (
 
   assign tx_sync = tx_sync_a & tx_sync_b;
 
-  assign gpio_i[94:90] = gpio_o[94:90];
+  assign gpio_i[94:93] = gpio_o[94:93];
   assign gpio_i[31:28] = gpio_o[31:28];
   assign gpio_i[21:20] = gpio_o[21:20];
 
-  ad_iobuf #(.DATA_WIDTH(58)) i_iobuf (
-    .dio_t ({gpio_t[89:32]}),
-    .dio_i ({gpio_o[89:32]}),
-    .dio_o ({gpio_i[89:32]}),
+  ad_iobuf #(.DATA_WIDTH(61)) i_iobuf (
+    .dio_t ({gpio_t[92:32]}),
+    .dio_i ({gpio_o[92:32]}),
+    .dio_o ({gpio_i[92:32]}),
     .dio_p ({
+              gpio_4_exp_n,             // 92
+              gpio_3_exp_n,             // 91
+              gpio_3_exp_p,             // 90
               hmc7044_gpio_4,           // 89
               hmc7044_gpio_3,           // 88
               hmc7044_gpio_1,           // 87
@@ -414,11 +418,11 @@ module system_top (
     .I (core_clk_a_p),
     .IB (core_clk_a_n),
     .O (core_clk_a_ds));
- 
+
   BUFG i_clk_bufg_1 (
      .I (core_clk_a_ds),
      .O (core_clk_a));
-   
+
   IBUFDS i_rx_clk_ibuf_2 (
     .I (core_clk_b_p),
     .IB (core_clk_b_n),
@@ -462,7 +466,6 @@ module system_top (
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .gpio_t (gpio_t),
-
     .ddr4_rtl_1_act_n(ddr4_rtl_1_act_n),
     .ddr4_rtl_1_adr(ddr4_rtl_1_adr),
     .ddr4_rtl_1_ba(ddr4_rtl_1_ba),
