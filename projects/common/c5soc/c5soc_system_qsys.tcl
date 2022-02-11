@@ -218,7 +218,7 @@ proc ad_dma_interconnect {m_port m_id} {
  add_connection pixel_clk_pll.outclk1 video_dmac.if_m_axis_aclk
  add_connection pixel_clk_pll.outclk1 sys_hps.f2h_sdram0_clock
  add_connection pixel_clk_pll.outclk1 vga_out.vdma_clock
- add_connection pixel_clk_pll.outclk0 vga_out.hdmi_clock
+ add_connection pixel_clk_pll.outclk0 vga_out.reference_clk
  add_connection sys_clk.clk_reset     pixel_clk_pll.reset
  add_connection sys_clk.clk_reset     pixel_clk_pll_reconfig.mgmt_reset
  add_connection sys_clk.clk_reset     vga_out.s_axi_reset

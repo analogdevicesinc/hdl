@@ -290,7 +290,7 @@ module system_top (
     .sys_spi_SS_n (spi_csn),
  
 
-    .vga_out_vga_if_v_clk (vga_clk),
+    .vga_out_vga_if_vga_clk (vga_clk),
     .vga_out_vga_if_vga_red (vga_red),
     .vga_out_vga_if_vga_green (vga_grn),
     .vga_out_vga_if_vga_blue (vga_blu),
