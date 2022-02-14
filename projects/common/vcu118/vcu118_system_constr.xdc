@@ -15,8 +15,8 @@ set_property PACKAGE_PIN AV21 [get_ports phy_tx_n]
 set_property PACKAGE_PIN AU24 [get_ports phy_rx_p]
 set_property PACKAGE_PIN AV24 [get_ports phy_rx_n]
 
-set_property -dict  {PACKAGE_PIN  AT22  IOSTANDARD LVDS} [get_ports phy_clk_p]
-set_property -dict  {PACKAGE_PIN  AU22  IOSTANDARD LVDS} [get_ports phy_clk_n]
+set_property -dict  {PACKAGE_PIN  AT22  IOSTANDARD LVDS  DIFF_TERM_ADV TERM_100} [get_ports phy_clk_p]
+set_property -dict  {PACKAGE_PIN  AU22  IOSTANDARD LVDS  DIFF_TERM_ADV TERM_100} [get_ports phy_clk_n]
 
 set_property -dict  {PACKAGE_PIN  BA21  IOSTANDARD  LVCMOS18} [get_ports phy_rst_n]
 set_property -dict  {PACKAGE_PIN  AV23  IOSTANDARD  LVCMOS18} [get_ports mdio_mdc]
