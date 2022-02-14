@@ -53,6 +53,7 @@ module spi_engine_offload #(
   input [(DATA_WIDTH-1):0] ctrl_sdo_wr_data,
 
   input ctrl_enable,
+  input ctrl_axis_sw,
   output ctrl_enabled,
   input ctrl_mem_reset,
 
@@ -83,7 +84,15 @@ module spi_engine_offload #(
 
   output offload_sdi_valid,
   input offload_sdi_ready,
-  output [(NUM_OF_SDI * DATA_WIDTH-1):0] offload_sdi_data
+  output [(NUM_OF_SDI * DATA_WIDTH-1):0] offload_sdi_data,
+
+  input offload_sdo_valid_0,
+  output offload_sdo_ready_0,
+  input [(DATA_WIDTH-1):0] offload_sdo_data_0,
+
+  input offload_sdo_valid_1,
+  output offload_sdo_ready_1,
+  input [(DATA_WIDTH-1):0] offload_sdo_data_1
 );
 
 reg spi_active = 1'b0;
@@ -91,6 +100,7 @@ reg spi_active = 1'b0;
 reg [CMD_MEM_ADDRESS_WIDTH-1:0] ctrl_cmd_wr_addr = 'h00;
 reg [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_rd_addr = 'h00;
 reg [SDO_MEM_ADDRESS_WIDTH-1:0] ctrl_sdo_wr_addr = 'h00;
+reg [SDO_MEM_ADDRESS_WIDTH-1:0] ctrl_sdo_wr_addr_1 = 'h00;
 reg [SDO_MEM_ADDRESS_WIDTH-1:0] spi_sdo_rd_addr = 'h00;
 
 reg [15:0] cmd_mem[0:2**CMD_MEM_ADDRESS_WIDTH-1];
@@ -99,10 +109,21 @@ reg [(DATA_WIDTH-1):0] sdo_mem[0:2**SDO_MEM_ADDRESS_WIDTH-1];
 wire [15:0] cmd_int_s;
 wire [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_rd_addr_next;
 wire spi_enable;
+wire mem_empty;
+wire offload_sdo_valid;
+wire offload_sdo_ready;
+wire [(DATA_WIDTH-1):0] offload_sdo_data;
 
+assign offload_sdo_ready_0 = (ctrl_axis_sw ? 0 : offload_sdo_ready);
+assign offload_sdo_ready_1 = (ctrl_axis_sw ? offload_sdo_ready : 0);
+
+assign offload_sdo_valid = (ctrl_axis_sw ? offload_sdo_valid_1 : offload_sdo_valid_0);
+assign offload_sdo_data = (ctrl_axis_sw ? offload_sdo_data_1 : offload_sdo_data_0);
+
+
+assign mem_empty = (ctrl_sdo_wr_addr_1 == 'h0 ? 1 : 0);
 assign cmd_valid = spi_active;
-assign sdo_data_valid = spi_active;
-
+assign sdo_data_valid = offload_sdo_valid;
 assign offload_sdi_valid = sdi_data_valid;
 
 // we don't want to block the SDI interface after disabling the module
@@ -110,9 +131,9 @@ assign offload_sdi_valid = sdi_data_valid;
 assign sdi_data_ready = (spi_enable) ? offload_sdi_ready : 1'b1;
 
 assign offload_sdi_data = sdi_data;
-
 assign cmd_int_s = cmd_mem[spi_cmd_rd_addr];
-assign sdo_data = sdo_mem[spi_sdo_rd_addr];
+assign offload_sdo_ready = sdo_data_ready & mem_empty;
+assign sdo_data = (mem_empty == 1 ? offload_sdo_data : sdo_mem[ctrl_sdo_wr_addr_1 - 1'h1]);
 
 /* SYNC ID counter. The offload module increments the sync_id on each
  * transaction. The initial value of the sync_id is the value of the last
@@ -258,8 +279,9 @@ always @(posedge spi_clk) begin
     if (spi_active == 1'b0) begin
       // start offload when we have a valid trigger, offload is enabled and
       // the DMA is enabled
-      if (trigger_s == 1'b1 && spi_enable == 1'b1 && offload_sdi_ready == 1'b1)
+      if (trigger_s == 1'b1 && spi_enable == 1'b1 && offload_sdi_ready == 1'b1) begin
         spi_active <= 1'b1;
+      end
     end else if (cmd_ready == 1'b1 && spi_cmd_rd_addr_next == ctrl_cmd_wr_addr) begin
       spi_active <= 1'b0;
     end
@@ -302,8 +324,19 @@ always @(posedge ctrl_clk) begin
 end
 
 always @(posedge ctrl_clk) begin
+  if (ctrl_mem_reset == 1'b1) begin
+    ctrl_sdo_wr_addr_1 <= 'h0;
+  end else if (trigger_s == 1'b1) begin
+    ctrl_sdo_wr_addr_1 <= ctrl_sdo_wr_addr;
+  end else if (sdo_data_ready == 1'b1 && mem_empty == 0) begin
+    ctrl_sdo_wr_addr_1 <= ctrl_sdo_wr_addr_1 - 1'b1;
+  end
+end
+
+always @(posedge ctrl_clk) begin
   if (ctrl_sdo_wr_en == 1'b1)
     sdo_mem[ctrl_sdo_wr_addr] <= ctrl_sdo_wr_data;
 end
 
 endmodule
+

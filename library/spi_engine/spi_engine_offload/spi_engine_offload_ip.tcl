@@ -50,6 +50,7 @@ adi_add_bus "spi_engine_offload_ctrl" "slave" \
 		{ "ctrl_sdo_wr_en" "SDO_WR_EN"} \
 		{ "ctrl_sdo_wr_data" "SDO_WR_DATA"} \
 		{ "ctrl_enable" "ENABLE"} \
+		{ "ctrl_axis_sw" "AXIS_SW"} \
 		{ "ctrl_enabled" "ENABLED"} \
 		{ "ctrl_mem_reset" "MEM_RESET"} \
 		{ "status_sync_ready" "SYNC_READY"} \
@@ -66,7 +67,25 @@ adi_add_bus "offload_sdi" "master" \
 		{"offload_sdi_data" "TDATA"} \
 	}
 
-adi_add_bus_clock "spi_clk" "spi_engine_ctrl:offload_sdi" "spi_resetn"
+adi_add_bus "offload_sdo_0" "slave" \
+	"xilinx.com:interface:axis_rtl:1.0" \
+	"xilinx.com:interface:axis:1.0" \
+	{ \
+		{"offload_sdo_valid_0" "TVALID"} \
+		{"offload_sdo_ready_0" "TREADY"} \
+		{"offload_sdo_data_0" "TDATA"} \
+	}
+
+adi_add_bus "offload_sdo_1" "slave" \
+	"xilinx.com:interface:axis_rtl:1.0" \
+	"xilinx.com:interface:axis:1.0" \
+	{ \
+		{"offload_sdo_valid_1" "TVALID"} \
+		{"offload_sdo_ready_1" "TREADY"} \
+		{"offload_sdo_data_1" "TDATA"} \
+	}
+
+adi_add_bus_clock "spi_clk" "spi_engine_ctrl:offload_sdi:offload_sdo_0:offload_sdo_1" "spi_resetn"
 adi_add_bus_clock "ctrl_clk" "spi_engine_offload_ctrl"
 
 ## Parameter validations

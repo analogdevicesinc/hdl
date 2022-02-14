@@ -82,6 +82,20 @@
 			</spirit:wire>
 		</spirit:port>
 		<spirit:port>
+			<spirit:logicalName>AXIS_SW</spirit:logicalName>
+			<spirit:wire>
+				<spirit:onMaster>
+					<spirit:presence>required</spirit:presence>
+					<spirit:width>1</spirit:width>
+				</spirit:onMaster>
+				<spirit:onSlave>
+					<spirit:presence>required</spirit:presence>
+					<spirit:width>1</spirit:width>
+					<spirit:direction>in</spirit:direction>
+				</spirit:onSlave>
+			</spirit:wire>
+		</spirit:port>
+		<spirit:port>
 			<spirit:logicalName>MEM_RESET</spirit:logicalName>
 			<spirit:wire>
 				<spirit:onMaster>

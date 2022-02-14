@@ -54,6 +54,7 @@ adi_add_bus "spi_engine_offload_ctrl0" "master" \
 		{ "offload0_sdo_wr_en" "SDO_WR_EN"} \
 		{ "offload0_sdo_wr_data" "SDO_WR_DATA"} \
 		{ "offload0_enable" "ENABLE"} \
+		{ "offload0_axis_sw" "AXIS_SW"} \
 		{ "offload0_enabled" "ENABLED"} \
 		{ "offload0_mem_reset" "MEM_RESET"} \
 		{ "offload_sync_ready" "SYNC_READY"} \
