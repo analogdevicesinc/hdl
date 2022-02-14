@@ -45,6 +45,8 @@ source $ad_hdl_dir/projects/common/xilinx/adi_fir_filter_bd.tcl
 
 # adrv9009
 
+create_bd_port -dir I ref_clk
+
 create_bd_port -dir I dac_fifo_bypass
 create_bd_port -dir I adc_fir_filter_active
 create_bd_port -dir I dac_fir_filter_active
@@ -220,14 +222,14 @@ ad_connect  $sys_cpu_clk util_adrv9009_xcvr/up_clk
 # Tx
 ad_connect adrv9009_tx_device_clk axi_adrv9009_tx_clkgen/clk_0
 ad_xcvrcon util_adrv9009_xcvr axi_adrv9009_tx_xcvr axi_adrv9009_tx_jesd {0 3 2 1} adrv9009_tx_device_clk {} $MAX_TX_NUM_OF_LANES
-ad_connect util_adrv9009_xcvr/tx_out_clk_0 axi_adrv9009_tx_clkgen/clk
+ad_connect ref_clk axi_adrv9009_tx_clkgen/clk
 ad_xcvrpll $tx_ref_clk util_adrv9009_xcvr/qpll_ref_clk_0
 ad_xcvrpll axi_adrv9009_tx_xcvr/up_pll_rst util_adrv9009_xcvr/up_qpll_rst_0
 
 # Rx
 ad_connect adrv9009_rx_device_clk axi_adrv9009_rx_clkgen/clk_0
 ad_xcvrcon util_adrv9009_xcvr axi_adrv9009_rx_xcvr axi_adrv9009_rx_jesd {} adrv9009_rx_device_clk {} $MAX_RX_NUM_OF_LANES
-ad_connect util_adrv9009_xcvr/rx_out_clk_0 axi_adrv9009_rx_clkgen/clk
+ad_connect ref_clk axi_adrv9009_rx_clkgen/clk
 for {set i 0} {$i < $MAX_RX_NUM_OF_LANES} {incr i} {
   set ch [expr $i]
   ad_xcvrpll  $rx_ref_clk util_adrv9009_xcvr/cpll_ref_clk_$ch
@@ -237,7 +239,7 @@ for {set i 0} {$i < $MAX_RX_NUM_OF_LANES} {incr i} {
 # Rx - OBS
 ad_connect adrv9009_rx_os_device_clk axi_adrv9009_rx_os_clkgen/clk_0
 ad_xcvrcon util_adrv9009_xcvr axi_adrv9009_rx_os_xcvr axi_adrv9009_rx_os_jesd {} adrv9009_rx_os_device_clk {} $MAX_RX_OS_NUM_OF_LANES
-ad_connect util_adrv9009_xcvr/rx_out_clk_$MAX_RX_NUM_OF_LANES axi_adrv9009_rx_os_clkgen/clk
+ad_connect ref_clk axi_adrv9009_rx_os_clkgen/clk
 for {set i 0} {$i < $MAX_RX_OS_NUM_OF_LANES} {incr i} {
   # channel indexing starts from the last RX
   set ch [expr $MAX_RX_NUM_OF_LANES + $i]
