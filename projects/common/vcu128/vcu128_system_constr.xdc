@@ -16,8 +16,8 @@ set_property PACKAGE_PIN BH22 [get_ports phy_tx_n]
 set_property PACKAGE_PIN BJ22 [get_ports phy_rx_p]
 set_property PACKAGE_PIN BK21 [get_ports phy_rx_n]
 
-set_property -dict  {PACKAGE_PIN  BH27  IOSTANDARD LVDS} [get_ports phy_clk_p]
-set_property -dict  {PACKAGE_PIN  BJ27  IOSTANDARD LVDS} [get_ports phy_clk_n]
+set_property -dict  {PACKAGE_PIN  BH27  IOSTANDARD LVDS  DIFF_TERM_ADV TERM_100} [get_ports phy_clk_p]
+set_property -dict  {PACKAGE_PIN  BJ27  IOSTANDARD LVDS  DIFF_TERM_ADV TERM_100} [get_ports phy_clk_n]
 
 set_property -dict  {PACKAGE_PIN  BN27  IOSTANDARD  LVCMOS18} [get_ports mdio_mdc]
 set_property -dict  {PACKAGE_PIN  BG23  IOSTANDARD  LVCMOS18} [get_ports mdio_mdio]
