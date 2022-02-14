@@ -68,6 +68,13 @@ set_property  -dict {PACKAGE_PIN  AA11   IOSTANDARD LVCMOS33}     [get_ports spi
 set_property  -dict {PACKAGE_PIN  Y10    IOSTANDARD LVCMOS33}     [get_ports gpio_muxout_tx]             ; ## JA3
 set_property  -dict {PACKAGE_PIN  AB9    IOSTANDARD LVCMOS33}     [get_ports gpio_muxout_rx]             ; ## JA9
 
+# spi logic analyzer PMOD JB1
+
+set_property  -dict {PACKAGE_PIN  W12    IOSTANDARD LVCMOS33}     [get_ports spi_csn_pmod]               ; ## JB1
+set_property  -dict {PACKAGE_PIN  W11    IOSTANDARD LVCMOS33}     [get_ports spi_clk_pmod]               ; ## JB2
+set_property  -dict {PACKAGE_PIN  V10    IOSTANDARD LVCMOS33}     [get_ports spi_mosi_pmod]              ; ## JB3
+set_property  -dict {PACKAGE_PIN  W8     IOSTANDARD LVCMOS33}     [get_ports spi_miso_pmod]              ; ## JB4
+
 # clocks
 
 create_clock -name rx_clk       -period  4 [get_ports rx_clk_in_p]

@@ -111,7 +111,12 @@ module system_top (
   output                  spi_clk,
   output                  spi_mosi,
   input                   spi_miso,
-
+  
+  output                  spi_csn_pmod,
+  output                  spi_clk_pmod,
+  output                  spi_mosi_pmod,
+  output                  spi_miso_pmod,
+  
   output                  spi_udc_csn_tx,
   output                  spi_udc_csn_rx,
   output                  spi_udc_sclk,
@@ -158,7 +163,12 @@ module system_top (
     .dio_i (iic_mux_sda_o_s),
     .dio_o (iic_mux_sda_i_s),
     .dio_p (iic_mux_sda));
-
+		
+  assign spi_csn_pmod   =   spi_csn; 
+  assign spi_clk_pmod   =   spi_clk;
+  assign spi_mosi_pmod  =   spi_mosi;
+  assign spi_miso_pmod  =   spi_miso;
+	
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
     .ddr_ba (ddr_ba),
