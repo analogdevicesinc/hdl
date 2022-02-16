@@ -289,7 +289,7 @@ ad_connect $sys_cpu_resetn axi_adrv9001_tx2_dma/m_src_axi_aresetn
 
 ad_cpu_interrupt ps-13 mb-12 axi_adrv9001_rx1_dma/irq
 ad_cpu_interrupt ps-12 mb-11 axi_adrv9001_rx2_dma/irq
-ad_cpu_interrupt ps-11 mb-6 axi_adrv9001_tx1_dma/irq
+ad_cpu_interrupt ps-9  mb-6 axi_adrv9001_tx1_dma/irq
 ad_cpu_interrupt ps-10 mb-5 axi_adrv9001_tx2_dma/irq
 
 
