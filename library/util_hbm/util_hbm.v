@@ -37,39 +37,63 @@
 
 module util_hbm #(
   parameter SRC_DATA_WIDTH = 512,
-  parameter SRC_ADDR_WIDTH = 8,
   parameter DST_DATA_WIDTH = 128,
-  parameter DST_ADDR_WIDTH = 7,
+
+  parameter LENGTH_WIDTH = 32,
 
   parameter AXI_DATA_WIDTH = 256,
   parameter AXI_ADDR_WIDTH = 32,
 
   parameter AXI_ID_WIDTH = 6,
 
+  parameter ASYNC_CLK_SAXIS_UP = 1,
+  parameter ASYNC_CLK_MAXIS_UP = 1,
+
+  parameter AXI_SLICE_DEST = 0,
+  parameter AXI_SLICE_SRC = 0,
+
+  // This will size the storage per master where each segment is 256MB
+  parameter HBM_SEGMENTS_PER_MASTER = 4,
+
+  // <TODO> This should depend on sample rate too
   parameter NUM_M = SRC_DATA_WIDTH <= AXI_DATA_WIDTH ? 1 :
-                   (SRC_DATA_WIDTH / AXI_DATA_WIDTH) 
+                   (SRC_DATA_WIDTH / AXI_DATA_WIDTH)
 ) (
-  input                                       fifo_src_clk,
-  input                                       fifo_src_resetn,
-  input                                       fifo_src_wen,
-  input       [SRC_ADDR_WIDTH-1:0]            fifo_src_waddr,
-  input       [SRC_DATA_WIDTH-1:0]            fifo_src_wdata,
-  input                                       fifo_src_wlast,
 
-  input                                       fifo_dst_clk,
-  input                                       fifo_dst_resetn,
-  input                                       fifo_dst_ren,
-  input       [DST_ADDR_WIDTH-1:0]            fifo_dst_raddr,
-  output      [DST_DATA_WIDTH-1:0]            fifo_dst_rdata,
+  input                                    up_clk,
+  input                                    up_reset,
 
-  // Signal to the controller, that the bridge is ready to push data to the
-  // destination
-  output                                      fifo_dst_ready,
+  input                                    up_src_request_enable,
+  input                                    up_src_request_valid,
+  output                                   up_src_request_ready,
+  input   [LENGTH_WIDTH-1:0]               up_src_request_length,
+  output                                   up_src_request_eot,
 
-  // Status signals
-  output                                      fifo_src_full,    // FULL asserts when SOURCE data rate (e.g. ADC) is higher than DDR data rate
-  output                                      fifo_dst_empty,   // EMPTY asserts when DESTINATION data rate (e.g. DAC) is higher than DDR data rate
+  input                                    up_dst_request_enable,
+  input                                    up_dst_request_valid,
+  output                                   up_dst_request_ready,
+  input   [LENGTH_WIDTH-1:0]               up_dst_request_length,
+  output                                   up_dst_request_eot,
 
+  // Slave streaming AXI interface
+  input                                    s_axis_aclk,
+  output                                   s_axis_ready,
+  input                                    s_axis_valid,
+  input  [SRC_DATA_WIDTH-1:0]              s_axis_data,
+  input  [SRC_DATA_WIDTH/8-1:0]            s_axis_strb,
+  input  [SRC_DATA_WIDTH/8-1:0]            s_axis_keep,
+  input  [0:0]                             s_axis_user,
+  input                                    s_axis_last,
+
+  // Master streaming AXI interface
+  input                                    m_axis_aclk,
+  input                                    m_axis_ready,
+  output                                   m_axis_valid,
+  output [DST_DATA_WIDTH-1:0]              m_axis_data,
+  output [DST_DATA_WIDTH/8-1:0]            m_axis_strb,
+  output [DST_DATA_WIDTH/8-1:0]            m_axis_keep,
+  output [0:0]                             m_axis_user,
+  output                                   m_axis_last,
 
   // Master AXI3 interface
   input                                    m_axi_aclk,
@@ -117,6 +141,325 @@ module util_hbm #(
 
 );
 
+localparam DMA_TYPE_AXI_MM = 0;
+localparam DMA_TYPE_AXI_STREAM = 1;
+localparam DMA_TYPE_FIFO = 2;
+
+localparam AXI_BYTES_PER_BEAT_WIDTH = $clog2(AXI_DATA_WIDTH);
+localparam SRC_BYTES_PER_BEAT_WIDTH = $clog2(SRC_DATA_WIDTH);
+localparam DST_BYTES_PER_BEAT_WIDTH = $clog2(DST_DATA_WIDTH);
+
+// AXI 3  1 burst is 16 beats
+localparam MAX_BYTES_PER_BURST = 16 * AXI_DATA_WIDTH/8;
+localparam BYTES_PER_BURST_WIDTH = $clog2(MAX_BYTES_PER_BURST);
+
+parameter FIFO_SIZE = 8; // In bursts
+
+genvar i;
+
+wire [NUM_M-1:0] up_src_request_ready_loc;
+wire [NUM_M-1:0] up_dst_request_ready_loc;
+wire [NUM_M-1:0] up_src_request_eot_loc;
+wire [NUM_M-1:0] up_dst_request_eot_loc;
+
+assign up_src_request_ready = &up_src_request_ready_loc;
+assign up_dst_request_ready = &up_dst_request_ready_loc;
+
+// Aggregate end of transfer from all masters
+reg [NUM_M-1:0] up_src_eot_pending;
+reg [NUM_M-1:0] up_dst_eot_pending;
+
+assign up_src_request_eot = &up_src_request_eot_loc;
+assign up_dst_request_eot = &up_dst_request_eot_loc;
+
+generate
+for (i = 0; i < NUM_M; i=i+1) begin
+
+  // 2Gb (256MB) per segment
+  localparam ADDR_OFFSET = i * HBM_SEGMENTS_PER_MASTER * 256 * 1024 * 1024;
+
+  always @(posedge up_clk) begin
+    if (up_src_request_eot) begin
+      up_src_eot_pending[i] <= 1'b0;
+    end else if (up_src_request_eot_loc[i]) begin
+      up_src_eot_pending[i] <= 1'b1;
+    end
+  end
+
+  // AXIS to AXI3
+  axi_dmac_transfer #(
+    .DMA_DATA_WIDTH_SRC(AXI_DATA_WIDTH),
+    .DMA_DATA_WIDTH_DEST(AXI_DATA_WIDTH),
+    .DMA_LENGTH_WIDTH(LENGTH_WIDTH),
+    .DMA_LENGTH_ALIGN(SRC_BYTES_PER_BEAT_WIDTH),
+    .BYTES_PER_BEAT_WIDTH_DEST(AXI_BYTES_PER_BEAT_WIDTH),
+    .BYTES_PER_BEAT_WIDTH_SRC(SRC_BYTES_PER_BEAT_WIDTH),
+    .BYTES_PER_BURST_WIDTH(BYTES_PER_BURST_WIDTH),
+    .DMA_TYPE_DEST(DMA_TYPE_AXI_MM),
+    .DMA_TYPE_SRC(DMA_TYPE_AXI_STREAM),
+    .DMA_AXI_ADDR_WIDTH(AXI_ADDR_WIDTH),
+    .DMA_2D_TRANSFER(1'b0),
+    .ASYNC_CLK_REQ_SRC(ASYNC_CLK_SAXIS_UP),
+    .ASYNC_CLK_SRC_DEST(1),
+    .ASYNC_CLK_DEST_REQ(1),
+    .AXI_SLICE_DEST(1),
+    .AXI_SLICE_SRC(1),
+    .MAX_BYTES_PER_BURST(MAX_BYTES_PER_BURST),
+    .FIFO_SIZE(FIFO_SIZE),
+    .ID_WIDTH(AXI_ID_WIDTH),
+    .AXI_LENGTH_WIDTH_SRC(8),
+    .AXI_LENGTH_WIDTH_DEST(8),
+    .ENABLE_DIAGNOSTICS_IF(0),
+    .ALLOW_ASYM_MEM(1)
+  ) i_src_transfer (
+    .ctrl_clk(up_clk),
+    .ctrl_resetn(~up_reset),
+
+     // Control interface
+    .ctrl_enable(up_src_request_enable),
+    .ctrl_pause(1'b0),
+
+    .req_valid(up_src_request_valid),
+    .req_ready(up_src_request_ready_loc[i]),
+    .req_dest_address(ADDR_OFFSET[AXI_ADDR_WIDTH-1:AXI_BYTES_PER_BEAT_WIDTH]),
+    .req_src_address('h0),
+    .req_x_length(up_src_request_length),
+    .req_y_length(0),
+    .req_dest_stride(0),
+    .req_src_stride(0),
+    .req_sync_transfer_start(1'b0),
+    .req_last(1'b1),
+
+    .req_eot(up_src_request_eot_loc[i]),
+    .req_measured_burst_length(),
+    .req_response_partial(),
+    .req_response_valid(),
+    .req_response_ready(1'b1),
+
+    .m_dest_axi_aclk(m_axi_aclk),
+    .m_dest_axi_aresetn(m_axi_aresetn),
+    .m_src_axi_aclk(1'b0),
+    .m_src_axi_aresetn(1'b0),
+
+    .m_axi_awaddr(m_dest_axi_awaddr),
+    .m_axi_awlen(m_dest_axi_awlen),
+    .m_axi_awsize(m_dest_axi_awsize),
+    .m_axi_awburst(m_dest_axi_awburst),
+    .m_axi_awprot(m_dest_axi_awprot),
+    .m_axi_awcache(m_dest_axi_awcache),
+    .m_axi_awvalid(m_dest_axi_awvalid),
+    .m_axi_awready(m_dest_axi_awready),
+
+    .m_axi_wdata(m_dest_axi_wdata),
+    .m_axi_wstrb(m_dest_axi_wstrb),
+    .m_axi_wready(m_dest_axi_wready),
+    .m_axi_wvalid(m_dest_axi_wvalid),
+    .m_axi_wlast(m_dest_axi_wlast),
+
+    .m_axi_bvalid(m_dest_axi_bvalid),
+    .m_axi_bresp(m_dest_axi_bresp),
+    .m_axi_bready(m_dest_axi_bready),
+
+    .m_axi_arready(),
+    .m_axi_arvalid(),
+    .m_axi_araddr(),
+    .m_axi_arlen(),
+    .m_axi_arsize(),
+    .m_axi_arburst(),
+    .m_axi_arprot(),
+    .m_axi_arcache(),
+
+    .m_axi_rdata(),
+    .m_axi_rready(),
+    .m_axi_rvalid(),
+    .m_axi_rlast(),
+    .m_axi_rresp(),
+
+    .s_axis_aclk(s_axis_aclk),
+    .s_axis_ready(s_axis_ready),
+    .s_axis_valid(s_axis_valid),
+    .s_axis_data(s_axis_data),
+    .s_axis_user(s_axis_user),
+    .s_axis_last(s_axis_last),
+    .s_axis_xfer_req(s_axis_xfer_req),
+
+    .m_axis_aclk(1'b0),
+    .m_axis_ready(1'b1),
+    .m_axis_valid(),
+    .m_axis_data(),
+    .m_axis_last(),
+    .m_axis_xfer_req(),
+
+    .fifo_wr_clk(1'b0),
+    .fifo_wr_en(1'b0),
+    .fifo_wr_din('b0),
+    .fifo_wr_overflow(),
+    .fifo_wr_sync(),
+    .fifo_wr_xfer_req(),
+
+    .fifo_rd_clk(1'b0),
+    .fifo_rd_en(1'b0),
+    .fifo_rd_valid(),
+    .fifo_rd_dout(),
+    .fifo_rd_underflow(),
+    .fifo_rd_xfer_req(),
+
+    // DBG
+    .dbg_dest_request_id(),
+    .dbg_dest_address_id(),
+    .dbg_dest_data_id(),
+    .dbg_dest_response_id(),
+    .dbg_src_request_id(),
+    .dbg_src_address_id(),
+    .dbg_src_data_id(),
+    .dbg_src_response_id(),
+    .dbg_status(),
+
+    .dest_diag_level_bursts()
+  );
+
+  always @(posedge up_clk) begin
+    if (up_dst_request_eot) begin
+      up_dst_eot_pending[i] <= 1'b0;
+    end else if (up_dst_request_eot_loc[i]) begin
+      up_dst_eot_pending[i] <= 1'b1;
+    end
+  end
+
+  // AXI3 to MAXIS
+  axi_dmac_transfer #(
+    .DMA_DATA_WIDTH_SRC(AXI_DATA_WIDTH),
+    .DMA_DATA_WIDTH_DEST(AXI_DATA_WIDTH),
+    .DMA_LENGTH_WIDTH(LENGTH_WIDTH),
+    .DMA_LENGTH_ALIGN(DST_BYTES_PER_BEAT_WIDTH),
+    .BYTES_PER_BEAT_WIDTH_DEST(DST_BYTES_PER_BEAT_WIDTH),
+    .BYTES_PER_BEAT_WIDTH_SRC(AXI_BYTES_PER_BEAT_WIDTH),
+    .BYTES_PER_BURST_WIDTH(BYTES_PER_BURST_WIDTH),
+    .DMA_TYPE_DEST(DMA_TYPE_AXI_STREAM),
+    .DMA_TYPE_SRC(DMA_TYPE_AXI_MM),
+    .DMA_AXI_ADDR_WIDTH(AXI_ADDR_WIDTH),
+    .DMA_2D_TRANSFER(1'b0),
+    .ASYNC_CLK_REQ_SRC(1),
+    .ASYNC_CLK_SRC_DEST(1),
+    .ASYNC_CLK_DEST_REQ(ASYNC_CLK_MAXIS_UP),
+    .AXI_SLICE_DEST(1),
+    .AXI_SLICE_SRC(1),
+    .MAX_BYTES_PER_BURST(MAX_BYTES_PER_BURST),
+    .FIFO_SIZE(FIFO_SIZE),
+    .ID_WIDTH(AXI_ID_WIDTH),
+    .AXI_LENGTH_WIDTH_SRC(8),
+    .AXI_LENGTH_WIDTH_DEST(8),
+    .ENABLE_DIAGNOSTICS_IF(0),
+    .ALLOW_ASYM_MEM(1)
+  ) i_dst_transfer (
+    .ctrl_clk(up_clk),
+    .ctrl_resetn(~up_reset),
+
+     // Control interface
+    .ctrl_enable(up_dst_request_enable),
+    .ctrl_pause(1'b0),
+
+    .req_valid(up_dst_request_valid),
+    .req_ready(up_dst_request_ready_loc[i]),
+    .req_dest_address(0),
+    .req_src_address(ADDR_OFFSET[AXI_ADDR_WIDTH-1:AXI_BYTES_PER_BEAT_WIDTH]),
+    .req_x_length(up_dst_request_length),
+    .req_y_length(0),
+    .req_dest_stride(0),
+    .req_src_stride(0),
+    .req_sync_transfer_start(1'b0),
+    .req_last(1'b1),
+
+    .req_eot(up_dst_request_eot_loc[i]),
+    .req_measured_burst_length(),
+    .req_response_partial(),
+    .req_response_valid(),
+    .req_response_ready(1'b1),
+
+    .m_dest_axi_aclk(1'b0),
+    .m_dest_axi_aresetn(1'b0),
+    .m_src_axi_aclk(m_axi_aclk),
+    .m_src_axi_aresetn(m_axi_aresetn),
+
+    .m_axi_awaddr(),
+    .m_axi_awlen(),
+    .m_axi_awsize(),
+    .m_axi_awburst(),
+    .m_axi_awprot(),
+    .m_axi_awcache(),
+    .m_axi_awvalid(),
+    .m_axi_awready(1'b1),
+
+    .m_axi_wdata(),
+    .m_axi_wstrb(),
+    .m_axi_wready(1'b1),
+    .m_axi_wvalid(),
+    .m_axi_wlast(),
+
+    .m_axi_bvalid(1'b0),
+    .m_axi_bresp(),
+    .m_axi_bready(),
+
+    .m_axi_arready(m_axi_arready),
+    .m_axi_arvalid(m_axi_arvalid),
+    .m_axi_araddr(m_axi_araddr),
+    .m_axi_arlen(m_axi_arlen),
+    .m_axi_arsize(m_axi_arsize),
+    .m_axi_arburst(m_axi_arburst),
+    .m_axi_arprot(m_axi_arprot),
+    .m_axi_arcache(m_axi_arcache),
+
+    .m_axi_rdata(m_axi_rdata),
+    .m_axi_rready(m_axi_rready),
+    .m_axi_rvalid(m_axi_rvalid),
+    .m_axi_rlast(m_axi_rlast),
+    .m_axi_rresp(m_axi_rresp),
+
+    .s_axis_aclk(1'b0),
+    .s_axis_ready(),
+    .s_axis_valid(1'b0),
+    .s_axis_data(),
+    .s_axis_user(),
+    .s_axis_last(),
+    .s_axis_xfer_req(),
+
+    .m_axis_aclk(m_axis_aclk),
+    .m_axis_ready(m_axis_ready),
+    .m_axis_valid(m_axis_valid),
+    .m_axis_data(m_axis_data),
+    .m_axis_last(m_axis_last),
+    .m_axis_xfer_req(m_axis_xfer_req),
+
+    .fifo_wr_clk(1'b0),
+    .fifo_wr_en(1'b0),
+    .fifo_wr_din('b0),
+    .fifo_wr_overflow(),
+    .fifo_wr_sync(),
+    .fifo_wr_xfer_req(),
+
+    .fifo_rd_clk(1'b0),
+    .fifo_rd_en(1'b0),
+    .fifo_rd_valid(),
+    .fifo_rd_dout(),
+    .fifo_rd_underflow(),
+    .fifo_rd_xfer_req(),
+
+    // DBG
+    .dbg_dest_request_id(),
+    .dbg_dest_address_id(),
+    .dbg_dest_data_id(),
+    .dbg_dest_response_id(),
+    .dbg_src_request_id(),
+    .dbg_src_address_id(),
+    .dbg_src_data_id(),
+    .dbg_src_response_id(),
+    .dbg_status(),
+
+    .dest_diag_level_bursts()
+  );
+
+end
+endgenerate
 
 endmodule
 

@@ -13,7 +13,6 @@ adi_ip_bd util_hbm "bd/bd.tcl"
 
 adi_ip_add_core_dependencies { \
   analog.com:user:util_cdc:1.0 \
-  analog.com:user:util_axis_fifo_asym:1.0 \
   analog.com:user:axi_dmac:1.0 \
 }
 
@@ -22,6 +21,30 @@ set_property description "Bridge between a FIFO READ/WRITE interface and an AXI4
 
 set max_axi_ifc 16
 set cc [ipx::current_core]
+
+adi_add_bus "s_axis" "slave" \
+	"xilinx.com:interface:axis_rtl:1.0" \
+	"xilinx.com:interface:axis:1.0" \
+	[list {"s_axis_ready" "TREADY"} \
+	  {"s_axis_valid" "TVALID"} \
+	  {"s_axis_data" "TDATA"} \
+	  {"s_axis_strb" "TSTRB"} \
+	  {"s_axis_keep" "TKEEP"} \
+	  {"s_axis_user" "TUSER"} \
+	  {"s_axis_last" "TLAST"}]
+adi_add_bus_clock "s_axis_aclk" "s_axis"
+
+adi_add_bus "m_axis" "master" \
+	"xilinx.com:interface:axis_rtl:1.0" \
+	"xilinx.com:interface:axis:1.0" \
+	[list {"m_axis_ready" "TREADY"} \
+	  {"m_axis_valid" "TVALID"} \
+	  {"m_axis_data" "TDATA"} \
+	  {"m_axis_strb" "TSTRB"} \
+	  {"m_axis_keep" "TKEEP"} \
+	  {"m_axis_user" "TUSER"} \
+	  {"m_axis_last" "TLAST"}]
+adi_add_bus_clock "m_axis_aclk" "m_axis"
 
 adi_add_multi_bus $max_axi_ifc "MAXI_" "master" \
   "xilinx.com:interface:aximm_rtl:1.0" \
@@ -71,17 +94,6 @@ foreach intf [ipx::get_bus_interfaces MAXI_* -of_objects $cc] {
 	set para [ipx::add_bus_parameter SUPPORTS_NARROW_BURST $intf]
 	set_property "VALUE" "0" $para
 }
-
-
-#ipx::add_address_space ddr_axi [ipx::current_core]
-#set_property master_address_space_ref ddr_axi [ipx::get_bus_interfaces ddr_axi \
-#  -of_objects [ipx::current_core]]
-#set_property range 4294967296 [ipx::get_address_spaces ddr_axi \
-#  -of_objects [ipx::current_core]]
-#set_property width 512 [ipx::get_address_spaces ddr_axi \
-#  -of_objects [ipx::current_core]]
-#
-#
 
 set_property value_tcl_expr {expr round(${SRC_DATA_WIDTH}.0 / ${AXI_DATA_WIDTH}.0)} \
   [ipx::get_user_parameters NUM_M -of_objects $cc]
