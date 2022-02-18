@@ -203,18 +203,38 @@ ad_connect axi_ad9361_dac_dma/m_axis util_ad9361_dac_upack/s_axis
 
 ad_connect $sys_cpu_resetn axi_ad9361_dac_dma/m_src_axi_aresetn
 
+
+ad_ip_instance axi_dmac mem2mem_dma
+ad_ip_parameter mem2mem_dma CONFIG.DMA_TYPE_SRC 0
+ad_ip_parameter mem2mem_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter mem2mem_dma CONFIG.CYCLIC 0
+ad_ip_parameter mem2mem_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter mem2mem_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter mem2mem_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter mem2mem_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+ad_ip_parameter mem2mem_dma CONFIG.DMA_DATA_WIDTH_SRC 64
+
+ad_connect $sys_cpu_resetn mem2mem_dma/m_src_axi_aresetn
+ad_connect $sys_cpu_resetn mem2mem_dma/m_dest_axi_aresetn
+
 # interconnects
 
 ad_cpu_interconnect 0x79020000 axi_ad9361
 ad_cpu_interconnect 0x7C400000 axi_ad9361_adc_dma
 ad_cpu_interconnect 0x7C420000 axi_ad9361_dac_dma
+ad_cpu_interconnect 0x7C600000 mem2mem_dma
+
 ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
 ad_mem_hp1_interconnect $sys_cpu_clk axi_ad9361_adc_dma/m_dest_axi
 ad_mem_hp2_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP2
 ad_mem_hp2_interconnect $sys_cpu_clk axi_ad9361_dac_dma/m_src_axi
+ad_mem_hp3_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP3
+ad_mem_hp3_interconnect $sys_cpu_clk mem2mem_dma/m_dest_axi
+ad_mem_hp3_interconnect $sys_cpu_clk mem2mem_dma/m_src_axi
 
 # interrupts
 
 ad_cpu_interrupt ps-13 mb-12 axi_ad9361_adc_dma/irq
 ad_cpu_interrupt ps-12 mb-13 axi_ad9361_dac_dma/irq
+ad_cpu_interrupt ps-14 mb-14 mem2mem_dma/irq
 
