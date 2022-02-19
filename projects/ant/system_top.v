@@ -83,14 +83,14 @@ module system_top (
   output          spi_clk,
   output          spi_mosi,
   input           spi_miso,
-  output          VCRX1_1,
-  output          VCRX1_2,
-  output          VCTX1_2,
-  output          VCTX1_1,
-  output          VCRX2_1,
-  output          VCRX2_2,
-  output          VCTX2_1,
-  output          VCTX2_2,
+  output          VCRX1_H,
+  output          VCRX1_L,
+  output          VCTX1_H,
+  output          VCTX1_L,
+  output          VCRX2_H,
+  output          VCRX2_L,
+  output          VCTX2_H,
+  output          VCTX2_L,
   
   // output          ltc2630_mosi_0,
   // output          ltc2630_ncs_0,
@@ -118,14 +118,14 @@ module system_top (
               gpio_status}));     //  7: 0
 
   assign gpio_i[24:14] = gpio_o[24:14];
-  assign VCRX1_1=gpio_o[17];
-  assign VCRX1_2=gpio_o[18];
-  assign VCTX1_2=gpio_o[19];
-  assign VCTX1_1=gpio_o[20];
-  assign VCRX2_1=gpio_o[21];
-  assign VCRX2_2=gpio_o[22];
-  assign VCTX2_1=gpio_o[23];
-  assign VCTX2_2=gpio_o[24];
+  assign VCRX1_H=gpio_o[17];
+  assign VCRX1_L=gpio_o[18];
+  assign VCTX1_H=gpio_o[19];
+  assign VCTX1_L=gpio_o[20];
+  assign VCRX2_H=gpio_o[21];
+  assign VCRX2_L=gpio_o[22];
+  assign VCTX2_H=gpio_o[23];
+  assign VCTX2_L=gpio_o[24];
   
 
   system_wrapper i_system_wrapper (
@@ -193,3 +193,4 @@ endmodule
 
 // ***************************************************************************
 // ***************************************************************************
+
