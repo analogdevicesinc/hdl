@@ -145,9 +145,12 @@ localparam DMA_TYPE_AXI_MM = 0;
 localparam DMA_TYPE_AXI_STREAM = 1;
 localparam DMA_TYPE_FIFO = 2;
 
+localparam SRC_DATA_WIDTH_PER_M = SRC_DATA_WIDTH / NUM_M;
+localparam DST_DATA_WIDTH_PER_M = DST_DATA_WIDTH / NUM_M;
+
 localparam AXI_BYTES_PER_BEAT_WIDTH = $clog2(AXI_DATA_WIDTH);
-localparam SRC_BYTES_PER_BEAT_WIDTH = $clog2(SRC_DATA_WIDTH);
-localparam DST_BYTES_PER_BEAT_WIDTH = $clog2(DST_DATA_WIDTH);
+localparam SRC_BYTES_PER_BEAT_WIDTH = $clog2(SRC_DATA_WIDTH_PER_M);
+localparam DST_BYTES_PER_BEAT_WIDTH = $clog2(DST_DATA_WIDTH_PER_M);
 
 // AXI 3  1 burst is 16 beats
 localparam MAX_BYTES_PER_BURST = 16 * AXI_DATA_WIDTH/8;
@@ -172,6 +175,16 @@ reg [NUM_M-1:0] up_dst_eot_pending;
 assign up_src_request_eot = &up_src_request_eot_loc;
 assign up_dst_request_eot = &up_dst_request_eot_loc;
 
+wire [NUM_M-1:0] s_axis_ready_loc;
+assign s_axis_ready = &s_axis_ready_loc;
+
+
+wire [NUM_M-1:0] m_axis_last_loc;
+assign m_axis_last = &m_axis_last_loc;
+
+wire [NUM_M-1:0] m_axis_valid_loc;
+assign m_axis_valid = &m_axis_valid_loc;
+
 generate
 for (i = 0; i < NUM_M; i=i+1) begin
 
@@ -188,7 +201,7 @@ for (i = 0; i < NUM_M; i=i+1) begin
 
   // AXIS to AXI3
   axi_dmac_transfer #(
-    .DMA_DATA_WIDTH_SRC(AXI_DATA_WIDTH),
+    .DMA_DATA_WIDTH_SRC(SRC_DATA_WIDTH_PER_M),
     .DMA_DATA_WIDTH_DEST(AXI_DATA_WIDTH),
     .DMA_LENGTH_WIDTH(LENGTH_WIDTH),
     .DMA_LENGTH_ALIGN(SRC_BYTES_PER_BEAT_WIDTH),
@@ -241,24 +254,24 @@ for (i = 0; i < NUM_M; i=i+1) begin
     .m_src_axi_aclk(1'b0),
     .m_src_axi_aresetn(1'b0),
 
-    .m_axi_awaddr(m_dest_axi_awaddr),
-    .m_axi_awlen(m_dest_axi_awlen),
-    .m_axi_awsize(m_dest_axi_awsize),
-    .m_axi_awburst(m_dest_axi_awburst),
-    .m_axi_awprot(m_dest_axi_awprot),
-    .m_axi_awcache(m_dest_axi_awcache),
-    .m_axi_awvalid(m_dest_axi_awvalid),
-    .m_axi_awready(m_dest_axi_awready),
+    .m_axi_awaddr(m_axi_awaddr[AXI_ADDR_WIDTH*i+:AXI_ADDR_WIDTH]),
+    .m_axi_awlen(m_axi_awlen[4*i+:4]),
+    .m_axi_awsize(m_axi_awsize[3*i+:3]),
+    .m_axi_awburst(m_axi_awburst[2*i+:2]),
+    .m_axi_awprot(),
+    .m_axi_awcache(m_axi_awcache),
+    .m_axi_awvalid(m_axi_awvalid[i]),
+    .m_axi_awready(m_axi_awready[i]),
 
-    .m_axi_wdata(m_dest_axi_wdata),
-    .m_axi_wstrb(m_dest_axi_wstrb),
-    .m_axi_wready(m_dest_axi_wready),
-    .m_axi_wvalid(m_dest_axi_wvalid),
-    .m_axi_wlast(m_dest_axi_wlast),
+    .m_axi_wdata(m_axi_wdata[AXI_DATA_WIDTH*i+:AXI_DATA_WIDTH]),
+    .m_axi_wstrb(m_axi_wstrb[(AXI_DATA_WIDTH/8)*i+:(AXI_DATA_WIDTH/8)]),
+    .m_axi_wready(m_axi_wready[i]),
+    .m_axi_wvalid(m_axi_wvalid[i]),
+    .m_axi_wlast(m_axi_wlast[i]),
 
-    .m_axi_bvalid(m_dest_axi_bvalid),
-    .m_axi_bresp(m_dest_axi_bresp),
-    .m_axi_bready(m_dest_axi_bready),
+    .m_axi_bvalid(m_axi_bvalid[i]),
+    .m_axi_bresp(m_axi_bresp[2*i+:2]),
+    .m_axi_bready(m_axi_bready[i]),
 
     .m_axi_arready(),
     .m_axi_arvalid(),
@@ -276,12 +289,12 @@ for (i = 0; i < NUM_M; i=i+1) begin
     .m_axi_rresp(),
 
     .s_axis_aclk(s_axis_aclk),
-    .s_axis_ready(s_axis_ready),
+    .s_axis_ready(s_axis_ready_loc[i]),
     .s_axis_valid(s_axis_valid),
-    .s_axis_data(s_axis_data),
+    .s_axis_data(s_axis_data[SRC_DATA_WIDTH_PER_M*i+:SRC_DATA_WIDTH_PER_M]),
     .s_axis_user(s_axis_user),
     .s_axis_last(s_axis_last),
-    .s_axis_xfer_req(s_axis_xfer_req),
+    .s_axis_xfer_req(),
 
     .m_axis_aclk(1'b0),
     .m_axis_ready(1'b1),
@@ -329,7 +342,7 @@ for (i = 0; i < NUM_M; i=i+1) begin
   // AXI3 to MAXIS
   axi_dmac_transfer #(
     .DMA_DATA_WIDTH_SRC(AXI_DATA_WIDTH),
-    .DMA_DATA_WIDTH_DEST(AXI_DATA_WIDTH),
+    .DMA_DATA_WIDTH_DEST(DST_DATA_WIDTH_PER_M),
     .DMA_LENGTH_WIDTH(LENGTH_WIDTH),
     .DMA_LENGTH_ALIGN(DST_BYTES_PER_BEAT_WIDTH),
     .BYTES_PER_BEAT_WIDTH_DEST(DST_BYTES_PER_BEAT_WIDTH),
@@ -400,20 +413,20 @@ for (i = 0; i < NUM_M; i=i+1) begin
     .m_axi_bresp(),
     .m_axi_bready(),
 
-    .m_axi_arready(m_axi_arready),
-    .m_axi_arvalid(m_axi_arvalid),
-    .m_axi_araddr(m_axi_araddr),
-    .m_axi_arlen(m_axi_arlen),
-    .m_axi_arsize(m_axi_arsize),
-    .m_axi_arburst(m_axi_arburst),
-    .m_axi_arprot(m_axi_arprot),
-    .m_axi_arcache(m_axi_arcache),
+    .m_axi_arready(m_axi_arready[i]),
+    .m_axi_arvalid(m_axi_arvalid[i]),
+    .m_axi_araddr(m_axi_araddr[AXI_ADDR_WIDTH*i+:AXI_ADDR_WIDTH]),
+    .m_axi_arlen(m_axi_arlen[4*i+:4]),
+    .m_axi_arsize(m_axi_arsize[3*i+:3]),
+    .m_axi_arburst(m_axi_arburst[2*i+:2]),
+    .m_axi_arprot(),
+    .m_axi_arcache(),
 
-    .m_axi_rdata(m_axi_rdata),
-    .m_axi_rready(m_axi_rready),
-    .m_axi_rvalid(m_axi_rvalid),
-    .m_axi_rlast(m_axi_rlast),
-    .m_axi_rresp(m_axi_rresp),
+    .m_axi_rdata(m_axi_rdata[AXI_DATA_WIDTH*i+:AXI_DATA_WIDTH]),
+    .m_axi_rready(m_axi_rready[i]),
+    .m_axi_rvalid(m_axi_rvalid[i]),
+    .m_axi_rlast(m_axi_rlast[i]),
+    .m_axi_rresp(m_axi_rresp[2*i+:2]),
 
     .s_axis_aclk(1'b0),
     .s_axis_ready(),
@@ -424,11 +437,11 @@ for (i = 0; i < NUM_M; i=i+1) begin
     .s_axis_xfer_req(),
 
     .m_axis_aclk(m_axis_aclk),
-    .m_axis_ready(m_axis_ready),
-    .m_axis_valid(m_axis_valid),
-    .m_axis_data(m_axis_data),
-    .m_axis_last(m_axis_last),
-    .m_axis_xfer_req(m_axis_xfer_req),
+    .m_axis_ready(m_axis_ready & m_axis_valid),
+    .m_axis_valid(m_axis_valid_loc[i]),
+    .m_axis_data(m_axis_data[DST_DATA_WIDTH_PER_M*i+:DST_DATA_WIDTH_PER_M]),
+    .m_axis_last(m_axis_last_loc[i]),
+    .m_axis_xfer_req(),
 
     .fifo_wr_clk(1'b0),
     .fifo_wr_en(1'b0),

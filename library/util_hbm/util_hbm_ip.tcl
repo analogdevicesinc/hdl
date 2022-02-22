@@ -89,6 +89,28 @@ for {set idx 0} {$idx < $max_axi_ifc} {incr idx} {
 }
 adi_add_bus_clock "m_axi_aclk" $ifc_list "m_axi_aresetn"
 
+adi_add_bus "up_src_ctrl" "slave" \
+	"analog.com:interface:if_do_ctrl_rtl:1.0" \
+	"analog.com:interface:if_do_ctrl:1.0" \
+	[list {"up_src_request_enable" "request_enable"} \
+	      {"up_src_request_valid" "request_valid"} \
+	      {"up_src_request_ready" "request_ready"} \
+	      {"up_src_request_length" "request_length"} \
+	      {"up_src_request_eot" "request_eot"} \
+	  ]
+adi_add_bus_clock "up_clk" "up_src_ctrl" "up_reset"
+
+adi_add_bus "up_dst_ctrl" "slave" \
+	"analog.com:interface:if_do_ctrl_rtl:1.0" \
+	"analog.com:interface:if_do_ctrl:1.0" \
+	[list {"up_dst_request_enable" "request_enable"} \
+	      {"up_dst_request_valid" "request_valid"} \
+	      {"up_dst_request_ready" "request_ready"} \
+	      {"up_dst_request_length" "request_length"} \
+	      {"up_dst_request_eot" "request_eot"} \
+	  ]
+adi_add_bus_clock "up_clk" "up_dst_ctrl" "up_reset"
+
 # The core does not issue narrow bursts
 foreach intf [ipx::get_bus_interfaces MAXI_* -of_objects $cc] {
 	set para [ipx::add_bus_parameter SUPPORTS_NARROW_BURST $intf]

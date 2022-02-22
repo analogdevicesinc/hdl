@@ -16,5 +16,7 @@ XILINX_DEPS += bd/bd.tcl
 #XILINX_LIB_DEPS += util_cdc
 XILINX_LIB_DEPS += axi_dmac
 
+XILINX_INTERFACE_DEPS += interfaces
+
 include ../scripts/library.mk
 
