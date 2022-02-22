@@ -2,7 +2,7 @@
 source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
 
 # system level parameters
-set NUM_OF_SDI  $ad_project_params(NUM_OF_SDI)
+set NUM_OF_SDI $ad_project_params(NUM_OF_SDI)
 set CAPTURE_ZONE $ad_project_params(CAPTURE_ZONE)
 set CLK_MODE $ad_project_params(CLK_MODE)
 set DDR_EN $ad_project_params(DDR_EN)
@@ -42,8 +42,8 @@ ad_connect spi_clk spi_clkgen/clk_0
 
 # create a SPI Engine architecture
 ###
-#                 name         data_width async_spi_clk num_csn num_sdi     sdi_delay  echo_sclk
-spi_engine_create "spi_ad463x" 32         1             1       $NUM_OF_SDI 0          1
+#                 name         data_width async_spi_clk num_csn num_sdi     num_sdo sdi_delay  echo_sclk
+spi_engine_create "spi_ad463x" 32         1             1       $NUM_OF_SDI 1       0          1
 ad_ip_parameter spi_ad463x/execution CONFIG.DEFAULT_SPI_CFG 1   ; # latching MISO on negative edge - hardware only
 
 ad_ip_parameter spi_ad463x/axi_regmap CONFIG.CFG_INFO_0 $NUM_OF_SDI
