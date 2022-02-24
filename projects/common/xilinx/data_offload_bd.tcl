@@ -31,7 +31,7 @@ proc ad_data_offload_create {instance_name
     create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:axis_rtl:1.0 m_axis
 
     create_bd_pin -dir I init_req
-    create_bd_pin -dir O init_ack
+#    create_bd_pin -dir O init_ack
     create_bd_pin -dir I sync_ext
 
     set source_addresses [expr ($mem_size * 8) / $source_dwidth]
@@ -117,6 +117,29 @@ proc ad_data_offload_create {instance_name
       ad_connect fifo2axi_bridge/fifo_dst_rdata i_data_offload/fifo_dst_rdata
       ad_connect fifo2axi_bridge/fifo_dst_ready i_data_offload/fifo_dst_ready
 
+    } elseif {$mem_type == 2} {
+      ###########################################################################
+      # Bridge instance for the external HBM memory contreller
+      # NOTE: The HBM instantiation should be in project's system_bd.tcl file
+      ###########################################################################
+      source $ad_hdl_dir/library/util_hbm/scripts/adi_util_hbm.tcl
+
+      set segments_per_master [expr $mem_size / 256 / 1024 / 1024]
+      ad_create_util_hbm i_util_hbm \
+        $datapath_type \
+        $source_dwidth \
+        $destination_dwidth \
+        $segments_per_master
+
+      ad_connect i_util_hbm/wr_ctrl i_data_offload/wr_ctrl
+      ad_connect i_util_hbm/rd_ctrl i_data_offload/rd_ctrl
+
+      ad_connect i_util_hbm/s_axis i_data_offload/m_storage_axis
+      ad_connect i_util_hbm/m_axis i_data_offload/s_storage_axis
+
+      ad_connect i_util_hbm/s_axis_aclk s_axis_aclk
+      ad_connect i_util_hbm/m_axis_aclk m_axis_aclk
+
     }
 
     ###########################################################################
@@ -135,7 +158,7 @@ proc ad_data_offload_create {instance_name
     ad_connect m_axis i_data_offload/m_axis
 
     ad_connect init_req i_data_offload/init_req
-    ad_connect init_ack i_data_offload/init_ack
+#    ad_connect init_ack i_data_offload/init_ack
     ad_connect sync_ext i_data_offload/sync_ext
 
   current_bd_instance /
