@@ -59,17 +59,14 @@ URAM, external memory etc.)
 |----------------------|:-----------:|:----------:|:---------------------------:|
 |ID                    |  integer    |    0       | Instance ID number | 
 |MEM_TYPE              |  [ 0:0]     |    0       | Define the used storage type: FPGA RAM - 0; external DDR - 1 |
-|MEM_SIZE              |  [31:0]     |   1024     | Define the size of the storage element |
-|MEMC_UIF_DATA_WIDTH   |  [ 0:0]     |   512      | The valid data depends on the DDRx memory controller IP. |
+|MEM_SIZE_LOG2         |  integer    |   10       | Log2 value of storage size, defines the width of transfer length control signals. |
 |TX_OR_RXN_PATH        |  [ 0:0]     |    1       | If set TX path enabled, otherwise RX |
 |SRC_DATA_WIDTH        |  integer    |    64      | The data width of the source interface |
-|SRC_RAW_DATA_EN       |  [ 0:0]     |     0      | Enable if the data path does extend samples to 16 bits | 
-|SRC_ADDR_WIDTH        |  integer    |    8       | The address width of the source interface, should be defined relative to the MEM_SIZE (MEM_SIZE/SRC_DATA_WIDTH/8) |
-|DST_ADDR_WIDTH        |  integer    |    7       | The address width of the source interface, should be defined relative to the MEM_SIZE (MEM_SIZE/DST_DATA_WIDTH/8) |
-|DST_DATA_WIDTH        |  integer    |    64      | The data width of the destination interface |
-|DST_RAW_DATA_EN       |  [ 0:0]     |     0      | Enable if the data path does extend samples to 16 bits | 
+|DST_DATA_WIDTH        |  integer    |   124      | The data width of the destination interface |
 |DST_CYCLIC_EN         |  [ 0:0]     |     0      | Enables CYCLIC mode for destinations like DAC | 
-|AUTO_BRINUP           |  [ 0:0]     |     0      | If enabled the IP runs automatically after bootup | 
+|AUTO_BRINGUP          |  [ 0:0]     |     1      | If enabled the IP runs automatically after bootup | 
+|SYNC_EXT_ADD_INTERNAL_CDC |  [ 0:0] |     1      | If enabled the external sync pin is synchronized to the internal clock domain with a CDC. | 
+|HAS_BYPASS            |  [ 0:0]     |     1      | If set to zero the bypass FIFO is not implemented. | 
 
 ## Interfaces
 
@@ -141,9 +138,9 @@ input                   s_axi_rready
 
 **NOTE**: To simplify the design both the source and destination data interface is
 an AXI4 streaming interface. A FIFO write (ADC) interface can be treated as AXI4
-stream where only the master controles the data rate (s_axis_ready is always asserted), 
+stream where only the master controls the data rate (s_axis_ready is always asserted), 
 and a FIFO read (DAC) interface can be treated as an AXI4 stream where only the slave
-controles the data rate. (m_axis_valid is always asserted).
+controls the data rate. (m_axis_valid is always asserted).
 
 #### AXI4 Stream interface (S_AXIS | M_AXIS)
 
@@ -178,76 +175,23 @@ and **axis_tkeep** will be used to indicate a partial last beat. This informatio
 should be transferred from the source domain to the sink domain, so we can read
 back the data from memory correctly.
 
-#### FIFO source and destination interface to the storage unit
+#### AXIS source and destination interface to the storage unit
 
-This is non-blocking (no back-pressure) interface for the storage unit,
-having an address bus too, so an ad_mem module can be connected directly to controller IP.
-
-```verilog
-// This is a FIFO source interface - it's clocked on the source clock (s_axis_aclk)
-// Reset signal
-output                         fifo_src_resetn
-// write enable signal
-output                         fifo_src_wen
-// address bus for internal memory
-output   [SRC_ADDR_WIDTH-1:0]  fifo_src_waddr
-// source data bus
-output   [SRC_DATA_WIDTH-1:0]  fifo_src_wdata
-// write last, indicates the last valid transfer
-output                         fifo_src_wlast
-```
-
-```verilog
-// This is a FIFO destination interface - it's clocked on the destination clock (m_axis_aclk)
-// Reset signal
-output                         fifo_dst_resetn
-// read enable signal
-output                         fifo_dst_ren
-// indicate if the storage is ready to accept read requests
-output                         fifo_dst_ready,
-// address bus for internal memory
-output   [DST_ADDR_WIDTH-1:0]  fifo_dst_raddr
-// destination data bus
-output   [DST_DATA_WIDTH-1:0]  fifo_dst_rdata
-```
-
-```verilog
-// This is a Slave FIFO Read interface
-// device digital interface clock, or core clock
-input                     fifo_rd_clk
-// enables the channel --  in our case this is redundant -- maybe we do neet to use it at all
-input                     fifo_rd_enable
-// validates the data on the bus, it's driven by the device indicates when the core latches the data
-input                     fifo_rd_valid
-// primary payload, its data width is equal with the channel's data width
-output  [DATA_WIDTH-1:0]  fifo_rd_data
-// indicates an underflow, the source (offload FIFO in this case) can not produce the data fast enough
-output                    fifo_rd_unf
-```
+This is blocking (back-pressure) interface for the storage unit,
+with similar behavior of main AXIS data interfaces.
 
 ###  Initialization request interface
 
-Define a simple request/acknowledge interface to initialize the memory:
+Define a simple request interface to initialize the memory:
 
   * The request will comes from the system and will put the data offload FSM
 into a standby/ready state.
-  * Both RX and TX path should have a separate initialization request interface.
-  * Acknowledge will be asserted by the data offload IP as the FSM  is ready to
-receive data. (from TX_DMA or ADC)
 
-  * In case of ADC: after the acknowledge samples will be stored into the memory
-using one of the SYNC modes.
-
-  * In case of the DAC: after acknowledge data from the DMA will be stored into
-the memory. Acknowledge will stay asserted until one of the SYNC mode is used,
-after that the source interface of the IP will stay in busy state. (all the DMA
-transfers will be blocked)
 
 #### Synchronization modes
 
   * **AUTOMATIC**
-    * ADC: As the acknowledge of the initialization interface is asserted, the
-IP will start to fill up the buffer with samples.
+    * ADC: The IP will start to fill up the buffer with samples as soon as possible.
     * DAC: As the DMA will send a valid last, the FSM will start to send the
 stored data to the device.
 
@@ -274,13 +218,14 @@ into or from the memory.
 | 0x0002 |  0x0008  |          | `SCRATCH`             |  RW   |  SYS         |  Scratch register       |
 | 0x0003 |  0x000C  |          | `IDENTIFICATION`      |  RO   |  SYS         |  Peripheral identification. Default value: 0x44414F46 - ('D','A','O','F') |
 | 0x0004 |  0x0010  |          | `SYNTHESIS_CONFIG`    |  RO   |  SYS         |  Core configuration registers |
+|        |          | [13: 8]  | `MEM_SIZE_LOG2`       |       |              |  Log2 of memory size in bytes |
+|        |          | [ 2: 2]  | `HAS_BYPASS`          |       |              |  If not set the bypass logic is not implemented. |
 |        |          | [ 1: 1]  | `TX_OR_RXN_PATH`      |       |              |  RX Path => 0, TX => 1  |
 |        |          | [ 0: 0]  | `MEMORY_TYPE`         |       |              |  The used storage type (embedded => 0 or external => 1) |
-| 0x0005 |  0x0014  |          | `MEMORY_SIZE_LSB`     |  RO   |  SYS         |  32bits LSB of the memory size register |
-| 0x0006 |  0x0018  |          | `MEMORY_SIZE_MSB`     |  RO   |  SYS         |  2bits MSB of the memory size register |
-|        |          | [ 1: 0]  | `MEMORY_SIZE_MSB`     |       |              |                         |
 | 0x0007 |  0x001C  |          | `TRANSFER_LENGTH`     |  RW   |  SRC         |  Transfer length        |
 | 0x0020 |  0x0080  |          | `MEM_PHY_STATE`       |  RO   |  DDR         |  Status bits of the memory controller IP |
+|        |          | [ 5: 5]  | `UNDERFLOW`           |  RW1C |              |  Indicates that storage could not handle data rate during play. Available when core is in TX mode.|
+|        |          | [ 4: 4]  | `OVERFLOW`            |  RW1C |              |  Indicates that storage could not handle data rate during capture. Available when core is in RX mode. |
 |        |          | [ 0: 0]  | `CALIB_COMPLETE`      |       |              |  Indicates that the memory initialization and calibration have completed successfully |
 | 0x0021 |  0x0084  |          | `RESETN_OFFLOAD`      |  RW   |  DST/SRC     |  Reset all the internal address registers and state machines |
 |        |          | [ 0: 0]  | `RESETN`              |       |              |                         |
@@ -292,10 +237,8 @@ into or from the memory.
 | 0x0041 |  0x0104  |          | `SYNC_CONFIG`         |  RW   |  SRC         |  Synchronization setup |
 |        |          | [ 1: 0]  | `SYNC_CONFIG`         |       |              |  Auto - '0'; hardware - '1'; software - '2' |
 | 0x0080 |  0x0200  |          | `FSM_DBG`             |  RO   |              |  Debug register for the offload FSM |
-|        |          | [ 5: 4]  | `FSM_STATE_READ`      |       |  SRC         |  The current state of the read-offload state machine |
-|        |          | [ 1: 0]  | `FSM_STATE_WRITE`     |       |  DST         |  The current state of the write-offload state machine |
-| 0x0081 |  0x0204  |          | `SAMPLE_COUNT_LSB`    |  RO   |  SRC         |  Stored sample count (32 LSB) |
-| 0x0082 |  0x0208  |          | `SAMPLE_COUNT_MSB`    |  RO   |  SRC         |  Stored sample count (32 MSB) |
+|        |          | [11: 8]  | `FSM_STATE_READ`      |       |  SRC         |  The current state of the read-offload state machine |
+|        |          | [ 4: 0]  | `FSM_STATE_WRITE`     |       |  DST         |  The current state of the write-offload state machine |
 
 ## Clock tree
 

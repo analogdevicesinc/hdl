@@ -16,7 +16,12 @@ GENERIC_DEPS += data_offload_regmap.v
 XILINX_DEPS += data_offload_ip.tcl
 XILINX_DEPS += data_offload_sv.ttcl
 
+XILINX_DEPS += ../interfaces/if_do_ctrl.xml
+XILINX_DEPS += ../interfaces/if_do_ctrl_rtl.xml
+
 XILINX_LIB_DEPS += util_axis_fifo_asym
 XILINX_LIB_DEPS += util_cdc
+
+XILINX_INTERFACE_DEPS += interfaces
 
 include ../scripts/library.mk

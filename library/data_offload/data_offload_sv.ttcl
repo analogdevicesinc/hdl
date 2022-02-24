@@ -5,17 +5,10 @@
 <: setFileExtension ".sv" :>
 <: set id                      [get_property MODELPARAM_VALUE.ID] :>
 <: set mem_type                [get_property MODELPARAM_VALUE.MEM_TYPE] :>
-<: set mem_size             [get_property MODELPARAM_VALUE.MEM_SIZE] :>
-<: set memc_uif_data_width     [get_property MODELPARAM_VALUE.MEMC_UIF_DATA_WIDTH] :>
-<: set memc_uif_address_width  [get_property MODELPARAM_VALUE.MEMC_UIF_ADDRESS_WIDTH] :>
-<: set memc_baddress        [get_property MODELPARAM_VALUE.MEMC_BADDRESS] :>
+<: set mem_size_log2           [get_property MODELPARAM_VALUE.MEM_SIZE_LOG2] :>
 <: set tx_or_rxn_path          [get_property MODELPARAM_VALUE.TX_OR_RXN_PATH] :>
 <: set src_data_width          [get_property MODELPARAM_VALUE.src_data_width] :>
-<: set src_raw_data_en         [get_property MODELPARAM_VALUE.src_raw_data_en] :>
-<: set src_addr_width          [get_property MODELPARAM_VALUE.src_addr_width] :>
 <: set dst_data_width          [get_property MODELPARAM_VALUE.dst_data_width] :>
-<: set dst_raw_data_en         [get_property MODELPARAM_VALUE.dst_raw_data_en] :>
-<: set dst_addr_width          [get_property MODELPARAM_VALUE.dst_addr_width] :>
 <: set dst_cyclic_en           [get_property MODELPARAM_VALUE.dst_cyclic_en] :>
 
 // boolean to intiger
@@ -37,17 +30,10 @@ package <=: ComponentName :>_pkg;
 
   parameter <=: ComponentName :>_ID                     = <=: $id :>;  
   parameter <=: ComponentName :>_MEM_TYPE               = <=: $mem_type :>;
-  parameter <=: ComponentName :>_MEM_SIZE               = <=: $mem_size :>;
-  parameter <=: ComponentName :>_MEMC_UIF_DATA_WIDTH    = <=: $memc_uif_data_width :>;
-  parameter <=: ComponentName :>_MEMC_UIF_ADDRESS_WIDTH = <=: $memc_uif_address_width :>;
-  parameter <=: ComponentName :>_MEMC_BADDRESS          = <=: h2vh $memc_baddress :>;
+  parameter <=: ComponentName :>_MEM_SIZE_LOG2          = <=: $mem_size_log2 :>;
   parameter <=: ComponentName :>_TX_OR_RXN_PATH         = <=: b2i $tx_or_rxn_path :>;
   parameter <=: ComponentName :>_SRC_DATA_WIDTH         = <=: b2i $src_data_width :>;
-  parameter <=: ComponentName :>_SRC_RAW_DATA_WIDTH     = <=: b2i $src_raw_data_en :>;
-  parameter <=: ComponentName :>_SRC_ADDR_WIDTH         = <=: b2i $src_addr_width :>;
   parameter <=: ComponentName :>_DST_DATA_WIDTH         = <=: b2i $dst_data_width :>;
-  parameter <=: ComponentName :>_DST_RAW_DATA_WIDTH     = <=: b2i $dst_raw_data_en :>;
-  parameter <=: ComponentName :>_DST_ADDR_WIDTH         = <=: b2i $dst_addr_width :>;
   parameter <=: ComponentName :>_DST_CYCLIC_EN          = <=: b2i $dst_cyclic_en :>;
 
 //////////////////////////////////////////////////////////////////////////
