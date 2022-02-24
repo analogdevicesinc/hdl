@@ -32,7 +32,6 @@ adi_add_bus "s_axis" "slave" \
 	  {"s_axis_keep" "TKEEP"} \
 	  {"s_axis_user" "TUSER"} \
 	  {"s_axis_last" "TLAST"}]
-adi_add_bus_clock "s_axis_aclk" "s_axis"
 
 adi_add_bus "m_axis" "master" \
 	"xilinx.com:interface:axis_rtl:1.0" \
@@ -44,7 +43,6 @@ adi_add_bus "m_axis" "master" \
 	  {"m_axis_keep" "TKEEP"} \
 	  {"m_axis_user" "TUSER"} \
 	  {"m_axis_last" "TLAST"}]
-adi_add_bus_clock "m_axis_aclk" "m_axis"
 
 adi_add_multi_bus $max_axi_ifc "MAXI_" "master" \
   "xilinx.com:interface:aximm_rtl:1.0" \
@@ -89,27 +87,28 @@ for {set idx 0} {$idx < $max_axi_ifc} {incr idx} {
 }
 adi_add_bus_clock "m_axi_aclk" $ifc_list "m_axi_aresetn"
 
-adi_add_bus "up_src_ctrl" "slave" \
+adi_add_bus "wr_ctrl" "slave" \
 	"analog.com:interface:if_do_ctrl_rtl:1.0" \
 	"analog.com:interface:if_do_ctrl:1.0" \
-	[list {"up_src_request_enable" "request_enable"} \
-	      {"up_src_request_valid" "request_valid"} \
-	      {"up_src_request_ready" "request_ready"} \
-	      {"up_src_request_length" "request_length"} \
-	      {"up_src_request_eot" "request_eot"} \
+	[list {"wr_request_enable" "request_enable"} \
+	      {"wr_request_valid" "request_valid"} \
+	      {"wr_request_ready" "request_ready"} \
+	      {"wr_request_length" "request_length"} \
+	      {"wr_request_eot" "request_eot"} \
 	  ]
-adi_add_bus_clock "up_clk" "up_src_ctrl" "up_reset"
 
-adi_add_bus "up_dst_ctrl" "slave" \
+adi_add_bus "rd_ctrl" "slave" \
 	"analog.com:interface:if_do_ctrl_rtl:1.0" \
 	"analog.com:interface:if_do_ctrl:1.0" \
-	[list {"up_dst_request_enable" "request_enable"} \
-	      {"up_dst_request_valid" "request_valid"} \
-	      {"up_dst_request_ready" "request_ready"} \
-	      {"up_dst_request_length" "request_length"} \
-	      {"up_dst_request_eot" "request_eot"} \
+	[list {"rd_request_enable" "request_enable"} \
+	      {"rd_request_valid" "request_valid"} \
+	      {"rd_request_ready" "request_ready"} \
+	      {"rd_request_length" "request_length"} \
+	      {"rd_request_eot" "request_eot"} \
 	  ]
-adi_add_bus_clock "up_clk" "up_dst_ctrl" "up_reset"
+
+adi_add_bus_clock "s_axis_aclk" "s_axis:wr_ctrl" "s_axis_aresetn"
+adi_add_bus_clock "m_axis_aclk" "m_axis:rd_ctrl" "m_axis_aresetn"
 
 # The core does not issue narrow bursts
 foreach intf [ipx::get_bus_interfaces MAXI_* -of_objects $cc] {
@@ -117,7 +116,23 @@ foreach intf [ipx::get_bus_interfaces MAXI_* -of_objects $cc] {
 	set_property "VALUE" "0" $para
 }
 
-set_property value_tcl_expr {expr round(${SRC_DATA_WIDTH}.0 / ${AXI_DATA_WIDTH}.0)} \
+ipx::add_user_parameter TX_RX_N $cc
+ipgui::add_param -name {TX_RX_N} -component $cc
+
+set_property  -dict [list \
+  display_name {Device type} \
+  widget {comboBox} \
+ ] [ipgui::get_guiparamspec TX_RX_N -component $cc]
+
+set_property  -dict [list \
+  value_resolve_type user \
+  value 1 \
+  value_validation_type pairs \
+  value_validation_pairs {{DAC (TX)} 1 {ADC (RX)} 0} \
+  ] [ipx::get_user_parameters TX_RX_N -of_objects $cc]
+
+
+set_property value_tcl_expr {expr round((${TX_RX_N} == 1 ? ${DST_DATA_WIDTH}.0 : ${SRC_DATA_WIDTH}.0) / ${AXI_DATA_WIDTH}.0)} \
   [ipx::get_user_parameters NUM_M -of_objects $cc]
 
 

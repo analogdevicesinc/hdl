@@ -33,6 +33,9 @@
 // ***************************************************************************
 // ***************************************************************************
 
+// Constraints:
+//   min(SRC_DATA_WIDTH,DST_DATA_WIDTH) / NUM_M >= 8
+
 `timescale 1ns/100ps
 
 module util_hbm #(
@@ -60,20 +63,17 @@ module util_hbm #(
                    (SRC_DATA_WIDTH / AXI_DATA_WIDTH)
 ) (
 
-  input                                    up_clk,
-  input                                    up_reset,
+  input                                    wr_request_enable,
+  input                                    wr_request_valid,
+  output                                   wr_request_ready,
+  input   [LENGTH_WIDTH-1:0]               wr_request_length,
+  output                                   wr_request_eot,
 
-  input                                    up_src_request_enable,
-  input                                    up_src_request_valid,
-  output                                   up_src_request_ready,
-  input   [LENGTH_WIDTH-1:0]               up_src_request_length,
-  output                                   up_src_request_eot,
-
-  input                                    up_dst_request_enable,
-  input                                    up_dst_request_valid,
-  output                                   up_dst_request_ready,
-  input   [LENGTH_WIDTH-1:0]               up_dst_request_length,
-  output                                   up_dst_request_eot,
+  input                                    rd_request_enable,
+  input                                    rd_request_valid,
+  output                                   rd_request_ready,
+  input   [LENGTH_WIDTH-1:0]               rd_request_length,
+  output                                   rd_request_eot,
 
   // Slave streaming AXI interface
   input                                    s_axis_aclk,
@@ -160,20 +160,20 @@ parameter FIFO_SIZE = 8; // In bursts
 
 genvar i;
 
-wire [NUM_M-1:0] up_src_request_ready_loc;
-wire [NUM_M-1:0] up_dst_request_ready_loc;
-wire [NUM_M-1:0] up_src_request_eot_loc;
-wire [NUM_M-1:0] up_dst_request_eot_loc;
+wire [NUM_M-1:0] wr_request_ready_loc;
+wire [NUM_M-1:0] rd_request_ready_loc;
+wire [NUM_M-1:0] wr_request_eot_loc;
+wire [NUM_M-1:0] rd_request_eot_loc;
 
-assign up_src_request_ready = &up_src_request_ready_loc;
-assign up_dst_request_ready = &up_dst_request_ready_loc;
+assign wr_request_ready = &wr_request_ready_loc;
+assign rd_request_ready = &rd_request_ready_loc;
 
 // Aggregate end of transfer from all masters
-reg [NUM_M-1:0] up_src_eot_pending;
-reg [NUM_M-1:0] up_dst_eot_pending;
+reg [NUM_M-1:0] wr_eot_pending;
+reg [NUM_M-1:0] rd_eot_pending;
 
-assign up_src_request_eot = &up_src_request_eot_loc;
-assign up_dst_request_eot = &up_dst_request_eot_loc;
+assign wr_request_eot = &wr_request_eot_loc;
+assign rd_request_eot = &rd_request_eot_loc;
 
 wire [NUM_M-1:0] s_axis_ready_loc;
 assign s_axis_ready = &s_axis_ready_loc;
@@ -191,11 +191,11 @@ for (i = 0; i < NUM_M; i=i+1) begin
   // 2Gb (256MB) per segment
   localparam ADDR_OFFSET = i * HBM_SEGMENTS_PER_MASTER * 256 * 1024 * 1024;
 
-  always @(posedge up_clk) begin
-    if (up_src_request_eot) begin
-      up_src_eot_pending[i] <= 1'b0;
-    end else if (up_src_request_eot_loc[i]) begin
-      up_src_eot_pending[i] <= 1'b1;
+  always @(posedge s_axis_aclk) begin
+    if (wr_request_eot) begin
+      wr_eot_pending[i] <= 1'b0;
+    end else if (wr_request_eot_loc[i]) begin
+      wr_eot_pending[i] <= 1'b1;
     end
   end
 
@@ -212,7 +212,7 @@ for (i = 0; i < NUM_M; i=i+1) begin
     .DMA_TYPE_SRC(DMA_TYPE_AXI_STREAM),
     .DMA_AXI_ADDR_WIDTH(AXI_ADDR_WIDTH),
     .DMA_2D_TRANSFER(1'b0),
-    .ASYNC_CLK_REQ_SRC(ASYNC_CLK_SAXIS_UP),
+    .ASYNC_CLK_REQ_SRC(0),
     .ASYNC_CLK_SRC_DEST(1),
     .ASYNC_CLK_DEST_REQ(1),
     .AXI_SLICE_DEST(1),
@@ -224,26 +224,26 @@ for (i = 0; i < NUM_M; i=i+1) begin
     .AXI_LENGTH_WIDTH_DEST(8),
     .ENABLE_DIAGNOSTICS_IF(0),
     .ALLOW_ASYM_MEM(1)
-  ) i_src_transfer (
-    .ctrl_clk(up_clk),
-    .ctrl_resetn(~up_reset),
+  ) i_wr_transfer (
+    .ctrl_clk(s_axis_aclk),
+    .ctrl_resetn(s_axis_aresetn),
 
      // Control interface
-    .ctrl_enable(up_src_request_enable),
+    .ctrl_enable(wr_request_enable),
     .ctrl_pause(1'b0),
 
-    .req_valid(up_src_request_valid),
-    .req_ready(up_src_request_ready_loc[i]),
+    .req_valid(wr_request_valid),
+    .req_ready(wr_request_ready_loc[i]),
     .req_dest_address(ADDR_OFFSET[AXI_ADDR_WIDTH-1:AXI_BYTES_PER_BEAT_WIDTH]),
     .req_src_address('h0),
-    .req_x_length(up_src_request_length),
+    .req_x_length(wr_request_length),
     .req_y_length(0),
     .req_dest_stride(0),
     .req_src_stride(0),
     .req_sync_transfer_start(1'b0),
     .req_last(1'b1),
 
-    .req_eot(up_src_request_eot_loc[i]),
+    .req_eot(wr_request_eot_loc[i]),
     .req_measured_burst_length(),
     .req_response_partial(),
     .req_response_valid(),
@@ -331,11 +331,11 @@ for (i = 0; i < NUM_M; i=i+1) begin
     .dest_diag_level_bursts()
   );
 
-  always @(posedge up_clk) begin
-    if (up_dst_request_eot) begin
-      up_dst_eot_pending[i] <= 1'b0;
-    end else if (up_dst_request_eot_loc[i]) begin
-      up_dst_eot_pending[i] <= 1'b1;
+  always @(posedge m_axis_aclk) begin
+    if (rd_request_eot) begin
+      rd_eot_pending[i] <= 1'b0;
+    end else if (rd_request_eot_loc[i]) begin
+      rd_eot_pending[i] <= 1'b1;
     end
   end
 
@@ -354,7 +354,7 @@ for (i = 0; i < NUM_M; i=i+1) begin
     .DMA_2D_TRANSFER(1'b0),
     .ASYNC_CLK_REQ_SRC(1),
     .ASYNC_CLK_SRC_DEST(1),
-    .ASYNC_CLK_DEST_REQ(ASYNC_CLK_MAXIS_UP),
+    .ASYNC_CLK_DEST_REQ(0),
     .AXI_SLICE_DEST(1),
     .AXI_SLICE_SRC(1),
     .MAX_BYTES_PER_BURST(MAX_BYTES_PER_BURST),
@@ -364,26 +364,26 @@ for (i = 0; i < NUM_M; i=i+1) begin
     .AXI_LENGTH_WIDTH_DEST(8),
     .ENABLE_DIAGNOSTICS_IF(0),
     .ALLOW_ASYM_MEM(1)
-  ) i_dst_transfer (
-    .ctrl_clk(up_clk),
-    .ctrl_resetn(~up_reset),
+  ) i_rd_transfer (
+    .ctrl_clk(m_axis_aclk),
+    .ctrl_resetn(m_axis_aresetn),
 
      // Control interface
-    .ctrl_enable(up_dst_request_enable),
+    .ctrl_enable(rd_request_enable),
     .ctrl_pause(1'b0),
 
-    .req_valid(up_dst_request_valid),
-    .req_ready(up_dst_request_ready_loc[i]),
+    .req_valid(rd_request_valid),
+    .req_ready(rd_request_ready_loc[i]),
     .req_dest_address(0),
     .req_src_address(ADDR_OFFSET[AXI_ADDR_WIDTH-1:AXI_BYTES_PER_BEAT_WIDTH]),
-    .req_x_length(up_dst_request_length),
+    .req_x_length(rd_request_length),
     .req_y_length(0),
     .req_dest_stride(0),
     .req_src_stride(0),
     .req_sync_transfer_start(1'b0),
     .req_last(1'b1),
 
-    .req_eot(up_dst_request_eot_loc[i]),
+    .req_eot(rd_request_eot_loc[i]),
     .req_measured_burst_length(),
     .req_response_partial(),
     .req_response_valid(),
