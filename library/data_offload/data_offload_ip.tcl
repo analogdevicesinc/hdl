@@ -41,7 +41,6 @@ adi_add_bus "m_axis" "master" \
     {"m_axis_data" "TDATA"} \
     {"m_axis_last" "TLAST"} \
     {"m_axis_tkeep" "TKEEP"} ]
-adi_add_bus_clock "m_axis_aclk" "m_axis" "m_axis_aresetn"
 
 ## source interface (e.g. TX_DMA or ADC core)
 
@@ -54,14 +53,75 @@ adi_add_bus "s_axis" "slave" \
     {"s_axis_data" "TDATA"} \
     {"s_axis_last" "TLAST"} \
     {"s_axis_tkeep" "TKEEP"} ]
-adi_add_bus_clock "s_axis_aclk" "s_axis" "s_axis_aresetn"
+
+adi_add_bus "wr_ctrl" "master" \
+  "analog.com:interface:if_do_ctrl_rtl:1.0" \
+  "analog.com:interface:if_do_ctrl:1.0" \
+  [list {"wr_request_enable" "request_enable"} \
+        {"wr_request_valid" "request_valid"} \
+        {"wr_request_ready" "request_ready"} \
+        {"wr_request_length" "request_length"} \
+        {"wr_response_measured_length" "response_measured_length"} \
+        {"wr_response_eot" "response_eot"} \
+        {"wr_overflow" "status_overflow"} \
+    ]
+
+adi_add_bus "rd_ctrl" "master" \
+  "analog.com:interface:if_do_ctrl_rtl:1.0" \
+  "analog.com:interface:if_do_ctrl:1.0" \
+  [list {"rd_request_enable" "request_enable"} \
+        {"rd_request_valid" "request_valid"} \
+        {"rd_request_ready" "request_ready"} \
+        {"rd_request_length" "request_length"} \
+        {"rd_response_eot" "response_eot"} \
+        {"rd_underflow" "status_underflow"} \
+    ]
+
+adi_add_bus "s_storage_axis" "slave" \
+  "xilinx.com:interface:axis_rtl:1.0" \
+  "xilinx.com:interface:axis:1.0" \
+  [list {"s_storage_axis_ready" "TREADY"} \
+    {"s_storage_axis_valid" "TVALID"} \
+    {"s_storage_axis_data" "TDATA"} \
+    {"s_storage_axis_tkeep" "TKEEP"} \
+    {"s_storage_axis_last" "TLAST"}]
+
+adi_add_bus "m_storage_axis" "master" \
+  "xilinx.com:interface:axis_rtl:1.0" \
+  "xilinx.com:interface:axis:1.0" \
+  [list {"m_storage_axis_ready" "TREADY"} \
+    {"m_storage_axis_valid" "TVALID"} \
+    {"m_storage_axis_data" "TDATA"} \
+    {"m_storage_axis_tkeep" "TKEEP"} \
+    {"m_storage_axis_last" "TLAST"}]
+
+adi_add_bus_clock "m_axis_aclk" "s_storage_axis:m_axis" "m_axis_aresetn"
+adi_add_bus_clock "s_axis_aclk" "m_storage_axis:s_axis" "s_axis_aresetn"
 
 set cc [ipx::current_core]
+
+set_property -dict [list \
+  enablement_resolve_type dependent \
+  driver_value 0 \
+  enablement_dependency {MEM_TYPE == 1} \
+  ] \
+[ipx::get_ports ddr_calib_done -of_objects $cc]
+
+set_property -dict [list \
+  driver_value 0 \
+  ] \
+[ipx::get_ports wr_overflow -of_objects $cc]
+
+set_property -dict [list \
+  driver_value 0 \
+  ] \
+[ipx::get_ports rd_underflow -of_objects $cc]
 
 ## Parameter validations
 
 ## MEM_TPYE
 set_property -dict [list \
+  "value_format" "long" \
   "value_validation_type" "pairs" \
   "value_validation_pairs" { \
       "Internal memory" "0" \
@@ -69,6 +129,11 @@ set_property -dict [list \
     } \
  ] \
  [ipx::get_user_parameters MEM_TYPE -of_objects $cc]
+
+set_property -dict [list \
+  "value_format" "long" \
+  ] \
+  [ipx::get_hdl_parameters MEM_TYPE -of_objects $cc]
 
 set_property -dict [list \
   "value_validation_type" "pairs" \
@@ -79,42 +144,53 @@ set_property -dict [list \
  ] \
  [ipx::get_user_parameters TX_OR_RXN_PATH -of_objects $cc]
 
-## MEMC_UIF_DATA_WIDTH
 set_property -dict [list \
-  "value_validation_type" "list" \
-  "value_validation_list" "64 128 256 512 1024" \
+    "value_validation_type" "pairs" \
+    "value" "10" \
+    "value_validation_pairs" {\
+      "1kB" "10" \
+      "2kB" "11" \
+      "4kB" "12" \
+      "8kB" "13" \
+      "16kB" "14" \
+      "32kB" "15" \
+      "64kB" "16" \
+      "128kB" "17" \
+      "256kB" "18" \
+      "512kB" "19" \
+      "1MB" "20" \
+      "2MB" "21" \
+      "4MB" "22" \
+      "8MB" "23" \
+      "16MB" "24" \
+      "32MB" "25" \
+      "64MB" "26" \
+      "128MB" "27" \
+      "256MB" "28" \
+      "512MB" "29" \
+      "1GB" "30" \
+      "2GB" "31" \
+      "4GB" "32" \
+      "8GB" "33" \
+      "16GB" "34" \
+    } \
  ] \
- [ipx::get_user_parameters MEMC_UIF_DATA_WIDTH -of_objects $cc]
-
-## MEMC_UIF_ADDRESS_WIDTH
-set_property -dict [list \
-  "value_validation_type" "range_long" \
-  "value_validation_range_minimum" "8" \
-  "value_validation_range_maximum" "31" \
- ] \
- [ipx::get_user_parameters MEMC_UIF_ADDRESS_WIDTH -of_objects $cc]
-
-## MEM_SIZE - 8GB??
-set_property -dict [list \
-  "value_validation_type" "range_long" \
-  "value_validation_range_minimum" "2" \
-  "value_validation_range_maximum" "8589934592" \
- ] \
- [ipx::get_user_parameters MEM_SIZE -of_objects $cc]
+ [ipx::get_user_parameters MEM_SIZE_LOG2 -of_objects $cc]
 
 ## Boolean parameters
 foreach {k v} { \
-    "SRC_RAW_DATA_EN" "false" \
-    "DST_RAW_DATA_EN" "false" \
+    "HAS_BYPASS" "true" \
     "DST_CYCLIC_EN" "true" \
     "SYNC_EXT_ADD_INTERNAL_CDC" "true" \
   } { \
   set_property -dict [list \
       "value_format" "bool" \
+      "value_format" "bool" \
       "value" $v \
     ] \
     [ipx::get_user_parameters $k -of_objects $cc]
   set_property -dict [list \
+      "value_format" "bool" \
       "value_format" "bool" \
       "value" $v \
     ] \
@@ -152,34 +228,11 @@ set_property -dict [list \
   "display_name" "Storage Type" \
 ] [ipgui::get_guiparamspec -name "MEM_TYPE" -component $cc]
 
-ipgui::add_param -name "MEM_SIZE" -component $cc -parent $general_group
+ipgui::add_param -name "MEM_SIZE_LOG2" -component $cc -parent $general_group
 set_property -dict [list \
   "display_name" "Storage Size" \
-] [ipgui::get_guiparamspec -name "MEM_SIZE" -component $cc]
-
-## DDR controller's user interface related configurations
-set m_controller_group [ipgui::add_group -name "DDR Controller Interface Configuration" -component $cc \
-    -parent $page0 -display_name "DDR Controller Interface Configuration" ]
-
-ipgui::add_param -name "MEMC_UIF_DATA_WIDTH" -component $cc -parent $m_controller_group
-set_property -dict [list \
-  "widget" "comboBox" \
-  "display_name" "Interface data width" \
-] [ipgui::get_guiparamspec -name "MEMC_UIF_DATA_WIDTH" -component $cc]
-set_property enablement_tcl_expr {$MEM_TYPE == 1} [ipx::get_user_parameters MEMC_UIF_DATA_WIDTH -of_objects $cc]
-
-ipgui::add_param -name "MEMC_UIF_ADDRESS_WIDTH" -component $cc -parent $m_controller_group
-set_property -dict [list \
-  "widget" "comboBox" \
-  "display_name" "Interface address width" \
-] [ipgui::get_guiparamspec -name "MEMC_UIF_ADDRESS_WIDTH" -component $cc]
-set_property enablement_tcl_expr {$MEM_TYPE == 1} [ipx::get_user_parameters MEMC_UIF_ADDRESS_WIDTH -of_objects $cc]
-
-ipgui::add_param -name "MEMC_BADDRESS" -component $cc -parent $m_controller_group
-set_property -dict [list \
-  "display_name" "PL DDR base address" \
-] [ipgui::get_guiparamspec -name "MEMC_BADDRESS" -component $cc]
-set_property enablement_tcl_expr {$MEM_TYPE == 1} [ipx::get_user_parameters MEMC_BADDRESS -of_objects $cc]
+  "tooltip" "Log2 value of Storage Size in bytes" \
+] [ipgui::get_guiparamspec -name "MEM_SIZE_LOG2" -component $cc]
 
 ## Transmit and receive endpoints
 set source_group [ipgui::add_group -name "Source Endpoint Configuration" -component $cc \
@@ -194,37 +247,19 @@ set_property -dict [list \
   "display_name" "Source Interface data width" \
 ] [ipgui::get_guiparamspec -name "SRC_DATA_WIDTH" -component $cc]
 
-ipgui::add_param -name "SRC_ADDR_WIDTH" -component $cc -parent $source_group
-set_property -dict [list \
-  "display_name" "Source Interface address width" \
-] [ipgui::get_guiparamspec -name "SRC_ADDR_WIDTH" -component $cc]
-
 ipgui::add_param -name "DST_DATA_WIDTH" -component $cc -parent $destination_group
 set_property -dict [list \
   "display_name" "Destination Interface data width" \
 ] [ipgui::get_guiparamspec -name "DST_DATA_WIDTH" -component $cc]
 
-ipgui::add_param -name "DST_ADDR_WIDTH" -component $cc -parent $destination_group
-set_property -dict [list \
-  "display_name" "Destination Interface address width" \
-] [ipgui::get_guiparamspec -name "DST_ADDR_WIDTH" -component $cc]
-
 ## Other features
 set features_group [ipgui::add_group -name "Features" -component $cc \
     -parent $page0 -display_name "Features" ]
 
-
-ipgui::add_param -name "SRC_RAW_DATA_EN" -component $cc -parent $features_group
+ipgui::add_param -name "HAS_BYPASS" -component $cc -parent $features_group
 set_property -dict [list \
-  "display_name" "Source Raw Data Enable" \
-] [ipgui::get_guiparamspec -name "SRC_RAW_DATA_EN" -component $cc]
-set_property enablement_tcl_expr {$TX_OR_RXN_PATH == 0} [ipx::get_user_parameters SRC_RAW_DATA_EN -of_objects $cc]
-
-ipgui::add_param -name "DST_RAW_DATA_EN" -component $cc -parent $features_group
-set_property -dict [list \
-  "display_name" "Destionation Raw Data Enable" \
-] [ipgui::get_guiparamspec -name "DST_RAW_DATA_EN" -component $cc]
-set_property enablement_tcl_expr {$TX_OR_RXN_PATH == 1} [ipx::get_user_parameters DST_RAW_DATA_EN -of_objects $cc]
+  "display_name" "Internal Bypass Data Path Enabled" \
+] [ipgui::get_guiparamspec -name "HAS_BYPASS" -component $cc]
 
 ipgui::add_param -name "DST_CYCLIC_EN" -component $cc -parent $features_group
 set_property -dict [list \
@@ -241,3 +276,4 @@ set_property -dict [list \
 ipx::create_xgui_files $cc
 
 ipx::save_core [ipx::current_core]
+
