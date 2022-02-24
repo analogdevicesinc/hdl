@@ -77,7 +77,8 @@ module data_offload_regmap #(
   output                  sync,
   output      [ 1:0]      sync_config,
 
-  output reg  [33:0]      src_transfer_length,
+  output      [33:0]      src_transfer_length,
+  output      [33:0]      dst_transfer_length,
 
   // FSM control and status
   input       [ 1:0]      src_fsm_status,
@@ -363,12 +364,21 @@ module data_offload_regmap #(
     .in_clk (up_clk),
     .in_data (up_transfer_length),
     .out_clk (src_clk),
-    .out_data (src_transfer_length_s)
+    .out_data (src_transfer_length)
+  );
+  sync_data #(
+    .NUM_OF_BITS (34),
+    .ASYNC_CLK (1))
+  i_sync_dst_transfer_length (
+    .in_clk (up_clk),
+    .in_data (up_transfer_length),
+    .out_clk (dst_clk),
+    .out_data (dst_transfer_length)
   );
 
   always @(posedge src_clk) begin
     src_sw_resetn <= src_sw_resetn_s;
-    src_transfer_length <= src_transfer_length_s;
+    //src_transfer_length <= src_transfer_length_s;
   end
 
   always @(posedge dst_clk) begin
