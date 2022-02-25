@@ -43,7 +43,8 @@
 
 module util_tdd_sync #(
 
-  parameter     TDD_SYNC_PERIOD = 100000000) (
+  parameter     TDD_SYNC_PERIOD = 100000000,
+  parameter     TDD_SYNC_WIDTH  = 7) (
   input                   clk,
   input                   rstn,
 
@@ -62,12 +63,13 @@ module util_tdd_sync #(
   // pulse generator
 
   util_pulse_gen #(
-    .PULSE_PERIOD(TDD_SYNC_PERIOD)
+    .PULSE_PERIOD(TDD_SYNC_PERIOD),
+    .PULSE_WIDTH(TDD_SYNC_WIDTH)
   )
     i_tdd_sync (
     .clk (clk),
     .rstn (rstn),
-    .pulse_width (32'd0),
+    .pulse_width (TDD_SYNC_WIDTH),
     .pulse_period (32'd0),
     .load_config (1'd0),
     .pulse (sync_internal)
