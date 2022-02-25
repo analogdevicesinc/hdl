@@ -18,9 +18,9 @@ create_bd_port -dir I spi0_sdo_i
 create_bd_port -dir O spi0_sdo_o
 create_bd_port -dir I spi0_sdi_i
 
-create_bd_port -dir I -from 16 -to 0 gpio_i
-create_bd_port -dir O -from 16 -to 0 gpio_o
-create_bd_port -dir O -from 16 -to 0 gpio_t
+create_bd_port -dir I -from 17 -to 0 gpio_i
+create_bd_port -dir O -from 17 -to 0 gpio_o
+create_bd_port -dir O -from 17 -to 0 gpio_t
 
 create_bd_port -dir O spi_csn_o
 create_bd_port -dir I spi_csn_i
@@ -31,6 +31,9 @@ create_bd_port -dir O spi_sdo_o
 create_bd_port -dir I spi_sdi_i
 
 create_bd_port -dir O txdata_o
+
+create_bd_port -dir I tdd_ext_sync
+create_bd_port -dir O tdd_sync_out
 
 # instance: sys_ps7
 
@@ -48,7 +51,7 @@ ad_ip_parameter sys_ps7 CONFIG.PCW_EN_RST1_PORT 1
 ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ 100.0
 ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA1_PERIPHERAL_FREQMHZ 200.0
 ad_ip_parameter sys_ps7 CONFIG.PCW_GPIO_EMIO_GPIO_ENABLE 1
-ad_ip_parameter sys_ps7 CONFIG.PCW_GPIO_EMIO_GPIO_IO 17
+ad_ip_parameter sys_ps7 CONFIG.PCW_GPIO_EMIO_GPIO_IO 18
 ad_ip_parameter sys_ps7 CONFIG.PCW_SPI1_PERIPHERAL_ENABLE 0
 ad_ip_parameter sys_ps7 CONFIG.PCW_I2C0_PERIPHERAL_ENABLE 0
 ad_ip_parameter sys_ps7 CONFIG.PCW_UART1_PERIPHERAL_ENABLE 1
@@ -303,7 +306,21 @@ ad_connect  cpack/fifo_wr_overflow axi_ad9361/adc_dovf
 
 # External TDD
 set TDD_CHANNEL_CNT 3
-ad_tdd_gen_create axi_tdd_0 $TDD_CHANNEL_CNT
+set TDD_DEFAULT_POL 0
+set TDD_REG_WIDTH 32
+set TDD_BURST_WIDTH 32
+set TDD_SYNC_WIDTH 0
+set TDD_SYNC_INT 0
+set TDD_SYNC_EXT 1
+set TDD_SYNC_EXT_CDC 1
+ad_tdd_gen_create axi_tdd_0 $TDD_CHANNEL_CNT \
+                            $TDD_DEFAULT_POL \
+                            $TDD_REG_WIDTH \
+                            $TDD_BURST_WIDTH \
+                            $TDD_SYNC_WIDTH \
+                            $TDD_SYNC_INT \
+                            $TDD_SYNC_EXT \
+                            $TDD_SYNC_EXT_CDC
 
 ad_ip_instance util_vector_logic logic_inv [list \
   C_OPERATION {not} \
@@ -316,7 +333,8 @@ ad_ip_instance util_vector_logic logic_or_1 [list \
 ad_connect logic_inv/Op1  axi_ad9361/rst
 ad_connect logic_inv/Res  axi_tdd_0/resetn
 ad_connect axi_ad9361/l_clk axi_tdd_0/clk
-ad_connect axi_tdd_0/sync_in GND
+ad_connect axi_tdd_0/sync_in tdd_ext_sync
+ad_connect axi_tdd_0/sync_out tdd_sync_out
 ad_connect axi_tdd_0/tdd_channel_0 txdata_o
 ad_connect axi_tdd_0/tdd_channel_1 axi_ad9361_adc_dma/fifo_wr_sync
 

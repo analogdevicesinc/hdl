@@ -83,17 +83,17 @@ module system_top (
 
   output          pl_gpio0,
   output          pl_gpio1,
+  input           pl_gpio2,
   output          pl_gpio3,
-
-  output          pl_spi_clk_o,
-  input           pl_spi_miso
-);
+  output          pl_gpio4);
 
   // internal signals
 
-  wire    [16:0]  gpio_i;
-  wire    [16:0]  gpio_o;
-  wire    [16:0]  gpio_t;
+  wire    [17:0]  gpio_i;
+  wire    [17:0]  gpio_o;
+  wire    [17:0]  gpio_t;
+
+  wire            pl_spi_miso;
 
   // instantiations
 
@@ -108,7 +108,9 @@ module system_top (
               gpio_ctl,           // 11: 8
               gpio_status}));     //  7: 0
 
-  assign gpio_i[16:14] = gpio_o[16:14];
+  assign gpio_i[17:14] = gpio_o[17:14];
+
+  assign pl_spi_miso = 1'b0;
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
@@ -151,7 +153,7 @@ module system_top (
     .spi0_sdo_o (spi_mosi),
 
     .spi_clk_i(1'b0),
-    .spi_clk_o(pl_spi_clk_o),
+    .spi_clk_o(pl_gpio4),
     .spi_csn_i(1'b1),
     .spi_csn_o(pl_gpio3),
     .spi_sdi_i(pl_spi_miso),
@@ -165,6 +167,7 @@ module system_top (
     .tx_frame_out (tx_frame_out),
     .txnrx (txnrx),
     .up_enable (gpio_o[15]),
-    .up_txnrx (gpio_o[16]));
+    .up_txnrx (gpio_o[16]),
+    .tdd_ext_sync(pl_gpio2));
 
 endmodule

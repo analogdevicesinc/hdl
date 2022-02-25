@@ -56,16 +56,26 @@ set_property  -dict {PACKAGE_PIN  E11  IOSTANDARD LVCMOS18} [get_ports spi_clk]
 set_property  -dict {PACKAGE_PIN  E13  IOSTANDARD LVCMOS18} [get_ports spi_mosi]
 set_property  -dict {PACKAGE_PIN  F12  IOSTANDARD LVCMOS18} [get_ports spi_miso]
 
-set_property  -dict {PACKAGE_PIN  R10  IOSTANDARD LVCMOS18} [get_ports pl_spi_clk_o]
-set_property  -dict {PACKAGE_PIN  M12  IOSTANDARD LVCMOS18} [get_ports pl_spi_miso]
+# PL GPIOs
+#
+# Pin  | Package Pin | GPIO
+# -----|-------------|---------
+# L10P | K13         | PL_GPIO0
+# L12N | M12         | PL_GPIO1
+# L24N | R10         | PL_GPIO2
+# L7N  | N14         | PL_GPIO3
+# L9N  | M14         | PL_GPIO4
+
 set_property  -dict {PACKAGE_PIN  K13  IOSTANDARD LVCMOS18} [get_ports pl_gpio0]
+set_property  -dict {PACKAGE_PIN  R10  IOSTANDARD LVCMOS18} [get_ports pl_gpio2]
 
 set_property  -dict {PACKAGE_PIN  P8   IOSTANDARD LVCMOS18} [get_ports clk_out]
 
 create_clock -name rx_clk -period  16.27 [get_ports rx_clk_in]
 
-set_property  -dict {PACKAGE_PIN  M14   IOSTANDARD LVCMOS18}                    [get_ports pl_gpio1]
+set_property  -dict {PACKAGE_PIN  M12   IOSTANDARD LVCMOS18}                    [get_ports pl_gpio1]
 set_property  -dict {PACKAGE_PIN  N14   IOSTANDARD LVCMOS18 PULLTYPE PULLUP}    [get_ports pl_gpio3]
+set_property  -dict {PACKAGE_PIN  M14   IOSTANDARD LVCMOS18 PULLTYPE PULLUP}    [get_ports pl_gpio4]
 
 # probably gone in 2016.4
 
