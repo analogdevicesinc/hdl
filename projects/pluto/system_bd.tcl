@@ -18,9 +18,9 @@ create_bd_port -dir I spi0_sdo_i
 create_bd_port -dir O spi0_sdo_o
 create_bd_port -dir I spi0_sdi_i
 
-create_bd_port -dir I -from 16 -to 0 gpio_i
-create_bd_port -dir O -from 16 -to 0 gpio_o
-create_bd_port -dir O -from 16 -to 0 gpio_t
+create_bd_port -dir I -from 17 -to 0 gpio_i
+create_bd_port -dir O -from 17 -to 0 gpio_o
+create_bd_port -dir O -from 17 -to 0 gpio_t
 
 create_bd_port -dir O spi_csn_o
 create_bd_port -dir I spi_csn_i
@@ -31,6 +31,9 @@ create_bd_port -dir O spi_sdo_o
 create_bd_port -dir I spi_sdi_i
 
 create_bd_port -dir O txdata_o
+
+create_bd_port -dir I tdd_ext_sync
+create_bd_port -dir O tdd_sync_out
 
 # instance: sys_ps7
 
@@ -48,7 +51,7 @@ ad_ip_parameter sys_ps7 CONFIG.PCW_EN_RST1_PORT 1
 ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ 100.0
 ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA1_PERIPHERAL_FREQMHZ 200.0
 ad_ip_parameter sys_ps7 CONFIG.PCW_GPIO_EMIO_GPIO_ENABLE 1
-ad_ip_parameter sys_ps7 CONFIG.PCW_GPIO_EMIO_GPIO_IO 17
+ad_ip_parameter sys_ps7 CONFIG.PCW_GPIO_EMIO_GPIO_IO 18
 ad_ip_parameter sys_ps7 CONFIG.PCW_SPI1_PERIPHERAL_ENABLE 0
 ad_ip_parameter sys_ps7 CONFIG.PCW_I2C0_PERIPHERAL_ENABLE 0
 ad_ip_parameter sys_ps7 CONFIG.PCW_UART1_PERIPHERAL_ENABLE 1
@@ -306,13 +309,12 @@ ad_ip_instance util_tdd_sync util_tdd_sync_0
 ad_ip_parameter util_tdd_sync_0 CONFIG.TDD_SYNC_PERIOD 100000000
 ad_connect sys_cpu_clk util_tdd_sync_0/clk
 ad_connect sys_cpu_resetn util_tdd_sync_0/rstn
-ad_connect util_tdd_sync_0/sync_mode GND
-ad_connect util_tdd_sync_0/sync_in GND
 
 ad_ip_instance axi_tdd axi_tdd_0
 ad_connect axi_ad9361/l_clk axi_tdd_0/clk
 ad_connect axi_ad9361/rst axi_tdd_0/rst
 ad_connect util_tdd_sync_0/sync_out axi_tdd_0/tdd_sync
+ad_connect util_tdd_sync_0/sync_out tdd_sync_out
 
 ad_connect axi_tdd_0/tdd_rx_rf_en txdata_o
 
@@ -358,10 +360,17 @@ ad_cpu_interrupt ps-11 mb-11 axi_spi/ip2intc_irpt
 ad_ip_instance xlslice interceptor_slice [list \
     DIN_FROM    14 \
     DIN_TO      14 \
-    DIN_WIDTH   17 \
+    DIN_WIDTH   18 \
+    DOUT_WIDTH   1 ]
+
+ad_ip_instance xlslice tdd_sync_mode_slice [list \
+    DIN_FROM    17 \
+    DIN_TO      17 \
+    DIN_WIDTH   18 \
     DOUT_WIDTH   1 ]
 
 ad_connect sys_ps7/GPIO_O interceptor_slice/Din
+ad_connect sys_ps7/GPIO_O tdd_sync_mode_slice/Din
 
 add_files -norecurse dma_interceptor.v
 
@@ -376,3 +385,7 @@ ad_connect axi_ad9361_dac_dma/m_axis dma_interceptor_0/s_axis
 ad_connect dma_interceptor_0/m_axis tx_upack/s_axis
 
 ad_connect axi_tdd_0/tdd_active dma_interceptor_0/tdd_active
+
+ad_connect tdd_sync_mode_slice/Dout util_tdd_sync_0/sync_mode
+ad_connect tdd_ext_sync util_tdd_sync_0/sync_in
+
