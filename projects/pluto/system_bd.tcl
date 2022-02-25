@@ -307,6 +307,7 @@ ad_connect  cpack/fifo_wr_overflow axi_ad9361/adc_dovf
 
 ad_ip_instance util_tdd_sync util_tdd_sync_0
 ad_ip_parameter util_tdd_sync_0 CONFIG.TDD_SYNC_PERIOD 100000000
+ad_ip_parameter util_tdd_sync_0 CONFIG.TDD_SYNC_WIDTH       1000
 ad_connect sys_cpu_clk util_tdd_sync_0/clk
 ad_connect sys_cpu_resetn util_tdd_sync_0/rstn
 
