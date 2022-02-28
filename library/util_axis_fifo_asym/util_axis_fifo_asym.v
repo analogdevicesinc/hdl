@@ -81,8 +81,8 @@ localparam A_ALMOST_FULL_THRESHOLD = (RATIO_TYPE) ? ALMOST_FULL_THRESHOLD : (ALM
 localparam A_ALMOST_EMPTY_THRESHOLD = (RATIO_TYPE) ? (ALMOST_EMPTY_THRESHOLD/RATIO) : ALMOST_EMPTY_THRESHOLD;
 
 // slave and master sequencers
-reg [$clog2(RATIO)-1:0] s_axis_counter;
-reg [$clog2(RATIO)-1:0] m_axis_counter;
+reg [$clog2(RATIO):0] s_axis_counter;
+reg [$clog2(RATIO):0] m_axis_counter;
 
 wire [RATIO-1:0] m_axis_ready_int_s;
 wire [RATIO-1:0] m_axis_valid_int_s;
@@ -257,7 +257,7 @@ end
 
 generate
   if (RATIO == 1) begin
-    always @(*) begin
+    always @(posedge s_axis_aclk) begin
       s_axis_counter <= 1'b1;
     end
   end else if (RATIO > 1) begin
@@ -267,7 +267,11 @@ generate
           s_axis_counter <= 0;
         end else begin
           if (s_axis_ready && s_axis_valid) begin
-            s_axis_counter <= s_axis_counter + 1'b1;
+            if (s_axis_counter == RATIO - 1) begin
+              s_axis_counter <= 'h0;
+            end else begin
+              s_axis_counter <= s_axis_counter + 1'b1;
+            end
           end
         end
       end
@@ -290,7 +294,7 @@ endgenerate
 
 generate
   if (RATIO == 1) begin
-    always @(*) begin
+    always @(posedge m_axis_aclk) begin
       m_axis_counter <= 1'b0;
     end
   end else if (RATIO > 1) begin
@@ -299,7 +303,11 @@ generate
         m_axis_counter <= 0;
       end else begin
         if (m_axis_ready && m_axis_valid) begin
-          m_axis_counter <= m_axis_counter + 1'b1;
+          if (m_axis_counter == RATIO - 1) begin
+            m_axis_counter <= 'h0;
+          end else begin
+            m_axis_counter <= m_axis_counter + 1'b1;
+          end
         end
       end
     end
