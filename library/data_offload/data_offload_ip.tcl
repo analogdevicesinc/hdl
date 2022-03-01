@@ -63,7 +63,8 @@ adi_add_bus "wr_ctrl" "master" \
 	      {"wr_request_valid" "request_valid"} \
 	      {"wr_request_ready" "request_ready"} \
 	      {"wr_request_length" "request_length"} \
-	      {"wr_request_eot" "request_eot"} \
+	      {"wr_response_measured_length" "response_measured_length"} \
+	      {"wr_response_eot" "response_eot"} \
 	  ]
 #adi_add_bus_clock "s_axi_aclk" "wr_ctrl" "s_axi_aresetn"
 
@@ -74,7 +75,7 @@ adi_add_bus "rd_ctrl" "master" \
 	      {"rd_request_valid" "request_valid"} \
 	      {"rd_request_ready" "request_ready"} \
 	      {"rd_request_length" "request_length"} \
-	      {"rd_request_eot" "request_eot"} \
+	      {"rd_response_eot" "response_eot"} \
 	  ]
 #adi_add_bus_clock "s_axi_aclk" "rd_ctrl" "s_axi_aresetn"
 

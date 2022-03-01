@@ -39,7 +39,6 @@ module data_offload #(
   parameter          ID = 0,
   parameter   [ 0:0] MEM_TYPE = 1'b0,               // 1'b0 -FPGA RAM; 1'b1 - external memory
   parameter   [33:0] MEM_SIZE = 1024,               // memory size in bytes -1 - max 16 GB
-  parameter          LENGTH_WIDTH = $clog2(MEM_SIZE),
   parameter          MEMC_UIF_DATA_WIDTH = 512,
   parameter          MEMC_UIF_ADDRESS_WIDTH = 31,
   parameter   [31:0] MEMC_BADDRESS = 32'h00000000,
@@ -135,15 +134,16 @@ module data_offload #(
   output                                      wr_request_enable,
   output                                      wr_request_valid,
   input                                       wr_request_ready,
-  output   [LENGTH_WIDTH-1:0]                 wr_request_length,
-  input                                       wr_request_eot,
+  output   [34-1:0]                           wr_request_length,
+  input    [34-1:0]                           wr_response_measured_length,
+  input                                       wr_response_eot,
 
   // Control interface for storage for s_storage_axis interface
   output                                      rd_request_enable,
   output                                      rd_request_valid,
   input                                       rd_request_ready,
-  output   [LENGTH_WIDTH-1:0]                 rd_request_length,
-  input                                       rd_request_eot,
+  output  reg  [34-1:0]                       rd_request_length,
+  input                                       rd_response_eot,
 
   // Status and monitor
 
@@ -205,6 +205,8 @@ module data_offload #(
 //  wire                                        m_axis_reset_int_s;
 //
   wire  [33:0]                                src_transfer_length_s;
+  wire  [33:0]                                rd_wr_response_measured_length;
+  wire                                        rd_ml_valid;
 //  wire                                        src_wr_last_int_s;
 //  wire  [33:0]                                src_wr_last_beat_s;
 //
@@ -246,7 +248,7 @@ module data_offload #(
     .wr_request_enable (wr_request_enable),
     .wr_request_valid (wr_request_valid),
     .wr_request_ready (wr_request_ready),
-    .wr_request_eot (wr_request_eot),
+    .wr_response_eot (wr_response_eot),
     .wr_ready (wr_ready),
 //    .wr_resetn_out (fifo_src_resetn),
 //    .wr_valid_in (s_axis_valid),
@@ -260,8 +262,11 @@ module data_offload #(
     .rd_request_enable (rd_request_enable),
     .rd_request_valid (rd_request_valid),
     .rd_request_ready (rd_request_ready),
-    .rd_request_eot (rd_request_eot),
+    .rd_response_eot (rd_response_eot),
     .rd_ready (rd_ready),
+
+    .rd_ml_valid (rd_ml_valid),
+    .rd_ml_ready (rd_ml_ready),
 //    .rd_resetn_out (fifo_dst_resetn),
 //    .rd_ready (fifo_dst_ready_int_s),
 //    .rd_valid (dst_mem_valid_s),
@@ -329,7 +334,7 @@ module data_offload #(
 
   assign s_storage_axis_ready = rd_ready & m_axis_ready;
 
-
+/*
   // Bypass module instance -- the same FIFO, just a smaller depth
   // NOTE: Generating an overflow is making sense just in BYPASS mode, and
   // it's supported just with the FIFO interface
@@ -356,7 +361,7 @@ module data_offload #(
     .s_axis_full  (),
     .s_axis_almost_full ()
   );
-
+*/
   // register map
 
   data_offload_regmap #(
@@ -387,7 +392,7 @@ module data_offload #(
     .sync (sync_int_s),
     .sync_config (sync_config_s),
     .src_transfer_length (wr_request_length),
-    .dst_transfer_length (rd_request_length),
+    .dst_transfer_length (),
     .src_fsm_status (src_fsm_status_s),
     .dst_fsm_status (dst_fsm_status_s)//,
   //  .sample_count_msb (sample_count_s[63:32]),
@@ -454,6 +459,34 @@ module data_offload #(
 //// transfer length is in bytes, but counter monitors the source data beats
 //assign src_wr_last_beat_s = (src_transfer_length_s == 'h0) ? MEM_SIZE[33:SRC_BEAT_BYTE]-1 : src_transfer_length_s[33:SRC_BEAT_BYTE]-1;
 //assign src_wr_last_int_s = (src_data_counter == src_wr_last_beat_s) ?  1'b1 : 1'b0;
+
+// Measured length handshake CDC
+util_axis_fifo #(
+  .DATA_WIDTH(34),
+  .ADDRESS_WIDTH(0),
+  .ASYNC_CLK(1)
+) i_measured_length_cdc (
+  .s_axis_aclk(s_axis_aclk),
+  .s_axis_aresetn(s_axis_aresetn),
+  .s_axis_valid(wr_response_eot),
+  .s_axis_ready(),
+  .s_axis_full(),
+  .s_axis_data(wr_response_measured_length-1),
+  .s_axis_room(),
+
+  .m_axis_aclk(m_axis_aclk),
+  .m_axis_aresetn(m_axis_aresetn),
+  .m_axis_valid(rd_ml_valid),
+  .m_axis_ready(rd_ml_ready),
+  .m_axis_data(rd_wr_response_measured_length),
+  .m_axis_level(),
+  .m_axis_empty()
+);
+
+always @(posedge m_axis_aclk) begin
+  if (rd_ml_valid & rd_ml_ready)
+   rd_request_length <= rd_wr_response_measured_length;
+end
 
 endmodule
 

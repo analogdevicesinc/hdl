@@ -50,19 +50,24 @@ module data_offload_fsm #(
   input                               up_clk,
 
   // Control interface for storage for m_storage_axis interface
-  output                              wr_request_enable,
+  output    reg                       wr_request_enable = 1'b0,
   output                              wr_request_valid,
   input                               wr_request_ready,
-  input                               wr_request_eot,
+  input                               wr_response_eot,
 
   // Control interface for storage for s_storage_axis interface
-  output                              rd_request_enable,
+  output    reg                       rd_request_enable = 1'b0,
   output                              rd_request_valid,
   input                               rd_request_ready,
-  input                               rd_request_eot,
+  input                               rd_response_eot,
 
+  input                               rd_ml_valid,
+  output                              rd_ml_ready,
+
+  // Data path gating
   output                              wr_ready,
   output                              rd_ready,
+
 //  // write control interface
   input                               wr_clk,
   input                               wr_resetn_in,
@@ -102,10 +107,11 @@ module data_offload_fsm #(
 
   // FSM states
 
-  localparam  WR_STATE_IDLE   = 4'b0001;
-  localparam  WR_STATE_PRE_WR = 4'b0010;
-  localparam  WR_STATE_SYNC   = 4'b0100;
-  localparam  WR_STATE_WR     = 4'b1000;
+  localparam  WR_STATE_IDLE    = 5'b00001;
+  localparam  WR_STATE_PRE_WR  = 5'b00010;
+  localparam  WR_STATE_SYNC    = 5'b00100;
+  localparam  WR_STATE_WR      = 5'b01000;
+  localparam  WR_STATE_WAIT_RD = 5'b10000;
 
   localparam  WR_BIT_IDLE   = 0;
   localparam  WR_BIT_PRE_WR = 1;
@@ -165,8 +171,8 @@ module data_offload_fsm #(
   wire                        rd_sync_external_s;
 //  wire                        wr_oneshot;
 //
-  reg [3:0] wr_fsm_state = WR_STATE_IDLE;
-  reg [3:0] wr_fsm_next_state;
+  reg [4:0] wr_fsm_state = WR_STATE_IDLE;
+  reg [4:0] wr_fsm_next_state;
   reg [3:0] rd_fsm_state = RD_STATE_IDLE;
   reg [3:0] rd_fsm_next_state;
 
@@ -197,7 +203,11 @@ module data_offload_fsm #(
             wr_fsm_next_state = WR_STATE_WR;
         endcase
       WR_STATE_WR:
-        if (wr_request_eot) begin
+        if (wr_response_eot) begin
+          wr_fsm_next_state = WR_STATE_WAIT_RD;
+        end
+      WR_STATE_WAIT_RD:
+        if (wr_rd_response_eot) begin
           wr_fsm_next_state = WR_STATE_IDLE;
         end
       default:
@@ -217,7 +227,7 @@ module data_offload_fsm #(
     rd_fsm_next_state = rd_fsm_state;
     case (rd_fsm_state)
       RD_STATE_IDLE:
-        if (rd_wr_request_eot) begin
+        if (rd_ml_valid) begin
           rd_fsm_next_state = RD_STATE_PRE_RD;
         end
       RD_STATE_PRE_RD:
@@ -240,7 +250,7 @@ module data_offload_fsm #(
             rd_fsm_next_state = RD_STATE_RD;
         endcase
       RD_STATE_RD:
-        if (rd_request_eot) begin
+        if (rd_response_eot) begin
           rd_fsm_next_state = (rd_cyclic_en == 1'b0)     ? RD_STATE_IDLE :
                               (sync_config != AUTOMATIC) ? RD_STATE_SYNC :
                                                            RD_STATE_RD;
@@ -271,6 +281,22 @@ module data_offload_fsm #(
 
   assign wr_request_valid = wr_fsm_state[WR_BIT_PRE_WR];
   assign rd_request_valid = rd_fsm_state[RD_BIT_PRE_RD] | rd_cyclic_en;
+
+  always @(posedge rd_clk) begin
+    if (rd_resetn_in == 1'b0)
+      rd_request_enable <= 1'b0;
+    else
+      rd_request_enable <= 1'b1;
+  end
+
+  always @(posedge wr_clk) begin
+    if (wr_resetn_in == 1'b0)
+      wr_request_enable <= 1'b0;
+    else
+      wr_request_enable <= 1'b1;
+  end
+
+  assign rd_ml_ready = rd_fsm_state[RD_BIT_IDLE];
 
 //  // Mealy state machine for write control
 //  always @(posedge wr_clk) begin
@@ -533,26 +559,26 @@ module data_offload_fsm #(
 //    end
 //  end
 //
-//  // CDC circuits
-//  sync_event #(
-//    .NUM_OF_EVENTS (1),
-//    .ASYNC_CLK (1))
-//  i_wr_empty_sync (
-//    .in_clk (rd_clk),
-//    .in_event (rd_isempty),
-//    .out_clk (wr_clk),
-//    .out_event (wr_isempty_s)
-//  );
-//
+  // CDC circuits
   sync_event #(
     .NUM_OF_EVENTS (1),
-    .ASYNC_CLK(1))
-  i_rd_full_sync (
-    .in_clk (wr_clk),
-    .in_event (wr_request_eot),
-    .out_clk (rd_clk),
-    .out_event (rd_wr_request_eot)
+    .ASYNC_CLK (1))
+  i_wr_empty_sync (
+    .in_clk (rd_clk),
+    .in_event (rd_response_eot && rd_fsm_state[RD_BIT_RD]),
+    .out_clk (wr_clk),
+    .out_event (wr_rd_response_eot)
   );
+
+//  sync_event #(
+//    .NUM_OF_EVENTS (1),
+//    .ASYNC_CLK(1))
+//  i_rd_full_sync (
+//    .in_clk (wr_clk),
+//    .in_event (wr_response_eot && wr_fsm_state[WR_BIT_WR]),
+//    .out_clk (rd_clk),
+//    .out_event (rd_wr_response_eot)
+//  );
 //
 //  sync_event #(
 //    .NUM_OF_EVENTS (1),
@@ -594,6 +620,7 @@ module data_offload_fsm #(
     .out_resetn (1'b1),
     .out_bits (wr_init_req_s)
   );
+
 //
 //  generate if (TX_OR_RXN_PATH == 0) begin : adc_init_sync
 //
@@ -715,4 +742,5 @@ module data_offload_fsm #(
   );
 
 endmodule
+
 
