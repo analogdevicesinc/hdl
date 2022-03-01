@@ -44,6 +44,7 @@ module axi_adrv9001_if #(
   parameter TX_USE_BUFG = 0,
   parameter DISABLE_RX2_SSI = 0,
   parameter DISABLE_TX2_SSI = 0,
+  parameter IODELAY_CTRL = 1,
   parameter IO_DELAY_GROUP = "dev_if_delay_group",
   parameter USE_RX_CLK_FOR_TX = 0
 ) (
@@ -208,7 +209,7 @@ module axi_adrv9001_if #(
       .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
       .NUM_LANES (NUM_LANES),
       .DRP_WIDTH (DRP_WIDTH),
-      .IODELAY_CTRL (1),
+      .IODELAY_CTRL (IODELAY_CTRL),
       .USE_BUFG (RX_USE_BUFG),
       .IO_DELAY_GROUP ({IO_DELAY_GROUP,"_rx"})
     ) i_rx_1_phy (
