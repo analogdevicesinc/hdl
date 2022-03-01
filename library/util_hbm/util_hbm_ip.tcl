@@ -84,6 +84,13 @@ adi_add_multi_bus $max_axi_ifc "MAXI_" "master" \
 set ifc_list ""
 for {set idx 0} {$idx < $max_axi_ifc} {incr idx} {
   set ifc_list $ifc_list:MAXI_$idx
+
+  ipx::add_address_space MAXI_$idx [ipx::current_core]
+  set_property master_address_space_ref MAXI_${idx} \
+    [ipx::get_bus_interfaces MAXI_$idx \
+    -of_objects [ipx::current_core]]
+  set_property range 4G [ipx::get_address_spaces MAXI_${idx}]
+
 }
 adi_add_bus_clock "m_axi_aclk" $ifc_list "m_axi_aresetn"
 
@@ -94,7 +101,8 @@ adi_add_bus "wr_ctrl" "slave" \
 	      {"wr_request_valid" "request_valid"} \
 	      {"wr_request_ready" "request_ready"} \
 	      {"wr_request_length" "request_length"} \
-	      {"wr_request_eot" "request_eot"} \
+	      {"wr_response_measured_length" "response_measured_length"} \
+	      {"wr_response_eot" "response_eot"} \
 	  ]
 
 adi_add_bus "rd_ctrl" "slave" \
@@ -104,7 +112,7 @@ adi_add_bus "rd_ctrl" "slave" \
 	      {"rd_request_valid" "request_valid"} \
 	      {"rd_request_ready" "request_ready"} \
 	      {"rd_request_length" "request_length"} \
-	      {"rd_request_eot" "request_eot"} \
+	      {"rd_response_eot" "response_eot"} \
 	  ]
 
 adi_add_bus_clock "s_axis_aclk" "s_axis:wr_ctrl" "s_axis_aresetn"

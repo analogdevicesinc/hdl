@@ -10,7 +10,7 @@ proc ad_create_hbm {name {density "4GB"}} {
     ad_ip_instance axi_vip $name [list \
       INTERFACE_MODE {SLAVE} \
     ]
-    adi_sim_add_define "HBM_AXI=hbm_axi_vip"
+    adi_sim_add_define "HBM_AXI=$name"
   }
 }
 

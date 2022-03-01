@@ -42,7 +42,7 @@ module util_hbm #(
   parameter SRC_DATA_WIDTH = 512,
   parameter DST_DATA_WIDTH = 128,
 
-  parameter LENGTH_WIDTH = 32,
+  parameter LENGTH_WIDTH = 33,
 
   parameter AXI_DATA_WIDTH = 256,
   parameter AXI_ADDR_WIDTH = 32,
@@ -67,16 +67,18 @@ module util_hbm #(
   input                                    wr_request_valid,
   output                                   wr_request_ready,
   input   [LENGTH_WIDTH-1:0]               wr_request_length,
-  output                                   wr_request_eot,
+  output  reg [LENGTH_WIDTH-1:0]           wr_response_measured_length = 'h0,
+  output  reg                              wr_response_eot = 1'b0,
 
   input                                    rd_request_enable,
   input                                    rd_request_valid,
   output                                   rd_request_ready,
   input   [LENGTH_WIDTH-1:0]               rd_request_length,
-  output                                   rd_request_eot,
+  output  reg                              rd_response_eot = 1'b0,
 
   // Slave streaming AXI interface
   input                                    s_axis_aclk,
+  input                                    s_axis_aresetn,
   output                                   s_axis_ready,
   input                                    s_axis_valid,
   input  [SRC_DATA_WIDTH-1:0]              s_axis_data,
@@ -87,6 +89,7 @@ module util_hbm #(
 
   // Master streaming AXI interface
   input                                    m_axis_aclk,
+  input                                    m_axis_aresetn,
   input                                    m_axis_ready,
   output                                   m_axis_valid,
   output [DST_DATA_WIDTH-1:0]              m_axis_data,
@@ -148,9 +151,9 @@ localparam DMA_TYPE_FIFO = 2;
 localparam SRC_DATA_WIDTH_PER_M = SRC_DATA_WIDTH / NUM_M;
 localparam DST_DATA_WIDTH_PER_M = DST_DATA_WIDTH / NUM_M;
 
-localparam AXI_BYTES_PER_BEAT_WIDTH = $clog2(AXI_DATA_WIDTH);
-localparam SRC_BYTES_PER_BEAT_WIDTH = $clog2(SRC_DATA_WIDTH_PER_M);
-localparam DST_BYTES_PER_BEAT_WIDTH = $clog2(DST_DATA_WIDTH_PER_M);
+localparam AXI_BYTES_PER_BEAT_WIDTH = $clog2(AXI_DATA_WIDTH/8);
+localparam SRC_BYTES_PER_BEAT_WIDTH = $clog2(SRC_DATA_WIDTH_PER_M/8);
+localparam DST_BYTES_PER_BEAT_WIDTH = $clog2(DST_DATA_WIDTH_PER_M/8);
 
 // AXI 3  1 burst is 16 beats
 localparam MAX_BYTES_PER_BURST = 16 * AXI_DATA_WIDTH/8;
@@ -164,16 +167,18 @@ wire [NUM_M-1:0] wr_request_ready_loc;
 wire [NUM_M-1:0] rd_request_ready_loc;
 wire [NUM_M-1:0] wr_request_eot_loc;
 wire [NUM_M-1:0] rd_request_eot_loc;
+wire [NUM_M-1:0] rd_response_valid_loc;
+wire [NUM_M-1:0] wr_response_valid_loc;
 
 assign wr_request_ready = &wr_request_ready_loc;
 assign rd_request_ready = &rd_request_ready_loc;
 
 // Aggregate end of transfer from all masters
-reg [NUM_M-1:0] wr_eot_pending;
-reg [NUM_M-1:0] rd_eot_pending;
+reg [NUM_M-1:0] wr_eot_pending = {NUM_M{1'b0}};
+reg [NUM_M-1:0] rd_eot_pending = {NUM_M{1'b0}};
 
-assign wr_request_eot = &wr_request_eot_loc;
-assign rd_request_eot = &rd_request_eot_loc;
+assign wr_eot_pending_all = &wr_eot_pending;
+assign rd_eot_pending_all = &rd_eot_pending;
 
 wire [NUM_M-1:0] s_axis_ready_loc;
 assign s_axis_ready = &s_axis_ready_loc;
@@ -185,6 +190,31 @@ assign m_axis_last = &m_axis_last_loc;
 wire [NUM_M-1:0] m_axis_valid_loc;
 assign m_axis_valid = &m_axis_valid_loc;
 
+wire [NUM_M-1:0] wr_response_ready_loc;
+wire [NUM_M-1:0] rd_response_ready_loc;
+
+// Measure stored data in case transfer is shorter than programmed,
+//  do the measurement only with the first master, all others should be
+//  similar.
+wire [NUM_M*BYTES_PER_BURST_WIDTH-1:0] wr_measured_burst_length;
+always @(posedge s_axis_aclk) begin
+  if (wr_request_enable == 1'b0) begin
+    wr_response_measured_length <= 'h0;
+  end else if (wr_response_valid_loc[0] == 1'b1 && wr_response_ready_loc[0] == 1'b1) begin
+    wr_response_measured_length <= wr_response_measured_length + wr_measured_burst_length[BYTES_PER_BURST_WIDTH-1:0] + 1'b1;
+  end else if (wr_response_eot == 1'b1) begin
+    wr_response_measured_length <= 'h0;
+  end
+end
+
+always @(posedge s_axis_aclk) begin
+  wr_response_eot <= wr_eot_pending_all;
+end
+
+always @(posedge m_axis_aclk) begin
+  rd_response_eot <= rd_eot_pending_all;
+end
+
 generate
 for (i = 0; i < NUM_M; i=i+1) begin
 
@@ -192,12 +222,15 @@ for (i = 0; i < NUM_M; i=i+1) begin
   localparam ADDR_OFFSET = i * HBM_SEGMENTS_PER_MASTER * 256 * 1024 * 1024;
 
   always @(posedge s_axis_aclk) begin
-    if (wr_request_eot) begin
+    if (wr_eot_pending_all) begin
       wr_eot_pending[i] <= 1'b0;
-    end else if (wr_request_eot_loc[i]) begin
+    end else if (wr_request_eot_loc[i] & wr_response_valid_loc[i]) begin
       wr_eot_pending[i] <= 1'b1;
     end
   end
+
+  // For last burst wait until all masters are done
+  assign wr_response_ready_loc[i] = wr_request_eot_loc[i] ? wr_eot_pending_all : wr_response_valid_loc[i];
 
   // AXIS to AXI3
   axi_dmac_transfer #(
@@ -244,10 +277,10 @@ for (i = 0; i < NUM_M; i=i+1) begin
     .req_last(1'b1),
 
     .req_eot(wr_request_eot_loc[i]),
-    .req_measured_burst_length(),
+    .req_measured_burst_length(wr_measured_burst_length[BYTES_PER_BURST_WIDTH*i+:BYTES_PER_BURST_WIDTH]),
     .req_response_partial(),
-    .req_response_valid(),
-    .req_response_ready(1'b1),
+    .req_response_valid(wr_response_valid_loc[i]),
+    .req_response_ready(wr_response_ready_loc[i]),
 
     .m_dest_axi_aclk(m_axi_aclk),
     .m_dest_axi_aresetn(m_axi_aresetn),
@@ -332,12 +365,14 @@ for (i = 0; i < NUM_M; i=i+1) begin
   );
 
   always @(posedge m_axis_aclk) begin
-    if (rd_request_eot) begin
+    if (rd_eot_pending_all) begin
       rd_eot_pending[i] <= 1'b0;
-    end else if (rd_request_eot_loc[i]) begin
+    end else if (rd_request_eot_loc[i] & rd_response_valid_loc[i]) begin
       rd_eot_pending[i] <= 1'b1;
     end
   end
+
+  assign rd_response_ready_loc[i] = rd_request_eot_loc[i] ? rd_eot_pending_all : rd_response_valid_loc[i];
 
   // AXI3 to MAXIS
   axi_dmac_transfer #(
@@ -386,8 +421,8 @@ for (i = 0; i < NUM_M; i=i+1) begin
     .req_eot(rd_request_eot_loc[i]),
     .req_measured_burst_length(),
     .req_response_partial(),
-    .req_response_valid(),
-    .req_response_ready(1'b1),
+    .req_response_valid(rd_response_valid_loc[i]),
+    .req_response_ready(rd_response_ready_loc[i]),
 
     .m_dest_axi_aclk(1'b0),
     .m_dest_axi_aresetn(1'b0),
