@@ -110,4 +110,5 @@ adi_if_ports  output   1  request_enable
 adi_if_ports  output   1  request_valid
 adi_if_ports  input    1  request_ready
 adi_if_ports  output  -1  request_length
-adi_if_ports  input    1  request_eot
+adi_if_ports  output  -1  response_measured_length
+adi_if_ports  input    1  response_eot
