@@ -44,8 +44,8 @@
 
 proc adi_axi_jesd204_tx_create {ip_name num_lanes {num_links 1} {link_mode 1}} {
 
-  if {$num_lanes < 1 || $num_lanes > 16} {
-    return -code 1 "ERROR: Invalid number of JESD204B lanes. (Supported range 1-16)"
+  if {$num_lanes < 1 || $num_lanes > 32} {
+    return -code 1 "ERROR: Invalid number of JESD204B lanes. (Supported range 1-32)"
   }
 
   if {$num_links < 1 || $num_links > 8} {
@@ -122,8 +122,8 @@ proc adi_axi_jesd204_tx_create {ip_name num_lanes {num_links 1} {link_mode 1}} {
 
 proc adi_axi_jesd204_rx_create {ip_name num_lanes {num_links 1} {link_mode 1}} {
 
-  if {$num_lanes < 1 || $num_lanes > 16} {
-    return -code 1 "ERROR: Invalid number of JESD204B lanes. (Supported range 1-16)"
+  if {$num_lanes < 1 || $num_lanes > 32} {
+    return -code 1 "ERROR: Invalid number of JESD204B lanes. (Supported range 1-32)"
   }
 
   if {$num_links < 1 || $num_links > 8} {
@@ -215,8 +215,8 @@ proc adi_axi_jesd204_rx_create {ip_name num_lanes {num_links 1} {link_mode 1}} {
 proc adi_tpl_jesd204_tx_create {ip_name num_of_lanes num_of_converters samples_per_frame sample_width {link_layer_bytes_per_beat 4} {dma_sample_width 16}} {
 
 
-  if {$num_of_lanes < 1 || $num_of_lanes > 16} {
-    return -code 1 "ERROR: Invalid number of JESD204B lanes. (Supported range 1-16)"
+  if {$num_of_lanes < 1 || $num_of_lanes > 32} {
+    return -code 1 "ERROR: Invalid number of JESD204B lanes. (Supported range 1-32)"
   }
   # F = (M * N * S) / (L * 8)
   set bytes_per_frame [expr ($num_of_converters * $sample_width * $samples_per_frame) / ($num_of_lanes * 8)];
@@ -344,8 +344,8 @@ proc adi_tpl_jesd204_tx_create {ip_name num_of_lanes num_of_converters samples_p
 proc adi_tpl_jesd204_rx_create {ip_name num_of_lanes num_of_converters samples_per_frame sample_width {link_layer_bytes_per_beat 4} {dma_sample_width 16}} {
 
 
-  if {$num_of_lanes < 1 || $num_of_lanes > 16} {
-    return -code 1 "ERROR: Invalid number of JESD204B lanes. (Supported range 1-16)"
+  if {$num_of_lanes < 1 || $num_of_lanes > 32} {
+    return -code 1 "ERROR: Invalid number of JESD204B lanes. (Supported range 1-32)"
   }
   # F = (M * N * S) / (L * 8)
   set bytes_per_frame [expr ($num_of_converters * $sample_width * $samples_per_frame) / ($num_of_lanes * 8)];
