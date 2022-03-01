@@ -138,7 +138,9 @@ proc ad_data_offload_create {instance_name
       ad_connect i_util_hbm/m_axis i_data_offload/s_storage_axis
 
       ad_connect i_util_hbm/s_axis_aclk s_axis_aclk
+      ad_connect i_util_hbm/s_axis_aresetn s_axis_aresetn
       ad_connect i_util_hbm/m_axis_aclk m_axis_aclk
+      ad_connect i_util_hbm/m_axis_aresetn m_axis_aresetn
 
     }
 
