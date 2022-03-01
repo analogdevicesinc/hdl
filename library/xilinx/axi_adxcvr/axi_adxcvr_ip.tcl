@@ -45,7 +45,7 @@ set_property master_address_space_ref m_axi \
     [ipx::get_bus_interfaces m_axi \
     -of_objects [ipx::current_core]]
 
-for {set n 0} {$n < 16} {incr n} {
+for {set n 0} {$n < 32} {incr n} {
 
   if {($n%4) == 0} {
   adi_if_infer_bus analog.com:interface:if_xcvr_cm master up_cm_${n} [list \
@@ -257,6 +257,154 @@ set_property enablement_dependency \
 
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 15} \
   [ipx::get_bus_interfaces up_ch_15 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency \
+  {((spirit:decode(id('MODELPARAM_VALUE.TX_OR_RX_N')) = 0) and \
+  (spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 16))} \
+  [ipx::get_bus_interfaces up_es_16 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 16} \
+  [ipx::get_bus_interfaces up_ch_16 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency \
+  {((spirit:decode(id('MODELPARAM_VALUE.QPLL_ENABLE')) = 1) and \
+  (spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 16))} \
+  [ipx::get_bus_interfaces up_cm_16 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency \
+  {((spirit:decode(id('MODELPARAM_VALUE.TX_OR_RX_N')) = 0) and \
+  (spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 17))} \
+  [ipx::get_bus_interfaces up_es_17 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 17} \
+  [ipx::get_bus_interfaces up_ch_17 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency \
+  {((spirit:decode(id('MODELPARAM_VALUE.TX_OR_RX_N')) = 0) and \
+  (spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 18))} \
+  [ipx::get_bus_interfaces up_es_18 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 18} \
+  [ipx::get_bus_interfaces up_ch_18 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency \
+  {((spirit:decode(id('MODELPARAM_VALUE.TX_OR_RX_N')) = 0) and \
+  (spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 19))} \
+  [ipx::get_bus_interfaces up_es_19 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 19} \
+  [ipx::get_bus_interfaces up_ch_19 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency \
+  {((spirit:decode(id('MODELPARAM_VALUE.TX_OR_RX_N')) = 0) and \
+  (spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 20))} \
+  [ipx::get_bus_interfaces up_es_20 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 20} \
+  [ipx::get_bus_interfaces up_ch_20 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency \
+  {((spirit:decode(id('MODELPARAM_VALUE.QPLL_ENABLE')) = 1) and \
+  (spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 20))} \
+  [ipx::get_bus_interfaces up_cm_20 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency \
+  {((spirit:decode(id('MODELPARAM_VALUE.TX_OR_RX_N')) = 0) and \
+  (spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 21))} \
+  [ipx::get_bus_interfaces up_es_21 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 21} \
+  [ipx::get_bus_interfaces up_ch_21 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency \
+  {((spirit:decode(id('MODELPARAM_VALUE.TX_OR_RX_N')) = 0) and \
+  (spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 22))} \
+  [ipx::get_bus_interfaces up_es_22 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 22} \
+  [ipx::get_bus_interfaces up_ch_22 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency \
+  {((spirit:decode(id('MODELPARAM_VALUE.TX_OR_RX_N')) = 0) and \
+  (spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 23))} \
+  [ipx::get_bus_interfaces up_es_23 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 23} \
+  [ipx::get_bus_interfaces up_ch_23 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency \
+  {((spirit:decode(id('MODELPARAM_VALUE.TX_OR_RX_N')) = 0) and \
+  (spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 24))} \
+  [ipx::get_bus_interfaces up_es_24 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 24} \
+  [ipx::get_bus_interfaces up_ch_24 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency \
+  {((spirit:decode(id('MODELPARAM_VALUE.QPLL_ENABLE')) = 1) and \
+  (spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 24))} \
+  [ipx::get_bus_interfaces up_cm_24 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency \
+  {((spirit:decode(id('MODELPARAM_VALUE.TX_OR_RX_N')) = 0) and \
+  (spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 25))} \
+  [ipx::get_bus_interfaces up_es_25 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 25} \
+  [ipx::get_bus_interfaces up_ch_25 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency \
+  {((spirit:decode(id('MODELPARAM_VALUE.TX_OR_RX_N')) = 0) and \
+  (spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 26))} \
+  [ipx::get_bus_interfaces up_es_26 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 26} \
+  [ipx::get_bus_interfaces up_ch_26 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency \
+  {((spirit:decode(id('MODELPARAM_VALUE.TX_OR_RX_N')) = 0) and \
+  (spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 27))} \
+  [ipx::get_bus_interfaces up_es_27 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 27} \
+  [ipx::get_bus_interfaces up_ch_27 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency \
+  {((spirit:decode(id('MODELPARAM_VALUE.TX_OR_RX_N')) = 0) and \
+  (spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 28))} \
+  [ipx::get_bus_interfaces up_es_28 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 28} \
+  [ipx::get_bus_interfaces up_ch_28 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency \
+  {((spirit:decode(id('MODELPARAM_VALUE.QPLL_ENABLE')) = 1) and \
+  (spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 28))} \
+  [ipx::get_bus_interfaces up_cm_28 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency \
+  {((spirit:decode(id('MODELPARAM_VALUE.TX_OR_RX_N')) = 0) and \
+  (spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 29))} \
+  [ipx::get_bus_interfaces up_es_29 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 29} \
+  [ipx::get_bus_interfaces up_ch_29 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency \
+  {((spirit:decode(id('MODELPARAM_VALUE.TX_OR_RX_N')) = 0) and \
+  (spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 30))} \
+  [ipx::get_bus_interfaces up_es_30 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 30} \
+  [ipx::get_bus_interfaces up_ch_30 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency \
+  {((spirit:decode(id('MODELPARAM_VALUE.TX_OR_RX_N')) = 0) and \
+  (spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 31))} \
+  [ipx::get_bus_interfaces up_es_31 -of_objects [ipx::current_core]]
+
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 31} \
+  [ipx::get_bus_interfaces up_ch_31 -of_objects [ipx::current_core]]
 
 adi_add_auto_fpga_spec_params
 ipx::create_xgui_files [ipx::current_core]

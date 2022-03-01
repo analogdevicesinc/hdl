@@ -103,7 +103,7 @@ ad_ip_parameter PART STRING "Generic" false [list \
 ad_ip_parameter NUM_LANES INTEGER 1 true [list \
   DISPLAY_NAME "Number of Lanes (L)" \
   DISPLAY_UNITS "lanes" \
-  ALLOWED_RANGES {1 2 3 4 8 16} \
+  ALLOWED_RANGES {1 2 3 4 8 16 24 32} \
   GROUP $group \
 ]
 

@@ -101,7 +101,7 @@ foreach p {DDS_CORDIC_DW DDS_CORDIC_PHASE_DW} {
 }
 
 foreach {p v} {
-  "NUM_LANES" "1 2 3 4 6 8 12 16" \
+  "NUM_LANES" "1 2 3 4 6 8 12 16 24 32" \
   "NUM_CHANNELS" "1 2 4 6 8 16 32 64" \
   "BITS_PER_SAMPLE" "8 12 16" \
   "DMA_BITS_PER_SAMPLE" "8 12 16" \
