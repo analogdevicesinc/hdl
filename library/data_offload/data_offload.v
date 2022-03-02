@@ -471,7 +471,7 @@ util_axis_fifo #(
   .s_axis_valid(wr_response_eot),
   .s_axis_ready(),
   .s_axis_full(),
-  .s_axis_data(wr_response_measured_length-1),
+  .s_axis_data(wr_response_measured_length),
   .s_axis_room(),
 
   .m_axis_aclk(m_axis_aclk),
