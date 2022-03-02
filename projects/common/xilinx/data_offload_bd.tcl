@@ -124,7 +124,7 @@ proc ad_data_offload_create {instance_name
       ###########################################################################
       source $ad_hdl_dir/library/util_hbm/scripts/adi_util_hbm.tcl
 
-      set segments_per_master [expr $mem_size / 256 / 1024 / 1024]
+      set segments_per_master [expr int(ceil($mem_size.0 / (256.0 * 1024 * 1024)))]
       ad_create_util_hbm i_util_hbm \
         $datapath_type \
         $source_dwidth \
