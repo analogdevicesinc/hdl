@@ -46,8 +46,10 @@ adi_project ad9081_fmca_ebz_vcu128 0 [list \
   TX_JESD_S    [get_env_param TX_JESD_S    1 ] \
   TX_JESD_NP   [get_env_param TX_JESD_NP   16 ] \
   TX_NUM_LINKS [get_env_param TX_NUM_LINKS 1 ] \
-  RX_KS_PER_CHANNEL [get_env_param RX_KS_PER_CHANNEL 64 ] \
-  TX_KS_PER_CHANNEL [get_env_param TX_KS_PER_CHANNEL 64 ] \
+  RX_KS_PER_CHANNEL [get_env_param RX_KS_PER_CHANNEL 16384 ] \
+  TX_KS_PER_CHANNEL [get_env_param TX_KS_PER_CHANNEL 16384 ] \
+  ADC_DO_MEM_TYPE [get_env_param ADC_DO_MEM_TYPE 2 ] \
+  DAC_DO_MEM_TYPE [get_env_param DAC_DO_MEM_TYPE 2 ] \
 ]
 
 adi_project_files ad9081_fmca_ebz_vcu128 [list \
