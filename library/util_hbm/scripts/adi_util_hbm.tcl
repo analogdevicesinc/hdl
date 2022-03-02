@@ -1,16 +1,30 @@
 # density 4GB,8GB
-proc ad_create_hbm {name {density "4GB"}} {
+proc ad_create_hbm {ip_name {density "4GB"}} {
   global hbm_sim;
+  if { [info exists hbm_sim] == 0} {
+    set hbm_sim 0
+  }
+
   if {$hbm_sim == 0} {
-    ad_ip_instance hbm $name
-    ad_ip_parameter $name CONFIG.USER_HBM_DENSITY $density
-    ad_ip_parameter $name CONFIG.USER_APB_EN {false}
+    ad_ip_instance hbm $ip_name
+    ad_ip_parameter $ip_name CONFIG.USER_HBM_DENSITY $density
+    ad_ip_parameter $ip_name CONFIG.USER_APB_EN {false}
+
+    set i_hbm_ip [get_bd_cells $ip_name]
+    set num_stacks [get_property CONFIG.USER_HBM_STACK $i_hbm_ip]
+    # 16 pseudo channels / sections / segments per stack
+    set num_segments [expr $num_stacks*16]
+    for {set i 1} {$i < $num_segments} {incr i} {
+      set i_formatted [format "%02d" $i]
+      ad_ip_parameter $ip_name CONFIG.USER_SAXI_${i_formatted} {false}
+    }
+
   } else {
     # Create data storage HMB controller model (AXI slave)
-    ad_ip_instance axi_vip $name [list \
+    ad_ip_instance axi_vip $ip_name [list \
       INTERFACE_MODE {SLAVE} \
     ]
-    adi_sim_add_define "HBM_AXI=$name"
+    adi_sim_add_define "HBM_AXI=$ip_name"
   }
 }
 
@@ -37,6 +51,9 @@ proc ad_create_util_hbm {name rx_tx_n src_width dst_width segments_per_master} {
 
 proc ad_connect_hbm {i_hbm i_util_hbm axi_clk axi_aresetn {first_master_index 0}} {
   global hbm_sim;
+  if { [info exists hbm_sim] == 0} {
+    set hbm_sim 0
+  }
 
   set i_util_hbm_ip [get_bd_cells $i_util_hbm]
   set segments_per_master [get_property CONFIG.HBM_SEGMENTS_PER_MASTER $i_util_hbm_ip]
@@ -61,8 +78,6 @@ proc ad_connect_hbm {i_hbm i_util_hbm axi_clk axi_aresetn {first_master_index 0}
         ad_connect $i_util_hbm/MAXI_[expr $i/$segments_per_master] $i_hbm/SAXI_${i_formatted}
         ad_connect $i_hbm/AXI_${i_formatted}_ACLK $axi_clk
         ad_connect $i_hbm/AXI_${i_formatted}_ARESET_N $axi_aresetn
-      } else {
-        ad_ip_parameter $i_hbm CONFIG.USER_SAXI_${i_formatted} {false}
       }
     }
   } else {
