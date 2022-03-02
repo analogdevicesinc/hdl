@@ -31,6 +31,14 @@ if {$TDD_SUPPORT && !$SHARED_DEVCLK} {
   error "ERROR: Cannot enable TDD support without shared deviceclocks!"
 }
 
+set adc_do_mem_type [ expr { [info exists ad_project_params(ADC_DO_MEM_TYPE)] \
+                          ? $ad_project_params(ADC_DO_MEM_TYPE) : 0 } ]
+set dac_do_mem_type [ expr { [info exists ad_project_params(DAC_DO_MEM_TYPE)] \
+                          ? $ad_project_params(DAC_DO_MEM_TYPE) : 0 } ]
+
+set do_axi_data_width [ expr { [info exists do_axi_data_width] \
+                          ? $do_axi_data_width : 256 } ]
+
 if {$JESD_MODE == "8B10B"} {
   set DATAPATH_WIDTH 4
   set NP12_DATAPATH_WIDTH 6
@@ -193,11 +201,11 @@ ad_ip_instance util_cpack2 util_mxfe_cpack [list \
 set adc_data_offload_size [expr $adc_data_width / 8 * 2**$adc_fifo_address_width]
 ad_data_offload_create $adc_data_offload_name \
                        0 \
-                       0 \
+                       $adc_do_mem_type \
                        $adc_data_offload_size \
                        $adc_data_width \
                        $adc_data_width \
-                       0 0 \
+                       $do_axi_data_width \
                        $SHARED_DEVCLK
 
 ad_ip_instance axi_dmac axi_mxfe_rx_dma
@@ -240,11 +248,11 @@ ad_ip_instance util_upack2 util_mxfe_upack [list \
 set dac_data_offload_size [expr $dac_data_width / 8 * 2**$dac_fifo_address_width]
 ad_data_offload_create $dac_data_offload_name \
                        1 \
-                       0 \
+                       $dac_do_mem_type \
                        $dac_data_offload_size \
                        $dac_data_width \
                        $dac_data_width \
-                       0 0 \
+                       $do_axi_data_width \
                        $SHARED_DEVCLK
 
 ad_ip_instance axi_dmac axi_mxfe_tx_dma
