@@ -67,7 +67,7 @@ module util_hbm #(
   input                                    wr_request_valid,
   output                                   wr_request_ready,
   input   [LENGTH_WIDTH-1:0]               wr_request_length,
-  output  reg [LENGTH_WIDTH-1:0]           wr_response_measured_length = 'h0,
+  output  [LENGTH_WIDTH-1:0]               wr_response_measured_length,
   output  reg                              wr_response_eot = 1'b0,
 
   input                                    rd_request_enable,
@@ -197,15 +197,17 @@ wire [NUM_M-1:0] rd_response_ready_loc;
 //  do the measurement only with the first master, all others should be
 //  similar.
 wire [NUM_M*BYTES_PER_BURST_WIDTH-1:0] wr_measured_burst_length;
+reg [LENGTH_WIDTH-1:0] wr_response_measured_length_per_m = 'h0;
 always @(posedge s_axis_aclk) begin
   if (wr_request_enable == 1'b0) begin
-    wr_response_measured_length <= 'h0;
+    wr_response_measured_length_per_m <= 'h0;
   end else if (wr_response_valid_loc[0] == 1'b1 && wr_response_ready_loc[0] == 1'b1) begin
-    wr_response_measured_length <= wr_response_measured_length + wr_measured_burst_length[BYTES_PER_BURST_WIDTH-1:0] + 1'b1;
+    wr_response_measured_length_per_m <= wr_response_measured_length_per_m + wr_measured_burst_length[BYTES_PER_BURST_WIDTH-1:0] + 1'b1;
   end else if (wr_response_eot == 1'b1) begin
-    wr_response_measured_length <= 'h0;
+    wr_response_measured_length_per_m <= 'h0;
   end
 end
+assign wr_response_measured_length = wr_response_measured_length_per_m << $clog2(NUM_M);
 
 always @(posedge s_axis_aclk) begin
   wr_response_eot <= wr_eot_pending_all;
@@ -269,7 +271,7 @@ for (i = 0; i < NUM_M; i=i+1) begin
     .req_ready(wr_request_ready_loc[i]),
     .req_dest_address(ADDR_OFFSET[AXI_ADDR_WIDTH-1:AXI_BYTES_PER_BEAT_WIDTH]),
     .req_src_address('h0),
-    .req_x_length(wr_request_length),
+    .req_x_length((wr_request_length >> $clog2(NUM_M))-1),
     .req_y_length(0),
     .req_dest_stride(0),
     .req_src_stride(0),
@@ -411,7 +413,7 @@ for (i = 0; i < NUM_M; i=i+1) begin
     .req_ready(rd_request_ready_loc[i]),
     .req_dest_address(0),
     .req_src_address(ADDR_OFFSET[AXI_ADDR_WIDTH-1:AXI_BYTES_PER_BEAT_WIDTH]),
-    .req_x_length(rd_request_length),
+    .req_x_length((rd_request_length >> $clog2(NUM_M))-1),
     .req_y_length(0),
     .req_dest_stride(0),
     .req_src_stride(0),
