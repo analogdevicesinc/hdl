@@ -43,6 +43,7 @@ module axi_ltc2387 #(
   parameter SPEED_GRADE = 1,
   parameter DEV_PACKAGE = 1,
   parameter IO_DELAY_GROUP = "adc_if_delay_group",
+  parameter IODELAY_CTRL = 1,
   parameter DELAY_REFCLK_FREQUENCY = 200,
   parameter USERPORTS_DISABLE = 0,
   parameter DATAFORMAT_DISABLE = 0,
@@ -159,6 +160,7 @@ module axi_ltc2387 #(
     .IO_DELAY_GROUP (IO_DELAY_GROUP),
     .DELAY_REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY),
     .RESOLUTION (ADC_RES),
+    .IODELAY_CTRL(IODELAY_CTRL),
     .TWOLANES (TWOLANES))
   i_if (
     .clk (ref_clk),

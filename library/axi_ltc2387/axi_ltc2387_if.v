@@ -43,6 +43,7 @@ module axi_ltc2387_if #(
   parameter   IO_DELAY_GROUP = "adc_if_delay_group",
   parameter   DELAY_REFCLK_FREQUENCY = 200,
   parameter   [0:0] TWOLANES = 1, // 0 for Single Lane, 1 for Two Lanes
+  parameter   IODELAY_CTRL = 1,
   parameter   RESOLUTION = 16)(    // 16 or 18 bits
 
   // delay interface
@@ -178,7 +179,7 @@ module axi_ltc2387_if #(
   ad_data_in #(
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .IDDR_CLK_EDGE("OPPOSITE_EDGE"),
-    .IODELAY_CTRL (1),
+    .IODELAY_CTRL (IODELAY_CTRL),
     .IODELAY_GROUP (IO_DELAY_GROUP),
     .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
   i_rx_da (
