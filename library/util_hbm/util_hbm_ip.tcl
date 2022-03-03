@@ -4,12 +4,18 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 adi_ip_create util_hbm
 adi_ip_files util_hbm [list \
   "util_hbm_constr.xdc" \
+  "util_hbm_ooc.ttcl" \
   "util_hbm.v" \
   "bd/bd.tcl" \
 ]
 
 adi_ip_properties_lite util_hbm
+adi_ip_ttcl util_dacfifo "util_hbm_ooc.ttcl"
 adi_ip_bd util_hbm "bd/bd.tcl"
+
+set_property PROCESSING_ORDER LATE [ipx::get_files util_hbm_constr.xdc \
+  -of_objects [ipx::get_file_groups -of_objects [ipx::current_core] \
+  -filter {NAME =~ *synthesis*}]]
 
 adi_ip_add_core_dependencies { \
   analog.com:user:util_cdc:1.0 \
