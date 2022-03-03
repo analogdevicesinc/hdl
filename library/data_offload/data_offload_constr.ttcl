@@ -177,6 +177,29 @@ set_false_path \
 set_false_path \
   -to [get_pins -hierarchical * -filter {NAME=~*i_dst_oneshot_sync/cdc_sync_stage1_reg[0]/D}]
 
+
+# measured transfer length util_axis_fifo 
+set src_clk [get_clocks -of_objects [get_ports s_axis_aclk]]
+set dest_clk [get_clocks -of_objects [get_ports m_axis_aclk]]
+
+set_max_delay -quiet -datapath_only \
+	-from $src_clk \
+	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+		-filter {NAME =~ *i_measured_length_cdc/zerodeep.i_waddr_sync* && IS_SEQUENTIAL}] \
+	[get_property -min PERIOD $src_clk]
+
+set_max_delay -quiet -datapath_only \
+	-from $dest_clk \
+	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+		-filter {NAME =~ *i_measured_length_cdc/zerodeep.i_raddr_sync* && IS_SEQUENTIAL}] \
+	[get_property -min PERIOD $dest_clk]
+
+set_max_delay -quiet -datapath_only \
+	-from [get_cells -quiet -hier *cdc_sync_fifo_ram_reg* \
+		-filter {NAME =~ *i_measured_length_cdc* && IS_SEQUENTIAL}] \
+	-to $dest_clk \
+	[get_property -min PERIOD $dest_clk]
+
 ## Constraints for the bypass module
 
 set_false_path \

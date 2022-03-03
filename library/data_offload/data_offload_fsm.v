@@ -252,9 +252,9 @@ module data_offload_fsm #(
         endcase
       RD_STATE_RD:
         if (rd_last_eot) begin
-          rd_fsm_next_state = (rd_cyclic_en == 1'b0)     ? RD_STATE_IDLE :
-                              (sync_config != AUTOMATIC) ? RD_STATE_SYNC :
-                                                           RD_STATE_RD;
+          rd_fsm_next_state = (rd_cyclic_en == 1'b0)      ? RD_STATE_IDLE :
+            (TX_OR_RXN_PATH & (sync_config != AUTOMATIC)) ? RD_STATE_SYNC :
+                                                            RD_STATE_RD;
         end
       default:
         rd_fsm_next_state = RD_STATE_IDLE;
