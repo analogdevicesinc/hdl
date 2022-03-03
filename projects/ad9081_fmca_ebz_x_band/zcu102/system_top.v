@@ -161,6 +161,9 @@ module system_top  #(
   wire [7:0] spi_pmod_csn;
   wire       spi_pmod_clk;
   wire       spi_pmod_mosi;
+  wire [7:0] spi_fmc_csn;
+  wire       spi_fmc_clk;
+  wire       spi_fmc_mosi;
   wire       pwr_up_mask;
   wire       sys_clk;
 
@@ -176,17 +179,19 @@ module system_top  #(
   assign pmod1_2_5_CSB5 = spi_pmod_csn[5];
   assign pmod0_3_7_SCLK = spi_pmod_clk;
 
-  assign fmc_bob_xud1_mosi = spi_pmod_mosi;
-  assign fmc_bob_xud1_csb = spi_pmod_csn[6];
-  assign fmc_bob_xud1_sclk = spi_pmod_clk;
+  assign fmc_bob_xud1_mosi = spi_fmc_mosi;
+  assign fmc_bob_xud1_csb = spi_fmc_csn[6];
+  assign fmc_bob_xud1_sclk = spi_fmc_clk;
 
-  assign fmc_bob_xud1_imu_mosi = spi_pmod_mosi;
-  assign fmc_bob_xud1_imu_csb = spi_pmod_csn[7];
-  assign fmc_bob_xud1_imu_sclk = spi_pmod_clk;
+  assign fmc_bob_xud1_imu_mosi = spi_fmc_mosi;
+  assign fmc_bob_xud1_imu_csb = spi_fmc_csn[7];
+  assign fmc_bob_xud1_imu_sclk = spi_fmc_clk;
 
   assign spi_pmod_miso = ~&spi_pmod_csn[5:1] ? pmod0_2_5_MISO :
-                         ~spi_pmod_csn[6] ? fmc_bob_xud1_miso :
-                         ~spi_pmod_csn[7] ? fmc_bob_xud1_imu_miso :
+                         1'b0;
+
+  assign spi_fmc_miso =  ~spi_fmc_csn[6] ? fmc_bob_xud1_miso :
+                         ~spi_fmc_csn[7] ? fmc_bob_xud1_imu_miso :
                          1'b0;
 
   assign iic_rstn = 1'b1;
@@ -424,6 +429,13 @@ module system_top  #(
     .spi_pmod_sdi_i (spi_pmod_miso),
     .spi_pmod_sdo_i (spi_pmod_mosi),
     .spi_pmod_sdo_o (spi_pmod_mosi),
+    .spi_fmc_clk_i (spi_fmc_clk),
+    .spi_fmc_clk_o (spi_fmc_clk),
+    .spi_fmc_csn_i (spi_fmc_csn),
+    .spi_fmc_csn_o (spi_fmc_csn),
+    .spi_fmc_sdi_i (spi_fmc_miso),
+    .spi_fmc_sdo_i (spi_fmc_mosi),
+    .spi_fmc_sdo_o (spi_fmc_mosi),
     .tdd_sync (tdd_sync),
     .tdd_enabled (tdd_enabled),
     .tdd_rx_mxfe_en (tdd_rx_mxfe_en),

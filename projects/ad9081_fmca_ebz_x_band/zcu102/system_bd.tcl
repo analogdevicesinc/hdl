@@ -87,12 +87,12 @@ create_bd_port -dir I spi_pmod_sdo_i
 create_bd_port -dir O spi_pmod_sdo_o
 create_bd_port -dir I spi_pmod_sdi_i
 
-# SPI at 100/16 = 6.25 MHz
+# SPI at 100/4 = 25 MHz
 ad_ip_instance axi_quad_spi axi_spi_pmod
 ad_ip_parameter axi_spi_pmod CONFIG.C_USE_STARTUP 0
 ad_ip_parameter axi_spi_pmod CONFIG.C_NUM_SS_BITS 8
-ad_ip_parameter axi_spi_pmod CONFIG.C_SCK_RATIO 16
-ad_ip_parameter axi_spi_pmod CONFIG.Multiples16 1
+ad_ip_parameter axi_spi_pmod CONFIG.C_SCK_RATIO 4
+#ad_ip_parameter axi_spi_pmod CONFIG.Multiples16 1
 
 ad_connect spi_pmod_csn_i axi_spi_pmod/ss_i
 ad_connect spi_pmod_csn_o axi_spi_pmod/ss_o
@@ -107,6 +107,37 @@ ad_connect $sys_cpu_clk axi_spi_pmod/ext_spi_clk
 ad_cpu_interrupt ps-15 mb-7 axi_spi_pmod/ip2intc_irpt
 
 ad_cpu_interconnect 0x45200000 axi_spi_pmod
+
+# SPI for FMC interposer
+#
+create_bd_port -dir O -from 7 -to 0 spi_fmc_csn_o
+create_bd_port -dir I -from 7 -to 0 spi_fmc_csn_i
+create_bd_port -dir I spi_fmc_clk_i
+create_bd_port -dir O spi_fmc_clk_o
+create_bd_port -dir I spi_fmc_sdo_i
+create_bd_port -dir O spi_fmc_sdo_o
+create_bd_port -dir I spi_fmc_sdi_i
+
+# SPI at 100/16 = 6.25 MHz
+ad_ip_instance axi_quad_spi axi_spi_fmc
+ad_ip_parameter axi_spi_fmc CONFIG.C_USE_STARTUP 0
+ad_ip_parameter axi_spi_fmc CONFIG.C_NUM_SS_BITS 8
+ad_ip_parameter axi_spi_fmc CONFIG.C_SCK_RATIO 16
+ad_ip_parameter axi_spi_fmc CONFIG.Multiples16 1
+
+ad_connect spi_fmc_csn_i axi_spi_fmc/ss_i
+ad_connect spi_fmc_csn_o axi_spi_fmc/ss_o
+ad_connect spi_fmc_clk_i axi_spi_fmc/sck_i
+ad_connect spi_fmc_clk_o axi_spi_fmc/sck_o
+ad_connect spi_fmc_sdo_i axi_spi_fmc/io0_i
+ad_connect spi_fmc_sdo_o axi_spi_fmc/io0_o
+ad_connect spi_fmc_sdi_i axi_spi_fmc/io1_i
+
+ad_connect $sys_cpu_clk axi_spi_fmc/ext_spi_clk
+
+ad_cpu_interrupt ps-9 mb-7 axi_spi_fmc/ip2intc_irpt
+
+ad_cpu_interconnect 0x45300000 axi_spi_fmc
 
 
 # Connect TDD
