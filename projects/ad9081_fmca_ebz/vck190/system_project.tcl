@@ -22,9 +22,10 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   TX_RATE :  Line rate of the Tx link ( FPGA to MxFE )
 #   [RX/TX]_JESD_M : Number of converters per link
 #   [RX/TX]_JESD_L : Number of lanes per link
+#   [RX/TX]_JESD_S : Number of samples per frame
 #   [RX/TX]_JESD_NP : Number of bits per sample, only 16 is supported
 #   [RX/TX]_NUM_LINKS : Number of links, matches numer of MxFE devices
-#
+#   [RX/TX]_KS_PER_CHANNEL : Number of samples stored in internal buffers in kilosamples per converter (M)
 #
 
 #      make JESD_MODE=64B66B RX_RATE=24.75 TX_RATE=24.75 RX_JESD_M=4 RX_JESD_L=4 RX_JESD_S=2 RX_JESD_NP=12 TX_JESD_M=4 TX_JESD_L=4 TX_JESD_S=2 TX_JESD_NP=12

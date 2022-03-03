@@ -14,6 +14,18 @@ source ../../scripts/adi_project_intel.tcl
 #
 # Lane Rate = I/Q Sample Rate x M x N' x (10 \ 8) \ L
 
+# Parameter description:
+#
+#   RX_RATE :  Lane rate of the Rx link ( MxFE to FPGA )
+#   TX_RATE :  Lane rate of the Tx link ( FPGA to MxFE )
+#   [RX/TX]_JESD_M : Number of converters per link
+#   [RX/TX]_JESD_L : Number of lanes per link
+#   [RX/TX]_JESD_S : Number of samples per frame
+#   [RX/TX]_JESD_NP : Number of bits per sample
+#   [RX/TX]_NUM_LINKS : Number of links
+#   [RX/TX]_KS_PER_CHANNEL : Number of samples stored in internal buffers in kilosamples per converter (M)
+#
+
 adi_project ad9081_fmca_ebz_a10soc [list \
   RX_LANE_RATE       [get_env_param RX_RATE      10 ] \
   TX_LANE_RATE       [get_env_param TX_RATE      10 ] \
