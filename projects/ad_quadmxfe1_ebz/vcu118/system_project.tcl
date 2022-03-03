@@ -20,13 +20,16 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #      64B66B - 64b66b link layer defined in JESD 204C, uses Xilinx IP as Physical layer
 #      8B10B  - 8b10b link layer defined in JESD 204B, uses ADI IP as Physical layer
 #    
-#    RX_RATE :  line rate of the Rx link ( MxFE to FPGA ) used in 64B66B mode 
-#    TX_RATE :  line rate of the Tx link ( FPGA to MxFE ) used in 64B66B mode 
-#    REF_CLK_RATE : frequency of reference clock in MHz used in 64B66B mode
-#    [RX/TX]_JESD_M : number of converters per link
-#    [RX/TX]_JESD_L : number of lanes per link
-#    [RX/TX]_JESD_NP : number of bits per sample, only 16 is supported
-#    [RX/TX]_NUM_LINKS : number of links, matches numer of MxFE devices
+#    RX_RATE :  Line rate of the Rx link ( MxFE to FPGA ) used in 64B66B mode 
+#    TX_RATE :  Line rate of the Tx link ( FPGA to MxFE ) used in 64B66B mode 
+#    REF_CLK_RATE : Frequency of reference clock in MHz used in 64B66B mode
+#    [RX/TX]_JESD_M : Number of converters per link
+#    [RX/TX]_JESD_L : Number of lanes per link
+#    [RX/TX]_JESD_S : Number of samples per frame
+#    [RX/TX]_JESD_NP : Number of bits per sample, only 16 is supported
+#    [RX/TX]_NUM_LINKS : Number of links, matches number of MxFE devices
+#    [RX/TX]_KS_PER_CHANNEL : Number of samples stored in internal buffers in kilosamples per converter (M)
+#
 
 adi_project ad_quadmxfe1_ebz_vcu118 0 [list \
   JESD_MODE    [get_env_param JESD_MODE    64B66B ] \
