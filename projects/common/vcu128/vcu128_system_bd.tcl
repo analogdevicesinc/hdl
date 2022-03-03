@@ -170,7 +170,8 @@ ad_connect sys_250m_clk axi_ddr_cntrl/addn_ui_clkout2
 ad_connect sys_250m_clk sys_250m_rstgen/slowest_sync_clk
 ad_connect sys_500m_clk axi_ddr_cntrl/addn_ui_clkout3
 ad_connect sys_500m_clk sys_500m_rstgen/slowest_sync_clk
-ad_connect sys_500m_clk sys_hbm_rstgen/slowest_sync_clk
+ad_connect sys_hbm_clk hbm_clk_wiz/clk_out1
+ad_connect sys_hbm_clk sys_hbm_rstgen/slowest_sync_clk
 ad_connect sys_cpu_reset sys_rstgen/peripheral_reset
 ad_connect sys_cpu_resetn sys_rstgen/peripheral_aresetn
 ad_connect sys_250m_reset sys_250m_rstgen/peripheral_reset
