@@ -175,6 +175,7 @@ module data_offload_fsm #(
   reg [4:0] wr_fsm_next_state;
   reg [3:0] rd_fsm_state = RD_STATE_IDLE;
   reg [3:0] rd_fsm_next_state;
+  reg [1:0] rd_outstanding = 2'd0;
 
   always @(*) begin
     wr_fsm_next_state = wr_fsm_state;
@@ -250,7 +251,7 @@ module data_offload_fsm #(
             rd_fsm_next_state = RD_STATE_RD;
         endcase
       RD_STATE_RD:
-        if (rd_response_eot) begin
+        if (rd_last_eot) begin
           rd_fsm_next_state = (rd_cyclic_en == 1'b0)     ? RD_STATE_IDLE :
                               (sync_config != AUTOMATIC) ? RD_STATE_SYNC :
                                                            RD_STATE_RD;
@@ -267,6 +268,15 @@ module data_offload_fsm #(
       rd_fsm_state <= rd_fsm_next_state;
     end
   end
+
+  always @(posedge rd_clk) begin
+    if (rd_request_ready & rd_request_valid & ~rd_response_eot) 
+      rd_outstanding <= rd_outstanding + 2'd1;
+    else if (~(rd_request_ready & rd_request_valid) & rd_response_eot) 
+      rd_outstanding <= rd_outstanding - 2'd1;
+  end
+  wire rd_last_eot;
+  assign rd_last_eot = (rd_outstanding == 1) & rd_response_eot & !(rd_request_ready & rd_request_valid); 
 
   always @(posedge rd_clk) begin
     if (rd_init_req_s) begin
@@ -565,7 +575,7 @@ module data_offload_fsm #(
     .ASYNC_CLK (1))
   i_wr_empty_sync (
     .in_clk (rd_clk),
-    .in_event (rd_response_eot && rd_fsm_state[RD_BIT_RD]),
+    .in_event (rd_last_eot && rd_fsm_state[RD_BIT_RD]),
     .out_clk (wr_clk),
     .out_event (wr_rd_response_eot)
   );
