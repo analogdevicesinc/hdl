@@ -101,6 +101,10 @@ proc ad_connect_hbm {i_hbm i_util_hbm axi_clk axi_aresetn {first_master_index 0}
   }
   ad_connect $axi_clk $i_util_hbm/m_axi_aclk
   ad_connect $axi_aresetn $i_util_hbm/m_axi_aresetn
+
+  for {set i 0} {$i < $num_m} {incr i} {
+    assign_bd_address -target_address_space $i_util_hbm/MAXI_${i}
+  }
 }
 
 
