@@ -19,5 +19,6 @@ XILINX_DEPS += data_offload_sv.ttcl
 XILINX_LIB_DEPS += util_axis_fifo_asym
 XILINX_LIB_DEPS += util_cdc
 XILINX_LIB_DEPS += util_hbm
+XILINX_LIB_DEPS += util_do_ram
 
 include ../scripts/library.mk

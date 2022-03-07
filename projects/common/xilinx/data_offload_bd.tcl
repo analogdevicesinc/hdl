@@ -60,30 +60,22 @@ proc ad_data_offload_create {instance_name
       # Internal storage instance (BRAMs)
       ###########################################################################
 
-      ## Add the memory module source into the project file set
-      if {[get_files -quiet "ad_mem_asym.v"] == ""} {
-        add_files -norecurse -fileset sources_1 "$ad_hdl_dir/library/common/ad_mem_asym.v"
-      }
+      ad_ip_instance util_do_ram storage_unit [list \
+        SRC_DATA_WIDTH $source_dwidth \
+        DST_DATA_WIDTH $destination_dwidth \
+        LENGTH_WIDTH [log2 $mem_size] \
+      ]
 
-      create_bd_cell -type module -reference ad_mem_asym storage_unit
-      set_property -dict [list \
-        CONFIG.A_DATA_WIDTH $source_dwidth \
-        CONFIG.A_ADDRESS_WIDTH $source_awidth \
-        CONFIG.B_DATA_WIDTH $destination_dwidth \
-        CONFIG.B_ADDRESS_WIDTH $destination_awidth \
-        CONFIG.CASCADE_HEIGHT 1 \
-      ] [get_bd_cells storage_unit]
+      ad_connect storage_unit/wr_ctrl i_data_offload/wr_ctrl
+      ad_connect storage_unit/rd_ctrl i_data_offload/rd_ctrl
 
-      ad_connect storage_unit/clka i_data_offload/s_axis_aclk
-      ad_connect storage_unit/wea i_data_offload/fifo_src_wen
-      ad_connect storage_unit/addra i_data_offload/fifo_src_waddr
-      ad_connect storage_unit/dina i_data_offload/fifo_src_wdata
-      ad_connect storage_unit/clkb i_data_offload/m_axis_aclk
-      ad_connect storage_unit/reb i_data_offload/fifo_dst_ren
-      ad_connect storage_unit/addrb i_data_offload/fifo_dst_raddr
-      ad_connect storage_unit/doutb i_data_offload/fifo_dst_rdata
-      ad_connect i_data_offload/fifo_dst_ready VCC     ; ## BRAM is always ready
-      ad_connect i_data_offload/ddr_calib_done VCC
+      ad_connect storage_unit/s_axis i_data_offload/m_storage_axis
+      ad_connect storage_unit/m_axis i_data_offload/s_storage_axis
+
+      ad_connect storage_unit/s_axis_aclk s_axis_aclk
+      ad_connect storage_unit/s_axis_aresetn s_axis_aresetn
+      ad_connect storage_unit/m_axis_aclk m_axis_aclk
+      ad_connect storage_unit/m_axis_aresetn m_axis_aresetn
 
     } elseif {$mem_type == 1} {
       ###########################################################################
