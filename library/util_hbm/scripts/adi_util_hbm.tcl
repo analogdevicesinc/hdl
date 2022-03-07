@@ -49,7 +49,7 @@ proc ad_create_util_hbm {name rx_tx_n src_width dst_width segments_per_master} {
 
 }
 
-proc ad_connect_hbm {i_hbm i_util_hbm axi_clk axi_aresetn {first_master_index 0}} {
+proc ad_connect_hbm {i_hbm i_util_hbm axi_clk axi_aresetn {first_slave_index 0}} {
   global hbm_sim;
   if { [info exists hbm_sim] == 0} {
     set hbm_sim 0
@@ -69,15 +69,15 @@ proc ad_connect_hbm {i_hbm i_util_hbm axi_clk axi_aresetn {first_master_index 0}
 
     set totat_used_segments [expr $num_m * $segments_per_master]
 
-    for {set i 0} {$i < $num_segments} {incr i} {
+    for {set i 0} {$i < $totat_used_segments} {incr i} {
 
-      set i_formatted [format "%02d" [expr $i+$first_master_index]]
+      set idx_hbm_slv [format "%02d" [expr $i+$first_slave_index]]
 
-      if {$i % $segments_per_master == 0 && $i < $totat_used_segments} {
-        ad_ip_parameter $i_hbm CONFIG.USER_SAXI_${i_formatted} {true}
-        ad_connect $i_util_hbm/MAXI_[expr $i/$segments_per_master] $i_hbm/SAXI_${i_formatted}
-        ad_connect $i_hbm/AXI_${i_formatted}_ACLK $axi_clk
-        ad_connect $i_hbm/AXI_${i_formatted}_ARESET_N $axi_aresetn
+      if {$i % $segments_per_master == 0} {
+        ad_ip_parameter $i_hbm CONFIG.USER_SAXI_${idx_hbm_slv} {true}
+        ad_connect $i_util_hbm/MAXI_[expr $i/$segments_per_master] $i_hbm/SAXI_${idx_hbm_slv}
+        ad_connect $i_hbm/AXI_${idx_hbm_slv}_ACLK $axi_clk
+        ad_connect $i_hbm/AXI_${idx_hbm_slv}_ARESET_N $axi_aresetn
       }
     }
   } else {
