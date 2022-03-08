@@ -81,8 +81,8 @@ module data_offload_regmap #(
   output      [33:0]      dst_transfer_length,
 
   // FSM control and status
-  input       [ 1:0]      src_fsm_status,
-  input       [ 1:0]      dst_fsm_status,
+  input       [ 4:0]      src_fsm_status,
+  input       [ 3:0]      dst_fsm_status,
 
   input       [31:0]      sample_count_msb,
   input       [31:0]      sample_count_lsb
@@ -107,8 +107,8 @@ module data_offload_regmap #(
   //internal signals
 
   wire          up_ddr_calib_done_s;
-  wire  [ 1:0]  up_wr_fsm_status_s;
-  wire  [ 1:0]  up_rd_fsm_status_s;
+  wire  [ 4:0]  up_wr_fsm_status_s;
+  wire  [ 3:0]  up_rd_fsm_status_s;
   wire  [31:0]  up_sample_count_msb_s;
   wire  [31:0]  up_sample_count_lsb_s;
   wire          src_sw_resetn_s;
@@ -234,11 +234,10 @@ module data_offload_regmap #(
 
         /* FMS Debug Register */
         14'h080:  up_rdata <= {
-                          24'b0,
-           /* 07-06 */    2'b0,
-           /* 05-04 */    up_rd_fsm_status_s,
-           /* 03-02 */    2'b0,
-           /* 01-00 */    up_wr_fsm_status_s
+                          20'b0,
+           /* 11-08 */    up_rd_fsm_status_s,
+                          3'b0,
+           /* 04-00 */    up_wr_fsm_status_s
         };
         /* Sample Count LSB Register */
         14'h081:  up_rdata <= up_sample_count_lsb_s;
@@ -254,7 +253,7 @@ module data_offload_regmap #(
   // Clock Domain Crossing Logic for reset, control and status signals
 
   sync_data #(
-    .NUM_OF_BITS (2),
+    .NUM_OF_BITS (5),
     .ASYNC_CLK (1))
   i_dst_fsm_status (
     .in_clk (dst_clk),
@@ -264,7 +263,7 @@ module data_offload_regmap #(
   );
 
   sync_data #(
-    .NUM_OF_BITS (2),
+    .NUM_OF_BITS (4),
     .ASYNC_CLK (1))
   i_src_fsm_status (
     .in_clk (src_clk),

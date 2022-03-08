@@ -99,7 +99,7 @@ module data_offload_fsm #(
   input                               sync_internal,
 //
 //  // FSM debug
-  output      [ 3:0]                  wr_fsm_state_out,
+  output      [ 4:0]                  wr_fsm_state_out,
   output      [ 3:0]                  rd_fsm_state_out
 //  output  reg [63:0]                  sample_count
 
@@ -176,6 +176,9 @@ module data_offload_fsm #(
   reg [3:0] rd_fsm_state = RD_STATE_IDLE;
   reg [3:0] rd_fsm_next_state;
   reg [1:0] rd_outstanding = 2'd0;
+
+  assign wr_fsm_state_out = wr_fsm_state;
+  assign rd_fsm_state_out = rd_fsm_state;
 
   always @(*) begin
     wr_fsm_next_state = wr_fsm_state;

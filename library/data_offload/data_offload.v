@@ -195,8 +195,8 @@ module data_offload #(
   wire                                        valid_bypass_s;
   wire  [DST_DATA_WIDTH-1:0]                  data_bypass_s;
   wire                                        ready_bypass_s;
-//  wire  [ 1:0]                                src_fsm_status_s;
-//  wire  [ 1:0]                                dst_fsm_status_s;
+  wire  [ 4:0]                                src_fsm_status_s;
+  wire  [ 3:0]                                dst_fsm_status_s;
 //  wire                                        m_axis_valid_s;
 //  wire                                        m_axis_last_s;
 //  wire  [DST_DATA_WIDTH-1:0]                  m_axis_data_s;
@@ -278,9 +278,9 @@ module data_offload #(
 //    .init_ack (init_ack),
     .sync_config (sync_config_s),
     .sync_external (sync_ext),
-    .sync_internal (sync_int_s)
-//    .wr_fsm_state (src_fsm_status_s),
-//    .rd_fsm_state (dst_fsm_status_s),
+    .sync_internal (sync_int_s),
+    .wr_fsm_state_out (src_fsm_status_s),
+    .rd_fsm_state_out (dst_fsm_status_s)
 //    .sample_count (sample_count_s)
   );
 
@@ -319,7 +319,7 @@ module data_offload #(
 //    .int_not_full(int_not_full));
 
   // <TODO> add here sync logic
-  assign m_axis_valid = (dst_bypass_s) ? valid_bypass_s : s_storage_axis_valid;
+  assign m_axis_valid = rd_ready & ((dst_bypass_s) ? valid_bypass_s : s_storage_axis_valid);
   assign m_axis_data  = (dst_bypass_s) ? data_bypass_s  : s_storage_axis_data;
   assign m_axis_last  = (dst_bypass_s) ? 1'b0           : s_storage_axis_last;
   assign m_axis_tkeep = (dst_bypass_s) ? {DST_DATA_WIDTH/8{1'b1}} : s_storage_axis_tkeep;
@@ -334,7 +334,7 @@ module data_offload #(
 
   assign s_storage_axis_ready = rd_ready & m_axis_ready;
 
-/*
+
   // Bypass module instance -- the same FIFO, just a smaller depth
   // NOTE: Generating an overflow is making sense just in BYPASS mode, and
   // it's supported just with the FIFO interface
@@ -361,7 +361,7 @@ module data_offload #(
     .s_axis_full  (),
     .s_axis_almost_full ()
   );
-*/
+
   // register map
 
   data_offload_regmap #(
