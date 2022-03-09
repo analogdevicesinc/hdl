@@ -502,7 +502,7 @@ if {$TDD_SUPPORT} {
   ad_connect tdd_sync_0/sync_mode GND
   ad_ip_parameter tdd_sync_0 CONFIG.TDD_SYNC_PERIOD 250000000; # More or less 1 PPS ;)
 
-  ad_ip_instance axi_tdd axi_tdd_0
+  ad_ip_instance axi_tdd axi_tdd_0 [list ASYNC_TDD_SYNC 0]
   ad_connect tx_device_clk axi_tdd_0/clk
   ad_connect tx_device_clk_rstgen/peripheral_reset axi_tdd_0/rst
   ad_connect $sys_cpu_clk axi_tdd_0/s_axi_aclk
