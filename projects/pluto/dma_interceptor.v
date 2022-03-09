@@ -51,18 +51,19 @@ module dma_interceptor (
     end
   end
   
-  reg tdd_active_d;
+  reg [3:0] tdd_active_d;
   
   always @(posedge axis_aclk)
   begin
     if (reset) begin
       tdd_active_d <= 'b0;
     end else begin
-      tdd_active_d <= tdd_active;
+      tdd_active_d[0] <= tdd_active;
+      tdd_active_d[3:1] <= tdd_active_d[2:0];
     end
   end
   
-  assign adc_dma_sync = (!enable_d_2) | (tdd_active & !tdd_active_d);
+  assign adc_dma_sync = (!enable_d_2) | (tdd_active & !tdd_active_d[3]);
   
   always @(posedge axis_aclk)
   begin
