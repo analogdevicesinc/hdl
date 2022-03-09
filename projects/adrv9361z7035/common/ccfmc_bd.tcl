@@ -91,7 +91,7 @@ ad_connect  sys_rgmii_rstgen/peripheral_reset sys_rgmii/rx_reset
 # hdmi
 
 ad_connect  sys_cpu_clk axi_hdmi_core/vdma_clk
-ad_connect  axi_hdmi_core/hdmi_clk axi_hdmi_clkgen/clk_0
+ad_connect  axi_hdmi_core/reference_clk axi_hdmi_clkgen/clk_0
 ad_connect  axi_hdmi_core/hdmi_out_clk hdmi_out_clk
 ad_connect  axi_hdmi_core/hdmi_16_hsync hdmi_hsync
 ad_connect  axi_hdmi_core/hdmi_16_vsync hdmi_vsync
