@@ -16,7 +16,7 @@ GENERIC_DEPS += axi_tdd.v
 
 XILINX_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
 XILINX_DEPS += ../xilinx/common/up_xfer_status_constr.xdc
-XILINX_DEPS += axi_tdd_constr.xdc
+XILINX_DEPS += axi_tdd_constr.ttcl
 XILINX_DEPS += axi_tdd_ip.tcl
 
 include ../scripts/library.mk
