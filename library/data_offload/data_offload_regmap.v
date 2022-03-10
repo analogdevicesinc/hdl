@@ -39,6 +39,7 @@ module data_offload_regmap #(
   parameter ID = 0,
   parameter [ 0:0] MEM_TYPE = 1'b0,
   parameter [33:0] MEM_SIZE = 1024,
+  parameter LENGTH_WIDTH = 10,
   parameter TX_OR_RXN_PATH = 0,
   parameter AUTO_BRINGUP = 0) (
 
@@ -77,8 +78,8 @@ module data_offload_regmap #(
   output                  sync,
   output      [ 1:0]      sync_config,
 
-  output      [33:0]      src_transfer_length,
-  output      [33:0]      dst_transfer_length,
+  output      [LENGTH_WIDTH-1:0] src_transfer_length,
+  output      [LENGTH_WIDTH-1:0] dst_transfer_length,
 
   // FSM control and status
   input       [ 4:0]      src_fsm_status,
@@ -102,7 +103,7 @@ module data_offload_regmap #(
   reg           up_sync = 'd0;
   reg   [ 1:0]  up_sync_config = 'd0;
   reg           up_oneshot = 1'b0;
-  reg   [33:0]  up_transfer_length = 'd0;
+  reg   [LENGTH_WIDTH-1:0]  up_transfer_length = 'd0;
 
   //internal signals
 
@@ -125,7 +126,7 @@ module data_offload_regmap #(
       up_bypass <= 'd0;
       up_sync <= 'd0;
       up_sync_config <= 'd0;
-      up_transfer_length <= 34'h0;
+      up_transfer_length <= {LENGTH_WIDTH{1'b1}};
     end else begin
       up_wack <= up_wreq;
       /* Scratch Register */
@@ -134,7 +135,7 @@ module data_offload_regmap #(
       end
       /* Transfer Length Register */
       if ((up_wreq == 1'b1) && (up_waddr[11:0] == 14'h07)) begin
-        up_transfer_length <= {up_wdata[27:0], 6'b0};
+        up_transfer_length <= {up_wdata[LENGTH_WIDTH-7:0], {6{1'b1}}};
       end
       /* Reset Offload Register */
       if ((up_wreq == 1'b1) && (up_waddr[11:0] == 14'h21)) begin
@@ -198,7 +199,7 @@ module data_offload_regmap #(
         };
 
         /* Configuration data transfer length */
-        14'h007:  up_rdata <= {4'b0, up_transfer_length[33:6]};
+        14'h007:  up_rdata <= {{32-6-LENGTH_WIDTH{1'b0}}, up_transfer_length[LENGTH_WIDTH-1:6]};
 
         /* 0x08-0x1f reserved for future use */
 
@@ -357,7 +358,7 @@ module data_offload_regmap #(
   );
 
   sync_data #(
-    .NUM_OF_BITS (34),
+    .NUM_OF_BITS (LENGTH_WIDTH),
     .ASYNC_CLK (1))
   i_sync_src_transfer_length (
     .in_clk (up_clk),
@@ -366,7 +367,7 @@ module data_offload_regmap #(
     .out_data (src_transfer_length)
   );
   sync_data #(
-    .NUM_OF_BITS (34),
+    .NUM_OF_BITS (LENGTH_WIDTH),
     .ASYNC_CLK (1))
   i_sync_dst_transfer_length (
     .in_clk (up_clk),
@@ -377,7 +378,6 @@ module data_offload_regmap #(
 
   always @(posedge src_clk) begin
     src_sw_resetn <= src_sw_resetn_s;
-    //src_transfer_length <= src_transfer_length_s;
   end
 
   always @(posedge dst_clk) begin

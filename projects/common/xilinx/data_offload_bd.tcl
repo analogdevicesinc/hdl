@@ -122,6 +122,7 @@ proc ad_data_offload_create {instance_name
         $source_dwidth \
         $destination_dwidth \
         $segments_per_master
+      ad_ip_parameter i_util_hbm CONFIG.LENGTH_WIDTH [log2 $mem_size]
 
       ad_connect i_util_hbm/wr_ctrl i_data_offload/wr_ctrl
       ad_connect i_util_hbm/rd_ctrl i_data_offload/rd_ctrl

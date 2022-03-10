@@ -39,6 +39,7 @@ module data_offload #(
   parameter          ID = 0,
   parameter   [ 0:0] MEM_TYPE = 1'b0,               // 1'b0 -FPGA RAM; 1'b1 - external memory
   parameter   [33:0] MEM_SIZE = 1024,               // memory size in bytes -1 - max 16 GB
+  parameter          LENGTH_WIDTH = 10,
   parameter          MEMC_UIF_DATA_WIDTH = 512,
   parameter          MEMC_UIF_ADDRESS_WIDTH = 31,
   parameter   [31:0] MEMC_BADDRESS = 32'h00000000,
@@ -134,15 +135,15 @@ module data_offload #(
   output                                      wr_request_enable,
   output                                      wr_request_valid,
   input                                       wr_request_ready,
-  output   [34-1:0]                           wr_request_length,
-  input    [34-1:0]                           wr_response_measured_length,
+  output   [LENGTH_WIDTH-1:0]                 wr_request_length,
+  input    [LENGTH_WIDTH-1:0]                 wr_response_measured_length,
   input                                       wr_response_eot,
 
   // Control interface for storage for s_storage_axis interface
   output                                      rd_request_enable,
   output                                      rd_request_valid,
   input                                       rd_request_ready,
-  output  reg  [34-1:0]                       rd_request_length,
+  output  reg  [LENGTH_WIDTH-1:0]             rd_request_length,
   input                                       rd_response_eot,
 
   // Status and monitor
@@ -204,8 +205,8 @@ module data_offload #(
 //  wire                                        dst_mem_valid_int_s;
 //  wire                                        m_axis_reset_int_s;
 //
-  wire  [33:0]                                src_transfer_length_s;
-  wire  [33:0]                                rd_wr_response_measured_length;
+  wire  [LENGTH_WIDTH-1:0]                    src_transfer_length_s;
+  wire  [LENGTH_WIDTH-1:0]                    rd_wr_response_measured_length;
   wire                                        rd_ml_valid;
 //  wire                                        src_wr_last_int_s;
 //  wire  [33:0]                                src_wr_last_beat_s;
@@ -327,7 +328,7 @@ module data_offload #(
   assign s_axis_ready = wr_ready & ((src_bypass_s) ? ready_bypass_s : m_storage_axis_ready);
 
   // <TODO> add here sync logic
-  assign m_storage_axis_valid = s_axis_valid;
+  assign m_storage_axis_valid = s_axis_valid & wr_ready;
   assign m_storage_axis_data = s_axis_data;
   assign m_storage_axis_last = s_axis_last;
   assign m_storage_axis_tkeep = s_axis_tkeep;
@@ -462,7 +463,7 @@ module data_offload #(
 
 // Measured length handshake CDC
 util_axis_fifo #(
-  .DATA_WIDTH(34),
+  .DATA_WIDTH(LENGTH_WIDTH),
   .ADDRESS_WIDTH(0),
   .ASYNC_CLK(1)
 ) i_measured_length_cdc (

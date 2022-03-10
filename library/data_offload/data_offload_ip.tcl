@@ -209,6 +209,11 @@ set_property -dict [list \
   "display_name" "Storage Size" \
 ] [ipgui::get_guiparamspec -name "MEM_SIZE" -component $cc]
 
+ipgui::add_param -name "LENGTH_WIDTH" -component $cc -parent $general_group
+set_property -dict [list \
+  "display_name" "Length Width" \
+] [ipgui::get_guiparamspec -name "LENGTH_WIDTH" -component $cc]
+
 ## DDR controller's user interface related configurations
 set m_controller_group [ipgui::add_group -name "DDR Controller Interface Configuration" -component $cc \
     -parent $page0 -display_name "DDR Controller Interface Configuration" ]
@@ -288,6 +293,11 @@ ipgui::add_param -name "SYNC_EXT_ADD_INTERNAL_CDC" -component $cc -parent $featu
 set_property -dict [list \
   "display_name" "Generate CDC Circuit for sync_ext" \
 ] [ipgui::get_guiparamspec -name "SYNC_EXT_ADD_INTERNAL_CDC" -component $cc]
+
+set_property value_tcl_expr {[tcl::mathfunc::int [tcl::mathfunc::ceil [expr [tcl::mathfunc::log $MEM_SIZE] / [tcl::mathfunc::log 2]]]]} \
+  [ipx::get_user_parameters LENGTH_WIDTH -of_objects $cc]
+
+ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "LENGTH_WIDTH" -component $cc]
 
 ## Create and save the XGUI file
 ipx::create_xgui_files $cc
