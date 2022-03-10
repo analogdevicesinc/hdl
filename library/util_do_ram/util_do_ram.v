@@ -117,7 +117,7 @@ always @(posedge s_axis_aclk) begin
 end
 
 wire wr_last_beat;
-assign wr_last_beat = (wr_addr == wr_length-1) | (s_axis_valid & s_axis_ready & s_axis_last);
+assign wr_last_beat = (wr_addr == wr_length) | (s_axis_valid & s_axis_ready & s_axis_last);
 
 always @(posedge s_axis_aclk) begin
   if (~wr_request_enable)
@@ -131,14 +131,14 @@ end
 
 always @(posedge s_axis_aclk) begin
   if (s_axis_valid & s_axis_ready)
-    wr_response_eot <= s_axis_last | (wr_addr == wr_length-1);
+    wr_response_eot <= s_axis_last | (wr_addr == wr_length);
   else
     wr_response_eot <= 1'b0;
 end
 
 always @(posedge s_axis_aclk) begin
   if (wr_last_beat)
-    wr_response_measured_length <= {wr_addr, {$clog2(SRC_DATA_WIDTH/8){1'b1}}} + 1;
+    wr_response_measured_length <= {wr_addr, {$clog2(SRC_DATA_WIDTH/8){1'b1}}};
 end
 
 always @(posedge s_axis_aclk) begin
@@ -182,7 +182,7 @@ always @(posedge m_axis_aclk) begin
     rd_length <= rd_request_length >> $clog2(DST_DATA_WIDTH/8);
 end
 
-assign rd_last_beat = (rd_addr == rd_length-1) & rd_enable;
+assign rd_last_beat = (rd_addr == rd_length) & rd_enable;
 //always @(posedge m_axis_aclk) begin
 assign rd_response_eot = m_axis_last & m_axis_valid & m_axis_ready;
 //end
