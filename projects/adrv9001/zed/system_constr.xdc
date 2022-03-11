@@ -31,7 +31,7 @@ set_property  -dict {PACKAGE_PIN C18  IOSTANDARD LVCMOS18}  [get_ports spi_dio] 
 set_property  -dict {PACKAGE_PIN P21  IOSTANDARD LVCMOS18}  [get_ports spi_do]            ; # G16 FMC_HPC0_LA12_N      IO_L18N_T2_34
 set_property  -dict {PACKAGE_PIN J16  IOSTANDARD LVCMOS18}  [get_ports spi_en]            ; # H19 FMC_HPC0_LA15_P      IO_L2P_T0_34
 
-set_property  -dict {PACKAGE_PIN R20  IOSTANDARD LVCMOS18}  [get_ports tx1_enable]        ; # D14 FMC_HPC0_LA09_P      IO_L17P_T2_34
+#set_property  -dict {PACKAGE_PIN R20  IOSTANDARD LVCMOS18}  [get_ports tx1_enable]        ; # D14 FMC_HPC0_LA09_P      IO_L17P_T2_34
 #set_property  -dict {PACKAGE_PIN C17  IOSTANDARD LVCMOS18}  [get_ports tx2_enable]        ; # G30 FMC_HPC0_LA29_P      IO_L11P_T1_SRCC_35
 
 set_property  -dict {PACKAGE_PIN B16  IOSTANDARD LVCMOS18}  [get_ports vadj_err]          ; # G33 FMC_HPC0_LA31_P      IO_L8P_T1_AD10P_35
@@ -58,6 +58,6 @@ set_property  -dict {PACKAGE_PIN  K15   IOSTANDARD LVCMOS18} [get_ports gpio_bd[
 set_property  -dict {PACKAGE_PIN  J15   IOSTANDARD LVCMOS18} [get_ports gpio_bd[30]]      ; ## XADC-GIO3
 set_property  -dict {PACKAGE_PIN  G17   IOSTANDARD LVCMOS18} [get_ports gpio_bd[31]]      ; ## OTG-RESETN
 
-set_property  -dict {PACKAGE_PIN  Y11   IOSTANDARD LVCMOS33} [get_ports  tdd_sync]        ; ## JA1.JA1 
+#set_property  -dict {PACKAGE_PIN  Y11   IOSTANDARD LVCMOS33} [get_ports  tdd_sync]        ; ## JA1.JA1 
 
 

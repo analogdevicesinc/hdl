@@ -129,17 +129,17 @@ module system_top (
 //  input                   rx2_strobe_in_n,
 //  input                   rx2_strobe_in_p,
 
-  output                  tx1_dclk_out_n,
-  output                  tx1_dclk_out_p,
-  input                   tx1_dclk_in_n,
-  input                   tx1_dclk_in_p,
-  output                  tx1_enable,
-  output                  tx1_idata_out_n,
-  output                  tx1_idata_out_p,
-  output                  tx1_qdata_out_n,
-  output                  tx1_qdata_out_p,
-  output                  tx1_strobe_out_n,
-  output                  tx1_strobe_out_p,
+  //output                  tx1_dclk_out_n,
+  //output                  tx1_dclk_out_p,
+  //input                   tx1_dclk_in_n,
+  //input                   tx1_dclk_in_p,
+  //output                  tx1_enable,
+  //output                  tx1_idata_out_n,
+  //output                  tx1_idata_out_p,
+  //output                  tx1_qdata_out_n,
+  //output                  tx1_qdata_out_p,
+  //output                  tx1_strobe_out_n,
+  //output                  tx1_strobe_out_p,
 
 //  output                  tx2_dclk_out_n,
 //  output                  tx2_dclk_out_p,
@@ -155,9 +155,9 @@ module system_top (
 
   inout                   sm_fan_tach,
   input                   vadj_err,
-  output                  platform_status,
+  output                  platform_status//,
 
-  inout                   tdd_sync
+  //inout                   tdd_sync
 );
 
   // internal registers
@@ -238,8 +238,8 @@ module system_top (
 
   // tdd_sync_loc - local sync signal from a GPIO or other source
   // tdd_sync - external sync 
-  assign tdd_sync_i = tdd_sync_cntr ? tdd_sync_loc : tdd_sync;
-  assign tdd_sync = tdd_sync_cntr ? tdd_sync_loc : 1'bz;
+  //assign tdd_sync_i = tdd_sync_cntr ? tdd_sync_loc : tdd_sync;
+  //assign tdd_sync = tdd_sync_cntr ? tdd_sync_loc : 1'bz;
 
    ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_iic_scl (
     .dio_t ({iic_mux_scl_t_s,iic_mux_scl_t_s}),
@@ -299,10 +299,10 @@ module system_top (
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif),
     //FMC connections
-    .ref_clk (1'b0),
+    //.ref_clk (1'b0),
     .mssi_sync (mssi_sync),
 
-    .tx_output_enable (~vadj_err),
+    //.tx_output_enable (~vadj_err),
 
     .rx1_dclk_in_n (rx1_dclk_in_n),
     .rx1_dclk_in_p (rx1_dclk_in_p),
@@ -322,16 +322,16 @@ module system_top (
     //.rx2_strobe_in_n (rx2_strobe_in_n),
     //.rx2_strobe_in_p (rx2_strobe_in_p),
 
-    .tx1_dclk_out_n (tx1_dclk_out_n),
-    .tx1_dclk_out_p (tx1_dclk_out_p),
-    .tx1_dclk_in_n (tx1_dclk_in_n),
-    .tx1_dclk_in_p (tx1_dclk_in_p),
-    .tx1_idata_out_n (tx1_idata_out_n),
-    .tx1_idata_out_p (tx1_idata_out_p),
-    .tx1_qdata_out_n (tx1_qdata_out_n),
-    .tx1_qdata_out_p (tx1_qdata_out_p),
-    .tx1_strobe_out_n (tx1_strobe_out_n),
-    .tx1_strobe_out_p (tx1_strobe_out_p),
+    //.tx1_dclk_out_n (tx1_dclk_out_n),
+    //.tx1_dclk_out_p (tx1_dclk_out_p),
+    //.tx1_dclk_in_n (tx1_dclk_in_n),
+    //.tx1_dclk_in_p (tx1_dclk_in_p),
+    //.tx1_idata_out_n (tx1_idata_out_n),
+    //.tx1_idata_out_p (tx1_idata_out_p),
+    //.tx1_qdata_out_n (tx1_qdata_out_n),
+    //.tx1_qdata_out_p (tx1_qdata_out_p),
+    //.tx1_strobe_out_n (tx1_strobe_out_n),
+    //.tx1_strobe_out_p (tx1_strobe_out_p),
 
     //.tx2_dclk_out_n (tx2_dclk_out_n),
     //.tx2_dclk_out_p (tx2_dclk_out_p),
@@ -346,16 +346,16 @@ module system_top (
 
     .rx1_enable (rx1_enable_s),
     //.rx2_enable (rx2_enable_s),
-    .tx1_enable (tx1_enable_s),
+    //.tx1_enable (tx1_enable_s),
     //.tx2_enable (tx2_enable_s),
 
     .gpio_rx1_enable_in (gpio_rx1_enable_in),
     //.gpio_rx2_enable_in (gpio_rx2_enable_in),
-    .gpio_tx1_enable_in (gpio_tx1_enable_in),
+    //.gpio_tx1_enable_in (gpio_tx1_enable_in),
     //.gpio_tx2_enable_in (gpio_tx2_enable_in),
 
-    .tdd_sync (tdd_sync_i),
-    .tdd_sync_cntr (tdd_sync_cntr),
+    //.tdd_sync (tdd_sync_i),
+    //.tdd_sync_cntr (tdd_sync_cntr),
 
     .spi0_clk_i (1'b0),
     .spi0_clk_o (spi_clk_s),
@@ -382,9 +382,9 @@ module system_top (
  assign spi_dio = vadj_err ? 1'bz : spi_dio_s;
 
  assign rx1_enable = vadj_err ? 1'bz : rx1_enable_s;
- assign rx2_enable = vadj_err ? 1'bz : rx2_enable_s;
- assign tx1_enable = vadj_err ? 1'bz : tx1_enable_s;
- assign tx2_enable = vadj_err ? 1'bz : tx2_enable_s;
+ //assign rx2_enable = vadj_err ? 1'bz : rx2_enable_s;
+ //assign tx1_enable = vadj_err ? 1'bz : tx1_enable_s;
+ //assign tx2_enable = vadj_err ? 1'bz : tx2_enable_s;
 
 endmodule
 

@@ -17,16 +17,16 @@ set_property  -dict {PACKAGE_PIN P17  IOSTANDARD LVCMOS18  }  [get_ports rx1_str
 #set_property  -dict {PACKAGE_PIN E19  IOSTANDARD LVCMOS18  }  [get_ports rx2_strobe_in_p]  ;## H25 FMC_HPC0_LA21_P    IO_L21P_T3_DQS_AD14P_35
 
 
-set_property  -dict {PACKAGE_PIN T17  IOSTANDARD LVCMOS18  }  [get_ports tx1_dclk_out_n]   ;## H14 FMC_HPC0_LA07_N    IO_L21N_T3_DQS_34
-set_property  -dict {PACKAGE_PIN T16  IOSTANDARD LVCMOS18  }  [get_ports tx1_dclk_out_p]   ;## H13 FMC_HPC0_LA07_P    IO_L21P_T3_DQS_34
-set_property  -dict {PACKAGE_PIN N20  IOSTANDARD LVCMOS18  }  [get_ports tx1_dclk_in_n]    ;## D09 FMC_HPC0_LA01_CC_N IO_L14N_T2_SRCC_34
-set_property  -dict {PACKAGE_PIN N19  IOSTANDARD LVCMOS18  }  [get_ports tx1_dclk_in_p]    ;## D08 FMC_HPC0_LA01_CC_P IO_L14P_T2_SRCC_34
-set_property  -dict {PACKAGE_PIN J22  IOSTANDARD LVCMOS18  }  [get_ports tx1_idata_out_n]  ;## G13 FMC_HPC0_LA08_N    IO_L8N_T1_34
-set_property  -dict {PACKAGE_PIN J21  IOSTANDARD LVCMOS18  }  [get_ports tx1_idata_out_p]  ;## G12 FMC_HPC0_LA08_P    IO_L8P_T1_34
-set_property  -dict {PACKAGE_PIN K18  IOSTANDARD LVCMOS18  }  [get_ports tx1_qdata_out_n]  ;## D12 FMC_HPC0_LA05_N    IO_L7N_T1_34
-set_property  -dict {PACKAGE_PIN J18  IOSTANDARD LVCMOS18  }  [get_ports tx1_qdata_out_p]  ;## D11 FMC_HPC0_LA05_P    IO_L7P_T1_34
-set_property  -dict {PACKAGE_PIN L22  IOSTANDARD LVCMOS18  }  [get_ports tx1_strobe_out_n] ;## C11 FMC_HPC0_LA06_N    IO_L10N_T1_34
-set_property  -dict {PACKAGE_PIN L21  IOSTANDARD LVCMOS18  }  [get_ports tx1_strobe_out_p] ;## C10 FMC_HPC0_LA06_P    IO_L10P_T1_34
+#set_property  -dict {PACKAGE_PIN T17  IOSTANDARD LVCMOS18  }  [get_ports tx1_dclk_out_n]   ;## H14 FMC_HPC0_LA07_N    IO_L21N_T3_DQS_34
+#set_property  -dict {PACKAGE_PIN T16  IOSTANDARD LVCMOS18  }  [get_ports tx1_dclk_out_p]   ;## H13 FMC_HPC0_LA07_P    IO_L21P_T3_DQS_34
+#set_property  -dict {PACKAGE_PIN N20  IOSTANDARD LVCMOS18  }  [get_ports tx1_dclk_in_n]    ;## D09 FMC_HPC0_LA01_CC_N IO_L14N_T2_SRCC_34
+#set_property  -dict {PACKAGE_PIN N19  IOSTANDARD LVCMOS18  }  [get_ports tx1_dclk_in_p]    ;## D08 FMC_HPC0_LA01_CC_P IO_L14P_T2_SRCC_34
+#set_property  -dict {PACKAGE_PIN J22  IOSTANDARD LVCMOS18  }  [get_ports tx1_idata_out_n]  ;## G13 FMC_HPC0_LA08_N    IO_L8N_T1_34
+#set_property  -dict {PACKAGE_PIN J21  IOSTANDARD LVCMOS18  }  [get_ports tx1_idata_out_p]  ;## G12 FMC_HPC0_LA08_P    IO_L8P_T1_34
+#set_property  -dict {PACKAGE_PIN K18  IOSTANDARD LVCMOS18  }  [get_ports tx1_qdata_out_n]  ;## D12 FMC_HPC0_LA05_N    IO_L7N_T1_34
+#set_property  -dict {PACKAGE_PIN J18  IOSTANDARD LVCMOS18  }  [get_ports tx1_qdata_out_p]  ;## D11 FMC_HPC0_LA05_P    IO_L7P_T1_34
+#set_property  -dict {PACKAGE_PIN L22  IOSTANDARD LVCMOS18  }  [get_ports tx1_strobe_out_n] ;## C11 FMC_HPC0_LA06_N    IO_L10N_T1_34
+#set_property  -dict {PACKAGE_PIN L21  IOSTANDARD LVCMOS18  }  [get_ports tx1_strobe_out_p] ;## C10 FMC_HPC0_LA06_P    IO_L10P_T1_34
 
 #set_property  -dict {PACKAGE_PIN F19  IOSTANDARD LVCMOS18  }  [get_ports tx2_dclk_out_n]   ;## G25 FMC_HPC0_LA22_N    IO_L20N_T3_AD6N_35
 #set_property  -dict {PACKAGE_PIN G19  IOSTANDARD LVCMOS18  }  [get_ports tx2_dclk_out_p]   ;## G24 FMC_HPC0_LA22_P    IO_L20P_T3_AD6P_35
@@ -46,7 +46,7 @@ set_property  -dict {PACKAGE_PIN L21  IOSTANDARD LVCMOS18  }  [get_ports tx1_str
 
 create_clock -name rx1_dclk_out   -period  12.5 [get_ports rx1_dclk_in_p]
 #create_clock -name rx2_dclk_out   -period  12.5 [get_ports rx2_dclk_in_p]
-create_clock -name tx1_dclk_out   -period  12.5 [get_ports tx1_dclk_in_p]
+#create_clock -name tx1_dclk_out   -period  12.5 [get_ports tx1_dclk_in_p]
 #create_clock -name tx2_dclk_out   -period  12.5 [get_ports tx2_dclk_in_p]
 
 set_clock_latency -source -early 2 [get_clocks rx1_dclk_out]
