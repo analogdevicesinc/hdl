@@ -43,6 +43,7 @@ module axi_adrv9001_if #(
   parameter RX_USE_BUFG = 0,
   parameter TX_USE_BUFG = 0,
   parameter DISABLE_RX2_SSI = 0,
+  parameter DISABLE_TX1_SSI = 0,
   parameter DISABLE_TX2_SSI = 0,
   parameter IO_DELAY_GROUP = "dev_if_delay_group",
   parameter USE_RX_CLK_FOR_TX = 0
@@ -343,73 +344,86 @@ module axi_adrv9001_if #(
   end
   endgenerate
 
-  adrv9001_tx #(
-   .CMOS_LVDS_N (CMOS_LVDS_N),
-   .NUM_LANES (TX_NUM_LANES),
-   .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
-   .USE_BUFG (TX_USE_BUFG),
-   .USE_RX_CLK_FOR_TX (USE_RX_CLK_FOR_TX)
-  ) i_tx_1_phy (
+  generate if (DISABLE_TX1_SSI == 0) begin
+    adrv9001_tx #(
+     .CMOS_LVDS_N (CMOS_LVDS_N),
+     .NUM_LANES (TX_NUM_LANES),
+     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+     .USE_BUFG (TX_USE_BUFG),
+     .USE_RX_CLK_FOR_TX (USE_RX_CLK_FOR_TX)
+    ) i_tx_1_phy (
 
-   .ref_clk (ref_clk),
-   .up_clk (up_clk),
+     .ref_clk (ref_clk),
+     .up_clk (up_clk),
 
-   .tx_output_enable(tx_output_enable),
+     .tx_output_enable(tx_output_enable),
 
-   .tx_dclk_out_n_NC (tx1_dclk_out_n_NC),
-   .tx_dclk_out_p_dclk_out (tx1_dclk_out_p_dclk_out),
-   .tx_dclk_in_n_NC (tx1_dclk_in_n_NC),
-   .tx_dclk_in_p_dclk_in (tx1_dclk_in_p_dclk_in),
-   .tx_idata_out_n_idata0 (tx1_idata_out_n_idata0),
-   .tx_idata_out_p_idata1 (tx1_idata_out_p_idata1),
-   .tx_qdata_out_n_qdata2 (tx1_qdata_out_n_qdata2),
-   .tx_qdata_out_p_qdata3 (tx1_qdata_out_p_qdata3),
-   .tx_strobe_out_n_NC (tx1_strobe_out_n_NC),
-   .tx_strobe_out_p_strobe_out (tx1_strobe_out_p_strobe_out),
+     .tx_dclk_out_n_NC (tx1_dclk_out_n_NC),
+     .tx_dclk_out_p_dclk_out (tx1_dclk_out_p_dclk_out),
+     .tx_dclk_in_n_NC (tx1_dclk_in_n_NC),
+     .tx_dclk_in_p_dclk_in (tx1_dclk_in_p_dclk_in),
+     .tx_idata_out_n_idata0 (tx1_idata_out_n_idata0),
+     .tx_idata_out_p_idata1 (tx1_idata_out_p_idata1),
+     .tx_qdata_out_n_qdata2 (tx1_qdata_out_n_qdata2),
+     .tx_qdata_out_p_qdata3 (tx1_qdata_out_p_qdata3),
+     .tx_strobe_out_n_NC (tx1_strobe_out_n_NC),
+     .tx_strobe_out_p_strobe_out (tx1_strobe_out_p_strobe_out),
 
-   .rx_clk_div (adc_1_clk_div),
-   .rx_clk (adc_1_clk),
-   .rx_ssi_rst (adc_1_ssi_rst),
+     .rx_clk_div (adc_1_clk_div),
+     .rx_clk (adc_1_clk),
+     .rx_ssi_rst (adc_1_ssi_rst),
 
-   .dac_rst (tx1_rst),
-   .dac_clk_div (dac_1_clk_div),
+     .dac_rst (tx1_rst),
+     .dac_clk_div (dac_1_clk_div),
 
-   .dac_data_0 (dac_1_data_0),
-   .dac_data_1 (dac_1_data_1),
-   .dac_data_2 (dac_1_data_2),
-   .dac_data_3 (dac_1_data_3),
-   .dac_data_strb (dac_1_data_strobe),
-   .dac_data_clk (dac_1_data_clk),
-   .dac_data_valid (dac_1_data_valid),
+     .dac_data_0 (dac_1_data_0),
+     .dac_data_1 (dac_1_data_1),
+     .dac_data_2 (dac_1_data_2),
+     .dac_data_3 (dac_1_data_3),
+     .dac_data_strb (dac_1_data_strobe),
+     .dac_data_clk (dac_1_data_clk),
+     .dac_data_valid (dac_1_data_valid),
 
-   .dac_clk_ratio (dac_clk_ratio),
+     .dac_clk_ratio (dac_clk_ratio),
 
-   .mssi_sync (mssi_sync)
-  );
+     .mssi_sync (mssi_sync)
+    );
 
-  adrv9001_tx_link #(
-    .CMOS_LVDS_N (CMOS_LVDS_N),
-    .CLK_DIV_IS_FAST_CLK (FPGA_TECHNOLOGY >= 100)
-  ) i_tx_1_link (
-    .dac_clk_div (dac_1_clk_div),
-    .dac_data_0 (dac_1_data_0),
-    .dac_data_1 (dac_1_data_1),
-    .dac_data_2 (dac_1_data_2),
-    .dac_data_3 (dac_1_data_3),
-    .dac_data_strobe (dac_1_data_strobe),
-    .dac_data_clk (dac_1_data_clk),
-    .dac_data_valid (dac_1_data_valid),
-    // DAC interface
-    .tx_clk (tx1_clk),
-    .tx_rst (tx1_rst),
-    .tx_data_valid (tx1_data_valid),
-    .tx_data_i (tx1_data_i),
-    .tx_data_q (tx1_data_q),
-    .tx_sdr_ddr_n (tx1_sdr_ddr_n),
-    .tx_single_lane (tx1_single_lane),
-    .tx_symb_op (tx1_symb_op),
-    .tx_symb_8_16b (tx1_symb_8_16b)
-  );
+    adrv9001_tx_link #(
+      .CMOS_LVDS_N (CMOS_LVDS_N),
+      .CLK_DIV_IS_FAST_CLK (FPGA_TECHNOLOGY >= 100)
+    ) i_tx_1_link (
+      .dac_clk_div (dac_1_clk_div),
+      .dac_data_0 (dac_1_data_0),
+      .dac_data_1 (dac_1_data_1),
+      .dac_data_2 (dac_1_data_2),
+      .dac_data_3 (dac_1_data_3),
+      .dac_data_strobe (dac_1_data_strobe),
+      .dac_data_clk (dac_1_data_clk),
+      .dac_data_valid (dac_1_data_valid),
+      // DAC interface
+      .tx_clk (tx1_clk),
+      .tx_rst (tx1_rst),
+      .tx_data_valid (tx1_data_valid),
+      .tx_data_i (tx1_data_i),
+      .tx_data_q (tx1_data_q),
+      .tx_sdr_ddr_n (tx1_sdr_ddr_n),
+      .tx_single_lane (tx1_single_lane),
+      .tx_symb_op (tx1_symb_op),
+      .tx_symb_8_16b (tx1_symb_8_16b)
+    );
+  end else begin
+    assign tx1_clk = 1'b0;
+    assign tx1_dclk_out_n_NC = 1'b0;
+    assign tx1_dclk_out_p_dclk_out = 1'b0;
+    assign tx1_idata_out_n_idata0 = 1'b0;
+    assign tx1_idata_out_p_idata1 = 1'b0;
+    assign tx1_qdata_out_n_qdata2 = 1'b0;
+    assign tx1_qdata_out_p_qdata3 = 1'b0;
+    assign tx1_strobe_out_n_NC = 1'b0;
+    assign tx1_strobe_out_p_strobe_out = 1'b0;
+  end
+  endgenerate
 
   generate if (DISABLE_TX2_SSI == 0) begin
     adrv9001_tx #(

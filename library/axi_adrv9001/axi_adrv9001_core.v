@@ -46,6 +46,7 @@ module axi_ad9001_core #(
   parameter INDEPENDENT_1R1T_SUPPORT = 1,
   parameter COMMON_2R2T_SUPPORT = 1,
   parameter DISABLE_RX2_SSI = 0,
+  parameter DISABLE_TX1_SSI = 0,
   parameter DISABLE_TX2_SSI = 0,
   parameter FPGA_TECHNOLOGY = 0,
   parameter FPGA_FAMILY = 0,
@@ -428,7 +429,7 @@ module axi_ad9001_core #(
 
   axi_adrv9001_tx #(
     .ID (ID),
-    .ENABLED (1),
+    .ENABLED (DISABLE_TX1_SSI != 1),
     .CMOS_LVDS_N (CMOS_LVDS_N),
     .USE_RX_CLK_FOR_TX (USE_RX_CLK_FOR_TX),
     .COMMON_BASE_ADDR ('h08),
@@ -589,7 +590,7 @@ module axi_ad9001_core #(
 
   axi_adrv9001_tdd #(
     .BASE_ADDRESS (6'h12),
-    .ENABLED (TDD_DISABLE==0)
+    .ENABLED (TDD_DISABLE==0 && DISABLE_TX1_SSI == 0)
   ) i_tdd_1 (
     .clk (rx1_clk),
     .rst (rx1_rst),
