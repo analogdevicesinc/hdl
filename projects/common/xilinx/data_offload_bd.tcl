@@ -31,7 +31,6 @@ proc ad_data_offload_create {instance_name
     create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:axis_rtl:1.0 m_axis
 
     create_bd_pin -dir I init_req
-#    create_bd_pin -dir O init_ack
     create_bd_pin -dir I sync_ext
 
     set source_addresses [expr ($mem_size * 8) / $source_dwidth]
@@ -48,9 +47,7 @@ proc ad_data_offload_create {instance_name
       MEM_SIZE $mem_size \
       TX_OR_RXN_PATH $datapath_type \
       SRC_DATA_WIDTH $source_dwidth \
-      SRC_ADDR_WIDTH $source_awidth \
       DST_DATA_WIDTH $destination_dwidth \
-      DST_ADDR_WIDTH $destination_awidth \
       DST_CYCLIC_EN $datapath_type \
       SYNC_EXT_ADD_INTERNAL_CDC [expr {!$shared_devclk}] \
     ]
@@ -153,7 +150,6 @@ proc ad_data_offload_create {instance_name
     ad_connect m_axis i_data_offload/m_axis
 
     ad_connect init_req i_data_offload/init_req
-#    ad_connect init_ack i_data_offload/init_ack
     ad_connect sync_ext i_data_offload/sync_ext
 
   current_bd_instance /

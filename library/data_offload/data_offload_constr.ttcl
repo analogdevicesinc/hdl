@@ -32,18 +32,6 @@ set_false_path \
   -from [get_pins -hierarchical * -filter {NAME=~*/i_sync_src_transfer_length/out_toggle_d1_reg/C}] \
   -to [get_pins -hierarchical * -filter {NAME=~*/i_sync_src_transfer_length/i_sync_in/cdc_sync_stage1_reg[*]/D}]
 
-<: if { !$mem_type } { :>
-
-#  set_false_path \
-#    -from [get_pins -hierarchical * -filter {NAME=~*adc_init_sync.i_rd_init_ack_sync/in_toggle_d1_reg/C}] \
-#    -to [get_pins -hierarchical * -filter {NAME=~*adc_init_sync.i_rd_init_ack_sync/i_sync_out/cdc_sync_stage1_reg[*]/D}]
-#
-#  set_false_path \
-#    -from [get_pins -hierarchical * -filter {NAME=~*adc_init_sync.i_rd_init_ack_sync/out_toggle_d1_reg/C}] \
-#    -to [get_pins -hierarchical * -filter {NAME=~*adc_init_sync.i_rd_init_ack_sync/i_sync_in/cdc_sync_stage1_reg[*]/D}]
-
-<: } :>
-
 <: } :>
 
 ## For TX in case of BRAMs
@@ -54,18 +42,6 @@ set_false_path \
   -to [get_pins -hierarchical * -filter {NAME=~*/i_sync_rd_sync/cdc_sync_stage1_reg[*]/D}]
 <: } :>
 
-
-<: if { !$mem_type } { :>
-
-#  set_false_path \
-#    -from [get_pins -hierarchical * -filter {NAME=~*dac_init_sync.i_wr_init_ack_sync/in_toggle_d1_reg/C}] \
-#    -to [get_pins -hierarchical * -filter {NAME=~*dac_init_sync.i_wr_init_ack_sync/i_sync_out/cdc_sync_stage1_reg[*]/D}]
-#
-#  set_false_path \
-#    -from [get_pins -hierarchical * -filter {NAME=~*dac_init_sync.i_wr_init_ack_sync/out_toggle_d1_reg/C}] \
-#    -to [get_pins -hierarchical * -filter {NAME=~*dac_init_sync.i_wr_init_ack_sync/i_sync_in/cdc_sync_stage1_reg[*]/D}]
-
-<: } :>
 
 <: } :>
 
@@ -124,22 +100,6 @@ set_false_path \
   -from [get_pins -hierarchical * -filter {NAME=~*/i_wr_empty_sync/out_toggle_d1_reg/C}] \
   -to [get_pins -hierarchical * -filter {NAME=~*/i_wr_empty_sync/i_sync_in/cdc_sync_stage1_reg[*]/D}]
 
-#set_false_path \
-#  -from [get_pins -hierarchical * -filter {NAME=~*/i_rd_full_sync/in_toggle_d1_reg/C}] \
-#  -to [get_pins -hierarchical * -filter {NAME=~*/i_rd_full_sync/i_sync_out/cdc_sync_stage1_reg[*]/D}]
-#
-#set_false_path \
-#  -from [get_pins -hierarchical * -filter {NAME=~*/i_rd_full_sync/out_toggle_d1_reg/C}] \
-#  -to [get_pins -hierarchical * -filter {NAME=~*/i_rd_full_sync/i_sync_in/cdc_sync_stage1_reg[*]/D}]
-
-#set_false_path \
-#  -from [get_pins -hierarchical * -filter {NAME=~*/i_rd_wr_last_sync/out_toggle_d1_reg/C}] \
-#  -to [get_pins -hierarchical * -filter {NAME=~*/i_rd_wr_last_sync/i_sync_in/cdc_sync_stage1_reg[*]/D}]
-#
-#set_false_path \
-#  -from [get_pins -hierarchical * -filter {NAME=~*/i_rd_wr_last_sync/in_toggle_d1_reg/C}] \
-#  -to [get_pins -hierarchical * -filter {NAME=~*/i_rd_wr_last_sync/i_sync_out/cdc_sync_stage1_reg[*]/D}]
-
 set_false_path \
   -from [get_pins -hierarchical * -filter {NAME=~*i_sync_xfer_control/in_toggle_d1_reg/C}] \
   -to [get_pins -hierarchical * -filter {NAME=~*i_sync_xfer_control/i_sync_out/cdc_sync_stage1_reg[*]/D}]
@@ -159,15 +119,6 @@ set_false_path \
 set_false_path \
   -to [get_pins -hierarchical * -filter {NAME=~*i_wr_init_req_sync/cdc_sync_stage1_reg[*]/D}]
 
-#set_false_path \
-#  -to [get_pins -hierarchical * -filter {NAME=~*i_wr_oneshot_sync/cdc_sync_stage1_reg[*]/D}]
-
-#set_false_path \
-#  -to [get_pins -hierarchical * -filter {NAME=~*/i_rd_last_address/cdc_sync_stage1_reg[*]/D}]
-
-#set_false_path \
-#  -to [get_pins -hierarchical * -filter {NAME=~*/i_rd_last_keep/cdc_sync_stage1_reg[*]/D}]
-
 set_false_path \
   -to [get_pins -hierarchical * -filter {NAME=~*i_src_xfer_control/cdc_sync_stage1_reg[*]/D}]
 
@@ -178,7 +129,7 @@ set_false_path \
   -to [get_pins -hierarchical * -filter {NAME=~*i_dst_oneshot_sync/cdc_sync_stage1_reg[0]/D}]
 
 
-# measured transfer length util_axis_fifo 
+# measured transfer length util_axis_fifo
 set src_clk [get_clocks -of_objects [get_ports s_axis_aclk]]
 set dest_clk [get_clocks -of_objects [get_ports m_axis_aclk]]
 
