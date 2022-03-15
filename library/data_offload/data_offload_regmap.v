@@ -254,7 +254,7 @@ module data_offload_regmap #(
   // Clock Domain Crossing Logic for reset, control and status signals
 
   sync_data #(
-    .NUM_OF_BITS (5),
+    .NUM_OF_BITS (4),
     .ASYNC_CLK (1))
   i_dst_fsm_status (
     .in_clk (dst_clk),
@@ -264,7 +264,7 @@ module data_offload_regmap #(
   );
 
   sync_data #(
-    .NUM_OF_BITS (4),
+    .NUM_OF_BITS (5),
     .ASYNC_CLK (1))
   i_src_fsm_status (
     .in_clk (src_clk),
