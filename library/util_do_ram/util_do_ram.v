@@ -117,7 +117,7 @@ always @(posedge s_axis_aclk) begin
 end
 
 wire wr_last_beat;
-assign wr_last_beat = (wr_addr == wr_length) | (s_axis_valid & s_axis_ready & s_axis_last);
+assign wr_last_beat = s_axis_valid & s_axis_ready & ((wr_addr == wr_length) | &wr_addr & s_axis_last);
 
 always @(posedge s_axis_aclk) begin
   if (~wr_request_enable)

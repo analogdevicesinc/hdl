@@ -225,12 +225,14 @@ module data_offload_fsm #(
   end
 
   always @(posedge rd_clk) begin
-    if (rd_request_ready & rd_request_valid & ~rd_response_eot)
+    if (rd_resetn_in == 1'b0)
+      rd_outstanding <= 2'b0;
+    else if (rd_request_ready & rd_request_valid & ~rd_response_eot)
       rd_outstanding <= rd_outstanding + 2'd1;
-    else if (~(rd_request_ready & rd_request_valid) & rd_response_eot)
+    else if (~(rd_request_ready & rd_request_valid) & (rd_response_eot & rd_fsm_state[RD_BIT_RD]))
       rd_outstanding <= rd_outstanding - 2'd1;
   end
-  assign rd_last_eot = (rd_outstanding == 1) & rd_response_eot & !(rd_request_ready & rd_request_valid);
+  assign rd_last_eot = (rd_outstanding == 1) & (rd_response_eot & rd_fsm_state[RD_BIT_RD]) & !(rd_request_ready & rd_request_valid);
 
   always @(posedge rd_clk) begin
     if (rd_init_req_s) begin
@@ -247,7 +249,7 @@ module data_offload_fsm #(
   assign rd_request_valid = rd_fsm_state[RD_BIT_PRE_RD] | rd_cyclic_en;
 
   always @(posedge rd_clk) begin
-    if (rd_resetn_in == 1'b0)
+    if (rd_resetn_in == 1'b0 || (~rd_init_req_s & ~TX_OR_RXN_PATH[0]))
       rd_request_enable <= 1'b0;
     else
       rd_request_enable <= 1'b1;
@@ -275,7 +277,7 @@ module data_offload_fsm #(
 
   sync_bits #(
     .NUM_OF_BITS (1),
-    .ASYNC_CLK (1))
+    .ASYNC_CLK (TX_OR_RXN_PATH[0]))
   i_rd_init_req_sync (
     .in_bits (init_req),
     .out_clk (rd_clk),
@@ -285,7 +287,7 @@ module data_offload_fsm #(
 
   sync_bits #(
     .NUM_OF_BITS (1),
-    .ASYNC_CLK (1))
+    .ASYNC_CLK (~TX_OR_RXN_PATH[0]))
   i_wr_init_req_sync (
     .in_bits (init_req),
     .out_clk (wr_clk),
