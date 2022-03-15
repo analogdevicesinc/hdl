@@ -57,6 +57,7 @@ module util_hbm #(
 
   // This will size the storage per master where each segment is 256MB
   parameter HBM_SEGMENTS_PER_MASTER = 4,
+  parameter HBM_SEGMENT_INDEX = 0,
 
   // <TODO> This should depend on sample rate too
   parameter NUM_M = SRC_DATA_WIDTH <= AXI_DATA_WIDTH ? 1 :
@@ -220,8 +221,13 @@ end
 generate
 for (i = 0; i < NUM_M; i=i+1) begin
 
+  wire [11:0] rd_dbg_status;
+  wire rd_needs_reset;
+
+  reg rd_needs_reset_d = 1'b0;
+
   // 2Gb (256MB) per segment
-  localparam ADDR_OFFSET = i * HBM_SEGMENTS_PER_MASTER * 256 * 1024 * 1024;
+  localparam ADDR_OFFSET = (HBM_SEGMENT_INDEX+i) * HBM_SEGMENTS_PER_MASTER * 256 * 1024 * 1024;
 
   always @(posedge s_axis_aclk) begin
     if (wr_eot_pending_all) begin
@@ -367,9 +373,15 @@ for (i = 0; i < NUM_M; i=i+1) begin
   );
 
   always @(posedge m_axis_aclk) begin
+    rd_needs_reset_d <= rd_needs_reset;
+  end
+
+  // Generate an end of transfer at the end of flush marked by rd_needs_reset
+  always @(posedge m_axis_aclk) begin
     if (rd_eot_pending_all) begin
       rd_eot_pending[i] <= 1'b0;
-    end else if (rd_request_eot_loc[i] & rd_response_valid_loc[i]) begin
+    end else if ((rd_request_eot_loc[i] & rd_response_valid_loc[i]) ||
+                 (~rd_needs_reset & rd_needs_reset_d)) begin
       rd_eot_pending[i] <= 1'b1;
     end
   end
@@ -474,7 +486,7 @@ for (i = 0; i < NUM_M; i=i+1) begin
     .s_axis_xfer_req(),
 
     .m_axis_aclk(m_axis_aclk),
-    .m_axis_ready(m_axis_ready & m_axis_valid),
+    .m_axis_ready((m_axis_ready & m_axis_valid) | rd_needs_reset),
     .m_axis_valid(m_axis_valid_loc[i]),
     .m_axis_data(m_axis_data[DST_DATA_WIDTH_PER_M*i+:DST_DATA_WIDTH_PER_M]),
     .m_axis_last(m_axis_last_loc[i]),
@@ -503,10 +515,12 @@ for (i = 0; i < NUM_M; i=i+1) begin
     .dbg_src_address_id(),
     .dbg_src_data_id(),
     .dbg_src_response_id(),
-    .dbg_status(),
+    .dbg_status(rd_dbg_status),
 
     .dest_diag_level_bursts()
   );
+
+  assign rd_needs_reset = rd_dbg_status[11];
 
 end
 endgenerate

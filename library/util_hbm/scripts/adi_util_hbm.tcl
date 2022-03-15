@@ -80,6 +80,9 @@ proc ad_connect_hbm {i_hbm i_util_hbm axi_clk axi_aresetn {first_slave_index 0}}
         ad_connect $i_hbm/AXI_${idx_hbm_slv}_ARESET_N $axi_aresetn
       }
     }
+
+    ad_ip_parameter $i_util_hbm CONFIG.HBM_SEGMENT_INDEX $first_slave_index
+
   } else {
     # Create smart connect
     ad_ip_instance smartconnect axi_hbm_interconnect [list \
