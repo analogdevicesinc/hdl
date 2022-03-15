@@ -16,6 +16,12 @@ if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
   set IGNORE_VERSION_CHECK 0
 }
 
+if {[info exists ::env(ADI_VIVADO_IP_LIBRARY)]} {
+  set VIVADO_IP_LIBRARY $::env(ADI_VIVADO_IP_LIBRARY)
+} else { 
+  set VIVADO_IP_LIBRARY user
+}
+
 ## Add a ttcl file to the project. XDC does not support if statements
 #  in constraint definitions, this file can be used to add parameter dependent
 #  constraints to the IP.
@@ -324,8 +330,9 @@ proc adi_ip_files {ip_name ip_files} {
 proc adi_ip_properties_lite {ip_name} {
 
   global ad_hdl_dir
+  global VIVADO_IP_LIBRARY
 
-  ipx::package_project -root_dir . -vendor analog.com -library user -taxonomy /Analog_Devices
+  ipx::package_project -root_dir . -vendor analog.com -library $VIVADO_IP_LIBRARY -taxonomy /Analog_Devices
 
   set_property name $ip_name [ipx::current_core]
 
