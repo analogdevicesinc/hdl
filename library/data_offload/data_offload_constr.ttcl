@@ -113,11 +113,13 @@ set_false_path \
   -to [get_cells -hierarchical * -filter {NAME=~*i_sync_xfer_control/out_data_reg[*]}]
 
 
+<: if { $tx_enable == 0 } { :>
 set_false_path \
   -to [get_pins -hierarchical * -filter {NAME=~*i_rd_init_req_sync/cdc_sync_stage1_reg[*]/D}]
-
+<: } else { :>
 set_false_path \
   -to [get_pins -hierarchical * -filter {NAME=~*i_wr_init_req_sync/cdc_sync_stage1_reg[*]/D}]
+<: } :>
 
 set_false_path \
   -to [get_pins -hierarchical * -filter {NAME=~*i_src_xfer_control/cdc_sync_stage1_reg[*]/D}]
