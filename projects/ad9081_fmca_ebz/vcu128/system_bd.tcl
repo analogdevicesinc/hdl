@@ -129,3 +129,21 @@ if {$ad_project_params(JESD_MODE) == "64B66B"} {
 
 }
 
+## Data offload Tx debug
+#set_property HDL_ATTRIBUTE.DEBUG true [get_bd_intf_nets {s_axis_1}]
+#set_property HDL_ATTRIBUTE.DEBUG true [get_bd_intf_nets {mxfe_tx_data_offload_m_axis}]
+#apply_bd_automation -rule xilinx.com:bd_rule:debug -dict [list \
+#                                                          [get_bd_intf_nets mxfe_tx_data_offload_m_axis] {AXIS_SIGNALS "Data and Trigger" CLK_SRC "/tx_device_clk" SYSTEM_ILA "Auto" APC_EN "0" } \
+#                                                          [get_bd_intf_nets s_axis_1] {AXIS_SIGNALS "Data and Trigger" CLK_SRC "/axi_ddr_cntrl/addn_ui_clkout2" SYSTEM_ILA "Auto" APC_EN "0" } \
+#                                                         ]
+#
+#set_property HDL_ATTRIBUTE.DEBUG true [get_bd_nets {init_req_1 }]
+#apply_bd_automation -rule xilinx.com:bd_rule:debug -dict [list \
+#                                                          [get_bd_nets init_req_1] {PROBE_TYPE "Data and Trigger" CLK_SRC "None (Connect manually)" SYSTEM_ILA "Auto" } \
+#                                                         ]
+#
+#set_property -dict [list CONFIG.C_TRIGIN_EN {true}] [get_bd_cells system_ila_1]
+#set_property -dict [list CONFIG.C_TRIGOUT_EN {true}] [get_bd_cells system_ila_2]
+#connect_bd_intf_net [get_bd_intf_pins system_ila_2/TRIG_OUT] [get_bd_intf_pins system_ila_1/TRIG_IN]
+#connect_bd_net [get_bd_pins system_ila_2/clk] [get_bd_pins axi_ddr_cntrl/addn_ui_clkout1]
+
