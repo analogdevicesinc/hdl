@@ -73,13 +73,13 @@ module system_top (
   inout                   iic_scl,
   inout                   iic_sda,
 
-  output                  spi_sclk,
-  output                  spi_sdo,
-  input       [ 1:0]      spi_sdi,
-  output                  spi_cs_n,
+  output                  ad7616_spi_sclk,
+  output                  ad7616_spi_sdo,
+  input       [ 1:0]      ad7616_spi_sdi,
+  output                  ad7616_spi_cs_n,
 
   output                  adc_reset_n,
-  output                  adc_convst,
+  output                  adc_cnvst,
   input                   adc_busy,
   output                  adc_seq_en,
   output      [ 1:0]      adc_hw_rngsel,
@@ -110,6 +110,8 @@ module system_top (
              adc_burst,          // 36
              adc_chsel,          // 35:33
              adc_crcen}));       // 32
+
+  assign gpio_i[63:44] = gpio_o[63:44];
 
   ad_iobuf #(
     .DATA_WIDTH(15)
@@ -152,11 +154,11 @@ module system_top (
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
     .spdif (spdif),
-    .rx_sclk (spi_sclk),
-    .rx_sdo (spi_sdo),
-    .rx_sdi (spi_sdi),
-    .rx_cnvst (adc_convst),
-    .rx_cs_n (spi_cs_n),
+    .ad7616_spi_sdo (ad7616_spi_sdo),
+    .ad7616_spi_sdi (ad7616_spi_sdi),
+    .ad7616_spi_cs (ad7616_spi_cs),
+    .ad7616_spi_sclk (ad7616_spi_sclk),
+    .rx_cnvst (adc_cnvst),
     .rx_busy (adc_busy));
 
 endmodule
