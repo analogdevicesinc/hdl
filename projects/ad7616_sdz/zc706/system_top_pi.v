@@ -79,7 +79,7 @@ module system_top (
 
   output                  adc_cs_n,
   output                  adc_reset_n,
-  output                  adc_convst,
+  output                  adc_cnvst,
   input                   adc_busy,
   output                  adc_seq_en,
   output      [ 1:0]      adc_hw_rngsel,
@@ -96,8 +96,6 @@ module system_top (
   wire    [15:0]  adc_db_o;
   wire    [15:0]  adc_db_i;
 
-  genvar i;
-
   // instantiations
 
   ad_iobuf #(
@@ -111,15 +109,16 @@ module system_top (
              adc_seq_en,         // 37
              adc_chsel}));       // 35:33
 
-  generate
-    for (i = 0; i < 16; i = i + 1) begin: adc_db_io
-      ad_iobuf i_iobuf_adc_db (
-        .dio_t(adc_db_t),
-        .dio_i(adc_db_o[i]),
-        .dio_o(adc_db_i[i]),
-        .dio_p(adc_db[i]));
-    end
-  endgenerate
+  assign gpio_i[63:44] = gpio_o[63:44];
+  assign gpio_i[32] = gpio_o[32];
+
+  ad_iobuf #(
+    .DATA_WIDTH(16)
+  ) i_iobuf_adc_db (
+    .dio_t(adc_db_t),
+    .dio_i(adc_db_o[15:0]),
+    .dio_o(adc_db_i[15:0]),
+    .dio_p(adc_db[15:0]));
 
   ad_iobuf #(
     .DATA_WIDTH(15)
@@ -162,7 +161,7 @@ module system_top (
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
     .spdif (spdif),
-    .rx_cnvst (adc_convst),
+    .rx_cnvst (adc_cnvst),
     .rx_cs_n (adc_cs_n),
     .rx_busy (adc_busy),
     .rx_db_o (adc_db_o),

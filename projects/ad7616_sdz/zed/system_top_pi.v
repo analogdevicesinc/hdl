@@ -89,7 +89,7 @@ module system_top (
 
   output                  adc_cs_n,
   output                  adc_reset_n,
-  output                  adc_convst,
+  output                  adc_cnvst,
   input                   adc_busy,
   output                  adc_seq_en,
   output      [ 1:0]      adc_hw_rngsel,
@@ -130,16 +130,15 @@ module system_top (
   assign gpio_i[63:44] = gpio_o[63:44];
   assign gpio_i[40:38] = gpio_o[40:38];
   assign gpio_i[36] = gpio_o[36];
+  assign gpio_i[32] = gpio_o[32];
 
-  generate
-    for (i = 0; i < 16; i = i + 1) begin: adc_db_io
-      ad_iobuf i_iobuf_adc_db (
-        .dio_t(adc_db_t),
-        .dio_i(adc_db_o[i]),
-        .dio_o(adc_db_i[i]),
-        .dio_p(adc_db[i]));
-    end
-  endgenerate
+  ad_iobuf #(
+    .DATA_WIDTH(16)
+  ) i_iobuf_adc_db (
+    .dio_t(adc_db_t),
+    .dio_i(adc_db_o[15:0]),
+    .dio_o(adc_db_i[15:0]),
+    .dio_p(adc_db[15:0]));
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -210,7 +209,7 @@ module system_top (
     .iic_mux_sda_t (iic_mux_sda_t_s),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif),
-    .rx_cnvst (adc_convst),
+    .rx_cnvst (adc_cnvst),
     .rx_cs_n (adc_cs_n),
     .rx_busy (adc_busy),
     .rx_db_o (adc_db_o),

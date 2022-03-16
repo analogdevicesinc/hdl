@@ -16,40 +16,43 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   How to use over-writable parameters from the environment:
 #
 #    e.g.
-#      make SI_OR_PI=0
+#      make SER_PAR_N=0
 #
-#    SI_OR_PI  - Defines the interface type (serial OR parallel)
+#    SER_PAR_N  - Defines the interface type (serial OR parallel)
+#               - Default value is 1
 #
-# LEGEND: Serial    - 0
-#         Parallel  - 1
+# LEGEND: Serial    - 1
+#         Parallel  - 0
 #
-# NOTE : This switch is a 'hardware' switch. Please reimplenent the
-# design if the variable has been changed.
+# NOTE : This switch is a 'hardware' switch. Please rebuild the design if the
+# variable has been changed.
+#     SL5 - mounted - Serial
+#     SL5 - unmounted - Parallel
 #
 ##--------------------------------------------------------------
 
-if {[info exists ::env(SI_OR_PI)]} {
-  set S_SI_OR_PI [get_env_param SI_OR_PI 0]
-} elseif {![info exists SI_OR_PI]} {
-  set S_SI_OR_PI 0
+if {[info exists ::env(SER_PAR_N)]} {
+  set S_SER_PAR_N [get_env_param SER_PAR_N 0]
+} elseif {![info exists SER_PAR_N]} {
+  set S_SER_PAR_N 1
 }
 
 adi_project ad7616_sdz_zed 0 [list \
-  SI_OR_PI  $S_SI_OR_PI \
+  SER_PAR_N  $S_SER_PAR_N \
 ]
 
 adi_project_files ad7616_sdz_zed [list \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc"]
 
-switch $S_SI_OR_PI {
-  0 {
+switch $S_SER_PAR_N {
+  1 {
     adi_project_files ad7616_sdz_zed [list \
       "system_top_si.v" \
       "serial_if_constr.xdc"
     ]
   }
-  1 {
+  0 {
     adi_project_files ad7616_sdz_zed [list \
       "system_top_pi.v" \
       "parallel_if_constr.xdc"
