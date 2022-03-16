@@ -37,14 +37,10 @@
 
 module axi_ad7616_control #(
 
-  parameter   ID = 0,
-  parameter   IF_TYPE = 0
+  parameter   ID = 0
 ) (
 
   // control signals
-
-  output                  cnvst,
-  input                   busy,
 
   input       [15:0]      up_read_data,
   input                   up_read_valid,
@@ -53,7 +49,6 @@ module axi_ad7616_control #(
   output                  up_write_req,
 
   output  reg [ 4:0]      up_burst_length,
-  output                  end_of_conv,
 
   // bus interface
 
@@ -72,8 +67,6 @@ module axi_ad7616_control #(
   localparam  PCORE_VERSION = 'h00001002;
   localparam  POS_EDGE = 0;
   localparam  NEG_EDGE = 1;
-  localparam  SERIAL = 0;
-  localparam  PARALLEL = 1;
 
   // internal signals
 
@@ -96,8 +89,8 @@ module axi_ad7616_control #(
 
   // the up_[read/write]_data interfaces are valid just in parallel mode
 
-  assign up_read_valid_s = (IF_TYPE == PARALLEL) ? up_read_valid : 1'b1;
-  assign up_read_data_s = (IF_TYPE == PARALLEL) ? {16'h0, up_read_data} : {2{16'hDEAD}};
+  assign up_read_valid_s = up_read_valid;
+  assign up_read_data_s = {16'h0, up_read_data};
 
   // processor write interface
 
@@ -149,7 +142,6 @@ module axi_ad7616_control #(
           9'h100 : up_rdata <= PCORE_VERSION;
           9'h101 : up_rdata <= ID;
           9'h102 : up_rdata <= up_scratch;
-          9'h103 : up_rdata <= IF_TYPE;
           9'h110 : up_rdata <= {29'b0, up_cnvst_en, up_resetn};
           9'h111 : up_rdata <= up_conv_rate;
           9'h112 : up_rdata <= {27'b0, up_burst_length};
@@ -163,47 +155,5 @@ module axi_ad7616_control #(
   // instantiations
 
   assign up_rst = ~up_rstn;
-
-  ad_edge_detect #(
-    .EDGE(NEG_EDGE)
-  ) i_ad_edge_detect (
-    .clk (up_clk),
-    .rst (up_rst),
-    .signal_in (busy),
-    .signal_out (end_of_conv));
-
-  // convertion start generator
-  // NOTE: + The minimum convertion cycle is 1 us
-  //       + The rate of the cnvst must be defined in a way,
-  //          to not lose any data. cnvst_rate >= t_conversion + t_aquisition
-  //  See the AD7616 datasheet for more information.
-
-  always @(posedge up_clk) begin
-    if(up_resetn == 1'b0) begin
-      cnvst_counter <= 32'b0;
-    end else begin
-      cnvst_counter <= (cnvst_counter < up_conv_rate) ? cnvst_counter + 1 : 32'b0;
-    end
-  end
-
-  always @(cnvst_counter, up_conv_rate) begin
-    cnvst_pulse <= (cnvst_counter == up_conv_rate) ? 1'b1 : 1'b0;
-  end
-
-  always @(posedge up_clk) begin
-    if(up_resetn == 1'b0) begin
-      pulse_counter <= 3'b0;
-      cnvst_buf <= 1'b0;
-    end else begin
-      pulse_counter <= (cnvst == 1'b1) ? pulse_counter + 1 : 3'b0;
-      if(cnvst_pulse == 1'b1) begin
-        cnvst_buf <= 1'b1;
-      end else if (pulse_counter[2] == 1'b1) begin
-        cnvst_buf <= 1'b0;
-      end
-    end
-  end
-
-  assign cnvst = (up_cnvst_en == 1'b1) ? cnvst_buf : 1'b0;
 
 endmodule
