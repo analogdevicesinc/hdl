@@ -82,8 +82,8 @@ module system_top (
   input           spi_miso,
 
   output          pl_gpio0,
-  output          pl_gpio1,
-  input           pl_gpio2,
+  input           pl_gpio1,
+  output          pl_gpio2,
   output          pl_gpio3,
   output          pl_gpio4);
 
@@ -158,7 +158,7 @@ module system_top (
     .spi_csn_o(pl_gpio3),
     .spi_sdi_i(pl_spi_miso),
     .spi_sdo_i(1'b0),
-    .spi_sdo_o(pl_gpio1),
+    .spi_sdo_o(pl_gpio2),
 
     .txdata_o(pl_gpio0),
 
@@ -168,6 +168,6 @@ module system_top (
     .txnrx (txnrx),
     .up_enable (gpio_o[15]),
     .up_txnrx (gpio_o[16]),
-    .tdd_ext_sync(pl_gpio2));
+    .tdd_ext_sync(pl_gpio1));
 
 endmodule
