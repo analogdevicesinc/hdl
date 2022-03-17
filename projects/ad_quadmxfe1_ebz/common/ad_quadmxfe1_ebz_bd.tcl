@@ -336,7 +336,7 @@ for {set i 0}  {$i < $RX_NUM_OF_LINKS} {incr i} {
   }
 }
 
-ad_xcvrcon  util_mxfe_xcvr axi_mxfe_rx_xcvr axi_mxfe_rx_jesd $lane_map {} rx_device_clk
+ad_xcvrcon  util_mxfe_xcvr axi_mxfe_rx_xcvr axi_mxfe_rx_jesd $lane_map {} rx_device_clk $MAX_RX_LANES
 
 # connections (dac)
 #  map the logical lane $n onto the physical lane  $lane_map[$n]
@@ -353,7 +353,7 @@ for {set i 0}  {$i < $TX_NUM_OF_LINKS} {incr i} {
   }
 }
 
-ad_xcvrcon  util_mxfe_xcvr axi_mxfe_tx_xcvr axi_mxfe_tx_jesd $lane_map {} tx_device_clk
+ad_xcvrcon  util_mxfe_xcvr axi_mxfe_tx_xcvr axi_mxfe_tx_jesd $lane_map {} tx_device_clk $MAX_TX_LANES
 
 } else {
 
