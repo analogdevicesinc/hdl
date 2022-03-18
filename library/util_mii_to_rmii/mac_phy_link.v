@@ -62,7 +62,6 @@ module mac_phy_link #(
   reg               rising_tx_clk_r0 = 1'b0;
   reg               rising_tx_clk_r1 = 1'b0;
   reg     [4:0]     reg_count = 5'b0;
-  reg               tx_dibit_d = 1'b0;
 
   localparam        DIV_REF_CLK = RATE_10_100 ? 10 : 1;
 
@@ -129,15 +128,7 @@ module mac_phy_link #(
     end
   end
 
-  always @(posedge ref_clk) begin
-    if (!reset_n) begin
-      tx_dibit_d <= 1'b0;
-    end else begin
-      tx_dibit_d <= tx_dibit;
-    end
-  end
-
-  assign dibit_sample = RATE_10_100 ? (reg_count_w == 5'b01001 ? 1'b1 : 1'b0) : rising_tx_clk_r1;
+  assign dibit_sample = RATE_10_100 ? ((reg_count_w == 5'b01001) ? 1'b1 : 1'b0) : rising_tx_clk_r1;
   assign num_w = num_r + 1;
   assign mii_tx_clk = mii_tx_clk_10_100_r;
   assign reg_count_w = reg_count;

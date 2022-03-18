@@ -54,7 +54,6 @@ module phy_mac_link  #(
   wire              data_valid_w;
   wire              dibit_sample;
   wire              eopack_w;
-  wire    [9:0]     mii_rx_dv_10mbps_w;
   wire    [3:0]     num_w;
   wire    [3:0]     reg_count_w;
   wire              sopack_w;
@@ -243,7 +242,11 @@ module phy_mac_link  #(
         clk_phase_r <= mii_rx_clk;
         nibble_valid <=  1'b0;
       end else begin
-        if (dibit_sample) begin
+        if (RATE_10_100) begin
+          if (dibit_sample) begin
+            nibble_valid <= ~nibble_valid;
+          end
+        end else begin
           nibble_valid <= ~nibble_valid;
         end
       end
