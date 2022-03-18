@@ -1,6 +1,8 @@
 source ../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
+global VIVADO_IP_LIBRARY
+
 adi_ip_create data_offload
 adi_ip_files data_offload [list \
   "data_offload_sv.ttcl" \
@@ -18,10 +20,10 @@ adi_ip_properties data_offload
 adi_ip_ttcl data_offload "data_offload_constr.ttcl"
 adi_ip_sim_ttcl data_offload "data_offload_sv.ttcl"
 
-adi_ip_add_core_dependencies { \
-  analog.com:user:util_cdc:1.0 \
-  analog.com:user:util_axis_fifo_asym:1.0 \
-}
+adi_ip_add_core_dependencies [list \
+  analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+  analog.com:$VIVADO_IP_LIBRARY:util_axis_fifo_asym:1.0 \
+]
 
 set_property display_name "ADI Data Offload Controller" [ipx::current_core]
 set_property description "ADI Data Offload Controller" [ipx::current_core]

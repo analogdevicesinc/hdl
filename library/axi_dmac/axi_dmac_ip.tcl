@@ -3,6 +3,8 @@
 source ../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
+global VIVADO_IP_LIBRARY
+
 adi_ip_create axi_dmac
 adi_ip_files axi_dmac [list \
   "$ad_hdl_dir/library/common/ad_mem_asym.v" \
@@ -45,10 +47,10 @@ adi_ip_bd axi_dmac "bd/bd.tcl"
 
 set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_dmac} [ipx::current_core]
 
-adi_ip_add_core_dependencies { \
-	analog.com:user:util_axis_fifo:1.0 \
-	analog.com:user:util_cdc:1.0 \
-}
+adi_ip_add_core_dependencies [list \
+	analog.com:$VIVADO_IP_LIBRARY:util_axis_fifo:1.0 \
+	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+]
 
 set_property display_name "ADI AXI DMA Controller" [ipx::current_core]
 set_property description "ADI AXI DMA Controller" [ipx::current_core]

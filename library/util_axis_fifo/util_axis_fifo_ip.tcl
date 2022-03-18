@@ -2,6 +2,8 @@
 source ../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
+global VIVADO_IP_LIBRARY
+
 adi_ip_create util_axis_fifo
 adi_ip_files util_axis_fifo [list \
 	"util_axis_fifo_address_generator.v" \
@@ -12,9 +14,9 @@ adi_ip_files util_axis_fifo [list \
 
 adi_ip_properties_lite util_axis_fifo
 
-adi_ip_add_core_dependencies { \
-	analog.com:user:util_cdc:1.0 \
-}
+adi_ip_add_core_dependencies [list \
+	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+]
 
 set_property display_name "ADI AXI Stream FIFO" [ipx::current_core]
 set_property description  "ADI AXI Stream FIFO" [ipx::current_core]
