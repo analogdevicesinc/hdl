@@ -3,6 +3,8 @@
 source ../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
+global VIVADO_IP_LIBRARY
+
 adi_ip_create axi_ad9144
 adi_ip_files axi_ad9144 [list \
   "axi_ad9144.v" ]
@@ -14,9 +16,9 @@ adi_ip_bd axi_ad9144 "bd/bd.tcl"
 
 set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_ad9144} [ipx::current_core]
 
-adi_ip_add_core_dependencies { \
-  analog.com:user:ad_ip_jesd204_tpl_dac:1.0 \
-}
+adi_ip_add_core_dependencies [list \
+  analog.com:$VIVADO_IP_LIBRARY:ad_ip_jesd204_tpl_dac:1.0 \
+]
 
 adi_set_ports_dependency "dac_valid_2" "QUAD_OR_DUAL_N == 1"
 adi_set_ports_dependency "dac_valid_3" "QUAD_OR_DUAL_N == 1"
@@ -34,4 +36,3 @@ adi_add_auto_fpga_spec_params
 ipx::create_xgui_files [ipx::current_core]
 
 ipx::save_core [ipx::current_core]
-

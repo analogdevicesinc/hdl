@@ -2,6 +2,8 @@
 source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
+global VIVADO_IP_LIBRARY
+
 adi_ip_create axi_xcvrlb
 adi_ip_files axi_xcvrlb [list \
   "$ad_hdl_dir/library/xilinx/util_adxcvr/util_adxcvr_xch.v" \
@@ -17,9 +19,9 @@ adi_ip_properties_lite axi_xcvrlb
 adi_init_bd_tcl
 adi_ip_bd axi_xcvrlb "bd/bd.tcl"
 
-adi_ip_add_core_dependencies { \
-	analog.com:user:util_cdc:1.0 \
-}
+adi_ip_add_core_dependencies [list \
+	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+]
 
 ipx::remove_all_bus_interface [ipx::current_core]
 
@@ -65,4 +67,3 @@ set_property range {1024} [ipx::get_address_blocks axi_lite \
 adi_add_auto_fpga_spec_params
 
 ipx::save_core [ipx::current_core]
-

@@ -45,6 +45,8 @@
 source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
+global VIVADO_IP_LIBRARY
+
 adi_ip_create axi_jesd204_tx
 adi_ip_files axi_jesd204_tx [list \
   "../../common/up_axi.v" \
@@ -64,9 +66,9 @@ set_property PROCESSING_ORDER LATE [ipx::get_files axi_jesd204_tx_constr.xdc \
   -of_objects [ipx::get_file_groups -of_objects [ipx::current_core] \
   -filter {NAME =~ *synthesis*}]]
 
-adi_ip_add_core_dependencies { \
-  analog.com:user:axi_jesd204_common:1.0 \
-}
+adi_ip_add_core_dependencies [list \
+  analog.com:$VIVADO_IP_LIBRARY:axi_jesd204_common:1.0 \
+]
 
 set_property display_name "ADI JESD204C Transmit AXI Interface" [ipx::current_core]
 set_property description "ADI JESD204B Transmit AXI Interface" [ipx::current_core]

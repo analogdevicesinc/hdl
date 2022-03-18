@@ -3,6 +3,8 @@
 source ../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
+global VIVADO_IP_LIBRARY
+
 adi_ip_create axi_adrv9001
 adi_ip_files axi_adrv9001 [list \
   "$ad_hdl_dir/library/xilinx/common/ad_serdes_clk.v" \
@@ -58,9 +60,9 @@ adi_ip_properties axi_adrv9001
 adi_init_bd_tcl
 adi_ip_bd axi_adrv9001 "bd/bd.tcl"
 
-adi_ip_add_core_dependencies { \
-  analog.com:user:util_cdc:1.0 \
-}
+adi_ip_add_core_dependencies [list \
+  analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+]
 
 set cc [ipx::current_core]
 
@@ -113,4 +115,3 @@ adi_add_auto_fpga_spec_params
 ipx::create_xgui_files $cc
 
 ipx::save_core $cc
-

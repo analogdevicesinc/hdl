@@ -3,6 +3,8 @@
 source ../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
+global VIVADO_IP_LIBRARY
+
 adi_ip_create axi_pwm_gen
 adi_ip_files axi_pwm_gen [list \
   "$ad_hdl_dir/library/common/ad_rst.v" \
@@ -18,9 +20,9 @@ adi_ip_ttcl axi_pwm_gen "axi_pwm_gen_constr.ttcl"
 
 set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_pwm_gen} [ipx::current_core]
 
-adi_ip_add_core_dependencies { \
-	analog.com:user:util_cdc:1.0 \
-}
+adi_ip_add_core_dependencies [list \
+	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+]
 
 set cc [ipx::current_core]
 

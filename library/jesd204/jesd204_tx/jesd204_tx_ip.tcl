@@ -45,6 +45,8 @@
 source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
+global VIVADO_IP_LIBRARY
+
 adi_ip_create jesd204_tx
 adi_ip_files jesd204_tx [list \
   "jesd204_tx_lane.v" \
@@ -64,10 +66,10 @@ adi_ip_ttcl jesd204_tx "jesd204_tx_constr.ttcl"
 adi_ip_ttcl jesd204_tx "jesd204_tx_ooc.ttcl"
 adi_ip_bd jesd204_tx "bd/bd.tcl"
 
-adi_ip_add_core_dependencies { \
-  analog.com:user:jesd204_common:1.0 \
-  analog.com:user:util_cdc:1.0 \
-}
+adi_ip_add_core_dependencies [list \
+  analog.com:$VIVADO_IP_LIBRARY:jesd204_common:1.0 \
+  analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+]
 
 set_property display_name "ADI JESD204 Transmit" [ipx::current_core]
 set_property description "ADI JESD204 Transmit" [ipx::current_core]
