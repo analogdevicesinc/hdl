@@ -3,6 +3,8 @@
 source ../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
+global VIVADO_IP_LIBRARY
+
 adi_ip_create axi_pulse_gen
 adi_ip_files axi_pulse_gen [list \
   "$ad_hdl_dir/library/common/ad_rst.v" \
@@ -16,9 +18,9 @@ adi_ip_files axi_pulse_gen [list \
 adi_ip_properties axi_pulse_gen
 adi_ip_ttcl axi_pulse_gen "axi_pulse_gen_constr.ttcl"
 
-adi_ip_add_core_dependencies { \
-	analog.com:user:util_cdc:1.0 \
-}
+adi_ip_add_core_dependencies [list \
+	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+]
 
 
 set cc [ipx::current_core]

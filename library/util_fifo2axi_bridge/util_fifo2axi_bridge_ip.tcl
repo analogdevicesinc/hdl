@@ -1,6 +1,8 @@
 source ../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
+global VIVADO_IP_LIBRARY
+
 adi_ip_create util_fifo2axi_bridge
 adi_ip_files util_fifo2axi_bridge [list \
   "util_fifo2axi_bridge_constr.xdc" \
@@ -9,10 +11,10 @@ adi_ip_files util_fifo2axi_bridge [list \
 
 adi_ip_properties_lite util_fifo2axi_bridge
 
-adi_ip_add_core_dependencies { \
-  analog.com:user:util_cdc:1.0 \
-  analog.com:user:util_axis_fifo_asym:1.0 \
-}
+adi_ip_add_core_dependencies [list \
+  analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+  analog.com:$VIVADO_IP_LIBRARY:util_axis_fifo_asym:1.0 \
+]
 
 set_property display_name "ADI FIFO to AXI4 bridge" [ipx::current_core]
 set_property description "Bridge between a FIFO READ/WRITE interface and an AXI4 Memory Mapped interface" [ipx::current_core]

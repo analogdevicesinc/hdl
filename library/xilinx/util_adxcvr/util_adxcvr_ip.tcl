@@ -3,6 +3,8 @@
 source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
+global VIVADO_IP_LIBRARY
+
 adi_ip_create util_adxcvr
 adi_ip_files util_adxcvr [list \
   "$ad_hdl_dir/library/scripts/adi_xilinx_device_info_enc.tcl" \
@@ -19,9 +21,9 @@ adi_ip_bd util_adxcvr "bd/bd.tcl"
 
 set_property company_url {https://wiki.analog.com/resources/fpga/docs/util_xcvr} [ipx::current_core]
 
-adi_ip_add_core_dependencies { \
-	analog.com:user:util_cdc:1.0 \
-}
+adi_ip_add_core_dependencies [list \
+	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+]
 set cc [ipx::current_core]
 
 # Arrange GUI page layout
@@ -1308,4 +1310,3 @@ set_property -dict [list \
 ipx::create_xgui_files [ipx::current_core]
 
 ipx::save_core [ipx::current_core]
-

@@ -3,6 +3,8 @@
 source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
+global VIVADO_IP_LIBRARY
+
 adi_ip_create axi_spi_engine
 adi_ip_files axi_spi_engine [list \
   "$ad_hdl_dir/library/common/up_axi.v" \
@@ -15,10 +17,10 @@ adi_ip_files axi_spi_engine [list \
 adi_ip_properties axi_spi_engine
 adi_ip_ttcl axi_spi_engine "axi_spi_engine_constr.ttcl"
 
-adi_ip_add_core_dependencies { \
-	analog.com:user:util_axis_fifo:1.0 \
-	analog.com:user:util_cdc:1.0 \
-}
+adi_ip_add_core_dependencies [list \
+	analog.com:$VIVADO_IP_LIBRARY:util_axis_fifo:1.0 \
+	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+]
 
 set_property company_url {https://wiki.analog.com/resources/fpga/peripherals/spi_engine/axi} [ipx::current_core]
 
