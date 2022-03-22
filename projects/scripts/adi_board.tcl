@@ -409,6 +409,14 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}
     ad_connect sys_cpu_resetn ${rst_gen}/ext_reset_in
   }
 
+  if {$lane_map != {} && $no_of_lanes != $num_of_max_lanes} {
+    for {set i 0}  {$i < $num_of_max_lanes} {incr i} {
+      if {$i ni $lane_map} {
+        lappend lane_map $i
+      }
+    }
+  }
+
   for {set n 0} {$n < $no_of_lanes} {incr n} {
 
     set m [expr ($n + $index)]
