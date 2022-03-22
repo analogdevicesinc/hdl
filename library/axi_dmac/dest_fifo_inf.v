@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module dmac_dest_fifo_inf #(
+module dest_fifo_inf #(
 
   parameter ID_WIDTH = 3,
   parameter DATA_WIDTH = 64,
@@ -121,7 +121,7 @@ always @(posedge clk) begin
   end
 end
 
-dmac_response_generator # (
+response_generator # (
   .ID_WIDTH(ID_WIDTH)
 ) i_response_generator (
   .clk(clk),

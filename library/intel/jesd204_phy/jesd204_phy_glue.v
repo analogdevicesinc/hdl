@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module jesd204_glue #(
+module jesd204_phy_glue #(
   parameter WIDTH = 20,
   parameter CONST_WIDTH = 1,
   parameter NUM_OF_LANES = 1,

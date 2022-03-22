@@ -315,7 +315,7 @@ assign dma_response_ready = req_response_ready;
 
 end endgenerate
 
-dmac_request_arb #(
+request_arb #(
   .DMA_DATA_WIDTH_SRC (DMA_DATA_WIDTH_SRC),
   .DMA_DATA_WIDTH_DEST (DMA_DATA_WIDTH_DEST),
   .DMA_LENGTH_WIDTH (DMA_LENGTH_WIDTH),

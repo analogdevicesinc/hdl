@@ -58,7 +58,7 @@ set_module_property INTERNAL true
 
 # files
 
-ad_ip_files jesd204_glue [list \
+ad_ip_files jesd204_phy_glue [list \
   jesd204_phy_glue.v \
 ]
 
@@ -272,7 +272,7 @@ proc jesd204_phy_glue_elab {} {
 
     if {$bonding_clocks_en && $num_of_lanes > 6} {
         glue_add_if $num_of_lanes tx_bonding_clocks hssi_bonded_clock sink true
-        glue_add_if_port $num_of_lanes tx_bonding_clocks tx_bonding_clocks clk Input 6 true        
+        glue_add_if_port $num_of_lanes tx_bonding_clocks tx_bonding_clocks clk Input 6 true
     } else {
         glue_add_tx_serial_clk $num_of_lanes
     }
