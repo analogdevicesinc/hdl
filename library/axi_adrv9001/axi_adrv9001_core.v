@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9001_core #(
+module axi_adrv9001_core #(
   parameter ID = 0,
   parameter CMOS_LVDS_N = 0,
   parameter USE_RX_CLK_FOR_TX = 0,

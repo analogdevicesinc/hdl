@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module dmac_src_mm_axi #(
+module src_axi_mm #(
 
   parameter ID_WIDTH = 3,
   parameter DMA_DATA_WIDTH = 64,
@@ -146,7 +146,7 @@ splitter #(
   })
 );
 
-dmac_address_generator #(
+address_generator #(
   .ID_WIDTH(ID_WIDTH),
   .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH),
   .BYTES_PER_BEAT_WIDTH(BYTES_PER_BEAT_WIDTH),

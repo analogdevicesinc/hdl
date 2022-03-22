@@ -105,7 +105,7 @@ assign device_cfg_lmfc_offset = 1;
 assign device_cfg_sysref_oneshot = SYSREF_ONE_SHOT;
 assign device_cfg_sysref_disable = SYSREF_DISABLE;
 
-jesd204_ilas_config_static #(
+jesd204_ilas_cfg_static #(
   .DID(8'h00),
   .BID(5'h00),
   .L(NUM_LANES - 1),

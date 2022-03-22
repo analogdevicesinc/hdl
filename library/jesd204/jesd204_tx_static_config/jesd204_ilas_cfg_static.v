@@ -44,7 +44,7 @@
 
 `timescale 1ns/100ps
 
-module jesd204_ilas_config_static #(
+module jesd204_ilas_cfg_static #(
   parameter DID = 8'h00,
   parameter BID = 4'h0,
   parameter L = 5'h3,

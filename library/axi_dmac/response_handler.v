@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module dmac_response_handler #(
+module response_handler #(
 
   parameter ID_WIDTH = 3)(
 

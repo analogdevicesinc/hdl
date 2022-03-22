@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module dmac_data_mover #(
+module data_mover #(
 
   parameter ID_WIDTH = 3,
   parameter DATA_WIDTH = 64,

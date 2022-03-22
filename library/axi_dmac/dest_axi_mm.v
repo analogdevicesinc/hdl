@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module dmac_dest_mm_axi #(
+module dest_axi_mm #(
 
   parameter ID_WIDTH = 3,
   parameter DMA_DATA_WIDTH = 64,
@@ -109,7 +109,7 @@ module dmac_dest_mm_axi #(
 
 wire address_enabled;
 
-dmac_address_generator #(
+address_generator #(
   .ID_WIDTH(ID_WIDTH),
   .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH),
   .BYTES_PER_BEAT_WIDTH(BYTES_PER_BEAT_WIDTH),
@@ -152,7 +152,7 @@ assign m_axi_wlast = fifo_last;
 assign m_axi_wdata = fifo_data;
 assign m_axi_wstrb = fifo_strb;
 
-dmac_response_handler #(
+response_handler #(
   .ID_WIDTH(ID_WIDTH)
 ) i_response_handler (
   .clk(m_axi_aclk),

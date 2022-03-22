@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module dmac_address_generator #(
+module address_generator #(
 
   parameter ID_WIDTH = 3,
   parameter DMA_DATA_WIDTH = 64,
