@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module dmac_src_fifo_inf #(
+module src_fifo_inf #(
 
   parameter ID_WIDTH = 3,
   parameter DATA_WIDTH = 64,
@@ -87,7 +87,7 @@ begin
   end
 end
 
-dmac_data_mover # (
+data_mover # (
   .ID_WIDTH(ID_WIDTH),
   .DATA_WIDTH(DATA_WIDTH),
   .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH)

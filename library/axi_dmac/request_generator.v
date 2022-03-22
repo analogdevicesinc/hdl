@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module dmac_request_generator #(
+module request_generator #(
 
   parameter ID_WIDTH = 3,
   parameter BURSTS_PER_TRANSFER_WIDTH = 17)(

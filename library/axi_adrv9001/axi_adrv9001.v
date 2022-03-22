@@ -408,7 +408,7 @@ module axi_adrv9001 #(
   );
 
   // common processor control
-  axi_ad9001_core #(
+  axi_adrv9001_core #(
     .ID (ID),
     .NUM_LANES (NUM_LANES),
     .CMOS_LVDS_N (CMOS_LVDS_N),

@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module dmac_request_arb #(
+module request_arb #(
   parameter DMA_DATA_WIDTH_SRC = 64,
   parameter DMA_DATA_WIDTH_DEST = 64,
   parameter DMA_LENGTH_WIDTH = 24,
@@ -353,7 +353,7 @@ assign dbg_dest_data_id = dest_data_response_id;
 
 assign dest_data_request_id = dest_address_id;
 
-dmac_dest_mm_axi #(
+dest_axi_mm #(
   .ID_WIDTH(ID_WIDTH),
   .DMA_DATA_WIDTH(DMA_DATA_WIDTH_DEST),
   .DMA_ADDR_WIDTH(DMA_AXI_ADDR_WIDTH),
@@ -499,7 +499,7 @@ assign dbg_dest_address_id = 'h00;
 assign dbg_dest_data_id = data_id;
 
 
-dmac_dest_axi_stream #(
+dest_axi_stream #(
   .ID_WIDTH(ID_WIDTH),
   .S_AXIS_DATA_WIDTH(DMA_DATA_WIDTH_DEST),
   .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_DEST)
@@ -561,7 +561,7 @@ assign dest_data_request_id = dest_request_id;
 assign dbg_dest_address_id = 'h00;
 assign dbg_dest_data_id = data_id;
 
-dmac_dest_fifo_inf #(
+dest_fifo_inf #(
   .ID_WIDTH(ID_WIDTH),
   .DATA_WIDTH(DMA_DATA_WIDTH_DEST),
   .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_DEST)
@@ -622,7 +622,7 @@ assign src_ext_resetn = m_src_axi_aresetn;
 assign dbg_src_address_id = src_address_id;
 assign dbg_src_data_id = src_data_id;
 
-dmac_src_mm_axi #(
+src_axi_mm #(
   .ID_WIDTH(ID_WIDTH),
   .DMA_DATA_WIDTH(DMA_DATA_WIDTH_SRC),
   .DMA_ADDR_WIDTH(DMA_AXI_ADDR_WIDTH),
@@ -709,7 +709,7 @@ assign src_response_resp = 2'b0;
 */
 
 
-dmac_src_axi_stream #(
+src_axi_stream #(
   .ID_WIDTH(ID_WIDTH),
   .S_AXIS_DATA_WIDTH(DMA_DATA_WIDTH_SRC),
   .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_SRC)
@@ -814,7 +814,7 @@ assign src_response_valid = 1'b0;
 assign src_response_resp = 2'b0;
 */
 
-dmac_src_fifo_inf #(
+src_fifo_inf #(
   .ID_WIDTH(ID_WIDTH),
   .DATA_WIDTH(DMA_DATA_WIDTH_SRC),
   .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_SRC)
@@ -1132,7 +1132,7 @@ assign src_response_empty = 1'b1;
 assign src_response_ready = 1'b1;
 */
 
-dmac_request_generator #(
+request_generator #(
   .ID_WIDTH(ID_WIDTH),
   .BURSTS_PER_TRANSFER_WIDTH(BURSTS_PER_TRANSFER_WIDTH)
 ) i_req_gen (

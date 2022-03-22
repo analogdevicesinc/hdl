@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module dmac_dest_axi_stream #(
+module dest_axi_stream #(
 
   parameter ID_WIDTH = 3,
   parameter S_AXIS_DATA_WIDTH = 64,
@@ -133,7 +133,7 @@ always @(posedge s_axis_aclk) begin
   end
 end
 
-dmac_response_generator # (
+response_generator # (
   .ID_WIDTH(ID_WIDTH)
 ) i_response_generator (
   .clk(s_axis_aclk),

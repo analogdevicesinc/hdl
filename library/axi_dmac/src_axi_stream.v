@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module dmac_src_axi_stream #(
+module src_axi_stream #(
 
   parameter ID_WIDTH = 3,
   parameter S_AXIS_DATA_WIDTH = 64,
@@ -86,7 +86,7 @@ module dmac_src_axi_stream #(
 
 assign enabled = enable;
 
-dmac_data_mover # (
+data_mover # (
   .ID_WIDTH(ID_WIDTH),
   .DATA_WIDTH(S_AXIS_DATA_WIDTH),
   .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH),
