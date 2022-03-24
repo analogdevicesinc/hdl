@@ -6,6 +6,7 @@
 <: set mem_type [getBooleanValue "MEM_TYPE"] :>
 <: set tx_enable [getBooleanValue "TX_OR_RXN_PATH"] :>
 <: set internal_cdc [getBooleanValue "SYNC_EXT_ADD_INTERNAL_CDC"] :>
+<: set has_bypass [getBooleanValue "HAS_BYPASS"] :>
 
 ## for all synchronization registers from util_cdc modules
 set_property ASYNC_REG TRUE \
@@ -113,7 +114,7 @@ set_false_path \
   -to [get_cells -hierarchical * -filter {NAME=~*i_sync_xfer_control/out_data_reg[*]}]
 
 
-<: if { $tx_enable == 0 } { :>
+<: if { $tx_enable == 1 } { :>
 set_false_path \
   -to [get_pins -hierarchical * -filter {NAME=~*i_rd_init_req_sync/cdc_sync_stage1_reg[*]/D}]
 <: } else { :>
@@ -154,9 +155,10 @@ set_max_delay -quiet -datapath_only \
 	[get_property -min PERIOD $dest_clk]
 
 ## Constraints for the bypass module
-
+<: if { $has_bypass == 1 } { :>
 set_false_path \
   -to [get_pins -hierarchical * -filter {NAME=~*i_waddr_sync_gray/cdc_sync_stage1_reg[*]/D}]
 
 set_false_path \
   -to [get_pins -hierarchical * -filter {NAME=~*i_raddr_sync_gray/cdc_sync_stage1_reg[*]/D}]
+<: } :>

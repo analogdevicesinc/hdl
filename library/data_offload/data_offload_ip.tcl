@@ -156,15 +156,18 @@ set_property -dict [list \
 
 ## Boolean parameters
 foreach {k v} { \
+    "HAS_BYPASS" "true" \
     "DST_CYCLIC_EN" "true" \
     "SYNC_EXT_ADD_INTERNAL_CDC" "true" \
   } { \
   set_property -dict [list \
       "value_format" "bool" \
+      "value_format" "bool" \
       "value" $v \
     ] \
     [ipx::get_user_parameters $k -of_objects $cc]
   set_property -dict [list \
+      "value_format" "bool" \
       "value_format" "bool" \
       "value" $v \
     ] \
@@ -280,6 +283,11 @@ set features_group [ipgui::add_group -name "Features" -component $cc \
 #  "display_name" "Destionation Raw Data Enable" \
 #] [ipgui::get_guiparamspec -name "DST_RAW_DATA_EN" -component $cc]
 #set_property enablement_tcl_expr {$TX_OR_RXN_PATH == 1} [ipx::get_user_parameters DST_RAW_DATA_EN -of_objects $cc]
+
+ipgui::add_param -name "HAS_BYPASS" -component $cc -parent $features_group
+set_property -dict [list \
+  "display_name" "Internal Bypass Data Path Enabled" \
+] [ipgui::get_guiparamspec -name "HAS_BYPASS" -component $cc]
 
 ipgui::add_param -name "DST_CYCLIC_EN" -component $cc -parent $features_group
 set_property -dict [list \

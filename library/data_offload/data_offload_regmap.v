@@ -41,7 +41,9 @@ module data_offload_regmap #(
   parameter [33:0] MEM_SIZE = 1024,
   parameter LENGTH_WIDTH = 10,
   parameter TX_OR_RXN_PATH = 0,
-  parameter AUTO_BRINGUP = 0) (
+  parameter AUTO_BRINGUP = 0,
+  parameter HAS_BYPASS = 1
+) (
 
   // microprocessor interface
   input                   up_clk,
@@ -144,7 +146,7 @@ module data_offload_regmap #(
       /* Control Register */
       if ((up_wreq == 1'b1) && (up_waddr[11:0] == 14'h22)) begin
         up_oneshot <= up_wdata[1];
-        up_bypass <= up_wdata[0];
+        up_bypass <= up_wdata[0] & HAS_BYPASS;
       end
       /* SYNC Offload Register - self cleared, one pulse signal */
       if ((up_wreq == 1'b1) && (up_waddr[11:0] == 14'h40)) begin

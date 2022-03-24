@@ -49,7 +49,9 @@ module data_offload #(
   parameter          DST_CYCLIC_EN = 1'b0,          // 1'b1 - CYCLIC mode enabled; 1'b0 - CYCLIC mode disabled
 
   parameter          AUTO_BRINGUP = 1,
-  parameter          SYNC_EXT_ADD_INTERNAL_CDC = 1) (
+  parameter          SYNC_EXT_ADD_INTERNAL_CDC = 1,
+  parameter          HAS_BYPASS = 1
+) (
 
   // AXI4 Slave for configuration
 
@@ -272,8 +274,9 @@ module data_offload #(
     .MEM_SIZE (MEM_SIZE),
     .LENGTH_WIDTH (LENGTH_WIDTH),
     .TX_OR_RXN_PATH (TX_OR_RXN_PATH),
-    .AUTO_BRINGUP (AUTO_BRINGUP))
-  i_regmap (
+    .AUTO_BRINGUP (AUTO_BRINGUP),
+    .HAS_BYPASS (HAS_BYPASS)
+) i_regmap (
     .up_clk (up_clk),
     .up_rstn (up_rstn),
     .up_rreq (up_rreq_s),
