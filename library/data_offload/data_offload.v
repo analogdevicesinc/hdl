@@ -216,6 +216,7 @@ module data_offload #(
     .rd_ml_valid (rd_ml_valid),
     .rd_ml_ready (rd_ml_ready),
     .rd_oneshot (oneshot_s),
+    .wr_bypass (src_bypass_s),
     .init_req (init_req),
     .sync_config (sync_config_s),
     .sync_external (sync_ext),

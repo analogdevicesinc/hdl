@@ -67,6 +67,7 @@ module data_offload_fsm #(
   // write control interface
   input                               wr_clk,
   input                               wr_resetn_in,
+  input                               wr_bypass,
 
   // read control interface
   input                               rd_clk,
@@ -136,7 +137,7 @@ module data_offload_fsm #(
     wr_fsm_next_state = wr_fsm_state;
     case (wr_fsm_state)
       WR_STATE_IDLE:
-        if (wr_init_req_s) begin
+        if (wr_init_req_s & ~wr_bypass) begin
           wr_fsm_next_state = WR_STATE_PRE_WR;
         end
       WR_STATE_PRE_WR:
