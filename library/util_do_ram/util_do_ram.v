@@ -117,7 +117,7 @@ always @(posedge s_axis_aclk) begin
 end
 
 wire wr_last_beat;
-assign wr_last_beat = s_axis_valid & s_axis_ready & ((wr_addr == wr_length) | &wr_addr & s_axis_last);
+assign wr_last_beat = s_axis_valid & s_axis_ready & ((wr_addr == wr_length) | s_axis_last);
 
 always @(posedge s_axis_aclk) begin
   if (~wr_request_enable)
@@ -141,13 +141,23 @@ always @(posedge s_axis_aclk) begin
     wr_response_measured_length <= {wr_addr, {$clog2(SRC_DATA_WIDTH/8){1'b1}}};
 end
 
+reg wr_full = 1'b0;
+// Protect against larger transfers than storage
+always @(posedge s_axis_aclk) begin
+  if (wr_request_valid & wr_request_ready)
+    wr_full <= 1'b0;
+  else if (&wr_addr & (s_axis_valid & s_axis_ready))
+    wr_full <= 1'b1;
+end
+
+// Do not roll over write address
 always @(posedge s_axis_aclk) begin
   if (~wr_request_enable | wr_last_beat)
     wr_addr <= 'h0;
-  else if (s_axis_valid & s_axis_ready)
+  else if (s_axis_valid & s_axis_ready & (~(&wr_addr)))
     wr_addr <= wr_addr + 1;
 end
-assign wr_enable = s_axis_valid & s_axis_ready;
+assign wr_enable = s_axis_valid & s_axis_ready & ~wr_full;
 
 ad_mem_asym #(
    .A_ADDRESS_WIDTH (SRC_ADDRESS_WIDTH),
