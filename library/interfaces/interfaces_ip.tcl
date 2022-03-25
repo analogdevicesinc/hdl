@@ -112,3 +112,5 @@ adi_if_ports  input    1  request_ready
 adi_if_ports  output  -1  request_length
 adi_if_ports  output  -1  response_measured_length
 adi_if_ports  input    1  response_eot
+adi_if_ports  input    1  status_underflow
+adi_if_ports  input    1  status_overflow
