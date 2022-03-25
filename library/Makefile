@@ -39,6 +39,7 @@ clean:
 	$(MAKE) -C axi_adrv9001 clean
 	$(MAKE) -C axi_adrv9009 clean
 	$(MAKE) -C axi_clkgen clean
+	$(MAKE) -C axi_clock_monitor clean
 	$(MAKE) -C axi_dac_interpolate clean
 	$(MAKE) -C axi_dmac clean
 	$(MAKE) -C axi_fan_control clean
@@ -165,6 +166,7 @@ lib:
 	$(MAKE) -C axi_adrv9001
 	$(MAKE) -C axi_adrv9009
 	$(MAKE) -C axi_clkgen
+	$(MAKE) -C axi_clock_monitor
 	$(MAKE) -C axi_dac_interpolate
 	$(MAKE) -C axi_dmac
 	$(MAKE) -C axi_fan_control
