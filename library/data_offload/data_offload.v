@@ -131,6 +131,7 @@ module data_offload #(
   output   [LENGTH_WIDTH-1:0]                 wr_request_length,
   input    [LENGTH_WIDTH-1:0]                 wr_response_measured_length,
   input                                       wr_response_eot,
+  input                                       wr_overflow,
 
   // Control interface for storage for s_storage_axis interface
   output                                      rd_request_enable,
@@ -138,6 +139,7 @@ module data_offload #(
   input                                       rd_request_ready,
   output  reg  [LENGTH_WIDTH-1:0]             rd_request_length,
   input                                       rd_response_eot,
+  input                                       rd_underflow,
 
   // Status and monitor
 
@@ -213,6 +215,7 @@ module data_offload #(
     .rd_request_ready (rd_request_ready),
     .rd_response_eot (rd_response_eot),
     .rd_ready (rd_ready),
+    .rd_valid (s_storage_axis_valid),
     .rd_ml_valid (rd_ml_valid),
     .rd_ml_ready (rd_ml_ready),
     .rd_oneshot (oneshot_s),
@@ -301,7 +304,9 @@ module data_offload #(
     .src_transfer_length (wr_request_length),
     .dst_transfer_length (),
     .src_fsm_status (src_fsm_status_s),
-    .dst_fsm_status (dst_fsm_status_s)
+    .dst_fsm_status (dst_fsm_status_s),
+    .src_overflow (wr_overflow),
+    .dst_underflow (rd_underflow)
   );
 
   // axi interface wrapper

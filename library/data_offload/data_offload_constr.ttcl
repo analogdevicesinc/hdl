@@ -162,3 +162,18 @@ set_false_path \
 set_false_path \
   -to [get_pins -hierarchical * -filter {NAME=~*i_raddr_sync_gray/cdc_sync_stage1_reg[*]/D}]
 <: } :>
+
+
+## Constraints for the overflow/underflow status
+<: if { $tx_enable == 1 } { :>
+set flow_cdc  i_rd_underflow_sync
+<: } else { :>
+set flow_cdc  i_wr_overflow_sync
+<: } :>
+set_false_path \
+  -from [get_pins -hierarchical * -filter NAME=~*/$flow_cdc/in_toggle_d1_reg/C] \
+  -to [get_pins -hierarchical * -filter NAME=~*/$flow_cdc/i_sync_out/cdc_sync_stage1_reg[*]/D]
+
+set_false_path \
+  -from [get_pins -hierarchical * -filter NAME=~*/$flow_cdc/out_toggle_d1_reg/C] \
+  -to [get_pins -hierarchical * -filter NAME=~*/$flow_cdc/i_sync_in/cdc_sync_stage1_reg[*]/D]

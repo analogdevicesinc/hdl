@@ -281,6 +281,8 @@ into or from the memory.
 |        |          | [ 1: 0]  | `MEMORY_SIZE_MSB`     |       |              |                         |
 | 0x0007 |  0x001C  |          | `TRANSFER_LENGTH`     |  RW   |  SRC         |  Transfer length        |
 | 0x0020 |  0x0080  |          | `MEM_PHY_STATE`       |  RO   |  DDR         |  Status bits of the memory controller IP |
+|        |          | [ 5: 5]  | `UNDERFLOW`           |  RW1C |              |  Indicates that storage could not handle data rate during play. Available when core is in TX mode.|
+|        |          | [ 4: 4]  | `OVERFLOW`            |  RW1C |              |  Indicates that storage could not handle data rate during capture. Available when core is in RX mode. |
 |        |          | [ 0: 0]  | `CALIB_COMPLETE`      |       |              |  Indicates that the memory initialization and calibration have completed successfully |
 | 0x0021 |  0x0084  |          | `RESETN_OFFLOAD`      |  RW   |  DST/SRC     |  Reset all the internal address registers and state machines |
 |        |          | [ 0: 0]  | `RESETN`              |       |              |                         |

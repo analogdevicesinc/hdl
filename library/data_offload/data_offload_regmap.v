@@ -88,7 +88,10 @@ module data_offload_regmap #(
   input       [ 3:0]      dst_fsm_status,
 
   input       [31:0]      sample_count_msb,
-  input       [31:0]      sample_count_lsb
+  input       [31:0]      sample_count_lsb,
+
+  input                   src_overflow,
+  input                   dst_underflow
 
 );
 
@@ -106,6 +109,8 @@ module data_offload_regmap #(
   reg   [ 1:0]  up_sync_config = 'd0;
   reg           up_oneshot = 1'b0;
   reg   [LENGTH_WIDTH-1:0]  up_transfer_length = 'd0;
+  reg           up_src_overflow = 1'b0;
+  reg           up_dst_underflow = 1'b0;
 
   //internal signals
 
@@ -117,6 +122,8 @@ module data_offload_regmap #(
   wire          src_sw_resetn_s;
   wire          dst_sw_resetn_s;
   wire  [33:0]  src_transfer_length_s;
+  wire          up_src_overflow_set_s;
+  wire          up_dst_underflow_set_s;
 
   // write interface
   always @(posedge up_clk) begin
@@ -129,6 +136,8 @@ module data_offload_regmap #(
       up_sync <= 'd0;
       up_sync_config <= 'd0;
       up_transfer_length <= {LENGTH_WIDTH{1'b1}};
+      up_src_overflow <= 1'b0;
+      up_dst_underflow <= 1'b0;
     end else begin
       up_wack <= up_wreq;
       /* Scratch Register */
@@ -138,6 +147,17 @@ module data_offload_regmap #(
       /* Transfer Length Register */
       if ((up_wreq == 1'b1) && (up_waddr[11:0] == 14'h07)) begin
         up_transfer_length <= {up_wdata[LENGTH_WIDTH-7:0], {6{1'b1}}};
+      end
+      /* Memory interface status register */
+      if ((up_wreq == 1'b1) && (up_waddr[11:0] == 14'h20) && up_wdata[4]) begin
+        up_src_overflow <= 1'b0;
+      end else if (up_src_overflow_set_s) begin
+        up_src_overflow <= 1'b1;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[11:0] == 14'h20) && up_wdata[5]) begin
+        up_dst_underflow <= 1'b0;
+      end else if (up_dst_underflow_set_s) begin
+        up_dst_underflow <= 1'b1;
       end
       /* Reset Offload Register */
       if ((up_wreq == 1'b1) && (up_waddr[11:0] == 14'h21)) begin
@@ -208,6 +228,9 @@ module data_offload_regmap #(
         /* Memory Physical Interface Status */
         14'h020:  up_rdata <= {
                           31'b0,
+                          up_dst_underflow,
+                          up_src_overflow,
+                          3'b0,
            /*   0   */    up_ddr_calib_done_s
         };
         /* Reset Offload Register */
@@ -385,5 +408,30 @@ module data_offload_regmap #(
   always @(posedge dst_clk) begin
     dst_sw_resetn <= dst_sw_resetn_s;
   end
+
+  generate if (TX_OR_RXN_PATH == 0) begin
+    sync_event #(
+      .NUM_OF_EVENTS (1),
+      .ASYNC_CLK (1))
+    i_wr_overflow_sync (
+      .in_clk (src_clk),
+      .in_event (src_overflow),
+      .out_clk (up_clk),
+      .out_event (up_src_overflow_set_s)
+    );
+    assign up_dst_underflow_set_s = 1'b0;
+  end else begin
+    sync_event #(
+      .NUM_OF_EVENTS (1),
+      .ASYNC_CLK (1))
+    i_rd_underflow_sync (
+      .in_clk (dst_clk),
+      .in_event (dst_underflow),
+      .out_clk (up_clk),
+      .out_event (up_dst_underflow_set_s)
+    );
+    assign up_src_overflow_set_s = 1'b0;
+  end
+  endgenerate
 
 endmodule

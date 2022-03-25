@@ -63,6 +63,7 @@ module data_offload_fsm #(
   // Data path gating
   output                              wr_ready,
   output                              rd_ready,
+  input                               rd_valid,
 
   // write control interface
   input                               wr_clk,
@@ -192,6 +193,7 @@ module data_offload_fsm #(
           rd_fsm_next_state = TX_OR_RXN_PATH ? RD_STATE_SYNC : RD_STATE_RD;
         end
       RD_STATE_SYNC:
+      if (rd_valid) // Wait until storage is valid
         case (sync_config)
           AUTOMATIC:
             rd_fsm_next_state = RD_STATE_RD;
@@ -320,5 +322,6 @@ module data_offload_fsm #(
   );
 
 endmodule
+
 
 
