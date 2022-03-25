@@ -15,6 +15,9 @@ source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 ad_connect_hbm HBM mxfe_rx_data_offload/storage_unit $sys_hbm_clk $sys_hbm_resetn 0
 ad_connect_hbm HBM mxfe_tx_data_offload/storage_unit $sys_hbm_clk $sys_hbm_resetn 4
 
+ad_ip_parameter $adc_data_offload_name/i_data_offload CONFIG.HAS_BYPASS false
+ad_ip_parameter $dac_data_offload_name/i_data_offload CONFIG.HAS_BYPASS false
+
 ad_connect HBM/HBM_REF_CLK_0 $sys_cpu_clk
 ad_connect HBM/APB_0_PCLK $sys_cpu_clk
 ad_connect HBM/APB_0_PRESET_N $sys_cpu_resetn
