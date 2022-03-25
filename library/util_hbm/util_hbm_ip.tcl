@@ -109,6 +109,7 @@ adi_add_bus "wr_ctrl" "slave" \
 	      {"wr_request_length" "request_length"} \
 	      {"wr_response_measured_length" "response_measured_length"} \
 	      {"wr_response_eot" "response_eot"} \
+	      {"wr_overflow" "status_overflow"} \
 	  ]
 
 adi_add_bus "rd_ctrl" "slave" \
@@ -119,6 +120,7 @@ adi_add_bus "rd_ctrl" "slave" \
 	      {"rd_request_ready" "request_ready"} \
 	      {"rd_request_length" "request_length"} \
 	      {"rd_response_eot" "response_eot"} \
+	      {"rd_underflow" "status_underflow"} \
 	  ]
 
 adi_add_bus_clock "s_axis_aclk" "s_axis:wr_ctrl" "s_axis_aresetn"
@@ -129,9 +131,6 @@ foreach intf [ipx::get_bus_interfaces MAXI_* -of_objects $cc] {
 	set para [ipx::add_bus_parameter SUPPORTS_NARROW_BURST $intf]
 	set_property "VALUE" "0" $para
 }
-
-ipx::add_user_parameter TX_RX_N $cc
-ipgui::add_param -name {TX_RX_N} -component $cc
 
 set_property  -dict [list \
   display_name {Device type} \

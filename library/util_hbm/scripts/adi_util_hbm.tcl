@@ -44,6 +44,7 @@ proc ad_create_util_hbm {name rx_tx_n src_width dst_width segments_per_master} {
     SRC_DATA_WIDTH $src_width \
     DST_DATA_WIDTH $dst_width  \
     AXI_DATA_WIDTH $axi_data_width \
+    TX_RX_N $rx_tx_n
   ]
     #NUM_M $num_m \
 

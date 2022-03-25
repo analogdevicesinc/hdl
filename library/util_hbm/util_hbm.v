@@ -39,6 +39,8 @@
 `timescale 1ns/100ps
 
 module util_hbm #(
+  parameter TX_RX_N = 1,
+
   parameter SRC_DATA_WIDTH = 512,
   parameter DST_DATA_WIDTH = 128,
 
@@ -70,12 +72,14 @@ module util_hbm #(
   input   [LENGTH_WIDTH-1:0]               wr_request_length,
   output  [LENGTH_WIDTH-1:0]               wr_response_measured_length,
   output  reg                              wr_response_eot = 1'b0,
+  output                                   wr_overflow,
 
   input                                    rd_request_enable,
   input                                    rd_request_valid,
   output                                   rd_request_ready,
   input   [LENGTH_WIDTH-1:0]               rd_request_length,
   output  reg                              rd_response_eot = 1'b0,
+  output                                   rd_underflow,
 
   // Slave streaming AXI interface
   input                                    s_axis_aclk,
@@ -194,6 +198,9 @@ assign m_axis_valid = &m_axis_valid_loc;
 wire [NUM_M-1:0] wr_response_ready_loc;
 wire [NUM_M-1:0] rd_response_ready_loc;
 
+wire [NUM_M-1:0] wr_overflow_loc;
+wire [NUM_M-1:0] rd_underflow_loc;
+
 // Measure stored data in case transfer is shorter than programmed,
 //  do the measurement only with the first master, all others should be
 //  similar.
@@ -239,6 +246,9 @@ for (i = 0; i < NUM_M; i=i+1) begin
 
   // For last burst wait until all masters are done
   assign wr_response_ready_loc[i] = wr_request_eot_loc[i] ? wr_eot_pending_all : wr_response_valid_loc[i];
+
+  // Overflow whenever s_axis_ready deasserts during capture (RX_PATH)
+  assign wr_overflow_loc[i] =  TX_RX_N[0] ? 1'b0 : s_axis_xfer_req & ~s_axis_ready_loc[i];
 
   // AXIS to AXI3
   axi_dmac_transfer #(
@@ -335,7 +345,7 @@ for (i = 0; i < NUM_M; i=i+1) begin
     .s_axis_data(s_axis_data[SRC_DATA_WIDTH_PER_M*i+:SRC_DATA_WIDTH_PER_M]),
     .s_axis_user(s_axis_user),
     .s_axis_last(s_axis_last),
-    .s_axis_xfer_req(),
+    .s_axis_xfer_req(s_axis_xfer_req),
 
     .m_axis_aclk(1'b0),
     .m_axis_ready(1'b1),
@@ -387,6 +397,9 @@ for (i = 0; i < NUM_M; i=i+1) begin
   end
 
   assign rd_response_ready_loc[i] = rd_request_eot_loc[i] ? rd_eot_pending_all : rd_response_valid_loc[i];
+
+  // Underflow whenever m_axis_valid deasserts during play (TX_PATH)
+  assign rd_underflow_loc[i] = ~TX_RX_N[0] ? 1'b0 : m_axis_xfer_req & m_axis_ready & ~m_axis_valid_loc[i];
 
   // AXI3 to MAXIS
   axi_dmac_transfer #(
@@ -490,7 +503,7 @@ for (i = 0; i < NUM_M; i=i+1) begin
     .m_axis_valid(m_axis_valid_loc[i]),
     .m_axis_data(m_axis_data[DST_DATA_WIDTH_PER_M*i+:DST_DATA_WIDTH_PER_M]),
     .m_axis_last(m_axis_last_loc[i]),
-    .m_axis_xfer_req(),
+    .m_axis_xfer_req(m_axis_xfer_req),
 
     .fifo_wr_clk(1'b0),
     .fifo_wr_en(1'b0),
@@ -524,6 +537,11 @@ for (i = 0; i < NUM_M; i=i+1) begin
 
 end
 endgenerate
+
+assign wr_overflow = |wr_overflow_loc;
+
+assign rd_underflow = |rd_underflow_loc;
+
 
 endmodule
 
