@@ -221,7 +221,7 @@ module data_offload_regmap #(
         };
 
         /* Configuration data transfer length */
-        14'h007:  up_rdata <= {{32-6-LENGTH_WIDTH{1'b0}}, up_transfer_length[LENGTH_WIDTH-1:6]};
+        14'h007:  up_rdata <= up_transfer_length[LENGTH_WIDTH-1:6];
 
         /* 0x08-0x1f reserved for future use */
 

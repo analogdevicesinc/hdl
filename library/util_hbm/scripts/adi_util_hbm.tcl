@@ -32,13 +32,6 @@ proc ad_create_util_hbm {name rx_tx_n src_width dst_width segments_per_master} {
 
   set axi_data_width 256
 
-#  # Numeber of masters
-#  if {$rx_tx_n == 1} {
-#    set num_m [expr $src_width / $axi_data_width]
-#  } else {
-#    set num_m [expr $dst_width / $axi_data_width]
-#  }
-
   ad_ip_instance util_hbm $name [list \
     HBM_SEGMENTS_PER_MASTER $segments_per_master \
     SRC_DATA_WIDTH $src_width \
@@ -46,7 +39,6 @@ proc ad_create_util_hbm {name rx_tx_n src_width dst_width segments_per_master} {
     AXI_DATA_WIDTH $axi_data_width \
     TX_RX_N $rx_tx_n
   ]
-    #NUM_M $num_m \
 
 }
 

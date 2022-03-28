@@ -44,26 +44,21 @@ module util_hbm #(
   parameter SRC_DATA_WIDTH = 512,
   parameter DST_DATA_WIDTH = 128,
 
-  parameter LENGTH_WIDTH = 33,
+  parameter LENGTH_WIDTH = 32,
 
   parameter AXI_DATA_WIDTH = 256,
   parameter AXI_ADDR_WIDTH = 32,
-
-  parameter AXI_ID_WIDTH = 6,
-
-  parameter ASYNC_CLK_SAXIS_UP = 1,
-  parameter ASYNC_CLK_MAXIS_UP = 1,
-
-  parameter AXI_SLICE_DEST = 0,
-  parameter AXI_SLICE_SRC = 0,
 
   // This will size the storage per master where each segment is 256MB
   parameter HBM_SEGMENTS_PER_MASTER = 4,
   parameter HBM_SEGMENT_INDEX = 0,
 
-  // <TODO> This should depend on sample rate too
-  parameter NUM_M = SRC_DATA_WIDTH <= AXI_DATA_WIDTH ? 1 :
-                   (SRC_DATA_WIDTH / AXI_DATA_WIDTH)
+  parameter NUM_M = TX_RX_N ?
+                   (DST_DATA_WIDTH <= AXI_DATA_WIDTH ? 1 :
+                   (DST_DATA_WIDTH / AXI_DATA_WIDTH))
+                    :
+                   (SRC_DATA_WIDTH <= AXI_DATA_WIDTH ? 1 :
+                   (SRC_DATA_WIDTH / AXI_DATA_WIDTH))
 ) (
 
   input                                    wr_request_enable,
@@ -114,7 +109,6 @@ module util_hbm #(
   output [NUM_M*2-1:0]                     m_axi_awburst,
   output [NUM_M-1:0]                       m_axi_awvalid,
   input  [NUM_M-1:0]                       m_axi_awready,
-  output [NUM_M*AXI_ID_WIDTH-1:0]          m_axi_awid,
 
   // Write data
   output [NUM_M*AXI_DATA_WIDTH-1:0]        m_axi_wdata,
@@ -122,13 +116,11 @@ module util_hbm #(
   input  [NUM_M-1:0]                       m_axi_wready,
   output [NUM_M-1:0]                       m_axi_wvalid,
   output [NUM_M-1:0]                       m_axi_wlast,
-  output [NUM_M*AXI_ID_WIDTH-1:0]          m_axi_wid,
 
   // Write response
   input  [NUM_M-1:0]                       m_axi_bvalid,
   input  [NUM_M*2-1:0]                     m_axi_bresp,
   output [NUM_M-1:0]                       m_axi_bready,
-  input  [NUM_M*AXI_ID_WIDTH-1:0]          m_axi_bid,
 
   // Read address
   input  [NUM_M-1:0]                       m_axi_arready,
@@ -137,14 +129,12 @@ module util_hbm #(
   output [NUM_M*4-1:0]                     m_axi_arlen,
   output [NUM_M*3-1:0]                     m_axi_arsize,
   output [NUM_M*2-1:0]                     m_axi_arburst,
-  output [NUM_M*AXI_ID_WIDTH-1:0]          m_axi_arid,
 
   // Read data and response
   input  [NUM_M*AXI_DATA_WIDTH-1:0]        m_axi_rdata,
   output [NUM_M-1:0]                       m_axi_rready,
   input  [NUM_M-1:0]                       m_axi_rvalid,
   input  [NUM_M*2-1:0]                     m_axi_rresp,
-  input  [NUM_M*AXI_ID_WIDTH-1:0]          m_axi_rid,
   input  [NUM_M-1:0]                       m_axi_rlast
 
 );
@@ -270,7 +260,7 @@ for (i = 0; i < NUM_M; i=i+1) begin
     .AXI_SLICE_SRC(1),
     .MAX_BYTES_PER_BURST(MAX_BYTES_PER_BURST),
     .FIFO_SIZE(FIFO_SIZE),
-    .ID_WIDTH(AXI_ID_WIDTH),
+    .ID_WIDTH($clog2(FIFO_SIZE)),
     .AXI_LENGTH_WIDTH_SRC(8),
     .AXI_LENGTH_WIDTH_DEST(8),
     .ENABLE_DIAGNOSTICS_IF(0),
@@ -421,7 +411,7 @@ for (i = 0; i < NUM_M; i=i+1) begin
     .AXI_SLICE_SRC(1),
     .MAX_BYTES_PER_BURST(MAX_BYTES_PER_BURST),
     .FIFO_SIZE(FIFO_SIZE),
-    .ID_WIDTH(AXI_ID_WIDTH),
+    .ID_WIDTH($clog2(FIFO_SIZE)),
     .AXI_LENGTH_WIDTH_SRC(8),
     .AXI_LENGTH_WIDTH_DEST(8),
     .ENABLE_DIAGNOSTICS_IF(0),

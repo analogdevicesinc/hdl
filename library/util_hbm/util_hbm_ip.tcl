@@ -22,8 +22,8 @@ adi_ip_add_core_dependencies { \
   analog.com:user:axi_dmac:1.0 \
 }
 
-set_property display_name "ADI FIFO to HBM AXI3 bridge" [ipx::current_core]
-set_property description "Bridge between a FIFO READ/WRITE interface and an AXI4 Memory Mapped interface" [ipx::current_core]
+set_property display_name "ADI AXIS to HBM AXI3 bridge" [ipx::current_core]
+set_property description "Bridge between a AXI Stream master/slave interface and an AXI4 Memory Mapped interface" [ipx::current_core]
 
 set max_axi_ifc 16
 set cc [ipx::current_core]
@@ -56,30 +56,25 @@ adi_add_multi_bus $max_axi_ifc "MAXI_" "master" \
   [list \
     { "m_axi_araddr"  "ARADDR"   32 "(spirit:decode(id('MODELPARAM_VALUE.AXI_ADDR_WIDTH')))"} \
     { "m_axi_arburst" "ARBURST"  2 } \
-    { "m_axi_arid"    "ARID"     6 "(spirit:decode(id('MODELPARAM_VALUE.AXI_ID_WIDTH')))"} \
     { "m_axi_arlen"   "ARLEN"    4 } \
     { "m_axi_arready" "ARREADY"  1 } \
     { "m_axi_arsize"  "ARSIZE"   3 } \
     { "m_axi_arvalid" "ARVALID"  1 } \
     { "m_axi_awaddr"  "AWADDR"  32 "(spirit:decode(id('MODELPARAM_VALUE.AXI_ADDR_WIDTH')) * 1)"} \
     { "m_axi_awburst" "AWBURST"  2 } \
-    { "m_axi_awid"    "AWID"     1 "(spirit:decode(id('MODELPARAM_VALUE.AXI_ID_WIDTH')))"} \
     { "m_axi_awlen"   "AWLEN"    4 } \
     { "m_axi_awready" "AWREADY"  1 } \
     { "m_axi_awsize"  "AWSIZE"   3 } \
     { "m_axi_awvalid" "AWVALID"  1 } \
-    { "m_axi_bid"     "BID"      6 "(spirit:decode(id('MODELPARAM_VALUE.AXI_ID_WIDTH')))"} \
     { "m_axi_bready"  "BREADY"   1 } \
     { "m_axi_bresp"   "BRESP"    2 } \
     { "m_axi_bvalid"  "BVALID"   1 } \
     { "m_axi_rdata"   "RDATA"   32 "(spirit:decode(id('MODELPARAM_VALUE.AXI_DATA_WIDTH')))"} \
-    { "m_axi_rid"     "RID"      6 "(spirit:decode(id('MODELPARAM_VALUE.AXI_ID_WIDTH')))"} \
     { "m_axi_rlast"   "RLAST"    1 } \
     { "m_axi_rready"  "RREADY"   1 } \
     { "m_axi_rresp"   "RRESP"    2 } \
     { "m_axi_rvalid"  "RVALID"   1 } \
     { "m_axi_wdata"   "WDATA"   32 "(spirit:decode(id('MODELPARAM_VALUE.AXI_DATA_WIDTH')))"} \
-    { "m_axi_wid"     "WID"      6 "(spirit:decode(id('MODELPARAM_VALUE.AXI_ID_WIDTH')))"} \
     { "m_axi_wlast"   "WLAST"    1 } \
     { "m_axi_wready"  "WREADY"   1 } \
     { "m_axi_wstrb"   "WSTRB"    4 "(spirit:decode(id('MODELPARAM_VALUE.AXI_DATA_WIDTH'))/8)"} \
@@ -150,7 +145,6 @@ set_property value_tcl_expr {expr round((${TX_RX_N} == 1 ? ${DST_DATA_WIDTH}.0 :
 
 
 ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "NUM_M" -component $cc]
-ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "AXI_ID_WIDTH" -component $cc]
 
 ipx::create_xgui_files [ipx::current_core]
 ipx::save_core [ipx::current_core]
