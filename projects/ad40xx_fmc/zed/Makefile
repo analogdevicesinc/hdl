@@ -27,5 +27,6 @@ LIB_DEPS += spi_engine/spi_engine_offload
 LIB_DEPS += sysid_rom
 LIB_DEPS += util_i2c_mixer
 LIB_DEPS += util_pulse_gen
+LIB_DEPS += axi_pwm_gen
 
 include ../../scripts/project-xilinx.mk
