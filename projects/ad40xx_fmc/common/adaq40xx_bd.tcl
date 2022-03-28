@@ -1,3 +1,7 @@
+# system level parameters
+set AD40XX_ADAQ400X_N $ad_project_params(AD40XX_ADAQ400X_N)
+
+puts "build parameters: AD40XX_ADAQ400X_N: $AD40XX_ADAQ400X_N"
 
 create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 adaq40xx_spi
 

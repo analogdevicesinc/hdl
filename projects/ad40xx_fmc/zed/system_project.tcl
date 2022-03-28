@@ -15,36 +15,47 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 ##       in system_bd.tcl
 
 ## Please select which eval board do you want to use
-##    2 - EVAL-ADAQ40xx-FMC
-##    1 - EVAL-AD40XX-FMCZ
+##    2 - EVAL-AD40XX-FMCZ
+##    1 - EVAL-ADAQ40xx-FMC
 ##    0 - EVAL-ADAQ400x
 ##
-set AD40XX_ADAQ400X_N [get_env_param AD40XX_ADAQ400X_N 1]
 
-adi_project ad40xx_fmc_zed
+# system level parameters
 
-if {$AD40XX_ADAQ400X_N == 2} {
-  adi_project_files ad40xx_fmc_zed [list \
-      "$ad_hdl_dir/library/common/ad_iobuf.v" \
-      "system_top_adaq40xx_fmc.v" \
-      "system_constr_adaq40xx_fmc.xdc" \
-      "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc"]
-} elseif {$AD40XX_ADAQ400X_N == 1} {
-  adi_project_files ad40xx_fmc_zed [list \
-      "$ad_hdl_dir/library/common/ad_iobuf.v" \
+if {[info exists ::env(AD40XX_ADAQ400X_N)]} {
+  set S_AD40XX_ADAQ400X_N [get_env_param AD40XX_ADAQ400X_N 0]
+} elseif {![info exists AD40XX_ADAQ400X_N]} {
+  set S_AD40XX_ADAQ400X_N 2
+}
+
+adi_project ad40xx_fmc_zed 0 [list \
+  AD40XX_ADAQ400X_N  $S_AD40XX_ADAQ400X_N \
+]
+
+adi_project_files ad40xx_fmc_zed [list \
+  "$ad_hdl_dir/library/common/ad_iobuf.v" \
+  "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc"]
+
+switch $S_AD40XX_ADAQ400X_N {
+  2 {
+    adi_project_files ad40xx_fmc_zed [list \
       "system_top_ad40xx.v" \
       "system_constr_ad40xx.xdc" \
-      "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc"]
-} elseif {$AD40XX_ADAQ400X_N == 0} {
-  adi_project_files ad40xx_fmc_zed [list \
-      "$ad_hdl_dir/library/common/ad_iobuf.v" \
+    ]
+  }
+  1 {
+    adi_project_files ad40xx_fmc_zed [list \
+      "system_top_adaq40xx_fmc.v" \
+      "system_constr_adaq40xx_fmc.xdc" \
+    ]
+  }
+  0 {
+    adi_project_files ad40xx_fmc_zed [list \
       "system_top_adaq400x.v" \
       "system_constr_adaq400x.xdc" \
-      "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc"]
-
-} else {
-  return -code error [format "ERROR: Invalid eval board type! ..."]
-}
+    ]
+  }
+}  
 
 adi_project_run ad40xx_fmc_zed
 
