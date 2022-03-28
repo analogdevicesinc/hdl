@@ -229,7 +229,10 @@ module data_offload #(
   );
 
   assign m_axis_valid = rd_ready & ((dst_bypass_s) ? valid_bypass_s : s_storage_axis_valid);
-  assign m_axis_data  = (dst_bypass_s) ? data_bypass_s  : s_storage_axis_data;
+  // For DAC paths set zero as IDLE data on the axis bus, avoid repeating last
+  // sample.
+  assign m_axis_data  = TX_OR_RXN_PATH[0] & ~m_axis_valid ? {DST_DATA_WIDTH{1'b0}} :
+                        (dst_bypass_s) ? data_bypass_s  : s_storage_axis_data;
   assign m_axis_last  = (dst_bypass_s) ? 1'b0           : s_storage_axis_last;
   assign m_axis_tkeep = (dst_bypass_s) ? {DST_DATA_WIDTH/8{1'b1}} : s_storage_axis_tkeep;
 
