@@ -28,8 +28,10 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #    [RX/TX]_JESD_NP : number of bits per sample, only 16 is supported
 #    [RX/TX]_NUM_LINKS : number of links, matches numer of MxFE devices
 
+set JESD_MODE [get_env_param JESD_MODE    64B66B ]
+
 adi_project ad_quadmxfe1_ebz_vcu118 0 [list \
-  JESD_MODE    [get_env_param JESD_MODE    64B66B ] \
+  JESD_MODE    $JESD_MODE\
   RX_RATE      [get_env_param RX_RATE      16.5 ] \
   TX_RATE      [get_env_param TX_RATE      16.5 ] \
   REF_CLK_RATE [get_env_param REF_CLK_RATE 250 ] \
@@ -55,6 +57,13 @@ adi_project_files ad_quadmxfe1_ebz_vcu118 [list \
   "../../../library/common/ad_3w_spi.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/vcu118/vcu118_system_constr.xdc" ]
+
+if {$JESD_MODE == "8B10B"} {
+ adi_project_files {} [list  "204B_constr.xdc"]
+} else {
+ adi_project_files {} [list  "204C_constr.xdc"]
+}
+
 
 set_property strategy Performance_Explore [get_runs impl_1]
 

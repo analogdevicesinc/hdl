@@ -36,7 +36,9 @@
 `timescale 1ns/100ps
 
 
-module system_top (
+module system_top #(
+    parameter JESD_MODE = "8B10B"
+  )  (
 
   input         sys_rst,
   input         sys_clk_p,
@@ -99,10 +101,10 @@ module system_top (
   output [15:0] c2m_p,
   input  [15:0] m2c_n,
   input  [15:0] m2c_p,
-  output  [3:0] mxfe_sync1_inb_n,
-  output  [3:0] mxfe_sync1_inb_p,
-  input   [3:0] mxfe_sync1_outb_n,
-  input   [3:0] mxfe_sync1_outb_p,
+  inout  [3:0] mxfe_sync1_inb_n,  // output
+  inout  [3:0] mxfe_sync1_inb_p,  // output
+  inout  [3:0] mxfe_sync1_outb_n, // input
+  inout  [3:0] mxfe_sync1_outb_p, // input
 
   inout         hmc7043_gpio,
   output        hmc7043_reset,
@@ -136,7 +138,7 @@ module system_top (
 
   input  ext_sync,
 
-  // PMOD1 for calibration board 
+  // PMOD1 for calibration board
   output pmod1_adc_sync_n,
   output pmod1_adc_sdi,
   input  pmod1_adc_sdo,
@@ -201,15 +203,37 @@ module system_top (
     .O (ref_clk[i]),
     .ODIV2 (ref_clk_odiv2[i]));
 
-  IBUFDS i_ibufds_syncin (
-    .I (mxfe_sync1_outb_p[i]),
-    .IB (mxfe_sync1_outb_n[i]),
-    .O (tx_syncin[i]));
+  if (JESD_MODE == "8B10B") begin
+    IBUFDS i_ibufds_syncin (
+      .I (mxfe_sync1_outb_p[i]),
+      .IB (mxfe_sync1_outb_n[i]),
+      .O (tx_syncin[i]));
 
-  OBUFDS i_obufds_syncout (
-    .I (rx_syncout[i]),
-    .O (mxfe_sync1_inb_p[i]),
-    .OB (mxfe_sync1_inb_n[i]));
+    OBUFDS i_obufds_syncout (
+      .I (rx_syncout[i]),
+      .O (mxfe_sync1_inb_p[i]),
+      .OB (mxfe_sync1_inb_n[i]));
+  end else begin
+    assign mxfe_sync1_inb_n[0] = mxfe0_syncin_1_n;
+    assign mxfe_sync1_inb_p[0] = mxfe0_syncin_1_p;
+    assign mxfe_sync1_outb_n[0] = mxfe0_syncout_1_n;
+    assign mxfe_sync1_outb_p[0] = mxfe0_syncout_1_p;
+
+    assign mxfe_sync1_inb_n[1] = mxfe1_syncin_1_n;
+    assign mxfe_sync1_inb_p[1] = mxfe1_syncin_1_p;
+    assign mxfe_sync1_outb_n[1] = mxfe1_syncout_1_n;
+    assign mxfe_sync1_outb_p[1] = mxfe1_syncout_1_p;
+
+    assign mxfe_sync1_inb_n[2] = mxfe2_syncin_1_n;
+    assign mxfe_sync1_inb_p[2] = mxfe2_syncin_1_p;
+    assign mxfe_sync1_outb_n[2] = mxfe2_syncout_1_n;
+    assign mxfe_sync1_outb_p[2] = mxfe2_syncout_1_p;
+
+    assign mxfe_sync1_inb_n[3] = mxfe3_syncin_1_n;
+    assign mxfe_sync1_inb_p[3] = mxfe3_syncin_1_p;
+    assign mxfe_sync1_outb_n[3] = mxfe3_syncout_1_n;
+    assign mxfe_sync1_outb_p[3] = mxfe3_syncout_1_p;
+  end
 
   end
   endgenerate
@@ -336,10 +360,69 @@ module system_top (
 
   quad_mxfe_gpio_mux i_quad_mxfe_gpio_mux (
 
-    .mxfe0_gpio(mxfe0_gpio),
-    .mxfe1_gpio(mxfe1_gpio),
-    .mxfe2_gpio(mxfe2_gpio),
-    .mxfe3_gpio(mxfe3_gpio),
+    .mxfe0_gpio0 (mxfe0_gpio[0]),
+    .mxfe0_gpio1 (mxfe0_gpio[1]),
+    .mxfe0_gpio2 (mxfe0_gpio[2]),
+    .mxfe0_gpio3 (mxfe0_gpio[3]),
+    .mxfe0_gpio4 (mxfe0_gpio[4]),
+    .mxfe0_gpio5 (mxfe0_gpio[5]),
+    .mxfe0_gpio6 (mxfe0_gpio[6]),
+    .mxfe0_gpio7 (mxfe0_gpio[7]),
+    .mxfe0_gpio8 (mxfe0_gpio[8]),
+    .mxfe0_gpio9 (mxfe0_gpio[9]),
+    .mxfe0_gpio10 (mxfe0_gpio[10]),
+    .mxfe0_syncin_1_n (mxfe0_syncin_1_n),
+    .mxfe0_syncin_1_p (mxfe0_syncin_1_p),
+    .mxfe0_syncout_1_n (mxfe0_syncout_1_n),
+    .mxfe0_syncout_1_p (mxfe0_syncout_1_p),
+
+    .mxfe1_gpio0 (mxfe1_gpio[0]),
+    .mxfe1_gpio1 (mxfe1_gpio[1]),
+    .mxfe1_gpio2 (mxfe1_gpio[2]),
+    .mxfe1_gpio3 (mxfe1_gpio[3]),
+    .mxfe1_gpio4 (mxfe1_gpio[4]),
+    .mxfe1_gpio5 (mxfe1_gpio[5]),
+    .mxfe1_gpio6 (mxfe1_gpio[6]),
+    .mxfe1_gpio7 (mxfe1_gpio[7]),
+    .mxfe1_gpio8 (mxfe1_gpio[8]),
+    .mxfe1_gpio9 (mxfe1_gpio[9]),
+    .mxfe1_gpio10 (mxfe1_gpio[10]),
+    .mxfe1_syncin_1_n (mxfe1_syncin_1_n),
+    .mxfe1_syncin_1_p (mxfe1_syncin_1_p),
+    .mxfe1_syncout_1_n (mxfe1_syncout_1_n),
+    .mxfe1_syncout_1_p (mxfe1_syncout_1_p),
+
+    .mxfe2_gpio0 (mxfe2_gpio[0]),
+    .mxfe2_gpio1 (mxfe2_gpio[1]),
+    .mxfe2_gpio2 (mxfe2_gpio[2]),
+    .mxfe2_gpio3 (mxfe2_gpio[3]),
+    .mxfe2_gpio4 (mxfe2_gpio[4]),
+    .mxfe2_gpio5 (mxfe2_gpio[5]),
+    .mxfe2_gpio6 (mxfe2_gpio[6]),
+    .mxfe2_gpio7 (mxfe2_gpio[7]),
+    .mxfe2_gpio8 (mxfe2_gpio[8]),
+    .mxfe2_gpio9 (mxfe2_gpio[9]),
+    .mxfe2_gpio10 (mxfe2_gpio[10]),
+    .mxfe2_syncin_1_n (mxfe2_syncin_1_n),
+    .mxfe2_syncin_1_p (mxfe2_syncin_1_p),
+    .mxfe2_syncout_1_n (mxfe2_syncout_1_n),
+    .mxfe2_syncout_1_p (mxfe2_syncout_1_p),
+
+    .mxfe3_gpio0 (mxfe3_gpio[0]),
+    .mxfe3_gpio1 (mxfe3_gpio[1]),
+    .mxfe3_gpio2 (mxfe3_gpio[2]),
+    .mxfe3_gpio3 (mxfe3_gpio[3]),
+    .mxfe3_gpio4 (mxfe3_gpio[4]),
+    .mxfe3_gpio5 (mxfe3_gpio[5]),
+    .mxfe3_gpio6 (mxfe3_gpio[6]),
+    .mxfe3_gpio7 (mxfe3_gpio[7]),
+    .mxfe3_gpio8 (mxfe3_gpio[8]),
+    .mxfe3_gpio9 (mxfe3_gpio[9]),
+    .mxfe3_gpio10 (mxfe3_gpio[10]),
+    .mxfe3_syncin_1_n (mxfe3_syncin_1_n),
+    .mxfe3_syncin_1_p (mxfe3_syncin_1_p),
+    .mxfe3_syncout_1_n (mxfe3_syncout_1_n),
+    .mxfe3_syncout_1_p (mxfe3_syncout_1_p),
 
     .gpio_t(gpio_t[127:64]),
     .gpio_i(gpio_i[127:64]),
