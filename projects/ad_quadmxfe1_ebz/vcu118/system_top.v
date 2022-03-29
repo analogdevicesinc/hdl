@@ -98,10 +98,42 @@ module system_top (
   output [15:0] c2m_p,
   input  [15:0] m2c_n,
   input  [15:0] m2c_p,
-  output  [3:0] mxfe_syncin_n,
-  output  [7:0] mxfe_syncin_p,
-  input   [3:0] mxfe_syncout_n,
-  input   [7:0] mxfe_syncout_p,
+
+  output        mxfe_syncin_0_p,
+  output        mxfe_syncin_2_p,
+  output        mxfe_syncin_4_p,
+  output        mxfe_syncin_6_p,
+
+  input         mxfe_syncout_0_p,
+  input         mxfe_syncout_2_p,
+  input         mxfe_syncout_4_p,
+  input         mxfe_syncout_6_p,
+
+  // Sync pins used as GPIOs
+  // MxFE0 GPIOs
+  inout         mxfe_syncin_0_n,
+  inout         mxfe_syncin_1_p,
+  inout         mxfe_syncout_0_n,
+  inout         mxfe_syncout_1_p,
+  inout  [8:0]  mxfe0_gpio,
+  // MxFE1 GPIOs
+  inout         mxfe_syncin_1_n,
+  inout         mxfe_syncin_3_p,
+  inout         mxfe_syncout_1_n,
+  inout         mxfe_syncout_3_p,
+  inout  [8:0]  mxfe1_gpio,
+  // MxFE2 GPIOs
+  inout         mxfe_syncin_2_n,
+  inout         mxfe_syncin_5_p,
+  inout         mxfe_syncout_2_n,
+  inout         mxfe_syncout_5_p,
+  inout  [8:0]  mxfe2_gpio,
+  // MxFE3 GPIOs
+  inout         mxfe_syncin_3_n,
+  inout         mxfe_syncin_7_p,
+  inout         mxfe_syncout_3_n,
+  inout         mxfe_syncout_7_p,
+  inout  [8:0]  mxfe3_gpio,
 
   inout         hmc7043_gpio,
   output        hmc7043_reset,
@@ -122,12 +154,8 @@ module system_top (
   output  [3:0] mxfe_tx_en0,
   output  [3:0] mxfe_tx_en1,
 
-  inout  [8:0] mxfe0_gpio,
-  inout  [8:0] mxfe1_gpio,
-  inout  [8:0] mxfe2_gpio,
-  inout  [8:0] mxfe3_gpio,
 
-  // PMOD1 for calibration board 
+  // PMOD1 for calibration board
   output pmod1_adc_sync_n,
   output pmod1_adc_sdi,
   input  pmod1_adc_sdo,
@@ -167,8 +195,6 @@ module system_top (
   wire            sysref;
   wire    [3:0]   link0_tx_syncin;
   wire    [3:0]   link0_rx_syncout;
-  wire    [3:0]   link1_tx_syncin;
-  wire    [3:0]   link1_rx_syncout;
 
   wire            fpga_clk_m2c_4;
   wire            device_clk;
@@ -183,32 +209,16 @@ module system_top (
 
   // instantiations
 
-  // Link 1 SYNC differential lines
-  genvar i;
-  generate
-  for(i=0;i<=3;i=i+1) begin : g_buffers
-    IBUFDS i_ibufds_syncin (
-      .I (mxfe_syncout_p[2*i+1]),
-      .IB (mxfe_syncout_n[i]),
-      .O (link1_tx_syncin[i]));
+  // Link 0 SYNC single ended lines
+  assign mxfe_syncin_0_p = link0_rx_syncout[0];
+  assign mxfe_syncin_2_p = link0_rx_syncout[1];
+  assign mxfe_syncin_4_p = link0_rx_syncout[2];
+  assign mxfe_syncin_6_p = link0_rx_syncout[3];
 
-    OBUFDS i_obufds_syncout (
-      .I (link1_rx_syncout[i]),
-      .O (mxfe_syncin_p[2*i+1]),
-      .OB (mxfe_syncin_n[i]));
-  end
-  endgenerate
-
-  // Link 0 SYNC single ended lines 
-  assign mxfe_syncin_p[0] = link0_rx_syncout[0];
-  assign mxfe_syncin_p[2] = link0_rx_syncout[1];
-  assign mxfe_syncin_p[4] = link0_rx_syncout[2];
-  assign mxfe_syncin_p[6] = link0_rx_syncout[3];
-
-  assign link0_tx_syncin[0] = mxfe_syncout_p[0];
-  assign link0_tx_syncin[1] = mxfe_syncout_p[2];
-  assign link0_tx_syncin[2] = mxfe_syncout_p[4];
-  assign link0_tx_syncin[3] = mxfe_syncout_p[6];
+  assign link0_tx_syncin[0] = mxfe_syncout_0_p;
+  assign link0_tx_syncin[1] = mxfe_syncout_2_p;
+  assign link0_tx_syncin[2] = mxfe_syncout_4_p;
+  assign link0_tx_syncin[3] = mxfe_syncout_6_p;
 
   IBUFDS_GTE4 i_ibufds_ref_clk (
     .CEB (1'd0),
@@ -328,10 +338,61 @@ module system_top (
   assign gpio_i[31:17] = gpio_o[31:17];
 
   quad_mxfe_gpio_mux i_quad_mxfe_gpio_mux (
-    .mxfe0_gpio(mxfe0_gpio),
-    .mxfe1_gpio(mxfe1_gpio),
-    .mxfe2_gpio(mxfe2_gpio),
-    .mxfe3_gpio(mxfe3_gpio),
+    .mxfe0_gpio0 (mxfe0_gpio[0]),
+    .mxfe0_gpio1 (mxfe0_gpio[1]),
+    .mxfe0_gpio2 (mxfe0_gpio[2]),
+    .mxfe0_gpio5 (mxfe0_gpio[3]),
+    .mxfe0_gpio6 (mxfe0_gpio[4]),
+    .mxfe0_gpio7 (mxfe0_gpio[5]),
+    .mxfe0_gpio8 (mxfe0_gpio[6]),
+    .mxfe0_gpio9 (mxfe0_gpio[7]),
+    .mxfe0_gpio10 (mxfe0_gpio[8]),
+    .mxfe0_syncin_1_n (mxfe_syncin_0_n),
+    .mxfe0_syncin_1_p (mxfe_syncin_1_p),
+    .mxfe0_syncout_1_n (mxfe_syncout_0_n),
+    .mxfe0_syncout_1_p (mxfe_syncout_1_p),
+
+    .mxfe1_gpio0 (mxfe1_gpio[0]),
+    .mxfe1_gpio1 (mxfe1_gpio[1]),
+    .mxfe1_gpio2 (mxfe1_gpio[2]),
+    .mxfe1_gpio5 (mxfe1_gpio[3]),
+    .mxfe1_gpio6 (mxfe1_gpio[4]),
+    .mxfe1_gpio7 (mxfe1_gpio[5]),
+    .mxfe1_gpio8 (mxfe1_gpio[6]),
+    .mxfe1_gpio9 (mxfe1_gpio[7]),
+    .mxfe1_gpio10 (mxfe1_gpio[8]),
+    .mxfe1_syncin_1_n (mxfe_syncin_1_n),
+    .mxfe1_syncin_1_p (mxfe_syncin_3_p),
+    .mxfe1_syncout_1_n (mxfe_syncout_1_n),
+    .mxfe1_syncout_1_p (mxfe_syncout_3_p),
+
+    .mxfe2_gpio0 (mxfe2_gpio[0]),
+    .mxfe2_gpio1 (mxfe2_gpio[1]),
+    .mxfe2_gpio2 (mxfe2_gpio[2]),
+    .mxfe2_gpio5 (mxfe2_gpio[3]),
+    .mxfe2_gpio6 (mxfe2_gpio[4]),
+    .mxfe2_gpio7 (mxfe2_gpio[5]),
+    .mxfe2_gpio8 (mxfe2_gpio[6]),
+    .mxfe2_gpio9 (mxfe2_gpio[7]),
+    .mxfe2_gpio10 (mxfe2_gpio[8]),
+    .mxfe2_syncin_1_n (mxfe_syncin_2_n),
+    .mxfe2_syncin_1_p (mxfe_syncin_5_p),
+    .mxfe2_syncout_1_n (mxfe_syncout_2_n),
+    .mxfe2_syncout_1_p (mxfe_syncout_5_p),
+
+    .mxfe3_gpio0 (mxfe3_gpio[0]),
+    .mxfe3_gpio1 (mxfe3_gpio[1]),
+    .mxfe3_gpio2 (mxfe3_gpio[2]),
+    .mxfe3_gpio5 (mxfe3_gpio[3]),
+    .mxfe3_gpio6 (mxfe3_gpio[4]),
+    .mxfe3_gpio7 (mxfe3_gpio[5]),
+    .mxfe3_gpio8 (mxfe3_gpio[6]),
+    .mxfe3_gpio9 (mxfe3_gpio[7]),
+    .mxfe3_gpio10 (mxfe3_gpio[8]),
+    .mxfe3_syncin_1_n (mxfe_syncin_3_n),
+    .mxfe3_syncin_1_p (mxfe_syncin_7_p),
+    .mxfe3_syncout_1_n (mxfe_syncout_3_n),
+    .mxfe3_syncout_1_p (mxfe_syncout_7_p),
 
     .gpio_t(gpio_t[127:64]),
     .gpio_i(gpio_i[127:64]),
