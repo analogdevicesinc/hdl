@@ -303,7 +303,7 @@ add_connection pixel_clk_pll.outclk1 video_dmac.m_src_axi_clock
 add_connection pixel_clk_pll.outclk1 video_dmac.if_m_axis_aclk
 add_connection pixel_clk_pll.outclk1 sys_hps.f2h_sdram0_clock
 add_connection pixel_clk_pll.outclk1 axi_hdmi_tx_0.vdma_clock
-add_connection pixel_clk_pll.outclk0 axi_hdmi_tx_0.hdmi_clock
+add_connection pixel_clk_pll.outclk0 axi_hdmi_tx_0.reference_clk
 
 add_connection sys_clk.clk_reset     pixel_clk_pll.reset
 add_connection sys_clk.clk_reset     pixel_clk_pll_reconfig.mgmt_reset

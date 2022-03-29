@@ -45,8 +45,9 @@ module axi_hdmi_tx #(
 
   // hdmi interface
 
-  input                   hdmi_clk,
+  input                   reference_clk,
   output                  hdmi_out_clk,
+  output                  vga_out_clk,
 
   // 16-bit interface
 
@@ -62,6 +63,14 @@ module axi_hdmi_tx #(
   output                  hdmi_24_vsync,
   output                  hdmi_24_data_e,
   output      [23:0]      hdmi_24_data,
+  
+  // VGA interface 
+
+  output                  vga_hsync,
+  output                  vga_vsync,
+  output      [7:0]       vga_red,
+  output      [7:0]       vga_green,
+  output      [7:0]       vga_blue,
 
   // 36-bit interface
 
@@ -114,7 +123,7 @@ module axi_hdmi_tx #(
 
   wire            up_rstn;
   wire            up_clk;
-  wire            hdmi_rst;
+  wire            reference_rst;
   wire            vdma_rst;
 
   // internal signals
@@ -160,6 +169,7 @@ module axi_hdmi_tx #(
 
   assign up_rstn = s_axi_aresetn;
   assign up_clk = s_axi_aclk;
+  assign vga_out_clk = hdmi_out_clk;
 
   // axi interface
 
@@ -195,8 +205,8 @@ module axi_hdmi_tx #(
   // processor interface
 
   up_hdmi_tx i_up (
-    .hdmi_clk (hdmi_clk),
-    .hdmi_rst (hdmi_rst),
+    .hdmi_clk (reference_clk),
+    .hdmi_rst (reference_rst),
     .hdmi_csc_bypass (hdmi_csc_bypass_s),
     .hdmi_ss_bypass (hdmi_ss_bypass_s),
     .hdmi_srcsel (hdmi_srcsel_s),
@@ -255,11 +265,12 @@ module axi_hdmi_tx #(
   // hdmi interface
 
   axi_hdmi_tx_core #(
+    .INTERFACE(INTERFACE),
     .CR_CB_N(CR_CB_N),
     .EMBEDDED_SYNC(EMBEDDED_SYNC))
   i_tx_core (
-    .hdmi_clk (hdmi_clk),
-    .hdmi_rst (hdmi_rst),
+    .reference_clk (reference_clk),
+    .reference_rst (reference_rst),
     .hdmi_16_hsync (hdmi_16_hsync),
     .hdmi_16_vsync (hdmi_16_vsync),
     .hdmi_16_data_e (hdmi_16_data_e),
@@ -269,6 +280,11 @@ module axi_hdmi_tx #(
     .hdmi_24_vsync (hdmi_24_vsync),
     .hdmi_24_data_e (hdmi_24_data_e),
     .hdmi_24_data (hdmi_24_data),
+    .vga_hsync(vga_hsync),
+    .vga_vsync(vga_vsync),
+    .vga_red(vga_red),
+    .vga_green(vga_green),
+    .vga_blue(vga_blue),
     .hdmi_36_hsync (hdmi_36_hsync),
     .hdmi_36_vsync (hdmi_36_vsync),
     .hdmi_36_data_e (hdmi_36_data_e),
@@ -308,7 +324,7 @@ module axi_hdmi_tx #(
     .SR (1'b0),
     .D1 (~OUT_CLK_POLARITY),
     .D2 (OUT_CLK_POLARITY),
-    .C (hdmi_clk),
+    .C (reference_clk),
     .Q (hdmi_out_clk));
   end
   if (FPGA_TECHNOLOGY == INTEL_5SERIES) begin
@@ -321,7 +337,7 @@ module axi_hdmi_tx #(
     .outclocken (1'b1),
     .datain_h (~OUT_CLK_POLARITY),
     .datain_l (OUT_CLK_POLARITY),
-    .outclock (hdmi_clk),
+    .outclock (reference_clk),
     .oe_out (),
     .dataout (hdmi_out_clk));
   end
@@ -332,7 +348,7 @@ module axi_hdmi_tx #(
     .CE (1'b1),
     .D1 (~OUT_CLK_POLARITY),
     .D2 (OUT_CLK_POLARITY),
-    .C (hdmi_clk),
+    .C (reference_clk),
     .Q (hdmi_out_clk));
   end
   endgenerate
