@@ -133,21 +133,6 @@ set_property -dict [list \
  ] \
  [ipx::get_user_parameters TX_OR_RXN_PATH -of_objects $cc]
 
-### MEMC_UIF_DATA_WIDTH
-#set_property -dict [list \
-#  "value_validation_type" "list" \
-#  "value_validation_list" "64 128 256 512 1024" \
-# ] \
-# [ipx::get_user_parameters MEMC_UIF_DATA_WIDTH -of_objects $cc]
-#
-### MEMC_UIF_ADDRESS_WIDTH
-#set_property -dict [list \
-#  "value_validation_type" "range_long" \
-#  "value_validation_range_minimum" "8" \
-#  "value_validation_range_maximum" "31" \
-# ] \
-# [ipx::get_user_parameters MEMC_UIF_ADDRESS_WIDTH -of_objects $cc]
-
 ## MEM_SIZE - 8GB??
 set_property -dict [list \
   "value_validation_type" "range_long" \
@@ -217,30 +202,6 @@ set_property -dict [list \
   "display_name" "Length Width" \
 ] [ipgui::get_guiparamspec -name "LENGTH_WIDTH" -component $cc]
 
-### DDR controller's user interface related configurations
-#set m_controller_group [ipgui::add_group -name "DDR Controller Interface Configuration" -component $cc \
-#    -parent $page0 -display_name "DDR Controller Interface Configuration" ]
-#
-#ipgui::add_param -name "MEMC_UIF_DATA_WIDTH" -component $cc -parent $m_controller_group
-#set_property -dict [list \
-#  "widget" "comboBox" \
-#  "display_name" "Interface data width" \
-#] [ipgui::get_guiparamspec -name "MEMC_UIF_DATA_WIDTH" -component $cc]
-#set_property enablement_tcl_expr {$MEM_TYPE == 1} [ipx::get_user_parameters MEMC_UIF_DATA_WIDTH -of_objects $cc]
-#
-#ipgui::add_param -name "MEMC_UIF_ADDRESS_WIDTH" -component $cc -parent $m_controller_group
-#set_property -dict [list \
-#  "widget" "comboBox" \
-#  "display_name" "Interface address width" \
-#] [ipgui::get_guiparamspec -name "MEMC_UIF_ADDRESS_WIDTH" -component $cc]
-#set_property enablement_tcl_expr {$MEM_TYPE == 1} [ipx::get_user_parameters MEMC_UIF_ADDRESS_WIDTH -of_objects $cc]
-#
-#ipgui::add_param -name "MEMC_BADDRESS" -component $cc -parent $m_controller_group
-#set_property -dict [list \
-#  "display_name" "PL DDR base address" \
-#] [ipgui::get_guiparamspec -name "MEMC_BADDRESS" -component $cc]
-#set_property enablement_tcl_expr {$MEM_TYPE == 1} [ipx::get_user_parameters MEMC_BADDRESS -of_objects $cc]
-
 ## Transmit and receive endpoints
 set source_group [ipgui::add_group -name "Source Endpoint Configuration" -component $cc \
     -parent $page0 -display_name "Source Endpoint Configuration" \
@@ -254,37 +215,14 @@ set_property -dict [list \
   "display_name" "Source Interface data width" \
 ] [ipgui::get_guiparamspec -name "SRC_DATA_WIDTH" -component $cc]
 
-#ipgui::add_param -name "SRC_ADDR_WIDTH" -component $cc -parent $source_group
-#set_property -dict [list \
-#  "display_name" "Source Interface address width" \
-#] [ipgui::get_guiparamspec -name "SRC_ADDR_WIDTH" -component $cc]
-
 ipgui::add_param -name "DST_DATA_WIDTH" -component $cc -parent $destination_group
 set_property -dict [list \
   "display_name" "Destination Interface data width" \
 ] [ipgui::get_guiparamspec -name "DST_DATA_WIDTH" -component $cc]
 
-#ipgui::add_param -name "DST_ADDR_WIDTH" -component $cc -parent $destination_group
-#set_property -dict [list \
-#  "display_name" "Destination Interface address width" \
-#] [ipgui::get_guiparamspec -name "DST_ADDR_WIDTH" -component $cc]
-
 ## Other features
 set features_group [ipgui::add_group -name "Features" -component $cc \
     -parent $page0 -display_name "Features" ]
-
-
-#ipgui::add_param -name "SRC_RAW_DATA_EN" -component $cc -parent $features_group
-#set_property -dict [list \
-#  "display_name" "Source Raw Data Enable" \
-#] [ipgui::get_guiparamspec -name "SRC_RAW_DATA_EN" -component $cc]
-#set_property enablement_tcl_expr {$TX_OR_RXN_PATH == 0} [ipx::get_user_parameters SRC_RAW_DATA_EN -of_objects $cc]
-#
-#ipgui::add_param -name "DST_RAW_DATA_EN" -component $cc -parent $features_group
-#set_property -dict [list \
-#  "display_name" "Destionation Raw Data Enable" \
-#] [ipgui::get_guiparamspec -name "DST_RAW_DATA_EN" -component $cc]
-#set_property enablement_tcl_expr {$TX_OR_RXN_PATH == 1} [ipx::get_user_parameters DST_RAW_DATA_EN -of_objects $cc]
 
 ipgui::add_param -name "HAS_BYPASS" -component $cc -parent $features_group
 set_property -dict [list \
