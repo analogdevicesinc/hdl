@@ -25,7 +25,7 @@ adi_ip_files axi_dmac [list \
   "request_generator.v" \
   "response_handler.v" \
   "axi_register_slice.v" \
-  "2d_transfer.v" \
+  "dmac_2d_transfer.v" \
   "dest_axi_mm.v" \
   "dest_axi_stream.v" \
   "dest_fifo_inf.v" \
