@@ -87,7 +87,7 @@ module axi_clock_monitor #(
 
   // local parameters
 
-  localparam  PCORE_VERSION = 1
+  localparam  PCORE_VERSION = 1;
 
   // internal registers
 
