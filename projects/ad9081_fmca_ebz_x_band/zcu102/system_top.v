@@ -86,12 +86,12 @@ module system_top  #(
   output [1:0]  txen,
 
   // PMOD0
-  inout         pmod0_0_1_PA_ON,
-  inout         pmod0_4_2_TR,
+  output        pmod0_0_1_PA_ON,
+  output        pmod0_4_2_TR,
   output        pmod0_1_3_MOSI,
-  inout         pmod0_5_4_TX_LOAD,
+  output        pmod0_5_4_TX_LOAD,
   input         pmod0_2_5_MISO,
-  inout         pmod0_6_6_RX_LOAD,
+  output        pmod0_6_6_RX_LOAD,
   output        pmod0_3_7_SCLK,
   inout         pmod0_7_8_SCL,
   // PMOD1
@@ -100,9 +100,9 @@ module system_top  #(
   output        pmod1_1_3_CSB3,
   output        pmod1_5_4_CSB4,
   output        pmod1_2_5_CSB5,
-  inout         pmod1_6_6_5V_CTRL,
+  output        reg pmod1_6_6_5V_CTRL = 1'b0,
   inout         pmod1_3_7_SDA,
-  inout         pmod1_7_8_PWR_UP_DOWN,
+  output        reg pmod1_7_8_PWR_UP_DOWN = 1'b0,
 
   // FMC1 custom breakout board
   output        fmc_bob_xud1_imu_sclk,
@@ -131,7 +131,6 @@ module system_top  #(
 );
 
   // internal signals
-  reg [20:0] pwr_up_cnt = {21'b0};
 
   wire    [94:0]  gpio_i;
   wire    [94:0]  gpio_o;
@@ -290,15 +289,41 @@ module system_top  #(
   assign txen[0]          = tdd_support ? tdd_tx_mxfe_en : gpio_o[58];
   assign txen[1]          = tdd_support ? tdd_tx_mxfe_en : gpio_o[59];
 
-  assign tr = tdd_support ? tdd_tx_stingray_en : gpio_t[62] ? 1'bz : gpio_o[62];
+  assign tr = tdd_support ? tdd_tx_stingray_en : gpio_o[62];
 
   // PMOD GPIOs
-  assign pmod0_0_1_PA_ON       = pwr_up_mask ? 1'b0 : gpio_t[61] ? 1'bz : gpio_o[61];
+  assign pmod0_0_1_PA_ON       = pwr_up_mask ? 1'b0 : gpio_o[61];
   assign pmod0_4_2_TR          = pwr_up_mask ? 1'b0 : tr;
-  assign pmod0_5_4_TX_LOAD     = pwr_up_mask ? 1'b0 : gpio_t[63] ? 1'bz : gpio_o[63];
-  assign pmod0_6_6_RX_LOAD     = pwr_up_mask ? 1'b0 : gpio_t[64] ? 1'bz : gpio_o[64];
-  assign pmod1_6_6_5V_CTRL     = pwr_up_mask ? 1'b0 : gpio_t[65] ? 1'bz : gpio_o[65];
-  assign pmod1_7_8_PWR_UP_DOWN = pwr_up_mask ? 1'b0 : gpio_t[66] ? 1'bz : gpio_o[66];
+  assign pmod0_5_4_TX_LOAD     = pwr_up_mask ? 1'b0 : gpio_o[63];
+  assign pmod0_6_6_RX_LOAD     = pwr_up_mask ? 1'b0 : gpio_o[64];
+
+  reg gpio_o_65_ms = 1'b0;
+  reg gpio_o_65_d1 = 1'b0;
+  always @(posedge sys_clk) begin
+    gpio_o_65_ms <= gpio_o[65];
+    gpio_o_65_d1 <= gpio_o_65_ms;
+  end
+
+  always @(posedge sys_clk) begin
+    if (pwr_up_mask)
+      pmod1_6_6_5V_CTRL <= 1'b0;
+    else
+      pmod1_6_6_5V_CTRL <= gpio_o_65_d1;
+  end
+
+  reg gpio_o_66_ms = 1'b0;
+  reg gpio_o_66_d1 = 1'b0;
+  always @(posedge sys_clk) begin
+    gpio_o_66_ms <= gpio_o[66];
+    gpio_o_66_d1 <= gpio_o_66_ms;
+  end
+
+  always @(posedge sys_clk) begin
+    if (pwr_up_mask)
+      pmod1_7_8_PWR_UP_DOWN <= 1'b0;
+    else
+      pmod1_7_8_PWR_UP_DOWN <= gpio_o_66_d1;
+  end
 
   assign proto_hdr[5:0] = gpio_t[66:61];
   assign proto_hdr[9:6] = 4'b0;
@@ -306,7 +331,7 @@ module system_top  #(
   // XUD GPIOs
   ad_iobuf #(.DATA_WIDTH(10)) i_xud_iobuf (
     .dio_t ({tdd_support ? 1'b1 : gpio_t[76],    // 76   TDD_EXT_TRIG
-             tdd_support ? 1'b0 : gpio_t[75],    // 75   TDD_XUD1_STINGRAY_SYNC 
+             tdd_support ? 1'b0 : gpio_t[75],    // 75   TDD_XUD1_STINGRAY_SYNC
              tdd_support ? 1'b0 : gpio_t[74],    // 74   TDD_RX_SYNC
              tdd_support ? 1'b0 : gpio_t[73],    // 73   TDD_TX_SYNC
              gpio_t[72],    // 72
@@ -317,7 +342,7 @@ module system_top  #(
              gpio_t[67]     // 67
             }),
     .dio_i ({gpio_o[76],   // 76   TDD_EXT_TRIG
-             tdd_support ? tdd_tx_stingray_en : gpio_o[75],   // 75   TDD_XUD1_STINGRAY_SYNC 
+             tdd_support ? tdd_tx_stingray_en : gpio_o[75],   // 75   TDD_XUD1_STINGRAY_SYNC
              tdd_support ? tdd_rx_mxfe_en : gpio_o[74],       // 74   TDD_RX_SYNC
              tdd_support ? tdd_tx_mxfe_en : gpio_o[73],       // 73   TDD_TX_SYNC
              gpio_o[72],   // 72
@@ -450,11 +475,28 @@ module system_top  #(
   assign tx_data_p[TX_JESD_L*TX_NUM_LINKS-1:0] = tx_data_p_loc[TX_JESD_L*TX_NUM_LINKS-1:0];
   assign tx_data_n[TX_JESD_L*TX_NUM_LINKS-1:0] = tx_data_n_loc[TX_JESD_L*TX_NUM_LINKS-1:0];
 
+  reg gpio_o_78_ms = 1'b0;
+  reg gpio_o_78_d1 = 1'b0;
+  always @(posedge sys_clk) begin
+    gpio_o_78_ms <= gpio_o[78];
+    gpio_o_78_d1 <= gpio_o_78_ms;
+  end
+
+  reg cooldown = 1'b0;
+  always @(posedge sys_clk) begin
+    if (pwr_up_cnt[20] & gpio_o_78_d1)
+      cooldown <= 1'b1;
+  end
+
   // Power up logic
   // Mask gpios during powerup for 10ms
+  reg [20:0] pwr_up_cnt = {21'b0};
+
   assign pwr_up_mask = ~pwr_up_cnt[20];
   always @(posedge sys_clk) begin
-    if (~pwr_up_cnt[20]) begin
+    if (cooldown) begin
+      pwr_up_cnt <= 'h0;
+    end else if (~pwr_up_cnt[20]) begin
       pwr_up_cnt <= pwr_up_cnt + 1;
     end
   end
