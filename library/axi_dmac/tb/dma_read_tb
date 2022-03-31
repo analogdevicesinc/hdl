@@ -2,7 +2,7 @@
 
 SOURCE="dma_read_tb.v"
 SOURCE+=" axi_read_slave.v axi_slave.v"
-SOURCE+=" ../axi_dmac_transfer.v ../2d_transfer.v ../request_arb.v ../request_generator.v ../splitter.v"
+SOURCE+=" ../axi_dmac_transfer.v ../dmac_2d_transfer.v ../request_arb.v ../request_generator.v ../splitter.v"
 SOURCE+=" ../axi_dmac_resize_src.v ../axi_dmac_resize_dest.v"
 SOURCE+=" ../axi_dmac_burst_memory.v"
 SOURCE+=" ../axi_dmac_reset_manager.v ../axi_register_slice.v"
