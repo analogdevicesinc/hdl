@@ -22,8 +22,8 @@ adi_ip_add_core_dependencies { \
   analog.com:user:axi_dmac:1.0 \
 }
 
-set_property display_name "ADI AXIS to HBM AXI3 bridge" [ipx::current_core]
-set_property description "Bridge between a AXI Stream master/slave interface and an AXI4 Memory Mapped interface" [ipx::current_core]
+set_property display_name "ADI AXIS to HBM/DDR AXI bridge" [ipx::current_core]
+set_property description "Bridge between a AXI Stream master/slave interface and an AXI Memory Mapped interface" [ipx::current_core]
 
 set max_axi_ifc 16
 set cc [ipx::current_core]
@@ -56,13 +56,13 @@ adi_add_multi_bus $max_axi_ifc "MAXI_" "master" \
   [list \
     { "m_axi_araddr"  "ARADDR"   32 "(spirit:decode(id('MODELPARAM_VALUE.AXI_ADDR_WIDTH')))"} \
     { "m_axi_arburst" "ARBURST"  2 } \
-    { "m_axi_arlen"   "ARLEN"    4 } \
+    { "m_axi_arlen"   "ARLEN"    4 "8-(spirit:decode(id('MODELPARAM_VALUE.AXI_PROTOCOL')) * 4)"} \
     { "m_axi_arready" "ARREADY"  1 } \
     { "m_axi_arsize"  "ARSIZE"   3 } \
     { "m_axi_arvalid" "ARVALID"  1 } \
     { "m_axi_awaddr"  "AWADDR"  32 "(spirit:decode(id('MODELPARAM_VALUE.AXI_ADDR_WIDTH')) * 1)"} \
     { "m_axi_awburst" "AWBURST"  2 } \
-    { "m_axi_awlen"   "AWLEN"    4 } \
+    { "m_axi_awlen"   "AWLEN"    4 "8-(spirit:decode(id('MODELPARAM_VALUE.AXI_PROTOCOL')) * 4)"} \
     { "m_axi_awready" "AWREADY"  1 } \
     { "m_axi_awsize"  "AWSIZE"   3 } \
     { "m_axi_awvalid" "AWVALID"  1 } \
@@ -127,24 +127,193 @@ foreach intf [ipx::get_bus_interfaces MAXI_* -of_objects $cc] {
 	set_property "VALUE" "0" $para
 }
 
+
+#
+#  Parameters description
+#
 set_property  -dict [list \
-  display_name {Device type} \
-  widget {comboBox} \
- ] [ipgui::get_guiparamspec TX_RX_N -component $cc]
+    "value_resolve_type" "user" \
+    "value" 1 \
+    "value_validation_type" "pairs" \
+    "value_validation_pairs" {"TX (DAC)" 1 "RX (ADC)" 0} \
+  ] \
+  [ipx::get_user_parameters TX_RX_N -of_objects $cc]
+
+foreach dir {"SRC" "DST"} {
+	set_property -dict [list \
+		"value_validation_type" "list" \
+		"value_validation_list" "16 32 64 128 256 512 1024 2048 4096" \
+	] \
+	[ipx::get_user_parameters ${dir}_DATA_WIDTH -of_objects $cc]
+}
+
+set_property -dict [list \
+	"value_validation_type" "range_long" \
+	"value_validation_range_minimum" "8" \
+	"value_validation_range_maximum" "33" \
+	] \
+	[ipx::get_user_parameters LENGTH_WIDTH -of_objects $cc]
 
 set_property  -dict [list \
-  value_resolve_type user \
-  value 1 \
-  value_validation_type pairs \
-  value_validation_pairs {{DAC (TX)} 1 {ADC (RX)} 0} \
-  ] [ipx::get_user_parameters TX_RX_N -of_objects $cc]
+    "value_resolve_type" "user" \
+    "value" 2 \
+    "value_validation_type" "pairs" \
+    "value_validation_pairs" {"HBM" 2 "DDR" 1} \
+  ] \
+  [ipx::get_user_parameters MEM_TYPE -of_objects $cc]
 
+set_property -dict [list \
+		"value_validation_type" "pairs" \
+    "value" "AXI3" \
+		"value_validation_pairs" {"AXI3" "1" "AXI4" "0"} \
+	] \
+	[ipx::get_user_parameters AXI_PROTOCOL -of_objects $cc]
 
-set_property value_tcl_expr {expr round((${TX_RX_N} == 1 ? ${DST_DATA_WIDTH}.0 : ${SRC_DATA_WIDTH}.0) / ${AXI_DATA_WIDTH}.0)} \
-  [ipx::get_user_parameters NUM_M -of_objects $cc]
+set_property -dict [list \
+		"value_validation_type" "list" \
+		"value_validation_list" "32 64 128 256 512 1024" \
+	] \
+	[ipx::get_user_parameters AXI_DATA_WIDTH -of_objects $cc]
 
+set_property -dict [list \
+		"value_validation_type" "range_long" \
+	  "value_validation_range_minimum" "1" \
+	  "value_validation_range_maximum" "16" \
+	] \
+	[ipx::get_user_parameters NUM_M -of_objects $cc]
 
-ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "NUM_M" -component $cc]
+set_property -dict [list \
+		"value_validation_type" "range_long" \
+	  "value_validation_range_minimum" "1" \
+	  "value_validation_range_maximum" "16" \
+    "enablement_tcl_expr" "\$MEM_TYPE == 2" \
+	] \
+	[ipx::get_user_parameters HBM_SEGMENTS_PER_MASTER -of_objects $cc]
+
+set_property -dict [list \
+		"value_validation_type" "range_long" \
+	  "value_validation_range_minimum" "1" \
+	  "value_validation_range_maximum" "16" \
+    "enablement_tcl_expr" "\$MEM_TYPE == 2" \
+	] \
+	[ipx::get_user_parameters HBM_SEGMENT_INDEX -of_objects $cc]
+
+set_property -dict [list \
+		"value_validation_type" "range_long" \
+	  "value_validation_range_minimum" "1" \
+	  "value_validation_range_maximum" "4294967296" \
+    "enablement_tcl_expr" "\$MEM_TYPE == 1" \
+	] \
+	[ipx::get_user_parameters DDR_BASE_ADDDRESS -of_objects $cc]
+
+#
+# GUI formatting
+#
+
+set page0 [ipgui::get_pagespec -name "Page 0" -component $cc]
+
+# General settings group
+set group [ipgui::add_group -name "General Settings" -component $cc \
+ -parent $page0 -display_name "General Settings"]
+
+set p [ipgui::get_guiparamspec -name "TX_RX_N" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $group
+set_property  -dict [list \
+  "display_name" "Datapath type" \
+  "widget" "comboBox" \
+ ] $p
+
+set p [ipgui::get_guiparamspec -name "LENGTH_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 1 $p -parent $group
+set_property  -dict [list \
+  "display_name" "Transfer Length Width" \
+  "tooltip" "Defines the amount of data can be stored starting from the base address of the storage.Log2 of targetted data to be stored in bytes"\
+ ] $p
+
+# Offload interface group
+set group [ipgui::add_group -name "Data Offload Interface" -component $cc \
+    -parent $page0 -display_name "Data Offload Interface"]
+
+set p [ipgui::get_guiparamspec -name "SRC_DATA_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $group
+set_property -dict [list \
+		"display_name" "Source AXIS Bus Width" \
+	] $p
+
+set p [ipgui::get_guiparamspec -name "DST_DATA_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 1 $p -parent $group
+set_property -dict [list \
+		"display_name" "Destination AXIS Bus Width" \
+	] $p
+
+# Memory interface group
+set group [ipgui::add_group -name "External Memory Interface" -component $cc \
+    -parent $page0 -display_name "External Memory Interface"]
+
+set p [ipgui::get_guiparamspec -name "MEM_TYPE" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $group
+set_property -dict [list \
+  "display_name" "External Storage Type" \
+  "tooltip" "External Storage Type" \
+  "widget" "comboBox" \
+] $p
+
+set p [ipgui::get_guiparamspec -name "NUM_M" -component $cc]
+ipgui::move_param -component $cc -order 1 $p -parent $group
+set_property -dict [list \
+  "display_name" "Number of AXI Masters" \
+  "tooltip" "Number of AXI masters the data stream bus is split" \
+] $p
+
+set p [ipgui::get_guiparamspec -name "AXI_PROTOCOL" -component $cc]
+ipgui::move_param -component $cc -order 2 $p -parent $group
+set_property -dict [list \
+  "widget" "comboBox" \
+  "display_name" "AXI Protocol" \
+] $p
+
+set p [ipgui::get_guiparamspec -name "AXI_DATA_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 3 $p -parent $group
+set_property -dict [list \
+  "display_name" "AXI Data Bus Width" \
+  "tooltip" "Bus Width: Memory-Mapped interface with valid range of 32-1024 bits" \
+] $p
+
+set p [ipgui::get_guiparamspec -name "AXI_ADDR_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 4 $p -parent $group
+set_property -dict [list \
+  "display_name" "AXI Address Bus Width" \
+  "tooltip" "Address Bus Width: Must cover targetted memory range" \
+] $p
+
+# HBM  sub group
+set hbm_group [ipgui::add_group -name "HBM Interface" -component $cc \
+    -parent $group -display_name "HBM Interface"]
+
+set p [ipgui::get_guiparamspec -name "HBM_SEGMENTS_PER_MASTER" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $hbm_group
+set_property -dict [list \
+  "display_name" "HBM sections per master" \
+  "tooltip" "HBM sections (2Gb/256MB pseudo channels) per master" \
+] $p
+
+set p [ipgui::get_guiparamspec -name "HBM_SEGMENT_INDEX" -component $cc]
+ipgui::move_param -component $cc -order 1 $p -parent $hbm_group
+set_property -dict [list \
+  "display_name" "First HBM section index" \
+  "tooltip" "First used HBM section (2Gb pseudo channels).The base address where data is stored is generated based on this parameter" \
+] $p
+
+# DDR sub group
+set hbm_group [ipgui::add_group -name "DDR Interface" -component $cc \
+    -parent $group -display_name "DDR Interface"]
+
+set p [ipgui::get_guiparamspec -name "DDR_BASE_ADDDRESS" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $hbm_group
+set_property -dict [list \
+  "display_name" "DDR base address" \
+  "tooltip" "The base address where data is stored is generated based on this parameter" \
+] $p
 
 ipx::create_xgui_files [ipx::current_core]
 ipx::save_core [ipx::current_core]

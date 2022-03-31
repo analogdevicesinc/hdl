@@ -28,16 +28,26 @@ proc ad_create_hbm {ip_name {density "4GB"}} {
   }
 }
 
-proc ad_create_util_hbm {name rx_tx_n src_width dst_width segments_per_master} {
+proc ad_create_util_hbm {name rx_tx_n src_width dst_width segments_per_master {axi_data_width 256} {axi_addr_width 32} {mem_type 2}} {
 
-  set axi_data_width 256
+  if {$mem_type == 2} {
+    # HBM
+    # split converter side bus into multiple AXI masters
+    set number_of_masters [expr int(ceil((${rx_tx_n} == 1 ? ${dst_width}.0 : ${src_width}.0) / ${axi_data_width}.0))]
+  } else {
+    # DDR we have always one master
+    set number_of_masters 1
+  }
 
   ad_ip_instance util_hbm $name [list \
     HBM_SEGMENTS_PER_MASTER $segments_per_master \
     SRC_DATA_WIDTH $src_width \
-    DST_DATA_WIDTH $dst_width  \
+    DST_DATA_WIDTH $dst_width \
     AXI_DATA_WIDTH $axi_data_width \
-    TX_RX_N $rx_tx_n
+    AXI_ADDR_WIDTH $axi_addr_width \
+    TX_RX_N $rx_tx_n \
+    NUM_M $number_of_masters \
+    MEM_TYPE $mem_type
   ]
 
 }

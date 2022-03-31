@@ -46,12 +46,19 @@ module util_hbm #(
 
   parameter LENGTH_WIDTH = 32,
 
+  // Memory interface parameters
+  parameter AXI_PROTOCOL = 0,   // 0 - AXI4 ;  1 - AXI3
   parameter AXI_DATA_WIDTH = 256,
   parameter AXI_ADDR_WIDTH = 32,
+
+  parameter MEM_TYPE = 2,  // 1 - DDR ; 2 - HBM
 
   // This will size the storage per master where each segment is 256MB
   parameter HBM_SEGMENTS_PER_MASTER = 4,
   parameter HBM_SEGMENT_INDEX = 0,
+
+  // DDR parameters
+  parameter DDR_BASE_ADDDRESS = 0,
 
   parameter NUM_M = TX_RX_N ?
                    (DST_DATA_WIDTH <= AXI_DATA_WIDTH ? 1 :
@@ -104,7 +111,7 @@ module util_hbm #(
 
   // Write address
   output [NUM_M*AXI_ADDR_WIDTH-1:0]        m_axi_awaddr,
-  output [NUM_M*4-1:0]                     m_axi_awlen,
+  output [NUM_M*(8-(4*AXI_PROTOCOL))-1:0]  m_axi_awlen,
   output [NUM_M*3-1:0]                     m_axi_awsize,
   output [NUM_M*2-1:0]                     m_axi_awburst,
   output [NUM_M-1:0]                       m_axi_awvalid,
@@ -126,7 +133,7 @@ module util_hbm #(
   input  [NUM_M-1:0]                       m_axi_arready,
   output [NUM_M-1:0]                       m_axi_arvalid,
   output [NUM_M*AXI_ADDR_WIDTH-1:0]        m_axi_araddr,
-  output [NUM_M*4-1:0]                     m_axi_arlen,
+  output [NUM_M*(8-(4*AXI_PROTOCOL))-1:0]  m_axi_arlen,
   output [NUM_M*3-1:0]                     m_axi_arsize,
   output [NUM_M*2-1:0]                     m_axi_arburst,
 
@@ -150,11 +157,18 @@ localparam AXI_BYTES_PER_BEAT_WIDTH = $clog2(AXI_DATA_WIDTH/8);
 localparam SRC_BYTES_PER_BEAT_WIDTH = $clog2(SRC_DATA_WIDTH_PER_M/8);
 localparam DST_BYTES_PER_BEAT_WIDTH = $clog2(DST_DATA_WIDTH_PER_M/8);
 
-// AXI 3  1 burst is 16 beats
-localparam MAX_BYTES_PER_BURST = 16 * AXI_DATA_WIDTH/8;
-localparam BYTES_PER_BURST_WIDTH = $clog2(MAX_BYTES_PER_BURST);
+// Size bursts to the max possible size
+//  AXI 3 1 burst is 16 beats
+//  AXI 4 1 burst is 256 beats
+// Limit one burst to 4096 bytes
+localparam MAX_BYTES_PER_BURST = (AXI_PROTOCOL ? 16 : 256) * AXI_DATA_WIDTH/8;
+localparam MAX_BYTES_PER_BURST_LMT = MAX_BYTES_PER_BURST >= 4096 ? 4096 :
+                                     MAX_BYTES_PER_BURST;
+localparam BYTES_PER_BURST_WIDTH = $clog2(MAX_BYTES_PER_BURST_LMT);
 
 parameter FIFO_SIZE = 8; // In bursts
+
+localparam AXI_ALEN = (8-(4*AXI_PROTOCOL));
 
 genvar i;
 
@@ -224,7 +238,8 @@ for (i = 0; i < NUM_M; i=i+1) begin
   reg rd_needs_reset_d = 1'b0;
 
   // 2Gb (256MB) per segment
-  localparam ADDR_OFFSET = (HBM_SEGMENT_INDEX+i) * HBM_SEGMENTS_PER_MASTER * 256 * 1024 * 1024;
+  localparam ADDR_OFFSET = (MEM_TYPE == 1) ? DDR_BASE_ADDDRESS :
+     (HBM_SEGMENT_INDEX+i) * HBM_SEGMENTS_PER_MASTER * 256 * 1024 * 1024 ;
 
   always @(posedge s_axis_aclk) begin
     if (wr_eot_pending_all) begin
@@ -258,11 +273,11 @@ for (i = 0; i < NUM_M; i=i+1) begin
     .ASYNC_CLK_DEST_REQ(1),
     .AXI_SLICE_DEST(1),
     .AXI_SLICE_SRC(1),
-    .MAX_BYTES_PER_BURST(MAX_BYTES_PER_BURST),
+    .MAX_BYTES_PER_BURST(MAX_BYTES_PER_BURST_LMT),
     .FIFO_SIZE(FIFO_SIZE),
     .ID_WIDTH($clog2(FIFO_SIZE)),
-    .AXI_LENGTH_WIDTH_SRC(8),
-    .AXI_LENGTH_WIDTH_DEST(8),
+    .AXI_LENGTH_WIDTH_SRC(8-(4*AXI_PROTOCOL)),
+    .AXI_LENGTH_WIDTH_DEST(8-(4*AXI_PROTOCOL)),
     .ENABLE_DIAGNOSTICS_IF(0),
     .ALLOW_ASYM_MEM(1)
   ) i_wr_transfer (
@@ -296,7 +311,7 @@ for (i = 0; i < NUM_M; i=i+1) begin
     .m_src_axi_aresetn(1'b0),
 
     .m_axi_awaddr(m_axi_awaddr[AXI_ADDR_WIDTH*i+:AXI_ADDR_WIDTH]),
-    .m_axi_awlen(m_axi_awlen[4*i+:4]),
+    .m_axi_awlen(m_axi_awlen[AXI_ALEN*i+:AXI_ALEN]),
     .m_axi_awsize(m_axi_awsize[3*i+:3]),
     .m_axi_awburst(m_axi_awburst[2*i+:2]),
     .m_axi_awprot(),
@@ -409,11 +424,11 @@ for (i = 0; i < NUM_M; i=i+1) begin
     .ASYNC_CLK_DEST_REQ(0),
     .AXI_SLICE_DEST(1),
     .AXI_SLICE_SRC(1),
-    .MAX_BYTES_PER_BURST(MAX_BYTES_PER_BURST),
+    .MAX_BYTES_PER_BURST(MAX_BYTES_PER_BURST_LMT),
     .FIFO_SIZE(FIFO_SIZE),
     .ID_WIDTH($clog2(FIFO_SIZE)),
-    .AXI_LENGTH_WIDTH_SRC(8),
-    .AXI_LENGTH_WIDTH_DEST(8),
+    .AXI_LENGTH_WIDTH_SRC(8-(4*AXI_PROTOCOL)),
+    .AXI_LENGTH_WIDTH_DEST(8-(4*AXI_PROTOCOL)),
     .ENABLE_DIAGNOSTICS_IF(0),
     .ALLOW_ASYM_MEM(1)
   ) i_rd_transfer (
@@ -468,7 +483,7 @@ for (i = 0; i < NUM_M; i=i+1) begin
     .m_axi_arready(m_axi_arready[i]),
     .m_axi_arvalid(m_axi_arvalid[i]),
     .m_axi_araddr(m_axi_araddr[AXI_ADDR_WIDTH*i+:AXI_ADDR_WIDTH]),
-    .m_axi_arlen(m_axi_arlen[4*i+:4]),
+    .m_axi_arlen(m_axi_arlen[AXI_ALEN*i+:AXI_ALEN]),
     .m_axi_arsize(m_axi_arsize[3*i+:3]),
     .m_axi_arburst(m_axi_arburst[2*i+:2]),
     .m_axi_arprot(),
