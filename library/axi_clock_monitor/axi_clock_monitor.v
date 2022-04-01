@@ -87,7 +87,7 @@ module axi_clock_monitor #(
 
   // local parameters
 
-  localparam  PCORE_VERSION = 1
+  localparam  PCORE_VERSION = 1;
 
   // internal registers
 
@@ -100,24 +100,24 @@ module axi_clock_monitor #(
 
   // internal signals
 
-  wire                      up_clk;
-  wire                      up_rstn;
-  wire                      up_wreq_s;
-  wire                      up_rreq_s;
-  wire                      up_waddr_s;
-  wire                      up_raddr_s;
+  wire         up_clk;
+  wire         up_rstn;
+  wire         up_wreq_s;
+  wire         up_rreq_s;
+  wire         up_waddr_s;
+  wire         up_raddr_s;
 
-  wire                      clock         [0:15];
-  wire [20:0]               clk_mon_count [0:15];
+  wire         clock         [0:15];
+  wire [20:0]  clk_mon_count [0:15];
 
-  wire                      up_wreq_i_s;
-  wire [(PROC_ADDR_WD-1):0] up_waddr_i_s;
-  wire [31:0]               up_wdata_i_s;
-  wire                      up_wack_o_s;
-  wire                      up_rreq_i_s;
-  wire [(PROC_ADDR_WD-1):0] up_raddr_i_s;
-  wire [31:0]               up_rdata_o_s;
-  wire                      up_rack_o_s;
+  wire         up_wreq_i_s;
+  wire [13:0]  up_waddr_i_s;
+  wire [31:0]  up_wdata_i_s;
+  wire         up_wack_o_s;
+  wire         up_rreq_i_s;
+  wire [13:0]  up_raddr_i_s;
+  wire [31:0]  up_rdata_o_s;
+  wire         up_rack_o_s;
 
   // loop variables
 
