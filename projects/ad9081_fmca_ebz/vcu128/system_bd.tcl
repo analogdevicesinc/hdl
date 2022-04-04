@@ -12,8 +12,8 @@ source $ad_hdl_dir/projects/ad9081_fmca_ebz/common/ad9081_fmca_ebz_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 
-ad_connect_hbm HBM mxfe_rx_data_offload/i_util_hbm $sys_hbm_clk $sys_hbm_resetn 0
-ad_connect_hbm HBM mxfe_tx_data_offload/i_util_hbm $sys_hbm_clk $sys_hbm_resetn 4
+ad_connect_hbm HBM mxfe_rx_data_offload/storage_unit $sys_hbm_clk $sys_hbm_resetn 0
+ad_connect_hbm HBM mxfe_tx_data_offload/storage_unit $sys_hbm_clk $sys_hbm_resetn 4
 
 ad_ip_parameter $adc_data_offload_name/i_data_offload CONFIG.HAS_BYPASS false
 ad_ip_parameter $dac_data_offload_name/i_data_offload CONFIG.HAS_BYPASS false
