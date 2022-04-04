@@ -38,8 +38,7 @@ module data_offload #(
 
   parameter          ID = 0,
   parameter   [ 0:0] MEM_TYPE = 1'b0,               // 1'b0 -FPGA RAM; 1'b1 - external memory
-  parameter   [33:0] MEM_SIZE = 1024,               // memory size in bytes -1 - max 16 GB
-  parameter          LENGTH_WIDTH = 10,
+  parameter          MEM_SIZE_LOG2 = 10,            // log2 of memory size in bytes 
 
   parameter          TX_OR_RXN_PATH = 0,            // if set IP is used in TX path, other wise in RX path
 
@@ -128,8 +127,8 @@ module data_offload #(
   output                                      wr_request_enable,
   output                                      wr_request_valid,
   input                                       wr_request_ready,
-  output   [LENGTH_WIDTH-1:0]                 wr_request_length,
-  input    [LENGTH_WIDTH-1:0]                 wr_response_measured_length,
+  output   [MEM_SIZE_LOG2-1:0]                wr_request_length,
+  input    [MEM_SIZE_LOG2-1:0]                wr_response_measured_length,
   input                                       wr_response_eot,
   input                                       wr_overflow,
 
@@ -137,7 +136,7 @@ module data_offload #(
   output                                      rd_request_enable,
   output                                      rd_request_valid,
   input                                       rd_request_ready,
-  output  reg  [LENGTH_WIDTH-1:0]             rd_request_length,
+  output  reg  [MEM_SIZE_LOG2-1:0]            rd_request_length,
   input                                       rd_response_eot,
   input                                       rd_underflow,
 
@@ -186,8 +185,8 @@ module data_offload #(
   wire  [ 4:0]                                src_fsm_status_s;
   wire  [ 3:0]                                dst_fsm_status_s;
 
-  wire  [LENGTH_WIDTH-1:0]                    src_transfer_length_s;
-  wire  [LENGTH_WIDTH-1:0]                    rd_wr_response_measured_length;
+  wire  [MEM_SIZE_LOG2-1:0]                   src_transfer_length_s;
+  wire  [MEM_SIZE_LOG2-1:0]                   rd_wr_response_measured_length;
   wire                                        rd_ml_valid;
 
   assign src_clk = s_axis_aclk;
@@ -278,8 +277,7 @@ module data_offload #(
   data_offload_regmap #(
     .ID (ID),
     .MEM_TYPE (MEM_TYPE),
-    .MEM_SIZE (MEM_SIZE),
-    .LENGTH_WIDTH (LENGTH_WIDTH),
+    .MEM_SIZE_LOG2 (MEM_SIZE_LOG2),
     .TX_OR_RXN_PATH (TX_OR_RXN_PATH),
     .AUTO_BRINGUP (AUTO_BRINGUP),
     .HAS_BYPASS (HAS_BYPASS)
@@ -350,7 +348,7 @@ module data_offload #(
 
 // Measured length handshake CDC
 util_axis_fifo #(
-  .DATA_WIDTH(LENGTH_WIDTH),
+  .DATA_WIDTH(MEM_SIZE_LOG2),
   .ADDRESS_WIDTH(0),
   .ASYNC_CLK(1)
 ) i_measured_length_cdc (

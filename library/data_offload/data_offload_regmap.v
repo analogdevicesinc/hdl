@@ -38,8 +38,7 @@ module data_offload_regmap #(
 
   parameter ID = 0,
   parameter [ 0:0] MEM_TYPE = 1'b0,
-  parameter [33:0] MEM_SIZE = 1024,
-  parameter LENGTH_WIDTH = 10,
+  parameter MEM_SIZE_LOG2 = 10,
   parameter TX_OR_RXN_PATH = 0,
   parameter AUTO_BRINGUP = 0,
   parameter HAS_BYPASS = 1
@@ -80,15 +79,12 @@ module data_offload_regmap #(
   output                  sync,
   output      [ 1:0]      sync_config,
 
-  output      [LENGTH_WIDTH-1:0] src_transfer_length,
-  output      [LENGTH_WIDTH-1:0] dst_transfer_length,
+  output      [MEM_SIZE_LOG2-1:0] src_transfer_length,
+  output      [MEM_SIZE_LOG2-1:0] dst_transfer_length,
 
   // FSM control and status
   input       [ 4:0]      src_fsm_status,
   input       [ 3:0]      dst_fsm_status,
-
-  input       [31:0]      sample_count_msb,
-  input       [31:0]      sample_count_lsb,
 
   input                   src_overflow,
   input                   dst_underflow
@@ -108,7 +104,7 @@ module data_offload_regmap #(
   reg           up_sync = 'd0;
   reg   [ 1:0]  up_sync_config = 'd0;
   reg           up_oneshot = 1'b0;
-  reg   [LENGTH_WIDTH-1:0]  up_transfer_length = 'd0;
+  reg   [MEM_SIZE_LOG2-1:0]  up_transfer_length = 'd0;
   reg           up_src_overflow = 1'b0;
   reg           up_dst_underflow = 1'b0;
 
@@ -117,8 +113,6 @@ module data_offload_regmap #(
   wire          up_ddr_calib_done_s;
   wire  [ 4:0]  up_wr_fsm_status_s;
   wire  [ 3:0]  up_rd_fsm_status_s;
-  wire  [31:0]  up_sample_count_msb_s;
-  wire  [31:0]  up_sample_count_lsb_s;
   wire          src_sw_resetn_s;
   wire          dst_sw_resetn_s;
   wire  [33:0]  src_transfer_length_s;
@@ -135,7 +129,7 @@ module data_offload_regmap #(
       up_bypass <= 'd0;
       up_sync <= 'd0;
       up_sync_config <= 'd0;
-      up_transfer_length <= {LENGTH_WIDTH{1'b1}};
+      up_transfer_length <= {MEM_SIZE_LOG2{1'b1}};
       up_src_overflow <= 1'b0;
       up_dst_underflow <= 1'b0;
     end else begin
@@ -146,7 +140,7 @@ module data_offload_regmap #(
       end
       /* Transfer Length Register */
       if ((up_wreq == 1'b1) && (up_waddr[11:0] == 14'h07)) begin
-        up_transfer_length <= {up_wdata[LENGTH_WIDTH-7:0], {6{1'b1}}};
+        up_transfer_length <= {up_wdata[MEM_SIZE_LOG2-7:0], {6{1'b1}}};
       end
       /* Memory interface status register */
       if ((up_wreq == 1'b1) && (up_waddr[11:0] == 14'h20) && up_wdata[4]) begin
@@ -207,21 +201,16 @@ module data_offload_regmap #(
 
         /* Configuration Register */
         14'h004:  up_rdata <= {
-                          30'b0,
+                          18'b0,
+           /*  12-7  */   MEM_SIZE_LOG2[5:0],
+                          5'b0,
+           /*   2   */    HAS_BYPASS[0],
            /*   1   */    TX_OR_RXN_PATH[0],
            /*   0   */    MEM_TYPE[0]
         };
-        /* Configuration Storage Unit Size LSB Register */
-        14'h005:  up_rdata <= MEM_SIZE[31:0];
-
-        /* Configuration Storage Unit Size MSB Register */
-        14'h006:  up_rdata <= {
-                          30'b0,
-           /* 00-01 */    MEM_SIZE[33:32]
-        };
 
         /* Configuration data transfer length */
-        14'h007:  up_rdata <= up_transfer_length[LENGTH_WIDTH-1:6];
+        14'h007:  up_rdata <= up_transfer_length[MEM_SIZE_LOG2-1:6];
 
         /* 0x08-0x1f reserved for future use */
 
@@ -265,11 +254,6 @@ module data_offload_regmap #(
                           3'b0,
            /* 04-00 */    up_wr_fsm_status_s
         };
-        /* Sample Count LSB Register */
-        14'h081:  up_rdata <= up_sample_count_lsb_s;
-
-        /* Sample Count MSB Register */
-        14'h082:  up_rdata <= up_sample_count_msb_s;
 
         default: up_rdata <= 32'h00000000;
       endcase
@@ -296,18 +280,6 @@ module data_offload_regmap #(
     .in_data (src_fsm_status),
     .out_clk (up_clk),
     .out_data (up_wr_fsm_status_s)
-  );
-
-  sync_data #(
-    .NUM_OF_BITS (64),
-    .ASYNC_CLK (1))
-  i_xfer_status (
-    .in_clk (src_clk),
-    .in_data ({sample_count_msb,
-               sample_count_lsb}),
-    .out_clk (up_clk),
-    .out_data ({up_sample_count_msb_s,
-                up_sample_count_lsb_s})
   );
 
   generate
@@ -383,7 +355,7 @@ module data_offload_regmap #(
   );
 
   sync_data #(
-    .NUM_OF_BITS (LENGTH_WIDTH),
+    .NUM_OF_BITS (MEM_SIZE_LOG2),
     .ASYNC_CLK (1))
   i_sync_src_transfer_length (
     .in_clk (up_clk),
@@ -392,7 +364,7 @@ module data_offload_regmap #(
     .out_data (src_transfer_length)
   );
   sync_data #(
-    .NUM_OF_BITS (LENGTH_WIDTH),
+    .NUM_OF_BITS (MEM_SIZE_LOG2),
     .ASYNC_CLK (1))
   i_sync_dst_transfer_length (
     .in_clk (up_clk),

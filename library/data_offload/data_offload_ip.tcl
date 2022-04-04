@@ -114,7 +114,6 @@ set_property -dict [list \
   "value_validation_pairs" { \
       "Internal memory" "0" \
       "External memory" "1" \
-      "External memory HBM" "2" \
     } \
  ] \
  [ipx::get_user_parameters MEM_TYPE -of_objects $cc]
@@ -133,13 +132,44 @@ set_property -dict [list \
  ] \
  [ipx::get_user_parameters TX_OR_RXN_PATH -of_objects $cc]
 
-## MEM_SIZE - 8GB??
+#set_property -dict [list \
+#  "value_validation_type" "range_long" \
+#  "value_validation_range_minimum" "8" \
+#  "value_validation_range_maximum" "34" \
+# ] \
+# [ipx::get_user_parameters MEM_SIZE_LOG2 -of_objects $cc]
 set_property -dict [list \
-  "value_validation_type" "range_long" \
-  "value_validation_range_minimum" "2" \
-  "value_validation_range_maximum" "8589934592" \
+		"value_validation_type" "pairs" \
+    "value" "10" \
+		"value_validation_pairs" {\
+      "1kB" "10" \
+      "2kB" "11" \
+      "4kB" "12" \
+      "8kB" "13" \
+      "16kB" "14" \
+      "32kB" "15" \
+      "64kB" "16" \
+      "128kB" "17" \
+      "256kB" "18" \
+      "512kB" "19" \
+      "1MB" "20" \
+      "2MB" "21" \
+      "4MB" "22" \
+      "8MB" "23" \
+      "16MB" "24" \
+      "32MB" "25" \
+      "64MB" "26" \
+      "128MB" "27" \
+      "256MB" "28" \
+      "512MB" "29" \
+      "1GB" "30" \
+      "2GB" "31" \
+      "4GB" "32" \
+      "8GB" "33" \
+      "16GB" "34" \
+    } \
  ] \
- [ipx::get_user_parameters MEM_SIZE -of_objects $cc]
+ [ipx::get_user_parameters MEM_SIZE_LOG2 -of_objects $cc]
 
 ## Boolean parameters
 foreach {k v} { \
@@ -192,15 +222,11 @@ set_property -dict [list \
   "display_name" "Storage Type" \
 ] [ipgui::get_guiparamspec -name "MEM_TYPE" -component $cc]
 
-ipgui::add_param -name "MEM_SIZE" -component $cc -parent $general_group
+ipgui::add_param -name "MEM_SIZE_LOG2" -component $cc -parent $general_group
 set_property -dict [list \
   "display_name" "Storage Size" \
-] [ipgui::get_guiparamspec -name "MEM_SIZE" -component $cc]
-
-ipgui::add_param -name "LENGTH_WIDTH" -component $cc -parent $general_group
-set_property -dict [list \
-  "display_name" "Length Width" \
-] [ipgui::get_guiparamspec -name "LENGTH_WIDTH" -component $cc]
+  "tooltip" "Log2 value of Storage Size in bytes" \
+] [ipgui::get_guiparamspec -name "MEM_SIZE_LOG2" -component $cc]
 
 ## Transmit and receive endpoints
 set source_group [ipgui::add_group -name "Source Endpoint Configuration" -component $cc \
@@ -240,11 +266,6 @@ set_property -dict [list \
   "display_name" "Generate CDC Circuit for sync_ext" \
 ] [ipgui::get_guiparamspec -name "SYNC_EXT_ADD_INTERNAL_CDC" -component $cc]
 
-# Auto calculated parameters
-set_property value_tcl_expr {[tcl::mathfunc::int [tcl::mathfunc::ceil [expr [tcl::mathfunc::log $MEM_SIZE] / [tcl::mathfunc::log 2]]]]} \
-  [ipx::get_user_parameters LENGTH_WIDTH -of_objects $cc]
-
-ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "LENGTH_WIDTH" -component $cc]
 
 ## Create and save the XGUI file
 ipx::create_xgui_files $cc

@@ -43,8 +43,8 @@ proc ad_data_offload_create {instance_name
     ###########################################################################
 
     ad_ip_instance data_offload i_data_offload [list \
-      MEM_TYPE $mem_type \
-      MEM_SIZE $mem_size \
+      MEM_TYPE [expr $mem_type == 0 ? 0 : 1] \
+      MEM_SIZE_LOG2 [log2 $mem_size] \
       TX_OR_RXN_PATH $datapath_type \
       SRC_DATA_WIDTH $source_dwidth \
       DST_DATA_WIDTH $destination_dwidth \
@@ -70,28 +70,21 @@ proc ad_data_offload_create {instance_name
       ###########################################################################
       source $ad_hdl_dir/library/util_hbm/scripts/adi_util_hbm.tcl
 
-      if {$mem_type == 2} {
-        # HBM has 256MB segments
-        set segments_per_master [expr int(ceil($mem_size.0 / (256.0 * 1024 * 1024)))]
-      } else {
-        # For DDR consider the whole memory as a single large segment
-        set segments_per_master 1
-      }
-
       ad_create_util_hbm storage_unit \
         $datapath_type \
         $source_dwidth \
         $destination_dwidth \
-        $segments_per_master \
+        $mem_size \
         $axi_data_width \
         $axi_addr_width \
         $mem_type
 
       if {$mem_type == 1} {
-        ad_ip_parameter storage_unit CONFIG.AXI_PROTOCOL "AXI4"
+        ad_ip_parameter storage_unit CONFIG.AXI_PROTOCOL 0
+      } else {
+        ad_ip_parameter storage_unit CONFIG.AXI_PROTOCOL 1
       }
 
-      ad_ip_parameter storage_unit CONFIG.LENGTH_WIDTH [log2 $mem_size]
     }
 
     ###########################################################################
