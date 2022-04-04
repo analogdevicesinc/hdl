@@ -194,7 +194,7 @@ set_property -dict [list \
 # HBM_SEGMENTS_PER_MASTER = Storage size (MB) / 256 (MB) / number of masters
 set_property -dict [list \
 	  "enablement_value" "false" \
-    "value_tcl_expr" {expr  2**($LENGTH_WIDTH-28) / $NUM_M } \
+    "value_tcl_expr" {expr  int(ceil(2**($LENGTH_WIDTH-28) / ${NUM_M}.0)) } \
 	] \
 	[ipx::get_user_parameters HBM_SEGMENTS_PER_MASTER -of_objects $cc]
 

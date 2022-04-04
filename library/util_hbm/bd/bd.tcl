@@ -33,6 +33,16 @@ proc post_config_ip {cellpath otherinfo} {
     set_property CONFIG.NUM_READ_OUTSTANDING  $fifo_size $intf
 
   }
+
+  # For multi master configurations (e.g.HBM) the AXIS data widths must match
+  if { $num_m > 1} {
+    set src_width [get_property "CONFIG.SRC_DATA_WIDTH" $ip]
+    set dst_width [get_property "CONFIG.DST_DATA_WIDTH" $ip]
+    if {$src_width != $dst_width} {
+      bd::send_msg -of $cellpath -type ERROR -msg_id 1 -text ": For multi AXI master configuration the Source AXIS interface width ($src_width) must match the Destination AXIS interface width ($dst_width)  ."
+    }
+  }
+
 }
 
 # Executed when the block design is validated

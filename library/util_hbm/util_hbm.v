@@ -42,7 +42,7 @@ module util_hbm #(
   parameter TX_RX_N = 1,
 
   parameter SRC_DATA_WIDTH = 512,
-  parameter DST_DATA_WIDTH = 128,
+  parameter DST_DATA_WIDTH = 512,
 
   parameter LENGTH_WIDTH = 32,
 
