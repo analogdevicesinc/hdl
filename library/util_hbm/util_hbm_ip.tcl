@@ -148,11 +148,19 @@ foreach dir {"SRC" "DST"} {
 }
 
 set_property -dict [list \
-	"value_validation_type" "range_long" \
-	"value_validation_range_minimum" "8" \
-	"value_validation_range_maximum" "33" \
-	] \
-	[ipx::get_user_parameters LENGTH_WIDTH -of_objects $cc]
+    "value_validation_type" "pairs" \
+    "value" "24" \
+    "value_validation_pairs" {\
+      "256MB" "28" \
+      "512MB" "29" \
+      "1GB" "30" \
+      "2GB" "31" \
+      "4GB" "32" \
+      "8GB" "33" \
+      "16GB" "34" \
+    } \
+ ] \
+ [ipx::get_user_parameters LENGTH_WIDTH -of_objects $cc]
 
 set_property  -dict [list \
     "value_resolve_type" "user" \
@@ -164,7 +172,7 @@ set_property  -dict [list \
 
 set_property -dict [list \
 		"value_validation_type" "pairs" \
-    "value" "AXI3" \
+    "value" "0" \
 		"value_validation_pairs" {"AXI3" "1" "AXI4" "0"} \
 	] \
 	[ipx::get_user_parameters AXI_PROTOCOL -of_objects $cc]
@@ -182,25 +190,26 @@ set_property -dict [list \
 	] \
 	[ipx::get_user_parameters NUM_M -of_objects $cc]
 
+# 1 segment = 256MB
+# HBM_SEGMENTS_PER_MASTER = Storage size (MB) / 256 (MB) / number of masters
 set_property -dict [list \
-		"value_validation_type" "range_long" \
-	  "value_validation_range_minimum" "1" \
-	  "value_validation_range_maximum" "16" \
-    "enablement_tcl_expr" "\$MEM_TYPE == 2" \
+	  "enablement_value" "false" \
+    "value_tcl_expr" {expr  2**($LENGTH_WIDTH-28) / $NUM_M } \
 	] \
 	[ipx::get_user_parameters HBM_SEGMENTS_PER_MASTER -of_objects $cc]
 
+
 set_property -dict [list \
 		"value_validation_type" "range_long" \
-	  "value_validation_range_minimum" "1" \
-	  "value_validation_range_maximum" "16" \
+	  "value_validation_range_minimum" "0" \
+	  "value_validation_range_maximum" "15" \
     "enablement_tcl_expr" "\$MEM_TYPE == 2" \
 	] \
 	[ipx::get_user_parameters HBM_SEGMENT_INDEX -of_objects $cc]
 
 set_property -dict [list \
 		"value_validation_type" "range_long" \
-	  "value_validation_range_minimum" "1" \
+	  "value_validation_range_minimum" "0" \
 	  "value_validation_range_maximum" "4294967296" \
     "enablement_tcl_expr" "\$MEM_TYPE == 1" \
 	] \
@@ -226,8 +235,8 @@ set_property  -dict [list \
 set p [ipgui::get_guiparamspec -name "LENGTH_WIDTH" -component $cc]
 ipgui::move_param -component $cc -order 1 $p -parent $group
 set_property  -dict [list \
-  "display_name" "Transfer Length Width" \
-  "tooltip" "Defines the amount of data can be stored starting from the base address of the storage.Log2 of targetted data to be stored in bytes"\
+  "display_name" "Storage size" \
+  "tooltip" "Defines the amount of data can be stored starting from the base address of the storage."\
  ] $p
 
 # Offload interface group
@@ -293,6 +302,7 @@ set hbm_group [ipgui::add_group -name "HBM Interface" -component $cc \
 set p [ipgui::get_guiparamspec -name "HBM_SEGMENTS_PER_MASTER" -component $cc]
 ipgui::move_param -component $cc -order 0 $p -parent $hbm_group
 set_property -dict [list \
+  "widget" {textEdit} \
   "display_name" "HBM sections per master" \
   "tooltip" "HBM sections (2Gb/256MB pseudo channels) per master" \
 ] $p
@@ -314,6 +324,7 @@ set_property -dict [list \
   "display_name" "DDR base address" \
   "tooltip" "The base address where data is stored is generated based on this parameter" \
 ] $p
+
 
 ipx::create_xgui_files [ipx::current_core]
 ipx::save_core [ipx::current_core]

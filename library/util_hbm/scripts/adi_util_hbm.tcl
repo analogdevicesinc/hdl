@@ -28,7 +28,7 @@ proc ad_create_hbm {ip_name {density "4GB"}} {
   }
 }
 
-proc ad_create_util_hbm {name rx_tx_n src_width dst_width segments_per_master {axi_data_width 256} {axi_addr_width 32} {mem_type 2}} {
+proc ad_create_util_hbm {name rx_tx_n src_width dst_width mem_size {axi_data_width 256} {axi_addr_width 32} {mem_type 2}} {
 
   if {$mem_type == 2} {
     # HBM
@@ -40,16 +40,15 @@ proc ad_create_util_hbm {name rx_tx_n src_width dst_width segments_per_master {a
   }
 
   ad_ip_instance util_hbm $name [list \
-    HBM_SEGMENTS_PER_MASTER $segments_per_master \
+    LENGTH_WIDTH [log2 $mem_size] \
     SRC_DATA_WIDTH $src_width \
     DST_DATA_WIDTH $dst_width \
     AXI_DATA_WIDTH $axi_data_width \
     AXI_ADDR_WIDTH $axi_addr_width \
     TX_RX_N $rx_tx_n \
     NUM_M $number_of_masters \
-    MEM_TYPE $mem_type
+    MEM_TYPE $mem_type \
   ]
-
 }
 
 proc ad_connect_hbm {i_hbm i_util_hbm axi_clk axi_aresetn {first_slave_index 0}} {
@@ -113,4 +112,6 @@ proc ad_connect_hbm {i_hbm i_util_hbm axi_clk axi_aresetn {first_slave_index 0}}
   }
 }
 
-
+proc log2 {x} {
+  return [tcl::mathfunc::int [tcl::mathfunc::ceil [expr [tcl::mathfunc::log $x] / [tcl::mathfunc::log 2]]]]
+}
