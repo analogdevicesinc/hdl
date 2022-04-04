@@ -87,7 +87,7 @@ module axi_clock_monitor #(
 
   // local parameters
 
-  localparam  PCORE_VERSION = 1
+  localparam  PCORE_VERSION = 1;
 
   // internal registers
 
@@ -100,24 +100,24 @@ module axi_clock_monitor #(
 
   // internal signals
 
-  wire                      up_clk;
-  wire                      up_rstn;
-  wire                      up_wreq_s;
-  wire                      up_rreq_s;
-  wire                      up_waddr_s;
-  wire                      up_raddr_s;
+  wire         up_clk;
+  wire         up_rstn;
+  wire         up_wreq_s;
+  wire         up_rreq_s;
+  wire         up_waddr_s;
+  wire         up_raddr_s;
 
-  wire                      clock         [0:15];
-  wire [20:0]               clk_mon_count [0:15];
+  wire         clock         [0:15];
+  wire [20:0]  clk_mon_count [0:15];
 
-  wire                      up_wreq_i_s;
-  wire [(PROC_ADDR_WD-1):0] up_waddr_i_s;
-  wire [31:0]               up_wdata_i_s;
-  wire                      up_wack_o_s;
-  wire                      up_rreq_i_s;
-  wire [(PROC_ADDR_WD-1):0] up_raddr_i_s;
-  wire [31:0]               up_rdata_o_s;
-  wire                      up_rack_o_s;
+  wire         up_wreq_i_s;
+  wire [13:0]  up_waddr_i_s;
+  wire [31:0]  up_wdata_i_s;
+  wire         up_wack_o_s;
+  wire         up_rreq_i_s;
+  wire [13:0]  up_raddr_i_s;
+  wire [31:0]  up_rdata_o_s;
+  wire         up_rack_o_s;
 
   // loop variables
 
@@ -184,30 +184,30 @@ module axi_clock_monitor #(
       if (up_rreq_s == 1'b1) begin
         case (up_raddr_i_s)
           /* Standard registers */
-          12'h000: up_rdata_int <= PCORE_VERSION;
-          12'h001: up_rdata_int <= ID;
+          14'h000: up_rdata_int <= PCORE_VERSION;
+          14'h001: up_rdata_int <= ID;
 
           /* Core configuration */
-          12'h003: up_rdata_int <= NUM_OF_CLOCKS;
-          12'h004: up_rdata_int <= up_reset_core;
+          14'h003: up_rdata_int <= NUM_OF_CLOCKS;
+          14'h004: up_rdata_int <= {31'h00, up_reset_core};
 
           /* Clock ratios registers*/
-          12'h010: up_rdata_int <= {11'h00, clk_mon_count[ 0]}; /* Make it 16.16 */
-          12'h011: up_rdata_int <= {11'h00, clk_mon_count[ 1]}; /* Make it 16.16 */
-          12'h012: up_rdata_int <= {11'h00, clk_mon_count[ 2]}; /* Make it 16.16 */
-          12'h013: up_rdata_int <= {11'h00, clk_mon_count[ 3]}; /* Make it 16.16 */
-          12'h014: up_rdata_int <= {11'h00, clk_mon_count[ 4]}; /* Make it 16.16 */
-          12'h015: up_rdata_int <= {11'h00, clk_mon_count[ 5]}; /* Make it 16.16 */
-          12'h016: up_rdata_int <= {11'h00, clk_mon_count[ 6]}; /* Make it 16.16 */
-          12'h017: up_rdata_int <= {11'h00, clk_mon_count[ 7]}; /* Make it 16.16 */
-          12'h018: up_rdata_int <= {11'h00, clk_mon_count[ 8]}; /* Make it 16.16 */
-          12'h019: up_rdata_int <= {11'h00, clk_mon_count[ 9]}; /* Make it 16.16 */
-          12'h01a: up_rdata_int <= {11'h00, clk_mon_count[10]}; /* Make it 16.16 */
-          12'h01b: up_rdata_int <= {11'h00, clk_mon_count[11]}; /* Make it 16.16 */
-          12'h01c: up_rdata_int <= {11'h00, clk_mon_count[12]}; /* Make it 16.16 */
-          12'h01d: up_rdata_int <= {11'h00, clk_mon_count[13]}; /* Make it 16.16 */
-          12'h01e: up_rdata_int <= {11'h00, clk_mon_count[14]}; /* Make it 16.16 */
-          12'h01f: up_rdata_int <= {11'h00, clk_mon_count[15]}; /* Make it 16.16 */
+          14'h010: up_rdata_int <= {11'h00, clk_mon_count[ 0]};
+          14'h011: up_rdata_int <= {11'h00, clk_mon_count[ 1]};
+          14'h012: up_rdata_int <= {11'h00, clk_mon_count[ 2]};
+          14'h013: up_rdata_int <= {11'h00, clk_mon_count[ 3]};
+          14'h014: up_rdata_int <= {11'h00, clk_mon_count[ 4]};
+          14'h015: up_rdata_int <= {11'h00, clk_mon_count[ 5]};
+          14'h016: up_rdata_int <= {11'h00, clk_mon_count[ 6]};
+          14'h017: up_rdata_int <= {11'h00, clk_mon_count[ 7]};
+          14'h018: up_rdata_int <= {11'h00, clk_mon_count[ 8]};
+          14'h019: up_rdata_int <= {11'h00, clk_mon_count[ 9]};
+          14'h01a: up_rdata_int <= {11'h00, clk_mon_count[10]};
+          14'h01b: up_rdata_int <= {11'h00, clk_mon_count[11]};
+          14'h01c: up_rdata_int <= {11'h00, clk_mon_count[12]};
+          14'h01d: up_rdata_int <= {11'h00, clk_mon_count[13]};
+          14'h01e: up_rdata_int <= {11'h00, clk_mon_count[14]};
+          14'h01f: up_rdata_int <= {11'h00, clk_mon_count[15]};
 
           default: up_rdata_int <= 'h00;
         endcase
@@ -230,7 +230,7 @@ module axi_clock_monitor #(
       );
     end
     for (n = NUM_OF_CLOCKS; n < 16; n = n + 1) begin: clk_mon_z
-      assign clk_mon_count[n] = 20'd0;
+      assign clk_mon_count[n] = 21'd0;
     end
   endgenerate
 
