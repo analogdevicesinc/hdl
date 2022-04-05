@@ -28,7 +28,7 @@ proc ad_create_hbm {ip_name {density "4GB"}} {
   }
 }
 
-proc ad_create_util_hbm {name rx_tx_n src_width dst_width mem_size {axi_data_width 256} {axi_addr_width 32} {mem_type 2}} {
+proc ad_create_util_hbm {name rx_tx_n src_width dst_width mem_size {axi_data_width 256} {mem_type 2}} {
 
   if {$mem_type == 2} {
     # HBM
@@ -44,7 +44,6 @@ proc ad_create_util_hbm {name rx_tx_n src_width dst_width mem_size {axi_data_wid
     SRC_DATA_WIDTH $src_width \
     DST_DATA_WIDTH $dst_width \
     AXI_DATA_WIDTH $axi_data_width \
-    AXI_ADDR_WIDTH $axi_addr_width \
     TX_RX_N $rx_tx_n \
     NUM_M $number_of_masters \
     MEM_TYPE $mem_type \
@@ -60,6 +59,9 @@ proc ad_connect_hbm {i_hbm i_util_hbm axi_clk axi_aresetn {first_slave_index 0}}
   set i_util_hbm_ip [get_bd_cells $i_util_hbm]
   set segments_per_master [get_property CONFIG.HBM_SEGMENTS_PER_MASTER $i_util_hbm_ip]
   set num_m [get_property CONFIG.NUM_M $i_util_hbm_ip]
+
+  # <TODO> : Curent HBM has port width of 256
+  ad_ip_parameter $i_util_hbm CONFIG.AXI_DATA_WIDTH 256
 
   if {$hbm_sim == 0} {
 
@@ -86,6 +88,7 @@ proc ad_connect_hbm {i_hbm i_util_hbm axi_clk axi_aresetn {first_slave_index 0}}
     ad_ip_parameter $i_util_hbm CONFIG.HBM_SEGMENT_INDEX $first_slave_index
 
   } else {
+
     # Create smart connect
     ad_ip_instance smartconnect axi_hbm_interconnect [list \
       NUM_MI 1 \

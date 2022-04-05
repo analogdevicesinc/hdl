@@ -190,6 +190,18 @@ set_property -dict [list \
 	] \
 	[ipx::get_user_parameters NUM_M -of_objects $cc]
 
+set_property -dict [list \
+		"value_validation_type" "list" \
+		"value_validation_list" "2 4 8 16 32" \
+	] \
+	[ipx::get_user_parameters SRC_FIFO_SIZE -of_objects $cc]
+
+set_property -dict [list \
+		"value_validation_type" "list" \
+		"value_validation_list" "2 4 8 16 32" \
+	] \
+	[ipx::get_user_parameters DST_FIFO_SIZE -of_objects $cc]
+
 # 1 segment = 256MB
 # HBM_SEGMENTS_PER_MASTER = Storage size (MB) / 256 (MB) / number of masters
 set_property -dict [list \
@@ -247,13 +259,31 @@ set p [ipgui::get_guiparamspec -name "SRC_DATA_WIDTH" -component $cc]
 ipgui::move_param -component $cc -order 0 $p -parent $group
 set_property -dict [list \
 		"display_name" "Source AXIS Bus Width" \
+		"tooltip"      "Source AXIS Bus Width (s_axis)" \
 	] $p
 
-set p [ipgui::get_guiparamspec -name "DST_DATA_WIDTH" -component $cc]
+set p [ipgui::get_guiparamspec -name "SRC_FIFO_SIZE" -component $cc]
 ipgui::move_param -component $cc -order 1 $p -parent $group
 set_property -dict [list \
+  "display_name" "Write Buffer Size" \
+  "tooltip" "Size of internal data mover buffer used for write to external memory. In AXI bursts, where one burst is max 4096 bytes or 2*AXI_DATA_WIDTH bytes for AXI3 or 32*AXI_DATA_WIDTH bytes for AXI4." \
+  "widget" "comboBox" \
+] $p
+
+set p [ipgui::get_guiparamspec -name "DST_DATA_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 2 $p -parent $group
+set_property -dict [list \
 		"display_name" "Destination AXIS Bus Width" \
+		"tooltip"      "Destination AXIS Bus Width (m_axis)" \
 	] $p
+
+set p [ipgui::get_guiparamspec -name "DST_FIFO_SIZE" -component $cc]
+ipgui::move_param -component $cc -order 3 $p -parent $group
+set_property -dict [list \
+  "display_name" "Read Buffer Size" \
+  "tooltip" "Size of internal data mover buffer used for read from the external memory. In AXI bursts, where one burst is max 4096 bytes or 2*AXI_DATA_WIDTH bytes for AXI3 or 32*AXI_DATA_WIDTH bytes for AXI4." \
+  "widget" "comboBox" \
+] $p
 
 # Memory interface group
 set group [ipgui::add_group -name "External Memory Interface" -component $cc \
@@ -272,6 +302,7 @@ ipgui::move_param -component $cc -order 1 $p -parent $group
 set_property -dict [list \
   "display_name" "Number of AXI Masters" \
   "tooltip" "Number of AXI masters the data stream bus is split" \
+  "widget" "comboBox" \
 ] $p
 
 set p [ipgui::get_guiparamspec -name "AXI_PROTOCOL" -component $cc]
@@ -286,13 +317,6 @@ ipgui::move_param -component $cc -order 3 $p -parent $group
 set_property -dict [list \
   "display_name" "AXI Data Bus Width" \
   "tooltip" "Bus Width: Memory-Mapped interface with valid range of 32-1024 bits" \
-] $p
-
-set p [ipgui::get_guiparamspec -name "AXI_ADDR_WIDTH" -component $cc]
-ipgui::move_param -component $cc -order 4 $p -parent $group
-set_property -dict [list \
-  "display_name" "AXI Address Bus Width" \
-  "tooltip" "Address Bus Width: Must cover targetted memory range" \
 ] $p
 
 # HBM  sub group
@@ -312,6 +336,7 @@ ipgui::move_param -component $cc -order 1 $p -parent $hbm_group
 set_property -dict [list \
   "display_name" "First HBM section index" \
   "tooltip" "First used HBM section (2Gb pseudo channels).The base address where data is stored is generated based on this parameter" \
+  "widget" "comboBox" \
 ] $p
 
 # DDR sub group
@@ -325,6 +350,7 @@ set_property -dict [list \
   "tooltip" "The base address where data is stored is generated based on this parameter" \
 ] $p
 
+ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "AXI_ADDR_WIDTH" -component $cc]
 
 ipx::create_xgui_files [ipx::current_core]
 ipx::save_core [ipx::current_core]

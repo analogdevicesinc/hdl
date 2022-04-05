@@ -1,5 +1,8 @@
 proc init {cellpath otherInfo} {
   set ip [get_bd_cells $cellpath]
+
+  bd::mark_propagate_only $ip \
+    "AXI_ADDR_WIDTH"
 }
 
 # Executed when you close the config window
@@ -10,8 +13,8 @@ proc post_config_ip {cellpath otherinfo} {
   set axi_protocol [get_property "CONFIG.AXI_PROTOCOL" $ip]
   set data_width [get_property "CONFIG.AXI_DATA_WIDTH" $ip]
 
-  # <TODO>: Make this depend on FIFO_SIZE parameter
-  set fifo_size 8
+  set src_fifo_size [get_property "CONFIG.SRC_FIFO_SIZE" $ip]
+  set dst_fifo_size [get_property "CONFIG.DST_FIFO_SIZE" $ip]
 
   if {$axi_protocol == 0} {
     set axi_protocol_str "AXI4"
@@ -29,8 +32,8 @@ proc post_config_ip {cellpath otherinfo} {
     set_property CONFIG.PROTOCOL $axi_protocol_str $intf
     set_property CONFIG.MAX_BURST_LENGTH $max_beats_per_burst $intf
 
-    set_property CONFIG.NUM_WRITE_OUTSTANDING $fifo_size $intf
-    set_property CONFIG.NUM_READ_OUTSTANDING  $fifo_size $intf
+    set_property CONFIG.NUM_WRITE_OUTSTANDING $src_fifo_size $intf
+    set_property CONFIG.NUM_READ_OUTSTANDING  $dst_fifo_size $intf
 
   }
 
@@ -45,8 +48,33 @@ proc post_config_ip {cellpath otherinfo} {
 
 }
 
+proc log2 {x} {
+  return [tcl::mathfunc::int [tcl::mathfunc::ceil [expr [tcl::mathfunc::log $x] / [tcl::mathfunc::log 2]]]]
+}
+
 # Executed when the block design is validated
 proc propagate {cellpath otherinfo} {
   set ip [get_bd_cells $cellpath]
+
+}
+
+proc post_propagate {cellpath otherinfo} {
+	set ip [get_bd_cells $cellpath]
+
+  #Check address space
+  set length_width [get_property "CONFIG.LENGTH_WIDTH" $ip]
+  set axi_addr_width [get_property "CONFIG.AXI_ADDR_WIDTH" $ip]
+  set ddr_base_adddress [get_property "CONFIG.DDR_BASE_ADDDRESS" $ip]
+  set hbm_segment_index [get_property "CONFIG.HBM_SEGMENT_INDEX" $ip]
+  set mem_type [get_property "CONFIG.MEM_TYPE" $ip]
+  if {$mem_type == 1} {
+    set addr_width [log2 [expr $ddr_base_adddress + 2 ** $length_width - 1]]
+  } else {
+    # assumption: 1 segmetn is 256MB
+    set addr_width [log2 [expr $hbm_segment_index * 256 * 1024 * 1024 + 2 ** $length_width - 1]]
+  }
+
+  set_property "CONFIG.AXI_ADDR_WIDTH" $addr_width $ip
+  bd::send_msg -of $cellpath -type INFO -msg_id 2 -text ": AXI Address Width  set to $addr_width"
 
 }

@@ -60,12 +60,12 @@ module util_hbm #(
   // DDR parameters
   parameter DDR_BASE_ADDDRESS = 0,
 
-  parameter NUM_M = TX_RX_N ?
-                   (DST_DATA_WIDTH <= AXI_DATA_WIDTH ? 1 :
-                   (DST_DATA_WIDTH / AXI_DATA_WIDTH))
-                    :
-                   (SRC_DATA_WIDTH <= AXI_DATA_WIDTH ? 1 :
-                   (SRC_DATA_WIDTH / AXI_DATA_WIDTH))
+  // Number of AXI masters
+  parameter NUM_M = 2,
+
+  // Data mover parameters
+  parameter SRC_FIFO_SIZE = 8, // In AXI bursts
+  parameter DST_FIFO_SIZE = 8
 ) (
 
   input                                    wr_request_enable,
@@ -165,8 +165,6 @@ localparam MAX_BYTES_PER_BURST = (AXI_PROTOCOL ? 16 : 256) * AXI_DATA_WIDTH/8;
 localparam MAX_BYTES_PER_BURST_LMT = MAX_BYTES_PER_BURST >= 4096 ? 4096 :
                                      MAX_BYTES_PER_BURST;
 localparam BYTES_PER_BURST_WIDTH = $clog2(MAX_BYTES_PER_BURST_LMT);
-
-parameter FIFO_SIZE = 8; // In bursts
 
 localparam AXI_ALEN = (8-(4*AXI_PROTOCOL));
 
@@ -274,8 +272,8 @@ for (i = 0; i < NUM_M; i=i+1) begin
     .AXI_SLICE_DEST(1),
     .AXI_SLICE_SRC(1),
     .MAX_BYTES_PER_BURST(MAX_BYTES_PER_BURST_LMT),
-    .FIFO_SIZE(FIFO_SIZE),
-    .ID_WIDTH($clog2(FIFO_SIZE)),
+    .FIFO_SIZE(SRC_FIFO_SIZE),
+    .ID_WIDTH($clog2(SRC_FIFO_SIZE)),
     .AXI_LENGTH_WIDTH_SRC(8-(4*AXI_PROTOCOL)),
     .AXI_LENGTH_WIDTH_DEST(8-(4*AXI_PROTOCOL)),
     .ENABLE_DIAGNOSTICS_IF(0),
@@ -425,8 +423,8 @@ for (i = 0; i < NUM_M; i=i+1) begin
     .AXI_SLICE_DEST(1),
     .AXI_SLICE_SRC(1),
     .MAX_BYTES_PER_BURST(MAX_BYTES_PER_BURST_LMT),
-    .FIFO_SIZE(FIFO_SIZE),
-    .ID_WIDTH($clog2(FIFO_SIZE)),
+    .FIFO_SIZE(DST_FIFO_SIZE),
+    .ID_WIDTH($clog2(DST_FIFO_SIZE)),
     .AXI_LENGTH_WIDTH_SRC(8-(4*AXI_PROTOCOL)),
     .AXI_LENGTH_WIDTH_DEST(8-(4*AXI_PROTOCOL)),
     .ENABLE_DIAGNOSTICS_IF(0),
