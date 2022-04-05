@@ -76,7 +76,6 @@ proc ad_data_offload_create {instance_name
         $destination_dwidth \
         $mem_size \
         $axi_data_width \
-        $axi_addr_width \
         $mem_type
 
       if {$mem_type == 1} {
