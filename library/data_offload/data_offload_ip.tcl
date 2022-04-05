@@ -41,7 +41,6 @@ adi_add_bus "m_axis" "master" \
     {"m_axis_data" "TDATA"} \
     {"m_axis_last" "TLAST"} \
     {"m_axis_tkeep" "TKEEP"} ]
-#adi_add_bus_clock "m_axis_aclk" "m_axis" "m_axis_aresetn"
 
 ## source interface (e.g. TX_DMA or ADC core)
 
@@ -54,7 +53,6 @@ adi_add_bus "s_axis" "slave" \
     {"s_axis_data" "TDATA"} \
     {"s_axis_last" "TLAST"} \
     {"s_axis_tkeep" "TKEEP"} ]
-#adi_add_bus_clock "s_axis_aclk" "s_axis" "s_axis_aresetn"
 
 adi_add_bus "wr_ctrl" "master" \
 	"analog.com:interface:if_do_ctrl_rtl:1.0" \
@@ -67,7 +65,6 @@ adi_add_bus "wr_ctrl" "master" \
 	      {"wr_response_eot" "response_eot"} \
 	      {"wr_overflow" "status_overflow"} \
 	  ]
-#adi_add_bus_clock "s_axi_aclk" "wr_ctrl" "s_axi_aresetn"
 
 adi_add_bus "rd_ctrl" "master" \
 	"analog.com:interface:if_do_ctrl_rtl:1.0" \
@@ -79,7 +76,6 @@ adi_add_bus "rd_ctrl" "master" \
 	      {"rd_response_eot" "response_eot"} \
 	      {"rd_underflow" "status_underflow"} \
 	  ]
-#adi_add_bus_clock "s_axi_aclk" "rd_ctrl" "s_axi_aresetn"
 
 adi_add_bus "s_storage_axis" "slave" \
 	"xilinx.com:interface:axis_rtl:1.0" \
@@ -132,12 +128,6 @@ set_property -dict [list \
  ] \
  [ipx::get_user_parameters TX_OR_RXN_PATH -of_objects $cc]
 
-#set_property -dict [list \
-#  "value_validation_type" "range_long" \
-#  "value_validation_range_minimum" "8" \
-#  "value_validation_range_maximum" "34" \
-# ] \
-# [ipx::get_user_parameters MEM_SIZE_LOG2 -of_objects $cc]
 set_property -dict [list \
 		"value_validation_type" "pairs" \
     "value" "10" \
@@ -266,8 +256,8 @@ set_property -dict [list \
   "display_name" "Generate CDC Circuit for sync_ext" \
 ] [ipgui::get_guiparamspec -name "SYNC_EXT_ADD_INTERNAL_CDC" -component $cc]
 
-
 ## Create and save the XGUI file
 ipx::create_xgui_files $cc
 
 ipx::save_core [ipx::current_core]
+

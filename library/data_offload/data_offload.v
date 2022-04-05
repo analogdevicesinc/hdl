@@ -176,7 +176,6 @@ module data_offload #(
   wire                                        src_bypass_s;
   wire                                        dst_bypass_s;
   wire                                        oneshot_s;
-//  wire  [63:0]                                sample_count_s;
   wire  [ 1:0]                                sync_config_s;
   wire                                        sync_int_s;
   wire                                        valid_bypass_s;

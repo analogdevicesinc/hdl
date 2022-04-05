@@ -60,7 +60,7 @@ URAM, external memory etc.)
 |ID                    |  integer    |    0       | Instance ID number | 
 |MEM_TYPE              |  [ 0:0]     |    0       | Define the used storage type: FPGA RAM - 0; external DDR - 1 |
 |MEM_SIZE              |  [31:0]     |   1024     | Define the size of the storage element |
-|LENGTH_WIDTH          |  integer    |   10       | Log2 value of MEM_SIZE, defines the width of transfer length control signals. |
+|MEM_SIZE_LOG2         |  integer    |   10       | Log2 value of MEM_SIZE, defines the width of transfer length control signals. |
 |TX_OR_RXN_PATH        |  [ 0:0]     |    1       | If set TX path enabled, otherwise RX |
 |SRC_DATA_WIDTH        |  integer    |    64      | The data width of the source interface |
 |DST_DATA_WIDTH        |  integer    |   124      | The data width of the destination interface |
