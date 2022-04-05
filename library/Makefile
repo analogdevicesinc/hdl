@@ -15,21 +15,15 @@ all: lib
 clean:
 	$(MAKE) -C ad463x_data_capture clean
 	$(MAKE) -C axi_ad5766 clean
-	$(MAKE) -C axi_ad6676 clean
 	$(MAKE) -C axi_ad7616 clean
 	$(MAKE) -C axi_ad9122 clean
-	$(MAKE) -C axi_ad9144 clean
-	$(MAKE) -C axi_ad9152 clean
-	$(MAKE) -C axi_ad9162 clean
 	$(MAKE) -C axi_ad9250 clean
 	$(MAKE) -C axi_ad9265 clean
 	$(MAKE) -C axi_ad9361 clean
-	$(MAKE) -C axi_ad9371 clean
 	$(MAKE) -C axi_ad9434 clean
 	$(MAKE) -C axi_ad9467 clean
 	$(MAKE) -C axi_ad9625 clean
 	$(MAKE) -C axi_ad9671 clean
-	$(MAKE) -C axi_ad9680 clean
 	$(MAKE) -C axi_ad9684 clean
 	$(MAKE) -C axi_ad9739a clean
 	$(MAKE) -C axi_ad9783 clean
@@ -37,7 +31,6 @@ clean:
 	$(MAKE) -C axi_adc_decimate clean
 	$(MAKE) -C axi_adc_trigger clean
 	$(MAKE) -C axi_adrv9001 clean
-	$(MAKE) -C axi_adrv9009 clean
 	$(MAKE) -C axi_clkgen clean
 	$(MAKE) -C axi_clock_monitor clean
 	$(MAKE) -C axi_dac_interpolate clean
@@ -52,9 +45,6 @@ clean:
 	$(MAKE) -C axi_intr_monitor clean
 	$(MAKE) -C axi_laser_driver clean
 	$(MAKE) -C axi_logic_analyzer clean
-	$(MAKE) -C axi_mc_controller clean
-	$(MAKE) -C axi_mc_current_monitor clean
-	$(MAKE) -C axi_mc_speed clean
 	$(MAKE) -C axi_pulse_gen clean
 	$(MAKE) -C axi_pwm_gen clean
 	$(MAKE) -C axi_rd_wr_combiner clean
@@ -62,7 +52,6 @@ clean:
 	$(MAKE) -C axi_spdif_tx clean
 	$(MAKE) -C axi_sysid clean
 	$(MAKE) -C axi_tdd clean
-	$(MAKE) -C axi_usb_fx3 clean
 	$(MAKE) -C cn0363/cn0363_dma_sequencer clean
 	$(MAKE) -C cn0363/cn0363_phase_data_sync clean
 	$(MAKE) -C cordic_demod clean
@@ -142,21 +131,15 @@ clean-all:clean
 lib:
 	$(MAKE) -C ad463x_data_capture
 	$(MAKE) -C axi_ad5766
-	$(MAKE) -C axi_ad6676
 	$(MAKE) -C axi_ad7616
 	$(MAKE) -C axi_ad9122
-	$(MAKE) -C axi_ad9144
-	$(MAKE) -C axi_ad9152
-	$(MAKE) -C axi_ad9162
 	$(MAKE) -C axi_ad9250
 	$(MAKE) -C axi_ad9265
 	$(MAKE) -C axi_ad9361
-	$(MAKE) -C axi_ad9371
 	$(MAKE) -C axi_ad9434
 	$(MAKE) -C axi_ad9467
 	$(MAKE) -C axi_ad9625
 	$(MAKE) -C axi_ad9671
-	$(MAKE) -C axi_ad9680
 	$(MAKE) -C axi_ad9684
 	$(MAKE) -C axi_ad9739a
 	$(MAKE) -C axi_ad9783
@@ -164,7 +147,6 @@ lib:
 	$(MAKE) -C axi_adc_decimate
 	$(MAKE) -C axi_adc_trigger
 	$(MAKE) -C axi_adrv9001
-	$(MAKE) -C axi_adrv9009
 	$(MAKE) -C axi_clkgen
 	$(MAKE) -C axi_clock_monitor
 	$(MAKE) -C axi_dac_interpolate
@@ -179,9 +161,6 @@ lib:
 	$(MAKE) -C axi_intr_monitor
 	$(MAKE) -C axi_laser_driver
 	$(MAKE) -C axi_logic_analyzer
-	$(MAKE) -C axi_mc_controller
-	$(MAKE) -C axi_mc_current_monitor
-	$(MAKE) -C axi_mc_speed
 	$(MAKE) -C axi_pulse_gen
 	$(MAKE) -C axi_pwm_gen
 	$(MAKE) -C axi_rd_wr_combiner
@@ -189,7 +168,6 @@ lib:
 	$(MAKE) -C axi_spdif_tx
 	$(MAKE) -C axi_sysid
 	$(MAKE) -C axi_tdd
-	$(MAKE) -C axi_usb_fx3
 	$(MAKE) -C cn0363/cn0363_dma_sequencer
 	$(MAKE) -C cn0363/cn0363_phase_data_sync
 	$(MAKE) -C cordic_demod
