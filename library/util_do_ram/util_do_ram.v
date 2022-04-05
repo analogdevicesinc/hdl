@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2022 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -193,9 +193,7 @@ always @(posedge m_axis_aclk) begin
 end
 
 assign rd_last_beat = (rd_addr == rd_length) & rd_enable;
-//always @(posedge m_axis_aclk) begin
 assign rd_response_eot = m_axis_last & m_axis_valid & m_axis_ready;
-//end
 
 // Read logic
 always @(posedge m_axis_aclk) begin
@@ -269,5 +267,4 @@ util_axis_fifo #(
 );
 
 endmodule
-
 

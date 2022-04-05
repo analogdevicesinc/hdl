@@ -74,25 +74,5 @@ adi_add_bus "rd_ctrl" "slave" \
 adi_add_bus_clock "s_axis_aclk" "s_axis:wr_ctrl" "s_axis_aresetn"
 adi_add_bus_clock "m_axis_aclk" "m_axis:rd_ctrl" "m_axis_aresetn"
 
-
-#ipx::add_user_parameter TX_RX_N $cc
-#ipgui::add_param -name {TX_RX_N} -component $cc
-#
-#set_property  -dict [list \
-#  display_name {Device type} \
-#  widget {comboBox} \
-# ] [ipgui::get_guiparamspec TX_RX_N -component $cc]
-#
-#set_property  -dict [list \
-#  value_resolve_type user \
-#  value 1 \
-#  value_validation_type pairs \
-#  value_validation_pairs {{DAC (TX)} 1 {ADC (RX)} 0} \
-#  ] [ipx::get_user_parameters TX_RX_N -of_objects $cc]
-#
-#
-#set_property value_tcl_expr {expr round((${TX_RX_N} == 1 ? ${DST_DATA_WIDTH}.0 : ${SRC_DATA_WIDTH}.0) / ${AXI_DATA_WIDTH}.0)} \
-#  [ipx::get_user_parameters NUM_M -of_objects $cc]
-
 ipx::create_xgui_files [ipx::current_core]
 ipx::save_core [ipx::current_core]
