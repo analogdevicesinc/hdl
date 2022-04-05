@@ -6,7 +6,6 @@ set dac_offload_type 0
 set dac_offload_size [expr 1 * 1024 * 1024]
 
 set plddr_offload_axi_data_width 0
-set plddr_offload_axi_addr_width 0
 
 ## NOTE: With this configuration the #36Kb BRAM utilization is at ~78%
 

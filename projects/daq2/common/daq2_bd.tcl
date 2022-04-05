@@ -69,8 +69,7 @@ ad_data_offload_create axi_ad9144_offload \
                        $dac_offload_size \
                        $dac_data_width \
                        $dac_data_width \
-                       $plddr_offload_axi_data_width \
-                       $plddr_offload_axi_addr_width
+                       $plddr_offload_axi_data_width
 
 # synchronization interface
 ad_connect axi_ad9144_offload/init_req axi_ad9144_dma/m_axis_xfer_req
@@ -117,8 +116,7 @@ ad_data_offload_create axi_ad9680_offload \
                        $adc_offload_size \
                        $adc_data_width \
                        $adc_data_width \
-                       $plddr_offload_axi_data_width \
-                       $plddr_offload_axi_addr_width
+                       $plddr_offload_axi_data_width
 
 # synchronization interface
 ad_connect axi_ad9680_offload/init_req axi_ad9680_dma/s_axis_xfer_req
