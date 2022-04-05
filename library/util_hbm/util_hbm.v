@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2022 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -189,7 +189,6 @@ assign rd_eot_pending_all = &rd_eot_pending;
 
 wire [NUM_M-1:0] s_axis_ready_loc;
 assign s_axis_ready = &s_axis_ready_loc;
-
 
 wire [NUM_M-1:0] m_axis_last_loc;
 assign m_axis_last = &m_axis_last_loc;
@@ -545,7 +544,5 @@ assign wr_overflow = |wr_overflow_loc;
 
 assign rd_underflow = |rd_underflow_loc;
 
-
 endmodule
-
 

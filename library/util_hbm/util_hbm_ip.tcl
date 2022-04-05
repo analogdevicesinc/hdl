@@ -127,7 +127,6 @@ foreach intf [ipx::get_bus_interfaces MAXI_* -of_objects $cc] {
 	set_property "VALUE" "0" $para
 }
 
-
 #
 #  Parameters description
 #
@@ -209,7 +208,6 @@ set_property -dict [list \
     "value_tcl_expr" {expr  int(ceil(2**($LENGTH_WIDTH-28) / ${NUM_M}.0)) } \
 	] \
 	[ipx::get_user_parameters HBM_SEGMENTS_PER_MASTER -of_objects $cc]
-
 
 set_property -dict [list \
 		"value_validation_type" "range_long" \

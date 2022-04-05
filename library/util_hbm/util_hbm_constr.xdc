@@ -258,9 +258,9 @@ set_max_delay -quiet -datapath_only \
 	-to $dest_clk \
 	[get_property -min PERIOD $dest_clk]
 
-
-
+# 
 # Common to both dmas
+#
 
 # Reset signals
 set_false_path -quiet \
@@ -295,5 +295,4 @@ set_property -dict { \
     SHREG_EXTRACT NO \
     ASYNC_REG TRUE \
   } [get_cells -quiet -hier *reset_sync_reg*]
-
 
