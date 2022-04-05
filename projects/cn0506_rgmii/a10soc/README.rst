@@ -1,3 +1,0 @@
-- Connect on FMC A HPC(V57.1)
-- VADJ = 1.8V
-- RGMII mode, using a GMII-to-RGMII converter. Connected to HPS (EMAC1-PHY0 and EMAC2-PHY1).
