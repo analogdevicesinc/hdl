@@ -38,8 +38,6 @@ set dac_do_mem_type [ expr { [info exists ad_project_params(DAC_DO_MEM_TYPE)] \
 
 set do_axi_data_width [ expr { [info exists do_axi_data_width] \
                           ? $do_axi_data_width : 256 } ]
-set do_axi_addr_width [ expr { [info exists do_axi_addr_width] \
-                          ? $do_axi_addr_width : 32 } ]
 
 if {$JESD_MODE == "8B10B"} {
   set DATAPATH_WIDTH 4
@@ -208,7 +206,6 @@ ad_data_offload_create $adc_data_offload_name \
                        $adc_data_width \
                        $adc_data_width \
                        $do_axi_data_width \
-                       $do_axi_addr_width \
                        $SHARED_DEVCLK
 
 ad_ip_instance axi_dmac axi_mxfe_rx_dma
@@ -256,7 +253,6 @@ ad_data_offload_create $dac_data_offload_name \
                        $dac_data_width \
                        $dac_data_width \
                        $do_axi_data_width \
-                       $do_axi_addr_width \
                        $SHARED_DEVCLK
 
 ad_ip_instance axi_dmac axi_mxfe_tx_dma
