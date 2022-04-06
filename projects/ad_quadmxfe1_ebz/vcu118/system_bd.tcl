@@ -21,39 +21,36 @@ set sys_cstring "sys rom custom string placeholder"
 sysid_gen_sys_init_file $sys_cstring
 
 if {$ad_project_params(JESD_MODE) == "8B10B"} {
-  # Parameters for 10Gpbs lane rate
-  ad_ip_parameter util_mxfe_xcvr CONFIG.RX_CLK25_DIV 20
-  ad_ip_parameter util_mxfe_xcvr CONFIG.TX_CLK25_DIV 20
-  ad_ip_parameter util_mxfe_xcvr CONFIG.CPLL_CFG0 0x3fe
-  ad_ip_parameter util_mxfe_xcvr CONFIG.CPLL_CFG1 0x29
-  ad_ip_parameter util_mxfe_xcvr CONFIG.CPLL_CFG2 0x203
-  ad_ip_parameter util_mxfe_xcvr CONFIG.CPLL_FBDIV 2
-  ad_ip_parameter util_mxfe_xcvr CONFIG.A_TXDIFFCTRL 0xc
-  ad_ip_parameter util_mxfe_xcvr CONFIG.RXCDR_CFG0 0x3
-  ad_ip_parameter util_mxfe_xcvr CONFIG.RXCDR_CFG2_GEN2 0x265
-  ad_ip_parameter util_mxfe_xcvr CONFIG.RXCDR_CFG2_GEN4 0x164
-  ad_ip_parameter util_mxfe_xcvr CONFIG.RXCDR_CFG3 0x12
+  # Parameters for 5Gpbs lane rate
+  ad_ip_parameter util_mxfe_xcvr CONFIG.RX_CLK25_DIV 5
+  ad_ip_parameter util_mxfe_xcvr CONFIG.TX_OUT_DIV 1
+  ad_ip_parameter util_mxfe_xcvr CONFIG.TX_CLK25_DIV 5
+  ad_ip_parameter util_mxfe_xcvr CONFIG.CPLL_CFG0 0x1fa
+  ad_ip_parameter util_mxfe_xcvr CONFIG.CPLL_CFG1 0x2b
+  ad_ip_parameter util_mxfe_xcvr CONFIG.CPLL_CFG2 0x2
+  ad_ip_parameter util_mxfe_xcvr CONFIG.CPLL_FBDIV 5
+  ad_ip_parameter util_mxfe_xcvr CONFIG.RX_OUT_DIV 1
+  ad_ip_parameter util_mxfe_xcvr CONFIG.CPLL_FBDIV_4_5 4
+  ad_ip_parameter util_mxfe_xcvr CONFIG.RTX_BUF_CML_CTRL 0x3
+  ad_ip_parameter util_mxfe_xcvr CONFIG.TXFE_CFG0 0x3c2
+  ad_ip_parameter util_mxfe_xcvr CONFIG.TXFE_CFG2 0x6c00
+  ad_ip_parameter util_mxfe_xcvr CONFIG.TXSWBST_EN 0
+  ad_ip_parameter util_mxfe_xcvr CONFIG.RXDFE_KH_CFG3 0x4101
+  ad_ip_parameter util_mxfe_xcvr CONFIG.TXFE_CFG3 0x6c00
+  ad_ip_parameter util_mxfe_xcvr CONFIG.RX_WIDEMODE_CDR 0x0
+  ad_ip_parameter util_mxfe_xcvr CONFIG.RX_XMODE_SEL 0x1
+  ad_ip_parameter util_mxfe_xcvr CONFIG.RXDFE_KH_CFG2 0x200
+  ad_ip_parameter util_mxfe_xcvr CONFIG.TXDRV_FREQBAND 0
+  ad_ip_parameter util_mxfe_xcvr CONFIG.CPLL_CFG3 0x0
+  ad_ip_parameter util_mxfe_xcvr CONFIG.TXFE_CFG1 0x6c00
+  ad_ip_parameter util_mxfe_xcvr CONFIG.RXCDR_CFG2 0x269
+  ad_ip_parameter util_mxfe_xcvr CONFIG.RXPI_CFG0 0x301
+  ad_ip_parameter util_mxfe_xcvr CONFIG.RXPI_CFG1 0xFC
   ad_ip_parameter util_mxfe_xcvr CONFIG.RXCDR_CFG3_GEN2 0x12
   ad_ip_parameter util_mxfe_xcvr CONFIG.RXCDR_CFG3_GEN3 0x12
   ad_ip_parameter util_mxfe_xcvr CONFIG.RXCDR_CFG3_GEN4 0x12
   ad_ip_parameter util_mxfe_xcvr CONFIG.CH_HSPMUX 0x2020
   ad_ip_parameter util_mxfe_xcvr CONFIG.PREIQ_FREQ_BST 0
-  ad_ip_parameter util_mxfe_xcvr CONFIG.RXPI_CFG0 0x1002
-  ad_ip_parameter util_mxfe_xcvr CONFIG.RXPI_CFG1 0x15
-  ad_ip_parameter util_mxfe_xcvr CONFIG.TXPI_CFG 0x54
-  ad_ip_parameter util_mxfe_xcvr CONFIG.TX_PI_BIASSET 0
-
-  ad_ip_parameter util_mxfe_xcvr CONFIG.QPLL_REFCLK_DIV 1
-  ad_ip_parameter util_mxfe_xcvr CONFIG.POR_CFG 0x0
-  ad_ip_parameter util_mxfe_xcvr CONFIG.QPLL_CFG0 0x331c
-  ad_ip_parameter util_mxfe_xcvr CONFIG.QPLL_CFG2 0xFC1
-  ad_ip_parameter util_mxfe_xcvr CONFIG.QPLL_CFG2_G3 0xFC1
-  ad_ip_parameter util_mxfe_xcvr CONFIG.QPLL_CFG4 0x1
-  ad_ip_parameter util_mxfe_xcvr CONFIG.QPLL_FBDIV 20
-  ad_ip_parameter util_mxfe_xcvr CONFIG.PPF0_CFG 0x400
-  ad_ip_parameter util_mxfe_xcvr CONFIG.QPLL_CP 0xFF
-  ad_ip_parameter util_mxfe_xcvr CONFIG.QPLL_CP_G3 0xF
-  ad_ip_parameter util_mxfe_xcvr CONFIG.QPLL_LPF 0x27F
 } else {
   set_property -dict [list CONFIG.ADDN_UI_CLKOUT4_FREQ_HZ {50}] [get_bd_cells axi_ddr_cntrl]
   ad_connect  /axi_ddr_cntrl/addn_ui_clkout4 jesd204_phy_121_122/drpclk
