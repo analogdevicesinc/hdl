@@ -39,41 +39,22 @@ module axi_ad9361_alt_lvds_rx (
 
   // physical interface (receive)
 
-  rx_clk_in_p,
-  rx_clk_in_n,
-  rx_frame_in_p,
-  rx_frame_in_n,
-  rx_data_in_p,
-  rx_data_in_n,
+  input           rx_clk_in_p,
+  input           rx_clk_in_n,
+  input           rx_frame_in_p,
+  input           rx_frame_in_n,
+  input   [ 5:0]  rx_data_in_p,
+  input   [ 5:0]  rx_data_in_n,
 
   // data interface
 
-  clk,
-  rx_frame,
-  rx_data_0,
-  rx_data_1,
-  rx_data_2,
-  rx_data_3,
-  rx_locked);
-
-  // physical interface (receive)
-
-  input           rx_clk_in_p;
-  input           rx_clk_in_n;
-  input           rx_frame_in_p;
-  input           rx_frame_in_n;
-  input   [ 5:0]  rx_data_in_p;
-  input   [ 5:0]  rx_data_in_n;
-
-  // data interface
-
-  output          clk;
-  output  [ 3:0]  rx_frame;
-  output  [ 5:0]  rx_data_0;
-  output  [ 5:0]  rx_data_1;
-  output  [ 5:0]  rx_data_2;
-  output  [ 5:0]  rx_data_3;
-  output          rx_locked;
+  output          clk,
+  output  [ 3:0]  rx_frame,
+  output  [ 5:0]  rx_data_0,
+  output  [ 5:0]  rx_data_1,
+  output  [ 5:0]  rx_data_2,
+  output  [ 5:0]  rx_data_3,
+  output          rx_locked);
 
   // internal signals
 
@@ -157,8 +138,8 @@ module axi_ad9361_alt_lvds_rx (
     .use_external_pll ("OFF"),
     .use_no_phase_shift ("ON"),
     .x_on_bitslip ("ON"),
-    .clk_src_is_pll ("off"))
-  i_altlvds_rx (
+    .clk_src_is_pll ("off")
+  ) i_altlvds_rx (
     .rx_inclock (rx_clk_in_p),
     .rx_in ({rx_frame_in_p, rx_data_in_p}),
     .rx_outclock (clk),
@@ -195,6 +176,3 @@ module axi_ad9361_alt_lvds_rx (
     .rx_syncclock (1'b0));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************
