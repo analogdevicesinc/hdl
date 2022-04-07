@@ -6,17 +6,21 @@
 
 LIBRARY_NAME := axi_tdd
 
-GENERIC_DEPS += ../common/ad_addsub.v
-GENERIC_DEPS += ../common/ad_tdd_control.v
 GENERIC_DEPS += ../common/up_axi.v
-GENERIC_DEPS += ../common/up_tdd_cntrl.v
-GENERIC_DEPS += ../common/up_xfer_cntrl.v
-GENERIC_DEPS += ../common/up_xfer_status.v
-GENERIC_DEPS += axi_tdd.v
+GENERIC_DEPS += ../util_cdc/sync_bits.v
+GENERIC_DEPS += ../util_cdc/sync_data.v
+GENERIC_DEPS += ../util_cdc/sync_event.v
+GENERIC_DEPS += axi_tdd.sv
+GENERIC_DEPS += axi_tdd_channel.sv
+GENERIC_DEPS += axi_tdd_counter.sv
+GENERIC_DEPS += axi_tdd_pkg.sv
+GENERIC_DEPS += axi_tdd_regmap.sv
+GENERIC_DEPS += axi_tdd_sync_gen.sv
 
-XILINX_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
-XILINX_DEPS += ../xilinx/common/up_xfer_status_constr.xdc
 XILINX_DEPS += axi_tdd_constr.ttcl
 XILINX_DEPS += axi_tdd_ip.tcl
+
+INTEL_DEPS += axi_tdd_constr.sdc
+INTEL_DEPS += axi_tdd_hw.tcl
 
 include ../scripts/library.mk
