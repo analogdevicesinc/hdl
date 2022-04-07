@@ -5,15 +5,16 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 adi_ip_create axi_tdd
 adi_ip_files axi_tdd [list \
-  "$ad_hdl_dir/library/common/ad_addsub.v" \
-  "$ad_hdl_dir/library/common/ad_tdd_control.v" \
-  "$ad_hdl_dir/library/common/up_tdd_cntrl.v" \
-  "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
-  "$ad_hdl_dir/library/common/up_xfer_status.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
-  "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
-  "axi_tdd.v" ]
+  "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
+  "$ad_hdl_dir/library/util_cdc/sync_data.v" \
+  "$ad_hdl_dir/library/util_cdc/sync_event.v" \
+  "axi_tdd_pkg.sv" \
+  "axi_tdd_channel.sv" \
+  "axi_tdd_counter.sv" \
+  "axi_tdd_regmap.sv" \
+  "axi_tdd_sync_gen.sv" \
+  "axi_tdd.sv" ]
 
 adi_ip_properties axi_tdd
 adi_ip_ttcl axi_tdd "axi_tdd_constr.ttcl"
@@ -38,24 +39,54 @@ add_reset s_axi_aresetn ACTIVE_LOW
 ipx::add_bus_parameter ASSOCIATED_BUSIF [ipx::get_bus_interfaces s_axi_aclk -of_objects [ipx::current_core]]
 set_property value s_axi [ipx::get_bus_parameters ASSOCIATED_BUSIF -of_objects [ipx::get_bus_interfaces s_axi_aclk -of_objects [ipx::current_core]]]
 
-set cc [ipx::current_core]
-## Remove the automatically generated GUI page
-ipgui::remove_page -component $cc [ipgui::get_pagespec -name "Page 0" -component $cc]
-ipx::save_core [ipx::current_core]
-
-## Create a new GUI page
-ipgui::add_page -name {ADI AXI TDD Controller} -component [ipx::current_core] -display_name {ADI AXI TDD Controller}
-set page0 [ipgui::get_pagespec -name "ADI AXI TDD Controller" -component $cc]
-
-## General Configurations
-set general_group [ipgui::add_group -name "General Configuration" -component $cc \
-    -parent $page0 -display_name "General Configuration" ]
-
-set param [ipgui::add_param -name {ASYNC_TDD_SYNC} -component $cc -parent $page0]
 set_property -dict [list \
-	display_name {Insert false path for tdd_sync} \
-	widget {checkBox} \
-] $param
+        "value_validation_type" "range_long" \
+        "value_validation_range_minimum" "1" \
+        "value_validation_range_maximum" "32" \
+        ] \
+        [ipx::get_user_parameters CHANNEL_COUNT -of_objects [ipx::current_core]]
+
+set_property -dict [list \
+        "value_validation_type" "range_long" \
+        "value_validation_range_minimum" "8" \
+        "value_validation_range_maximum" "32" \
+        ] \
+        [ipx::get_user_parameters REGISTER_WIDTH -of_objects [ipx::current_core]]
+
+set_property -dict [list \
+        "value_validation_type" "range_long" \
+        "value_validation_range_minimum" "8" \
+        "value_validation_range_maximum" "32" \
+        ] \
+        [ipx::get_user_parameters BURST_COUNT_WIDTH -of_objects [ipx::current_core]]
+
+set_property -dict [list \
+        "value_validation_type" "range_long" \
+        "value_validation_range_minimum" "0" \
+        "value_validation_range_maximum" "64" \
+        ] \
+        [ipx::get_user_parameters SYNC_COUNT_WIDTH -of_objects [ipx::current_core]]
+
+set_property -dict [list \
+        "value_validation_type" "range_long" \
+        "value_validation_range_minimum" "0" \
+        "value_validation_range_maximum" "1" \
+        ] \
+        [ipx::get_user_parameters SYNC_INTERNAL -of_objects [ipx::current_core]]
+
+set_property -dict [list \
+        "value_validation_type" "range_long" \
+        "value_validation_range_minimum" "0" \
+        "value_validation_range_maximum" "1" \
+        ] \
+        [ipx::get_user_parameters SYNC_EXTERNAL -of_objects [ipx::current_core]]
+
+set_property -dict [list \
+        "value_validation_type" "range_long" \
+        "value_validation_range_minimum" "0" \
+        "value_validation_range_maximum" "1" \
+        ] \
+        [ipx::get_user_parameters SYNC_EXTERNAL_CDC -of_objects [ipx::current_core]]
 
 ipx::create_xgui_files [ipx::current_core]
 
