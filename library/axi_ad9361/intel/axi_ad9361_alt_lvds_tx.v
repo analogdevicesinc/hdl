@@ -39,43 +39,23 @@ module axi_ad9361_alt_lvds_tx (
 
   // physical interface (transmit)
 
-  tx_clk_out_p,
-  tx_clk_out_n,
-  tx_frame_out_p,
-  tx_frame_out_n,
-  tx_data_out_p,
-  tx_data_out_n,
+  output          tx_clk_out_p,
+  output          tx_clk_out_n,
+  output          tx_frame_out_p,
+  output          tx_frame_out_n,
+  output  [ 5:0]  tx_data_out_p,
+  output  [ 5:0]  tx_data_out_n,
 
   // data interface
 
-  tx_clk,
-  clk,
-  tx_frame,
-  tx_data_0,
-  tx_data_1,
-  tx_data_2,
-  tx_data_3,
-  tx_locked);
-
-  // physical interface (transmit)
-
-  output          tx_clk_out_p;
-  output          tx_clk_out_n;
-  output          tx_frame_out_p;
-  output          tx_frame_out_n;
-  output  [ 5:0]  tx_data_out_p;
-  output  [ 5:0]  tx_data_out_n;
-
-  // data interface
-
-  input           tx_clk;
-  input           clk;
-  input   [ 3:0]  tx_frame;
-  input   [ 5:0]  tx_data_0;
-  input   [ 5:0]  tx_data_1;
-  input   [ 5:0]  tx_data_2;
-  input   [ 5:0]  tx_data_3;
-  output          tx_locked;
+  input           tx_clk,
+  input           clk,
+  input   [ 3:0]  tx_frame,
+  input   [ 5:0]  tx_data_0,
+  input   [ 5:0]  tx_data_1,
+  input   [ 5:0]  tx_data_2,
+  input   [ 5:0]  tx_data_3,
+  output          tx_locked);
 
   // internal registers
 
@@ -163,8 +143,8 @@ module axi_ad9361_alt_lvds_tx (
     .use_external_pll ("OFF"),
     .use_no_phase_shift ("ON"),
     .vod_setting (0),
-    .clk_src_is_pll ("off"))
-  i_altlvds_tx (
+    .clk_src_is_pll ("off")
+  ) i_altlvds_tx (
     .tx_inclock (tx_clk),
     .tx_coreclock (core_clk),
     .tx_in (tx_data_p),
@@ -179,6 +159,3 @@ module axi_ad9361_alt_lvds_tx (
     .tx_syncclock (1'b0));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************
