@@ -76,8 +76,6 @@
 
   assign reset = reset_shift[3];
 
-
-
   task do_trigger_reset;
   begin
     @(posedge clk) trigger_reset <= 1'b1;

@@ -41,7 +41,8 @@ module axi_adcfifo_rd #(
   parameter   AXI_SIZE = 2,
   parameter   AXI_LENGTH = 16,
   parameter   AXI_ADDRESS = 32'h00000000,
-  parameter   AXI_ADDRESS_LIMIT = 32'h00000000) (
+  parameter   AXI_ADDRESS_LIMIT = 32'h00000000
+) (
 
   // request and synchronization
 
@@ -85,7 +86,8 @@ module axi_adcfifo_rd #(
   output  reg             axi_drst,
   output  reg             axi_dvalid,
   output  reg [AXI_DATA_WIDTH-1:0]  axi_ddata,
-  input                   axi_dready);
+  input                   axi_dready
+);
 
   localparam  AXI_BYTE_WIDTH = AXI_DATA_WIDTH/8;
   localparam  AXI_AWINCR = AXI_LENGTH * AXI_BYTE_WIDTH;
@@ -197,6 +199,3 @@ module axi_adcfifo_rd #(
   end
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

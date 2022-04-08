@@ -45,8 +45,8 @@ module dest_axi_mm #(
   parameter MAX_BYTES_PER_BURST = 128,
   parameter BYTES_PER_BURST_WIDTH = $clog2(MAX_BYTES_PER_BURST),
   parameter AXI_LENGTH_WIDTH = 8,
-  parameter CACHE_COHERENT = 0)(
-
+  parameter CACHE_COHERENT = 0
+) (
   input                               m_axi_aclk,
   input                               m_axi_aresetn,
 
@@ -108,86 +108,83 @@ module dest_axi_mm #(
   output                              m_axi_bready
 );
 
-wire address_enabled;
+  wire address_enabled;
 
-address_generator #(
-  .ID_WIDTH(ID_WIDTH),
-  .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH),
-  .BYTES_PER_BEAT_WIDTH(BYTES_PER_BEAT_WIDTH),
-  .DMA_DATA_WIDTH(DMA_DATA_WIDTH),
-  .LENGTH_WIDTH(AXI_LENGTH_WIDTH),
-  .DMA_ADDR_WIDTH(DMA_ADDR_WIDTH),
-  .CACHE_COHERENT(CACHE_COHERENT)
-) i_addr_gen (
-  .clk(m_axi_aclk),
-  .resetn(m_axi_aresetn),
+  address_generator #(
+    .ID_WIDTH(ID_WIDTH),
+    .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH),
+    .BYTES_PER_BEAT_WIDTH(BYTES_PER_BEAT_WIDTH),
+    .DMA_DATA_WIDTH(DMA_DATA_WIDTH),
+    .LENGTH_WIDTH(AXI_LENGTH_WIDTH),
+    .DMA_ADDR_WIDTH(DMA_ADDR_WIDTH),
+    .CACHE_COHERENT(CACHE_COHERENT)
+  ) i_addr_gen (
+    .clk(m_axi_aclk),
+    .resetn(m_axi_aresetn),
 
-  .enable(enable),
-  .enabled(address_enabled),
+    .enable(enable),
+    .enabled(address_enabled),
 
-  .id(address_id),
-  .request_id(request_id),
+    .id(address_id),
+    .request_id(request_id),
 
-  .req_valid(req_valid),
-  .req_ready(req_ready),
-  .req_address(req_address),
+    .req_valid(req_valid),
+    .req_ready(req_ready),
+    .req_address(req_address),
 
-  .bl_valid(bl_valid),
-  .bl_ready(bl_ready),
-  .measured_last_burst_length(measured_last_burst_length),
+    .bl_valid(bl_valid),
+    .bl_ready(bl_ready),
+    .measured_last_burst_length(measured_last_burst_length),
 
-  .eot(address_eot),
+    .eot(address_eot),
 
-  .addr_ready(m_axi_awready),
-  .addr_valid(m_axi_awvalid),
-  .addr(m_axi_awaddr),
-  .len(m_axi_awlen),
-  .size(m_axi_awsize),
-  .burst(m_axi_awburst),
-  .prot(m_axi_awprot),
-  .cache(m_axi_awcache)
-);
+    .addr_ready(m_axi_awready),
+    .addr_valid(m_axi_awvalid),
+    .addr(m_axi_awaddr),
+    .len(m_axi_awlen),
+    .size(m_axi_awsize),
+    .burst(m_axi_awburst),
+    .prot(m_axi_awprot),
+    .cache(m_axi_awcache));
 
-assign m_axi_wvalid = fifo_valid;
-assign fifo_ready = m_axi_wready;
-assign m_axi_wlast = fifo_last;
-assign m_axi_wdata = fifo_data;
-assign m_axi_wstrb = fifo_strb;
+  assign m_axi_wvalid = fifo_valid;
+  assign fifo_ready = m_axi_wready;
+  assign m_axi_wlast = fifo_last;
+  assign m_axi_wdata = fifo_data;
+  assign m_axi_wstrb = fifo_strb;
 
-response_handler #(
-  .ID_WIDTH(ID_WIDTH)
-) i_response_handler (
-  .clk(m_axi_aclk),
-  .resetn(m_axi_aresetn),
-  .bvalid(m_axi_bvalid),
-  .bready(m_axi_bready),
-  .bresp(m_axi_bresp),
+  response_handler #(
+    .ID_WIDTH(ID_WIDTH)
+  ) i_response_handler (
+    .clk(m_axi_aclk),
+    .resetn(m_axi_aresetn),
+    .bvalid(m_axi_bvalid),
+    .bready(m_axi_bready),
+    .bresp(m_axi_bresp),
 
-  .enable(address_enabled),
-  .enabled(enabled),
+    .enable(address_enabled),
+    .enabled(enabled),
 
-  .id(response_id),
-  .request_id(address_id),
+    .id(response_id),
+    .request_id(address_id),
 
-  .eot(response_eot),
+    .eot(response_eot),
 
-  .resp_valid(response_valid),
-  .resp_ready(response_ready),
-  .resp_resp(response_resp),
-  .resp_eot(response_resp_eot)
-);
+    .resp_valid(response_valid),
+    .resp_ready(response_ready),
+    .resp_resp(response_resp),
+    .resp_eot(response_resp_eot));
 
-reg [BYTES_PER_BURST_WIDTH+1-1:0] bl_mem [0:2**(ID_WIDTH)-1];
+  reg [BYTES_PER_BURST_WIDTH+1-1:0] bl_mem [0:2**(ID_WIDTH)-1];
 
-assign {response_resp_partial,
-        response_data_burst_length} = bl_mem[response_id];
+  assign {response_resp_partial,
+          response_data_burst_length} = bl_mem[response_id];
 
-always @(posedge m_axi_aclk) begin
-  if (dest_burst_info_write) begin
-    bl_mem[dest_burst_info_id] <= {dest_burst_info_partial,
-                                   dest_burst_info_length};
+  always @(posedge m_axi_aclk) begin
+    if (dest_burst_info_write) begin
+      bl_mem[dest_burst_info_id] <= {dest_burst_info_partial,
+                                     dest_burst_info_length};
+    end
   end
-end
-
 
 endmodule

@@ -150,7 +150,6 @@ module axi_jesd204_rx_regmap_tb;
     end
   end
 
-
   task set_reset_reg_value;
   input [31:0] addr;
   input [31:0] value;
@@ -379,7 +378,6 @@ module axi_jesd204_rx_regmap_tb;
 
     .status_synth_params0(NUM_LANES),
     .status_synth_params1(2),
-    .status_synth_params2(NUM_LINKS)
-  );
+    .status_synth_params2(NUM_LINKS));
 
 endmodule

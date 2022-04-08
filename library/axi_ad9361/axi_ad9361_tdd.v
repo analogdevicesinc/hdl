@@ -75,7 +75,8 @@ module axi_ad9361_tdd (
   input                   up_rreq,
   input       [13:0]      up_raddr,
   output      [31:0]      up_rdata,
-  output                  up_rack);
+  output                  up_rack
+);
 
   // internal signals
 
@@ -152,7 +153,7 @@ module axi_ad9361_tdd (
 
   // instantiations
 
-  up_tdd_cntrl i_up_tdd_cntrl(
+  up_tdd_cntrl i_up_tdd_cntrl (
     .clk(clk),
     .rst(rst),
     .tdd_enable(tdd_enable_s),
@@ -206,8 +207,8 @@ module axi_ad9361_tdd (
 
   ad_tdd_control #(
     .TX_DATA_PATH_DELAY(),
-    .CONTROL_PATH_DELAY())
-  i_tdd_control(
+    .CONTROL_PATH_DELAY()
+  ) i_tdd_control(
     .clk(clk),
     .rst(rst),
     .tdd_enable(tdd_enable_s),

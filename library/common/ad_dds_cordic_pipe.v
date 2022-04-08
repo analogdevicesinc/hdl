@@ -46,7 +46,8 @@ module ad_dds_cordic_pipe#(
   // Range = N/A
   parameter DELAY_DW = 1,
   // Range = 0-(DW - 1)
-  parameter SHIFT = 0) (
+  parameter SHIFT = 0
+) (
 
   // Interface
 
@@ -60,7 +61,8 @@ module ad_dds_cordic_pipe#(
   (* keep = "TRUE" *) output reg        [  D_DW-1:0] result_y,
   (* keep = "TRUE" *) output reg        [  P_DW-1:0] result_z,
                       input             [DELAY_DW:1] data_delay_in,
-                      output            [DELAY_DW:1] data_delay_out);
+                      output            [DELAY_DW:1] data_delay_out
+);
 
   // Registers Declarations
 

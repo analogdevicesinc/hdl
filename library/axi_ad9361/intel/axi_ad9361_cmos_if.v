@@ -45,7 +45,8 @@ module axi_ad9361_cmos_if #(
   // Dummy parameters, required keep the code consistency(used on Xilinx)
   parameter   IO_DELAY_GROUP = "dev_if_delay_group",
   parameter   IODELAY_CTRL = 1,
-  parameter   DELAY_REFCLK_FREQUENCY = 0) (
+  parameter   DELAY_REFCLK_FREQUENCY = 0
+) (
 
   // physical interface (receive)
 
@@ -116,7 +117,8 @@ module axi_ad9361_cmos_if #(
   input   [31:0]      up_drp_wdata,
   output  [31:0]      up_drp_rdata,
   output              up_drp_ready,
-  output              up_drp_locked);
+  output              up_drp_locked
+);
 
   // cmos is not supported on intel platforms yet.
 
@@ -137,6 +139,3 @@ module axi_ad9361_cmos_if #(
   assign up_drp_locked = 1'd0;
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

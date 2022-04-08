@@ -111,7 +111,6 @@ module soft_pcs_pattern_align_tb;
     .patternalign_en(1'b1),
 
     .in_data(comma_unaligned),
-    .out_data(comma_aligned)
-  );
+    .out_data(comma_aligned));
 
 endmodule

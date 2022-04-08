@@ -30,8 +30,7 @@ module ad_upack_tb;
     .iready(iready),
     .ivalid(ivalid),
     .odata(odata),
-    .ovalid(ovalid)
-  );
+    .ovalid(ovalid));
 
   task test(input no_random);
   begin

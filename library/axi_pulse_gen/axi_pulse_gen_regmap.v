@@ -41,7 +41,8 @@ module axi_pulse_gen_regmap #(
   parameter [31:0] CORE_VERSION = 0,
   parameter [ 0:0] ASYNC_CLK_EN = 1,
   parameter        PULSE_WIDTH = 7,
-  parameter        PULSE_PERIOD = 10 )(
+  parameter        PULSE_PERIOD = 10
+) (
 
   // external clock
 
@@ -141,8 +142,8 @@ module axi_pulse_gen_regmap #(
 
     sync_data #(
       .NUM_OF_BITS (32),
-      .ASYNC_CLK (1))
-    i_pulse_period_sync (
+      .ASYNC_CLK (1)
+    ) i_pulse_period_sync (
       .in_clk (up_clk),
       .in_data (up_pulse_period),
       .out_clk (clk_out),
@@ -150,8 +151,8 @@ module axi_pulse_gen_regmap #(
 
     sync_data #(
       .NUM_OF_BITS (32),
-      .ASYNC_CLK (1))
-    i_pulse_width_sync (
+      .ASYNC_CLK (1)
+    ) i_pulse_width_sync (
       .in_clk (up_clk),
       .in_data (up_pulse_width),
       .out_clk (clk_out),
@@ -159,8 +160,8 @@ module axi_pulse_gen_regmap #(
 
     sync_event #(
       .NUM_OF_EVENTS (1),
-      .ASYNC_CLK (1))
-    i_load_config_sync (
+      .ASYNC_CLK (1)
+    ) i_load_config_sync (
       .in_clk (up_clk),
       .in_event (up_load_config),
       .out_clk (clk_out),

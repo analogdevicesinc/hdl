@@ -155,7 +155,6 @@ module regmap_tb;
     end
   end
 
-
   task set_reset_reg_value;
   input [31:0] addr;
   input [31:0] value;
@@ -331,7 +330,6 @@ module regmap_tb;
     set_reset_reg_value('h450, 'h0);
     set_reset_reg_value('h448, 24'h000080);
 
-
     check_all_registers("Transfer completed");
 
     /* Clear interrupts */
@@ -423,7 +421,6 @@ module regmap_tb;
     .dbg_dest_addr(VAL_DBG_DEST_ADDR),
     .dbg_status(VAL_DBG_STATUS),
     .dbg_ids0(VAL_DBG_IDS0),
-    .dbg_ids1(VAL_DBG_IDS1)
-  );
+    .dbg_ids1(VAL_DBG_IDS1));
 
 endmodule

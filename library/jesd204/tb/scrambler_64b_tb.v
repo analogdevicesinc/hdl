@@ -67,7 +67,6 @@ module scrambler_64b_tb;
     end
   end
 
-
   jesd204_scrambler_64b #(
     .DESCRAMBLE(0)
   ) i_scrambler (
@@ -75,8 +74,7 @@ module scrambler_64b_tb;
     .reset(reset),
     .enable(1'b1),
     .data_in(data_in),
-    .data_out(data_scrambled)
-  );
+    .data_out(data_scrambled));
 
   jesd204_scrambler_64b #(
     .DESCRAMBLE(1)
@@ -85,8 +83,8 @@ module scrambler_64b_tb;
     .reset(reset),
     .enable(1'b1),
     .data_in(data_scrambled),
-    .data_out(data_out)
-  );
+    .data_out(data_out));
+
   always @(posedge clk) begin
     if (data_in != data_out && failed_t1 == 1'b0) begin
       failed_t1 <= 1'b1;
@@ -128,8 +126,7 @@ module scrambler_64b_tb;
     .reset(reset),
     .enable(1'b1),
     .data_in(descrambler_data_in),
-    .data_out(descrambler_data_out)
-  );
+    .data_out(descrambler_data_out));
 
   always @(posedge clk) begin
     if (data_ref != descrambler_data_out && failed_t2 == 1'b0 && t2_enable) begin
@@ -140,6 +137,5 @@ module scrambler_64b_tb;
   always @(posedge clk) begin
     failed <= failed_t1 || failed_t2;
   end
-
 
 endmodule

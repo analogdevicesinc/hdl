@@ -37,8 +37,8 @@
 
 module up_ad5766_sequencer #(
 
-  parameter   SEQ_ID = 0)(
-
+  parameter   SEQ_ID = 0
+) (
   input                 sequence_clk,
   input                 sequence_rst,
   input                 sequence_req,
@@ -54,8 +54,8 @@ module up_ad5766_sequencer #(
   input                 up_rreq,
   input         [13:0]  up_raddr,
   output  reg   [31:0]  up_rdata,
-  output  reg           up_rack);
-
+  output  reg           up_rack
+);
 
   // registers
 
@@ -214,7 +214,9 @@ module up_ad5766_sequencer #(
 
   // CDC
 
-  up_xfer_cntrl #(.DATA_WIDTH(132)) i_xfer_cntrl (
+  up_xfer_cntrl #(
+    .DATA_WIDTH(132)
+  ) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({up_endof_seq,

@@ -57,7 +57,8 @@ module pack_shell #(
   output out_sync,
   output [NUM_OF_CHANNELS*SAMPLES_PER_CHANNEL-1:0] out_valid
 );
-  /* If the number of active channels can be a non-power of two */
+
+  // If the number of active channels can be a non-power of two
   localparam NON_POWER_OF_TWO = NUM_OF_CHANNELS > 2;
 
   localparam CHANNEL_DATA_WIDTH = SAMPLES_PER_CHANNEL * SAMPLE_DATA_WIDTH;
@@ -251,7 +252,6 @@ module pack_shell #(
          */
         reg rotate_msb = 1'b0;
 
-
         /*
          * Extended version of the normal control and data signals that can
          * handle 2*NUM_OF_CHANNELS channels.
@@ -348,8 +348,7 @@ module pack_shell #(
           .prefix_count (ext_prefix_count),
 
           .data_in (ext_data_in),
-          .data_out (ext_data_out)
-        );
+          .data_out (ext_data_out));
 
         /*
          * In order to go from this stage that has 2 * NUM_OF_SAMPLES inputs
@@ -365,9 +364,8 @@ module pack_shell #(
           .WORDS_PER_GROUP (2),
           .WORD_WIDTH (2 * SAMPLE_DATA_WIDTH)
         ) i_ext_shuffle (
-           .data_in (ext_data_out),
-           .data_out (ext_data_shuffled)
-        );
+          .data_in (ext_data_out),
+          .data_out (ext_data_shuffled));
 
         assign ext_data_in = {data_d1,{2*CHANNEL_DATA_WIDTH{1'b0}},in_data};
         assign data[0] = ext_data_shuffled[0+:TOTAL_DATA_WIDTH];
@@ -427,8 +425,7 @@ module pack_shell #(
             .prefix_count (prefix_count),
 
             .data_in (data[i]),
-            .data_out (data[i+1])
-          );
+            .data_out (data[i+1]));
         end else begin
           assign data[i+1] = data[i];
         end

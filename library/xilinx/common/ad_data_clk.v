@@ -37,14 +37,15 @@
 
 module ad_data_clk #(
 
-  parameter   SINGLE_ENDED = 0) (
-
+  parameter   SINGLE_ENDED = 0
+) (
   input               rst,
   output              locked,
 
   input               clk_in_p,
   input               clk_in_n,
-  output              clk);
+  output              clk
+);
 
   // internal signals
 
@@ -74,6 +75,3 @@ module ad_data_clk #(
     .O (clk));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

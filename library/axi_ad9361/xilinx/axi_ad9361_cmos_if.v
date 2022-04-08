@@ -43,7 +43,8 @@ module axi_ad9361_cmos_if #(
   parameter   IODELAY_CTRL = 1,
   parameter   CLK_DESKEW = 0,
   parameter   USE_SSI_CLK = 1,
-  parameter   DELAY_REFCLK_FREQUENCY = 200) (
+  parameter   DELAY_REFCLK_FREQUENCY = 200
+) (
 
   // physical interface (receive)
 
@@ -114,7 +115,8 @@ module axi_ad9361_cmos_if #(
   input   [31:0]      up_drp_wdata,
   output  [31:0]      up_drp_rdata,
   output              up_drp_ready,
-  output              up_drp_locked);
+  output              up_drp_locked
+);
 
   // internal registers
 
@@ -439,8 +441,8 @@ module axi_ad9361_cmos_if #(
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .IODELAY_CTRL (0),
     .IODELAY_GROUP (IO_DELAY_GROUP),
-    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
-  i_rx_data (
+    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY)
+  ) i_rx_data (
     .rx_clk (l_clk),
     .rx_data_in_p (rx_data_in[i]),
     .rx_data_in_n (1'd0),
@@ -463,8 +465,8 @@ module axi_ad9361_cmos_if #(
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .IODELAY_CTRL (IODELAY_CTRL),
     .IODELAY_GROUP (IO_DELAY_GROUP),
-    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
-  i_rx_frame (
+    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY)
+  ) i_rx_frame (
     .rx_clk (l_clk),
     .rx_data_in_p (rx_frame_in),
     .rx_data_in_n (1'd0),
@@ -488,8 +490,8 @@ module axi_ad9361_cmos_if #(
     .IODELAY_ENABLE (DAC_IODELAY_ENABLE),
     .IODELAY_CTRL (0),
     .IODELAY_GROUP (IO_DELAY_GROUP),
-    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
-  i_tx_data (
+    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY)
+  ) i_tx_data (
     .tx_clk (l_clk),
     .tx_data_p (tx_data_1[i]),
     .tx_data_n (tx_data_0[i]),
@@ -513,8 +515,8 @@ module axi_ad9361_cmos_if #(
     .IODELAY_ENABLE (DAC_IODELAY_ENABLE),
     .IODELAY_CTRL (0),
     .IODELAY_GROUP (IO_DELAY_GROUP),
-    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
-  i_tx_frame (
+    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY)
+  ) i_tx_frame (
     .tx_clk (l_clk),
     .tx_data_p (tx_frame[1]),
     .tx_data_n (tx_frame[0]),
@@ -536,8 +538,8 @@ module axi_ad9361_cmos_if #(
     .IODELAY_ENABLE (DAC_IODELAY_ENABLE),
     .IODELAY_CTRL (0),
     .IODELAY_GROUP (IO_DELAY_GROUP),
-    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
-  i_tx_clk (
+    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY)
+  ) i_tx_clk (
     .tx_clk (l_clk),
     .tx_data_p (tx_clk[1]),
     .tx_data_n (tx_clk[0]),
@@ -559,8 +561,8 @@ module axi_ad9361_cmos_if #(
     .IODELAY_ENABLE (DAC_IODELAY_ENABLE),
     .IODELAY_CTRL (0),
     .IODELAY_GROUP (IO_DELAY_GROUP),
-    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
-  i_enable (
+    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY)
+  ) i_enable (
     .tx_clk (l_clk),
     .tx_data_p (enable_int_p),
     .tx_data_n (enable_int_p),
@@ -582,8 +584,8 @@ module axi_ad9361_cmos_if #(
     .IODELAY_ENABLE (DAC_IODELAY_ENABLE),
     .IODELAY_CTRL (0),
     .IODELAY_GROUP (IO_DELAY_GROUP),
-    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
-  i_txnrx (
+    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY)
+  ) i_txnrx (
     .tx_clk (l_clk),
     .tx_data_p (txnrx_int_p),
     .tx_data_n (txnrx_int_p),
@@ -601,8 +603,8 @@ module axi_ad9361_cmos_if #(
 
   generate if (USE_SSI_CLK == 1) begin
   ad_data_clk #(
-    .SINGLE_ENDED (1))
-  i_clk (
+    .SINGLE_ENDED (1)
+  ) i_clk (
     .rst (1'd0),
     .locked (),
     .clk_in_p (rx_clk_in),
@@ -614,6 +616,3 @@ module axi_ad9361_cmos_if #(
   endgenerate
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

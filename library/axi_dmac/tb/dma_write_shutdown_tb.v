@@ -92,8 +92,7 @@ module dma_write_shutdown_tb;
 
     .bvalid(bvalid),
     .bready(bready),
-    .bresp(bresp)
-  );
+    .bresp(bresp));
 
   reg ctrl_enable = 1'b0;
 
@@ -164,7 +163,6 @@ module dma_write_shutdown_tb;
     .fifo_wr_sync(1'b1),
     .fifo_wr_xfer_req(),
 
-    .dbg_status(dbg_status)
-  );
+    .dbg_status(dbg_status));
 
 endmodule

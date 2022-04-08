@@ -38,19 +38,19 @@
 module axi_dacfifo_address_buffer #(
 
   parameter ADDRESS_WIDTH = 4,
-  parameter DATA_WIDTH = 16)(
-
+  parameter DATA_WIDTH = 16
+) (
   input                         clk,
   input                         rst,
   input                         wea,
   input      [DATA_WIDTH-1:0]   din,
 
   input                         rea,
-  output     [DATA_WIDTH-1:0]   dout);
+  output     [DATA_WIDTH-1:0]   dout
+);
 
   reg   [ADDRESS_WIDTH-1:0]     waddr;
   reg   [ADDRESS_WIDTH-1:0]     raddr;
-
 
   always @(posedge clk) begin
     if (rst == 1'b1) begin
@@ -64,8 +64,8 @@ module axi_dacfifo_address_buffer #(
 
   ad_mem #(
     .DATA_WIDTH (DATA_WIDTH),
-    .ADDRESS_WIDTH (ADDRESS_WIDTH))
-  i_mem (
+    .ADDRESS_WIDTH (ADDRESS_WIDTH)
+  ) i_mem (
     .clka (clk),
     .wea (wea),
     .addra (waddr),
@@ -76,4 +76,3 @@ module axi_dacfifo_address_buffer #(
     .doutb (dout));
 
 endmodule
-

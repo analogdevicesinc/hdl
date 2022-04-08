@@ -45,7 +45,8 @@ module axi_adaq8092 #(
   parameter ADC_DATAPATH_DISABLE = 0,
   parameter IO_DELAY_GROUP = "adc_if_delay_group",
   parameter OUTPUT_MODE = 0,
-  parameter   [27:0] POLARITY_MASK ='hfffffff) (
+  parameter   [27:0] POLARITY_MASK ='hfffffff
+) (
 
   // adc interface (clk, data, over-range)
 
@@ -99,10 +100,11 @@ module axi_adaq8092 #(
   output      [31:0]      s_axi_rdata,
   input                   s_axi_rready,
   input       [ 2:0]      s_axi_awprot,
-  input       [ 2:0]      s_axi_arprot);
-  
+  input       [ 2:0]      s_axi_arprot
+);
+
   // configuration settings
-  
+
   localparam CONFIG = (OUTPUT_MODE * 128);
 
   // internal registers
@@ -111,7 +113,7 @@ module axi_adaq8092 #(
   reg     [31:0]  up_rdata = 'd0;
   reg             up_wack = 'd0;
   reg             up_rack = 'd0;
-  
+
   // internal clocks & resets
 
   wire            up_rstn;
@@ -122,16 +124,16 @@ module axi_adaq8092 #(
 
   wire            adc_or_s;
   wire    [27:0]  adc_data_s;
-  wire    [1:0]   up_status_or_s;      
+  wire    [1:0]   up_status_or_s;
   wire            adc_status_s;
   wire    [29:0]  up_dld_s;
   wire    [149:0] up_dwdata_s;
   wire    [149:0] up_drdata_s;
   wire            delay_locked_s;
   wire    [13:0]  up_raddr_s;
-  wire    [31:0]  up_rdata_s[0:3];     
-  wire    [3:0]   up_rack_s ;          
-  wire    [3:0]   up_wack_s;          
+  wire    [31:0]  up_rdata_s[0:3];
+  wire    [3:0]   up_rack_s;
+  wire    [3:0]   up_wack_s;
   wire            up_wreq_s;
   wire    [13:0]  up_waddr_s;
   wire    [31:0]  up_wdata_s;
@@ -147,7 +149,7 @@ module axi_adaq8092 #(
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
   assign adc_valid = 1'b1;
- 
+
   // processor read interface
 
   always @(negedge up_rstn or posedge up_clk) begin
@@ -159,12 +161,12 @@ module axi_adaq8092 #(
     end else begin
       up_status_or <= up_status_or_s[0] | up_status_or_s[1];
       up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2] | up_rdata_s[3];
-      up_rack <=   up_rack_s[0] | up_rack_s[1]  | up_rack_s[2]  | up_rack_s[3];
-      up_wack <=   up_wack_s[0] | up_wack_s[1]  | up_wack_s[2]  | up_wack_s[3]; 
+      up_rack  <=  up_rack_s[0] | up_rack_s[1]  | up_rack_s[2]  | up_rack_s[3];
+      up_wack  <=  up_wack_s[0] | up_wack_s[1]  | up_wack_s[2]  | up_wack_s[3];
     end
   end
 
-  // ADC channel 1  
+  // ADC channel 1
 
   axi_adaq8092_channel #(
     .CHANNEL_ID(0),
@@ -189,7 +191,7 @@ module axi_adaq8092 #(
     .up_rdata (up_rdata_s[0]),
     .up_rack (up_rack_s[0]));
 
-  // ADC channel 2 
+  // ADC channel 2
 
   axi_adaq8092_channel #(
     .CHANNEL_ID(1),
@@ -215,19 +217,19 @@ module axi_adaq8092 #(
     .up_rack (up_rack_s[1]));
 
   // ADC interface
-  
+
   axi_adaq8092_rand_decode i_rand (
     .adc_data(adc_data_s),
     .adc_clk(adc_clk),
     .adc_rand_enb(adc_custom_control_s[0]),
     .adc_data_decoded(adc_part_decoded_data_s));
-            
+
   axi_adaq8092_apb_decode i_apb (
     .adc_data(adc_part_decoded_data_s),
     .adc_clk(adc_clk),
     .adc_abp_enb(adc_custom_control_s[1]),
     .adc_data_decoded({adc_decoded_data_s_2,adc_decoded_data_s_1}));
-  
+
   axi_adaq8092_if #(
     .OUTPUT_MODE(OUTPUT_MODE),
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
@@ -259,7 +261,7 @@ module axi_adaq8092 #(
   // adc delay control
 
   up_delay_cntrl #(
-    .DATA_WIDTH(30), 
+    .DATA_WIDTH(30),
     .BASE_ADDRESS(6'h02)
   ) i_delay_cntrl (
     .delay_clk (delay_clk),

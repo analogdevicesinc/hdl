@@ -45,7 +45,8 @@ module avl_dacfifo #(
   parameter   AVL_ADDRESS_WIDTH = 25,
   parameter   AVL_BURST_LENGTH = 127,
   parameter   AVL_BASE_ADDRESS = 32'h00000000,
-  parameter   AVL_ADDRESS_LIMIT = 32'h1fffffff) (
+  parameter   AVL_ADDRESS_LIMIT = 32'h1fffffff
+) (
 
   // dma interface
 
@@ -81,7 +82,8 @@ module avl_dacfifo #(
   input                                 avl_readdata_valid,
   input                                 avl_ready,
   output                                avl_write,
-  output      [(AVL_DATA_WIDTH-1):0]    avl_writedata);
+  output      [(AVL_DATA_WIDTH-1):0]    avl_writedata
+);
 
   localparam  FIFO_BYPASS = (DAC_DATA_WIDTH == DMA_DATA_WIDTH) ? 1 : 0;
 
@@ -210,8 +212,7 @@ module avl_dacfifo #(
       .dac_rst(dac_rst),
       .dac_valid(dac_valid),
       .dac_data(dac_data_bypass_s),
-      .dac_dunf(dac_dunf_bypass_s)
-    );
+      .dac_dunf(dac_dunf_bypass_s));
 
     always @(posedge dma_clk) begin
       dma_bypass_m1 <= bypass;
@@ -258,4 +259,3 @@ module avl_dacfifo #(
   endgenerate
 
 endmodule
-

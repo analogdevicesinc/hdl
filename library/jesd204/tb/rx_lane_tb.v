@@ -150,7 +150,6 @@ module rx_lane_tb;
     .status_cgs_state(status_cgs_state),
     .status_ifs_ready(status_ifs_ready),
     .status_frame_align(status_frame_align),
-    .status_frame_align_err_cnt()
-  );
+    .status_frame_align_err_cnt());
 
 endmodule

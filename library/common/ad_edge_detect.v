@@ -39,14 +39,14 @@
 
 module ad_edge_detect #(
 
-  parameter   EDGE = 0) (
-
+  parameter   EDGE = 0
+) (
   input                   clk,
   input                   rst,
 
   input                   signal_in,
-  output  reg             signal_out);
-
+  output  reg             signal_out
+);
 
   localparam  POS_EDGE = 0;
   localparam  NEG_EDGE = 1;
@@ -80,4 +80,3 @@ module ad_edge_detect #(
   end
 
 endmodule
-

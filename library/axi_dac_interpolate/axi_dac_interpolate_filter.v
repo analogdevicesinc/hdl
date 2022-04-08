@@ -35,11 +35,10 @@
 
 `timescale 1ns/100ps
 
-
 module axi_dac_interpolate_filter #(
 
-  parameter CORRECTION_DISABLE = 1) (
-
+  parameter CORRECTION_DISABLE = 1
+) (
   input                 dac_clk,
   input                 dac_rst,
 
@@ -96,10 +95,11 @@ module axi_dac_interpolate_filter #(
   wire              dma_valid_ch_sync;
   wire              dma_valid_ch;
 
-  ad_iqcor #(.Q_OR_I_N (0),
+  ad_iqcor #(
+    .Q_OR_I_N (0),
     .DISABLE(CORRECTION_DISABLE),
-    .SCALE_ONLY(1))
-  i_ad_iqcor (
+    .SCALE_ONLY(1)
+  ) i_ad_iqcor (
     .clk (dac_clk),
     .valid (dac_valid),
     .data_in (dac_data),

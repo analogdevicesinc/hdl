@@ -47,7 +47,8 @@ module axi_ad9361_tx_channel #(
   parameter   DAC_DDS_CORDIC_DW = 14,
   parameter   DAC_DDS_CORDIC_PHASE_DW = 13,
   parameter   USERPORTS_DISABLE = 0,
-  parameter   IQCORRECTION_DISABLE = 0) (
+  parameter   IQCORRECTION_DISABLE = 0
+) (
 
   // dac interface
 
@@ -77,7 +78,8 @@ module axi_ad9361_tx_channel #(
   input           up_rreq,
   input   [13:0]  up_raddr,
   output  [31:0]  up_rdata,
-  output          up_rack);
+  output          up_rack
+);
 
   // parameters
 
@@ -258,8 +260,8 @@ module axi_ad9361_tx_channel #(
 
   ad_iqcor #(
     .Q_OR_I_N (Q_OR_I_N),
-    .DISABLE (IQCORRECTION_DISABLE))
-  i_ad_iqcor (
+    .DISABLE (IQCORRECTION_DISABLE)
+  ) i_ad_iqcor (
     .clk (dac_clk),
     .valid (dac_valid),
     .data_in ({dac_data_out_int, 4'd0}),
@@ -323,8 +325,8 @@ module axi_ad9361_tx_channel #(
     .DDS_TYPE (DAC_DDS_TYPE),
     .CORDIC_DW (DAC_DDS_CORDIC_DW),
     .CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
-    .CLK_RATIO (1))
-  i_dds (
+    .CLK_RATIO (1)
+  ) i_dds (
     .clk (dac_clk),
     .dac_dds_format (dac_dds_format),
     .dac_data_sync (dac_data_sync),
@@ -348,8 +350,8 @@ module axi_ad9361_tx_channel #(
     .CHANNEL_ID (CHANNEL_ID),
     .DDS_DISABLE (DAC_DDS_DISABLE),
     .USERPORTS_DISABLE (USERPORTS_DISABLE),
-    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE))
-  i_up_dac_channel (
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE)
+  ) i_up_dac_channel (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_dds_scale_1 (dac_dds_scale_1_s),
@@ -391,6 +393,3 @@ module axi_ad9361_tx_channel #(
     .up_rack (up_rack_s));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

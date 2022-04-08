@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2021 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -35,11 +35,10 @@
 `timescale 1ns/1ps
 
 module axi_pwm_gen_1 #(
-
   // the width and period are defined in number of clock cycles
   parameter   PULSE_WIDTH = 7,
-  parameter   PULSE_PERIOD = 100000000) (
-
+  parameter   PULSE_PERIOD = 100000000
+) (
   input               clk,
   input               rstn,
 

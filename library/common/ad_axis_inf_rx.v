@@ -37,7 +37,8 @@
 
 module ad_axis_inf_rx #(
 
-  parameter   DATA_WIDTH = 16) (
+  parameter   DATA_WIDTH = 16
+) (
 
   // adi interface
 
@@ -54,7 +55,8 @@ module ad_axis_inf_rx #(
   output  reg [(DATA_WIDTH-1):0]  inf_data = {DATA_WIDTH{1'b0}},
   input                           inf_ready,
 
-  output                          int_not_full);
+  output                          int_not_full
+);
 
   // internal registers
 
@@ -191,6 +193,3 @@ module ad_axis_inf_rx #(
   end
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

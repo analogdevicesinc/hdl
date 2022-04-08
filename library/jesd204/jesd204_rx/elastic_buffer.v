@@ -64,59 +64,58 @@ module elastic_buffer #(
   input do_release_n
 );
 
-localparam ADDR_WIDTH = SIZE > 128 ? 7 :
-  SIZE > 64 ? 6 :
-  SIZE > 32 ? 5 :
-  SIZE > 16 ? 4 :
-  SIZE > 8 ? 3 :
-  SIZE > 4 ? 2 :
-  SIZE > 2 ? 1 : 0;
+  localparam ADDR_WIDTH = SIZE > 128 ? 7 :
+    SIZE > 64 ? 6 :
+    SIZE > 32 ? 5 :
+    SIZE > 16 ? 4 :
+    SIZE > 8 ? 3 :
+    SIZE > 4 ? 2 :
+    SIZE > 2 ? 1 : 0;
 
-localparam WIDTH = OWIDTH >= IWIDTH ? OWIDTH : IWIDTH;
+  localparam WIDTH = OWIDTH >= IWIDTH ? OWIDTH : IWIDTH;
 
-reg [ADDR_WIDTH:0] wr_addr = 'h00;
-reg [ADDR_WIDTH:0] rd_addr = 'h00;
-(* ram_style = "distributed" *) reg [WIDTH-1:0] mem[0:SIZE - 1];
+  reg [ADDR_WIDTH:0] wr_addr = 'h00;
+  reg [ADDR_WIDTH:0] rd_addr = 'h00;
+  (* ram_style = "distributed" *) reg [WIDTH-1:0] mem[0:SIZE - 1];
 
-wire mem_wr;
-wire [WIDTH-1:0] mem_wr_data;
+  wire mem_wr;
+  wire [WIDTH-1:0] mem_wr_data;
 
-generate if ((OWIDTH > IWIDTH) && ASYNC_CLK) begin
-  ad_pack #(
-    .I_W(IWIDTH/8),
-    .O_W(OWIDTH/8),
-    .UNIT_W(8)
-  ) i_ad_pack (
-    .clk(clk),
-    .reset(ready_n),
-    .idata(wr_data),
-    .ivalid(1'b1),
+  generate if ((OWIDTH > IWIDTH) && ASYNC_CLK) begin
+    ad_pack #(
+      .I_W(IWIDTH/8),
+      .O_W(OWIDTH/8),
+      .UNIT_W(8)
+    ) i_ad_pack (
+      .clk(clk),
+      .reset(ready_n),
+      .idata(wr_data),
+      .ivalid(1'b1),
 
-    .odata(mem_wr_data),
-    .ovalid(mem_wr)
-  );
-end else begin
-  assign mem_wr = 1'b1;
-  assign mem_wr_data = wr_data;
-end
-endgenerate
-
-always @(posedge clk) begin
-  if (ready_n == 1'b1) begin
-    wr_addr <= 'h00;
-  end else if (mem_wr) begin
-    mem[wr_addr] <= mem_wr_data;
-    wr_addr <= wr_addr + 1'b1;
-  end
-end
-
-always @(posedge device_clk) begin
-  if (do_release_n == 1'b1) begin
-    rd_addr <= 'h00;
+      .odata(mem_wr_data),
+      .ovalid(mem_wr));
   end else begin
-    rd_addr <= rd_addr + 1'b1;
-    rd_data <= mem[rd_addr];
+    assign mem_wr = 1'b1;
+    assign mem_wr_data = wr_data;
   end
-end
+  endgenerate
+
+  always @(posedge clk) begin
+    if (ready_n == 1'b1) begin
+      wr_addr <= 'h00;
+    end else if (mem_wr) begin
+      mem[wr_addr] <= mem_wr_data;
+      wr_addr <= wr_addr + 1'b1;
+    end
+  end
+
+  always @(posedge device_clk) begin
+    if (do_release_n == 1'b1) begin
+      rd_addr <= 'h00;
+    end else begin
+      rd_addr <= rd_addr + 1'b1;
+      rd_data <= mem[rd_addr];
+    end
+  end
 
 endmodule

@@ -38,7 +38,8 @@
 
 module axi_hdmi_rx_core #(
 
-  parameter   IO_INTERFACE = 1) (
+  parameter   IO_INTERFACE = 1
+) (
 
   // hdmi interface
 
@@ -63,7 +64,8 @@ module axi_hdmi_rx_core #(
 
   output  reg             hdmi_dma_sof,
   output  reg             hdmi_dma_de,
-  output  reg [63:0]      hdmi_dma_data);
+  output  reg [63:0]      hdmi_dma_data
+);
 
   // internal registers
 
@@ -282,8 +284,8 @@ module axi_hdmi_rx_core #(
     .DDR_CLK_EDGE ("SAME_EDGE_PIPELINED"),
     .INIT_Q1 (1'b0),
     .INIT_Q2 (1'b0),
-    .SRTYPE ("ASYNC"))
-  i_rx_data_iddr (
+    .SRTYPE ("ASYNC")
+  ) i_rx_data_iddr (
     .CE (1'b1),
     .R (1'b0),
     .S (1'b0),
@@ -308,7 +310,10 @@ module axi_hdmi_rx_core #(
 
   // super sampling, 422 to 444
 
-  ad_ss_422to444 #(.CR_CB_N(0), .DELAY_DATA_WIDTH(2)) i_ss (
+  ad_ss_422to444 #(
+    .CR_CB_N(0),
+    .DELAY_DATA_WIDTH(2)
+  ) i_ss (
     .clk (hdmi_clk),
     .s422_de (hdmi_de_422),
     .s422_sync ({hdmi_sof_422, hdmi_de_422}),
@@ -318,7 +323,9 @@ module axi_hdmi_rx_core #(
 
   // color space conversion, CrYCb to RGB
 
-  ad_csc_CrYCb2RGB #(.DELAY_DATA_WIDTH(2)) i_csc (
+  ad_csc_CrYCb2RGB #(
+    .DELAY_DATA_WIDTH(2)
+  ) i_csc (
     .clk (hdmi_clk),
     .CrYCb_sync ({hdmi_sof_ss_s, hdmi_de_ss_s}),
     .CrYCb_data (hdmi_data_ss_s),
@@ -327,7 +334,9 @@ module axi_hdmi_rx_core #(
 
   // embedded sync
 
-  axi_hdmi_rx_es #(.DATA_WIDTH(16)) i_es (
+  axi_hdmi_rx_es #(
+    .DATA_WIDTH(16)
+  ) i_es (
     .hdmi_clk (hdmi_clk),
     .hdmi_data (hdmi_data_p),
     .hdmi_vs_de (hdmi_vs_de_s),
@@ -344,6 +353,3 @@ module axi_hdmi_rx_core #(
     .hdmi_tpm_oos(hdmi_tpm_oos));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

@@ -44,7 +44,7 @@ module cic_decim (
   input [2:0] rate_sel,
   output [11:0] filter_out,
   output ce_out
-  );
+);
 
   localparam NUM_STAGES = 6;
   localparam DATA_WIDTH = 106;
@@ -110,8 +110,7 @@ module cic_decim (
         .clk(clk),
         .ce(enable),
         .data_in(data_stage[i]),
-        .data_out(data_stage[i+1])
-      );
+        .data_out(data_stage[i+1]));
     end
   endgenerate
 
@@ -125,8 +124,7 @@ module cic_decim (
     .ce(ce_comb),
     .enable(filter_enable),
     .data_in(data_stage[6]),
-    .data_out(data_stage[11])
-  );
+    .data_out(data_stage[11]));
 
   cic_comb #(
     .DATA_WIDTH(DATA_WIDTH),
@@ -138,8 +136,7 @@ module cic_decim (
     .ce(ce_comb),
     .enable(filter_enable),
     .data_in(data_stage[11]),
-    .data_out(data_stage[12])
-  );
+    .data_out(data_stage[12]));
 
   assign data_final_stage = data_stage[2*NUM_STAGES];
 

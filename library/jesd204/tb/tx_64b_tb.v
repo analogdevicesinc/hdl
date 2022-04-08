@@ -118,8 +118,7 @@ module tx_64b_tb;
 
     .ilas_config_rd(tx_ilas_config_rd),
     .ilas_config_addr(tx_ilas_config_addr),
-    .ilas_config_data(tx_ilas_config_data)
-  );
+    .ilas_config_data(tx_ilas_config_data));
 
   jesd204_tx #(
     .NUM_LANES(NUM_LANES),
@@ -183,9 +182,6 @@ module tx_64b_tb;
 
     .status_synth_params0(),
     .status_synth_params1(),
-    .status_synth_params2()
-
-  );
-
+    .status_synth_params2());
 
 endmodule

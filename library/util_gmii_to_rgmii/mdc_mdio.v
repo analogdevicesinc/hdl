@@ -1,5 +1,3 @@
-`timescale 1ns/100ps
-
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
@@ -35,17 +33,18 @@
 // ***************************************************************************
 // ***************************************************************************
 
+`timescale 1ns/100ps
+
 module mdc_mdio #(
-
-  parameter PHY_AD = 5'b10000) (
-
+  parameter PHY_AD = 5'b10000
+) (
   input                   mdio_mdc,
   input                   mdio_in_w,
   input                   mdio_in_r,
 
   output  reg [ 1:0]      speed_select,
-  output  reg             duplex_mode);
-
+  output  reg             duplex_mode
+);
 
   localparam IDLE     = 2'b01;
   localparam ACQUIRE  = 2'b10;

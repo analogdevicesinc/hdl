@@ -37,7 +37,8 @@
 
 module axi_gpreg_io #(
 
-  parameter   ID = 0) (
+  parameter   ID = 0
+) (
 
   // gpio
 
@@ -56,8 +57,8 @@ module axi_gpreg_io #(
   input                   up_rreq,
   input       [13:0]      up_raddr,
   output  reg [31:0]      up_rdata,
-  output  reg             up_rack);
-
+  output  reg             up_rack
+);
 
   // internal registers
 
@@ -111,6 +112,3 @@ module axi_gpreg_io #(
   end
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

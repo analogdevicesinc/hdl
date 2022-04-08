@@ -32,6 +32,7 @@
 //
 // ***************************************************************************
 // ***************************************************************************
+
 `timescale 1ns/1ps
 
 module util_axis_fifo_address_generator #(
@@ -40,6 +41,7 @@ module util_axis_fifo_address_generator #(
   parameter [ADDRESS_WIDTH-1:0] ALMOST_EMPTY_THRESHOLD = 16,
   parameter [ADDRESS_WIDTH-1:0] ALMOST_FULL_THRESHOLD = 16
 ) (
+
   // Read interface - Sink side
 
   input m_axis_aclk,
@@ -63,130 +65,108 @@ module util_axis_fifo_address_generator #(
   output [ADDRESS_WIDTH-1:0] s_axis_room
 );
 
-//------------------------------------------------------------------------------
-// local parameters
-//------------------------------------------------------------------------------
+  localparam FIFO_DEPTH = {ADDRESS_WIDTH{1'b1}};
 
-localparam FIFO_DEPTH = {ADDRESS_WIDTH{1'b1}};
+  // Definition of address counters
+  // All the counters are wider with one bit to indicate wraparounds
+  reg [ADDRESS_WIDTH:0] s_axis_waddr_reg = 'h0;
+  reg [ADDRESS_WIDTH:0] m_axis_raddr_reg = 'h0;
 
-//------------------------------------------------------------------------------
-// registers
-//------------------------------------------------------------------------------
+  wire [ADDRESS_WIDTH:0] s_axis_raddr_reg;
+  wire [ADDRESS_WIDTH:0] m_axis_waddr_reg;
 
-// Definition of address counters
-// All the counters are wider with one bit to indicate wraparounds
-reg [ADDRESS_WIDTH:0] s_axis_waddr_reg = 'h0;
-reg [ADDRESS_WIDTH:0] m_axis_raddr_reg = 'h0;
+  wire s_axis_write_s;
+  wire s_axis_ready_s;
 
-//------------------------------------------------------------------------------
-// wires
-//------------------------------------------------------------------------------
+  wire m_axis_read_s;
+  wire m_axis_valid_s;
+  wire [ADDRESS_WIDTH-1:0] m_axis_level_s;
 
-wire [ADDRESS_WIDTH:0] s_axis_raddr_reg;
-wire [ADDRESS_WIDTH:0] m_axis_waddr_reg;
+  // Write address counter
 
-wire s_axis_write_s;
-wire s_axis_ready_s;
+  assign s_axis_write_s = s_axis_ready && s_axis_valid && ~s_axis_full;
+  always @(posedge s_axis_aclk)
+  begin
+    if (!s_axis_aresetn)
+      s_axis_waddr_reg <= 'h0;
+    else
+      if (s_axis_write_s)
+        s_axis_waddr_reg <= s_axis_waddr_reg + 1'b1;
+  end
 
-wire m_axis_read_s;
-wire m_axis_valid_s;
-wire [ADDRESS_WIDTH-1:0] m_axis_level_s;
+  // Read address counter
 
-//------------------------------------------------------------------------------
-// Write address counter
-//------------------------------------------------------------------------------
+  assign m_axis_read_s = m_axis_ready && m_axis_valid && ~m_axis_empty;
+  always @(posedge m_axis_aclk)
+  begin
+    if (!m_axis_aresetn)
+      m_axis_raddr_reg <= 'h0;
+    else
+      if (m_axis_read_s)
+        m_axis_raddr_reg <= m_axis_raddr_reg + 1'b1;
+  end
 
-assign s_axis_write_s = s_axis_ready && s_axis_valid && ~s_axis_full;
-always @(posedge s_axis_aclk)
-begin
-  if (!s_axis_aresetn)
-    s_axis_waddr_reg <= 'h0;
-  else
-    if (s_axis_write_s)
-      s_axis_waddr_reg <= s_axis_waddr_reg + 1'b1;
-end
+  // Output assignments
 
-//------------------------------------------------------------------------------
-// Read address counter
-//------------------------------------------------------------------------------
+  assign s_axis_waddr = s_axis_waddr_reg[ADDRESS_WIDTH-1:0];
+  assign m_axis_raddr = m_axis_raddr_reg[ADDRESS_WIDTH-1:0];
 
-assign m_axis_read_s = m_axis_ready && m_axis_valid && ~m_axis_empty;
-always @(posedge m_axis_aclk)
-begin
-  if (!m_axis_aresetn)
-    m_axis_raddr_reg <= 'h0;
-  else
-    if (m_axis_read_s)
-      m_axis_raddr_reg <= m_axis_raddr_reg + 1'b1;
-end
+  // CDC circuits for double clock configuration
 
-//------------------------------------------------------------------------------
-// Output assignments
-//------------------------------------------------------------------------------
+  generate if (ASYNC_CLK == 1) begin : g_async_clock
+    // CDC transfer of the write pointer to the read clock domain
+    sync_gray #(
+      .DATA_WIDTH(ADDRESS_WIDTH + 1)
+    ) i_waddr_sync_gray (
+      .in_clk(s_axis_aclk),
+      .in_resetn(s_axis_aresetn),
+      .out_clk(m_axis_aclk),
+      .out_resetn(m_axis_aresetn),
+      .in_count(s_axis_waddr_reg),
+      .out_count(m_axis_waddr_reg));
 
-assign s_axis_waddr = s_axis_waddr_reg[ADDRESS_WIDTH-1:0];
-assign m_axis_raddr = m_axis_raddr_reg[ADDRESS_WIDTH-1:0];
+    // CDC transfer of the read pointer to the write clock domain
+    sync_gray #(
+      .DATA_WIDTH(ADDRESS_WIDTH + 1)
+    ) i_raddr_sync_gray (
+      .in_clk(m_axis_aclk),
+      .in_resetn(m_axis_aresetn),
+      .out_clk(s_axis_aclk),
+      .out_resetn(s_axis_aresetn),
+      .in_count(m_axis_raddr_reg),
+      .out_count(s_axis_raddr_reg));
+  end else begin
+    assign m_axis_waddr_reg = s_axis_waddr_reg;
+    assign s_axis_raddr_reg = m_axis_raddr_reg;
+  end
+  endgenerate
 
-//------------------------------------------------------------------------------
-// CDC circuits for double clock configuration
-//------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------
+  // FIFO write logic - upstream
+  //
+  // s_axis_full  - FIFO is full if next write pointer equal to read pointer
+  // s_axis_ready - FIFO is always ready, unless it's full
+  //
+  //------------------------------------------------------------------------------
 
-generate if (ASYNC_CLK == 1) begin : g_async_clock
-  // CDC transfer of the write pointer to the read clock domain
-  sync_gray #(
-    .DATA_WIDTH(ADDRESS_WIDTH + 1)
-  ) i_waddr_sync_gray (
-    .in_clk(s_axis_aclk),
-    .in_resetn(s_axis_aresetn),
-    .out_clk(m_axis_aclk),
-    .out_resetn(m_axis_aresetn),
-    .in_count(s_axis_waddr_reg),
-    .out_count(m_axis_waddr_reg)
-  );
+  wire [ADDRESS_WIDTH:0] s_axis_fifo_fill = s_axis_waddr_reg - s_axis_raddr_reg;
+  assign s_axis_full = (s_axis_fifo_fill == {ADDRESS_WIDTH{1'b1}});
+  assign s_axis_almost_full = s_axis_fifo_fill > {1'b0, ~ALMOST_FULL_THRESHOLD};
+  assign s_axis_ready = ~s_axis_full;
+  assign s_axis_room = ~s_axis_fifo_fill;
 
-  // CDC transfer of the read pointer to the write clock domain
-  sync_gray #(
-    .DATA_WIDTH(ADDRESS_WIDTH + 1)
-  ) i_raddr_sync_gray (
-    .in_clk(m_axis_aclk),
-    .in_resetn(m_axis_aresetn),
-    .out_clk(s_axis_aclk),
-    .out_resetn(s_axis_aresetn),
-    .in_count(m_axis_raddr_reg),
-    .out_count(s_axis_raddr_reg)
-  );
-end else begin
-  assign m_axis_waddr_reg = s_axis_waddr_reg;
-  assign s_axis_raddr_reg = m_axis_raddr_reg;
-end
-endgenerate
+  //------------------------------------------------------------------------------
+  // FIFO read logic - downstream
+  //
+  // m_axis_empty - FIFO is empty if read pointer equal to write pointer
+  // m_axis_valid - FIFO has a valid output data, if it's not empty
+  //
+  //------------------------------------------------------------------------------
 
-//------------------------------------------------------------------------------
-// FIFO write logic - upstream
-//
-// s_axis_full  - FIFO is full if next write pointer equal to read pointer
-// s_axis_ready - FIFO is always ready, unless it's full
-//
-//------------------------------------------------------------------------------
-
-wire [ADDRESS_WIDTH:0] s_axis_fifo_fill = s_axis_waddr_reg - s_axis_raddr_reg;
-assign s_axis_full = (s_axis_fifo_fill == {ADDRESS_WIDTH{1'b1}});
-assign s_axis_almost_full = s_axis_fifo_fill > {1'b0, ~ALMOST_FULL_THRESHOLD};
-assign s_axis_ready = ~s_axis_full;
-assign s_axis_room = ~s_axis_fifo_fill;
-
-//------------------------------------------------------------------------------
-// FIFO read logic - downstream
-//
-// m_axis_empty - FIFO is empty if read pointer equal to write pointer
-// m_axis_valid - FIFO has a valid output data, if it's not empty
-//
-//------------------------------------------------------------------------------
-
-wire [ADDRESS_WIDTH:0] m_axis_fifo_fill = m_axis_waddr_reg - m_axis_raddr_reg;
-assign m_axis_empty = m_axis_fifo_fill == 0;
-assign m_axis_almost_empty = (m_axis_fifo_fill < ALMOST_EMPTY_THRESHOLD);
-assign m_axis_valid = ~m_axis_empty;
-assign m_axis_level = m_axis_fifo_fill;
+  wire [ADDRESS_WIDTH:0] m_axis_fifo_fill = m_axis_waddr_reg - m_axis_raddr_reg;
+  assign m_axis_empty = m_axis_fifo_fill == 0;
+  assign m_axis_almost_empty = (m_axis_fifo_fill < ALMOST_EMPTY_THRESHOLD);
+  assign m_axis_valid = ~m_axis_empty;
+  assign m_axis_level = m_axis_fifo_fill;
 
 endmodule

@@ -64,81 +64,78 @@ module jesd204_tx_gearbox #(
   input output_ready
 );
 
-localparam MEM_W = IN_DATA_PATH_WIDTH*8*NUM_LANES;
-localparam D_LOG2 = $clog2(DEPTH);
+  localparam MEM_W = IN_DATA_PATH_WIDTH*8*NUM_LANES;
+  localparam D_LOG2 = $clog2(DEPTH);
 
-reg [MEM_W-1:0] mem [0:DEPTH-1];
-reg [D_LOG2-1:0]  in_addr ='h00;
-reg [D_LOG2-1:0]  out_addr = 'b0;
-reg               mem_rd_valid = 'b0;
-reg [MEM_W-1:0]  mem_rd_data;
+  reg [MEM_W-1:0] mem [0:DEPTH-1];
+  reg [D_LOG2-1:0]  in_addr ='h00;
+  reg [D_LOG2-1:0]  out_addr = 'b0;
+  reg               mem_rd_valid = 'b0;
+  reg [MEM_W-1:0]  mem_rd_data;
 
-wire                mem_wr_en = 1'b1;
-wire                mem_rd_en;
-wire [D_LOG2-1:0]  in_out_addr;
-wire [D_LOG2-1:0]  out_in_addr;
-wire [NUM_LANES-1:0] unpacker_ready;
-wire output_ready_sync;
+  wire                mem_wr_en = 1'b1;
+  wire                mem_rd_en;
+  wire [D_LOG2-1:0]  in_out_addr;
+  wire [D_LOG2-1:0]  out_in_addr;
+  wire [NUM_LANES-1:0] unpacker_ready;
+  wire output_ready_sync;
 
-sync_bits i_sync_ready (
-  .in_bits(output_ready),
-  .out_resetn(~device_reset),
-  .out_clk(device_clk),
-  .out_bits(output_ready_sync)
-);
+  sync_bits i_sync_ready (
+    .in_bits(output_ready),
+    .out_resetn(~device_reset),
+    .out_clk(device_clk),
+    .out_bits(output_ready_sync));
 
-always @(posedge device_clk) begin
-  if (device_lmfc_edge & ~output_ready_sync) begin
-    in_addr <= 'h01;
-  end else if (mem_wr_en) begin
-    in_addr <= in_addr + 1;
+  always @(posedge device_clk) begin
+    if (device_lmfc_edge & ~output_ready_sync) begin
+      in_addr <= 'h01;
+    end else if (mem_wr_en) begin
+      in_addr <= in_addr + 1;
+    end
   end
-end
 
-always @(posedge device_clk) begin
-  if (mem_wr_en) begin
-    mem[in_addr] <= device_data;
+  always @(posedge device_clk) begin
+    if (mem_wr_en) begin
+      mem[in_addr] <= device_data;
+    end
   end
-end
 
-assign mem_rd_en = output_ready&unpacker_ready[0];
+  assign mem_rd_en = output_ready&unpacker_ready[0];
 
-always @(posedge link_clk) begin
-  if (mem_rd_en) begin
-    mem_rd_data <= mem[out_addr];
+  always @(posedge link_clk) begin
+    if (mem_rd_en) begin
+      mem_rd_data <= mem[out_addr];
+    end
+    mem_rd_valid <= mem_rd_en;
   end
-  mem_rd_valid <= mem_rd_en;
-end
 
-always @(posedge link_clk) begin
-  if (reset) begin
-    out_addr <= 'b0;
-  end else if (mem_rd_en) begin
-    out_addr <= out_addr + 1;
+  always @(posedge link_clk) begin
+    if (reset) begin
+      out_addr <= 'b0;
+    end else if (mem_rd_en) begin
+      out_addr <= out_addr + 1;
+    end
   end
-end
 
-genvar i;
-generate for (i = 0; i < NUM_LANES; i=i+1) begin: unpacker
+  genvar i;
+  generate for (i = 0; i < NUM_LANES; i=i+1) begin: unpacker
 
-ad_upack #(
-  .I_W(IN_DATA_PATH_WIDTH),
-  .O_W(OUT_DATA_PATH_WIDTH),
-  .UNIT_W(8),
-  .O_REG(0)
-) i_ad_upack (
-  .clk(link_clk),
-  .reset(reset),
-  .idata(mem_rd_data[i*IN_DATA_PATH_WIDTH*8+:IN_DATA_PATH_WIDTH*8]),
-  .ivalid(mem_rd_valid),
-  .iready(unpacker_ready[i]),
+  ad_upack #(
+    .I_W(IN_DATA_PATH_WIDTH),
+    .O_W(OUT_DATA_PATH_WIDTH),
+    .UNIT_W(8),
+    .O_REG(0)
+  ) i_ad_upack (
+    .clk(link_clk),
+    .reset(reset),
+    .idata(mem_rd_data[i*IN_DATA_PATH_WIDTH*8+:IN_DATA_PATH_WIDTH*8]),
+    .ivalid(mem_rd_valid),
+    .iready(unpacker_ready[i]),
 
-  .odata(link_data[i*OUT_DATA_PATH_WIDTH*8+:OUT_DATA_PATH_WIDTH*8]),
-  .ovalid()
-);
+    .odata(link_data[i*OUT_DATA_PATH_WIDTH*8+:OUT_DATA_PATH_WIDTH*8]),
+    .ovalid());
 
-end
-endgenerate
+  end
+  endgenerate
 
 endmodule
-

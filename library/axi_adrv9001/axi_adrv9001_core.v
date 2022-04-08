@@ -57,6 +57,7 @@ module axi_adrv9001_core #(
   parameter DAC_DDS_CORDIC_DW = 20,
   parameter DAC_DDS_CORDIC_PHASE_DW = 18
 ) (
+
   // ADC interface
   input                   rx1_clk,
   output                  rx1_rst,
@@ -245,8 +246,8 @@ module axi_adrv9001_core #(
 
   sync_bits #(
     .NUM_OF_BITS (6),
-    .ASYNC_CLK (1))
-  i_rx1_ctrl_sync (
+    .ASYNC_CLK (1)
+  ) i_rx1_ctrl_sync (
     .in_bits ({up_rx1_r1_mode,rx1_symb_op,rx1_symb_8_16b,rx1_sdr_ddr_n,rx1_single_lane,rx1_rst}),
     .out_clk (rx2_clk),
     .out_resetn (1'b1),
@@ -254,8 +255,8 @@ module axi_adrv9001_core #(
 
   sync_bits #(
     .NUM_OF_BITS (6),
-    .ASYNC_CLK (1))
-  i_tx1_ctrl_sync (
+    .ASYNC_CLK (1)
+  ) i_tx1_ctrl_sync (
     .in_bits ({up_tx1_r1_mode,tx1_symb_op,tx1_symb_8_16b,tx1_sdr_ddr_n,tx1_single_lane,tx1_rst}),
     .out_clk (tx2_clk),
     .out_resetn (1'b1),
@@ -324,8 +325,8 @@ module axi_adrv9001_core #(
 
   sync_event #(
     .NUM_OF_EVENTS (1),
-    .ASYNC_CLK (1))
-  i_rx_external_sync (
+    .ASYNC_CLK (1)
+  ) i_rx_external_sync (
     .in_clk (ref_clk),
     .in_event (adc_sync_in),
     .out_clk (rx1_clk),
@@ -352,8 +353,8 @@ module axi_adrv9001_core #(
 
   sync_event #(
     .NUM_OF_EVENTS (1),
-    .ASYNC_CLK (1))
-  i_tx_external_sync (
+    .ASYNC_CLK (1)
+  ) i_tx_external_sync (
     .in_clk (ref_clk),
     .in_event (dac_sync_in),
     .out_clk (tx1_clk),
@@ -388,8 +389,8 @@ module axi_adrv9001_core #(
     .DEV_PACKAGE (DEV_PACKAGE),
     .DATAFORMAT_DISABLE (0),
     .DCFILTER_DISABLE (1),
-    .IQCORRECTION_DISABLE (1))
-  i_rx1 (
+    .IQCORRECTION_DISABLE (1)
+  ) i_rx1 (
     .adc_rst (rx1_rst),
     .adc_clk (rx1_clk),
     .adc_valid_A (rx1_data_valid & tdd_rx1_valid & sync_adc_valid),
@@ -453,8 +454,8 @@ module axi_adrv9001_core #(
     .DEV_PACKAGE (DEV_PACKAGE),
     .DATAFORMAT_DISABLE (0),
     .DCFILTER_DISABLE (1),
-    .IQCORRECTION_DISABLE (1))
-  i_rx2 (
+    .IQCORRECTION_DISABLE (1)
+  ) i_rx2 (
     .adc_rst (rx2_rst_loc),
     .adc_clk (rx2_clk),
     .adc_valid_A (rx2_data_valid & tdd_rx2_valid & sync_adc_valid),
@@ -515,8 +516,8 @@ module axi_adrv9001_core #(
     .IQCORRECTION_DISABLE (1),
     .DAC_DDS_TYPE (DAC_DDS_TYPE),
     .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
-    .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
-  i_tx1 (
+    .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW)
+  ) i_tx1 (
     .dac_rst (tx1_rst),
     .dac_clk (tx1_clk),
     .dac_data_valid_A (tx1_data_valid_A),
@@ -573,8 +574,8 @@ module axi_adrv9001_core #(
     .IQCORRECTION_DISABLE (1),
     .DAC_DDS_TYPE (DAC_DDS_TYPE),
     .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
-    .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
-  i_tx2 (
+    .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW)
+  ) i_tx2 (
     .dac_rst (tx2_rst_loc),
     .dac_clk (tx2_clk),
     .dac_data_valid_A (tx2_data_valid_A),
@@ -616,8 +617,8 @@ module axi_adrv9001_core #(
   up_delay_cntrl #(
     .DATA_WIDTH(NUM_LANES),
     .DRP_WIDTH(DRP_WIDTH),
-    .BASE_ADDRESS(6'h02))
-  i_delay_cntrl_rx1 (
+    .BASE_ADDRESS(6'h02)
+  ) i_delay_cntrl_rx1 (
     .delay_clk (delay_clk),
     .delay_rst (delay_rx1_rst),
     .delay_locked (delay_rx1_locked),
@@ -639,8 +640,8 @@ module axi_adrv9001_core #(
     .DATA_WIDTH(NUM_LANES),
     .DRP_WIDTH(DRP_WIDTH),
     .DISABLE(DISABLE_RX2_SSI),
-    .BASE_ADDRESS(6'h06))
-  i_delay_cntrl_rx2 (
+    .BASE_ADDRESS(6'h06)
+  ) i_delay_cntrl_rx2 (
     .delay_clk (delay_clk),
     .delay_rst (delay_rx2_rst),
     .delay_locked (delay_rx2_locked),
@@ -723,4 +724,3 @@ module axi_adrv9001_core #(
   assign tdd_sync_cntr = tdd_sync_cntr1 | tdd_sync_cntr2;
 
 endmodule
-

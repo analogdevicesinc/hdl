@@ -40,8 +40,8 @@ module util_var_fifo #(
   // parameters
 
   parameter DATA_WIDTH = 32,
-  parameter ADDRESS_WIDTH =  13) (
-
+  parameter ADDRESS_WIDTH =  13
+) (
   input                       clk,
   input                       rst,
 
@@ -59,10 +59,10 @@ module util_var_fifo #(
   output  [DATA_WIDTH-1:0]    din_w,
   output                      en_r,
   output  [ADDRESS_WIDTH-1:0] addr_r,
-  input   [DATA_WIDTH-1:0]    dout_r);
+  input   [DATA_WIDTH-1:0]    dout_r
+);
 
   localparam      MAX_DEPTH = (2 ** ADDRESS_WIDTH) - 1;
-
 
   // internal registers
 
@@ -168,6 +168,3 @@ module util_var_fifo #(
   end
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

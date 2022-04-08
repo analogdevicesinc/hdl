@@ -106,8 +106,7 @@ module util_upack2_impl #(
     .out_data (out_data),
 
     .out_valid (),
-    .out_sync ()
-  );
+    .out_sync ());
 
   /*
    * Data at the output of the routing network is interleaved. The upack
@@ -120,8 +119,7 @@ module util_upack2_impl #(
     .WORD_WIDTH (SAMPLE_DATA_WIDTH)
   ) i_deinterleave (
     .data_in (out_data),
-    .data_out (deinterleaved_data)
-  );
+    .data_out (deinterleaved_data));
 
   always @(posedge clk) begin
     /* In case of an underflow the output vector should be zeroed */

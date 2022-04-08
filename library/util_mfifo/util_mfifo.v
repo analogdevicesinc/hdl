@@ -39,7 +39,8 @@ module util_mfifo #(
 
   parameter   NUM_OF_CHANNELS = 4,
   parameter   DIN_DATA_WIDTH = 32,
-  parameter   ADDRESS_WIDTH = 8) (
+  parameter   ADDRESS_WIDTH = 8
+) (
 
   // d-in interface
 
@@ -67,8 +68,8 @@ module util_mfifo #(
   output      [15:0]      dout_data_4,
   output      [15:0]      dout_data_5,
   output      [15:0]      dout_data_6,
-  output      [15:0]      dout_data_7);
-
+  output      [15:0]      dout_data_7
+);
 
   // internal registers
 
@@ -254,8 +255,8 @@ module util_mfifo #(
   for (n = 0; n < NUM_OF_CHANNELS; n = n + 1) begin: g_channels
   ad_mem #(
     .ADDRESS_WIDTH (ADDRESS_WIDTH),
-    .DATA_WIDTH (DIN_DATA_WIDTH))
-  i_mem (
+    .DATA_WIDTH (DIN_DATA_WIDTH)
+  ) i_mem (
     .clka (din_clk),
     .wea (din_wr),
     .addra (din_waddr),
@@ -269,6 +270,3 @@ module util_mfifo #(
   endgenerate
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

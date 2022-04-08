@@ -51,7 +51,7 @@
 
 module adrv9001_pack #(
   parameter WIDTH = 8
-)(
+) (
   input                      clk,    // Input clock
   input                      rst,
   input                      sof,    // Start of frame indicator marking the MS Beat

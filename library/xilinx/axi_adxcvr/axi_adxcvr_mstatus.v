@@ -54,7 +54,8 @@ module axi_adxcvr_mstatus (
   output          up_rst_done_out,
   output          up_prbserr_out,
   output          up_prbslocked_out,
-  output  [ 1:0]  up_bufstatus_out);
+  output  [ 1:0]  up_bufstatus_out
+);
 
   // parameters
 
@@ -109,7 +110,3 @@ module axi_adxcvr_mstatus (
   end
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************
-

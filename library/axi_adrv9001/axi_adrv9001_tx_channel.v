@@ -46,6 +46,7 @@ module axi_adrv9001_tx_channel #(
   parameter   DAC_DDS_CORDIC_DW = 20,
   parameter   DAC_DDS_CORDIC_PHASE_DW = 18
 ) (
+
   // dac interface
   input                   dac_clk,
   input                   dac_rst,
@@ -105,7 +106,9 @@ module axi_adrv9001_tx_channel #(
   assign dac_data_in_req = dac_data_out_req;
 
   end else begin
-  ad_iqcor #(.Q_OR_I_N (Q_OR_I_N)) i_ad_iqcor_0 (
+  ad_iqcor #(
+    .Q_OR_I_N (Q_OR_I_N)
+  ) i_ad_iqcor_0 (
     .clk (dac_clk),
     .valid (dac_data_out_req),
     .data_in (dac_data_iq_out[15:0]),
@@ -128,26 +131,24 @@ module axi_adrv9001_tx_channel #(
     .POL_MASK ((1<<7) | (1<<6)),
     .POL_W (7),
     .DW (16)
-    ) PN7_gen (
+  ) PN7_gen (
     .clk (dac_clk),
     .reset (dac_rst),
     .clk_en (dac_data_in_req),
     .pn_init (1'b0),
-    .pn_data_out (pn7_data)
-  );
+    .pn_data_out (pn7_data));
 
   // PN15 x^15 + x^14 + 1
   ad_pngen  #(
     .POL_MASK ((1<<15) | (1<<14)),
     .POL_W (15),
     .DW (16)
-    ) PN15_gen (
+  ) PN15_gen (
     .clk (dac_clk),
     .reset (dac_rst),
     .clk_en (dac_data_in_req),
     .pn_init (1'b0),
-    .pn_data_out (pn15_data)
-  );
+    .pn_data_out (pn15_data));
 
   // full ramp generator
   always @(posedge dac_clk) begin
@@ -183,8 +184,8 @@ module axi_adrv9001_tx_channel #(
     .DDS_TYPE (DAC_DDS_TYPE),
     .CORDIC_DW (DAC_DDS_CORDIC_DW),
     .CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
-    .CLK_RATIO (1))
-  i_dds (
+    .CLK_RATIO (1)
+  ) i_dds (
     .clk (dac_clk),
     .dac_dds_format (dac_dds_format),
     .dac_data_sync (dac_data_sync),
@@ -204,8 +205,8 @@ module axi_adrv9001_tx_channel #(
     .CHANNEL_ID (CHANNEL_ID),
     .DDS_DISABLE(DDS_DISABLE),
     .USERPORTS_DISABLE(1),
-    .IQCORRECTION_DISABLE(IQCORRECTION_DISABLE))
-    i_up_dac_channel (
+    .IQCORRECTION_DISABLE(IQCORRECTION_DISABLE)
+  ) i_up_dac_channel (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_dds_scale_1 (dac_dds_scale_1_s),

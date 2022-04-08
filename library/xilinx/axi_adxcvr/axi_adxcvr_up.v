@@ -56,7 +56,8 @@ module axi_adxcvr_up #(
   parameter   [ 4:0]  TX_POSTCURSOR = 5'd0,
   parameter   [ 4:0]  TX_PRECURSOR = 5'd0,
   parameter   [ 1:0]  SYS_CLK_SEL = 2'd3,
-  parameter   [ 2:0]  OUT_CLK_SEL = 3'd4) (
+  parameter   [ 2:0]  OUT_CLK_SEL = 3'd4
+) (
 
   // common
 
@@ -129,7 +130,8 @@ module axi_adxcvr_up #(
   input               up_rreq,
   input      [ 9:0]   up_raddr,
   output     [31:0]   up_rdata,
-  output              up_rack);
+  output              up_rack
+);
 
   // parameters
 
@@ -572,6 +574,3 @@ module axi_adxcvr_up #(
   end
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

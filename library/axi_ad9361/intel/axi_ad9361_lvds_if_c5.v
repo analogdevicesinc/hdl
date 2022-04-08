@@ -89,7 +89,8 @@ module axi_ad9361_lvds_if_c5 (
   // delay interface
 
   input               up_clk,
-  input               up_rstn);
+  input               up_rstn
+);
 
   // internal registers
 
@@ -392,6 +393,3 @@ module axi_ad9361_lvds_if_c5 (
     .sset (1'b0));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

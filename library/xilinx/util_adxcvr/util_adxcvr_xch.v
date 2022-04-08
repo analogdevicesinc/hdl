@@ -91,7 +91,8 @@ module util_adxcvr_xch #(
   parameter   [15:0]  TXPI_CFG0 = 16'b0000001100000000,
   parameter   [15:0]  TXPI_CFG1 = 16'b0001000000000000,
   parameter   integer TXSWBST_EN = 0,
-  parameter   integer RX_POLARITY = 0) (
+  parameter   integer RX_POLARITY = 0
+) (
 
   // pll interface
 
@@ -355,14 +356,15 @@ module util_adxcvr_xch #(
   wire [ 3:0] rx_prbssel;
   reg         rx_prbserr_sticky = 1'b0;
 
-  sync_bits #(.NUM_OF_BITS(5)) i_sync_bits_rx_prbs_in (
+  sync_bits #(
+    .NUM_OF_BITS(5)
+  ) i_sync_bits_rx_prbs_in (
     .in_bits ({up_rx_prbssel,
                up_rx_prbscntreset}),
     .out_resetn (1'b1),
     .out_clk (rx_clk),
     .out_bits ({rx_prbssel,
-                rx_prbscntreset})
-  );
+                rx_prbscntreset}));
 
   always @(posedge rx_clk) begin
     if (rx_prbscntreset) begin
@@ -372,44 +374,47 @@ module util_adxcvr_xch #(
     end
   end
 
-  sync_bits #(.NUM_OF_BITS(2)) i_sync_bits_rx_prbs_out (
+  sync_bits #(
+    .NUM_OF_BITS(2)
+  ) i_sync_bits_rx_prbs_out (
     .in_bits ({rx_prbslocked,
                rx_prbserr_sticky}),
     .out_resetn (up_rstn),
     .out_clk (up_clk),
     .out_bits ({up_rx_prbslocked,
-                up_rx_prbserr})
-  );
+                up_rx_prbserr}));
 
   // Tx PRBS interface logic
   wire        tx_prbsforceerr;
   wire [ 3:0] tx_prbssel;
 
-  sync_bits #(.NUM_OF_BITS(5)) i_sync_bits_tx_prbs_in (
+  sync_bits #(
+    .NUM_OF_BITS(5)
+  ) i_sync_bits_tx_prbs_in (
     .in_bits ({up_tx_prbssel,
                up_tx_prbsforceerr}),
     .out_resetn (1'b1),
     .out_clk (tx_clk),
     .out_bits ({tx_prbssel,
-                tx_prbsforceerr})
-  );
-  
-  // Bufstatus 
+                tx_prbsforceerr}));
+
+  // Bufstatus
   reg         rx_bufstatus_sticky_0 = 1'b0;
   reg         rx_bufstatus_sticky_1 = 1'b0;
-  
+
   wire        rx_bufstatus_rst;
   wire [ 1:0] rx_bufstatus;
   wire [ 1:0] rx_bufstatus_s;
   wire [ 1:0] tx_bufstatus;
   wire [ 1:0] tx_bufstatus_s;
-  
-  sync_bits #(.NUM_OF_BITS(1)) i_sync_bits_rx_bufstatus_in (
+
+  sync_bits #(
+    .NUM_OF_BITS(1)
+  ) i_sync_bits_rx_bufstatus_in (
     .in_bits (up_rx_bufstatus_rst),
     .out_resetn (1'b1),
     .out_clk (rx_clk),
-    .out_bits (rx_bufstatus_rst)
-  );
+    .out_bits (rx_bufstatus_rst));
 
   always @(posedge rx_clk) begin
     if (rx_bufstatus_rst) begin
@@ -418,7 +423,7 @@ module util_adxcvr_xch #(
       rx_bufstatus_sticky_0 <= 1'b1;
     end
   end
-  
+
   always @(posedge rx_clk) begin
     if (rx_bufstatus_rst) begin
       rx_bufstatus_sticky_1 <= 1'b0;
@@ -426,16 +431,17 @@ module util_adxcvr_xch #(
       rx_bufstatus_sticky_1 <= 1'b1;
     end
   end
-  
-  sync_bits #(.NUM_OF_BITS(4)) i_sync_bits_bufstatus_out (
-      .in_bits ({rx_bufstatus,
-                 tx_bufstatus}),
-      .out_resetn (up_rstn),
-      .out_clk (up_clk),
-      .out_bits ({up_rx_bufstatus,
-                  up_tx_bufstatus})
-    );
-  
+
+  sync_bits #(
+    .NUM_OF_BITS(4)
+  ) i_sync_bits_bufstatus_out (
+    .in_bits ({rx_bufstatus,
+               tx_bufstatus}),
+    .out_resetn (up_rstn),
+    .out_clk (up_clk),
+    .out_bits ({up_rx_bufstatus,
+                up_tx_bufstatus}));
+
   // 204C specific logic
   localparam ALIGN_COMMA_ENABLE  = LINK_MODE[1] ? 10'b0000000000 : 10'b1111111111;
   localparam ALIGN_MCOMMA_DET = LINK_MODE[1] ? "FALSE" : "TRUE";
@@ -485,20 +491,20 @@ module util_adxcvr_xch #(
         .i_slip_done(rx_bitslip_d[3]),
         .o_data(rx_data),
         .o_header(rx_header),
-        .o_block_sync(rx_block_sync)
-      );
+        .o_block_sync(rx_block_sync));
+
       assign tx_data_s = {64'd0, tx_data};
 
       assign rx_usrclk = (XCVR_TYPE==GTHE3_TRANSCEIVERS) ||
                          (XCVR_TYPE==GTHE4_TRANSCEIVERS) ? rx_clk_2x : rx_clk;
       assign tx_usrclk = (XCVR_TYPE==GTHE3_TRANSCEIVERS) ||
                          (XCVR_TYPE==GTHE4_TRANSCEIVERS) ? tx_clk_2x : tx_clk;
-						 
+
       assign rx_bufstatus[0] = rx_bufstatus_sticky_0;
       assign rx_bufstatus[1] = rx_bufstatus_sticky_1;
-	  
+
       assign tx_bufstatus = tx_bufstatus_s;
-	  
+
     end else begin
 
       assign {rx_data_open_s, rx_data} = rx_data_s;
@@ -507,10 +513,10 @@ module util_adxcvr_xch #(
 
       assign rx_usrclk = rx_clk;
       assign tx_usrclk = tx_clk;
-	  
+
       assign rx_bufstatus[0] = rx_bufstatus_sticky_1;
       assign rx_bufstatus[1] = rx_bufstatus_sticky_1;
-	  
+
       assign tx_bufstatus[0] = tx_bufstatus_s[1];
       assign tx_bufstatus[1] = tx_bufstatus_s[1];
     end
@@ -520,8 +526,13 @@ module util_adxcvr_xch #(
 
   generate
   if (XCVR_TYPE == GTXE2_TRANSCEIVERS) begin
-  BUFG i_rx_bufg (.I (rx_out_clk_s), .O (rx_out_clk));
-  BUFG i_tx_bufg (.I (tx_out_clk_s), .O (tx_out_clk));
+    BUFG i_rx_bufg (
+      .I (rx_out_clk_s),
+      .O (rx_out_clk));
+
+    BUFG i_tx_bufg (
+      .I (tx_out_clk_s),
+      .O (tx_out_clk));
   end
   endgenerate
 
@@ -743,8 +754,8 @@ module util_adxcvr_xch #(
     .TX_RXDETECT_CFG (14'h1832),
     .TX_RXDETECT_REF (3'b100),
     .TX_XCLK_SEL ("TXOUT"),
-    .UCODEER_CLR (1'b0))
-  i_gtxe2_channel (
+    .UCODEER_CLR (1'b0)
+  ) i_gtxe2_channel (
     .RXOUTCLKPCS (),
     .RXPHSLIPMONITOR (),
     .PHYSTATUS (),
@@ -1009,7 +1020,7 @@ module util_adxcvr_xch #(
     .I (rx_out_clk_s),
     .O (rx_out_clk_div2));
 
-    BUFG_GT i_tx_div2_bufg (
+  BUFG_GT i_tx_div2_bufg (
     .CE (1'b1),
     .CEMASK (1'b0),
     .CLR (1'b0),
@@ -1419,8 +1430,8 @@ module util_adxcvr_xch #(
     .TX_SARC_LPBK_ENB (1'b0),
     .TX_XCLK_SEL ("TXOUT"),
     .USE_PCS_CLK_PHASE_SEL (1'b0),
-    .WB_MODE (2'b00))
-  i_gthe3_channel (
+    .WB_MODE (2'b00)
+  ) i_gthe3_channel (
     .BUFGTCE (),
     .BUFGTCEMASK (),
     .BUFGTDIV (),
@@ -1782,7 +1793,7 @@ module util_adxcvr_xch #(
     .I (rx_out_clk_s),
     .O (rx_out_clk_div2));
 
-    BUFG_GT i_tx_div2_bufg (
+  BUFG_GT i_tx_div2_bufg (
     .CE (1'b1),
     .CEMASK (1'b0),
     .CLR (1'b0),
@@ -2307,8 +2318,8 @@ module util_adxcvr_xch #(
     .USB_U2_SAS_MAX_COM (64),
     .USB_U2_SAS_MIN_COM (36),
     .USE_PCS_CLK_PHASE_SEL (1'b0),
-    .Y_ALL_MODE (1'b0))
-  i_gthe4_channel (
+    .Y_ALL_MODE (1'b0)
+  ) i_gthe4_channel (
     .BUFGTCE (),
     .BUFGTCEMASK (),
     .BUFGTDIV (),
@@ -3178,8 +3189,8 @@ module util_adxcvr_xch #(
       .USB_U2_SAS_MAX_COM (64),
       .USB_U2_SAS_MIN_COM (36),
       .USE_PCS_CLK_PHASE_SEL (1'b0),
-      .Y_ALL_MODE (1'b0))
-    i_gtye4_channel (
+      .Y_ALL_MODE (1'b0)
+    ) i_gtye4_channel (
       .CDRSTEPDIR (1'b0),
       .CDRSTEPSQ (1'b0),
       .CDRSTEPSX (1'b0),
@@ -3511,13 +3522,7 @@ module util_adxcvr_xch #(
       .TXRATEDONE (),
       .TXRESETDONE (tx_rst_done_s),
       .TXSYNCDONE (),
-      .TXSYNCOUT ()
-    );
-
+      .TXSYNCOUT ());
   end
   endgenerate
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************
-

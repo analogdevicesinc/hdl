@@ -37,10 +37,11 @@
 
 module ad_g2b #(
 
-  parameter DATA_WIDTH = 8) (
-
+  parameter DATA_WIDTH = 8
+) (
   input       [DATA_WIDTH-1:0]    din,
-  output      [DATA_WIDTH-1:0]    dout);
+  output      [DATA_WIDTH-1:0]    dout
+);
 
   function [DATA_WIDTH-1:0] g2b;
     input [DATA_WIDTH-1:0] g;
@@ -56,4 +57,3 @@ module ad_g2b #(
   assign dout = g2b(din);
 
 endmodule
-

@@ -48,7 +48,8 @@ module axi_ad9739a #(
   parameter   DAC_DDS_CORDIC_DW = 16,
   parameter   DAC_DDS_CORDIC_PHASE_DW = 16,
   parameter   DAC_DATAPATH_DISABLE = 0,
-  parameter   IO_DELAY_GROUP = "dev_if_delay_group") (
+  parameter   IO_DELAY_GROUP = "dev_if_delay_group"
+) (
 
   // dac interface
 
@@ -91,8 +92,8 @@ module axi_ad9739a #(
   output      [ 1:0]      s_axi_rresp,
   input                   s_axi_rready,
   input       [ 2:0]      s_axi_awprot,
-  input       [ 2:0]      s_axi_arprot);
-
+  input       [ 2:0]      s_axi_arprot
+);
 
   // internal clocks and resets
 
@@ -135,7 +136,9 @@ module axi_ad9739a #(
 
   // device interface
 
-  axi_ad9739a_if #(.FPGA_TECHNOLOGY (FPGA_TECHNOLOGY)) i_if (
+  axi_ad9739a_if #(
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY)
+  ) i_if (
     .dac_clk_in_p (dac_clk_in_p),
     .dac_clk_in_n (dac_clk_in_n),
     .dac_clk_out_p (dac_clk_out_p),
@@ -176,8 +179,8 @@ module axi_ad9739a #(
     .DAC_DDS_TYPE (DAC_DDS_TYPE),
     .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
     .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
-    .DATAPATH_DISABLE(DAC_DATAPATH_DISABLE))
-  i_core (
+    .DATAPATH_DISABLE(DAC_DATAPATH_DISABLE)
+  ) i_core (
     .dac_div_clk (dac_div_clk),
     .dac_rst (dac_rst),
     .dac_data_00 (dac_data_00_s),
@@ -244,6 +247,3 @@ module axi_ad9739a #(
     .up_rack (up_rack_s));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

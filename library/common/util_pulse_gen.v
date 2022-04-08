@@ -37,8 +37,8 @@
 module util_pulse_gen #(
 
   parameter   PULSE_WIDTH = 7,
-  parameter   PULSE_PERIOD = 100000000)(         // t_period * clk_freq
-
+  parameter   PULSE_PERIOD = 100000000         // t_period * clk_freq
+) (
   input               clk,
   input               rstn,
 

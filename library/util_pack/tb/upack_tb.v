@@ -163,7 +163,6 @@ module upack_tb;
 
     .s_axis_valid(s_axis_valid),
     .s_axis_ready(s_axis_ready),
-    .s_axis_data(s_axis_valid ? s_axis_data : {NUM_OF_PORTS{8'hx}})
-  );
+    .s_axis_data(s_axis_valid ? s_axis_data : {NUM_OF_PORTS{8'hx}}));
 
 endmodule

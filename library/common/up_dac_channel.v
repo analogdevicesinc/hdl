@@ -96,7 +96,8 @@ module up_dac_channel #(
   input           up_rreq,
   input   [13:0]  up_raddr,
   output  [31:0]  up_rdata,
-  output          up_rack);
+  output          up_rack
+);
 
   // internal registers
 
@@ -402,7 +403,9 @@ module up_dac_channel #(
 
   // dac control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(177)) i_xfer_cntrl (
+  up_xfer_cntrl #(
+    .DATA_WIDTH(177)
+  ) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_dac_iq_mode,
@@ -440,6 +443,3 @@ module up_dac_channel #(
                       dac_src_chan_sel}));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

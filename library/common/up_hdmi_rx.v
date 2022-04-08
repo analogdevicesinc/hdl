@@ -37,7 +37,8 @@
 
 module up_hdmi_rx #(
 
-  parameter   ID = 0) (
+  parameter   ID = 0
+) (
 
   // hdmi interface
 
@@ -71,7 +72,8 @@ module up_hdmi_rx #(
   input                   up_rreq,
   input       [13:0]      up_raddr,
   output  reg [31:0]      up_rdata,
-  output  reg             up_rack);
+  output  reg             up_rack
+);
 
   localparam  PCORE_VERSION = 32'h00040063;
 
@@ -230,7 +232,9 @@ module up_hdmi_rx #(
 
   // hdmi control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(36)) i_hdmi_xfer_cntrl (
+  up_xfer_cntrl #(
+    .DATA_WIDTH(36)
+  ) i_hdmi_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_edge_sel,
@@ -249,7 +253,9 @@ module up_hdmi_rx #(
                       hdmi_vs_count,
                       hdmi_hs_count}));
 
-  up_xfer_status #(.DATA_WIDTH(39)) i_hdmi_xfer_status (
+  up_xfer_status #(
+    .DATA_WIDTH(39)
+  ) i_hdmi_xfer_status (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_status ({  up_dma_ovf_s,
@@ -281,6 +287,3 @@ module up_hdmi_rx #(
     .d_clk (hdmi_clk));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

@@ -54,7 +54,8 @@ module axi_ad9361_alt_lvds_rx (
   output  [ 5:0]  rx_data_1,
   output  [ 5:0]  rx_data_2,
   output  [ 5:0]  rx_data_3,
-  output          rx_locked);
+  output          rx_locked
+);
 
   // internal signals
 

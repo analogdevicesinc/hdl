@@ -27,8 +27,7 @@ module ad_mux_tb;
     .clk(clk),
     .data_in(data_in),
     .ch_sel(ch_sel),
-    .data_out(data_out)
-  );
+    .data_out(data_out));
 
   wire [CH_W-1:0] ref_data;
   generate

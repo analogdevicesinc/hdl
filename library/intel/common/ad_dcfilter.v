@@ -41,7 +41,8 @@ module ad_dcfilter #(
 
   // data path disable
 
-  parameter   DISABLE = 0) (
+  parameter   DISABLE = 0
+) (
 
   // data interface
 
@@ -55,7 +56,8 @@ module ad_dcfilter #(
 
   input           dcfilt_enb,
   input   [15:0]  dcfilt_coeff,
-  input   [15:0]  dcfilt_offset);
+  input   [15:0]  dcfilt_offset
+);
 
   // internal registers
 
@@ -80,6 +82,3 @@ module ad_dcfilter #(
   end
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

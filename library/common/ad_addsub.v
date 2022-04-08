@@ -43,13 +43,14 @@ module ad_addsub #(
 
   parameter   A_DATA_WIDTH = 32,
   parameter   B_DATA_VALUE = 32'h1,
-  parameter   ADD_OR_SUB_N = 0) (
+  parameter   ADD_OR_SUB_N = 0
+) (
   input                   clk,
   input       [(A_DATA_WIDTH-1):0]  A,
   input       [(A_DATA_WIDTH-1):0]  Amax,
   output  reg [(A_DATA_WIDTH-1):0]  out,
-  input                   CE);
-
+  input                   CE
+);
 
   localparam  ADDER = 1;
   localparam  SUBSTRACTER = 0;

@@ -65,19 +65,19 @@ module pack_ctrl #(
 
   localparam z = 2**MUX_ORDER;
 
-  /* This part is magic */
+  // This part is magic
   for (i = 0; i < NUM_STAGES; i = i + 1) begin: ctrl_gen_outer
     localparam k0 = 2**(PORT_ADDRESS_WIDTH - MUX_ORDER*(i+1)-MIN_STAGE);
     localparam k1 = 2**(MUX_ORDER*(1+i)+MIN_STAGE);
 
     for (j = 0; j < NUM_OF_PORTS; j = j + 1) begin: ctrl_gen_inner
-      /* Offset in the ctrl signal */
+      // Offset in the ctrl signal
       localparam s = (i*NUM_OF_PORTS+j)*MUX_ORDER;
       localparam m = (j % k1) * k0;
       localparam n = j / k1;
 
       if (MUX_ORDER == 1 && j % 2 == 0) begin
-        /* This is an optimization that only works for 2:1 MUXes */
+        // This is an optimization that only works for 2:1 MUXes
         assign ctrl1[s] = ~ctrl1[s+1];
       end else begin
         assign ctrl1[s+:MUX_ORDER] = (j - (prefix_count[m*PORT_ADDRESS_WIDTH+:PORT_ADDRESS_WIDTH] + n - rotate) / k0) % z;
@@ -86,7 +86,7 @@ module pack_ctrl #(
   end
 
   if (PACK == 0 || MUX_ORDER == 1) begin
-    /* For 2:1 MUXes pack and unpack control is the same */
+    // For 2:1 MUXes pack and unpack control is the same
     assign ctrl = ctrl1;
   end else begin
     /*

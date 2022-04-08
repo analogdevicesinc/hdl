@@ -39,7 +39,8 @@
 
 module ad_dds_sine #(
 
-  parameter   DELAY_DATA_WIDTH = 16) (
+  parameter   DELAY_DATA_WIDTH = 16
+) (
 
   // sine = sin(angle)
 
@@ -47,7 +48,8 @@ module ad_dds_sine #(
   input   [15:0]                    angle,
   output  [15:0]                    sine,
   input   [(DELAY_DATA_WIDTH-1):0]  ddata_in,
-  output  [(DELAY_DATA_WIDTH-1):0]  ddata_out);
+  output  [(DELAY_DATA_WIDTH-1):0]  ddata_out
+);
 
   // internal registers
 
@@ -96,7 +98,9 @@ module ad_dds_sine #(
 
   // level 1 - intermediate
 
-  ad_mul #(.DELAY_DATA_WIDTH(DELAY_DATA_WIDTH+16)) i_mul_s1 (
+  ad_mul #(
+    .DELAY_DATA_WIDTH(DELAY_DATA_WIDTH+16)
+  ) i_mul_s1 (
     .clk (clk),
     .data_a ({angle_s[15], angle_s}),
     .data_b ({angle_s[15], angle_s}),
@@ -130,7 +134,9 @@ module ad_dds_sine #(
 
   // level 2 - final
 
-  ad_mul #(.DELAY_DATA_WIDTH(DELAY_DATA_WIDTH+17)) i_mul_s2 (
+  ad_mul #(
+    .DELAY_DATA_WIDTH(DELAY_DATA_WIDTH+17)
+  ) i_mul_s2 (
     .clk (clk),
     .data_a (s3_data[16:0]),
     .data_b (s3_data[16:0]),
@@ -167,7 +173,9 @@ module ad_dds_sine #(
 
   // full-scale
 
-  ad_mul #(.DELAY_DATA_WIDTH(1)) i_mul_s3_2 (
+  ad_mul #(
+    .DELAY_DATA_WIDTH(1)
+  ) i_mul_s3_2 (
     .clk (clk),
     .data_a (s6_data2),
     .data_b (17'h1d08),
@@ -175,7 +183,9 @@ module ad_dds_sine #(
     .ddata_in (1'b0),
     .ddata_out ());
 
-  ad_mul #(.DELAY_DATA_WIDTH(DELAY_DATA_WIDTH)) i_mul_s3_1 (
+  ad_mul #(
+    .DELAY_DATA_WIDTH(DELAY_DATA_WIDTH)
+  ) i_mul_s3_1 (
     .clk (clk),
     .data_a (s6_data1),
     .data_b (17'h7fff),
@@ -201,6 +211,3 @@ module ad_dds_sine #(
   end
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

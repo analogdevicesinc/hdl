@@ -41,8 +41,8 @@
 module data_offload_fsm #(
 
   parameter TX_OR_RXN_PATH = 0,
-  parameter SYNC_EXT_ADD_INTERNAL_CDC = 1) (
-
+  parameter SYNC_EXT_ADD_INTERNAL_CDC = 1
+) (
   input                               up_clk,
 
   // Control interface for storage for m_storage_axis interface
@@ -85,8 +85,7 @@ module data_offload_fsm #(
   // FSM debug
   output      [ 4:0]                  wr_fsm_state_out,
   output      [ 3:0]                  rd_fsm_state_out
-
-  );
+);
 
   // FSM states
 
@@ -273,56 +272,50 @@ module data_offload_fsm #(
   // CDC circuits
   sync_event #(
     .NUM_OF_EVENTS (1),
-    .ASYNC_CLK (1))
-  i_wr_empty_sync (
+    .ASYNC_CLK (1)
+  ) i_wr_empty_sync (
     .in_clk (rd_clk),
     .in_event (rd_last_eot && rd_fsm_state[RD_BIT_RD]),
     .out_clk (wr_clk),
-    .out_event (wr_rd_response_eot)
-  );
+    .out_event (wr_rd_response_eot));
 
   sync_bits #(
     .NUM_OF_BITS (1),
-    .ASYNC_CLK (TX_OR_RXN_PATH[0]))
-  i_rd_init_req_sync (
+    .ASYNC_CLK (TX_OR_RXN_PATH[0])
+  ) i_rd_init_req_sync (
     .in_bits (init_req),
     .out_clk (rd_clk),
     .out_resetn (1'b1),
-    .out_bits (rd_init_req_s)
-  );
+    .out_bits (rd_init_req_s));
 
   sync_bits #(
     .NUM_OF_BITS (1),
-    .ASYNC_CLK (~TX_OR_RXN_PATH[0]))
-  i_wr_init_req_sync (
+    .ASYNC_CLK (~TX_OR_RXN_PATH[0])
+  ) i_wr_init_req_sync (
     .in_bits (init_req),
     .out_clk (wr_clk),
     .out_resetn (1'b1),
-    .out_bits (wr_init_req_s)
-  );
+    .out_bits (wr_init_req_s));
 
   // When SYNC_EXT_ADD_INTERNAL_CDC is deasserted, one of these signals will end
   // up being synchronized to the "wrong" clock domain. This shouldn't matter
   // because the incorrectly synchronized signal is guarded by a synthesis constant.
   sync_bits #(
     .NUM_OF_BITS (1),
-    .ASYNC_CLK (SYNC_EXT_ADD_INTERNAL_CDC))
-  i_sync_wr_sync (
+    .ASYNC_CLK (SYNC_EXT_ADD_INTERNAL_CDC)
+  ) i_sync_wr_sync (
     .in_bits ({ sync_external }),
     .out_clk (wr_clk),
     .out_resetn (1'b1),
-    .out_bits ({ wr_sync_external_s })
-  );
+    .out_bits ({wr_sync_external_s}));
 
   sync_bits #(
     .NUM_OF_BITS (1),
-    .ASYNC_CLK (SYNC_EXT_ADD_INTERNAL_CDC))
-  i_sync_rd_sync (
+    .ASYNC_CLK (SYNC_EXT_ADD_INTERNAL_CDC)
+  ) i_sync_rd_sync (
     .in_bits ({ sync_external }),
     .out_clk (rd_clk),
     .out_resetn (1'b1),
-    .out_bits ({ rd_sync_external_s })
-  );
+    .out_bits ({ rd_sync_external_s }));
 
 endmodule
-

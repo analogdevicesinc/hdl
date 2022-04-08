@@ -42,7 +42,8 @@ module ad_datafmt #(
 
   parameter   DATA_WIDTH = 16,
   parameter   OCTETS_PER_SAMPLE = 2,
-  parameter   DISABLE = 0) (
+  parameter   DISABLE = 0
+) (
 
   // data path
 
@@ -56,7 +57,8 @@ module ad_datafmt #(
 
   input                       dfmt_enable,
   input                       dfmt_type,
-  input                       dfmt_se);
+  input                       dfmt_se
+);
 
   // internal registers
 
@@ -104,6 +106,3 @@ module ad_datafmt #(
   end
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

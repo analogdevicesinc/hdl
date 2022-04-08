@@ -39,7 +39,8 @@ module ad_mul #(
 
   parameter   A_DATA_WIDTH = 17,
   parameter   B_DATA_WIDTH = 17,
-  parameter   DELAY_DATA_WIDTH = 16) (
+  parameter   DELAY_DATA_WIDTH = 16
+) (
 
   // data_p = data_a * data_b;
 
@@ -51,8 +52,8 @@ module ad_mul #(
   // delay interface
 
   input       [(DELAY_DATA_WIDTH-1):0]  ddata_in,
-  output  reg [(DELAY_DATA_WIDTH-1):0]  ddata_out);
-
+  output  reg [(DELAY_DATA_WIDTH-1):0]  ddata_out
+);
 
   // internal registers
 
@@ -70,8 +71,8 @@ module ad_mul #(
   MULT_MACRO #(
     .LATENCY (3),
     .WIDTH_A (A_DATA_WIDTH),
-    .WIDTH_B (B_DATA_WIDTH))
-  i_mult_macro (
+    .WIDTH_B (B_DATA_WIDTH)
+  ) i_mult_macro (
     .CE (1'b1),
     .RST (1'b0),
     .CLK (clk),
@@ -80,6 +81,3 @@ module ad_mul #(
     .P (data_p));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

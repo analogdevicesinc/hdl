@@ -45,9 +45,9 @@
 //
 // Data format:
 //  idata  [U(I_W-1) .... U(0)]
-//  odata [U(O_W-1) .... U(0)] 
+//  odata [U(O_W-1) .... U(0)]
 //
-// e.g 
+// e.g
 //  I_W = 4
 //  O_W = 6
 //  UNIT_W = 8
@@ -72,101 +72,100 @@ module ad_pack #(
   output reg                  ovalid = 'b0
 );
 
-// Width of shift reg is integer multiple of input data width
-localparam SH_W = ((O_W/I_W)+|(O_W % I_W))*I_W;
-localparam STEP = O_W % I_W;
+  // Width of shift reg is integer multiple of input data width
+  localparam SH_W = ((O_W/I_W)+|(O_W % I_W))*I_W;
+  localparam STEP = O_W % I_W;
 
-reg [O_W*UNIT_W-1:0] idata_packed;
-reg [SH_W*UNIT_W-1:0] idata_d = 'h0;
-reg ivalid_d  = 'h0;
-reg [SH_W*UNIT_W-1:0] idata_dd = 'h0;
-reg [SH_W-1:0] in_use = 'b0;
-reg [SH_W-1:0] out_mask;
+  reg [O_W*UNIT_W-1:0] idata_packed;
+  reg [SH_W*UNIT_W-1:0] idata_d = 'h0;
+  reg ivalid_d  = 'h0;
+  reg [SH_W*UNIT_W-1:0] idata_dd = 'h0;
+  reg [SH_W-1:0] in_use = 'b0;
+  reg [SH_W-1:0] out_mask;
 
-wire [SH_W*UNIT_W-1:0] idata_dd_nx;
-wire [SH_W-1:0] in_use_nx;
-wire pack_wr;
+  wire [SH_W*UNIT_W-1:0] idata_dd_nx;
+  wire [SH_W-1:0] in_use_nx;
+  wire pack_wr;
 
-generate
-  if (I_REG) begin : i_reg
+  generate
+    if (I_REG) begin : i_reg
 
-    always @(posedge clk) begin
-      ivalid_d <= ivalid;
-      idata_d <= idata;
+      always @(posedge clk) begin
+        ivalid_d <= ivalid;
+        idata_d <= idata;
+      end
+
+    end else begin
+
+      always @(*) begin
+        ivalid_d = ivalid;
+        idata_d = idata;
+      end
+
     end
+  endgenerate
 
-  end else begin
+  assign idata_dd_nx = {idata_d,idata_dd[SH_W*UNIT_W-1:I_W*UNIT_W]};
+  assign in_use_nx = {{I_W{ivalid_d}},in_use[SH_W-1:I_W]};
 
-    always @(*) begin
-      ivalid_d = ivalid;
-      idata_d = idata;
+  always @(posedge clk) begin
+    if (reset) begin
+      in_use <= 'h0;
+    end else if (ivalid_d) begin
+      in_use <= in_use_nx &(~out_mask);
     end
-
   end
-endgenerate
 
-assign idata_dd_nx = {idata_d,idata_dd[SH_W*UNIT_W-1:I_W*UNIT_W]};
-assign in_use_nx = {{I_W{ivalid_d}},in_use[SH_W-1:I_W]};
-
-always @(posedge clk) begin
-  if (reset) begin
-    in_use <= 'h0;
-  end else if (ivalid_d) begin
-    in_use <= in_use_nx &(~out_mask);
+  always @(posedge clk) begin
+    if (ivalid_d) begin
+      idata_dd <= idata_dd_nx;
+    end
   end
-end
 
-always @(posedge clk) begin
-  if (ivalid_d) begin
-    idata_dd <= idata_dd_nx;
-  end
-end
-
-integer i;
-always @(*) begin
-  out_mask = 'b0;
-  idata_packed = 'bx;
-  if (STEP>0) begin
-    for (i = SH_W-O_W; i >= 0; i=i-STEP) begin
-      if (in_use_nx[i]) begin
-        out_mask = {O_W{1'b1}} << i;
-        idata_packed = idata_dd_nx >> i*UNIT_W;
+  integer i;
+  always @(*) begin
+    out_mask = 'b0;
+    idata_packed = 'bx;
+    if (STEP>0) begin
+      for (i = SH_W-O_W; i >= 0; i=i-STEP) begin
+        if (in_use_nx[i]) begin
+          out_mask = {O_W{1'b1}} << i;
+          idata_packed = idata_dd_nx >> i*UNIT_W;
+        end
+      end
+    end else begin
+      if (in_use_nx[0]) begin
+        out_mask = {O_W{1'b1}};
+        idata_packed = idata_dd_nx;
       end
     end
-  end else begin
-    if (in_use_nx[0]) begin
-      out_mask = {O_W{1'b1}};
-      idata_packed = idata_dd_nx;
-    end
   end
-end
 
-assign pack_wr = ivalid_d & |in_use_nx[SH_W-O_W:0];
+  assign pack_wr = ivalid_d & |in_use_nx[SH_W-O_W:0];
 
-generate
-  if (O_REG) begin : o_reg
+  generate
+    if (O_REG) begin : o_reg
 
-    always @(posedge clk) begin
-      if (reset) begin
-        ovalid <= 1'b0;
-      end else begin
-        ovalid <= pack_wr;
+      always @(posedge clk) begin
+        if (reset) begin
+          ovalid <= 1'b0;
+        end else begin
+          ovalid <= pack_wr;
+        end
       end
+
+      always @(posedge clk) begin
+        odata <= idata_packed;
+      end
+
+    end else begin
+
+      always @(*) begin
+        ovalid = pack_wr;
+        odata = idata_packed;
+      end
+
     end
-
-    always @(posedge clk) begin
-      odata <= idata_packed;
-    end
-
-  end else begin
-
-    always @(*) begin
-      ovalid = pack_wr;
-      odata = idata_packed;
-    end
-
-  end
-endgenerate
+  endgenerate
 
 endmodule
-

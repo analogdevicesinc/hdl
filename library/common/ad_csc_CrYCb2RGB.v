@@ -43,7 +43,8 @@
 
 module ad_csc_CrYCb2RGB #(
 
-  parameter   DELAY_DATA_WIDTH = 16) (
+  parameter   DELAY_DATA_WIDTH = 16
+) (
 
   // Cr-Y-Cb inputs
 
@@ -54,7 +55,8 @@ module ad_csc_CrYCb2RGB #(
   // R-G-B outputs
 
   output      [DELAY_DATA_WIDTH-1:0]  RGB_sync,
-  output      [23:0]                  RGB_data);
+  output      [23:0]                  RGB_data
+);
 
   localparam  DW = DELAY_DATA_WIDTH - 1;
 
@@ -64,8 +66,8 @@ module ad_csc_CrYCb2RGB #(
     .DELAY_DW (DELAY_DATA_WIDTH),
     .MUL_COEF_DW (18),
     .SUM_COEF_DW (28),
-    .YCbCr_2_RGB (1))
-  i_csc_R (
+    .YCbCr_2_RGB (1)
+  ) i_csc_R (
     .clk (clk),
     .sync (CrYCb_sync),
     .data (CrYCb_data),
@@ -81,8 +83,8 @@ module ad_csc_CrYCb2RGB #(
   ad_csc  #(
     .MUL_COEF_DW (18),
     .SUM_COEF_DW (28),
-    .YCbCr_2_RGB (1))
-  i_csc_G (
+    .YCbCr_2_RGB (1)
+  ) i_csc_G (
     .clk (clk),
     .sync (1'd0),
     .data (CrYCb_data),
@@ -98,8 +100,8 @@ module ad_csc_CrYCb2RGB #(
   ad_csc #(
     .MUL_COEF_DW (18),
     .SUM_COEF_DW (28),
-    .YCbCr_2_RGB (1))
-  i_csc_B (
+    .YCbCr_2_RGB (1)
+  ) i_csc_B (
     .clk (clk),
     .sync (1'd0),
     .data (CrYCb_data),
@@ -111,6 +113,3 @@ module ad_csc_CrYCb2RGB #(
     .csc_data (RGB_data[7:0]));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

@@ -37,7 +37,8 @@
 module axi_laser_driver_regmap #(
 
   parameter       ID = 0,
-  parameter       LASER_DRIVER_ID = 1 )(
+  parameter       LASER_DRIVER_ID = 1
+) (
 
   // control and status signals
 
@@ -224,8 +225,8 @@ module axi_laser_driver_regmap #(
 
   sync_bits #(
     .NUM_OF_BITS (1),
-    .ASYNC_CLK (1))
-  i_driver_otw_sync (
+    .ASYNC_CLK (1)
+  ) i_driver_otw_sync (
     .in_bits (driver_otw_n),
     .out_clk (up_clk),
     .out_resetn (1'b1),
@@ -233,8 +234,8 @@ module axi_laser_driver_regmap #(
 
   sync_bits #(
     .NUM_OF_BITS (1),
-    .ASYNC_CLK (1))
-  i_pulse_sync (
+    .ASYNC_CLK (1)
+  ) i_pulse_sync (
     .in_bits (pulse),
     .out_clk (up_clk),
     .out_resetn (1'b1),
@@ -242,8 +243,8 @@ module axi_laser_driver_regmap #(
 
   sync_bits #(
     .NUM_OF_BITS (2),
-    .ASYNC_CLK (1))
-  i_sequence_control_sync (
+    .ASYNC_CLK (1)
+  ) i_sequence_control_sync (
     .in_bits ({up_auto_sequence, up_sequence_en}),
     .out_clk (clk),
     .out_resetn (1'b1),
@@ -251,8 +252,8 @@ module axi_laser_driver_regmap #(
 
   sync_bits #(
     .NUM_OF_BITS (16),
-    .ASYNC_CLK (1))
-  i_sequencer_sync (
+    .ASYNC_CLK (1)
+  ) i_sequencer_sync (
     .in_bits ({up_auto_seq3,
                up_auto_seq2,
                up_auto_seq1,
@@ -270,8 +271,8 @@ module axi_laser_driver_regmap #(
 
   sync_bits #(
     .NUM_OF_BITS (32),
-    .ASYNC_CLK (1))
-  i_sequence_offset_sync (
+    .ASYNC_CLK (1)
+  ) i_sequence_offset_sync (
     .in_bits (up_sequence_offset),
     .out_clk (clk),
     .out_resetn (1'b1),

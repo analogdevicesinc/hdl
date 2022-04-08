@@ -102,8 +102,7 @@ module dma_write_tb;
 
     .bvalid(bvalid),
     .bready(bready),
-    .bresp(bresp)
-  );
+    .bresp(bresp));
 
   axi_dmac_transfer #(
     .DMA_DATA_WIDTH_SRC(WIDTH_SRC),
@@ -156,8 +155,7 @@ module dma_write_tb;
     .fifo_wr_din(fifo_wr_din),
     .fifo_wr_overflow(fifo_wr_overflow),
     .fifo_wr_sync(1'b1),
-    .fifo_wr_xfer_req(fifo_wr_xfer_req)
-  );
+    .fifo_wr_xfer_req(fifo_wr_xfer_req));
 
   always @(posedge clk) begin: fifo_wr
     integer i;

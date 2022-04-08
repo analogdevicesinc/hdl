@@ -43,8 +43,8 @@ module address_generator #(
   parameter BEATS_PER_BURST_WIDTH = 4,
   parameter BYTES_PER_BEAT_WIDTH = $clog2(DMA_DATA_WIDTH/8),
   parameter LENGTH_WIDTH = 8,
-  parameter CACHE_COHERENT = 0)(
-
+  parameter CACHE_COHERENT = 0
+) (
   input                        clk,
   input                        resetn,
 
@@ -74,114 +74,114 @@ module address_generator #(
   output     [ 3:0]               cache
 );
 
-localparam MAX_BEATS_PER_BURST = {1'b1,{BEATS_PER_BURST_WIDTH{1'b0}}};
-localparam MAX_LENGTH = {BEATS_PER_BURST_WIDTH{1'b1}};
+  localparam MAX_BEATS_PER_BURST = {1'b1,{BEATS_PER_BURST_WIDTH{1'b0}}};
+  localparam MAX_LENGTH = {BEATS_PER_BURST_WIDTH{1'b1}};
 
 `include "inc_id.vh"
 
-assign burst = 2'b01;
-assign prot = 3'b000;
-// If CACHE_COHERENT is set, signal downstream that this transaction must be
-// looked up in cache. Otherwise default to "normal non-cachable bufferable".
-assign cache = CACHE_COHERENT ? 4'b1110 : 4'b0011;
-assign size = DMA_DATA_WIDTH == 1024 ? 3'b111 :
-              DMA_DATA_WIDTH ==  512 ? 3'b110 :
-              DMA_DATA_WIDTH ==  256 ? 3'b101 :
-              DMA_DATA_WIDTH ==  128 ? 3'b100 :
-              DMA_DATA_WIDTH ==   64 ? 3'b011 :
-              DMA_DATA_WIDTH ==   32 ? 3'b010 :
-              DMA_DATA_WIDTH ==   16 ? 3'b001 : 3'b000;
+  assign burst = 2'b01;
+  assign prot = 3'b000;
+  // If CACHE_COHERENT is set, signal downstream that this transaction must be
+  // looked up in cache. Otherwise default to "normal non-cachable bufferable".
+  assign cache = CACHE_COHERENT ? 4'b1110 : 4'b0011;
+  assign size = DMA_DATA_WIDTH == 1024 ? 3'b111 :
+                DMA_DATA_WIDTH ==  512 ? 3'b110 :
+                DMA_DATA_WIDTH ==  256 ? 3'b101 :
+                DMA_DATA_WIDTH ==  128 ? 3'b100 :
+                DMA_DATA_WIDTH ==   64 ? 3'b011 :
+                DMA_DATA_WIDTH ==   32 ? 3'b010 :
+                DMA_DATA_WIDTH ==   16 ? 3'b001 : 3'b000;
 
-reg [LENGTH_WIDTH-1:0] length = 'h0;
-reg [DMA_ADDR_WIDTH-BYTES_PER_BEAT_WIDTH-1:0] address = 'h00;
-reg [BEATS_PER_BURST_WIDTH-1:0] last_burst_len = 'h00;
-assign addr = {address, {BYTES_PER_BEAT_WIDTH{1'b0}}};
-assign len = length;
+  reg [LENGTH_WIDTH-1:0] length = 'h0;
+  reg [DMA_ADDR_WIDTH-BYTES_PER_BEAT_WIDTH-1:0] address = 'h00;
+  reg [BEATS_PER_BURST_WIDTH-1:0] last_burst_len = 'h00;
+  assign addr = {address, {BYTES_PER_BEAT_WIDTH{1'b0}}};
+  assign len = length;
 
-reg addr_valid_d1;
-reg last = 1'b0;
+  reg addr_valid_d1;
+  reg last = 1'b0;
 
-// If we already asserted addr_valid we have to wait until it is accepted before
-// we can disable the address generator.
-always @(posedge clk) begin
-  if (resetn == 1'b0) begin
-    enabled <= 1'b0;
-  end else if (enable == 1'b1) begin
-    enabled <= 1'b1;
-  end else if (addr_valid == 1'b0) begin
-    enabled <= 1'b0;
-  end
-end
-
-always @(posedge clk) begin
-  if (bl_valid == 1'b1 && bl_ready == 1'b1) begin
-    last_burst_len <= measured_last_burst_length;
-  end
-end
-
-always @(posedge clk) begin
-  if (addr_valid == 1'b0) begin
-    last <= eot;
-    if (eot == 1'b1) begin
-      length <= last_burst_len;
-    end else begin
-      length <= MAX_LENGTH;
+  // If we already asserted addr_valid we have to wait until it is accepted before
+  // we can disable the address generator.
+  always @(posedge clk) begin
+    if (resetn == 1'b0) begin
+      enabled <= 1'b0;
+    end else if (enable == 1'b1) begin
+      enabled <= 1'b1;
+    end else if (addr_valid == 1'b0) begin
+      enabled <= 1'b0;
     end
   end
-end
 
-always @(posedge clk) begin
-  if (req_ready == 1'b1) begin
-    address <= req_address;
-  end else if (addr_valid == 1'b1 && addr_ready == 1'b1) begin
-    address <= address + MAX_BEATS_PER_BURST;
+  always @(posedge clk) begin
+    if (bl_valid == 1'b1 && bl_ready == 1'b1) begin
+      last_burst_len <= measured_last_burst_length;
+    end
   end
-end
 
-always @(posedge clk) begin
-  if (resetn == 1'b0) begin
-    bl_ready <= 1'b1;
-  end else begin
-    if (bl_ready == 1'b1) begin
-      bl_ready <= ~bl_valid;
-    end else if (addr_valid == 1'b0 && eot == 1'b1) begin
-      // assert bl_ready only when the addr_valid asserts in the next cycle
-      if (id != request_id && enable == 1'b1) begin
-        bl_ready <= 1'b1;
+  always @(posedge clk) begin
+    if (addr_valid == 1'b0) begin
+      last <= eot;
+      if (eot == 1'b1) begin
+        length <= last_burst_len;
+      end else begin
+        length <= MAX_LENGTH;
       end
     end
   end
-end
 
-always @(posedge clk) begin
-  if (resetn == 1'b0) begin
-    req_ready <= 1'b1;
-    addr_valid <= 1'b0;
-  end else begin
+  always @(posedge clk) begin
     if (req_ready == 1'b1) begin
-      req_ready <= ~req_valid;
+      address <= req_address;
     end else if (addr_valid == 1'b1 && addr_ready == 1'b1) begin
-      addr_valid <= 1'b0;
-      req_ready <= last;
-    end else if (id != request_id && enable == 1'b1) begin
-      // if eot wait until the last_burst_len gets synced over
-      if (eot == 1'b0 || (eot == 1'b1 && bl_ready == 1'b0)) begin
-        addr_valid <= 1'b1;
+      address <= address + MAX_BEATS_PER_BURST;
+    end
+  end
+
+  always @(posedge clk) begin
+    if (resetn == 1'b0) begin
+      bl_ready <= 1'b1;
+    end else begin
+      if (bl_ready == 1'b1) begin
+        bl_ready <= ~bl_valid;
+      end else if (addr_valid == 1'b0 && eot == 1'b1) begin
+        // assert bl_ready only when the addr_valid asserts in the next cycle
+        if (id != request_id && enable == 1'b1) begin
+          bl_ready <= 1'b1;
+        end
       end
     end
   end
-end
 
-always @(posedge clk) begin
-  addr_valid_d1 <= addr_valid;
-end
-
-always @(posedge clk) begin
-  if (resetn == 1'b0) begin
-    id <= 'h0;
-  end else if (addr_valid == 1'b1 && addr_valid_d1 == 1'b0) begin
-    id <= inc_id(id);
+  always @(posedge clk) begin
+    if (resetn == 1'b0) begin
+      req_ready <= 1'b1;
+      addr_valid <= 1'b0;
+    end else begin
+      if (req_ready == 1'b1) begin
+        req_ready <= ~req_valid;
+      end else if (addr_valid == 1'b1 && addr_ready == 1'b1) begin
+        addr_valid <= 1'b0;
+        req_ready <= last;
+      end else if (id != request_id && enable == 1'b1) begin
+        // if eot wait until the last_burst_len gets synced over
+        if (eot == 1'b0 || (eot == 1'b1 && bl_ready == 1'b0)) begin
+          addr_valid <= 1'b1;
+        end
+      end
+    end
   end
-end
+
+  always @(posedge clk) begin
+    addr_valid_d1 <= addr_valid;
+  end
+
+  always @(posedge clk) begin
+    if (resetn == 1'b0) begin
+      id <= 'h0;
+    end else if (addr_valid == 1'b1 && addr_valid_d1 == 1'b0) begin
+      id <= inc_id(id);
+    end
+  end
 
 endmodule

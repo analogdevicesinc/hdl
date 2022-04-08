@@ -38,10 +38,9 @@
 module up_tpl_common #(
 
   // parameters
-  parameter COMMON_ID = 2'h0,  // Offset of regmap
-  parameter NUM_PROFILES = 1   // Number of JESD profiles
-  )(
-
+  parameter COMMON_ID = 2'h0,   // Offset of regmap
+  parameter NUM_PROFILES = 1 // Number of JESD profiles
+) (
   input [NUM_PROFILES*8-1: 0] jesd_m,
   input [NUM_PROFILES*8-1: 0] jesd_l,
   input [NUM_PROFILES*8-1: 0] jesd_s,
@@ -88,7 +87,7 @@ module up_tpl_common #(
     if (up_rstn == 0) begin
       up_wack_int <= 'd0;
       up_profile_sel <= 'd0;
-   end else begin
+    end else begin
       up_wack_int <= up_wreq_s;
       if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h00)) begin
         up_profile_sel <= up_wdata[$clog2(NUM_PROFILES):0];
@@ -111,7 +110,7 @@ module up_tpl_common #(
         case (up_raddr[6:0])
           7'h00: up_rdata_int <= up_profile_sel;
           7'h01: up_rdata_int <= NUM_PROFILES;
-         default: up_rdata_int <= up_rdata_jesd_params;
+          default: up_rdata_int <= up_rdata_jesd_params;
         endcase
       end else begin
         up_rdata_int <= 32'd0;
@@ -136,6 +135,3 @@ module up_tpl_common #(
   end
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

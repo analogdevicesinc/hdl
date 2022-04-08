@@ -39,12 +39,13 @@ module util_delay #(
 
   parameter DATA_WIDTH = 1,
   // the minimum valid value for DELAY_CYCLES is 1
-  parameter DELAY_CYCLES = 1) (
-
+  parameter DELAY_CYCLES = 1
+) (
   input                             clk,
   input                             reset,
   input                             din,
-  output  [DATA_WIDTH-1:0]          dout);
+  output  [DATA_WIDTH-1:0]          dout
+);
 
   reg     [DATA_WIDTH-1:0]          dbuf[0:(DELAY_CYCLES-1)];
 

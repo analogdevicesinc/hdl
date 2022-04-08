@@ -47,9 +47,8 @@ module axi_gpreg #(
   parameter   integer BUF_ENABLE_4 = 1,
   parameter   integer BUF_ENABLE_5 = 1,
   parameter   integer BUF_ENABLE_6 = 1,
-  parameter   integer BUF_ENABLE_7 = 1)
-
- (
+  parameter   integer BUF_ENABLE_7 = 1
+) (
 
   // io
 
@@ -111,8 +110,8 @@ module axi_gpreg #(
   output  [  1:0]   s_axi_rresp,
   input             s_axi_rready,
   input   [ 2:0]    s_axi_awprot,
-  input   [ 2:0]    s_axi_arprot);
-
+  input   [ 2:0]    s_axi_arprot
+);
 
   // version
 
@@ -258,64 +257,64 @@ module axi_gpreg #(
 
   genvar n;
   generate
+    // gpio
 
-  // gpio
+    if (NUM_OF_IO < 8) begin
+      for (n = NUM_OF_IO; n < 8; n = n + 1) begin: g_unused_io
+        assign up_gp_ioenb_s[n] = 32'd0;
+        assign up_gp_out_s[n] = 32'd0;
+        assign up_wack_s[n] = 1'd0;
+        assign up_rdata_s[n] = 32'd0;
+        assign up_rack_s[n] = 1'd0;
+      end
+    end
 
-  if (NUM_OF_IO < 8) begin
-  for (n = NUM_OF_IO; n < 8; n = n + 1) begin: g_unused_io
-  assign up_gp_ioenb_s[n] = 32'd0;
-  assign up_gp_out_s[n] = 32'd0;
-  assign up_wack_s[n] = 1'd0;
-  assign up_rdata_s[n] = 32'd0;
-  assign up_rack_s[n] = 1'd0;
-  end
-  end
+    for (n = 0; n < NUM_OF_IO; n = n + 1) begin: g_io
+      axi_gpreg_io #(
+        .ID (16+n)
+      ) i_gpreg_io (
+        .up_gp_ioenb (up_gp_ioenb_s[n]),
+        .up_gp_out (up_gp_out_s[n]),
+        .up_gp_in (up_gp_in_s[n]),
+        .up_rstn (up_rstn),
+        .up_clk (up_clk),
+        .up_wreq (up_wreq),
+        .up_waddr (up_waddr),
+        .up_wdata (up_wdata),
+        .up_wack (up_wack_s[n]),
+        .up_rreq (up_rreq),
+        .up_raddr (up_raddr),
+        .up_rdata (up_rdata_s[n]),
+        .up_rack (up_rack_s[n]));
+    end
 
-  for (n = 0; n < NUM_OF_IO; n = n + 1) begin: g_io
-  axi_gpreg_io #(.ID (16+n)) i_gpreg_io (
-    .up_gp_ioenb (up_gp_ioenb_s[n]),
-    .up_gp_out (up_gp_out_s[n]),
-    .up_gp_in (up_gp_in_s[n]),
-    .up_rstn (up_rstn),
-    .up_clk (up_clk),
-    .up_wreq (up_wreq),
-    .up_waddr (up_waddr),
-    .up_wdata (up_wdata),
-    .up_wack (up_wack_s[n]),
-    .up_rreq (up_rreq),
-    .up_raddr (up_raddr),
-    .up_rdata (up_rdata_s[n]),
-    .up_rack (up_rack_s[n]));
-  end
+    // clock monitors
 
-  // clock monitors
+    if (NUM_OF_CLK_MONS < 8) begin
+      for (n = NUM_OF_CLK_MONS; n < 8; n = n + 1) begin: g_unused_clock_mon
+        assign up_wack_s[(8+n)] = 1'd0;
+        assign up_rdata_s[(8+n)] = 32'd0;
+        assign up_rack_s[(8+n)] = 1'd0;
+      end
+    end
 
-  if (NUM_OF_CLK_MONS < 8) begin
-  for (n = NUM_OF_CLK_MONS; n < 8; n = n + 1) begin: g_unused_clock_mon
-  assign up_wack_s[(8+n)] = 1'd0;
-  assign up_rdata_s[(8+n)] = 32'd0;
-  assign up_rack_s[(8+n)] = 1'd0;
-  end
-  end
-
-  for (n = 0; n < NUM_OF_CLK_MONS; n = n + 1) begin: g_clock_mon
-  axi_gpreg_clock_mon #(
-    .ID (32+n),
-    .BUF_ENABLE (BUF_ENABLE[n]))
-  i_gpreg_clock_mon (
-    .d_clk (d_clk_s[n]),
-    .up_rstn (up_rstn),
-    .up_clk (up_clk),
-    .up_wreq (up_wreq),
-    .up_waddr (up_waddr),
-    .up_wdata (up_wdata),
-    .up_wack (up_wack_s[(8+n)]),
-    .up_rreq (up_rreq),
-    .up_raddr (up_raddr),
-    .up_rdata (up_rdata_s[(8+n)]),
-    .up_rack (up_rack_s[(8+n)]));
-  end
-
+    for (n = 0; n < NUM_OF_CLK_MONS; n = n + 1) begin: g_clock_mon
+      axi_gpreg_clock_mon #(
+        .ID (32+n),
+        .BUF_ENABLE (BUF_ENABLE[n])
+      ) i_gpreg_clock_mon (
+        .d_clk (d_clk_s[n]),
+        .up_rstn (up_rstn),
+        .up_clk (up_clk),
+        .up_wreq (up_wreq),
+        .up_waddr (up_waddr),
+        .up_wdata (up_wdata),
+        .up_wack (up_wack_s[(8+n)]),
+        .up_rreq (up_rreq),
+        .up_raddr (up_raddr),
+        .up_rdata (up_rdata_s[(8+n)]),
+        .up_rack (up_rack_s[(8+n)]));
+    end
   endgenerate
 
   up_axi i_up_axi (
@@ -348,6 +347,3 @@ module axi_gpreg #(
     .up_rack (up_rack_d));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

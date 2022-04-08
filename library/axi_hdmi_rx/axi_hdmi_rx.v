@@ -38,7 +38,8 @@
 module axi_hdmi_rx  #(
 
   parameter   ID = 0,
-  parameter   IO_INTERFACE = 1) (
+  parameter   IO_INTERFACE = 1
+) (
 
   // hdmi interface
 
@@ -76,7 +77,8 @@ module axi_hdmi_rx  #(
   output      [31:0]      s_axi_rdata,
   input                   s_axi_rready,
   input       [ 2:0]      s_axi_awprot,
-  input       [ 2:0]      s_axi_arprot);
+  input       [ 2:0]      s_axi_arprot
+);
 
   // internal signals
 
@@ -113,7 +115,7 @@ module axi_hdmi_rx  #(
 
   // axi interface
 
-  up_axi i_up_axi  (
+  up_axi i_up_axi (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_axi_awvalid (s_axi_awvalid),
@@ -144,7 +146,7 @@ module axi_hdmi_rx  #(
 
   // processor interface
 
-  up_hdmi_rx i_up  (
+  up_hdmi_rx i_up (
     .hdmi_clk (hdmi_clk),
     .hdmi_rst (hdmi_rst),
     .hdmi_edge_sel (hdmi_edge_sel_s),
@@ -176,7 +178,7 @@ module axi_hdmi_rx  #(
 
   // hdmi interface
 
-  axi_hdmi_rx_core i_rx_core  (
+  axi_hdmi_rx_core i_rx_core (
     .hdmi_clk (hdmi_clk),
     .hdmi_rst (hdmi_rst),
     .hdmi_data (hdmi_data),
@@ -198,6 +200,3 @@ module axi_hdmi_rx  #(
     .hdmi_dma_data (hdmi_dma_data));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

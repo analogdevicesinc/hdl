@@ -38,7 +38,8 @@
 module axi_clock_monitor #(
 
   parameter   ID = 0,
-  parameter   NUM_OF_CLOCKS = 1) (
+  parameter   NUM_OF_CLOCKS = 1
+) (
 
   // clocks
 
@@ -83,7 +84,8 @@ module axi_clock_monitor #(
   output          s_axi_rvalid,
   output  [31:0]  s_axi_rdata,
   output  [ 1:0]  s_axi_rresp,
-  input           s_axi_rready);
+  input           s_axi_rready
+);
 
   // local parameters
 
@@ -226,8 +228,7 @@ module axi_clock_monitor #(
         .up_clk(up_clk),
         .up_d_count(clk_mon_count[n]),
         .d_rst(1'b0),
-        .d_clk(clock[n])
-      );
+        .d_clk(clock[n]));
     end
     for (n = NUM_OF_CLOCKS; n < 16; n = n + 1) begin: clk_mon_z
       assign clk_mon_count[n] = 21'd0;
@@ -266,6 +267,3 @@ module axi_clock_monitor #(
     .up_rack (up_rack_o_s));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

@@ -40,7 +40,8 @@ module ad_dcfilter #(
 
   // data path disable
 
-  parameter   DISABLE = 0) (
+  parameter   DISABLE = 0
+) (
 
   // data interface
 
@@ -54,7 +55,8 @@ module ad_dcfilter #(
 
   input           dcfilt_enb,
   input   [15:0]  dcfilt_coeff,
-  input   [15:0]  dcfilt_offset);
+  input   [15:0]  dcfilt_offset
+);
 
   // internal registers
 
@@ -139,8 +141,8 @@ module ad_dcfilter #(
     .USE_DPORT ("TRUE"),
     .USE_MULT ("MULTIPLY"),
     .USE_PATTERN_DETECT ("NO_PATDET"),
-    .USE_SIMD ("ONE48"))
-  i_dsp48e1 (
+    .USE_SIMD ("ONE48")
+  ) i_dsp48e1 (
     .CLK (clk),
     .A ({{14{dc_offset_s[32]}}, dc_offset_s[32:17]}),
     .B ({{2{dcfilt_coeff_d[15]}}, dcfilt_coeff_d}),
@@ -192,6 +194,3 @@ module ad_dcfilter #(
     .RSTP (1'd0));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

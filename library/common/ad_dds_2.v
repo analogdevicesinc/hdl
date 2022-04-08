@@ -46,7 +46,8 @@ module ad_dds_2 #(
   // Range = 8-24
   parameter   CORDIC_DW = 16,
   // Range = 8-24 ( make sure CORDIC_PHASE_DW < CORDIC_DW)
-  parameter   CORDIC_PHASE_DW = 16) (
+  parameter   CORDIC_PHASE_DW = 16
+) (
 
   // interface
 
@@ -56,18 +57,19 @@ module ad_dds_2 #(
   input   [        15:0]  dds_scale_0,
   input   [PHASE_DW-1:0]  dds_phase_1,
   input   [        15:0]  dds_scale_1,
-  output  [  DDS_DW-1:0]  dds_data);
+  output  [  DDS_DW-1:0]  dds_data
+);
 
- // Local parameters
+  // Local parameters
 
- localparam CORDIC = 1;
- localparam POLYNOMIAL = 2;
+  localparam CORDIC = 1;
+  localparam POLYNOMIAL = 2;
 
- // The width for Polynomial DDS is fixed (16)
- localparam DDS_D_DW = (DDS_TYPE == CORDIC) ? CORDIC_DW : 16;
- localparam DDS_P_DW = (DDS_TYPE == CORDIC) ? CORDIC_PHASE_DW : 16;
- // concatenation or truncation width
- localparam C_T_WIDTH = (DDS_D_DW > DDS_DW) ? (DDS_D_DW - DDS_DW) : (DDS_DW - DDS_D_DW);
+  // The width for Polynomial DDS is fixed (16)
+  localparam DDS_D_DW = (DDS_TYPE == CORDIC) ? CORDIC_DW : 16;
+  localparam DDS_P_DW = (DDS_TYPE == CORDIC) ? CORDIC_PHASE_DW : 16;
+  // concatenation or truncation width
+  localparam C_T_WIDTH = (DDS_D_DW > DDS_DW) ? (DDS_D_DW - DDS_DW) : (DDS_DW - DDS_D_DW);
 
   // internal registers
 
@@ -111,46 +113,43 @@ module ad_dds_2 #(
       dds_data_int <= dds_data_0_s + dds_data_1_s;
     end
 
-     always @(posedge clk) begin
-       dds_scale_0_d <= dds_scale_0;
-       dds_scale_1_d <= dds_scale_1;
-     end
+    always @(posedge clk) begin
+      dds_scale_0_d <= dds_scale_0;
+      dds_scale_1_d <= dds_scale_1;
+    end
 
-     // phase
-      if (DDS_P_DW > PHASE_DW) begin
-        assign dds_phase_0_s = {dds_phase_0,{DDS_P_DW-PHASE_DW{1'b0}}};
-        assign dds_phase_1_s = {dds_phase_1,{DDS_P_DW-PHASE_DW{1'b0}}};
-      end else begin
-        assign dds_phase_0_s = dds_phase_0[(PHASE_DW-1):PHASE_DW-DDS_P_DW];
-        assign dds_phase_1_s = dds_phase_1[(PHASE_DW-1):PHASE_DW-DDS_P_DW];
-      end
+    // phase
+    if (DDS_P_DW > PHASE_DW) begin
+      assign dds_phase_0_s = {dds_phase_0,{DDS_P_DW-PHASE_DW{1'b0}}};
+      assign dds_phase_1_s = {dds_phase_1,{DDS_P_DW-PHASE_DW{1'b0}}};
+    end else begin
+      assign dds_phase_0_s = dds_phase_0[(PHASE_DW-1):PHASE_DW-DDS_P_DW];
+      assign dds_phase_1_s = dds_phase_1[(PHASE_DW-1):PHASE_DW-DDS_P_DW];
+    end
 
-     // dds-1
+    // dds-1
 
-     ad_dds_1 #(
-       .DDS_TYPE(DDS_TYPE),
-       .DDS_D_DW(DDS_D_DW),
-       .DDS_P_DW(DDS_P_DW))
-     i_dds_1_0 (
-       .clk (clk),
-       .angle (dds_phase_0_s),
-       .scale (dds_scale_0_d),
-       .dds_data (dds_data_0_s));
+    ad_dds_1 #(
+      .DDS_TYPE(DDS_TYPE),
+      .DDS_D_DW(DDS_D_DW),
+      .DDS_P_DW(DDS_P_DW)
+    ) i_dds_1_0 (
+      .clk (clk),
+      .angle (dds_phase_0_s),
+      .scale (dds_scale_0_d),
+      .dds_data (dds_data_0_s));
 
-     // dds-2
+    // dds-2
 
-     ad_dds_1 #(
-       .DDS_TYPE(DDS_TYPE),
-       .DDS_D_DW(DDS_D_DW),
-       .DDS_P_DW(DDS_P_DW))
-     i_dds_1_1 (
-       .clk (clk),
-       .angle (dds_phase_1_s),
-       .scale (dds_scale_1_d),
-       .dds_data (dds_data_1_s));
+    ad_dds_1 #(
+      .DDS_TYPE(DDS_TYPE),
+      .DDS_D_DW(DDS_D_DW),
+      .DDS_P_DW(DDS_P_DW)
+    ) i_dds_1_1 (
+      .clk (clk),
+      .angle (dds_phase_1_s),
+      .scale (dds_scale_1_d),
+      .dds_data (dds_data_1_s));
   endgenerate
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

@@ -108,8 +108,7 @@ module soft_pcs_loopback_tb;
     .char(tx_char_pcs),
     .charisk(tx_charisk_pcs),
 
-    .data(data_aligned)
-  );
+    .data(data_aligned));
 
   jesd204_soft_pcs_rx #(
     .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
@@ -124,8 +123,7 @@ module soft_pcs_loopback_tb;
     .char(rx_char_pcs),
     .charisk(rx_charisk_pcs),
     .notintable(rx_notintable_pcs),
-    .disperr(rx_disperr_pcs)
-  );
+    .disperr(rx_disperr_pcs));
 
   always @(posedge clk) begin
     tx_char_pcs <= {tx_char,tx_char_pcs[DATA_PATH_WIDTH*8-1:8]};

@@ -76,7 +76,8 @@ module axi_logic_analyzer_reg (
   input               up_rreq,
   input       [ 4:0]  up_raddr,
   output reg  [31:0]  up_rdata,
-  output reg          up_rack);
+  output reg          up_rack
+);
 
   // internal registers
 
@@ -241,9 +242,15 @@ module axi_logic_analyzer_reg (
     end
   end
 
-  ad_rst i_core_rst_reg (.rst_async(~up_rstn), .clk(clk), .rstn(), .rst(reset));
+  ad_rst i_core_rst_reg (
+    .rst_async(~up_rstn),
+    .clk(clk),
+    .rstn(),
+    .rst(reset));
 
-   up_xfer_cntrl #(.DATA_WIDTH(353)) i_xfer_cntrl (
+  up_xfer_cntrl #(
+    .DATA_WIDTH(353)
+  ) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_streaming,             // 1
@@ -289,22 +296,19 @@ module axi_logic_analyzer_reg (
                       divider_counter_la,     // 32
                       data_delay_control}));  // 10
 
- up_xfer_status #(.DATA_WIDTH(16)) i_xfer_status (
+  up_xfer_status #(
+    .DATA_WIDTH(16)
+  ) i_xfer_status (
+    // up interface
 
-  // up interface
+    .up_rstn(up_rstn),
+    .up_clk(up_clk),
+    .up_data_status(up_input_data),
 
-  .up_rstn(up_rstn),
-  .up_clk(up_clk),
-  .up_data_status(up_input_data),
+    // device interface
 
-  // device interface
-
-  .d_rst(1'd0),
-  .d_clk(clk),
-  .d_data_status(input_data));
+    .d_rst(1'd0),
+    .d_clk(clk),
+    .d_data_status(input_data));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************
-

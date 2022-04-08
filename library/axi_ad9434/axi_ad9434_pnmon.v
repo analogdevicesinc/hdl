@@ -44,7 +44,8 @@ module axi_ad9434_pnmon (
   // pn interface
   input       [ 3:0]      adc_pnseq_sel,
   output                  adc_pn_err,
-  output                  adc_pn_oos);
+  output                  adc_pn_oos
+);
 
   // internal registers
   reg     [47:0]  adc_pn_data_pn = 'd0;
@@ -181,7 +182,9 @@ module axi_ad9434_pnmon (
   end
 
   // pn oos & pn err
-  ad_pnmon #(.DATA_WIDTH(48)) i_pnmon (
+  ad_pnmon #(
+    .DATA_WIDTH(48)
+  ) i_pnmon (
     .adc_clk (adc_clk),
     .adc_valid_in (1'b1),
     .adc_data_in (adc_data_inv_s),

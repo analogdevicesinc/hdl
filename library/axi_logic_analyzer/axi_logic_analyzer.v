@@ -84,7 +84,8 @@ module axi_logic_analyzer (
   output                s_axi_rvalid,
   output      [31:0]    s_axi_rdata,
   output      [ 1:0]    s_axi_rresp,
-  input                 s_axi_rready);
+  input                 s_axi_rready
+);
 
   // internal registers
 
@@ -215,7 +216,6 @@ module axi_logic_analyzer (
       end
     end
   end
-
 
   always @(posedge clk_out) begin
     if (sample_valid_la == 1'b1 && trigger_out_holdoff == 1'b1) begin
@@ -452,8 +452,7 @@ module axi_logic_analyzer (
     .trigger_out_adc (trigger_out_adc),
     .trigger_out (trigger_out_s));
 
-   axi_logic_analyzer_reg i_registers (
-
+  axi_logic_analyzer_reg i_registers (
     .clk (clk_out),
     .reset (reset),
 
@@ -527,6 +526,3 @@ module axi_logic_analyzer (
     .up_rack (up_rack));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

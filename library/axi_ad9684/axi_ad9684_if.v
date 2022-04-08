@@ -39,7 +39,8 @@ module axi_ad9684_if #(
 
   parameter FPGA_TECHNOLOGY = 0,
   parameter IO_DELAY_GROUP = "dev_if_delay_group",
-  parameter OR_STATUS = 0) (
+  parameter OR_STATUS = 0
+) (
 
   // device interface
   input                   adc_clk_in_p,
@@ -78,8 +79,8 @@ module axi_ad9684_if #(
   input       [31:0]      up_drp_wdata,
   output      [31:0]      up_drp_rdata,
   output                  up_drp_ready,
-  output                  up_drp_locked);
-
+  output                  up_drp_locked
+);
 
   localparam DDR_OR_SDR_N = 1;
 
@@ -110,8 +111,8 @@ module axi_ad9684_if #(
     .IODELAY_CTRL(1),
     .IODELAY_GROUP(IO_DELAY_GROUP),
     .DDR_OR_SDR_N(DDR_OR_SDR_N),
-    .DATA_WIDTH(14))
-  i_adc_data (
+    .DATA_WIDTH(14)
+  ) i_adc_data (
     .rst(adc_rst),
     .clk(adc_clk_in),
     .div_clk(adc_div_clk),
@@ -143,8 +144,8 @@ module axi_ad9684_if #(
       .IODELAY_CTRL(0),
       .IODELAY_GROUP(IO_DELAY_GROUP),
       .DDR_OR_SDR_N(DDR_OR_SDR_N),
-      .DATA_WIDTH(1))
-    i_adc_or (
+      .DATA_WIDTH(1)
+    ) i_adc_or (
       .rst(adc_rst),
       .clk(adc_clk_in),
       .div_clk(adc_div_clk),
@@ -188,8 +189,8 @@ module axi_ad9684_if #(
     .MMCM_VCO_DIV (6),
     .MMCM_VCO_MUL (12),
     .MMCM_CLK0_DIV (2),
-    .MMCM_CLK1_DIV (4))
-  i_serdes_clk (
+    .MMCM_CLK1_DIV (4)
+  ) i_serdes_clk (
     .rst (rst),
     .clk_in_p (adc_clk_in_p),
     .clk_in_n (adc_clk_in_n),

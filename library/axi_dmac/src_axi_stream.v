@@ -40,8 +40,8 @@ module src_axi_stream #(
   parameter ID_WIDTH = 3,
   parameter S_AXIS_DATA_WIDTH = 64,
   parameter LENGTH_WIDTH = 24,
-  parameter BEATS_PER_BURST_WIDTH = 4)(
-
+  parameter BEATS_PER_BURST_WIDTH = 4
+) (
   input s_axis_aclk,
   input s_axis_aresetn,
 
@@ -84,52 +84,51 @@ module src_axi_stream #(
   input req_xlast
 );
 
-assign enabled = enable;
+  assign enabled = enable;
 
-data_mover # (
-  .ID_WIDTH(ID_WIDTH),
-  .DATA_WIDTH(S_AXIS_DATA_WIDTH),
-  .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH),
-  .ALLOW_ABORT(1)
-) i_data_mover (
-  .clk(s_axis_aclk),
-  .resetn(s_axis_aresetn),
+  data_mover #(
+    .ID_WIDTH(ID_WIDTH),
+    .DATA_WIDTH(S_AXIS_DATA_WIDTH),
+    .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH),
+    .ALLOW_ABORT(1)
+  ) i_data_mover (
+    .clk(s_axis_aclk),
+    .resetn(s_axis_aresetn),
 
-  .xfer_req(s_axis_xfer_req),
+    .xfer_req(s_axis_xfer_req),
 
-  .request_id(request_id),
-  .response_id(response_id),
-  .eot(eot),
+    .request_id(request_id),
+    .response_id(response_id),
+    .eot(eot),
 
-  .rewind_req_valid(rewind_req_valid),
-  .rewind_req_ready(rewind_req_ready),
-  .rewind_req_data(rewind_req_data),
+    .rewind_req_valid(rewind_req_valid),
+    .rewind_req_ready(rewind_req_ready),
+    .rewind_req_data(rewind_req_data),
 
-  .bl_valid(bl_valid),
-  .bl_ready(bl_ready),
-  .measured_last_burst_length(measured_last_burst_length),
+    .bl_valid(bl_valid),
+    .bl_ready(bl_ready),
+    .measured_last_burst_length(measured_last_burst_length),
 
-  .block_descr_to_dst(block_descr_to_dst),
+    .block_descr_to_dst(block_descr_to_dst),
 
-  .source_id(source_id),
-  .source_eot(source_eot),
+    .source_id(source_id),
+    .source_eot(source_eot),
 
-  .req_valid(req_valid),
-  .req_ready(req_ready),
-  .req_last_burst_length(req_last_burst_length),
-  .req_sync_transfer_start(req_sync_transfer_start),
-  .req_xlast(req_xlast),
+    .req_valid(req_valid),
+    .req_ready(req_ready),
+    .req_last_burst_length(req_last_burst_length),
+    .req_sync_transfer_start(req_sync_transfer_start),
+    .req_xlast(req_xlast),
 
-  .s_axi_valid(s_axis_valid),
-  .s_axi_ready(s_axis_ready),
-  .s_axi_data(s_axis_data),
-  .s_axi_last(s_axis_last),
-  .s_axi_sync(s_axis_user[0]),
+    .s_axi_valid(s_axis_valid),
+    .s_axi_ready(s_axis_ready),
+    .s_axi_data(s_axis_data),
+    .s_axi_last(s_axis_last),
+    .s_axi_sync(s_axis_user[0]),
 
-  .m_axi_valid(fifo_valid),
-  .m_axi_data(fifo_data),
-  .m_axi_last(fifo_last),
-  .m_axi_partial_burst(fifo_partial_burst)
-);
+    .m_axi_valid(fifo_valid),
+    .m_axi_data(fifo_data),
+    .m_axi_last(fifo_last),
+    .m_axi_partial_burst(fifo_partial_burst));
 
 endmodule

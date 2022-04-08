@@ -37,7 +37,8 @@
 
 module up_xfer_cntrl #(
 
-  parameter     DATA_WIDTH = 8) (
+  parameter     DATA_WIDTH = 8
+) (
 
   // up interface
 
@@ -50,7 +51,8 @@ module up_xfer_cntrl #(
 
   input                       d_rst,
   input                       d_clk,
-  output  [(DATA_WIDTH-1):0]  d_data_cntrl);
+  output  [(DATA_WIDTH-1):0]  d_data_cntrl
+);
 
   // internal registers
 
@@ -121,6 +123,3 @@ module up_xfer_cntrl #(
   end
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

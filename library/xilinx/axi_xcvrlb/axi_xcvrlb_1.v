@@ -42,7 +42,7 @@ module axi_xcvrlb_1 #(
   parameter   CPLL_FBDIV = 1,
   parameter   CPLL_FBDIV_4_5 = 5,
   parameter   XCVR_TYPE = 2
-  )(
+) (
 
   // transceiver interface
 
@@ -58,7 +58,8 @@ module axi_xcvrlb_1 #(
   input           up_clk,
   input           up_resetn,
   output          up_status,
-  output          up_pll_locked);
+  output          up_pll_locked
+);
 
   // internal registers
 
@@ -233,7 +234,9 @@ module axi_xcvrlb_1 #(
 
   // instantiations
 
-  ad_pnmon #(.DATA_WIDTH(32)) i_pnmon (
+  ad_pnmon #(
+    .DATA_WIDTH(32)
+  ) i_pnmon (
     .adc_clk (clk),
     .adc_valid_in (1'b1),
     .adc_data_in (rx_data),
@@ -241,7 +244,9 @@ module axi_xcvrlb_1 #(
     .adc_pn_oos (rx_pn_oos_s),
     .adc_pn_err (rx_pn_err_s));
 
-  up_xfer_status #(.DATA_WIDTH(2)) i_xfer_status (
+  up_xfer_status #(
+    .DATA_WIDTH(2)
+  ) i_xfer_status (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_status ({up_pn_err_s, up_pn_oos_s}),
@@ -259,8 +264,8 @@ module axi_xcvrlb_1 #(
     .RX_CLK25_DIV (10),
     .RX_DFE_LPM_CFG (16'h0904),
     .RX_PMA_CFG ('h00018480),
-    .RX_CDR_CFG ('h03000023ff10200020))
-  i_xch (
+    .RX_CDR_CFG ('h03000023ff10200020)
+  ) i_xch (
     .qpll2ch_clk (1'b0),
     .qpll2ch_ref_clk (1'b0),
     .qpll2ch_locked (1'b1),
@@ -319,7 +324,3 @@ module axi_xcvrlb_1 #(
     .up_tx_ready ());
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************
-

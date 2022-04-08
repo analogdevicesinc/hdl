@@ -44,6 +44,7 @@ module adrv9001_rx #(
   parameter USE_BUFG = 0,
   parameter IO_DELAY_GROUP = "dev_if_delay_group"
 ) (
+
   // device interface
   input                   rx_dclk_in_n_NC,
   input                   rx_dclk_in_p_dclk_in,

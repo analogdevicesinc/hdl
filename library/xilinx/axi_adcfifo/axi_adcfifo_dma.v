@@ -39,8 +39,8 @@ module axi_adcfifo_dma #(
 
   parameter   AXI_DATA_WIDTH = 512,
   parameter   DMA_DATA_WIDTH =  64,
-  parameter   DMA_READY_ENABLE = 1) (
-
+  parameter   DMA_READY_ENABLE = 1
+) (
   input                   axi_clk,
   input                   axi_drst,
   input                   axi_dvalid,
@@ -53,14 +53,13 @@ module axi_adcfifo_dma #(
   output      [DMA_DATA_WIDTH-1:0]  dma_wdata,
   input                   dma_wready,
   input                   dma_xfer_req,
-  output      [ 3:0]      dma_xfer_status);
-
+  output      [ 3:0]      dma_xfer_status
+);
 
   localparam  DMA_MEM_RATIO = AXI_DATA_WIDTH/DMA_DATA_WIDTH;
   localparam  DMA_ADDRESS_WIDTH = 8;
   localparam  AXI_ADDRESS_WIDTH = (DMA_MEM_RATIO == 2) ? (DMA_ADDRESS_WIDTH - 1) :
     ((DMA_MEM_RATIO == 4) ? (DMA_ADDRESS_WIDTH - 2) : (DMA_ADDRESS_WIDTH - 3));
-
 
   // internal registers
 
@@ -191,8 +190,8 @@ module axi_adcfifo_dma #(
     .A_ADDRESS_WIDTH (AXI_ADDRESS_WIDTH),
     .A_DATA_WIDTH (AXI_DATA_WIDTH),
     .B_ADDRESS_WIDTH (DMA_ADDRESS_WIDTH),
-    .B_DATA_WIDTH (DMA_DATA_WIDTH))
-  i_mem_asym (
+    .B_DATA_WIDTH (DMA_DATA_WIDTH)
+  ) i_mem_asym (
     .clka (axi_clk),
     .wea (axi_dvalid),
     .addra (axi_waddr),
@@ -202,7 +201,9 @@ module axi_adcfifo_dma #(
     .addrb (dma_raddr),
     .doutb (dma_rdata_s));
 
-  ad_axis_inf_rx #(.DATA_WIDTH(DMA_DATA_WIDTH)) i_axis_inf (
+  ad_axis_inf_rx #(
+    .DATA_WIDTH(DMA_DATA_WIDTH)
+  ) i_axis_inf (
     .clk (dma_clk),
     .rst (dma_rst),
     .valid (dma_rd_d),
@@ -213,7 +214,9 @@ module axi_adcfifo_dma #(
     .inf_data (dma_wdata),
     .inf_ready (dma_wready));
 
-  up_xfer_status #(.DATA_WIDTH(4)) i_xfer_status (
+  up_xfer_status #(
+    .DATA_WIDTH(4)
+  ) i_xfer_status (
     .up_rstn (~dma_rst),
     .up_clk (dma_clk),
     .up_data_status (dma_xfer_status),
@@ -222,6 +225,3 @@ module axi_adcfifo_dma #(
     .d_data_status (axi_xfer_status));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

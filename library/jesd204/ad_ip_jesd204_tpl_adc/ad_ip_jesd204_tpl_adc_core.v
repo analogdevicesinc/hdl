@@ -94,8 +94,7 @@ module ad_ip_jesd204_tpl_adc_core #(
     .ext_sync_arm (adc_ext_sync_arm),
     .ext_sync_disarm (adc_ext_sync_disarm),
     .sync_in (adc_sync_in | adc_sync_manual_req),
-    .sync_armed (adc_sync_armed)
-  );
+    .sync_armed (adc_sync_armed));
 
   ad_ip_jesd204_tpl_adc_deframer #(
     .NUM_LANES (NUM_LANES),
@@ -111,8 +110,7 @@ module ad_ip_jesd204_tpl_adc_core #(
     .clk (clk),
     .link_sof (link_sof),
     .link_data (link_data),
-    .adc_data (raw_data_s)
-  );
+    .adc_data (raw_data_s));
 
   generate
   genvar i;
@@ -134,8 +132,7 @@ module ad_ip_jesd204_tpl_adc_core #(
 
       .pn_seq_sel (pn_seq_sel[i*4+:4]),
       .pn_err (pn_err[i]),
-      .pn_oos (pn_oos[i])
-    );
+      .pn_oos (pn_oos[i]));
   end
   endgenerate
 

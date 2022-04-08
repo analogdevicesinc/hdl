@@ -62,84 +62,83 @@ module axi_write_slave #(
   output [1:0] bresp
 );
 
-wire beat_last;
+  wire beat_last;
 
-axi_slave #(
-  .ACCEPTANCE(WRITE_ACCEPTANCE)
-) i_axi_slave (
-  .clk(clk),
-  .reset(reset),
+  axi_slave #(
+    .ACCEPTANCE(WRITE_ACCEPTANCE)
+  ) i_axi_slave (
+    .clk(clk),
+    .reset(reset),
 
-  .valid(awvalid),
-  .ready(awready),
-  .addr(awaddr),
-  .len(awlen),
-  .size(awsize),
-  .burst(awburst),
-  .prot(awprot),
-  .cache(awcache),
+    .valid(awvalid),
+    .ready(awready),
+    .addr(awaddr),
+    .len(awlen),
+    .size(awsize),
+    .burst(awburst),
+    .prot(awprot),
+    .cache(awcache),
 
-  .beat_stb(wready),
-  .beat_ack(wvalid & wready),
-  .beat_last(beat_last)
-);
+    .beat_stb(wready),
+    .beat_ack(wvalid & wready),
+    .beat_last(beat_last));
 
-reg [4:0] resp_count = 'h00;
-wire [4:0] resp_count_next;
-reg [DATA_WIDTH-1:0] data_cmp = 'h00;
-reg failed = 'b0;
+  reg [4:0] resp_count = 'h00;
+  wire [4:0] resp_count_next;
+  reg [DATA_WIDTH-1:0] data_cmp = 'h00;
+  reg failed = 'b0;
 
-assign bresp = 2'b00;
+  assign bresp = 2'b00;
 
-wire resp_count_dec = bvalid & bready;
-wire resp_count_inc = wvalid & wready & beat_last;
-assign resp_count_next = resp_count - resp_count_dec + resp_count_inc;
+  wire resp_count_dec = bvalid & bready;
+  wire resp_count_inc = wvalid & wready & beat_last;
+  assign resp_count_next = resp_count - resp_count_dec + resp_count_inc;
 
-always @(posedge clk) begin
-  if (reset == 1'b1) begin
-    resp_count <= 'h00;
-  end else begin
-    resp_count <= resp_count - resp_count_dec + resp_count_inc;
-  end
-end
-
-always @(posedge clk) begin
-  if (reset == 1'b1) begin
-    bvalid <= 1'b0;
-  end else if (bvalid == 1'b0 || bready == 1'b1) begin
-    if (resp_count_next != 'h00) begin
-      bvalid <= {$random} % 4 == 0;
+  always @(posedge clk) begin
+    if (reset == 1'b1) begin
+      resp_count <= 'h00;
     end else begin
+      resp_count <= resp_count - resp_count_dec + resp_count_inc;
+    end
+  end
+
+  always @(posedge clk) begin
+    if (reset == 1'b1) begin
       bvalid <= 1'b0;
-    end
-  end
-end
-
-integer byte_count;
-
-always @(*) begin: count
-  integer i;
-  byte_count = 0;
-  for (i = 0; i < DATA_WIDTH / 8; i = i + 1) begin
-    byte_count = byte_count + wstrb[i];
-  end
-end
-
-always @(posedge clk) begin: gen_data_cmp
-  integer i;
-  if (reset) begin
-    for (i = 0; i < DATA_WIDTH; i = i + 8) begin
-      data_cmp[i+:8] <= i/8;
-    end
-    failed <= 'b0;
-  end else if (wvalid & wready) begin
-    for (i = 0; i < DATA_WIDTH; i = i + 8) begin
-      if (data_cmp[i+:8] !== wdata[i+:8] && wstrb[i/8] == 1'b1) begin
-        failed <= 1'b1;
+    end else if (bvalid == 1'b0 || bready == 1'b1) begin
+      if (resp_count_next != 'h00) begin
+        bvalid <= {$random} % 4 == 0;
+      end else begin
+        bvalid <= 1'b0;
       end
-      data_cmp[i+:8] <= data_cmp[i+:8] + byte_count;
     end
   end
-end
+
+  integer byte_count;
+
+  always @(*) begin: count
+    integer i;
+    byte_count = 0;
+    for (i = 0; i < DATA_WIDTH / 8; i = i + 1) begin
+      byte_count = byte_count + wstrb[i];
+    end
+  end
+
+  always @(posedge clk) begin: gen_data_cmp
+    integer i;
+    if (reset) begin
+      for (i = 0; i < DATA_WIDTH; i = i + 8) begin
+        data_cmp[i+:8] <= i/8;
+      end
+      failed <= 'b0;
+    end else if (wvalid & wready) begin
+      for (i = 0; i < DATA_WIDTH; i = i + 8) begin
+        if (data_cmp[i+:8] !== wdata[i+:8] && wstrb[i/8] == 1'b1) begin
+          failed <= 1'b1;
+        end
+        data_cmp[i+:8] <= data_cmp[i+:8] + byte_count;
+      end
+    end
+  end
 
 endmodule

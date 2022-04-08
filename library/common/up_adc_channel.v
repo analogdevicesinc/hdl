@@ -44,7 +44,8 @@ module up_adc_channel #(
   parameter   USERPORTS_DISABLE = 0,
   parameter   DATAFORMAT_DISABLE = 0,
   parameter   DCFILTER_DISABLE = 0,
-  parameter   IQCORRECTION_DISABLE = 0) (
+  parameter   IQCORRECTION_DISABLE = 0
+) (
 
   // adc interface
 
@@ -97,7 +98,8 @@ module up_adc_channel #(
   input           up_rreq,
   input   [13:0]  up_raddr,
   output  [31:0]  up_rdata,
-  output          up_rack);
+  output          up_rack
+);
 
   // internal registers
 
@@ -442,7 +444,9 @@ module up_adc_channel #(
 
   // adc control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(78)) i_xfer_cntrl (
+  up_xfer_cntrl #(
+    .DATA_WIDTH(78)
+  ) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_adc_iqcor_enb,
@@ -473,7 +477,9 @@ module up_adc_channel #(
                       adc_pnseq_sel,
                       adc_data_sel}));
 
-  up_xfer_status #(.DATA_WIDTH(3)) i_xfer_status (
+  up_xfer_status #(
+    .DATA_WIDTH(3)
+  ) i_xfer_status (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_status ({up_adc_pn_err_s,
@@ -486,6 +492,3 @@ module up_adc_channel #(
                       adc_or}));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

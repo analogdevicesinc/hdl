@@ -40,22 +40,14 @@
 
 `timescale 1 ns / 1 ns
 
-module fir_interp
-               (
-                clk,
-                clk_enable,
-                reset,
-                filter_in,
-                filter_out,
-                ce_out
-                );
-
-  input   clk;
-  input   clk_enable;
-  input   reset;
-  input   signed [15:0] filter_in; //sfix16_En15
-  output  signed [35:0] filter_out; //sfix36_En30
-  output  ce_out;
+module fir_interp (
+  input  clk,
+  input  clk_enable,
+  input  reset,
+  input  signed [15:0] filter_in, //sfix16_En15
+  output signed [35:0] filter_out, //sfix36_En30
+  output ce_out
+);
 
 ////////////////////////////////////////////////////////////////
 //Module Architecture: fir_interp
@@ -213,7 +205,6 @@ module fir_interp
         end
       end
     end // Delay_Pipeline_process
-
 
   assign product_mux = (cur_count == 2'b00) ? coeffphase1_12 :
                       coeffphase2_12;
@@ -387,4 +378,4 @@ module fir_interp
   // Assignment Statements
   assign ce_out = phase_1;
   assign filter_out = output_register;
-endmodule  // fir_interp
+endmodule

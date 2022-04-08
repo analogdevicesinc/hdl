@@ -52,7 +52,8 @@ module axi_spi_engine #(
   parameter CFG_INFO_0 = 0,
   parameter CFG_INFO_1 = 0,
   parameter CFG_INFO_2 = 0,
-  parameter CFG_INFO_3 = 0) (
+  parameter CFG_INFO_3 = 0
+) (
 
   // Slave AXI interface
 
@@ -129,7 +130,8 @@ module axi_spi_engine #(
 
   output offload_sync_ready,
   input offload_sync_valid,
-  input [7:0] offload_sync_data);
+  input [7:0] offload_sync_data
+);
 
   localparam PCORE_VERSION = 'h010071;
   localparam S_AXI = 0;
@@ -228,8 +230,7 @@ module axi_spi_engine #(
       .up_rreq(up_rreq_s),
       .up_raddr(up_raddr_s),
       .up_rdata(up_rdata_ff),
-      .up_rack(up_rack_ff)
-    );
+      .up_rack(up_rack_ff));
 
     assign up_rdata = 32'b0;
     assign up_rack = 1'b0;
@@ -396,8 +397,7 @@ module axi_spi_engine #(
       .rst_async(up_sw_reset),
       .clk(spi_clk),
       .rst(spi_reset),
-      .rstn()
-    );
+      .rstn());
     assign spi_resetn = ~spi_reset;
   end else begin
     assign spi_resetn = ~up_sw_reset;
@@ -432,8 +432,7 @@ module axi_spi_engine #(
     .m_axis_tlast(),
     .m_axis_empty(),
     .m_axis_almost_empty(cmd_fifo_almost_empty),
-    .m_axis_level()
-  );
+    .m_axis_level());
 
   assign sdo_fifo_in_valid = up_wreq_s == 1'b1 && up_waddr_s == 8'h39;
   assign sdo_fifo_in_data = up_wdata_s[(DATA_WIDTH-1):0];
@@ -463,8 +462,7 @@ module axi_spi_engine #(
     .m_axis_tlast(),
     .m_axis_level(),
     .m_axis_empty(),
-    .m_axis_almost_empty(sdo_fifo_almost_empty)
-  );
+    .m_axis_almost_empty(sdo_fifo_almost_empty));
 
   assign sdi_fifo_out_ready = up_rreq_s == 1'b1 && up_raddr_s == 8'h3a;
 
@@ -493,8 +491,7 @@ module axi_spi_engine #(
     .m_axis_tlast(),
     .m_axis_level(sdi_fifo_level),
     .m_axis_empty(),
-    .m_axis_almost_empty()
-  );
+    .m_axis_almost_empty());
 
   generate if (ASYNC_SPI_CLK) begin
 
@@ -518,8 +515,7 @@ module axi_spi_engine #(
       .m_axis_valid(sync_fifo_valid),
       .m_axis_data(sync_fifo_data),
       .m_axis_level(),
-      .m_axis_empty()
-    );
+      .m_axis_empty());
 
     // synchronization FIFO for the offload command interface
     wire up_offload0_cmd_wr_en_s;
@@ -544,8 +540,7 @@ module axi_spi_engine #(
       .m_axis_valid(offload0_cmd_wr_en),
       .m_axis_data(offload0_cmd_wr_data),
       .m_axis_level(),
-      .m_axis_empty()
-    );
+      .m_axis_empty());
 
     assign up_offload0_cmd_wr_en_s = up_wreq_s == 1'b1 && up_waddr_s == 8'h44;
     assign up_offload0_cmd_wr_data_s = up_wdata_s[15:0];
@@ -573,8 +568,7 @@ module axi_spi_engine #(
       .m_axis_valid(offload0_sdo_wr_en),
       .m_axis_data(offload0_sdo_wr_data),
       .m_axis_level(),
-      .m_axis_empty()
-    );
+      .m_axis_empty());
 
     assign up_offload0_sdo_wr_en_s = up_wreq_s == 1'b1 && up_waddr_s == 8'h45;
     assign up_offload0_sdo_wr_data_s = up_wdata_s[DATA_WIDTH-1:0];
@@ -599,8 +593,7 @@ module axi_spi_engine #(
       .m_axis_valid(offload_sync_fifo_valid),
       .m_axis_data(offload_sync_fifo_data),
       .m_axis_level(),
-      .m_axis_empty()
-    );
+      .m_axis_empty());
 
   end else begin /* ASYNC_SPI_CLK == 0 */
 

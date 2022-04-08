@@ -38,7 +38,8 @@
 module axi_ad7616 #(
 
   parameter       ID = 0,
-  parameter       IF_TYPE = 1) (
+  parameter       IF_TYPE = 1
+) (
 
   // physical data interface
 
@@ -88,8 +89,8 @@ module axi_ad7616 #(
   output      [15:0]      adc_data,
   output                  adc_sync,
 
-  output                  irq);
-
+  output                  irq
+);
 
   localparam      NUM_OF_SDI = 2;
   localparam      SERIAL = 0;
@@ -368,8 +369,7 @@ module axi_ad7616 #(
       .fifo_wr_en(adc_valid),
       .fifo_wr_data(adc_data),
       .fifo_wr_sync(adc_sync),
-      .fifo_wr_xfer_req(1'b1)
-    );
+      .fifo_wr_xfer_req(1'b1));
 
   end
   endgenerate
@@ -402,8 +402,7 @@ module axi_ad7616 #(
       .wr_req (wr_req_s),
       .wr_data (wr_data_s),
       .rd_data (rd_data_s),
-      .rd_valid (rd_valid_s)
-    );
+      .rd_valid (rd_valid_s));
 
   end
   endgenerate
@@ -466,6 +465,3 @@ module axi_ad7616 #(
     .up_rack (up_rack));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

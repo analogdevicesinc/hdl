@@ -58,7 +58,8 @@ module axi_hdmi_tx_vdma (
   output  reg [ 8:0]      vdma_fs_waddr,
   output  reg             vdma_tpm_oos,
   output  reg             vdma_ovf,
-  output  reg             vdma_unf);
+  output  reg             vdma_unf
+);
 
   localparam      BUF_THRESHOLD_LO = 9'd3;
   localparam      BUF_THRESHOLD_HI = 9'd509;
@@ -230,6 +231,3 @@ module axi_hdmi_tx_vdma (
   end
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

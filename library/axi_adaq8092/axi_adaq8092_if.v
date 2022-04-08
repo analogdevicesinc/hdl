@@ -43,7 +43,8 @@ module axi_adaq8092_if #(
   parameter          IO_DELAY_GROUP = "adc_if_delay_group",
   parameter          DELAY_REFCLK_FREQUENCY = 200,
   parameter   [27:0] POLARITY_MASK ='hfffffff,
-  parameter          OUTPUT_MODE = 0) (
+  parameter          OUTPUT_MODE = 0
+) (
 
   // adc interface (clk, data, over-range)
   // nominal clock 80 MHz, up to 105 MHz
@@ -60,14 +61,14 @@ module axi_adaq8092_if #(
   input                    cmos_adc_data_or_1,
   input                    cmos_adc_data_or_2,
 
-  // up control SDR or DDR 
+  // up control SDR or DDR
 
   input                    sdr_or_ddr,
-  
+
   // interface outputs
 
   output                  adc_clk,
-  output  reg [27:0]      adc_data, 
+  output  reg [27:0]      adc_data,
   output  reg             adc_or,
   output  reg             adc_status,
 
@@ -79,7 +80,8 @@ module axi_adaq8092_if #(
   output      [149:0]     up_drdata,
   input                   delay_clk,
   input                   delay_rst,
-  output                  delay_locked);
+  output                  delay_locked
+);
 
   // internal registers
 
@@ -105,73 +107,73 @@ module axi_adaq8092_if #(
 
   localparam LVDS =  0;
   localparam CMOS =  1;
-  
+
   always @(posedge adc_clk) begin
 
     adc_status <= 1'b1;
-    
-    if (OUTPUT_MODE == LVDS) begin         
-    
+
+    if (OUTPUT_MODE == LVDS) begin
+
       adc_or <= adc_or_s_1 | adc_or_s_2;
-      adc_data <= POLARITY_MASK ^ adc_data_s; 
-      adc_data_s <= { lvds_adc_data_n_s[13], lvds_adc_data_p_s[13], 
-                      lvds_adc_data_n_s[12], lvds_adc_data_p_s[12], 
-                      lvds_adc_data_n_s[11], lvds_adc_data_p_s[11], 
-                      lvds_adc_data_n_s[10], lvds_adc_data_p_s[10], 
-                      lvds_adc_data_n_s[9],  lvds_adc_data_p_s[9], 
-                      lvds_adc_data_n_s[8],  lvds_adc_data_p_s[8], 
-                      lvds_adc_data_n_s[7],  lvds_adc_data_p_s[7], 
-                      lvds_adc_data_n_s[6],  lvds_adc_data_p_s[6], 
-                      lvds_adc_data_n_s[5],  lvds_adc_data_p_s[5], 
-                      lvds_adc_data_n_s[4],  lvds_adc_data_p_s[4], 
-                      lvds_adc_data_n_s[3],  lvds_adc_data_p_s[3], 
-                      lvds_adc_data_n_s[2],  lvds_adc_data_p_s[2], 
-                      lvds_adc_data_n_s[1],  lvds_adc_data_p_s[1], 
+      adc_data <= POLARITY_MASK ^ adc_data_s;
+      adc_data_s <= { lvds_adc_data_n_s[13], lvds_adc_data_p_s[13],
+                      lvds_adc_data_n_s[12], lvds_adc_data_p_s[12],
+                      lvds_adc_data_n_s[11], lvds_adc_data_p_s[11],
+                      lvds_adc_data_n_s[10], lvds_adc_data_p_s[10],
+                      lvds_adc_data_n_s[9],  lvds_adc_data_p_s[9],
+                      lvds_adc_data_n_s[8],  lvds_adc_data_p_s[8],
+                      lvds_adc_data_n_s[7],  lvds_adc_data_p_s[7],
+                      lvds_adc_data_n_s[6],  lvds_adc_data_p_s[6],
+                      lvds_adc_data_n_s[5],  lvds_adc_data_p_s[5],
+                      lvds_adc_data_n_s[4],  lvds_adc_data_p_s[4],
+                      lvds_adc_data_n_s[3],  lvds_adc_data_p_s[3],
+                      lvds_adc_data_n_s[2],  lvds_adc_data_p_s[2],
+                      lvds_adc_data_n_s[1],  lvds_adc_data_p_s[1],
                       lvds_adc_data_n_s[0],  lvds_adc_data_p_s[0]};
-    
-    end else if (OUTPUT_MODE == CMOS) begin  
+
+    end else if (OUTPUT_MODE == CMOS) begin
       adc_data <= adc_data_s;
       if (sdr_or_ddr == 0) begin            //DDR_CMOS
         adc_or <= adc_or_s_1_p | adc_or_s_1_n;
-        adc_data_s <= { cmos_adc_data_n_s[27], cmos_adc_data_p_s[27], 
-                        cmos_adc_data_n_s[25], cmos_adc_data_p_s[25], 
-                        cmos_adc_data_n_s[23], cmos_adc_data_p_s[23], 
-                        cmos_adc_data_n_s[21], cmos_adc_data_p_s[21], 
-                        cmos_adc_data_n_s[19], cmos_adc_data_p_s[19], 
-                        cmos_adc_data_n_s[17], cmos_adc_data_p_s[17], 
-                        cmos_adc_data_n_s[15], cmos_adc_data_p_s[15], 
-                        cmos_adc_data_n_s[13], cmos_adc_data_p_s[13], 
-                        cmos_adc_data_n_s[11], cmos_adc_data_p_s[11], 
-                        cmos_adc_data_n_s[9],  cmos_adc_data_p_s[9], 
-                        cmos_adc_data_n_s[7],  cmos_adc_data_p_s[7], 
-                        cmos_adc_data_n_s[5],  cmos_adc_data_p_s[5], 
-                        cmos_adc_data_n_s[3],  cmos_adc_data_p_s[3], 
+        adc_data_s <= { cmos_adc_data_n_s[27], cmos_adc_data_p_s[27],
+                        cmos_adc_data_n_s[25], cmos_adc_data_p_s[25],
+                        cmos_adc_data_n_s[23], cmos_adc_data_p_s[23],
+                        cmos_adc_data_n_s[21], cmos_adc_data_p_s[21],
+                        cmos_adc_data_n_s[19], cmos_adc_data_p_s[19],
+                        cmos_adc_data_n_s[17], cmos_adc_data_p_s[17],
+                        cmos_adc_data_n_s[15], cmos_adc_data_p_s[15],
+                        cmos_adc_data_n_s[13], cmos_adc_data_p_s[13],
+                        cmos_adc_data_n_s[11], cmos_adc_data_p_s[11],
+                        cmos_adc_data_n_s[9],  cmos_adc_data_p_s[9],
+                        cmos_adc_data_n_s[7],  cmos_adc_data_p_s[7],
+                        cmos_adc_data_n_s[5],  cmos_adc_data_p_s[5],
+                        cmos_adc_data_n_s[3],  cmos_adc_data_p_s[3],
                         cmos_adc_data_n_s[1],  cmos_adc_data_p_s[1]};
       end else if (sdr_or_ddr == 1) begin    //SDR_CMOS
         adc_or <= adc_or_s_1_p | adc_or_s_2_p;
-        adc_data_s <= { cmos_adc_data_p_s[27], cmos_adc_data_p_s[26], 
-                        cmos_adc_data_p_s[25], cmos_adc_data_p_s[24], 
-                        cmos_adc_data_p_s[23], cmos_adc_data_p_s[22], 
-                        cmos_adc_data_p_s[21], cmos_adc_data_p_s[20], 
-                        cmos_adc_data_p_s[19], cmos_adc_data_p_s[18], 
-                        cmos_adc_data_p_s[17], cmos_adc_data_p_s[16], 
-                        cmos_adc_data_p_s[15], cmos_adc_data_p_s[14], 
-                        cmos_adc_data_p_s[13], cmos_adc_data_p_s[12], 
-                        cmos_adc_data_p_s[11], cmos_adc_data_p_s[10], 
-                        cmos_adc_data_p_s[9],  cmos_adc_data_p_s[8], 
-                        cmos_adc_data_p_s[7],  cmos_adc_data_p_s[6], 
-                        cmos_adc_data_p_s[5],  cmos_adc_data_p_s[4], 
-                        cmos_adc_data_p_s[3],  cmos_adc_data_p_s[2], 
-                        cmos_adc_data_p_s[1],  cmos_adc_data_p_s[0]}; 
+        adc_data_s <= { cmos_adc_data_p_s[27], cmos_adc_data_p_s[26],
+                        cmos_adc_data_p_s[25], cmos_adc_data_p_s[24],
+                        cmos_adc_data_p_s[23], cmos_adc_data_p_s[22],
+                        cmos_adc_data_p_s[21], cmos_adc_data_p_s[20],
+                        cmos_adc_data_p_s[19], cmos_adc_data_p_s[18],
+                        cmos_adc_data_p_s[17], cmos_adc_data_p_s[16],
+                        cmos_adc_data_p_s[15], cmos_adc_data_p_s[14],
+                        cmos_adc_data_p_s[13], cmos_adc_data_p_s[12],
+                        cmos_adc_data_p_s[11], cmos_adc_data_p_s[10],
+                        cmos_adc_data_p_s[9],  cmos_adc_data_p_s[8],
+                        cmos_adc_data_p_s[7],  cmos_adc_data_p_s[6],
+                        cmos_adc_data_p_s[5],  cmos_adc_data_p_s[4],
+                        cmos_adc_data_p_s[3],  cmos_adc_data_p_s[2],
+                        cmos_adc_data_p_s[1],  cmos_adc_data_p_s[0]};
       end
-    end 
+    end
   end
 
   // data interface
 
   generate
     if (OUTPUT_MODE == LVDS) begin
-      for (l_inst = 0; l_inst <= 13; l_inst = l_inst + 1) begin : lvds_adc_if  // DDR LVDS INTERFACE 
+      for (l_inst = 0; l_inst <= 13; l_inst = l_inst + 1) begin : lvds_adc_if  // DDR LVDS INTERFACE
         ad_data_in #(
           .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
           .IODELAY_CTRL (0),
@@ -191,10 +193,10 @@ module axi_adaq8092_if #(
           .delay_clk (delay_clk),
           .delay_rst (delay_rst),
           .delay_locked ());
-      end          
+      end
     end else if (OUTPUT_MODE == CMOS) begin
 
-       for (l_inst = 0; l_inst <= 27; l_inst = l_inst + 1) begin : cmos_adc_if  //  CMOS INTERFACE 
+       for (l_inst = 0; l_inst <= 27; l_inst = l_inst + 1) begin : cmos_adc_if  //  CMOS INTERFACE
         ad_data_in #(
           .SINGLE_ENDED(1),
           .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
@@ -215,8 +217,8 @@ module axi_adaq8092_if #(
           .delay_clk (delay_clk),
           .delay_rst (delay_rst),
           .delay_locked ());
-      end 
-    end       
+      end
+    end
   endgenerate
 
   // over-range interface
@@ -262,7 +264,7 @@ module axi_adaq8092_if #(
       .delay_clk (delay_clk),
       .delay_rst (delay_rst),
       .delay_locked ());
-    
+
     ad_data_in #(
       .SINGLE_ENDED(1),
       .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
@@ -284,7 +286,7 @@ module axi_adaq8092_if #(
       .delay_rst (delay_rst),
       .delay_locked ());
   end
-  
+
   // clock
 
   ad_data_clk i_adc_clk (
@@ -293,5 +295,5 @@ module axi_adaq8092_if #(
     .clk_in_p (adc_clk_in_p),
     .clk_in_n (adc_clk_in_n),
     .clk (adc_clk));
-    
+
 endmodule

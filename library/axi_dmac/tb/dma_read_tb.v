@@ -91,8 +91,7 @@ module dma_read_tb;
     .rvalid(rvalid),
     .rdata(rdata),
     .rresp(rresp),
-    .rlast(rlast)
-  );
+    .rlast(rlast));
 
   wire fifo_rd_en = 1'b1;
   wire fifo_rd_valid;
@@ -151,8 +150,7 @@ module dma_read_tb;
     .fifo_rd_en(fifo_rd_en),
     .fifo_rd_valid(fifo_rd_valid),
     .fifo_rd_underflow(fifo_rd_underflow),
-    .fifo_rd_dout(fifo_rd_dout)
-  );
+    .fifo_rd_dout(fifo_rd_dout));
 
   always @(posedge clk) begin: dout
     integer i;

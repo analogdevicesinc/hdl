@@ -45,7 +45,8 @@ module axi_ad9783 #(
   parameter   DAC_DDS_TYPE = 2,
   parameter   DAC_DDS_CORDIC_DW = 16,
   parameter   DAC_DDS_CORDIC_PHASE_DW = 16,
-  parameter   DAC_DATAPATH_DISABLE = 0) (
+  parameter   DAC_DATAPATH_DISABLE = 0
+) (
 
   // dac interface
   // from dco1_p
@@ -92,8 +93,8 @@ module axi_ad9783 #(
   output      [  1:0]     s_axi_rresp,
   input                   s_axi_rready,
   input       [  2:0]     s_axi_awprot,
-  input       [  2:0]     s_axi_arprot);
-
+  input       [  2:0]     s_axi_arprot
+);
 
   // internal clocks and resets
 
@@ -130,8 +131,8 @@ module axi_ad9783 #(
   // device interface
 
   axi_ad9783_if #(
-    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY))
-  i_if (
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY)
+  ) i_if (
     .dac_clk_in_p (dac_clk_in_p),
     .dac_clk_in_n (dac_clk_in_n),
     .dac_clk_out_p (dac_clk_out_p),
@@ -161,8 +162,8 @@ module axi_ad9783 #(
     .DAC_DDS_TYPE (DAC_DDS_TYPE),
     .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
     .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
-    .DATAPATH_DISABLE(DAC_DATAPATH_DISABLE))
-  i_core (
+    .DATAPATH_DISABLE(DAC_DATAPATH_DISABLE)
+  ) i_core (
     .dac_div_clk (dac_div_clk),
     .dac_rst (dac_rst_s),
     .dac_data_a0 (dac_data_a0_s),
@@ -223,6 +224,3 @@ module axi_ad9783 #(
     .up_rack (up_rack_s));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

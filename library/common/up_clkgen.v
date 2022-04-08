@@ -42,7 +42,8 @@ module up_clkgen #(
   parameter [ 7:0]  FPGA_FAMILY = 0,
   parameter [ 7:0]  SPEED_GRADE = 0,
   parameter [ 7:0]  DEV_PACKAGE = 0,
-  parameter [15:0]  FPGA_VOLTAGE = 0) (
+  parameter [15:0]  FPGA_VOLTAGE = 0
+) (
 
   // mmcm reset
 
@@ -73,7 +74,8 @@ module up_clkgen #(
   input                   up_rreq,
   input       [13:0]      up_raddr,
   output  reg [31:0]      up_rdata,
-  output  reg             up_rack);
+  output  reg             up_rack
+);
 
   localparam  PCORE_VERSION = 32'h00050063;
 
@@ -183,9 +185,10 @@ module up_clkgen #(
 
   // resets
 
-  ad_rst i_mmcm_rst_reg (.rst_async(up_mmcm_preset), .clk(up_clk), .rstn(), .rst(mmcm_rst));
+  ad_rst i_mmcm_rst_reg (
+    .rst_async(up_mmcm_preset),
+    .clk(up_clk),
+    .rstn(),
+    .rst(mmcm_rst));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

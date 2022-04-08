@@ -56,7 +56,6 @@ module  jesd204_versal_gt_adapter_rx (
   output          rx_block_sync,
 
   input           usr_clk
-
 );
 
   // Sync header alignment
@@ -92,7 +91,6 @@ module  jesd204_versal_gt_adapter_rx (
     .i_slip_done(rx_bitslip_done_cnt[4]),
     .o_data(rx_data),
     .o_header(rx_header),
-    .o_block_sync(rx_block_sync)
-  );
+    .o_block_sync(rx_block_sync));
 
 endmodule

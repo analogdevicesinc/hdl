@@ -34,6 +34,7 @@ module ad_ip_jesd204_tpl_dac_channel #(
   parameter DDS_CORDIC_PHASE_DW = 16,
   parameter Q_OR_I_N = 0
 ) (
+
   // dac interface
 
   input clk,
@@ -62,7 +63,7 @@ module ad_ip_jesd204_tpl_dac_channel #(
   input [15:0] dac_dds_incr_1,
 
   input [15:0] dac_pat_data_0,
-  input [15:0] dac_pat_data_1, 
+  input [15:0] dac_pat_data_1,
 
   input        dac_iqcor_enb,
   input [15:0] dac_iqcor_coeff_1,
@@ -124,7 +125,6 @@ module ad_ip_jesd204_tpl_dac_channel #(
     .iqcor_coeff_1 (dac_iqcor_coeff_1),
     .iqcor_coeff_2 (dac_iqcor_coeff_2));
 
-
   // dac data select
 
   always @(posedge clk) begin
@@ -144,15 +144,15 @@ module ad_ip_jesd204_tpl_dac_channel #(
 
   // dds
 
-    ad_dds #(
+  ad_dds #(
     .DISABLE (DATAPATH_DISABLE),
     .DDS_DW (CONVERTER_RESOLUTION),
     .PHASE_DW (16),
     .DDS_TYPE (DDS_TYPE),
     .CORDIC_DW (DDS_CORDIC_DW),
     .CORDIC_PHASE_DW (DDS_CORDIC_PHASE_DW),
-    .CLK_RATIO (DATA_PATH_WIDTH))
-  i_dds (
+    .CLK_RATIO (DATA_PATH_WIDTH)
+  ) i_dds (
     .clk (clk),
     .dac_dds_format (dac_dds_format),
     .dac_data_sync (dac_data_sync),

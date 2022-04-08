@@ -39,7 +39,8 @@
 
 module axi_ad9783_if #(
 
-  parameter   FPGA_TECHNOLOGY = 0) (
+  parameter   FPGA_TECHNOLOGY = 0
+) (
 
   // dac interface
 
@@ -65,8 +66,8 @@ module axi_ad9783_if #(
   input   [15:0]   dac_data_b0,
   input   [15:0]   dac_data_b1,
   input   [15:0]   dac_data_b2,
-  input   [15:0]   dac_data_b3);
-
+  input   [15:0]   dac_data_b3
+);
 
   // internal registers
 
@@ -92,8 +93,8 @@ module axi_ad9783_if #(
     .DDR_OR_SDR_N(1),
     .DATA_WIDTH(16),
     .SERDES_FACTOR(8),
-    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY))
-  i_serdes_out_data (
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY)
+  ) i_serdes_out_data (
     .rst (dac_rst),
     .clk (dac_clk_s),
     .div_clk (dac_div_clk),
@@ -117,8 +118,8 @@ module axi_ad9783_if #(
     .DDR_OR_SDR_N(1),
     .DATA_WIDTH(1),
     .SERDES_FACTOR(8),
-    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY))
-  i_serdes_out_clk (
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY)
+  ) i_serdes_out_clk (
     .rst (dac_rst),
     .clk (dac_clk_s),
     .div_clk (dac_div_clk),
@@ -147,8 +148,8 @@ module axi_ad9783_if #(
     .BUFGCE_DIVIDE (4),
     .IS_CE_INVERTED (1'b0),
     .IS_CLR_INVERTED (1'b0),
-    .IS_I_INVERTED (1'b0))
-  i_dac_div_clk_rbuf (
+    .IS_I_INVERTED (1'b0)
+  ) i_dac_div_clk_rbuf (
     .O (dac_div_clk_s),
     .CE (1'b1),
     .CLR (1'b0),
@@ -159,6 +160,3 @@ module axi_ad9783_if #(
     .O (dac_div_clk));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

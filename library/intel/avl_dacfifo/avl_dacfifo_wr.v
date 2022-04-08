@@ -42,8 +42,8 @@ module avl_dacfifo_wr #(
   parameter     AVL_BURST_LENGTH = 128,
   parameter     AVL_DDR_BASE_ADDRESS = 0,
   parameter     AVL_DDR_ADDRESS_LIMIT = 33554432,
-  parameter     DMA_MEM_ADDRESS_WIDTH = 10)(
-
+  parameter     DMA_MEM_ADDRESS_WIDTH = 10
+) (
   input                                 dma_clk,
   input       [DMA_DATA_WIDTH-1:0]      dma_data,
   input                                 dma_ready,
@@ -66,7 +66,8 @@ module avl_dacfifo_wr #(
   output  reg [24:0]                    avl_last_address,
   output  reg [ 6:0]                    avl_last_burstcount,
   output  reg                           avl_xfer_req_out,
-  input                                 avl_xfer_req_in);
+  input                                 avl_xfer_req_in
+);
 
   localparam  MEM_RATIO = AVL_DATA_WIDTH/DMA_DATA_WIDTH;  // Max supported MEM_RATIO is 16
   localparam  AVL_MEM_ADDRESS_WIDTH = (MEM_RATIO ==  1) ?  DMA_MEM_ADDRESS_WIDTH :
@@ -211,7 +212,7 @@ module avl_dacfifo_wr #(
     end
   end
 
-  ad_b2g # (
+  ad_b2g #(
     .DATA_WIDTH(DMA_MEM_ADDRESS_WIDTH)
   ) i_dma_mem_waddr_b2g (
     .din (dma_mem_waddr),
@@ -367,8 +368,8 @@ module avl_dacfifo_wr #(
     end
   end
 
-  ad_g2b # (
-    .DATA_WIDTH(DMA_MEM_ADDRESS_WIDTH)
+  ad_g2b #(
+    .DATA_WIDTH (DMA_MEM_ADDRESS_WIDTH)
   ) i_avl_mem_waddr_g2b (
     .din (avl_mem_waddr_m2),
     .dout (avl_mem_waddr_m2_g2b_s));

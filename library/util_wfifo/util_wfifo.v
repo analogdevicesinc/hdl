@@ -40,7 +40,8 @@ module util_wfifo #(
   parameter   NUM_OF_CHANNELS = 4,
   parameter   DIN_DATA_WIDTH = 32,
   parameter   DOUT_DATA_WIDTH = 64,
-  parameter   DIN_ADDRESS_WIDTH = 8) (
+  parameter   DIN_ADDRESS_WIDTH = 8
+) (
 
   // d-in interface
 
@@ -100,8 +101,8 @@ module util_wfifo #(
   output                  dout_enable_7,
   output                  dout_valid_7,
   output      [DOUT_DATA_WIDTH-1:0]  dout_data_7,
-  input                   dout_ovf);
-
+  input                   dout_ovf
+);
 
   localparam  M_MEM_RATIO = DOUT_DATA_WIDTH/DIN_DATA_WIDTH;
   localparam  ADDRESS_WIDTH = (DIN_ADDRESS_WIDTH > 4) ? DIN_ADDRESS_WIDTH : 4;
@@ -208,7 +209,7 @@ module util_wfifo #(
       din_ovf <= 'd0;
     end else begin
       din_enable <= din_enable_s;
-     case (M_MEM_RATIO)
+      case (M_MEM_RATIO)
         8: din_wr <= din_valid_s[0] & din_dcnt_s[0] & din_dcnt_s[1] & din_dcnt_s[2];
         4: din_wr <= din_valid_s[0] & din_dcnt_s[0] & din_dcnt_s[1];
         2: din_wr <= din_valid_s[0] & din_dcnt_s[0];
@@ -326,7 +327,10 @@ module util_wfifo #(
 
   // instantiations
 
-  ad_mem #(.ADDRESS_WIDTH(ADDRESS_WIDTH), .DATA_WIDTH(DATA_WIDTH)) i_mem (
+  ad_mem #(
+    .ADDRESS_WIDTH(ADDRESS_WIDTH),
+    .DATA_WIDTH(DATA_WIDTH)
+  ) i_mem (
     .clka (din_clk),
     .wea (din_wr),
     .addra (din_waddr),
@@ -337,6 +341,3 @@ module util_wfifo #(
     .doutb (dout_rdata_s));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

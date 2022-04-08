@@ -45,7 +45,8 @@ module axi_ad9739a_core #(
   parameter   DAC_DDS_TYPE = 1,
   parameter   DAC_DDS_CORDIC_DW = 16,
   parameter   DAC_DDS_CORDIC_PHASE_DW = 16,
-  parameter   DATAPATH_DISABLE = 0) (
+  parameter   DATAPATH_DISABLE = 0
+) (
 
   // dac interface
 
@@ -87,8 +88,8 @@ module axi_ad9739a_core #(
   input                   up_rreq,
   input       [ 13:0]     up_raddr,
   output  reg [ 31:0]     up_rdata,
-  output  reg             up_rack);
-
+  output  reg             up_rack
+);
 
   // internal registers
 
@@ -128,8 +129,8 @@ module axi_ad9739a_core #(
     .DAC_DDS_TYPE (DAC_DDS_TYPE),
     .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
     .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
-    .DATAPATH_DISABLE(DATAPATH_DISABLE))
-  i_channel_0 (
+    .DATAPATH_DISABLE(DATAPATH_DISABLE)
+  ) i_channel_0 (
     .dac_div_clk (dac_div_clk),
     .dac_rst (dac_rst),
     .dac_enable (dac_enable),
@@ -213,6 +214,3 @@ module axi_ad9739a_core #(
     .up_rack (up_rack_s));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

@@ -43,7 +43,8 @@ module util_fir_dec (
   input       [15:0]  channel_1,
   input               decimate,
   output              m_axis_data_tvalid,
-  output      [31:0]  m_axis_data_tdata);
+  output      [31:0]  m_axis_data_tdata
+);
 
   wire [31:0] s_axis_data_tdata;
 
@@ -61,8 +62,6 @@ module util_fir_dec (
     .s_axis_data_tready(s_axis_data_tready),
     .s_axis_data_tdata(s_axis_data_tdata),
     .m_axis_data_tvalid(m_axis_data_tvalid_s),
-    .m_axis_data_tdata(m_axis_data_tdata_s)
-  );
+    .m_axis_data_tdata(m_axis_data_tdata_s));
 
-endmodule  // util_fir_dec
-
+endmodule

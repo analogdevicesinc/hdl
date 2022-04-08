@@ -49,7 +49,8 @@ module up_adc_common #(
   parameter         DRP_DISABLE = 0,
   parameter         USERPORTS_DISABLE = 0,
   parameter         GPIO_DISABLE = 0,
-  parameter         START_CODE_DISABLE = 0) (
+  parameter         START_CODE_DISABLE = 0
+) (
 
   // clock reset
 
@@ -117,7 +118,8 @@ module up_adc_common #(
   input               up_rreq,
   input       [13:0]  up_raddr,
   output      [31:0]  up_rdata,
-  output              up_rack);
+  output              up_rack
+);
 
   // parameters
 
@@ -151,7 +153,7 @@ module up_adc_common #(
   reg         [31:0]  up_timer = 'd0;
   reg                 up_rack_int = 'd0;
   reg         [31:0]  up_rdata_int = 'd0;
-  reg         [ 7:0]  up_adc_custom_control = 'd0;  
+  reg         [ 7:0]  up_adc_custom_control = 'd0;
 
   // internal signals
 
@@ -442,7 +444,7 @@ module up_adc_common #(
                                   3'b0, up_adc_ext_sync_manual_req,
                                   4'b0,
                                   1'b0, up_adc_ext_sync_disarm, up_adc_ext_sync_arm, 1'b0};
-          7'h13: up_rdata_int <= {24'd0, up_adc_custom_control};                        
+          7'h13: up_rdata_int <= {24'd0, up_adc_custom_control};
           7'h15: up_rdata_int <= up_adc_clk_count_s;
           7'h16: up_rdata_int <= adc_clk_ratio;
           7'h17: up_rdata_int <= {28'd0, up_status_pn_err, up_status_pn_oos, up_status_or, up_status_s};
@@ -470,13 +472,22 @@ module up_adc_common #(
 
   // resets
 
-  ad_rst i_mmcm_rst_reg (.rst_async(up_mmcm_preset), .clk(up_clk),  .rstn(), .rst(mmcm_rst));
-  ad_rst i_core_rst_reg (.rst_async(up_core_preset), .clk(adc_clk), .rstn(), .rst(adc_rst_s));
+  ad_rst i_mmcm_rst_reg (
+    .rst_async(up_mmcm_preset),
+    .clk(up_clk),
+    .rstn(),
+    .rst(mmcm_rst));
+
+  ad_rst i_core_rst_reg (
+    .rst_async(up_core_preset),
+    .clk(adc_clk),
+    .rstn(),
+    .rst(adc_rst_s));
 
   // adc control & status
 
   up_xfer_cntrl #(
-    .DATA_WIDTH(57) 
+    .DATA_WIDTH(57)
   ) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
@@ -544,6 +555,3 @@ module up_adc_common #(
     .d_clk (adc_clk));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

@@ -88,7 +88,6 @@ module data_offload_regmap #(
 
   input                   src_overflow,
   input                   dst_underflow
-
 );
 
   // local parameters
@@ -275,114 +274,105 @@ module data_offload_regmap #(
 
   sync_data #(
     .NUM_OF_BITS (4),
-    .ASYNC_CLK (1))
-  i_dst_fsm_status (
+    .ASYNC_CLK (1)
+  ) i_dst_fsm_status (
     .in_clk (dst_clk),
     .in_data (dst_fsm_status),
     .out_clk (up_clk),
-    .out_data (up_rd_fsm_status_s)
-  );
+    .out_data (up_rd_fsm_status_s));
 
   sync_data #(
     .NUM_OF_BITS (5),
-    .ASYNC_CLK (1))
-  i_src_fsm_status (
+    .ASYNC_CLK (1)
+  ) i_src_fsm_status (
     .in_clk (src_clk),
     .in_data (src_fsm_status),
     .out_clk (up_clk),
-    .out_data (up_wr_fsm_status_s)
-  );
+    .out_data (up_wr_fsm_status_s));
 
   generate
   if (TX_OR_RXN_PATH) begin : sync_tx_path
 
     sync_data #(
       .NUM_OF_BITS (3),
-      .ASYNC_CLK (1))
-    i_sync_xfer_control (
+      .ASYNC_CLK (1)
+    ) i_sync_xfer_control (
       .in_clk (up_clk),
       .in_data ({up_sync_config,
                  up_sync}),
       .out_clk (dst_clk),
       .out_data ({sync_config,
-                  sync})
-    );
+                  sync}));
 
   end else begin : sync_rx_path
 
     sync_data #(
       .NUM_OF_BITS (3),
-      .ASYNC_CLK (1))
-    i_sync_xfer_control (
+      .ASYNC_CLK (1)
+    ) i_sync_xfer_control (
       .in_clk (up_clk),
       .in_data ({up_sync_config,
                  up_sync}),
       .out_clk (src_clk),
       .out_data ({sync_config,
-                  sync})
-    );
+                  sync}));
 
   end
   endgenerate
 
   sync_bits #(
     .NUM_OF_BITS (2),
-    .ASYNC_CLK (1))
-  i_src_xfer_control (
+    .ASYNC_CLK (1)
+  ) i_src_xfer_control (
     .in_bits ({ up_sw_resetn, up_bypass }),
     .out_clk (src_clk),
     .out_resetn (1'b1),
-    .out_bits ({ src_sw_resetn_s, src_bypass })
-  );
+    .out_bits ({ src_sw_resetn_s, src_bypass }));
 
   sync_bits #(
     .NUM_OF_BITS (2),
-    .ASYNC_CLK (1))
-  i_dst_xfer_control (
+    .ASYNC_CLK (1)
+  ) i_dst_xfer_control (
     .in_bits ({ up_sw_resetn, up_bypass }),
     .out_clk (dst_clk),
     .out_resetn (1'b1),
-    .out_bits ({ dst_sw_resetn_s, dst_bypass })
-  );
+    .out_bits ({ dst_sw_resetn_s, dst_bypass }));
 
   sync_bits #(
     .NUM_OF_BITS (1),
-    .ASYNC_CLK (1))
-  i_ddr_calib_done_sync (
+    .ASYNC_CLK (1)
+  ) i_ddr_calib_done_sync (
     .in_bits (ddr_calib_done),
     .out_clk (up_clk),
     .out_resetn (1'b1),
-    .out_bits (up_ddr_calib_done_s)
-  );
+    .out_bits (up_ddr_calib_done_s));
 
   sync_bits #(
     .NUM_OF_BITS (1),
-    .ASYNC_CLK (1))
-  i_dst_oneshot_sync (
+    .ASYNC_CLK (1)
+  ) i_dst_oneshot_sync (
     .in_bits (up_oneshot),
     .out_clk (dst_clk),
     .out_resetn (1'b1),
-    .out_bits (oneshot)
-  );
+    .out_bits (oneshot));
 
   sync_data #(
     .NUM_OF_BITS (MEM_SIZE_LOG2),
-    .ASYNC_CLK (1))
-  i_sync_src_transfer_length (
+    .ASYNC_CLK (1)
+  ) i_sync_src_transfer_length (
     .in_clk (up_clk),
     .in_data (up_transfer_length),
     .out_clk (src_clk),
-    .out_data (src_transfer_length)
-  );
+    .out_data (src_transfer_length));
+
   sync_data #(
     .NUM_OF_BITS (MEM_SIZE_LOG2),
-    .ASYNC_CLK (1))
-  i_sync_dst_transfer_length (
+    .ASYNC_CLK (1)
+  ) i_sync_dst_transfer_length (
     .in_clk (up_clk),
     .in_data (up_transfer_length),
     .out_clk (dst_clk),
-    .out_data (dst_transfer_length)
-  );
+    .out_data (dst_transfer_length));
 
   always @(posedge src_clk) begin
     src_sw_resetn <= src_sw_resetn_s;
@@ -395,24 +385,22 @@ module data_offload_regmap #(
   generate if (TX_OR_RXN_PATH == 0) begin
     sync_event #(
       .NUM_OF_EVENTS (1),
-      .ASYNC_CLK (1))
-    i_wr_overflow_sync (
+      .ASYNC_CLK (1)
+    ) i_wr_overflow_sync (
       .in_clk (src_clk),
       .in_event (src_overflow),
       .out_clk (up_clk),
-      .out_event (up_src_overflow_set_s)
-    );
+      .out_event (up_src_overflow_set_s));
     assign up_dst_underflow_set_s = 1'b0;
   end else begin
     sync_event #(
       .NUM_OF_EVENTS (1),
-      .ASYNC_CLK (1))
-    i_rd_underflow_sync (
+      .ASYNC_CLK (1)
+    ) i_rd_underflow_sync (
       .in_clk (dst_clk),
       .in_event (dst_underflow),
       .out_clk (up_clk),
-      .out_event (up_dst_underflow_set_s)
-    );
+      .out_event (up_dst_underflow_set_s));
     assign up_src_overflow_set_s = 1'b0;
   end
   endgenerate

@@ -46,7 +46,6 @@ module ad_mux #(
   parameter REQ_MUX_SZ = 8,  // Size of mux which acts as a building block
   parameter EN_REG = 1,  // Enable register at output of each mux
   parameter DW = CH_W*CH_CNT
-
 ) (
   input clk,
   input [DW-1:0] data_in,
@@ -54,70 +53,65 @@ module ad_mux #(
   output [CH_W-1:0] data_out
 );
 
-`define MIN(A,B) (A<B?A:B)
+  `define MIN(A,B) (A<B?A:B)
 
-localparam MUX_SZ = CH_CNT < REQ_MUX_SZ ? CH_CNT : REQ_MUX_SZ;
-localparam CLOG2_CH_CNT = $clog2(CH_CNT);
-localparam CLOG2_MUX_SZ = $clog2(MUX_SZ);
-localparam NUM_STAGES = ($clog2(CH_CNT) / $clog2(MUX_SZ)) + // divide and round up
-                       |($clog2(CH_CNT) % $clog2(MUX_SZ));
+  localparam MUX_SZ = CH_CNT < REQ_MUX_SZ ? CH_CNT : REQ_MUX_SZ;
+  localparam CLOG2_CH_CNT = $clog2(CH_CNT);
+  localparam CLOG2_MUX_SZ = $clog2(MUX_SZ);
+  localparam NUM_STAGES = ($clog2(CH_CNT) / $clog2(MUX_SZ)) + // divide and round up
+                         |($clog2(CH_CNT) % $clog2(MUX_SZ));
 
-wire [NUM_STAGES*DW+CH_W-1:0] mux_in;
-wire [NUM_STAGES*CLOG2_CH_CNT-1:0] ch_sel_pln;
+  wire [NUM_STAGES*DW+CH_W-1:0] mux_in;
+  wire [NUM_STAGES*CLOG2_CH_CNT-1:0] ch_sel_pln;
 
+  assign mux_in[DW-1:0] = data_in;
+  assign ch_sel_pln[CLOG2_CH_CNT-1:0] = ch_sel;
 
-assign mux_in[DW-1:0] = data_in;
-assign ch_sel_pln[CLOG2_CH_CNT-1:0] = ch_sel;
+  genvar i;
+  genvar j;
 
-genvar i;
-genvar j;
+  generate
 
-generate
+    for (i = 0; i < NUM_STAGES; i = i + 1) begin: g_stage
 
+      wire [CLOG2_CH_CNT-1:0] ch_sel_cur;
+      assign ch_sel_cur = ch_sel_pln[i*CLOG2_CH_CNT+:CLOG2_CH_CNT];
 
-  for (i = 0; i < NUM_STAGES; i = i + 1) begin: g_stage
+      wire [CLOG2_MUX_SZ-1:0] ch_sel_w;
+      assign ch_sel_w = ch_sel_cur >> i*CLOG2_MUX_SZ;
 
-    wire [CLOG2_CH_CNT-1:0] ch_sel_cur;
-    assign ch_sel_cur = ch_sel_pln[i*CLOG2_CH_CNT+:CLOG2_CH_CNT];
-
-    wire [CLOG2_MUX_SZ-1:0] ch_sel_w;
-    assign ch_sel_w = ch_sel_cur >> i*CLOG2_MUX_SZ;
-
-    if (EN_REG) begin
-      reg [CLOG2_CH_CNT-1:0] ch_sel_d;
-      always @(posedge clk) begin
-        ch_sel_d <= ch_sel_cur;
+      if (EN_REG) begin
+        reg [CLOG2_CH_CNT-1:0] ch_sel_d;
+        always @(posedge clk) begin
+          ch_sel_d <= ch_sel_cur;
+        end
+        if (i<NUM_STAGES-1) begin
+          assign ch_sel_pln[(i+1)*CLOG2_CH_CNT+:CLOG2_CH_CNT] = ch_sel_d;
+        end
+      end else begin
+        if (i<NUM_STAGES-1) begin
+          assign ch_sel_pln[(i+1)*CLOG2_CH_CNT+:CLOG2_CH_CNT] = ch_sel_cur;
+        end
       end
-      if (i<NUM_STAGES-1) begin
-        assign ch_sel_pln[(i+1)*CLOG2_CH_CNT+:CLOG2_CH_CNT] = ch_sel_d;
-      end
-    end else begin
-      if (i<NUM_STAGES-1) begin
-        assign ch_sel_pln[(i+1)*CLOG2_CH_CNT+:CLOG2_CH_CNT] = ch_sel_cur;
+
+      localparam MAX_RANGE_PER_STAGE=MUX_SZ**(NUM_STAGES-i);
+
+      for (j = 0; j < `MIN(MAX_RANGE_PER_STAGE,CH_CNT); j = j + MUX_SZ) begin: g_mux
+
+        ad_mux_core #(
+          .CH_W (CH_W),
+          .CH_CNT (MUX_SZ),
+          .EN_REG (EN_REG)
+        ) i_mux (
+          .clk (clk),
+          .data_in (mux_in[i*DW+j*CH_W+:MUX_SZ*CH_W]),
+          .ch_sel (ch_sel_w),
+          .data_out (mux_in[(i+1)*DW+(j/MUX_SZ)*CH_W+:CH_W]));
       end
     end
 
-    localparam MAX_RANGE_PER_STAGE=MUX_SZ**(NUM_STAGES-i);
+  endgenerate
 
-    for (j = 0; j < `MIN(MAX_RANGE_PER_STAGE,CH_CNT); j = j + MUX_SZ) begin: g_mux
-
-      ad_mux_core #(
-        .CH_W (CH_W),
-        .CH_CNT (MUX_SZ),
-        .EN_REG (EN_REG)
-      ) i_mux (
-        .clk (clk),
-        .data_in (mux_in[i*DW+j*CH_W+:MUX_SZ*CH_W]),
-        .ch_sel (ch_sel_w),
-        .data_out (mux_in[(i+1)*DW+(j/MUX_SZ)*CH_W+:CH_W])
-      );
-
-    end
-  end
-
-endgenerate
-
-assign data_out = mux_in[NUM_STAGES*DW+:CH_W];
+  assign data_out = mux_in[NUM_STAGES*DW+:CH_W];
 
 endmodule
-

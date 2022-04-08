@@ -37,8 +37,8 @@
 
 module up_pmod #(
 
-  parameter       ID = 0) (
-
+  parameter       ID = 0
+) (
   input                   pmod_clk,
   output                  pmod_rst,
   input       [31:0]      pmod_signal_freq,
@@ -54,7 +54,8 @@ module up_pmod #(
   input                   up_rreq,
   input       [13:0]      up_raddr,
   output  reg [31:0]      up_rdata,
-  output  reg             up_rack);
+  output  reg             up_rack
+);
 
   localparam      PCORE_VERSION = 32'h00010001;
 
@@ -118,11 +119,17 @@ module up_pmod #(
 
   // resets
 
-  ad_rst i_adc_rst_reg (.rst_async(up_preset_s), .clk(pmod_clk), .rstn(), .rst(pmod_rst));
+  ad_rst i_adc_rst_reg (
+    .rst_async(up_preset_s),
+    .clk(pmod_clk),
+    .rstn(),
+    .rst(pmod_rst));
 
   // adc control & status
 
-  up_xfer_status #(.DATA_WIDTH(32)) i_pmod_xfer_status (
+  up_xfer_status #(
+    .DATA_WIDTH(32)
+  ) i_pmod_xfer_status (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_status (up_pmod_signal_freq_s),
@@ -131,6 +138,3 @@ module up_pmod #(
     .d_data_status (pmod_signal_freq));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

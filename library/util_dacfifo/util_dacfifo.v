@@ -38,7 +38,8 @@
 module util_dacfifo #(
 
   parameter       ADDRESS_WIDTH = 6,
-  parameter       DATA_WIDTH = 128) (
+  parameter       DATA_WIDTH = 128
+) (
 
   // DMA interface
 
@@ -59,8 +60,8 @@ module util_dacfifo #(
   output  reg             dac_dunf,
   output  reg             dac_xfer_out,
 
-  input                   bypass);
-
+  input                   bypass
+);
 
   localparam  FIFO_THRESHOLD_HI = {(ADDRESS_WIDTH){1'b1}} - 4;
 
@@ -109,7 +110,6 @@ module util_dacfifo #(
   wire                                dac_mem_ren_s;
   wire                                dac_xfer_posedge_s;
   wire                                dac_rst_int_s;
-
 
   // internal reset generation
 
@@ -160,8 +160,8 @@ module util_dacfifo #(
   end
 
   ad_b2g #(
-    .DATA_WIDTH (ADDRESS_WIDTH))
-  i_dma_waddr_b2g (
+    .DATA_WIDTH (ADDRESS_WIDTH)
+  ) i_dma_waddr_b2g (
     .din (dma_waddr),
     .dout (dma_waddr_b2g_s));
 
@@ -214,8 +214,8 @@ module util_dacfifo #(
   end
 
   ad_g2b #(
-    .DATA_WIDTH (ADDRESS_WIDTH))
-  i_dac_waddr_g2b (
+    .DATA_WIDTH (ADDRESS_WIDTH)
+  ) i_dac_waddr_g2b (
     .din (dac_waddr_m2),
     .dout (dac_waddr_g2b_s));
 
@@ -240,8 +240,8 @@ module util_dacfifo #(
   end
 
   ad_g2b #(
-    .DATA_WIDTH (ADDRESS_WIDTH))
-  i_dac_lastaddr_g2b (
+    .DATA_WIDTH (ADDRESS_WIDTH)
+  ) i_dac_lastaddr_g2b (
     .din (dac_lastaddr_m2),
     .dout (dac_lastaddr_g2b_s));
 
@@ -268,8 +268,8 @@ module util_dacfifo #(
 
   ad_mem #(
     .ADDRESS_WIDTH (ADDRESS_WIDTH),
-    .DATA_WIDTH (DATA_WIDTH))
-  i_mem_fifo (
+    .DATA_WIDTH (DATA_WIDTH)
+  ) i_mem_fifo (
     .clka (dma_clk),
     .wea (dma_wren_s),
     .addra (dma_waddr),
@@ -306,8 +306,7 @@ module util_dacfifo #(
     .dac_rst(dac_rst),
     .dac_valid(dac_valid),
     .dac_data(dac_data_bypass_s),
-    .dac_dunf(dac_dunf_bypass_s)
-  );
+    .dac_dunf(dac_dunf_bypass_s));
 
   always @(posedge dma_clk) begin
     dma_bypass_m1 <= bypass;
@@ -333,4 +332,3 @@ module util_dacfifo #(
   end
 
 endmodule
-

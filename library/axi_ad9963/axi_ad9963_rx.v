@@ -49,7 +49,8 @@ module axi_ad9963_rx #(
   parameter FPGA_TECHNOLOGY = 0,
   parameter FPGA_FAMILY = 0,
   parameter SPEED_GRADE = 0,
-  parameter DEV_PACKAGE = 0) (
+  parameter DEV_PACKAGE = 0
+) (
 
   // adc interface
 
@@ -91,7 +92,8 @@ module axi_ad9963_rx #(
   input               up_rreq,
   input       [13:0]  up_raddr,
   output reg  [31:0]  up_rdata,
-  output reg          up_rack);
+  output reg          up_rack
+);
 
  // configuration settings
 
@@ -148,8 +150,8 @@ module axi_ad9963_rx #(
     .DATAFORMAT_DISABLE (DATAFORMAT_DISABLE),
     .DCFILTER_DISABLE (DCFILTER_DISABLE),
     .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
-    .SCALECORRECTION_ONLY (SCALECORRECTION_ONLY))
-  i_rx_channel_0 (
+    .SCALECORRECTION_ONLY (SCALECORRECTION_ONLY)
+  ) i_rx_channel_0 (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_valid (adc_valid),
@@ -183,8 +185,8 @@ module axi_ad9963_rx #(
     .DATAFORMAT_DISABLE (DATAFORMAT_DISABLE),
     .DCFILTER_DISABLE (DCFILTER_DISABLE),
     .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
-    .SCALECORRECTION_ONLY (SCALECORRECTION_ONLY))
-  i_rx_channel_1 (
+    .SCALECORRECTION_ONLY (SCALECORRECTION_ONLY)
+  ) i_rx_channel_1 (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_valid (adc_valid),
@@ -273,7 +275,10 @@ module axi_ad9963_rx #(
 
   generate if (IODELAY_ENABLE == 1) begin
 
-  up_delay_cntrl #(.DATA_WIDTH(13), .BASE_ADDRESS(6'h02)) i_delay_cntrl (
+  up_delay_cntrl #(
+    .DATA_WIDTH(13),
+    .BASE_ADDRESS(6'h02)
+  ) i_delay_cntrl (
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
     .delay_locked (delay_locked),
@@ -302,7 +307,3 @@ module axi_ad9963_rx #(
   endgenerate
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************
-

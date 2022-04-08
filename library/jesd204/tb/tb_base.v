@@ -78,7 +78,6 @@
 
   assign reset = reset_shift[3];
 
-
   initial begin
     #1000;
     @(posedge clk) sysref <= 1'b1;

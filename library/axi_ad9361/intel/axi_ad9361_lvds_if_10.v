@@ -37,7 +37,8 @@
 
 module axi_ad9361_lvds_if_10  #(
 
-  parameter   RX_NODPA = 0) (
+  parameter   RX_NODPA = 0
+) (
 
   // physical interface (receive)
 
@@ -91,7 +92,8 @@ module axi_ad9361_lvds_if_10  #(
   // delay interface
 
   input               up_clk,
-  input               up_rstn);
+  input               up_rstn
+);
 
   // internal registers
 
@@ -236,7 +238,7 @@ module axi_ad9361_lvds_if_10  #(
         .data_s_export (rx_data_s[27:24]),
         .delay_locked_export (rx_delay_locked_s[6]));
 
-     assign rx_clk = rx_clk_in_p;
+      assign rx_clk = rx_clk_in_p;
 
     end else begin
 
@@ -302,6 +304,3 @@ module axi_ad9361_lvds_if_10  #(
     .ls_clk_clk (clk));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

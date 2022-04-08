@@ -45,6 +45,7 @@ module axi_adrv9001_rx_channel #(
   parameter   IQCORRECTION_DISABLE = 0,
   parameter   DATA_WIDTH = 16
 ) (
+
   // adc interface
   input                           adc_clk,
   input                           adc_rst,
@@ -145,7 +146,9 @@ module axi_adrv9001_rx_channel #(
   assign adc_dfmt_valid_s[n] = adc_valid_in_s;
   assign adc_dfmt_data_s[((16*n)+15):(16*n)] = adc_data_in_s[((16*n)+15):(16*n)];
   end else begin
-  ad_datafmt #(.DATA_WIDTH (16)) i_ad_datafmt (
+  ad_datafmt #(
+    .DATA_WIDTH (16)
+  ) i_ad_datafmt (
     .clk (adc_clk),
     .valid (adc_valid_in_s),
     .data (adc_data_in_s[((16*n)+15):(16*n)]),
@@ -182,7 +185,9 @@ module axi_adrv9001_rx_channel #(
   assign adc_valid_out_s[n] = adc_dcfilter_valid_s[n];
   assign adc_data_out[((16*n)+15):(16*n)] = adc_dcfilter_data_s[((16*n)+15):(16*n)];
   end else begin
-  ad_iqcor #(.Q_OR_I_N (Q_OR_I_N)) i_ad_iqcor (
+  ad_iqcor #(
+    .Q_OR_I_N (Q_OR_I_N)
+  ) i_ad_iqcor (
     .clk (adc_clk),
     .valid (adc_dcfilter_valid_s[n]),
     .data_in (adc_dcfilter_data_s[((16*n)+15):(16*n)]),
@@ -211,31 +216,29 @@ module axi_adrv9001_rx_channel #(
     .POL_MASK ( (1<<7) | (1<<6) ),
     .POL_W (7),
     .DW (16)
-    ) PN7_gen (
+  ) PN7_gen (
     .clk (adc_clk),
     .reset (adc_rst),
     .clk_en (adc_valid_in_s),
     .pn_init (adc_pn_oos_s),
     .pn_data_in (adc_data_in_s),
-    .pn_data_out (pn7_data)
-  );
+    .pn_data_out (pn7_data));
 
   // PN15 x^15 + x^14 + 1
   ad_pngen  #(
     .POL_MASK ( (1<<15) | (1<<14) ),
     .POL_W (15),
     .DW (16)
-    ) PN15_gen (
+  ) PN15_gen (
     .clk (adc_clk),
     .reset (adc_rst),
     .clk_en (adc_valid_in_s),
     .pn_init (adc_pn_oos_s),
     .pn_data_in (adc_data_in_s),
-    .pn_data_out (pn15_data)
-  );
+    .pn_data_out (pn15_data));
 
   // reference nibble ramp and full ramp generator
-  // next value is always the currently received value incremented 
+  // next value is always the currently received value incremented
   always @(posedge adc_clk) begin
     if (adc_valid_in_s) begin
       full_ramp_counter <= adc_data_in_s + 16'd1;
@@ -246,7 +249,7 @@ module axi_adrv9001_rx_channel #(
                         adc_pnseq_sel == 4'd5 ? pn15_data :
                         adc_pnseq_sel == 4'd10 ? {4{full_ramp_counter[3:0]}} :
                         adc_pnseq_sel == 4'd11 ? full_ramp_counter : 'h0;
-  assign valid_seq_sel = adc_pnseq_sel == 4'd4 || adc_pnseq_sel == 4'd5 || 
+  assign valid_seq_sel = adc_pnseq_sel == 4'd4 || adc_pnseq_sel == 4'd5 ||
                          adc_pnseq_sel == 4'd10 || adc_pnseq_sel == 4'd11;
 
   ad_pnmon #(
@@ -260,8 +263,7 @@ module axi_adrv9001_rx_channel #(
     .adc_data_pn (adc_data_pn),
     .adc_pattern_has_zero (adc_pnseq_sel[3]),
     .adc_pn_oos (adc_pn_oos_s),
-    .adc_pn_err (adc_pn_err_s)
-  );
+    .adc_pn_err (adc_pn_err_s));
 
   up_adc_channel #(
     .COMMON_ID (COMMON_ID),
@@ -269,8 +271,8 @@ module axi_adrv9001_rx_channel #(
     .USERPORTS_DISABLE(1),
     .DATAFORMAT_DISABLE(DATAFORMAT_DISABLE),
     .DCFILTER_DISABLE(DCFILTER_DISABLE),
-    .IQCORRECTION_DISABLE(IQCORRECTION_DISABLE))
-  i_up_adc_channel (
+    .IQCORRECTION_DISABLE(IQCORRECTION_DISABLE)
+  ) i_up_adc_channel (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_enable (adc_enable),
@@ -319,7 +321,3 @@ module axi_adrv9001_rx_channel #(
   endgenerate
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************
-
