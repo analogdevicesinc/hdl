@@ -34,38 +34,38 @@ module util_pad #(
   output reg [NUM_OF_SAMPLES*OUT_BITS_PER_SAMPLE-1:0] data_out
 );
 
-// Remove padding
-if (IN_BITS_PER_SAMPLE >= OUT_BITS_PER_SAMPLE) begin
-  integer i;
-  always @(*) begin
-    for (i=0;i<NUM_OF_SAMPLES;i=i+1) begin
-      if (PADDING_TO_MSB_LSB_N==1) begin
-        data_out[i*OUT_BITS_PER_SAMPLE +: OUT_BITS_PER_SAMPLE] =
-          data_in[i*IN_BITS_PER_SAMPLE +: OUT_BITS_PER_SAMPLE];
-      end else begin
-        data_out[i*OUT_BITS_PER_SAMPLE +: OUT_BITS_PER_SAMPLE] =
-          data_in[((i+1)*IN_BITS_PER_SAMPLE)-1 -: OUT_BITS_PER_SAMPLE];
+  // Remove padding
+  if (IN_BITS_PER_SAMPLE >= OUT_BITS_PER_SAMPLE) begin
+    integer i;
+    always @(*) begin
+      for (i=0;i<NUM_OF_SAMPLES;i=i+1) begin
+        if (PADDING_TO_MSB_LSB_N==1) begin
+          data_out[i*OUT_BITS_PER_SAMPLE +: OUT_BITS_PER_SAMPLE] =
+            data_in[i*IN_BITS_PER_SAMPLE +: OUT_BITS_PER_SAMPLE];
+        end else begin
+          data_out[i*OUT_BITS_PER_SAMPLE +: OUT_BITS_PER_SAMPLE] =
+            data_in[((i+1)*IN_BITS_PER_SAMPLE)-1 -: OUT_BITS_PER_SAMPLE];
+        end
       end
     end
   end
-end
 
-// Add padding
-if (IN_BITS_PER_SAMPLE < OUT_BITS_PER_SAMPLE) begin
-  integer i;
-  always @(*) begin
-    for (i=0;i<NUM_OF_SAMPLES;i=i+1) begin
-      if (PADDING_TO_MSB_LSB_N==1) begin
-        data_out[i*OUT_BITS_PER_SAMPLE +: OUT_BITS_PER_SAMPLE] =
-          {{OUT_BITS_PER_SAMPLE-IN_BITS_PER_SAMPLE{data_in[(i+1)*IN_BITS_PER_SAMPLE-1]&SIGN_EXTEND[0]}},
-          data_in[i*IN_BITS_PER_SAMPLE +: OUT_BITS_PER_SAMPLE]};
-      end else begin
-        data_out[i*OUT_BITS_PER_SAMPLE +: OUT_BITS_PER_SAMPLE] =
-          {data_in[((i+1)*IN_BITS_PER_SAMPLE)-1 -: OUT_BITS_PER_SAMPLE],
-          {OUT_BITS_PER_SAMPLE-IN_BITS_PER_SAMPLE{1'b0}}};
+  // Add padding
+  if (IN_BITS_PER_SAMPLE < OUT_BITS_PER_SAMPLE) begin
+    integer i;
+    always @(*) begin
+      for (i=0;i<NUM_OF_SAMPLES;i=i+1) begin
+        if (PADDING_TO_MSB_LSB_N==1) begin
+          data_out[i*OUT_BITS_PER_SAMPLE +: OUT_BITS_PER_SAMPLE] =
+            {{OUT_BITS_PER_SAMPLE-IN_BITS_PER_SAMPLE{data_in[(i+1)*IN_BITS_PER_SAMPLE-1]&SIGN_EXTEND[0]}},
+            data_in[i*IN_BITS_PER_SAMPLE +: OUT_BITS_PER_SAMPLE]};
+        end else begin
+          data_out[i*OUT_BITS_PER_SAMPLE +: OUT_BITS_PER_SAMPLE] =
+            {data_in[((i+1)*IN_BITS_PER_SAMPLE)-1 -: OUT_BITS_PER_SAMPLE],
+            {OUT_BITS_PER_SAMPLE-IN_BITS_PER_SAMPLE{1'b0}}};
+        end
       end
     end
   end
-end
 
 endmodule

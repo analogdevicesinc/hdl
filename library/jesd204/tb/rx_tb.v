@@ -190,8 +190,7 @@ module rx_tb;
     .device_cfg_sysref_disable(device_cfg_sysref_disable),
     .device_cfg_sysref_oneshot(device_cfg_sysref_oneshot),
     .device_cfg_buffer_early_release(device_cfg_buffer_early_release),
-    .device_cfg_buffer_delay(device_cfg_buffer_delay)
-  );
+    .device_cfg_buffer_delay(device_cfg_buffer_delay));
 
   jesd204_rx #(
     .NUM_LANES(NUM_LANES),
@@ -267,8 +266,6 @@ module rx_tb;
 
     .status_synth_params0(),
     .status_synth_params1(),
-    .status_synth_params2()
-
-  );
+    .status_synth_params2());
 
 endmodule

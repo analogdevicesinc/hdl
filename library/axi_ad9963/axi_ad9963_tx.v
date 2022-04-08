@@ -47,7 +47,8 @@ module axi_ad9963_tx #(
   parameter   DAC_DDS_TYPE = 1,
   parameter   DAC_DDS_CORDIC_DW = 14,
   parameter   DAC_DDS_CORDIC_PHASE_DW = 13,
-  parameter   DATAPATH_DISABLE = 0) (
+  parameter   DATAPATH_DISABLE = 0
+) (
 
   // dac interface
 
@@ -88,7 +89,8 @@ module axi_ad9963_tx #(
   input               up_rreq,
   input       [13:0]  up_raddr,
   output reg  [31:0]  up_rdata,
-  output reg          up_rack);
+  output reg          up_rack
+);
 
   // internal signals
 
@@ -131,8 +133,8 @@ module axi_ad9963_tx #(
     .DAC_DDS_TYPE (DAC_DDS_TYPE),
     .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
     .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
-    .DATAPATH_DISABLE (DATAPATH_DISABLE))
-  i_tx_channel_0 (
+    .DATAPATH_DISABLE (DATAPATH_DISABLE)
+  ) i_tx_channel_0 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_valid (dac_valid_i),
@@ -165,8 +167,8 @@ module axi_ad9963_tx #(
     .DAC_DDS_TYPE (DAC_DDS_TYPE),
     .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
     .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
-    .DATAPATH_DISABLE (DATAPATH_DISABLE))
-  i_tx_channel_1 (
+    .DATAPATH_DISABLE (DATAPATH_DISABLE)
+  ) i_tx_channel_1 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_valid (dac_valid_q),
@@ -250,6 +252,3 @@ module axi_ad9963_tx #(
     .up_rack (up_rack_s[2]));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

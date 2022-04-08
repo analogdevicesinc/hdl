@@ -267,8 +267,7 @@ module axi_adrv9001_if #(
     .rx_single_lane (rx1_single_lane),
     .rx_sdr_ddr_n (rx1_sdr_ddr_n),
     .rx_symb_op (rx1_symb_op),
-    .rx_symb_8_16b (rx1_symb_8_16b)
-  );
+    .rx_symb_8_16b (rx1_symb_8_16b));
 
   generate if (DISABLE_RX2_SSI == 0) begin
     adrv9001_rx
@@ -332,8 +331,7 @@ module axi_adrv9001_if #(
       .rx_single_lane (rx2_single_lane),
       .rx_sdr_ddr_n (rx2_sdr_ddr_n),
       .rx_symb_op (rx2_symb_op),
-      .rx_symb_8_16b (rx2_symb_8_16b)
-    );
+      .rx_symb_8_16b (rx2_symb_8_16b));
   end else begin
     assign delay_rx2_locked = 1'b1;
     assign up_rx2_drdata = 'h0;
@@ -345,48 +343,46 @@ module axi_adrv9001_if #(
   endgenerate
 
   adrv9001_tx #(
-   .CMOS_LVDS_N (CMOS_LVDS_N),
-   .NUM_LANES (TX_NUM_LANES),
-   .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
-   .USE_BUFG (TX_USE_BUFG),
-   .USE_RX_CLK_FOR_TX (USE_RX_CLK_FOR_TX)
+    .CMOS_LVDS_N (CMOS_LVDS_N),
+    .NUM_LANES (TX_NUM_LANES),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .USE_BUFG (TX_USE_BUFG),
+    .USE_RX_CLK_FOR_TX (USE_RX_CLK_FOR_TX)
   ) i_tx_1_phy (
+    .ref_clk (ref_clk),
+    .up_clk (up_clk),
 
-   .ref_clk (ref_clk),
-   .up_clk (up_clk),
+    .tx_output_enable(tx_output_enable),
 
-   .tx_output_enable(tx_output_enable),
+    .tx_dclk_out_n_NC (tx1_dclk_out_n_NC),
+    .tx_dclk_out_p_dclk_out (tx1_dclk_out_p_dclk_out),
+    .tx_dclk_in_n_NC (tx1_dclk_in_n_NC),
+    .tx_dclk_in_p_dclk_in (tx1_dclk_in_p_dclk_in),
+    .tx_idata_out_n_idata0 (tx1_idata_out_n_idata0),
+    .tx_idata_out_p_idata1 (tx1_idata_out_p_idata1),
+    .tx_qdata_out_n_qdata2 (tx1_qdata_out_n_qdata2),
+    .tx_qdata_out_p_qdata3 (tx1_qdata_out_p_qdata3),
+    .tx_strobe_out_n_NC (tx1_strobe_out_n_NC),
+    .tx_strobe_out_p_strobe_out (tx1_strobe_out_p_strobe_out),
 
-   .tx_dclk_out_n_NC (tx1_dclk_out_n_NC),
-   .tx_dclk_out_p_dclk_out (tx1_dclk_out_p_dclk_out),
-   .tx_dclk_in_n_NC (tx1_dclk_in_n_NC),
-   .tx_dclk_in_p_dclk_in (tx1_dclk_in_p_dclk_in),
-   .tx_idata_out_n_idata0 (tx1_idata_out_n_idata0),
-   .tx_idata_out_p_idata1 (tx1_idata_out_p_idata1),
-   .tx_qdata_out_n_qdata2 (tx1_qdata_out_n_qdata2),
-   .tx_qdata_out_p_qdata3 (tx1_qdata_out_p_qdata3),
-   .tx_strobe_out_n_NC (tx1_strobe_out_n_NC),
-   .tx_strobe_out_p_strobe_out (tx1_strobe_out_p_strobe_out),
+    .rx_clk_div (adc_1_clk_div),
+    .rx_clk (adc_1_clk),
+    .rx_ssi_rst (adc_1_ssi_rst),
 
-   .rx_clk_div (adc_1_clk_div),
-   .rx_clk (adc_1_clk),
-   .rx_ssi_rst (adc_1_ssi_rst),
+    .dac_rst (tx1_rst),
+    .dac_clk_div (dac_1_clk_div),
 
-   .dac_rst (tx1_rst),
-   .dac_clk_div (dac_1_clk_div),
+    .dac_data_0 (dac_1_data_0),
+    .dac_data_1 (dac_1_data_1),
+    .dac_data_2 (dac_1_data_2),
+    .dac_data_3 (dac_1_data_3),
+    .dac_data_strb (dac_1_data_strobe),
+    .dac_data_clk (dac_1_data_clk),
+    .dac_data_valid (dac_1_data_valid),
 
-   .dac_data_0 (dac_1_data_0),
-   .dac_data_1 (dac_1_data_1),
-   .dac_data_2 (dac_1_data_2),
-   .dac_data_3 (dac_1_data_3),
-   .dac_data_strb (dac_1_data_strobe),
-   .dac_data_clk (dac_1_data_clk),
-   .dac_data_valid (dac_1_data_valid),
+    .dac_clk_ratio (dac_clk_ratio),
 
-   .dac_clk_ratio (dac_clk_ratio),
-
-   .mssi_sync (mssi_sync)
-  );
+    .mssi_sync (mssi_sync));
 
   adrv9001_tx_link #(
     .CMOS_LVDS_N (CMOS_LVDS_N),
@@ -409,51 +405,48 @@ module axi_adrv9001_if #(
     .tx_sdr_ddr_n (tx1_sdr_ddr_n),
     .tx_single_lane (tx1_single_lane),
     .tx_symb_op (tx1_symb_op),
-    .tx_symb_8_16b (tx1_symb_8_16b)
-  );
+    .tx_symb_8_16b (tx1_symb_8_16b));
 
   generate if (DISABLE_TX2_SSI == 0) begin
     adrv9001_tx #(
-     .CMOS_LVDS_N (CMOS_LVDS_N),
-     .NUM_LANES (TX_NUM_LANES),
-     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
-     .USE_BUFG (TX_USE_BUFG),
-     .USE_RX_CLK_FOR_TX (USE_RX_CLK_FOR_TX)
+      .CMOS_LVDS_N (CMOS_LVDS_N),
+      .NUM_LANES (TX_NUM_LANES),
+      .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+      .USE_BUFG (TX_USE_BUFG),
+      .USE_RX_CLK_FOR_TX (USE_RX_CLK_FOR_TX)
     ) i_tx_2_phy (
+      .ref_clk (ref_clk),
+      .up_clk (up_clk),
 
-     .ref_clk (ref_clk),
-     .up_clk (up_clk),
+      .tx_output_enable(tx_output_enable),
 
-     .tx_output_enable(tx_output_enable),
+      .tx_dclk_out_n_NC (tx2_dclk_out_n_NC),
+      .tx_dclk_out_p_dclk_out (tx2_dclk_out_p_dclk_out),
+      .tx_dclk_in_n_NC (tx2_dclk_in_n_NC),
+      .tx_dclk_in_p_dclk_in (tx2_dclk_in_p_dclk_in),
+      .tx_idata_out_n_idata0 (tx2_idata_out_n_idata0),
+      .tx_idata_out_p_idata1 (tx2_idata_out_p_idata1),
+      .tx_qdata_out_n_qdata2 (tx2_qdata_out_n_qdata2),
+      .tx_qdata_out_p_qdata3 (tx2_qdata_out_p_qdata3),
+      .tx_strobe_out_n_NC (tx2_strobe_out_n_NC),
+      .tx_strobe_out_p_strobe_out (tx2_strobe_out_p_strobe_out),
 
-     .tx_dclk_out_n_NC (tx2_dclk_out_n_NC),
-     .tx_dclk_out_p_dclk_out (tx2_dclk_out_p_dclk_out),
-     .tx_dclk_in_n_NC (tx2_dclk_in_n_NC),
-     .tx_dclk_in_p_dclk_in (tx2_dclk_in_p_dclk_in),
-     .tx_idata_out_n_idata0 (tx2_idata_out_n_idata0),
-     .tx_idata_out_p_idata1 (tx2_idata_out_p_idata1),
-     .tx_qdata_out_n_qdata2 (tx2_qdata_out_n_qdata2),
-     .tx_qdata_out_p_qdata3 (tx2_qdata_out_p_qdata3),
-     .tx_strobe_out_n_NC (tx2_strobe_out_n_NC),
-     .tx_strobe_out_p_strobe_out (tx2_strobe_out_p_strobe_out),
+      .rx_clk_div (adc_2_clk_div),
+      .rx_clk (adc_2_clk),
+      .rx_ssi_rst (adc_2_ssi_rst),
 
-     .rx_clk_div (adc_2_clk_div),
-     .rx_clk (adc_2_clk),
-     .rx_ssi_rst (adc_2_ssi_rst),
+      .dac_rst (tx2_rst),
+      .dac_clk_div (dac_2_clk_div),
 
-     .dac_rst (tx2_rst),
-     .dac_clk_div (dac_2_clk_div),
+      .dac_data_0 (dac_2_data_0),
+      .dac_data_1 (dac_2_data_1),
+      .dac_data_2 (dac_2_data_2),
+      .dac_data_3 (dac_2_data_3),
+      .dac_data_strb (dac_2_data_strobe),
+      .dac_data_clk (dac_2_data_clk),
+      .dac_data_valid (dac_2_data_valid),
 
-     .dac_data_0 (dac_2_data_0),
-     .dac_data_1 (dac_2_data_1),
-     .dac_data_2 (dac_2_data_2),
-     .dac_data_3 (dac_2_data_3),
-     .dac_data_strb (dac_2_data_strobe),
-     .dac_data_clk (dac_2_data_clk),
-     .dac_data_valid (dac_2_data_valid),
-
-     .mssi_sync (mssi_sync)
-    );
+      .mssi_sync (mssi_sync));
 
     adrv9001_tx_link #(
       .CMOS_LVDS_N (CMOS_LVDS_N),
@@ -476,8 +469,7 @@ module axi_adrv9001_if #(
       .tx_sdr_ddr_n (tx2_sdr_ddr_n),
       .tx_single_lane (tx2_single_lane),
       .tx_symb_op (tx2_symb_op),
-      .tx_symb_8_16b (tx2_symb_8_16b)
-    );
+      .tx_symb_8_16b (tx2_symb_8_16b));
   end else begin
     assign tx2_clk = 1'b0;
     assign tx2_dclk_out_n_NC = 1'b0;
@@ -492,4 +484,3 @@ module axi_adrv9001_if #(
   endgenerate
 
 endmodule
-

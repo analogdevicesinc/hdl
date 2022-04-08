@@ -39,7 +39,8 @@ module ad_adl5904_rst (
 
   input           sys_cpu_clk,
   input           rf_peak_det_n,
-  output          rf_peak_rst);
+  output          rf_peak_rst
+);
 
   // internal registers
 
@@ -73,6 +74,3 @@ module ad_adl5904_rst (
   end
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

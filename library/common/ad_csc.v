@@ -41,7 +41,8 @@ module ad_csc #(
   parameter   DELAY_DW    = 16,
   parameter   MUL_COEF_DW = 17,
   parameter   SUM_COEF_DW = 24,
-  parameter   YCbCr_2_RGB = 0) (
+  parameter   YCbCr_2_RGB = 0
+) (
 
   // data
 
@@ -59,8 +60,8 @@ module ad_csc #(
   // sync is delay matched
 
   output       [   DELAY_DW-1:0]    csc_sync,
-  output       [            7:0]    csc_data);
-
+  output       [            7:0]    csc_data
+);
 
   localparam PIXEL_WD = 9; // sign extended
   localparam MUL_DW = MUL_COEF_DW + PIXEL_WD -1;
@@ -80,7 +81,6 @@ module ad_csc #(
   reg         [DELAY_DW-1:0]  sync_3_m;
   reg         [DELAY_DW-1:0]  sync_4_m;
   reg         [         7:0]  csc_data_d;
-
 
   wire signed [8:0]  color1;
   wire signed [8:0]  color2;
@@ -141,6 +141,3 @@ module ad_csc #(
   endgenerate
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

@@ -89,7 +89,7 @@ module axi_tdd #(
   output      [ 1:0]      s_axi_rresp,
   output      [31:0]      s_axi_rdata,
   input                   s_axi_rready
-  );
+);
 
   // internal signals
 
@@ -167,7 +167,7 @@ module axi_tdd #(
   // tx/rx data flow control
 
   always @(posedge clk) begin
-    if((tdd_enable_s == 1) && (tdd_gated_tx_dmapath_s == 1)) begin
+    if ((tdd_enable_s == 1) && (tdd_gated_tx_dmapath_s == 1)) begin
       tdd_tx_valid <= tdd_tx_dp_en_s;
     end else begin
       tdd_tx_valid <= 1'b1;
@@ -175,7 +175,7 @@ module axi_tdd #(
   end
 
   always @(posedge clk) begin
-    if((tdd_enable_s == 1) && (tdd_gated_rx_dmapath_s == 1)) begin
+    if ((tdd_enable_s == 1) && (tdd_gated_rx_dmapath_s == 1)) begin
       tdd_rx_valid <= tdd_rx_dp_en_s;
     end else begin
       tdd_rx_valid <= 1'b1;
@@ -183,7 +183,7 @@ module axi_tdd #(
   end
 
   always @(posedge clk) begin
-    if(rst == 1'b1) begin
+    if (rst == 1'b1) begin
       tdd_vco_overlap <= 1'b0;
       tdd_rf_overlap <= 1'b0;
     end else begin
@@ -197,8 +197,8 @@ module axi_tdd #(
   // instantiations
 
   up_tdd_cntrl #(
-    .BASE_ADDRESS('h0))
-  i_up_tdd_cntrl(
+    .BASE_ADDRESS('h0)
+  ) i_up_tdd_cntrl(
     .clk(clk),
     .rst(rst),
     .tdd_enable(tdd_enable_s),
@@ -249,8 +249,8 @@ module axi_tdd #(
 
   ad_tdd_control #(
     .TX_DATA_PATH_DELAY(0),
-    .CONTROL_PATH_DELAY(0))
-  i_tdd_control(
+    .CONTROL_PATH_DELAY(0)
+  ) i_tdd_control (
     .clk(clk),
     .rst(rst),
     .tdd_enable(tdd_enable_s),
@@ -294,8 +294,8 @@ module axi_tdd #(
     .tdd_counter_status(tdd_counter_status));
 
   up_axi #(
-    .AXI_ADDRESS_WIDTH(16))
-  i_up_axi (
+    .AXI_ADDRESS_WIDTH(16)
+  ) i_up_axi (
     .up_rstn(s_axi_aresetn),
     .up_clk(s_axi_aclk),
 
@@ -324,7 +324,6 @@ module axi_tdd #(
     .up_rreq(up_rreq),
     .up_raddr(up_raddr),
     .up_rdata(up_rdata),
-    .up_rack(up_rack)
-  );
+    .up_rack(up_rack));
 
 endmodule

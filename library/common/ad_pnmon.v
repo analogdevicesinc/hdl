@@ -40,7 +40,8 @@ module ad_pnmon #(
 
   parameter DATA_WIDTH = 16,
   parameter OOS_THRESHOLD = 16,
-  parameter ALLOW_ZERO_MASKING = 0) (
+  parameter ALLOW_ZERO_MASKING = 0
+) (
 
   // adc interface
 
@@ -91,7 +92,6 @@ module ad_pnmon #(
                           ~adc_pn_oos_int & adc_pn_match_z_s;
   assign adc_pn_err_s = ~(adc_pn_oos_int | adc_pn_match_s | adc_valid_zero_d);
 
-
   // pn oos and counters (16 to clear and set).
 
   assign adc_pn_oos = adc_pn_oos_int;
@@ -116,7 +116,3 @@ module ad_pnmon #(
   end
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************
-

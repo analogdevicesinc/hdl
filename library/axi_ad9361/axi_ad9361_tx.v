@@ -55,7 +55,8 @@ module axi_ad9361_tx #(
   parameter   DAC_DDS_CORDIC_PHASE_DW = 13,
   parameter   USERPORTS_DISABLE = 0,
   parameter   DELAYCNTRL_DISABLE = 0,
-  parameter   IQCORRECTION_DISABLE = 0) (
+  parameter   IQCORRECTION_DISABLE = 0
+) (
 
   // dac interface
 
@@ -119,7 +120,8 @@ module axi_ad9361_tx #(
   input           up_rreq,
   input   [13:0]  up_raddr,
   output  [31:0]  up_rdata,
-  output          up_rack);
+  output          up_rack
+);
 
   // configuration settings
 
@@ -227,8 +229,8 @@ module axi_ad9361_tx #(
     .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
     .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
     .USERPORTS_DISABLE (USERPORTS_DISABLE),
-    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE))
-  i_tx_channel_0 (
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE)
+  ) i_tx_channel_0 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_valid (dac_valid_int),
@@ -262,8 +264,8 @@ module axi_ad9361_tx #(
     .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
     .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
     .USERPORTS_DISABLE (USERPORTS_DISABLE),
-    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE))
-  i_tx_channel_1 (
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE)
+  ) i_tx_channel_1 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_valid (dac_valid_int),
@@ -297,8 +299,8 @@ module axi_ad9361_tx #(
     .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
     .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
     .USERPORTS_DISABLE (USERPORTS_DISABLE),
-    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE))
-  i_tx_channel_2 (
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE)
+  ) i_tx_channel_2 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_valid (dac_valid_int),
@@ -332,8 +334,8 @@ module axi_ad9361_tx #(
     .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
     .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
     .USERPORTS_DISABLE (USERPORTS_DISABLE),
-    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE))
-  i_tx_channel_3 (
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE)
+  ) i_tx_channel_3 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_valid (dac_valid_int),
@@ -368,8 +370,8 @@ module axi_ad9361_tx #(
     .CLK_EDGE_SEL (CLK_EDGE_SEL),
     .DRP_DISABLE (1),
     .USERPORTS_DISABLE (USERPORTS_DISABLE),
-    .GPIO_DISABLE (0))
-  i_up_dac_common (
+    .GPIO_DISABLE (0)
+  ) i_up_dac_common (
     .mmcm_rst (),
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
@@ -419,8 +421,8 @@ module axi_ad9361_tx #(
     .DISABLE (DELAYCNTRL_DISABLE),
     .INIT_DELAY (INIT_DELAY),
     .DATA_WIDTH(16),
-    .BASE_ADDRESS(6'h12))
-  i_delay_cntrl (
+    .BASE_ADDRESS(6'h12)
+  ) i_delay_cntrl (
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
     .delay_locked (delay_locked),
@@ -439,6 +441,3 @@ module axi_ad9361_tx #(
     .up_rack (up_rack_s[5]));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

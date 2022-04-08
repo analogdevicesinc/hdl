@@ -221,7 +221,6 @@ module frame_align_tb;
     end
   end
 
-
   wire [NUM_LANES-1:0] tx_cfg_lanes_disable;
   wire [NUM_LINKS-1:0] tx_cfg_links_disable;
   wire [9:0] tx_cfg_octets_per_multiframe;
@@ -289,8 +288,7 @@ module frame_align_tb;
 
     .ilas_config_rd(tx_ilas_config_rd),
     .ilas_config_addr(tx_ilas_config_addr),
-    .ilas_config_data(tx_ilas_config_data)
-  );
+    .ilas_config_data(tx_ilas_config_data));
 
   jesd204_tx #(
     .NUM_LANES(NUM_LANES),
@@ -358,8 +356,7 @@ module frame_align_tb;
 
     .status_synth_params0(),
     .status_synth_params1(),
-    .status_synth_params2()
-  );
+    .status_synth_params2());
 
   wire [NUM_LANES-1:0] rx_cfg_lanes_disable;
   wire [NUM_LINKS-1:0] rx_cfg_links_disable;
@@ -421,8 +418,7 @@ module frame_align_tb;
     .device_cfg_sysref_disable(rx_device_cfg_sysref_disable),
     .device_cfg_sysref_oneshot(rx_device_cfg_sysref_oneshot),
     .device_cfg_buffer_early_release(rx_device_cfg_buffer_early_release),
-    .device_cfg_buffer_delay(rx_device_cfg_buffer_delay)
-  );
+    .device_cfg_buffer_delay(rx_device_cfg_buffer_delay));
 
   jesd204_rx #(
     .NUM_LANES(NUM_LANES),
@@ -506,9 +502,8 @@ module frame_align_tb;
 
     .status_synth_params0(),
     .status_synth_params1(),
-    .status_synth_params2()
-  );
-  
+    .status_synth_params2());
+
   wire m_axis_aresetn;
   wire m_axis_ready;
   wire m_axis_valid;
@@ -528,15 +523,15 @@ module frame_align_tb;
   wire s_axis_full;
   wire s_axis_almost_full;
   wire error_inject = (align_err_f | align_err_mf);
-  
+
   reg invalid_data = 1'b0;
   reg read_flag = 1'b1;
-  
+
   assign s_axis_aresetn = ~error_inject;
   assign m_axis_aresetn = ~error_inject;
-  assign m_axis_ready = rx_valid; 
+  assign m_axis_ready = rx_valid;
   assign s_axis_valid = tx_ready;
-  
+
   //util_axis_fifo instance
   util_axis_fifo #(
     .DATA_WIDTH(DATA_PATH_WIDTH*8),
@@ -570,9 +565,8 @@ module frame_align_tb;
     .s_axis_tlast(s_axis_tlast),
     .s_axis_room(s_axis_room),
     .s_axis_full(s_axis_full),
-    .s_axis_almost_full(s_axis_almost_full)
-);
-          
+    .s_axis_almost_full(s_axis_almost_full));
+
   always @ (negedge error_inject) begin
     //get fifo out of reset
     #5000; //wait for tx_ready to rise up
@@ -585,12 +579,12 @@ module frame_align_tb;
     if (rx_valid == 1 && error_inject == 0) begin
       //remove from the queue first element and compare to rx_data
       //compare the data sent by tx with the data recieved
-      if(rx_data[DATA_PATH_WIDTH*8-1:0] !== m_axis_data) begin 
+      if(rx_data[DATA_PATH_WIDTH*8-1:0] !== m_axis_data) begin
         invalid_data <= 1'b1;
       end
-    end 
+    end
   end
-  
+
   assign cur_data_mismatch = (rx_data & rx_mask) !== ({NUM_LANES{rx_ref_data}} & rx_mask);
 
   always @(posedge clk) begin
@@ -621,7 +615,7 @@ module frame_align_tb;
   always @(*) begin
     if ((rx_valid == 1'b1 && invalid_data == 1'b1) || read_flag == 1'b0) begin
       failed <= 1'b1;
-    end 
+    end
   end
 
 endmodule

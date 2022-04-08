@@ -40,7 +40,8 @@ module axi_adc_trigger #(
   // parameters
 
   parameter SIGN_BITS = 2,
-  parameter OUT_PIN_HOLD_N = 100000) (
+  parameter OUT_PIN_HOLD_N = 100000
+) (
 
   // interface
 
@@ -89,8 +90,8 @@ module axi_adc_trigger #(
   output                s_axi_rvalid,
   output      [31:0]    s_axi_rdata,
   output      [ 1:0]    s_axi_rresp,
-  input                 s_axi_rready);
-
+  input                 s_axi_rready
+);
 
   localparam DW = 15 - SIGN_BITS;
 
@@ -211,7 +212,6 @@ module axi_adc_trigger #(
   reg                   trigger_out_hold;
   reg                   trigger_out_ack;
 
-
   // signal name changes
 
   assign up_clk = s_axi_aclk;
@@ -278,7 +278,6 @@ module axi_adc_trigger #(
     trigger_o[1] <= (trig_o_hold_cnt_1 == 'd0) ? trigger_o_m[1] : trig_o_hold_1;
   end
 
-
   // 1. keep data in sync with the trigger. The trigger bypasses the variable
   // fifo. The data goes through and it is delayed with 4 clock cycles)
   // 2. For non max sample rate of the ADC, the trigger signal that originates
@@ -343,7 +342,6 @@ module axi_adc_trigger #(
       end
     end
   end
-
 
   always @(posedge clk) begin
     if (trigger_delay == 0) begin
@@ -470,7 +468,7 @@ module axi_adc_trigger #(
       (trigger_b_any_edge & any_edge[1]));
   end
 
-   always @(*) begin
+  always @(*) begin
     case(trigger_out_control[3:0])
       4'h0: trigger_out_mixed = trigger_a;
       4'h1: trigger_out_mixed = trigger_b;
@@ -569,54 +567,53 @@ module axi_adc_trigger #(
   assign comp_low_b_s = !comp_high_b;
 
   axi_adc_trigger_reg adc_trigger_registers (
+    .clk(clk),
 
-  .clk(clk),
+    .io_selection(io_selection),
+    .trigger_o(trigger_up_o_s),
+    .triggered(up_triggered),
 
-  .io_selection(io_selection),
-  .trigger_o(trigger_up_o_s),
-  .triggered(up_triggered),
+    .low_level(low_level),
+    .high_level(high_level),
+    .any_edge(any_edge),
+    .rise_edge(rise_edge),
+    .fall_edge(fall_edge),
 
-  .low_level(low_level),
-  .high_level(high_level),
-  .any_edge(any_edge),
-  .rise_edge(rise_edge),
-  .fall_edge(fall_edge),
+    .limit_a(limit_a),
+    .function_a(function_a),
+    .hysteresis_a(hysteresis_a),
+    .trigger_l_mix_a(trigger_l_mix_a),
 
-  .limit_a(limit_a),
-  .function_a(function_a),
-  .hysteresis_a(hysteresis_a),
-  .trigger_l_mix_a(trigger_l_mix_a),
+    .limit_b(limit_b),
+    .function_b(function_b),
+    .hysteresis_b(hysteresis_b),
+    .trigger_l_mix_b(trigger_l_mix_b),
 
-  .limit_b(limit_b),
-  .function_b(function_b),
-  .hysteresis_b(hysteresis_b),
-  .trigger_l_mix_b(trigger_l_mix_b),
+    .trigger_out_control(trigger_out_control),
+    .trigger_delay(trigger_delay),
+    .trigger_holdoff (trigger_holdoff),
+    .trigger_out_hold_pins (trigger_out_hold_pins),
 
-  .trigger_out_control(trigger_out_control),
-  .trigger_delay(trigger_delay),
-  .trigger_holdoff (trigger_holdoff),
-  .trigger_out_hold_pins (trigger_out_hold_pins),
+    .fifo_depth(fifo_depth),
 
-  .fifo_depth(fifo_depth),
+    .streaming(streaming),
 
-  .streaming(streaming),
+    // bus interface
 
-  // bus interface
+    .up_rstn(up_rstn),
+    .up_clk(up_clk),
+    .up_wreq(up_wreq),
+    .up_waddr(up_waddr),
+    .up_wdata(up_wdata),
+    .up_wack(up_wack),
+    .up_rreq(up_rreq),
+    .up_raddr(up_raddr),
+    .up_rdata(up_rdata),
+    .up_rack(up_rack));
 
-  .up_rstn(up_rstn),
-  .up_clk(up_clk),
-  .up_wreq(up_wreq),
-  .up_waddr(up_waddr),
-  .up_wdata(up_wdata),
-  .up_wack(up_wack),
-  .up_rreq(up_rreq),
-  .up_raddr(up_raddr),
-  .up_rdata(up_rdata),
-  .up_rack(up_rack));
-
- up_axi #(
+  up_axi #(
     .AXI_ADDRESS_WIDTH(7)
- ) i_up_axi (
+  ) i_up_axi (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_axi_awvalid (s_axi_awvalid),
@@ -646,6 +643,3 @@ module axi_adc_trigger #(
     .up_rack (up_rack));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

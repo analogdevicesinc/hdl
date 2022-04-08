@@ -58,7 +58,8 @@ module axi_adc_decimate_reg(
   input               up_rreq,
   input       [ 4:0]  up_raddr,
   output  reg [31:0]  up_rdata,
-  output  reg         up_rack);
+  output  reg         up_rack
+);
 
   // internal registers
 
@@ -129,7 +130,9 @@ module axi_adc_decimate_reg(
     end
   end
 
-   up_xfer_cntrl #(.DATA_WIDTH(69)) i_xfer_cntrl (
+  up_xfer_cntrl #(
+    .DATA_WIDTH (69)
+  ) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_config[1],                 // 1
@@ -150,7 +153,3 @@ module axi_adc_decimate_reg(
                       adc_filter_mask}));           // 3
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************
-

@@ -43,7 +43,8 @@ module axi_ad9434 #(
   parameter FPGA_FAMILY = 0,
   parameter SPEED_GRADE = 0,
   parameter DEV_PACKAGE = 0,
-  parameter IO_DELAY_GROUP = "dev_if_delay_group") (
+  parameter IO_DELAY_GROUP = "dev_if_delay_group"
+) (
 
   // physical interface
   input                   adc_clk_in_p,
@@ -84,7 +85,8 @@ module axi_ad9434 #(
   output      [31:0]      s_axi_rdata,
   input                   s_axi_rready,
   input       [ 2:0]      s_axi_awprot,
-  input       [ 2:0]      s_axi_arprot);
+  input       [ 2:0]      s_axi_arprot
+);
 
   // internal clocks & resets
   wire            adc_rst;
@@ -131,8 +133,8 @@ module axi_ad9434 #(
 
   axi_ad9434_if #(
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
-    .IO_DELAY_GROUP(IO_DELAY_GROUP))
-  i_if(
+    .IO_DELAY_GROUP(IO_DELAY_GROUP)
+  ) i_if (
     .adc_clk_in_p(adc_clk_in_p),
     .adc_clk_in_n(adc_clk_in_n),
     .adc_data_in_p(adc_data_in_p),

@@ -194,8 +194,7 @@ module loopback_64b_tb;
 
     .ilas_config_rd(tx_ilas_config_rd),
     .ilas_config_addr(tx_ilas_config_addr),
-    .ilas_config_data(tx_ilas_config_data)
-  );
+    .ilas_config_data(tx_ilas_config_data));
 
   jesd204_tx #(
     .NUM_LANES(NUM_LANES),
@@ -262,8 +261,7 @@ module loopback_64b_tb;
 
     .status_synth_params0(),
     .status_synth_params1(),
-    .status_synth_params2()
-  );
+    .status_synth_params2());
 
   wire [NUM_LANES-1:0] rx_cfg_lanes_disable;
   wire [NUM_LINKS-1:0] rx_cfg_links_disable;
@@ -307,8 +305,7 @@ module loopback_64b_tb;
     .device_cfg_sysref_disable(rx_device_cfg_sysref_disable),
     .device_cfg_sysref_oneshot(rx_device_cfg_sysref_oneshot),
     .device_cfg_buffer_early_release(rx_device_cfg_buffer_early_release),
-    .device_cfg_buffer_delay(rx_device_cfg_buffer_delay)
-  );
+    .device_cfg_buffer_delay(rx_device_cfg_buffer_delay));
 
   jesd204_rx #(
     .NUM_LANES(NUM_LANES),
@@ -387,8 +384,7 @@ module loopback_64b_tb;
 
     .status_synth_params0(),
     .status_synth_params1(),
-    .status_synth_params2()
-  );
+    .status_synth_params2());
 
   integer ii;
   reg rx_status_mismatch = 1'b0;
@@ -414,7 +410,6 @@ module loopback_64b_tb;
       end
     end
   end
-
 
   always @(*) begin
     if (data_mismatch || rx_status_mismatch) begin

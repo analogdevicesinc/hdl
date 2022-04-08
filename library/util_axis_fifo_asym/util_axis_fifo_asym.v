@@ -68,242 +68,240 @@ module util_axis_fifo_asym #(
   output [S_ADDRESS_WIDTH-1:0] s_axis_room
 );
 
-// define which interface has a wider bus
-localparam RATIO_TYPE = (S_DATA_WIDTH >= M_DATA_WIDTH) ? 1 : 0;
+  // define which interface has a wider bus
+  localparam RATIO_TYPE = (S_DATA_WIDTH >= M_DATA_WIDTH) ? 1 : 0;
 
-// bus width ratio
-localparam RATIO = (RATIO_TYPE) ? S_DATA_WIDTH/M_DATA_WIDTH : M_DATA_WIDTH/S_DATA_WIDTH;
+  // bus width ratio
+  localparam RATIO = (RATIO_TYPE) ? S_DATA_WIDTH/M_DATA_WIDTH : M_DATA_WIDTH/S_DATA_WIDTH;
 
-// atomic parameters - NOTE: depth is always defined by the slave attributes
-localparam A_WIDTH = (RATIO_TYPE) ? M_DATA_WIDTH : S_DATA_WIDTH;
-localparam A_ADDRESS = (RATIO_TYPE) ? S_ADDRESS_WIDTH : (S_ADDRESS_WIDTH-$clog2(RATIO));
-localparam A_ALMOST_FULL_THRESHOLD = (RATIO_TYPE) ? ALMOST_FULL_THRESHOLD : (ALMOST_FULL_THRESHOLD/RATIO);
-localparam A_ALMOST_EMPTY_THRESHOLD = (RATIO_TYPE) ? (ALMOST_EMPTY_THRESHOLD/RATIO) : ALMOST_EMPTY_THRESHOLD;
+  // atomic parameters - NOTE: depth is always defined by the slave attributes
+  localparam A_WIDTH = (RATIO_TYPE) ? M_DATA_WIDTH : S_DATA_WIDTH;
+  localparam A_ADDRESS = (RATIO_TYPE) ? S_ADDRESS_WIDTH : (S_ADDRESS_WIDTH-$clog2(RATIO));
+  localparam A_ALMOST_FULL_THRESHOLD = (RATIO_TYPE) ? ALMOST_FULL_THRESHOLD : (ALMOST_FULL_THRESHOLD/RATIO);
+  localparam A_ALMOST_EMPTY_THRESHOLD = (RATIO_TYPE) ? (ALMOST_EMPTY_THRESHOLD/RATIO) : ALMOST_EMPTY_THRESHOLD;
 
-// slave and master sequencers
-reg [$clog2(RATIO)-1:0] s_axis_counter;
-reg [$clog2(RATIO)-1:0] m_axis_counter;
+  // slave and master sequencers
+  reg [$clog2(RATIO)-1:0] s_axis_counter;
+  reg [$clog2(RATIO)-1:0] m_axis_counter;
 
-wire [RATIO-1:0] m_axis_ready_int_s;
-wire [RATIO-1:0] m_axis_valid_int_s;
-wire [RATIO*A_WIDTH-1:0] m_axis_data_int_s;
-wire [RATIO*A_WIDTH/8-1:0] m_axis_tkeep_int_s;
-wire [RATIO-1:0] m_axis_tlast_int_s;
-wire [RATIO-1:0] m_axis_empty_int_s;
-wire [RATIO-1:0] m_axis_almost_empty_int_s;
-wire [RATIO*A_ADDRESS-1:0] m_axis_level_int_s;
+  wire [RATIO-1:0] m_axis_ready_int_s;
+  wire [RATIO-1:0] m_axis_valid_int_s;
+  wire [RATIO*A_WIDTH-1:0] m_axis_data_int_s;
+  wire [RATIO*A_WIDTH/8-1:0] m_axis_tkeep_int_s;
+  wire [RATIO-1:0] m_axis_tlast_int_s;
+  wire [RATIO-1:0] m_axis_empty_int_s;
+  wire [RATIO-1:0] m_axis_almost_empty_int_s;
+  wire [RATIO*A_ADDRESS-1:0] m_axis_level_int_s;
 
-wire [RATIO-1:0] s_axis_ready_int_s;
-wire [RATIO-1:0] s_axis_valid_int_s;
-wire [RATIO*A_WIDTH-1:0] s_axis_data_int_s;
-wire [RATIO*A_WIDTH/8-1:0] s_axis_tkeep_int_s;
-wire [RATIO-1:0] s_axis_tlast_int_s;
-wire [RATIO-1:0] s_axis_full_int_s;
-wire [RATIO-1:0] s_axis_almost_full_int_s;
-wire [RATIO*A_ADDRESS-1:0] s_axis_room_int_s;
+  wire [RATIO-1:0] s_axis_ready_int_s;
+  wire [RATIO-1:0] s_axis_valid_int_s;
+  wire [RATIO*A_WIDTH-1:0] s_axis_data_int_s;
+  wire [RATIO*A_WIDTH/8-1:0] s_axis_tkeep_int_s;
+  wire [RATIO-1:0] s_axis_tlast_int_s;
+  wire [RATIO-1:0] s_axis_full_int_s;
+  wire [RATIO-1:0] s_axis_almost_full_int_s;
+  wire [RATIO*A_ADDRESS-1:0] s_axis_room_int_s;
 
-// instantiate the FIFOs
-genvar i;
-generate
-  for (i=0; i<RATIO; i=i+1) begin
-    util_axis_fifo #(
-      .DATA_WIDTH (A_WIDTH),
-      .ADDRESS_WIDTH (A_ADDRESS),
-      .ASYNC_CLK (ASYNC_CLK),
-      .M_AXIS_REGISTERED (M_AXIS_REGISTERED),
-      .ALMOST_EMPTY_THRESHOLD (A_ALMOST_EMPTY_THRESHOLD),
-      .ALMOST_FULL_THRESHOLD (A_ALMOST_FULL_THRESHOLD),
-      .TKEEP_EN (TKEEP_EN),
-      .TLAST_EN (TLAST_EN))
-    i_fifo (
-      .m_axis_aclk    (m_axis_aclk),
-      .m_axis_aresetn (m_axis_aresetn),
-      .m_axis_ready   (m_axis_ready_int_s[i]),
-      .m_axis_valid   (m_axis_valid_int_s[i]),
-      .m_axis_data    (m_axis_data_int_s[A_WIDTH*i+:A_WIDTH]),
-      .m_axis_tlast   (m_axis_tlast_int_s[i]),
-      .m_axis_tkeep   (m_axis_tkeep_int_s[A_WIDTH/8*i+:A_WIDTH/8]),
-      .m_axis_level   (m_axis_level_int_s[A_ADDRESS*i+:A_ADDRESS]),
-      .m_axis_empty   (m_axis_empty_int_s[i]),
-      .m_axis_almost_empty (m_axis_almost_empty_int_s[i]),
-      .s_axis_aclk    (s_axis_aclk),
-      .s_axis_aresetn (s_axis_aresetn),
-      .s_axis_ready   (s_axis_ready_int_s[i]),
-      .s_axis_valid   (s_axis_valid_int_s[i]),
-      .s_axis_data    (s_axis_data_int_s[A_WIDTH*i+:A_WIDTH]),
-      .s_axis_tkeep   (s_axis_tkeep_int_s[A_WIDTH/8*i+:A_WIDTH/8]),
-      .s_axis_tlast   (s_axis_tlast_int_s[i]),
-      .s_axis_room    (s_axis_room_int_s[A_ADDRESS*i+:A_ADDRESS]),
-      .s_axis_full    (s_axis_full_int_s[i]),
-      .s_axis_almost_full (s_axis_almost_full_int_s[i])
-    );
+  // instantiate the FIFOs
+  genvar i;
+  generate
+    for (i=0; i<RATIO; i=i+1) begin
+      util_axis_fifo #(
+        .DATA_WIDTH (A_WIDTH),
+        .ADDRESS_WIDTH (A_ADDRESS),
+        .ASYNC_CLK (ASYNC_CLK),
+        .M_AXIS_REGISTERED (M_AXIS_REGISTERED),
+        .ALMOST_EMPTY_THRESHOLD (A_ALMOST_EMPTY_THRESHOLD),
+        .ALMOST_FULL_THRESHOLD (A_ALMOST_FULL_THRESHOLD),
+        .TKEEP_EN (TKEEP_EN),
+        .TLAST_EN (TLAST_EN)
+      ) i_fifo (
+        .m_axis_aclk    (m_axis_aclk),
+        .m_axis_aresetn (m_axis_aresetn),
+        .m_axis_ready   (m_axis_ready_int_s[i]),
+        .m_axis_valid   (m_axis_valid_int_s[i]),
+        .m_axis_data    (m_axis_data_int_s[A_WIDTH*i+:A_WIDTH]),
+        .m_axis_tlast   (m_axis_tlast_int_s[i]),
+        .m_axis_tkeep   (m_axis_tkeep_int_s[A_WIDTH/8*i+:A_WIDTH/8]),
+        .m_axis_level   (m_axis_level_int_s[A_ADDRESS*i+:A_ADDRESS]),
+        .m_axis_empty   (m_axis_empty_int_s[i]),
+        .m_axis_almost_empty (m_axis_almost_empty_int_s[i]),
+        .s_axis_aclk    (s_axis_aclk),
+        .s_axis_aresetn (s_axis_aresetn),
+        .s_axis_ready   (s_axis_ready_int_s[i]),
+        .s_axis_valid   (s_axis_valid_int_s[i]),
+        .s_axis_data    (s_axis_data_int_s[A_WIDTH*i+:A_WIDTH]),
+        .s_axis_tkeep   (s_axis_tkeep_int_s[A_WIDTH/8*i+:A_WIDTH/8]),
+        .s_axis_tlast   (s_axis_tlast_int_s[i]),
+        .s_axis_room    (s_axis_room_int_s[A_ADDRESS*i+:A_ADDRESS]),
+        .s_axis_full    (s_axis_full_int_s[i]),
+        .s_axis_almost_full (s_axis_almost_full_int_s[i]));
+    end
+  endgenerate
+
+  // write or slave logic
+  generate
+
+    if (RATIO_TYPE) begin : big_slave
+
+      for (i=0; i<RATIO; i=i+1) begin
+        assign s_axis_valid_int_s[i] = s_axis_valid & s_axis_ready;
+        assign s_axis_tlast_int_s[i] = s_axis_tlast;
+      end
+
+      assign s_axis_tkeep_int_s = s_axis_tkeep;
+      assign s_axis_data_int_s = s_axis_data;
+      // if every instance is ready, the interface is ready
+      assign s_axis_ready = &(s_axis_ready_int_s);
+      // if one of the atomic instance is full, s_axis_full is asserted
+      assign s_axis_full = |s_axis_full_int_s;
+      assign s_axis_almost_full = |s_axis_almost_full_int_s;
+      // the FIFO has the same room as the atomic FIFO
+      assign s_axis_room = s_axis_room_int_s[A_ADDRESS-1:0];
+
+    end else begin : small_slave
+
+      reg [RATIO-1:0] s_axis_valid_int_d = {RATIO{1'b0}};
+
+      for (i=0; i<RATIO; i=i+1) begin
+        assign s_axis_data_int_s[A_WIDTH*i+:A_WIDTH] = s_axis_data;
+        assign s_axis_tkeep_int_s[A_WIDTH/8*i+:A_WIDTH/8] = (s_axis_counter == i) ? s_axis_tkeep : {A_WIDTH/8{1'b0}};
+        assign s_axis_tlast_int_s[i] = (s_axis_counter == i) ? s_axis_tlast : 1'b0;
+      end
+
+      // insert invalid writes (TKEEP==0) in case if the TLAST arrives before the RATIO
+      // boundary
+      always @(*) begin
+        case ({s_axis_valid, s_axis_tlast})
+          2'b00 : s_axis_valid_int_d = {RATIO{1'b0}};
+          2'b01 : s_axis_valid_int_d = {RATIO{1'b0}};
+          2'b10 : s_axis_valid_int_d = {{RATIO-1{1'b0}}, 1'b1} << s_axis_counter;
+          2'b11 : s_axis_valid_int_d = {RATIO{1'b1}} << s_axis_counter;
+        endcase
+      end
+      assign s_axis_valid_int_s = s_axis_valid_int_d;
+
+      // READY/FULL/ALMOST_FULL is driven by the current atomic instance
+      assign s_axis_ready = s_axis_ready_int_s >> s_axis_counter;
+      assign s_axis_almost_full = s_axis_almost_full_int_s >> s_axis_counter;
+
+      // the FIFO has the same room as the last atomic instance
+      // (NOTE: this is not the real room value, rather the value will be updated
+      // after every RATIO number of writes)
+      assign s_axis_full = s_axis_full_int_s[RATIO-1];
+      assign s_axis_room = {s_axis_room_int_s[A_ADDRESS*(RATIO-1)+:A_ADDRESS], {$clog2(RATIO){1'b1}}};
+
+    end
+
+  endgenerate
+
+  // read or slave logic
+  generate
+    if (RATIO_TYPE) begin : small_master
+
+      for (i=0; i<RATIO; i=i+1) begin
+        assign m_axis_ready_int_s[i] = (m_axis_counter == i) ? m_axis_ready : 1'b0;
+      end
+
+      assign m_axis_data = m_axis_data_int_s >> (m_axis_counter*A_WIDTH) ;
+      assign m_axis_tkeep = m_axis_tkeep_int_s >> (m_axis_counter*A_WIDTH/8) ;
+
+      // VALID/EMPTY/ALMOST_EMPTY is driven by the current atomic instance
+      assign m_axis_valid = m_axis_valid_int_s >> m_axis_counter;
+
+      // the FIFO has the same level as the last atomic instance
+      // (NOTE: this is not the real level value, rather the value will be updated
+      // after every RATIO number of reads)
+      assign m_axis_level = {m_axis_level_int_s[A_ADDRESS-1:0], {$clog2(RATIO){1'b0}}};
+      assign m_axis_almost_empty = m_axis_almost_empty_int_s[RATIO-1];
+      assign m_axis_empty = m_axis_empty_int_s[RATIO-1];
+
+    end else begin : big_master
+
+      for (i=0; i<RATIO; i=i+1) begin
+        assign m_axis_ready_int_s[i] = m_axis_ready;
+      end
+
+      for (i=0; i<RATIO; i=i+1) begin
+        assign m_axis_tkeep[i*A_WIDTH/8+:A_WIDTH/8] = (m_axis_tlast_int_s[i:0] == 0) ||
+                                                      (m_axis_tlast_int_s[i]) ?
+                                                    m_axis_tkeep_int_s[i*A_WIDTH/8+:A_WIDTH/8] :
+                                                    {(A_WIDTH/8){1'b0}};
+      end
+
+      assign m_axis_data = m_axis_data_int_s;
+      // if every instance has a valid data, the interface has valid data,
+      // otherwise valid is asserted only if TLAST is asserted
+      assign m_axis_valid = (|m_axis_tlast_int_s) ? |m_axis_valid_int_s : &m_axis_valid_int_s;
+      // if one of the atomic instance is empty, m_axis_empty should be asserted
+      assign m_axis_empty = |m_axis_empty_int_s;
+      assign m_axis_almost_empty = |m_axis_almost_empty_int_s;
+
+      // the FIFO has the same room as the atomic FIFO
+      assign m_axis_level = m_axis_level_int_s[A_ADDRESS-1:0];
+
+    end
+
+    assign m_axis_tlast = (m_axis_valid) ? |m_axis_tlast_int_s : 1'b0;
+
+  endgenerate
+
+  // slave handshake counter
+
+  reg s_axis_tlast_d = 0;
+  always @(posedge s_axis_aclk) begin
+    s_axis_tlast_d <= s_axis_tlast;
   end
-endgenerate
 
-// write or slave logic
-generate
-
-  if (RATIO_TYPE) begin : big_slave
-
-
-    for (i=0; i<RATIO; i=i+1) begin
-      assign s_axis_valid_int_s[i] = s_axis_valid & s_axis_ready;
-      assign s_axis_tlast_int_s[i] = s_axis_tlast;
-    end
-
-    assign s_axis_tkeep_int_s = s_axis_tkeep;
-    assign s_axis_data_int_s = s_axis_data;
-    // if every instance is ready, the interface is ready
-    assign s_axis_ready = &(s_axis_ready_int_s);
-    // if one of the atomic instance is full, s_axis_full is asserted
-    assign s_axis_full = |s_axis_full_int_s;
-    assign s_axis_almost_full = |s_axis_almost_full_int_s;
-    // the FIFO has the same room as the atomic FIFO
-    assign s_axis_room = s_axis_room_int_s[A_ADDRESS-1:0];
-
-  end else begin : small_slave
-
-    reg [RATIO-1:0] s_axis_valid_int_d = {RATIO{1'b0}};
-
-    for (i=0; i<RATIO; i=i+1) begin
-      assign s_axis_data_int_s[A_WIDTH*i+:A_WIDTH] = s_axis_data;
-      assign s_axis_tkeep_int_s[A_WIDTH/8*i+:A_WIDTH/8] = (s_axis_counter == i) ? s_axis_tkeep : {A_WIDTH/8{1'b0}};
-      assign s_axis_tlast_int_s[i] = (s_axis_counter == i) ? s_axis_tlast : 1'b0;
-    end
-
-    // insert invalid writes (TKEEP==0) in case if the TLAST arrives before the RATIO
-    // boundary
-    always @(*) begin
-      case ({s_axis_valid, s_axis_tlast})
-        2'b00 : s_axis_valid_int_d = {RATIO{1'b0}};
-        2'b01 : s_axis_valid_int_d = {RATIO{1'b0}};
-        2'b10 : s_axis_valid_int_d = {{RATIO-1{1'b0}}, 1'b1} << s_axis_counter;
-        2'b11 : s_axis_valid_int_d = {RATIO{1'b1}} << s_axis_counter;
-      endcase
-    end
-    assign s_axis_valid_int_s = s_axis_valid_int_d;
-
-    // READY/FULL/ALMOST_FULL is driven by the current atomic instance
-    assign s_axis_ready = s_axis_ready_int_s >> s_axis_counter;
-    assign s_axis_almost_full = s_axis_almost_full_int_s >> s_axis_counter;
-
-    // the FIFO has the same room as the last atomic instance
-    // (NOTE: this is not the real room value, rather the value will be updated
-    // after every RATIO number of writes)
-    assign s_axis_full = s_axis_full_int_s[RATIO-1];
-    assign s_axis_room = {s_axis_room_int_s[A_ADDRESS*(RATIO-1)+:A_ADDRESS], {$clog2(RATIO){1'b1}}};
-
-  end
-
-endgenerate
-
-// read or slave logic
-generate
-  if (RATIO_TYPE) begin : small_master
-
-    for (i=0; i<RATIO; i=i+1) begin
-      assign m_axis_ready_int_s[i] = (m_axis_counter == i) ? m_axis_ready : 1'b0;
-    end
-
-    assign m_axis_data = m_axis_data_int_s >> (m_axis_counter*A_WIDTH) ;
-    assign m_axis_tkeep = m_axis_tkeep_int_s >> (m_axis_counter*A_WIDTH/8) ;
-
-    // VALID/EMPTY/ALMOST_EMPTY is driven by the current atomic instance
-    assign m_axis_valid = m_axis_valid_int_s >> m_axis_counter;
-
-    // the FIFO has the same level as the last atomic instance
-    // (NOTE: this is not the real level value, rather the value will be updated
-    // after every RATIO number of reads)
-    assign m_axis_level = {m_axis_level_int_s[A_ADDRESS-1:0], {$clog2(RATIO){1'b0}}};
-    assign m_axis_almost_empty = m_axis_almost_empty_int_s[RATIO-1];
-    assign m_axis_empty = m_axis_empty_int_s[RATIO-1];
-
-  end else begin : big_master
-
-    for (i=0; i<RATIO; i=i+1) begin
-      assign m_axis_ready_int_s[i] = m_axis_ready;
-    end
-
-    for (i=0; i<RATIO; i=i+1) begin
-      assign m_axis_tkeep[i*A_WIDTH/8+:A_WIDTH/8] = (m_axis_tlast_int_s[i:0] == 0) ||
-                                                    (m_axis_tlast_int_s[i]) ?
-                                                  m_axis_tkeep_int_s[i*A_WIDTH/8+:A_WIDTH/8] :
-                                                  {(A_WIDTH/8){1'b0}};
-    end
-
-    assign m_axis_data = m_axis_data_int_s;
-    // if every instance has a valid data, the interface has valid data,
-    // otherwise valid is asserted only if TLAST is asserted
-    assign m_axis_valid = (|m_axis_tlast_int_s) ? |m_axis_valid_int_s : &m_axis_valid_int_s;
-    // if one of the atomic instance is empty, m_axis_empty should be asserted
-    assign m_axis_empty = |m_axis_empty_int_s;
-    assign m_axis_almost_empty = |m_axis_almost_empty_int_s;
-
-    // the FIFO has the same room as the atomic FIFO
-    assign m_axis_level = m_axis_level_int_s[A_ADDRESS-1:0];
-
-  end
-
-  assign m_axis_tlast = (m_axis_valid) ? |m_axis_tlast_int_s : 1'b0;
-
-endgenerate
-
-// slave handshake counter
-
-reg s_axis_tlast_d = 0;
-always @(posedge s_axis_aclk) begin
-  s_axis_tlast_d <= s_axis_tlast;
-end
-
-generate
-  if (RATIO == 1) begin
-    always @(*) begin
-      s_axis_counter <= 1'b1;
-    end
-  end else if (RATIO > 1) begin
-    if (RATIO_TYPE) begin
-      always @(posedge s_axis_aclk) begin
-        if (!s_axis_aresetn) begin
-          s_axis_counter <= 0;
-        end else begin
-          if (s_axis_ready && s_axis_valid) begin
-            s_axis_counter <= s_axis_counter + 1'b1;
+  generate
+    if (RATIO == 1) begin
+      always @(*) begin
+        s_axis_counter <= 1'b1;
+      end
+    end else if (RATIO > 1) begin
+      if (RATIO_TYPE) begin
+        always @(posedge s_axis_aclk) begin
+          if (!s_axis_aresetn) begin
+            s_axis_counter <= 0;
+          end else begin
+            if (s_axis_ready && s_axis_valid) begin
+              s_axis_counter <= s_axis_counter + 1'b1;
+            end
           end
         end
-      end
-    end else begin
-      // in case of a small slave, after an active TLAST reset the counter
-      always @(posedge s_axis_aclk) begin
-        if (!s_axis_aresetn || s_axis_tlast_d) begin
-          s_axis_counter <= 0;
-        end else begin
-          if (s_axis_ready && s_axis_valid) begin
-            s_axis_counter <= s_axis_counter + 1'b1;
-          end
-        end
-      end
-    end
-  end
-endgenerate
-
-// master handshake sequencer
-
-generate
-  if (RATIO == 1) begin
-    always @(*) begin
-      m_axis_counter <= 1'b0;
-    end
-  end else if (RATIO > 1) begin
-    always @(posedge m_axis_aclk) begin
-      if (!m_axis_aresetn) begin
-        m_axis_counter <= 0;
       end else begin
-        if (m_axis_ready && m_axis_valid) begin
-          m_axis_counter <= m_axis_counter + 1'b1;
+        // in case of a small slave, after an active TLAST reset the counter
+        always @(posedge s_axis_aclk) begin
+          if (!s_axis_aresetn || s_axis_tlast_d) begin
+            s_axis_counter <= 0;
+          end else begin
+            if (s_axis_ready && s_axis_valid) begin
+              s_axis_counter <= s_axis_counter + 1'b1;
+            end
+          end
         end
       end
     end
-  end
-endgenerate
+  endgenerate
+
+  // master handshake sequencer
+
+  generate
+    if (RATIO == 1) begin
+      always @(*) begin
+        m_axis_counter <= 1'b0;
+      end
+    end else if (RATIO > 1) begin
+      always @(posedge m_axis_aclk) begin
+        if (!m_axis_aresetn) begin
+          m_axis_counter <= 0;
+        end else begin
+          if (m_axis_ready && m_axis_valid) begin
+            m_axis_counter <= m_axis_counter + 1'b1;
+          end
+        end
+      end
+    end
+  endgenerate
 
 endmodule

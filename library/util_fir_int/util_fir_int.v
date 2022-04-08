@@ -44,7 +44,8 @@ module util_fir_int (
   output      [15:0]  channel_1,
   output              m_axis_data_tvalid,
   input               interpolate,
-  input               dac_read);
+  input               dac_read
+);
 
   wire [31:0] m_axis_data_tdata_s;
   wire        s_axis_data_tvalid_s;
@@ -73,8 +74,6 @@ module util_fir_int (
     .s_axis_data_tready(),
     .s_axis_data_tdata(s_axis_data_tdata),
     .m_axis_data_tvalid(m_axis_data_tvalid),
-    .m_axis_data_tdata(m_axis_data_tdata_s)
-  );
+    .m_axis_data_tdata(m_axis_data_tdata_s));
 
-endmodule  // util_fir_int
-
+endmodule

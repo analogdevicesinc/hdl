@@ -37,8 +37,8 @@
 
 module axi_ad7616_maxis2wrfifo #(
 
-  parameter   DATA_WIDTH = 16) (
-
+  parameter   DATA_WIDTH = 16
+) (
   input                   clk,
   input                   rstn,
   input                   sync_in,
@@ -57,7 +57,6 @@ module axi_ad7616_maxis2wrfifo #(
   output  reg             fifo_wr_sync,
   input                   fifo_wr_xfer_req
 );
-
 
   always @(posedge clk) begin
     if (rstn == 1'b0) begin

@@ -52,7 +52,8 @@ module axi_clkgen #(
   parameter real    CLK0_DIV = 6.000,
   parameter real    CLK0_PHASE = 0.000,
   parameter integer CLK1_DIV = 6,
-  parameter real    CLK1_PHASE = 0.000) (
+  parameter real    CLK1_PHASE = 0.000
+) (
 
   // clocks
 
@@ -83,8 +84,8 @@ module axi_clkgen #(
   output      [ 1:0]      s_axi_rresp,
   input                   s_axi_rready,
   input       [ 2:0]      s_axi_awprot,
-  input       [ 2:0]      s_axi_arprot);
-
+  input       [ 2:0]      s_axi_arprot
+);
 
   // reset and clocks
 
@@ -199,8 +200,8 @@ module axi_clkgen #(
     .MMCM_CLK0_DIV (CLK0_DIV),
     .MMCM_CLK0_PHASE (CLK0_PHASE),
     .MMCM_CLK1_DIV (CLK1_DIV),
-    .MMCM_CLK1_PHASE (CLK1_PHASE))
-  i_mmcm_drp (
+    .MMCM_CLK1_PHASE (CLK1_PHASE)
+  ) i_mmcm_drp (
     .clk (clk),
     .clk2 (clk2),
     .clk_sel(clk_sel_s),
@@ -219,6 +220,3 @@ module axi_clkgen #(
     .up_drp_locked (up_drp_locked_s));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

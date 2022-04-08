@@ -38,7 +38,8 @@
 
 module axi_hdmi_tx_es #(
 
-  parameter   DATA_WIDTH = 32) (
+  parameter   DATA_WIDTH = 32
+) (
 
   // hdmi interface
 
@@ -46,7 +47,8 @@ module axi_hdmi_tx_es #(
   input                   hdmi_hs_de,
   input                   hdmi_vs_de,
   input       [(DATA_WIDTH-1):0]  hdmi_data_de,
-  output  reg [(DATA_WIDTH-1):0]  hdmi_data);
+  output  reg [(DATA_WIDTH-1):0]  hdmi_data
+);
 
   localparam  BYTE_WIDTH = DATA_WIDTH/8;
 
@@ -102,6 +104,3 @@ module axi_hdmi_tx_es #(
   end
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

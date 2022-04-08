@@ -69,7 +69,8 @@ module axi_ad9361 #(
   parameter   MIMO_ENABLE = 0,
   parameter   USE_SSI_CLK = 1,
   parameter   DELAY_REFCLK_FREQUENCY = 200,
-  parameter   RX_NODPA = 0) (
+  parameter   RX_NODPA = 0
+) (
 
   // physical interface (receive-lvds)
 
@@ -192,7 +193,8 @@ module axi_ad9361 #(
   input   [31:0]  up_dac_gpio_in,
   output  [31:0]  up_dac_gpio_out,
   input   [31:0]  up_adc_gpio_in,
-  output  [31:0]  up_adc_gpio_out);
+  output  [31:0]  up_adc_gpio_out
+);
 
   // derived parameters
 
@@ -339,8 +341,8 @@ module axi_ad9361 #(
     .IODELAY_CTRL (IODELAY_CTRL),
     .CLK_DESKEW (MIMO_ENABLE),
     .USE_SSI_CLK (USE_SSI_CLK),
-    .DELAY_REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
-  i_dev_if (
+    .DELAY_REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY)
+  ) i_dev_if (
     .rx_clk_in (rx_clk_in),
     .rx_frame_in (rx_frame_in),
     .rx_data_in (rx_data_in),
@@ -405,8 +407,8 @@ module axi_ad9361 #(
     .CLK_DESKEW (MIMO_ENABLE),
     .USE_SSI_CLK (USE_SSI_CLK),
     .DELAY_REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY),
-    .RX_NODPA (RX_NODPA))
-  i_dev_if (
+    .RX_NODPA (RX_NODPA)
+  ) i_dev_if (
     .rx_clk_in_p (rx_clk_in_p),
     .rx_clk_in_n (rx_clk_in_n),
     .rx_frame_in_p (rx_frame_in_p),
@@ -521,7 +523,9 @@ module axi_ad9361 #(
 
   generate
   if (TDD_DISABLE == 0) begin
-  axi_ad9361_tdd_if #(.LEVEL_OR_PULSE_N(1)) i_tdd_if (
+  axi_ad9361_tdd_if #(
+    .LEVEL_OR_PULSE_N(1)
+  ) i_tdd_if (
     .clk (clk),
     .rst (rst),
     .tdd_rx_vco_en (tdd_rx_vco_en_s),
@@ -599,8 +603,8 @@ module axi_ad9361 #(
     .USERPORTS_DISABLE (ADC_USERPORTS_DISABLE_INT),
     .DATAFORMAT_DISABLE (ADC_DATAFORMAT_DISABLE_INT),
     .DCFILTER_DISABLE (ADC_DCFILTER_DISABLE_INT),
-    .IQCORRECTION_DISABLE (ADC_IQCORRECTION_DISABLE_INT))
-  i_rx (
+    .IQCORRECTION_DISABLE (ADC_IQCORRECTION_DISABLE_INT)
+  ) i_rx (
     .mmcm_rst (mmcm_rst),
     .adc_rst (rst),
     .adc_clk (clk),
@@ -672,8 +676,8 @@ module axi_ad9361 #(
     .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
     .USERPORTS_DISABLE (DAC_USERPORTS_DISABLE_INT),
     .DELAYCNTRL_DISABLE (DAC_DELAYCNTRL_DISABLE_INT),
-    .IQCORRECTION_DISABLE (DAC_IQCORRECTION_DISABLE_INT))
-  i_tx (
+    .IQCORRECTION_DISABLE (DAC_IQCORRECTION_DISABLE_INT)
+  ) i_tx (
     .dac_clk (clk),
     .dac_valid (dac_valid_s),
     .dac_data (dac_data_s),
@@ -750,6 +754,3 @@ module axi_ad9361 #(
     .up_rack (up_rack));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

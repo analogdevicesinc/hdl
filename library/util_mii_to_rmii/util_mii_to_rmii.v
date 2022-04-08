@@ -38,7 +38,8 @@
 module util_mii_to_rmii #(
   parameter         INTF_CFG = 0,
   parameter         RATE_10_100 = 0
-  )   (
+) (
+
   // MAC to MII(PHY)
   input             mac_tx_en,
   input    [3:0]    mac_txd,
@@ -61,7 +62,7 @@ module util_mii_to_rmii #(
   // External
   input             ref_clk,
   input             reset_n
-  );
+);
 
   reg                mac_tx_en_r1 = 1'b0;
   reg       [3:0]    mac_txd_r1 = 4'b0;

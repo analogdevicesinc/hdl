@@ -41,8 +41,8 @@ module dmac_2d_transfer #(
   parameter DMA_LENGTH_WIDTH = 24,
   parameter BYTES_PER_BURST_WIDTH = 7,
   parameter BYTES_PER_BEAT_WIDTH_SRC = 3,
-  parameter BYTES_PER_BEAT_WIDTH_DEST = 3) (
-
+  parameter BYTES_PER_BEAT_WIDTH_DEST = 3
+) (
   input req_aclk,
   input req_aresetn,
 
@@ -78,7 +78,8 @@ module dmac_2d_transfer #(
   input [BYTES_PER_BURST_WIDTH-1:0] out_measured_burst_length,
   input out_response_partial,
   input out_response_valid,
-  output reg out_response_ready = 1'b1);
+  output reg out_response_ready = 1'b1
+);
 
   // internal registers
 

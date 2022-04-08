@@ -103,8 +103,8 @@ module adrv9001_tx #(
     .DDR_OR_SDR_N(1),
     .DATA_WIDTH(NUM_LANES),
     .SERDES_FACTOR(8),
-    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY))
-  i_serdes (
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY)
+  ) i_serdes (
     .rst (dac_rst|ssi_rst),
     .clk (dac_fast_clk),
     .div_clk (dac_clk_div),
@@ -184,7 +184,9 @@ module adrv9001_tx #(
         .O (dac_fast_clk));
 
       // SERDES slow clock
-      BUFR #(.BUFR_DIVIDE("4")) i_dac_div_clk_rbuf (
+      BUFR #(
+        .BUFR_DIVIDE("4")
+      ) i_dac_div_clk_rbuf (
         .CLR (mssi_sync),
         .CE (1'b1),
         .I (tx_dclk_in_s),
@@ -192,25 +194,20 @@ module adrv9001_tx #(
 
       if (USE_BUFG == 1) begin
         BUFG I_bufg (
-         .I (dac_clk_div_s),
-         .O (dac_clk_div)
-        );
+          .I (dac_clk_div_s),
+          .O (dac_clk_div));
       end else begin
         assign dac_clk_div = dac_clk_div_s;
       end
 
-      xpm_cdc_async_rst
-      # (
-         .DEST_SYNC_FF    (10), // DECIMAL; range: 2-10
-         .INIT_SYNC_FF    ( 0), // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
-         .RST_ACTIVE_HIGH ( 1)  // DECIMAL; 0=active low reset, 1=active high reset
-        )
-      rst_syncro
-      (
-       .src_arst (mssi_sync  ),
-       .dest_clk (dac_clk_div),
-       .dest_arst(ssi_rst    )
-      );
+      xpm_cdc_async_rst #(
+        .DEST_SYNC_FF    (10), // DECIMAL; range: 2-10
+        .INIT_SYNC_FF    ( 0), // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
+        .RST_ACTIVE_HIGH ( 1)  // DECIMAL; 0=active low reset, 1=active high reset
+      ) rst_syncro (
+        .src_arst (mssi_sync),
+        .dest_clk (dac_clk_div),
+        .dest_arst(ssi_rst));
 
     end else begin
 
@@ -222,26 +219,24 @@ module adrv9001_tx #(
       end
 
       BUFGCE #(
-         .CE_TYPE ("SYNC"),
-         .IS_CE_INVERTED (1'b0),
-         .IS_I_INVERTED (1'b0)
+        .CE_TYPE ("SYNC"),
+        .IS_CE_INVERTED (1'b0),
+        .IS_I_INVERTED (1'b0)
       ) i_dac_clk_in_gbuf (
-         .O (dac_fast_clk),
-         .CE (1'b1),
-         .I (tx_dclk_in_s)
-      );
+        .O (dac_fast_clk),
+        .CE (1'b1),
+        .I (tx_dclk_in_s));
 
       BUFGCE_DIV #(
-         .BUFGCE_DIVIDE (4),
-         .IS_CE_INVERTED (1'b0),
-         .IS_CLR_INVERTED (1'b0),
-         .IS_I_INVERTED (1'b0)
+        .BUFGCE_DIVIDE (4),
+        .IS_CE_INVERTED (1'b0),
+        .IS_CLR_INVERTED (1'b0),
+        .IS_I_INVERTED (1'b0)
       ) i_dac_div_clk_rbuf (
-         .O (dac_clk_div),
-         .CE (1'b1),
-         .CLR (mssi_sync_2d),
-         .I (tx_dclk_in_s)
-      );
+        .O (dac_clk_div),
+        .CE (1'b1),
+        .CLR (mssi_sync_2d),
+        .I (tx_dclk_in_s));
 
       assign ssi_rst = mssi_sync_2d;
 

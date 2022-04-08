@@ -286,7 +286,7 @@ module axi_adrv9001 #(
     .DISABLE_RX2_SSI (DISABLE_RX2_SSI),
     .DISABLE_TX2_SSI (DISABLE_TX2_SSI),
     .USE_RX_CLK_FOR_TX (USE_RX_CLK_FOR_TX)
-  ) i_if(
+  ) i_if (
 
     //
     // Physical interface
@@ -404,8 +404,7 @@ module axi_adrv9001 #(
     .tx2_single_lane (tx2_single_lane),
     .tx2_sdr_ddr_n (tx2_sdr_ddr_n),
     .tx2_symb_op (tx2_symb_op),
-    .tx2_symb_8_16b (tx2_symb_8_16b)
-  );
+    .tx2_symb_8_16b (tx2_symb_8_16b));
 
   // common processor control
   axi_adrv9001_core #(
@@ -551,8 +550,7 @@ module axi_adrv9001 #(
     .up_rreq (up_rreq_s),
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_s),
-    .up_rack (up_rack_s)
-  );
+    .up_rack (up_rack_s));
 
   assign adc_1_valid_i0 = adc_1_valid;
   assign adc_1_valid_q0 = adc_1_valid;
@@ -576,7 +574,7 @@ module axi_adrv9001 #(
   // up bus interface
   up_axi #(
     .AXI_ADDRESS_WIDTH(15)
-    ) i_up_axi (
+  ) i_up_axi (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_axi_awvalid (s_axi_awvalid),
@@ -603,8 +601,7 @@ module axi_adrv9001 #(
     .up_wack (up_wack_s),
     .up_raddr (up_raddr_s[12:0]),
     .up_rreq (up_rreq_s),
-    .up_rack (up_rack_s)
-  );
+    .up_rack (up_rack_s));
 
   // Alias Rx/Tx peripherals @ 0x8000
   assign up_raddr_s[13] = 1'b0;

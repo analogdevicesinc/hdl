@@ -38,8 +38,8 @@
 module util_extract #(
 
   parameter  NUM_OF_CHANNELS = 2,
-  parameter  DATA_WIDTH = NUM_OF_CHANNELS * 16) (
-
+  parameter  DATA_WIDTH = NUM_OF_CHANNELS * 16
+) (
   input                         clk,
 
   input       [DATA_WIDTH-1:0]  data_in,
@@ -79,6 +79,3 @@ module util_extract #(
   end
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

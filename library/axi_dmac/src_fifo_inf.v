@@ -39,8 +39,8 @@ module src_fifo_inf #(
 
   parameter ID_WIDTH = 3,
   parameter DATA_WIDTH = 64,
-  parameter BEATS_PER_BURST_WIDTH = 4)(
-
+  parameter BEATS_PER_BURST_WIDTH = 4
+) (
   input clk,
   input resetn,
 
@@ -71,55 +71,54 @@ module src_fifo_inf #(
   input req_sync_transfer_start
 );
 
-wire ready;
-wire valid;
+  wire ready;
+  wire valid;
 
-assign enabled = enable;
+  assign enabled = enable;
 
-assign valid = en & ready;
+  assign valid = en & ready;
 
-always @(posedge clk)
-begin
-  if (enable) begin
-    overflow <= en & ~ready;
-  end else begin
-    overflow <= en;
+  always @(posedge clk)
+  begin
+    if (enable) begin
+      overflow <= en & ~ready;
+    end else begin
+      overflow <= en;
+    end
   end
-end
 
-data_mover # (
-  .ID_WIDTH(ID_WIDTH),
-  .DATA_WIDTH(DATA_WIDTH),
-  .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH)
-) i_data_mover (
-  .clk(clk),
-  .resetn(resetn),
+  data_mover #(
+    .ID_WIDTH(ID_WIDTH),
+    .DATA_WIDTH(DATA_WIDTH),
+    .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH)
+  ) i_data_mover (
+    .clk(clk),
+    .resetn(resetn),
 
-  .xfer_req(xfer_req),
+    .xfer_req(xfer_req),
 
-  .request_id(request_id),
-  .response_id(response_id),
-  .eot(eot),
+    .request_id(request_id),
+    .response_id(response_id),
+    .eot(eot),
 
-  .bl_valid(bl_valid),
-  .bl_ready(bl_ready),
-  .measured_last_burst_length(measured_last_burst_length),
+    .bl_valid(bl_valid),
+    .bl_ready(bl_ready),
+    .measured_last_burst_length(measured_last_burst_length),
 
-  .req_valid(req_valid),
-  .req_ready(req_ready),
-  .req_last_burst_length(req_last_burst_length),
-  .req_sync_transfer_start(req_sync_transfer_start),
-  .req_xlast(1'b0),
+    .req_valid(req_valid),
+    .req_ready(req_ready),
+    .req_last_burst_length(req_last_burst_length),
+    .req_sync_transfer_start(req_sync_transfer_start),
+    .req_xlast(1'b0),
 
-  .s_axi_ready(ready),
-  .s_axi_valid(valid),
-  .s_axi_data(din),
-  .s_axi_sync(sync),
-  .s_axi_last(1'b0),
+    .s_axi_ready(ready),
+    .s_axi_valid(valid),
+    .s_axi_data(din),
+    .s_axi_sync(sync),
+    .s_axi_last(1'b0),
 
-  .m_axi_valid(fifo_valid),
-  .m_axi_data(fifo_data),
-  .m_axi_last(fifo_last)
-);
+    .m_axi_valid(fifo_valid),
+    .m_axi_data(fifo_data),
+    .m_axi_last(fifo_last));
 
 endmodule

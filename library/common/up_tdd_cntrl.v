@@ -39,7 +39,6 @@ module up_tdd_cntrl #(
   parameter   ID = 0,
   parameter   BASE_ADDRESS = 6'h20
 ) (
-
   input                   clk,
   input                   rst,
 
@@ -93,7 +92,8 @@ module up_tdd_cntrl #(
   input                   up_rreq,
   input       [13:0]      up_raddr,
   output  reg [31:0]      up_rdata,
-  output  reg             up_rack);
+  output  reg             up_rack
+);
 
   localparam  PCORE_VERSION = 32'h00010061;
   localparam  PCORE_MAGIC = 32'h54444443; // "TDDC", big endian
@@ -350,7 +350,9 @@ module up_tdd_cntrl #(
 
   // rf tdd control signal CDC
 
-  up_xfer_cntrl #(.DATA_WIDTH(63)) i_xfer_tdd_control (
+  up_xfer_cntrl #(
+    .DATA_WIDTH(63)
+  ) i_xfer_tdd_control (
     .up_rstn(up_rstn),
     .up_clk(up_clk),
     .up_data_cntrl({up_tdd_counter_init,
@@ -362,8 +364,7 @@ module up_tdd_cntrl #(
                     up_tdd_gated_rx_dmapath,
                     up_tdd_gated_tx_dmapath,
                     up_tdd_burst_count,
-                    up_tdd_terminal_type
-                  }),
+                    up_tdd_terminal_type}),
     .up_xfer_done(),
     .d_rst(rst),
     .d_clk(clk),
@@ -376,10 +377,11 @@ module up_tdd_cntrl #(
                    tdd_gated_rx_dmapath,
                    tdd_gated_tx_dmapath,
                    tdd_burst_count,
-                   tdd_terminal_type
-    }));
+                   tdd_terminal_type}));
 
-  up_xfer_cntrl #(.DATA_WIDTH(144)) i_xfer_tdd_counter_values_rx_1 (
+  up_xfer_cntrl #(
+    .DATA_WIDTH(144)
+  ) i_xfer_tdd_counter_values_rx_1 (
     .up_rstn(up_rstn),
     .up_clk(up_clk),
     .up_data_cntrl({
@@ -388,8 +390,7 @@ module up_tdd_cntrl #(
                     up_tdd_rx_on_1,
                     up_tdd_rx_off_1,
                     up_tdd_rx_dp_on_1,
-                    up_tdd_rx_dp_off_1
-    }),
+                    up_tdd_rx_dp_off_1}),
     .up_xfer_done(),
     .d_rst(rst),
     .d_clk(clk),
@@ -399,10 +400,11 @@ module up_tdd_cntrl #(
                    tdd_rx_on_1,
                    tdd_rx_off_1,
                    tdd_rx_dp_on_1,
-                   tdd_rx_dp_off_1
-    }));
+                   tdd_rx_dp_off_1}));
 
-  up_xfer_cntrl #(.DATA_WIDTH(144)) i_xfer_tdd_counter_values_tx_1 (
+  up_xfer_cntrl #(
+    .DATA_WIDTH(144)
+  ) i_xfer_tdd_counter_values_tx_1 (
     .up_rstn(up_rstn),
     .up_clk(up_clk),
     .up_data_cntrl({
@@ -411,8 +413,7 @@ module up_tdd_cntrl #(
                     up_tdd_tx_on_1,
                     up_tdd_tx_off_1,
                     up_tdd_tx_dp_on_1,
-                    up_tdd_tx_dp_off_1
-    }),
+                    up_tdd_tx_dp_off_1}),
     .up_xfer_done(),
     .d_rst(rst),
     .d_clk(clk),
@@ -422,10 +423,11 @@ module up_tdd_cntrl #(
                    tdd_tx_on_1,
                    tdd_tx_off_1,
                    tdd_tx_dp_on_1,
-                   tdd_tx_dp_off_1
-    }));
+                   tdd_tx_dp_off_1}));
 
-  up_xfer_cntrl #(.DATA_WIDTH(144)) i_xfer_tdd_counter_values_rx_2 (
+  up_xfer_cntrl #(
+    .DATA_WIDTH(144)
+  ) i_xfer_tdd_counter_values_rx_2 (
     .up_rstn(up_rstn),
     .up_clk(up_clk),
     .up_data_cntrl({
@@ -434,8 +436,7 @@ module up_tdd_cntrl #(
                     up_tdd_rx_on_2,
                     up_tdd_rx_off_2,
                     up_tdd_rx_dp_on_2,
-                    up_tdd_rx_dp_off_2
-    }),
+                    up_tdd_rx_dp_off_2}),
     .up_xfer_done(),
     .d_rst(rst),
     .d_clk(clk),
@@ -445,10 +446,11 @@ module up_tdd_cntrl #(
                    tdd_rx_on_2,
                    tdd_rx_off_2,
                    tdd_rx_dp_on_2,
-                   tdd_rx_dp_off_2
-    }));
+                   tdd_rx_dp_off_2}));
 
-  up_xfer_cntrl #(.DATA_WIDTH(144)) i_xfer_tdd_counter_values_tx_2 (
+  up_xfer_cntrl #(
+    .DATA_WIDTH(144)
+  ) i_xfer_tdd_counter_values_tx_2 (
     .up_rstn(up_rstn),
     .up_clk(up_clk),
     .up_data_cntrl({
@@ -457,8 +459,7 @@ module up_tdd_cntrl #(
                     up_tdd_tx_on_2,
                     up_tdd_tx_off_2,
                     up_tdd_tx_dp_on_2,
-                    up_tdd_tx_dp_off_2
-    }),
+                    up_tdd_tx_dp_off_2}),
     .up_xfer_done(),
     .d_rst(rst),
     .d_clk(clk),
@@ -468,10 +469,11 @@ module up_tdd_cntrl #(
                    tdd_tx_on_2,
                    tdd_tx_off_2,
                    tdd_tx_dp_on_2,
-                   tdd_tx_dp_off_2
-    }));
+                   tdd_tx_dp_off_2}));
 
-  up_xfer_status #(.DATA_WIDTH(8)) i_xfer_tdd_status (
+  up_xfer_status #(
+    .DATA_WIDTH(8)
+  ) i_xfer_tdd_status (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_status (up_tdd_status_s),
@@ -480,6 +482,3 @@ module up_tdd_cntrl #(
     .d_data_status (tdd_status));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

@@ -48,7 +48,8 @@ module up_clock_mon #(
   // device interface
 
   input                              d_rst,
-  input                              d_clk);
+  input                              d_clk
+);
 
   // internal registers
 
@@ -141,6 +142,3 @@ module up_clock_mon #(
   end
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

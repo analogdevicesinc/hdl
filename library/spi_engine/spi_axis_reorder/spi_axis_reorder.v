@@ -39,8 +39,8 @@
 //
 module spi_axis_reorder #(
 
-  parameter [3:0] NUM_OF_LANES = 2) (
-
+  parameter [3:0] NUM_OF_LANES = 2
+) (
   input                          axis_aclk,
   input                          axis_aresetn,
 

@@ -38,8 +38,8 @@
 module ad_mem #(
 
   parameter  DATA_WIDTH = 16,
-  parameter  ADDRESS_WIDTH = 5) (
-
+  parameter  ADDRESS_WIDTH = 5
+) (
   input                               clka,
   input                               wea,
   input       [(ADDRESS_WIDTH-1):0]   addra,
@@ -48,7 +48,8 @@ module ad_mem #(
   input                               clkb,
   input                               reb,
   input       [(ADDRESS_WIDTH-1):0]   addrb,
-  output  reg [(DATA_WIDTH-1):0]      doutb);
+  output  reg [(DATA_WIDTH-1):0]      doutb
+);
 
   (* ram_style = "block" *)
   reg         [(DATA_WIDTH-1):0]      m_ram[0:((2**ADDRESS_WIDTH)-1)];
@@ -66,6 +67,3 @@ module ad_mem #(
   end
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

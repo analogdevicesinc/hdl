@@ -34,6 +34,7 @@ module ad_ip_jesd204_tpl_adc_regmap #(
   parameter NUM_PROFILES = 1,    // Number of supported JESD profiles
   parameter EXT_SYNC = 0
 ) (
+
   // axi interface
   input s_axi_aclk,
   input s_axi_aresetn,
@@ -169,8 +170,7 @@ module ad_ip_jesd204_tpl_adc_regmap #(
     .up_rreq (up_rreq_s),
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata),
-    .up_rack (up_rack)
-  );
+    .up_rack (up_rack));
 
   integer n;
 
@@ -201,7 +201,6 @@ module ad_ip_jesd204_tpl_adc_regmap #(
   // common processor control
   //
   localparam CONFIG = (EXT_SYNC << 12);
-
 
   up_adc_common #(
     .COMMON_ID (6'h0),
@@ -261,8 +260,7 @@ module ad_ip_jesd204_tpl_adc_regmap #(
     .up_rreq (up_rreq_s),
     .up_raddr ({3'b0,up_raddr_s}),
     .up_rdata (up_rdata_s[0]),
-    .up_rack (up_rack_s[0])
-  );
+    .up_rack (up_rack_s[0]));
 
   generate
   genvar i;
@@ -319,16 +317,14 @@ module ad_ip_jesd204_tpl_adc_regmap #(
       .up_rreq (up_rreq_s),
       .up_raddr ({3'b0,up_raddr_s}),
       .up_rdata (up_rdata_s[i+1]),
-      .up_rack (up_rack_s[i+1])
-    );
+      .up_rack (up_rack_s[i+1]));
   end
   endgenerate
 
   up_tpl_common #(
-     .COMMON_ID(2'h0),            // Offset of regmap
-     .NUM_PROFILES(NUM_PROFILES)  // Number of JESD profiles
-    ) i_up_tpl_adc (
-
+    .COMMON_ID(2'h0),            // Offset of regmap
+    .NUM_PROFILES(NUM_PROFILES)  // Number of JESD profiles
+  ) i_up_tpl_adc (
     .jesd_m (jesd_m),
     .jesd_l (jesd_l),
     .jesd_s (jesd_s),
@@ -349,7 +345,6 @@ module ad_ip_jesd204_tpl_adc_regmap #(
     .up_rreq (up_rreq_s),
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_s[NUM_CHANNELS+1]),
-    .up_rack (up_rack_s[NUM_CHANNELS+1])
-  );
+    .up_rack (up_rack_s[NUM_CHANNELS+1]));
 
 endmodule

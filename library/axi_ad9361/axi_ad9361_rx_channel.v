@@ -45,7 +45,8 @@ module axi_ad9361_rx_channel #(
   parameter   USERPORTS_DISABLE = 0,
   parameter   DATAFORMAT_DISABLE = 0,
   parameter   DCFILTER_DISABLE = 0,
-  parameter   IQCORRECTION_DISABLE = 0) (
+  parameter   IQCORRECTION_DISABLE = 0
+) (
 
   // adc interface
 
@@ -79,7 +80,8 @@ module axi_ad9361_rx_channel #(
   input           up_rreq,
   input   [13:0]  up_raddr,
   output  [31:0]  up_rdata,
-  output          up_rack);
+  output          up_rack
+);
 
   // internal signals
 
@@ -129,8 +131,8 @@ module axi_ad9361_rx_channel #(
 
   axi_ad9361_rx_pnmon #(
     .Q_OR_I_N (Q_OR_I_N),
-    .PRBS_SEL (CHANNEL_ID))
-  i_rx_pnmon (
+    .PRBS_SEL (CHANNEL_ID)
+  )  i_rx_pnmon (
     .adc_clk (adc_clk),
     .adc_valid (adc_valid),
     .adc_data_i (adc_data),
@@ -141,8 +143,8 @@ module axi_ad9361_rx_channel #(
 
   ad_datafmt #(
     .DATA_WIDTH (12),
-    .DISABLE (DATAFORMAT_DISABLE))
-  i_ad_datafmt (
+    .DISABLE (DATAFORMAT_DISABLE)
+  ) i_ad_datafmt (
     .clk (adc_clk),
     .valid (adc_valid),
     .data (adc_data_s),
@@ -153,8 +155,8 @@ module axi_ad9361_rx_channel #(
     .dfmt_se (adc_dfmt_se_s));
 
   ad_dcfilter #(
-    .DISABLE (DCFILTER_DISABLE))
-  i_ad_dcfilter (
+    .DISABLE (DCFILTER_DISABLE)
+  ) i_ad_dcfilter (
     .clk (adc_clk),
     .valid (adc_dfmt_valid_s),
     .data (adc_dfmt_data_s),
@@ -166,8 +168,8 @@ module axi_ad9361_rx_channel #(
 
   ad_iqcor #(
     .Q_OR_I_N (Q_OR_I_N),
-    .DISABLE (IQCORRECTION_DISABLE))
-  i_ad_iqcor (
+    .DISABLE (IQCORRECTION_DISABLE)
+  ) i_ad_iqcor (
     .clk (adc_clk),
     .valid (adc_dcfilter_valid_s),
     .data_in (adc_dcfilter_data_s),
@@ -183,8 +185,8 @@ module axi_ad9361_rx_channel #(
     .USERPORTS_DISABLE (USERPORTS_DISABLE),
     .DATAFORMAT_DISABLE (DATAFORMAT_DISABLE),
     .DCFILTER_DISABLE (DCFILTER_DISABLE),
-    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE))
-  i_up_adc_channel (
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE)
+  ) i_up_adc_channel (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_enable (adc_enable),
@@ -232,9 +234,4 @@ module axi_ad9361_rx_channel #(
 
   end
   endgenerate
-
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************
-

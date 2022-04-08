@@ -81,7 +81,8 @@ module axi_adxcvr_es (
   input           up_axi_rvalid,
   input   [31:0]  up_axi_rdata,
   input   [ 1:0]  up_axi_rresp,
-  output          up_axi_rready);
+  output          up_axi_rready
+);
 
   // parameters
 
@@ -567,6 +568,3 @@ module axi_adxcvr_es (
   end
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

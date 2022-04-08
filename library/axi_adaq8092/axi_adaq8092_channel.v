@@ -39,7 +39,8 @@
 module axi_adaq8092_channel #(
 
   parameter CHANNEL_ID = 0,
-  parameter DATAPATH_DISABLE = 0) (
+  parameter DATAPATH_DISABLE = 0
+) (
 
   // adc interface
 
@@ -66,7 +67,8 @@ module axi_adaq8092_channel #(
   input                   up_rreq,
   input       [13:0]      up_raddr,
   output      [31:0]      up_rdata,
-  output                  up_rack);
+  output                  up_rack
+);
 
   // internal signals
 
@@ -77,7 +79,7 @@ module axi_adaq8092_channel #(
   wire            adc_dfmt_enable_s;
   wire    [15:0]  adc_dcfilt_offset_s;
   wire    [15:0]  adc_dcfilt_coeff_s;
-      
+
   generate
     if (DATAPATH_DISABLE == 1) begin
       assign adc_dfmt_data_s = {2'b0 , adc_data};
@@ -110,8 +112,8 @@ module axi_adaq8092_channel #(
         .dcfilt_coeff (adc_dcfilt_coeff_s),
         .dcfilt_offset (adc_dcfilt_offset_s));
     end
-  endgenerate 
-  
+  endgenerate
+
   up_adc_channel #(
     .COMMON_ID (6'h01),
     .CHANNEL_ID(CHANNEL_ID),

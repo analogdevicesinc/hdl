@@ -68,8 +68,7 @@ module pack_network #(
   ) i_ctrl (
     .rotate(rotate),
     .prefix_count(prefix_count),
-    .ctrl(ctrl_s)
-  );
+    .ctrl(ctrl_s));
 
   always @(posedge clk) begin
     if (ce_ctrl == 1'b1) begin
@@ -103,7 +102,6 @@ module pack_network #(
     .ctrl(ctrl_),
 
     .data_in(data_in),
-    .data_out(data_out)
-  );
+    .data_out(data_out));
 
 endmodule

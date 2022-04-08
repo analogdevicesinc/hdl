@@ -49,7 +49,8 @@ module axi_ad9625_pnmon (
 
   // processor interface PN9 (0x0), PN23 (0x1)
 
-  input       [  3:0]     adc_pnseq_sel);
+  input       [  3:0]     adc_pnseq_sel
+);
 
   // internal registers
 
@@ -494,7 +495,9 @@ module axi_ad9625_pnmon (
 
   // pn oos & pn error
 
-  ad_pnmon #(.DATA_WIDTH(192)) i_pnmon (
+  ad_pnmon #(
+    .DATA_WIDTH(192)
+  ) i_pnmon (
     .adc_clk (adc_clk),
     .adc_valid_in (1'b1),
     .adc_data_in (adc_pn_data_in),
@@ -503,7 +506,3 @@ module axi_ad9625_pnmon (
     .adc_pn_err (adc_pn_err));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************
-

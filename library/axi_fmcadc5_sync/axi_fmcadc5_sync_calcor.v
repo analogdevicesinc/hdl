@@ -61,7 +61,8 @@ module axi_fmcadc5_sync_calcor (
   input   [ 15:0]   rx_cor_scale_0,
   input   [ 15:0]   rx_cor_offset_0,
   input   [ 15:0]   rx_cor_scale_1,
-  input   [ 15:0]   rx_cor_offset_1);
+  input   [ 15:0]   rx_cor_offset_1
+);
 
   // internal registers
 
@@ -124,14 +125,19 @@ module axi_fmcadc5_sync_calcor (
 
   generate
   for (n = 0; n <= 15; n = n + 1) begin: g_rx_gain
-  ad_mul #(.DELAY_DATA_WIDTH(1)) i_rx_gain_0 (
+  ad_mul #(
+    .DELAY_DATA_WIDTH(1)
+  ) i_rx_gain_0 (
     .clk (rx_clk),
     .data_a ({rx_cor_data_0[n][15], rx_cor_data_0[n]}),
     .data_b ({1'b0, rx_cor_scale_0}),
     .data_p (rx_cor_data_0_s[n]),
     .ddata_in (1'd0),
     .ddata_out ());
-  ad_mul #(.DELAY_DATA_WIDTH(1)) i_rx_gain_1 (
+
+  ad_mul #(
+    .DELAY_DATA_WIDTH(1)
+  ) i_rx_gain_1 (
     .clk (rx_clk),
     .data_a ({rx_cor_data_1[n][15], rx_cor_data_1[n]}),
     .data_b ({1'b0, rx_cor_scale_1}),
@@ -317,6 +323,3 @@ module axi_fmcadc5_sync_calcor (
   endgenerate
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

@@ -199,8 +199,8 @@ module data_offload #(
   // Offload FSM and control
   data_offload_fsm #(
     .TX_OR_RXN_PATH (TX_OR_RXN_PATH),
-    .SYNC_EXT_ADD_INTERNAL_CDC (SYNC_EXT_ADD_INTERNAL_CDC))
-  i_data_offload_fsm (
+    .SYNC_EXT_ADD_INTERNAL_CDC (SYNC_EXT_ADD_INTERNAL_CDC)
+  ) i_data_offload_fsm (
     .up_clk (up_clk),
     .wr_clk (src_clk),
     .wr_resetn_in (src_rstn),
@@ -226,8 +226,7 @@ module data_offload #(
     .sync_external (sync_ext),
     .sync_internal (sync_int_s),
     .wr_fsm_state_out (src_fsm_status_s),
-    .rd_fsm_state_out (dst_fsm_status_s)
-  );
+    .rd_fsm_state_out (dst_fsm_status_s));
 
   assign m_axis_valid = rd_ready & ((dst_bypass_s) ? valid_bypass_s : s_storage_axis_valid);
   // For DAC paths set zero as IDLE data on the axis bus, avoid repeating last
@@ -246,7 +245,6 @@ module data_offload #(
 
   assign s_storage_axis_ready = rd_ready & m_axis_ready;
 
-
   // Bypass module instance -- the same FIFO, just a smaller depth
   // NOTE: Generating an overflow is making sense just in BYPASS mode, and
   // it's supported just with the FIFO interface
@@ -254,8 +252,8 @@ module data_offload #(
     .S_DATA_WIDTH (SRC_DATA_WIDTH),
     .S_ADDRESS_WIDTH (SRC_ADDR_WIDTH_BYPASS),
     .M_DATA_WIDTH (DST_DATA_WIDTH),
-    .ASYNC_CLK (1))
-  i_bypass_fifo (
+    .ASYNC_CLK (1)
+  ) i_bypass_fifo (
     .m_axis_aclk (m_axis_aclk),
     .m_axis_aresetn (dst_rstn),
     .m_axis_ready (m_axis_ready),
@@ -275,8 +273,7 @@ module data_offload #(
     .s_axis_full  (),
     .s_axis_almost_full (),
     .s_axis_tkeep (),
-    .s_axis_room ()
-  );
+    .s_axis_room ());
 
   // register map
 
@@ -287,7 +284,7 @@ module data_offload #(
     .TX_OR_RXN_PATH (TX_OR_RXN_PATH),
     .AUTO_BRINGUP (AUTO_BRINGUP),
     .HAS_BYPASS (HAS_BYPASS)
-) i_regmap (
+  ) i_regmap (
     .up_clk (up_clk),
     .up_rstn (up_rstn),
     .up_rreq (up_rreq_s),
@@ -313,8 +310,7 @@ module data_offload #(
     .src_fsm_status (src_fsm_status_s),
     .dst_fsm_status (dst_fsm_status_s),
     .src_overflow (wr_overflow),
-    .dst_underflow (rd_underflow)
-  );
+    .dst_underflow (rd_underflow));
 
   // axi interface wrapper
 
@@ -322,8 +318,8 @@ module data_offload #(
   assign up_rstn = s_axi_aresetn;
 
   up_axi #(
-    .AXI_ADDRESS_WIDTH (16))
-  i_up_axi (
+    .AXI_ADDRESS_WIDTH (16)
+  ) i_up_axi (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_axi_awvalid (s_axi_awvalid),
@@ -352,39 +348,37 @@ module data_offload #(
     .up_rdata (up_rdata_s),
     .up_rack (up_rack_s));
 
-// Measured length handshake CDC
-util_axis_fifo #(
-  .DATA_WIDTH(MEM_SIZE_LOG2),
-  .ADDRESS_WIDTH(0),
-  .ASYNC_CLK(1)
-) i_measured_length_cdc (
-  .s_axis_aclk(s_axis_aclk),
-  .s_axis_aresetn(s_axis_aresetn),
-  .s_axis_valid(wr_response_eot),
-  .s_axis_ready(),
-  .s_axis_full(),
-  .s_axis_data(wr_response_measured_length),
-  .s_axis_room(),
-  .s_axis_tkeep(),
-  .s_axis_tlast(),
-  .s_axis_almost_full(),
+  // Measured length handshake CDC
+  util_axis_fifo #(
+    .DATA_WIDTH(MEM_SIZE_LOG2),
+    .ADDRESS_WIDTH(0),
+    .ASYNC_CLK(1)
+  ) i_measured_length_cdc (
+    .s_axis_aclk(s_axis_aclk),
+    .s_axis_aresetn(s_axis_aresetn),
+    .s_axis_valid(wr_response_eot),
+    .s_axis_ready(),
+    .s_axis_full(),
+    .s_axis_data(wr_response_measured_length),
+    .s_axis_room(),
+    .s_axis_tkeep(),
+    .s_axis_tlast(),
+    .s_axis_almost_full(),
 
-  .m_axis_aclk(m_axis_aclk),
-  .m_axis_aresetn(m_axis_aresetn),
-  .m_axis_valid(rd_ml_valid),
-  .m_axis_ready(rd_ml_ready),
-  .m_axis_data(rd_wr_response_measured_length),
-  .m_axis_level(),
-  .m_axis_empty(),
-  .m_axis_tkeep(),
-  .m_axis_tlast(),
-  .m_axis_almost_empty()
-);
+    .m_axis_aclk(m_axis_aclk),
+    .m_axis_aresetn(m_axis_aresetn),
+    .m_axis_valid(rd_ml_valid),
+    .m_axis_ready(rd_ml_ready),
+    .m_axis_data(rd_wr_response_measured_length),
+    .m_axis_level(),
+    .m_axis_empty(),
+    .m_axis_tkeep(),
+    .m_axis_tlast(),
+    .m_axis_almost_empty());
 
-always @(posedge m_axis_aclk) begin
-  if (rd_ml_valid & rd_ml_ready)
-   rd_request_length <= rd_wr_response_measured_length;
-end
+  always @(posedge m_axis_aclk) begin
+    if (rd_ml_valid & rd_ml_ready)
+     rd_request_length <= rd_wr_response_measured_length;
+  end
 
 endmodule
-

@@ -47,15 +47,16 @@
 
 module ad_3w_spi #(
 
-  parameter NUM_OF_SLAVES=8) (
-
+  parameter NUM_OF_SLAVES = 8
+) (
   input       [NUM_OF_SLAVES-1:0] spi_csn,
   input                           spi_clk,
   input                           spi_mosi,
   output                          spi_miso,
 
   inout                           spi_sdio,
-  output                          spi_dir);
+  output                          spi_dir
+);
 
   // internal registers
 
@@ -102,6 +103,3 @@ module ad_3w_spi #(
   assign spi_sdio = (spi_enable_s == 1'b1) ? 1'bz : spi_mosi;
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

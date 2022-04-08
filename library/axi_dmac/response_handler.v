@@ -37,8 +37,8 @@
 
 module response_handler #(
 
-  parameter ID_WIDTH = 3)(
-
+  parameter ID_WIDTH = 3
+) (
   input clk,
   input resetn,
 
@@ -60,34 +60,34 @@ module response_handler #(
   output [1:0] resp_resp
 );
 
-`include "resp.vh"
-`include "inc_id.vh"
+  `include "resp.vh"
+  `include "inc_id.vh"
 
-assign resp_resp = bresp;
-assign resp_eot = eot;
+  assign resp_resp = bresp;
+  assign resp_eot = eot;
 
-wire active = id != request_id;
+  wire active = id != request_id;
 
-assign bready = active && resp_ready;
-assign resp_valid = active && bvalid;
+  assign bready = active && resp_ready;
+  assign resp_valid = active && bvalid;
 
-// We have to wait for all responses before we can disable the response handler
-always @(posedge clk) begin
-  if (resetn == 1'b0) begin
-    enabled <= 1'b0;
-  end else if (enable == 1'b1) begin
-      enabled <= 1'b1;
-  end else if (request_id == id) begin
+  // We have to wait for all responses before we can disable the response handler
+  always @(posedge clk) begin
+    if (resetn == 1'b0) begin
       enabled <= 1'b0;
+    end else if (enable == 1'b1) begin
+        enabled <= 1'b1;
+    end else if (request_id == id) begin
+        enabled <= 1'b0;
+    end
   end
-end
 
-always @(posedge clk) begin
-  if (resetn == 1'b0) begin
-    id <= 'h0;
-  end else if (bready == 1'b1 && bvalid == 1'b1) begin
-    id <= inc_id(id);
+  always @(posedge clk) begin
+    if (resetn == 1'b0) begin
+      id <= 'h0;
+    end else if (bready == 1'b1 && bvalid == 1'b1) begin
+      id <= inc_id(id);
+    end
   end
-end
 
 endmodule

@@ -82,8 +82,7 @@ module dma_read_shutdown_tb;
     .rvalid(rvalid),
     .rdata(rdata),
     .rresp(rresp),
-    .rlast(rlast)
-  );
+    .rlast(rlast));
 
   wire [11:0] dbg_status;
 
@@ -157,7 +156,6 @@ module dma_read_shutdown_tb;
     .fifo_rd_underflow(),
     .fifo_rd_dout(),
 
-    .dbg_status(dbg_status)
-  );
+    .dbg_status(dbg_status));
 
 endmodule

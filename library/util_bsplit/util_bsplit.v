@@ -38,9 +38,9 @@
 
 module util_bsplit #(
 
-  parameter   CHANNEL_DATA_WIDTH     = 1,
-  parameter   NUM_OF_CHANNELS    = 8) (
-
+  parameter   CHANNEL_DATA_WIDTH = 1,
+  parameter   NUM_OF_CHANNELS = 8
+) (
   input       [((NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH)-1):0]  data,
 
   output      [(CHANNEL_DATA_WIDTH-1):0]  split_data_0,
@@ -50,7 +50,8 @@ module util_bsplit #(
   output      [(CHANNEL_DATA_WIDTH-1):0]  split_data_4,
   output      [(CHANNEL_DATA_WIDTH-1):0]  split_data_5,
   output      [(CHANNEL_DATA_WIDTH-1):0]  split_data_6,
-  output      [(CHANNEL_DATA_WIDTH-1):0]  split_data_7);
+  output      [(CHANNEL_DATA_WIDTH-1):0]  split_data_7
+);
 
   localparam  NUM_OF_CHANNELS_M   = 9;
 
@@ -73,6 +74,3 @@ module util_bsplit #(
   assign split_data_7 = data_s[((CHANNEL_DATA_WIDTH*8)-1):(CHANNEL_DATA_WIDTH*7)];
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

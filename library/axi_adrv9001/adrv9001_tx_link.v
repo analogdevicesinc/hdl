@@ -58,9 +58,9 @@ module adrv9001_tx_link  #(
   // Config interface
   input          tx_sdr_ddr_n,
   input          tx_single_lane,
-  input          tx_symb_op,                
-  input          tx_symb_8_16b                 
-);                                                           
+  input          tx_symb_op,
+  input          tx_symb_8_16b
+);
 
   assign tx_clk = dac_clk_div;
 
@@ -74,7 +74,7 @@ module adrv9001_tx_link  #(
   wire [7:0] data8sdr_2;
   wire [7:0] data8sdr_3;
   wire [7:0] strobe8sdr;
-  
+
   wire       ld_next;
 
   reg [31:0] data32 = 32'b0;
@@ -122,15 +122,15 @@ module adrv9001_tx_link  #(
       data16_1 <= tx_data_q;
       strobe16 <= {1'b1,15'b0};
     end else if (ld_next) begin
-     if(tx_sdr_ddr_n) begin
-       data16_0 <= {data16_0,4'b0};
-       data16_1 <= {data16_1,4'b0};
-       strobe16 <= {strobe16,4'b0};
-     end else begin
-       data16_0 <= {data16_0,8'b0};
-       data16_1 <= {data16_1,8'b0};
-       strobe16 <= {strobe16,8'b0};
-     end
+      if(tx_sdr_ddr_n) begin
+        data16_0 <= {data16_0,4'b0};
+        data16_1 <= {data16_1,4'b0};
+        strobe16 <= {strobe16,4'b0};
+      end else begin
+        data16_0 <= {data16_0,8'b0};
+        data16_1 <= {data16_1,8'b0};
+        strobe16 <= {strobe16,8'b0};
+      end
     end
   end
 
@@ -138,7 +138,7 @@ module adrv9001_tx_link  #(
   assign data16sdr_0 = {data16_0[15],data16_0[15],
                         data16_0[14],data16_0[14],
                         data16_0[13],data16_0[13],
-                        data16_0[12],data16_0[12]}; 
+                        data16_0[12],data16_0[12]};
   assign strobe16sdr = {strobe16[15],strobe16[15],
                         strobe16[14],strobe16[14],
                         strobe16[13],strobe16[13],
@@ -198,7 +198,7 @@ module adrv9001_tx_link  #(
   assign dac_data_3 = tx_single_lane ? 'b0 :
                            (CMOS_LVDS_N ? (tx_sdr_ddr_n ? data8sdr_3 : data8_3) :
                            1'b0);
- 
+
   assign dac_data_strobe = tx_single_lane ? (tx_symb_op ? (tx_symb_8_16b ? (tx_sdr_ddr_n ? strobe8sdr : strobe8) :
                            (tx_sdr_ddr_n ? strobe16sdr : strobe16[15-:8])):
                            (tx_sdr_ddr_n ? strobe32sdr : strobe32[31-:8])) :
@@ -215,6 +215,6 @@ module adrv9001_tx_link  #(
       valid_gen <= {valid_gen[2:0],valid_gen[3]};
     end
   end
- assign ld_next = (CLK_DIV_IS_FAST_CLK == 0) ? 1'b1 : valid_gen[2];
+  assign ld_next = (CLK_DIV_IS_FAST_CLK == 0) ? 1'b1 : valid_gen[2];
 
 endmodule

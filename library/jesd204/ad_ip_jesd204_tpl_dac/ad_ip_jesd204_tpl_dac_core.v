@@ -40,6 +40,7 @@ module ad_ip_jesd204_tpl_dac_core #(
   parameter DDS_CORDIC_PHASE_DW = 16,
   parameter EXT_SYNC = 0
 ) (
+
   // dac interface
   input clk,
 
@@ -108,8 +109,7 @@ module ad_ip_jesd204_tpl_dac_core #(
     .ext_sync_arm (dac_ext_sync_arm),
     .ext_sync_disarm (dac_ext_sync_disarm),
     .sync_in (dac_sync_in | dac_sync_manual_req),
-    .sync_armed (dac_sync_armed)
-  );
+    .sync_armed (dac_sync_armed));
 
   // Sync either from external or software source
   assign dac_sync_int = dac_sync_armed | dac_sync;
@@ -127,8 +127,7 @@ module ad_ip_jesd204_tpl_dac_core #(
     .DAC_DATA_WIDTH (DAC_DATA_WIDTH)
   ) i_framer (
     .link_data (link_data),
-    .dac_data (dac_data_s)
-  );
+    .dac_data (dac_data_s));
 
   // PN generator
   ad_ip_jesd204_tpl_dac_pn #(
@@ -139,15 +138,14 @@ module ad_ip_jesd204_tpl_dac_core #(
     .reset (dac_sync_int),
 
     .pn7_data (pn7_data),
-    .pn15_data (pn15_data)
-  );
+    .pn15_data (pn15_data));
 
   // dac valid
 
   assign dac_valid = {NUM_CHANNELS{~dac_sync_armed}};
   assign dac_rst = dac_sync_armed;
 
-  // Gate input data 
+  // Gate input data
   assign dac_ddata_int = dac_sync_armed ? {LINK_DATA_WIDTH{1'b0}} : dac_ddata;
 
   generate
@@ -171,8 +169,7 @@ module ad_ip_jesd204_tpl_dac_core #(
         .clk (clk),
         .data_in (dac_ddata_int),
         .ch_sel (dac_src_chan_sel[8*i+:8]),
-        .data_out (dac_ddata_muxed[DAC_CDW*i+:DAC_CDW])
-      );
+        .data_out (dac_ddata_muxed[DAC_CDW*i+:DAC_CDW]));
 
     end else begin
       assign dac_ddata_muxed[DAC_CDW*i+:DAC_CDW] = dac_ddata_int[DAC_CDW*i+:DAC_CDW];
@@ -216,9 +213,7 @@ module ad_ip_jesd204_tpl_dac_core #(
       .dac_iqcor_enb (dac_iqcor_enb[i]),
       .dac_iqcor_coeff_1 (dac_iqcor_coeff_1[16*i+:16]),
       .dac_iqcor_coeff_2 (dac_iqcor_coeff_2[16*i+:16]),
-      .dac_iqcor_data_in (dac_ddata_muxed[DAC_CDW*IQ_PAIR_CH_INDEX+:DAC_CDW])
-
-    );
+      .dac_iqcor_data_in (dac_ddata_muxed[DAC_CDW*IQ_PAIR_CH_INDEX+:DAC_CDW]));
   end
   endgenerate
 

@@ -62,8 +62,7 @@ module crc12_tb;
     .reset (1'b0),
     .init (init),
     .data_in (data_in),
-    .crc12 (crc12)
-  );
+    .crc12 (crc12));
 
   // Test against dataset from the standard
   //  - Test contiguous input stream with init phase
@@ -94,7 +93,6 @@ module crc12_tb;
       @(posedge clk) ref_crc12 <= 'h5fe;
     end
   end
-
 
   always @(posedge clk) begin
     if (ref_crc12 != crc12 && failed == 1'b0 && test_en) begin

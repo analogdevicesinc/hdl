@@ -45,76 +45,74 @@ module sync_event #(
   output reg [NUM_OF_EVENTS-1:0] out_event
 );
 
-generate
-if (ASYNC_CLK == 1) begin
+  generate
+  if (ASYNC_CLK == 1) begin
 
-wire out_toggle;
-wire in_toggle;
+  wire out_toggle;
+  wire in_toggle;
 
-reg out_toggle_d1 = 1'b0;
-reg in_toggle_d1 = 1'b0;
+  reg out_toggle_d1 = 1'b0;
+  reg in_toggle_d1 = 1'b0;
 
-sync_bits i_sync_out (
-  .in_bits(in_toggle_d1),
-  .out_clk(out_clk),
-  .out_resetn(1'b1),
-  .out_bits(out_toggle)
-);
+  sync_bits i_sync_out (
+    .in_bits(in_toggle_d1),
+    .out_clk(out_clk),
+    .out_resetn(1'b1),
+    .out_bits(out_toggle));
 
-sync_bits i_sync_in (
-  .in_bits(out_toggle_d1),
-  .out_clk(in_clk),
-  .out_resetn(1'b1),
-  .out_bits(in_toggle)
-);
+  sync_bits i_sync_in (
+    .in_bits(out_toggle_d1),
+    .out_clk(in_clk),
+    .out_resetn(1'b1),
+    .out_bits(in_toggle));
 
-wire in_ready = in_toggle == in_toggle_d1;
-wire load_out = out_toggle ^ out_toggle_d1;
+  wire in_ready = in_toggle == in_toggle_d1;
+  wire load_out = out_toggle ^ out_toggle_d1;
 
-reg [NUM_OF_EVENTS-1:0] in_event_sticky = 'h00;
-wire [NUM_OF_EVENTS-1:0] pending_events = in_event_sticky | in_event;
-wire [NUM_OF_EVENTS-1:0] out_event_s;
-
-always @(posedge in_clk) begin
-  if (in_ready == 1'b1) begin
-    in_event_sticky <= {NUM_OF_EVENTS{1'b0}};
-    if (|pending_events == 1'b1) begin
-      in_toggle_d1 <= ~in_toggle_d1;
-    end
-  end else begin
-    in_event_sticky <= pending_events;
-  end
-end
-
-if (NUM_OF_EVENTS > 1) begin
-  reg [NUM_OF_EVENTS-1:0] cdc_hold = 'h00;
+  reg [NUM_OF_EVENTS-1:0] in_event_sticky = 'h00;
+  wire [NUM_OF_EVENTS-1:0] pending_events = in_event_sticky | in_event;
+  wire [NUM_OF_EVENTS-1:0] out_event_s;
 
   always @(posedge in_clk) begin
     if (in_ready == 1'b1) begin
-      cdc_hold <= pending_events;
+      in_event_sticky <= {NUM_OF_EVENTS{1'b0}};
+      if (|pending_events == 1'b1) begin
+        in_toggle_d1 <= ~in_toggle_d1;
+      end
+    end else begin
+      in_event_sticky <= pending_events;
     end
   end
 
-  assign out_event_s = cdc_hold;
-end else begin
-  // When there is only one event, we know that it is set.
-  assign out_event_s = 1'b1;
-end
+  if (NUM_OF_EVENTS > 1) begin
+    reg [NUM_OF_EVENTS-1:0] cdc_hold = 'h00;
 
-always @(posedge out_clk) begin
-  if (load_out == 1'b1) begin
-    out_event <= out_event_s;
+    always @(posedge in_clk) begin
+      if (in_ready == 1'b1) begin
+        cdc_hold <= pending_events;
+      end
+    end
+
+    assign out_event_s = cdc_hold;
   end else begin
-    out_event <= {NUM_OF_EVENTS{1'b0}};
+    // When there is only one event, we know that it is set.
+    assign out_event_s = 1'b1;
   end
-  out_toggle_d1 <= out_toggle;
-end
 
-end else begin
-  always @(*) begin
-    out_event <= in_event;
+  always @(posedge out_clk) begin
+    if (load_out == 1'b1) begin
+      out_event <= out_event_s;
+    end else begin
+      out_event <= {NUM_OF_EVENTS{1'b0}};
+    end
+    out_toggle_d1 <= out_toggle;
   end
-end
-endgenerate
+
+  end else begin
+    always @(*) begin
+      out_event <= in_event;
+    end
+  end
+  endgenerate
 
 endmodule

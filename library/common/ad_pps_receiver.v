@@ -44,7 +44,8 @@ module ad_pps_receiver (
   output  reg [31:0]    up_pps_rcounter,
   output  reg           up_pps_status,
   input                 up_irq_mask,
-  output  reg           up_irq);
+  output  reg           up_irq
+);
 
   // *************************************************************************
   // 1PPS reception and reporting counter implementation

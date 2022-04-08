@@ -36,7 +36,7 @@
 
 module phy_mac_link  #(
   parameter RATE_10_100 = 0
-  ) (
+) (
   input             ref_clk,
   input             reset_n,
   input   [1:0]     phy_rxd,
@@ -48,7 +48,7 @@ module phy_mac_link  #(
   output            mii_crs,
   output            mii_col,
   output            mii_rx_clk
-  );
+);
 
   wire              clk_phase_res;
   wire              data_valid_w;

@@ -53,7 +53,6 @@ module tx_tb;
 
   `include "tb_base.v"
 
-
   reg [NUM_LINKS-1:0] sync = {NUM_LINKS{1'b1}};
   reg [31:0] counter = 'h00;
   reg [31:0] tx_data = 'h00000000;
@@ -140,8 +139,7 @@ module tx_tb;
 
     .ilas_config_rd(tx_ilas_config_rd),
     .ilas_config_addr(tx_ilas_config_addr),
-    .ilas_config_data(tx_ilas_config_data)
-  );
+    .ilas_config_data(tx_ilas_config_data));
 
   jesd204_tx #(
     .NUM_LANES(NUM_LANES),
@@ -204,10 +202,6 @@ module tx_tb;
 
     .status_synth_params0(),
     .status_synth_params1(),
-    .status_synth_params2()
-
-
-  );
-
+    .status_synth_params2());
 
 endmodule

@@ -44,8 +44,8 @@ module util_gmii_to_rgmii #(
   parameter IODELAY_CTRL = 1'b0,
   parameter IDELAY_VALUE = 18,
   parameter IODELAY_GROUP = "if_delay_group",
-  parameter REFCLK_FREQUENCY = 200) (
-
+  parameter REFCLK_FREQUENCY = 200
+) (
   input                   clk_20m,
   input                   clk_25m,
   input                   clk_125m,
@@ -73,8 +73,8 @@ module util_gmii_to_rgmii #(
   output  reg [ 7:0]      gmii_rxd,
   output  reg             gmii_rx_dv,
   output  reg             gmii_rx_er,
-  output                  gmii_rx_clk);
-
+  output                  gmii_rx_clk
+);
 
   // wires
   wire            clk_2_5m;
@@ -284,11 +284,11 @@ module util_gmii_to_rgmii #(
   mdc_mdio  #(
     .PHY_AD(PHY_AD)
   ) mdc_mdio_in(
-      .mdio_mdc(mdio_mdc),
-      .mdio_in_w(mdio_in_w),
-      .mdio_in_r(mdio_in_r),
-      .speed_select(speed_selection),
-      .duplex_mode(duplex_mode));
+    .mdio_mdc(mdio_mdc),
+    .mdio_in_w(mdio_in_w),
+    .mdio_in_r(mdio_in_r),
+    .speed_select(speed_selection),
+    .duplex_mode(duplex_mode));
 
   // DELAY CONTROLLER
   generate

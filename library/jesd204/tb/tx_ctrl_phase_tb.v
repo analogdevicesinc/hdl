@@ -161,9 +161,7 @@ module tx_ctrl_phase_tb;
     .ctrl_manual_sync_request(1'b0),
 
     .status_sync(),
-    .status_state()
-
-  );
+    .status_state());
 
   jesd204_tx_ctrl i_tx_ctrl_b (
     .clk(clk),
@@ -200,9 +198,7 @@ module tx_ctrl_phase_tb;
     .ctrl_manual_sync_request(1'b0),
 
     .status_sync(),
-    .status_state()
-
-  );
+    .status_state());
 
   reg status = 1'b1;
 

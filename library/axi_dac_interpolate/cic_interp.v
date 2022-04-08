@@ -37,26 +37,16 @@
 
 `timescale 1 ns / 1 ns
 
-module cic_interp
-               (
-                clk,
-                clk_enable,
-                reset,
-                filter_in,
-                rate,
-                load_rate,
-                filter_out,
-                ce_out
-                );
-
-  input   clk;
-  input   clk_enable;
-  input   reset;
-  input   signed [30:0] filter_in; //sfix31_En30
-  input   [15:0] rate; //ufix16
-  input   load_rate;
-  output  signed [109:0] filter_out; //sfix110_En30
-  output  ce_out;
+module cic_interp (
+  input  clk,
+  input  clk_enable,
+  input  reset,
+  input  signed [30:0] filter_in, //sfix31_En30
+  input  [15:0] rate, //ufix16
+  input  load_rate,
+  output signed [109:0] filter_out, //sfix110_En30
+  output ce_out
+);
 
 ////////////////////////////////////////////////////////////////
 //Module Architecture: cic_interp
@@ -611,4 +601,4 @@ module cic_interp
   // Assignment Statements
   assign ce_out = phase_0;
   assign filter_out = output_register;
-endmodule  // cic_interp
+endmodule

@@ -60,42 +60,41 @@ module axi_read_slave #(
   output rlast
 );
 
-reg [DATA_WIDTH-1:0] data = 'h00;
+  reg [DATA_WIDTH-1:0] data = 'h00;
 
-wire [31:0] beat_addr;
+  wire [31:0] beat_addr;
 
-assign rresp = 2'b00;
-assign rdata = data;
+  assign rresp = 2'b00;
+  assign rdata = data;
 
-always @(*) begin: gen_data
-  integer i;
-  for (i = 0; i < DATA_WIDTH; i = i + 8) begin
-    data[i+:8] <= beat_addr[7:0] + i / 8;
+  always @(*) begin: gen_data
+    integer i;
+    for (i = 0; i < DATA_WIDTH; i = i + 8) begin
+      data[i+:8] <= beat_addr[7:0] + i / 8;
+    end
   end
-end
 
-axi_slave #(
-  .DATA_WIDTH(DATA_WIDTH),
-  .ACCEPTANCE(READ_ACCEPTANCE),
-  .MIN_LATENCY(MIN_LATENCY),
-  .MAX_LATENCY(MAX_LATENCY)
-) i_axi_slave (
-  .clk(clk),
-  .reset(reset),
+  axi_slave #(
+    .DATA_WIDTH(DATA_WIDTH),
+    .ACCEPTANCE(READ_ACCEPTANCE),
+    .MIN_LATENCY(MIN_LATENCY),
+    .MAX_LATENCY(MAX_LATENCY)
+  ) i_axi_slave (
+    .clk(clk),
+    .reset(reset),
 
-  .valid(arvalid),
-  .ready(arready),
-  .addr(araddr),
-  .len(arlen),
-  .size(arsize),
-  .burst(arburst),
-  .prot(arprot),
-  .cache(arcache),
+    .valid(arvalid),
+    .ready(arready),
+    .addr(araddr),
+    .len(arlen),
+    .size(arsize),
+    .burst(arburst),
+    .prot(arprot),
+    .cache(arcache),
 
-  .beat_stb(rvalid),
-  .beat_ack(rvalid & rready),
-  .beat_last(rlast),
-  .beat_addr(beat_addr)
-);
+    .beat_stb(rvalid),
+    .beat_ack(rvalid & rready),
+    .beat_last(rlast),
+    .beat_addr(beat_addr));
 
 endmodule

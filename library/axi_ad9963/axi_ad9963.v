@@ -56,7 +56,8 @@ module axi_ad9963 #(
   parameter   ADC_DCFILTER_DISABLE = 0,
   parameter   ADC_IQCORRECTION_DISABLE = 0,
   parameter   ADC_SCALECORRECTION_ONLY = 1,
-  parameter   DELAY_REFCLK_FREQUENCY = 200) (
+  parameter   DELAY_REFCLK_FREQUENCY = 200
+) (
 
   // physical interface (receive)
 
@@ -130,7 +131,8 @@ module axi_ad9963 #(
   output          s_axi_rvalid,
   output  [31:0]  s_axi_rdata,
   output  [ 1:0]  s_axi_rresp,
-  input           s_axi_rready);
+  input           s_axi_rready
+);
 
   // internal registers
 
@@ -189,8 +191,8 @@ module axi_ad9963 #(
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .ADC_IODELAY_ENABLE (ADC_IODELAY_ENABLE),
     .IO_DELAY_GROUP (IO_DELAY_GROUP),
-    .DELAY_REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
-  i_dev_if (
+    .DELAY_REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY)
+  ) i_dev_if (
     .trx_clk (trx_clk),
     .trx_iq (trx_iq),
     .trx_data (trx_data),
@@ -274,8 +276,8 @@ module axi_ad9963 #(
     .DAC_DDS_TYPE (DAC_DDS_TYPE),
     .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
     .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
-    .DATAPATH_DISABLE (DAC_DATAPATH_DISABLE))
-  i_tx (
+    .DATAPATH_DISABLE (DAC_DATAPATH_DISABLE)
+  ) i_tx (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_data (dac_data_s),
@@ -337,6 +339,3 @@ module axi_ad9963 #(
     .up_rack (up_rack));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

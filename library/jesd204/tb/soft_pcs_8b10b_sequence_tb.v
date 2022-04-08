@@ -107,8 +107,7 @@ module soft_pcs_8b10b_sequence_tb;
     .out_char(raw_data),
 
     .in_disparity(encoder_disparity),
-    .out_disparity(encoder_disparity_s)
-  );
+    .out_disparity(encoder_disparity_s));
 
   jesd204_8b10b_decoder i_dec (
     .in_char(raw_data),
@@ -118,8 +117,7 @@ module soft_pcs_8b10b_sequence_tb;
     .out_charisk(decoder_charisk),
 
     .in_disparity(decoder_disparity),
-    .out_disparity(decoder_disparity_s)
-  );
+    .out_disparity(decoder_disparity_s));
 
    wire char_mismatch = encoder_char != decoder_char;
    wire charisk_mismatch = encoder_charisk != decoder_charisk;

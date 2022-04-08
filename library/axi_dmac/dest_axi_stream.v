@@ -39,8 +39,8 @@ module dest_axi_stream #(
 
   parameter ID_WIDTH = 3,
   parameter S_AXIS_DATA_WIDTH = 64,
-  parameter BEATS_PER_BURST_WIDTH = 4)(
-
+  parameter BEATS_PER_BURST_WIDTH = 4
+) (
   input s_axis_aclk,
   input s_axis_aresetn,
 
@@ -75,82 +75,81 @@ module dest_axi_stream #(
 
 `include "inc_id.vh"
 
-reg data_enabled = 1'b0;
-reg req_xlast_d = 1'b0;
-reg active = 1'b0;
+  reg data_enabled = 1'b0;
+  reg req_xlast_d = 1'b0;
+  reg active = 1'b0;
 
-reg [ID_WIDTH-1:0] id = 'h0;
+  reg [ID_WIDTH-1:0] id = 'h0;
 
-/* Last beat of the burst */
-wire fifo_last_beat;
-/* Last beat of the segment */
-wire fifo_eot_beat;
+  // Last beat of the burst
+  wire fifo_last_beat;
+  // Last beat of the segment
+  wire fifo_eot_beat;
 
-/* fifo_last == 1'b1 implies fifo_valid == 1'b1 */
-assign fifo_last_beat = fifo_ready & fifo_last;
-assign fifo_eot_beat = fifo_last_beat & data_eot;
+  // fifo_last == 1'b1 implies fifo_valid == 1'b1
+  assign fifo_last_beat = fifo_ready & fifo_last;
+  assign fifo_eot_beat = fifo_last_beat & data_eot;
 
-assign req_ready = fifo_eot_beat | ~active;
-assign data_id = id;
-assign xfer_req = active;
+  assign req_ready = fifo_eot_beat | ~active;
+  assign data_id = id;
+  assign xfer_req = active;
 
-assign m_axis_valid = fifo_valid & active;
-assign fifo_ready = m_axis_ready & active;
-assign m_axis_last = req_xlast_d & fifo_last & data_eot;
-assign m_axis_data = fifo_data;
+  assign m_axis_valid = fifo_valid & active;
+  assign fifo_ready = m_axis_ready & active;
+  assign m_axis_last = req_xlast_d & fifo_last & data_eot;
+  assign m_axis_data = fifo_data;
 
-always @(posedge s_axis_aclk) begin
-  if (s_axis_aresetn == 1'b0) begin
-    data_enabled <= 1'b0;
-  end else if (enable == 1'b1) begin
-    data_enabled <= 1'b1;
-  end else if (m_axis_valid == 1'b0 || m_axis_ready == 1'b1) begin
-    data_enabled <= 1'b0;
+  always @(posedge s_axis_aclk) begin
+    if (s_axis_aresetn == 1'b0) begin
+      data_enabled <= 1'b0;
+    end else if (enable == 1'b1) begin
+      data_enabled <= 1'b1;
+    end else if (m_axis_valid == 1'b0 || m_axis_ready == 1'b1) begin
+      data_enabled <= 1'b0;
+    end
   end
-end
 
-always @(posedge s_axis_aclk) begin
-  if (req_ready == 1'b1) begin
-    req_xlast_d <= req_xlast;
+  always @(posedge s_axis_aclk) begin
+    if (req_ready == 1'b1) begin
+      req_xlast_d <= req_xlast;
+    end
   end
-end
 
-always @(posedge s_axis_aclk) begin
-  if (s_axis_aresetn == 1'b0) begin
-    active <= 1'b0;
-  end else if (req_valid == 1'b1) begin
-    active <= 1'b1;
-  end else if (fifo_eot_beat == 1'b1) begin
-    active <= 1'b0;
+  always @(posedge s_axis_aclk) begin
+    if (s_axis_aresetn == 1'b0) begin
+      active <= 1'b0;
+    end else if (req_valid == 1'b1) begin
+      active <= 1'b1;
+    end else if (fifo_eot_beat == 1'b1) begin
+      active <= 1'b0;
+    end
   end
-end
 
-always @(posedge s_axis_aclk) begin
-  if (s_axis_aresetn == 1'b0) begin
-    id <= 'h00;
-  end else if (fifo_last_beat == 1'b1) begin
-    id <= inc_id(id);
+  always @(posedge s_axis_aclk) begin
+    if (s_axis_aresetn == 1'b0) begin
+      id <= 'h00;
+    end else if (fifo_last_beat == 1'b1) begin
+      id <= inc_id(id);
+    end
   end
-end
 
-response_generator # (
-  .ID_WIDTH(ID_WIDTH)
-) i_response_generator (
-  .clk(s_axis_aclk),
-  .resetn(s_axis_aresetn),
+  response_generator #(
+    .ID_WIDTH(ID_WIDTH)
+  ) i_response_generator (
+    .clk(s_axis_aclk),
+    .resetn(s_axis_aresetn),
 
-  .enable(data_enabled),
-  .enabled(enabled),
+    .enable(data_enabled),
+    .enabled(enabled),
 
-  .request_id(id),
-  .response_id(response_id),
+    .request_id(id),
+    .response_id(response_id),
 
-  .eot(response_eot),
+    .eot(response_eot),
 
-  .resp_valid(response_valid),
-  .resp_ready(response_ready),
-  .resp_eot(response_resp_eot),
-  .resp_resp(response_resp)
-);
+    .resp_valid(response_valid),
+    .resp_ready(response_ready),
+    .resp_eot(response_resp_eot),
+    .resp_resp(response_resp));
 
 endmodule

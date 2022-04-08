@@ -54,7 +54,8 @@ module axi_logic_analyzer_trigger (
   input       [ 6:0]    trigger_logic,
 
   output  reg           trigger_out,
-  output  reg           trigger_out_adc);
+  output  reg           trigger_out_adc
+);
 
   reg     [  1:0]   ext_t_m = 'd0;
   reg     [  1:0]   ext_t_low_level_hold = 'd0;
@@ -90,7 +91,6 @@ module axi_logic_analyzer_trigger (
       trigger_out_adc <= trigger_active_mux;
     end
   end
-
 
   // trigger logic:
   // 0 OR
@@ -185,6 +185,3 @@ module axi_logic_analyzer_trigger (
   end
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

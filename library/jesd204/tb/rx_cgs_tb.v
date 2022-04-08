@@ -79,8 +79,7 @@ module rx_cgs_tb;
     .char_is_cgs(char_is_cgs),
     .char_is_error(char_is_error),
 
-    .ready(ready)
-  );
+    .ready(ready));
 
   reg lost_sync = 1'b0;
 

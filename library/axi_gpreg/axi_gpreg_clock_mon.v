@@ -38,7 +38,8 @@
 module axi_gpreg_clock_mon #(
 
   parameter   ID = 0,
-  parameter   BUF_ENABLE = 0) (
+  parameter   BUF_ENABLE = 0
+) (
 
   // clock
 
@@ -55,8 +56,8 @@ module axi_gpreg_clock_mon #(
   input                   up_rreq,
   input       [13:0]      up_raddr,
   output  reg [31:0]      up_rdata,
-  output  reg             up_rack);
-
+  output  reg             up_rack
+);
 
   // internal registers
 
@@ -138,6 +139,3 @@ module axi_gpreg_clock_mon #(
   endgenerate
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

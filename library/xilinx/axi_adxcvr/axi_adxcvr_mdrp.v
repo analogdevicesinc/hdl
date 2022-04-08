@@ -48,7 +48,8 @@ module axi_adxcvr_mdrp (
   input   [15:0]  up_rdata,
   input           up_ready,
   output  [15:0]  up_rdata_out,
-  output          up_ready_out);
+  output          up_ready_out
+);
 
   // parameters
 
@@ -156,7 +157,3 @@ module axi_adxcvr_mdrp (
   endgenerate
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************
-

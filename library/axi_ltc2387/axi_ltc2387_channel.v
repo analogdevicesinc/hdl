@@ -45,6 +45,7 @@ module axi_ltc2387_channel #(
   parameter   USERPORTS_DISABLE = 0,
   parameter   DATAFORMAT_DISABLE = 0
 ) (
+
   // adc interface
 
   input                   adc_clk,

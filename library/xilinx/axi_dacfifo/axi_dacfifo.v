@@ -43,7 +43,8 @@ module axi_dacfifo #(
   parameter   AXI_SIZE = 2,
   parameter   AXI_LENGTH = 15,
   parameter   AXI_ADDRESS = 32'h00000000,
-  parameter   AXI_ADDRESS_LIMIT = 32'hffffffff) (
+  parameter   AXI_ADDRESS_LIMIT = 32'hffffffff
+) (
 
   // dma interface (AXI Stream)
 
@@ -106,7 +107,8 @@ module axi_dacfifo #(
   input       [ 1:0]      axi_rresp,
   input                   axi_rlast,
   input       [(AXI_DATA_WIDTH-1):0]  axi_rdata,
-  output                  axi_rready);
+  output                  axi_rready
+);
 
   localparam  FIFO_BYPASS = (DAC_DATA_WIDTH == DMA_DATA_WIDTH) ? 1 : 0;
 
@@ -231,8 +233,7 @@ module axi_dacfifo #(
       .dac_rst(dac_rst),
       .dac_valid(dac_valid),
       .dac_data(dac_data_bypass_s),
-      .dac_dunf(dac_dunf_bypass_s)
-    );
+      .dac_dunf(dac_dunf_bypass_s));
 
     always @(posedge dma_clk) begin
       dma_bypass_m1 <= bypass;
@@ -279,4 +280,3 @@ module axi_dacfifo #(
   endgenerate
 
 endmodule
-

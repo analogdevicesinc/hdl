@@ -41,14 +41,16 @@ module ad_dds_1 #(
 
   parameter   DDS_TYPE = 1,
   parameter   DDS_D_DW = 16,
-  parameter   DDS_P_DW = 16) (
+  parameter   DDS_P_DW = 16
+) (
 
   // interface
 
   input                       clk,
   input       [DDS_P_DW-1:0]  angle,
   input       [        15:0]  scale,
-  output  reg [DDS_D_DW-1:0]  dds_data);
+  output  reg [DDS_D_DW-1:0]  dds_data
+);
 
   // local parameters
 
@@ -68,8 +70,8 @@ module ad_dds_1 #(
       ad_dds_sine_cordic #(
         .CORDIC_DW(DDS_D_DW),
         .PHASE_DW(DDS_P_DW),
-        .DELAY_DW(1))
-      i_dds_sine (
+        .DELAY_DW(1)
+      ) i_dds_sine (
         .clk (clk),
         .angle (angle),
         .sine (sine_s),
@@ -93,8 +95,8 @@ module ad_dds_1 #(
   ad_mul #(
     .A_DATA_WIDTH(DDS_D_DW + 1),
     .B_DATA_WIDTH(17),
-    .DELAY_DATA_WIDTH(1))
-  i_dds_scale (
+    .DELAY_DATA_WIDTH(1)
+  ) i_dds_scale (
     .clk (clk),
     .data_a ({sine_s[DDS_D_DW-1], sine_s}),
     .data_b ({scale[15], scale}),
@@ -110,6 +112,3 @@ module ad_dds_1 #(
   end
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

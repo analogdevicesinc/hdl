@@ -42,7 +42,8 @@ module ad_rst (
   input                   rst_async,
   input                   clk,
   output                  rstn,
-  output  reg             rst);
+  output  reg             rst
+);
 
   // internal registers
   reg             rst_async_d1 = 1'd1;
@@ -72,6 +73,3 @@ module ad_rst (
   assign rstn = ~rst;
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

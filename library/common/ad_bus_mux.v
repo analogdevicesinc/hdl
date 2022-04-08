@@ -38,8 +38,8 @@
 module ad_bus_mux #(
 
   // Channel data width
-  parameter DATA_WIDTH = 16) (
-
+  parameter DATA_WIDTH = 16
+) (
   input                    select_path,
 
   input                    valid_in_0,
@@ -52,7 +52,8 @@ module ad_bus_mux #(
 
   output                   valid_out,
   output                   enable_out,
-  output [DATA_WIDTH-1:0]  data_out);
+  output [DATA_WIDTH-1:0]  data_out
+);
 
   assign valid_out  = (select_path == 0) ? valid_in_0   : valid_in_1;
   assign enable_out = (select_path == 0) ? enable_in_0  : enable_in_1;

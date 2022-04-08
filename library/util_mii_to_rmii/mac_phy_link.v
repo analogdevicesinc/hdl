@@ -35,17 +35,17 @@
 `timescale 1ns/100ps
 
 module mac_phy_link #(
-    parameter RATE_10_100 = 0
-  ) (
-    input              ref_clk,
-    input    [3:0]     mac_txd,
-    input              reset_n,
-    input              mac_tx_en,
-    input              mac_tx_er,
-    output             rmii_tx_en,
-    output   [1:0]     rmii_txd,
-    output             mii_tx_clk
-  );
+  parameter RATE_10_100 = 0
+) (
+  input              ref_clk,
+  input    [3:0]     mac_txd,
+  input              reset_n,
+  input              mac_tx_en,
+  input              mac_tx_er,
+  output             rmii_tx_en,
+  output   [1:0]     rmii_txd,
+  output             mii_tx_clk
+);
 
   wire              dibit_sample;
   wire    [3:0]     num_w;

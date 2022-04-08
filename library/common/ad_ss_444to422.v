@@ -39,7 +39,8 @@
 module ad_ss_444to422 #(
 
   parameter   CR_CB_N = 0,
-  parameter   DELAY_DATA_WIDTH = 16) (
+  parameter   DELAY_DATA_WIDTH = 16
+) (
 
   // 444 inputs
 
@@ -51,7 +52,8 @@ module ad_ss_444to422 #(
   // 422 outputs
 
   output  reg [DELAY_DATA_WIDTH-1:0]  s422_sync,
-  output  reg [15:0]                  s422_data);
+  output  reg [15:0]                  s422_data
+);
 
   localparam  DW = DELAY_DATA_WIDTH - 1;
 
@@ -129,6 +131,3 @@ module ad_ss_444to422 #(
   end
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

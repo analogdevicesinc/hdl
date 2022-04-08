@@ -41,7 +41,6 @@ module reset_manager_tb;
   `define TIMEOUT 1000000
   `include "tb_base.v"
 
-
   reg clk_a = 1'b0;
   reg clk_b = 1'b0;
   reg clk_c = 1'b0;
@@ -84,7 +83,6 @@ module reset_manager_tb;
   wire src_enable;
   wire src_enabled = src_enabled_shift[15];
 
-
   always @(posedge clk_a) begin
     req_enabled_shift <= {req_enabled_shift[14:0],req_enable};
   end
@@ -115,7 +113,6 @@ module reset_manager_tb;
     .src_clk(clk_c),
     .src_ext_resetn(1'b0),
     .src_enable(src_enable),
-    .src_enabled(src_enabled)
-  );
+    .src_enabled(src_enabled));
 
 endmodule

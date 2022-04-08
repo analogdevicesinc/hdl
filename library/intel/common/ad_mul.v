@@ -39,7 +39,8 @@ module ad_mul #(
 
   parameter   A_DATA_WIDTH = 17,
   parameter   B_DATA_WIDTH = 17,
-  parameter   DELAY_DATA_WIDTH = 16) (
+  parameter   DELAY_DATA_WIDTH = 16
+) (
 
   // data_p = data_a * data_b;
 
@@ -51,8 +52,8 @@ module ad_mul #(
   // delay interface
 
   input       [(DELAY_DATA_WIDTH-1):0]  ddata_in,
-  output  reg [(DELAY_DATA_WIDTH-1):0]  ddata_out);
-
+  output  reg [(DELAY_DATA_WIDTH-1):0]  ddata_out
+);
 
   // internal registers
 
@@ -85,6 +86,3 @@ module ad_mul #(
     .result (data_p));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

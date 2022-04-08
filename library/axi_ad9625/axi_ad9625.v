@@ -42,7 +42,8 @@ module axi_ad9625 #(
   parameter FPGA_FAMILY = 0,
   parameter SPEED_GRADE = 0,
   parameter DEV_PACKAGE = 0,
-  parameter DELAY_REFCLK_FREQUENCY = 200) (
+  parameter DELAY_REFCLK_FREQUENCY = 200
+) (
 
   // jesd interface
   // rx_clk is (line-rate/40)
@@ -87,7 +88,8 @@ module axi_ad9625 #(
   output      [ 31:0]     s_axi_rdata,
   input                   s_axi_rready,
   input       [  2:0]     s_axi_awprot,
-  input       [  2:0]     s_axi_arprot);
+  input       [  2:0]     s_axi_arprot
+);
 
   // internal registers
 
@@ -143,8 +145,8 @@ module axi_ad9625 #(
   assign adc_valid = 1'b1;
 
   axi_ad9625_if #(
-    .ID (ID))
-  i_if (
+    .ID (ID)
+  ) i_if (
     .rx_clk (rx_clk),
     .rx_sof (rx_sof),
     .rx_data (rx_data),
@@ -194,8 +196,8 @@ module axi_ad9625 #(
     .DRP_DISABLE(1),
     .USERPORTS_DISABLE(1),
     .GPIO_DISABLE(1),
-    .START_CODE_DISABLE(1))
-  i_up_adc_common (
+    .START_CODE_DISABLE(1)
+  ) i_up_adc_common (
     .mmcm_rst (),
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
@@ -270,7 +272,3 @@ module axi_ad9625 #(
     .up_rack (up_rack));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************
-

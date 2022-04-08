@@ -41,7 +41,8 @@ module axi_hdmi_rx_tpm (
   input                   hdmi_de,
   input       [15:0]      hdmi_data,
 
-  output  reg             hdmi_tpm_oos);
+  output  reg             hdmi_tpm_oos
+);
 
   wire    [15:0]  hdmi_tpm_lr_data_s;
   wire            hdmi_tpm_lr_mismatch_s;

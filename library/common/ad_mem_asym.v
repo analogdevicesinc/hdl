@@ -44,8 +44,8 @@ module ad_mem_asym #(
   parameter   A_DATA_WIDTH = 256,
   parameter   B_ADDRESS_WIDTH =   10,
   parameter   B_DATA_WIDTH =  64,
-  parameter   CASCADE_HEIGHT = -1) (
-
+  parameter   CASCADE_HEIGHT = -1
+) (
   input                             clka,
   input                             wea,
   input       [A_ADDRESS_WIDTH-1:0] addra,
@@ -54,8 +54,8 @@ module ad_mem_asym #(
   input                             clkb,
   input                             reb,
   input       [B_ADDRESS_WIDTH-1:0] addrb,
-  output  reg [B_DATA_WIDTH-1:0]    doutb);
-
+  output  reg [B_DATA_WIDTH-1:0]    doutb
+);
 
   `define max(a,b) {(a) > (b) ? (a) : (b)}
   `define min(a,b) {(a) < (b) ? (a) : (b)}
@@ -145,6 +145,3 @@ module ad_mem_asym #(
   endgenerate
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

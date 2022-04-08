@@ -32,7 +32,7 @@
 //
 // ***************************************************************************
 // ***************************************************************************
-// ADC ALTERNATE BIT POLARITY DECODE 
+// ADC ALTERNATE BIT POLARITY DECODE
 
 `timescale 1ns/100ps
 
@@ -41,23 +41,24 @@ module axi_adaq8092_apb_decode (
   input      [27:0]      adc_data,
   input                  adc_clk,
   input                  adc_abp_enb,
-  output     [27:0]      adc_data_decoded);
+  output     [27:0]      adc_data_decoded
+);
 
-  // internal registers 
- 
+  // internal registers
+
   reg        [27:0]      adc_data_decoded_s;
 
   // internal variable
 
-  integer i; 
+  integer i;
 
   assign adc_data_decoded = adc_abp_enb ? adc_data_decoded_s : adc_data ;
 
-  always @(posedge adc_clk) begin 
+  always @(posedge adc_clk) begin
     for (i = 0; i <= 13; i = i + 1) begin
       adc_data_decoded_s[2*i+1] = ~adc_data[2*i+1];
       adc_data_decoded_s[2*i] = adc_data[2*i];
     end
-  end  
+  end
 
 endmodule

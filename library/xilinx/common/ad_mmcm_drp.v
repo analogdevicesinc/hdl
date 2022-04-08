@@ -48,7 +48,8 @@ module ad_mmcm_drp #(
   parameter   MMCM_CLK1_DIV = 6,
   parameter   MMCM_CLK1_PHASE = 0.000,
   parameter   MMCM_CLK2_DIV = 2.000,
-  parameter   MMCM_CLK2_PHASE = 0.000) (
+  parameter   MMCM_CLK2_PHASE = 0.000
+) (
 
   // clocks
 
@@ -70,12 +71,12 @@ module ad_mmcm_drp #(
   input       [15:0]      up_drp_wdata,
   output  reg [15:0]      up_drp_rdata,
   output  reg             up_drp_ready,
-  output  reg             up_drp_locked);
+  output  reg             up_drp_locked
+);
 
   localparam  SEVEN_SERIES = 1;
   localparam  ULTRASCALE = 2;
   localparam  ULTRASCALE_PLUS = 3;
-
 
   // internal registers
 
@@ -135,8 +136,8 @@ module ad_mmcm_drp #(
       .CLKOUT2_USE_FINE_PS ("FALSE"),
       .CLKIN1_PERIOD (MMCM_CLKIN_PERIOD),
       .CLKIN2_PERIOD (MMCM_CLKIN2_PERIOD),
-      .REF_JITTER1 (0.010))
-    i_mmcm (
+      .REF_JITTER1 (0.010)
+    ) i_mmcm (
       .CLKIN1 (clk),
       .CLKFBIN (bufg_fb_clk_s),
       .CLKFBOUT (mmcm_fb_clk_s),
@@ -171,10 +172,21 @@ module ad_mmcm_drp #(
       .PWRDWN (1'b0),
       .RST (mmcm_rst));
 
-      BUFG i_fb_clk_bufg  (.I (mmcm_fb_clk_s),  .O (bufg_fb_clk_s));
-      BUFG i_clk_0_bufg   (.I (mmcm_clk_0_s),   .O (mmcm_clk_0));
-      BUFG i_clk_1_bufg   (.I (mmcm_clk_1_s),   .O (mmcm_clk_1));
-      BUFG i_clk_2_bufg   (.I (mmcm_clk_2_s),   .O (mmcm_clk_2));
+      BUFG i_fb_clk_bufg (
+        .I (mmcm_fb_clk_s),
+        .O (bufg_fb_clk_s));
+
+      BUFG i_clk_0_bufg (
+        .I (mmcm_clk_0_s),
+        .O (mmcm_clk_0));
+
+      BUFG i_clk_1_bufg (
+        .I (mmcm_clk_1_s),
+        .O (mmcm_clk_1));
+
+      BUFG i_clk_2_bufg (
+        .I (mmcm_clk_2_s),
+        .O (mmcm_clk_2));
 
   end else if (FPGA_TECHNOLOGY == ULTRASCALE) begin
     MMCME3_ADV #(
@@ -201,8 +213,8 @@ module ad_mmcm_drp #(
       .CLKOUT2_USE_FINE_PS ("FALSE"),
       .CLKIN1_PERIOD (MMCM_CLKIN_PERIOD),
       .CLKIN2_PERIOD (MMCM_CLKIN2_PERIOD),
-      .REF_JITTER1 (0.010))
-    i_mmcme3 (
+      .REF_JITTER1 (0.010)
+    ) i_mmcme3 (
       .CLKIN1 (clk),
       .CLKFBIN (bufg_fb_clk_s),
       .CLKFBOUT (mmcm_fb_clk_s),
@@ -239,10 +251,21 @@ module ad_mmcm_drp #(
       .CDDCDONE (),
       .RST (mmcm_rst));
 
-      BUFG i_fb_clk_bufg  (.I (mmcm_fb_clk_s),  .O (bufg_fb_clk_s));
-      BUFG i_clk_0_bufg   (.I (mmcm_clk_0_s),   .O (mmcm_clk_0));
-      BUFG i_clk_1_bufg   (.I (mmcm_clk_1_s),   .O (mmcm_clk_1));
-      BUFG i_clk_2_bufg   (.I (mmcm_clk_2_s),   .O (mmcm_clk_2));
+      BUFG i_fb_clk_bufg (
+        .I (mmcm_fb_clk_s),
+        .O (bufg_fb_clk_s));
+
+      BUFG i_clk_0_bufg (
+        .I (mmcm_clk_0_s),
+        .O (mmcm_clk_0));
+
+      BUFG i_clk_1_bufg (
+        .I (mmcm_clk_1_s),
+        .O (mmcm_clk_1));
+
+      BUFG i_clk_2_bufg (
+        .I (mmcm_clk_2_s),
+        .O (mmcm_clk_2));
 
   end else if (FPGA_TECHNOLOGY == ULTRASCALE_PLUS) begin
     MMCME4_ADV #(
@@ -306,16 +329,23 @@ module ad_mmcm_drp #(
       .CDDCDONE (),
       .RST (mmcm_rst));
 
-      BUFG i_fb_clk_bufg  (.I (mmcm_fb_clk_s),  .O (bufg_fb_clk_s));
-      BUFG i_clk_0_bufg   (.I (mmcm_clk_0_s),   .O (mmcm_clk_0));
-      BUFG i_clk_1_bufg   (.I (mmcm_clk_1_s),   .O (mmcm_clk_1));
-      BUFG i_clk_2_bufg   (.I (mmcm_clk_2_s),   .O (mmcm_clk_2));
+      BUFG i_fb_clk_bufg (
+        .I (mmcm_fb_clk_s),
+        .O (bufg_fb_clk_s));
+
+      BUFG i_clk_0_bufg (
+        .I (mmcm_clk_0_s),
+        .O (mmcm_clk_0));
+
+      BUFG i_clk_1_bufg (
+        .I (mmcm_clk_1_s),
+        .O (mmcm_clk_1));
+
+      BUFG i_clk_2_bufg (
+        .I (mmcm_clk_2_s),
+        .O (mmcm_clk_2));
 
   end
   endgenerate
 
-
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

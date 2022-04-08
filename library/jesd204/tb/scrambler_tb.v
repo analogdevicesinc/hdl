@@ -69,8 +69,7 @@ module scrambler_tb;
     .reset(reset),
     .enable(1'b1),
     .data_in(data_in),
-    .data_out(data_scrambled)
-  );
+    .data_out(data_scrambled));
 
   jesd204_scrambler #(
     .DESCRAMBLE(1)
@@ -79,8 +78,7 @@ module scrambler_tb;
     .reset(reset),
     .enable(1'b1),
     .data_in(data_scrambled),
-    .data_out(data_out)
-  );
+    .data_out(data_out));
 
   always @(posedge clk) begin
     if (data_in != data_out && failed == 1'b0) begin

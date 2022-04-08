@@ -113,7 +113,6 @@ module underflow_tb;
 
     .s_axis_valid(s_axis_valid),
     .s_axis_ready(s_axis_ready),
-    .s_axis_data(s_axis_data)
-  );
+    .s_axis_data(s_axis_data));
 
 endmodule

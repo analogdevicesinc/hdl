@@ -34,6 +34,7 @@ module ad_ip_jesd204_tpl_adc_deframer #(
   parameter LINK_DATA_WIDTH = OCTETS_PER_BEAT * 8 * NUM_LANES,
   parameter ADC_DATA_WIDTH = LINK_DATA_WIDTH * CONVERTER_RESOLUTION / BITS_PER_SAMPLE
 ) (
+
   // jesd interface
   // clk is (line-rate/40)
 
@@ -44,8 +45,7 @@ module ad_ip_jesd204_tpl_adc_deframer #(
    // adc data output
 
    output [ADC_DATA_WIDTH-1:0] adc_data
- );
-
+);
 
   localparam SAMPLES_PER_BEAT = ADC_DATA_WIDTH / CONVERTER_RESOLUTION;
   localparam BITS_PER_CHANNEL_PER_FRAME = BITS_PER_SAMPLE * SAMPLES_PER_FRAME;
@@ -75,8 +75,7 @@ module ad_ip_jesd204_tpl_adc_deframer #(
       .WORD_WIDTH (BITS_PER_LANE_PER_FRAME)
     ) i_lanes_to_frames (
       .data_in (link_data_msb_s),
-      .data_out (frame_data_s)
-    );
+      .data_out (frame_data_s));
 
     /* Slice frames into channels */
     ad_perfect_shuffle #(
@@ -85,8 +84,7 @@ module ad_ip_jesd204_tpl_adc_deframer #(
       .WORD_WIDTH (BITS_PER_CHANNEL_PER_FRAME)
     ) i_frames_to_channels (
       .data_in (frame_data_s),
-      .data_out (adc_data_msb)
-    );
+      .data_out (adc_data_msb));
 
     /* Reorder samples LSB first and remove tail bits */
     for (i = 0; i < SAMPLES_PER_BEAT; i = i + 1) begin: g_dac_data_msb
@@ -113,8 +111,7 @@ module ad_ip_jesd204_tpl_adc_deframer #(
       .rx_ip_sof (link_sof),
       .rx_ip_data (link_data[n*DW+:DW]),
       .rx_sof (),
-      .rx_data (link_data_s[n*DW+:DW])
-    );
+      .rx_data (link_data_s[n*DW+:DW]));
   end
   end else begin
     assign link_data_s = link_data;

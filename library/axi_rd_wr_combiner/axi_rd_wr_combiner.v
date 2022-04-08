@@ -122,38 +122,38 @@ module axi_rd_wr_combiner (
   input                         s_rd_axi_rready
 );
 
-assign m_axi_awaddr = s_wr_axi_awaddr;
-assign m_axi_awlen = s_wr_axi_awlen;
-assign m_axi_awsize = s_wr_axi_awsize;
-assign m_axi_awburst = s_wr_axi_awburst;
-assign m_axi_awprot = s_wr_axi_awprot;
-assign m_axi_awcache = s_wr_axi_awcache;
-assign m_axi_awvalid = s_wr_axi_awvalid;
-assign s_wr_axi_awready = m_axi_awready;
+  assign m_axi_awaddr = s_wr_axi_awaddr;
+  assign m_axi_awlen = s_wr_axi_awlen;
+  assign m_axi_awsize = s_wr_axi_awsize;
+  assign m_axi_awburst = s_wr_axi_awburst;
+  assign m_axi_awprot = s_wr_axi_awprot;
+  assign m_axi_awcache = s_wr_axi_awcache;
+  assign m_axi_awvalid = s_wr_axi_awvalid;
+  assign s_wr_axi_awready = m_axi_awready;
 
-assign m_axi_wdata = s_wr_axi_wdata;
-assign m_axi_wstrb = s_wr_axi_wstrb;
-assign s_wr_axi_wready = m_axi_wready;
-assign m_axi_wvalid = s_wr_axi_wvalid;
-assign m_axi_wlast = s_wr_axi_wlast;
+  assign m_axi_wdata = s_wr_axi_wdata;
+  assign m_axi_wstrb = s_wr_axi_wstrb;
+  assign s_wr_axi_wready = m_axi_wready;
+  assign m_axi_wvalid = s_wr_axi_wvalid;
+  assign m_axi_wlast = s_wr_axi_wlast;
 
-assign s_wr_axi_bvalid = m_axi_bvalid;
-assign s_wr_axi_bresp = m_axi_bresp;
-assign m_axi_bready = s_wr_axi_bready;
+  assign s_wr_axi_bvalid = m_axi_bvalid;
+  assign s_wr_axi_bresp = m_axi_bresp;
+  assign m_axi_bready = s_wr_axi_bready;
 
-assign m_axi_arvalid = s_rd_axi_arvalid;
-assign m_axi_araddr = s_rd_axi_araddr;
-assign m_axi_arlen = s_rd_axi_arlen;
-assign m_axi_arsize = s_rd_axi_arsize;
-assign m_axi_arburst = s_rd_axi_arburst;
-assign m_axi_arcache = s_rd_axi_arcache;
-assign m_axi_arprot = s_rd_axi_arprot;
-assign s_rd_axi_arready = m_axi_arready;
+  assign m_axi_arvalid = s_rd_axi_arvalid;
+  assign m_axi_araddr = s_rd_axi_araddr;
+  assign m_axi_arlen = s_rd_axi_arlen;
+  assign m_axi_arsize = s_rd_axi_arsize;
+  assign m_axi_arburst = s_rd_axi_arburst;
+  assign m_axi_arcache = s_rd_axi_arcache;
+  assign m_axi_arprot = s_rd_axi_arprot;
+  assign s_rd_axi_arready = m_axi_arready;
 
-assign s_rd_axi_rvalid = m_axi_rvalid;
-assign s_rd_axi_rresp = m_axi_rresp;
-assign s_rd_axi_rdata = m_axi_rdata;
-assign s_rd_axi_rlast = m_axi_rlast;
-assign m_axi_rready = s_rd_axi_rready;
+  assign s_rd_axi_rvalid = m_axi_rvalid;
+  assign s_rd_axi_rresp = m_axi_rresp;
+  assign s_rd_axi_rdata = m_axi_rdata;
+  assign s_rd_axi_rlast = m_axi_rlast;
+  assign m_axi_rready = s_rd_axi_rready;
 
 endmodule

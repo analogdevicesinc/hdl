@@ -42,7 +42,8 @@ module util_dec256sinc24b (
   input               data_in,      /* input data to be filtered */
   output reg [15:0]   data_out,     /* filtered output */
   output reg          data_en,
-  input      [15:0]   dec_rate);
+  input      [15:0]   dec_rate
+);
 
   /* Data is read on positive clk edge */
 

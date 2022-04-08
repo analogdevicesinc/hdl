@@ -172,7 +172,6 @@ module cpack_tb;
 
     .packed_fifo_wr_en(packed_fifo_wr_en),
     .packed_fifo_wr_data(packed_fifo_wr_data),
-    .packed_fifo_wr_overflow(1'b0)
-  );
+    .packed_fifo_wr_overflow(1'b0));
 
 endmodule

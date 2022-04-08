@@ -47,7 +47,8 @@ module axi_adxcvr_up #(
   parameter   [15:0]  FPGA_VOLTAGE = 0,
   parameter   integer XCVR_TYPE = 0,
   parameter   integer TX_OR_RX_N = 0,
-  parameter   integer NUM_OF_LANES = 4) (
+  parameter   integer NUM_OF_LANES = 4
+) (
 
   // xcvr, lane-pll and ref-pll are shared
 
@@ -66,7 +67,8 @@ module axi_adxcvr_up #(
   input                         up_rreq,
   input   [ 9:0]                up_raddr,
   output  [31:0]                up_rdata,
-  output                        up_rack);
+  output                        up_rack
+);
 
   // parameters
 
@@ -186,6 +188,3 @@ module axi_adxcvr_up #(
   end
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

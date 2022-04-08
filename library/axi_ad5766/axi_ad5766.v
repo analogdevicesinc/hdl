@@ -43,7 +43,8 @@ module axi_ad5766 #(
   parameter   DEV_PACKAGE = 0,
   parameter   ASYNC_SPI_CLK = 0,
   parameter   CMD_MEM_ADDRESS_WIDTH = 4,
-  parameter   SDO_MEM_ADDRESS_WIDTH = 4)(
+  parameter   SDO_MEM_ADDRESS_WIDTH = 4
+) (
 
   // Slave AXI interface
 
@@ -107,7 +108,8 @@ module axi_ad5766 #(
 
   input                                 ctrl_enable,
   output                                ctrl_enabled,
-  input                                 ctrl_mem_reset);
+  input                                 ctrl_mem_reset
+);
 
   // internal wires
 
@@ -192,35 +194,32 @@ module axi_ad5766 #(
         spi_enabled <= spi_enable_s | spi_active;
     end
 
-    sync_bits # (
-        .NUM_OF_BITS(1),
-        .ASYNC_CLK(1)
+    sync_bits #(
+      .NUM_OF_BITS(1),
+      .ASYNC_CLK(1)
     ) i_sync_enable (
-        .in_bits(ctrl_do_enable),
-        .out_clk(spi_clk),
-        .out_resetn(1'b1),
-        .out_bits(spi_enable_s)
-    );
+      .in_bits(ctrl_do_enable),
+      .out_clk(spi_clk),
+      .out_resetn(1'b1),
+      .out_bits(spi_enable_s));
 
-    sync_bits # (
-        .NUM_OF_BITS(1),
-        .ASYNC_CLK(1)
+    sync_bits #(
+      .NUM_OF_BITS(1),
+      .ASYNC_CLK(1)
     ) i_sync_enabled (
-        .in_bits(spi_enabled),
-        .out_clk(ctrl_clk),
-        .out_resetn(1'b1),
-        .out_bits(ctrl_is_enabled)
-    );
+      .in_bits(spi_enabled),
+      .out_clk(ctrl_clk),
+      .out_resetn(1'b1),
+      .out_bits(ctrl_is_enabled));
 
-    sync_bits # (
-        .NUM_OF_BITS(1),
-        .ASYNC_CLK(1)
+    sync_bits #(
+      .NUM_OF_BITS(1),
+      .ASYNC_CLK(1)
     ) i_sync_mem_reset (
-        .in_bits(ctrl_mem_reset),
-        .out_clk(spi_clk),
-        .out_resetn(1'b1),
-        .out_bits(spi_mem_reset_s)
-    );
+      .in_bits(ctrl_mem_reset),
+      .out_clk(spi_clk),
+      .out_resetn(1'b1),
+      .out_bits(spi_mem_reset_s));
 
   end else begin
     assign spi_enable_s = ctrl_enable;
@@ -299,14 +298,15 @@ module axi_ad5766 #(
   // rate controller
 
   assign dac_rstn_s = ~dac_rst_s;
-  util_pulse_gen #(.PULSE_WIDTH(1)) i_trigger_gen (
+  util_pulse_gen #(
+    .PULSE_WIDTH(1)
+  ) i_trigger_gen (
     .clk (spi_clk),
     .rstn (dac_rstn_s),
     .pulse_width (1'b1),
     .pulse_period (pulse_period_s),
     .load_config (1'b1),
-    .pulse (trigger_s)
-  );
+    .pulse (trigger_s));
 
   // offset of the sequencer registers are 8'h40
 
@@ -327,8 +327,8 @@ module axi_ad5766 #(
   assign pulse_period_s = {16'h0, dac_datarate_s};
 
   up_ad5766_sequencer #(
-    .SEQ_ID(4))
-  i_sequencer (
+    .SEQ_ID(4)
+  ) i_sequencer (
     .sequence_clk (spi_clk),
     .sequence_rst (spi_mem_reset_s),
     .sequence_req (dma_valid),
@@ -396,7 +396,6 @@ module axi_ad5766 #(
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_s[0]),
     .up_rack (up_rack_s[0]));
-
 
   // AXI wrapper
 

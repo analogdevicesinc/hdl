@@ -35,12 +35,9 @@
 
 `timescale 1ns/1ps
 
-module axi_ad9361_tdd_if#(
-
-  parameter       LEVEL_OR_PULSE_N = 0) (
-
-  // clock
-
+module axi_ad9361_tdd_if #(
+  parameter       LEVEL_OR_PULSE_N = 0
+) (
   input                   clk,
   input                   rst,
 
@@ -58,14 +55,13 @@ module axi_ad9361_tdd_if#(
 
   // interface status
 
-  output      [ 7:0]      ad9361_tdd_status);
-
+  output      [ 7:0]      ad9361_tdd_status
+);
 
   localparam      PULSE_MODE = 0;
   localparam      LEVEL_MODE = 1;
 
   // internal registers
-
 
   reg             tdd_vco_overlap = 1'b0;
   reg             tdd_rf_overlap = 1'b0;
@@ -91,7 +87,7 @@ module axi_ad9361_tdd_if#(
   endgenerate
 
   always @(posedge clk) begin
-    if(rst == 1'b1) begin
+    if (rst == 1'b1) begin
       tdd_vco_overlap <= 1'b0;
       tdd_rf_overlap <= 1'b0;
     end else begin
@@ -106,4 +102,3 @@ module axi_ad9361_tdd_if#(
   assign ad9361_enable = ad9361_enable_s;
 
 endmodule
-

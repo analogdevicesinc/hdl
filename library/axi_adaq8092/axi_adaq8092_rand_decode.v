@@ -32,20 +32,21 @@
 //
 // ***************************************************************************
 // ***************************************************************************
-// ADC DIGITAL OUTPUT RANDOMIZE DECODE 
+// ADC DIGITAL OUTPUT RANDOMIZE DECODE
 
 `timescale 1ns/100ps
 
 module axi_adaq8092_rand_decode (
 
-  // data interface 
+  // data interface
 
   input       [27:0]      adc_data,
   input                   adc_clk,
   input                   adc_rand_enb,
-  output      [27:0]      adc_data_decoded);
-  
-  // internal register 
+  output      [27:0]      adc_data_decoded
+);
+
+  // internal register
 
   reg [27:0] adc_data_decoded_s;
 
@@ -55,7 +56,7 @@ module axi_adaq8092_rand_decode (
 
   // DATA DECODING
 
-  always @(posedge adc_clk) begin 
+  always @(posedge adc_clk) begin
     for (i = 1; i <= 13; i = i + 1) begin
       adc_data_decoded_s[i] = adc_data[i] ^ adc_data[0];
     end
@@ -63,8 +64,8 @@ module axi_adaq8092_rand_decode (
       adc_data_decoded_s[i] = adc_data[i] ^ adc_data[14];
     end
 
-    adc_data_decoded_s[0] = adc_data[0];  
+    adc_data_decoded_s[0] = adc_data[0];
     adc_data_decoded_s[14] = adc_data[14];
   end
-    
+
 endmodule

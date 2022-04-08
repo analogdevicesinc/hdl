@@ -38,7 +38,6 @@
 module adrv9001_rx_link #(
   parameter CMOS_LVDS_N = 0
 ) (
-
   input         adc_rst,
   input         adc_clk_div,
   input   [7:0] adc_data_0,
@@ -107,8 +106,7 @@ module adrv9001_rx_link #(
       .idata (sdr_data_0),
       .ivalid (adc_valid),
       .strobe (sdr_data_strobe),
-      .odata (sdr_data_0_aligned)
-    );
+      .odata (sdr_data_0_aligned));
 
     adrv9001_aligner4 i_rx_aligner4_1 (
       .clk (adc_clk_div),
@@ -116,8 +114,7 @@ module adrv9001_rx_link #(
       .idata (sdr_data_1),
       .ivalid (adc_valid),
       .strobe (sdr_data_strobe),
-      .odata (sdr_data_1_aligned)
-    );
+      .odata (sdr_data_1_aligned));
 
     adrv9001_aligner4 i_rx_aligner4_2 (
       .clk (adc_clk_div),
@@ -125,8 +122,7 @@ module adrv9001_rx_link #(
       .idata (sdr_data_2),
       .ivalid (adc_valid),
       .strobe (sdr_data_strobe),
-      .odata (sdr_data_2_aligned)
-    );
+      .odata (sdr_data_2_aligned));
 
     adrv9001_aligner4 i_rx_aligner4_3 (
       .clk (adc_clk_div),
@@ -134,8 +130,7 @@ module adrv9001_rx_link #(
       .idata (sdr_data_3),
       .ivalid (adc_valid),
       .strobe (sdr_data_strobe),
-      .odata (sdr_data_3_aligned)
-    );
+      .odata (sdr_data_3_aligned));
 
     adrv9001_aligner4 i_rx_aligner4_strobe (
       .clk (adc_clk_div),
@@ -144,8 +139,7 @@ module adrv9001_rx_link #(
       .ivalid (adc_valid),
       .strobe (sdr_data_strobe),
       .ovalid (aligner4_ovalid),
-      .odata (sdr_data_strobe_aligned)
-    );
+      .odata (sdr_data_strobe_aligned));
 
     adrv9001_pack #(
       .WIDTH(4)
@@ -156,8 +150,7 @@ module adrv9001_rx_link #(
       .ivalid (aligner4_ovalid),
       .sof (sdr_data_strobe_aligned[3]),
       .odata (sdr_data_0_packed),
-      .ovalid (sdr_data_valid)
-    );
+      .ovalid (sdr_data_valid));
 
     adrv9001_pack #(
       .WIDTH(4)
@@ -168,8 +161,7 @@ module adrv9001_rx_link #(
       .ivalid (aligner4_ovalid),
       .sof (sdr_data_strobe_aligned[3]),
       .odata (sdr_data_1_packed),
-      .ovalid ()
-    );
+      .ovalid ());
 
     adrv9001_pack #(
       .WIDTH(4)
@@ -179,8 +171,7 @@ module adrv9001_rx_link #(
       .ivalid (aligner4_ovalid),
       .sof (sdr_data_strobe_aligned[3]),
       .odata (sdr_data_2_packed),
-      .ovalid ()
-    );
+      .ovalid ());
 
     adrv9001_pack #(
       .WIDTH(4)
@@ -191,8 +182,7 @@ module adrv9001_rx_link #(
       .ivalid (aligner4_ovalid),
       .sof (sdr_data_strobe_aligned[3]),
       .odata (sdr_data_3_packed),
-      .ovalid ()
-    );
+      .ovalid ());
 
     adrv9001_pack #(
       .WIDTH(4)
@@ -203,8 +193,8 @@ module adrv9001_rx_link #(
       .ivalid (aligner4_ovalid),
       .sof (sdr_data_strobe_aligned[3]),
       .odata (sdr_data_strobe_packed),
-      .ovalid ()
-    );
+      .ovalid ());
+
     assign data_0 = rx_sdr_ddr_n ? sdr_data_0_packed : adc_data_0;
     assign data_1 = rx_sdr_ddr_n ? sdr_data_1_packed : adc_data_1;
     assign data_2 = rx_sdr_ddr_n ? sdr_data_2_packed : adc_data_2;
@@ -241,54 +231,50 @@ module adrv9001_rx_link #(
   wire [31:0] rx_data32_0_packed;
   wire        rx_data32_0_packed_valid;
 
-  adrv9001_aligner8 i_rx_aligner8_0(
+  adrv9001_aligner8 i_rx_aligner8_0 (
     .clk (adc_clk_div),
     .rst (adc_rst),
     .idata (data_0),
     .ivalid (data_valid),
     .strobe (data_strobe),
     .odata (rx_data8_0_aligned),
-    .ovalid (rx_data8_0_aligned_valid)
-  );
+    .ovalid (rx_data8_0_aligned_valid));
 
-  adrv9001_aligner8 i_rx_aligner8_1(
+  adrv9001_aligner8 i_rx_aligner8_1 (
     .clk (adc_clk_div),
     .rst (adc_rst),
     .ivalid (data_valid),
     .idata (data_1),
     .strobe (data_strobe),
     .odata (rx_data8_1_aligned),
-    .ovalid (rx_data8_1_aligned_valid)
-  );
+    .ovalid (rx_data8_1_aligned_valid));
 
   generate if (CMOS_LVDS_N) begin : cmos_aligner8
-    adrv9001_aligner8 i_rx_aligner8_2(
+    adrv9001_aligner8 i_rx_aligner8_2 (
       .clk (adc_clk_div),
       .rst (adc_rst),
       .idata (data_2),
       .ivalid (data_valid),
       .strobe (data_strobe),
-      .odata (rx_data8_2_aligned)
-    );
+      .odata (rx_data8_2_aligned));
+
     adrv9001_aligner8 i_rx_aligner8_3(
       .clk (adc_clk_div),
       .rst (adc_rst),
       .idata (data_3),
       .ivalid (data_valid),
       .strobe (data_strobe),
-      .odata (rx_data8_3_aligned)
-    );
+      .odata (rx_data8_3_aligned));
   end
   endgenerate
 
-  adrv9001_aligner8 i_rx_strobe_aligner(
+  adrv9001_aligner8 i_rx_strobe_aligner (
     .clk (adc_clk_div),
     .rst (adc_rst),
     .idata (data_strobe),
     .ivalid (data_valid),
     .strobe (data_strobe),
-    .odata (rx_data8_strobe_aligned)
-  );
+    .odata (rx_data8_strobe_aligned));
 
   adrv9001_pack #(
     .WIDTH (8)
@@ -300,8 +286,7 @@ module adrv9001_rx_link #(
     .sof (rx_data8_strobe_aligned[7]),
     .odata (rx_data16_0_packed),
     .ovalid (rx_data16_0_packed_valid),
-    .osof (rx_data16_0_packed_osof)
-  );
+    .osof (rx_data16_0_packed_osof));
 
   adrv9001_pack #(
     .WIDTH (8)
@@ -313,8 +298,7 @@ module adrv9001_rx_link #(
     .sof (rx_data8_strobe_aligned[7]),
     .odata (rx_data16_1_packed),
     .ovalid (rx_data16_1_paked_valid),
-    .osof (rx_data16_1_packed_osof)
-  );
+    .osof (rx_data16_1_packed_osof));
 
   adrv9001_pack #(
     .WIDTH (16)
@@ -326,15 +310,14 @@ module adrv9001_rx_link #(
     .sof (rx_data16_0_packed_osof),
     .odata (rx_data32_0_packed),
     .ovalid (rx_data32_0_packed_valid),
-    .osof (rx_data32_0_packed_osof)
-  );
+    .osof (rx_data32_0_packed_osof));
 
   generate if (CMOS_LVDS_N) begin
     assign rx_data_i = ~rx_single_lane ? {rx_data8_1_aligned,rx_data8_0_aligned} :
                                          (rx_symb_op ? rx_data16_0_packed : rx_data32_0_packed[31:16]);
     assign rx_data_q = ~rx_single_lane ? {rx_data8_3_aligned,rx_data8_2_aligned} :
                                          (rx_symb_op ? 'b0 : rx_data32_0_packed[15:0]);
-    assign rx_data_valid = ~rx_single_lane ? rx_data8_0_aligned_valid : 
+    assign rx_data_valid = ~rx_single_lane ? rx_data8_0_aligned_valid :
                                              (rx_symb_op ? (rx_symb_8_16b ? rx_data8_0_aligned_valid : rx_data16_0_packed_valid) : rx_data32_0_packed_valid);
   end else begin
     assign rx_data_i = ~rx_single_lane ? rx_data16_0_packed :

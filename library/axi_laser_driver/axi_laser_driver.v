@@ -36,10 +36,11 @@
 
 module axi_laser_driver #(
 
-  parameter       ID = 0,
-  parameter [0:0] ASYNC_CLK_EN = 1,
-  parameter       PULSE_WIDTH = 7,
-  parameter       PULSE_PERIOD = 10 )(
+  parameter ID = 0,
+  parameter ASYNC_CLK_EN = 1,
+  parameter PULSE_WIDTH = 7,
+  parameter PULSE_PERIOD = 10
+) (
 
   // axi interface
 
@@ -76,7 +77,8 @@ module axi_laser_driver #(
 
   // interrupt
 
-  output                  irq);
+  output                  irq
+);
 
   // internal signals
 
@@ -136,8 +138,8 @@ module axi_laser_driver #(
     .CORE_VERSION (CORE_VERSION),
     .ASYNC_CLK_EN (ASYNC_CLK_EN),
     .PULSE_WIDTH (PULSE_WIDTH),
-    .PULSE_PERIOD (PULSE_PERIOD))
-  i_pwm_regmap (
+    .PULSE_PERIOD (PULSE_PERIOD)
+  ) i_pwm_regmap (
     .ext_clk (ext_clk),
     .clk_out (clk),
     .pulse_gen_resetn (pulse_gen_resetn),
@@ -157,8 +159,8 @@ module axi_laser_driver #(
 
   axi_laser_driver_regmap #(
     .ID (ID),
-    .LASER_DRIVER_ID (1))
-  i_laser_driver_regmap (
+    .LASER_DRIVER_ID (1)
+  ) i_laser_driver_regmap (
     .clk (clk),
     .driver_en_n (driver_en_n),
     .driver_otw_n (driver_otw_n),
@@ -202,8 +204,8 @@ module axi_laser_driver #(
 
   util_pulse_gen  #(
     .PULSE_WIDTH(PULSE_WIDTH),
-    .PULSE_PERIOD(PULSE_PERIOD))
-  i_laser_driver_pulse (
+    .PULSE_PERIOD(PULSE_PERIOD)
+  ) i_laser_driver_pulse (
     .clk (clk),
     .rstn (pulse_gen_resetn),
     .pulse_width (pulse_width_s),
@@ -268,8 +270,8 @@ module axi_laser_driver #(
   // AXI Memory Mapped Wrapper
 
   up_axi #(
-    .AXI_ADDRESS_WIDTH(16))
-  i_up_axi (
+    .AXI_ADDRESS_WIDTH(16)
+  ) i_up_axi (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_axi_awvalid (s_axi_awvalid),

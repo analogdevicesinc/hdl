@@ -29,8 +29,7 @@ module ad_pack_tb;
     .idata(idata),
     .ivalid(ivalid),
     .odata(odata),
-    .ovalid(ovalid)
-  );
+    .ovalid(ovalid));
 
   task test();
   begin

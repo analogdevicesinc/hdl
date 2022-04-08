@@ -44,7 +44,8 @@ module axi_ad9963_tx_channel #(
   parameter   DAC_DDS_TYPE = 1,
   parameter   DAC_DDS_CORDIC_DW = 14,
   parameter   DAC_DDS_CORDIC_PHASE_DW = 13,
-  parameter   DATAPATH_DISABLE = 0) (
+  parameter   DATAPATH_DISABLE = 0
+) (
 
   // dac interface
 
@@ -76,7 +77,8 @@ module axi_ad9963_tx_channel #(
   input               up_rreq,
   input       [13:0]  up_raddr,
   output      [31:0]  up_rdata,
-  output              up_rack);
+  output              up_rack
+);
 
   localparam  PRBS_SEL = CHANNEL_ID;
   localparam  PRBS_P09 = 0;
@@ -128,7 +130,9 @@ module axi_ad9963_tx_channel #(
   assign dac_iqcor_valid_s = data_source_valid;
   assign dac_iqcor_data_s = {dac_data_out, 4'd0};
   end else begin
-  ad_iqcor #(.Q_OR_I_N (Q_OR_I_N)) i_ad_iqcor (
+  ad_iqcor #(
+    .Q_OR_I_N (Q_OR_I_N)
+  ) i_ad_iqcor (
     .clk (dac_clk),
     .valid (data_source_valid),
     .data_in ({dac_data_out, 4'd0}),
@@ -156,7 +160,7 @@ module axi_ad9963_tx_channel #(
     dma_valid_m <= dma_valid;
   end
 
- function [23:0] pn23;
+  function [23:0] pn23;
     input [23:0] din;
     reg   [23:0] dout;
     begin
@@ -205,8 +209,8 @@ module axi_ad9963_tx_channel #(
     .DDS_TYPE (DAC_DDS_TYPE),
     .CORDIC_DW (DAC_DDS_CORDIC_DW),
     .CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
-    .CLK_RATIO (1))
-  i_dds (
+    .CLK_RATIO (1)
+  ) i_dds (
     .clk (dac_clk),
     .dac_dds_format (dac_dds_format),
     .dac_data_sync (dac_data_sync),
@@ -269,6 +273,3 @@ module axi_ad9963_tx_channel #(
     .up_rack (up_rack));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

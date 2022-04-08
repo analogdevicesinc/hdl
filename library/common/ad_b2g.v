@@ -37,10 +37,11 @@
 
 module ad_b2g #(
 
-  parameter DATA_WIDTH = 8) (
-
+  parameter DATA_WIDTH = 8
+) (
   input       [DATA_WIDTH-1:0]    din,
-  output      [DATA_WIDTH-1:0]    dout);
+  output      [DATA_WIDTH-1:0]    dout
+);
 
   function [DATA_WIDTH-1:0] b2g;
     input [DATA_WIDTH-1:0] b;
@@ -56,4 +57,3 @@ module ad_b2g #(
   assign dout = b2g(din);
 
 endmodule
-

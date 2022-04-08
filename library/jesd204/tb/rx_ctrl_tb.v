@@ -88,7 +88,6 @@ module rx_ctrl_tb;
     end
   end
 
-
   always @(posedge clk or posedge cgs_reset) begin
     if (cgs_reset == 1'b1) begin
       cgs_counter <= 'h00;
@@ -108,7 +107,6 @@ module rx_ctrl_tb;
     .phy_ready(phy_ready),
     .phy_en_char_align(en_align),
     .cgs_reset(cgs_reset),
-    .cgs_ready(cgs_ready)
-  );
+    .cgs_ready(cgs_ready));
 
 endmodule

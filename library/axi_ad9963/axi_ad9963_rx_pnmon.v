@@ -48,7 +48,8 @@ module axi_ad9963_rx_pnmon (
 
   input   [ 3:0]  adc_pnseq_sel,
   output          adc_pn_oos,
-  output          adc_pn_err);
+  output          adc_pn_err
+);
 
   // internal registers
 
@@ -83,7 +84,7 @@ module axi_ad9963_rx_pnmon (
 
   // standard prbs functions
 
- function [23:0] pn23;
+  function [23:0] pn23;
     input [23:0] din;
     reg   [23:0] dout;
     begin
@@ -96,16 +97,18 @@ module axi_ad9963_rx_pnmon (
 
   assign adc_pn_data_pn_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in : adc_pn_data_pn;
 
- always @(posedge adc_clk) begin
-   if(adc_valid == 1'b1) begin
-     adc_pn_data_in <= {adc_pn_data_in[22:11], adc_data};
-     adc_pn_data_pn <= pn23(adc_pn_data_pn_s);
-   end
- end
+  always @(posedge adc_clk) begin
+    if(adc_valid == 1'b1) begin
+      adc_pn_data_in <= {adc_pn_data_in[22:11], adc_data};
+      adc_pn_data_pn <= pn23(adc_pn_data_pn_s);
+    end
+  end
 
   // pn oos & pn err
 
-  ad_pnmon #(.DATA_WIDTH(24)) i_pnmon (
+  ad_pnmon #(
+    .DATA_WIDTH(24)
+  ) i_pnmon (
     .adc_clk (adc_clk),
     .adc_valid_in (adc_valid),
     .adc_data_in (adc_pn_data_in),
@@ -115,6 +118,3 @@ module axi_ad9963_rx_pnmon (
     .adc_pn_err (adc_pn_err));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

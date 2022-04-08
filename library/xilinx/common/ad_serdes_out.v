@@ -42,7 +42,8 @@ module ad_serdes_out #(
   parameter   CMOS_LVDS_N = 0,
   parameter   DDR_OR_SDR_N = 1,
   parameter   SERDES_FACTOR = 8,
-  parameter   DATA_WIDTH = 16) (
+  parameter   DATA_WIDTH = 16
+) (
 
   // reset and clocks
 
@@ -63,7 +64,8 @@ module ad_serdes_out #(
   input   [(DATA_WIDTH-1):0]  data_s7,   // last bit to be transmitted
   output  [(DATA_WIDTH-1):0]  data_out_se,
   output  [(DATA_WIDTH-1):0]  data_out_p,
-  output  [(DATA_WIDTH-1):0]  data_out_n);
+  output  [(DATA_WIDTH-1):0]  data_out_n
+);
 
   localparam  SEVEN_SERIES  = 1;
   localparam  ULTRASCALE  = 2;
@@ -74,7 +76,6 @@ module ad_serdes_out #(
                           FPGA_TECHNOLOGY == ULTRASCALE ? "ULTRASCALE" :
                           FPGA_TECHNOLOGY == ULTRASCALE_PLUS ? "ULTRASCALE_PLUS" :
                           "UNSUPPORTED";
-
 
   // internal signals
 
@@ -108,8 +109,8 @@ module ad_serdes_out #(
         .DATA_RATE_TQ ("SDR"),
         .DATA_WIDTH (SERDES_FACTOR),
         .TRISTATE_WIDTH (1),
-        .SERDES_MODE ("MASTER"))
-      i_serdes (
+        .SERDES_MODE ("MASTER")
+      ) i_serdes (
         .D1 (data_s0[l_inst]),
         .D2 (data_s1[l_inst]),
         .D3 (data_s2[l_inst]),
@@ -142,8 +143,8 @@ module ad_serdes_out #(
     if (FPGA_TECHNOLOGY == ULTRASCALE || FPGA_TECHNOLOGY == ULTRASCALE_PLUS) begin
       OSERDESE3  #(
         .DATA_WIDTH (SERDES_FACTOR),
-        .SIM_DEVICE (SIM_DEVICE))
-      i_serdes (
+        .SIM_DEVICE (SIM_DEVICE)
+      ) i_serdes (
         .D ({data_s7[l_inst],
              data_s6[l_inst],
              data_s5[l_inst],
@@ -181,7 +182,3 @@ module ad_serdes_out #(
   endgenerate
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************
-

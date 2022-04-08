@@ -59,8 +59,7 @@ module ad_ip_jesd204_tpl_adc_channel #(
 
     .pn_seq_sel (pn_seq_sel),
     .pn_oos (pn_oos),
-    .pn_err (pn_err)
-  );
+    .pn_err (pn_err));
 
   generate
   genvar n;
@@ -78,8 +77,7 @@ module ad_ip_jesd204_tpl_adc_channel #(
 
       .dfmt_enable (dfmt_enable),
       .dfmt_type (dfmt_type),
-      .dfmt_se (dfmt_sign_extend)
-    );
+      .dfmt_se (dfmt_sign_extend));
   end
   endgenerate
 

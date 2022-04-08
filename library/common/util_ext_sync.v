@@ -34,7 +34,6 @@ module util_ext_sync #(
   input sync_in,
 
   output reg sync_armed = 1'b0
-
 );
 
   reg sync_in_d1 = 1'b0;
@@ -62,4 +61,3 @@ module util_ext_sync #(
   end
 
 endmodule
-

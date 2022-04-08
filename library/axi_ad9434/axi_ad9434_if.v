@@ -38,7 +38,8 @@
 module axi_ad9434_if #(
 
   parameter FPGA_TECHNOLOGY = 0,
-  parameter IO_DELAY_GROUP = "dev_if_delay_group") (
+  parameter IO_DELAY_GROUP = "dev_if_delay_group"
+) (
 
   // device interface
   input                   adc_clk_in_p,
@@ -77,8 +78,8 @@ module axi_ad9434_if #(
   input       [31:0]      up_drp_wdata,
   output      [31:0]      up_drp_rdata,
   output                  up_drp_ready,
-  output                  up_drp_locked);
-
+  output                  up_drp_locked
+);
 
   localparam SDR = 0;
 
@@ -105,8 +106,8 @@ module axi_ad9434_if #(
     .IODELAY_GROUP(IO_DELAY_GROUP),
     .DDR_OR_SDR_N(SDR),
     .DATA_WIDTH(12),
-    .SERDES_FACTOR(4))
-  i_adc_data (
+    .SERDES_FACTOR(4)
+  ) i_adc_data (
     .rst(adc_rst),
     .clk(adc_clk_in),
     .div_clk(adc_div_clk),
@@ -138,8 +139,8 @@ module axi_ad9434_if #(
     .IODELAY_GROUP(IO_DELAY_GROUP),
     .DDR_OR_SDR_N(SDR),
     .DATA_WIDTH(1),
-    .SERDES_FACTOR(4))
-  i_adc_or (
+    .SERDES_FACTOR(4)
+  ) i_adc_or (
     .rst(adc_rst),
     .clk(adc_clk_in),
     .div_clk(adc_div_clk),
@@ -174,8 +175,8 @@ module axi_ad9434_if #(
     .MMCM_VCO_MUL (12),
     .MMCM_CLK0_DIV (2),
     .MMCM_CLK1_DIV (8),
-    .SERDES_FACTOR(4))
-  i_serdes_clk (
+    .SERDES_FACTOR(4)
+  ) i_serdes_clk (
     .rst (mmcm_rst),
     .clk_in_p (adc_clk_in_p),
     .clk_in_n (adc_clk_in_n),

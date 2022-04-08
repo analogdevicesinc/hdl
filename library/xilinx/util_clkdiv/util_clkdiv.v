@@ -39,54 +39,54 @@ module util_clkdiv (
   input   clk,
   input   clk_sel,
   output  clk_out
- );
+);
 
-parameter SIM_DEVICE = "7SERIES";
-parameter SEL_0_DIV = "4";
-parameter SEL_1_DIV = "2";
+  parameter SIM_DEVICE = "7SERIES";
+  parameter SEL_0_DIV = "4";
+  parameter SEL_1_DIV = "2";
 
   wire clk_div_sel_0_s;
   wire clk_div_sel_1_s;
 
-generate if (SIM_DEVICE == "7SERIES") begin
+  generate if (SIM_DEVICE == "7SERIES") begin
 
-  BUFR #(
-    .BUFR_DIVIDE(SEL_0_DIV),
-    .SIM_DEVICE("7SERIES")
-  ) clk_divide_sel_0 (
-    .I(clk),
-    .CE(1),
-    .CLR(0),
-    .O(clk_div_sel_0_s));
+    BUFR #(
+      .BUFR_DIVIDE(SEL_0_DIV),
+      .SIM_DEVICE("7SERIES")
+    ) clk_divide_sel_0 (
+      .I(clk),
+      .CE(1),
+      .CLR(0),
+      .O(clk_div_sel_0_s));
 
-  BUFR #(
-    .BUFR_DIVIDE(SEL_1_DIV),
-    .SIM_DEVICE("7SERIES")
-  ) clk_divide_sel_1 (
-    .I(clk),
-    .CE(1),
-    .CLR(0),
-    .O(clk_div_sel_1_s));
+    BUFR #(
+      .BUFR_DIVIDE(SEL_1_DIV),
+      .SIM_DEVICE("7SERIES")
+    ) clk_divide_sel_1 (
+      .I(clk),
+      .CE(1),
+      .CLR(0),
+      .O(clk_div_sel_1_s));
 
-end else if (SIM_DEVICE == "ULTRASCALE") begin
+  end else if (SIM_DEVICE == "ULTRASCALE") begin
 
-  BUFGCE_DIV #(
-    .BUFGCE_DIVIDE(SEL_0_DIV)
-  ) clk_divide_sel_0 (
-    .I(clk),
-    .CE(1),
-    .CLR(0),
-    .O(clk_div_sel_0_s));
+    BUFGCE_DIV #(
+      .BUFGCE_DIVIDE(SEL_0_DIV)
+    ) clk_divide_sel_0 (
+      .I(clk),
+      .CE(1),
+      .CLR(0),
+      .O(clk_div_sel_0_s));
 
-  BUFGCE_DIV #(
-    .BUFGCE_DIVIDE(SEL_1_DIV)
-  ) clk_divide_sel_1 (
-    .I(clk),
-    .CE(1),
-    .CLR(0),
-    .O(clk_div_sel_1_s));
+    BUFGCE_DIV #(
+      .BUFGCE_DIVIDE(SEL_1_DIV)
+    ) clk_divide_sel_1 (
+      .I(clk),
+      .CE(1),
+      .CLR(0),
+      .O(clk_div_sel_1_s));
 
-end endgenerate
+  end endgenerate
 
   BUFGMUX_CTRL i_div_clk_gbuf (
     .I0(clk_div_sel_0_s), // 1-bit input: Clock input (S=0)
@@ -94,5 +94,4 @@ end endgenerate
     .S(clk_sel),
     .O (clk_out));
 
-endmodule  // util_clkdiv
-
+endmodule

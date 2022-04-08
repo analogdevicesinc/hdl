@@ -86,47 +86,46 @@ module jesd204_tx_static_config #(
   output [NUM_LANES*DATA_PATH_WIDTH*8-1:0] ilas_config_data
 );
 
-assign cfg_lanes_disable = {NUM_LANES{1'b0}};
-assign cfg_links_disable = {NUM_LINKS{1'b0}};
-assign cfg_octets_per_multiframe = (FRAMES_PER_MULTIFRAME * OCTETS_PER_FRAME) - 1;
-assign cfg_octets_per_frame = OCTETS_PER_FRAME - 1;
-assign cfg_continuous_cgs = 1'b0;
-assign cfg_continuous_ilas = 1'b0;
-assign cfg_skip_ilas = 1'b0;
-assign cfg_mframes_per_ilas = 3;
-assign cfg_disable_char_replacement = 1'b0;
-assign cfg_disable_scrambler = SCR ? 1'b0 : 1'b1;
+  assign cfg_lanes_disable = {NUM_LANES{1'b0}};
+  assign cfg_links_disable = {NUM_LINKS{1'b0}};
+  assign cfg_octets_per_multiframe = (FRAMES_PER_MULTIFRAME * OCTETS_PER_FRAME) - 1;
+  assign cfg_octets_per_frame = OCTETS_PER_FRAME - 1;
+  assign cfg_continuous_cgs = 1'b0;
+  assign cfg_continuous_ilas = 1'b0;
+  assign cfg_skip_ilas = 1'b0;
+  assign cfg_mframes_per_ilas = 3;
+  assign cfg_disable_char_replacement = 1'b0;
+  assign cfg_disable_scrambler = SCR ? 1'b0 : 1'b1;
 
-assign device_cfg_octets_per_multiframe = (FRAMES_PER_MULTIFRAME * OCTETS_PER_FRAME) - 1;
-assign device_cfg_octets_per_frame = OCTETS_PER_FRAME - 1;
-assign device_cfg_beats_per_multiframe = ((FRAMES_PER_MULTIFRAME * OCTETS_PER_FRAME) /
-                                          TPL_DATA_PATH_WIDTH) - 1;
-assign device_cfg_lmfc_offset = 1;
-assign device_cfg_sysref_oneshot = SYSREF_ONE_SHOT;
-assign device_cfg_sysref_disable = SYSREF_DISABLE;
+  assign device_cfg_octets_per_multiframe = (FRAMES_PER_MULTIFRAME * OCTETS_PER_FRAME) - 1;
+  assign device_cfg_octets_per_frame = OCTETS_PER_FRAME - 1;
+  assign device_cfg_beats_per_multiframe = ((FRAMES_PER_MULTIFRAME * OCTETS_PER_FRAME) /
+                                            TPL_DATA_PATH_WIDTH) - 1;
+  assign device_cfg_lmfc_offset = 1;
+  assign device_cfg_sysref_oneshot = SYSREF_ONE_SHOT;
+  assign device_cfg_sysref_disable = SYSREF_DISABLE;
 
-jesd204_ilas_cfg_static #(
-  .DID(8'h00),
-  .BID(5'h00),
-  .L(NUM_LANES - 1),
-  .SCR(SCR),
-  .F(OCTETS_PER_FRAME - 1),
-  .K(FRAMES_PER_MULTIFRAME - 1),
-  .M(NUM_CONVERTERS - 1),
-  .N(N),
-  .NP(NP),
-  .SUBCLASSV(3'h1),
-  .S(5'h00),
-  .JESDV(3'h1),
-  .CF(5'h00),
-  .HD(HIGH_DENSITY),
-  .NUM_LANES(NUM_LANES),
-  .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
-) i_ilas_config (
-  .clk(clk),
-  .ilas_config_addr(ilas_config_addr),
-  .ilas_config_rd(ilas_config_rd),
-  .ilas_config_data(ilas_config_data)
-);
+  jesd204_ilas_cfg_static #(
+    .DID(8'h00),
+    .BID(5'h00),
+    .L(NUM_LANES - 1),
+    .SCR(SCR),
+    .F(OCTETS_PER_FRAME - 1),
+    .K(FRAMES_PER_MULTIFRAME - 1),
+    .M(NUM_CONVERTERS - 1),
+    .N(N),
+    .NP(NP),
+    .SUBCLASSV(3'h1),
+    .S(5'h00),
+    .JESDV(3'h1),
+    .CF(5'h00),
+    .HD(HIGH_DENSITY),
+    .NUM_LANES(NUM_LANES),
+    .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
+  ) i_ilas_config (
+    .clk(clk),
+    .ilas_config_addr(ilas_config_addr),
+    .ilas_config_rd(ilas_config_rd),
+    .ilas_config_data(ilas_config_data));
 
 endmodule
