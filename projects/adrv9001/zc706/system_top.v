@@ -176,7 +176,9 @@ module system_top (
 
   assign platform_status = vadj_err;
 
-  ad_iobuf #(.DATA_WIDTH(16)) i_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH(16)
+  ) i_iobuf (
     .dio_t (vadj_err ? {16{1'b1}} : gpio_t[47:32]),
     .dio_i ({gpio_o[47:32]}),
     .dio_o ({gpio_i[47:32]}),
@@ -202,7 +204,9 @@ module system_top (
   assign gpio_tx1_enable_in = gpio_o[50];
   assign gpio_tx2_enable_in = gpio_o[51];
 
-  ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_bd (
+  ad_iobuf #(
+    .DATA_WIDTH(15)
+  ) i_iobuf_bd (
     .dio_t (gpio_t[14:0]),
     .dio_i (gpio_o[14:0]),
     .dio_o (gpio_i[14:0]),
@@ -215,7 +219,7 @@ module system_top (
   assign tdd_sync_loc = gpio_o[56];
 
   // tdd_sync_loc - local sync signal from a GPIO or other source
-  // tdd_sync - external sync 
+  // tdd_sync - external sync
   assign tdd_sync_i = tdd_sync_cntr ? tdd_sync_loc : tdd_sync;
   assign tdd_sync = tdd_sync_cntr ? tdd_sync_loc : 1'bz;
 
@@ -327,20 +331,15 @@ module system_top (
     .gpio_tx2_enable_in (gpio_tx2_enable_in),
 
     .tdd_sync (tdd_sync_i),
-    .tdd_sync_cntr (tdd_sync_cntr)
+    .tdd_sync_cntr (tdd_sync_cntr));
 
-  );
+  assign spi_clk = vadj_err ? 1'bz : spi_clk_s;
+  assign spi_en  = vadj_err ? 1'bz : spi_en_s;
+  assign spi_dio = vadj_err ? 1'bz : spi_dio_s;
 
- assign spi_clk = vadj_err ? 1'bz : spi_clk_s;
- assign spi_en  = vadj_err ? 1'bz : spi_en_s;
- assign spi_dio = vadj_err ? 1'bz : spi_dio_s;
-
- assign rx1_enable = vadj_err ? 1'bz : rx1_enable_s;
- assign rx2_enable = vadj_err ? 1'bz : rx2_enable_s;
- assign tx1_enable = vadj_err ? 1'bz : tx1_enable_s;
- assign tx2_enable = vadj_err ? 1'bz : tx2_enable_s;
+  assign rx1_enable = vadj_err ? 1'bz : rx1_enable_s;
+  assign rx2_enable = vadj_err ? 1'bz : rx2_enable_s;
+  assign tx1_enable = vadj_err ? 1'bz : tx1_enable_s;
+  assign tx2_enable = vadj_err ? 1'bz : tx2_enable_s;
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

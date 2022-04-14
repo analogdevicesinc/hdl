@@ -198,7 +198,8 @@ module system_top (
 
   output            spi_clk,
   inout             spi_sdio,
-  input             spi_miso);
+  input             spi_miso
+);
 
   // internal signals
 
@@ -418,6 +419,3 @@ module system_top (
     .rx_sysref_export (sysref_c));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

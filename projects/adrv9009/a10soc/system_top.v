@@ -156,7 +156,8 @@ module system_top (
   output            spi_csn_adrv9009,
   output            spi_clk,
   output            spi_mosi,
-  input             spi_miso);
+  input             spi_miso
+);
 
   // internal signals
 
@@ -324,6 +325,3 @@ module system_top (
     .rx_sysref_export (sysref));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

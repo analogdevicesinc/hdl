@@ -80,10 +80,9 @@ tx_sysref_p   SYSREF2_P       G06  FMC_HPC0_LA00_CC_P        Y4     IO_L13P_T2L_
 */
 
 module system_top #(
-    parameter NUM_LINKS = 2,
-    parameter DEVICE_CODE = 0
-  ) (
-
+  parameter NUM_LINKS = 2,
+  parameter DEVICE_CODE = 0
+) (
   input   [12:0]  gpio_bd_i,
   output  [ 7:0]  gpio_bd_o,
 
@@ -146,26 +145,22 @@ module system_top #(
     .I (tx_ref_clk_p),
     .IB (tx_ref_clk_n),
     .O (tx_ref_clk),
-    .ODIV2 ()
-  );
+    .ODIV2 ());
 
   IBUFDS i_ibufds_tx_sysref (
     .I (tx_sysref_p),
     .IB (tx_sysref_n),
-    .O (tx_sysref)
-  );
+    .O (tx_sysref));
 
   IBUFDS i_ibufds_tx_sync_0 (
     .I (tx_sync_p[0]),
     .IB (tx_sync_n[0]),
-    .O (tx_sync[0])
-  );
+    .O (tx_sync[0]));
 
   IBUFDS i_ibufds_tx_sync_1 (
     .I (tx_sync_p[1]),
     .IB (tx_sync_n[1]),
-    .O (tx_sync[1])
-  );
+    .O (tx_sync[1]));
 
   /* FMC GPIOs */
   ad_iobuf #(
@@ -176,8 +171,7 @@ module system_top #(
     .dio_o (gpio_i[21+:5]),
     .dio_p ({
       dac_ctrl           /* 25 - 21 */
-    })
-  );
+    }));
 
   /*
   * Control signals for different FMC boards:
@@ -187,7 +181,7 @@ module system_top #(
   *        1  C10   NC           NC              FMC_TXEN_0
   *        2  C11   NC           NC              FMC_TXEN_1
   *        3  H14   FMC_TXEN_1   NC              NC
-  *        4  D15   NC           FMC_HMC849VCTL  NC          
+  *        4  D15   NC           FMC_HMC849VCTL  NC
   */
 
   assign dac_fifo_bypass = gpio_o[40];
@@ -199,8 +193,7 @@ module system_top #(
     .dio_t (gpio_t[48+:4]),
     .dio_i (gpio_o[48+:4]),
     .dio_o (gpio_i[48+:4]),
-    .dio_p (pmod_gpio)
-  );
+    .dio_p (pmod_gpio));
 
   /* PMOD SPI */
   assign pmod_spi_csn = spi1_csn[0];
@@ -251,8 +244,4 @@ module system_top #(
   // The FMC connector instead of SYNC1 has SYSREF connected to it
   assign tx_sysref_loc = (DEVICE_CODE == 3) ? tx_sync[1] : tx_sysref;
 
-
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

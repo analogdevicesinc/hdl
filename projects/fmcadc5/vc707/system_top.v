@@ -130,7 +130,8 @@ module system_top (
   inout             pwdn_0,
   inout             rst_0,
   output            drst_0,
-  output            arst_0);
+  output            arst_0
+);
 
   // internal signals
 
@@ -206,19 +207,25 @@ module system_top (
 
   // fmcadc5 board controls
 
-  ad_iobuf #(.DATA_WIDTH(5)) i_iobuf_fmcadc5 (
+  ad_iobuf #(
+    .DATA_WIDTH(5)
+  ) i_iobuf_fmcadc5 (
     .dio_t (gpio_t[44:40]),
     .dio_i (gpio_o[44:40]),
     .dio_o (gpio_i[44:40]),
     .dio_p ({pwr_good, fd_1, irq_1, fd_0, irq_0}));
 
-  ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_ad9625_1 (
+  ad_iobuf #(
+    .DATA_WIDTH(2)
+  ) i_iobuf_ad9625_1 (
     .dio_t (gpio_t[39:38]),
     .dio_i (gpio_o[39:38]),
     .dio_o (gpio_i[39:38]),
     .dio_p ({pwdn_1, rst_1}));
 
-  ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_ad9625_0 (
+  ad_iobuf #(
+    .DATA_WIDTH(2)
+  ) i_iobuf_ad9625_0 (
     .dio_t (gpio_t[35:34]),
     .dio_i (gpio_o[35:34]),
     .dio_o (gpio_i[35:34]),
@@ -226,7 +233,9 @@ module system_top (
 
   // vc707 board controls
 
-  ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_bd (
+  ad_iobuf #(
+    .DATA_WIDTH(21)
+  ) i_iobuf_bd (
     .dio_t (gpio_t[20:0]),
     .dio_i (gpio_o[20:0]),
     .dio_o (gpio_i[20:0]),
@@ -328,6 +337,3 @@ module system_top (
     .vcal (vcal));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

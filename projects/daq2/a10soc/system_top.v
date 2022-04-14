@@ -158,7 +158,8 @@ module system_top (
   output                  spi_csn_adc,
   output                  spi_clk,
   inout                   spi_sdio,
-  output                  spi_dir);
+  output                  spi_dir
+);
 
   // internal signals
 
@@ -178,7 +179,6 @@ module system_top (
   assign spi_csn_adc = spi_csn_s[2];
   assign spi_csn_dac = spi_csn_s[1];
   assign spi_csn_clk = spi_csn_s[0];
-
 
   daq2_spi i_daq2_spi (
     .spi_csn (spi_csn_s[2:0]),
@@ -333,6 +333,3 @@ module system_top (
     .rx_sysref_export (rx_sysref));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

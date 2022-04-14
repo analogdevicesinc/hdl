@@ -76,7 +76,6 @@ module system_top (
   output          i2s_sdata_out,
   input           i2s_sdata_in,
 
-
   inout           iic_scl,
   inout           iic_sda,
   inout   [ 1:0]  iic_mux_scl,
@@ -93,7 +92,8 @@ module system_top (
   output          ad7768_spi_mosi,
   output          ad7768_spi_sclk,
   output          ad7768_spi_cs,
-  input           ad7768_drdy);
+  input           ad7768_drdy
+);
 
   // internal signals
 
@@ -219,6 +219,3 @@ module system_top (
     .adc_data_ready (ad7768_drdy));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

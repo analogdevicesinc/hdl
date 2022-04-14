@@ -128,8 +128,8 @@ module system_top (
 
   //debug hdr
   output       [9:0]      proto_hdr
-
 );
+
   // internal registers
   reg         [  2:0] mcs_sync_m = 'd0;
   reg                 dev_mcs_fpga_in = 1'b0;
@@ -180,7 +180,9 @@ module system_top (
 
   assign platform_status = vadj_err;
 
-  ad_iobuf #(.DATA_WIDTH(16)) i_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH(16)
+  ) i_iobuf (
     .dio_t ({gpio_t[47:32]}),
     .dio_i ({gpio_o[47:32]}),
     .dio_o ({gpio_i[47:32]}),
@@ -220,7 +222,7 @@ module system_top (
   assign tdd_sync_loc = gpio_o[56];
 
   // tdd_sync_loc - local sync signal from a GPIO or other source
-  // tdd_sync - external sync 
+  // tdd_sync - external sync
 
   assign tdd_sync_i = tdd_sync_cntr ? tdd_sync_loc : tdd_sync;
   assign tdd_sync = tdd_sync_cntr ? tdd_sync_loc : 1'bz;
@@ -300,13 +302,8 @@ module system_top (
     .adc1_div_clk (proto_hdr[0]),
     .adc2_div_clk (proto_hdr[1]),
     .dac1_div_clk (proto_hdr[2]),
-    .dac2_div_clk (proto_hdr[3])
-
-  );
+    .dac2_div_clk (proto_hdr[3]));
 
   assign proto_hdr[9:4] = {'b0};
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

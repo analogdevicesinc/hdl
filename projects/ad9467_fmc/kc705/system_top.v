@@ -100,7 +100,8 @@ module system_top (
   output                  spi_clk,
   output                  spi_csn_adc,
   output                  spi_csn_clk,
-  inout                   spi_sdio);
+  inout                   spi_sdio
+);
 
   // internal signals
   wire   [ 7:0]   spi_csn;
@@ -120,85 +121,83 @@ module system_top (
   assign spi_csn_clk = spi_csn[1];
 
   ad9467_spi i_spi (
-      .spi_csn(spi_csn[1:0]),
-      .spi_clk(spi_clk),
-      .spi_mosi(spi_mosi),
-      .spi_miso(spi_miso),
-      .spi_sdio(spi_sdio)
-      );
+    .spi_csn(spi_csn[1:0]),
+    .spi_clk(spi_clk),
+    .spi_mosi(spi_mosi),
+    .spi_miso(spi_miso),
+    .spi_sdio(spi_sdio));
 
-  ad_iobuf #(.DATA_WIDTH(17)) i_iobuf_sw_led (
-     .dio_t (gpio_t[16:0]),
-     .dio_i (gpio_o[16:0]),
-     .dio_o (gpio_i[16:0]),
-     .dio_p (gpio_bd));
+  ad_iobuf #(
+    .DATA_WIDTH(17)
+  ) i_iobuf_sw_led (
+    .dio_t (gpio_t[16:0]),
+    .dio_i (gpio_o[16:0]),
+    .dio_o (gpio_i[16:0]),
+    .dio_p (gpio_bd));
 
   assign gpio_i[63:32] = gpio_o[63:32];
   assign gpio_i[31:17] = gpio_o[31:17];
 
   system_wrapper i_system_wrapper (
-      .ddr3_addr (ddr3_addr),
-      .ddr3_ba (ddr3_ba),
-      .ddr3_cas_n (ddr3_cas_n),
-      .ddr3_ck_n (ddr3_ck_n),
-      .ddr3_ck_p (ddr3_ck_p),
-      .ddr3_cke (ddr3_cke),
-      .ddr3_cs_n (ddr3_cs_n),
-      .ddr3_dm (ddr3_dm),
-      .ddr3_dq (ddr3_dq),
-      .ddr3_dqs_n (ddr3_dqs_n),
-      .ddr3_dqs_p (ddr3_dqs_p),
-      .ddr3_odt (ddr3_odt),
-      .ddr3_ras_n (ddr3_ras_n),
-      .ddr3_reset_n (ddr3_reset_n),
-      .ddr3_we_n (ddr3_we_n),
-      .gpio_lcd_tri_io (gpio_lcd),
-      .gpio0_o (gpio_o[31:0]),
-      .gpio0_t (gpio_t[31:0]),
-      .gpio0_i (gpio_i[31:0]),
-      .gpio1_o (gpio_o[63:32]),
-      .gpio1_t (gpio_t[63:32]),
-      .gpio1_i (gpio_i[63:32]),
-      .iic_main_scl_io (iic_scl),
-      .iic_main_sda_io (iic_sda),
-      .mdio_mdc (mdio_mdc),
-      .mdio_mdio_io (mdio_mdio),
-      .mii_col (mii_col),
-      .mii_crs (mii_crs),
-      .mii_rst_n (mii_rst_n),
-      .mii_rx_clk (mii_rx_clk),
-      .mii_rx_dv (mii_rx_dv),
-      .mii_rx_er (mii_rx_er),
-      .mii_rxd (mii_rxd),
-      .mii_tx_clk (mii_tx_clk),
-      .mii_tx_en (mii_tx_en),
-      .mii_txd (mii_txd),
-      .linear_flash_addr (linear_flash_addr),
-      .linear_flash_adv_ldn (linear_flash_adv_ldn),
-      .linear_flash_ce_n (linear_flash_ce_n),
-      .linear_flash_dq_io (linear_flash_dq_io),
-      .linear_flash_oen (linear_flash_oen),
-      .linear_flash_wen (linear_flash_wen),
-      .sys_clk_n (sys_clk_n),
-      .sys_clk_p (sys_clk_p),
-      .sys_rst (sys_rst),
-      .uart_sin (uart_sin),
-      .uart_sout (uart_sout),
-      .adc_clk_in_n (adc_clk_in_n),
-      .adc_clk_in_p (adc_clk_in_p),
-      .adc_data_in_n (adc_data_in_n),
-      .adc_data_in_p (adc_data_in_p),
-      .adc_data_or_n (adc_data_or_n),
-      .adc_data_or_p (adc_data_or_p),
-      .spi_clk_i (1'b0),
-      .spi_clk_o (spi_clk),
-      .spi_csn_i (1'b1),
-      .spi_csn_o (spi_csn),
-      .spi_sdi_i (spi_miso),
-      .spi_sdo_i (1'b0),
-      .spi_sdo_o (spi_mosi));
+    .ddr3_addr (ddr3_addr),
+    .ddr3_ba (ddr3_ba),
+    .ddr3_cas_n (ddr3_cas_n),
+    .ddr3_ck_n (ddr3_ck_n),
+    .ddr3_ck_p (ddr3_ck_p),
+    .ddr3_cke (ddr3_cke),
+    .ddr3_cs_n (ddr3_cs_n),
+    .ddr3_dm (ddr3_dm),
+    .ddr3_dq (ddr3_dq),
+    .ddr3_dqs_n (ddr3_dqs_n),
+    .ddr3_dqs_p (ddr3_dqs_p),
+    .ddr3_odt (ddr3_odt),
+    .ddr3_ras_n (ddr3_ras_n),
+    .ddr3_reset_n (ddr3_reset_n),
+    .ddr3_we_n (ddr3_we_n),
+    .gpio_lcd_tri_io (gpio_lcd),
+    .gpio0_o (gpio_o[31:0]),
+    .gpio0_t (gpio_t[31:0]),
+    .gpio0_i (gpio_i[31:0]),
+    .gpio1_o (gpio_o[63:32]),
+    .gpio1_t (gpio_t[63:32]),
+    .gpio1_i (gpio_i[63:32]),
+    .iic_main_scl_io (iic_scl),
+    .iic_main_sda_io (iic_sda),
+    .mdio_mdc (mdio_mdc),
+    .mdio_mdio_io (mdio_mdio),
+    .mii_col (mii_col),
+    .mii_crs (mii_crs),
+    .mii_rst_n (mii_rst_n),
+    .mii_rx_clk (mii_rx_clk),
+    .mii_rx_dv (mii_rx_dv),
+    .mii_rx_er (mii_rx_er),
+    .mii_rxd (mii_rxd),
+    .mii_tx_clk (mii_tx_clk),
+    .mii_tx_en (mii_tx_en),
+    .mii_txd (mii_txd),
+    .linear_flash_addr (linear_flash_addr),
+    .linear_flash_adv_ldn (linear_flash_adv_ldn),
+    .linear_flash_ce_n (linear_flash_ce_n),
+    .linear_flash_dq_io (linear_flash_dq_io),
+    .linear_flash_oen (linear_flash_oen),
+    .linear_flash_wen (linear_flash_wen),
+    .sys_clk_n (sys_clk_n),
+    .sys_clk_p (sys_clk_p),
+    .sys_rst (sys_rst),
+    .uart_sin (uart_sin),
+    .uart_sout (uart_sout),
+    .adc_clk_in_n (adc_clk_in_n),
+    .adc_clk_in_p (adc_clk_in_p),
+    .adc_data_in_n (adc_data_in_n),
+    .adc_data_in_p (adc_data_in_p),
+    .adc_data_or_n (adc_data_or_n),
+    .adc_data_or_p (adc_data_or_p),
+    .spi_clk_i (1'b0),
+    .spi_clk_o (spi_clk),
+    .spi_csn_i (1'b1),
+    .spi_csn_o (spi_csn),
+    .spi_sdi_i (spi_miso),
+    .spi_sdo_i (1'b0),
+    .spi_sdo_o (spi_mosi));
 
   endmodule
-
-// ***************************************************************************
-// ***************************************************************************

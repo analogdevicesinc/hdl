@@ -65,7 +65,8 @@ module system_top (
   output          spi_csn,
   output          spi_clk,
   output          spi_mosi,
-  input           spi_miso);
+  input           spi_miso
+);
 
   // internal signals
 
@@ -123,6 +124,3 @@ module system_top (
     .up_txnrx (gpio_o[48]));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

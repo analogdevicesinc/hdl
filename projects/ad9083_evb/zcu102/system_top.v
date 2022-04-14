@@ -102,12 +102,11 @@ module system_top (
   IBUFDS IBUFDS_inst (
     .O(rx_ref_core_clk0_s),
     .I(glblclk_p),
-    .IB(glblclk_n)
-  );
+    .IB(glblclk_n));
+
   BUFG BUFG_inst (
     .O(rx_ref_core_clk0),
-    .I(rx_ref_core_clk0_s)
-  );
+    .I(rx_ref_core_clk0_s));
 
   IBUFDS_GTE4 i_ibufds_ref_clk0 (
     .CEB (1'd0),
@@ -117,17 +116,18 @@ module system_top (
     .ODIV2 ());
 
   ad_3w_spi #(
-    .NUM_OF_SLAVES(2))
-    i_spi (
+    .NUM_OF_SLAVES(2)
+  ) i_spi (
     .spi_csn(spi0_csn[1:0]),
     .spi_clk(spi_clk),
     .spi_mosi(spi_mosi),
     .spi_miso(spi_miso),
     .spi_sdio(spi_sdio),
-    .spi_dir(spidbg_dir)
-    );
+    .spi_dir(spidbg_dir));
 
-  ad_iobuf #(.DATA_WIDTH(3)) i_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH(3)
+  ) i_iobuf (
     .dio_t ({gpio_t[34:32]}),
     .dio_i ({gpio_o[34:32]}),
     .dio_o ({gpio_i[34:32]}),
@@ -172,9 +172,6 @@ module system_top (
     .spi1_csn (),
     .spi1_miso (),
     .spi1_mosi (),
-    .spi1_sclk ()
-    );
+    .spi1_sclk ());
 
 endmodule
-
-// ***************************************************************************

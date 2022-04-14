@@ -101,7 +101,6 @@
 //  DUTB_PDWN_TO_FPGA         LA09_P         D14       AJ33      adc1_pdwn       IO_L19P_T3L_N0_DBC_AD9P_43
 //  HMC7044_SYNC_REQ_TO_FPGA  LA13_N         D18       AJ36      hmc_sync_req    IO_L20N_T3L_N3_AD1N_43
 
-
 module system_top (
 
   input                   sys_rst,
@@ -184,7 +183,6 @@ module system_top (
   inout                   adc1_pdwn,
 
   inout                   hmc_sync_req
-
 );
 
   // internal signals
@@ -228,7 +226,6 @@ module system_top (
     .O (rx_ref_clk_1),
     .ODIV2 ());
 
-
   IBUFDS i_ibufds_rx_sysref_0 (
     .I (rx_sysref_0_p),
     .IB (rx_sysref_0_n),
@@ -258,9 +255,7 @@ module system_top (
 
   BUFG_GT i_bufg(
     .I (glbl_clk_0),
-    .O (glbl_clk_buf)
-  );
-
+    .O (glbl_clk_buf));
 
   daq3_spi i_spi (
     .spi_csn (spi_csn[2:0]),
@@ -270,7 +265,9 @@ module system_top (
     .spi_sdio (spi_sdio),
     .spi_dir ());
 
-  ad_iobuf #(.DATA_WIDTH(11)) i_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH(11)
+  ) i_iobuf (
     .dio_t (gpio_t[42:32]),
     .dio_i (gpio_o[42:32]),
     .dio_o (gpio_i[42:32]),
@@ -286,7 +283,9 @@ module system_top (
               adc1_pdwn,        // 33
               hmc_sync_req}));  // 32
 
-  ad_iobuf #(.DATA_WIDTH(17)) i_iobuf_bd (
+  ad_iobuf #(
+    .DATA_WIDTH(17)
+  ) i_iobuf_bd (
     .dio_t (gpio_t[16:0]),
     .dio_i (gpio_o[16:0]),
     .dio_o (gpio_i[16:0]),
@@ -380,11 +379,6 @@ module system_top (
     .rx_sync_0 (rx_sync_0),
     .rx_sync_1_0 (rx_sync_1),
     .rx_sysref_0 (rx_sysref_0),
-    .rx_sysref_1_0 (rx_sysref_0)
-
-  );
+    .rx_sysref_1_0 (rx_sysref_0));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

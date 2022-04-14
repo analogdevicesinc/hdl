@@ -79,7 +79,8 @@ module system_top (
   input   [ 3:0]  cn0561_din,
   output          cn0561_odr,
 
-  inout           cn0561_pdn);
+  inout           cn0561_pdn
+);
 
   // internal signals
 
@@ -169,6 +170,3 @@ module system_top (
     .cn0561_odr (cn0561_odr));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

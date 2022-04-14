@@ -67,7 +67,8 @@ module system_top (
   output          pulsar_adc_spi_pd,
 
   inout   [ 1:0]  btn,
-  inout   [ 5:0]  led);
+  inout   [ 5:0]  led
+);
 
   // internal signals
 
@@ -152,10 +153,6 @@ module system_top (
     .pulsar_adc_spi_sdi(pulsar_adc_spi_sdi),
     .pulsar_adc_spi_sdo(pulsar_adc_spi_sdo),
     .pulsar_adc_spi_sdo_t(),
-    .pulsar_adc_spi_three_wire()
-  );
+    .pulsar_adc_spi_three_wire());
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

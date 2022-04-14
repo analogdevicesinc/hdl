@@ -86,7 +86,8 @@ module system_top (
 
   output          pl_spi_clk_o,
   output          pl_spi_mosi,
-  input           pl_spi_miso);
+  input           pl_spi_miso
+);
 
   // internal signals
 
@@ -96,7 +97,9 @@ module system_top (
 
   // instantiations
 
-  ad_iobuf #(.DATA_WIDTH(14)) i_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH(14)
+  ) i_iobuf (
     .dio_t (gpio_t[13:0]),
     .dio_i (gpio_o[13:0]),
     .dio_o (gpio_i[13:0]),
@@ -165,6 +168,3 @@ module system_top (
     .up_txnrx (gpio_o[16]));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

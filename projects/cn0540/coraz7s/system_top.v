@@ -94,7 +94,8 @@ module system_top (
   output          cn0540_spi_mosi,
   output          cn0540_spi_sclk,
   output          cn0540_spi_cs,
-  inout           cn0540_drdy);
+  inout           cn0540_drdy
+);
 
   // internal signals
 
@@ -208,6 +209,3 @@ module system_top (
     .xadc_vaux15_v_n (cn0540_ck_an3_n));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

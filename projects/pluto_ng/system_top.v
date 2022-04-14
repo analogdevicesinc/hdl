@@ -207,14 +207,17 @@ module system_top (
 
   // instantiations
 
-  ad_iobuf #(.DATA_WIDTH(16)) i_ext_gpio_buf (
+  ad_iobuf #(
+    .DATA_WIDTH(16)
+  ) i_ext_gpio_buf (
     .dio_t (gpio_t[31:16]),
     .dio_i (gpio_o[31:16]),
     .dio_o (gpio_i[31:16]),
     .dio_p (ext_gpio));
 
-
-  ad_iobuf #(.DATA_WIDTH(16)) i_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH(16)
+  ) i_iobuf (
     .dio_t ({gpio_t[47:32]}),
     .dio_i ({gpio_o[47:32]}),
     .dio_o ({gpio_i[47:32]}),
@@ -224,7 +227,9 @@ module system_top (
              gpio_tx2_enable_in, // 44
              dgpio[11:0]}));     // 43:32
 
-  ad_iobuf #(.DATA_WIDTH(16)) i_iobuf_addon (
+  ad_iobuf #(
+    .DATA_WIDTH(16)
+  ) i_iobuf_addon (
     .dio_t ({gpio_t[63:48]}),
     .dio_i ({gpio_o[63:48]}),
     .dio_o ({gpio_i[63:48]}),
@@ -368,10 +373,6 @@ module system_top (
     .s_1v2_sns_p (s_1v2_sns_p),
     .s_1v2_sns_n (s_1v2_sns_n),
     .s_1v8_mgtravtt_sns_p (s_1v8_mgtravtt_sns_p),
-    .s_1v8_mgtravtt_sns_n (s_1v8_mgtravtt_sns_n)
-  );
+    .s_1v8_mgtravtt_sns_n (s_1v8_mgtravtt_sns_n));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

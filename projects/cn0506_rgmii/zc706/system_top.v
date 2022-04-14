@@ -164,7 +164,9 @@ module system_top (
 
   assign gpio_i[31:15] = gpio_o[31:15];
 
-  ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_bd (
+  ad_iobuf #(
+    .DATA_WIDTH(15)
+  ) i_iobuf_bd (
     .dio_t (gpio_t[14:0]),
     .dio_i (gpio_o[14:0]),
     .dio_o (gpio_i[14:0]),
@@ -251,10 +253,6 @@ module system_top (
     .RGMII_1_td (rgmii_txd_b),
     .RGMII_1_tx_ctl (rgmii_tx_ctl_b),
     .RGMII_1_txc (rgmii_txc_b),
-    .speed_mode_b (speed_mode_b_s)
-    );
+    .speed_mode_b (speed_mode_b_s));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

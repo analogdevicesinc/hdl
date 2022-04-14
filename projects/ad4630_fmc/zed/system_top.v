@@ -37,8 +37,7 @@
 
 module system_top #(
   parameter NUM_OF_SDI = 2
-)(
-
+) (
   inout   [14:0]  ddr_addr,
   inout   [ 2:0]  ddr_ba,
   inout           ddr_cas_n,
@@ -97,7 +96,6 @@ module system_top #(
   output          ad463x_cnv,
   input           ad463x_busy,
   inout           ad463x_resetn
-
 );
 
   // internal signals
@@ -119,24 +117,22 @@ module system_top #(
   assign gpio_i[63:33] = 31'b0;
 
   ad_data_clk #(
-    .SINGLE_ENDED (1))
-  i_ext_clk (
+    .SINGLE_ENDED (1)
+  ) i_ext_clk (
     .rst (1'b0),
     .locked (),
     .clk_in_p (ad463x_ext_clk),
     .clk_in_n (1'b0),
-    .clk (ext_clk_s)
-  );
+    .clk (ext_clk_s));
 
   ad_data_clk #(
-    .SINGLE_ENDED (1))
-  i_echo_sclk (
+    .SINGLE_ENDED (1)
+  ) i_echo_sclk (
     .rst (1'b0),
     .locked (),
     .clk_in_p (ad463x_echo_sclk),
     .clk_in_n (1'b0),
-    .clk (ad463x_echo_sclk_s)
-  );
+    .clk (ad463x_echo_sclk_s));
 
   ad_iobuf #(
     .DATA_WIDTH(1)
@@ -243,6 +239,3 @@ module system_top #(
     .spdif (spdif));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

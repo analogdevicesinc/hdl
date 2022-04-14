@@ -35,14 +35,12 @@
 
 `timescale 1ns/100ps
 
-
 module system_top #(
-    parameter TX_JESD_L = 8,
-    parameter TX_NUM_LINKS = 1,
-    parameter RX_JESD_L = 8,
-    parameter RX_NUM_LINKS = 1
-  ) (
-
+  parameter TX_JESD_L = 8,
+  parameter TX_NUM_LINKS = 1,
+  parameter RX_JESD_L = 8,
+  parameter RX_NUM_LINKS = 1
+) (
   input         sys_rst,
   input         sys_clk_p,
   input         sys_clk_n,
@@ -120,7 +118,6 @@ module system_top #(
   input         sysref2_n,
   input         sysref2_p,
   output [1:0]  txen
-
 );
 
   // internal signals
@@ -200,13 +197,12 @@ module system_top #(
 
   BUFG i_tx_device_clk (
     .I (clkin6),
-    .O (tx_device_clk)
-  );
+    .O (tx_device_clk));
 
   BUFG_GT i_rx_device_clk (
     .I (clkin8),
-    .O (rx_device_clk)
-  );
+    .O (rx_device_clk));
+
   // spi
 
   assign spi0_csb   = spi_csn[0];
@@ -219,7 +215,9 @@ module system_top #(
   assign spi_miso = ~spi_csn[0] ? spi0_miso :
                     ~spi_csn[1] ? spi1_miso : 1'b0;
 
-  ad_3w_spi #(.NUM_OF_SLAVES(1)) i_spi (
+  ad_3w_spi #(
+    .NUM_OF_SLAVES(1)
+  ) i_spi (
     .spi_csn (spi_csn[1]),
     .spi_clk (spi_clk),
     .spi_mosi (spi_mosi),
@@ -229,7 +227,9 @@ module system_top #(
 
   // gpios
 
-  ad_iobuf #(.DATA_WIDTH(12)) i_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH(12)
+  ) i_iobuf (
     .dio_t (gpio_t[43:32]),
     .dio_i (gpio_o[43:32]),
     .dio_o (gpio_i[43:32]),
@@ -254,8 +254,9 @@ module system_top #(
   assign txen[0]          = gpio_o[58];
   assign txen[1]          = gpio_o[59];
 
-
-  ad_iobuf #(.DATA_WIDTH(17)) i_iobuf_bd (
+  ad_iobuf #(
+    .DATA_WIDTH(17)
+  ) i_iobuf_bd (
     .dio_t (gpio_t[16:0]),
     .dio_i (gpio_o[16:0]),
     .dio_o (gpio_i[16:0]),
@@ -349,13 +350,9 @@ module system_top #(
     .rx_sync_0 (rx_syncout),
     .tx_sync_0 (tx_syncin),
     .rx_sysref_0 (sysref),
-    .tx_sysref_0 (sysref)
-  );
+    .tx_sysref_0 (sysref));
 
   assign tx_data_p[TX_JESD_L*TX_NUM_LINKS-1:0] = tx_data_p_loc[TX_JESD_L*TX_NUM_LINKS-1:0];
   assign tx_data_n[TX_JESD_L*TX_NUM_LINKS-1:0] = tx_data_n_loc[TX_JESD_L*TX_NUM_LINKS-1:0];
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

@@ -88,7 +88,8 @@ module system_top (
   output                  gain0_o,
   output                  gain1_o,
 
-  input                   otg_vbusoc);
+  input                   otg_vbusoc
+);
 
   // internal signals
 
@@ -119,8 +120,7 @@ module system_top (
     .dio_t(gpio_t[31:0]),
     .dio_i(gpio_o[31:0]),
     .dio_o(gpio_i[31:0]),
-    .dio_p(gpio_bd)
-  );
+    .dio_p(gpio_bd));
 
   ad_iobuf #(
     .DATA_WIDTH(2)
@@ -128,8 +128,7 @@ module system_top (
     .dio_t({iic_mux_scl_t_s, iic_mux_scl_t_s}),
     .dio_i(iic_mux_scl_o_s),
     .dio_o(iic_mux_scl_i_s),
-    .dio_p(iic_mux_scl)
-  );
+    .dio_p(iic_mux_scl));
 
   ad_iobuf #(
     .DATA_WIDTH(2)
@@ -137,8 +136,7 @@ module system_top (
     .dio_t({iic_mux_sda_t_s, iic_mux_sda_t_s}),
     .dio_i(iic_mux_sda_o_s),
     .dio_o(iic_mux_sda_i_s),
-    .dio_p(iic_mux_sda)
-  );
+    .dio_p(iic_mux_sda));
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
@@ -211,6 +209,3 @@ module system_top (
     .spi1_sdo_o ());
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

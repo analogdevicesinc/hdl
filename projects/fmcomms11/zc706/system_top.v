@@ -121,7 +121,8 @@ module system_top (
   output          spi_csn_hmc1119,
   output          spi_clk,
   inout           spi_sdio,
-  output          spi_dir);
+  output          spi_dir
+);
 
   // internal signals
 
@@ -183,7 +184,9 @@ module system_top (
 
   assign gpio_i[63:36] = gpio_o[63:36];
 
-  ad_iobuf #(.DATA_WIDTH(4)) i_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH(4)
+  ) i_iobuf (
     .dio_t ({gpio_t[35:32]}),
     .dio_i ({gpio_o[35:32]}),
     .dio_o ({gpio_i[35:32]}),
@@ -194,7 +197,9 @@ module system_top (
 
   assign gpio_i[31:15] = gpio_o[31:15];
 
-  ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_bd (
+  ad_iobuf #(
+    .DATA_WIDTH(15)
+  ) i_iobuf_bd (
     .dio_t (gpio_t[14:0]),
     .dio_i (gpio_o[14:0]),
     .dio_o (gpio_i[14:0]),
@@ -310,6 +315,3 @@ module system_top (
     .dac_fifo_bypass (gpio_o[60]));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

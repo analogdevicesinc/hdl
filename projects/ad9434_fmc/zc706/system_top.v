@@ -83,7 +83,8 @@ module system_top (
   output                  spi_csn_clk,
   output                  spi_csn_adc,
   output                  spi_sclk,
-  inout                   spi_dio);
+  inout                   spi_dio
+);
 
   // internal signals
 
@@ -103,7 +104,9 @@ module system_top (
 
   // instantiations
 
-  ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_gpio (
+  ad_iobuf #(
+    .DATA_WIDTH(15)
+  ) i_iobuf_gpio (
     .dio_i (gpio_o[14:0]),
     .dio_o (gpio_i[14:0]),
     .dio_t (gpio_t[14:0]),
@@ -114,8 +117,7 @@ module system_top (
     .spi_clk(spi_sclk),
     .spi_mosi(spi_mosi),
     .spi_miso(spi_miso),
-    .spi_sdio(spi_dio)
-    );
+    .spi_sdio(spi_dio));
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
@@ -175,6 +177,4 @@ module system_top (
     .spi1_sdo_i (spi1_mosi),
     .spi1_sdo_o (spi1_mosi));
 
-
 endmodule
-

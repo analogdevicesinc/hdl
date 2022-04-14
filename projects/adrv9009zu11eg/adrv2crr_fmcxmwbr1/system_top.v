@@ -337,12 +337,12 @@ module system_top (
   assign spi2_cs0 = spi2_csn[0];
 
   adrv9009zu11eg_spi i_spi (
-  .spi_csn(spi_3_to_8_csn),
-  .spi_clk(spi_clk),
-  .spi_mosi(spi_mosi),
-  .spi_miso_i(spi_miso_s),
-  .spi_miso_o(spi0_miso),
-  .spi_sdio(spi_sdio));
+    .spi_csn(spi_3_to_8_csn),
+    .spi_clk(spi_clk),
+    .spi_mosi(spi_mosi),
+    .spi_miso_i(spi_miso_s),
+    .spi_miso_o(spi0_miso),
+    .spi_sdio(spi_sdio));
 
   assign tx_sync = tx_sync_a & tx_sync_b;
 
@@ -352,7 +352,9 @@ module system_top (
 
   assign fmcxmwbr1_gpio_i[63:30] = fmcxmwbr1_gpio_o[63:30];
 
-  ad_iobuf #(.DATA_WIDTH(30)) i_fmcxmwbr1_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH(30)
+  ) i_fmcxmwbr1_iobuf (
     .dio_t ({fmcxmwbr1_gpio_t[29:0]}),
     .dio_i ({fmcxmwbr1_gpio_o[29:0]}),
     .dio_o ({fmcxmwbr1_gpio_i[29:0]}),
@@ -388,7 +390,9 @@ module system_top (
               gpio1,       // 01
               gpio0}));    // 00
 
-  ad_iobuf #(.DATA_WIDTH(61)) i_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH(61)
+  ) i_iobuf (
     .dio_t ({gpio_t[92:32]}),
     .dio_i ({gpio_o[92:32]}),
     .dio_o ({gpio_i[92:32]}),
@@ -455,7 +459,9 @@ module system_top (
               adrv9009_gpio_01_a,       // 33
               adrv9009_gpio_00_a}));    // 32
 
-  ad_iobuf #(.DATA_WIDTH(6)) i_carrier_iobuf_0 (
+  ad_iobuf #(
+    .DATA_WIDTH(6)
+  ) i_carrier_iobuf_0 (
     .dio_t ({gpio_t[27:22]}),
     .dio_i ({gpio_o[27:22]}),
     .dio_o ({gpio_i[27:22]}),
@@ -467,7 +473,9 @@ module system_top (
               hmc7044_car_reset,  // 23
               resetb_ad9545}));   // 22
 
-  ad_iobuf #(.DATA_WIDTH(20)) i_carrier_iobuf_1 (
+  ad_iobuf #(
+    .DATA_WIDTH(20)
+  ) i_carrier_iobuf_1 (
     .dio_t ({gpio_t[19:0]}),
     .dio_i ({gpio_o[19:0]}),
     .dio_o ({gpio_i[19:0]}),
@@ -523,8 +531,8 @@ module system_top (
     .O (core_clk_a_ds));
 
   BUFG i_rx_clk_ibufg_1 (
-     .I (core_clk_a_ds),
-     .O (core_clk_a));
+    .I (core_clk_a_ds),
+    .O (core_clk_a));
 
   IBUFDS i_rx_clk_ibuf_2 (
     .I (core_clk_b_p),
@@ -532,8 +540,8 @@ module system_top (
     .O (core_clk_b_ds));
 
   BUFG i_rx_clk_ibufg_2 (
-     .I (core_clk_b_ds),
-     .O (core_clk_b));
+    .I (core_clk_b_ds),
+    .O (core_clk_b));
 
   IBUFDS i_ibufds_tx_sync_1 (
     .I (tx_sync_a_p),
@@ -663,10 +671,6 @@ module system_top (
     .fmcxmwbr1_gpio0_i(fmcxmwbr1_gpio_i[31:0]),
     .fmcxmwbr1_gpio1_o(fmcxmwbr1_gpio_o[63:32]),
     .fmcxmwbr1_gpio1_t(fmcxmwbr1_gpio_t[63:32]),
-    .fmcxmwbr1_gpio1_i(fmcxmwbr1_gpio_i[63:32])
-  );
+    .fmcxmwbr1_gpio1_i(fmcxmwbr1_gpio_i[63:32]));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

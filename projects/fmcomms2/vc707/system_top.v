@@ -112,7 +112,8 @@ module system_top (
   output                  spi_csn_0,
   output                  spi_clk,
   output                  spi_mosi,
-  input                   spi_miso );
+  input                   spi_miso
+);
 
   // internal signals
 
@@ -129,7 +130,9 @@ module system_top (
 
   // instantiations
 
-  ad_iobuf #(.DATA_WIDTH(15)) i_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH(15)
+  ) i_iobuf (
     .dio_t (gpio_t[46:32]),
     .dio_i (gpio_o[46:32]),
     .dio_o (gpio_i[46:32]),
@@ -139,7 +142,9 @@ module system_top (
               gpio_ctl,
               gpio_status}));
 
-  ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_sw_led (
+  ad_iobuf #(
+    .DATA_WIDTH(21)
+  ) i_iobuf_sw_led (
     .dio_t (gpio_t[20:0]),
     .dio_i (gpio_o[20:0]),
     .dio_o (gpio_i[20:0]),
@@ -222,6 +227,3 @@ module system_top (
     .up_txnrx (gpio_o[48]));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

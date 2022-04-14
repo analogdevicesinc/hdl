@@ -59,7 +59,8 @@ module system_top (
   output                  spi_csn_ad9656,
   output                  spi_clk,
   output                  spi_mosi,
-  input                   spi_miso);
+  input                   spi_miso
+);
 
   // internal signals
 
@@ -107,7 +108,7 @@ module system_top (
     .I (sysref_out),
     .O (sysref_out_p),
     .OB (sysref_out_n));
-  
+
   IBUFDS i_ibufds_sysref (
     .I (sysref_p),
     .IB (sysref_n),
@@ -129,7 +130,7 @@ module system_top (
     .rx_data_2_p (rx_data_p[2]),
     .rx_data_3_n (rx_data_n[3]),
     .rx_data_3_p (rx_data_p[3]),
-    .rx_ref_clk_0 (ref_clk0),   
+    .rx_ref_clk_0 (ref_clk0),
     .rx_sync_0 (rx_sync),
     .rx_sysref_0 (sysref),
     .spi0_sclk (spi_clk),
@@ -142,6 +143,3 @@ module system_top (
     .spi1_mosi ());
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

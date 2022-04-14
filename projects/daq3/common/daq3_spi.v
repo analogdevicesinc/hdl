@@ -43,7 +43,8 @@ module daq3_spi (
   output                  spi_miso,
 
   inout                   spi_sdio,
-  output                  spi_dir);
+  output                  spi_dir
+);
 
   // internal registers
 
@@ -90,6 +91,3 @@ module daq3_spi (
   assign spi_sdio = (spi_enable_s == 1'b1) ? 1'bz : spi_mosi;
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

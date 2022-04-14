@@ -74,7 +74,8 @@ module ad7768_if (
   input                   up_crc_enable,
   input                   up_crc_4_or_16_n,
   input       [ 35:0]     up_status_clr,
-  output      [ 35:0]     up_status);
+  output      [ 35:0]     up_status
+);
 
   // internal registers
 
@@ -495,7 +496,6 @@ module ad7768_if (
     end
   end
 
-
   // data (common)
 
   assign adc_cnt_enable_1_s = (adc_cnt_p <= 9'h01f) ? 1'b1 : 1'b0;
@@ -569,6 +569,3 @@ module ad7768_if (
   end
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

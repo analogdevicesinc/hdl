@@ -47,7 +47,8 @@ module m2k_spi (
 
   // 3-wire
 
-  inout           spi_sdio);
+  inout           spi_sdio
+);
 
   // internal registers
 
@@ -85,6 +86,3 @@ module m2k_spi (
   assign spi_sdio = (spi_enable == 1'b1) ? 1'bz : spi_mosi;
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************
