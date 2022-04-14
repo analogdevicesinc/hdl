@@ -93,7 +93,9 @@ module system_top (
 
   // instantiations
 
-  ad_iobuf #(.DATA_WIDTH(3)) i_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH(3)
+  ) i_iobuf (
     .dio_t ({gpio_t[34:32]}),
     .dio_i ({gpio_o[34:32]}),
     .dio_o ({gpio_i[34:32]}),
@@ -161,10 +163,6 @@ module system_top (
     .spi1_csn (spi1_csn),
     .spi1_miso (pmod_spi_miso),
     .spi1_mosi (pmod_spi_mosi),
-    .spi1_sclk (pmod_spi_clk)
-    );
+    .spi1_sclk (pmod_spi_clk));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

@@ -52,7 +52,8 @@ module fmcadc2_spi (
   output                  spi_adf4355_data_or_csn_0,
   output                  spi_adf4355_clk_or_csn_1,
   output                  spi_adf4355_le_or_clk,
-  inout                   spi_adf4355_ce_or_sdio);
+  inout                   spi_adf4355_ce_or_sdio
+);
 
   // internal registers
 
@@ -110,6 +111,3 @@ module fmcadc2_spi (
     ((spi_enable_s == 1'b0) ? spi_mosi : 1'bz);
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

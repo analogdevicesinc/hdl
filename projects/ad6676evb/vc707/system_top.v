@@ -110,7 +110,8 @@ module system_top (
   output                  spi_csn,
   output                  spi_clk,
   output                  spi_mosi,
-  input                   spi_miso);
+  input                   spi_miso
+);
 
   // internal signals
 
@@ -150,7 +151,9 @@ module system_top (
     .O (rx_sync_p),
     .OB (rx_sync_n));
 
-  ad_iobuf #(.DATA_WIDTH(10)) i_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH(10)
+  ) i_iobuf (
     .dio_t (gpio_t[41:32]),
     .dio_i (gpio_o[41:32]),
     .dio_o (gpio_i[41:32]),
@@ -165,7 +168,9 @@ module system_top (
               adc_agc3,
               adc_agc4}));
 
-  ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_bd (
+  ad_iobuf #(
+    .DATA_WIDTH(21)
+  ) i_iobuf_bd (
     .dio_t (gpio_t[20:0]),
     .dio_i (gpio_o[20:0]),
     .dio_o (gpio_i[20:0]),
@@ -236,9 +241,6 @@ module system_top (
     .sys_clk_p (sys_clk_p),
     .sys_rst (sys_rst),
     .uart_sin (uart_sin),
-    .uart_sout (uart_sout));  
+    .uart_sout (uart_sout));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

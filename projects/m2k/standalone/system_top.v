@@ -79,7 +79,8 @@ module system_top (
   output          en_power_analog,
 
   inout           iic_scl,
-  inout           iic_sda);
+  inout           iic_sda
+);
 
   // internal signals
 
@@ -108,7 +109,9 @@ module system_top (
 
   // instantiations
 
-  ad_iobuf #(.DATA_WIDTH(2)) i_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH(2)
+  ) i_iobuf (
     .dio_t (gpio_t[ 1:0]),
     .dio_i (gpio_o[ 1:0]),
     .dio_o (gpio_i[ 1:0]),
@@ -191,6 +194,3 @@ module system_top (
     .spi0_sdo_o (spi0_mosi));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

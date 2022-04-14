@@ -126,7 +126,8 @@ module system_top (
   output                  spi_csn_clk,
   output                  spi_csn_adc,
   output                  spi_clk,
-  inout                   spi_sdio);
+  inout                   spi_sdio
+);
 
   // internal signals
 
@@ -144,15 +145,14 @@ module system_top (
   assign spi_csn_clk = spi_csn_s[1];
 
   ad_3w_spi #(
-    .NUM_OF_SLAVES(2))
-    i_spi (
+    .NUM_OF_SLAVES(2)
+  ) i_spi (
     .spi_csn (spi_csn_s[1:0]),
     .spi_clk (spi_clk),
     .spi_mosi (spi_mosi_s),
     .spi_miso (spi_miso_s),
     .spi_sdio (spi_sdio),
-    .spi_dir ()
-    );
+    .spi_dir ());
 
   // gpio in & out are separate cores
 
@@ -259,6 +259,3 @@ module system_top (
     .sys_spi_SS_n (spi_csn_s));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

@@ -210,8 +210,17 @@ module system_top (
   assign gpio_i[11: 4] = gpio_bd_i;
   assign gpio_bd_o = gpio_o[3:0];
 
-  ALT_IOBUF md_iobuf_a (.i(hps_emac_mdo_o_a), .oe(hps_emac_mdo_o_e_a), .o(hps_emac_mdi_i_a), .io(mdio_fmc_a));
-  ALT_IOBUF md_iobuf_b (.i(hps_emac_mdo_o_b), .oe(hps_emac_mdo_o_e_b), .o(hps_emac_mdi_i_b), .io(mdio_fmc_b));
+  ALT_IOBUF md_iobuf_a (
+    .i(hps_emac_mdo_o_a),
+    .oe(hps_emac_mdo_o_e_a),
+    .o(hps_emac_mdi_i_a),
+    .io(mdio_fmc_a));
+
+  ALT_IOBUF md_iobuf_b (
+    .i(hps_emac_mdo_o_b),
+    .oe(hps_emac_mdo_o_e_b),
+    .o(hps_emac_mdi_i_b),
+    .io(mdio_fmc_b));
 
   // peripheral reset
 
@@ -325,10 +334,6 @@ module system_top (
     .sys_hps_emac2_gmii_mdi_i (hps_emac_mdi_i_b),
     .sys_hps_emac2_md_clk_clk (mdc_fmc_b),
     .sys_hps_emac2_rx_clk_in_clk (mii_rx_clk_b),
-    .sys_hps_emac2_tx_clk_in_clk (mii_tx_clk_b)
-    );
+    .sys_hps_emac2_tx_clk_in_clk (mii_tx_clk_b));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

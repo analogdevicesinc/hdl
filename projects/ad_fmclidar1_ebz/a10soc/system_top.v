@@ -168,7 +168,6 @@ module system_top (
   // Vref selects for AFE board
 
   output      [ 7:0]      tia_chsel
-
 );
 
   // internal signals
@@ -212,20 +211,19 @@ module system_top (
   wire [31:0] adc_data_tia_chsel_s;
 
   util_tia_chsel #(
-    .DATA_WIDTH (32))
-  i_util_tia_chsel (
+    .DATA_WIDTH (32)
+  ) i_util_tia_chsel (
     .clk (rx_device_clk),
     .adc_tia_chsel_en (laser_driver),
     .adc_data_tia_chsel (adc_data_tia_chsel_s),
-    .tia_chsel (tia_chsel)
-  );
+    .tia_chsel (tia_chsel));
 
   wire dma_sync_s;
   wire fifo_wr_en_s;
 
   util_axis_syncgen #(
-    .ASYNC_SYNC (1))
-  i_util_axis_syncgen (
+    .ASYNC_SYNC (1)
+  ) i_util_axis_syncgen (
     .s_axis_aclk (rx_device_clk),
     .s_axis_aresetn (1'b1),
     .s_axis_ready (1'b1),
@@ -240,8 +238,17 @@ module system_top (
   wire i2c_0_sda_in;
   wire i2c_0_sda_oe;
 
-  ALT_IOBUF scl_iobuf (.i(1'b0), .oe(i2c_0_scl_out), .o(i2c_0_scl_in), .io(afe_dac_scl));
-  ALT_IOBUF sda_iobuf (.i(1'b0), .oe(i2c_0_sda_oe), .o(i2c_0_sda_in), .io(afe_dac_sda));
+  ALT_IOBUF scl_iobuf (
+    .i(1'b0),
+    .oe(i2c_0_scl_out),
+    .o(i2c_0_scl_in),
+    .io(afe_dac_scl));
+
+  ALT_IOBUF sda_iobuf (
+    .i(1'b0),
+    .oe(i2c_0_sda_oe),
+    .o(i2c_0_sda_in),
+    .io(afe_dac_sda));
 
   // Block design instance
 
@@ -362,10 +369,6 @@ module system_top (
     // DMA synchronization
     .fifo_wr_en_out_valid (fifo_wr_en_s),
     .fifo_wr_en_in_valid (fifo_wr_en_s),
-    .fifo_wr_sync_sync (dma_sync_s)
-    );
+    .fifo_wr_sync_sync (dma_sync_s));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

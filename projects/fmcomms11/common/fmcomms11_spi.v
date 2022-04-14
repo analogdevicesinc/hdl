@@ -53,7 +53,8 @@ module fmcomms11_spi (
   output          spi_csn_adf4355,
   output          spi_csn_hmc1119,
   inout           spi_sdio,
-  output          spi_dir);
+  output          spi_dir
+);
 
   // internal registers
 
@@ -115,6 +116,3 @@ module fmcomms11_spi (
   assign spi_sdio = (spi_enable_s == 1'b1) ? 1'bz : spi_mosi;
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

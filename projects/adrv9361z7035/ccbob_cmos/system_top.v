@@ -98,7 +98,8 @@ module system_top (
   output  [ 3:0]  gt_tx_p,
   output  [ 3:0]  gt_tx_n,
   input   [ 3:0]  gt_rx_p,
-  input   [ 3:0]  gt_rx_n);
+  input   [ 3:0]  gt_rx_n
+);
 
   // internal signals
 
@@ -130,7 +131,9 @@ module system_top (
 
   assign gpio_i[31:20] = gpio_o[31:20];
 
-  ad_iobuf #(.DATA_WIDTH(20)) i_iobuf_bd (
+  ad_iobuf #(
+    .DATA_WIDTH(20)
+  ) i_iobuf_bd (
     .dio_t (gpio_t[19:0]),
     .dio_i (gpio_o[19:0]),
     .dio_o (gpio_i[19:0]),
@@ -141,7 +144,9 @@ module system_top (
   assign gpio_i[63:52] = gpio_o[63:52];
   assign gpio_i[50:47] = gpio_o[50:47];
 
-  ad_iobuf #(.DATA_WIDTH(16)) i_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH(16)
+  ) i_iobuf (
     .dio_t ({gpio_t[51], gpio_t[46:32]}),
     .dio_i ({gpio_o[51], gpio_o[46:32]}),
     .dio_o ({gpio_i[51], gpio_i[46:32]}),
@@ -229,6 +234,3 @@ module system_top (
     .up_txnrx (gpio_o[48]));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

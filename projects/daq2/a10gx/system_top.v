@@ -118,7 +118,8 @@ module system_top (
   output                  spi_csn_adc,
   output                  spi_clk,
   inout                   spi_sdio,
-  output                  spi_dir);
+  output                  spi_dir
+);
 
   // internal signals
 
@@ -196,7 +197,6 @@ module system_top (
   assign  flash_clk    = 1'b0;
   assign  flash_cen[1] = flash_cen[0]; // select both flash devices for double-wide 32 bit data width
 
-
   system_bd i_system_bd (
     .rx_serial_data_rx_serial_data (rx_serial_data),
     .rx_ref_clk_clk (rx_ref_clk),
@@ -250,6 +250,3 @@ module system_top (
     .sys_flash_tcm_chipselect_n_out (flash_cen[0]));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

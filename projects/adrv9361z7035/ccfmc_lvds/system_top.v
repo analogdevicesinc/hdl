@@ -153,7 +153,8 @@ module system_top (
   output          spi_csn,
   output          spi_clk,
   output          spi_mosi,
-  input           spi_miso);
+  input           spi_miso
+);
 
   // internal signals
 
@@ -219,7 +220,9 @@ module system_top (
     .O (gt_ref_clk_1),
     .ODIV2 ());
 
-  ad_iobuf #(.DATA_WIDTH(1)) i_iobuf_tdd_sync (
+  ad_iobuf #(
+    .DATA_WIDTH(1)
+  ) i_iobuf_tdd_sync (
     .dio_t (tdd_sync_t),
     .dio_i (tdd_sync_o),
     .dio_o (tdd_sync_i),
@@ -229,7 +232,9 @@ module system_top (
 
   assign gpio_i[31:21] = gpio_o[31:21];
 
-  ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_bd (
+  ad_iobuf #(
+    .DATA_WIDTH(21)
+  ) i_iobuf_bd (
     .dio_t (gpio_t[20:0]),
     .dio_i (gpio_o[20:0]),
     .dio_o (gpio_i[20:0]),
@@ -241,7 +246,9 @@ module system_top (
 
   // rf & ad9517 gpio - 60:56
 
-  ad_iobuf #(.DATA_WIDTH(5)) i_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH(5)
+  ) i_iobuf (
     .dio_t (gpio_t[60:56]),
     .dio_i (gpio_o[60:56]),
     .dio_o (gpio_i[60:56]),
@@ -257,7 +264,9 @@ module system_top (
 
   // rf & clock-select gpio - 52:51
 
-  ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_rf_1 (
+  ad_iobuf #(
+    .DATA_WIDTH(2)
+  ) i_iobuf_rf_1 (
     .dio_t (gpio_t[52:51]),
     .dio_i (gpio_o[52:51]),
     .dio_o (gpio_i[52:51]),
@@ -270,7 +279,9 @@ module system_top (
 
   // ad9361 gpio - 46:32
 
-  ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_ad9361 (
+  ad_iobuf #(
+    .DATA_WIDTH(15)
+  ) i_iobuf_ad9361 (
     .dio_t (gpio_t[46:32]),
     .dio_i (gpio_o[46:32]),
     .dio_o (gpio_i[46:32]),
@@ -395,6 +406,3 @@ module system_top (
     .up_txnrx (gpio_o[48]));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

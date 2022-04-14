@@ -172,19 +172,25 @@ module system_top (
   assign gpio_i[35] = link_st_a;
   assign gpio_i[34] = link_st_b;
 
-  ad_iobuf #(.DATA_WIDTH(32)) i_iobuf_bd (
+  ad_iobuf #(
+    .DATA_WIDTH(32)
+  ) i_iobuf_bd (
     .dio_t (gpio_t[31:0]),
     .dio_i (gpio_o[31:0]),
     .dio_o (gpio_i[31:0]),
     .dio_p (gpio_bd));
 
-   ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_iic_scl (
+  ad_iobuf #(
+    .DATA_WIDTH(2)
+  ) i_iobuf_iic_scl (
     .dio_t ({iic_mux_scl_t_s,iic_mux_scl_t_s}),
     .dio_i (iic_mux_scl_o_s),
     .dio_o (iic_mux_scl_i_s),
     .dio_p (iic_mux_scl));
 
-   ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_iic_sda (
+  ad_iobuf #(
+    .DATA_WIDTH(2)
+  ) i_iobuf_iic_sda (
     .dio_t ({iic_mux_sda_t_s,iic_mux_sda_t_s}),
     .dio_i (iic_mux_sda_o_s),
     .dio_o (iic_mux_sda_i_s),
@@ -282,10 +288,6 @@ module system_top (
     .GMII_ETHERNET_1_0_tx_er(),
     .GMII_ETHERNET_1_0_txd({mii_txd_extra_b,mii_txd_b}),
     .MDIO_ETHERNET_1_0_mdc(mdc_fmc_b),
-    .MDIO_ETHERNET_1_0_mdio_io(mdio_fmc_b)
-    );
+    .MDIO_ETHERNET_1_0_mdio_io(mdio_fmc_b));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

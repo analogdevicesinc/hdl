@@ -36,10 +36,9 @@
 `timescale 1ns/100ps
 
 module system_top #(
-    parameter NUM_LINKS = 2,
-    parameter DEVICE_CODE = 0
-  ) (
-
+  parameter NUM_LINKS = 2,
+  parameter DEVICE_CODE = 0
+) (
   inout       [14:0]      ddr_addr,
   inout       [ 2:0]      ddr_ba,
   inout                   ddr_cas_n,
@@ -100,7 +99,7 @@ module system_top #(
   output                  pmod_spi_mosi,
   input                   pmod_spi_miso,
   inout       [ 3:0]      pmod_gpio
-  );
+);
 
   // internal signals
 
@@ -138,26 +137,22 @@ module system_top #(
     .I (tx_ref_clk_p),
     .IB (tx_ref_clk_n),
     .O (tx_ref_clk),
-    .ODIV2 ()
-  );
+    .ODIV2 ());
 
   IBUFDS i_ibufds_tx_sysref (
     .I (tx_sysref_p),
     .IB (tx_sysref_n),
-    .O (tx_sysref)
-  );
+    .O (tx_sysref));
 
   IBUFDS i_ibufds_tx_sync_0 (
     .I (tx_sync_p[0]),
     .IB (tx_sync_n[0]),
-    .O (tx_sync[0])
-  );
+    .O (tx_sync[0]));
 
   IBUFDS i_ibufds_tx_sync_1 (
     .I (tx_sync_p[1]),
     .IB (tx_sync_n[1]),
-    .O (tx_sync[1])
-  );
+    .O (tx_sync[1]));
 
   /* FMC GPIOs */
   ad_iobuf #(
@@ -168,8 +163,7 @@ module system_top #(
     .dio_o (gpio_i[21+:5]),
     .dio_p ({
       dac_ctrl           /* 25 - 21 */
-    })
-  );
+    }));
 
   /*
   * Control signals for different FMC boards:
@@ -179,7 +173,7 @@ module system_top #(
   *        1  C10   NC           NC              FMC_TXEN_0
   *        2  C11   NC           NC              FMC_TXEN_1
   *        3  H14   FMC_TXEN_1   NC              NC
-  *        4  D15   NC           FMC_HMC849VCTL  NC          
+  *        4  D15   NC           FMC_HMC849VCTL  NC
   */
 
   assign dac_fifo_bypass = gpio_o[40];
@@ -191,8 +185,7 @@ module system_top #(
     .dio_t (gpio_t[48+:4]),
     .dio_i (gpio_o[48+:4]),
     .dio_o (gpio_i[48+:4]),
-    .dio_p (pmod_gpio)
-  );
+    .dio_p (pmod_gpio));
 
   /* PMOD SPI */
   assign pmod_spi_clk = spi1_clk;
@@ -207,8 +200,7 @@ module system_top #(
     .dio_t (gpio_t[0+:15]),
     .dio_i (gpio_o[0+:15]),
     .dio_o (gpio_i[0+:15]),
-    .dio_p (gpio_bd)
-  );
+    .dio_p (gpio_bd));
 
   assign gpio_i[63:52] = gpio_o[63:52];
   assign gpio_i[47:26] = gpio_o[47:26];

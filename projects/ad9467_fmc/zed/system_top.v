@@ -91,25 +91,28 @@ module system_top (
   output                  spi_clk,
   output                  spi_csn_adc,
   output                  spi_csn_clk,
-  inout                   spi_sdio);
+  inout                   spi_sdio
+);
 
-// internal signals
-wire   [ 1:0]   spi_csn;
-wire            spi_miso;
-wire            spi_mosi;
-wire    [63:0]  gpio_i;
-wire    [63:0]  gpio_o;
-wire    [63:0]  gpio_t;
-wire    [ 1:0]  iic_mux_scl_i_s;
-wire    [ 1:0]  iic_mux_scl_o_s;
-wire            iic_mux_scl_t_s;
-wire    [ 1:0]  iic_mux_sda_i_s;
-wire    [ 1:0]  iic_mux_sda_o_s;
-wire            iic_mux_sda_t_s;
+  // internal signals
+  wire   [ 1:0]   spi_csn;
+  wire            spi_miso;
+  wire            spi_mosi;
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
 
-// instantiations
+  // instantiations
 
-  ad_iobuf #(.DATA_WIDTH(32)) i_iobuf_gpio (
+  ad_iobuf #(
+    .DATA_WIDTH(32)
+  ) i_iobuf_gpio (
     .dio_t ({gpio_t[31:0]}),
     .dio_i ({gpio_o[31:0]}),
     .dio_o ({gpio_i[31:0]}),
@@ -117,30 +120,33 @@ wire            iic_mux_sda_t_s;
 
   assign gpio_i[63:32] = gpio_o[63:32];
 
-   ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_iic_scl (
+  ad_iobuf #(
+    .DATA_WIDTH(2)
+  ) i_iobuf_iic_scl (
     .dio_t ({iic_mux_scl_t_s,iic_mux_scl_t_s}),
     .dio_i (iic_mux_scl_o_s),
     .dio_o (iic_mux_scl_i_s),
     .dio_p (iic_mux_scl));
 
-   ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_iic_sda (
+  ad_iobuf #(
+    .DATA_WIDTH(2)
+  ) i_iobuf_iic_sda (
     .dio_t ({iic_mux_sda_t_s,iic_mux_sda_t_s}),
     .dio_i (iic_mux_sda_o_s),
     .dio_o (iic_mux_sda_i_s),
     .dio_p (iic_mux_sda));
 
-assign spi_csn_adc = spi_csn[0];
-assign spi_csn_clk = spi_csn[1];
+  assign spi_csn_adc = spi_csn[0];
+  assign spi_csn_clk = spi_csn[1];
 
-ad9467_spi i_spi (
+  ad9467_spi i_spi (
     .spi_csn(spi_csn),
     .spi_clk(spi_clk),
     .spi_mosi(spi_mosi),
     .spi_miso(spi_miso),
-    .spi_sdio(spi_sdio)
-    );
+    .spi_sdio(spi_sdio));
 
-system_wrapper i_system_wrapper (
+  system_wrapper i_system_wrapper (
     .ddr_addr(ddr_addr),
     .ddr_ba(ddr_ba),
     .ddr_cas_n(ddr_cas_n),
@@ -211,6 +217,3 @@ system_wrapper i_system_wrapper (
     .spi1_sdo_o());
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

@@ -173,10 +173,6 @@ module system_top (
     .RGMII_1_td (rgmii_txd_b),
     .RGMII_1_tx_ctl (rgmii_tx_ctl_b),
     .RGMII_1_txc (rgmii_txc_b),
-    .speed_mode_b (speed_mode_b_s)
-  );
+    .speed_mode_b (speed_mode_b_s));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

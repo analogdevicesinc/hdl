@@ -159,8 +159,7 @@ module system_top #(
   output        rstb,
   output [1:0]  rxen,
   output [1:0]  txen
-
-  );
+);
 
   // internal signals
 
@@ -180,7 +179,9 @@ module system_top #(
 
   assign spi0_mosi = spi_mosi;
 
-  ad_3w_spi #(.NUM_OF_SLAVES(1)) i_spi_hmc (
+  ad_3w_spi #(
+    .NUM_OF_SLAVES(1)
+  ) i_spi_hmc (
     .spi_csn (spi_csn_s[1]),
     .spi_clk (spi_clk),
     .spi_mosi (spi_mosi),
@@ -214,7 +215,6 @@ module system_top #(
   assign rxen[1]          = gpio_o[57];
   assign txen[0]          = gpio_o[58];
   assign txen[1]          = gpio_o[59];
-
 
   // board stuff (max-v-u21)
 
@@ -327,11 +327,6 @@ module system_top #(
     .rx_ref_clk_clk (fpga_refclk_in),
     .rx_sync_export (fpga_syncout_0),
     .rx_sysref_export (sysref2),
-    .rx_device_clk_clk (clkin6)
-
-  );
+    .rx_device_clk_clk (clkin6));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module quad_mxfe_gpio_mux #() (
+module quad_mxfe_gpio_mux (
 
   inout         mxfe0_gpio0,
   inout         mxfe0_gpio1,
@@ -96,12 +96,13 @@ module quad_mxfe_gpio_mux #() (
   input  [127:64] gpio_t,
   output [127:64] gpio_i,
   input  [127:64] gpio_o
-
 );
 
   wire gpio0_mode;
 
-  ad_iobuf #(.DATA_WIDTH(13)) i_iobuf_mxfe_0 (
+  ad_iobuf #(
+    .DATA_WIDTH(13)
+  ) i_iobuf_mxfe_0 (
     .dio_t ( {mxfe0_gpio0_t,
               mxfe0_gpio1_t,
               mxfe0_gpio2_t,
@@ -153,10 +154,11 @@ module quad_mxfe_gpio_mux #() (
               mxfe0_syncin_1_n,
               mxfe0_syncin_1_p,
               mxfe0_syncout_1_n,
-              mxfe0_syncout_1_p})
-  );
+              mxfe0_syncout_1_p}));
 
-  ad_iobuf #(.DATA_WIDTH(13)) i_iobuf_mxfe_1 (
+  ad_iobuf #(
+    .DATA_WIDTH(13)
+  ) i_iobuf_mxfe_1 (
     .dio_t ( {mxfe1_gpio0_t,
               mxfe1_gpio1_t,
               mxfe1_gpio2_t,
@@ -208,10 +210,11 @@ module quad_mxfe_gpio_mux #() (
               mxfe1_syncin_1_n,
               mxfe1_syncin_1_p,
               mxfe1_syncout_1_n,
-              mxfe1_syncout_1_p})
-  );
+              mxfe1_syncout_1_p}));
 
-  ad_iobuf #(.DATA_WIDTH(13)) i_iobuf_mxfe_2 (
+  ad_iobuf #(
+    .DATA_WIDTH(13)
+  ) i_iobuf_mxfe_2 (
     .dio_t ( {mxfe2_gpio0_t,
               mxfe2_gpio1_t,
               mxfe2_gpio2_t,
@@ -265,7 +268,9 @@ module quad_mxfe_gpio_mux #() (
               mxfe2_syncout_1_n,
               mxfe2_syncout_1_p}));
 
-  ad_iobuf #(.DATA_WIDTH(13)) i_iobuf_mxfe_3 (
+  ad_iobuf #(
+    .DATA_WIDTH(13)
+  ) i_iobuf_mxfe_3 (
     .dio_t ( {mxfe3_gpio0_t,
               mxfe3_gpio1_t,
               mxfe3_gpio2_t,
@@ -317,209 +322,206 @@ module quad_mxfe_gpio_mux #() (
               mxfe3_syncin_1_n,
               mxfe3_syncin_1_p,
               mxfe3_syncout_1_n,
-              mxfe3_syncout_1_p})
-    );
+              mxfe3_syncout_1_p}));
 
+  // Bidirectional buffer output enables
+  assign {mxfe0_gpio0_t,
+          mxfe1_gpio0_t,
+          mxfe2_gpio0_t,
+          mxfe3_gpio0_t} = gpio0_mode ? 4'b0001 : {4{gpio_t[64]}};
 
-// Bidirectional buffer output enables
-assign {mxfe0_gpio0_t,
-        mxfe1_gpio0_t,
-        mxfe2_gpio0_t,
-        mxfe3_gpio0_t} = gpio0_mode ? 4'b0001 : {4{gpio_t[64]}};
+  assign {mxfe0_gpio1_t,
+          mxfe1_gpio1_t,
+          mxfe2_gpio1_t,
+          mxfe3_gpio1_t} = {4{gpio_t[65]}};
 
-assign {mxfe0_gpio1_t,
-        mxfe1_gpio1_t,
-        mxfe2_gpio1_t,
-        mxfe3_gpio1_t} = {4{gpio_t[65]}};
+  assign {mxfe0_gpio2_t,
+          mxfe1_gpio2_t,
+          mxfe2_gpio2_t,
+          mxfe3_gpio2_t} = {4{gpio_t[66]}};
 
-assign {mxfe0_gpio2_t,
-        mxfe1_gpio2_t,
-        mxfe2_gpio2_t,
-        mxfe3_gpio2_t} = {4{gpio_t[66]}};
+  assign {mxfe0_gpio5_t,
+          mxfe1_gpio5_t,
+          mxfe2_gpio5_t,
+          mxfe3_gpio5_t} = {4{gpio_t[69]}};
 
-assign {mxfe0_gpio5_t,
-        mxfe1_gpio5_t,
-        mxfe2_gpio5_t,
-        mxfe3_gpio5_t} = {4{gpio_t[69]}};
+  assign {mxfe0_gpio6_t,
+          mxfe1_gpio6_t,
+          mxfe2_gpio6_t,
+          mxfe3_gpio6_t} = {4{gpio_t[70]}};
 
-assign {mxfe0_gpio6_t,
-        mxfe1_gpio6_t,
-        mxfe2_gpio6_t,
-        mxfe3_gpio6_t} = {4{gpio_t[70]}};
+  assign {mxfe0_gpio7_t,
+          mxfe1_gpio7_t,
+          mxfe2_gpio7_t,
+          mxfe3_gpio7_t} = {4{gpio_t[71]}};
 
-assign {mxfe0_gpio7_t,
-        mxfe1_gpio7_t,
-        mxfe2_gpio7_t,
-        mxfe3_gpio7_t} = {4{gpio_t[71]}};
+  assign {mxfe0_gpio8_t,
+          mxfe1_gpio8_t,
+          mxfe2_gpio8_t,
+          mxfe3_gpio8_t} = {4{gpio_t[72]}};
 
-assign {mxfe0_gpio8_t,
-        mxfe1_gpio8_t,
-        mxfe2_gpio8_t,
-        mxfe3_gpio8_t} = {4{gpio_t[72]}};
+  assign {mxfe0_gpio9_t,
+          mxfe1_gpio9_t,
+          mxfe2_gpio9_t,
+          mxfe3_gpio9_t} = {4{gpio_t[73]}};
 
-assign {mxfe0_gpio9_t,
-        mxfe1_gpio9_t,
-        mxfe2_gpio9_t,
-        mxfe3_gpio9_t} = {4{gpio_t[73]}};
+  assign {mxfe0_gpio10_t,
+          mxfe1_gpio10_t,
+          mxfe2_gpio10_t,
+          mxfe3_gpio10_t} = {4{gpio_t[74]}};
 
-assign {mxfe0_gpio10_t,
-        mxfe1_gpio10_t,
-        mxfe2_gpio10_t,
-        mxfe3_gpio10_t} = {4{gpio_t[74]}};
+  assign {mxfe0_syncin_1_n_t,
+          mxfe1_syncin_1_n_t,
+          mxfe2_syncin_1_n_t,
+          mxfe3_syncin_1_n_t} = {4{gpio_t[75]}};
 
-assign {mxfe0_syncin_1_n_t,
-        mxfe1_syncin_1_n_t,
-        mxfe2_syncin_1_n_t,
-        mxfe3_syncin_1_n_t} = {4{gpio_t[75]}};
+  assign {mxfe0_syncin_1_p_t,
+          mxfe1_syncin_1_p_t,
+          mxfe2_syncin_1_p_t,
+          mxfe3_syncin_1_p_t} = {4{gpio_t[76]}};
 
-assign {mxfe0_syncin_1_p_t,
-        mxfe1_syncin_1_p_t,
-        mxfe2_syncin_1_p_t,
-        mxfe3_syncin_1_p_t} = {4{gpio_t[76]}};
+  assign {mxfe0_syncout_1_n_t,
+          mxfe1_syncout_1_n_t,
+          mxfe2_syncout_1_n_t,
+          mxfe3_syncout_1_n_t} = {4{gpio_t[77]}};
 
-assign {mxfe0_syncout_1_n_t,
-        mxfe1_syncout_1_n_t,
-        mxfe2_syncout_1_n_t,
-        mxfe3_syncout_1_n_t} = {4{gpio_t[77]}};
+  assign {mxfe0_syncout_1_p_t,
+          mxfe1_syncout_1_p_t,
+          mxfe2_syncout_1_p_t,
+          mxfe3_syncout_1_p_t} = {4{gpio_t[78]}};
 
-assign {mxfe0_syncout_1_p_t,
-        mxfe1_syncout_1_p_t,
-        mxfe2_syncout_1_p_t,
-        mxfe3_syncout_1_p_t} = {4{gpio_t[78]}};
+  // Bidirectional buffer output values
+  assign {mxfe0_gpio0_o,
+          mxfe1_gpio0_o,
+          mxfe2_gpio0_o,
+          mxfe3_gpio0_o} = gpio0_mode ? {4{mxfe3_gpio0_i}} : {4{gpio_o[64]}};
 
-// Bidirectional buffer output values
-assign {mxfe0_gpio0_o,
-        mxfe1_gpio0_o,
-        mxfe2_gpio0_o,
-        mxfe3_gpio0_o} = gpio0_mode ? {4{mxfe3_gpio0_i}} : {4{gpio_o[64]}};
+  assign {mxfe0_gpio1_o,
+          mxfe1_gpio1_o,
+          mxfe2_gpio1_o,
+          mxfe3_gpio1_o} = {4{gpio_o[65]}};
 
-assign {mxfe0_gpio1_o,
-        mxfe1_gpio1_o,
-        mxfe2_gpio1_o,
-        mxfe3_gpio1_o} = {4{gpio_o[65]}};
+  assign {mxfe0_gpio2_o,
+          mxfe1_gpio2_o,
+          mxfe2_gpio2_o,
+          mxfe3_gpio2_o} = {4{gpio_o[66]}};
 
-assign {mxfe0_gpio2_o,
-        mxfe1_gpio2_o,
-        mxfe2_gpio2_o,
-        mxfe3_gpio2_o} = {4{gpio_o[66]}};
+  assign {mxfe0_gpio5_o,
+          mxfe1_gpio5_o,
+          mxfe2_gpio5_o,
+          mxfe3_gpio5_o} = {4{gpio_o[69]}};
 
-assign {mxfe0_gpio5_o,
-        mxfe1_gpio5_o,
-        mxfe2_gpio5_o,
-        mxfe3_gpio5_o} = {4{gpio_o[69]}};
+  assign {mxfe0_gpio6_o,
+          mxfe1_gpio6_o,
+          mxfe2_gpio6_o,
+          mxfe3_gpio6_o} = {4{gpio_o[70]}};
 
-assign {mxfe0_gpio6_o,
-        mxfe1_gpio6_o,
-        mxfe2_gpio6_o,
-        mxfe3_gpio6_o} = {4{gpio_o[70]}};
+  assign {mxfe0_gpio7_o,
+          mxfe1_gpio7_o,
+          mxfe2_gpio7_o,
+          mxfe3_gpio7_o} = {4{gpio_o[71]}};
 
-assign {mxfe0_gpio7_o,
-        mxfe1_gpio7_o,
-        mxfe2_gpio7_o,
-        mxfe3_gpio7_o} = {4{gpio_o[71]}};
+  assign {mxfe0_gpio8_o,
+          mxfe1_gpio8_o,
+          mxfe2_gpio8_o,
+          mxfe3_gpio8_o} = {4{gpio_o[72]}};
 
-assign {mxfe0_gpio8_o,
-        mxfe1_gpio8_o,
-        mxfe2_gpio8_o,
-        mxfe3_gpio8_o} = {4{gpio_o[72]}};
+  assign {mxfe0_gpio9_o,
+          mxfe1_gpio9_o,
+          mxfe2_gpio9_o,
+          mxfe3_gpio9_o} = {4{gpio_o[73]}};
 
-assign {mxfe0_gpio9_o,
-        mxfe1_gpio9_o,
-        mxfe2_gpio9_o,
-        mxfe3_gpio9_o} = {4{gpio_o[73]}};
+  assign {mxfe0_gpio10_o,
+          mxfe1_gpio10_o,
+          mxfe2_gpio10_o,
+          mxfe3_gpio10_o} = {4{gpio_o[74]}};
 
-assign {mxfe0_gpio10_o,
-        mxfe1_gpio10_o,
-        mxfe2_gpio10_o,
-        mxfe3_gpio10_o} = {4{gpio_o[74]}};
+  assign {mxfe0_syncin_1_n_o,
+          mxfe1_syncin_1_n_o,
+          mxfe2_syncin_1_n_o,
+          mxfe3_syncin_1_n_o} = {4{gpio_o[75]}};
 
-assign {mxfe0_syncin_1_n_o,
-        mxfe1_syncin_1_n_o,
-        mxfe2_syncin_1_n_o,
-        mxfe3_syncin_1_n_o} = {4{gpio_o[75]}};
+  assign {mxfe0_syncin_1_p_o,
+          mxfe1_syncin_1_p_o,
+          mxfe2_syncin_1_p_o,
+          mxfe3_syncin_1_p_o} = {4{gpio_o[76]}};
 
-assign {mxfe0_syncin_1_p_o,
-        mxfe1_syncin_1_p_o,
-        mxfe2_syncin_1_p_o,
-        mxfe3_syncin_1_p_o} = {4{gpio_o[76]}};
+  assign {mxfe0_syncout_1_n_o,
+          mxfe1_syncout_1_n_o,
+          mxfe2_syncout_1_n_o,
+          mxfe3_syncout_1_n_o} = {4{gpio_o[77]}};
 
-assign {mxfe0_syncout_1_n_o,
-        mxfe1_syncout_1_n_o,
-        mxfe2_syncout_1_n_o,
-        mxfe3_syncout_1_n_o} = {4{gpio_o[77]}};
+  assign {mxfe0_syncout_1_p_o,
+          mxfe1_syncout_1_p_o,
+          mxfe2_syncout_1_p_o,
+          mxfe3_syncout_1_p_o} = {4{gpio_o[78]}};
 
-assign {mxfe0_syncout_1_p_o,
-        mxfe1_syncout_1_p_o,
-        mxfe2_syncout_1_p_o,
-        mxfe3_syncout_1_p_o} = {4{gpio_o[78]}};
+  // GPIO inputs
 
+  assign gpio_i[64] = gpio0_mode ? gpio_o[64] : |{mxfe0_gpio0_i,
+                                                  mxfe1_gpio0_i,
+                                                  mxfe2_gpio0_i,
+                                                  mxfe3_gpio0_i};
 
-// GPIO inputs
+  assign gpio_i[65] = |{mxfe0_gpio1_i,
+                        mxfe1_gpio1_i,
+                        mxfe2_gpio1_i,
+                        mxfe3_gpio1_i};
 
-assign gpio_i[64] = gpio0_mode ? gpio_o[64] : |{mxfe0_gpio0_i,
-                                                mxfe1_gpio0_i,
-                                                mxfe2_gpio0_i,
-                                                mxfe3_gpio0_i};
+  assign gpio_i[66] = |{mxfe0_gpio2_i,
+                        mxfe1_gpio2_i,
+                        mxfe2_gpio2_i,
+                        mxfe3_gpio2_i};
 
-assign gpio_i[65] = |{mxfe0_gpio1_i,
-                      mxfe1_gpio1_i,
-                      mxfe2_gpio1_i,
-                      mxfe3_gpio1_i};
+  assign gpio_i[69] = |{mxfe0_gpio5_i,
+                        mxfe1_gpio5_i,
+                        mxfe2_gpio5_i,
+                        mxfe3_gpio5_i};
 
-assign gpio_i[66] = |{mxfe0_gpio2_i,
-                      mxfe1_gpio2_i,
-                      mxfe2_gpio2_i,
-                      mxfe3_gpio2_i};
+  assign gpio_i[70] = |{mxfe0_gpio6_i,
+                        mxfe1_gpio6_i,
+                        mxfe2_gpio6_i,
+                        mxfe3_gpio6_i};
 
-assign gpio_i[69] = |{mxfe0_gpio5_i,
-                      mxfe1_gpio5_i,
-                      mxfe2_gpio5_i,
-                      mxfe3_gpio5_i};
+  assign gpio_i[71] = |{mxfe0_gpio7_i,
+                        mxfe1_gpio7_i,
+                        mxfe2_gpio7_i,
+                        mxfe3_gpio7_i};
 
-assign gpio_i[70] = |{mxfe0_gpio6_i,
-                      mxfe1_gpio6_i,
-                      mxfe2_gpio6_i,
-                      mxfe3_gpio6_i};
+  assign gpio_i[72] = |{mxfe0_gpio8_i,
+                        mxfe1_gpio8_i,
+                        mxfe2_gpio8_i,
+                        mxfe3_gpio8_i};
 
-assign gpio_i[71] = |{mxfe0_gpio7_i,
-                      mxfe1_gpio7_i,
-                      mxfe2_gpio7_i,
-                      mxfe3_gpio7_i};
+  assign gpio_i[73] = |{mxfe0_gpio9_i,
+                        mxfe1_gpio9_i,
+                        mxfe2_gpio9_i,
+                        mxfe3_gpio9_i};
 
-assign gpio_i[72] = |{mxfe0_gpio8_i,
-                      mxfe1_gpio8_i,
-                      mxfe2_gpio8_i,
-                      mxfe3_gpio8_i};
+  assign gpio_i[74] = |{mxfe0_gpio10_i,
+                        mxfe1_gpio10_i,
+                        mxfe2_gpio10_i,
+                        mxfe3_gpio10_i};
 
-assign gpio_i[73] = |{mxfe0_gpio9_i,
-                      mxfe1_gpio9_i,
-                      mxfe2_gpio9_i,
-                      mxfe3_gpio9_i};
+  assign gpio_i[75] = |{mxfe0_syncin_1_n_i,
+                        mxfe1_syncin_1_n_i,
+                        mxfe2_syncin_1_n_i,
+                        mxfe3_syncin_1_n_i};
 
-assign gpio_i[74] = |{mxfe0_gpio10_i,
-                      mxfe1_gpio10_i,
-                      mxfe2_gpio10_i,
-                      mxfe3_gpio10_i};
+  assign gpio_i[76] = |{mxfe0_syncin_1_p_i,
+                        mxfe1_syncin_1_p_i,
+                        mxfe2_syncin_1_p_i,
+                        mxfe3_syncin_1_p_i};
 
-assign gpio_i[75] = |{mxfe0_syncin_1_n_i,
-                      mxfe1_syncin_1_n_i,
-                      mxfe2_syncin_1_n_i,
-                      mxfe3_syncin_1_n_i};
+  assign gpio_i[77] = |{mxfe0_syncout_1_n_i,
+                        mxfe1_syncout_1_n_i,
+                        mxfe2_syncout_1_n_i,
+                        mxfe3_syncout_1_n_i};
 
-assign gpio_i[76] = |{mxfe0_syncin_1_p_i,
-                      mxfe1_syncin_1_p_i,
-                      mxfe2_syncin_1_p_i,
-                      mxfe3_syncin_1_p_i};
-
-assign gpio_i[77] = |{mxfe0_syncout_1_n_i,
-                      mxfe1_syncout_1_n_i,
-                      mxfe2_syncout_1_n_i,
-                      mxfe3_syncout_1_n_i};
-
-assign gpio_i[78] = |{mxfe0_syncout_1_p_i,
-                      mxfe1_syncout_1_p_i,
-                      mxfe2_syncout_1_p_i,
-                      mxfe3_syncout_1_p_i};
+  assign gpio_i[78] = |{mxfe0_syncout_1_p_i,
+                        mxfe1_syncout_1_p_i,
+                        mxfe2_syncout_1_p_i,
+                        mxfe3_syncout_1_p_i};
 
   //loopback unused gpios
   assign gpio_i[68:67] = gpio_o[68:67];

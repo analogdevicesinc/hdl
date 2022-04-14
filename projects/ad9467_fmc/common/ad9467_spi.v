@@ -42,7 +42,8 @@ module ad9467_spi (
   input                   spi_mosi,
   output                  spi_miso,
 
-  inout                   spi_sdio);
+  inout                   spi_sdio
+);
 
   // internal registers
 
@@ -84,11 +85,12 @@ module ad9467_spi (
 
   // io buffer
 
-  ad_iobuf #(.DATA_WIDTH(1)) i_iobuf_sdio (
+  ad_iobuf #(
+    .DATA_WIDTH(1)
+  ) i_iobuf_sdio (
     .dio_t (spi_enable_s),
     .dio_i (spi_mosi),
     .dio_o (spi_miso),
     .dio_p (spi_sdio));
 
 endmodule
-

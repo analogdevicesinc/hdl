@@ -101,7 +101,8 @@ module system_top (
   inout                   start_n,
   inout                   sync_n,
   inout                   sync_in_n,
-  output                  mclk);
+  output                  mclk
+);
 
   // internal signals
 
@@ -145,7 +146,9 @@ module system_top (
 
   // instantiations
 
-  ad_iobuf #(.DATA_WIDTH(9)) i_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH(9)
+  ) i_iobuf (
     .dio_t ({gpio_t[52:48], gpio_t[43:40]}),
     .dio_i ({gpio_o[52:48], gpio_o[43:40]}),
     .dio_o ({gpio_i[52:48], gpio_i[43:40]}),
@@ -159,7 +162,9 @@ module system_top (
               start_n,              // 41
               reset_n}));           // 40
 
-  ad_iobuf #(.DATA_WIDTH(32)) i_iobuf_bd (
+  ad_iobuf #(
+    .DATA_WIDTH(32)
+  ) i_iobuf_bd (
     .dio_t (gpio_t[31:0]),
     .dio_i (gpio_o[31:0]),
     .dio_o (gpio_i[31:0]),
@@ -170,13 +175,17 @@ module system_top (
   assign gpio_i[47:44] = gpio_o[47:44];
   assign gpio_i[63:53] = gpio_o[63:53];
 
-  ad_iobuf #(.DATA_WIDTH(2)) i_iic_mux_scl (
+  ad_iobuf #(
+    .DATA_WIDTH(2)
+  ) i_iic_mux_scl (
     .dio_t ({iic_mux_scl_t_s, iic_mux_scl_t_s}),
     .dio_i (iic_mux_scl_o_s),
     .dio_o (iic_mux_scl_i_s),
     .dio_p (iic_mux_scl));
 
-  ad_iobuf #(.DATA_WIDTH(2)) i_iic_mux_sda (
+  ad_iobuf #(
+    .DATA_WIDTH(2)
+  ) i_iic_mux_sda (
     .dio_t ({iic_mux_sda_t_s, iic_mux_sda_t_s}),
     .dio_i (iic_mux_sda_o_s),
     .dio_o (iic_mux_sda_i_s),
@@ -290,6 +299,3 @@ module system_top (
     .spi1_sdo_o ());
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

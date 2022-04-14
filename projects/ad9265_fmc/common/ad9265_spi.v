@@ -42,7 +42,8 @@ module ad9265_spi (
   input                   spi_mosi,
   output                  spi_miso,
 
-  inout                   spi_sdio);
+  inout                   spi_sdio
+);
 
   // internal registers
 
@@ -88,4 +89,3 @@ module ad9265_spi (
   assign spi_miso = spi_sdio;
 
 endmodule
-

@@ -129,7 +129,8 @@ module system_top (
   output                  spi_csn_adc,
   output                  spi_clk,
   inout                   spi_sdio,
-  output                  spi_dir);
+  output                  spi_dir
+);
 
   // internal signals
 
@@ -216,7 +217,9 @@ module system_top (
   assign gpio_i[39] = trig;
   assign spi_clk = spi0_clk;
 
-  ad_iobuf #(.DATA_WIDTH(7)) i_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH(7)
+  ) i_iobuf (
     .dio_t (gpio_t[38:32]),
     .dio_i (gpio_o[38:32]),
     .dio_o (gpio_i[38:32]),
@@ -227,7 +230,9 @@ module system_top (
               dac_irq,          // 34
               clkd_status}));   // 32
 
-  ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_bd (
+  ad_iobuf #(
+    .DATA_WIDTH(15)
+  ) i_iobuf_bd (
     .dio_t (gpio_t[14:0]),
     .dio_i (gpio_o[14:0]),
     .dio_o (gpio_i[14:0]),
@@ -329,6 +334,3 @@ module system_top (
     .tx_sysref_0 (tx_sysref));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

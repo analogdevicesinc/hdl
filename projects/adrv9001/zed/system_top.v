@@ -191,7 +191,7 @@ module system_top (
   // instantiations
 
   // multi-ssi synchronization
-  //
+
   assign mssi_sync = gpio_o[54];
 
   assign platform_status = vadj_err;
@@ -204,7 +204,9 @@ module system_top (
     .dio_o(gpio_i[31:0]),
     .dio_p(gpio_bd));
 
-  ad_iobuf #(.DATA_WIDTH(16)) i_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH(16)
+  ) i_iobuf (
     .dio_t (vadj_err ? {16{1'b1}} : gpio_t[47:32]),
     .dio_i ({gpio_o[47:32]}),
     .dio_o ({gpio_i[47:32]}),
@@ -237,17 +239,21 @@ module system_top (
   assign tdd_sync_loc = gpio_o[56];
 
   // tdd_sync_loc - local sync signal from a GPIO or other source
-  // tdd_sync - external sync 
+  // tdd_sync - external sync
   assign tdd_sync_i = tdd_sync_cntr ? tdd_sync_loc : tdd_sync;
   assign tdd_sync = tdd_sync_cntr ? tdd_sync_loc : 1'bz;
 
-   ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_iic_scl (
+  ad_iobuf #(
+    .DATA_WIDTH(2)
+  ) i_iobuf_iic_scl (
     .dio_t ({iic_mux_scl_t_s,iic_mux_scl_t_s}),
     .dio_i (iic_mux_scl_o_s),
     .dio_o (iic_mux_scl_i_s),
     .dio_p (iic_mux_scl));
 
-   ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_iic_sda (
+  ad_iobuf #(
+    .DATA_WIDTH(2)
+  ) i_iobuf_iic_sda (
     .dio_t ({iic_mux_sda_t_s,iic_mux_sda_t_s}),
     .dio_i (iic_mux_sda_o_s),
     .dio_o (iic_mux_sda_i_s),
@@ -374,19 +380,15 @@ module system_top (
     .spi1_csn_i (1'b1),
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
-    .spi1_sdo_o ()
-  );
+    .spi1_sdo_o ());
 
- assign spi_clk = vadj_err ? 1'bz : spi_clk_s;
- assign spi_en  = vadj_err ? 1'bz : spi_en_s;
- assign spi_dio = vadj_err ? 1'bz : spi_dio_s;
+  assign spi_clk = vadj_err ? 1'bz : spi_clk_s;
+  assign spi_en  = vadj_err ? 1'bz : spi_en_s;
+  assign spi_dio = vadj_err ? 1'bz : spi_dio_s;
 
- assign rx1_enable = vadj_err ? 1'bz : rx1_enable_s;
- assign rx2_enable = vadj_err ? 1'bz : rx2_enable_s;
- assign tx1_enable = vadj_err ? 1'bz : tx1_enable_s;
- assign tx2_enable = vadj_err ? 1'bz : tx2_enable_s;
+  assign rx1_enable = vadj_err ? 1'bz : rx1_enable_s;
+  assign rx2_enable = vadj_err ? 1'bz : rx2_enable_s;
+  assign tx1_enable = vadj_err ? 1'bz : tx1_enable_s;
+  assign tx2_enable = vadj_err ? 1'bz : tx2_enable_s;
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

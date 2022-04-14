@@ -76,7 +76,8 @@ module system_top (
   output                  spi_csn_adc,
   output                  spi_clk,
   inout                   spi_sdio,
-  output                  spi_dir);
+  output                  spi_dir
+);
 
   // internal signals
 
@@ -158,7 +159,9 @@ module system_top (
   assign gpio_i[94:40] = gpio_o[94:40];
   assign gpio_i[39] = trig;
 
-  ad_iobuf #(.DATA_WIDTH(7)) i_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH(7)
+  ) i_iobuf (
     .dio_t (gpio_t[38:32]),
     .dio_i (gpio_o[38:32]),
     .dio_o (gpio_i[38:32]),
@@ -212,6 +215,3 @@ module system_top (
     .tx_sysref_0 (tx_sysref));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

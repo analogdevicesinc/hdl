@@ -83,7 +83,7 @@ module system_top (
 
   input                   otg_vbusoc,
 
-  // adc interface 
+  // adc interface
 
   input                   adc_clk_in_n,
   input                   adc_clk_in_p,
@@ -97,39 +97,40 @@ module system_top (
   output                  adc_pd1,
   output                  adc_pd2,
   output                  en_1p8,
-  
+
   // spi interface
 
   output                  spi_csn,
   output                  spi_clk,
   output                  spi_mosi,
-  input                   spi_miso);
+  input                   spi_miso
+);
 
   // internal signals
 
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
-  
+
   wire    [ 2:0]  spi0_csn;
   wire            spi0_clk;
   wire            spi0_mosi;
   wire            spi0_miso;
-  
+
   wire    [ 2:0]  spi1_csn;
   wire            spi1_clk;
   wire            spi1_mosi;
   wire            spi1_miso;
-  
+
   wire    [ 1:0]  iic_mux_scl_i_s;
   wire    [ 1:0]  iic_mux_scl_o_s;
   wire            iic_mux_scl_t_s;
   wire    [ 1:0]  iic_mux_sda_i_s;
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
-  
+
   // instantiations
-  
+
   assign spi_csn    = spi0_csn[0];
   assign spi_clk    = spi0_clk;
   assign spi_mosi   = spi0_mosi;
@@ -139,7 +140,7 @@ module system_top (
   assign adc_pd1    = gpio_o[33];
   assign adc_pd2    = gpio_o[34];
   assign en_1p8     = gpio_o[35];
-  
+
   ad_iobuf #(
     .DATA_WIDTH(15)
   ) iobuf_gpio_bd (
@@ -147,10 +148,10 @@ module system_top (
     .dio_o (gpio_i[14:0]),
     .dio_t (gpio_t[14:0]),
     .dio_p (gpio_bd[14:0]));
-  
+
   assign gpio_i[63:33] = gpio_o[63:33];
   assign gpio_i[31:15] = gpio_o[31:15];
-  
+
   ad_iobuf #(
     .DATA_WIDTH(2)
   ) i_iic_mux_scl (
@@ -158,7 +159,7 @@ module system_top (
     .dio_i(iic_mux_scl_o_s),
     .dio_o(iic_mux_scl_i_s),
     .dio_p(iic_mux_scl));
-  
+
   ad_iobuf #(
     .DATA_WIDTH(2)
   ) i_iic_mux_sda (
@@ -238,5 +239,5 @@ module system_top (
     .spi1_sdo_i (spi1_mosi),
     .spi1_sdo_o (spi1_mosi),
     .spdif (spdif));
-  
+
   endmodule

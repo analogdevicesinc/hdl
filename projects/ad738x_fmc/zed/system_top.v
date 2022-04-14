@@ -76,7 +76,6 @@ module system_top (
   output          i2s_sdata_out,
   input           i2s_sdata_in,
 
-
   inout           iic_scl,
   inout           iic_sda,
   inout   [ 1:0]  iic_mux_scl,
@@ -88,7 +87,8 @@ module system_top (
   input           spi_sdib,
   output          spi_sdo,
   output          spi_sclk,
-  output          spi_cs);
+  output          spi_cs
+);
 
   // internal signals
 
@@ -181,6 +181,3 @@ module system_top (
     .spdif (spdif));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

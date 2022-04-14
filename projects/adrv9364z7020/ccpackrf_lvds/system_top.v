@@ -142,7 +142,8 @@ module system_top (
   output          spi_csn,
   output          spi_clk,
   output          spi_mosi,
-  input           spi_miso);
+  input           spi_miso
+);
 
   // internal signals
 
@@ -163,7 +164,9 @@ module system_top (
 
   // rtc int gpio - 26
 
-  ad_iobuf #(.DATA_WIDTH(1)) i_iobuf_rtc (
+  ad_iobuf #(
+    .DATA_WIDTH(1)
+  ) i_iobuf_rtc (
     .dio_t (gpio_t[26]),
     .dio_i (gpio_o[26]),
     .dio_o (gpio_i[26]),
@@ -175,7 +178,9 @@ module system_top (
 
   // misc gpio - 23:20
 
-  ad_iobuf #(.DATA_WIDTH(4)) i_iobuf_misc (
+  ad_iobuf #(
+    .DATA_WIDTH(4)
+  ) i_iobuf_misc (
     .dio_t (gpio_t[23:20]),
     .dio_i (gpio_o[23:20]),
     .dio_o (gpio_i[23:20]),
@@ -188,7 +193,9 @@ module system_top (
 
   assign gpio_i[19] = gpio_o[19];
 
-  ad_iobuf #(.DATA_WIDTH(3)) i_iobuf_adp5061 (
+  ad_iobuf #(
+    .DATA_WIDTH(3)
+  ) i_iobuf_adp5061 (
     .dio_t (gpio_t[18:16]),
     .dio_i (gpio_o[18:16]),
     .dio_o (gpio_i[18:16]),
@@ -205,7 +212,9 @@ module system_top (
   assign imu_rstn = gpio_o[9];
   assign gpio_i[11:9] = gpio_o[11:9];
 
-  ad_iobuf #(.DATA_WIDTH(1)) i_iobuf_imu_sync (
+  ad_iobuf #(
+    .DATA_WIDTH(1)
+  ) i_iobuf_imu_sync (
     .dio_t (gpio_t[8]),
     .dio_i (gpio_o[8]),
     .dio_o (gpio_i[8]),
@@ -234,7 +243,9 @@ module system_top (
 
   // tsw-part-2 gpio - 59:57
 
-  ad_iobuf #(.DATA_WIDTH(3)) i_iobuf_tsw_2 (
+  ad_iobuf #(
+    .DATA_WIDTH(3)
+  ) i_iobuf_tsw_2 (
     .dio_t (gpio_t[59:57]),
     .dio_i (gpio_o[59:57]),
     .dio_o (gpio_i[59:57]),
@@ -244,7 +255,9 @@ module system_top (
 
   // rf gpio - 56
 
-  ad_iobuf #(.DATA_WIDTH(1)) i_iobuf_rf_2 (
+  ad_iobuf #(
+    .DATA_WIDTH(1)
+  ) i_iobuf_rf_2 (
     .dio_t (gpio_t[56]),
     .dio_i (gpio_o[56]),
     .dio_o (gpio_i[56]),
@@ -256,7 +269,9 @@ module system_top (
 
   // rf & clock-select gpio - 52:51
 
-  ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_rf_1 (
+  ad_iobuf #(
+    .DATA_WIDTH(2)
+  ) i_iobuf_rf_1 (
     .dio_t (gpio_t[52:51]),
     .dio_i (gpio_o[52:51]),
     .dio_o (gpio_i[52:51]),
@@ -265,7 +280,9 @@ module system_top (
 
   // tact-scroll-wheel gpio - 50:47
 
-  ad_iobuf #(.DATA_WIDTH(4)) i_iobuf_tsw_1 (
+  ad_iobuf #(
+    .DATA_WIDTH(4)
+  ) i_iobuf_tsw_1 (
     .dio_t (gpio_t[50:47]),
     .dio_i (gpio_o[50:47]),
     .dio_o (gpio_i[50:47]),
@@ -276,7 +293,9 @@ module system_top (
 
   // ad9361 gpio - 46:32
 
-  ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_ad9361 (
+  ad_iobuf #(
+    .DATA_WIDTH(15)
+  ) i_iobuf_ad9361 (
     .dio_t (gpio_t[46:32]),
     .dio_i (gpio_o[46:32]),
     .dio_o (gpio_i[46:32]),
@@ -374,6 +393,3 @@ module system_top (
     .up_txnrx (gpio_o[48]));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

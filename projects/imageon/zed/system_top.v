@@ -86,7 +86,8 @@ module system_top (
   inout                   hdmi_iic_sda,
   inout                   hdmi_iic_rstn,
 
-  input                   otg_vbusoc);
+  input                   otg_vbusoc
+);
 
   // internal signals
 
@@ -104,7 +105,9 @@ module system_top (
 
   // instantiations
 
-  ad_iobuf #(.DATA_WIDTH(2)) i_gpio (
+  ad_iobuf #(
+    .DATA_WIDTH(2)
+  ) i_gpio (
     .dio_t (gpio_t[33:32]),
     .dio_i (gpio_o[33:32]),
     .dio_o (gpio_i[33:32]),
@@ -201,6 +204,3 @@ module system_top (
     .spi1_sdo_o ());
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

@@ -96,7 +96,8 @@ module system_top (
   output                  spi_csn,
   output                  spi_clk,
   output                  spi_mosi,
-  input                   spi_miso);
+  input                   spi_miso
+);
 
   // internal signals
 
@@ -114,7 +115,7 @@ module system_top (
   wire            rx_ref_clk;
   wire            rx_sync;
   wire            rx_sysref;
-  wire            rx_clk;  
+  wire            rx_clk;
 
   assign gpio_i[63:42]= gpio_o[63:42];
   assign gpio_i[31:15]= gpio_o[31:15];
@@ -143,7 +144,9 @@ module system_top (
   assign spi_mosi = spi0_mosi;
   assign spi0_miso = spi_miso;
 
-  ad_iobuf #(.DATA_WIDTH(10)) i_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH(10)
+  ) i_iobuf (
     .dio_t (gpio_t[41:32]),
     .dio_i (gpio_o[41:32]),
     .dio_o (gpio_i[41:32]),
@@ -158,7 +161,9 @@ module system_top (
               adc_agc3,
               adc_agc4}));
 
-  ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_bd (
+  ad_iobuf #(
+    .DATA_WIDTH(15)
+  ) i_iobuf_bd (
     .dio_t (gpio_t[14:0]),
     .dio_i (gpio_o[14:0]),
     .dio_o (gpio_i[14:0]),
@@ -230,6 +235,3 @@ module system_top (
     .spi1_sdo_o (spi1_mosi));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

@@ -71,7 +71,8 @@ module system_top (
   output                  spdif,
 
   inout                   iic_scl,
-  inout                   iic_sda);
+  inout                   iic_sda
+);
 
   // internal signals
 
@@ -144,6 +145,3 @@ module system_top (
     .spi1_sdo_o());
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

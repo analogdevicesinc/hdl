@@ -139,7 +139,6 @@ module system_top (
   // Vref selects for AFE board
 
   output      [ 7:0]      tia_chsel
-
 );
 
   // internal signals
@@ -191,7 +190,9 @@ module system_top (
 
   // GPIO connections to the FMC connector
 
-  ad_iobuf #(.DATA_WIDTH(20)) i_fmc_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH(20)
+  ) i_fmc_iobuf (
     .dio_t ({gpio_t[51:38], 3'b0, gpio_t[34:32]}),
     .dio_i ({gpio_o[51:32]}),
     .dio_o ({gpio_i[51:32]}),
@@ -210,7 +211,9 @@ module system_top (
 
   // GPIO connections for the carrier
 
-  ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_bd (
+  ad_iobuf #(
+    .DATA_WIDTH(15)
+  ) i_iobuf_bd (
     .dio_t (gpio_t[14:0]),
     .dio_i (gpio_o[14:0]),
     .dio_o (gpio_i[14:0]),

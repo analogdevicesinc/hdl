@@ -43,7 +43,8 @@ module adrv9009zu11eg_spi (
   input                   spi_miso_i,
   output                  spi_miso_o,
 
-  inout                   spi_sdio);
+  inout                   spi_sdio
+);
 
   // internal registers
 
@@ -86,7 +87,9 @@ module adrv9009zu11eg_spi (
 
   // io buffer
 
-  ad_iobuf #(.DATA_WIDTH(1)) i_iobuf_sdio (
+  ad_iobuf #(
+    .DATA_WIDTH(1)
+  ) i_iobuf_sdio (
     .dio_t (spi_enable_s),
     .dio_i (spi_mosi),
     .dio_o (spi_miso_io),
@@ -95,6 +98,3 @@ module adrv9009zu11eg_spi (
   assign spi_miso_o = spi_enable_s ? spi_miso_io : spi_miso_i;
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

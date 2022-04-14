@@ -36,9 +36,8 @@
 `timescale 1ns/100ps
 
 module system_top #(
-    parameter RX_JESD_L = 8
-  ) (
-
+  parameter RX_JESD_L = 8
+) (
   inout       [14:0]      ddr_addr,
   inout       [ 2:0]      ddr_ba,
   inout                   ddr_cas_n,
@@ -114,7 +113,8 @@ module system_top #(
   output                  spi_adf4355_data_or_csn_0,
   output                  spi_adf4355_clk_or_csn_1,
   output                  spi_adf4355_le_or_clk,
-  inout                   spi_adf4355_ce_or_sdio);
+  inout                   spi_adf4355_ce_or_sdio
+);
 
   // internal signals
 
@@ -172,13 +172,17 @@ module system_top #(
     .spi_adf4355_le_or_clk (spi_adf4355_le_or_clk),
     .spi_adf4355_ce_or_sdio (spi_adf4355_ce_or_sdio));
 
-  ad_iobuf #(.DATA_WIDTH(2)) i_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH(2)
+  ) i_iobuf (
     .dio_t (gpio_t[33:32]),
     .dio_i (gpio_o[33:32]),
     .dio_o (gpio_i[33:32]),
     .dio_p ({adc_irq, adc_fd}));
 
-  ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_bd (
+  ad_iobuf #(
+    .DATA_WIDTH(15)
+  ) i_iobuf_bd (
     .dio_t (gpio_t[14:0]),
     .dio_i (gpio_o[14:0]),
     .dio_o (gpio_i[14:0]),
@@ -286,6 +290,3 @@ module system_top #(
   assign rx_data_n_loc[RX_JESD_L-1:0] = rx_data_n[RX_JESD_L-1:0];
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

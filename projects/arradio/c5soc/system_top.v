@@ -150,7 +150,8 @@ module system_top (
   output            spi_csn,
   output            spi_clk,
   output            spi_mosi,
-  input             spi_miso);
+  input             spi_miso
+);
 
   // internal signals
 
@@ -187,8 +188,17 @@ module system_top (
   assign ga0 = 1'b0;
   assign ga1 = 1'b0;
 
-  ALT_IOBUF scl_iobuf (.i(1'b0), .oe(i2c0_out_clk), .o(i2c0_scl_in_clk), .io(scl));
-  ALT_IOBUF sda_iobuf (.i(1'b0), .oe(i2c0_out_data), .o(i2c0_sda), .io(sda));
+  ALT_IOBUF scl_iobuf (
+    .i(1'b0),
+    .oe(i2c0_out_clk),
+    .o(i2c0_scl_in_clk),
+    .io(scl));
+
+  ALT_IOBUF sda_iobuf (
+    .i(1'b0),
+    .oe(i2c0_out_data),
+    .o(i2c0_sda),
+    .io(sda));
 
   // instantiations
 
@@ -293,6 +303,3 @@ module system_top (
     .vga_out_vga_if_vga_vsync(vga_vsync));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

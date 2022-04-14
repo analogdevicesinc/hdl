@@ -39,22 +39,23 @@ module system_top (
 
   input   [12:0]  gpio_bd_i,
   output  [ 7:0]  gpio_bd_o,
-  
+
   // dci_p&n enter the chip
   output          dci_p,
   output          dci_n,
-  
+
   // dco_p&n leave the chip
   input           dco1_p,
   input           dco1_n,
-  
+
   output  [15:0]  data_p,
   output  [15:0]  data_n,
-  
+
   output          spi_clk,
   output          spi_dio,
   input           spi_do,
-  output          spi_en);
+  output          spi_en
+);
 
   // internal signals
 
@@ -67,9 +68,8 @@ module system_top (
   assign gpio_bd_o = gpio_o[20:13];
   assign gpio_i[94:13] = gpio_o[94:13];
   assign gpio_i[12: 0] = gpio_bd_i;
-  
-  assign spi_en = spi_csb[0];
 
+  assign spi_en = spi_csb[0];
 
   // instantiations
 
@@ -93,6 +93,3 @@ module system_top (
     .data_p (data_p));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

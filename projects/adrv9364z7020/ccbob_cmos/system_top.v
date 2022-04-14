@@ -91,8 +91,8 @@ module system_top (
   input           spi_miso,
 
   output  [27:0]  gp_out,
-  input   [27:0]  gp_in);
-
+  input   [27:0]  gp_in
+);
 
   // internal signals
 
@@ -114,7 +114,9 @@ module system_top (
 
   assign gpio_i[31:11] = gpio_o[31:11];
 
-  ad_iobuf #(.DATA_WIDTH(11)) i_iobuf_bd (
+  ad_iobuf #(
+    .DATA_WIDTH(11)
+  ) i_iobuf_bd (
     .dio_t (gpio_t[10:0]),
     .dio_i (gpio_o[10:0]),
     .dio_o (gpio_i[10:0]),
@@ -125,7 +127,9 @@ module system_top (
   assign gpio_i[63:52] = gpio_o[63:52];
   assign gpio_i[50:47] = gpio_o[50:47];
 
-  ad_iobuf #(.DATA_WIDTH(16)) i_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH(16)
+  ) i_iobuf (
     .dio_t ({gpio_t[51], gpio_t[46:32]}),
     .dio_i ({gpio_o[51], gpio_o[46:32]}),
     .dio_o ({gpio_i[51], gpio_i[46:32]}),
@@ -202,6 +206,3 @@ module system_top (
     .up_txnrx (gpio_o[48]));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

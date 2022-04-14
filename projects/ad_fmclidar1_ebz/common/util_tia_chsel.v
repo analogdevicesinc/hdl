@@ -37,14 +37,15 @@
 
 module util_tia_chsel #(
 
-  parameter DATA_WIDTH = 32) (
-
+  parameter DATA_WIDTH = 32
+) (
   input                        clk,
 
   input                        adc_tia_chsel_en,
   output      [DATA_WIDTH-1:0] adc_data_tia_chsel,
 
-  input       [ 7:0]           tia_chsel);
+  input       [ 7:0]           tia_chsel
+);
 
   (* keep = "TRUE" *)reg         [DATA_WIDTH-1:0] adc_data_tia_chsel_int;
 

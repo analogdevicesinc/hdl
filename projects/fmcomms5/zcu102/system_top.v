@@ -97,7 +97,8 @@ module system_top (
   input                   spi_miso,
 
   input                   ref_clk_p,
-  input                   ref_clk_n);
+  input                   ref_clk_n
+);
 
   // internal registers
 
@@ -144,7 +145,9 @@ module system_top (
     .I (ref_clk_s_ds),
     .O (ref_clk_s));
 
-  BUFR #(.BUFR_DIVIDE("BYPASS")) i_ref_clk_rbuf (
+  BUFR #(
+    .BUFR_DIVIDE ("BYPASS")
+  ) i_ref_clk_rbuf (
     .CLR (1'b0),
     .CE (1'b1),
     .I (ref_clk_s),
@@ -236,6 +239,3 @@ module system_top (
     .up_txnrx_1 (gpio_txnrx_1));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

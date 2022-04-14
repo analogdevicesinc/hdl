@@ -86,7 +86,8 @@ module system_top (
   output      [ 2:0]      adc_chsel,
   output                  adc_crcen,
   output                  adc_burst,
-  output      [ 2:0]      adc_os);
+  output      [ 2:0]      adc_os
+);
 
   // internal signals
 
@@ -96,7 +97,9 @@ module system_top (
 
   // instantiations
 
-  ad_iobuf #(.DATA_WIDTH(12)) i_iobuf_adc_cntrl (
+  ad_iobuf #(
+    .DATA_WIDTH(12)
+  ) i_iobuf_adc_cntrl (
     .dio_t (gpio_t[43:32]),
     .dio_i (gpio_o[43:32]),
     .dio_o (gpio_i[43:32]),
@@ -157,6 +160,3 @@ module system_top (
     .rx_busy (adc_busy));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

@@ -36,17 +36,16 @@
 `timescale 1ns/100ps
 
 module system_top #(
-    parameter NUM_LINKS = 2,
-    parameter DEVICE_CODE = 0
-  ) (
-  
+  parameter NUM_LINKS = 2,
+  parameter DEVICE_CODE = 0
+) (
   input                   sys_rst,
   input                   sys_clk_p,
   input                   sys_clk_n,
-        
+
   input                   uart_sin,
   output                  uart_sout,
-  
+
   output                  ddr4_act_n,
   output      [16:0]      ddr4_addr,
   output      [ 1:0]      ddr4_ba,
@@ -127,41 +126,35 @@ module system_top #(
   assign spi_csn_clk  = spi_csn[0];    //   HMC7044          AD9508
   assign spi_csn_clk2 = spi_csn[2];    //   NC               ADF4355
 
-
   /* JESD204 clocks and control signals */
   IBUFDS_GTE4 i_ibufds_tx_ref_clk_121 (
     .CEB (1'd0),
     .I (tx_ref_clk_121_p),
     .IB (tx_ref_clk_121_n),
     .O (tx_ref_clk_121),
-    .ODIV2 ()
-  );
+    .ODIV2 ());
 
   IBUFDS_GTE4 i_ibufds_tx_ref_clk_126 (
     .CEB (1'd0),
     .I (tx_ref_clk_126_p),
     .IB (tx_ref_clk_126_n),
     .O (tx_ref_clk_126),
-    .ODIV2 ()
-  );
+    .ODIV2 ());
 
   IBUFDS i_ibufds_tx_sysref (
     .I (tx_sysref_p),
     .IB (tx_sysref_n),
-    .O (tx_sysref)
-  );
+    .O (tx_sysref));
 
   IBUFDS i_ibufds_tx_sync_0 (
     .I (tx_sync_p[0]),
     .IB (tx_sync_n[0]),
-    .O (tx_sync[0])
-  );
+    .O (tx_sync[0]));
 
   IBUFDS i_ibufds_tx_sync_1 (
     .I (tx_sync_p[1]),
     .IB (tx_sync_n[1]),
-    .O (tx_sync[1])
-  );
+    .O (tx_sync[1]));
 
   /* FMC GPIOs */
   ad_iobuf #(
@@ -172,8 +165,7 @@ module system_top #(
     .dio_o (gpio_i[21+:5]),
     .dio_p ({
       dac_ctrl           /* 25 - 21 */
-    })
-  );
+    }));
 
   /*
   * Control signals for different FMC boards:
@@ -183,7 +175,7 @@ module system_top #(
   *        1  C10   NC           NC              FMC_TXEN_0
   *        2  C11   NC           NC              FMC_TXEN_1
   *        3  H14   FMC_TXEN_1   NC              NC
-  *        4  D15   NC           FMC_HMC849VCTL  NC          
+  *        4  D15   NC           FMC_HMC849VCTL  NC
   */
 
   assign dac_fifo_bypass = gpio_o[40];
@@ -195,8 +187,7 @@ module system_top #(
     .dio_t (gpio_t[0+:17]),
     .dio_i (gpio_o[0+:17]),
     .dio_o (gpio_i[0+:17]),
-    .dio_p (gpio_bd)
-  );
+    .dio_p (gpio_bd));
 
   assign gpio_i[63:26] = gpio_o[63:26];
   assign gpio_i[20:17] = gpio_o[20:17];
@@ -273,6 +264,3 @@ module system_top #(
   assign tx_sysref_loc = (DEVICE_CODE == 3) ? tx_sync[1] : tx_sysref;
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

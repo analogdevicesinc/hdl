@@ -42,7 +42,8 @@ module fmcjesdadc1_spi (
   input                   spi_mosi,
   output                  spi_miso,
 
-  inout                   spi_sdio);
+  inout                   spi_sdio
+);
 
   localparam  FMC27X_CPLD = 8'h00;
   localparam  FMC27X_AD9517 = 8'h84;
@@ -101,6 +102,3 @@ module fmcjesdadc1_spi (
   assign spi_sdio = (spi_enable_s == 1'b1) ? 1'bz : spi_mosi;
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

@@ -100,7 +100,8 @@ module system_top (
   output                  spi_csn_0,
   output                  spi_clk,
   output                  spi_mosi,
-  input                   spi_miso);
+  input                   spi_miso
+);
 
   // internal signals
 
@@ -121,7 +122,9 @@ module system_top (
   assign gpio_en_agc = gpio_o[44:44];
   assign gpio_ctl = gpio_o[43:40];
 
-  ad_iobuf #(.DATA_WIDTH(17)) i_iobuf_bd (
+  ad_iobuf #(
+    .DATA_WIDTH(17)
+  ) i_iobuf_bd (
     .dio_t (gpio_t[16:0]),
     .dio_i (gpio_o[16:0]),
     .dio_o (gpio_i[16:0]),
@@ -201,6 +204,3 @@ module system_top (
     .uart_sout (uart_sout));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

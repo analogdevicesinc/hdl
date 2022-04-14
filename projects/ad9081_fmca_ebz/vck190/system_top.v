@@ -36,12 +36,12 @@
 `timescale 1ns/100ps
 
 module system_top  #(
-    parameter TX_JESD_L = 4,
-    parameter TX_NUM_LINKS = 1,
-    parameter RX_JESD_L = 4,
-    parameter RX_NUM_LINKS = 1,
-    parameter JESD_MODE = "8B10B"
-  ) (
+  parameter TX_JESD_L = 4,
+  parameter TX_NUM_LINKS = 1,
+  parameter RX_JESD_L = 4,
+  parameter RX_NUM_LINKS = 1,
+  parameter JESD_MODE = "8B10B"
+) (
   input         sys_clk_n,
   input         sys_clk_p,
   output        ddr4_act_n,
@@ -102,7 +102,6 @@ module system_top  #(
   input         sysref2_n,
   input         sysref2_p,
   output [1:0]  txen
-
 );
 
   // internal signals
@@ -166,19 +165,20 @@ module system_top  #(
 
   BUFG i_tx_device_clk (
     .I (clkin6),
-    .O (tx_device_clk)
-  );
+    .O (tx_device_clk));
 
   BUFG i_rx_device_clk (
     .I (clkin10),
-    .O (rx_device_clk)
-  );
+    .O (rx_device_clk));
+
   // spi
 
   assign spi0_csb   = spi0_csn[0];
   assign spi1_csb   = spi1_csn[0];
 
-  ad_3w_spi #(.NUM_OF_SLAVES(1)) i_spi (
+  ad_3w_spi #(
+    .NUM_OF_SLAVES(1)
+  ) i_spi (
     .spi_csn (spi1_csn[0]),
     .spi_clk (spi1_sclk),
     .spi_mosi (spi1_mosi),
@@ -188,7 +188,9 @@ module system_top  #(
 
   // gpios
 
-  ad_iobuf #(.DATA_WIDTH(12)) i_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH(12)
+  ) i_iobuf (
     .dio_t (gpio_t[43:32]),
     .dio_i (gpio_o[43:32]),
     .dio_o (gpio_i[43:32]),
@@ -217,7 +219,9 @@ module system_top  #(
   if (TX_NUM_LINKS > 1 & JESD_MODE == "8B10B") begin
     assign tx_syncin[1] = fpga_syncin_1_p;
   end else begin
-    ad_iobuf #(.DATA_WIDTH(2)) i_syncin_iobuf (
+    ad_iobuf #(
+      .DATA_WIDTH(2)
+    ) i_syncin_iobuf (
       .dio_t (gpio_t[61:60]),
       .dio_i (gpio_o[61:60]),
       .dio_o (gpio_i[61:60]),
@@ -229,7 +233,9 @@ module system_top  #(
     assign fpga_syncout_1_p = rx_syncout[1];
     assign fpga_syncout_1_n = 0;
   end else begin
-    ad_iobuf #(.DATA_WIDTH(2)) i_syncout_iobuf (
+    ad_iobuf #(
+      .DATA_WIDTH(2)
+    ) i_syncout_iobuf (
       .dio_t (gpio_t[63:62]),
       .dio_i (gpio_o[63:62]),
       .dio_o (gpio_i[63:62]),
@@ -298,8 +304,7 @@ module system_top  #(
     .rx_sync_0 (rx_syncout),
     .tx_sync_0 (tx_syncin),
     .rx_sysref_0 (sysref),
-    .tx_sysref_0 (sysref)
-  );
+    .tx_sysref_0 (sysref));
 
   assign rx_data_p_loc[RX_JESD_L*RX_NUM_LINKS-1:0] = rx_data_p[RX_JESD_L*RX_NUM_LINKS-1:0];
   assign rx_data_n_loc[RX_JESD_L*RX_NUM_LINKS-1:0] = rx_data_n[RX_JESD_L*RX_NUM_LINKS-1:0];
@@ -308,6 +313,3 @@ module system_top  #(
   assign tx_data_n[TX_JESD_L*TX_NUM_LINKS-1:0] = tx_data_n_loc[TX_JESD_L*TX_NUM_LINKS-1:0];
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

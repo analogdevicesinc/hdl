@@ -81,7 +81,8 @@ module system_top (
   inout       [ 1:0]      iic_mux_scl,
   inout       [ 1:0]      iic_mux_sda,
 
-  input                   otg_vbusoc);
+  input                   otg_vbusoc
+);
 
   // internal signals
 
@@ -188,6 +189,3 @@ module system_top (
     .spi1_sdo_o ());
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

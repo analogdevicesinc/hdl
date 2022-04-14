@@ -115,7 +115,8 @@ module system_top (
   output            spi_csn_ad9371,
   output            spi_clk,
   output            spi_mosi,
-  input             spi_miso);
+  input             spi_miso
+);
 
   // internal signals
 
@@ -239,6 +240,3 @@ module system_top (
     .sys_flash_tcm_chipselect_n_out (flash_cen[0]));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************
