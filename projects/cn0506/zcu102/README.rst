@@ -1,0 +1,5 @@
+- Connect on FMC1
+- VADJ = 1.8V
+- MII mode, Connected to PS8's Ethernet 0(PHY 0) and Ethernet 1(PHY 1).
+- RGMII mode using a GMII-to-RGMII converter, Connected to PS8's Ethernet 0(PHY 0) and Ethernet 1(PHY 1).
+- RMII mode using a MII-to-RMII converter, Connected to PS8's Ethernet 0(PHY 0) and Ethernet 1(PHY 1).
