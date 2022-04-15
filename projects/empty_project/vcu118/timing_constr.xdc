@@ -7,9 +7,9 @@ set tco_max 7
 # Min Tco
 set tco_min 1
 # Setup time requirement
-set tsu 2
+set tsu 2.5
 # Hold time requirement
-set th 3
+set th 2
 # Following are the board/trace delay numbers
 # Assumption is that all Data lines are matched
 set tdata_trace_delay_max 0.25
@@ -65,6 +65,6 @@ set_input_delay -clock clk_sck -min [expr $tco_min + $tdata_trace_delay_min + \
 # Data is driven by the IP on alternate rising_edge of the ext_spi_clk
 set_output_delay -clock clk_sck -max [expr $tsu + $tdata_trace_delay_max - \
   $tclk_trace_delay_min] [get_ports SPI_1*_io];
-set_output_delay -clock clk_sck -min [expr $tdata_trace_delay_min -$th - \
+set_output_delay -clock clk_sck -min [expr $tdata_trace_delay_min - $th - \
   $tclk_trace_delay_max] [get_ports SPI_1*_io];
 
