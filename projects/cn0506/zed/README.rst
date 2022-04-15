@@ -1,0 +1,5 @@
+- Connect on FMC LPC
+- VADJ = 2.5V
+- MII mode, Connected to PS7's Ethernet 0(PHY 0) and Ethernet 1(PHY 1).
+- RGMII mode using a GMII-to-RGMII converter, Connected to PS7's Ethernet 0(PHY 0) and Ethernet 1(PHY 1).
+- RMII mode using a MII-to-RMII converter, Connected to PS7's Ethernet 0(PHY 0) and Ethernet 1(PHY 1).
