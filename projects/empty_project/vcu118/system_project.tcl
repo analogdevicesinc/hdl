@@ -20,5 +20,8 @@ if {$ADI_USE_OOC_SYNTHESIS == 1} {
   set_property used_in_synthesis false [get_files timing_constr.xdc]
 }
 
+set_property strategy {Vivado Implementation Defaults} [get_runs impl_1]
+set_property STEPS.PHYS_OPT_DESIGN.ARGS.DIRECTIVE ExploreWithAggressiveHoldFix [get_runs impl_1]
+
 adi_project_run empty_project_vcu118
 
