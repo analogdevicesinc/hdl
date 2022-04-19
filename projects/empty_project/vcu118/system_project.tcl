@@ -21,7 +21,13 @@ if {$ADI_USE_OOC_SYNTHESIS == 1} {
 }
 
 set_property strategy {Vivado Implementation Defaults} [get_runs impl_1]
+# Required to fix timing on second SPI interface which is not passed through the STARTUP primitive
 set_property STEPS.PHYS_OPT_DESIGN.ARGS.DIRECTIVE ExploreWithAggressiveHoldFix [get_runs impl_1]
+
+# SREC bootloader with address set to 0x0C00_0000 suitable for image of 64MB
+add_files -norecurse ./mb_bootloader.elf
+set_property SCOPED_TO_REF system [get_files -all -of_objects [get_fileset sources_1] {./mb_bootloader.elf}]
+set_property SCOPED_TO_CELLS { sys_mb } [get_files -all -of_objects [get_fileset sources_1] {./mb_bootloader.elf}]
 
 adi_project_run empty_project_vcu118
 
