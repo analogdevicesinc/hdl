@@ -17,7 +17,7 @@ set_interface_property sys_rst EXPORT_OF sys_clk.clk_in_reset
 
 add_instance sys_hps altera_hps
 set_instance_parameter_value sys_hps {MPU_EVENTS_Enable} {0}
-set_instance_parameter_value sys_hps {F2SDRAM_Type} {Avalon-MM\ Bidirectional AXI-3 AXI-3}
+set_instance_parameter_value sys_hps {F2SDRAM_Type} {AXI-3 AXI-3 AXI-3}
 set_instance_parameter_value sys_hps {F2SDRAM_Width} {64 64 64}
 set_instance_parameter_value sys_hps {F2SINTERRUPT_Enable} {1}
 set_instance_parameter_value sys_hps {EMAC0_PinMuxing} {Unused}
@@ -126,6 +126,12 @@ proc ad_cpu_interconnect {m_base m_port} {
 
 proc ad_dma_interconnect {m_port m_id} {
 
+  if {${m_id} == 0} {
+    add_connection ${m_port} sys_hps.f2h_sdram0_data
+    set_connection_parameter_value ${m_port}/sys_hps.f2h_sdram0_data baseAddress {0x0000}
+    return
+  }
+  
   if {${m_id} == 1} {
     add_connection ${m_port} sys_hps.f2h_sdram1_data
     set_connection_parameter_value ${m_port}/sys_hps.f2h_sdram1_data baseAddress {0x0000}
@@ -156,86 +162,73 @@ add_connection sys_clk.clk_reset sys_int_mem.reset1
 add_connection sys_hps.h2f_axi_master sys_int_mem.s1
 set_connection_parameter_value sys_hps.h2f_axi_master/sys_int_mem.s1 baseAddress {0x0000}
 
-# display (vga-pll)
+# display (vga-out)
 
-add_instance vga_pll altera_pll
-set_instance_parameter_value vga_pll {gui_device_speed_grade} {2}
-set_instance_parameter_value vga_pll {gui_reference_clock_frequency} {50.0}
-set_instance_parameter_value vga_pll {gui_use_locked} {0}
-set_instance_parameter_value vga_pll {gui_number_of_clocks} {2}
-set_instance_parameter_value vga_pll {gui_output_clock_frequency0} {85.5}
-set_instance_parameter_value vga_pll {gui_output_clock_frequency1} {171.0}
-add_connection sys_clk.clk vga_pll.refclk
-add_connection sys_clk.clk_reset vga_pll.reset
+add_instance vga_out axi_hdmi_tx 
+set_instance_parameter_value vga_out {CR_CB_N} {0}
+set_instance_parameter_value vga_out {INTERFACE} {VGA_INTERFACE}
+set_instance_parameter_value vga_out {ID} {0}
+add_interface vga_out_vga_if conduit end
+set_interface_property vga_out_vga_if EXPORT_OF vga_out.vga_if
+add_connection sys_clk.clk           vga_out.s_axi_clock
+add_connection sys_clk.clk_reset     vga_out.s_axi_reset
 
-# display (vga-frame-reader)
+# display (pixel-clk-pll)
 
-add_instance vga_frame_reader alt_vip_vfr
-set_instance_parameter_value vga_frame_reader {BITS_PER_PIXEL_PER_COLOR_PLANE} {8}
-set_instance_parameter_value vga_frame_reader {NUMBER_OF_CHANNELS_IN_PARALLEL} {4}
-set_instance_parameter_value vga_frame_reader {NUMBER_OF_CHANNELS_IN_SEQUENCE} {1}
-set_instance_parameter_value vga_frame_reader {MAX_IMAGE_WIDTH} {1360}
-set_instance_parameter_value vga_frame_reader {MAX_IMAGE_HEIGHT} {768}
-set_instance_parameter_value vga_frame_reader {MEM_PORT_WIDTH} {128}
-set_instance_parameter_value vga_frame_reader {RMASTER_FIFO_DEPTH} {64}
-set_instance_parameter_value vga_frame_reader {RMASTER_BURST_TARGET} {32}
-set_instance_parameter_value vga_frame_reader {CLOCKS_ARE_SEPARATE} {1}
-add_connection sys_clk.clk vga_frame_reader.clock_master
-add_connection sys_clk.clk_reset vga_frame_reader.clock_master_reset
-add_connection vga_frame_reader.avalon_master sys_hps.f2h_sdram0_data
-set_connection_parameter_value vga_frame_reader.avalon_master/sys_hps.f2h_sdram0_data baseAddress {0x0000}
-add_connection vga_pll.outclk0 vga_frame_reader.clock_reset
-add_connection sys_clk.clk_reset vga_frame_reader.clock_reset_reset
+add_instance pixel_clk_pll altera_pll
+set_instance_parameter_value pixel_clk_pll {gui_device_speed_grade} {2}
+set_instance_parameter_value pixel_clk_pll {gui_reference_clock_frequency} {50.0}
+set_instance_parameter_value pixel_clk_pll {gui_use_locked} {0}
+set_instance_parameter_value pixel_clk_pll {gui_number_of_clocks} {2}
+set_instance_parameter_value pixel_clk_pll {gui_output_clock_frequency0} {65.00}
+set_instance_parameter_value pixel_clk_pll {gui_output_clock_frequency1} {100.0}
+set_instance_parameter_value pixel_clk_pll {gui_en_reconf} {1}
+add_connection sys_clk.clk           pixel_clk_pll.refclk
+add_connection sys_clk.clk_reset     pixel_clk_pll.reset
+add_connection pixel_clk_pll.outclk1 sys_hps.f2h_sdram0_clock
+add_connection pixel_clk_pll.outclk1 vga_out.vdma_clock
+add_connection pixel_clk_pll.outclk0 vga_out.reference_clk
 
-# display (vga-out-clock)
 
-add_instance vga_out_clock altera_clock_bridge
-set_instance_parameter_value vga_out_clock {NUM_CLOCK_OUTPUTS} {1}
-add_connection vga_pll.outclk0 vga_out_clock.in_clk
-add_interface vga_out_clk clock source
-set_interface_property vga_out_clk EXPORT_OF vga_out_clock.out_clk
+# display (pixel-clk-pll-reconfig)
 
-# display (vga-out-data)
+add_instance pixel_clk_pll_reconfig altera_pll_reconfig
+set_instance_parameter_value pixel_clk_pll_reconfig {ENABLE_BYTEENABLE} {0}
+set_instance_parameter_value pixel_clk_pll_reconfig {ENABLE_MIF} {0}
+add_connection pixel_clk_pll.reconfig_from_pll pixel_clk_pll_reconfig.reconfig_from_pll
+set_connection_parameter_value pixel_clk_pll.reconfig_from_pll/pixel_clk_pll_reconfig.reconfig_from_pll endPortLSB {0}
+set_connection_parameter_value pixel_clk_pll.reconfig_from_pll/pixel_clk_pll_reconfig.reconfig_from_pll startPortLSB {0}
+set_connection_parameter_value pixel_clk_pll.reconfig_from_pll/pixel_clk_pll_reconfig.reconfig_from_pll width {0}
+add_connection pixel_clk_pll.reconfig_to_pll pixel_clk_pll_reconfig.reconfig_to_pll
+set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_reconfig.reconfig_to_pll endPortLSB {0}
+set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_reconfig.reconfig_to_pll startPortLSB {0}
+set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_reconfig.reconfig_to_pll width {0}
+add_connection sys_clk.clk           pixel_clk_pll_reconfig.mgmt_clk
+add_connection sys_clk.clk_reset     pixel_clk_pll_reconfig.mgmt_reset
 
-add_instance vga_out_data alt_vip_itc
-set_instance_parameter_value vga_out_data {H_ACTIVE_PIXELS} {1360}
-set_instance_parameter_value vga_out_data {V_ACTIVE_LINES} {768}
-set_instance_parameter_value vga_out_data {BPS} {8}
-set_instance_parameter_value vga_out_data {NUMBER_OF_COLOUR_PLANES} {4}
-set_instance_parameter_value vga_out_data {COLOUR_PLANES_ARE_IN_PARALLEL} {1}
-set_instance_parameter_value vga_out_data {ACCEPT_COLOURS_IN_SEQ} {0}
-set_instance_parameter_value vga_out_data {INTERLACED} {0}
-set_instance_parameter_value vga_out_data {USE_EMBEDDED_SYNCS} {0}
-set_instance_parameter_value vga_out_data {AP_LINE} {0}
-set_instance_parameter_value vga_out_data {ANC_LINE} {0}
-set_instance_parameter_value vga_out_data {H_BLANK} {0}
-set_instance_parameter_value vga_out_data {V_BLANK} {0}
-set_instance_parameter_value vga_out_data {H_SYNC_LENGTH} {112}
-set_instance_parameter_value vga_out_data {H_FRONT_PORCH} {64}
-set_instance_parameter_value vga_out_data {H_BACK_PORCH} {256}
-set_instance_parameter_value vga_out_data {V_SYNC_LENGTH} {6}
-set_instance_parameter_value vga_out_data {V_FRONT_PORCH} {3}
-set_instance_parameter_value vga_out_data {V_BACK_PORCH} {18}
-set_instance_parameter_value vga_out_data {F_RISING_EDGE} {0}
-set_instance_parameter_value vga_out_data {F_FALLING_EDGE} {0}
-set_instance_parameter_value vga_out_data {FIELD0_V_RISING_EDGE} {0}
-set_instance_parameter_value vga_out_data {FIELD0_ANC_LINE} {0}
-set_instance_parameter_value vga_out_data {FIELD0_V_BLANK} {0}
-set_instance_parameter_value vga_out_data {FIELD0_V_SYNC_LENGTH} {0}
-set_instance_parameter_value vga_out_data {FIELD0_V_FRONT_PORCH} {0}
-set_instance_parameter_value vga_out_data {FIELD0_V_BACK_PORCH} {0}
-set_instance_parameter_value vga_out_data {FIFO_DEPTH} {1920}
-set_instance_parameter_value vga_out_data {THRESHOLD} {1919}
-set_instance_parameter_value vga_out_data {CLOCKS_ARE_SAME} {0}
-set_instance_parameter_value vga_out_data {USE_CONTROL} {0}
-set_instance_parameter_value vga_out_data {GENERATE_SYNC} {0}
-set_instance_parameter_value vga_out_data {NO_OF_MODES} {1}
-set_instance_parameter_value vga_out_data {STD_WIDTH} {1}
-add_connection vga_pll.outclk0 vga_out_data.is_clk_rst
-add_connection sys_clk.clk_reset vga_out_data.is_clk_rst_reset
-add_connection vga_frame_reader.avalon_streaming_source vga_out_data.din
-add_interface vga_out_data conduit end
-set_interface_property vga_out_data EXPORT_OF vga_out_data.clocked_video
+#display (video-dmac)
+
+add_instance video_dmac axi_dmac
+set_instance_parameter_value video_dmac {AUTO_ASYNC_CLK} {1}
+set_instance_parameter_value video_dmac {AXI_SLICE_DEST} {0}
+set_instance_parameter_value video_dmac {AXI_SLICE_SRC} {0}
+set_instance_parameter_value video_dmac {CYCLIC} {1}
+set_instance_parameter_value video_dmac {HAS_AXIS_TLAST} {1}
+set_instance_parameter_value video_dmac {DMA_2D_TRANSFER} {1}
+set_instance_parameter_value video_dmac {DMA_DATA_WIDTH_DEST} {64}
+set_instance_parameter_value video_dmac {DMA_DATA_WIDTH_SRC} {64}
+set_instance_parameter_value video_dmac {DMA_LENGTH_WIDTH} {24}
+set_instance_parameter_value video_dmac {DMA_TYPE_DEST} {1}
+set_instance_parameter_value video_dmac {DMA_TYPE_SRC} {0}
+set_instance_parameter_value video_dmac {FIFO_SIZE} {8}
+set_instance_parameter_value video_dmac {ID} {0}
+set_instance_parameter_value video_dmac {SYNC_TRANSFER_START} {0}
+add_connection video_dmac.m_axis vga_out.vdma_if axi4stream
+add_connection pixel_clk_pll.outclk1 video_dmac.m_src_axi_clock 
+add_connection pixel_clk_pll.outclk1 video_dmac.if_m_axis_aclk  
+add_connection sys_clk.clk           video_dmac.s_axi_clock
+add_connection sys_clk.clk_reset     video_dmac.m_src_axi_reset
+add_connection sys_clk.clk_reset     video_dmac.s_axi_reset
 
 # id
 
@@ -295,13 +288,11 @@ set_interface_property sys_spi EXPORT_OF sys_spi.external
 
 add_instance axi_sysid_0 axi_sysid
 add_instance rom_sys_0 sysid_rom
-
 add_connection axi_sysid_0.if_rom_addr rom_sys_0.if_rom_addr
 add_connection rom_sys_0.if_rom_data axi_sysid_0.if_sys_rom_data
 add_connection sys_clk.clk rom_sys_0.if_clk
 add_connection sys_clk.clk axi_sysid_0.s_axi_clock
 add_connection sys_clk.clk_reset axi_sysid_0.s_axi_reset
-
 add_interface pr_rom_data_nc conduit end
 set_interface_property pr_rom_data_nc EXPORT_OF axi_sysid_0.if_pr_rom_data
 
@@ -309,14 +300,22 @@ set_interface_property pr_rom_data_nc EXPORT_OF axi_sysid_0.if_pr_rom_data
 
 ad_cpu_interrupt 0 sys_gpio_bd.irq
 ad_cpu_interrupt 1 sys_spi.irq
-ad_cpu_interrupt 4 vga_frame_reader.interrupt_sender
+ad_cpu_interrupt 4 video_dmac.interrupt_sender
 
 # cpu interconnects
 
 ad_cpu_interconnect 0x00108000 sys_spi.spi_control_port
-ad_cpu_interconnect 0x00009000 vga_frame_reader.avalon_slave
 ad_cpu_interconnect 0x00010000 sys_id.control_slave
 ad_cpu_interconnect 0x00010080 sys_gpio_bd.s1
 ad_cpu_interconnect 0x00010100 sys_gpio_in.s1
 ad_cpu_interconnect 0x00109000 sys_gpio_out.s1
 ad_cpu_interconnect 0x00018000 axi_sysid_0.s_axi
+ad_cpu_interconnect 0x00110800 video_dmac.s_axi
+ad_cpu_interconnect 0x00130000 vga_out.s_axi
+ad_cpu_interconnect 0x00118900 pixel_clk_pll_reconfig.mgmt_avalon_slave
+
+# mem interconnects
+
+ad_dma_interconnect video_dmac.m_src_axi 0
+
+
