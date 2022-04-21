@@ -71,7 +71,8 @@ set fpga_technology_list { \
         { "Cyclone V"  101 } \
         { "Cyclone 10" 102 } \
         { "Arria 10"   103 } \
-        { "Stratix 10" 104 }}
+        { "Stratix 10" 104 } \
+        { "Agilex"     105 }}
 
 set fpga_family_list { \
         { Unknown   0 } \
@@ -79,7 +80,8 @@ set fpga_family_list { \
         { GX        2 } \
         { GT        3 } \
         { GZ        4 } \
-        { "SE Base" 5 }}
+        { "SE Base" 5 } \
+        { "I-Series with HPS only" 6}}
 
        #technology 5 generation
        # family Arria SX
@@ -162,8 +164,13 @@ proc get_part_param {} {
     }
 
     # user and system values (sys_val)
-    regsub {V} $fpga_voltage "" fpga_voltage
-    set fpga_voltage [expr int([expr $fpga_voltage * 1000])] ;# // V to mV conversion(integer val)
+    if { $fpga_technology == {{Agilex}} } {
+      # TODO : Transform VID2 to some voltage
+      set fpga_voltage "0"
+    } else {
+      regsub {V} $fpga_voltage "" fpga_voltage
+      set fpga_voltage [expr int([expr $fpga_voltage * 1000])] ;# // V to mV conversion(integer val)
+    }
 
 }
 
