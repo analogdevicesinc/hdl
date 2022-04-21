@@ -301,14 +301,13 @@ proc ad_disconnect {p_name_1 p_name_2} {
 #  by the axi_adxcvr.
 #
 
-proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}} {num_of_max_lanes -1}} {
+proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}} {num_of_max_lanes -1} {partial_lane_map {}}} {
 
   global xcvr_index
   global xcvr_tx_index
   global xcvr_rx_index
   global xcvr_instance
 
-  set no_of_lanes [get_property CONFIG.NUM_OF_LANES [get_bd_cells $a_xcvr]]
   set qpll_enable [get_property CONFIG.QPLL_ENABLE [get_bd_cells $a_xcvr]]
   set tx_or_rx_n [get_property CONFIG.TX_OR_RX_N [get_bd_cells $a_xcvr]]
 
@@ -341,11 +340,6 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}
   set data_dir "I"
   set ctrl_dir "O"
   set index $xcvr_rx_index
-  set max_no_of_lanes $no_of_lanes
-
-  if {$num_of_max_lanes != -1} {
-    set max_no_of_lanes $num_of_max_lanes
-  }
 
   if {$tx_or_rx_n == 1} {
 
@@ -372,6 +366,12 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}
     set num_of_links 1
   }
 
+  set no_of_lanes [get_property CONFIG.NUM_LANES [get_bd_cells $a_jesd/$txrx]]
+  set max_no_of_lanes $no_of_lanes
+
+  if {$num_of_max_lanes != -1} {
+    set max_no_of_lanes $num_of_max_lanes
+  }
   create_bd_port -dir I $m_sysref
   create_bd_port -from [expr $num_of_links - 1] -to 0 -dir ${ctrl_dir} $m_sync
 
@@ -385,7 +385,12 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}
       set link_clk_2x ${u_xcvr}/${txrx}_out_clk_${index}
       set use_2x_clk 1
     } else {
-      set link_clk ${u_xcvr}/${txrx}_out_clk_${index}
+      if {$partial_lane_map != {}} {
+        set cur_index [lindex $partial_lane_map $index]
+        set link_clk ${u_xcvr}/${txrx}_out_clk_${cur_index}
+      } else {
+        set link_clk ${u_xcvr}/${txrx}_out_clk_${index}
+      }
     }
     set rst_gen [regsub -all "/" ${a_jesd}_rstgen "_"]
     set create_rst_gen 1
@@ -409,76 +414,120 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}
     ad_connect sys_cpu_resetn ${rst_gen}/ext_reset_in
   }
 
-  if {$lane_map != {} && $no_of_lanes != $num_of_max_lanes} {
-    for {set i 0}  {$i < $num_of_max_lanes} {incr i} {
-      if {$i ni $lane_map} {
-        lappend lane_map $i
-      }
-    }
-  }
+  if {$partial_lane_map != {}} {
+    for {set n 0} {$n < $no_of_lanes} {incr n} {
 
-  for {set n 0} {$n < $no_of_lanes} {incr n} {
-
-    set m [expr ($n + $index)]
-
-
-    if {$lane_map != {}} {
-      set phys_lane [lindex $lane_map $n]
-    } else {
-      set phys_lane $m
-    }
-
-    if {$tx_or_rx_n == 0} {
-      ad_connect  ${a_xcvr}/up_es_${n} ${u_xcvr}/up_es_${phys_lane}
-      if {$jesd204_type == 0} {
-        if {$link_mode == 1} {
-          ad_connect  ${a_jesd}/phy_en_char_align ${u_xcvr}/${txrx}_calign_${phys_lane}
+      set phys_lane [lindex $partial_lane_map $n]
+    
+      if {$phys_lane != {}} {
+        if {$jesd204_type == 0} {
+          ad_connect  ${u_xcvr}/${txrx}_${phys_lane} ${a_jesd}/${txrx}_phy${n}
+        } else {
+          ad_connect  ${u_xcvr}/${txrx}_${phys_lane} ${a_jesd}/gt${n}_${txrx}
         }
-      } else {
-        ad_connect  ${a_jesd}/rxencommaalign_out ${u_xcvr}/${txrx}_calign_${phys_lane}
+      }
+
+      if {$tx_or_rx_n == 0} {
+        if {$jesd204_type == 0} {
+          if {$link_mode == 1} {
+            ad_connect  ${a_jesd}/phy_en_char_align ${u_xcvr}/${txrx}_calign_${phys_lane}
+          }
+        } else {
+          ad_connect  ${a_jesd}/rxencommaalign_out ${u_xcvr}/${txrx}_calign_${phys_lane}
+        }
       }
     }
 
-    if {(($n%4) == 0) && ($qpll_enable == 1)} {
-      ad_connect  ${a_xcvr}/up_cm_${n} ${u_xcvr}/up_cm_${n}
-    }
-    ad_connect  ${a_xcvr}/up_ch_${n} ${u_xcvr}/up_${txrx}_${phys_lane}
-    ad_connect  ${link_clk} ${u_xcvr}/${txrx}_clk_${phys_lane}
-    if {$use_2x_clk == 1} {
-      ad_connect  ${link_clk_2x} ${u_xcvr}/${txrx}_clk_2x_${phys_lane}
-    }
-    if {$phys_lane != {}} {
-      if {$jesd204_type == 0} {
-        ad_connect  ${u_xcvr}/${txrx}_${phys_lane} ${a_jesd}/${txrx}_phy${n}
+    for {set n 0} {$n < $max_no_of_lanes} {incr n} {
+
+      set m [expr ($n + $index)]
+
+      if {$lane_map != {}} {
+        set phys_lane [lindex $lane_map $n]
       } else {
-        ad_connect  ${u_xcvr}/${txrx}_${phys_lane} ${a_jesd}/gt${n}_${txrx}
+        set phys_lane $m
       }
+
+      if {$tx_or_rx_n == 0} {
+        ad_connect  ${a_xcvr}/up_es_${n} ${u_xcvr}/up_es_${phys_lane}
+      }
+      
+      if {(($n%4) == 0) && ($qpll_enable == 1)} {
+        ad_connect  ${a_xcvr}/up_cm_${n} ${u_xcvr}/up_cm_${n}
+      }
+      ad_connect  ${a_xcvr}/up_ch_${n} ${u_xcvr}/up_${txrx}_${phys_lane}
+      ad_connect  ${link_clk} ${u_xcvr}/${txrx}_clk_${phys_lane}
+      if {$use_2x_clk == 1} {
+        ad_connect  ${link_clk_2x} ${u_xcvr}/${txrx}_clk_2x_${phys_lane}
+      }
+
+      create_bd_port -dir ${data_dir} ${m_data}_${m}_p
+      create_bd_port -dir ${data_dir} ${m_data}_${m}_n
+      ad_connect  ${u_xcvr}/${txrx}_${m}_p ${m_data}_${m}_p
+      ad_connect  ${u_xcvr}/${txrx}_${m}_n ${m_data}_${m}_n
+    }
+  } else {
+    for {set n 0} {$n < $no_of_lanes} {incr n} {
+
+      set m [expr ($n + $index)]
+      if {$lane_map != {}} {
+        set phys_lane [lindex $lane_map $n]
+      } else {
+        set phys_lane $m
+      }
+
+      if {$tx_or_rx_n == 0} {
+        ad_connect  ${a_xcvr}/up_es_${n} ${u_xcvr}/up_es_${phys_lane}
+        if {$jesd204_type == 0} {
+          if {$link_mode == 1} {
+            ad_connect  ${a_jesd}/phy_en_char_align ${u_xcvr}/${txrx}_calign_${phys_lane}
+          }
+        } else {
+          ad_connect  ${a_jesd}/rxencommaalign_out ${u_xcvr}/${txrx}_calign_${phys_lane}
+        }
+      }
+
+      if {(($n%4) == 0) && ($qpll_enable == 1)} {
+        ad_connect  ${a_xcvr}/up_cm_${n} ${u_xcvr}/up_cm_${n}
+      }
+      ad_connect  ${a_xcvr}/up_ch_${n} ${u_xcvr}/up_${txrx}_${phys_lane}
+      ad_connect  ${link_clk} ${u_xcvr}/${txrx}_clk_${phys_lane}
+      if {$use_2x_clk == 1} {
+        ad_connect  ${link_clk_2x} ${u_xcvr}/${txrx}_clk_2x_${phys_lane}
+      }
+      if {$phys_lane != {}} {
+        if {$jesd204_type == 0} {
+          ad_connect  ${u_xcvr}/${txrx}_${phys_lane} ${a_jesd}/${txrx}_phy${n}
+        } else {
+          ad_connect  ${u_xcvr}/${txrx}_${phys_lane} ${a_jesd}/gt${n}_${txrx}
+        }
+      }
+
+      create_bd_port -dir ${data_dir} ${m_data}_${m}_p
+      create_bd_port -dir ${data_dir} ${m_data}_${m}_n
+      ad_connect  ${u_xcvr}/${txrx}_${m}_p ${m_data}_${m}_p
+      ad_connect  ${u_xcvr}/${txrx}_${m}_n ${m_data}_${m}_n
     }
 
-    create_bd_port -dir ${data_dir} ${m_data}_${m}_p
-    create_bd_port -dir ${data_dir} ${m_data}_${m}_n
-    ad_connect  ${u_xcvr}/${txrx}_${m}_p ${m_data}_${m}_p
-    ad_connect  ${u_xcvr}/${txrx}_${m}_n ${m_data}_${m}_n
-  }
+    for {set n $no_of_lanes} {$n < $max_no_of_lanes} {incr n} {
 
-  for {set n $no_of_lanes} {$n < $max_no_of_lanes} {incr n} {
+      set m [expr ($n + $index)]
 
-    set m [expr ($n + $index)]
+      if {$lane_map != {}} {
+        set phys_lane [lindex $lane_map $n]
+      } else {
+        set phys_lane $m
+      }
 
-    if {$lane_map != {}} {
-      set phys_lane [lindex $lane_map $n]
-    } else {
-      set phys_lane $m
-    }
+      create_bd_port -dir ${data_dir} ${m_data}_${m}_p
+      create_bd_port -dir ${data_dir} ${m_data}_${m}_n
+      ad_connect  ${u_xcvr}/${txrx}_${m}_p ${m_data}_${m}_p
+      ad_connect  ${u_xcvr}/${txrx}_${m}_n ${m_data}_${m}_n
+      ad_connect  ${link_clk} ${u_xcvr}/${txrx}_clk_${phys_lane}
 
-    create_bd_port -dir ${data_dir} ${m_data}_${m}_p
-    create_bd_port -dir ${data_dir} ${m_data}_${m}_n
-    ad_connect  ${u_xcvr}/${txrx}_${m}_p ${m_data}_${m}_p
-    ad_connect  ${u_xcvr}/${txrx}_${m}_n ${m_data}_${m}_n
-    ad_connect  ${link_clk} ${u_xcvr}/${txrx}_clk_${phys_lane}
-
-    if {$tx_or_rx_n == 0} {
-      ad_connect  ${a_jesd}/phy_en_char_align ${u_xcvr}/${txrx}_calign_${phys_lane}
+      if {$tx_or_rx_n == 0} {
+        ad_connect  ${a_jesd}/phy_en_char_align ${u_xcvr}/${txrx}_calign_${phys_lane}
+      }
     }
   }
   
