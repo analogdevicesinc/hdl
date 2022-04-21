@@ -60,8 +60,8 @@ ad_ip_parameter DEVICE STRING "Stratix 10" false
 ad_ip_files jesd204c_phy_adaptor_rx [list \
   $ad_hdl_dir/library/util_cdc/sync_bits.v \
   $ad_hdl_dir/library/common/ad_mem.v \
+  $ad_hdl_dir/library/jesd204/jesd204_common/sync_header_align.v \
   jesd204c_phy_adaptor_rx.v \
-  sync_header_align.v \
 ]
 
 # clock
