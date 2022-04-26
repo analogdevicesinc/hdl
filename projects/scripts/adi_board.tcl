@@ -4,6 +4,8 @@ package require math
 ## Global variables for interconnect interface indexing
 #
 set sys_cpu_interconnect_index 0
+set sys_hpc0_interconnect_index -1
+set sys_hpc1_interconnect_index -1
 set sys_hp0_interconnect_index -1
 set sys_hp1_interconnect_index -1
 set sys_hp2_interconnect_index -1
@@ -570,6 +572,32 @@ proc ad_xcvrpll {m_src m_dst} {
 ###################################################################################################
 ###################################################################################################
 
+## Create an memory mapped interface connection to PS8 IP, using a
+#  HPC0 high speed interface.
+#
+#  \param[p_clk]  - name of the clock or reset source
+#  \param[p_name] - name or list of names of the clock or reset sink
+#
+proc ad_mem_hpc0_interconnect {p_clk p_name} {
+
+  global sys_zynq
+
+  if {$sys_zynq == 2} {ad_mem_hpx_interconnect "HPC0" $p_clk $p_name}
+}
+
+## Create an memory mapped interface connection to PS8 IP, using a
+#  HPC1 high speed interface.
+#
+#  \param[p_clk]  - name of the clock or reset source
+#  \param[p_name] - name or list of names of the clock or reset sink
+#
+proc ad_mem_hpc1_interconnect {p_clk p_name} {
+
+  global sys_zynq
+
+  if {$sys_zynq == 2} {ad_mem_hpx_interconnect "HPC1" $p_clk $p_name}
+}
+
 ## Create an memory mapped interface connection to a MIG or PS7/8 IP, using a
 #  HP0 high speed interface in case of PSx.
 #
@@ -655,6 +683,8 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
 
   global sys_zynq
   global sys_ddr_addr_seg
+  global sys_hpc0_interconnect_index
+  global sys_hpc1_interconnect_index
   global sys_hp0_interconnect_index
   global sys_hp1_interconnect_index
   global sys_hp2_interconnect_index
@@ -725,6 +755,30 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     set m_interconnect_index $sys_hp3_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hp3_interconnect]
     set m_addr_seg [get_bd_addr_segs sys_ps7/S_AXI_HP3/HP3_DDR_LOWOCM]
+  }
+
+  if {($p_sel eq "HPC0") && ($sys_zynq == 2)} {
+    if {$sys_hpc0_interconnect_index < 0} {
+      set p_name_int sys_ps8/S_AXI_HPC0_FPD
+      set_property CONFIG.PSU__USE__S_AXI_GP0 {1} [get_bd_cells sys_ps8]
+      set_property CONFIG.PSU__AFI0_COHERENCY {1} [get_bd_cells sys_ps8]
+      ad_ip_instance smartconnect axi_hpc0_interconnect
+    }
+    set m_interconnect_index $sys_hpc0_interconnect_index
+    set m_interconnect_cell [get_bd_cells axi_hpc0_interconnect]
+    set m_addr_seg [get_bd_addr_segs sys_ps8/SAXIGP0/HPC0_DDR_*]
+  }
+
+  if {($p_sel eq "HPC1") && ($sys_zynq == 2)} {
+    if {$sys_hpc1_interconnect_index < 0} {
+      set p_name_int sys_ps8/S_AXI_HPC1_FPD
+      set_property CONFIG.PSU__USE__S_AXI_GP1 {1} [get_bd_cells sys_ps8]
+      set_property CONFIG.PSU__AFI1_COHERENCY {1} [get_bd_cells sys_ps8]
+      ad_ip_instance smartconnect axi_hpc1_interconnect
+    }
+    set m_interconnect_index $sys_hpc1_interconnect_index
+    set m_interconnect_cell [get_bd_cells axi_hpc1_interconnect]
+    set m_addr_seg [get_bd_addr_segs sys_ps8/SAXIGP1/HPC1_DDR_*]
   }
 
   if {($p_sel eq "HP0") && ($sys_zynq == 2)} {
@@ -855,6 +909,8 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
 
   if {$p_sel eq "SIM"} {set sys_mem_interconnect_index $m_interconnect_index}
   if {$p_sel eq "MEM"} {set sys_mem_interconnect_index $m_interconnect_index}
+  if {$p_sel eq "HPC0"} {set sys_hpc0_interconnect_index $m_interconnect_index}
+  if {$p_sel eq "HPC1"} {set sys_hpc1_interconnect_index $m_interconnect_index}
   if {$p_sel eq "HP0"} {set sys_hp0_interconnect_index $m_interconnect_index}
   if {$p_sel eq "HP1"} {set sys_hp1_interconnect_index $m_interconnect_index}
   if {$p_sel eq "HP2"} {set sys_hp2_interconnect_index $m_interconnect_index}
