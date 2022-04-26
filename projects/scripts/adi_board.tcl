@@ -934,8 +934,9 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
 #  \param[p_address] - address offset of the IP register map
 #  \param[p_name] - name of the IP
 #  \param[p_intf_name] - name of the AXI MM Slave interface (optional)
+#  \param[segment_prefix] - prefix to add to the segment name to avoid namespace clashes (optional)
 #
-proc ad_cpu_interconnect {p_address p_name {p_intf_name {}}} {
+proc ad_cpu_interconnect {p_address p_name {p_intf_name {}} {segment_prefix {}}} {
 
   global sys_zynq
   global sys_cpu_interconnect_index
@@ -1131,7 +1132,7 @@ proc ad_cpu_interconnect {p_address p_name {p_intf_name {}}} {
       }
       create_bd_addr_seg -range $p_seg_range \
         -offset $p_address $sys_addr_cntrl_space \
-        $p_seg_name "SEG_data_${p_name}"
+        $p_seg_name "SEG_data_${segment_prefix}_${p_name}"
     } else {
       assign_bd_address $p_seg_name
     }
