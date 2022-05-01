@@ -36,17 +36,14 @@
 `timescale 1ns/100ps
 
 module system_top (
-
-  input  [12:0] gpio_bd_i,
-  output [ 7:0] gpio_bd_o
-
+  output [ 7:0] tdd_out
 );
   // internal signals
 
   wire    [94:0]  gpio_i;
   wire    [94:0]  gpio_o;
   wire    [94:0]  gpio_t;
-
+  
   wire    [ 2: 0] spi0_csn;
   wire            spi0_sclk;
   wire            spi0_mosi;
@@ -56,13 +53,8 @@ module system_top (
   wire            spi1_mosi;
   wire            spi1_miso;
 
-  /* Board GPIOS. Buttons, LEDs, etc... */
-  assign gpio_i[20: 8] = gpio_bd_i;
-  assign gpio_bd_o = gpio_o[7:0];
-
   // Unused GPIOs
-  assign gpio_i[7:0] = 'h0;
-  assign gpio_i[94:21] = 'h0;
+  assign gpio_i[94:0] = 'h0;
 
   system_wrapper i_system_wrapper (
     .gpio_i (gpio_i),
@@ -75,7 +67,8 @@ module system_top (
     .spi1_csn (spi1_csn),
     .spi1_sclk (spi1_sclk),
     .spi1_mosi (spi1_mosi),
-    .spi1_miso (spi1_miso)
+    .spi1_miso (spi1_miso),
+    .tdd_out   (tdd_out)
   );
 
 endmodule
