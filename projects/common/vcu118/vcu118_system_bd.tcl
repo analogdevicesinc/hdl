@@ -45,6 +45,10 @@ set_property -dict [list CONFIG.FREQ_HZ {625000000}] [get_bd_intf_ports sgmii_ph
 ad_ip_instance microblaze sys_mb
 ad_ip_parameter sys_mb CONFIG.G_TEMPLATE_LIST 4
 ad_ip_parameter sys_mb CONFIG.C_DCACHE_FORCE_TAG_LUTRAM 1
+ad_ip_parameter sys_mb CONFIG.C_ADDR_TAG_BITS 15
+ad_ip_parameter sys_mb CONFIG.C_CACHE_BYTE_SIZE 65536
+ad_ip_parameter sys_mb CONFIG.C_DCACHE_ADDR_TAG 15
+ad_ip_parameter sys_mb CONFIG.C_DCACHE_BYTE_SIZE 65536
 
 # instance: microblaze - local memory & bus
 
@@ -69,6 +73,8 @@ ad_ip_parameter sys_mb_debug CONFIG.C_USE_UART 1
 # instance: system reset/clocks
 ad_ip_instance proc_sys_reset sys_rstgen
 ad_ip_parameter sys_rstgen CONFIG.C_EXT_RST_WIDTH 1
+ad_ip_instance proc_sys_reset sys_mb_rstgen
+ad_ip_parameter sys_mb_rstgen CONFIG.C_EXT_RST_WIDTH 1
 ad_ip_instance proc_sys_reset sys_250m_rstgen
 ad_ip_parameter sys_250m_rstgen CONFIG.C_EXT_RST_WIDTH 1
 ad_ip_instance proc_sys_reset sys_500m_rstgen
@@ -82,6 +88,7 @@ ad_ip_parameter axi_ddr_cntrl CONFIG.C0_DDR4_BOARD_INTERFACE ddr4_sdram_c2_083
 ad_ip_parameter axi_ddr_cntrl CONFIG.RESET_BOARD_INTERFACE reset
 ad_ip_parameter axi_ddr_cntrl CONFIG.ADDN_UI_CLKOUT2_FREQ_HZ 250
 ad_ip_parameter axi_ddr_cntrl CONFIG.ADDN_UI_CLKOUT3_FREQ_HZ 500
+ad_ip_parameter axi_ddr_cntrl CONFIG.ADDN_UI_CLKOUT4_FREQ_HZ 188
 
 ad_ip_instance proc_sys_reset axi_ddr_cntrl_rstgen
 
@@ -135,12 +142,15 @@ ad_connect sys_clk axi_ddr_cntrl/C0_SYS_CLK
 ad_connect ddr4 axi_ddr_cntrl/C0_DDR4
 ad_connect axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst axi_ddr_cntrl_rstgen/ext_reset_in
 ad_connect axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst sys_rstgen/ext_reset_in
+ad_connect axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst sys_mb_rstgen/ext_reset_in
 ad_connect axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst sys_250m_rstgen/ext_reset_in
 ad_connect axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst sys_500m_rstgen/ext_reset_in
 ad_connect sys_mem_clk axi_ddr_cntrl/c0_ddr4_ui_clk
 ad_connect sys_mem_clk axi_ddr_cntrl_rstgen/slowest_sync_clk
 ad_connect sys_cpu_clk axi_ddr_cntrl/addn_ui_clkout1
 ad_connect sys_cpu_clk sys_rstgen/slowest_sync_clk
+ad_connect sys_mb_clk axi_ddr_cntrl/addn_ui_clkout4
+ad_connect sys_mb_clk sys_mb_rstgen/slowest_sync_clk
 ad_connect sys_mem_resetn axi_ddr_cntrl_rstgen/peripheral_aresetn
 ad_connect sys_mem_resetn axi_ddr_cntrl/c0_ddr4_aresetn
 ad_connect sys_250m_clk axi_ddr_cntrl/addn_ui_clkout2
@@ -157,6 +167,7 @@ ad_connect sys_500m_resetn sys_500m_rstgen/peripheral_aresetn
 # generic system clocks pointers
 
 set sys_cpu_clk      [get_bd_nets sys_cpu_clk]
+set sys_mb_clk       [get_bd_nets axi_ddr_cntrl/addn_ui_clkout4]
 set sys_dma_clk      [get_bd_nets sys_250m_clk]
 set sys_iodelay_clk  [get_bd_nets sys_500m_clk]
 
@@ -169,16 +180,16 @@ set sys_iodelay_resetn    [get_bd_nets sys_500m_resetn]
 
 # microblaze debug & interrupt
 
-ad_connect sys_cpu_clk sys_mb/Clk
-ad_connect sys_cpu_clk sys_dlmb/LMB_Clk
-ad_connect sys_cpu_clk sys_ilmb/LMB_Clk
-ad_connect sys_cpu_clk sys_dlmb_cntlr/LMB_Clk
-ad_connect sys_cpu_clk sys_ilmb_cntlr/LMB_Clk
-ad_connect sys_rstgen/mb_reset sys_mb/Reset
-ad_connect sys_rstgen/bus_struct_reset sys_dlmb/SYS_Rst
-ad_connect sys_rstgen/bus_struct_reset sys_ilmb/SYS_Rst
-ad_connect sys_rstgen/bus_struct_reset sys_dlmb_cntlr/LMB_Rst
-ad_connect sys_rstgen/bus_struct_reset sys_ilmb_cntlr/LMB_Rst
+ad_connect sys_mb_clk sys_mb/Clk
+ad_connect sys_mb_clk sys_dlmb/LMB_Clk
+ad_connect sys_mb_clk sys_ilmb/LMB_Clk
+ad_connect sys_mb_clk sys_dlmb_cntlr/LMB_Clk
+ad_connect sys_mb_clk sys_ilmb_cntlr/LMB_Clk
+ad_connect sys_mb_rstgen/mb_reset sys_mb/Reset
+ad_connect sys_mb_rstgen/bus_struct_reset sys_dlmb/SYS_Rst
+ad_connect sys_mb_rstgen/bus_struct_reset sys_ilmb/SYS_Rst
+ad_connect sys_mb_rstgen/bus_struct_reset sys_dlmb_cntlr/LMB_Rst
+ad_connect sys_mb_rstgen/bus_struct_reset sys_ilmb_cntlr/LMB_Rst
 ad_connect sys_mb/DLMB sys_dlmb/LMB_M
 ad_connect sys_mb/ILMB sys_ilmb/LMB_M
 ad_connect sys_dlmb/LMB_Sl_0 sys_dlmb_cntlr/SLMB
@@ -268,11 +279,15 @@ ad_cpu_interconnect 0x45000000 axi_sysid_0
 ad_cpu_interconnect 0x44A70000 axi_spi
 ad_cpu_interconnect 0x41400000 sys_mb_debug
 
+## Peripheral Data Interface runs at the new sys_mb_clk frequency
+ad_ip_parameter axi_cpu_interconnect CONFIG.NUM_CLKS 2
+ad_connect sys_mb_clk axi_cpu_interconnect/aclk1
+
 # interconnect - memory
 
 ad_mem_hp0_interconnect sys_mem_clk axi_ddr_cntrl/C0_DDR4_S_AXI
-ad_mem_hp0_interconnect sys_cpu_clk sys_mb/M_AXI_DC
-ad_mem_hp0_interconnect sys_cpu_clk sys_mb/M_AXI_IC
+ad_mem_hp0_interconnect sys_mb_clk sys_mb/M_AXI_DC
+ad_mem_hp0_interconnect sys_mb_clk sys_mb/M_AXI_IC
 ad_mem_hp0_interconnect sys_cpu_clk axi_ethernet_dma/M_AXI_SG
 ad_mem_hp0_interconnect sys_cpu_clk axi_ethernet_dma/M_AXI_MM2S
 ad_mem_hp0_interconnect sys_cpu_clk axi_ethernet_dma/M_AXI_S2MM
