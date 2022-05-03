@@ -1,4 +1,4 @@
-# DUAL QUAD SPI constraints from PG153 
+# Single QUAD SPI constraints from PG153
 
 #STARTUPE3 (UltraScale+) primitive included inside IP:
 # Following are the SPI device parameters
@@ -54,17 +54,4 @@ set_max_delay -quiet -datapath_only -from [get_clocks -of_objects [get_pins -hie
 
 set_max_delay -quiet -datapath_only -from [get_clocks -of_objects [get_pins -hierarchical \
   *axi_cfg_spi/ext_spi_clk]] -to [get_pins -hier *STARTUP*_inst/DTS[*]] 1.000
-
-
-# Constraints for paths where STARTUP is Disabled :
-set_input_delay -clock clk_sck -max [expr $tco_max + $tdata_trace_delay_max + \
-  $tclk_trace_delay_max] [get_ports SPI_1*_io] -clock_fall;
-set_input_delay -clock clk_sck -min [expr $tco_min + $tdata_trace_delay_min + \
-  $tclk_trace_delay_min] [get_ports SPI_1*_io] -clock_fall;
-# Data is captured into SPI on the following rising edge of SCK
-# Data is driven by the IP on alternate rising_edge of the ext_spi_clk
-set_output_delay -clock clk_sck -max [expr $tsu + $tdata_trace_delay_max - \
-  $tclk_trace_delay_min] [get_ports SPI_1*_io];
-set_output_delay -clock clk_sck -min [expr $tdata_trace_delay_min - $th - \
-  $tclk_trace_delay_max] [get_ports SPI_1*_io];
 

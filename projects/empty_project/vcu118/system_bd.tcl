@@ -15,24 +15,21 @@ ad_ip_instance axi_quad_spi axi_cfg_spi [list \
   C_SPI_MEMORY {2} \
   C_USE_STARTUP {1} \
   C_USE_STARTUP_INT {1} \
+  C_NUM_SS_BITS {1} \
+  QSPI_BOARD_INTERFACE {Custom} \
+  C_DUAL_QUAD_MODE {0} \
   C_SPI_MODE {2} \
-  C_DUAL_QUAD_MODE {1} \
-  C_NUM_SS_BITS {2} \
   C_SCK_RATIO {2} \
   C_FIFO_DEPTH {256} \
   C_TYPE_OF_AXI4_INTERFACE {0} \
-  QSPI_BOARD_INTERFACE {spi_flash} \
   ]
-
-make_bd_intf_pins_external  [get_bd_intf_pins axi_cfg_spi/SPI_1]
 
 ad_cpu_interconnect 0x44A80000 axi_cfg_spi
 
 ad_cpu_interrupt NA mb-7 axi_cfg_spi/ip2intc_irpt
 
-# Take a 50 MHz clock from the DDR controller
-set_property -dict [list CONFIG.ADDN_UI_CLKOUT4_FREQ_HZ {50}] [get_bd_cells axi_ddr_cntrl]
-ad_connect  /axi_ddr_cntrl/addn_ui_clkout4 axi_cfg_spi/ext_spi_clk
+# Take a 100 MHz clock from the DDR controller
+ad_connect $sys_cpu_clk axi_cfg_spi/ext_spi_clk
 
 #  --------
 

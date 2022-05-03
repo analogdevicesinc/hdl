@@ -74,15 +74,7 @@ module system_top (
 
   output        iic_rstn,
   inout         iic_scl,
-  inout         iic_sda,
-
-  // Second Dual SPI flash
-  inout         SPI_1_0_io0_io,
-  inout         SPI_1_0_io1_io,
-  inout         SPI_1_0_io2_io,
-  inout         SPI_1_0_io3_io,
-  inout         SPI_1_0_ss_io
-
+  inout         iic_sda
 );
 
   // internal signals
@@ -151,13 +143,7 @@ module system_top (
     .gpio0_t (gpio_t[31:0]),
     .gpio1_i (gpio_i[63:32]),
     .gpio1_o (gpio_o[63:32]),
-    .gpio1_t (gpio_t[63:32]),
-    .SPI_1_0_io0_io (SPI_1_0_io0_io),
-    .SPI_1_0_io1_io (SPI_1_0_io1_io),
-    .SPI_1_0_io2_io (SPI_1_0_io2_io),
-    .SPI_1_0_io3_io (SPI_1_0_io3_io),
-    .SPI_1_0_ss_io  (SPI_1_0_ss_io )
-    // FMC HPC
+    .gpio1_t (gpio_t[63:32])
   );
 
 endmodule
