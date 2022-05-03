@@ -361,8 +361,16 @@ proc ad_ip_addfile {pname pfile} {
     add_fileset_file $pmodule VERILOG PATH $pfile
     return
   }
+  if {$ptype eq ".sv"} {
+    add_fileset_file $pmodule SYSTEM_VERILOG PATH $pfile
+    return
+  }
   if {$ptype eq ".vh"} {
     add_fileset_file $pmodule VERILOG_INCLUDE PATH $pfile
+    return
+  }
+  if {$ptype eq ".svh"} {
+    add_fileset_file $pmodule SYSTEM_VERILOG_INCLUDE PATH $pfile
     return
   }
   if {$ptype eq ".sdc"} {
