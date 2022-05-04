@@ -180,11 +180,17 @@ module system_top (
   wire              adc_enable_0;
   wire              adc_enable_1;
   wire              adc_valid;
+  wire    [  1:0]   ltc_csn;
+  wire              adc_swap;
+
   reg               adc_valid_d1;
   reg     [1023:0]  adc_data_d1;
   reg     [511:0]   adc_data_0_d1;
   reg     [511:0]   adc_data_1_d1;
-  wire    [  1:0]   ltc_csn;
+  reg     [511:0]   adc_data_0_swap;
+  reg     [511:0]   adc_data_1_swap;
+  reg               adc_swap_d1;
+  reg               adc_swap_d2;
 
   // motherboard-gpio
 
@@ -195,6 +201,7 @@ module system_top (
 
   // assignments
 
+  assign adc_swap      = gpio_o[34];
   assign ad9213_a_rst  = gpio_o[32];
   assign ad9213_b_rst  = gpio_o[33];
   assign gpio_i[63:32] = gpio_o[63:32];
@@ -233,10 +240,21 @@ module system_top (
 
  genvar i;
  for (i = 0; i < 512; i = i + 16) begin
-    assign adc_data[(2*i)+31:(2*i)] ={adc_data_1[i+15:i],adc_data_0[i+15:i]};
+    assign adc_data[(2*i)+31:(2*i)] ={adc_data_1_swap[i+15:i],adc_data_0_swap[i+15:i]};
  end
 
  always @(posedge rx_device_clk_0) begin
+   adc_swap_d1 <= adc_swap;
+   adc_swap_d2 <= adc_swap_d1;
+
+   if (adc_swap_d2 == 1'b0) begin
+     adc_data_0_swap <= adc_data_0;
+     adc_data_1_swap <= adc_data_1;
+   end else begin
+     adc_data_0_swap <= adc_data_1;
+     adc_data_1_swap <= adc_data_0;
+   end
+
    adc_data_0_d1 <= adc_data_0;
    adc_data_1_d1 <= adc_data_1;
 
