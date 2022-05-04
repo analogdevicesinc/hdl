@@ -74,6 +74,8 @@ ad_ip_parameter sys_mb_debug CONFIG.C_USE_UART 1
 # instance: system reset/clocks
 ad_ip_instance proc_sys_reset sys_rstgen
 ad_ip_parameter sys_rstgen CONFIG.C_EXT_RST_WIDTH 1
+ad_ip_instance proc_sys_reset sys_mb_rstgen
+ad_ip_parameter sys_mb_rstgen CONFIG.C_EXT_RST_WIDTH 1
 ad_ip_instance proc_sys_reset sys_250m_rstgen
 ad_ip_parameter sys_250m_rstgen CONFIG.C_EXT_RST_WIDTH 1
 ad_ip_instance proc_sys_reset sys_500m_rstgen
@@ -141,12 +143,14 @@ ad_connect sys_clk axi_ddr_cntrl/C0_SYS_CLK
 ad_connect ddr4 axi_ddr_cntrl/C0_DDR4
 ad_connect axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst axi_ddr_cntrl_rstgen/ext_reset_in
 ad_connect axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst sys_rstgen/ext_reset_in
+ad_connect axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst sys_mb_rstgen/ext_reset_in
 ad_connect axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst sys_250m_rstgen/ext_reset_in
 ad_connect axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst sys_500m_rstgen/ext_reset_in
 ad_connect sys_mem_clk axi_ddr_cntrl/c0_ddr4_ui_clk
 ad_connect sys_mem_clk axi_ddr_cntrl_rstgen/slowest_sync_clk
 ad_connect sys_cpu_clk axi_ddr_cntrl/addn_ui_clkout1
 ad_connect sys_cpu_clk sys_rstgen/slowest_sync_clk
+ad_connect sys_overclk sys_mb_rstgen/slowest_sync_clk
 ad_connect sys_overclk axi_ddr_cntrl/addn_ui_clkout4
 ad_connect sys_mem_resetn axi_ddr_cntrl_rstgen/peripheral_aresetn
 ad_connect sys_mem_resetn axi_ddr_cntrl/c0_ddr4_aresetn
@@ -182,11 +186,11 @@ ad_connect sys_overclk sys_dlmb/LMB_Clk
 ad_connect sys_overclk sys_ilmb/LMB_Clk
 ad_connect sys_overclk sys_dlmb_cntlr/LMB_Clk
 ad_connect sys_overclk sys_ilmb_cntlr/LMB_Clk
-ad_connect sys_rstgen/mb_reset sys_mb/Reset
-ad_connect sys_rstgen/bus_struct_reset sys_dlmb/SYS_Rst
-ad_connect sys_rstgen/bus_struct_reset sys_ilmb/SYS_Rst
-ad_connect sys_rstgen/bus_struct_reset sys_dlmb_cntlr/LMB_Rst
-ad_connect sys_rstgen/bus_struct_reset sys_ilmb_cntlr/LMB_Rst
+ad_connect sys_mb_rstgen/mb_reset sys_mb/Reset
+ad_connect sys_mb_rstgen/bus_struct_reset sys_dlmb/SYS_Rst
+ad_connect sys_mb_rstgen/bus_struct_reset sys_ilmb/SYS_Rst
+ad_connect sys_mb_rstgen/bus_struct_reset sys_dlmb_cntlr/LMB_Rst
+ad_connect sys_mb_rstgen/bus_struct_reset sys_ilmb_cntlr/LMB_Rst
 ad_connect sys_mb/DLMB sys_dlmb/LMB_M
 ad_connect sys_mb/ILMB sys_ilmb/LMB_M
 ad_connect sys_dlmb/LMB_Sl_0 sys_dlmb_cntlr/SLMB
