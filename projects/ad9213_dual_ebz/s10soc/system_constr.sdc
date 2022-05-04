@@ -9,3 +9,4 @@ create_clock -period  "3.2 ns"        -name device_clk          [get_ports {rx_d
 set_input_delay -clock {device_clk} 0.2 [get_ports {rx_sysref_a}]
 
 set_false_path -from [get_registers *altera_reset_synchronizer:alt_rst_sync_uq1|altera_reset_synchronizer_int_chain_out*]
+set_false_path -from [get_keepers -no_duplicates {i_system_bd|sys_gpio_out|sys_gpio_out|data_out[2]}] -to [get_keepers -no_duplicates {adc_swap_d1}]
