@@ -20,9 +20,9 @@ if {$ADI_USE_OOC_SYNTHESIS == 1} {
   set_property used_in_synthesis false [get_files timing_constr.xdc]
 }
 
-# single 128MB flash range 0x0 - 0x800_0000
+# single 128MB flash range 0x0 - 0x0800_0000
 #
-# max 32MB SREC bootloader with address set to 0x0600_0000
+# max 8MB SREC bootloader with address set to 0x0780_0000
 add_files -norecurse ./mb_bootloader.elf
 set_property SCOPED_TO_REF system [get_files -all -of_objects [get_fileset sources_1] {./mb_bootloader.elf}]
 set_property SCOPED_TO_CELLS { sys_mb } [get_files -all -of_objects [get_fileset sources_1] {./mb_bootloader.elf}]

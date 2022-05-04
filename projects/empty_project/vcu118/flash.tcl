@@ -13,7 +13,7 @@ set single_dual_n 1
 
 # write_cfgmem  -format mcs -size 256 -interface SPIx4 \
   -loadbit {up 0x00000000 "./empty_project_vcu118.runs/impl_1/system_top.bit" } \
-  -loaddata {up 0x06000000 "/home/lnagy/workspace/vitis/uboot_placeholder_system/_ide/flash/uboot_placeholder.elf.srec" } \
+  -loaddata {up 0x07800000 "/home/lnagy/workspace/vitis/uboot_placeholder_system/_ide/flash/uboot_placeholder.elf.srec" } \
   -file "empty_project_bl.mcs" -force
 
 set TOP empty_project_bl
