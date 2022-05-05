@@ -20,6 +20,8 @@ if {$ADI_USE_OOC_SYNTHESIS == 1} {
   set_property used_in_synthesis false [get_files timing_constr.xdc]
 }
 
+set_property strategy Performance_Explore [get_runs impl_1]
+
 # single 128MB flash range 0x0 - 0x0800_0000
 #
 # max 8MB SREC bootloader with address set to 0x0780_0000
