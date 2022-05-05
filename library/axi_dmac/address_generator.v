@@ -42,7 +42,8 @@ module address_generator #(
   parameter DMA_ADDR_WIDTH = 32,
   parameter BEATS_PER_BURST_WIDTH = 4,
   parameter BYTES_PER_BEAT_WIDTH = $clog2(DMA_DATA_WIDTH/8),
-  parameter LENGTH_WIDTH = 8)(
+  parameter LENGTH_WIDTH = 8,
+  parameter CACHE_COHERENT = 0)(
 
   input                        clk,
   input                        resetn,
@@ -80,7 +81,9 @@ localparam MAX_LENGTH = {BEATS_PER_BURST_WIDTH{1'b1}};
 
 assign burst = 2'b01;
 assign prot = 3'b000;
-assign cache = 4'b0011;
+// If CACHE_COHERENT is set, signal downstream that this transaction must be
+// looked up in cache. Otherwise default to "normal non-cachable bufferable".
+assign cache = CACHE_COHERENT ? 4'b1110 : 4'b0011;
 assign size = DMA_DATA_WIDTH == 1024 ? 3'b111 :
               DMA_DATA_WIDTH ==  512 ? 3'b110 :
               DMA_DATA_WIDTH ==  256 ? 3'b101 :

@@ -57,7 +57,8 @@ module request_arb #(
   parameter AXI_LENGTH_WIDTH_SRC = 8,
   parameter AXI_LENGTH_WIDTH_DEST = 8,
   parameter ENABLE_DIAGNOSTICS_IF = 0,
-  parameter ALLOW_ASYM_MEM = 0
+  parameter ALLOW_ASYM_MEM = 0,
+  parameter CACHE_COHERENT_DEST = 0
 )(
   input req_clk,
   input req_resetn,
@@ -361,7 +362,8 @@ dest_axi_mm #(
   .BYTES_PER_BEAT_WIDTH(BYTES_PER_BEAT_WIDTH_DEST),
   .MAX_BYTES_PER_BURST(MAX_BYTES_PER_BURST),
   .BYTES_PER_BURST_WIDTH(BYTES_PER_BURST_WIDTH),
-  .AXI_LENGTH_WIDTH(AXI_LENGTH_WIDTH_DEST)
+  .AXI_LENGTH_WIDTH(AXI_LENGTH_WIDTH_DEST),
+  .CACHE_COHERENT(CACHE_COHERENT_DEST)
 ) i_dest_dma_mm (
   .m_axi_aclk(m_dest_axi_aclk),
   .m_axi_aresetn(dest_resetn),

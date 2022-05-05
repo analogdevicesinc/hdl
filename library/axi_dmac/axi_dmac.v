@@ -62,7 +62,8 @@ module axi_dmac #(
   parameter DMA_AXIS_DEST_W = 4,
   parameter DISABLE_DEBUG_REGISTERS = 0,
   parameter ENABLE_DIAGNOSTICS_IF = 0,
-  parameter ALLOW_ASYM_MEM = 0
+  parameter ALLOW_ASYM_MEM = 0,
+  parameter CACHE_COHERENT_DEST = 0
 ) (
   // Slave AXI interface
   input s_axi_aclk,
@@ -407,7 +408,8 @@ axi_dmac_regmap #(
   .HAS_DEST_ADDR(HAS_DEST_ADDR),
   .HAS_SRC_ADDR(HAS_SRC_ADDR),
   .DMA_2D_TRANSFER(DMA_2D_TRANSFER),
-  .SYNC_TRANSFER_START(SYNC_TRANSFER_START)
+  .SYNC_TRANSFER_START(SYNC_TRANSFER_START),
+  .CACHE_COHERENT_DEST(CACHE_COHERENT_DEST)
 ) i_regmap (
   .s_axi_aclk(s_axi_aclk),
   .s_axi_aresetn(s_axi_aresetn),
@@ -489,7 +491,8 @@ axi_dmac_transfer #(
   .AXI_LENGTH_WIDTH_SRC(8-(4*DMA_AXI_PROTOCOL_SRC)),
   .AXI_LENGTH_WIDTH_DEST(8-(4*DMA_AXI_PROTOCOL_DEST)),
   .ENABLE_DIAGNOSTICS_IF(ENABLE_DIAGNOSTICS_IF),
-  .ALLOW_ASYM_MEM(ALLOW_ASYM_MEM)
+  .ALLOW_ASYM_MEM(ALLOW_ASYM_MEM),
+  .CACHE_COHERENT_DEST(CACHE_COHERENT_DEST)
 ) i_transfer (
   .ctrl_clk(s_axi_aclk),
   .ctrl_resetn(s_axi_aresetn),
