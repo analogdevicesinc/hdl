@@ -58,7 +58,8 @@ module axi_dmac_transfer #(
   parameter AXI_LENGTH_WIDTH_SRC = 8,
   parameter AXI_LENGTH_WIDTH_DEST = 8,
   parameter ENABLE_DIAGNOSTICS_IF = 0,
-  parameter ALLOW_ASYM_MEM = 0
+  parameter ALLOW_ASYM_MEM = 0,
+  parameter CACHE_COHERENT_DEST = 0
 ) (
   input ctrl_clk,
   input ctrl_resetn,
@@ -337,7 +338,8 @@ request_arb #(
   .AXI_LENGTH_WIDTH_DEST (AXI_LENGTH_WIDTH_DEST),
   .AXI_LENGTH_WIDTH_SRC (AXI_LENGTH_WIDTH_SRC),
   .ENABLE_DIAGNOSTICS_IF(ENABLE_DIAGNOSTICS_IF),
-  .ALLOW_ASYM_MEM (ALLOW_ASYM_MEM)
+  .ALLOW_ASYM_MEM (ALLOW_ASYM_MEM),
+  .CACHE_COHERENT_DEST(CACHE_COHERENT_DEST)
 ) i_request_arb (
   .req_clk (req_clk),
   .req_resetn (req_resetn),

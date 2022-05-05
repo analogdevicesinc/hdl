@@ -50,7 +50,8 @@ module axi_dmac_regmap #(
   parameter HAS_DEST_ADDR = 1,
   parameter HAS_SRC_ADDR = 1,
   parameter DMA_2D_TRANSFER = 0,
-  parameter SYNC_TRANSFER_START = 0
+  parameter SYNC_TRANSFER_START = 0,
+  parameter CACHE_COHERENT_DEST = 0
 ) (
   // Slave AXI interface
   input s_axi_aclk,
@@ -114,7 +115,7 @@ module axi_dmac_regmap #(
   input [31:0] dbg_ids1
 );
 
-localparam PCORE_VERSION = 'h00040361;
+localparam PCORE_VERSION = 'h00040461;
 
 // Register interface signals
 reg [31:0] up_rdata = 32'h00;
@@ -205,6 +206,7 @@ always @(posedge s_axi_aclk) begin
                          4'b0,BYTES_PER_BURST_WIDTH[3:0],
                          2'b0,DMA_TYPE_SRC[1:0],BYTES_PER_BEAT_WIDTH_SRC[3:0],
                          2'b0,DMA_TYPE_DEST[1:0],BYTES_PER_BEAT_WIDTH_DEST[3:0]};
+    9'h005: up_rdata <= {31'd0, CACHE_COHERENT_DEST};
     9'h020: up_rdata <= up_irq_mask;
     9'h021: up_rdata <= up_irq_pending;
     9'h022: up_rdata <= up_irq_source;
