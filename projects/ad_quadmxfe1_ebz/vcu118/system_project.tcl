@@ -64,5 +64,12 @@ adi_project_files ad_quadmxfe1_ebz_vcu118 [list \
 
 set_property strategy Performance_RefinePlacement [get_runs impl_1]
 
+# single 128MB flash range 0x0 - 0x0800_0000
+#
+# max 8MB SREC bootloader with address set to 0x0780_0000
+add_files -norecurse ./mb_bootloader.elf
+set_property SCOPED_TO_REF system [get_files -all -of_objects [get_fileset sources_1] {./mb_bootloader.elf}]
+set_property SCOPED_TO_CELLS { sys_mb } [get_files -all -of_objects [get_fileset sources_1] {./mb_bootloader.elf}]
+
 adi_project_run ad_quadmxfe1_ebz_vcu118
 
