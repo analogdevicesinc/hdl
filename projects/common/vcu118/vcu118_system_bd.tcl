@@ -127,6 +127,21 @@ ad_ip_parameter axi_gpio CONFIG.C_GPIO_WIDTH 32
 ad_ip_parameter axi_gpio CONFIG.C_GPIO2_WIDTH 32
 ad_ip_parameter axi_gpio CONFIG.C_INTERRUPT_PRESENT 1
 
+#  --------
+# Flash SPI access
+ad_ip_instance axi_quad_spi axi_cfg_spi [list \
+  C_SPI_MEMORY {2} \
+  C_USE_STARTUP {1} \
+  C_USE_STARTUP_INT {1} \
+  C_NUM_SS_BITS {1} \
+  QSPI_BOARD_INTERFACE {Custom} \
+  C_DUAL_QUAD_MODE {0} \
+  C_SPI_MODE {2} \
+  C_SCK_RATIO {2} \
+  C_FIFO_DEPTH {256} \
+  C_TYPE_OF_AXI4_INTERFACE {0} \
+  ]
+
 # instance: interrupt
 
 ad_ip_instance axi_intc axi_intc
@@ -246,6 +261,7 @@ ad_connect gpio1_i axi_gpio/gpio2_io_i
 ad_connect gpio1_o axi_gpio/gpio2_io_o
 ad_connect gpio1_t axi_gpio/gpio2_io_t
 ad_connect sys_cpu_clk axi_spi/ext_spi_clk
+ad_connect sys_cpu_clk axi_cfg_spi/ext_spi_clk
 
 # defaults (interrupts)
 
@@ -254,7 +270,7 @@ ad_connect sys_concat_intc/In1    axi_ethernet_0/interrupt
 ad_connect sys_concat_intc/In2    axi_ethernet_dma/mm2s_introut
 ad_connect sys_concat_intc/In3    axi_ethernet_dma/s2mm_introut
 ad_connect sys_concat_intc/In4    axi_uart/interrupt
-ad_connect sys_concat_intc/In5    GND
+ad_connect sys_concat_intc/In5    axi_cfg_spi/ip2intc_irpt
 ad_connect sys_concat_intc/In6    GND
 ad_connect sys_concat_intc/In7    GND
 ad_connect sys_concat_intc/In8    GND
@@ -278,6 +294,7 @@ ad_cpu_interconnect 0x41600000 axi_iic_main
 ad_cpu_interconnect 0x45000000 axi_sysid_0
 ad_cpu_interconnect 0x44A70000 axi_spi
 ad_cpu_interconnect 0x41400000 sys_mb_debug
+ad_cpu_interconnect 0x41410000 axi_cfg_spi
 
 ## Peripheral Data Interface runs at the new sys_mb_clk frequency
 ad_ip_parameter axi_cpu_interconnect CONFIG.NUM_CLKS 2
