@@ -1,3 +1,8 @@
+# system level parameter
+set OUTPUT_MODE $ad_project_params(OUTPUT_MODE)
+
+puts "build parameters: OUTPUT_MODE: $OUTPUT_MODE"
+
 #adaq8092
 
 create_bd_port -dir I adc_clk_in_p
@@ -5,14 +10,31 @@ create_bd_port -dir I adc_clk_in_n
 
 #interface port create 
 
-create_bd_port -dir I adc_data_or_p
-create_bd_port -dir I adc_data_or_n
-create_bd_port -dir I -from 6 -to 0 adc_data_in1_p
-create_bd_port -dir I -from 6 -to 0 adc_data_in1_n
-create_bd_port -dir I -from 6 -to 0 adc_data_in2_p
-create_bd_port -dir I -from 6 -to 0 adc_data_in2_n
- 
- # adc peripheral
+switch $OUTPUT_MODE {
+   
+  LVDS {
+   create_bd_port -dir I adc_data_or_p
+   create_bd_port -dir I adc_data_or_n
+   create_bd_port -dir I -from 6 -to 0 adc_data_in1_p
+   create_bd_port -dir I -from 6 -to 0 adc_data_in1_n
+   create_bd_port -dir I -from 6 -to 0 adc_data_in2_p
+   create_bd_port -dir I -from 6 -to 0 adc_data_in2_n
+  }
+
+  CMOS {
+    create_bd_port -dir I adc_data_or_1
+    create_bd_port -dir I adc_data_or_2
+    create_bd_port -dir I -from 13 -to 0 adc_data_in1
+    create_bd_port -dir I -from 13 -to 0 adc_data_in2
+  }
+
+  default {
+    puts " The output mode is not set correctly"
+  }
+
+ }
+
+# adc peripheral
 
 ad_ip_instance util_cpack2 axi_adaq8092_cpack [list \
                                              NUM_OF_CHANNELS 2 \
@@ -20,7 +42,7 @@ ad_ip_instance util_cpack2 axi_adaq8092_cpack [list \
                                              SAMPLE_DATA_WIDTH 16 \
 ]
 
-
+ad_ip_instance axi_adaq8092 axi_adaq8092
 ad_ip_instance axi_dmac axi_adaq8092_dma
 ad_ip_parameter axi_adaq8092_dma CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter axi_adaq8092_dma CONFIG.DMA_TYPE_DEST 0
@@ -33,22 +55,40 @@ ad_ip_parameter axi_adaq8092_dma CONFIG.DMA_DATA_WIDTH_SRC 32
 ad_ip_parameter axi_adaq8092_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 ad_ip_parameter axi_adaq8092_dma CONFIG.AXI_SLICE_DEST 1
 
- # connections
+# connections
 
- #adaq8092_core
-
-ad_ip_instance axi_adaq8092 axi_adaq8092
-ad_ip_parameter axi_adaq8092  CONFIG.POLARITY_MASK 28'hfffffff
-ad_ip_parameter axi_adaq8092  CONFIG.OUTPUT_MODE 0
+#adaq8092_core
 
 ad_connect    adc_clk_in_p         axi_adaq8092/adc_clk_in_p
 ad_connect    adc_clk_in_n         axi_adaq8092/adc_clk_in_n 
-ad_connect    adc_data_in1_p       axi_adaq8092/lvds_adc_data_in1_p
-ad_connect    adc_data_in1_n       axi_adaq8092/lvds_adc_data_in1_n
-ad_connect    adc_data_in2_p       axi_adaq8092/lvds_adc_data_in2_p
-ad_connect    adc_data_in2_n       axi_adaq8092/lvds_adc_data_in2_n
-ad_connect    adc_data_or_p        axi_adaq8092/lvds_adc_or_in_p
-ad_connect    adc_data_or_n        axi_adaq8092/lvds_adc_or_in_n 
+
+switch $OUTPUT_MODE {
+   
+  LVDS {
+   ad_ip_parameter axi_adaq8092  CONFIG.POLARITY_MASK 28'hfffffff
+   ad_ip_parameter axi_adaq8092  CONFIG.OUTPUT_MODE 0
+   ad_connect     adc_data_in1_p     axi_adaq8092/lvds_adc_data_in1_p
+   ad_connect     adc_data_in1_n     axi_adaq8092/lvds_adc_data_in1_n
+   ad_connect     adc_data_in2_p     axi_adaq8092/lvds_adc_data_in2_p
+   ad_connect     adc_data_in2_n     axi_adaq8092/lvds_adc_data_in2_n
+   ad_connect     adc_data_or_p      axi_adaq8092/lvds_adc_or_in_p
+   ad_connect     adc_data_or_n      axi_adaq8092/lvds_adc_or_in_n 
+  }
+
+  CMOS {
+   ad_ip_parameter axi_adaq8092  CONFIG.OUTPUT_MODE 1
+   ad_connect    adc_data_in1         axi_adaq8092/cmos_adc_data_in1
+   ad_connect    adc_data_in2         axi_adaq8092/cmos_adc_data_in2
+   ad_connect    adc_data_or_1        axi_adaq8092/cmos_adc_or_in_1
+   ad_connect    adc_data_or_2        axi_adaq8092/cmos_adc_or_in_2
+  }
+  
+  default {
+    puts " The output mode is not set correctly"
+  }
+
+ }
+
 ad_connect    adaq8092_clk         axi_adaq8092/adc_clk
 ad_connect    $sys_iodelay_clk     axi_adaq8092/delay_clk
 

@@ -6,6 +6,8 @@
 
 PROJECT_NAME := adaq8092_fmc_zed
 
+M_DEPS += lvds_constr.xdc
+M_DEPS += cmos_constr.xdc
 M_DEPS += ../common/adaq8092_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
