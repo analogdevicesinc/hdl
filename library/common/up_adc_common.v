@@ -73,6 +73,7 @@ module up_adc_common #(
   output              adc_ext_sync_disarm,
   output              adc_ext_sync_manual_req,
   output       [4:0]  adc_num_lanes,
+  output       [7:0]  adc_custom_control,
   output              adc_sdr_ddr_n,
   output              adc_symb_op,
   output              adc_symb_8_16b,
@@ -150,6 +151,7 @@ module up_adc_common #(
   reg         [31:0]  up_timer = 'd0;
   reg                 up_rack_int = 'd0;
   reg         [31:0]  up_rdata_int = 'd0;
+  reg         [ 7:0]  up_adc_custom_control = 'd0;  
 
   // internal signals
 
@@ -200,6 +202,7 @@ module up_adc_common #(
       up_adc_ddr_edgesel <= 'd0;
       up_adc_pin_mode <= 'd0;
       up_pps_irq_mask <= 1'b1;
+      up_adc_custom_control <= 'd0;
     end else begin
       up_adc_clk_enb_int <= ~up_adc_clk_enb;
       up_core_preset <= ~up_resetn;
@@ -243,6 +246,8 @@ module up_adc_common #(
         end
       end else if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h12)) begin
         up_adc_ext_sync_manual_req <= up_wdata[8];
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h13)) begin
+        up_adc_custom_control <= up_wdata[7:0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h11)) begin
         up_adc_sdr_ddr_n <= up_wdata[16];
@@ -437,6 +442,7 @@ module up_adc_common #(
                                   3'b0, up_adc_ext_sync_manual_req,
                                   4'b0,
                                   1'b0, up_adc_ext_sync_disarm, up_adc_ext_sync_arm, 1'b0};
+          7'h13: up_rdata_int <= {24'd0, up_adc_custom_control};                        
           7'h15: up_rdata_int <= up_adc_clk_count_s;
           7'h16: up_rdata_int <= adc_clk_ratio;
           7'h17: up_rdata_int <= {28'd0, up_status_pn_err, up_status_pn_oos, up_status_or, up_status_s};
@@ -469,13 +475,16 @@ module up_adc_common #(
 
   // adc control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(49)) i_xfer_cntrl (
+  up_xfer_cntrl #(
+    .DATA_WIDTH(57) 
+  ) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_adc_sdr_ddr_n,
                       up_adc_symb_op,
                       up_adc_symb_8_16b,
                       up_adc_num_lanes,
+                      up_adc_custom_control,
                       up_adc_sref_sync,
                       up_adc_ext_sync_arm,
                       up_adc_ext_sync_disarm,
@@ -493,6 +502,7 @@ module up_adc_common #(
                       adc_symb_op,
                       adc_symb_8_16b,
                       adc_num_lanes,
+                      adc_custom_control,
                       adc_sref_sync,
                       adc_ext_sync_arm,
                       adc_ext_sync_disarm,
@@ -507,9 +517,12 @@ module up_adc_common #(
   // De-assert adc_rst together with an updated control set.
   // This allows writing the control registers before releasing the reset.
   // This is important at start-up when stable set of controls is required.
+
   assign adc_rst = ~adc_rst_n;
 
-  up_xfer_status #(.DATA_WIDTH(3)) i_xfer_status (
+  up_xfer_status #(
+    .DATA_WIDTH(3)
+  ) i_xfer_status (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_status ({up_sync_status_s,

@@ -239,6 +239,7 @@ foreach {k v} { \
 		"AXI_SLICE_DEST" "false" \
 		"DISABLE_DEBUG_REGISTERS" "false" \
     "ENABLE_DIAGNOSTICS_IF" "false" \
+    "CACHE_COHERENT_DEST" "false" \
 	} { \
 	set_property -dict [list \
 			"value_format" "bool" \
@@ -325,6 +326,18 @@ ipgui::move_param -component $cc -order 4 $p -parent $src_group
 set_property -dict [list \
 	"display_name" "Transfer Start Synchronization Support" \
 ] $p
+
+set p [ipgui::get_guiparamspec -name "CACHE_COHERENT_DEST" -component $cc]
+ipgui::move_param -component $cc -order 4 $p -parent $dest_group
+set_property -dict [list \
+	"tooltip" "Assume destination port ensures cache coherency (e.g. Ultrascale HPC port)" \
+] $p
+set_property -dict [list \
+	"display_name" "Assume cache coherent" \
+	"enablement_tcl_expr" "\$DMA_TYPE_DEST == 0 && \$DMA_AXI_PROTOCOL_DEST == 0" \
+	"value_tcl_expr" "\$DMA_TYPE_DEST == 0 && \$DMA_AXI_PROTOCOL_DEST == 0" \
+	"enablement_value" "false" \
+] [ipx::get_user_parameters CACHE_COHERENT_DEST -of_objects $cc]
 
 set general_group [ipgui::add_group -name "General Configuration" -component $cc \
 		-parent $page0 -display_name "General Configuration"]

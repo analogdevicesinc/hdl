@@ -28,6 +28,7 @@ clean:
 	$(MAKE) -C axi_ad9739a clean
 	$(MAKE) -C axi_ad9783 clean
 	$(MAKE) -C axi_ad9963 clean
+	$(MAKE) -C axi_adaq8092 clean
 	$(MAKE) -C axi_adc_decimate clean
 	$(MAKE) -C axi_adc_trigger clean
 	$(MAKE) -C axi_adrv9001 clean
@@ -98,11 +99,12 @@ clean:
 	$(MAKE) -C util_dacfifo clean
 	$(MAKE) -C util_dec256sinc24b clean
 	$(MAKE) -C util_delay clean
+	$(MAKE) -C util_do_ram clean
 	$(MAKE) -C util_extract clean
-	$(MAKE) -C util_fifo2axi_bridge clean
 	$(MAKE) -C util_fir_dec clean
 	$(MAKE) -C util_fir_int clean
 	$(MAKE) -C util_gmii_to_rgmii clean
+	$(MAKE) -C util_hbm clean
 	$(MAKE) -C util_i2c_mixer clean
 	$(MAKE) -C util_mfifo clean
 	$(MAKE) -C util_mii_to_rmii clean
@@ -144,6 +146,7 @@ lib:
 	$(MAKE) -C axi_ad9739a
 	$(MAKE) -C axi_ad9783
 	$(MAKE) -C axi_ad9963
+	$(MAKE) -C axi_adaq8092
 	$(MAKE) -C axi_adc_decimate
 	$(MAKE) -C axi_adc_trigger
 	$(MAKE) -C axi_adrv9001
@@ -214,11 +217,12 @@ lib:
 	$(MAKE) -C util_dacfifo
 	$(MAKE) -C util_dec256sinc24b
 	$(MAKE) -C util_delay
+	$(MAKE) -C util_do_ram
 	$(MAKE) -C util_extract
-	$(MAKE) -C util_fifo2axi_bridge
 	$(MAKE) -C util_fir_dec
 	$(MAKE) -C util_fir_int
 	$(MAKE) -C util_gmii_to_rgmii
+	$(MAKE) -C util_hbm
 	$(MAKE) -C util_i2c_mixer
 	$(MAKE) -C util_mfifo
 	$(MAKE) -C util_mii_to_rmii

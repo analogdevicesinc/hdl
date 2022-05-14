@@ -35,7 +35,13 @@
 
 `timescale 1ns/1ps
 
-module axi_tdd (
+module axi_tdd #(
+  // Boolean. Whether a false path constraint should be introduced for the tdd_sync
+  // trigger input. This allows asynchronous (or external) sources to be used.
+  // Note: This parameter isn't used inside of the core, but just for the
+  // configuration of the constraints file.
+  parameter ASYNC_TDD_SYNC = 1
+) (
 
   // clock
 

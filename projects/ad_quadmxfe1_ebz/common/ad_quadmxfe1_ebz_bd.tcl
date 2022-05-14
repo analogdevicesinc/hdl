@@ -94,7 +94,7 @@ ad_ip_instance util_adxcvr util_mxfe_xcvr [list \
 
 ad_ip_instance axi_adxcvr axi_mxfe_rx_xcvr [list \
   ID 0 \
-  NUM_OF_LANES $RX_NUM_OF_LANES\
+  NUM_OF_LANES $MAX_RX_LANES\
   TX_OR_RX_N 0 \
   QPLL_ENABLE 0 \
   LPM_OR_DFE_N 1 \
@@ -103,7 +103,7 @@ ad_ip_instance axi_adxcvr axi_mxfe_rx_xcvr [list \
 
 ad_ip_instance axi_adxcvr axi_mxfe_tx_xcvr [list \
   ID 0 \
-  NUM_OF_LANES $TX_NUM_OF_LANES \
+  NUM_OF_LANES $MAX_TX_LANES \
   TX_OR_RX_N 1 \
   QPLL_ENABLE 1 \
   SYS_CLK_SEL 0x3 \
@@ -336,7 +336,7 @@ for {set i 0}  {$i < $RX_NUM_OF_LINKS} {incr i} {
   }
 }
 
-ad_xcvrcon  util_mxfe_xcvr axi_mxfe_rx_xcvr axi_mxfe_rx_jesd $lane_map {} rx_device_clk $MAX_RX_LANES
+ad_xcvrcon  util_mxfe_xcvr axi_mxfe_rx_xcvr axi_mxfe_rx_jesd $max_lane_map {} rx_device_clk $MAX_RX_LANES $lane_map
 
 # connections (dac)
 #  map the logical lane $n onto the physical lane  $lane_map[$n]
@@ -353,7 +353,7 @@ for {set i 0}  {$i < $TX_NUM_OF_LINKS} {incr i} {
   }
 }
 
-ad_xcvrcon  util_mxfe_xcvr axi_mxfe_tx_xcvr axi_mxfe_tx_jesd $lane_map {} tx_device_clk $MAX_TX_LANES
+ad_xcvrcon  util_mxfe_xcvr axi_mxfe_tx_xcvr axi_mxfe_tx_jesd $max_lane_map {} tx_device_clk $MAX_TX_LANES $lane_map
 
 } else {
 

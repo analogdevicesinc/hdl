@@ -121,30 +121,30 @@ set_property  -dict {PACKAGE_PIN N14   IOSTANDARD LVCMOS18                      
 set_property  -dict {PACKAGE_PIN AT39  IOSTANDARD LVCMOS18                       } [get_ports mxfe_sclk[1]             ]; ## LA03_P         G09  IO_L4P_T0U_N6_DBC_AD7P_43
 set_property  -dict {PACKAGE_PIN R11   IOSTANDARD LVCMOS18                       } [get_ports mxfe_sclk[2]             ]; ## HA17_P_CC      K16  IO_L16P_T2U_N6_QBC_AD3P_70
 set_property  -dict {PACKAGE_PIN AL30  IOSTANDARD LVCMOS18                       } [get_ports mxfe_sclk[3]             ]; ## LA01_P_CC      D08  IO_L16P_T2U_N6_QBC_AD3P_43
-set_property  -dict {PACKAGE_PIN T36   IOSTANDARD LVDS                           } [get_ports mxfe_syncin_n[0]         ]; ## LA29_N         G31  IO_L4N_T0U_N7_DBC_AD7N_45
-set_property  -dict {PACKAGE_PIN AJ31  IOSTANDARD LVDS                           } [get_ports mxfe_syncin_n[1]         ]; ## LA11_N         H17  IO_L17N_T2U_N9_AD10N_43
-set_property  -dict {PACKAGE_PIN Y12   IOSTANDARD LVDS                           } [get_ports mxfe_syncin_n[2]         ]; ## HA02_N         K08  IO_L5N_T0U_N9_AD14N_70
-set_property  -dict {PACKAGE_PIN U12   IOSTANDARD LVDS                           } [get_ports mxfe_syncin_n[3]         ]; ## HA13_N         E13  IO_L4N_T0U_N7_DBC_AD7N_70
-set_property  -dict {PACKAGE_PIN W34   IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncin_p[0]         ]; ## LA25_N         G28  IO_L3N_T0L_N5_AD15N_45
-set_property  -dict {PACKAGE_PIN U35   IOSTANDARD LVDS                           } [get_ports mxfe_syncin_p[1]         ]; ## LA29_P         G30  IO_L4P_T0U_N6_DBC_AD7P_45
-set_property  -dict {PACKAGE_PIN K33   IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncin_p[2]         ]; ## LA32_N         H38  IO_L21N_T3L_N5_AD8N_45
-set_property  -dict {PACKAGE_PIN AJ30  IOSTANDARD LVDS                           } [get_ports mxfe_syncin_p[3]         ]; ## LA11_P         H16  IO_L17P_T2U_N8_AD10P_43
-set_property  -dict {PACKAGE_PIN J12   IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncin_p[4]         ]; ## HA22_N         J22  IO_L24N_T3U_N11_70
-set_property  -dict {PACKAGE_PIN AA12  IOSTANDARD LVDS                           } [get_ports mxfe_syncin_p[5]         ]; ## HA02_P         K07  IO_L5P_T0U_N8_AD14P_70
-set_property  -dict {PACKAGE_PIN V14   IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncin_p[6]         ]; ## HA09_N         E10  IO_L6N_T0U_N11_AD6N_70
-set_property  -dict {PACKAGE_PIN V13   IOSTANDARD LVDS                           } [get_ports mxfe_syncin_p[7]         ]; ## HA13_P         E12  IO_L4P_T0U_N6_DBC_AD7P_70
-set_property  -dict {PACKAGE_PIN N37   IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports mxfe_syncout_n[0]        ]; ## LA31_N         G34  IO_L16N_T2U_N7_QBC_AD3N_45
-set_property  -dict {PACKAGE_PIN AG33  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports mxfe_syncout_n[1]        ]; ## LA15_N         H20  IO_L24N_T3U_N11_43
-set_property  -dict {PACKAGE_PIN T13   IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports mxfe_syncout_n[2]        ]; ## HA06_N         K11  IO_L12N_T1U_N11_GC_70
-set_property  -dict {PACKAGE_PIN R13   IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports mxfe_syncout_n[3]        ]; ## HA16_N         E16  IO_L11N_T1U_N9_GC_70
-set_property  -dict {PACKAGE_PIN Y34   IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncout_p[0]        ]; ## LA25_P         G27  IO_L3P_T0L_N4_AD15P_45
-set_property  -dict {PACKAGE_PIN P37   IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports mxfe_syncout_p[1]        ]; ## LA31_P         G33  IO_L16P_T2U_N6_QBC_AD3P_45
-set_property  -dict {PACKAGE_PIN L33   IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncout_p[2]        ]; ## LA32_P         H37  IO_L21P_T3L_N4_AD8P_45
-set_property  -dict {PACKAGE_PIN AG32  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports mxfe_syncout_p[3]        ]; ## LA15_P         H19  IO_L24P_T3U_N10_43
-set_property  -dict {PACKAGE_PIN K12   IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncout_p[4]        ]; ## HA22_P         J21  IO_L24P_T3U_N10_70
-set_property  -dict {PACKAGE_PIN U13   IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports mxfe_syncout_p[5]        ]; ## HA06_P         K10  IO_L12P_T1U_N10_GC_70
-set_property  -dict {PACKAGE_PIN W14   IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncout_p[6]        ]; ## HA09_P         E09  IO_L6P_T0U_N10_AD6P_70
-set_property  -dict {PACKAGE_PIN T14   IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports mxfe_syncout_p[7]        ]; ## HA16_P         E15  IO_L11P_T1U_N8_GC_70
+set_property  -dict {PACKAGE_PIN T36   IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncin_0_n          ]; ## LA29_N         G31  IO_L4N_T0U_N7_DBC_AD7N_45
+set_property  -dict {PACKAGE_PIN AJ31  IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncin_1_n          ]; ## LA11_N         H17  IO_L17N_T2U_N9_AD10N_43
+set_property  -dict {PACKAGE_PIN Y12   IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncin_2_n          ]; ## HA02_N         K08  IO_L5N_T0U_N9_AD14N_70
+set_property  -dict {PACKAGE_PIN U12   IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncin_3_n          ]; ## HA13_N         E13  IO_L4N_T0U_N7_DBC_AD7N_70
+set_property  -dict {PACKAGE_PIN W34   IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncin_0_p          ]; ## LA25_N         G28  IO_L3N_T0L_N5_AD15N_45
+set_property  -dict {PACKAGE_PIN U35   IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncin_1_p          ]; ## LA29_P         G30  IO_L4P_T0U_N6_DBC_AD7P_45
+set_property  -dict {PACKAGE_PIN K33   IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncin_2_p          ]; ## LA32_N         H38  IO_L21N_T3L_N5_AD8N_45
+set_property  -dict {PACKAGE_PIN AJ30  IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncin_3_p          ]; ## LA11_P         H16  IO_L17P_T2U_N8_AD10P_43
+set_property  -dict {PACKAGE_PIN J12   IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncin_4_p          ]; ## HA22_N         J22  IO_L24N_T3U_N11_70
+set_property  -dict {PACKAGE_PIN AA12  IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncin_5_p          ]; ## HA02_P         K07  IO_L5P_T0U_N8_AD14P_70
+set_property  -dict {PACKAGE_PIN V14   IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncin_6_p          ]; ## HA09_N         E10  IO_L6N_T0U_N11_AD6N_70
+set_property  -dict {PACKAGE_PIN V13   IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncin_7_p          ]; ## HA13_P         E12  IO_L4P_T0U_N6_DBC_AD7P_70
+set_property  -dict {PACKAGE_PIN N37   IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncout_0_n         ]; ## LA31_N         G34  IO_L16N_T2U_N7_QBC_AD3N_45
+set_property  -dict {PACKAGE_PIN AG33  IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncout_1_n         ]; ## LA15_N         H20  IO_L24N_T3U_N11_43
+set_property  -dict {PACKAGE_PIN T13   IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncout_2_n         ]; ## HA06_N         K11  IO_L12N_T1U_N11_GC_70
+set_property  -dict {PACKAGE_PIN R13   IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncout_3_n         ]; ## HA16_N         E16  IO_L11N_T1U_N9_GC_70
+set_property  -dict {PACKAGE_PIN Y34   IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncout_0_p         ]; ## LA25_P         G27  IO_L3P_T0L_N4_AD15P_45
+set_property  -dict {PACKAGE_PIN P37   IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncout_1_p         ]; ## LA31_P         G33  IO_L16P_T2U_N6_QBC_AD3P_45
+set_property  -dict {PACKAGE_PIN L33   IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncout_2_p         ]; ## LA32_P         H37  IO_L21P_T3L_N4_AD8P_45
+set_property  -dict {PACKAGE_PIN AG32  IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncout_3_p         ]; ## LA15_P         H19  IO_L24P_T3U_N10_43
+set_property  -dict {PACKAGE_PIN K12   IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncout_4_p         ]; ## HA22_P         J21  IO_L24P_T3U_N10_70
+set_property  -dict {PACKAGE_PIN U13   IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncout_5_p         ]; ## HA06_P         K10  IO_L12P_T1U_N10_GC_70
+set_property  -dict {PACKAGE_PIN W14   IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncout_6_p         ]; ## HA09_P         E09  IO_L6P_T0U_N10_AD6P_70
+set_property  -dict {PACKAGE_PIN T14   IOSTANDARD LVCMOS18                       } [get_ports mxfe_syncout_7_p         ]; ## HA16_P         E15  IO_L11P_T1U_N8_GC_70
 set_property  -dict {PACKAGE_PIN U11   IOSTANDARD LVCMOS18                       } [get_ports mxfe_tx_en0[0]           ]; ## HA08_P         F10  IO_L10P_T1U_N6_QBC_AD4P_70
 set_property  -dict {PACKAGE_PIN AJ32  IOSTANDARD LVCMOS18                       } [get_ports mxfe_tx_en0[1]           ]; ## LA02_P         H07  IO_L14P_T2L_N2_GC_43
 set_property  -dict {PACKAGE_PIN K11   IOSTANDARD LVCMOS18                       } [get_ports mxfe_tx_en0[2]           ]; ## HA23_P         K22  IO_L21P_T3L_N4_AD8P_70

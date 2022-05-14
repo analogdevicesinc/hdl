@@ -2,13 +2,24 @@
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
 # RX parameters
-set RX_NUM_OF_LANES 4        ; # L
-set RX_NUM_OF_CONVERTERS 16  ; # M
-set RX_SAMPLES_PER_FRAME 1   ; # S
-set RX_SAMPLE_WIDTH 16       ; # N/NP
-set RX_SAMPLES_PER_CHANNEL 1 ; # L * 32 / (M * N)
+if ![info exists RX_NUM_OF_LANES] {
+  set RX_NUM_OF_LANES 4                  ; # L
+}
+if ![info exists RX_NUM_OF_CONVERTERS] {
+  set RX_NUM_OF_CONVERTERS 16            ; # M
+}
+if ![info exists RX_SAMPLES_PER_FRAME] {
+  set RX_SAMPLES_PER_FRAME 1             ; # S
+}
+if ![info exists RX_SAMPLE_WIDTH] {
+  set RX_SAMPLE_WIDTH 16                 ; # N/NP
+}
 
-set adc_dma_data_width 256
+set RX_OCTETS_PER_FRAME [expr $RX_NUM_OF_CONVERTERS * $RX_SAMPLES_PER_FRAME * $RX_SAMPLE_WIDTH / (8*$RX_NUM_OF_LANES)] ; # F
+set DPW [expr max(4,$RX_OCTETS_PER_FRAME)] ;# max(4,F)
+set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 8 * $DPW / ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)] ; # L * 8* DPW /
+
+set adc_dma_data_width [expr $RX_NUM_OF_LANES * 8 * $DPW]
 
 # adc peripherals
 # rx_out_clk = ref_clk
@@ -24,7 +35,7 @@ ad_ip_instance axi_adxcvr axi_ad9083_rx_xcvr [list \
 
 adi_axi_jesd204_rx_create axi_ad9083_rx_jesd $RX_NUM_OF_LANES
 ad_ip_parameter axi_ad9083_rx_jesd/rx CONFIG.SYSREF_IOB false
-ad_ip_parameter axi_ad9083_rx_jesd/rx CONFIG.TPL_DATA_PATH_WIDTH 8
+ad_ip_parameter axi_ad9083_rx_jesd/rx CONFIG.TPL_DATA_PATH_WIDTH $DPW
 
 ad_ip_instance util_cpack2 util_ad9083_rx_cpack [list \
   NUM_OF_CHANNELS $RX_NUM_OF_CONVERTERS \
@@ -171,3 +182,8 @@ ad_mem_hp2_interconnect $sys_dma_clk axi_ad9083_rx_dma/m_dest_axi
 ad_cpu_interrupt ps-12 mb-13 axi_ad9083_rx_jesd/irq
 ad_cpu_interrupt ps-13 mb-12 axi_ad9083_rx_dma/irq
 
+# Create dummy outputs for unused Rx lanes
+for {set i $RX_NUM_OF_LANES} {$i < 4} {incr i} {
+  create_bd_port -dir I rx_data_${i}_n
+  create_bd_port -dir I rx_data_${i}_p
+}

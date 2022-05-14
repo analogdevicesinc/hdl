@@ -46,6 +46,11 @@ set_property -dict [list CONFIG.FREQ_HZ {625000000}] [get_bd_intf_ports sgmii_ph
 ad_ip_instance microblaze sys_mb
 ad_ip_parameter sys_mb CONFIG.G_TEMPLATE_LIST 4
 ad_ip_parameter sys_mb CONFIG.C_DCACHE_FORCE_TAG_LUTRAM 1
+ad_ip_parameter sys_mb CONFIG.C_ADDR_TAG_BITS 15
+ad_ip_parameter sys_mb CONFIG.C_CACHE_BYTE_SIZE 65536
+ad_ip_parameter sys_mb CONFIG.C_DCACHE_ADDR_TAG 15
+ad_ip_parameter sys_mb CONFIG.C_DCACHE_BYTE_SIZE 65536
+ad_ip_parameter sys_mb CONFIG.C_USE_BRANCH_TARGET_CACHE 1
 
 # instance: microblaze - local memory & bus
 
@@ -70,10 +75,21 @@ ad_ip_parameter sys_mb_debug CONFIG.C_USE_UART 1
 # instance: system reset/clocks
 ad_ip_instance proc_sys_reset sys_rstgen
 ad_ip_parameter sys_rstgen CONFIG.C_EXT_RST_WIDTH 1
+ad_ip_instance proc_sys_reset sys_mb_rstgen
+ad_ip_parameter sys_mb_rstgen CONFIG.C_EXT_RST_WIDTH 1
 ad_ip_instance proc_sys_reset sys_250m_rstgen
 ad_ip_parameter sys_250m_rstgen CONFIG.C_EXT_RST_WIDTH 1
 ad_ip_instance proc_sys_reset sys_500m_rstgen
 ad_ip_parameter sys_500m_rstgen CONFIG.C_EXT_RST_WIDTH 1
+ad_ip_instance proc_sys_reset sys_hbm_rstgen
+ad_ip_parameter sys_hbm_rstgen CONFIG.C_EXT_RST_WIDTH 1
+
+# Clock for HBM
+ad_ip_instance clk_wiz hbm_clk_wiz [ list \
+  PRIMITIVE {Auto} \
+  PRIM_IN_FREQ {100} \
+  CLKOUT1_REQUESTED_OUT_FREQ {450} \
+]
 
 # instance: ddr4
 #
@@ -90,7 +106,7 @@ ad_ip_parameter axi_ddr_cntrl CONFIG.C0.DDR4_DataMask {NO_DM_NO_DBI}
 ad_ip_parameter axi_ddr_cntrl CONFIG.C0.DDR4_Ecc {true}
 ad_ip_parameter axi_ddr_cntrl CONFIG.C0.DDR4_AxiDataWidth {512}
 ad_ip_parameter axi_ddr_cntrl CONFIG.C0.DDR4_AxiAddressWidth {32}
-ad_ip_parameter axi_ddr_cntrl CONFIG.ADDN_UI_CLKOUT1_FREQ_HZ {100}
+ad_ip_parameter axi_ddr_cntrl CONFIG.ADDN_UI_CLKOUT1_FREQ_HZ 200
 ad_ip_parameter axi_ddr_cntrl CONFIG.ADDN_UI_CLKOUT2_FREQ_HZ 250
 ad_ip_parameter axi_ddr_cntrl CONFIG.ADDN_UI_CLKOUT3_FREQ_HZ 500
 ad_ip_parameter axi_ddr_cntrl CONFIG.C0.BANK_GROUP_WIDTH {1}
@@ -133,6 +149,14 @@ ad_ip_parameter axi_gpio CONFIG.C_GPIO_WIDTH 32
 ad_ip_parameter axi_gpio CONFIG.C_GPIO2_WIDTH 32
 ad_ip_parameter axi_gpio CONFIG.C_INTERRUPT_PRESENT 1
 
+ad_ip_instance util_ds_buf sys_cpu_clk_BUFGCE
+ad_ip_parameter sys_cpu_clk_BUFGCE CONFIG.C_BUF_TYPE {BUFGCE_DIV}
+ad_ip_parameter sys_cpu_clk_BUFGCE CONFIG.C_BUFGCE_DIV 2
+ad_connect sys_cpu_clk_BUFGCE/BUFGCE_CE VCC
+ad_connect sys_cpu_clk_BUFGCE/BUFGCE_CLR GND
+ad_connect sys_cpu_clk_BUFGCE/BUFGCE_I sys_mb_clk
+ad_connect sys_cpu_clk sys_cpu_clk_BUFGCE/BUFGCE_O
+
 # instance: interrupt
 
 ad_ip_instance axi_intc axi_intc
@@ -150,9 +174,11 @@ ad_connect axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst axi_ddr_cntrl_rstgen/ext_reset_
 ad_connect axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst sys_rstgen/ext_reset_in
 ad_connect axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst sys_250m_rstgen/ext_reset_in
 ad_connect axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst sys_500m_rstgen/ext_reset_in
+ad_connect axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst sys_hbm_rstgen/ext_reset_in
 ad_connect sys_mem_clk axi_ddr_cntrl/c0_ddr4_ui_clk
 ad_connect sys_mem_clk axi_ddr_cntrl_rstgen/slowest_sync_clk
-ad_connect sys_cpu_clk axi_ddr_cntrl/addn_ui_clkout1
+ad_connect sys_mb_clk axi_ddr_cntrl/addn_ui_clkout1
+ad_connect sys_mb_clk sys_mb_rstgen/slowest_sync_clk
 ad_connect sys_cpu_clk sys_rstgen/slowest_sync_clk
 ad_connect sys_mem_resetn axi_ddr_cntrl_rstgen/peripheral_aresetn
 ad_connect sys_mem_resetn axi_ddr_cntrl/c0_ddr4_aresetn
@@ -160,6 +186,8 @@ ad_connect sys_250m_clk axi_ddr_cntrl/addn_ui_clkout2
 ad_connect sys_250m_clk sys_250m_rstgen/slowest_sync_clk
 ad_connect sys_500m_clk axi_ddr_cntrl/addn_ui_clkout3
 ad_connect sys_500m_clk sys_500m_rstgen/slowest_sync_clk
+ad_connect sys_hbm_clk hbm_clk_wiz/clk_out1
+ad_connect sys_hbm_clk sys_hbm_rstgen/slowest_sync_clk
 ad_connect sys_cpu_reset sys_rstgen/peripheral_reset
 ad_connect sys_cpu_resetn sys_rstgen/peripheral_aresetn
 ad_connect sys_250m_reset sys_250m_rstgen/peripheral_reset
@@ -169,9 +197,11 @@ ad_connect sys_500m_resetn sys_500m_rstgen/peripheral_aresetn
 
 # generic system clocks pointers
 
-set sys_cpu_clk      [get_bd_pins axi_ddr_cntrl/addn_ui_clkout1]
+set sys_cpu_clk      [get_bd_pins sys_cpu_clk_BUFGCE/BUFGCE_O]
+set sys_mb_clk       [get_bd_nets axi_ddr_cntrl/addn_ui_clkout1]
 set sys_dma_clk      [get_bd_nets sys_250m_clk]
 set sys_iodelay_clk  [get_bd_nets sys_500m_clk]
+set sys_hbm_clk      [get_bd_pins hbm_clk_wiz/clk_out1]
 
 set sys_cpu_reset         [get_bd_nets sys_cpu_reset]
 set sys_cpu_resetn        [get_bd_pins sys_rstgen/peripheral_aresetn]
@@ -179,19 +209,25 @@ set sys_dma_reset         [get_bd_nets sys_250m_reset]
 set sys_dma_resetn        [get_bd_nets sys_250m_resetn]
 set sys_iodelay_reset     [get_bd_nets sys_500m_reset]
 set sys_iodelay_resetn    [get_bd_nets sys_500m_resetn]
+set sys_hbm_reset         [get_bd_pins sys_hbm_rstgen/peripheral_reset]
+set sys_hbm_resetn        [get_bd_pins sys_hbm_rstgen/peripheral_aresetn]
+
+# clock gen connections
+
+ad_connect $sys_cpu_clk hbm_clk_wiz/clk_in1
 
 # microblaze debug & interrupt
 
-ad_connect sys_cpu_clk sys_mb/Clk
-ad_connect sys_cpu_clk sys_dlmb/LMB_Clk
-ad_connect sys_cpu_clk sys_ilmb/LMB_Clk
-ad_connect sys_cpu_clk sys_dlmb_cntlr/LMB_Clk
-ad_connect sys_cpu_clk sys_ilmb_cntlr/LMB_Clk
-ad_connect sys_rstgen/mb_reset sys_mb/Reset
-ad_connect sys_rstgen/bus_struct_reset sys_dlmb/SYS_Rst
-ad_connect sys_rstgen/bus_struct_reset sys_ilmb/SYS_Rst
-ad_connect sys_rstgen/bus_struct_reset sys_dlmb_cntlr/LMB_Rst
-ad_connect sys_rstgen/bus_struct_reset sys_ilmb_cntlr/LMB_Rst
+ad_connect sys_mb_clk sys_mb/Clk
+ad_connect sys_mb_clk sys_dlmb/LMB_Clk
+ad_connect sys_mb_clk sys_ilmb/LMB_Clk
+ad_connect sys_mb_clk sys_dlmb_cntlr/LMB_Clk
+ad_connect sys_mb_clk sys_ilmb_cntlr/LMB_Clk
+ad_connect sys_mb_rstgen/mb_reset sys_mb/Reset
+ad_connect sys_mb_rstgen/bus_struct_reset sys_dlmb/SYS_Rst
+ad_connect sys_mb_rstgen/bus_struct_reset sys_ilmb/SYS_Rst
+ad_connect sys_mb_rstgen/bus_struct_reset sys_dlmb_cntlr/LMB_Rst
+ad_connect sys_mb_rstgen/bus_struct_reset sys_ilmb_cntlr/LMB_Rst
 ad_connect sys_mb/DLMB sys_dlmb/LMB_M
 ad_connect sys_mb/ILMB sys_ilmb/LMB_M
 ad_connect sys_dlmb/LMB_Sl_0 sys_dlmb_cntlr/SLMB
@@ -284,14 +320,17 @@ ad_cpu_interconnect 0x45100000 axi_ddr_cntrl C0_DDR4_S_AXI_CTRL
 
 ### Workaround for DDR controller with control interface
 ### DDR contoller control interface runs at UI clock not CPU clock
-set_property -dict [list CONFIG.NUM_CLKS {2}] [get_bd_cells axi_cpu_interconnect]
+set_property -dict [list CONFIG.NUM_CLKS {3}] [get_bd_cells axi_cpu_interconnect]
 ad_connect axi_ddr_cntrl/c0_ddr4_ui_clk  axi_cpu_interconnect/aclk1
+
+### Peripheral Data Interface runs at the sys_mb_clk frequency
+ad_connect sys_mb_clk axi_cpu_interconnect/aclk2
 
 # interconnect - memory
 
 ad_mem_hp0_interconnect sys_mem_clk axi_ddr_cntrl/C0_DDR4_S_AXI
-ad_mem_hp0_interconnect sys_cpu_clk sys_mb/M_AXI_DC
-ad_mem_hp0_interconnect sys_cpu_clk sys_mb/M_AXI_IC
+ad_mem_hp0_interconnect sys_mb_clk sys_mb/M_AXI_DC
+ad_mem_hp0_interconnect sys_mb_clk sys_mb/M_AXI_IC
 ad_mem_hp0_interconnect sys_cpu_clk axi_ethernet_dma/M_AXI_SG
 ad_mem_hp0_interconnect sys_cpu_clk axi_ethernet_dma/M_AXI_MM2S
 ad_mem_hp0_interconnect sys_cpu_clk axi_ethernet_dma/M_AXI_S2MM

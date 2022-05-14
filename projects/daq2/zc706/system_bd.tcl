@@ -7,7 +7,6 @@ set dac_offload_type 0                              ; ## BRAM
 set dac_offload_size [expr 1 * 1024 * 1024]         ; ## 1 MByte
 
 set plddr_offload_axi_data_width 512
-set plddr_offload_axi_addr_width 30
 
 ## NOTE: With this configuration the #36Kb BRAM utilization is at ~52%
 
@@ -42,9 +41,9 @@ if {$adc_offload_type || $dac_offload_type} {
     create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 ddr3
 
     ad_connect axi_ddr_cntrl/ui_clk axi_rstgen/slowest_sync_clk
-    ad_connect axi_ddr_cntrl/ui_clk $offload_name/fifo2axi_bridge/axi_clk
-    ad_connect axi_ddr_cntrl/S_AXI $offload_name/fifo2axi_bridge/ddr_axi
-    ad_connect axi_rstgen/peripheral_aresetn $offload_name/fifo2axi_bridge/axi_resetn
+    ad_connect axi_ddr_cntrl/ui_clk $offload_name/storage_unit/m_axi_aclk
+    ad_connect axi_ddr_cntrl/S_AXI $offload_name/storage_unit/MAXI_0
+    ad_connect axi_rstgen/peripheral_aresetn $offload_name/storage_unit/m_axi_aresetn
     ad_connect axi_rstgen/peripheral_aresetn axi_ddr_cntrl/aresetn
     ad_connect sys_cpu_resetn axi_rstgen/ext_reset_in
 

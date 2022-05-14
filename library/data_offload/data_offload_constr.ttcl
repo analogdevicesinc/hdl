@@ -6,6 +6,7 @@
 <: set mem_type [getBooleanValue "MEM_TYPE"] :>
 <: set tx_enable [getBooleanValue "TX_OR_RXN_PATH"] :>
 <: set internal_cdc [getBooleanValue "SYNC_EXT_ADD_INTERNAL_CDC"] :>
+<: set has_bypass [getBooleanValue "HAS_BYPASS"] :>
 
 ## for all synchronization registers from util_cdc modules
 set_property ASYNC_REG TRUE \
@@ -13,11 +14,13 @@ set_property ASYNC_REG TRUE \
   [get_cells -hier {*cdc_sync_stage2_reg*}]
 
 ## For RX in case of BRAMs
-<: if { $tx_enable == 0 } { :>
+<: if { !$tx_enable } { :>
 
 <: if { $internal_cdc } { :>
   set_false_path \
     -to [get_pins -hierarchical * -filter {NAME=~*/i_sync_wr_sync/cdc_sync_stage1_reg[*]/D}]
+<: } :>
+
 <: } :>
 
 set_false_path \
@@ -32,22 +35,8 @@ set_false_path \
   -from [get_pins -hierarchical * -filter {NAME=~*/i_sync_src_transfer_length/out_toggle_d1_reg/C}] \
   -to [get_pins -hierarchical * -filter {NAME=~*/i_sync_src_transfer_length/i_sync_in/cdc_sync_stage1_reg[*]/D}]
 
-<: if { !$mem_type } { :>
-
-  set_false_path \
-    -from [get_pins -hierarchical * -filter {NAME=~*adc_init_sync.i_rd_init_ack_sync/in_toggle_d1_reg/C}] \
-    -to [get_pins -hierarchical * -filter {NAME=~*adc_init_sync.i_rd_init_ack_sync/i_sync_out/cdc_sync_stage1_reg[*]/D}]
-
-  set_false_path \
-    -from [get_pins -hierarchical * -filter {NAME=~*adc_init_sync.i_rd_init_ack_sync/out_toggle_d1_reg/C}] \
-    -to [get_pins -hierarchical * -filter {NAME=~*adc_init_sync.i_rd_init_ack_sync/i_sync_in/cdc_sync_stage1_reg[*]/D}]
-
-<: } :>
-
-<: } :>
-
 ## For TX in case of BRAMs
-<: if { $tx_enable == 1 } { :>
+<: if { $tx_enable } { :>
 
 <: if { $internal_cdc } { :>
 set_false_path \
@@ -55,23 +44,11 @@ set_false_path \
 <: } :>
 
 
-<: if { !$mem_type } { :>
-
-  set_false_path \
-    -from [get_pins -hierarchical * -filter {NAME=~*dac_init_sync.i_wr_init_ack_sync/in_toggle_d1_reg/C}] \
-    -to [get_pins -hierarchical * -filter {NAME=~*dac_init_sync.i_wr_init_ack_sync/i_sync_out/cdc_sync_stage1_reg[*]/D}]
-
-  set_false_path \
-    -from [get_pins -hierarchical * -filter {NAME=~*dac_init_sync.i_wr_init_ack_sync/out_toggle_d1_reg/C}] \
-    -to [get_pins -hierarchical * -filter {NAME=~*dac_init_sync.i_wr_init_ack_sync/i_sync_in/cdc_sync_stage1_reg[*]/D}]
-
-<: } :>
-
 <: } :>
 
 ## For external DDRx memory
 
-<: if { $mem_type == 1 } { :>
+<: if { $mem_type } { :>
 
   set_false_path \
     -to [get_pins -hierarchical * -filter {NAME=~*i_ddr_calib_done_sync/cdc_sync_stage1_reg[0]/D}]
@@ -79,18 +56,6 @@ set_false_path \
 <: } :>
 
 ## Common constraints
-
-set_false_path \
-  -from [get_pins -hierarchical * -filter {NAME=~*/i_xfer_status/in_toggle_d1_reg/C}] \
-  -to [get_pins -hierarchical * -filter {NAME=~*/i_xfer_status/i_sync_out/cdc_sync_stage1_reg[*]/D}]
-
-set_false_path \
-  -from [get_pins -hierarchical * -filter {NAME=~*/i_xfer_status/out_toggle_d1_reg/C}] \
-  -to [get_pins -hierarchical * -filter {NAME=~*/i_xfer_status/i_sync_in/cdc_sync_stage1_reg[*]/D}]
-
-set_false_path \
-  -from [get_cells -hierarchical * -filter {NAME=~*/i_xfer_status/cdc_hold_reg[*]}] \
-  -to [get_cells -hierarchical * -filter {NAME=~*/i_xfer_status/out_data_reg[*]}]
 
 set_false_path \
   -from [get_pins -hierarchical * -filter {NAME=~*/i_dst_fsm_status/in_toggle_d1_reg/C}] \
@@ -125,22 +90,6 @@ set_false_path \
   -to [get_pins -hierarchical * -filter {NAME=~*/i_wr_empty_sync/i_sync_in/cdc_sync_stage1_reg[*]/D}]
 
 set_false_path \
-  -from [get_pins -hierarchical * -filter {NAME=~*/i_rd_full_sync/in_toggle_d1_reg/C}] \
-  -to [get_pins -hierarchical * -filter {NAME=~*/i_rd_full_sync/i_sync_out/cdc_sync_stage1_reg[*]/D}]
-
-set_false_path \
-  -from [get_pins -hierarchical * -filter {NAME=~*/i_rd_full_sync/out_toggle_d1_reg/C}] \
-  -to [get_pins -hierarchical * -filter {NAME=~*/i_rd_full_sync/i_sync_in/cdc_sync_stage1_reg[*]/D}]
-
-set_false_path \
-  -from [get_pins -hierarchical * -filter {NAME=~*/i_rd_wr_last_sync/out_toggle_d1_reg/C}] \
-  -to [get_pins -hierarchical * -filter {NAME=~*/i_rd_wr_last_sync/i_sync_in/cdc_sync_stage1_reg[*]/D}]
-
-set_false_path \
-  -from [get_pins -hierarchical * -filter {NAME=~*/i_rd_wr_last_sync/in_toggle_d1_reg/C}] \
-  -to [get_pins -hierarchical * -filter {NAME=~*/i_rd_wr_last_sync/i_sync_out/cdc_sync_stage1_reg[*]/D}]
-
-set_false_path \
   -from [get_pins -hierarchical * -filter {NAME=~*i_sync_xfer_control/in_toggle_d1_reg/C}] \
   -to [get_pins -hierarchical * -filter {NAME=~*i_sync_xfer_control/i_sync_out/cdc_sync_stage1_reg[*]/D}]
 
@@ -153,20 +102,13 @@ set_false_path \
   -to [get_cells -hierarchical * -filter {NAME=~*i_sync_xfer_control/out_data_reg[*]}]
 
 
+<: if { $tx_enable } { :>
 set_false_path \
   -to [get_pins -hierarchical * -filter {NAME=~*i_rd_init_req_sync/cdc_sync_stage1_reg[*]/D}]
-
+<: } else { :>
 set_false_path \
   -to [get_pins -hierarchical * -filter {NAME=~*i_wr_init_req_sync/cdc_sync_stage1_reg[*]/D}]
-
-set_false_path \
-  -to [get_pins -hierarchical * -filter {NAME=~*i_wr_oneshot_sync/cdc_sync_stage1_reg[*]/D}]
-
-set_false_path \
-  -to [get_pins -hierarchical * -filter {NAME=~*/i_rd_last_address/cdc_sync_stage1_reg[*]/D}]
-
-set_false_path \
-  -to [get_pins -hierarchical * -filter {NAME=~*/i_rd_last_keep/cdc_sync_stage1_reg[*]/D}]
+<: } :>
 
 set_false_path \
   -to [get_pins -hierarchical * -filter {NAME=~*i_src_xfer_control/cdc_sync_stage1_reg[*]/D}]
@@ -177,10 +119,48 @@ set_false_path \
 set_false_path \
   -to [get_pins -hierarchical * -filter {NAME=~*i_dst_oneshot_sync/cdc_sync_stage1_reg[0]/D}]
 
-## Constraints for the bypass module
 
+# measured transfer length util_axis_fifo
+set src_clk [get_clocks -of_objects [get_ports s_axis_aclk]]
+set dest_clk [get_clocks -of_objects [get_ports m_axis_aclk]]
+
+set_max_delay -quiet -datapath_only \
+  -from $src_clk \
+  -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+    -filter {NAME =~ *i_measured_length_cdc/zerodeep.i_waddr_sync* && IS_SEQUENTIAL}] \
+  [get_property -min PERIOD $src_clk]
+
+set_max_delay -quiet -datapath_only \
+  -from $dest_clk \
+  -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+    -filter {NAME =~ *i_measured_length_cdc/zerodeep.i_raddr_sync* && IS_SEQUENTIAL}] \
+  [get_property -min PERIOD $dest_clk]
+
+set_max_delay -quiet -datapath_only \
+  -from [get_cells -quiet -hier *cdc_sync_fifo_ram_reg* \
+    -filter {NAME =~ *i_measured_length_cdc* && IS_SEQUENTIAL}] \
+  -to $dest_clk \
+  [get_property -min PERIOD $dest_clk]
+
+## Constraints for the bypass module
+<: if { $has_bypass } { :>
 set_false_path \
   -to [get_pins -hierarchical * -filter {NAME=~*i_waddr_sync_gray/cdc_sync_stage1_reg[*]/D}]
 
 set_false_path \
   -to [get_pins -hierarchical * -filter {NAME=~*i_raddr_sync_gray/cdc_sync_stage1_reg[*]/D}]
+<: } :>
+
+## Constraints for the overflow/underflow status
+<: if { $tx_enable } { :>
+set flow_cdc  i_rd_underflow_sync
+<: } else { :>
+set flow_cdc  i_wr_overflow_sync
+<: } :>
+set_false_path \
+  -from [get_pins -hierarchical * -filter NAME=~*/$flow_cdc/in_toggle_d1_reg/C] \
+  -to [get_pins -hierarchical * -filter NAME=~*/$flow_cdc/i_sync_out/cdc_sync_stage1_reg[*]/D]
+
+set_false_path \
+  -from [get_pins -hierarchical * -filter NAME=~*/$flow_cdc/out_toggle_d1_reg/C] \
+  -to [get_pins -hierarchical * -filter NAME=~*/$flow_cdc/i_sync_in/cdc_sync_stage1_reg[*]/D]

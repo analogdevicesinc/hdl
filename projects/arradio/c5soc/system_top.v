@@ -285,16 +285,12 @@ module system_top (
     .sys_spi_MOSI (spi_mosi),
     .sys_spi_SCLK (spi_clk),
     .sys_spi_SS_n (spi_csn),
-    .vga_out_clk_clk (vga_clk),
-    .vga_out_data_vid_clk (vga_clk),
-    .vga_out_data_vid_data ({vga_red, vga_grn, vga_blu}),
-    .vga_out_data_underflow (),
-    .vga_out_data_vid_datavalid (),
-    .vga_out_data_vid_v_sync (vga_vsync),
-    .vga_out_data_vid_h_sync (vga_hsync),
-    .vga_out_data_vid_f (),
-    .vga_out_data_vid_h (),
-    .vga_out_data_vid_v ());
+    .vga_out_vga_if_vga_clk (vga_clk),
+    .vga_out_vga_if_vga_red (vga_red),
+    .vga_out_vga_if_vga_green (vga_grn),
+    .vga_out_vga_if_vga_blue (vga_blu),
+    .vga_out_vga_if_vga_hsync(vga_hsync),
+    .vga_out_vga_if_vga_vsync(vga_vsync));
 
 endmodule
 
