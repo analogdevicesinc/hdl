@@ -235,6 +235,17 @@ proc create_lane_pll {id tx_or_rx_n pllclk_frequency refclk_frequency num_lanes 
   } elseif {$device_family == "Stratix 10"} {
     add_instance lane_pll altera_xcvr_atx_pll_s10_htile
     set_instance_parameter_value lane_pll {rcfg_enable} {1}
+    if {$num_lanes > 6} {
+      set_instance_parameter_value lane_pll enable_mcgb {true}
+      if {$bonding_clocks_en} {
+          set_instance_parameter_value lane_pll {enable_bonding_clks} {true}
+          set_instance_parameter_value lane_pll {mcgb_div} {1}
+          set_instance_parameter_value lane_pll {set_ref_clk_div} {1}
+          set_instance_parameter_value lane_pll {pma_width} {40}
+      } else {
+          set_instance_parameter_value lane_pll enable_hfreq_clk {true}
+      }
+    }
 
     ## tie pll_select to GND
     add_instance glue adi_jesd204_glue
