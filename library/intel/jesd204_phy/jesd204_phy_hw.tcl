@@ -72,6 +72,14 @@ ad_ip_parameter REGISTER_INPUTS INTEGER 0 false
 ad_ip_parameter LANE_INVERT INTEGER 0 false
 ad_ip_parameter BONDING_CLOCKS_EN BOOLEAN false false
 
+proc log2 {x} {
+    expr (log($x) / log(2))
+}
+
+#proc log2 {x} {
+#  return [tcl::mathfunc::int [tcl::mathfunc::ceil [expr [tcl::mathfunc::log $x] / [tcl::mathfunc::log 2]]]]
+#}
+
 proc jesd204_phy_composition_callback {} {
 
   set device [get_parameter_value "DEVICE"]
@@ -91,6 +99,8 @@ proc jesd204_phy_composition_callback {} {
     set device_type 1
   } elseif {[string equal $device "Stratix 10"]} {
     set device_type 2
+  } elseif {[string equal $device "Agilex"]} {
+    set device_type 3
   } else {
     set device_type 0
   }
@@ -114,65 +124,101 @@ proc jesd204_phy_composition_callback {} {
     add_instance native_phy altera_xcvr_native_s10_htile
     set_instance_parameter_value native_phy {tx_fifo_mode} "Phase compensation"
     set_instance_parameter_value native_phy {rx_fifo_mode} "Phase compensation"
+  ## Agilex F-Tile
+  } elseif {$device_type == 3} {
+    add_instance native_phy directphy_f
+    set_instance_parameter_value native_phy xcvr_type "FGT"
+    set_instance_parameter_value native_phy num_xcvr_per_sys $num_of_lanes
+    set_instance_parameter_value native_phy clocking_mode "xcvr"
+    set_instance_parameter_value native_phy pma_modulation "NRZ"
+    set_instance_parameter_value native_phy pma_data_rate $lane_rate
+    set_instance_parameter_value native_phy pma_width 20
+    set_instance_parameter_value native_phy rx_deskew_en 0
+
   ## Unsupported device
   } else {
-    send_message error "Only Arria 10 and Stratix 10 are supported."
+    send_message error "Only Arria 10/Stratix 10/Agilex are supported."
   }
 
-  if {$soft_pcs} {
-    set_instance_parameter_value native_phy {protocol_mode} "basic_enh"
+  # Common paramters to all PHYs
+  if {$tx} {
+    set tx_rx "tx"
   } else {
-    set_instance_parameter_value native_phy {protocol_mode} "basic_std"
-    set_instance_parameter_value native_phy {std_pcs_pma_width} 20
+    set tx_rx "rx"
+  }
+  set_instance_parameter_value native_phy {duplex_mode} $tx_rx
+
+  if {$device_type == 1 || $device_type == 2} {
+    if {$soft_pcs} {
+      set_instance_parameter_value native_phy {protocol_mode} "basic_enh"
+    } else {
+      set_instance_parameter_value native_phy {protocol_mode} "basic_std"
+      set_instance_parameter_value native_phy {std_pcs_pma_width} 20
+
+      if {$tx} {
+        set_instance_parameter_value native_phy {std_tx_byte_ser_mode} "Serialize x2"
+        set_instance_parameter_value native_phy {std_tx_8b10b_enable} 1
+        set_instance_parameter_value native_phy {std_tx_polinv_enable} 1
+        set_instance_parameter_value native_phy {enable_port_tx_polinv} 1
+      } else {
+        set_instance_parameter_value native_phy {std_rx_byte_deser_mode} "Deserialize x2"
+        set_instance_parameter_value native_phy {std_rx_8b10b_enable} 1
+        set_instance_parameter_value native_phy {std_rx_word_aligner_mode} "manual (PLD controlled)"
+        set_instance_parameter_value native_phy {std_rx_word_aligner_pattern_len} 20
+        set_instance_parameter_value native_phy {std_rx_word_aligner_pattern} 0xA0D7C
+        set_instance_parameter_value native_phy {enable_port_rx_std_wa_patternalign} 1
+        set_instance_parameter_value native_phy {std_rx_polinv_enable} 1
+        set_instance_parameter_value native_phy {enable_port_rx_polinv} 1
+      }
+    }
 
     if {$tx} {
-      set_instance_parameter_value native_phy {std_tx_byte_ser_mode} "Serialize x2"
-      set_instance_parameter_value native_phy {std_tx_8b10b_enable} 1
-      set_instance_parameter_value native_phy {std_tx_polinv_enable} 1
-      set_instance_parameter_value native_phy {enable_port_tx_polinv} 1
+      if {$bonding_clocks_en && $num_of_lanes > 6} {
+          set_instance_parameter_value native_phy {bonded_mode} "pma_only"
+      } else {
+          set_instance_parameter_value native_phy {bonded_mode} "not_bonded"
+      }
+      set_instance_parameter_value native_phy {enable_port_tx_pma_elecidle} 0
     } else {
-      set_instance_parameter_value native_phy {std_rx_byte_deser_mode} "Deserialize x2"
-      set_instance_parameter_value native_phy {std_rx_8b10b_enable} 1
-      set_instance_parameter_value native_phy {std_rx_word_aligner_mode} "manual (PLD controlled)"
-      set_instance_parameter_value native_phy {std_rx_word_aligner_pattern_len} 20
-      set_instance_parameter_value native_phy {std_rx_word_aligner_pattern} 0xA0D7C
-      set_instance_parameter_value native_phy {enable_port_rx_std_wa_patternalign} 1
-      set_instance_parameter_value native_phy {std_rx_polinv_enable} 1
-      set_instance_parameter_value native_phy {enable_port_rx_polinv} 1
+      set_instance_parameter_value native_phy {set_cdr_refclk_freq} $refclk_frequency
+      set_instance_parameter_value native_phy {enable_port_rx_is_lockedtodata} 1
+      set_instance_parameter_value native_phy {enable_port_rx_is_lockedtoref} 0
+      set_instance_parameter_value native_phy {enable_ports_rx_manual_cdr_mode} 0
+    }
+
+    set_instance_parameter_value native_phy {channels} $num_of_lanes
+    set_instance_parameter_value native_phy {set_data_rate} $lane_rate
+    set_instance_parameter_value native_phy {enable_simple_interface} 1
+    set_instance_parameter_value native_phy {enh_pcs_pma_width} 40
+    set_instance_parameter_value native_phy {enh_pld_pcs_width} 40
+    set_instance_parameter_value native_phy {rcfg_enable} 1
+    set_instance_parameter_value native_phy {rcfg_shared} 0
+    set_instance_parameter_value native_phy {rcfg_jtag_enable} 0
+    set_instance_parameter_value native_phy {rcfg_sv_file_enable} 0
+    set_instance_parameter_value native_phy {rcfg_h_file_enable} 0
+    set_instance_parameter_value native_phy {rcfg_mif_file_enable} 0
+    set_instance_parameter_value native_phy {set_user_identifier} $id
+    set_instance_parameter_value native_phy {set_capability_reg_enable} 1
+    set_instance_parameter_value native_phy {set_csr_soft_logic_enable} 1
+    set_instance_parameter_value native_phy {set_prbs_soft_logic_enable} 0
+
+  } elseif {$device_type == 3} {
+    if {$tx} {
+      set_instance_parameter_value native_phy fgt_tx_pll_refclk_freq_mhz [format {%.6f} $refclk_frequency]
+      set_instance_parameter_value native_phy pmaif_tx_fifo_mode_s "phase_comp"
+      set_instance_parameter_value native_phy pldif_tx_double_width_transfer_enable 1
+      set_instance_parameter_value native_phy pldif_tx_fifo_mode "phase_comp"
+      set_instance_parameter_value native_phy pldif_tile_tx_fifo_mode "phase_comp"
+      set_instance_parameter_value native_phy enable_port_tx_clkout2 1
+      set_instance_parameter_value native_phy pldif_tx_clkout2_sel "TX_WORD_CLK"
+      set_instance_parameter_value native_phy pldif_tx_clkout2_div 2
+      set_instance_parameter_value native_phy avmm2_enable 1
+      #set_instance_parameter_value native_phy avmm2_split [expr $num_of_lanes > 1]
+      #set_instance_parameter_value native_phy avmm2_split 1
+    } else {
+      # TODO  Rx parameters here
     }
   }
-
-  if {$tx} {
-    set_instance_parameter_value native_phy {duplex_mode} "tx"
-    if {$bonding_clocks_en && $num_of_lanes > 6} {
-        set_instance_parameter_value native_phy {bonded_mode} "pma_only"
-    } else {
-        set_instance_parameter_value native_phy {bonded_mode} "not_bonded"
-    }
-    set_instance_parameter_value native_phy {enable_port_tx_pma_elecidle} 0
-  } else {
-    set_instance_parameter_value native_phy {duplex_mode} "rx"
-    set_instance_parameter_value native_phy {set_cdr_refclk_freq} $refclk_frequency
-    set_instance_parameter_value native_phy {enable_port_rx_is_lockedtodata} 1
-    set_instance_parameter_value native_phy {enable_port_rx_is_lockedtoref} 0
-    set_instance_parameter_value native_phy {enable_ports_rx_manual_cdr_mode} 0
-  }
-
-  set_instance_parameter_value native_phy {channels} $num_of_lanes
-  set_instance_parameter_value native_phy {set_data_rate} $lane_rate
-  set_instance_parameter_value native_phy {enable_simple_interface} 1
-  set_instance_parameter_value native_phy {enh_pcs_pma_width} 40
-  set_instance_parameter_value native_phy {enh_pld_pcs_width} 40
-  set_instance_parameter_value native_phy {rcfg_enable} 1
-  set_instance_parameter_value native_phy {rcfg_shared} 0
-  set_instance_parameter_value native_phy {rcfg_jtag_enable} 0
-  set_instance_parameter_value native_phy {rcfg_sv_file_enable} 0
-  set_instance_parameter_value native_phy {rcfg_h_file_enable} 0
-  set_instance_parameter_value native_phy {rcfg_mif_file_enable} 0
-  set_instance_parameter_value native_phy {set_user_identifier} $id
-  set_instance_parameter_value native_phy {set_capability_reg_enable} 1
-  set_instance_parameter_value native_phy {set_csr_soft_logic_enable} 1
-  set_instance_parameter_value native_phy {set_prbs_soft_logic_enable} 0
 
   add_instance phy_glue jesd204_phy_glue
   set_instance_parameter_value phy_glue DEVICE $device
@@ -188,94 +234,181 @@ proc jesd204_phy_composition_callback {} {
   add_interface reconfig_reset reset sink
   set_interface_property reconfig_reset EXPORT_OF phy_glue.reconfig_reset
 
+  # Connect PHY with GLUE
+  if {$device_type == 1 || $device_type == 2} {
 
-  if {$tx} {
-    if {$bonding_clocks_en && $num_of_lanes > 6} {
-        add_interface bonding_clocks hssi_bonded_clock end
-        set_interface_property bonding_clocks EXPORT_OF phy_glue.tx_bonding_clocks
-        add_connection phy_glue.phy_tx_bonding_clocks native_phy.tx_bonding_clocks
-    } else {
-        add_interface serial_clk_x1 hssi_serial_clock end
-        set_interface_property serial_clk_x1 EXPORT_OF phy_glue.tx_serial_clk_x1
-        if {$num_of_lanes > 6} {
-           add_interface serial_clk_xN hssi_serial_clock end
-           set_interface_property serial_clk_xN EXPORT_OF phy_glue.tx_serial_clk_xN
-        }
-        add_connection phy_glue.phy_tx_serial_clk0 native_phy.tx_serial_clk0
-    }
+    if {$tx} {
+      if {$bonding_clocks_en && $num_of_lanes > 6} {
+          add_interface bonding_clocks hssi_bonded_clock end
+          set_interface_property bonding_clocks EXPORT_OF phy_glue.tx_bonding_clocks
+          add_connection phy_glue.phy_tx_bonding_clocks native_phy.tx_bonding_clocks
+      } else {
+          add_interface serial_clk_x1 hssi_serial_clock end
+          set_interface_property serial_clk_x1 EXPORT_OF phy_glue.tx_serial_clk_x1
+          if {$num_of_lanes > 6} {
+             add_interface serial_clk_xN hssi_serial_clock end
+             set_interface_property serial_clk_xN EXPORT_OF phy_glue.tx_serial_clk_xN
+          }
+          add_connection phy_glue.phy_tx_serial_clk0 native_phy.tx_serial_clk0
+      }
 
-    add_connection link_clock.clk phy_glue.tx_coreclkin
+      add_connection link_clock.clk phy_glue.tx_coreclkin
 
-    if { $soft_pcs == true && $device_type == 1 }  {
-      add_connection phy_glue.phy_tx_enh_data_valid native_phy.tx_enh_data_valid
-    }
+      if { $soft_pcs == true && $device_type == 1 }  {
+        add_connection phy_glue.phy_tx_enh_data_valid native_phy.tx_enh_data_valid
+      }
 
-    foreach x {reconfig_clk reconfig_reset reconfig_avmm tx_coreclkin \
-      tx_clkout tx_parallel_data unused_tx_parallel_data} {
-      add_connection phy_glue.phy_${x} native_phy.${x}
-    }
+      foreach x {reconfig_clk reconfig_reset reconfig_avmm tx_coreclkin \
+        tx_clkout tx_parallel_data unused_tx_parallel_data} {
+        add_connection phy_glue.phy_${x} native_phy.${x}
+      }
 
-    foreach x {serial_data analogreset digitalreset cal_busy} {
-      add_interface ${x} conduit end
-      set_interface_property ${x} EXPORT_OF native_phy.tx_${x}
-    }
-
-    if {$soft_pcs == false} {
-      add_connection phy_glue.phy_tx_datak native_phy.tx_datak
-      add_connection phy_glue.phy_tx_polinv native_phy.tx_polinv
-    }
-
-    ## Startix 10
-    if {$device_type == 2} {
-      foreach x {analogreset_stat digitalreset_stat} {
+      foreach x {serial_data analogreset digitalreset cal_busy} {
         add_interface ${x} conduit end
         set_interface_property ${x} EXPORT_OF native_phy.tx_${x}
       }
-    }
 
-  } else {
-
-    add_interface ref_clk clock sink
-    set_interface_property ref_clk EXPORT_OF phy_glue.rx_cdr_refclk0
-
-    add_connection link_clock.clk phy_glue.rx_coreclkin
-
-    foreach x {serial_data analogreset digitalreset cal_busy is_lockedtodata} {
-      add_interface ${x} conduit end
-      set_interface_property ${x} EXPORT_OF native_phy.rx_${x}
-    }
-
-    foreach x {reconfig_clk reconfig_reset reconfig_avmm rx_coreclkin \
-      rx_clkout rx_parallel_data rx_cdr_refclk0} {
-      add_connection phy_glue.phy_${x} native_phy.${x}
-    }
-
-    if {$soft_pcs == false} {
-      foreach x {rx_datak rx_disperr rx_errdetect rx_std_wa_patternalign} {
-        add_connection phy_glue.phy_${x} native_phy.${x}
+      if {$soft_pcs == false} {
+        add_connection phy_glue.phy_tx_datak native_phy.tx_datak
+        add_connection phy_glue.phy_tx_polinv native_phy.tx_polinv
       }
-      add_connection phy_glue.phy_rx_polinv native_phy.rx_polinv
-    }
 
-    ## Startix 10
-    if {$device_type == 2} {
-      foreach x {analogreset_stat digitalreset_stat} {
+      ## Startix 10
+      if {$device_type == 2} {
+        foreach x {analogreset_stat digitalreset_stat} {
+          add_interface ${x} conduit end
+          set_interface_property ${x} EXPORT_OF native_phy.tx_${x}
+        }
+      }
+
+    } else {
+
+      add_interface ref_clk clock sink
+      set_interface_property ref_clk EXPORT_OF phy_glue.rx_cdr_refclk0
+
+      add_connection link_clock.clk phy_glue.rx_coreclkin
+
+      foreach x {serial_data analogreset digitalreset cal_busy is_lockedtodata} {
         add_interface ${x} conduit end
         set_interface_property ${x} EXPORT_OF native_phy.rx_${x}
       }
+
+      foreach x {reconfig_clk reconfig_reset reconfig_avmm rx_coreclkin \
+        rx_clkout rx_parallel_data rx_cdr_refclk0} {
+        add_connection phy_glue.phy_${x} native_phy.${x}
+      }
+
+      if {$soft_pcs == false} {
+        foreach x {rx_datak rx_disperr rx_errdetect rx_std_wa_patternalign} {
+          add_connection phy_glue.phy_${x} native_phy.${x}
+        }
+        add_connection phy_glue.phy_rx_polinv native_phy.rx_polinv
+      }
+
+      ## Startix 10
+      if {$device_type == 2} {
+        foreach x {analogreset_stat digitalreset_stat} {
+          add_interface ${x} conduit end
+          set_interface_property ${x} EXPORT_OF native_phy.rx_${x}
+        }
+      }
+
     }
 
-  }
+    # Connect GLUE with PCS
+    for {set i 0} {$i < $num_of_lanes} {incr i} {
+      add_interface reconfig_avmm_${i} avalon slave
+      set_interface_property reconfig_avmm_${i} EXPORT_OF phy_glue.reconfig_avmm_${i}
 
-  for {set i 0} {$i < $num_of_lanes} {incr i} {
-    add_interface reconfig_avmm_${i} avalon slave
-    set_interface_property reconfig_avmm_${i} EXPORT_OF phy_glue.reconfig_avmm_${i}
+      add_interface phy_${i} conduit start
 
-    add_interface phy_${i} conduit start
+      if {$tx} {
+        if {$soft_pcs} {
+          add_instance soft_pcs_${i} jesd204_soft_pcs_tx
+          set_instance_parameter_value soft_pcs_${i} INVERT_OUTPUTS \
+            [expr ($lane_invert >> $i) & 1]
+          add_connection link_clock.clk soft_pcs_${i}.clock
+          add_connection link_clock.clk_reset soft_pcs_${i}.reset
+          add_connection soft_pcs_${i}.tx_raw_data phy_glue.tx_raw_data_${i}
 
+          set_interface_property phy_${i} EXPORT_OF soft_pcs_${i}.tx_phy
+        } else {
+          set_interface_property phy_${i} EXPORT_OF phy_glue.tx_phy_${i}
+        }
+      } else {
+        if {$soft_pcs} {
+          add_instance soft_pcs_${i} jesd204_soft_pcs_rx
+          set_instance_parameter_value soft_pcs_${i} REGISTER_INPUTS $register_inputs
+          set_instance_parameter_value soft_pcs_${i} INVERT_INPUTS \
+            [expr ($lane_invert >> $i) & 1]
+          add_connection link_clock.clk soft_pcs_${i}.clock
+          add_connection link_clock.clk_reset soft_pcs_${i}.reset
+          add_connection phy_glue.rx_raw_data_${i} soft_pcs_${i}.rx_raw_data
+
+          set_interface_property phy_${i} EXPORT_OF soft_pcs_${i}.rx_phy
+        } else {
+          set_interface_property phy_${i} EXPORT_OF phy_glue.rx_phy_${i}
+        }
+      }
+    }
+
+  # Agilex
+  } elseif {$device_type == 3} {
+
+    add_interface ref_clk ftile_hssi_reference_clock end
+    set_interface_property ref_clk EXPORT_OF phy_glue.ref_clk
+
+    # export ${tx_rx}_reset, ${tx_rx}_ready, ${tx_rx}_reset_ack, ${tx_rx}_pll_locked
+    # This conects to axi_xcvr
+    foreach x {reset reset_ack ready pll_locked} {
+      add_interface ${x} conduit end
+      set_interface_property ${x} EXPORT_OF native_phy.${tx_rx}_${x}
+    }
+
+    # export ${tx_rx}_serial_data, ${tx_rx}_serial_data_n
+    foreach x {serial_data serial_data_n} {
+      add_interface ${x} conduit end
+      set_interface_property ${x} EXPORT_OF native_phy.${tx_rx}_${x}
+    }
+
+    # connect link clock and output clock from - to GLUE
+
+    add_connection link_clock.clk phy_glue.${tx_rx}_coreclkin
+    add_connection phy_glue.phy_${tx_rx}_coreclkin native_phy.${tx_rx}_coreclkin
+
+    # Reconfig interface
+    add_connection phy_glue.phy_reconfig_clk native_phy.reconfig_xcvr_clk
+    add_connection phy_glue.phy_reconfig_reset native_phy.reconfig_xcvr_reset
+    add_connection phy_glue.phy_reconfig_avmm native_phy.reconfig_xcvr_avmm
+
+    add_interface reconfig_avmm avalon slave
+    set_interface_property reconfig_avmm EXPORT_OF phy_glue.reconfig_avmm
+
+    # connect ref clock and output clock from - to GLUE
+    # tx_pll_refclk_link
     if {$tx} {
-      if {$soft_pcs} {
+      set tx_rx_ref_name "pll"
+    } else {
+      set tx_rx_ref_name "cdr"
+    }
+    add_connection phy_glue.phy_ref_clk native_phy.${tx_rx}_${tx_rx_ref_name}_refclk_link
+
+    foreach x [list ${tx_rx}_parallel_data ${tx_rx}_clkout2] {
+      add_connection phy_glue.phy_${x} native_phy.${x}
+    }
+
+    # This is lane rate / 40
+    add_interface clkout clock source
+    set_interface_property clkout EXPORT_OF phy_glue.${tx_rx}_clkout2_0
+
+    # Connect GLUE with PCS
+    for {set i 0} {$i < $num_of_lanes} {incr i} {
+
+      add_interface phy_${i} conduit start
+
+      if {$tx} {
         add_instance soft_pcs_${i} jesd204_soft_pcs_tx
+        set_instance_parameter_value soft_pcs_${i} IFC_TYPE 1
         set_instance_parameter_value soft_pcs_${i} INVERT_OUTPUTS \
           [expr ($lane_invert >> $i) & 1]
         add_connection link_clock.clk soft_pcs_${i}.clock
@@ -284,11 +417,8 @@ proc jesd204_phy_composition_callback {} {
 
         set_interface_property phy_${i} EXPORT_OF soft_pcs_${i}.tx_phy
       } else {
-        set_interface_property phy_${i} EXPORT_OF phy_glue.tx_phy_${i}
-      }
-    } else {
-      if {$soft_pcs} {
         add_instance soft_pcs_${i} jesd204_soft_pcs_rx
+        set_instance_parameter_value soft_pcs_${i} IFC_TYPE 1
         set_instance_parameter_value soft_pcs_${i} REGISTER_INPUTS $register_inputs
         set_instance_parameter_value soft_pcs_${i} INVERT_INPUTS \
           [expr ($lane_invert >> $i) & 1]
@@ -297,9 +427,8 @@ proc jesd204_phy_composition_callback {} {
         add_connection phy_glue.rx_raw_data_${i} soft_pcs_${i}.rx_raw_data
 
         set_interface_property phy_${i} EXPORT_OF soft_pcs_${i}.rx_phy
-      } else {
-        set_interface_property phy_${i} EXPORT_OF phy_glue.rx_phy_${i}
       }
     }
   }
+
 }
