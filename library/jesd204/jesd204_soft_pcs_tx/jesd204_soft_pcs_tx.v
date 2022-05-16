@@ -10,7 +10,8 @@
 module jesd204_soft_pcs_tx #(
   parameter NUM_LANES = 1,
   parameter DATA_PATH_WIDTH = 4,
-  parameter INVERT_OUTPUTS = 0
+  parameter INVERT_OUTPUTS = 0,
+  parameter IFC_TYPE = 0
 ) (
   input clk,
   input reset,
@@ -18,13 +19,32 @@ module jesd204_soft_pcs_tx #(
   input [NUM_LANES*DATA_PATH_WIDTH*8-1:0] char,
   input [NUM_LANES*DATA_PATH_WIDTH-1:0] charisk,
 
-  output reg [NUM_LANES*DATA_PATH_WIDTH*10-1:0] data
+   output reg [NUM_LANES*(DATA_PATH_WIDTH*10 + IFC_TYPE*40)-1:0] data
 );
 
   reg [NUM_LANES-1:0] disparity = 'h00;
 
-  wire [DATA_PATH_WIDTH:0] disparity_chain[0:NUM_LANES-1];
-  wire [NUM_LANES*DATA_PATH_WIDTH*10-1:0] data_s;
+wire [DATA_PATH_WIDTH:0] disparity_chain[0:NUM_LANES-1];
+wire [NUM_LANES*DATA_PATH_WIDTH*10-1:0] data_s;
+wire [NUM_LANES*DATA_PATH_WIDTH*10-1:0] data_inv_s;
+
+assign data_inv_s = INVERT_OUTPUTS ? ~data_s : data_s;
+
+always @(posedge clk) begin
+  data <= IFC_TYPE == 0 ? data_inv_s : { // F-Tile padding
+                          /* 79-60 */ 20'b0,
+                          /* 59-40 */ data_inv_s[39:20],
+                          /*    39 */ 1'b0,
+                          /*    38 */ 1'b1,
+                          /* 37-20 */ 18'b0,
+                          /* 19-00 */ data_inv_s[19:0]};
+end
+
+generate
+genvar lane;
+genvar i;
+for (lane = 0; lane < NUM_LANES; lane = lane + 1) begin: gen_lane
+  assign disparity_chain[lane][0] = disparity[lane];
 
   always @(posedge clk) begin
     data <= INVERT_OUTPUTS ? ~data_s : data_s;
