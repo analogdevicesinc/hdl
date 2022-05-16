@@ -277,9 +277,9 @@ proc jesd204_validate {{quiet false}} {
   set num_of_lanes [get_parameter_value "NUM_OF_LANES"]
   set tx_or_rx_n [get_parameter_value "TX_OR_RX_N"]
 
-  if {$device_family != "Arria 10" && $device_family != "Stratix 10"} {
+  if {$device_family != "Arria 10" && $device_family != "Stratix 10" && $device_family != "Agilex"} {
     if {!$quiet} {
-      send_message error "Only Arria 10 and Startix 10 are supported."
+      send_message error "Only Arria 10/Startix 10/Agilex are supported."
     }
     return false
   }
@@ -342,11 +342,13 @@ proc jesd204_compose {} {
   add_interface sys_resetn reset sink
   set_interface_property sys_resetn EXPORT_OF sys_clock.clk_in_reset
 
-  add_instance ref_clock altera_clock_bridge
-  set_instance_parameter_value ref_clock {EXPLICIT_CLOCK_RATE} [expr $refclk_frequency*1000000]
-  set_instance_parameter_value ref_clock {NUM_CLOCK_OUTPUTS} 2
-  add_interface ref_clk clock sink
-  set_interface_property ref_clk EXPORT_OF ref_clock.in_clk
+  if {$device_family == "Arria 10" || $device_family == "Stratix 10"} {
+    add_instance ref_clock altera_clock_bridge
+    set_instance_parameter_value ref_clock {EXPLICIT_CLOCK_RATE} [expr $refclk_frequency*1000000]
+    set_instance_parameter_value ref_clock {NUM_CLOCK_OUTPUTS} 2
+    add_interface ref_clk clock sink
+    set_interface_property ref_clk EXPORT_OF ref_clock.in_clk
+  }
 
   set outclk_name ""
 
@@ -395,6 +397,7 @@ proc jesd204_compose {} {
     set_instance_parameter_value link_pll {gui_desired_outclk1_frequency} $pfdclk_frequency
 
     set outclk_name "outclk0"
+    add_connection link_pll.$outclk_name link_clock.in_clk
 
     add_instance link_pll_reset_control altera_xcvr_reset_control
     set_instance_parameter_value link_pll_reset_control {SYNCHRONIZE_RESET} {0}
@@ -426,30 +429,36 @@ proc jesd204_compose {} {
     set_instance_parameter_value link_pll {set_capability_reg_enable} {1}
 
     set outclk_name "outclk_div1"
+    add_connection link_pll.$outclk_name link_clock.in_clk
 
   } elseif {$device_family == "Stratix 10" && $sip_tile == "E-Tile"} {
 
     ## No fPLL here, PLL embedded in Native PHY
 
+  } elseif {$device_family == "Agilex"} {
+
+    ## No fPLL here, PLL embedded in Native PHY
+
   } else {
-  ## Unsupported device
-    send_message error "Only Arria 10 and Stratix 10 are supported."
+    ## Unsupported device
+    send_message error "Only Arria 10/Stratix 10/Agilex are supported."
   }
 
-  add_connection link_pll.$outclk_name link_clock.in_clk
   add_interface link_clk clock source
 
   add_connection sys_clock.clk link_reset.clk
   add_interface link_reset reset source
   set_interface_property link_reset EXPORT_OF link_reset.out_reset_1
 
-  set_instance_parameter_value link_pll {set_capability_reg_enable} {1}
-  set_instance_parameter_value link_pll {set_csr_soft_logic_enable} {1}
-  set_instance_parameter_value link_pll {rcfg_separate_avmm_busy} {1}
-  add_connection ref_clock.out_clk link_pll.pll_refclk0
+  if {$device_family == "Arria 10" || $device_family == "Stratix 10"} {
+    set_instance_parameter_value link_pll {set_capability_reg_enable} {1}
+    set_instance_parameter_value link_pll {set_csr_soft_logic_enable} {1}
+    set_instance_parameter_value link_pll {rcfg_separate_avmm_busy} {1}
+    add_connection ref_clock.out_clk link_pll.pll_refclk0
 
-  add_connection sys_clock.clk_reset link_pll.reconfig_reset0
-  add_connection sys_clock.clk link_pll.reconfig_clk0
+    add_connection sys_clock.clk_reset link_pll.reconfig_reset0
+    add_connection sys_clock.clk link_pll.reconfig_clk0
+  }
 
   add_instance axi_xcvr axi_adxcvr
   set_instance_parameter_value axi_xcvr {ID} $id
@@ -459,18 +468,20 @@ proc jesd204_compose {} {
   add_connection sys_clock.clk axi_xcvr.s_axi_clock
   add_connection sys_clock.clk_reset axi_xcvr.s_axi_reset
   add_connection axi_xcvr.if_up_rst link_reset.in_reset
-  add_connection link_pll.pll_locked axi_xcvr.core_pll_locked
 
   add_interface link_management axi4lite slave
   set_interface_property link_management EXPORT_OF axi_xcvr.s_axi
 
-  add_interface link_pll_reconfig avalon slave
-  set_interface_property link_pll_reconfig EXPORT_OF link_pll.reconfig_avmm0
-  set_interface_property link_pll_reconfig associatedClock sys_clk
-  set_interface_property link_pll_reconfig associatedReset sys_resetn
+  if {$device_family == "Arria 10" || $device_family == "Stratix 10"} {
+    add_connection link_pll.pll_locked axi_xcvr.core_pll_locked
 
+    add_interface link_pll_reconfig avalon slave
+    set_interface_property link_pll_reconfig EXPORT_OF link_pll.reconfig_avmm0
+    set_interface_property link_pll_reconfig associatedClock sys_clk
+    set_interface_property link_pll_reconfig associatedReset sys_resetn
 
-  create_phy_reset_control $tx_or_rx_n $num_of_lanes $sysclk_frequency
+    create_phy_reset_control $tx_or_rx_n $num_of_lanes $sysclk_frequency
+  }
 
   add_instance phy jesd204_phy
   set_instance_parameter_value phy ID $id
@@ -500,32 +511,53 @@ proc jesd204_compose {} {
   add_connection $link_clock phy.link_clk
   set_interface_property link_clk EXPORT_OF $device_clock_export
 
-  set phy_reset_intfs_s10 {analogreset_stat digitalreset_stat}
+  if {$device_family == "Arria 10" || $device_family == "Stratix 10"} {
+    if {$tx_or_rx_n} {
+      create_lane_pll $id $tx_or_rx_n $pllclk_frequency $refclk_frequency $num_of_lanes $bonding_clocks_en
+      if {$num_of_lanes > 6} {
+          if {$bonding_clocks_en} {
+              add_connection lane_pll.tx_bonding_clocks phy.bonding_clocks
+          } else {
+              add_connection lane_pll.tx_serial_clk   phy.serial_clk_x1
+              add_connection lane_pll.mcgb_serial_clk phy.serial_clk_xN
+          }
+      } else {
+          add_connection lane_pll.tx_serial_clk phy.serial_clk_x1
+      }
+    }
+  }
+
+  if {$device_family == "Arria 10" || $device_family == "Stratix 10"} {
+    add_connection ref_clock.out_clk phy.ref_clk
+
+  } elseif {$device_family == "Agilex"} {
+
+    add_connection phy.clkout link_clock.in_clk
+
+    # PHY <-> AXI_XCVR
+    add_connection axi_xcvr.core_pll_locked phy.pll_locked
+    add_connection axi_xcvr.ready phy.ready
+    add_connection axi_xcvr.reset phy.reset
+
+    add_connection axi_xcvr.if_up_rst phy.link_reset
+
+    ## Export ref clocks
+    add_interface ref_clk ftile_hssi_reference_clock sink
+    set_interface_property ref_clk EXPORT_OF phy.ref_clk
+
+  } else {
+    ## Unsupported device
+    send_message error "Only Arria 10/Stratix 10/Agilex are supported."
+  }
 
   if {$tx_or_rx_n} {
-    set tx_rx "tx"
     set data_direction sink
     set jesd204_intfs {config device_config control ilas_config device_event status}
-    set phy_reset_intfs {analogreset digitalreset cal_busy}
-
-    create_lane_pll $id $tx_or_rx_n $pllclk_frequency $refclk_frequency $num_of_lanes $bonding_clocks_en
-    if {$num_of_lanes > 6} {
-        if {$bonding_clocks_en} {
-            add_connection lane_pll.tx_bonding_clocks phy.bonding_clocks
-        } else {
-            add_connection lane_pll.tx_serial_clk   phy.serial_clk_x1
-            add_connection lane_pll.mcgb_serial_clk phy.serial_clk_xN
-        }
-    } else {
-        add_connection lane_pll.tx_serial_clk phy.serial_clk_x1
-    }
+    set tx_rx "tx"
   } else {
-    set tx_rx "rx"
     set data_direction source
     set jesd204_intfs {config device_config ilas_config device_event status}
-    set phy_reset_intfs {analogreset digitalreset cal_busy is_lockedtodata}
-
-    add_connection ref_clock.out_clk phy.ref_clk
+    set tx_rx "rx"
   }
 
   add_instance axi_jesd204_${tx_rx} axi_jesd204_${tx_rx}
@@ -552,16 +584,28 @@ proc jesd204_compose {} {
     add_connection axi_jesd204_${tx_rx}.${intf} jesd204_${tx_rx}.${intf}
   }
 
-  foreach intf $phy_reset_intfs {
-    add_connection phy_reset_control.${tx_rx}_${intf} phy.${intf}
-  }
+  if {$device_family == "Arria 10" || $device_family == "Stratix 10"} {
 
-  ## connect phy_reset_control interfaces specific to Stratix 10
-  if {$device_family == "Stratix 10"} {
-    foreach intf $phy_reset_intfs_s10 {
+    set phy_reset_intfs_s10 {analogreset_stat digitalreset_stat}
+
+    if {$tx_or_rx_n} {
+      set phy_reset_intfs {analogreset digitalreset cal_busy}
+
+    } else {
+      set phy_reset_intfs {analogreset digitalreset cal_busy is_lockedtodata}
+    }
+
+    foreach intf $phy_reset_intfs {
       add_connection phy_reset_control.${tx_rx}_${intf} phy.${intf}
     }
 
+    ## connect phy_reset_control interfaces specific to Stratix 10
+    if {$device_family == "Stratix 10"} {
+      foreach intf $phy_reset_intfs_s10 {
+        add_connection phy_reset_control.${tx_rx}_${intf} phy.${intf}
+      }
+
+    }
   }
 
   set lane_map [regexp -all -inline {\S+} $lane_map]
@@ -575,9 +619,14 @@ proc jesd204_compose {} {
     add_connection jesd204_${tx_rx}.${tx_rx}_phy${j} phy.phy_${i}
   }
 
-  for {set i 0} {$i < $num_of_lanes} {incr i} {
-    add_interface phy_reconfig_${i} avalon slave
-    set_interface_property phy_reconfig_${i} EXPORT_OF phy.reconfig_avmm_${i}
+  if {$device_family == "Arria 10" || $device_family == "Stratix 10"} {
+    for {set i 0} {$i < $num_of_lanes} {incr i} {
+      add_interface phy_reconfig_${i} avalon slave
+      set_interface_property phy_reconfig_${i} EXPORT_OF phy.reconfig_avmm_${i}
+    }
+  } elseif {$device_family == "Agilex"} {
+    add_interface phy_reconfig avalon slave
+    set_interface_property phy_reconfig EXPORT_OF phy.reconfig_avmm
   }
 
   add_interface interrupt interrupt end
