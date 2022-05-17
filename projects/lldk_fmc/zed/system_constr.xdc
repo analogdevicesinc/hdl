@@ -70,6 +70,24 @@ set_property  -dict {PACKAGE_PIN B15 IOSTANDARD LVCMOS25}             [get_ports
 set_property  -dict {PACKAGE_PIN A21  IOSTANDARD LVCMOS25}            [get_ports direction]   ; ## H37 LA_32_P
 set_property  -dict {PACKAGE_PIN A22  IOSTANDARD LVCMOS25}            [get_ports reset]       ; ## H38 LA_32_N
 
+set_property  -dict {PACKAGE_PIN R19 IOSTANDARD LVCMOS25              } [get_ports dac_0_spi_cs]                     ; ## C14 LA_10_P
+set_property  -dict {PACKAGE_PIN T19 IOSTANDARD LVCMOS25              } [get_ports dac_0_spi_sclk]                   ; ## C15 LA_10_N
+set_property  -dict {PACKAGE_PIN N17 IOSTANDARD LVCMOS25              } [get_ports dac_0_spi_sdio[0]]                  ; ## H16 LA_11_P
+set_property  -dict {PACKAGE_PIN N18 IOSTANDARD LVCMOS25              } [get_ports dac_0_spi_sdio[1]]                  ; ## H17 LA_11_N
+set_property  -dict {PACKAGE_PIN P20 IOSTANDARD LVCMOS25              } [get_ports dac_0_spi_sdio[2]]                  ; ## G15 LA_12_P
+set_property  -dict {PACKAGE_PIN P21 IOSTANDARD LVCMOS25              } [get_ports dac_0_spi_sdio[3]]                  ; ## G16 LA_12_N
+set_property  -dict {PACKAGE_PIN J20 IOSTANDARD LVCMOS25              } [get_ports dac_0_alert]                       ; ## G18 LA_16_P
+set_property  -dict {PACKAGE_PIN K21 IOSTANDARD LVCMOS25              } [get_ports dac_0_ldac]                        ; ## G19 LA_16_N
+
+set_property  -dict {PACKAGE_PIN E21 IOSTANDARD LVCMOS25              } [get_ports dac_1_spi_cs]                     ; ## C26 LA_27_P
+set_property  -dict {PACKAGE_PIN D21 IOSTANDARD LVCMOS25              } [get_ports dac_1_spi_sclk]                   ; ## C27 LA_27_N
+set_property  -dict {PACKAGE_PIN A16 IOSTANDARD LVCMOS25              } [get_ports dac_1_spi_sdio[0]]                  ; ## H31 LA_28_P
+set_property  -dict {PACKAGE_PIN A17 IOSTANDARD LVCMOS25              } [get_ports dac_1_spi_sdio[1]]                  ; ## H32 LA_28_N
+set_property  -dict {PACKAGE_PIN C17 IOSTANDARD LVCMOS25              } [get_ports dac_1_spi_sdio[2]]                  ; ## G30 LA_29_P
+set_property  -dict {PACKAGE_PIN C18 IOSTANDARD LVCMOS25              } [get_ports dac_1_spi_sdio[3]]                  ; ## G31 LA_29_N
+set_property  -dict {PACKAGE_PIN B21 IOSTANDARD LVCMOS25              } [get_ports dac_1_alert]                      ; ## G36 LA_33_P
+set_property  -dict {PACKAGE_PIN B22 IOSTANDARD LVCMOS25              } [get_ports dac_1_ldac]                        ; ## G37 LA_33_N
+
 # clocks
 
 set clk_period  8.333

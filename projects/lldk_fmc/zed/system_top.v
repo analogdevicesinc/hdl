@@ -100,13 +100,6 @@ module system_top (
   input       [ 3:0]      rx_da_p,
   input       [ 3:0]      rx_da_n,
 
-  output      [ 1:0]      dac_cs,
-  output      [ 1:0]      dac_sclk,
-  output      [ 1:0]      dac_sdio0,
-  input       [ 1:0]      dac_sdio1,
-  input       [ 1:0]      dac_sdio2,
-  input       [ 1:0]      dac_sdio3,
-
   input                   spi_miso,
   output                  spi_mosi,
   output                  spi_sck,
@@ -121,10 +114,18 @@ module system_top (
   output                  direction,
   output                  reset,
 
-  input                   alert_1,
-  output                  ldac_1,
-  input                   alert_2,
-  output                  ldac_2
+  inout                   dac_0_alert,
+  inout                   dac_0_ldac,
+  inout                   dac_1_alert,
+  inout                   dac_1_ldac,
+
+  output          dac_0_spi_cs,
+  output          dac_0_spi_sclk,
+  inout   [ 3:0]  dac_0_spi_sdio,
+
+  output          dac_1_spi_cs,
+  output          dac_1_spi_sclk,
+  inout   [ 3:0]  dac_1_spi_sdio
 );
 
   // internal signals
@@ -147,26 +148,56 @@ module system_top (
 
   wire    [ 3:0]  ltc_clk;
 
-
   assign gpio_i[63:32] = gpio_o[63:32];
-  //direction High for A->B
-//  assign direction = 1'b1;
   assign reset  = 1'b1;
 
   //LDAC active low
   assign ldac_1 = 1'b1;
   assign ldac_2 = 1'b1;
 
+  wire    [ 3:0]  dac_0_spi_sdo;
+  wire    [ 3:0]  dac_0_spi_sdi;
+  wire            dac_0_spi_sdo_t;
 
-  ad_3w_spi i_spi (
-    .spi_csn (dac_cs[0]),
-    .spi_clk (dac_sclk[0]),
-    .spi_mosi (),
-    .spi_miso (),
-    .spi_sdio (),
-    .spi_dir (direction));
+  wire    [ 3:0]  dac_1_spi_sdo;
+  wire    [ 3:0]  dac_1_spi_sdi;
+  wire            dac_1_spi_sdo_t;
 
   // instantiations
+
+  ad_iobuf #(
+    .DATA_WIDTH(4)
+  ) i_ad3552r_iobuf (
+    .dio_t(gpio_t[39:32]),
+    .dio_i(gpio_o[39:32]),
+    .dio_o(gpio_i[39:32]),
+    .dio_p({dac_0_alert,
+            dac_1_alert,
+            dac_0_ldac,
+            dac_1_ldac
+            }));
+
+  ad_iobuf #(
+    .DATA_WIDTH(4)
+  ) i_dac_0_spi_iobuf (
+    .dio_t({dac_0_spi_sdo_t,
+            dac_0_spi_sdo_t,
+            dac_0_spi_sdo_t,
+            dac_0_spi_sdo_t}),
+    .dio_i(dac_0_spi_sdo),
+    .dio_o(dac_0_spi_sdi),
+    .dio_p(dac_0_spi_sdio));
+
+  ad_iobuf #(
+    .DATA_WIDTH(4)
+  ) i_dac_1_spi_iobuf (
+    .dio_t({dac_1_spi_sdo_t,
+            dac_1_spi_sdo_t,
+            dac_1_spi_sdo_t,
+            dac_1_spi_sdo_t}),
+    .dio_i(dac_1_spi_sdo),
+    .dio_o(dac_1_spi_sdi),
+    .dio_p(dac_1_spi_sdio));
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -191,24 +222,6 @@ module system_top (
     .dio_i(iic_mux_sda_o_s),
     .dio_o(iic_mux_sda_i_s),
     .dio_p(iic_mux_sda));
-
-//de aici
-
-//  ad_iobuf #(
-//  .DATA_WIDTH(4)
-//  ) i_spi_iobuf0 (
-//    .dio_t(tx_0_1_sdt),
-//    .dio_i(tx_0_1_sdo),
-//    .dio_o(tx_0_1_sdi),
-//    .dio_p(tx_0_1_sdio));
-//
-//  ad_iobuf #(
-//  .DATA_WIDTH(4)
-//  ) i_spi_iobuf1 (
-//    .dio_t(tx_2_3_sdt),
-//    .dio_i(tx_2_3_sdo),
-//    .dio_o(tx_2_3_sdi),
-//    .dio_p(tx_2_3_sdio));
 
   ODDR #(.DDR_CLK_EDGE ("SAME_EDGE")) i_tx_clk_oddr0 (
     .CE (1'b1),
@@ -394,23 +407,6 @@ module system_top (
     .max_spi_csn_i(spi_csb),
     .max_spi_csn_o(spi_csb),
 
-
-    .dac1_spi_clk_i(dac_sclk[0]),
-    .dac1_spi_clk_o(dac_sclk[0]),
-    .dac1_spi_sdo_i(dac_sdio0[0]),
-    .dac1_spi_sdo_o(dac_sdio0[0]),
-    .dac1_spi_sdi_i(dac_sdio1[0]),
-    .dac1_spi_csn_i(dac_cs[0]),
-    .dac1_spi_csn_o(dac_cs[0]),
-
-    .dac2_spi_clk_i(dac_sclk[1]),
-    .dac2_spi_clk_o(dac_sclk[1]),
-    .dac2_spi_sdo_i(dac_sdio0[1]),
-    .dac2_spi_sdo_o(dac_sdio0[1]),
-    .dac2_spi_sdi_i(dac_sdio1[1]),
-    .dac2_spi_csn_i(dac_cs[1]),
-    .dac2_spi_csn_o(dac_cs[1]),
-
     .rx_0_dco_p   (rx_dco_p[0]),
     .rx_0_dco_n   (rx_dco_n[0]),
     .rx_0_cnv     (rx_cnv[0]),
@@ -440,6 +436,21 @@ module system_top (
     .rx_3_db_p    (rx_db_p[3]),
     .rx_3_db_n    (rx_db_n[3]),
     .clk_gate     (clk_gate),
+
+    .dac_0_spi_cs         (dac_0_spi_cs),
+    .dac_0_spi_sclk       (dac_0_spi_sclk),
+    .dac_0_spi_sdi        (dac_0_spi_sdi),
+    .dac_0_spi_sdo        (dac_0_spi_sdo),
+    .dac_0_spi_sdo_t      (dac_0_spi_sdo_t),
+    .dac_0_spi_three_wire (),
+
+    .dac_1_spi_cs         (dac_1_spi_cs),
+    .dac_1_spi_sclk       (dac_1_spi_sclk),
+    .dac_1_spi_sdi        (dac_1_spi_sdi),
+    .dac_1_spi_sdo        (dac_1_spi_sdo),
+    .dac_1_spi_sdo_t      (dac_1_spi_sdo_t),
+    .dac_1_spi_three_wire (),
+
     .sampling_clk(sampling_clk_s)
 );
 

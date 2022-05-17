@@ -1,3 +1,14 @@
+source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
+
+# specify ADC resolution -- the design supports 16/18 bit resolutions
+set adc_resolution 16
+
+# specify number of channels -- the design supports one lane/two lanes
+set two_lanes 2
+
+create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 dac_0_spi
+create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 dac_1_spi
+
 # ltc2387
 
 create_bd_port -dir O clk_gate
@@ -59,6 +70,157 @@ create_bd_port -dir O dac2_spi_clk_o
 create_bd_port -dir I dac2_spi_sdo_i
 create_bd_port -dir O dac2_spi_sdo_o
 create_bd_port -dir I dac2_spi_sdi_i
+#spi engine stuff
+
+set data_width    32
+set async_spi_clk 1
+set num_cs        1
+set num_sdi       4
+set num_sdo       4
+set sdi_delay     1
+
+set hier_spi_engine_0 spi_ad3552r_0
+set hier_spi_engine_1 spi_ad3552r_1
+
+spi_engine_create $hier_spi_engine_0 $data_width $async_spi_clk $num_cs $num_sdi $num_sdo $sdi_delay
+spi_engine_create $hier_spi_engine_1 $data_width $async_spi_clk $num_cs $num_sdi $num_sdo $sdi_delay
+
+ad_ip_instance ad_ip_jesd204_tpl_dac spi_dds_0
+ad_connect spi_clk spi_dds_0/spi_clk
+
+ad_ip_instance axi_clkgen spi_clkgen
+ad_ip_parameter spi_clkgen CONFIG.CLK0_DIV 10
+ad_ip_parameter spi_clkgen CONFIG.VCO_DIV 1
+ad_ip_parameter spi_clkgen CONFIG.VCO_MUL 12
+
+ad_ip_instance axi_pwm_gen pulsar_adc_trigger_gen
+ad_ip_parameter pulsar_adc_trigger_gen CONFIG.PULSE_0_PERIOD 120
+ad_ip_parameter pulsar_adc_trigger_gen CONFIG.PULSE_0_WIDTH 1
+
+ad_ip_instance proc_sys_reset spi_120m_rstgen
+ad_ip_parameter spi_120m_rstgen CONFIG.C_EXT_RST_WIDTH 1
+
+ad_ip_instance axi_dmac axi_dac_0_dma
+ad_ip_parameter axi_dac_0_dma CONFIG.DMA_TYPE_SRC 0
+ad_ip_parameter axi_dac_0_dma CONFIG.DMA_TYPE_DEST 1
+ad_ip_parameter axi_dac_0_dma CONFIG.CYCLIC 0
+ad_ip_parameter axi_dac_0_dma CONFIG.SYNC_TRANSFER_START 0
+ad_ip_parameter axi_dac_0_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter axi_dac_0_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter axi_dac_0_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_dac_0_dma CONFIG.DMA_DATA_WIDTH_SRC 32 ;#$data_width
+ad_ip_parameter axi_dac_0_dma CONFIG.DMA_DATA_WIDTH_DEST 32
+
+ad_connect spi_resetn spi_120m_rstgen/peripheral_aresetn
+ad_connect spi_clk spi_120m_rstgen/slowest_sync_clk
+ad_connect sys_ps7/FCLK_RESET0_N spi_120m_rstgen/ext_reset_in
+
+ad_connect $sys_cpu_clk spi_clkgen/clk
+ad_connect spi_clk spi_clkgen/clk_0
+
+ad_connect spi_clk pulsar_adc_trigger_gen/ext_clk
+ad_connect $sys_cpu_clk pulsar_adc_trigger_gen/s_axi_aclk
+ad_connect sys_cpu_resetn pulsar_adc_trigger_gen/s_axi_aresetn
+ad_connect pulsar_adc_trigger_gen/pwm_0  $hier_spi_engine_0/trigger
+
+ad_connect $hier_spi_engine_0/m_spi dac_0_spi
+
+ad_connect $sys_cpu_clk $hier_spi_engine_0/clk
+ad_connect spi_clk $hier_spi_engine_0/spi_clk
+ad_connect sys_cpu_resetn $hier_spi_engine_0/resetn
+ad_connect sys_cpu_resetn axi_dac_0_dma/m_src_axi_aresetn
+ad_connect $sys_cpu_clk axi_dac_0_dma/m_axis_aclk
+
+ad_ip_instance axis_interconnect axis_interconnect_0
+ad_ip_parameter axis_interconnect_0 CONFIG.NUM_SI 2
+ad_ip_parameter axis_interconnect_0 CONFIG.NUM_MI 1
+ad_ip_parameter axis_interconnect_0 CONFIG.ROUTING_MODE 1
+
+ad_connect axis_interconnect_0/S00_AXIS axi_dac_0_dma/m_axis
+ad_connect axis_interconnect_0/S01_AXIS spi_dds_0/m_axis_dds
+ad_connect axis_interconnect_0/M00_AXIS $hier_spi_engine_0/s_axis_sample
+
+ad_connect axis_interconnect_0/ACLK $sys_cpu_clk
+ad_connect axis_interconnect_0/M00_AXIS_ACLK spi_clk
+ad_connect axis_interconnect_0/S01_AXIS_ACLK spi_clk
+ad_connect axis_interconnect_0/S00_AXIS_ACLK $sys_cpu_clk
+
+ad_connect axis_interconnect_0/S00_ARB_REQ_SUPPRESS GND
+ad_connect axis_interconnect_0/S01_ARB_REQ_SUPPRESS GND
+
+ad_connect axis_interconnect_0/ARESETN sys_cpu_resetn
+ad_connect axis_interconnect_0/S00_AXIS_ARESETN sys_cpu_resetn
+ad_connect axis_interconnect_0/S_AXI_CTRL_ARESETN sys_cpu_resetn
+
+ad_connect axis_interconnect_0/M00_AXIS_ARESETN spi_resetn
+ad_connect axis_interconnect_0/S01_AXIS_ARESETN spi_resetn
+
+#dac1
+
+ad_ip_instance ad_ip_jesd204_tpl_dac spi_dds_1
+ad_connect spi_clk spi_dds_1/spi_clk
+
+ad_ip_instance axi_dmac axi_dac_1_dma
+ad_ip_parameter axi_dac_1_dma CONFIG.DMA_TYPE_SRC 0
+ad_ip_parameter axi_dac_1_dma CONFIG.DMA_TYPE_DEST 1
+ad_ip_parameter axi_dac_1_dma CONFIG.CYCLIC 0
+ad_ip_parameter axi_dac_1_dma CONFIG.SYNC_TRANSFER_START 0
+ad_ip_parameter axi_dac_1_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter axi_dac_1_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter axi_dac_1_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_dac_1_dma CONFIG.DMA_DATA_WIDTH_SRC 32 ;#$data_width
+ad_ip_parameter axi_dac_1_dma CONFIG.DMA_DATA_WIDTH_DEST 32
+
+ad_connect $hier_spi_engine_1/m_spi dac_1_spi
+
+ad_connect $sys_cpu_clk $hier_spi_engine_1/clk
+ad_connect spi_clk $hier_spi_engine_1/spi_clk
+ad_connect sys_cpu_resetn $hier_spi_engine_1/resetn
+ad_connect sys_cpu_resetn axi_dac_1_dma/m_src_axi_aresetn
+ad_connect $sys_cpu_clk axi_dac_1_dma/m_axis_aclk
+ad_connect pulsar_adc_trigger_gen/pwm_0  $hier_spi_engine_1/trigger
+
+ad_ip_instance axis_interconnect axis_interconnect_1
+ad_ip_parameter axis_interconnect_1 CONFIG.NUM_SI 2
+ad_ip_parameter axis_interconnect_1 CONFIG.NUM_MI 1
+ad_ip_parameter axis_interconnect_1 CONFIG.ROUTING_MODE 1
+
+ad_connect axis_interconnect_1/S00_AXIS axi_dac_1_dma/m_axis
+ad_connect axis_interconnect_1/S01_AXIS spi_dds_1/m_axis_dds
+ad_connect axis_interconnect_1/M00_AXIS $hier_spi_engine_1/s_axis_sample
+
+ad_connect axis_interconnect_1/ACLK $sys_cpu_clk
+ad_connect axis_interconnect_1/M00_AXIS_ACLK spi_clk
+ad_connect axis_interconnect_1/S01_AXIS_ACLK spi_clk
+ad_connect axis_interconnect_1/S00_AXIS_ACLK $sys_cpu_clk
+
+ad_connect axis_interconnect_1/S00_ARB_REQ_SUPPRESS GND
+ad_connect axis_interconnect_1/S01_ARB_REQ_SUPPRESS GND
+
+ad_connect axis_interconnect_1/ARESETN sys_cpu_resetn
+ad_connect axis_interconnect_1/S00_AXIS_ARESETN sys_cpu_resetn
+ad_connect axis_interconnect_1/S_AXI_CTRL_ARESETN sys_cpu_resetn
+
+ad_connect axis_interconnect_1/M00_AXIS_ARESETN spi_resetn
+ad_connect axis_interconnect_1/S01_AXIS_ARESETN spi_resetn
+
+#end spi engine stuff
+
+if {$adc_resolution == 16} {
+  set data_width 16
+  if {$two_lanes == 0} {
+    set gate_width 9
+  } else {
+    set gate_width 4
+  }} elseif {$adc_resolution == 18} {
+  set data_width 32
+  if {$two_lanes == 0} {
+    set gate_width 8
+  } else {
+    set gate_width 5
+  }
+};
+
 # adc peripheral
 
 ad_ip_instance axi_ltc2387 axi_ltc2387_0
@@ -106,8 +268,6 @@ ad_ip_parameter axi_pwm_gen_1 CONFIG.PULSE_0_PERIOD 8
 ad_ip_parameter axi_pwm_gen_1 CONFIG.PULSE_1_WIDTH 5
 ad_ip_parameter axi_pwm_gen_1 CONFIG.PULSE_1_PERIOD 8
 ad_ip_parameter axi_pwm_gen_1 CONFIG.PULSE_1_OFFSET 0
-
-# util_cpack2
 
 # dma
 
@@ -244,66 +404,6 @@ ad_connect axi_ltc2387_3/adc_valid  axi_ltc2387_dma_3/fifo_wr_en
 ad_connect axi_ltc2387_3/adc_data   axi_ltc2387_dma_3/fifo_wr_din
 ad_connect axi_ltc2387_3/adc_dovf   axi_ltc2387_dma_3/fifo_wr_overflow
 
-# quad SPI
-
-ad_ip_instance axi_quad_spi max_spi
-ad_ip_parameter max_spi CONFIG.C_USE_STARTUP 0
-ad_ip_parameter max_spi CONFIG.C_USE_STARTUP_INT 0
-ad_ip_parameter max_spi CONFIG.C_SPI_MODE 0
-ad_ip_parameter max_spi CONFIG.C_SCK_RATIO 16
-ad_ip_parameter max_spi CONFIG.C_NUM_TRANSFER_BITS 16
-#
-## connections
-#
-ad_connect sys_ps7/FCLK_CLK0  max_spi/ext_spi_clk
-ad_connect sys_ps7/FCLK_CLK0  max_spi/s_axi_aclk
-
-ad_connect  max_spi_csn_i max_spi/ss_i
-ad_connect  max_spi_csn_o max_spi/ss_o
-ad_connect  max_spi_clk_i max_spi/sck_i
-ad_connect  max_spi_clk_o max_spi/sck_o
-ad_connect  max_spi_sdo_i max_spi/io0_i
-ad_connect  max_spi_sdo_o max_spi/io0_o
-ad_connect  max_spi_sdi_i max_spi/io1_i
-
-ad_ip_instance axi_quad_spi dac1_spi
-ad_ip_parameter dac1_spi CONFIG.C_USE_STARTUP 0
-ad_ip_parameter dac1_spi CONFIG.C_USE_STARTUP_INT 0
-ad_ip_parameter dac1_spi CONFIG.C_SPI_MODE 0
-ad_ip_parameter dac1_spi CONFIG.C_SCK_RATIO 16
-#
-## connections
-#
-ad_connect axi_clkgen/clk_0  dac1_spi/ext_spi_clk
-ad_connect sys_ps7/FCLK_CLK0  dac1_spi/s_axi_aclk
-
-ad_connect  dac1_spi_csn_i dac1_spi/ss_i
-ad_connect  dac1_spi_csn_o dac1_spi/ss_o
-ad_connect  dac1_spi_clk_i dac1_spi/sck_i
-ad_connect  dac1_spi_clk_o dac1_spi/sck_o
-ad_connect  dac1_spi_sdo_i dac1_spi/io0_i
-ad_connect  dac1_spi_sdo_o dac1_spi/io0_o
-ad_connect  dac1_spi_sdi_i dac1_spi/io1_i
-
-ad_ip_instance axi_quad_spi dac2_spi
-ad_ip_parameter dac2_spi CONFIG.C_USE_STARTUP 0
-ad_ip_parameter dac2_spi CONFIG.C_USE_STARTUP_INT 0
-ad_ip_parameter dac2_spi CONFIG.C_SPI_MODE 0
-ad_ip_parameter dac2_spi CONFIG.C_SCK_RATIO 16
-#
-## connections
-#
-ad_connect axi_clkgen/clk_0  dac2_spi/ext_spi_clk
-ad_connect sys_ps7/FCLK_CLK0  dac2_spi/s_axi_aclk
-
-ad_connect  dac2_spi_csn_i dac2_spi/ss_i
-ad_connect  dac2_spi_csn_o dac2_spi/ss_o
-ad_connect  dac2_spi_clk_i dac2_spi/sck_i
-ad_connect  dac2_spi_clk_o dac2_spi/sck_o
-ad_connect  dac2_spi_sdo_i dac2_spi/io0_i
-ad_connect  dac2_spi_sdo_o dac2_spi/io0_o
-ad_connect  dac2_spi_sdi_i dac2_spi/io1_i
-
 # address mapping
 
 ad_cpu_interconnect 0x44A00000 axi_ltc2387_0
@@ -317,14 +417,30 @@ ad_cpu_interconnect 0x44A70000 axi_ltc2387_dma_3
 ad_cpu_interconnect 0x44B00000 axi_clkgen
 ad_cpu_interconnect 0x44B10000 axi_pwm_gen
 ad_cpu_interconnect 0x44B20000 max_spi
-ad_cpu_interconnect 0x44B30000 dac1_spi
-ad_cpu_interconnect 0x44B40000 dac2_spi
+#ad_cpu_interconnect 0x44B30000 dac1_spi
+#ad_cpu_interconnect 0x44B40000 dac2_spi
 ad_cpu_interconnect 0x44C10000 axi_pwm_gen_1
+
+ad_cpu_interconnect 0x44d00000 $hier_spi_engine_0/${hier_spi_engine_0}_axi_regmap
+ad_cpu_interconnect 0x44d30000 axi_dac_0_dma
+ad_cpu_interconnect 0x44d40000 spi_clkgen
+ad_cpu_interconnect 0x44d50000 pulsar_adc_trigger_gen
+ad_cpu_interconnect 0x44d60000 spi_dds_0
+ad_cpu_interconnect 0x44d70000 axis_interconnect_0
+
+ad_cpu_interconnect 0x44e00000 $hier_spi_engine_1/${hier_spi_engine_1}_axi_regmap
+ad_cpu_interconnect 0x44e30000 axi_dac_1_dma
+ad_cpu_interconnect 0x44ef0000 spi_dds_1
+ad_cpu_interconnect 0x44f00000 axis_interconnect_1
+
+ad_mem_hp0_interconnect sys_cpu_clk axi_dac_0_dma/m_src_axi
+ad_mem_hp0_interconnect sys_cpu_clk axi_dac_1_dma/m_src_axi
 
 # interconnect (adc)
 
 ad_mem_hp2_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP2
-ad_mem_hp2_interconnect $sys_cpu_clk axi_ltc2387_dma_0/m_dest_axi
+
+	ad_mem_hp2_interconnect $sys_cpu_clk axi_ltc2387_dma_0/m_dest_axi
 ad_mem_hp2_interconnect $sys_cpu_clk axi_ltc2387_dma_1/m_dest_axi
 ad_mem_hp2_interconnect $sys_cpu_clk axi_ltc2387_dma_2/m_dest_axi
 ad_mem_hp2_interconnect $sys_cpu_clk axi_ltc2387_dma_3/m_dest_axi
@@ -341,5 +457,24 @@ ad_cpu_interrupt ps-12 mb-12 axi_ltc2387_dma_1/irq
 ad_cpu_interrupt ps-10 mb-10 axi_ltc2387_dma_2/irq
 ad_cpu_interrupt ps-9 mb-9 axi_ltc2387_dma_3/irq
 ad_cpu_interrupt ps-8 mb-8 max_spi/ip2intc_irpt
-ad_cpu_interrupt ps-7 mb-7 dac1_spi/ip2intc_irpt
-ad_cpu_interrupt ps-6 mb-6 dac2_spi/ip2intc_irpt
+#ad_cpu_interrupt ps-7 mb-7 dac1_spi/ip2intc_irpt
+#ad_cpu_interrupt ps-6 mb-6 dac2_spi/ip2intc_irpt
+
+	ad_mem_hp2_interconnect $sys_cpu_clk axi_ltc2387_dma/m_dest_axi
+ad_connect  $sys_cpu_resetn axi_ltc2387_dma/m_dest_axi_aresetn
+ad_connect  $sys_cpu_reset axi_ltc_cpack/reset
+
+# interrupts
+ad_cpu_interrupt ps-7 mb-7 /$hier_spi_engine_0/irq
+ad_cpu_interrupt ps-6 mb-6 /$hier_spi_engine_1/irq
+
+ad_cpu_interrupt ps-5 mb-5 axi_dac_0_dma/irq
+ad_cpu_interrupt ps-4 mb-4 axi_dac_1_dma/irq
+
+#system ID
+ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
+ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/mem_init_sys.txt"
+ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
+set sys_cstring "sys rom custom string placeholder"
+sysid_gen_sys_init_file $sys_cstring
+
