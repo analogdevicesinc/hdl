@@ -24,5 +24,6 @@ LIB_DEPS += axi_spdif_tx
 LIB_DEPS += axi_sysid
 LIB_DEPS += sysid_rom
 LIB_DEPS += util_i2c_mixer
+LIB_DEPS += util_pack/util_cpack2
 
 include ../../scripts/project-xilinx.mk

@@ -4,9 +4,8 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := lldk_fmc_zc706
+PROJECT_NAME := ltc2387_fmc_zc706
 
-M_DEPS += ../common/lldk_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zc706/zc706_system_constr.xdc
 M_DEPS += ../../common/zc706/zc706_system_bd.tcl
@@ -17,12 +16,11 @@ M_DEPS += ../../../library/common/ad_iobuf.v
 LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_hdmi_tx
-LIB_DEPS += axi_i2s_adi
 LIB_DEPS += axi_ltc2387
 LIB_DEPS += axi_pwm_gen
 LIB_DEPS += axi_spdif_tx
 LIB_DEPS += axi_sysid
 LIB_DEPS += sysid_rom
-LIB_DEPS += util_i2c_mixer
+LIB_DEPS += util_pack/util_cpack2
 
 include ../../scripts/project-xilinx.mk
