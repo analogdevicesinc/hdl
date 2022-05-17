@@ -55,9 +55,15 @@ if {$ad_project_params(JESD_MODE) == "8B10B"} {
   ad_ip_parameter util_mxfe_xcvr CONFIG.QPLL_CP_G3 0xF
   ad_ip_parameter util_mxfe_xcvr CONFIG.QPLL_LPF 0x27F
 } else {
-  set_property -dict [list CONFIG.ADDN_UI_CLKOUT4_FREQ_HZ {50}] [get_bd_cells axi_ddr_cntrl]
-  ad_connect  /axi_ddr_cntrl/addn_ui_clkout4 jesd204_phy_121_122/drpclk
-  ad_connect  /axi_ddr_cntrl/addn_ui_clkout4 jesd204_phy_125_126/drpclk
+  ad_ip_instance util_ds_buf sys_cpu_clk_BUFGCE
+  ad_ip_parameter sys_cpu_clk_BUFGCE CONFIG.C_BUF_TYPE {BUFGCE_DIV}
+  ad_ip_parameter sys_cpu_clk_BUFGCE CONFIG.C_BUFGCE_DIV 2
+  ad_connect sys_cpu_clk_BUFGCE/BUFGCE_CE VCC
+  ad_connect sys_cpu_clk_BUFGCE/BUFGCE_CLR GND
+  ad_connect sys_cpu_clk_BUFGCE/BUFGCE_I $sys_cpu_clk
+
+  ad_connect  sys_cpu_clk_BUFGCE/BUFGCE_O jesd204_phy_121_122/drpclk
+  ad_connect  sys_cpu_clk_BUFGCE/BUFGCE_O jesd204_phy_125_126/drpclk
 }
 
 # Second SPI controller
