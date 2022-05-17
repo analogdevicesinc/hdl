@@ -13,6 +13,8 @@ adi_ip_files axi_gpreg [list \
   "axi_gpreg_constr.ttcl" \
   "axi_gpreg_clock_mon.v" \
   "axi_gpreg.v" ]
+  
+set_property FILE_TYPE SystemVerilog [get_files "axi_gpreg.v"]
 
 adi_ip_properties axi_gpreg
 adi_ip_ttcl axi_gpreg "axi_gpreg_constr.ttcl"
