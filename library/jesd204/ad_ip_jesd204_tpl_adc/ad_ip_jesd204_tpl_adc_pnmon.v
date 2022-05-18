@@ -115,7 +115,13 @@ module ad_ip_jesd204_tpl_adc_pnmon #(
     .adc_data_in (pn_data_in_s),
     .adc_data_pn (pn_data_pn[DW:0]),
     .adc_pn_oos (pn_oos),
-    .adc_pn_err (pn_err)
-  );
+    .adc_pn_err (pn_err));
+  
+   my_ila i_ila (
+    .clk(clk),
+    .probe0(pn_data_in_s),
+    .probe1(pn_data_pn),
+    .probe2(pn_oos),
+    .probe3(pn_err));
 
 endmodule
