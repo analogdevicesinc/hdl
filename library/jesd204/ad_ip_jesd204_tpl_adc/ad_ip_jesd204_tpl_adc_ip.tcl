@@ -25,6 +25,18 @@ source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 adi_ip_create ad_ip_jesd204_tpl_adc
+
+ create_ip -name ila -vendor xilinx.com -library ip -version 6.2 -module_name my_ila
+    set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] [get_ips my_ila]
+    set_property -dict [list CONFIG.C_NUM_OF_PROBES {4}] [get_ips my_ila]
+    set_property -dict [list CONFIG.C_DATA_DEPTH {4096}] [get_ips my_ila]
+    set_property -dict [list CONFIG.C_TRIGIN_EN {false}] [get_ips my_ila]
+    set_property -dict [list CONFIG.C_PROBE0_WIDTH {64}] [get_ips my_ila]
+    set_property -dict [list CONFIG.C_PROBE1_WIDTH {64}] [get_ips my_ila]
+    set_property -dict [list CONFIG.C_PROBE2_WIDTH {1} ] [get_ips my_ila]
+    set_property -dict [list CONFIG.C_PROBE3_WIDTH {1} ] [get_ips my_ila]
+    generate_target {all} [get_files ad_ip_jesd204_tpl_adc.srcs/sources_1/ip/my_ila/my_ila.xci]
+
 adi_ip_files ad_ip_jesd204_tpl_adc [list \
   "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/common/ad_perfect_shuffle.v" \
