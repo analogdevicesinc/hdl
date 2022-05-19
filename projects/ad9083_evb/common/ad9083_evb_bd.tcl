@@ -148,7 +148,7 @@ ad_connect ad9083_rx_device_clk axi_ad9083_rx_dma/fifo_wr_clk
 
 ad_connect ad9083_rx_device_clk rx_ad9083_tpl_core/link_clk
 ad_connect ad9083_rx_device_clk util_ad9083_rx_cpack/clk
-ad_connect ad9083_rx_device_clk_rstgen/peripheral_reset util_ad9083_rx_cpack/reset
+ad_connect rx_ad9083_tpl_core/adc_tpl_core/adc_rst util_ad9083_rx_cpack/reset
 
 ad_connect axi_ad9083_rx_jesd/rx_sof rx_ad9083_tpl_core/link_sof
 ad_connect axi_ad9083_rx_jesd/rx_data_tdata rx_ad9083_tpl_core/link_data
