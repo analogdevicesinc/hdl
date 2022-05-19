@@ -216,7 +216,12 @@ proc jesd204_phy_composition_callback {} {
       #set_instance_parameter_value native_phy avmm2_split [expr $num_of_lanes > 1]
       #set_instance_parameter_value native_phy avmm2_split 1
     } else {
-      # TODO  Rx parameters here
+      set_instance_parameter_value native_phy fgt_rx_pll_refclk_freq_mhz [format {%.6f} $refclk_frequency]
+      set_instance_parameter_value native_phy pmaif_rx_fifo_mode_s "register"
+      set_instance_parameter_value native_phy enable_port_rx_clkout2 1
+      set_instance_parameter_value native_phy pldif_rx_clkout2_sel "RX_WORD_CLK"
+      set_instance_parameter_value native_phy pldif_rx_clkout2_div 2
+      set_instance_parameter_value native_phy avmm2_enable 1
     }
   }
 
@@ -358,11 +363,19 @@ proc jesd204_phy_composition_callback {} {
     add_interface ref_clk ftile_hssi_reference_clock end
     set_interface_property ref_clk EXPORT_OF phy_glue.ref_clk
 
-    # export ${tx_rx}_reset, ${tx_rx}_ready, ${tx_rx}_reset_ack, ${tx_rx}_pll_locked
+    # export ${tx_rx}_reset, ${tx_rx}_ready, ${tx_rx}_reset_ack
     # This conects to axi_xcvr
-    foreach x {reset reset_ack ready pll_locked} {
+    foreach x {reset reset_ack ready} {
       add_interface ${x} conduit end
       set_interface_property ${x} EXPORT_OF native_phy.${tx_rx}_${x}
+    }
+
+    if {$tx} {
+      add_interface pll_locked conduit end
+      set_interface_property pll_locked EXPORT_OF native_phy.tx_pll_locked
+    } else {
+      add_interface rx_lockedtodata conduit end
+      set_interface_property rx_lockedtodata EXPORT_OF native_phy.rx_is_lockedtodata
     }
 
     # export ${tx_rx}_serial_data, ${tx_rx}_serial_data_n
