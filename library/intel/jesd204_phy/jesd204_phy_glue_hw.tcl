@@ -314,14 +314,23 @@ proc jesd204_phy_glue_elab {} {
     add_interface_port phy_tx_polinv polinv tx_polinv Output $num_of_lanes
     set_port_property polinv TERMINATION $soft_pcs
   } else {
-    glue_add_if 1 rx_cdr_refclk0 clock sink true
-    glue_add_if_port 1 rx_cdr_refclk0 rx_cdr_refclk0 clk Input 1 true
 
     glue_add_if $num_of_lanes rx_coreclkin clock sink true
     glue_add_if_port $num_of_lanes rx_coreclkin rx_coreclkin clk Input 1 true
 
-    glue_add_if $num_of_lanes rx_clkout clock source
-    glue_add_if_port $num_of_lanes rx_clkout rx_clkout clk Output 1
+    if {[string equal $device "Agilex"]} {
+      glue_add_if $num_of_lanes ref_clk ftile_hssi_reference_clock sink true
+      glue_add_if_port $num_of_lanes ref_clk ref_clk clk Input 1 true clk
+
+      glue_add_if $num_of_lanes rx_clkout2 clock source
+      glue_add_if_port $num_of_lanes rx_clkout2 rx_clkout2 clk Output 1
+    } else {
+      glue_add_if 1 rx_cdr_refclk0 clock sink true
+      glue_add_if_port 1 rx_cdr_refclk0 rx_cdr_refclk0 clk Input 1 true
+
+      glue_add_if $num_of_lanes rx_clkout clock source
+      glue_add_if_port $num_of_lanes rx_clkout rx_clkout clk Output 1
+    }
 
     if {$soft_pcs} {
       for {set i 0} {$i < $num_of_lanes} {incr i} {
