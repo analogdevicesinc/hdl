@@ -47,12 +47,17 @@ package require qsys 14.0
 source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_intel.tcl
 
-ad_ip_create jesd204_soft_pcs_rx "ADI JESD204 Transmit Soft PCS"
+ad_ip_create jesd204_soft_pcs_rx "ADI JESD204 Receive Soft PCS"
 
 ad_ip_parameter REGISTER_INPUTS INTEGER 0
 ad_ip_parameter INVERT_INPUTS INTEGER 0
 
-set_module_property INTERNAL true
+set_module_property INTERNAL false
+
+add_parameter          IFC_TYPE INTEGER 0
+set_parameter_property IFC_TYPE DISPLAY_NAME "Interface type"
+set_parameter_property IFC_TYPE HDL_PARAMETER true
+set_parameter_property IFC_TYPE ALLOWED_RANGES { "0:Legacy" "1:F-Type" }
 
 # files
 
@@ -89,4 +94,4 @@ add_interface_port rx_phy patternalign_en patternalign_en Input 1
 add_interface rx_raw_data conduit end
 #set_interface_property rx_raw_data associatedClock clock
 #set_interface_property rx_raw_data associatedReset reset
-add_interface_port rx_raw_data data raw_data Input 40
+add_interface_port rx_raw_data data raw_data Input "(IFC_TYPE+1)*40" 
