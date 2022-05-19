@@ -574,7 +574,11 @@ proc jesd204_compose {} {
     add_connection phy.clkout link_clock.in_clk
 
     # PHY <-> AXI_XCVR
-    add_connection axi_xcvr.core_pll_locked phy.pll_locked
+    if {$tx_or_rx_n} {
+      add_connection axi_xcvr.core_pll_locked phy.pll_locked
+    } else {
+      add_connection axi_xcvr.rx_lockedtodata phy.rx_lockedtodata
+    }
     add_connection axi_xcvr.ready phy.ready
     add_connection axi_xcvr.reset phy.reset
 
