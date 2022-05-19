@@ -11,14 +11,15 @@ module jesd204_soft_pcs_rx #(
   parameter NUM_LANES = 1,
   parameter DATA_PATH_WIDTH = 4,
   parameter REGISTER_INPUTS = 0,
-  parameter INVERT_INPUTS = 0
+  parameter INVERT_INPUTS = 0,
+  parameter IFC_TYPE = 0
 ) (
   input clk,
   input reset,
 
   input patternalign_en,
 
-  input [NUM_LANES*DATA_PATH_WIDTH*10-1:0] data,
+  input [NUM_LANES*(DATA_PATH_WIDTH*10 + IFC_TYPE*40)-1:0] data,
 
   output reg [NUM_LANES*DATA_PATH_WIDTH*8-1:0] char,
   output reg [NUM_LANES*DATA_PATH_WIDTH-1:0] charisk,
@@ -56,13 +57,13 @@ module jesd204_soft_pcs_rx #(
     reg [NUM_LANES*DATA_PATH_WIDTH*10-1:0]  data_r;
     always @(posedge clk) begin
       patternalign_en_r <= patternalign_en;
-      data_r  <= data;
+      data_r  <= IFC_TYPE == 0 ? data : {data[59:40],data[19:0]};
     end
     assign patternalign_en_s = patternalign_en_r;
     assign data_s = data_r;
   end else begin
     assign patternalign_en_s = patternalign_en;
-    assign data_s = data;
+    assign data_s = IFC_TYPE == 0 ? data : {data[59:40],data[19:0]};
   end
 
   for (lane = 0; lane < NUM_LANES; lane = lane + 1) begin: gen_lane
