@@ -49,7 +49,7 @@ source $ad_hdl_dir/library/scripts/adi_ip_intel.tcl
 
 ad_ip_create axi_jesd204_tx "ADI JESD204 Transmit AXI Interface"
 
-set_module_property INTERNAL true
+set_module_property INTERNAL false
 
 # files
 
