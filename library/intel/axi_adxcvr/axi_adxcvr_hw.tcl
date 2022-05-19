@@ -85,6 +85,10 @@ proc p_axi_adxcvr {} {
     add_interface reset conduit start
     add_interface_port reset xcvr_reset ${rx_tx}_reset output 1
 
+    if {$m_tx_or_rx_n == 0} {
+      add_interface rx_lockedtodata conduit end
+      add_interface_port rx_lockedtodata up_rx_lockedtodata rx_is_lockedtodata input $m_num_of_lanes
+    }
 
   } else {
 
