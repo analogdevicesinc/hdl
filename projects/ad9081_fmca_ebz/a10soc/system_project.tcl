@@ -109,14 +109,14 @@ set_location_assignment PIN_J36   -to "tx_data[4](n)"       ; ## A35  DP4_C2M_N
 set_location_assignment PIN_J37   -to "tx_data[4]"          ; ## A34  DP4_C2M_P
 set_location_assignment PIN_K38   -to "tx_data[3](n)"       ; ## A31  DP3_C2M_N
 set_location_assignment PIN_K39   -to "tx_data[3]"          ; ## A30  DP3_C2M_P
-set_location_assignment PIN_D13   -to "fpga_syncin[0](n)"   ; ## H08  LA02_N
-set_location_assignment PIN_C13   -to "fpga_syncin[0]"      ; ## H07  LA02_P
-set_location_assignment PIN_D14   -to "fpga_syncin[1](n)"   ; ## G10  LA03_N
-set_location_assignment PIN_C14   -to "fpga_syncin[1]"      ; ## G09  LA03_P
-set_location_assignment PIN_E13   -to "fpga_syncout[0](n)"  ; ## D09  LA01_CC_N
-set_location_assignment PIN_E12   -to "fpga_syncout[0]"     ; ## D08  LA01_CC_P
-set_location_assignment PIN_B10   -to "fpga_syncout[1](n)"  ; ## C11  LA06_N
-set_location_assignment PIN_A10   -to "fpga_syncout[1]"     ; ## C10  LA06_P
+set_location_assignment PIN_D13   -to "fpga_syncin_0(n)"    ; ## H08  LA02_N
+set_location_assignment PIN_C13   -to "fpga_syncin_0"       ; ## H07  LA02_P
+set_location_assignment PIN_D14   -to "fpga_syncin_1_n"     ; ## G10  LA03_N
+set_location_assignment PIN_C14   -to "fpga_syncin_1_p"     ; ## G09  LA03_P
+set_location_assignment PIN_E13   -to "fpga_syncout_0(n)"   ; ## D09  LA01_CC_N
+set_location_assignment PIN_E12   -to "fpga_syncout_0"      ; ## D08  LA01_CC_P
+set_location_assignment PIN_B10   -to "fpga_syncout_1_n"    ; ## C11  LA06_N
+set_location_assignment PIN_A10   -to "fpga_syncout_1_p"    ; ## C10  LA06_P
 set_location_assignment PIN_D4    -to "gpio[0]"             ; ## H19  LA15_P
 set_location_assignment PIN_D5    -to "gpio[1]"             ; ## H20  LA15_N
 set_location_assignment PIN_G5    -to "gpio[2]"             ; ## H22  LA19_P
@@ -168,13 +168,10 @@ for {set i 0} {$i < $common_lanes} {incr i} {
   set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_${i} -to tx_data[${i}]
 }
 
-set_instance_assignment -name IO_STANDARD LVDS -to fpga_syncin[0]
-set_instance_assignment -name IO_STANDARD LVDS -to fpga_syncin[1]
-set_instance_assignment -name IO_STANDARD LVDS -to fpga_syncout[0]
-set_instance_assignment -name IO_STANDARD LVDS -to fpga_syncout[1]
+set_instance_assignment -name IO_STANDARD LVDS -to fpga_syncin_0
+set_instance_assignment -name IO_STANDARD LVDS -to fpga_syncout_0
 set_instance_assignment -name IO_STANDARD LVDS -to sysref2
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to fpga_syncin[0]
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to fpga_syncin[1]
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to fpga_syncin_0
 set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to sysref2
 
 set_instance_assignment -name IO_STANDARD "1.8 V" -to agc0[0]
