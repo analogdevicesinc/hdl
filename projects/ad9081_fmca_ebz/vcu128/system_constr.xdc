@@ -48,14 +48,14 @@ set_property  -quiet -dict {PACKAGE_PIN AY47                                    
 set_property  -quiet -dict {PACKAGE_PIN AY46                                           } [get_ports tx_data_p[4]              ]    ; ## MGTYTXP0_125              FPGA_SERDOUT_6_P
 set_property  -quiet -dict {PACKAGE_PIN BA45                                           } [get_ports tx_data_n[3]              ]    ; ## MGTYTXN3_124              FPGA_SERDOUT_7_N
 set_property  -quiet -dict {PACKAGE_PIN BA44                                           } [get_ports tx_data_p[3]              ]    ; ## MGTYTXP3_124              FPGA_SERDOUT_7_P
-set_property  -quiet -dict {PACKAGE_PIN K22  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports fpga_syncin_n[0]          ]    ; ## IO_L4N_T0U_N7_DBC_AD7N_72 
-set_property  -quiet -dict {PACKAGE_PIN L23  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports fpga_syncin_p[0]          ]    ; ## IO_L4P_T0U_N6_DBC_AD7P_72 
-set_property  -quiet -dict {PACKAGE_PIN A26  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports fpga_syncin_n[1]          ]    ; ## IO_L23N_T3U_N9_72         
-set_property  -quiet -dict {PACKAGE_PIN B27  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports fpga_syncin_p[1]          ]    ; ## IO_L23P_T3U_N8_72         
-set_property  -quiet -dict {PACKAGE_PIN F25  IOSTANDARD LVDS                           } [get_ports fpga_syncout_n[0]         ]    ; ## IO_L14N_T2L_N3_GC_72      
-set_property  -quiet -dict {PACKAGE_PIN F26  IOSTANDARD LVDS                           } [get_ports fpga_syncout_p[0]         ]    ; ## IO_L14P_T2L_N2_GC_72      
-set_property  -quiet -dict {PACKAGE_PIN D22  IOSTANDARD LVDS                           } [get_ports fpga_syncout_n[1]         ]    ; ## IO_L15N_T2L_N5_AD11N_72   
-set_property  -quiet -dict {PACKAGE_PIN E22  IOSTANDARD LVDS                           } [get_ports fpga_syncout_p[1]         ]    ; ## IO_L15P_T2L_N4_AD11P_72   
+set_property  -quiet -dict {PACKAGE_PIN K22  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports fpga_syncin_0_n           ]    ; ## IO_L4N_T0U_N7_DBC_AD7N_72 
+set_property  -quiet -dict {PACKAGE_PIN L23  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100} [get_ports fpga_syncin_0_p           ]    ; ## IO_L4P_T0U_N6_DBC_AD7P_72 
+set_property  -quiet -dict {PACKAGE_PIN A26  IOSTANDARD LVCMOS18                       } [get_ports fpga_syncin_1_n           ]    ; ## IO_L23N_T3U_N9_72         
+set_property  -quiet -dict {PACKAGE_PIN B27  IOSTANDARD LVCMOS18                       } [get_ports fpga_syncin_1_p           ]    ; ## IO_L23P_T3U_N8_72         
+set_property  -quiet -dict {PACKAGE_PIN F25  IOSTANDARD LVDS                           } [get_ports fpga_syncout_0_n          ]    ; ## IO_L14N_T2L_N3_GC_72      
+set_property  -quiet -dict {PACKAGE_PIN F26  IOSTANDARD LVDS                           } [get_ports fpga_syncout_0_p          ]    ; ## IO_L14P_T2L_N2_GC_72      
+set_property  -quiet -dict {PACKAGE_PIN D22  IOSTANDARD LVCMOS18                       } [get_ports fpga_syncout_1_n          ]    ; ## IO_L15N_T2L_N5_AD11N_72   
+set_property  -quiet -dict {PACKAGE_PIN E22  IOSTANDARD LVCMOS18                       } [get_ports fpga_syncout_1_p          ]    ; ## IO_L15P_T2L_N4_AD11P_72   
 set_property         -dict {PACKAGE_PIN J26  IOSTANDARD LVCMOS18                       } [get_ports gpio[0]                   ]    ; ## IO_L6P_T0U_N10_AD6P_72    
 set_property         -dict {PACKAGE_PIN J25  IOSTANDARD LVCMOS18                       } [get_ports gpio[1]                   ]    ; ## IO_L6N_T0U_N11_AD6N_72    
 set_property         -dict {PACKAGE_PIN B18  IOSTANDARD LVCMOS18                       } [get_ports gpio[2]                   ]    ; ## IO_L21P_T3L_N4_AD8P_71    
