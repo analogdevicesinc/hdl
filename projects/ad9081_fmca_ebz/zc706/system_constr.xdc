@@ -48,14 +48,14 @@ set_property  -quiet -dict {PACKAGE_PIN AH1                                     
 set_property  -quiet -dict {PACKAGE_PIN AH2                                     } [get_ports tx_data_p[4]     ]    ; ## FMC0_DP4_C2M_P      MGTXTXP0_110     FPGA_SERDOUT_6_P
 set_property  -quiet -dict {PACKAGE_PIN AK1                                     } [get_ports tx_data_n[3]     ]    ; ## FMC0_DP3_C2M_N      MGTXTXN3_109     FPGA_SERDOUT_7_N
 set_property  -quiet -dict {PACKAGE_PIN AK2                                     } [get_ports tx_data_p[3]     ]    ; ## FMC0_DP3_C2M_P      MGTXTXP3_109     FPGA_SERDOUT_7_P
-set_property  -quiet -dict {PACKAGE_PIN AK18  IOSTANDARD LVDS_25  DIFF_TERM TRUE} [get_ports fpga_syncin_n[0] ]    ; ## FMC0_LA02_N         IO_L16N_T2_11
-set_property  -quiet -dict {PACKAGE_PIN AK17  IOSTANDARD LVDS_25  DIFF_TERM TRUE} [get_ports fpga_syncin_p[0] ]    ; ## FMC0_LA02_P         IO_L16P_T2_11
-set_property  -quiet -dict {PACKAGE_PIN AJ19  IOSTANDARD LVDS_25  DIFF_TERM TRUE} [get_ports fpga_syncin_n[1] ]    ; ## FMC0_LA03_N         IO_L17N_T2_11
-set_property  -quiet -dict {PACKAGE_PIN AH19  IOSTANDARD LVDS_25  DIFF_TERM TRUE} [get_ports fpga_syncin_p[1] ]    ; ## FMC0_LA03_P         IO_L17P_T2_11
-set_property  -quiet -dict {PACKAGE_PIN AH21  IOSTANDARD LVDS_25                } [get_ports fpga_syncout_n[0]]    ; ## FMC0_LA01_CC_N      IO_L13N_T2_MRCC_11
-set_property  -quiet -dict {PACKAGE_PIN AG21  IOSTANDARD LVDS_25                } [get_ports fpga_syncout_p[0]]    ; ## FMC0_LA01_CC_P      IO_L13P_T2_MRCC_11
-set_property  -quiet -dict {PACKAGE_PIN AH22  IOSTANDARD LVDS_25                } [get_ports fpga_syncout_n[1]]    ; ## FMC0_LA06_N         IO_L6N_T0_VREF_11
-set_property  -quiet -dict {PACKAGE_PIN AG22  IOSTANDARD LVDS_25                } [get_ports fpga_syncout_p[1]]    ; ## FMC0_LA06_P         IO_L6P_T0_11
+set_property  -quiet -dict {PACKAGE_PIN AK18  IOSTANDARD LVDS_25  DIFF_TERM TRUE} [get_ports fpga_syncin_0_n  ]    ; ## FMC0_LA02_N         IO_L16N_T2_11
+set_property  -quiet -dict {PACKAGE_PIN AK17  IOSTANDARD LVDS_25  DIFF_TERM TRUE} [get_ports fpga_syncin_0_p  ]    ; ## FMC0_LA02_P         IO_L16P_T2_11
+set_property  -quiet -dict {PACKAGE_PIN AJ19  IOSTANDARD LVCMOS25               } [get_ports fpga_syncin_1_n  ]    ; ## FMC0_LA03_N         IO_L17N_T2_11
+set_property  -quiet -dict {PACKAGE_PIN AH19  IOSTANDARD LVCMOS25               } [get_ports fpga_syncin_1_p  ]    ; ## FMC0_LA03_P         IO_L17P_T2_11
+set_property  -quiet -dict {PACKAGE_PIN AH21  IOSTANDARD LVDS_25                } [get_ports fpga_syncout_0_n ]    ; ## FMC0_LA01_CC_N      IO_L13N_T2_MRCC_11
+set_property  -quiet -dict {PACKAGE_PIN AG21  IOSTANDARD LVDS_25                } [get_ports fpga_syncout_0_p ]    ; ## FMC0_LA01_CC_P      IO_L13P_T2_MRCC_11
+set_property  -quiet -dict {PACKAGE_PIN AH22  IOSTANDARD LVCMOS25               } [get_ports fpga_syncout_1_n ]    ; ## FMC0_LA06_N         IO_L6N_T0_VREF_11
+set_property  -quiet -dict {PACKAGE_PIN AG22  IOSTANDARD LVCMOS25               } [get_ports fpga_syncout_1_p ]    ; ## FMC0_LA06_P         IO_L6P_T0_11
 set_property         -dict {PACKAGE_PIN Y22   IOSTANDARD LVCMOS25               } [get_ports gpio[0]          ]    ; ## FMC0_LA15_P         IO_L21P_T3_DQS_11
 set_property         -dict {PACKAGE_PIN Y23   IOSTANDARD LVCMOS25               } [get_ports gpio[1]          ]    ; ## FMC0_LA15_N         IO_L21N_T3_DQS_11
 set_property         -dict {PACKAGE_PIN T24   IOSTANDARD LVCMOS25               } [get_ports gpio[2]          ]    ; ## FMC0_LA19_P         IO_L17P_T2_13
