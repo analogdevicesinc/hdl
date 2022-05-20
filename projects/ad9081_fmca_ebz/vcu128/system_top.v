@@ -40,7 +40,9 @@ module system_top #(
     parameter TX_JESD_L = 8,
     parameter TX_NUM_LINKS = 1,
     parameter RX_JESD_L = 8,
-    parameter RX_NUM_LINKS = 1
+    parameter RX_NUM_LINKS = 1,
+    parameter JESD_MODE = "8B10B"
+
   ) (
 
   input         sys_rst,
@@ -97,10 +99,14 @@ module system_top #(
   input  [RX_JESD_L*RX_NUM_LINKS-1:0]  rx_data_p,
   output [TX_JESD_L*TX_NUM_LINKS-1:0]  tx_data_n,
   output [TX_JESD_L*TX_NUM_LINKS-1:0]  tx_data_p,
-  input  [TX_NUM_LINKS-1:0]  fpga_syncin_n,
-  input  [TX_NUM_LINKS-1:0]  fpga_syncin_p,
-  output [RX_NUM_LINKS-1:0]  fpga_syncout_n,
-  output [RX_NUM_LINKS-1:0]  fpga_syncout_p,
+  input                                fpga_syncin_0_n,
+  input                                fpga_syncin_0_p,
+  inout                                fpga_syncin_1_n,
+  inout                                fpga_syncin_1_p,
+  output                               fpga_syncout_0_n,
+  output                               fpga_syncout_0_p,
+  inout                                fpga_syncout_1_n,
+  inout                                fpga_syncout_1_p,
   inout  [10:0] gpio,
   inout         hmc_gpio1,
   output        hmc_sync,
@@ -169,22 +175,15 @@ module system_top #(
     .CEB(1'b0),
     .ODIV2 (clkin8));
 
-  genvar i;
-  generate
-  for(i=0;i<TX_NUM_LINKS;i=i+1) begin : g_tx_buffers
-    IBUFDS i_ibufds_syncin (
-      .I (fpga_syncin_p[i]),
-      .IB (fpga_syncin_n[i]),
-      .O (tx_syncin[i]));
-  end
+  IBUFDS i_ibufds_syncin_0 (
+    .I (fpga_syncin_0_p),
+    .IB (fpga_syncin_0_n),
+    .O (tx_syncin[0]));
 
-  for(i=0;i<RX_NUM_LINKS;i=i+1) begin : g_rx_buffers
-    OBUFDS i_obufds_syncout (
-      .I (rx_syncout[i]),
-      .O (fpga_syncout_p[i]),
-      .OB (fpga_syncout_n[i]));
-  end
-  endgenerate
+  OBUFDS i_obufds_syncout_0 (
+    .I (rx_syncout[0]),
+    .O (fpga_syncout_0_p),
+    .OB (fpga_syncout_0_n));
 
   BUFG i_tx_device_clk (
     .I (clkin6),
@@ -241,8 +240,31 @@ module system_top #(
   assign rxen[1]          = gpio_o[57];
   assign txen[0]          = gpio_o[58];
   assign txen[1]          = gpio_o[59];
-  assign dac_fifo_bypass  = gpio_o[60];
 
+  generate
+  if (TX_NUM_LINKS > 1 & JESD_MODE == "8B10B") begin
+    assign tx_syncin[1] = fpga_syncin_1_p;
+  end else begin
+    ad_iobuf #(.DATA_WIDTH(2)) i_syncin_iobuf (
+      .dio_t (gpio_t[61:60]),
+      .dio_i (gpio_o[61:60]),
+      .dio_o (gpio_i[61:60]),
+      .dio_p ({fpga_syncin_1_n,      // 61
+               fpga_syncin_1_p}));   // 60
+  end
+
+  if (RX_NUM_LINKS > 1 & JESD_MODE == "8B10B") begin
+    assign fpga_syncout_1_p = rx_syncout[1];
+    assign fpga_syncout_1_n = 0;
+  end else begin
+    ad_iobuf #(.DATA_WIDTH(2)) i_syncout_iobuf (
+      .dio_t (gpio_t[63:62]),
+      .dio_i (gpio_o[63:62]),
+      .dio_o (gpio_i[63:62]),
+      .dio_p ({fpga_syncout_1_n,      // 63
+               fpga_syncout_1_p}));   // 62
+  end
+  endgenerate
 
   ad_iobuf #(.DATA_WIDTH(8)) i_iobuf_bd (
     .dio_t (gpio_t[7:0]),
@@ -250,7 +272,7 @@ module system_top #(
     .dio_o (gpio_i[7:0]),
     .dio_p (gpio_bd));
 
-  assign gpio_i[63:54] = gpio_o[63:54];
+  assign gpio_i[59:54] = gpio_o[59:54];
   assign gpio_i[31:8] = gpio_o[31:8];
 
   system_wrapper i_system_wrapper (
