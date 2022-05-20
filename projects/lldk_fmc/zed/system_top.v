@@ -100,35 +100,31 @@ module system_top (
   input       [ 3:0]      rx_da_p,
   input       [ 3:0]      rx_da_n,
 
-  output      [ 1:0]      tx_cs,
-  output      [ 1:0]      tx_sclk,
-  inout       [ 1:0]      tx_sdio0,
-  inout       [ 1:0]      tx_sdio1,
-  inout       [ 1:0]      tx_sdio2,
-  inout       [ 1:0]      tx_sdio3,
+  input       [ 1:0]      dac_cs,
+  input       [ 1:0]      dac_sclk,
+  input       [ 1:0]      dac_sdio0,
+  input       [ 1:0]      dac_sdio1,
+  input       [ 1:0]      dac_sdio2,
+  input       [ 1:0]      dac_sdio3,
 
   input                   spi_miso,
   output                  spi_mosi,
   output                  spi_sck,
-  output                  spi_csb
+  output                  spi_csb,
 
-/*
-  output                  fmc_la14_p,
-  output                  fmc_la14_n,
-  output                  fmc_la30_p,
-  output                  fmc_la30_n,
+  input                   fmc_la14_p,
+  input                   fmc_la14_n,
+  input                   fmc_la30_p,
+  input                   fmc_la30_n,
   input                   fmc_la31_p,
-  output                  fmc_la31_n,
-  output                  fmc_la32_p,
-  output                  fmc_la32_n,
-
+  input                   fmc_la31_n,
+  output                  direction,
+  output                  reset,
 
   input                   alert_1,
-  output                  ladc_1,
+  output                  ldac_1,
   input                   alert_2,
   output                  ldac_2
-*/
-
 );
 
   // internal signals
@@ -143,7 +139,6 @@ module system_top (
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
 
-
   wire    [ 3:0]  rx_cnv_s;
   wire    [ 3:0]  rx_cnv;
 
@@ -152,35 +147,35 @@ module system_top (
 
   wire    [ 3:0]  ltc_clk;
 
-  wire   [ 3:0]   tx_0_1_sdio;
-  wire   [ 3:0]   tx_2_3_sdio;
-
-  wire   [ 3:0]   tx_0_1_sdt;
-  wire   [ 3:0]   tx_0_1_sdo;
-  wire   [ 3:0]   tx_0_1_sdi;
-
-  wire   [ 3:0]   tx_2_3_sdt;
-  wire   [ 3:0]   tx_2_3_sdo;
-  wire   [ 3:0]   tx_2_3_sdi;
+//  wire   [ 3:0]   tx_0_1_sdio;
+//  wire   [ 3:0]   tx_2_3_sdio;
+//
+//  wire   [ 3:0]   tx_0_1_sdt;
+//  wire   [ 3:0]   tx_0_1_sdo;
+//  wire   [ 3:0]   tx_0_1_sdi;
+//
+//  wire   [ 3:0]   tx_2_3_sdt;
+//  wire   [ 3:0]   tx_2_3_sdo;
+//  wire   [ 3:0]   tx_2_3_sdi;
 
   // spi
 
-  assign tx_0_1_sdio[0] = tx_sdio0[0];
-  assign tx_0_1_sdio[1] = tx_sdio1[0];
-  assign tx_0_1_sdio[2] = tx_sdio2[0];
-  assign tx_0_1_sdio[3] = tx_sdio3[0];
-
-  assign tx_2_3_sdio[0] = tx_sdio0[1];
-  assign tx_2_3_sdio[1] = tx_sdio1[1];
-  assign tx_2_3_sdio[2] = tx_sdio2[1];
-  assign tx_2_3_sdio[3] = tx_sdio3[1];
-
-  //assign spi_csn_adc = spi0_csn[2];
-  //assign spi_csn_dac = spi0_csn[1];
-  //assign spi_csn_clk = spi0_csn[0];
-
+//  assign tx_0_1_sdio[0] = tx_sdio0[0];
+//  assign tx_0_1_sdio[1] = tx_sdio1[0];
+//  assign tx_0_1_sdio[2] = tx_sdio2[0];
+//  assign tx_0_1_sdio[3] = tx_sdio3[0];
+//
+//  assign tx_2_3_sdio[0] = tx_sdio0[1];
+//  assign tx_2_3_sdio[1] = tx_sdio1[1];
+//  assign tx_2_3_sdio[2] = tx_sdio2[1];
+//  assign tx_2_3_sdio[3] = tx_sdio3[1];
 
   assign gpio_i[63:32] = gpio_o[63:32];
+  //direction High for A->B
+  assign direction = 1'b1;
+  //LDAC active low
+  assign ldac_1 = 1'b1;
+  assign ldac_2 = 1'b1;
 
   // instantiations
 
@@ -210,22 +205,21 @@ module system_top (
 
 //de aici
 
-  ad_iobuf #(
-  .DATA_WIDTH(4)
-  ) i_spi_iobuf0 (
-    .dio_t(tx_0_1_sdt),
-    .dio_i(tx_0_1_sdo),
-    .dio_o(tx_0_1_sdi), 
-    .dio_p(tx_0_1_sdio));
-
-  ad_iobuf #(
-  .DATA_WIDTH(4)
-  ) i_spi_iobuf1 (
-    .dio_t(tx_2_3_sdt),
-    .dio_i(tx_2_3_sdo),
-    .dio_o(tx_2_3_sdi), 
-    .dio_p(tx_2_3_sdio));
-
+//  ad_iobuf #(
+//  .DATA_WIDTH(4)
+//  ) i_spi_iobuf0 (
+//    .dio_t(tx_0_1_sdt),
+//    .dio_i(tx_0_1_sdo),
+//    .dio_o(tx_0_1_sdi),
+//    .dio_p(tx_0_1_sdio));
+//
+//  ad_iobuf #(
+//  .DATA_WIDTH(4)
+//  ) i_spi_iobuf1 (
+//    .dio_t(tx_2_3_sdt),
+//    .dio_i(tx_2_3_sdo),
+//    .dio_o(tx_2_3_sdi),
+//    .dio_p(tx_2_3_sdio));
 
   ODDR #(.DDR_CLK_EDGE ("SAME_EDGE")) i_tx_clk_oddr0 (
     .CE (1'b1),
@@ -385,14 +379,14 @@ module system_top (
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif),
     .spi0_clk_i (1'b0),
-    .spi0_clk_o (),
-    .spi0_csn_0_o (),
+    .spi0_clk_o (spi_sck),
+    .spi0_csn_0_o (spi_csb),
     .spi0_csn_1_o (),
     .spi0_csn_2_o (),
     .spi0_csn_i (1'b1),
-    .spi0_sdi_i (1'b0),
+    .spi0_sdi_i (spi_miso),
     .spi0_sdo_i (1'b0),
-    .spi0_sdo_o (),
+    .spi0_sdo_o (spi_mosi),
     .spi1_clk_i (1'b0),
     .spi1_clk_o (),
     .spi1_csn_0_o (),
@@ -432,36 +426,36 @@ module system_top (
     .rx_3_db_p    (rx_db_p[3]),
     .rx_3_db_n    (rx_db_n[3]),
 
-    .tx_0_1_cs   (tx_0_1_cs),
-    .tx_0_1_sclk (tx_0_1_sclk),
-    .tx_0_1_sdi0 (tx_0_1_sdi[0]),
-    .tx_0_1_sdi1 (tx_0_1_sdi[1]),
-    .tx_0_1_sdi2 (tx_0_1_sdi[2]),
-    .tx_0_1_sdi3 (tx_0_1_sdi[3]),
-    .tx_0_1_sdo0 (tx_0_1_sdo[0]),
-    .tx_0_1_sdo1 (tx_0_1_sdo[1]),
-    .tx_0_1_sdo2 (tx_0_1_sdo[2]),
-    .tx_0_1_sdo3 (tx_0_1_sdo[3]),
-    .tx_0_1_sdt0 (tx_0_1_sdt[0]),
-    .tx_0_1_sdt1 (tx_0_1_sdt[1]),
-    .tx_0_1_sdt2 (tx_0_1_sdt[2]),
-    .tx_0_1_sdt3 (tx_0_1_sdt[3]),
-
-    .tx_2_3_cs   (tx_2_3_cs),
-    .tx_2_3_sclk (tx_2_3_sclk),
-    .tx_2_3_sdi0 (tx_2_3_sdi[0]),
-    .tx_2_3_sdi1 (tx_2_3_sdi[1]),
-    .tx_2_3_sdi2 (tx_2_3_sdi[2]),
-    .tx_2_3_sdi3 (tx_2_3_sdi[3]),
-    .tx_2_3_sdo0 (tx_2_3_sdo[0]),
-    .tx_2_3_sdo1 (tx_2_3_sdo[1]),
-    .tx_2_3_sdo2 (tx_2_3_sdo[2]),
-    .tx_2_3_sdo3 (tx_2_3_sdo[3]),
-    .tx_2_3_sdt0 (tx_2_3_sdt[0]),
-    .tx_2_3_sdt1 (tx_2_3_sdt[1]),
-    .tx_2_3_sdt2 (tx_2_3_sdt[2]),
-    .tx_2_3_sdt3 (tx_2_3_sdt[3]),
-
+//    .tx_0_1_cs   (tx_0_1_cs),
+//    .tx_0_1_sclk (tx_0_1_sclk),
+//    .tx_0_1_sdi0 (tx_0_1_sdi[0]),
+//    .tx_0_1_sdi1 (tx_0_1_sdi[1]),
+//    .tx_0_1_sdi2 (tx_0_1_sdi[2]),
+//    .tx_0_1_sdi3 (tx_0_1_sdi[3]),
+//    .tx_0_1_sdo0 (tx_0_1_sdo[0]),
+//    .tx_0_1_sdo1 (tx_0_1_sdo[1]),
+//    .tx_0_1_sdo2 (tx_0_1_sdo[2]),
+//    .tx_0_1_sdo3 (tx_0_1_sdo[3]),
+//    .tx_0_1_sdt0 (tx_0_1_sdt[0]),
+//    .tx_0_1_sdt1 (tx_0_1_sdt[1]),
+//    .tx_0_1_sdt2 (tx_0_1_sdt[2]),
+//    .tx_0_1_sdt3 (tx_0_1_sdt[3]),
+//
+//    .tx_2_3_cs   (tx_2_3_cs),
+//    .tx_2_3_sclk (tx_2_3_sclk),
+//    .tx_2_3_sdi0 (tx_2_3_sdi[0]),
+//    .tx_2_3_sdi1 (tx_2_3_sdi[1]),
+//    .tx_2_3_sdi2 (tx_2_3_sdi[2]),
+//    .tx_2_3_sdi3 (tx_2_3_sdi[3]),
+//    .tx_2_3_sdo0 (tx_2_3_sdo[0]),
+//    .tx_2_3_sdo1 (tx_2_3_sdo[1]),
+//    .tx_2_3_sdo2 (tx_2_3_sdo[2]),
+//    .tx_2_3_sdo3 (tx_2_3_sdo[3]),
+//    .tx_2_3_sdt0 (tx_2_3_sdt[0]),
+//    .tx_2_3_sdt1 (tx_2_3_sdt[1]),
+//    .tx_2_3_sdt2 (tx_2_3_sdt[2]),
+//    .tx_2_3_sdt3 (tx_2_3_sdt[3]),
+//
     .sampling_clk(sampling_clk_s)
 );
 
