@@ -1,8 +1,3 @@
-# specify ADC resolution -- the design supports 16/18 bit resolutions
-set adc_resolution 16
-
-# specify number of channels -- the design supports one lane/two lanes
-set two_lanes 1
 
 source $ad_hdl_dir/projects/common/zed/zed_system_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
