@@ -48,14 +48,14 @@ set_property  -quiet -dict {PACKAGE_PIN V6                                      
 set_property  -quiet -dict {PACKAGE_PIN V7                                                            } [get_ports tx_data_p[4]     ]    ; ## FMC0_DP4_C2M_P      MGTHTXP3_228    FPGA_SERDOUT_6_P
 set_property  -quiet -dict {PACKAGE_PIN W8                                                            } [get_ports tx_data_n[3]     ]    ; ## FMC0_DP3_C2M_N      MGTHTXN0_229    FPGA_SERDOUT_7_N
 set_property  -quiet -dict {PACKAGE_PIN W9                                                            } [get_ports tx_data_p[3]     ]    ; ## FMC0_DP3_C2M_P      MGTHTXP0_229    FPGA_SERDOUT_7_P
-set_property  -quiet -dict {PACKAGE_PIN AY25  IOSTANDARD LVDS15   DIFF_TERM_ADV TERM_100              } [get_ports fpga_syncin_n[0] ]    ; ## FMC0_LA02_N         IO_L23N_T3U_N9_66
-set_property  -quiet -dict {PACKAGE_PIN AW24  IOSTANDARD LVDS15   DIFF_TERM_ADV TERM_100              } [get_ports fpga_syncin_p[0] ]    ; ## FMC0_LA02_P         IO_L23P_T3U_N8_66
-set_property  -quiet -dict {PACKAGE_PIN AW21  IOSTANDARD LVDS15   DIFF_TERM_ADV TERM_100              } [get_ports fpga_syncin_n[1] ]    ; ## FMC0_LA03_N         IO_L22N_T3U_N7_DBC_AD0N_66
-set_property  -quiet -dict {PACKAGE_PIN AV22  IOSTANDARD LVDS15   DIFF_TERM_ADV TERM_100              } [get_ports fpga_syncin_p[1] ]    ; ## FMC0_LA03_P         IO_L22P_T3U_N6_DBC_AD0P_66
-set_property  -quiet -dict {PACKAGE_PIN BD22  IOSTANDARD LVDS15                                       } [get_ports fpga_syncout_n[0]]    ; ## FMC0_LA01_CC_N      IO_L16N_T2U_N7_QBC_AD3N_66
-set_property  -quiet -dict {PACKAGE_PIN BC23  IOSTANDARD LVDS15                                       } [get_ports fpga_syncout_p[0]]    ; ## FMC0_LA01_CC_P      IO_L16P_T2U_N6_QBC_AD3P_66
-set_property  -quiet -dict {PACKAGE_PIN BD20  IOSTANDARD LVDS15                                       } [get_ports fpga_syncout_n[1]]    ; ## FMC0_LA06_N         IO_L19N_T3L_N1_DBC_AD9N_66
-set_property  -quiet -dict {PACKAGE_PIN BC20  IOSTANDARD LVDS15                                       } [get_ports fpga_syncout_p[1]]    ; ## FMC0_LA06_P         IO_L19P_T3L_N0_DBC_AD9P_66
+set_property  -quiet -dict {PACKAGE_PIN AY25  IOSTANDARD LVDS15   DIFF_TERM_ADV TERM_100              } [get_ports fpga_syncin_0_n  ]    ; ## FMC0_LA02_N         IO_L23N_T3U_N9_66
+set_property  -quiet -dict {PACKAGE_PIN AW24  IOSTANDARD LVDS15   DIFF_TERM_ADV TERM_100              } [get_ports fpga_syncin_0_p  ]    ; ## FMC0_LA02_P         IO_L23P_T3U_N8_66
+set_property  -quiet -dict {PACKAGE_PIN AW21  IOSTANDARD LVCMOS15                                     } [get_ports fpga_syncin_1_n  ]    ; ## FMC0_LA03_N         IO_L22N_T3U_N7_DBC_AD0N_66
+set_property  -quiet -dict {PACKAGE_PIN AV22  IOSTANDARD LVCMOS15                                     } [get_ports fpga_syncin_1_p  ]    ; ## FMC0_LA03_P         IO_L22P_T3U_N6_DBC_AD0P_66
+set_property  -quiet -dict {PACKAGE_PIN BD22  IOSTANDARD LVDS15                                       } [get_ports fpga_syncout_0_n ]    ; ## FMC0_LA01_CC_N      IO_L16N_T2U_N7_QBC_AD3N_66
+set_property  -quiet -dict {PACKAGE_PIN BC23  IOSTANDARD LVDS15                                       } [get_ports fpga_syncout_0_p ]    ; ## FMC0_LA01_CC_P      IO_L16P_T2U_N6_QBC_AD3P_66
+set_property  -quiet -dict {PACKAGE_PIN BD20  IOSTANDARD LVCMOS15                                     } [get_ports fpga_syncout_1_n ]    ; ## FMC0_LA06_N         IO_L19N_T3L_N1_DBC_AD9N_66
+set_property  -quiet -dict {PACKAGE_PIN BC20  IOSTANDARD LVCMOS15                                     } [get_ports fpga_syncout_1_p ]    ; ## FMC0_LA06_P         IO_L19P_T3L_N0_DBC_AD9P_66
 set_property         -dict {PACKAGE_PIN AY22  IOSTANDARD LVCMOS15                                     } [get_ports gpio[0]          ]    ; ## FMC0_LA15_P         IO_L6P_T0U_N10_AD6P_66
 set_property         -dict {PACKAGE_PIN AY23  IOSTANDARD LVCMOS15                                     } [get_ports gpio[1]          ]    ; ## FMC0_LA15_N         IO_L6N_T0U_N11_AD6N_66
 set_property         -dict {PACKAGE_PIN BA17  IOSTANDARD LVCMOS15                                     } [get_ports gpio[2]          ]    ; ## FMC0_LA19_P         IO_L23P_T3U_N8_67
