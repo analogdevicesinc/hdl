@@ -75,7 +75,7 @@ ad_ip_instance axi_ltc2387 axi_ltc2387_3
 ad_ip_parameter axi_ltc2387_3 CONFIG.ADC_RES 16
 ad_ip_parameter axi_ltc2387_3 CONFIG.OUT_RES 16
 ad_ip_parameter axi_ltc2387_3 CONFIG.TWOLANES 1
-ad_ip_parameter axi_ltc2387_3 CONFIG.ADC_INIT_DELAY 27
+ad_ip_parameter axi_ltc2387_3 CONFIG.ADC_INIT_DELAY 28
 ad_ip_parameter axi_ltc2387_3 CONFIG.IO_DELAY_GROUP adc_if_delay_group2
 ad_ip_parameter axi_ltc2387_3 CONFIG.IODELAY_CTRL 0
 

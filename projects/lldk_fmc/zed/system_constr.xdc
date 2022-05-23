@@ -72,10 +72,55 @@ set_property  -dict {PACKAGE_PIN A22  IOSTANDARD LVCMOS25}            [get_ports
 
 # clocks
 
-create_generated_clock -name dco0 -divide_by 1 -add -master_clock mmcm_clk_0_s -source [get_ports rx_dco_p[0]] -objects [get_ports rx_clk_p[0]]
-create_generated_clock -name dco1 -divide_by 1 -add -master_clock mmcm_clk_0_s -source [get_ports rx_dco_p[1]] -objects [get_ports rx_clk_p[1]]
-create_generated_clock -name dco2 -divide_by 1 -add -master_clock mmcm_clk_0_s -source [get_ports rx_dco_p[2]] -objects [get_ports rx_clk_p[2]]
-create_generated_clock -name dco3 -divide_by 1 -add -master_clock mmcm_clk_0_s -source [get_ports rx_dco_p[3]] -objects [get_ports rx_clk_p[3]]
+set clk_period  8.333
+set data_delay  0.200
 
+create_clock -period $clk_period -name dco_0      [get_ports rx_dco_p[0]]
+create_clock -period $clk_period -name dco_1      [get_ports rx_dco_p[1]]
+create_clock -period $clk_period -name dco_2      [get_ports rx_dco_p[2]]
+create_clock -period $clk_period -name dco_3      [get_ports rx_dco_p[3]]
 
+set_input_delay -clock dco_0 -max  $data_delay [get_ports rx_da_p[0]]
+set_input_delay -clock dco_0 -min -$data_delay [get_ports rx_da_p[0]]
+set_input_delay -clock dco_0 -clock_fall -max -add_delay  $data_delay [get_ports rx_da_p[0]]
+set_input_delay -clock dco_0 -clock_fall -min -add_delay -$data_delay [get_ports rx_da_p[0]]
+set_input_delay -clock dco_0 -max  $data_delay [get_ports rx_db_p[0]]
+set_input_delay -clock dco_0 -min -$data_delay [get_ports rx_db_p[0]]
+set_input_delay -clock dco_0 -clock_fall -max -add_delay  $data_delay [get_ports rx_db_p[0]]
+set_input_delay -clock dco_0 -clock_fall -min -add_delay -$data_delay [get_ports rx_db_p[0]]
 
+set_input_delay -clock dco_1 -max  $data_delay [get_ports rx_da_p[1]]
+set_input_delay -clock dco_1 -min -$data_delay [get_ports rx_da_p[1]]
+set_input_delay -clock dco_1 -clock_fall -max -add_delay  $data_delay [get_ports rx_da_p[1]]
+set_input_delay -clock dco_1 -clock_fall -min -add_delay -$data_delay [get_ports rx_da_p[1]]
+set_input_delay -clock dco_1 -max  $data_delay [get_ports rx_db_p[1]]
+set_input_delay -clock dco_1 -min -$data_delay [get_ports rx_db_p[1]]
+set_input_delay -clock dco_1 -clock_fall -max -add_delay  $data_delay [get_ports rx_db_p[1]]
+set_input_delay -clock dco_1 -clock_fall -min -add_delay -$data_delay [get_ports rx_db_p[1]]
+
+set_input_delay -clock dco_2 -max  $data_delay [get_ports rx_da_p[2]]
+set_input_delay -clock dco_2 -min -$data_delay [get_ports rx_da_p[2]]
+set_input_delay -clock dco_2 -clock_fall -max -add_delay  $data_delay [get_ports rx_da_p[2]]
+set_input_delay -clock dco_2 -clock_fall -min -add_delay -$data_delay [get_ports rx_da_p[2]]
+set_input_delay -clock dco_2 -max  $data_delay [get_ports rx_db_p[2]]
+set_input_delay -clock dco_2 -min -$data_delay [get_ports rx_db_p[2]]
+set_input_delay -clock dco_2 -clock_fall -max -add_delay  $data_delay [get_ports rx_db_p[2]]
+set_input_delay -clock dco_2 -clock_fall -min -add_delay -$data_delay [get_ports rx_db_p[2]]
+
+set_input_delay -clock dco_3 -max  $data_delay [get_ports rx_da_p[3]]
+set_input_delay -clock dco_3 -min -$data_delay [get_ports rx_da_p[3]]
+set_input_delay -clock dco_3 -clock_fall -max -add_delay  $data_delay [get_ports rx_da_p[3]]
+set_input_delay -clock dco_3 -clock_fall -min -add_delay -$data_delay [get_ports rx_da_p[3]]
+set_input_delay -clock dco_3 -max  $data_delay [get_ports rx_db_p[3]]
+set_input_delay -clock dco_3 -min -$data_delay [get_ports rx_db_p[3]]
+set_input_delay -clock dco_3 -clock_fall -max -add_delay  $data_delay [get_ports rx_db_p[3]]
+set_input_delay -clock dco_3 -clock_fall -min -add_delay -$data_delay [get_ports rx_db_p[3]]
+
+set_property IDELAY_VALUE 27 [get_cells i_system_wrapper/system_i/axi_ltc2387_0/inst/i_if/i_rx_da/i_rx_data_idelay]
+set_property IDELAY_VALUE 27 [get_cells i_system_wrapper/system_i/axi_ltc2387_0/inst/i_if/i_rx_db/i_rx_data_idelay]
+set_property IDELAY_VALUE 27 [get_cells i_system_wrapper/system_i/axi_ltc2387_1/inst/i_if/i_rx_da/i_rx_data_idelay]
+set_property IDELAY_VALUE 27 [get_cells i_system_wrapper/system_i/axi_ltc2387_1/inst/i_if/i_rx_db/i_rx_data_idelay]
+set_property IDELAY_VALUE 27 [get_cells i_system_wrapper/system_i/axi_ltc2387_2/inst/i_if/i_rx_da/i_rx_data_idelay]
+set_property IDELAY_VALUE 27 [get_cells i_system_wrapper/system_i/axi_ltc2387_2/inst/i_if/i_rx_db/i_rx_data_idelay]
+set_property IDELAY_VALUE 28 [get_cells i_system_wrapper/system_i/axi_ltc2387_3/inst/i_if/i_rx_da/i_rx_data_idelay]
+set_property IDELAY_VALUE 28 [get_cells i_system_wrapper/system_i/axi_ltc2387_3/inst/i_if/i_rx_db/i_rx_data_idelay]
