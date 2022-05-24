@@ -20,3 +20,6 @@ set_instance_parameter_value rom_sys_0 {PATH_TO_FILE} "[pwd]/mem_init_sys.txt"
 
 sysid_gen_sys_init_file;
 
+#spi
+set_instance_parameter_value sys_spi {clockPhase} {1}
+set_instance_parameter_value sys_spi {targetClockRate} {1000000.0}
