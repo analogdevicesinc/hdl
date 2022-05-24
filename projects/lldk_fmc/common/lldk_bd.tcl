@@ -49,6 +49,21 @@ create_bd_port -dir I max_spi_sdo_i
 create_bd_port -dir O max_spi_sdo_o
 create_bd_port -dir I max_spi_sdi_i
 
+create_bd_port -dir I dac1_spi_csn_i
+create_bd_port -dir O dac1_spi_csn_o
+create_bd_port -dir I dac1_spi_clk_i
+create_bd_port -dir O dac1_spi_clk_o
+create_bd_port -dir I dac1_spi_sdo_i
+create_bd_port -dir O dac1_spi_sdo_o
+create_bd_port -dir I dac1_spi_sdi_i
+
+create_bd_port -dir I dac2_spi_csn_i
+create_bd_port -dir O dac2_spi_csn_o
+create_bd_port -dir I dac2_spi_clk_i
+create_bd_port -dir O dac2_spi_clk_o
+create_bd_port -dir I dac2_spi_sdo_i
+create_bd_port -dir O dac2_spi_sdo_o
+create_bd_port -dir I dac2_spi_sdi_i
 # adc peripheral
 
 ad_ip_instance axi_ltc2387 axi_ltc2387_0
@@ -207,7 +222,6 @@ ad_connect axi_clkgen/clk_0       axi_ltc2387_dma_1/fifo_wr_clk
 ad_connect axi_clkgen/clk_0       axi_ltc2387_dma_2/fifo_wr_clk
 ad_connect axi_clkgen/clk_0       axi_ltc2387_dma_3/fifo_wr_clk
 
-
 ad_connect axi_ltc2387_0/adc_valid  axi_ltc2387_dma_0/fifo_wr_en
 ad_connect axi_ltc2387_0/adc_data   axi_ltc2387_dma_0/fifo_wr_din
 ad_connect axi_ltc2387_0/adc_dovf   axi_ltc2387_dma_0/fifo_wr_overflow
@@ -246,6 +260,43 @@ ad_connect  max_spi_sdo_i max_spi/io0_i
 ad_connect  max_spi_sdo_o max_spi/io0_o
 ad_connect  max_spi_sdi_i max_spi/io1_i
 
+ad_ip_instance axi_quad_spi dac1_spi
+ad_ip_parameter dac1_spi CONFIG.C_USE_STARTUP 0
+ad_ip_parameter dac1_spi CONFIG.C_USE_STARTUP_INT 0
+ad_ip_parameter dac1_spi CONFIG.C_SPI_MODE 0
+ad_ip_parameter dac1_spi CONFIG.C_SCK_RATIO 16
+#
+## connections
+#
+ad_connect axi_clkgen/clk_0  dac1_spi/ext_spi_clk
+ad_connect sys_ps7/FCLK_CLK0  dac1_spi/s_axi_aclk
+
+ad_connect  dac1_spi_csn_i dac1_spi/ss_i
+ad_connect  dac1_spi_csn_o dac1_spi/ss_o
+ad_connect  dac1_spi_clk_i dac1_spi/sck_i
+ad_connect  dac1_spi_clk_o dac1_spi/sck_o
+ad_connect  dac1_spi_sdo_i dac1_spi/io0_i
+ad_connect  dac1_spi_sdo_o dac1_spi/io0_o
+ad_connect  dac1_spi_sdi_i dac1_spi/io1_i
+
+ad_ip_instance axi_quad_spi dac2_spi
+ad_ip_parameter dac2_spi CONFIG.C_USE_STARTUP 0
+ad_ip_parameter dac2_spi CONFIG.C_USE_STARTUP_INT 0
+ad_ip_parameter dac2_spi CONFIG.C_SPI_MODE 0
+ad_ip_parameter dac2_spi CONFIG.C_SCK_RATIO 16
+#
+## connections
+#
+ad_connect axi_clkgen/clk_0  dac2_spi/ext_spi_clk
+ad_connect sys_ps7/FCLK_CLK0  dac2_spi/s_axi_aclk
+
+ad_connect  dac2_spi_csn_i dac2_spi/ss_i
+ad_connect  dac2_spi_csn_o dac2_spi/ss_o
+ad_connect  dac2_spi_clk_i dac2_spi/sck_i
+ad_connect  dac2_spi_clk_o dac2_spi/sck_o
+ad_connect  dac2_spi_sdo_i dac2_spi/io0_i
+ad_connect  dac2_spi_sdo_o dac2_spi/io0_o
+ad_connect  dac2_spi_sdi_i dac2_spi/io1_i
 
 # address mapping
 
@@ -260,6 +311,8 @@ ad_cpu_interconnect 0x44AD0000 axi_ltc2387_dma_3
 ad_cpu_interconnect 0x44AF0000 axi_pwm_gen
 ad_cpu_interconnect 0x44B00000 axi_clkgen
 ad_cpu_interconnect 0x44B30000 max_spi
+ad_cpu_interconnect 0x44B40000 dac1_spi
+ad_cpu_interconnect 0x44B50000 dac2_spi
 
 # interconnect (adc)
 
@@ -281,3 +334,5 @@ ad_cpu_interrupt ps-12 mb-12 axi_ltc2387_dma_1/irq
 ad_cpu_interrupt ps-11 mb-11 axi_ltc2387_dma_2/irq
 ad_cpu_interrupt ps-10 mb-10 axi_ltc2387_dma_3/irq
 ad_cpu_interrupt ps-9 mb-9 max_spi/ip2intc_irpt
+ad_cpu_interrupt ps-8 mb-8 dac1_spi/ip2intc_irpt
+ad_cpu_interrupt ps-7 mb-7 dac2_spi/ip2intc_irpt

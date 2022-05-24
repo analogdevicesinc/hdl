@@ -100,14 +100,14 @@ module system_top (
   input       [ 3:0]      rx_da_p,
   input       [ 3:0]      rx_da_n,
 
-  input       [ 1:0]      dac_cs,
-  input       [ 1:0]      dac_sclk,
-  input       [ 1:0]      dac_sdio0,
+  output      [ 1:0]      dac_cs,
+  output      [ 1:0]      dac_sclk,
+  output      [ 1:0]      dac_sdio0,
   input       [ 1:0]      dac_sdio1,
   input       [ 1:0]      dac_sdio2,
   input       [ 1:0]      dac_sdio3,
 
-  input                  spi_miso,
+  input                   spi_miso,
   output                  spi_mosi,
   output                  spi_sck,
   output                  spi_csb,
@@ -147,32 +147,12 @@ module system_top (
 
   wire    [ 3:0]  ltc_clk;
 
-//  wire   [ 3:0]   tx_0_1_sdio;
-//  wire   [ 3:0]   tx_2_3_sdio;
-//
-//  wire   [ 3:0]   tx_0_1_sdt;
-//  wire   [ 3:0]   tx_0_1_sdo;
-//  wire   [ 3:0]   tx_0_1_sdi;
-//
-//  wire   [ 3:0]   tx_2_3_sdt;
-//  wire   [ 3:0]   tx_2_3_sdo;
-//  wire   [ 3:0]   tx_2_3_sdi;
-
-  // spi
-
-//  assign tx_0_1_sdio[0] = tx_sdio0[0];
-//  assign tx_0_1_sdio[1] = tx_sdio1[0];
-//  assign tx_0_1_sdio[2] = tx_sdio2[0];
-//  assign tx_0_1_sdio[3] = tx_sdio3[0];
-//
-//  assign tx_2_3_sdio[0] = tx_sdio0[1];
-//  assign tx_2_3_sdio[1] = tx_sdio1[1];
-//  assign tx_2_3_sdio[2] = tx_sdio2[1];
-//  assign tx_2_3_sdio[3] = tx_sdio3[1];
 
   assign gpio_i[63:32] = gpio_o[63:32];
   //direction High for A->B
   assign direction = 1'b1;
+  assign reset  = 1'b1;
+
   //LDAC active low
   assign ldac_1 = 1'b1;
   assign ldac_2 = 1'b1;
@@ -404,6 +384,23 @@ module system_top (
     .max_spi_sdi_i(spi_miso),
     .max_spi_csn_i(spi_csb),
     .max_spi_csn_o(spi_csb),
+
+
+    .dac1_spi_clk_i(dac_sclk[0]),
+    .dac1_spi_clk_o(dac_sclk[0]),
+    .dac1_spi_sdo_i(dac_sdio0[0]),
+    .dac1_spi_sdo_o(dac_sdio0[0]),
+    .dac1_spi_sdi_i(dac_sdio1[0]),
+    .dac1_spi_csn_i(dac_cs[0]),
+    .dac1_spi_csn_o(dac_cs[0]),
+
+    .dac2_spi_clk_i(dac_sclk[1]),
+    .dac2_spi_clk_o(dac_sclk[1]),
+    .dac2_spi_sdo_i(dac_sdio0[1]),
+    .dac2_spi_sdo_o(dac_sdio0[1]),
+    .dac2_spi_sdi_i(dac_sdio1[1]),
+    .dac2_spi_csn_i(dac_cs[1]),
+    .dac2_spi_csn_o(dac_cs[1]),
 
     .rx_0_dco_p   (rx_dco_p[0]),
     .rx_0_dco_n   (rx_dco_n[0]),
