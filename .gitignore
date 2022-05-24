@@ -96,5 +96,5 @@ _vmake
 *.gen*
 *.xsa
 *.pdi
-library/*/bd/bd.tcl
+library/**/bd/bd.tcl
 
