@@ -301,18 +301,18 @@ ad_connect  dac2_spi_sdi_i dac2_spi/io1_i
 # address mapping
 
 ad_cpu_interconnect 0x44A00000 axi_ltc2387_0
-ad_cpu_interconnect 0x44A30000 axi_ltc2387_1
-ad_cpu_interconnect 0x44A60000 axi_ltc2387_2
-ad_cpu_interconnect 0x44A90000 axi_ltc2387_3
-ad_cpu_interconnect 0x44AA0000 axi_ltc2387_dma_0
-ad_cpu_interconnect 0x44AB0000 axi_ltc2387_dma_1
-ad_cpu_interconnect 0x44AC0000 axi_ltc2387_dma_2
-ad_cpu_interconnect 0x44AD0000 axi_ltc2387_dma_3
-ad_cpu_interconnect 0x44AF0000 axi_pwm_gen
+ad_cpu_interconnect 0x44A10000 axi_ltc2387_1
+ad_cpu_interconnect 0x44A20000 axi_ltc2387_2
+ad_cpu_interconnect 0x44A30000 axi_ltc2387_3
+ad_cpu_interconnect 0x44A40000 axi_ltc2387_dma_0
+ad_cpu_interconnect 0x44A50000 axi_ltc2387_dma_1
+ad_cpu_interconnect 0x44A60000 axi_ltc2387_dma_2
+ad_cpu_interconnect 0x44A70000 axi_ltc2387_dma_3
 ad_cpu_interconnect 0x44B00000 axi_clkgen
-ad_cpu_interconnect 0x44B30000 max_spi
-ad_cpu_interconnect 0x44B40000 dac1_spi
-ad_cpu_interconnect 0x44B50000 dac2_spi
+ad_cpu_interconnect 0x44B10000 axi_pwm_gen
+ad_cpu_interconnect 0x44B20000 max_spi
+ad_cpu_interconnect 0x44B30000 dac1_spi
+ad_cpu_interconnect 0x44B40000 dac2_spi
 
 # interconnect (adc)
 
