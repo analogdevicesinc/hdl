@@ -430,6 +430,7 @@ module system_top (
     .rx_3_da_n    (rx_da_n[3]),
     .rx_3_db_p    (rx_db_p[3]),
     .rx_3_db_n    (rx_db_n[3]),
+    .clk_gate     (clk_gate),
     .sampling_clk(sampling_clk_s)
 );
 

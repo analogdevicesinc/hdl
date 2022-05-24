@@ -1,8 +1,3 @@
-#create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 dac_0_spi
-#create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 dac_1_spi
-
-#de aici
-
 # ltc2387
 
 create_bd_port -dir O clk_gate
