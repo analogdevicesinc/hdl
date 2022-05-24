@@ -331,8 +331,8 @@ ad_connect  $sys_cpu_resetn axi_ltc2387_dma_3/m_dest_axi_aresetn
 
 ad_cpu_interrupt ps-13 mb-13 axi_ltc2387_dma_0/irq
 ad_cpu_interrupt ps-12 mb-12 axi_ltc2387_dma_1/irq
-ad_cpu_interrupt ps-11 mb-11 axi_ltc2387_dma_2/irq
-ad_cpu_interrupt ps-10 mb-10 axi_ltc2387_dma_3/irq
-ad_cpu_interrupt ps-9 mb-9 max_spi/ip2intc_irpt
-ad_cpu_interrupt ps-8 mb-8 dac1_spi/ip2intc_irpt
-ad_cpu_interrupt ps-7 mb-7 dac2_spi/ip2intc_irpt
+ad_cpu_interrupt ps-10 mb-10 axi_ltc2387_dma_2/irq
+ad_cpu_interrupt ps-9 mb-9 axi_ltc2387_dma_3/irq
+ad_cpu_interrupt ps-8 mb-8 max_spi/ip2intc_irpt
+ad_cpu_interrupt ps-7 mb-7 dac1_spi/ip2intc_irpt
+ad_cpu_interrupt ps-6 mb-6 dac2_spi/ip2intc_irpt
