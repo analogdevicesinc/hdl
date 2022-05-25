@@ -150,12 +150,21 @@ module system_top (
 
   assign gpio_i[63:32] = gpio_o[63:32];
   //direction High for A->B
-  assign direction = 1'b1;
+//  assign direction = 1'b1;
   assign reset  = 1'b1;
 
   //LDAC active low
   assign ldac_1 = 1'b1;
   assign ldac_2 = 1'b1;
+
+
+  ad_3w_spi i_spi (
+    .spi_csn (dac_cs[0]),
+    .spi_clk (dac_sclk[0]),
+    .spi_mosi (),
+    .spi_miso (),
+    .spi_sdio (),
+    .spi_dir (direction));
 
   // instantiations
 

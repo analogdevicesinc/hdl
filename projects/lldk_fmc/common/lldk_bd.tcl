@@ -92,12 +92,20 @@ ad_ip_parameter axi_ltc2387_3 CONFIG.IODELAY_CTRL 0
 # axi pwm gen
 
 ad_ip_instance axi_pwm_gen axi_pwm_gen
-ad_ip_parameter axi_pwm_gen CONFIG.N_PWMS 2
+ad_ip_parameter axi_pwm_gen CONFIG.N_PWMS 4
 ad_ip_parameter axi_pwm_gen CONFIG.PULSE_0_WIDTH 1
 ad_ip_parameter axi_pwm_gen CONFIG.PULSE_0_PERIOD 8
 ad_ip_parameter axi_pwm_gen CONFIG.PULSE_1_WIDTH 5
 ad_ip_parameter axi_pwm_gen CONFIG.PULSE_1_PERIOD 8
 ad_ip_parameter axi_pwm_gen CONFIG.PULSE_1_OFFSET 0
+
+ad_ip_instance axi_pwm_gen axi_pwm_gen_1
+ad_ip_parameter axi_pwm_gen_1 CONFIG.N_PWMS 4
+ad_ip_parameter axi_pwm_gen_1 CONFIG.PULSE_0_WIDTH 1
+ad_ip_parameter axi_pwm_gen_1 CONFIG.PULSE_0_PERIOD 8
+ad_ip_parameter axi_pwm_gen_1 CONFIG.PULSE_1_WIDTH 5
+ad_ip_parameter axi_pwm_gen_1 CONFIG.PULSE_1_PERIOD 8
+ad_ip_parameter axi_pwm_gen_1 CONFIG.PULSE_1_OFFSET 0
 
 # util_cpack2
 
@@ -211,6 +219,9 @@ ad_connect clk_gate   axi_pwm_gen/pwm_1
 ad_connect axi_clkgen/clk_0       axi_pwm_gen/ext_clk
 ad_connect sys_cpu_resetn         axi_pwm_gen/s_axi_aresetn
 ad_connect sys_cpu_clk            axi_pwm_gen/s_axi_aclk
+ad_connect axi_clkgen/clk_0       axi_pwm_gen_1/ext_clk
+ad_connect sys_cpu_resetn         axi_pwm_gen_1/s_axi_aresetn
+ad_connect sys_cpu_clk            axi_pwm_gen_1/s_axi_aclk
 
 ad_connect axi_clkgen/clk_0       axi_ltc2387_dma_0/fifo_wr_clk
 ad_connect axi_clkgen/clk_0       axi_ltc2387_dma_1/fifo_wr_clk
@@ -308,6 +319,7 @@ ad_cpu_interconnect 0x44B10000 axi_pwm_gen
 ad_cpu_interconnect 0x44B20000 max_spi
 ad_cpu_interconnect 0x44B30000 dac1_spi
 ad_cpu_interconnect 0x44B40000 dac2_spi
+ad_cpu_interconnect 0x44C10000 axi_pwm_gen_1
 
 # interconnect (adc)
 
