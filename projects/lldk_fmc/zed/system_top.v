@@ -119,13 +119,13 @@ module system_top (
   inout                   dac_1_alert,
   inout                   dac_1_ldac,
 
-  output          dac_0_spi_cs,
-  output          dac_0_spi_sclk,
-  inout   [ 3:0]  dac_0_spi_sdio,
+  output                  dac_0_spi_cs,
+  output                  dac_0_spi_sclk,
+  inout       [ 3:0]      dac_0_spi_sdio,
 
-  output          dac_1_spi_cs,
-  output          dac_1_spi_sclk,
-  inout   [ 3:0]  dac_1_spi_sdio
+  output                  dac_1_spi_cs,
+  output                  dac_1_spi_sclk,
+  inout       [ 3:0]      dac_1_spi_sdio
 );
 
   // internal signals
@@ -148,13 +148,6 @@ module system_top (
 
   wire    [ 3:0]  ltc_clk;
 
-  assign gpio_i[63:32] = gpio_o[63:32];
-  assign reset  = 1'b1;
-
-  //LDAC active low
-  assign ldac_1 = 1'b1;
-  assign ldac_2 = 1'b1;
-
   wire    [ 3:0]  dac_0_spi_sdo;
   wire    [ 3:0]  dac_0_spi_sdi;
   wire            dac_0_spi_sdo_t;
@@ -163,14 +156,17 @@ module system_top (
   wire    [ 3:0]  dac_1_spi_sdi;
   wire            dac_1_spi_sdo_t;
 
-  // instantiations
+  assign gpio_i[63:36] = gpio_o[63:36];
+  assign reset  = 1'b1;
+
+// instantiations
 
   ad_iobuf #(
     .DATA_WIDTH(4)
   ) i_ad3552r_iobuf (
-    .dio_t(gpio_t[39:32]),
-    .dio_i(gpio_o[39:32]),
-    .dio_o(gpio_i[39:32]),
+    .dio_t(gpio_t[35:32]),
+    .dio_i(gpio_o[35:32]),
+    .dio_o(gpio_i[35:32]),
     .dio_p({dac_0_alert,
             dac_1_alert,
             dac_0_ldac,
