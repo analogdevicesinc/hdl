@@ -6,8 +6,8 @@
 
 PROJECT_NAME := quad_iso_adc_fmc_zed
 
-M_DEPS += system_constr_ad40xx.xdc
-M_DEPS += ../common/pulsar_adc_pmdz_bd.tcl
+M_DEPS += system_constr.xdc
+M_DEPS += ../common/quad_iso_adc_fmc_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
 M_DEPS += ../../common/zed/zed_system_bd.tcl
@@ -18,7 +18,6 @@ LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_hdmi_tx
 LIB_DEPS += axi_i2s_adi
-LIB_DEPS += axi_pwm_gen
 LIB_DEPS += axi_spdif_tx
 LIB_DEPS += axi_sysid
 LIB_DEPS += spi_engine/axi_spi_engine
