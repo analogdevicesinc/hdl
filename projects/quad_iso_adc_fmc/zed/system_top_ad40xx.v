@@ -84,14 +84,25 @@ module system_top (
 
   input           otg_vbusoc,
 
-  // ad400x SPI configuration interface
+  // SPI configuration interface
 
-  input           ad40xx_spi_sdi,
-  output          ad40xx_spi_sdo,
-  output          ad40xx_spi_sclk,
-  output          ad40xx_spi_cs,
+  output          se_spi_sdo,
+  output          se_spi_sclk,
+  input   [ 3:0]  se_spi_sdi,
+  output  [ 3:0]  se_spi_cs,
 
-  inout           ad40xx_amp_pd);
+  input   [ 3:0]  qadc_drdy,
+
+  input           qadc_mclk_refclk,
+  output          qadc_xtal2_mclk,
+  inout           qadc_sync,
+
+  inout   [ 1:0]  qadc_muxa,
+  inout   [ 1:0]  qadc_muxb,
+  inout   [ 1:0]  qadc_muxc,
+  inout   [ 1:0]  qadc_muxd
+
+  );
 
   // internal signals
 
@@ -107,15 +118,24 @@ module system_top (
 
   // instantiations
 
-  assign gpio_i[63:33] = gpio_o[63:33];
+  assign gpio_i[63:41] = gpio_o[63:41];
 
   ad_iobuf #(
-    .DATA_WIDTH(1)
-  ) i_admp_pd_iobuf (
-    .dio_t(gpio_t[32]),
-    .dio_i(gpio_o[32]),
-    .dio_o(gpio_i[32]),
-    .dio_p(ad40xx_amp_pd));
+    .DATA_WIDTH(9)
+  ) qadc_gpio (
+    .dio_t(gpio_t[40:32]),
+    .dio_i(gpio_o[40:32]),
+    .dio_o(gpio_i[40:32]),
+    .dio_p({qadc_muxa[1],
+            qadc_muxa[0],
+            qadc_muxb[1],
+            qadc_muxb[0],
+            qadc_muxc[1],
+            qadc_muxc[0],
+            qadc_muxd[1],
+            qadc_muxd[0],
+            qadc_sync
+            }));
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -201,13 +221,14 @@ module system_top (
     .spi1_csn_i (1'b1),
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
-    .spi1_sdo_o (),
-    .pulsar_adc_spi_cs(ad40xx_spi_cs),
-    .pulsar_adc_spi_sclk(ad40xx_spi_sclk),
-    .pulsar_adc_spi_sdi(ad40xx_spi_sdi),
-    .pulsar_adc_spi_sdo(ad40xx_spi_sdo),
-    .pulsar_adc_spi_sdo_t(),
-    .pulsar_adc_spi_three_wire(),
+    .qadc_spi_cs(se_spi_cs), 
+    .qadc_spi_sclk(se_spi_sclk),  
+    .qadc_spi_sdi(se_spi_sdi),   
+    .qadc_spi_sdo(se_spi_sdo), 
+    .qadc_spi_sdo_t(),
+    .qadc_drdy(qadc_drdy),      
+    .qadc_mclk_refclk(qadc_mclk_refclk),
+    .qadc_xtal2_mclk(qadc_xtal2_mclk),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));
 
