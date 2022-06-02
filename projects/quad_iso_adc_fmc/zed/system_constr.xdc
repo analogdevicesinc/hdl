@@ -3,26 +3,26 @@
 
 set_property -dict {PACKAGE_PIN P17 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports se_spi_sdo]          ; ##  FMC_LPC_LA02_P
 set_property -dict {PACKAGE_PIN N19 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports se_spi_sclk]         ; ##  FMC_LPC_LA01_CC_P
-  
+
 set_property -dict {PACKAGE_PIN N22 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports se_spi_sdi[0]]       ; ##  FMC_LPC_LA03_P
 set_property -dict {PACKAGE_PIN M21 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports se_spi_sdi[1]]       ; ##  FMC_LPC_LA04_P
 set_property -dict {PACKAGE_PIN J18 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports se_spi_sdi[2]]       ; ##  FMC_LPC_LA05_P
 set_property -dict {PACKAGE_PIN L21 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports se_spi_sdi[3]]       ; ##  FMC_LPC_LA06_P
-  
+
 set_property -dict {PACKAGE_PIN J21 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports se_spi_cs[0]]        ; ##  FMC_LPC_LA08_P
 set_property -dict {PACKAGE_PIN R20 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports se_spi_cs[1]]        ; ##  FMC_LPC_LA09_P
 set_property -dict {PACKAGE_PIN R19 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports se_spi_cs[2]]        ; ##  FMC_LPC_LA10_P
 set_property -dict {PACKAGE_PIN N17 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports se_spi_cs[3]]        ; ##  FMC_LPC_LA11_P
-  
+
 set_property -dict {PACKAGE_PIN L17 IOSTANDARD LVCMOS25} [get_ports qadc_drdy[0]]                 ; ##  FMC_LPC_LA13_P
 set_property -dict {PACKAGE_PIN K19 IOSTANDARD LVCMOS25} [get_ports qadc_drdy[1]]                 ; ##  FMC_LPC_LA14_P
 set_property -dict {PACKAGE_PIN J16 IOSTANDARD LVCMOS25} [get_ports qadc_drdy[2]]                 ; ##  FMC_LPC_LA15_P
 set_property -dict {PACKAGE_PIN J20 IOSTANDARD LVCMOS25} [get_ports qadc_drdy[3]]                 ; ##  FMC_LPC_LA16_P
-  
-set_property -dict {PACKAGE_PIN L18 IOSTANDARD LVCMOS25} [get_ports qadc_mclk_refclk]             ; ##  FMC_CLK0_M2C_P   VOLTAGE NOT RIGHT
-set_property -dict {PACKAGE_PIN B19 IOSTANDARD LVCMOS25} [get_ports qadc_xtal2_mclk]              ; ##  FMC_LA17_CC_P    
+
+set_property -dict {PACKAGE_PIN L18 IOSTANDARD LVCMOS25} [get_ports qadc_mclk_refclk]             ; ##  FMC_CLK0_M2C_P
+set_property -dict {PACKAGE_PIN B19 IOSTANDARD LVCMOS25} [get_ports qadc_xtal2_mclk]              ; ##  FMC_LA17_CC_P
 set_property -dict {PACKAGE_PIN P20 IOSTANDARD LVCMOS25} [get_ports qadc_sync]                    ; ##  FMC_LPC_LA12_P
-  
+
 set_property -dict {PACKAGE_PIN G19 IOSTANDARD LVCMOS25} [get_ports qadc_muxa[0]]                   ; ##  FMC_LPC_LA22_P
 set_property -dict {PACKAGE_PIN E15 IOSTANDARD LVCMOS25} [get_ports qadc_muxa[1]]                   ; ##  FMC_LPC_LA23_P
 set_property -dict {PACKAGE_PIN A18 IOSTANDARD LVCMOS25} [get_ports qadc_muxb[0]]                   ; ##  FMC_LPC_LA24_P
