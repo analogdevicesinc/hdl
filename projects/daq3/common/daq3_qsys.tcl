@@ -131,8 +131,8 @@ set_instance_parameter_value axi_ad9680_tpl {ID} {0}
 set_instance_parameter_value axi_ad9680_tpl {NUM_CHANNELS} $RX_NUM_OF_CONVERTERS
 set_instance_parameter_value axi_ad9680_tpl {NUM_LANES} $RX_NUM_OF_LANES
 set_instance_parameter_value axi_ad9680_tpl {BITS_PER_SAMPLE} $RX_SAMPLE_WIDTH
-set_instance_parameter_value axi_ad9680_tpl {CONVERTER_RESOLUTION} $RX_SAMPLE_WIDTH
-set_instance_parameter_value axi_ad9680_tpl {TWOS_COMPLEMENT} {1}
+set_instance_parameter_value axi_ad9680_tpl {CONVERTER_RESOLUTION} {14}
+set_instance_parameter_value axi_ad9680_tpl {TWOS_COMPLEMENT} {0}
 
 add_connection ad9680_jesd204.link_clk axi_ad9680_tpl.link_clk
 add_connection ad9680_jesd204.link_sof axi_ad9680_tpl.if_link_sof
