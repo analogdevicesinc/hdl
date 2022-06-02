@@ -132,7 +132,7 @@ module axi_ltc2387_channel #(
   if (ADC_RES == 18) begin
     ad_datafmt #(
       .DATA_WIDTH (18),
-      .OCTETS_PER_SAMPLE (4),
+      .BITS_PER_SAMPLE (32),
       .DISABLE (DATAFORMAT_DISABLE)
     ) i_ad_datafmt (
       .clk (adc_clk),
