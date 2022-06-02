@@ -45,8 +45,6 @@ module ad_ip_jesd204_tpl_adc_channel #(
   output pn_err
 );
 
-  localparam OCTETS_PER_SAMPLE = BITS_PER_SAMPLE / 8;
-
   // instantiations
 
   ad_ip_jesd204_tpl_adc_pnmon #(
@@ -66,7 +64,7 @@ module ad_ip_jesd204_tpl_adc_channel #(
   for (n = 0; n < DATA_PATH_WIDTH; n = n + 1) begin: g_datafmt
     ad_datafmt #(
       .DATA_WIDTH (CONVERTER_RESOLUTION),
-      .OCTETS_PER_SAMPLE (OCTETS_PER_SAMPLE)
+      .BITS_PER_SAMPLE (BITS_PER_SAMPLE)
     ) i_ad_datafmt (
       .clk (clk),
 
