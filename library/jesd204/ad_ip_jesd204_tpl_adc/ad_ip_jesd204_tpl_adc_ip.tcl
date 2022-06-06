@@ -146,6 +146,9 @@ set i 0
 foreach {k v w} {
   "TWOS_COMPLEMENT" "Use twos complement" "checkBox" \
   "EXT_SYNC" "Enable external sync" "checkBox" \
+  "PN7_ENABLE" "Enable PN7" "checkBox" \
+  "PN15_ENABLE" "Enable PN15" "checkBox" \
+  "PN31_ENABLE" "Enable PN31" "checkBox" \
   } { \
   set p [ipgui::get_guiparamspec -name $k -component $cc]
   ipgui::move_param -component $cc -order $i $p -parent $datapath_group
