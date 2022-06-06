@@ -22,4 +22,4 @@ sysid_gen_sys_init_file;
 
 #spi
 set_instance_parameter_value sys_spi {clockPhase} {1}
-set_instance_parameter_value sys_spi {targetClockRate} {1000000.0}
+set_instance_parameter_value sys_spi {clockPolarity} {1}
