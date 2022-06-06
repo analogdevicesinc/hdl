@@ -88,7 +88,7 @@ adi_axi_jesd204_rx_create axi_ad9680_jesd $RX_NUM_OF_LANES
 adi_tpl_jesd204_rx_create axi_ad9680_tpl $RX_NUM_OF_LANES \
                                          $RX_NUM_OF_CONVERTERS \
                                          $RX_SAMPLES_PER_FRAME \
-                                         $RX_SAMPLE_WIDTH \
+                                         $RX_SAMPLE_WIDTH
 ad_ip_parameter axi_ad9680_tpl/adc_tpl_core CONFIG.CONVERTER_RESOLUTION 14
 ad_ip_parameter axi_ad9680_tpl/adc_tpl_core CONFIG.TWOS_COMPLEMENT 0
 
