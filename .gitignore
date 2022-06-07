@@ -97,4 +97,10 @@ _vmake
 *.xsa
 *.pdi
 library/**/bd/bd.tcl
+*.syn.smsg
+*.syn.summary
+qdb
+tmp-clearbox
+*.bin
+.qsys_edit
 
