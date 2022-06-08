@@ -1,5 +1,5 @@
 
-package require qsys 14.0
+package require qsys
 package require quartus::device
 
 source ../scripts/adi_env.tcl
@@ -11,6 +11,9 @@ set_module_property VALIDATION_CALLBACK info_param_validate
 ad_ip_files axi_ad9361 [list\
   $ad_hdl_dir/library/intel/common/ad_mul.v \
   $ad_hdl_dir/library/intel/common/ad_dcfilter.v \
+  $ad_hdl_dir/library/intel/common/ad_data_clk.v \
+  $ad_hdl_dir/library/intel/common/ad_data_in.v \
+  $ad_hdl_dir/library/intel/common/ad_data_out.v \
   $ad_hdl_dir/library/common/ad_rst.v \
   $ad_hdl_dir/library/common/ad_pnmon.v \
   $ad_hdl_dir/library/common/ad_dds_cordic_pipe.v \
@@ -34,10 +37,8 @@ ad_ip_files axi_ad9361 [list\
   $ad_hdl_dir/library/common/up_dac_common.v \
   $ad_hdl_dir/library/common/up_dac_channel.v \
   $ad_hdl_dir/library/common/up_tdd_cntrl.v \
-  intel/axi_ad9361_lvds_if_10.v \
-  intel/axi_ad9361_lvds_if_c5.v \
-  intel/axi_ad9361_lvds_if.v \
-  intel/axi_ad9361_cmos_if.v \
+  axi_ad9361_lvds_if.v \
+  axi_ad9361_cmos_if.v \
   axi_ad9361_rx_pnmon.v \
   axi_ad9361_rx_channel.v \
   axi_ad9361_rx.v \
@@ -70,7 +71,6 @@ ad_ip_parameter DAC_USERPORTS_DISABLE INTEGER 0
 ad_ip_parameter DAC_IQCORRECTION_DISABLE INTEGER 0
 ad_ip_parameter IO_DELAY_GROUP STRING {dev_if_delay_group}
 ad_ip_parameter MIMO_ENABLE INTEGER 0
-ad_ip_parameter RX_NODPA INTEGER 0
 
 adi_add_auto_fpga_spec_params
 
@@ -171,48 +171,14 @@ ad_interface signal up_adc_gpio_out output 32
 
 proc axi_ad9361_elab {} {
 
-  set m_fpga_technology [get_parameter_value "FPGA_TECHNOLOGY"]
+#   set m_fpga_technology [get_parameter_value "FPGA_TECHNOLOGY"]
   set m_cmos_or_lvds_n [get_parameter_value "CMOS_OR_LVDS_N"]
-  set rx_nodpa [get_parameter_value "RX_NODPA"]
-
+  
   # 103 - stands for "Arria 10" see adi_intel_device_info_enc.tcl
-  if {$m_fpga_technology == 103} {
-
-    add_hdl_instance axi_ad9361_serdes_clk intel_serdes 1.0
-    set_instance_parameter_value axi_ad9361_serdes_clk {DEVICE_FAMILY} {Arria 10}
-    set_instance_parameter_value axi_ad9361_serdes_clk {MODE} {CLK}
-    set_instance_parameter_value axi_ad9361_serdes_clk {DDR_OR_SDR_N} {1}
-    set_instance_parameter_value axi_ad9361_serdes_clk {SERDES_FACTOR} {4}
-    set_instance_parameter_value axi_ad9361_serdes_clk {CLKIN_FREQUENCY} {250.0}
-
-    set rx_serdes_mode IN
-    if {$rx_nodpa == 1} {set rx_serdes_mode IN_NODPA}
-
-    add_hdl_instance axi_ad9361_serdes_in intel_serdes 1.0
-    set_instance_parameter_value axi_ad9361_serdes_in {DEVICE_FAMILY} {Arria 10}
-    set_instance_parameter_value axi_ad9361_serdes_in {MODE} $rx_serdes_mode
-    set_instance_parameter_value axi_ad9361_serdes_in {DDR_OR_SDR_N} {1}
-    set_instance_parameter_value axi_ad9361_serdes_in {SERDES_FACTOR} {4}
-    set_instance_parameter_value axi_ad9361_serdes_in {CLKIN_FREQUENCY} {250.0}
-
-    add_hdl_instance axi_ad9361_serdes_out intel_serdes 1.0
-    set_instance_parameter_value axi_ad9361_serdes_out {DEVICE_FAMILY} {Arria 10}
-    set_instance_parameter_value axi_ad9361_serdes_out {MODE} {OUT}
-    set_instance_parameter_value axi_ad9361_serdes_out {DDR_OR_SDR_N} {1}
-    set_instance_parameter_value axi_ad9361_serdes_out {SERDES_FACTOR} {4}
-    set_instance_parameter_value axi_ad9361_serdes_out {CLKIN_FREQUENCY} {250.0}
-
-    add_hdl_instance axi_ad9361_data_out altera_gpio 19.1
-    set_instance_parameter_value axi_ad9361_data_out {DEVICE_FAMILY} {Arria 10}
-    set_instance_parameter_value axi_ad9361_data_out {PIN_TYPE_GUI} {Output}
-    set_instance_parameter_value axi_ad9361_data_out {SIZE} {1}
-    set_instance_parameter_value axi_ad9361_data_out {gui_io_reg_mode} {DDIO}
-
-    add_hdl_instance clk_buffer altclkctrl 19.1
-    set_instance_parameter_value clk_buffer {DEVICE_FAMILY} {Arria 10}
-
-  }
-
+#   if {$m_fpga_technology == 103} {
+# 
+#   }
+  
   add_interface device_if conduit end
   set_interface_property device_if associatedClock none
   set_interface_property device_if associatedReset none
