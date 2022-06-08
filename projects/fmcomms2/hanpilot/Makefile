@@ -6,6 +6,7 @@
 PROJECT_NAME := fmcomms2_hanpilot
 
 M_DEPS += ../common/fmcomms2_qsys.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/hanpilot/hanpilot_system_qsys.tcl
 M_DEPS += ../../common/hanpilot/hanpilot_system_assign.tcl
 #M_DEPS += ../../common/hanpilot/hanpilot_plddr4_dacfifo_qsys.tcl

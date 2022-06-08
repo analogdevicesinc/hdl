@@ -6,6 +6,7 @@
 PROJECT_NAME := fmcomms2_a10soc
 
 M_DEPS += ../common/fmcomms2_qsys.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/a10soc/a10soc_system_qsys.tcl
 M_DEPS += ../../common/a10soc/a10soc_system_assign.tcl
 M_DEPS += ../../common/a10soc/a10soc_plddr4_assign.tcl
