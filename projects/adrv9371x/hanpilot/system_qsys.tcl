@@ -1,6 +1,7 @@
 
 set dac_fifo_address_width 10
 
+source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 source $ad_hdl_dir/projects/common/hanpilot/hanpilot_system_qsys.tcl
 
 # altera_iopll
@@ -20,3 +21,10 @@ set_interface_property sma_iopll_out EXPORT_OF sma_iopll.extclk_out
 source $ad_hdl_dir/projects/common/hanpilot/hanpilot_sodimm_plddr4_dacfifo_qsys.tcl
 source ../common/adrv9371x_qsys.tcl
 
+#system ID
+set_instance_parameter_value axi_sysid_0 {ROM_ADDR_BITS} {9}
+set_instance_parameter_value rom_sys_0 {ROM_ADDR_BITS} {9}
+
+set_instance_parameter_value rom_sys_0 {PATH_TO_FILE} "[pwd]/mem_init_sys.txt"
+
+sysid_gen_sys_init_file;

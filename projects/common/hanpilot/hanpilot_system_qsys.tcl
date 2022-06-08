@@ -1,5 +1,6 @@
 # hanpilot carrier qsys
 
+set xcvr_reconfig_addr_width 10
 
 # clock-&-reset
 add_instance sys_clk clock_source
@@ -105,10 +106,10 @@ set_instance_parameter_value sys_hps_ddr4_cntrl {CTRL_DDR4_WR_TO_RD_DIFF_CHIP_DE
 set_instance_parameter_value sys_hps_ddr4_cntrl {CTRL_DDR4_WR_TO_RD_SAME_CHIP_DELTA_CYCS} {0}
 set_instance_parameter_value sys_hps_ddr4_cntrl {CTRL_DDR4_WR_TO_WR_DIFF_CHIP_DELTA_CYCS} {0}
 set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_ABSTRACT_PHY} {0}
-set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_BYPASS_DEFAULT_PATTERN} {0}
+#set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_BYPASS_DEFAULT_PATTERN} {0}
 #set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_BYPASS_REPEAT_STAGE} {1}
 #set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_BYPASS_STRESS_STAGE} {1}
-set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_BYPASS_USER_STAGE} {1}
+#set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_BYPASS_USER_STAGE} {1}
 set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_CAL_ADDR0} {0}
 set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_CAL_ADDR1} {8}
 set_instance_parameter_value sys_hps_ddr4_cntrl {DIAG_DDR4_CAL_ENABLE_NON_DES} {0}
@@ -471,6 +472,20 @@ set_interface_property fmc_i2c EXPORT_OF fmc_i2c.i2c_serial
 # add_connection sys_dma_clk.clk axi_usb_fx3_rx_dma.m_dest_axi_clock
 # add_connection sys_dma_clk.clk_reset axi_usb_fx3_rx_dma.m_dest_axi_reset
 
+# system id
+
+add_instance axi_sysid_0 axi_sysid
+add_instance rom_sys_0 sysid_rom
+
+add_connection axi_sysid_0.if_rom_addr rom_sys_0.if_rom_addr
+add_connection rom_sys_0.if_rom_data axi_sysid_0.if_sys_rom_data
+add_connection sys_clk.clk rom_sys_0.if_clk
+add_connection sys_clk.clk axi_sysid_0.s_axi_clock
+add_connection sys_clk.clk_reset axi_sysid_0.s_axi_reset
+
+add_interface pr_rom_data_nc conduit end
+set_interface_property pr_rom_data_nc EXPORT_OF axi_sysid_0.if_pr_rom_data
+
 # base-addresses
 
 ad_cpu_interconnect 0x00000010 sys_gpio_bd.s1
@@ -479,6 +494,7 @@ ad_cpu_interconnect 0x00000020 sys_gpio_out.s1
 ad_cpu_interconnect 0x00000040 sys_spi.spi_control_port
 ad_cpu_interconnect 0x00000080 sys_i2c.csr
 ad_cpu_interconnect 0x000000C0 fmc_i2c.csr
+ad_cpu_interconnect 0x00018000 axi_sysid_0.s_axi
 # ad_cpu_interconnect 0x00010000 usb_fx3.s_axi
 # ad_cpu_interconnect 0x00070000 axi_usb_fx3_tx_dma.s_axi
 # ad_cpu_interconnect 0x00080000 axi_usb_fx3_rx_dma.s_axi
