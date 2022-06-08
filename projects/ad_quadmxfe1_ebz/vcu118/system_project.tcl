@@ -21,7 +21,12 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #      8B10B  - 8b10b link layer defined in JESD 204B, uses ADI IP as Physical layer
 #    
 #    RX_RATE :  Line rate of the Rx link ( MxFE to FPGA ) used in 64B66B mode 
-#    TX_RATE :  Line rate of the Tx link ( FPGA to MxFE ) used in 64B66B mode 
+#    TX_RATE :  Line rate of the Tx link ( FPGA to MxFE ) used in 64B66B mode   
+#    [RX/TX]_PLL_SEL :  used in 64B66B mode, 
+#                     0 - CPLL   for lane rates 4-12.5 Gbps and integer sub-multiples
+#                     1 - QPLL0  for lane rates 19.6–32.75 Gbps and integer sub-multiples (e.g. 9.8–16.375;)
+#                     2 - QPLL1  for lane rates 16.0–26.0 Gbps and integer sub-multiple (e.g. 8.0–13.0;)
+#                     For detail see JESD204 PHY v4.0 pg198-jesd204-phy.pdf  and ug578-ultrascale-gty-transceivers.pdf
 #    REF_CLK_RATE : Frequency of reference clock in MHz used in 64B66B mode
 #    [RX/TX]_JESD_M : Number of converters per link
 #    [RX/TX]_JESD_L : Number of lanes per link
