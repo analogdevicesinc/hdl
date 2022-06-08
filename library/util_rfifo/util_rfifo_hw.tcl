@@ -1,6 +1,6 @@
 
 
-package require qsys
+package require qsys 14.0
 source ../scripts/adi_env.tcl
 source ../scripts/adi_ip_intel.tcl
 

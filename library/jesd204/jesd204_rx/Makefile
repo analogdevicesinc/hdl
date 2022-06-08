@@ -12,10 +12,12 @@ GENERIC_DEPS += jesd204_lane_latency_monitor.v
 GENERIC_DEPS += jesd204_rx.v
 GENERIC_DEPS += jesd204_rx_cgs.v
 GENERIC_DEPS += jesd204_rx_ctrl.v
+GENERIC_DEPS += jesd204_rx_frame_align.v
 GENERIC_DEPS += jesd204_rx_lane.v
 
 XILINX_DEPS += error_monitor.v
 XILINX_DEPS += jesd204_rx_constr.ttcl
+XILINX_DEPS += jesd204_rx_ooc.ttcl
 XILINX_DEPS += jesd204_rx_ctrl_64b.v
 XILINX_DEPS += jesd204_rx_header.v
 XILINX_DEPS += jesd204_rx_ip.tcl
@@ -29,6 +31,7 @@ XILINX_DEPS += ../../jesd204/interfaces/jesd204_rx_ilas_config.xml
 XILINX_DEPS += ../../jesd204/interfaces/jesd204_rx_ilas_config_rtl.xml
 XILINX_DEPS += ../../jesd204/interfaces/jesd204_rx_status.xml
 XILINX_DEPS += ../../jesd204/interfaces/jesd204_rx_status_rtl.xml
+XILINX_DEPS += bd/bd.tcl
 
 XILINX_LIB_DEPS += jesd204/jesd204_common
 

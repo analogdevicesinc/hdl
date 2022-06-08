@@ -83,7 +83,7 @@ module ad_ip_jesd204_tpl_adc_pnmon #(
     localparam dst_lsb = (DATA_PATH_WIDTH - i - 1) * CONVERTER_RESOLUTION;
     localparam dst_msb = dst_lsb + CONVERTER_RESOLUTION - 1;
 
-    assign pn_data_in_s[dst_msb] = tc ^ data[src_msb];
+    assign pn_data_in_s[dst_msb] = (~tc) ^ data[src_msb];
     assign pn_data_in_s[dst_msb-1:dst_lsb] = data[src_msb-1:src_lsb];
   end
   endgenerate

@@ -121,7 +121,8 @@ module axi_logic_analyzer_trigger (
       3'd2: trigger_active_mux = trigger_active & trigger_in;
       3'd3: trigger_active_mux = trigger_active | trigger_in;
       3'd4: trigger_active_mux = trigger_active ^ trigger_in;
-      default: trigger_active_mux = 1'b1;
+      3'd7: trigger_active_mux = 1'b0; // trigger disable
+      default: trigger_active_mux = 1'b0;
     endcase
   end
 

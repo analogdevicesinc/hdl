@@ -6,13 +6,16 @@
 PROJECT_NAME := adrv9371x_zcu102
 
 M_DEPS += ../common/adrv9371x_bd.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zcu102/zcu102_system_constr.xdc
 M_DEPS += ../../common/zcu102/zcu102_system_bd.tcl
 M_DEPS += ../../common/xilinx/dacfifo_bd.tcl
+M_DEPS += ../../common/xilinx/adi_fir_filter_constr.xdc
 M_DEPS += ../../common/xilinx/adi_fir_filter_bd.tcl
-M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
+M_DEPS += ../../../library/util_cdc/sync_bits.v
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
 M_DEPS += ../../../library/common/util_pulse_gen.v
+M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/common/ad_bus_mux.v
 
 LIB_DEPS += axi_clkgen

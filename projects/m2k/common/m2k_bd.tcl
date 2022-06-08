@@ -46,7 +46,6 @@ ad_ip_parameter bram_la CONFIG.Algorithm {Low_Power}
 ad_ip_parameter bram_la CONFIG.Use_Byte_Write_Enable {false}
 ad_ip_parameter bram_la CONFIG.Operating_Mode_A {NO_CHANGE}
 ad_ip_parameter bram_la CONFIG.Register_PortB_Output_of_Memory_Primitives {true}
-ad_ip_parameter bram_la CONFIG.Use_RSTA_Pin {false}
 ad_ip_parameter bram_la CONFIG.Port_B_Clock {100}
 ad_ip_parameter bram_la CONFIG.Port_B_Enable_Rate {100}
 ad_ip_parameter bram_la CONFIG.Write_Width_A {16}
@@ -91,7 +90,6 @@ ad_ip_parameter bram_adc CONFIG.Enable_32bit_Address false
 ad_ip_parameter bram_adc CONFIG.Use_Byte_Write_Enable false
 ad_ip_parameter bram_adc CONFIG.Operating_Mode_A {NO_CHANGE}
 ad_ip_parameter bram_adc CONFIG.Register_PortB_Output_of_Memory_Primitives true
-ad_ip_parameter bram_adc CONFIG.Use_RSTA_Pin {false}
 ad_ip_parameter bram_adc CONFIG.Port_B_Clock 100
 ad_ip_parameter bram_adc CONFIG.Port_B_Enable_Rate 100
 ad_ip_parameter bram_adc CONFIG.Write_Width_A 32
@@ -261,6 +259,10 @@ ad_connect axi_dac_interpolate/trigger_i   trigger_i
 ad_connect axi_dac_interpolate/trigger_adc adc_trigger/trigger_out_la
 ad_connect axi_dac_interpolate/trigger_la  logic_analyzer/trigger_out_adc
 
+ad_connect axi_dac_interpolate/dac_valid_out_a  axi_ad9963/dma_valid_i
+ad_connect axi_dac_interpolate/dac_valid_out_b  axi_ad9963/dma_valid_q
+ad_connect axi_dac_interpolate/hold_last_sample  axi_ad9963/hold_last_sample
+
 ad_connect /axi_ad9963/tx_data    txd
 ad_connect /axi_ad9963/tx_iq      txiq
 ad_connect /axi_ad9963/tx_clk     tx_clk
@@ -272,6 +274,10 @@ ad_connect adc_trigger/data_a axi_adc_decimate/adc_dec_data_a
 ad_connect adc_trigger/data_valid_a axi_adc_decimate/adc_dec_valid_a
 ad_connect adc_trigger/data_b axi_adc_decimate/adc_dec_data_b
 ad_connect adc_trigger/data_valid_b axi_adc_decimate/adc_dec_valid_b
+
+ad_connect axi_adc_decimate/adc_dec_valid_a  logic_analyzer/external_valid
+ad_connect axi_adc_decimate/adc_data_rate  logic_analyzer/external_rate
+ad_connect axi_adc_decimate/adc_oversampling_en  logic_analyzer/external_decimation_en
 
 ad_connect adc_trigger/clk axi_ad9963/adc_clk
 ad_connect trigger_i adc_trigger/trigger_i

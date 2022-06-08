@@ -165,7 +165,7 @@ module axi_jesd204_rx_regmap_tb;
     for (i = 0; i < 1024; i = i + 1)
       expected_reg_mem[i] <= 'h00;
     /* Non zero power-on-reset values */
-    set_reset_reg_value('h00, 32'h00010261); /* PCORE version register */
+    set_reset_reg_value('h00, 32'h00010761); /* PCORE version register */
     set_reset_reg_value('h0c, 32'h32303452); /* PCORE magic register */
     set_reset_reg_value('h10, NUM_LANES); /* Number of lanes */
     set_reset_reg_value('h18, NUM_LINKS); /* Number of links */
@@ -175,6 +175,7 @@ module axi_jesd204_rx_regmap_tb;
     set_reset_reg_value('hc4, 'h1); /* Core state */
 //    set_reset_reg_value('hc8, 'h28000); /* clock monitor */
     set_reset_reg_value('h210, 'h3); /* OCTETS_PER_MULTIFRAME  */
+    set_reset_reg_value('h248, 'h4); /* FRAME_ALIGN_ERR_THRESHOLD */
 
     /* Lane error statistics */
     for (i = 0; i < NUM_LANES; i = i + 1) begin
@@ -310,7 +311,7 @@ module axi_jesd204_rx_regmap_tb;
 
     /* Should be read-only when core is out of reset */
     invert_register('h200); /* lanes enable */
-    invert_register('h210); /* octets per frame, beats per multiframe */
+    invert_register('h210); /* octets per frame, octets per multiframe */
     invert_register('h218); /* links enable */
     invert_register('h240); /* char replacement, scrambler */
 
@@ -362,17 +363,23 @@ module axi_jesd204_rx_regmap_tb;
     .core_ilas_config_addr({NUM_LANES{core_ilas_config_addr}}),
     .core_ilas_config_data(core_ilas_config_data),
 
-    .core_event_sysref_alignment_error(1'b0),
-    .core_event_sysref_edge(1'b0),
+    .device_event_sysref_alignment_error(1'b0),
+    .device_event_sysref_edge(1'b0),
 
     .core_status_err_statistics_cnt(core_status_err_statistics_cnt),
     .core_ctrl_err_statistics_mask(),
     .core_ctrl_err_statistics_reset(),
 
     .core_status_ctrl_state(2'b00),
-    .core_status_lane_cgs_state(4'b0000),
+    .core_status_lane_cgs_state({NUM_LANES{2'b0}}),
+    .core_status_lane_emb_state({NUM_LANES{3'b0}}),
     .core_status_lane_ifs_ready({NUM_LANES{1'b0}}),
-    .core_status_lane_latency({NUM_LANES{14'h00}})
+    .core_status_lane_latency({NUM_LANES{14'h00}}),
+    .core_status_lane_frame_align_err_cnt({NUM_LANES{8'b0}}),
+
+    .status_synth_params0(NUM_LANES),
+    .status_synth_params1(2),
+    .status_synth_params2(NUM_LINKS)
   );
 
 endmodule

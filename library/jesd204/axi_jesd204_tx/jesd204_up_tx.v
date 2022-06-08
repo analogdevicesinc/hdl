@@ -46,7 +46,8 @@
 
 module jesd204_up_tx # (
   parameter NUM_LANES = 1,
-  parameter NUM_LINKS = 1
+  parameter NUM_LINKS = 1,
+  parameter DATA_PATH_WIDTH = 4
 ) (
   input up_clk,
   input up_reset,
@@ -67,7 +68,7 @@ module jesd204_up_tx # (
   input core_clk,
   input core_ilas_config_rd,
   input [1:0] core_ilas_config_addr,
-  output reg [32*NUM_LANES-1:0] core_ilas_config_data,
+  output reg [DATA_PATH_WIDTH*8*NUM_LANES-1:0] core_ilas_config_data,
 
   output core_ctrl_manual_sync_request,
 
@@ -114,19 +115,19 @@ integer i;
 always @(*) begin
   case (up_raddr)
   /* JESD TX configuration */
-  12'h090: up_rdata <= {
+  12'h090: up_rdata = {
     /* 03-31 */ 29'h00, /* Reserved for future additions */
     /*    02 */ up_cfg_skip_ilas, /* Don't send ILAS, go directly from CGS to DATA */
     /*    01 */ up_cfg_continuous_ilas, /* Continuously send ILAS sequence */
     /*    00 */ up_cfg_continuous_cgs /* Continuously send CGS characters */
   };
-  12'h091: up_rdata <= {
+  12'h091: up_rdata = {
     /* 08-31 */ 24'h00, /* Reserved for future additions */
     /* 00-07 */ up_cfg_mframes_per_ilas /* Number of multiframes send during the ILAS */
   };
 
   /* JESD TX status */
-  12'ha0: up_rdata <= {
+  12'ha0: up_rdata = {
     /* 12-31 */ 20'h00, /* Reserved for future additions */
     /* 04-11 */ up_status_sync, /* Raw value of the SYNC pin */
     /* 02-03 */ 2'b0, /* Reserved fo future extension of the status_state field */
@@ -136,9 +137,9 @@ always @(*) begin
     if (up_raddr[10:3] >= ('h300/32) &&
         up_raddr[10:3] < (('h300/32) + NUM_LANES) &&
       up_raddr[2] == 1'b1) begin
-      up_rdata <= up_cfg_ilas_data[up_raddr[5:3]][up_raddr[1:0]];
+      up_rdata = up_cfg_ilas_data[up_raddr[5:3]][up_raddr[1:0]];
     end else begin
-       up_rdata <= 32'h00000000;
+       up_rdata = 32'h00000000;
     end
   end
   endcase
@@ -202,13 +203,13 @@ reg [7:0] up_cfg_ilas_data_fchk[0:NUM_LANES-1];
 
 always @(*) begin
   for (i = 0; i < NUM_LANES; i = i + 1) begin
-    up_cfg_ilas_data[i][0] <= {
+    up_cfg_ilas_data[i][0] = {
       4'b0000,
       up_cfg_ilas_data_bid,
       up_cfg_ilas_data_did,
       16'h00
     };
-    up_cfg_ilas_data[i][1] <= {
+    up_cfg_ilas_data[i][1] = {
       3'b000,
       up_cfg_ilas_data_k,
       up_cfg_ilas_data_f,
@@ -218,7 +219,7 @@ always @(*) begin
       3'b000,
       up_cfg_ilas_data_lid[i]
     };
-    up_cfg_ilas_data[i][2] <= {
+    up_cfg_ilas_data[i][2] = {
       up_cfg_ilas_data_jesdv,
       up_cfg_ilas_data_s,
       up_cfg_ilas_data_subclassv,
@@ -228,7 +229,7 @@ always @(*) begin
       up_cfg_ilas_data_n,
       up_cfg_ilas_data_m
     };
-    up_cfg_ilas_data[i][3] <= {
+    up_cfg_ilas_data[i][3] = {
       up_cfg_ilas_data_fchk[i],
       16'h0000,
       up_cfg_ilas_data_hd,
@@ -294,6 +295,8 @@ always @(posedge up_clk) begin
   end
 end
 
+generate
+if(DATA_PATH_WIDTH == 4) begin : gen_dp_4
 always @(posedge core_clk) begin
   if (core_ilas_config_rd == 1'b1) begin
     for (i = 0; i < NUM_LANES; i = i + 1) begin
@@ -301,5 +304,15 @@ always @(posedge core_clk) begin
     end
   end
 end
+end else if(DATA_PATH_WIDTH == 8) begin : gen_dp_8
+always @(posedge core_clk) begin
+  if (core_ilas_config_rd == 1'b1) begin
+    for (i = 0; i < NUM_LANES; i = i + 1) begin
+      core_ilas_config_data[i*64+:64] <= {up_cfg_ilas_data[i][{core_ilas_config_addr[0], 1'b1}],up_cfg_ilas_data[i][{core_ilas_config_addr[0], 1'b0}]};
+    end
+  end
+end
+end
+endgenerate
 
 endmodule

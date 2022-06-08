@@ -45,16 +45,21 @@
 `timescale 1ns/100ps
 
 module jesd204_rx_lane_64b #(
-  parameter ELASTIC_BUFFER_SIZE = 256
+  parameter ELASTIC_BUFFER_SIZE = 256,
+  parameter TPL_DATA_PATH_WIDTH = 8,
+  parameter ASYNC_CLK = 0
 ) (
   input clk,
   input reset,
+
+  input device_clk,
+  input device_reset,
 
   input [63:0] phy_data,
   input [1:0] phy_header,
   input phy_block_sync,
 
-  output [63:0] rx_data,
+  output [TPL_DATA_PATH_WIDTH*8-1:0] rx_data,
 
   output reg buffer_ready_n = 'b1,
   input all_buffer_ready_n,
@@ -80,6 +85,7 @@ reg [11:0] crc12_calculated_prev;
 
 wire [63:0] data_descrambled_s;
 wire [63:0] data_descrambled;
+wire [63:0] data_descrambled_reordered;
 wire [11:0] crc12_received;
 wire [11:0] crc12_calculated;
 
@@ -108,7 +114,7 @@ jesd204_rx_header i_rx_header (
   .cfg_beats_per_multiframe(cfg_beats_per_multiframe),
 
   .emb_lock(emb_lock),
-  
+
   .valid_eomb(eomb),
   .valid_eoemb(eoemb),
   .crc12(crc12_received),
@@ -125,7 +131,7 @@ jesd204_rx_header i_rx_header (
 
 jesd204_crc12 i_crc12 (
   .clk(clk),
-  .reset(reset),
+  .reset(1'b0),
   .init(eomb),
   .data_in(phy_data),
   .crc12(crc12_calculated)
@@ -181,7 +187,7 @@ jesd204_scrambler_64b #(
   .DESCRAMBLE(1)
 ) i_descrambler (
   .clk(clk),
-  .reset(reset),
+  .reset(1'b0),
   .enable(~cfg_disable_scrambler),
   .data_in(phy_data),
   .data_out(data_descrambled_s)
@@ -217,14 +223,19 @@ end
 
 
 elastic_buffer #(
-  .WIDTH(64),
-  .SIZE(ELASTIC_BUFFER_SIZE)
+  .IWIDTH(64),
+  .OWIDTH(TPL_DATA_PATH_WIDTH*8),
+  .SIZE(ELASTIC_BUFFER_SIZE),
+  .ASYNC_CLK(ASYNC_CLK)
 ) i_elastic_buffer (
   .clk(clk),
   .reset(reset),
 
-  .wr_data(data_descrambled),
-  .rd_data(rx_data_msb_s),
+  .device_clk(device_clk),
+  .device_reset(device_reset),
+
+  .wr_data(data_descrambled_reordered),
+  .rd_data(rx_data),
 
   .ready_n(buffer_ready_n),
   .do_release_n(buffer_release_n)
@@ -242,7 +253,7 @@ end
 genvar i;
 generate
   for (i = 0; i < 64; i = i + 8) begin: g_link_data
-    assign rx_data[i+:8] = rx_data_msb_s[64-1-i-:8];
+    assign data_descrambled_reordered[i+:8] = data_descrambled[64-1-i-:8];
   end
 endgenerate
 

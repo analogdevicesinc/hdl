@@ -45,15 +45,20 @@
 `timescale 1ns/100ps
 
 module elastic_buffer #(
-  parameter WIDTH = 32,
-  parameter SIZE = 256
+  parameter IWIDTH = 32,
+  parameter OWIDTH = 48,
+  parameter SIZE = 256,
+  parameter ASYNC_CLK = 0
 ) (
   input clk,
   input reset,
 
-  input [WIDTH-1:0] wr_data,
+  input device_clk,
+  input device_reset,
 
-  output reg [WIDTH-1:0] rd_data,
+  input [IWIDTH-1:0] wr_data,
+
+  output reg [OWIDTH-1:0] rd_data,
 
   input ready_n,
   input do_release_n
@@ -67,20 +72,45 @@ localparam ADDR_WIDTH = SIZE > 128 ? 7 :
   SIZE > 4 ? 2 :
   SIZE > 2 ? 1 : 0;
 
+localparam WIDTH = OWIDTH >= IWIDTH ? OWIDTH : IWIDTH;
+
 reg [ADDR_WIDTH:0] wr_addr = 'h00;
 reg [ADDR_WIDTH:0] rd_addr = 'h00;
-reg [WIDTH-1:0] mem[0:SIZE - 1];
+(* ram_style = "distributed" *) reg [WIDTH-1:0] mem[0:SIZE - 1];
+
+wire mem_wr;
+wire [WIDTH-1:0] mem_wr_data;
+
+generate if ((OWIDTH > IWIDTH) && ASYNC_CLK) begin
+  ad_pack #(
+    .I_W(IWIDTH/8),
+    .O_W(OWIDTH/8),
+    .UNIT_W(8)
+  ) i_ad_pack (
+    .clk(clk),
+    .reset(ready_n),
+    .idata(wr_data),
+    .ivalid(1'b1),
+
+    .odata(mem_wr_data),
+    .ovalid(mem_wr)
+  );
+end else begin
+  assign mem_wr = 1'b1;
+  assign mem_wr_data = wr_data;
+end
+endgenerate
 
 always @(posedge clk) begin
   if (ready_n == 1'b1) begin
     wr_addr <= 'h00;
-  end else begin
-    mem[wr_addr] <= wr_data;
+  end else if (mem_wr) begin
+    mem[wr_addr] <= mem_wr_data;
     wr_addr <= wr_addr + 1'b1;
   end
 end
 
-always @(posedge clk) begin
+always @(posedge device_clk) begin
   if (do_release_n == 1'b1) begin
     rd_addr <= 'h00;
   end else begin

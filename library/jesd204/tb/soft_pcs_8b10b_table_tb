@@ -5,4 +5,4 @@ SOURCE+=" ../jesd204_soft_pcs_tx/jesd204_8b10b_encoder.v"
 SOURCE+=" ../jesd204_soft_pcs_rx/jesd204_8b10b_decoder.v"
 
 cd `dirname $0`
-source run_tb.sh
+source ../../common/tb/run_tb.sh

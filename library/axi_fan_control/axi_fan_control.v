@@ -180,7 +180,7 @@ reg   [31:0]  up_tacho_100_tol = TACHO_T100 * TACHO_TOL_PERCENT / 100;
 reg           up_wack = 'd0;
 reg   [31:0]  up_rdata = 'd0;
 reg           up_rack = 'd0;
-reg           up_resetn = 1'b1;
+reg           up_resetn = 1'b0;
 reg   [3:0]   up_irq_mask = 4'b1111;
 reg   [3:0]   up_irq_source = 4'h0;
 
@@ -628,11 +628,13 @@ end
 always @(posedge up_clk) begin
   if (s_axi_aresetn == 1'b0) begin
     up_wack <= 'd0;
-    up_resetn <= 1'd1;
+    up_resetn <= 1'd0;
   end else begin
     up_wack <= up_wreq_s;
     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h20)) begin
       up_resetn <= up_wdata_s[0];
+    end else begin
+      up_resetn <= 1'd1;
     end
   end
 end

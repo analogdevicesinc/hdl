@@ -45,12 +45,14 @@
 `timescale 1ns/100ps
 
 module jesd204_up_sysref #(
-  parameter DATA_PATH_WIDTH = 2
+  parameter DATA_PATH_WIDTH_LOG2 = 2
 ) (
   input up_clk,
   input up_reset,
 
   input core_clk,
+
+  input device_clk,
 
   input [11:0] up_raddr,
   output reg [31:0] up_rdata,
@@ -65,8 +67,8 @@ module jesd204_up_sysref #(
   output reg [7:0] up_cfg_lmfc_offset,
   output reg up_cfg_sysref_disable,
 
-  input core_event_sysref_alignment_error,
-  input core_event_sysref_edge
+  input device_event_sysref_alignment_error,
+  input device_event_sysref_edge
 );
 
 reg [1:0] up_sysref_status;
@@ -76,10 +78,10 @@ wire [1:0] up_sysref_event;
 sync_event #(
   .NUM_OF_EVENTS(2)
 ) i_cdc_sysref_event (
-  .in_clk(core_clk),
+  .in_clk(device_clk),
   .in_event({
-    core_event_sysref_alignment_error,
-    core_event_sysref_edge
+    device_event_sysref_alignment_error,
+    device_event_sysref_edge
   }),
   .out_clk(up_clk),
   .out_event(up_sysref_event)
@@ -96,21 +98,21 @@ end
 always @(*) begin
   case (up_raddr)
   /* JESD SYSREF configuraton */
-  12'h040: up_rdata <= {
+  12'h040: up_rdata = {
     /* 02-31 */ 30'h00, /* Reserved for future use */
     /*    01 */ up_cfg_sysref_oneshot,
     /*    00 */ up_cfg_sysref_disable
   };
-  12'h041: up_rdata <= {
+  12'h041: up_rdata = {
     /* 10-31 */ 22'h00, /* Reserved for future use */
     /* 02-09 */ up_cfg_lmfc_offset,
     /* 00-01 */ 2'b00 /* data path alignment for cfg_lmfc_offset */
   };
-  12'h042: up_rdata <= {
+  12'h042: up_rdata = {
     /* 02-31 */ 30'h00,
     /* 00-01 */ up_sysref_status
   };
-  default: up_rdata <= 32'h00000000;
+  default: up_rdata = 32'h00000000;
   endcase
 end
 
@@ -127,8 +129,8 @@ always @(posedge up_clk) begin
       up_cfg_sysref_disable <= up_wdata[0];
     end
     12'h041: begin
-      /* Aligned to data path width */
-      up_cfg_lmfc_offset <= up_wdata[9:DATA_PATH_WIDTH];
+      /* Must be aligned to data path width */
+      up_cfg_lmfc_offset <= up_wdata;
     end
     endcase
   end
@@ -136,9 +138,9 @@ end
 
 always @(*) begin
   if (up_wreq == 1'b1 && up_waddr == 12'h042) begin
-    up_sysref_status_clear <= up_wdata[1:0];
+    up_sysref_status_clear = up_wdata[1:0];
   end else begin
-    up_sysref_status_clear <= 2'b00;
+    up_sysref_status_clear = 2'b00;
   end
 end
 

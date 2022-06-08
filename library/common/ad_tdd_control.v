@@ -92,8 +92,8 @@ module ad_tdd_control#(
   output      [23:0]      tdd_counter_status);
 
 
-  localparam          ON = 1;
-  localparam          OFF = 0;
+  localparam  [ 0:0]      ON = 1;
+  localparam  [ 0:0]      OFF = 0;
 
   // tdd control related
 
@@ -779,10 +779,10 @@ module ad_tdd_control#(
       tdd_rx_rf_en <= 1'b0;
     end else if((tdd_cstate == OFF) || (counter_at_tdd_rx_off_1 == 1'b1) || (counter_at_tdd_rx_off_2 == 1'b1)) begin
       tdd_rx_rf_en <= 1'b0;
+    end else if((tdd_cstate == ON) && (tdd_tx_only == 1'b1)) begin
+      tdd_rx_rf_en <= 1'b0;
     end else if((tdd_cstate == ON) && ((counter_at_tdd_rx_on_1 == 1'b1) || (counter_at_tdd_rx_on_2 == 1'b1))) begin
       tdd_rx_rf_en <= 1'b1;
-    end else if((tdd_cstate == ON) && (tdd_txrx_only_en_s == 1'b1)) begin
-      tdd_rx_rf_en <= tdd_rx_only;
     end else begin
       tdd_rx_rf_en <= tdd_rx_rf_en;
     end
@@ -793,10 +793,10 @@ module ad_tdd_control#(
       tdd_tx_rf_en <= 1'b0;
     end else if((tdd_cstate == OFF) || (counter_at_tdd_tx_off_1 == 1'b1) || (counter_at_tdd_tx_off_2 == 1'b1)) begin
       tdd_tx_rf_en <= 1'b0;
+    end else if((tdd_cstate == ON) && (tdd_rx_only == 1'b1)) begin
+      tdd_tx_rf_en <= 1'b0;
     end else if((tdd_cstate == ON) && ((counter_at_tdd_tx_on_1 == 1'b1) || (counter_at_tdd_tx_on_2 == 1'b1))) begin
       tdd_tx_rf_en <= 1'b1;
-    end else if((tdd_cstate == ON) && (tdd_txrx_only_en_s == 1'b1)) begin
-      tdd_tx_rf_en <= tdd_tx_only;
     end else begin
       tdd_tx_rf_en <= tdd_tx_rf_en;
     end
@@ -807,10 +807,10 @@ module ad_tdd_control#(
       tdd_tx_dp_en <= 1'b0;
     end else if((tdd_cstate == OFF) || (counter_at_tdd_tx_dp_off_1 == 1'b1) || (counter_at_tdd_tx_dp_off_2 == 1'b1)) begin
       tdd_tx_dp_en <= 1'b0;
+    end else if((tdd_cstate == ON) && (tdd_rx_only == 1'b1)) begin
+      tdd_tx_dp_en <= 1'b0;
     end else if((tdd_cstate == ON) && ((counter_at_tdd_tx_dp_on_1 == 1'b1) || (counter_at_tdd_tx_dp_on_2 == 1'b1))) begin
       tdd_tx_dp_en <= 1'b1;
-    end else if((tdd_cstate == ON) && (tdd_txrx_only_en_s == 1'b1)) begin
-      tdd_tx_dp_en <= tdd_tx_only;
     end else begin
       tdd_tx_dp_en <= tdd_tx_dp_en;
     end
@@ -821,10 +821,10 @@ module ad_tdd_control#(
       tdd_rx_dp_en <= 1'b0;
     end else if((tdd_cstate == OFF) || (counter_at_tdd_rx_dp_off_1 == 1'b1) || (counter_at_tdd_rx_dp_off_2 == 1'b1)) begin
       tdd_rx_dp_en <= 1'b0;
+    end else if((tdd_cstate == ON) && (tdd_tx_only == 1'b1)) begin
+      tdd_rx_dp_en <= 1'b0;
     end else if((tdd_cstate == ON) && ((counter_at_tdd_rx_dp_on_1 == 1'b1) || (counter_at_tdd_rx_dp_on_2 == 1'b1))) begin
       tdd_rx_dp_en <= 1'b1;
-    end else if((tdd_cstate == ON) && (tdd_txrx_only_en_s == 1'b1)) begin
-      tdd_rx_dp_en <= tdd_rx_only;
     end else begin
       tdd_rx_dp_en <= tdd_rx_dp_en;
     end

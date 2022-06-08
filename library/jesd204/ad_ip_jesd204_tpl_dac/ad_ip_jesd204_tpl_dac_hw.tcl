@@ -21,7 +21,7 @@
 # ***************************************************************************
 # ***************************************************************************
 
-package require qsys
+package require qsys 14.0
 source ../../scripts/adi_env.tcl
 source ../../scripts/adi_ip_intel.tcl
 
@@ -29,6 +29,8 @@ ad_ip_create ad_ip_jesd204_tpl_dac "JESD204 Transport Layer for DACs" p_ad_ip_je
 set_module_property VALIDATION_CALLBACK p_ad_ip_jesd204_tpl_dac_validate
 ad_ip_files ad_ip_jesd204_tpl_dac [list \
   $ad_hdl_dir/library/intel/common/ad_mul.v \
+  $ad_hdl_dir/library/common/ad_mux.v \
+  $ad_hdl_dir/library/common/ad_mux_core.v \
   $ad_hdl_dir/library/common/ad_dds_sine.v \
   $ad_hdl_dir/library/common/ad_dds_cordic_pipe.v \
   $ad_hdl_dir/library/common/ad_dds_sine_cordic.v \
@@ -68,6 +70,13 @@ ad_ip_parameter ID INTEGER 0 true [list \
   GROUP $group \
 ]
 
+ad_ip_parameter OCTETS_PER_BEAT INTEGER 4 true [list \
+  DISPLAY_NAME "Datapath width" \
+  DISPLAY_UNITS "octets" \
+  ALLOWED_RANGES {4 6 8 12} \
+  GROUP $group \
+]
+
 set group "JESD204 Framer Configuration"
 
 ad_ip_parameter PART STRING "Generic" false [list \
@@ -93,20 +102,27 @@ ad_ip_parameter PART STRING "Generic" false [list \
 ad_ip_parameter NUM_LANES INTEGER 1 true [list \
   DISPLAY_NAME "Number of Lanes (L)" \
   DISPLAY_UNITS "lanes" \
-  ALLOWED_RANGES {1 2 3 4 8} \
+  ALLOWED_RANGES {1 2 3 4 8 16} \
   GROUP $group \
 ]
 
 ad_ip_parameter NUM_CHANNELS INTEGER 1 true [list \
   DISPLAY_NAME "Number of Converters (M)" \
   DISPLAY_UNITS "converters" \
-  ALLOWED_RANGES {1 2 4 6 8} \
+  ALLOWED_RANGES {1 2 4 6 8 16 32 64} \
   GROUP $group \
 ]
 
-ad_ip_parameter BITS_PER_SAMPLE INTEGER 16 false [list \
+ad_ip_parameter BITS_PER_SAMPLE INTEGER 16 true [list \
   DISPLAY_NAME "Bits per Sample (N')" \
   ALLOWED_RANGES {8 12 16} \
+  UNITS bits \
+  GROUP $group \
+]
+
+ad_ip_parameter DMA_BITS_PER_SAMPLE INTEGER 16 true [list \
+  DISPLAY_NAME "DMA Bits per Sample" \
+  ALLOWED_RANGES {8 16} \
   UNITS bits \
   GROUP $group \
 ]
@@ -142,7 +158,7 @@ ad_ip_parameter SAMPLES_PER_FRAME_MANUAL INTEGER 1 false [list \
 ad_ip_parameter OCTETS_PER_FRAME INTEGER 1 false [list \
   DISPLAY_NAME "Octets per Frame (F)" \
   DISPLAY_UNITS "octets" \
-  ALLOWED_RANGES {1 2 4} \
+  ALLOWED_RANGES {1 2 3 4 6 8} \
   DERIVED true \
   GROUP $group \
 ]
@@ -201,9 +217,14 @@ ad_ip_parameter DDS_CORDIC_PHASE_DW INTEGER 16 true [list \
   GROUP $group \
 ]
 
+ad_ip_parameter XBAR_ENABLE boolean 0 true [list \
+  DISPLAY_NAME "Channel Crossbar Enable" \
+  GROUP $group \
+]
+
 # axi4 slave
 
-ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn
+ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn 12
 
 # core clock and start of frame
 
@@ -437,11 +458,11 @@ proc p_ad_ip_jesd204_tpl_dac_validate {} {
       send_message ERROR "Framer configuration (L=$L, M=$M, N=$N, NP=$NP, S=$S, F=$F) not supported by $part"
     }
   } else {
-    set allowed_channels {1 2 4 6}
-    set allowed_lanes {1 2 3 4 8}
+    set allowed_channels {1 2 4 6 8 16 32 64}
+    set allowed_lanes {1 2 3 4 8 16}
     set allowed_samples_per_frame {1 2 3 4 6 8 12 16}
-    set allowed_resolution {11 12 16}
-    set allowed_bits_per_sample {12 16}
+    set allowed_resolution {8 11 12 16}
+    set allowed_bits_per_sample {8 12 16}
   }
 
   set_parameter_property "NUM_CHANNELS" "ALLOWED_RANGES" $allowed_channels
@@ -475,21 +496,22 @@ proc p_ad_ip_jesd204_tpl_dac_elab {} {
   set L [get_parameter_value "NUM_LANES"]
   set M [get_parameter_value "NUM_CHANNELS"]
   set NP [get_parameter_value "BITS_PER_SAMPLE"]
+  set OPB [get_parameter_value "OCTETS_PER_BEAT"]
+  set DMA_BPS [get_parameter_value "DMA_BITS_PER_SAMPLE"]
 
-  # The DMA interface is always 16-bits per sample, regardless of NP
-  # In case of an invalid configuration the expression can be 0, but we still
-  # want to be able to generate an interface without generating an extra error,
-  # so set the minimum width to 1.
-  set channel_bus_width [expr max(1, 16 * (32 * $L / ($M * $NP)))]
+  # The DMA interface is rounded to nearest power of two bytes per sample,
+  # e.g NP=12 is padded into 16 bits 
+  set samples_per_beat_per_channel [expr ($OPB * 8 * $L / ($M * $NP))]
+  set channel_bus_width [expr $samples_per_beat_per_channel*$DMA_BPS]
 
   # link layer interface
 
   add_interface link_data avalon_streaming source
-  add_interface_port link_data link_data  data  output  [expr 32 * $L]
+  add_interface_port link_data link_data  data  output  [expr $OPB*8*$L]
   add_interface_port link_data link_valid valid output  1
   add_interface_port link_data link_ready ready input   1
   set_interface_property link_data associatedClock link_clk
-  set_interface_property link_data dataBitsPerSymbol [expr 32 * $L]
+  set_interface_property link_data dataBitsPerSymbol [expr $OPB*8*$L]
 
   # dma interface
 

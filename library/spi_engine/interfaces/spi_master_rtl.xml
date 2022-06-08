@@ -6,17 +6,19 @@
 	<spirit:library>interface</spirit:library>
 	<spirit:name>spi_master_rtl</spirit:name>
 	<spirit:version>1.0</spirit:version>
-	<spirit:busType spirit:vendor="analog.com"
-			spirit:library="interface"
-			spirit:name="spi_master"
+	<spirit:busType spirit:vendor="analog.com" 
+			spirit:library="interface" 
+			spirit:name="spi_master" 
 			spirit:version="1.0"/>
 	<spirit:ports>
 		<spirit:port>
 			<spirit:logicalName>SCLK</spirit:logicalName>
+			<spirit:description>SPI clock</spirit:description>
 			<spirit:wire>
 				<spirit:onMaster>
 					<spirit:presence>required</spirit:presence>
 					<spirit:width>1</spirit:width>
+					<spirit:direction>out</spirit:direction>
 				</spirit:onMaster>
 				<spirit:onSlave>
 					<spirit:presence>required</spirit:presence>
@@ -27,150 +29,83 @@
 		</spirit:port>
 		<spirit:port>
 			<spirit:logicalName>SDI</spirit:logicalName>
+			<spirit:description>Serial data in</spirit:description>
 			<spirit:wire>
 				<spirit:onMaster>
-					<spirit:presence>required</spirit:presence>
-					<spirit:width>1</spirit:width>
+					<spirit:presence>optional</spirit:presence>
 					<spirit:direction>in</spirit:direction>
 				</spirit:onMaster>
 				<spirit:onSlave>
-					<spirit:width>1</spirit:width>
+					<spirit:presence>optional</spirit:presence>
+					<spirit:direction>out</spirit:direction>
 				</spirit:onSlave>
+			        <spirit:defaultValue>0</spirit:defaultValue>
 			</spirit:wire>
 		</spirit:port>
 		<spirit:port>
-			<spirit:logicalName>SDI_1</spirit:logicalName>
-			<spirit:wire>
-				<spirit:onMaster>
-					<spirit:presence>required</spirit:presence>
-					<spirit:width>1</spirit:width>
-					<spirit:direction>in</spirit:direction>
-				</spirit:onMaster>
-				<spirit:onSlave>
-					<spirit:width>1</spirit:width>
-				</spirit:onSlave>
-			</spirit:wire>
-		</spirit:port>
-		<spirit:port>
-			<spirit:logicalName>SDI_2</spirit:logicalName>
-			<spirit:wire>
-				<spirit:onMaster>
-					<spirit:presence>required</spirit:presence>
-					<spirit:width>1</spirit:width>
-					<spirit:direction>in</spirit:direction>
-				</spirit:onMaster>
-				<spirit:onSlave>
-					<spirit:width>1</spirit:width>
-				</spirit:onSlave>
-			</spirit:wire>
-		</spirit:port>
-		<spirit:port>
-			<spirit:logicalName>SDI_3</spirit:logicalName>
-			<spirit:wire>
-				<spirit:onMaster>
-					<spirit:presence>required</spirit:presence>
-					<spirit:width>1</spirit:width>
-					<spirit:direction>in</spirit:direction>
-				</spirit:onMaster>
-				<spirit:onSlave>
-					<spirit:width>1</spirit:width>
-				</spirit:onSlave>
-			</spirit:wire>
-		</spirit:port>
-		<spirit:port>
-			<spirit:logicalName>SDI_4</spirit:logicalName>
-			<spirit:wire>
-				<spirit:onMaster>
-					<spirit:presence>required</spirit:presence>
-					<spirit:width>1</spirit:width>
-					<spirit:direction>in</spirit:direction>
-				</spirit:onMaster>
-				<spirit:onSlave>
-					<spirit:width>1</spirit:width>
-				</spirit:onSlave>
-			</spirit:wire>
-		</spirit:port>
-		<spirit:port>
-			<spirit:logicalName>SDI_5</spirit:logicalName>
-			<spirit:wire>
-				<spirit:onMaster>
-					<spirit:presence>required</spirit:presence>
-					<spirit:width>1</spirit:width>
-					<spirit:direction>in</spirit:direction>
-				</spirit:onMaster>
-				<spirit:onSlave>
-					<spirit:width>1</spirit:width>
-				</spirit:onSlave>
-			</spirit:wire>
-		</spirit:port>
-		<spirit:port>
-			<spirit:logicalName>SDI_6</spirit:logicalName>
-			<spirit:wire>
-				<spirit:onMaster>
-					<spirit:presence>required</spirit:presence>
-					<spirit:width>1</spirit:width>
-					<spirit:direction>in</spirit:direction>
-				</spirit:onMaster>
-				<spirit:onSlave>
-					<spirit:width>1</spirit:width>
-				</spirit:onSlave>
-			</spirit:wire>
-		</spirit:port>
-		<spirit:port>
-			<spirit:logicalName>SDI_7</spirit:logicalName>
-			<spirit:wire>
-				<spirit:onMaster>
-					<spirit:presence>required</spirit:presence>
-					<spirit:width>1</spirit:width>
-					<spirit:direction>in</spirit:direction>
-				</spirit:onMaster>
-				<spirit:onSlave>
-					<spirit:width>1</spirit:width>
-				</spirit:onSlave>
-			</spirit:wire>
-		</spirit:port>
-		<spirit:port>	
 			<spirit:logicalName>SDO</spirit:logicalName>
+			<spirit:description>Serial data out</spirit:description>
 			<spirit:wire>
 				<spirit:onMaster>
+					<spirit:presence>optional</spirit:presence>
 					<spirit:width>1</spirit:width>
+					<spirit:direction>out</spirit:direction>
 				</spirit:onMaster>
 				<spirit:onSlave>
+					<spirit:presence>optional</spirit:presence>
 					<spirit:width>1</spirit:width>
 					<spirit:direction>in</spirit:direction>
 				</spirit:onSlave>
+			        <spirit:defaultValue>0</spirit:defaultValue>
 			</spirit:wire>
 		</spirit:port>
 		<spirit:port>
 			<spirit:logicalName>SDO_T</spirit:logicalName>
+			<spirit:description>Serial data out three state controle line</spirit:description>
 			<spirit:wire>
 				<spirit:onMaster>
+					<spirit:presence>optional</spirit:presence>
 					<spirit:width>1</spirit:width>
+					<spirit:direction>out</spirit:direction>
 				</spirit:onMaster>
 				<spirit:onSlave>
+					<spirit:presence>optional</spirit:presence>
 					<spirit:width>1</spirit:width>
 					<spirit:direction>in</spirit:direction>
 				</spirit:onSlave>
+			        <spirit:defaultValue>0</spirit:defaultValue>
 			</spirit:wire>
 		</spirit:port>
 		<spirit:port>
 			<spirit:logicalName>THREE_WIRE</spirit:logicalName>
+			<spirit:description>Three wire mode</spirit:description>
 			<spirit:wire>
 				<spirit:onMaster>
+					<spirit:presence>optional</spirit:presence>
 					<spirit:width>1</spirit:width>
+					<spirit:direction>out</spirit:direction>
 				</spirit:onMaster>
 				<spirit:onSlave>
+					<spirit:presence>optional</spirit:presence>
 					<spirit:width>1</spirit:width>
 					<spirit:direction>in</spirit:direction>
 				</spirit:onSlave>
+			        <spirit:defaultValue>0</spirit:defaultValue>
 			</spirit:wire>
 		</spirit:port>
 		<spirit:port>
 			<spirit:logicalName>CS</spirit:logicalName>
+			<spirit:description>Chip select</spirit:description>
 			<spirit:wire>
+				<spirit:onMaster>
+					<spirit:presence>required</spirit:presence>
+					<spirit:direction>out</spirit:direction>
+				</spirit:onMaster>
 				<spirit:onSlave>
+					<spirit:presence>required</spirit:presence>
 					<spirit:direction>in</spirit:direction>
 				</spirit:onSlave>
+			        <spirit:defaultValue>0</spirit:defaultValue>
 			</spirit:wire>
 		</spirit:port>
 	</spirit:ports>

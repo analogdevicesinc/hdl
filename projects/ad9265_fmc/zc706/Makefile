@@ -7,9 +7,10 @@ PROJECT_NAME := ad9265_fmc_zc706
 
 M_DEPS += ../common/ad9265_spi.v
 M_DEPS += ../common/ad9265_bd.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zc706/zc706_system_constr.xdc
 M_DEPS += ../../common/zc706/zc706_system_bd.tcl
-M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
+M_DEPS += ../../../library/common/ad_iobuf.v
 
 LIB_DEPS += axi_ad9265
 LIB_DEPS += axi_clkgen

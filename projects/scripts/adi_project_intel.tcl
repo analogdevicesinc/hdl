@@ -2,7 +2,14 @@
 ## Initialize global variable
 set family "none"
 set device "none"
-set version "19.4.0"
+set version "20.4.0"
+
+## Define the ADI_IGNORE_VERSION_CHECK environment variable to skip version check
+if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
+  set IGNORE_VERSION_CHECK 1
+} elseif {![info exists IGNORE_VERSION_CHECK]} {
+  set IGNORE_VERSION_CHECK 0
+}
 
 ## Create a project.
 #
@@ -20,6 +27,7 @@ proc adi_project {project_name {parameter_list {}}} {
   global device
   global version
   global quartus
+  global IGNORE_VERSION_CHECK
 
   # check $ALT_NIOS_MMU_ENABLED environment variables
 
@@ -52,13 +60,19 @@ proc adi_project {project_name {parameter_list {}}} {
     set system_qip_file system_bd/system_bd.qip
   }
 
+  if [regexp "_s10soc$" $project_name] {
+    set family "Stratix 10"
+    set device 1SX280LU2F50E2VGS2
+    set system_qip_file system_bd/system_bd.qip
+  }
+
   if [regexp "_c5soc$" $project_name] {
     set family "Cyclone V"
     set device 5CSXFC6D6F31C8ES
     set system_qip_file system_bd/synthesis/system_bd.qip
   }
 
-  if [regexp "de10nano$" $project_name] {
+  if [regexp "_de10nano$" $project_name] {
     set family "Cyclone V"
     set device 5CSEBA6U23I7DK
     set system_qip_file system_bd/synthesis/system_bd.qip
@@ -79,10 +93,20 @@ proc adi_project {project_name {parameter_list {}}} {
   # version check
 
   set m_version [lindex $quartus(version) 1]
-  if {[string compare $m_version $version] != 0} {
-    puts -nonewline "Critical Warning: quartus version mismatch; "
-    puts -nonewline "expected $version, "
-    puts -nonewline "got $m_version.\n"
+  if {$IGNORE_VERSION_CHECK} {
+    if {[string compare $m_version $version] != 0} {
+      puts -nonewline "CRITICAL WARNING: Quartus version mismatch; "
+      puts -nonewline "expected $version, "
+      puts -nonewline "got $m_version.\n"
+    }
+  } else {
+    if {[string compare $m_version $version] != 0} {
+      puts -nonewline "ERROR: Quartus version mismatch; "
+      puts -nonewline "expected $version, "
+      puts -nonewline "got $m_version.\n"
+      puts -nonewline "This ERROR message can be down-graded to CRITICAL WARNING by setting ADI_IGNORE_VERSION_CHECK environment variable to 1. Be aware that ADI will not support you, if you are using a different tool version.\n"
+      exit 2
+    }
   }
 
   # packages used
@@ -113,6 +137,7 @@ proc adi_project {project_name {parameter_list {}}} {
   }
 
   set QFILE [open "system_qsys_script.tcl" "w"]
+  puts $QFILE "set project_name $project_name"
   puts $QFILE "set mmu_enabled $mmu_enabled"
   puts $QFILE "set ad_hdl_dir $ad_hdl_dir"
   puts $QFILE "set ad_ghdl_dir $ad_ghdl_dir"
@@ -122,9 +147,15 @@ proc adi_project {project_name {parameter_list {}}} {
   puts $QFILE "set_project_property DEVICE $device"
   puts $QFILE "foreach {param value} {$parameter_list} { set ad_project_params(\$param) \$value }"
   puts $QFILE "source system_qsys.tcl"
-  puts $QFILE "set_domain_assignment {\$system} {qsys_mm.maxAdditionalLatency} {4}"
-  puts $QFILE "set_domain_assignment {\$system} {qsys_mm.clockCrossingAdapter} {AUTO}"
-  puts $QFILE "set_domain_assignment {\$system} {qsys_mm.burstAdapterImplementation} {PER_BURST_TYPE_CONVERTER}"
+  if {$quartus_pro_isused == 1} {
+    puts $QFILE "set_domain_assignment {\$system} {qsys_mm.maxAdditionalLatency} {4}"
+    puts $QFILE "set_domain_assignment {\$system} {qsys_mm.clockCrossingAdapter} {AUTO}"
+    puts $QFILE "set_domain_assignment {\$system} {qsys_mm.burstAdapterImplementation} {PER_BURST_TYPE_CONVERTER}"
+  } else {
+    puts $QFILE "set_interconnect_requirement {\$system} {qsys_mm.maxAdditionalLatency} {4}"
+    puts $QFILE "set_interconnect_requirement {\$system} {qsys_mm.clockCrossingAdapter} {AUTO}"
+    puts $QFILE "set_interconnect_requirement {\$system} {qsys_mm.burstAdapterImplementation} {PER_BURST_TYPE_CONVERTER}"
+  }
   puts $QFILE "save_system {system_bd.qsys}"
   close $QFILE
 
@@ -151,6 +182,10 @@ proc adi_project {project_name {parameter_list {}}} {
     set_global_assignment -name ENABLE_ADVANCED_IO_TIMING ON
 
   }
+
+  # source MESSAGE-DISABLE definitions - to ignore invalid critical warnings
+
+  source $ad_hdl_dir/projects/scripts/adi_intel_msg.tcl
 
   # default assignments
 

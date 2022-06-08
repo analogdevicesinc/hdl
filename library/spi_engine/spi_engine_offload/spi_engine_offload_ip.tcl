@@ -3,16 +3,21 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 adi_ip_create spi_engine_offload
 adi_ip_files spi_engine_offload [list \
+  "spi_engine_offload_constr.ttcl" \
 	"spi_engine_offload.v" \
 ]
 
 adi_ip_properties_lite spi_engine_offload
+adi_ip_ttcl axi_spi_engine "spi_engine_offload_constr.ttcl"
+
 # Remove all inferred interfaces
 ipx::remove_all_bus_interface [ipx::current_core]
 
 adi_ip_add_core_dependencies { \
 	analog.com:user:util_cdc:1.0 \
 }
+
+## Interface definitions
 
 adi_add_bus "spi_engine_ctrl" "master" \
 	"analog.com:interface:spi_engine_ctrl_rtl:1.0" \
@@ -43,6 +48,9 @@ adi_add_bus "spi_engine_offload_ctrl" "slave" \
 		{ "ctrl_enable" "ENABLE"} \
 		{ "ctrl_enabled" "ENABLED"} \
 		{ "ctrl_mem_reset" "MEM_RESET"} \
+		{ "status_sync_ready" "SYNC_READY"} \
+		{ "status_sync_valid" "SYNC_VALID"} \
+		{ "status_sync_data" "SYNC_DATA"} \
 	}
 
 adi_add_bus "offload_sdi" "master" \
@@ -56,5 +64,121 @@ adi_add_bus "offload_sdi" "master" \
 
 adi_add_bus_clock "spi_clk" "spi_engine_ctrl:offload_sdi" "spi_resetn"
 adi_add_bus_clock "ctrl_clk" "spi_engine_offload_ctrl"
+
+## Parameter validations
+
+set cc [ipx::current_core]
+
+## ASYNC_SPI_CLK
+set_property -dict [list \
+  "value_format" "bool" \
+  "value" "false" \
+ ] \
+ [ipx::get_user_parameters ASYNC_SPI_CLK -of_objects $cc]
+set_property -dict [list \
+  "value_format" "bool" \
+  "value" "false" \
+ ] \
+ [ipx::get_hdl_parameters ASYNC_SPI_CLK -of_objects $cc]
+
+## ASYNC_TRIG
+set_property -dict [list \
+  "value_format" "bool" \
+  "value" "false" \
+ ] \
+ [ipx::get_user_parameters ASYNC_TRIG -of_objects $cc]
+set_property -dict [list \
+  "value_format" "bool" \
+  "value" "false" \
+ ] \
+ [ipx::get_hdl_parameters ASYNC_TRIG -of_objects $cc]
+
+## NUM_OF_SDI
+set_property -dict [list \
+  "value_validation_type" "range_long" \
+  "value_validation_range_minimum" "1" \
+  "value_validation_range_maximum" "8" \
+ ] \
+ [ipx::get_user_parameters NUM_OF_SDI -of_objects $cc]
+
+## DATA_WIDTH
+set_property -dict [list \
+  "value_validation_type" "range_long" \
+  "value_validation_range_minimum" "8" \
+  "value_validation_range_maximum" "256" \
+ ] \
+ [ipx::get_user_parameters DATA_WIDTH -of_objects $cc]
+
+## CMD_MEM_ADDRESS_WIDTH
+set_property -dict [list \
+  "value_validation_type" "range_long" \
+  "value_validation_range_minimum" "1" \
+  "value_validation_range_maximum" "16" \
+ ] \
+ [ipx::get_user_parameters CMD_MEM_ADDRESS_WIDTH -of_objects $cc]
+
+## SDO_MEM_ADDRESS_WIDTH
+set_property -dict [list \
+  "value_validation_type" "range_long" \
+  "value_validation_range_minimum" "1" \
+  "value_validation_range_maximum" "16" \
+ ] \
+ [ipx::get_user_parameters SDO_MEM_ADDRESS_WIDTH -of_objects $cc]
+
+## Customize IP Layout
+
+## Remove the automatically generated GUI page
+ipgui::remove_page -component $cc [ipgui::get_pagespec -name "Page 0" -component $cc]
+ipx::save_core [ipx::current_core]
+
+## Create general configuration page
+ipgui::add_page -name {SPI Engine RX offload} -component [ipx::current_core] -display_name {SPI Engine RX offload}
+set page0 [ipgui::get_pagespec -name "SPI Engine RX offload" -component $cc]
+
+set general_group [ipgui::add_group -name "General Configuration" -component $cc \
+    -parent $page0 -display_name "General Configuration" ]
+
+ipgui::add_param -name "DATA_WIDTH" -component $cc -parent $general_group
+set_property -dict [list \
+  "display_name" "Shift register's data width" \
+  "tooltip" "\[DATA_WIDTH\] Define the data interface width"
+] [ipgui::get_guiparamspec -name "DATA_WIDTH" -component $cc]
+
+ipgui::add_param -name "NUM_OF_SDI" -component $cc -parent $general_group
+set_property -dict [list \
+  "display_name" "Number of MISO lines" \
+  "tooltip" "\[NUM_OF_SDI\] Define the number of MISO lines" \
+] [ipgui::get_guiparamspec -name "NUM_OF_SDI" -component $cc]
+
+ipgui::add_param -name "ASYNC_SPI_CLK" -component $cc -parent $general_group
+set_property -dict [list \
+  "display_name" "Asynchronous core clock" \
+  "tooltip" "\[ASYNC_SPI_CLK\] Define the relationship between the core clock and the memory mapped interface clock" \
+] [ipgui::get_guiparamspec -name "ASYNC_SPI_CLK" -component $cc]
+
+ipgui::add_param -name "ASYNC_TRIG" -component $cc -parent $general_group
+set_property -dict [list \
+  "display_name" "Asynchronous trigger" \
+  "tooltip" "\[ASYNC_TRIG\] Set if the external trigger is asynchronous to the core clk" \
+] [ipgui::get_guiparamspec -name "ASYNC_TRIG" -component $cc]
+
+## Command stream FIFO depth configuration
+set cmd_stream_fifo_group [ipgui::add_group -name "Command stream FIFO configuration" -component $cc \
+    -parent $page0 -display_name "Command stream FIFO configuration" ]
+
+ipgui::add_param -name "CMD_MEM_ADDRESS_WIDTH" -component $cc -parent $cmd_stream_fifo_group
+set_property -dict [list \
+  "display_name" "Command FIFO address width" \
+  "tooltip" "\[CMD_MEM_ADDRESS_WIDTH\] Define the depth of the FIFO" \
+] [ipgui::get_guiparamspec -name "CMD_MEM_ADDRESS_WIDTH" -component $cc]
+
+ipgui::add_param -name "SDO_MEM_ADDRESS_WIDTH" -component $cc -parent $cmd_stream_fifo_group
+set_property -dict [list \
+  "display_name" "MOSI FIFO address width" \
+  "tooltip" "\[SDO_MEM_ADDRESS_WIDTH\] Define the depth of the FIFO" \
+] [ipgui::get_guiparamspec -name "SDO_MEM_ADDRESS_WIDTH" -component $cc]
+
+## Create and save the XGUI file
+ipx::create_xgui_files $cc
 
 ipx::save_core [ipx::current_core]

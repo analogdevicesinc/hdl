@@ -27,6 +27,8 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 adi_ip_create ad_ip_jesd204_tpl_dac
 adi_ip_files ad_ip_jesd204_tpl_dac [list \
   "$ad_hdl_dir/library/xilinx/common/ad_mul.v" \
+  "$ad_hdl_dir/library/common/ad_mux.v" \
+  "$ad_hdl_dir/library/common/ad_mux_core.v" \
   "$ad_hdl_dir/library/common/ad_dds_sine.v" \
   "$ad_hdl_dir/library/common/ad_dds_cordic_pipe.v" \
   "$ad_hdl_dir/library/common/ad_dds_sine_cordic.v" \
@@ -93,11 +95,12 @@ foreach p {DDS_CORDIC_DW DDS_CORDIC_PHASE_DW} {
 
 foreach {p v} {
   "NUM_LANES" "1 2 3 4 8 16" \
-  "NUM_CHANNELS" "1 2 4 6 8 16 32" \
+  "NUM_CHANNELS" "1 2 4 6 8 16 32 64" \
   "BITS_PER_SAMPLE" "8 12 16" \
+  "DMA_BITS_PER_SAMPLE" "8 12 16" \
   "CONVERTER_RESOLUTION" "8 11 12 16" \
   "SAMPLES_PER_FRAME" "1 2 3 4 6 8 12 16" \
-  "OCTETS_PER_BEAT" "4 8" \
+  "OCTETS_PER_BEAT" "4 6 8 12 16 32 64" \
 } { \
   set_property -dict [list \
     "value_validation_type" "list" \
@@ -125,6 +128,7 @@ foreach {k v} { \
   "NUM_LANES" "Number of Lanes (L)" \
   "NUM_CHANNELS" "Number of Conveters (M)" \
   "BITS_PER_SAMPLE" "Bits per Sample (N')" \
+  "DMA_BITS_PER_SAMPLE" "DMA Bits per Sample" \
   "CONVERTER_RESOLUTION" "Converter Resolution (N)" \
   "SAMPLES_PER_FRAME" "Samples per Frame (S)" \
   "OCTETS_PER_BEAT" "Octets per Beat" \
@@ -145,7 +149,9 @@ set i 0
 
 foreach {k v w} {
   "DATAPATH_DISABLE" "Disable Datapath" "checkBox" \
+  "EXT_SYNC" "Enable external SYNC" "checkBox" \
   "IQCORRECTION_DISABLE" "Disable IQ Correction" "checkBox" \
+  "XBAR_ENABLE" "Enable user data XBAR" "checkBox" \
   "DDS_TYPE" "DDS Type" "comboBox" \
   "DDS_CORDIC_DW" "CORDIC DDS Data Width" "text" \
   "DDS_CORDIC_PHASE_DW" "CORDIC DDS Phase Width" "text" \

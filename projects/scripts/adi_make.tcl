@@ -245,7 +245,7 @@ namespace eval adi_make {
 
     set arm_tr_sw_elf "bl31.elf"
     set boot_bin_folder "boot_bin"
-    if {[catch {set hdf_file "[glob "./*.sdk/system_top.hdf"]"} fid]} {
+    if {[catch {set xsa_file "[glob "./*.sdk/system_top.xsa"]"} fid]} {
       puts stderr "ERROR: $fid\n\rNOTE: you must have built hdl project\n\
       \rSee: https://wiki.analog.com/resources/fpga/docs/build\n"
       return
@@ -258,7 +258,7 @@ namespace eval adi_make {
 
     puts "root_hdl_folder $root_hdl_folder"
     puts "uboot_elf $uboot_elf"
-    puts "hdf_file $hdf_file"
+    puts "xsa_file $xsa_file"
 
     # determine if Xilinx SDK tools are set in the enviroment
     package require platform
@@ -281,7 +281,7 @@ namespace eval adi_make {
     }
 
     set xsct_script "exec xsct $root_hdl_folder/projects/scripts/adi_make_boot_bin.tcl"
-    set build_args "$hdf_file $uboot_elf $boot_bin_folder $arm_tr_sw_elf"
+    set build_args "$xsa_file $uboot_elf $boot_bin_folder $arm_tr_sw_elf"
     puts "Please wait, this may take a few minutes."
     eval $xsct_script $build_args
   }

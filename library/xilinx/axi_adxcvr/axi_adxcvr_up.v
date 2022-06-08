@@ -42,6 +42,7 @@ module axi_adxcvr_up #(
   parameter   integer ID = 0,
   parameter   integer NUM_OF_LANES = 8,
   parameter   integer XCVR_TYPE = 0,
+  parameter   integer LINK_MODE = 1, // 2 - 64B/66B;  1 - 8B/10B
   parameter   [ 7:0]  FPGA_TECHNOLOGY = 0,
   parameter   [ 7:0]  FPGA_FAMILY = 0,
   parameter   [ 7:0]  SPEED_GRADE = 0,
@@ -73,6 +74,11 @@ module axi_adxcvr_up #(
   output              up_ch_rst,
   output              up_ch_user_ready,
   input               up_ch_rst_done,
+  output              up_ch_prbsforceerr,
+  output     [ 3:0]   up_ch_prbssel,
+  output              up_ch_prbscntreset,
+  input               up_ch_prbserr,
+  input               up_ch_prbslocked,
   output              up_ch_lpm_dfe_n,
   output     [ 2:0]   up_ch_rate,
   output     [ 1:0]   up_ch_sys_clk_sel,
@@ -125,7 +131,7 @@ module axi_adxcvr_up #(
 
   // parameters
 
-  localparam  [31:0]  VERSION = 32'h00110161;
+  localparam  [31:0]  VERSION = 32'h00110461;
 
   // internal registers
 
@@ -169,6 +175,9 @@ module axi_adxcvr_up #(
   reg             up_ies_status = 'd0;
   reg             up_rreq_d = 'd0;
   reg     [31:0]  up_rdata_d = 'd0;
+  reg      [3:0]  up_prbssel = 'd0;
+  reg             up_prbscntreset = 'd1;
+  reg             up_prbsforceerr = 'd0;
 
   // internal signals
 
@@ -230,7 +239,7 @@ module axi_adxcvr_up #(
       end else if (up_user_ready_cnt[6] == 1'b0) begin
         up_user_ready_cnt <= up_user_ready_cnt + 1'b1;
       end
-      if (up_resetn == 1'b0) begin
+      if ((up_resetn == 1'b0) || (up_ch_pll_locked == 1'b0)) begin
         up_status_int <= 1'b0;
       end else if (up_ch_rst_done == 1'b1) begin
         up_status_int <= 1'b1;
@@ -247,6 +256,9 @@ module axi_adxcvr_up #(
   assign up_ch_tx_diffctrl = up_tx_diffctrl;
   assign up_ch_tx_postcursor = up_tx_postcursor;
   assign up_ch_tx_precursor = up_tx_precursor;
+  assign up_ch_prbssel = up_prbssel;
+  assign up_ch_prbscntreset = up_prbscntreset;
+  assign up_ch_prbsforceerr = up_prbsforceerr;
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
@@ -257,6 +269,9 @@ module axi_adxcvr_up #(
       up_tx_diffctrl <= TX_DIFFCTRL;
       up_tx_postcursor <= TX_POSTCURSOR;
       up_tx_precursor <= TX_PRECURSOR;
+      up_prbssel <= 4'b0;
+      up_prbscntreset <= 1'b1;
+      up_prbsforceerr <= 1'b0;
     end else begin
       if ((up_wreq == 1'b1) && (up_waddr == 10'h008)) begin
         up_lpm_dfe_n <= up_wdata[12];
@@ -272,6 +287,11 @@ module axi_adxcvr_up #(
       end
       if ((up_wreq == 1'b1) && (up_waddr == 10'h032)) begin
         up_tx_precursor <= up_wdata[4:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 10'h060)) begin
+        up_prbssel <= up_wdata[3:0];
+        up_prbscntreset <= up_wdata[8];
+        up_prbsforceerr <= up_wdata[16];
       end
     end
   end
@@ -488,7 +508,9 @@ module axi_adxcvr_up #(
 
   // generic
 
-  assign up_rparam_s[15: 9] = 7'd0;
+  assign up_rparam_s[15:14] = 2'd0;
+  assign up_rparam_s[13:12] = LINK_MODE[1:0];
+  assign up_rparam_s[11: 9] = 3'd0;
   assign up_rparam_s[ 8: 8] = (TX_OR_RX_N == 0) ? 1'b0 : 1'b1;
   assign up_rparam_s[ 7: 0] = NUM_OF_LANES;
 
@@ -504,7 +526,7 @@ module axi_adxcvr_up #(
           10'h001: up_rdata_d <= ID;
           10'h002: up_rdata_d <= up_scratch;
           10'h004: up_rdata_d <= {31'd0, up_resetn};
-          10'h005: up_rdata_d <= {31'd0, up_status_int};
+          10'h005: up_rdata_d <= {27'd0, ~up_ch_pll_locked, 3'b0, up_status_int};
           10'h006: up_rdata_d <= {17'd0, up_user_ready_cnt, up_rst_cnt, up_pll_rst_cnt};
           10'h007: up_rdata_d <= {FPGA_TECHNOLOGY,FPGA_FAMILY,SPEED_GRADE,DEV_PACKAGE}; // [8,8,8,8]
           10'h008: up_rdata_d <= {19'd0, up_lpm_dfe_n, 1'd0, up_rate, 2'd0, up_sys_clk_sel, 1'd0, up_out_clk_sel};
@@ -527,7 +549,14 @@ module axi_adxcvr_up #(
           10'h030: up_rdata_d <= up_tx_diffctrl;
           10'h031: up_rdata_d <= up_tx_postcursor;
           10'h032: up_rdata_d <= up_tx_precursor;
-	  10'h050: up_rdata_d <= {16'd0, FPGA_VOLTAGE};  // mV
+          10'h050: up_rdata_d <= {16'd0, FPGA_VOLTAGE};  // mV
+          10'h060: up_rdata_d <= {8'b0,
+                                  7'b0,up_prbsforceerr,
+                                  7'b0,up_prbscntreset,
+                                  4'b0,up_prbssel};
+          10'h061: up_rdata_d <= {16'b0,
+                                  7'b0,up_ch_prbserr,
+                                  7'b0,up_ch_prbslocked};
           default: up_rdata_d <= 32'd0;
         endcase
       end else begin

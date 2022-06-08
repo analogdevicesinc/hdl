@@ -134,6 +134,9 @@ module axi_jesd204_tx_regmap_tb;
     read_reg(addr, value);
     expected = expected_reg_mem[addr[13:2]];
     match <= value === expected;
+    if (value !== expected) begin
+      $display("Address %h, Expected %h, Found %h", addr, expected, value);
+    end
   end
   endtask
 
@@ -160,7 +163,7 @@ module axi_jesd204_tx_regmap_tb;
     for (i = 0; i < 1024; i = i + 1)
       expected_reg_mem[i] <= 'h00;
     /* Non zero power-on-reset values */
-    set_reset_reg_value('h00, 32'h00010161); /* PCORE version register */
+    set_reset_reg_value('h00, 32'h00010661); /* PCORE version register */
     set_reset_reg_value('h0c, 32'h32303454); /* PCORE magic register */
     set_reset_reg_value('h10, NUM_LANES); /* Number of lanes */
     set_reset_reg_value('h14, 'h2); /* Datapath width */
@@ -356,11 +359,15 @@ module axi_jesd204_tx_regmap_tb;
     .core_ilas_config_rd(1'b1),
     .core_ilas_config_addr(2'b00),
 
-    .core_event_sysref_alignment_error(1'b0),
-    .core_event_sysref_edge(1'b0),
+    .device_event_sysref_alignment_error(1'b0),
+    .device_event_sysref_edge(1'b0),
 
     .core_status_state(core_status_state),
-    .core_status_sync(core_status_sync)
+    .core_status_sync(core_status_sync),
+
+    .status_synth_params0(NUM_LANES),
+    .status_synth_params1(2),
+    .status_synth_params2(NUM_LINKS)
   );
 
 endmodule

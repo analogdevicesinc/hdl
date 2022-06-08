@@ -10,14 +10,15 @@ M_DEPS += ../common/ccbob_bd.tcl
 M_DEPS += ../common/adrv9361z7035_constr_cmos.xdc
 M_DEPS += ../common/adrv9361z7035_constr.xdc
 M_DEPS += ../common/adrv9361z7035_bd.tcl
-M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
+M_DEPS += ../../scripts/adi_pd.tcl
+M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/axi_ad9361/axi_ad9361_delay.tcl
 
 LIB_DEPS += axi_ad9361
 LIB_DEPS += axi_dmac
+LIB_DEPS += axi_gpreg
 LIB_DEPS += axi_sysid
 LIB_DEPS += sysid_rom
-LIB_DEPS += axi_gpreg
 LIB_DEPS += util_pack/util_cpack2
 LIB_DEPS += util_pack/util_upack2
 LIB_DEPS += util_rfifo

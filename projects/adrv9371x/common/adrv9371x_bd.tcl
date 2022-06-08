@@ -101,6 +101,7 @@ ad_ip_parameter axi_ad9371_rx_xcvr CONFIG.OUT_CLK_SEL 3
 ad_ip_parameter axi_ad9371_rx_xcvr CONFIG.LPM_OR_DFE_N 1
 
 adi_axi_jesd204_rx_create axi_ad9371_rx_jesd $RX_NUM_OF_LANES
+ad_ip_parameter axi_ad9371_rx_jesd/rx CONFIG.SYSREF_IOB {false}
 
 ad_ip_instance util_cpack2 util_ad9371_rx_cpack [list \
   NUM_OF_CHANNELS $RX_NUM_OF_CONVERTERS \
@@ -147,6 +148,7 @@ ad_ip_parameter axi_ad9371_rx_os_xcvr CONFIG.OUT_CLK_SEL 3
 ad_ip_parameter axi_ad9371_rx_os_xcvr CONFIG.LPM_OR_DFE_N 1
 
 adi_axi_jesd204_rx_create axi_ad9371_rx_os_jesd $RX_OS_NUM_OF_LANES
+ad_ip_parameter axi_ad9371_rx_os_jesd/rx CONFIG.SYSREF_IOB {false}
 
 ad_ip_instance util_cpack2 util_ad9371_rx_os_cpack [list \
   NUM_OF_CHANNELS $RX_OS_NUM_OF_CONVERTERS \

@@ -48,7 +48,9 @@ module axi_jesd204_tx #(
   parameter ID = 0,
   parameter NUM_LANES = 1,
   parameter NUM_LINKS = 1,
-  parameter LINK_MODE = 1  // 2 - 64B/66B;  1 - 8B/10B
+  parameter LINK_MODE = 1,  // 2 - 64B/66B;  1 - 8B/10B
+  parameter ENABLE_LINK_STATS = 0,
+  parameter DATA_PATH_WIDTH = LINK_MODE == 2 ? 8 : 4
 ) (
   input s_axi_aclk,
   input s_axi_aresetn,
@@ -79,13 +81,13 @@ module axi_jesd204_tx #(
   input core_reset_ext,
   output core_reset,
 
+  input device_clk,
+  output device_reset,
+
   output [NUM_LANES-1:0] core_cfg_lanes_disable,
   output [NUM_LINKS-1:0] core_cfg_links_disable,
-  output [7:0] core_cfg_beats_per_multiframe,
+  output [9:0] core_cfg_octets_per_multiframe,
   output [7:0] core_cfg_octets_per_frame,
-  output [7:0] core_cfg_lmfc_offset,
-  output core_cfg_sysref_oneshot,
-  output core_cfg_sysref_disable,
   output core_cfg_continuous_cgs,
   output core_cfg_continuous_ilas,
   output core_cfg_skip_ilas,
@@ -93,23 +95,34 @@ module axi_jesd204_tx #(
   output core_cfg_disable_char_replacement,
   output core_cfg_disable_scrambler,
 
+  output [9:0] device_cfg_octets_per_multiframe,
+  output [7:0] device_cfg_octets_per_frame,
+  output [7:0] device_cfg_beats_per_multiframe,
+  output [7:0] device_cfg_lmfc_offset,
+  output device_cfg_sysref_oneshot,
+  output device_cfg_sysref_disable,
+
   input core_ilas_config_rd,
   input [1:0] core_ilas_config_addr,
-  output [32*NUM_LANES-1:0] core_ilas_config_data,
+  output [DATA_PATH_WIDTH*8*NUM_LANES-1:0] core_ilas_config_data,
 
-  input core_event_sysref_alignment_error,
-  input core_event_sysref_edge,
+  input device_event_sysref_alignment_error,
+  input device_event_sysref_edge,
 
   output core_ctrl_manual_sync_request,
 
   input [1:0] core_status_state,
-  input [NUM_LINKS-1:0] core_status_sync
+  input [NUM_LINKS-1:0] core_status_sync,
+
+  input [31:0] status_synth_params0,
+  input [31:0] status_synth_params1,
+  input [31:0] status_synth_params2
 );
 
-localparam PCORE_VERSION = 32'h00010361; // 1.03.a
+localparam PCORE_VERSION = 32'h00010661; // 1.06.a
 localparam PCORE_MAGIC = 32'h32303454; // 204T
 
-localparam DATA_PATH_WIDTH = LINK_MODE == 2 ? 3 : 2;
+localparam DATA_PATH_WIDTH_LOG2 = (DATA_PATH_WIDTH == 8) ? 3 : 2;
 
 wire up_reset;
 
@@ -177,11 +190,10 @@ jesd204_up_common #(
   .ID(ID),
   .NUM_LANES(NUM_LANES),
   .NUM_LINKS(NUM_LINKS),
-  .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
   .NUM_IRQS(5),
-  .EXTRA_CFG_WIDTH(21),
-  .MAX_OCTETS_PER_FRAME(8),
-  .LINK_MODE(LINK_MODE)
+  .EXTRA_CFG_WIDTH(11),
+  .DEV_EXTRA_CFG_WIDTH(10),
+  .ENABLE_LINK_STATS(ENABLE_LINK_STATS)
 ) i_up_common (
   .up_clk(s_axi_aclk),
   .ext_resetn(s_axi_aresetn),
@@ -193,6 +205,9 @@ jesd204_up_common #(
   .core_clk(core_clk),
   .core_reset_ext(core_reset_ext),
   .core_reset(core_reset),
+
+  .device_clk(device_clk),
+  .device_reset(device_reset),
 
   .up_raddr(up_raddr),
   .up_rdata(up_rdata_common),
@@ -206,7 +221,7 @@ jesd204_up_common #(
   .up_irq_trigger(up_irq_trigger),
   .irq(irq),
 
-  .core_cfg_beats_per_multiframe(core_cfg_beats_per_multiframe),
+  .core_cfg_octets_per_multiframe(core_cfg_octets_per_multiframe),
   .core_cfg_octets_per_frame(core_cfg_octets_per_frame),
   .core_cfg_lanes_disable(core_cfg_lanes_disable),
   .core_cfg_links_disable(core_cfg_links_disable),
@@ -214,34 +229,49 @@ jesd204_up_common #(
   .core_cfg_disable_char_replacement(core_cfg_disable_char_replacement),
 
   .up_extra_cfg({
-    /*    20 */ up_cfg_sysref_disable,
-    /*    19 */ up_cfg_sysref_oneshot,
-    /*    18 */ up_cfg_continuous_cgs,
-    /*    17 */ up_cfg_continuous_ilas,
-    /*    16 */ up_cfg_skip_ilas,
-    /* 08-15 */ up_cfg_lmfc_offset,
+    /*    10 */ up_cfg_continuous_cgs,
+    /*    09 */ up_cfg_continuous_ilas,
+    /*    08 */ up_cfg_skip_ilas,
     /* 00-07 */ up_cfg_mframes_per_ilas
   }),
   .core_extra_cfg({
-    /*    20 */ core_cfg_sysref_disable,
-    /*    19 */ core_cfg_sysref_oneshot,
-    /*    18 */ core_cfg_continuous_cgs,
-    /*    17 */ core_cfg_continuous_ilas,
-    /*    16 */ core_cfg_skip_ilas,
-    /* 08-15 */ core_cfg_lmfc_offset,
+    /*    10 */ core_cfg_continuous_cgs,
+    /*    09 */ core_cfg_continuous_ilas,
+    /*    08 */ core_cfg_skip_ilas,
     /* 00-07 */ core_cfg_mframes_per_ilas
-  })
+  }),
+
+  .device_cfg_octets_per_multiframe(device_cfg_octets_per_multiframe),
+  .device_cfg_octets_per_frame(device_cfg_octets_per_frame),
+  .device_cfg_beats_per_multiframe(device_cfg_beats_per_multiframe),
+
+  .up_dev_extra_cfg({
+    /*    09 */ up_cfg_sysref_disable,
+    /*    08 */ up_cfg_sysref_oneshot,
+    /* 00-07 */ up_cfg_lmfc_offset
+  }),
+  .device_extra_cfg({
+    /*    09 */ device_cfg_sysref_disable,
+    /*    08 */ device_cfg_sysref_oneshot,
+    /* 00-07 */ device_cfg_lmfc_offset
+  }),
+
+  .status_synth_params0(status_synth_params0),
+  .status_synth_params1(status_synth_params1),
+  .status_synth_params2(status_synth_params2)
+
 );
 
 jesd204_up_sysref #(
-  .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
+  .DATA_PATH_WIDTH_LOG2(DATA_PATH_WIDTH_LOG2)
 ) i_up_sysref (
   .up_clk(s_axi_aclk),
   .up_reset(up_reset),
 
   .core_clk(core_clk),
-  .core_event_sysref_alignment_error(core_event_sysref_alignment_error),
-  .core_event_sysref_edge(core_event_sysref_edge),
+  .device_clk(device_clk),
+  .device_event_sysref_alignment_error(device_event_sysref_alignment_error),
+  .device_event_sysref_edge(device_event_sysref_edge),
 
   .up_cfg_lmfc_offset(up_cfg_lmfc_offset),
   .up_cfg_sysref_oneshot(up_cfg_sysref_oneshot),
@@ -259,7 +289,8 @@ jesd204_up_sysref #(
 
 jesd204_up_tx #(
   .NUM_LANES(NUM_LANES),
-  .NUM_LINKS(NUM_LINKS)
+  .NUM_LINKS(NUM_LINKS),
+  .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
 ) i_up_tx (
   .up_clk(s_axi_aclk),
   .up_reset(up_reset),

@@ -33,7 +33,12 @@ ad_ip_instance axi_adxcvr axi_ad9694_xcvr [list \
 ]
 
 adi_axi_jesd204_rx_create ad9694_jesd $NUM_OF_LANES
-adi_tpl_jesd204_rx_create ad9694_tpl_core $NUM_OF_LANES $NUM_OF_CHANNELS $SAMPLES_PER_FRAME $SAMPLE_WIDTH
+adi_tpl_jesd204_rx_create ad9694_tpl_core $NUM_OF_LANES \
+                                          $NUM_OF_CHANNELS \
+                                          $SAMPLES_PER_FRAME \
+                                          $SAMPLE_WIDTH \
+                                          4 \
+                                          $SAMPLE_WIDTH
 
 ad_ip_instance util_cpack2 util_ad9694_cpack [list \
   NUM_OF_CHANNELS [expr $NUM_OF_CHANNELS + 1] \
@@ -132,7 +137,6 @@ ad_connect $sys_dma_resetn ad9694_dma/m_dest_axi_aresetn
 #ad_connect ad9694_tpl_core/adc_dovf axi_ad9694_fifo/adc_wovf
 
 ad_connect $sys_cpu_clk  axi_spi_vco/ext_spi_clk
-ad_connect spi_vco axi_spi_vco/SPI_0
 ad_connect spi_vco_csn_i axi_spi_vco/ss_i
 ad_connect spi_vco_csn_o axi_spi_vco/ss_o
 ad_connect spi_vco_clk_i axi_spi_vco/sck_i
@@ -142,7 +146,6 @@ ad_connect spi_vco_sdo_o axi_spi_vco/io0_o
 ad_connect spi_vco_sdi_i axi_spi_vco/io1_i
 
 ad_connect $sys_cpu_clk  axi_spi_afe_adc/ext_spi_clk
-ad_connect spi_afe_adc axi_spi_afe_adc/SPI_0
 ad_connect spi_afe_adc_csn_i axi_spi_afe_adc/ss_i
 ad_connect spi_afe_adc_csn_o axi_spi_afe_adc/ss_o
 ad_connect spi_afe_adc_clk_i axi_spi_afe_adc/sck_i

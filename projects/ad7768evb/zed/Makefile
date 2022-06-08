@@ -7,9 +7,10 @@ PROJECT_NAME := ad7768evb_zed
 
 M_DEPS += ../common/ad7768evb_bd.tcl
 M_DEPS += ../common/ad7768_if.v
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
 M_DEPS += ../../common/zed/zed_system_bd.tcl
-M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
+M_DEPS += ../../../library/common/ad_iobuf.v
 
 LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_dmac
@@ -19,5 +20,7 @@ LIB_DEPS += axi_spdif_tx
 LIB_DEPS += axi_sysid
 LIB_DEPS += sysid_rom
 LIB_DEPS += util_i2c_mixer
+LIB_DEPS += axi_generic_adc
+LIB_DEPS += util_pack/util_cpack2
 
 include ../../scripts/project-xilinx.mk

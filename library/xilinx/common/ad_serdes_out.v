@@ -39,6 +39,7 @@
 module ad_serdes_out #(
 
   parameter   FPGA_TECHNOLOGY = 0,
+  parameter   CMOS_LVDS_N = 0,
   parameter   DDR_OR_SDR_N = 1,
   parameter   SERDES_FACTOR = 8,
   parameter   DATA_WIDTH = 16) (
@@ -51,15 +52,15 @@ module ad_serdes_out #(
   input                       loaden,
 
   // data interface
-
-  input   [(DATA_WIDTH-1):0]  data_s0,
+  input                       data_oe,
+  input   [(DATA_WIDTH-1):0]  data_s0,   // 1st bit to be transmitted
   input   [(DATA_WIDTH-1):0]  data_s1,
   input   [(DATA_WIDTH-1):0]  data_s2,
   input   [(DATA_WIDTH-1):0]  data_s3,
   input   [(DATA_WIDTH-1):0]  data_s4,
   input   [(DATA_WIDTH-1):0]  data_s5,
   input   [(DATA_WIDTH-1):0]  data_s6,
-  input   [(DATA_WIDTH-1):0]  data_s7,
+  input   [(DATA_WIDTH-1):0]  data_s7,   // last bit to be transmitted
   output  [(DATA_WIDTH-1):0]  data_out_se,
   output  [(DATA_WIDTH-1):0]  data_out_p,
   output  [(DATA_WIDTH-1):0]  data_out_n);
@@ -69,15 +70,33 @@ module ad_serdes_out #(
   localparam  ULTRASCALE_PLUS  = 3;
   localparam  DR_OQ_DDR = DDR_OR_SDR_N == 1'b1 ? "DDR": "SDR";
 
+  localparam SIM_DEVICE = FPGA_TECHNOLOGY == SEVEN_SERIES ? "7SERIES" :
+                          FPGA_TECHNOLOGY == ULTRASCALE ? "ULTRASCALE" :
+                          FPGA_TECHNOLOGY == ULTRASCALE_PLUS ? "ULTRASCALE_PLUS" :
+                          "UNSUPPORTED";
+
+
   // internal signals
 
   wire    [(DATA_WIDTH-1):0]  data_out_s;
   wire    [(DATA_WIDTH-1):0]  serdes_shift1_s;
   wire    [(DATA_WIDTH-1):0]  serdes_shift2_s;
+  wire    [(DATA_WIDTH-1):0]  data_t;
+  wire    buffer_disable;
 
   assign data_out_se =  data_out_s;
 
+  assign buffer_disable = ~data_oe;
   // instantiations
+
+  reg [6:0] serdes_rst_seq;
+  wire      serdes_rst     = serdes_rst_seq [6];
+
+  always @ (posedge div_clk)
+  begin
+      if   (rst) serdes_rst_seq [6:0] <= 7'b0001110;
+      else       serdes_rst_seq [6:0] <= {serdes_rst_seq [5:0], 1'b0};
+  end
 
   genvar l_inst;
   generate
@@ -99,10 +118,10 @@ module ad_serdes_out #(
         .D6 (data_s5[l_inst]),
         .D7 (data_s6[l_inst]),
         .D8 (data_s7[l_inst]),
-        .T1 (1'b0),
-        .T2 (1'b0),
-        .T3 (1'b0),
-        .T4 (1'b0),
+        .T1 (buffer_disable),
+        .T2 (buffer_disable),
+        .T3 (buffer_disable),
+        .T4 (buffer_disable),
         .SHIFTIN1 (1'b0),
         .SHIFTIN2 (1'b0),
         .SHIFTOUT1 (),
@@ -111,19 +130,52 @@ module ad_serdes_out #(
         .CLK (clk),
         .CLKDIV (div_clk),
         .OQ (data_out_s[l_inst]),
-        .TQ (),
+        .TQ (data_t[l_inst]),
         .OFB (),
         .TFB (),
         .TBYTEIN (1'b0),
         .TBYTEOUT (),
-        .TCE (1'b0),
-        .RST (rst));
+        .TCE (1'b1),
+        .RST (serdes_rst));
     end
 
-    OBUFDS i_obuf (
-      .I (data_out_s[l_inst]),
-      .O (data_out_p[l_inst]),
-      .OB (data_out_n[l_inst]));
+    if (FPGA_TECHNOLOGY == ULTRASCALE || FPGA_TECHNOLOGY == ULTRASCALE_PLUS) begin
+      OSERDESE3  #(
+        .DATA_WIDTH (SERDES_FACTOR),
+        .SIM_DEVICE (SIM_DEVICE))
+      i_serdes (
+        .D ({data_s7[l_inst],
+             data_s6[l_inst],
+             data_s5[l_inst],
+             data_s4[l_inst],
+             data_s3[l_inst],
+             data_s2[l_inst],
+             data_s1[l_inst],
+             data_s0[l_inst]}),
+        .T (buffer_disable),
+        .CLK (clk),
+        .CLKDIV (div_clk),
+        .OQ (data_out_s[l_inst]),
+        .T_OUT (data_t[l_inst]),
+        .RST (serdes_rst));
+    end
+
+    if (CMOS_LVDS_N == 0) begin
+
+      OBUFTDS i_obuf (
+        .T (data_t[l_inst]),
+        .I (data_out_s[l_inst]),
+        .O (data_out_p[l_inst]),
+        .OB (data_out_n[l_inst]));
+
+    end else begin
+
+      OBUFT i_obuf (
+        .T (data_t[l_inst]),
+        .I (data_out_s[l_inst]),
+        .O (data_out_p[l_inst]));
+
+    end
 
   end
   endgenerate

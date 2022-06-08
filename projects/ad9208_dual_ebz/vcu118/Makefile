@@ -6,12 +6,13 @@
 PROJECT_NAME := ad9208_dual_ebz_vcu118
 
 M_DEPS += ../common/dual_ad9208_bd.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../daq3/common/daq3_spi.v
 M_DEPS += ../../common/xilinx/adcfifo_bd.tcl
 M_DEPS += ../../common/vcu118/vcu118_system_constr.xdc
 M_DEPS += ../../common/vcu118/vcu118_system_bd.tcl
-M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
+M_DEPS += ../../../library/common/ad_iobuf.v
 
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_sysid

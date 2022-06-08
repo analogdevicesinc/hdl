@@ -99,10 +99,14 @@ module axi_ad9963 #(
   output          dac_enable_i,
   output          dac_valid_i,
   input   [15:0]  dac_data_i,
+  input           dma_valid_i,
   output          dac_enable_q,
   output          dac_valid_q,
   input   [15:0]  dac_data_q,
+  input           dma_valid_q,
   input           dac_dunf,
+
+  input           hold_last_sample,
 
   // axi interface
 
@@ -145,7 +149,6 @@ module axi_ad9963 #(
   wire            adc_valid_s;
   wire    [23:0]  adc_data_s;
   wire            adc_status_s;
-  wire            dac_valid_s;
   wire    [23:0]  dac_data_s;
   wire    [12:0]  up_adc_dld_s;
   wire    [64:0]  up_adc_dwdata_s;
@@ -164,6 +167,8 @@ module axi_ad9963 #(
   wire            up_rack_tx_s;
   wire            up_adc_ce;
   wire            up_dac_ce;
+  wire            valid_out_q_s;
+  wire            valid_out_i_s;
 
   // signal name changes
 
@@ -200,9 +205,11 @@ module axi_ad9963 #(
     .adc_data (adc_data_s),
     .adc_status (adc_status_s),
     .up_adc_ce(up_adc_ce),
-    .dac_valid (dac_valid_s),
     .dac_data (dac_data_s),
+    .out_valid_q (valid_out_q_s),
+    .out_valid_i (valid_out_i_s),
     .up_dac_ce(up_dac_ce),
+    .tx_sample_hold (hold_last_sample),
     .up_clk (up_clk),
     .up_adc_dld (up_adc_dld_s),
     .up_adc_dwdata (up_adc_dwdata_s),
@@ -271,7 +278,6 @@ module axi_ad9963 #(
   i_tx (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
-    .dac_valid (dac_valid_s),
     .dac_data (dac_data_s),
     .adc_data (adc_data_s),
     .dac_sync_in (dac_sync_in),
@@ -279,9 +285,13 @@ module axi_ad9963 #(
     .dac_enable_i (dac_enable_i),
     .dac_valid_i (dac_valid_i),
     .dac_data_i (dac_data_i),
+    .dma_valid_i (dma_valid_i),
+    .out_valid_i (valid_out_i_s),
     .dac_enable_q (dac_enable_q),
     .dac_valid_q (dac_valid_q),
     .dac_data_q (dac_data_q),
+    .dma_valid_q (dma_valid_q),
+    .out_valid_q (valid_out_q_s),
     .dac_dunf(dac_dunf),
     .up_dac_ce(up_dac_ce),
     .up_rstn (up_rstn),

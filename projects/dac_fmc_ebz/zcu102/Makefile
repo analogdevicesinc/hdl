@@ -7,11 +7,12 @@ PROJECT_NAME := dac_fmc_ebz_zcu102
 
 M_DEPS += ../common/dac_fmc_ebz_bd.tcl
 M_DEPS += ../common/config.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zcu102/zcu102_system_constr.xdc
 M_DEPS += ../../common/zcu102/zcu102_system_bd.tcl
 M_DEPS += ../../common/xilinx/dacfifo_bd.tcl
-M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
+M_DEPS += ../../../library/common/ad_iobuf.v
 
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_sysid

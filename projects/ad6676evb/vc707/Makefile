@@ -6,12 +6,13 @@
 PROJECT_NAME := ad6676evb_vc707
 
 M_DEPS += ../common/ad6676evb_bd.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/vc707/vc707_system_mig.prj
 M_DEPS += ../../common/vc707/vc707_system_constr.xdc
 M_DEPS += ../../common/vc707/vc707_system_bd.tcl
-M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
 M_DEPS += ../../../library/common/ad_sysref_gen.v
+M_DEPS += ../../../library/common/ad_iobuf.v
 
 LIB_DEPS += axi_ad6676
 LIB_DEPS += axi_dmac

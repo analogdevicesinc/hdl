@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module dmac_dma_read_shutdown_tb;
+module dma_read_shutdown_tb;
   parameter VCD_FILE = {`__FILE__,"cd"};
 
   `include "tb_base.v"

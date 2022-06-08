@@ -69,6 +69,7 @@ proc adi_axi_jesd204_tx_create {ip_name num_lanes {num_links 1} {link_mode 1}} {
     ad_ip_parameter "${ip_name}/tx"     CONFIG.LINK_MODE $link_mode
 
     ad_connect "${ip_name}/tx_axi/core_reset" "${ip_name}/tx/reset"
+    ad_connect "${ip_name}/tx_axi/device_reset" "${ip_name}/tx/device_reset"
     if {$link_mode == 1} {ad_connect "${ip_name}/tx_axi/tx_ctrl" "${ip_name}/tx/tx_ctrl"}
     ad_connect "${ip_name}/tx_axi/tx_cfg" "${ip_name}/tx/tx_cfg"
     ad_connect "${ip_name}/tx/tx_event" "${ip_name}/tx_axi/tx_event"
@@ -87,14 +88,17 @@ proc adi_axi_jesd204_tx_create {ip_name num_lanes {num_links 1} {link_mode 1}} {
     ad_connect "${ip_name}/tx_axi/irq" "${ip_name}/irq"
 
     # JESD204 processing
+    create_bd_pin -dir I -type clk "${ip_name}/link_clk"
     create_bd_pin -dir I -type clk "${ip_name}/device_clk"
     if {$link_mode == 1} {create_bd_pin -dir I -from [expr $num_links - 1] -to 0 "${ip_name}/sync"}
     create_bd_pin -dir I "${ip_name}/sysref"
 
     create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:axis_rtl:1.0 "${ip_name}/tx_data"
 
-    ad_connect "${ip_name}/device_clk" "${ip_name}/tx_axi/core_clk"
-    ad_connect "${ip_name}/device_clk" "${ip_name}/tx/clk"
+    ad_connect "${ip_name}/link_clk" "${ip_name}/tx_axi/core_clk"
+    ad_connect "${ip_name}/link_clk" "${ip_name}/tx/clk"
+    ad_connect "${ip_name}/device_clk" "${ip_name}/tx_axi/device_clk"
+    ad_connect "${ip_name}/device_clk" "${ip_name}/tx/device_clk"
     if {$link_mode == 1} {ad_connect "${ip_name}/sync" "${ip_name}/tx/sync"}
     ad_connect "${ip_name}/sysref" "${ip_name}/tx/sysref"
     ad_connect "${ip_name}/tx_data" "${ip_name}/tx/tx_data"
@@ -143,6 +147,7 @@ proc adi_axi_jesd204_rx_create {ip_name num_lanes {num_links 1} {link_mode 1}} {
     ad_ip_parameter "${ip_name}/rx"     CONFIG.LINK_MODE $link_mode
 
     ad_connect "${ip_name}/rx_axi/core_reset" "${ip_name}/rx/reset"
+    ad_connect "${ip_name}/rx_axi/device_reset" "${ip_name}/rx/device_reset"
     ad_connect "${ip_name}/rx_axi/rx_cfg" "${ip_name}/rx/rx_cfg"
     ad_connect "${ip_name}/rx/rx_event" "${ip_name}/rx_axi/rx_event"
     ad_connect "${ip_name}/rx/rx_status" "${ip_name}/rx_axi/rx_status"
@@ -160,6 +165,7 @@ proc adi_axi_jesd204_rx_create {ip_name num_lanes {num_links 1} {link_mode 1}} {
     ad_connect "${ip_name}/rx_axi/irq" "${ip_name}/irq"
 
     # JESD204 processing
+    create_bd_pin -dir I -type clk "${ip_name}/link_clk"
     create_bd_pin -dir I -type clk "${ip_name}/device_clk"
     if {$link_mode == 1} {create_bd_pin -dir O -from [expr $num_links - 1] -to 0 "${ip_name}/sync"}
     create_bd_pin -dir I "${ip_name}/sysref"
@@ -172,8 +178,10 @@ proc adi_axi_jesd204_rx_create {ip_name num_lanes {num_links 1} {link_mode 1}} {
     create_bd_pin -dir O "${ip_name}/rx_data_tvalid"
     create_bd_pin -dir O -from [expr $num_lanes * 32 - 1] -to 0 "${ip_name}/rx_data_tdata"
 
-    ad_connect "${ip_name}/device_clk" "${ip_name}/rx_axi/core_clk"
-    ad_connect "${ip_name}/device_clk" "${ip_name}/rx/clk"
+    ad_connect "${ip_name}/link_clk" "${ip_name}/rx_axi/core_clk"
+    ad_connect "${ip_name}/link_clk" "${ip_name}/rx/clk"
+    ad_connect "${ip_name}/device_clk" "${ip_name}/rx_axi/device_clk"
+    ad_connect "${ip_name}/device_clk" "${ip_name}/rx/device_clk"
     if {$link_mode == 1} {ad_connect "${ip_name}/rx/sync" "${ip_name}/sync"}
     ad_connect "${ip_name}/sysref" "${ip_name}/rx/sysref"
 #    ad_connect "${ip_name}/phy_ready" "${ip_name}/rx/phy_ready"
@@ -204,7 +212,7 @@ proc adi_axi_jesd204_rx_create {ip_name num_lanes {num_links 1} {link_mode 1}} {
 
 
 #                                       L            M                 S                 N & NP
-proc adi_tpl_jesd204_tx_create {ip_name num_of_lanes num_of_converters samples_per_frame sample_width {link_layer_bytes_per_beat 4}} {
+proc adi_tpl_jesd204_tx_create {ip_name num_of_lanes num_of_converters samples_per_frame sample_width {link_layer_bytes_per_beat 4} {dma_sample_width 16}} {
 
 
   if {$num_of_lanes < 1 || $num_of_lanes > 16} {
@@ -243,20 +251,30 @@ proc adi_tpl_jesd204_tx_create {ip_name num_of_lanes num_of_converters samples_p
     }
 
     # Generic TPL core
-    ad_ip_instance ad_ip_jesd204_tpl_dac "${ip_name}/tpl_core" [list \
+    ad_ip_instance ad_ip_jesd204_tpl_dac "${ip_name}/dac_tpl_core" [list \
       NUM_LANES $num_of_lanes \
       NUM_CHANNELS $num_of_converters \
       SAMPLES_PER_FRAME $samples_per_frame \
       CONVERTER_RESOLUTION $sample_width \
       BITS_PER_SAMPLE $sample_width  \
       OCTETS_PER_BEAT $tpl_bytes_per_beat \
+      DMA_BITS_PER_SAMPLE $dma_sample_width
      ]
 
     if {$num_of_converters > 1} {
       # Concatenation and slicer cores
-      ad_ip_instance xlconcat "${ip_name}/data_concat" [list \
-        NUM_PORTS $num_of_converters \
-      ]
+      # xconcat limited to 32 input ports
+      for {set i 0} {$i < $num_of_converters} {incr i 32} {
+      ad_ip_instance xlconcat "${ip_name}/data_concat[expr $i/32]" [list \
+        NUM_PORTS [expr min(32,$num_of_converters-$i)] \
+        ]
+      }
+      # main concat
+      if {$num_of_converters > 32} {
+       ad_ip_instance xlconcat "${ip_name}/data_concat" [list \
+        NUM_PORTS [expr int(ceil(double($num_of_converters)/32))] \
+        ]
+      }
 
       for {set i 0} {$i < $num_of_converters} {incr i} {
         ad_ip_instance xlslice "${ip_name}/enable_slice_${i}" [list \
@@ -273,32 +291,40 @@ proc adi_tpl_jesd204_tx_create {ip_name num_of_lanes num_of_converters samples_p
     }
     # Create connections
     # TPL configuration interface
-    ad_connect "${ip_name}/s_axi_aclk" "${ip_name}/tpl_core/s_axi_aclk"
-    ad_connect "${ip_name}/s_axi_aresetn" "${ip_name}/tpl_core/s_axi_aresetn"
-    ad_connect "${ip_name}/s_axi" "${ip_name}/tpl_core/s_axi"
+    ad_connect "${ip_name}/s_axi_aclk" "${ip_name}/dac_tpl_core/s_axi_aclk"
+    ad_connect "${ip_name}/s_axi_aresetn" "${ip_name}/dac_tpl_core/s_axi_aresetn"
+    ad_connect "${ip_name}/s_axi" "${ip_name}/dac_tpl_core/s_axi"
 
     # TPL - link layer
-    ad_connect ${ip_name}/tpl_core/link_clk ${ip_name}/link_clk
-    ad_connect ${ip_name}/tpl_core/link ${ip_name}/link
+    ad_connect ${ip_name}/dac_tpl_core/link_clk ${ip_name}/link_clk
+    ad_connect ${ip_name}/dac_tpl_core/link ${ip_name}/link
 
     # TPL - app layer
     if {$num_of_converters > 1} {
       for {set i 0} {$i < $num_of_converters} {incr i} {
-        ad_connect ${ip_name}/tpl_core/enable ${ip_name}/enable_slice_$i/Din
-        ad_connect ${ip_name}/tpl_core/dac_valid ${ip_name}/valid_slice_$i/Din
+        ad_connect ${ip_name}/dac_tpl_core/enable ${ip_name}/enable_slice_$i/Din
+        ad_connect ${ip_name}/dac_tpl_core/dac_valid ${ip_name}/valid_slice_$i/Din
 
         ad_connect ${ip_name}/enable_slice_$i/Dout ${ip_name}/dac_enable_$i
         ad_connect ${ip_name}/valid_slice_$i/Dout ${ip_name}/dac_valid_$i
-        ad_connect ${ip_name}/dac_data_$i ${ip_name}/data_concat/In$i
+        ad_connect ${ip_name}/dac_data_$i ${ip_name}/data_concat[expr $i/32]/In[expr $i%32]
 
       }
-      ad_connect ${ip_name}/data_concat/dout ${ip_name}/tpl_core/dac_ddata
+      if {$num_of_converters > 32} {
+        # wire all concatenators together
+        for {set i 0} {$i < $num_of_converters} {incr i 32} {
+          ad_connect ${ip_name}/data_concat[expr $i/32]/dout ${ip_name}/data_concat/In[expr $i/32]
+        }
+        ad_connect ${ip_name}/data_concat/dout ${ip_name}/dac_tpl_core/dac_ddata
+      } else {
+        ad_connect ${ip_name}/data_concat0/dout ${ip_name}/dac_tpl_core/dac_ddata
+      }
     } else {
-      ad_connect ${ip_name}/dac_data_0 ${ip_name}/tpl_core/dac_ddata
-      ad_connect ${ip_name}/tpl_core/enable ${ip_name}/dac_enable_0
-      ad_connect ${ip_name}/tpl_core/dac_valid ${ip_name}/dac_valid_0
+      ad_connect ${ip_name}/dac_data_0 ${ip_name}/dac_tpl_core/dac_ddata
+      ad_connect ${ip_name}/dac_tpl_core/enable ${ip_name}/dac_enable_0
+      ad_connect ${ip_name}/dac_tpl_core/dac_valid ${ip_name}/dac_valid_0
     }
-    ad_connect ${ip_name}/dac_dunf ${ip_name}/tpl_core/dac_dunf
+    ad_connect ${ip_name}/dac_dunf ${ip_name}/dac_tpl_core/dac_dunf
 
   } resulttext resultoptions]
 
@@ -315,7 +341,7 @@ proc adi_tpl_jesd204_tx_create {ip_name num_of_lanes num_of_converters samples_p
 
 
 #                                       L            M                 S                 N & NP
-proc adi_tpl_jesd204_rx_create {ip_name num_of_lanes num_of_converters samples_per_frame sample_width {link_layer_bytes_per_beat 4}} {
+proc adi_tpl_jesd204_rx_create {ip_name num_of_lanes num_of_converters samples_per_frame sample_width {link_layer_bytes_per_beat 4} {dma_sample_width 16}} {
 
 
   if {$num_of_lanes < 1 || $num_of_lanes > 16} {
@@ -357,22 +383,23 @@ proc adi_tpl_jesd204_rx_create {ip_name num_of_lanes num_of_converters samples_p
     }
 
     # Generic TPL core
-    ad_ip_instance ad_ip_jesd204_tpl_adc "${ip_name}/tpl_core" [list \
+    ad_ip_instance ad_ip_jesd204_tpl_adc "${ip_name}/adc_tpl_core" [list \
       NUM_LANES $num_of_lanes \
       NUM_CHANNELS $num_of_converters \
       SAMPLES_PER_FRAME $samples_per_frame \
       CONVERTER_RESOLUTION $sample_width \
       BITS_PER_SAMPLE $sample_width  \
       OCTETS_PER_BEAT $tpl_bytes_per_beat \
+      DMA_BITS_PER_SAMPLE $dma_sample_width
      ]
 
     if {$num_of_converters > 1} {
       # Slicer cores
       for {set i 0} {$i < $num_of_converters} {incr i} {
         ad_ip_instance xlslice ${ip_name}/data_slice_$i [list \
-          DIN_WIDTH [expr $sample_width*$samples_per_channel*$num_of_converters] \
-          DIN_FROM [expr $sample_width*$samples_per_channel*($i+1)-1] \
-          DIN_TO [expr $sample_width*$samples_per_channel*$i] \
+          DIN_WIDTH [expr $dma_sample_width*$samples_per_channel*$num_of_converters] \
+          DIN_FROM [expr $dma_sample_width*$samples_per_channel*($i+1)-1] \
+          DIN_TO [expr $dma_sample_width*$samples_per_channel*$i] \
         ]
 
         ad_ip_instance xlslice "${ip_name}/enable_slice_${i}" [list \
@@ -390,23 +417,23 @@ proc adi_tpl_jesd204_rx_create {ip_name num_of_lanes num_of_converters samples_p
 
     # Create connections
     # TPL configuration interface
-    ad_connect "${ip_name}/s_axi_aclk" "${ip_name}/tpl_core/s_axi_aclk"
-    ad_connect "${ip_name}/s_axi_aresetn" "${ip_name}/tpl_core/s_axi_aresetn"
-    ad_connect "${ip_name}/s_axi" "${ip_name}/tpl_core/s_axi"
+    ad_connect "${ip_name}/s_axi_aclk" "${ip_name}/adc_tpl_core/s_axi_aclk"
+    ad_connect "${ip_name}/s_axi_aresetn" "${ip_name}/adc_tpl_core/s_axi_aresetn"
+    ad_connect "${ip_name}/s_axi" "${ip_name}/adc_tpl_core/s_axi"
 
     # TPL - link layer
-    ad_connect ${ip_name}/tpl_core/link_clk ${ip_name}/link_clk
-    #ad_connect ${ip_name}/tpl_core/link ${ip_name}/link
-    ad_connect ${ip_name}/tpl_core/link_sof ${ip_name}/link_sof
-    ad_connect ${ip_name}/tpl_core/link_data ${ip_name}/link_data
-    ad_connect ${ip_name}/tpl_core/link_valid ${ip_name}/link_valid
+    ad_connect ${ip_name}/adc_tpl_core/link_clk ${ip_name}/link_clk
+    #ad_connect ${ip_name}/adc_tpl_core/link ${ip_name}/link
+    ad_connect ${ip_name}/adc_tpl_core/link_sof ${ip_name}/link_sof
+    ad_connect ${ip_name}/adc_tpl_core/link_data ${ip_name}/link_data
+    ad_connect ${ip_name}/adc_tpl_core/link_valid ${ip_name}/link_valid
 
     # TPL - app layer
     if {$num_of_converters > 1} {
       for {set i 0} {$i < $num_of_converters} {incr i} {
-        ad_connect ${ip_name}/tpl_core/adc_data ${ip_name}/data_slice_$i/Din
-        ad_connect ${ip_name}/tpl_core/enable ${ip_name}/enable_slice_$i/Din
-        ad_connect ${ip_name}/tpl_core/adc_valid ${ip_name}/valid_slice_$i/Din
+        ad_connect ${ip_name}/adc_tpl_core/adc_data ${ip_name}/data_slice_$i/Din
+        ad_connect ${ip_name}/adc_tpl_core/enable ${ip_name}/enable_slice_$i/Din
+        ad_connect ${ip_name}/adc_tpl_core/adc_valid ${ip_name}/valid_slice_$i/Din
 
         ad_connect ${ip_name}/data_slice_$i/Dout ${ip_name}/adc_data_$i
         ad_connect ${ip_name}/enable_slice_$i/Dout ${ip_name}/adc_enable_$i
@@ -414,11 +441,11 @@ proc adi_tpl_jesd204_rx_create {ip_name num_of_lanes num_of_converters samples_p
 
       }
     } else {
-      ad_connect ${ip_name}/tpl_core/adc_data ${ip_name}/adc_data_0
-      ad_connect ${ip_name}/tpl_core/enable ${ip_name}/adc_enable_0
-      ad_connect ${ip_name}/tpl_core/adc_valid ${ip_name}/adc_valid_0
+      ad_connect ${ip_name}/adc_tpl_core/adc_data ${ip_name}/adc_data_0
+      ad_connect ${ip_name}/adc_tpl_core/enable ${ip_name}/adc_enable_0
+      ad_connect ${ip_name}/adc_tpl_core/adc_valid ${ip_name}/adc_valid_0
     }
-    ad_connect ${ip_name}/adc_dovf ${ip_name}/tpl_core/adc_dovf
+    ad_connect ${ip_name}/adc_dovf ${ip_name}/adc_tpl_core/adc_dovf
 
   } resulttext resultoptions]
 

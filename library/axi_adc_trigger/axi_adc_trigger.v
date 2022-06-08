@@ -310,8 +310,10 @@ module axi_adc_trigger #(
   assign trigger_out = trigger_out_m2;
 
   always @(posedge clk) begin
-    data_a_trig <= (embedded_trigger == 1'h0) ? {data_a[14],data_a[14:0]} : {trigger_out_s,data_a[14:0]};
-    data_b_trig <= (embedded_trigger == 1'h0) ? {data_b[14],data_b[14:0]} : {trigger_out_s,data_b[14:0]};
+    if (data_out_valid) begin
+      data_a_trig <= (embedded_trigger == 1'h0) ? {data_a[14],data_a[14:0]} : {trigger_out_s,data_a[14:0]};
+      data_b_trig <= (embedded_trigger == 1'h0) ? {data_b[14],data_b[14:0]} : {trigger_out_s,data_b[14:0]};
+    end
 
     data_valid_a_trig <= data_valid_a;
     data_valid_b_trig <= data_valid_b;
@@ -479,7 +481,8 @@ module axi_adc_trigger #(
       4'h6: trigger_out_mixed = trigger_a | trigger_in;
       4'h7: trigger_out_mixed = trigger_b | trigger_in;
       4'h8: trigger_out_mixed = trigger_a | trigger_b | trigger_in;
-      default: trigger_out_mixed = trigger_a;
+      4'hf: trigger_out_mixed = 1'b0; // trigger disable
+      default: trigger_out_mixed = 1'b0;
     endcase
   end
 

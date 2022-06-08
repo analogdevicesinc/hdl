@@ -10,6 +10,7 @@ GENERIC_DEPS += jesd204_tx_ctrl.v
 GENERIC_DEPS += jesd204_tx_lane.v
 
 XILINX_DEPS += jesd204_tx_constr.ttcl
+XILINX_DEPS += jesd204_tx_ooc.ttcl
 XILINX_DEPS += jesd204_tx_header.v
 XILINX_DEPS += jesd204_tx_ip.tcl
 XILINX_DEPS += jesd204_tx_lane_64b.v
@@ -24,6 +25,7 @@ XILINX_DEPS += ../../jesd204/interfaces/jesd204_tx_ilas_config.xml
 XILINX_DEPS += ../../jesd204/interfaces/jesd204_tx_ilas_config_rtl.xml
 XILINX_DEPS += ../../jesd204/interfaces/jesd204_tx_status.xml
 XILINX_DEPS += ../../jesd204/interfaces/jesd204_tx_status_rtl.xml
+XILINX_DEPS += bd/bd.tcl
 
 XILINX_LIB_DEPS += jesd204/jesd204_common
 XILINX_LIB_DEPS += util_cdc

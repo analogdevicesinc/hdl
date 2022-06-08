@@ -4,7 +4,7 @@ source $ad_hdl_dir/library/scripts/adi_xilinx_device_info_enc.tcl
 # check tool version
 
 if {![info exists REQUIRED_VIVADO_VERSION]} {
-  set REQUIRED_VIVADO_VERSION "2019.1"
+  set REQUIRED_VIVADO_VERSION "2020.2"
 }
 
 if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
@@ -264,16 +264,29 @@ proc adi_ip_create {ip_name} {
   global IGNORE_VERSION_CHECK
 
   set VIVADO_VERSION [version -short]
-  if {[string compare $VIVADO_VERSION $REQUIRED_VIVADO_VERSION] != 0} {
-    puts -nonewline "CRITICAL WARNING: vivado version mismatch; "
-    puts -nonewline "expected $REQUIRED_VIVADO_VERSION, "
-    puts -nonewline "got $VIVADO_VERSION.\n"
+  if {$IGNORE_VERSION_CHECK} {
+    if {[string compare $VIVADO_VERSION $REQUIRED_VIVADO_VERSION] != 0} {
+      puts -nonewline "CRITICAL WARNING: vivado version mismatch; "
+      puts -nonewline "expected $REQUIRED_VIVADO_VERSION, "
+      puts -nonewline "got $VIVADO_VERSION.\n"
+    }
+  } else {
+    if {[string compare $VIVADO_VERSION $REQUIRED_VIVADO_VERSION] != 0} {
+      puts -nonewline "ERROR: vivado version mismatch; "
+      puts -nonewline "expected $REQUIRED_VIVADO_VERSION, "
+      puts -nonewline "got $VIVADO_VERSION.\n"
+      puts -nonewline "This ERROR message can be down-graded to CRITICAL WARNING by setting ADI_IGNORE_VERSION_CHECK environment variable to 1. Be aware that ADI will not support you, if you are using a different tool version.\n"
+      exit 2
+    }
   }
 
   create_project $ip_name . -force
 
   ## Load custom message severity definitions
-  source $ad_hdl_dir/projects/scripts/adi_xilinx_msg.tcl
+
+  if {![info exists ::env(ADI_DISABLE_MESSAGE_SUPPRESION)]} {
+    source $ad_hdl_dir/projects/scripts/adi_xilinx_msg.tcl
+  }
 
   set lib_dirs $ad_hdl_dir/library
   if {$ad_hdl_dir ne $ad_ghdl_dir} {
@@ -533,7 +546,7 @@ proc adi_add_device_spec_param {ip_param} {
   # set ranges or validation pairs (show x in GUI assign the corresponding y to HDL)
   if { [llength [subst $$list_pointer]] == 2 && [llength $j] == 4} {
     set_property -dict [list \
-      "value_validation_type" "range" \
+      "value_validation_type" "range_long" \
       "value_validation_range_minimum" [lindex [subst $$list_pointer] 0] \
       "value_validation_range_maximum" [lindex [subst $$list_pointer] 1] ] \
     [ipx::get_user_parameters $ip_param -of_objects $cc]

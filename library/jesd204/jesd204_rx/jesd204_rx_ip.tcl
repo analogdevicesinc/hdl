@@ -58,15 +58,22 @@ adi_ip_files jesd204_rx [list \
   "jesd204_ilas_monitor.v" \
   "align_mux.v" \
   "jesd204_lane_latency_monitor.v" \
+  "jesd204_rx_frame_align.v" \
   "jesd204_rx_constr.ttcl" \
+  "jesd204_rx_ooc.ttcl" \
   "jesd204_rx.v" \
+  "../../common/ad_pack.v" \
+  "bd/bd.tcl"
 ]
 
 adi_ip_properties_lite jesd204_rx
 adi_ip_ttcl jesd204_rx "jesd204_rx_constr.ttcl"
+adi_ip_ttcl jesd204_rx "jesd204_rx_ooc.ttcl"
+adi_ip_bd jesd204_rx "bd/bd.tcl"
 
 adi_ip_add_core_dependencies { \
   analog.com:user:jesd204_common:1.0 \
+  analog.com:user:util_cdc:1.0 \
 }
 
 set_property display_name "ADI JESD204 Receive" [ipx::current_core]
@@ -99,17 +106,21 @@ adi_add_bus "rx_cfg" "slave" \
   { \
     { "cfg_lanes_disable" "lanes_disable" } \
     { "cfg_links_disable" "links_disable" } \
-    { "cfg_beats_per_multiframe" "beats_per_multiframe" } \
+    { "cfg_octets_per_multiframe" "octets_per_multiframe" } \
     { "cfg_octets_per_frame" "octets_per_frame" } \
-    { "cfg_lmfc_offset" "lmfc_offset" } \
-    { "cfg_sysref_oneshot" "sysref_oneshot" } \
-    { "cfg_sysref_disable" "sysref_disable" } \
-    { "cfg_buffer_delay" "buffer_delay" } \
-    { "cfg_buffer_early_release" "buffer_early_release" } \
+    { "cfg_disable_scrambler" "disable_scrambler" } \
     { "cfg_disable_char_replacement" "disable_char_replacement" } \
+    { "cfg_frame_align_err_threshold" "frame_align_err_threshold" } \
+    { "device_cfg_octets_per_multiframe" "device_octets_per_multiframe" } \
+    { "device_cfg_octets_per_frame" "device_octets_per_frame" } \
+    { "device_cfg_beats_per_multiframe" "device_beats_per_multiframe" } \
+    { "device_cfg_lmfc_offset" "device_lmfc_offset" } \
+    { "device_cfg_sysref_oneshot" "device_sysref_oneshot" } \
+    { "device_cfg_sysref_disable" "device_sysref_disable" } \
+    { "device_cfg_buffer_delay" "device_buffer_delay" } \
+    { "device_cfg_buffer_early_release" "device_buffer_early_release" } \
     { "ctrl_err_statistics_reset" "err_statistics_reset" } \
     { "ctrl_err_statistics_mask" "err_statistics_mask" } \
-    { "cfg_disable_scrambler" "disable_scrambler" } \
   }
 
 adi_add_bus "rx_status" "master" \
@@ -122,6 +133,10 @@ adi_add_bus "rx_status" "master" \
     { "status_err_statistics_cnt" "err_statistics_cnt" } \
     { "status_lane_ifs_ready" "lane_ifs_ready" } \
     { "status_lane_latency" "lane_latency" } \
+    { "status_lane_frame_align_err_cnt" "lane_frame_align_err_cnt" } \
+    { "status_synth_params0" "synth_params0" } \
+    { "status_synth_params1" "synth_params1" } \
+    { "status_synth_params2" "synth_params2" } \
   }
 
 adi_add_bus "rx_ilas_config" "master" \
@@ -137,11 +152,14 @@ adi_add_bus "rx_event" "master" \
   "analog.com:interface:jesd204_rx_event_rtl:1.0" \
   "analog.com:interface:jesd204_rx_event:1.0" \
   { \
-    { "event_sysref_alignment_error" "sysref_alignment_error" } \
-    { "event_sysref_edge" "sysref_edge" } \
+    { "device_event_sysref_alignment_error" "sysref_alignment_error" } \
+    { "device_event_sysref_edge" "sysref_edge" } \
+    { "event_frame_alignment_error" "frame_alignment_error" } \
+    { "event_unexpected_lane_state_error" "unexpected_lane_state_error" } \
   }
 
-adi_add_bus_clock "clk" "rx_cfg:rx_ilas_config:rx_event:rx_status:rx_data" "reset"
+adi_add_bus_clock "clk" "rx_cfg:rx_ilas_config:rx_event:rx_status" "reset"
+adi_add_bus_clock "device_clk" "rx_data" "device_reset"
 
 adi_set_bus_dependency "rx_ilas_config" "rx_ilas_config" \
 	"(spirit:decode(id('MODELPARAM_VALUE.LINK_MODE')) = 1)"
@@ -178,9 +196,10 @@ set_property -dict [list \
 # Data width selection
 set param [ipx::get_user_parameters DATA_PATH_WIDTH -of_objects $cc]
 set_property -dict [list \
-  enablement_value false \
+  enablement_tcl_expr {$LINK_MODE==1} \
   value_tcl_expr {expr $LINK_MODE*4} \
 ] $param
+
 
 set param [ipx::add_user_parameter SYSREF_IOB $cc]
 set_property -dict {value_resolve_type user value_format bool value true} $param
@@ -191,6 +210,16 @@ set_property -dict [list \
   widget {checkBox} \
   show_label true \
 ] $param
+
+set clk_group [ipgui::add_group -name {Clock Domain Configuration} -component $cc \
+    -parent $page0 -display_name {Clock Domain Configuration}]
+
+set p [ipgui::get_guiparamspec -name "ASYNC_CLK" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $clk_group
+set_property -dict [list \
+  "display_name" "Link and Device Clock Asynchronous" \
+  "widget" "checkBox" \
+] $p
 
 ipx::create_xgui_files [ipx::current_core]
 ipx::save_core [ipx::current_core]

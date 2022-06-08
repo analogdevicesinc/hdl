@@ -240,8 +240,11 @@ module system_top (
   wire i2c_0_sda_in;
   wire i2c_0_sda_oe;
 
-  ALT_IOBUF scl_iobuf (.i(1'b0), .oe(i2c_0_scl_out), .o(i2c_0_scl_in), .io(afe_dac_scl));
-  ALT_IOBUF sda_iobuf (.i(1'b0), .oe(i2c_0_sda_oe), .o(i2c_0_sda_in), .io(afe_dac_sda));
+  ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_i2c (
+    .dio_t ({i2c_0_scl_out,i2c_0_sda_oe}),
+    .dio_i (2'b0),
+    .dio_o ({i2c_0_scl_in,i2c_0_sda_in}),
+    .dio_p ({afe_dac_scl,afe_dac_sda}));
 
   // Block design instance
 
@@ -251,6 +254,7 @@ module system_top (
     .sys_gpio_bd_out_port (gpio_o[31:0]),
     .sys_gpio_in_export (gpio_i[63:32]),
     .sys_gpio_out_export (gpio_o[63:32]),
+    .pr_rom_data_nc_rom_data('h0),
     .sys_hps_ddr_mem_ck (hps_ddr_clk_p),
     .sys_hps_ddr_mem_ck_n (hps_ddr_clk_n),
     .sys_hps_ddr_mem_a (hps_ddr_a),

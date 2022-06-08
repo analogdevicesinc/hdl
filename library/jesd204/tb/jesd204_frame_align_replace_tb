@@ -1,0 +1,7 @@
+#!/bin/bash
+
+SOURCE="jesd204_frame_align_replace_tb.v"
+SOURCE+=" ../jesd204_common/jesd204_frame_align_replace.v"
+
+cd `dirname $0`
+source ../../common/tb/run_tb.sh

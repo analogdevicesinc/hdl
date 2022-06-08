@@ -5,7 +5,8 @@ set TX_NUM_OF_CONVERTERS 4 ; # M
 set TX_SAMPLES_PER_FRAME 1 ; # S
 set TX_SAMPLE_WIDTH 16     ; # N/NP
 
-set TX_SAMPLES_PER_CHANNEL 2 ; # L * 32 / (M * N)
+set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 32 / \
+                                ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)] ; # L * 32 / (M * N)
 
 # RX parameters
 set RX_NUM_OF_LANES 2      ; # L
@@ -13,18 +14,20 @@ set RX_NUM_OF_CONVERTERS 4 ; # M
 set RX_SAMPLES_PER_FRAME 1 ; # S
 set RX_SAMPLE_WIDTH 16     ; # N/NP
 
-set RX_SAMPLES_PER_CHANNEL 1 ; # L * 32 / (M * N)
+set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 32 / \
+                                ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)] ; # L * 32 / (M * N)
 
 # RX Observation parameters
 set RX_OS_NUM_OF_LANES 2      ; # L
-set RX_OS_NUM_OF_CONVERTERS 4 ; # M
+set RX_OS_NUM_OF_CONVERTERS 2 ; # M
 set RX_OS_SAMPLES_PER_FRAME 1 ; # S
 set RX_OS_SAMPLE_WIDTH 16     ; # N/NP
 
-set RX_OS_SAMPLES_PER_CHANNEL 1 ;  # L * 32 / (M * N)
+set RX_OS_SAMPLES_PER_CHANNEL [expr $RX_OS_NUM_OF_LANES * 32 / \
+                                   ($RX_OS_NUM_OF_CONVERTERS * $RX_OS_SAMPLE_WIDTH)] ; # L * 32 / (M * N)
 
 set dac_fifo_name axi_adrv9009_dacfifo
-set dac_data_width [expr 32*$TX_NUM_OF_LANES]
+set dac_data_width [expr $TX_SAMPLE_WIDTH * $TX_NUM_OF_CONVERTERS * $TX_SAMPLES_PER_CHANNEL]
 set dac_dma_data_width 128
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
@@ -125,7 +128,9 @@ ad_ip_parameter axi_adrv9009_rx_dma CONFIG.ASYNC_CLK_DEST_REQ 1
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.ASYNC_CLK_SRC_DEST 1
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.ASYNC_CLK_REQ_SRC 1
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_adrv9009_rx_dma CONFIG.DMA_DATA_WIDTH_SRC [expr 32*$RX_NUM_OF_LANES]
+ad_ip_parameter axi_adrv9009_rx_dma CONFIG.DMA_DATA_WIDTH_SRC [expr $RX_SAMPLE_WIDTH * \
+                                                                    $RX_NUM_OF_CONVERTERS * \
+                                                                    $RX_SAMPLES_PER_CHANNEL]
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.MAX_BYTES_PER_BURST 256
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.AXI_SLICE_DEST true
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.AXI_SLICE_SRC true
@@ -168,7 +173,9 @@ ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.ASYNC_CLK_DEST_REQ 1
 ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.ASYNC_CLK_SRC_DEST 1
 ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.ASYNC_CLK_REQ_SRC 1
 ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.DMA_DATA_WIDTH_SRC [expr 32*$RX_NUM_OF_LANES];
+ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.DMA_DATA_WIDTH_SRC [expr $RX_OS_SAMPLE_WIDTH * \
+                                                                       $RX_OS_NUM_OF_CONVERTERS * \
+                                                                       $RX_OS_SAMPLES_PER_CHANNEL];
 ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.MAX_BYTES_PER_BURST 256
 ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.AXI_SLICE_DEST true
 ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.AXI_SLICE_SRC true

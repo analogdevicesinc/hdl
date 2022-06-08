@@ -297,6 +297,7 @@ ad_ip_instance util_vector_logic logic_or [list \
 ad_connect  logic_or/Op1  tx_fir_interpolator/valid_out_0
 ad_connect  logic_or/Op2  axi_ad9361/dac_valid_i1
 ad_connect  logic_or/Res  tx_upack/fifo_rd_en
+ad_connect  tx_upack/fifo_rd_underflow axi_ad9361/dac_dunf
 
 ad_connect axi_ad9361/up_dac_gpio_out interp_slice/Din
 ad_connect  tx_fir_interpolator/active interp_slice/Dout

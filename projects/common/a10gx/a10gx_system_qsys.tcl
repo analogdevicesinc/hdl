@@ -214,35 +214,20 @@ set_connection_parameter_value sys_cpu.instruction_master/sys_flash.uas arbitrat
 set_connection_parameter_value sys_cpu.instruction_master/sys_flash.uas baseAddress {0x11000000}
 set_connection_parameter_value sys_cpu.instruction_master/sys_flash.uas defaultConnection {0}
 
+
+
 # cpu/hps handling
 
 proc ad_cpu_interrupt {m_irq m_port} {
 
   add_connection sys_cpu.irq ${m_port}
   set_connection_parameter_value sys_cpu.irq/${m_port} irqNumber ${m_irq}
-
 }
 
-proc ad_cpu_interconnect {m_base m_port {avl_bridge ""} {avl_bridge_baseaddr 0x10000000}} {
+proc ad_cpu_interconnect {m_base m_port} {
 
-  if {[string equal ${avl_bridge} ""]} {
-    add_connection sys_cpu.data_master ${m_port}
-    set_connection_parameter_value sys_cpu.data_master/${m_port} baseAddress [expr ($m_base + 0x10000000)]
-  } else {
-    if {[lsearch -exact [get_instances] ${avl_bridge}] == -1} {
-      ## Instantiate the bridge and connect the interfaces
-      add_instance ${avl_bridge} altera_avalon_mm_bridge
-      set_instance_parameter_value ${avl_bridge} {USE_AUTO_ADDRESS_WIDTH} {1}
-      #set_instance_parameter_value ${avl_bridge} {ADDRESS_WIDTH} {17}
-      set_instance_parameter_value ${avl_bridge} {SYNC_RESET} {1}
-      add_connection sys_cpu.data_master ${avl_bridge}.s0
-      set_connection_parameter_value sys_cpu.data_master/${avl_bridge}.s0 baseAddress ${avl_bridge_baseaddr}
-      add_connection sys_clk.clk ${avl_bridge}.clk
-      add_connection sys_clk.clk_reset ${avl_bridge}.reset
-    }
-    add_connection ${avl_bridge}.m0 ${m_port}
-    set_connection_parameter_value ${avl_bridge}.m0/${m_port} baseAddress ${m_base}
-  }
+  add_connection sys_cpu.data_master ${m_port}
+  set_connection_parameter_value sys_cpu.data_master/${m_port} baseAddress [expr ($m_base + 0x10000000)]
 }
 
 proc ad_dma_interconnect {m_port} {
@@ -257,6 +242,7 @@ proc ad_dma_interconnect {m_port} {
   set_instance_parameter_value ${avm_bridge} {SYNC_RESET} {1}
   set_instance_parameter_value ${avm_bridge} {DATA_WIDTH} {128}
   set_instance_parameter_value ${avm_bridge} {USE_AUTO_ADDRESS_WIDTH} {1}
+
   add_connection sys_clk.clk ${avm_bridge}.clk
   add_connection sys_clk.clk_reset ${avm_bridge}.reset
   add_connection ${m_port} ${avm_bridge}.s0
@@ -413,6 +399,20 @@ add_connection sys_clk.clk sys_spi.clk
 add_interface sys_spi conduit end
 set_interface_property sys_spi EXPORT_OF sys_spi.external
 
+# system id
+
+add_instance axi_sysid_0 axi_sysid
+add_instance rom_sys_0 sysid_rom
+
+add_connection axi_sysid_0.if_rom_addr rom_sys_0.if_rom_addr
+add_connection rom_sys_0.if_rom_data axi_sysid_0.if_sys_rom_data
+add_connection sys_clk.clk rom_sys_0.if_clk
+add_connection sys_clk.clk axi_sysid_0.s_axi_clock
+add_connection sys_clk.clk_reset axi_sysid_0.s_axi_reset
+
+add_interface pr_rom_data_nc conduit end
+set_interface_property pr_rom_data_nc EXPORT_OF axi_sysid_0.if_pr_rom_data
+
 # base-addresses
 
 ad_cpu_interconnect 0x00180800 sys_cpu.debug_mem_slave
@@ -431,6 +431,7 @@ ad_cpu_interconnect 0x001814d0 sys_gpio_bd.s1
 ad_cpu_interconnect 0x001814c0 sys_gpio_in.s1
 ad_cpu_interconnect 0x00181500 sys_gpio_out.s1
 ad_cpu_interconnect 0x00181400 sys_spi.spi_control_port
+ad_cpu_interconnect 0x00190000 axi_sysid_0.s_axi
 
 # dma interconnects
 
@@ -452,4 +453,7 @@ ad_cpu_interrupt 7 sys_spi.irq
 add_interface sys_flash conduit end
 set_interface_property sys_flash EXPORT_OF sys_flash_bridge.out
 
+# architecture specific global variables
+
+set xcvr_reconfig_addr_width 10
 

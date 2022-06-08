@@ -52,10 +52,12 @@ module system_top (
   inout               pmod0_d5,
   inout               pmod0_d6,
   inout               pmod0_d7,
-  output              gpio_0_exp_n, //CS
+  output              gpio_0_exp_n, //CS0n
   output              gpio_0_exp_p, //MOSI
   input               gpio_1_exp_n, //MISO
   output              gpio_1_exp_p, //SCK
+  output              gpio_2_exp_n, //CS2n
+  output              gpio_2_exp_p, //CS2p
   output              led_gpio_0,
   output              led_gpio_1,
   output              led_gpio_2,
@@ -354,6 +356,8 @@ module system_top (
       3'h2: spi_3_to_8_csn = 8'b11111011;
       3'h3: spi_3_to_8_csn = 8'b11110111;
       3'h4: spi_3_to_8_csn = 8'b11101111;
+      3'h5: spi_3_to_8_csn = 8'b11011111;
+      3'h6: spi_3_to_8_csn = 8'b10111111;
       default: spi_3_to_8_csn = 8'b11111111;
     endcase
   end
@@ -375,6 +379,8 @@ module system_top (
   assign gpio_1_exp_p = spi_clk;
   assign gpio_0_exp_p = spi_3_to_8_csn[4] == 1'b0 ?  spi_mosi : 1'bZ;
   assign spi_miso_s = spi_3_to_8_csn[4] == 1'b0 ? gpio_1_exp_n : spi_miso;
+  assign gpio_2_exp_n = spi_3_to_8_csn[5];
+  assign gpio_2_exp_p = spi_3_to_8_csn[6];
 
   assign spi_csn_adrv9009_c = spi_fmcomms8_3_to_8_csn[0];
   assign spi_csn_adrv9009_d = spi_fmcomms8_3_to_8_csn[1];

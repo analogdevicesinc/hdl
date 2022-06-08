@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module upack2_underflow_tb;
+module underflow_tb;
   parameter VCD_FILE = {`__FILE__,"cd"};
   parameter NUM_OF_CHANNELS = 8;
   parameter SAMPLES_PER_CHANNEL = 4;

@@ -86,11 +86,11 @@ module fmcomms8_spi (
 
   // io buffer
 
-  IOBUF i_iobuf_sdio (
-    .T (spi_enable_s),
-    .I (spi_mosi),
-    .O (spi_miso_io),
-    .IO (spi_sdio));
+  ad_iobuf #(.DATA_WIDTH(1)) i_iobuf_sdio (
+    .dio_t (spi_enable_s),
+    .dio_i (spi_mosi),
+    .dio_o (spi_miso_io),
+    .dio_p (spi_sdio));
 
   assign spi_miso_o = spi_enable_s ? spi_miso_io : spi_miso_i;
 

@@ -7,4 +7,4 @@ SOURCE+=" ../jesd204_common/jesd204_scrambler.v"
 SOURCE+=" ../jesd204_common/pipeline_stage.v"
 
 cd `dirname $0`
-source run_tb.sh
+source ../../common/tb/run_tb.sh

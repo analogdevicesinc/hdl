@@ -56,6 +56,9 @@ module axi_dac_interpolate #(
   input                 dac_enable_b,
   output      [15:0]    dac_int_data_a,
   output      [15:0]    dac_int_data_b,
+  output                dac_valid_out_a,
+  output                dac_valid_out_b,
+  output                hold_last_sample,
   output                underflow,
 
   input       [ 1:0]    trigger_i,
@@ -130,6 +133,8 @@ module axi_dac_interpolate #(
   wire    [15:0]    dac_correction_coefficient_b;
   wire    [19:0]    trigger_config;
 
+  wire              en_start_trigger;
+  wire              en_stop_trigger;
   wire    [ 1:0]    en_trigger_pins;
   wire              en_trigger_adc;
   wire              en_trigger_la;
@@ -141,10 +146,14 @@ module axi_dac_interpolate #(
   wire    [ 1:0]    fall_edge;
 
   wire              trigger_active;
+  wire              trigger;
   wire              ext_trigger;
 
   wire              underflow_a;
   wire              underflow_b;
+
+  wire    [ 1:0]    lsample_hold_config;
+  wire              sync_stop_channels;
 
   // signal name changes
 
@@ -159,9 +168,11 @@ module axi_dac_interpolate #(
   assign rise_edge  = trigger_config[7:6];
   assign fall_edge  = trigger_config[9:8];
 
-  assign en_trigger_pins = trigger_config[17:16];
-  assign en_trigger_adc  = trigger_config[18];
-  assign en_trigger_la   = trigger_config[19];
+  assign en_start_trigger = trigger_config[14];
+  assign en_stop_trigger  = trigger_config[15];
+  assign en_trigger_pins  = trigger_config[17:16];
+  assign en_trigger_adc   = trigger_config[18];
+  assign en_trigger_la    = trigger_config[19];
 
   assign trigger_active = |trigger_config[19:16];
   assign trigger = (ext_trigger & en_trigger_pins) |
@@ -195,6 +206,9 @@ module axi_dac_interpolate #(
    low_level_trigger <= ~trigger_i_m3 & low_level;
   end
 
+  assign hold_last_sample = lsample_hold_config[0];
+  assign sync_stop_channels = lsample_hold_config[1];
+
   assign underflow = underflow_a | underflow_b;
 
   axi_dac_interpolate_filter #(
@@ -205,6 +219,8 @@ module axi_dac_interpolate #(
 
     .dac_data (dac_data_a),
     .dac_valid (dac_valid_a),
+    .dac_valid_out (dac_valid_out_a),
+    .sync_stop_channels (sync_stop_channels),
 
     .dac_enable (dac_enable_a),
     .dac_int_data (dac_int_data_a),
@@ -217,6 +233,8 @@ module axi_dac_interpolate #(
     .start_sync_channels (start_sync_channels),
     .trigger (trigger),
     .trigger_active (trigger_active),
+    .en_start_trigger (en_start_trigger),
+    .en_stop_trigger (en_stop_trigger),
     .dma_valid (dma_valid_a),
     .dma_valid_adjacent (dma_valid_b),
     .dac_correction_enable(dac_correction_enable_a),
@@ -231,6 +249,8 @@ module axi_dac_interpolate #(
 
     .dac_data (dac_data_b),
     .dac_valid (dac_valid_b),
+    .dac_valid_out (dac_valid_out_b),
+    .sync_stop_channels (sync_stop_channels),
     .underflow (underflow_b),
 
     .dac_enable (dac_enable_b),
@@ -243,6 +263,8 @@ module axi_dac_interpolate #(
     .start_sync_channels (start_sync_channels),
     .trigger (trigger),
     .trigger_active (trigger_active),
+    .en_start_trigger (en_start_trigger),
+    .en_stop_trigger (en_stop_trigger),
     .dma_valid (dma_valid_b),
     .dma_valid_adjacent (dma_valid_a),
     .dac_correction_enable(dac_correction_enable_b),
@@ -265,6 +287,7 @@ module axi_dac_interpolate #(
     .dac_correction_coefficient_a(dac_correction_coefficient_a),
     .dac_correction_coefficient_b(dac_correction_coefficient_b),
     .trigger_config (trigger_config),
+    .lsample_hold_config (lsample_hold_config),
 
     .up_rstn (up_rstn),
     .up_clk (up_clk),

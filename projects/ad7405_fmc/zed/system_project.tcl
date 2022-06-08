@@ -24,7 +24,7 @@ adi_project ad7405_fmc_zed
 if { $adc_port_type == 0 } {
 
   adi_project_files ad7405_fmc_zed [list \
-      "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
+      "$ad_hdl_dir/library/common/ad_iobuf.v" \
       "system_top_singlended.v" \
       "system_constr_singlended.xdc" \
       "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc"]
@@ -32,7 +32,7 @@ if { $adc_port_type == 0 } {
 } elseif { $adc_port_type == 1 } {
 
   adi_project_files ad7405_fmc_zed [list \
-      "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
+      "$ad_hdl_dir/library/common/ad_iobuf.v" \
       "system_top_differential.v" \
       "system_constr_differential.xdc" \
       "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc"]

@@ -1,15 +1,32 @@
+#
+# Parameter description:
+#   JESD_MODE : Used link layer encoder mode
+#      64B66B - 64b66b link layer defined in JESD 204C
+#      8B10B  - 8b10b link layer defined in JESD 204B
+#
+#   RX_LANE_RATE :  Lane rate of the Rx link ( MxFE to FPGA )
+#   TX_LANE_RATE :  Lane rate of the Tx link ( FPGA to MxFE )
+#   [RX/TX]_JESD_M : Number of converters per link
+#   [RX/TX]_JESD_L : Number of lanes per link
+#   [RX/TX]_JESD_NP : Number of bits per sample
+#   [RX/TX]_NUM_LINKS : Number of links, matches numer of MxFE devices
+#
+
+source ../../common/xilinx/data_offload_bd.tcl
 
 # Common parameter for TX and RX
-set JESD_MODE  $ad_project_params(JESD_MODE) 
+set JESD_MODE  $ad_project_params(JESD_MODE)
+set RX_LANE_RATE $ad_project_params(RX_LANE_RATE)
+set TX_LANE_RATE $ad_project_params(TX_LANE_RATE)
 
 if {$JESD_MODE == "8B10B"} {
-  set DATAPATH_WIDTH 4   
-  set ENCODER_SEL 1  
-  set ADI_PHY_SEL 1
+  set DATAPATH_WIDTH 4
+  set NP12_DATAPATH_WIDTH 6
+  set ENCODER_SEL 1
 } else {
-  set DATAPATH_WIDTH 8   
-  set ENCODER_SEL 2   
-  set ADI_PHY_SEL 0
+  set DATAPATH_WIDTH 8
+  set NP12_DATAPATH_WIDTH 12
+  set ENCODER_SEL 2
 }
 
 # These are max values specific to the board
@@ -29,14 +46,25 @@ set RX_JESD_L     $ad_project_params(RX_JESD_L)
 set RX_JESD_S     $ad_project_params(RX_JESD_S)
 set RX_JESD_NP    $ad_project_params(RX_JESD_NP)
 
-
 set RX_NUM_OF_LANES      [expr $RX_JESD_L * $RX_NUM_LINKS]
 set RX_NUM_OF_CONVERTERS [expr $RX_JESD_M * $RX_NUM_LINKS]
 set RX_SAMPLES_PER_FRAME $RX_JESD_S
 set RX_SAMPLE_WIDTH      $RX_JESD_NP
 
-set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 8*$DATAPATH_WIDTH / ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)]
+set RX_DMA_SAMPLE_WIDTH $RX_JESD_NP
+if {$RX_DMA_SAMPLE_WIDTH == 12} {
+  set RX_DMA_SAMPLE_WIDTH 16
+}
 
+set RX_JESD_F [expr ($RX_JESD_M*$RX_JESD_S*$RX_JESD_NP)/(8*$RX_JESD_L)]
+# For F=3,6,12 use dual clock
+if {$RX_JESD_F % 3 == 0} {
+  set RX_DATAPATH_WIDTH [expr max($RX_JESD_F,$NP12_DATAPATH_WIDTH)]
+} else {
+  set RX_DATAPATH_WIDTH [expr max($RX_JESD_F,$DATAPATH_WIDTH)]
+}
+
+set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 8* $RX_DATAPATH_WIDTH / ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)]
 
 # TX parameters
 set TX_NUM_LINKS $ad_project_params(TX_NUM_LINKS)
@@ -52,33 +80,49 @@ set TX_NUM_OF_CONVERTERS [expr $TX_JESD_M * $TX_NUM_LINKS]
 set TX_SAMPLES_PER_FRAME $TX_JESD_S
 set TX_SAMPLE_WIDTH      $TX_JESD_NP
 
-set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8*$DATAPATH_WIDTH / ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)]
+set TX_DMA_SAMPLE_WIDTH $TX_JESD_NP
+if {$TX_DMA_SAMPLE_WIDTH == 12} {
+  set TX_DMA_SAMPLE_WIDTH 16
+}
+
+set TX_JESD_F [expr ($TX_JESD_M*$TX_JESD_S*$TX_JESD_NP)/(8*$TX_JESD_L)]
+# For F=3,6,12 use dual clock
+if {$TX_JESD_F % 3 == 0} {
+  set TX_DATAPATH_WIDTH [expr max($TX_JESD_F,$NP12_DATAPATH_WIDTH)]
+} else {
+  set TX_DATAPATH_WIDTH [expr max($TX_JESD_F,$DATAPATH_WIDTH)]
+}
+
+set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8* $TX_DATAPATH_WIDTH / ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)]
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
 set adc_fifo_name mxfe_adc_fifo
-set adc_data_width [expr 8*$DATAPATH_WIDTH*$RX_NUM_OF_LANES]
-set adc_dma_data_width [expr 8*$DATAPATH_WIDTH*$RX_NUM_OF_LANES]
-set adc_fifo_address_width [expr int(ceil(log(($adc_fifo_samples_per_converter*$RX_NUM_OF_CONVERTERS) / ($adc_data_width/$RX_SAMPLE_WIDTH))/log(2)))]
+set adc_data_width [expr $RX_DMA_SAMPLE_WIDTH*$RX_NUM_OF_CONVERTERS*$RX_SAMPLES_PER_CHANNEL]
+set adc_dma_data_width $adc_data_width
+set adc_fifo_address_width [expr int(ceil(log(($adc_fifo_samples_per_converter*$RX_NUM_OF_CONVERTERS) / ($adc_data_width/$RX_DMA_SAMPLE_WIDTH))/log(2)))]
 
-set dac_fifo_name mxfe_dac_fifo
-set dac_data_width [expr 8*$DATAPATH_WIDTH*$TX_NUM_OF_LANES]
-set dac_dma_data_width [expr 8*$DATAPATH_WIDTH*$TX_NUM_OF_LANES]
-set dac_fifo_address_width [expr int(ceil(log(($dac_fifo_samples_per_converter*$TX_NUM_OF_CONVERTERS) / ($dac_data_width/$TX_SAMPLE_WIDTH))/log(2)))]
+set dac_data_offload_name mxfe_tx_data_offload
+set dac_data_width [expr $TX_DMA_SAMPLE_WIDTH*$TX_NUM_OF_CONVERTERS*$TX_SAMPLES_PER_CHANNEL]
+set dac_dma_data_width $dac_data_width
+set dac_fifo_address_width [expr int(ceil(log(($dac_fifo_samples_per_converter*$TX_NUM_OF_CONVERTERS) / ($dac_data_width/$TX_DMA_SAMPLE_WIDTH))/log(2)))]
 
 create_bd_port -dir I rx_device_clk
 create_bd_port -dir I tx_device_clk
 
-if {$ADI_PHY_SEL == 1} {
 # common xcvr
 ad_ip_instance util_adxcvr util_mxfe_xcvr
 ad_ip_parameter util_mxfe_xcvr CONFIG.CPLL_FBDIV_4_5 5
 ad_ip_parameter util_mxfe_xcvr CONFIG.TX_NUM_OF_LANES $TX_NUM_OF_LANES
 ad_ip_parameter util_mxfe_xcvr CONFIG.RX_NUM_OF_LANES $RX_NUM_OF_LANES
 ad_ip_parameter util_mxfe_xcvr CONFIG.RX_OUT_DIV 1
+ad_ip_parameter util_mxfe_xcvr CONFIG.LINK_MODE $ENCODER_SEL
+ad_ip_parameter util_mxfe_xcvr CONFIG.RX_LANE_RATE $RX_LANE_RATE
+ad_ip_parameter util_mxfe_xcvr CONFIG.TX_LANE_RATE $TX_LANE_RATE
 
 ad_ip_instance axi_adxcvr axi_mxfe_rx_xcvr
 ad_ip_parameter axi_mxfe_rx_xcvr CONFIG.ID 0
+ad_ip_parameter axi_mxfe_rx_xcvr CONFIG.LINK_MODE $ENCODER_SEL
 ad_ip_parameter axi_mxfe_rx_xcvr CONFIG.NUM_OF_LANES $RX_NUM_OF_LANES
 ad_ip_parameter axi_mxfe_rx_xcvr CONFIG.TX_OR_RX_N 0
 ad_ip_parameter axi_mxfe_rx_xcvr CONFIG.QPLL_ENABLE 0
@@ -87,88 +131,16 @@ ad_ip_parameter axi_mxfe_rx_xcvr CONFIG.SYS_CLK_SEL 0x3 ; # QPLL0
 
 ad_ip_instance axi_adxcvr axi_mxfe_tx_xcvr
 ad_ip_parameter axi_mxfe_tx_xcvr CONFIG.ID 0
+ad_ip_parameter axi_mxfe_tx_xcvr CONFIG.LINK_MODE $ENCODER_SEL
 ad_ip_parameter axi_mxfe_tx_xcvr CONFIG.NUM_OF_LANES $TX_NUM_OF_LANES
 ad_ip_parameter axi_mxfe_tx_xcvr CONFIG.TX_OR_RX_N 1
 ad_ip_parameter axi_mxfe_tx_xcvr CONFIG.QPLL_ENABLE 1
 ad_ip_parameter axi_mxfe_tx_xcvr CONFIG.SYS_CLK_SEL 0x3 ; # QPLL0
 
-} else {
-for {set i 0} {$i < $MAX_RX_LANES} {incr i} {
-create_bd_port -dir I rx_data_${i}_n
-create_bd_port -dir I rx_data_${i}_p
-}
-
-for {set i 0} {$i < $MAX_TX_LANES} {incr i} {
-create_bd_port -dir O tx_data_${i}_n
-create_bd_port -dir O tx_data_${i}_p
-}
-
-create_bd_port -dir I rx_sysref_0
-create_bd_port -dir I tx_sysref_0
-
-# unused, keep for port map compatibility with JESD204B
-create_bd_port -dir O  rx_sync_0
-create_bd_port -dir I  tx_sync_0
-
-# reset generator
-ad_ip_instance proc_sys_reset rx_device_clk_rstgen
-ad_connect  rx_device_clk rx_device_clk_rstgen/slowest_sync_clk
-ad_connect  $sys_cpu_resetn rx_device_clk_rstgen/ext_reset_in
-
-ad_ip_instance proc_sys_reset tx_device_clk_rstgen
-ad_connect  tx_device_clk tx_device_clk_rstgen/slowest_sync_clk
-ad_connect  $sys_cpu_resetn tx_device_clk_rstgen/ext_reset_in
-
-
-# Common PHYs
-# Use two instances since they are located on different SLRS
-set rx_rate $ad_project_params(RX_RATE) 
-set tx_rate $ad_project_params(TX_RATE) 
-set ref_clk_rate $ad_project_params(REF_CLK_RATE)
-
-ad_ip_instance jesd204_phy jesd204_phy_121 [list \
-  C_LANES {4} \
-  GT_Line_Rate $tx_rate \
-  GT_REFCLK_FREQ $ref_clk_rate \
-  DRPCLK_FREQ {50} \
-  C_PLL_SELECTION {1} \
-  RX_GT_Line_Rate $rx_rate \
-  RX_GT_REFCLK_FREQ $ref_clk_rate \
-  RX_PLL_SELECTION {1} \
-  GT_Location {X0Y8} \
-  Tx_JesdVersion {1} \
-  Rx_JesdVersion {1} \
-  Tx_use_64b {1} \
-  Rx_use_64b {1} \
-  Min_Line_Rate [expr min($rx_rate,$tx_rate)] \
-  Max_Line_Rate [expr max($rx_rate,$tx_rate)] \
-  Axi_Lite {true} \
-]
-
-ad_ip_instance jesd204_phy jesd204_phy_126 [list \
-  C_LANES {4} \
-  GT_Line_Rate $tx_rate \
-  GT_REFCLK_FREQ $ref_clk_rate \
-  DRPCLK_FREQ {50} \
-  C_PLL_SELECTION {1} \
-  RX_GT_Line_Rate $rx_rate \
-  RX_GT_REFCLK_FREQ $ref_clk_rate \
-  RX_PLL_SELECTION {1} \
-  GT_Location {X0Y28} \
-  Tx_JesdVersion {1} \
-  Rx_JesdVersion {1} \
-  Tx_use_64b {1} \
-  Rx_use_64b {1} \
-  Min_Line_Rate [expr min($rx_rate,$tx_rate)] \
-  Max_Line_Rate [expr max($rx_rate,$tx_rate)] \
-  Axi_Lite {true} \
-]
-}
-
 # adc peripherals
 
-
 adi_axi_jesd204_rx_create axi_mxfe_rx_jesd $RX_NUM_OF_LANES $RX_NUM_LINKS $ENCODER_SEL
+ad_ip_parameter axi_mxfe_rx_jesd/rx CONFIG.TPL_DATA_PATH_WIDTH $RX_DATAPATH_WIDTH
 
 ad_ip_parameter axi_mxfe_rx_jesd/rx CONFIG.SYSREF_IOB false
 ad_ip_parameter axi_mxfe_rx_jesd/rx CONFIG.NUM_INPUT_PIPELINE 1
@@ -177,12 +149,13 @@ adi_tpl_jesd204_rx_create rx_mxfe_tpl_core $RX_NUM_OF_LANES \
                                            $RX_NUM_OF_CONVERTERS \
                                            $RX_SAMPLES_PER_FRAME \
                                            $RX_SAMPLE_WIDTH \
-                                           $DATAPATH_WIDTH
+                                           $RX_DATAPATH_WIDTH \
+                                           $RX_DMA_SAMPLE_WIDTH
 
 ad_ip_instance util_cpack2 util_mxfe_cpack [list \
   NUM_OF_CHANNELS $RX_NUM_OF_CONVERTERS \
   SAMPLES_PER_CHANNEL $RX_SAMPLES_PER_CHANNEL \
-  SAMPLE_DATA_WIDTH $RX_SAMPLE_WIDTH \
+  SAMPLE_DATA_WIDTH $RX_DMA_SAMPLE_WIDTH \
 ]
 
 ad_adcfifo_create $adc_fifo_name $adc_data_width $adc_dma_data_width $adc_fifo_address_width
@@ -201,11 +174,10 @@ ad_ip_parameter axi_mxfe_rx_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_dma_data_width
 ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_DATA_WIDTH_DEST $adc_dma_data_width
 
-
-
 # dac peripherals
 
 adi_axi_jesd204_tx_create axi_mxfe_tx_jesd $TX_NUM_OF_LANES $TX_NUM_LINKS $ENCODER_SEL
+ad_ip_parameter axi_mxfe_tx_jesd/tx CONFIG.TPL_DATA_PATH_WIDTH $TX_DATAPATH_WIDTH
 
 ad_ip_parameter axi_mxfe_tx_jesd/tx CONFIG.SYSREF_IOB false
 #ad_ip_parameter axi_mxfe_tx_jesd/tx CONFIG.NUM_OUTPUT_PIPELINE 1
@@ -214,17 +186,26 @@ adi_tpl_jesd204_tx_create tx_mxfe_tpl_core $TX_NUM_OF_LANES \
                                            $TX_NUM_OF_CONVERTERS \
                                            $TX_SAMPLES_PER_FRAME \
                                            $TX_SAMPLE_WIDTH \
-                                           $DATAPATH_WIDTH
+                                           $TX_DATAPATH_WIDTH \
+                                           $TX_DMA_SAMPLE_WIDTH
 
-ad_ip_parameter tx_mxfe_tpl_core/tpl_core CONFIG.IQCORRECTION_DISABLE 0
+ad_ip_parameter tx_mxfe_tpl_core/dac_tpl_core CONFIG.IQCORRECTION_DISABLE 0
 
 ad_ip_instance util_upack2 util_mxfe_upack [list \
   NUM_OF_CHANNELS $TX_NUM_OF_CONVERTERS \
   SAMPLES_PER_CHANNEL $TX_SAMPLES_PER_CHANNEL \
-  SAMPLE_DATA_WIDTH $TX_SAMPLE_WIDTH \
+  SAMPLE_DATA_WIDTH $TX_DMA_SAMPLE_WIDTH \
 ]
 
-ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_dma_data_width $dac_fifo_address_width
+set data_offload_size [expr $dac_data_width / 8 * 2**$dac_fifo_address_width]
+ad_data_offload_create $dac_data_offload_name \
+                       1 \
+                       0 \
+                       $data_offload_size \
+                       $dac_data_width \
+                       $dac_data_width
+
+ad_connect $dac_data_offload_name/sync_ext GND
 
 ad_ip_instance axi_dmac axi_mxfe_tx_dma
 ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_TYPE_SRC 0
@@ -236,6 +217,7 @@ ad_ip_parameter axi_mxfe_tx_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_LENGTH_WIDTH 24
 ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_mxfe_tx_dma CONFIG.CYCLIC 1
+ad_ip_parameter axi_mxfe_tx_dma CONFIG.MAX_BYTES_PER_BURST 4096
 ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_DATA_WIDTH_SRC $dac_dma_data_width
 ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_dma_data_width
 
@@ -244,7 +226,6 @@ ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_dma_data_width
 create_bd_port -dir I ref_clk_q0
 create_bd_port -dir I ref_clk_q1
 
-if {$ADI_PHY_SEL == 1} {
 for {set i 0} {$i < [expr max($TX_NUM_OF_LANES,$RX_NUM_OF_LANES)]} {incr i} {
   set quad_index [expr int($i / 4)]
   ad_xcvrpll  ref_clk_q$quad_index  util_mxfe_xcvr/cpll_ref_clk_$i
@@ -256,34 +237,16 @@ for {set i 0} {$i < [expr max($TX_NUM_OF_LANES,$RX_NUM_OF_LANES)]} {incr i} {
 ad_xcvrpll  axi_mxfe_tx_xcvr/up_pll_rst util_mxfe_xcvr/up_qpll_rst_*
 ad_xcvrpll  axi_mxfe_rx_xcvr/up_pll_rst util_mxfe_xcvr/up_cpll_rst_*
 
-
 ad_connect  $sys_cpu_resetn util_mxfe_xcvr/up_rstn
 ad_connect  $sys_cpu_clk util_mxfe_xcvr/up_clk
 
-
 # connections (adc)
 
-ad_xcvrcon  util_mxfe_xcvr axi_mxfe_rx_xcvr axi_mxfe_rx_jesd {} rx_device_clk
+ad_xcvrcon  util_mxfe_xcvr axi_mxfe_rx_xcvr axi_mxfe_rx_jesd {} {} rx_device_clk
 
 # connections (dac)
-ad_xcvrcon  util_mxfe_xcvr axi_mxfe_tx_xcvr axi_mxfe_tx_jesd {} tx_device_clk
-} else {
-ad_connect  ref_clk_q0 jesd204_phy_121/cpll_refclk
-ad_connect  ref_clk_q0 jesd204_phy_121/qpll0_refclk
-ad_connect  ref_clk_q0 jesd204_phy_121/qpll1_refclk
-ad_connect  ref_clk_q1 jesd204_phy_126/cpll_refclk
-ad_connect  ref_clk_q1 jesd204_phy_126/qpll0_refclk
-ad_connect  ref_clk_q1 jesd204_phy_126/qpll1_refclk
+ad_xcvrcon  util_mxfe_xcvr axi_mxfe_tx_xcvr axi_mxfe_tx_jesd {} {} tx_device_clk
 
-# device clock domain
-ad_connect  tx_device_clk jesd204_phy_121/tx_core_clk
-ad_connect  tx_device_clk jesd204_phy_126/tx_core_clk
-ad_connect  tx_device_clk axi_mxfe_tx_jesd/device_clk
-
-ad_connect  rx_device_clk jesd204_phy_121/rx_core_clk
-ad_connect  rx_device_clk jesd204_phy_126/rx_core_clk
-ad_connect  rx_device_clk axi_mxfe_rx_jesd/device_clk
-}
 # device clock domain
 ad_connect  rx_device_clk rx_mxfe_tpl_core/link_clk
 ad_connect  rx_device_clk util_mxfe_cpack/clk
@@ -291,90 +254,29 @@ ad_connect  rx_device_clk mxfe_adc_fifo/adc_clk
 
 ad_connect  tx_device_clk tx_mxfe_tpl_core/link_clk
 ad_connect  tx_device_clk util_mxfe_upack/clk
-ad_connect  tx_device_clk mxfe_dac_fifo/dac_clk
+ad_connect  tx_device_clk $dac_data_offload_name/m_axis_aclk
 
-# dma clock domain
+# Clocks
 ad_connect  $sys_cpu_clk mxfe_adc_fifo/dma_clk
-ad_connect  $sys_dma_clk mxfe_dac_fifo/dma_clk
+ad_connect  $sys_dma_clk $dac_data_offload_name/s_axis_aclk
 
 ad_connect  $sys_cpu_clk axi_mxfe_rx_dma/s_axis_aclk
 ad_connect  $sys_dma_clk axi_mxfe_tx_dma/m_axis_aclk
+ad_connect  $sys_cpu_clk $dac_data_offload_name/s_axi_aclk
 
-# connect resets
+# Resets
 ad_connect  rx_device_clk_rstgen/peripheral_reset mxfe_adc_fifo/adc_rst
-ad_connect  tx_device_clk_rstgen/peripheral_reset mxfe_dac_fifo/dac_rst
+ad_connect  $sys_dma_resetn $dac_data_offload_name/s_axis_aresetn
+ad_connect  tx_device_clk_rstgen/peripheral_aresetn  $dac_data_offload_name/m_axis_aresetn
 ad_connect  rx_device_clk_rstgen/peripheral_reset util_mxfe_cpack/reset
 ad_connect  tx_device_clk_rstgen/peripheral_reset util_mxfe_upack/reset
 ad_connect  $sys_cpu_resetn axi_mxfe_rx_dma/m_dest_axi_aresetn
 ad_connect  $sys_dma_resetn axi_mxfe_tx_dma/m_src_axi_aresetn
-ad_connect  $sys_dma_reset  mxfe_dac_fifo/dma_rst
+ad_connect $sys_cpu_resetn $dac_data_offload_name/s_axi_aresetn
 
-if {$ADI_PHY_SEL == 0} {
-ad_connect  $sys_cpu_reset jesd204_phy_121/tx_sys_reset
-ad_connect  $sys_cpu_reset jesd204_phy_126/tx_sys_reset
-
-ad_connect  $sys_cpu_reset jesd204_phy_121/rx_sys_reset 
-ad_connect  $sys_cpu_reset jesd204_phy_126/rx_sys_reset
-
-ad_connect  axi_mxfe_tx_jesd/tx_axi/core_reset jesd204_phy_121/tx_reset_gt
-ad_connect  axi_mxfe_rx_jesd/rx_axi/core_reset jesd204_phy_121/rx_reset_gt
-ad_connect  axi_mxfe_tx_jesd/tx_axi/core_reset jesd204_phy_126/tx_reset_gt
-ad_connect  axi_mxfe_rx_jesd/rx_axi/core_reset jesd204_phy_126/rx_reset_gt
-}
 #
 # connect adc dataflow
 #
-if {$ADI_PHY_SEL == 0} {
-# Rx Physical lanes to PHY
-ad_ip_instance xlconcat rx_concat_3_0_p [list NUM_PORTS {4}]
-ad_ip_instance xlconcat rx_concat_3_0_n [list NUM_PORTS {4}]
-
-ad_connect  rx_data_0_p rx_concat_3_0_p/In0
-ad_connect  rx_data_1_p rx_concat_3_0_p/In1
-ad_connect  rx_data_2_p rx_concat_3_0_p/In2
-ad_connect  rx_data_3_p rx_concat_3_0_p/In3
-
-ad_connect  rx_data_0_n rx_concat_3_0_n/In0
-ad_connect  rx_data_1_n rx_concat_3_0_n/In1
-ad_connect  rx_data_2_n rx_concat_3_0_n/In2
-ad_connect  rx_data_3_n rx_concat_3_0_n/In3
-
-ad_connect  jesd204_phy_121/rxp_in rx_concat_3_0_p/dout
-ad_connect  jesd204_phy_121/rxn_in rx_concat_3_0_n/dout
-
-ad_ip_instance xlconcat rx_concat_7_4_p [list NUM_PORTS {4}]
-ad_ip_instance xlconcat rx_concat_7_4_n [list NUM_PORTS {4}]
-
-ad_connect  rx_data_4_p rx_concat_7_4_p/In0
-ad_connect  rx_data_5_p rx_concat_7_4_p/In1
-ad_connect  rx_data_6_p rx_concat_7_4_p/In2
-ad_connect  rx_data_7_p rx_concat_7_4_p/In3
-
-ad_connect  rx_data_4_n rx_concat_7_4_n/In0
-ad_connect  rx_data_5_n rx_concat_7_4_n/In1
-ad_connect  rx_data_6_n rx_concat_7_4_n/In2
-ad_connect  rx_data_7_n rx_concat_7_4_n/In3
-
-ad_connect  jesd204_phy_126/rxp_in rx_concat_7_4_p/dout
-ad_connect  jesd204_phy_126/rxn_in rx_concat_7_4_n/dout
-
-# Connect PHY to Link Layer
-set logic_lane(0) jesd204_phy_121/gt0_rx
-set logic_lane(1) jesd204_phy_121/gt1_rx
-set logic_lane(2) jesd204_phy_121/gt2_rx
-set logic_lane(3) jesd204_phy_121/gt3_rx
-set logic_lane(4) jesd204_phy_126/gt0_rx
-set logic_lane(5) jesd204_phy_126/gt1_rx
-set logic_lane(6) jesd204_phy_126/gt2_rx
-set logic_lane(7) jesd204_phy_126/gt3_rx
-for {set j 0}  {$j < $RX_NUM_OF_LANES} {incr j} {
- ad_connect  axi_mxfe_rx_jesd/rx_phy$j $logic_lane($j)
-}
-
-
-ad_connect  rx_sysref_0  axi_mxfe_rx_jesd/sysref
-
-}
 # Connect Link Layer to Transport Layer
 #
 ad_connect  axi_mxfe_rx_jesd/rx_sof rx_mxfe_tpl_core/link_sof
@@ -396,56 +298,8 @@ ad_connect  mxfe_adc_fifo/dma_wdata axi_mxfe_rx_dma/s_axis_data
 ad_connect  mxfe_adc_fifo/dma_wready axi_mxfe_rx_dma/s_axis_ready
 ad_connect  mxfe_adc_fifo/dma_xfer_req axi_mxfe_rx_dma/s_axis_xfer_req
 
-
 # connect dac dataflow
 #
-if {$ADI_PHY_SEL == 0} {
-# Tx Physical lanes to PHY
-#
-for {set i 0} {$i < $MAX_TX_LANES} {incr i} {
-  ad_ip_instance xlslice txp_out_slice_$i [list \
-    DIN_TO [expr $i % 4] \
-    DIN_FROM [expr $i % 4] \
-    DIN_WIDTH {4} \
-    DOUT_WIDTH {1} \
-  ]
-  ad_ip_instance xlslice txn_out_slice_$i [list \
-    DIN_TO [expr $i % 4] \
-    DIN_FROM [expr $i % 4] \
-    DIN_WIDTH {4} \
-    DOUT_WIDTH {1} \
-  ]
-}
-
-for {set i 0} {$i < 4} {incr i} {
-  ad_connect  jesd204_phy_121/txn_out  txn_out_slice_$i/Din
-  ad_connect  jesd204_phy_121/txp_out  txp_out_slice_$i/Din
-  ad_connect  jesd204_phy_126/txn_out  txn_out_slice_[expr $i+4]/Din
-  ad_connect  jesd204_phy_126/txp_out  txp_out_slice_[expr $i+4]/Din
-}
-
-
-for {set i 0} {$i < $MAX_TX_LANES} {incr i} {
-  ad_connect  txn_out_slice_$i/Dout tx_data_${i}_n
-  ad_connect  txp_out_slice_$i/Dout tx_data_${i}_p
-}
-
-# Tx connect PHY to Link Layer
-set logic_lane(0) jesd204_phy_121/gt0_tx
-set logic_lane(1) jesd204_phy_121/gt1_tx
-set logic_lane(2) jesd204_phy_121/gt2_tx
-set logic_lane(3) jesd204_phy_121/gt3_tx
-set logic_lane(4) jesd204_phy_126/gt0_tx
-set logic_lane(5) jesd204_phy_126/gt1_tx
-set logic_lane(6) jesd204_phy_126/gt2_tx
-set logic_lane(7) jesd204_phy_126/gt3_tx
-for {set j 0}  {$j < $TX_NUM_OF_LANES} {incr j} {
- ad_connect  axi_mxfe_tx_jesd/tx_phy$j $logic_lane($j)
-}
-
-ad_connect  tx_sysref_0  axi_mxfe_tx_jesd/sysref
-
-}
 
 # Connect Link Layer to Transport Layer
 #
@@ -457,44 +311,28 @@ for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
   ad_connect  tx_mxfe_tpl_core/dac_enable_$i  util_mxfe_upack/enable_$i
 }
 
-# TODO: Add streaming AXI interface for DAC FIFO
+ad_connect $dac_data_offload_name/s_axis axi_mxfe_tx_dma/m_axis
+
+ad_connect  util_mxfe_upack/s_axis $dac_data_offload_name/m_axis
 ad_connect  util_mxfe_upack/s_axis_valid VCC
-ad_connect  util_mxfe_upack/s_axis_ready mxfe_dac_fifo/dac_valid
-ad_connect  util_mxfe_upack/s_axis_data mxfe_dac_fifo/dac_data
 
-ad_connect  mxfe_dac_fifo/dma_valid axi_mxfe_tx_dma/m_axis_valid
-ad_connect  mxfe_dac_fifo/dma_data axi_mxfe_tx_dma/m_axis_data
-ad_connect  mxfe_dac_fifo/dma_ready axi_mxfe_tx_dma/m_axis_ready
-ad_connect  mxfe_dac_fifo/dma_xfer_req axi_mxfe_tx_dma/m_axis_xfer_req
-ad_connect  mxfe_dac_fifo/dma_xfer_last axi_mxfe_tx_dma/m_axis_last
-ad_connect  mxfe_dac_fifo/dac_dunf tx_mxfe_tpl_core/dac_dunf
-
-create_bd_port -dir I dac_fifo_bypass
-ad_connect  mxfe_dac_fifo/bypass dac_fifo_bypass
-
+ad_connect $dac_data_offload_name/init_req axi_mxfe_tx_dma/m_axis_xfer_req
+ad_connect tx_mxfe_tpl_core/dac_dunf GND
 
 # interconnect (cpu)
-if {$ADI_PHY_SEL == 1} {
 ad_cpu_interconnect 0x44a60000 axi_mxfe_rx_xcvr
 ad_cpu_interconnect 0x44b60000 axi_mxfe_tx_xcvr
-} else {
-ad_cpu_interconnect 0x44a60000 jesd204_phy_121
-ad_cpu_interconnect 0x44b60000 jesd204_phy_126
-}
 ad_cpu_interconnect 0x44a10000 rx_mxfe_tpl_core
 ad_cpu_interconnect 0x44b10000 tx_mxfe_tpl_core
 ad_cpu_interconnect 0x44a90000 axi_mxfe_rx_jesd
 ad_cpu_interconnect 0x44b90000 axi_mxfe_tx_jesd
 ad_cpu_interconnect 0x7c420000 axi_mxfe_rx_dma
 ad_cpu_interconnect 0x7c430000 axi_mxfe_tx_dma
+ad_cpu_interconnect 0x7c440000 $dac_data_offload_name
 
 # interconnect (gt/adc)
 
-if {$ADI_PHY_SEL == 1} {
-ad_mem_hp0_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP0
 ad_mem_hp0_interconnect $sys_cpu_clk axi_mxfe_rx_xcvr/m_axi
-}
-
 ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
 ad_mem_hp1_interconnect $sys_cpu_clk axi_mxfe_rx_dma/m_dest_axi
 ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2
@@ -507,8 +345,6 @@ ad_cpu_interrupt ps-12 mb-13 axi_mxfe_tx_dma/irq
 ad_cpu_interrupt ps-11 mb-14 axi_mxfe_rx_jesd/irq
 ad_cpu_interrupt ps-10 mb-15 axi_mxfe_tx_jesd/irq
 
-
-if {$ADI_PHY_SEL == 1} {
 # Create dummy outputs for unused Tx lanes
 for {set i $TX_NUM_OF_LANES} {$i < 8} {incr i} {
   create_bd_port -dir O tx_data_${i}_n
@@ -518,5 +354,4 @@ for {set i $TX_NUM_OF_LANES} {$i < 8} {incr i} {
 for {set i $RX_NUM_OF_LANES} {$i < 8} {incr i} {
   create_bd_port -dir I rx_data_${i}_n
   create_bd_port -dir I rx_data_${i}_p
-}
 }

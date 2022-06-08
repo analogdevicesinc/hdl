@@ -1,6 +1,7 @@
 
 source ../common/adrv9009zu11eg_bd.tcl
 source ../common/adrv2crr_fmc_bd.tcl
+source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 create_bd_port -dir I ref_clk_c
 create_bd_port -dir I ref_clk_d
@@ -76,8 +77,8 @@ ad_xcvrpll  axi_adrv9009_som_obs_xcvr/up_pll_rst util_adrv9009_som_xcvr/up_cpll_
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
 ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/mem_init_sys.txt"
 ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
-set sys_cstring "sys rom custom string placeholder"
-sysid_gen_sys_init_file $sys_cstring
+
+sysid_gen_sys_init_file
 
 ad_cpu_interconnect 0x46000000 axi_fmcomms8_gpio
 

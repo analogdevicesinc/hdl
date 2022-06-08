@@ -7,7 +7,7 @@ adi_project ad9208_dual_ebz_vcu118
 adi_project_files ad9208_dual_ebz_vcu118 [list \
   "system_top.v" \
   "system_constr.xdc"\
-  "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
+  "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/daq3/common/daq3_spi.v" \
   "$ad_hdl_dir/projects/common/vcu118/vcu118_system_constr.xdc" ]
 

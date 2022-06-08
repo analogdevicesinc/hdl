@@ -55,8 +55,8 @@ encounter.
 
 ## Documenation
 
- - [JESD204B overview](https://wiki.analog.com/resources/fpga/peripherals/jesd204)
- - [Analog Devices JESD204B Transmit Peripheral](https://wiki.analog.com/resources/fpga/peripherals/jesd204/axi_jesd204_tx)
- - [Analog Devices JESD204B Receive Peripheral](https://wiki.analog.com/resources/fpga/peripherals/jesd204/axi_jesd204_rx)
+ - [JESD204B/C overview](https://wiki.analog.com/resources/fpga/peripherals/jesd204)
+ - [Analog Devices JESD204B/C Transmit Peripheral](https://wiki.analog.com/resources/fpga/peripherals/jesd204/axi_jesd204_tx)
+ - [Analog Devices JESD204B/C Receive Peripheral](https://wiki.analog.com/resources/fpga/peripherals/jesd204/axi_jesd204_rx)
 
 

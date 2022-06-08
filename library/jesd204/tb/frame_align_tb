@@ -1,0 +1,23 @@
+#!/bin/bash
+
+SOURCE="frame_align_tb.v"
+SOURCE+=" ../jesd204_common/jesd204_lmfc.v ../jesd204_common/jesd204_scrambler.v ../jesd204_common/jesd204_eof_generator.v"
+SOURCE+=" ../jesd204_common/pipeline_stage.v ../jesd204_common/jesd204_frame_mark.v ../jesd204_common/jesd204_frame_align_replace.v"
+SOURCE+=" ../jesd204_rx/jesd204_rx.v ../jesd204_rx/jesd204_rx_lane.v"
+SOURCE+=" ../jesd204_rx/jesd204_ilas_monitor.v ../jesd204_rx/align_mux.v ../jesd204_rx/jesd204_rx_cgs.v"
+SOURCE+=" ../jesd204_rx/jesd204_rx_ctrl.v ../jesd204_rx/elastic_buffer.v ../jesd204_rx/jesd204_lane_latency_monitor.v"
+SOURCE+=" ../jesd204_rx/jesd204_rx_frame_align.v"
+SOURCE+=" ../jesd204_rx_static_config/jesd204_rx_static_config.v"
+SOURCE+=" ../jesd204_tx/jesd204_tx.v ../jesd204_tx/jesd204_tx_ctrl.v ../jesd204_tx/jesd204_tx_lane.v"
+SOURCE+=" ../jesd204_tx_static_config/jesd204_tx_static_config.v"
+SOURCE+=" ../jesd204_tx_static_config/jesd204_ilas_cfg_static.v"
+SOURCE+=" ../../util_cdc/sync_bits.v"
+SOURCE+=" ../../util_cdc/sync_event.v"
+SOURCE+=" ../../common/ad_mem.v"
+SOURCE+=" ../../common/ad_mem_asym.v" 
+SOURCE+=" ../../util_axis_fifo/util_axis_fifo_address_generator.v"
+SOURCE+=" ../../util_axis_fifo/util_axis_fifo.v" 
+
+
+cd `dirname $0`
+source ../../common/tb/run_tb.sh

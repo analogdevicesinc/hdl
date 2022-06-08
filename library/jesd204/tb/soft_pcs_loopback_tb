@@ -6,4 +6,4 @@ SOURCE+=" ../jesd204_soft_pcs_rx/jesd204_soft_pcs_rx.v ../jesd204_soft_pcs_rx/je
 SOURCE+=" ../jesd204_soft_pcs_rx/jesd204_pattern_align.v"
 
 cd `dirname $0`
-source run_tb.sh
+source ../../common/tb/run_tb.sh

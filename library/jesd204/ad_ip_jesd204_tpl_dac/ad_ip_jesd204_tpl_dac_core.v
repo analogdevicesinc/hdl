@@ -26,6 +26,7 @@
 module ad_ip_jesd204_tpl_dac_core #(
   parameter DATAPATH_DISABLE = 0,
   parameter IQCORRECTION_DISABLE = 1,
+  parameter XBAR_ENABLE = 1,
   parameter NUM_LANES = 1,
   parameter NUM_CHANNELS = 1,
   parameter BITS_PER_SAMPLE = 16,
@@ -34,10 +35,10 @@ module ad_ip_jesd204_tpl_dac_core #(
   parameter OCTETS_PER_BEAT = 4,
   parameter DATA_PATH_WIDTH = 4,
   parameter LINK_DATA_WIDTH = NUM_LANES * OCTETS_PER_BEAT * 8,
-  parameter DMA_DATA_WIDTH = DATA_PATH_WIDTH * BITS_PER_SAMPLE * NUM_CHANNELS,
   parameter DDS_TYPE = 1,
   parameter DDS_CORDIC_DW = 16,
-  parameter DDS_CORDIC_PHASE_DW = 16
+  parameter DDS_CORDIC_PHASE_DW = 16,
+  parameter EXT_SYNC = 0
 ) (
   // dac interface
   input clk,
@@ -48,14 +49,20 @@ module ad_ip_jesd204_tpl_dac_core #(
 
   // dma interface
   output [NUM_CHANNELS-1:0] dac_valid,
-  input [DMA_DATA_WIDTH-1:0] dac_ddata,
+  input [LINK_DATA_WIDTH-1:0] dac_ddata,
 
   // Configuration interface
 
   input dac_sync,
+
+  input dac_sync_in,
+
+  output dac_sync_in_status,
+
   input dac_dds_format,
 
   input [NUM_CHANNELS*4-1:0] dac_data_sel,
+  input [NUM_CHANNELS-1:0]   dac_mask_enable,
 
   input [NUM_CHANNELS*16-1:0] dac_dds_scale_0,
   input [NUM_CHANNELS*16-1:0] dac_dds_init_0,
@@ -71,19 +78,40 @@ module ad_ip_jesd204_tpl_dac_core #(
   input [NUM_CHANNELS*16-1:0] dac_iqcor_coeff_1,
   input [NUM_CHANNELS*16-1:0] dac_iqcor_coeff_2,
 
+  input [NUM_CHANNELS*8-1:0] dac_src_chan_sel,
+
   output [NUM_CHANNELS-1:0] enable
 );
 
   localparam DAC_CDW = CONVERTER_RESOLUTION * DATA_PATH_WIDTH;
   localparam DAC_DATA_WIDTH = DAC_CDW * NUM_CHANNELS;
-  localparam DMA_CDW = DATA_PATH_WIDTH * BITS_PER_SAMPLE;
-
-  assign link_valid = 1'b1;
 
   wire [DAC_DATA_WIDTH-1:0] dac_data_s;
+  wire [DAC_DATA_WIDTH-1:0] dac_ddata_muxed;
 
   wire [DAC_CDW-1:0] pn7_data;
   wire [DAC_CDW-1:0] pn15_data;
+
+  reg dac_sync_in_d1 ='d0;
+  reg dac_sync_in_d2 ='d0;
+  reg dac_sync_in_arm ='d0;
+  reg dac_sync_d1 = 'd0;
+
+  assign link_valid = 1'b1;
+  assign dac_sync_in_status = dac_sync_in_arm;
+
+  always @(posedge clk) begin
+    dac_sync_d1 <= dac_sync;
+    dac_sync_in_d1 <= dac_sync_in;
+    dac_sync_in_d2 <= dac_sync_in_d1;
+    if ((~dac_sync_d1&dac_sync) == 1'b1) begin
+      dac_sync_in_arm <= ~dac_sync_in_arm;
+    end else if ((~dac_sync_in_d2&dac_sync_in_d1) == 1'b1) begin
+      dac_sync_in_arm <= 1'b0;
+    end else if (EXT_SYNC == 1'b0) begin
+      dac_sync_in_arm <= 1'b0;
+    end
+  end
 
   // device interface
 
@@ -107,7 +135,7 @@ module ad_ip_jesd204_tpl_dac_core #(
     .CONVERTER_RESOLUTION (CONVERTER_RESOLUTION)
   ) i_pn_gen (
     .clk (clk),
-    .reset (dac_sync),
+    .reset (dac_sync_in_arm),
 
     .pn7_data (pn7_data),
     .pn15_data (pn15_data)
@@ -115,8 +143,7 @@ module ad_ip_jesd204_tpl_dac_core #(
 
   // dac valid
 
-  assign dac_valid = {NUM_CHANNELS{1'b1}};
-
+  assign dac_valid = {NUM_CHANNELS{~dac_sync_in_arm}};
 
   generate
   genvar i;
@@ -127,6 +154,24 @@ module ad_ip_jesd204_tpl_dac_core #(
     // Assuming channel count is even other case do not pair channels
     localparam IQ_PAIR_CH_INDEX = (NUM_CHANNELS%2) ? i :
                                   (i%2) ? i-1 : i+1;
+
+    if (XBAR_ENABLE == 1) begin
+
+      // NUM_CHANNELS : 1  mux
+      ad_mux #(
+        .CH_W (DAC_CDW),
+        .CH_CNT (NUM_CHANNELS),
+        .EN_REG (1)
+      ) channel_mux (
+        .clk (clk),
+        .data_in (dac_ddata),
+        .ch_sel (dac_src_chan_sel[8*i+:8]),
+        .data_out (dac_ddata_muxed[DAC_CDW*i+:DAC_CDW])
+      );
+
+    end else begin
+      assign dac_ddata_muxed[DAC_CDW*i+:DAC_CDW] = dac_ddata[DAC_CDW*i+:DAC_CDW];
+    end
 
     ad_ip_jesd204_tpl_dac_channel #(
       .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
@@ -142,15 +187,16 @@ module ad_ip_jesd204_tpl_dac_core #(
       .clk (clk),
       .dac_enable (enable[i]),
       .dac_data (dac_data_s[DAC_CDW*i+:DAC_CDW]),
-      .dma_data (dac_ddata[DMA_CDW*i+:DMA_CDW]),
+      .dma_data (dac_ddata_muxed[DAC_CDW*i+:DAC_CDW]),
 
       .pn7_data (pn7_data),
       .pn15_data (pn15_data),
 
-      .dac_data_sync (dac_sync),
+      .dac_data_sync (dac_sync_in_arm),
       .dac_dds_format (dac_dds_format),
 
       .dac_data_sel (dac_data_sel[4*i+:4]),
+      .dac_mask_enable (dac_mask_enable[i]),
 
       .dac_dds_scale_0 (dac_dds_scale_0[16*i+:16]),
       .dac_dds_init_0 (dac_dds_init_0[16*i+:16]),
@@ -165,7 +211,7 @@ module ad_ip_jesd204_tpl_dac_core #(
       .dac_iqcor_enb (dac_iqcor_enb[i]),
       .dac_iqcor_coeff_1 (dac_iqcor_coeff_1[16*i+:16]),
       .dac_iqcor_coeff_2 (dac_iqcor_coeff_2[16*i+:16]),
-      .dac_iqcor_data_in (dac_ddata[DMA_CDW*IQ_PAIR_CH_INDEX+:DMA_CDW])
+      .dac_iqcor_data_in (dac_ddata_muxed[DAC_CDW*IQ_PAIR_CH_INDEX+:DAC_CDW])
 
     );
   end

@@ -143,7 +143,7 @@ module axi_ad9361_tdd (
   end
 
   always @(posedge clk) begin
-    if((tdd_enable_s == 1) && (tdd_gated_tx_dmapath_s == 1)) begin
+    if((tdd_enable_s == 1) && (tdd_gated_rx_dmapath_s == 1)) begin
       tdd_rx_valid <= tdd_rx_dp_en_s;
     end else begin
       tdd_rx_valid <= 1'b1;

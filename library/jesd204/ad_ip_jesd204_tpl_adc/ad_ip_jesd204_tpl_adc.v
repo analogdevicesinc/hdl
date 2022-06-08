@@ -34,7 +34,9 @@ module ad_ip_jesd204_tpl_adc #(
   parameter SAMPLES_PER_FRAME = 1,
   parameter CONVERTER_RESOLUTION = 14,
   parameter BITS_PER_SAMPLE = 16,
+  parameter DMA_BITS_PER_SAMPLE = 16,
   parameter OCTETS_PER_BEAT = 4,
+  parameter EN_FRAME_ALIGN = 1,
   parameter TWOS_COMPLEMENT = 1
 ) (
   // jesd interface
@@ -51,8 +53,11 @@ module ad_ip_jesd204_tpl_adc #(
   output [NUM_CHANNELS-1:0] enable,
 
   output [NUM_CHANNELS-1:0] adc_valid,
-  output [NUM_LANES*8*OCTETS_PER_BEAT-1:0] adc_data,
+  output [DMA_BITS_PER_SAMPLE * OCTETS_PER_BEAT * 8 * NUM_LANES / BITS_PER_SAMPLE-1:0] adc_data,
   input adc_dovf,
+
+  input adc_sync_in,
+  output adc_rst,
 
   // axi interface
 
@@ -61,7 +66,7 @@ module ad_ip_jesd204_tpl_adc #(
 
   input s_axi_awvalid,
   output s_axi_awready,
-  input [11:0] s_axi_awaddr,
+  input [12:0] s_axi_awaddr,
   input [2:0] s_axi_awprot,
 
   input s_axi_wvalid,
@@ -75,7 +80,7 @@ module ad_ip_jesd204_tpl_adc #(
 
   input s_axi_arvalid,
   output s_axi_arready,
-  input [11:0] s_axi_araddr,
+  input [12:0] s_axi_araddr,
   input [2:0] s_axi_arprot,
 
   output s_axi_rvalid,
@@ -87,7 +92,7 @@ module ad_ip_jesd204_tpl_adc #(
   // Number of samples per channel that are processed in parallel.
   localparam DATA_PATH_WIDTH = OCTETS_PER_BEAT * 8 * NUM_LANES / NUM_CHANNELS / BITS_PER_SAMPLE;
   localparam LINK_DATA_WIDTH = NUM_LANES * OCTETS_PER_BEAT * 8;
-  localparam DMA_DATA_WIDTH = BITS_PER_SAMPLE * DATA_PATH_WIDTH * NUM_CHANNELS;
+  localparam DMA_DATA_WIDTH = DMA_BITS_PER_SAMPLE * DATA_PATH_WIDTH * NUM_CHANNELS;
 
   localparam BYTES_PER_FRAME = (NUM_CHANNELS * BITS_PER_SAMPLE * SAMPLES_PER_FRAME) / ( 8 * NUM_LANES);
 
@@ -98,6 +103,13 @@ module ad_ip_jesd204_tpl_adc #(
   wire [NUM_CHANNELS*4-1:0] pn_seq_sel_s;
   wire [NUM_CHANNELS-1:0] pn_err_s;
   wire [NUM_CHANNELS-1:0] pn_oos_s;
+
+  wire adc_rst_sync_s;
+  wire adc_rst_s;
+  wire adc_sync;
+  wire adc_sync_status;
+
+  assign adc_rst = adc_rst_s | adc_rst_sync_s;
 
   // regmap
   ad_ip_jesd204_tpl_adc_regmap #(
@@ -144,6 +156,11 @@ module ad_ip_jesd204_tpl_adc #(
 
     .enable (enable),
 
+    .adc_sync (adc_sync),
+    .adc_sync_status (adc_sync_status),
+
+    .adc_rst (adc_rst_s),
+
     .adc_dovf (adc_dovf),
 
     .jesd_m (NUM_CHANNELS),
@@ -161,11 +178,13 @@ module ad_ip_jesd204_tpl_adc #(
     .BITS_PER_SAMPLE (BITS_PER_SAMPLE),
     .CONVERTER_RESOLUTION (CONVERTER_RESOLUTION),
     .SAMPLES_PER_FRAME (SAMPLES_PER_FRAME),
+    .EN_FRAME_ALIGN (EN_FRAME_ALIGN),
     .OCTETS_PER_BEAT (OCTETS_PER_BEAT),
     .LINK_DATA_WIDTH (LINK_DATA_WIDTH),
     .DMA_DATA_WIDTH (DMA_DATA_WIDTH),
     .TWOS_COMPLEMENT (TWOS_COMPLEMENT),
-    .DATA_PATH_WIDTH (DATA_PATH_WIDTH)
+    .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
+    .DMA_BITS_PER_SAMPLE (DMA_BITS_PER_SAMPLE)
   ) i_core (
     .clk (link_clk),
 
@@ -181,6 +200,11 @@ module ad_ip_jesd204_tpl_adc #(
     .link_ready (link_ready),
     .link_sof (link_sof),
     .link_data (link_data),
+
+    .adc_sync (adc_sync),
+    .adc_sync_status (adc_sync_status),
+    .adc_sync_in (adc_sync_in),
+    .adc_rst_sync (adc_rst_sync_s),
 
     .adc_valid (adc_valid),
     .adc_data (adc_data)

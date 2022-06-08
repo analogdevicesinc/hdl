@@ -27,12 +27,14 @@ module ad_ip_jesd204_tpl_dac_regmap #(
   parameter ID = 0,
   parameter DATAPATH_DISABLE = 0,
   parameter IQCORRECTION_DISABLE = 1,
+  parameter XBAR_ENABLE = 0,
   parameter FPGA_TECHNOLOGY = 0,
   parameter FPGA_FAMILY = 0,
   parameter SPEED_GRADE = 0,
   parameter DEV_PACKAGE = 0,
   parameter NUM_CHANNELS = 2,
   parameter DATA_PATH_WIDTH = 16,
+  parameter PADDING_TO_MSB_LSB_N = 0,
   parameter NUM_PROFILES = 1    // Number of supported JESD profiles
 ) (
   input s_axi_aclk,
@@ -40,7 +42,7 @@ module ad_ip_jesd204_tpl_dac_regmap #(
 
   input s_axi_awvalid,
   output s_axi_awready,
-  input [11:0] s_axi_awaddr,
+  input [12:0] s_axi_awaddr,
   input [2:0] s_axi_awprot,
 
   input s_axi_wvalid,
@@ -50,7 +52,7 @@ module ad_ip_jesd204_tpl_dac_regmap #(
 
   input s_axi_arvalid,
   output s_axi_arready,
-  input [11:0] s_axi_araddr,
+  input [12:0] s_axi_araddr,
   input [2:0] s_axi_arprot,
 
   output s_axi_rvalid,
@@ -68,7 +70,10 @@ module ad_ip_jesd204_tpl_dac_regmap #(
 
   output dac_sync,
 
+  input dac_sync_in_status,
+
   output [NUM_CHANNELS*4-1:0] dac_data_sel,
+  output [NUM_CHANNELS-1:0] dac_mask_enable,
   output dac_dds_format,
 
   output [NUM_CHANNELS*16-1:0] dac_dds_scale_0,
@@ -84,6 +89,8 @@ module ad_ip_jesd204_tpl_dac_regmap #(
   output [NUM_CHANNELS-1:0]  dac_iqcor_enb,
   output [NUM_CHANNELS*16-1:0] dac_iqcor_coeff_1,
   output [NUM_CHANNELS*16-1:0] dac_iqcor_coeff_2,
+
+  output [NUM_CHANNELS*8-1:0] dac_src_chan_sel,
 
   // Framer interface
   input [NUM_PROFILES*8-1: 0] jesd_m,
@@ -104,11 +111,11 @@ module ad_ip_jesd204_tpl_dac_regmap #(
 
 
   wire up_wreq_s;
-  wire [9:0] up_waddr_s;
+  wire [10:0] up_waddr_s;
   wire [31:0] up_wdata_s;
   wire [NUM_CHANNELS+1:0] up_wack_s;
   wire up_rreq_s;
-  wire [9:0] up_raddr_s;
+  wire [10:0] up_raddr_s;
   wire [31:0] up_rdata_s[0:NUM_CHANNELS+1];
   wire [NUM_CHANNELS+1:0] up_rack_s;
 
@@ -126,7 +133,7 @@ module ad_ip_jesd204_tpl_dac_regmap #(
   // up bus interface
 
   up_axi #(
-    .AXI_ADDRESS_WIDTH (12)
+    .AXI_ADDRESS_WIDTH (13)
   ) i_up_axi (
     .up_clk (up_clk),
     .up_rstn (up_rstn),
@@ -181,11 +188,16 @@ module ad_ip_jesd204_tpl_dac_regmap #(
   end
 
   // dac common processor interface
+  //
+  localparam CONFIG = (PADDING_TO_MSB_LSB_N << 11) |
+                      (XBAR_ENABLE << 10) |
+                      (DATAPATH_DISABLE << 6) |
+                      (IQCORRECTION_DISABLE << 0);
 
   up_dac_common #(
     .COMMON_ID(6'h0),
     .ID (ID),
-    .CONFIG((DATAPATH_DISABLE << 6) | (IQCORRECTION_DISABLE << 0)),
+    .CONFIG(CONFIG),
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .FPGA_FAMILY (FPGA_FAMILY),
     .SPEED_GRADE (SPEED_GRADE),
@@ -198,6 +210,7 @@ module ad_ip_jesd204_tpl_dac_regmap #(
     .dac_clk (link_clk),
     .dac_rst (dac_rst),
     .dac_sync (dac_sync),
+    .dac_sync_in_status (dac_sync_in_status),
     .dac_frame (),
     .dac_clksel (),
     .dac_par_type (),
@@ -228,11 +241,11 @@ module ad_ip_jesd204_tpl_dac_regmap #(
     .up_rstn (up_rstn),
 
     .up_wreq (up_wreq_s),
-    .up_waddr ({4'b0,up_waddr_s}),
+    .up_waddr ({3'b0,up_waddr_s}),
     .up_wdata (up_wdata_s),
     .up_wack (up_wack_s[0]),
     .up_rreq (up_rreq_s),
-    .up_raddr ({4'b0,up_raddr_s}),
+    .up_raddr ({3'b0,up_raddr_s}),
     .up_rdata (up_rdata_s[0]),
     .up_rack (up_rack_s[0])
   );
@@ -243,8 +256,10 @@ module ad_ip_jesd204_tpl_dac_regmap #(
     up_dac_channel #(
       .COMMON_ID(6'h1 + i/16),
       .CHANNEL_ID (i % 16),
+      .CHANNEL_NUMBER (i),
       .USERPORTS_DISABLE (1),
-      .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE)
+      .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
+      .XBAR_ENABLE (XBAR_ENABLE)
     ) i_up_dac_channel (
       .dac_clk (link_clk),
       .dac_rst (dac_rst),
@@ -257,10 +272,12 @@ module ad_ip_jesd204_tpl_dac_regmap #(
       .dac_pat_data_1 (dac_pat_data_0[16*i+:16]),
       .dac_pat_data_2 (dac_pat_data_1[16*i+:16]),
       .dac_data_sel (dac_data_sel[4*i+:4]),
+      .dac_mask_enable (dac_mask_enable[i]),
       .dac_iq_mode (),
       .dac_iqcor_enb (dac_iqcor_enb[i]),
       .dac_iqcor_coeff_1 (dac_iqcor_coeff_1[16*i+:16]),
       .dac_iqcor_coeff_2 (dac_iqcor_coeff_2[16*i+:16]),
+      .dac_src_chan_sel (dac_src_chan_sel[8*i+:8]),
       .up_usr_datatype_be (),
       .up_usr_datatype_signed (),
       .up_usr_datatype_shift (),
@@ -279,11 +296,11 @@ module ad_ip_jesd204_tpl_dac_regmap #(
       .up_clk (up_clk),
       .up_rstn (up_rstn),
       .up_wreq (up_wreq_s),
-      .up_waddr ({4'b0,up_waddr_s}),
+      .up_waddr ({3'b0,up_waddr_s}),
       .up_wdata (up_wdata_s),
       .up_wack (up_wack_s[i+1]),
       .up_rreq (up_rreq_s),
-      .up_raddr ({4'b0,up_raddr_s}),
+      .up_raddr ({3'b0,up_raddr_s}),
       .up_rdata (up_rdata_s[i+1]),
       .up_rack (up_rack_s[i+1])
     );

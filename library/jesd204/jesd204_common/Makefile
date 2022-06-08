@@ -7,6 +7,8 @@ LIBRARY_NAME := jesd204_common
 
 GENERIC_DEPS += jesd204_crc12.v
 GENERIC_DEPS += jesd204_eof_generator.v
+GENERIC_DEPS += jesd204_frame_align_replace.v
+GENERIC_DEPS += jesd204_frame_mark.v
 GENERIC_DEPS += jesd204_lmfc.v
 GENERIC_DEPS += jesd204_scrambler.v
 GENERIC_DEPS += jesd204_scrambler_64b.v

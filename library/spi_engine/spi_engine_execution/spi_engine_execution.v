@@ -43,6 +43,7 @@ module spi_engine_execution #(
   parameter DATA_WIDTH = 8,                   // Valid data widths values are 8/16/24/32
   parameter NUM_OF_SDI = 1,
   parameter [0:0] SDO_DEFAULT = 1'b0,
+  parameter ECHO_SCLK = 0,
   parameter [1:0] SDI_DELAY = 2'b00) (
 
   input clk,
@@ -61,23 +62,17 @@ module spi_engine_execution #(
 
   input sdi_data_ready,
   output reg sdi_data_valid,
-  output [(NUM_OF_SDI * DATA_WIDTH-1):0] sdi_data,
+  output [(NUM_OF_SDI * DATA_WIDTH)-1:0] sdi_data,
 
   input sync_ready,
   output reg sync_valid,
   output [7:0] sync,
 
+  input echo_sclk,
   output reg sclk,
   output reg sdo,
   output reg sdo_t,
-  input sdi,
-  input sdi_1,
-  input sdi_2,
-  input sdi_3,
-  input sdi_4,
-  input sdi_5,
-  input sdi_6,
-  input sdi_7,
+  input [NUM_OF_SDI-1:0] sdi,
   output reg [NUM_OF_CS-1:0] cs,
   output reg three_wire
 );
@@ -114,7 +109,6 @@ reg [(BIT_COUNTER_WIDTH+8):0] counter = 'h00;
 
 wire [7:0] sleep_counter = counter[(BIT_COUNTER_WIDTH+8):(BIT_COUNTER_WIDTH+1)];
 wire [1:0] cs_sleep_counter = counter[(BIT_COUNTER_WIDTH+2):(BIT_COUNTER_WIDTH+1)];
-wire [2:0] cs_sleep_counter2 = counter[(BIT_COUNTER_WIDTH+3):(BIT_COUNTER_WIDTH+1)];
 wire [(BIT_COUNTER_WIDTH-1):0] bit_counter = counter[BIT_COUNTER_WIDTH:1];
 wire [7:0] transfer_counter = counter[(BIT_COUNTER_WIDTH+8):(BIT_COUNTER_WIDTH+1)];
 wire ntx_rx = counter[0];
@@ -134,8 +128,6 @@ wire end_of_word;
 reg [7:0] sdi_counter = 8'b0;
 
 assign first_bit = ((bit_counter == 'h0) ||  (bit_counter == word_length));
-assign last_bit = bit_counter == word_length - 1;
-assign end_of_word = last_bit == 1'b1 && ntx_rx == 1'b1 && clk_div_last == 1'b1;
 
 reg [15:0] cmd_d1;
 
@@ -143,19 +135,12 @@ reg cpha = DEFAULT_SPI_CFG[0];
 reg cpol = DEFAULT_SPI_CFG[1];
 reg [7:0] clk_div = DEFAULT_CLK_DIV;
 
-wire sdo_enabled = cmd_d1[8];
-wire sdi_enabled = cmd_d1[9];
+reg sdo_enabled = 1'b0;
+reg sdi_enabled = 1'b0;
 
-// supporting max 8 SDI channel
 reg [(DATA_WIDTH-1):0] data_sdo_shift = 'h0;
-reg [(DATA_WIDTH-1):0] data_sdi_shift = 'h0;
-reg [(DATA_WIDTH-1):0] data_sdi_shift_1 = 'h0;
-reg [(DATA_WIDTH-1):0] data_sdi_shift_2 = 'h0;
-reg [(DATA_WIDTH-1):0] data_sdi_shift_3 = 'h0;
-reg [(DATA_WIDTH-1):0] data_sdi_shift_4 = 'h0;
-reg [(DATA_WIDTH-1):0] data_sdi_shift_5 = 'h0;
-reg [(DATA_WIDTH-1):0] data_sdi_shift_6 = 'h0;
-reg [(DATA_WIDTH-1):0] data_sdi_shift_7 = 'h0;
+
+reg [SDI_DELAY+1:0] trigger_rx_d = {(SDI_DELAY+2){1'b0}};
 
 wire [1:0] inst = cmd[13:12];
 wire [1:0] inst_d1 = cmd_d1[13:12];
@@ -168,10 +153,30 @@ wire exec_chipselect_cmd = exec_cmd && inst == CMD_CHIPSELECT;
 wire exec_misc_cmd = exec_cmd && inst == CMD_MISC;
 wire exec_sync_cmd = exec_misc_cmd && cmd[8] == MISC_SYNC;
 
+wire trigger_tx;
+wire trigger_rx;
+
+wire sleep_counter_compare;
+wire cs_sleep_counter_compare;
+
+wire io_ready1;
+wire io_ready2;
+wire trigger_rx_s;
+
+wire last_sdi_bit;
+wire end_of_sdi_latch;
+
 assign cmd_ready = idle;
 
 always @(posedge clk) begin
-  if (cmd_ready)
+  if (exec_transfer_cmd) begin
+    sdo_enabled <= cmd[8];
+    sdi_enabled <= cmd[9];
+  end
+end
+
+always @(posedge clk) begin
+  if (cmd_ready & cmd_valid)
    cmd_d1 <= cmd;
 end
 
@@ -229,12 +234,11 @@ always @(posedge clk) begin
   end
 end
 
-wire trigger_tx = trigger == 1'b1 && ntx_rx == 1'b0;
-wire trigger_rx = trigger == 1'b1 && ntx_rx == 1'b1;
+assign trigger_tx = trigger == 1'b1 && ntx_rx == 1'b0;
+assign trigger_rx = trigger == 1'b1 && ntx_rx == 1'b1;
 
-wire sleep_counter_compare = sleep_counter == cmd_d1[7:0] && clk_div_last == 1'b1;
-wire cs_sleep_counter_compare = cs_sleep_counter == cmd_d1[9:8] && clk_div_last == 1'b1;
-wire cs_sleep_counter_compare2 = cs_sleep_counter2 == {cmd_d1[9:8],1'b1} && clk_div_last == 1'b1;
+assign sleep_counter_compare = sleep_counter == cmd_d1[7:0] && clk_div_last == 1'b1;
+assign cs_sleep_counter_compare = cs_sleep_counter == cmd_d1[9:8] && clk_div_last == 1'b1;
 
 always @(posedge clk) begin
   if (idle == 1'b1) begin
@@ -257,11 +261,11 @@ always @(posedge clk) begin
     end else begin
       case (inst_d1)
       CMD_TRANSFER: begin
-        if (transfer_active == 1'b0 && wait_for_io == 1'b0)
+        if (transfer_active == 1'b0 && wait_for_io == 1'b0 && end_of_sdi_latch == 1'b1)
           idle <= 1'b1;
       end
       CMD_CHIPSELECT: begin
-        if (cs_sleep_counter_compare2)
+        if (cs_sleep_counter_compare)
           idle <= 1'b1;
       end
       CMD_MISC: begin
@@ -312,18 +316,9 @@ always @(posedge clk) begin
     sdo_data_ready <= 1'b0;
 end
 
-always @(posedge clk) begin
-  if (resetn == 1'b0)
-    sdi_data_valid <= 1'b0;
-  else if (sdi_enabled == 1'b1 && last_sdi_bit == 1'b1 && trigger_rx_s == 1'b1)
-    sdi_data_valid <= 1'b1;
-  else if (sdi_data_ready == 1'b1)
-    sdi_data_valid <= 1'b0;
-end
-
-wire io_ready1 = (sdi_data_valid == 1'b0 || sdi_data_ready == 1'b1) &&
+assign io_ready1 = (sdi_data_valid == 1'b0 || sdi_data_ready == 1'b1) &&
         (sdo_enabled == 1'b0 || last_transfer == 1'b1 || sdo_data_valid == 1'b1);
-wire io_ready2 = (sdi_enabled == 1'b0 || sdi_data_ready == 1'b1) &&
+assign io_ready2 = (sdi_enabled == 1'b0 || sdi_data_ready == 1'b1) &&
         (sdo_enabled == 1'b0 || last_transfer == 1'b1 || sdo_data_valid == 1'b1);
 
 always @(posedge clk) begin
@@ -384,78 +379,202 @@ end
 
 assign sdo_int_s = data_sdo_shift[DATA_WIDTH-1];
 
-// In case of an interface with high clock rate (SCLK > 50MHz), one of the
-// next SCLK edge must be used to flop the SDI line, to compensate the overall
-// delay of the read path
-
-reg trigger_rx_d1 = 1'b0;
-reg trigger_rx_d2 = 1'b0;
-reg trigger_rx_d3 = 1'b0;
+// In case of an interface with high clock rate (SCLK > 50MHz), the latch of
+// the SDI line can be delayed with 1, 2 or 3 SPI core clock cycle.
+// Taking the fact that in high SCLK frequencies the pre-scaler most likely will
+// be set to 0, to reduce the core clock's speed, this delay will mean that SDI will
+// be latched at one of the next consecutive SCLK edge.
 
 always @(posedge clk) begin
-  trigger_rx_d1 <= trigger_rx;
-  trigger_rx_d2 <= trigger_rx_d1;
-  trigger_rx_d3 <= trigger_rx_d2;
+  trigger_rx_d <= {trigger_rx_d, trigger_rx};
 end
 
-wire trigger_rx_s = (SDI_DELAY == 2'b00) ? trigger_rx :
-                    (SDI_DELAY == 2'b01) ? trigger_rx_d1 :
-                    (SDI_DELAY == 2'b10) ? trigger_rx_d2 :
-                    (SDI_DELAY == 2'b11) ? trigger_rx_d3 : trigger_rx;
+assign trigger_rx_s = trigger_rx_d[SDI_DELAY+1];
 
-always @(posedge clk) begin
-  if (inst_d1 == CMD_CHIPSELECT) begin
-    data_sdi_shift <= {DATA_WIDTH{1'b0}};
-    data_sdi_shift_1 <= {DATA_WIDTH{1'b0}};
-    data_sdi_shift_2 <= {DATA_WIDTH{1'b0}};
-    data_sdi_shift_3 <= {DATA_WIDTH{1'b0}};
-    data_sdi_shift_4 <= {DATA_WIDTH{1'b0}};
-    data_sdi_shift_5 <= {DATA_WIDTH{1'b0}};
-    data_sdi_shift_6 <= {DATA_WIDTH{1'b0}};
-    data_sdi_shift_7 <= {DATA_WIDTH{1'b0}};
-  end else if (trigger_rx_s == 1'b1) begin
-    data_sdi_shift <= {data_sdi_shift[(DATA_WIDTH-2):0], sdi};
-    data_sdi_shift_1 <= {data_sdi_shift_1[(DATA_WIDTH-2):0], sdi_1};
-    data_sdi_shift_2 <= {data_sdi_shift_2[(DATA_WIDTH-2):0], sdi_2};
-    data_sdi_shift_3 <= {data_sdi_shift_3[(DATA_WIDTH-2):0], sdi_3};
-    data_sdi_shift_4 <= {data_sdi_shift_4[(DATA_WIDTH-2):0], sdi_4};
-    data_sdi_shift_5 <= {data_sdi_shift_5[(DATA_WIDTH-2):0], sdi_5};
-    data_sdi_shift_6 <= {data_sdi_shift_6[(DATA_WIDTH-2):0], sdi_6};
-    data_sdi_shift_7 <= {data_sdi_shift_7[(DATA_WIDTH-2):0], sdi_7};
+// Load the serial data into SDI shift register(s), then link it to the output
+// register of the module
+// NOTE: ECHO_SCLK mode can be used when the SCLK line is looped back to the FPGA
+// through an other level shifter, in order to remove the round-trip timing delays
+// introduced by the level shifters. This can improve the timing significantly
+// on higher SCLK rates. Devices like ad4630 have an echod SCLK, which can be
+// used to latch the MISO lines, improving the overall timing margin of the
+// interface.
+
+wire cs_active_s = (inst_d1 == CMD_CHIPSELECT) & ~(&cmd_d1[NUM_OF_CS-1:0]);
+genvar i;
+
+// NOTE: SPI configuration (CPOL/PHA) is only hardware configurable at this point
+generate
+if (ECHO_SCLK == 1) begin : g_echo_sclk_miso_latch
+
+  reg [7:0] sdi_counter_d = 8'b0;
+  reg [7:0] sdi_transfer_counter = 8'b0;
+  reg [7:0] num_of_transfers = 8'b0;
+  reg [(NUM_OF_SDI * DATA_WIDTH)-1:0] sdi_data_latch = {(NUM_OF_SDI * DATA_WIDTH){1'b0}};
+
+  if ((DEFAULT_SPI_CFG[1:0] == 2'b01) || (DEFAULT_SPI_CFG[1:0] == 2'b10)) begin : g_echo_miso_nshift_reg
+
+    // MISO shift register runs on negative echo_sclk
+    for (i=0; i<NUM_OF_SDI; i=i+1) begin: g_sdi_shift_reg
+      reg [DATA_WIDTH-1:0] data_sdi_shift;
+
+      always @(negedge echo_sclk or posedge cs_active_s) begin
+        if (cs_active_s) begin
+          data_sdi_shift <= 0;
+        end else begin
+          data_sdi_shift <= {data_sdi_shift, sdi[i]};
+        end
+      end
+
+      // intended LATCH
+      always @(negedge echo_sclk) begin
+        if (last_sdi_bit)
+          sdi_data_latch[i*DATA_WIDTH+:DATA_WIDTH] <= {data_sdi_shift, sdi[i]};
+      end
+
+    end
+
+    always @(posedge echo_sclk or posedge cs_active_s) begin
+      if (cs_active_s == 1'b1) begin
+        sdi_counter <= 8'b0;
+        sdi_counter_d <= 8'b0;
+      end else begin
+        sdi_counter <= (sdi_counter == word_length-1) ? 8'b0 : sdi_counter + 1'b1;
+        sdi_counter_d <= sdi_counter;
+      end
+    end
+
+  end else begin : g_echo_miso_pshift_reg
+
+    // MISO shift register runs on positive echo_sclk
+    for (i=0; i<NUM_OF_SDI; i=i+1) begin: g_sdi_shift_reg
+      reg [DATA_WIDTH-1:0] data_sdi_shift;
+      always @(posedge echo_sclk or posedge cs_active_s) begin
+        if (cs_active_s) begin
+          data_sdi_shift <= 0;
+        end else begin
+          data_sdi_shift <= {data_sdi_shift, sdi[i]};
+        end
+      end
+      // intended LATCH
+      always @(posedge echo_sclk) begin
+        if (last_sdi_bit)
+          sdi_data_latch[i*DATA_WIDTH+:DATA_WIDTH] <= data_sdi_shift;
+      end
+    end
+
+    always @(posedge echo_sclk or posedge cs_active_s) begin
+      if (cs_active_s == 1'b1) begin
+        sdi_counter <= 8'b0;
+        sdi_counter_d <= 8'b0;
+      end else begin
+        sdi_counter <= (sdi_counter == word_length-1) ? 8'b0 : sdi_counter + 1'b1;
+        sdi_counter_d <= sdi_counter;
+      end
+    end
+
   end
-end
 
-assign sdi_data = (NUM_OF_SDI == 1) ? data_sdi_shift :
-                  (NUM_OF_SDI == 2) ? {data_sdi_shift_1, data_sdi_shift} :
-                  (NUM_OF_SDI == 3) ? {data_sdi_shift_2, data_sdi_shift_1,
-                                                         data_sdi_shift} :
-                  (NUM_OF_SDI == 4) ? {data_sdi_shift_3, data_sdi_shift_2,
-                                       data_sdi_shift_1, data_sdi_shift} :
-                  (NUM_OF_SDI == 5) ? {data_sdi_shift_4, data_sdi_shift_3,
-                                       data_sdi_shift_2, data_sdi_shift_1,
-                                                         data_sdi_shift} :
-                  (NUM_OF_SDI == 6) ? {data_sdi_shift_5, data_sdi_shift_4,
-                                       data_sdi_shift_3, data_sdi_shift_2,
-                                       data_sdi_shift_1, data_sdi_shift} :
-                  (NUM_OF_SDI == 7) ? {data_sdi_shift_6, data_sdi_shift_5,
-                                       data_sdi_shift_4, data_sdi_shift_3,
-                                       data_sdi_shift_2, data_sdi_shift_1,
-                                                         data_sdi_shift} :
-                  (NUM_OF_SDI == 8) ? {data_sdi_shift_7, data_sdi_shift_6,
-                                       data_sdi_shift_5, data_sdi_shift_4,
-                                       data_sdi_shift_3, data_sdi_shift_2,
-                                       data_sdi_shift_1, data_sdi_shift} : data_sdi_shift;
+  assign sdi_data = sdi_data_latch;
+  assign last_sdi_bit = (sdi_counter == 0) && (sdi_counter_d == word_length-1);
 
-wire last_sdi_bit = (sdi_counter == word_length-1);
-always @(posedge clk) begin
-  if (resetn == 1'b0) begin
-    sdi_counter <= 8'b0;
-  end else begin
-    if (trigger_rx_s == 1'b1) begin
-      sdi_counter <= last_sdi_bit ? 8'b0 : sdi_counter + 1'b1;
+  // sdi_data_valid is synchronous to SPI clock, so synchronize the
+  // last_sdi_bit to SPI clock
+
+  reg [3:0] last_sdi_bit_m = 4'b0;
+  always @(posedge clk) begin
+    if (cs_active_s) begin
+      last_sdi_bit_m <= 4'b0;
+    end else begin
+      last_sdi_bit_m <= {last_sdi_bit_m, last_sdi_bit};
     end
   end
-end
+
+  always @(posedge clk) begin
+    if (cs_active_s) begin
+      sdi_data_valid <= 1'b0;
+    end else if (sdi_enabled == 1'b1 &&
+                 last_sdi_bit_m[3] == 1'b0 &&
+                 last_sdi_bit_m[2] == 1'b1) begin
+      sdi_data_valid <= 1'b1;
+    end else if (sdi_data_ready == 1'b1 && sdi_data_valid == 1'b1) begin
+      sdi_data_valid <= 1'b0;
+    end
+  end
+
+  always @(posedge clk) begin
+    if (cs_active_s) begin
+      num_of_transfers <= 8'b0;
+    end else begin
+      if (cmd_d1[15:12] == 4'b0) begin
+        num_of_transfers <= cmd_d1[7:0] + 1'b1; // cmd_d1 contains the NUM_OF_TRANSFERS - 1
+      end
+    end
+  end
+
+  always @(posedge clk) begin
+    if (cs_active_s) begin
+      sdi_transfer_counter <= 0;
+    end else if (last_sdi_bit_m[2] == 1'b0 &&
+                 last_sdi_bit_m[1] == 1'b1) begin
+      sdi_transfer_counter <= sdi_transfer_counter + 1'b1;
+    end
+  end
+
+  assign end_of_sdi_latch = last_sdi_bit_m[2] & (sdi_transfer_counter == num_of_transfers);
+
+end /* g_echo_sclk_miso_latch */
+else
+begin : g_sclk_miso_latch
+
+  assign end_of_sdi_latch = 1'b1;
+
+  for (i=0; i<NUM_OF_SDI; i=i+1) begin: g_sdi_shift_reg
+
+    reg [DATA_WIDTH-1:0] data_sdi_shift;
+
+    always @(posedge clk) begin
+      if (cs_active_s) begin
+        data_sdi_shift <= 0;
+      end else begin
+        if (trigger_rx_s == 1'b1) begin
+          data_sdi_shift <= {data_sdi_shift, sdi[i]};
+        end
+      end
+    end
+
+    assign sdi_data[i*DATA_WIDTH+:DATA_WIDTH] = data_sdi_shift;
+
+  end
+
+  assign last_sdi_bit = (sdi_counter == word_length-1);
+  always @(posedge clk) begin
+    if (resetn == 1'b0) begin
+      sdi_counter <= 8'b0;
+    end else begin
+      if (trigger_rx_s == 1'b1) begin
+        sdi_counter <= last_sdi_bit ? 8'b0 : sdi_counter + 1'b1;
+      end
+    end
+  end
+
+  always @(posedge clk) begin
+    if (resetn == 1'b0)
+      sdi_data_valid <= 1'b0;
+    else if (sdi_enabled == 1'b1 && last_sdi_bit == 1'b1 && trigger_rx_s == 1'b1)
+      sdi_data_valid <= 1'b1;
+    else if (sdi_data_ready == 1'b1)
+      sdi_data_valid <= 1'b0;
+  end
+
+end /* g_sclk_miso_latch */
+endgenerate
+
+// end_of_word will signal the end of a transaction, pushing the command
+// stream execution to the next command. end_of_word in normal mode can be
+// generated using the global bit_counter
+assign last_bit = bit_counter == word_length - 1;
+assign end_of_word = last_bit == 1'b1 && ntx_rx == 1'b1 && clk_div_last == 1'b1;
 
 always @(posedge clk) begin
   if (transfer_active == 1'b1) begin
@@ -465,7 +584,7 @@ always @(posedge clk) begin
   end
 end
 
-// Additional register stage to imrpove timing
+// Additional register stage to improve timing
 always @(posedge clk) begin
   sclk <= sclk_int;
   sdo <= sdo_int_s;

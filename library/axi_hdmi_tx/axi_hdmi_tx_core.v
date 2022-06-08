@@ -295,7 +295,6 @@ module axi_hdmi_tx_core #(
   always @(posedge hdmi_clk) begin
     if (EMBEDDED_SYNC == 1) begin
       hdmi_hs <= 1'b0;
-      hdmi_vs <= 1'b0;
       if (hdmi_hs_count <= hdmi_he_width_s) begin
         hdmi_hs_de <= 1'b0;
       end else begin

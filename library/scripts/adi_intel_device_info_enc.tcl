@@ -78,7 +78,8 @@ set fpga_family_list { \
         { SX        1 } \
         { GX        2 } \
         { GT        3 } \
-        { GZ        4 }}
+        { GZ        4 } \
+        { "SE Base" 5 }}
 
        #technology 5 generation
        # family Arria SX
@@ -107,8 +108,8 @@ set dev_package_list { \
         { RQFP      9 } \
         { TQFP     10 } \
         { UBGA     11 } \
-        { UFBGA    11 } \
-        { MBGA     12 }}
+        { UFBGA    12 } \
+        { MBGA     13 }}
 
 # Ball-Grid Array (BGA)
 # Ceramic Pin-Grid Array (PGA)

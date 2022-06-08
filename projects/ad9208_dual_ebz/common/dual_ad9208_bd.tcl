@@ -129,8 +129,8 @@ ad_connect  $sys_cpu_clk util_adc_1_xcvr/up_clk
 
 # connections (adc)
 
-ad_xcvrcon  util_adc_0_xcvr axi_ad9208_0_xcvr axi_ad9208_0_jesd
-ad_xcvrcon  util_adc_1_xcvr axi_ad9208_1_xcvr axi_ad9208_1_jesd
+ad_xcvrcon  util_adc_0_xcvr axi_ad9208_0_xcvr axi_ad9208_0_jesd {} glbl_clk_0
+ad_xcvrcon  util_adc_1_xcvr axi_ad9208_1_xcvr axi_ad9208_1_jesd {} glbl_clk_0
 
 ## use global clock as device clock instead of rx_out_clk
 delete_bd_objs [get_bd_nets util_adc_1_xcvr_rx_out_clk_0]
@@ -138,13 +138,6 @@ delete_bd_objs [get_bd_nets util_adc_0_xcvr_rx_out_clk_0]
 
 # connect clocks
 # device clock domain
-ad_xcvrpll  glbl_clk_0 util_adc_0_xcvr/rx_clk_*
-ad_xcvrpll  glbl_clk_0 util_adc_1_xcvr/rx_clk_*
-ad_connect  glbl_clk_0 axi_ad9208_0_jesd/device_clk
-ad_connect  glbl_clk_0 axi_ad9208_1_jesd/device_clk
-ad_connect  glbl_clk_0 axi_ad9208_0_jesd_rstgen/slowest_sync_clk
-ad_connect  glbl_clk_0 axi_ad9208_1_jesd_rstgen/slowest_sync_clk
-
 ad_connect  glbl_clk_0 rx_ad9208_0_tpl_core/link_clk
 ad_connect  glbl_clk_0 rx_ad9208_1_tpl_core/link_clk
 
@@ -157,8 +150,8 @@ ad_connect  $sys_cpu_clk axi_ad9208_fifo/dma_clk
 ad_connect  $sys_cpu_clk axi_ad9208_dma/s_axis_aclk
 
 # connect resets
-ad_connect  axi_ad9208_0_jesd_rstgen/peripheral_reset axi_ad9208_fifo/adc_rst
-ad_connect  axi_ad9208_0_jesd_rstgen/peripheral_reset util_ad9208_cpack/reset
+ad_connect  glbl_clk_0_rstgen/peripheral_reset axi_ad9208_fifo/adc_rst
+ad_connect  glbl_clk_0_rstgen/peripheral_reset util_ad9208_cpack/reset
 ad_connect  $sys_cpu_resetn axi_ad9208_dma/m_dest_axi_aresetn
 
 

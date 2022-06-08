@@ -67,7 +67,6 @@ module system_top (
   inout               adrv9009_tx2_enable_c,
   inout               adrv9009_rx1_enable_c,
   inout               adrv9009_rx2_enable_c,
-  inout               adrv9009_test_c,
   inout               adrv9009_reset_b_c,
   inout               adrv9009_gpint_c,
 
@@ -105,7 +104,6 @@ module system_top (
   inout               adrv9009_tx2_enable_d,
   inout               adrv9009_rx1_enable_d,
   inout               adrv9009_rx2_enable_d,
-  inout               adrv9009_test_d,
   inout               adrv9009_reset_b_d,
   inout               adrv9009_gpint_d,
 
@@ -160,8 +158,9 @@ module system_top (
   wire            spi_mosi;
   wire            spi0_miso;
 
+  // The csn bus from the SPI controller needs to be decoded as 
+  // is-decoded-cs = <1> is set in the device tree.
   reg  [7:0]     spi_3_to_8_csn;
-
   always @(*) begin
     case (spi_csn)
       3'h0: spi_3_to_8_csn = 8'b11111110;

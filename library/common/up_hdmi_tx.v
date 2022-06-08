@@ -88,7 +88,7 @@ module up_hdmi_tx #(
 
   // internal registers
 
-  reg             up_core_preset = 'd0;
+  reg             up_core_preset;
   reg     [31:0]  up_scratch = 'd0;
   reg             up_resetn = 'd0;
   reg             up_csc_bypass = 'd0;
@@ -109,8 +109,8 @@ module up_hdmi_tx #(
   reg     [15:0]  up_vs_width = 'd0;
   reg     [15:0]  up_ve_max = 'd0;
   reg     [15:0]  up_ve_min = 'd0;
-  reg     [23:0]  up_clip_max = 'd0;
-  reg     [23:0]  up_clip_min = 'd0;
+  reg     [23:0]  up_clip_max;
+  reg     [23:0]  up_clip_min;
 
   // internal signals
 
