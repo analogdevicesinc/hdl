@@ -158,6 +158,7 @@ module system_top (
 
   assign gpio_i[63:36] = gpio_o[63:36];
   assign reset  = 1'b1;
+  assign direction = ~dac_0_spi_sdo_t;
 
 // instantiations
 
