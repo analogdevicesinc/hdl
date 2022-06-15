@@ -137,21 +137,21 @@ module ad_data_in #(
       .sreset(1'b0),
       .datain(s_ibuf_o),
       .clk (rx_clk),
-      .regouthi(s_rx_data_p),
-      .regoutlo(s_rx_data_n));
+      .regouthi(rx_data_p),
+      .regoutlo(rx_data_n));
       
 //     always @(negedge rx_clk) begin
 //       rn_rx_data_p <= s_rx_data_p;
 //       rn_rx_data_n <= s_rx_data_n;
 //     end;
     
-    always @(posedge rx_clk) begin
-      rp_rx_data_p <= s_rx_data_p;
-      rp_rx_data_n <= s_rx_data_n;
-    end;
-    
-    assign rx_data_p = rp_rx_data_p;
-    assign rx_data_n = rp_rx_data_n;
+//     always @(posedge rx_clk) begin
+//       rp_rx_data_p <= s_rx_data_p;
+//       rp_rx_data_n <= s_rx_data_n;
+//     end;
+//     
+//     assign rx_data_p = rp_rx_data_p;
+//     assign rx_data_n = rp_rx_data_n;
   end
   endgenerate
 endmodule

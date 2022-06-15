@@ -36,7 +36,9 @@
 `timescale 1ns/100ps
 
 module ad_data_clk #(
-
+  // from FPGA/GLOBAL are for intel only
+  parameter   FPGA_TECHNOLOGY = 103,
+  parameter   GLOBAL_CLOCK = 1,
   parameter   SINGLE_ENDED = 0) (
 
   input               rst,

@@ -50,8 +50,8 @@ set_false_path -hold  -rise_from [get_clocks {tx_clk_virtual_250mhz}] -rise_to [
 set_multicycle_path -setup -end -rise_from [get_clocks {tx_clk_virtual_250mhz}] -rise_to [get_clocks {tx_clk_250mhz}] 0
 set_multicycle_path -setup -end -fall_from [get_clocks {tx_clk_virtual_250mhz}] -rise_to [get_clocks {tx_clk_250mhz}] 0
 
-#set_false_path -from {rx_clk_250mhz} -to  [get_ports tx_data_out*]
-#set_false_path -from {rx_clk_250mhz} -to  [get_ports tx_frame_out*]
+set_false_path -from {rx_clk_250mhz} -to  [get_ports tx_data_out*]
+set_false_path -from {rx_clk_250mhz} -to  [get_ports tx_frame_out*]
 
 set_false_path -from [get_registers *altera_reset_synchronizer:alt_rst_sync_uq1|altera_reset_synchronizer_int_chain_out*]
 
