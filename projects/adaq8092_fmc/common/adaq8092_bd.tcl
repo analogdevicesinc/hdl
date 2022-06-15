@@ -65,7 +65,6 @@ ad_connect    adc_clk_in_n         axi_adaq8092/adc_clk_in_n
 switch $OUTPUT_MODE {
    
   LVDS {
-   ad_ip_parameter axi_adaq8092  CONFIG.POLARITY_MASK 28'hfffffff
    ad_ip_parameter axi_adaq8092  CONFIG.OUTPUT_MODE 0
    ad_connect     adc_data_in1_p     axi_adaq8092/lvds_adc_data_in1_p
    ad_connect     adc_data_in1_n     axi_adaq8092/lvds_adc_data_in1_n

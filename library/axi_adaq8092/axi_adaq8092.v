@@ -44,8 +44,7 @@ module axi_adaq8092 #(
   parameter DEV_PACKAGE = 0,
   parameter ADC_DATAPATH_DISABLE = 0,
   parameter IO_DELAY_GROUP = "adc_if_delay_group",
-  parameter OUTPUT_MODE = 0,
-  parameter   [27:0] POLARITY_MASK ='hfffffff) (
+  parameter OUTPUT_MODE = 0) (
 
   // adc interface (clk, data, over-range)
 
@@ -231,8 +230,7 @@ module axi_adaq8092 #(
   axi_adaq8092_if #(
     .OUTPUT_MODE(OUTPUT_MODE),
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
-    .IO_DELAY_GROUP (IO_DELAY_GROUP),
-    .POLARITY_MASK(POLARITY_MASK)
+    .IO_DELAY_GROUP (IO_DELAY_GROUP)
   ) i_if (
     .adc_clk_in_p (adc_clk_in_p),
     .adc_clk_in_n (adc_clk_in_n),
