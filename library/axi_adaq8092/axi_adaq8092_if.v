@@ -42,7 +42,6 @@ module axi_adaq8092_if #(
   parameter          FPGA_TECHNOLOGY = 0,
   parameter          IO_DELAY_GROUP = "adc_if_delay_group",
   parameter          DELAY_REFCLK_FREQUENCY = 200,
-  parameter   [27:0] POLARITY_MASK ='hfffffff,
   parameter          OUTPUT_MODE = 0) (
 
   // adc interface (clk, data, over-range)
@@ -113,7 +112,7 @@ module axi_adaq8092_if #(
     if (OUTPUT_MODE == LVDS) begin         
     
       adc_or <= adc_or_s_1 | adc_or_s_2;
-      adc_data <= POLARITY_MASK ^ adc_data_s; 
+      adc_data <= adc_data_s; 
       adc_data_s <= { lvds_adc_data_n_s[13], lvds_adc_data_p_s[13], 
                       lvds_adc_data_n_s[12], lvds_adc_data_p_s[12], 
                       lvds_adc_data_n_s[11], lvds_adc_data_p_s[11], 
