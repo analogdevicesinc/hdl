@@ -2,7 +2,6 @@
 create_clock -period "10.000 ns"  -name sys_clk_100mhz      [get_ports {sys_clk}]
 create_clock -period "4.000 ns"   -name rx_clk_250mhz       [get_ports {rx_clk_in}]
 create_clock -period "4.000 ns"   -name tx_clk_250mhz       [get_ports {tx_clk_out_*}]
-create_clock -period "100.000 ns" -name spi_clk_10mhz       [get_ports {spi_clk}]
 create_clock -period "100.000 ns" -name spi_clk_virtual_10mhz
 create_clock -period "4.000 ns"   -name rx_clk_virtual_250mhz
 create_clock -period "4.000 ns"   -name tx_clk_virtual_250mhz
@@ -22,10 +21,19 @@ set_false_path -from [get_ports {gpio*}] -to *
 
 set_output_delay 0.000 -clock {tx_clk_virtual_250mhz} [get_ports tx_clk_out_*]
 
-set_output_delay 0.000 -clock {spi_clk_virtual_10mhz} [get_ports {spi_clk}]
-set_output_delay 0.000 -clock {spi_clk_virtual_10mhz} [get_ports {spi_csn}]
-set_output_delay 0.000 -clock {spi_clk_virtual_10mhz} [get_ports {spi_mosi}]
-set_input_delay  0.000 -clock {spi_clk_virtual_10mhz} [get_ports {spi_miso}]
+#taken from blade rf :)
+create_generated_clock -name spi_clk_reg -source [get_ports {sys_clk}] -divide_by 10 [get_registers {i_system_bd|sys_spi|sys_spi|SCLK_reg}]
+create_generated_clock -name spi_clk_10mhz -source [get_registers -no_duplicates {i_system_bd|sys_spi|sys_spi|SCLK_reg}] [get_ports {spi_clk}]
+
+set_max_skew -from [get_clocks {spi_clk_10mhz}] -to [get_ports {spi_clk}] 0.2
+
+set_output_delay -max 1.000 -clock {spi_clk_10mhz} [get_ports {spi_mosi}]
+set_output_delay -min 0.000 -clock {spi_clk_10mhz} [get_ports {spi_mosi}]
+set_output_delay -max 1.000 -clock {spi_clk_10mhz} [get_ports {spi_csn}]
+set_output_delay -min 0.000 -clock {spi_clk_10mhz} [get_ports {spi_csn}]
+
+set_input_delay -max 2.000 -clock {spi_clk_10mhz} [get_ports {spi_miso}]
+set_input_delay -min 3.000 -clock {spi_clk_10mhz} [get_ports {spi_miso}]
 
 #AN433 + DDR_timing_cookbook_v2
 set_input_delay -max 0.000 -clock {rx_clk_virtual_250mhz} [get_ports rx_data_in*]
