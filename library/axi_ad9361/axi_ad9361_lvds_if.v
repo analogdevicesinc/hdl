@@ -610,7 +610,7 @@ module axi_ad9361_lvds_if #(
   // device clock interface (receive clock)
   generate if (USE_SSI_CLK == 1) begin
   ad_data_clk #(
-    .GLOBAL_CLOCK(1))
+    .GLOBAL_CLOCK(0))
   i_clk (
     .rst (1'd0),
     .locked (),

@@ -79,7 +79,7 @@ module ad_data_clk #(
       .outclk(clk));
     end else begin
     twentynm_clkena #(
-      .clock_type("Large Periphery Clock"),
+      .clock_type("Regional Clock"),
       .en_register_mode("always enabled"),
       .lpm_type("twentynm_clkena"))
     clk_buf ( 
