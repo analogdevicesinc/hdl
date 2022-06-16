@@ -34,8 +34,8 @@ set_output_delay -min 0.000 -clock {spi_clk_10mhz} [get_ports {spi_mosi}]
 set_output_delay -max 1.000 -clock {spi_clk_10mhz} [get_ports {spi_csn}]
 set_output_delay -min 0.000 -clock {spi_clk_10mhz} [get_ports {spi_csn}]
 
-set_input_delay -max 8.000 -clock {spi_clk_10mhz} [get_ports {spi_miso}]
-set_input_delay -min 3.119 -clock {spi_clk_10mhz} [get_ports {spi_miso}]
+set_input_delay -max 2.000 -clock {spi_clk_10mhz} [get_ports {spi_miso}]
+set_input_delay -min 3.000 -clock {spi_clk_10mhz} [get_ports {spi_miso}]
 
 #AN433 + DDR_timing_cookbook_v2
 set_input_delay -max 0.000 -clock {rx_clk_virtual_250mhz} [get_ports rx_data_in*]
