@@ -4,6 +4,7 @@ create_clock -period "4.000 ns"   -name rx_clk_250mhz       [get_ports {rx_clk_i
 create_clock -period "4.000 ns"   -name tx_clk_250mhz       [get_ports {tx_clk_out_*}]
 create_clock -period "4.000 ns"   -name rx_clk_virtual_250mhz
 create_clock -period "4.000 ns"   -name tx_clk_virtual_250mhz
+create_clock -period "100khz"     -name i2c_clk_virtual_100khz
 
 derive_pll_clocks
 derive_clock_uncertainty
@@ -36,6 +37,9 @@ set_output_delay -min 0.000 -clock {spi_clk_10mhz} [get_ports {spi_csn}]
 
 set_input_delay -max 2.000 -clock {spi_clk_10mhz} [get_ports {spi_miso}]
 set_input_delay -min 3.000 -clock {spi_clk_10mhz} [get_ports {spi_miso}]
+
+#i2c should be slow enough to ignore, 100khz vs 100mhz system clock.
+set_false_path -to [get_ports "fpga_i2c* fmc_i2c*"]
 
 #AN433 + DDR_timing_cookbook_v2
 set_input_delay -max 0.000 -clock {rx_clk_virtual_250mhz} [get_ports rx_data_in*]
