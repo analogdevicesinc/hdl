@@ -48,26 +48,25 @@ ad_connect ref_clk sampling_clk
 
 ad_connect sys_200m_clk axi_ltc2387/delay_clk
 
-ad_connect ref_clk  axi_ltc2387/ref_clk
-ad_connect clk_gate          axi_ltc2387/clk_gate
-ad_connect dco_p             axi_ltc2387/dco_p
-ad_connect dco_n             axi_ltc2387/dco_n
-ad_connect da_n              axi_ltc2387/da_n
-ad_connect da_p              axi_ltc2387/da_p
-ad_connect db_n              axi_ltc2387/db_n
-ad_connect db_p              axi_ltc2387/db_p
+ad_connect ref_clk    axi_ltc2387/ref_clk
+ad_connect clk_gate   axi_ltc2387/clk_gate
+ad_connect dco_p      axi_ltc2387/dco_p
+ad_connect dco_n      axi_ltc2387/dco_n
+ad_connect da_p       axi_ltc2387/da_p
+ad_connect da_n       axi_ltc2387/da_n
+ad_connect db_p       axi_ltc2387/db_p
+ad_connect db_n       axi_ltc2387/db_n
 
-ad_connect cnv        axi_pwm_gen/pwm_0
-ad_connect clk_gate   axi_pwm_gen/pwm_1
-
-ad_connect ref_clk       axi_pwm_gen/ext_clk
-ad_connect sys_cpu_resetn         axi_pwm_gen/s_axi_aresetn
-ad_connect sys_cpu_clk            axi_pwm_gen/s_axi_aclk
-ad_connect ref_clk       axi_ltc2387_dma/fifo_wr_clk
-
+ad_connect ref_clk                axi_ltc2387_dma/fifo_wr_clk
 ad_connect axi_ltc2387/adc_valid  axi_ltc2387_dma/fifo_wr_en
 ad_connect axi_ltc2387/adc_data   axi_ltc2387_dma/fifo_wr_din
 ad_connect axi_ltc2387/adc_dovf   axi_ltc2387_dma/fifo_wr_overflow
+
+ad_connect cnv               axi_pwm_gen/pwm_0
+ad_connect clk_gate          axi_pwm_gen/pwm_1
+ad_connect ref_clk           axi_pwm_gen/ext_clk
+ad_connect sys_cpu_resetn    axi_pwm_gen/s_axi_aresetn
+ad_connect sys_cpu_clk       axi_pwm_gen/s_axi_aclk
 
 # address mapping
 
@@ -79,7 +78,7 @@ ad_cpu_interconnect 0x44A60000 axi_pwm_gen
 
 ad_mem_hp2_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP2
 ad_mem_hp2_interconnect $sys_cpu_clk axi_ltc2387_dma/m_dest_axi
-ad_connect  $sys_cpu_resetn axi_ltc2387_dma/m_dest_axi_aresetn
+ad_connect $sys_cpu_resetn axi_ltc2387_dma/m_dest_axi_aresetn
 
 # interrupts
 

@@ -103,25 +103,28 @@ module system_top (
 
   // internal signals
 
-  wire    [63:0]  gpio_i;
-  wire    [63:0]  gpio_o;
-  wire    [63:0]  gpio_t;
+  wire  [63:0]  gpio_i;
+  wire  [63:0]  gpio_o;
+  wire  [63:0]  gpio_t;
 
-  wire    [ 1:0]  iic_mux_scl_i_s;
-  wire    [ 1:0]  iic_mux_scl_o_s;
-  wire            iic_mux_scl_t_s;
-  wire    [ 1:0]  iic_mux_sda_i_s;
-  wire    [ 1:0]  iic_mux_sda_o_s;
-  wire            iic_mux_sda_t_s;
+  wire  [ 1:0]  iic_mux_scl_i_s;
+  wire  [ 1:0]  iic_mux_scl_o_s;
+  wire          iic_mux_scl_t_s;
+  wire  [ 1:0]  iic_mux_sda_i_s;
+  wire  [ 1:0]  iic_mux_sda_o_s;
+  wire          iic_mux_sda_t_s;
 
-  wire            clk_s;
-  wire            cnv_s;
-  wire            cnv;
-  wire            clk_gate;
-  wire            sampling_clk_s;
-  wire            ltc_clk;
+  wire          clk_s;
+  wire          cnv_s;
+  wire          cnv;
+  wire          clk_gate;
+  wire          sampling_clk_s;
+  wire          ltc_clk;
 
   assign gpio_i[63:34] = gpio_o[63:34];
+
+  // hardcode GPIO to always use two lanes configuration
+
   assign twolanes_cntrl = 1'b1;
   assign cnv_en = cnv;
 
@@ -169,7 +172,7 @@ module system_top (
     .I (cnv_s));
 
   ad_iobuf #(
-    .DATA_WIDTH(2)
+    .DATA_WIDTH (2)
   ) iobuf_gpio_cn0577 (
     .dio_i (gpio_o[33:32]),
     .dio_o (gpio_i[33:32]),
@@ -177,7 +180,7 @@ module system_top (
     .dio_p ({pd_cntrl, testpat_cntrl}));
 
   ad_iobuf #(
-    .DATA_WIDTH(32)
+    .DATA_WIDTH (32)
   ) iobuf_gpio_bd (
     .dio_i (gpio_o[31:0]),
     .dio_o (gpio_i[31:0]),
@@ -185,7 +188,7 @@ module system_top (
     .dio_p (gpio_bd));
 
   ad_iobuf #(
-    .DATA_WIDTH(2)
+    .DATA_WIDTH (2)
   ) i_iic_mux_scl (
     .dio_t ({iic_mux_scl_t_s, iic_mux_scl_t_s}),
     .dio_i (iic_mux_scl_o_s),
@@ -193,7 +196,7 @@ module system_top (
     .dio_p (iic_mux_scl));
 
   ad_iobuf #(
-    .DATA_WIDTH(2)
+    .DATA_WIDTH (2)
   ) i_iic_mux_sda (
     .dio_t ({iic_mux_sda_t_s, iic_mux_sda_t_s}),
     .dio_i (iic_mux_sda_o_s),
@@ -260,7 +263,7 @@ module system_top (
     .spi0_csn_0_o (),
     .spi0_csn_1_o (),
     .spi0_csn_2_o (),
-    .spi0_csn_i (1'b0),
+    .spi0_csn_i (1'b1),
     .spi0_sdi_i (1'b0),
     .spi0_sdo_i (1'b0),
     .spi0_sdo_o (),
@@ -269,7 +272,7 @@ module system_top (
     .spi1_csn_0_o (),
     .spi1_csn_1_o (),
     .spi1_csn_2_o (),
-    .spi1_csn_i (1'b0),
+    .spi1_csn_i (1'b1),
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o ());
