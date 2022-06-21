@@ -64,6 +64,11 @@ set_global_assignment -name VERILOG_FILE ../../../library/common/ad_3w_spi.v
 #  R632: DNI -> R0    PIN_F14
 #  R621: R0 -> DNI
 #  R633: R0 -> DNI
+#  R574: DNI -> R0    PIN_W5
+#  R577: DNI -> R0    PIN_W6
+#  R576: R0 -> DNI
+#  R575: R0 -> DNI
+
 
 set_location_assignment PIN_F9    -to "agc0[0]"             ; ## D20  LA17_CC_P
 set_location_assignment PIN_G9    -to "agc0[1]"             ; ## D21  LA17_CC_N
