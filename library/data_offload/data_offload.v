@@ -228,7 +228,7 @@ module data_offload #(
     .wr_fsm_state_out (src_fsm_status_s),
     .rd_fsm_state_out (dst_fsm_status_s));
 
-  assign m_axis_valid = rd_ready & ((dst_bypass_s) ? valid_bypass_s : s_storage_axis_valid);
+  assign m_axis_valid = dst_bypass_s ? valid_bypass_s : (rd_ready & s_storage_axis_valid);
   // For DAC paths set zero as IDLE data on the axis bus, avoid repeating last
   // sample.
   assign m_axis_data  = TX_OR_RXN_PATH[0] & ~m_axis_valid ? {DST_DATA_WIDTH{1'b0}} :
@@ -236,7 +236,7 @@ module data_offload #(
   assign m_axis_last  = (dst_bypass_s) ? 1'b0           : s_storage_axis_last;
   assign m_axis_tkeep = (dst_bypass_s) ? {DST_DATA_WIDTH/8{1'b1}} : s_storage_axis_tkeep;
 
-  assign s_axis_ready = wr_ready & ((src_bypass_s) ? ready_bypass_s : m_storage_axis_ready);
+  assign s_axis_ready =  src_bypass_s ? ready_bypass_s : (wr_ready & m_storage_axis_ready);
 
   assign m_storage_axis_valid = s_axis_valid & wr_ready;
   assign m_storage_axis_data = s_axis_data;
@@ -267,7 +267,7 @@ module data_offload #(
     .s_axis_aclk  (s_axis_aclk),
     .s_axis_aresetn (src_rstn),
     .s_axis_ready (ready_bypass_s),
-    .s_axis_valid (s_axis_valid),
+    .s_axis_valid (s_axis_valid & src_bypass_s),
     .s_axis_data  (s_axis_data),
     .s_axis_tlast (),
     .s_axis_full  (),
