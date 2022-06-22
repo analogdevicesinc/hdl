@@ -185,7 +185,9 @@ ad_mem_asym #(
 reg rd_active = 1'b0;
 reg [1:0] rd_req_cnt = 2'b0;
 always @(posedge m_axis_aclk) begin
-  if (rd_request_valid & rd_request_ready)
+  if (~rd_request_enable)
+    rd_req_cnt <= 2'b0;
+  else if (rd_request_valid & rd_request_ready)
     rd_req_cnt <= rd_req_cnt + 2'b1;
   else if (rd_response_eot)
     rd_req_cnt <= rd_req_cnt - 2'b1;
@@ -198,12 +200,17 @@ always @(posedge m_axis_aclk) begin
     rd_length <= rd_request_length[LENGTH_WIDTH-1:DST_ADDR_ALIGN];
 end
 
+wire rd_early_finish;
+
+assign rd_early_finish = rd_active & ~rd_request_enable;
 assign rd_last_beat = (rd_addr == rd_length) & rd_enable;
-assign rd_response_eot = m_axis_last & m_axis_valid & m_axis_ready;
+assign rd_response_eot = (m_axis_last & m_axis_valid & m_axis_ready) || rd_early_finish;
 
 // Read logic
 always @(posedge m_axis_aclk) begin
-  if (rd_request_valid & rd_request_ready)
+  if (~rd_request_enable)
+    rd_active <= 1'b0;
+  else if (rd_request_valid & rd_request_ready)
     rd_active <= 1'b1;
   else if (rd_last_beat)
     rd_active <= rd_req_cnt == 2;
@@ -256,7 +263,7 @@ util_axis_fifo #(
   .M_AXIS_REGISTERED(0)
 ) i_rd_fifo (
   .s_axis_aclk(m_axis_aclk),
-  .s_axis_aresetn(m_axis_aresetn),
+  .s_axis_aresetn(m_axis_aresetn & rd_request_enable),
   .s_axis_valid(rd_fifo_s_valid),
   .s_axis_ready(rd_fifo_s_ready),
   .s_axis_full(),
@@ -267,7 +274,7 @@ util_axis_fifo #(
   .s_axis_almost_full(),
 
   .m_axis_aclk(m_axis_aclk),
-  .m_axis_aresetn(m_axis_aresetn),
+  .m_axis_aresetn(m_axis_aresetn & rd_request_enable),
   .m_axis_valid(m_axis_valid),
   .m_axis_ready(m_axis_ready),
   .m_axis_data({m_axis_last,m_axis_data}),
