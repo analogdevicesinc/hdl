@@ -66,146 +66,6 @@ create_bd_port -dir I dac2_spi_sdo_i
 create_bd_port -dir O dac2_spi_sdo_o
 create_bd_port -dir I dac2_spi_sdi_i
 
-#spi engine stuff
-
-set data_width    32
-set async_spi_clk 1
-set num_cs        1
-set num_sdi       4
-set num_sdo       4
-set sdi_delay     1
-
-set hier_spi_engine_0 spi_ad3552r_0
-set hier_spi_engine_1 spi_ad3552r_1
-
-spi_engine_create $hier_spi_engine_0 $data_width $async_spi_clk $num_cs $num_sdi $num_sdo $sdi_delay
-spi_engine_create $hier_spi_engine_1 $data_width $async_spi_clk $num_cs $num_sdi $num_sdo $sdi_delay
-
-ad_ip_instance axi_clkgen spi_clkgen
-ad_ip_parameter spi_clkgen CONFIG.CLK0_DIV 10
-ad_ip_parameter spi_clkgen CONFIG.VCO_DIV 1
-ad_ip_parameter spi_clkgen CONFIG.VCO_MUL 12
-
-ad_ip_instance axi_pwm_gen pulsar_adc_trigger_gen
-ad_ip_parameter pulsar_adc_trigger_gen CONFIG.PULSE_0_PERIOD 120
-ad_ip_parameter pulsar_adc_trigger_gen CONFIG.PULSE_0_WIDTH 1
-
-ad_ip_instance proc_sys_reset spi_120m_rstgen
-ad_ip_parameter spi_120m_rstgen CONFIG.C_EXT_RST_WIDTH 1
-
-ad_ip_instance axi_dds spi_dds_0
-ad_connect spi_clk spi_dds_0/spi_clk
-
-#dac0
-
-ad_ip_instance axi_dmac axi_dac_0_dma
-ad_ip_parameter axi_dac_0_dma CONFIG.DMA_TYPE_SRC 0
-ad_ip_parameter axi_dac_0_dma CONFIG.DMA_TYPE_DEST 1
-ad_ip_parameter axi_dac_0_dma CONFIG.CYCLIC 0
-ad_ip_parameter axi_dac_0_dma CONFIG.SYNC_TRANSFER_START 0
-ad_ip_parameter axi_dac_0_dma CONFIG.AXI_SLICE_SRC 0
-ad_ip_parameter axi_dac_0_dma CONFIG.AXI_SLICE_DEST 0
-ad_ip_parameter axi_dac_0_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_dac_0_dma CONFIG.DMA_DATA_WIDTH_SRC 32 ;#$data_width
-ad_ip_parameter axi_dac_0_dma CONFIG.DMA_DATA_WIDTH_DEST 32
-
-ad_connect spi_resetn spi_120m_rstgen/peripheral_aresetn
-ad_connect spi_clk spi_120m_rstgen/slowest_sync_clk
-ad_connect sys_ps7/FCLK_RESET0_N spi_120m_rstgen/ext_reset_in
-
-ad_connect $sys_cpu_clk spi_clkgen/clk
-ad_connect spi_clk spi_clkgen/clk_0
-
-ad_connect spi_clk pulsar_adc_trigger_gen/ext_clk
-ad_connect $sys_cpu_clk pulsar_adc_trigger_gen/s_axi_aclk
-ad_connect sys_cpu_resetn pulsar_adc_trigger_gen/s_axi_aresetn
-ad_connect pulsar_adc_trigger_gen/pwm_0  $hier_spi_engine_0/trigger
-
-ad_connect $hier_spi_engine_0/m_spi dac_0_spi
-
-ad_connect $sys_cpu_clk $hier_spi_engine_0/clk
-ad_connect spi_clk $hier_spi_engine_0/spi_clk
-ad_connect sys_cpu_resetn $hier_spi_engine_0/resetn
-ad_connect sys_cpu_resetn axi_dac_0_dma/m_src_axi_aresetn
-ad_connect spi_clk axi_dac_0_dma/m_axis_aclk
-
-#ad_ip_instance axis_interconnect axis_interconnect_0
-#ad_ip_parameter axis_interconnect_0 CONFIG.NUM_SI 2
-#ad_ip_parameter axis_interconnect_0 CONFIG.NUM_MI 1
-#ad_ip_parameter axis_interconnect_0 CONFIG.ROUTING_MODE 1
-
-#ad_connect axis_interconnect_0/S00_AXIS axi_dac_0_dma/m_axis
-#ad_connect axis_interconnect_0/S01_AXIS spi_dds_0/m_axis_dds
-#ad_connect axis_interconnect_0/M00_AXIS $hier_spi_engine_0/s_axis_sample
-
-#ad_connect axis_interconnect_0/ACLK $sys_cpu_clk
-#ad_connect axis_interconnect_0/M00_AXIS_ACLK spi_clk
-#ad_connect axis_interconnect_0/S01_AXIS_ACLK spi_clk
-#ad_connect axis_interconnect_0/S00_AXIS_ACLK $sys_cpu_clk
-
-#ad_connect axis_interconnect_0/S00_ARB_REQ_SUPPRESS GND
-#ad_connect axis_interconnect_0/S01_ARB_REQ_SUPPRESS GND
-
-#ad_connect axis_interconnect_0/ARESETN sys_cpu_resetn
-#ad_connect axis_interconnect_0/S00_AXIS_ARESETN sys_cpu_resetn
-#ad_connect axis_interconnect_0/S_AXI_CTRL_ARESETN sys_cpu_resetn
-
-#ad_connect axis_interconnect_0/M00_AXIS_ARESETN spi_resetn
-#ad_connect axis_interconnect_0/S01_AXIS_ARESETN spi_resetn
-
-ad_connect $hier_spi_engine_0/s_axis_sample_0 axi_dac_0_dma/m_axis
-ad_connect $hier_spi_engine_0/s_axis_sample_1 spi_dds_0/m_axis_dds
-#dac1
-
-ad_ip_instance axi_dds spi_dds_1
-ad_connect spi_clk spi_dds_1/spi_clk
-
-ad_ip_instance axi_dmac axi_dac_1_dma
-ad_ip_parameter axi_dac_1_dma CONFIG.DMA_TYPE_SRC 0
-ad_ip_parameter axi_dac_1_dma CONFIG.DMA_TYPE_DEST 1
-ad_ip_parameter axi_dac_1_dma CONFIG.CYCLIC 0
-ad_ip_parameter axi_dac_1_dma CONFIG.SYNC_TRANSFER_START 0
-ad_ip_parameter axi_dac_1_dma CONFIG.AXI_SLICE_SRC 0
-ad_ip_parameter axi_dac_1_dma CONFIG.AXI_SLICE_DEST 0
-ad_ip_parameter axi_dac_1_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_dac_1_dma CONFIG.DMA_DATA_WIDTH_SRC 32
-ad_ip_parameter axi_dac_1_dma CONFIG.DMA_DATA_WIDTH_DEST 32
-
-ad_connect $hier_spi_engine_1/m_spi dac_1_spi
-
-ad_connect $sys_cpu_clk $hier_spi_engine_1/clk
-ad_connect spi_clk $hier_spi_engine_1/spi_clk
-ad_connect sys_cpu_resetn $hier_spi_engine_1/resetn
-ad_connect sys_cpu_resetn axi_dac_1_dma/m_src_axi_aresetn
-ad_connect spi_clk axi_dac_1_dma/m_axis_aclk
-ad_connect pulsar_adc_trigger_gen/pwm_0  $hier_spi_engine_1/trigger
-
-#ad_ip_instance axis_interconnect axis_interconnect_1
-#ad_ip_parameter axis_interconnect_1 CONFIG.NUM_SI 2
-#ad_ip_parameter axis_interconnect_1 CONFIG.NUM_MI 1
-#ad_ip_parameter axis_interconnect_1 CONFIG.ROUTING_MODE 1
-
-#ad_connect axis_interconnect_1/S00_AXIS axi_dac_1_dma/m_axis
-#ad_connect axis_interconnect_1/S01_AXIS spi_dds_1/m_axis_dds
-#ad_connect axis_interconnect_1/M00_AXIS $hier_spi_engine_1/s_axis_sample
-
-#ad_connect axis_interconnect_1/ACLK $sys_cpu_clk
-#ad_connect axis_interconnect_1/M00_AXIS_ACLK spi_clk
-#ad_connect axis_interconnect_1/S01_AXIS_ACLK spi_clk
-#ad_connect axis_interconnect_1/S00_AXIS_ACLK $sys_cpu_clk
-
-#ad_connect axis_interconnect_1/S00_ARB_REQ_SUPPRESS GND
-#ad_connect axis_interconnect_1/S01_ARB_REQ_SUPPRESS GND
-
-#ad_connect axis_interconnect_1/ARESETN sys_cpu_resetn
-#ad_connect axis_interconnect_1/S00_AXIS_ARESETN sys_cpu_resetn
-#ad_connect axis_interconnect_1/S_AXI_CTRL_ARESETN sys_cpu_res
-#ad_connect axis_interconnect_1/M00_AXIS_ARESETN spi_resetn
-#ad_connect axis_interconnect_1/S01_AXIS_ARESETN spi_resetn
-
-ad_connect $hier_spi_engine_1/s_axis_sample_0 axi_dac_1_dma/m_axis
-ad_connect $hier_spi_engine_1/s_axis_sample_1 spi_dds_1/m_axis_dds
-# adc peripheral
 
 ad_ip_instance axi_ltc2387 axi_ltc2387_0
 ad_ip_parameter axi_ltc2387_0 CONFIG.ADC_RES 16
@@ -293,6 +153,7 @@ ad_connect axi_clkgen/clk_0   sampling_clk
 
 ad_connect sys_ps7/FCLK_RESET0_N  pack_sys_rstgen/ext_reset_in
 ad_connect axi_clkgen/clk_0       pack_sys_rstgen/slowest_sync_clk
+ad_connect spi_resetn pack_sys_rstgen/peripheral_aresetn
 
 # ltc adc connections
 ad_connect sys_200m_clk axi_ltc2387_0/delay_clk
@@ -395,6 +256,136 @@ ad_connect  max_spi_sdo_i max_spi/io0_i
 ad_connect  max_spi_sdo_o max_spi/io0_o
 ad_connect  max_spi_sdi_i max_spi/io1_i
 
+#spi engine stuff
+
+set data_width    32
+set async_spi_clk 1
+set num_cs        1
+set num_sdi       4
+set num_sdo       4
+set sdi_delay     1
+
+set hier_spi_engine_0 spi_ad3552r_0
+set hier_spi_engine_1 spi_ad3552r_1
+
+spi_engine_create $hier_spi_engine_0 $data_width $async_spi_clk $num_cs $num_sdi $num_sdo $sdi_delay
+spi_engine_create $hier_spi_engine_1 $data_width $async_spi_clk $num_cs $num_sdi $num_sdo $sdi_delay
+
+ad_ip_instance axi_pwm_gen pulsar_adc_trigger_gen
+ad_ip_parameter pulsar_adc_trigger_gen CONFIG.PULSE_0_PERIOD 120
+ad_ip_parameter pulsar_adc_trigger_gen CONFIG.PULSE_0_WIDTH 1
+
+ad_ip_instance axi_dds spi_dds_0
+ad_connect sampling_clk spi_dds_0/spi_clk
+
+#dac0
+
+ad_ip_instance axi_dmac axi_dac_0_dma
+ad_ip_parameter axi_dac_0_dma CONFIG.DMA_TYPE_SRC 0
+ad_ip_parameter axi_dac_0_dma CONFIG.DMA_TYPE_DEST 1
+ad_ip_parameter axi_dac_0_dma CONFIG.CYCLIC 0
+ad_ip_parameter axi_dac_0_dma CONFIG.SYNC_TRANSFER_START 0
+ad_ip_parameter axi_dac_0_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter axi_dac_0_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter axi_dac_0_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_dac_0_dma CONFIG.DMA_DATA_WIDTH_SRC 32 ;#$data_width
+ad_ip_parameter axi_dac_0_dma CONFIG.DMA_DATA_WIDTH_DEST 32
+
+
+#ad_connect $sys_cpu_clk spi_clkgen/clk
+#ad_connect spi_clk spi_clkgen/clk_0
+
+ad_connect sampling_clk pulsar_adc_trigger_gen/ext_clk
+ad_connect $sys_cpu_clk pulsar_adc_trigger_gen/s_axi_aclk
+ad_connect sys_cpu_resetn pulsar_adc_trigger_gen/s_axi_aresetn
+ad_connect pulsar_adc_trigger_gen/pwm_0  $hier_spi_engine_0/trigger
+
+ad_connect $hier_spi_engine_0/m_spi dac_0_spi
+
+ad_connect $sys_cpu_clk $hier_spi_engine_0/clk
+ad_connect sampling_clk $hier_spi_engine_0/spi_clk
+ad_connect sys_cpu_resetn $hier_spi_engine_0/resetn
+ad_connect sys_cpu_resetn axi_dac_0_dma/m_src_axi_aresetn
+ad_connect sampling_clk axi_dac_0_dma/m_axis_aclk
+
+#ad_ip_instance axis_interconnect axis_interconnect_0
+#ad_ip_parameter axis_interconnect_0 CONFIG.NUM_SI 2
+#ad_ip_parameter axis_interconnect_0 CONFIG.NUM_MI 1
+#ad_ip_parameter axis_interconnect_0 CONFIG.ROUTING_MODE 1
+
+#ad_connect axis_interconnect_0/S00_AXIS axi_dac_0_dma/m_axis
+#ad_connect axis_interconnect_0/S01_AXIS spi_dds_0/m_axis_dds
+#ad_connect axis_interconnect_0/M00_AXIS $hier_spi_engine_0/s_axis_sample
+
+#ad_connect axis_interconnect_0/ACLK $sys_cpu_clk
+#ad_connect axis_interconnect_0/M00_AXIS_ACLK spi_clk
+#ad_connect axis_interconnect_0/S01_AXIS_ACLK spi_clk
+#ad_connect axis_interconnect_0/S00_AXIS_ACLK $sys_cpu_clk
+
+#ad_connect axis_interconnect_0/S00_ARB_REQ_SUPPRESS GND
+#ad_connect axis_interconnect_0/S01_ARB_REQ_SUPPRESS GND
+
+#ad_connect axis_interconnect_0/ARESETN sys_cpu_resetn
+#ad_connect axis_interconnect_0/S00_AXIS_ARESETN sys_cpu_resetn
+#ad_connect axis_interconnect_0/S_AXI_CTRL_ARESETN sys_cpu_resetn
+
+#ad_connect axis_interconnect_0/M00_AXIS_ARESETN spi_resetn
+#ad_connect axis_interconnect_0/S01_AXIS_ARESETN spi_resetn
+
+ad_connect $hier_spi_engine_0/s_axis_sample_0 axi_dac_0_dma/m_axis
+ad_connect $hier_spi_engine_0/s_axis_sample_1 spi_dds_0/m_axis_dds
+#dac1
+
+ad_ip_instance axi_dds spi_dds_1
+ad_connect sampling_clk spi_dds_1/spi_clk
+
+ad_ip_instance axi_dmac axi_dac_1_dma
+ad_ip_parameter axi_dac_1_dma CONFIG.DMA_TYPE_SRC 0
+ad_ip_parameter axi_dac_1_dma CONFIG.DMA_TYPE_DEST 1
+ad_ip_parameter axi_dac_1_dma CONFIG.CYCLIC 0
+ad_ip_parameter axi_dac_1_dma CONFIG.SYNC_TRANSFER_START 0
+ad_ip_parameter axi_dac_1_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter axi_dac_1_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter axi_dac_1_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_dac_1_dma CONFIG.DMA_DATA_WIDTH_SRC 32
+ad_ip_parameter axi_dac_1_dma CONFIG.DMA_DATA_WIDTH_DEST 32
+
+ad_connect $hier_spi_engine_1/m_spi dac_1_spi
+
+ad_connect $sys_cpu_clk $hier_spi_engine_1/clk
+ad_connect sampling_clk $hier_spi_engine_1/spi_clk
+ad_connect sys_cpu_resetn $hier_spi_engine_1/resetn
+ad_connect sys_cpu_resetn axi_dac_1_dma/m_src_axi_aresetn
+ad_connect sampling_clk axi_dac_1_dma/m_axis_aclk
+ad_connect pulsar_adc_trigger_gen/pwm_0  $hier_spi_engine_1/trigger
+
+#ad_ip_instance axis_interconnect axis_interconnect_1
+#ad_ip_parameter axis_interconnect_1 CONFIG.NUM_SI 2
+#ad_ip_parameter axis_interconnect_1 CONFIG.NUM_MI 1
+#ad_ip_parameter axis_interconnect_1 CONFIG.ROUTING_MODE 1
+
+#ad_connect axis_interconnect_1/S00_AXIS axi_dac_1_dma/m_axis
+#ad_connect axis_interconnect_1/S01_AXIS spi_dds_1/m_axis_dds
+#ad_connect axis_interconnect_1/M00_AXIS $hier_spi_engine_1/s_axis_sample
+
+#ad_connect axis_interconnect_1/ACLK $sys_cpu_clk
+#ad_connect axis_interconnect_1/M00_AXIS_ACLK spi_clk
+#ad_connect axis_interconnect_1/S01_AXIS_ACLK spi_clk
+#ad_connect axis_interconnect_1/S00_AXIS_ACLK $sys_cpu_clk
+
+#ad_connect axis_interconnect_1/S00_ARB_REQ_SUPPRESS GND
+#ad_connect axis_interconnect_1/S01_ARB_REQ_SUPPRESS GND
+
+#ad_connect axis_interconnect_1/ARESETN sys_cpu_resetn
+#ad_connect axis_interconnect_1/S00_AXIS_ARESETN sys_cpu_resetn
+#ad_connect axis_interconnect_1/S_AXI_CTRL_ARESETN sys_cpu_res
+#ad_connect axis_interconnect_1/M00_AXIS_ARESETN spi_resetn
+#ad_connect axis_interconnect_1/S01_AXIS_ARESETN spi_resetn
+
+ad_connect $hier_spi_engine_1/s_axis_sample_0 axi_dac_1_dma/m_axis
+ad_connect $hier_spi_engine_1/s_axis_sample_1 spi_dds_1/m_axis_dds
+# adc peripheral
+
 # address mapping
 
 ad_cpu_interconnect 0x44A00000 axi_ltc2387_0
@@ -409,7 +400,6 @@ ad_cpu_interconnect 0x44C10000 axi_pwm_gen_1
 
 ad_cpu_interconnect 0x44d00000 $hier_spi_engine_0/${hier_spi_engine_0}_axi_regmap
 ad_cpu_interconnect 0x44d30000 axi_dac_0_dma
-ad_cpu_interconnect 0x44d40000 spi_clkgen
 ad_cpu_interconnect 0x44d50000 pulsar_adc_trigger_gen
 ad_cpu_interconnect 0x44d60000 spi_dds_0
 #ad_cpu_interconnect 0x44d70000 axis_interconnect_0
