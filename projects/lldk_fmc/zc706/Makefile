@@ -13,6 +13,7 @@ M_DEPS += ../../../library/xilinx/common/ad_data_out.v
 M_DEPS += ../../../library/xilinx/common/ad_data_clk.v
 M_DEPS += ../../../library/common/ad_iobuf.v
 
+LIB_DEPS += axi_adc_decimate
 LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_hdmi_tx

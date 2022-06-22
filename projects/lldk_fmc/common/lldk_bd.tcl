@@ -105,14 +105,6 @@ ad_ip_parameter axi_pwm_gen CONFIG.PULSE_1_WIDTH 5
 ad_ip_parameter axi_pwm_gen CONFIG.PULSE_1_PERIOD 8
 ad_ip_parameter axi_pwm_gen CONFIG.PULSE_1_OFFSET 0
 
-ad_ip_instance axi_pwm_gen axi_pwm_gen_1
-ad_ip_parameter axi_pwm_gen_1 CONFIG.N_PWMS 4
-ad_ip_parameter axi_pwm_gen_1 CONFIG.PULSE_0_WIDTH 1
-ad_ip_parameter axi_pwm_gen_1 CONFIG.PULSE_0_PERIOD 8
-ad_ip_parameter axi_pwm_gen_1 CONFIG.PULSE_1_WIDTH 5
-ad_ip_parameter axi_pwm_gen_1 CONFIG.PULSE_1_PERIOD 8
-ad_ip_parameter axi_pwm_gen_1 CONFIG.PULSE_1_OFFSET 0
-
 # constant 1
 
 create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 const_vcc_1
@@ -209,24 +201,39 @@ ad_connect clk_gate   axi_pwm_gen/pwm_1
 ad_connect axi_clkgen/clk_0       axi_pwm_gen/ext_clk
 ad_connect sys_cpu_resetn         axi_pwm_gen/s_axi_aresetn
 ad_connect sys_cpu_clk            axi_pwm_gen/s_axi_aclk
-ad_connect axi_clkgen/clk_0       axi_pwm_gen_1/ext_clk
-ad_connect sys_cpu_resetn         axi_pwm_gen_1/s_axi_aresetn
-ad_connect sys_cpu_clk            axi_pwm_gen_1/s_axi_aclk
-
 ad_connect axi_clkgen/clk_0                  util_ltc2387_adc_pack/clk
 ad_connect pack_sys_rstgen/peripheral_reset  util_ltc2387_adc_pack/reset
-ad_connect axi_ltc2387_0/adc_valid           util_ltc2387_adc_pack/fifo_wr_en
 
-for {set i 0} {$i < 4} {incr i} {
-  ad_connect axi_ltc2387_$i/adc_data  util_ltc2387_adc_pack/fifo_wr_data_$i
-}
+#debug
+ad_ip_instance axi_adc_decimate axi_adc_decimate_0
+ad_ip_parameter axi_adc_decimate_0 CONFIG.CORRECTION_DISABLE {0}
+ad_connect sampling_clk axi_adc_decimate_0/adc_clk
+ad_connect pack_sys_rstgen/peripheral_reset axi_adc_decimate_0/adc_rst
+ad_connect axi_adc_decimate_0/adc_data_a axi_ltc2387_0/adc_data
+ad_connect axi_adc_decimate_0/adc_data_b axi_ltc2387_1/adc_data
+ad_connect axi_adc_decimate_0/adc_valid_a axi_ltc2387_0/adc_valid
+ad_connect axi_adc_decimate_0/adc_valid_b axi_ltc2387_1/adc_valid
+ad_connect axi_adc_decimate_0/adc_dec_data_a util_ltc2387_adc_pack/fifo_wr_data_0
+ad_connect axi_adc_decimate_0/adc_dec_data_b util_ltc2387_adc_pack/fifo_wr_data_1
+
+ad_ip_instance axi_adc_decimate axi_adc_decimate_1
+ad_ip_parameter axi_adc_decimate_1 CONFIG.CORRECTION_DISABLE {0}
+ad_connect sampling_clk axi_adc_decimate_1/adc_clk
+ad_connect pack_sys_rstgen/peripheral_reset axi_adc_decimate_1/adc_rst
+ad_connect axi_adc_decimate_1/adc_data_a axi_ltc2387_2/adc_data
+ad_connect axi_adc_decimate_1/adc_data_b axi_ltc2387_3/adc_data
+ad_connect axi_adc_decimate_1/adc_valid_a axi_ltc2387_2/adc_valid
+ad_connect axi_adc_decimate_1/adc_valid_b axi_ltc2387_3/adc_valid
+ad_connect axi_adc_decimate_1/adc_dec_data_a util_ltc2387_adc_pack/fifo_wr_data_2
+ad_connect axi_adc_decimate_1/adc_dec_data_b util_ltc2387_adc_pack/fifo_wr_data_3
+
+ad_connect axi_adc_decimate_0/adc_dec_valid_a util_ltc2387_adc_pack/fifo_wr_en
 
 for {set i 0} {$i < 4} {incr i} {
   ad_connect const_vcc_1/dout  util_ltc2387_adc_pack/enable_$i
 }
 
 ad_connect axi_clkgen/clk_0         axi_ltc2387_dma/fifo_wr_clk
-ad_connect axi_ltc2387_0/adc_valid  axi_ltc2387_dma/fifo_wr_en
 
 ad_connect util_ltc2387_adc_pack/fifo_wr_overflow  axi_ltc2387_0/adc_dovf
 ad_connect util_ltc2387_adc_pack/fifo_wr_overflow  axi_ltc2387_1/adc_dovf
@@ -393,11 +400,11 @@ ad_cpu_interconnect 0x44A10000 axi_ltc2387_1
 ad_cpu_interconnect 0x44A20000 axi_ltc2387_2
 ad_cpu_interconnect 0x44A30000 axi_ltc2387_3
 ad_cpu_interconnect 0x44A40000 axi_ltc2387_dma
+ad_cpu_interconnect 0x44A50000 axi_adc_decimate_0
+ad_cpu_interconnect 0x44A60000 axi_adc_decimate_1
 ad_cpu_interconnect 0x44B00000 axi_clkgen
 ad_cpu_interconnect 0x44B10000 axi_pwm_gen
 ad_cpu_interconnect 0x44B20000 max_spi
-ad_cpu_interconnect 0x44C10000 axi_pwm_gen_1
-
 ad_cpu_interconnect 0x44d00000 $hier_spi_engine_0/${hier_spi_engine_0}_axi_regmap
 ad_cpu_interconnect 0x44d30000 axi_dac_0_dma
 ad_cpu_interconnect 0x44d50000 pulsar_adc_trigger_gen
