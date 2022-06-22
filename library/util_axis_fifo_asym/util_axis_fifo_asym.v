@@ -255,8 +255,8 @@ module util_axis_fifo_asym #(
 
   generate
     if (RATIO == 1) begin
-      always @(*) begin
-        s_axis_counter <= 1'b1;
+      initial begin
+        s_axis_counter = 1'b1;
       end
     end else if (RATIO > 1) begin
       if (RATIO_TYPE) begin
@@ -288,8 +288,8 @@ module util_axis_fifo_asym #(
 
   generate
     if (RATIO == 1) begin
-      always @(*) begin
-        m_axis_counter <= 1'b0;
+      initial begin
+        m_axis_counter = 1'b0;
       end
     end else if (RATIO > 1) begin
       always @(posedge m_axis_aclk) begin
