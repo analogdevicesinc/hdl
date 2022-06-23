@@ -143,6 +143,3 @@ ad_connect  sys_concat_intc/In0   GND
 # interconnects and address mapping
 
 ad_cpu_interconnect 0x45000000 axi_sysid_0
-
-ad_mem_hp0_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
-
