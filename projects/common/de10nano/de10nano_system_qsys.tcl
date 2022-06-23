@@ -164,6 +164,20 @@ set_instance_parameter_value sys_id {id} {-1395322110}
 add_connection sys_clk.clk sys_id.clk
 add_connection sys_clk.clk_reset sys_id.reset
 
+# system id
+
+add_instance axi_sysid_0 axi_sysid
+add_instance rom_sys_0 sysid_rom
+
+add_connection axi_sysid_0.if_rom_addr rom_sys_0.if_rom_addr
+add_connection rom_sys_0.if_rom_data axi_sysid_0.if_sys_rom_data
+add_connection sys_clk.clk rom_sys_0.if_clk
+add_connection sys_clk.clk axi_sysid_0.s_axi_clock
+add_connection sys_clk.clk_reset axi_sysid_0.s_axi_reset
+
+add_interface pr_rom_data_nc conduit end
+set_interface_property pr_rom_data_nc EXPORT_OF axi_sysid_0.if_pr_rom_data
+
 # gpio-bd
 
 add_instance sys_gpio_bd altera_avalon_pio
@@ -333,4 +347,5 @@ ad_cpu_interconnect 0x00090000 axi_hdmi_tx_0.s_axi
 ad_cpu_interconnect 0x00100000 pixel_clk_pll_reconfig.mgmt_avalon_slave
 ad_cpu_interconnect 0x00109000 sys_gpio_out.s1
 ad_cpu_interconnect 0x0010A000 ltc2308_spi.spi_control_port
+ad_cpu_interconnect 0x00018000 axi_sysid_0.s_axi
 
