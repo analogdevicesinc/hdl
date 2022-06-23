@@ -7,14 +7,17 @@
 PROJECT_NAME := cn0540_de10nano
 
 M_DEPS += ../common/cn0540_qsys.tcl
+M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/de10nano/de10nano_system_qsys.tcl
 M_DEPS += ../../common/de10nano/de10nano_system_assign.tcl
 
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_hdmi_tx
+LIB_DEPS += axi_sysid
 LIB_DEPS += spi_engine/axi_spi_engine
 LIB_DEPS += spi_engine/spi_engine_execution
 LIB_DEPS += spi_engine/spi_engine_interconnect
 LIB_DEPS += spi_engine/spi_engine_offload
+LIB_DEPS += sysid_rom
 
 include ../../scripts/project-intel.mk
