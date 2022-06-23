@@ -52,25 +52,24 @@ module spi_engine_execution #(
 
   output reg active,
 
-  output cmd_ready,
-  input cmd_valid,
-  input [15:0] cmd,
+ (* mark_debug = "true" *) output cmd_ready,
+ (* mark_debug = "true" *) input cmd_valid,
+ (* mark_debug = "true" *) input [15:0] cmd,
 
  (* mark_debug = "true" *) input sdo_data_valid,
  (* mark_debug = "true" *) output reg sdo_data_ready,
  (* mark_debug = "true" *) input [(DATA_WIDTH-1):0] sdo_data,
 
+ (* mark_debug = "true" *) input sdi_data_ready,
+ (* mark_debug = "true" *) output sdi_data_valid,
+ (* mark_debug = "true" *) output [(NUM_OF_SDI * DATA_WIDTH)-1:0] sdi_data,
 
-  input sdi_data_ready,
-  output sdi_data_valid,
-  output [(NUM_OF_SDI * DATA_WIDTH)-1:0] sdi_data,
+ (* mark_debug = "true" *) input sync_ready,
+ (* mark_debug = "true" *) output reg sync_valid,
+ (* mark_debug = "true" *) output [7:0] sync,
 
-  input sync_ready,
-  output reg sync_valid,
-  output [7:0] sync,
-
-  input echo_sclk,
-  output reg sclk,
+ (* mark_debug = "true" *) input echo_sclk,
+ (* mark_debug = "true" *) output reg sclk,
  (* mark_debug = "true" *) output reg [NUM_OF_SDO-1:0] sdo,
  (* mark_debug = "true" *) output reg sdo_t,
  (* mark_debug = "true" *) input [NUM_OF_SDI-1:0] sdi,
@@ -103,7 +102,7 @@ wire [NUM_OF_SDO-1:0] sdo_int_s;
 wire [NUM_OF_SDO-1:0] sdo_int_s2;
 reg sdo_t_int = 1'b0;
 
-reg idle;
+ (* mark_debug = "true" *) reg idle;
 
 reg [7:0] clk_div_counter = 'h00;
 reg [7:0] clk_div_counter_next = 'h00;
@@ -119,15 +118,15 @@ wire ntx_rx = counter[0];
 
 reg trigger = 1'b0;
 reg trigger_next = 1'b0;
-reg wait_for_io = 1'b0;
-reg transfer_active = 1'b0;
+ (* mark_debug = "true" *) reg wait_for_io = 1'b0;
+ (* mark_debug = "true" *) reg transfer_active = 1'b0;
 
-wire last_bit;
-wire first_bit;
-reg last_transfer;
+ (* mark_debug = "true" *) wire last_bit;
+ (* mark_debug = "true" *) wire first_bit;
+ (* mark_debug = "true" *) reg last_transfer;
 reg [7:0] word_length = DATA_WIDTH;
 reg [7:0] left_aligned = 8'b0;
-wire end_of_word;
+ (* mark_debug = "true" *) wire end_of_word;
 
 reg [7:0] sdi_counter = 8'b0;
 
@@ -139,8 +138,8 @@ reg cpha = DEFAULT_SPI_CFG[0];
 reg cpol = DEFAULT_SPI_CFG[1];
 reg [7:0] clk_div = DEFAULT_CLK_DIV;
 
-reg sdo_enabled = 1'b0;
-reg sdi_enabled = 1'b0;
+ (* mark_debug = "true" *) reg sdo_enabled = 1'b0;
+ (* mark_debug = "true" *) reg sdi_enabled = 1'b0;
 
 reg [(DATA_WIDTH-1):0] data_sdo_shift = 'h0;
 reg [(DATA_WIDTH-1):0] data_sdo_shift2 = 'h0;
@@ -149,26 +148,26 @@ reg [(DATA_WIDTH-1):0] data_sdo_shift4 = 'h0;
 
 reg [SDI_DELAY+1:0] trigger_rx_d = {(SDI_DELAY+2){1'b0}};
 
-wire [1:0] inst = cmd[13:12];
-wire [1:0] inst_d1 = cmd_d1[13:12];
+ (* mark_debug = "true" *) wire [1:0] inst = cmd[13:12];
+ (* mark_debug = "true" *) wire [1:0] inst_d1 = cmd_d1[13:12];
 
-wire exec_cmd = cmd_ready && cmd_valid;
-wire exec_transfer_cmd = exec_cmd && inst == CMD_TRANSFER;
+ (* mark_debug = "true" *) wire exec_cmd = cmd_ready && cmd_valid;
+ (* mark_debug = "true" *) wire exec_transfer_cmd = exec_cmd && inst == CMD_TRANSFER;
 
-wire exec_write_cmd = exec_cmd && inst == CMD_WRITE;
-wire exec_chipselect_cmd = exec_cmd && inst == CMD_CHIPSELECT;
-wire exec_misc_cmd = exec_cmd && inst == CMD_MISC;
-wire exec_sync_cmd = exec_misc_cmd && cmd[8] == MISC_SYNC;
+ (* mark_debug = "true" *) wire exec_write_cmd = exec_cmd && inst == CMD_WRITE;
+ (* mark_debug = "true" *) wire exec_chipselect_cmd = exec_cmd && inst == CMD_CHIPSELECT;
+ (* mark_debug = "true" *) wire exec_misc_cmd = exec_cmd && inst == CMD_MISC;
+ (* mark_debug = "true" *) wire exec_sync_cmd = exec_misc_cmd && cmd[8] == MISC_SYNC;
 
-wire trigger_tx;
-wire trigger_rx;
+ (* mark_debug = "true" *) wire trigger_tx;
+ (* mark_debug = "true" *) wire trigger_rx;
 
 wire sleep_counter_compare;
 wire cs_sleep_counter_compare;
 
-wire io_ready1;
-wire io_ready2;
-wire trigger_rx_s;
+ (* mark_debug = "true" *) wire io_ready1;
+ (* mark_debug = "true" *) wire io_ready2;
+ (* mark_debug = "true" *) wire trigger_rx_s;
 
 wire last_sdi_bit;
 wire end_of_sdi_latch;

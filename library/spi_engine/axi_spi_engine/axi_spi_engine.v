@@ -99,17 +99,17 @@ module axi_spi_engine #(
 
   output spi_resetn,
 
-  input cmd_ready,
-  output cmd_valid,
-  output [15:0] cmd_data,
+ (* mark_debug = "true" *) input cmd_ready,
+ (* mark_debug = "true" *) output cmd_valid,
+ (* mark_debug = "true" *) output [15:0] cmd_data,
 
-  input sdo_data_ready,
-  output sdo_data_valid,
-  output [(DATA_WIDTH-1):0] sdo_data,
+ (* mark_debug = "true" *) input sdo_data_ready,
+ (* mark_debug = "true" *) output sdo_data_valid,
+ (* mark_debug = "true" *) output [(DATA_WIDTH-1):0] sdo_data,
 
-  output sdi_data_ready,
-  input sdi_data_valid,
-  input [(NUM_OF_SDI * DATA_WIDTH-1):0] sdi_data,
+ (* mark_debug = "true" *) output sdi_data_ready,
+ (* mark_debug = "true" *) input sdi_data_valid,
+ (* mark_debug = "true" *) input [(NUM_OF_SDI * DATA_WIDTH-1):0] sdi_data,
 
   output sync_ready,
   input sync_valid,

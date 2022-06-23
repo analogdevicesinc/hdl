@@ -47,33 +47,33 @@ module spi_engine_offload #(
 
   input ctrl_clk,
 
-  input ctrl_cmd_wr_en,
-  input [15:0] ctrl_cmd_wr_data,
+ (* mark_debug = "true" *) input ctrl_cmd_wr_en,
+ (* mark_debug = "true" *) input [15:0] ctrl_cmd_wr_data,
 
-  input ctrl_sdo_wr_en,
-  input [(DATA_WIDTH-1):0] ctrl_sdo_wr_data,
+ (* mark_debug = "true" *) input ctrl_sdo_wr_en,
+ (* mark_debug = "true" *) input [(DATA_WIDTH-1):0] ctrl_sdo_wr_data,
 
-  input ctrl_enable,
-  input ctrl_axis_sw,
-  output ctrl_enabled,
-  input ctrl_mem_reset,
+ (* mark_debug = "true" *) input ctrl_enable,
+ (* mark_debug = "true" *) input ctrl_axis_sw,
+ (* mark_debug = "true" *) output ctrl_enabled,
+ (* mark_debug = "true" *) input ctrl_mem_reset,
 
-  output status_sync_valid,
-  input status_sync_ready,
-  output [7:0] status_sync_data,
+ (* mark_debug = "true" *) output status_sync_valid,
+ (* mark_debug = "true" *) input status_sync_ready,
+ (* mark_debug = "true" *) output [7:0] status_sync_data,
 
   input spi_clk,
-  input spi_resetn,
+ (* mark_debug = "true" *) input spi_resetn,
 
-  input trigger,
+ (* mark_debug = "true" *) input trigger,
 
-  output cmd_valid,
-  input cmd_ready,
-  output [15:0] cmd,
+ (* mark_debug = "true" *) output cmd_valid,
+ (* mark_debug = "true" *) input cmd_ready,
+ (* mark_debug = "true" *) output [15:0] cmd,
 
-  output sdo_data_valid,
-  input sdo_data_ready,
-  output [(DATA_WIDTH-1):0] sdo_data,
+ (* mark_debug = "true" *) output sdo_data_valid,
+ (* mark_debug = "true" *) input sdo_data_ready,
+ (* mark_debug = "true" *) output [(DATA_WIDTH-1):0] sdo_data,
 
   input sdi_data_valid,
   output sdi_data_ready,
@@ -87,25 +87,25 @@ module spi_engine_offload #(
   input offload_sdi_ready,
   output [(NUM_OF_SDI * DATA_WIDTH-1):0] offload_sdi_data,
 
-  input offload_sdo_valid_0,
-  output offload_sdo_ready_0,
-  input [(DATA_WIDTH-1):0] offload_sdo_data_0,
+ (* mark_debug = "true" *) input offload_sdo_valid_0,
+ (* mark_debug = "true" *) output offload_sdo_ready_0,
+ (* mark_debug = "true" *) input [(DATA_WIDTH-1):0] offload_sdo_data_0,
 
-  input offload_sdo_valid_1,
-  output offload_sdo_ready_1,
-  input [(DATA_WIDTH-1):0] offload_sdo_data_1
+ (* mark_debug = "true" *) input offload_sdo_valid_1,
+ (* mark_debug = "true" *) output offload_sdo_ready_1,
+ (* mark_debug = "true" *) input [(DATA_WIDTH-1):0] offload_sdo_data_1
 );
 
-reg spi_active = 1'b0;
-reg ctrl_enable_d = 1'b0;
-reg spi_active_d = 1'b0;
-wire ctrl_enable_ed;
-wire spi_active_ed;
+ (* mark_debug = "true" *) reg spi_active = 1'b0;
+ (* mark_debug = "true" *) reg ctrl_enable_d = 1'b0;
+ (* mark_debug = "true" *) reg spi_active_d = 1'b0;
+ (* mark_debug = "true" *) wire ctrl_enable_ed;
+ (* mark_debug = "true" *) wire spi_active_ed;
 
-reg [CMD_MEM_ADDRESS_WIDTH-1:0] ctrl_cmd_wr_addr = 'h00;
-reg [CMD_MEM_ADDRESS_WIDTH-1:0] ctrl_cmd_os_wr_addr = 'h00;
-reg [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_rd_addr = 'h00;
-reg [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_os_rd_addr = 'h00;
+ (* mark_debug = "true" *) reg [CMD_MEM_ADDRESS_WIDTH-1:0] ctrl_cmd_wr_addr = 'h00;
+ (* mark_debug = "true" *) reg [CMD_MEM_ADDRESS_WIDTH-1:0] ctrl_cmd_os_wr_addr = 'h00;
+ (* mark_debug = "true" *) reg [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_rd_addr = 'h00;
+ (* mark_debug = "true" *) reg [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_os_rd_addr = 'h00;
 reg [SDO_MEM_ADDRESS_WIDTH-1:0] ctrl_sdo_wr_addr = 'h00;
 reg [SDO_MEM_ADDRESS_WIDTH-1:0] ctrl_sdo_wr_addr_1 = 'h00;
 reg [SDO_MEM_ADDRESS_WIDTH-1:0] spi_sdo_rd_addr = 'h00;
@@ -114,13 +114,13 @@ reg [15:0] cmd_mem[0:2**CMD_MEM_ADDRESS_WIDTH-1];
 reg [15:0] cmd_mem_os[0:2**CMD_MEM_ADDRESS_WIDTH-1];
 reg [(DATA_WIDTH-1):0] sdo_mem[0:2**SDO_MEM_ADDRESS_WIDTH-1];
 
-reg cmd_valid_s = 1'h0;
+ (* mark_debug = "true" *) reg cmd_valid_s = 1'h0;
 
-wire [15:0] cmd_int_s;
-wire [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_rd_addr_next;
-wire [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_os_rd_addr_next;
-wire spi_enable;
-wire mem_empty;
+ (* mark_debug = "true" *) wire [15:0] cmd_int_s;
+ (* mark_debug = "true" *) wire [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_rd_addr_next;
+ (* mark_debug = "true" *) wire [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_os_rd_addr_next;
+ (* mark_debug = "true" *) wire spi_enable;
+ (* mark_debug = "true" *) wire mem_empty;
 wire offload_sdo_valid;
 wire offload_sdo_ready;
 wire cmd_mem_os_s;
@@ -257,9 +257,9 @@ generate if (ASYNC_SPI_CLK) begin
  * is asserted in the control domain.
  */
 
-reg ctrl_do_enable = 1'b0;
-wire ctrl_is_enabled;
-reg spi_enabled = 1'b0;
+ (* mark_debug = "true" *) reg ctrl_do_enable = 1'b0;
+ (* mark_debug = "true" *) wire ctrl_is_enabled;
+ (* mark_debug = "true" *) reg spi_enabled = 1'b0;
 
 always @(posedge ctrl_clk) begin
   if (ctrl_enable == 1'b1) begin
