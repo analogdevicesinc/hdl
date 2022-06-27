@@ -1,13 +1,19 @@
 name: Lint
 
-on: [push, pull_request]
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'library/**'
+      - 'projects/**'
 
 jobs:
-  Lint:
+  lint:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Check Readmes
+      - uses: actions/checkout@v3
+      - name: Check for Readme.md
         run: |
           bash ./.github/scripts/check_for_missing_readme_md.sh
