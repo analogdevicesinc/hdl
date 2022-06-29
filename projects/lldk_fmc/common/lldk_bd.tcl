@@ -282,8 +282,8 @@ ad_ip_instance axi_pwm_gen pulsar_adc_trigger_gen
 ad_ip_parameter pulsar_adc_trigger_gen CONFIG.PULSE_0_PERIOD 120
 ad_ip_parameter pulsar_adc_trigger_gen CONFIG.PULSE_0_WIDTH 1
 
-ad_ip_instance axi_dds spi_dds_0
-ad_connect sampling_clk spi_dds_0/spi_clk
+#ad_ip_instance axi_dds spi_dds_0
+#ad_connect sampling_clk spi_dds_0/spi_clk
 
 #dac0
 
@@ -340,11 +340,19 @@ ad_connect sampling_clk axi_dac_0_dma/m_axis_aclk
 #ad_connect axis_interconnect_0/S01_AXIS_ARESETN spi_resetn
 
 ad_connect $hier_spi_engine_0/s_axis_sample_0 axi_dac_0_dma/m_axis
-ad_connect $hier_spi_engine_0/s_axis_sample_1 spi_dds_0/m_axis_dds
+
+create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 xlconcat_0
+set_property -dict [list CONFIG.IN0_WIDTH.VALUE_SRC PROPAGATED] [get_bd_cells xlconcat_0]
+connect_bd_net [get_bd_pins xlconcat_0/In0] [get_bd_pins axi_adc_decimate_0/adc_dec_data_a]
+connect_bd_net [get_bd_pins xlconcat_0/In1] [get_bd_pins axi_adc_decimate_0/adc_dec_data_b]
+connect_bd_net [get_bd_pins spi_ad3552r_0/s_axis_sample_1_tdata] [get_bd_pins xlconcat_0/dout]
+connect_bd_net [get_bd_pins spi_ad3552r_0/s_axis_sample_1_tvalid] [get_bd_pins axi_adc_decimate_0/adc_dec_valid_a]
+
+#ad_connect $hier_spi_engine_0/s_axis_sample_1 spi_dds_0/m_axis_dds
 #dac1
 
-ad_ip_instance axi_dds spi_dds_1
-ad_connect sampling_clk spi_dds_1/spi_clk
+#ad_ip_instance axi_dds spi_dds_1
+#ad_connect sampling_clk spi_dds_1/spi_clk
 
 ad_ip_instance axi_dmac axi_dac_1_dma
 ad_ip_parameter axi_dac_1_dma CONFIG.DMA_TYPE_SRC 0
@@ -390,7 +398,14 @@ ad_connect pulsar_adc_trigger_gen/pwm_0  $hier_spi_engine_1/trigger
 #ad_connect axis_interconnect_1/S01_AXIS_ARESETN spi_resetn
 
 ad_connect $hier_spi_engine_1/s_axis_sample_0 axi_dac_1_dma/m_axis
-ad_connect $hier_spi_engine_1/s_axis_sample_1 spi_dds_1/m_axis_dds
+
+create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 xlconcat_1
+set_property -dict [list CONFIG.IN0_WIDTH.VALUE_SRC PROPAGATED] [get_bd_cells xlconcat_1]
+connect_bd_net [get_bd_pins xlconcat_1/In0] [get_bd_pins axi_adc_decimate_1/adc_dec_data_a]
+connect_bd_net [get_bd_pins xlconcat_1/In1] [get_bd_pins axi_adc_decimate_1/adc_dec_data_b]
+connect_bd_net [get_bd_pins spi_ad3552r_1/s_axis_sample_1_tdata] [get_bd_pins xlconcat_1/dout]
+connect_bd_net [get_bd_pins spi_ad3552r_1/s_axis_sample_1_tvalid] [get_bd_pins axi_adc_decimate_1/adc_dec_valid_a]
+#ad_connect $hier_spi_engine_1/s_axis_sample_1 spi_dds_1/m_axis_dds
 # adc peripheral
 
 # address mapping
@@ -408,12 +423,12 @@ ad_cpu_interconnect 0x44B20000 max_spi
 ad_cpu_interconnect 0x44d00000 $hier_spi_engine_0/${hier_spi_engine_0}_axi_regmap
 ad_cpu_interconnect 0x44d30000 axi_dac_0_dma
 ad_cpu_interconnect 0x44d50000 pulsar_adc_trigger_gen
-ad_cpu_interconnect 0x44d60000 spi_dds_0
+#ad_cpu_interconnect 0x44d60000 spi_dds_0
 #ad_cpu_interconnect 0x44d70000 axis_interconnect_0
 
 ad_cpu_interconnect 0x44e00000 $hier_spi_engine_1/${hier_spi_engine_1}_axi_regmap
 ad_cpu_interconnect 0x44e30000 axi_dac_1_dma
-ad_cpu_interconnect 0x44ef0000 spi_dds_1
+#ad_cpu_interconnect 0x44ef0000 spi_dds_1
 #ad_cpu_interconnect 0x44f00000 axis_interconnect_1
 
 # interconnect (adc)
