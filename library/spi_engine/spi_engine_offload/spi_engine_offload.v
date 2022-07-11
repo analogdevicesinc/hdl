@@ -39,6 +39,7 @@ module spi_engine_offload #(
 
   parameter ASYNC_SPI_CLK = 0,
   parameter ASYNC_TRIG = 0,
+  parameter SDO_MEM_OS = 0,
   parameter CMD_MEM_ADDRESS_WIDTH = 4,
   parameter SDO_MEM_ADDRESS_WIDTH = 4,
   parameter DATA_WIDTH = 8,                   // Valid data widths values are 8/16/24/32
@@ -96,23 +97,37 @@ module spi_engine_offload #(
 );
 
 reg spi_active = 1'b0;
+reg ctrl_enable_d = 1'b0;
+reg spi_active_d = 1'b0;
+wire ctrl_enable_ed;
+wire spi_active_ed;
 
 reg [CMD_MEM_ADDRESS_WIDTH-1:0] ctrl_cmd_wr_addr = 'h00;
+reg [CMD_MEM_ADDRESS_WIDTH-1:0] ctrl_cmd_os_wr_addr = 'h00;
 reg [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_rd_addr = 'h00;
+reg [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_os_rd_addr = 'h00;
 reg [SDO_MEM_ADDRESS_WIDTH-1:0] ctrl_sdo_wr_addr = 'h00;
 reg [SDO_MEM_ADDRESS_WIDTH-1:0] ctrl_sdo_wr_addr_1 = 'h00;
 reg [SDO_MEM_ADDRESS_WIDTH-1:0] spi_sdo_rd_addr = 'h00;
 
 reg [15:0] cmd_mem[0:2**CMD_MEM_ADDRESS_WIDTH-1];
+reg [15:0] cmd_mem_os[0:2**CMD_MEM_ADDRESS_WIDTH-1];
 reg [(DATA_WIDTH-1):0] sdo_mem[0:2**SDO_MEM_ADDRESS_WIDTH-1];
+
+reg cmd_valid_s = 1'h0;
 
 wire [15:0] cmd_int_s;
 wire [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_rd_addr_next;
+wire [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_os_rd_addr_next;
 wire spi_enable;
 wire mem_empty;
 wire offload_sdo_valid;
 wire offload_sdo_ready;
+wire cmd_mem_os_s;
 wire [(DATA_WIDTH-1):0] offload_sdo_data;
+
+assign cmd_mem_os_s = ctrl_cmd_wr_data [15];
+
 
 assign offload_sdo_ready_0 = (ctrl_axis_sw ? 0 : offload_sdo_ready);
 assign offload_sdo_ready_1 = (ctrl_axis_sw ? offload_sdo_ready : 0);
@@ -120,9 +135,8 @@ assign offload_sdo_ready_1 = (ctrl_axis_sw ? offload_sdo_ready : 0);
 assign offload_sdo_valid = (ctrl_axis_sw ? offload_sdo_valid_1 : offload_sdo_valid_0);
 assign offload_sdo_data = (ctrl_axis_sw ? offload_sdo_data_1 : offload_sdo_data_0);
 
-
 assign mem_empty = (ctrl_sdo_wr_addr_1 == 'h0 ? 1 : 0);
-assign cmd_valid = spi_active;
+assign cmd_valid = spi_active | cmd_valid_s;
 assign sdo_data_valid = offload_sdo_valid;
 assign offload_sdi_valid = sdi_data_valid;
 
@@ -131,7 +145,9 @@ assign offload_sdi_valid = sdi_data_valid;
 assign sdi_data_ready = (spi_enable) ? offload_sdi_ready : 1'b1;
 
 assign offload_sdi_data = sdi_data;
-assign cmd_int_s = cmd_mem[spi_cmd_rd_addr];
+
+  assign cmd_int_s = cmd_sdo_en_os ? cmd_mem_os[spi_cmd_os_rd_addr] : cmd_mem[spi_cmd_rd_addr];
+
 assign offload_sdo_ready = sdo_data_ready & mem_empty;
 assign sdo_data = (mem_empty == 1 ? offload_sdo_data : sdo_mem[ctrl_sdo_wr_addr_1 - 1'h1]);
 
@@ -194,7 +210,9 @@ always @(posedge spi_clk) begin
   end
 end
 
-assign cmd = (cmd_int_s[15:8] == 8'h30) ? {cmd_int_s[15:8], spi_sync_id_counter} : cmd_int_s;
+// when offload is disabled pull up all CS signals
+assign cmd = (cmd_valid_s) ? 16'h10ff : (cmd_int_s[15:8] == 8'h30) ?
+                                        {cmd_int_s[15:8], spi_sync_id_counter} : cmd_int_s;
 
 /*
  * Forwarded SYNC interface, this can be used to monitor the state of the
@@ -204,6 +222,29 @@ assign cmd = (cmd_int_s[15:8] == 8'h30) ? {cmd_int_s[15:8], spi_sync_id_counter}
 assign status_sync_data = sync_data;
 assign status_sync_valid = sync_valid;
 assign sync_ready = status_sync_ready;
+
+wire ctrl_enable_ned;
+
+assign ctrl_enable_ed = ~ctrl_enable_d & ctrl_enable;
+assign ctrl_enable_ned = ctrl_enable_d & ~ctrl_enable;
+assign spi_active_ed = spi_active_d & ~spi_active;
+
+reg cmd_sdo_en_os = 1'h0;
+
+always @(posedge spi_clk) begin
+  ctrl_enable_d <= ctrl_enable; //check for clock domain
+  spi_active_d <= spi_active;
+  if (ctrl_enable_ed) begin
+    cmd_sdo_en_os <= 1'h1;
+  end else if (spi_active_ed) begin
+    cmd_sdo_en_os <= 1'h0;
+  end
+  if (ctrl_enable_ned) begin // when offload is disable pull up all CS signals
+    cmd_valid_s <= 1'h1;
+  end else if (cmd_ready) begin
+    cmd_valid_s <= 1'h0;
+  end
+end
 
 generate if (ASYNC_SPI_CLK) begin
 
@@ -259,9 +300,12 @@ assign spi_enable = ctrl_enable;
 assign ctrl_enabled = spi_enable | spi_active;
 end endgenerate
 
+//OS cmd switch
 assign spi_cmd_rd_addr_next = spi_cmd_rd_addr + 1;
+assign spi_cmd_os_rd_addr_next = spi_cmd_os_rd_addr + 1;
 
 wire trigger_s;
+
 sync_bits #(
   .NUM_OF_BITS(1),
   .ASYNC_CLK(ASYNC_TRIG)
@@ -282,7 +326,7 @@ always @(posedge spi_clk) begin
       if (trigger_s == 1'b1 && spi_enable == 1'b1 && offload_sdi_ready == 1'b1) begin
         spi_active <= 1'b1;
       end
-    end else if (cmd_ready == 1'b1 && spi_cmd_rd_addr_next == ctrl_cmd_wr_addr) begin
+    end else if (cmd_ready == 1'b1 && ((spi_cmd_rd_addr_next == ctrl_cmd_wr_addr) || (spi_cmd_os_rd_addr_next == ctrl_cmd_os_wr_addr))) begin
       spi_active <= 1'b0;
     end
   end
@@ -290,9 +334,14 @@ end
 
 always @(posedge spi_clk) begin
   if (cmd_valid == 1'b0) begin
-    spi_cmd_rd_addr <= 'h00;
+    spi_cmd_rd_addr <= 'h0;
+    spi_cmd_os_rd_addr <= 'h0;
   end else if (cmd_ready == 1'b1) begin
-    spi_cmd_rd_addr <= spi_cmd_rd_addr_next;
+    if (cmd_sdo_en_os) begin
+      spi_cmd_os_rd_addr <= spi_cmd_os_rd_addr_next;
+    end else begin
+      spi_cmd_rd_addr <= spi_cmd_rd_addr_next;
+    end
   end
 end
 
@@ -305,15 +354,26 @@ always @(posedge spi_clk) begin
 end
 
 always @(posedge ctrl_clk) begin
-  if (ctrl_mem_reset == 1'b1)
+  if (ctrl_mem_reset == 1'b1) begin
     ctrl_cmd_wr_addr <= 'h00;
-  else if (ctrl_cmd_wr_en == 1'b1)
-    ctrl_cmd_wr_addr <= ctrl_cmd_wr_addr + 1'b1;
+    ctrl_cmd_os_wr_addr <= 'h00;
+  end else if (ctrl_cmd_wr_en == 1'b1) begin
+    if (cmd_mem_os_s) begin
+      ctrl_cmd_os_wr_addr <= ctrl_cmd_os_wr_addr + 1'b1;
+    end else begin
+      ctrl_cmd_wr_addr <= ctrl_cmd_wr_addr + 1'b1;
+    end
+  end
 end
 
 always @(posedge ctrl_clk) begin
-  if (ctrl_cmd_wr_en == 1'b1)
-    cmd_mem[ctrl_cmd_wr_addr] <= ctrl_cmd_wr_data;
+  if (ctrl_cmd_wr_en == 1'b1) begin
+    if (cmd_mem_os_s) begin
+      cmd_mem_os[ctrl_cmd_os_wr_addr] <= {1'h0, ctrl_cmd_wr_data[14:0]};
+    end else begin
+      cmd_mem[ctrl_cmd_wr_addr] <= {1'h0, ctrl_cmd_wr_data[14:0]};
+    end
+  end
 end
 
 always @(posedge ctrl_clk) begin
@@ -323,15 +383,29 @@ always @(posedge ctrl_clk) begin
     ctrl_sdo_wr_addr <= ctrl_sdo_wr_addr + 1'b1;
 end
 
-always @(posedge ctrl_clk) begin
-  if (ctrl_mem_reset == 1'b1) begin
-    ctrl_sdo_wr_addr_1 <= 'h0;
-  end else if (trigger_s == 1'b1) begin
-    ctrl_sdo_wr_addr_1 <= ctrl_sdo_wr_addr;
-  end else if (sdo_data_ready == 1'b1 && mem_empty == 0) begin
-    ctrl_sdo_wr_addr_1 <= ctrl_sdo_wr_addr_1 - 1'b1;
+//make memory one-shot optional. if param is kept spi engine script needs update
+generate if (SDO_MEM_OS) begin
+  always @(posedge ctrl_clk) begin
+    if (ctrl_mem_reset == 1'b1) begin
+      ctrl_sdo_wr_addr_1 <= 'h0;
+    end else if (trigger_s == 1'b1 && cmd_sdo_en_os == 1'b1) begin
+      ctrl_sdo_wr_addr_1 <= ctrl_sdo_wr_addr;
+    end else if (sdo_data_ready == 1'b1 && mem_empty == 0) begin
+      ctrl_sdo_wr_addr_1 <= ctrl_sdo_wr_addr_1 - 1'b1;
+    end
+  end
+end else begin
+  always @(posedge ctrl_clk) begin
+    if (ctrl_mem_reset == 1'b1) begin
+      ctrl_sdo_wr_addr_1 <= 'h0;
+    end else if (trigger_s == 1'b1) begin
+      ctrl_sdo_wr_addr_1 <= ctrl_sdo_wr_addr;
+    end else if (sdo_data_ready == 1'b1 && mem_empty == 0) begin
+      ctrl_sdo_wr_addr_1 <= ctrl_sdo_wr_addr_1 - 1'b1;
+    end
   end
 end
+endgenerate
 
 always @(posedge ctrl_clk) begin
   if (ctrl_sdo_wr_en == 1'b1)
@@ -339,4 +413,3 @@ always @(posedge ctrl_clk) begin
 end
 
 endmodule
-
