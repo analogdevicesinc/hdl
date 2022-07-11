@@ -278,6 +278,9 @@ set hier_spi_engine_1 spi_ad3552r_1
 spi_engine_create $hier_spi_engine_0 $data_width $async_spi_clk $num_cs $num_sdi $num_sdo $sdi_delay
 spi_engine_create $hier_spi_engine_1 $data_width $async_spi_clk $num_cs $num_sdi $num_sdo $sdi_delay
 
+ad_ip_parameter $hier_spi_engine_0/${hier_spi_engine_0}_offload CONFIG.SDO_MEM_OS 1
+ad_ip_parameter $hier_spi_engine_1/${hier_spi_engine_1}_offload CONFIG.SDO_MEM_OS 1
+
 ad_ip_instance axi_pwm_gen pulsar_adc_trigger_gen
 ad_ip_parameter pulsar_adc_trigger_gen CONFIG.PULSE_0_PERIOD 120
 ad_ip_parameter pulsar_adc_trigger_gen CONFIG.PULSE_0_WIDTH 1
