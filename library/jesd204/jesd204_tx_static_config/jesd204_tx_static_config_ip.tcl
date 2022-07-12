@@ -42,7 +42,7 @@
 # is copyright © 2016-2017, Analog Devices, Inc.”
 #
 
-source ../../scripts/adi_env.tcl
+source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 adi_ip_create jesd204_tx_static_config

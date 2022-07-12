@@ -1,5 +1,5 @@
 
-source ../../scripts/adi_env.tcl
+source ../../../scripts/adi_env.tcl
 source ../../scripts/adi_project_intel.tcl
 
 adi_project ad_fmclidar1_ebz_a10soc

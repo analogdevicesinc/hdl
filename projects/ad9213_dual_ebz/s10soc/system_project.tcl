@@ -1,5 +1,5 @@
 
-source ../../scripts/adi_env.tcl
+source ../../../scripts/adi_env.tcl
 source ../../scripts/adi_project_intel.tcl
 
 adi_project ad9213_dual_ebz_s10soc

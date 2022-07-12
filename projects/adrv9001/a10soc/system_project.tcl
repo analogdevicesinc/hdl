@@ -1,5 +1,5 @@
 
-source ../../scripts/adi_env.tcl
+source ../../../scripts/adi_env.tcl
 source ../../scripts/adi_project_intel.tcl
 
 adi_project adrv9001_a10soc

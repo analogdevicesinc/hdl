@@ -1,7 +1,7 @@
 package require qsys 14.0
 package require quartus::device
 
-source ../scripts/adi_env.tcl
+source ../../scripts/adi_env.tcl
 source ../scripts/adi_ip_intel.tcl
 
 ad_ip_create axi_adrv9001 {AXI ADRV9001 Interface} axi_adrv9001_elab

@@ -30,7 +30,7 @@ CLEAN_TARGET += .Xil
 CLEAN_TARGET += .timestamp_intel
 CLEAN_TARGET += *.hbs
 
-GENERIC_DEPS += $(HDL_LIBRARY_PATH)scripts/adi_env.tcl
+GENERIC_DEPS += $(HDL_LIBRARY_PATH)../scripts/adi_env.tcl
 
 .PHONY: all intel intel_dep xilinx xilinx_dep clean clean-all
 

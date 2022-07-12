@@ -3,18 +3,6 @@
 set family "none"
 set device "none"
 
-## Define the supported tool version
-if {![info exists REQUIRED_QUARTUS_VERSION]} {
-  set REQUIRED_QUARTUS_VERSION "21.2.0"
-}
-
-## Define the ADI_IGNORE_VERSION_CHECK environment variable to skip version check
-if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
-  set IGNORE_VERSION_CHECK 1
-} elseif {![info exists IGNORE_VERSION_CHECK]} {
-  set IGNORE_VERSION_CHECK 0
-}
-
 ## Create a project.
 #
 # \param[project_name] - name of the project, must contain a valid carrier name
@@ -119,8 +107,11 @@ proc adi_project {project_name {parameter_list {}}} {
   project_new $project_name -overwrite
 
   # library paths
-
-  set ad_lib_folders "$ad_hdl_dir/library/**/*;$ad_ghdl_dir/library/**/*"
+  if {[info exists ::env(ADI_GHDL_DIR)]} {
+    set ad_lib_folders "$ad_hdl_dir/library/**/*;$ad_ghdl_dir/library/**/*"
+  } else {
+    set ad_lib_folders "$ad_hdl_dir/library/**/*"
+  }
 
   set_user_option -name USER_IP_SEARCH_PATHS $ad_lib_folders
   set_global_assignment -name IP_SEARCH_PATHS $ad_lib_folders
@@ -141,7 +132,9 @@ proc adi_project {project_name {parameter_list {}}} {
   puts $QFILE "set project_name $project_name"
   puts $QFILE "set mmu_enabled $mmu_enabled"
   puts $QFILE "set ad_hdl_dir $ad_hdl_dir"
-  puts $QFILE "set ad_ghdl_dir $ad_ghdl_dir"
+  if {[info exists ::env(ADI_GHDL_DIR)]} {
+    puts $QFILE "set ad_ghdl_dir $ad_ghdl_dir"
+  }
   puts $QFILE "package require qsys"
   puts $QFILE "set_module_property NAME {system_bd}"
   puts $QFILE "set_project_property DEVICE_FAMILY {$family}"

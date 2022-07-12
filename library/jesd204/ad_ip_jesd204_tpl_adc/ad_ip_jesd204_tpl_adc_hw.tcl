@@ -22,7 +22,7 @@
 # ***************************************************************************
 
 package require qsys 14.0
-source ../../scripts/adi_env.tcl
+source ../../../scripts/adi_env.tcl
 source ../../scripts/adi_ip_intel.tcl
 
 ad_ip_create ad_ip_jesd204_tpl_adc "JESD204 Transport Layer for ADCs" p_ad_ip_jesd204_tpl_adc_elab
