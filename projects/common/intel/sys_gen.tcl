@@ -21,8 +21,11 @@ if {[string compare $QUARTUS_VERSION $REQUIRED_QUARTUS_VERSION] != 0} {
 }
 
 # library paths
-
-set ad_lib_folders "$ad_hdl_dir/library/**/*;$ad_ghdl_dir/library/**/*"
+if {[info exists ::env(ADI_GHDL_DIR)]} {
+  set ad_lib_folders "$ad_hdl_dir/library/**/*;$ad_ghdl_dir/library/**/*"
+} else {
+  set ad_lib_folders "$ad_hdl_dir/library/**/*"
+}
 
 set_user_option -name USER_IP_SEARCH_PATHS $ad_lib_folders
 set_global_assignment -name IP_SEARCH_PATHS $ad_lib_folders
@@ -37,7 +40,9 @@ if [info exists ::env(NIOS_MMU_ENABLED)] {
 set QFILE [open "system_qsys_script.tcl" "w"]
 puts $QFILE "set mmu_enabled $mmu_enabled"
 puts $QFILE "set ad_hdl_dir $ad_hdl_dir"
-puts $QFILE "set ad_ghdl_dir $ad_ghdl_dir"
+if {[info exists ::env(ADI_GHDL_DIR)]} {
+  puts $QFILE "set ad_ghdl_dir $ad_ghdl_dir"
+}
 puts $QFILE "source system_qsys.tcl"
 puts $QFILE "set_interconnect_requirement {\$system} {qsys_mm.clockCrossingAdapter} {FIFO}"
 puts $QFILE "set_interconnect_requirement {\$system} {qsys_mm.maxAdditionalLatency} {2}"

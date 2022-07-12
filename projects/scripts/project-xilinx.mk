@@ -38,7 +38,7 @@ M_DEPS += system_bd.tcl
 M_DEPS += $(wildcard system_top*.v)
 M_DEPS += $(wildcard system_constr.xdc) # Not all projects have this file
 M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_project_xilinx.tcl
-M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_env.tcl
+M_DEPS += $(HDL_PROJECT_PATH)../scripts/adi_env.tcl
 M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_board.tcl
 
 M_DEPS += $(foreach dep,$(LIB_DEPS),$(HDL_LIBRARY_PATH)$(dep)/component.xml)

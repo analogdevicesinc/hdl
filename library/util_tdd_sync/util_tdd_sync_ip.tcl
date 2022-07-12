@@ -1,7 +1,7 @@
 
 # ip
 
-source ../scripts/adi_env.tcl
+source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 adi_ip_create util_tdd_sync

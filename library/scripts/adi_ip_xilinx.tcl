@@ -298,8 +298,12 @@ proc adi_ip_create {ip_name} {
   }
 
   set lib_dirs $ad_hdl_dir/library
-  if {$ad_hdl_dir ne $ad_ghdl_dir} {
-    lappend lib_dirs $ad_ghdl_dir/library
+  if {[info exists ::env(ADI_GHDL_DIR)]} {
+    if {$ad_hdl_dir ne $ad_ghdl_dir} {
+      lappend lib_dirs $ad_ghdl_dir/library
+    }
+  } else {
+    # puts -nonew-line "INFO: ADI_GHDL_DIR not defined.\n"
   }
 
   set_property ip_repo_paths $lib_dirs [current_fileset]
