@@ -1,6 +1,6 @@
 
 package require qsys 14.0
-source ../../scripts/adi_env.tcl
+source ../../../scripts/adi_env.tcl
 source ../../scripts/adi_ip_intel.tcl
 
 ad_ip_create avl_adxcvr {Avalon ADXCVR Core}

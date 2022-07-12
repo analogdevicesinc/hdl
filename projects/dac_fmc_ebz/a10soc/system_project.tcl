@@ -30,7 +30,7 @@
 #      as long as it attaches to an ADI device.
 #
 
-source ../../scripts/adi_env.tcl
+source ../../../scripts/adi_env.tcl
 source ../../scripts/adi_project_intel.tcl
 
 source ../common/config.tcl

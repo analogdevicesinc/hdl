@@ -1,7 +1,7 @@
 
 package require qsys 14.0
 
-source ../../scripts/adi_env.tcl
+source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_intel.tcl
 
 ad_ip_create avl_adxcvr_octet_swap "avl_adxcvvr_octet_swap helper" avl_adxcvr_octet_swap_elaboration

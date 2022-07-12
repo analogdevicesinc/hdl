@@ -2,7 +2,7 @@
 package require qsys 14.0
 package require quartus::device
 
-source ../../scripts/adi_env.tcl
+source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_intel.tcl
 
 set_module_property NAME axi_adxcvr

@@ -3,7 +3,7 @@
 package require qsys 14.0
 package require quartus::device
 
-source ../scripts/adi_env.tcl
+source ../../scripts/adi_env.tcl
 source ../scripts/adi_ip_intel.tcl
 source $ad_hdl_dir/library/scripts/adi_intel_device_info_enc.tcl
 

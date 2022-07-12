@@ -1,4 +1,4 @@
-source ../../scripts/adi_env.tcl
+source ../../../scripts/adi_env.tcl
 source ../../scripts/adi_project_intel.tcl
 
 adi_project cn0506_mii_a10soc
