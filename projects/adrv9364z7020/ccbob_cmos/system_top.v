@@ -90,14 +90,11 @@ module system_top (
   output          spi_mosi,
   input           spi_miso,
 
-  output  [27:0]  gp_out,
-  input   [27:0]  gp_in
-);
+  inout   [25:0]  gpio_0_c1_io,
+  inout   [27:0]  gpio_0_c2_io);
 
   // internal signals
 
-  wire    [31:0]  gp_out_s;
-  wire    [31:0]  gp_in_s;
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
@@ -106,9 +103,6 @@ module system_top (
 
   assign tx_gnd = 2'd0;
   assign clkout_out = clkout_in;
-  assign gp_out[27:0] = gp_out_s[27:0];
-  assign gp_in_s[31:28] = gp_out_s[31:28];
-  assign gp_in_s[27: 0] = gp_in[27:0];
 
   // board gpio - 31-0
 
@@ -140,6 +134,19 @@ module system_top (
               gpio_ctl,           // 43:40
               gpio_status}));     // 39:32
 
+  ad_iobuf #(.DATA_WIDTH(26)) gpio_0_c1_iobuf (
+    .dio_t (gpio_0_c1_t),
+    .dio_i (gpio_0_c1_o),
+    .dio_o (gpio_0_c1_i),
+    .dio_p (gpio_0_c1_io));
+
+  ad_iobuf #(.DATA_WIDTH(28)) gpio_0_c2_iobuf (
+    .dio_t (gpio_0_c2_t),
+    .dio_i (gpio_0_c2_o),
+    .dio_o (gpio_0_c2_i),
+    .dio_p (gpio_0_c2_io));
+
+
   // instantiations
 
   system_wrapper i_system_wrapper (
@@ -165,8 +172,13 @@ module system_top (
     .fixed_io_ps_clk (fixed_io_ps_clk),
     .fixed_io_ps_porb (fixed_io_ps_porb),
     .fixed_io_ps_srstb (fixed_io_ps_srstb),
-    .gp_in_0 (gp_in_s[31:0]),
-    .gp_out_0 (gp_out_s[31:0]),
+    .gpio_0_c1_i (gpio_0_c1_i),
+    .gpio_0_c1_o (gpio_0_c1_o),
+    .gpio_0_c1_t (gpio_0_c1_t),
+    .gpio_0_c2_i (gpio_0_c2_i),
+    .gpio_0_c2_o (gpio_0_c2_o),
+    .gpio_0_c2_t (gpio_0_c2_t),
+    .clkout_in_s (clkout_in),
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .gpio_t (gpio_t),
