@@ -42,7 +42,8 @@ module system_top  #(
     parameter RX_JESD_L = 8,
     parameter RX_NUM_LINKS = 1,
     parameter SHARED_DEVCLK = 0,
-    parameter TDD_SUPPORT = 0
+    parameter TDD_SUPPORT = 0,
+    parameter JESD_MODE = "8B10B"
   ) (
 
   input  [12:0] gpio_bd_i,
@@ -64,10 +65,14 @@ module system_top  #(
   input  [RX_JESD_L*RX_NUM_LINKS-1:0]  rx_data_p,
   output [TX_JESD_L*TX_NUM_LINKS-1:0]  tx_data_n,
   output [TX_JESD_L*TX_NUM_LINKS-1:0]  tx_data_p,
-  input  [TX_NUM_LINKS-1:0]  fpga_syncin_n,
-  input  [TX_NUM_LINKS-1:0]  fpga_syncin_p,
-  output [RX_NUM_LINKS-1:0]  fpga_syncout_n,
-  output [RX_NUM_LINKS-1:0]  fpga_syncout_p,
+  input    fpga_syncin_0_n,
+  input    fpga_syncin_0_p,
+  inout    fpga_syncin_1_n,
+  inout    fpga_syncin_1_p,
+  output   fpga_syncout_0_n,
+  output   fpga_syncout_0_p,
+  inout    fpga_syncout_1_n,
+  inout    fpga_syncout_1_p,
   inout  [10:0] gpio,
   inout         hmc_gpio1,
   output        hmc_sync,
@@ -218,22 +223,15 @@ module system_top  #(
     .IB (clkin10_n),
     .O (clkin10));
 
-  genvar i;
-  generate
-  for(i=0;i<TX_NUM_LINKS;i=i+1) begin : g_tx_buffers
-    IBUFDS i_ibufds_syncin (
-      .I (fpga_syncin_p[i]),
-      .IB (fpga_syncin_n[i]),
-      .O (tx_syncin[i]));
-  end
+  IBUFDS i_ibufds_syncin_0 (
+    .I (fpga_syncin_0_p),
+    .IB (fpga_syncin_0_n),
+    .O (tx_syncin[0]));
 
-  for(i=0;i<RX_NUM_LINKS;i=i+1) begin : g_rx_buffers
-    OBUFDS i_obufds_syncout (
-      .I (rx_syncout[i]),
-      .O (fpga_syncout_p[i]),
-      .OB (fpga_syncout_n[i]));
-  end
-  endgenerate
+  OBUFDS i_obufds_syncout_0 (
+    .I (rx_syncout[0]),
+    .O (fpga_syncout_0_p),
+    .OB (fpga_syncout_0_n));
 
   BUFG i_tx_device_clk (
     .I (clkin6),
@@ -289,43 +287,68 @@ module system_top  #(
   assign txen[0]          = tdd_support ? tdd_tx_mxfe_en : gpio_o[58];
   assign txen[1]          = tdd_support ? tdd_tx_mxfe_en : gpio_o[59];
 
-  assign tr = tdd_support ? tdd_tx_stingray_en : gpio_o[62];
+  generate 
+  if (TX_NUM_LINKS > 1 & JESD_MODE == "8B10B") begin
+    assign tx_syncin[1] = fpga_syncin_1_p;
+  end else begin
+    ad_iobuf #(.DATA_WIDTH(2)) i_syncin_iobuf (
+      .dio_t (gpio_t[61:60]),
+      .dio_i (gpio_o[61:60]),
+      .dio_o (gpio_i[61:60]),
+      .dio_p ({fpga_syncin_1_n,      // 61
+               fpga_syncin_1_p}));   // 60
+  end
+
+  if (RX_NUM_LINKS > 1 & JESD_MODE == "8B10B") begin
+    assign fpga_syncout_1_p = rx_syncout[1];
+    assign fpga_syncout_1_n = 0; 
+  end else begin
+    ad_iobuf #(.DATA_WIDTH(2)) i_syncout_iobuf (
+      .dio_t (gpio_t[63:62]),
+      .dio_i (gpio_o[63:62]),
+      .dio_o (gpio_i[63:62]),
+      .dio_p ({fpga_syncout_1_n,      // 63
+               fpga_syncout_1_p}));   // 62
+  end
+  endgenerate
+
+  assign tr = tdd_support ? tdd_tx_stingray_en : gpio_o[82];
 
   // PMOD GPIOs
-  assign pmod0_0_1_PA_ON       = pwr_up_mask ? 1'b0 : gpio_o[61];
+  assign pmod0_0_1_PA_ON       = pwr_up_mask ? 1'b0 : gpio_o[81];
   assign pmod0_4_2_TR          = pwr_up_mask ? 1'b0 : tr;
-  assign pmod0_5_4_TX_LOAD     = pwr_up_mask ? 1'b0 : gpio_o[63];
-  assign pmod0_6_6_RX_LOAD     = pwr_up_mask ? 1'b0 : gpio_o[64];
+  assign pmod0_5_4_TX_LOAD     = pwr_up_mask ? 1'b0 : gpio_o[83];
+  assign pmod0_6_6_RX_LOAD     = pwr_up_mask ? 1'b0 : gpio_o[84];
 
-  reg gpio_o_65_ms = 1'b0;
-  reg gpio_o_65_d1 = 1'b0;
+  reg gpio_o_85_ms = 1'b0;
+  reg gpio_o_85_d1 = 1'b0;
   always @(posedge sys_clk) begin
-    gpio_o_65_ms <= gpio_o[65];
-    gpio_o_65_d1 <= gpio_o_65_ms;
+    gpio_o_85_ms <= gpio_o[85];
+    gpio_o_85_d1 <= gpio_o_85_ms;
   end
 
   always @(posedge sys_clk) begin
     if (pwr_up_mask)
       pmod1_6_6_5V_CTRL <= 1'b0;
     else
-      pmod1_6_6_5V_CTRL <= gpio_o_65_d1;
+      pmod1_6_6_5V_CTRL <= gpio_o_85_d1;
   end
 
-  reg gpio_o_66_ms = 1'b0;
-  reg gpio_o_66_d1 = 1'b0;
+  reg gpio_o_86_ms = 1'b0;
+  reg gpio_o_86_d1 = 1'b0;
   always @(posedge sys_clk) begin
-    gpio_o_66_ms <= gpio_o[66];
-    gpio_o_66_d1 <= gpio_o_66_ms;
+    gpio_o_86_ms <= gpio_o[86];
+    gpio_o_86_d1 <= gpio_o_86_ms;
   end
 
   always @(posedge sys_clk) begin
     if (pwr_up_mask)
       pmod1_7_8_PWR_UP_DOWN <= 1'b0;
     else
-      pmod1_7_8_PWR_UP_DOWN <= gpio_o_66_d1;
+      pmod1_7_8_PWR_UP_DOWN <= gpio_o_86_d1;
   end
 
-  assign proto_hdr[5:0] = gpio_t[66:61];
+  assign proto_hdr[5:0] = gpio_t[86:81];
   assign proto_hdr[9:6] = 4'b0;
 
   // XUD GPIOs
@@ -386,7 +409,8 @@ module system_top  #(
 
   // Unused GPIOs
   assign gpio_i[94:77] = gpio_o[94:77];
-  assign gpio_i[66:54] = gpio_o[66:54];
+  assign gpio_i[59:54] = gpio_o[59:54];
+  assign gpio_i[66:64] = gpio_o[66:64];
   assign gpio_i[31:21] = gpio_o[31:21];
   assign gpio_i[7:0] = gpio_o[7:0];
 
