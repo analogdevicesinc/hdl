@@ -479,12 +479,19 @@ ad_connect manual_sync_or/Res rx_mxfe_tpl_core/adc_tpl_core/adc_sync_manual_req_
 # Reset pack cores
 ad_ip_instance util_reduced_logic cpack_rst_logic
 ad_ip_parameter cpack_rst_logic config.c_operation {or}
-ad_ip_parameter cpack_rst_logic config.c_size {2}
+ad_ip_parameter cpack_rst_logic config.c_size {3}
+
+ad_ip_instance util_vector_logic rx_do_rstout_logic
+ad_ip_parameter rx_do_rstout_logic config.c_operation {not}
+ad_ip_parameter rx_do_rstout_logic config.c_size {1}
+
+ad_connect $adc_data_offload_name/s_axis_tready rx_do_rstout_logic/Op1
 
 ad_ip_instance xlconcat cpack_reset_sources
-ad_ip_parameter cpack_reset_sources config.num_ports {2}
+ad_ip_parameter cpack_reset_sources config.num_ports {3}
 ad_connect rx_device_clk_rstgen/peripheral_reset cpack_reset_sources/in0
 ad_connect rx_mxfe_tpl_core/adc_tpl_core/adc_rst cpack_reset_sources/in1
+ad_connect rx_do_rstout_logic/res cpack_reset_sources/in2
 
 ad_connect cpack_reset_sources/dout cpack_rst_logic/op1
 ad_connect cpack_rst_logic/res util_mxfe_cpack/reset
@@ -524,20 +531,6 @@ if {$TDD_SUPPORT} {
   ad_connect axi_tdd_0/tdd_tx_valid $dac_data_offload_name/sync_ext
   ad_connect axi_tdd_0/tdd_rx_valid $adc_data_offload_name/sync_ext
 
-  ad_ip_parameter cpack_rst_logic CONFIG.C_SIZE {3}
-  ad_ip_parameter cpack_reset_sources CONFIG.NUM_PORTS {3}
-
-  if {[get_files -quiet "ad_edge_detect.v"] == ""} {
-    add_files -norecurse -fileset sources_1 "$ad_hdl_dir/library/common/ad_edge_detect.v"
-  }
-
-  create_bd_cell -type module -reference ad_edge_detect mxfe_cpack_edge_detector
-  ad_connect rx_device_clk mxfe_cpack_edge_detector/clk
-  ad_connect rx_device_clk_rstgen/peripheral_reset mxfe_cpack_edge_detector/rst
-
-  ad_connect axi_tdd_0/tdd_rx_valid mxfe_cpack_edge_detector/signal_in
-
-  ad_connect mxfe_cpack_edge_detector/signal_out cpack_reset_sources/In2
 
 } else {
   ad_connect GND $dac_data_offload_name/sync_ext
