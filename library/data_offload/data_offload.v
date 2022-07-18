@@ -147,8 +147,8 @@ module data_offload #(
 
   // local parameters -- to make the code more readable
 
-  localparam  SRC_ADDR_WIDTH_BYPASS = (SRC_DATA_WIDTH > DST_DATA_WIDTH) ? 3 : 3 + $clog2(SRC_DATA_WIDTH/DST_DATA_WIDTH);
-  localparam  DST_ADDR_WIDTH_BYPASS = (SRC_DATA_WIDTH <= DST_DATA_WIDTH) ? 3 + $clog2(DST_DATA_WIDTH/SRC_DATA_WIDTH) : 3;
+  localparam  SRC_ADDR_WIDTH_BYPASS = (SRC_DATA_WIDTH > DST_DATA_WIDTH) ? 4 : 4 + $clog2(SRC_DATA_WIDTH/DST_DATA_WIDTH);
+  localparam  DST_ADDR_WIDTH_BYPASS = (SRC_DATA_WIDTH <= DST_DATA_WIDTH) ? 4 + $clog2(DST_DATA_WIDTH/SRC_DATA_WIDTH) : 4;
 
   localparam SRC_BEAT_BYTE = $clog2(SRC_DATA_WIDTH/8);
 
