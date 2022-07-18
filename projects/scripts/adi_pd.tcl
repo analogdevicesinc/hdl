@@ -109,8 +109,8 @@ proc sysid_gen_sys_init_file {{custom_string {}}} {
 
   set git_clean_string "f";
   if {$gitsha_string != 0} {
-    if {[catch {exec git status .} gitstat_string] == 0} {
-      if [expr [string match *modified $gitstat_string] == 0] {
+    if {[catch {exec git status} gitstat_string] == 0} {
+      if [expr [string match *modified* $gitstat_string] == 0] {
         set git_clean_string "t";
       }
     }
