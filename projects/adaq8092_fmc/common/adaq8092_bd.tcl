@@ -38,7 +38,7 @@ ad_ip_parameter axi_adaq8092_dma CONFIG.AXI_SLICE_DEST 1
  #adaq8092_core
 
 ad_ip_instance axi_adaq8092 axi_adaq8092
-ad_ip_parameter axi_adaq8092  CONFIG.POLARITY_MASK 28'hfffffff
+ad_ip_parameter axi_adaq8092  CONFIG.POLARITY_MASK 28'h0
 ad_ip_parameter axi_adaq8092  CONFIG.OUTPUT_MODE 0
 
 ad_connect    adc_clk_in_p         axi_adaq8092/adc_clk_in_p
