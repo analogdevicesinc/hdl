@@ -1,6 +1,7 @@
 
 create_clock -period "10.000 ns"  -name sys_clk_100mhz      [get_ports {sys_clk}]
 create_clock -period "4.000 ns"   -name rx_clk_250mhz       [get_ports {rx_clk_in}]
+
 create_clock -period "4.000 ns"   -name tx_clk_250mhz       [get_ports {tx_clk_out_*}]
 create_clock -period "100.000 ns" -name spi_clk_virtual_10mhz
 create_clock -period "4.000 ns"   -name rx_clk_virtual_250mhz
@@ -80,4 +81,3 @@ set_false_path -from {rx_clk_250mhz} -to  [get_ports tx_frame_out*]
 set_false_path -from [get_ports {rx_clk_in}] -to  [get_ports {tx_clk_out_*}]
 
 set_false_path -from [get_registers *altera_reset_synchronizer:alt_rst_sync_uq1|altera_reset_synchronizer_int_chain_out*]
-

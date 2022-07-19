@@ -171,14 +171,8 @@ ad_interface signal up_adc_gpio_out output 32
 
 proc axi_ad9361_elab {} {
 
-#   set m_fpga_technology [get_parameter_value "FPGA_TECHNOLOGY"]
   set m_cmos_or_lvds_n [get_parameter_value "CMOS_OR_LVDS_N"]
-  
-  # 103 - stands for "Arria 10" see adi_intel_device_info_enc.tcl
-#   if {$m_fpga_technology == 103} {
-# 
-#   }
-  
+
   add_interface device_if conduit end
   set_interface_property device_if associatedClock none
   set_interface_property device_if associatedReset none
