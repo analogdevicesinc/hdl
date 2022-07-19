@@ -52,34 +52,20 @@ ad_ip_parameter sys_concat_intc CONFIG.NUM_PORTS 16
 
 ad_ip_instance proc_sys_reset sys_rstgen
 ad_ip_parameter sys_rstgen CONFIG.C_EXT_RST_WIDTH 1
-ad_ip_instance proc_sys_reset sys_dma_rstgen
-ad_ip_parameter sys_dma_rstgen CONFIG.C_EXT_RST_WIDTH 1
 
 # system reset/clock definitions
 
 ad_connect  sys_cpu_clk sys_ps7/FCLK_CLK0
-ad_connect  sys_dma_clk sys_ps7/FCLK_CLK1
 ad_connect  sys_cpu_reset sys_rstgen/peripheral_reset
 ad_connect  sys_cpu_resetn sys_rstgen/peripheral_aresetn
 ad_connect  sys_cpu_clk sys_rstgen/slowest_sync_clk
 ad_connect  sys_rstgen/ext_reset_in sys_ps7/FCLK_RESET0_N
-ad_connect  sys_dma_reset sys_dma_rstgen/peripheral_reset
-ad_connect  sys_dma_resetn sys_dma_rstgen/peripheral_aresetn
-ad_connect  sys_dma_clk sys_dma_rstgen/slowest_sync_clk
-ad_connect  sys_dma_rstgen/ext_reset_in sys_ps7/FCLK_RESET1_N
 
 # generic system clocks pointers
 
 set sys_cpu_clk           [get_bd_nets sys_cpu_clk]
-set sys_dma_clk           [get_bd_nets sys_dma_clk]
-set sys_iodelay_clk       [get_bd_nets sys_dma_clk]
-
 set sys_cpu_reset         [get_bd_nets sys_cpu_reset]
 set sys_cpu_resetn        [get_bd_nets sys_cpu_resetn]
-set sys_dma_reset         [get_bd_nets sys_dma_reset]
-set sys_dma_resetn        [get_bd_nets sys_dma_resetn]
-set sys_iodelay_reset     [get_bd_nets sys_dma_reset]
-set sys_iodelay_resetn    [get_bd_nets sys_dma_resetn]
 
 # interface connections
 
@@ -144,5 +130,4 @@ ad_connect  sys_concat_intc/In0   GND
 
 ad_cpu_interconnect 0x45000000 axi_sysid_0
 
-ad_mem_hp0_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
 
