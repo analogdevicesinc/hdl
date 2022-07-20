@@ -156,20 +156,39 @@ module system_top (
   wire    [ 3:0]  dac_1_spi_sdi;
   wire            dac_1_spi_sdo_t;
 
-  assign gpio_i[63:36] = gpio_o[63:36];
-  assign reset  = 1'b1;
+  wire            dec_0_valid_a;
+  wire    [31:0]  dac_0_axis_tdata;
+  wire    [15:0]  dec_0_data_a;
+  wire    [15:0]  dec_0_data_b;
 
+  wire            dec_1_valid_a;
+  wire    [31:0]  dac_1_axis_tdata;
+  wire    [15:0]  dec_1_data_a;
+  wire    [15:0]  dec_1_data_b;
+
+  assign gpio_i[63:37] = gpio_o[63:37];
   assign direction = dac_1_spi_cs == 1'h0 ? ~dac_1_spi_sdo_t : ~dac_0_spi_sdo_t;
+
+  assign dac_0_axis_tdata [31] = ~dec_0_data_b [15];
+  assign dac_0_axis_tdata [30:16] = dec_0_data_b [14:0];
+  assign dac_0_axis_tdata [15] = ~dec_0_data_a [15];
+  assign dac_0_axis_tdata [14:0] = dec_0_data_a [14:0];
+
+  assign dac_1_axis_tdata [31] = ~dec_1_data_b [15];
+  assign dac_1_axis_tdata [30:16] = dec_1_data_b [14:0];
+  assign dac_1_axis_tdata [15] = ~dec_1_data_a [15];
+  assign dac_1_axis_tdata [14:0] = dec_1_data_a [14:0];
 
 // instantiations
 
   ad_iobuf #(
-    .DATA_WIDTH(4)
+    .DATA_WIDTH(5)
   ) i_ad3552r_iobuf (
-    .dio_t(gpio_t[35:32]),
-    .dio_i(gpio_o[35:32]),
-    .dio_o(gpio_i[35:32]),
-    .dio_p({dac_0_alert,
+    .dio_t(gpio_t[36:32]),
+    .dio_i(gpio_o[36:32]),
+    .dio_o(gpio_i[36:32]),
+    .dio_p({reset,
+            dac_0_alert,
             dac_1_alert,
             dac_0_ldac,
             dac_1_ldac
@@ -434,6 +453,18 @@ module system_top (
     .rx_3_db_p    (rx_db_p[3]),
     .rx_3_db_n    (rx_db_n[3]),
     .clk_gate     (clk_gate),
+
+    .dac_0_axis_tdata (dac_0_axis_tdata),
+    .dac_0_axis_tvalid (dec_0_valid_a),
+    .dec_0_valid_a (dec_0_valid_a),
+    .dec_0_data_a (dec_0_data_a),
+    .dec_0_data_b (dec_0_data_b),
+
+    .dac_1_axis_tdata (dac_1_axis_tdata),
+    .dac_1_axis_tvalid (dec_1_valid_a),
+    .dec_1_valid_a (dec_1_valid_a),
+    .dec_1_data_a (dec_1_data_a),
+    .dec_1_data_b (dec_1_data_b),
 
     .dac_0_spi_cs         (dac_0_spi_cs),
     .dac_0_spi_sclk       (dac_0_spi_sclk),

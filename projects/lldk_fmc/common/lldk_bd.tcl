@@ -344,12 +344,27 @@ ad_connect sampling_clk axi_dac_0_dma/m_axis_aclk
 
 ad_connect $hier_spi_engine_0/s_axis_sample_0 axi_dac_0_dma/m_axis
 
-create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 xlconcat_0
-set_property -dict [list CONFIG.IN0_WIDTH.VALUE_SRC PROPAGATED] [get_bd_cells xlconcat_0]
-connect_bd_net [get_bd_pins xlconcat_0/In0] [get_bd_pins axi_adc_decimate_0/adc_dec_data_a]
-connect_bd_net [get_bd_pins xlconcat_0/In1] [get_bd_pins axi_adc_decimate_0/adc_dec_data_b]
-connect_bd_net [get_bd_pins spi_ad3552r_0/s_axis_sample_1_tdata] [get_bd_pins xlconcat_0/dout]
-connect_bd_net [get_bd_pins spi_ad3552r_0/s_axis_sample_1_tvalid] [get_bd_pins axi_adc_decimate_0/adc_dec_valid_a]
+#create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:axis_rtl:1.0 dac_0_axis
+#make_bd_intf_pins_external  [get_bd_intf_pins $hier_spi_engine_0/s_axis_sample_1]
+
+create_bd_port -dir O dec_0_valid_a
+create_bd_port -dir O -from 15 -to 0 dec_0_data_a
+create_bd_port -dir O -from 15 -to 0 dec_0_data_b
+create_bd_port -dir I -from 31 -to 0 dac_0_axis_tdata
+create_bd_port -dir I dac_0_axis_tvalid
+
+ad_connect axi_adc_decimate_0/adc_dec_valid_a dec_0_valid_a
+ad_connect axi_adc_decimate_0/adc_dec_data_a dec_0_data_a
+ad_connect axi_adc_decimate_0/adc_dec_data_b dec_0_data_b
+ad_connect $hier_spi_engine_0/s_axis_sample_1_tdata dac_0_axis_tdata
+ad_connect $hier_spi_engine_0/s_axis_sample_1_tvalid dac_0_axis_tvalid
+
+#create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 xlconcat_0
+#set_property -dict [list CONFIG.IN0_WIDTH.VALUE_SRC PROPAGATED] [get_bd_cells xlconcat_0]
+#connect_bd_net [get_bd_pins xlconcat_0/In0] [get_bd_pins axi_adc_decimate_0/adc_dec_data_a]
+#connect_bd_net [get_bd_pins xlconcat_0/In1] [get_bd_pins axi_adc_decimate_0/adc_dec_data_b]
+#connect_bd_net [get_bd_pins spi_ad3552r_0/s_axis_sample_1_tdata] [get_bd_pins xlconcat_0/dout]
+#connect_bd_net [get_bd_pins spi_ad3552r_0/s_axis_sample_1_tvalid] [get_bd_pins axi_adc_decimate_0/adc_dec_valid_a]
 
 #ad_connect $hier_spi_engine_0/s_axis_sample_1 spi_dds_0/m_axis_dds
 #dac1
@@ -402,12 +417,24 @@ ad_connect pulsar_adc_trigger_gen/pwm_0  $hier_spi_engine_1/trigger
 
 ad_connect $hier_spi_engine_1/s_axis_sample_0 axi_dac_1_dma/m_axis
 
-create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 xlconcat_1
-set_property -dict [list CONFIG.IN0_WIDTH.VALUE_SRC PROPAGATED] [get_bd_cells xlconcat_1]
-connect_bd_net [get_bd_pins xlconcat_1/In0] [get_bd_pins axi_adc_decimate_1/adc_dec_data_a]
-connect_bd_net [get_bd_pins xlconcat_1/In1] [get_bd_pins axi_adc_decimate_1/adc_dec_data_b]
-connect_bd_net [get_bd_pins spi_ad3552r_1/s_axis_sample_1_tdata] [get_bd_pins xlconcat_1/dout]
-connect_bd_net [get_bd_pins spi_ad3552r_1/s_axis_sample_1_tvalid] [get_bd_pins axi_adc_decimate_1/adc_dec_valid_a]
+create_bd_port -dir O dec_1_valid_a
+create_bd_port -dir O -from 15 -to 0 dec_1_data_a
+create_bd_port -dir O -from 15 -to 0 dec_1_data_b
+create_bd_port -dir I -from 31 -to 0 dac_1_axis_tdata
+create_bd_port -dir I dac_1_axis_tvalid
+
+ad_connect axi_adc_decimate_1/adc_dec_valid_a dec_1_valid_a
+ad_connect axi_adc_decimate_1/adc_dec_data_a dec_1_data_a
+ad_connect axi_adc_decimate_1/adc_dec_data_b dec_1_data_b
+ad_connect $hier_spi_engine_1/s_axis_sample_1_tdata dac_1_axis_tdata
+ad_connect $hier_spi_engine_1/s_axis_sample_1_tvalid dac_1_axis_tvalid
+
+#create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 xlconcat_1
+#set_property -dict [list CONFIG.IN0_WIDTH.VALUE_SRC PROPAGATED] [get_bd_cells xlconcat_1]
+#connect_bd_net [get_bd_pins xlconcat_1/In0] [get_bd_pins axi_adc_decimate_1/adc_dec_data_a]
+#connect_bd_net [get_bd_pins xlconcat_1/In1] [get_bd_pins axi_adc_decimate_1/adc_dec_data_b]
+#connect_bd_net [get_bd_pins spi_ad3552r_1/s_axis_sample_1_tdata] [get_bd_pins xlconcat_1/dout]
+#connect_bd_net [get_bd_pins spi_ad3552r_1/s_axis_sample_1_tvalid] [get_bd_pins axi_adc_decimate_1/adc_dec_valid_a]
 #ad_connect $hier_spi_engine_1/s_axis_sample_1 spi_dds_1/m_axis_dds
 # adc peripheral
 
