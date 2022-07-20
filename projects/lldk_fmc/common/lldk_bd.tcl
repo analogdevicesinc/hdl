@@ -104,6 +104,10 @@ ad_ip_parameter axi_pwm_gen CONFIG.PULSE_0_PERIOD 8
 ad_ip_parameter axi_pwm_gen CONFIG.PULSE_1_WIDTH 5
 ad_ip_parameter axi_pwm_gen CONFIG.PULSE_1_PERIOD 8
 ad_ip_parameter axi_pwm_gen CONFIG.PULSE_1_OFFSET 0
+ad_ip_parameter axi_pwm_gen CONFIG.PULSE_2_PERIOD 120
+ad_ip_parameter axi_pwm_gen CONFIG.PULSE_2_WIDTH 1
+ad_ip_parameter axi_pwm_gen CONFIG.PULSE_3_PERIOD 120
+ad_ip_parameter axi_pwm_gen CONFIG.PULSE_3_WIDTH 1
 
 # constant 1
 
@@ -281,10 +285,6 @@ spi_engine_create $hier_spi_engine_1 $data_width $async_spi_clk $num_cs $num_sdi
 ad_ip_parameter $hier_spi_engine_0/${hier_spi_engine_0}_offload CONFIG.SDO_MEM_OS 1
 ad_ip_parameter $hier_spi_engine_1/${hier_spi_engine_1}_offload CONFIG.SDO_MEM_OS 1
 
-ad_ip_instance axi_pwm_gen pulsar_adc_trigger_gen
-ad_ip_parameter pulsar_adc_trigger_gen CONFIG.PULSE_0_PERIOD 120
-ad_ip_parameter pulsar_adc_trigger_gen CONFIG.PULSE_0_WIDTH 1
-
 #ad_ip_instance axi_dds spi_dds_0
 #ad_connect sampling_clk spi_dds_0/spi_clk
 
@@ -301,15 +301,6 @@ ad_ip_parameter axi_dac_0_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_dac_0_dma CONFIG.DMA_DATA_WIDTH_SRC 32 ;#$data_width
 ad_ip_parameter axi_dac_0_dma CONFIG.DMA_DATA_WIDTH_DEST 32
 
-
-#ad_connect $sys_cpu_clk spi_clkgen/clk
-#ad_connect spi_clk spi_clkgen/clk_0
-
-ad_connect sampling_clk pulsar_adc_trigger_gen/ext_clk
-ad_connect $sys_cpu_clk pulsar_adc_trigger_gen/s_axi_aclk
-ad_connect sys_cpu_resetn pulsar_adc_trigger_gen/s_axi_aresetn
-ad_connect pulsar_adc_trigger_gen/pwm_0  $hier_spi_engine_0/trigger
-
 ad_connect $hier_spi_engine_0/m_spi dac_0_spi
 
 ad_connect $sys_cpu_clk $hier_spi_engine_0/clk
@@ -317,6 +308,7 @@ ad_connect sampling_clk $hier_spi_engine_0/spi_clk
 ad_connect sys_cpu_resetn $hier_spi_engine_0/resetn
 ad_connect sys_cpu_resetn axi_dac_0_dma/m_src_axi_aresetn
 ad_connect sampling_clk axi_dac_0_dma/m_axis_aclk
+ad_connect axi_pwm_gen/pwm_2 $hier_spi_engine_0/trigger
 
 #ad_ip_instance axis_interconnect axis_interconnect_0
 #ad_ip_parameter axis_interconnect_0 CONFIG.NUM_SI 2
@@ -390,7 +382,7 @@ ad_connect sampling_clk $hier_spi_engine_1/spi_clk
 ad_connect sys_cpu_resetn $hier_spi_engine_1/resetn
 ad_connect sys_cpu_resetn axi_dac_1_dma/m_src_axi_aresetn
 ad_connect sampling_clk axi_dac_1_dma/m_axis_aclk
-ad_connect pulsar_adc_trigger_gen/pwm_0  $hier_spi_engine_1/trigger
+ad_connect axi_pwm_gen/pwm_3 $hier_spi_engine_1/trigger
 
 #ad_ip_instance axis_interconnect axis_interconnect_1
 #ad_ip_parameter axis_interconnect_1 CONFIG.NUM_SI 2
@@ -452,7 +444,7 @@ ad_cpu_interconnect 0x44B10000 axi_pwm_gen
 ad_cpu_interconnect 0x44B20000 max_spi
 ad_cpu_interconnect 0x44d00000 $hier_spi_engine_0/${hier_spi_engine_0}_axi_regmap
 ad_cpu_interconnect 0x44d30000 axi_dac_0_dma
-ad_cpu_interconnect 0x44d50000 pulsar_adc_trigger_gen
+#ad_cpu_interconnect 0x44d50000 pulsar_adc_trigger_gen
 #ad_cpu_interconnect 0x44d60000 spi_dds_0
 #ad_cpu_interconnect 0x44d70000 axis_interconnect_0
 
