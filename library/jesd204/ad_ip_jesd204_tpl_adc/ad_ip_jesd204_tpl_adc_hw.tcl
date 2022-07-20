@@ -100,7 +100,7 @@ ad_ip_parameter DMA_BITS_PER_SAMPLE INTEGER 16 true [list \
 
 ad_ip_parameter CONVERTER_RESOLUTION INTEGER 16 true [list \
   DISPLAY_NAME "Converter Resolution (N)" \
-  ALLOWED_RANGES {8 11 12 16} \
+  ALLOWED_RANGES {8 11 12 14 16} \
   UNITS bits \
   GROUP $group \
 ]
@@ -259,7 +259,7 @@ proc p_ad_ip_jesd204_tpl_adc_elab {} {
   set DMA_BPS [get_parameter_value "DMA_BITS_PER_SAMPLE"]
 
   # The DMA interface is rounded to nearest power of two bytes per sample,
-  # e.g NP=12 is padded into 16 bits 
+  # e.g NP=12 is padded into 16 bits
   set samples_per_beat_per_channel [expr ($OPB * 8 * $L / ($M * $NP))]
   set channel_bus_width [expr $samples_per_beat_per_channel*$DMA_BPS]
 
