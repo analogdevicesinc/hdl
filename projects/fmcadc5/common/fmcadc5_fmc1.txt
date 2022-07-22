@@ -1,0 +1,65 @@
+FMC_pin     FMC_port       Schematic_name   System_top_name    IOSTANDARD  Termination
+
+# ad9625
+
+# FMC1
+
+D4          GBTCLK0_M2C_P  #N/A             rx_ref_clk_0_p     #N/A        #N/A
+D5          GBTCLK0_M2C_N  #N/A             rx_ref_clk_0_n     #N/A        #N/A
+
+G6          LA00_CC_P      #N/A             rx_sysref_p        LVDS        #N/A
+G7          LA00_CC_N      #N/A             rx_sysref_n        LVDS        #N/A
+D8          LA01_CC_P      #N/A             rx_sync_0_p        LVDS        #N/A
+D9          LA01_CC_N      #N/A             rx_sync_0_n        LVDS        #N/A
+H7          LA02_P         #N/A             rx_sync_1_p        LVDS        #N/A
+H8          LA02_N         #N/A             rx_sync_1_n        LVDS        #N/A
+
+A18         DP5_M2C_P      #N/A             rx_data_0_p[0]     #N/A        #N/A
+A19         DP5_M2C_N      #N/A             rx_data_0_n[0]     #N/A        #N/A
+B16         DP6_M2C_P      #N/A             rx_data_0_p[1]     #N/A        #N/A
+B17         DP6_M2C_N      #N/A             rx_data_0_n[1]     #N/A        #N/A
+A14         DP4_M2C_P      #N/A             rx_data_0_p[2]     #N/A        #N/A
+A15         DP4_M2C_N      #N/A             rx_data_0_n[2]     #N/A        #N/A
+B12         DP7_M2C_P      #N/A             rx_data_0_p[3]     #N/A        #N/A
+B13         DP7_M2C_N      #N/A             rx_data_0_n[3]     #N/A        #N/A
+A10         DP3_M2C_P      #N/A             rx_data_0_p[4]     #N/A        #N/A
+A11         DP3_M2C_N      #N/A             rx_data_0_n[4]     #N/A        #N/A
+A6          DP2_M2C_P      #N/A             rx_data_0_p[5]     #N/A        #N/A
+A7          DP2_M2C_N      #N/A             rx_data_0_n[5]     #N/A        #N/A
+C6          DP0_M2C_P      #N/A             rx_data_0_p[6]     #N/A        #N/A
+C7          DP0_M2C_N      #N/A             rx_data_0_n[6]     #N/A        #N/A
+A2          DP1_M2C_P      #N/A             rx_data_0_p[7]     #N/A        #N/A
+A3          DP1_M2C_N      #N/A             rx_data_0_n[7]     #N/A        #N/A
+
+H13         LA07_P         #N/A             pwdn_0             LVCMOS18    #N/A
+C10         LA06_P         #N/A             rst_0              LVCMOS18    #N/A
+G12         LA08_P         #N/A             drst_0             LVCMOS18    #N/A
+D14         LA09_P         #N/A             arst_0             LVCMOS18    #N/A
+H10         LA04_P         #N/A             fd_0               LVCMOS18    #N/A
+G9          LA03_P         #N/A             irq_0              LVCMOS18    #N/A
+H14         LA07_N         #N/A             pwdn_1             LVCMOS18    #N/A
+C11         LA06_N         #N/A             rst_1              LVCMOS18    #N/A
+G13         LA08_N         #N/A             drst_1             LVCMOS18    #N/A
+D15         LA09_N         #N/A             arst_1             LVCMOS18    #N/A
+H11         LA04_N         #N/A             fd_1               LVCMOS18    #N/A
+G10         LA03_N         #N/A             irq_1              LVCMOS18    #N/A
+
+H20         LA15_N         #N/A             pwr_good           LVCMOS18    #N/A
+H16         LA11_P         #N/A             trig_p             LVDS        DIFF_TERM TRUE
+H17         LA11_N         #N/A             trig_n             LVDS        DIFF_TERM TRUE
+G18         LA16_P         #N/A             vdither_p          LVDS        #N/A
+G19         LA16_N         #N/A             vdither_n          LVDS        #N/A
+
+D17         LA13_P         #N/A             dac_clk            LVCMOS18    #N/A
+D18         LA13_N         #N/A             dac_data           LVCMOS18    #N/A
+C18         LA14_P         #N/A             dac_sync_0         LVCMOS18    #N/A
+C19         LA14_N         #N/A             dac_sync_1         LVCMOS18    #N/A
+
+G15         LA12_P         #N/A             psync_0            LVCMOS18    #N/A
+G16         LA12_N         #N/A             psync_1            LVCMOS18    #N/A
+
+D11         LA05_P         #N/A             spi_csn_0          LVCMOS18    #N/A
+D12         LA05_N         #N/A             spi_csn_1          LVCMOS18    #N/A
+C14         LA10_P         #N/A             spi_clk            LVCMOS18    #N/A
+C15         LA10_N         #N/A             spi_sdio           LVCMOS18    #N/A
+H19         LA15_P         #N/A             spi_dirn           LVCMOS18    #N/A

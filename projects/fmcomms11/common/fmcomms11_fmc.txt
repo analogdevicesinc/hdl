@@ -1,0 +1,61 @@
+FMC_pin    FMC_port       Schematic_name   System_top_name  IOSTANDARD Termination
+
+# fmcomms11
+
+B20        GBTCLK1_M2C_P  FPGA_CLK_P       usr_clk_p        LVDS_25    DIFF_TERM TRUE
+B21        GBTCLK1_M2C_N  FPGA_CLK_N       usr_clk_n        LVDS_25    DIFF_TERM TRUE
+D4         GBTCLK0_M2C_P  DIVCLK_P         trx_ref_clk_p    #N/A       #N/A
+D5         GBTCLK0_M2C_N  DIVCLK_N         trx_ref_clk_n    #N/A       #N/A
+
+H7         LA02_P         DSYNC_P1_P       rx_sync_p        LVDS_25    #N/A
+H8         LA02_N         DSYNC_P1_N       rx_sync_n        LVDS_25    #N/A
+G9         LA03_P         SYNC_DAC_P       tx_sync_p        LVDS_25    DIFF_TERM TRUE
+G10        LA03_N         SYNC_DAC_N       tx_sync_n        LVDS_25    DIFF_TERM TRUE
+
+C6         DP0_M2C_P      DOUTA_P          rx_data_p[0]     #N/A       #N/A
+C7         DP0_M2C_N      DOUTA_N          rx_data_n[0]     #N/A       #N/A
+A2         DP1_M2C_P      DOUTB_P          rx_data_p[1]     #N/A       #N/A
+A3         DP1_M2C_N      DOUTB_N          rx_data_n[1]     #N/A       #N/A
+A6         DP2_M2C_P      DOUTC_P          rx_data_p[2]     #N/A       #N/A
+A7         DP2_M2C_N      DOUTC_N          rx_data_n[2]     #N/A       #N/A
+A10        DP3_M2C_P      DOUTD_P          rx_data_p[3]     #N/A       #N/A
+A11        DP3_M2C_N      DOUTD_N          rx_data_n[3]     #N/A       #N/A
+A14        DP4_M2C_P      DOUTF_P          rx_data_p[4]     #N/A       #N/A
+A15        DP4_M2C_N      DOUTF_N          rx_data_n[4]     #N/A       #N/A
+A18        DP5_M2C_P      DOUTH_P          rx_data_p[5]     #N/A       #N/A
+A19        DP5_M2C_N      DOUTH_N          rx_data_n[5]     #N/A       #N/A
+B16        DP6_M2C_P      DOUTG_P          rx_data_p[6]     #N/A       #N/A
+B17        DP6_M2C_N      DOUTG_N          rx_data_n[6]     #N/A       #N/A
+B12        DP7_M2C_P      DOUTE_P          rx_data_p[7]     #N/A       #N/A
+B13        DP7_M2C_N      DOUTE_N          rx_data_n[7]     #N/A       #N/A
+C2         DP0_C2M_P      SERDIN0_P        tx_data_p[0]     #N/A       #N/A
+C3         DP0_C2M_N      SERDIN0_N        tx_data_n[0]     #N/A       #N/A
+A22        DP1_C2M_P      SERDIN1_P        tx_data_p[1]     #N/A       #N/A
+A23        DP1_C2M_N      SERDIN1_N        tx_data_n[1]     #N/A       #N/A
+A26        DP2_C2M_P      SERDIN2_P        tx_data_p[2]     #N/A       #N/A
+A27        DP2_C2M_N      SERDIN2_N        tx_data_n[2]     #N/A       #N/A
+A30        DP3_C2M_P      SERDIN3_P        tx_data_p[3]     #N/A       #N/A
+A31        DP3_C2M_N      SERDIN3_N        tx_data_n[3]     #N/A       #N/A
+A34        DP4_C2M_P      SERDIN5_P        tx_data_p[4]     #N/A       #N/A
+A35        DP4_C2M_N      SERDIN5_N        tx_data_n[4]     #N/A       #N/A
+A38        DP5_C2M_P      SERDIN7_P        tx_data_p[5]     #N/A       #N/A
+A39        DP5_C2M_N      SERDIN7_N        tx_data_n[5]     #N/A       #N/A
+B36        DP6_C2M_P      SERDIN6_P        tx_data_p[6]     #N/A       #N/A
+B37        DP6_C2M_N      SERDIN6_N        tx_data_n[6]     #N/A       #N/A
+B32        DP7_C2M_P      SERDIN4_P        tx_data_p[7]     #N/A       #N/A
+B33        DP7_C2M_N      SERDIN4_N        tx_data_n[7]     #N/A       #N/A
+
+D14        LA09_P         MUXOUT_FMC       adf4355_muxout   LVCMOS25   #N/A
+D15        LA09_N         IRQ9625_FMC      ad9625_irq       LVCMOS25   #N/A
+G13        LA08_N         TXEN_FMC         ad9162_txen      LVCMOS25   #N/A
+H16        LA11_P         IRQ9162_FMC      ad9162_irq       LVCMOS25   #N/A
+
+G12        LA08_P         CSB9162_FMC      spi_csn_ad9162   LVCMOS25   #N/A
+G15        LA12_P         CSB1119_FMC      spi_csn_hmc1119  LVCMOS25   #N/A
+G16        LA12_N         CSB4355_FMC      spi_csn_adf4355  LVCMOS25   #N/A
+C10        LA06_P         CSB5240_FMC      spi_csn_adl5240  LVCMOS25   #N/A
+C11        LA06_N         CSB9625_FMC      spi_csn_ad9625   LVCMOS25   #N/A
+H14        LA07_N         CSB9508_FMC      spi_csn_ad9508   LVCMOS25   #N/A
+H13        LA07_P         SDIO_CTRL_FMC    spi_dir          LVCMOS25   #N/A
+C14        LA10_P         SCLK_FMC         spi_clk          LVCMOS25   #N/A
+C15        LA10_N         SDIO_FMC         spi_sdio         LVCMOS25   #N/A

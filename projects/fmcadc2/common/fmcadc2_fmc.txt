@@ -1,0 +1,39 @@
+FMC_pin     FMC_port       Schematic_name   System_top_name            IOSTANDARD  Termination
+
+# ad9625
+
+D4          GBTCLK0_M2C_P  DIVCLK+          rx_ref_clk_p               #N/A        #N/A
+D5          GBTCLK0_M2C_N  DIVCLK-          rx_ref_clk_n               #N/A        #N/A
+ 
+H10         LA04_P         DSYNC+           rx_sync_p                  LVDS        #N/A
+H11         LA04_N         DSYNC-           rx_sync_n                  LVDS        #N/A
+D11         LA05_P         DSYSREF+         rx_sysref_p                LVDS        DIFF_TERM TRUE
+D12         LA05_N         DSYSREF-         rx_sysref_n                LVDS        DIFF_TERM TRUE
+
+C6          DP0_M2C_P      DOUTA+           rx_data_p[0]               #N/A        #N/A
+C7          DP0_M2C_N      DOUTA-           rx_data_n[0]               #N/A        #N/A
+A2          DP1_M2C_P      DOUTB+           rx_data_p[1]               #N/A        #N/A
+A3          DP1_M2C_N      DOUTB-           rx_data_n[1]               #N/A        #N/A
+A6          DP2_M2C_P      DOUTC+           rx_data_p[2]               #N/A        #N/A
+A7          DP2_M2C_N      DOUTC-           rx_data_n[2]               #N/A        #N/A
+A10         DP3_M2C_P      DOUTD+           rx_data_p[3]               #N/A        #N/A
+A11         DP3_M2C_N      DOUTD-           rx_data_n[3]               #N/A        #N/A
+B12         DP7_M2C_P      DOUTE+           rx_data_p[4]               #N/A        #N/A
+B13         DP7_M2C_N      DOUTE-           rx_data_n[4]               #N/A        #N/A
+A14         DP4_M2C_P      DOUTF+           rx_data_p[5]               #N/A        #N/A
+A15         DP4_M2C_N      DOUTF-           rx_data_n[5]               #N/A        #N/A
+B16         DP6_M2C_P      DOUTG+           rx_data_p[6]               #N/A        #N/A
+B17         DP6_M2C_N      DOUTG-           rx_data_n[6]               #N/A        #N/A
+A18         DP5_M2C_P      DOUTH+           rx_data_p[7]               #N/A        #N/A
+A19         DP5_M2C_N      DOUTH-           rx_data_n[7]               #N/A        #N/A
+
+G9          LA03_P         IRQ              adc_irq                    LVCMOS18    #N/A
+G10         LA03_N         FD               adc_fd                     LVCMOS18    #N/A
+
+H8          LA02_N         CSB              spi_adc_csn                LVCMOS18    #N/A
+D8          LA01_CC_P      SCLK             spi_adc_clk                LVCMOS18    #N/A
+D9          LA01_CC_N      SDIO             spi_adc_sdio               LVCMOS18    #N/A
+H7          LA02_P         CS_CLOCK         spi_adf4355_data_or_csn_0  LVCMOS18    #N/A
+C10         LA06_P         SPARE_CLOCK      spi_adf4355_clk_or_csn_1   LVCMOS18    #N/A
+G6          LA00_CC_P      SCLK_CLOCK       spi_adf4355_le_or_clk      LVCMOS18    #N/A
+G7          LA00_CC_N      SDIO_CLOCK       spi_adf4355_ce_or_sdio     LVCMOS18    #N/A
