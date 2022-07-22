@@ -1,0 +1,22 @@
+FMC_pin    FMC_port      Schematic_name     System_top_name IOSTANDARD Termination
+
+# ad9250
+
+D4         GBTCLK0_M2C_P GBTCLK0_M2C_P      rx_ref_clk_p    #N/A       #N/A
+D5         GBTCLK0_M2C_N GBTCLK0_M2C_N      rx_ref_clk_n    #N/A       #N/A
+
+C6         DP0_M2C_P     SERDOUTA_P         rx_data_p[0]    #N/A       #N/A
+C7         DP0_M2C_N     SERDOUTA_N         rx_data_n[0]    #N/A       #N/A
+A2         DP1_M2C_P     SERDOUTB_P         rx_data_p[1]    #N/A       #N/A
+A3         DP1_M2C_N     SERDOUTB_N         rx_data_n[1]    #N/A       #N/A
+A6         DP2_M2C_P     SERDOUTC_P         rx_data_p[2]    #N/A       #N/A
+A7         DP2_M2C_N     SERDOUTC_N         rx_data_n[2]    #N/A       #N/A
+A10        DP3_M2C_P     SERDOUTD_P         rx_data_p[3]    #N/A       #N/A
+A11        DP3_M2C_N     SERDOUTD_N         rx_data_n[3]    #N/A       #N/A
+
+G36        LA33_P        SYNCIN_L           rx_sync         LVCMOS25   #N/A
+G37        LA33_N        SYSREF             rx_sysref       LVCMOS25   #N/A
+
+G33        LA31_P        FMC_TO_CPLD0_VADJ  spi_clk         LVCMOS25   #N/A
+G34        LA31_N        FMC_TO_CPLD1_VADJ  spi_csn         LVCMOS25   #N/A
+H37        LA32_P        FMC_TO_CPLD2_VADJ  spi_sdio        LVCMOS25   #N/A
