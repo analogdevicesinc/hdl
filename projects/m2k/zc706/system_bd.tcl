@@ -37,6 +37,31 @@ foreach rst $video_dma_resets {
   ad_connect $rst video_dma_reset/peripheral_aresetn
 }
 
+create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.2 ila_0
+
+set_property -dict [list \
+  CONFIG.C_PROBE1_WIDTH {16} \
+  CONFIG.C_PROBE0_WIDTH {2} \
+  CONFIG.C_NUM_OF_PROBES {4} \
+  CONFIG.C_TRIGOUT_EN {false} \
+  CONFIG.C_EN_STRG_QUAL {0} \
+  CONFIG.C_ADV_TRIGGER {false} \
+  CONFIG.C_PROBE3_MU_CNT {2} \
+  CONFIG.C_PROBE2_MU_CNT {2} \
+  CONFIG.C_PROBE1_MU_CNT {2} \
+  CONFIG.C_PROBE0_MU_CNT {2} \
+  CONFIG.C_TRIGIN_EN {false} \
+  CONFIG.ALL_PROBE_SAME_MU_CNT {2} \
+  CONFIG.C_ENABLE_ILA_AXI_MON {false} \
+  CONFIG.C_MONITOR_TYPE {Native}
+] [get_bd_cells ila_0]
+
+ad_connect ila_0/clk axi_ad9963/adc_clk
+ad_connect ila_0/probe0 adc_trigger/trigger_o
+ad_connect ila_0/probe1 adc_trigger/data_a_trig
+ad_connect ila_0/probe2 adc_trigger/data_valid_a_trig
+ad_connect ila_0/probe3 adc_trigger/trigger_out
+
 # create board design
 # default ports
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 iic_m2k_fmc
