@@ -99,6 +99,8 @@ module spi_engine_execution #(
   reg sdo_t_int = 1'b0;
 
   reg idle;
+  reg [15:0] cmd_d = 'h0;
+  reg cmd_valid_d = 'h0;
 
   reg [7:0] clk_div_counter = 'h00;
   reg [7:0] clk_div_counter_next = 'h00;
@@ -141,16 +143,16 @@ module spi_engine_execution #(
 
   reg [SDI_DELAY+1:0] trigger_rx_d = {(SDI_DELAY+2){1'b0}};
 
-  wire [1:0] inst = cmd[13:12];
+  wire [1:0] inst = cmd_d[13:12];
   wire [1:0] inst_d1 = cmd_d1[13:12];
 
-  wire exec_cmd = cmd_ready && cmd_valid;
+  wire exec_cmd = cmd_ready && cmd_valid_d;
   wire exec_transfer_cmd = exec_cmd && inst == CMD_TRANSFER;
 
   wire exec_write_cmd = exec_cmd && inst == CMD_WRITE;
   wire exec_chipselect_cmd = exec_cmd && inst == CMD_CHIPSELECT;
   wire exec_misc_cmd = exec_cmd && inst == CMD_MISC;
-  wire exec_sync_cmd = exec_misc_cmd && cmd[8] == MISC_SYNC;
+  wire exec_sync_cmd = exec_misc_cmd && cmd_d[8] == MISC_SYNC;
 
   wire trigger_tx;
   wire trigger_rx;
@@ -171,15 +173,22 @@ module spi_engine_execution #(
   assign cmd_ready = idle;
 
   always @(posedge clk) begin
-    if (exec_transfer_cmd) begin
-      sdo_enabled <= cmd[8];
-      sdi_enabled <= cmd[9];
+    if (cmd_ready) begin
+      cmd_d <= cmd;
+      cmd_valid_d <= cmd_valid;
     end
   end
 
   always @(posedge clk) begin
-    if (cmd_ready & cmd_valid)
-     cmd_d1 <= cmd;
+    if (exec_transfer_cmd) begin
+      sdo_enabled <= cmd_d[8];
+      sdi_enabled <= cmd_d[9];
+    end
+  end
+
+  always @(posedge clk) begin
+    if (cmd_ready & cmd_valid_d)
+     cmd_d1 <= cmd_d;
   end
 
   always @(posedge clk) begin
@@ -204,16 +213,16 @@ module spi_engine_execution #(
       word_length <= DATA_WIDTH;
       left_aligned <= 8'b0;
     end else if (exec_write_cmd == 1'b1) begin
-      if (cmd[9:8] == REG_CONFIG) begin
-        cpha <= cmd[0];
-        cpol <= cmd[1];
-        three_wire <= cmd[2];
-      end else if (cmd[9:8] == REG_CLK_DIV) begin
-        clk_div <= cmd[7:0];
-      end else if (cmd[9:8] == REG_WORD_LENGTH) begin
+      if (cmd_d[9:8] == REG_CONFIG) begin
+        cpha <= cmd_d[0];
+        cpol <= cmd_d[1];
+        three_wire <= cmd_d[2];
+      end else if (cmd_d[9:8] == REG_CLK_DIV) begin
+        clk_div <= cmd_d[7:0];
+      end else if (cmd_d[9:8] == REG_WORD_LENGTH) begin
         // the max value of this reg must be DATA_WIDTH
-        word_length <= cmd[7:0];
-        left_aligned <= DATA_WIDTH - cmd[7:0];
+        word_length <= cmd_d[7:0];
+        left_aligned <= DATA_WIDTH - cmd_d[7:0];
       end
     end
   end
