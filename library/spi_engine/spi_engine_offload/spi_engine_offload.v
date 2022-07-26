@@ -122,16 +122,23 @@ module spi_engine_offload #(
   reg [ 7:0] ctrl_sync_id_init = 8'b0;
   reg        ctrl_sync_id_load = 1'b0;
   reg [ 7:0] spi_sync_id_counter = 8'b0;
+  reg ctrl_cmd_wr_en_d = 'b0;
+  reg [15:0] ctrl_cmd_wr_data_d = 'b0;
 
   wire [ 7:0] spi_sync_id_init_s;
+
+  always @(posedge ctrl_clk) begin
+    ctrl_cmd_wr_en_d <= ctrl_cmd_wr_en;
+    ctrl_cmd_wr_data_d <= ctrl_cmd_wr_data;
+  end
 
   always @(posedge ctrl_clk) begin
     if (ctrl_mem_reset == 1'b1) begin
       ctrl_sync_id_init <= 8'b0;
       ctrl_sync_id_load <= 1'b0;
     end else begin
-      if (ctrl_cmd_wr_en && (ctrl_cmd_wr_data[15:8] == 8'h30)) begin
-        ctrl_sync_id_init <= ctrl_cmd_wr_data;
+      if (ctrl_cmd_wr_en_d && (ctrl_cmd_wr_data_d[15:8] == 8'h30)) begin
+        ctrl_sync_id_init <= ctrl_cmd_wr_data_d;
         ctrl_sync_id_load <= 1'b1;
       end else begin
         ctrl_sync_id_load <= 1'b0;
@@ -280,13 +287,13 @@ module spi_engine_offload #(
   always @(posedge ctrl_clk) begin
     if (ctrl_mem_reset == 1'b1)
       ctrl_cmd_wr_addr <= 'h00;
-    else if (ctrl_cmd_wr_en == 1'b1)
+    else if (ctrl_cmd_wr_en_d == 1'b1)
       ctrl_cmd_wr_addr <= ctrl_cmd_wr_addr + 1'b1;
   end
 
   always @(posedge ctrl_clk) begin
-    if (ctrl_cmd_wr_en == 1'b1)
-      cmd_mem[ctrl_cmd_wr_addr] <= ctrl_cmd_wr_data;
+    if (ctrl_cmd_wr_en_d == 1'b1)
+      cmd_mem[ctrl_cmd_wr_addr] <= ctrl_cmd_wr_data_d;
   end
 
   always @(posedge ctrl_clk) begin
