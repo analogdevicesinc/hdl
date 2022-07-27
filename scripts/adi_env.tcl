@@ -1,4 +1,3 @@
-
 # environment related stuff
 
 set ad_hdl_dir [file normalize [file join [file dirname [info script]] "../"]]
@@ -12,7 +11,7 @@ if [info exists ::env(ADI_GHDL_DIR)] {
 }
 
 # Define the supported tool version
-set required_vivado_version "2021.1"
+set required_vivado_version "2021.2"
 if {[info exists ::env(REQUIRED_VIVADO_VERSION)]} {
   set required_vivado_version $::env(REQUIRED_VIVADO_VERSION)
 } elseif {[info exists REQUIRED_VIVADO_VERSION]} {
