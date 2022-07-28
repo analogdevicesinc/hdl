@@ -70,7 +70,7 @@ module spi_engine_execution #(
 
  (* mark_debug = "true" *) input echo_sclk,
  (* mark_debug = "true" *) output reg sclk,
- (* mark_debug = "true" *) output reg [NUM_OF_SDO-1:0] sdo,
+ (* mark_debug = "true" *) output [NUM_OF_SDO-1:0] sdo,
  (* mark_debug = "true" *) output reg sdo_t,
  (* mark_debug = "true" *) input [NUM_OF_SDI-1:0] sdi,
  (* mark_debug = "true" *) output reg [NUM_OF_CS-1:0] cs,
@@ -94,6 +94,8 @@ localparam BIT_COUNTER_WIDTH = DATA_WIDTH > 16 ? 5 :
 
 localparam BIT_COUNTER_CARRY = 2** (BIT_COUNTER_WIDTH + 1);
 localparam BIT_COUNTER_CLEAR = {{8{1'b1}}, {BIT_COUNTER_WIDTH{1'b0}}, 1'b1};
+
+wire ddr_en = cmd_d[12];
 
 wire [(NUM_OF_SDI * DATA_WIDTH)-1:0] sdi_data_s;
 reg sdi_data_valid_s = 1'b0;
@@ -241,7 +243,7 @@ always @(posedge clk) begin
       clk_div <= cmd_d[7:0];
     end else if (cmd_d[9:8] == REG_WORD_LENGTH) begin
       // the max value of this reg must be DATA_WIDTH
-      word_length <= cmd_d[7:0] >> (NUM_OF_SDO-2);  //WORK STILL NEEDED HERE. WILL NOT WORK WITH NORMAL SPI AS IS
+      word_length <= cmd_d[7:0] >> (NUM_OF_SDO-1);  //WORK STILL NEEDED HERE. WILL NOT WORK WITH NORMAL SPI AS IS
       left_aligned <= DATA_WIDTH - cmd_d[7:0];
     end
   end
@@ -265,6 +267,9 @@ always @(posedge clk) begin
   end
 end
 
+wire trigger_tx_ddr;
+
+assign trigger_tx_ddr = trigger;
 assign trigger_tx = trigger == 1'b1 && ntx_rx == 1'b0;
 assign trigger_rx = trigger == 1'b1 && ntx_rx == 1'b1;
 
@@ -417,7 +422,7 @@ if (NUM_OF_SDO == 1) begin : g_single_sdo
   // Additional register stage to improve timing
   always @(posedge clk) begin
     sclk <= sclk_int;
-    sdo <= sdo_int_s;
+//    sdo <= sdo_int_s;
     sdo_t <= sdo_t_int;
   end
 
@@ -447,8 +452,8 @@ begin : g_dual_sdo
   // Additional register stage to improve timing
   always @(posedge clk) begin
     sclk <= sclk_int;
-    sdo[0] <= sdo_int_s2;
-    sdo[1] <= sdo_int_s;
+//    sdo[0] <= sdo_int_s2;
+//    sdo[1] <= sdo_int_s;
     sdo_t <= sdo_t_int;
   end
 
@@ -459,7 +464,7 @@ begin : g_quad_sdo
   always @(posedge clk) begin
     if ((inst_d1 == CMD_TRANSFER) && (!sdo_enabled)) begin
       data_sdo_shift <= {DATA_WIDTH{SDO_DEFAULT}};
-    end else if (transfer_active == 1'b1 && trigger_tx == 1'b1) begin
+    end else if (transfer_active == 1'b1 && trigger_tx_ddr == 1'b1) begin
       if (first_bit == 1'b1) begin
         data_sdo_shift <= sdo_data << left_aligned;
         data_sdo_shift2 <= sdo_data << (left_aligned + 2'd1);
@@ -474,18 +479,36 @@ begin : g_quad_sdo
     end
   end
 
-  assign sdo_int_s = data_sdo_shift[DATA_WIDTH-1];
-  assign sdo_int_s2 = data_sdo_shift2[DATA_WIDTH-1];
-  assign sdo_int_s3 = data_sdo_shift3[DATA_WIDTH-1];
-  assign sdo_int_s4 = data_sdo_shift4[DATA_WIDTH-1];
+//  always @(posedge clk) begin
+//    if ((inst_d1 == CMD_TRANSFER) && (!sdo_enabled)) begin
+//      data_sdo_shift <= {DATA_WIDTH{SDO_DEFAULT}};
+//    end else if (transfer_active == 1'b1 && trigger_tx == 1'b1) begin
+//      if (first_bit == 1'b1) begin
+//        data_sdo_shift <= sdo_data << left_aligned;
+//        data_sdo_shift2 <= sdo_data << (left_aligned + 2'd1);
+//        data_sdo_shift3 <= sdo_data << (left_aligned + 2'd2);
+//        data_sdo_shift4 <= sdo_data << (left_aligned + 2'd3);
+//      end else begin
+//        data_sdo_shift <= {data_sdo_shift[(DATA_WIDTH-2):0], 4'b0};
+//        data_sdo_shift2 <= {data_sdo_shift2[(DATA_WIDTH-2):0], 4'b0};
+//        data_sdo_shift3 <= {data_sdo_shift3[(DATA_WIDTH-2):0], 4'b0};
+//        data_sdo_shift4 <= {data_sdo_shift4[(DATA_WIDTH-2):0], 4'b0};
+//      end
+//    end
+//  end
+
+  assign sdo[3] = data_sdo_shift[DATA_WIDTH-1];
+  assign sdo[2] = data_sdo_shift2[DATA_WIDTH-1];
+  assign sdo[1] = data_sdo_shift3[DATA_WIDTH-1];
+  assign sdo[0] = data_sdo_shift4[DATA_WIDTH-1];
 
   // Additional register stage to improve timing
   always @(posedge clk) begin
     sclk <= sclk_int;
-    sdo[0] <= sdo_int_s4;
-    sdo[1] <= sdo_int_s3;
-    sdo[2] <= sdo_int_s2;
-    sdo[3] <= sdo_int_s;
+//    sdo[0] <= sdo_int_s4;
+//    sdo[1] <= sdo_int_s3;
+//    sdo[2] <= sdo_int_s2;
+//    sdo[3] <= sdo_int_s;
     sdo_t <= sdo_t_int;
   end
 
