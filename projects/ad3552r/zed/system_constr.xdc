@@ -30,6 +30,6 @@ create_generated_clock -name spi_clk -source [get_pins -filter name=~*CLKIN1 -of
 get_cells -hierarchical -filter {NAME=~*.data_sdo_shift_reg*[*]}
 set_multicycle_path -setup 8 -to [get_cells -hierarchical -filter {NAME=~*.data_sdo_shift_reg*[*]}] -from [get_clocks spi_clk]
 set_multicycle_path -hold  7 -to [get_cells -hierarchical -filter {NAME=~*.data_sdo_shift_reg*[*]}] -from [get_clocks spi_clk]
-set_multicycle_path -setup 8 -to [get_cells -hierarchical -filter {NAME=~*/execution/inst/left_aligned_reg*}] -from [get_clocks spi_clk]
-set_multicycle_path -hold  7 -to [get_cells -hierarchical -filter {NAME=~*/execution/inst/left_aligned_reg*}] -from [get_clocks spi_clk]
+set_multicycle_path -setup 8 -to [get_cells -hierarchical -filter {NAME=~*/*execution/inst/left_aligned_reg*}] -from [get_clocks spi_clk]
+set_multicycle_path -hold  7 -to [get_cells -hierarchical -filter {NAME=~*/*execution/inst/left_aligned_reg*}] -from [get_clocks spi_clk]
 
