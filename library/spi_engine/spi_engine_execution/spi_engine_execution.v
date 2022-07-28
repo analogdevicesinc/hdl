@@ -148,16 +148,19 @@ reg [(DATA_WIDTH-1):0] data_sdo_shift4 = 'h0;
 
 reg [SDI_DELAY+1:0] trigger_rx_d = {(SDI_DELAY+2){1'b0}};
 
- (* mark_debug = "true" *) wire [1:0] inst = cmd[13:12];
- (* mark_debug = "true" *) wire [1:0] inst_d1 = cmd_d1[13:12];
+reg [15:0] cmd_d = 'h0;
+reg cmd_valid_d = 'h0;
 
- (* mark_debug = "true" *) wire exec_cmd = cmd_ready && cmd_valid;
- (* mark_debug = "true" *) wire exec_transfer_cmd = exec_cmd && inst == CMD_TRANSFER;
+wire [1:0] inst = cmd_d[13:12];
+wire [1:0] inst_d1 = cmd_d1[13:12];
 
- (* mark_debug = "true" *) wire exec_write_cmd = exec_cmd && inst == CMD_WRITE;
- (* mark_debug = "true" *) wire exec_chipselect_cmd = exec_cmd && inst == CMD_CHIPSELECT;
- (* mark_debug = "true" *) wire exec_misc_cmd = exec_cmd && inst == CMD_MISC;
- (* mark_debug = "true" *) wire exec_sync_cmd = exec_misc_cmd && cmd[8] == MISC_SYNC;
+wire exec_cmd = cmd_ready && cmd_valid_d;
+wire exec_transfer_cmd = exec_cmd && inst == CMD_TRANSFER;
+
+wire exec_write_cmd = exec_cmd && inst == CMD_WRITE;
+wire exec_chipselect_cmd = exec_cmd && inst == CMD_CHIPSELECT;
+wire exec_misc_cmd = exec_cmd && inst == CMD_MISC;
+wire exec_sync_cmd = exec_misc_cmd && cmd_d[8] == MISC_SYNC;
 
  (* mark_debug = "true" *) wire trigger_tx;
  (* mark_debug = "true" *) wire trigger_rx;
@@ -179,6 +182,13 @@ assign cmd_ready = idle;
 
 assign sdi_data_valid = sdi_data_valid_s;
 
+always @(posedge clk) begin
+  if (cmd_ready) begin
+    cmd_d <= cmd;
+    cmd_valid_d <= cmd_valid;
+  end
+end
+
 genvar j;
 generate
   for (j=0; j<128; j=j+1) begin: g_reorder_sdi
@@ -191,14 +201,14 @@ endgenerate
 
 always @(posedge clk) begin
   if (exec_transfer_cmd) begin
-    sdo_enabled <= cmd[8];
-    sdi_enabled <= cmd[9];
+    sdo_enabled <= cmd_d[8];
+    sdi_enabled <= cmd_d[9];
   end
 end
 
 always @(posedge clk) begin
-  if (cmd_ready & cmd_valid)
-   cmd_d1 <= cmd;
+  if (cmd_ready & cmd_valid_d)
+   cmd_d1 <= cmd_d;
 end
 
 always @(posedge clk) begin
@@ -223,16 +233,16 @@ always @(posedge clk) begin
     word_length <= DATA_WIDTH;
     left_aligned <= 8'b0;
   end else if (exec_write_cmd == 1'b1) begin
-    if (cmd[9:8] == REG_CONFIG) begin
-      cpha <= cmd[0];
-      cpol <= cmd[1];
-      three_wire <= cmd[2];
-    end else if (cmd[9:8] == REG_CLK_DIV) begin
-      clk_div <= cmd[7:0];
-    end else if (cmd[9:8] == REG_WORD_LENGTH) begin
+    if (cmd_d[9:8] == REG_CONFIG) begin
+      cpha <= cmd_d[0];
+      cpol <= cmd_d[1];
+      three_wire <= cmd_d[2];
+    end else if (cmd_d[9:8] == REG_CLK_DIV) begin
+      clk_div <= cmd_d[7:0];
+    end else if (cmd_d[9:8] == REG_WORD_LENGTH) begin
       // the max value of this reg must be DATA_WIDTH
-      word_length <= cmd[7:0] >> (NUM_OF_SDO-2);  //WORK STILL NEEDED HERE. WILL NOT WORK WITH NORMAL SPI AS IS
-      left_aligned <= DATA_WIDTH - cmd[7:0];
+      word_length <= cmd_d[7:0] >> (NUM_OF_SDO-2);  //WORK STILL NEEDED HERE. WILL NOT WORK WITH NORMAL SPI AS IS
+      left_aligned <= DATA_WIDTH - cmd_d[7:0];
     end
   end
 end
@@ -415,7 +425,7 @@ end /* g_single_sdo */
 else if (NUM_OF_SDO == 2)
 begin : g_dual_sdo
 
-    always @(posedge clk) begin
+  always @(posedge clk) begin
     if ((inst_d1 == CMD_TRANSFER) && (!sdo_enabled)) begin
       data_sdo_shift <= {DATA_WIDTH{SDO_DEFAULT}};
     end else if (transfer_active == 1'b1 && trigger_tx == 1'b1) begin
@@ -446,7 +456,7 @@ end /* g_dual_sdo */
 else if (NUM_OF_SDO == 4)
 begin : g_quad_sdo
 
-      always @(posedge clk) begin
+  always @(posedge clk) begin
     if ((inst_d1 == CMD_TRANSFER) && (!sdo_enabled)) begin
       data_sdo_shift <= {DATA_WIDTH{SDO_DEFAULT}};
     end else if (transfer_active == 1'b1 && trigger_tx == 1'b1) begin
@@ -534,7 +544,6 @@ if (ECHO_SCLK == 1) begin : g_echo_sclk_miso_latch
         if (last_sdi_bit)
           sdi_data_latch[i*DATA_WIDTH+:DATA_WIDTH] <= {data_sdi_shift, sdi[i]};
       end
-
     end
 
     always @(posedge echo_sclk or posedge cs_active_s) begin
@@ -575,7 +584,6 @@ if (ECHO_SCLK == 1) begin : g_echo_sclk_miso_latch
         sdi_counter_d <= sdi_counter;
       end
     end
-
   end
 
   assign sdi_data_s = sdi_data_latch;
@@ -647,10 +655,10 @@ begin : g_sclk_miso_latch
     end
 
     assign sdi_data_s[i*DATA_WIDTH+:DATA_WIDTH] = data_sdi_shift;
-
   end
 
   assign last_sdi_bit = (sdi_counter == word_length-1);
+
   always @(posedge clk) begin
     if (resetn == 1'b0) begin
       sdi_counter <= 8'b0;
