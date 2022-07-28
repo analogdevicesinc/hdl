@@ -13,6 +13,8 @@ set hier_spi_engine spi_ad3552r_dac
 
 spi_engine_create $hier_spi_engine $data_width $async_spi_clk $num_cs $num_sdi $num_sdo $sdi_delay
 
+ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_offload CONFIG.SDO_MEM_OS 1
+
 ad_ip_instance axi_dds spi_dds
 ad_connect spi_clk spi_dds/spi_clk
 
