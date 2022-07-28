@@ -114,7 +114,9 @@ reg [15:0] cmd_mem[0:2**CMD_MEM_ADDRESS_WIDTH-1];
 reg [15:0] cmd_mem_os[0:2**CMD_MEM_ADDRESS_WIDTH-1];
 reg [(DATA_WIDTH-1):0] sdo_mem[0:2**SDO_MEM_ADDRESS_WIDTH-1];
 
- (* mark_debug = "true" *) reg cmd_valid_s = 1'h0;
+reg cmd_valid_s = 1'h0;
+reg ctrl_cmd_wr_en_d = 'b0;
+reg [15:0] ctrl_cmd_wr_data_d = 'b0;
 
  (* mark_debug = "true" *) wire [15:0] cmd_int_s;
  (* mark_debug = "true" *) wire [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_rd_addr_next;
@@ -126,7 +128,7 @@ wire offload_sdo_ready;
 wire cmd_mem_os_s;
 wire [(DATA_WIDTH-1):0] offload_sdo_data;
 
-assign cmd_mem_os_s = ctrl_cmd_wr_data [15];
+assign cmd_mem_os_s = ctrl_cmd_wr_data_d [15];
 
 
 assign offload_sdo_ready_0 = (ctrl_axis_sw ? 0 : offload_sdo_ready);
@@ -161,14 +163,18 @@ reg        ctrl_sync_id_load = 1'b0;
 reg [ 7:0] spi_sync_id_counter = 8'b0;
 
 wire [ 7:0] spi_sync_id_init_s;
+always @(posedge ctrl_clk) begin
+  ctrl_cmd_wr_en_d <= ctrl_cmd_wr_en;
+  ctrl_cmd_wr_data_d <= ctrl_cmd_wr_data;
+end
 
 always @(posedge ctrl_clk) begin
   if (ctrl_mem_reset == 1'b1) begin
     ctrl_sync_id_init <= 8'b0;
     ctrl_sync_id_load <= 1'b0;
   end else begin
-    if (ctrl_cmd_wr_en && (ctrl_cmd_wr_data[15:8] == 8'h30)) begin
-      ctrl_sync_id_init <= ctrl_cmd_wr_data;
+    if (ctrl_cmd_wr_en_d && (ctrl_cmd_wr_data_d[15:8] == 8'h30)) begin
+      ctrl_sync_id_init <= ctrl_cmd_wr_data_d;
       ctrl_sync_id_load <= 1'b1;
     end else begin
       ctrl_sync_id_load <= 1'b0;
@@ -228,7 +234,6 @@ wire ctrl_enable_ned;
 assign ctrl_enable_ed = ~ctrl_enable_d & ctrl_enable;
 assign ctrl_enable_ned = ctrl_enable_d & ~ctrl_enable;
 assign spi_active_ed = spi_active_d & ~spi_active;
-
 reg cmd_sdo_en_os = 1'h0;
 
 always @(posedge spi_clk) begin
@@ -357,7 +362,7 @@ always @(posedge ctrl_clk) begin
   if (ctrl_mem_reset == 1'b1) begin
     ctrl_cmd_wr_addr <= 'h00;
     ctrl_cmd_os_wr_addr <= 'h00;
-  end else if (ctrl_cmd_wr_en == 1'b1) begin
+  end else if (ctrl_cmd_wr_en_d == 1'b1) begin
     if (cmd_mem_os_s) begin
       ctrl_cmd_os_wr_addr <= ctrl_cmd_os_wr_addr + 1'b1;
     end else begin
@@ -367,11 +372,11 @@ always @(posedge ctrl_clk) begin
 end
 
 always @(posedge ctrl_clk) begin
-  if (ctrl_cmd_wr_en == 1'b1) begin
+  if (ctrl_cmd_wr_en_d == 1'b1) begin
     if (cmd_mem_os_s) begin
-      cmd_mem_os[ctrl_cmd_os_wr_addr] <= {1'h0, ctrl_cmd_wr_data[14:0]};
+      cmd_mem_os[ctrl_cmd_os_wr_addr] <= {1'h0, ctrl_cmd_wr_data_d[14:0]};
     end else begin
-      cmd_mem[ctrl_cmd_wr_addr] <= {1'h0, ctrl_cmd_wr_data[14:0]};
+      cmd_mem[ctrl_cmd_wr_addr] <= {1'h0, ctrl_cmd_wr_data_d[14:0]};
     end
   end
 end
