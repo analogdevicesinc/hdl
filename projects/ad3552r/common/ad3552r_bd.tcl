@@ -25,9 +25,9 @@ ad_connect spi_clk spi_dds/spi_clk
 #ad_connect spi_dds/dac_sync_in_0 GND
 
 ad_ip_instance axi_clkgen spi_clkgen
-ad_ip_parameter spi_clkgen CONFIG.CLK0_DIV 10
-ad_ip_parameter spi_clkgen CONFIG.VCO_DIV 1
-ad_ip_parameter spi_clkgen CONFIG.VCO_MUL 12
+ad_ip_parameter spi_clkgen CONFIG.CLK0_DIV 4
+ad_ip_parameter spi_clkgen CONFIG.VCO_DIV 5
+ad_ip_parameter spi_clkgen CONFIG.VCO_MUL 48
 
 ad_ip_instance axi_pwm_gen pulsar_adc_trigger_gen
 ad_ip_parameter pulsar_adc_trigger_gen CONFIG.PULSE_0_PERIOD 120
