@@ -21,8 +21,6 @@ set_property  -dict {PACKAGE_PIN N17  IOSTANDARD LVCMOS25}  [get_ports gpio_3_mo
 set_property  -dict {PACKAGE_PIN R19  IOSTANDARD LVCMOS25}  [get_ports gpio_4_filter]       ; ## C14  FMC_LPC_LA10_P     IO_L22P_T3_34             
 set_property  -dict {PACKAGE_PIN L21  IOSTANDARD LVCMOS25}  [get_ports reset_n]             ; ## C10  FMC_LPC_LA06_P     IO_L10P_T1_34             
 set_property  -dict {PACKAGE_PIN P22  IOSTANDARD LVCMOS25}  [get_ports start_n]             ; ## G10  FMC_LPC_LA03_N     IO_L16N_T2_34             
-set_property  -dict {PACKAGE_PIN M21  IOSTANDARD LVCMOS25}  [get_ports sync_n]              ; ## H10  FMC_LPC_LA04_P     IO_L15P_T2_DQS_34         
-set_property  -dict {PACKAGE_PIN K18  IOSTANDARD LVCMOS25}  [get_ports sync_in_n]           ; ## D12  FMC_LPC_LA05_N     IO_L7N_T1_34              
 set_property  -dict {PACKAGE_PIN N20  IOSTANDARD LVCMOS25}  [get_ports mclk]                ; ## D09  FMC_LPC_LA01_CC_N  IO_L14N_T2_SRCC_34        
 
 create_clock -name adc_clk -period 20 [get_ports clk_in]
