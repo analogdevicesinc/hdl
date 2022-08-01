@@ -31,8 +31,8 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 adi_project ad9082_fmca_ebz_zcu102 0 [list \
   JESD_MODE    8B10B \
-  RX_LANE_RATE [get_env_param RX_RATE      10 ] \
-  TX_LANE_RATE [get_env_param TX_RATE      10 ] \
+  RX_LANE_RATE [get_env_param RX_RATE      15 ] \
+  TX_LANE_RATE [get_env_param TX_RATE      15 ] \
   RX_JESD_M    [get_env_param RX_JESD_M    4 ] \
   RX_JESD_L    [get_env_param RX_JESD_L    8 ] \
   RX_JESD_S    [get_env_param RX_JESD_S    1 ] \
