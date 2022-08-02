@@ -59,12 +59,12 @@ module axi_pwm_gen_1 #(
   reg     [31:0]               pulse_period_d = PULSE_PERIOD;
   reg     [31:0]               pulse_width_d = PULSE_WIDTH;
   reg                          phase_align_armed = 1'b1;
+  reg                          end_of_pulse;
+  reg                          end_of_period;
 
   // internal wires
 
   wire                         phase_align;
-  wire                         end_of_period;
-  wire                         end_of_pulse;
   wire                         pulse_enable;
 
   // enable pwm
@@ -121,9 +121,15 @@ module axi_pwm_gen_1 #(
     end
   end
 
-  assign end_of_period = (pulse_period_cnt == pulse_period_d) ? 1'b1 : 1'b0;
-  assign end_of_pulse = (pulse_period_cnt == pulse_width_d) ? 1'b1 : 1'b0;
-
+  always @(posedge clk) begin
+    if (rstn == 1'b0) begin
+      end_of_period <= 1'b0;
+      end_of_pulse <= 1'b0;
+    end else begin
+      end_of_period <= (pulse_period_cnt == pulse_period_d) ? 1'b1 : 1'b0;
+      end_of_pulse <= (pulse_period_cnt == pulse_width_d) ? 1'b1 : 1'b0;
+    end
+  end
   // generate pulse with a specified width
 
   always @ (posedge clk) begin
