@@ -17,7 +17,8 @@ case "$SIMULATOR" in
 		xvlog -log ${NAME}_xvlog.log --sourcelibdir . ${SOURCE}
 		xelab -log ${NAME}_xelab.log -debug all ${NAME}
 		if [[ "$MODE" == "-gui" ]]; then
-			echo "run all" > xsim_gui_cmd.tcl
+			echo "log_wave -r *" > xsim_gui_cmd.tcl
+			echo "run all" >> xsim_gui_cmd.tcl
 			xsim work.${NAME} -gui -tclbatch xsim_gui_cmd.tcl -log ${NAME}_xsim.log
 		else
 			xsim work.${NAME} -R -log ${NAME}_xsim.log
