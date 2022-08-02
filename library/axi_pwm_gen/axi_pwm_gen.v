@@ -103,6 +103,18 @@ module axi_pwm_gen #(
   reg   [31:0]    offset_cnt = 32'd0;
   reg             offset_alignment = 1'b0;
   reg             pause_cnt_d = 1'b0;
+  reg  [31:0]     burst_cnt_0 = 32'd0;
+  reg             end_of_burst_0 = 1'd0;
+  reg             pwm_0_d = 1'd0;
+  reg  [31:0]     burst_cnt_1 = 32'd0;
+  reg             end_of_burst_1 = 1'd0;
+  reg             pwm_1_d = 1'd0;
+  reg  [31:0]     burst_cnt_2 = 32'd0;
+  reg             end_of_burst_2 = 1'd0;
+  reg             pwm_2_d = 1'd0;
+  reg  [31:0]     burst_cnt_3 = 32'd0;
+  reg             end_of_burst_3 = 1'd0;
+  reg             pwm_3_d = 1'd0;
 
   // internal signals
 
@@ -120,6 +132,7 @@ module axi_pwm_gen #(
   wire   [127:0]  pwm_width_s;
   wire   [127:0]  pwm_period_s;
   wire   [127:0]  pwm_offset_s;
+  wire   [127:0]  pwm_burst_s;
   wire   [ 31:0]  pwm_counter[0:3];
   wire            load_config_s;
   wire            pwm_gen_resetn;
@@ -155,6 +168,7 @@ module axi_pwm_gen #(
     .pwm_width (pwm_width_s),
     .pwm_period (pwm_period_s),
     .pwm_offset (pwm_offset_s),
+    .pwm_burst (pwm_burst_s),
     .load_config (load_config_s),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
@@ -230,6 +244,7 @@ module axi_pwm_gen #(
     .pulse_period (pwm_period_s[31:0]),
     .load_config (load_config_s),
     .sync (sync_0),
+    .end_of_burst (end_of_burst_0),
     .pulse (pwm_0),
     .pulse_counter (pwm_counter[0]));
 
@@ -238,6 +253,22 @@ module axi_pwm_gen #(
       sync_0 <= 1'b1;
     end else begin
       sync_0 <= (offset_cnt == pwm_offset_s[31:0]) ? 1'b0 : 1'b1;
+    end
+  end
+
+  always @(posedge clk) begin
+    if (pwm_gen_resetn == 1'b0) begin
+      burst_cnt_0 <= 32'd0;
+      end_of_burst_0 <= 1'd0;
+      pwm_0_d <= 1'd0;
+    end else begin
+      pwm_0_d <= pwm_0;
+      if ((burst_cnt_0 != 32'd0) && (burst_cnt_0 == pwm_burst_s[31:0])) begin
+        burst_cnt_0 <= burst_cnt_0;
+        end_of_burst_0 <= 1'd1;
+      end else begin
+        burst_cnt_0 <= (pwm_0 & ~pwm_0_d) ? burst_cnt_0 + 32'b1 : burst_cnt_0;
+      end
     end
   end
 
@@ -254,6 +285,7 @@ module axi_pwm_gen #(
         .pulse_period (pwm_period_s[63:32]),
         .load_config (load_config_s),
         .sync (sync_1),
+        .end_of_burst (end_of_burst_1),
         .pulse (pwm_1),
         .pulse_counter (pwm_counter[1]));
 
@@ -262,6 +294,22 @@ module axi_pwm_gen #(
           sync_1 <= 1'b1;
         end else begin
           sync_1 <= (offset_cnt == pwm_offset_s[63:32]) ? 1'b0 : 1'b1;
+        end
+      end
+
+      always @(posedge clk) begin
+        if (pwm_gen_resetn == 1'b0) begin
+          burst_cnt_1 <= 32'd0;
+          end_of_burst_1 <= 1'd0;
+          pwm_1_d <= 1'd0;
+        end else begin
+          pwm_1_d <= pwm_1;
+          if ((burst_cnt_1 != 32'd0) && (burst_cnt_1 == pwm_burst_s[63:32])) begin
+            burst_cnt_1 <= burst_cnt_1;
+            end_of_burst_1 <= 1'd1;
+          end else begin
+            burst_cnt_1 <= (pwm_1 & ~pwm_1_d) ? burst_cnt_1 + 32'b1 : burst_cnt_1;
+          end
         end
       end
     end else begin
@@ -280,6 +328,7 @@ module axi_pwm_gen #(
         .pulse_period (pwm_period_s[95:64]),
         .load_config (load_config_s),
         .sync (sync_2),
+        .end_of_burst (end_of_burst_2),
         .pulse (pwm_2),
         .pulse_counter (pwm_counter[2]));
 
@@ -288,6 +337,22 @@ module axi_pwm_gen #(
           sync_2 <= 1'b1;
         end else begin
           sync_2 <= (offset_cnt == pwm_offset_s[95:64]) ? 1'b0 : 1'b1;
+        end
+      end
+
+      always @(posedge clk) begin
+        if (pwm_gen_resetn == 1'b0) begin
+          burst_cnt_2 <= 32'd0;
+          end_of_burst_2 <= 1'd0;
+          pwm_2_d <= 1'd0;
+        end else begin
+          pwm_2_d <= pwm_2;
+          if ((burst_cnt_2 != 32'd0) && (burst_cnt_2 == pwm_burst_s[95:64])) begin
+            burst_cnt_2 <= burst_cnt_2;
+            end_of_burst_2 <= 1'd1;
+          end else begin
+            burst_cnt_2 <= (pwm_2 & ~pwm_2_d) ? burst_cnt_2 + 32'b1 : burst_cnt_2;
+          end
         end
       end
     end else begin
@@ -306,6 +371,7 @@ module axi_pwm_gen #(
         .pulse_period (pwm_period_s[127:96]),
         .load_config (load_config_s),
         .sync (sync_3),
+        .end_of_burst (end_of_burst_3),
         .pulse (pwm_3),
         .pulse_counter (pwm_counter[3]));
 
@@ -314,6 +380,22 @@ module axi_pwm_gen #(
           sync_3 <= 1'b1;
         end else begin
           sync_3 <= (offset_cnt == pwm_offset_s[127:96]) ? 1'b0 : 1'b1;
+        end
+      end
+
+      always @(posedge clk) begin
+        if (pwm_gen_resetn == 1'b0) begin
+          burst_cnt_3 <= 32'd0;
+          end_of_burst_3 <= 1'd0;
+          pwm_3_d <= 1'd0;
+        end else begin
+          pwm_3_d <= pwm_3;
+          if ((burst_cnt_3 != 32'd0) && (burst_cnt_3 == pwm_burst_s[127:96])) begin
+            burst_cnt_3 <= burst_cnt_3;
+            end_of_burst_3 <= 1'd1;
+          end else begin
+            burst_cnt_3 <= (pwm_3 & ~pwm_3_d) ? burst_cnt_3 + 32'b1 : burst_cnt_3;
+          end
         end
       end
     end else begin

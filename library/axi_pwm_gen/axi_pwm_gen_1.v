@@ -46,6 +46,7 @@ module axi_pwm_gen_1 #(
   input       [31:0]  pulse_period,
   input               load_config,
   input               sync,
+  input               end_of_burst,
 
   output  reg         pulse,
   output      [31:0]  pulse_counter
@@ -112,7 +113,8 @@ module axi_pwm_gen_1 #(
   // a free running counter
 
   always @(posedge clk) begin
-    if (rstn == 1'b0 || phase_align == 1'b1 || end_of_period == 1'b1) begin
+    if (rstn == 1'b0 || phase_align == 1'b1 || end_of_period == 1'b1
+      || end_of_burst == 1'b1) begin
       pulse_period_cnt <= 32'd1;
     end else begin
       if (pulse_enable == 1'b1) begin
@@ -133,7 +135,8 @@ module axi_pwm_gen_1 #(
   // generate pulse with a specified width
 
   always @ (posedge clk) begin
-    if ((rstn == 1'b0) || (phase_align == 1'b1) || (end_of_pulse == 1'b1)) begin
+    if ((rstn == 1'b0) || (phase_align == 1'b1) || (end_of_pulse == 1'b1)
+      || end_of_burst == 1'b1) begin
       pulse <= 1'b0;
     end else if (end_of_period == 1'b1 && pulse_enable == 1'b1) begin
       pulse <= 1'b1;

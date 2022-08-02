@@ -67,6 +67,7 @@ module axi_pwm_gen_regmap #(
   output     [127:0]      pwm_width,
   output     [127:0]      pwm_period,
   output     [127:0]      pwm_offset,
+  output     [127:0]      pwm_burst,
   output                  load_config,
 
   // processor interface
@@ -98,6 +99,10 @@ module axi_pwm_gen_regmap #(
   reg     [31:0]  up_pwm_offset_1 = PULSE_1_OFFSET;
   reg     [31:0]  up_pwm_offset_2 = PULSE_2_OFFSET;
   reg     [31:0]  up_pwm_offset_3 = PULSE_3_OFFSET;
+  reg     [31:0]  up_pwm_burst_0 = 32'd0;
+  reg     [31:0]  up_pwm_burst_1 = 32'd0;
+  reg     [31:0]  up_pwm_burst_2 = 32'd0;
+  reg     [31:0]  up_pwm_burst_3 = 32'd0;
   reg             up_load_config = 1'b0;
   reg             up_reset = 1'b1;
 
@@ -166,6 +171,18 @@ module axi_pwm_gen_regmap #(
       if ((up_wreq == 1'b1) && (up_waddr == 14'h1b)) begin
         up_pwm_offset_3 <= up_wdata;
       end
+      if ((up_wreq == 1'b1) && (up_waddr == 14'h40)) begin
+        up_pwm_burst_0 <= up_wdata;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 14'h40)) begin
+        up_pwm_burst_1 <= up_wdata;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 14'h40)) begin
+        up_pwm_burst_2 <= up_wdata;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 14'h40)) begin
+        up_pwm_burst_3 <= up_wdata;
+      end
     end
   end
 
@@ -195,6 +212,10 @@ module axi_pwm_gen_regmap #(
           14'h19: up_rdata <= up_pwm_period_3;
           14'h1a: up_rdata <= up_pwm_width_3;
           14'h1b: up_rdata <= up_pwm_offset_3;
+          14'h40: up_rdata <= up_pwm_burst_0;
+          14'h41: up_rdata <= up_pwm_burst_1;
+          14'h42: up_rdata <= up_pwm_burst_2;
+          14'h43: up_rdata <= up_pwm_burst_3;
           default: up_rdata <= 0;
         endcase
       end else begin
@@ -246,9 +267,24 @@ module axi_pwm_gen_regmap #(
       .in_data ({up_pwm_offset_3,
                  up_pwm_offset_2,
                  up_pwm_offset_1,
+                 up_pwm_offset_0,
                  32'd0}),
       .out_clk (clk_out),
       .out_data (pwm_offset));
+
+    sync_data #(
+      .NUM_OF_BITS (128),
+      .ASYNC_CLK (1)
+    ) i_pwm_burst_sync (
+      .in_clk (up_clk),
+      .in_data ({up_pwm_burst_3,
+                 up_pwm_burst_2,
+                 up_pwm_burst_1,
+                 up_pwm_burst_0,
+                 32'd0}),
+      .out_clk (clk_out),
+      .out_data (pwm_burst));
+
 
     sync_event #(
       .NUM_OF_EVENTS (1),
