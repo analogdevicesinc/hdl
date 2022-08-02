@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2020 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2022 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -40,7 +40,7 @@
 //   - data unit defined in bits by UNIT_W e.g 8 is a byte
 //
 // Constraints:
-//   - O_W >= I_W
+//   - O_W > I_W
 //   - no backpressure
 //
 // Data format:
@@ -72,12 +72,13 @@ module ad_pack #(
   output reg                  ovalid = 'b0
 );
 
-  // Width of shift reg is integer multiple of input data width
-  localparam SH_W = ((O_W/I_W)+|(O_W % I_W))*I_W;
-  localparam STEP = O_W % I_W;
+  // The Width of the shift reg is an integer multiple of input data width
+  localparam SH_W = ((O_W/I_W) + ((O_W%I_W) > 0) + ((I_W % (O_W - ((O_W/I_W)*I_W) + ((O_W%I_W) == 0))) > 0))*I_W;
+  // The Step of the algorithm is the greatest common divisor of O_W and I_W
+  localparam STEP = gcd(O_W, I_W);
 
   reg [O_W*UNIT_W-1:0] idata_packed;
-  reg [SH_W*UNIT_W-1:0] idata_d = 'h0;
+  reg [I_W*UNIT_W-1:0] idata_d = 'h0;
   reg ivalid_d  = 'h0;
   reg [SH_W*UNIT_W-1:0] idata_dd = 'h0;
   reg [SH_W-1:0] in_use = 'b0;
@@ -86,6 +87,21 @@ module ad_pack #(
   wire [SH_W*UNIT_W-1:0] idata_dd_nx;
   wire [SH_W-1:0] in_use_nx;
   wire pack_wr;
+
+  function [31:0] gcd;
+    input [31:0]  a;
+    input [31:0]  b;
+    begin
+      while (a != b) begin
+        if (a > b) begin
+          a = a-b;
+        end else begin
+          b = b-a;
+        end
+      end
+      gcd = a;
+    end
+  endfunction
 
   generate
     if (I_REG) begin : i_reg
@@ -125,18 +141,11 @@ module ad_pack #(
   integer i;
   always @(*) begin
     out_mask = 'b0;
-    idata_packed = 'bx;
-    if (STEP>0) begin
-      for (i = SH_W-O_W; i >= 0; i=i-STEP) begin
-        if (in_use_nx[i]) begin
-          out_mask = {O_W{1'b1}} << i;
-          idata_packed = idata_dd_nx >> i*UNIT_W;
-        end
-      end
-    end else begin
-      if (in_use_nx[0]) begin
-        out_mask = {O_W{1'b1}};
-        idata_packed = idata_dd_nx;
+    idata_packed = 'b0;
+    for (i = SH_W-O_W; i >= 0; i=i-STEP) begin
+      if (in_use_nx[i]) begin
+        out_mask = {O_W{1'b1}} << i;
+        idata_packed = idata_dd_nx >> i*UNIT_W;
       end
     end
   end

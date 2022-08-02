@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2020 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2022 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -40,7 +40,7 @@
 //   - data unit defined in bits by UNIT_W e.g 8 is a byte
 //
 // Constraints:
-//   - O_W <= I_W
+//   - O_W < I_W
 //   - LATENCY 1
 //   - no backpressure
 //
@@ -73,9 +73,10 @@ module ad_upack #(
   output reg                  ovalid = 'b0
 );
 
-  // Width of shift reg is integer multiple of output data width
-  localparam SH_W = ((I_W/O_W)+1)*O_W;
-  localparam STEP = I_W % O_W;
+  // The Width of the shift reg is an integer multiple of output data width
+  localparam SH_W = ((I_W/O_W) + ((I_W%O_W) > 0) + ((O_W % (I_W - ((I_W/O_W)*O_W) + ((I_W%O_W) == 0))) > 0))*O_W;
+  // The Step of the algorithm is the greatest common divisor of I_W and O_W
+  localparam STEP = gcd(I_W, O_W);
 
   localparam LATENCY = 1; // Minimum input latency from iready to ivalid
 
@@ -93,6 +94,21 @@ module ad_upack #(
   wire [O_W*UNIT_W-1:0] odata_s;
   wire                  ovalid_s;
 
+  function [31:0] gcd;
+    input [31:0]  a;
+    input [31:0]  b;
+    begin
+      while (a != b) begin
+        if (a > b) begin
+          a = a-b;
+        end else begin
+          b = b-a;
+        end
+      end
+      gcd = a;
+    end
+  endfunction
+
   assign unit_valid = (in_use | inmask);
   assign in_use_nx = unit_valid >> O_W;
 
@@ -106,11 +122,9 @@ module ad_upack #(
 
   always @(*) begin
     inmask = {I_W{ivalid}};
-    if (STEP>0) begin
-      for (i = STEP; i < O_W; i=i+STEP) begin
-        if (in_use[i-1]) begin
-          inmask = {I_W{ivalid}} << i;
-        end
+    for (i = STEP; i < O_W; i=i+STEP) begin
+      if (in_use[i-1]) begin
+        inmask = {I_W{ivalid}} << i;
       end
     end
   end
@@ -119,11 +133,9 @@ module ad_upack #(
     idata_d_nx = idata_d;
     if (ivalid) begin
       idata_d_nx = {{(SH_W-I_W)*UNIT_W{1'b0}},idata};
-      if (STEP>0) begin
-        for (i = STEP; i < O_W; i=i+STEP) begin
-          if (in_use[i-1]) begin
-            idata_d_nx = (idata << UNIT_W*i) | idata_d;
-          end
+      for (i = STEP; i < O_W; i=i+STEP) begin
+        if (in_use[i-1]) begin
+          idata_d_nx = (idata << UNIT_W*i) | idata_d;
         end
       end
     end
