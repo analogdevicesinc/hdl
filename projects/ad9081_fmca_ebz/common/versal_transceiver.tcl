@@ -3,12 +3,14 @@
 proc create_versal_phy {
   {ip_name versal_phy}
   {num_lanes 2}
-  {lane_rate 11.88}
+  {rx_lane_rate 11.88}
+  {tx_lane_rate 11.88}
   {ref_clock 360}
 } {
 
 set num_quads [expr round(1.0*$num_lanes/4)]
-set progdiv_clock [format %.3f [expr $lane_rate * 1000 / 66]]
+set rx_progdiv_clock [format %.3f [expr $rx_lane_rate * 1000 / 66]]
+set tx_progdiv_clock [format %.3f [expr $tx_lane_rate * 1000 / 66]]
 
 create_bd_cell -type hier ${ip_name}
 
@@ -33,7 +35,7 @@ set_property -dict [list \
      INTERNAL_PRESET JESD204_64B66B \
      GT_TYPE GTY \
      GT_DIRECTION DUPLEX \
-     TX_LINE_RATE $lane_rate \
+     TX_LINE_RATE $tx_lane_rate \
      TX_PLL_TYPE LCPLL \
      TX_REFCLK_FREQUENCY $ref_clock \
      TX_ACTUAL_REFCLK_FREQUENCY $ref_clock \
@@ -49,13 +51,13 @@ set_property -dict [list \
      TX_OUTCLK_SOURCE TXPROGDIVCLK \
      TXPROGDIV_FREQ_ENABLE true \
      TXPROGDIV_FREQ_SOURCE LCPLL \
-     TXPROGDIV_FREQ_VAL $progdiv_clock \
+     TXPROGDIV_FREQ_VAL $tx_progdiv_clock \
      TX_DIFF_SWING_EMPH_MODE CUSTOM \
      TX_64B66B_SCRAMBLER false \
      TX_64B66B_ENCODER false \
      TX_64B66B_CRC false \
      TX_RATE_GROUP A \
-     RX_LINE_RATE $lane_rate \
+     RX_LINE_RATE $rx_lane_rate \
      RX_PLL_TYPE LCPLL \
      RX_REFCLK_FREQUENCY $ref_clock \
      RX_ACTUAL_REFCLK_FREQUENCY $ref_clock \
@@ -69,7 +71,7 @@ set_property -dict [list \
      RX_OUTCLK_SOURCE RXPROGDIVCLK \
      RXPROGDIV_FREQ_ENABLE true \
      RXPROGDIV_FREQ_SOURCE LCPLL \
-     RXPROGDIV_FREQ_VAL $progdiv_clock \
+     RXPROGDIV_FREQ_VAL $rx_progdiv_clock \
      INS_LOSS_NYQ 12 \
      RX_EQ_MODE LPM \
      RX_COUPLING AC \
