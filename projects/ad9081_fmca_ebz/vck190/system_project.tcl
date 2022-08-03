@@ -20,6 +20,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #
 #   RX_RATE :  Line rate of the Rx link ( MxFE to FPGA )
 #   TX_RATE :  Line rate of the Tx link ( FPGA to MxFE )
+#   REF_CLK_RATE : Frequency of reference clock in MHz used in 64B66B mode
 #   [RX/TX]_JESD_M : Number of converters per link
 #   [RX/TX]_JESD_L : Number of lanes per link
 #   [RX/TX]_JESD_S : Number of samples per frame
@@ -34,6 +35,7 @@ adi_project ad9081_fmca_ebz_vck190 0 [list \
   JESD_MODE    [get_env_param JESD_MODE    64B66B ]\
   RX_LANE_RATE [get_env_param RX_RATE      11.88 ] \
   TX_LANE_RATE [get_env_param TX_RATE      11.88 ] \
+  REF_CLK_RATE [get_env_param REF_CLK_RATE 360 ] \
   RX_JESD_M    [get_env_param RX_JESD_M    2 ] \
   RX_JESD_L    [get_env_param RX_JESD_L    2 ] \
   RX_JESD_S    [get_env_param RX_JESD_S    4 ] \
