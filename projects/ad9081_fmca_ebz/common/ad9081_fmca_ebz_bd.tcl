@@ -21,6 +21,7 @@ source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
 set JESD_MODE  $ad_project_params(JESD_MODE)
 set RX_LANE_RATE $ad_project_params(RX_LANE_RATE)
 set TX_LANE_RATE $ad_project_params(TX_LANE_RATE)
+set REF_CLK_RATE $ad_project_params(REF_CLK_RATE)
 
 set TDD_SUPPORT [ expr { [info exists ad_project_params(TDD_SUPPORT)] \
                           ? $ad_project_params(TDD_SUPPORT) : 0 } ]
@@ -143,7 +144,9 @@ if {$ADI_PHY_SEL == 1} {
 } else {
   source $ad_hdl_dir/projects/ad9081_fmca_ebz/common/versal_transceiver.tcl
 
-  create_versal_phy jesd204_phy $TX_NUM_OF_LANES
+  # TODO: 
+  # Assumption is that number of Tx and Rx lane is the same
+  create_versal_phy jesd204_phy $TX_NUM_OF_LANES $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE
 
 }
 
