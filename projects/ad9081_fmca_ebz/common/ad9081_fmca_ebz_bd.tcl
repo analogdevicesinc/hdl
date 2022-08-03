@@ -143,7 +143,11 @@ if {$ADI_PHY_SEL == 1} {
 } else {
   source $ad_hdl_dir/projects/ad9081_fmca_ebz/common/versal_transceiver.tcl
 
-  create_versal_phy jesd204_phy $TX_NUM_OF_LANES
+  set REF_CLK_RATE [ expr { [info exists ad_project_params(REF_CLK_RATE)] \
+                            ? $ad_project_params(REF_CLK_RATE) : 360 } ]
+  # TODO: 
+  # Assumption is that number of Tx and Rx lane is the same
+  create_versal_phy jesd204_phy $TX_NUM_OF_LANES $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE
 
 }
 
