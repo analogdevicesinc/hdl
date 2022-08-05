@@ -222,8 +222,6 @@ always @(posedge clk) begin
   end
 end
 
-reg debug_wl = 'h0;
-reg debug_wl2 = 'h0;
 // Load the interface configurations from the 'Configuration Write'
 // instruction
 always @(posedge clk) begin
@@ -234,27 +232,21 @@ always @(posedge clk) begin
     clk_div <= DEFAULT_CLK_DIV;
     word_length <= DATA_WIDTH;
     left_aligned <= 8'b0;
-    debug_wl <= 1'b0;
   end else if (exec_write_cmd == 1'b1) begin
     if (cmd[9:8] == REG_CONFIG) begin
       cpha <= cmd[0];
       cpol <= cmd[1];
       three_wire <= cmd[2];
       ddr_en <= cmd[3];
-      debug_wl <= 1'b0;
     end else if (cmd[9:8] == REG_CLK_DIV) begin
       clk_div <= cmd[7:0];
-      debug_wl <= 1'b0;
     end else if (cmd[13:12] == REG_WORD_LENGTH && cmd[9:8] == REG_WORD_LENGTH) begin
-      debug_wl <= 1'b1;
       if (ddr_en) begin
-//        debug_wl2 <= 1'b1;
         word_length <= cmd[7:0] >> (NUM_OF_SDO -1);
-        left_aligned <= DATA_WIDTH - (cmd[7:0]);
+        left_aligned <= 64 - (cmd[7:0]); //64 = DATA_WIDTH?
       end else begin
-        // the max value of this reg must be DATA_WIDTH
         word_length <= cmd[7:0] >> (NUM_OF_SDO-2);
-        left_aligned <= DATA_WIDTH - (2*cmd[7:0]);
+        left_aligned <= 64 - (2*cmd[7:0]); //64 = DATA_WIDTH?
       end
     end
   end
@@ -278,10 +270,6 @@ always @(posedge clk) begin
   end
 end
 
-wire trigger_tx_ddr;
-
-assign trigger_tx_ddr = trigger;
-//assign trigger_tx_ddr = ddr_en ? trigger : ~trigger_tx;
 assign trigger_tx = trigger == 1'b1 && ntx_rx == 1'b0;
 assign trigger_rx = trigger == 1'b1 && ntx_rx == 1'b1;
 
@@ -308,26 +296,26 @@ always @(posedge clk) begin
       idle <= 1'b0;
     end else begin
       case (inst_d1)
-      CMD_TRANSFER: begin
-        if (transfer_active == 1'b0 && wait_for_io == 1'b0 && end_of_sdi_latch == 1'b1)
-          idle <= 1'b1;
-      end
-      CMD_CHIPSELECT: begin
-        if (cs_sleep_counter_compare)
-          idle <= 1'b1;
-      end
-      CMD_MISC: begin
-        case (cmd_d1[8])
-        MISC_SLEEP: begin
-          if (sleep_counter_compare)
+        CMD_TRANSFER: begin
+          if (transfer_active == 1'b0 && wait_for_io == 1'b0 && end_of_sdi_latch == 1'b1)
             idle <= 1'b1;
         end
-        MISC_SYNC: begin
-          if (sync_ready)
+        CMD_CHIPSELECT: begin
+          if (cs_sleep_counter_compare)
             idle <= 1'b1;
         end
-        endcase
-      end
+        CMD_MISC: begin
+          case (cmd_d1[8])
+            MISC_SLEEP: begin
+              if (sleep_counter_compare)
+                idle <= 1'b1;
+            end
+            MISC_SYNC: begin
+              if (sync_ready)
+                idle <= 1'b1;
+            end
+          endcase
+        end
       endcase
     end
   end
@@ -470,20 +458,11 @@ begin : g_dual_sdo
 end /* g_dual_sdo */
 else if (NUM_OF_SDO == 4)
 begin : g_quad_sdo
-  wire [31:0] sdr_data_buf;
-  wire [63:0] sdr_data_buf2;
-  wire [31:0] sdr_data_buf3;
-  wire [31:0] sdr_data_buf4;
+  wire [63:0] sdr_data_buf;
   genvar i;
   for (i=0; i<8; i=i+1) begin
     assign  sdr_data_buf [8*(i+1)-1 : 8*(i+1)-4] = sdo_data[4*i+3 : 4*i];
     assign  sdr_data_buf [8*i+3 : 8*i] = sdo_data[4*i+3 : 4*i];
-    assign  sdr_data_buf2 [8*(i+1)-1 : 8*(i+1)-4] = sdo_data[4*i+3 : 4*i];
-    assign  sdr_data_buf2 [8*i+3 : 8*i] = sdo_data[4*i+3 : 4*i];
-//    assign  sdr_data_buf3 [8*(i+1)-1 : 8*(i+1)-4] = sdo_data[4*i+3 : 4*i] << (left_aligned + 2'd2);
-//    assign  sdr_data_buf3 [8*i+3 : 8*i] = sdo_data[4*i+3 : 4*i] << (left_aligned + 2'd2);
-//    assign  sdr_data_buf4 [8*(i+1)-1 : 8*(i+1)-4] = sdo_data[4*i+3 : 4*i] << (left_aligned + 2'd3);
-//    assign  sdr_data_buf4 [8*i+3 : 8*i] = sdo_data[4*i+3 : 4*i] << (left_aligned + 2'd3);
   end
 
   always @(posedge clk) begin
@@ -496,42 +475,31 @@ begin : g_quad_sdo
         data_sdo_shift3 <= sdo_data << (left_aligned + 2'd2);
         data_sdo_shift4 <= sdo_data << (left_aligned + 2'd3);
       end else begin
-        data_sdo_shift <= sdr_data_buf2 << left_aligned;
-        data_sdo_shift2 <= sdr_data_buf2 << (left_aligned + 2'd1);
-        data_sdo_shift3 <= sdr_data_buf2 << (left_aligned + 2'd2);
-        data_sdo_shift4 <= sdr_data_buf2 << (left_aligned + 2'd3);
+        data_sdo_shift <= sdr_data_buf << left_aligned;
+        data_sdo_shift2 <= sdr_data_buf << (left_aligned + 2'd1);
+        data_sdo_shift3 <= sdr_data_buf << (left_aligned + 2'd2);
+        data_sdo_shift4 <= sdr_data_buf << (left_aligned + 2'd3);
       end
-    end else if ((transfer_active == 1'b1 || end_of_word_d == 1'b1) && trigger_tx_ddr == 1'b1) begin
+    end else if ((transfer_active == 1'b1 || end_of_word_d == 1'b1) && trigger == 1'b1) begin
       data_sdo_shift <= {data_sdo_shift[(63-2):0], 4'b0};
       data_sdo_shift2 <= {data_sdo_shift2[(63-2):0], 4'b0};
       data_sdo_shift3 <= {data_sdo_shift3[(63-2):0], 4'b0};
       data_sdo_shift4 <= {data_sdo_shift4[(63-2):0], 4'b0};
-//      data_sdo_shift <= {data_sdo_shift[(DATA_WIDTH-2):0], 4'b0};
-//      data_sdo_shift2 <= {data_sdo_shift2[(DATA_WIDTH-2):0], 4'b0};
-//      data_sdo_shift3 <= {data_sdo_shift3[(DATA_WIDTH-2):0], 4'b0};
-//      data_sdo_shift4 <= {data_sdo_shift4[(DATA_WIDTH-2):0], 4'b0};
     end
   end
 
-  assign sdo[3] = data_sdo_shift[DATA_WIDTH-1];
-  assign sdo[2] = data_sdo_shift2[DATA_WIDTH-1];
-  assign sdo[1] = data_sdo_shift3[DATA_WIDTH-1];
-  assign sdo[0] = data_sdo_shift4[DATA_WIDTH-1];
+  assign sdo[3] = data_sdo_shift[63];
+  assign sdo[2] = data_sdo_shift2[63];
+  assign sdo[1] = data_sdo_shift3[63];
+  assign sdo[0] = data_sdo_shift4[63];
 
   // Additional register stage to improve timing
   always @(posedge clk) begin
     sclk <= sclk_int;
-
-    sdo_int_s4 <= data_sdo_shift [63-1];
-    sdo_int_s3 <= data_sdo_shift2[63-1];
-    sdo_int_s2 <= data_sdo_shift3[63-1];
-    sdo_int_s <= data_sdo_shift4 [63-1];
-
 //    sdo_int_s4 <= data_sdo_shift [DATA_WIDTH-1];
 //    sdo_int_s3 <= data_sdo_shift2[DATA_WIDTH-1];
 //    sdo_int_s2 <= data_sdo_shift3[DATA_WIDTH-1];
 //    sdo_int_s <= data_sdo_shift4 [DATA_WIDTH-1];
-
     sdo_t <= sdo_t_int;
   end
 
