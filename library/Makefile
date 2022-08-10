@@ -16,6 +16,7 @@ clean:
 	$(MAKE) -C ad463x_data_capture clean
 	$(MAKE) -C axi_ad5766 clean
 	$(MAKE) -C axi_ad7616 clean
+	$(MAKE) -C axi_ad777x clean
 	$(MAKE) -C axi_ad9122 clean
 	$(MAKE) -C axi_ad9250 clean
 	$(MAKE) -C axi_ad9265 clean
@@ -135,6 +136,7 @@ lib:
 	$(MAKE) -C ad463x_data_capture
 	$(MAKE) -C axi_ad5766
 	$(MAKE) -C axi_ad7616
+	$(MAKE) -C axi_ad777x
 	$(MAKE) -C axi_ad9122
 	$(MAKE) -C axi_ad9250
 	$(MAKE) -C axi_ad9265
