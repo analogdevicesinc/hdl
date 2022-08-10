@@ -31,14 +31,14 @@ module ad_pack_tb;
     .odata(odata),
     .ovalid(ovalid));
 
-  task test();
+  task test(input random_n);
   begin
     @(posedge clk);
     i = 0;
     j = 0;
     while (i < (VECT_W/(I_W*UNIT_W) + (VECT_W%(I_W*UNIT_W)>0))) begin
       @(posedge clk);
-      if ($urandom % 2 == 0) begin
+      if ($urandom % 2 == 0 | random_n) begin
         idata <= input_vector[i*(I_W*UNIT_W) +: (I_W*UNIT_W)];
         ivalid <= 1'b1;
         i = i + 1;
@@ -59,6 +59,11 @@ module ad_pack_tb;
         $display("i=%d Expected=%x Found=%x",i,input_vector[i*8+:8],output_vector[i*8+:8]);
       end
     end
+    // Clear output vector
+    for (i=0; i<VECT_W/8; i=i+1) begin
+      output_vector[i*8+:8] = 8'bx;
+    end
+
   end
   endtask
 
@@ -71,7 +76,12 @@ module ad_pack_tb;
       input_vector[i*8+:8] = i[7:0];
     end
 
-    test();
+    test(1);
+
+    do_trigger_reset();
+    @(negedge reset);
+
+    test(0);
 
     do_trigger_reset();
     @(negedge reset);
@@ -81,7 +91,7 @@ module ad_pack_tb;
       input_vector[i*8+:8] = $urandom;
     end
 
-    test();
+    test(0);
 
   end
 
