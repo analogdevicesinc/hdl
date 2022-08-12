@@ -54,8 +54,8 @@ module system_top (
   output                  rx_sync_p,
   output                  rx_sync_n,
 
-  input                   sysref_p,
-  input                   sysref_n,
+  input                   sysrefadc_p,
+  input                   sysrefadc_n,
 
   output                  pwdn,
   output                  rstb,
@@ -75,7 +75,10 @@ module system_top (
   input                   br40_ext_p,
   input                   br40_ext_n,
 
-  output      [ 3:0]      dac_data_p, // pair 7 is missing
+  input                   sysrefdac_p,
+  input                   sysrefdac_n,
+
+  output      [ 3:0]      dac_data_p,
   output      [ 3:0]      dac_data_n,
 
   input                   sync0_n,
@@ -86,7 +89,6 @@ module system_top (
 
   // AD9528
 
-  output                  clkd_lvsft_en,
   output                  fpga_adclk_refsel,
 
   // SPIs
@@ -144,6 +146,8 @@ module system_top (
   input                   adcsdo6,
   output                  adcpd,
 
+  output                  gpio_mix2en,
+
   output                  adl5960x_sync1);
 
   // internal signals
@@ -157,6 +161,7 @@ module system_top (
   wire                    tx_ref_clk0;
   wire                    rx_sync;
   wire                    sysref;
+  wire                    dac_sysref;
   wire                    rx_ref_core_clk0_s;
   wire                    rx_ref_core_clk0;
   wire                    tx_sync0;
@@ -203,10 +208,9 @@ module system_top (
 
   assign fpga_bus0_rstn = gpio_o[51];
   assign fpga_busf_sfl = gpio_o[50];
-  assign clkd_lvsft_en = gpio_o[49];
+  //assign clkd_lvsft_en = gpio_o[49];
   assign gpio_sw_pg = gpio_o[48];
 
-  // gpio_o[47:41] reserved vna 8x
   assign gpio_sw3_v2 = gpio_o[40];
   assign gpio_sw4_v2 = gpio_o[40];
   assign gpio_sw3_v1 = gpio_o[39];
@@ -262,9 +266,14 @@ module system_top (
     .spi_dir());
 
   IBUFDS i_ibufds_sysref (
-    .I (sysref_p),
-    .IB (sysref_n),
+    .I (sysrefadc_p),
+    .IB (sysrefadc_n),
     .O (sysref));
+
+  IBUFDS i_ibufds_tx_sysref (
+    .I (sysrefdac_p),
+    .IB (sysrefdac_n),
+    .O (dac_sysref));
 
   OBUFDS i_obufds_rx_sync (
     .I (rx_sync),
@@ -327,6 +336,7 @@ module system_top (
     //.tx_data_1_7_n (dac_data_n[7]),
     //.tx_data_1_7_p (dac_data_p[7]),
 
+    .tx_sysref_1_0 (dac_sysref),
     .tx_sync_1_0 (tx_sync0),
     .tx_ref_clk_0 (tx_ref_clk0),
     ////.tx_sync1 (tx_sync1),
