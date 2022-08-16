@@ -30,13 +30,6 @@ if {![info exists REQUIRED_QUARTUS_VERSION]} {
   set REQUIRED_QUARTUS_VERSION "21.2.0"
 }
 
-# Define the ADI_IGNORE_VERSION_CHECK environment variable to skip version check
-if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
-  set IGNORE_VERSION_CHECK 1
-} elseif {![info exists IGNORE_VERSION_CHECK]} {
-  set IGNORE_VERSION_CHECK 0
-}
-
 # This helper pocedure retrieves the value of varible from environment if exists,
 # other case returns the provided default value
 #  name - name of the environment variable
@@ -49,4 +42,3 @@ proc get_env_param {name default_value} {
     return $default_value
   }
 }
-
