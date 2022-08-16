@@ -462,12 +462,22 @@ proc adi_tpl_jesd204_rx_create {ip_name num_of_lanes num_of_converters samples_p
 
 # Calculate Link Layer interface width towards Transport Layer
 # TPL width must be set to an integer multiple of F
-proc adi_jesd204_calc_tpl_width {link_datapath_width jesd_l jesd_m jesd_s jesd_np} {
+proc adi_jesd204_calc_tpl_width {link_datapath_width jesd_l jesd_m jesd_s jesd_np {tpl_datapath_width {}}} {
 
   set jesd_f [expr ($jesd_m*$jesd_s*$jesd_np)/(8*$jesd_l)]
 
+  if {$tpl_datapath_width != ""} {
+    set tpl_div [expr $tpl_datapath_width / $jesd_f]
+    set tpl_mod [expr $tpl_datapath_width % $jesd_f]
+
+    if {$tpl_div < 1 || $tpl_mod != 0 || (($tpl_div > 1) && ([expr $tpl_div % 2] != 0))} {
+      return -code 1 "ERROR: Invalid custom TPL width. Must be a power of 2 multiple of F"
+    } else {
+      return $tpl_datapath_width
+    }
+
   # For F=3,6,12 get first pow 2 multiple of F greater than link_datapath_width
-  if {$jesd_f % 3 == 0} {
+  } elseif {$jesd_f % 3 == 0} {
     set np12_datapath_width $jesd_f
     while {$np12_datapath_width < $link_datapath_width} {
         set np12_datapath_width [expr 2*$np12_datapath_width]
