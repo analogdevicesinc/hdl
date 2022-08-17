@@ -40,19 +40,16 @@ proc adi_project {project_name {parameter_list {}}} {
   if [regexp "_a10gx$" $project_name] {
     set family "Arria 10"
     set device 10AX115S2F45I1SG
-    set system_qip_file system_bd/system_bd.qip
   }
 
   if [regexp "_a10soc$" $project_name] {
     set family "Arria 10"
     set device 10AS066N3F40E2SG
-    set system_qip_file system_bd/system_bd.qip
   }
 
   if [regexp "_s10soc$" $project_name] {
     set family "Stratix 10"
     set device 1SX280HU2F50E1VGAS
-    set system_qip_file system_bd/system_bd.qip
   }
 
   if [regexp "_c5soc$" $project_name] {
@@ -183,7 +180,6 @@ proc adi_project {project_name {parameter_list {}}} {
 
   # default assignments
 
-  set_global_assignment -name QIP_FILE $system_qip_file
   set_global_assignment -name VERILOG_FILE system_top.v
   set_global_assignment -name SDC_FILE system_constr.sdc
   set_global_assignment -name TOP_LEVEL_ENTITY system_top
