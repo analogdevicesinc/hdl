@@ -208,7 +208,6 @@ module jesd204_tx #(
   if (ASYNC_CLK) begin : dual_lmfc_mode
 
     reg link_lmfc_reset = 1'b1;
-    reg device_lmfc_edge_d1 = 1'b0;
     reg device_tx_ready = 1'b0;
 
     jesd204_lmfc #(
@@ -272,13 +271,9 @@ module jesd204_tx #(
       .device_clk(device_clk),
       .device_reset(device_reset),
       .device_data(tx_data),
-      .device_lmfc_edge(device_lmfc_edge_d1),
+      .device_lmfc_edge(device_lmfc_edge),
       .link_data(gearbox_data),
       .output_ready(tx_ready_nx));
-
-    always @(posedge device_clk) begin
-      device_lmfc_edge_d1 <= device_lmfc_edge;
-    end
 
     sync_bits #(
       .NUM_OF_BITS (1),

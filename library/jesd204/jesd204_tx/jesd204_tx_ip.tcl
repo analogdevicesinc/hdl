@@ -56,6 +56,7 @@ adi_ip_files jesd204_tx [list \
   "jesd204_tx_ctrl.v" \
   "jesd204_tx_constr.ttcl" \
   "jesd204_tx_ooc.ttcl" \
+  "../../common/ad_pack.v" \
   "../../common/ad_upack.v" \
   "jesd204_tx.v" \
   "bd/bd.tcl"

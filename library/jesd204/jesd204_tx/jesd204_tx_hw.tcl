@@ -68,6 +68,7 @@ ad_ip_files jesd204_tx [list \
   $ad_hdl_dir/library/util_cdc/sync_bits.v \
   $ad_hdl_dir/library/util_cdc/sync_event.v \
   $ad_hdl_dir/library/util_cdc/util_cdc_constr.tcl \
+  $ad_hdl_dir/library/common/ad_pack.v \
   $ad_hdl_dir/library/common/ad_upack.v \
 ]
 

@@ -75,6 +75,7 @@ ad_ip_files jesd204_rx [list \
   $ad_hdl_dir/library/util_cdc/sync_event.v \
   $ad_hdl_dir/library/util_cdc/util_cdc_constr.tcl \
   ../../common/ad_pack.v \
+  ../../common/ad_upack.v \
 ]
 
 # parameters

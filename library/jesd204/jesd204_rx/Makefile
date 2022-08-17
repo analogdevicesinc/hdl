@@ -7,6 +7,7 @@
 LIBRARY_NAME := jesd204_rx
 
 GENERIC_DEPS += ../../common/ad_pack.v
+GENERIC_DEPS += ../../common/ad_upack.v
 GENERIC_DEPS += align_mux.v
 GENERIC_DEPS += elastic_buffer.v
 GENERIC_DEPS += jesd204_ilas_monitor.v
