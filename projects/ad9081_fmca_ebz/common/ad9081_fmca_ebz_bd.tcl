@@ -23,6 +23,11 @@ set JESD_MODE  $ad_project_params(JESD_MODE)
 set RX_LANE_RATE $ad_project_params(RX_LANE_RATE)
 set TX_LANE_RATE $ad_project_params(TX_LANE_RATE)
 
+set RX_TPL_WIDTH [ expr { [info exists ad_project_params(RX_TPL_WIDTH)] \
+                          ? $ad_project_params(RX_TPL_WIDTH) : {} } ]
+set TX_TPL_WIDTH [ expr { [info exists ad_project_params(TX_TPL_WIDTH)] \
+                          ? $ad_project_params(TX_TPL_WIDTH) : {} } ]
+
 set TDD_SUPPORT [ expr { [info exists ad_project_params(TDD_SUPPORT)] \
                           ? $ad_project_params(TDD_SUPPORT) : 0 } ]
 set SHARED_DEVCLK [ expr { [info exists ad_project_params(SHARED_DEVCLK)] \
@@ -77,7 +82,7 @@ if {$RX_DMA_SAMPLE_WIDTH == 12} {
   set RX_DMA_SAMPLE_WIDTH 16
 }
 
-set RX_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $RX_JESD_L $RX_JESD_M $RX_JESD_S $RX_JESD_NP]
+set RX_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $RX_JESD_L $RX_JESD_M $RX_JESD_S $RX_JESD_NP $RX_TPL_WIDTH]
 
 set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 8* $RX_DATAPATH_WIDTH / ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)]
 
@@ -100,7 +105,7 @@ if {$TX_DMA_SAMPLE_WIDTH == 12} {
   set TX_DMA_SAMPLE_WIDTH 16
 }
 
-set TX_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $TX_JESD_L $TX_JESD_M $TX_JESD_S $TX_JESD_NP]
+set TX_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $TX_JESD_L $TX_JESD_M $TX_JESD_S $TX_JESD_NP $TX_TPL_WIDTH]
 
 set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8* $TX_DATAPATH_WIDTH / ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)]
 

@@ -36,11 +36,13 @@ adi_project ad9081_fmca_ebz_zcu102 0 [list \
   RX_JESD_S     [get_env_param RX_JESD_S      1     ] \
   RX_JESD_NP    [get_env_param RX_JESD_NP     16    ] \
   RX_NUM_LINKS  [get_env_param RX_NUM_LINKS   1     ] \
+  RX_TPL_WIDTH  [get_env_param RX_TPL_WIDTH   {}    ] \
   TX_JESD_M     [get_env_param TX_JESD_M      8     ] \
   TX_JESD_L     [get_env_param TX_JESD_L      4     ] \
   TX_JESD_S     [get_env_param TX_JESD_S      1     ] \
   TX_JESD_NP    [get_env_param TX_JESD_NP     16    ] \
   TX_NUM_LINKS  [get_env_param TX_NUM_LINKS   1     ] \
+  TX_TPL_WIDTH  [get_env_param TX_TPL_WIDTH   {}    ] \
   TDD_SUPPORT   [get_env_param TDD_SUPPORT    0     ] \
   SHARED_DEVCLK [get_env_param SHARED_DEVCLK  0     ] \
 ]
