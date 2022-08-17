@@ -65,6 +65,7 @@ adi_ip_files jesd204_rx [list \
   "jesd204_rx_ooc.ttcl" \
   "jesd204_rx.v" \
   "../../common/ad_pack.v" \
+  "../../common/ad_upack.v" \
   "bd/bd.tcl"
 ]
 

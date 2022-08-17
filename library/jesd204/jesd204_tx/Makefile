@@ -6,6 +6,7 @@
 
 LIBRARY_NAME := jesd204_tx
 
+GENERIC_DEPS += ../../common/ad_pack.v
 GENERIC_DEPS += ../../common/ad_upack.v
 GENERIC_DEPS += jesd204_tx.v
 GENERIC_DEPS += jesd204_tx_ctrl.v
