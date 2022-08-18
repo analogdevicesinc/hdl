@@ -211,10 +211,12 @@ module system_top (
   //assign clkd_lvsft_en = gpio_o[49];
   assign gpio_sw_pg = gpio_o[48];
 
-  assign gpio_sw3_v2 = gpio_o[40];
-  assign gpio_sw4_v2 = gpio_o[40];
+  assign gpio_mix2en = gpio_o[43];
+  assign gpio_sw3_v2 = gpio_o[42];
+  assign gpio_sw3_v2 = gpio_o[42];
+  assign gpio_sw4_v2 = gpio_o[41];
+  assign gpio_sw4_v1 = gpio_o[40];
   assign gpio_sw3_v1 = gpio_o[39];
-  assign gpio_sw4_v1 = gpio_o[39];
   assign gpio_sw2 = gpio_o[38];
   assign gpio_sw1_v2 = gpio_o[37];
   assign gpio_sw1_v1 = gpio_o[36];
