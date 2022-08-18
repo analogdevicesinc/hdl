@@ -218,6 +218,13 @@ module adrv9001_tx #(
         mssi_sync_2d <= mssi_sync_d;
       end
 
+      reg s_mssi_sync_d = 1'b0;
+      reg s_mssi_sync_2d = 1'b0;
+      always @(posedge tx_dclk_in_s) begin
+        s_mssi_sync_d <= mssi_sync;
+        s_mssi_sync_2d <= s_mssi_sync_d;
+      end
+
       BUFGCE #(
         .CE_TYPE ("SYNC"),
         .IS_CE_INVERTED (1'b0),
@@ -235,7 +242,7 @@ module adrv9001_tx #(
       ) i_dac_div_clk_rbuf (
         .O (dac_clk_div),
         .CE (1'b1),
-        .CLR (mssi_sync_2d),
+        .CLR (s_mssi_sync_2d),
         .I (tx_dclk_in_s));
 
       assign ssi_rst = mssi_sync_2d;
