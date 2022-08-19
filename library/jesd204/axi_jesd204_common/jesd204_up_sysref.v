@@ -44,9 +44,7 @@
 
 `timescale 1ns/100ps
 
-module jesd204_up_sysref #(
-  parameter DATA_PATH_WIDTH_LOG2 = 2
-) (
+module jesd204_up_sysref (
   input up_clk,
   input up_reset,
 

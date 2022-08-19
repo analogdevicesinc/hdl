@@ -130,8 +130,6 @@ module axi_jesd204_rx #(
   localparam PCORE_VERSION = 32'h00010761; // 1.07.a
   localparam PCORE_MAGIC = 32'h32303452; // 204R
 
-  localparam DATA_PATH_WIDTH_LOG2 = (DATA_PATH_WIDTH == 8) ? 3 : 2;
-
   /* Register interface signals */
   reg [31:0] up_rdata = 'h0;
   reg up_wack = 1'b0;
@@ -279,9 +277,7 @@ module axi_jesd204_rx #(
     .status_synth_params1(status_synth_params1),
     .status_synth_params2(status_synth_params2));
 
-  jesd204_up_sysref #(
-    .DATA_PATH_WIDTH_LOG2(DATA_PATH_WIDTH_LOG2)
-  ) i_up_sysref (
+  jesd204_up_sysref i_up_sysref (
     .up_clk(s_axi_aclk),
     .up_reset(up_reset),
 
@@ -304,8 +300,7 @@ module axi_jesd204_rx #(
 
   jesd204_up_rx #(
     .NUM_LANES(NUM_LANES),
-    .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
-    .DATA_PATH_WIDTH_LOG2(DATA_PATH_WIDTH_LOG2)
+    .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
   ) i_up_rx (
     .up_clk(s_axi_aclk),
     .up_reset(up_reset),

@@ -122,8 +122,6 @@ module axi_jesd204_tx #(
   localparam PCORE_VERSION = 32'h00010661; // 1.06.a
   localparam PCORE_MAGIC = 32'h32303454; // 204T
 
-  localparam DATA_PATH_WIDTH_LOG2 = (DATA_PATH_WIDTH == 8) ? 3 : 2;
-
   wire up_reset;
 
   /* Register interface signals */
@@ -259,9 +257,7 @@ module axi_jesd204_tx #(
     .status_synth_params1(status_synth_params1),
     .status_synth_params2(status_synth_params2));
 
-  jesd204_up_sysref #(
-    .DATA_PATH_WIDTH_LOG2(DATA_PATH_WIDTH_LOG2)
-  ) i_up_sysref (
+  jesd204_up_sysref i_up_sysref (
     .up_clk(s_axi_aclk),
     .up_reset(up_reset),
 

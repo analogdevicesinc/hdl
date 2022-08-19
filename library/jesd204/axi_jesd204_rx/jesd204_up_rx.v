@@ -46,8 +46,7 @@
 
 module jesd204_up_rx #(
   parameter NUM_LANES = 1,
-  parameter DATA_PATH_WIDTH = 4,
-  parameter DATA_PATH_WIDTH_LOG2 = 2
+  parameter DATA_PATH_WIDTH = 4
 ) (
   input up_clk,
   input up_reset,
