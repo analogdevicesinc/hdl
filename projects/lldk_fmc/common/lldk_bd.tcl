@@ -209,29 +209,13 @@ ad_connect axi_clkgen/clk_0                  util_ltc2387_adc_pack/clk
 ad_connect pack_sys_rstgen/peripheral_reset  util_ltc2387_adc_pack/reset
 
 #debug
-ad_ip_instance axi_adc_decimate axi_adc_decimate_0
-ad_ip_parameter axi_adc_decimate_0 CONFIG.CORRECTION_DISABLE {0}
-ad_connect sampling_clk axi_adc_decimate_0/adc_clk
-ad_connect pack_sys_rstgen/peripheral_reset axi_adc_decimate_0/adc_rst
-ad_connect axi_adc_decimate_0/adc_data_a axi_ltc2387_0/adc_data
-ad_connect axi_adc_decimate_0/adc_data_b axi_ltc2387_1/adc_data
-ad_connect axi_adc_decimate_0/adc_valid_a axi_ltc2387_0/adc_valid
-ad_connect axi_adc_decimate_0/adc_valid_b axi_ltc2387_1/adc_valid
-ad_connect axi_adc_decimate_0/adc_dec_data_a util_ltc2387_adc_pack/fifo_wr_data_0
-ad_connect axi_adc_decimate_0/adc_dec_data_b util_ltc2387_adc_pack/fifo_wr_data_1
+ad_connect axi_ltc2387_0/adc_data util_ltc2387_adc_pack/fifo_wr_data_0
+ad_connect axi_ltc2387_1/adc_data util_ltc2387_adc_pack/fifo_wr_data_1
+ad_connect axi_ltc2387_2/adc_data util_ltc2387_adc_pack/fifo_wr_data_2
+ad_connect axi_ltc2387_3/adc_data util_ltc2387_adc_pack/fifo_wr_data_3
 
-ad_ip_instance axi_adc_decimate axi_adc_decimate_1
-ad_ip_parameter axi_adc_decimate_1 CONFIG.CORRECTION_DISABLE {0}
-ad_connect sampling_clk axi_adc_decimate_1/adc_clk
-ad_connect pack_sys_rstgen/peripheral_reset axi_adc_decimate_1/adc_rst
-ad_connect axi_adc_decimate_1/adc_data_a axi_ltc2387_2/adc_data
-ad_connect axi_adc_decimate_1/adc_data_b axi_ltc2387_3/adc_data
-ad_connect axi_adc_decimate_1/adc_valid_a axi_ltc2387_2/adc_valid
-ad_connect axi_adc_decimate_1/adc_valid_b axi_ltc2387_3/adc_valid
-ad_connect axi_adc_decimate_1/adc_dec_data_a util_ltc2387_adc_pack/fifo_wr_data_2
-ad_connect axi_adc_decimate_1/adc_dec_data_b util_ltc2387_adc_pack/fifo_wr_data_3
 
-ad_connect axi_adc_decimate_0/adc_dec_valid_a util_ltc2387_adc_pack/fifo_wr_en
+ad_connect axi_ltc2387_0/adc_valid util_ltc2387_adc_pack/fifo_wr_en
 
 for {set i 0} {$i < 4} {incr i} {
   ad_connect const_vcc_1/dout  util_ltc2387_adc_pack/enable_$i
@@ -345,18 +329,12 @@ create_bd_port -dir O -from 15 -to 0 dec_0_data_b
 create_bd_port -dir I -from 31 -to 0 dac_0_axis_tdata
 create_bd_port -dir I dac_0_axis_tvalid
 
-ad_connect axi_adc_decimate_0/adc_dec_valid_a dec_0_valid_a
-ad_connect axi_adc_decimate_0/adc_dec_data_a dec_0_data_a
-ad_connect axi_adc_decimate_0/adc_dec_data_b dec_0_data_b
+ad_connect axi_ltc2387_0/adc_valid dec_0_valid_a
+ad_connect axi_ltc2387_0/adc_data dec_0_data_a
+ad_connect axi_ltc2387_1/adc_data dec_0_data_b
 ad_connect $hier_spi_engine_0/s_axis_sample_1_tdata dac_0_axis_tdata
 ad_connect $hier_spi_engine_0/s_axis_sample_1_tvalid dac_0_axis_tvalid
 
-#create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 xlconcat_0
-#set_property -dict [list CONFIG.IN0_WIDTH.VALUE_SRC PROPAGATED] [get_bd_cells xlconcat_0]
-#connect_bd_net [get_bd_pins xlconcat_0/In0] [get_bd_pins axi_adc_decimate_0/adc_dec_data_a]
-#connect_bd_net [get_bd_pins xlconcat_0/In1] [get_bd_pins axi_adc_decimate_0/adc_dec_data_b]
-#connect_bd_net [get_bd_pins spi_ad3552r_0/s_axis_sample_1_tdata] [get_bd_pins xlconcat_0/dout]
-#connect_bd_net [get_bd_pins spi_ad3552r_0/s_axis_sample_1_tvalid] [get_bd_pins axi_adc_decimate_0/adc_dec_valid_a]
 
 #ad_connect $hier_spi_engine_0/s_axis_sample_1 spi_dds_0/m_axis_dds
 #dac1
@@ -415,19 +393,12 @@ create_bd_port -dir O -from 15 -to 0 dec_1_data_b
 create_bd_port -dir I -from 31 -to 0 dac_1_axis_tdata
 create_bd_port -dir I dac_1_axis_tvalid
 
-ad_connect axi_adc_decimate_1/adc_dec_valid_a dec_1_valid_a
-ad_connect axi_adc_decimate_1/adc_dec_data_a dec_1_data_a
-ad_connect axi_adc_decimate_1/adc_dec_data_b dec_1_data_b
+ad_connect axi_ltc2387_2/adc_valid dec_1_valid_a
+ad_connect axi_ltc2387_2/adc_data dec_1_data_a
+ad_connect axi_ltc2387_3/adc_data dec_1_data_b
 ad_connect $hier_spi_engine_1/s_axis_sample_1_tdata dac_1_axis_tdata
 ad_connect $hier_spi_engine_1/s_axis_sample_1_tvalid dac_1_axis_tvalid
 
-#create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 xlconcat_1
-#set_property -dict [list CONFIG.IN0_WIDTH.VALUE_SRC PROPAGATED] [get_bd_cells xlconcat_1]
-#connect_bd_net [get_bd_pins xlconcat_1/In0] [get_bd_pins axi_adc_decimate_1/adc_dec_data_a]
-#connect_bd_net [get_bd_pins xlconcat_1/In1] [get_bd_pins axi_adc_decimate_1/adc_dec_data_b]
-#connect_bd_net [get_bd_pins spi_ad3552r_1/s_axis_sample_1_tdata] [get_bd_pins xlconcat_1/dout]
-#connect_bd_net [get_bd_pins spi_ad3552r_1/s_axis_sample_1_tvalid] [get_bd_pins axi_adc_decimate_1/adc_dec_valid_a]
-#ad_connect $hier_spi_engine_1/s_axis_sample_1 spi_dds_1/m_axis_dds
 # adc peripheral
 
 # address mapping
@@ -437,8 +408,6 @@ ad_cpu_interconnect 0x44A10000 axi_ltc2387_1
 ad_cpu_interconnect 0x44A20000 axi_ltc2387_2
 ad_cpu_interconnect 0x44A30000 axi_ltc2387_3
 ad_cpu_interconnect 0x44A40000 axi_ltc2387_dma
-ad_cpu_interconnect 0x44A50000 axi_adc_decimate_0
-ad_cpu_interconnect 0x44A60000 axi_adc_decimate_1
 ad_cpu_interconnect 0x44B00000 axi_clkgen
 ad_cpu_interconnect 0x44B10000 axi_pwm_gen
 ad_cpu_interconnect 0x44B20000 max_spi
