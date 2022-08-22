@@ -1,5 +1,4 @@
 source $ad_hdl_dir/library/scripts/adi_xilinx_device_info_enc.tcl
-source $ad_hdl_dir/scripts/adi_env.tcl
 
 if {[info exists ::env(ADI_VIVADO_IP_LIBRARY)]} {
   set VIVADO_IP_LIBRARY $::env(ADI_VIVADO_IP_LIBRARY)
