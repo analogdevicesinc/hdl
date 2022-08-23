@@ -96,7 +96,8 @@ module axi_ltc2387_if #(
 
   // assignments
 
-  assign adc_valid = ~clk_gate_d[2] & clk_gate_d[1];
+  // adc_valid is 1 for the current sample that is sent
+  assign adc_valid = clk_gate_d[1] & ~clk_gate_d[0];
 
   always @(posedge clk) begin
     clk_gate_d <= {clk_gate_d[1:0], clk_gate};
