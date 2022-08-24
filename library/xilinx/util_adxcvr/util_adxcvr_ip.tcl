@@ -6,6 +6,11 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 global VIVADO_IP_LIBRARY
 
 adi_ip_create util_adxcvr
+
+create_ip -name vio -vendor xilinx.com -library ip -version 3.0 -module_name vio_xcvr
+set_property -dict [list CONFIG.C_PROBE_OUT0_WIDTH {3} CONFIG.C_NUM_PROBE_OUT {1} CONFIG.C_EN_PROBE_IN_ACTIVITY {0} CONFIG.C_NUM_PROBE_IN {0} CONFIG.Component_Name {vio_xcvr}] [get_ips vio_xcvr]
+generate_target {all} [get_files util_adxcvr.srcs/sources_1/ip/vio_xcvr/vio_xcvr.xci]
+
 adi_ip_files util_adxcvr [list \
   "$ad_hdl_dir/library/scripts/adi_xilinx_device_info_enc.tcl" \
   "$ad_hdl_dir/library/jesd204/jesd204_common/sync_header_align.v" \

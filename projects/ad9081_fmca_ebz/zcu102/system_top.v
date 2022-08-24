@@ -84,7 +84,10 @@ module system_top  #(
   inout         spi1_sdio,
   input         sysref2_n,
   input         sysref2_p,
-  output [1:0]  txen
+  output [1:0]  txen,
+
+  //debug hdr
+  inout       [9:0]      proto_hdr
 );
 
   // internal signals
@@ -159,6 +162,11 @@ module system_top  #(
     .O (rx_device_clk_internal));
 
   assign rx_device_clk = SHARED_DEVCLK ? tx_device_clk : rx_device_clk_internal;
+
+  reg sysref_d;
+  always @(posedge tx_device_clk)
+  sysref_d <= sysref;
+
 
   // spi
 
@@ -293,13 +301,59 @@ module system_top  #(
     .tx_device_clk (tx_device_clk),
     .rx_sync_0 (rx_syncout),
     .tx_sync_0 (tx_syncin),
-    .rx_sysref_0 (sysref),
-    .tx_sysref_0 (sysref));
+    .rx_sysref_0 (sysref_d),
+    .tx_sysref_0 (sysref_d),
+    .ext_sync_in (ext_sync_in),
+    .dac_sync_manual_req_out_0(dac_sync_manual_req_out_0),
+    .sample_msb (sample_msb)
+    );
+
+reg ext_sync_in_arm = 1'b0;
+reg sysref_dd = 1'b0;
+always @(posedge tx_device_clk)
+    sysref_dd <= sysref_d;
+
+assign sysref_d_edge = ~sysref_dd & sysref_d;
+
+reg ext_sync_pin_d = 1'b0;
+reg ext_sync_pin_dd = 1'b0;
+reg ext_sync_pin_ddd = 1'b0;
+
+// Ext sync pin pulled high with pullup by default 
+always @(posedge tx_device_clk) begin
+    ext_sync_pin_d <= ext_sync_pin;
+    ext_sync_pin_dd <= ext_sync_pin_d;
+    ext_sync_pin_ddd <= ext_sync_pin_dd;
+end
+
+always @(posedge tx_device_clk) begin
+    if (dac_sync_manual_req_out_0 & ~ext_sync_in_arm)
+        ext_sync_in_arm <= 1'b1;
+    else if (ext_sync_in)
+        ext_sync_in_arm <= 1'b0;
+end
+//assign ext_sync_in = ext_sync_in_arm & sysref_d_edge & ext_sync_pin_dd;
+assign ext_sync_in = ext_sync_in_arm & ext_sync_pin_dd & ~ext_sync_pin_ddd;
+
+reg ext_sync_out_dbg = 1'b0;
+reg ext_sync_in_d = 1'b0;
+// Make pule wider
+always @(posedge tx_device_clk) begin
+    ext_sync_in_d <= ext_sync_in;
+    ext_sync_out_dbg <= ext_sync_in|ext_sync_in_d;
+end
+
 
   assign rx_data_p_loc[RX_JESD_L*RX_NUM_LINKS-1:0] = rx_data_p[RX_JESD_L*RX_NUM_LINKS-1:0];
   assign rx_data_n_loc[RX_JESD_L*RX_NUM_LINKS-1:0] = rx_data_n[RX_JESD_L*RX_NUM_LINKS-1:0];
 
   assign tx_data_p[TX_JESD_L*TX_NUM_LINKS-1:0] = tx_data_p_loc[TX_JESD_L*TX_NUM_LINKS-1:0];
   assign tx_data_n[TX_JESD_L*TX_NUM_LINKS-1:0] = tx_data_n_loc[TX_JESD_L*TX_NUM_LINKS-1:0];
+
+  assign proto_hdr[0] = sysref_d;
+  assign proto_hdr[1] = ext_sync_out_dbg;
+  assign ext_sync_pin = proto_hdr[2];
+  assign proto_hdr[3] = sample_msb;
+  assign proto_hdr[9:4] = 'b0;
 
 endmodule

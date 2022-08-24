@@ -442,6 +442,13 @@ module util_adxcvr_xch #(
     .out_bits ({up_rx_bufstatus,
                 up_tx_bufstatus}));
 
+  // Debug
+  wire [2:0] loopback_sel_s;
+  vio_xcvr i_vio_xcvr (
+    .clk(up_clk),
+    .probe_out0(loopback_sel_s)
+  );
+
   // 204C specific logic
   localparam ALIGN_COMMA_ENABLE  = LINK_MODE[1] ? 10'b0000000000 : 10'b1111111111;
   localparam ALIGN_MCOMMA_DET = LINK_MODE[1] ? "FALSE" : "TRUE";
@@ -828,7 +835,7 @@ module util_adxcvr_xch #(
     .GTXRXP (rx_p),
     .GTXTXN (tx_n),
     .GTXTXP (tx_p),
-    .LOOPBACK (3'h0),
+    .LOOPBACK (loopback_sel_s),
     .PCSRSVDIN (16'h0),
     .PCSRSVDIN2 (5'h0),
     .PMARSVDIN (5'h0),
@@ -1485,7 +1492,7 @@ module util_adxcvr_xch #(
     .GTSOUTHREFCLK0 (1'h0),
     .GTSOUTHREFCLK1 (1'h0),
     .GTTXRESET (up_tx_rst),
-    .LOOPBACK (3'h0),
+    .LOOPBACK (loopback_sel_s),
     .LPBKRXTXSEREN (1'h0),
     .LPBKTXRXSEREN (1'h0),
     .PCIEEQRXEQADAPTDONE (1'h0),
@@ -2375,7 +2382,7 @@ module util_adxcvr_xch #(
     .GTTXRESET (up_tx_rst),
     .GTTXRESETSEL (1'd0),
     .INCPCTRL (1'd0),
-    .LOOPBACK (3'd0),
+    .LOOPBACK (loopback_sel_s),
     .PCIEEQRXEQADAPTDONE (1'd0),
     .PCIERATEGEN3 (),
     .PCIERATEIDLE (),
@@ -3229,7 +3236,7 @@ module util_adxcvr_xch #(
       .GTYRXN (rx_n),
       .GTYRXP (rx_p),
       .INCPCTRL (1'b0),
-      .LOOPBACK (3'b000),
+      .LOOPBACK (loopback_sel_s),
       .PCIEEQRXEQADAPTDONE (1'b0),
       .PCIERSTIDLE (1'b0),
       .PCIERSTTXSYNCSTART (1'b0),
