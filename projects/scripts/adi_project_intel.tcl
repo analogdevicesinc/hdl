@@ -180,6 +180,9 @@ proc adi_project {project_name {parameter_list {}}} {
 
   # default assignments
 
+  if {$quartus_pro_isused != 1} {
+    set_global_assignment -name QIP_FILE $system_qip_file
+  }
   set_global_assignment -name VERILOG_FILE system_top.v
   set_global_assignment -name SDC_FILE system_constr.sdc
   set_global_assignment -name TOP_LEVEL_ENTITY system_top
