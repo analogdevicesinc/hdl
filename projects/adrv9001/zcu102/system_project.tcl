@@ -18,11 +18,16 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   CMOS_LVDS_N - type of interface
 #         0 - LVDS
 #         1 - CMOS
+#   DISABLE_TX2_SSI - Disable TX2 for 9003 use case
+#         0 - TX2 enabled
+#         1 - TX2 disabled
 
 set CMOS_LVDS_N [get_env_param CMOS_LVDS_N 1]
+set DISABLE_TX2_SSI [get_env_param DISABLE_TX2_SSI 0]
 
 adi_project adrv9001_zcu102 0 [list \
   CMOS_LVDS_N $CMOS_LVDS_N \
+  DISABLE_TX2_SSI $DISABLE_TX2_SSI \
 ]
 
 adi_project_files {} [list \
