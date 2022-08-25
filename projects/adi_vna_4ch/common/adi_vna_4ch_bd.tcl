@@ -424,6 +424,7 @@ ad_cpu_interconnect 0x7c420000 dac_dma
 
 # interrupts
 
+ad_cpu_interrupt ps-3  mb-12  axi_spi_fmcdac/ip2intc_irpt
 ad_cpu_interrupt ps-4  mb-11 dac_jesd204_link/irq
 ad_cpu_interrupt ps-5  mb-10 dac_dma/irq
 ad_cpu_interrupt ps-6  mb-9  axi_ad4858_dma/irq
