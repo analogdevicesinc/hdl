@@ -114,7 +114,7 @@ proc sysid_gen_sys_init_file {{custom_string {}}} {
         set git_clean_string "t";
       }
     }
-    if {[catch {exec git branch} gitbranch_string] != 0} {
+    if {[catch {exec git branch --no-color} gitbranch_string] != 0} {
       set gitbranch_string "";
     } else {
       set gitbranch_string [lindex $gitbranch_string [expr [lsearch -exact $gitbranch_string "*"] + 1]];
