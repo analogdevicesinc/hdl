@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2021 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2021 - 2022 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -49,50 +49,50 @@ module axi_ltc2387_if #(
 
   // delay interface
 
-  input                    up_clk,
-  input   [ 1:0]           up_dld,
-  input   [ 9:0]           up_dwdata,
-  output  [ 9:0]           up_drdata,
-  input                    delay_clk,
-  input                    delay_rst,
-  output                   delay_locked,
+  input             up_clk,
+  input    [ 1:0]   up_dld,
+  input    [ 9:0]   up_dwdata,
+  output   [ 9:0]   up_drdata,
+  input             delay_clk,
+  input             delay_rst,
+  output            delay_locked,
 
   // adc interface
 
-  input                    clk,
-  input                    clk_gate,
-  input                    dco_p,
-  input                    dco_n,
-  input                    da_p,
-  input                    da_n,
-  input                    db_p,
-  input                    db_n,
+  input             clk,
+  input             clk_gate,
+  input             dco_p,
+  input             dco_n,
+  input             da_p,
+  input             da_n,
+  input             db_p,
+  input             db_n,
 
-  output                      adc_valid,
+  output            adc_valid,
   output reg [RESOLUTION-1:0] adc_data
 );
 
-  localparam   ONE_L_WIDTH = (RESOLUTION == 18) ? 9 : 8;
-  localparam   TWO_L_WIDTH = (RESOLUTION == 18) ? 5 : 4;
-  localparam   WIDTH = (TWOLANES == 0) ? ONE_L_WIDTH : TWO_L_WIDTH;
+  localparam ONE_L_WIDTH = (RESOLUTION == 18) ? 9 : 8;
+  localparam TWO_L_WIDTH = (RESOLUTION == 18) ? 5 : 4;
+  localparam WIDTH = (TWOLANES == 0) ? ONE_L_WIDTH : TWO_L_WIDTH;
 
   // internal wires
 
-  wire          da_p_int_s;
-  wire          da_n_int_s;
-  wire          db_p_int_s;
-  wire          db_n_int_s;
-  wire          dco;
-  wire          dco_s;
-  wire  [17:0]  adc_data_int;
+  wire            da_p_int_s;
+  wire            da_n_int_s;
+  wire            db_p_int_s;
+  wire            db_n_int_s;
+  wire            dco;
+  wire            dco_s;
+  wire   [17:0]   adc_data_int;
 
   // internal registers
 
-  reg [WIDTH:0] adc_data_da_p = 'b0;
-  reg [WIDTH:0] adc_data_da_n = 'b0;
-  reg [WIDTH:0] adc_data_db_p = 'b0;
-  reg [WIDTH:0] adc_data_db_n = 'b0;
-  reg [2:0]     clk_gate_d = 'b0;
+  reg  [WIDTH:0]  adc_data_da_p = 'b0;
+  reg  [WIDTH:0]  adc_data_da_n = 'b0;
+  reg  [WIDTH:0]  adc_data_db_p = 'b0;
+  reg  [WIDTH:0]  adc_data_db_n = 'b0;
+  reg      [2:0]  clk_gate_d = 'b0;
 
   // assignments
 
@@ -118,6 +118,7 @@ module axi_ltc2387_if #(
   end
 
   // bits rearrangement
+
   if (!TWOLANES) begin
     assign adc_data_int[17] = adc_data_da_p[7];
     assign adc_data_int[16] = adc_data_da_n[7];
@@ -181,7 +182,7 @@ module axi_ltc2387_if #(
 
   ad_data_in #(
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
-    .IDDR_CLK_EDGE("OPPOSITE_EDGE"),
+    .IDDR_CLK_EDGE ("OPPOSITE_EDGE"),
     .IODELAY_CTRL (IODELAY_CTRL),
     .IODELAY_GROUP (IO_DELAY_GROUP),
     .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY)
@@ -201,7 +202,7 @@ module axi_ltc2387_if #(
 
   ad_data_in #(
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
-    .IDDR_CLK_EDGE("OPPOSITE_EDGE"),
+    .IDDR_CLK_EDGE ("OPPOSITE_EDGE"),
     .IODELAY_CTRL (0),
     .IODELAY_GROUP (IO_DELAY_GROUP),
     .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY)
