@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2021 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2021 - 2022 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -37,69 +37,67 @@
 
 module axi_ltc2387_channel #(
 
-  // parameters
-
-  parameter   ADC_RES = 16,
-  parameter   OUT_RES = 16,
-  parameter   TWOLANES = 1,
-  parameter   USERPORTS_DISABLE = 0,
-  parameter   DATAFORMAT_DISABLE = 0
+  parameter ADC_RES = 16,
+  parameter OUT_RES = 16,
+  parameter TWOLANES = 1,
+  parameter USERPORTS_DISABLE = 0,
+  parameter DATAFORMAT_DISABLE = 0
 ) (
 
   // adc interface
 
-  input                   adc_clk,
-  input                   adc_rst,
-  input                   adc_valid_in,
-  input     [ADC_RES-1:0] adc_data_in,
+  input                  adc_clk,
+  input                  adc_rst,
+  input                  adc_valid_in,
+  input   [ADC_RES-1:0]  adc_data_in,
 
   // dma interface
 
-  output                  adc_enable,
-  output                  adc_valid,
-  output    [OUT_RES-1:0] adc_data,
+  output                 adc_enable,
+  output                 adc_valid,
+  output  [OUT_RES-1:0]  adc_data,
 
   // error monitoring
 
-  output                  up_adc_pn_err,
-  output                  up_adc_pn_oos,
-  output                  up_adc_or,
+  output                 up_adc_pn_err,
+  output                 up_adc_pn_oos,
+  output                 up_adc_or,
 
   // processor interface
 
-  input                   up_rstn,
-  input                   up_clk,
-  input                   up_wreq,
-  input            [13:0] up_waddr,
-  input            [31:0] up_wdata,
-  output                  up_wack,
-  input                   up_rreq,
-  input            [13:0] up_raddr,
-  output           [31:0] up_rdata,
-  output                  up_rack
+  input                  up_rstn,
+  input                  up_clk,
+  input                  up_wreq,
+  input      [13:0]      up_waddr,
+  input      [31:0]      up_wdata,
+  output                 up_wack,
+  input                  up_rreq,
+  input      [13:0]      up_raddr,
+  output     [31:0]      up_rdata,
+  output                 up_rack
 );
 
   // internal signals
 
-  wire                  adc_dfmt_valid_s;
-  wire           [15:0] adc_dfmt_data_s;
-  wire                  adc_dcfilter_valid_s;
-  wire                  adc_iqcor_enb_s;
-  wire                  adc_dcfilt_enb_s;
-  wire                  adc_dfmt_se_s;
-  wire                  adc_dfmt_type_s;
-  wire                  adc_dfmt_enable_s;
-  wire           [15:0] adc_dcfilt_offset_s;
-  wire           [15:0] adc_dcfilt_coeff_s;
-  wire           [15:0] adc_iqcor_coeff_1_s;
-  wire           [15:0] adc_iqcor_coeff_2_s;
-  wire           [ 3:0] adc_pnseq_sel_s;
-  wire           [ 3:0] adc_data_sel_s;
-  reg                   adc_pn_err;
-  wire                  adc_pn_err_s;
+  wire          adc_dfmt_valid_s;
+  wire  [15:0]  adc_dfmt_data_s;
+  wire          adc_dcfilter_valid_s;
+  wire          adc_iqcor_enb_s;
+  wire          adc_dcfilt_enb_s;
+  wire          adc_dfmt_se_s;
+  wire          adc_dfmt_type_s;
+  wire          adc_dfmt_enable_s;
+  wire  [15:0]  adc_dcfilt_offset_s;
+  wire  [15:0]  adc_dcfilt_coeff_s;
+  wire  [15:0]  adc_iqcor_coeff_1_s;
+  wire  [15:0]  adc_iqcor_coeff_2_s;
+  wire  [ 3:0]  adc_pnseq_sel_s;
+  wire  [ 3:0]  adc_data_sel_s;
+  reg           adc_pn_err;
+  wire          adc_pn_err_s;
 
-  wire           [15:0] expected_pattern;
-  wire    [ADC_RES-1:0] test_pattern;
+  wire  [ADC_RES-1:0]  test_pattern;
+  wire  [15:0]         expected_pattern;
 
   assign adc_pn_err_s = adc_pn_err;
 
@@ -178,6 +176,8 @@ module axi_ltc2387_channel #(
     .adc_pn_err (adc_pn_err_s),
     .adc_pn_oos (1'b0),
     .adc_or (1'b0),
+    .adc_status_header (8'd0),
+    .adc_crc_err (1'b0),
     .up_adc_pn_err (up_adc_pn_err),
     .up_adc_pn_oos (up_adc_pn_oos),
     .up_adc_or (up_adc_or),
