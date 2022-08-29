@@ -94,9 +94,10 @@ localparam BIT_COUNTER_WIDTH = DATA_WIDTH > 16 ? 5 :
 
 localparam BIT_COUNTER_CARRY = 2** (BIT_COUNTER_WIDTH + 1);
 localparam BIT_COUNTER_CLEAR = {{8{1'b1}}, {BIT_COUNTER_WIDTH{1'b0}}, 1'b1};
+localparam BIT_COUNTER_CLEAR2 = {{5{1'b1}}, {3{1'b0}}, {BIT_COUNTER_WIDTH{1'b0}}, 1'b1};
+//localparam BIT_COUNTER_CLEAR2 = {{7{1'b0}}, {1{1'b1}}, {BIT_COUNTER_WIDTH{1'b0}}, 1'b1};
 
 reg ddr_en = 1'b0;
-//wire ddr_en = cmd[12];
 
 wire [(NUM_OF_SDI * DATA_WIDTH)-1:0] sdi_data_s;
 reg sdi_data_valid_s = 1'b0;
@@ -240,12 +241,12 @@ always @(posedge clk) begin
       ddr_en <= cmd[3];
     end else if (cmd[9:8] == REG_CLK_DIV) begin
       clk_div <= cmd[7:0];
-    end else if (cmd[13:12] == REG_WORD_LENGTH && cmd[9:8] == REG_WORD_LENGTH) begin
+    end else if (cmd[13:12] == REG_WORD_LENGTH && cmd[9:8] == REG_WORD_LENGTH) begin //redundant?
       if (ddr_en) begin
-        word_length <= cmd[7:0] >> (NUM_OF_SDO -1);
+        word_length <= cmd[7:0] >> (NUM_OF_SDO - 1);
         left_aligned <= 64 - (cmd[7:0]); //64 = DATA_WIDTH?
       end else begin
-        word_length <= cmd[7:0] >> (NUM_OF_SDO-2);
+        word_length <= cmd[7:0] >> (NUM_OF_SDO - 2);
         left_aligned <= 64 - (2*cmd[7:0]); //64 = DATA_WIDTH?
       end
     end
@@ -276,17 +277,82 @@ assign trigger_rx = trigger == 1'b1 && ntx_rx == 1'b1;
 assign sleep_counter_compare = sleep_counter == cmd_d1[7:0] && clk_div_last == 1'b1;
 assign cs_sleep_counter_compare = cs_sleep_counter == cmd_d1[9:8] && clk_div_last == 1'b1;
 
+reg stream_mode = 'h0;
+reg stream_mode_d = 'h0;
+wire stream_mode_ed = ~stream_mode & stream_mode_d;
+reg dbg_reg0 = 'h0;
+reg dbg_reg1 = 'h0;
+
+always @(posedge clk) begin
+  stream_mode_d <= stream_mode;
+  if (cmd_valid && cmd == 'h01ff) begin
+    stream_mode <= 1'h1;
+  end else if (cmd_valid && cmd == 'h10ff) begin
+    stream_mode <= 1'h0;
+  end
+end
+
 always @(posedge clk) begin
   if (idle == 1'b1) begin
     counter <= 'h00;
   end else if (clk_div_last == 1'b1 && wait_for_io == 1'b0) begin
-    if (bit_counter == word_length) begin
-        counter <= (counter & BIT_COUNTER_CLEAR) + (transfer_active ? 'h1 : 'h10) + BIT_COUNTER_CARRY;
+    if (stream_mode) begin
+      if (bit_counter == word_length) begin
+        if (transfer_counter == 8'hfe && !(cmd == 16'h10ff && cmd_valid))
+          counter[(BIT_COUNTER_WIDTH+8):(BIT_COUNTER_WIDTH+1)] <= 'h1;
+        else begin
+          counter <= (counter & BIT_COUNTER_CLEAR) + (transfer_active ? 'h1 : 'h10) + BIT_COUNTER_CARRY;
+        end
+      end else begin
+        counter <= counter + (transfer_active ? 'h1 : 'h10);
+      end
     end else begin
-      counter <= counter + (transfer_active ? 'h1 : 'h10);
+      if (stream_mode_ed) begin
+        counter[(BIT_COUNTER_WIDTH+8):(BIT_COUNTER_WIDTH+1)] <= cmd_d1 - 'h1;
+      end else begin
+        if (bit_counter == word_length) begin
+          counter <= (counter & BIT_COUNTER_CLEAR) + (transfer_active ? 'h1 : 'h10) + BIT_COUNTER_CARRY;
+        end else begin
+          counter <= counter + (transfer_active ? 'h1 : 'h10);
+        end
+      end
     end
   end
 end
+
+//always @(posedge clk) begin
+//  if (idle == 1'b1) begin
+//    counter <= 'h00;
+//    dbg_reg0 <= 'h0;
+//    dbg_reg1 <= 'h0;
+//  end else if (clk_div_last == 1'b1 && wait_for_io == 1'b0) begin
+//    if (bit_counter == word_length) begin
+//        dbg_reg0 <= 'h1;
+//        dbg_reg1 <= 'h0;
+//        counter <= (counter & BIT_COUNTER_CLEAR) + (transfer_active ? 'h1 : 'h10) + BIT_COUNTER_CARRY;
+//    end else begin
+//      dbg_reg0 <= 'h0;
+//      dbg_reg1 <= 'h1;
+//      counter <= counter + (transfer_active ? 'h1 : 'h10);
+//    end
+//  end
+//end
+
+//always @(posedge clk) begin
+//  if (idle == 1'b1) begin
+//    counter <= 'h00;
+//  end else if (clk_div_last == 1'b1 && wait_for_io == 1'b0) begin
+//    if (bit_counter == word_length) begin
+//      if (transfer_counter == 8'hfe && !(cmd == 16'h10ff && cmd_valid))
+//        counter[(BIT_COUNTER_WIDTH+8):(BIT_COUNTER_WIDTH+1)] <= 'h1;
+//      else begin
+//        counter <= (counter & BIT_COUNTER_CLEAR) + (transfer_active ? 'h1 : 'h10) + BIT_COUNTER_CARRY;
+//      end
+//    end else begin
+//      counter <= counter + (transfer_active ? 'h1 : 'h10);
+//    end
+//  end
+//end
 
 always @(posedge clk) begin
   if (resetn == 1'b0) begin
@@ -361,10 +427,12 @@ always @(posedge clk) begin
   if (idle == 1'b1) begin
     last_transfer <= 1'b0;
   end else if (trigger_tx == 1'b1 && transfer_active == 1'b1) begin
-    if (transfer_counter == cmd_d1[7:0])
-      last_transfer <= 1'b1;
-    else
-      last_transfer <= 1'b0;
+      if (transfer_counter == cmd_d1[7:0]) begin
+//      if (stream_mode_ed || (transfer_counter == cmd_d1[7:0])) begin
+        last_transfer <= 1'b1;
+      end else begin
+        last_transfer <= 1'b0;
+      end
   end
 end
 
@@ -378,10 +446,11 @@ always @(posedge clk) begin
       transfer_active <= 1'b0;
     end else if (wait_for_io == 1'b1 && io_ready1 == 1'b1) begin
       wait_for_io <= 1'b0;
-      if (last_transfer == 1'b0)
+      if (last_transfer == 1'b0) begin
         transfer_active <= 1'b1;
-      else
+      end else begin
         transfer_active <= 1'b0;
+      end
     end else if (transfer_active == 1'b1 && end_of_word == 1'b1) begin
       if (last_transfer == 1'b1 || io_ready2 == 1'b0)
         transfer_active <= 1'b0;
