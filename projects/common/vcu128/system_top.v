@@ -82,35 +82,35 @@ module system_top (
 
   // instantiations
   ad_iobuf #(
-    .DATA_WIDTH(8)
+    .DATA_WIDTH (8)
   ) i_iobuf_bd (
     .dio_t (gpio_t[ 7:0]),
     .dio_i (gpio_o[ 7:0]),
     .dio_o (gpio_i[ 7:0]),
     .dio_p (gpio_bd ));
 
-  system_wrapper i_ system_wrapper (
+  system_wrapper i_system_wrapper (
     .sys_rst (sys_rst),
     .sys_clk_clk_n (sys_clk_n),
     .sys_clk_clk_p (sys_clk_p),
 
-    .ddr4_act_n (dd r4_act_n),
-    .ddr4_adr (ddr4 _addr),
-    .ddr4_ba (ddr4_ ba),
-    .ddr4_bg (ddr4_ bg),
-    .ddr4_ck_c (ddr 4_ck_n),
-    .ddr4_ck_t (ddr 4_ck_p),
-    .ddr4_cke (ddr4 _cke),
-    .ddr4_cs_n (ddr 4_cs_n),
-    .ddr4_dm_n (ddr 4_dm_n),
-    .ddr4_dq (ddr4_ dq),
-    .ddr4_dqs_c (dd r4_dqs_n),
-    .ddr4_dqs_t (dd r4_dqs_p),
-    .ddr4_odt (ddr4 _odt),
+    .ddr4_act_n (ddr4_act_n),
+    .ddr4_adr (ddr4_addr),
+    .ddr4_ba (ddr4_ba),
+    .ddr4_bg (ddr4_bg),
+    .ddr4_ck_c (ddr4_ck_n),
+    .ddr4_ck_t (ddr4_ck_p),
+    .ddr4_cke (ddr4_cke),
+    .ddr4_cs_n (ddr4_cs_n),
+    .ddr4_dm_n (ddr4_dm_n),
+    .ddr4_dq (ddr4_dq),
+    .ddr4_dqs_c (ddr4_dqs_n),
+    .ddr4_dqs_t (ddr4_dqs_p),
+    .ddr4_odt (ddr4_odt),
     .ddr4_reset_n (ddr4_reset_n),
 
     .phy_sd (1'b1),
-    .phy_dummy_port _in (phy_dummy_port_in),
+    .phy_dummy_port_in (phy_dummy_port_in),
     .sgmii_rxn (phy_rx_n),
     .sgmii_rxp (phy_rx_p),
     .sgmii_txn (phy_tx_n),

@@ -123,7 +123,7 @@ module system_top (
     .mdio_mdio_io (mdio_mdio),
     .mgt_clk_clk_n (mgt_clk_n),
     .mgt_clk_clk_p (mgt_clk_p),
-    .phy_rstn (phy_rstn),
+    .phy_rst_n (phy_rstn),
 
     .fan_pwm (fan_pwm),
 

@@ -88,6 +88,9 @@ module system_top (
   wire    [63:0]  gpio_t;
   wire    [ 7:0]  spi_csn;
 
+  assign gpio_i[63:32] = gpio_o[63:32];
+  assign gpio_i[31:17] = gpio_o[31:17];
+
   // default logic
   assign fan_pwm = 1'b1;
   assign spi_csn_0 = spi_csn[0];

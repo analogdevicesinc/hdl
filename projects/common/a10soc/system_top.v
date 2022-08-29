@@ -130,6 +130,7 @@ module system_top (
   wire            dac_fifo_bypass;
 
   // assignments
+  assign gpio_i[63:32] = gpio_o[63:32];
 
   // board stuff (max-v-u21)
   assign gpio_i[31:14] = gpio_o[31:14];

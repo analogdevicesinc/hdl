@@ -107,6 +107,14 @@ module system_top (
   assign iic_rstn = 1'b1;
 
   // instantiations
+   ad_iobuf #( 
+   .DATA_WIDTH (17) 
+ ) i_iobuf_bd ( 
+   .dio_t (gpio_t[16:0]), 
+   .dio_i (gpio_o[16:0]), 
+   .dio_o (gpio_i[16:0]), 
+   .dio_p (gpio_bd)); 
+
   system_wrapper i_system_wrapper (
     .ddr3_addr (ddr3_addr),
     .ddr3_ba (ddr3_ba),

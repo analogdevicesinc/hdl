@@ -69,6 +69,10 @@ module system_top (
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
 
+ // assignments
+  assign gpio_i[63:32] = gpio_o[63:32];
+  assign gpio_i[31:8] = gpio_o[31:8];
+
   // instantiations
   ad_iobuf #(
     .DATA_WIDTH(2)
