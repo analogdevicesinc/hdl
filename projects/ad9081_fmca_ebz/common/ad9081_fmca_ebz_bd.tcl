@@ -17,6 +17,7 @@ if {![info exists ADI_PHY_SEL]} {
 
 source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
+source $ad_hdl_dir/library/axi_tdd/scripts/axi_tdd.tcl
 
 # Common parameter for TX and RX
 set JESD_MODE  $ad_project_params(JESD_MODE)
@@ -508,27 +509,39 @@ ad_connect upack_reset_sources/dout upack_rst_logic/op1
 ad_connect upack_rst_logic/res util_mxfe_upack/reset
 
 if {$TDD_SUPPORT} {
-  ad_ip_instance util_tdd_sync tdd_sync_0
-  ad_connect tx_device_clk tdd_sync_0/clk
-  ad_connect tx_device_clk_rstgen/peripheral_aresetn tdd_sync_0/rstn
-  ad_connect tdd_sync_0/sync_in GND
-  ad_connect tdd_sync_0/sync_mode GND
-  ad_ip_parameter tdd_sync_0 CONFIG.TDD_SYNC_PERIOD 250000000; # More or less 1 PPS ;)
+  set TDD_CHANNEL_CNT $ad_project_params(TDD_CHANNEL_CNT)
 
-  ad_ip_instance axi_tdd axi_tdd_0 [list ASYNC_TDD_SYNC 0]
+  set TDD_DEFAULT_POL [ expr { [info exists ad_project_params(TDD_DEFAULT_POL)] \
+                               ? $ad_project_params(TDD_DEFAULT_POL) : 0 } ]
+  set TDD_REG_WIDTH [ expr { [info exists ad_project_params(TDD_REG_WIDTH)] \
+                             ? $ad_project_params(TDD_REG_WIDTH) : 32 } ]
+  set TDD_BURST_WIDTH [ expr { [info exists ad_project_params(TDD_BURST_WIDTH)] \
+                               ? $ad_project_params(TDD_BURST_WIDTH) : 32 } ]
+  set TDD_SYNC_WIDTH [ expr { [info exists ad_project_params(TDD_SYNC_WIDTH)] \
+                              ? $ad_project_params(TDD_SYNC_WIDTH) : 64 } ]
+
+  set TDD_SYNC_INT $ad_project_params(TDD_SYNC_INT)
+  set TDD_SYNC_EXT $ad_project_params(TDD_SYNC_EXT)
+  set TDD_SYNC_EXT_CDC $ad_project_params(TDD_SYNC_EXT_CDC)
+
+  ad_tdd_gen_create axi_tdd_0 $TDD_CHANNEL_CNT \
+                              $TDD_DEFAULT_POL \
+                              $TDD_REG_WIDTH \
+                              $TDD_BURST_WIDTH \
+                              $TDD_SYNC_WIDTH \
+                              $TDD_SYNC_INT \
+                              $TDD_SYNC_EXT \
+                              $TDD_SYNC_EXT_CDC
+
   ad_connect tx_device_clk axi_tdd_0/clk
-  ad_connect tx_device_clk_rstgen/peripheral_reset axi_tdd_0/rst
+  ad_connect tx_device_clk_rstgen/peripheral_aresetn axi_tdd_0/resetn
   ad_connect $sys_cpu_clk axi_tdd_0/s_axi_aclk
   ad_connect $sys_cpu_resetn axi_tdd_0/s_axi_aresetn
+  ad_connect axi_tdd_0/sync_in GND
   ad_cpu_interconnect 0x7c460000 axi_tdd_0
 
-  ad_connect tdd_sync_0/sync_out axi_tdd_0/tdd_sync
-
-  delete_bd_objs [get_bd_nets mxfe_adc_fifo_dma_wr]
-
-  ad_connect axi_tdd_0/tdd_tx_valid $dac_data_offload_name/sync_ext
-  ad_connect axi_tdd_0/tdd_rx_valid $adc_data_offload_name/sync_ext
-
+  ad_connect axi_tdd_0/tdd_channel_0 $dac_data_offload_name/sync_ext
+  ad_connect axi_tdd_0/tdd_channel_1 $adc_data_offload_name/sync_ext
 
 } else {
   ad_connect GND $dac_data_offload_name/sync_ext

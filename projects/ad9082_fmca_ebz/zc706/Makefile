@@ -22,6 +22,7 @@ M_DEPS += ../../../library/util_hbm/scripts/adi_util_hbm.tcl
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/common/ad_3w_spi.v
+M_DEPS += ../../../library/axi_tdd/scripts/axi_tdd.tcl
 
 LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_dmac
@@ -45,7 +46,6 @@ LIB_DEPS += util_do_ram
 LIB_DEPS += util_hbm
 LIB_DEPS += util_pack/util_cpack2
 LIB_DEPS += util_pack/util_upack2
-LIB_DEPS += util_tdd_sync
 LIB_DEPS += xilinx/axi_adxcvr
 LIB_DEPS += xilinx/util_adxcvr
 
