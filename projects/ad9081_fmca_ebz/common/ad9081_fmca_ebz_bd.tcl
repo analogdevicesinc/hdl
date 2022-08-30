@@ -508,27 +508,36 @@ ad_connect upack_reset_sources/dout upack_rst_logic/op1
 ad_connect upack_rst_logic/res util_mxfe_upack/reset
 
 if {$TDD_SUPPORT} {
-  ad_ip_instance util_tdd_sync tdd_sync_0
-  ad_connect tx_device_clk tdd_sync_0/clk
-  ad_connect tx_device_clk_rstgen/peripheral_aresetn tdd_sync_0/rstn
-  ad_connect tdd_sync_0/sync_in GND
-  ad_connect tdd_sync_0/sync_mode GND
-  ad_ip_parameter tdd_sync_0 CONFIG.TDD_SYNC_PERIOD 250000000; # More or less 1 PPS ;)
-
-  ad_ip_instance axi_tdd axi_tdd_0 [list ASYNC_TDD_SYNC 0]
+  ad_ip_instance axi_tdd axi_tdd_0
+  ad_ip_parameter axi_tdd_0 CONFIG.CHANNEL_COUNT 2
+  ad_ip_parameter axi_tdd_0 CONFIG.SYNC_COUNT_WIDTH 32
   ad_connect tx_device_clk axi_tdd_0/clk
-  ad_connect tx_device_clk_rstgen/peripheral_reset axi_tdd_0/rst
+  ad_connect tx_device_clk_rstgen/peripheral_aresetn axi_tdd_0/resetn
   ad_connect $sys_cpu_clk axi_tdd_0/s_axi_aclk
   ad_connect $sys_cpu_resetn axi_tdd_0/s_axi_aresetn
+  ad_connect axi_tdd_0/sync_in GND
   ad_cpu_interconnect 0x7c460000 axi_tdd_0
 
-  ad_connect tdd_sync_0/sync_out axi_tdd_0/tdd_sync
+  # Create instance: tdd_ch_slice_0, and set properties
+  set tdd_ch_slice_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 tdd_ch_slice_0 ]
+  set_property -dict [ list \
+   CONFIG.DIN_FROM {0} \
+   CONFIG.DIN_TO {0} \
+   CONFIG.DIN_WIDTH {2} \
+ ] $tdd_ch_slice_0
 
-  delete_bd_objs [get_bd_nets mxfe_adc_fifo_dma_wr]
+  # Create instance: tdd_ch_slice_1, and set properties
+  set tdd_ch_slice_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 tdd_ch_slice_1 ]
+  set_property -dict [ list \
+   CONFIG.DIN_FROM {1} \
+   CONFIG.DIN_TO {1} \
+   CONFIG.DIN_WIDTH {2} \
+ ] $tdd_ch_slice_1
 
-  ad_connect axi_tdd_0/tdd_tx_valid $dac_data_offload_name/sync_ext
-  ad_connect axi_tdd_0/tdd_rx_valid $adc_data_offload_name/sync_ext
+  connect_bd_net -net tdd_channel [get_bd_pins axi_tdd_0/tdd_channel] [get_bd_pins tdd_ch_slice_0/Din] [get_bd_pins tdd_ch_slice_1/Din]
 
+  ad_connect tdd_ch_slice_0/Dout $dac_data_offload_name/sync_ext
+  ad_connect tdd_ch_slice_1/Dout $adc_data_offload_name/sync_ext
 
 } else {
   ad_connect GND $dac_data_offload_name/sync_ext
