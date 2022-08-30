@@ -99,6 +99,14 @@ localparam BIT_COUNTER_CLEAR2 = {{5{1'b1}}, {3{1'b0}}, {BIT_COUNTER_WIDTH{1'b0}}
 
 reg ddr_en = 1'b0;
 
+reg sdo_data_valid_d = 'h0;
+reg [(DATA_WIDTH-1):0] sdo_data_d = 'h0;
+
+always @(posedge clk) begin
+    sdo_data_d <= sdo_data;
+    sdo_data_valid_d <= sdo_data_valid;
+end
+
 wire [(NUM_OF_SDI * DATA_WIDTH)-1:0] sdi_data_s;
 reg sdi_data_valid_s = 1'b0;
 reg sclk_int = 1'b0;
@@ -414,14 +422,14 @@ always @(posedge clk) begin
     sdo_data_ready <= 1'b0;
   else if (sdo_enabled == 1'b1 && first_bit == 1'b1 && trigger_tx == 1'b1 && transfer_active == 1'b1)
     sdo_data_ready <= 1'b1;
-  else if (sdo_data_valid == 1'b1)
+  else if (sdo_data_valid_d == 1'b1)
     sdo_data_ready <= 1'b0;
 end
 
 assign io_ready1 = (sdi_data_valid_s == 1'b0 || sdi_data_ready == 1'b1) &&
-        (sdo_enabled == 1'b0 || last_transfer == 1'b1 || sdo_data_valid == 1'b1);
+        (sdo_enabled == 1'b0 || last_transfer == 1'b1 || sdo_data_valid_d == 1'b1);
 assign io_ready2 = (sdi_enabled == 1'b0 || sdi_data_ready == 1'b1) &&
-        (sdo_enabled == 1'b0 || last_transfer == 1'b1 || sdo_data_valid == 1'b1);
+        (sdo_enabled == 1'b0 || last_transfer == 1'b1 || sdo_data_valid_d == 1'b1);
 
 always @(posedge clk) begin
   if (idle == 1'b1) begin
@@ -480,7 +488,7 @@ if (NUM_OF_SDO == 1) begin : g_single_sdo
       data_sdo_shift <= {DATA_WIDTH{SDO_DEFAULT}};
     end else if (transfer_active == 1'b1 && trigger_tx == 1'b1) begin
       if (first_bit == 1'b1)
-        data_sdo_shift <= sdo_data << left_aligned;
+        data_sdo_shift <= sdo_data_d << left_aligned;
       else
         data_sdo_shift <= {data_sdo_shift[(DATA_WIDTH-2):0], 1'b0};
     end
@@ -504,8 +512,8 @@ begin : g_dual_sdo
       data_sdo_shift <= {DATA_WIDTH{SDO_DEFAULT}};
     end else if (transfer_active == 1'b1 && trigger_tx == 1'b1) begin
       if (first_bit == 1'b1) begin
-        data_sdo_shift <= sdo_data << left_aligned;
-        data_sdo_shift2 <= sdo_data << (left_aligned + 1'b1);
+        data_sdo_shift <= sdo_data_d << left_aligned;
+        data_sdo_shift2 <= sdo_data_d << (left_aligned + 1'b1);
       end else begin
         data_sdo_shift <= {data_sdo_shift[(DATA_WIDTH-2):0], 2'b0};
         data_sdo_shift2 <= {data_sdo_shift2[(DATA_WIDTH-2):0], 2'b0};
@@ -530,19 +538,19 @@ begin : g_quad_sdo
   wire [63:0] sdr_data_buf;
   genvar i;
   for (i=0; i<8; i=i+1) begin
-    assign  sdr_data_buf [8*(i+1)-1 : 8*(i+1)-4] = sdo_data[4*i+3 : 4*i];
-    assign  sdr_data_buf [8*i+3 : 8*i] = sdo_data[4*i+3 : 4*i];
+    assign  sdr_data_buf [8*(i+1)-1 : 8*(i+1)-4] = sdo_data_d[4*i+3 : 4*i];
+    assign  sdr_data_buf [8*i+3 : 8*i] = sdo_data_d[4*i+3 : 4*i];
   end
 
   always @(posedge clk) begin
     if ((inst_d1 == CMD_TRANSFER) && (!sdo_enabled)) begin
       data_sdo_shift <= {DATA_WIDTH{SDO_DEFAULT}};
-    end else if (sdo_data_ready && sdo_data_valid) begin
+    end else if (sdo_data_ready && sdo_data_valid_d) begin
       if (ddr_en) begin
-        data_sdo_shift <= sdo_data << left_aligned;
-        data_sdo_shift2 <= sdo_data << (left_aligned + 2'd1);
-        data_sdo_shift3 <= sdo_data << (left_aligned + 2'd2);
-        data_sdo_shift4 <= sdo_data << (left_aligned + 2'd3);
+        data_sdo_shift <= sdo_data_d << left_aligned;
+        data_sdo_shift2 <= sdo_data_d << (left_aligned + 2'd1);
+        data_sdo_shift3 <= sdo_data_d << (left_aligned + 2'd2);
+        data_sdo_shift4 <= sdo_data_d << (left_aligned + 2'd3);
       end else begin
         data_sdo_shift <= sdr_data_buf << left_aligned;
         data_sdo_shift2 <= sdr_data_buf << (left_aligned + 2'd1);
