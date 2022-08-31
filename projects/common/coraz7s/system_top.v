@@ -75,7 +75,7 @@ module system_top (
 
   // instantiations
   ad_iobuf #(
-    .DATA_WIDTH(2)
+    .DATA_WIDTH (2)
   ) i_iobuf_buttons (
     .dio_t (gpio_t[1:0]),
     .dio_i (gpio_o[1:0]),
@@ -83,7 +83,7 @@ module system_top (
     .dio_p (btn));
 
   ad_iobuf #(
-    .DATA_WIDTH(6)
+    .DATA_WIDTH (6)
   ) i_iobuf_leds (
     .dio_t (gpio_t[7:2]),
     .dio_i (gpio_o[7:2]),
@@ -116,6 +116,25 @@ module system_top (
 
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
-    .gpio_t (gpio_t));
+    .gpio_t (gpio_t),
+
+    .spi0_clk_i (1'b0),
+    .spi0_clk_o (),
+    .spi0_csn_0_o (),
+    .spi0_csn_1_o (),
+    .spi0_csn_2_o (),
+    .spi0_csn_i (1'b1),
+    .spi0_sdi_i (1'b0),
+    .spi0_sdo_i (1'b0),
+    .spi0_sdo_o (),
+    .spi1_clk_i (1'b0),
+    .spi1_clk_o (),
+    .spi1_csn_0_o (),
+    .spi1_csn_1_o (),
+    .spi1_csn_2_o (),
+    .spi1_csn_i (1'b1),
+    .spi1_sdi_i (1'b0),
+    .spi1_sdo_i (1'b0),
+    .spi1_sdo_o());
 
 endmodule

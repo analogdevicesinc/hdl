@@ -99,7 +99,7 @@ module system_top (
 
   // instantiations
   ad_iobuf #(
-    .DATA_WIDTH(32)
+    .DATA_WIDTH (32)
   ) i_iobuf (
     .dio_t (gpio_t[31:0]),
     .dio_i (gpio_o[31:0]),
@@ -107,7 +107,7 @@ module system_top (
     .dio_p (gpio_bd));
 
   ad_iobuf #(
-    .DATA_WIDTH(2)
+    .DATA_WIDTH (2)
   ) i_iic_mux_scl (
     .dio_t ({iic_mux_scl_t_s, iic_mux_scl_t_s}),
     .dio_i (iic_mux_scl_o_s),
@@ -115,7 +115,7 @@ module system_top (
     .dio_p (iic_mux_scl));
 
   ad_iobuf #(
-    .DATA_WIDTH(2)
+    .DATA_WIDTH (2)
   ) i_iic_mux_sda (
     .dio_t ({iic_mux_sda_t_s, iic_mux_sda_t_s}),
     .dio_i (iic_mux_sda_o_s),
@@ -173,6 +173,25 @@ module system_top (
 
     .otg_vbusoc (otg_vbusoc),
 
-    .spdif (spdif));
+    .spdif (spdif),
+
+    .spi0_clk_i (1'b0),
+    .spi0_clk_o (),
+    .spi0_csn_0_o (),
+    .spi0_csn_1_o (),
+    .spi0_csn_2_o (),
+    .spi0_csn_i (1'b1),
+    .spi0_sdi_i (1'b0),
+    .spi0_sdo_i (1'b0),
+    .spi0_sdo_o (),
+    .spi1_clk_i (1'b0),
+    .spi1_clk_o (),
+    .spi1_csn_0_o (),
+    .spi1_csn_1_o (),
+    .spi1_csn_2_o (),
+    .spi1_csn_i (1'b1),
+    .spi1_sdi_i (1'b0),
+    .spi1_sdo_i (1'b0),
+    .spi1_sdo_o());
 
 endmodule

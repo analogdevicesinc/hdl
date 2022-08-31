@@ -97,7 +97,7 @@ module system_top (
 
   // instantiations
   ad_iobuf #(
-    .DATA_WIDTH(17)
+    .DATA_WIDTH (17)
   ) i_iobuf_bd (
     .dio_t (gpio_t[16:0]),
     .dio_i (gpio_o[16:0]),

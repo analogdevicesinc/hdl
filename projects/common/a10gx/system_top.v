@@ -101,7 +101,7 @@ module system_top (
   assign eth_mdio = (eth_mdio_t == 1'b1) ? 1'bz : eth_mdio_o;
 
   assign ddr3_a[14:12] = 3'd0;
- 
+
   assign gpio_i[63:32] = gpio_o[63:32];
   assign gpio_i[31:27] = gpio_o[31:27];
   assign gpio_i[26:16] = gpio_bd_i;

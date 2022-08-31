@@ -1,5 +1,5 @@
 source ../../scripts/adi_env.tcl
-source $ad_hdl_dir/projects/scripts/adi_project.tcl
+source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 
 adi_project template_ac701
 adi_project_files template_ac701 [list \

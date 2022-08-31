@@ -89,13 +89,19 @@ module system_top (
 
   output          iic_rstn,
   inout           iic_scl,
-  inout           iic_sda
+  inout           iic_sda,
+
+  output          spi_csn_0,
+  output          spi_clk,
+  output          spi_mosi,
+  input           spi_miso
 );
 
   // internal signals
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
+  wire    [ 7:0]  spi_csn;
 
   assign gpio_i[63:32] = gpio_o[63:32];
   assign gpio_i[31:17] = gpio_o[31:17];
@@ -105,15 +111,16 @@ module system_top (
   assign ddr3_1_n = 3'b000;
   assign fan_pwm = 1'b1;
   assign iic_rstn = 1'b1;
+  assign spi_csn_0 = spi_csn[0];
 
   // instantiations
-   ad_iobuf #( 
-   .DATA_WIDTH (17) 
- ) i_iobuf_bd ( 
-   .dio_t (gpio_t[16:0]), 
-   .dio_i (gpio_o[16:0]), 
-   .dio_o (gpio_i[16:0]), 
-   .dio_p (gpio_bd)); 
+  ad_iobuf #(
+    .DATA_WIDTH (17)
+  ) i_iobuf_bd (
+    .dio_t (gpio_t[16:0]),
+    .dio_i (gpio_o[16:0]),
+    .dio_o (gpio_i[16:0]),
+    .dio_p (gpio_bd));
 
   system_wrapper i_system_wrapper (
     .ddr3_addr (ddr3_addr),
@@ -168,6 +175,14 @@ module system_top (
     .sys_rst (sys_rst),
 
     .uart_sin (uart_sin),
-    .uart_sout (uart_sout));
+    .uart_sout (uart_sout),
+
+    .spi_clk_i (spi_clk),
+    .spi_clk_o (spi_clk),
+    .spi_csn_i (spi_csn),
+    .spi_csn_o (spi_csn),
+    .spi_sdi_i (spi_miso),
+    .spi_sdo_i (spi_mosi),
+    .spi_sdo_o (spi_mosi));
 
 endmodule

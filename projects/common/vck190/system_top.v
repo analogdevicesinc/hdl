@@ -57,25 +57,37 @@ module system_top (
 
   output  [ 3:0]  gpio_led,
   input   [ 3:0]  gpio_dip_sw,
-  input   [ 1:0]  gpio_pb
+  input   [ 1:0]  gpio_pb,
+
+  output          spi0_csn_0,
+  output          spi0_sclk,
+  output          spi0_mosi,
+  input           spi0_miso,
+  output          spi1_csn_0,
+  output          spi1_sclk,
+  output          spi1_mosi,
+  input           spi1_miso
 );
 
   // internal signals
   wire    [95:0]  gpio_i;
   wire    [95:0]  gpio_o;
   wire    [95:0]  gpio_t;
+  wire    [ 2:0]  spi0_csn;
+  wire    [ 2:0]  spi1_csn;
 
-  // instantiations
+  assign spi0_csn_0 = spi0_csn[0];
+  assign spi1_csn_0 = spi1_csn[0];
 
-  // Board GPIOS. Buttons, LEDs, etc ...
+  // Board GPIOS. Buttons, LEDs, etc...
   assign gpio_led = gpio_o[3:0];
   assign gpio_i[3:0] = gpio_o[3:0];
   assign gpio_i[7:4] = gpio_dip_sw;
   assign gpio_i[9:8] = gpio_pb;
 
   // Unused GPIOs
-  assign gpio_i[59:54] = gpio_o[59:54];
-  assign gpio_i[94:64] = gpio_o[94:64];
+  assign gpio_i[95:64] = gpio_o[95:64];
+  assign gpio_i[63:32] = gpio_o[63:32];
   assign gpio_i[31:10] = gpio_o[31:10];
 
   system_wrapper i_system_wrapper (
@@ -105,6 +117,15 @@ module system_top (
     .ddr4_dimm1_dqs_c (ddr4_dqs_c),
     .ddr4_dimm1_dqs_t (ddr4_dqs_t),
     .ddr4_dimm1_odt (ddr4_odt),
-    .ddr4_dimm1_reset_n (ddr4_reset_n));
+    .ddr4_dimm1_reset_n (ddr4_reset_n),
+
+    .spi0_csn (spi0_csn),
+    .spi0_miso (spi0_miso),
+    .spi0_mosi (spi0_mosi),
+    .spi0_sclk (spi0_sclk),
+    .spi1_csn (spi1_csn),
+    .spi1_miso (spi1_miso),
+    .spi1_mosi (spi1_mosi),
+    .spi1_sclk (spi1_sclk));
 
 endmodule

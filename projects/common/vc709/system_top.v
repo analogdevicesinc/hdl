@@ -99,10 +99,22 @@ module system_top (
   wire    [63:0]  gpio_t;
   wire    [ 7:0]  spi_csn;
 
+  assign gpio_i[63:32] = gpio_o[63:32];
+  assign gpio_i[31:21] = gpio_o[31:21];
+
   // default logic
   assign fan_pwm = 1'b1;
   assign iic_rstn = 1'b1;
   assign spi_csn_0 = spi_csn[0];
+
+  // instantiations
+  ad_iobuf #(
+    .DATA_WIDTH (21)
+  ) i_iobuf_bd (
+    .dio_t (gpio_t[20:0]),
+    .dio_i (gpio_o[20:0]),
+    .dio_o (gpio_i[20:0]),
+    .dio_p (gpio_bd));
 
   // instantiations
   system_wrapper i_system_wrapper (
