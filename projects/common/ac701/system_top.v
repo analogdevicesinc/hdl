@@ -60,22 +60,20 @@ module system_top (
   output          ddr3_reset_n,
   output          ddr3_we_n,
 
-  input           sgmii_rxp,
-  input           sgmii_rxn,
-  output          sgmii_txp,
-  output          sgmii_txn,
-
-  output          phy_rstn,
-  input           mgt_clk_p,
-  input           mgt_clk_n,
-  output          mdio_mdc,
-  inout           mdio_mdio,
+  output          phy_reset_n,
+  output          phy_mdc,
+  inout           phy_mdio,
+  output          phy_tx_clk,
+  output          phy_tx_ctrl,
+  output  [ 3:0]  phy_tx_data,
+  input           phy_rx_clk,
+  input           phy_rx_ctrl,
+  input   [ 3:0]  phy_rx_data,
 
   output          fan_pwm,
 
-  output  [ 6:0]  gpio_lcd,
-  output  [ 7:0]  gpio_led,
-  input   [12:0]  gpio_sw,
+  inout   [ 6:0]  gpio_lcd,
+  inout   [12:0]  gpio_bd,
 
   output          iic_rstn,
   inout           iic_scl,
@@ -90,7 +88,30 @@ module system_top (
   output          spdif
 );
 
+  // internal signals
+
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+
+  // assignments
+
+  assign fan_pwm      = 1'b1;
+  assign iic_rstn     = 1'b1;
+
   // instantiations
+
+  assign gpio_i[63:32] = gpio_o[63:32];
+  assign gpio_i[31:13] = gpio_o[31:13];
+
+  ad_iobuf #(
+    .DATA_WIDTH(13)
+  ) i_iobuf_sw_led (
+    .dio_t (gpio_t[12:0]),
+    .dio_i (gpio_o[12:0]),
+    .dio_o (gpio_i[12:0]),
+    .dio_p (gpio_bd));
+
   system_wrapper i_system_wrapper (
     .sys_clk_n (sys_clk_n),
     .sys_clk_p (sys_clk_p),
@@ -115,25 +136,29 @@ module system_top (
     .ddr3_reset_n (ddr3_reset_n),
     .ddr3_we_n (ddr3_we_n),
 
-    .sgmii_rxn (sgmii_rxn),
-    .sgmii_rxp (sgmii_rxp),
-    .sgmii_txn (sgmii_txn),
-    .sgmii_txp (sgmii_txp),
-    .mdio_mdc (mdio_mdc),
-    .mdio_mdio_io (mdio_mdio),
-    .mgt_clk_clk_n (mgt_clk_n),
-    .mgt_clk_clk_p (mgt_clk_p),
-    .phy_rst_n (phy_rstn),
-
-    .fan_pwm (fan_pwm),
-
-    .gpio_lcd_tri_o (gpio_lcd),
-    .gpio_led_tri_o (gpio_led),
-    .gpio_sw_tri_i (gpio_sw),
+    .gpio_lcd_tri_io (gpio_lcd),
+    .gpio0_o (gpio_o[31:0]),
+    .gpio0_t (gpio_t[31:0]),
+    .gpio0_i (gpio_i[31:0]),
+    .gpio1_o (gpio_o[63:32]),
+    .gpio1_t (gpio_t[63:32]),
+    .gpio1_i (gpio_i[63:32]),
 
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
     .iic_rstn (iic_rstn),
+
+    .mdio_mdio_io (phy_mdio),
+    .mdio_mdc (phy_mdc),
+    .phy_rst_n (phy_reset_n),
+    .rgmii_rd (phy_rx_data),
+    .rgmii_rx_ctl (phy_rx_ctrl),
+    .rgmii_rxc (phy_rx_clk),
+    .rgmii_td (phy_tx_data),
+    .rgmii_tx_ctl (phy_tx_ctrl),
+    .rgmii_txc (phy_tx_clk),
+
+    .fan_pwm (fan_pwm),
 
     .hdmi_data (hdmi_data),
     .hdmi_data_e (hdmi_data_e),
