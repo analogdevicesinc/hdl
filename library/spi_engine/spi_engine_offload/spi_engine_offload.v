@@ -137,7 +137,7 @@ assign offload_sdo_data = (ctrl_axis_sw ? offload_sdo_data_1 : offload_sdo_data_
 
 assign mem_empty = (ctrl_sdo_wr_addr_1 == 'h0 ? 1 : 0);
 assign cmd_valid = spi_active | cmd_valid_s;
-assign sdo_data_valid = offload_sdo_valid;
+assign sdo_data_valid = mem_empty == 1 ? offload_sdo_valid : 1'b1;
 assign offload_sdi_valid = sdi_data_valid;
 
 // we don't want to block the SDI interface after disabling the module
@@ -304,7 +304,9 @@ end endgenerate
 assign spi_cmd_rd_addr_next = spi_cmd_rd_addr + 1;
 assign spi_cmd_os_rd_addr_next = spi_cmd_os_rd_addr + 1;
 
-wire trigger_s;
+wire trigger_s = trigger_i & ~spi_active;
+wire trigger_i;
+
 
 sync_bits #(
   .NUM_OF_BITS(1),
@@ -313,7 +315,7 @@ sync_bits #(
   .in_bits(trigger),
   .out_clk(spi_clk),
   .out_resetn(1'b1),
-  .out_bits(trigger_s)
+  .out_bits(trigger_i)
 );
 
 always @(posedge spi_clk) begin
