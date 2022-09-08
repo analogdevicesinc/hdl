@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2022 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -83,7 +83,8 @@ module ad_serdes_in #(
 
   input                           delay_clk,
   input                           delay_rst,
-  output                          delay_locked);
+  output                          delay_locked
+);
 
   localparam  SEVEN_SERIES  = 1;
   localparam  ULTRASCALE  = 2;
@@ -194,8 +195,8 @@ module ad_serdes_in #(
         .SRVAL_Q1 (1'b0),
         .SRVAL_Q2 (1'b0),
         .SRVAL_Q3 (1'b0),
-        .SRVAL_Q4 (1'b0))
-      i_iserdes (
+        .SRVAL_Q4 (1'b0)
+      ) i_iserdes (
         .O (),
         .Q1 (data_s0[l_inst]),
         .Q2 (data_s1[l_inst]),
@@ -231,7 +232,6 @@ module ad_serdes_in #(
 
   generate if (FPGA_TECHNOLOGY == ULTRASCALE || FPGA_TECHNOLOGY == ULTRASCALE_PLUS) begin
 
-
     for (l_inst = 0; l_inst <= (DATA_WIDTH-1); l_inst = l_inst + 1) begin: g_data
 
     wire   div_dld;
@@ -241,8 +241,7 @@ module ad_serdes_in #(
       .in_clk (up_clk),
       .in_event (up_dld[l_inst]),
       .out_clk (div_clk),
-      .out_event (div_dld)
-    );
+      .out_event (div_dld));
 
     (* IODELAY_GROUP = IODELAY_GROUP *)
     IDELAYE3 #(
@@ -274,7 +273,6 @@ module ad_serdes_in #(
        .LOAD (ld_cnt),                                     // 1-bit input: Load DELAY_VALUE input
        .RST (rst)                                          // 1-bit input: Asynchronous Reset to the DELAY_VALUE
     );
-
 
     always @(posedge div_clk) begin
       if (div_dld) begin
@@ -323,6 +321,3 @@ module ad_serdes_in #(
   endgenerate
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************
