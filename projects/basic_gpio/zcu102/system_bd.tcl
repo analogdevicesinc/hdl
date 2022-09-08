@@ -14,7 +14,7 @@ sysid_gen_sys_init_file
 
 create_bd_port -dir O -from 7 -to 0 tdd_out
 
-ad_ip_instance axi_tdd_ng tdd
+ad_ip_instance axi_tdd tdd
 ad_connect tdd/tdd_channel tdd_out
 ad_connect sys_ps8/pl_clk1 tdd/clk
 ad_connect sys_250m_rstgen/peripheral_aresetn tdd/resetn
