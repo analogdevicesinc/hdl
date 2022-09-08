@@ -137,8 +137,8 @@ ad_connect  $sys_cpu_resetn tx_device_clk_rstgen/ext_reset_in
 
 # Common PHYs
 # Use two instances since they are located on different SLRS
-set rx_rate $ad_project_params(RX_RATE)
-set tx_rate $ad_project_params(TX_RATE)
+set rx_rate $ad_project_params(RX_LANE_RATE)
+set tx_rate $ad_project_params(TX_LANE_RATE)
 set ref_clk_rate $ad_project_params(REF_CLK_RATE)
 
 ad_ip_instance jesd204_phy jesd204_phy_121_122 [list \
