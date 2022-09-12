@@ -246,7 +246,7 @@ ad_connect sys_reset ddr4_1/sys_rst
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
 ad_ip_instance axi_adxcvr axi_adrv9009_som_tx_xcvr
-ad_ip_parameter axi_adrv9009_som_tx_xcvr CONFIG.NUM_OF_LANES $TX_NUM_OF_LANES
+ad_ip_parameter axi_adrv9009_som_tx_xcvr CONFIG.NUM_OF_LANES $MAX_TX_NUM_OF_LANES
 ad_ip_parameter axi_adrv9009_som_tx_xcvr CONFIG.QPLL_ENABLE 1
 ad_ip_parameter axi_adrv9009_som_tx_xcvr CONFIG.TX_OR_RX_N 1
 
@@ -277,7 +277,7 @@ ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_dma_data
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_DATA_WIDTH_SRC 128
 
 ad_ip_instance axi_adxcvr axi_adrv9009_som_rx_xcvr
-ad_ip_parameter axi_adrv9009_som_rx_xcvr CONFIG.NUM_OF_LANES $RX_NUM_OF_LANES
+ad_ip_parameter axi_adrv9009_som_rx_xcvr CONFIG.NUM_OF_LANES $MAX_RX_NUM_OF_LANES
 ad_ip_parameter axi_adrv9009_som_rx_xcvr CONFIG.QPLL_ENABLE 0
 ad_ip_parameter axi_adrv9009_som_rx_xcvr CONFIG.TX_OR_RX_N 0
 
@@ -310,7 +310,7 @@ ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_DATA_WIDTH_SRC [expr 32*$RX_N
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 
 ad_ip_instance axi_adxcvr axi_adrv9009_som_obs_xcvr
-ad_ip_parameter axi_adrv9009_som_obs_xcvr CONFIG.NUM_OF_LANES $RX_NUM_OF_LANES
+ad_ip_parameter axi_adrv9009_som_obs_xcvr CONFIG.NUM_OF_LANES $MAX_RX_NUM_OF_LANES
 ad_ip_parameter axi_adrv9009_som_obs_xcvr CONFIG.QPLL_ENABLE 0
 ad_ip_parameter axi_adrv9009_som_obs_xcvr CONFIG.TX_OR_RX_N 0
 
@@ -376,18 +376,224 @@ ad_xcvrpll  axi_adrv9009_som_obs_xcvr/up_pll_rst util_adrv9009_som_xcvr/up_cpll_
 ad_connect  sys_cpu_resetn util_adrv9009_som_xcvr/up_rstn
 ad_connect  sys_cpu_clk util_adrv9009_som_xcvr/up_clk
 
-if {$TX_NUM_OF_LANES == 16} {
-ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_tx_xcvr axi_adrv9009_som_tx_jesd {0 1 2 3 4 5 6 7 9 8 10 11 12 13 14 15 16} core_clk_a
-} else {
-ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_tx_xcvr axi_adrv9009_som_tx_jesd {} core_clk_a
-}
+if {[info exists FMCOMMS8]} {
+  if {$TX_NUM_OF_LANES == 16} {
+    ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_tx_xcvr axi_adrv9009_som_tx_jesd {} core_clk_a
+  } else {
 
-if {$RX_NUM_OF_LANES == 8} {
-ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_rx_xcvr axi_adrv9009_som_rx_jesd {0 1 4 5 8 9 12 13} core_clk_b
-ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_obs_xcvr axi_adrv9009_som_obs_jesd {2 3 6 7 10 11 14 15} core_clk_a
+    ad_connect util_adrv9009_som_xcvr/tx_clk_2 util_adrv9009_som_xcvr/tx_clk_0
+    ad_connect util_adrv9009_som_xcvr/tx_clk_3 util_adrv9009_som_xcvr/tx_clk_0
+    ad_connect util_adrv9009_som_xcvr/tx_clk_6 util_adrv9009_som_xcvr/tx_clk_0
+    ad_connect util_adrv9009_som_xcvr/tx_clk_7 util_adrv9009_som_xcvr/tx_clk_0
+    ad_connect util_adrv9009_som_xcvr/tx_clk_10 util_adrv9009_som_xcvr/tx_clk_0
+    ad_connect util_adrv9009_som_xcvr/tx_clk_11 util_adrv9009_som_xcvr/tx_clk_0
+    ad_connect util_adrv9009_som_xcvr/tx_clk_14 util_adrv9009_som_xcvr/tx_clk_0
+    ad_connect util_adrv9009_som_xcvr/tx_clk_15 util_adrv9009_som_xcvr/tx_clk_0
+
+    create_bd_port -dir O tx_data_2_p
+    create_bd_port -dir O tx_data_2_n
+    create_bd_port -dir O tx_data_3_p
+    create_bd_port -dir O tx_data_3_n
+    create_bd_port -dir O tx_data_6_p
+    create_bd_port -dir O tx_data_6_n
+    create_bd_port -dir O tx_data_7_p
+    create_bd_port -dir O tx_data_7_n
+    create_bd_port -dir O tx_data_10_p
+    create_bd_port -dir O tx_data_10_n
+    create_bd_port -dir O tx_data_11_p
+    create_bd_port -dir O tx_data_11_n
+    create_bd_port -dir O tx_data_14_p
+    create_bd_port -dir O tx_data_14_n
+    create_bd_port -dir O tx_data_15_p
+    create_bd_port -dir O tx_data_15_n
+
+    ad_connect util_adrv9009_som_xcvr/tx_2_p tx_data_2_p
+    ad_connect util_adrv9009_som_xcvr/tx_2_n tx_data_2_n
+    ad_connect util_adrv9009_som_xcvr/tx_3_p tx_data_3_p
+    ad_connect util_adrv9009_som_xcvr/tx_3_n tx_data_3_n
+    ad_connect util_adrv9009_som_xcvr/tx_6_p tx_data_6_p
+    ad_connect util_adrv9009_som_xcvr/tx_6_n tx_data_6_n
+    ad_connect util_adrv9009_som_xcvr/tx_7_p tx_data_7_p
+    ad_connect util_adrv9009_som_xcvr/tx_7_n tx_data_7_n
+    ad_connect util_adrv9009_som_xcvr/tx_10_p tx_data_10_p
+    ad_connect util_adrv9009_som_xcvr/tx_10_n tx_data_10_n
+    ad_connect util_adrv9009_som_xcvr/tx_11_p tx_data_11_p
+    ad_connect util_adrv9009_som_xcvr/tx_11_n tx_data_11_n
+    ad_connect util_adrv9009_som_xcvr/tx_14_p tx_data_14_p
+    ad_connect util_adrv9009_som_xcvr/tx_14_n tx_data_14_n
+    ad_connect util_adrv9009_som_xcvr/tx_15_p tx_data_15_p
+    ad_connect util_adrv9009_som_xcvr/tx_15_n tx_data_15_n
+
+    if {$TX_NUM_OF_LANES == 8} {
+      ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_tx_xcvr axi_adrv9009_som_tx_jesd {0 1 4 5 8 9 12 13} core_clk_a {} $MAX_TX_NUM_OF_LANES
+    } else {
+        ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_tx_xcvr axi_adrv9009_som_tx_jesd {0 4 8 12} core_clk_a {} $MAX_TX_NUM_OF_LANES
+
+        ad_connect util_adrv9009_som_xcvr/tx_clk_1 util_adrv9009_som_xcvr/tx_clk_0
+        ad_connect util_adrv9009_som_xcvr/tx_clk_5 util_adrv9009_som_xcvr/tx_clk_0
+        ad_connect util_adrv9009_som_xcvr/tx_clk_9 util_adrv9009_som_xcvr/tx_clk_0
+        ad_connect util_adrv9009_som_xcvr/tx_clk_13 util_adrv9009_som_xcvr/tx_clk_0
+
+        create_bd_port -dir O tx_data_1_p
+        create_bd_port -dir O tx_data_1_n
+        create_bd_port -dir O tx_data_5_p
+        create_bd_port -dir O tx_data_5_n
+        create_bd_port -dir O tx_data_9_p
+        create_bd_port -dir O tx_data_9_n
+        create_bd_port -dir O tx_data_13_p
+        create_bd_port -dir O tx_data_13_n
+
+        ad_connect util_adrv9009_som_xcvr/tx_1_p tx_data_1_p
+        ad_connect util_adrv9009_som_xcvr/tx_1_n tx_data_1_n
+        ad_connect util_adrv9009_som_xcvr/tx_5_p tx_data_5_p
+        ad_connect util_adrv9009_som_xcvr/tx_5_n tx_data_5_n
+        ad_connect util_adrv9009_som_xcvr/tx_9_p tx_data_9_p
+        ad_connect util_adrv9009_som_xcvr/tx_9_n tx_data_9_n
+        ad_connect util_adrv9009_som_xcvr/tx_13_p tx_data_13_p
+        ad_connect util_adrv9009_som_xcvr/tx_13_n tx_data_13_n
+
+    }
+  }
+  if {$RX_NUM_OF_LANES == 8} {
+    ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_rx_xcvr axi_adrv9009_som_rx_jesd {0 1 4 5 8 9 12 13} core_clk_b {} $MAX_RX_NUM_OF_LANES
+  } else {
+    ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_rx_xcvr axi_adrv9009_som_rx_jesd {0 4 8 12} core_clk_b {} $MAX_RX_NUM_OF_LANES
+
+    ad_connect util_adrv9009_som_xcvr/rx_clk_1 util_adrv9009_som_xcvr/rx_clk_0
+    ad_connect util_adrv9009_som_xcvr/rx_clk_5 util_adrv9009_som_xcvr/rx_clk_0
+    ad_connect util_adrv9009_som_xcvr/rx_clk_9 util_adrv9009_som_xcvr/rx_clk_0
+    ad_connect util_adrv9009_som_xcvr/rx_clk_13 util_adrv9009_som_xcvr/rx_clk_0
+
+    create_bd_port -dir I rx_data_1_p
+    create_bd_port -dir I rx_data_1_n
+    create_bd_port -dir I rx_data_5_p
+    create_bd_port -dir I rx_data_5_n
+    create_bd_port -dir I rx_data_9_p
+    create_bd_port -dir I rx_data_9_n
+    create_bd_port -dir I rx_data_13_p
+    create_bd_port -dir I rx_data_13_n
+
+    ad_connect util_adrv9009_som_xcvr/rx_1_p rx_data_1_p
+    ad_connect util_adrv9009_som_xcvr/rx_1_n rx_data_1_n
+    ad_connect util_adrv9009_som_xcvr/rx_5_p rx_data_5_p
+    ad_connect util_adrv9009_som_xcvr/rx_5_n rx_data_5_n
+    ad_connect util_adrv9009_som_xcvr/rx_9_p rx_data_9_p
+    ad_connect util_adrv9009_som_xcvr/rx_9_n rx_data_9_n
+    ad_connect util_adrv9009_som_xcvr/rx_13_p rx_data_13_p
+    ad_connect util_adrv9009_som_xcvr/rx_13_n rx_data_13_n
+
+  }
+  if {$OBS_NUM_OF_LANES == 8} {
+    ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_obs_xcvr axi_adrv9009_som_obs_jesd {2 3 6 7 10 11 14 15} core_clk_a {} $MAX_OBS_NUM_OF_LANES
+  } else {
+    ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_obs_xcvr axi_adrv9009_som_obs_jesd {2 6 10 14} core_clk_a {} $MAX_OBS_NUM_OF_LANES
+
+    ad_connect util_adrv9009_som_xcvr/rx_clk_3 util_adrv9009_som_xcvr/rx_clk_2
+    ad_connect util_adrv9009_som_xcvr/rx_clk_7 util_adrv9009_som_xcvr/rx_clk_2
+    ad_connect util_adrv9009_som_xcvr/rx_clk_11 util_adrv9009_som_xcvr/rx_clk_2
+    ad_connect util_adrv9009_som_xcvr/rx_clk_15 util_adrv9009_som_xcvr/rx_clk_2
+
+    create_bd_port -dir I rx_data_3_p
+    create_bd_port -dir I rx_data_3_n
+    create_bd_port -dir I rx_data_7_p
+    create_bd_port -dir I rx_data_7_n
+    create_bd_port -dir I rx_data_11_p
+    create_bd_port -dir I rx_data_11_n
+    create_bd_port -dir I rx_data_15_p
+    create_bd_port -dir I rx_data_15_n
+
+    ad_connect util_adrv9009_som_xcvr/rx_3_p rx_data_3_p
+    ad_connect util_adrv9009_som_xcvr/rx_3_n rx_data_3_n
+    ad_connect util_adrv9009_som_xcvr/rx_7_p rx_data_7_p
+    ad_connect util_adrv9009_som_xcvr/rx_7_n rx_data_7_n
+    ad_connect util_adrv9009_som_xcvr/rx_11_p rx_data_11_p
+    ad_connect util_adrv9009_som_xcvr/rx_11_n rx_data_11_n
+    ad_connect util_adrv9009_som_xcvr/rx_15_p rx_data_15_p
+    ad_connect util_adrv9009_som_xcvr/rx_15_n rx_data_15_n
+
+  }
 } else {
-ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_rx_xcvr axi_adrv9009_som_rx_jesd {0 1 4 5} core_clk_b
-ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_obs_xcvr axi_adrv9009_som_obs_jesd {2 3 6 7} core_clk_a
+  # adrv2crr_fmc
+  if {$TX_NUM_OF_LANES == 8} {
+    ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_tx_xcvr axi_adrv9009_som_tx_jesd {} core_clk_a
+  } else {
+ #   ad_connect util_adrv9009_som_xcvr/tx_clk_2 util_adrv9009_som_xcvr/tx_clk_0
+ #   ad_connect util_adrv9009_som_xcvr/tx_clk_3 util_adrv9009_som_xcvr/tx_clk_0
+ #   ad_connect util_adrv9009_som_xcvr/tx_clk_6 util_adrv9009_som_xcvr/tx_clk_0
+ #   ad_connect util_adrv9009_som_xcvr/tx_clk_7 util_adrv9009_som_xcvr/tx_clk_0
+
+ #   create_bd_port -dir O tx_data_4_p
+ #   create_bd_port -dir O tx_data_4_n
+ #   create_bd_port -dir O tx_data_5_p
+ #   create_bd_port -dir O tx_data_5_n
+ #   create_bd_port -dir O tx_data_6_p
+ #   create_bd_port -dir O tx_data_6_n
+ #   create_bd_port -dir O tx_data_7_p
+ #   create_bd_port -dir O tx_data_7_n
+
+ #   ad_connect util_adrv9009_som_xcvr/tx_4_p tx_data_4_p
+ #   ad_connect util_adrv9009_som_xcvr/tx_4_n tx_data_4_n
+ #   ad_connect util_adrv9009_som_xcvr/tx_5_p tx_data_5_p
+ #   ad_connect util_adrv9009_som_xcvr/tx_5_n tx_data_5_n
+ #   ad_connect util_adrv9009_som_xcvr/tx_6_p tx_data_6_p
+ #   ad_connect util_adrv9009_som_xcvr/tx_6_n tx_data_6_n
+ #   ad_connect util_adrv9009_som_xcvr/tx_7_p tx_data_7_p
+ #   ad_connect util_adrv9009_som_xcvr/tx_7_n tx_data_7_n
+
+    if {$TX_NUM_OF_LANES == 4} {
+      ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_tx_xcvr axi_adrv9009_som_tx_jesd {0 1 2 3 4 5 6 7} core_clk_a {} $MAX_TX_NUM_OF_LANES {0 1 4 5}
+    } else {
+      ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_tx_xcvr axi_adrv9009_som_tx_jesd {0 4} core_clk_a {} $MAX_TX_NUM_OF_LANES
+      ad_connect util_adrv9009_som_xcvr/tx_clk_1 util_adrv9009_som_xcvr/tx_clk_0
+      ad_connect util_adrv9009_som_xcvr/tx_clk_5 util_adrv9009_som_xcvr/tx_clk_0
+
+      create_bd_port -dir O tx_data_1_p
+      create_bd_port -dir O tx_data_1_n
+      create_bd_port -dir O tx_data_5_p
+      create_bd_port -dir O tx_data_5_n
+
+      ad_connect util_adrv9009_som_xcvr/tx_1_p tx_data_1_p
+      ad_connect util_adrv9009_som_xcvr/tx_1_n tx_data_1_n
+      ad_connect util_adrv9009_som_xcvr/tx_5_p tx_data_5_p
+      ad_connect util_adrv9009_som_xcvr/tx_5_n tx_data_5_n
+
+
+    }
+  }
+   if {$RX_NUM_OF_LANES == 4} {
+    ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_rx_xcvr axi_adrv9009_som_rx_jesd {0 1 4 5} core_clk_b {} $MAX_RX_NUM_OF_LANES
+  } else {
+    ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_rx_xcvr axi_adrv9009_som_rx_jesd {0 4} core_clk_b {} $MAX_RX_NUM_OF_LANES
+    ad_connect util_adrv9009_som_xcvr/rx_clk_1 util_adrv9009_som_xcvr/rx_clk_0
+    ad_connect util_adrv9009_som_xcvr/rx_clk_5 util_adrv9009_som_xcvr/rx_clk_0
+
+    create_bd_port -dir I rx_data_1_p
+    create_bd_port -dir I rx_data_1_n
+    create_bd_port -dir I rx_data_5_p
+    create_bd_port -dir I rx_data_5_n
+
+    ad_connect util_adrv9009_som_xcvr/rx_1_p rx_data_1_p
+    ad_connect util_adrv9009_som_xcvr/rx_1_n rx_data_1_n
+    ad_connect util_adrv9009_som_xcvr/rx_5_p rx_data_5_p
+    ad_connect util_adrv9009_som_xcvr/rx_5_n rx_data_5_n
+  }
+  if {$OBS_NUM_OF_LANES == 4} {
+    ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_obs_xcvr axi_adrv9009_som_obs_jesd {2 3 6 7} core_clk_a {} $MAX_OBS_NUM_OF_LANES
+  } else {
+    ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_obs_xcvr axi_adrv9009_som_obs_jesd {2 6} core_clk_a {} $MAX_OBS_NUM_OF_LANES
+    ad_connect util_adrv9009_som_xcvr/rx_clk_3 util_adrv9009_som_xcvr/rx_clk_2
+    ad_connect util_adrv9009_som_xcvr/rx_clk_7 util_adrv9009_som_xcvr/rx_clk_2
+
+    create_bd_port -dir I rx_data_3_p
+    create_bd_port -dir I rx_data_3_n
+    create_bd_port -dir I rx_data_7_p
+    create_bd_port -dir I rx_data_7_n
+
+    ad_connect util_adrv9009_som_xcvr/rx_3_p rx_data_3_p
+    ad_connect util_adrv9009_som_xcvr/rx_3_n rx_data_3_n
+    ad_connect util_adrv9009_som_xcvr/rx_7_p rx_data_7_p
+    ad_connect util_adrv9009_som_xcvr/rx_7_n rx_data_7_n
+  }
 }
 
 ad_connect  core_clk_a tx_adrv9009_som_tpl_core/link_clk
