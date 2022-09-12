@@ -203,6 +203,7 @@ module axi_ad7768 #(
         .adc_pn_err (1'b0),
         .adc_pn_oos (1'b0),
         .adc_or (1'b0),
+        .adc_read_data ('d0),
         .adc_status_header(adc_status_header[i]),
         .adc_crc_err(adc_crc_err[i]),
         .up_adc_pn_err (),
