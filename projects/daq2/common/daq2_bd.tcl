@@ -57,6 +57,7 @@ ad_ip_instance axi_dmac axi_ad9144_dma [list \
   AXI_SLICE_SRC 0 \
   AXI_SLICE_DEST 0 \
   DMA_LENGTH_WIDTH 24 \
+  DMA_AXI_ADDR_WIDTH 36 \
   DMA_2D_TRANSFER 0 \
   CYCLIC 0 \
   DMA_DATA_WIDTH_SRC 128 \
@@ -106,6 +107,7 @@ ad_ip_instance axi_dmac axi_ad9680_dma [list \
   AXI_SLICE_DEST 0 \
   SYNC_TRANSFER_START 0 \
   DMA_LENGTH_WIDTH 24 \
+  DMA_AXI_ADDR_WIDTH 36 \
   DMA_2D_TRANSFER 0 \
   CYCLIC 0 \
   DMA_DATA_WIDTH_SRC $adc_data_width \

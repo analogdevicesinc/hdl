@@ -23,3 +23,6 @@ sysid_gen_sys_init_file $sys_cstring
 
 ad_ip_parameter util_daq2_xcvr CONFIG.QPLL_FBDIV 20
 ad_ip_parameter util_daq2_xcvr CONFIG.QPLL_REFCLK_DIV 1
+
+set_property range 2G [get_bd_addr_segs {axi_ad9144_dma/m_src_axi/SEG_sys_ps8_HP1_DDR_HIGH}]
+set_property range 2G [get_bd_addr_segs {axi_ad9680_dma/m_dest_axi/SEG_sys_ps8_HP2_DDR_HIGH}]
