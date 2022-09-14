@@ -228,6 +228,13 @@ set_property -dict [list \
 	] \
 	[ipx::get_user_parameters DMA_LENGTH_WIDTH -of_objects $cc]
 
+set_property -dict [list \
+	"value_validation_type" "range_long" \
+	"value_validation_range_minimum" "16" \
+	"value_validation_range_maximum" "64" \
+	] \
+	[ipx::get_user_parameters DMA_AXI_ADDR_WIDTH -of_objects $cc]
+
 foreach {k v} { \
 		"ASYNC_CLK_REQ_SRC" "true" \
 		"ASYNC_CLK_SRC_DEST" "true" \
@@ -367,6 +374,12 @@ set_property -dict [list \
 	"display_name" "Maximum Bytes per Burst" \
 ] $p
 
+set p [ipgui::get_guiparamspec -name "DMA_AXI_ADDR_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 4 $p -parent $general_group
+set_property -dict [list \
+	"display_name" "DMA AXI Address Width" \
+] $p
+
 set feature_group [ipgui::add_group -name "Features" -component $cc \
 		-parent $page0 -display_name "Features"]
 
@@ -418,7 +431,6 @@ set_property -dict [list \
 	"display_name" "Enable Diagnostics Interface" \
 ] $p
 
-ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "DMA_AXI_ADDR_WIDTH" -component $cc]
 ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "AXI_ID_WIDTH_SRC" -component $cc]
 ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "AXI_ID_WIDTH_DEST" -component $cc]
 ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "ALLOW_ASYM_MEM" -component $cc]
