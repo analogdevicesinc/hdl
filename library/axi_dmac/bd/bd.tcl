@@ -5,7 +5,7 @@ proc init {cellpath otherInfo} {
 	bd::mark_propagate_override $ip \
 		"ASYNC_CLK_REQ_SRC ASYNC_CLK_SRC_DEST ASYNC_CLK_DEST_REQ"
 
-	bd::mark_propagate_only $ip \
+	bd::mark_propagate_override $ip \
 		"DMA_AXI_ADDR_WIDTH"
 
 	# On ZYNQ the core is most likely connected to the AXI3 HP ports so use AXI3

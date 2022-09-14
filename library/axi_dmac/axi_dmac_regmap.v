@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2018 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2022 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -117,6 +117,8 @@ module axi_dmac_regmap #(
 );
 
   localparam PCORE_VERSION = 'h00040461;
+  localparam HAS_ADDR_HIGH = DMA_AXI_ADDR_WIDTH > 32;
+  localparam ADDR_LOW_MSB = HAS_ADDR_HIGH ? 31 : DMA_AXI_ADDR_WIDTH-1;
 
   // Register interface signals
   reg [31:0] up_rdata = 32'h00;
@@ -212,11 +214,13 @@ module axi_dmac_regmap #(
       9'h021: up_rdata <= up_irq_pending;
       9'h022: up_rdata <= up_irq_source;
       9'h100: up_rdata <= {ctrl_pause, ctrl_enable};
-      9'h10d: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_dest_addr;
-      9'h10e: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_src_addr;
+      9'h10d: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_dest_addr[ADDR_LOW_MSB:0];
+      9'h10e: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_src_addr[ADDR_LOW_MSB:0];
       9'h10f: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_status;
       9'h110: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_ids0;
       9'h111: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_ids1;
+      9'h126: up_rdata <= (HAS_ADDR_HIGH && !DISABLE_DEBUG_REGISTERS) ? dbg_dest_addr[DMA_AXI_ADDR_WIDTH-1:32] : 32'h00;
+      9'h127: up_rdata <= (HAS_ADDR_HIGH && !DISABLE_DEBUG_REGISTERS) ? dbg_src_addr[DMA_AXI_ADDR_WIDTH-1:32] : 32'h00;
       default: up_rdata <= up_rdata_request;
       endcase
     end

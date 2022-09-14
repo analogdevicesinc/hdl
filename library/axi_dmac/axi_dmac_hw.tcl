@@ -80,6 +80,13 @@ set_parameter_property MAX_BYTES_PER_BURST DISPLAY_NAME "Maximum bytes per burst
 set_parameter_property MAX_BYTES_PER_BURST HDL_PARAMETER true
 set_parameter_property MAX_BYTES_PER_BURST GROUP $group
 
+add_parameter DMA_AXI_ADDR_WIDTH INTEGER 32
+set_parameter_property DMA_AXI_ADDR_WIDTH DISPLAY_NAME "DMA AXI Address Width"
+set_parameter_property DMA_AXI_ADDR_WIDTH UNITS Bits
+set_parameter_property DMA_AXI_ADDR_WIDTH HDL_PARAMETER true
+set_parameter_property DMA_AXI_ADDR_WIDTH ALLOWED_RANGES {16:64}
+set_parameter_property DMA_AXI_ADDR_WIDTH GROUP $group
+
 foreach {suffix group} { \
     "SRC" "Source" \
     "DEST" "Destination" \
