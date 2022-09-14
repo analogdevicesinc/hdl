@@ -9,14 +9,21 @@ set MAX_TX_NUM_OF_LANES 4
 set MAX_RX_NUM_OF_LANES 2
 set MAX_RX_OS_NUM_OF_LANES 2
 
+set DATAPATH_WIDTH 4
+source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
+source $ad_hdl_dir/projects/common/xilinx/adi_fir_filter_bd.tcl
+
 # TX parameters
 set TX_NUM_OF_LANES $ad_project_params(TX_JESD_L)      ; # L
 set TX_NUM_OF_CONVERTERS $ad_project_params(TX_JESD_M) ; # M
 set TX_SAMPLES_PER_FRAME $ad_project_params(TX_JESD_S) ; # S
 set TX_SAMPLE_WIDTH 16                                 ; # N/NP
 
-set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 32 / \
-                                ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)] ; # L * 32 / (M * N)
+set TX_TPL_WIDTH [ expr { [info exists ad_project_params(TX_TPL_WIDTH)] \
+                          ? $ad_project_params(TX_TPL_WIDTH) : {} } ]
+
+set TX_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $TX_NUM_OF_LANES $TX_NUM_OF_CONVERTERS $TX_SAMPLES_PER_FRAME $TX_SAMPLE_WIDTH $TX_TPL_WIDTH]
+set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8 * $TX_DATAPATH_WIDTH / ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)]
 
 # RX parameters
 set RX_NUM_OF_LANES $ad_project_params(RX_JESD_L)      ; # L
@@ -24,8 +31,11 @@ set RX_NUM_OF_CONVERTERS $ad_project_params(RX_JESD_M) ; # M
 set RX_SAMPLES_PER_FRAME $ad_project_params(RX_JESD_S) ; # S
 set RX_SAMPLE_WIDTH 16                                 ; # N/NP
 
-set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 32 / \
-                                ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)] ; # L * 32 / (M * N)
+set RX_OCTETS_PER_FRAME [expr $RX_NUM_OF_CONVERTERS * $RX_SAMPLES_PER_FRAME * $RX_SAMPLE_WIDTH / (8 * $RX_NUM_OF_LANES)] ; # F
+set DPW [expr max(4, $RX_OCTETS_PER_FRAME)] ; #max(4, F)
+set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 8 * $DPW / ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)] ; # L * 8 * DPW / (M* N)
+
+set adc_dma_data_width [expr $RX_NUM_OF_LANES * 8 * $DPW]
 
 # RX Observation parameters
 set RX_OS_NUM_OF_LANES $ad_project_params(RX_OS_JESD_L)      ; # L
@@ -33,15 +43,14 @@ set RX_OS_NUM_OF_CONVERTERS $ad_project_params(RX_OS_JESD_M) ; # M
 set RX_OS_SAMPLES_PER_FRAME $ad_project_params(RX_OS_JESD_S) ; # S
 set RX_OS_SAMPLE_WIDTH 16                                    ; # N/NP
 
-set RX_OS_SAMPLES_PER_CHANNEL [expr $RX_OS_NUM_OF_LANES * 32 / \
-                                   ($RX_OS_NUM_OF_CONVERTERS * $RX_OS_SAMPLE_WIDTH)] ; # L * 32 / (M * N)
+set RX_OS_TPL_WIDTH [ expr { [info exists ad_project_params(RX_OS_TPL_WIDTH)] \
+                          ? $ad_project_params(RX_OS_TPL_WIDTH) : {} } ]
+
+set RX_OS_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $RX_OS_NUM_OF_LANES $RX_OS_NUM_OF_CONVERTERS $RX_OS_SAMPLES_PER_FRAME $RX_OS_SAMPLE_WIDTH $RX_OS_TPL_WIDTH]
+set RX_OS_SAMPLES_PER_CHANNEL [expr $RX_OS_NUM_OF_LANES * 8 * $RX_OS_DATAPATH_WIDTH / ($RX_OS_NUM_OF_CONVERTERS * $RX_OS_SAMPLE_WIDTH)]
 
 set dac_fifo_name axi_adrv9009_dacfifo
 set dac_data_width [expr $TX_SAMPLE_WIDTH * $TX_NUM_OF_CONVERTERS * $TX_SAMPLES_PER_CHANNEL]
-set dac_dma_data_width [expr $TX_SAMPLE_WIDTH * $TX_NUM_OF_CONVERTERS * $TX_SAMPLES_PER_CHANNEL]
-
-source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
-source $ad_hdl_dir/projects/common/xilinx/adi_fir_filter_bd.tcl
 
 # adrv9009
 
@@ -92,12 +101,12 @@ ad_ip_parameter axi_adrv9009_tx_dma CONFIG.ASYNC_CLK_DEST_REQ 1
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.ASYNC_CLK_SRC_DEST 1
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.ASYNC_CLK_REQ_SRC 1
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_adrv9009_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_dma_data_width
+ad_ip_parameter axi_adrv9009_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_data_width
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.MAX_BYTES_PER_BURST 256
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.AXI_SLICE_DEST true
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.AXI_SLICE_SRC true
 
-ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_dma_data_width $dac_fifo_address_width
+ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_data_width $dac_fifo_address_width
 
 # adc peripherals
 
@@ -107,6 +116,8 @@ ad_ip_parameter axi_adrv9009_rx_clkgen CONFIG.CLKIN_PERIOD 4
 ad_ip_parameter axi_adrv9009_rx_clkgen CONFIG.VCO_DIV 1
 ad_ip_parameter axi_adrv9009_rx_clkgen CONFIG.VCO_MUL 4
 ad_ip_parameter axi_adrv9009_rx_clkgen CONFIG.CLK0_DIV 4
+ad_ip_parameter axi_adrv9009_rx_clkgen CONFIG.ENABLE_CLKOUT1 {true}
+ad_ip_parameter axi_adrv9009_rx_clkgen CONFIG.CLK1_DIV 8
 
 ad_ip_instance axi_adxcvr axi_adrv9009_rx_xcvr
 ad_ip_parameter axi_adrv9009_rx_xcvr CONFIG.NUM_OF_LANES $MAX_RX_NUM_OF_LANES
@@ -116,6 +127,8 @@ ad_ip_parameter axi_adrv9009_rx_xcvr CONFIG.SYS_CLK_SEL 0
 ad_ip_parameter axi_adrv9009_rx_xcvr CONFIG.OUT_CLK_SEL 3
 
 adi_axi_jesd204_rx_create axi_adrv9009_rx_jesd $RX_NUM_OF_LANES
+ad_ip_parameter axi_adrv9009_rx_jesd/rx CONFIG.SYSREF_IOB false
+ad_ip_parameter axi_adrv9009_rx_jesd/rx CONFIG.TPL_DATA_PATH_WIDTH $DPW
 
 ad_ip_instance util_cpack2 util_adrv9009_rx_cpack [list \
   NUM_OF_CHANNELS $RX_NUM_OF_CONVERTERS \
@@ -140,9 +153,7 @@ ad_ip_parameter axi_adrv9009_rx_dma CONFIG.ASYNC_CLK_DEST_REQ 1
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.ASYNC_CLK_SRC_DEST 1
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.ASYNC_CLK_REQ_SRC 1
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_adrv9009_rx_dma CONFIG.DMA_DATA_WIDTH_SRC [expr $RX_SAMPLE_WIDTH * \
-                                                                    $RX_NUM_OF_CONVERTERS * \
-                                                                    $RX_SAMPLES_PER_CHANNEL]
+ad_ip_parameter axi_adrv9009_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_dma_data_width
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.MAX_BYTES_PER_BURST 256
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.AXI_SLICE_DEST true
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.AXI_SLICE_SRC true
@@ -224,16 +235,43 @@ ad_connect adrv9009_tx_device_clk axi_adrv9009_tx_clkgen/clk_0
 if {$TX_NUM_OF_LANES == 4} {
   ad_xcvrcon util_adrv9009_xcvr axi_adrv9009_tx_xcvr axi_adrv9009_tx_jesd {0 3 2 1} adrv9009_tx_device_clk {} $MAX_TX_NUM_OF_LANES
 } else {
-  # TX_NUM_OF_LANES = 2
-  ad_xcvrcon util_adrv9009_xcvr axi_adrv9009_tx_xcvr axi_adrv9009_tx_jesd {0 3 2 1} adrv9009_tx_device_clk {} $MAX_TX_NUM_OF_LANES {0 2}
+    if {$TX_NUM_OF_LANES == 2} {
+      ad_xcvrcon util_adrv9009_xcvr axi_adrv9009_tx_xcvr axi_adrv9009_tx_jesd {0 3 2 1} adrv9009_tx_device_clk {} $MAX_TX_NUM_OF_LANES {0 2}
+    } else {
+      ad_xcvrcon util_adrv9009_xcvr axi_adrv9009_tx_xcvr axi_adrv9009_tx_jesd {0 3 2 1} adrv9009_tx_device_clk {} $MAX_TX_NUM_OF_LANES {0}
+    }
 }
 ad_connect ref_clk axi_adrv9009_tx_clkgen/clk
 ad_xcvrpll $tx_ref_clk util_adrv9009_xcvr/qpll_ref_clk_0
 ad_xcvrpll axi_adrv9009_tx_xcvr/up_pll_rst util_adrv9009_xcvr/up_qpll_rst_0
 
 # Rx
-ad_connect adrv9009_rx_device_clk axi_adrv9009_rx_clkgen/clk_0
-ad_xcvrcon util_adrv9009_xcvr axi_adrv9009_rx_xcvr axi_adrv9009_rx_jesd {} adrv9009_rx_device_clk {} $MAX_RX_NUM_OF_LANES
+if {$RX_NUM_OF_LANES == 2} {
+  ad_connect adrv9009_rx_device_clk axi_adrv9009_rx_clkgen/clk_0
+  ad_xcvrcon util_adrv9009_xcvr axi_adrv9009_rx_xcvr axi_adrv9009_rx_jesd {} adrv9009_rx_device_clk {} $MAX_RX_NUM_OF_LANES
+} else {
+  # for RX_NUM_OF_LANES = 1, RX_OCTETS_PER_FRAME = 8
+  ad_connect adrv9009_rx_device_clk axi_adrv9009_rx_clkgen/clk_1
+  ad_connect adrv9009_rx_link_clk axi_adrv9009_rx_clkgen/clk_0
+  ad_xcvrcon util_adrv9009_xcvr axi_adrv9009_rx_xcvr axi_adrv9009_rx_jesd {0 1 2 3} adrv9009_rx_link_clk adrv9009_rx_device_clk $MAX_RX_NUM_OF_LANES {0} 0
+  ad_connect axi_adrv9009_rx_xcvr/up_es_0 util_adrv9009_xcvr/up_es_0
+  ad_connect axi_adrv9009_rx_xcvr/up_es_1 util_adrv9009_xcvr/up_es_1
+  ad_connect axi_adrv9009_rx_xcvr/up_ch_0 util_adrv9009_xcvr/up_rx_0
+  ad_connect axi_adrv9009_rx_xcvr/up_ch_1 util_adrv9009_xcvr/up_rx_1
+
+  ad_connect adrv9009_rx_link_clk util_adrv9009_xcvr/rx_clk_0
+  ad_connect adrv9009_rx_link_clk util_adrv9009_xcvr/rx_clk_1
+
+  create_bd_port -dir I rx_data_0_p
+  create_bd_port -dir I rx_data_0_n
+  create_bd_port -dir I rx_data_1_p
+  create_bd_port -dir I rx_data_1_n
+  ad_connect util_adrv9009_xcvr/rx_0_p rx_data_0_p
+  ad_connect util_adrv9009_xcvr/rx_0_n rx_data_0_n
+  ad_connect util_adrv9009_xcvr/rx_1_p rx_data_1_p
+  ad_connect util_adrv9009_xcvr/rx_1_n rx_data_1_n
+}
+
 ad_connect ref_clk axi_adrv9009_rx_clkgen/clk
 for {set i 0} {$i < $MAX_RX_NUM_OF_LANES} {incr i} {
   set ch [expr $i]
@@ -243,7 +281,28 @@ for {set i 0} {$i < $MAX_RX_NUM_OF_LANES} {incr i} {
 
 # Rx - OBS
 ad_connect adrv9009_rx_os_device_clk axi_adrv9009_rx_os_clkgen/clk_0
-ad_xcvrcon util_adrv9009_xcvr axi_adrv9009_rx_os_xcvr axi_adrv9009_rx_os_jesd {} adrv9009_rx_os_device_clk {} $MAX_RX_OS_NUM_OF_LANES
+if {$RX_OS_NUM_OF_LANES == 2} {
+  ad_xcvrcon util_adrv9009_xcvr axi_adrv9009_rx_os_xcvr axi_adrv9009_rx_os_jesd {} adrv9009_rx_os_device_clk {} $MAX_RX_OS_NUM_OF_LANES
+} else {
+  ad_xcvrcon util_adrv9009_xcvr axi_adrv9009_rx_os_xcvr axi_adrv9009_rx_os_jesd {0 1 2 3} adrv9009_rx_os_device_clk {} $MAX_RX_OS_NUM_OF_LANES {2} 0
+  ad_connect axi_adrv9009_rx_os_xcvr/up_es_0 util_adrv9009_xcvr/up_es_2
+  ad_connect axi_adrv9009_rx_os_xcvr/up_es_1 util_adrv9009_xcvr/up_es_3
+  ad_connect axi_adrv9009_rx_os_xcvr/up_ch_0 util_adrv9009_xcvr/up_rx_2
+  ad_connect axi_adrv9009_rx_os_xcvr/up_ch_1 util_adrv9009_xcvr/up_rx_3
+
+  ad_connect adrv9009_rx_os_device_clk util_adrv9009_xcvr/rx_clk_2
+  ad_connect adrv9009_rx_os_device_clk util_adrv9009_xcvr/rx_clk_3
+
+  create_bd_port -dir I rx_data_2_p
+  create_bd_port -dir I rx_data_2_n
+  create_bd_port -dir I rx_data_3_p
+  create_bd_port -dir I rx_data_3_n
+  ad_connect util_adrv9009_xcvr/rx_2_p rx_data_2_p
+  ad_connect util_adrv9009_xcvr/rx_2_n rx_data_2_n
+  ad_connect util_adrv9009_xcvr/rx_3_p rx_data_3_p
+  ad_connect util_adrv9009_xcvr/rx_3_n rx_data_3_n
+}
+
 ad_connect ref_clk axi_adrv9009_rx_os_clkgen/clk
 for {set i 0} {$i < $MAX_RX_OS_NUM_OF_LANES} {incr i} {
   # channel indexing starts from the last RX
@@ -307,14 +366,24 @@ ad_connect  $sys_dma_resetn axi_adrv9009_tx_dma/m_src_axi_aresetn
 
 # connections (adc)
 
-ad_connect  axi_adrv9009_rx_clkgen/clk_0 rx_adrv9009_tpl_core/link_clk
+if {$RX_OCTETS_PER_FRAME == 8} {
+  ad_connect  axi_adrv9009_rx_clkgen/clk_1 rx_adrv9009_tpl_core/link_clk
+  ad_connect  axi_adrv9009_rx_clkgen/clk_1 util_adrv9009_rx_cpack/clk
+  ad_connect  rx_fir_decimator/aclk axi_adrv9009_rx_clkgen/clk_1
+  ad_connect  axi_adrv9009_rx_clkgen/clk_1 axi_adrv9009_rx_dma/fifo_wr_clk
+
+} else {
+  ad_connect  axi_adrv9009_rx_clkgen/clk_0 rx_adrv9009_tpl_core/link_clk
+  ad_connect  axi_adrv9009_rx_clkgen/clk_0 util_adrv9009_rx_cpack/clk
+  ad_connect  rx_fir_decimator/aclk axi_adrv9009_rx_clkgen/clk_0
+  ad_connect  axi_adrv9009_rx_clkgen/clk_0 axi_adrv9009_rx_dma/fifo_wr_clk
+}
+
 ad_connect  axi_adrv9009_rx_jesd/rx_sof rx_adrv9009_tpl_core/link_sof
 ad_connect  axi_adrv9009_rx_jesd/rx_data_tdata rx_adrv9009_tpl_core/link_data
 ad_connect  axi_adrv9009_rx_jesd/rx_data_tvalid rx_adrv9009_tpl_core/link_valid
-ad_connect  axi_adrv9009_rx_clkgen/clk_0 util_adrv9009_rx_cpack/clk
-ad_connect  adrv9009_rx_device_clk_rstgen/peripheral_reset util_adrv9009_rx_cpack/reset
 
-ad_connect rx_fir_decimator/aclk axi_adrv9009_rx_clkgen/clk_0
+ad_connect  adrv9009_rx_device_clk_rstgen/peripheral_reset util_adrv9009_rx_cpack/reset
 
 for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
   ad_connect  rx_adrv9009_tpl_core/adc_valid_$i rx_fir_decimator/valid_in_$i
@@ -330,7 +399,6 @@ ad_connect rx_fir_decimator/active adc_fir_filter_active
 ad_connect  rx_fir_decimator/valid_out_0 util_adrv9009_rx_cpack/fifo_wr_en
 ad_connect  rx_adrv9009_tpl_core/adc_dovf util_adrv9009_rx_cpack/fifo_wr_overflow
 
-ad_connect  axi_adrv9009_rx_clkgen/clk_0 axi_adrv9009_rx_dma/fifo_wr_clk
 ad_connect  util_adrv9009_rx_cpack/packed_fifo_wr axi_adrv9009_rx_dma/fifo_wr
 ad_connect  $sys_dma_resetn axi_adrv9009_rx_dma/m_dest_axi_aresetn
 
