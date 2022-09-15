@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2022 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2019 - 2022 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsibilities that he or she has by using this source/core.
+// freedoms and responsabilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -38,99 +38,107 @@
 module system_top (
 
   // clock and resets
-  input           sys_clk,
+  input            sys_clk,
 
   // hps-ddr
-  output  [14:0]  ddr3_a,
-  output  [ 2:0]  ddr3_ba,
-  output          ddr3_reset_n,
-  output          ddr3_ck_p,
-  output          ddr3_ck_n,
-  output          ddr3_cke,
-  output          ddr3_cs_n,
-  output          ddr3_ras_n,
-  output          ddr3_cas_n,
-  output          ddr3_we_n,
-  inout   [31:0]  ddr3_dq,
-  inout   [ 3:0]  ddr3_dqs_p,
-  inout   [ 3:0]  ddr3_dqs_n,
-  output  [ 3:0]  ddr3_dm,
-  output          ddr3_odt,
-  input           ddr3_rzq,
+  output  [14:0]   ddr3_a,
+  output  [ 2:0]   ddr3_ba,
+  output           ddr3_reset_n,
+  output           ddr3_ck_p,
+  output           ddr3_ck_n,
+  output           ddr3_cke,
+  output           ddr3_cs_n,
+  output           ddr3_ras_n,
+  output           ddr3_cas_n,
+  output           ddr3_we_n,
+  inout   [31:0]   ddr3_dq,
+  inout   [ 3:0]   ddr3_dqs_p,
+  inout   [ 3:0]   ddr3_dqs_n,
+  output  [ 3:0]   ddr3_dm,
+  output           ddr3_odt,
+  input            ddr3_rzq,
 
   // hps-ethernet
-  output          eth1_tx_clk,
-  output          eth1_tx_ctl,
-  output  [ 3:0]  eth1_tx_d,
-  input           eth1_rx_clk,
-  input           eth1_rx_ctl,
-  input   [ 3:0]  eth1_rx_d,
-  output          eth1_mdc,
-  inout           eth1_mdio,
-
-  // hps-qspi
-  output          qspi_ss0,
-  output          qspi_clk,
-  inout   [ 3:0]  qspi_io,
+  output            eth1_tx_clk,
+  output            eth1_tx_ctl,
+  output  [  3:0]   eth1_tx_d,
+  input             eth1_rx_clk,
+  input             eth1_rx_ctl,
+  input   [  3:0]   eth1_rx_d,
+  output            eth1_mdc,
+  inout             eth1_mdio,
 
   // hps-sdio
-  output          sdio_clk,
-  inout           sdio_cmd,
-  inout   [ 3:0]  sdio_d,
+  output            sdio_clk,
+  inout             sdio_cmd,
+  inout   [  3:0]   sdio_d,
+
+  // hps-spim1
+  output            spim1_ss0,
+  output            spim1_clk,
+  output            spim1_mosi,
+  input             spim1_miso,
 
   // hps-usb
-  input           usb1_clk,
-  output          usb1_stp,
-  input           usb1_dir,
-  input           usb1_nxt,
-  inout   [ 7:0]  usb1_d,
-
-  // hps-spim1-lcd
-  output          spim1_ss0,
-  output          spim1_clk,
-  output          spim1_mosi,
-  input           spim1_miso,
+  input             usb1_clk,
+  output            usb1_stp,
+  input             usb1_dir,
+  input             usb1_nxt,
+  inout   [  7:0]   usb1_d,
 
   // hps-uart
-  input           uart0_rx,
-  output          uart0_tx,
+  input             uart0_rx,
+  output            uart0_tx,
+  inout             hps_conv_usb_n,
 
   // board gpio
-  output  [ 3:0]  gpio_bd_o,
-  input   [ 7:0]  gpio_bd_i,
+  output  [  7:0]   gpio_bd_o,
+  input   [  5:0]   gpio_bd_i,
 
-  // display
-  output          vga_clk,
-  output          vga_blank_n,
-  output          vga_sync_n,
-  output          vga_hsync,
-  output          vga_vsync,
-  output  [ 7:0]  vga_red,
-  output  [ 7:0]  vga_grn,
-  output  [ 7:0]  vga_blu
+  output            hdmi_out_clk,
+  output            hdmi_vsync,
+  output            hdmi_hsync,
+  output            hdmi_data_e,
+  output  [ 23:0]   hdmi_data,
+
+  inout             hdmi_i2c_scl,
+  inout             hdmi_i2c_sda
 );
 
   // internal signals
-  wire            sys_resetn;
-  wire    [31:0]  sys_gpio_bd_i;
-  wire    [31:0]  sys_gpio_bd_o;
-  wire    [31:0]  sys_gpio_i;
-  wire    [31:0]  sys_gpio_o;
 
-  // defaults
-  assign vga_blank_n = 1'b1;
-  assign vga_sync_n = 1'b0;
+  wire             sys_resetn;
+  wire    [63:0]   gpio_i;
+  wire    [63:0]   gpio_o;
 
-  assign gpio_bd_o = sys_gpio_bd_o[3:0];
-
-  assign sys_gpio_bd_i[31:8] = sys_gpio_bd_o[31:8];
-  assign sys_gpio_bd_i[ 7:0] = gpio_bd_i;
-
-  assign sys_gpio_i[31:0] = sys_gpio_o[31:0];
+  wire             i2c0_out_data;
+  wire             i2c0_sda;
+  wire             i2c0_out_clk;
+  wire             i2c0_scl_in_clk;
 
   // instantiations
+
+  assign gpio_i[63:14] = gpio_o[63:14];
+  assign gpio_i[13:8] = gpio_bd_i[5:0];
+
+  assign gpio_bd_o[7:0] = gpio_o[7:0];
+
+  ALT_IOBUF scl_iobuf (
+    .i (1'b0),
+    .oe (i2c0_out_clk),
+    .o (i2c0_scl_in_clk),
+    .io (hdmi_i2c_scl));
+
+  ALT_IOBUF sda_iobuf (
+    .i (1'b0),
+    .oe (i2c0_out_data),
+    .o (i2c0_sda),
+    .io (hdmi_i2c_sda));
+
   system_bd i_system_bd (
     .sys_clk_clk (sys_clk),
+
+    .sys_hps_h2f_reset_reset_n (sys_resetn),
 
     .sys_hps_memory_mem_a (ddr3_a),
     .sys_hps_memory_mem_ba (ddr3_ba),
@@ -149,6 +157,13 @@ module system_top (
     .sys_hps_memory_mem_dm (ddr3_dm),
     .sys_hps_memory_oct_rzqin (ddr3_rzq),
 
+    .sys_rst_reset_n (sys_resetn),
+
+    .sys_hps_i2c0_out_data (i2c0_out_data),
+    .sys_hps_i2c0_sda (i2c0_sda),
+    .sys_hps_i2c0_clk_clk (i2c0_out_clk),
+    .sys_hps_i2c0_scl_in_clk (i2c0_scl_in_clk),
+
     .sys_hps_hps_io_hps_io_emac1_inst_TX_CLK (eth1_tx_clk),
     .sys_hps_hps_io_hps_io_emac1_inst_TXD0 (eth1_tx_d[0]),
     .sys_hps_hps_io_hps_io_emac1_inst_TXD1 (eth1_tx_d[1]),
@@ -163,13 +178,6 @@ module system_top (
     .sys_hps_hps_io_hps_io_emac1_inst_RXD1 (eth1_rx_d[1]),
     .sys_hps_hps_io_hps_io_emac1_inst_RXD2 (eth1_rx_d[2]),
     .sys_hps_hps_io_hps_io_emac1_inst_RXD3 (eth1_rx_d[3]),
-
-    .sys_hps_hps_io_hps_io_qspi_inst_IO0 (qspi_io[0]),
-    .sys_hps_hps_io_hps_io_qspi_inst_IO1 (qspi_io[1]),
-    .sys_hps_hps_io_hps_io_qspi_inst_IO2 (qspi_io[2]),
-    .sys_hps_hps_io_hps_io_qspi_inst_IO3 (qspi_io[3]),
-    .sys_hps_hps_io_hps_io_qspi_inst_SS0 (qspi_ss0),
-    .sys_hps_hps_io_hps_io_qspi_inst_CLK (qspi_clk),
 
     .sys_hps_hps_io_hps_io_sdio_inst_CMD (sdio_cmd),
     .sys_hps_hps_io_hps_io_sdio_inst_D0 (sdio_d[0]),
@@ -191,34 +199,30 @@ module system_top (
     .sys_hps_hps_io_hps_io_usb1_inst_DIR (usb1_dir),
     .sys_hps_hps_io_hps_io_usb1_inst_NXT (usb1_nxt),
 
+    .sys_hps_hps_io_hps_io_uart0_inst_RX (uart0_rx),
+    .sys_hps_hps_io_hps_io_uart0_inst_TX (uart0_tx),
+
     .sys_hps_hps_io_hps_io_spim1_inst_CLK (spim1_clk),
     .sys_hps_hps_io_hps_io_spim1_inst_MOSI (spim1_mosi),
     .sys_hps_hps_io_hps_io_spim1_inst_MISO (spim1_miso),
     .sys_hps_hps_io_hps_io_spim1_inst_SS0 (spim1_ss0),
 
-    .sys_hps_hps_io_hps_io_uart0_inst_RX (uart0_rx),
-    .sys_hps_hps_io_hps_io_uart0_inst_TX (uart0_tx),
+    .sys_hps_hps_io_hps_io_gpio_inst_GPIO09 (hps_conv_usb_n),
 
-    .sys_gpio_bd_in_port (sys_gpio_bd_i),
-    .sys_gpio_bd_out_port (sys_gpio_bd_o),
-    .sys_gpio_in_export (sys_gpio_i),
-    .sys_gpio_out_export (sys_gpio_o),
+    .sys_gpio_bd_in_port (gpio_i[31:0]),
+    .sys_gpio_bd_out_port (gpio_o[31:0]),
+    .sys_gpio_in_export (gpio_i[63:32]),
+    .sys_gpio_out_export (gpio_o[63:32]),
 
-    .pr_rom_data_nc_rom_data ('h0),
+    .ltc2308_spi_MISO (1'b0),
+    .ltc2308_spi_MOSI (),
+    .ltc2308_spi_SCLK (),
+    .ltc2308_spi_SS_n (1'b1),
 
-    .sys_hps_h2f_reset_reset_n (sys_resetn),
-    .sys_rst_reset_n (sys_resetn),
-
-    .sys_spi_MISO (1'b0),
-    .sys_spi_MOSI (),
-    .sys_spi_SCLK (),
-    .sys_spi_SS_n (1'b1),
-
-    .vga_out_vga_if_vga_clk (vga_clk),
-    .vga_out_vga_if_vga_red (vga_red),
-    .vga_out_vga_if_vga_green (vga_grn),
-    .vga_out_vga_if_vga_blue (vga_blu),
-    .vga_out_vga_if_vga_hsync (vga_hsync),
-    .vga_out_vga_if_vga_vsync (vga_vsync));
+    .axi_hdmi_tx_0_hdmi_if_h_clk (hdmi_out_clk),
+    .axi_hdmi_tx_0_hdmi_if_h24_hsync (hdmi_hsync),
+    .axi_hdmi_tx_0_hdmi_if_h24_vsync (hdmi_vsync),
+    .axi_hdmi_tx_0_hdmi_if_h24_data_e (hdmi_data_e),
+    .axi_hdmi_tx_0_hdmi_if_h24_data (hdmi_data));
 
 endmodule

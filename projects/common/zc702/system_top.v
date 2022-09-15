@@ -60,7 +60,7 @@ module system_top (
   inout           fixed_io_ps_porb,
   inout           fixed_io_ps_srstb,
 
-  inout   [15:0]  gpio_bd,
+  inout   [ 7:0]  gpio_bd,
 
   output          hdmi_out_clk,
   output          hdmi_vsync,
@@ -79,16 +79,16 @@ module system_top (
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
 
-  assign gpio_i[63:16] = gpio_o[63:16];
+  assign gpio_i[63:8] = gpio_o[63:8];
 
   // instantiations
   ad_iobuf #(
-    .DATA_WIDTH (16)
+    .DATA_WIDTH (8)
   ) i_gpio_bd (
-    .dio_t (gpio_t[15:0]),
-    .dio_i (gpio_o[15:0]),
-    .dio_o (gpio_i[15:0]),
-    .dio_p ({gpio_bd[7:4], gpio_bd[15:8], gpio_bd[3:0]}));
+    .dio_t (gpio_t[7:0]),
+    .dio_i (gpio_o[7:0]),
+    .dio_o (gpio_i[7:0]),
+    .dio_p (gpio_bd));
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),

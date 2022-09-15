@@ -77,15 +77,7 @@ module system_top (
 
   output          iic_rstn,
   inout           iic_scl,
-  inout           iic_sda,
-
-  output          hdmi_out_clk,
-  output          hdmi_hsync,
-  output          hdmi_vsync,
-  output          hdmi_data_e,
-  output  [23:0]  hdmi_data,
-
-  output          spdif
+  inout           iic_sda
 );
 
   // internal signals
@@ -105,7 +97,7 @@ module system_top (
   assign gpio_i[31:13] = gpio_o[31:13];
 
   ad_iobuf #(
-    .DATA_WIDTH(13)
+    .DATA_WIDTH (13)
   ) i_iobuf_sw_led (
     .dio_t (gpio_t[12:0]),
     .dio_i (gpio_o[12:0]),
@@ -146,7 +138,6 @@ module system_top (
 
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
-    .iic_rstn (iic_rstn),
 
     .mdio_mdio_io (phy_mdio),
     .mdio_mdc (phy_mdc),
@@ -156,16 +147,6 @@ module system_top (
     .rgmii_rxc (phy_rx_clk),
     .rgmii_td (phy_tx_data),
     .rgmii_tx_ctl (phy_tx_ctrl),
-    .rgmii_txc (phy_tx_clk),
-
-    .fan_pwm (fan_pwm),
-
-    .hdmi_data (hdmi_data),
-    .hdmi_data_e (hdmi_data_e),
-    .hdmi_hsync (hdmi_hsync),
-    .hdmi_out_clk (hdmi_out_clk),
-    .hdmi_vsync (hdmi_vsync),
-
-    .spdif (spdif));
+    .rgmii_txc (phy_tx_clk));
 
 endmodule

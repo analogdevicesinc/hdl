@@ -67,37 +67,20 @@ module system_top (
   output          linear_flash_wen,
   inout   [15:0]  linear_flash_dq_io,
 
-  input           sgmii_rxp,
-  input           sgmii_rxn,
-  output          sgmii_txp,
-  output          sgmii_txn,
-
-  output          phy_rstn,
-  input           mgt_clk_p,
-  input           mgt_clk_n,
-  output          mdio_mdc,
-  inout           mdio_mdio,
-
   output          fan_pwm,
 
-  inout   [ 6:0]  gpio_lcd,
-  inout   [20:0]  gpio_bd,
+  inout   [ 7:0]  gpio_bd_o,
+  inout   [12:0]  gpio_bd_i,
 
   output          iic_rstn,
   inout           iic_scl,
-  inout           iic_sda,
-
-  output          spi_csn_0,
-  output          spi_clk,
-  output          spi_mosi,
-  input           spi_miso
+  inout           iic_sda
 );
 
   // internal signals
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
-  wire    [ 7:0]  spi_csn;
 
   assign gpio_i[63:32] = gpio_o[63:32];
   assign gpio_i[31:21] = gpio_o[31:21];
@@ -105,7 +88,6 @@ module system_top (
   // default logic
   assign fan_pwm = 1'b1;
   assign iic_rstn = 1'b1;
-  assign spi_csn_0 = spi_csn[0];
 
   // instantiations
   ad_iobuf #(
@@ -114,9 +96,8 @@ module system_top (
     .dio_t (gpio_t[20:0]),
     .dio_i (gpio_o[20:0]),
     .dio_o (gpio_i[20:0]),
-    .dio_p (gpio_bd));
+    .dio_p ({gpio_bd_o, gpio_bd_i}));
 
-  // instantiations
   system_wrapper i_system_wrapper (
     .ddr3_addr (ddr3_addr),
     .ddr3_ba (ddr3_ba),
@@ -141,7 +122,6 @@ module system_top (
     .linear_flash_wen (linear_flash_wen),
     .linear_flash_dq_io (linear_flash_dq_io),
 
-    .gpio_lcd_tri_io (gpio_lcd),
     .gpio0_o (gpio_o[31:0]),
     .gpio0_t (gpio_t[31:0]),
     .gpio0_i (gpio_i[31:0]),
@@ -152,28 +132,17 @@ module system_top (
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
 
-    .mdio_mdc (mdio_mdc),
-    .mdio_mdio_io (mdio_mdio),
-    .mgt_clk_clk_n (mgt_clk_n),
-    .mgt_clk_clk_p (mgt_clk_p),
-    .phy_rstn (phy_rstn),
-    .phy_sd (1'b1),
-    .sgmii_rxn (sgmii_rxn),
-    .sgmii_rxp (sgmii_rxp),
-    .sgmii_txn (sgmii_txn),
-    .sgmii_txp (sgmii_txp),
-
     .sys_clk_n (sys_clk_n),
     .sys_clk_p (sys_clk_p),
     .sys_rst (sys_rst),
 
-    .spi_clk_i (spi_clk),
-    .spi_clk_o (spi_clk),
-    .spi_csn_i (spi_csn),
-    .spi_csn_o (spi_csn),
-    .spi_sdi_i (spi_miso),
-    .spi_sdo_i (spi_mosi),
-    .spi_sdo_o (spi_mosi),
+    .spi_clk_i (),
+    .spi_clk_o (),
+    .spi_csn_i (1'b1),
+    .spi_csn_o (),
+    .spi_sdi_i (1'b0),
+    .spi_sdo_i (1'b0),
+    .spi_sdo_o (),
 
     .uart_sin (uart_sin),
     .uart_sout (uart_sout));

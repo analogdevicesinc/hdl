@@ -38,21 +38,12 @@
 module system_top (
 
   input   [12:0]  gpio_bd_i,
-  output  [ 7:0]  gpio_bd_o,
-
-  inout           iic_scl,
-  inout           iic_sda,
-
-  output          spi_csn,
-  output          pi_clk,
-  output          spi_mosi,
-  input           spi_miso
+  output  [ 7:0]  gpio_bd_o
 );
 
   // internal signals
   wire    [94:0]  gpio_i;
   wire    [94:0]  gpio_o;
-  wire    [ 2:0]  spi0_csn;
 
   assign gpio_bd_o = gpio_o[7:0];
 
@@ -60,19 +51,17 @@ module system_top (
   assign gpio_i[20: 8] = gpio_bd_i;
   assign gpio_i[ 7: 0] = gpio_o[ 7: 0];
 
-  assign spi_csn = spi0_csn[0];
-
   // instantiations
   system_wrapper i_system_wrapper (
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .gpio_t (),
 
-    .spi0_csn (spi0_csn),
-    .spi0_miso (spi_miso),
-    .spi0_mosi (spi_mosi),
-    .spi0_sclk (spi_clk),
-    .spi1_csn (),
+    .spi0_csn (1'b1),
+    .spi0_miso (1'b0),
+    .spi0_mosi (),
+    .spi0_sclk (),
+    .spi1_csn (1'b1),
     .spi1_miso (1'b0),
     .spi1_mosi (),
     .spi1_sclk ());

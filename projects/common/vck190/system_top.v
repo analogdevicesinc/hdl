@@ -57,27 +57,13 @@ module system_top (
 
   output  [ 3:0]  gpio_led,
   input   [ 3:0]  gpio_dip_sw,
-  input   [ 1:0]  gpio_pb,
-
-  output          spi0_csn_0,
-  output          spi0_sclk,
-  output          spi0_mosi,
-  input           spi0_miso,
-  output          spi1_csn_0,
-  output          spi1_sclk,
-  output          spi1_mosi,
-  input           spi1_miso
+  input   [ 1:0]  gpio_pb
 );
 
   // internal signals
   wire    [95:0]  gpio_i;
   wire    [95:0]  gpio_o;
   wire    [95:0]  gpio_t;
-  wire    [ 2:0]  spi0_csn;
-  wire    [ 2:0]  spi1_csn;
-
-  assign spi0_csn_0 = spi0_csn[0];
-  assign spi1_csn_0 = spi1_csn[0];
 
   // Board GPIOS. Buttons, LEDs, etc...
   assign gpio_led = gpio_o[3:0];
@@ -119,13 +105,13 @@ module system_top (
     .ddr4_dimm1_odt (ddr4_odt),
     .ddr4_dimm1_reset_n (ddr4_reset_n),
 
-    .spi0_csn (spi0_csn),
-    .spi0_miso (spi0_miso),
-    .spi0_mosi (spi0_mosi),
-    .spi0_sclk (spi0_sclk),
-    .spi1_csn (spi1_csn),
-    .spi1_miso (spi1_miso),
-    .spi1_mosi (spi1_mosi),
-    .spi1_sclk (spi1_sclk));
+    .spi0_csn (1'b1),
+    .spi0_miso (1'b0),
+    .spi0_mosi (),
+    .spi0_sclk (),
+    .spi1_csn (1'b1),
+    .spi1_miso (1'b0),
+    .spi1_mosi (),
+    .spi1_sclk ());
 
 endmodule

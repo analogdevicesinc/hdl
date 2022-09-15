@@ -58,69 +58,15 @@ module system_top (
   inout   [53:0]  fixed_io_mio,
   inout           fixed_io_ps_clk,
   inout           fixed_io_ps_porb,
-  inout           fixed_io_ps_srstb,
-
-  inout   [31:0]  gpio_bd,
-
-  output          hdmi_out_clk,
-  output          hdmi_vsync,
-  output          hdmi_hsync,
-  output          hdmi_data_e,
-  output  [15:0]  hdmi_data,
-
-  output          spdif,
-
-  output          i2s_mclk,
-  output          i2s_bclk,
-  output          i2s_lrclk,
-  output          i2s_sdata_out,
-  input           i2s_sdata_in,
-
-  inout           iic_scl,
-  inout           iic_sda,
-  inout   [ 1:0]  iic_mux_scl,
-  inout   [ 1:0]  iic_mux_sda,
-
-  input           otg_vbusoc
+  inout           fixed_io_ps_srstb
 );
 
   // internal signals
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
-  wire    [ 1:0]  iic_mux_scl_i_s;
-  wire    [ 1:0]  iic_mux_scl_o_s;
-  wire            iic_mux_scl_t_s;
-  wire    [ 1:0]  iic_mux_sda_i_s;
-  wire    [ 1:0]  iic_mux_sda_o_s;
-  wire            iic_mux_sda_t_s;
 
-  assign gpio_i[63:32] = gpio_o[63:32];
-
-  // instantiations
-  ad_iobuf #(
-    .DATA_WIDTH (32)
-  ) i_iobuf (
-    .dio_t (gpio_t[31:0]),
-    .dio_i (gpio_o[31:0]),
-    .dio_o (gpio_i[31:0]),
-    .dio_p (gpio_bd));
-
-  ad_iobuf #(
-    .DATA_WIDTH (2)
-  ) i_iic_mux_scl (
-    .dio_t ({iic_mux_scl_t_s, iic_mux_scl_t_s}),
-    .dio_i (iic_mux_scl_o_s),
-    .dio_o (iic_mux_scl_i_s),
-    .dio_p (iic_mux_scl));
-
-  ad_iobuf #(
-    .DATA_WIDTH (2)
-  ) i_iic_mux_sda (
-    .dio_t ({iic_mux_sda_t_s, iic_mux_sda_t_s}),
-    .dio_i (iic_mux_sda_o_s),
-    .dio_o (iic_mux_sda_i_s),
-    .dio_p (iic_mux_sda));
+  assign gpio_i[63:0] = gpio_o[63:0];
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
@@ -150,31 +96,6 @@ module system_top (
     .gpio_o (gpio_o),
     .gpio_t (gpio_t),
 
-    .hdmi_data (hdmi_data),
-    .hdmi_data_e (hdmi_data_e),
-    .hdmi_hsync (hdmi_hsync),
-    .hdmi_out_clk (hdmi_out_clk),
-    .hdmi_vsync (hdmi_vsync),
-
-    .i2s_bclk (i2s_bclk),
-    .i2s_lrclk (i2s_lrclk),
-    .i2s_mclk (i2s_mclk),
-    .i2s_sdata_in (i2s_sdata_in),
-    .i2s_sdata_out (i2s_sdata_out),
-
-    .iic_fmc_scl_io (iic_scl),
-    .iic_fmc_sda_io (iic_sda),
-    .iic_mux_scl_i (iic_mux_scl_i_s),
-    .iic_mux_scl_o (iic_mux_scl_o_s),
-    .iic_mux_scl_t (iic_mux_scl_t_s),
-    .iic_mux_sda_i (iic_mux_sda_i_s),
-    .iic_mux_sda_o (iic_mux_sda_o_s),
-    .iic_mux_sda_t (iic_mux_sda_t_s),
-
-    .otg_vbusoc (otg_vbusoc),
-
-    .spdif (spdif),
-
     .spi0_clk_i (1'b0),
     .spi0_clk_o (),
     .spi0_csn_0_o (),
@@ -192,6 +113,6 @@ module system_top (
     .spi1_csn_i (1'b1),
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
-    .spi1_sdo_o());
+    .spi1_sdo_o ());
 
 endmodule

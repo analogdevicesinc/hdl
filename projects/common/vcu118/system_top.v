@@ -73,24 +73,17 @@ module system_top (
 
   output          iic_rstn,
   inout           iic_scl,
-  inout           iic_sda,
-
-  output          spi_csn_0,
-  output          spi_clk,
-  output          spi_mosi,
-  input           spi_miso
+  inout           iic_sda
 );
 
   // internal signals
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
-  wire    [ 7:0]  spi_csn;
 
   assign gpio_i[63:32] = gpio_o[63:32];
   assign gpio_i[31:18] = gpio_o[31:18];
   assign iic_rstn = 1'b1;
-  assign spi_csn_0 = spi_csn[0];
 
   // instantiations
   ad_iobuf #(
@@ -138,13 +131,13 @@ module system_top (
     .uart_sin (uart_sin),
     .uart_sout (uart_sout),
 
-    .spi_clk_i (spi_clk),
-    .spi_clk_o (spi_clk),
-    .spi_csn_i (spi_csn),
-    .spi_csn_o (spi_csn),
-    .spi_sdi_i (spi_miso),
-    .spi_sdo_i (spi_mosi),
-    .spi_sdo_o (spi_mosi),
+    .spi_clk_i (),
+    .spi_clk_o (),
+    .spi_csn_i (1'b1),
+    .spi_csn_o (1'b1),
+    .spi_sdi_i (1'b0),
+    .spi_sdo_i (),
+    .spi_sdo_o (),
 
     .gpio0_i (gpio_i[31:0]),
     .gpio0_o (gpio_o[31:0]),
