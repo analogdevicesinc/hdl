@@ -1,0 +1,371 @@
+TITLE
+SPI Engine (axi_spi_engine)
+axi_spi_engine
+ENDTITLE
+
+############################################################################################
+############################################################################################
+
+REG
+0x00
+VERSION
+Version of the peripheral. Follows semantic versioning. Current version 1.00.71.
+ENDREG
+
+FIELD
+[31:16] 0x01
+VERSION_MAJOR
+RO
+ENDFIELD
+
+FIELD
+[15:8] 0x00
+VERSION_MINOR
+RO
+ENDFIELD
+
+FIELD
+[7:0] 0x71
+VERSION_PATCH
+RO
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x01
+PERIPHERAL_ID
+ENDREG
+
+FIELD
+[31:0] ''ID''
+PERIPHERAL_ID
+RO
+Value of the ID configuration parameter.
+In case of multiple instances, each instance will have a unique ID.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x02
+SCRATCH
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+SCRATCH
+RW
+Scratch register useful for debug.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x03
+DATA_WIDTH
+ENDREG
+
+FIELD
+[31:0] 0x00000008
+DATA_WIDTH
+RO
+Data width of the SDI/SDO parallel interface.
+It is equal with the maximum supported transfer length in bits.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x10
+ENABLE
+ENDREG
+
+FIELD
+[31:0] 0x00000001
+ENABLE
+RW
+Enable register. If the enable bit is set to 1 the internal state of the peripheral is reset.
+For proper operation, the bit needs to be set to 0.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x20
+IRQ_MASK
+ENDREG
+
+FIELD
+[0] 0x00
+CMD_ALMOST_EMPTY
+RW
+If set to 0 the CMD_ALMOST_EMPTY interrupt is masked.
+ENDFIELD
+
+FIELD
+[1] 0x00
+SDO_ALMOST_EMPTY
+RW
+If set to 0 the SDO_ALMOST_EMPTY interrupt is masked.
+ENDFIELD
+
+FIELD
+[2] 0x00
+SDI_ALMOST_FULL
+RW
+If set to 0 the SDI_ALMOST_FULL interrupt is masked.
+ENDFIELD
+
+FIELD
+[3] 0x00
+SYNC_EVENT
+RW
+If set to 0 the SYNC_EVENT interrupt is masked.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x21
+IRQ_PENDING
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+IRQ_PENDING
+RW1C
+Pending IRQs with mask.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x22
+IRQ_SOURCE
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+IRQ_SOURCE
+RO
+Pending IRQs without mask.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x30
+SYNC_ID
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+SYNC_ID
+RO
+Last synchronization event ID received from the SPI engine control interface.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x34
+CMD_FIFO_ROOM
+ENDREG
+
+FIELD
+[31:0] 0x????????
+CMD_FIFO_ROOM
+RO
+Number of free entries in the command FIFO. The reset value of the CMD_FIFO_ROOM register
+depends on the setting of the CMD_FIFO_ADDRESS_WIDTH parameter.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x35
+SDO_FIFO_ROOM
+ENDREG
+
+FIELD
+[31:0] 0x????????
+SDO_FIFO_ROOM
+RO
+Number of free entries in the serial-data-out FIFO. The reset value of the SDO_FIFO_ROOM
+register depends on the setting of the SDO_FIFO_ADDRESS_WIDTH parameter.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x36
+SDI_FIFO_LEVEL
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+SDI_FIFO_LEVEL
+RO
+Number of valid entries in the serial-data-in FIFO.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x38
+CMD_FIFO
+ENDREG
+
+FIELD
+[31:0] 0x?????????
+CMD_FIFO
+WO
+Command FIFO register. Writing to this register inserts an entry into the command FIFO.
+Writing to this register when the command FIFO is full has no effect and the written entry
+is discarded. Reading from this register always returns 0x00000000.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x39
+SDO_FIFO
+ENDREG
+
+FIELD
+[31:0] 0x?????????
+SDO_FIFO
+WO
+SDO FIFO register. Writing to this register inserts an entry into the SDO FIFO.
+Writing to this register when the SDO FIFO is full has no effect and the written entry is
+discarded. Reading from this register always returns 0x00000000.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x3a
+SDI_FIFO
+ENDREG
+
+FIELD
+[31:0] 0x?????????
+SDI_FIFO
+RO
+SDI FIFO register. Reading from this register removes the first entry from the SDI FIFO.
+Reading this register when the SDI FIFO is empty will return undefined data.
+Writing to it has no effect.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x3c
+SDI_FIFO_PEEK
+ENDREG
+
+FIELD
+[31:0] 0x?????????
+SDI_FIFO_PEEK
+RO
+SDI FIFO peek register.
+Reading from this register returns the first entry from the SDI FIFO, but without removing
+it from the FIFO. Reading this register when the SDI FIFO is empty will return undefined
+data. Writing to it has no effect.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x40
+OFFLOAD0_EN
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+OFFLOAD0_EN
+RW
+Set this bit to enable the offload module.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x41
+OFFLOAD0_STATUS
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+OFFLOAD0_STATUS
+RO
+Offload status register.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x42
+OFFLOAD0_MEM_RESET
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+OFFLOAD0_MEM_RESET
+WO
+Reset the memory of the offload module.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x44
+OFFLOAD0_CDM_FIFO
+ENDREG
+
+FIELD
+[31:0] 0x????????
+OFFLOAD0_CDM_FIFO
+WO
+Offload command FIFO register. Writing to this register inserts an entry into the command FIFO
+of the offload module. Writing to this register when the command FIFO is full has no effect
+and the written entry is discarded. Reading from this register always returns 0x00000000.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x45
+OFFLOAD0_SDO_FIFO
+ENDREG
+
+FIELD
+[31:0] 0x????????
+OFFLOAD0_SDO_FIFO
+WO
+Offload SDO FIFO register. Writing to this register inserts an entry into the offload SDO FIFO.
+Writing to this register when the SDO FIFO is full has no effect and the written entry is
+discarded. Reading from this register always returns 0x00000000.
+ENDFIELD
+

@@ -1,0 +1,611 @@
+TITLE
+HDMI Transmit (axi_hdmi_tx)
+HDMI_TX
+ENDTITLE
+
+############################################################################################
+############################################################################################
+
+REG
+0x0010
+REG_RSTN
+HDMI Interface Control & Status
+ENDREG
+
+FIELD
+[0] 0x0
+RSTN
+RW
+Reset, a common reset is used for all the interface modules,
+The default is reset (0x0), software must write 0x1 to bring up the core.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0011
+REG_CNTRL1
+HDMI Interface Control & Status
+ENDREG
+
+FIELD
+[2] 0x0
+SS_BYPASS
+RW
+If set (0x1) bypasses the chroma sub-sampler. This is primarily intended to be used to send
+the test-pattern directly to the HDMI transmitter without modifying it.
+ENDFIELD
+
+FIELD
+[1] 0x0
+RESERVED
+RO
+Reserved
+ENDFIELD
+
+FIELD
+[0] 0x0
+CSC_BYPASS
+RW
+If set (0x1) bypasses color space conversion (if equipped). And depending on its value, the
+default value of color space boundaries is set in the REG_CLIPP_MAX and REG_CLIPP_MIN registers.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0012
+REG_CNTRL2
+HDMI Interface Control & Status
+ENDREG
+
+FIELD
+[1:0] 0x0
+SOURCE_SEL
+RW
+Select the HDMI data source- register constant (0x3), incr-pattern (0x2),
+input (0x1) or disabled (0x0).
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0013
+REG_CNTRL3
+HDMI Interface Control & Status
+ENDREG
+
+FIELD
+[23:0] 0x000000
+CONST_RGB[23:0]
+RW
+This is the RGB value transmitted, if the source is constant (see above).
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0015
+REG_CLK_FREQ
+HDMI Interface Control & Status
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+CLK_FREQ[31:0]
+RO
+Interface clock frequency. This is relative to the processor clock and in many cases is
+100MHz. The number is represented as unsigned 16.16 format. Assuming a 100MHz processor
+clock the minimum is 1.523kHz and maximum is 6.554THz. The actual interface clock
+is CLK_FREQ * CLK_RATIO (see below). Note that the actual sampling clock may not be
+the same as the interface clock- software must consider device specific implementation
+parameters to calculate the final sampling clock.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0016
+REG_CLK_RATIO
+HDMI Interface Control & Status
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+CLK_RATIO[31:0]
+RO
+Interface clock ratio - as a factor actual received clock. This is implementation specific
+and depends on any serial to parallel conversion and interface type (ddr/sdr/qdr).
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0017
+REG_STATUS
+ADC Interface Control & Status
+ENDREG
+
+FIELD
+[0] 0x0
+STATUS
+RO
+Interface status, if set indicates no errors. If not set, there 
+are errors, software may try resetting the cores.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0018
+REG_VDMA_STATUS
+HDMI Interface Control & Status
+ENDREG
+
+FIELD
+[1] 0x0
+VDMA_OVF
+RW1C
+If set, indicates vdma overflow.
+ENDFIELD
+
+FIELD
+[0] 0x0
+VDMA_UNF
+RW1C
+If set, indicates vdma underflow.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0019
+REG_TPM_STATUS
+HDMI Interface Control & Status
+ENDREG
+
+FIELD
+[1] 0x0
+HDMI_TPM_OOS
+RW1C
+If set, indicates TPM OOS at the HDMI interface.
+ENDFIELD
+
+FIELD
+[0] 0x0
+VDMA_TPM_OOS
+RW1C
+If set, indicates TPM OOS at the VDMA interface.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x001a
+REG_CLIPP_MAX
+HDMI Interface Control & Status
+ENDREG
+
+FIELD
+[23:16] 0xF0
+R_MAX/Cr_MAX
+RW
+Defines the maximum value for clipping the red or red-difference chroma component.
+Default value are 0xf0 for red-difference chroma and 0xfe for red.
+ENDFIELD
+
+FIELD
+[16:8] 0xEB
+G_MAX/Y_MAX
+RW
+Defines the maximum value for clipping the green or luma component.
+Default values are 0xeb for luma and and 0xfe for green.
+ENDFIELD
+
+FIELD
+[7:0] 0xF0
+B_MAX/Cb_MAX
+RW
+Defines the maximum value for clipping the blue or blue-difference chroma component.
+Default value are 0xf0 for blue-difference chroma and 0xfe for blue.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x001b
+REG_CLIPP_MIN
+HDMI Interface Control & Status
+ENDREG
+
+FIELD
+[23:16] 0x10
+R_MIN/Cr_MIN
+RW
+Defines the minimum value for clipping the red or red-difference chroma component.
+Default value are 0x10 for red-difference chroma and 0x01 for red.
+ENDFIELD
+
+FIELD
+[16:8] 0x10
+G_MIN/Y_MIN
+RW
+Defines the minimum value for clipping the green or luma component.
+Default values are 0x10 for luma and and 0x01 for green.
+ENDFIELD
+
+FIELD
+[7:0] 0x10
+B_MIN/Cb_MIN
+RW
+Defines the minimum value for clipping the blue or blue-difference chroma component.
+Default value are 0x10 for blue-difference chroma and 0x01 for blue.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0100
+REG_HSYNC_1
+HDMI Interface Control & Status
+ENDREG
+
+FIELD
+[31:16] 0x0000
+H_LINE_ACTIVE[15:0]
+RW
+This is the horizontal line active pixel width (active resolution length). e.g. 1920 (1080p)
+ENDFIELD
+
+FIELD
+[15:0] 0x0000
+H_LINE_WIDTH[15:0]
+RW
+This is the horizontal line width (no. of pixel clocks per line). e.g. 2200 (1080p)
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0101
+REG_HSYNC_2
+HDMI Interface Control & Status
+ENDREG
+
+FIELD
+[15:0] 0x0000
+H_SYNC_WIDTH[15:0]
+RW
+This is the horizontal sync width (no. of pixel clocks). e.g. 44 (1080p)
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0102
+REG_HSYNC_3
+HDMI Interface Control & Status
+ENDREG
+
+FIELD
+[31:16] 0x0000
+H_ENABLE_MAX[15:0]
+RW
+This is the horizontal data enable maximum. It is the sum of H_ENABLE_MIN and the active
+pixel width. e.g. 2112 (192 + 1920) (1080p)
+ENDFIELD
+
+FIELD
+[15:0] 0x0000
+H_ENABLE_MIN[15:0]
+RW
+This is the horizontal data enable minimum. It is the sum of horizontal back porch (number
+of clock cycles between the falling edge of HSYNC to the rising edge of DE) and the sync
+width. e.g. 192 (44 + 148) (1080p)
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0110
+REG_VSYNC_1
+HDMI Interface Control & Status
+ENDREG
+
+FIELD
+[31:16] 0x0000
+V_FRAME_ACTIVE[15:0]
+RW
+This is the vertical frame active line width (active resolution height). e.g. 1080 (1080p)
+ENDFIELD
+
+FIELD
+[15:0] 0x0000
+V_FRAME_WIDTH[15:0]
+RW
+This is the vertical frame width (no. of lines per frame). e.g. 1125 (1080p)
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0111
+REG_VSYNC_2
+HDMI Interface Control & Status
+ENDREG
+
+FIELD
+[15:0] 0x0000
+V_SYNC_WIDTH[15:0]
+RW
+This is the vertical sync width (no. of lines). e.g. 5 (1080p)
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0112
+REG_VSYNC_3
+HDMI Interface Control & Status
+ENDREG
+
+FIELD
+[31:16] 0x0000
+V_ENABLE_MAX[15:0]
+RW
+This is the vertical data enable maximum. It is the sum of V_ENABLE_MIN and the active
+pixel height. e.g. 1121 (41 + 1080) (1080p)
+ENDFIELD
+
+FIELD
+[15:0] 0x0000
+V_ENABLE_MIN[15:0]
+RW
+This is the vertical data enable minimum. It is the sum of vertical back porch (number of lines
+between the falling edge of VSYNC to the rising edge of DE) and the sync width.
+e.g. 41 (36 + 5) (1080p)
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+TITLE
+HDMI Receive (axi_hdmi_rx)
+hdmi_rx
+ENDTITLE
+
+############################################################################################
+############################################################################################
+
+REG
+0x0010
+REG_RSTN
+HDMI Interface Control & Status
+ENDREG
+
+FIELD
+[0] 0x0
+RSTN
+RW
+Reset, a common reset is used for all the interface modules,
+The default is reset (0x0), software must write 0x1 to bring up the core.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0011
+REG_CNTRL
+HDMI Interface Control & Status
+ENDREG
+
+FIELD
+[3] 0x0
+EDGE_SEL
+RW
+If set (0x1), incoming data is registered on the falling edge of the clock first. The
+default uses rising edge.
+ENDFIELD
+
+FIELD
+[2] 0x0
+BGR
+RW
+If set (0x1), output BGR. The default is RGB.
+ENDFIELD
+
+FIELD
+[1] 0x0
+PACKED
+RW
+If set (0x1) pack 24bit RGB data on 32bit dwords. The default pads the MSB to zeros.
+ENDFIELD
+
+FIELD
+[0] 0x0
+CSC_BYPASS
+RW
+If set (0x1) bypasses color space conversion (if equipped).
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0015
+REG_CLK_FREQ
+HDMI Interface Control & Status
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+CLK_FREQ[31:0]
+RO
+Interface clock frequency. This is relative to the processor clock and in many cases is
+100MHz. The number is represented as unsigned 16.16 format. Assuming a 100MHz processor
+clock the minimum is 1.523kHz and maximum is 6.554THz. The actual interface clock
+is CLK_FREQ * CLK_RATIO (see below). Note that the actual sampling clock may not be
+the same as the interface clock- software must consider device specific implementation
+parameters to calculate the final sampling clock.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0016
+REG_CLK_RATIO
+HDMI Interface Control & Status
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+CLK_RATIO[31:0]
+RO
+Interface clock ratio - as a factor actual received clock. This is implementation specific
+and depends on any serial to parallel conversion and interface type (ddr/sdr/qdr).
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0018
+REG_VDMA_STATUS
+HDMI Interface Control & Status
+ENDREG
+
+FIELD
+[1] 0x0
+VDMA_OVF
+RW1C
+If set, indicates vdma overflow.
+ENDFIELD
+
+FIELD
+[0] 0x0
+VDMA_UNF
+RW1C
+If set, indicates vdma underflow.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0019
+REG_TPM_STATUS1
+HDMI Interface Control & Status
+ENDREG
+
+FIELD
+[1] 0x0
+HDMI_TPM_OOS
+RW1C
+If set, indicates TPM OOS at the HDMI interface.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0020
+REG_TPM_STATUS2
+HDMI Interface Control & Status
+ENDREG
+
+FIELD
+[3] 0x0
+VS_OOS
+RW1C
+If set, indicates VSYNC OOS - the core is unabled to detect/track VSYNC. Consecutive frames have different number of lines.
+ENDFIELD
+
+FIELD
+[2] 0x0
+HS_OOS
+RW1C
+If set, indicates HSYNC OOS - the core is unabled to detect/track HSYNC. Consecutive lines have different lengths.
+ENDFIELD
+
+FIELD
+[1] 0x0
+VS_MISMATCH
+RW1C
+If set, indicates received (detected) & programmed VSYNC (number of lines) mismatch. Incoming frames are stable but not the expected resolution.
+ENDFIELD
+
+FIELD
+[0] 0x0
+HS_MISMATCH
+RW1C
+If set, indicates received (detected) & programmed HSYNC (number of pixels) mismatch. Incoming frames are stable but not the expected resolution.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0100
+REG_HVCOUNTS1
+HDMI Interface Control & Status
+ENDREG
+
+FIELD
+[31:16] 0x0000
+VS_COUNT[15:0]
+RW
+This is the expected active horizontal pixel lines (active resolution length). e.g. 1080 (1080p)
+ENDFIELD
+
+FIELD
+[15:0] 0x0000
+HS_COUNT[15:0]
+RW
+This is the expected horizontal pixel count (no. of pixel clocks per line). e.g. 1920 (1080p)
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0101
+REG_HVCOUNTS2
+HDMI Interface Control & Status
+ENDREG
+
+FIELD
+[31:16] 0x0000
+VS_COUNT[15:0]
+RO
+This is the detected horizontal active pixel lines (active resolution length).
+This field is valid only if VS_OOS is zero.
+ENDFIELD
+
+FIELD
+[15:0] 0x0000
+HS_COUNT[15:0]
+RO
+This is the detected horizontal pixel count (no. of pixel clocks per line).
+This field is valid only if HS_OOS is zero.
+ENDFIELD
+
+############################################################################################
+############################################################################################

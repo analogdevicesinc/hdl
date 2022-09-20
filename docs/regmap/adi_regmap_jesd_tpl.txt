@@ -1,0 +1,112 @@
+TITLE
+JESD TPL (up_tpl_common)
+JESD_TPL
+ENDTITLE
+
+############################################################################################
+############################################################################################
+
+REG
+0x00080
+REG_TPL_CNTRL
+JESD, TPL Control
+ENDREG
+
+FIELD
+[3:0]
+PROFILE_SEL
+RW
+Selects one of the available deframer/framers from the transport layer.
+Valid only if ''PROFILE_NUM'' > 1.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x00081
+REG_TPL_STATUS
+JESD, TPL Status
+ENDREG
+
+FIELD
+[3:0]
+PROFILE_NUM
+RO
+Number of supported framer/deframer profiles.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x00090
+REG_TPL_DESCRIPTOR_1
+JESD, TPL descriptor for profile 0
+ENDREG
+
+FIELD
+[31:24]
+JESD_F
+RO
+Octets per Frame per Lane.
+ENDFIELD
+
+FIELD
+[23:16]
+JESD_S
+RO
+Samples per Converter per Frame.
+ENDFIELD
+
+FIELD
+[15:8]
+JESD_L
+RO
+Lane Count.
+ENDFIELD
+
+FIELD
+[7:0]
+JESD_M
+RO
+Converter Count.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x00091
+REG_TPL_DESCRIPTOR_2
+JESD, TPL descriptor for profile 0
+ENDREG
+
+FIELD
+[7:0]
+JESD_N
+RO
+Converter Resolution.
+ENDFIELD
+
+FIELD
+[15:8]
+JESD_NP
+RO
+Total Number of Bits per Sample.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x00092
+REG_*
+Profile 1, similar to registers 0x00010 to 0x00011.
+ENDREG
+
+REG
+0x00094
+REG_*
+Profile 2, similar to registers 0x00010 to 0x00011.
+ENDREG

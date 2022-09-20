@@ -1,0 +1,800 @@
+TITLE
+DAC Common (axi_ad)
+DAC_COMMON
+ENDTITLE
+
+############################################################################################
+############################################################################################
+
+REG
+0x0010
+REG_RSTN
+DAC Interface Control & Status
+ENDREG
+
+FIELD
+[2] 0x0
+CE_N
+RW
+Clock enable, default is enabled(0x0). An inverse version of the signal is exported out of
+the module to control clock enables
+ENDFIELD
+
+FIELD
+[1] 0x0
+MMCM_RSTN
+RW
+MMCM reset only (required for DRP access).
+Reset, default is IN-RESET (0x0), software must write 0x1 to bring up the core.
+ENDFIELD
+
+FIELD
+[0] 0x0
+RSTN
+RW
+Reset, default is IN-RESET (0x0), software must write 0x1 to bring up the core.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0011
+REG_CNTRL_1
+DAC Interface Control & Status
+ENDREG
+
+FIELD
+[0] 0x0
+SYNC
+RW
+Setting this bit synchronizes channels within a DAC, and across multiple instances.
+This bit self clears.
+ENDFIELD
+
+FIELD
+[1] 0x0
+EXT_SYNC_ARM
+RW
+Setting this bit will arm the trigger mechanism sensitive to an external sync signal.
+Once the external sync signal goes high it synchronizes channels within a DAC, and across multiple instances.
+This bit has an effect only the EXT_SYNC synthesis parameter is set.
+This bit self clears.
+ENDFIELD
+
+FIELD
+[2] 0x0
+EXT_SYNC_DISARM
+RW
+Setting this bit will disarm the trigger mechanism sensitive to an external sync signal.
+This bit has an effect only the EXT_SYNC synthesis parameter is set.
+This bit self clears.
+ENDFIELD
+
+FIELD
+[8] 0x0
+MANUAL_SYNC_REQUEST
+RW
+Setting this bit will issue an external sync event if it is hooked up inside the fabric.
+This bit has an effect only the EXT_SYNC synthesis parameter is set.
+This bit self clears.
+ENDFIELD
+
+
+############################################################################################
+############################################################################################
+
+REG
+0x0012
+REG_CNTRL_2
+DAC Interface Control & Status
+ENDREG
+
+FIELD
+[16] 0x0
+SDR_DDR_N
+RW
+Interface type (1 represents SDR, 0 represents DDR)
+ENDFIELD
+
+FIELD
+[15] 0x0
+SYMB_OP
+RW
+Select data symbol format mode (0x1)
+ENDFIELD
+
+FIELD
+[14] 0x0
+SYMB_8_16B
+RW
+Select number of bits for symbol format mode (1 represents 8b, 0 represents 16b) 
+ENDFIELD
+
+FIELD
+[12:8] 0x0
+NUM_LANES[4:0]
+RW
+Number of active lanes (1 : CSSI 1-lane, LSSI 1-lane, 2 : LSSI 2-lane, 4 : CSSI 4-lane)
+ENDFIELD
+
+FIELD
+[7] 0x0
+PAR_TYPE
+RW
+Select parity even (0x0) or odd (0x1).
+ENDFIELD
+
+FIELD
+[6] 0x0
+PAR_ENB
+RW
+Select parity (0x1) or frame (0x0) mode.
+ENDFIELD
+
+FIELD
+[5] 0x0
+R1_MODE
+RW
+Select number of RF channels 1 (0x1) or 2 (0x0).
+ENDFIELD
+
+FIELD
+[4] 0x0
+DATA_FORMAT
+RW
+Select data format 2's complement (0x0) or offset binary (0x1).
+NOT-APPLICABLE if DAC_DP_DISABLE is set (0x1).
+ENDFIELD
+
+FIELD
+[3:0] 0x00
+RESERVED[3:0]
+NA
+Reserved
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0013
+REG_RATECNTRL
+DAC Interface Control & Status
+ENDREG
+
+FIELD
+[7:0] 0x00
+RATE[7:0]
+RW
+The effective dac rate (the maximum possible rate is dependent on the interface clock).
+The samples are generated at 1/RATE of the interface clock.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0014
+REG_FRAME
+DAC Interface Control & Status
+ENDREG
+
+FIELD
+[0] 0x0
+FRAME
+RW
+The use of frame is device specific. Usually setting this bit to 1 generates a FRAME (1
+DCI clock period) pulse on the interface. This bit self clears.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0015
+REG_STATUS1
+DAC Interface Control & Status
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+CLK_FREQ[31:0]
+RO
+Interface clock frequency. This is relative to the processor clock and in many cases is
+100MHz. The number is represented as unsigned 16.16 format. Assuming a 100MHz processor
+clock the minimum is 1.523kHz and maximum is 6.554THz. The actual interface clock
+is CLK_FREQ * CLK_RATIO (see below). Note that the actual sampling clock may not be
+the same as the interface clock- software must consider device specific implementation
+parameters to calculate the final sampling clock.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0016
+REG_STATUS2
+DAC Interface Control & Status
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+CLK_RATIO[31:0]
+RO
+Interface clock ratio - as a factor actual received clock. This is implementation specific
+and depends on any serial to parallel conversion and interface type (ddr/sdr/qdr).
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0017
+REG_STATUS3
+DAC Interface Control & Status
+ENDREG
+
+FIELD
+[0] 0x0
+STATUS
+RO
+Interface status, if set indicates no errors. If not set, there 
+are errors, software may try resetting the cores.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0018
+REG_DAC_CLKSEL
+DAC Interface Control & Status
+ENDREG
+
+FIELD
+[0] 0x0
+DAC_CLKSEL
+RW
+Allows changing of the clock polarity. Note: its default value is CLK_EDGE_SEL
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x001A
+REG_SYNC_STATUS
+DAC Synchronization Status register
+ENDREG
+
+FIELD
+[0] 0x0
+DAC_SYNC_STATUS
+RO
+DAC synchronization status. Will be set to 1 while waiting for the external synchronization signal
+This bit has an effect only the EXT_SYNC synthesis parameter is set.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x001C
+REG_DRP_CNTRL
+DRP Control & Status
+ENDREG
+
+FIELD
+[28] 0x0
+DRP_RWN
+RW
+DRP read (0x1) or write (0x0) select (does not include GTX lanes).
+NOT-APPLICABLE if DRP_DISABLE is set (0x1).
+ENDFIELD
+
+FIELD
+[27:16] 0x00
+DRP_ADDRESS[11:0]
+RW
+DRP address, designs that contain more than one DRP accessible primitives 
+have selects based on the most significant bits (does not include GTX lanes).
+NOT-APPLICABLE if DRP_DISABLE is set (0x1).
+ENDFIELD
+
+FIELD
+[15:0] 0x0000
+RESERVED[15:0]
+RO
+Reserved for backwards compatibility
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x001D
+REG_DRP_STATUS
+DAC Interface Control & Status
+ENDREG
+
+FIELD
+[17] 0x0
+DRP_LOCKED
+RO
+If set indicates the MMCM/PLL is locked
+ENDFIELD
+
+FIELD
+[16] 0x0
+DRP_STATUS
+RO
+If set indicates busy (access pending). The read data may not be valid if 
+this bit is set (does not include GTX lanes).
+NOT-APPLICABLE if DRP_DISABLE is set (0x1).
+ENDFIELD
+
+FIELD
+[15:0] 0x0000
+RESERVED[15:0]
+RO
+Reserved for backwards compatibility
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x001E
+REG_DRP_WDATA
+DAC Interface Control & Status
+ENDREG
+
+FIELD
+[15:0] 0x0000
+DRP_WDATA[15:0]
+RW
+DRP write data (does not include GTX lanes).
+NOT-APPLICABLE if DRP_DISABLE is set (0x1).
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x001F
+REG_DRP_RDATA
+DAC Interface Control & Status
+ENDREG
+
+FIELD
+[15:0] 0x0000
+DRP_RDATA
+RO
+DRP read data (does not include GTX lanes).
+NOT-APPLICABLE if DRP_DISABLE is set (0x1).
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0022
+REG_UI_STATUS
+User Interface Status
+ENDREG
+
+FIELD
+[1] 0x0
+UI_OVF
+RW1C
+User Interface overflow. If set, indicates an overflow occurred during data transfer at
+the user interface (FIFO interface). Software must write a 0x1 to clear this register
+bit.
+ENDFIELD
+
+FIELD
+[0] 0x0
+UI_UNF
+RW1C
+User Interface underflow. If set, indicates an underflow occurred during data transfer at
+the user interface (FIFO interface). Software must write a 0x1 to clear this register
+bit.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0028
+REG_USR_CNTRL_1
+DAC User Control & Status
+ENDREG
+
+FIELD
+[7:0] 0x00
+USR_CHANMAX[7:0]
+RW
+This indicates the maximum number of inputs for the channel data multiplexers. User may add 
+different processing modules as inputs to the dac.
+NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x002E
+REG_DAC_GPIO_IN
+DAC GPIO inputs
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+DAC_GPIO_IN[31:0]
+RO
+This reads auxiliary GPI pins of the DAC core
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x002F
+REG_DAC_GPIO_OUT
+DAC GPIO outputs
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+DAC_GPIO_OUT[31:0]
+RW
+This controls auxiliary GPO pins of the DAC core
+NOT-APPLICABLE if GPIO_DISABLE is set (0x1).
+ENDFIELD
+############################################################################################
+############################################################################################
+
+TITLE
+DAC Channel (axi_ad*)
+DAC_CHANNEL
+ENDTITLE
+
+############################################################################################
+############################################################################################
+
+REG
+0x0100
+REG_CHAN_CNTRL_1
+DAC Channel Control & Status (channel - 0)
+ENDREG
+
+FIELD
+[15:0] 0x0000
+DDS_SCALE_1[15:0]
+RW
+The DDS scale for tone 1. Defines the amplitude of the tone. The format is 
+1.1.14 fixed point (signed, integer, fractional). The DDS in general runs on 
+16-bits, note that if you do use both channels and set both scale to 0x4000, 
+it is over-range. The final output is (channel_1_fullscale * scale_1) + 
+(channel_2 * scale_2).
+NOT-APPLICABLE if DDS_DISABLE is set (0x1).
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0101
+REG_CHAN_CNTRL_2
+DAC Channel Control & Status (channel - 0)
+ENDREG
+
+FIELD
+[31:16] 0x0000
+DDS_INIT_1[15:0]
+RW
+The DDS phase initialization for tone 1. Defines the initial phase offset of 
+the tone.
+NOT-APPLICABLE if DDS_DISABLE is set (0x1).
+ENDFIELD
+
+FIELD
+[15:0] 0x0000
+DDS_INCR_1[15:0]
+RW
+Defines the resolution of the phase accumulator. Its value can be defined by 
+<m>INCR = (f_out * 2^16) * clkratio / f_if</m>; where f_out is the generated 
+output frequency, and f_if is the frequency of the digital interface, and 
+clock_ratio is the ratio between the sampling clock and the interface clock.
+NOT-APPLICABLE if DDS_DISABLE is set (0x1).
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0102
+REG_CHAN_CNTRL_3
+DAC Channel Control & Status (channel - 0)
+ENDREG
+
+FIELD
+[15:0] 0x0000
+DDS_SCALE_2[15:0]
+RW
+The DDS scale for tone 1. Defines the amplitude of the tone. The format is 
+1.1.14 fixed point (signed, integer, fractional). The DDS in general runs on 
+16-bits, note that if you do use both channels and set both scale to 0x4000, 
+it is over-range. The final output is (channel_1_fullscale * scale_1) + 
+(channel_2 * scale_2).
+NOT-APPLICABLE if DDS_DISABLE is set (0x1).
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0103
+REG_CHAN_CNTRL_4
+DAC Channel Control & Status (channel - 0)
+ENDREG
+
+FIELD
+[31:16] 0x0000
+DDS_INIT_2[15:0]
+RW
+The DDS phase initialization for tone 1. Defines the initial phase offset of 
+the tone.
+NOT-APPLICABLE if DDS_DISABLE is set (0x1).
+ENDFIELD
+
+FIELD
+[15:0] 0x0000
+DDS_INCR_2[15:0]
+RW
+Defines the resolution of the phase accumulator. Its value can be defined by 
+<m>INCR = (f_out * 2^16) * clkratio / f_if</m>; where f_out is the generated 
+output frequency, and f_if is the frequency of the digital interface, and 
+clock_ratio is the ratio between the sampling clock and the interface clock.
+NOT-APPLICABLE if DDS_DISABLE is set (0x1).
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0104
+REG_CHAN_CNTRL_5
+DAC Channel Control & Status (channel - 0)
+ENDREG
+
+FIELD
+[31:16] 0x0000
+DDS_PATT_2[15:0]
+RW
+The DDS data pattern for this channel.
+ENDFIELD
+
+FIELD
+[15:0] 0x0000
+DDS_PATT_1[15:0]
+RW
+The DDS data pattern for this channel.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0105
+REG_CHAN_CNTRL_6
+DAC Channel Control & Status (channel - 0)
+ENDREG
+
+FIELD
+[2] 0x0
+IQCOR_ENB
+RW
+if set, enables IQ correction.
+NOT-APPLICABLE if DAC_DP_DISABLE is set (0x1).
+ENDFIELD
+
+FIELD
+[1] 0x0
+DAC_LB_OWR
+RW
+If set, forces DAC_DDS_SEL to 0x8, loopback
+If DAC_LB_OWR and DAC_PN_OWR are both set, they are ignored
+ENDFIELD
+
+FIELD
+[0] 0x0
+DAC_PN_OWR
+RW
+IF set, forces DAC_DDS_SEL to 0x09, device specific pnX
+If DAC_LB_OWR and DAC_PN_OWR are both set, they are ignored
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0106
+REG_CHAN_CNTRL_7
+DAC Channel Control & Status (channel - 0)
+ENDREG
+
+FIELD
+[3:0] 0x00
+DAC_DDS_SEL[3:0]
+RW
+Select internal data sources (available only if the DAC supports it). \\
+ - 0x00: internal tone (DDS) \\
+ - 0x01: pattern (SED) \\
+ - 0x02: input data (DMA) \\
+ - 0x03: 0x00 \\
+ - 0x04: inverted pn7 \\
+ - 0x05: inverted pn15 \\
+ - 0x06: pn7 (standard O.150) \\
+ - 0x07: pn15 (standard O.150) \\
+ - 0x08: loopback data (ADC) \\
+ - 0x09: pnX (Device specific e.g. ad9361) \\
+ - 0x0A: Nibble ramp (Device specific e.g. adrv9001) \\
+ - 0x0B: 16 bit ramp (Device specific e.g. adrv9001) \\
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0107
+REG_CHAN_CNTRL_8
+DAC Channel Control & Status (channel - 0)
+ENDREG
+
+FIELD
+[31:16] 0x0000
+IQCOR_COEFF_1[15:0]
+RW
+IQ correction (if equipped) coefficient. If scale & offset is implemented, this is the scale value
+and the format is 1.1.14 (sign, integer and fractional bits). If matrix multiplication is used,
+this is the channel I coefficient and the format is 1.1.14 (sign, integer and fractional bits).
+NOT-APPLICABLE if IQCORRECTION_DISABLE is set (0x1).
+ENDFIELD
+
+FIELD
+[15:0] 0x0000
+IQCOR_COEFF_2[15:0]
+RW
+IQ correction (if equipped) coefficient. If scale & offset is implemented, this is the offset value
+and the format is 2's complement. If matrix multiplication is used, this is the channel Q coefficient
+and the format is 1.1.14 (sign, integer and fractional bits).
+NOT-APPLICABLE if IQCORRECTION_DISABLE is set (0x1).
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0108
+REG_USR_CNTRL_3
+DAC Channel Control & Status (channel - 0)
+ENDREG
+
+FIELD
+[25] 0x0
+USR_DATATYPE_BE
+RW
+The user data type format- if set, indicates big endian (default is little endian).
+NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).
+ENDFIELD
+
+FIELD
+[24] 0x0
+USR_DATATYPE_SIGNED
+RW
+The user data type format- if set, indicates signed (2's complement) data (default is unsigned).
+NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).
+ENDFIELD
+
+FIELD
+[23:16] 0x00
+USR_DATATYPE_SHIFT[7:0]
+RW
+The user data type format- the amount of right shift for actual samples within the total number
+of bits.
+NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).
+ENDFIELD
+
+FIELD
+[15:8] 0x00
+USR_DATATYPE_TOTAL_BITS[7:0]
+RW
+The user data type format- number of total bits used for a sample. The total number of bits must
+be an integer multiple of 8 (byte aligned).
+NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).
+ENDFIELD
+
+FIELD
+[7:0] 0x00
+USR_DATATYPE_BITS[7:0]
+RW
+The user data type format- number of bits in a sample. This indicates the actual sample data bits.
+NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0109
+REG_USR_CNTRL_4
+DAC Channel Control & Status (channel - 0)
+ENDREG
+
+FIELD
+[31:16] 0x0000
+USR_INTERPOLATION_M[15:0]
+RW
+This holds the user interpolation M value of the channel that is currently being selected on 
+the multiplexer above. The total interpolation factor is of the form M/N.
+NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).
+ENDFIELD
+
+FIELD
+[15:0] 0x0000
+USR_INTERPOLATION_N[15:0]
+RW
+This holds the user interpolation N value of the channel that is currently being selected on
+the multiplexer above. The total interpolation factor is of the form M/N.
+NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x010A
+REG_USR_CNTRL_5
+DAC Channel Control & Status (channel - 0)
+ENDREG
+
+FIELD
+[0] 0x0
+DAC_IQ_MODE[0]
+RW
+Enable complex mode. In this mode the driven data to the DAC must be a sequence 
+of I and Q sample pairs.
+ENDFIELD
+
+FIELD
+[1] 0x0
+DAC_IQ_SWAP[1]
+RW
+Allows IQ swapping in complex mode. Only takes effect if complex mode is enabled.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0110
+REG_*
+Channel 1, similar to registers 0x100 to 0x10f.
+ENDREG
+
+REG
+0x0120
+REG_*
+Channel 2, similar to registers 0x100 to 0x10f.
+ENDREG
+
+REG
+0x01F0
+REG_*
+Channel 15, similar to registers 0x100 to 0x10f.
+ENDREG
+
+############################################################################################
+############################################################################################

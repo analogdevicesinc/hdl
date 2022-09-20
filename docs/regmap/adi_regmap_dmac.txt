@@ -1,0 +1,561 @@
+TITLE
+DMA Controller (axi_dmac)
+DMAC
+ENDTITLE
+
+############################################################################################
+############################################################################################
+
+REG
+0x000
+VERSION
+Version of the peripheral. Follows semantic versioning. Current version 4.03.61.
+ENDREG
+
+FIELD
+[31:16] 0x04
+VERSION_MAJOR
+RO
+ENDFIELD
+
+FIELD
+[15:8] 0x03
+VERSION_MINOR
+RO
+ENDFIELD
+
+FIELD
+[7:0] 0x61
+VERSION_PATCH
+RO
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x001
+PERIPHERAL_ID
+ENDREG
+
+FIELD
+[31:0] ''ID''
+PERIPHERAL_ID
+RO
+Value of the ID configuration parameter.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x002
+SCRATCH
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+SCRATCH
+RW
+Scratch register useful for debug.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x003
+IDENTIFICATION
+ENDREG
+
+FIELD
+[31:0] 0x444D4143
+IDENTIFICATION
+RO
+Peripheral identification ('D', 'M', 'A', 'C').
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x004
+INTERFACE_DESCRIPTION
+ENDREG
+
+FIELD
+[3:0] log2(''DMA_DATA_WIDTH_DEST''/8)
+BYTES_PER_BEAT_DEST_LOG2
+R
+Width of data bus on destination interface. Log2 of interface data widths in bytes.
+ENDFIELD
+
+FIELD
+[5:4] ''DMA_TYPE_DEST''
+DMA_TYPE_DEST
+R
+Value of ''DMA_TYPE_DEST'' parameter.(0 - AXI MemoryMap, 1 -  AXI Stream, 2 - FIFO )
+ENDFIELD
+
+FIELD
+[11:8] log2(''DMA_DATA_WIDTH_SRC''/8)
+BYTES_PER_BEAT_SRC_LOG2
+R
+Width of data bus on source interface. Log2 of interface data widths in bytes.
+ENDFIELD
+
+FIELD
+[13:12] ''DMA_TYPE_SRC''
+DMA_TYPE_SRC
+R
+Value of ''DMA_TYPE_SRC'' parameter.(0 - AXI MemoryMap, 1 -  AXI Stream, 2 - FIFO )
+ENDFIELD
+
+FIELD
+[19:16] ''BYTES_PER_BURST_WIDTH''
+BYTES_PER_BURST_WIDTH
+R
+Value of ''BYTES_PER_BURST_WIDTH'' interface parameter. Log2 of the real ''MAX_BYTES_PER_BURST''.
+The starting address of the transfer must be aligned with ''MAX_BYTES_PER_BURST'' to avoid crossing
+the 4kB address boundary.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x020
+IRQ_MASK
+ENDREG
+
+FIELD
+[1] 0x1
+TRANSFER_COMPLETED
+RW
+Masks the TRANSFER_COMPLETED IRQ.
+ENDFIELD
+
+FIELD
+[0] 0x1
+TRANSFER_QUEUED
+RW
+Masks the TRANSFER_QUEUED IRQ.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x021
+IRQ_PENDING
+ENDREG
+
+FIELD
+[1] 0x0
+TRANSFER_COMPLETED
+RW1C
+This bit will be asserted if a transfer has been completed and the
+TRANSFER_COMPLETED bit in the IRQ_MASK register is not set. Either if all bytes have been
+transferred or an error occurred during the transfer.
+ENDFIELD
+
+FIELD
+[0] 0x0
+TRANSFER_QUEUED
+RW1C
+This bit will be asserted if a transfer has been queued and it is possible to queue
+the next transfer. It can be masked out by setting the TRANSFER_QUEUED bit in the 
+IRQ_MASK register.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x022
+IRQ_SOURCE
+ENDREG
+
+FIELD
+[1] 0x0
+TRANSFER_COMPLETED
+RO
+This bit will be asserted if a transfer has been completed. Either if all bytes have been
+transferred or an error occurred during the transfer. Cleared together with the corresponding IRQ_PENDING bit.
+ENDFIELD
+
+FIELD
+[0] 0x0
+TRANSFER_QUEUED
+RO
+This bit will be asserted if a transfer has been queued and it is possible to queue
+the next transfer. Cleared together with the corresponding IRQ_PENDING bit.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x100
+CONTROL
+ENDREG
+
+FIELD
+[1] 0x0
+PAUSE
+RW
+When set to 1 the currently active transfer is paused. It will be resumed once the bit is
+cleared again.
+ENDFIELD
+
+FIELD
+[0] 0x0
+ENABLE
+RW
+When set to 1 the DMA channel is enabled.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x101
+TRANSFER_ID
+ENDREG
+
+FIELD
+[1:0] 0x00
+TRANSFER_ID
+RO
+This register contains the ID of the next transfer. The ID is generated by the DMAC and after the
+transfer has been started can be used to check if the transfer has finished by checking the
+corresponding bit in the TRANSFER_DONE register. The contents of this register is only valid if
+TRANSFER_SUBMIT is 0.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x102
+TRANSFER_SUBMIT
+ENDREG
+
+FIELD
+[0] 0x00
+TRANSFER_SUBMIT
+RW
+Writing a 1 to this register queues a new transfer. The bit transitions back to 0 once
+the transfer has been queued or the DMA channel is disabled.
+
+Writing a 0 to this register has no effect.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x103
+FLAGS
+ENDREG
+
+FIELD
+[0] ''CYCLIC''
+CYCLIC
+RW
+Setting this field to 1 puts the DMA transfer into cyclic mode. In cyclic mode
+the controller will re-start a transfer again once it has finished. In cyclic
+mode no end-of-transfer interrupts will be generated.
+ENDFIELD
+
+FIELD
+[1] 0x1
+TLAST
+RW
+When setting this bit for a MM to AXIS transfer the TLAST signal
+will be asserted during the last beat of the transfer.
+For AXIS to MM transfers the TLAST signal from the AXIS interface is monitored.
+After its occurrence all descriptors are ignored until this bit is set.
+ENDFIELD
+
+FIELD
+[2] 0x0
+PARTIAL_REPORTING_EN
+RW
+When setting this bit the length of partial transfers caused eventually by TLAST will be recorded.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x104
+DEST_ADDRESS
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+DEST_ADDRESS
+RW
+This register contains the destination address of the transfer. The address needs to be aligned
+to the bus width.
+
+This register is only valid if the DMA channel has been configured for write to memory support.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x105
+SRC_ADDRESS
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+SRC_ADDRESS
+RW
+This register contains the source address of the transfer. The address needs to be aligned
+to the bus width.
+
+This register is only valid if the DMA channel has been configured for read from memory support.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x106
+X_LENGTH
+ENDREG
+
+FIELD
+[23:0] {log2(max(\n''DMA_DATA_WIDTH_SRC'',\n''DMA_DATA_WIDTH_DEST''\n)/8){1'b1}}
+X_LENGTH
+RW
+Number of bytes to transfer - 1.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x107
+Y_LENGTH
+ENDREG
+
+FIELD
+[23:0] 0x000000
+Y_LENGTH
+RW
+Number of rows to transfer - 1.
+
+Note, this field is only valid if the DMA channel has been configured with 2D transfer support.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x108
+DEST_STRIDE
+ENDREG
+
+FIELD
+[23:0] 0x000000
+DEST_STRIDE
+RW
+The number of bytes between the start of one row and the next row for the
+destination address. Needs to be aligned to the bus width.
+
+Note, this field is only valid if the DMA channel has been configured with 2D
+transfer support and write to memory support.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x109
+SRC_STRIDE
+ENDREG
+
+FIELD
+[23:0] 0x000000
+SRC_STRIDE
+RW
+The number of bytes between the start of one row and the next row for the source
+address. Needs to be aligned to the bus width.
+
+Note, this field is only valid if the DMA channel has been configured with 2D
+transfer and read from memory support.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+
+REG
+0x10a
+TRANSFER_DONE
+If bit x is set in this register the transfer with ID x has been completed. The bit will automatically
+be cleared when a new transfer with this ID is queued and will be set when the transfer has been completed.
+ENDREG
+
+FIELD
+[0] 0x0
+TRANSFER_0_DONE
+RO
+If this bit is set the transfer with ID 0 has been completed.
+ENDFIELD
+
+FIELD
+[1] 0x0
+TRANSFER_1_DONE
+RO
+If this bit is set the transfer with ID 1 has been completed.
+ENDFIELD
+
+FIELD
+[2] 0x0
+TRANSFER_2_DONE
+RO
+If this bit is set the transfer with ID 2 has been completed.
+ENDFIELD
+
+FIELD
+[3] 0x0
+TRANSFER_3_DONE
+RO
+If this bit is set the transfer with ID 3 has been completed.
+ENDFIELD
+
+FIELD
+[31] 0x0
+PARTIAL_TRANSFER_DONE
+RO
+If this bit is set at least one partial transfer was transferred.
+This field will reset when the ENABLE control bit is reset or when
+all information on partial transfers was read through PARTIAL_TRANSFER_LENGTH and
+PARTIAL_TRANSFER_ID registers.
+ENDFIELD
+############################################################################################
+############################################################################################
+
+REG
+0x10b
+ACTIVE_TRANSFER_ID
+ENDREG
+
+FIELD
+[4:0] 0x00
+ACTIVE_TRANSFER_ID
+RO
+ID of the currently active transfer. When no transfer is active this register will be equal to
+the TRANSFER_ID register.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x10c
+STATUS
+ENDREG
+
+FIELD
+[31:0] 0x00
+RESERVED
+RO
+This register is reserved for future usage. Reading it will always return 0.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x10d
+CURRENT_DEST_ADDRESS
+ENDREG
+
+FIELD
+[31:0] 0x00
+CURRENT_DEST_ADDRESS
+RO
+Address to which the next data sample is written to.
+
+This register is only valid if the DMA channel has been configured for write to memory support.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x10e
+CURRENT_SRC_ADDRESS
+ENDREG
+
+FIELD
+[31:0] 0x00
+CURRENT_SRC_ADDRESS
+RO
+Address form which the next data sample is read.
+
+This register is only valid if the DMA channel has been configured for read from memory support.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x112
+TRANSFER_PROGRESS
+ENDREG
+
+FIELD
+[23:0] 0x000000
+TRANSFER_PROGRESS
+RO
+This field presents the number of bytes transferred to the destination for the current transfer.
+This register will be cleared once the transfer completes.
+This should be used for debugging purposes only.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x113
+PARTIAL_TRANSFER_LENGTH
+ENDREG
+
+FIELD
+[31:0] 0x000000
+PARTIAL_LENGTH
+RO
+Length of the partial transfer in bytes. Represents the number of bytes received
+until the moment of TLAST assertion. This will be smaller than the programmed length
+from the X_LENGTH and Y_LENGTH registers.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x114
+PARTIAL_TRANSFER_ID
+Must be read after the PARTIAL_TRANSFER_LENGTH registers.
+ENDREG
+
+FIELD
+[1:0] 0x0
+PARTIAL_TRANSFER_ID
+RO
+ID of the transfer that was partial.
+
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+
