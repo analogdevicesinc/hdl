@@ -70,7 +70,7 @@ module spi_engine_execution #(
 
  (* mark_debug = "true" *) input echo_sclk,
  (* mark_debug = "true" *) output reg sclk,
- (* mark_debug = "true" *) output reg [NUM_OF_SDO-1:0] sdo,
+ (* mark_debug = "true" *) output [NUM_OF_SDO-1:0] sdo,
  (* mark_debug = "true" *) output reg sdo_t,
  (* mark_debug = "true" *) input [NUM_OF_SDI-1:0] sdi,
  (* mark_debug = "true" *) output reg [NUM_OF_CS-1:0] cs,
@@ -573,33 +573,33 @@ begin : g_quad_sdo
     end
   end
 
-//  assign sdo[3] = sdo_int_s [3] data_sdo_shift[63];
-//  assign sdo[2] = data_sdo_shift2[63];
-//  assign sdo[1] = data_sdo_shift3[63];
-//  assign sdo[0] = data_sdo_shift4[63];
+  assign sdo[3] = data_sdo_shift[63];
+  assign sdo[2] = data_sdo_shift2[63];
+  assign sdo[1] = data_sdo_shift3[63];
+  assign sdo[0] = data_sdo_shift4[63];
 
   // Additional register stage to improve timing
   always @(posedge clk) begin
     sclk <= sclk_int;
     sdo_t <= sdo_t_int;
-    if (ddr_en) begin
-      sdo[3] <= data_sdo_shift[63];
-      sdo[2] <= data_sdo_shift2[63];
-      sdo[1] <= data_sdo_shift3[63];
-      sdo[0] <= data_sdo_shift4[63];
-    end else begin
-      sdo_int_s[3] <= data_sdo_shift[63];
-      sdo_int_s[2] <= data_sdo_shift2[63];
-      sdo_int_s[1] <= data_sdo_shift3[63];
-      sdo_int_s[0] <= data_sdo_shift4[63];
-      sdo <= sdo_int_s;
-    end
+//    if (ddr_en) begin
+//      sdo[3] <= data_sdo_shift[63];
+//      sdo[2] <= data_sdo_shift2[63];
+//      sdo[1] <= data_sdo_shift3[63];
+//      sdo[0] <= data_sdo_shift4[63];
+//    end else begin
+//      sdo_int_s[3] <= data_sdo_shift[63];
+//      sdo_int_s[2] <= data_sdo_shift2[63];
+//      sdo_int_s[1] <= data_sdo_shift3[63];
+//      sdo_int_s[0] <= data_sdo_shift4[63];
+//      sdo <= sdo_int_s;
+//    end
   end
 
 end /* g_quad_sdo */
 endgenerate
 
-  (* mark_debug = "true" *) wire transfer_active_s = ddr_en == 'h1 ? transfer_active_d [1] : transfer_active_d [1];
+  (* mark_debug = "true" *) wire transfer_active_s = ddr_en == 'h1 ? transfer_active_d [2] : transfer_active_d [1];
 
 reg [3:0] transfer_active_d = 'h0;
 always @(posedge clk) begin

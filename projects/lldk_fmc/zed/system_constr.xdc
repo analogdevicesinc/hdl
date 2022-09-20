@@ -1,3 +1,70 @@
+create_clock -period 16.667 -name dac_0_spi_sclk_g [get_ports dac_0_spi_sclk]
+
+#set_output_delay -clock dac_0_spi_sclk_g -min 6.8 [get_ports dac_0_spi_sdio[*]]
+#set_output_delay -clock dac_0_spi_sclk_g -max 2.8 [get_ports dac_0_spi_sdio[*]]
+
+#set_output_delay -clock dac_0_spi_sclk_g -min 6.8 [get_ports dac_0_spi_sdio[*]] -clock_fall -add_delay
+#set_output_delay -clock dac_0_spi_sclk_g -max 2.8 [get_ports dac_0_spi_sdio[*]] -clock_fall -add_delay
+
+
+set_output_delay -clock dac_0_spi_sclk_g -min 3.000 [get_ports {dac_0_spi_sdio[*]}]
+set_output_delay -clock dac_0_spi_sclk_g -max -3.000 [get_ports {dac_0_spi_sdio[*]}]
+
+set_output_delay -clock dac_0_spi_sclk_g -clock_fall -min -add_delay 3.000 [get_ports {dac_0_spi_sdio[*]}]
+set_output_delay -clock dac_0_spi_sclk_g -clock_fall -max -add_delay -3.000 [get_ports {dac_0_spi_sdio[*]}]
+
+
+
+#  Double Data Rate Source Synchronous Outputs
+#
+#  Source synchronous output interfaces can be constrained either by the max data skew
+#  relative to the generated clock or by the destination device setup/hold requirements.
+#
+#  Setup/Hold Case:
+#  Setup and hold requirements for the destination device and board trace delays are known.
+#
+# forwarded                        _________________________________
+# clock                 __________|                                 |______________
+#                                 |                                 |
+#                           tsu_r |  thd_r                    tsu_f | thd_f
+#                         <------>|<------->                <------>|<----->
+#                         ________|_________                ________|_______
+# data @ destination   XXX__________________XXXXXXXXXXXXXXXX________________XXXXX
+#
+# Example of creating generated clock at clock output port
+# create_generated_clock -name <gen_clock_name> -multiply_by 1 -source [get_pins <source_pin>] [get_ports <output_clock_port>]
+# gen_clock_name is the name of forwarded clock here. It should be used below for defining "fwclk".
+
+#set fwclk        <clock-name>;     # forwarded clock name (generated using create_generated_clock at output clock port)
+#set tsu_r        2;            # destination device setup time requirement for rising edge
+#set thd_r        2;            # destination device hold time requirement for rising edge
+#set tsu_f        2;            # destination device setup time requirement for falling edge
+#set thd_f        2;            # destination device hold time requirement for falling edge
+#set trce_dly_max 0.000;            # maximum board trace delay
+#set trce_dly_min 0.000;            # minimum board trace delay
+#set output_ports <output_ports>;   # list of output ports
+
+## Output Delay Constraints
+#set_output_delay -clock $fwclk -max [expr $trce_dly_max + $tsu_r] [get_ports $output_ports];
+#set_output_delay -clock $fwclk -min [expr $trce_dly_min - $thd_r] [get_ports $output_ports];
+
+#set_output_delay -clock $fwclk -max [expr $trce_dly_max + $tsu_f] [get_ports $output_ports] -clock_fall -add_delay;
+#set_output_delay -clock $fwclk -min [expr $trce_dly_min - $thd_f] [get_ports $output_ports] -clock_fall -add_delay;
+
+# Report Timing Template
+# report_timing -rise_to [get_ports $output_ports] -max_paths 20 -nworst 2 -delay_type min_max -name src_sync_ddr_out_rise -file src_sync_ddr_out_rise.txt;
+# report_timing -fall_to [get_ports $output_ports] -max_paths 20 -nworst 2 -delay_type min_max -name src_sync_ddr_out_fall -file src_sync_ddr_out_fall.txt;
+
+
+#create_generated_clock -name spi_clk -source [get_pins -filter name=~*CLKIN1 -of [get_cells -hier -filter name=~*axi_clkgen*i_mmcm]] -master_clock clk_fpga_0 [get_pins -filter name=~*CLKOUT0 -of [get_cells -hier -filter name=~*axi_clkgen*i_mmcm]]
+
+#set _xlnx_shared_i0 [get_cells -hierarchical -filter {NAME=~*.data_sdo_shift_reg*[*]}]
+#set_multicycle_path -setup -from [get_clocks spi_clk] -to $_xlnx_shared_i0 8
+#set_multicycle_path -hold -from [get_clocks spi_clk] -to $_xlnx_shared_i0 7
+
+#set_multicycle_path -setup -from [get_clocks spi_clk] -to [get_cells -hierarchical -filter NAME=~*/*_execution/inst/left_aligned_reg*] 8
+#set_multicycle_path -hold -from [get_clocks spi_clk] -to [get_cells -hierarchical -filter NAME=~*/*_execution/inst/left_aligned_reg*] 7
+
 
 # lldk
 

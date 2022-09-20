@@ -121,13 +121,12 @@ reg [(DATA_WIDTH-1):0] sdo_mem[0:2**SDO_MEM_ADDRESS_WIDTH-1];
  (* mark_debug = "true" *) wire [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_os_rd_addr_next;
  (* mark_debug = "true" *) wire spi_enable;
  (* mark_debug = "true" *) wire mem_empty;
-wire offload_sdo_valid;
+ (* mark_debug = "true" *) wire offload_sdo_valid;
 wire offload_sdo_ready;
 wire cmd_mem_os_s;
 wire [(DATA_WIDTH-1):0] offload_sdo_data;
 
 assign cmd_mem_os_s = ctrl_cmd_wr_data [15];
-
 
 assign offload_sdo_ready_0 = (ctrl_axis_sw ? 0 : offload_sdo_ready);
 assign offload_sdo_ready_1 = (ctrl_axis_sw ? offload_sdo_ready : 0);
