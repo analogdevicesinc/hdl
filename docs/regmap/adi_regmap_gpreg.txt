@@ -1,0 +1,134 @@
+TITLE
+General Purpose Registers (axi_gpreg)
+AXI_GPREG
+ENDTITLE
+
+############################################################################################
+############################################################################################
+
+REG
+0x0100
+REG_IO_ENB
+IO control register
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+IO_ENB
+RW
+IO control register (use as tri-state control, logic depends on the buffer type).
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0101
+REG_IO_OUT
+IO output register
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+IO_ENB
+RW
+IO output register.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+
+REG
+0x0102
+REG_IO_IN
+IO input register
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+IO_IN
+RO
+IO input register.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0110
+REG_*
+Channel 1, similar to register 0x100 to 0x10f.
+ENDREG
+
+REG
+0x0120
+REG_*
+Channel 2, similar to register 0x100 to 0x10f.
+ENDREG
+
+REG
+0x01f0
+REG_*
+Channel 15, similar to register 0x100 to 0x10f.
+ENDREG
+
+############################################################################################
+############################################################################################
+
+REG
+0x0200
+REG_CM_RESET
+Reset register
+ENDREG
+
+FIELD
+[0] 0x0
+CM_RESET_N
+RW
+Reset register (write a 0x01 to bring core out of reset).
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0202
+REG_CM_COUNT
+Clock count register
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+CM_CLK_COUNT
+RO
+Interface clock frequency. This is relative to the processor clock and in many cases is
+100MHz. The number is represented as unsigned 16.16 format. Assuming a 100MHz processor
+clock the minimum is 1.523kHz and maximum is 6.554THz.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0210
+REG_*
+Channel 1, similar to register 0x200 to 0x20f.
+ENDREG
+
+REG
+0x0220
+REG_*
+Channel 2, similar to register 0x200 to 0x20f.
+ENDREG
+
+REG
+0x02f0
+REG_*
+Channel 15, similar to register 0x200 to 0x20f.
+ENDREG
+
+############################################################################################
+############################################################################################
+
+

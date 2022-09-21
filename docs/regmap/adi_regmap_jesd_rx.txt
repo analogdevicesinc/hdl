@@ -1,0 +1,991 @@
+TITLE
+JESD204 RX (axi_jesd204_rx)
+JESD_RX
+ENDTITLE
+
+############################################################################################
+############################################################################################
+
+REG
+0x00
+VERSION
+Version of the peripheral. Follows semantic versioning. Current version 1.03.a.
+ENDREG
+
+FIELD
+[31:16] 0x0001
+VERSION_MAJOR
+RO
+ENDFIELD
+
+FIELD
+[15:8] 0x03
+VERSION_MINOR
+RO
+ENDFIELD
+
+FIELD
+[7:0] 0x61
+VERSION_PATCH
+RO
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x01
+PERIPHERAL_ID
+ENDREG
+
+FIELD
+[31:0] 0x????????
+PERIPHERAL_ID
+RO
+Value of the ID configuration parameter.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x02
+SCRATCH
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+SCRATCH
+RW
+Scratch register useful for debug.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x03
+IDENTIFICATION
+ENDREG
+
+FIELD
+[31:0] 0x32303452
+IDENTIFICATION
+RO
+Peripheral identification ('2', '0', '4', 'R').
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x04
+SYNTH_NUM_LANES
+ENDREG
+
+FIELD
+[31:0] 0x????????
+SYNTH_NUM_LANES
+RO
+Number of supported lanes.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x05
+SYNTH_DATA_PATH_WIDTH
+ENDREG
+
+FIELD
+[31:16] 0x0000
+Reserved
+RO
+ENDFIELD
+
+FIELD
+[15:8] 0x00000002
+TPL_DATA_PATH_WIDTH
+RO
+Data path width in octets at Transport Layer interface. Available starting from version 1.07.a;
+ENDFIELD
+
+FIELD
+[7:0] 0x00000002
+SYNTH_DATA_PATH_WIDTH
+RO
+Log2 of internal data path width in octets. Represents the datapath width towards the physical interface.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x06
+SYNTH_REG_1
+Core description register.
+ENDREG
+
+FIELD
+[31:19] 0x0000
+Reserved
+RO
+ENDFIELD
+
+FIELD
+[18] 0
+ENABLE_CHAR_REPLACE
+RO
+This bit reflects the presence of character replacement monitoring logic for cases when scrambling is disabled.
+Available starting from version 1.07.a;
+ENDFIELD
+
+FIELD
+[17] 0
+ENABLE_FRAME_ALIGN_ERR_RESET
+RO
+If this bit is set in case of frame misalignment is detected the core resets itself.
+No software intervention is required.
+If the bit is not set and misalignment is detected the software must restart the link.
+Available starting from version 1.07.a;
+ENDFIELD
+
+FIELD
+[16] 1
+ENABLE_FRAME_ALIGN_CHECK
+RO
+This bit reflects the presence of frame alignment monitor.
+Available starting from version 1.07.a;
+ENDFIELD
+
+FIELD
+[12] ASYNC_CLK
+ASYNC_CLK
+RO
+This bit is set if link clock and device clock are connected to different sources.
+This is useful for supporting modes where datapath width is not integer multiple of F.
+Available starting from version 1.07.a;
+ENDFIELD
+
+FIELD
+[9:8] 0x??
+DECODER
+RO
+Decoder presence: 01 - 8B10B decoder \\ 10 - 64B66B decoder
+ENDFIELD
+
+FIELD
+[7:0] 0x??
+NUM_LINKS
+RO
+Maximum supported links. Valid for 8B/10B encoder.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x10
+SYNTH_ELASTIC_BUFFER_SIZE
+ENDREG
+
+FIELD
+[31:0] 0x00000100
+SYNTH_ELASTIC_BUFFER_SIZE
+RO
+Elastic buffer size in octets.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x20
+IRQ_ENABLE
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+IRQ_ENABLE
+RW
+Interrupt enable.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x21
+IRQ_PENDING
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+IRQ_PENDING
+RW1C-V
+Pending and enabled interrupts.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x22
+IRQ_SOURCE
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+IRQ_SOURCE
+RW1C-V
+Pending interrupts.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x30
+LINK_DISABLE
+JESD204B link disable.
+ENDREG
+
+FIELD
+[31:1] 0x00
+Reserved
+RO
+ENDFIELD
+
+FIELD
+[0] 0x1
+LINK_DISABLE
+RW
+0 = Enable link, 1 = Disable link.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x31
+LINK_STATE
+JESD204B link state.
+ENDREG
+
+FIELD
+[31:2] 0x00
+Reserved
+RO
+ENDFIELD
+
+FIELD
+[1] 0x?
+EXTERNAL_RESET
+RO
+0 = External reset de-asserted, 1 = External reset asserted.
+ENDFIELD
+
+FIELD
+[0] 0x1
+LINK_STATE
+RO
+0 = Link enabled, 1 = Link disabled.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x32
+LINK_CLK_FREQ
+ENDREG
+
+FIELD
+[20:0] 0x?????????
+LINK_CLK_FREQ
+RO-V
+Ratio of the link_clk frequency relative to the s_axi_aclk. Format is 16.16.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x33
+DEVICE_CLK_FREQ
+ENDREG
+
+FIELD
+[20:0] 0x?????????
+DEVICE_CLK_FREQ
+RO-V
+Ratio of the device_clk frequency relative to the s_axi_aclk. Format is 16.16.
+Available starting from version 1.07.a;
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x40
+SYSREF_CONF
+SYSREF configuration
+ENDREG
+
+FIELD
+[31:2] 0x00
+Reserved
+RO
+ENDFIELD
+
+FIELD
+[1] 0x0
+SYSREF_ONESHOT
+RW
+In oneshot mode only the first occurrence of the SYSREF signal is used for alignment.
+ENDFIELD
+
+FIELD
+[0] 0x0
+SYSREF_DISABLE
+RW
+Enable/Disable SYSREF handling.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x41
+SYSREF_LMFC_OFFSET
+SYSREF LMFC offset
+ENDREG
+
+FIELD
+[31:10] 0x00
+Reserved
+RO
+ENDFIELD
+
+FIELD
+[9:0] 0x00
+SYSREF_LMFC_OFFSET
+RW
+Offset between SYSREF event and internal LMFC event in octets.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x42
+SYSREF_STATUS
+SYSREF status
+ENDREG
+
+FIELD
+[31:2] 0x00
+Reserved
+RO
+ENDFIELD
+
+FIELD
+[1] 0x0
+SYSREF_ALIGNMENT_ERROR
+RW1C-V
+Indicates that an external SYSREF event has been observed that was unaligned to a previously
+observed event.
+ENDFIELD
+
+FIELD
+[0] 0x0
+SYSREF_DETECTED
+RW1C-V
+Indicates that an external SYSREF event has been observed.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x80
+LANES_DISABLE
+Enabled/Disabled lanes.
+ENDREG
+
+FIELD
+[n] 0x0
+LANE_DISABLEn
+RW
+Enable/Disable n-th lane (0 = enabled, 1 = disabled).
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x84
+LINK_CONF0
+JESD204B link configuration.
+ENDREG
+
+FIELD
+[31:19] 0x00
+Reserved
+RO
+ENDFIELD
+
+FIELD
+[18:16] 0x00
+OCTETS_PER_FRAME
+RW
+Number of octets per frame - 1 (F).
+ENDFIELD
+
+FIELD
+[15:10] 0x00
+Reserved
+RO
+ENDFIELD
+
+FIELD
+[9:0] 0x03
+OCTETS_PER_MULTIFRAME
+RW
+Number of octets per multi-frame - 1 (K x F).
+In 64B/66B mode represents the number of octets per extended multiblock.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x85
+LINK_CONF1
+JESD204B link configuration.
+ENDREG
+
+FIELD
+[31:2] 0x0
+Reserved
+RO
+ENDFIELD
+
+FIELD
+[1] 0x0
+CHAR_REPLACEMENT_DISABLE
+RW
+Enable/Disable user data alignment character replacement (0 = enabled, 1 = disabled).
+Valid for 8B/10B encoder.
+ENDFIELD
+
+FIELD
+[0] 0x0
+DESCRAMBLER_DISABLE
+RW
+Enable/Disable user data descrambling (0 = enabled, 1 = disabled).
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x86
+MULTI_LINK_DISABLE
+Enable/Disable links in case of a multi-link architecture.
+Valid for 8B/10B encoder.
+ENDREG
+
+FIELD
+[n] 0x0
+LINK_DISABLEn
+RW
+Enable/Disable n-th link (0 = enabled, 1 = disabled).
+ENDFIELD
+
+
+############################################################################################
+############################################################################################
+
+REG
+0x87
+LINK_CONF4
+JESD204B link configuration.
+ENDREG
+
+FIELD
+[31:8] 0x0
+Reserved
+RO
+ENDFIELD
+
+FIELD
+[7:0] 0x00
+TPL_BEATS_PER_MULTIFRAME
+RW
+Number of beats per multi-frame - 1 (K x F / TPL_DATA_PATH_WIDTH) at interface to Transport Layer.
+In 64B/66B mode represents the number of octets per extended multiblock.
+Available starting from version 1.07.a;
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x90
+LINK_CONF2
+JESD204B link configuration.
+ENDREG
+
+FIELD
+[31:17] 0x0
+Reserved
+RO
+ENDFIELD
+
+FIELD
+[16] 0x0
+BUFFER_EARLY_RELEASE
+RW
+Elastic buffer release point.
+ENDFIELD
+
+FIELD
+[15:10] 0x0
+Reserved
+RO
+ENDFIELD
+
+FIELD
+[9:0] 0x0
+BUFFER_DEALY
+RW
+Buffer release opportunity offset from LMFC.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x91
+LINK_CONF3
+JESD204B error statistics configuration.
+ENDREG
+
+FIELD
+[31:15] 0x0
+Reserved
+RO
+ENDFIELD
+
+FIELD
+[14] 0x0
+MASK_INVALID_HEADER
+RW
+If set, invalid header errors are not counted;
+Valid for 64B/66B encoder.
+ENDFIELD
+
+FIELD
+[13] 0x0
+MASK_UNEXPECTED_EOMB
+RW
+If set, unexpected end of multiblock errors are not counted;
+Valid for 64B/66B encoder.
+ENDFIELD
+
+FIELD
+[12] 0x0
+MASK_UNEXPECTED_EOEMB
+RW
+If set, unexpected end of extended multiblock errors are not counted;
+Valid for 64B/66B encoder.
+ENDFIELD
+
+FIELD
+[11] 0x0
+MASK_CRC_MISMATCH
+RW
+If set, CRC mismatch errors are not counted.
+Valid for 64B/66B encoder.
+ENDFIELD
+
+FIELD
+[10] 0x0
+MASK_UNEXPECTEDK
+RW
+If set, unexpected k errors are not counted.
+Valid for 8B/10B encoder.
+ENDFIELD
+
+FIELD
+[9] 0x0
+MASK_NOTINTABLE
+RW
+If set, not in table errors are not counted.
+Valid for 8B/10B encoder.
+ENDFIELD
+
+FIELD
+[8] 0x0
+MASK_DISPERR
+RW
+If set, disparity errors are not counted.
+Valid for 8B/10B encoder.
+ENDFIELD
+
+FIELD
+[7:1] 0x0
+Reserved
+RO
+ENDFIELD
+
+FIELD
+[0] 0x0
+RESET_COUNTER
+RW
+If set, resets the error counter
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0xa0
+LINK_STATUS
+JESD204B link status.
+ENDREG
+
+FIELD
+[31:2] 0x00
+Reserved
+RO
+ENDFIELD
+
+FIELD
+[1:0] 0x00
+STATUS_STATE
+RO-V
+8B/10B : State of the [[#b10b_link_state_machine|8B/10B link state machine]]. (0 = RESET, 1 = WAIT_FOR_PHY, 2 = CGS, 3 = SYNCHRONIZED) \\
+64B/66B : State of the [[#b66b_link_state_machine|64B/66B link state machine]]. (0 = RESET, 1 = WAIT_BS, 2 = BLOCK_SYNC, 3 = DATA)
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0xc0 + 0x08*n
+LANEn_STATUS
+ENDREG
+
+FIELD
+[31:11] 0x0
+Reserved
+RO
+ENDFIELD
+
+FIELD
+[10:8] 0x0
+EMB_STATE
+RO
+State of Extended multiblock alignment: \\
+
+001 - EMB_INIT \\
+010 - EMB_HUNT \\
+100 - EMB_LOCK \\
+
+Valid for 64b66b encoder.
+ENDFIELD
+
+
+FIELD
+[7:6] 0x0
+Reserved
+RO
+ENDFIELD
+
+FIELD
+[5] 0x0
+ILAS_READY
+RO-V
+ILAS configuration data received.
+ENDFIELD
+
+FIELD
+[4] 0x0
+IFS_READY
+RO-V
+Frame synchronization state.
+ENDFIELD
+
+FIELD
+[3:2] 0x0
+Reserved
+RO
+ENDFIELD
+
+FIELD
+[1:0] 0x0
+CGS_STATE
+RO-V
+State of the lane code group synchronization. (0 = INIT, 1 = CHECK, 2 = DATA)
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0xc1 + 0x08*n
+LANEn_LATENCY
+ENDREG
+
+FIELD
+[31:14] 0x0
+Reserved
+RO
+ENDFIELD
+
+FIELD
+[13:0] 0x0
+LATENCY
+RO-V
+For 8b10b mode: represents the lane latency in octets;
+For 64b66b mode: represents the delay from the received EOEMB indicator to the next (SYSREF aligned) LEMC edge in octets.
+In other words, this amount of data is stored in the elastic buffer before it gets released on the LEMC edge. Must be greater than 64.
+Its max value is KxF octets.  Where LEMC period = KxF/8 link clock periods.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0xc2 + 0x08*n
+LANEn_ERROR_STATISTICS
+ENDREG
+
+FIELD
+[31:0] 0x0
+ERROR_REGISTER
+RO
+This register shows the number of total errors for this lane. Errors counted depend on the configuration
+in LINK_CONF3. It must always be manually reset.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0xc3 + 0x08*n
+LANEn_LANE_FRAME_ALIGN_ERR_CNT
+ENDREG
+
+FIELD
+[7:0] 0x0
+ERROR_REGISTER
+RO
+This register shows the number of frame alignment errors for this lane. It resets with a link restart.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0xc4 + 0x08*n
+LANEn_ILAS0
+Received ILAS config data for the n-th lane.
+ENDREG
+
+FIELD
+[31:28] 0x0
+Reserved
+RO
+ENDFIELD
+
+FIELD
+[27:24] 0x0
+BID
+RO
+BID (Bank ID) field of the ILAS config sequence.
+ENDFIELD
+
+FIELD
+[23:16] 0x00
+DID
+RO
+DID (Device ID) field of the ILAS config sequence.
+ENDFIELD
+
+FIELD
+[15:0] 0x0000
+Reserved
+RO
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0xc5 + 0x08*n
+LANEn_ILAS1
+Received ILAS config data for the n-th lane.
+ENDREG
+
+FIELD
+[31:29] 0x00
+Reserved
+RO
+ENDFIELD
+
+FIELD
+[28:24] 0x00
+K
+RO
+K (Frames per multi-frame) field of the ILAS config sequence - 1.
+ENDFIELD
+
+FIELD
+[23:16] 0x00
+F
+RO
+F (Octets per frame) field of the ILAS config sequence - 1.
+ENDFIELD
+
+FIELD
+[15] 0x0
+SCR
+RO
+SCR (Scrambling enabled) field of the ILAS config sequence.
+ENDFIELD
+
+FIELD
+[14:13] 0x0
+Reserved
+RO
+ENDFIELD
+
+FIELD
+[12:8] 0x00
+L
+RO
+L (Number of lanes) field of the ILAS config sequence - 1.
+ENDFIELD
+
+FIELD
+[7:5] 0x0
+Reserved
+RO
+ENDFIELD
+
+FIELD
+[4:0] 0x00
+LID
+RO
+LID (Lane ID) field of the ILAS config sequence.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0xc6 + 0x08*n
+LANEn_ILAS2
+Received ILAS config data for the n-th lane.
+ENDREG
+
+FIELD
+[31:29] 0x0
+JESDV
+RO
+JESDV (JESD204 version) field of the ILAS config sequence.
+ENDFIELD
+
+FIELD
+[28:24] 0x00
+S
+RO
+S (Samples per frame) field of the ILAS config sequence - 1.
+ENDFIELD
+
+FIELD
+[23:21] 0x0
+SUBCLASSV
+RO
+SUBCLASSV (JESD204B subclass) field of the ILAS config sequence.
+ENDFIELD
+
+FIELD
+[20:16] 0x00
+NP
+RO
+N' (Total number of bits per sample) field of the ILAS config sequence - 1.
+ENDFIELD
+
+FIELD
+[15:14] 0x0
+CS
+RO
+CS (Control bits per sample) field of the ILAS config sequence.
+ENDFIELD
+
+FIELD
+[13] 0x0
+Reserved
+RO
+ENDFIELD
+
+FIELD
+[12:8] 0x00
+N
+RO
+N (Converter resolution) field of the ILAS config sequence - 1.
+ENDFIELD
+
+FIELD
+[7:0] 0x00
+M
+RO
+M (Number of converters) field of the ILAS config sequence - 1.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0xc7 + 0x08*n
+LANEn_ILAS3
+Received ILAS config data for the n-th lane.
+ENDREG
+
+FIELD
+[31:24] 0x00
+FCHK
+RO
+FCHK (Checksum) field of the ILAS config sequence.
+ENDFIELD
+
+FIELD
+[23:8] 0x0
+Reserved
+RO
+ENDFIELD
+
+FIELD
+[7] 0x0
+HD
+RO
+HD (High-density) field of the ILAS config sequence.
+ENDFIELD
+
+FIELD
+[6:5] 0x0
+Reserved
+RO
+ENDFIELD
+
+FIELD
+[4:0] 0x00
+CF
+RO
+CF (control words per frame) field of the ILAS config sequence
+ENDFIELD

@@ -1,0 +1,577 @@
+TITLE
+Fan Controller (axi_fan_control)
+AXI_FAN_CONTROL
+ENDTITLE
+
+############################################################################################
+############################################################################################
+
+REG
+0x00
+VERSION
+Version of the peripheral. Follows semantic versioning. Current version 1.00.a.
+ENDREG
+
+FIELD
+[31:16] 0x0001
+VERSION_MAJOR
+RO
+ENDFIELD
+
+FIELD
+[15:8] 0x00
+VERSION_MINOR
+RO
+ENDFIELD
+
+FIELD
+[7:0] 0x61
+VERSION_PATCH
+RO
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x01
+PERIPHERAL_ID
+ENDREG
+
+FIELD
+[31:0] ''ID''
+PERIPHERAL_ID
+RO
+Value of the ID configuration parameter.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x02
+SCRATCH
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+SCRATCH
+RW
+Scratch register useful for debug.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x03
+IDENTIFICATION
+ENDREG
+
+FIELD
+[31:0] 0x46414E43
+IDENTIFICATION
+RO
+Peripheral identification ('F', 'A', 'N', 'C').
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x10
+IRQ_MASK
+ENDREG
+
+FIELD
+[3] 0x1
+NEW_TACHO_MEASUREMENT
+RW
+Masks the TACHO_MEASUREMENT_DONE IRQ.
+ENDFIELD
+
+FIELD
+[2] 0x1
+TEMP_INCREASE
+RW
+Masks the TEMP_INCREASE IRQ.
+ENDFIELD
+
+FIELD
+[1] 0x1
+TACHO_ERR
+RW
+Masks the TACHO_ERR IRQ.
+ENDFIELD
+
+FIELD
+[0] 0x1
+PWM_CHANGED
+RW
+Masks the PWM_CHANGED IRQ.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x11
+IRQ_PENDING
+ENDREG
+
+FIELD
+[3] 0x0
+NEW_TACHO_MEASUREMENT
+RW1C
+This bit will be asserted when the hardware has written a new value to the
+TACHO_MEASUREMENT register if the NEW_TACHO_MEASUREMENT bit in the IRQ_MASK
+register is not set.
+ENDFIELD
+
+FIELD
+[2] 0x0
+TEMP_INCREASE
+RW1C
+This bit will be asserted whenever the HW decides to increase the PWM
+duty-cycle, indicating a rise in temperature, and if the TEMP_INCREASE bit in
+the IRQ_MASK register is not set.
+ENDFIELD
+
+FIELD
+[1] 0x0
+TACHO_ERR
+RW1C
+This bit will be asserted when a fault related to the tacho signal is detected.
+This can either mean that the tacho has not toggled in 5 seconds or that the
+period of the tacho signal is no longer whithin the defined valid interval.
+Also, the TACHO_ERR bit in the IRQ_MASK register must not be set.
+ENDFIELD
+
+FIELD
+[0] 0x0
+PWM_CHANGED
+RW1C
+This bit will be asserted when a 5 second delay expires after the PWM width was
+changed. The delay is used to allow the fan rotation speed to stabilize. Also,
+the PWM_CHANGED bit in the IRQ_MASK register must not be set.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x12
+IRQ_SOURCE
+ENDREG
+
+FIELD
+[3] 0x0
+NEW_TACHO_MEASUREMENT
+RO
+This bit will be asserted when the hardware has written a new value to the
+TACHO_MEASUREMENT register.
+ENDFIELD
+
+FIELD
+[2] 0x0
+TEMP_INCREASE
+RO
+This bit will be asserted whenever the hardware decides to increase the PWM
+duty-cycle indicating a rise in temperature.
+ENDFIELD
+
+FIELD
+[1] 0x0
+TACHO_ERR
+RO
+This bit will be asserted when a fault related to the tacho signal is detected.
+This can either mean that the tacho has not toggled in 5 seconds or that the
+period of the tacho signal is no longer whithin the defined valid interval.
+ENDFIELD
+
+FIELD
+[0] 0x0
+PWM_CHANGED
+RO
+This bit will be asserted when a 5 second delay expires after the PWM width was
+changed. The delay is used to allow the fan rotation speed to stabilize.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x20
+REG_RSTN
+ENDREG
+
+FIELD
+[0] 0x0
+RSTN
+RW
+Reset, default is IN-RESET (0x0), software must write 0x1 to bring up the core.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x21
+PWM_WIDTH
+ENDREG
+
+FIELD
+[31:0] ''PWM_PERIOD''
+PWM_WIDTH
+RW
+This register contains the width of the PWM output signal. By default its
+value is established by the hardware after reading the temperature. By writing
+to this register the software can change the value however this is only possible
+if the requested value is greater than the value selected by the hardware and
+not exceeding the PWM period.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x22
+TACHO_PERIOD
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+TACHO_PERIOD
+RW
+After using the PWM_WIDTH register to request a different duty-cycle, the
+software can use this register to define the target period of the tacho signal.
+This is used together with the TACHO_TOLERANCE register to define an interval
+for the tacho signal. This register must be written before the TACHO_TOLERANCE
+register. The hardware will then use this interval to monitor the tacho signal
+coming from the fan.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x23
+TACHO_TOLERANCE
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+TACHO_TOLERANCE
+RW
+This register is used together with the TACHO_PERIOD register to define an
+interval for the fan's tacho signal. Writing to this register enables the
+hardware to start monitoring the tacho signal and so it must be written after
+the TACHO_PERIOD register.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x24
+TEMP_DATA_SOURCE
+ENDREG
+
+FIELD
+[31:0] ''INTERNAL_SYSMONE''
+TEMP_DATA_SOURCE
+RO
+This register copies the value from the INTERNAL_SYSMONE register and is used to inform
+the software what the source of the temperature information is.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x30
+PWM_PERIOD
+ENDREG
+
+FIELD
+[31:0] 0x4E20
+PWM_PERIOD
+RO
+This register contains the period for the PWM output signal. Derived from the
+PWM_FREQUENCY_HZ parameter.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x31
+TACHO_MEASUREMENT
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+TACHO_MEASUREMENT
+RO
+This register contains the measurement results of the tacho signal period
+performed by the hardware.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x32
+TEMPERATURE
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+TEMPERATURE
+RO
+This register contains the latest temperature reading from the SYSMONE
+primitive.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x40
+TEMP_00_H
+ENDREG
+
+FIELD
+[31:0] ''TEMP_00_H''
+TEMP_00_H
+RW
+Temperature threshold below which PWM should be 0%
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x41
+TEMP_25_L
+ENDREG
+
+FIELD
+[31:0] ''TEMP_25_L''
+TEMP_25_L
+RW
+Temperature threshold above which PWM should be 25%
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x42
+TEMP_25_H
+ENDREG
+
+FIELD
+[31:0] ''TEMP_25_H''
+TEMP_25_H
+RW
+Temperature threshold below which PWM should be 25%
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x43
+TEMP_50_L
+ENDREG
+
+FIELD
+[31:0] ''TEMP_50_L''
+TEMP_50_L
+RW
+Temperature threshold above which PWM should be 50%
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x44
+TEMP_50_H
+ENDREG
+
+FIELD
+[31:0] ''TEMP_50_H''
+TEMP_50_H
+RW
+Temperature threshold below which PWM should be 50%
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x45
+TEMP_75_L
+ENDREG
+
+FIELD
+[31:0] ''TEMP_75_L''
+TEMP_75_L
+RW
+Temperature threshold above which PWM should be 75%
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x46
+TEMP_75_H
+ENDREG
+
+FIELD
+[31:0] ''TEMP_75_H''
+TEMP_75_H
+RW
+Temperature threshold below which PWM should be 75%
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x47
+TEMP_100_L
+ENDREG
+
+FIELD
+[31:0] ''TEMP_100_L''
+TEMP_100_L
+RW
+Temperature threshold above which PWM should be 100%
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x50
+TACHO_25
+ENDREG
+
+FIELD
+[31:0] ''TACHO_T25''
+TACHO_25
+RW
+Nominal tacho period at 25% PWM
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x51
+TACHO_50
+ENDREG
+
+FIELD
+[31:0] ''TACHO_T50''
+TACHO_50
+RW
+Nominal tacho period at 50% PWM
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x52
+TACHO_75
+ENDREG
+
+FIELD
+[31:0] ''TACHO_T75''
+TACHO_75
+RW
+Nominal tacho period at 75% PWM
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x53
+TACHO_100
+ENDREG
+
+FIELD
+[31:0] ''TACHO_T100''
+TACHO_100
+RW
+Nominal tacho period at 100% PWM
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x54
+TACHO_25_TOL
+ENDREG
+
+FIELD
+[31:0] ''TACHO_T25'' \\ ''*TACHO_TOL_PERCENT'' \\ ''/100''
+TACHO_25_TOL
+RW
+Tolerance for the 25% PWM tacho period
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x55
+TACHO_50_TOL
+ENDREG
+
+FIELD
+[31:0] ''TACHO_T50'' \\ ''*TACHO_TOL_PERCENT'' \\ ''/100''
+TACHO_50_TOL
+RW
+Tolerance for the 50% PWM tacho period
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x56
+TACHO_75_TOL
+ENDREG
+
+FIELD
+[31:0] ''TACHO_T75'' \\ ''*TACHO_TOL_PERCENT'' \\ ''/100''
+TACHO_75_TOL
+RW
+Tolerance for the 75% PWM tacho period
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x57
+TACHO_100_TOL
+ENDREG
+
+FIELD
+[31:0] ''TACHO_T100'' \\ ''*TACHO_TOL_PERCENT'' \\ ''/100''
+TACHO_100_TOL
+RW
+Tolerance for the 100% PWM tacho period
+ENDFIELD
+
+############################################################################################
+############################################################################################
