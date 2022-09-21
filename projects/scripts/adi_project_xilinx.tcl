@@ -188,9 +188,22 @@ proc adi_project_create {project_name mode parameter_list device {board "not-app
     }
   }
 
+   if {[info exists ::env(ADI_MATLAB)]} {
+    set ADI_MATLAB 1
+    set actual_project_name "$ad_hdl_dir/vivado_prj"
+    if {$mode != 0} {
+        puts -nonewline "MATLAB builds do not support mode 2"
+        exit 2
+    }
+  } else {
+    set ADI_MATLAB 0
+  }
+
   if {$mode == 0} {
-    set project_system_dir "${actual_project_name}.srcs/sources_1/bd/system"
-    create_project ${actual_project_name} . -part $p_device -force
+     set project_system_dir "${actual_project_name}.srcs/sources_1/bd/system"
+     if {$ADI_MATLAB == 0} {
+       create_project ${actual_project_name} . -part $p_device -force
+     }
   } else {
     set project_system_dir "${actual_project_name}.srcs/sources_1/bd/system"
     create_project -in_memory -part $p_device
@@ -204,13 +217,16 @@ proc adi_project_create {project_name mode parameter_list device {board "not-app
     set_property board_part $p_board [current_project]
   }
 
-  set lib_dirs $ad_hdl_dir/library
+  if {$ADI_MATLAB == 0} {
+    set lib_dirs $ad_hdl_dir/library
+  } else {
+    set lib_dirs [get_property ip_repo_paths [current_fileset]]
+     lappend lib_dirs $ad_hdl_dir/library
+  }
   if {[info exists ::env(ADI_GHDL_DIR)]} {
     if {$ad_hdl_dir ne $ad_ghdl_dir} {
       lappend lib_dirs $ad_ghdl_dir/library
     }
-  } else {
-    # puts -nonew-line "INFO: ADI_GHDL_DIR not defined.\n"
   }
 
   # Set a common IP cache for all projects
@@ -316,6 +332,10 @@ proc adi_project_run {project_name} {
     set actual_project_name "$::env(ADI_PROJECT_DIR)${project_name}"
     set ad_project_dir "$::env(ADI_PROJECT_DIR)"
   }
+  if {[info exists ::env(ADI_SKIP_SYNTHESIS)]} {
+    puts "Skipping synthesis"
+    return
+  }
 
   if {$ADI_USE_OOC_SYNTHESIS == 1} {
     launch_runs -jobs $ADI_MAX_OOC_JOBS system_*_synth_1 synth_1
@@ -393,6 +413,62 @@ proc adi_project_run {project_name} {
       }
     } else {
     puts "GENERATE_REPORTS: Resource utilization files won't be generated because ADI_GENERATE_UTILIZATION env var is not set"
+  }
+
+  ## Extract IP ports and their properties
+
+  if {[info exists ::env(ADI_EXTRACT_PORTS)]} {
+
+    set p_output_file ports_properties.txt
+
+    # Define a list of IPs for which to generate the ports properties and nets report
+    set P_IP_list {
+      util_wfifo
+      util_rfifo
+      util_cpack2
+      util_upack2
+      ad_ip_jesd204_tpl_adc
+      ad_ip_jesd204_tpl_dac
+      rx_fir_decimator
+      tx_fir_interpolator
+      axi_ad9361
+      axi_adrv9009
+    }
+
+    set fileWrite [open $p_output_file w]
+
+    foreach P_IP_name $P_IP_list {
+      foreach P_IP_instance [ get_cells -quiet -hierarchical -filter " ORIG_REF_NAME =~ $P_IP_name || REF_NAME =~ $P_IP_name " ] {
+        set P_IP_instance_name [regsub -all {i_system_wrapper\/system_i\/} $P_IP_instance {}]
+	if { [regexp {adc_tpl_core} $P_IP_instance_name] } {
+            set P_IP_INST  [regsub -all {\/adc_tpl_core/inst} $P_IP_instance_name {}]
+            puts "$P_IP_INST\n"
+        } elseif { [regexp {dac_tpl_core} $P_IP_instance_name] } {
+            set P_IP_INST  [regsub -all {\/dac_tpl_core/inst} $P_IP_instance_name {}]
+            puts "$P_IP_INST\n"
+        } else {
+            set P_IP_INST  [regsub -all {\/inst} $P_IP_instance_name {}]
+            puts "$P_IP_INST\n"
+        }
+        puts $fileWrite "\n$P_IP_INST properties: \n"
+        set list_of_IP_ports [ get_bd_pins -of_objects [get_bd_cells $P_IP_INST]]
+        foreach IP_port $list_of_IP_ports {
+          set pin_direction [get_property DIR [get_bd_pins $IP_port]]
+          set pin_path [get_property PATH [get_bd_pins $IP_port]]
+          set pin_path_name  [regsub {\/} $pin_path {}]
+          set left [get_property LEFT [get_bd_pins $IP_port]]
+          set right [get_property RIGHT [get_bd_pins $IP_port]]
+          puts $fileWrite "direction $pin_direction \nMSB $left \nLSB $right \nname $pin_path_name"
+          set net_info [get_bd_nets -of_objects [get_bd_pins $IP_port]]
+          set net_name  [regsub -all {\/} $net_info {}]
+          puts $fileWrite "net $net_name\n"
+        }
+      }
+    }
+    close $fileWrite
+
+  } else {
+  puts "GENERATE_PORTS_REPORTS: IP ports properties and nets report files won't be generated because ADI_EXTRACT_PORTS env var is not set"
   }
 
   if {[info exists ::env(ADI_GENERATE_XPA)]} {
