@@ -126,13 +126,6 @@ ad_ip_parameter axi_adrv9009_rx_clkgen CONFIG.CLK0_DIV 4
 ad_ip_parameter axi_adrv9009_rx_clkgen CONFIG.ENABLE_CLKOUT1 {true}
 ad_ip_parameter axi_adrv9009_rx_clkgen CONFIG.CLK1_DIV 8
 
-# startgroup
-# set_property -dict [list CONFIG.CLKIN2_PERIOD.VALUE_SRC PROPAGATED] [get_bd_cells axi_adrv9009_rx_clkgen]
-# set_property -dict [list CONFIG.CLK1_DIV {8} CONFIG.ENABLE_CLKIN2 {false} CONFIG.ENABLE_CLKOUT1 {true}] [get_bd_cells axi_adrv9009_rx_clkgen]
-# endgroup
-# delete_bd_objs [get_bd_nets adrv9009_rx_link_clk]
-# connect_bd_net [get_bd_pins axi_adrv9009_rx_clkgen/clk_1] [get_bd_pins axi_adrv9009_rx_jesd/link_clk]
-
 ad_ip_instance axi_adxcvr axi_adrv9009_rx_xcvr
 ad_ip_parameter axi_adrv9009_rx_xcvr CONFIG.NUM_OF_LANES $MAX_RX_NUM_OF_LANES
 ad_ip_parameter axi_adrv9009_rx_xcvr CONFIG.QPLL_ENABLE 0
@@ -261,10 +254,11 @@ ad_xcvrpll $tx_ref_clk util_adrv9009_xcvr/qpll_ref_clk_0
 ad_xcvrpll axi_adrv9009_tx_xcvr/up_pll_rst util_adrv9009_xcvr/up_qpll_rst_0
 
 # Rx
-ad_connect adrv9009_rx_device_clk axi_adrv9009_rx_clkgen/clk_1
 if {$RX_NUM_OF_LANES == 2} {
+  ad_connect adrv9009_rx_device_clk axi_adrv9009_rx_clkgen/clk_0
   ad_xcvrcon util_adrv9009_xcvr axi_adrv9009_rx_xcvr axi_adrv9009_rx_jesd {} adrv9009_rx_device_clk {} $MAX_RX_NUM_OF_LANES
 } else {
+  ad_connect adrv9009_rx_device_clk axi_adrv9009_rx_clkgen/clk_1
   ad_connect adrv9009_rx_link_clk axi_adrv9009_rx_clkgen/clk_0
   ad_xcvrcon util_adrv9009_xcvr axi_adrv9009_rx_xcvr axi_adrv9009_rx_jesd {0 1 2 3} adrv9009_rx_link_clk adrv9009_rx_device_clk $MAX_RX_NUM_OF_LANES {0} 0
   ad_connect axi_adrv9009_rx_xcvr/up_es_0 util_adrv9009_xcvr/up_es_0
