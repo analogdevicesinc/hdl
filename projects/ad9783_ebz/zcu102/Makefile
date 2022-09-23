@@ -4,7 +4,7 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := ad9783_zcu102
+PROJECT_NAME := ad9783_ebz_zcu102
 
 M_DEPS += ../common/ad9783_ebz_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
