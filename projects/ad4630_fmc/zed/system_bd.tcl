@@ -3,10 +3,9 @@ source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 source $ad_hdl_dir/projects/common/zed/zed_system_bd.tcl
 
 # add RTL source that will be instantiated in system_bd directly
-adi_project_files ad463x_fmc_zed [list \
+adi_project_files ad4630_fmc_zed [list \
   "$ad_hdl_dir/library/common/ad_edge_detect.v" \
-  "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
-]
+  "$ad_hdl_dir/library/util_cdc/sync_bits.v" ]
 
 # block design
 source ../common/ad463x_bd.tcl
