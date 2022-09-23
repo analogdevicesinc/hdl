@@ -1,10 +1,14 @@
-
 set dac_fifo_address_width 10
 
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 source $ad_hdl_dir/projects/common/a10gx/a10gx_system_qsys.tcl
 source $ad_hdl_dir/projects/common/intel/dacfifo_qsys.tcl
-source ../common/adrv9009_qsys.tcl
+
+if [info exists ad_project_dir] {
+  source ../../common/adrv9009_qsys.tcl
+} else {
+  source ../common/adrv9009_qsys.tcl
+}
 
 #system ID
 set_instance_parameter_value axi_sysid_0 {ROM_ADDR_BITS} {9}

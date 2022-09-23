@@ -1,4 +1,3 @@
-
 ## ADC FIFO depth in samples per converter
 set adc_fifo_samples_per_converter [expr $ad_project_params(RX_KS_PER_CHANNEL)*1024]
 ## DAC FIFO depth in samples per converter
@@ -13,9 +12,11 @@ source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 # Set SPI clock to 100/16 =  6.25 MHz
 ad_ip_parameter axi_spi CONFIG.C_SCK_RATIO 16
 
+set mem_init_sys_path [get_env_param ADI_PROJECT_DIR ""]mem_init_sys.txt;
+
 #system ID
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
-ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/mem_init_sys.txt"
+ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/$mem_init_sys_path"
 ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 set sys_cstring "sys rom custom string placeholder"
 sysid_gen_sys_init_file $sys_cstring

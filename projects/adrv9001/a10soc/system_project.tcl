@@ -1,4 +1,3 @@
-
 source ../../../scripts/adi_env.tcl
 source ../../scripts/adi_project_intel.tcl
 

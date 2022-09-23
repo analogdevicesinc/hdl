@@ -4,7 +4,12 @@ set dac_fifo_address_width 10
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 source $ad_hdl_dir/projects/common/a10gx/a10gx_system_qsys.tcl
 source $ad_hdl_dir/projects/common/intel/dacfifo_qsys.tcl
-source ../common/adrv9371x_qsys.tcl
+
+if [info exists ad_project_dir] {
+  source ../../common/adrv9371x_qsys.tcl
+} else {
+  source ../common/adrv9371x_qsys.tcl
+}
 
 #system ID
 

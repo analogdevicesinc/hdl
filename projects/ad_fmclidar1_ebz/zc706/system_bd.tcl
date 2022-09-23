@@ -1,4 +1,3 @@
-
 # Configurable parameters
 
 set SAMPLE_RATE_MHZ 1000.0
@@ -36,9 +35,11 @@ ad_ip_parameter sys_ps7 CONFIG.PCW_I2C1_PERIPHERAL_ENABLE 1
 
 ad_connect iic_dac sys_ps7/IIC_1
 
+set mem_init_sys_path [get_env_param ADI_PROJECT_DIR ""]mem_init_sys.txt;
+
 # System ID instance and configuration
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
-ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/mem_init_sys.txt"
+ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/$mem_init_sys_path"
 ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 
 sysid_gen_sys_init_file

@@ -1,4 +1,3 @@
-
 source ../../../scripts/adi_env.tcl
 source ../../scripts/adi_project_xilinx.tcl
 source ../../scripts/adi_board.tcl
