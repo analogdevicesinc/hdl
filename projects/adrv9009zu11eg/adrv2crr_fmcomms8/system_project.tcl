@@ -1,4 +1,3 @@
-
 source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
@@ -16,7 +15,7 @@ adi_project_create fmcomms8_adrv9009zu11eg 0 [list \
 ] "xczu11eg-ffvf1517-2-i"
 
 
-adi_project_files  fmcomms8_adrv9009zu11eg [list \
+adi_project_files fmcomms8_adrv9009zu11eg [list \
   "system_top.v" \
   "fmcomms8_constr.xdc"\
   "../common/adrv9009zu11eg_spi.v" \

@@ -1,4 +1,3 @@
-
 ## Offload attributes
 set adc_offload_type 1                              ; ## PL_DDR
 set adc_offload_size [expr 1 * 1024 * 1024 * 1024]  ; ## 1 Gbyte
@@ -61,8 +60,10 @@ if {$adc_offload_type || $dac_offload_type} {
 # System ID
 ################################################################################
 
+set mem_init_sys_path [get_env_param ADI_PROJECT_DIR ""]mem_init_sys.txt;
+
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
-ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/mem_init_sys.txt"
+ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/$mem_init_sys_path"
 ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 
 set sys_cstring "ADC_OFFLOAD_TYPE=$adc_offload_type\nDAC_OFFLOAD_TYPE=$dac_offload_type"

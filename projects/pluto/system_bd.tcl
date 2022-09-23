@@ -1,6 +1,5 @@
 # create board design
 
-
 source $ad_hdl_dir/projects/common/xilinx/adi_fir_filter_bd.tcl
 
 # default ports

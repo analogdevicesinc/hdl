@@ -1,4 +1,3 @@
-
 ## ADC FIFO depth in samples per converter
 set adc_fifo_samples_per_converter [expr $ad_project_params(RX_KS_PER_CHANNEL)*1024]
 ## DAC FIFO depth in samples per converter
@@ -13,9 +12,11 @@ source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 ad_ip_parameter axi_mxfe_rx_jesd/rx CONFIG.NUM_INPUT_PIPELINE 2
 ad_ip_parameter axi_mxfe_tx_jesd/tx CONFIG.NUM_OUTPUT_PIPELINE 1
 
+set mem_init_sys_path [get_env_param ADI_PROJECT_DIR ""]mem_init_sys.txt;
+
 #system ID
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
-ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/mem_init_sys.txt"
+ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/$mem_init_sys_path"
 ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 
 sysid_gen_sys_init_file

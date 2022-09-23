@@ -194,7 +194,13 @@ proc sysid_gen_sys_init_file {{custom_string {}}} {
 
   set sys_mem_hex [format %0-[expr 512 * 8]s [concat $comh_hex$verh_hex$projname_hex$boardname_hex$custom_hex]];
 
-  set sys_mem_file [open "mem_init_sys.txt" "w"];
+  if {[info exists ::env(ADI_PROJECT_DIR)]} {
+    set mem_init_sys_file_path "$::env(ADI_PROJECT_DIR)mem_init_sys.txt";
+  } else {
+    set mem_init_sys_file_path "mem_init_sys.txt";
+  }
+
+  set sys_mem_file [open $mem_init_sys_file_path "w"];
 
   for {set i 0} {$i < [string length $sys_mem_hex]} {incr i} {
     if { ($i+1) % 8 == 0} {

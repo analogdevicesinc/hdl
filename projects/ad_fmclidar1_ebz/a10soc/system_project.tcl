@@ -1,4 +1,3 @@
-
 source ../../../scripts/adi_env.tcl
 source ../../scripts/adi_project_intel.tcl
 
@@ -8,9 +7,9 @@ source $ad_hdl_dir/projects/common/a10soc/a10soc_system_assign.tcl
 
 # files
 
-set_global_assignment -name VERILOG_FILE ../common/util_tia_chsel.v
-set_global_assignment -name VERILOG_FILE ../common/util_axis_syncgen.v
-set_global_assignment -name VERILOG_FILE ../../../library/util_cdc/sync_bits.v
+set_global_assignment -name VERILOG_FILE $ad_hdl_dir/projects/ad_fmclidar1_ebz/common/util_tia_chsel.v
+set_global_assignment -name VERILOG_FILE $ad_hdl_dir/projects/ad_fmclidar1_ebz/common/util_axis_syncgen.v
+set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/util_cdc/sync_bits.v
 
 #
 # Note: This project requires a hardware rework to function correctly.
