@@ -61,7 +61,7 @@ ad_ip_parameter axi_adrv9009_tx_clkgen CONFIG.VCO_MUL 4
 ad_ip_parameter axi_adrv9009_tx_clkgen CONFIG.CLK0_DIV 4
 
 ad_ip_instance axi_adxcvr axi_adrv9009_tx_xcvr
-ad_ip_parameter axi_adrv9009_tx_xcvr CONFIG.NUM_OF_LANES $TX_NUM_OF_LANES
+ad_ip_parameter axi_adrv9009_tx_xcvr CONFIG.NUM_OF_LANES $MAX_TX_NUM_OF_LANES
 ad_ip_parameter axi_adrv9009_tx_xcvr CONFIG.QPLL_ENABLE 1
 ad_ip_parameter axi_adrv9009_tx_xcvr CONFIG.TX_OR_RX_N 1
 ad_ip_parameter axi_adrv9009_tx_xcvr CONFIG.SYS_CLK_SEL 3
@@ -109,7 +109,7 @@ ad_ip_parameter axi_adrv9009_rx_clkgen CONFIG.VCO_MUL 4
 ad_ip_parameter axi_adrv9009_rx_clkgen CONFIG.CLK0_DIV 4
 
 ad_ip_instance axi_adxcvr axi_adrv9009_rx_xcvr
-ad_ip_parameter axi_adrv9009_rx_xcvr CONFIG.NUM_OF_LANES $RX_NUM_OF_LANES
+ad_ip_parameter axi_adrv9009_rx_xcvr CONFIG.NUM_OF_LANES $MAX_RX_NUM_OF_LANES
 ad_ip_parameter axi_adrv9009_rx_xcvr CONFIG.QPLL_ENABLE 0
 ad_ip_parameter axi_adrv9009_rx_xcvr CONFIG.TX_OR_RX_N 0
 ad_ip_parameter axi_adrv9009_rx_xcvr CONFIG.SYS_CLK_SEL 0
@@ -157,7 +157,7 @@ ad_ip_parameter axi_adrv9009_rx_os_clkgen CONFIG.VCO_MUL 4
 ad_ip_parameter axi_adrv9009_rx_os_clkgen CONFIG.CLK0_DIV 4
 
 ad_ip_instance axi_adxcvr axi_adrv9009_rx_os_xcvr
-ad_ip_parameter axi_adrv9009_rx_os_xcvr CONFIG.NUM_OF_LANES $RX_OS_NUM_OF_LANES
+ad_ip_parameter axi_adrv9009_rx_os_xcvr CONFIG.NUM_OF_LANES $MAX_RX_OS_NUM_OF_LANES
 ad_ip_parameter axi_adrv9009_rx_os_xcvr CONFIG.QPLL_ENABLE 0
 ad_ip_parameter axi_adrv9009_rx_os_xcvr CONFIG.TX_OR_RX_N 0
 ad_ip_parameter axi_adrv9009_rx_os_xcvr CONFIG.SYS_CLK_SEL 0
@@ -221,7 +221,12 @@ ad_connect  $sys_cpu_clk util_adrv9009_xcvr/up_clk
 
 # Tx
 ad_connect adrv9009_tx_device_clk axi_adrv9009_tx_clkgen/clk_0
-ad_xcvrcon util_adrv9009_xcvr axi_adrv9009_tx_xcvr axi_adrv9009_tx_jesd {0 3 2 1} adrv9009_tx_device_clk {} $MAX_TX_NUM_OF_LANES
+if {$TX_NUM_OF_LANES == 4} {
+  ad_xcvrcon util_adrv9009_xcvr axi_adrv9009_tx_xcvr axi_adrv9009_tx_jesd {0 3 2 1} adrv9009_tx_device_clk {} $MAX_TX_NUM_OF_LANES
+} else {
+  # TX_NUM_OF_LANES = 2
+  ad_xcvrcon util_adrv9009_xcvr axi_adrv9009_tx_xcvr axi_adrv9009_tx_jesd {0 3 2 1} adrv9009_tx_device_clk {} $MAX_TX_NUM_OF_LANES {0 2}
+}
 ad_connect ref_clk axi_adrv9009_tx_clkgen/clk
 ad_xcvrpll $tx_ref_clk util_adrv9009_xcvr/qpll_ref_clk_0
 ad_xcvrpll axi_adrv9009_tx_xcvr/up_pll_rst util_adrv9009_xcvr/up_qpll_rst_0
