@@ -27,7 +27,9 @@ module ad_ip_jesd204_tpl_adc_channel #(
   parameter CONVERTER_RESOLUTION = 14,
   parameter DATA_PATH_WIDTH = 2,
   parameter TWOS_COMPLEMENT = 1,
-  parameter BITS_PER_SAMPLE = 16
+  parameter BITS_PER_SAMPLE = 16,
+  parameter PN7_ENABLE = 1,
+  parameter PN15_ENABLE = 1
 ) (
   input clk,
 
@@ -50,7 +52,9 @@ module ad_ip_jesd204_tpl_adc_channel #(
   ad_ip_jesd204_tpl_adc_pnmon #(
     .CONVERTER_RESOLUTION (CONVERTER_RESOLUTION),
     .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
-    .TWOS_COMPLEMENT (TWOS_COMPLEMENT)
+    .TWOS_COMPLEMENT (TWOS_COMPLEMENT),
+    .PN7_ENABLE (PN7_ENABLE),
+    .PN15_ENABLE(PN15_ENABLE)
   ) i_pnmon (
     .clk (clk),
     .data (raw_data),

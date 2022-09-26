@@ -36,7 +36,9 @@ module ad_ip_jesd204_tpl_adc_core #(
   parameter LINK_DATA_WIDTH = NUM_LANES * OCTETS_PER_BEAT * 8,
   parameter DMA_DATA_WIDTH = DATA_PATH_WIDTH * DMA_BITS_PER_SAMPLE * NUM_CHANNELS,
   parameter TWOS_COMPLEMENT = 1,
-  parameter EXT_SYNC = 0
+  parameter EXT_SYNC = 0,
+  parameter PN7_ENABLE = 1,
+  parameter PN15_ENABLE = 1
 ) (
   input clk,
 
@@ -119,7 +121,9 @@ module ad_ip_jesd204_tpl_adc_core #(
       .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
       .CONVERTER_RESOLUTION (CONVERTER_RESOLUTION),
       .TWOS_COMPLEMENT (TWOS_COMPLEMENT),
-      .BITS_PER_SAMPLE (DMA_BITS_PER_SAMPLE)
+      .BITS_PER_SAMPLE (DMA_BITS_PER_SAMPLE),
+      .PN7_ENABLE (PN7_ENABLE),
+      .PN15_ENABLE(PN15_ENABLE)
     ) i_channel (
       .clk (clk),
 

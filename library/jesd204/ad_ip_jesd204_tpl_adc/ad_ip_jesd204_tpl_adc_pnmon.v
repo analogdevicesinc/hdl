@@ -26,7 +26,9 @@
 module ad_ip_jesd204_tpl_adc_pnmon #(
   parameter CONVERTER_RESOLUTION = 16,
   parameter DATA_PATH_WIDTH = 1,
-  parameter TWOS_COMPLEMENT = 1
+  parameter TWOS_COMPLEMENT = 1,
+  parameter PN7_ENABLE = 1,
+  parameter PN15_ENABLE = 1
 ) (
   input clk,
 
@@ -37,7 +39,7 @@ module ad_ip_jesd204_tpl_adc_pnmon #(
   output pn_oos,
   output pn_err,
 
-  // processor interface PN9 (0x0), PN23 (0x1)
+  // processor interface PN9 (0x0), PN23 (0x1), PN7 (0x4), PN15 (0x5)
   input [3:0] pn_seq_sel
 );
 
@@ -58,6 +60,10 @@ module ad_ip_jesd204_tpl_adc_pnmon #(
   wire [DW+23:0] full_state_pn23;
   wire [DW:0] pn9;
   wire [DW+9:0] full_state_pn9;
+  wire [DW:0] pn7;
+  wire [DW+7:0] full_state_pn7;
+  wire [DW:0] pn15;
+  wire [DW+15:0] full_state_pn15;
 
   // pn sequence select
   generate if (PN_W > DW) begin
@@ -98,11 +104,36 @@ module ad_ip_jesd204_tpl_adc_pnmon #(
 
   always @(posedge clk) begin
     if (pn_seq_sel == 4'd0) begin
-      pn_data_pn <= PN_W > DW ? {pn_data_pn[PN_W-DW-1:0],pn9} : pn9;
-    end else begin
+      pn_data_pn <= PN_W > DW ? {pn_data_pn[PN_W-DW-1:0],pn9}  : pn9;
+    end else if (pn_seq_sel == 4'd1) begin
       pn_data_pn <= PN_W > DW ? {pn_data_pn[PN_W-DW-1:0],pn23} : pn23;
+    end else if (pn_seq_sel == 4'd4) begin
+      pn_data_pn <= PN_W > DW ? {pn_data_pn[PN_W-DW-1:0],pn7}  : pn7;
+    end else if (pn_seq_sel == 4'd5) begin
+      pn_data_pn <= PN_W > DW ? {pn_data_pn[PN_W-DW-1:0],pn15} : pn15;
     end
   end
+
+ // specific PN sequences
+
+  generate
+    if(PN7_ENABLE == 'b1) begin
+     // PN7  x^7 + x^6 + 1
+     assign pn7 = full_state_pn7[7+:DW+1] ^ full_state_pn7[6+:DW+1];
+     assign full_state_pn7 = {pn_data_pn_s[6:0],pn7};
+    end else begin
+     assign pn7 = 'd0;
+     assign full_state_pn7 = 'd0;
+    end
+    if(PN15_ENABLE == 'b1)  begin
+     // PN15 x^15 + x^14 + 1
+     assign pn15 = full_state_pn15[15+:DW+1] ^ full_state_pn15[14+:DW+1];
+     assign full_state_pn15 = {pn_data_pn_s[14:0],pn15};
+    end else begin
+     assign pn15 = 'd0;
+     assign full_state_pn15 = 'd0;
+    end
+  endgenerate
 
   // pn oos & pn err
 

@@ -25,6 +25,7 @@ source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 adi_ip_create ad_ip_jesd204_tpl_adc
+
 adi_ip_files ad_ip_jesd204_tpl_adc [list \
   "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/common/ad_perfect_shuffle.v" \
@@ -134,6 +135,8 @@ set i 0
 foreach {k v w} {
   "TWOS_COMPLEMENT" "Use twos complement" "checkBox" \
   "EXT_SYNC" "Enable external sync" "checkBox" \
+  "PN7_ENABLE" "Enable PN7" "checkBox" \
+  "PN15_ENABLE" "Enable PN15" "checkBox" \
   } { \
   set p [ipgui::get_guiparamspec -name $k -component $cc]
   ipgui::move_param -component $cc -order $i $p -parent $datapath_group
