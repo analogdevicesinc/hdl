@@ -277,7 +277,7 @@ ad_ip_parameter $hier_spi_engine_1/${hier_spi_engine_1}_offload CONFIG.SDO_MEM_O
 ad_ip_instance axi_dmac axi_dac_0_dma
 ad_ip_parameter axi_dac_0_dma CONFIG.DMA_TYPE_SRC 0
 ad_ip_parameter axi_dac_0_dma CONFIG.DMA_TYPE_DEST 1
-ad_ip_parameter axi_dac_0_dma CONFIG.CYCLIC 0
+ad_ip_parameter axi_dac_0_dma CONFIG.CYCLIC 1
 ad_ip_parameter axi_dac_0_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_dac_0_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_dac_0_dma CONFIG.AXI_SLICE_DEST 0
@@ -345,7 +345,7 @@ ad_connect $hier_spi_engine_0/s_axis_sample_1_tvalid dac_0_axis_tvalid
 ad_ip_instance axi_dmac axi_dac_1_dma
 ad_ip_parameter axi_dac_1_dma CONFIG.DMA_TYPE_SRC 0
 ad_ip_parameter axi_dac_1_dma CONFIG.DMA_TYPE_DEST 1
-ad_ip_parameter axi_dac_1_dma CONFIG.CYCLIC 0
+ad_ip_parameter axi_dac_1_dma CONFIG.CYCLIC 1
 ad_ip_parameter axi_dac_1_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_dac_1_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_dac_1_dma CONFIG.AXI_SLICE_DEST 0
