@@ -167,7 +167,14 @@ ad_ip_parameter TWOS_COMPLEMENT boolean 1 true [list \
   DISPLAY_NAME "Twos Complement" \
   GROUP $group \
 ]
-
+ad_ip_parameter PN7_ENABLE boolean 1 true [list \
+  DISPLAY_NAME "Enable PN7" \
+  GROUP $group \
+]
+ad_ip_parameter PN15_ENABLE boolean 1 true [list \
+  DISPLAY_NAME "Enable PN15" \
+  GROUP $group \
+]
 
 # axi4 slave
 

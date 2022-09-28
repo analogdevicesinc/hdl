@@ -38,7 +38,9 @@ module ad_ip_jesd204_tpl_adc #(
   parameter OCTETS_PER_BEAT = 4,
   parameter EN_FRAME_ALIGN = 1,
   parameter TWOS_COMPLEMENT = 1,
-  parameter EXT_SYNC = 0
+  parameter EXT_SYNC = 0,
+  parameter PN7_ENABLE = 1,
+  parameter PN15_ENABLE = 1
 ) (
 
   // jesd interface
@@ -193,7 +195,9 @@ module ad_ip_jesd204_tpl_adc #(
     .TWOS_COMPLEMENT (TWOS_COMPLEMENT),
     .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
     .DMA_BITS_PER_SAMPLE (DMA_BITS_PER_SAMPLE),
-    .EXT_SYNC (EXT_SYNC)
+    .EXT_SYNC (EXT_SYNC),
+    .PN7_ENABLE (PN7_ENABLE),
+    .PN15_ENABLE(PN15_ENABLE)
   ) i_core (
     .clk (link_clk),
 
