@@ -155,5 +155,5 @@ ad_cpu_interrupt "ps-11" "mb-11" spi_adc/irq
 
 # memory interconnects
 
-ad_mem_hp0_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP0
-ad_mem_hp0_interconnect $sys_cpu_clk axi_cn0540_dma/m_dest_axi
+ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
+ad_mem_hp1_interconnect $sys_cpu_clk axi_cn0540_dma/m_dest_axi

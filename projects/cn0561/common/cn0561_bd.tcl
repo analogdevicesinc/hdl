@@ -126,6 +126,6 @@ ad_cpu_interconnect 0x44b10000 axi_cn0561_clkgen
 ad_cpu_interrupt "ps-13" "mb-13" axi_cn0561_dma/irq
 ad_cpu_interrupt "ps-12" "mb-12" cn0561_spi/irq
 
-ad_mem_hp0_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP0
-ad_mem_hp0_interconnect $sys_cpu_clk axi_cn0561_dma/m_dest_axi
+ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
+ad_mem_hp1_interconnect $sys_cpu_clk axi_cn0561_dma/m_dest_axi
 
