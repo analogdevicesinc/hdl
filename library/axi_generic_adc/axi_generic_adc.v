@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2020 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2022 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -134,9 +134,19 @@ module axi_generic_adc #(
     .adc_start_code (),
     .adc_sref_sync (),
     .adc_sync (),
+    .adc_ext_sync_arm (),
+    .adc_ext_sync_disarm (),
+    .adc_ext_sync_manual_req (),
+    .adc_num_lanes (),
+    .adc_custom_control (),
+    .adc_crc_enable (),
+    .adc_sdr_ddr_n (),
+    .adc_symb_op (),
+    .adc_symb_8_16b (),
     .up_pps_rcounter (32'b0),
     .up_pps_status (1'b0),
     .up_pps_irq_mask (),
+    .up_adc_r1_mode (),
     .up_adc_ce (),
     .up_status_pn_err (1'b0),
     .up_status_pn_oos (1'b0),
@@ -148,6 +158,11 @@ module axi_generic_adc #(
     .up_drp_rdata (32'd0),
     .up_drp_ready (1'd0),
     .up_drp_locked (1'd1),
+    .adc_custom_wr (),
+    .adc_write_req (),
+    .adc_custom_rd ('d0),
+    .adc_read_valid ('d0),
+    .adc_read_req (),
     .up_usr_chanmax_out (),
     .up_usr_chanmax_in (NUM_OF_CHANNELS),
     .up_adc_gpio_in (32'b0),
@@ -218,6 +233,9 @@ module axi_generic_adc #(
       .adc_pn_err (1'b0),
       .adc_pn_oos (1'b0),
       .adc_or (1'b0),
+      .adc_read_data ('d0),
+      .adc_status_header ('d0),
+      .adc_crc_err ('d0),
       .up_adc_pn_err (),
       .up_adc_pn_oos (),
       .up_adc_or (),

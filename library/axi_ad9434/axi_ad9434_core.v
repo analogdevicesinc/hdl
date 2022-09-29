@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2022 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -178,9 +178,19 @@ module axi_ad9434_core #(
     .adc_clk_ratio (32'd4),
     .adc_start_code (),
     .adc_sref_sync (),
+    .adc_ext_sync_arm (),
+    .adc_ext_sync_disarm (),
+    .adc_ext_sync_manual_req (),
+    .adc_num_lanes (),
+    .adc_custom_control (),
+    .adc_crc_enable (),
+    .adc_sdr_ddr_n (),
+    .adc_symb_op (),
+    .adc_symb_8_16b (),
     .adc_sync (),
 
     .up_pps_rcounter(32'h0),
+    .up_adc_r1_mode (),
     .up_pps_status(1'b0),
     .up_pps_irq_mask(),
 
@@ -192,6 +202,11 @@ module axi_ad9434_core #(
     .up_drp_sel (up_drp_sel),
     .up_drp_wr (up_drp_wr),
     .up_drp_addr (up_drp_addr),
+    .adc_custom_wr (),
+    .adc_write_req (),
+    .adc_custom_rd ('d0),
+    .adc_read_valid ('d0),
+    .adc_read_req (),
     .up_drp_wdata (up_drp_wdata),
     .up_drp_rdata (up_drp_rdata),
     .up_drp_ready (up_drp_ready),
@@ -237,6 +252,9 @@ module axi_ad9434_core #(
     .adc_pn_err (adc_pn_err_s),
     .adc_pn_oos (adc_pn_oos_s),
     .adc_or (adc_or),
+    .adc_read_data ('d0),
+    .adc_status_header ('d0),
+    .adc_crc_err ('d0),
     .up_adc_pn_err (up_status_pn_err_s),
     .up_adc_pn_oos (up_status_pn_oos_s),
     .up_adc_or (up_status_or_s),
