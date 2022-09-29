@@ -156,15 +156,15 @@ module system_top (
   wire    [ 3:0]  dac_1_spi_sdi;
   wire            dac_1_spi_sdo_t;
 
-  wire            dec_0_valid_a;
+(* mark_debug = "true" *)  wire            dec_0_valid_a;
   wire    [31:0]  dac_0_axis_tdata;
-  wire    [15:0]  dec_0_data_a;
-  wire    [15:0]  dec_0_data_b;
+(* mark_debug = "true" *)   wire    [15:0]  dec_0_data_a;
+(* mark_debug = "true" *)   wire    [15:0]  dec_0_data_b;
 
-  wire            dec_1_valid_a;
+(* mark_debug = "true" *)  wire            dec_1_valid_a;
   wire    [31:0]  dac_1_axis_tdata;
-  wire    [15:0]  dec_1_data_a;
-  wire    [15:0]  dec_1_data_b;
+(* mark_debug = "true" *)  wire    [15:0]  dec_1_data_a;
+(* mark_debug = "true" *)  wire    [15:0]  dec_1_data_b;
 
   assign gpio_i[63:37] = gpio_o[63:37];
   assign direction = dac_1_spi_cs == 1'h0 ? ~dac_1_spi_sdo_t : ~dac_0_spi_sdo_t;
@@ -455,13 +455,15 @@ module system_top (
     .clk_gate     (clk_gate),
 
     .dac_0_axis_tdata (dac_0_axis_tdata),
-    .dac_0_axis_tvalid (dec_0_valid_a),
+    .dac_0_axis_tvalid (1'h1),
+//    .dac_0_axis_tvalid (dec_0_valid_a),
     .dec_0_valid_a (dec_0_valid_a),
     .dec_0_data_a (dec_0_data_a),
     .dec_0_data_b (dec_0_data_b),
 
     .dac_1_axis_tdata (dac_1_axis_tdata),
-    .dac_1_axis_tvalid (dec_1_valid_a),
+    .dac_1_axis_tvalid (1'h1),
+//    .dac_1_axis_tvalid (dec_1_valid_a),
     .dec_1_valid_a (dec_1_valid_a),
     .dec_1_data_a (dec_1_data_a),
     .dec_1_data_b (dec_1_data_b),
