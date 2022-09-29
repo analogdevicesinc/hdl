@@ -68,8 +68,8 @@ module spi_engine_execution #(
  (* mark_debug = "true" *) output reg sync_valid,
  (* mark_debug = "true" *) output [7:0] sync,
 
- (* mark_debug = "true" *) input echo_sclk,
- (* mark_debug = "true" *) output reg sclk,
+  input echo_sclk,
+  output sclk,
  (* mark_debug = "true" *) output [NUM_OF_SDO-1:0] sdo,
  (* mark_debug = "true" *) output reg sdo_t,
  (* mark_debug = "true" *) input [NUM_OF_SDI-1:0] sdi,
@@ -121,9 +121,6 @@ wire [(NUM_OF_SDI * DATA_WIDTH)-1:0] sdi_data_s;
 reg sdi_data_valid_s = 1'b0;
 (* mark_debug = "true" *) reg sclk_int = 1'b0;
 reg [NUM_OF_SDO-1:0] sdo_int_s;
-//reg [NUM_OF_SDO-1:0] sdo_int_s2;
-//reg [NUM_OF_SDO-1:0] sdo_int_s3;
-//reg [NUM_OF_SDO-1:0] sdo_int_s4;
 reg sdo_t_int = 1'b0;
 
  (* mark_debug = "true" *) reg idle;
@@ -164,12 +161,6 @@ reg [7:0] clk_div = DEFAULT_CLK_DIV;
 
  (* mark_debug = "true" *) reg sdo_enabled = 1'b0;
  (* mark_debug = "true" *) reg sdi_enabled = 1'b0;
-
-//reg [(DATA_WIDTH-1):0] data_sdo_shift = 'h0;
-//reg [(DATA_WIDTH-1):0] data_sdo_shift2 = 'h0;
-//reg [(DATA_WIDTH-1):0] data_sdo_shift3 = 'h0;
-//reg [(DATA_WIDTH-1):0] data_sdo_shift4 = 'h0;
-
  (* mark_debug = "true" *) reg [63:0] data_sdo_shift = 'h0;
  (* mark_debug = "true" *) reg [63:0] data_sdo_shift2 = 'h0;
  (* mark_debug = "true" *) reg [63:0] data_sdo_shift3 = 'h0;
@@ -191,6 +182,8 @@ reg [SDI_DELAY+1:0] trigger_rx_d = {(SDI_DELAY+2){1'b0}};
  (* mark_debug = "true" *) wire trigger_tx;
  (* mark_debug = "true" *) wire trigger_rx;
 
+ (* mark_debug = "true" *) reg sclk_s;
+
 wire sleep_counter_compare;
 wire cs_sleep_counter_compare;
 
@@ -205,6 +198,20 @@ wire end_of_sdi_latch;
 
 assign cs_gen = inst_d1 == CMD_CHIPSELECT && cs_sleep_counter_compare == 1'b1;
 assign cmd_ready = idle;
+
+ODDR #(
+  .DDR_CLK_EDGE("OPPOSITE_EDGE"), // "OPPOSITE_EDGE" or "SAME_EDGE"
+  .INIT(1'b0),    // Initial value of Q: 1'b0 or 1'b1
+  .SRTYPE("SYNC") // Set/Reset type: "SYNC" or "ASYNC"
+) ODDR_inst_sclk (
+  .Q(sclk),   // 1-bit DDR output
+  .C(clk),   // 1-bit clock input
+  .CE(1), // 1-bit clock enable input
+  .D1(sclk_s), // 1-bit data input (positive edge)
+  .D2(sclk_s), // 1-bit data input (negative edge)
+  .R(0),   // 1-bit reset
+  .S(0)    // 1-bit set
+);
 
 assign sdi_data_valid = sdi_data_valid_s;
 
@@ -336,40 +343,6 @@ always @(posedge clk) begin
   end
 end
 
-//always @(posedge clk) begin
-//  if (idle == 1'b1) begin
-//    counter <= 'h00;
-//    dbg_reg0 <= 'h0;
-//    dbg_reg1 <= 'h0;
-//  end else if (clk_div_last == 1'b1 && wait_for_io == 1'b0) begin
-//    if (bit_counter == word_length) begin
-//        dbg_reg0 <= 'h1;
-//        dbg_reg1 <= 'h0;
-//        counter <= (counter & BIT_COUNTER_CLEAR) + (transfer_active ? 'h1 : 'h10) + BIT_COUNTER_CARRY;
-//    end else begin
-//      dbg_reg0 <= 'h0;
-//      dbg_reg1 <= 'h1;
-//      counter <= counter + (transfer_active ? 'h1 : 'h10);
-//    end
-//  end
-//end
-
-//always @(posedge clk) begin
-//  if (idle == 1'b1) begin
-//    counter <= 'h00;
-//  end else if (clk_div_last == 1'b1 && wait_for_io == 1'b0) begin
-//    if (bit_counter == word_length) begin
-//      if (transfer_counter == 8'hfe && !(cmd == 16'h10ff && cmd_valid))
-//        counter[(BIT_COUNTER_WIDTH+8):(BIT_COUNTER_WIDTH+1)] <= 'h1;
-//      else begin
-//        counter <= (counter & BIT_COUNTER_CLEAR) + (transfer_active ? 'h1 : 'h10) + BIT_COUNTER_CARRY;
-//      end
-//    end else begin
-//      counter <= counter + (transfer_active ? 'h1 : 'h10);
-//    end
-//  end
-//end
-
 always @(posedge clk) begin
   if (resetn == 1'b0) begin
     idle <= 1'b1;
@@ -436,6 +409,7 @@ end
 
 assign io_ready1 = (sdi_data_valid_s == 1'b0 || sdi_data_ready == 1'b1) &&
         (sdo_enabled == 1'b0 || last_transfer == 1'b1 || sdo_data_valid_d == 1'b1);
+
 assign io_ready2 = (sdi_enabled == 1'b0 || sdi_data_ready == 1'b1) &&
         (sdo_enabled == 1'b0 || last_transfer == 1'b1 || sdo_data_valid_d == 1'b1);
 
@@ -444,7 +418,6 @@ always @(posedge clk) begin
     last_transfer <= 1'b0;
   end else if (trigger_tx == 1'b1 && transfer_active == 1'b1) begin
       if (transfer_counter == cmd_d1[7:0]) begin
-//      if (stream_mode_ed || (transfer_counter == cmd_d1[7:0])) begin
         last_transfer <= 1'b1;
       end else begin
         last_transfer <= 1'b0;
@@ -478,7 +451,6 @@ end
 
 always @(posedge clk) begin
   if (transfer_active_d[0] || transfer_active) begin
-//  if (transfer_active_s == 1'b1 || wait_for_io == 1'b1) begin
     sdo_t_int <= ~sdo_enabled;
   end else begin
     sdo_t_int <= 1'b1;
@@ -502,12 +474,9 @@ if (NUM_OF_SDO == 1) begin : g_single_sdo
     end
   end
 
-//  assign sdo_int_s = data_sdo_shift[DATA_WIDTH-1];
-
   // Additional register stage to improve timing
   always @(posedge clk) begin
-    sclk <= sclk_int;
-//    sdo <= sdo_int_s;
+    sclk_s <= sclk_int;
     sdo_t <= sdo_t_int;
   end
 
@@ -529,14 +498,9 @@ begin : g_dual_sdo
     end
   end
 
-//  assign sdo_int_s = data_sdo_shift[DATA_WIDTH-1];
-//  assign sdo_int_s2 = data_sdo_shift2[DATA_WIDTH-1];
-
   // Additional register stage to improve timing
   always @(posedge clk) begin
-    sclk <= sclk_int;
-//    sdo[0] <= sdo_int_s2;
-//    sdo[1] <= sdo_int_s;
+    sclk_s <= sclk_int;
     sdo_t <= sdo_t_int;
   end
 
@@ -553,6 +517,9 @@ begin : g_quad_sdo
   always @(posedge clk) begin
     if ((inst_d1 == CMD_TRANSFER) && (!sdo_enabled)) begin
       data_sdo_shift <= {DATA_WIDTH{SDO_DEFAULT}};
+      data_sdo_shift2 <= {DATA_WIDTH{SDO_DEFAULT}};
+      data_sdo_shift3 <= {DATA_WIDTH{SDO_DEFAULT}};
+      data_sdo_shift4 <= {DATA_WIDTH{SDO_DEFAULT}};
     end else if (sdo_data_ready && sdo_data_valid_d) begin
       if (ddr_en) begin
         data_sdo_shift <= sdo_data_d << left_aligned;
@@ -566,10 +533,10 @@ begin : g_quad_sdo
         data_sdo_shift4 <= sdr_data_buf << (left_aligned + 2'd3);
       end
     end else if ((transfer_active_s == 1'b1 || end_of_word_d == 1'b1) && trigger == 1'b1) begin
-      data_sdo_shift <= {data_sdo_shift[(63-2):0], 4'b0};
-      data_sdo_shift2 <= {data_sdo_shift2[(63-2):0], 4'b0};
-      data_sdo_shift3 <= {data_sdo_shift3[(63-2):0], 4'b0};
-      data_sdo_shift4 <= {data_sdo_shift4[(63-2):0], 4'b0};
+      data_sdo_shift <= {data_sdo_shift[(63-4):0], 4'b0};
+      data_sdo_shift2 <= {data_sdo_shift2[(63-4):0], 4'b0};
+      data_sdo_shift3 <= {data_sdo_shift3[(63-4):0], 4'b0};
+      data_sdo_shift4 <= {data_sdo_shift4[(63-4):0], 4'b0};
     end
   end
 
@@ -580,20 +547,8 @@ begin : g_quad_sdo
 
   // Additional register stage to improve timing
   always @(posedge clk) begin
-    sclk <= sclk_int;
+    sclk_s <= sclk_int;
     sdo_t <= sdo_t_int;
-//    if (ddr_en) begin
-//      sdo[3] <= data_sdo_shift[63];
-//      sdo[2] <= data_sdo_shift2[63];
-//      sdo[1] <= data_sdo_shift3[63];
-//      sdo[0] <= data_sdo_shift4[63];
-//    end else begin
-//      sdo_int_s[3] <= data_sdo_shift[63];
-//      sdo_int_s[2] <= data_sdo_shift2[63];
-//      sdo_int_s[1] <= data_sdo_shift3[63];
-//      sdo_int_s[0] <= data_sdo_shift4[63];
-//      sdo <= sdo_int_s;
-//    end
   end
 
 end /* g_quad_sdo */
@@ -743,8 +698,7 @@ if (ECHO_SCLK == 1) begin : g_echo_sclk_miso_latch
   always @(posedge clk) begin
     if (cs_active_s) begin
       sdi_transfer_counter <= 0;
-    end else if (last_sdi_bit_m[2] == 1'b0 &&
-                 last_sdi_bit_m[1] == 1'b1) begin
+    end else if (last_sdi_bit_m[2] == 1'b0 && last_sdi_bit_m[1] == 1'b1) begin
       sdi_transfer_counter <= sdi_transfer_counter + 1'b1;
     end
   end
@@ -817,8 +771,6 @@ always @(posedge clk) begin
   if (transfer_active == 1'b1) begin
     if (ddr_en == 1'b1) begin
       sclk_int <= ntx_rx;
-//      sclk_int <= sclk_int_d[0];
-//      sclk_int_d[0] <= ~ntx_rx;
     end else begin
       sclk_int <= cpol ^ cpha ^ ntx_rx;
     end
