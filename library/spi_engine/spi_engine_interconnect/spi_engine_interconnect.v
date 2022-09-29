@@ -55,12 +55,12 @@ module spi_engine_interconnect #(
   output m_sdi_ready,
   input [(NUM_OF_SDI * DATA_WIDTH-1):0] m_sdi_data,
 
-  input m_sync_valid,
-  output m_sync_ready,
+ (* mark_debug = "true" *) input m_sync_valid,
+ (* mark_debug = "true" *) output m_sync_ready,
   input [7:0] m_sync,
 
 
-  input s0_cmd_valid,
+ (* mark_debug = "true" *) input s0_cmd_valid,
   output s0_cmd_ready,
   input [15:0] s0_cmd_data,
 
@@ -77,7 +77,7 @@ module spi_engine_interconnect #(
   output [7:0] s0_sync,
 
 
-  input s1_cmd_valid,
+ (* mark_debug = "true" *) input s1_cmd_valid,
   output s1_cmd_ready,
   input [15:0] s1_cmd_data,
 
@@ -94,9 +94,8 @@ module spi_engine_interconnect #(
   output [7:0] s1_sync
 );
 
-reg s_active = 1'b0;
-
-reg idle = 1'b1;
+ (* mark_debug = "true" *) reg s_active = 1'b0;
+ (* mark_debug = "true" *) reg idle = 1'b1;
 
 `define spi_engine_interconnect_mux(s0, s1) (idle == 1'b1 ? 1'b0 : (s_active == 1'b0 ? s0 : s1))
 
