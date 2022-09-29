@@ -389,7 +389,7 @@ generate if (SDO_MEM_OS) begin
   always @(posedge ctrl_clk) begin
     if (ctrl_mem_reset == 1'b1) begin
       ctrl_sdo_wr_addr_1 <= 'h0;
-    end else if (trigger_s == 1'b1 && cmd_sdo_en_os == 1'b1) begin
+    end else if (trigger_s == 1'b1 && cmd_sdo_en_os == 1'b1 && ~spi_active_ed) begin
       ctrl_sdo_wr_addr_1 <= ctrl_sdo_wr_addr;
     end else if (sdo_data_ready == 1'b1 && mem_empty == 0) begin
       ctrl_sdo_wr_addr_1 <= ctrl_sdo_wr_addr_1 - 1'b1;
