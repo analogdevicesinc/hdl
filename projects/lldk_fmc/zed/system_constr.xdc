@@ -1,19 +1,10 @@
 create_clock -period 16.667 -name dac_0_spi_sclk_g [get_ports dac_0_spi_sclk]
 
-#set_output_delay -clock dac_0_spi_sclk_g -min 6.8 [get_ports dac_0_spi_sdio[*]]
-#set_output_delay -clock dac_0_spi_sclk_g -max 2.8 [get_ports dac_0_spi_sdio[*]]
+set_output_delay -clock dac_0_spi_sclk_g -min 2.500 [get_ports {dac_0_spi_sdio[*]}]
+set_output_delay -clock dac_0_spi_sclk_g -max -2.500 [get_ports {dac_0_spi_sdio[*]}]
 
-#set_output_delay -clock dac_0_spi_sclk_g -min 6.8 [get_ports dac_0_spi_sdio[*]] -clock_fall -add_delay
-#set_output_delay -clock dac_0_spi_sclk_g -max 2.8 [get_ports dac_0_spi_sdio[*]] -clock_fall -add_delay
-
-
-set_output_delay -clock dac_0_spi_sclk_g -min 3.000 [get_ports {dac_0_spi_sdio[*]}]
-set_output_delay -clock dac_0_spi_sclk_g -max -3.000 [get_ports {dac_0_spi_sdio[*]}]
-
-set_output_delay -clock dac_0_spi_sclk_g -clock_fall -min -add_delay 3.000 [get_ports {dac_0_spi_sdio[*]}]
-set_output_delay -clock dac_0_spi_sclk_g -clock_fall -max -add_delay -3.000 [get_ports {dac_0_spi_sdio[*]}]
-
-
+set_output_delay -clock dac_0_spi_sclk_g -clock_fall -min -add_delay 2.500 [get_ports {dac_0_spi_sdio[*]}]
+set_output_delay -clock dac_0_spi_sclk_g -clock_fall -max -add_delay -2.500 [get_ports {dac_0_spi_sdio[*]}]
 
 #  Double Data Rate Source Synchronous Outputs
 #
@@ -64,7 +55,6 @@ set_output_delay -clock dac_0_spi_sclk_g -clock_fall -max -add_delay -3.000 [get
 
 #set_multicycle_path -setup -from [get_clocks spi_clk] -to [get_cells -hierarchical -filter NAME=~*/*_execution/inst/left_aligned_reg*] 8
 #set_multicycle_path -hold -from [get_clocks spi_clk] -to [get_cells -hierarchical -filter NAME=~*/*_execution/inst/left_aligned_reg*] 7
-
 
 # lldk
 
