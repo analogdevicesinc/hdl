@@ -437,6 +437,38 @@ ENDFIELD
 ############################################################################################
 
 REG
+0x0020
+REG_ADC_CUSTOM_WR
+ADC Custom Write Data
+ENDREG
+
+FIELD
+[31:0] 0x0000
+ADC_CUSTOM_WR[31:0]
+RW
+Custom write to the ADC available registers.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0X0021
+REG_ADC_CUSTOM_RD
+ADC Custom Read Data
+ENDREG
+
+FIELD
+[31:0] 0x0000
+ADC_CUSTOM_RD[31:0]
+RO
+Custom read of the ADC available registers.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
 0x0022
 REG_UI_STATUS
 User Interface Status

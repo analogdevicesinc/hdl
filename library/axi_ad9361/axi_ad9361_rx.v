@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2022 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -32,7 +32,6 @@
 //
 // ***************************************************************************
 // ***************************************************************************
-// ADC channel-need to work on dual mode for pn sequence
 
 `timescale 1ns/100ps
 
@@ -362,8 +361,15 @@ module axi_ad9361_rx #(
     .adc_start_code (),
     .adc_sref_sync (),
     .adc_sync (),
+    .adc_ext_sync_arm (),
+    .adc_ext_sync_disarm (),
+    .adc_ext_sync_manual_req (),
     .adc_num_lanes (),
+    .adc_custom_control (),
+    .adc_crc_enable (),
     .adc_sdr_ddr_n (),
+    .adc_symb_op (),
+    .adc_symb_8_16b (),
     .up_adc_ce (),
     .up_pps_rcounter (up_pps_rcounter),
     .up_pps_status (up_pps_status),
@@ -379,6 +385,11 @@ module axi_ad9361_rx #(
     .up_drp_rdata (up_drp_rdata),
     .up_drp_ready (up_drp_ready),
     .up_drp_locked (up_drp_locked),
+    .adc_custom_wr (),
+    .adc_write_req (),
+    .adc_custom_rd ('d0),
+    .adc_read_valid ('d0),
+    .adc_read_req (),
     .up_usr_chanmax_out (),
     .up_usr_chanmax_in (8'd3),
     .up_adc_gpio_in (up_adc_gpio_in),
