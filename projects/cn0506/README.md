@@ -12,6 +12,6 @@ IMPORTANT: Set CN0506 MAC to PHY interface
 
 How to use over-writable parameters from the environment:
 ```
-hdl/projects/cn05060/zed> make INTF_CFG=MII
+hdl/projects/cn0506/zed> make INTF_CFG=MII
 ``  - Defines the MAC to PHY interface: MII, RGMII or RMII.
 INTF_CFG  - Defines the MAC to PHY interface: MII, RGMII or RMII.
