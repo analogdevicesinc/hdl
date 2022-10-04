@@ -528,7 +528,11 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}
       ad_connect  ${link_clk} ${u_xcvr}/${txrx}_clk_${phys_lane}
 
       if {$tx_or_rx_n == 0} {
-        ad_connect  ${a_jesd}/phy_en_char_align ${u_xcvr}/${txrx}_calign_${phys_lane}
+        if {$jesd204_type == 0} {
+          if {$link_mode == 1} {
+	    ad_connect  ${a_jesd}/phy_en_char_align ${u_xcvr}/${txrx}_calign_${phys_lane}
+          }
+	}
       }
     }
   }
