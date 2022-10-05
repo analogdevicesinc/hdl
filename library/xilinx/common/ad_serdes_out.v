@@ -50,7 +50,6 @@ module ad_serdes_out #(
   input                       rst,
   input                       clk,
   input                       div_clk,
-  input                       loaden,
 
   // data interface
   input                       data_oe,
@@ -99,9 +98,13 @@ module ad_serdes_out #(
       else       serdes_rst_seq [6:0] <= {serdes_rst_seq [5:0], 1'b0};
   end
 
+  // transmit data path: oserdes -> obuf
+
   genvar l_inst;
   generate
   for (l_inst = 0; l_inst <= (DATA_WIDTH-1); l_inst = l_inst + 1) begin: g_data
+
+    // oserdes
 
     if (FPGA_TECHNOLOGY == SEVEN_SERIES) begin
       OSERDESE2  #(
@@ -161,9 +164,10 @@ module ad_serdes_out #(
         .RST (serdes_rst));
     end
 
-    if (CMOS_LVDS_N == 0) begin
+    // obuf
 
-      OBUFTDS i_obuf (
+    if (CMOS_LVDS_N == 0) begin
+      OBUFTDS i_obuftds (
         .T (data_t[l_inst]),
         .I (data_out_s[l_inst]),
         .O (data_out_p[l_inst]),
