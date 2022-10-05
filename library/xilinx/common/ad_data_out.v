@@ -78,7 +78,7 @@ module ad_data_out #(
     (FPGA_TECHNOLOGY == ULTRASCALE) ? "ULTRASCALE" : "7SERIES";
 
   localparam  IODELAY_FPGA_TECHNOLOGY = (IODELAY_ENABLE == 1) ? FPGA_TECHNOLOGY : NONE;
-  localparam  IODELAY_SIM_DEVICE = (FPGA_TECHNOLOGY == ULTRASCALE_PLUS) ? "ULTRASCALE_PLUS_ES1" :
+  localparam  IODELAY_SIM_DEVICE = (FPGA_TECHNOLOGY == ULTRASCALE_PLUS) ? "ULTRASCALE_PLUS" :
     (FPGA_TECHNOLOGY == ULTRASCALE) ? "ULTRASCALE" : "7SERIES";
 
   // internal signals
@@ -104,13 +104,17 @@ module ad_data_out #(
 
   // transmit data interface, oddr -> odelay -> obuf
 
+  // oddr
+
   generate
   if ((FPGA_TECHNOLOGY == ULTRASCALE) || (FPGA_TECHNOLOGY == ULTRASCALE_PLUS)) begin
-  ODDRE1 i_tx_data_oddr (
+  ODDRE1 #(
+    .SIM_DEVICE (IODELAY_SIM_DEVICE)
+  ) i_tx_data_oddr (
     .SR (1'b0),
     .C (tx_clk),
-    .D1 (tx_data_n),
-    .D2 (tx_data_p),
+    .D1 (tx_data_p),
+    .D2 (tx_data_n),
     .Q (tx_data_oddr_s));
   end
   endgenerate
@@ -124,8 +128,8 @@ module ad_data_out #(
     .R (1'b0),
     .S (1'b0),
     .C (tx_clk),
-    .D1 (tx_data_n),
-    .D2 (tx_data_p),
+    .D1 (tx_data_p),
+    .D2 (tx_data_n),
     .Q (tx_data_oddr_s));
   end
   endgenerate
