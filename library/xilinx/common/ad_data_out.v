@@ -165,6 +165,37 @@ module ad_data_out #(
   endgenerate
 
   generate
+  if ((IODELAY_FPGA_TECHNOLOGY == ULTRASCALE_PLUS) || (IODELAY_FPGA_TECHNOLOGY == ULTRASCALE)) begin
+
+    (* IODELAY_GROUP = IODELAY_GROUP *)
+    ODELAYE3 #(
+      .CASCADE ("NONE"),
+      .DELAY_FORMAT ("COUNT"),
+      .DELAY_TYPE ("VAR_LOAD"),
+      .DELAY_VALUE (0),
+      .IS_CLK_INVERTED (1'b0),
+      .IS_RST_INVERTED (1'b0),
+      .REFCLK_FREQUENCY (REFCLK_FREQUENCY),
+      .SIM_DEVICE (IODELAY_SIM_DEVICE),
+      .UPDATE_MODE ("ASYNC")
+    ) i_tx_data_odelay (
+      .CASC_RETURN (1'b0),
+      .CASC_IN (1'b0),
+      .CASC_OUT (),
+      .CE (1'b0),
+      .CLK (up_clk),
+      .INC (1'b0),
+      .LOAD (up_dld),
+      .CNTVALUEIN (up_dwdata),
+      .CNTVALUEOUT (up_drdata),
+      .ODATAIN (tx_data_oddr_s),
+      .DATAOUT (tx_data_odelay_s),
+      .RST (1'b0),
+      .EN_VTC (~up_dld));
+  end
+  endgenerate
+
+  generate
   if (IODELAY_FPGA_TECHNOLOGY == NONE) begin
   assign up_drdata = 5'd0;
   assign tx_data_odelay_s = tx_data_oddr_s;
