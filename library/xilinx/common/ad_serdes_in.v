@@ -42,6 +42,7 @@ module ad_serdes_in #(
   parameter   SERDES_FACTOR = 8,
   parameter   DATA_WIDTH = 16,
   parameter   DRP_WIDTH = 5,
+  parameter   IODELAY_ENABLE = 1,
   parameter   IODELAY_CTRL = 0,
   parameter   IODELAY_GROUP = "dev_if_delay_group",
   parameter   REFCLK_FREQUENCY = 200
@@ -52,9 +53,6 @@ module ad_serdes_in #(
   input                           rst,
   input                           clk,
   input                           div_clk,
-  input                           loaden,
-  input   [ 7:0]                  phase,
-  input                           locked,
 
   // data interface
 
@@ -88,11 +86,13 @@ module ad_serdes_in #(
   localparam  ULTRASCALE_PLUS  = 3;
   localparam  DATA_RATE = (DDR_OR_SDR_N) ? "DDR" : "SDR";
 
+  localparam IODELAY_CTRL_ENABLED = (IODELAY_ENABLE == 1) ? IODELAY_CTRL : 0;
   localparam SIM_DEVICE = FPGA_TECHNOLOGY == SEVEN_SERIES ? "7SERIES" :
                           FPGA_TECHNOLOGY == ULTRASCALE ? "ULTRASCALE" :
                           FPGA_TECHNOLOGY == ULTRASCALE_PLUS ? "ULTRASCALE_PLUS" :
                           "UNSUPPORTED";
-
+  // when ULTRASCALE_PLUS, use ULTRASCALE because IDELAYCTRL is the same for both
+  // and doesn't know ULTRASCALE_PLUS string
   localparam SIM_DEVICE_IDELAYCTRL = FPGA_TECHNOLOGY == SEVEN_SERIES ? "7SERIES" :
                           FPGA_TECHNOLOGY == ULTRASCALE ? "ULTRASCALE" :
                           FPGA_TECHNOLOGY == ULTRASCALE_PLUS ? "ULTRASCALE" :
@@ -108,7 +108,7 @@ module ad_serdes_in #(
   // delay controller
 
   generate
-  if (IODELAY_CTRL == 1) begin
+  if (IODELAY_CTRL_ENABLED == 1) begin
     (* IODELAY_GROUP = IODELAY_GROUP *)
     IDELAYCTRL #(
       .SIM_DEVICE(SIM_DEVICE_IDELAYCTRL)
@@ -122,6 +122,9 @@ module ad_serdes_in #(
   endgenerate
 
   // received data interface: ibuf -> idelay -> iserdes
+
+  // ibuf
+
   genvar l_inst;
   generate
     for (l_inst = 0; l_inst <= (DATA_WIDTH-1); l_inst = l_inst + 1) begin: g_io
@@ -138,6 +141,14 @@ module ad_serdes_in #(
     end
   endgenerate
 
+  // bypass IDELAY
+
+  generate
+  if (IODELAY_ENABLE == 0) begin
+    assign data_in_idelay_s = data_in_ibuf_s;
+  end
+  endgenerate
+
   reg [6:0] serdes_rst_seq;
   wire      serdes_rst     = serdes_rst_seq [6];
 
@@ -147,9 +158,12 @@ module ad_serdes_in #(
       else       serdes_rst_seq [6:0] <= {serdes_rst_seq [5:0], 1'b0};
   end
 
+  // idelay + iserdes
+
   generate if (FPGA_TECHNOLOGY == SEVEN_SERIES) begin
     for (l_inst = 0; l_inst <= (DATA_WIDTH-1); l_inst = l_inst + 1) begin: g_data
 
+      if (IODELAY_ENABLE == 1) begin
       (* IODELAY_GROUP = IODELAY_GROUP *)
       IDELAYE2 #(
         .CINVCTRL_SEL ("FALSE"),
@@ -173,6 +187,7 @@ module ad_serdes_in #(
         .LD (up_dld[l_inst]),
         .CNTVALUEIN (up_dwdata[DRP_WIDTH*l_inst +: DRP_WIDTH]),
         .CNTVALUEOUT (up_drdata[DRP_WIDTH*l_inst +: DRP_WIDTH]));
+      end
 
       ISERDESE2  #(
         .DATA_RATE (DATA_RATE),
@@ -231,6 +246,8 @@ module ad_serdes_in #(
     for (l_inst = 0; l_inst <= (DATA_WIDTH-1); l_inst = l_inst + 1) begin: g_data
 
     wire   div_dld;
+    wire   en_vtc;
+    wire   ld_cnt;
     reg [4:0] vtc_cnt = {5{1'b1}};
 
     sync_event sync_load (
@@ -239,6 +256,7 @@ module ad_serdes_in #(
       .out_clk (div_clk),
       .out_event (div_dld));
 
+    if (IODELAY_ENABLE == 1) begin
     (* IODELAY_GROUP = IODELAY_GROUP *)
     IDELAYE3 #(
       .CASCADE ("NONE"),          // Cascade setting (MASTER, NONE, SLAVE_END, SLAVE_MIDDLE)
@@ -267,6 +285,7 @@ module ad_serdes_in #(
       .INC (1'b0),                                        // 1-bit input: Increment / Decrement tap delay input
       .LOAD (ld_cnt),                                     // 1-bit input: Load DELAY_VALUE input
       .RST (rst));                                        // 1-bit input: Asynchronous Reset to the DELAY_VALUE
+    end
 
     always @(posedge div_clk) begin
       if (div_dld) begin

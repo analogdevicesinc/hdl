@@ -43,6 +43,7 @@ module axi_ad9434 #(
   parameter FPGA_FAMILY = 0,
   parameter SPEED_GRADE = 0,
   parameter DEV_PACKAGE = 0,
+  parameter IODELAY_ENABLE = 1,
   parameter IO_DELAY_GROUP = "dev_if_delay_group"
 ) (
 
@@ -133,6 +134,7 @@ module axi_ad9434 #(
 
   axi_ad9434_if #(
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
+    .IODELAY_ENABLE (IODELAY_ENABLE),
     .IO_DELAY_GROUP(IO_DELAY_GROUP)
   ) i_if (
     .adc_clk_in_p(adc_clk_in_p),

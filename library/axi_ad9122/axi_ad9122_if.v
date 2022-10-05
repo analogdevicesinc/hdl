@@ -112,7 +112,6 @@ module axi_ad9122_if #(
   // internal signals
 
   wire            dac_out_clk;
-  wire            loaden_s;
 
   // dac status
 
@@ -136,7 +135,6 @@ module axi_ad9122_if #(
     .rst (dac_rst),
     .clk (dac_clk),
     .div_clk (dac_div_clk),
-    .loaden (loaden_s),
     .data_oe (1'b1),
     .data_s0 (dac_data_i0),
     .data_s1 (dac_data_q0),
@@ -160,7 +158,6 @@ module axi_ad9122_if #(
     .rst (dac_rst),
     .clk (dac_clk),
     .div_clk (dac_div_clk),
-    .loaden (loaden_s),
     .data_oe (1'b1),
     .data_s0 (dac_frame_i0),
     .data_s1 (dac_frame_q0),
@@ -184,7 +181,6 @@ module axi_ad9122_if #(
     .rst (dac_rst),
     .clk (dac_clk),
     .div_clk (dac_div_clk),
-    .loaden (loaden_s),
     .data_oe (1'b1),
     .data_s0 (1'b1),
     .data_s1 (1'b0),
@@ -216,8 +212,6 @@ module axi_ad9122_if #(
     .clk (dac_clk),
     .div_clk (dac_div_clk),
     .out_clk (dac_out_clk),
-    .loaden (loaden_s),
-    .phase (),
     .up_clk (up_clk),
     .up_rstn (up_rstn),
     .up_drp_sel (up_drp_sel),

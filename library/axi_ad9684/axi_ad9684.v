@@ -42,6 +42,7 @@ module axi_ad9684 #(
   parameter FPGA_FAMILY = 0,
   parameter SPEED_GRADE = 0,
   parameter DEV_PACKAGE = 0,
+  parameter IODELAY_ENABLE = 1,
   parameter IO_DELAY_GROUP = "dev_if_delay_group",
   parameter OR_STATUS = 1
 ) (
@@ -168,6 +169,7 @@ module axi_ad9684 #(
 
   axi_ad9684_if #(
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
+    .IODELAY_ENABLE (IODELAY_ENABLE),
     .IO_DELAY_GROUP(IO_DELAY_GROUP),
     .OR_STATUS (OR_STATUS)
   ) i_ad9684_if (

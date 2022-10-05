@@ -58,8 +58,6 @@ module ad_serdes_clk #(
   output          clk,
   output          div_clk,
   output          out_clk,
-  output          loaden,
-  output  [ 7:0]  phase,
 
   // drp interface
 
@@ -82,8 +80,6 @@ module ad_serdes_clk #(
 
   // defaults
 
-  assign loaden = 'd0;
-  assign phase = 'd0;
   assign up_drp_rdata[31:16] = 'd0;
 
   // instantiations
