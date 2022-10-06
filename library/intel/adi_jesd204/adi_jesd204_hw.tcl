@@ -602,7 +602,7 @@ proc jesd204_compose {} {
     set jesd204_intfs {config device_config ilas_config device_event status}
     set tx_rx "rx"
 
-    add_connection ref_clock.out_clk phy.ref_clk
+    # add_connection ref_clock.out_clk phy.ref_clk
   }
 
   add_instance axi_jesd204_${tx_rx} axi_jesd204_${tx_rx}
