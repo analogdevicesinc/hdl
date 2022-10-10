@@ -1,26 +1,4 @@
- * [Vivado Design Suite](https://www.xilinx.com/support/download.html)
-
-**or**
-
- * [Quartus Prime Design Suite](https://www.altera.com/downloads/download-center.html)
- 
-Please make sure that you have the [required](https://github.com/analogdevicesinc/hdl/releases) tool version.
-### How to build a project
-
-For building a project (generate a bitstream), you have to use the [GNU Make tool](https://www.gnu.org/software/make/). If you're a 
-Windows user please checkout [this page](https://wiki.analog.com/resources/fpga/docs/build#windows_environment_setup), to see how you can install this tool.
-
-To build a project, checkout the [latest release](https://github.com/analogdevicesinc/hdl/releases), after that just **cd** to the 
-project that you want to build and run make:
-```
- [~]cd projects/fmcomms2/zc706
- [~]make
-```
-
-A more comprehensive build guide can be found under the following link: 
-<https://wiki.analog.com/resources/fpga/docs/build>
-
-## Software
+ ## Software
 
 In general all the projects have no-OS (baremetal) and a Linux support. See [no-OS](https://github.com/analogdevicesinc/no-OS) or [Linux](https://github.com/analogdevicesinc/Linux) for
 more information.
