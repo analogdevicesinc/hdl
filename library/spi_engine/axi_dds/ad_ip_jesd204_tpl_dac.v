@@ -81,7 +81,7 @@ module ad_ip_jesd204_tpl_dac #(
 //  input [7:0] sync_data,
 
   // axi interface
-  
+
   input                   s_axi_aclk,
   input                   s_axi_aresetn,
   input                   s_axi_awvalid,
@@ -103,7 +103,7 @@ module ad_ip_jesd204_tpl_dac #(
   output      [ 1:0]      s_axi_rresp,
   output      [31:0]      s_axi_rdata,
   input                   s_axi_rready
-  
+
 );
 
   localparam DATA_PATH_WIDTH = OCTETS_PER_BEAT * 8 * NUM_LANES / NUM_CHANNELS / BITS_PER_SAMPLE;
@@ -114,7 +114,7 @@ module ad_ip_jesd204_tpl_dac #(
 
     localparam DAC_CDW = CONVERTER_RESOLUTION * DATA_PATH_WIDTH;
     localparam DAC_DATA_WIDTH = DAC_CDW * NUM_CHANNELS;
-  
+
   // internal signals
 
   wire dac_sync;
@@ -140,7 +140,26 @@ module ad_ip_jesd204_tpl_dac #(
 //  reg [LINK_DATA_WIDTH-1:0] dac_ddata_cr;
 
   assign m_axis_dds_data = dac_data[31:0];
-  assign m_axis_dds_valid = 1'b1;
+
+    assign m_axis_dds_valid = valid_s;
+//  assign m_axis_dds_valid = 1'b1;
+
+  reg [15:0] valid_cnt = 'h0;
+  reg valid_d = 'h0;
+  wire valid_s;
+  wire m_axis_dds_ready_s = m_axis_dds_ready || valid_d;
+
+  assign valid_s = valid_d & ~valid_cnt[3];
+
+  always @(posedge spi_clk) begin
+    if (valid_cnt == 'd8) begin
+      valid_cnt <= 'h0;
+    end else begin
+      valid_cnt <= valid_cnt + 1'h1;
+    end
+    valid_d <= valid_cnt [3];
+  end
+
   // regmap
 
   ad_ip_jesd204_tpl_dac_regmap #(
@@ -237,7 +256,7 @@ module ad_ip_jesd204_tpl_dac #(
     .clk (spi_clk),
 
     .dac_data (dac_data),
-    .dac_dds_valid (m_axis_dds_ready),
+    .dac_dds_valid (m_axis_dds_ready_s),
 //      output [DAC_DATA_WIDTH-1:0] dac_data,
 
     .enable (enable),
