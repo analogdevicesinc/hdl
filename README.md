@@ -3,7 +3,6 @@
 [Analog Devices Inc.](http://www.analog.com/en/index.html) HDL libraries and projects for various reference design and prototyping systems.
 This repository contains HDL code (Verilog or VHDL) and the required Tcl scripts to create and build a specific FPGA 
 example design using Xilinx and/or Intel tool chain.
-
 ## Support
 The HDL is provided "AS IS", support is only provided on [EngineerZone](https://ez.analog.com/community/fpga).
 
