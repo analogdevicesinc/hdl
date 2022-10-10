@@ -23,7 +23,6 @@ This repository supports reference designs for different [Analog Devices boards]
  * [Quartus Prime Design Suite](https://www.altera.com/downloads/download-center.html)
  
 Please make sure that you have the [required](https://github.com/analogdevicesinc/hdl/releases) tool version.
-
 ### How to build a project
 
 For building a project (generate a bitstream), you have to use the [GNU Make tool](https://www.gnu.org/software/make/). If you're a 
