@@ -6,7 +6,6 @@ This repository contains HDL code (Verilog or VHDL) and the required Tcl scripts
 example design using Xilinx and/or Intel tool chain.
 
 ## Support
-
 The HDL is provided "AS IS", support is only provided on [EngineerZone](https://ez.analog.com/community/fpga).
 
 If you feel you can not, or do not want to ask questions on [EngineerZone](https://ez.analog.com/community/fpga), you should not use or look at the HDL found in this repository. Just like you have the freedom and rights to use this software in your products (with the obligations found in individual licenses) and get support on [EngineerZone](https://ez.analog.com/community/fpga), you have the freedom and rights not to use this software and get datasheet level support from traditional ADI contacts that you may have.
