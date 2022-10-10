@@ -12,7 +12,6 @@ If you feel you can not, or do not want to ask questions on [EngineerZone](https
 There is no free replacement for consulting services. If you have questions that are best handed one-on-one engagement, and are time sensitive, consider hiring a consultant. If you want to find a consultant who is familar with the HDL found in this repository - ask on [EngineerZone](https://ez.analog.com/community/fpga).
 
 ## Getting started
-
 This repository supports reference designs for different [Analog Devices boards](../master/projects) based on [Intel and Xilinx FPGA development boards](../master/projects/common) or standalone.
 
 ### Prerequisites
