@@ -12,7 +12,6 @@ There is no free replacement for consulting services. If you have questions that
 
 ## Getting started
 This repository supports reference designs for different [Analog Devices boards](../master/projects) based on [Intel and Xilinx FPGA development boards](../master/projects/common) or standalone.
-
 ### Prerequisites
 
  * [Vivado Design Suite](https://www.xilinx.com/support/download.html)
