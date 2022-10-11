@@ -2,18 +2,10 @@
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
 # RX parameters
-if ![info exists RX_NUM_OF_LANES] {
-  set RX_NUM_OF_LANES 4                  ; # L
-}
-if ![info exists RX_NUM_OF_CONVERTERS] {
-  set RX_NUM_OF_CONVERTERS 16            ; # M
-}
-if ![info exists RX_SAMPLES_PER_FRAME] {
-  set RX_SAMPLES_PER_FRAME 1             ; # S
-}
-if ![info exists RX_SAMPLE_WIDTH] {
-  set RX_SAMPLE_WIDTH 16                 ; # N/NP
-}
+set RX_NUM_OF_LANES $ad_project_params(RX_JESD_L)           ; # L
+set RX_NUM_OF_CONVERTERS $ad_project_params(RX_JESD_M)      ; # M
+set RX_SAMPLES_PER_FRAME $ad_project_params(RX_JESD_S)      ; # S
+set RX_SAMPLE_WIDTH 16                                      ; # N/NP
 
 set RX_OCTETS_PER_FRAME [expr $RX_NUM_OF_CONVERTERS * $RX_SAMPLES_PER_FRAME * $RX_SAMPLE_WIDTH / (8*$RX_NUM_OF_LANES)] ; # F
 set DPW [expr max(4,$RX_OCTETS_PER_FRAME)] ;# max(4,F)
