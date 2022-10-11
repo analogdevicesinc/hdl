@@ -1,10 +1,4 @@
 
-# RX parameters
-set RX_NUM_OF_LANES 1        ; # L
-set RX_NUM_OF_CONVERTERS 32  ; # M
-set RX_SAMPLES_PER_FRAME 1   ; # S
-set RX_SAMPLE_WIDTH 16       ; # N/NP
-
 source ../../ad9083_evb/common/ad9083_evb_bd.tcl
 
 # add spi interfaces
