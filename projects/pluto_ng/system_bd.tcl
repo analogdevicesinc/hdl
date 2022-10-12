@@ -69,10 +69,11 @@ ad_ip_parameter sys_ps8 CONFIG.PSU__PMU__PERIPHERAL__ENABLE {0}
 # some sets of parameters must be configured at the same tine to avoid tools issues
 set_property -dict [list CONFIG.PSU__DISPLAYPORT__PERIPHERAL__ENABLE {1} \
                          CONFIG.PSU__DPAUX__PERIPHERAL__IO {MIO 27 .. 30} \
-                         CONFIG.PSU__DP__LANE_SEL {Single Lower} \
+                         CONFIG.PSU__DP__LANE_SEL {Dual Higher} \
                          CONFIG.PSU__SATA__PERIPHERAL__ENABLE {1} \
                          CONFIG.PSU__SATA__LANE0__ENABLE {0} \
-                         CONFIG.PSU__SATA__LANE1__IO {GT Lane3} \
+                         CONFIG.PSU__SATA__LANE1__ENABLE {1} \
+                         CONFIG.PSU__SATA__LANE1__IO {GT Lane1} \
                          CONFIG.PSU__USB0__PERIPHERAL__ENABLE {1} \
                          CONFIG.PSU__USB3_0__PERIPHERAL__ENABLE {1} \
                          CONFIG.PSU__USB3_0__PERIPHERAL__IO {GT Lane0} \
@@ -115,7 +116,7 @@ set_property -dict [list CONFIG.PSU__I2C1__PERIPHERAL__ENABLE {1} \
                          CONFIG.PSU__I2C1__PERIPHERAL__IO {MIO 32 .. 33} \
                          ] [get_bd_cells sys_ps8]
 
-ad_ip_parameter sys_ps8 CONFIG.PSU__SATA__REF_CLK_FREQ {125}
+ad_ip_parameter sys_ps8 CONFIG.PSU__SATA__REF_CLK_FREQ {150}
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRF_APB__TOPSW_MAIN_CTRL__SRCSEL {DPLL}
 ad_ip_parameter sys_ps8 CONFIG.PSU__DP__REF_CLK_FREQ 108
 ad_ip_parameter sys_ps8 CONFIG.PSU__USB0_COHERENCY 1

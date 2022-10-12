@@ -43,6 +43,10 @@ module system_top (
   output                  spi_enb,
 
   output                  usb_pd_reset,
+  output                  usb_flash_prog_en,
+  output                  fan_en,
+  output                  fan_ctl,
+  output                  adrv9002_mcssrc,
 
   inout      [15:0]       ext_gpio,
   inout      [15:0]       add_on,
@@ -178,7 +182,7 @@ module system_top (
 
   // assignments
 
-  assign gpio_i[94:64] = gpio_o[94:64];
+  assign gpio_i[94:68] = gpio_o[94:68];
   assign gpio_i[15:7] = gpio_o[15:7];
   assign gpio_i[3:1] = gpio_o[3:1];
 
@@ -193,6 +197,10 @@ module system_top (
 
   assign mssi_sync = mcs_sync_busy | gpio_o[7];
   //assign usb_pd_reset = gpio_o[8];
+  assign usb_flash_prog_en = gpio_o[64];
+  assign adrv9002_mcssrc = gpio_o[65];
+  assign fan_en  = gpio_o[66];
+  assign fan_ctl = gpio_o[67];
 
   assign rf_rx1a_mux_ctl = gpio_o[ 8];
   assign rf_rx1b_mux_ctl = gpio_o[ 9];

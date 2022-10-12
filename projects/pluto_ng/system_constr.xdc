@@ -11,6 +11,7 @@ set_property -dict {PACKAGE_PIN R1 IOSTANDARD LVCMOS18} [get_ports spi_do]      
 set_property -dict {PACKAGE_PIN M7 IOSTANDARD LVCMOS18} [get_ports spi_enb]                                     ; ## IO_65_SPI_ENB
 set_property -dict {PACKAGE_PIN R2 IOSTANDARD LVCMOS18} [get_ports spi_clk]                                     ; ## IO_L1P_65_SPICLK
 
+set_property -dict {PACKAGE_PIN A4 IOSTANDARD LVCMOS18} [get_ports usb_flash_prog_en]                           ; ## IO_66_USB_FLASH_PROG_EN
 set_property -dict {PACKAGE_PIN E7 IOSTANDARD LVCMOS18} [get_ports usb_pd_reset]                                ; ## IO_66_USB_PD_RESET
 set_property -dict {PACKAGE_PIN D8 IOSTANDARD LVCMOS18} [get_ports vin_poe_valid_n]                             ; ## VIN_POE_VALID_N
 set_property -dict {PACKAGE_PIN B7 IOSTANDARD LVCMOS18} [get_ports vin_usb2_valid_n]                            ; ## VIN_USB2_VALID_N
@@ -73,6 +74,11 @@ set_property  -dict {PACKAGE_PIN N1    IOSTANDARD LVDS}                         
 set_property  -dict {PACKAGE_PIN AA5   IOSTANDARD LVDS  DIFF_TERM_ADV TERM_100}  [get_ports fpga_mcs_in_n]      ; ## IO_L11N_64_EXT_MCS_IN_N
 set_property  -dict {PACKAGE_PIN Y5    IOSTANDARD LVDS  DIFF_TERM_ADV TERM_100}  [get_ports fpga_mcs_in_p]      ; ## IO_L11P_64_EXT_MCS_IN_P
 
+set_property  -dict {PACKAGE_PIN AE9   IOSTANDARD LVCMOS18}                      [get_ports adrv9002_mcssrc]    ; ## IO_L4N_64_ADRV9002_MCSSRC
+set_property  -dict {PACKAGE_PIN C1    IOSTANDARD LVCMOS18}                      [get_ports fan_en]             ; ## IO_L7P_66_FAN_EN
+set_property  -dict {PACKAGE_PIN B1    IOSTANDARD LVCMOS18}                      [get_ports fan_ctl]            ; ## IO_L7N_66_FAN_CTL
+
+
 set_property  -dict {PACKAGE_PIN AD6   IOSTANDARD LVCMOS18}                      [get_ports dgpio[0]]           ; ## IO_L5P_64_ADRV9002_DGPIO_0
 set_property  -dict {PACKAGE_PIN AD5   IOSTANDARD LVCMOS18}                      [get_ports dgpio[1]]           ; ## IO_L5N_64_ADRV9002_DGPIO_1
 set_property  -dict {PACKAGE_PIN AC9   IOSTANDARD LVCMOS18}                      [get_ports dgpio[2]]           ; ## IO_L6P_64_ADRV9002_DGPIO_2
@@ -132,7 +138,7 @@ set_property -dict {PACKAGE_PIN F12 IOSTANDARD LVCMOS33} [get_ports add_on[7]] ;
 
 # BANK 64 1V8
 
-set_property -dict {PACKAGE_PIN AB6 IOSTANDARD LVCMOS18} [get_ports add_on[8]]  ; # IO_L1P_T0L_N0_DBC_64 -
+set_property -dict {PACKAGE_PIN AB6 IOSTANDARD LVCMOS18} [get_ports add_on[8]]  ; # IO_L1P_T0L_N0_DBC_64
 set_property -dict {PACKAGE_PIN AC6 IOSTANDARD LVCMOS18} [get_ports add_on[9]]  ; # IO_L1N_T0L_N1_DBC_64
 set_property -dict {PACKAGE_PIN AD8 IOSTANDARD LVCMOS18} [get_ports add_on[10]] ; # IO_L2P_T0L_N2_64
 set_property -dict {PACKAGE_PIN AD7 IOSTANDARD LVCMOS18} [get_ports add_on[11]] ; # IO_L2N_T0L_N3_64
