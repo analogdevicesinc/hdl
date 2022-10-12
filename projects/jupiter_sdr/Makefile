@@ -4,7 +4,7 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := pluto_ng
+PROJECT_NAME := jupiter_sdr
 
 M_DEPS += ../scripts/adi_pd.tcl
 M_DEPS += ../common/xilinx/adi_fir_filter_constr.xdc
