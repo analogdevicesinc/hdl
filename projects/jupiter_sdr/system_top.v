@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2021 (c) Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -43,9 +43,14 @@ module system_top (
   output                  spi_enb,
 
   output                  usb_pd_reset,
+  output                  usb_flash_prog_en,
+  output                  fan_en,
+  output                  fan_ctl,
+  output                  adrv9002_mcssrc,
 
   inout      [15:0]       ext_gpio,
-  inout      [15:0]       add_on,
+  inout      [14:0]       add_on_gpio,
+  output                  add_on_power,
   inout      [11:0]       dgpio,
 
   input                   gp_int,
@@ -59,9 +64,6 @@ module system_top (
 
   input                   fpga_ref_clk_n,
   input                   fpga_ref_clk_p,
-
-  //input                   adrv9002_dev_clk,
-  //input                   s_1pps,
 
   input                   fpga_mcs_in_n,
   input                   fpga_mcs_in_p,
@@ -178,7 +180,8 @@ module system_top (
 
   // assignments
 
-  assign gpio_i[94:64] = gpio_o[94:64];
+  assign gpio_i[94:68] = gpio_o[94:68];
+  assign gpio_i[64] = gpio_o[64];
   assign gpio_i[15:7] = gpio_o[15:7];
   assign gpio_i[3:1] = gpio_o[3:1];
 
@@ -192,7 +195,13 @@ module system_top (
   assign gpio_i[6] = vin_usb1_valid_n;
 
   assign mssi_sync = mcs_sync_busy | gpio_o[7];
+
+  // TO-DO
   //assign usb_pd_reset = gpio_o[8];
+  assign adrv9002_mcssrc = gpio_o[65];
+  assign usb_flash_prog_en = gpio_o[66];
+  assign fan_en  = 1'b1;
+  assign fan_ctl = gpio_o[67];
 
   assign rf_rx1a_mux_ctl = gpio_o[ 8];
   assign rf_rx1b_mux_ctl = gpio_o[ 9];
@@ -228,12 +237,14 @@ module system_top (
              dgpio[11:0]}));     // 43:32
 
   ad_iobuf #(
-    .DATA_WIDTH(16)
+    .DATA_WIDTH(15)
   ) i_iobuf_addon (
-    .dio_t ({gpio_t[63:48]}),
-    .dio_i ({gpio_o[63:48]}),
-    .dio_o ({gpio_i[63:48]}),
-    .dio_p ({add_on}));
+    .dio_t ({gpio_t[62:48]}),
+    .dio_i ({gpio_o[62:48]}),
+    .dio_o ({gpio_i[62:48]}),
+    .dio_p (add_on_gpio));
+
+  assign add_on_power = gpio_o[63];
 
   IBUFDS i_ibufgs_fpga_ref_clk (
     .I (fpga_ref_clk_p),
