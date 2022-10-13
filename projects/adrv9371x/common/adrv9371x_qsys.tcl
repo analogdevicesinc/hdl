@@ -264,33 +264,43 @@ for {set i 0} {$i < 4} {incr i} {
 
 # addresses
 
-ad_cpu_interconnect 0x00000000 ad9371_tx_jesd204.link_reconfig        "axi_mm_bridge_0" 0x00060000
-ad_cpu_interconnect 0x00004000 ad9371_rx_jesd204.link_reconfig        "axi_mm_bridge_0"
-ad_cpu_interconnect 0x00008000 ad9371_rx_os_jesd204.link_reconfig     "axi_mm_bridge_0"
-ad_cpu_interconnect 0x0000C000 ad9371_tx_jesd204.link_management      "axi_mm_bridge_0"
-ad_cpu_interconnect 0x0000D000 ad9371_rx_jesd204.link_management      "axi_mm_bridge_0"
-ad_cpu_interconnect 0x0000E000 ad9371_rx_os_jesd204.link_management   "axi_mm_bridge_0"
-ad_cpu_interconnect 0x0000F000 axi_ad9371_rx.s_axi                    "axi_mm_bridge_0"
-ad_cpu_interconnect 0x00013000 axi_ad9371_tx.s_axi                    "axi_mm_bridge_0"
-ad_cpu_interconnect 0x00017000 axi_ad9371_rx_os.s_axi                 "axi_mm_bridge_0"
-ad_cpu_interconnect 0x0001B000 axi_ad9371_tx_dma.s_axi                "axi_mm_bridge_0"
-ad_cpu_interconnect 0x0001B800 axi_ad9371_rx_dma.s_axi                "axi_mm_bridge_0"
-ad_cpu_interconnect 0x0001C000 axi_ad9371_rx_os_dma.s_axi             "axi_mm_bridge_0"
+## TX ##
 
-ad_cpu_interconnect 0x00000000 ad9371_tx_jesd204.link_pll_reconfig    "avl_mm_bridge_tx" 0x00080000
-ad_cpu_interconnect 0x00001000 ad9371_tx_jesd204.lane_pll_reconfig    "avl_mm_bridge_tx"
-ad_cpu_interconnect 0x00002000 avl_adxcfg_0.rcfg_s0                   "avl_mm_bridge_tx"
-ad_cpu_interconnect 0x00003000 avl_adxcfg_1.rcfg_s0                   "avl_mm_bridge_tx"
-ad_cpu_interconnect 0x00004000 avl_adxcfg_2.rcfg_s0                   "avl_mm_bridge_tx"
-ad_cpu_interconnect 0x00005000 avl_adxcfg_3.rcfg_s0                   "avl_mm_bridge_tx"
+ad_cpu_interconnect  0x00000000    ad9371_tx_jesd204.link_reconfig         "avl_mm_bridge_tx"       0x00060000           
+ad_cpu_interconnect  0x00004000    ad9371_tx_jesd204.link_management       "avl_mm_bridge_tx"    
+ad_cpu_interconnect  0x00005000    ad9371_tx_jesd204.link_pll_reconfig     "avl_mm_bridge_tx"    
+ad_cpu_interconnect  0x00006000    ad9371_tx_jesd204.lane_pll_reconfig     "avl_mm_bridge_tx"    
+ad_cpu_interconnect  0x00008000    avl_adxcfg_0.rcfg_s0                    "avl_mm_bridge_tx"    
+ad_cpu_interconnect  0x00009000    avl_adxcfg_1.rcfg_s0                    "avl_mm_bridge_tx"    
+ad_cpu_interconnect  0x0000a000    avl_adxcfg_2.rcfg_s0                    "avl_mm_bridge_tx"    
+ad_cpu_interconnect  0x0000b000    avl_adxcfg_3.rcfg_s0                    "avl_mm_bridge_tx"      
+ad_cpu_interconnect  0x0000c000    axi_ad9371_tx_dma.s_axi                 "avl_mm_bridge_tx"             
+ 
+ ## RX ## 
+ 
+ad_cpu_interconnect  0x00000000    ad9371_rx_jesd204.link_reconfig           "avl_mm_bridge_rx"    0x00070000 
+ad_cpu_interconnect  0x00004000    ad9371_rx_jesd204.link_management         "avl_mm_bridge_rx"   
+ad_cpu_interconnect  0x00005000    ad9371_rx_jesd204.link_pll_reconfig       "avl_mm_bridge_rx"   
+ad_cpu_interconnect  0x00008000    avl_adxcfg_0.rcfg_s1                      "avl_mm_bridge_rx"   
+ad_cpu_interconnect  0x00009000    avl_adxcfg_1.rcfg_s1                      "avl_mm_bridge_rx"   
+ad_cpu_interconnect  0x0000c000    axi_ad9371_rx_dma.s_axi                   "avl_mm_bridge_rx"   
+       
+  ## RX-OBS ##
 
-ad_cpu_interconnect 0x00000000 ad9371_rx_jesd204.link_pll_reconfig    "avl_mm_bridge_rx" 0x00090000
-ad_cpu_interconnect 0x00001000 ad9371_rx_os_jesd204.link_pll_reconfig "avl_mm_bridge_rx"
-ad_cpu_interconnect 0x00002000 avl_adxcfg_0.rcfg_s1                   "avl_mm_bridge_rx"
-ad_cpu_interconnect 0x00003000 avl_adxcfg_1.rcfg_s1                   "avl_mm_bridge_rx"
-ad_cpu_interconnect 0x00004000 avl_adxcfg_2.rcfg_s1                   "avl_mm_bridge_rx"
-ad_cpu_interconnect 0x00005000 avl_adxcfg_3.rcfg_s1                   "avl_mm_bridge_rx"
-ad_cpu_interconnect 0x00006000 avl_ad9371_gpio.s1                     "avl_mm_bridge_rx"
+ad_cpu_interconnect  0x00000000    ad9371_rx_os_jesd204.link_reconfig        "avl_mm_bridge_rx_os"     0x00080000     
+ad_cpu_interconnect  0x00004000    ad9371_rx_os_jesd204.link_management      "avl_mm_bridge_rx_os" 
+ad_cpu_interconnect  0x00005000    ad9371_rx_os_jesd204.link_pll_reconfig    "avl_mm_bridge_rx_os" 
+ad_cpu_interconnect  0x00008000    avl_adxcfg_2.rcfg_s1                      "avl_mm_bridge_rx_os" 
+ad_cpu_interconnect  0x00009000    avl_adxcfg_3.rcfg_s1                      "avl_mm_bridge_rx_os" 
+ad_cpu_interconnect  0x0000c000    axi_ad9371_rx_os_dma.s_axi                "avl_mm_bridge_rx_os" 
+
+#### s-axi 4000 offset ####
+
+ad_cpu_interconnect  0x00000000    axi_ad9371_rx.s_axi                       "avl_mm_bridge_common"    0x00090000          
+ad_cpu_interconnect  0x00004000    axi_ad9371_tx.s_axi                       "avl_mm_bridge_common" 
+ad_cpu_interconnect  0x00008000    axi_ad9371_rx_os.s_axi                    "avl_mm_bridge_common" 
+ad_cpu_interconnect  0x0000c000    avl_ad9371_gpio.s1                        "avl_mm_bridge_common" 
+
 
 # dma interconnects
 

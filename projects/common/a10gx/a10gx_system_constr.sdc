@@ -5,6 +5,14 @@ create_clock -period "30.303 ns"  -name {altera_reserved_tck} {altera_reserved_t
 create_clock -period "100.00 ns"  -name sys_spi_clk           [get_registers {i_system_bd|sys_spi|sys_spi|SCLK_reg}]
 
 set_false_path -from [get_ports {sys_resetn}]
+set_false_path -from [get_clocks {sys_clk_100mhz}] -to [get_clocks {altera_reserved_tck}]
 set_false_path -from [get_registers *altera_reset_synchronizer:alt_rst_sync_uq1|altera_reset_synchronizer_int_chain_out*]
 set_false_path -from * -to [get_ports {flash_resetn}]
+set_false_path -from [get_registers *altera_reset_synchronizer_int_chain_out*]
 
+
+if {[string equal "quartus_fit" $::TimeQuestInfo(nameofexecutable)]} {
+  set_max_delay -from [get_clocks *sys_ddr3_cntrl_phy_clk_l*] -to [get_clocks *sys_ddr3_cntrl_core_usr_clk*] 0.150
+  set_min_delay -from [get_clocks *sys_ddr3_cntrl_phy_clk_l*] -to [get_clocks *sys_ddr3_cntrl_core_usr_clk*] 0.000
+
+  }
