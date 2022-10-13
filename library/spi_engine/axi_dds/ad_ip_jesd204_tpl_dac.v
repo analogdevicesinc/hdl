@@ -149,16 +149,30 @@ module ad_ip_jesd204_tpl_dac #(
   wire valid_s;
   wire m_axis_dds_ready_s = m_axis_dds_ready || valid_d;
 
-  assign valid_s = valid_d & ~valid_cnt[3];
+  assign valid_s = valid_d;
+//  assign valid_s = valid_d & ~valid_cnt[3];
 
   always @(posedge spi_clk) begin
-    if (valid_cnt == 'd8) begin
+    if (valid_cnt == 'd7) begin
       valid_cnt <= 'h0;
     end else begin
       valid_cnt <= valid_cnt + 1'h1;
     end
-    valid_d <= valid_cnt [3];
+    if (valid_cnt == 'd7) begin
+      valid_d <= 1'h1;
+    end else begin
+      valid_d <= 1'h0;
+    end
   end
+
+//  always @(posedge spi_clk) begin
+//    if (valid_cnt == 'd8) begin
+//      valid_cnt <= 'h0;
+//    end else begin
+//      valid_cnt <= valid_cnt + 1'h1;
+//    end
+//    valid_d <= valid_cnt [3];
+//  end
 
   // regmap
 
