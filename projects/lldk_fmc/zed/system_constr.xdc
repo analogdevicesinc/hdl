@@ -58,18 +58,19 @@ set_property -dict {PACKAGE_PIN P22 IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_port
 
 # dac spi
 
-set_property -dict {PACKAGE_PIN D21 IOSTANDARD LVCMOS25} [get_ports dac_sclk[1]]                            ; ## C27  FMC_LA27_N     IO_L17N_T2_AD5N_35
-set_property -dict {PACKAGE_PIN T19 IOSTANDARD LVCMOS25} [get_ports dac_sclk[0]]                            ; ## C15  FMC_LA10_N     IO_L22N_T3_34
-set_property -dict {PACKAGE_PIN E21 IOSTANDARD LVCMOS25} [get_ports dac_cs[1]]                              ; ## C26  FMC_LA27_P     IO_L17P_T2_AD5P_35
-set_property -dict {PACKAGE_PIN R19 IOSTANDARD LVCMOS25} [get_ports dac_cs[0]]                              ; ## C14  FMC_LA10_P     IO_L22P_T3_34
-set_property -dict {PACKAGE_PIN C18 IOSTANDARD LVCMOS25} [get_ports dac_sdio3[1]]                           ; ## G31  FMC_LA29_N     IO_L11N_T1_SRCC_35
-set_property -dict {PACKAGE_PIN P21 IOSTANDARD LVCMOS25} [get_ports dac_sdio3[0]]                           ; ## G16  FMC_LA12_N     IO_L18N_T2_34
-set_property -dict {PACKAGE_PIN C17 IOSTANDARD LVCMOS25} [get_ports dac_sdio2[1]]                           ; ## G30  FMC_LA29_P     IO_L11P_T1_SRCC_35
-set_property -dict {PACKAGE_PIN P20 IOSTANDARD LVCMOS25} [get_ports dac_sdio2[0]]                           ; ## G15  FMC_LA12_P     IO_L18P_T2_34
-set_property -dict {PACKAGE_PIN A17 IOSTANDARD LVCMOS25} [get_ports dac_sdio1[1]]                           ; ## H32  FMC_LA28_N     IO_L9N_T1_DQS_AD3N_35
-set_property -dict {PACKAGE_PIN N18 IOSTANDARD LVCMOS25} [get_ports dac_sdio1[0]]                           ; ## H17  FMC_LA11_N     IO_L5N_T0_34
-set_property -dict {PACKAGE_PIN A16 IOSTANDARD LVCMOS25} [get_ports dac_sdio0[1]]                           ; ## H31  FMC_LA28_P     IO_L9P_T1_DQS_AD3P_35
-set_property -dict {PACKAGE_PIN N17 IOSTANDARD LVCMOS25} [get_ports dac_sdio0[0]]                           ; ## H16  FMC_LA11_P     IO_L5P_T0_34
+set_property -dict {PACKAGE_PIN T19 IOSTANDARD LVCMOS25} [get_ports dac_0_spi_sclk]                            ; ## C15  FMC_LA10_N     IO_L22N_T3_34
+set_property -dict {PACKAGE_PIN R19 IOSTANDARD LVCMOS25} [get_ports dac_0_spi_cs]                              ; ## C14  FMC_LA10_P     IO_L22P_T3_34
+set_property -dict {PACKAGE_PIN N17 IOSTANDARD LVCMOS25} [get_ports dac_0_spi_sdio[0]]                           ; ## H16  FMC_LA11_P     IO_L5P_T0_34
+set_property -dict {PACKAGE_PIN N18 IOSTANDARD LVCMOS25} [get_ports dac_0_spi_sdio[1]]                           ; ## H17  FMC_LA11_N     IO_L5N_T0_34
+set_property -dict {PACKAGE_PIN P20 IOSTANDARD LVCMOS25} [get_ports dac_0_spi_sdio[2]]                           ; ## G15  FMC_LA12_P     IO_L18P_T2_34
+set_property -dict {PACKAGE_PIN P21 IOSTANDARD LVCMOS25} [get_ports dac_0_spi_sdio[3]]                           ; ## G16  FMC_LA12_N     IO_L18N_T2_34
+
+set_property -dict {PACKAGE_PIN E21 IOSTANDARD LVCMOS25} [get_ports dac_1_spi_cs]                              ; ## C26  FMC_LA27_P     IO_L17P_T2_AD5P_35
+set_property -dict {PACKAGE_PIN D21 IOSTANDARD LVCMOS25} [get_ports dac_1_spi_sclk]                            ; ## C27  FMC_LA27_N     IO_L17N_T2_AD5N_35
+set_property -dict {PACKAGE_PIN A16 IOSTANDARD LVCMOS25} [get_ports dac_1_spi_sdio[0]]                           ; ## H31  FMC_LA28_P     IO_L9P_T1_DQS_AD3P_35
+set_property -dict {PACKAGE_PIN A17 IOSTANDARD LVCMOS25} [get_ports dac_1_spi_sdio[1]]                           ; ## H32  FMC_LA28_N     IO_L9N_T1_DQS_AD3N_35
+set_property -dict {PACKAGE_PIN C17 IOSTANDARD LVCMOS25} [get_ports dac_1_spi_sdio[2]]                           ; ## G30  FMC_LA29_P     IO_L11P_T1_SRCC_35
+set_property -dict {PACKAGE_PIN C18 IOSTANDARD LVCMOS25} [get_ports dac_1_spi_sdio[3]]                           ; ## G31  FMC_LA29_N     IO_L11N_T1_SRCC_35
 
 # spi
 
@@ -82,10 +83,10 @@ set_property -dict {PACKAGE_PIN J17 IOSTANDARD LVCMOS25} [get_ports spi_csb]    
 
 set_property -dict {PACKAGE_PIN A21 IOSTANDARD LVCMOS25} [get_ports direction]                              ; ## H37  FMC_LA32_P     IO_L15P_T2_DQS_AD12P_35
 set_property -dict {PACKAGE_PIN A22 IOSTANDARD LVCMOS25} [get_ports reset]                                  ; ## H38  FMC_LA32_N     IO_L15N_T2_DQS_AD12N_35
-set_property -dict {PACKAGE_PIN B21 IOSTANDARD LVCMOS25} [get_ports alert_2]                                ; ## G36  FMC_LA33_P     IO_L18P_T2_AD13P_35
-set_property -dict {PACKAGE_PIN J20 IOSTANDARD LVCMOS25} [get_ports alert_1]                                ; ## G18  FMC_LA16_P     IO_L9P_T1_DQS_34
-set_property -dict {PACKAGE_PIN B22 IOSTANDARD LVCMOS25} [get_ports ldac_2]                                 ; ## G37  FMC_LA33_N     IO_L18N_T2_AD13N_35
-set_property -dict {PACKAGE_PIN K21 IOSTANDARD LVCMOS25} [get_ports ldac_1]                                 ; ## G19  FMC_LA16_N     IO_L9N_T1_DQS_34
+set_property -dict {PACKAGE_PIN J20 IOSTANDARD LVCMOS25} [get_ports dac_0_alert]                                ; ## G18  FMC_LA16_P     IO_L9P_T1_DQS_34
+set_property -dict {PACKAGE_PIN B21 IOSTANDARD LVCMOS25} [get_ports dac_1_alert]                                ; ## G36  FMC_LA33_P     IO_L18P_T2_AD13P_35
+set_property -dict {PACKAGE_PIN K21 IOSTANDARD LVCMOS25} [get_ports dac_0_ldac]                                 ; ## G19  FMC_LA16_N     IO_L9N_T1_DQS_34
+set_property -dict {PACKAGE_PIN B22 IOSTANDARD LVCMOS25} [get_ports dac_1_ldac]                                 ; ## G37  FMC_LA33_N     IO_L18N_T2_AD13N_35
 
 # clocks
 
