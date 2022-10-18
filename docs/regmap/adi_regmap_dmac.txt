@@ -9,7 +9,7 @@ ENDTITLE
 REG
 0x000
 VERSION
-Version of the peripheral. Follows semantic versioning. Current version 4.03.61.
+Version of the peripheral. Follows semantic versioning. Current version 4.04.61.
 ENDREG
 
 FIELD
@@ -558,4 +558,70 @@ ENDFIELD
 ############################################################################################
 ############################################################################################
 
+REG
+0x124
+DEST_ADDRESS_HIGH
+ENDREG
 
+FIELD
+[31:0] 0x00000000
+DEST_ADDRESS_HIGH
+RW
+This register contains the HIGH segment of the destination address of the transfer.
+
+This register is only valid if the DMA_AXI_ADDR_WIDTH is bigger than 32 and if DMA channel has been configured for write to memory support.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x125
+SRC_ADDRESS_HIGH
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+SRC_ADDRESS_HIGH
+RW
+This register contains the HIGH segment of the source address of the transfer.
+
+This register is only valid if the DMA_AXI_ADDR_WIDTH is bigger than 32 and if the DMA channel has been configured for read from memory support.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x126
+CURRENT_DEST_ADDRESS_HIGH
+ENDREG
+
+FIELD
+[31:0] 0x00
+CURRENT_DEST_ADDRESS_HIGH
+RO
+HIGH segment of the address to which the next data sample is written to.
+
+This register is only valid if the DMA_AXI_ADDR_WIDTH is bigger than 32 and if the DMA channel has been configured for write to memory support.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x127
+CURRENT_SRC_ADDRESS_HIGH
+ENDREG
+
+FIELD
+[31:0] 0x00
+CURRENT_SRC_ADDRESS_HIGH
+RO
+HIGH segment of the address from which the next data sample is read.
+
+This register is only valid if the DMA_AXI_ADDR_WIDTH is bigger than 32 and if the DMA channel has been configured for read from memory support.
+ENDFIELD
+
+############################################################################################
+############################################################################################
