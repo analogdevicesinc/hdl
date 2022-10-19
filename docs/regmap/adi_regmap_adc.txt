@@ -72,7 +72,6 @@ RW
 Number of active lanes (1 : CSSI 1-lane, LSSI 1-lane, 2 : LSSI 2-lane, 4 : CSSI 4-lane). 
 For AD7768, AD7768-4 and AD777x number of active lanes : 1/2/4/8 where supported.
 ENDFIELD
-FIELD
 
 FIELD
 [3] 0x0
