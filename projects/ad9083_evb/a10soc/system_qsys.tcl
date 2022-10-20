@@ -15,6 +15,8 @@ if [info exists ad_project_dir] {
   source ../common/ad9083_evb_qsys.tcl
 }
 
+set_instance_parameter_value sys_spi {targetClockRate} {1000000.0}
+
 #system ID
 set_instance_parameter_value axi_sysid_0 {ROM_ADDR_BITS} {9}
 set_instance_parameter_value rom_sys_0 {ROM_ADDR_BITS} {9}
