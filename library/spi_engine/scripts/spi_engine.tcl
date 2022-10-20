@@ -1,4 +1,4 @@
-proc spi_engine_create {{name "spi_engine"} {data_width 32} {async_spi_clk 1} {num_cs 1} {num_sdi 1} {sdi_delay 0} {echo_sclk 0}} {
+proc spi_engine_create {{name "spi_engine"} {data_width 32} {async_spi_clk 1} {num_cs 1} {num_sdi 1} {num_sdo 1} {sdi_delay 0} {echo_sclk 0}} {
 
   create_bd_cell -type hier $name
   current_bd_instance /$name
@@ -20,6 +20,7 @@ proc spi_engine_create {{name "spi_engine"} {data_width 32} {async_spi_clk 1} {n
   ad_ip_parameter execution CONFIG.DATA_WIDTH $data_width
   ad_ip_parameter execution CONFIG.NUM_OF_CS $num_cs
   ad_ip_parameter execution CONFIG.NUM_OF_SDI $num_sdi
+  ad_ip_parameter execution CONFIG.NUM_OF_SDO $num_sdo
   ad_ip_parameter execution CONFIG.SDO_DEFAULT 1
   ad_ip_parameter execution CONFIG.SDI_DELAY $sdi_delay
   ad_ip_parameter execution CONFIG.ECHO_SCLK $echo_sclk

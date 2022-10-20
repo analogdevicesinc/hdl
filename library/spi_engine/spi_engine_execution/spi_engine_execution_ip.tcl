@@ -78,6 +78,14 @@ set_property -dict [list \
  ] \
  [ipx::get_user_parameters NUM_OF_SDI -of_objects $cc]
 
+## NUM_OF_SDO
+set_property -dict [list \
+  "value_validation_type" "range_long" \
+  "value_validation_range_minimum" "1" \
+  "value_validation_range_maximum" "8" \
+ ] \
+ [ipx::get_user_parameters NUM_OF_SDO -of_objects $cc]
+
 ## DEFAULT_SPI_CFG
 set_property -dict [list \
   "value_validation_type" "list" \

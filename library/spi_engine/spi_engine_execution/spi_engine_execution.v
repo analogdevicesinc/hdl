@@ -41,7 +41,8 @@ module spi_engine_execution #(
   parameter DEFAULT_SPI_CFG = 0,
   parameter DEFAULT_CLK_DIV = 0,
   parameter DATA_WIDTH = 8,                   // Valid data widths values are 8/16/24/32
-  parameter NUM_OF_SDI = 1,
+  parameter NUM_OF_SDI = 4,
+  parameter NUM_OF_SDO = 4,
   parameter [0:0] SDO_DEFAULT = 1'b0,
   parameter ECHO_SCLK = 0,
   parameter [1:0] SDI_DELAY = 2'b00
@@ -69,7 +70,7 @@ module spi_engine_execution #(
 
   input echo_sclk,
   output reg sclk,
-  output reg sdo,
+  output reg [NUM_OF_SDO-1:0] sdo,
   output reg sdo_t,
   input [NUM_OF_SDI-1:0] sdi,
   output reg [NUM_OF_CS-1:0] cs,
@@ -95,14 +96,14 @@ module spi_engine_execution #(
   localparam BIT_COUNTER_CLEAR = {{8{1'b1}}, {BIT_COUNTER_WIDTH{1'b0}}, 1'b1};
 
   reg sclk_int = 1'b0;
-  wire sdo_int_s;
+  wire [NUM_OF_SDO-1:0] sdo_int_s;
   reg sdo_t_int = 1'b0;
 
-  reg idle;
+  reg idle = 0;
 
   reg [7:0] clk_div_counter = 'h00;
   reg [7:0] clk_div_counter_next = 'h00;
-  reg clk_div_last;
+  reg clk_div_last = 0;
 
   reg [(BIT_COUNTER_WIDTH+8):0] counter = 'h00;
 
@@ -119,7 +120,7 @@ module spi_engine_execution #(
 
   wire last_bit;
   wire first_bit;
-  reg last_transfer;
+  reg last_transfer = 0;
   reg [7:0] word_length = DATA_WIDTH;
   reg [7:0] left_aligned = 8'b0;
   wire end_of_word;
@@ -128,7 +129,7 @@ module spi_engine_execution #(
 
   assign first_bit = ((bit_counter == 'h0) ||  (bit_counter == word_length));
 
-  reg [15:0] cmd_d1;
+  reg [15:0] cmd_d1 = 16'h0;
 
   reg cpha = DEFAULT_SPI_CFG[0];
   reg cpol = DEFAULT_SPI_CFG[1];
@@ -178,8 +179,9 @@ module spi_engine_execution #(
   end
 
   always @(posedge clk) begin
-    if (cmd_ready & cmd_valid)
-     cmd_d1 <= cmd;
+    if (cmd_ready & cmd_valid) begin
+      cmd_d1 <= cmd;
+    end
   end
 
   always @(posedge clk) begin
@@ -212,7 +214,12 @@ module spi_engine_execution #(
         clk_div <= cmd[7:0];
       end else if (cmd[9:8] == REG_WORD_LENGTH) begin
         // the max value of this reg must be DATA_WIDTH
-        word_length <= cmd[7:0];
+        if (NUM_OF_SDO == 4) begin
+          word_length <= cmd[7:0]>>2;
+        end else begin
+          word_length <= cmd[7:0];
+        end
+
         left_aligned <= DATA_WIDTH - cmd[7:0];
       end
     end
@@ -375,11 +382,21 @@ module spi_engine_execution #(
       if (first_bit == 1'b1)
         data_sdo_shift <= sdo_data << left_aligned;
       else
-        data_sdo_shift <= {data_sdo_shift[(DATA_WIDTH-2):0], 1'b0};
+        if (NUM_OF_SDO == 4) begin
+          data_sdo_shift <= {data_sdo_shift[(DATA_WIDTH-5):0], 4'b0};
+        end else begin
+          data_sdo_shift <= {data_sdo_shift[(DATA_WIDTH-2):0], 1'b0};
+        end
     end
   end
 
-  assign sdo_int_s = data_sdo_shift[DATA_WIDTH-1];
+  genvar i;
+
+  generate
+    for (i=0; i<NUM_OF_SDO; i=i+1) begin: g_sdo_shift_reg
+      assign sdo_int_s[i] = data_sdo_shift[DATA_WIDTH-1-i];
+    end
+  endgenerate
 
   // In case of an interface with high clock rate (SCLK > 50MHz), the latch of
   // the SDI line can be delayed with 1, 2 or 3 SPI core clock cycle.
@@ -403,7 +420,6 @@ module spi_engine_execution #(
   // interface.
 
   wire cs_active_s = (inst_d1 == CMD_CHIPSELECT) & ~(&cmd_d1[NUM_OF_CS-1:0]);
-  genvar i;
 
   // NOTE: SPI configuration (CPOL/PHA) is only hardware configurable at this point
   generate
@@ -450,7 +466,7 @@ module spi_engine_execution #(
 
       // MISO shift register runs on positive echo_sclk
       for (i=0; i<NUM_OF_SDI; i=i+1) begin: g_sdi_shift_reg
-        reg [DATA_WIDTH-1:0] data_sdi_shift;
+        reg [DATA_WIDTH-1:0] data_sdi_shift = 0;
         always @(posedge echo_sclk or posedge cs_active_s) begin
           if (cs_active_s) begin
             data_sdi_shift <= 0;
