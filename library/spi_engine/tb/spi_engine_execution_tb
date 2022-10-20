@@ -1,0 +1,7 @@
+#!/bin/bash
+
+SOURCE="$0.v"
+SOURCE+=" ../spi_engine_execution/spi_engine_execution.v"
+
+cd `dirname $0`
+source ../../common/tb/run_tb.sh
