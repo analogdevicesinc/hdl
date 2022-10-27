@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2022 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -154,6 +154,9 @@ module system_top (
 
   // assignments
 
+  assign gpio_i[63:52] = gpio_o[63:52];
+  assign gpio_i[50:47] = gpio_o[50:47];
+  assign gpio_i[31:20] = gpio_o[31:20];
   assign clkout_out = clkout_in;
 //  assign gp_out[85:0] = gp_out_s[85:0];
 //  assign gp_in_s[95:86] = gp_out_s[95:86];
@@ -170,58 +173,72 @@ module system_top (
 
   // board gpio - 31-0
 
-  ad_iobuf #(.DATA_WIDTH(22)) gpio_p13_c1_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH (22)
+  ) gpio_p13_c1_iobuf (
     .dio_t (gpio_p13_c1_t),
     .dio_i (gpio_p13_c1_o),
     .dio_o (gpio_p13_c1_i),
     .dio_p (gpio_p13_c1_io));
 
-  ad_iobuf #(.DATA_WIDTH(22)) gpio_p13_c2_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH (22)
+  ) gpio_p13_c2_iobuf (
     .dio_t (gpio_p13_c2_t),
     .dio_i (gpio_p13_c2_o),
     .dio_o (gpio_p13_c2_i),
     .dio_p (gpio_p13_c2_io));
 
-  ad_iobuf #(.DATA_WIDTH(22)) gpio_p2_c1_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH (22)
+  ) gpio_p2_c1_iobuf (
     .dio_t (gpio_p2_c1_t),
     .dio_i (gpio_p2_c1_o),
     .dio_o (gpio_p2_c1_i),
     .dio_p (gpio_p2_c1_io));
 
-  ad_iobuf #(.DATA_WIDTH(22)) gpio_p2_c2_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH (22)
+  ) gpio_p2_c2_iobuf (
     .dio_t (gpio_p2_c2_t),
     .dio_i (gpio_p2_c2_o),
     .dio_o (gpio_p2_c2_i),
     .dio_p (gpio_p2_c2_io));
 
-  ad_iobuf #(.DATA_WIDTH(24)) gpio_p4_p5_c1_iobuf (
+   ad_iobuf #(
+    .DATA_WIDTH (24)
+  ) gpio_p4_p5_c1_iobuf (
     .dio_t (gpio_p4_p5_c1_t),
     .dio_i (gpio_p4_p5_c1_o),
     .dio_o (gpio_p4_p5_c1_i),
     .dio_p (gpio_p4_p5_c1_io));
 
-  ad_iobuf #(.DATA_WIDTH(24)) gpio_p4_p5_c2_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH (24)
+  ) gpio_p4_p5_c2_iobuf (
     .dio_t (gpio_p4_p5_c2_t),
     .dio_i (gpio_p4_p5_c2_o),
     .dio_o (gpio_p4_p5_c2_i),
     .dio_p (gpio_p4_p5_c2_io));
 
-  ad_iobuf #(.DATA_WIDTH(16)) gpio_p6_p7_c1_iobuf (
+  ad_iobuf #( 
+    .DATA_WIDTH (16)
+  ) gpio_p6_p7_c1_iobuf (
     .dio_t (gpio_p6_p7_c1_t),
     .dio_i (gpio_p6_p7_c1_o),
     .dio_o (gpio_p6_p7_c1_i),
     .dio_p (gpio_p6_p7_c1_io));
 
-  ad_iobuf #(.DATA_WIDTH(18)) gpio_p6_p7_c2_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH (18)
+  ) gpio_p6_p7_c2_iobuf (
     .dio_t (gpio_p6_p7_c2_t),
     .dio_i (gpio_p6_p7_c2_o),
     .dio_o (gpio_p6_p7_c2_i),
     .dio_p (gpio_p6_p7_c2_io));
 
-  assign gpio_i[31:20] = gpio_o[31:20];
-
   ad_iobuf #(
-    .DATA_WIDTH(20)
+    .DATA_WIDTH (20)
   ) i_iobuf_bd (
     .dio_t (gpio_t[19:0]),
     .dio_i (gpio_o[19:0]),
@@ -230,11 +247,8 @@ module system_top (
 
   // ad9361 gpio - 63-32
 
-  assign gpio_i[63:52] = gpio_o[63:52];
-  assign gpio_i[50:47] = gpio_o[50:47];
-
   ad_iobuf #(
-    .DATA_WIDTH(16)
+    .DATA_WIDTH (16)
   ) i_iobuf (
     .dio_t ({gpio_t[51], gpio_t[46:32]}),
     .dio_i ({gpio_o[51], gpio_o[46:32]}),

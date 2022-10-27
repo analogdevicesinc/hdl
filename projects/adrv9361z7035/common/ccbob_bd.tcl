@@ -52,7 +52,6 @@ create_bd_port -dir I -from 17 -to 0 gpio_p6_p7_c2_i
 create_bd_port -dir O -from 17 -to 0 gpio_p6_p7_c2_o
 create_bd_port -dir O -from 17 -to 0 gpio_p6_p7_c2_t
 
-
 ad_ip_instance axi_gpio gpio_p2
 ad_ip_parameter gpio_p2 CONFIG.C_IS_DUAL 1
 ad_ip_parameter gpio_p2 CONFIG.C_GPIO_WIDTH 22
@@ -128,4 +127,3 @@ ad_cpu_interconnect 0x412D0000 gpio_p6_p7
 #ad_connect  gp_out_2 axi_gpreg/up_gp_out_2
 #ad_connect  gp_out_3 axi_gpreg/up_gp_out_3
 #ad_cpu_interconnect 0x41200000 axi_gpreg
-
