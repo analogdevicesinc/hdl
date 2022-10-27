@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2022 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -38,319 +38,319 @@
 
 module system_top (
 
-  inout       [31:0]  fmc_gpio_00_io_tri_io,
-  inout       [31:0]  fmc_gpio_01_io_tri_io,
-  inout       [3:0]   fmc_gpio_10_io_tri_io,
+  inout  [31:0]  fmc_gpio_00_io_tri_io,
+  inout  [31:0]  fmc_gpio_01_io_tri_io,
+  inout  [ 3:0]  fmc_gpio_10_io_tri_io,
 
-  input               ref_clk_fmc_0_p,
-  input               ref_clk_fmc_0_n,
+  input          ref_clk_fmc_0_p,
+  input          ref_clk_fmc_0_n,
 
-  input               ref_clk_fmc_1_p,
-  input               ref_clk_fmc_1_n,
+  input          ref_clk_fmc_1_p,
+  input          ref_clk_fmc_1_n,
 
-  input               ref_clk_1_p,
-  input               ref_clk_1_n,
+  input          ref_clk_1_p,
+  input          ref_clk_1_n,
 
-  input               ad9545_clk_in_0_p,
-  input               ad9545_clk_in_0_n,
-  input               ad9545_clk_in_1_p,
-  input               ad9545_clk_in_1_n,
+  input          ad9545_clk_in_0_p,
+  input          ad9545_clk_in_0_n,
+  input          ad9545_clk_in_1_p,
+  input          ad9545_clk_in_1_n,
 
-  input               hmc_clk_in_0_p,
-  input               hmc_clk_in_0_n,
-  input               hmc_clk_in_1_p,
-  input               hmc_clk_in_1_n,
+  input          hmc_clk_in_0_p,
+  input          hmc_clk_in_0_n,
+  input          hmc_clk_in_1_p,
+  input          hmc_clk_in_1_n,
 
-  output              pcie_ref_clk_out_p,
-  output              pcie_ref_clk_out_n,
+  output         pcie_ref_clk_out_p,
+  output         pcie_ref_clk_out_n,
 
-  input               vaux_0_v_n,
-  input               vaux_0_v_p,
-  input               vaux_1_v_n,
-  input               vaux_1_v_p,
-  input               vaux_2_v_n,
-  input               vaux_2_v_p,
-  input               vaux_3_v_n,
-  input               vaux_3_v_p,
-  input               vaux_4_v_n,
-  input               vaux_4_v_p,
-  input               vaux_5_v_n,
-  input               vaux_5_v_p,
-  input               vaux_6_v_n,
-  input               vaux_6_v_p,
-  input               vaux_7_v_n,
-  input               vaux_7_v_p,
-  input               vn_v_n,
-  input               vp_v_p,
+  input          vaux_0_v_n,
+  input          vaux_0_v_p,
+  input          vaux_1_v_n,
+  input          vaux_1_v_p,
+  input          vaux_2_v_n,
+  input          vaux_2_v_p,
+  input          vaux_3_v_n,
+  input          vaux_3_v_p,
+  input          vaux_4_v_n,
+  input          vaux_4_v_p,
+  input          vaux_5_v_n,
+  input          vaux_5_v_p,
+  input          vaux_6_v_n,
+  input          vaux_6_v_p,
+  input          vaux_7_v_n,
+  input          vaux_7_v_p,
+  input          vn_v_n,
+  input          vp_v_p,
 
-  input               rx_n_0,
-  input               rx_p_0,
-  output              tx_n_0,
-  output              tx_p_0,
+  input          rx_n_0,
+  input          rx_p_0,
+  output         tx_n_0,
+  output         tx_p_0,
 
-  input       [3:0]   rx_n_1,
-  input       [3:0]   rx_p_1,
-  output      [3:0]   tx_n_1,
-  output      [3:0]   tx_p_1,
+  input  [ 3:0]  rx_n_1,
+  input  [ 3:0]  rx_p_1,
+  output [ 3:0]  tx_n_1,
+  output [ 3:0]  tx_p_1,
 
-  input       [9:0]   rx_n_2,
-  input       [9:0]   rx_p_2,
-  output      [9:0]   tx_p_2,
-  output      [9:0]   tx_n_2,
+  input  [ 9:0]  rx_n_2,
+  input  [ 9:0]  rx_p_2,
+  output [ 9:0]  tx_p_2,
+  output [ 9:0]  tx_n_2,
 
-  input       [7:0]   rx_n_3,
-  input       [7:0]   rx_p_3,
-  output      [7:0]   tx_n_3,
-  output      [7:0]   tx_p_3,
+  input  [ 7:0]  rx_n_3,
+  input  [ 7:0]  rx_p_3,
+  output [ 7:0]  tx_n_3,
+  output [ 7:0]  tx_p_3,
 
-  input               fan_tach,
-  output              fan_pwm,
-  input               i2s_sdata_in,
-  output              i2s_sdata_out,
-  output              i2s_mclk,
-  output              i2s_bclk,
-  output              i2s_lrclk,
+  input          fan_tach,
+  output         fan_pwm,
+  input          i2s_sdata_in,
+  output         i2s_sdata_out,
+  output         i2s_mclk,
+  output         i2s_bclk,
+  output         i2s_lrclk,
 
-  inout               pmod0_d0,
-  inout               pmod0_d1,
-  inout               pmod0_d2,
-  inout               pmod0_d3,
-  inout               pmod0_d4,
-  inout               pmod0_d5,
-  inout               pmod0_d6,
-  inout               pmod0_d7,
-  output              led_gpio_0,
-  output              led_gpio_1,
-  output              led_gpio_2,
-  output              led_gpio_3,
-  inout               dip_gpio_0,
-  inout               dip_gpio_1,
-  inout               dip_gpio_2,
-  inout               dip_gpio_3,
-  inout               pb_gpio_0,
-  inout               pb_gpio_1,
-  inout               pb_gpio_2,
-  inout               pb_gpio_3,
+  inout          pmod0_d0,
+  inout          pmod0_d1,
+  inout          pmod0_d2,
+  inout          pmod0_d3,
+  inout          pmod0_d4,
+  inout          pmod0_d5,
+  inout          pmod0_d6,
+  inout          pmod0_d7,
+  output         led_gpio_0,
+  output         led_gpio_1,
+  output         led_gpio_2,
+  output         led_gpio_3,
+  inout          dip_gpio_0,
+  inout          dip_gpio_1,
+  inout          dip_gpio_2,
+  inout          dip_gpio_3,
+  inout          pb_gpio_0,
+  inout          pb_gpio_1,
+  inout          pb_gpio_2,
+  inout          pb_gpio_3,
 
-  output              resetb_ad9545,
-  output              hmc7044_car_reset,
-  inout               hmc7044_car_gpio_1,
-  inout               hmc7044_car_gpio_2,
-  inout               hmc7044_car_gpio_3,
-  inout               hmc7044_car_gpio_4,
-  output              spi_csn_hmc7044_car,
+  output         resetb_ad9545,
+  output         hmc7044_car_reset,
+  inout          hmc7044_car_gpio_1,
+  inout          hmc7044_car_gpio_2,
+  inout          hmc7044_car_gpio_3,
+  inout          hmc7044_car_gpio_4,
+  output         spi_csn_hmc7044_car,
 
-  inout               i2c0_scl,
-  inout               i2c0_sda,
-  inout               i2c1_scl,
-  inout               i2c1_sda,
+  inout          i2c0_scl,
+  inout          i2c0_sda,
+  inout          i2c1_scl,
+  inout          i2c1_sda,
 
-  input               oscout_p,
-  input               oscout_n,
+  input          oscout_p,
+  input          oscout_n,
 
-  input               ref_clk_a_p,
-  input               ref_clk_a_n,
-  input               core_clk_a_p,
-  input               core_clk_a_n,
-  input       [ 3:0]  rx_data_a_p,
-  input       [ 3:0]  rx_data_a_n,
-  output      [ 3:0]  tx_data_a_p,
-  output      [ 3:0]  tx_data_a_n,
+  input          ref_clk_a_p,
+  input          ref_clk_a_n,
+  input          core_clk_a_p,
+  input          core_clk_a_n,
+  input  [ 3:0]  rx_data_a_p,
+  input  [ 3:0]  rx_data_a_n,
+  output [ 3:0]  tx_data_a_p,
+  output [ 3:0]  tx_data_a_n,
 
-  output              rx_sync_a_p,
-  output              rx_sync_a_n,
-  output              rx_os_sync_a_p,
-  output              rx_os_sync_a_n,
-  input               tx_sync_a_p,
-  input               tx_sync_a_n,
-  input               tx_sync_a_1_p,
-  input               tx_sync_a_1_n,
-  input               sysref_a_p,
-  input               sysref_a_n,
+  output         rx_sync_a_p,
+  output         rx_sync_a_n,
+  output         rx_os_sync_a_p,
+  output         rx_os_sync_a_n,
+  input          tx_sync_a_p,
+  input          tx_sync_a_n,
+  input          tx_sync_a_1_p,
+  input          tx_sync_a_1_n,
+  input          sysref_a_p,
+  input          sysref_a_n,
 
-  inout               adrv9009_tx1_enable_a,
-  inout               adrv9009_tx2_enable_a,
-  inout               adrv9009_rx1_enable_a,
-  inout               adrv9009_rx2_enable_a,
-  inout               adrv9009_test_a,
-  inout               adrv9009_reset_b_a,
-  inout               adrv9009_gpint_a,
+  inout          adrv9009_tx1_enable_a,
+  inout          adrv9009_tx2_enable_a,
+  inout          adrv9009_rx1_enable_a,
+  inout          adrv9009_rx2_enable_a,
+  inout          adrv9009_test_a,
+  inout          adrv9009_reset_b_a,
+  inout          adrv9009_gpint_a,
 
-  inout               adrv9009_gpio_00_a,
-  inout               adrv9009_gpio_01_a,
-  inout               adrv9009_gpio_02_a,
-  inout               adrv9009_gpio_03_a,
-  inout               adrv9009_gpio_04_a,
-  inout               adrv9009_gpio_05_a,
-  inout               adrv9009_gpio_06_a,
-  inout               adrv9009_gpio_07_a,
-  inout               adrv9009_gpio_15_a,
-  inout               adrv9009_gpio_08_a,
-  inout               adrv9009_gpio_09_a,
-  inout               adrv9009_gpio_10_a,
-  inout               adrv9009_gpio_11_a,
-  inout               adrv9009_gpio_12_a,
-  inout               adrv9009_gpio_14_a,
-  inout               adrv9009_gpio_13_a,
-  inout               adrv9009_gpio_17_a,
-  inout               adrv9009_gpio_16_a,
-  inout               adrv9009_gpio_18_a,
+  inout          adrv9009_gpio_00_a,
+  inout          adrv9009_gpio_01_a,
+  inout          adrv9009_gpio_02_a,
+  inout          adrv9009_gpio_03_a,
+  inout          adrv9009_gpio_04_a,
+  inout          adrv9009_gpio_05_a,
+  inout          adrv9009_gpio_06_a,
+  inout          adrv9009_gpio_07_a,
+  inout          adrv9009_gpio_15_a,
+  inout          adrv9009_gpio_08_a,
+  inout          adrv9009_gpio_09_a,
+  inout          adrv9009_gpio_10_a,
+  inout          adrv9009_gpio_11_a,
+  inout          adrv9009_gpio_12_a,
+  inout          adrv9009_gpio_14_a,
+  inout          adrv9009_gpio_13_a,
+  inout          adrv9009_gpio_17_a,
+  inout          adrv9009_gpio_16_a,
+  inout          adrv9009_gpio_18_a,
 
-  input               ref_clk_b_p,
-  input               ref_clk_b_n,
-  input               core_clk_b_p,
-  input               core_clk_b_n,
-  input       [ 3:0]  rx_data_b_p,
-  input       [ 3:0]  rx_data_b_n,
-  output      [ 3:0]  tx_data_b_p,
-  output      [ 3:0]  tx_data_b_n,
+  input          ref_clk_b_p,
+  input          ref_clk_b_n,
+  input          core_clk_b_p,
+  input          core_clk_b_n,
+  input  [ 3:0]  rx_data_b_p,
+  input  [ 3:0]  rx_data_b_n,
+  output [ 3:0]  tx_data_b_p,
+  output [ 3:0]  tx_data_b_n,
 
-  output              rx_sync_b_p,
-  output              rx_sync_b_n,
-  output              rx_os_sync_b_p,
-  output              rx_os_sync_b_n,
-  input               tx_sync_b_p,
-  input               tx_sync_b_n,
-  input               tx_sync_b_1_p,
-  input               tx_sync_b_1_n,
-  input               sysref_b_p,
-  input               sysref_b_n,
+  output         rx_sync_b_p,
+  output         rx_sync_b_n,
+  output         rx_os_sync_b_p,
+  output         rx_os_sync_b_n,
+  input          tx_sync_b_p,
+  input          tx_sync_b_n,
+  input          tx_sync_b_1_p,
+  input          tx_sync_b_1_n,
+  input          sysref_b_p,
+  input          sysref_b_n,
 
-  inout               adrv9009_tx1_enable_b,
-  inout               adrv9009_tx2_enable_b,
-  inout               adrv9009_rx1_enable_b,
-  inout               adrv9009_rx2_enable_b,
-  inout               adrv9009_test_b,
-  inout               adrv9009_reset_b_b,
-  inout               adrv9009_gpint_b,
+  inout          adrv9009_tx1_enable_b,
+  inout          adrv9009_tx2_enable_b,
+  inout          adrv9009_rx1_enable_b,
+  inout          adrv9009_rx2_enable_b,
+  inout          adrv9009_test_b,
+  inout          adrv9009_reset_b_b,
+  inout          adrv9009_gpint_b,
 
-  inout               adrv9009_gpio_00_b,
-  inout               adrv9009_gpio_01_b,
-  inout               adrv9009_gpio_02_b,
-  inout               adrv9009_gpio_03_b,
-  inout               adrv9009_gpio_04_b,
-  inout               adrv9009_gpio_05_b,
-  inout               adrv9009_gpio_06_b,
-  inout               adrv9009_gpio_07_b,
-  inout               adrv9009_gpio_15_b,
-  inout               adrv9009_gpio_08_b,
-  inout               adrv9009_gpio_09_b,
-  inout               adrv9009_gpio_10_b,
-  inout               adrv9009_gpio_11_b,
-  inout               adrv9009_gpio_12_b,
-  inout               adrv9009_gpio_14_b,
-  inout               adrv9009_gpio_13_b,
-  inout               adrv9009_gpio_17_b,
-  inout               adrv9009_gpio_16_b,
-  inout               adrv9009_gpio_18_b,
+  inout          adrv9009_gpio_00_b,
+  inout          adrv9009_gpio_01_b,
+  inout          adrv9009_gpio_02_b,
+  inout          adrv9009_gpio_03_b,
+  inout          adrv9009_gpio_04_b,
+  inout          adrv9009_gpio_05_b,
+  inout          adrv9009_gpio_06_b,
+  inout          adrv9009_gpio_07_b,
+  inout          adrv9009_gpio_15_b,
+  inout          adrv9009_gpio_08_b,
+  inout          adrv9009_gpio_09_b,
+  inout          adrv9009_gpio_10_b,
+  inout          adrv9009_gpio_11_b,
+  inout          adrv9009_gpio_12_b,
+  inout          adrv9009_gpio_14_b,
+  inout          adrv9009_gpio_13_b,
+  inout          adrv9009_gpio_17_b,
+  inout          adrv9009_gpio_16_b,
+  inout          adrv9009_gpio_18_b,
 
-  output              hmc7044_reset,
-  output              hmc7044_sync,
-  inout               hmc7044_gpio_1,
-  inout               hmc7044_gpio_2,
-  inout               hmc7044_gpio_3,
-  inout               hmc7044_gpio_4,
+  output         hmc7044_reset,
+  output         hmc7044_sync,
+  inout          hmc7044_gpio_1,
+  inout          hmc7044_gpio_2,
+  inout          hmc7044_gpio_3,
+  inout          hmc7044_gpio_4,
 
-  output              spi_csn_adrv9009_a,
-  output              spi_csn_adrv9009_b,
-  output              spi_csn_hmc7044,
+  output         spi_csn_adrv9009_a,
+  output         spi_csn_adrv9009_b,
+  output         spi_csn_hmc7044,
 
-  input               ddr4_ref_0_clk_n,
-  input               ddr4_ref_0_clk_p,
-  output              ddr4_rtl_0_act_n,
-  output      [16:0]  ddr4_rtl_0_adr,
-  output      [1:0]   ddr4_rtl_0_ba,
-  output      [0:0]   ddr4_rtl_0_bg,
-  output      [0:0]   ddr4_rtl_0_ck_c,
-  output      [0:0]   ddr4_rtl_0_ck_t,
-  output      [0:0]   ddr4_rtl_0_cke,
-  output      [0:0]   ddr4_rtl_0_cs_n,
-  inout       [3:0]   ddr4_rtl_0_dm_n,
-  inout       [31:0]  ddr4_rtl_0_dq,
-  inout       [3:0]   ddr4_rtl_0_dqs_c,
-  inout       [3:0]   ddr4_rtl_0_dqs_t,
-  output      [0:0]   ddr4_rtl_0_odt,
-  output              ddr4_rtl_0_reset_n,
-  output              ddr4_rtl_0_par,
-  input               ddr4_rtl_0_alert_n,
+  input          ddr4_ref_0_clk_n,
+  input          ddr4_ref_0_clk_p,
+  output         ddr4_rtl_0_act_n,
+  output [16:0]  ddr4_rtl_0_adr,
+  output [ 1:0]  ddr4_rtl_0_ba,
+  output [ 0:0]  ddr4_rtl_0_bg,
+  output [ 0:0]  ddr4_rtl_0_ck_c,
+  output [ 0:0]  ddr4_rtl_0_ck_t,
+  output [ 0:0]  ddr4_rtl_0_cke,
+  output [ 0:0]  ddr4_rtl_0_cs_n,
+  inout  [ 3:0]  ddr4_rtl_0_dm_n,
+  inout  [31:0]  ddr4_rtl_0_dq,
+  inout  [ 3:0]  ddr4_rtl_0_dqs_c,
+  inout  [ 3:0]  ddr4_rtl_0_dqs_t,
+  output [ 0:0]  ddr4_rtl_0_odt,
+  output         ddr4_rtl_0_reset_n,
+  output         ddr4_rtl_0_par,
+  input          ddr4_rtl_0_alert_n,
 
-  input               ddr4_ref_1_clk_n,
-  input               ddr4_ref_1_clk_p,
-  output              ddr4_rtl_1_act_n,
-  output      [16:0]  ddr4_rtl_1_adr,
-  output      [1:0]   ddr4_rtl_1_ba,
-  output      [0:0]   ddr4_rtl_1_bg,
-  output      [0:0]   ddr4_rtl_1_ck_c,
-  output      [0:0]   ddr4_rtl_1_ck_t,
-  output      [0:0]   ddr4_rtl_1_cke,
-  output      [0:0]   ddr4_rtl_1_cs_n,
-  inout       [3:0]   ddr4_rtl_1_dm_n,
-  inout       [31:0]  ddr4_rtl_1_dq,
-  inout       [3:0]   ddr4_rtl_1_dqs_c,
-  inout       [3:0]   ddr4_rtl_1_dqs_t,
-  output      [0:0]   ddr4_rtl_1_odt,
-  output              ddr4_rtl_1_reset_n,
-  output              ddr4_rtl_1_par,
-  input               ddr4_rtl_1_alert_n,
-  output              spi_clk,
-  inout               spi_sdio,
-  input               spi_miso
+  input          ddr4_ref_1_clk_n,
+  input          ddr4_ref_1_clk_p,
+  output         ddr4_rtl_1_act_n,
+  output [16:0]  ddr4_rtl_1_adr,
+  output [ 1:0]  ddr4_rtl_1_ba,
+  output [ 0:0]  ddr4_rtl_1_bg,
+  output [ 0:0]  ddr4_rtl_1_ck_c,
+  output [ 0:0]  ddr4_rtl_1_ck_t,
+  output [ 0:0]  ddr4_rtl_1_cke,
+  output [ 0:0]  ddr4_rtl_1_cs_n,
+  inout  [ 3:0]  ddr4_rtl_1_dm_n,
+  inout  [31:0]  ddr4_rtl_1_dq,
+  inout  [ 3:0]  ddr4_rtl_1_dqs_c,
+  inout  [ 3:0]  ddr4_rtl_1_dqs_t,
+  output [ 0:0]  ddr4_rtl_1_odt,
+  output         ddr4_rtl_1_reset_n,
+  output         ddr4_rtl_1_par,
+  input          ddr4_rtl_1_alert_n,
+  output         spi_clk,
+  inout          spi_sdio,
+  input          spi_miso
 );
 
   // internal signals
 
-  wire    [94:0]  gpio_i;
-  wire    [94:0]  gpio_o;
-  wire    [94:0]  gpio_t;
+  wire  [94:0]  gpio_i;
+  wire  [94:0]  gpio_o;
+  wire  [94:0]  gpio_t;
 
-  wire    [2:0]   spi_csn;
+  wire  [ 2:0]  spi_csn;
 
-  wire            ref_clk_a;
-  wire            core_clk_a;
-  wire            rx_sync_rx;
-  wire            tx_sync_a;
-  wire            sysref_a;
-  wire            ref_clk_b;
-  wire            core_clk_b;
-  wire            rx_sync_obs;
-  wire            rx_os_sync_b;
-  wire            tx_sync_b;
-  wire            sysref_b;
-  wire            tx_sync;
-  wire            spi_mosi;
-  wire            spi0_miso;
+  wire          ref_clk_a;
+  wire          core_clk_a;
+  wire          rx_sync_rx;
+  wire          tx_sync_a;
+  wire          sysref_a;
+  wire          ref_clk_b;
+  wire          core_clk_b;
+  wire          rx_sync_obs;
+  wire          rx_os_sync_b;
+  wire          tx_sync_b;
+  wire          sysref_b;
+  wire          tx_sync;
+  wire          spi_mosi;
+  wire          spi0_miso;
 
-  wire [31:0] fmc_gpio_00_i;
-  wire [31:0] fmc_gpio_00_o;
-  wire [31:0] fmc_gpio_00_t;
-  wire [31:0] fmc_gpio_01_i;
-  wire [31:0] fmc_gpio_01_o;
-  wire [31:0] fmc_gpio_01_t;
-  wire [3:0]  fmc_gpio_10_i;
-  wire [3:0]  fmc_gpio_10_o;
-  wire [3:0]  fmc_gpio_10_t;
+  wire  [31:0]  fmc_gpio_00_i;
+  wire  [31:0]  fmc_gpio_00_o;
+  wire  [31:0]  fmc_gpio_00_t;
+  wire  [31:0]  fmc_gpio_01_i;
+  wire  [31:0]  fmc_gpio_01_o;
+  wire  [31:0]  fmc_gpio_01_t;
+  wire  [ 3:0]  fmc_gpio_10_i;
+  wire  [ 3:0]  fmc_gpio_10_o;
+  wire  [ 3:0]  fmc_gpio_10_t;
 
-  wire ref_clk_fmc_int_0;
-  wire ref_clk_fmc_0;
-  wire ref_clk_fmc_0_gt;
-  wire ref_clk_1;
+  wire          ref_clk_fmc_int_0;
+  wire          ref_clk_fmc_0;
+  wire          ref_clk_fmc_0_gt;
+  wire          ref_clk_1;
 
-  wire ad9545_clk_0;
-  wire ad9545_clk_1;
-  wire ad9545_clk_int_0;
-  wire ad9545_clk_int_1;
+  wire          ad9545_clk_0;
+  wire          ad9545_clk_1;
+  wire          ad9545_clk_int_0;
+  wire          ad9545_clk_int_1;
 
-  wire ref_clk_fmc_int_1;
-  wire ref_clk_fmc_1;
+  wire          ref_clk_fmc_int_1;
+  wire          ref_clk_fmc_1;
 
-  wire hmc_clk_0;
-  wire hmc_clk_1;
-  wire hmc_clk_int_0;
-  wire hmc_clk_int_1;
-  wire pcie_ref_clk_out_0;
-  wire pcie_ref_clk_out_1;
+  wire          hmc_clk_0;
+  wire          hmc_clk_1;
+  wire          hmc_clk_int_0;
+  wire          hmc_clk_int_1;
+  wire          pcie_ref_clk_out_0;
+  wire          pcie_ref_clk_out_1;
 
-  reg  [7:0]     spi_3_to_8_csn;
+  reg   [7:0]   spi_3_to_8_csn;
 
   always @(*) begin
     case (spi_csn)
@@ -367,6 +367,12 @@ module system_top (
   assign spi_csn_hmc7044 = spi_3_to_8_csn[2];
   assign spi_csn_hmc7044_car = spi_3_to_8_csn[3];
 
+  assign tx_sync = tx_sync_a & tx_sync_b;
+
+  assign gpio_i[94:90] = gpio_o[94:90];
+  assign gpio_i[31:28] = gpio_o[31:28];
+  assign gpio_i[21:20] = gpio_o[21:20];
+
   adrv9009zu11eg_spi i_spi (
   .spi_csn(spi_3_to_8_csn),
   .spi_clk(spi_clk),
@@ -375,13 +381,9 @@ module system_top (
   .spi_miso_o(spi0_miso),
   .spi_sdio(spi_sdio));
 
-  assign tx_sync = tx_sync_a & tx_sync_b;
-
-  assign gpio_i[94:90] = gpio_o[94:90];
-  assign gpio_i[31:28] = gpio_o[31:28];
-  assign gpio_i[21:20] = gpio_o[21:20];
-
-  ad_iobuf #(.DATA_WIDTH(58)) i_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH (58)
+  ) i_iobuf (
     .dio_t ({gpio_t[89:32]}),
     .dio_i ({gpio_o[89:32]}),
     .dio_o ({gpio_i[89:32]}),
@@ -445,7 +447,9 @@ module system_top (
               adrv9009_gpio_01_a,       // 33
               adrv9009_gpio_00_a}));    // 32
 
-  ad_iobuf #(.DATA_WIDTH(6)) i_carrier_iobuf_0 (
+  ad_iobuf #(
+    .DATA_WIDTH (6)
+  ) i_carrier_iobuf_0 (
     .dio_t ({gpio_t[27:22]}),
     .dio_i ({gpio_o[27:22]}),
     .dio_o ({gpio_i[27:22]}),
@@ -457,7 +461,9 @@ module system_top (
               hmc7044_car_reset,  // 23
               resetb_ad9545}));   // 22
 
-  ad_iobuf #(.DATA_WIDTH(20)) i_carrier_iobuf_1 (
+  ad_iobuf #(
+    .DATA_WIDTH (20)
+  ) i_carrier_iobuf_1 (
     .dio_t ({gpio_t[19:0]}),
     .dio_i ({gpio_o[19:0]}),
     .dio_o ({gpio_i[19:0]}),
@@ -483,19 +489,25 @@ module system_top (
               pb_gpio_1,          // 1
               pb_gpio_0}));       // 0
 
-  ad_iobuf #(.DATA_WIDTH(32)) fmc_gpio_00_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH (32)
+  ) fmc_gpio_00_iobuf (
     .dio_t (fmc_gpio_00_t),
     .dio_i (fmc_gpio_00_o),
     .dio_o (fmc_gpio_00_i),
     .dio_p (fmc_gpio_00_io_tri_io));
 
-  ad_iobuf #(.DATA_WIDTH(32)) fmc_gpio_01_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH (32)
+  ) fmc_gpio_01_iobuf (
     .dio_t (fmc_gpio_01_t),
     .dio_i (fmc_gpio_01_o),
     .dio_o (fmc_gpio_01_i),
     .dio_p (fmc_gpio_01_io_tri_io));
 
-  ad_iobuf #(.DATA_WIDTH(4)) fmc_gpio_10_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH (4)
+  ) fmc_gpio_10_iobuf (
     .dio_t (fmc_gpio_10_t),
     .dio_i (fmc_gpio_10_o),
     .dio_o (fmc_gpio_10_i),
@@ -509,14 +521,13 @@ module system_top (
     .ODIV2 (ad9545_clk_0));
 
    BUFG_GT BUFG_GT_inst_0 (
-    .O(ad9545_clk_int_0),
-    .CE(1'b1),
-    .CEMASK(1'b1),
-    .CLR(1'b0),
-    .CLRMASK(1'b1),
-    .DIV(1'b0),
-    .I(ad9545_clk_0)
-  );
+    .O (ad9545_clk_int_0),
+    .CE (1'b1),
+    .CEMASK (1'b1),
+    .CLR (1'b0),
+    .CLRMASK (1'b1),
+    .DIV (1'b0),
+    .I (ad9545_clk_0));
 
   IBUFDS_GTE4 ad9545_1 (
     .CEB (1'd0),
@@ -526,14 +537,13 @@ module system_top (
     .ODIV2 (ad9545_clk_1));
 
   BUFG_GT BUFG_GT_inst_1 (
-    .O(ad9545_clk_int_1),
-    .CE(1'b1),
-    .CEMASK(1'b1),
-    .CLR(1'b0),
-    .CLRMASK(1'b1),
-    .DIV(1'b0),
-    .I(ad9545_clk_1)
-  );
+    .O (ad9545_clk_int_1),
+    .CE (1'b1),
+    .CEMASK (1'b1),
+    .CLR (1'b0),
+    .CLRMASK (1'b1),
+    .DIV (1'b0),
+    .I (ad9545_clk_1));
 
   IBUFDS_GTE4 hmc_0 (
     .CEB (1'd0),
@@ -543,14 +553,13 @@ module system_top (
     .ODIV2 (hmc_clk_0));
 
    BUFG_GT BUFG_GT_inst_2 (
-    .O(hmc_clk_int_0),
-    .CE(1'b1),
-    .CEMASK(1'b1),
-    .CLR(1'b0),
-    .CLRMASK(1'b1),
-    .DIV(1'b0),
-    .I(hmc_clk_0)
-  );
+    .O (hmc_clk_int_0),
+    .CE (1'b1),
+    .CEMASK (1'b1),
+    .CLR (1'b0),
+    .CLRMASK (1'b1),
+    .DIV (1'b0),
+    .I (hmc_clk_0));
 
   IBUFDS_GTE4 hmc_1 (
     .CEB (1'd0),
@@ -560,14 +569,13 @@ module system_top (
     .ODIV2 (hmc_clk_1));
 
   BUFG_GT BUFG_GT_inst_3 (
-    .O(hmc_clk_int_1),
-    .CE(1'b1),
-    .CEMASK(1'b1),
-    .CLR(1'b0),
-    .CLRMASK(1'b1),
-    .DIV(1'b0),
-    .I(hmc_clk_1)
-  );
+    .O (hmc_clk_int_1),
+    .CE (1'b1),
+    .CEMASK (1'b1),
+    .CLR (1'b0),
+    .CLRMASK (1'b1),
+    .DIV (1'b0),
+    .I (hmc_clk_1));
 
   IBUFDS_GTE4 fmc_0 (
     .CEB (1'd0),
@@ -577,14 +585,13 @@ module system_top (
     .ODIV2 (ref_clk_fmc_0));
 
    BUFG_GT BUFG_GT_inst_6 (
-    .O(ref_clk_fmc_int_0),
-    .CE(1'b1),
-    .CEMASK(1'b1),
-    .CLR(1'b0),
-    .CLRMASK(1'b1),
-    .DIV(1'b0),
-    .I(ref_clk_fmc_0)
-  );
+    .O (ref_clk_fmc_int_0),
+    .CE (1'b1),
+    .CEMASK (1'b1),
+    .CLR (1'b0),
+    .CLRMASK (1'b1),
+    .DIV (1'b0),
+    .I (ref_clk_fmc_0));
 
   IBUFDS_GTE4 fmc_1 (
     .CEB (1'd0),
@@ -594,38 +601,34 @@ module system_top (
     .ODIV2 (ref_clk_fmc_1));
 
    BUFG_GT BUFG_GT_inst_5 (
-    .O(ref_clk_fmc_int_1),
-    .CE(1'b1),
-    .CEMASK(1'b1),
-    .CLR(1'b0),
-    .CLRMASK(1'b1),
-    .DIV(1'b0),
-    .I(ref_clk_fmc_1)
-  );
+    .O (ref_clk_fmc_int_1),
+    .CE (1'b1),
+    .CEMASK (1'b1),
+    .CLR (1'b0),
+    .CLRMASK (1'b1),
+    .DIV (1'b0),
+    .I (ref_clk_fmc_1));
 
   OBUFDS OBUFDS_inst (
-    .O(pcie_ref_clk_out_p),
-    .OB(pcie_ref_clk_out_n),
-    .I(pcie_ref_clk_out_1)
-  );
+    .O (pcie_ref_clk_out_p),
+    .OB (pcie_ref_clk_out_n),
+    .I (pcie_ref_clk_out_1));
 
    BUFG_GT BUFG_GT_inst_4 (
-    .O(pcie_ref_clk_out_1),
-    .CE(1'b1),
-    .CEMASK(1'b1),
-    .CLR(1'b0),
-    .CLRMASK(1'b1),
-    .DIV(1'b0),
-    .I(pcie_ref_clk_out_0)
-  );
+    .O (pcie_ref_clk_out_1),
+    .CE (1'b1),
+    .CEMASK (1'b1),
+    .CLR (1'b0),
+    .CLRMASK (1'b1),
+    .DIV (1'b0),
+    .I (pcie_ref_clk_out_0));
 
   IBUFDS_GTE4 i_buf_gth_q0_clk1 (
-    .O            (ref_clk_1),
-    .CEB          (1'b0),
-    .I            (ref_clk_1_p),
-    .IB           (ref_clk_1_n),
-    .ODIV2        (pcie_ref_clk_out_0)
-  );
+    .O (ref_clk_1),
+    .CEB (1'b0),
+    .I (ref_clk_1_p),
+    .IB (ref_clk_1_n),
+    .ODIV2 (pcie_ref_clk_out_0));
 
   IBUFDS_GTE4 i_ibufds_ref_clk_1 (
     .CEB (1'd0),
@@ -703,44 +706,45 @@ module system_top (
     .clk_mon_4 (ref_clk_fmc_int_1),
     .clk_mon_5 (ref_clk_fmc_int_0),
 
-    .ddr4_rtl_0_act_n(ddr4_rtl_0_act_n),
-    .ddr4_rtl_0_adr(ddr4_rtl_0_adr),
-    .ddr4_rtl_0_ba(ddr4_rtl_0_ba),
-    .ddr4_rtl_0_bg(ddr4_rtl_0_bg),
-    .ddr4_rtl_0_ck_c(ddr4_rtl_0_ck_c),
-    .ddr4_rtl_0_ck_t(ddr4_rtl_0_ck_t),
-    .ddr4_rtl_0_cke(ddr4_rtl_0_cke),
-    .ddr4_rtl_0_cs_n(ddr4_rtl_0_cs_n),
-    .ddr4_rtl_0_dm_n(ddr4_rtl_0_dm_n),
-    .ddr4_rtl_0_dq(ddr4_rtl_0_dq),
-    .ddr4_rtl_0_dqs_c(ddr4_rtl_0_dqs_c),
-    .ddr4_rtl_0_dqs_t(ddr4_rtl_0_dqs_t),
-    .ddr4_rtl_0_odt(ddr4_rtl_0_odt),
-    .ddr4_rtl_0_reset_n(ddr4_rtl_0_reset_n),
-    .ddr4_ref_0_clk_n(ddr4_ref_0_clk_n),
-    .ddr4_ref_0_clk_p(ddr4_ref_0_clk_p),
+    .ddr4_rtl_0_act_n (ddr4_rtl_0_act_n),
+    .ddr4_rtl_0_adr (ddr4_rtl_0_adr),
+    .ddr4_rtl_0_ba (ddr4_rtl_0_ba),
+    .ddr4_rtl_0_bg (ddr4_rtl_0_bg),
+    .ddr4_rtl_0_ck_c (ddr4_rtl_0_ck_c),
+    .ddr4_rtl_0_ck_t (ddr4_rtl_0_ck_t),
+    .ddr4_rtl_0_cke (ddr4_rtl_0_cke),
+    .ddr4_rtl_0_cs_n (ddr4_rtl_0_cs_n),
+    .ddr4_rtl_0_dm_n (ddr4_rtl_0_dm_n),
+    .ddr4_rtl_0_dq (ddr4_rtl_0_dq),
+    .ddr4_rtl_0_dqs_c (ddr4_rtl_0_dqs_c),
+    .ddr4_rtl_0_dqs_t (ddr4_rtl_0_dqs_t),
+    .ddr4_rtl_0_odt (ddr4_rtl_0_odt),
+    .ddr4_rtl_0_reset_n (ddr4_rtl_0_reset_n),
+    .ddr4_ref_0_clk_n (ddr4_ref_0_clk_n),
+    .ddr4_ref_0_clk_p (ddr4_ref_0_clk_p),
 
-    .ddr4_rtl_1_act_n(ddr4_rtl_1_act_n),
-    .ddr4_rtl_1_adr(ddr4_rtl_1_adr),
-    .ddr4_rtl_1_ba(ddr4_rtl_1_ba),
-    .ddr4_rtl_1_bg(ddr4_rtl_1_bg),
-    .ddr4_rtl_1_ck_c(ddr4_rtl_1_ck_c),
-    .ddr4_rtl_1_ck_t(ddr4_rtl_1_ck_t),
-    .ddr4_rtl_1_cke(ddr4_rtl_1_cke),
-    .ddr4_rtl_1_cs_n(ddr4_rtl_1_cs_n),
-    .ddr4_rtl_1_dm_n(ddr4_rtl_1_dm_n),
-    .ddr4_rtl_1_dq(ddr4_rtl_1_dq),
-    .ddr4_rtl_1_dqs_c(ddr4_rtl_1_dqs_c),
-    .ddr4_rtl_1_dqs_t(ddr4_rtl_1_dqs_t),
-    .ddr4_rtl_1_odt(ddr4_rtl_1_odt),
-    .ddr4_rtl_1_reset_n(ddr4_rtl_1_reset_n),
-    .sys_reset(1'b0),
-    .ddr4_ref_1_clk_n(ddr4_ref_1_clk_n),
-    .ddr4_ref_1_clk_p(ddr4_ref_1_clk_p),
-    .core_clk_a(core_clk_a),
-    .core_clk_b(core_clk_b),
-    .ref_clk_a(ref_clk_a),
-    .ref_clk_b(ref_clk_b),
+    .ddr4_rtl_1_act_n (ddr4_rtl_1_act_n),
+    .ddr4_rtl_1_adr (ddr4_rtl_1_adr),
+    .ddr4_rtl_1_ba (ddr4_rtl_1_ba),
+    .ddr4_rtl_1_bg (ddr4_rtl_1_bg),
+    .ddr4_rtl_1_ck_c (ddr4_rtl_1_ck_c),
+    .ddr4_rtl_1_ck_t (ddr4_rtl_1_ck_t),
+    .ddr4_rtl_1_cke (ddr4_rtl_1_cke),
+    .ddr4_rtl_1_cs_n (ddr4_rtl_1_cs_n),
+    .ddr4_rtl_1_dm_n (ddr4_rtl_1_dm_n),
+    .ddr4_rtl_1_dq (ddr4_rtl_1_dq),
+    .ddr4_rtl_1_dqs_c (ddr4_rtl_1_dqs_c),
+    .ddr4_rtl_1_dqs_t (ddr4_rtl_1_dqs_t),
+    .ddr4_rtl_1_odt (ddr4_rtl_1_odt),
+    .ddr4_rtl_1_reset_n (ddr4_rtl_1_reset_n),
+    .sys_reset (1'b0),
+    .ddr4_ref_1_clk_n (ddr4_ref_1_clk_n),
+    .ddr4_ref_1_clk_p (ddr4_ref_1_clk_p),
+    .core_clk_a (core_clk_a),
+    .core_clk_b (core_clk_b),
+    .ref_clk_a (ref_clk_a),
+    .ref_clk_b (ref_clk_b),
+
     .rx_data_0_n (rx_data_a_n[0]),
     .rx_data_0_p (rx_data_a_p[0]),
     .rx_data_1_n (rx_data_a_n[1]),
@@ -779,66 +783,69 @@ module system_top (
     .tx_data_7_p (tx_data_b_p[3]),
     .tx_sync_0 (tx_sync),
     .tx_sysref_0 (sysref_a),
-    .dac_fifo_bypass(gpio_o[90]),
+    .dac_fifo_bypass (gpio_o[90]),
 
-    .ref_clk_0(ref_clk_fmc_0_gt),
-    .ref_clk_1(ref_clk_1),
-    .rx_n_0(rx_n_0),
-    .rx_p_0(rx_p_0),
-    .tx_n_0(tx_n_0),
-    .tx_p_0(tx_p_0),
-    .rx_n_1(rx_n_1),
-    .rx_p_1(rx_p_1),
-    .tx_n_1(tx_n_1),
-    .tx_p_1(tx_p_1),
-    .rx_n_2(rx_n_2),
-    .rx_p_2(rx_p_2),
-    .tx_p_2(tx_p_2),
-    .tx_n_2(tx_n_2),
-    .rx_n_3(rx_n_3),
-    .rx_p_3(rx_p_3),
-    .tx_n_3(tx_n_3),
-    .tx_p_3(tx_p_3),
+    .ref_clk_0 (ref_clk_fmc_0_gt),
+    .ref_clk_1 (ref_clk_1),
+    .rx_n_0 (rx_n_0),
+    .rx_p_0 (rx_p_0),
+    .tx_n_0 (tx_n_0),
+    .tx_p_0 (tx_p_0),
+    .rx_n_1 (rx_n_1),
+    .rx_p_1 (rx_p_1),
+    .tx_n_1 (tx_n_1),
+    .tx_p_1 (tx_p_1),
+    .rx_n_2 (rx_n_2),
+    .rx_p_2 (rx_p_2),
+    .tx_p_2 (tx_p_2),
+    .tx_n_2 (tx_n_2),
+    .rx_n_3 (rx_n_3),
+    .rx_p_3 (rx_p_3),
+    .tx_n_3 (tx_n_3),
+    .tx_p_3 (tx_p_3),
 
-    .fmc_gpio_00_i(fmc_gpio_00_i),
-    .fmc_gpio_00_o(fmc_gpio_00_o),
-    .fmc_gpio_00_t(fmc_gpio_00_t),
-    .fmc_gpio_01_i(fmc_gpio_01_i),
-    .fmc_gpio_01_o(fmc_gpio_01_o),
-    .fmc_gpio_01_t(fmc_gpio_01_t),
-    .fmc_gpio_10_i(fmc_gpio_10_i),
-    .fmc_gpio_10_o(fmc_gpio_10_o),
-    .fmc_gpio_10_t(fmc_gpio_10_t),
+    .fmc_gpio_00_i (fmc_gpio_00_i),
+    .fmc_gpio_00_o (fmc_gpio_00_o),
+    .fmc_gpio_00_t (fmc_gpio_00_t),
+    .fmc_gpio_01_i (fmc_gpio_01_i),
+    .fmc_gpio_01_o (fmc_gpio_01_o),
+    .fmc_gpio_01_t (fmc_gpio_01_t),
+    .fmc_gpio_10_i (fmc_gpio_10_i),
+    .fmc_gpio_10_o (fmc_gpio_10_o),
+    .fmc_gpio_10_t (fmc_gpio_10_t),
 
-    .vaux_0_v_n(vaux_0_v_n),
-    .vaux_0_v_p(vaux_0_v_p),
-    .vaux_1_v_n(vaux_1_v_n),
-    .vaux_1_v_p(vaux_1_v_p),
-    .vaux_2_v_n(vaux_2_v_n),
-    .vaux_2_v_p(vaux_2_v_p),
-    .vaux_3_v_n(vaux_3_v_n),
-    .vaux_3_v_p(vaux_3_v_p),
-    .vaux_4_v_n(vaux_4_v_n),
-    .vaux_4_v_p(vaux_4_v_p),
-    .vaux_5_v_n(vaux_5_v_n),
-    .vaux_5_v_p(vaux_5_v_p),
-    .vaux_6_v_n(vaux_6_v_n),
-    .vaux_6_v_p(vaux_6_v_p),
-    .vaux_7_v_n(vaux_7_v_n),
-    .vaux_7_v_p(vaux_7_v_p),
-    .vp_vn_v_n(vn_v_n),
-    .vp_vn_v_p(vp_v_p),
-    .i2s_bclk(i2s_bclk),
-    .i2s_lrclk(i2s_lrclk),
-    .i2s_mclk(i2s_mclk),
-    .i2s_sdata_in(i2s_sdata_in),
-    .i2s_sdata_out(i2s_sdata_out),
-    .axi_fan_pwm_o(fan_pwm),
-    .axi_fan_tacho_i(fan_tach),
-    .spi0_csn(spi_csn),
-    .spi0_miso(spi0_miso),
-    .spi0_mosi(spi_mosi),
-    .spi0_sclk(spi_clk)
+    .vaux_0_v_n (vaux_0_v_n),
+    .vaux_0_v_p (vaux_0_v_p),
+    .vaux_1_v_n (vaux_1_v_n),
+    .vaux_1_v_p (vaux_1_v_p),
+    .vaux_2_v_n (vaux_2_v_n),
+    .vaux_2_v_p (vaux_2_v_p),
+    .vaux_3_v_n (vaux_3_v_n),
+    .vaux_3_v_p (vaux_3_v_p),
+    .vaux_4_v_n (vaux_4_v_n),
+    .vaux_4_v_p (vaux_4_v_p),
+    .vaux_5_v_n (vaux_5_v_n),
+    .vaux_5_v_p (vaux_5_v_p),
+    .vaux_6_v_n (vaux_6_v_n),
+    .vaux_6_v_p (vaux_6_v_p),
+    .vaux_7_v_n (vaux_7_v_n),
+    .vaux_7_v_p (vaux_7_v_p),
+    .vp_vn_v_n (vn_v_n),
+    .vp_vn_v_p (vp_v_p),
+
+    .i2s_bclk (i2s_bclk),
+    .i2s_lrclk (i2s_lrclk),
+    .i2s_mclk (i2s_mclk),
+    .i2s_sdata_in (i2s_sdata_in),
+    .i2s_sdata_out (i2s_sdata_out),
+
+    .axi_fan_pwm_o (fan_pwm),
+    .axi_fan_tacho_i (fan_tach),
+
+    .spi0_csn (spi_csn),
+    .spi0_miso (spi0_miso),
+    .spi0_mosi (spi_mosi),
+    .spi0_sclk (spi_clk)
   );
 
 endmodule

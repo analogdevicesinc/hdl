@@ -4,18 +4,17 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := adrv9009zu11eg_prod_test
+PROJECT_NAME := adrv2crr_fmc_prod
 
 M_DEPS += prod_constr.xdc
 M_DEPS += prod_bd.tcl
-M_DEPS += ./prod_constr.xdc
 M_DEPS += ../common/adrv9009zu11eg_bd.tcl
 M_DEPS += ../common/adrv2crr_fmc_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
-M_DEPS += ../../adrv9009zu11eg/common/adrv9009zu11eg_spi.v
-M_DEPS += ../../adrv9009zu11eg/common/adrv9009zu11eg_constr.xdc
-M_DEPS += ../../adrv9009zu11eg/common/adrv2crr_fmc_constr.xdc
-M_DEPS += ../../adrv9009zu11eg/adrv2crr_fmc/system_bd.tcl
+M_DEPS += ../common/adrv9009zu11eg_spi.v
+M_DEPS += ../common/adrv9009zu11eg_constr.xdc
+M_DEPS += ../common/adrv2crr_fmc_constr.xdc
+M_DEPS += ../adrv2crr_fmc/system_bd.tcl
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
 
