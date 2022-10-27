@@ -13,4 +13,3 @@ adi_project_files adrv9364z7020_ccbob_cmos [list \
 
 adi_project_run adrv9364z7020_ccbob_cmos
 source $ad_hdl_dir/library/axi_ad9361/axi_ad9361_delay.tcl
-

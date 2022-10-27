@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2022 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -118,21 +118,21 @@ module system_top (
 
   assign gpio_i[31:11] = gpio_o[31:11];
 
-  ad_iobuf #(
-    .DATA_WIDTH(11)
-  ) i_iobuf_bd (
-    .dio_t (gpio_t[10:0]),
-    .dio_i (gpio_o[10:0]),
-    .dio_o (gpio_i[10:0]),
-    .dio_p (gpio_bd));
-
   // ad9361 gpio - 63-32
 
   assign gpio_i[63:52] = gpio_o[63:52];
   assign gpio_i[50:47] = gpio_o[50:47];
 
   ad_iobuf #(
-    .DATA_WIDTH(16)
+    .DATA_WIDTH (11)
+  ) i_iobuf_bd (
+    .dio_t (gpio_t[10:0]),
+    .dio_i (gpio_o[10:0]),
+    .dio_o (gpio_i[10:0]),
+    .dio_p (gpio_bd));
+
+  ad_iobuf #(
+    .DATA_WIDTH (16)
   ) i_iobuf (
     .dio_t ({gpio_t[51], gpio_t[46:32]}),
     .dio_i ({gpio_o[51], gpio_o[46:32]}),
@@ -144,14 +144,17 @@ module system_top (
               gpio_ctl,           // 43:40
               gpio_status}));     // 39:32
 
-
-  ad_iobuf #(.DATA_WIDTH(26)) gpio_0_c1_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH (26)
+  ) gpio_0_c1_iobuf (
     .dio_t (gpio_0_c1_t),
     .dio_i (gpio_0_c1_o),
     .dio_o (gpio_0_c1_i),
     .dio_p (gpio_0_c1_io));
 
-  ad_iobuf #(.DATA_WIDTH(28)) gpio_0_c2_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH (28)
+  ) gpio_0_c2_iobuf (
     .dio_t (gpio_0_c2_t),
     .dio_i (gpio_0_c2_o),
     .dio_o (gpio_0_c2_i),
