@@ -1,0 +1,34 @@
+FMC_pin   FMC_port       Schematic_name   System_top_name   IOSTANDARD    Termination
+
+# ad7606x
+
+D08       LA01_CC_P      DB0_1            adc_db[0]         LVCMOS25      #N/A
+D09       LA01_CC_N      DB1_1            adc_db[1]         LVCMOS25      #N/A
+H08       LA02_N         DB2_1            adc_db[2]         LVCMOS25      #N/A
+G10       LA03_N         DB3_1            adc_db[3]         LVCMOS25      #N/A
+H11       LA04_N         DB4_1            adc_db[4]         LVCMOS25      #N/A
+H14       LA07_N         DB5_1            adc_db[5]         LVCMOS25      #N/A
+G13       LA08_N         DB6_1            adc_db[6]         LVCMOS25      #N/A
+G07       LA00_CC_N      DOUTA_1          adc_db[7]         LVCMOS25      #N/A
+C11       LA06_N         DOUTB_1          adc_db[8]         LVCMOS25      #N/A
+D11       LA05_P         DOUTC_1          adc_db[9]         LVCMOS25      #N/A
+D14       LA09_P         DOUTD_1          adc_db[10]        LVCMOS25      #N/A
+G09       LA03_P         SDI_1            adc_db[11]        LVCMOS25      #N/A
+H17       LA11_N         DB12_1           adc_db[12]        LVCMOS25      #N/A
+G16       LA12_N         DB13_1           adc_db[13]        LVCMOS25      #N/A
+D17       LA13_P         DB14_1           adc_db[14]        LVCMOS25      #N/A
+D18       LA13_N         DB15_1           adc_db[15]        LVCMOS25      #N/A
+
+G06       LA00_CC_P      SCLK_1           adc_rd_n          LVCMOS25      #N/A
+C14       LA10_P         WR_SDP           adc_wr_n          LVCMOS25      #N/A
+
+H13       LA07_P         BUSY_SDP         adc_busy          LVCMOS25      #N/A
+D12       LA05_N         CNVST_SDP        adc_cnvst_n       LVCMOS25      #N/A
+H10       LA04_P         CS_1             adc_cs_n          LVCMOS25      #N/A
+G12       LA08_P         FRSTDATA_SDP     adc_first_data    LVCMOS25      #N/A
+C10       LA06_P         RESET_1          adc_reset         LVCMOS25      #N/A
+G15       LA12_P         OS0              adc_os[0]         LVCMOS25      #N/A
+H07       LA04_P         OS1              adc_os[1]         LVCMOS25      #N/A
+H16       LA11_P         OS2              adc_os[2]         LVCMOS25      #N/A
+C15       LA10_N         STBY             adc_stby          LVCMOS25      #N/A
+D15       LA09_N         RANGE_1          adc_range         LVCMOS25      #N/A
