@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2022 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -404,7 +404,7 @@ module up_dac_channel #(
   // dac control & status
 
   up_xfer_cntrl #(
-    .DATA_WIDTH(177)
+    .DATA_WIDTH(176)
   ) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
