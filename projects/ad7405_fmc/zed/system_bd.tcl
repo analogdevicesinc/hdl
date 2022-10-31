@@ -6,15 +6,6 @@
 source $ad_hdl_dir/projects/common/zed/zed_system_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
-set mem_init_sys_path [get_env_param ADI_PROJECT_DIR ""]mem_init_sys.txt;
-
-#system ID
-ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
-ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/$mem_init_sys_path"
-ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
-
-sysid_gen_sys_init_file
-
 # System clock is 100 MHz for this base design
 
 set sys_cpu_clk_freq  100
@@ -30,5 +21,16 @@ set clkgen_vco_mul 50
 
 set ext_clk_rate 25
 
-source ../common/ad7405_bd.tcl
+#system ID
+ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
+ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "$mem_init_sys_file_path/mem_init_sys.txt"
+ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 
+set sys_cstring "SYS_CPU_CLK_FREQ=$sys_cpu_clk_freq\
+CLKGEN_VCO_DIV=$clkgen_vco_div\
+CLKGEN_VCO_MUL=$clkgen_vco_mul\
+EXT_CLK_RATE=$ext_clk_rate"
+
+sysid_gen_sys_init_file $sys_cstring
+
+source ../common/ad7405_bd.tcl

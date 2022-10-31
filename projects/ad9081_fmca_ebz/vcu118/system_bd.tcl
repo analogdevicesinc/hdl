@@ -21,14 +21,28 @@ if {$INTF_CFG != "RX"} {
   ad_ip_parameter axi_mxfe_tx_jesd/tx CONFIG.NUM_OUTPUT_PIPELINE 1
 }
 
-set mem_init_sys_path [get_env_param ADI_PROJECT_DIR ""]mem_init_sys.txt;
-
 #system ID
-ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
-ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/$mem_init_sys_path"
-ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
+ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 10
+ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "$mem_init_sys_file_path/mem_init_sys.txt"
+ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 10
 
-sysid_gen_sys_init_file
+set sys_cstring "$ad_project_params(JESD_MODE)\
+RX:RATE=$ad_project_params(RX_LANE_RATE)\
+M=$ad_project_params(RX_JESD_M)\
+L=$ad_project_params(RX_JESD_L)\
+S=$ad_project_params(RX_JESD_S)\
+NP=$ad_project_params(RX_JESD_NP)\
+LINKS=$ad_project_params(RX_NUM_LINKS)\
+KS/CH=$ad_project_params(RX_KS_PER_CHANNEL)\
+TX:RATE=$ad_project_params(TX_LANE_RATE)\
+M=$ad_project_params(TX_JESD_M)\
+L=$ad_project_params(TX_JESD_L)\
+S=$ad_project_params(TX_JESD_S)\
+NP=$ad_project_params(TX_JESD_NP)\
+LINKS=$ad_project_params(TX_NUM_LINKS)\
+KS/CH=$ad_project_params(TX_KS_PER_CHANNEL)"
+
+sysid_gen_sys_init_file $sys_cstring 10
 
 # Parameters for 15.5Gpbs lane rate
 
