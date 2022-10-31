@@ -65,11 +65,19 @@ if {$adc_offload_type || $dac_offload_type} {
 # System ID
 ################################################################################
 
-set mem_init_sys_path [get_env_param ADI_PROJECT_DIR ""]mem_init_sys.txt;
-
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
-ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/$mem_init_sys_path"
+ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "$mem_init_sys_file_path/mem_init_sys.txt"
 ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 
-set sys_cstring "ADC_OFFLOAD_TYPE=$adc_offload_type\nDAC_OFFLOAD_TYPE=$dac_offload_type"
+set sys_cstring "RX:M=$ad_project_params(RX_JESD_M)\
+L=$ad_project_params(RX_JESD_L)\
+S=$ad_project_params(RX_JESD_S)\
+TX:M=$ad_project_params(TX_JESD_M)\
+L=$ad_project_params(TX_JESD_L)\
+S=$ad_project_params(TX_JESD_S)\
+ADC_OFFLOAD:TYPE=$adc_offload_type\
+SIZE=$adc_offload_size\
+DAC_OFFLOAD:TYPE=$dac_offload_type\
+SIZE=$dac_offload_size"
+
 sysid_gen_sys_init_file $sys_cstring

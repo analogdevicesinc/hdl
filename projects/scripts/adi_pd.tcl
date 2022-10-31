@@ -3,6 +3,13 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
+## Initialize global variables
+
+set mem_init_sys_file_path [pwd]
+if {[info exists ::env(ADI_PROJECT_DIR)]} {
+  set mem_init_sys_file_path $::env(ADI_PROJECT_DIR)
+}
+
 ## Converts a string input to hex and adds whitespace as padding to obtain the size defined by
 # the blocksize parameter.
 #
@@ -95,8 +102,7 @@ proc rev_by_string {str} {
 # \param[custom_string] - string input
 #
 
-proc sysid_gen_sys_init_file {{custom_string {}}} {
-
+proc sysid_gen_sys_init_file {{custom_string {}} {address_bits {9}}} {
   global project_name;
   if {[info exists project_name]} {
     puts "project_name: $project_name";
@@ -163,13 +169,18 @@ proc sysid_gen_sys_init_file {{custom_string {}}} {
   puts "boardname_string: $boardname_string";
   puts "boardname_hex: $boardname_hex";
 
-  set projname_string [string trimright [string trimright $project_name $boardname_string] _]
+  set projname_string [lindex [split [string trimright [string trimright $project_name $boardname_string] _] /] end]
   set projname_hex [hexstr_flip [stringtohex $projname_string 32]];
 
   puts "projname_string: $projname_string";
   puts "projname_hex: $projname_hex";
 
-  set custom_hex [hexstr_flip [stringtohex $custom_string 64]];
+  set custom_string_length [expr ([string length $custom_string] + 3) / 4 * 4]
+  # Can't use max function on quartus
+  if {$custom_string_length < 64} {
+    set custom_string_length 64
+  }
+  set custom_hex [hexstr_flip [stringtohex $custom_string $custom_string_length]];
 
   puts "custom_string: $custom_string";
   puts "custom_hex: $custom_hex";
@@ -197,15 +208,15 @@ proc sysid_gen_sys_init_file {{custom_string {}}} {
   set comh_hex [format %0-[expr [expr $table_size - 2] * 8]s $comh_hex];
   append comh_hex "00000000" [checksum8bit $comh_hex] "000000";
 
-  set sys_mem_hex [format %0-[expr 512 * 8]s [concat $comh_hex$verh_hex$projname_hex$boardname_hex$custom_hex]];
+  set memory_size [expr int(pow(2, $address_bits)) * 8]
+  set sys_mem_hex [format %0-${memory_size}s [concat $comh_hex$verh_hex$projname_hex$boardname_hex$custom_hex]];
 
   if {[info exists ::env(ADI_PROJECT_DIR)]} {
-    set mem_init_sys_file_path "$::env(ADI_PROJECT_DIR)mem_init_sys.txt";
+    set mem_init_sys_file_path $::env(ADI_PROJECT_DIR)mem_init_sys.txt
   } else {
-    set mem_init_sys_file_path "mem_init_sys.txt";
+    set mem_init_sys_file_path "mem_init_sys.txt"
   }
-
-  set sys_mem_file [open $mem_init_sys_file_path "w"];
+  set sys_mem_file [open ${mem_init_sys_file_path} "w"];
 
   for {set i 0} {$i < [string length $sys_mem_hex]} {incr i} {
     if { ($i+1) % 8 == 0} {
@@ -225,7 +236,13 @@ proc sysid_gen_sys_init_file {{custom_string {}}} {
 proc sysid_gen_pr_init_file {custom_string} {
 
   set custom_hex [stringtohex $custom_string 64];
-  set pr_mem_file [open "mem_init_pr.txt" "w"];
+  if {[info exists ::env(ADI_PROJECT_DIR)]} {
+    set mem_init_pr_file_path $::env(ADI_PROJECT_DIR)mem_init_pr.txt
+  } else {
+    set mem_init_pr_file_path "mem_init_pr.txt"
+  }
+
+  set pr_mem_file [open $mem_init_pr_file_path "w"];
   for {set i 0} {$i < [string length $custom_hex]} {incr i} {
     if { ($i+1) % 8 == 0} {
       puts $pr_mem_file [string index $custom_hex $i];
@@ -235,4 +252,3 @@ proc sysid_gen_pr_init_file {custom_string} {
   };
   close $pr_mem_file;
 }
-

@@ -124,18 +124,17 @@ switch $INTF_CFG {
     ad_connect proc_sys_reset_eth1/slowest_sync_clk  ref_clk_50_b
     ad_connect proc_sys_reset_eth1/ext_reset_in  sys_rstgen/peripheral_aresetn
     ad_connect proc_sys_reset_eth1/peripheral_reset  reset_b
-    ad_connect proc_sys_reset_eth1/peripheral_aresetn  mii_to_rmii_1/reset_n 
+    ad_connect proc_sys_reset_eth1/peripheral_aresetn  mii_to_rmii_1/reset_n
   }
 }
 
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
-set mem_init_sys_path [get_env_param ADI_PROJECT_DIR ""]mem_init_sys.txt;
-
 #system ID
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
-ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/$mem_init_sys_path"
+ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "$mem_init_sys_file_path/mem_init_sys.txt"
 ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
-set INTF_CFG $::env(INTF_CFG)
+
 set sys_cstring "$INTF_CFG"
+
 sysid_gen_sys_init_file $sys_cstring
