@@ -45,8 +45,8 @@ module axi_ad3552r_channel #(
 
   input                   dac_clk,
   input                   dac_rst,
-  output                  dac_data_valid,
-  output       [15:0]     dac_data,
+  output  reg             dac_data_valid,
+  output  reg  [15:0]     dac_data,
   output       [ 3:0]     dac_source_sel,
   
   // input sources
@@ -79,6 +79,9 @@ module axi_ad3552r_channel #(
  wire    [15:0]   max_ramp_value;   
  wire    [15:0]   min_ramp_value; 
 
+ wire    [15:0]   sample_data; 
+ wire             sample_data_valid;
+
  reg     [15:0]   ramp_pattern = 16'h0000;
  reg              ramp_valid = 1'b0;
  reg              dac_data_valid_int = 'b0;
@@ -86,10 +89,42 @@ module axi_ad3552r_channel #(
 
   assign dac_source_sel = dac_data_sel_s;
 
-  assign dac_data       =  (dac_data_sel_s == 4'h2 ) ? dma_data :
-                                              ((dac_data_sel_s == 4'h3) ? {12'b0,control_data} :  ((dac_data_sel_s == 4'h8) ? adc_data : ramp_pattern ));
-  assign dac_data_valid =  (dac_data_sel_s == 4'h2 ) ? valid_in_dma :
-                                              ((dac_data_sel_s == 4'h3) ? valid_in_ctrl :  ((dac_data_sel_s == 4'h8) ? valid_in_adc : ramp_valid ));
+ // assign dac_data       =  (dac_data_sel_s == 4'h2 ) ? dma_data :
+ //                                             ((dac_data_sel_s == 4'h3) ? {12'b0,control_data} :  ((dac_data_sel_s == 4'h8) ? adc_data : ramp_pattern ));
+ // assign dac_data_valid =  (dac_data_sel_s == 4'h2 ) ? valid_in_dma :
+ //                                             ((dac_data_sel_s == 4'h3) ? valid_in_ctrl :  ((dac_data_sel_s == 4'h8) ? valid_in_adc : ramp_valid ));
+
+
+  always @(posedge dac_clk) begin
+  
+    case(dac_data_sel_s)
+      4'h2: begin       // input from DMA
+        dac_data <= dma_data;
+        dac_data_valid <= valid_in_dma;
+      end
+      4'h3: begin       // input from regmap for control
+        dac_data <= {12'b0,control_data};
+        dac_data_valid <= valid_in_ctrl;
+      end
+      4'h4: begin       // input from regmap for sample value
+        dac_data <= sample_data;
+        dac_data_valid <= sample_data_valid;
+      end
+      4'h8: begin      // input from ADC
+        dac_data <= adc_data;
+        dac_data_valid <= valid_in_adc;
+      end
+      4'hb: begin     // ramp input
+        dac_data <= ramp_pattern;
+        dac_data_valid <= ramp_valid;
+      end
+      default: begin
+        dac_data <= ramp_pattern;
+        dac_data_valid <= ramp_valid;
+      end
+    endcase
+  end
+
 
   // ramp generator
 
@@ -129,6 +164,7 @@ module axi_ad3552r_channel #(
     .dac_pat_data_1(),
     .dac_pat_data_2(),
     .dac_data_sel(dac_data_sel_s),
+    .dac_sample_data({sample_data_valid,sample_data}),
     .dac_mask_enable(),
     .dac_iq_mode(),
     .dac_iqcor_enb(),

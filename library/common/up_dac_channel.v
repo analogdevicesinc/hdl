@@ -67,6 +67,7 @@ module up_dac_channel #(
   output  [15:0]  dac_iqcor_coeff_1,
   output  [15:0]  dac_iqcor_coeff_2,
   output  [7:0]   dac_src_chan_sel,
+  output  [16:0]  dac_sample_data,
 
   // user controls
 
@@ -133,6 +134,7 @@ module up_dac_channel #(
   reg     [ 3:0]  up_dac_data_sel_m = 'd0;
   reg     [ 7:0]  up_dac_src_chan_sel = XBAR_ENABLE ? CHANNEL_NUMBER[7:0] : 8'h0;
   reg             up_dac_mask_enable = 1'b0;
+  reg     [16:0]  up_dac_sample_data = 'd0;
 
   // internal signals
 
@@ -330,9 +332,13 @@ module up_dac_channel #(
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
       up_dac_iq_mode <= 'd0;
+      up_dac_sample_data <= 'd0;
     end else begin
       if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'ha)) begin
         up_dac_iq_mode <= up_wdata[1:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'hb)) begin
+        up_dac_sample_data <= up_wdata[16:0];
       end
     end
   end
@@ -363,6 +369,7 @@ module up_dac_channel #(
                                   dac_usr_datatype_bits};
           4'h9: up_rdata_int <= { dac_usr_interpolation_m, dac_usr_interpolation_n};
           4'ha: up_rdata_int <= { 30'd0, up_dac_iq_mode};
+          4'hb: up_rdata_int <= { 15'd0, up_dac_sample_data};
           default: up_rdata_int <= 0;
         endcase
       end else begin
@@ -404,7 +411,7 @@ module up_dac_channel #(
   // dac control & status
 
   up_xfer_cntrl #(
-    .DATA_WIDTH(176)
+    .DATA_WIDTH(193)
   ) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
@@ -422,7 +429,8 @@ module up_dac_channel #(
                       up_dac_pat_data_2,
                       up_dac_data_sel_m,
                       up_dac_mask_enable,
-                      up_dac_src_chan_sel}),
+                      up_dac_src_chan_sel,
+                      up_dac_sample_data}),
     .up_xfer_done (),
     .d_rst (dac_rst),
     .d_clk (dac_clk),
@@ -440,6 +448,7 @@ module up_dac_channel #(
                       dac_pat_data_2,
                       dac_data_sel,
                       dac_mask_enable,
-                      dac_src_chan_sel}));
+                      dac_src_chan_sel,
+                      dac_sample_data}));
 
 endmodule

@@ -6,8 +6,8 @@ set_property -dict {PACKAGE_PIN P18 IOSTANDARD LVCMOS25} [get_ports {ad3552r_spi
 set_property -dict {PACKAGE_PIN N22 IOSTANDARD LVCMOS25} [get_ports {ad3552r_spi_sdio[2]}]
 set_property -dict {PACKAGE_PIN P22 IOSTANDARD LVCMOS25} [get_ports {ad3552r_spi_sdio[3]}]
 
-set_property -dict {PACKAGE_PIN M19 IOSTANDARD LVCMOS25} [get_ports ad3552r_spi_sclk]
-set_property -dict {PACKAGE_PIN M20 IOSTANDARD LVCMOS25} [get_ports ad3552r_spi_cs]
+set_property -dict {PACKAGE_PIN M19 IOSTANDARD LVCMOS25 } [get_ports ad3552r_spi_sclk]
+set_property -dict {PACKAGE_PIN M20 IOSTANDARD LVCMOS25 } [get_ports ad3552r_spi_cs]
 
 set_property -dict {PACKAGE_PIN J18 IOSTANDARD LVCMOS25} [get_ports ad3552r_ldacn]
 set_property -dict {PACKAGE_PIN K18 IOSTANDARD LVCMOS25} [get_ports ad3552r_resetn]

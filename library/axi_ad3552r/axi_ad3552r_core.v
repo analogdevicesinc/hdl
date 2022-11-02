@@ -53,17 +53,17 @@ module axi_ad3552r_core #(
   input                   adc_valid_in_a,
   input                   adc_valid_in_b,
   input                   valid_in_dma,
-  (* mark_debug = "true" *) input                   dac_data_ready,
+  input                   dac_data_ready,
 
   // output
 
-  (* mark_debug = "true" *)  output       [ 7:0]     address,
-  (* mark_debug = "true" *)  output                  sdr_ddr_n,
-  (* mark_debug = "true" *) output                   write_start,
-  (* mark_debug = "true" *) output                   write_stop,
-  (* mark_debug = "true" *) output      [31:0]       dac_data,
-  (* mark_debug = "true" *) output                   dac_valid,
-  (* mark_debug = "true" *) output       [ 7:0]      dac_source_sel,
+   output       [ 7:0]     address,
+   output                  sdr_ddr_n,
+   output                  write_start,
+   output                  write_stop,
+   output      [31:0]      dac_data,
+   output                  dac_valid,
+   output       [ 7:0]     dac_source_sel,
 
   // processor interface
 
@@ -89,18 +89,18 @@ module axi_ad3552r_core #(
   wire              up_rack_s;
   wire              up_wack_s;
 
-  (* mark_debug = "true" *)  wire    [  7:0]   control_data;
-  (* mark_debug = "true" *)  wire              control_valid;
-  (* mark_debug = "true" *)  wire    [ 15:0]   dac_data_channel_0;
-  (* mark_debug = "true" *)  wire    [ 15:0]   dac_data_channel_1;
-  (* mark_debug = "true" *) wire              dac_valid_channel_0;
-  (* mark_debug = "true" *) wire              dac_valid_channel_1;
-  (* mark_debug = "true" *)  wire     [3:0]    dac_source_sel_0;
-  (* mark_debug = "true" *) wire     [3:0]    dac_source_sel_1;
-  (* mark_debug = "true" *) wire              dac_rst_s;
+  wire    [  7:0]   control_data;
+  wire              control_valid;
+  wire    [ 15:0]   dac_data_channel_0;
+  wire    [ 15:0]   dac_data_channel_1;
+  wire              dac_valid_channel_0;
+  wire              dac_valid_channel_1;
+  wire     [3:0]    dac_source_sel_0;
+  wire     [3:0]    dac_source_sel_1;
+  wire              dac_rst_s;
    
-  (* mark_debug = "true" *) wire     [16:0]   dac_data_control;
-  (* mark_debug = "true" *) wire     [2:0]    dac_control;
+   wire     [16:0]   dac_data_control;
+   wire     [2:0]    dac_control;
 
   // defaults
 

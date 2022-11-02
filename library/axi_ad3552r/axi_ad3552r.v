@@ -53,18 +53,18 @@ module axi_ad3552r #(
   input                   valid_in_a,
   input                   valid_in_b,
   input                   valid_in_dma,
-  (* mark_debug = "true" *) output                  dac_data_ready,
-  (* mark_debug = "true" *) output                  dac_sclk,
-  (* mark_debug = "true" *) output                  dac_csn,
-  (* mark_debug = "true" *) output                  dac_sdo_0,
-  (* mark_debug = "true" *) output                  dac_sdo_1,
-  (* mark_debug = "true" *) output                  dac_sdo_2,
-  (* mark_debug = "true" *) output                  dac_sdo_3,
+  output                  dac_data_ready,
+  output                  dac_sclk,
+  output                  dac_csn,
+  output                  dac_sdo_0,
+  output                  dac_sdo_1,
+  output                  dac_sdo_2,
+  output                  dac_sdo_3,
   input                   dac_sdi_0,
   input                   dac_sdi_1,
   input                   dac_sdi_2,
   input                   dac_sdi_3,
-  (* mark_debug = "true" *) output        [3:0]     rx_or_tx_n,
+  output        [3:0]     rx_or_tx_n,
 
   // axi interface
 
@@ -114,9 +114,9 @@ module axi_ad3552r #(
   wire              sdr_ddr_n;
   wire              write_start;
   wire              write_stop;
-  (* mark_debug = "true" *) wire              dac_data_ready_s;
-  (* mark_debug = "true" *) wire    [ 31:0]   dac_data;
-  (* mark_debug = "true" *) wire              dac_valid;
+  wire              dac_data_ready_s;
+  wire    [ 31:0]   dac_data;
+  wire              dac_valid;
 
   // signal name changes
 
