@@ -55,43 +55,49 @@ module axi_ad3552r_if #(
   output                  dac_data_ready,
   output                  sclk,
   output                  csn,
-  output                  sdio_0,
-  output                  sdio_1,
-  output                  sdio_2,
-  output                  sdio_3
+  output                  sdo_0,
+  output                  sdo_1,
+  output                  sdo_2,
+  output                  sdo_3,
+  input                   sdi_0,
+  input                   sdi_1,
+  input                   sdi_2,
+  input                   sdi_3,
+  output      [3:0]       rx_or_tx_n
 );
 
   
   wire         start_transfer;
-
   wire [47:0]  transfer_data_0;
   wire [47:0]  transfer_data_1;
   wire [47:0]  transfer_data_2;
   wire [47:0]  transfer_data_3;
-
   wire [47:0]  sdr_transfer_data_0;
   wire [47:0]  sdr_transfer_data_1;
   wire [47:0]  sdr_transfer_data_2;
   wire [47:0]  sdr_transfer_data_3;
-
   wire [7:0]   ddr_transfer_data_0;
   wire [7:0]   ddr_transfer_data_1;
   wire [7:0]   ddr_transfer_data_2;
   wire [7:0]   ddr_transfer_data_3;
   wire [3:0]   clk_cnt_value;
-  wire         sclk_int;
   wire [15:0]  data_in;
   wire         cnt_enable_s;
   wire         end_transfer;
   wire         valid_in_int;
-  wire         sdio_0_int;
-  wire         sdio_1_int;
-  wire         sdio_2_int;
-  wire         sdio_3_int;
   wire         dac_data_valid_int;
   wire [ 5:0]  cnt_value;
+  wire         sclk_int;
+  wire         sdo_0_int; 
+  wire         sdo_1_int; 
+  wire         sdo_2_int; 
+  wire         sdo_3_int; 
 
-  reg          csn_int='d1;
+  reg [47:0]  read_data_0 = 48'b0 ;
+  reg [47:0]  read_data_1 = 48'b0 ;
+  reg [47:0]  read_data_2 = 48'b0 ;
+  reg [47:0]  read_data_3 = 48'b0 ;
+  reg          csn_int    = 'd1;
   reg          write_start_d = 'd0;
   reg          write_start_dd = 'd0;
   reg          write_stop_d  = 'd0;
@@ -103,15 +109,15 @@ module axi_ad3552r_if #(
   reg   [31:0] dac_data_int= 32'b0;
   reg   [31:0] new_dac_data = 32'b0;
   reg          dac_data_ready_int = 'b1;
-  reg   [3:0]  count = 4'b0;
+  reg   [3:0]  count_clk_div = 4'b0;
   reg          clk_div = 'b0;
 
   assign sclk   = sclk_int;
   assign csn    = csn_int;
-  assign sdio_0 = sdio_0_int;
-  assign sdio_1 = sdio_1_int;
-  assign sdio_2 = sdio_2_int;
-  assign sdio_3 = sdio_3_int;
+  assign sdo_0 = sdo_0_int;
+  assign sdo_1 = sdo_1_int;
+  assign sdo_2 = sdo_2_int;
+  assign sdo_3 = sdo_3_int;
 
   assign cnt_value      = ( sdr_ddr_n == 1'b1) ? ((input_data_select == 8'h33) ? ((address_sent == 1'b1) ? 'he :'h1e) : ((address_sent == 1'b1) ? 'h1f :'h2e)) :
                                                  ((address_sent == 1'b1) ? 'h3:'h7) ;
@@ -148,6 +154,7 @@ module axi_ad3552r_if #(
   end
 
   // counter for 1 command
+  reg read_address_sent = 1'b0;
 
   always @(negedge clk_in) begin
     if ( start_transfer || valid_in_int == 1'b1 || cnt_enable_s == 1'b0 || reset_in == 1'b1 ) begin
@@ -159,6 +166,9 @@ module axi_ad3552r_if #(
     if (cnt_p == cnt_value) begin
      address_sent <= 1'b1;
     end
+    if (cnt_p == 'hf && sdr_ddr_n == 1'b1 ) begin
+      read_address_sent <= 1'b1;
+     end
 
     if (end_transfer == 1'b1) begin
       end_transfer_good <= 1'b1;
@@ -167,6 +177,7 @@ module axi_ad3552r_if #(
     if (csn_int == 1'b1 || reset_in == 1'b1 ) begin
      end_transfer_good <= 1'b0;
      address_sent <= 1'b0;
+     read_address_sent <= 1'b0;
     end
     if(csn_int == 1'b1 || reset_in == 1'b1) begin
       channel_sel <= 1'b0;
@@ -213,15 +224,30 @@ module axi_ad3552r_if #(
   assign transfer_data_2 = (sdr_ddr_n == 1'b1) ?  sdr_transfer_data_2 : {40'b0,ddr_transfer_data_2};
   assign transfer_data_3 = (sdr_ddr_n == 1'b1) ?  sdr_transfer_data_3 : {40'b0,ddr_transfer_data_3};
 
-  assign sdio_0_int =(csn_int == 1'b0) ?  transfer_data_0[cnt_p] : 1'b0;
-  assign sdio_1_int =(csn_int == 1'b0) ?  transfer_data_1[cnt_p] : 1'b0;
-  assign sdio_2_int =(csn_int == 1'b0) ?  transfer_data_2[cnt_p] : 1'b0;
-  assign sdio_3_int =(csn_int == 1'b0) ?  transfer_data_3[cnt_p] : 1'b0;
+  always @(negedge clk_in) begin
+    if(csn_int == 1'b0  && rx_or_tx_n == 1'b1) begin 
+      read_data_0[cnt_p] <= sdi_0;
+      read_data_1[cnt_p] <= sdi_1;
+      read_data_2[cnt_p] <= sdi_2;
+      read_data_3[cnt_p] <= sdi_3;
+    end else if(csn_int == 1'b0  && rx_or_tx_n == 1'b0) begin 
+      read_data_0[cnt_p] <= 1'b0;
+      read_data_1[cnt_p] <= 1'b0;
+      read_data_2[cnt_p] <= 1'b0;
+      read_data_3[cnt_p] <= 1'b0;
+    end 
+  end
+ assign sdo_0_int = (csn_int == 1'b0) ? transfer_data_0[cnt_p] : 1'b0; 
+ assign sdo_1_int = (csn_int == 1'b0) ? transfer_data_1[cnt_p] : 1'b0;
+ assign sdo_2_int = (csn_int == 1'b0) ? transfer_data_2[cnt_p] : 1'b0;
+ assign sdo_3_int = (csn_int == 1'b0) ? transfer_data_3[cnt_p] : 1'b0;
+
+  assign rx_or_tx_n = (address[7] == 1'b1 && read_address_sent == 1'b1) ?  4'b1 : 4'b0 ;
 
   assign dac_data_valid_int = (dac_data_valid == 1'b1 && (input_data_select == 8'h33 || input_data_select == 8'h88 || input_data_select == 8'hbb)) ||
                               (dac_data_valid == 1'b1 &&  input_data_select == 8'h22 &&  dac_data_ready_int == 1'b1) ? 1'b1 : 1'b0;
 
-  always @(negedge clk_in) begin
+  always @(posedge clk_in) begin
     if(reset_in == 1'b1) begin 
       dac_data_int <= 'd0;
     end else if( dac_data_valid_int == 1'b1) begin
@@ -231,25 +257,31 @@ module axi_ad3552r_if #(
     end
   end
 
+  wire clk_cnt_enable_s;
+
   assign clk_cnt_value = (sdr_ddr_n == 1'b1) ? 4'h3 : 4'h0;
+  assign clk_cnt_enable_s  = (count_clk_div < clk_cnt_value ) ? 1'b1 : 1'b0;
   assign sclk_int   = (csn_int == 1'b0) ? clk_div : 1'b0;
 
   always @ (posedge clk_in) begin
-    if (csn_int == 1'b1 || count == clk_cnt_value || reset_in == 1'b1 ) begin
-      count <= 4'b0;
-      clk_div <= 1'b0;
-    end else if (count < clk_cnt_value) begin
-      count <= count + 1'b1;
+    if (csn_int == 1'b1 || count_clk_div == clk_cnt_value || reset_in == 1'b1 ) begin
+      count_clk_div <= 4'b0;
+    end else if (clk_cnt_enable_s == 1'b1 && csn_int == 1'b0 ) begin
+      count_clk_div <= count_clk_div + 1;
     end
-    if (count == clk_cnt_value) begin
-      clk_div <= ~clk_div;
+
+    if (reset_in == 1'b1 || csn_int == 1'b1) begin 
+      clk_div <= 1'b0;
+    end else if (count_clk_div == clk_cnt_value) begin
+      clk_div <= ~clk_div; 
+    end else begin 
+      clk_div <= clk_div;
     end
   end
 
 reg [2:0] cnt_valid = 'b0;
 
 always @ (posedge clk_in) begin
-  
   if(valid_in_int == 1'b1) begin
     cnt_valid <= cnt_valid+1;
   end else if (cnt_valid == 2'd2 || reset_in == 1'b1) begin 
@@ -259,4 +291,5 @@ always @ (posedge clk_in) begin
     dac_data_ready_int <= 1'b0;
   end
 end
+
 endmodule

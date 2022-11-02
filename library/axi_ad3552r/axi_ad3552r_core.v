@@ -46,19 +46,19 @@ module axi_ad3552r_core #(
   // dac interface
 
   input                   dac_clk,
-  (* mark_debug = "true" *) output                  dac_rst,
+  output                  dac_rst,
   input        [15:0]     adc_data_in_a,
   input        [15:0]     adc_data_in_b,
   input        [31:0]     dma_data,
   input                   adc_valid_in_a,
   input                   adc_valid_in_b,
   input                   valid_in_dma,
-  input                   dac_data_ready,
+  (* mark_debug = "true" *) input                   dac_data_ready,
 
   // output
 
-  (* mark_debug = "true" *) output       [ 7:0]      address,
-  (* mark_debug = "true" *) output                   sdr_ddr_n,
+  (* mark_debug = "true" *)  output       [ 7:0]     address,
+  (* mark_debug = "true" *)  output                  sdr_ddr_n,
   (* mark_debug = "true" *) output                   write_start,
   (* mark_debug = "true" *) output                   write_stop,
   (* mark_debug = "true" *) output      [31:0]       dac_data,
@@ -67,7 +67,7 @@ module axi_ad3552r_core #(
 
   // processor interface
 
-  (* mark_debug = "true" *) input                   up_rstn,
+  input                   up_rstn,
   input                   up_clk,
   input                   up_wreq,
   input       [ 13:0]     up_waddr,
@@ -89,15 +89,15 @@ module axi_ad3552r_core #(
   wire              up_rack_s;
   wire              up_wack_s;
 
-  (* mark_debug = "true" *) wire    [  7:0]   control_data;
-  (* mark_debug = "true" *) wire              control_valid;
-  wire    [ 15:0]   dac_data_channel_0;
-  wire    [ 15:0]   dac_data_channel_1;
-  wire              dac_valid_channel_0;
-  wire              dac_valid_channel_1;
-  (* mark_debug = "true" *) wire     [3:0]    dac_source_sel_0;
+  (* mark_debug = "true" *)  wire    [  7:0]   control_data;
+  (* mark_debug = "true" *)  wire              control_valid;
+  (* mark_debug = "true" *)  wire    [ 15:0]   dac_data_channel_0;
+  (* mark_debug = "true" *)  wire    [ 15:0]   dac_data_channel_1;
+  (* mark_debug = "true" *) wire              dac_valid_channel_0;
+  (* mark_debug = "true" *) wire              dac_valid_channel_1;
+  (* mark_debug = "true" *)  wire     [3:0]    dac_source_sel_0;
   (* mark_debug = "true" *) wire     [3:0]    dac_source_sel_1;
-  wire              dac_rst_s;
+  (* mark_debug = "true" *) wire              dac_rst_s;
    
   (* mark_debug = "true" *) wire     [16:0]   dac_data_control;
   (* mark_debug = "true" *) wire     [2:0]    dac_control;
@@ -106,7 +106,7 @@ module axi_ad3552r_core #(
 
   assign dac_rst = dac_rst_s;
   assign dac_source_sel  = {dac_source_sel_1 , dac_source_sel_0};
-  assign dac_data        = (dac_source_sel == 8'h33 ) ? {16'b0,dac_data_channel_1[3:0],dac_data_channel_0[3:0],8'b0} : {dac_data_channel_1  ,dac_data_channel_0};
+  assign dac_data        = (dac_source_sel == 8'h33 ) ? {16'b0,dac_data_channel_1[3:0],dac_data_channel_0[3:0],8'b0} : {dac_data_channel_0 ,dac_data_channel_1};
   assign dac_valid       = dac_valid_channel_0 | dac_valid_channel_1;
 
   assign control_data    = dac_data_control[7:0];

@@ -1,9 +1,16 @@
 create_bd_port -dir O dac_sclk
 create_bd_port -dir O dac_csn
-create_bd_port -dir O dac_sdio0
-create_bd_port -dir O dac_sdio1
-create_bd_port -dir O dac_sdio2
-create_bd_port -dir O dac_sdio3
+create_bd_port -dir O dac_sdo0
+create_bd_port -dir O dac_sdo1
+create_bd_port -dir O dac_sdo2
+create_bd_port -dir O dac_sdo3
+
+create_bd_port -dir O -from 3 -to 0 rx_or_tx_n
+
+create_bd_port -dir I dac_sdi0
+create_bd_port -dir I dac_sdi1
+create_bd_port -dir I dac_sdi2
+create_bd_port -dir I dac_sdi3
 
 ad_ip_instance axi_dmac axi_dac_dma
 ad_ip_parameter axi_dac_dma CONFIG.DMA_TYPE_SRC 0
@@ -20,10 +27,15 @@ ad_ip_instance axi_ad3552r axi_ad3552r_dac
  
 ad_connect axi_ad3552r_dac/dac_sclk       dac_sclk
 ad_connect axi_ad3552r_dac/dac_csn        dac_csn
-ad_connect axi_ad3552r_dac/dac_sdio_0     dac_sdio0
-ad_connect axi_ad3552r_dac/dac_sdio_1     dac_sdio1
-ad_connect axi_ad3552r_dac/dac_sdio_2     dac_sdio2
-ad_connect axi_ad3552r_dac/dac_sdio_3     dac_sdio3 
+ad_connect axi_ad3552r_dac/dac_sdo_0      dac_sdo0
+ad_connect axi_ad3552r_dac/dac_sdo_1      dac_sdo1
+ad_connect axi_ad3552r_dac/dac_sdo_2      dac_sdo2
+ad_connect axi_ad3552r_dac/dac_sdo_3      dac_sdo3 
+ad_connect axi_ad3552r_dac/dac_sdi_0      dac_sdi0
+ad_connect axi_ad3552r_dac/dac_sdi_1      dac_sdi1
+ad_connect axi_ad3552r_dac/dac_sdi_2      dac_sdi2
+ad_connect axi_ad3552r_dac/dac_sdi_3      dac_sdi3 
+ad_connect axi_ad3552r_dac/rx_or_tx_n     rx_or_tx_n
 ad_connect axi_ad3552r_dac/dac_clk        sys_ps7/FCLK_CLK2
 ad_connect axi_ad3552r_dac/dma_data       axi_dac_dma/m_axis_data
 ad_connect axi_ad3552r_dac/valid_in_dma   axi_dac_dma/m_axis_valid

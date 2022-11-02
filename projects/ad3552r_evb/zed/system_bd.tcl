@@ -9,7 +9,7 @@ ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 # enable clk2 to 120MHz
 
 ad_ip_parameter sys_ps7 CONFIG.PCW_EN_CLK2_PORT 1
-ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ 120.0
+ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ 125.0
 
 sysid_gen_sys_init_file
 

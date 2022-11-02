@@ -111,15 +111,14 @@ module system_top (
   wire            iic_mux_sda_t_s;
   wire    [3:0]   ad3552r_spi_mosi;
   wire    [3:0]   ad3552r_spi_miso;
-  wire            ad3552r_spi_t;
+  wire    [3:0]   ad3552r_spi_t;
 
   assign gpio_i[63:40] = gpio_o[63:40];
-  assign ad3552r_spi_t = 1'b0;
 
   ad_iobuf #(
     .DATA_WIDTH(4)
   ) i_ad3552r_spi_iobuf (
-    .dio_t({4{ad3552r_spi_t}}),
+    .dio_t(ad3552r_spi_t),
     .dio_i(ad3552r_spi_mosi),
     .dio_o(ad3552r_spi_miso),
     .dio_p(ad3552r_spi_sdio));
@@ -240,9 +239,15 @@ module system_top (
 
     .dac_sclk(ad3552r_spi_sclk),
     .dac_csn(ad3552r_spi_cs),
-    .dac_sdio0(ad3552r_spi_mosi[0]),
-    .dac_sdio1(ad3552r_spi_mosi[1]),
-    .dac_sdio2(ad3552r_spi_mosi[2]),
-    .dac_sdio3(ad3552r_spi_mosi[3]));
+    .dac_sdo0(ad3552r_spi_mosi[0]),
+    .dac_sdo1(ad3552r_spi_mosi[1]),
+    .dac_sdo2(ad3552r_spi_mosi[2]),
+    .dac_sdo3(ad3552r_spi_mosi[3]),
+    .rx_or_tx_n(ad3552r_spi_t),
+    .dac_sdi0(ad3552r_spi_miso[0]),
+    .dac_sdi1(ad3552r_spi_miso[1]),
+    .dac_sdi2(ad3552r_spi_miso[2]),
+    .dac_sdi3(ad3552r_spi_miso[3])
+    );
 
 endmodule

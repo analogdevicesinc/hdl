@@ -53,42 +53,50 @@ module axi_ad3552r #(
   input                   valid_in_a,
   input                   valid_in_b,
   input                   valid_in_dma,
-  output                  dac_data_ready,
+  (* mark_debug = "true" *) output                  dac_data_ready,
   (* mark_debug = "true" *) output                  dac_sclk,
   (* mark_debug = "true" *) output                  dac_csn,
-  (* mark_debug = "true" *) output                  dac_sdio_0,
-  (* mark_debug = "true" *) output                  dac_sdio_1,
-  (* mark_debug = "true" *) output                  dac_sdio_2,
-  (* mark_debug = "true" *) output                  dac_sdio_3,
+  (* mark_debug = "true" *) output                  dac_sdo_0,
+  (* mark_debug = "true" *) output                  dac_sdo_1,
+  (* mark_debug = "true" *) output                  dac_sdo_2,
+  (* mark_debug = "true" *) output                  dac_sdo_3,
+  input                   dac_sdi_0,
+  input                   dac_sdi_1,
+  input                   dac_sdi_2,
+  input                   dac_sdi_3,
+  (* mark_debug = "true" *) output        [3:0]     rx_or_tx_n,
 
   // axi interface
 
   input                   s_axi_aclk,
   input                   s_axi_aresetn,
   input                   s_axi_awvalid,
-  input       [ 15:0]     s_axi_awaddr,
+  input   [15:0]          s_axi_awaddr,
+  input   [ 2:0]          s_axi_awprot,
   output                  s_axi_awready,
   input                   s_axi_wvalid,
-  input       [ 31:0]     s_axi_wdata,
-  input       [  3:0]     s_axi_wstrb,
+  input   [31:0]          s_axi_wdata,
+  input   [ 3:0]          s_axi_wstrb,
   output                  s_axi_wready,
   output                  s_axi_bvalid,
-  output      [  1:0]     s_axi_bresp,
+  output  [ 1:0]          s_axi_bresp,
   input                   s_axi_bready,
   input                   s_axi_arvalid,
-  input       [ 15:0]     s_axi_araddr,
+  input   [15:0]          s_axi_araddr,
+  input   [ 2:0]          s_axi_arprot,
   output                  s_axi_arready,
   output                  s_axi_rvalid,
-  output      [ 31:0]     s_axi_rdata,
-  output      [  1:0]     s_axi_rresp,
+  output  [ 1:0]          s_axi_rresp,
+  output  [31:0]          s_axi_rdata,
   input                   s_axi_rready
+
 );
 
   // internal clocks and resets
 
- (* mark_debug = "true" *)  wire              dac_rst_s; 
+  wire              dac_rst_s; 
   wire              up_clk;
- (* mark_debug = "true" *)  wire              up_rstn;
+  wire              up_rstn;
 
   // internal signals
 
@@ -106,9 +114,9 @@ module axi_ad3552r #(
   wire              sdr_ddr_n;
   wire              write_start;
   wire              write_stop;
-  wire              dac_data_ready_s;
-  wire    [ 31:0]   dac_data;
-  wire              dac_valid;
+  (* mark_debug = "true" *) wire              dac_data_ready_s;
+  (* mark_debug = "true" *) wire    [ 31:0]   dac_data;
+  (* mark_debug = "true" *) wire              dac_valid;
 
   // signal name changes
 
@@ -132,10 +140,15 @@ module axi_ad3552r #(
     .dac_data_ready(dac_data_ready_s),
     .sclk(dac_sclk),
     .csn(dac_csn),
-    .sdio_0(dac_sdio_0),
-    .sdio_1(dac_sdio_1),
-    .sdio_2(dac_sdio_2),
-    .sdio_3(dac_sdio_3));
+    .sdo_0(dac_sdo_0),
+    .sdo_1(dac_sdo_1),
+    .sdo_2(dac_sdo_2),
+    .sdo_3(dac_sdo_3),
+    .sdi_0(dac_sdi_0),
+    .sdi_1(dac_sdi_1),
+    .sdi_2(dac_sdi_2),
+    .sdi_3(dac_sdi_3),
+    .rx_or_tx_n(rx_or_tx_n));
 
   // core
   axi_ad3552r_core #(
