@@ -157,6 +157,7 @@ module system_top (
   wire            dac_1_spi_sdo_t;
 
   wire            dec_0_valid_a;
+  wire            dec_0_valid_b;
   wire    [31:0]  dac_0_axis_tdata;
   wire    [15:0]  dec_0_data_a;
   wire    [15:0]  dec_0_data_b;
@@ -169,15 +170,86 @@ module system_top (
   assign gpio_i[63:37] = gpio_o[63:37];
   assign direction = dac_1_spi_cs == 1'h0 ? ~dac_1_spi_sdo_t : ~dac_0_spi_sdo_t;
 
-  assign dac_0_axis_tdata [31] = ~dec_0_data_b [15];
-  assign dac_0_axis_tdata [30:16] = dec_0_data_b [14:0];
-  assign dac_0_axis_tdata [15] = ~dec_0_data_a [15];
-  assign dac_0_axis_tdata [14:0] = dec_0_data_a [14:0];
+  //  assign dac_0_axis_tdata [31] = ~dec_0_data_b [15];
+  //  assign dac_0_axis_tdata [30:16] = dec_0_data_b [14:0];
+  //  assign dac_0_axis_tdata [15] = ~dec_0_data_a [15];
+  //  assign dac_0_axis_tdata [14:0] = dec_0_data_a [14:0];
 
-  assign dac_1_axis_tdata [31] = ~dec_1_data_b [15];
-  assign dac_1_axis_tdata [30:16] = dec_1_data_b [14:0];
-  assign dac_1_axis_tdata [15] = ~dec_1_data_a [15];
-  assign dac_1_axis_tdata [14:0] = dec_1_data_a [14:0];
+  //  assign dac_1_axis_tdata [31] = ~dec_1_data_b [15];
+  //  assign dac_1_axis_tdata [30:16] = dec_1_data_b [14:0];
+  //  assign dac_1_axis_tdata [15] = ~dec_1_data_a [15];
+  //  assign dac_1_axis_tdata [14:0] = dec_1_data_a [14:0];
+
+//   reg [31:0] delay_cnt;
+//   reg [31:0] pulse_cnt;
+//   reg [15:0] dac_0_comp_dec_data;
+//   reg [15:0] delay_dec_data;
+//   reg q_adc_1_value_change;
+//   //reg qq_adc_1_value_change;
+//   reg delay_cnt_en;
+//   reg pulse_cnt_en;
+//   reg adc_1_value_change;
+
+//   wire adc_1_passed_threshhold;
+
+//   assign adc_1_passed_threshhold = !q_adc_1_value_change && adc_1_value_change;
+
+//   always @(posedge sampling_clk_s) begin
+//     q_adc_1_value_change <= adc_1_value_change;
+//     //qq_adc_1_value_change <= q_adc_1_value_change;
+//     if (adc_1_passed_threshhold) begin
+//       delay_cnt_en <= 1'b1;
+//     end
+//     if (delay_cnt == 32'h00B71B00) begin
+//       delay_cnt_en <= 1'b0;
+//       pulse_cnt_en <= 1'b1;
+//     end
+//     if (pulse_cnt == 32'h00B71B00) begin
+//       pulse_cnt_en <= 1'b0;
+//     end
+//   end
+  
+//   always @(posedge sampling_clk_s) begin
+//     if (delay_cnt_en) begin
+//       delay_cnt <= delay_cnt + 1'h1;
+//       if (delay_cnt == 32'h00B71B00) begin
+//         delay_dec_data <= 16'h0000;
+//         delay_cnt <= 32'h00000000;
+//       end
+//     end
+//     if (pulse_cnt_en) begin
+//       pulse_cnt <= pulse_cnt + 1'h1;
+//       if (pulse_cnt == 32'h00B71B00) begin
+//         delay_dec_data <= 16'h4639;
+//         pulse_cnt <= 32'h00000000;
+//       end
+//     end
+//  end
+
+//  // 0V -> 0000 DAC
+//  // ~2.5V -> 2000 ADC
+//  // ~5V  -> 4639 DAC
+//  always @(posedge sampling_clk_s) begin
+//   if (dec_0_valid_b) begin
+//     if (!dec_0_data_b[15] && (dec_0_data_b >= 16'h2000)) begin
+//       adc_1_value_change <= 1'b1;
+//     end
+//     else begin
+//       adc_1_value_change <= 1'b0;
+//     end
+//   end
+//   dac_0_comp_dec_data <= 16'h4639;
+//   if (dec_0_valid_a) begin
+//     if (!dec_0_data_a[15] && (dec_0_data_a >= 16'h2000)) begin
+//       dac_0_comp_dec_data <= 16'h0000;
+//     end else begin
+//       dac_0_comp_dec_data <= 16'h4639;
+//     end
+//   end
+//  end
+
+//  assign dac_0_axis_tdata = {~delay_dec_data[15], delay_dec_data[14:0], ~dac_0_comp_dec_data[15], dac_0_comp_dec_data[14:0]};
+//  assign dac_1_axis_tdata = {~delay_dec_data[15], delay_dec_data[14:0], ~dac_0_comp_dec_data[15], dac_0_comp_dec_data[14:0]};
 
 // instantiations
 
@@ -454,17 +526,18 @@ module system_top (
     .rx_3_db_n    (rx_db_n[3]),
     .clk_gate     (clk_gate),
 
-    .dac_0_axis_tdata (dac_0_axis_tdata),
-    .dac_0_axis_tvalid (dec_0_valid_a),
-    .dec_0_valid_a (dec_0_valid_a),
-    .dec_0_data_a (dec_0_data_a),
-    .dec_0_data_b (dec_0_data_b),
+    // .dac_0_axis_tdata (dac_0_axis_tdata),
+    // .dac_0_axis_tvalid (dec_0_valid_a),
+    // .dec_0_valid_a (dec_0_valid_a),
+    // .dec_0_valid_b (dec_0_valid_b),
+    // .dec_0_data_a (dec_0_data_a),
+    // .dec_0_data_b (dec_0_data_b),
 
-    .dac_1_axis_tdata (dac_1_axis_tdata),
-    .dac_1_axis_tvalid (dec_1_valid_a),
-    .dec_1_valid_a (dec_1_valid_a),
-    .dec_1_data_a (dec_1_data_a),
-    .dec_1_data_b (dec_1_data_b),
+    // .dac_1_axis_tdata (dac_1_axis_tdata),
+    // .dac_1_axis_tvalid (dec_1_valid_a),
+    // .dec_1_valid_a (dec_1_valid_a),
+    // .dec_1_data_a (dec_1_data_a),
+    // .dec_1_data_b (dec_1_data_b),
 
     .dac_0_spi_cs         (dac_0_spi_cs),
     .dac_0_spi_sclk       (dac_0_spi_sclk),

@@ -393,8 +393,8 @@ module axi_hil #(
     end
   endgenerate
 
-  // assign dac_1_0_data = {dac_data[2], dac_data[0]}; // ADC CHC -> CHB DAC by Miguel's request
-  assign dac_1_0_data = {dac_data[1], dac_data[0]};
+  assign dac_1_0_data = {dac_data[2], dac_data[0]}; // ADC CHC -> CHB DAC by Miguel's request
+  // assign dac_1_0_data = {dac_data[1], dac_data[0]};
   assign dac_3_2_data = {dac_data[3], dac_data[2]};
 
   // ila probes

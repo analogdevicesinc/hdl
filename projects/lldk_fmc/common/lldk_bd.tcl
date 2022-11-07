@@ -323,17 +323,19 @@ ad_connect $hier_spi_engine_0/s_axis_sample_0 axi_dac_0_dma/m_axis
 #create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:axis_rtl:1.0 dac_0_axis
 #make_bd_intf_pins_external  [get_bd_intf_pins $hier_spi_engine_0/s_axis_sample_1]
 
-create_bd_port -dir O dec_0_valid_a
-create_bd_port -dir O -from 15 -to 0 dec_0_data_a
-create_bd_port -dir O -from 15 -to 0 dec_0_data_b
-create_bd_port -dir I -from 31 -to 0 dac_0_axis_tdata
-create_bd_port -dir I dac_0_axis_tvalid
+#create_bd_port -dir O dec_0_valid_a
+#create_bd_port -dir O dec_0_valid_b
+#create_bd_port -dir O -from 15 -to 0 dec_0_data_a
+#create_bd_port -dir O -from 15 -to 0 dec_0_data_b
+#create_bd_port -dir I -from 31 -to 0 dac_0_axis_tdata
+#create_bd_port -dir I dac_0_axis_tvalid
 
-ad_connect axi_ltc2387_0/adc_valid dec_0_valid_a
-ad_connect axi_ltc2387_0/adc_data dec_0_data_a
-ad_connect axi_ltc2387_1/adc_data dec_0_data_b
-ad_connect $hier_spi_engine_0/s_axis_sample_1_tdata dac_0_axis_tdata
-ad_connect $hier_spi_engine_0/s_axis_sample_1_tvalid dac_0_axis_tvalid
+#ad_connect axi_ltc2387_0/adc_valid dec_0_valid_a
+#ad_connect axi_ltc2387_1/adc_valid dec_0_valid_b
+#ad_connect axi_ltc2387_0/adc_data dec_0_data_a
+#ad_connect axi_ltc2387_1/adc_data dec_0_data_b
+#ad_connect $hier_spi_engine_0/s_axis_sample_1_tdata dac_0_axis_tdata
+#ad_connect $hier_spi_engine_0/s_axis_sample_1_tvalid dac_0_axis_tvalid
 
 
 #ad_connect $hier_spi_engine_0/s_axis_sample_1 spi_dds_0/m_axis_dds
@@ -387,17 +389,17 @@ ad_connect axi_pwm_gen/pwm_3 $hier_spi_engine_1/trigger
 
 ad_connect $hier_spi_engine_1/s_axis_sample_0 axi_dac_1_dma/m_axis
 
-create_bd_port -dir O dec_1_valid_a
-create_bd_port -dir O -from 15 -to 0 dec_1_data_a
-create_bd_port -dir O -from 15 -to 0 dec_1_data_b
-create_bd_port -dir I -from 31 -to 0 dac_1_axis_tdata
-create_bd_port -dir I dac_1_axis_tvalid
-
-ad_connect axi_ltc2387_2/adc_valid dec_1_valid_a
-ad_connect axi_ltc2387_2/adc_data dec_1_data_a
-ad_connect axi_ltc2387_3/adc_data dec_1_data_b
-ad_connect $hier_spi_engine_1/s_axis_sample_1_tdata dac_1_axis_tdata
-ad_connect $hier_spi_engine_1/s_axis_sample_1_tvalid dac_1_axis_tvalid
+#create_bd_port -dir O dec_1_valid_a
+#create_bd_port -dir O -from 15 -to 0 dec_1_data_a
+#create_bd_port -dir O -from 15 -to 0 dec_1_data_b
+#create_bd_port -dir I -from 31 -to 0 dac_1_axis_tdata
+#create_bd_port -dir I dac_1_axis_tvalid
+#
+#ad_connect axi_ltc2387_2/adc_valid dec_1_valid_a
+#ad_connect axi_ltc2387_2/adc_data dec_1_data_a
+#ad_connect axi_ltc2387_3/adc_data dec_1_data_b
+#ad_connect $hier_spi_engine_1/s_axis_sample_1_tdata dac_1_axis_tdata
+#ad_connect $hier_spi_engine_1/s_axis_sample_1_tvalid dac_1_axis_tvalid
 
 # adc peripheral
 
@@ -440,3 +442,73 @@ ad_cpu_interrupt ps-7 mb-7 /$hier_spi_engine_0/irq
 ad_cpu_interrupt ps-6 mb-6 /$hier_spi_engine_1/irq
 ad_cpu_interrupt ps-5 mb-5 axi_dac_0_dma/irq
 ad_cpu_interrupt ps-4 mb-4 axi_dac_1_dma/irq
+
+
+# axi hil ip
+ad_ip_instance axi_hil axi_hil
+ad_ip_parameter axi_hil CONFIG.ID 2
+ad_connect axi_hil/sampling_clk sampling_clk
+ad_connect axi_ltc2387_0/adc_data axi_hil/adc_0_data
+ad_connect axi_ltc2387_1/adc_data axi_hil/adc_1_data
+ad_connect axi_ltc2387_2/adc_data axi_hil/adc_2_data
+ad_connect axi_ltc2387_3/adc_data axi_hil/adc_3_data
+ad_connect axi_ltc2387_0/adc_valid axi_hil/adc_0_valid
+ad_connect axi_ltc2387_1/adc_valid axi_hil/adc_1_valid
+ad_connect axi_ltc2387_2/adc_valid axi_hil/adc_2_valid
+ad_connect axi_ltc2387_3/adc_valid axi_hil/adc_3_valid
+ad_connect $hier_spi_engine_0/s_axis_sample_1_tdata axi_hil/dac_1_0_data
+ad_connect $hier_spi_engine_0/s_axis_sample_1_tvalid axi_ltc2387_0/adc_valid
+ad_connect $hier_spi_engine_1/s_axis_sample_1_tdata axi_hil/dac_3_2_data
+ad_connect $hier_spi_engine_1/s_axis_sample_1_tvalid axi_ltc2387_2/adc_valid
+
+
+ad_cpu_interconnect 0x44ef0000 axi_hil
+
+# ILA
+#ad_ip_instance ila ila_adc
+#ad_ip_parameter ila_adc CONFIG.C_MONITOR_TYPE Native
+#ad_ip_parameter ila_adc CONFIG.C_TRIGIN_EN false
+#ad_ip_parameter ila_adc CONFIG.C_EN_STRG_QUAL 1
+#ad_ip_parameter ila_adc CONFIG.C_DATA_DEPTH 8192
+#ad_ip_parameter ila_adc CONFIG.C_NUM_OF_PROBES 19
+#
+#ad_ip_parameter ila_adc CONFIG.C_PROBE0_WIDTH 16
+#ad_ip_parameter ila_adc CONFIG.C_PROBE1_WIDTH 16
+#ad_ip_parameter ila_adc CONFIG.C_PROBE2_WIDTH 16
+#ad_ip_parameter ila_adc CONFIG.C_PROBE3_WIDTH 16
+#ad_ip_parameter ila_adc CONFIG.C_PROBE4_WIDTH 32
+#ad_ip_parameter ila_adc CONFIG.C_PROBE5_WIDTH 32
+#ad_ip_parameter ila_adc CONFIG.C_PROBE6_WIDTH 16
+#ad_ip_parameter ila_adc CONFIG.C_PROBE7_WIDTH 16
+#ad_ip_parameter ila_adc CONFIG.C_PROBE8_WIDTH 16
+#ad_ip_parameter ila_adc CONFIG.C_PROBE9_WIDTH 32
+#ad_ip_parameter ila_adc CONFIG.C_PROBE10_WIDTH 32
+#ad_ip_parameter ila_adc CONFIG.C_PROBE11_WIDTH 1
+#ad_ip_parameter ila_adc CONFIG.C_PROBE12_WIDTH 1
+#ad_ip_parameter ila_adc CONFIG.C_PROBE13_WIDTH 1
+#ad_ip_parameter ila_adc CONFIG.C_PROBE14_WIDTH 1
+#ad_ip_parameter ila_adc CONFIG.C_PROBE15_WIDTH 1
+#ad_ip_parameter ila_adc CONFIG.C_PROBE16_WIDTH 1
+#ad_ip_parameter ila_adc CONFIG.C_PROBE17_WIDTH 1
+#ad_ip_parameter ila_adc CONFIG.C_PROBE18_WIDTH 1
+#
+#ad_connect  sampling_clk ila_adc/clk
+#ad_connect  axi_ltc2387_0_adc_data ila_adc/probe0
+#ad_connect  axi_ltc2387_1_adc_data ila_adc/probe1
+#ad_connect  axi_ltc2387_2_adc_data ila_adc/probe2
+#ad_connect  axi_ltc2387_3_adc_data ila_adc/probe3
+#ad_connect  axi_hil/dac_1_0_data ila_adc/probe4
+#ad_connect  axi_hil/dac_3_2_data ila_adc/probe5
+#ad_connect  axi_hil/dbg_adc_0_threshold ila_adc/probe6
+#ad_connect  axi_hil/dbg_dac_0_min_value ila_adc/probe7
+#ad_connect  axi_hil/dbg_dac_0_max_value ila_adc/probe8
+#ad_connect  axi_hil/dbg_adc_0_delay_prescaler ila_adc/probe9
+#ad_connect  axi_hil/dbg_adc_0_delay_cnt ila_adc/probe10
+#ad_connect  axi_hil/dbg_dac_0_bypass_mux ila_adc/probe11
+#ad_connect  axi_hil/dbg_resetn ila_adc/probe12
+#ad_connect  axi_hil/dbg_adc_0_threshold_passed ila_adc/probe13
+#ad_connect  axi_hil/dbg_adc_0_delay_cnt_en ila_adc/probe14
+#ad_connect  axi_hil/dbg_adc_0_valid ila_adc/probe15
+#ad_connect  axi_hil/dbg_adc_1_valid ila_adc/probe16
+#ad_connect  axi_hil/dbg_adc_2_valid ila_adc/probe17
+#ad_connect  axi_hil/dbg_adc_3_valid ila_adc/probe18
