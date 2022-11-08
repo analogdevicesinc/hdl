@@ -425,8 +425,7 @@ module axi_ad7606x_16b_pif #(
 
   assign adc_status_er_5b = adc_status_0[7:3] | adc_status_1[7:3] | adc_status_2[7:3] | adc_status_3[7:3] | adc_status_4[7:3] | adc_status_5[7:3] | adc_status_6[7:3] | adc_status_7[7:3];
   assign adc_status_er = adc_status_er_5b[0] | adc_status_er_5b[1] | adc_status_er_5b[2] | adc_status_er_5b[3] | adc_status_er_5b[4] | adc_status_er_5b[5] | adc_status_er_5b[6] | adc_status_er_5b[7];
-  assign adc_status = (ADC_READ_MODE == STATUS_HEADER) ? (adc_status_er ? 1'b0 : 1'b1) : 1'b1;
-
+  assign adc_status = (ADC_READ_MODE == STATUS_HEADER || ADC_READ_MODE == CRC_STATUS) ? (adc_status_er ? 1'b0 : 1'b1) : 1'b1;
   assign cs_n = (transfer_state == IDLE) ? 1'b1 : 1'b0;
   assign db_t = ~wr_req_d;
   assign rd_n = ((transfer_state == CNTRL_LOW) && ((rd_conv_d == 1'b1) || rd_req_d == 1'b1)) ? 1'b0 : 1'b1;

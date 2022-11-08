@@ -9,4 +9,8 @@ ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 
 sysid_gen_sys_init_file
 
+adi_project_files ad7606x_fmc_zed [list \
+	"../../../library/common/ad_edge_detect.v" \
+	"../../../library/util_cdc/sync_bits.v"]
+
 source ../common/ad7606x_bd.tcl
