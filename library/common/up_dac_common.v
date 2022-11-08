@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2022 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -70,6 +70,9 @@ module up_dac_common #(
   output              dac_ext_sync_manual_req,
   output              dac_frame,
   output              dac_clksel,
+  output     [31:0]   dac_data_control,
+  output     [ 4:0]   dac_control,
+  input      [23:0]   dac_data_raw_read,
   output              dac_par_type,
   output              dac_par_enb,
   output              dac_r1_mode,
@@ -144,6 +147,8 @@ module up_dac_common #(
   reg     [15:0]  up_dac_datarate = 'd0;
   reg             up_dac_frame = 'd0;
   reg             up_dac_clksel = CLK_EDGE_SEL;
+  reg    [31:0]   up_dac_data_control = 'd0;
+  reg    [ 4:0]   up_dac_control = 'd0;
   reg             up_status_unf = 'd0;
   reg     [ 7:0]  up_usr_chanmax_int = 'd0;
   reg     [31:0]  up_dac_gpio_out_int = 'd0;
@@ -164,6 +169,7 @@ module up_dac_common #(
   wire            up_rreq_s;
   wire            up_xfer_done_s;
   wire            up_status_s;
+  wire   [23:0]   up_dac_data_raw_read;
   wire            up_sync_in_status;
   wire            up_status_unf_s;
   wire            dac_sync_s;
@@ -212,6 +218,8 @@ module up_dac_common #(
       up_dac_datarate <= 'd0;
       up_dac_frame <= 'd0;
       up_dac_clksel <= CLK_EDGE_SEL;
+      up_dac_data_control <= 'd0;
+      up_dac_control <= 'd0;
       up_pps_irq_mask <= 1'b1;
     end else begin
       up_dac_clk_enb_int <= ~up_dac_clk_enb;
@@ -279,6 +287,12 @@ module up_dac_common #(
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h18)) begin
         up_dac_clksel <= up_wdata[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h19)) begin
+        up_dac_data_control <= up_wdata[31:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h1b)) begin
+        up_dac_control <= up_wdata[4:0];
       end
     end
   end
@@ -450,7 +464,9 @@ module up_dac_common #(
           7'h16: up_rdata_int <= dac_clk_ratio;
           7'h17: up_rdata_int <= {31'd0, up_status_s};
           7'h18: up_rdata_int <= {31'd0, up_dac_clksel};
+          7'h19: up_rdata_int <= up_dac_data_control;
           7'h1a: up_rdata_int <= {31'd0, up_sync_in_status};
+          7'h1b: up_rdata_int <= {up_dac_data_raw_read,3'd0,up_dac_control};
           7'h1c: up_rdata_int <= {3'd0, up_drp_rwn_s, up_drp_addr, 16'b0};
           7'h1d: up_rdata_int <= {14'd0, up_drp_locked, up_drp_status_s, 16'b0};
           7'h1e: up_rdata_int <= up_drp_wdata;
@@ -460,7 +476,7 @@ module up_dac_common #(
           7'h2e: up_rdata_int <= up_dac_gpio_in;
           7'h2f: up_rdata_int <= up_dac_gpio_out_int;
           7'h30: up_rdata_int <= up_pps_rcounter;
-          7'h31: up_rdata_int <= up_pps_status;
+          7'h31: up_rdata_int <= {31'd0,up_pps_status};
           7'h40: up_rdata_int <= up_timer;
           default: up_rdata_int <= 0;
         endcase
@@ -487,7 +503,7 @@ module up_dac_common #(
   // dac control & status
 
   up_xfer_cntrl #(
-    .DATA_WIDTH(35)
+    .DATA_WIDTH(72)
   ) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
@@ -500,6 +516,8 @@ module up_dac_common #(
                       up_dac_ext_sync_manual_req,
                       up_dac_sync,
                       up_dac_clksel,
+                      up_dac_data_control,
+                      up_dac_control,
                       up_dac_frame,
                       up_dac_par_type,
                       up_dac_par_enb,
@@ -519,6 +537,8 @@ module up_dac_common #(
                       dac_ext_sync_manual_req,
                       dac_sync_s,
                       dac_clksel,
+                      dac_data_control,
+                      dac_control,
                       dac_frame_s,
                       dac_par_type,
                       dac_par_enb,
@@ -533,18 +553,20 @@ module up_dac_common #(
   assign dac_rst = ~dac_rst_n;
 
   up_xfer_status #(
-    .DATA_WIDTH(3)
+    .DATA_WIDTH(27)
   ) i_xfer_status (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_status ({up_sync_in_status,
                       up_status_s,
-                      up_status_unf_s}),
+                      up_status_unf_s,
+                      up_dac_data_raw_read}),
     .d_rst (dac_rst_s),
     .d_clk (dac_clk),
     .d_data_status ({ dac_sync_in_status,
                       dac_status,
-                      dac_status_unf}));
+                      dac_status_unf,
+                      dac_data_raw_read}));
 
   // generate frame and enable
 
