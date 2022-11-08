@@ -15,6 +15,7 @@ M_DEPS += ../../../library/common/ad_3w_spi.v
 
 LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_dmac
+LIB_DEPS += axi_ad3552r
 LIB_DEPS += axi_hdmi_tx
 LIB_DEPS += axi_i2s_adi
 LIB_DEPS += axi_ltc2387

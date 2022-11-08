@@ -45,26 +45,19 @@ create_bd_port -dir I max_spi_sdo_i
 create_bd_port -dir O max_spi_sdo_o
 create_bd_port -dir I max_spi_sdi_i
 
-source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
+create_bd_port -dir O dac0_spi_csn
+create_bd_port -dir O dac0_spi_sclk
+create_bd_port -dir O dac0_spi_sdio_0
+create_bd_port -dir O dac0_spi_sdio_1
+create_bd_port -dir O dac0_spi_sdio_2
+create_bd_port -dir O dac0_spi_sdio_3
 
-create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 dac_0_spi
-create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 dac_1_spi
-
-#create_bd_port -dir I dac1_spi_csn_i
-#create_bd_port -dir O dac1_spi_csn_o
-#create_bd_port -dir I dac1_spi_clk_i
-#create_bd_port -dir O dac1_spi_clk_o
-#create_bd_port -dir I dac1_spi_sdo_i
-#create_bd_port -dir O dac1_spi_sdo_o
-#create_bd_port -dir I dac1_spi_sdi_i
-#
-#create_bd_port -dir I dac2_spi_csn_i
-#create_bd_port -dir O dac2_spi_csn_o
-#create_bd_port -dir I dac2_spi_clk_i
-#create_bd_port -dir O dac2_spi_clk_o
-#create_bd_port -dir I dac2_spi_sdo_i
-#create_bd_port -dir O dac2_spi_sdo_o
-#create_bd_port -dir I dac2_spi_sdi_i
+create_bd_port -dir O dac1_spi_csn
+create_bd_port -dir O dac1_spi_sclk
+create_bd_port -dir O dac1_spi_sdio_0
+create_bd_port -dir O dac1_spi_sdio_1
+create_bd_port -dir O dac1_spi_sdio_2
+create_bd_port -dir O dac1_spi_sdio_3
 
 # adc peripheral
 
@@ -247,27 +240,9 @@ ad_connect max_spi_sdo_i max_spi/io0_i
 ad_connect max_spi_sdo_o max_spi/io0_o
 ad_connect max_spi_sdi_i max_spi/io1_i
 
-
 # AD3552Rs
 
-set data_width    32
-set async_spi_clk 1
-set num_cs        1
-set num_sdi       4
-set num_sdo       4
-set sdi_delay     1
-
-set hier_spi_engine_0 spi_ad3552r_0
-set hier_spi_engine_1 spi_ad3552r_1
-
-spi_engine_create $hier_spi_engine_0 $data_width $async_spi_clk $num_cs $num_sdi $num_sdo $sdi_delay
-spi_engine_create $hier_spi_engine_1 $data_width $async_spi_clk $num_cs $num_sdi $num_sdo $sdi_delay
-
-ad_ip_parameter $hier_spi_engine_0/${hier_spi_engine_0}_offload CONFIG.SDO_MEM_OS 1
-ad_ip_parameter $hier_spi_engine_1/${hier_spi_engine_1}_offload CONFIG.SDO_MEM_OS 1
-
-#ad_ip_instance axi_dds spi_dds_0
-#ad_connect sampling_clk spi_dds_0/spi_clk
+ad_ip_instance axi_ad3552r axi_ad3552r_0
 
 #dac0
 
@@ -282,31 +257,27 @@ ad_ip_parameter axi_dac_0_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_dac_0_dma CONFIG.DMA_DATA_WIDTH_SRC 32 ;#$data_width
 ad_ip_parameter axi_dac_0_dma CONFIG.DMA_DATA_WIDTH_DEST 32
 
-ad_connect $hier_spi_engine_0/m_spi dac_0_spi
+ad_connect axi_ad3552r_0/dac_clk axi_clkgen/clk_0
+ad_connect axi_ad3552r_0/valid_in_a axi_ltc2387_0/adc_valid
+ad_connect axi_ad3552r_0/data_in_a axi_ltc2387_0/adc_data
+ad_connect axi_ad3552r_0/valid_in_b axi_ltc2387_1/adc_valid
+ad_connect axi_ad3552r_0/data_in_b axi_ltc2387_1/adc_data
 
-ad_connect $sys_cpu_clk $hier_spi_engine_0/clk
-ad_connect sampling_clk $hier_spi_engine_0/spi_clk
-ad_connect sys_cpu_resetn $hier_spi_engine_0/resetn
-ad_connect sys_cpu_resetn axi_dac_0_dma/m_src_axi_aresetn
-ad_connect sampling_clk axi_dac_0_dma/m_axis_aclk
-ad_connect axi_pwm_gen/pwm_2 $hier_spi_engine_0/trigger
+ad_connect axi_dac_0_dma/m_axis_aclk axi_clkgen/clk_0
+ad_connect axi_ad3552r_0/dac_data_ready axi_dac_0_dma/m_axis_ready
+ad_connect axi_ad3552r_0/valid_in_dma axi_dac_0_dma/m_axis_valid
+ad_connect axi_ad3552r_0/dma_data axi_dac_0_dma/m_axis_data
 
-ad_connect $hier_spi_engine_0/s_axis_sample_0 axi_dac_0_dma/m_axis
-
-create_bd_port -dir O dec_0_valid_a
-create_bd_port -dir O -from 15 -to 0 dec_0_data_a
-create_bd_port -dir O -from 15 -to 0 dec_0_data_b
-create_bd_port -dir I -from 31 -to 0 dac_0_axis_tdata
-create_bd_port -dir I dac_0_axis_tvalid
-
-ad_connect axi_ltc2387_0/adc_valid dec_0_valid_a
-ad_connect axi_ltc2387_0/adc_data dec_0_data_a
-ad_connect axi_ltc2387_1/adc_data dec_0_data_b
-ad_connect $hier_spi_engine_0/s_axis_sample_1_tdata dac_0_axis_tdata
-ad_connect $hier_spi_engine_0/s_axis_sample_1_tvalid dac_0_axis_tvalid
-
+ad_connect axi_ad3552r_0/dac_csn dac0_spi_csn
+ad_connect axi_ad3552r_0/dac_sclk dac0_spi_sclk
+ad_connect axi_ad3552r_0/dac_sdio_0 dac0_spi_sdio_0
+ad_connect axi_ad3552r_0/dac_sdio_1 dac0_spi_sdio_1
+ad_connect axi_ad3552r_0/dac_sdio_2 dac0_spi_sdio_2
+ad_connect axi_ad3552r_0/dac_sdio_3 dac0_spi_sdio_3
 
 #dac1
+
+ad_ip_instance axi_ad3552r axi_ad3552r_1
 
 ad_ip_instance axi_dmac axi_dac_1_dma
 ad_ip_parameter axi_dac_1_dma CONFIG.DMA_TYPE_SRC 0
@@ -319,28 +290,23 @@ ad_ip_parameter axi_dac_1_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_dac_1_dma CONFIG.DMA_DATA_WIDTH_SRC 32
 ad_ip_parameter axi_dac_1_dma CONFIG.DMA_DATA_WIDTH_DEST 32
 
-ad_connect $hier_spi_engine_1/m_spi dac_1_spi
+ad_connect axi_ad3552r_1/dac_clk axi_clkgen/clk_0
+ad_connect axi_ad3552r_1/valid_in_a axi_ltc2387_2/adc_valid
+ad_connect axi_ad3552r_1/data_in_a axi_ltc2387_2/adc_data
+ad_connect axi_ad3552r_1/valid_in_b axi_ltc2387_3/adc_valid
+ad_connect axi_ad3552r_1/data_in_b axi_ltc2387_3/adc_data
 
-ad_connect $sys_cpu_clk $hier_spi_engine_1/clk
-ad_connect sampling_clk $hier_spi_engine_1/spi_clk
-ad_connect sys_cpu_resetn $hier_spi_engine_1/resetn
-ad_connect sys_cpu_resetn axi_dac_1_dma/m_src_axi_aresetn
-ad_connect sampling_clk axi_dac_1_dma/m_axis_aclk
-ad_connect axi_pwm_gen/pwm_3 $hier_spi_engine_1/trigger
+ad_connect axi_dac_1_dma/m_axis_aclk axi_clkgen/clk_0
+ad_connect axi_ad3552r_1/dac_data_ready axi_dac_1_dma/m_axis_ready
+ad_connect axi_ad3552r_1/valid_in_dma axi_dac_1_dma/m_axis_valid
+ad_connect axi_ad3552r_1/dma_data axi_dac_1_dma/m_axis_data
 
-ad_connect $hier_spi_engine_1/s_axis_sample_0 axi_dac_1_dma/m_axis
-
-create_bd_port -dir O dec_1_valid_a
-create_bd_port -dir O -from 15 -to 0 dec_1_data_a
-create_bd_port -dir O -from 15 -to 0 dec_1_data_b
-create_bd_port -dir I -from 31 -to 0 dac_1_axis_tdata
-create_bd_port -dir I dac_1_axis_tvalid
-
-ad_connect axi_ltc2387_2/adc_valid dec_1_valid_a
-ad_connect axi_ltc2387_2/adc_data dec_1_data_a
-ad_connect axi_ltc2387_3/adc_data dec_1_data_b
-ad_connect $hier_spi_engine_1/s_axis_sample_1_tdata dac_1_axis_tdata
-ad_connect $hier_spi_engine_1/s_axis_sample_1_tvalid dac_1_axis_tvalid
+ad_connect axi_ad3552r_1/dac_csn dac1_spi_csn
+ad_connect axi_ad3552r_1/dac_sclk dac1_spi_sclk
+ad_connect axi_ad3552r_1/dac_sdio_0 dac1_spi_sdio_0
+ad_connect axi_ad3552r_1/dac_sdio_1 dac1_spi_sdio_1
+ad_connect axi_ad3552r_1/dac_sdio_2 dac1_spi_sdio_2
+ad_connect axi_ad3552r_1/dac_sdio_3 dac1_spi_sdio_3
 
 # address mapping
 
@@ -352,9 +318,9 @@ ad_cpu_interconnect 0x44A40000 axi_ltc2387_dma
 ad_cpu_interconnect 0x44B00000 axi_clkgen
 ad_cpu_interconnect 0x44B10000 axi_pwm_gen
 ad_cpu_interconnect 0x44B20000 max_spi
-ad_cpu_interconnect 0x44d00000 $hier_spi_engine_0/${hier_spi_engine_0}_axi_regmap
+ad_cpu_interconnect 0x44d00000 axi_ad3552r_0
 ad_cpu_interconnect 0x44d30000 axi_dac_0_dma
-ad_cpu_interconnect 0x44e00000 $hier_spi_engine_1/${hier_spi_engine_1}_axi_regmap
+ad_cpu_interconnect 0x44e00000 axi_ad3552r_1
 ad_cpu_interconnect 0x44e30000 axi_dac_1_dma
 
 # interconnect
@@ -366,12 +332,12 @@ ad_mem_hp2_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP2
 ad_mem_hp2_interconnect $sys_cpu_clk axi_ltc2387_dma/m_dest_axi
 
 ad_connect $sys_cpu_resetn axi_ltc2387_dma/m_dest_axi_aresetn
+ad_connect axi_dac_0_dma/m_src_axi_aresetn sys_rstgen/peripheral_aresetn
+ad_connect axi_dac_1_dma/m_src_axi_aresetn sys_rstgen/peripheral_aresetn
 
 # interrupts
 
 ad_cpu_interrupt ps-13 mb-13 axi_ltc2387_dma/irq
 ad_cpu_interrupt ps-8 mb-8 max_spi/ip2intc_irpt
-ad_cpu_interrupt ps-7 mb-7 /$hier_spi_engine_0/irq
-ad_cpu_interrupt ps-6 mb-6 /$hier_spi_engine_1/irq
 ad_cpu_interrupt ps-5 mb-5 axi_dac_0_dma/irq
 ad_cpu_interrupt ps-4 mb-4 axi_dac_1_dma/irq
