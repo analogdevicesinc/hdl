@@ -73,6 +73,7 @@ module axi_ad3552r_if_tb;
   reg ddr_sdr_n = 1'b0;
   reg reg_16b_8bn = 1'b0;
   reg stream = 1'b0;
+  reg stream_reg = 1'b0;
   reg [23:0]    data_write = 24'h0;
 
   always #4 clk_a <= ~clk_a;
@@ -128,8 +129,9 @@ module axi_ad3552r_if_tb;
       if (counter == 2 && address_read == 1'b0) begin
         counter <= 0;
         address_read <= 1'b1;
+        stream_reg <= stream;
       end else begin
-        if (stream) begin
+        if (stream_reg) begin
           if (ddr_sdr_n == 1'b1 & counter == 3) begin
             counter <= 0;
           end else if (ddr_sdr_n == 1'b0 & counter == 7) begin
@@ -174,7 +176,7 @@ module axi_ad3552r_if_tb;
       address <= shift_register[7:0];
     end
 
-    if (stream) begin 
+    if (stream_reg) begin
       if(ddr_sdr_n == 1'b0) begin
         if (counter == 3) begin
           dac_a = shift_register[15:0];
@@ -208,7 +210,7 @@ module axi_ad3552r_if_tb;
           ad3552r_8bit_reg = {shift_register[3:0],shift_register_n[3:0]};
         end
         if (counter_n== 3) begin
-          ad3552r_16bit_reg ={shift_register[7:4],shift_register_n[7:4],shift_register[3:0],shift_register_n[3:0]}; 
+          ad3552r_16bit_reg ={shift_register[7:4],shift_register_n[7:4],shift_register[3:0],shift_register_n[3:0]};
           dac_a = {shift_register[7:4],shift_register_n[7:4],shift_register[3:0],shift_register_n[3:0]};
         end
         if (counter_n == 6) begin
