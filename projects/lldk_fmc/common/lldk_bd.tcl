@@ -240,6 +240,23 @@ ad_connect max_spi_sdo_i max_spi/io0_i
 ad_connect max_spi_sdo_o max_spi/io0_o
 ad_connect max_spi_sdi_i max_spi/io1_i
 
+## sign conversion IP 
+
+ad_ip_instance axi_hil axi_hil
+ad_ip_parameter axi_hil CONFIG.ID 2
+ad_connect axi_hil/sampling_clk sampling_clk
+
+ad_connect axi_ltc2387_0/adc_data axi_hil/adc_0_data
+ad_connect axi_ltc2387_1/adc_data axi_hil/adc_1_data
+ad_connect axi_ltc2387_2/adc_data axi_hil/adc_2_data
+ad_connect axi_ltc2387_3/adc_data axi_hil/adc_3_data
+
+
+ad_connect axi_ltc2387_0/adc_valid axi_hil/adc_0_valid
+ad_connect axi_ltc2387_1/adc_valid axi_hil/adc_1_valid
+ad_connect axi_ltc2387_2/adc_valid axi_hil/adc_2_valid
+ad_connect axi_ltc2387_3/adc_valid axi_hil/adc_3_valid
+
 # AD3552Rs
 
 ad_ip_instance axi_ad3552r axi_ad3552r_0
@@ -257,11 +274,13 @@ ad_ip_parameter axi_dac_0_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_dac_0_dma CONFIG.DMA_DATA_WIDTH_SRC 32 ;#$data_width
 ad_ip_parameter axi_dac_0_dma CONFIG.DMA_DATA_WIDTH_DEST 32
 
+
+
 ad_connect axi_ad3552r_0/dac_clk axi_clkgen/clk_0
-ad_connect axi_ad3552r_0/valid_in_a axi_ltc2387_0/adc_valid
-ad_connect axi_ad3552r_0/data_in_a axi_ltc2387_0/adc_data
-ad_connect axi_ad3552r_0/valid_in_b axi_ltc2387_1/adc_valid
-ad_connect axi_ad3552r_0/data_in_b axi_ltc2387_1/adc_data
+
+ad_connect axi_ad3552r_0/adc_valid_in  axi_ltc2387_0/adc_valid
+ad_connect axi_ad3552r_0/adc_data_in  axi_hil/dac_1_0_data
+
 
 ad_connect axi_dac_0_dma/m_axis_aclk axi_clkgen/clk_0
 ad_connect axi_ad3552r_0/dac_data_ready axi_dac_0_dma/m_axis_ready
@@ -291,10 +310,10 @@ ad_ip_parameter axi_dac_1_dma CONFIG.DMA_DATA_WIDTH_SRC 32
 ad_ip_parameter axi_dac_1_dma CONFIG.DMA_DATA_WIDTH_DEST 32
 
 ad_connect axi_ad3552r_1/dac_clk axi_clkgen/clk_0
-ad_connect axi_ad3552r_1/valid_in_a axi_ltc2387_2/adc_valid
-ad_connect axi_ad3552r_1/data_in_a axi_ltc2387_2/adc_data
-ad_connect axi_ad3552r_1/valid_in_b axi_ltc2387_3/adc_valid
-ad_connect axi_ad3552r_1/data_in_b axi_ltc2387_3/adc_data
+
+ad_connect axi_ad3552r_1/adc_valid_in axi_ltc2387_2/adc_valid
+ad_connect axi_ad3552r_1/adc_data_in axi_hil/dac_3_2_data
+
 
 ad_connect axi_dac_1_dma/m_axis_aclk axi_clkgen/clk_0
 ad_connect axi_ad3552r_1/dac_data_ready axi_dac_1_dma/m_axis_ready
@@ -322,6 +341,7 @@ ad_cpu_interconnect 0x44d00000 axi_ad3552r_0
 ad_cpu_interconnect 0x44d30000 axi_dac_0_dma
 ad_cpu_interconnect 0x44e00000 axi_ad3552r_1
 ad_cpu_interconnect 0x44e30000 axi_dac_1_dma
+ad_cpu_interconnect 0x44ef0000 axi_hil
 
 # interconnect
 

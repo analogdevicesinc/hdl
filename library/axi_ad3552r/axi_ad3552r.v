@@ -52,10 +52,8 @@ module axi_ad3552r #(
   input                   valid_in_dma,
   output                  dac_data_ready,
 
-  input       [15:0]      data_in_a,
-  input       [15:0]      data_in_b,
-  input                   valid_in_a,
-  input                   valid_in_b,
+  input       [31:0]      adc_data_in,
+  input                   adc_valid_in,
 
   output                  dac_sclk,
   output                  dac_csn,
@@ -153,11 +151,11 @@ module axi_ad3552r #(
   ) axi_ad3552r_up_core (
     .dac_clk(dac_clk),
     .dac_rst(dac_rst_s),
-    .adc_data_in_a(data_in_a),
-    .adc_data_in_b(data_in_b),
+    .adc_data_in_a(adc_data_in[15:0]),
+    .adc_data_in_b(adc_data_in[31:16]),
     .dma_data(dma_data),
-    .adc_valid_in_a(valid_in_a),
-    .adc_valid_in_b(valid_in_b),
+    .adc_valid_in_a(adc_valid_in),
+    .adc_valid_in_b(adc_valid_in),
     .valid_in_dma(valid_in_dma),
     .dac_data_ready(dac_data_ready),
     .dac_data(dac_data),
