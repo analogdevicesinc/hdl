@@ -110,11 +110,11 @@ module system_top (
 
   output                  dac_0_spi_cs,
   output                  dac_0_spi_sclk,
-  output      [ 3:0]      dac_0_spi_sdio,
+  inout       [ 3:0]      dac_0_spi_sdio,
 
   output                  dac_1_spi_cs,
   output                  dac_1_spi_sclk,
-  output      [ 3:0]      dac_1_spi_sdio,
+  inout       [ 3:0]      dac_1_spi_sdio,
 
   input                   dac_0_alert,
   input                   dac_1_alert,
@@ -155,8 +155,6 @@ module system_top (
 
   //assign direction = dac_1_spi_cs == 1'h0 ? ~dac_1_spi_sdo_t : ~dac_0_spi_sdo_t;
   assign direction = 1'b1;
-  assign dac_0_spi_sdio = dac_0_spi_sdo;
-  assign dac_1_spi_sdio = dac_1_spi_sdo;
 
   // instantiations
 //   ad_iobuf #(
@@ -455,20 +453,20 @@ module system_top (
     .dac0_spi_csn        (dac_0_spi_cs),
     .dac0_spi_sclk       (dac_0_spi_sclk),
 //    .dac0_spi_sdi        (dac_0_spi_sdi),
-    .dac0_spi_sdio_0        (dac_0_spi_sdo[0]),
-    .dac0_spi_sdio_1        (dac_0_spi_sdo[1]),
-    .dac0_spi_sdio_2        (dac_0_spi_sdo[2]),
-    .dac0_spi_sdio_3        (dac_0_spi_sdo[3]),
+    .dac0_spi_sdio_0        (dac_0_spi_sdio[0]),
+    .dac0_spi_sdio_1        (dac_0_spi_sdio[1]),
+    .dac0_spi_sdio_2        (dac_0_spi_sdio[2]),
+    .dac0_spi_sdio_3        (dac_0_spi_sdio[3]),
 //    .dac0_spi_sdo_t      (dac_0_spi_sdo_t),
 //    .dac0_spi_three_wire (),
 
     .dac1_spi_csn         (dac_1_spi_cs),
     .dac1_spi_sclk       (dac_1_spi_sclk),
  //   .dac1_spi_sdi        (dac_1_spi_sdi),
-    .dac1_spi_sdio_0        (dac_1_spi_sdo[0]),
-    .dac1_spi_sdio_1        (dac_1_spi_sdo[1]),
-    .dac1_spi_sdio_2        (dac_1_spi_sdo[2]),
-    .dac1_spi_sdio_3        (dac_1_spi_sdo[3]));
+    .dac1_spi_sdio_0        (dac_1_spi_sdio[0]),
+    .dac1_spi_sdio_1        (dac_1_spi_sdio[1]),
+    .dac1_spi_sdio_2        (dac_1_spi_sdio[2]),
+    .dac1_spi_sdio_3        (dac_1_spi_sdio[3]));
 //    .dac1_spi_sdo_t      (dac_1_spi_sdo_t),
 //    .dac1_spi_three_wire ());
 
