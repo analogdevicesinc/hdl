@@ -57,10 +57,10 @@ module axi_ad3552r #(
 
   output                  dac_sclk,
   output                  dac_csn,
-  output                  dac_sdio_0,
-  output                  dac_sdio_1,
-  output                  dac_sdio_2,
-  output                  dac_sdio_3,
+  inout                   dac_sdio_0,
+  inout                   dac_sdio_1,
+  inout                   dac_sdio_2,
+  inout                   dac_sdio_3,
 
   // axi interface
 

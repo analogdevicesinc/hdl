@@ -44,7 +44,7 @@ module axi_ad3552r_if (
   output reg              dac_data_ready,
 
   input       [ 7:0]      address,
-  output      [23:0]      data_read,
+  output reg  [23:0]      data_read,
   input       [23:0]      data_write,
   input                   ddr_sdr_n,
   input                   reg_16b_8bn,
@@ -54,10 +54,10 @@ module axi_ad3552r_if (
   // DAC control signals
   output                  sclk,
   output reg              csn,
-  output                   sdio_0,
-  output                   sdio_1,
-  output                   sdio_2,
-  output                   sdio_3
+  inout                   sdio_0,
+  inout                   sdio_1,
+  inout                   sdio_2,
+  inout                   sdio_3
 );
 
   wire transfer_data_s;
@@ -75,6 +75,7 @@ module axi_ad3552r_if (
   reg full_speed = 1'b0;
   reg transfer_data_d = 1'b0;
   reg transfer_data_dd = 1'b0;
+  reg data_r_wn = 1'b0;
 
   localparam  [ 2:0]    IDLE = 3'h0,
                         CS_LOW = 3'h1,
@@ -230,6 +231,9 @@ module axi_ad3552r_if (
   assign sclk = full_speed ? (ddr_sdr_n ? sclk_ddr : counter[0]) : counter[2];
 
   always@(posedge clk_in) begin
+    if (transfer_state == CS_LOW) begin
+        data_r_wn <= address[7];
+      end
     if (transfer_state == CS_LOW & stream) begin
         dac_data_ready <= 1'b1;
     end else if (transfer_state == STREAM) begin
@@ -253,17 +257,17 @@ module axi_ad3552r_if (
     end else if (transfer_step) begin
       transfer_reg <= {transfer_reg[51:0], sdio_3,sdio_2,sdio_1,sdio_0};
     end
+
+    if (transfer_state == CS_HIGH) begin
+      data_read <= transfer_reg[23:0];
+    end
   end
 
   // address[7] is r_wn : depends also on the state machine, input only when
   // in TRANSFER register mode
-//  assign sdio_0 = address[7] ? 1'bz : transfer_reg[52];
-//  assign sdio_1 = address[7] ? 1'bz : transfer_reg[53];
-//  assign sdio_2 = address[7] ? 1'bz : transfer_reg[54];
-//  assign sdio_3 = address[7] ? 1'bz : transfer_reg[55];
-  assign sdio_0 = transfer_reg[52];
-  assign sdio_1 = transfer_reg[53];
-  assign sdio_2 = transfer_reg[54];
-  assign sdio_3 = transfer_reg[55];
+  assign sdio_0 = data_r_wn ? 1'bz : transfer_reg[52];
+  assign sdio_1 = data_r_wn ? 1'bz : transfer_reg[53];
+  assign sdio_2 = data_r_wn ? 1'bz : transfer_reg[54];
+  assign sdio_3 = data_r_wn ? 1'bz : transfer_reg[55];
 
 endmodule

@@ -42,11 +42,12 @@ module axi_ad3552r_if_tb;
   `include "tb_base.v"
 
   reg    [  7:0]   address;
-  wire    [23:0]    data_read;
-  wire              dac_valid;
-  wire              dac_sclk;
-  wire              dac_csn;
-  wire              dac_data_ready;
+  reg    [  7:0]   address_write;
+  wire    [23:0]   data_read;
+  wire             dac_valid;
+  wire             dac_sclk;
+  wire             dac_csn;
+  wire             dac_data_ready;
 
   reg clk_a = 1'b0;
   reg clk_b = 1'b0;
@@ -75,11 +76,21 @@ module axi_ad3552r_if_tb;
   reg stream = 1'b0;
   reg stream_reg = 1'b0;
   reg [23:0]    data_write = 24'h0;
+  inout dac_sdio_0;
+  inout dac_sdio_1;
+  inout dac_sdio_2;
+  inout dac_sdio_3;
+
+  wire dac_sdio_in_0;
+  wire dac_sdio_in_1;
+  wire dac_sdio_in_2;
+  wire dac_sdio_in_3;
 
   always #4 clk_a <= ~clk_a;
 
   initial begin
    #100 reset_in = 1'b0;
+   address_write = 8'h2c;
    data_write = 24'hf1a500;
    ddr_sdr_n = 1'b0;
    reg_16b_8bn = 1'b0;
@@ -151,6 +162,12 @@ module axi_ad3552r_if_tb;
     end
   end
 
+
+  assign #15 dac_sdio_in_0 = shift_register_n[28];
+  assign #15 dac_sdio_in_1 = shift_register_n[29];
+  assign #15 dac_sdio_in_2 = shift_register_n[30];
+  assign #15 dac_sdio_in_3 = shift_register_n[31];
+
   always@(negedge dac_sclk or posedge dac_csn) begin
     if(dac_csn == 1'b1 ) begin
       counter_n <= 0;
@@ -158,7 +175,9 @@ module axi_ad3552r_if_tb;
     end else begin
         if ((counter == 2 && address_read == 1'b0)) begin
           counter_n <= 1;
+          shift_register_n <= 32'hdeadf0f5;
         end else begin
+        shift_register_n <= {shift_register_n[27:0],dac_sdio_3,dac_sdio_2,dac_sdio_1,dac_sdio_0};
           if (ddr_sdr_n == 1'b1 & counter_n == 5) begin
             counter_n <= 2;
           end else if (ddr_sdr_n == 1'b0 & counter_n  == 7) begin
@@ -166,7 +185,6 @@ module axi_ad3552r_if_tb;
           end else begin
             counter_n <= counter_n + 1;
           end
-        shift_register_n <= {shift_register_n[27:0],dac_sdio_3,dac_sdio_2,dac_sdio_1,dac_sdio_0};
         end
     end
   end
@@ -220,6 +238,11 @@ module axi_ad3552r_if_tb;
     end
   end
 
+  assign dac_sdio_0 = (address_write[7] & address_read == 1'b1) ? dac_sdio_in_0: 1'bz;
+  assign dac_sdio_1 = (address_write[7] & address_read == 1'b1) ? dac_sdio_in_1: 1'bz;
+  assign dac_sdio_2 = (address_write[7] & address_read == 1'b1) ? dac_sdio_in_2: 1'bz;
+  assign dac_sdio_3 = (address_write[7] & address_read == 1'b1) ? dac_sdio_in_3: 1'bz;
+
   always @(posedge clk_a) begin
     if (dac_data_ready) begin
       dac_data <= dac_data + 32'h00010002;
@@ -231,7 +254,7 @@ module axi_ad3552r_if_tb;
     .reset_in(reset_in),
     .dac_data(dac_data),
     .dac_data_valid(1'b1),
-    .address(8'h2c),
+    .address(address_write),
     .data_read(data_read),
     .data_write(data_write),
     .ddr_sdr_n(ddr_sdr_n),
