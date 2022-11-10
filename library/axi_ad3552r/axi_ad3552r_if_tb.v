@@ -67,6 +67,7 @@ module axi_ad3552r_if_tb;
   reg [31:0] shift_register = 'h00;
   reg [31:0] shift_register_n = 'h00;
   reg [31:0] dac_data = 32'ha5a5f0f0;
+  reg [15:0] ad3552r_16bit_in_reg = 'h00;
 
   reg ctrl_enable = 1'b0;
   reg ctrl_pause = 1'b0;
@@ -90,6 +91,7 @@ module axi_ad3552r_if_tb;
 
   initial begin
    #100 reset_in = 1'b0;
+   // Write 8 bit SDR
    address_write = 8'h2c;
    data_write = 24'hf1a500;
    ddr_sdr_n = 1'b0;
@@ -98,24 +100,51 @@ module axi_ad3552r_if_tb;
    #500 transfer_data = 1'b1;
    #100 transfer_data = 1'b0;
    #500 data_write = 24'ha5f000;
+   // Read 8 bit SDR
+   ad3552r_16bit_in_reg = 16'habcd;
+   address_write = 8'hac;
+   data_write = 24'hf1a500;
+   ddr_sdr_n = 1'b0;
+   reg_16b_8bn = 1'b0;
+   stream = 1'b0;
+   #500 transfer_data = 1'b1;
+   #100 transfer_data = 1'b0;
+   #500 data_write = 24'ha5f000;
+   // Write 16 bit SDR
+   address_write = 8'h2c;
    ddr_sdr_n = 1'b0;
    reg_16b_8bn = 1'b1;
    stream = 1'b0;
    #500 transfer_data = 1'b1;
    #100 transfer_data = 1'b0;
    #500 data_write = 24'h123400;
+   // Read 16 bit SDR
+   address_write = 8'hac;
+   ad3552r_16bit_in_reg = 16'hfedc;
+   ddr_sdr_n = 1'b0;
+   reg_16b_8bn = 1'b1;
+   stream = 1'b0;
+   #500 transfer_data = 1'b1;
+   #100 transfer_data = 1'b0;
+   #500 data_write = 24'h123400;
+   // Write 8 bit DDR
+   address_write = 8'h2c;
    ddr_sdr_n = 1'b1;
    reg_16b_8bn = 1'b0;
    stream = 1'b0;
    #500 transfer_data = 1'b1;
    #100 transfer_data = 1'b0;
    #500 data_write = 24'hf5a500;
+   // Write 16 bit DDR
+   address_write = 8'h2c;
    ddr_sdr_n = 1'b1;
    reg_16b_8bn = 1'b1;
    stream = 1'b0;
    #500 transfer_data = 1'b1;
    #100 transfer_data = 1'b0;
    #500 data_write = 24'h000000;
+   // Stream SDR
+   address_write = 8'h2c;
    ddr_sdr_n = 1'b0;
    reg_16b_8bn = 1'b0;
    stream = 1'b1;
@@ -123,6 +152,8 @@ module axi_ad3552r_if_tb;
    #100 transfer_data = 1'b0;
    #5000 stream = 1'b0;
    #2000 ddr_sdr_n = 1'b1;
+   // Stream DDR
+   address_write = 8'h2c;
    reg_16b_8bn = 1'b0;
    stream = 1'b1;
    #500 transfer_data = 1'b1;
@@ -162,7 +193,6 @@ module axi_ad3552r_if_tb;
     end
   end
 
-
   assign #15 dac_sdio_in_0 = shift_register_n[28];
   assign #15 dac_sdio_in_1 = shift_register_n[29];
   assign #15 dac_sdio_in_2 = shift_register_n[30];
@@ -175,7 +205,7 @@ module axi_ad3552r_if_tb;
     end else begin
         if ((counter == 2 && address_read == 1'b0)) begin
           counter_n <= 1;
-          shift_register_n <= 32'hdeadf0f5;
+          shift_register_n <= {ad3552r_16bit_in_reg, 16'h0};
         end else begin
         shift_register_n <= {shift_register_n[27:0],dac_sdio_3,dac_sdio_2,dac_sdio_1,dac_sdio_0};
           if (ddr_sdr_n == 1'b1 & counter_n == 5) begin
@@ -238,10 +268,10 @@ module axi_ad3552r_if_tb;
     end
   end
 
-  assign dac_sdio_0 = (address_write[7] & address_read == 1'b1) ? dac_sdio_in_0: 1'bz;
-  assign dac_sdio_1 = (address_write[7] & address_read == 1'b1) ? dac_sdio_in_1: 1'bz;
-  assign dac_sdio_2 = (address_write[7] & address_read == 1'b1) ? dac_sdio_in_2: 1'bz;
-  assign dac_sdio_3 = (address_write[7] & address_read == 1'b1) ? dac_sdio_in_3: 1'bz;
+  assign dac_sdio_0 = (address_write[7] && (address_read == 1'b1)) ? dac_sdio_in_0: 1'bz;
+  assign dac_sdio_1 = (address_write[7] && (address_read == 1'b1)) ? dac_sdio_in_1: 1'bz;
+  assign dac_sdio_2 = (address_write[7] && (address_read == 1'b1)) ? dac_sdio_in_2: 1'bz;
+  assign dac_sdio_3 = (address_write[7] && (address_read == 1'b1)) ? dac_sdio_in_3: 1'bz;
 
   always @(posedge clk_a) begin
     if (dac_data_ready) begin

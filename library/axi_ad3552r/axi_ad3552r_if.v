@@ -233,6 +233,8 @@ module axi_ad3552r_if (
   always@(posedge clk_in) begin
     if (transfer_state == CS_LOW) begin
         data_r_wn <= address[7];
+      end else if (transfer_state == CS_HIGH) begin
+        data_r_wn <=1'b0;
       end
     if (transfer_state == CS_LOW & stream) begin
         dac_data_ready <= 1'b1;
@@ -265,9 +267,9 @@ module axi_ad3552r_if (
 
   // address[7] is r_wn : depends also on the state machine, input only when
   // in TRANSFER register mode
-  assign sdio_0 = data_r_wn ? 1'bz : transfer_reg[52];
-  assign sdio_1 = data_r_wn ? 1'bz : transfer_reg[53];
-  assign sdio_2 = data_r_wn ? 1'bz : transfer_reg[54];
-  assign sdio_3 = data_r_wn ? 1'bz : transfer_reg[55];
+  assign sdio_0 = (data_r_wn & transfer_state == TRANSFER_REGISTER) ? 1'bz : transfer_reg[52];
+  assign sdio_1 = (data_r_wn & transfer_state == TRANSFER_REGISTER) ? 1'bz : transfer_reg[53];
+  assign sdio_2 = (data_r_wn & transfer_state == TRANSFER_REGISTER) ? 1'bz : transfer_reg[54];
+  assign sdio_3 = (data_r_wn & transfer_state == TRANSFER_REGISTER) ? 1'bz : transfer_reg[55];
 
 endmodule
