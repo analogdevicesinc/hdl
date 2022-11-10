@@ -4,6 +4,7 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 adi_ip_create axi_ad3552r
 adi_ip_files axi_ad3552r [list \
   "$ad_hdl_dir/library/xilinx/common/ad_mul.v" \
+  "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/library/common/ad_dds_cordic_pipe.v" \
   "$ad_hdl_dir/library/common/ad_dds_sine_cordic.v" \
   "$ad_hdl_dir/library/common/ad_dds_sine.v" \
@@ -25,8 +26,6 @@ adi_ip_files axi_ad3552r [list \
   "axi_ad3552r_core.v" \
   "axi_ad3552r_if.v" \
   "axi_ad3552r.v" ]
-
-#  "$ad_hdl_dir/library/xilinx/common/ad_serdes_out.v" \
 
 adi_ip_properties axi_ad3552r
 adi_init_bd_tcl

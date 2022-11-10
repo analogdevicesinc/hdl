@@ -61,6 +61,8 @@ module axi_ad3552r_if (
 );
 
   wire transfer_data_s;
+  wire [3:0] sdio_i;
+  wire [3:0] sdio_o;
 
   reg [55:0]  transfer_reg = 56'h0;
 
@@ -257,19 +259,32 @@ module axi_ad3552r_if (
     end else if (transfer_state == STREAM & cycle_done) begin
         transfer_reg <= {dac_data_int, 24'h0};
     end else if (transfer_step) begin
-      transfer_reg <= {transfer_reg[51:0], sdio_3,sdio_2,sdio_1,sdio_0};
+      transfer_reg <= {transfer_reg[51:0], sdio_o};
     end
 
     if (transfer_state == CS_HIGH) begin
-      data_read <= transfer_reg[23:0];
+      if (reg_16b_8bn) begin
+        data_read <= {8'h0,transfer_reg[15:0]};
+      end else begin
+        data_read <= {16'h0,transfer_reg[7:0]};
+    end
     end
   end
 
   // address[7] is r_wn : depends also on the state machine, input only when
   // in TRANSFER register mode
-  assign sdio_0 = (data_r_wn & transfer_state == TRANSFER_REGISTER) ? 1'bz : transfer_reg[52];
-  assign sdio_1 = (data_r_wn & transfer_state == TRANSFER_REGISTER) ? 1'bz : transfer_reg[53];
-  assign sdio_2 = (data_r_wn & transfer_state == TRANSFER_REGISTER) ? 1'bz : transfer_reg[54];
-  assign sdio_3 = (data_r_wn & transfer_state == TRANSFER_REGISTER) ? 1'bz : transfer_reg[55];
+  assign sdio_t = (data_r_wn & transfer_state == TRANSFER_REGISTER);
+  assign sdio_i = transfer_reg[55:52];
+//  assign sdio_0 = (data_r_wn & transfer_state == TRANSFER_REGISTER) ? 1'bz : transfer_reg[52];
+//  assign sdio_1 = (data_r_wn & transfer_state == TRANSFER_REGISTER) ? 1'bz : transfer_reg[53];
+//  assign sdio_2 = (data_r_wn & transfer_state == TRANSFER_REGISTER) ? 1'bz : transfer_reg[54];
+//  assign sdio_3 = (data_r_wn & transfer_state == TRANSFER_REGISTER) ? 1'bz : transfer_reg[55];
+   ad_iobuf #(
+     .DATA_WIDTH(4)
+   ) i_dac_0_spi_iobuf (
+     .dio_t({4{sdio_t}}),
+     .dio_i(sdio_i),
+     .dio_o(sdio_o),
+     .dio_p({sdio_3,sdio_2,sdio_1,sdio_0}));
 
 endmodule
