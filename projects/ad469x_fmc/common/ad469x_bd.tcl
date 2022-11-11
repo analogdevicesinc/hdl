@@ -5,11 +5,11 @@ create_bd_port -dir I ad469x_spi_busy
 
 source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
 
-set data_width    $ad_project_params(DATA_WIDTH)
-set async_spi_clk $ad_project_params(ASYNC_SPI_CLK)
-set num_cs        $ad_project_params(NUM_CS)
-set num_sdi       $ad_project_params(NUM_SDI)
-set sdi_delay     $ad_project_params(SDI_DELAY)
+set data_width    32
+set async_spi_clk 1
+set num_cs        1
+set num_sdi       1
+set sdi_delay     1
 
 set hier_spi_engine spi_ad469x
 
@@ -28,10 +28,10 @@ ad_connect spi_clk spi_clkgen/clk_0
 ## the acutal sample rate will be PULSE_PERIOD * (1/sys_cpu_clk)
 set sampling_cycle [expr int(ceil(double($spi_clk_ref_frequency * 1000000) / $adc_sampling_rate))]
 
-ad_ip_instance axi_pulse_gen ad469x_trigger_gen
+ad_ip_instance axi_pwm_gen ad469x_trigger_gen
 
-ad_ip_parameter ad469x_trigger_gen CONFIG.PULSE_PERIOD $sampling_cycle
-ad_ip_parameter ad469x_trigger_gen CONFIG.PULSE_WIDTH 1
+ad_ip_parameter ad469x_trigger_gen CONFIG.PULSE_0_PERIOD $sampling_cycle
+ad_ip_parameter ad469x_trigger_gen CONFIG.PULSE_0_WIDTH 1
 
 ad_connect spi_clk ad469x_trigger_gen/ext_clk
 ad_connect $sys_cpu_clk ad469x_trigger_gen/s_axi_aclk
@@ -80,7 +80,7 @@ ad_ip_parameter cnv_gate CONFIG.C_SIZE 1
 ad_ip_parameter cnv_gate CONFIG.C_OPERATION {and}
 
 ad_connect cnv_gate/Op1 axi_ad469x_dma/s_axis_xfer_req
-ad_connect cnv_gate/Op2 ad469x_trigger_gen/pulse
+ad_connect cnv_gate/Op2 ad469x_trigger_gen/pwm_0
 ad_connect cnv_gate/Res ad469x_spi_cnv
 
 ad_cpu_interconnect 0x44a00000 $hier_spi_engine/axi_regmap
