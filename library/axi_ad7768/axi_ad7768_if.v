@@ -41,39 +41,39 @@ module axi_ad7768_if #(
 
   // device-interface
 
-  input                   clk_in,
-  input                   ready_in,
-  input       [ 7:0]      data_in,
+  input                  clk_in,
+  input                  ready_in,
+  input       [ 7:0]     data_in,
 
   // data path interface
 
-  output                  adc_clk,
-  output                  adc_valid,
-  output      [ 31:0]     adc_data,
-  output                  adc_sync,
-  output      [ 31:0]     adc_data_0,
-  output      [ 31:0]     adc_data_1,
-  output      [ 31:0]     adc_data_2,
-  output      [ 31:0]     adc_data_3,
-  output      [ 31:0]     adc_data_4,
-  output      [ 31:0]     adc_data_5,
-  output      [ 31:0]     adc_data_6,
-  output      [ 31:0]     adc_data_7,
-  output      [  7:0]     adc_status_0,
-  output      [  7:0]     adc_status_1,
-  output      [  7:0]     adc_status_2,
-  output      [  7:0]     adc_status_3,
-  output      [  7:0]     adc_status_4,
-  output      [  7:0]     adc_status_5,
-  output      [  7:0]     adc_status_6,
-  output      [  7:0]     adc_status_7,
-  output      [  7:0]     adc_crc_ch_mismatch,
+  output                 adc_clk,
+  output                 adc_valid,
+  output      [31:0]     adc_data,
+  output                 adc_sync,
+  output      [31:0]     adc_data_0,
+  output      [31:0]     adc_data_1,
+  output      [31:0]     adc_data_2,
+  output      [31:0]     adc_data_3,
+  output      [31:0]     adc_data_4,
+  output      [31:0]     adc_data_5,
+  output      [31:0]     adc_data_6,
+  output      [31:0]     adc_data_7,
+  output      [ 7:0]     adc_status_0,
+  output      [ 7:0]     adc_status_1,
+  output      [ 7:0]     adc_status_2,
+  output      [ 7:0]     adc_status_3,
+  output      [ 7:0]     adc_status_4,
+  output      [ 7:0]     adc_status_5,
+  output      [ 7:0]     adc_status_6,
+  output      [ 7:0]     adc_status_7,
+  output      [ 7:0]     adc_crc_ch_mismatch,
 
   // control interface
 
-  input                      adc_sshot,
-  input          [ 4:0]      adc_format,
-  input                      adc_crc_enable
+  input                  adc_sshot,
+  input       [ 4:0]     adc_format,
+  input                  adc_crc_enable
 );
 
   // internal registers
@@ -255,22 +255,22 @@ module axi_ad7768_if #(
 
   always @(posedge adc_clk) begin
 
-   adc_status_0_s <= (adc_valid_s == 1'b1 ) ? adc_data_s[0][31:24]: adc_status_0_s;
-   adc_status_1_s <= (adc_valid_s == 1'b1 ) ? adc_data_s[1][31:24]: adc_status_1_s;
-   adc_status_2_s <= (adc_valid_s == 1'b1 ) ? adc_data_s[2][31:24]: adc_status_2_s;
-   adc_status_3_s <= (adc_valid_s == 1'b1 ) ? adc_data_s[3][31:24]: adc_status_3_s;
-   adc_status_4_s <= (adc_valid_s == 1'b1 ) ? adc_data_s[4][31:24]: adc_status_4_s;
-   adc_status_5_s <= (adc_valid_s == 1'b1 ) ? adc_data_s[5][31:24]: adc_status_5_s;
-   adc_status_6_s <= (adc_valid_s == 1'b1 ) ? adc_data_s[6][31:24]: adc_status_6_s;
-   adc_status_7_s <= (adc_valid_s == 1'b1 ) ? adc_data_s[7][31:24]: adc_status_7_s;
-   adc_crc_ch_mismatch_s[0] <= (adc_crc_valid_p == 1'b1 ) ? adc_crc_mismatch_s[0] : adc_crc_ch_mismatch_s[0];
-   adc_crc_ch_mismatch_s[1] <= (adc_crc_valid_p == 1'b1 ) ? adc_crc_mismatch_s[1] : adc_crc_ch_mismatch_s[1];
-   adc_crc_ch_mismatch_s[2] <= (adc_crc_valid_p == 1'b1 ) ? adc_crc_mismatch_s[2] : adc_crc_ch_mismatch_s[2];
-   adc_crc_ch_mismatch_s[3] <= (adc_crc_valid_p == 1'b1 ) ? adc_crc_mismatch_s[3] : adc_crc_ch_mismatch_s[3];
-   adc_crc_ch_mismatch_s[4] <= (adc_crc_valid_p == 1'b1 ) ? adc_crc_mismatch_s[4] : adc_crc_ch_mismatch_s[4];
-   adc_crc_ch_mismatch_s[5] <= (adc_crc_valid_p == 1'b1 ) ? adc_crc_mismatch_s[5] : adc_crc_ch_mismatch_s[5];
-   adc_crc_ch_mismatch_s[6] <= (adc_crc_valid_p == 1'b1 ) ? adc_crc_mismatch_s[6] : adc_crc_ch_mismatch_s[6];
-   adc_crc_ch_mismatch_s[7] <= (adc_crc_valid_p == 1'b1 ) ? adc_crc_mismatch_s[7] : adc_crc_ch_mismatch_s[7];
+   adc_status_0_s <= (adc_valid_s == 1'b1) ? adc_data_s[0][31:24]: adc_status_0_s;
+   adc_status_1_s <= (adc_valid_s == 1'b1) ? adc_data_s[1][31:24]: adc_status_1_s;
+   adc_status_2_s <= (adc_valid_s == 1'b1) ? adc_data_s[2][31:24]: adc_status_2_s;
+   adc_status_3_s <= (adc_valid_s == 1'b1) ? adc_data_s[3][31:24]: adc_status_3_s;
+   adc_status_4_s <= (adc_valid_s == 1'b1) ? adc_data_s[4][31:24]: adc_status_4_s;
+   adc_status_5_s <= (adc_valid_s == 1'b1) ? adc_data_s[5][31:24]: adc_status_5_s;
+   adc_status_6_s <= (adc_valid_s == 1'b1) ? adc_data_s[6][31:24]: adc_status_6_s;
+   adc_status_7_s <= (adc_valid_s == 1'b1) ? adc_data_s[7][31:24]: adc_status_7_s;
+   adc_crc_ch_mismatch_s[0] <= (adc_crc_valid_p == 1'b1) ? adc_crc_mismatch_s[0] : adc_crc_ch_mismatch_s[0];
+   adc_crc_ch_mismatch_s[1] <= (adc_crc_valid_p == 1'b1) ? adc_crc_mismatch_s[1] : adc_crc_ch_mismatch_s[1];
+   adc_crc_ch_mismatch_s[2] <= (adc_crc_valid_p == 1'b1) ? adc_crc_mismatch_s[2] : adc_crc_ch_mismatch_s[2];
+   adc_crc_ch_mismatch_s[3] <= (adc_crc_valid_p == 1'b1) ? adc_crc_mismatch_s[3] : adc_crc_ch_mismatch_s[3];
+   adc_crc_ch_mismatch_s[4] <= (adc_crc_valid_p == 1'b1) ? adc_crc_mismatch_s[4] : adc_crc_ch_mismatch_s[4];
+   adc_crc_ch_mismatch_s[5] <= (adc_crc_valid_p == 1'b1) ? adc_crc_mismatch_s[5] : adc_crc_ch_mismatch_s[5];
+   adc_crc_ch_mismatch_s[6] <= (adc_crc_valid_p == 1'b1) ? adc_crc_mismatch_s[6] : adc_crc_ch_mismatch_s[6];
+   adc_crc_ch_mismatch_s[7] <= (adc_crc_valid_p == 1'b1) ? adc_crc_mismatch_s[7] : adc_crc_ch_mismatch_s[7];
 
   end
 
@@ -281,13 +281,13 @@ module axi_ad7768_if #(
   assign adc_crc_cnt_enable_s = (adc_crc_cnt < adc_crc_cnt_value) ? 1'b1 : 1'b0;
 
   always @(posedge adc_clk) begin
-    if ( (crc_in_sync_n == 1'b0) || (adc_crc_enable == 1'b0) || (adc_crc_cnt_enable_s ==1'b0)) begin
+    if ((crc_in_sync_n == 1'b0) || (adc_crc_enable == 1'b0) || (adc_crc_cnt_enable_s ==1'b0)) begin
       adc_crc_cnt <= 4'd0;
-    end else if ( (adc_valid_p == 1'b1) && (adc_crc_enable == 1'b1)) begin
+    end else if ((adc_valid_p == 1'b1) && (adc_crc_enable == 1'b1)) begin
       adc_crc_cnt <= adc_crc_cnt + 1'b1;
     end
 
-    if (adc_crc_cnt == adc_crc_cnt_value ) begin
+    if (adc_crc_cnt == adc_crc_cnt_value) begin
       adc_crc_valid_p <= 1'b1;
     end else begin
       adc_crc_valid_p <= 1'b0;
@@ -297,7 +297,7 @@ module axi_ad7768_if #(
   // capturing crc data
 
   always @(posedge adc_clk) begin
-    if(adc_valid_s == 1'b1 ) begin
+    if(adc_valid_s == 1'b1) begin
       adc_crc_data_s[0] <= {adc_crc_data_s[0][71:0],adc_data_s[0][23:0]};
       adc_crc_data_s[1] <= {adc_crc_data_s[1][71:0],adc_data_s[1][23:0]};
       adc_crc_data_s[2] <= {adc_crc_data_s[2][71:0],adc_data_s[2][23:0]};
@@ -352,13 +352,13 @@ module axi_ad7768_if #(
 
   // data capturing counter
 
-  assign adc_cnt_value = (adc_format == 'h0 && NUM_CHANNELS == 8 ) ? 'hff :
-                         (( adc_format == 'h1 || (adc_format == 'h0 && NUM_CHANNELS == 4 )) ? 'h7f : 'h1f );
+  assign adc_cnt_value = (adc_format == 'h1 && NUM_CHANNELS == 8) ? 'hff :
+                       (((adc_format == 'h2 && NUM_CHANNELS == 8) || (adc_format == 'h1 && NUM_CHANNELS == 4)) ? 'h7f : 'h1f);
 
   assign adc_cnt_enable_s = (adc_cnt_p < adc_cnt_value) ? 1'b1 : 1'b0;
 
   always @(negedge adc_clk) begin
-    if (adc_ready == 1'b0 || adc_cnt_enable_s ==1'b0 ) begin
+    if (adc_ready == 1'b0 || adc_cnt_enable_s ==1'b0) begin
       adc_cnt_p <= 'h000;
     end else if (adc_cnt_enable_s == 1'b1) begin
       adc_cnt_p <= adc_cnt_p + 1'b1;
@@ -398,7 +398,7 @@ module axi_ad7768_if #(
 
   always @(posedge adc_clk) begin
     if (adc_valid_p == 1'b1) begin
-      if( adc_format == 'h0 && NUM_CHANNELS == 8 ) begin          // 1 active line
+      if(adc_format == 'h1 && NUM_CHANNELS == 8) begin          // 1 active line
         adc_data_s[0] <= adc_data_p[((32*7)+31):(32*7)];
         adc_data_s[1] <= adc_data_p[((32*6)+31):(32*6)];
         adc_data_s[2] <= adc_data_p[((32*5)+31):(32*5)];
@@ -407,7 +407,7 @@ module axi_ad7768_if #(
         adc_data_s[5] <= adc_data_p[((32*2)+31):(32*2)];
         adc_data_s[6] <= adc_data_p[((32*1)+31):(32*1)];
         adc_data_s[7] <= adc_data_p[((32*0)+31):(32*0)];
-      end else if( adc_format == 'h1 || (adc_format == 'h0 && NUM_CHANNELS == 4 )) begin   // 2 active lines or 1 for ad7768-4
+      end else if((adc_format == 'h2 && NUM_CHANNELS == 8) || (adc_format == 'h1 && NUM_CHANNELS == 4)) begin   // 2 active lines or 1 for ad7768-4
         adc_data_s[0] <= adc_data_p[((32*3)+31):(32*3)];
         adc_data_s[1] <= adc_data_p[((32*2)+31):(32*2)];
         adc_data_s[2] <= adc_data_p[((32*1)+31):(32*1)];
@@ -443,22 +443,22 @@ module axi_ad7768_if #(
   // data (individual lanes)
 
   always @(negedge adc_clk) begin
-    if( adc_format == 'h0 && NUM_CHANNELS == 8 ) begin     // 1 active line for ad7768
-      if (adc_cnt_p == 'h0 ) begin
+    if(adc_format == 'h1 && NUM_CHANNELS == 8) begin     // 1 active line for ad7768
+      if (adc_cnt_p == 'h0) begin
         adc_data_p[((256*0)+255):(256*0)] <= {255'd0, data_in[0]};
       end else begin
         adc_data_p[((256*0)+255):(255*0)] <= {adc_data_p[((256*0)+254):(256*0)], data_in[0]};
       end
-    end else if( adc_format == 'h1 || (adc_format == 'h0 && NUM_CHANNELS == 4 )) begin  // 2 active lines or 1 active lane for ad7768-4
-      if (adc_cnt_p == 'h0 ) begin
+    end else if((adc_format == 'h2 && NUM_CHANNELS == 8) || (adc_format == 'h1 && NUM_CHANNELS == 4)) begin  // 2 active lines or 1 active lane for ad7768-4
+      if (adc_cnt_p == 'h0) begin
         adc_data_p[((128*0)+127):(128*0)] <= {127'd0, data_in[0]};
         adc_data_p[((128*1)+127):(128*1)] <= {127'd0, data_in[1]};
       end else begin
         adc_data_p[((128*0)+127):(128*0)] <= {adc_data_p[((128*0)+126):(128*0)], data_in[0]};
         adc_data_p[((128*1)+127):(128*1)] <= {adc_data_p[((128*1)+126):(128*1)], data_in[1]};
       end
-    end else if( adc_format == 'h2 )  begin   // 8 active lines or 4 active lane for ad7768-4
-     if (adc_cnt_p == 'h0 ) begin
+    end else begin   // 8 active lines or 4 active lane for ad7768-4
+     if (adc_cnt_p == 'h0) begin
         adc_data_p[((32*0)+31):(32*0)] <= {31'd0, data_in[0]};
         adc_data_p[((32*1)+31):(32*1)] <= {31'd0, data_in[1]};
         adc_data_p[((32*2)+31):(32*2)] <= {31'd0, data_in[2]};
