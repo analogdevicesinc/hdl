@@ -69,6 +69,7 @@ module up_adc_channel #(
   input   [31:0]  adc_read_data,
   input   [ 7:0]  adc_status_header,
   input           adc_crc_err,
+  output          up_adc_crc_err,
   output          up_adc_pn_err,
   output          up_adc_pn_oos,
   output          up_adc_or,
@@ -116,6 +117,7 @@ module up_adc_channel #(
   reg             up_adc_dfmt_enable = 'd0;
   reg             up_adc_pn_type = 'd0;
   reg             up_adc_enable = 'd0;
+  reg             up_adc_crc_err_int = 'd0;
   reg             up_adc_pn_err_int = 'd0;
   reg             up_adc_pn_oos_int = 'd0;
   reg             up_adc_or_int = 'd0;
@@ -143,12 +145,12 @@ module up_adc_channel #(
 
   wire            up_wreq_s;
   wire            up_rreq_s;
+  wire            up_adc_crc_err_s;
   wire            up_adc_pn_err_s;
   wire            up_adc_pn_oos_s;
   wire            up_adc_or_s;
   wire    [31:0]  up_adc_read_data_s;
   wire    [ 7:0]  up_adc_status_header_s;
-  wire            up_adc_crc_err_s;
 
   // 2's complement function
 
@@ -166,7 +168,7 @@ module up_adc_channel #(
   endfunction
 
   // up control/status
-
+  assign up_adc_crc_err = up_adc_crc_err_int;
   assign up_adc_pn_err = up_adc_pn_err_int;
   assign up_adc_pn_oos = up_adc_pn_oos_int;
   assign up_adc_or = up_adc_or_int;
@@ -265,6 +267,7 @@ module up_adc_channel #(
     if (up_rstn == 0) begin
       up_adc_pn_type <= 'd0;
       up_adc_enable <= 'd0;
+      up_adc_crc_err_int <= 'd0;
       up_adc_pn_err_int <= 'd0;
       up_adc_pn_oos_int <= 'd0;
       up_adc_or_int <= 'd0;
@@ -272,6 +275,11 @@ module up_adc_channel #(
       if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'h0)) begin
         up_adc_pn_type <= up_wdata[1];
         up_adc_enable <= up_wdata[0];
+      end
+      if (up_adc_crc_err_s == 1'b1) begin
+        up_adc_crc_err_int <= 1'b1;
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'h1)) begin
+        up_adc_crc_err_int <= up_adc_crc_err_int & ~up_wdata[12];
       end
       if (up_adc_pn_err_s == 1'b1) begin
         up_adc_pn_err_int <= 1'b1;
@@ -400,7 +408,7 @@ module up_adc_channel #(
                                   up_adc_iqcor_enb, up_adc_dcfilt_enb,
                                   1'd0, up_adc_dfmt_se, up_adc_dfmt_type, up_adc_dfmt_enable,
                                   2'd0, up_adc_pn_type, up_adc_enable};
-          4'h1: up_rdata_int <= { 19'd0, up_adc_crc_err_s, up_adc_status_header_s, 1'd0, up_adc_pn_err_int, up_adc_pn_oos_int, up_adc_or_int};
+          4'h1: up_rdata_int <= { 19'd0, up_adc_crc_err_int, up_adc_status_header_s, 1'd0, up_adc_pn_err_int, up_adc_pn_oos_int, up_adc_or_int};
           4'h2: up_rdata_int <= { up_adc_read_data_s};
           4'h4: up_rdata_int <= { up_adc_dcfilt_offset, up_adc_dcfilt_coeff};
           4'h5: up_rdata_int <= { up_adc_iqcor_coeff_1, up_adc_iqcor_coeff_2};
