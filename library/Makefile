@@ -45,6 +45,7 @@ clean:
 	$(MAKE) -C axi_gpreg clean
 	$(MAKE) -C axi_hdmi_rx clean
 	$(MAKE) -C axi_hdmi_tx clean
+	$(MAKE) -C axi_hil clean
 	$(MAKE) -C axi_i2s_adi clean
 	$(MAKE) -C axi_intr_monitor clean
 	$(MAKE) -C axi_laser_driver clean
@@ -167,6 +168,7 @@ lib:
 	$(MAKE) -C axi_gpreg
 	$(MAKE) -C axi_hdmi_rx
 	$(MAKE) -C axi_hdmi_tx
+	$(MAKE) -C axi_hil
 	$(MAKE) -C axi_i2s_adi
 	$(MAKE) -C axi_intr_monitor
 	$(MAKE) -C axi_laser_driver

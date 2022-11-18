@@ -63,7 +63,7 @@ module axi_ad3552r_channel #(
 
   input                   dac_data_sync,
   input                   dac_dds_format,
-
+  input                   dac_dfmt_type,
 
   // bus interface
 
@@ -90,14 +90,18 @@ module axi_ad3552r_channel #(
   wire    [15:0]   dac_pat_data_1_s;
   wire    [15:0]   dac_pat_data_2_s;
   wire    [ 3:0]   dac_data_sel_s;
+  wire    [15:0]   input_format_data;
+  wire    [15:0]   formatted_data;
+  
+  reg     [15:0]   ramp_pattern = 16'h0000;
+  reg              ramp_valid = 1'b0;
 
- reg     [15:0]   ramp_pattern = 16'h0000;
- reg              ramp_valid = 1'b0;
+ assign input_format_data = (dac_data_sel_s == 4'h2) ? dma_data : ((dac_data_sel_s == 4'h8)? adc_data : dac_dds_data_s);
 
   always @(posedge dac_clk) begin
     case(dac_data_sel_s)
       4'h2: begin       // input from DMA
-        dac_data <= dma_data;
+        dac_data <= formatted_data;
         dac_data_valid <= valid_in_dma;
       end
       4'h3: begin       // all 0's
@@ -105,7 +109,7 @@ module axi_ad3552r_channel #(
         dac_data_valid <= 1'b1;
       end
       4'h8: begin      // input from ADC
-        dac_data <= adc_data;
+        dac_data <= formatted_data;
         dac_data_valid <= valid_in_adc;
       end
       4'hb: begin     // ramp input
@@ -113,11 +117,31 @@ module axi_ad3552r_channel #(
         dac_data_valid <= ramp_valid;
       end
       default: begin
-        dac_data <= dac_dds_data_s;
+        dac_data <= formatted_data;
         dac_data_valid <= ramp_valid;
       end
     endcase
   end
+
+  ad_datafmt #(
+    .DATA_WIDTH(16),
+    .BITS_PER_SAMPLE(16)
+  ) i_ad_datafmt (
+    .clk (dac_clk),
+    .valid (1'b1),
+    .data (input_format_data),
+    .valid_out (),
+    .data_out (formatted_data),
+    .dfmt_enable (1'b1),
+    .dfmt_type (dac_dfmt_type),
+    .dfmt_se (1'b0));
+
+  
+
+
+
+
+
 
   // ramp generator
 

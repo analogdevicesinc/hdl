@@ -46,38 +46,36 @@ module axi_ad3552r_if (
   input       [ 7:0]      address,
   output reg  [23:0]      data_read,
   input       [23:0]      data_write,
-  input                   ddr_sdr_n,
-  input                   reg_16b_8bn,
+  input                   sdr_ddr_n,
+  input                   symb_8_16b,
   input                   transfer_data,
   input                   stream,
 
   // DAC control signals
+
   output                  sclk,
   output reg              csn,
-  inout                   sdio_0,
-  inout                   sdio_1,
-  inout                   sdio_2,
-  inout                   sdio_3
+  
+  input         [3:0]     sdio_i,
+  output        [3:0]     sdio_o,
+  output                  sdio_t
+  
 );
 
-  wire transfer_data_s;
-  wire [3:0] sdio_i;
-  wire [3:0] sdio_o;
+  wire        transfer_data_s;
 
   reg [55:0]  transfer_reg = 56'h0;
-
-  reg [31:0] dac_data_int = 32'h0;
-  reg [15:0] counter = 16'h0;
-  reg [2:0] transfer_state = 0;
-  reg [2:0] transfer_state_next = 0;
-
-  reg cycle_done = 1'b0;
-  reg transfer_step = 1'b0;
-  reg sclk_ddr = 1'b0;
-  reg full_speed = 1'b0;
-  reg transfer_data_d = 1'b0;
-  reg transfer_data_dd = 1'b0;
-  reg data_r_wn = 1'b0;
+  reg [31:0]  dac_data_int = 32'h0;
+  reg [15:0]  counter = 16'h0;
+  reg [ 2:0]  transfer_state = 0;
+  reg [ 2:0]  transfer_state_next = 0;
+  reg         cycle_done = 1'b0;
+  reg         transfer_step = 1'b0;
+  reg         sclk_ddr = 1'b0;
+  reg         full_speed = 1'b0;
+  reg         transfer_data_d = 1'b0;
+  reg         transfer_data_dd = 1'b0;
+  reg         data_r_wn = 1'b0;
 
   localparam  [ 2:0]    IDLE = 3'h0,
                         CS_LOW = 3'h1,
@@ -87,32 +85,23 @@ module axi_ad3552r_if (
                         STREAM = 3'h5,
                         CS_HIGH = 3'h6;
 
- localparam ADDRESS_COUNTS = 16;
- localparam ADDRESS_COUNTS_FAST = ADDRESS_COUNTS >> 2;
- localparam TRANSFER_8B_SDR = 16;
- localparam TRANSFER_8B_DDR = 16;
- localparam TRANSFER_16B_SDR = 16;
- localparam TRANSFER_16B_DDR = 16;
- localparam TRANSFER_24B_SDR = 16;
- localparam TRANSFER_24B_DDR = 16;
-
 // transform the transfer data rising edge into a pulse
 
- assign transfer_data_s = transfer_data_d & ~transfer_data_dd;
+  assign transfer_data_s = transfer_data_d & ~transfer_data_dd;
 
- always @(posedge clk_in) begin
-  if(reset_in == 1'b1) begin
-    transfer_data_d  <= 'd0;
-    transfer_data_dd <= 'd0;
-  end else begin
-    transfer_data_d  <= transfer_data;
-    transfer_data_dd <= transfer_data_d;
+  always @(posedge clk_in) begin
+   if(reset_in == 1'b1) begin
+     transfer_data_d  <= 'd0;
+     transfer_data_dd <= 'd0;
+   end else begin
+     transfer_data_d  <= transfer_data;
+     transfer_data_dd <= transfer_data_d;
+   end
   end
- end
-
 
 // dac_data_int is a register allows capturing asinchronously with the
 // transmission
+
   always @(posedge clk_in) begin
     if (dac_data_valid) begin
       dac_data_int <= dac_data;
@@ -159,19 +148,19 @@ module axi_ad3552r_if (
         // always works at 15 MHz
         // can be DDR or SDR
         //
-        cycle_done = ddr_sdr_n ? (reg_16b_8bn ? (counter == 16'h11) : (counter == 16'h09)): (reg_16b_8bn ? (counter == 16'h20) : (counter == 16'h10));
+        cycle_done = sdr_ddr_n ? (symb_8_16b ? (counter == 16'h10) : (counter == 16'h20))  :  (symb_8_16b ? (counter == 16'h09) : (counter == 16'h11));
         transfer_state_next = cycle_done ? CS_HIGH : TRANSFER_REGISTER;
         csn = 1'b0;
-        transfer_step = ddr_sdr_n ? (counter[1:0] == 2'h0) : (counter[2:0] == 3'h0); // in DDR mode, change data on falledge
+        transfer_step = sdr_ddr_n ? (counter[2:0] == 3'h0) :   (counter[1:0] == 2'h0); // in DDR mode, change data on falledge
       end
       STREAM : begin
         // can be DDR or SDR
         // in DDR mode needs to be make sure the clock and data is shifted by
         // 2 ns
-        cycle_done = stream ? (ddr_sdr_n ? (counter == 16'h7) : (counter == 16'h0f )): (ddr_sdr_n ? (counter == 16'h7) : (counter == 16'h10 ));
+        cycle_done = stream ? (sdr_ddr_n ? (counter == 16'h0f ) : (counter == 16'h7)): (sdr_ddr_n ? (counter == 16'h10 ) : (counter == 16'h7));
         transfer_state_next = stream ? STREAM: (cycle_done ?  CS_HIGH :STREAM);
         csn = 1'b0;
-        transfer_step = ddr_sdr_n ? 1'b1 : counter[0] ;
+        transfer_step = sdr_ddr_n ? counter[0] :  1'b1;
       end
       CS_HIGH : begin
         cycle_done = 1'b1;
@@ -190,10 +179,10 @@ module axi_ad3552r_if (
 
   // counter is used to time all states
   // depends on number of clock cycles per phase
-  //
+  
   always@(posedge clk_in) begin
-    if (transfer_state == IDLE) begin
-      counter <= 1'b0;
+    if (transfer_state == IDLE | reset_in == 1'b1 ) begin
+      counter <= 'b0;
     end else if (transfer_state == WRITE_ADDRESS | transfer_state == TRANSFER_REGISTER | transfer_state == STREAM) begin
       if (cycle_done) begin
         counter <= 0;
@@ -202,23 +191,6 @@ module axi_ad3552r_if (
       end
     end
   end
-  // always@(posedge clk_in) begin
-  //   if (transfer_state == IDLE) begin
-  //     counter <= 0;
-  //   end else if (transfer_state == CS_LOW | transfer_state == WRITE_ADDRESS | transfer_state == TRANSFER_REGISTER) begin
-  //     if (transfer_state_next == STREAM) begin
-  //       counter <= 0;
-  //     end else begin
-  //       counter <= counter + 1;
-  //     end
-  //   end else if (transfer_state == STREAM) begin
-  //     if (cycle_done == 1'b1) begin
-  //       counter <= 0;
-  //     end else begin
-  //       counter <= counter + 1;
-  //     end
-  //   end
-  // end
 
 // selection between 60 MHz and 15 MHz
 
@@ -230,7 +202,7 @@ module axi_ad3552r_if (
    end
  end
 
-  assign sclk = full_speed ? (ddr_sdr_n ? sclk_ddr : counter[0]) : counter[2];
+  assign sclk = full_speed ? (sdr_ddr_n ? counter[0] : sclk_ddr) : counter[2];
 
   always@(posedge clk_in) begin
     if (transfer_state == CS_LOW) begin
@@ -259,11 +231,11 @@ module axi_ad3552r_if (
     end else if (transfer_state == STREAM & cycle_done) begin
         transfer_reg <= {dac_data_int, 24'h0};
     end else if (transfer_step) begin
-      transfer_reg <= {transfer_reg[51:0], sdio_o};
+      transfer_reg <= {transfer_reg[51:0], sdio_i};
     end
 
     if (transfer_state == CS_HIGH) begin
-      if (reg_16b_8bn) begin
+      if (symb_8_16b == 1'b0 ) begin
         data_read <= {8'h0,transfer_reg[15:0]};
       end else begin
         data_read <= {16'h0,transfer_reg[7:0]};
@@ -273,18 +245,8 @@ module axi_ad3552r_if (
 
   // address[7] is r_wn : depends also on the state machine, input only when
   // in TRANSFER register mode
+
   assign sdio_t = (data_r_wn & transfer_state == TRANSFER_REGISTER);
-  assign sdio_i = transfer_reg[55:52];
-//  assign sdio_0 = (data_r_wn & transfer_state == TRANSFER_REGISTER) ? 1'bz : transfer_reg[52];
-//  assign sdio_1 = (data_r_wn & transfer_state == TRANSFER_REGISTER) ? 1'bz : transfer_reg[53];
-//  assign sdio_2 = (data_r_wn & transfer_state == TRANSFER_REGISTER) ? 1'bz : transfer_reg[54];
-//  assign sdio_3 = (data_r_wn & transfer_state == TRANSFER_REGISTER) ? 1'bz : transfer_reg[55];
-   ad_iobuf #(
-     .DATA_WIDTH(4)
-   ) i_dac_0_spi_iobuf (
-     .dio_t({4{sdio_t}}),
-     .dio_i(sdio_i),
-     .dio_o(sdio_o),
-     .dio_p({sdio_3,sdio_2,sdio_1,sdio_0}));
+  assign sdio_o = transfer_reg[55:52];
 
 endmodule

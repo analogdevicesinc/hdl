@@ -5,6 +5,7 @@ adi_ip_create axi_ad3552r
 adi_ip_files axi_ad3552r [list \
   "$ad_hdl_dir/library/xilinx/common/ad_mul.v" \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
+  "$ad_hdl_dir/library/common/ad_datafmt.v" \
   "$ad_hdl_dir/library/common/ad_dds_cordic_pipe.v" \
   "$ad_hdl_dir/library/common/ad_dds_sine_cordic.v" \
   "$ad_hdl_dir/library/common/ad_dds_sine.v" \

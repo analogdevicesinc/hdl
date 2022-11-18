@@ -52,15 +52,18 @@ module axi_ad3552r #(
   input                   valid_in_dma,
   output                  dac_data_ready,
 
-  input       [31:0]      adc_data_in,
-  input                   adc_valid_in,
+  input       [15:0]      data_in_a,
+  input       [15:0]      data_in_b,
+  input                   valid_in_a,
+  input                   valid_in_b,
+  
+  
 
   output                  dac_sclk,
   output                  dac_csn,
-  inout                   dac_sdio_0,
-  inout                   dac_sdio_1,
-  inout                   dac_sdio_2,
-  inout                   dac_sdio_3,
+  input         [3:0]     sdio_i,
+  output        [3:0]     sdio_o,
+  output                  sdio_t,
 
   // axi interface
 
@@ -109,7 +112,7 @@ module axi_ad3552r #(
   wire    [23:0]    data_read;
   wire    [23:0]    data_write;
   wire              ddr_sdr_n;
-  wire              reg_16b_8bn;
+  wire              symb_8_16b;
   wire              transfer_data;
   wire              stream;
   wire    [ 31:0]   dac_data;
@@ -130,16 +133,15 @@ module axi_ad3552r #(
     .address(address),
     .data_read(data_read),
     .data_write(data_write),
-    .ddr_sdr_n(ddr_sdr_n),
-    .reg_16b_8bn(reg_16b_8bn),
+    .sdr_ddr_n(sdr_ddr_n),
+    .symb_8_16b(symb_8_16b),
     .transfer_data(transfer_data),
     .stream(stream),
     .sclk(dac_sclk),
     .csn(dac_csn),
-    .sdio_0(dac_sdio_0),
-    .sdio_1(dac_sdio_1),
-    .sdio_2(dac_sdio_2),
-    .sdio_3(dac_sdio_3));
+    .sdio_i(sdio_i),
+    .sdio_o(sdio_o),
+    .sdio_t(sdio_t));
 
   // core
   axi_ad3552r_core #(
@@ -151,11 +153,11 @@ module axi_ad3552r #(
   ) axi_ad3552r_up_core (
     .dac_clk(dac_clk),
     .dac_rst(dac_rst_s),
-    .adc_data_in_a(adc_data_in[15:0]),
-    .adc_data_in_b(adc_data_in[31:16]),
+    .adc_data_in_a(data_in_a),
+    .adc_data_in_b(data_in_b),
     .dma_data(dma_data),
-    .adc_valid_in_a(adc_valid_in),
-    .adc_valid_in_b(adc_valid_in),
+    .adc_valid_in_a(valid_in_a),
+    .adc_valid_in_b(valid_in_b),
     .valid_in_dma(valid_in_dma),
     .dac_data_ready(dac_data_ready),
     .dac_data(dac_data),
@@ -163,8 +165,8 @@ module axi_ad3552r #(
     .address(address),
     .data_read(data_read),
     .data_write(data_write),
-    .ddr_sdr_n(ddr_sdr_n),
-    .reg_16b_8bn(reg_16b_8bn),
+    .sdr_ddr_n(sdr_ddr_n),
+    .symb_8_16b(symb_8_16b),
     .transfer_data(transfer_data),
     .stream(stream),
     .up_rstn(up_rstn),

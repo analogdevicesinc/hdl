@@ -70,9 +70,6 @@ module up_dac_common #(
   output              dac_ext_sync_manual_req,
   output              dac_frame,
   output              dac_clksel,
-  output     [31:0]   dac_data_control,
-  output     [ 4:0]   dac_control,
-  input      [23:0]   dac_data_raw_read,
   output              dac_par_type,
   output              dac_par_enb,
   output              dac_r1_mode,
@@ -97,6 +94,13 @@ module up_dac_common #(
   input       [31:0]  up_drp_rdata,
   input               up_drp_ready,
   input               up_drp_locked,
+
+  // DAC custom read/write interface
+
+  output      [31:0]  dac_custom_wr,
+  output      [ 3:0]  dac_write_control,
+  input       [31:0]  dac_custom_rd,
+
 
   // user channel control
 
@@ -147,8 +151,8 @@ module up_dac_common #(
   reg     [15:0]  up_dac_datarate = 'd0;
   reg             up_dac_frame = 'd0;
   reg             up_dac_clksel = CLK_EDGE_SEL;
-  reg    [31:0]   up_dac_data_control = 'd0;
-  reg    [ 4:0]   up_dac_control = 'd0;
+  reg     [31:0]  up_dac_custom_wr = 'd0;
+  reg     [ 3:0]  up_dac_write_control = 'd0;
   reg             up_status_unf = 'd0;
   reg     [ 7:0]  up_usr_chanmax_int = 'd0;
   reg     [31:0]  up_dac_gpio_out_int = 'd0;
@@ -169,7 +173,7 @@ module up_dac_common #(
   wire            up_rreq_s;
   wire            up_xfer_done_s;
   wire            up_status_s;
-  wire   [23:0]   up_dac_data_raw_read;
+  wire   [31:0]   up_dac_custom_rd;
   wire            up_sync_in_status;
   wire            up_status_unf_s;
   wire            dac_sync_s;
@@ -218,8 +222,7 @@ module up_dac_common #(
       up_dac_datarate <= 'd0;
       up_dac_frame <= 'd0;
       up_dac_clksel <= CLK_EDGE_SEL;
-      up_dac_data_control <= 'd0;
-      up_dac_control <= 'd0;
+      up_dac_write_control <= 'd0;
       up_pps_irq_mask <= 1'b1;
     end else begin
       up_dac_clk_enb_int <= ~up_dac_clk_enb;
@@ -288,11 +291,8 @@ module up_dac_common #(
       if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h18)) begin
         up_dac_clksel <= up_wdata[0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h19)) begin
-        up_dac_data_control <= up_wdata[31:0];
-      end
       if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h1b)) begin
-        up_dac_control <= up_wdata[4:0];
+        up_dac_write_control <= up_wdata[3:0];
       end
     end
   end
@@ -363,6 +363,16 @@ module up_dac_common #(
 
   end
   endgenerate
+
+  always @(posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_dac_custom_wr <= 'd0;
+    end else begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h20)) begin
+        up_dac_custom_wr <= up_wdata;
+      end
+    end
+  end
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
@@ -453,24 +463,23 @@ module up_dac_common #(
                                   3'b0, up_dac_ext_sync_manual_req,
                                   4'b0,
                                   1'b0, up_dac_ext_sync_disarm, up_dac_ext_sync_arm, up_dac_sync};
-          7'h12: up_rdata_int <= {15'd0, up_dac_sdr_ddr_n,
-                                  up_dac_symb_op, up_dac_symb_8_16b,
-                                  1'd0, up_dac_num_lanes,
-                                  up_dac_par_type, up_dac_par_enb, up_dac_r1_mode, up_dac_datafmt,
-                                  4'd0};
+          7'h12: up_rdata_int <= {15'd0, up_dac_sdr_ddr_n, up_dac_symb_op, up_dac_symb_8_16b, 1'd0, 
+                                  up_dac_num_lanes, up_dac_par_type, up_dac_par_enb, up_dac_r1_mode, 
+                                  up_dac_datafmt, 4'd0};
           7'h13: up_rdata_int <= {16'd0, up_dac_datarate};
           7'h14: up_rdata_int <= {31'd0, up_dac_frame};
           7'h15: up_rdata_int <= up_dac_clk_count_s;
           7'h16: up_rdata_int <= dac_clk_ratio;
           7'h17: up_rdata_int <= {31'd0, up_status_s};
           7'h18: up_rdata_int <= {31'd0, up_dac_clksel};
-          7'h19: up_rdata_int <= up_dac_data_control;
           7'h1a: up_rdata_int <= {31'd0, up_sync_in_status};
-          7'h1b: up_rdata_int <= {up_dac_data_raw_read,3'd0,up_dac_control};
+          7'h1b: up_rdata_int <= {28'd0, up_dac_write_control};
           7'h1c: up_rdata_int <= {3'd0, up_drp_rwn_s, up_drp_addr, 16'b0};
           7'h1d: up_rdata_int <= {14'd0, up_drp_locked, up_drp_status_s, 16'b0};
           7'h1e: up_rdata_int <= up_drp_wdata;
           7'h1f: up_rdata_int <= up_drp_rdata_hold_s;
+          7'h20: up_rdata_int <= up_dac_custom_wr;
+          7'h21: up_rdata_int <= up_dac_custom_rd;
           7'h22: up_rdata_int <= {31'd0, up_status_unf};
           7'h28: up_rdata_int <= {24'd0, dac_usr_chanmax};
           7'h2e: up_rdata_int <= up_dac_gpio_in;
@@ -503,7 +512,7 @@ module up_dac_common #(
   // dac control & status
 
   up_xfer_cntrl #(
-    .DATA_WIDTH(72)
+    .DATA_WIDTH(71)
   ) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
@@ -516,8 +525,8 @@ module up_dac_common #(
                       up_dac_ext_sync_manual_req,
                       up_dac_sync,
                       up_dac_clksel,
-                      up_dac_data_control,
-                      up_dac_control,
+                      up_dac_custom_wr,
+                      up_dac_write_control,
                       up_dac_frame,
                       up_dac_par_type,
                       up_dac_par_enb,
@@ -537,8 +546,8 @@ module up_dac_common #(
                       dac_ext_sync_manual_req,
                       dac_sync_s,
                       dac_clksel,
-                      dac_data_control,
-                      dac_control,
+                      dac_custom_wr,
+                      dac_write_control,
                       dac_frame_s,
                       dac_par_type,
                       dac_par_enb,
@@ -553,20 +562,20 @@ module up_dac_common #(
   assign dac_rst = ~dac_rst_n;
 
   up_xfer_status #(
-    .DATA_WIDTH(27)
+    .DATA_WIDTH(35)
   ) i_xfer_status (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_status ({up_sync_in_status,
                       up_status_s,
                       up_status_unf_s,
-                      up_dac_data_raw_read}),
+                      up_dac_custom_rd}),
     .d_rst (dac_rst_s),
     .d_clk (dac_clk),
     .d_data_status ({ dac_sync_in_status,
                       dac_status,
                       dac_status_unf,
-                      dac_data_raw_read}));
+                      dac_custom_rd}));
 
   // generate frame and enable
 

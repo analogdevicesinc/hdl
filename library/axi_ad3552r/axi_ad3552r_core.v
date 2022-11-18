@@ -62,8 +62,8 @@ module axi_ad3552r_core #(
   output       [ 7:0]      address,
   input        [23:0]      data_read,
   output       [23:0]      data_write,
-  output                   ddr_sdr_n,
-  output                   reg_16b_8bn,
+  output                   sdr_ddr_n,
+  output                   symb_8_16b,
   output                   transfer_data,
   output                   stream,
 
@@ -98,10 +98,11 @@ module axi_ad3552r_core #(
   wire              dac_rst_s;
 
   wire     [31:0]   dac_data_control;
-  wire     [4:0]    dac_control;
+  wire     [ 3:0]    dac_control;
 
   wire              dac_dds_format;
   wire              dac_data_sync;
+  wire              dac_dfmt_type;
 
   // defaults
 
@@ -111,10 +112,8 @@ module axi_ad3552r_core #(
 
   assign data_write     = dac_data_control[23:0];
   assign address        = dac_data_control[31:24];
-  assign ddr_sdr_n      = dac_control[0];
-  assign reg_16b_8bn    = dac_control[1];
-  assign transfer_data  = dac_control[2];
-  assign stream         = dac_control[3];
+  assign transfer_data  = dac_control[0];
+  assign stream         = dac_control[1];
 
   // processor read interface
 
@@ -145,6 +144,7 @@ module axi_ad3552r_core #(
     .valid_in_adc(adc_valid_in_a),
     .valid_in_dma(valid_in_dma),
     .dac_data_sync(dac_data_sync),
+    .dac_dfmt_type(dac_dfmt_type),
     .dac_dds_format(dac_dds_format),
     .up_rstn(up_rstn),
     .up_clk(up_clk),
@@ -172,6 +172,7 @@ module axi_ad3552r_core #(
     .valid_in_adc(adc_valid_in_b),
     .valid_in_dma(valid_in_dma),
     .dac_data_sync(dac_data_sync),
+    .dac_dfmt_type(dac_dfmt_type),
     .dac_dds_format(dac_dds_format),
     .up_rstn(up_rstn),
     .up_clk(up_clk),
@@ -197,21 +198,22 @@ module axi_ad3552r_core #(
     .dac_clk(dac_clk),
     .dac_rst(dac_rst_s),
     .dac_num_lanes(),
+    .dac_sdr_ddr_n(sdr_ddr_n),
     .dac_symb_op(),
-    .dac_symb_8_16b(),
+    .dac_symb_8_16b(symb_8_16b),
     .dac_sync(dac_data_sync),
     .dac_ext_sync_arm(),
     .dac_ext_sync_disarm(),
     .dac_ext_sync_manual_req(),
     .dac_frame(),
     .dac_clksel(),
-    .dac_data_control(dac_data_control),
-    .dac_data_raw_read(data_read),
-    .dac_control(dac_control),
+    .dac_custom_wr(dac_data_control),
+    .dac_custom_rd({8'b0,data_read}),
+    .dac_write_control(dac_control),
     .dac_par_type(),
     .dac_par_enb(),
     .dac_r1_mode(),
-    .dac_datafmt(dac_dds_format),
+    .dac_datafmt(dac_dfmt_type),
     .dac_datarate(),
     .dac_status(),
     .dac_sync_in_status(),
