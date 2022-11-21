@@ -142,15 +142,12 @@ create_bd_port -dir O tdd_rx_mxfe_en
 create_bd_port -dir O tdd_tx_mxfe_en
 create_bd_port -dir O tdd_tx_stingray_en
 
-ad_disconnect tdd_sync_0/sync_in GND
-ad_disconnect tdd_sync_0/sync_mode GND
-
-ad_connect tdd_sync_0/sync_in tdd_sync
-ad_connect tdd_sync_0/sync_mode VCC
-
-ad_connect axi_tdd_0/tdd_enabled tdd_enabled
-ad_connect axi_tdd_0/tdd_rx_rf_en tdd_rx_mxfe_en
-ad_connect axi_tdd_0/tdd_tx_rf_en tdd_tx_mxfe_en
-# repurpose tdd_tx_vco_en as XUD1A and Stingray TR
-ad_connect axi_tdd_0/tdd_tx_vco_en tdd_tx_stingray_en
+set tdd_sync_in_net [get_bd_nets -of_objects [find_bd_objs -relation connected_to [get_bd_pins axi_tdd_0/sync_in]]]
+set tdd_sync_in_pin [get_bd_pins axi_tdd_0/sync_in]
+ad_disconnect $tdd_sync_in_net $tdd_sync_in_pin
+ad_connect axi_tdd_0/sync_in tdd_sync
+ad_connect axi_tdd_0/tdd_channel_2 tdd_enabled
+ad_connect axi_tdd_0/tdd_channel_3 tdd_rx_mxfe_en
+ad_connect axi_tdd_0/tdd_channel_4 tdd_tx_mxfe_en
+ad_connect axi_tdd_0/tdd_channel_5 tdd_tx_stingray_en
 
