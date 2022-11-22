@@ -101,7 +101,6 @@ module up_dac_common #(
   output      [ 3:0]  dac_write_control,
   input       [31:0]  dac_custom_rd,
 
-
   // user channel control
 
   output      [ 7:0]  up_usr_chanmax,
@@ -463,8 +462,8 @@ module up_dac_common #(
                                   3'b0, up_dac_ext_sync_manual_req,
                                   4'b0,
                                   1'b0, up_dac_ext_sync_disarm, up_dac_ext_sync_arm, up_dac_sync};
-          7'h12: up_rdata_int <= {15'd0, up_dac_sdr_ddr_n, up_dac_symb_op, up_dac_symb_8_16b, 1'd0, 
-                                  up_dac_num_lanes, up_dac_par_type, up_dac_par_enb, up_dac_r1_mode, 
+          7'h12: up_rdata_int <= {15'd0, up_dac_sdr_ddr_n, up_dac_symb_op, up_dac_symb_8_16b, 1'd0,
+                                  up_dac_num_lanes, up_dac_par_type, up_dac_par_enb, up_dac_r1_mode,
                                   up_dac_datafmt, 4'd0};
           7'h13: up_rdata_int <= {16'd0, up_dac_datarate};
           7'h14: up_rdata_int <= {31'd0, up_dac_frame};

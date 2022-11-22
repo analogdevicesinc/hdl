@@ -55,11 +55,10 @@ module axi_ad3552r_if (
 
   output                  sclk,
   output reg              csn,
-  
+
   input         [3:0]     sdio_i,
   output        [3:0]     sdio_o,
   output                  sdio_t
-  
 );
 
   wire        transfer_data_s;
@@ -179,7 +178,7 @@ module axi_ad3552r_if (
 
   // counter is used to time all states
   // depends on number of clock cycles per phase
-  
+
   always@(posedge clk_in) begin
     if (transfer_state == IDLE | reset_in == 1'b1 ) begin
       counter <= 'b0;
@@ -200,7 +199,7 @@ module axi_ad3552r_if (
     end else begin
      sclk_ddr <= 0;
    end
- end
+  end
 
   assign sclk = full_speed ? (sdr_ddr_n ? counter[0] : sclk_ddr) : counter[2];
 

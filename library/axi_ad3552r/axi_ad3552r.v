@@ -56,8 +56,6 @@ module axi_ad3552r #(
   input       [15:0]      data_in_b,
   input                   valid_in_a,
   input                   valid_in_b,
-  
-  
 
   output                  dac_sclk,
   output                  dac_csn,
@@ -88,7 +86,6 @@ module axi_ad3552r #(
   output  [ 1:0]          s_axi_rresp,
   output  [31:0]          s_axi_rdata,
   input                   s_axi_rready
-
 );
 
   // internal clocks and resets

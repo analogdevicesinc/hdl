@@ -92,11 +92,11 @@ module axi_ad3552r_channel #(
   wire    [ 3:0]   dac_data_sel_s;
   wire    [15:0]   input_format_data;
   wire    [15:0]   formatted_data;
-  
+
   reg     [15:0]   ramp_pattern = 16'h0000;
   reg              ramp_valid = 1'b0;
 
- assign input_format_data = (dac_data_sel_s == 4'h2) ? dma_data : ((dac_data_sel_s == 4'h8)? adc_data : dac_dds_data_s);
+  assign input_format_data = (dac_data_sel_s == 4'h2) ? dma_data : ((dac_data_sel_s == 4'h8)? adc_data : dac_dds_data_s);
 
   always @(posedge dac_clk) begin
     case(dac_data_sel_s)
@@ -135,13 +135,6 @@ module axi_ad3552r_channel #(
     .dfmt_enable (1'b1),
     .dfmt_type (dac_dfmt_type),
     .dfmt_se (1'b0));
-
-  
-
-
-
-
-
 
   // ramp generator
 
