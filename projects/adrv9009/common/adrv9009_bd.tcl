@@ -269,6 +269,7 @@ if {$RX_NUM_OF_LANES == 2} {
   ad_connect adrv9009_rx_device_clk axi_adrv9009_rx_clkgen/clk_0
   ad_xcvrcon util_adrv9009_xcvr axi_adrv9009_rx_xcvr axi_adrv9009_rx_jesd {} adrv9009_rx_device_clk {} $MAX_RX_NUM_OF_LANES
 } else {
+  # for RX_NUM_OF_LANES = 1, RX_OCTETS_PER_FRAME = 8
   ad_connect adrv9009_rx_device_clk axi_adrv9009_rx_clkgen/clk_1
   ad_connect adrv9009_rx_link_clk axi_adrv9009_rx_clkgen/clk_0
   ad_xcvrcon util_adrv9009_xcvr axi_adrv9009_rx_xcvr axi_adrv9009_rx_jesd {0 1 2 3} adrv9009_rx_link_clk adrv9009_rx_device_clk $MAX_RX_NUM_OF_LANES {0} 0
@@ -384,18 +385,24 @@ ad_connect  $sys_dma_resetn axi_adrv9009_tx_dma/m_src_axi_aresetn
 
 # connections (adc)
 
-ad_connect  axi_adrv9009_rx_clkgen/clk_1 rx_adrv9009_tpl_core/link_clk
-# ad_connect  axi_adrv9009_rx_clkgen/clk_0 rx_adrv9009_tpl_core/link_clk
+if {$RX_OCTETS_PER_FRAME == 8} {
+  ad_connect  axi_adrv9009_rx_clkgen/clk_1 rx_adrv9009_tpl_core/link_clk
+  ad_connect  axi_adrv9009_rx_clkgen/clk_1 util_adrv9009_rx_cpack/clk
+  ad_connect  rx_fir_decimator/aclk axi_adrv9009_rx_clkgen/clk_1
+  ad_connect  axi_adrv9009_rx_clkgen/clk_1 axi_adrv9009_rx_dma/fifo_wr_clk
+
+} else {
+  ad_connect  axi_adrv9009_rx_clkgen/clk_0 rx_adrv9009_tpl_core/link_clk
+  ad_connect  axi_adrv9009_rx_clkgen/clk_0 util_adrv9009_rx_cpack/clk
+  ad_connect  rx_fir_decimator/aclk axi_adrv9009_rx_clkgen/clk_0
+  ad_connect  axi_adrv9009_rx_clkgen/clk_0 axi_adrv9009_rx_dma/fifo_wr_clk
+}
+
 ad_connect  axi_adrv9009_rx_jesd/rx_sof rx_adrv9009_tpl_core/link_sof
 ad_connect  axi_adrv9009_rx_jesd/rx_data_tdata rx_adrv9009_tpl_core/link_data
 ad_connect  axi_adrv9009_rx_jesd/rx_data_tvalid rx_adrv9009_tpl_core/link_valid
-ad_connect  axi_adrv9009_rx_clkgen/clk_1 util_adrv9009_rx_cpack/clk
-# ad_connect  axi_adrv9009_rx_clkgen/clk_0 util_adrv9009_rx_cpack/clk
+
 ad_connect  adrv9009_rx_device_clk_rstgen/peripheral_reset util_adrv9009_rx_cpack/reset
-
-ad_connect rx_fir_decimator/aclk axi_adrv9009_rx_clkgen/clk_1
-# ad_connect rx_fir_decimator/aclk axi_adrv9009_rx_clkgen/clk_0
-
 
 for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
   ad_connect  rx_adrv9009_tpl_core/adc_valid_$i rx_fir_decimator/valid_in_$i
@@ -411,8 +418,6 @@ ad_connect rx_fir_decimator/active adc_fir_filter_active
 ad_connect  rx_fir_decimator/valid_out_0 util_adrv9009_rx_cpack/fifo_wr_en
 ad_connect  rx_adrv9009_tpl_core/adc_dovf util_adrv9009_rx_cpack/fifo_wr_overflow
 
-ad_connect  axi_adrv9009_rx_clkgen/clk_1 axi_adrv9009_rx_dma/fifo_wr_clk
-# ad_connect  axi_adrv9009_rx_clkgen/clk_0 axi_adrv9009_rx_dma/fifo_wr_clk
 ad_connect  util_adrv9009_rx_cpack/packed_fifo_wr axi_adrv9009_rx_dma/fifo_wr
 ad_connect  $sys_dma_resetn axi_adrv9009_rx_dma/m_dest_axi_aresetn
 
