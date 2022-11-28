@@ -30,20 +30,10 @@ set RX_NUM_OF_CONVERTERS $ad_project_params(RX_JESD_M) ; # M
 set RX_SAMPLES_PER_FRAME $ad_project_params(RX_JESD_S) ; # S
 set RX_SAMPLE_WIDTH 16                                 ; # N/NP
 
-###
 set RX_OCTETS_PER_FRAME [expr $RX_NUM_OF_CONVERTERS * $RX_SAMPLES_PER_FRAME * $RX_SAMPLE_WIDTH / (8 * $RX_NUM_OF_LANES)] ; # F
 set DPW [expr max(4, $RX_OCTETS_PER_FRAME)] ; #max(4, F)
 set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 8 * $DPW / ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)] ; # L * 8 * DPW / (M* N)
 set adc_dma_data_width [expr $RX_NUM_OF_LANES * 8 * $DPW]
-
-###
-
-#set RX_TPL_WIDTH [ expr { [info exists ad_project_params(RX_TPL_WIDTH)] \
-#                          ? $ad_project_params(RX_TPL_WIDTH) : {} } ]
-
-#set RX_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $RX_NUM_OF_LANES $RX_NUM_OF_CONVERTERS $RX_SAMPLES_PER_FRAME $RX_SAMPLE_WIDTH $RX_TPL_WIDTH]
-
-#set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 8 * $RX_DATAPATH_WIDTH / ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)]
 
 # RX Observation parameters
 set RX_OS_NUM_OF_LANES $ad_project_params(RX_OS_JESD_L)      ; # L
@@ -169,9 +159,6 @@ ad_ip_parameter axi_adrv9009_rx_dma CONFIG.ASYNC_CLK_SRC_DEST 1
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.ASYNC_CLK_REQ_SRC 1
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_dma_data_width
-# [expr $RX_SAMPLE_WIDTH * \
-                                                                   # $RX_NUM_OF_CONVERTERS * \
-                                                                   # $RX_SAMPLES_PER_CHANNEL]
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.MAX_BYTES_PER_BURST 256
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.AXI_SLICE_DEST true
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.AXI_SLICE_SRC true
@@ -257,7 +244,6 @@ if {$TX_NUM_OF_LANES == 4} {
       ad_xcvrcon util_adrv9009_xcvr axi_adrv9009_tx_xcvr axi_adrv9009_tx_jesd {0 3 2 1} adrv9009_tx_device_clk {} $MAX_TX_NUM_OF_LANES {0 2}
     } else {
       ad_xcvrcon util_adrv9009_xcvr axi_adrv9009_tx_xcvr axi_adrv9009_tx_jesd {0 3 2 1} adrv9009_tx_device_clk {} $MAX_TX_NUM_OF_LANES {0}
-
     }
 }
 ad_connect ref_clk axi_adrv9009_tx_clkgen/clk
@@ -289,8 +275,8 @@ if {$RX_NUM_OF_LANES == 2} {
   ad_connect util_adrv9009_xcvr/rx_0_n rx_data_0_n
   ad_connect util_adrv9009_xcvr/rx_1_p rx_data_1_p
   ad_connect util_adrv9009_xcvr/rx_1_n rx_data_1_n
-
 }
+
 ad_connect ref_clk axi_adrv9009_rx_clkgen/clk
 for {set i 0} {$i < $MAX_RX_NUM_OF_LANES} {incr i} {
   set ch [expr $i]
@@ -320,8 +306,8 @@ if {$RX_OS_NUM_OF_LANES == 2} {
   ad_connect util_adrv9009_xcvr/rx_2_n rx_data_2_n
   ad_connect util_adrv9009_xcvr/rx_3_p rx_data_3_p
   ad_connect util_adrv9009_xcvr/rx_3_n rx_data_3_n
-
 }
+
 ad_connect ref_clk axi_adrv9009_rx_os_clkgen/clk
 for {set i 0} {$i < $MAX_RX_OS_NUM_OF_LANES} {incr i} {
   # channel indexing starts from the last RX
