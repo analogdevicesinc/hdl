@@ -8,7 +8,9 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   Use over-writable parameters from the environment.
 #
 #    e.g.
-#      make RX_JESD_L=4 RX_JESD_M=2 TX_JESD_L=4 TX_JESD_M=2 
+#      make TX_JESD_L=2 RX_OS_JESD_M=4
+#      make TX_JESD_M=4 TX_JESD_L=2 RX_JESD_M=4 RX_JESD_L=1 RX_OS_JESD_M=2 RX_OS_JESD_L=1
+#      make TX_JESD_M=2 TX_JESD_L=1 RX_JESD_M=4 RX_JESD_L=1 RX_OS_JESD_M=2 RX_OS_JESD_L=1
 
 # Parameter description:
 #   [TX/RX/RX_OS]_JESD_M : Number of converters per link

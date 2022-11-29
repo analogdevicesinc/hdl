@@ -2,6 +2,23 @@ source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
+# get_env_param retrieves parameter value from the environment if exists,
+# other case use the default value
+#
+#   Use over-writable parameters from the environment.
+#
+#    e.g.
+#      make TX_JESD_L=8 RX_OS_JESD_M=16
+#      make TX_JESD_M=16 TX_JESD_L=8 RX_JESD_M=16 RX_JESD_L=4 RX_OS_JESD_M=8 RX_OS_JESD_L=4
+#      make TX_JESD_M=8 TX_JESD_L=4 RX_JESD_M=16 RX_JESD_L=4 RX_OS_JESD_M=8 RX_OS_JESD_L=4
+
+# Parameter description:
+#   [TX/RX/RX_OS]_JESD_M : Number of converters per link
+#   [TX/RX/RX_OS]_JESD_L : Number of lanes per link
+#   [TX/RX/RX_OS]_JESD_S : Number of samples per frame
+#   [TX/RX/RX_OS]_JESD_NP : Number of bits per sample
+#
+
 adi_project_create fmcomms8_adrv9009zu11eg 0 [list \
   RX_JESD_M       [get_env_param RX_JESD_M    16 ] \
   RX_JESD_L       [get_env_param RX_JESD_L     8 ] \
