@@ -313,7 +313,6 @@ ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter axi_adrv9009_som_rx_dma MAX_BYTES_PER_BURST 256
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_dma_data_width
-### This could be a problem
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 
 ad_ip_instance axi_adxcvr axi_adrv9009_som_obs_xcvr
@@ -385,14 +384,153 @@ ad_connect  sys_cpu_clk util_adrv9009_som_xcvr/up_clk
 
 if {[info exists FMCOMMS8]} {
   #FMCOMMS8
+  # Tx
   if {$TX_NUM_OF_LANES == 16} {
     ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_tx_xcvr axi_adrv9009_som_tx_jesd {0 1 2 3 4 5 6 7 9 8 10 11 12 13 14 15} core_clk_a
   } else {
-    #TX_JESD_L=8 it is recommanded to use RX_OS_JESD_M=TX_JESD_M because they share the same device clock
-    ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_tx_xcvr axi_adrv9009_som_tx_jesd {0 1 2 3 4 5 6 7 9 8 10 11 12 13 14 15} core_clk_a {} $MAX_TX_NUM_OF_LANES {0 1 4 5 9 8 12 13}
+    if {$TX_NUM_OF_LANES == 8} {
+      # TX_JESD_L=8 it is recommanded to use RX_OS_JESD_M=TX_JESD_M because they share the same device clock
+      ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_tx_xcvr axi_adrv9009_som_tx_jesd {0 1 2 3 4 5 6 7 9 8 10 11 12 13 14 15} core_clk_a {} $MAX_TX_NUM_OF_LANES {0 1 4 5 8 9 12 13}
+    } else {
+      # TX_JESD_L=4
+      ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_tx_xcvr axi_adrv9009_som_tx_jesd {0 1 2 3 4 5 6 7 9 8 10 11 12 13 14 15} core_clk_a {} $MAX_TX_NUM_OF_LANES {0 4 8 12}
+    }
   }
-  ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_rx_xcvr axi_adrv9009_som_rx_jesd {0 1 4 5 8 9 12 13} core_clk_b
-  ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_obs_xcvr axi_adrv9009_som_obs_jesd {2 3 6 7 10 11 14 15} core_clk_a
+
+  # Rx
+  if {$RX_NUM_OF_LANES == 8} {
+    ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_rx_xcvr axi_adrv9009_som_rx_jesd {0 1 4 5 8 9 12 13} core_clk_b
+  } else {
+    # for RX_JESD_L=4, RX_OCTETS_PER_FRAME = 8
+    # {0 1 4 5 8 9 12 13} are the lanes for rx
+    ad_connect adrv9009_som_rx_link_clk util_adrv9009_som_xcvr/rx_out_clk_0
+    ad_xcvrcon util_adrv9009_som_xcvr axi_adrv9009_som_rx_xcvr axi_adrv9009_som_rx_jesd {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15} adrv9009_som_rx_link_clk core_clk_b $MAX_RX_NUM_OF_LANES {0 4 8 12} 0
+    ad_connect axi_adrv9009_som_rx_xcvr/up_es_0 util_adrv9009_som_xcvr/up_es_0
+    ad_connect axi_adrv9009_som_rx_xcvr/up_es_1 util_adrv9009_som_xcvr/up_es_1
+    ad_connect axi_adrv9009_som_rx_xcvr/up_es_2 util_adrv9009_som_xcvr/up_es_4
+    ad_connect axi_adrv9009_som_rx_xcvr/up_es_3 util_adrv9009_som_xcvr/up_es_5
+    ad_connect axi_adrv9009_som_rx_xcvr/up_es_4 util_adrv9009_som_xcvr/up_es_8
+    ad_connect axi_adrv9009_som_rx_xcvr/up_es_5 util_adrv9009_som_xcvr/up_es_9
+    ad_connect axi_adrv9009_som_rx_xcvr/up_es_6 util_adrv9009_som_xcvr/up_es_12
+    ad_connect axi_adrv9009_som_rx_xcvr/up_es_7 util_adrv9009_som_xcvr/up_es_13
+    ad_connect axi_adrv9009_som_rx_xcvr/up_ch_0 util_adrv9009_som_xcvr/up_rx_0
+    ad_connect axi_adrv9009_som_rx_xcvr/up_ch_1 util_adrv9009_som_xcvr/up_rx_1
+    ad_connect axi_adrv9009_som_rx_xcvr/up_ch_2 util_adrv9009_som_xcvr/up_rx_4
+    ad_connect axi_adrv9009_som_rx_xcvr/up_ch_3 util_adrv9009_som_xcvr/up_rx_5
+    ad_connect axi_adrv9009_som_rx_xcvr/up_ch_4 util_adrv9009_som_xcvr/up_rx_8
+    ad_connect axi_adrv9009_som_rx_xcvr/up_ch_5 util_adrv9009_som_xcvr/up_rx_9
+    ad_connect axi_adrv9009_som_rx_xcvr/up_ch_6 util_adrv9009_som_xcvr/up_rx_12
+    ad_connect axi_adrv9009_som_rx_xcvr/up_ch_7 util_adrv9009_som_xcvr/up_rx_13
+
+    ad_connect adrv9009_som_rx_link_clk util_adrv9009_som_xcvr/rx_clk_0
+    ad_connect adrv9009_som_rx_link_clk util_adrv9009_som_xcvr/rx_clk_1
+    ad_connect adrv9009_som_rx_link_clk util_adrv9009_som_xcvr/rx_clk_4
+    ad_connect adrv9009_som_rx_link_clk util_adrv9009_som_xcvr/rx_clk_5
+    ad_connect adrv9009_som_rx_link_clk util_adrv9009_som_xcvr/rx_clk_8
+    ad_connect adrv9009_som_rx_link_clk util_adrv9009_som_xcvr/rx_clk_9
+    ad_connect adrv9009_som_rx_link_clk util_adrv9009_som_xcvr/rx_clk_12
+    ad_connect adrv9009_som_rx_link_clk util_adrv9009_som_xcvr/rx_clk_13
+
+    create_bd_port -dir I rx_data_0_p
+    create_bd_port -dir I rx_data_0_n
+    create_bd_port -dir I rx_data_1_p
+    create_bd_port -dir I rx_data_1_n
+    create_bd_port -dir I rx_data_4_p
+    create_bd_port -dir I rx_data_4_n
+    create_bd_port -dir I rx_data_5_p
+    create_bd_port -dir I rx_data_5_n
+    create_bd_port -dir I rx_data_8_p
+    create_bd_port -dir I rx_data_8_n
+    create_bd_port -dir I rx_data_9_p
+    create_bd_port -dir I rx_data_9_n
+    create_bd_port -dir I rx_data_12_p
+    create_bd_port -dir I rx_data_12_n
+    create_bd_port -dir I rx_data_13_p
+    create_bd_port -dir I rx_data_13_n
+    ad_connect util_adrv9009_som_xcvr/rx_0_p rx_data_0_p
+    ad_connect util_adrv9009_som_xcvr/rx_0_n rx_data_0_n
+    ad_connect util_adrv9009_som_xcvr/rx_1_p rx_data_1_p
+    ad_connect util_adrv9009_som_xcvr/rx_1_n rx_data_1_n
+    ad_connect util_adrv9009_som_xcvr/rx_4_p rx_data_4_p
+    ad_connect util_adrv9009_som_xcvr/rx_4_n rx_data_4_n
+    ad_connect util_adrv9009_som_xcvr/rx_5_p rx_data_5_p
+    ad_connect util_adrv9009_som_xcvr/rx_5_n rx_data_5_n
+    ad_connect util_adrv9009_som_xcvr/rx_8_p rx_data_8_p
+    ad_connect util_adrv9009_som_xcvr/rx_8_n rx_data_8_n
+    ad_connect util_adrv9009_som_xcvr/rx_9_p rx_data_9_p
+    ad_connect util_adrv9009_som_xcvr/rx_9_n rx_data_9_n
+    ad_connect util_adrv9009_som_xcvr/rx_12_p rx_data_12_p
+    ad_connect util_adrv9009_som_xcvr/rx_12_n rx_data_12_n
+    ad_connect util_adrv9009_som_xcvr/rx_13_p rx_data_13_p
+    ad_connect util_adrv9009_som_xcvr/rx_13_n rx_data_13_n
+  }
+
+  # Rx - Obs
+  if {$RX_OS_NUM_OF_LANES == 8} {
+    ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_obs_xcvr axi_adrv9009_som_obs_jesd {2 3 6 7 10 11 14 15} core_clk_a
+  } else {
+    # ORX_JESD_L=4
+    # {2 3 6 7 10 11 14 15} are the lanes for orx
+    ad_xcvrcon util_adrv9009_som_xcvr axi_adrv9009_som_obs_xcvr axi_adrv9009_som_obs_jesd {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15} core_clk_a {} $MAX_RX_OS_NUM_OF_LANES {2 6 10 14} 0
+    ad_connect axi_adrv9009_som_obs_xcvr/up_es_0 util_adrv9009_som_xcvr/up_es_2
+    ad_connect axi_adrv9009_som_obs_xcvr/up_es_1 util_adrv9009_som_xcvr/up_es_3
+    ad_connect axi_adrv9009_som_obs_xcvr/up_es_2 util_adrv9009_som_xcvr/up_es_6
+    ad_connect axi_adrv9009_som_obs_xcvr/up_es_3 util_adrv9009_som_xcvr/up_es_7
+    ad_connect axi_adrv9009_som_obs_xcvr/up_es_4 util_adrv9009_som_xcvr/up_es_10
+    ad_connect axi_adrv9009_som_obs_xcvr/up_es_5 util_adrv9009_som_xcvr/up_es_11
+    ad_connect axi_adrv9009_som_obs_xcvr/up_es_6 util_adrv9009_som_xcvr/up_es_14
+    ad_connect axi_adrv9009_som_obs_xcvr/up_es_7 util_adrv9009_som_xcvr/up_es_15
+    ad_connect axi_adrv9009_som_obs_xcvr/up_ch_0 util_adrv9009_som_xcvr/up_rx_2
+    ad_connect axi_adrv9009_som_obs_xcvr/up_ch_1 util_adrv9009_som_xcvr/up_rx_3
+    ad_connect axi_adrv9009_som_obs_xcvr/up_ch_2 util_adrv9009_som_xcvr/up_rx_6
+    ad_connect axi_adrv9009_som_obs_xcvr/up_ch_3 util_adrv9009_som_xcvr/up_rx_7
+    ad_connect axi_adrv9009_som_obs_xcvr/up_ch_4 util_adrv9009_som_xcvr/up_rx_10
+    ad_connect axi_adrv9009_som_obs_xcvr/up_ch_5 util_adrv9009_som_xcvr/up_rx_11
+    ad_connect axi_adrv9009_som_obs_xcvr/up_ch_6 util_adrv9009_som_xcvr/up_rx_14
+    ad_connect axi_adrv9009_som_obs_xcvr/up_ch_7 util_adrv9009_som_xcvr/up_rx_15
+
+    ad_connect core_clk_a util_adrv9009_som_xcvr/rx_clk_2
+    ad_connect core_clk_a util_adrv9009_som_xcvr/rx_clk_3
+    ad_connect core_clk_a util_adrv9009_som_xcvr/rx_clk_6
+    ad_connect core_clk_a util_adrv9009_som_xcvr/rx_clk_7
+    ad_connect core_clk_a util_adrv9009_som_xcvr/rx_clk_10
+    ad_connect core_clk_a util_adrv9009_som_xcvr/rx_clk_11
+    ad_connect core_clk_a util_adrv9009_som_xcvr/rx_clk_14
+    ad_connect core_clk_a util_adrv9009_som_xcvr/rx_clk_15
+
+    create_bd_port -dir I rx_data_2_p
+    create_bd_port -dir I rx_data_2_n
+    create_bd_port -dir I rx_data_3_p
+    create_bd_port -dir I rx_data_3_n
+    create_bd_port -dir I rx_data_6_p
+    create_bd_port -dir I rx_data_6_n
+    create_bd_port -dir I rx_data_7_p
+    create_bd_port -dir I rx_data_7_n
+    create_bd_port -dir I rx_data_10_p
+    create_bd_port -dir I rx_data_10_n
+    create_bd_port -dir I rx_data_11_p
+    create_bd_port -dir I rx_data_11_n
+    create_bd_port -dir I rx_data_14_p
+    create_bd_port -dir I rx_data_14_n
+    create_bd_port -dir I rx_data_15_p
+    create_bd_port -dir I rx_data_15_n
+    ad_connect util_adrv9009_som_xcvr/rx_2_p rx_data_2_p
+    ad_connect util_adrv9009_som_xcvr/rx_2_n rx_data_2_n
+    ad_connect util_adrv9009_som_xcvr/rx_3_p rx_data_3_p
+    ad_connect util_adrv9009_som_xcvr/rx_3_n rx_data_3_n
+    ad_connect util_adrv9009_som_xcvr/rx_6_p rx_data_6_p
+    ad_connect util_adrv9009_som_xcvr/rx_6_n rx_data_6_n
+    ad_connect util_adrv9009_som_xcvr/rx_7_p rx_data_7_p
+    ad_connect util_adrv9009_som_xcvr/rx_7_n rx_data_7_n
+    ad_connect util_adrv9009_som_xcvr/rx_10_p rx_data_10_p
+    ad_connect util_adrv9009_som_xcvr/rx_10_n rx_data_10_n
+    ad_connect util_adrv9009_som_xcvr/rx_11_p rx_data_11_p
+    ad_connect util_adrv9009_som_xcvr/rx_11_n rx_data_11_n
+    ad_connect util_adrv9009_som_xcvr/rx_14_p rx_data_14_p
+    ad_connect util_adrv9009_som_xcvr/rx_14_n rx_data_14_n
+    ad_connect util_adrv9009_som_xcvr/rx_15_p rx_data_15_p
+    ad_connect util_adrv9009_som_xcvr/rx_15_n rx_data_15_n
+  }
 } else {
   #ADRV2CRR_FMC
   # Tx
@@ -400,26 +538,21 @@ if {[info exists FMCOMMS8]} {
     ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_tx_xcvr axi_adrv9009_som_tx_jesd {} core_clk_a
   } else {
     if {$TX_NUM_OF_LANES == 4} {
-    #TX_JESD_L=4, it is recommanded to use RX_OS_JESD_M=TX_JESD_M because they share the same device clock
+    # TX_JESD_L=4, it is recommanded to use RX_OS_JESD_M=TX_JESD_M because they share the same device clock
     ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_tx_xcvr axi_adrv9009_som_tx_jesd {0 1 2 3 4 5 6 7} core_clk_a {} $MAX_TX_NUM_OF_LANES {0 1 4 5}
     } else {
-      #TX_JESD_L=2
+      # TX_JESD_L=2
       ad_xcvrcon util_adrv9009_som_xcvr axi_adrv9009_som_tx_xcvr axi_adrv9009_som_tx_jesd {0 1 2 3 4 5 6 7} core_clk_a {} $MAX_TX_NUM_OF_LANES {0 4}
     }
-  }  
+  }
 
   # Rx
   if {$RX_NUM_OF_LANES == 4} {
     ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_rx_xcvr axi_adrv9009_som_rx_jesd {0 1 4 5} core_clk_b
   } else {
     # for RX_JESD_L=2, RX_OCTETS_PER_FRAME = 8
-    # 0 1 4 5 are the lanes for rx
-    # find replacement for this
-    #ad_connect adrv9009_rx_device_clk axi_adrv9009_rx_clkgen/clk_1
-    #ad_connect adrv9009_rx_link_clk axi_adrv9009_rx_clkgen/clk_0
-    #connect_bd_net [get_bd_pins util_adrv9009_som_xcvr/rx_out_clk_0] [get_bd_pins axi_adrv9009_som_rx_jesd/link_clk]
+    # {0 1 4 5} are the lanes for rx
     ad_connect adrv9009_som_rx_link_clk util_adrv9009_som_xcvr/rx_out_clk_0
-    # core_clk_b is should be the link clock
     ad_xcvrcon util_adrv9009_som_xcvr axi_adrv9009_som_rx_xcvr axi_adrv9009_som_rx_jesd {0 1 2 3 4 5 6 7} adrv9009_som_rx_link_clk core_clk_b $MAX_RX_NUM_OF_LANES {0 4} 0
     ad_connect axi_adrv9009_som_rx_xcvr/up_es_0 util_adrv9009_som_xcvr/up_es_0
     ad_connect axi_adrv9009_som_rx_xcvr/up_es_1 util_adrv9009_som_xcvr/up_es_1
@@ -453,12 +586,12 @@ if {[info exists FMCOMMS8]} {
     ad_connect util_adrv9009_som_xcvr/rx_5_n rx_data_5_n
   }
 
-  # Rx -OBS
+  # Rx - Obs
   if {$RX_OS_NUM_OF_LANES == 4} {
     ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_obs_xcvr axi_adrv9009_som_obs_jesd {2 3 6 7} core_clk_a
   } else {
-    #ORX_JESD_L=2
-    # 2 3 6 7 are the lanes for orx
+    # ORX_JESD_L=2
+    # {2 3 6 7} are the lanes for orx
     ad_xcvrcon util_adrv9009_som_xcvr axi_adrv9009_som_obs_xcvr axi_adrv9009_som_obs_jesd {0 1 2 3 4 5 6 7} core_clk_a {} $MAX_RX_OS_NUM_OF_LANES {2 6} 0
     ad_connect axi_adrv9009_som_obs_xcvr/up_es_0 util_adrv9009_som_xcvr/up_es_2
     ad_connect axi_adrv9009_som_obs_xcvr/up_es_1 util_adrv9009_som_xcvr/up_es_3
@@ -493,10 +626,6 @@ if {[info exists FMCOMMS8]} {
   }
 }
 
-##rx and orx stuff
-##ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_rx_xcvr axi_adrv9009_som_rx_jesd {0 1 4 5} core_clk_b
-##ad_xcvrcon  util_adrv9009_som_xcvr axi_adrv9009_som_obs_xcvr axi_adrv9009_som_obs_jesd {2 3 6 7} core_clk_a
-
 ad_connect  core_clk_a tx_adrv9009_som_tpl_core/link_clk
 ad_connect  axi_adrv9009_som_tx_jesd/tx_data tx_adrv9009_som_tpl_core/link
 
@@ -514,18 +643,9 @@ ad_connect tx_sysref_0 tx_adrv9009_som_tpl_core/dac_tpl_core/dac_sync_in
 
 # connections (adc)
 
-if {$RX_OCTETS_PER_FRAME == 8} {
-# if this does not work, swap with link_clk
-  ad_connect  core_clk_b rx_adrv9009_som_tpl_core/link_clk
-  ad_connect  core_clk_b util_som_rx_cpack/clk
-  ad_connect  axi_adrv9009_som_rx_dma/fifo_wr_clk core_clk_b
-
-} else {
-  ad_connect  core_clk_b rx_adrv9009_som_tpl_core/link_clk
-  ad_connect  core_clk_b util_som_rx_cpack/clk
-  ad_connect  axi_adrv9009_som_rx_dma/fifo_wr_clk core_clk_b
-}
-
+ad_connect  core_clk_b rx_adrv9009_som_tpl_core/link_clk
+ad_connect  core_clk_b util_som_rx_cpack/clk
+ad_connect  axi_adrv9009_som_rx_dma/fifo_wr_clk core_clk_b
 
 ad_connect  axi_adrv9009_som_rx_jesd/rx_sof rx_adrv9009_som_tpl_core/link_sof
 ad_connect  axi_adrv9009_som_rx_jesd/rx_data_tdata rx_adrv9009_som_tpl_core/link_data
