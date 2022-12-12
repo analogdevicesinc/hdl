@@ -217,5 +217,6 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to txen[1]
 
 # set optimization to get a better timing closure
 set_global_assignment -name OPTIMIZATION_MODE "HIGH PERFORMANCE EFFORT"
+set_global_assignment -name PLACEMENT_EFFORT_MULTIPLIER 1.2
 
 execute_flow -compile
