@@ -17,3 +17,4 @@ ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ 250
 
 source ../common/adrv9009_bd.tcl
 
+ad_ip_parameter axi_adrv9009_rx_clkgen CONFIG.CLK1_DIV 6
