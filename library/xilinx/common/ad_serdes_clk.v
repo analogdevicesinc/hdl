@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2022 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -40,6 +40,8 @@ module ad_serdes_clk #(
 
   parameter       FPGA_TECHNOLOGY = 0,
   parameter       DDR_OR_SDR_N = 1,
+  // single ended - 0
+  // differential - 1
   parameter       CLKIN_DS_OR_SE_N = 1,
   parameter       SERDES_FACTOR = 8,
   parameter       MMCM_OR_BUFR_N = 1,
@@ -128,7 +130,7 @@ module ad_serdes_clk #(
       .up_drp_rdata (up_drp_rdata[15:0]),
       .up_drp_ready (up_drp_ready),
       .up_drp_locked (up_drp_locked));
-    end
+  end
   endgenerate
 
   generate

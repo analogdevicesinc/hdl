@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2020 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2022 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -205,16 +205,16 @@ module axi_adrv9001_if #(
 
   wire        rx_ssi_sync_out;
 
-  adrv9001_rx
-    #(.CMOS_LVDS_N (CMOS_LVDS_N),
-      .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
-      .NUM_LANES (NUM_LANES),
-      .DRP_WIDTH (DRP_WIDTH),
-      .IODELAY_CTRL (IODELAY_CTRL),
-      .IODELAY_ENABLE (IODELAY_ENABLE),
-      .USE_BUFG (RX_USE_BUFG),
-      .IO_DELAY_GROUP ({IO_DELAY_GROUP,"_rx"})
-    ) i_rx_1_phy (
+  adrv9001_rx #(
+    .CMOS_LVDS_N (CMOS_LVDS_N),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .NUM_LANES (NUM_LANES),
+    .DRP_WIDTH (DRP_WIDTH),
+    .IODELAY_CTRL (IODELAY_CTRL),
+    .IODELAY_ENABLE (IODELAY_ENABLE),
+    .USE_BUFG (RX_USE_BUFG),
+    .IO_DELAY_GROUP ({IO_DELAY_GROUP,"_rx"})
+  ) i_rx_1_phy (
     .rx_dclk_in_n_NC (rx1_dclk_in_n_NC),
     .rx_dclk_in_p_dclk_in (rx1_dclk_in_p_dclk_in),
     .rx_idata_in_n_idata0 (rx1_idata_in_n_idata0),
@@ -247,8 +247,7 @@ module axi_adrv9001_if #(
     .mssi_sync (mssi_sync),
     .ssi_sync_out (rx_ssi_sync_out),
     .ssi_sync_in (rx_ssi_sync_out),
-    .ssi_rst (adc_1_ssi_rst)
-  );
+    .ssi_rst (adc_1_ssi_rst));
 
   adrv9001_rx_link #(
     .CMOS_LVDS_N (CMOS_LVDS_N)
@@ -272,16 +271,16 @@ module axi_adrv9001_if #(
     .rx_symb_8_16b (rx1_symb_8_16b));
 
   generate if (DISABLE_RX2_SSI == 0) begin
-    adrv9001_rx
-      #(.CMOS_LVDS_N (CMOS_LVDS_N),
-        .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
-        .NUM_LANES (NUM_LANES),
-        .DRP_WIDTH (DRP_WIDTH),
-        .IODELAY_CTRL (0),
-        .IODELAY_ENABLE (IODELAY_ENABLE),
-        .USE_BUFG (RX_USE_BUFG),
-        .IO_DELAY_GROUP ({IO_DELAY_GROUP,"_rx"})
-      ) i_rx_2_phy (
+    adrv9001_rx #(
+      .CMOS_LVDS_N (CMOS_LVDS_N),
+      .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+      .NUM_LANES (NUM_LANES),
+      .DRP_WIDTH (DRP_WIDTH),
+      .IODELAY_CTRL (0),
+      .IODELAY_ENABLE (IODELAY_ENABLE),
+      .USE_BUFG (RX_USE_BUFG),
+      .IO_DELAY_GROUP ({IO_DELAY_GROUP,"_rx"})
+    ) i_rx_2_phy (
       .rx_dclk_in_n_NC (rx2_dclk_in_n_NC),
       .rx_dclk_in_p_dclk_in (rx2_dclk_in_p_dclk_in),
       .rx_idata_in_n_idata0 (rx2_idata_in_n_idata0),
@@ -312,8 +311,7 @@ module axi_adrv9001_if #(
       .mssi_sync (1'b0),
       .ssi_sync_out (),
       .ssi_sync_in (rx_ssi_sync_out),
-      .ssi_rst (adc_2_ssi_rst)
-    );
+      .ssi_rst (adc_2_ssi_rst));
 
     adrv9001_rx_link #(
       .CMOS_LVDS_N (CMOS_LVDS_N)

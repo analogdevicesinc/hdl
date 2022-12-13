@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2022 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -195,7 +195,7 @@ module axi_ad9434_if #(
 
   // adc status: adc is up, if both the MMCM_OR_BUFR_N and DELAY blocks are up
   always @(posedge adc_div_clk) begin
-    if(adc_rst == 1'b1) begin
+    if (adc_rst == 1'b1) begin
       adc_status_m1 <= 1'b0;
       adc_status <= 1'b0;
     end else begin
