@@ -43,7 +43,7 @@ ad_ip_parameter ad7606_dma CONFIG.DMA_TYPE_SRC 1
 ad_ip_parameter ad7606_dma CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter ad7606_dma CONFIG.CYCLIC 0
 ad_ip_parameter ad7606_dma CONFIG.SYNC_TRANSFER_START 0
-ad_ip_parameter ad7606_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter ad7606_dma CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter ad7606_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter ad7606_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter ad7606_dma CONFIG.DMA_DATA_WIDTH_SRC [expr $data_width * $num_sdi]
@@ -59,7 +59,7 @@ ad_connect $sys_cpu_clk ad7606_pwm_gen/s_axi_aclk
 ad_connect sys_cpu_resetn ad7606_pwm_gen/s_axi_aresetn
 ad_connect rx_busy spi_ad7606/offload/trigger
 
-ad_connect ad7606_dma/s_axis spi_ad7606/M_AXIS_SAMPLE
+ad_connect ad7606_dma/s_axis spi_ad7606/m_axis_sample
 ad_connect spi_ad7606/m_spi ad7606_spi
 
 ad_connect $sys_cpu_clk spi_ad7606/clk
