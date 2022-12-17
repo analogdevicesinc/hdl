@@ -157,6 +157,7 @@ proc adi_project_create {project_name mode parameter_list device {board "not-app
   global IGNORE_VERSION_CHECK
   global ADI_USE_OOC_SYNTHESIS
   global ADI_USE_INCR_COMP
+  global use_smartconnect
 
   if {![info exists ::env(ADI_PROJECT_DIR)]} {
     set actual_project_name $project_name
@@ -169,6 +170,12 @@ proc adi_project_create {project_name mode parameter_list device {board "not-app
     set p_device $device
   }
   set p_board $board
+
+  set use_smartconnect 1
+  if [regexp "^xc7z" $p_device] {
+    # SmartConnect has higher resource utilization and worse timing closure on older families
+    set use_smartconnect 0
+  }
 
   if [regexp "^xc7z" $p_device] {
     set sys_zynq 1
