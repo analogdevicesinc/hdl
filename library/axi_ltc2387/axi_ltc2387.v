@@ -67,9 +67,10 @@ module axi_ltc2387 #(
 
   // dma interface
 
-  output                   adc_valid,
-  output   [OUT_RES-1:0]   adc_data,
+  (* mark_debug = "true" *) output                   adc_valid,
+  (* mark_debug = "true" *) output   [OUT_RES-1:0]   adc_data,
   input                    adc_dovf,
+  output                   dac_valid,
 
   // axi interface
 
@@ -130,15 +131,16 @@ module axi_ltc2387 #(
   wire            up_clk;
   wire            up_rstn;
   wire            delay_rst;
-  wire            adc_valid_ch_s;
-  wire [ADC_RES-1:0] adc_data_ch_s;
+  (* mark_debug = "true" *)  wire            adc_valid_ch_s;
+                             wire            dac_valid_s;
+  (* mark_debug = "true" *)  wire [ADC_RES-1:0] adc_data_ch_s;
 
   // signal name changes
 
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
   assign adc_clk = ref_clk;
-
+  assign dac_valid = dac_valid_s;
   // processor read interface
 
   always @(negedge up_rstn or posedge up_clk) begin
@@ -172,6 +174,7 @@ module axi_ltc2387 #(
     .dco_p (dco_p),
     .dco_n (dco_n),
     .adc_valid (adc_valid_ch_s),
+    .dac_valid(dac_valid_s),
     .adc_data (adc_data_ch_s),
     .up_clk (up_clk),
     .up_dld (up_dld_s),

@@ -60,7 +60,7 @@ module axi_ltc2387_if #(
   // adc interface
 
   input             clk,
-  input             clk_gate,
+  (* mark_debug = "true" *) input             clk_gate,
   input             dco_p,
   input             dco_n,
   input             da_p,
@@ -69,6 +69,7 @@ module axi_ltc2387_if #(
   input             db_n,
 
   output            adc_valid,
+  output     reg    dac_valid,
   output reg [RESOLUTION-1:0] adc_data
 );
 
@@ -78,13 +79,13 @@ module axi_ltc2387_if #(
 
   // internal wires
 
-  wire            da_p_int_s;
-  wire            da_n_int_s;
-  wire            db_p_int_s;
-  wire            db_n_int_s;
+  (* mark_debug = "true" *) wire            da_p_int_s;
+  (* mark_debug = "true" *) wire            da_n_int_s;
+  (* mark_debug = "true" *) wire            db_p_int_s;
+  (* mark_debug = "true" *) wire            db_n_int_s;
   wire            dco;
   wire            dco_s;
-  wire   [17:0]   adc_data_int;
+  (* mark_debug = "true" *) wire   [17:0]   adc_data_int;
 
   // internal registers
 
@@ -92,7 +93,7 @@ module axi_ltc2387_if #(
   reg  [WIDTH:0]  adc_data_da_n = 'b0;
   reg  [WIDTH:0]  adc_data_db_p = 'b0;
   reg  [WIDTH:0]  adc_data_db_n = 'b0;
-  reg      [2:0]  clk_gate_d = 'b0;
+  (* mark_debug = "true" *)  reg      [2:0]  clk_gate_d = 'b0;
 
   // assignments
 
@@ -100,12 +101,15 @@ module axi_ltc2387_if #(
   assign adc_valid = clk_gate_d[1] & ~clk_gate_d[0];
 
   always @(posedge clk) begin
+    dac_valid <= 1'b0;
     clk_gate_d <= {clk_gate_d[1:0], clk_gate};
     if (clk_gate_d[1] == 1'b1 && clk_gate_d[0] == 1'b0) begin
       if (RESOLUTION == 18) begin
         adc_data <= adc_data_int;
+        dac_valid <= 1'b1;
       end else begin
         adc_data <= adc_data_int[15:0];
+        dac_valid <= 1'b1;
       end
     end
   end

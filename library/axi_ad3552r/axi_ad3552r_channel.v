@@ -48,15 +48,15 @@ module axi_ad3552r_channel #(
 
   input                   dac_clk,
   input                   dac_rst,
-  output  reg             dac_data_valid,
-  output  reg  [15:0]     dac_data,
+  (* mark_debug = "true" *)  output                  dac_data_valid,
+  (* mark_debug = "true" *)  output    [15:0]        dac_data,
 
   // input sources
 
   input        [15:0]     dma_data,
-  input        [15:0]     adc_data,
-  input                   valid_in_adc,
-  input                   valid_in_dma,
+  (* mark_debug = "true" *) input        [15:0]     adc_data,
+  (* mark_debug = "true" *) input                   valid_in_adc,
+  (* mark_debug = "true" *) input                   valid_in_dma,
   input                   dac_data_ready,
 
   // processor interface
@@ -89,52 +89,31 @@ module axi_ad3552r_channel #(
   wire    [15:0]   dac_dds_incr_2_s;
   wire    [15:0]   dac_pat_data_1_s;
   wire    [15:0]   dac_pat_data_2_s;
-  wire    [ 3:0]   dac_data_sel_s;
-  wire    [15:0]   input_format_data;
-  wire    [15:0]   formatted_data;
 
-  reg     [15:0]   ramp_pattern = 16'h0000;
-  reg              ramp_valid = 1'b0;
+  wire    [15:0]   formatted_dma_data;
+  wire    [15:0]   formatted_adc_data; 
 
-  assign input_format_data = (dac_data_sel_s == 4'h2) ? dma_data : ((dac_data_sel_s == 4'h8)? adc_data : dac_dds_data_s);
+  (* mark_debug = "true" *) wire    [ 3:0]   dac_data_sel_s;
 
-  always @(posedge dac_clk) begin
-    case(dac_data_sel_s)
-      4'h2: begin       // input from DMA
-        dac_data <= formatted_data;
-        dac_data_valid <= valid_in_dma;
-      end
-      4'h3: begin       // all 0's
-        dac_data <= 0;
-        dac_data_valid <= 1'b1;
-      end
-      4'h8: begin      // input from ADC
-        dac_data <= formatted_data;
-        dac_data_valid <= valid_in_adc;
-      end
-      4'hb: begin     // ramp input
-        dac_data <= ramp_pattern;
-        dac_data_valid <= ramp_valid;
-      end
-      default: begin
-        dac_data <= formatted_data;
-        dac_data_valid <= ramp_valid;
-      end
-    endcase
-  end
+  (* mark_debug = "true" *)  wire             dac_data_valid_int;
+  (* mark_debug = "true" *)  wire    [15:0]   dac_data_int;
 
-  ad_datafmt #(
-    .DATA_WIDTH(16),
-    .BITS_PER_SAMPLE(16)
-  ) i_ad_datafmt (
-    .clk (dac_clk),
-    .valid (1'b1),
-    .data (input_format_data),
-    .valid_out (),
-    .data_out (formatted_data),
-    .dfmt_enable (1'b1),
-    .dfmt_type (dac_dfmt_type),
-    .dfmt_se (1'b0));
+  (* mark_debug = "true" *) reg     [15:0]   ramp_pattern = 16'h0000;
+  (* mark_debug = "true" *) reg              ramp_valid = 1'b0;
+
+
+  assign dac_data = dac_data_int;
+  assign dac_data_valid = dac_data_valid_int;
+
+  
+  assign formatted_dma_data [15] = dac_dfmt_type ^ dma_data[15];
+  assign formatted_dma_data [14:0] = dma_data[14:0];
+  assign formatted_adc_data [15] = dac_dfmt_type ^ adc_data[15];
+  assign formatted_adc_data [14:0] = adc_data[14:0];
+ 
+  
+  assign dac_data_int = (dac_data_sel_s == 4'hb) ? ramp_pattern : ((dac_data_sel_s == 4'h3) ? 16'b0 : ((dac_data_sel_s == 4'h8) ? formatted_adc_data : formatted_dma_data));
+  assign dac_data_valid_int = (dac_data_sel_s == 4'hb) ? ramp_valid : ((dac_data_sel_s == 4'h3) ? 1'b1 : ((dac_data_sel_s == 4'h8) ? valid_in_adc : valid_in_dma));
 
   // ramp generator
 

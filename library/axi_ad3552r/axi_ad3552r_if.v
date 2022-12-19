@@ -39,8 +39,8 @@ module axi_ad3552r_if (
 
   input                   clk_in,  // 120MHz
   input                   reset_in,
-  input       [31:0]      dac_data,
-  input                   dac_data_valid,
+  (* mark_debug = "true" *) input       [31:0]      dac_data,
+  (* mark_debug = "true" *) input                   dac_data_valid,
   output reg              dac_data_ready,
 
   input       [ 7:0]      address,
@@ -48,34 +48,37 @@ module axi_ad3552r_if (
   input       [23:0]      data_write,
   input                   sdr_ddr_n,
   input                   symb_8_16b,
-  input                   transfer_data,
-  input                   stream,
+  (* mark_debug = "true" *) input                   transfer_data,
+  (* mark_debug = "true" *) input                   stream,
 
   // DAC control signals
 
-  output                  sclk,
-  output reg              csn,
+  (* mark_debug = "true" *) output                  sclk,
+  (* mark_debug = "true" *) output reg              csn,
 
   input         [3:0]     sdio_i,
   output        [3:0]     sdio_o,
   output                  sdio_t
 );
 
-  wire        transfer_data_s;
+  (* mark_debug = "true" *) wire          transfer_data_s;
+  (* mark_debug = "true" *) wire          start_synced;
+  (* mark_debug = "true" *) wire [31:0]   dac_data_int ;
+  (* mark_debug = "true" *) reg  [55:0]   transfer_reg = 56'h0;
 
-  reg [55:0]  transfer_reg = 56'h0;
-  reg [31:0]  dac_data_int = 32'h0;
-  reg [15:0]  counter = 16'h0;
+  (* mark_debug = "true" *) reg  [15:0]   counter = 16'h0;
   reg [ 2:0]  transfer_state = 0;
   reg [ 2:0]  transfer_state_next = 0;
-  reg         cycle_done = 1'b0;
-  reg         transfer_step = 1'b0;
+  (* mark_debug = "true" *) reg         cycle_done = 1'b0;
+  (* mark_debug = "true" *) reg         transfer_step = 1'b0;
   reg         sclk_ddr = 1'b0;
   reg         full_speed = 1'b0;
   reg         transfer_data_d = 1'b0;
   reg         transfer_data_dd = 1'b0;
+  (* mark_debug = "true" *)  reg  [3:0]  valid_captured_d = 4'b0;
   reg         data_r_wn = 1'b0;
-
+  reg         valid_captured = 1'b0;
+  reg         start_transfer = 1'b0; 
   localparam  [ 2:0]    IDLE = 3'h0,
                         CS_LOW = 3'h1,
                         WRITE_ADDRESS = 3'h2,
@@ -87,24 +90,36 @@ module axi_ad3552r_if (
 // transform the transfer data rising edge into a pulse
 
   assign transfer_data_s = transfer_data_d & ~transfer_data_dd;
-
+  assign start_synced = valid_captured_d[1] & start_transfer & stream;
   always @(posedge clk_in) begin
    if(reset_in == 1'b1) begin
      transfer_data_d  <= 'd0;
      transfer_data_dd <= 'd0;
+     valid_captured_d <= 4'b0;
+     valid_captured <= 1'b0; 
    end else begin
      transfer_data_d  <= transfer_data;
      transfer_data_dd <= transfer_data_d;
+     valid_captured_d <= {valid_captured_d[2:0], valid_captured};
    end
+   if(dac_data_valid == 1'b1 && start_transfer == 1'b1 ) begin 
+     valid_captured <= 1'b1; 
+   end 
+   if( transfer_data == 1'b1) begin 
+    start_transfer <= 1'b1;
+   end 
+   
+   if(transfer_state == CS_HIGH || stream == 1'b0 ) begin
+    start_transfer <= 1'b0; 
+    valid_captured <= 1'b0; 
+    valid_captured_d <= 4'b0; 
+  end
   end
 
 // dac_data_int is a register allows capturing asinchronously with the
 // transmission
+  assign dac_data_int = dac_data;
 
-  always @(posedge clk_in) begin
-    if (dac_data_valid) begin
-      dac_data_int <= dac_data;
-    end end
   always @(posedge clk_in) begin
     if (reset_in == 1'b1) begin
       transfer_state <= IDLE;
@@ -117,7 +132,7 @@ module axi_ad3552r_if (
   always @(*) begin
     case (transfer_state)
       IDLE : begin
-        transfer_state_next = transfer_data_s ? CS_LOW : IDLE;
+        transfer_state_next = ((transfer_data_s == 1'b1 && stream == 1'b0) || start_synced == 1'b1)  ? CS_LOW : IDLE;
         csn = 1'b1;
         transfer_step = 0;
         cycle_done = 0;
@@ -227,7 +242,7 @@ module axi_ad3552r_if (
       end else begin
         transfer_reg <= {address,data_write, 24'h0};
       end
-    end else if (transfer_state == STREAM & cycle_done) begin
+    end else if ((transfer_state == STREAM & cycle_done) || (transfer_state != STREAM  && transfer_state_next == STREAM)) begin
         transfer_reg <= {dac_data_int, 24'h0};
     end else if (transfer_step) begin
       transfer_reg <= {transfer_reg[51:0], sdio_i};

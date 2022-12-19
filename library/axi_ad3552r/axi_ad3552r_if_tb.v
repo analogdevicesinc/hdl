@@ -50,6 +50,7 @@ module axi_ad3552r_if_tb;
   wire             dac_data_ready;
 
   reg clk_a = 1'b0;
+  reg clk_data = 1'b0;
   reg clk_b = 1'b0;
   reg clk_c = 1'b0;
   reg reset_in = 1'b1;
@@ -66,36 +67,34 @@ module axi_ad3552r_if_tb;
   reg [15:0] dac_b = 'h00;
   reg [31:0] shift_register = 'h00;
   reg [31:0] shift_register_n = 'h00;
-  reg [31:0] dac_data = 32'ha5a5f0f0;
+  wire [31:0] dac_data ;
+  reg [31:0] dac_data_old = 32'ha5a5f0f0;
   reg [15:0] ad3552r_16bit_in_reg = 'h00;
 
   reg ctrl_enable = 1'b0;
   reg ctrl_pause = 1'b0;
   reg address_read = 1'b0;
-  reg ddr_sdr_n = 1'b0;
+  reg ddr_sdr_n = 1'b1;
   reg reg_16b_8bn = 1'b0;
   reg stream = 1'b0;
   reg stream_reg = 1'b0;
   reg [23:0]    data_write = 24'h0;
-  inout dac_sdio_0;
-  inout dac_sdio_1;
-  inout dac_sdio_2;
-  inout dac_sdio_3;
 
+  reg  dac_data_valid = 1'b0;
   wire dac_sdio_in_0;
   wire dac_sdio_in_1;
   wire dac_sdio_in_2;
   wire dac_sdio_in_3;
 
   always #4 clk_a <= ~clk_a;
-
+  always #32 clk_data <= ~clk_data;
   initial begin
    #100 reset_in = 1'b0;
    // Write 8 bit SDR
    address_write = 8'h2c;
    data_write = 24'hf1a500;
-   ddr_sdr_n = 1'b0;
-   reg_16b_8bn = 1'b0;
+   ddr_sdr_n = 1'b1;
+   reg_16b_8bn = 1'b1;
    stream = 1'b0;
    #500 transfer_data = 1'b1;
    #100 transfer_data = 1'b0;
@@ -104,16 +103,16 @@ module axi_ad3552r_if_tb;
    ad3552r_16bit_in_reg = 16'habcd;
    address_write = 8'hac;
    data_write = 24'hf1a500;
-   ddr_sdr_n = 1'b0;
-   reg_16b_8bn = 1'b0;
+   ddr_sdr_n = 1'b1;
+   reg_16b_8bn = 1'b1;
    stream = 1'b0;
    #500 transfer_data = 1'b1;
    #100 transfer_data = 1'b0;
    #500 data_write = 24'ha5f000;
    // Write 16 bit SDR
    address_write = 8'h2c;
-   ddr_sdr_n = 1'b0;
-   reg_16b_8bn = 1'b1;
+   ddr_sdr_n = 1'b1;
+   reg_16b_8bn = 1'b0;
    stream = 1'b0;
    #500 transfer_data = 1'b1;
    #100 transfer_data = 1'b0;
@@ -121,45 +120,57 @@ module axi_ad3552r_if_tb;
    // Read 16 bit SDR
    address_write = 8'hac;
    ad3552r_16bit_in_reg = 16'hfedc;
-   ddr_sdr_n = 1'b0;
-   reg_16b_8bn = 1'b1;
+   ddr_sdr_n = 1'b1;
+   reg_16b_8bn = 1'b0;
    stream = 1'b0;
    #500 transfer_data = 1'b1;
    #100 transfer_data = 1'b0;
    #500 data_write = 24'h123400;
    // Write 8 bit DDR
    address_write = 8'h2c;
-   ddr_sdr_n = 1'b1;
-   reg_16b_8bn = 1'b0;
+   ddr_sdr_n = 1'b0;
+   reg_16b_8bn = 1'b1;
    stream = 1'b0;
    #500 transfer_data = 1'b1;
    #100 transfer_data = 1'b0;
    #500 data_write = 24'hf5a500;
    // Write 16 bit DDR
    address_write = 8'h2c;
-   ddr_sdr_n = 1'b1;
-   reg_16b_8bn = 1'b1;
+   ddr_sdr_n = 1'b0;
+   reg_16b_8bn = 1'b0;
    stream = 1'b0;
-   #500 transfer_data = 1'b1;
+   transfer_data = 1'b1;
    #100 transfer_data = 1'b0;
    #500 data_write = 24'h000000;
    // Stream SDR
    address_write = 8'h2c;
-   ddr_sdr_n = 1'b0;
+   ddr_sdr_n = 1'b1;
    reg_16b_8bn = 1'b0;
    stream = 1'b1;
-   #500 transfer_data = 1'b1;
+   transfer_data = 1'b1;
    #100 transfer_data = 1'b0;
-   #5000 stream = 1'b0;
-   #2000 ddr_sdr_n = 1'b1;
+   #1725 stream = 1'b0;
+   #2000 ddr_sdr_n = 1'b0;
    // Stream DDR
    address_write = 8'h2c;
-   reg_16b_8bn = 1'b0;
+   reg_16b_8bn = 1'b1;
    stream = 1'b1;
-   #500 transfer_data = 1'b1;
+   transfer_data = 1'b1;
    #100 transfer_data = 1'b0;
    #5000 stream = 1'b0;
-
+ 
+ end
+ reg [3:0] counter_data = 4'b0;
+ always@(posedge clk_a) begin
+  if(counter_data == 4'h3) begin 
+    dac_data_valid <= 1'b1;
+  end else begin
+  dac_data_valid <= 1'b0;
+  end
+  counter_data <= counter_data +4'b1;
+  if(counter_data == 4'h7) begin 
+  counter_data <= 4'h0;
+  end
  end
 
   always@(posedge dac_sclk or posedge dac_csn) begin
@@ -174,7 +185,7 @@ module axi_ad3552r_if_tb;
         stream_reg <= stream;
       end else begin
         if (stream_reg) begin
-          if (ddr_sdr_n == 1'b1 & counter == 3) begin
+          if (ddr_sdr_n == 1'b0 & counter == 3) begin
             counter <= 0;
           end else if (ddr_sdr_n == 1'b0 & counter == 7) begin
             counter <= 0;
@@ -189,7 +200,6 @@ module axi_ad3552r_if_tb;
           end
         end
       end
-      shift_register <= {shift_register[27:0],dac_sdio_3,dac_sdio_2,dac_sdio_1,dac_sdio_0};
     end
   end
 
@@ -207,10 +217,9 @@ module axi_ad3552r_if_tb;
           counter_n <= 1;
           shift_register_n <= {ad3552r_16bit_in_reg, 16'h0};
         end else begin
-        shift_register_n <= {shift_register_n[27:0],dac_sdio_3,dac_sdio_2,dac_sdio_1,dac_sdio_0};
-          if (ddr_sdr_n == 1'b1 & counter_n == 5) begin
+          if (ddr_sdr_n == 1'b0 & counter_n == 5) begin
             counter_n <= 2;
-          end else if (ddr_sdr_n == 1'b0 & counter_n  == 7) begin
+          end else if (ddr_sdr_n == 1'b1 & counter_n  == 7) begin
             counter_n <= 1;
           end else begin
             counter_n <= counter_n + 1;
@@ -225,7 +234,7 @@ module axi_ad3552r_if_tb;
     end
 
     if (stream_reg) begin
-      if(ddr_sdr_n == 1'b0) begin
+      if(ddr_sdr_n == 1'b1) begin
         if (counter == 3) begin
           dac_a = shift_register[15:0];
         end
@@ -242,7 +251,7 @@ module axi_ad3552r_if_tb;
       end
 
     end else begin
-      if(ddr_sdr_n == 1'b0) begin
+      if(ddr_sdr_n == 1'b1) begin
         if (counter_n == 2) begin
           ad3552r_8bit_reg = shift_register[7:0];
         end
@@ -268,35 +277,33 @@ module axi_ad3552r_if_tb;
     end
   end
 
-  assign dac_sdio_0 = (address_write[7] && (address_read == 1'b1)) ? dac_sdio_in_0: 1'bz;
-  assign dac_sdio_1 = (address_write[7] && (address_read == 1'b1)) ? dac_sdio_in_1: 1'bz;
-  assign dac_sdio_2 = (address_write[7] && (address_read == 1'b1)) ? dac_sdio_in_2: 1'bz;
-  assign dac_sdio_3 = (address_write[7] && (address_read == 1'b1)) ? dac_sdio_in_3: 1'bz;
 
-  always @(posedge clk_a) begin
-    if (dac_data_ready) begin
-      dac_data <= dac_data + 32'h00010002;
-    end
-  end
+  assign dac_data = (dac_data_valid) ? dac_data_old  + 32'h00010002 : dac_data_old;
+
+always @(posedge clk_a) begin  
+  dac_data_old <= dac_data;
+end
+
+wire [31:0] dac_data_final;
+assign dac_data_final = dac_data;
 
   axi_ad3552r_if axi_ad3552r_interface (
     .clk_in(clk_a),
     .reset_in(reset_in),
-    .dac_data(dac_data),
-    .dac_data_valid(1'b1),
+    .dac_data(dac_data_final),
+    .dac_data_valid(dac_data_valid),
     .address(address_write),
     .data_read(data_read),
     .data_write(data_write),
-    .ddr_sdr_n(ddr_sdr_n),
-    .reg_16b_8bn(reg_16b_8bn),
+    .sdr_ddr_n(ddr_sdr_n),
+    .symb_8_16b(reg_16b_8bn),
     .transfer_data(transfer_data),
     .stream(stream),
-    .dac_data_ready(dac_data_ready),
+    .dac_data_ready(),
     .sclk(dac_sclk),
     .csn(dac_csn),
-    .sdio_0(dac_sdio_0),
-    .sdio_1(dac_sdio_1),
-    .sdio_2(dac_sdio_2),
-    .sdio_3(dac_sdio_3));
+    .sdio_i(sdio_i),
+    .sdio_o(sdio_o),
+    .sdio_t(sdio_t));
 
 endmodule

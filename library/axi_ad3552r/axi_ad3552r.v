@@ -52,15 +52,15 @@ module axi_ad3552r #(
   input                   valid_in_dma,
   output                  dac_data_ready,
 
-  input       [15:0]      data_in_a,
-  input       [15:0]      data_in_b,
-  input                   valid_in_a,
-  input                   valid_in_b,
+  (* mark_debug = "true" *) input       [15:0]      data_in_a,
+  (* mark_debug = "true" *) input       [15:0]      data_in_b,
+  (* mark_debug = "true" *) input                   valid_in_a,
+  (* mark_debug = "true" *) input                   valid_in_b,
 
   output                  dac_sclk,
   output                  dac_csn,
   input         [3:0]     sdio_i,
-  output        [3:0]     sdio_o,
+  (* mark_debug = "true" *) output        [3:0]     sdio_o,
   output                  sdio_t,
 
   // axi interface

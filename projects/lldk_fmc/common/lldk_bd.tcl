@@ -265,8 +265,8 @@ ad_connect axi_ad3552r_0/dma_data axi_dac_0_dma/m_axis_data
 
 ad_connect axi_ltc2387_0/adc_data  axi_ad3552r_0/data_in_a
 ad_connect axi_ltc2387_1/adc_data  axi_ad3552r_0/data_in_b
-ad_connect axi_ltc2387_0/adc_valid axi_ad3552r_0/valid_in_a
-ad_connect axi_ltc2387_1/adc_valid axi_ad3552r_0/valid_in_b
+ad_connect axi_ltc2387_0/dac_valid axi_ad3552r_0/valid_in_a
+ad_connect axi_ltc2387_1/dac_valid axi_ad3552r_0/valid_in_b
 
 
 ad_connect axi_ad3552r_0/dac_csn   dac0_spi_csn
@@ -298,8 +298,8 @@ ad_connect axi_ad3552r_1/dma_data axi_dac_1_dma/m_axis_data
 
 ad_connect axi_ltc2387_2/adc_data axi_ad3552r_1/data_in_a
 ad_connect axi_ltc2387_3/adc_data axi_ad3552r_1/data_in_b
-ad_connect axi_ltc2387_2/adc_valid axi_ad3552r_1/valid_in_a
-ad_connect axi_ltc2387_3/adc_valid axi_ad3552r_1/valid_in_b
+ad_connect axi_ltc2387_2/dac_valid axi_ad3552r_1/valid_in_a
+ad_connect axi_ltc2387_3/dac_valid axi_ad3552r_1/valid_in_b
 
 ad_connect axi_ad3552r_1/dac_csn   dac1_spi_csn
 ad_connect axi_ad3552r_1/dac_sclk  dac1_spi_sclk
