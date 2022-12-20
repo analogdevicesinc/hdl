@@ -359,6 +359,7 @@ ad_cpu_interconnect 0x7d400000 axi_adrv9009_fmc_tx_dma
 ad_cpu_interconnect 0x7d420000 axi_adrv9009_fmc_rx_dma
 ad_cpu_interconnect 0x7d440000 axi_adrv9009_fmc_obs_dma
 
+ad_mem_hp0_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP0
 ad_mem_hp0_interconnect $sys_cpu_clk axi_adrv9009_fmc_rx_xcvr/m_axi
 ad_mem_hp0_interconnect $sys_cpu_clk axi_adrv9009_fmc_obs_xcvr/m_axi
 
