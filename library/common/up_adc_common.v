@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2022 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2023 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -103,11 +103,10 @@ module up_adc_common #(
 
   // ADC custom read/write interface
 
-  output      [31:0]  adc_custom_wr,
-  output              adc_write_req,
-  input       [31:0]  adc_custom_rd,
-  input               adc_read_valid,
-  output              adc_read_req,
+  output      [31:0]  adc_config_wr,
+  output      [31:0]  adc_config_ctrl,
+  input       [31:0]  adc_config_rd,
+  input               adc_ctrl_status,
 
   // user channel control
 
@@ -164,7 +163,8 @@ module up_adc_common #(
   reg         [31:0]  up_rdata_int = 'd0;
   reg         [ 7:0]  up_adc_custom_control = 'd0;
   reg                 up_adc_crc_enable = 'd0;
-  reg         [31:0]  up_adc_custom_wr = 'd0;
+  reg         [31:0]  up_adc_config_wr = 'd0;
+  reg         [31:0]  up_adc_config_ctrl = 'd0;
 
   // internal signals
 
@@ -181,8 +181,8 @@ module up_adc_common #(
   wire                up_drp_status_s;
   wire                up_drp_rwn_s;
   wire        [31:0]  up_drp_rdata_hold_s;
-  wire                up_adc_read_valid;
-  wire        [31:0]  up_adc_custom_rd;
+  wire        [31:0]  up_adc_config_rd;
+  wire                up_adc_ctrl_status;
 
   wire                adc_rst_n;
   wire                adc_rst_s;
@@ -191,9 +191,6 @@ module up_adc_common #(
 
   assign up_wreq_s = (up_waddr[13:7] == {COMMON_ID,1'b0}) ? up_wreq : 1'b0;
   assign up_rreq_s = (up_raddr[13:7] == {COMMON_ID,1'b0}) ? up_rreq : 1'b0;
-  assign up_rack_s = (up_raddr[6:0] == 7'h21) ? up_adc_read_valid : up_rreq_s;
-  assign up_write_req = (up_waddr[6:0] == 7'h20) ? up_wreq : 1'b0;
-  assign up_read_req = (up_raddr[6:0] == 7'h21) ? up_rreq : 1'b0;
 
   // processor write interface
 
@@ -354,10 +351,20 @@ module up_adc_common #(
 
   always @(posedge up_clk) begin
     if (up_rstn == 0) begin
-      up_adc_custom_wr <= 'd0;
+      up_adc_config_wr <= 'd0;
     end else begin
       if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h20)) begin
-         up_adc_custom_wr <= up_wdata;
+         up_adc_config_wr <= up_wdata;
+      end
+    end
+  end
+
+  always @(posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_adc_config_ctrl <= 'd0;
+    end else begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h23)) begin
+        up_adc_config_ctrl <= up_wdata;
       end
     end
   end
@@ -456,8 +463,8 @@ module up_adc_common #(
       up_rack_int <= 'd0;
       up_rdata_int <= 'd0;
     end else begin
-      up_rack_int <= up_rack_s;
-      if (up_rack_s == 1'b1) begin
+      up_rack_int <= up_rreq_s;
+      if (up_rreq_s == 1'b1) begin
         case (up_raddr[6:0])
           7'h00: up_rdata_int <= VERSION;
           7'h01: up_rdata_int <= ID;
@@ -478,16 +485,16 @@ module up_adc_common #(
           7'h13: up_rdata_int <= {23'd0, up_adc_crc_enable, up_adc_custom_control};
           7'h15: up_rdata_int <= up_adc_clk_count_s;
           7'h16: up_rdata_int <= adc_clk_ratio;
-          7'h17: up_rdata_int <= {28'd0, up_status_pn_err, up_status_pn_oos, up_status_or, up_status_s};
+          7'h17: up_rdata_int <= {27'd0, up_adc_ctrl_status, up_status_pn_err, up_status_pn_oos, up_status_or, up_status_s};
           7'h1a: up_rdata_int <= {31'd0, up_sync_status_s};
           7'h1c: up_rdata_int <= {3'd0, up_drp_rwn_s, up_drp_addr, 16'b0};
           7'h1d: up_rdata_int <= {14'd0, up_drp_locked, up_drp_status_s, 16'b0};
           7'h1e: up_rdata_int <= up_drp_wdata;
           7'h1f: up_rdata_int <= up_drp_rdata_hold_s;
-          7'h20: up_rdata_int <= up_adc_custom_wr;
-          7'h21: up_rdata_int <= up_adc_custom_rd;
+          7'h20: up_rdata_int <= up_adc_config_wr;
+          7'h21: up_rdata_int <= up_adc_config_rd;
           7'h22: up_rdata_int <= {29'd0, up_status_ovf, 2'b0};
-          7'h23: up_rdata_int <= 32'd8;
+          7'h23: up_rdata_int <= up_adc_config_ctrl;
           7'h28: up_rdata_int <= {24'd0, up_usr_chanmax_in};
           7'h29: up_rdata_int <= up_adc_start_code;
           7'h2e: up_rdata_int <= up_adc_gpio_in;
@@ -520,7 +527,7 @@ module up_adc_common #(
   // adc control & status
 
   up_xfer_cntrl #(
-    .DATA_WIDTH(92)
+    .DATA_WIDTH(122)
   ) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
@@ -535,9 +542,8 @@ module up_adc_common #(
                       up_adc_ext_sync_disarm,
                       up_adc_ext_sync_manual_req,
                       up_adc_sync,
-                      up_write_req,
-                      up_read_req,
-                      up_adc_custom_wr,
+                      up_adc_config_ctrl,
+                      up_adc_config_wr,
                       up_adc_start_code,
                       up_adc_r1_mode,
                       up_adc_ddr_edgesel,
@@ -557,9 +563,8 @@ module up_adc_common #(
                       adc_ext_sync_disarm,
                       adc_ext_sync_manual_req,
                       adc_sync,
-                      adc_write_req,
-                      adc_read_req,
-                      adc_custom_wr,
+                      adc_config_ctrl,
+                      adc_config_wr,
                       adc_start_code,
                       adc_r1_mode,
                       adc_ddr_edgesel,
@@ -580,15 +585,15 @@ module up_adc_common #(
     .up_data_status ({up_sync_status_s,
                       up_status_s,
                       up_status_ovf_s,
-                      up_adc_read_valid,
-                      up_adc_custom_rd}),
+                      up_adc_config_rd,
+                      up_adc_ctrl_status}),
     .d_rst (adc_rst_s),
     .d_clk (adc_clk),
     .d_data_status ({ adc_sync_status,
                       adc_status,
                       adc_status_ovf,
-                      adc_read_valid,
-                      adc_custom_rd}));
+                      adc_config_rd,
+                      adc_ctrl_status}));
 
   // adc clock monitor
 
