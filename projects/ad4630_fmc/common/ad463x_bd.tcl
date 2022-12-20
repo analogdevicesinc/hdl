@@ -40,16 +40,32 @@ ad_ip_parameter spi_clkgen CONFIG.VCO_MUL 8
 ad_connect $sys_cpu_clk spi_clkgen/clk
 ad_connect spi_clk spi_clkgen/clk_0
 
-# create a SPI Engine architecture
-###
-#                 name         data_width async_spi_clk num_csn num_sdi     sdi_delay  echo_sclk
-spi_engine_create "spi_ad463x" 32         1             1       $NUM_OF_SDI 0          1
-ad_ip_parameter spi_ad463x/execution CONFIG.DEFAULT_SPI_CFG 1   ; # latching MISO on negative edge - hardware only
 
-ad_ip_parameter spi_ad463x/axi_regmap CONFIG.CFG_INFO_0 $NUM_OF_SDI
-ad_ip_parameter spi_ad463x/axi_regmap CONFIG.CFG_INFO_1 $CAPTURE_ZONE
-ad_ip_parameter spi_ad463x/axi_regmap CONFIG.CFG_INFO_2 $CLK_MODE
-ad_ip_parameter spi_ad463x/axi_regmap CONFIG.CFG_INFO_3 $DDR_EN
+# create a SPI Engine architecture
+
+#spi_engine_create "spi_ad463x" 32         1             1       $NUM_OF_SDI 0          1
+
+set data_width    32
+set async_spi_clk 1
+set num_cs        1
+set num_sdi       $NUM_OF_SDI
+set num_sdo       1
+set sdi_delay     1
+set echo_sclk     1
+
+set hier_spi_engine spi_ad463x
+
+spi_engine_create $hier_spi_engine $data_width $async_spi_clk $num_cs $num_sdi $num_sdo $sdi_delay $echo_sclk
+
+
+
+
+ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_execution CONFIG.DEFAULT_SPI_CFG 1   ; # latching MISO on negative edge - hardware only
+
+ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_axi_regmap CONFIG.CFG_INFO_0 $NUM_OF_SDI
+ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_axi_regmap CONFIG.CFG_INFO_1 $CAPTURE_ZONE
+ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_axi_regmap CONFIG.CFG_INFO_2 $CLK_MODE
+ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_axi_regmap CONFIG.CFG_INFO_3 $DDR_EN
 
 ## to setup the sample rate of the system change the PULSE_PERIOD value of the
 ## CNV generator; the actual sample rate will be PULSE_PERIOD * (1/cnv_ref_clk)
@@ -84,7 +100,7 @@ if {$CAPTURE_ZONE == 1} {
   #  is used for SDI latching
   switch $CLK_MODE {
     0 {
-      ad_connect spi_ad463x/echo_sclk ad463x_echo_sclk
+      ad_connect $hier_spi_engine/echo_sclk ad463x_echo_sclk
     }
     1 -
     2 {
@@ -105,29 +121,28 @@ if {$CAPTURE_ZONE == 1} {
   ad_connect spi_clk busy_capture/clk
   ad_connect spi_clk busy_sync/out_clk
   ad_connect busy_capture/rst GND
-  ad_connect spi_ad463x/axi_regmap/spi_resetn busy_sync/out_resetn
+  ad_connect $hier_spi_engine/${hier_spi_engine}_axi_regmap/spi_resetn busy_sync/out_resetn
 
   ad_connect ad463x_busy busy_sync/in_bits
   ad_connect busy_sync/out_bits busy_capture/signal_in
-  ad_connect busy_capture/signal_out spi_ad463x/trigger
-
+  ad_connect $hier_spi_engine/trigger busy_capture/signal_out
   ## SDI is latched by the SPIE execution module
-  ad_connect  spi_ad463x/m_axis_sample data_reorder/s_axis
+  ad_connect  $hier_spi_engine/m_axis_sample data_reorder/s_axis
 
 } elseif {$CAPTURE_ZONE == 2} {
 
   # Zone 2 - trigger to next consecutive CNV
-  ad_ip_parameter spi_ad463x/offload CONFIG.ASYNC_TRIG 1
-  ad_connect cnv_generator/pwm_0 spi_ad463x/trigger
+  ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_offload CONFIG.ASYNC_TRIG 1
+  ad_connect cnv_generator/pwm_0 $hier_spi_engine/trigger
 
   ## SPI mode is using the echo SCLK, on echo SPI and Master mode the BUSY
   #  is used for SDI latching
 
-  ad_connect spi_ad463x/echo_sclk ad463x_echo_sclk
+  ad_connect $hier_spi_engine/echo_sclk ad463x_echo_sclk
   switch $CLK_MODE {
     0 {
       ## SDI is latched by the SPIE execution module
-      ad_connect  spi_ad463x/m_axis_sample data_reorder/s_axis
+      ad_connect  $hier_spi_engine/m_axis_sample data_reorder/s_axis
     }
     1 -
     2 {
@@ -160,9 +175,9 @@ ad_connect ad463x_cnv cnv_generator/pwm_1
 
 # clocks
 
-ad_connect $sys_cpu_clk spi_ad463x/clk
+ad_connect $sys_cpu_clk $hier_spi_engine/clk
 ad_connect $sys_cpu_clk cnv_generator/s_axi_aclk
-ad_connect spi_clk spi_ad463x/spi_clk
+ad_connect spi_clk $hier_spi_engine/spi_clk
 ad_connect spi_clk data_reorder/axis_aclk
 ad_connect spi_clk axi_ad463x_dma/s_axis_aclk
 ad_connect ad463x_ext_clk cnv_generator/ext_clk
@@ -171,21 +186,21 @@ ad_connect ad463x_ext_clk cnv_generator/ext_clk
 
 ad_connect $sys_cpu_resetn cnv_generator/s_axi_aresetn
 ad_connect data_reorder/axis_aresetn VCC
-ad_connect $sys_cpu_resetn spi_ad463x/resetn
+ad_connect $sys_cpu_resetn $hier_spi_engine/resetn
 ad_connect $sys_cpu_resetn axi_ad463x_dma/m_dest_axi_aresetn
 
 # data path
 
-ad_connect  spi_ad463x/execution/cs ad463x_spi_cs
-ad_connect  spi_ad463x/execution/sclk ad463x_spi_sclk
-ad_connect  spi_ad463x/execution/sdo ad463x_spi_sdo
-ad_connect  spi_ad463x/execution/sdi ad463x_spi_sdi
+ad_connect  $hier_spi_engine/${hier_spi_engine}_execution/cs ad463x_spi_cs
+ad_connect  $hier_spi_engine/${hier_spi_engine}_execution/sclk ad463x_spi_sclk
+ad_connect  $hier_spi_engine/${hier_spi_engine}_execution/sdo ad463x_spi_sdo
+ad_connect  $hier_spi_engine/${hier_spi_engine}_execution/sdi ad463x_spi_sdi
 
 ad_connect  axi_ad463x_dma/s_axis data_reorder/m_axis
 
 # AXI memory mapped address space
 
-ad_cpu_interconnect 0x44a00000 spi_ad463x/axi_regmap
+ad_cpu_interconnect 0x44a00000 $hier_spi_engine/${hier_spi_engine}_axi_regmap
 ad_cpu_interconnect 0x44b00000 cnv_generator
 ad_cpu_interconnect 0x44a30000 axi_ad463x_dma
 ad_cpu_interconnect 0x44a70000 spi_clkgen
@@ -193,7 +208,7 @@ ad_cpu_interconnect 0x44a70000 spi_clkgen
 # interrupts
 
 ad_cpu_interrupt "ps-13" "mb-13" axi_ad463x_dma/irq
-ad_cpu_interrupt "ps-12" "mb-12" /spi_ad463x/irq
+ad_cpu_interrupt "ps-12" "mb-12" $hier_spi_engine/irq
 
 # interconnect to memory interface
 
