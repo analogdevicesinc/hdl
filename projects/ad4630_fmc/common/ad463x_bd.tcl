@@ -23,9 +23,7 @@ create_bd_port -dir O ad463x_spi_sclk
 create_bd_port -dir O ad463x_spi_cs
 create_bd_port -dir O ad463x_spi_sdo
 create_bd_port -dir I -from [expr $NUM_OF_SDI-1] -to 0 ad463x_spi_sdi
-
 create_bd_port -dir I ad463x_echo_sclk
-
 create_bd_port -dir I ad463x_busy
 create_bd_port -dir O ad463x_cnv
 create_bd_port -dir I ad463x_ext_clk
@@ -40,8 +38,6 @@ ad_connect $sys_cpu_clk spi_clkgen/clk
 ad_connect spi_clk spi_clkgen/clk_0
 
 # create a SPI Engine architecture
-
-#spi_engine_create "spi_ad463x" 32         1             1       $NUM_OF_SDI 0          1
 
 set data_width    32
 set async_spi_clk 1
@@ -152,7 +148,6 @@ if {$CAPTURE_ZONE == 1} {
       ad_connect ad463x_spi_sdi data_capture/data_in
 
       ad_connect data_capture/m_axis data_reorder/s_axis
-
     }
     default {
       puts "ERROR: Invalid value for CLK_MODE. (valid values are 0 or 1 or 2)"
@@ -186,12 +181,12 @@ ad_connect $sys_cpu_resetn axi_ad463x_dma/m_dest_axi_aresetn
 
 # data path
 
-ad_connect  $hier_spi_engine/${hier_spi_engine}_execution/cs ad463x_spi_cs
-ad_connect  $hier_spi_engine/${hier_spi_engine}_execution/sclk ad463x_spi_sclk
-ad_connect  $hier_spi_engine/${hier_spi_engine}_execution/sdo ad463x_spi_sdo
-ad_connect  $hier_spi_engine/${hier_spi_engine}_execution/sdi ad463x_spi_sdi
+ad_connect $hier_spi_engine/${hier_spi_engine}_execution/cs ad463x_spi_cs
+ad_connect $hier_spi_engine/${hier_spi_engine}_execution/sclk ad463x_spi_sclk
+ad_connect $hier_spi_engine/${hier_spi_engine}_execution/sdo ad463x_spi_sdo
+ad_connect $hier_spi_engine/${hier_spi_engine}_execution/sdi ad463x_spi_sdi
 
-ad_connect  axi_ad463x_dma/s_axis data_reorder/m_axis
+ad_connect axi_ad463x_dma/s_axis data_reorder/m_axis
 
 # AXI memory mapped address space
 
