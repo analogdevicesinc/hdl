@@ -236,6 +236,22 @@ module axi_ad9361_tx_channel #(
     end
   endfunction
 
+  // data-path disable
+
+  generate
+  if (DISABLE == 1) begin
+    assign dac_data = 12'd0;
+    assign dac_data_out = 12'd0;
+    assign dac_enable = 1'd0;
+    assign up_wack = 1'd0;
+    assign up_rdata = 32'd0;
+    assign up_rack = 1'd0;
+  end
+  endgenerate
+
+  generate
+  if (DISABLE == 0) begin
+
   // global toggle
 
   always @(posedge dac_clk) begin
@@ -248,8 +264,8 @@ module axi_ad9361_tx_channel #(
 
   // dac iq correction
 
-  assign dac_enable = (DISABLE == 1) ? 1'd0 : dac_enable_int;
-  assign dac_data = (DISABLE == 1) ? 12'd0 : dac_data_int;
+  assign dac_enable = dac_enable_int;
+  assign dac_data = dac_data_int;
 
   always @(posedge dac_clk) begin
     dac_enable_int <= (dac_data_sel_s == 4'h2) ? 1'b1 : 1'b0;
@@ -274,7 +290,7 @@ module axi_ad9361_tx_channel #(
 
   // dac mux
 
-  assign dac_data_out = (DISABLE == 1) ? 12'd0 : dac_data_out_int;
+  assign dac_data_out = dac_data_out_int;
 
   always @(posedge dac_clk) begin
     case (dac_data_sel_s)
@@ -341,9 +357,9 @@ module axi_ad9361_tx_channel #(
 
   // single channel processor
 
-  assign up_wack = (DISABLE == 1) ? 1'd0 : up_wack_s;
-  assign up_rack = (DISABLE == 1) ? 1'd0 : up_rack_s;
-  assign up_rdata = (DISABLE == 1) ? 32'd0 : up_rdata_s;
+  assign up_wack = up_wack_s;
+  assign up_rack = up_rack_s;
+  assign up_rdata = up_rdata_s;
 
   up_dac_channel #(
     .COMMON_ID (6'h11),
@@ -391,5 +407,8 @@ module axi_ad9361_tx_channel #(
     .up_raddr (up_raddr),
     .up_rdata (up_rdata_s),
     .up_rack (up_rack_s));
+
+  end
+  endgenerate
 
 endmodule
