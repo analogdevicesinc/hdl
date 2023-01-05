@@ -10,6 +10,7 @@ M_DEPS += ../common/cn0363_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
 M_DEPS += ../../common/zed/zed_system_bd.tcl
+M_DEPS += ../../../library/spi_engine/scripts/spi_engine.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
 
 LIB_DEPS += axi_clkgen

@@ -1,3 +1,7 @@
+source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
+
+create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 spi
+
 proc load_fir_filter_vector {filter_file} {
 	set fp [open $filter_file r]
 	set data [split [read $fp] "\n"]
@@ -37,64 +41,32 @@ ad_ip_parameter axi_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 ad_ip_parameter axi_dma CONFIG.DMA_AXI_PROTOCOL_DEST 1
 
 # Create SPI engine controller with offload
-create_bd_cell -type hier spi
-current_bd_instance /spi
 
-	create_bd_pin -dir I -type clk clk
-	create_bd_pin -dir I -type rst resetn
-	create_bd_pin -dir O conv_done
-	create_bd_pin -dir O irq
-	create_bd_intf_pin -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 m_spi
-	create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:axis_rtl:1.0 M_AXIS_SAMPLE
+set data_width    8
+set async_spi_clk 0
+set num_cs        2
+set num_sdi       1
+set num_sdo       1
+set sdi_delay     1
+set echo_sclk     0
 
-  ad_ip_instance spi_engine_execution execution
-  ad_ip_instance axi_spi_engine axi
-  ad_ip_instance spi_engine_offload offload
-  ad_ip_instance spi_engine_interconnect interconnect
-  ad_ip_instance util_sigma_delta_spi util_sigma_delta_spi
+set hier_spi_engine spi_cn0363
 
-  ad_ip_parameter execution CONFIG.NUM_OF_CS 2
-  ad_ip_parameter util_sigma_delta_spi CONFIG.NUM_OF_CS 2
-  ad_ip_parameter interconnect CONFIG.NUM_OF_SDI 2
-  ad_ip_parameter axi CONFIG.NUM_OFFLOAD 1
+spi_engine_create $hier_spi_engine $data_width $async_spi_clk $num_cs $num_sdi $num_sdo $sdi_delay $echo_sclk
 
-	ad_connect axi/spi_engine_offload_ctrl0 offload/spi_engine_offload_ctrl
-	ad_connect offload/spi_engine_ctrl interconnect/s0_ctrl
-	ad_connect axi/spi_engine_ctrl interconnect/s1_ctrl
-	ad_connect interconnect/m_ctrl execution/ctrl
-	ad_connect offload/offload_sdi M_AXIS_SAMPLE
+ad_connect $sys_cpu_clk $hier_spi_engine/clk
+ad_connect sys_cpu_resetn $hier_spi_engine/resetn
 
-	ad_connect util_sigma_delta_spi/data_ready offload/trigger
-	ad_connect util_sigma_delta_spi/data_ready conv_done
+ad_ip_instance util_sigma_delta_spi util_sigma_delta_spi
+ad_ip_parameter util_sigma_delta_spi CONFIG.NUM_OF_CS $num_cs
 
-	ad_connect execution/active util_sigma_delta_spi/spi_active
-	ad_connect execution/spi util_sigma_delta_spi/s_spi
-	ad_connect util_sigma_delta_spi/m_spi m_spi
+ad_connect $hier_spi_engine/clk util_sigma_delta_spi/clk
+ad_connect util_sigma_delta_spi/resetn $hier_spi_engine/resetn
 
-	connect_bd_net \
-		[get_bd_pins clk] \
-		[get_bd_pins offload/spi_clk] \
-		[get_bd_pins offload/ctrl_clk] \
-		[get_bd_pins execution/clk] \
-		[get_bd_pins axi/s_axi_aclk] \
-		[get_bd_pins axi/spi_clk] \
-		[get_bd_pins interconnect/clk] \
-		[get_bd_pins util_sigma_delta_spi/clk]
-
-	connect_bd_net \
-		[get_bd_pins axi/spi_resetn] \
-		[get_bd_pins offload/spi_resetn] \
-		[get_bd_pins execution/resetn] \
-		[get_bd_pins interconnect/resetn] \
-		[get_bd_pins util_sigma_delta_spi/resetn]
-
-	connect_bd_net [get_bd_pins resetn] [get_bd_pins axi/s_axi_aresetn]
-	ad_connect irq axi/irq
-
-current_bd_instance /
-
-create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 spi
-ad_connect spi/m_spi spi
+ad_connect $hier_spi_engine/m_spi util_sigma_delta_spi/s_spi
+ad_connect util_sigma_delta_spi/data_ready $hier_spi_engine/trigger
+ad_connect $hier_spi_engine/${hier_spi_engine}_execution/active util_sigma_delta_spi/spi_active
+ad_connect util_sigma_delta_spi/m_spi spi
 
 ad_ip_instance c_counter_binary phase_gen
 ad_ip_instance xlslice phase_slice
@@ -243,9 +215,9 @@ current_bd_instance /processing
 
 current_bd_instance /
 
-ad_connect /spi/M_AXIS_SAMPLE /processing/S_AXIS_SAMPLE
-ad_connect /spi/conv_done /processing/conv_done
+ad_connect /processing/S_AXIS_SAMPLE $hier_spi_engine/M_AXIS_SAMPLE
 ad_connect /phase_gen/Q /processing/phase
+ad_connect util_sigma_delta_spi/data_ready /processing/conv_done
 
 ad_ip_instance axi_generic_adc axi_adc
 ad_ip_parameter axi_adc	CONFIG.NUM_OF_CHANNELS 14
@@ -254,7 +226,6 @@ ad_connect processing/overflow axi_adc/adc_dovf
 ad_connect axi_adc/adc_enable processing/channel_enable
 
 connect_bd_net -net $sys_cpu_clk \
-	[get_bd_pins /spi/clk] \
 	[get_bd_pins /processing/clk] \
 	[get_bd_pins /axi_dma/m_dest_axi_aclk] \
 	[get_bd_pins /axi_dma/fifo_wr_clk] \
@@ -262,18 +233,17 @@ connect_bd_net -net $sys_cpu_clk \
 	[get_bd_pins /axi_adc/adc_clk]
 
 connect_bd_net -net $sys_cpu_resetn \
-	[get_bd_pins /spi/resetn] \
 	[get_bd_pins /processing/resetn] \
 	[get_bd_pins /axi_dma/m_dest_axi_aresetn]
 
 ad_connect /processing/dma_wr /axi_dma/fifo_wr
 
 ad_cpu_interconnect 0x43c00000 /axi_adc
-ad_cpu_interconnect 0x44a00000 /spi/axi
+ad_cpu_interconnect 0x44a00000 $hier_spi_engine/${hier_spi_engine}_axi_regmap
 ad_cpu_interconnect 0x44a30000 /axi_dma
 
 ad_cpu_interrupt "ps-13" "mb-13" /axi_dma/irq
-ad_cpu_interrupt "ps-12" "mb-12" /spi/irq
+ad_cpu_interrupt "ps-12" "mb-12" $hier_spi_engine/irq
 
 ad_mem_hp2_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP2
 ad_mem_hp2_interconnect $sys_cpu_clk axi_dma/m_dest_axi
