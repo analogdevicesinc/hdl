@@ -11,10 +11,8 @@ M_DEPS += ../common/ad7606x_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
 M_DEPS += ../../common/zed/zed_system_bd.tcl
-M_DEPS += ../../../library/util_cdc/sync_bits.v
 M_DEPS += ../../../library/spi_engine/scripts/spi_engine.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
-M_DEPS += ../../../library/common/ad_edge_detect.v
 
 LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_dmac
