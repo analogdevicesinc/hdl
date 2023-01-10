@@ -39,8 +39,8 @@ module axi_ad3552r_if (
 
   input                   clk_in,  // 120MHz
   input                   reset_in,
-  (* mark_debug = "true" *) input       [31:0]      dac_data,
-  (* mark_debug = "true" *) input                   dac_data_valid,
+  input       [31:0]      dac_data,
+  input                   dac_data_valid,
   output reg              dac_data_ready,
 
   input       [ 7:0]      address,
@@ -48,34 +48,35 @@ module axi_ad3552r_if (
   input       [23:0]      data_write,
   input                   sdr_ddr_n,
   input                   symb_8_16b,
-  (* mark_debug = "true" *) input                   transfer_data,
-  (* mark_debug = "true" *) input                   stream,
+  input                   transfer_data,
+  input                   stream,
 
   // DAC control signals
 
-  (* mark_debug = "true" *) output                  sclk,
-  (* mark_debug = "true" *) output reg              csn,
+  output                  sclk,
+  output reg              csn,
+  output                  if_busy,
 
   input         [3:0]     sdio_i,
   output        [3:0]     sdio_o,
   output                  sdio_t
 );
 
-  (* mark_debug = "true" *) wire          transfer_data_s;
-  (* mark_debug = "true" *) wire          start_synced;
-  (* mark_debug = "true" *) wire [31:0]   dac_data_int ;
-  (* mark_debug = "true" *) reg  [55:0]   transfer_reg = 56'h0;
+  wire          transfer_data_s;
+  wire          start_synced;
+  wire [31:0]   dac_data_int ;
+  reg  [55:0]   transfer_reg = 56'h0;
 
-  (* mark_debug = "true" *) reg  [15:0]   counter = 16'h0;
+  reg  [15:0]   counter = 16'h0;
   reg [ 2:0]  transfer_state = 0;
   reg [ 2:0]  transfer_state_next = 0;
-  (* mark_debug = "true" *) reg         cycle_done = 1'b0;
-  (* mark_debug = "true" *) reg         transfer_step = 1'b0;
+  reg         cycle_done = 1'b0;
+  reg         transfer_step = 1'b0;
   reg         sclk_ddr = 1'b0;
   reg         full_speed = 1'b0;
   reg         transfer_data_d = 1'b0;
   reg         transfer_data_dd = 1'b0;
-  (* mark_debug = "true" *)  reg  [3:0]  valid_captured_d = 4'b0;
+  reg  [3:0]  valid_captured_d = 4'b0;
   reg         data_r_wn = 1'b0;
   reg         valid_captured = 1'b0;
   reg         start_transfer = 1'b0; 
@@ -88,7 +89,7 @@ module axi_ad3552r_if (
                         CS_HIGH = 3'h6;
 
 // transform the transfer data rising edge into a pulse
-
+  assign if_busy = ~csn;
   assign transfer_data_s = transfer_data_d & ~transfer_data_dd;
   assign start_synced = valid_captured_d[1] & start_transfer & stream;
   always @(posedge clk_in) begin

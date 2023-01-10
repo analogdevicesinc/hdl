@@ -68,8 +68,8 @@ module axi_ltc2387_if #(
   input             db_p,
   input             db_n,
 
-  output            adc_valid,
-  output     reg    dac_valid,
+  (* mark_debug = "true" *)  output            adc_valid,
+  (* mark_debug = "true" *)  output     reg    dac_valid,
   output reg [RESOLUTION-1:0] adc_data
 );
 

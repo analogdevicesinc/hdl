@@ -60,6 +60,7 @@ module axi_ad3552r_core #(
   // output
 
   output       [ 7:0]      address,
+  input                    if_busy,
   input        [23:0]      data_read,
   output       [23:0]      data_write,
   output                   sdr_ddr_n,
@@ -98,7 +99,7 @@ module axi_ad3552r_core #(
   wire              dac_rst_s;
 
   wire     [31:0]   dac_data_control;
-  wire     [ 3:0]    dac_control;
+  wire     [31:0]   dac_control;
 
   wire              dac_dds_format;
   wire              dac_data_sync;
@@ -111,10 +112,10 @@ module axi_ad3552r_core #(
   assign dac_valid      = dac_valid_channel_0 | dac_valid_channel_1;
 
   assign data_write     = dac_data_control[23:0];
-  assign address        = dac_data_control[31:24];
   assign transfer_data  = dac_control[0];
   assign stream         = dac_control[1];
-
+  assign address        = dac_control[31:24];
+  
   // processor read interface
 
   always @(negedge up_rstn or posedge up_clk) begin
@@ -209,7 +210,8 @@ module axi_ad3552r_core #(
     .dac_clksel(),
     .dac_custom_wr(dac_data_control),
     .dac_custom_rd({8'b0,data_read}),
-    .dac_write_control(dac_control),
+    .dac_custom_control(dac_control),
+    .dac_status_if_busy(if_busy),
     .dac_par_type(),
     .dac_par_enb(),
     .dac_r1_mode(),

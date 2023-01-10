@@ -37,8 +37,8 @@ create_bd_port -dir I rx_3_db_n
 
 # max7301
 
-create_bd_port -dir I max_spi_csn_i
-create_bd_port -dir O max_spi_csn_o
+create_bd_port -dir I -from 1 -to 0 max_spi_csn_i
+create_bd_port -dir O -from 1 -to 0 max_spi_csn_o
 create_bd_port -dir I max_spi_clk_i
 create_bd_port -dir O max_spi_clk_o
 create_bd_port -dir I max_spi_sdo_i
@@ -225,6 +225,7 @@ ad_ip_parameter max_spi CONFIG.C_USE_STARTUP_INT 0
 ad_ip_parameter max_spi CONFIG.C_SPI_MODE 0
 ad_ip_parameter max_spi CONFIG.C_SCK_RATIO 16
 ad_ip_parameter max_spi CONFIG.C_NUM_TRANSFER_BITS 16
+ad_ip_parameter max_spi CONFIG.C_NUM_SS_BITS 2
 
 ## connections
 

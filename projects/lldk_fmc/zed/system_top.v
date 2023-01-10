@@ -103,7 +103,7 @@ module system_top(
   input                   spi_miso,
   output                  spi_mosi,
   output                  spi_sck,
-  output                  spi_csb,
+  output        [1:0]     spi_csb,
 
   output                  direction,
   output                  reset,

@@ -48,15 +48,15 @@ module axi_ad3552r_channel #(
 
   input                   dac_clk,
   input                   dac_rst,
-  (* mark_debug = "true" *)  output                  dac_data_valid,
-  (* mark_debug = "true" *)  output    [15:0]        dac_data,
+  output                  dac_data_valid,
+  output    [15:0]        dac_data,
 
   // input sources
 
   input        [15:0]     dma_data,
-  (* mark_debug = "true" *) input        [15:0]     adc_data,
-  (* mark_debug = "true" *) input                   valid_in_adc,
-  (* mark_debug = "true" *) input                   valid_in_dma,
+  input        [15:0]     adc_data,
+  input                   valid_in_adc,
+  input                   valid_in_dma,
   input                   dac_data_ready,
 
   // processor interface
@@ -93,13 +93,13 @@ module axi_ad3552r_channel #(
   wire    [15:0]   formatted_dma_data;
   wire    [15:0]   formatted_adc_data; 
 
-  (* mark_debug = "true" *) wire    [ 3:0]   dac_data_sel_s;
+  wire    [ 3:0]   dac_data_sel_s;
 
-  (* mark_debug = "true" *)  wire             dac_data_valid_int;
-  (* mark_debug = "true" *)  wire    [15:0]   dac_data_int;
+  wire             dac_data_valid_int;
+  wire    [15:0]   dac_data_int;
 
-  (* mark_debug = "true" *) reg     [15:0]   ramp_pattern = 16'h0000;
-  (* mark_debug = "true" *) reg              ramp_valid = 1'b0;
+  reg     [15:0]   ramp_pattern = 16'h0000;
+  reg              ramp_valid = 1'b0;
 
 
   assign dac_data = dac_data_int;

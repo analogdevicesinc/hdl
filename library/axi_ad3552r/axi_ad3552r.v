@@ -52,15 +52,15 @@ module axi_ad3552r #(
   input                   valid_in_dma,
   output                  dac_data_ready,
 
-  (* mark_debug = "true" *) input       [15:0]      data_in_a,
-  (* mark_debug = "true" *) input       [15:0]      data_in_b,
-  (* mark_debug = "true" *) input                   valid_in_a,
-  (* mark_debug = "true" *) input                   valid_in_b,
+  input       [15:0]      data_in_a,
+  input       [15:0]      data_in_b,
+  input                   valid_in_a,
+  input                   valid_in_b,
 
   output                  dac_sclk,
   output                  dac_csn,
   input         [3:0]     sdio_i,
-  (* mark_debug = "true" *) output        [3:0]     sdio_o,
+  output        [3:0]     sdio_o,
   output                  sdio_t,
 
   // axi interface
@@ -114,7 +114,7 @@ module axi_ad3552r #(
   wire              stream;
   wire    [ 31:0]   dac_data;
   wire              dac_valid;
-
+  wire              if_busy;
   // signal name changes
 
   assign up_clk  = s_axi_aclk;
@@ -134,6 +134,7 @@ module axi_ad3552r #(
     .symb_8_16b(symb_8_16b),
     .transfer_data(transfer_data),
     .stream(stream),
+    .if_busy(if_busy),
     .sclk(dac_sclk),
     .csn(dac_csn),
     .sdio_i(sdio_i),
@@ -166,6 +167,7 @@ module axi_ad3552r #(
     .symb_8_16b(symb_8_16b),
     .transfer_data(transfer_data),
     .stream(stream),
+    .if_busy(if_busy),
     .up_rstn(up_rstn),
     .up_clk(up_clk),
     .up_wreq(up_wreq_s),
