@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2022 (c) Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -47,16 +47,16 @@ module system_top (
   output                  ddr4_act_n,
   output      [16:0]      ddr4_addr,
   output      [ 1:0]      ddr4_ba,
-  output      [ 0:0]      ddr4_bg,
+  output                  ddr4_bg,
   output                  ddr4_ck_p,
   output                  ddr4_ck_n,
-  output      [ 0:0]      ddr4_cke,
-  output      [ 0:0]      ddr4_cs_n,
+  output                  ddr4_cke,
+  output                  ddr4_cs_n,
   inout       [ 7:0]      ddr4_dm_n,
   inout       [63:0]      ddr4_dq,
   inout       [ 7:0]      ddr4_dqs_p,
   inout       [ 7:0]      ddr4_dqs_n,
-  output      [ 0:0]      ddr4_odt,
+  output                  ddr4_odt,
   output                  ddr4_reset_n,
 
   output                  mdio_mdc,
@@ -96,13 +96,11 @@ module system_top (
   inout                   fpga_sdio,
   output                  fpga_csb,
 
+  output                  adf4371_csb,
+
   output                  hmc7044_sclk,
   inout                   hmc7044_sdio,
   output                  hmc7044_csb,
-
-  output                  adf4371_sclk,
-  inout                   adf4371_sdio,
-  output                  adf4371_csb,
 
   inout       [ 4:0]      gpio,
 
@@ -116,11 +114,11 @@ module system_top (
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
 
-  wire            spi_clk;
-  wire    [ 7:0]  spi_csn;
-  wire            spi_mosi;
   wire            spi_miso;
-  wire            spi_sdio;
+  wire            spi_mosi;
+  wire            hmc7044_miso;
+  wire            hmc7044_mosi;
+  wire    [ 1:0]  hmc7044_csn;
 
   wire            rx_ref_clk;
   wire            rx_ref_clk_replica;
@@ -128,21 +126,9 @@ module system_top (
   wire            rx_sync;
 
   assign iic_rstn = 1'b1;
+  assign hmc7044_csb = hmc7044_csn[0];
+  assign adf4371_csb = hmc7044_csn[1];
 
-  // spi
-
-  assign fpga_csb = spi_csn[0];
-  assign fpga_sclk = spi_clk;
-  assign fpga_sdio = spi_sdio;
-
-  assign hmc7044_csb = spi_csn[1];
-  assign hmc7044_sclk = spi_clk;
-  assign hmc7044_sdio = spi_sdio;
-
-  assign adf4371_csb = spi_csn[2];
-  assign adf4371_sclk = spi_clk;
-  assign adf4371_sdio = spi_sdio;
-  
   // instantiations
 
   IBUFDS_GTE4 i_ibufds_rx_ref_clk (
@@ -169,26 +155,14 @@ module system_top (
     .O (rx_sync_p),
     .OB (rx_sync_n));
 
-  IBUFDS_GTE4 #(
-    .REFCLK_HROW_CK_SEL(2'b00)
-  ) i_ibufds_glbl_clk_0 (
+  IBUFDS_GTE4 i_ibufds_glbl_clk_0 (
     .I (glbl_clk_0_p),
     .IB (glbl_clk_0_n),
     .ODIV2 (glbl_clk_0));
 
-  BUFG_GT i_bufg(
+  BUFG_GT i_bufg_glbl_clk_0(
     .I (glbl_clk_0),
     .O (glbl_clk_buf));
-
-  ad_3w_spi #(
-    .NUM_OF_SLAVES(3)
-  ) i_spi (
-    .spi_csn(spi_csn[3:0]),
-    .spi_clk(spi_clk),
-    .spi_mosi(spi_mosi),
-    .spi_miso(spi_miso),
-    .spi_sdio(spi_sdio),
-    .spi_dir());
 
   ad_iobuf #(
     .DATA_WIDTH(5)
@@ -211,6 +185,26 @@ module system_top (
 
   assign gpio_i[63:38] = gpio_o[63:38];
   assign gpio_i[31:17] = gpio_o[31:17];
+
+  ad_3w_spi #(
+    .NUM_OF_SLAVES(2)
+  ) i_hmc7044_spi (
+    .spi_csn (hmc7044_csn[1:0]),
+    .spi_clk (hmc7044_sclk),
+    .spi_mosi (hmc7044_mosi),
+    .spi_miso (hmc7044_miso),
+    .spi_sdio (hmc7044_sdio),
+    .spi_dir ());
+
+  ad_3w_spi #(
+    .NUM_OF_SLAVES(1)
+  ) i_ad9213_spi (
+    .spi_csn (fpga_csb),
+    .spi_clk (fpga_sclk),
+    .spi_mosi (spi_mosi),
+    .spi_miso (spi_miso),
+    .spi_sdio (fpga_sdio),
+    .spi_dir ());
 
   system_wrapper i_system_wrapper (
     .sys_rst (sys_rst),
@@ -244,13 +238,20 @@ module system_top (
     .iic_main_sda_io (iic_sda),
     .uart_sin (uart_sin),
     .uart_sout (uart_sout),
-    .spi_clk_i (spi_clk),
-    .spi_clk_o (spi_clk),
-    .spi_csn_i (spi_csn),
-    .spi_csn_o (spi_csn),
+    .spi_clk_i (fpga_sclk),
+    .spi_clk_o (fpga_sclk),
+    .spi_csn_i (fpga_csb),
+    .spi_csn_o (fpga_csb),
     .spi_sdi_i (spi_miso),
     .spi_sdo_i (spi_mosi),
     .spi_sdo_o (spi_mosi),
+    .hmc7044_clk_i (hmc7044_sclk),
+    .hmc7044_clk_o (hmc7044_sclk),
+    .hmc7044_csn_i (hmc7044_csn),
+    .hmc7044_csn_o (hmc7044_csn),
+    .hmc7044_sdi_i (hmc7044_miso),
+    .hmc7044_sdo_i (hmc7044_mosi),
+    .hmc7044_sdo_o (hmc7044_mosi),
     .gpio0_i (gpio_i[31:0]),
     .gpio0_o (gpio_o[31:0]),
     .gpio0_t (gpio_t[31:0]),
@@ -260,36 +261,36 @@ module system_top (
     // FMC+
     .rx_data_0_n  (rx_data_n[1]),
     .rx_data_0_p  (rx_data_p[1]),
-    .rx_data_1_n  (rx_data_n[2]),
-    .rx_data_1_p  (rx_data_p[2]),
-    .rx_data_2_n  (rx_data_n[3]),
-    .rx_data_2_p  (rx_data_p[3]),
+    .rx_data_1_n  (rx_data_n[3]),
+    .rx_data_1_p  (rx_data_p[3]),
+    .rx_data_2_n  (rx_data_n[2]),
+    .rx_data_2_p  (rx_data_p[2]),
     .rx_data_3_n  (rx_data_n[4]),
     .rx_data_3_p  (rx_data_p[4]),
     .rx_data_4_n  (rx_data_n[0]),
     .rx_data_4_p  (rx_data_p[0]),
     .rx_data_5_n  (rx_data_n[15]),
     .rx_data_5_p  (rx_data_p[15]),
-    .rx_data_6_n  (rx_data_n[7]),
-    .rx_data_6_p  (rx_data_p[7]),
-    .rx_data_7_n  (rx_data_n[8]),
-    .rx_data_7_p  (rx_data_p[8]),
+    .rx_data_6_n  (rx_data_n[8]),
+    .rx_data_6_p  (rx_data_p[8]),
+    .rx_data_7_n  (rx_data_n[7]),
+    .rx_data_7_p  (rx_data_p[7]),
     .rx_data_8_n  (rx_data_n[5]),
     .rx_data_8_p  (rx_data_p[5]),
-    .rx_data_9_n  (rx_data_n[10]),
-    .rx_data_9_p  (rx_data_p[10]),
-    .rx_data_10_n (rx_data_n[9]),
-    .rx_data_10_p (rx_data_p[9]),
-    .rx_data_11_n (rx_data_n[6]),
-    .rx_data_11_p (rx_data_p[6]),
-    .rx_data_12_n (rx_data_n[11]),
-    .rx_data_12_p (rx_data_p[11]),
-    .rx_data_13_n (rx_data_n[12]),
-    .rx_data_13_p (rx_data_p[12]),
+    .rx_data_9_n  (rx_data_n[6]),
+    .rx_data_9_p  (rx_data_p[6]),
+    .rx_data_10_n (rx_data_n[10]),
+    .rx_data_10_p (rx_data_p[10]),
+    .rx_data_11_n (rx_data_n[9]),
+    .rx_data_11_p (rx_data_p[9]),
+    .rx_data_12_n (rx_data_n[12]),
+    .rx_data_12_p (rx_data_p[12]),
+    .rx_data_13_n (rx_data_n[14]),
+    .rx_data_13_p (rx_data_p[14]),
     .rx_data_14_n (rx_data_n[13]),
     .rx_data_14_p (rx_data_p[13]),
-    .rx_data_15_n (rx_data_n[14]),
-    .rx_data_15_p (rx_data_p[14]),
+    .rx_data_15_n (rx_data_n[11]),
+    .rx_data_15_p (rx_data_p[11]),
 
     .rx_ref_clk_0 (rx_ref_clk),
     .rx_ref_clk_1 (rx_ref_clk_replica),
