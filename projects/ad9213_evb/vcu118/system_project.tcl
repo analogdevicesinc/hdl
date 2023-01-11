@@ -1,5 +1,9 @@
+###############################################################################
+## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
-source ../../scripts/adi_env.tcl
+source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
@@ -15,4 +19,3 @@ adi_project_files ad9213_evb_vcu118 [list \
 set_property strategy Performance_SpreadSLLs [get_runs impl_1]
 
 adi_project_run ad9213_evb_vcu118
-
