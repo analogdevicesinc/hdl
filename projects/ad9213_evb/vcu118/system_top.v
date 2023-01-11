@@ -96,13 +96,11 @@ module system_top (
   inout                   fpga_sdio,
   output                  fpga_csb,
 
+  output                  adf4371_csb,
+  
   output                  hmc7044_sclk,
   inout                   hmc7044_sdio,
   output                  hmc7044_csb,
-
-  output                  adf4371_sclk,
-  inout                   adf4371_sdio,
-  output                  adf4371_csb,
 
   inout       [ 4:0]      gpio,
 
@@ -116,11 +114,11 @@ module system_top (
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
 
-  wire            spi_clk;
-  wire    [ 7:0]  spi_csn;
-  wire            spi_mosi;
   wire            spi_miso;
-  wire            spi_sdio;
+  wire            spi_mosi;
+  wire            hmc7044_miso;
+  wire            hmc7044_mosi;
+  wire    [ 1:0]  hmc7044_csn;
 
   wire            rx_ref_clk;
   wire            rx_ref_clk_replica;
@@ -128,21 +126,9 @@ module system_top (
   wire            rx_sync;
 
   assign iic_rstn = 1'b1;
+  assign hmc7044_csb = hmc7044_csn[0];
+  assign adf4371_csb = hmc7044_csn[1];
 
-  // spi
-
-  assign fpga_csb = spi_csn[0];
-  assign fpga_sclk = spi_clk;
-  assign fpga_sdio = spi_sdio;
-
-  assign hmc7044_csb = spi_csn[1];
-  assign hmc7044_sclk = spi_clk;
-  assign hmc7044_sdio = spi_sdio;
-
-  assign adf4371_csb = spi_csn[2];
-  assign adf4371_sclk = spi_clk;
-  assign adf4371_sdio = spi_sdio;
-  
   // instantiations
 
   IBUFDS_GTE4 i_ibufds_rx_ref_clk (
@@ -169,26 +155,14 @@ module system_top (
     .O (rx_sync_p),
     .OB (rx_sync_n));
 
-  IBUFDS_GTE4 #(
-    .REFCLK_HROW_CK_SEL(2'b00)
-  ) i_ibufds_glbl_clk_0 (
+  IBUFDS_GTE4 i_ibufds_glbl_clk_0 (
     .I (glbl_clk_0_p),
     .IB (glbl_clk_0_n),
     .ODIV2 (glbl_clk_0));
 
-  BUFG_GT i_bufg(
+  BUFG_GT i_bufg_glbl_clk_0(
     .I (glbl_clk_0),
     .O (glbl_clk_buf));
-
-  ad_3w_spi #(
-    .NUM_OF_SLAVES(3)
-  ) i_spi (
-    .spi_csn(spi_csn[3:0]),
-    .spi_clk(spi_clk),
-    .spi_mosi(spi_mosi),
-    .spi_miso(spi_miso),
-    .spi_sdio(spi_sdio),
-    .spi_dir());
 
   ad_iobuf #(
     .DATA_WIDTH(5)
@@ -211,6 +185,26 @@ module system_top (
 
   assign gpio_i[63:38] = gpio_o[63:38];
   assign gpio_i[31:17] = gpio_o[31:17];
+
+  ad_3w_spi #(
+    .NUM_OF_SLAVES(2)
+  ) i_hmc7044_spi (
+    .spi_csn (hmc7044_csn[1:0]),
+    .spi_clk (hmc7044_sclk),
+    .spi_mosi (hmc7044_mosi),
+    .spi_miso (hmc7044_miso),
+    .spi_sdio (hmc7044_sdio),
+    .spi_dir ());
+
+  ad_3w_spi #(
+    .NUM_OF_SLAVES(1)
+  ) i_ad9213_spi (
+    .spi_csn (fpga_csb),
+    .spi_clk (fpga_sclk),
+    .spi_mosi (spi_mosi),
+    .spi_miso (spi_miso),
+    .spi_sdio (fpga_sdio),
+    .spi_dir ());
 
   system_wrapper i_system_wrapper (
     .sys_rst (sys_rst),
@@ -244,13 +238,20 @@ module system_top (
     .iic_main_sda_io (iic_sda),
     .uart_sin (uart_sin),
     .uart_sout (uart_sout),
-    .spi_clk_i (spi_clk),
-    .spi_clk_o (spi_clk),
-    .spi_csn_i (spi_csn),
-    .spi_csn_o (spi_csn),
+    .spi_clk_i (fpga_sclk),
+    .spi_clk_o (fpga_sclk),
+    .spi_csn_i (fpga_csb),
+    .spi_csn_o (fpga_csb),
     .spi_sdi_i (spi_miso),
     .spi_sdo_i (spi_mosi),
     .spi_sdo_o (spi_mosi),
+    .hmc7044_clk_i (hmc7044_sclk),
+    .hmc7044_clk_o (hmc7044_sclk),
+    .hmc7044_csn_i (hmc7044_csn),
+    .hmc7044_csn_o (hmc7044_csn),
+    .hmc7044_sdi_i (hmc7044_miso),
+    .hmc7044_sdo_i (hmc7044_mosi),
+    .hmc7044_sdo_o (hmc7044_mosi),
     .gpio0_i (gpio_i[31:0]),
     .gpio0_o (gpio_o[31:0]),
     .gpio0_t (gpio_t[31:0]),

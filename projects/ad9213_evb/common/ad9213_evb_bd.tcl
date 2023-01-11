@@ -15,6 +15,13 @@ set adc_dma_data_width 512
 
 create_bd_port -dir I glbl_clk_0
 
+create_bd_port -dir O -from 1 -to 0 hmc7044_csn_o
+create_bd_port -dir I -from 1 -to 0 hmc7044_csn_i
+create_bd_port -dir I hmc7044_clk_i
+create_bd_port -dir O hmc7044_clk_o
+create_bd_port -dir I hmc7044_sdo_i
+create_bd_port -dir O hmc7044_sdo_o
+create_bd_port -dir I hmc7044_sdi_i
 # adc peripherals
 
 ad_ip_instance util_adxcvr util_adc_xcvr
@@ -97,7 +104,7 @@ ad_connect  $sys_cpu_clk util_adc_xcvr/up_clk
 
 # connections (adc)
 
-ad_xcvrcon  util_adc_xcvr axi_ad9213_xcvr axi_ad9213_jesd {} glbl_clk_0
+ad_xcvrcon util_adc_xcvr axi_ad9213_xcvr axi_ad9213_jesd {4 0 2 1 3 8 9 7 6 11 10 15 12 14 13 5} glbl_clk_0 
 
 ## use global clock as device clock instead of rx_out_clk
 delete_bd_objs [get_bd_nets util_adc_xcvr_rx_out_clk_0]
@@ -138,10 +145,26 @@ ad_connect  axi_ad9213_fifo/dma_wdata axi_ad9213_dma/s_axis_data
 ad_connect  axi_ad9213_fifo/dma_wready axi_ad9213_dma/s_axis_ready
 ad_connect  axi_ad9213_fifo/dma_xfer_req axi_ad9213_dma/s_axis_xfer_req
 
+ad_ip_instance axi_quad_spi hmc7044_spi
+ad_ip_parameter hmc7044_spi CONFIG.C_USE_STARTUP 0
+ad_ip_parameter hmc7044_spi CONFIG.C_NUM_SS_BITS 2
+ad_ip_parameter hmc7044_spi CONFIG.C_SCK_RATIO 8
+
+ad_connect hmc7044_csn_i hmc7044_spi/ss_i
+ad_connect hmc7044_csn_o hmc7044_spi/ss_o
+ad_connect hmc7044_clk_i hmc7044_spi/sck_i
+ad_connect hmc7044_clk_o hmc7044_spi/sck_o
+ad_connect hmc7044_sdo_i hmc7044_spi/io0_i
+ad_connect hmc7044_sdo_o hmc7044_spi/io0_o
+ad_connect hmc7044_sdi_i hmc7044_spi/io1_i
+
+ad_connect $sys_cpu_clk hmc7044_spi/ext_spi_clk
+
 # interconnect (cpu)
 ad_cpu_interconnect 0x44a60000 axi_ad9213_xcvr
 ad_cpu_interconnect 0x44a10000 rx_ad9213_tpl_core
 ad_cpu_interconnect 0x44a90000 axi_ad9213_jesd
+ad_cpu_interconnect 0x44a71000 hmc7044_spi
 ad_cpu_interconnect 0x7c420000 axi_ad9213_dma
 
 # interconnect (gt/adc)
@@ -149,5 +172,7 @@ ad_mem_hp0_interconnect $sys_cpu_clk axi_ad9213_xcvr/m_axi
 ad_mem_hp0_interconnect $sys_cpu_clk axi_ad9213_dma/m_dest_axi
 
 # interrupts
+ad_cpu_interrupt ps-17 mb-7 hmc7044_spi/ip2intc_irpt
 ad_cpu_interrupt ps-12 mb-12 axi_ad9213_dma/irq
 ad_cpu_interrupt ps-11 mb-13 axi_ad9213_jesd/irq
+
