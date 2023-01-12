@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2022 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2023 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -385,11 +385,10 @@ module axi_ad9361_rx #(
     .up_drp_rdata (up_drp_rdata),
     .up_drp_ready (up_drp_ready),
     .up_drp_locked (up_drp_locked),
-    .adc_custom_wr (),
-    .adc_write_req (),
-    .adc_custom_rd ('d0),
-    .adc_read_valid ('d0),
-    .adc_read_req (),
+    .adc_config_wr (),
+    .adc_config_ctrl (),
+    .adc_config_rd ('d0),
+    .adc_ctrl_status ('d0),
     .up_usr_chanmax_out (),
     .up_usr_chanmax_in (8'd3),
     .up_adc_gpio_in (up_adc_gpio_in),
