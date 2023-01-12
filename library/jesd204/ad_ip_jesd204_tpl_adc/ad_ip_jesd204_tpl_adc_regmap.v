@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2018 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2018-2023 (c) Analog Devices, Inc. All rights reserved.
 //
 // Each core or library found in this collection may have its own licensing terms.
 // The user should keep this in in mind while exploring these cores.
@@ -242,11 +242,10 @@ module ad_ip_jesd204_tpl_adc_regmap #(
     .up_drp_rdata (32'd0),
     .up_drp_ready (1'd0),
     .up_drp_locked (1'd1),
-    .adc_custom_wr (),
-    .adc_write_req (),
-    .adc_custom_rd ('d0),
-    .adc_read_valid ('d0),
-    .adc_read_req (),
+    .adc_config_wr (),
+    .adc_config_ctrl (),
+    .adc_config_rd ('d0),
+    .adc_ctrl_status ('d0),
     .up_usr_chanmax_out (),
     .up_usr_chanmax_in (NUM_CHANNELS),
     .up_adc_gpio_in (32'd0),
