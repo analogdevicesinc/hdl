@@ -30,6 +30,21 @@ ad_ip_instance axi_pwm_gen ad7606_pwm_gen
 ad_ip_parameter ad7606_pwm_gen CONFIG.PULSE_0_PERIOD 160
 ad_ip_parameter ad7606_pwm_gen CONFIG.PULSE_0_WIDTH 159
 
+# trigger to BUSY's negative edge
+
+create_bd_cell -type module -reference sync_bits busy_sync
+create_bd_cell -type module -reference ad_edge_detect busy_capture
+set_property -dict [list CONFIG.EDGE 1] [get_bd_cells busy_capture]
+
+ad_connect spi_clk busy_capture/clk
+ad_connect busy_capture/rst GND
+
+ad_connect busy_sync/out_resetn spi_ad7606/axi_regmap/spi_resetn
+ad_connect spi_clk busy_sync/out_clk
+ad_connect busy_sync/in_bits rx_busy
+ad_connect busy_sync/out_bits busy_capture/signal_in
+ad_connect busy_capture/signal_out spi_ad7606/offload/trigger
+
 # dma
 ad_ip_instance axi_dmac ad7606_dma
 ad_ip_parameter ad7606_dma CONFIG.DMA_TYPE_SRC 1
@@ -50,7 +65,6 @@ ad_connect spi_clk spi_clkgen/clk_0
 ad_connect spi_clk ad7606_pwm_gen/ext_clk
 ad_connect $sys_cpu_clk ad7606_pwm_gen/s_axi_aclk
 ad_connect sys_cpu_resetn ad7606_pwm_gen/s_axi_aresetn
-ad_connect rx_busy spi_ad7606/offload/trigger
 
 ad_connect ad7606_dma/s_axis spi_ad7606/m_axis_sample
 ad_connect spi_ad7606/m_spi ad7606_spi
