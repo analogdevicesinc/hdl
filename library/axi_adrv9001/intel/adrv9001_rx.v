@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2020 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2023 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -40,6 +40,7 @@ module adrv9001_rx #(
   parameter FPGA_TECHNOLOGY = 0,
   parameter NUM_LANES = 3,
   parameter DRP_WIDTH = 5,
+  parameter IODELAY_ENABLE = 0,
   parameter IODELAY_CTRL = 0,
   parameter USE_BUFG = 0,
   parameter IO_DELAY_GROUP = "dev_if_delay_group"
