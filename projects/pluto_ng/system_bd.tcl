@@ -36,6 +36,9 @@ ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL1_REF_CTRL__FREQMHZ 250
 ad_ip_parameter sys_ps8 CONFIG.PSU__FPGA_PL2_ENABLE 1
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL2_REF_CTRL__SRCSEL {IOPLL}
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL2_REF_CTRL__FREQMHZ 500
+#ad_ip_parameter sys_ps8 CONFIG.PSU__FPGA_PL3_ENABLE 1
+#ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL3_REF_CTRL__SRCSEL {IOPLL}
+#ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL3_REF_CTRL__FREQMHZ 20
 ad_ip_parameter sys_ps8 CONFIG.PSU__USE__IRQ0 1
 ad_ip_parameter sys_ps8 CONFIG.PSU__USE__IRQ1 1
 ad_ip_parameter sys_ps8 CONFIG.PSU__GPIO_EMIO__PERIPHERAL__ENABLE 1
@@ -111,7 +114,6 @@ ad_ip_parameter sys_ps8 CONFIG.PSU_MIO_72_PULLUPDOWN {pulldown}
 ad_ip_parameter sys_ps8 CONFIG.PSU_MIO_73_PULLUPDOWN {pulldown}
 ad_ip_parameter sys_ps8 CONFIG.PSU_MIO_74_PULLUPDOWN {pulldown}
 
-ad_ip_parameter sys_ps8 CONFIG.PSU__I2C0__PERIPHERAL__ENABLE {0}
 set_property -dict [list CONFIG.PSU__I2C1__PERIPHERAL__ENABLE {1} \
                          CONFIG.PSU__I2C1__PERIPHERAL__IO {MIO 32 .. 33} \
                          ] [get_bd_cells sys_ps8]
@@ -130,6 +132,8 @@ ad_ip_instance proc_sys_reset sys_250m_rstgen
 ad_ip_parameter sys_250m_rstgen CONFIG.C_EXT_RST_WIDTH 1
 ad_ip_instance proc_sys_reset sys_500m_rstgen
 ad_ip_parameter sys_500m_rstgen CONFIG.C_EXT_RST_WIDTH 1
+ad_ip_instance proc_sys_reset mipi_aresetngen
+ad_ip_parameter mipi_aresetngen CONFIG.C_EXT_RST_WIDTH 1
 
 # system reset/clock definitions
 
@@ -179,6 +183,14 @@ ad_connect  sys_ps8/emio_spi0_m_i spi0_miso
 ad_connect  sys_ps8/emio_spi0_ss_i_n VCC
 ad_connect  sys_ps8/emio_spi0_sclk_i GND
 ad_connect  sys_ps8/emio_spi0_s_i GND
+
+ad_ip_instance axi_iic axi_iic_mipi
+ad_ip_parameter axi_iic_mipi CONFIG.USE_BOARD_FLOW true
+ad_ip_parameter axi_iic_mipi CONFIG.IIC_BOARD_INTERFACE Custom
+
+#ad_connect iic_mipi_top axi_iic_mipi/iic
+#ad_connect iic_mipi iic_mipi_top
+make_bd_intf_pins_external [get_bd_intf_pins axi_iic_mipi/IIC]
 
 #system ID
 
@@ -296,6 +308,11 @@ create_bd_port -dir I s_1v2_sns_n
 create_bd_port -dir I s_1v8_mgtravtt_sns_p
 create_bd_port -dir I s_1v8_mgtravtt_sns_n
 
+create_bd_port -dir I mipi_csi_clk_p
+create_bd_port -dir I mipi_csi_clk_n
+create_bd_port -dir I -from 1 -to 0 mipi_csi_data_p
+create_bd_port -dir I -from 1 -to 0 mipi_csi_data_n
+
 # adrv9001
 
 ad_ip_instance axi_adrv9001 axi_adrv9001
@@ -370,6 +387,62 @@ ad_ip_instance util_upack2 util_dac_2_upack { \
   NUM_OF_CHANNELS 2 \
   SAMPLE_DATA_WIDTH 16 \
 }
+
+# mipi camera receiver
+
+ad_ip_instance mipi_csi2_rx_subsystem mipi_csi
+#create_bd_cell -type ip -vlnv xilinx.com:ip:mipi_csi2_rx_subsystem:5.0 mipi_csi
+ad_ip_parameter mipi_csi CONFIG.C_CSI_EN_CRC {false}
+ad_ip_parameter mipi_csi CONFIG.CMN_PXL_FORMAT {RAW8}
+ad_ip_parameter mipi_csi CONFIG.CMN_INC_VFB {true}
+ad_ip_parameter mipi_csi CONFIG.CMN_NUM_LANES {2}
+ad_ip_parameter mipi_csi CONFIG.VFB_TU_WIDTH {1}
+ad_ip_parameter mipi_csi CONFIG.CMN_NUM_PIXELS {2}
+ad_ip_parameter mipi_csi CONFIG.DPY_LINE_RATE {800}
+ad_ip_parameter mipi_csi CONFIG.CSI_EMB_NON_IMG {false}
+ad_ip_parameter mipi_csi CONFIG.SupportLevel {1}
+ad_ip_parameter mipi_csi CONFIG.C_HS_SETTLE_NS {143}
+ad_ip_parameter mipi_csi CONFIG.C_CSI_FILTER_USERDATATYPE {false}
+
+# VDMA instance
+
+ad_ip_instance axi_vdma axi_vdma
+ad_ip_parameter axi_vdma CONFIG.C_ADDR_WIDTH {32}
+ad_ip_parameter axi_vdma CONFIG.C_INCLUDE_S2MM {1}
+ad_ip_parameter axi_vdma CONFIG.C_M_AXI_S2MM_DATA_WIDTH {64}
+ad_ip_parameter axi_vdma CONFIG.C_S2MM_MAX_BURST_LENGTH {64}
+ad_ip_parameter axi_vdma CONFIG.C_S_AXIS_S2MM_TDATA_WIDTH {40}
+ad_ip_parameter axi_vdma CONFIG.C_INCLUDE_MM2S {0}
+ad_ip_parameter axi_vdma CONFIG.C_PRMRY_IS_ACLK_ASYNC {1}
+ad_ip_parameter axi_vdma CONFIG.C_USE_S2MM_FSYNC {2}
+ad_ip_parameter axi_vdma CONFIG.C_S2MM_GENLOCK_MODE {2}
+ad_ip_parameter axi_vdma CONFIG.C_INCLUDE_S2MM_DRE {0}
+ad_ip_parameter axi_vdma CONIFG.C_ENABLE_VERT_FLIP {0}
+
+# video_aclk generator
+ad_ip_instance clk_wiz video_aclk_generator
+ad_ip_parameter video_aclk_generator CONFIG.PRIMITIVE PLL
+ad_ip_parameter video_aclk_generator CONFIG.RESET_TYPE ACTIVE_LOW
+ad_ip_parameter video_aclk_generator CONFIG.USE_LOCKED false
+ad_ip_parameter video_aclk_generator CONFIG.CLKOUT1_REQUESTED_OUT_FREQ 120.000
+ad_ip_parameter video_aclk_generator CONFIG.CLKOUT1_REQUESTED_PHASE 0.000
+ad_ip_parameter video_aclk_generator CONFIG.CLKOUT1_REQUESTED_DUTY_CYCLE 50.000
+ad_ip_parameter video_aclk_generator CONFIG.PRIM_SOURCE Global_buffer
+ad_ip_parameter video_aclk_generator CONFIG.CLKIN1_UI_JITTER 0
+ad_ip_parameter video_aclk_generator CONFIG.PRIM_IN_FREQ 249.997498 
+
+# dphy_clk_200M generator
+ad_ip_instance clk_wiz dphy_clk_generator
+ad_ip_parameter dphy_clk_generator CONFIG.PRIMITIVE PLL
+ad_ip_parameter dphy_clk_generator CONFIG.RESET_TYPE ACTIVE_LOW
+ad_ip_parameter dphy_clk_generator CONFIG.USE_LOCKED false
+ad_ip_parameter dphy_clk_generator CONFIG.CLKOUT1_REQUESTED_OUT_FREQ 200.000
+ad_ip_parameter dphy_clk_generator CONFIG.CLKOUT1_REQUESTED_PHASE 0.000
+ad_ip_parameter dphy_clk_generator CONFIG.CLKOUT1_REQUESTED_DUTY_CYCLE 50.000
+ad_ip_parameter dphy_clk_generator CONFIG.PRIM_SOURCE Global_buffer
+ad_ip_parameter dphy_clk_generator CONFIG.CLKIN1_UI_JITTER 0
+ad_ip_parameter dphy_clk_generator CONFIG.PRIM_IN_FREQ 249.997498
+
 # ad9001 connections
 
 ad_connect  $sys_iodelay_clk       axi_adrv9001/delay_clk
@@ -568,6 +641,32 @@ ad_connect  pl_sysmon/vauxn9  s_5v0_rf_sns_n
 ad_connect  pl_sysmon/vauxp10 s_1p8_rf_sns_p
 ad_connect  pl_sysmon/vauxn10 s_1p8_rf_sns_n
 
+# MIPI receiver connections
+
+ad_connect mipi_csi/mipi_phy_if_clk_n mipi_csi_clk_n
+ad_connect mipi_csi/mipi_phy_if_clk_p mipi_csi_clk_p
+ad_connect mipi_csi/mipi_phy_if_data_p mipi_csi_data_p
+ad_connect mipi_csi/mipi_phy_if_data_n mipi_csi_data_n
+ad_connect mipi_csi/video_out axi_vdma/S_AXIS_S2MM
+
+ad_connect video_aclk_generator/clk_in1 $sys_dma_clk
+ad_connect dphy_clk_generator/clk_in1 $sys_dma_clk
+ad_connect video_aclk_generator/resetn $sys_dma_resetn
+ad_connect dphy_clk_generator/resetn $sys_dma_resetn
+ad_connect mipi_csi/video_aclk video_aclk_generator/clk_out1
+ad_connect mipi_csi/lite_aclk $sys_cpu_clk
+ad_connect mipi_csi/lite_aresetn $sys_cpu_resetn
+ad_connect mipi_csi/dphy_clk_200M dphy_clk_generator/clk_out1
+ad_connect sys_ps8/pl_resetn0 mipi_aresetngen/ext_reset_in
+ad_connect mipi_csi/video_aclk mipi_aresetngen/slowest_sync_clk
+ad_connect mipi_csi/video_aresetn mipi_aresetngen/peripheral_aresetn
+ad_connect axi_vdma/s_axi_lite_aclk $sys_cpu_clk
+ad_connect axi_vdma/m_axi_s2mm_aclk $sys_dma_clk
+ad_connect axi_vdma/s_axis_s2mm_aclk video_aclk_generator/clk_out1
+ad_connect axi_vdma/axi_resetn $sys_cpu_resetn
+ad_connect axi_iic_mipi/s_axi_aclk $sys_cpu_clk
+ad_connect axi_iic_mipi/s_axi_aresetn $sys_cpu_resetn
+
 ad_connect sys_cpu_clk     pl_sysmon/s_axi_aclk
 ad_connect sys_cpu_resetn  pl_sysmon/s_axi_aresetn
 
@@ -578,12 +677,18 @@ ad_cpu_interconnect 0x44A50000  axi_adrv9001_tx1_dma
 ad_cpu_interconnect 0x44A60000  axi_adrv9001_tx2_dma
 ad_cpu_interconnect 0x45000000  axi_sysid_0
 ad_cpu_interconnect 0x44A70000  pl_sysmon
+ad_cpu_interconnect 0x44A80000  mipi_csi
+ad_cpu_interconnect 0x44A90000  axi_vdma
+ad_cpu_interconnect 0x44AD0000  axi_iic_mipi
 
 ad_mem_hp1_interconnect $sys_dma_clk sys_ps7/S_AXI_HP1
 ad_mem_hp1_interconnect $sys_dma_clk axi_adrv9001_rx1_dma/m_dest_axi
 ad_mem_hp1_interconnect $sys_dma_clk axi_adrv9001_rx2_dma/m_dest_axi
 ad_mem_hp1_interconnect $sys_dma_clk axi_adrv9001_tx1_dma/m_src_axi
 ad_mem_hp1_interconnect $sys_dma_clk axi_adrv9001_tx2_dma/m_src_axi
+
+ad_mem_hp2_interconnect $sys_dma_clk sys_ps8/S_AXI_HP2
+ad_mem_hp2_interconnect $sys_dma_clk axi_vdma/M_AXI_S2MM
 
 ad_connect $sys_dma_resetn axi_adrv9001_rx1_dma/m_dest_axi_aresetn
 ad_connect $sys_dma_resetn axi_adrv9001_rx2_dma/m_dest_axi_aresetn
@@ -595,6 +700,9 @@ ad_cpu_interrupt ps-13 mb-12 axi_adrv9001_rx1_dma/irq
 ad_cpu_interrupt ps-12 mb-11 axi_adrv9001_rx2_dma/irq
 ad_cpu_interrupt ps-11 mb-6 axi_adrv9001_tx1_dma/irq
 ad_cpu_interrupt ps-10 mb-5 axi_adrv9001_tx2_dma/irq
+ad_cpu_interrupt ps-9 mb-4 mipi_csi/csirxss_csi_irq
+ad_cpu_interrupt ps-8 mb-3 axi_vdma/s2mm_introut
+ad_cpu_interrupt ps-7 mb-2 axi_iic_mipi/iic2intc_irpt
 
 #system ID
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
@@ -602,3 +710,4 @@ ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/mem_init_sys.txt"
 ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 
 sysid_gen_sys_init_file
+

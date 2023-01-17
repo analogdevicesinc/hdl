@@ -147,7 +147,16 @@ module system_top (
   input                   s_1v2_sns_p,
   input                   s_1v2_sns_n,
   input                   s_1v8_mgtravtt_sns_p,
-  input                   s_1v8_mgtravtt_sns_n
+  input                   s_1v8_mgtravtt_sns_n,
+
+  input                   mipi_csi_clk_p,
+  input                   mipi_csi_clk_n,
+  input      [ 1:0]       mipi_csi_data_p,
+  input      [ 1:0]       mipi_csi_data_n,
+  inout                   mipi_csi_scl,
+  inout                   mipi_csi_sda,
+  output                  mipi_csi_phy_clk,
+  output                  mipi_csi_pwup
 );
 
   // internal registers
@@ -182,7 +191,7 @@ module system_top (
 
   // assignments
 
-  assign gpio_i[94:68] = gpio_o[94:68];
+  assign gpio_i[94:69] = gpio_o[94:69];
   assign gpio_i[15:7] = gpio_o[15:7];
   assign gpio_i[3:1] = gpio_o[3:1];
 
@@ -201,6 +210,7 @@ module system_top (
   assign adrv9002_mcssrc = gpio_o[65];
   assign fan_en  = gpio_o[66];
   assign fan_ctl = gpio_o[67];
+  assign mipi_csi_pwup = gpio_o[68];
 
   assign rf_rx1a_mux_ctl = gpio_o[ 8];
   assign rf_rx1b_mux_ctl = gpio_o[ 9];
@@ -381,6 +391,13 @@ module system_top (
     .s_1v2_sns_p (s_1v2_sns_p),
     .s_1v2_sns_n (s_1v2_sns_n),
     .s_1v8_mgtravtt_sns_p (s_1v8_mgtravtt_sns_p),
-    .s_1v8_mgtravtt_sns_n (s_1v8_mgtravtt_sns_n));
-
+    .s_1v8_mgtravtt_sns_n (s_1v8_mgtravtt_sns_n),
+    .mipi_csi_clk_p (mipi_csi_clk_p),
+    .mipi_csi_clk_n (mipi_csi_clk_n),
+    .mipi_csi_data_p (mipi_csi_data_p),
+    .mipi_csi_data_n (mipi_csi_data_n),
+    //.iic_mipi_top_scl_io (mipi_csi_scl),
+    //.iic_mipi_top_sda_io (mipi_csi_sda));
+    .IIC_0_scl_io (mipi_csi_scl),
+    .IIC_0_sda_io (mipi_csi_sda));
 endmodule
