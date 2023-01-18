@@ -1,12 +1,11 @@
 ####################################################################################
-## Copyright (c) 2018 - 2022 Analog Devices, Inc.
+## Copyright (c) 2018 - 2023 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
 
 PROJECT_NAME := ad7606x_fmc_zed
 
-M_DEPS += system_constr.xdc
 M_DEPS += ../common/ad7606x_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
@@ -23,6 +22,6 @@ LIB_DEPS += axi_spdif_tx
 LIB_DEPS += axi_sysid
 LIB_DEPS += sysid_rom
 LIB_DEPS += util_i2c_mixer
-LIB_DEPS += util_pack/util_cpack2 
+LIB_DEPS += util_pack/util_cpack2
 
 include ../../scripts/project-xilinx.mk
