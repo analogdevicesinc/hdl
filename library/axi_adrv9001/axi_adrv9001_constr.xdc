@@ -34,3 +34,8 @@ set_false_path \
 set_false_path \
   -to [get_cells -quiet -hier *mssi_sync_d_reg* \
     -filter {NAME =~ *i_*_phy* && IS_SEQUENTIAL}]
+set_property ASYNC_REG TRUE [get_cells -quiet -hier *mssi_sync_d_reg* -filter {NAME =~ *i_*_phy* && IS_SEQUENTIAL}]
+set_false_path \
+  -to [get_cells -quiet -hier *mssi_sync_2d_reg* \
+    -filter {NAME =~ *i_*_phy* && IS_SEQUENTIAL}]
+set_property ASYNC_REG TRUE [get_cells -quiet -hier *mssi_sync_2d_reg* -filter {NAME =~ *i_*_phy* && IS_SEQUENTIAL}]
