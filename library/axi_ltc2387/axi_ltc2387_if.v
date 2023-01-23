@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2021 - 2022 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2021 - 2023 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -69,6 +69,7 @@ module axi_ltc2387_if #(
   input             db_n,
 
   output            adc_valid,
+  output     reg    dac_valid,
   output reg [RESOLUTION-1:0] adc_data
 );
 
@@ -100,12 +101,15 @@ module axi_ltc2387_if #(
   assign adc_valid = clk_gate_d[1] & ~clk_gate_d[0];
 
   always @(posedge clk) begin
+    dac_valid <= 1'b0;
     clk_gate_d <= {clk_gate_d[1:0], clk_gate};
     if (clk_gate_d[1] == 1'b1 && clk_gate_d[0] == 1'b0) begin
       if (RESOLUTION == 18) begin
         adc_data <= adc_data_int;
+        dac_valid <= 1'b1;
       end else begin
         adc_data <= adc_data_int[15:0];
+        dac_valid <= 1'b1;
       end
     end
   end

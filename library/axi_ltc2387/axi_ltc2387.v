@@ -70,6 +70,7 @@ module axi_ltc2387 #(
   output                   adc_valid,
   output   [OUT_RES-1:0]   adc_data,
   input                    adc_dovf,
+  output                   dac_valid,
 
   // axi interface
 
@@ -131,6 +132,7 @@ module axi_ltc2387 #(
   wire            up_rstn;
   wire            delay_rst;
   wire            adc_valid_ch_s;
+  wire            dac_valid_s;
   wire [ADC_RES-1:0] adc_data_ch_s;
 
   // signal name changes
@@ -138,6 +140,7 @@ module axi_ltc2387 #(
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
   assign adc_clk = ref_clk;
+  assign dac_valid = dac_valid_s;
 
   // processor read interface
 
@@ -172,6 +175,7 @@ module axi_ltc2387 #(
     .dco_p (dco_p),
     .dco_n (dco_n),
     .adc_valid (adc_valid_ch_s),
+    .dac_valid(dac_valid_s),
     .adc_data (adc_data_ch_s),
     .up_clk (up_clk),
     .up_dld (up_dld_s),
