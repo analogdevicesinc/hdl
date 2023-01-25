@@ -2,10 +2,10 @@
 # TODO: This works only up to 4 lanes on 64B66B
 proc create_versal_phy {
   {ip_name versal_phy}
-  {num_lanes 2}
-  {rx_lane_rate 11.88}
-  {tx_lane_rate 11.88}
-  {ref_clock 360}
+  {num_lanes 4}
+  {rx_lane_rate 24.75}
+  {tx_lane_rate 24.75}
+  {ref_clock 375}
 } {
 
 set num_quads [expr round(1.0*$num_lanes/4)]
