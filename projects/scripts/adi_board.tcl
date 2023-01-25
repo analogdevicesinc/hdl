@@ -301,9 +301,11 @@ proc ad_disconnect {p_name_1 p_name_2} {
 #  this parameter is used only when the project is parameterized in order to connect the unused lanes
 #  to the util_adxcvr block. If not used, the number of connected lanes will be defined
 #  by the axi_adxcvr.
+#  \param[port_prefix] - Optional prefix to apply to port names.
+#  \param[resetn] - Optional net to connect to to the external reset pin on the reset generator (defaults to "sys_cpu_resetn")
 #
 
-proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}} {num_of_max_lanes -1} {partial_lane_map {}}} {
+proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}} {num_of_max_lanes -1} {partial_lane_map {}} {port_prefix {}} {resetn {}}} {
 
   global xcvr_index
   global xcvr_tx_index
@@ -331,11 +333,11 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}
     set jesd204_type 1
   }
 
-  if {$xcvr_instance ne $u_xcvr} {
+  if {$xcvr_instance ne "${port_prefix}${u_xcvr}"} {
     set xcvr_index [expr ($xcvr_index + 1)]
     set xcvr_tx_index 0
     set xcvr_rx_index 0
-    set xcvr_instance $u_xcvr
+    set xcvr_instance ${port_prefix}${u_xcvr}
   }
 
   set txrx "rx"
@@ -355,7 +357,7 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}
   set m_sync ${txrx}_sync_${index}
   set m_data ${txrx}_data
 
-  if {$xcvr_index >= 1} {
+  if {$xcvr_index >= 1 && $port_prefix eq {} } {
 
     set m_sysref ${txrx}_sysref_${xcvr_index}_${index}
     set m_sync ${txrx}_sync_${xcvr_index}_${index}
@@ -374,8 +376,8 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}
   if {$num_of_max_lanes != -1} {
     set max_no_of_lanes $num_of_max_lanes
   }
-  create_bd_port -dir I $m_sysref
-  create_bd_port -from [expr $num_of_links - 1] -to 0 -dir ${ctrl_dir} $m_sync
+  create_bd_port -dir I ${port_prefix}$m_sysref
+  create_bd_port -from [expr $num_of_links - 1] -to 0 -dir ${ctrl_dir} ${port_prefix}$m_sync
 
   set use_2x_clk 0
   if {$link_clk == {}} {
@@ -410,10 +412,14 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}
     set create_rst_gen [expr {[get_bd_cells -quiet ${rst_gen}] == {}}]
   }
 
+  if {$resetn == {}} {
+    set resetn sys_cpu_resetn
+  }
+
   if {${create_rst_gen}} {
     ad_ip_instance proc_sys_reset ${rst_gen}
     ad_connect ${device_clk} ${rst_gen}/slowest_sync_clk
-    ad_connect sys_cpu_resetn ${rst_gen}/ext_reset_in
+    ad_connect ${resetn} ${rst_gen}/ext_reset_in
   }
 
   if {$partial_lane_map != {}} {
@@ -505,10 +511,10 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}
         }
       }
 
-      create_bd_port -dir ${data_dir} ${m_data}_${m}_p
-      create_bd_port -dir ${data_dir} ${m_data}_${m}_n
-      ad_connect  ${u_xcvr}/${txrx}_${m}_p ${m_data}_${m}_p
-      ad_connect  ${u_xcvr}/${txrx}_${m}_n ${m_data}_${m}_n
+      create_bd_port -dir ${data_dir} ${port_prefix}${m_data}_${m}_p
+      create_bd_port -dir ${data_dir} ${port_prefix}${m_data}_${m}_n
+      ad_connect  ${u_xcvr}/${txrx}_${m}_p ${port_prefix}${m_data}_${m}_p
+      ad_connect  ${u_xcvr}/${txrx}_${m}_n ${port_prefix}${m_data}_${m}_n
     }
 
     for {set n $no_of_lanes} {$n < $max_no_of_lanes} {incr n} {
@@ -538,15 +544,15 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}
   }
   
   if {$jesd204_type == 0} {
-    ad_connect  ${a_jesd}/sysref $m_sysref
+    ad_connect  ${a_jesd}/sysref ${port_prefix}$m_sysref
     if {$link_mode == 1} {
-      ad_connect  ${a_jesd}/sync $m_sync
+      ad_connect  ${a_jesd}/sync ${port_prefix}$m_sync
     }
     ad_connect  ${device_clk} ${a_jesd}/device_clk
     ad_connect  ${link_clk} ${a_jesd}/link_clk
   } else {
-    ad_connect  ${a_jesd}/${txrx}_sysref $m_sysref
-    ad_connect  ${a_jesd}/${txrx}_sync $m_sync
+    ad_connect  ${a_jesd}/${txrx}_sysref ${port_prefix}$m_sysref
+    ad_connect  ${a_jesd}/${txrx}_sync ${port_prefix}$m_sync
     ad_connect  ${device_clk} ${a_jesd}/${txrx}_core_clk
     ad_connect  ${a_xcvr}/up_status ${a_jesd}/${txrx}_reset_done
     ad_connect  ${rst_gen}/peripheral_reset ${a_jesd}/${txrx}_reset
@@ -928,8 +934,9 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
 #  \param[p_address] - address offset of the IP register map
 #  \param[p_name] - name of the IP
 #  \param[p_intf_name] - name of the AXI MM Slave interface (optional)
+#  \param[segment_prefix] - prefix to add to the segment name to avoid namespace clashes (optional)
 #
-proc ad_cpu_interconnect {p_address p_name {p_intf_name {}}} {
+proc ad_cpu_interconnect {p_address p_name {p_intf_name {}} {segment_prefix {}}} {
 
   global sys_zynq
   global sys_cpu_interconnect_index
@@ -1125,7 +1132,7 @@ proc ad_cpu_interconnect {p_address p_name {p_intf_name {}}} {
       }
       create_bd_addr_seg -range $p_seg_range \
         -offset $p_address $sys_addr_cntrl_space \
-        $p_seg_name "SEG_data_${p_name}"
+        $p_seg_name "SEG_data_${segment_prefix}_${p_name}"
     } else {
       assign_bd_address $p_seg_name
     }
