@@ -73,7 +73,8 @@ module util_pulse_gen #(
         pulse_width_read <= pulse_width;
       end
       // update the current period/width at the end of the period
-      if (pulse_period_cnt == 32'h1) begin
+      // Change condition to 0 instead of 1 or the counter will never start counting!
+      if (pulse_period_cnt == 32'h0) begin
         pulse_period_d <= pulse_period_read;
         pulse_width_d <= pulse_width_read;
       end
