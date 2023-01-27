@@ -13,12 +13,23 @@ proc gen_fmc_constr {{fmc_index1 fmc} {fmc_index2 {}}} {
   variable col2_max 0
   variable col3_max 0
   variable io_standard_max 0
+  variable file_index 0
 
   set platform [expr [regexp {a10gx|a10soc|s10soc} [file tail [pwd]]] ? "{intel}" : "{xilinx}"]
 
   if {[string match $platform xilinx]} {
 
-    set constr_file [open fmc_constr.xdc w+]
+    if {![catch {file lstat fmc_constr.xdc finfo}]} {
+      while {![catch {file lstat fmc_constr_$file_index\.xdc finfo}]} {
+        incr file_index
+      }
+      set constr_file [open fmc_constr_$file_index\.xdc w+]
+      set constr_file_name "fmc_constr_$file_index\.xdc"
+      set file_index 0
+    } else {
+      set constr_file [open fmc_constr.xdc w+]
+      set constr_file_name "fmc_constr.xdc"
+    }
 
     if {[string length $fmc_index2] == 0} {
       gen_xilinx_fmc $fmc_index1 fmc $constr_file
@@ -30,7 +41,7 @@ proc gen_fmc_constr {{fmc_index1 fmc} {fmc_index2 {}}} {
     close $constr_file
 
    if {![catch {[string length [get_property NAME [current_project]]]} errmsg]} {
-     add_files -fileset constrs_1 -norecurse fmc_constr.xdc
+     add_files -fileset constrs_1 -norecurse $constr_file_name
    }
 
   } else {
@@ -62,15 +73,22 @@ proc gen_xilinx_fmc {fmc_index fmc_file constr_file} {
   variable gbt_exist_flag 0
   variable edit_flag 0
 
-  set carrier_path [glob ../../common/$carrier/$carrier\_$fmc_index*.txt]
+  if {[string match *adrv9009zu11eg* $eval_board]} {
+    set carrier_path [glob ../../common/adrv9009zu11eg/adrv9009zu11eg_$fmc_index*.txt]
+  } else {
+    set carrier_path [glob ../../common/$carrier*/$carrier*\_$fmc_index*.txt]
+  }
   set carrier_file [open $carrier_path r]
   set carrier_data [read $carrier_file]
   close $carrier_file
   set line_c [split $carrier_data \n]
 
-  set carrierType [expr [string match *$carrier* vck190vmk180] ? 2 : [string match *u* $carrier] || [string match v* $carrier]]
-
-  set eval_board_path [glob ../common/*_$fmc_file*.txt]
+  set carrierType [expr [string match *$carrier* vck190vmk180] ? 2 : [string match *u* $carrier] || [string match v* $carrier] || [string match *adrv* $carrier]]
+  if {[string match *fmcomms8* $carrier]} {
+    set eval_board_path [glob ../../fmcomms8/common/fmcomms8_$fmc_file.txt]
+  } else {
+    set eval_board_path [glob ../common/*$eval_board*\_$fmc_file.txt]
+  }
   set eval_board_file [open $eval_board_path r]
   set eval_board_data [read $eval_board_file]
   close $eval_board_file
@@ -339,16 +357,19 @@ proc constrToIntel {line_e col_e i} {
 }
 
 # Allow the script to be called or sourced
-if { [info script] eq $::argv0 } {
+if {[info script] eq $::argv0} {
   if {$::argv == ""} {
     puts "To create the fmc_constr.xdc, call the adi_fmc_constr_generator.tcl with argument(s) <fmc_port>"
     puts "e.g. tclsh ../../scripts/adi_fmc_constr_generator.tcl fmc0"
     puts "e.g. tclsh ../../scripts/adi_fmc_constr_generator.tcl fmc0 fmc1"
     puts "NOTE: The fmc port name can be deduced from the git repo hdl/projects/common/<carrier>/<carrier>_<fmc_port>.txt"
   } else {
-    gen_fmc_constr $::argv
+    if {$::argc == 2} {
+      gen_fmc_constr [lindex $::argv 0] [lindex $::argv 1]
+    } else {
+      gen_fmc_constr $::argv
+    }
   }
-
 } else {
   puts "To create the fmc_constr.xdc call the gen_fmc_constr <fmc_port> procedure"
   puts "e.g. gen_fmc_constr fmc0"
