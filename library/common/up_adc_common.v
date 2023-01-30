@@ -114,6 +114,7 @@ module up_adc_common #(
   input       [ 7:0]  up_usr_chanmax_in,
   input       [31:0]  up_adc_gpio_in,
   output      [31:0]  up_adc_gpio_out,
+  output      [23:0]  softspan,
 
   // bus interface
 
@@ -131,7 +132,8 @@ module up_adc_common #(
 
   // parameters
 
-  localparam  VERSION = 32'h000a0262;
+  localparam  VERSION = 32'h000a0300;
+  localparam  SOFTSPAN_DEFAULT = 24'hff_ffff;
 
   // internal registers
 
@@ -165,6 +167,7 @@ module up_adc_common #(
   reg                 up_adc_crc_enable = 'd0;
   reg         [31:0]  up_adc_config_wr = 'd0;
   reg         [31:0]  up_adc_config_ctrl = 'd0;
+  reg         [23:0]  softspan_int = SOFTSPAN_DEFAULT;
 
   // internal signals
 
@@ -196,6 +199,7 @@ module up_adc_common #(
 
   assign up_wack = up_wack_int;
   assign up_adc_ce = up_adc_clk_enb_int;
+  assign softspan = softspan_int;
 
   always @(posedge up_clk) begin
     if (up_rstn == 0) begin
@@ -222,6 +226,7 @@ module up_adc_common #(
       up_pps_irq_mask <= 1'b1;
       up_adc_custom_control <= 'd0;
       up_adc_crc_enable <= 'd0;
+      softspan_int <= SOFTSPAN_DEFAULT;
     end else begin
       up_adc_clk_enb_int <= ~up_adc_clk_enb;
       up_core_preset <= ~up_resetn;
@@ -278,6 +283,9 @@ module up_adc_common #(
         up_adc_r1_mode <= up_wdata[2];
         up_adc_ddr_edgesel <= up_wdata[1];
         up_adc_pin_mode <= up_wdata[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h32)) begin
+        softspan_int <= up_wdata[23:0];
       end
     end
   end
@@ -501,6 +509,7 @@ module up_adc_common #(
           7'h2f: up_rdata_int <= up_adc_gpio_out_int;
           7'h30: up_rdata_int <= up_pps_rcounter;
           7'h31: up_rdata_int <= {31'b0, up_pps_status};
+          7'h32: up_rdata_int <= {8'b0, softspan_int};
           7'h40: up_rdata_int <= up_timer;
           default: up_rdata_int <= 0;
         endcase

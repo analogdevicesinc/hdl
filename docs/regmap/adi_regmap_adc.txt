@@ -589,6 +589,19 @@ RO
 If this bit is asserted there is no incomming 1PPS signal. Maybe the source is out of sync or it's not active.
 ENDFIELD
 
+REG
+0x0032
+REG_SOFTSPAN
+Softspan configuration register
+ENDREG
+
+FIELD
+[23:0] 0x00FFFFFF
+SOFTSPAN
+RO
+Softspan configuration register
+ENDFIELD
+
 ############################################################################################
 ############################################################################################
 
