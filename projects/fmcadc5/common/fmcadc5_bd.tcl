@@ -149,17 +149,17 @@ ad_cpu_interrupt ps-10 mb-14 axi_ad9625_1_jesd/irq
 
 # interleave-sync
 
-ad_disconnect  rx_sysref_0 axi_ad9625_0_jesd/sysref
-ad_disconnect  rx_sync_0 axi_ad9625_0_jesd/sync
-ad_disconnect  rx_sysref_1_0 axi_ad9625_1_jesd/sysref
-ad_disconnect  rx_sync_1_0 axi_ad9625_1_jesd/sync
-ad_disconnect  spi_csn_o axi_spi/ss_o
-ad_disconnect  spi_csn_i axi_spi/ss_i
-ad_disconnect  spi_clk_i axi_spi/sck_i
-ad_disconnect  spi_clk_o axi_spi/sck_o
-ad_disconnect  spi_sdo_i axi_spi/io0_i
-ad_disconnect  spi_sdo_o axi_spi/io0_o
-ad_disconnect  spi_sdi_i axi_spi/io1_i
+ad_disconnect  axi_ad9625_0_jesd/sysref rx_sysref_0
+ad_disconnect  axi_ad9625_0_jesd/sync rx_sync_0
+ad_disconnect  axi_ad9625_1_jesd/sysref rx_sysref_1_0
+ad_disconnect  axi_ad9625_1_jesd/sync rx_sync_1_0
+ad_disconnect  axi_spi/ss_o  spi_csn_o
+ad_disconnect  axi_spi/ss_i  spi_csn_i
+ad_disconnect  axi_spi/sck_i spi_clk_i
+ad_disconnect  axi_spi/sck_o spi_clk_o
+ad_disconnect  axi_spi/io0_i spi_sdo_i
+ad_disconnect  axi_spi/io0_o spi_sdo_o
+ad_disconnect  axi_spi/io1_i spi_sdi_i
 
 ad_ip_instance axi_fmcadc5_sync axi_fmcadc5_sync
 ad_cpu_interconnect 0x44a20000 axi_fmcadc5_sync
