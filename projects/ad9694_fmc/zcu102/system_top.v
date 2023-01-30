@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2023 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -77,8 +77,7 @@ module system_top (
   wire        [94:0]      gpio_t;
   wire        [20:0]      gpio_bd;
   wire                    ref_clk0;
-  wire                    rx_sync0;
-  wire                    rx_sync1;
+  wire                    rx_sync;
   wire                    rx_ref_core_clk0_s;
   wire                    rx_ref_core_clk0;
   wire         [2:0]      spi0_csn;
@@ -98,7 +97,9 @@ module system_top (
 
   // instantiations
 
-  ad_iobuf #(.DATA_WIDTH(3)) i_iobuf (
+  ad_iobuf #(
+    .DATA_WIDTH(3)
+  ) i_iobuf (
     .dio_t ({gpio_t[34:32]}),
     .dio_i ({gpio_o[34:32]}),
     .dio_o ({gpio_i[34:32]}),
@@ -139,12 +140,12 @@ module system_top (
     .O(sysref_0));
 
   OBUFDS i_obufds_rx_sync0 (
-    .I (rx_sync0),
+    .I (rx_sync),
     .O (rx_sync0_p),
     .OB (rx_sync0_n));
 
   OBUFDS i_obufds_rx_sync1 (
-    .I (rx_sync1),
+    .I (rx_sync),
     .O (rx_sync1_p),
     .OB (rx_sync1_n));
 
@@ -166,8 +167,7 @@ module system_top (
     .rx_data_5_p (rx_data_p[3]),
     .rx_ref_clk_0 (ref_clk0),
     .rx_core_clk_0 (rx_ref_core_clk0),
-    .rx_sync_0 (rx_sync0),
-    //.rx_sync_1 (rx_sync1),
+    .rx_sync_0 (rx_sync),
     .rx_sysref_0 (sysref_0),
     .spi0_csn (spi0_csn),
     .spi0_miso (spi_miso),
@@ -176,10 +176,6 @@ module system_top (
     .spi1_csn (spi1_csn),
     .spi1_miso (pmod_spi_miso),
     .spi1_mosi (pmod_spi_mosi),
-    .spi1_sclk (pmod_spi_clk)
-    );
+    .spi1_sclk (pmod_spi_clk));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

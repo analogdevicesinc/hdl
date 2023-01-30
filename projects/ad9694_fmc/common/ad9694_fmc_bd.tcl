@@ -1,4 +1,3 @@
-
 # RX parameters
 set RX_NUM_OF_LANES $ad_project_params(RX_JESD_L)           ; # L
 set RX_NUM_OF_CONVERTERS $ad_project_params(RX_JESD_M)      ; # M
@@ -34,9 +33,9 @@ ad_ip_instance util_cpack2 util_ad9694_rx_cpack [list \
   ]
 
 adi_tpl_jesd204_rx_create rx_ad9694_tpl_core $RX_NUM_OF_LANES \
-                                               $RX_NUM_OF_CONVERTERS \
-                                               $RX_SAMPLES_PER_FRAME \
-                                               $RX_SAMPLE_WIDTH
+                                             $RX_NUM_OF_CONVERTERS \
+                                             $RX_SAMPLES_PER_FRAME \
+                                             $RX_SAMPLE_WIDTH
 
 ad_ip_instance clk_wiz dma_clk_wiz
 ad_ip_parameter dma_clk_wiz CONFIG.PRIMITIVE MMCM
@@ -61,8 +60,8 @@ ad_ip_instance axi_dmac axi_ad9694_rx_dma [list \
   ]
 
 # common cores
-# fPLLClkin = 325 MHz => RX_CLK25_DIV = 13
-# fPLLClkout = 13000 MHz - qpll0
+# fPLLClkin = 250 MHz => RX_CLK25_DIV = 10
+# fPLLClkout = 10000 MHz - qpll0
 
 ad_ip_instance util_adxcvr util_ad9694_xcvr [list \
   RX_NUM_OF_LANES $MAX_RX_NUM_OF_LANES \
@@ -100,33 +99,6 @@ ad_ip_instance util_adxcvr util_ad9694_xcvr [list \
   RXCDR_CFG3_GEN2 0x12 \
   ]
 
-#  QPLL_FBDIV 40 \
-#  QPLL_REFCLK_DIV 1 \
-#  RX_OUT_DIV 1 \
-#  RX_CLK25_DIV 13 \
-#  POR_CFG 0x0 \
-#  QPLL_CFG0 0x331c \
-#  QPLL_CFG1 0xd038 \
-#  QPLL_CFG1_G3 0xd038 \
-#  QPLL_CFG2 0xfc1 \
-#  QPLL_CFG2_G3 0xfc1 \
-#  QPLL_CFG3 0x120 \
-#  QPLL_CFG4 0x4 \
-#  QPLL_CP 0xff \
-#  QPLL_CP_G3 0xf \
-#  QPLL_LPF 0x33f \
-#  CH_HSPMUX 0x4444 \
-#  PREIQ_FREQ_BST 1 \
-#  RXPI_CFG0 0x104 \
-#  RXPI_CFG1 0x0 \
-#  RXCDR_CFG0 0x3 \
-#  RXCDR_CFG2_GEN2 0x265 \
-#  RXCDR_CFG2_GEN4 0x164 \
-#  RXCDR_CFG3 0x18 \
-#  RXCDR_CFG3_GEN2 0x18 \
-#  RXCDR_CFG3_GEN3 0x18 \
-#  RXCDR_CFG3_GEN4 0x12 \
-
 # xcvr interfaces
 
 set rx_ref_clk     rx_ref_clk_0
@@ -143,9 +115,8 @@ ad_connect ad9694_rx_device_clk rx_core_clk_0
 ad_xcvrcon  util_ad9694_xcvr axi_ad9694_rx_xcvr axi_ad9694_rx_jesd {0 1 2 3 4 5} ad9694_rx_device_clk {} $MAX_RX_NUM_OF_LANES {0 1 4 5}
 
 ad_xcvrpll $rx_ref_clk util_ad9694_xcvr/qpll_ref_clk_0
-#
 ad_xcvrpll $rx_ref_clk util_ad9694_xcvr/qpll_ref_clk_4
-#
+
 for {set i 0} {$i < $MAX_RX_NUM_OF_LANES} {incr i} {
   set ch [expr $i]
   ad_xcvrpll  $rx_ref_clk util_ad9694_xcvr/cpll_ref_clk_$ch
@@ -198,4 +169,3 @@ ad_mem_hp2_interconnect dma_clk_wiz/clk_out1 axi_ad9694_rx_dma/m_dest_axi
 
 ad_cpu_interrupt ps-12 mb-13 axi_ad9694_rx_jesd/irq
 ad_cpu_interrupt ps-13 mb-12 axi_ad9694_rx_dma/irq
-
