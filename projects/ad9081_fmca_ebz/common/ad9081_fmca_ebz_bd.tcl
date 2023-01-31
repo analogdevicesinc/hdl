@@ -139,9 +139,10 @@ if {$ADI_PHY_SEL == 1} {
 
   set REF_CLK_RATE [ expr { [info exists ad_project_params(REF_CLK_RATE)] \
                             ? $ad_project_params(REF_CLK_RATE) : 360 } ]
-  # TODO: 
+  # TODO:
   # Assumption is that number of Tx and Rx lane is the same
-  create_versal_phy jesd204_phy $TX_NUM_OF_LANES $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE
+  create_versal_phy jesd204_phy_0 4 $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE
+  create_versal_phy jesd204_phy_1 4 $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE
 
 }
 
@@ -218,7 +219,7 @@ ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_mxfe_rx_dma CONFIG.MAX_BYTES_PER_BURST 4096
 ad_ip_parameter axi_mxfe_rx_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_dma_data_width
-ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_DATA_WIDTH_DEST $adc_dma_data_width
+ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_DATA_WIDTH_DEST 512
 
 # dac peripherals
 
@@ -264,7 +265,7 @@ ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_LENGTH_WIDTH 24
 ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_mxfe_tx_dma CONFIG.CYCLIC 1
 ad_ip_parameter axi_mxfe_tx_dma CONFIG.MAX_BYTES_PER_BURST 4096
-ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_DATA_WIDTH_SRC $dac_dma_data_width
+ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_DATA_WIDTH_SRC 512
 ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_dma_data_width
 
 # reference clocks & resets
@@ -295,23 +296,35 @@ if {$ADI_PHY_SEL == 1} {
   ad_xcvrcon  util_mxfe_xcvr axi_mxfe_tx_xcvr axi_mxfe_tx_jesd {} {} tx_device_clk
 } else {
 
-  ad_connect ref_clk_q0 jesd204_phy/GT_REFCLK
+  ad_connect ref_clk_q0 jesd204_phy_0/GT_REFCLK
+  ad_connect ref_clk_q0 jesd204_phy_1/GT_REFCLK
 
-  set rx_link_clock  jesd204_phy/rxusrclk_out
-  set tx_link_clock  jesd204_phy/txusrclk_out
+  set rx_link_clock  jesd204_phy_0/rxusrclk_out
+  set tx_link_clock  jesd204_phy_0/txusrclk_out
+  set rx_link_clock  jesd204_phy_1/rxusrclk_out
+  set tx_link_clock  jesd204_phy_1/txusrclk_out
 
   # Connect PHY to Link Layer
-  for {set j 0}  {$j < $RX_NUM_OF_LANES} {incr j} {
-    ad_connect  axi_mxfe_tx_jesd/tx_phy${j} jesd204_phy/tx${j}
-
-    ad_connect  axi_mxfe_rx_jesd/rx_phy${j} jesd204_phy/rx${j}
-
+  for {set j 0}  {$j < 4} {incr j} {
+    ad_connect  axi_mxfe_tx_jesd/tx_phy${j} jesd204_phy_0/tx${j}
+    ad_connect  axi_mxfe_rx_jesd/rx_phy${j} jesd204_phy_0/rx${j}
   }
+    ad_connect  axi_mxfe_tx_jesd/tx_phy4 jesd204_phy_1/tx0
+    ad_connect  axi_mxfe_tx_jesd/tx_phy5 jesd204_phy_1/tx1
+    ad_connect  axi_mxfe_tx_jesd/tx_phy6 jesd204_phy_1/tx2
+    ad_connect  axi_mxfe_tx_jesd/tx_phy7 jesd204_phy_1/tx3
+    ad_connect  axi_mxfe_rx_jesd/rx_phy4 jesd204_phy_1/rx0
+    ad_connect  axi_mxfe_rx_jesd/rx_phy5 jesd204_phy_1/rx1
+    ad_connect  axi_mxfe_rx_jesd/rx_phy6 jesd204_phy_1/rx2
+    ad_connect  axi_mxfe_rx_jesd/rx_phy7 jesd204_phy_1/rx3
 
-  ad_connect $sys_cpu_clk jesd204_phy/apb3clk
+  ad_connect $sys_cpu_clk jesd204_phy_0/apb3clk
+  ad_connect $sys_cpu_clk jesd204_phy_1/apb3clk
 
-  ad_connect axi_mxfe_rx_jesd/rx_axi/device_reset jesd204_phy/reset_rx_pll_and_datapath_in
-  ad_connect axi_mxfe_tx_jesd/tx_axi/device_reset jesd204_phy/reset_tx_pll_and_datapath_in
+  ad_connect axi_mxfe_rx_jesd/rx_axi/device_reset jesd204_phy_0/reset_rx_pll_and_datapath_in
+  ad_connect axi_mxfe_tx_jesd/tx_axi/device_reset jesd204_phy_0/reset_tx_pll_and_datapath_in
+  ad_connect axi_mxfe_rx_jesd/rx_axi/device_reset jesd204_phy_1/reset_rx_pll_and_datapath_in
+  ad_connect axi_mxfe_tx_jesd/tx_axi/device_reset jesd204_phy_1/reset_tx_pll_and_datapath_in
 
   ad_connect  $rx_link_clock /axi_mxfe_rx_jesd/link_clk
   ad_connect  rx_device_clk /axi_mxfe_rx_jesd/device_clk
@@ -446,11 +459,12 @@ if {$ADI_PHY_SEL == 1} {
     create_bd_port -dir I rx_data_${i}_p
   }
 } else {
-  make_bd_intf_pins_external  [get_bd_intf_pins jesd204_phy/GT_Serial]
+  make_bd_intf_pins_external  [get_bd_intf_pins jesd204_phy_0/GT_Serial]
+  make_bd_intf_pins_external  [get_bd_intf_pins jesd204_phy_1/GT_Serial]
 }
 
 #
-# Sync at TPL level 
+# Sync at TPL level
 #
 
 create_bd_port -dir I ext_sync_in
