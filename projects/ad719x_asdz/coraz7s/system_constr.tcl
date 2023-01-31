@@ -1,0 +1,28 @@
+###############################################################################
+## Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
+
+# coraz7s
+# ad719x spi connections
+
+if {![info exists IO_PMOD_N]} {
+  set IO_PMOD_N $::env(IO_PMOD_N)
+}
+
+switch $IO_PMOD_N {
+  0 {
+    # connect through the PMOD pins
+    set_property -dict {PACKAGE_PIN Y17 IOSTANDARD LVCMOS33} [get_ports {adc_spi_sclk}];      # IO_L7N_T1_34  Sch=ja_n[2]
+    set_property -dict {PACKAGE_PIN Y16 IOSTANDARD LVCMOS33} [get_ports {adc_spi_miso_rdyn}]; # IO_L7P_T1_34  Sch=ja_p[2]; AD719X sch=DOUT/RDY_N
+    set_property -dict {PACKAGE_PIN Y19 IOSTANDARD LVCMOS33} [get_ports {adc_spi_mosi}];      # IO_L17N_T2_34 Sch=ja_n[1]; AD719X sch=DIN
+    set_property -dict {PACKAGE_PIN Y18 IOSTANDARD LVCMOS33} [get_ports {adc_spi_csn}];       # IO_L17P_T2_34 Sch=ja_p[1]
+  }
+  1 {
+    # connect through the IO pins
+    set_property -dict {PACKAGE_PIN G15 IOSTANDARD LVCMOS33} [get_ports {adc_spi_sclk}];        # IO_L19N_T3_VREF_35 Sch=ck_io[13]
+    set_property -dict {PACKAGE_PIN J18 IOSTANDARD LVCMOS33} [get_ports {adc_spi_miso_rdyn}];   # IO_L14P_T2_AD4P_SRCC_35 Sch=ck_io[12]
+    set_property -dict {PACKAGE_PIN K18 IOSTANDARD LVCMOS33} [get_ports {adc_spi_mosi}];        # IO_L12N_T1_MRCC_35 Sch=ck_io[11]
+    set_property -dict {PACKAGE_PIN U15 IOSTANDARD LVCMOS33} [get_ports {adc_spi_csn}];         # IO_L11N_T1_SRCC_34 Sch=ck_io[10]
+  }
+}
