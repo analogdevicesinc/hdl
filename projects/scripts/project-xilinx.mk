@@ -3,9 +3,14 @@
 ## SPDX short identifier: BSD-1-Clause
 ####################################################################################
 
+ifneq (,$(REQUIRED_VIVADO_VERSION))
+  BUILD_FLAGS += "REQUIRED_VIVADO_VERSION=${REQUIRED_VIVADO_VERSION}"
+endif
+
 # Assumes this file is in prpojects/scripts/project-xilinx.mk
 HDL_PROJECT_PATH := $(subst scripts/project-xilinx.mk,,$(lastword $(MAKEFILE_LIST)))
 HDL_LIBRARY_PATH := $(HDL_PROJECT_PATH)../library/
+GHDL_LIBRARY_PATH := $(ADI_GHDL_DIR)/library/
 
 include $(HDL_PROJECT_PATH)../quiet.mk
 
@@ -73,6 +78,7 @@ M_DEPS += $(HDL_PROJECT_PATH)../scripts/adi_env.tcl
 M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_board.tcl
 
 M_DEPS += $(foreach dep,$(LIB_DEPS),$(HDL_LIBRARY_PATH)$(dep)/component.xml)
+M_DEPS += $(foreach dep,$(LIB_GHDL_DEPS),$(GHDL_LIBRARY_PATH)$(dep)/component.xml)
 
 .PHONY: all lib clean clean-all
 
@@ -91,6 +97,9 @@ clean-all: clean
 	done
 	@for dir in ${CLEAN_DIRS}; do \
 		rm -Rf $${dir}; \
+	done
+	@for lib in $(LIB_GHDL_DEPS); do \
+		$(MAKE) -C $(GHDL_LIBRARY_PATH)$${lib} clean; \
 	done
 
 MODE ?= "default"
@@ -115,10 +124,9 @@ $(PROJECT_NAME).sdk/system_top.xsa: $(M_DEPS)
 
 lib:
 	@for lib in $(LIB_DEPS); do \
-		if [ -n "${REQUIRED_VIVADO_VERSION}" ]; then \
-			$(MAKE) -C $(HDL_LIBRARY_PATH)$${lib} xilinx REQUIRED_VIVADO_VERSION=${REQUIRED_VIVADO_VERSION} || exit $$?; \
-		else \
-			$(MAKE) -C $(HDL_LIBRARY_PATH)$${lib} xilinx || exit $$?; \
-		fi; \
+		$(MAKE) -C $(HDL_LIBRARY_PATH)$${lib} xilinx $(BUILD_FLAGS) || exit $$?; \
+	done
+	@for lib in $(LIB_GHDL_DEPS); do \
+		$(MAKE) -C $(GHDL_LIBRARY_PATH)$${lib} xilinx $(BUILD_FLAGS) || exit $$?; \
 	done
 
