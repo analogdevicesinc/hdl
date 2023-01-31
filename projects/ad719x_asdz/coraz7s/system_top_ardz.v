@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -68,7 +68,8 @@ module system_top (
   output          adc_spi_sclk,
   input           adc_spi_miso_rdyn,
   output          adc_spi_mosi,
-  output          adc_spi_csn
+  output          adc_spi_csn,
+  output          adc_syncn
 );
 
   // internal signals
@@ -97,8 +98,16 @@ module system_top (
 
   // project specific gpios
 
-  assign gpio_i[63:33] = gpio_o[63:33];
+  assign gpio_i[63:34] = gpio_o[63:34];
   assign gpio_i[32] = adc_spi_miso_rdyn;
+
+  ad_iobuf #(
+    .DATA_WIDTH (1)
+  ) i_iobuf_syncn (
+    .dio_i (gpio_o[33]),
+    .dio_o (gpio_i[33]),
+    .dio_t (gpio_t[33]),
+    .dio_p (adc_syncn));
 
   // board specific gpios
 
