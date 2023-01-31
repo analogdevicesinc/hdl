@@ -48,7 +48,6 @@ set_instance_parameter_value adc_pwm_gen {PULSE_0_WIDTH} {1}
 set_instance_parameter_value adc_pwm_gen {PULSE_0_PERIOD} {8}
 set_instance_parameter_value adc_pwm_gen {PULSE_0_OFFSET} {0}
 add_interface axi_ltc235x_cnv_if conduit end
-#add_connection adc_pwm_gen.if_pwm_0 if_cnv
 set_interface_property axi_ltc235x_cnv_if EXPORT_OF adc_pwm_gen.if_pwm_0
 add_connection sys_clk.clk adc_pwm_gen.if_ext_clk
 add_connection sys_clk.clk adc_pwm_gen.s_axi_clock

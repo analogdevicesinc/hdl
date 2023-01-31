@@ -252,7 +252,7 @@ module axi_ltc235x #(
       assign adc_clk_s = up_clk;
     end
 
-    if (LVDS_CMOS_N == 1) begin // TODO: add support for LVDS interface
+    if (LVDS_CMOS_N == 1) begin
       assign scki = 1'b0;
     end else begin
       assign scki_p = 1'b0;
@@ -459,7 +459,5 @@ module axi_ltc235x #(
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata),
     .up_rack (up_rack));
-
-  // TODO: add support for other LTC235x members
 
 endmodule

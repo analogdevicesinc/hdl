@@ -166,8 +166,6 @@ module axi_ltc235x_cmos #(
   wire        [ 2:0]  adc_ch_id_s [7:0];
   wire        [ 2:0]  adc_softspan_s [7:0];
 
-  ////////////////////////////////////////////////////// SCKI
-
   always @(posedge clk) begin
     if (rst == 1'b1) begin
       busy_m1 <= 1'b0;
@@ -207,39 +205,6 @@ module axi_ltc235x_cmos #(
 
   assign scki_cnt_rst = (scki_counter == DW);
   assign scki = scki_i | ~acquire_data;
-
-  /////////////////////////////////////////////////////////// DATA FLOW
-
-  /*
-  The device sends each channel data on one of the 8 lines.
-  Data is stored in the device in a ring buffer. After the first packet is read
-  and no new conversion is requested if the reading process is restarted,
-  the new data on the lines will be from the next index from the ring buffer.
-  e.g For second read process without a conversion start
-  line 0 = channel 1, line 1 = channel 2, line 2 = channel 3; so on and so forth.
-
-  The ring buffer contains the crc data on the 8(last position.)
-  e.g for a 4'th reading cycle:
-  line 0 = ch 3
-  line 1 = ch 4
-  line 2 = ch 5
-  line 3 = ch 6
-  line 4 = ch 7
-  line 5 = crc
-  line 6 = ch 0
-  line 7 = ch 1
-
-  Because there is no rule for a specific number of lanes to be enabled at a given time
-  the interface can handle every combination of enabled lanes with enabled channels.
-  The valid signal will only be asserted after all enabled channels are stored.
-  This means that the user must adjust the sampling frequency based on the
-  interface clock frequency and the maximum position/index
-  difference +1 of a channel data and the first enabled lane that will
-  pass that channels data, maximum difference is 8(e.g line 0 to line 7).
-  e.g. If only lanes 1 and 2(0 to 7) are enabled,
-    1. The user wants to capture the 6'th(0 to 7) channel, 5 reading cycles are required.
-    2. The user wants to capture channel 0, 8 reading cycles are required.
-  */
 
   // capture data per lane in rx buffers adc_lane_X on every edge of scko
   // ignore when busy forced scko to 0
@@ -443,7 +408,7 @@ module axi_ltc235x_cmos #(
   assign adc_ch6_id = adc_ch_id_s[6];
   assign adc_ch7_id = adc_ch_id_s[7];
 
-  // assign extracted adc channel id to corresponding outputs
+  // assign extracted adc softspan to corresponding outputs
   assign adc_softspan_0 = adc_softspan_s[0];
   assign adc_softspan_1 = adc_softspan_s[1];
   assign adc_softspan_2 = adc_softspan_s[2];
@@ -452,8 +417,6 @@ module axi_ltc235x_cmos #(
   assign adc_softspan_5 = adc_softspan_s[5];
   assign adc_softspan_6 = adc_softspan_s[6];
   assign adc_softspan_7 = adc_softspan_s[7];
-
-//////////////////////////////////////////////////////////// VALID SIGNAL
 
   // initial valid signal
   always @(posedge clk) begin
@@ -492,7 +455,6 @@ module axi_ltc235x_cmos #(
     end
   end
 
-	////////////////////////////////////////////////////////////////////////// ADC SDI
   // every negedge of scki, update index of db_o
   always @(posedge clk) begin
     if (start_transfer_s || rst) begin
@@ -505,7 +467,5 @@ module axi_ltc235x_cmos #(
   end
 
   assign db_o = (db_o_index != 5'b11111)? softspan_next_int[db_o_index] : 0;
-
-  // TODO: add support for other ltc235x
 
 endmodule
