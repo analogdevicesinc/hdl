@@ -74,6 +74,13 @@ module system_top (
   output                  iic_rstn,
   inout                   iic_scl,
   inout                   iic_sda,
+  
+    // Second Dual SPI flash
+  inout                   SPI_1_0_io0_io,
+  inout                   SPI_1_0_io1_io,
+  inout                   SPI_1_0_io2_io,
+  inout                   SPI_1_0_io3_io,
+  inout                   SPI_1_0_ss_io,
 
   // FMC+ IOs
 
@@ -257,6 +264,11 @@ module system_top (
     .gpio1_i (gpio_i[63:32]),
     .gpio1_o (gpio_o[63:32]),
     .gpio1_t (gpio_t[63:32]),
+    .SPI_1_0_io0_io (SPI_1_0_io0_io),
+    .SPI_1_0_io1_io (SPI_1_0_io1_io),
+    .SPI_1_0_io2_io (SPI_1_0_io2_io),
+    .SPI_1_0_io3_io (SPI_1_0_io3_io),
+    .SPI_1_0_ss_io  (SPI_1_0_ss_io ),
     // FMC+
     .rx_data_0_n  (rx_data_n[1]),
     .rx_data_0_p  (rx_data_p[1]),

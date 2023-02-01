@@ -6,6 +6,7 @@
 
 PROJECT_NAME := ad9213_evb_vcu118
 
+M_DEPS += timing_constr.xdc
 M_DEPS += ../common/ad9213_evb_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/xilinx/adcfifo_bd.tcl
