@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2023 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -62,14 +62,23 @@ module util_pulse_gen #(
 
   always @(posedge clk) begin
     if (rstn == 1'b0) begin
-      pulse_period_d <= PULSE_PERIOD;
+      if (PULSE_PERIOD == 'd0) begin
+        pulse_period_d <= 32'h1;
+        pulse_period_read <= 32'h1;
+      end else begin
+        pulse_period_d <= PULSE_PERIOD;
+        pulse_period_read <= PULSE_PERIOD;
+      end
       pulse_width_d <= PULSE_WIDTH;
-      pulse_period_read <= PULSE_PERIOD;
       pulse_width_read <= PULSE_WIDTH;
     end else begin
       // latch the input period/width values
       if (load_config) begin
-        pulse_period_read <= pulse_period;
+        if (pulse_period == 'd0) begin
+          pulse_period_read <= 32'h1;
+        end else begin
+          pulse_period_read <= pulse_period;
+        end
         pulse_width_read <= pulse_width;
       end
       // update the current period/width at the end of the period
