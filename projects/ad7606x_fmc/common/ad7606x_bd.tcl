@@ -1,6 +1,7 @@
 # system level parameters
 
 set DEV_CONFIG $ad_project_params(DEV_CONFIG)
+set INTF $ad_project_params(INTF)
 set ADC_N_BITS [expr {$DEV_CONFIG == 2 ? 18 : 16}]
 set ADC_TO_DMA_N_BITS [expr {$ADC_N_BITS == 16 ? 16 : 32}]
 set SIMPLE_STATUS_CRC $ad_project_params(SIMPLE_STATUS_CRC)
@@ -8,6 +9,7 @@ set EXT_CLK $ad_project_params(EXT_CLK)
 set TOTAL_N_BITS_DMA [expr {$ADC_TO_DMA_N_BITS*8}]
 
 puts "build parameters: DEV_CONFIG: $DEV_CONFIG"
+puts "build parameters: INTF: $INTF"
 puts "build parameters: SIMPLE_STATUS_CRC: $SIMPLE_STATUS_CRC"
 puts "build parameters: EXT_CLK: $EXT_CLK"
 
