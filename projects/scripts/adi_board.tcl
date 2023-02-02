@@ -455,7 +455,7 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}
         }
 
         if {(($n%4) == 0) && ($qpll_enable == 1)} {
-          ad_connect  ${a_xcvr}/up_cm_${n} ${u_xcvr}/up_cm_${n}
+          ad_connect  ${a_xcvr}/up_cm_${n} ${u_xcvr}/up_cm_${m}
         }
         ad_connect  ${a_xcvr}/up_ch_${n} ${u_xcvr}/up_${txrx}_${phys_lane}
         ad_connect  ${link_clk} ${u_xcvr}/${txrx}_clk_${phys_lane}
@@ -494,7 +494,7 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}
       }
 
       if {(($n%4) == 0) && ($qpll_enable == 1)} {
-        ad_connect  ${a_xcvr}/up_cm_${n} ${u_xcvr}/up_cm_${n}
+        ad_connect  ${a_xcvr}/up_cm_${n} ${u_xcvr}/up_cm_${m}
       }
       ad_connect  ${a_xcvr}/up_ch_${n} ${u_xcvr}/up_${txrx}_${phys_lane}
       ad_connect  ${link_clk} ${u_xcvr}/${txrx}_clk_${phys_lane}
