@@ -110,6 +110,8 @@ set TX_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $TX_JESD_L $TX
 
 set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8* $TX_DATAPATH_WIDTH / ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)]
 
+set num_quads [expr int(round(1.0 * $RX_NUM_OF_LANES / 4))]
+
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
 set adc_data_offload_name mxfe_rx_data_offload
@@ -120,6 +122,7 @@ set adc_fifo_address_width [expr int(ceil(log(($adc_fifo_samples_per_converter*$
 set dac_data_offload_name mxfe_tx_data_offload
 set dac_data_width [expr $TX_DMA_SAMPLE_WIDTH*$TX_NUM_OF_CONVERTERS*$TX_SAMPLES_PER_CHANNEL]
 set dac_dma_data_width $dac_data_width
+puts "dac_dma_data_width: ${dac_dma_data_width}"
 set dac_fifo_address_width [expr int(ceil(log(($dac_fifo_samples_per_converter*$TX_NUM_OF_CONVERTERS) / ($dac_data_width/$TX_DMA_SAMPLE_WIDTH))/log(2)))]
 
 create_bd_port -dir I rx_device_clk
@@ -140,7 +143,7 @@ if {$ADI_PHY_SEL == 1} {
 
   set REF_CLK_RATE [ expr { [info exists ad_project_params(REF_CLK_RATE)] \
                             ? $ad_project_params(REF_CLK_RATE) : 360 } ]
-  # TODO: 
+
   # Assumption is that number of Tx and Rx lane is the same
   create_versal_phy jesd204_phy $TX_NUM_OF_LANES $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE
 
@@ -218,8 +221,8 @@ ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_LENGTH_WIDTH 24
 ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_mxfe_rx_dma CONFIG.MAX_BYTES_PER_BURST 4096
 ad_ip_parameter axi_mxfe_rx_dma CONFIG.CYCLIC 0
-ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_dma_data_width
-ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_DATA_WIDTH_DEST $adc_dma_data_width
+ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $dac_dma_data_width
+ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_DATA_WIDTH_DEST [expr min(512, $dac_dma_data_width)]
 
 # dac peripherals
 
@@ -265,7 +268,7 @@ ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_LENGTH_WIDTH 24
 ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_mxfe_tx_dma CONFIG.CYCLIC 1
 ad_ip_parameter axi_mxfe_tx_dma CONFIG.MAX_BYTES_PER_BURST 4096
-ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_DATA_WIDTH_SRC $dac_dma_data_width
+ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_DATA_WIDTH_SRC [expr min(512, $dac_dma_data_width)]
 ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_dma_data_width
 
 # reference clocks & resets
@@ -447,7 +450,9 @@ if {$ADI_PHY_SEL == 1} {
     create_bd_port -dir I rx_data_${i}_p
   }
 } else {
-  make_bd_intf_pins_external  [get_bd_intf_pins jesd204_phy/GT_Serial]
+  for {set j 0} {$j < $num_quads} {incr j} {
+    make_bd_intf_pins_external  [get_bd_intf_pins jesd204_phy/GT_Serial_${j}]
+  }
 }
 
 #
