@@ -24,9 +24,9 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   [RX/TX]_JESD_NP : Number of bits per sample, only 16 is supported
 #   [RX/TX]_NUM_LINKS : Number of links, matches numer of MxFE devices
 #
-#
 
 adi_project ad9081_fmca_ebz_zcu102 0 [list \
+  INTF_CFG         RXTX \
   JESD_MODE        [get_env_param JESD_MODE      8B10B ] \
   RX_LANE_RATE     [get_env_param RX_LANE_RATE      10 ] \
   TX_LANE_RATE     [get_env_param TX_LANE_RATE      10 ] \
