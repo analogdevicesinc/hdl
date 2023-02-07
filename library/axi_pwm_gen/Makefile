@@ -18,4 +18,7 @@ XILINX_DEPS += axi_pwm_gen_ip.tcl
 
 XILINX_LIB_DEPS += util_cdc
 
+INTEL_DEPS += ../intel/common/up_rst_constr.sdc
+INTEL_DEPS += axi_pwm_gen_hw.tcl
+
 include ../scripts/library.mk
