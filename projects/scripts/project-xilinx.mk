@@ -1,5 +1,5 @@
 ####################################################################################
-## Copyright (c) 2018 -2021 Analog Devices, Inc.
+## Copyright (c) 2018 - 2023 Analog Devices, Inc.
 ## SPDX short identifier: BSD-1-Clause
 ####################################################################################
 
@@ -41,6 +41,7 @@ CLEAN_TARGET := *.cache
 CLEAN_TARGET += *.data
 CLEAN_TARGET += *.xpr
 CLEAN_TARGET += xgui
+CLEAN_TARGET +=  gui
 CLEAN_TARGET += *.runs
 CLEAN_TARGET += *.srcs
 CLEAN_TARGET += *.sdk
