@@ -41,7 +41,8 @@ module system_top  #(
   parameter RX_JESD_L = 8,
   parameter RX_NUM_LINKS = 1,
   parameter SHARED_DEVCLK = 0,
-  parameter JESD_MODE = "8B10B"
+  parameter JESD_MODE = "8B10B",
+  parameter VERSAL_PHY_MODE = 0
 ) (
   input  [12:0] gpio_bd_i,
   output [ 7:0] gpio_bd_o,
@@ -129,16 +130,24 @@ module system_top  #(
     .I (sysref2_p),
     .IB (sysref2_n),
     .O (sysref));
-
+  
+  generate
+  if (VERSAL_PHY_MODE != 1) begin
   IBUFDS i_ibufds_tx_device_clk (
     .I (clkin6_p),
     .IB (clkin6_n),
     .O (clkin6));
+  end
+  endgenerate
 
+  generate
+  if (VERSAL_PHY_MODE != 2) begin
   IBUFDS i_ibufds_rx_device_clk (
     .I (clkin10_p),
     .IB (clkin10_n),
     .O (clkin10));
+  end
+  endgenerate
 
   IBUFDS i_ibufds_syncin_0 (
     .I (fpga_syncin_0_p),
@@ -150,13 +159,21 @@ module system_top  #(
     .O (fpga_syncout_0_p),
     .OB (fpga_syncout_0_n));
 
+  generate
+  if (VERSAL_PHY_MODE != 1) begin
   BUFG i_tx_device_clk (
     .I (clkin6),
     .O (tx_device_clk));
+  end
+  endgenerate
 
+  generate
+  if (VERSAL_PHY_MODE != 2) begin
   BUFG i_rx_device_clk (
     .I (clkin10),
     .O (rx_device_clk_internal));
+  end
+  endgenerate
 
   assign rx_device_clk = SHARED_DEVCLK ? tx_device_clk : rx_device_clk_internal;
 
@@ -242,59 +259,171 @@ module system_top  #(
   assign gpio_i[31:21] = gpio_o[31:21];
   assign gpio_i[7:0] = gpio_o[7:0];
 
-  system_wrapper i_system_wrapper (
-    .gpio_i (gpio_i),
-    .gpio_o (gpio_o),
-    .gpio_t (gpio_t),
-    .spi0_csn (spi0_csn),
-    .spi0_miso (spi0_miso),
-    .spi0_mosi (spi0_mosi),
-    .spi0_sclk (spi0_sclk),
-    .spi1_csn (spi1_csn),
-    .spi1_miso (spi1_miso),
-    .spi1_mosi (spi1_mosi),
-    .spi1_sclk (spi1_sclk),
-    // FMC HPC
-    .rx_data_0_n (rx_data_n_loc[0]),
-    .rx_data_0_p (rx_data_p_loc[0]),
-    .rx_data_1_n (rx_data_n_loc[1]),
-    .rx_data_1_p (rx_data_p_loc[1]),
-    .rx_data_2_n (rx_data_n_loc[2]),
-    .rx_data_2_p (rx_data_p_loc[2]),
-    .rx_data_3_n (rx_data_n_loc[3]),
-    .rx_data_3_p (rx_data_p_loc[3]),
-    .rx_data_4_n (rx_data_n_loc[4]),
-    .rx_data_4_p (rx_data_p_loc[4]),
-    .rx_data_5_n (rx_data_n_loc[5]),
-    .rx_data_5_p (rx_data_p_loc[5]),
-    .rx_data_6_n (rx_data_n_loc[6]),
-    .rx_data_6_p (rx_data_p_loc[6]),
-    .rx_data_7_n (rx_data_n_loc[7]),
-    .rx_data_7_p (rx_data_p_loc[7]),
-    .tx_data_0_n (tx_data_n_loc[0]),
-    .tx_data_0_p (tx_data_p_loc[0]),
-    .tx_data_1_n (tx_data_n_loc[1]),
-    .tx_data_1_p (tx_data_p_loc[1]),
-    .tx_data_2_n (tx_data_n_loc[2]),
-    .tx_data_2_p (tx_data_p_loc[2]),
-    .tx_data_3_n (tx_data_n_loc[3]),
-    .tx_data_3_p (tx_data_p_loc[3]),
-    .tx_data_4_n (tx_data_n_loc[4]),
-    .tx_data_4_p (tx_data_p_loc[4]),
-    .tx_data_5_n (tx_data_n_loc[5]),
-    .tx_data_5_p (tx_data_p_loc[5]),
-    .tx_data_6_n (tx_data_n_loc[6]),
-    .tx_data_6_p (tx_data_p_loc[6]),
-    .tx_data_7_n (tx_data_n_loc[7]),
-    .tx_data_7_p (tx_data_p_loc[7]),
-    .ref_clk_q0 (ref_clk),
-    .ref_clk_q1 (ref_clk),
-    .rx_device_clk (rx_device_clk),
-    .tx_device_clk (tx_device_clk),
-    .rx_sync_0 (rx_syncout),
-    .tx_sync_0 (tx_syncin),
-    .rx_sysref_0 (sysref),
-    .tx_sysref_0 (sysref));
+  generate
+  case (VERSAL_PHY_MODE) 
+    0 : begin
+      // Rx & Tx
+      system_wrapper i_system_wrapper (
+        .gpio_i (gpio_i),
+        .gpio_o (gpio_o),
+        .gpio_t (gpio_t),
+        .spi0_csn (spi0_csn),
+        .spi0_miso (spi0_miso),
+        .spi0_mosi (spi0_mosi),
+        .spi0_sclk (spi0_sclk),
+        .spi1_csn (spi1_csn),
+        .spi1_miso (spi1_miso),
+        .spi1_mosi (spi1_mosi),
+        .spi1_sclk (spi1_sclk),
+        // FMC HPC
+        .rx_data_0_n (rx_data_n_loc[0]),
+        .rx_data_0_p (rx_data_p_loc[0]),
+        .rx_data_1_n (rx_data_n_loc[1]),
+        .rx_data_1_p (rx_data_p_loc[1]),
+        .rx_data_2_n (rx_data_n_loc[2]),
+        .rx_data_2_p (rx_data_p_loc[2]),
+        .rx_data_3_n (rx_data_n_loc[3]),
+        .rx_data_3_p (rx_data_p_loc[3]),
+        .rx_data_4_n (rx_data_n_loc[4]),
+        .rx_data_4_p (rx_data_p_loc[4]),
+        .rx_data_5_n (rx_data_n_loc[5]),
+        .rx_data_5_p (rx_data_p_loc[5]),
+        .rx_data_6_n (rx_data_n_loc[6]),
+        .rx_data_6_p (rx_data_p_loc[6]),
+        .rx_data_7_n (rx_data_n_loc[7]),
+        .rx_data_7_p (rx_data_p_loc[7]),
+        .tx_data_0_n (tx_data_n_loc[0]),
+        .tx_data_0_p (tx_data_p_loc[0]),
+        .tx_data_1_n (tx_data_n_loc[1]),
+        .tx_data_1_p (tx_data_p_loc[1]),
+        .tx_data_2_n (tx_data_n_loc[2]),
+        .tx_data_2_p (tx_data_p_loc[2]),
+        .tx_data_3_n (tx_data_n_loc[3]),
+        .tx_data_3_p (tx_data_p_loc[3]),
+        .tx_data_4_n (tx_data_n_loc[4]),
+        .tx_data_4_p (tx_data_p_loc[4]),
+        .tx_data_5_n (tx_data_n_loc[5]),
+        .tx_data_5_p (tx_data_p_loc[5]),
+        .tx_data_6_n (tx_data_n_loc[6]),
+        .tx_data_6_p (tx_data_p_loc[6]),
+        .tx_data_7_n (tx_data_n_loc[7]),
+        .tx_data_7_p (tx_data_p_loc[7]),
+        .ref_clk_q0 (ref_clk),
+        .ref_clk_q1 (ref_clk),
+        .rx_device_clk (rx_device_clk),
+        .tx_device_clk (tx_device_clk),
+        .rx_sync_0 (rx_syncout),
+        .tx_sync_0 (tx_syncin),
+        .rx_sysref_0 (sysref),
+        .tx_sysref_0 (sysref));
+    end
+    1 : begin
+      // Rx
+      system_wrapper i_system_wrapper (
+        .gpio_i (gpio_i),
+        .gpio_o (gpio_o),
+        .gpio_t (gpio_t),
+        .spi0_csn (spi0_csn),
+        .spi0_miso (spi0_miso),
+        .spi0_mosi (spi0_mosi),
+        .spi0_sclk (spi0_sclk),
+        .spi1_csn (spi1_csn),
+        .spi1_miso (spi1_miso),
+        .spi1_mosi (spi1_mosi),
+        .spi1_sclk (spi1_sclk),
+        // FMC HPC
+        .rx_data_0_n (rx_data_n_loc[0]),
+        .rx_data_0_p (rx_data_p_loc[0]),
+        .rx_data_1_n (rx_data_n_loc[1]),
+        .rx_data_1_p (rx_data_p_loc[1]),
+        .rx_data_2_n (rx_data_n_loc[2]),
+        .rx_data_2_p (rx_data_p_loc[2]),
+        .rx_data_3_n (rx_data_n_loc[3]),
+        .rx_data_3_p (rx_data_p_loc[3]),
+        .rx_data_4_n (rx_data_n_loc[4]),
+        .rx_data_4_p (rx_data_p_loc[4]),
+        .rx_data_5_n (rx_data_n_loc[5]),
+        .rx_data_5_p (rx_data_p_loc[5]),
+        .rx_data_6_n (rx_data_n_loc[6]),
+        .rx_data_6_p (rx_data_p_loc[6]),
+        .rx_data_7_n (rx_data_n_loc[7]),
+        .rx_data_7_p (rx_data_p_loc[7]),
+        .tx_data_0_n (tx_data_n_loc[0]),
+        .tx_data_0_p (tx_data_p_loc[0]),
+        .tx_data_1_n (tx_data_n_loc[1]),
+        .tx_data_1_p (tx_data_p_loc[1]),
+        .tx_data_2_n (tx_data_n_loc[2]),
+        .tx_data_2_p (tx_data_p_loc[2]),
+        .tx_data_3_n (tx_data_n_loc[3]),
+        .tx_data_3_p (tx_data_p_loc[3]),
+        .tx_data_4_n (tx_data_n_loc[4]),
+        .tx_data_4_p (tx_data_p_loc[4]),
+        .tx_data_5_n (tx_data_n_loc[5]),
+        .tx_data_5_p (tx_data_p_loc[5]),
+        .tx_data_6_n (tx_data_n_loc[6]),
+        .tx_data_6_p (tx_data_p_loc[6]),
+        .tx_data_7_n (tx_data_n_loc[7]),
+        .tx_data_7_p (tx_data_p_loc[7]),
+        .ref_clk_q0 (ref_clk),
+        .ref_clk_q1 (ref_clk),
+        .rx_device_clk (rx_device_clk),
+        .rx_sync_0 (rx_syncout),
+        .rx_sysref_0 (sysref));
+    end
+    2 : begin
+      // Tx
+      system_wrapper i_system_wrapper (
+        .gpio_i (gpio_i),
+        .gpio_o (gpio_o),
+        .gpio_t (gpio_t),
+        .spi0_csn (spi0_csn),
+        .spi0_miso (spi0_miso),
+        .spi0_mosi (spi0_mosi),
+        .spi0_sclk (spi0_sclk),
+        .spi1_csn (spi1_csn),
+        .spi1_miso (spi1_miso),
+        .spi1_mosi (spi1_mosi),
+        .spi1_sclk (spi1_sclk),
+        // FMC HPC
+        .rx_data_0_n (rx_data_n_loc[0]),
+        .rx_data_0_p (rx_data_p_loc[0]),
+        .rx_data_1_n (rx_data_n_loc[1]),
+        .rx_data_1_p (rx_data_p_loc[1]),
+        .rx_data_2_n (rx_data_n_loc[2]),
+        .rx_data_2_p (rx_data_p_loc[2]),
+        .rx_data_3_n (rx_data_n_loc[3]),
+        .rx_data_3_p (rx_data_p_loc[3]),
+        .rx_data_4_n (rx_data_n_loc[4]),
+        .rx_data_4_p (rx_data_p_loc[4]),
+        .rx_data_5_n (rx_data_n_loc[5]),
+        .rx_data_5_p (rx_data_p_loc[5]),
+        .rx_data_6_n (rx_data_n_loc[6]),
+        .rx_data_6_p (rx_data_p_loc[6]),
+        .rx_data_7_n (rx_data_n_loc[7]),
+        .rx_data_7_p (rx_data_p_loc[7]),
+        .tx_data_0_n (tx_data_n_loc[0]),
+        .tx_data_0_p (tx_data_p_loc[0]),
+        .tx_data_1_n (tx_data_n_loc[1]),
+        .tx_data_1_p (tx_data_p_loc[1]),
+        .tx_data_2_n (tx_data_n_loc[2]),
+        .tx_data_2_p (tx_data_p_loc[2]),
+        .tx_data_3_n (tx_data_n_loc[3]),
+        .tx_data_3_p (tx_data_p_loc[3]),
+        .tx_data_4_n (tx_data_n_loc[4]),
+        .tx_data_4_p (tx_data_p_loc[4]),
+        .tx_data_5_n (tx_data_n_loc[5]),
+        .tx_data_5_p (tx_data_p_loc[5]),
+        .tx_data_6_n (tx_data_n_loc[6]),
+        .tx_data_6_p (tx_data_p_loc[6]),
+        .tx_data_7_n (tx_data_n_loc[7]),
+        .tx_data_7_p (tx_data_p_loc[7]),
+        .ref_clk_q0 (ref_clk),
+        .ref_clk_q1 (ref_clk),
+        .tx_device_clk (tx_device_clk),
+        .tx_sync_0 (tx_syncin),
+        .tx_sysref_0 (sysref));
+    end
+  endgenerate
 
   assign rx_data_p_loc[RX_JESD_L*RX_NUM_LINKS-1:0] = rx_data_p[RX_JESD_L*RX_NUM_LINKS-1:0];
   assign rx_data_n_loc[RX_JESD_L*RX_NUM_LINKS-1:0] = rx_data_n[RX_JESD_L*RX_NUM_LINKS-1:0];

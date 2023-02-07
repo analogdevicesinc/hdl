@@ -40,7 +40,8 @@ module system_top  #(
   parameter TX_NUM_LINKS = 1,
   parameter RX_JESD_L = 4,
   parameter RX_NUM_LINKS = 1,
-  parameter JESD_MODE = "8B10B"
+  parameter JESD_MODE = "8B10B",
+  parameter VERSAL_PHY_MODE = 0
 ) (
   input         sys_clk_n,
   input         sys_clk_p,
@@ -143,15 +144,23 @@ module system_top  #(
     .IB (sysref2_n),
     .O (sysref));
 
-  IBUFDS i_ibufds_tx_device_clk (
-    .I (clkin6_p),
-    .IB (clkin6_n),
-    .O (clkin6));
+  generate
+  if (VERSAL_PHY_MODE != 1) begin
+    IBUFDS i_ibufds_tx_device_clk (
+      .I (clkin6_p),
+      .IB (clkin6_n),
+      .O (clkin6));
+  end
+  endgenerate
 
-  IBUFDS i_ibufds_rx_device_clk (
-    .I (clkin10_p),
-    .IB (clkin10_n),
-    .O (clkin10));
+  generate
+  if (VERSAL_PHY_MODE != 2) begin
+    IBUFDS i_ibufds_rx_device_clk (
+      .I (clkin10_p),
+      .IB (clkin10_n),
+      .O (clkin10));
+  end
+  endgenerate
 
   IBUFDS i_ibufds_syncin_0 (
     .I (fpga_syncin_0_p),
@@ -163,13 +172,21 @@ module system_top  #(
     .O (fpga_syncout_0_p),
     .OB (fpga_syncout_0_n));
 
-  BUFG i_tx_device_clk (
-    .I (clkin6),
-    .O (tx_device_clk));
+  generate
+  if (VERSAL_PHY_MODE != 1) begin
+    BUFG i_tx_device_clk (
+      .I (clkin6),
+      .O (tx_device_clk));
+  end
+  endgenerate
 
+  generate
+  if (VERSAL_PHY_MODE != 2) begin
   BUFG i_rx_device_clk (
     .I (clkin10),
     .O (rx_device_clk));
+  end
+  endgenerate
 
   // spi
 
@@ -256,110 +273,320 @@ module system_top  #(
   assign gpio_i[31:10] = gpio_o[31:10];
 
   generate
-  if (TX_JESD_L > 4)
-    system_wrapper i_system_wrapper (
-      .gpio0_i (gpio_i[31:0]),
-      .gpio0_o (gpio_o[31:0]),
-      .gpio0_t (gpio_t[31:0]),
-      .gpio1_i (gpio_i[63:32]),
-      .gpio1_o (gpio_o[63:32]),
-      .gpio1_t (gpio_t[63:32]),
-      .gpio2_i (gpio_i[95:64]),
-      .gpio2_o (gpio_o[95:64]),
-      .gpio2_t (gpio_t[95:64]),
-      .ddr4_dimm1_sma_clk_clk_n (sys_clk_n),
-      .ddr4_dimm1_sma_clk_clk_p (sys_clk_p),
-      .ddr4_dimm1_act_n (ddr4_act_n),
-      .ddr4_dimm1_adr (ddr4_adr),
-      .ddr4_dimm1_ba (ddr4_ba),
-      .ddr4_dimm1_bg (ddr4_bg),
-      .ddr4_dimm1_ck_c (ddr4_ck_c),
-      .ddr4_dimm1_ck_t (ddr4_ck_t),
-      .ddr4_dimm1_cke (ddr4_cke),
-      .ddr4_dimm1_cs_n (ddr4_cs_n),
-      .ddr4_dimm1_dm_n (ddr4_dm_n),
-      .ddr4_dimm1_dq (ddr4_dq),
-      .ddr4_dimm1_dqs_c (ddr4_dqs_c),
-      .ddr4_dimm1_dqs_t (ddr4_dqs_t),
-      .ddr4_dimm1_odt (ddr4_odt),
-      .ddr4_dimm1_reset_n (ddr4_reset_n),
-      .spi0_csn (spi0_csn),
-      .spi0_miso (spi0_miso),
-      .spi0_mosi (spi0_mosi),
-      .spi0_sclk (spi0_sclk),
-      .spi1_csn (spi1_csn),
-      .spi1_miso (spi1_miso),
-      .spi1_mosi (spi1_mosi),
-      .spi1_sclk (spi1_sclk),
-      // FMC HPC
-      .GT_Serial_0_0_gtx_p (tx_data_p_loc[3:0]),
-      .GT_Serial_0_0_gtx_n (tx_data_n_loc[3:0]),
-      .GT_Serial_0_0_grx_p (rx_data_p_loc[3:0]),
-      .GT_Serial_0_0_grx_n (rx_data_n_loc[3:0]),
-      .GT_Serial_1_0_gtx_p (tx_data_p_loc[7:4]),
-      .GT_Serial_1_0_gtx_n (tx_data_n_loc[7:4]),
-      .GT_Serial_1_0_grx_p (rx_data_p_loc[7:4]),
-      .GT_Serial_1_0_grx_n (rx_data_n_loc[7:4]),
+  case (VERSAL_PHY_MODE)
+    // Rx & Tx
+    0 : begin
+      if (TX_JESD_L > 4) begin
+        system_wrapper i_system_wrapper (
+          .gpio0_i (gpio_i[31:0]),
+          .gpio0_o (gpio_o[31:0]),
+          .gpio0_t (gpio_t[31:0]),
+          .gpio1_i (gpio_i[63:32]),
+          .gpio1_o (gpio_o[63:32]),
+          .gpio1_t (gpio_t[63:32]),
+          .gpio2_i (gpio_i[95:64]),
+          .gpio2_o (gpio_o[95:64]),
+          .gpio2_t (gpio_t[95:64]),
+          .ddr4_dimm1_sma_clk_clk_n (sys_clk_n),
+          .ddr4_dimm1_sma_clk_clk_p (sys_clk_p),
+          .ddr4_dimm1_act_n (ddr4_act_n),
+          .ddr4_dimm1_adr (ddr4_adr),
+          .ddr4_dimm1_ba (ddr4_ba),
+          .ddr4_dimm1_bg (ddr4_bg),
+          .ddr4_dimm1_ck_c (ddr4_ck_c),
+          .ddr4_dimm1_ck_t (ddr4_ck_t),
+          .ddr4_dimm1_cke (ddr4_cke),
+          .ddr4_dimm1_cs_n (ddr4_cs_n),
+          .ddr4_dimm1_dm_n (ddr4_dm_n),
+          .ddr4_dimm1_dq (ddr4_dq),
+          .ddr4_dimm1_dqs_c (ddr4_dqs_c),
+          .ddr4_dimm1_dqs_t (ddr4_dqs_t),
+          .ddr4_dimm1_odt (ddr4_odt),
+          .ddr4_dimm1_reset_n (ddr4_reset_n),
+          .spi0_csn (spi0_csn),
+          .spi0_miso (spi0_miso),
+          .spi0_mosi (spi0_mosi),
+          .spi0_sclk (spi0_sclk),
+          .spi1_csn (spi1_csn),
+          .spi1_miso (spi1_miso),
+          .spi1_mosi (spi1_mosi),
+          .spi1_sclk (spi1_sclk),
+          // FMC HPC
+          .GT_Serial_0_0_gtx_p (tx_data_p_loc[3:0]),
+          .GT_Serial_0_0_gtx_n (tx_data_n_loc[3:0]),
+          .GT_Serial_0_0_grx_p (rx_data_p_loc[3:0]),
+          .GT_Serial_0_0_grx_n (rx_data_n_loc[3:0]),
+          .GT_Serial_1_0_gtx_p (tx_data_p_loc[7:4]),
+          .GT_Serial_1_0_gtx_n (tx_data_n_loc[7:4]),
+          .GT_Serial_1_0_grx_p (rx_data_p_loc[7:4]),
+          .GT_Serial_1_0_grx_n (rx_data_n_loc[7:4]),
 
-      .ref_clk_q0 (ref_clk),
-      .ref_clk_q1 (ref_clk),
+          .ref_clk_q0 (ref_clk),
+          .ref_clk_q1 (ref_clk),
 
-      .rx_device_clk (rx_device_clk),
-      .tx_device_clk (tx_device_clk),
-      .rx_sync_0 (rx_syncout),
-      .tx_sync_0 (tx_syncin),
-      .rx_sysref_0 (sysref),
-      .tx_sysref_0 (sysref));
-  else
-    system_wrapper i_system_wrapper (
-      .gpio0_i (gpio_i[31:0]),
-      .gpio0_o (gpio_o[31:0]),
-      .gpio0_t (gpio_t[31:0]),
-      .gpio1_i (gpio_i[63:32]),
-      .gpio1_o (gpio_o[63:32]),
-      .gpio1_t (gpio_t[63:32]),
-      .gpio2_i (gpio_i[95:64]),
-      .gpio2_o (gpio_o[95:64]),
-      .gpio2_t (gpio_t[95:64]),
-      .ddr4_dimm1_sma_clk_clk_n (sys_clk_n),
-      .ddr4_dimm1_sma_clk_clk_p (sys_clk_p),
-      .ddr4_dimm1_act_n (ddr4_act_n),
-      .ddr4_dimm1_adr (ddr4_adr),
-      .ddr4_dimm1_ba (ddr4_ba),
-      .ddr4_dimm1_bg (ddr4_bg),
-      .ddr4_dimm1_ck_c (ddr4_ck_c),
-      .ddr4_dimm1_ck_t (ddr4_ck_t),
-      .ddr4_dimm1_cke (ddr4_cke),
-      .ddr4_dimm1_cs_n (ddr4_cs_n),
-      .ddr4_dimm1_dm_n (ddr4_dm_n),
-      .ddr4_dimm1_dq (ddr4_dq),
-      .ddr4_dimm1_dqs_c (ddr4_dqs_c),
-      .ddr4_dimm1_dqs_t (ddr4_dqs_t),
-      .ddr4_dimm1_odt (ddr4_odt),
-      .ddr4_dimm1_reset_n (ddr4_reset_n),
-      .spi0_csn (spi0_csn),
-      .spi0_miso (spi0_miso),
-      .spi0_mosi (spi0_mosi),
-      .spi0_sclk (spi0_sclk),
-      .spi1_csn (spi1_csn),
-      .spi1_miso (spi1_miso),
-      .spi1_mosi (spi1_mosi),
-      .spi1_sclk (spi1_sclk),
-      // FMC HPC
-      .GT_Serial_0_0_gtx_p (tx_data_p_loc[3:0]),
-      .GT_Serial_0_0_gtx_n (tx_data_n_loc[3:0]),
-      .GT_Serial_0_0_grx_p (rx_data_p_loc[3:0]),
-      .GT_Serial_0_0_grx_n (rx_data_n_loc[3:0]),
+          .rx_device_clk (rx_device_clk),
+          .tx_device_clk (tx_device_clk),
+          .rx_sync_0 (rx_syncout),
+          .tx_sync_0 (tx_syncin),
+          .rx_sysref_0 (sysref),
+          .tx_sysref_0 (sysref));
+      end else begin
+        system_wrapper i_system_wrapper (
+          .gpio0_i (gpio_i[31:0]),
+          .gpio0_o (gpio_o[31:0]),
+          .gpio0_t (gpio_t[31:0]),
+          .gpio1_i (gpio_i[63:32]),
+          .gpio1_o (gpio_o[63:32]),
+          .gpio1_t (gpio_t[63:32]),
+          .gpio2_i (gpio_i[95:64]),
+          .gpio2_o (gpio_o[95:64]),
+          .gpio2_t (gpio_t[95:64]),
+          .ddr4_dimm1_sma_clk_clk_n (sys_clk_n),
+          .ddr4_dimm1_sma_clk_clk_p (sys_clk_p),
+          .ddr4_dimm1_act_n (ddr4_act_n),
+          .ddr4_dimm1_adr (ddr4_adr),
+          .ddr4_dimm1_ba (ddr4_ba),
+          .ddr4_dimm1_bg (ddr4_bg),
+          .ddr4_dimm1_ck_c (ddr4_ck_c),
+          .ddr4_dimm1_ck_t (ddr4_ck_t),
+          .ddr4_dimm1_cke (ddr4_cke),
+          .ddr4_dimm1_cs_n (ddr4_cs_n),
+          .ddr4_dimm1_dm_n (ddr4_dm_n),
+          .ddr4_dimm1_dq (ddr4_dq),
+          .ddr4_dimm1_dqs_c (ddr4_dqs_c),
+          .ddr4_dimm1_dqs_t (ddr4_dqs_t),
+          .ddr4_dimm1_odt (ddr4_odt),
+          .ddr4_dimm1_reset_n (ddr4_reset_n),
+          .spi0_csn (spi0_csn),
+          .spi0_miso (spi0_miso),
+          .spi0_mosi (spi0_mosi),
+          .spi0_sclk (spi0_sclk),
+          .spi1_csn (spi1_csn),
+          .spi1_miso (spi1_miso),
+          .spi1_mosi (spi1_mosi),
+          .spi1_sclk (spi1_sclk),
+          // FMC HPC
+          .GT_Serial_0_0_gtx_p (tx_data_p_loc[3:0]),
+          .GT_Serial_0_0_gtx_n (tx_data_n_loc[3:0]),
+          .GT_Serial_0_0_grx_p (rx_data_p_loc[3:0]),
+          .GT_Serial_0_0_grx_n (rx_data_n_loc[3:0]),
 
-      .ref_clk_q0 (ref_clk),
-      .ref_clk_q1 (ref_clk),
+          .ref_clk_q0 (ref_clk),
+          .ref_clk_q1 (ref_clk),
 
-      .rx_device_clk (rx_device_clk),
-      .tx_device_clk (tx_device_clk),
-      .rx_sync_0 (rx_syncout),
-      .tx_sync_0 (tx_syncin),
-      .rx_sysref_0 (sysref),
-      .tx_sysref_0 (sysref));
+          .rx_device_clk (rx_device_clk),
+          .tx_device_clk (tx_device_clk),
+          .rx_sync_0 (rx_syncout),
+          .tx_sync_0 (tx_syncin),
+          .rx_sysref_0 (sysref),
+          .tx_sysref_0 (sysref));
+      end
+    end
+    // Rx only
+    1 : begin
+      if (RX_JESD_L > 4) begin
+        system_wrapper i_system_wrapper (
+          .gpio0_i (gpio_i[31:0]),
+          .gpio0_o (gpio_o[31:0]),
+          .gpio0_t (gpio_t[31:0]),
+          .gpio1_i (gpio_i[63:32]),
+          .gpio1_o (gpio_o[63:32]),
+          .gpio1_t (gpio_t[63:32]),
+          .gpio2_i (gpio_i[95:64]),
+          .gpio2_o (gpio_o[95:64]),
+          .gpio2_t (gpio_t[95:64]),
+          .ddr4_dimm1_sma_clk_clk_n (sys_clk_n),
+          .ddr4_dimm1_sma_clk_clk_p (sys_clk_p),
+          .ddr4_dimm1_act_n (ddr4_act_n),
+          .ddr4_dimm1_adr (ddr4_adr),
+          .ddr4_dimm1_ba (ddr4_ba),
+          .ddr4_dimm1_bg (ddr4_bg),
+          .ddr4_dimm1_ck_c (ddr4_ck_c),
+          .ddr4_dimm1_ck_t (ddr4_ck_t),
+          .ddr4_dimm1_cke (ddr4_cke),
+          .ddr4_dimm1_cs_n (ddr4_cs_n),
+          .ddr4_dimm1_dm_n (ddr4_dm_n),
+          .ddr4_dimm1_dq (ddr4_dq),
+          .ddr4_dimm1_dqs_c (ddr4_dqs_c),
+          .ddr4_dimm1_dqs_t (ddr4_dqs_t),
+          .ddr4_dimm1_odt (ddr4_odt),
+          .ddr4_dimm1_reset_n (ddr4_reset_n),
+          .spi0_csn (spi0_csn),
+          .spi0_miso (spi0_miso),
+          .spi0_mosi (spi0_mosi),
+          .spi0_sclk (spi0_sclk),
+          .spi1_csn (spi1_csn),
+          .spi1_miso (spi1_miso),
+          .spi1_mosi (spi1_mosi),
+          .spi1_sclk (spi1_sclk),
+          // FMC HPC
+          .GT_Serial_0_0_gtx_p (tx_data_p_loc[3:0]),
+          .GT_Serial_0_0_gtx_n (tx_data_n_loc[3:0]),
+          .GT_Serial_0_0_grx_p (rx_data_p_loc[3:0]),
+          .GT_Serial_0_0_grx_n (rx_data_n_loc[3:0]),
+          .GT_Serial_1_0_gtx_p (tx_data_p_loc[7:4]),
+          .GT_Serial_1_0_gtx_n (tx_data_n_loc[7:4]),
+          .GT_Serial_1_0_grx_p (rx_data_p_loc[7:4]),
+          .GT_Serial_1_0_grx_n (rx_data_n_loc[7:4]),
+
+          .ref_clk_q0 (ref_clk),
+          .ref_clk_q1 (ref_clk),
+
+          .rx_device_clk (rx_device_clk),
+          .rx_sync_0 (rx_syncout),
+          .rx_sysref_0 (sysref));
+      end else begin
+        system_wrapper i_system_wrapper (
+          .gpio0_i (gpio_i[31:0]),
+          .gpio0_o (gpio_o[31:0]),
+          .gpio0_t (gpio_t[31:0]),
+          .gpio1_i (gpio_i[63:32]),
+          .gpio1_o (gpio_o[63:32]),
+          .gpio1_t (gpio_t[63:32]),
+          .gpio2_i (gpio_i[95:64]),
+          .gpio2_o (gpio_o[95:64]),
+          .gpio2_t (gpio_t[95:64]),
+          .ddr4_dimm1_sma_clk_clk_n (sys_clk_n),
+          .ddr4_dimm1_sma_clk_clk_p (sys_clk_p),
+          .ddr4_dimm1_act_n (ddr4_act_n),
+          .ddr4_dimm1_adr (ddr4_adr),
+          .ddr4_dimm1_ba (ddr4_ba),
+          .ddr4_dimm1_bg (ddr4_bg),
+          .ddr4_dimm1_ck_c (ddr4_ck_c),
+          .ddr4_dimm1_ck_t (ddr4_ck_t),
+          .ddr4_dimm1_cke (ddr4_cke),
+          .ddr4_dimm1_cs_n (ddr4_cs_n),
+          .ddr4_dimm1_dm_n (ddr4_dm_n),
+          .ddr4_dimm1_dq (ddr4_dq),
+          .ddr4_dimm1_dqs_c (ddr4_dqs_c),
+          .ddr4_dimm1_dqs_t (ddr4_dqs_t),
+          .ddr4_dimm1_odt (ddr4_odt),
+          .ddr4_dimm1_reset_n (ddr4_reset_n),
+          .spi0_csn (spi0_csn),
+          .spi0_miso (spi0_miso),
+          .spi0_mosi (spi0_mosi),
+          .spi0_sclk (spi0_sclk),
+          .spi1_csn (spi1_csn),
+          .spi1_miso (spi1_miso),
+          .spi1_mosi (spi1_mosi),
+          .spi1_sclk (spi1_sclk),
+          // FMC HPC
+          .GT_Serial_0_0_gtx_p (tx_data_p_loc[3:0]),
+          .GT_Serial_0_0_gtx_n (tx_data_n_loc[3:0]),
+          .GT_Serial_0_0_grx_p (rx_data_p_loc[3:0]),
+          .GT_Serial_0_0_grx_n (rx_data_n_loc[3:0]),
+
+          .ref_clk_q0 (ref_clk),
+          .ref_clk_q1 (ref_clk),
+
+          .rx_device_clk (rx_device_clk),
+          .rx_sync_0 (rx_syncout),
+          .rx_sysref_0 (sysref));
+      end
+    end
+    // Tx only
+    2 : begin
+      if (TX_JESD_L > 4) begin
+        system_wrapper i_system_wrapper (
+          .gpio0_i (gpio_i[31:0]),
+          .gpio0_o (gpio_o[31:0]),
+          .gpio0_t (gpio_t[31:0]),
+          .gpio1_i (gpio_i[63:32]),
+          .gpio1_o (gpio_o[63:32]),
+          .gpio1_t (gpio_t[63:32]),
+          .gpio2_i (gpio_i[95:64]),
+          .gpio2_o (gpio_o[95:64]),
+          .gpio2_t (gpio_t[95:64]),
+          .ddr4_dimm1_sma_clk_clk_n (sys_clk_n),
+          .ddr4_dimm1_sma_clk_clk_p (sys_clk_p),
+          .ddr4_dimm1_act_n (ddr4_act_n),
+          .ddr4_dimm1_adr (ddr4_adr),
+          .ddr4_dimm1_ba (ddr4_ba),
+          .ddr4_dimm1_bg (ddr4_bg),
+          .ddr4_dimm1_ck_c (ddr4_ck_c),
+          .ddr4_dimm1_ck_t (ddr4_ck_t),
+          .ddr4_dimm1_cke (ddr4_cke),
+          .ddr4_dimm1_cs_n (ddr4_cs_n),
+          .ddr4_dimm1_dm_n (ddr4_dm_n),
+          .ddr4_dimm1_dq (ddr4_dq),
+          .ddr4_dimm1_dqs_c (ddr4_dqs_c),
+          .ddr4_dimm1_dqs_t (ddr4_dqs_t),
+          .ddr4_dimm1_odt (ddr4_odt),
+          .ddr4_dimm1_reset_n (ddr4_reset_n),
+          .spi0_csn (spi0_csn),
+          .spi0_miso (spi0_miso),
+          .spi0_mosi (spi0_mosi),
+          .spi0_sclk (spi0_sclk),
+          .spi1_csn (spi1_csn),
+          .spi1_miso (spi1_miso),
+          .spi1_mosi (spi1_mosi),
+          .spi1_sclk (spi1_sclk),
+          // FMC HPC
+          .GT_Serial_0_0_gtx_p (tx_data_p_loc[3:0]),
+          .GT_Serial_0_0_gtx_n (tx_data_n_loc[3:0]),
+          .GT_Serial_0_0_grx_p (rx_data_p_loc[3:0]),
+          .GT_Serial_0_0_grx_n (rx_data_n_loc[3:0]),
+          .GT_Serial_1_0_gtx_p (tx_data_p_loc[7:4]),
+          .GT_Serial_1_0_gtx_n (tx_data_n_loc[7:4]),
+          .GT_Serial_1_0_grx_p (rx_data_p_loc[7:4]),
+          .GT_Serial_1_0_grx_n (rx_data_n_loc[7:4]),
+
+          .ref_clk_q0 (ref_clk),
+          .ref_clk_q1 (ref_clk),
+
+          .tx_device_clk (tx_device_clk),
+          .tx_sync_0 (tx_syncin),
+          .tx_sysref_0 (sysref));
+      end else begin
+        system_wrapper i_system_wrapper (
+          .gpio0_i (gpio_i[31:0]),
+          .gpio0_o (gpio_o[31:0]),
+          .gpio0_t (gpio_t[31:0]),
+          .gpio1_i (gpio_i[63:32]),
+          .gpio1_o (gpio_o[63:32]),
+          .gpio1_t (gpio_t[63:32]),
+          .gpio2_i (gpio_i[95:64]),
+          .gpio2_o (gpio_o[95:64]),
+          .gpio2_t (gpio_t[95:64]),
+          .ddr4_dimm1_sma_clk_clk_n (sys_clk_n),
+          .ddr4_dimm1_sma_clk_clk_p (sys_clk_p),
+          .ddr4_dimm1_act_n (ddr4_act_n),
+          .ddr4_dimm1_adr (ddr4_adr),
+          .ddr4_dimm1_ba (ddr4_ba),
+          .ddr4_dimm1_bg (ddr4_bg),
+          .ddr4_dimm1_ck_c (ddr4_ck_c),
+          .ddr4_dimm1_ck_t (ddr4_ck_t),
+          .ddr4_dimm1_cke (ddr4_cke),
+          .ddr4_dimm1_cs_n (ddr4_cs_n),
+          .ddr4_dimm1_dm_n (ddr4_dm_n),
+          .ddr4_dimm1_dq (ddr4_dq),
+          .ddr4_dimm1_dqs_c (ddr4_dqs_c),
+          .ddr4_dimm1_dqs_t (ddr4_dqs_t),
+          .ddr4_dimm1_odt (ddr4_odt),
+          .ddr4_dimm1_reset_n (ddr4_reset_n),
+          .spi0_csn (spi0_csn),
+          .spi0_miso (spi0_miso),
+          .spi0_mosi (spi0_mosi),
+          .spi0_sclk (spi0_sclk),
+          .spi1_csn (spi1_csn),
+          .spi1_miso (spi1_miso),
+          .spi1_mosi (spi1_mosi),
+          .spi1_sclk (spi1_sclk),
+          // FMC HPC
+          .GT_Serial_0_0_gtx_p (tx_data_p_loc[3:0]),
+          .GT_Serial_0_0_gtx_n (tx_data_n_loc[3:0]),
+          .GT_Serial_0_0_grx_p (rx_data_p_loc[3:0]),
+          .GT_Serial_0_0_grx_n (rx_data_n_loc[3:0]),
+
+          .ref_clk_q0 (ref_clk),
+          .ref_clk_q1 (ref_clk),
+
+          .tx_device_clk (tx_device_clk),
+          .tx_sync_0 (tx_syncin),
+          .tx_sysref_0 (sysref));
+      end
+    end
+  endcase
   endgenerate
 
   assign rx_data_p_loc[RX_JESD_L*RX_NUM_LINKS-1:0] = rx_data_p[RX_JESD_L*RX_NUM_LINKS-1:0];

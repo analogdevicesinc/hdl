@@ -29,6 +29,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   [RX/TX]_JESD_NP : Number of bits per sample
 #   [RX/TX]_NUM_LINKS : Number of links
 #   [RX/TX]_KS_PER_CHANNEL : Number of samples stored in internal buffers in kilosamples per converter (M)
+#   VERSAL_PHY_MODE : 0 - RX & TX, 1 - RX only, 2 - TX only
 #
 
 adi_project ad9081_fmca_ebz_vcu118 0 [list \
@@ -47,6 +48,7 @@ adi_project ad9081_fmca_ebz_vcu118 0 [list \
   TX_NUM_LINKS      [get_env_param TX_NUM_LINKS       1 ] \
   RX_KS_PER_CHANNEL [get_env_param RX_KS_PER_CHANNEL 64 ] \
   TX_KS_PER_CHANNEL [get_env_param TX_KS_PER_CHANNEL 64 ] \
+  VERSAL_PHY_MODE   [get_env_param VERSAL_PHY_MODE    0 ] \
 ]
 
 adi_project_files ad9081_fmca_ebz_vcu118 [list \
