@@ -11,3 +11,4 @@ ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 set sys_cstring "$DEV_CONFIG,$SIMPLE_STATUS_CRC,$EXT_CLK"
 
 sysid_gen_sys_init_file $sys_cstring
+

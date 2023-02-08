@@ -15,20 +15,24 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 set DEV_CONFIG [get_env_param DEV_CONFIG 0]
 set INTF [get_env_param INTF 0]
+set NUM_OF_SDI [get_env_param NUM_OF_SDI 8]
 set SIMPLE_STATUS_CRC [get_env_param SIMPLE_STATUS_CRC 0]
 set EXT_CLK [get_env_param EXT_CLK 0]
 
 adi_project ad7606x_fmc_zed 0 [list \
   DEV_CONFIG $DEV_CONFIG \
   INTF $INTF \
+  NUM_OF_SDI $NUM_OF_SDI \
   SIMPLE_STATUS_CRC $SIMPLE_STATUS_CRC \
   EXT_CLK $EXT_CLK \
 ]
 
 adi_project_files ad7606x_fmc_zed [list \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
-  "$ad_hdl_dir/projects/common/zed/zed_system_constr.tcl" \
-  "system_constr.tcl"]
+  "$ad_hdl_dir/library/common/ad_edge_detect.v" \
+  "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
+  "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc" \
+  "system_constr.xdc"]
 
 switch $INTF {
   0 {
