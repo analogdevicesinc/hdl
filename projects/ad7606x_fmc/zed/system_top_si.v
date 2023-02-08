@@ -199,7 +199,6 @@ module system_top #(
     .ad7606_spi_cs (ad7606_spi_cs),
     .ad7606_spi_sclk (ad7606_spi_sclk),
     .rx_busy (adc_busy),
-    .rx_cnvst_n (adc_cnvst_n),
-    .rx_first_data (adc_first_data));
+    .rx_cnvst_n (adc_cnvst_n));
 
 endmodule
