@@ -24,6 +24,10 @@ switch $INTF {
     set_property -dict {PACKAGE_PIN M19     IOSTANDARD LVCMOS25} [get_ports adc_rd_n]           ; ## G06 FMC_LPC_LA00_CC_P
     set_property -dict {PACKAGE_PIN R19     IOSTANDARD LVCMOS25} [get_ports adc_wr_n]           ; ## C14 FMC_LPC_LA10_P
     set_property -dict {PACKAGE_PIN K18     IOSTANDARD LVCMOS25} [get_ports adc_cnvst_n]        ; ## D12 FMC_LPC_LA05_N
+<<<<<<< HEAD
+=======
+  }
+>>>>>>> 0ff4cbbe0768301c54b4af331ccd3aeb0a93a48b
   1 {
     set_property -dict {PACKAGE_PIN P22     IOSTANDARD LVCMOS25} [get_ports ad7606_spi_sdi[4]]        ; ## G10 FMC_LPC_LA03_N
     set_property -dict {PACKAGE_PIN M22     IOSTANDARD LVCMOS25} [get_ports ad7606_spi_sdi[5]]        ; ## H11 FMC_LPC_LA04_N

@@ -8,6 +8,8 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #  - Options : AD7606B(0)/C-16(1)/C-18(2)
 # INTF - Operation interface
 #  - Options : Parallel/Serial
+# NUM_OF_SDI - NUmber of SDI lines used
+#  - Options: 1, 2, 4, 8
 # SIMPLE_STATUS_CRC - ADC read mode options
 #  - Options : SIMPLE(0), STATUS(1), CRC(2) CRC_STATUS(3)
 # EXT_CLK - Use external clock as ADC clock
