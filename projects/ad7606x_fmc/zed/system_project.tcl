@@ -32,7 +32,7 @@ adi_project ad7606x_fmc_zed 0 [list \
 adi_project_files ad7606x_fmc_zed [list \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc" \
-  "system_constr.xdc"]
+  "system_constr.tcl"]
 
 switch $INTF {
   0 {
