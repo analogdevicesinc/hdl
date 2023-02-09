@@ -392,18 +392,19 @@ if {$VERSAL_PHY_MODE != 2} {
   ad_connect $adc_data_offload_name/init_req axi_mxfe_rx_dma/s_axis_xfer_req
 
   # Interconnect
-  if {$ADI_PHY_SEL == 1} {
-    # CPU
-    ad_cpu_interconnect 0x44a60000 axi_mxfe_rx_xcvr
-    # GT / ADC
-    ad_mem_hp0_interconnect $sys_cpu_clk axi_mxfe_rx_xcvr/m_axi
-  }
   # CPU
+  if {$ADI_PHY_SEL == 1} {
+    ad_cpu_interconnect 0x44a60000 axi_mxfe_rx_xcvr
+  }
   ad_cpu_interconnect 0x44a10000 rx_mxfe_tpl_core
   ad_cpu_interconnect 0x44a90000 axi_mxfe_rx_jesd
   ad_cpu_interconnect 0x7c420000 axi_mxfe_rx_dma
   ad_cpu_interconnect 0x7c450000 $adc_data_offload_name
   # GT / ADC
+  if {$ADI_PHY_SEL == 1} {
+    ad_mem_hp0_interconnect $sys_cpu_clk axi_mxfe_rx_xcvr/m_axi
+  }
+  ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
   ad_mem_hp1_interconnect $sys_dma_clk axi_mxfe_rx_dma/m_dest_axi
 
   # Interrupts
@@ -455,16 +456,13 @@ if {$VERSAL_PHY_MODE != 1} {
   ad_cpu_interconnect 0x7c430000 axi_mxfe_tx_dma
   ad_cpu_interconnect 0x7c440000 $dac_data_offload_name
   # GT / ADC
+  ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2
   ad_mem_hp2_interconnect $sys_dma_clk axi_mxfe_tx_dma/m_src_axi
 
   # Interrupts
   ad_cpu_interrupt ps-12 mb-13 axi_mxfe_tx_dma/irq
   ad_cpu_interrupt ps-10 mb-15 axi_mxfe_tx_jesd/irq
 }
-
-# Interconnect (GT / ADC)
-ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
-ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2
 
 # Dummy outputs for unused lanes
 if {$ADI_PHY_SEL == 1} {
