@@ -162,8 +162,8 @@ module axi_ltc235x #(
 
   // internal signals
 
-  wire    [23:0]          softspan_next_24;
-  wire    [ 2:0]          softspan_next_3[0:7];
+  wire    [23:0]          softspan_24;
+  wire    [ 2:0]          softspan_3[0:7];
 
   wire                    adc_valid;
 
@@ -221,7 +221,7 @@ module axi_ltc235x #(
   assign adc_enable_6 = adc_enable[6];
   assign adc_enable_7 = adc_enable[7];
 
-  assign softspan_next_24 = {softspan_next_3[7], softspan_next_3[6], softspan_next_3[5], softspan_next_3[4], softspan_next_3[3], softspan_next_3[2], softspan_next_3[1], softspan_next_3[0]};
+  assign softspan_24 = {softspan_3[7], softspan_3[6], softspan_3[5], softspan_3[4], softspan_3[3], softspan_3[2], softspan_3[1], softspan_3[0]};
 
   // processor read/write interface
 
@@ -267,7 +267,7 @@ module axi_ltc235x #(
         .rst (adc_rst_s),
         .clk (adc_clk_s),
         .adc_enable (adc_enable),
-        .softspan_next (softspan_next_24),
+        .softspan_next (softspan_24),
         .scki (scki),
         .db_o (sdi),
         .scko (scko),
@@ -336,6 +336,7 @@ module axi_ltc235x #(
         .adc_read_data (32'h0),
         .adc_status_header({5'd0, adc_status_header[i]}),
         .adc_crc_err(1'b0),
+        .adc_softspan (softspan_3[i]),
         .up_adc_crc_err (),
         .up_adc_pn_err (),
         .up_adc_pn_oos (),
@@ -354,7 +355,6 @@ module axi_ltc235x #(
         .adc_usr_datatype_bits (8'd32),
         .adc_usr_decimation_m (16'd1),
         .adc_usr_decimation_n (16'd1),
-        .up_usr_softspan (softspan_next_3[i]),
         .up_rstn (up_rstn),
         .up_clk (up_clk),
         .up_wreq (up_wreq_s),
