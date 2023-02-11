@@ -462,6 +462,4 @@ module axi_ltc235x #(
     .up_rdata (up_rdata),
     .up_rack (up_rack));
 
-  // TODO: add support for other LTC235x members
-
 endmodule
