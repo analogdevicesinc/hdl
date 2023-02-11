@@ -377,10 +377,15 @@ module axi_ltc235x_cmos #(
       adc_data_store[5] <= 'd0;
       adc_data_store[6] <= 'd0;
       adc_data_store[7] <= 'd0;
-      softspan_next_int <= 'd0;
+      softspan_next_int <= 24'hff_ffff;
     end else begin
       if (!adc_valid_init_d & adc_valid_init) begin
-        softspan_next_int <= softspan_next; // update next softspan
+        // update next softspan
+        if (softspan_next == 24'hff_ffff) begin
+          softspan_next_int <= 24'd0;
+        end else begin
+          softspan_next_int <= softspan_next;
+        end
         if (adc_lane0_shift_d[3] == 1'b1) begin
           adc_data_store[adc_lane0_shift_d[2:0]] <= adc_data_init[0];
         end
