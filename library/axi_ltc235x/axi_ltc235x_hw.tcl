@@ -27,19 +27,33 @@ ad_ip_files axi_ltc235x [list \
 
 # parameters
 
+set ADC_LVDS_CMOS_N     0
+set CHIP_SELECT_N       0
+set ADC_LANE_0_ENABLE   1
+set ADC_LANE_1_ENABLE   1
+set ADC_LANE_2_ENABLE   1
+set ADC_LANE_3_ENABLE   1
+set ADC_LANE_4_ENABLE   1
+set ADC_LANE_5_ENABLE   1
+set ADC_LANE_6_ENABLE   1
+set ADC_LANE_7_ENABLE   1
+set ADC_NUM_CHANNELS    8
+set ADC_DATA_WIDTH      18
+set ADC_EXTERNAL_CLK    0
+
 ad_ip_parameter ID INTEGER 0
-ad_ip_parameter LVDS_CMOS_N INTEGER 0
-ad_ip_parameter LANE_0_ENABLE INTEGER 1
-ad_ip_parameter LANE_1_ENABLE INTEGER 1
-ad_ip_parameter LANE_2_ENABLE INTEGER 1
-ad_ip_parameter LANE_3_ENABLE INTEGER 1
-ad_ip_parameter LANE_4_ENABLE INTEGER 1
-ad_ip_parameter LANE_5_ENABLE INTEGER 1
-ad_ip_parameter LANE_6_ENABLE INTEGER 1
-ad_ip_parameter LANE_7_ENABLE INTEGER 1
-ad_ip_parameter NUM_CHANNELS INTEGER 8
-ad_ip_parameter DATA_WIDTH INTEGER 18
-ad_ip_parameter EXTERNAL_CLK INTEGER 0
+ad_ip_parameter LVDS_CMOS_N INTEGER $ADC_LVDS_CMOS_N
+ad_ip_parameter LANE_0_ENABLE INTEGER $ADC_LANE_0_ENABLE
+ad_ip_parameter LANE_1_ENABLE INTEGER $ADC_LANE_1_ENABLE
+ad_ip_parameter LANE_2_ENABLE INTEGER $ADC_LANE_2_ENABLE
+ad_ip_parameter LANE_3_ENABLE INTEGER $ADC_LANE_3_ENABLE
+ad_ip_parameter LANE_4_ENABLE INTEGER $ADC_LANE_4_ENABLE
+ad_ip_parameter LANE_5_ENABLE INTEGER $ADC_LANE_5_ENABLE
+ad_ip_parameter LANE_6_ENABLE INTEGER $ADC_LANE_6_ENABLE
+ad_ip_parameter LANE_7_ENABLE INTEGER $ADC_LANE_7_ENABLE
+ad_ip_parameter NUM_CHANNELS INTEGER $ADC_NUM_CHANNELS
+ad_ip_parameter DATA_WIDTH INTEGER $ADC_DATA_WIDTH
+ad_ip_parameter EXTERNAL_CLK INTEGER $ADC_EXTERNAL_CLK
 
 adi_add_auto_fpga_spec_params
 
@@ -56,14 +70,9 @@ add_interface_port device_if pd pd Output 1
 add_interface_port device_if scki scki Output 1
 add_interface_port device_if scko scko Input 1
 add_interface_port device_if sdi sdi Output 1
-add_interface_port device_if sdo_0 sdo_0 Input 1
-add_interface_port device_if sdo_1 sdo_1 Input 1
-add_interface_port device_if sdo_2 sdo_2 Input 1
-add_interface_port device_if sdo_3 sdo_3 Input 1
-add_interface_port device_if sdo_4 sdo_4 Input 1
-add_interface_port device_if sdo_5 sdo_5 Input 1
-add_interface_port device_if sdo_6 sdo_6 Input 1
-add_interface_port device_if sdo_7 sdo_7 Input 1
+for {set i 0} {$i < $ADC_NUM_CHANNELS} {incr i} {
+    add_interface_port device_if sdo_$i sdo_$i Input 1
+}
 # lvds
 #add_interface_port device_if scki_p scki_p Output 1
 #add_interface_port device_if scki_n scki_n Output 1
@@ -83,7 +92,7 @@ ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn
 # others
 ad_interface signal adc_dovf Input 1 ovf
 
-for {set i 0} {$i < 8} {incr i} {
+for {set i 0} {$i < $ADC_NUM_CHANNELS} {incr i} {
     add_interface adc_ch_$i conduit end
     add_interface_port adc_ch_$i adc_enable_$i enable Output 1
     add_interface_port adc_ch_$i adc_valid_$i valid Output 1
