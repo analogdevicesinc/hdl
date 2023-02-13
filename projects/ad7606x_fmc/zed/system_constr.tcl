@@ -5,7 +5,6 @@ if {![info exists INTF]} {
   set INTF $::env(INTF)
 }
 
-set INTF $ad_project_params(INTF)
 switch $INTF {
   0 {
     set_property -dict {PACKAGE_PIN N19     IOSTANDARD LVCMOS25} [get_ports adc_db[0] ]         ; ## D08 FMC_LPC_LA01_CC_P
@@ -42,7 +41,7 @@ switch $INTF {
     set_property -dict {PACKAGE_PIN N22     IOSTANDARD LVCMOS25} [get_ports ad7606_spi_sdo]     ; ## G09 FMC_LPC_LA03_P
 
     set_property -dict {PACKAGE_PIN M19     IOSTANDARD LVCMOS25} [get_ports ad7606_spi_sclk]    ; ## G06 FMC_LPC_LA00_CC_P
-    set_property -dict {PACKAGE_PIN M21     IOSTANDARD LVCMOS25} [get_ports ad7606_spi_cs_n]    ; ## H10 FMC_LPC_LA04_P
+    set_property -dict {PACKAGE_PIN M21     IOSTANDARD LVCMOS25} [get_ports ad7606_spi_cs]    ; ## H10 FMC_LPC_LA04_P
     set_property -dict {PACKAGE_PIN R19     IOSTANDARD LVCMOS25} [get_ports adc_cnvst_n]        ; ## C14 FMC_LPC_LA10_P
   }
 }
