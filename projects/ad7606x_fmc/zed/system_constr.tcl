@@ -63,8 +63,18 @@ switch $INTF {
     
     set_property -dict {PACKAGE_PIN M19     IOSTANDARD LVCMOS25} [get_ports ad7606_spi_sclk]    ; ## G06 FMC_LPC_LA00_CC_P
     set_property -dict {PACKAGE_PIN N22     IOSTANDARD LVCMOS25} [get_ports ad7606_spi_sdo]     ; ## G09 FMC_LPC_LA03_P
-    set_property -dict {PACKAGE_PIN M21     IOSTANDARD LVCMOS25} [get_ports ad7606_spi_cs]    ; ## H10 FMC_LPC_LA04_P
+    set_property -dict {PACKAGE_PIN M21     IOSTANDARD LVCMOS25} [get_ports ad7606_spi_cs]      ; ## H10 FMC_LPC_LA04_P
     set_property -dict {PACKAGE_PIN R19     IOSTANDARD LVCMOS25} [get_ports adc_cnvst_n]        ; ## C14 FMC_LPC_LA10_P
+    
+    # rename auto-generated clock for SPIEngine to spi_clk - 160MHz
+    # NOTE: clk_fpga_0 is the first PL fabric clock, also called $sys_cpu_clk
+    create_generated_clock -name spi_clk -source [get_pins -filter name=~*CLKIN1 -of [get_cells -hier -filter name=~*spi_clkgen*i_mmcm]] -master_clock clk_fpga_0 [get_pins -filter name=~*CLKOUT0 -of [get_cells -hier -filter name=~*spi_clkgen*i_mmcm]]
+
+    # relax the SDO path to help closing timing at high frequencies
+    set_multicycle_path -setup 8 -to [get_cells -hierarchical -filter {NAME=~*/data_sdo_shift_reg[*]}] -from [get_clocks spi_clk]
+    set_multicycle_path -hold  7 -to [get_cells -hierarchical -filter {NAME=~*/data_sdo_shift_reg[*]}] -from [get_clocks spi_clk]
+    set_multicycle_path -setup 8 -to [get_cells -hierarchical -filter {NAME=~*/execution/inst/left_aligned_reg*}] -from [get_clocks spi_clk]
+    set_multicycle_path -hold  7 -to [get_cells -hierarchical -filter {NAME=~*/execution/inst/left_aligned_reg*}] -from [get_clocks spi_clk]
   }
 }
 
