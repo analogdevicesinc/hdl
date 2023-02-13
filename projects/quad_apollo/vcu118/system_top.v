@@ -99,23 +99,10 @@ module system_top (
   inout         art_sdio,
   output  [3:0] art_csb,
 
-  output        adf4030_sclk,
-  inout         adf4030_sdio,
-  output        adf4030_csn,
-
   output        ltc6953_sclk,  
   output        ltc6953_sdi, 
   input         ltc6953_sdo,  
   output  [1:0] ltc6953_csn,
-
-  output  [3:0] hsci_ckin_p,
-  output  [3:0] hsci_ckin_n,
-  output  [3:0] hsci_din_p,
-  output  [3:0] hsci_din_n,
-  input   [3:0] hsci_cko_p,
-  input   [3:0] hsci_cko_n,
-  input   [3:0] hsci_do_p,
-  input   [3:0] hsci_do_n,
 
   output  [3:0] trig0_a,
   output  [3:0] trig1_a,
@@ -137,18 +124,7 @@ module system_top (
   output  [3:0] lpf_b,
   output        admv8913_cs_n,
 
-  output        syncin_c2m_p,
- // output        syncin_c2m_n,
-
-  // FMC HPC IOs
-//   output        syncin_a1_p,
-//   output        syncin_a1_n,
-  
-  // input         syncout_b0_n,
-  // input         syncout_b1_p,
-
-//   input   [3:0] syncout_b0_p,
-//   input   [3:0] syncout_b1_n,
+  output  [5:0] rx_dsa,
 
   inout   [3:0] gp4,
   inout   [3:0] gp5
@@ -171,7 +147,6 @@ module system_top (
   wire            spi_2_mosi;
   wire            spi_2_miso;
   wire            art_miso;
-  wire            adf4030_miso;
 
   wire            ref_clk;
   wire            ref_clk_replica;
@@ -234,18 +209,14 @@ module system_top (
   assign art_csb = spi_2_csn[3:0];
   assign art_sclk = spi_2_clk;
 
-  assign adf4030_csn = spi_2_csn[4];
-  assign adf4030_sclk = spi_2_clk;
-
-  assign ltc6953_csn = spi_2_csn[6:5];
+  assign ltc6953_csn = spi_2_csn[5:4];
   assign ltc6953_sclk = spi_2_clk;
-  assign ltc6953_sdi = |(~spi_2_csn[6:5]) ? spi_2_mosi : 1'b0;
+  assign ltc6953_sdi = |(~spi_2_csn[5:4]) ? spi_2_mosi : 1'b0;
 
   assign spi_miso = |(~spi_csn[3:0]) ? apollo_miso : 1'b0;
 
   assign spi_2_miso =  |(~spi_2_csn[3:0]) ? art_miso :
-                         ~spi_2_csn[4]    ? adf4030_miso : 
-                       |(~spi_2_csn[6:5]) ? ltc6953_sdo :
+                       |(~spi_2_csn[5:4]) ? ltc6953_sdo :
                          1'b0;
   genvar i;
   generate
@@ -272,16 +243,6 @@ module system_top (
     .spi_sdio (art_sdio),
     .spi_dir ());
 
-  ad_3w_spi #(
-    .NUM_OF_SLAVES(1)
-  ) i_spi_adf4030 (
-    .spi_csn (spi_2_csn[4]),
-    .spi_clk (spi_2_clk),
-    .spi_mosi (spi_2_mosi),
-    .spi_miso (adf4030_miso),
-    .spi_sdio (adf4030_sdio),
-    .spi_dir ());
-
   // gpios
 
   ad_iobuf #(
@@ -292,34 +253,26 @@ module system_top (
     .dio_o (gpio_i[39:32]),
     .dio_p ({gp5[3:0],       // 39-36 
              gp4[3:0]}));    // 35-32
-  
-  assign gpio_i[43:40] = hsci_cko_p;
-  assign gpio_i[47:44] = hsci_cko_n;
-  assign gpio_i[51:48] = hsci_do_p;
-  assign gpio_i[55:52] = hsci_do_n;
-  assign gpio_i[59:56] = irqa;
-  assign gpio_i[63:60] = irqb;
 
-  assign hsci_ckin_p   = gpio_o[67:64];
-  assign hsci_ckin_n   = gpio_o[71:68];
-  assign hsci_din_p    = gpio_o[75:72];
-  assign hsci_din_n    = gpio_o[79:76];
-  assign trig0_a       = gpio_o[83:80];
-  assign trig1_a       = gpio_o[87:84];
-  assign trig0_b       = gpio_o[91:88];
-  assign trig1_b       = gpio_o[95:92];
-  assign resetb        = gpio_o[99:96];
-  assign txen          = gpio_o[101:100];
-  assign rxen          = gpio_o[103:102];
-  assign txrxn         = gpio_o[105:104];
-  assign slice         = gpio_o[108:106];
-  assign txrxwe        = gpio_o[109];
-  assign fcnsel        = gpio_o[112:110];
-  assign profile       = gpio_o[117:113];
-  assign hpf_b         = gpio_o[121:118];
-  assign lpf_b         = gpio_o[125:122];
-  assign admv8913_cs_n = gpio_o[126];
-  assign syncin_c2m_p  = gpio_o[127];
+  assign gpio_i[43:40] = irqa;
+  assign gpio_i[47:44] = irqb;
+
+  assign trig0_a       = gpio_o[51:48];
+  assign trig1_a       = gpio_o[55:52];
+  assign trig0_b       = gpio_o[59:56];
+  assign trig1_b       = gpio_o[63:60];
+  assign resetb        = gpio_o[67:64];
+  assign txen          = gpio_o[69:68];
+  assign rxen          = gpio_o[71:70];
+  assign txrxn         = gpio_o[73:72];
+  assign slice         = gpio_o[76:74];
+  assign txrxwe        = gpio_o[77];
+  assign fcnsel        = gpio_o[80:78];
+  assign profile       = gpio_o[85:81];
+  assign hpf_b         = gpio_o[89:86];
+  assign lpf_b         = gpio_o[93:90];
+  assign admv8913_cs_n = gpio_o[94];
+  assign rx_dsa        = gpio_o[100:95];
 
   ad_iobuf #(
     .DATA_WIDTH(17)
@@ -329,7 +282,8 @@ module system_top (
     .dio_o (gpio_i[16:0]),
     .dio_p (gpio_bd));
 
-  assign gpio_i[31:17] = gpio_o[31:17];
+  assign gpio_i[127:101] = gpio_o[127:101];
+  assign gpio_i[ 31:17] = gpio_o[ 31:17];
 
   system_wrapper i_system_wrapper (
     .sys_rst (sys_rst),
