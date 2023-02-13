@@ -98,8 +98,6 @@ module system_top (
   input                   spi_bus0_sdo,
   output                  spi_bus0_cs_4372,
   output                  fpga_bus0_csb_9528,
-  output                  fpga_bus0_csb_5752,
-  output                  fpga_bus0_rstn,
 
   output                  spi_bus1_sck,
   output                  spi_bus1_sdi,
@@ -118,13 +116,14 @@ module system_top (
   output                  spiad_sck,
   output                  spiad_sdi,
   output                  spiad_csn,
+  output                  adc_mon_csb,
 
   output                  fpga_busf_sck,
   output                  fpga_busf_sdi,
   input                   fpga_busf_sdo,
   output                  fpga_busf_csb,
   output                  fpga_busf_sfl,
-
+  output                  fpga_hlsel,
   output                  gpio_sw_pg,
   output                  gpio_sw1_v1,
   output                  gpio_sw1_v2,
@@ -133,7 +132,6 @@ module system_top (
   output                  gpio_sw3_v2,
   output                  gpio_sw4_v1,
   output                  gpio_sw4_v2,
-
 
   output                  adcscko,
   input                   adcscki,
@@ -145,7 +143,7 @@ module system_top (
   input                   adcsdo4,
   input                   adcsdo6,
   output                  adcpd,
-
+  output                  adcmon_rstn,
   output                  gpio_mix2en,
 
   output                  adl5960x_sync1);
@@ -167,7 +165,7 @@ module system_top (
   wire                    tx_sync0;
   wire                    tx_sync1;
 
-  wire         [ 3:0]     adcsdo_in;
+  wire         [ 7:0]     adcsdo_in;
 
   wire         [ 2:0]     adc_spi_csn;
 
@@ -183,14 +181,12 @@ module system_top (
 
   // assignments
 
-  assign adcsdo_in = {adcsdo6, adcsdo4, adcsdo2, adcsdo0};
-
+  assign adc_mon_csb = spiad_csn_s[1];
   assign spiad_csn = spiad_csn_s[0];
 
   assign fpga_csb = adc_spi_csn[0];
 
   assign fpga_bus0_csb_9528 = spi_bus0_csn[2];
-  assign fpga_bus0_csb_5752 = spi_bus0_csn[1];
   assign spi_bus0_cs_4372 = spi_bus0_csn[0];
 
   assign spi_bus1_csn_dat1 = spi_bus1_csn[0];
@@ -205,10 +201,9 @@ module system_top (
   // gpios
 
   assign adcpd = gpio_o[52];
-
-  assign fpga_bus0_rstn = gpio_o[51];
+  assign adcmon_rstn = gpio_o[51];
   assign fpga_busf_sfl = gpio_o[50];
-  //assign clkd_lvsft_en = gpio_o[49];
+  assign fpga_hlsel = gpio_o[49];
   assign gpio_sw_pg = gpio_o[48];
 
   assign gpio_mix2en = gpio_o[43];
@@ -311,15 +306,18 @@ module system_top (
     .rx_sync_0 (rx_sync),
     .rx_sysref_0 (sysref),
 
-    .adcbusy (adcbusy),
-
-    .ad4858_sdpclk (),
-    .ad4858_di_sclk (adcscko),
-    .ad4858_di_cs (),
-    .ad4858_di_sdo (),
-    .ad4858_di_sdo_t (),
-    .ad4858_di_sdi (adcsdo_in),
-    .ad4858_odr (adccnv),
+    .scki (adcscko),
+    .scko (adcscki),
+    .adc_lane_0 (adcsdo0),
+    .adc_lane_1 (1'b0),
+    .adc_lane_2 (adcsdo2),
+    .adc_lane_3 (1'b0),
+    .adc_lane_4 (adcsdo4),
+    .adc_lane_5 (1'b0),
+    .adc_lane_6 (adcsdo6),
+    .adc_lane_7 (1'b0),
+    .busy (adcbusy),
+    .cnv (adccnv),
 
     .tx_data_1_0_n (dac_data_n[0]),
     .tx_data_1_0_p (dac_data_p[0]),
@@ -341,7 +339,6 @@ module system_top (
     .tx_sysref_1_0 (dac_sysref),
     .tx_sync_1_0 (tx_sync0),
     .tx_ref_clk_0 (tx_ref_clk0),
-    ////.tx_sync1 (tx_sync1),
 
     .spi0_sclk (fpga_clk),
     .spi0_csn (adc_spi_csn),

@@ -1,5 +1,5 @@
 
-source ../../scripts/adi_env.tcl
+source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
@@ -9,9 +9,12 @@ set mode   04
 set env(ADI_DAC_DEVICE) $device
 set env(ADI_DAC_MODE) $mode
 
-source ../../dac_fmc_ebz/common/config.tcl
+source $ad_hdl_dir/projects/dac_fmc_ebz/common/config.tcl
 
 adi_project adi_vna_4ch_zcu102 0 [list \
+  RX_JESD_L    [get_env_param RX_JESD_L    1 ] \
+  RX_JESD_M    [get_env_param RX_JESD_M   32 ] \
+  RX_JESD_S    [get_env_param RX_JESD_S    1 ] \
   TX_JESD_M    [get_config_param M] \
   TX_JESD_L    [get_config_param L] \
   TX_JESD_S    [get_config_param S] \
