@@ -1,0 +1,29 @@
+###############################################################################
+## Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
+
+<: set ComponentName [getComponentNameString] :>
+<: setOutputDirectory "./" :>
+<: setFileName [ttcl_add $ComponentName "_constr"] :>
+<: setFileExtension ".xdc" :>
+<: setFileProcessingOrder late :>
+<: set lvds_cmos_n [getBooleanValue "LVDS_CMOS_N"] :>
+
+set up_clk [get_clocks -of_objects [get_ports s_axi_aclk]]
+
+<: if {$lvds_cmos_n} { :>
+
+set_false_path -quiet \
+	-from $up_clk \
+	-to [get_cells -quiet -hier -filter {name =~ *packet_format_reg* && IS_SEQUENTIAL}]
+
+set_false_path -quiet \
+	-from $up_clk \
+	-to [get_cells -quiet -hier -filter {name =~ *ch_*_base_reg* && IS_SEQUENTIAL}]
+
+set_false_path -quiet \
+	-from [get_cells -hier -filter {name =~ *packet_format_reg* && IS_SEQUENTIAL}] \
+	-to [get_cells -quiet -hieri -filter {name =~ *packet_cnt_length_reg* && IS_SEQUENTIAL}]
+
+<: } :>
