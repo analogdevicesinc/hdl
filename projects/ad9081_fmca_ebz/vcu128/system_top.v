@@ -559,7 +559,7 @@ module system_top #(
         .tx_sync_0 (tx_syncin),
         .tx_sysref_0 (sysref));
     end
-    endcase
+  endcase
   endgenerate
   
 

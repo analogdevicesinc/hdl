@@ -293,8 +293,8 @@ module system_top  #(
   assign gpio_i[31:16] = gpio_o[31:16];
 
   generate
-    case (VERSAL_PHY_MODE)
-      0 : begin
+  case (VERSAL_PHY_MODE)
+    0 : begin
         // Rx & Tx
         system_wrapper i_system_wrapper (
           .ddr_addr (ddr_addr),
@@ -572,7 +572,8 @@ module system_top  #(
           .tx_device_clk (tx_device_clk),
           .tx_sync_0 (tx_syncin),
           .tx_sysref_0 (sysref));
-      end
+    end
+  endcase
   endgenerate
 
   assign rx_data_p_loc[RX_JESD_L*RX_NUM_LINKS-1:0] = rx_data_p[RX_JESD_L*RX_NUM_LINKS-1:0];

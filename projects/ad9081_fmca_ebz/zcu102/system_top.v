@@ -423,6 +423,7 @@ module system_top  #(
         .tx_sync_0 (tx_syncin),
         .tx_sysref_0 (sysref));
     end
+  endcase
   endgenerate
 
   assign rx_data_p_loc[RX_JESD_L*RX_NUM_LINKS-1:0] = rx_data_p[RX_JESD_L*RX_NUM_LINKS-1:0];
