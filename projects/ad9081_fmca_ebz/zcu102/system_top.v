@@ -348,22 +348,6 @@ module system_top  #(
         .rx_data_6_p (rx_data_p_loc[6]),
         .rx_data_7_n (rx_data_n_loc[7]),
         .rx_data_7_p (rx_data_p_loc[7]),
-        .tx_data_0_n (tx_data_n_loc[0]),
-        .tx_data_0_p (tx_data_p_loc[0]),
-        .tx_data_1_n (tx_data_n_loc[1]),
-        .tx_data_1_p (tx_data_p_loc[1]),
-        .tx_data_2_n (tx_data_n_loc[2]),
-        .tx_data_2_p (tx_data_p_loc[2]),
-        .tx_data_3_n (tx_data_n_loc[3]),
-        .tx_data_3_p (tx_data_p_loc[3]),
-        .tx_data_4_n (tx_data_n_loc[4]),
-        .tx_data_4_p (tx_data_p_loc[4]),
-        .tx_data_5_n (tx_data_n_loc[5]),
-        .tx_data_5_p (tx_data_p_loc[5]),
-        .tx_data_6_n (tx_data_n_loc[6]),
-        .tx_data_6_p (tx_data_p_loc[6]),
-        .tx_data_7_n (tx_data_n_loc[7]),
-        .tx_data_7_p (tx_data_p_loc[7]),
         .ref_clk_q0 (ref_clk),
         .ref_clk_q1 (ref_clk),
         .rx_device_clk (rx_device_clk),
@@ -385,22 +369,6 @@ module system_top  #(
         .spi1_mosi (spi1_mosi),
         .spi1_sclk (spi1_sclk),
         // FMC HPC
-        .rx_data_0_n (rx_data_n_loc[0]),
-        .rx_data_0_p (rx_data_p_loc[0]),
-        .rx_data_1_n (rx_data_n_loc[1]),
-        .rx_data_1_p (rx_data_p_loc[1]),
-        .rx_data_2_n (rx_data_n_loc[2]),
-        .rx_data_2_p (rx_data_p_loc[2]),
-        .rx_data_3_n (rx_data_n_loc[3]),
-        .rx_data_3_p (rx_data_p_loc[3]),
-        .rx_data_4_n (rx_data_n_loc[4]),
-        .rx_data_4_p (rx_data_p_loc[4]),
-        .rx_data_5_n (rx_data_n_loc[5]),
-        .rx_data_5_p (rx_data_p_loc[5]),
-        .rx_data_6_n (rx_data_n_loc[6]),
-        .rx_data_6_p (rx_data_p_loc[6]),
-        .rx_data_7_n (rx_data_n_loc[7]),
-        .rx_data_7_p (rx_data_p_loc[7]),
         .tx_data_0_n (tx_data_n_loc[0]),
         .tx_data_0_p (tx_data_p_loc[0]),
         .tx_data_1_n (tx_data_n_loc[1]),
@@ -423,6 +391,7 @@ module system_top  #(
         .tx_sync_0 (tx_syncin),
         .tx_sysref_0 (sysref));
     end
+  endcase
   endgenerate
 
   assign rx_data_p_loc[RX_JESD_L*RX_NUM_LINKS-1:0] = rx_data_p[RX_JESD_L*RX_NUM_LINKS-1:0];

@@ -36,9 +36,9 @@ set TDD_SUPPORT [ expr { [info exists ad_project_params(TDD_SUPPORT)] \
 set SHARED_DEVCLK [ expr { [info exists ad_project_params(SHARED_DEVCLK)] \
                             ? $ad_project_params(SHARED_DEVCLK) : 0 } ]
 
-if {$ADI_PHY_SEL == 1 && $VERSAL_PHY_MODE != 0} {
-  error "ERROR: Unsuported mode!"
-}
+# if {$ADI_PHY_SEL == 1 && $VERSAL_PHY_MODE != 0} {
+#   error "ERROR: Unsuported mode!"
+# }
 
 if {$TDD_SUPPORT && !$SHARED_DEVCLK} {
   error "ERROR: Cannot enable TDD support without shared deviceclocks!"
@@ -138,12 +138,35 @@ set dac_fifo_address_width [expr int(ceil(log(($dac_fifo_samples_per_converter*$
 if {$ADI_PHY_SEL == 1} {
   ad_ip_instance util_adxcvr util_mxfe_xcvr
   ad_ip_parameter util_mxfe_xcvr CONFIG.CPLL_FBDIV_4_5 5
-  ad_ip_parameter util_mxfe_xcvr CONFIG.TX_NUM_OF_LANES $TX_NUM_OF_LANES
-  ad_ip_parameter util_mxfe_xcvr CONFIG.RX_NUM_OF_LANES $RX_NUM_OF_LANES
-  ad_ip_parameter util_mxfe_xcvr CONFIG.RX_OUT_DIV 1
-  ad_ip_parameter util_mxfe_xcvr CONFIG.LINK_MODE $ENCODER_SEL
-  ad_ip_parameter util_mxfe_xcvr CONFIG.RX_LANE_RATE $RX_LANE_RATE
-  ad_ip_parameter util_mxfe_xcvr CONFIG.TX_LANE_RATE $TX_LANE_RATE
+  switch $VERSAL_PHY_MODE {
+    0 {
+      # Rx & Tx
+      ad_ip_parameter util_mxfe_xcvr CONFIG.TX_NUM_OF_LANES $TX_NUM_OF_LANES
+      ad_ip_parameter util_mxfe_xcvr CONFIG.RX_NUM_OF_LANES $RX_NUM_OF_LANES
+      ad_ip_parameter util_mxfe_xcvr CONFIG.RX_OUT_DIV 1
+      ad_ip_parameter util_mxfe_xcvr CONFIG.LINK_MODE $ENCODER_SEL
+      ad_ip_parameter util_mxfe_xcvr CONFIG.RX_LANE_RATE $RX_LANE_RATE
+      ad_ip_parameter util_mxfe_xcvr CONFIG.TX_LANE_RATE $TX_LANE_RATE
+    }
+    1 {
+      # Rx only
+      ad_ip_parameter util_mxfe_xcvr CONFIG.TX_NUM_OF_LANES 0
+      ad_ip_parameter util_mxfe_xcvr CONFIG.RX_NUM_OF_LANES $RX_NUM_OF_LANES
+      ad_ip_parameter util_mxfe_xcvr CONFIG.RX_OUT_DIV 1
+      ad_ip_parameter util_mxfe_xcvr CONFIG.LINK_MODE $ENCODER_SEL
+      ad_ip_parameter util_mxfe_xcvr CONFIG.RX_LANE_RATE $RX_LANE_RATE
+      ad_ip_parameter util_mxfe_xcvr CONFIG.TX_LANE_RATE 0
+    }
+    2 {
+      # Tx only
+      ad_ip_parameter util_mxfe_xcvr CONFIG.TX_NUM_OF_LANES $TX_NUM_OF_LANES
+      ad_ip_parameter util_mxfe_xcvr CONFIG.RX_NUM_OF_LANES 0
+      ad_ip_parameter util_mxfe_xcvr CONFIG.RX_OUT_DIV 1
+      ad_ip_parameter util_mxfe_xcvr CONFIG.LINK_MODE $ENCODER_SEL
+      ad_ip_parameter util_mxfe_xcvr CONFIG.RX_LANE_RATE 0
+      ad_ip_parameter util_mxfe_xcvr CONFIG.TX_LANE_RATE $TX_LANE_RATE
+    }
+  }
 } else {
   source $ad_hdl_dir/projects/ad9081_fmca_ebz/common/versal_transceiver.tcl
 
