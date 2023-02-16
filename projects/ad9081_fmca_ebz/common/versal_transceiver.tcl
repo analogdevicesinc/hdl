@@ -4,17 +4,17 @@ proc create_versal_phy {
   {rx_lane_rate 11.88}
   {tx_lane_rate 11.88}
   {ref_clock 360}
-  {versal_phy_mode 0}
+  {intf_cfg RXTX}
 } {
 
 set num_quads [expr int(round(1.0 * $num_lanes / 4))]
 set rx_progdiv_clock [format %.3f [expr $rx_lane_rate * 1000 / 66]]
 set tx_progdiv_clock [format %.3f [expr $tx_lane_rate * 1000 / 66]]
 
-if {$versal_phy_mode == 1} {
+if {$intf_cfg == "RX"} {
   set gt_direction "SIMPLEX_RX"
   set no_lanes_property "CONFIG.IP_NO_OF_RX_LANES"
-} elseif {$versal_phy_mode == 2} {
+} elseif {$intf_cfg == "TX"} {
   set gt_direction "SIMPLEX_TX"
   set no_lanes_property "CONFIG.IP_NO_OF_TX_LANES"
 } else {
@@ -25,11 +25,11 @@ if {$versal_phy_mode == 1} {
 create_bd_cell -type hier ${ip_name}
 
 # Common interface
-if {$versal_phy_mode != 2} {
+if {$intf_cfg != "TX"} {
   create_bd_pin -dir O ${ip_name}/rxusrclk_out -type clk
   create_bd_pin -dir I ${ip_name}/reset_rx_pll_and_datapath_in
 }
-if {$versal_phy_mode != 1} {
+if {$intf_cfg != "RX"} {
   create_bd_pin -dir O ${ip_name}/txusrclk_out -type clk
   create_bd_pin -dir I ${ip_name}/reset_tx_pll_and_datapath_in
 }
@@ -203,11 +203,11 @@ for {set j 0} {$j < $num_quads} {incr j} {
     CONFIG.PROT0_GT_DIRECTION ${gt_direction} \
   ] [get_bd_cells ${ip_name}/gt_quad_base_${j}]
 
-  if {$versal_phy_mode != 2} {
+  if {$intf_cfg != "TX"} {
     ad_ip_instance bufg_gt ${ip_name}/bufg_gt_rx_${j}
     ad_connect ${ip_name}/gt_quad_base_${j}/ch0_rxoutclk ${ip_name}/bufg_gt_rx_${j}/outclk
   }
-  if {$versal_phy_mode != 1} {
+  if {$intf_cfg != "RX"} {
     ad_ip_instance bufg_gt ${ip_name}/bufg_gt_tx_${j}
     ad_connect ${ip_name}/gt_quad_base_${j}/ch0_txoutclk ${ip_name}/bufg_gt_tx_${j}/outclk
   }
@@ -216,7 +216,7 @@ for {set j 0} {$j < $num_quads} {incr j} {
   ad_connect ${ip_name}/gt_quad_base_${j}/GT_Serial ${ip_name}/GT_Serial_${j}
 }
 
-if {$versal_phy_mode != 2} {
+if {$intf_cfg != "TX"} {
   ad_connect ${ip_name}/bufg_gt_rx_0/usrclk ${ip_name}/gt_bridge_ip_0/gt_rxusrclk
   ad_connect ${ip_name}/gt_bridge_ip_0/rxusrclk_out ${ip_name}/rxusrclk_out
 
@@ -237,7 +237,7 @@ if {$versal_phy_mode != 2} {
   ad_connect ${ip_name}/reset_rx_pll_and_datapath_in ${ip_name}/gt_bridge_ip_0/reset_rx_pll_and_datapath_in
 
 }
-if {$versal_phy_mode != 1} {
+if {$intf_cfg != "RX"} {
   ad_connect ${ip_name}/bufg_gt_tx_0/usrclk ${ip_name}/gt_bridge_ip_0/gt_txusrclk
   ad_connect ${ip_name}/gt_bridge_ip_0/txusrclk_out ${ip_name}/txusrclk_out
 
@@ -260,10 +260,10 @@ if {$versal_phy_mode != 1} {
 
 for {set i 0} {$i < $num_quads} {incr i} {
   for {set j 0} {$j < 4} {incr j} {
-    if {$versal_phy_mode != 2} {
+    if {$intf_cfg != "TX"} {
       ad_connect ${ip_name}/bufg_gt_rx_${i}/usrclk ${ip_name}/gt_quad_base_${i}/ch${j}_rxusrclk
     }
-    if {$versal_phy_mode != 1} {
+    if {$intf_cfg != "RX"} {
       ad_connect ${ip_name}/bufg_gt_tx_${i}/usrclk ${ip_name}/gt_quad_base_${i}/ch${j}_txusrclk
     }
   }

@@ -10,7 +10,11 @@
 #   [RX/TX]_JESD_L : Number of lanes per link
 #   [RX/TX]_JESD_NP : Number of bits per sample
 #   [RX/TX]_NUM_LINKS : Number of links, matches numer of MxFE devices
-#
+#   INTF_CFG : Used to select betwen RX, TX or RX & TX
+#       RXTX : RX & TX
+#         RX : RX only
+#         Tx : TX only
+
 if {![info exists ADI_PHY_SEL]} {
   set ADI_PHY_SEL 1
 }
@@ -19,7 +23,7 @@ source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 source $ad_hdl_dir/library/axi_tdd/scripts/axi_tdd.tcl
 
-set VERSAL_PHY_MODE $ad_project_params(VERSAL_PHY_MODE)
+set INTF_CFG $ad_project_params(INTF_CFG)
 
 # Common parameter for TX and RX
 set JESD_MODE  $ad_project_params(JESD_MODE)
@@ -36,16 +40,12 @@ set TDD_SUPPORT [ expr { [info exists ad_project_params(TDD_SUPPORT)] \
 set SHARED_DEVCLK [ expr { [info exists ad_project_params(SHARED_DEVCLK)] \
                             ? $ad_project_params(SHARED_DEVCLK) : 0 } ]
 
-# if {$ADI_PHY_SEL == 1 && $VERSAL_PHY_MODE != 0} {
-#   error "ERROR: Unsuported mode!"
-# }
-
 if {$TDD_SUPPORT && !$SHARED_DEVCLK} {
   error "ERROR: Cannot enable TDD support without shared deviceclocks!"
 }
 
-if {$TDD_SUPPORT && $VERSAL_PHY_MODE != 0} {
-  error "ERROR: Cannot enable TDD support with VERSAL_PHY_MODE=0!"
+if {$TDD_SUPPORT && $INTF_CFG != "RXTX"} {
+  error "ERROR: Cannot enable TDD support with INTF_CFG != RXTX!"
 }
 
 set adc_do_mem_type [ expr { [info exists ad_project_params(ADC_DO_MEM_TYPE)] \
@@ -138,8 +138,8 @@ set dac_fifo_address_width [expr int(ceil(log(($dac_fifo_samples_per_converter*$
 if {$ADI_PHY_SEL == 1} {
   ad_ip_instance util_adxcvr util_mxfe_xcvr
   ad_ip_parameter util_mxfe_xcvr CONFIG.CPLL_FBDIV_4_5 5
-  switch $VERSAL_PHY_MODE {
-    0 {
+  switch $INTF_CFG {
+    "RXTX" {
       # Rx & Tx
       ad_ip_parameter util_mxfe_xcvr CONFIG.TX_NUM_OF_LANES $TX_NUM_OF_LANES
       ad_ip_parameter util_mxfe_xcvr CONFIG.RX_NUM_OF_LANES $RX_NUM_OF_LANES
@@ -148,7 +148,7 @@ if {$ADI_PHY_SEL == 1} {
       ad_ip_parameter util_mxfe_xcvr CONFIG.RX_LANE_RATE $RX_LANE_RATE
       ad_ip_parameter util_mxfe_xcvr CONFIG.TX_LANE_RATE $TX_LANE_RATE
     }
-    1 {
+    "RX" {
       # Rx only
       ad_ip_parameter util_mxfe_xcvr CONFIG.TX_NUM_OF_LANES 0
       ad_ip_parameter util_mxfe_xcvr CONFIG.RX_NUM_OF_LANES $RX_NUM_OF_LANES
@@ -157,7 +157,7 @@ if {$ADI_PHY_SEL == 1} {
       ad_ip_parameter util_mxfe_xcvr CONFIG.RX_LANE_RATE $RX_LANE_RATE
       ad_ip_parameter util_mxfe_xcvr CONFIG.TX_LANE_RATE 0
     }
-    2 {
+    "TX" {
       # Tx only
       ad_ip_parameter util_mxfe_xcvr CONFIG.TX_NUM_OF_LANES $TX_NUM_OF_LANES
       ad_ip_parameter util_mxfe_xcvr CONFIG.RX_NUM_OF_LANES 0
@@ -173,22 +173,22 @@ if {$ADI_PHY_SEL == 1} {
   set REF_CLK_RATE [ expr { [info exists ad_project_params(REF_CLK_RATE)] \
                             ? $ad_project_params(REF_CLK_RATE) : 360 } ]
 
-  switch $VERSAL_PHY_MODE {
-    0 {
+  switch $INTF_CFG {
+    "RXTX" {
       # Assumption is that number of Tx and Rx lane is the same
-      create_versal_phy jesd204_phy $TX_NUM_OF_LANES $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE $VERSAL_PHY_MODE
+      create_versal_phy jesd204_phy $TX_NUM_OF_LANES $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE $INTF_CFG
     }
-    1 {
-      create_versal_phy jesd204_phy $RX_NUM_OF_LANES $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE $VERSAL_PHY_MODE
+    "RX" {
+      create_versal_phy jesd204_phy $RX_NUM_OF_LANES $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE $INTF_CFG
     }
-    2 {
-      create_versal_phy jesd204_phy $TX_NUM_OF_LANES $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE $VERSAL_PHY_MODE
+    "TX" {
+      create_versal_phy jesd204_phy $TX_NUM_OF_LANES $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE $INTF_CFG
     }
   }  
 }
 
 # Instantiate ADC (Rx) path
-if {$VERSAL_PHY_MODE != 2} {
+if {$INTF_CFG != "TX"} {
   create_bd_port -dir I rx_device_clk
 
   if {$ADI_PHY_SEL == 1} {
@@ -253,7 +253,7 @@ if {$VERSAL_PHY_MODE != 2} {
 }
 
 # Instantiate DAC (Tx) path
-if {$VERSAL_PHY_MODE != 1} {
+if {$INTF_CFG != "RX"} {
   create_bd_port -dir I tx_device_clk
 
   if {$ADI_PHY_SEL == 1} {
@@ -332,17 +332,17 @@ if {$ADI_PHY_SEL == 1} {
   ad_connect  $sys_cpu_resetn util_mxfe_xcvr/up_rstn
   ad_connect  $sys_cpu_clk util_mxfe_xcvr/up_clk
 
-  if {$VERSAL_PHY_MODE != 2} {
+  if {$INTF_CFG != "TX"} {
     ad_xcvrpll  axi_mxfe_rx_xcvr/up_pll_rst util_mxfe_xcvr/up_cpll_rst_*
     ad_xcvrcon  util_mxfe_xcvr axi_mxfe_rx_xcvr axi_mxfe_rx_jesd {} {} rx_device_clk
   }
-  if {$VERSAL_PHY_MODE != 1} {
+  if {$INTF_CFG != "RX"} {
     ad_xcvrpll  axi_mxfe_tx_xcvr/up_pll_rst util_mxfe_xcvr/up_qpll_rst_*
     ad_xcvrcon  util_mxfe_xcvr axi_mxfe_tx_xcvr axi_mxfe_tx_jesd {} {} tx_device_clk
   }
 } else {
   ad_connect ref_clk_q0 jesd204_phy/GT_REFCLK
-  if {$VERSAL_PHY_MODE != 2} {
+  if {$INTF_CFG != "TX"} {
     set rx_link_clock  jesd204_phy/rxusrclk_out
     # Connect PHY to Link Layer
     for {set j 0}  {$j < $RX_NUM_OF_LANES} {incr j} {
@@ -357,7 +357,7 @@ if {$ADI_PHY_SEL == 1} {
 
     create_bd_port -dir O rx_sync_0
   }
-  if {$VERSAL_PHY_MODE != 1} {
+  if {$INTF_CFG != "RX"} {
     set tx_link_clock  jesd204_phy/txusrclk_out
     # Connect PHY to Link Layer
     for {set j 0}  {$j < $TX_NUM_OF_LANES} {incr j} {
@@ -376,7 +376,7 @@ if {$ADI_PHY_SEL == 1} {
   ad_connect $sys_cpu_clk jesd204_phy/apb3clk
 }
 
-if {$VERSAL_PHY_MODE != 2} {
+if {$INTF_CFG != "TX"} {
   # RX connections
   # Device clock domain
   ad_connect  rx_device_clk rx_mxfe_tpl_core/link_clk
@@ -435,7 +435,7 @@ if {$VERSAL_PHY_MODE != 2} {
   ad_cpu_interrupt ps-11 mb-14 axi_mxfe_rx_jesd/irq
 }
 
-if {$VERSAL_PHY_MODE != 1} {
+if {$INTF_CFG != "RX"} {
   # TX connections
   # Device clock domain
   ad_connect  tx_device_clk tx_mxfe_tpl_core/link_clk
@@ -489,14 +489,14 @@ if {$VERSAL_PHY_MODE != 1} {
 
 # Dummy outputs for unused lanes
 if {$ADI_PHY_SEL == 1} {
-  if {$VERSAL_PHY_MODE != 2} {
+  if {$INTF_CFG != "TX"} {
     # Unused Rx lanes
     for {set i $RX_NUM_OF_LANES} {$i < 8} {incr i} {
       create_bd_port -dir I rx_data_${i}_n
       create_bd_port -dir I rx_data_${i}_p
     }
   }
-  if {$VERSAL_PHY_MODE != 1} {
+  if {$INTF_CFG != "RX"} {
     # Unused Tx lanes
     for {set i $TX_NUM_OF_LANES} {$i < 8} {incr i} {
       create_bd_port -dir O tx_data_${i}_n
@@ -512,11 +512,11 @@ if {$ADI_PHY_SEL == 1} {
 # Sync at TPL level
 create_bd_port -dir I ext_sync_in
 
-if {$VERSAL_PHY_MODE != 2} {
+if {$INTF_CFG != "TX"} {
   # ADC (Rx) external sync
   ad_ip_parameter rx_mxfe_tpl_core/adc_tpl_core CONFIG.EXT_SYNC 1
   ad_connect ext_sync_in rx_mxfe_tpl_core/adc_tpl_core/adc_sync_in
-  if {$VERSAL_PHY_MODE == 0} {
+  if {$INTF_CFG == "RXTX"} {
     # Rx & Tx
     ad_ip_instance util_vector_logic manual_sync_or [list \
       C_SIZE 1 \
@@ -548,11 +548,11 @@ if {$VERSAL_PHY_MODE != 2} {
   ad_connect cpack_reset_sources/dout cpack_rst_logic/op1
   ad_connect cpack_rst_logic/res util_mxfe_cpack/reset
 }
-if {$VERSAL_PHY_MODE != 1} {
+if {$INTF_CFG != "RX"} {
   # DAC (Tx) external sync
   ad_ip_parameter tx_mxfe_tpl_core/dac_tpl_core CONFIG.EXT_SYNC 1
   ad_connect ext_sync_in tx_mxfe_tpl_core/dac_tpl_core/dac_sync_in
-  if {$VERSAL_PHY_MODE == 0} {
+  if {$INTF_CFG == "RXTX"} {
     # Rx & Tx
     ad_connect tx_mxfe_tpl_core/dac_tpl_core/dac_sync_manual_req_out manual_sync_or/Op2
     ad_connect manual_sync_or/Res tx_mxfe_tpl_core/dac_tpl_core/dac_sync_manual_req_in
@@ -609,10 +609,10 @@ if {$TDD_SUPPORT} {
   ad_connect axi_tdd_0/tdd_channel_0 $dac_data_offload_name/sync_ext
   ad_connect axi_tdd_0/tdd_channel_1 $adc_data_offload_name/sync_ext
 } else {
-  if {$VERSAL_PHY_MODE != 2} {
+  if {$INTF_CFG != "TX"} {
     ad_connect GND $adc_data_offload_name/sync_ext
   }
-  if {$VERSAL_PHY_MODE != 1} {
+  if {$INTF_CFG != "RX"} {
     ad_connect GND $dac_data_offload_name/sync_ext
   }
 }
