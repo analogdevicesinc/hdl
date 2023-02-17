@@ -36,83 +36,83 @@
 `timescale 1ns/100ps
 
 module system_top  #(
-  parameter RX_JESD_L = 4,
+  parameter RX_JESD_L = 8,
   parameter RX_NUM_LINKS = 1,
-  parameter JESD_MODE = "8B10B"
+  parameter JESD_MODE = "64B66B"
 ) (
-  input         sys_clk_n,
-  input         sys_clk_p,
-  output        ddr4_act_n,
-  output [16:0] ddr4_adr,
-  output  [1:0] ddr4_ba,
-  output  [1:0] ddr4_bg,
-  output        ddr4_ck_c,
-  output        ddr4_ck_t,
-  output        ddr4_cke,
-  output        ddr4_cs_n,
-  inout   [7:0] ddr4_dm_n,
-  inout  [63:0] ddr4_dq,
-  inout   [7:0] ddr4_dqs_c,
-  inout   [7:0] ddr4_dqs_t,
-  output        ddr4_odt,
-  output        ddr4_reset_n,
+  input                                 sys_clk_n,
+  input                                 sys_clk_p,
+  output                                ddr4_act_n,
+  output  [16:0]                        ddr4_adr,
+  output  [ 1:0]                        ddr4_ba,
+  output  [ 1:0]                        ddr4_bg,
+  output                                ddr4_ck_c,
+  output                                ddr4_ck_t,
+  output                                ddr4_cke,
+  output                                ddr4_cs_n,
+  inout   [ 7:0]                        ddr4_dm_n,
+  inout   [63:0]                        ddr4_dq,
+  inout   [ 7:0]                        ddr4_dqs_c,
+  inout   [ 7:0]                        ddr4_dqs_t,
+  output                                ddr4_odt,
+  output                                ddr4_reset_n,
   // GPIOs
-  output  [3:0] gpio_led,
-  input   [3:0] gpio_dip_sw,
-  input   [1:0] gpio_pb,
+  output  [ 3:0]                        gpio_led,
+  input   [ 3:0]                        gpio_dip_sw,
+  input   [ 1:0]                        gpio_pb,
 
   // FMC HPC IOs
-  input  [1:0]  agc0,
-  input  [1:0]  agc1,
-  input  [1:0]  agc2,
-  input  [1:0]  agc3,
-  input         clkin10_n,
-  input         clkin10_p,
-  input         fpga_refclk_in_n,
-  input         fpga_refclk_in_p,
-  input  [RX_JESD_L*RX_NUM_LINKS-1:0]  rx_data_n,
-  input  [RX_JESD_L*RX_NUM_LINKS-1:0]  rx_data_p,
-  output                               fpga_syncout_0_n,
-  output                               fpga_syncout_0_p,
-  inout                                fpga_syncout_1_n,
-  inout                                fpga_syncout_1_p,
-  inout  [10:0] gpio,
-  inout         hmc_gpio1,
-  output        hmc_sync,
-  input  [1:0]  irqb,
-  output        rstb,
-  output [1:0]  rxen,
-  output        spi0_csb,
-  input         spi0_miso,
-  output        spi0_mosi,
-  output        spi0_sclk,
-  output        spi1_csb,
-  output        spi1_sclk,
-  inout         spi1_sdio,
-  input         sysref2_n,
-  input         sysref2_p
+  input   [ 1:0]                        agc0,
+  input   [ 1:0]                        agc1,
+  input   [ 1:0]                        agc2,
+  input   [ 1:0]                        agc3,
+  input                                 clkin10_n,
+  input                                 clkin10_p,
+  input                                 fpga_refclk_in_n,
+  input                                 fpga_refclk_in_p,
+  input   [RX_JESD_L*RX_NUM_LINKS-1:0]  rx_data_n,
+  input   [RX_JESD_L*RX_NUM_LINKS-1:0]  rx_data_p,
+  output                                fpga_syncout_0_n,
+  output                                fpga_syncout_0_p,
+  inout                                 fpga_syncout_1_n,
+  inout                                 fpga_syncout_1_p,
+  inout  [10:0]                         gpio,
+  inout                                 hmc_gpio1,
+  output                                hmc_sync,
+  input  [ 1:0]                         irqb,
+  output                                rstb,
+  output [ 1:0]                         rxen,
+  output                                spi0_csb,
+  input                                 spi0_miso,
+  output                                spi0_mosi,
+  output                                spi0_sclk,
+  output                                spi1_csb,
+  output                                spi1_sclk,
+  inout                                 spi1_sdio,
+  input                                 sysref2_n,
+  input                                 sysref2_p
 );
 
   // internal signals
 
-  wire    [95:0]  gpio_i;
-  wire    [95:0]  gpio_o;
-  wire    [95:0]  gpio_t;
+  wire    [95:0]                gpio_i;
+  wire    [95:0]                gpio_o;
+  wire    [95:0]                gpio_t;
 
-  wire    [ 2:0]  spi0_csn;
+  wire    [ 2:0]               spi0_csn;
 
-  wire    [ 2:0]  spi1_csn;
-  wire            spi1_mosi;
-  wire            spi1_miso;
+  wire    [ 2:0]               spi1_csn;
+  wire                         spi1_mosi;
+  wire                         spi1_miso;
 
-  wire            sysref;
+  wire                         sysref;
   wire    [RX_NUM_LINKS-1:0]   rx_syncout;
 
-  wire    [7:0]   rx_data_p_loc;
-  wire    [7:0]   rx_data_n_loc;
+  wire    [7:0]                rx_data_p_loc;
+  wire    [7:0]                rx_data_n_loc;
 
-  wire            clkin10;
-  wire            rx_device_clk;
+  wire                         clkin10;
+  wire                         rx_device_clk;
 
   // instantiations
   IBUFDS_GTE5 i_ibufds_ref_clk (
@@ -210,101 +210,52 @@ module system_top  #(
   assign gpio_i[94:64] = gpio_o[94:64];
   assign gpio_i[31:10] = gpio_o[31:10];
 
-  generate
-  if (RX_JESD_L > 4) begin
-    system_wrapper i_system_wrapper (
-      .gpio0_i (gpio_i[31:0]),
-      .gpio0_o (gpio_o[31:0]),
-      .gpio0_t (gpio_t[31:0]),
-      .gpio1_i (gpio_i[63:32]),
-      .gpio1_o (gpio_o[63:32]),
-      .gpio1_t (gpio_t[63:32]),
-      .gpio2_i (gpio_i[95:64]),
-      .gpio2_o (gpio_o[95:64]),
-      .gpio2_t (gpio_t[95:64]),
-      .ddr4_dimm1_sma_clk_clk_n (sys_clk_n),
-      .ddr4_dimm1_sma_clk_clk_p (sys_clk_p),
-      .ddr4_dimm1_act_n (ddr4_act_n),
-      .ddr4_dimm1_adr (ddr4_adr),
-      .ddr4_dimm1_ba (ddr4_ba),
-      .ddr4_dimm1_bg (ddr4_bg),
-      .ddr4_dimm1_ck_c (ddr4_ck_c),
-      .ddr4_dimm1_ck_t (ddr4_ck_t),
-      .ddr4_dimm1_cke (ddr4_cke),
-      .ddr4_dimm1_cs_n (ddr4_cs_n),
-      .ddr4_dimm1_dm_n (ddr4_dm_n),
-      .ddr4_dimm1_dq (ddr4_dq),
-      .ddr4_dimm1_dqs_c (ddr4_dqs_c),
-      .ddr4_dimm1_dqs_t (ddr4_dqs_t),
-      .ddr4_dimm1_odt (ddr4_odt),
-      .ddr4_dimm1_reset_n (ddr4_reset_n),
-      .spi0_csn (spi0_csn),
-      .spi0_miso (spi0_miso),
-      .spi0_mosi (spi0_mosi),
-      .spi0_sclk (spi0_sclk),
-      .spi1_csn (spi1_csn),
-      .spi1_miso (spi1_miso),
-      .spi1_mosi (spi1_mosi),
-      .spi1_sclk (spi1_sclk),
-      // FMC HPC
-      .GT_Serial_0_0_grx_p (rx_data_p_loc[3:0]),
-      .GT_Serial_0_0_grx_n (rx_data_n_loc[3:0]),
-      .GT_Serial_1_0_grx_p (rx_data_p_loc[7:4]),
-      .GT_Serial_1_0_grx_n (rx_data_n_loc[7:4]),
+  system_wrapper i_system_wrapper (
+    .gpio0_i (gpio_i[31:0]),
+    .gpio0_o (gpio_o[31:0]),
+    .gpio0_t (gpio_t[31:0]),
+    .gpio1_i (gpio_i[63:32]),
+    .gpio1_o (gpio_o[63:32]),
+    .gpio1_t (gpio_t[63:32]),
+    .gpio2_i (gpio_i[95:64]),
+    .gpio2_o (gpio_o[95:64]),
+    .gpio2_t (gpio_t[95:64]),
+    .ddr4_dimm1_sma_clk_clk_n (sys_clk_n),
+    .ddr4_dimm1_sma_clk_clk_p (sys_clk_p),
+    .ddr4_dimm1_act_n (ddr4_act_n),
+    .ddr4_dimm1_adr (ddr4_adr),
+    .ddr4_dimm1_ba (ddr4_ba),
+    .ddr4_dimm1_bg (ddr4_bg),
+    .ddr4_dimm1_ck_c (ddr4_ck_c),
+    .ddr4_dimm1_ck_t (ddr4_ck_t),
+    .ddr4_dimm1_cke (ddr4_cke),
+    .ddr4_dimm1_cs_n (ddr4_cs_n),
+    .ddr4_dimm1_dm_n (ddr4_dm_n),
+    .ddr4_dimm1_dq (ddr4_dq),
+    .ddr4_dimm1_dqs_c (ddr4_dqs_c),
+    .ddr4_dimm1_dqs_t (ddr4_dqs_t),
+    .ddr4_dimm1_odt (ddr4_odt),
+    .ddr4_dimm1_reset_n (ddr4_reset_n),
+    .spi0_csn (spi0_csn),
+    .spi0_miso (spi0_miso),
+    .spi0_mosi (spi0_mosi),
+    .spi0_sclk (spi0_sclk),
+    .spi1_csn (spi1_csn),
+    .spi1_miso (spi1_miso),
+    .spi1_mosi (spi1_mosi),
+    .spi1_sclk (spi1_sclk),
+    // FMC HPC
+    .GT_Serial_0_0_grx_p (rx_data_p_loc[3:0]),
+    .GT_Serial_0_0_grx_n (rx_data_n_loc[3:0]),
+    .GT_Serial_1_0_grx_p (rx_data_p_loc[7:4]),
+    .GT_Serial_1_0_grx_n (rx_data_n_loc[7:4]),
 
-      .ref_clk_q0 (ref_clk),
-      .ref_clk_q1 (ref_clk),
+    .ref_clk_q0 (ref_clk),
+    .ref_clk_q1 (ref_clk),
 
-      .rx_device_clk (rx_device_clk),
-      .rx_sync_0 (rx_syncout),
-      .rx_sysref_0 (sysref));
-  end else begin
-    system_wrapper i_system_wrapper (
-      .gpio0_i (gpio_i[31:0]),
-      .gpio0_o (gpio_o[31:0]),
-      .gpio0_t (gpio_t[31:0]),
-      .gpio1_i (gpio_i[63:32]),
-      .gpio1_o (gpio_o[63:32]),
-      .gpio1_t (gpio_t[63:32]),
-      .gpio2_i (gpio_i[95:64]),
-      .gpio2_o (gpio_o[95:64]),
-      .gpio2_t (gpio_t[95:64]),
-      .ddr4_dimm1_sma_clk_clk_n (sys_clk_n),
-      .ddr4_dimm1_sma_clk_clk_p (sys_clk_p),
-      .ddr4_dimm1_act_n (ddr4_act_n),
-      .ddr4_dimm1_adr (ddr4_adr),
-      .ddr4_dimm1_ba (ddr4_ba),
-      .ddr4_dimm1_bg (ddr4_bg),
-      .ddr4_dimm1_ck_c (ddr4_ck_c),
-      .ddr4_dimm1_ck_t (ddr4_ck_t),
-      .ddr4_dimm1_cke (ddr4_cke),
-      .ddr4_dimm1_cs_n (ddr4_cs_n),
-      .ddr4_dimm1_dm_n (ddr4_dm_n),
-      .ddr4_dimm1_dq (ddr4_dq),
-      .ddr4_dimm1_dqs_c (ddr4_dqs_c),
-      .ddr4_dimm1_dqs_t (ddr4_dqs_t),
-      .ddr4_dimm1_odt (ddr4_odt),
-      .ddr4_dimm1_reset_n (ddr4_reset_n),
-      .spi0_csn (spi0_csn),
-      .spi0_miso (spi0_miso),
-      .spi0_mosi (spi0_mosi),
-      .spi0_sclk (spi0_sclk),
-      .spi1_csn (spi1_csn),
-      .spi1_miso (spi1_miso),
-      .spi1_mosi (spi1_mosi),
-      .spi1_sclk (spi1_sclk),
-      // FMC HPC
-      .GT_Serial_0_0_grx_p (rx_data_p_loc[3:0]),
-      .GT_Serial_0_0_grx_n (rx_data_n_loc[3:0]),
-
-      .ref_clk_q0 (ref_clk),
-      .ref_clk_q1 (ref_clk),
-
-      .rx_device_clk (rx_device_clk),
-      .rx_sync_0 (rx_syncout),
-      .rx_sysref_0 (sysref));
-  end
-  endgenerate
+    .rx_device_clk (rx_device_clk),
+    .rx_sync_0 (rx_syncout),
+    .rx_sysref_0 (sysref));
 
   assign rx_data_p_loc[RX_JESD_L*RX_NUM_LINKS-1:0] = rx_data_p[RX_JESD_L*RX_NUM_LINKS-1:0];
   assign rx_data_n_loc[RX_JESD_L*RX_NUM_LINKS-1:0] = rx_data_n[RX_JESD_L*RX_NUM_LINKS-1:0];

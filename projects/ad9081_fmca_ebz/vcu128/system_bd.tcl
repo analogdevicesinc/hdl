@@ -10,19 +10,21 @@ source $ad_hdl_dir/projects/common/vcu128/vcu128_system_bd.tcl
 source $ad_hdl_dir/projects/ad9081_fmca_ebz/common/ad9081_fmca_ebz_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
+if {$INTF_CFG != "TX"} {
+  ad_connect_hbm HBM mxfe_rx_data_offload/storage_unit $sys_hbm_clk $sys_hbm_resetn 0
+  ad_ip_parameter $adc_data_offload_name/i_data_offload CONFIG.HAS_BYPASS false
+  ad_ip_parameter axi_mxfe_rx_jesd/rx CONFIG.NUM_INPUT_PIPELINE 2
+}
 
-ad_connect_hbm HBM mxfe_rx_data_offload/storage_unit $sys_hbm_clk $sys_hbm_resetn 0
-ad_connect_hbm HBM mxfe_tx_data_offload/storage_unit $sys_hbm_clk $sys_hbm_resetn 4
-
-ad_ip_parameter $adc_data_offload_name/i_data_offload CONFIG.HAS_BYPASS false
-ad_ip_parameter $dac_data_offload_name/i_data_offload CONFIG.HAS_BYPASS false
+if {$INTF_CFG != "RX"} {
+  ad_connect_hbm HBM mxfe_tx_data_offload/storage_unit $sys_hbm_clk $sys_hbm_resetn 4
+  ad_ip_parameter $dac_data_offload_name/i_data_offload CONFIG.HAS_BYPASS false
+  ad_ip_parameter axi_mxfe_tx_jesd/tx CONFIG.NUM_OUTPUT_PIPELINE 1
+}
 
 ad_connect HBM/HBM_REF_CLK_0 $sys_cpu_clk
 ad_connect HBM/APB_0_PCLK $sys_cpu_clk
 ad_connect HBM/APB_0_PRESET_N $sys_cpu_resetn
-
-ad_ip_parameter axi_mxfe_rx_jesd/rx CONFIG.NUM_INPUT_PIPELINE 2
-ad_ip_parameter axi_mxfe_tx_jesd/tx CONFIG.NUM_OUTPUT_PIPELINE 1
 
 set mem_init_sys_path [get_env_param ADI_PROJECT_DIR ""]mem_init_sys.txt;
 

@@ -2,7 +2,7 @@
 create_clock -name refclk         -period  2.66 [get_ports fpga_refclk_in_p]
 
 # device clock
-create_clock -name rx_device_clk     -period  2.66 [get_ports clkin10_p]
+create_clock -name rx_device_clk  -period  2.66 [get_ports clkin10_p]
 
 # Constraint SYSREFs
 # Assumption is that REFCLK and SYSREF have similar propagation delay,

@@ -29,23 +29,15 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #      make JESD_MODE=64B66B RX_LANE_RATE=24.75 RX_JESD_M=4 RX_JESD_L=4 RX_JESD_S=2 RX_JESD_NP=12
 
 adi_project ad9209_fmca_ebz_vck190 0 [list \
-  INTF_CFG          RX  \
   JESD_MODE         [get_env_param JESD_MODE     64B66B ]\
-  RX_LANE_RATE      [get_env_param RX_LANE_RATE   11.88 ] \
-  REF_CLK_RATE      [get_env_param REF_CLK_RATE     360 ] \
-  RX_JESD_M         [get_env_param RX_JESD_M          2 ] \
-  RX_JESD_L         [get_env_param RX_JESD_L          2 ] \
+  RX_LANE_RATE      [get_env_param RX_LANE_RATE   24.75 ] \
+  REF_CLK_RATE      [get_env_param REF_CLK_RATE     375 ] \
+  RX_JESD_M         [get_env_param RX_JESD_M          4 ] \
+  RX_JESD_L         [get_env_param RX_JESD_L          8 ] \
   RX_JESD_S         [get_env_param RX_JESD_S          4 ] \
   RX_JESD_NP        [get_env_param RX_JESD_NP        12 ] \
   RX_NUM_LINKS      [get_env_param RX_NUM_LINKS       1 ] \
   RX_KS_PER_CHANNEL [get_env_param RX_KS_PER_CHANNEL 64 ] \
-  TX_LANE_RATE 0 \
-  TX_JESD_M 1 \
-  TX_JESD_L 1 \
-  TX_JESD_S 1 \
-  TX_JESD_NP 12 \
-  TX_NUM_LINKS 1 \
-  TX_KS_PER_CHANNEL 1 \
 ]
 
 adi_project_files ad9209_fmca_ebz_vck190 [list \

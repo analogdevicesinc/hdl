@@ -14,26 +14,26 @@ set_property         -dict {PACKAGE_PIN BD24  IOSTANDARD LVDS15   DIFF_TERM_ADV 
 set_property         -dict {PACKAGE_PIN BD23  IOSTANDARD LVDS15   DIFF_TERM_ADV TERM_100              } [get_ports clkin10_p        ]    ; ## FMC0_CLK2_IO_P      IO_L13P_T2L_N0_GC_QBC_66
 set_property         -dict {PACKAGE_PIN M14                                                           } [get_ports fpga_refclk_in_n ]    ; ## FMC0_GBTCLK0_M2C_N  MGTREFCLK0N_229
 set_property         -dict {PACKAGE_PIN M15                                                           } [get_ports fpga_refclk_in_p ]    ; ## FMC0_GBTCLK0_M2C_P  MGTREFCLK0P_229
-set_property  -quiet -dict {PACKAGE_PIN Y1                                                            } [get_ports rx_data_n[2]     ]    ; ## FMC0_DP2_M2C_N      MGTHRXN3_229    FPGA_SERDIN_0_N
-set_property  -quiet -dict {PACKAGE_PIN Y2                                                            } [get_ports rx_data_p[2]     ]    ; ## FMC0_DP2_M2C_P      MGTHRXP3_229    FPGA_SERDIN_0_P
-set_property  -quiet -dict {PACKAGE_PIN AB1                                                           } [get_ports rx_data_n[0]     ]    ; ## FMC0_DP0_M2C_N      MGTHRXN2_229    FPGA_SERDIN_1_N
-set_property  -quiet -dict {PACKAGE_PIN AB2                                                           } [get_ports rx_data_p[0]     ]    ; ## FMC0_DP0_M2C_P      MGTHRXP2_229    FPGA_SERDIN_1_P
-set_property  -quiet -dict {PACKAGE_PIN R3                                                            } [get_ports rx_data_n[7]     ]    ; ## FMC0_DP7_M2C_N      MGTHRXN2_228    FPGA_SERDIN_2_N
-set_property  -quiet -dict {PACKAGE_PIN R4                                                            } [get_ports rx_data_p[7]     ]    ; ## FMC0_DP7_M2C_P      MGTHRXP2_228    FPGA_SERDIN_2_P
-set_property  -quiet -dict {PACKAGE_PIN T1                                                            } [get_ports rx_data_n[6]     ]    ; ## FMC0_DP6_M2C_N      MGTHRXN0_228    FPGA_SERDIN_3_N
-set_property  -quiet -dict {PACKAGE_PIN T2                                                            } [get_ports rx_data_p[6]     ]    ; ## FMC0_DP6_M2C_P      MGTHRXP0_228    FPGA_SERDIN_3_P
-set_property  -quiet -dict {PACKAGE_PIN U3                                                            } [get_ports rx_data_n[5]     ]    ; ## FMC0_DP5_M2C_N      MGTHRXN1_228    FPGA_SERDIN_4_N
-set_property  -quiet -dict {PACKAGE_PIN U4                                                            } [get_ports rx_data_p[5]     ]    ; ## FMC0_DP5_M2C_P      MGTHRXP1_228    FPGA_SERDIN_4_P
-set_property  -quiet -dict {PACKAGE_PIN V1                                                            } [get_ports rx_data_n[4]     ]    ; ## FMC0_DP4_M2C_N      MGTHRXN3_228    FPGA_SERDIN_5_N
-set_property  -quiet -dict {PACKAGE_PIN V2                                                            } [get_ports rx_data_p[4]     ]    ; ## FMC0_DP4_M2C_P      MGTHRXP3_228    FPGA_SERDIN_5_P
-set_property  -quiet -dict {PACKAGE_PIN W3                                                            } [get_ports rx_data_n[3]     ]    ; ## FMC0_DP3_M2C_N      MGTHRXN0_229    FPGA_SERDIN_6_N
-set_property  -quiet -dict {PACKAGE_PIN W4                                                            } [get_ports rx_data_p[3]     ]    ; ## FMC0_DP3_M2C_P      MGTHRXP0_229    FPGA_SERDIN_6_P
-set_property  -quiet -dict {PACKAGE_PIN AA3                                                           } [get_ports rx_data_n[1]     ]    ; ## FMC0_DP1_M2C_N      MGTHRXN1_229    FPGA_SERDIN_7_N
-set_property  -quiet -dict {PACKAGE_PIN AA4                                                           } [get_ports rx_data_p[1]     ]    ; ## FMC0_DP1_M2C_P      MGTHRXP1_229    FPGA_SERDIN_7_P
-set_property  -quiet -dict {PACKAGE_PIN BD22  IOSTANDARD LVDS15                                       } [get_ports fpga_syncout_0_n ]    ; ## FMC0_LA01_CC_N      IO_L16N_T2U_N7_QBC_AD3N_66
-set_property  -quiet -dict {PACKAGE_PIN BC23  IOSTANDARD LVDS15                                       } [get_ports fpga_syncout_0_p ]    ; ## FMC0_LA01_CC_P      IO_L16P_T2U_N6_QBC_AD3P_66
-set_property  -quiet -dict {PACKAGE_PIN BD20  IOSTANDARD LVCMOS15                                     } [get_ports fpga_syncout_1_n ]    ; ## FMC0_LA06_N         IO_L19N_T3L_N1_DBC_AD9N_66
-set_property  -quiet -dict {PACKAGE_PIN BC20  IOSTANDARD LVCMOS15                                     } [get_ports fpga_syncout_1_p ]    ; ## FMC0_LA06_P         IO_L19P_T3L_N0_DBC_AD9P_66
+set_property         -dict {PACKAGE_PIN Y1                                                            } [get_ports rx_data_n[2]     ]    ; ## FMC0_DP2_M2C_N      MGTHRXN3_229    FPGA_SERDIN_0_N
+set_property         -dict {PACKAGE_PIN Y2                                                            } [get_ports rx_data_p[2]     ]    ; ## FMC0_DP2_M2C_P      MGTHRXP3_229    FPGA_SERDIN_0_P
+set_property         -dict {PACKAGE_PIN AB1                                                           } [get_ports rx_data_n[0]     ]    ; ## FMC0_DP0_M2C_N      MGTHRXN2_229    FPGA_SERDIN_1_N
+set_property         -dict {PACKAGE_PIN AB2                                                           } [get_ports rx_data_p[0]     ]    ; ## FMC0_DP0_M2C_P      MGTHRXP2_229    FPGA_SERDIN_1_P
+set_property         -dict {PACKAGE_PIN R3                                                            } [get_ports rx_data_n[7]     ]    ; ## FMC0_DP7_M2C_N      MGTHRXN2_228    FPGA_SERDIN_2_N
+set_property         -dict {PACKAGE_PIN R4                                                            } [get_ports rx_data_p[7]     ]    ; ## FMC0_DP7_M2C_P      MGTHRXP2_228    FPGA_SERDIN_2_P
+set_property         -dict {PACKAGE_PIN T1                                                            } [get_ports rx_data_n[6]     ]    ; ## FMC0_DP6_M2C_N      MGTHRXN0_228    FPGA_SERDIN_3_N
+set_property         -dict {PACKAGE_PIN T2                                                            } [get_ports rx_data_p[6]     ]    ; ## FMC0_DP6_M2C_P      MGTHRXP0_228    FPGA_SERDIN_3_P
+set_property         -dict {PACKAGE_PIN U3                                                            } [get_ports rx_data_n[5]     ]    ; ## FMC0_DP5_M2C_N      MGTHRXN1_228    FPGA_SERDIN_4_N
+set_property         -dict {PACKAGE_PIN U4                                                            } [get_ports rx_data_p[5]     ]    ; ## FMC0_DP5_M2C_P      MGTHRXP1_228    FPGA_SERDIN_4_P
+set_property         -dict {PACKAGE_PIN V1                                                            } [get_ports rx_data_n[4]     ]    ; ## FMC0_DP4_M2C_N      MGTHRXN3_228    FPGA_SERDIN_5_N
+set_property         -dict {PACKAGE_PIN V2                                                            } [get_ports rx_data_p[4]     ]    ; ## FMC0_DP4_M2C_P      MGTHRXP3_228    FPGA_SERDIN_5_P
+set_property         -dict {PACKAGE_PIN W3                                                            } [get_ports rx_data_n[3]     ]    ; ## FMC0_DP3_M2C_N      MGTHRXN0_229    FPGA_SERDIN_6_N
+set_property         -dict {PACKAGE_PIN W4                                                            } [get_ports rx_data_p[3]     ]    ; ## FMC0_DP3_M2C_P      MGTHRXP0_229    FPGA_SERDIN_6_P
+set_property         -dict {PACKAGE_PIN AA3                                                           } [get_ports rx_data_n[1]     ]    ; ## FMC0_DP1_M2C_N      MGTHRXN1_229    FPGA_SERDIN_7_N
+set_property         -dict {PACKAGE_PIN AA4                                                           } [get_ports rx_data_p[1]     ]    ; ## FMC0_DP1_M2C_P      MGTHRXP1_229    FPGA_SERDIN_7_P
+set_property         -dict {PACKAGE_PIN BD22  IOSTANDARD LVDS15                                       } [get_ports fpga_syncout_0_n ]    ; ## FMC0_LA01_CC_N      IO_L16N_T2U_N7_QBC_AD3N_66
+set_property         -dict {PACKAGE_PIN BC23  IOSTANDARD LVDS15                                       } [get_ports fpga_syncout_0_p ]    ; ## FMC0_LA01_CC_P      IO_L16P_T2U_N6_QBC_AD3P_66
+set_property         -dict {PACKAGE_PIN BD20  IOSTANDARD LVCMOS15                                     } [get_ports fpga_syncout_1_n ]    ; ## FMC0_LA06_N         IO_L19N_T3L_N1_DBC_AD9N_66
+set_property         -dict {PACKAGE_PIN BC20  IOSTANDARD LVCMOS15                                     } [get_ports fpga_syncout_1_p ]    ; ## FMC0_LA06_P         IO_L19P_T3L_N0_DBC_AD9P_66
 set_property         -dict {PACKAGE_PIN AY22  IOSTANDARD LVCMOS15                                     } [get_ports gpio[0]          ]    ; ## FMC0_LA15_P         IO_L6P_T0U_N10_AD6P_66
 set_property         -dict {PACKAGE_PIN AY23  IOSTANDARD LVCMOS15                                     } [get_ports gpio[1]          ]    ; ## FMC0_LA15_N         IO_L6N_T0U_N11_AD6N_66
 set_property         -dict {PACKAGE_PIN BA17  IOSTANDARD LVCMOS15                                     } [get_ports gpio[2]          ]    ; ## FMC0_LA19_P         IO_L23P_T3U_N8_67
