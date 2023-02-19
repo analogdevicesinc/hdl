@@ -32,3 +32,5 @@ set_property -dict {PACKAGE_PIN P17     IOSTANDARD LVCMOS25} [get_ports adc_os[1
 set_property -dict {PACKAGE_PIN N17     IOSTANDARD LVCMOS25} [get_ports adc_os[2]]          ; ## H16 FMC_LPC_LA11_P
 set_property -dict {PACKAGE_PIN T19     IOSTANDARD LVCMOS25} [get_ports adc_stby]           ; ## C15 FMC_LPC_LA10_N
 set_property -dict {PACKAGE_PIN R21     IOSTANDARD LVCMOS25} [get_ports adc_range]          ; ## D15 FMC_LPC_LA09_N
+set_property -dict {PACKAGE_PIN K19     IOSTANDARD LVCMOS25} [get_ports adc_serpar]         ; ## C18 FMC_LPC_LA14_P
+set_property -dict {PACKAGE_PIN K20     IOSTANDARD LVCMOS25} [get_ports adc_refsel]         ; ## C19 FMC_LPC_LA14_N

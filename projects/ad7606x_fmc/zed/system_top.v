@@ -94,7 +94,9 @@ module system_top (
   output                  adc_reset,
   output      [2:0]       adc_os,
   output                  adc_stby,
-  output                  adc_range
+  output                  adc_range,
+  output                  adc_refsel,
+  output                  adc_serpar
 );
 
   // internal signals
@@ -117,18 +119,13 @@ module system_top (
 
   // instantiations
 
-  ad_iobuf #(
-    .DATA_WIDTH(6)
-  ) i_iobuf_adc_cntrl (
-    .dio_t (gpio_t[37:32]),
-    .dio_i (gpio_o[37:32]),
-    .dio_o (gpio_i[37:32]),
-    .dio_p ({adc_reset,        // 37
-             adc_stby,         // 36
-             adc_range,        // 35
-             adc_os}));        // 34:32
-
-  assign gpio_i[63:38] = gpio_o[63:38];
+  assign adc_serpar = gpio_o[39];
+  assign adc_refsel = gpio_o[38];
+  assign adc_reset = gpio_o[37];
+  assign adc_stby = gpio_o[36];
+  assign adc_range = gpio_o[35];
+  assign adc_os = gpio_o[34:32];
+  assign gpio_i[63:32] = gpio_o[63:32];
 
   generate
     for (i = 0; i < 16; i = i + 1) begin: adc_db_io
