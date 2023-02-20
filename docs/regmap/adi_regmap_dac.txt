@@ -379,10 +379,49 @@ ENDFIELD
 ############################################################################################
 
 REG
+0x0020
+REG_DAC_CUSTOM_RD
+DAC Read Configuration Data
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+DAC_CUSTOM_RD[31:0]
+RO
+Custom Read of the available registers.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0021
+REG_DAC_CUSTOM_WR
+DAC Write Configuration Data
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+DAC_CUSTOM_WR[31:0]
+RW
+Custom Write of the available registers.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
 0x0022
 REG_UI_STATUS
 User Interface Status
 ENDREG
+
+FIELD
+[4] 0x0
+IF_BUSY
+RO
+Interface busy. If set, indicates that the data interface is busy.
+ENDFIELD
 
 FIELD
 [1] 0x0
@@ -400,6 +439,22 @@ RW1C
 User Interface underflow. If set, indicates an underflow occurred during data transfer at
 the user interface (FIFO interface). Software must write a 0x1 to clear this register
 bit.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0023
+REG_DAC_CUSTOM_CTRL
+DAC Control Configuration Data
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+DAC_CUSTOM_CTRL[31:0]
+RW
+Custom Control of the available registers.
 ENDFIELD
 
 ############################################################################################
