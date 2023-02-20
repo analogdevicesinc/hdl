@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2019 - 2020 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2022 - 2023 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -281,7 +281,7 @@ module system_top (
     .cn0540_spi_sdi_sdi (cn0540_spi_miso),
     .cn0540_spi_cs_cs (cn0540_spi_cs),
     .cn0540_spi_sclk_clk (cn0540_spi_sclk),
-    .cn0540_spi_trigger_trigger (cn0540_drdy),
+    .cn0540_spi_trigger_if_pwm (cn0540_drdy),
     .sys_spi_MISO (1'b0),
     .sys_spi_MOSI (),
     .sys_spi_SCLK (),
