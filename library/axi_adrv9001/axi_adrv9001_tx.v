@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2020 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2023 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -384,6 +384,10 @@ module axi_adrv9001_tx #(
       .dac_ext_sync_arm (dac_ext_sync_arm),
       .dac_frame (),
       .dac_clksel (),
+      .dac_custom_wr(),
+      .dac_custom_rd(32'b0),
+      .dac_custom_control(),
+      .dac_status_if_busy(1'b0),
       .dac_par_type (),
       .dac_par_enb (),
       .dac_r1_mode (),
