@@ -404,7 +404,7 @@ module up_dac_channel #(
   // dac control & status
 
   up_xfer_cntrl #(
-    .DATA_WIDTH(177)
+    .DATA_WIDTH(176)
   ) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),

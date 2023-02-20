@@ -95,6 +95,13 @@ module up_dac_common #(
   input               up_drp_ready,
   input               up_drp_locked,
 
+  // DAC custom read/write interface
+
+  output      [31:0]  dac_custom_wr,
+  output      [31:0]  dac_custom_control,
+  input       [31:0]  dac_custom_rd,
+  input               dac_status_if_busy,
+
   // user channel control
 
   output      [ 7:0]  up_usr_chanmax,
@@ -118,7 +125,7 @@ module up_dac_common #(
 
   // parameters
 
-  localparam  VERSION = 32'h00090162;
+  localparam  VERSION = 32'h00090262;
 
   // internal registers
 
@@ -144,6 +151,8 @@ module up_dac_common #(
   reg     [15:0]  up_dac_datarate = 'd0;
   reg             up_dac_frame = 'd0;
   reg             up_dac_clksel = CLK_EDGE_SEL;
+  reg     [31:0]  up_dac_custom_wr = 'd0;
+  reg     [31:0]  up_dac_custom_control = 'd0;
   reg             up_status_unf = 'd0;
   reg     [ 7:0]  up_usr_chanmax_int = 'd0;
   reg     [31:0]  up_dac_gpio_out_int = 'd0;
@@ -164,6 +173,8 @@ module up_dac_common #(
   wire            up_rreq_s;
   wire            up_xfer_done_s;
   wire            up_status_s;
+  wire   [31:0]   up_dac_custom_rd;
+  wire            up_status_if_busy;
   wire            up_sync_in_status;
   wire            up_status_unf_s;
   wire            dac_sync_s;
@@ -212,6 +223,7 @@ module up_dac_common #(
       up_dac_datarate <= 'd0;
       up_dac_frame <= 'd0;
       up_dac_clksel <= CLK_EDGE_SEL;
+      up_dac_custom_control <= 'd0;
       up_pps_irq_mask <= 1'b1;
     end else begin
       up_dac_clk_enb_int <= ~up_dac_clk_enb;
@@ -279,6 +291,9 @@ module up_dac_common #(
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h18)) begin
         up_dac_clksel <= up_wdata[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h23)) begin
+        up_dac_custom_control <= up_wdata;
       end
     end
   end
@@ -349,6 +364,16 @@ module up_dac_common #(
 
   end
   endgenerate
+
+  always @(posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_dac_custom_wr <= 'd0;
+    end else begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h21)) begin
+        up_dac_custom_wr <= up_wdata;
+      end
+    end
+  end
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
@@ -439,11 +464,9 @@ module up_dac_common #(
                                   3'b0, up_dac_ext_sync_manual_req,
                                   4'b0,
                                   1'b0, up_dac_ext_sync_disarm, up_dac_ext_sync_arm, up_dac_sync};
-          7'h12: up_rdata_int <= {15'd0, up_dac_sdr_ddr_n,
-                                  up_dac_symb_op, up_dac_symb_8_16b,
-                                  1'd0, up_dac_num_lanes,
-                                  up_dac_par_type, up_dac_par_enb, up_dac_r1_mode, up_dac_datafmt,
-                                  4'd0};
+          7'h12: up_rdata_int <= {15'd0, up_dac_sdr_ddr_n, up_dac_symb_op, up_dac_symb_8_16b, 1'd0,
+                                  up_dac_num_lanes, up_dac_par_type, up_dac_par_enb, up_dac_r1_mode,
+                                  up_dac_datafmt, 4'd0};
           7'h13: up_rdata_int <= {16'd0, up_dac_datarate};
           7'h14: up_rdata_int <= {31'd0, up_dac_frame};
           7'h15: up_rdata_int <= up_dac_clk_count_s;
@@ -455,12 +478,15 @@ module up_dac_common #(
           7'h1d: up_rdata_int <= {14'd0, up_drp_locked, up_drp_status_s, 16'b0};
           7'h1e: up_rdata_int <= up_drp_wdata;
           7'h1f: up_rdata_int <= up_drp_rdata_hold_s;
-          7'h22: up_rdata_int <= {31'd0, up_status_unf};
+          7'h20: up_rdata_int <= up_dac_custom_rd;
+          7'h21: up_rdata_int <= up_dac_custom_wr;
+          7'h22: up_rdata_int <= {27'd0, up_status_if_busy, 3'd0, up_status_unf};
+          7'h23: up_rdata_int <= up_dac_custom_control;
           7'h28: up_rdata_int <= {24'd0, dac_usr_chanmax};
           7'h2e: up_rdata_int <= up_dac_gpio_in;
           7'h2f: up_rdata_int <= up_dac_gpio_out_int;
           7'h30: up_rdata_int <= up_pps_rcounter;
-          7'h31: up_rdata_int <= up_pps_status;
+          7'h31: up_rdata_int <= {31'd0,up_pps_status};
           7'h40: up_rdata_int <= up_timer;
           default: up_rdata_int <= 0;
         endcase
@@ -487,7 +513,7 @@ module up_dac_common #(
   // dac control & status
 
   up_xfer_cntrl #(
-    .DATA_WIDTH(35)
+    .DATA_WIDTH(99)
   ) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
@@ -500,6 +526,8 @@ module up_dac_common #(
                       up_dac_ext_sync_manual_req,
                       up_dac_sync,
                       up_dac_clksel,
+                      up_dac_custom_wr,
+                      up_dac_custom_control,
                       up_dac_frame,
                       up_dac_par_type,
                       up_dac_par_enb,
@@ -519,6 +547,8 @@ module up_dac_common #(
                       dac_ext_sync_manual_req,
                       dac_sync_s,
                       dac_clksel,
+                      dac_custom_wr,
+                      dac_custom_control,
                       dac_frame_s,
                       dac_par_type,
                       dac_par_enb,
@@ -533,18 +563,22 @@ module up_dac_common #(
   assign dac_rst = ~dac_rst_n;
 
   up_xfer_status #(
-    .DATA_WIDTH(3)
+    .DATA_WIDTH(36)
   ) i_xfer_status (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_status ({up_sync_in_status,
                       up_status_s,
-                      up_status_unf_s}),
+                      up_status_unf_s,
+                      up_status_if_busy,
+                      up_dac_custom_rd}),
     .d_rst (dac_rst_s),
     .d_clk (dac_clk),
     .d_data_status ({ dac_sync_in_status,
                       dac_status,
-                      dac_status_unf}));
+                      dac_status_unf,
+                      dac_status_if_busy,
+                      dac_custom_rd}));
 
   // generate frame and enable
 
