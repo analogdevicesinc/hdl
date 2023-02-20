@@ -58,7 +58,7 @@ proc p_elaboration {} {
   ad_interface clock   spi_clk     input 1
   ad_interface resetn  spi_resetn  input 1 if_spi_clk
 
-  ad_interface signal  trigger     input 1
+  ad_interface signal  trigger     input 1 if_pwm
 
   ## command interface
 
