@@ -8,9 +8,13 @@ source ../scripts/adi_ip_intel.tcl
 
 ad_ip_create axi_pwm_gen {AXI PWM GEN}
 ad_ip_files axi_pwm_gen [list \
+  $ad_hdl_dir/library/util_cdc/sync_data.v \
+  $ad_hdl_dir/library/util_cdc/sync_bits.v \
   $ad_hdl_dir/library/common/ad_rst.v \
   $ad_hdl_dir/library/common/up_axi.v \
   $ad_hdl_dir/library/intel/common/up_rst_constr.sdc \
+  $ad_hdl_dir/library/util_cdc/util_cdc_constr.tcl \
+  axi_pwm_gen_constr.sdc \
   axi_pwm_gen_regmap.v \
   axi_pwm_gen_1.v \
   axi_pwm_gen.v]
@@ -46,5 +50,5 @@ ad_interface signal ext_sync input 1
 
 # output signals
 for {set i 0} {$i < 4} {incr i} {
-  ad_interface signal pwm_$i output 1
+  ad_interface signal pwm_$i output 1 if_pwm
 }
