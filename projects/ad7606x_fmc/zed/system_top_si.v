@@ -89,13 +89,14 @@ module system_top #(
   input       [NUM_OF_SDI-1:0] ad7606_spi_sdi,
   output                       ad7606_spi_sdo,
 
-  input                   adc_busy,
+  inout                   adc_serpar,
+  inout                   adc_busy,
   output                  adc_cnvst_n,
-  input                   adc_first_data,
-  output                  adc_reset,
-  output      [ 2:0]      adc_os,
-  output                  adc_stby,
-  output                  adc_range
+  inout                   adc_first_data,
+  inout                   adc_reset,
+  inout       [ 2:0]      adc_os,
+  inout                   adc_stby,
+  inout                   adc_range
 );
 
   // internal signals
@@ -113,12 +114,14 @@ module system_top #(
     // instantiations
 
   ad_iobuf #(
-    .DATA_WIDTH(6)
+    .DATA_WIDTH(8)
   ) i_iobuf_adc_cntrl (
-    .dio_t (gpio_t[37:32]),
-    .dio_i (gpio_o[37:32]),
-    .dio_o (gpio_i[37:32]),
-    .dio_p ({adc_reset,       // 37
+    .dio_t (gpio_t[39:32]),
+    .dio_i (gpio_o[39:32]),
+    .dio_o (gpio_i[39:32]),
+    .dio_p ({adc_first_data,  // 39 
+             adc_serpar,      // 38 
+             adc_reset,       // 37
              adc_stby,        // 36
              adc_range,       // 35
              adc_os}));       // 34:32
@@ -131,7 +134,7 @@ module system_top #(
     .dio_o(gpio_i[31:0]),
     .dio_p(gpio_bd));
 
-  assign gpio_i[63:38] = gpio_o[63:38];
+  assign gpio_i[63:40] = gpio_o[63:40];
 
  ad_iobuf #(
     .DATA_WIDTH(2)

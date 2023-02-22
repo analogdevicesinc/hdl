@@ -79,6 +79,7 @@ switch $INTF {
 }
 
 # control lines
+set_property -dict {PACKAGE_PIN K19     IOSTANDARD LVCMOS25} [get_ports adc_serpar]         ; ## C18 FMC_LPC_LA14_P 
 set_property -dict {PACKAGE_PIN T16     IOSTANDARD LVCMOS25} [get_ports adc_busy]           ; ## H13 FMC_LPC_LA07_P
 set_property -dict {PACKAGE_PIN J21     IOSTANDARD LVCMOS25} [get_ports adc_first_data]     ; ## G12 FMC_LPC_LA08_P
 set_property -dict {PACKAGE_PIN L21     IOSTANDARD LVCMOS25} [get_ports adc_reset]          ; ## C10 FMC_LPC_LA06_P
