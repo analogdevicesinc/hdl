@@ -140,7 +140,7 @@ module system_top (
   wire    [ 7:0]  spi_csn;
   wire            spi_mosi;
   wire            spi_miso;
-  wire            apollo_miso;
+  wire    [ 3:0]  apollo_miso;
 
   wire            spi_2_clk;
   wire    [ 7:0]  spi_2_csn;
@@ -211,25 +211,28 @@ module system_top (
 
   assign ltc6953_csn = spi_2_csn[5:4];
   assign ltc6953_sclk = spi_2_clk;
-  assign ltc6953_sdi = |(~spi_2_csn[5:4]) ? spi_2_mosi : 1'b0;
+  assign ltc6953_sdi = spi_2_mosi;
 
-  assign spi_miso = |(~spi_csn[3:0]) ? apollo_miso : 1'b0;
+  assign spi_miso = ~spi_csn[0] ? apollo_miso[0] :
+                    ~spi_csn[1] ? apollo_miso[1] :
+                    ~spi_csn[2] ? apollo_miso[2] :
+                    ~spi_csn[3] ? apollo_miso[3] : 1'b0;
 
   assign spi_2_miso =  |(~spi_2_csn[3:0]) ? art_miso :
-                       |(~spi_2_csn[5:4]) ? ltc6953_sdo :
-                         1'b0;
+                       |(~spi_2_csn[5:4]) ? ltc6953_sdo : 1'b0;
+
   genvar i;
   generate
   for (i=0;i<4;i=i+1) begin : apollo_spi_3w
     ad_3w_spi #(
       .NUM_OF_SLAVES(1)
     ) i_spi_apollo (
-      .spi_csn (spi_csn[i]),
-      .spi_clk (spi_clk),
+      .spi_csn  (spi_csn[i]),
+      .spi_clk  (spi_clk),
       .spi_mosi (spi_mosi),
-      .spi_miso (apollo_miso),
+      .spi_miso (apollo_miso[i]),
       .spi_sdio (apollo_sdio[i]),
-      .spi_dir ());
+      .spi_dir  ());
   end
   endgenerate
 
