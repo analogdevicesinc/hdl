@@ -12,8 +12,9 @@ source ../../../../hdl/projects/scripts/adi_pd.tcl
 ad_ip_parameter axi_apollo_rx_jesd/rx CONFIG.NUM_INPUT_PIPELINE 2
 ad_ip_parameter axi_apollo_tx_jesd/tx CONFIG.NUM_OUTPUT_PIPELINE 1
 
-# Set SPI clock to 100/16 =  6.25 MHz
+# Set SPI clock to 100/32 = 3.125 MHz
 ad_ip_parameter axi_spi CONFIG.C_SCK_RATIO 16
+ad_ip_parameter axi_spi CONFIG.Multiples16 2
 
 #system ID
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
@@ -134,7 +135,9 @@ create_bd_port -dir I spi_2_sdi_i
 ad_ip_instance axi_quad_spi axi_spi_2
 ad_ip_parameter axi_spi_2 CONFIG.C_USE_STARTUP 0
 ad_ip_parameter axi_spi_2 CONFIG.C_NUM_SS_BITS 8
+# Set SPI clock to 100/128 = 781.25 KHz
 ad_ip_parameter axi_spi_2 CONFIG.C_SCK_RATIO 16
+ad_ip_parameter axi_spi_2 CONFIG.Multiples16 8
 
 ad_connect spi_2_csn_i axi_spi_2/ss_i
 ad_connect spi_2_csn_o axi_spi_2/ss_o
