@@ -1,0 +1,49 @@
+FMC_pin  FMC_port      Schematic_name    System_top_name  IOSTANDARD   Termination
+
+# ad408x
+
+H4       FMC_CLK0_M2C_P    DCO_P         dco_p         LVDS_25        DIFF_TERM 1
+H5       FMC_CLK0_M2C_N    DCO_N         dco_n         LVDS_25        DIFF_TERM 1
+G2       FMC_CLK1_M2C_P    FPGACLK_P     fpgaclk_p     LVDS_25        DIFF_TERM 1
+G3       FMC_CLK1_M2C_N    FPGACLK_N     fpgaclk_n     LVDS_25        DIFF_TERM 1
+D8       FMC_LA01_CC_P     CLK_P         clk_p         LVDS_25        DIFF_TERM 1
+D9       FMC_LA01_CC_N     CLK_N         clk_n         LVDS_25        DIFF_TERM 1
+H7       FMC_LA02_P        DA_P          da_p          LVDS_25        DIFF_TERM 1
+H8       FMC_LA02_N        DA_N          da_n          LVDS_25        DIFF_TERM 1
+G9       FMC_LA03_P        DB_P          db_p          LVDS_25        DIFF_TERM 1
+G10      FMC_LA03_N        DB_N          db_n          LVDS_25        DIFF_TERM 1
+H13      FMC_LA07_P        GPIO0_FMC     gpio0_fmc     LVCMOS25       #N/A
+C11      FMC_LA06_N        GPIO1_FMC     gpio1_fmc     LVCMOS25       #N/A
+D14      FMC_LA09_P        GPIO2_FMC     gpio2_fmc     LVCMOS25       #N/A
+D15      FMC_LA09_N        GPIO3_FMC     gpio3_fmc     LVCMOS25       #N/A
+H16      FMC_LA11_P        GP0_DIR       gp0_dir       LVCMOS25       #N/A
+C15      FMC_LA10_N        GP1_DIR       gp1_dir       LVCMOS25       #N/A
+G15      FMC_LA12_P        GP2_DIR       gp2_dir       LVCMOS25       #N/A
+H17      FMC_LA11_N        GP3_DIR       gp3_dir       LVCMOS25       #N/A
+H19      FMC_LA15_P        EN_PSU        en_psu        LVCMOS25       #N/A
+H20      FMC_LA15_N        PWRGD         pwrgd         LVCMOS25       #N/A
+H22      FMC_LA19_P        PD_V33B       pd_v33b       LVCMOS25       #N/A
+G16      FMC_LA12_N        OSC_EN        osc_en        LVCMOS25       #N/A
+G12      FMC_LA08_P        CS_N_SRC      cs_n_src      LVCMOS25       #N/A
+G13      FMC_LA08_N        SDIO_SRC      sdio_src      LVCMOS25       #N/A
+H14      FMC_LA07_N        SCLK_SRC      sclk_src      LVCMOS25       #N/A
+C19      FMC_LA14_N        CS1_0         cs1_0         LVCMOS25       #N/A
+C22      FMC_LA18_CC_P     CS1_1         cs1_1         LVCMOS25       #N/A
+D17      FMC_LA13_P        SDO_1         sdo_1         LVCMOS25       #N/A
+D18      FMC_LA13_N        SCLK1         sclk1         LVCMOS25       #N/A
+C18      FMC_LA14_P        SDIN1         sdin1         LVCMOS25       #N/A
+D20      FMC_LA17_CC_P     DOA_FMC       doa_fmc       LVCMOS25       #N/A
+D21      FMC_LA17_CC_N     DOB_FMC       dob_fmc       LVCMOS25       #N/A
+G18      FMC_LA16_P        DOC_FMC       doc_fmc       LVCMOS25       #N/A
+G19      FMC_LA16_N        DOD_FMC       dod_fmc       LVCMOS25       #N/A
+H23      FMC_LA19_N        PBIO<0>       pbio[0]       LVCMOS25       #N/A
+G21      FMC_LA20_P        PBIO<1>       pbio[1]       LVCMOS25       #N/A
+G22      FMC_LA20_N        PBIO<2>       pbio[2]       LVCMOS25       #N/A
+H25      FMC_LA21_P        PBIO<3>       pbio[3]       LVCMOS25       #N/A
+H26      FMC_LA21_N        PBIO<4>       pbio[4]       LVCMOS25       #N/A
+G24      FMC_LA22_P        PBIO<5>       pbio[5]       LVCMOS25       #N/A
+G25      FMC_LA22_N        PBIO<6>       pbio[6]       LVCMOS25       #N/A
+D23      FMC_LA23_P        PBIO<7>       pbio[7]       LVCMOS25       #N/A
+D24      FMC_LA23_N        PBIO<8>       pbio[8]       LVCMOS25       #N/A
+C10      FMC_LA06_P        AD9508_SYNC   ad9508_sync   LVCMOS25       #N/A
+C23      FMC_LA18_CC_N     ADF435X_LOCK  adf435x_lock  LVCMOS25       #N/A
