@@ -306,7 +306,7 @@ ad_connect  cpack/fifo_wr_overflow axi_ad9361/adc_dovf
 
 # External TDD
 set TDD_CHANNEL_CNT 3
-set TDD_DEFAULT_POL 0
+set TDD_DEFAULT_POL 0b010
 set TDD_REG_WIDTH 32
 set TDD_BURST_WIDTH 32
 set TDD_SYNC_WIDTH 0
