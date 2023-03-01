@@ -205,7 +205,7 @@ switch $INTF {
     ad_connect sys_cpu_resetn $hier_spi_engine/resetn
     ad_connect sys_cpu_resetn axi_ad7606_dma/m_dest_axi_aresetn
 
-    ad_connect rx_cnvst ad7606_pwm_gen/pwm_0
+    ad_connect rx_cnvst_n ad7606_pwm_gen/pwm_0
 
     ad_connect axi_ad7606_dma/s_axis $hier_spi_engine/m_axis_sample
 
