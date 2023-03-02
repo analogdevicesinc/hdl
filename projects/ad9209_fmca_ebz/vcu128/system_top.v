@@ -35,39 +35,57 @@
 
 `timescale 1ns/100ps
 
-module system_top  #(
+module system_top #(
   parameter RX_JESD_L = 8,
   parameter RX_NUM_LINKS = 1,
-  parameter JESD_MODE = "64B66B"
+  parameter JESD_MODE = "8B10B"
 ) (
-  input                                 sys_clk_n,
+  input                                 sys_rst,
   input                                 sys_clk_p,
+  input                                 sys_clk_n,
+
+  input                                 uart_sin,
+  output                                uart_sout,
+
   output                                ddr4_act_n,
-  output  [16:0]                        ddr4_adr,
-  output  [ 1:0]                        ddr4_ba,
-  output  [ 1:0]                        ddr4_bg,
-  output                                ddr4_ck_c,
-  output                                ddr4_ck_t,
-  output                                ddr4_cke,
-  output                                ddr4_cs_n,
-  inout   [ 7:0]                        ddr4_dm_n,
-  inout   [63:0]                        ddr4_dq,
-  inout   [ 7:0]                        ddr4_dqs_c,
-  inout   [ 7:0]                        ddr4_dqs_t,
-  output                                ddr4_odt,
+  output [16:0]                         ddr4_addr,
+  output [ 1:0]                         ddr4_ba,
+  output [ 0:0]                         ddr4_bg,
+  output                                ddr4_ck_p,
+  output                                ddr4_ck_n,
+  output [ 0:0]                         ddr4_cke,
+  output [ 1:0]                         ddr4_cs_n,
+  inout  [ 8:0]                         ddr4_dm_n,
+  inout  [71:0]                         ddr4_dq,
+  inout  [ 8:0]                         ddr4_dqs_p,
+  inout  [ 8:0]                         ddr4_dqs_n,
+  output [ 0:0]                         ddr4_odt,
   output                                ddr4_reset_n,
-  // GPIOs
-  output  [ 3:0]                        gpio_led,
-  input   [ 3:0]                        gpio_dip_sw,
-  input   [ 1:0]                        gpio_pb,
+
+  output                                mdio_mdc,
+  inout                                 mdio_mdio,
+  input                                 phy_clk_p,
+  input                                 phy_clk_n,
+  input                                 phy_rx_p,
+  input                                 phy_rx_n,
+  output                                phy_tx_p,
+  output                                phy_tx_n,
+  input                                 phy_dummy_port_in,
+
+  inout  [7:0]                          gpio_bd,
+
+  inout                                 iic_scl,
+  inout                                 iic_sda,
+
+  input                                 vadj_1v8_pgood,
 
   // FMC HPC IOs
   input   [ 1:0]                        agc0,
   input   [ 1:0]                        agc1,
   input   [ 1:0]                        agc2,
   input   [ 1:0]                        agc3,
-  input                                 clkin10_n,
-  input                                 clkin10_p,
+  input                                 clkin8_n,
+  input                                 clkin8_p,
   input                                 fpga_refclk_in_n,
   input                                 fpga_refclk_in_p,
   input   [RX_JESD_L*RX_NUM_LINKS-1:0]  rx_data_n,
@@ -95,27 +113,24 @@ module system_top  #(
 
   // internal signals
 
-  wire  [95:0]              gpio_i;
-  wire  [95:0]              gpio_o;
-  wire  [95:0]              gpio_t;
-
-  wire  [ 2:0]              spi0_csn;
-
-  wire  [ 2:0]              spi1_csn;
-  wire                      spi1_mosi;
+  wire  [63:0]              gpio_i;
+  wire  [63:0]              gpio_o;
+  wire  [63:0]              gpio_t;
+  wire  [ 7:0]              spi_csn;
+  wire                      spi_mosi;
+  wire                      spi_miso;
   wire                      spi1_miso;
 
+  wire                      ref_clk;
   wire                      sysref;
   wire  [RX_NUM_LINKS-1:0]  rx_syncout;
 
-  wire  [ 7:0]              rx_data_p_loc;
-  wire  [ 7:0]              rx_data_n_loc;
-
-  wire                      clkin10;
+  wire                      clkin8;
   wire                      rx_device_clk;
 
   // instantiations
-  IBUFDS_GTE5 i_ibufds_ref_clk (
+
+  IBUFDS_GTE4 i_ibufds_ref_clk (
     .CEB (1'd0),
     .I (fpga_refclk_in_p),
     .IB (fpga_refclk_in_n),
@@ -127,31 +142,44 @@ module system_top  #(
     .IB (sysref2_n),
     .O (sysref));
 
-  IBUFDS i_ibufds_rx_device_clk (
-    .I (clkin10_p),
-    .IB (clkin10_n),
-    .O (clkin10));
+  IBUFDS i_ibufds_device_clk (
+    .I (clkin6_p),
+    .IB (clkin6_n),
+    .O (clkin6));
+
+  IBUFDS_GTE4 i_ibufds_rx_device_clk (
+    .I (clkin8_p),
+    .IB (clkin8_n),
+    .CEB(1'b0),
+    .ODIV2 (clkin8));
 
   OBUFDS i_obufds_syncout_0 (
     .I (rx_syncout[0]),
     .O (fpga_syncout_0_p),
     .OB (fpga_syncout_0_n));
 
-  BUFG i_rx_device_clk (
-    .I (clkin10),
+  BUFG_GT i_rx_device_clk (
+    .I (clkin8),
     .O (rx_device_clk));
 
   // spi
 
-  assign spi0_csb   = spi0_csn[0];
-  assign spi1_csb   = spi1_csn[0];
+  assign spi0_csb   = spi_csn[0];
+  assign spi0_mosi  = spi_mosi;
+  assign spi0_sclk  = spi_clk;
+
+  assign spi1_csb   = spi_csn[1];
+  assign spi1_sclk  = spi_clk;
+
+  assign spi_miso = ~spi_csn[0] ? spi0_miso :
+                    ~spi_csn[1] ? spi1_miso : 1'b0;
 
   ad_3w_spi #(
     .NUM_OF_SLAVES(1)
   ) i_spi (
-    .spi_csn (spi1_csn[0]),
-    .spi_clk (spi1_sclk),
-    .spi_mosi (spi1_mosi),
+    .spi_csn (spi_csn[1]),
+    .spi_clk (spi_clk),
+    .spi_mosi (spi_mosi),
     .spi_miso (spi1_miso),
     .spi_sdio (spi1_sdio),
     .spi_dir ());
@@ -178,10 +206,10 @@ module system_top  #(
   assign gpio_i[52] = irqb[0];
   assign gpio_i[53] = irqb[1];
 
-  assign hmc_sync   = gpio_o[54];
-  assign rstb       = gpio_o[55];
-  assign rxen[0]    = gpio_o[56];
-  assign rxen[1]    = gpio_o[57];
+  assign hmc_sync         = gpio_o[54];
+  assign rstb             = gpio_o[55];
+  assign rxen[0]          = gpio_o[56];
+  assign rxen[1]          = gpio_o[57];
 
   generate
   if (RX_NUM_LINKS > 1 & JESD_MODE == "8B10B") begin
@@ -199,65 +227,83 @@ module system_top  #(
   end
   endgenerate
 
-  /* Board GPIOS. Buttons, LEDs, etc... */
-  assign gpio_led = gpio_o[3:0];
-  assign gpio_i[3:0] = gpio_o[3:0];
-  assign gpio_i[7: 4] = gpio_dip_sw;
-  assign gpio_i[9: 8] = gpio_pb;
+  ad_iobuf #(
+    .DATA_WIDTH(8)
+  ) i_iobuf_bd (
+    .dio_t (gpio_t[7:0]),
+    .dio_i (gpio_o[7:0]),
+    .dio_o (gpio_i[7:0]),
+    .dio_p (gpio_bd));
 
-  // Unused GPIOs
   assign gpio_i[59:54] = gpio_o[59:54];
-  assign gpio_i[94:64] = gpio_o[94:64];
-  assign gpio_i[31:10] = gpio_o[31:10];
+  assign gpio_i[31:8] = gpio_o[31:8];
 
   system_wrapper i_system_wrapper (
+    .sys_rst (sys_rst),
+    .sys_clk_clk_n (sys_clk_n),
+    .sys_clk_clk_p (sys_clk_p),
+    .ddr4_act_n (ddr4_act_n),
+    .ddr4_adr (ddr4_addr),
+    .ddr4_ba (ddr4_ba),
+    .ddr4_bg (ddr4_bg),
+    .ddr4_ck_c (ddr4_ck_n),
+    .ddr4_ck_t (ddr4_ck_p),
+    .ddr4_cke (ddr4_cke),
+    .ddr4_cs_n (ddr4_cs_n),
+    .ddr4_dm_n (ddr4_dm_n),
+    .ddr4_dq (ddr4_dq),
+    .ddr4_dqs_c (ddr4_dqs_n),
+    .ddr4_dqs_t (ddr4_dqs_p),
+    .ddr4_odt (ddr4_odt),
+    .ddr4_reset_n (ddr4_reset_n),
+    .phy_sd (1'b1),
+    .phy_dummy_port_in (phy_dummy_port_in),
+    .sgmii_rxn (phy_rx_n),
+    .sgmii_rxp (phy_rx_p),
+    .sgmii_txn (phy_tx_n),
+    .sgmii_txp (phy_tx_p),
+    .mdio_mdc (mdio_mdc),
+    .mdio_mdio_io (mdio_mdio),
+    .sgmii_phyclk_clk_n (phy_clk_n),
+    .sgmii_phyclk_clk_p (phy_clk_p),
+    .iic_main_scl_io (iic_scl),
+    .iic_main_sda_io (iic_sda),
+    .uart_sin (uart_sin),
+    .uart_sout (uart_sout),
+    .spi_clk_i (spi_clk),
+    .spi_clk_o (spi_clk),
+    .spi_csn_i (spi_csn),
+    .spi_csn_o (spi_csn),
+    .spi_sdi_i (spi_miso),
+    .spi_sdo_i (spi_mosi),
+    .spi_sdo_o (spi_mosi),
     .gpio0_i (gpio_i[31:0]),
     .gpio0_o (gpio_o[31:0]),
     .gpio0_t (gpio_t[31:0]),
     .gpio1_i (gpio_i[63:32]),
     .gpio1_o (gpio_o[63:32]),
     .gpio1_t (gpio_t[63:32]),
-    .gpio2_i (gpio_i[95:64]),
-    .gpio2_o (gpio_o[95:64]),
-    .gpio2_t (gpio_t[95:64]),
-    .ddr4_dimm1_sma_clk_clk_n (sys_clk_n),
-    .ddr4_dimm1_sma_clk_clk_p (sys_clk_p),
-    .ddr4_dimm1_act_n (ddr4_act_n),
-    .ddr4_dimm1_adr (ddr4_adr),
-    .ddr4_dimm1_ba (ddr4_ba),
-    .ddr4_dimm1_bg (ddr4_bg),
-    .ddr4_dimm1_ck_c (ddr4_ck_c),
-    .ddr4_dimm1_ck_t (ddr4_ck_t),
-    .ddr4_dimm1_cke (ddr4_cke),
-    .ddr4_dimm1_cs_n (ddr4_cs_n),
-    .ddr4_dimm1_dm_n (ddr4_dm_n),
-    .ddr4_dimm1_dq (ddr4_dq),
-    .ddr4_dimm1_dqs_c (ddr4_dqs_c),
-    .ddr4_dimm1_dqs_t (ddr4_dqs_t),
-    .ddr4_dimm1_odt (ddr4_odt),
-    .ddr4_dimm1_reset_n (ddr4_reset_n),
-    .spi0_csn (spi0_csn),
-    .spi0_miso (spi0_miso),
-    .spi0_mosi (spi0_mosi),
-    .spi0_sclk (spi0_sclk),
-    .spi1_csn (spi1_csn),
-    .spi1_miso (spi1_miso),
-    .spi1_mosi (spi1_mosi),
-    .spi1_sclk (spi1_sclk),
     // FMC HPC
-    .GT_Serial_0_0_grx_p (rx_data_p_loc[3:0]),
-    .GT_Serial_0_0_grx_n (rx_data_n_loc[3:0]),
-    .GT_Serial_1_0_grx_p (rx_data_p_loc[7:4]),
-    .GT_Serial_1_0_grx_n (rx_data_n_loc[7:4]),
-
+    .rx_data_0_n (rx_data_n[0]),
+    .rx_data_0_p (rx_data_p[0]),
+    .rx_data_1_n (rx_data_n[1]),
+    .rx_data_1_p (rx_data_p[1]),
+    .rx_data_2_n (rx_data_n[2]),
+    .rx_data_2_p (rx_data_p[2]),
+    .rx_data_3_n (rx_data_n[3]),
+    .rx_data_3_p (rx_data_p[3]),
+    .rx_data_4_n (rx_data_n[4]),
+    .rx_data_4_p (rx_data_p[4]),
+    .rx_data_5_n (rx_data_n[5]),
+    .rx_data_5_p (rx_data_p[5]),
+    .rx_data_6_n (rx_data_n[6]),
+    .rx_data_6_p (rx_data_p[6]),
+    .rx_data_7_n (rx_data_n[7]),
+    .rx_data_7_p (rx_data_p[7]),
     .ref_clk_q0 (ref_clk),
     .ref_clk_q1 (ref_clk),
-
     .rx_device_clk (rx_device_clk),
     .rx_sync_0 (rx_syncout),
     .rx_sysref_0 (sysref));
-
-  assign rx_data_p_loc[RX_JESD_L*RX_NUM_LINKS-1:0] = rx_data_p[RX_JESD_L*RX_NUM_LINKS-1:0];
-  assign rx_data_n_loc[RX_JESD_L*RX_NUM_LINKS-1:0] = rx_data_n[RX_JESD_L*RX_NUM_LINKS-1:0];
 
 endmodule
