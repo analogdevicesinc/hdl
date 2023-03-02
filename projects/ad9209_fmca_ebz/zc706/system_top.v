@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2020 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2023 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -196,10 +196,10 @@ module system_top  #(
   assign gpio_i[52] = irqb[0];
   assign gpio_i[53] = irqb[1];
 
-  assign hmc_sync         = gpio_o[54];
-  assign rstb             = gpio_o[55];
-  assign rxen[0]          = gpio_o[56];
-  assign rxen[1]          = gpio_o[57];
+  assign hmc_sync   = gpio_o[54];
+  assign rstb       = gpio_o[55];
+  assign rxen[0]    = gpio_o[56];
+  assign rxen[1]    = gpio_o[57];
 
   generate
   if (RX_NUM_LINKS > 1 & JESD_MODE == "8B10B") begin
@@ -217,13 +217,12 @@ module system_top  #(
   end
   endgenerate
 
-  /* Board GPIOS. Buttons, LEDs, etc... */
   ad_iobuf #(
     .DATA_WIDTH(15)
   ) i_iobuf_bd (
-    .dio_t (gpio_t[0+:15]),
-    .dio_i (gpio_o[0+:15]),
-    .dio_o (gpio_i[0+:15]),
+    .dio_t (gpio_t[0:15]),
+    .dio_i (gpio_o[0:15]),
+    .dio_o (gpio_i[0:15]),
     .dio_p (gpio_bd));
 
   // Unused GPIOs

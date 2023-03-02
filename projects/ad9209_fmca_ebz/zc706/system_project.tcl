@@ -12,7 +12,6 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #      make RX_JESD_L=8 RX_JESD_M=4 RX_JESD_S=1
 #      make RX_JESD_L=2 RX_JESD_M=8 RX_JESD_S=1 RX_JESD_NP=12
 
-#
 # Parameter description:
 #   JESD_MODE : Used link layer encoder mode
 #      64B66B - 64b66b link layer defined in JESD 204C, uses Xilinx IP as Physical layer
@@ -25,7 +24,6 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   RX_NUM_LINKS : Number of links
 #
 #  !!! For this carrier only 8B10B mode is supported !!!
-#
 
 adi_project ad9209_fmca_ebz_zc706 0 [list \
   JESD_MODE         8B10B \

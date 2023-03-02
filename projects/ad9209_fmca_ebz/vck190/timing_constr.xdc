@@ -10,4 +10,3 @@ create_clock -name rx_device_clk  -period  2.66 [get_ports clkin10_p]
 set_input_delay -clock [get_clocks rx_device_clk] \
   [get_property PERIOD [get_clocks rx_device_clk]] \
   [get_ports {sysref2_*}]
-

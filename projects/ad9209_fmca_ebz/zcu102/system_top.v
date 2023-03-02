@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2023 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -185,7 +185,7 @@ module system_top  #(
                fpga_syncout_1_p}));   // 62
   end
   endgenerate
-  /* Board GPIOS. Buttons, LEDs, etc... */
+
   assign gpio_i[20: 8] = gpio_bd_i;
   assign gpio_bd_o = gpio_o[7:0];
 
