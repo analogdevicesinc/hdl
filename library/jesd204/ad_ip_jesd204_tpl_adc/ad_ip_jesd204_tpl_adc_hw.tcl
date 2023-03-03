@@ -73,14 +73,14 @@ set group "JESD204 Deframer Configuration"
 ad_ip_parameter NUM_LANES INTEGER 1 true [list \
   DISPLAY_NAME "Number of Lanes (L)" \
   DISPLAY_UNITS "lanes" \
-  ALLOWED_RANGES {1 2 3 4 8 16 24 32} \
+  ALLOWED_RANGES {1 2 3 4 8 12 16 24 32} \
   GROUP $group \
 ]
 
 ad_ip_parameter NUM_CHANNELS INTEGER 1 true [list \
   DISPLAY_NAME "Number of Converters (M)" \
   DISPLAY_UNITS "converters" \
-  ALLOWED_RANGES {1 2 4 6 8 16 32 64} \
+  ALLOWED_RANGES {1 2 4 6 8 12 16 32 64} \
   GROUP $group \
 ]
 

@@ -80,7 +80,7 @@ adi_set_ports_dependency "adc_sync_manual_req_in"  "EXT_SYNC == 1"
 
 foreach {p v} {
   "NUM_LANES" "1 2 3 4 6 8 12 16 24 32" \
-  "NUM_CHANNELS" "1 2 4 6 8 16 32 64" \
+  "NUM_CHANNELS" "1 2 4 6 8 12 16 32 64" \
   "BITS_PER_SAMPLE" "8 12 16" \
   "DMA_BITS_PER_SAMPLE" "8 12 16" \
   "CONVERTER_RESOLUTION" "8 11 12 14 16" \
