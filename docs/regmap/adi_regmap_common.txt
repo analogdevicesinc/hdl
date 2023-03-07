@@ -141,6 +141,7 @@ ENDFIELD
 FIELD
 [13] 0x0
 RD_RAW_DATA
+RO
 If set, the ADC has the capability to read raw data in register REG_CHAN_RAW_DATA from adc_channel.
 ENDFIELD
 
