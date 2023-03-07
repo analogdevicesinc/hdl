@@ -216,6 +216,13 @@ ADC Interface Control & Status
 ENDREG
 
 FIELD
+[4] 0x0
+ADC_CTRL_STATUS
+RO
+If set, indicates that the device'​s register data is available on the data bus.
+ENDFIELD
+
+FIELD
 [3] 0x0
 PN_ERR
 RO
@@ -437,31 +444,31 @@ ENDFIELD
 
 REG
 0x0020
-REG_ADC_CUSTOM_WR
-ADC Custom Write Data
+REG_ADC_CONFIG_WR
+ADC Write Configuration ​Data
 ENDREG
 
 FIELD
 [31:0] 0x0000
-ADC_CUSTOM_WR[31:0]
+ADC_CONFIG_WR[31:0]
 RW
-Custom write to the ADC available registers.
+Custom ​Write to the available registers.
 ENDFIELD
 
 ############################################################################################
 ############################################################################################
 
 REG
-0X0021
-REG_ADC_CUSTOM_RD
-ADC Custom Read Data
+0x0021
+REG_ADC_CONFIG_RD
+ADC Read Configuration ​Data
 ENDREG
 
 FIELD
 [31:0] 0x0000
-ADC_CUSTOM_RD[31:0]
+ADC_CONFIG_RD[31:0]
 RO
-Custom read of the ADC available registers.
+Custom read of the available registers.
 ENDFIELD
 
 ############################################################################################
@@ -496,6 +503,22 @@ FIELD
 UI_RESERVED
 RW1C
 Reserved for backward compatibility.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0023
+REG_ADC_CONFIG_CTRL
+ADC RD/WR configuration
+ENDREG
+
+FIELD
+[31:0] 0x0000
+ADC_CONFIG_CTRL[31:​0]
+RW
+Control RD/WR requests to the device'​s register map: bit 1 - RD ('b1) , WR ('b0), bit 0 - enable WR/RD operation.
 ENDFIELD
 
 ############################################################################################
