@@ -1,6 +1,7 @@
 # LTC235x attributes
 
-set ADC_LVDS_CMOS_N     0
+#set ADC_LVDS_CMOS_N $ad_project_params(LVDS_CMOS_N)
+set LVDS_CMOS_N         1
 set CHIP_SELECT_N       0
 set ADC_LANE_0_ENABLE   1
 set ADC_LANE_1_ENABLE   1
@@ -18,7 +19,7 @@ set ADC_EXTERNAL_CLK    0
 
 add_instance axi_ltc235x axi_ltc235x
 set_instance_parameter_value axi_ltc235x {ID} {0}
-set_instance_parameter_value axi_ltc235x {LVDS_CMOS_N} $ADC_LVDS_CMOS_N
+set_instance_parameter_value axi_ltc235x {LVDS_CMOS_N} $LVDS_CMOS_N
 set_instance_parameter_value axi_ltc235x {LANE_0_ENABLE} $ADC_LANE_0_ENABLE
 set_instance_parameter_value axi_ltc235x {LANE_1_ENABLE} $ADC_LANE_1_ENABLE
 set_instance_parameter_value axi_ltc235x {LANE_2_ENABLE} $ADC_LANE_2_ENABLE
@@ -48,7 +49,6 @@ set_instance_parameter_value adc_pwm_gen {PULSE_0_WIDTH} {1}
 set_instance_parameter_value adc_pwm_gen {PULSE_0_PERIOD} {8}
 set_instance_parameter_value adc_pwm_gen {PULSE_0_OFFSET} {0}
 add_interface axi_ltc235x_cnv_if conduit end
-#add_connection adc_pwm_gen.if_pwm_0 if_cnv
 set_interface_property axi_ltc235x_cnv_if EXPORT_OF adc_pwm_gen.if_pwm_0
 add_connection sys_clk.clk adc_pwm_gen.if_ext_clk
 add_connection sys_clk.clk adc_pwm_gen.s_axi_clock

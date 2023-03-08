@@ -49,9 +49,9 @@ module axi_ltc235x_cmos #(
   // physical interface
 
   output                  scki,
-  output                  db_o,
+  output                  sdi,
   input                   scko,
-  input       [ 7:0]      db_i,
+  input       [ 7:0]      sdo,
   input                   busy,
 
   // FIFO interface
@@ -148,9 +148,9 @@ module axi_ltc235x_cmos #(
   reg         [ 7:0]  ch_captured;
 
   reg                 scko_d;
-  reg         [7:0]   db_i_d;
+  reg         [7:0]   sdo_d;
 
-  reg         [ 4:0]  db_o_index = 5'd23;
+  reg         [ 4:0]  sdi_index = 5'd23;
 
   reg         [23:0]  softspan_next_int;
 
@@ -241,16 +241,16 @@ module axi_ltc235x_cmos #(
   // ignore when busy forced scko to 0
   always @(posedge clk) begin
     scko_d <= scko;
-    db_i_d <= db_i;
+    sdo_d <= sdo;
     if (scko != scko_d && scki != scki_d) begin
-      adc_lane_0 <= {adc_lane_0[BW-1:0], db_i_d[0]};
-      adc_lane_1 <= {adc_lane_1[BW-1:0], db_i_d[1]};
-      adc_lane_2 <= {adc_lane_2[BW-1:0], db_i_d[2]};
-      adc_lane_3 <= {adc_lane_3[BW-1:0], db_i_d[3]};
-      adc_lane_4 <= {adc_lane_4[BW-1:0], db_i_d[4]};
-      adc_lane_5 <= {adc_lane_5[BW-1:0], db_i_d[5]};
-      adc_lane_6 <= {adc_lane_6[BW-1:0], db_i_d[6]};
-      adc_lane_7 <= {adc_lane_7[BW-1:0], db_i_d[7]};
+      adc_lane_0 <= {adc_lane_0[BW-1:0], sdo_d[0]};
+      adc_lane_1 <= {adc_lane_1[BW-1:0], sdo_d[1]};
+      adc_lane_2 <= {adc_lane_2[BW-1:0], sdo_d[2]};
+      adc_lane_3 <= {adc_lane_3[BW-1:0], sdo_d[3]};
+      adc_lane_4 <= {adc_lane_4[BW-1:0], sdo_d[4]};
+      adc_lane_5 <= {adc_lane_5[BW-1:0], sdo_d[5]};
+      adc_lane_6 <= {adc_lane_6[BW-1:0], sdo_d[6]};
+      adc_lane_7 <= {adc_lane_7[BW-1:0], sdo_d[7]};
     end
   end
 
@@ -377,15 +377,8 @@ module axi_ltc235x_cmos #(
       adc_data_store[5] <= 'd0;
       adc_data_store[6] <= 'd0;
       adc_data_store[7] <= 'd0;
-      softspan_next_int <= 24'hff_ffff;
     end else begin
       if (!adc_valid_init_d & adc_valid_init) begin
-        // update next softspan
-        if (softspan_next == 24'hff_ffff) begin
-          softspan_next_int <= 24'd0;
-        end else begin
-          softspan_next_int <= softspan_next;
-        end
         if (adc_lane0_shift_d[3] == 1'b1) begin
           adc_data_store[adc_lane0_shift_d[2:0]] <= adc_data_init[0];
         end
@@ -491,17 +484,30 @@ module axi_ltc235x_cmos #(
     end
   end
 
-  // every negedge of scki, update index of db_o
+  // every negedge of scki, update index of sdi
   always @(posedge clk) begin
     if (start_transfer_s || rst) begin
-      db_o_index <= 5'd23;
+      sdi_index <= 5'd23;
     end else begin
-      if (scki && !scki_d && db_o_index != 5'b11111) begin
-        db_o_index <= db_o_index - 5'b1;
+      if (scki && !scki_d && sdi_index != 5'b11111) begin
+        sdi_index <= sdi_index - 5'b1;
       end
     end
   end
 
-  assign db_o = (db_o_index != 5'b11111)? softspan_next_int[db_o_index] : 1'b0;
+  // update next softspan configuration every after busy
+  always @(posedge clk) begin
+    if (rst == 1'b1) begin
+      softspan_next_int <= 24'hff_ffff;
+    end else begin
+      if (busy_m3 & ~busy_m2) begin
+        softspan_next_int <= softspan_next;
+      end else begin
+        softspan_next_int <= softspan_next_int;
+      end
+    end
+  end
+
+  assign sdi = (sdi_index != 5'b11111)? softspan_next_int[sdi_index] : 1'b0;
 
 endmodule

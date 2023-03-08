@@ -43,14 +43,14 @@ module axi_ltc235x #(
   parameter       SPEED_GRADE = 0,
   parameter       DEV_PACKAGE = 0,
   parameter       LVDS_CMOS_N = 0,
-  parameter       LANE_0_ENABLE = "true",
-  parameter       LANE_1_ENABLE = "true",
-  parameter       LANE_2_ENABLE = "true",
-  parameter       LANE_3_ENABLE = "true",
-  parameter       LANE_4_ENABLE = "true",
-  parameter       LANE_5_ENABLE = "true",
-  parameter       LANE_6_ENABLE = "true",
-  parameter       LANE_7_ENABLE = "true",
+  parameter       LANE_0_ENABLE = 1,
+  parameter       LANE_1_ENABLE = 1,
+  parameter       LANE_2_ENABLE = 1,
+  parameter       LANE_3_ENABLE = 1,
+  parameter       LANE_4_ENABLE = 1,
+  parameter       LANE_5_ENABLE = 1,
+  parameter       LANE_6_ENABLE = 1,
+  parameter       LANE_7_ENABLE = 1,
   parameter       NUM_CHANNELS = 8,	// 8 for 2358, 4 for 2357, 2 for 2353
   parameter       DATA_WIDTH = 18,	// 18 or 16
   parameter       EXTERNAL_CLK = 0
@@ -66,28 +66,11 @@ module axi_ltc235x #(
   output                  cs_n,
   output                  pd,
 
-  // cmos
+  // lvds-cmos
+  output                  sdi,
   output                  scki,
   input                   scko,
-  output                  sdi,
-  input                   sdo_0,
-  input                   sdo_1,
-  input                   sdo_2,
-  input                   sdo_3,
-  input                   sdo_4,
-  input                   sdo_5,
-  input                   sdo_6,
-  input                   sdo_7,
-
-  // lvds
-  output                  scki_p,
-  output                  scki_n,
-  input                   scko_p,
-  input                   scko_n,
-  output                  sdi_p,
-  output                  sdi_n,
-  input                   sdo_p,
-  input                   sdo_n,
+  input       [ 7:0]      sdo,
 
   // AXI Slave Memory Map
 
@@ -200,8 +183,8 @@ module axi_ltc235x #(
   assign up_rstn = s_axi_aresetn;
 
   assign lvds_cmos_n = LVDS_CMOS_N[0];
-  assign cs_n = 'b0;
-  assign pd = 'b0;
+  assign cs_n = 1'b0;
+  assign pd = 1'b0;
 
   assign adc_valid_0 = adc_valid;
   assign adc_valid_1 = adc_valid;
@@ -246,7 +229,6 @@ module axi_ltc235x #(
   end
 
   // CMOS/LVDS INTERFACE
-
   generate
     if (EXTERNAL_CLK == 1'b1) begin
       assign adc_clk_s = external_clk;
@@ -254,11 +236,50 @@ module axi_ltc235x #(
       assign adc_clk_s = up_clk;
     end
 
-    if (LVDS_CMOS_N == 1) begin // TODO: add support for LVDS interface
-      assign scki = 1'b0;
+    if (LVDS_CMOS_N == 1) begin
+      axi_ltc235x_lvds #(
+        .NUM_CHANNELS (NUM_CHANNELS),
+        .DATA_WIDTH (DATA_WIDTH)
+      ) i_ltc235x_lvds (
+        .rst (adc_rst_s),
+        .clk (adc_clk_s),
+        .adc_enable (adc_enable),
+        .softspan_next (softspan_24),
+        .scki_p (scki),
+        .scki_n (),
+        .sdi_p (sdi),
+        .sdi_n (),
+        .scko_p (scko),
+        .scko_n (1'b0),
+        .sdo_p (sdo[0]),
+        .sdo_n (1'b0),
+        .busy (busy),
+        .adc_ch0_id (adc_status_header[0]),
+        .adc_ch1_id (adc_status_header[1]),
+        .adc_ch2_id (adc_status_header[2]),
+        .adc_ch3_id (adc_status_header[3]),
+        .adc_ch4_id (adc_status_header[4]),
+        .adc_ch5_id (adc_status_header[5]),
+        .adc_ch6_id (adc_status_header[6]),
+        .adc_ch7_id (adc_status_header[7]),
+        .adc_data_0 (adc_data_0),
+        .adc_data_1 (adc_data_1),
+        .adc_data_2 (adc_data_2),
+        .adc_data_3 (adc_data_3),
+        .adc_data_4 (adc_data_4),
+        .adc_data_5 (adc_data_5),
+        .adc_data_6 (adc_data_6),
+        .adc_data_7 (adc_data_7),
+        .adc_softspan_0 (),
+        .adc_softspan_1 (),
+        .adc_softspan_2 (),
+        .adc_softspan_3 (),
+        .adc_softspan_4 (),
+        .adc_softspan_5 (),
+        .adc_softspan_6 (),
+        .adc_softspan_7 (),
+        .adc_valid (adc_valid));
     end else begin
-      assign scki_p = 1'b0;
-      assign scki_n = 1'b1;
       axi_ltc235x_cmos #(
         .NUM_CHANNELS (NUM_CHANNELS),
         .DATA_WIDTH (DATA_WIDTH),
@@ -269,16 +290,9 @@ module axi_ltc235x #(
         .adc_enable (adc_enable),
         .softspan_next (softspan_24),
         .scki (scki),
-        .db_o (sdi),
+        .sdi (sdi),
         .scko (scko),
-        .db_i ({sdo_7,
-                sdo_6,
-                sdo_5,
-                sdo_4,
-                sdo_3,
-                sdo_2,
-                sdo_1,
-                sdo_0}),
+        .sdo (sdo),
         .busy (busy),
         .adc_ch0_id (adc_status_header[0]),
         .adc_ch1_id (adc_status_header[1]),
