@@ -32,3 +32,5 @@ H07       LA04_P         OS1              adc_os[1]         LVCMOS25      #N/A
 H16       LA11_P         OS2              adc_os[2]         LVCMOS25      #N/A
 C15       LA10_N         STBY             adc_stby          LVCMOS25      #N/A
 D15       LA09_N         RANGE_1          adc_range         LVCMOS25      #N/A
+C18       LA14_P         SERPAR           adc_serpar        LVCMOS25      #N/A
+C19       LA14_N         REFSEL           adc_refsel        LVCMOS25      #N/A

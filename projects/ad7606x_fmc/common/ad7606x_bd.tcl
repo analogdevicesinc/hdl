@@ -6,13 +6,11 @@
 # system level parameters
 set DEV_CONFIG $ad_project_params(DEV_CONFIG)
 set ADC_N_BITS [expr {$DEV_CONFIG == 2 ? 18 : 16}]
-set ADC_TO_DMA_N_BITS [expr {$ADC_N_BITS == 16 ? 16 : 32}]
-set SIMPLE_STATUS_CRC $ad_project_params(SIMPLE_STATUS_CRC)
+set ADC_CH_DW [expr {$ADC_N_BITS == 16 ? 16 : 32}]
 set EXT_CLK $ad_project_params(EXT_CLK)
-set TOTAL_N_BITS_DMA [expr {$ADC_TO_DMA_N_BITS*8}]
+set TOTAL_N_BITS_DMA [expr {$ADC_CH_DW*8}]
 
 puts "build parameters: DEV_CONFIG: $DEV_CONFIG"
-puts "build parameters: SIMPLE_STATUS_CRC: $SIMPLE_STATUS_CRC"
 puts "build parameters: EXT_CLK: $EXT_CLK"
 
 # data, read and write lines
@@ -35,8 +33,7 @@ create_bd_port -dir I rx_first_data
 ad_ip_instance axi_ad7606x axi_ad7606x
 ad_ip_parameter axi_ad7606x CONFIG.DEV_CONFIG $DEV_CONFIG
 ad_ip_parameter axi_ad7606x CONFIG.ADC_N_BITS $ADC_N_BITS
-ad_ip_parameter axi_ad7606x CONFIG.ADC_TO_DMA_N_BITS $ADC_TO_DMA_N_BITS
-ad_ip_parameter axi_ad7606x CONFIG.ADC_READ_MODE $SIMPLE_STATUS_CRC
+ad_ip_parameter axi_ad7606x CONFIG.ADC_CH_DW $ADC_CH_DW
 ad_ip_parameter axi_ad7606x CONFIG.EXTERNAL_CLK $EXT_CLK
 
 ad_ip_instance axi_pwm_gen axi_pwm_gen
@@ -60,7 +57,7 @@ ad_ip_parameter axi_ad7606x_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 ad_ip_instance util_cpack2 ad7606x_adc_pack
 ad_ip_parameter ad7606x_adc_pack CONFIG.NUM_OF_CHANNELS 8
-ad_ip_parameter ad7606x_adc_pack CONFIG.SAMPLE_DATA_WIDTH $ADC_TO_DMA_N_BITS
+ad_ip_parameter ad7606x_adc_pack CONFIG.SAMPLE_DATA_WIDTH $ADC_CH_DW
 
 if {$EXT_CLK == 1} {
   # use Xilinx's clocking wizard in order to generate th clock from the CPU clock, this being then assigned to the adc_clk in the axi_ad7606x IP
