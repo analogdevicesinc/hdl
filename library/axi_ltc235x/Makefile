@@ -15,6 +15,7 @@ GENERIC_DEPS += ../common/up_xfer_cntrl.v
 GENERIC_DEPS += ../common/up_xfer_status.v
 GENERIC_DEPS += axi_ltc235x.v
 GENERIC_DEPS += axi_ltc235x_cmos.v
+GENERIC_DEPS += axi_ltc235x_lvds.v
 
 INTEL_DEPS += ../intel/common/up_clock_mon_constr.sdc
 INTEL_DEPS += ../intel/common/up_rst_constr.sdc

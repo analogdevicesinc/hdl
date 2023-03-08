@@ -116,17 +116,10 @@ module system_top (
   output          pd,
   output          cs_n,
 
-  input           sdo_0,
-  input           sdo_1,
-  input           sdo_2,
-  input           sdo_3,
-  input           sdo_4,
-  input           sdo_5,
-  input           sdo_6,
-  input           sdo_7,
+  output          sdi,
   output          scki,
   input           scko,
-  output          sdi
+  input   [ 7:0]  sdo
 );
 
   // internal signals
@@ -232,16 +225,9 @@ module system_top (
     .axi_ltc235x_device_if_pd (pd),
     .axi_ltc235x_device_if_cs_n (cs_n),
     .axi_ltc235x_cnv_if_pwm_0(cnv),
+    .axi_ltc235x_device_if_sdo (sdo),
     .axi_ltc235x_device_if_scki (scki),
     .axi_ltc235x_device_if_scko (scko),
-    .axi_ltc235x_device_if_sdi (sdi),
-    .axi_ltc235x_device_if_sdo_0 (sdo_0),
-    .axi_ltc235x_device_if_sdo_1 (sdo_1),
-    .axi_ltc235x_device_if_sdo_2 (sdo_2),
-    .axi_ltc235x_device_if_sdo_3 (sdo_3),
-    .axi_ltc235x_device_if_sdo_4 (sdo_4),
-    .axi_ltc235x_device_if_sdo_5 (sdo_5),
-    .axi_ltc235x_device_if_sdo_6 (sdo_6),
-    .axi_ltc235x_device_if_sdo_7 (sdo_7));
+    .axi_ltc235x_device_if_sdi (sdi));
 
 endmodule
