@@ -39,9 +39,8 @@ module axi_ad7606x #(
 
   parameter       ID = 0,
   parameter       DEV_CONFIG = 0,
-  parameter       ADC_TO_DMA_N_BITS = 16,
+  parameter       ADC_CH_DW = 16,
   parameter       ADC_N_BITS = 16,
-  parameter       ADC_READ_MODE = 0,
   parameter       EXTERNAL_CLK = 0
 ) (
 
@@ -88,14 +87,14 @@ module axi_ad7606x #(
   output                  adc_clk,
 
   output                  adc_valid,
-  output [ADC_TO_DMA_N_BITS-1:0] adc_data_0,
-  output [ADC_TO_DMA_N_BITS-1:0] adc_data_1,
-  output [ADC_TO_DMA_N_BITS-1:0] adc_data_2,
-  output [ADC_TO_DMA_N_BITS-1:0] adc_data_3,
-  output [ADC_TO_DMA_N_BITS-1:0] adc_data_4,
-  output [ADC_TO_DMA_N_BITS-1:0] adc_data_5,
-  output [ADC_TO_DMA_N_BITS-1:0] adc_data_6,
-  output [ADC_TO_DMA_N_BITS-1:0] adc_data_7,
+  output [ADC_CH_DW-1:0]  adc_data_0,
+  output [ADC_CH_DW-1:0]  adc_data_1,
+  output [ADC_CH_DW-1:0]  adc_data_2,
+  output [ADC_CH_DW-1:0]  adc_data_3,
+  output [ADC_CH_DW-1:0]  adc_data_4,
+  output [ADC_CH_DW-1:0]  adc_data_5,
+  output [ADC_CH_DW-1:0]  adc_data_6,
+  output [ADC_CH_DW-1:0]  adc_data_7,
   output                  adc_enable_0,
   output                  adc_enable_1,
   output                  adc_enable_2,
@@ -108,6 +107,8 @@ module axi_ad7606x #(
 );
 
   localparam     [31:0]             RD_RAW_CAP = 32'h2000;
+  localparam                        AD7606B = 1'b0;
+  localparam                        AD7606C_16 = 1'b1;
 
   // internal registers
 
@@ -134,6 +135,8 @@ module axi_ad7606x #(
   wire    [15:0]                    adc_crc;
   wire    [15:0]                    adc_crc_res;
   wire                              adc_crc_err;
+  wire                              adc_mode_en;
+  wire    [ 7:0]                    adc_custom_control;
 
   wire                              adc_dfmt_enable_s[0:7];
   wire                              adc_dfmt_type_s[0:7];
@@ -143,7 +146,7 @@ module axi_ad7606x #(
   wire    [ 7:0]                    adc_enable;
   wire                              adc_reset_s;
 
-  wire    [(8*ADC_TO_DMA_N_BITS)-1:0]      dma_data;
+  wire    [(8*ADC_CH_DW)-1:0]       dma_data;
   wire                              dma_dvalid;
 
   wire                              up_clk;
@@ -284,13 +287,13 @@ module axi_ad7606x #(
     for (k = 0;k < 8;k = k + 1) begin
       ad_datafmt #(
         .DATA_WIDTH (ADC_N_BITS),
-        .BITS_PER_SAMPLE (ADC_TO_DMA_N_BITS)
+        .BITS_PER_SAMPLE (ADC_CH_DW)
       ) i_datafmt (
         .clk (adc_clk),
         .valid (1'b1),
         .data (adc_data_s[k*ADC_N_BITS+(ADC_N_BITS-1):k*ADC_N_BITS]),
         .valid_out (dma_dvalid),
-        .data_out (dma_data[k*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):k*ADC_TO_DMA_N_BITS]),
+        .data_out (dma_data[k*ADC_CH_DW+(ADC_CH_DW-1):k*ADC_CH_DW]),
         .dfmt_enable (adc_dfmt_enable_s[k]),
         .dfmt_type (adc_dfmt_type_s[k]),
         .dfmt_se (adc_dfmt_se_s[k]));
@@ -298,10 +301,8 @@ module axi_ad7606x #(
   endgenerate
 
   generate
-    if (DEV_CONFIG == 0 || DEV_CONFIG == 1) begin
-      axi_ad7606x_16b_pif #(
-        .ADC_READ_MODE (ADC_READ_MODE)
-      ) i_ad7606_parallel_interface (
+    if (DEV_CONFIG == AD7606B || DEV_CONFIG == AD7606C_16) begin
+      axi_ad7606x_16b_pif i_ad7606_parallel_interface (
         .cs_n (rx_cs_n),
         .db_o (rx_db_o),
         .db_i (rx_db_i),
@@ -335,13 +336,13 @@ module axi_ad7606x #(
         .rstn (up_rstn),
         .adc_config_ctrl (adc_config_ctrl_s),
         .adc_ctrl_status (adc_ctrl_status_s),
+        .adc_mode_en (adc_mode_en),
+        .adc_custom_control (adc_custom_control),
         .wr_data (wr_data_s[15:0]),
         .rd_data (rd_data_s),
         .rd_valid (rd_valid_s));
     end else begin
-      axi_ad7606x_18b_pif #(
-        .ADC_READ_MODE (ADC_READ_MODE)
-      ) i_ad7606_parallel_interface (
+      axi_ad7606x_18b_pif i_ad7606_parallel_interface (
         .cs_n (rx_cs_n),
         .db_o (rx_db_o),
         .db_i (rx_db_i),
@@ -375,6 +376,8 @@ module axi_ad7606x #(
         .rstn (up_rstn),
         .adc_config_ctrl (adc_config_ctrl_s),
         .adc_ctrl_status (adc_ctrl_status_s),
+        .adc_mode_en (adc_mode_en),
+        .adc_custom_control (adc_custom_control),
         .wr_data (wr_data_s[15:0]),
         .rd_data (rd_data_s),
         .rd_valid (rd_valid_s));
@@ -382,14 +385,14 @@ module axi_ad7606x #(
   endgenerate
 
   assign adc_data_s = {adc_data_0_s,adc_data_1_s,adc_data_2_s,adc_data_3_s,adc_data_4_s,adc_data_5_s,adc_data_6_s,adc_data_7_s};
-  assign adc_data_7 = dma_data[0*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):0*ADC_TO_DMA_N_BITS];
-  assign adc_data_6 = dma_data[1*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):1*ADC_TO_DMA_N_BITS];
-  assign adc_data_5 = dma_data[2*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):2*ADC_TO_DMA_N_BITS];
-  assign adc_data_4 = dma_data[3*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):3*ADC_TO_DMA_N_BITS];
-  assign adc_data_3 = dma_data[4*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):4*ADC_TO_DMA_N_BITS];
-  assign adc_data_2 = dma_data[5*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):5*ADC_TO_DMA_N_BITS];
-  assign adc_data_1 = dma_data[6*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):6*ADC_TO_DMA_N_BITS];
-  assign adc_data_0 = dma_data[7*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):7*ADC_TO_DMA_N_BITS];
+  assign adc_data_7 = dma_data[0*ADC_CH_DW+(ADC_CH_DW-1):0*ADC_CH_DW];
+  assign adc_data_6 = dma_data[1*ADC_CH_DW+(ADC_CH_DW-1):1*ADC_CH_DW];
+  assign adc_data_5 = dma_data[2*ADC_CH_DW+(ADC_CH_DW-1):2*ADC_CH_DW];
+  assign adc_data_4 = dma_data[3*ADC_CH_DW+(ADC_CH_DW-1):3*ADC_CH_DW];
+  assign adc_data_3 = dma_data[4*ADC_CH_DW+(ADC_CH_DW-1):4*ADC_CH_DW];
+  assign adc_data_2 = dma_data[5*ADC_CH_DW+(ADC_CH_DW-1):5*ADC_CH_DW];
+  assign adc_data_1 = dma_data[6*ADC_CH_DW+(ADC_CH_DW-1):6*ADC_CH_DW];
+  assign adc_data_0 = dma_data[7*ADC_CH_DW+(ADC_CH_DW-1):7*ADC_CH_DW];
 
   up_adc_common #(
     .ID (ID),
@@ -412,8 +415,8 @@ module axi_ad7606x #(
     .adc_ext_sync_disarm (),
     .adc_ext_sync_manual_req (),
     .adc_num_lanes (),
-    .adc_custom_control (),
-    .adc_crc_enable (),
+    .adc_custom_control (adc_custom_control),
+    .adc_crc_enable (adc_mode_en),
     .adc_sdr_ddr_n (),
     .adc_symb_op (),
     .adc_symb_8_16b (),

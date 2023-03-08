@@ -93,22 +93,6 @@ set_property -dict [list \
   } \
 ] [ipx::get_user_parameters DEV_CONFIG -of_objects $cc]
 
-ipgui::add_param -name "ADC_READ_MODE" -component $cc
-set_property -dict [list \
-  "widget" "comboBox" \
-  "display_name" "ADC Read Mode Selection" \
-] [ipgui::get_guiparamspec -name "ADC_READ_MODE" -component $cc]
-
-set_property -dict [list \
-  "value_validation_type" "pairs" \
-  "value_validation_pairs" { \
-    "SIMPLE" "0" \
-    "STATUS_HEADER" "1" \
-    "CRC_ENABLED" "2" \
-    "CRC_STATUS" "3" \
-  } \
-] [ipx::get_user_parameters ADC_READ_MODE -of_objects $cc]
-
 adi_add_auto_fpga_spec_params
 
 ## save the modifications
