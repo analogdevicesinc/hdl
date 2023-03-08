@@ -38,7 +38,6 @@
 module axi_ltc235x_lvds #(
   parameter NUM_CHANNELS = 8, // 8 for 2358, 4 for 2357, 2 for 2353
   parameter DATA_WIDTH = 18  // 18 or 16
-  //parameter ACTIVE_LANE = 8'b1111_1111
 ) (
 
   input                   rst,
@@ -212,7 +211,6 @@ module axi_ltc235x_lvds #(
     scko_d <= scko;
     sdo_d <= sdo;
     if (scko != scko_d && scki != scki_d) begin
-    //if (scko != scko_d) begin
       adc_lane <= {adc_lane[BW_8-1:0], sdo_d};
     end
   end
@@ -360,7 +358,6 @@ module axi_ltc235x_lvds #(
       sdi_index <= 5'd23;
     end else begin
       if (scki != scki_d && sdi_index != 5'b11111) begin
-      //if (sdi_index != 5'b11111) begin
         sdi_index <= sdi_index - 5'b1;
       end
     end
