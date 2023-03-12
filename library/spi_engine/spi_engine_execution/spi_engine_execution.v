@@ -204,17 +204,21 @@ module spi_engine_execution #(
       word_length <= DATA_WIDTH;
       left_aligned <= 8'b0;
     end else if (exec_write_cmd == 1'b1) begin
-      if (cmd[9:8] == REG_CONFIG) begin
-        cpha <= cmd[0];
-        cpol <= cmd[1];
-        three_wire <= cmd[2];
-      end else if (cmd[9:8] == REG_CLK_DIV) begin
-        clk_div <= cmd[7:0];
-      end else if (cmd[9:8] == REG_WORD_LENGTH) begin
-        // the max value of this reg must be DATA_WIDTH
-        word_length <= cmd[7:0];
-        left_aligned <= DATA_WIDTH - cmd[7:0];
-      end
+      case (cmd[9:8])
+        REG_CONFIG : begin
+          cpha <= cmd[0];
+          cpol <= cmd[1];
+          three_wire <= cmd[2];
+        end
+        REG_CLK_DIV :
+          clk_div <= cmd[7:0];
+        REG_WORD_LENGTH : begin
+          // the max value of this reg must be DATA_WIDTH
+          word_length <= cmd[7:0];
+          left_aligned <= DATA_WIDTH - cmd[7:0];
+        end
+        default : begin end // Unused instr 2'b11
+      endcase
     end
   end
 
