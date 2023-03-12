@@ -257,36 +257,28 @@ module spi_engine_execution #(
   end
 
   always @(posedge clk) begin
-    if (resetn == 1'b0) begin
+    if (resetn == 1'b0)
       idle <= 1'b1;
-    end else begin
-      if (exec_transfer_cmd || exec_chipselect_cmd || exec_misc_cmd) begin
-        idle <= 1'b0;
-      end else begin
-        case (inst_d1)
-        CMD_TRANSFER: begin
-          if (transfer_active == 1'b0 && wait_for_io == 1'b0 && end_of_sdi_latch == 1'b1)
-            idle <= 1'b1;
-        end
-        CMD_CHIPSELECT: begin
-          if (cs_sleep_counter_compare)
-            idle <= 1'b1;
-        end
-        CMD_MISC: begin
-          case (cmd_d1[8])
-          MISC_SLEEP: begin
-            if (sleep_counter_compare)
-              idle <= 1'b1;
-          end
-          MISC_SYNC: begin
-            if (sync_ready)
-              idle <= 1'b1;
-          end
-          endcase
-        end
-        endcase
-      end
-    end
+    else if (exec_transfer_cmd || exec_chipselect_cmd || exec_misc_cmd)
+      idle <= 1'b0;
+    else if (
+      (
+        inst_d1 == CMD_TRANSFER &&
+        (~transfer_active && ~wait_for_io && end_of_sdi_latch)
+      ) || (
+        inst_d1 == CMD_CHIPSELECT &&
+        (cs_sleep_counter_compare)
+      ) || (
+        inst_d1 == CMD_MISC &&
+        (
+          (cmd_d1[8] == MISC_SLEEP && sleep_counter_compare) ||
+          (cmd_d1[8] == MISC_SYNC && sync_ready)
+        )
+      )
+    )
+      idle <= 1'b1;
+    else
+      idle <= idle;
   end
 
   always @(posedge clk) begin
