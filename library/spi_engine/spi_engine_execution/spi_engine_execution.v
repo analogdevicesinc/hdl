@@ -124,7 +124,7 @@ module spi_engine_execution #(
 
   reg [7:0] sdi_counter = 8'b0;
 
-  assign first_bit = ((bit_counter == 'h0) ||  (bit_counter == word_length));
+  assign first_bit = ((bit_counter == 'h0) || (bit_counter == word_length[BIT_COUNTER_WIDTH-1:0]));
 
   reg [15:0] cmd_d1;
 
@@ -248,7 +248,7 @@ module spi_engine_execution #(
     if (idle == 1'b1) begin
       counter <= 'h00;
     end else if (clk_div_last == 1'b1 && wait_for_io == 1'b0) begin
-      if (bit_counter == word_length) begin
+      if (bit_counter == word_length[BIT_COUNTER_WIDTH-1:0]) begin
           counter <= (counter & BIT_COUNTER_CLEAR) + (transfer_active ? 'h1 : 'h10) + BIT_COUNTER_CARRY;
       end else begin
         counter <= counter + (transfer_active ? 'h1 : 'h10);
@@ -291,7 +291,7 @@ module spi_engine_execution #(
 
   always @(posedge clk) begin
     if (resetn == 1'b0) begin
-      cs <= 'hff;
+      cs <= {NUM_OF_CS{1'b1}};
     end else if (cs_gen) begin
       cs <= cmd_d1[NUM_OF_CS-1:0];
     end
@@ -390,7 +390,7 @@ module spi_engine_execution #(
   // be latched at one of the next consecutive SCLK edge.
 
   always @(posedge clk) begin
-    trigger_rx_d <= {trigger_rx_d, trigger_rx};
+    trigger_rx_d <= (trigger_rx_d << 1 | {1'b0, trigger_rx});
   end
 
   assign trigger_rx_s = trigger_rx_d[SDI_DELAY+1];
@@ -542,7 +542,7 @@ module spi_engine_execution #(
           data_sdi_shift <= 0;
         end else begin
           if (trigger_rx_s == 1'b1) begin
-            data_sdi_shift <= {data_sdi_shift, sdi[i]};
+            data_sdi_shift <= (data_sdi_shift << 1 | {{DATA_WIDTH-1{1'b0}}, sdi[i]});
           end
         end
       end
@@ -577,7 +577,7 @@ module spi_engine_execution #(
   // end_of_word will signal the end of a transaction, pushing the command
   // stream execution to the next command. end_of_word in normal mode can be
   // generated using the global bit_counter
-  assign last_bit = bit_counter == word_length - 1;
+  assign last_bit = bit_counter == word_length[BIT_COUNTER_WIDTH-1:0] - 1;
   assign end_of_word = last_bit == 1'b1 && ntx_rx == 1'b1 && clk_div_last == 1'b1;
 
   always @(posedge clk) begin
