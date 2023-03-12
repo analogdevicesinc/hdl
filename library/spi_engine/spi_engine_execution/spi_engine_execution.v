@@ -101,7 +101,6 @@ module spi_engine_execution #(
   reg idle;
 
   reg [7:0] clk_div_counter = 'h00;
-  reg [7:0] clk_div_counter_next = 'h00;
   reg clk_div_last;
 
   reg [(BIT_COUNTER_WIDTH+8):0] counter = 'h00;
@@ -113,7 +112,6 @@ module spi_engine_execution #(
   wire ntx_rx = counter[0];
 
   reg trigger = 1'b0;
-  reg trigger_next = 1'b0;
   reg wait_for_io = 1'b0;
   reg transfer_active = 1'b0;
 
