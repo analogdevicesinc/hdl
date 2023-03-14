@@ -1,0 +1,3 @@
+[submodule "submodules/open5G_rx"]
+	path = submodules/open5G_rx
+	url = https://github.com/catkira/open5G_rx.git
