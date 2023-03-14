@@ -65,21 +65,25 @@ adi_ip_files open5G_rx [list \
   "hdl/verilog-axi/arbiter.v" \
   "open5G_rx_constr.ttcl" ]
 
-adi_ip_properties open5G_rx
-adi_ip_infer_mm_interfaces open5G_rx
+set_property top receiver [current_fileset]
+update_compile_order -fileset sources_1
+
+adi_ip_properties_lite open5G_rx
 adi_ip_ttcl open5G_rx "open5G_rx_constr.ttcl"
 
 set_property display_name "Open5G receiver" [ipx::current_core]
 set_property description "Open5G receiver" [ipx::current_core]
 
-ipx::add_bus_parameter ASSOCIATED_BUSIF [ipx::get_bus_interfaces clk_i \
-  -of_objects [ipx::current_core]]
-set_property value s_axi_if [ipx::get_bus_parameters ASSOCIATED_BUSIF \
-  -of_objects [ipx::get_bus_interfaces clk_i \
-  -of_objects [ipx::current_core]]]
+adi_add_bus "m_axis_out" "master" \
+	"xilinx.com:interface:axis_rtl:1.0" \
+	"xilinx.com:interface:axis:1.0" \
+	{
+		{"m_axis_out_tvalid" "TVALID"} \
+		{"m_axis_out_tdata"  "TDATA"} \
+	}
+adi_ip_infer_mm_interfaces open5G_rx
 
-ipx::infer_bus_interface clk_i xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
-
+adi_add_bus_clock "clk_i" "m_axis_out:s_axi_if" "reset_ni"
 
 ipx::create_xgui_files [ipx::current_core]
-ipx::save_core $cc
+ipx::save_core [ipx::current_core]
