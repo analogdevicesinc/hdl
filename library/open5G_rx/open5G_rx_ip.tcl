@@ -5,6 +5,8 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 global VIVADO_IP_LIBRARY
 
+exec python3 ../../submodules/open5G_rx/tools/generate_FFT_demod_tap_file.py --NFFT=8 --CP_LEN=18 --CP_ADVANCE=9
+
 adi_ip_create open5G_rx
 adi_ip_files open5G_rx [list \
   "hdl/receiver.sv" \
