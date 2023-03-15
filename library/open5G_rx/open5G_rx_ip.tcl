@@ -63,6 +63,7 @@ adi_ip_files open5G_rx [list \
   "hdl/axil_interconnect_wrap_1x4.v" \
   "hdl/verilog-axi/axil_interconnect.v" \
   "hdl/verilog-axi/arbiter.v" \
+  "hdl/verilog-axi/priority_encoder.v" \
   "open5G_rx_constr.ttcl" ]
 
 set_property top receiver [current_fileset]
