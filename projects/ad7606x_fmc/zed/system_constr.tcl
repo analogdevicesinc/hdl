@@ -65,6 +65,7 @@ switch $INTF {
     set_property -dict {PACKAGE_PIN N22     IOSTANDARD LVCMOS25} [get_ports ad7606_spi_sdo]     ; ## G09 FMC_LPC_LA03_P
     set_property -dict {PACKAGE_PIN M21     IOSTANDARD LVCMOS25} [get_ports ad7606_spi_cs]      ; ## H10 FMC_LPC_LA04_P
     set_property -dict {PACKAGE_PIN R19     IOSTANDARD LVCMOS25} [get_ports adc_cnvst_n]        ; ## C14 FMC_LPC_LA10_P
+    set_property -dict {PACKAGE_PIN K18     IOSTANDARD LVCMOS25} [get_ports adc_cnvst_n]        ; ## D12 FMC_LPC_LA05_N
     
     # rename auto-generated clock for SPIEngine to spi_clk - 160MHz
     # NOTE: clk_fpga_0 is the first PL fabric clock, also called $sys_cpu_clk
