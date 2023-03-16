@@ -5,9 +5,10 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 global VIVADO_IP_LIBRARY
 
-exec python3 ../../submodules/open5G_rx/tools/generate_FFT_demod_tap_file.py --NFFT=8 --CP_LEN=18 --CP_ADVANCE=9
+exec python3 ../../submodules/open5G_rx/tools/generate_FFT_demod_tap_file.py --NFFT=8 --CP_LEN=18 --CP_ADVANCE=9 --OUT_DW=16
 
 adi_ip_create open5G_rx
+set_property part xc7z010clg400-1 [current_project]
 set proj_fileset [get_filesets sources_1]
 add_files -norecurse -scan_for_includes -fileset $proj_fileset [list \
   "hdl/receiver.sv" \
@@ -72,10 +73,13 @@ set_property top receiver $proj_fileset
 update_compile_order -fileset sources_1
 
 adi_ip_properties_lite open5G_rx
-adi_ip_ttcl open5G_rx "open5G_rx_constr.ttcl"
-
 set_property display_name "Open5G receiver" [ipx::current_core]
 set_property description "Open5G receiver" [ipx::current_core]
+adi_ip_ttcl open5G_rx "open5G_rx_constr.ttcl"
+
+set project_dir [get_property DIRECTORY [current_project]]/
+set_property value $project_dir [ipx::get_user_parameters TAP_FILE_PATH -of_objects [ipx::current_core]]
+set_property value $project_dir [ipx::get_hdl_parameters TAP_FILE_PATH -of_objects [ipx::current_core]]
 
 adi_add_bus "s_axis_in" "slave" \
 	"xilinx.com:interface:axis_rtl:1.0" \
