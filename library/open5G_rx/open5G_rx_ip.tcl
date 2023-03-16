@@ -8,7 +8,8 @@ global VIVADO_IP_LIBRARY
 exec python3 ../../submodules/open5G_rx/tools/generate_FFT_demod_tap_file.py --NFFT=8 --CP_LEN=18 --CP_ADVANCE=9
 
 adi_ip_create open5G_rx
-adi_ip_files open5G_rx [list \
+set proj_fileset [get_filesets sources_1]
+add_files -norecurse -scan_for_includes -fileset $proj_fileset [list \
   "hdl/receiver.sv" \
   "hdl/dot_product.sv" \
   "hdl/Peak_detector.sv" \
@@ -65,10 +66,9 @@ adi_ip_files open5G_rx [list \
   "hdl/axil_interconnect_wrap_1x4.v" \
   "hdl/verilog-axi/axil_interconnect.v" \
   "hdl/verilog-axi/arbiter.v" \
-  "hdl/verilog-axi/priority_encoder.v" \
-  "open5G_rx_constr.ttcl" ]
+  "hdl/verilog-axi/priority_encoder.v"]
 
-set_property top receiver [current_fileset]
+set_property top receiver $proj_fileset
 update_compile_order -fileset sources_1
 
 adi_ip_properties_lite open5G_rx
@@ -76,6 +76,15 @@ adi_ip_ttcl open5G_rx "open5G_rx_constr.ttcl"
 
 set_property display_name "Open5G receiver" [ipx::current_core]
 set_property description "Open5G receiver" [ipx::current_core]
+
+adi_add_bus "s_axis_in" "slave" \
+	"xilinx.com:interface:axis_rtl:1.0" \
+	"xilinx.com:interface:axis:1.0" \
+	{
+		{"s_axis_in_tvalid" "TVALID"} \
+		{"s_axis_in_tdata"  "TDATA"} \
+	}
+adi_add_bus_clock "sample_clk_i" "s_axis_in"
 
 adi_add_bus "m_axis_out" "master" \
 	"xilinx.com:interface:axis_rtl:1.0" \
