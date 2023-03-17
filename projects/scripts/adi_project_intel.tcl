@@ -24,10 +24,10 @@ proc adi_project {project_name {parameter_list {}}} {
 
   if {![info exists ::env(ADI_PROJECT_DIR)]} {
     set actual_project_name $project_name
-    set ad_project_dir ""
+    set ad_project_dir "."
   } else {
     set actual_project_name "$::env(ADI_PROJECT_DIR)${project_name}"
-    set ad_project_dir $::env(ADI_PROJECT_DIR)
+    set ad_project_dir [file normalize $::env(ADI_PROJECT_DIR)]
   }
 
   # check $ALT_NIOS_MMU_ENABLED environment variables
@@ -63,25 +63,25 @@ proc adi_project {project_name {parameter_list {}}} {
   if [regexp "_c5soc" $project_name] {
     set family "Cyclone V"
     set device 5CSXFC6D6F31C8ES
-    set system_qip_file ${ad_project_dir}system_bd/synthesis/system_bd.qip
+    set system_qip_file ${ad_project_dir}/system_bd/synthesis/system_bd.qip
   }
 
   if [regexp "_de10nano" $project_name] {
     set family "Cyclone V"
     set device 5CSEBA6U23I7DK
-    set system_qip_file ${ad_project_dir}system_bd/synthesis/system_bd.qip
+    set system_qip_file ${ad_project_dir}/system_bd/synthesis/system_bd.qip
   }
 
   if [regexp "_a5soc" $project_name] {
     set family "Arria V"
     set device 5ASTFD5K3F40I3ES
-    set system_qip_file ${ad_project_dir}system_bd/synthesis/system_bd.qip
+    set system_qip_file ${ad_project_dir}/system_bd/synthesis/system_bd.qip
   }
 
   if [regexp "_a5gt" $project_name] {
     set family "Arria V"
     set device 5AGTFD7K3F40I3
-    set system_qip_file ${ad_project_dir}system_bd/synthesis/system_bd.qip
+    set system_qip_file ${ad_project_dir}/system_bd/synthesis/system_bd.qip
   }
 
   # version check
@@ -141,7 +141,7 @@ proc adi_project {project_name {parameter_list {}}} {
     puts $QFILE "set ad_ghdl_dir $ad_ghdl_dir"
   }
   if {[info exists ::env(ADI_PROJECT_DIR)]} {
-    puts $QFILE "set ad_project_dir $::env(ADI_PROJECT_DIR)"
+    puts $QFILE "set ad_project_dir $ad_project_dir"
   }
   puts $QFILE "package require qsys"
   puts $QFILE "set_module_property NAME {system_bd}"
