@@ -5,7 +5,16 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 global VIVADO_IP_LIBRARY
 
+set python_home $::env(PYTHONHOME)
+set python_path $::env(PYTHPATH)
+set ::env(PYTHONHOME) ""
+set ::env(PYTHONPATH) ""
 exec python3 ../../submodules/open5G_rx/tools/generate_FFT_demod_tap_file.py --NFFT=8 --CP_LEN=18 --CP_ADVANCE=9 --OUT_DW=16
+exec python3 ../../submodules/open5G_rx/tools/generate_PSS_tap_file.py --PSS_LEN=128 --TAP_DW=32 --N_id_2=0
+exec python3 ../../submodules/open5G_rx/tools/generate_PSS_tap_file.py --PSS_LEN=128 --TAP_DW=32 --N_id_2=1
+exec python3 ../../submodules/open5G_rx/tools/generate_PSS_tap_file.py --PSS_LEN=128 --TAP_DW=32 --N_id_2=2
+set ::env(PYTHONHOME) $python_home
+set ::env(PYTHONPATH) $python_path
 
 adi_ip_create open5G_rx
 set_property part xc7z010clg400-1 [current_project]
