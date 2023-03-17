@@ -36,8 +36,9 @@
 `timescale 1ns/100ps
 
 module axi_ltc235x_lvds #(
-  parameter NUM_CHANNELS = 8, // 8 for 2358, 4 for 2357, 2 for 2353
-  parameter DATA_WIDTH = 18  // 18 or 16
+  parameter LTC235X_FAMILY = 0,
+  parameter NUM_CHANNELS = 8,	// 8 for 2358, 4 for 2357, 2 for 2353
+  parameter DATA_WIDTH = 18	// 18 or 16 based on -18/-16
 ) (
 
   input                   rst,
@@ -152,6 +153,9 @@ module axi_ltc235x_lvds #(
 
   wire                acquire_data;
 
+  wire        [DATA_WIDTH-1:0] adc_data_raw_s [7:0];
+  wire        [31:0]  adc_data_sign_s [7:0];
+  wire        [31:0]  adc_data_zero_s [7:0];
   wire        [31:0]  adc_data_s [7:0];
   wire        [ 2:0]  adc_ch_id_s [7:0];
   wire        [ 2:0]  adc_softspan_s [7:0];
@@ -279,8 +283,19 @@ module axi_ltc235x_lvds #(
   genvar i;
   generate
     for (i=0; i < 8; i=i+1) begin: format
-      assign adc_data_s[i] = (adc_softspan_s[i] == 3'b0)? 32'h0 : (adc_softspan_s[i][1])? {{14{adc_data_store[i][23]}}, adc_data_store[i][23:6]} : {14'b0, adc_data_store[i][23:6]};
-      assign adc_ch_id_s[i] = adc_data_store[i][5:3];
+      assign adc_data_raw_s[i] = adc_data_store[i][BW:DW-DATA_WIDTH];
+      assign adc_data_sign_s[i] = {{(32-DATA_WIDTH){adc_data_raw_s[i][DATA_WIDTH-1]}}, adc_data_raw_s[i]};
+      assign adc_data_zero_s[i] = {{(32-DATA_WIDTH){1'b0}}, adc_data_raw_s[i]};
+      assign adc_data_s[i] =  (adc_softspan_s[i] == 3'b0)?  32'h0               :
+                              (adc_softspan_s[i][1])?       adc_data_sign_s[i]  :
+                                                            adc_data_zero_s[i]  ;
+      if (NUM_CHANNELS == 8) begin
+        assign adc_ch_id_s[i] = adc_data_store[i][5:3];
+      end else if (NUM_CHANNELS == 4) begin
+        assign adc_ch_id_s[i] = {1'b0, adc_data_store[i][4:3]};
+      end else begin
+        assign adc_ch_id_s[i] = {2'b0, adc_data_store[i][3]};
+      end
       assign adc_softspan_s[i] = adc_data_store[i][2:0];
     end
   endgenerate

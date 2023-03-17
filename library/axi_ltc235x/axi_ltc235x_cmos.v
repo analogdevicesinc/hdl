@@ -36,9 +36,10 @@
 `timescale 1ns/100ps
 
 module axi_ltc235x_cmos #(
-  parameter NUM_CHANNELS = 8, // 8 for 2358, 4 for 2357, 2 for 2353
-  parameter DATA_WIDTH = 18,  // 18 or 16
-  parameter ACTIVE_LANE = 8'b1111_1111
+  parameter ACTIVE_LANES = 8'b1111_1111,
+  parameter LTC235X_FAMILY = 0,
+  parameter NUM_CHANNELS = 8,	// 8 for 2358, 4 for 2357, 2 for 2353
+  parameter DATA_WIDTH = 18	// 18 or 16 based on -18/-16
 ) (
 
   input                   rst,
@@ -162,6 +163,9 @@ module axi_ltc235x_cmos #(
 
   wire                acquire_data;
 
+  wire        [17:0]  adc_data_raw_s [7:0];
+  wire        [31:0]  adc_data_sign_s [7:0];
+  wire        [31:0]  adc_data_zero_s [7:0];
   wire        [31:0]  adc_data_s [7:0];
   wire        [ 2:0]  adc_ch_id_s [7:0];
   wire        [ 2:0]  adc_softspan_s [7:0];
@@ -305,14 +309,14 @@ module axi_ltc235x_cmos #(
       lane_5_ch <= lane_5_ch + 3'd1;
       lane_6_ch <= lane_6_ch + 3'd1;
       lane_7_ch <= lane_7_ch + 3'd1;
-      ch_data_lock[lane_0_ch] <= ACTIVE_LANE[0] ? 1'b1 : ch_data_lock[lane_0_ch];
-      ch_data_lock[lane_1_ch] <= ACTIVE_LANE[1] ? 1'b1 : ch_data_lock[lane_1_ch];
-      ch_data_lock[lane_2_ch] <= ACTIVE_LANE[2] ? 1'b1 : ch_data_lock[lane_2_ch];
-      ch_data_lock[lane_3_ch] <= ACTIVE_LANE[3] ? 1'b1 : ch_data_lock[lane_3_ch];
-      ch_data_lock[lane_4_ch] <= ACTIVE_LANE[4] ? 1'b1 : ch_data_lock[lane_4_ch];
-      ch_data_lock[lane_5_ch] <= ACTIVE_LANE[5] ? 1'b1 : ch_data_lock[lane_5_ch];
-      ch_data_lock[lane_6_ch] <= ACTIVE_LANE[6] ? 1'b1 : ch_data_lock[lane_6_ch];
-      ch_data_lock[lane_7_ch] <= ACTIVE_LANE[7] ? 1'b1 : ch_data_lock[lane_7_ch];
+      ch_data_lock[lane_0_ch] <= ACTIVE_LANES[0] ? 1'b1 : ch_data_lock[lane_0_ch];
+      ch_data_lock[lane_1_ch] <= ACTIVE_LANES[1] ? 1'b1 : ch_data_lock[lane_1_ch];
+      ch_data_lock[lane_2_ch] <= ACTIVE_LANES[2] ? 1'b1 : ch_data_lock[lane_2_ch];
+      ch_data_lock[lane_3_ch] <= ACTIVE_LANES[3] ? 1'b1 : ch_data_lock[lane_3_ch];
+      ch_data_lock[lane_4_ch] <= ACTIVE_LANES[4] ? 1'b1 : ch_data_lock[lane_4_ch];
+      ch_data_lock[lane_5_ch] <= ACTIVE_LANES[5] ? 1'b1 : ch_data_lock[lane_5_ch];
+      ch_data_lock[lane_6_ch] <= ACTIVE_LANES[6] ? 1'b1 : ch_data_lock[lane_6_ch];
+      ch_data_lock[lane_7_ch] <= ACTIVE_LANES[7] ? 1'b1 : ch_data_lock[lane_7_ch];
     end
   end
 
@@ -346,14 +350,14 @@ module axi_ltc235x_cmos #(
       adc_lane6_shift_d <= 4'd0;
       adc_lane7_shift_d <= 4'd0;
     end else begin
-      adc_lane0_shift <= {ACTIVE_LANE[0], lane_0_ch};
-      adc_lane1_shift <= {ACTIVE_LANE[1], lane_1_ch};
-      adc_lane2_shift <= {ACTIVE_LANE[2], lane_2_ch};
-      adc_lane3_shift <= {ACTIVE_LANE[3], lane_3_ch};
-      adc_lane4_shift <= {ACTIVE_LANE[4], lane_4_ch};
-      adc_lane5_shift <= {ACTIVE_LANE[5], lane_5_ch};
-      adc_lane6_shift <= {ACTIVE_LANE[6], lane_6_ch};
-      adc_lane7_shift <= {ACTIVE_LANE[7], lane_7_ch};
+      adc_lane0_shift <= {ACTIVE_LANES[0], lane_0_ch};
+      adc_lane1_shift <= {ACTIVE_LANES[1], lane_1_ch};
+      adc_lane2_shift <= {ACTIVE_LANES[2], lane_2_ch};
+      adc_lane3_shift <= {ACTIVE_LANES[3], lane_3_ch};
+      adc_lane4_shift <= {ACTIVE_LANES[4], lane_4_ch};
+      adc_lane5_shift <= {ACTIVE_LANES[5], lane_5_ch};
+      adc_lane6_shift <= {ACTIVE_LANES[6], lane_6_ch};
+      adc_lane7_shift <= {ACTIVE_LANES[7], lane_7_ch};
       adc_lane0_shift_d <= adc_lane0_shift;
       adc_lane1_shift_d <= adc_lane1_shift;
       adc_lane2_shift_d <= adc_lane2_shift;
@@ -411,8 +415,19 @@ module axi_ltc235x_cmos #(
   genvar i;
   generate
     for (i=0; i < 8; i=i+1) begin: format
-      assign adc_data_s[i] = (adc_softspan_s[i] == 3'b0)? 32'h0 : (adc_softspan_s[i][1])? {{14{adc_data_store[i][23]}}, adc_data_store[i][23:6]} : {14'b0, adc_data_store[i][23:6]};
-      assign adc_ch_id_s[i] = adc_data_store[i][5:3];
+      assign adc_data_raw_s[i] = adc_data_store[i][BW:DW-DATA_WIDTH];
+      assign adc_data_sign_s[i] = {{(32-DATA_WIDTH){adc_data_raw_s[i][DATA_WIDTH-1]}}, adc_data_raw_s[i]};
+      assign adc_data_zero_s[i] = {{(32-DATA_WIDTH){1'b0}}, adc_data_raw_s[i]};
+      assign adc_data_s[i] =  (adc_softspan_s[i] == 3'b0)?  32'h0               :
+                              (adc_softspan_s[i][1])?       adc_data_sign_s[i]  :
+                                                            adc_data_zero_s[i]  ;
+      if (NUM_CHANNELS == 8) begin
+        assign adc_ch_id_s[i] = adc_data_store[i][5:3];
+      end else if (NUM_CHANNELS == 4) begin
+        assign adc_ch_id_s[i] = {1'b0, adc_data_store[i][4:3]};
+      end else begin
+        assign adc_ch_id_s[i] = {2'b0, adc_data_store[i][3]};
+      end
       assign adc_softspan_s[i] = adc_data_store[i][2:0];
     end
   endgenerate
