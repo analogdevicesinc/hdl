@@ -51,9 +51,10 @@ module axi_ltc235x #(
   parameter       LANE_5_ENABLE = 1,
   parameter       LANE_6_ENABLE = 1,
   parameter       LANE_7_ENABLE = 1,
-  parameter       NUM_CHANNELS = 8,	// 8 for 2358, 4 for 2357, 2 for 2353
-  parameter       DATA_WIDTH = 18,	// 18 or 16
-  parameter       EXTERNAL_CLK = 0
+  parameter       EXTERNAL_CLK = 0,
+  parameter       LTC235X_FAMILY = 0,
+  parameter       NUM_CHANNELS = 8,
+  parameter       DATA_WIDTH = 18
 ) (
 
   // physical data interface
@@ -204,7 +205,15 @@ module axi_ltc235x #(
   assign adc_enable_6 = adc_enable[6];
   assign adc_enable_7 = adc_enable[7];
 
-  assign softspan_24 = {softspan_3[7], softspan_3[6], softspan_3[5], softspan_3[4], softspan_3[3], softspan_3[2], softspan_3[1], softspan_3[0]};
+  generate
+    if (NUM_CHANNELS == 8) begin
+      assign softspan_24 = {softspan_3[7], softspan_3[6], softspan_3[5], softspan_3[4], softspan_3[3], softspan_3[2], softspan_3[1], softspan_3[0]};
+    end else if (NUM_CHANNELS == 4) begin
+      assign softspan_24 = {softspan_3[3], softspan_3[2], softspan_3[1], softspan_3[0], 12'b0};
+    end else begin
+      assign softspan_24 = {softspan_3[1], softspan_3[0], 18'b0};
+    end
+  endgenerate
 
   // processor read/write interface
 
@@ -238,6 +247,7 @@ module axi_ltc235x #(
 
     if (LVDS_CMOS_N == 1) begin
       axi_ltc235x_lvds #(
+        .LTC235X_FAMILY (LTC235X_FAMILY),
         .NUM_CHANNELS (NUM_CHANNELS),
         .DATA_WIDTH (DATA_WIDTH)
       ) i_ltc235x_lvds (
@@ -281,9 +291,10 @@ module axi_ltc235x #(
         .adc_valid (adc_valid));
     end else begin
       axi_ltc235x_cmos #(
+        .LTC235X_FAMILY (LTC235X_FAMILY),
+        .ACTIVE_LANES (ACTIVE_LANES),
         .NUM_CHANNELS (NUM_CHANNELS),
-        .DATA_WIDTH (DATA_WIDTH),
-        .ACTIVE_LANE (ACTIVE_LANES)
+        .DATA_WIDTH (DATA_WIDTH)
       ) i_ltc235x_cmos (
         .rst (adc_rst_s),
         .clk (adc_clk_s),
@@ -326,7 +337,7 @@ module axi_ltc235x #(
 
   generate
     genvar i;
-    for (i = 0; i < 8; i=i+1) begin : regmap_channels
+    for (i = 0; i < NUM_CHANNELS; i=i+1) begin : regmap_channels
       up_adc_channel #(
         .CHANNEL_ID(i)
       ) i_up_adc_channel (

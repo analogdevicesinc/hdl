@@ -1,19 +1,41 @@
 # LTC235x attributes
 
-#set ADC_LVDS_CMOS_N $ad_project_params(LVDS_CMOS_N)
-set LVDS_CMOS_N         1
+set LVDS_CMOS_N         ${ad_project_params(LVDS_CMOS_N)}
 set CHIP_SELECT_N       0
+set ADC_EXTERNAL_CLK    0
+set LTC235X_FAMILY      ${ad_project_params(LTC235X_FAMILY)}
 set ADC_LANE_0_ENABLE   1
 set ADC_LANE_1_ENABLE   1
-set ADC_LANE_2_ENABLE   1
-set ADC_LANE_3_ENABLE   1
-set ADC_LANE_4_ENABLE   1
-set ADC_LANE_5_ENABLE   1
-set ADC_LANE_6_ENABLE   1
-set ADC_LANE_7_ENABLE   1
-set ADC_NUM_CHANNELS    8
-set ADC_DATA_WIDTH      18
-set ADC_EXTERNAL_CLK    0
+if {$LTC235X_FAMILY <= 1} {
+    set ADC_NUM_CHANNELS 8
+    set ADC_LANE_2_ENABLE   1
+    set ADC_LANE_3_ENABLE   1
+    set ADC_LANE_4_ENABLE   1
+    set ADC_LANE_5_ENABLE   1
+    set ADC_LANE_6_ENABLE   1
+    set ADC_LANE_7_ENABLE   1
+} elseif {$LTC235X_FAMILY <= 3} {
+    set ADC_NUM_CHANNELS 4
+    set ADC_LANE_2_ENABLE   1
+    set ADC_LANE_3_ENABLE   1
+    set ADC_LANE_4_ENABLE   0
+    set ADC_LANE_5_ENABLE   0
+    set ADC_LANE_6_ENABLE   0
+    set ADC_LANE_7_ENABLE   0
+} else {
+    set ADC_NUM_CHANNELS 2
+    set ADC_LANE_2_ENABLE   0
+    set ADC_LANE_3_ENABLE   0
+    set ADC_LANE_4_ENABLE   0
+    set ADC_LANE_5_ENABLE   0
+    set ADC_LANE_6_ENABLE   0
+    set ADC_LANE_7_ENABLE   0
+}
+if {$LTC235X_FAMILY % 2 == 0} {
+    set ADC_DATA_WIDTH  18
+} else {
+    set ADC_DATA_WIDTH  16
+}
 
 # axi_ltc235x
 
@@ -28,9 +50,10 @@ set_instance_parameter_value axi_ltc235x {LANE_4_ENABLE} $ADC_LANE_4_ENABLE
 set_instance_parameter_value axi_ltc235x {LANE_5_ENABLE} $ADC_LANE_5_ENABLE
 set_instance_parameter_value axi_ltc235x {LANE_6_ENABLE} $ADC_LANE_6_ENABLE
 set_instance_parameter_value axi_ltc235x {LANE_7_ENABLE} $ADC_LANE_7_ENABLE
+set_instance_parameter_value axi_ltc235x {EXTERNAL_CLK} $ADC_EXTERNAL_CLK
+set_instance_parameter_value axi_ltc235x {LTC235X_FAMILY} $LTC235X_FAMILY
 set_instance_parameter_value axi_ltc235x {NUM_CHANNELS} $ADC_NUM_CHANNELS
 set_instance_parameter_value axi_ltc235x {DATA_WIDTH} $ADC_DATA_WIDTH
-set_instance_parameter_value axi_ltc235x {EXTERNAL_CLK} $ADC_EXTERNAL_CLK
 add_interface axi_ltc235x_device_if conduit end
 set_interface_property axi_ltc235x_device_if EXPORT_OF axi_ltc235x.device_if
 add_connection sys_clk.clk axi_ltc235x.if_external_clk
@@ -71,7 +94,13 @@ add_connection util_adc_pack.if_fifo_wr_overflow axi_ltc235x.if_adc_dovf
 
 add_instance axi_adc_dma axi_dmac
 set_instance_parameter_value axi_adc_dma {ID} {0}
-set_instance_parameter_value axi_adc_dma {DMA_DATA_WIDTH_SRC} {256}
+if {$ADC_NUM_CHANNELS == 8} {
+    set_instance_parameter_value axi_adc_dma {DMA_DATA_WIDTH_SRC} {256}
+} elseif {$ADC_NUM_CHANNELS == 4} {
+    set_instance_parameter_value axi_adc_dma {DMA_DATA_WIDTH_SRC} {128}
+} else {
+    set_instance_parameter_value axi_adc_dma {DMA_DATA_WIDTH_SRC} {64}
+}
 set_instance_parameter_value axi_adc_dma {DMA_DATA_WIDTH_DEST} {64}
 set_instance_parameter_value axi_adc_dma {DMA_2D_TRANSFER} {0}
 set_instance_parameter_value axi_adc_dma {AXI_SLICE_DEST} {0}
