@@ -49,6 +49,7 @@ ad_ip_parameter sys_mb CONFIG.C_ADDR_TAG_BITS 15
 ad_ip_parameter sys_mb CONFIG.C_CACHE_BYTE_SIZE 65536
 ad_ip_parameter sys_mb CONFIG.C_DCACHE_ADDR_TAG 15
 ad_ip_parameter sys_mb CONFIG.C_DCACHE_BYTE_SIZE 65536
+ad_ip_parameter sys_mb CONFIG.C_USE_BRANCH_TARGET_CACHE 1
 
 # instance: microblaze - local memory & bus
 
