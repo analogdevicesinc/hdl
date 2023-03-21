@@ -35,7 +35,11 @@
 
 `timescale 1ns/100ps
 
-module system_top (
+module system_top #(
+  parameter TX_JESD_L = 4,
+  parameter RX_JESD_L = 2,
+  parameter RX_OS_JESD_L = 2
+) (
 
   // clock and resets
 
@@ -132,8 +136,8 @@ module system_top (
 
   input             ref_clk0,
   input             ref_clk1,
-  input   [  3:0]   rx_serial_data,
-  output  [  3:0]   tx_serial_data,
+  input   [ 3:0]    rx_serial_data,
+  output  [ 3:0]    tx_serial_data,
   output            rx_sync,
   output            rx_os_sync,
   input             tx_sync,

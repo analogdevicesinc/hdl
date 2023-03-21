@@ -1,26 +1,29 @@
+set MAX_TX_NUM_OF_LANES 4
+set MAX_RX_NUM_OF_LANES 4
+set MAX_RX_OS_NUM_OF_LANES 2
 
 # TX parameters
-set TX_NUM_OF_LANES 4      ; # L
-set TX_NUM_OF_CONVERTERS 4 ; # M
-set TX_SAMPLE_WIDTH 16     ; # N/NP
+set TX_NUM_OF_LANES $ad_project_params(TX_JESD_L)      ; # L
+set TX_NUM_OF_CONVERTERS $ad_project_params(TX_JESD_M) ; # M
+set TX_SAMPLE_WIDTH 16                                 ; # N/NP
 
-set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 32 / \
+set TX_SAMPLES_PER_CHANNEL [expr $MAX_TX_NUM_OF_LANES * 32 / \
                                 ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)] ; # L * 32 / (M * N)
 
 # RX parameters
-set RX_NUM_OF_LANES 2      ; # L
-set RX_NUM_OF_CONVERTERS 4 ; # M
-set RX_SAMPLE_WIDTH 16     ; # N/NP
+set RX_NUM_OF_LANES $ad_project_params(RX_JESD_L)      ; # L
+set RX_NUM_OF_CONVERTERS $ad_project_params(RX_JESD_M) ; # M
+set RX_SAMPLE_WIDTH 16                                 ; # N/NP
 
-set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 32 / \
+set RX_SAMPLES_PER_CHANNEL [expr $MAX_RX_NUM_OF_LANES * 32 / \
                                 ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)] ; # L * 32 / (M * N)
 
 # RX Observation parameters
-set RX_OS_NUM_OF_LANES 2      ; # L
-set RX_OS_NUM_OF_CONVERTERS 2 ; # M
-set RX_OS_SAMPLE_WIDTH 16     ; # N/NP
+set RX_OS_NUM_OF_LANES $ad_project_params(RX_OS_JESD_L)      ; # L
+set RX_OS_NUM_OF_CONVERTERS $ad_project_params(RX_OS_JESD_M) ; # M
+set RX_OS_SAMPLE_WIDTH 16                                    ; # N/NP
 
-set RX_OS_SAMPLES_PER_CHANNEL [expr $RX_OS_NUM_OF_LANES * 32 / \
+set RX_OS_SAMPLES_PER_CHANNEL [expr $MAX_RX_OS_NUM_OF_LANES * 32 / \
                                    ($RX_OS_NUM_OF_CONVERTERS * $RX_OS_SAMPLE_WIDTH)] ; # L * 32 / (M * N)
 
 set dac_fifo_name avl_adrv9009_tx_fifo
@@ -39,8 +42,7 @@ set_instance_parameter_value adrv9009_tx_jesd204 {TX_OR_RX_N} {1}
 set_instance_parameter_value adrv9009_tx_jesd204 {SOFT_PCS} {true}
 set_instance_parameter_value adrv9009_tx_jesd204 {LANE_RATE} {2460}
 set_instance_parameter_value adrv9009_tx_jesd204 {REFCLK_FREQUENCY} {123}
-set_instance_parameter_value adrv9009_tx_jesd204 {NUM_OF_LANES} $TX_NUM_OF_LANES
-set_instance_parameter_value adrv9009_tx_jesd204 {LANE_MAP} {0 3 2 1}
+set_instance_parameter_value adrv9009_tx_jesd204 {NUM_OF_LANES} $MAX_TX_NUM_OF_LANES
 
 add_connection sys_clk.clk adrv9009_tx_jesd204.sys_clk
 add_connection sys_clk.clk_reset adrv9009_tx_jesd204.sys_resetn
@@ -61,7 +63,7 @@ set_instance_parameter_value adrv9009_rx_jesd204 {TX_OR_RX_N} {0}
 set_instance_parameter_value adrv9009_rx_jesd204 {SOFT_PCS} {true}
 set_instance_parameter_value adrv9009_rx_jesd204 {LANE_RATE} {4920}
 set_instance_parameter_value adrv9009_rx_jesd204 {REFCLK_FREQUENCY} {123}
-set_instance_parameter_value adrv9009_rx_jesd204 {NUM_OF_LANES} $RX_NUM_OF_LANES
+set_instance_parameter_value adrv9009_rx_jesd204 {NUM_OF_LANES} $MAX_RX_NUM_OF_LANES
 set_instance_parameter_value adrv9009_rx_jesd204 {INPUT_PIPELINE_STAGES} {1}
 
 add_connection sys_clk.clk adrv9009_rx_jesd204.sys_clk
@@ -83,7 +85,7 @@ set_instance_parameter_value adrv9009_rx_os_jesd204 {TX_OR_RX_N} {0}
 set_instance_parameter_value adrv9009_rx_os_jesd204 {SOFT_PCS} {true}
 set_instance_parameter_value adrv9009_rx_os_jesd204 {LANE_RATE} {4920}
 set_instance_parameter_value adrv9009_rx_os_jesd204 {REFCLK_FREQUENCY} {123}
-set_instance_parameter_value adrv9009_rx_os_jesd204 {NUM_OF_LANES} $RX_OS_NUM_OF_LANES
+set_instance_parameter_value adrv9009_rx_os_jesd204 {NUM_OF_LANES} $MAX_RX_OS_NUM_OF_LANES
 set_instance_parameter_value adrv9009_rx_os_jesd204 {INPUT_PIPELINE_STAGES} {1}
 
 add_connection sys_clk.clk adrv9009_rx_os_jesd204.sys_clk
@@ -102,14 +104,14 @@ set_interface_property rx_os_sync EXPORT_OF adrv9009_rx_os_jesd204.sync
 add_instance axi_adrv9009_tx ad_ip_jesd204_tpl_dac
 set_instance_parameter_value axi_adrv9009_tx {ID} {0}
 set_instance_parameter_value axi_adrv9009_tx {NUM_CHANNELS} $TX_NUM_OF_CONVERTERS
-set_instance_parameter_value axi_adrv9009_tx {NUM_LANES} $TX_NUM_OF_LANES
+set_instance_parameter_value axi_adrv9009_tx {NUM_LANES} $MAX_TX_NUM_OF_LANES
 set_instance_parameter_value axi_adrv9009_tx {BITS_PER_SAMPLE} $TX_SAMPLE_WIDTH
 set_instance_parameter_value axi_adrv9009_tx {CONVERTER_RESOLUTION} $TX_SAMPLE_WIDTH
 
 add_instance axi_adrv9009_rx ad_ip_jesd204_tpl_adc
 set_instance_parameter_value axi_adrv9009_rx {ID} {0}
 set_instance_parameter_value axi_adrv9009_rx {NUM_CHANNELS} $RX_NUM_OF_CONVERTERS
-set_instance_parameter_value axi_adrv9009_rx {NUM_LANES} $RX_NUM_OF_LANES
+set_instance_parameter_value axi_adrv9009_rx {NUM_LANES} $MAX_RX_NUM_OF_LANES
 set_instance_parameter_value axi_adrv9009_rx {BITS_PER_SAMPLE} $RX_SAMPLE_WIDTH
 set_instance_parameter_value axi_adrv9009_rx {CONVERTER_RESOLUTION} $RX_SAMPLE_WIDTH
 set_instance_parameter_value axi_adrv9009_rx {TWOS_COMPLEMENT} {1}
@@ -117,7 +119,7 @@ set_instance_parameter_value axi_adrv9009_rx {TWOS_COMPLEMENT} {1}
 add_instance axi_adrv9009_rx_os ad_ip_jesd204_tpl_adc
 set_instance_parameter_value axi_adrv9009_rx_os {ID} {1}
 set_instance_parameter_value axi_adrv9009_rx_os {NUM_CHANNELS} $RX_OS_NUM_OF_CONVERTERS
-set_instance_parameter_value axi_adrv9009_rx_os {NUM_LANES} $RX_OS_NUM_OF_LANES
+set_instance_parameter_value axi_adrv9009_rx_os {NUM_LANES} $MAX_RX_OS_NUM_OF_LANES
 set_instance_parameter_value axi_adrv9009_rx_os {BITS_PER_SAMPLE} $RX_OS_SAMPLE_WIDTH
 set_instance_parameter_value axi_adrv9009_rx_os {CONVERTER_RESOLUTION} $RX_OS_SAMPLE_WIDTH
 set_instance_parameter_value axi_adrv9009_rx_os {TWOS_COMPLEMENT} {1}
@@ -242,7 +244,7 @@ add_connection sys_dma_clk.clk_reset axi_adrv9009_rx_dma.m_dest_axi_reset
 
 add_instance axi_adrv9009_rx_os_dma axi_dmac
 set_instance_parameter_value axi_adrv9009_rx_os_dma {ID} {0}
-set_instance_parameter_value axi_adrv9009_rx_os_dma {DMA_DATA_WIDTH_SRC} [expr 32*$RX_OS_NUM_OF_LANES]
+set_instance_parameter_value axi_adrv9009_rx_os_dma {DMA_DATA_WIDTH_SRC} [expr 32*$MAX_RX_OS_NUM_OF_LANES]
 set_instance_parameter_value axi_adrv9009_rx_os_dma {DMA_DATA_WIDTH_DEST} {128}
 set_instance_parameter_value axi_adrv9009_rx_os_dma {DMA_LENGTH_WIDTH} {24}
 set_instance_parameter_value axi_adrv9009_rx_os_dma {DMA_2D_TRANSFER} {0}
@@ -275,20 +277,15 @@ add_interface adrv9009_gpio conduit end
 set_interface_property adrv9009_gpio EXPORT_OF avl_adrv9009_gpio.external_connection
 
 # reconfig sharing
-
 for {set i 0} {$i < 4} {incr i} {
   add_instance avl_adxcfg_${i} avl_adxcfg
   add_connection sys_clk.clk avl_adxcfg_${i}.rcfg_clk
   add_connection sys_clk.clk_reset avl_adxcfg_${i}.rcfg_reset_n
   add_connection avl_adxcfg_${i}.rcfg_m0 adrv9009_tx_jesd204.phy_reconfig_${i}
-
-  set_instance_parameter_value avl_adxcfg_${i} {ADDRESS_WIDTH} $xcvr_reconfig_addr_width
-
   if {$i < 2} {
     add_connection avl_adxcfg_${i}.rcfg_m1 adrv9009_rx_jesd204.phy_reconfig_${i}
-  } else {
-    set j [expr $i - 2]
-    add_connection avl_adxcfg_${i}.rcfg_m1 adrv9009_rx_os_jesd204.phy_reconfig_${j}
+  } else {  
+      add_connection avl_adxcfg_${i}.rcfg_m1 adrv9009_rx_os_jesd204.phy_reconfig_[expr $i - 2]
   }
 }
 
@@ -299,23 +296,31 @@ ad_cpu_interconnect 0x00024000 adrv9009_tx_jesd204.link_management
 ad_cpu_interconnect 0x00026000 adrv9009_tx_jesd204.link_pll_reconfig
 ad_cpu_interconnect 0x00028000 adrv9009_tx_jesd204.lane_pll_reconfig
 ad_cpu_interconnect 0x0002a000 avl_adxcfg_0.rcfg_s0
-ad_cpu_interconnect 0x0002c000 avl_adxcfg_1.rcfg_s0
-ad_cpu_interconnect 0x0002e000 avl_adxcfg_2.rcfg_s0
-ad_cpu_interconnect 0x00030000 avl_adxcfg_3.rcfg_s0
+if {$TX_NUM_OF_LANES >= 2} {
+    ad_cpu_interconnect 0x0002e000 avl_adxcfg_2.rcfg_s0
+  }
+if {$TX_NUM_OF_LANES == 4} {
+  ad_cpu_interconnect 0x0002c000 avl_adxcfg_1.rcfg_s0
+  ad_cpu_interconnect 0x00030000 avl_adxcfg_3.rcfg_s0
+}
 ad_cpu_interconnect 0x00032000 axi_adrv9009_tx_dma.s_axi
 
 ad_cpu_interconnect 0x00040000 adrv9009_rx_jesd204.link_reconfig
 ad_cpu_interconnect 0x00044000 adrv9009_rx_jesd204.link_management
 ad_cpu_interconnect 0x00046000 adrv9009_rx_jesd204.link_pll_reconfig
 ad_cpu_interconnect 0x00048000 avl_adxcfg_0.rcfg_s1
-ad_cpu_interconnect 0x0004a000 avl_adxcfg_1.rcfg_s1
+if {$RX_NUM_OF_LANES == 2} {
+  ad_cpu_interconnect 0x0004a000 avl_adxcfg_1.rcfg_s1
+}
 ad_cpu_interconnect 0x0004c000 axi_adrv9009_rx_dma.s_axi
 
 ad_cpu_interconnect 0x00050000 adrv9009_rx_os_jesd204.link_reconfig
 ad_cpu_interconnect 0x00054000 adrv9009_rx_os_jesd204.link_management
 ad_cpu_interconnect 0x00056000 adrv9009_rx_os_jesd204.link_pll_reconfig
 ad_cpu_interconnect 0x00058000 avl_adxcfg_2.rcfg_s1
-ad_cpu_interconnect 0x0005a000 avl_adxcfg_3.rcfg_s1
+if {$RX_OS_NUM_OF_LANES == 2} {
+  ad_cpu_interconnect 0x0005a000 avl_adxcfg_3.rcfg_s1
+}
 ad_cpu_interconnect 0x0005c000 axi_adrv9009_rx_os_dma.s_axi
 
 ad_cpu_interconnect 0x00060000 axi_adrv9009_rx.s_axi

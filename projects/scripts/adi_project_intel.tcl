@@ -230,7 +230,7 @@ proc adi_project {project_name {parameter_list {}}} {
 
   # set top level file parameters
   foreach {param value} $parameter_list {
-    set_parameter -name $param $value
+    set_parameter -name $param $value 
   }
 }
 

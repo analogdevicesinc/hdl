@@ -1,10 +1,21 @@
 source ../../../scripts/adi_env.tcl
 source ../../scripts/adi_project_intel.tcl
 
-adi_project adrv9009_a10soc
+adi_project adrv9009_a10soc [list \
+  TX_JESD_M       [get_env_param TX_JESD_M       4 ] \
+  TX_JESD_L       [get_env_param TX_JESD_L       4 ] \
+  RX_JESD_M       [get_env_param RX_JESD_M       4 ] \
+  RX_JESD_L       [get_env_param RX_JESD_L       2 ] \
+  RX_OS_JESD_M    [get_env_param RX_OS_JESD_M    2 ] \
+  RX_OS_JESD_L    [get_env_param RX_OS_JESD_L    2 ] \
+]
 
 source $ad_hdl_dir/projects/common/a10soc/a10soc_system_assign.tcl
 source $ad_hdl_dir/projects/common/a10soc/a10soc_plddr4_assign.tcl
+
+set TX_NUM_OF_LANES [get_env_param TX_JESD_L 4]       ; # L
+set RX_NUM_OF_LANES [get_env_param RX_JESD_L 2]       ; # L
+set RX_OS_NUM_OF_LANES [get_env_param RX_OS_JESD_L 2] ; # L
 
 # adrv9009
 
@@ -14,20 +25,29 @@ set_location_assignment PIN_R29   -to ref_clk1               ; ## B20  FMC_HPC_G
 set_location_assignment PIN_R28   -to "ref_clk1(n)"          ; ## B21  FMC_HPC_GBTCLK1_M2C_N
 set_location_assignment PIN_R33   -to rx_serial_data[0]      ; ## A02  FMC_HPC_DP1_M2C_P
 set_location_assignment PIN_R32   -to "rx_serial_data[0](n)" ; ## A03  FMC_HPC_DP1_M2C_N
-set_location_assignment PIN_P35   -to rx_serial_data[1]      ; ## A06  FMC_HPC_DP2_M2C_P
-set_location_assignment PIN_P34   -to "rx_serial_data[1](n)" ; ## A07  FMC_HPC_DP2_M2C_N
+if {$RX_NUM_OF_LANES == 2} {
+  set_location_assignment PIN_P35   -to rx_serial_data[1]      ; ## A06  FMC_HPC_DP2_M2C_P
+  set_location_assignment PIN_P34   -to "rx_serial_data[1](n)" ; ## A07  FMC_HPC_DP2_M2C_N
+} 
 set_location_assignment PIN_T31   -to rx_serial_data[2]      ; ## C06  FMC_HPC_DP0_M2C_P
 set_location_assignment PIN_T30   -to "rx_serial_data[2](n)" ; ## C07  FMC_HPC_DP0_M2C_N
-set_location_assignment PIN_P31   -to rx_serial_data[3]      ; ## A10  FMC_HPC_DP3_M2C_P
-set_location_assignment PIN_P30   -to "rx_serial_data[3](n)" ; ## A11  FMC_HPC_DP3_M2C_N
+if {$RX_OS_NUM_OF_LANES == 2} {
+  set_location_assignment PIN_P31   -to rx_serial_data[3]      ; ## A10  FMC_HPC_DP3_M2C_P
+  set_location_assignment PIN_P30   -to "rx_serial_data[3](n)" ; ## A11  FMC_HPC_DP3_M2C_N
+}
+
 set_location_assignment PIN_M39   -to tx_serial_data[0]      ; ## A22  FMC_HPC_DP1_C2M_P (tx_serial_data_p[0])
 set_location_assignment PIN_M38   -to "tx_serial_data[0](n)" ; ## A23  FMC_HPC_DP1_C2M_N (tx_serial_data_n[0])
-set_location_assignment PIN_L37   -to tx_serial_data[1]      ; ## A26  FMC_HPC_DP2_C2M_P (tx_serial_data_p[3])
-set_location_assignment PIN_L36   -to "tx_serial_data[1](n)" ; ## A27  FMC_HPC_DP2_C2M_N (tx_serial_data_n[3])
-set_location_assignment PIN_N37   -to tx_serial_data[2]      ; ## C02  FMC_HPC_DP0_C2M_P (tx_serial_data_p[2])
-set_location_assignment PIN_N36   -to "tx_serial_data[2](n)" ; ## C03  FMC_HPC_DP0_C2M_N (tx_serial_data_n[2])
-set_location_assignment PIN_K39   -to tx_serial_data[3]      ; ## A30  FMC_HPC_DP3_C2M_P (tx_serial_data_p[1])
-set_location_assignment PIN_K38   -to "tx_serial_data[3](n)" ; ## A31  FMC_HPC_DP3_C2M_N (tx_serial_data_n[1])
+if {$TX_NUM_OF_LANES >= 2} {
+  set_location_assignment PIN_N37   -to tx_serial_data[2]      ; ## C02  FMC_HPC_DP0_C2M_P (tx_serial_data_p[2])
+  set_location_assignment PIN_N36   -to "tx_serial_data[2](n)" ; ## C03  FMC_HPC_DP0_C2M_N (tx_serial_data_n[2])
+}
+if {$TX_NUM_OF_LANES == 4} {
+  set_location_assignment PIN_L37   -to tx_serial_data[1]      ; ## A26  FMC_HPC_DP2_C2M_P (tx_serial_data_p[3])
+  set_location_assignment PIN_L36   -to "tx_serial_data[1](n)" ; ## A27  FMC_HPC_DP2_C2M_N (tx_serial_data_n[3])
+  set_location_assignment PIN_K39   -to tx_serial_data[3]      ; ## A30  FMC_HPC_DP3_C2M_P (tx_serial_data_p[1])
+  set_location_assignment PIN_K38   -to "tx_serial_data[3](n)" ; ## A31  FMC_HPC_DP3_C2M_N (tx_serial_data_n[1])
+}
 
 set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 1_0V -to rx_serial_data
 set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 1_0V -to tx_serial_data
@@ -39,8 +59,8 @@ set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to tx_s
 
 # Merge RX and TX into single transceiver
 for {set i 0} {$i < 4} {incr i} {
-  set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_${i} -to rx_serial_data[${i}]
   set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_${i} -to tx_serial_data[${i}]
+  set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_${i} -to rx_serial_data[${i}]
 }
 
 set_location_assignment PIN_C14   -to rx_sync               ; ## G09  FMC_HPC_LA03_P
