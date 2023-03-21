@@ -170,13 +170,15 @@ ad_ip_parameter fmc_gpio_1 CONFIG.C_GPIO_WIDTH 4
 # clock monitor
 
 ad_ip_instance axi_clock_monitor clk_monitor_0
-ad_ip_parameter clk_monitor_0 CONFIG.NUM_OF_CLOCKS 6
+ad_ip_parameter clk_monitor_0 CONFIG.NUM_OF_CLOCKS 8
 ad_connect clk_mon_0 clk_monitor_0/clock_0
 ad_connect clk_mon_1 clk_monitor_0/clock_1
 ad_connect clk_mon_2 clk_monitor_0/clock_2
 ad_connect clk_mon_3 clk_monitor_0/clock_3
 ad_connect clk_mon_4 clk_monitor_0/clock_4
 ad_connect clk_mon_5 clk_monitor_0/clock_5
+ad_connect ddr4_0/c0_ddr4_ui_clk clk_monitor_0/clock_6
+ad_connect ddr4_1/c0_ddr4_ui_clk clk_monitor_0/clock_7
 
 # xcvr
 
