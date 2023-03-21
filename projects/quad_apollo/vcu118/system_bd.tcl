@@ -9,7 +9,7 @@ source ../../../../hdl/projects/common/xilinx/dacfifo_bd.tcl
 source ../../quad_apollo/common/ad_xband16_ebz_bd.tcl
 source ../../../../hdl/projects/scripts/adi_pd.tcl
 
-ad_ip_parameter axi_apollo_rx_jesd/rx CONFIG.NUM_INPUT_PIPELINE 2
+ad_ip_parameter axi_apollo_rx_jesd/rx CONFIG.NUM_INPUT_PIPELINE 3
 ad_ip_parameter axi_apollo_tx_jesd/tx CONFIG.NUM_OUTPUT_PIPELINE 1
 
 # Set SPI clock to 100/32 = 3.125 MHz

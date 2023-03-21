@@ -153,7 +153,7 @@ ad_data_offload_create $adc_data_offload_name \
                        $adc_do_mem_type \
                        $adc_data_offload_size \
                        $adc_data_width \
-                       $adc_data_width \
+                       1024 \
                        $do_axi_data_width \
                        $SHARED_DEVCLK
 
@@ -168,8 +168,8 @@ ad_ip_parameter axi_apollo_rx_dma CONFIG.DMA_LENGTH_WIDTH 24
 ad_ip_parameter axi_apollo_rx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_apollo_rx_dma CONFIG.MAX_BYTES_PER_BURST 4096
 ad_ip_parameter axi_apollo_rx_dma CONFIG.CYCLIC 0
-ad_ip_parameter axi_apollo_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_data_width
-ad_ip_parameter axi_apollo_rx_dma CONFIG.DMA_DATA_WIDTH_DEST $adc_data_width
+ad_ip_parameter axi_apollo_rx_dma CONFIG.DMA_DATA_WIDTH_SRC 1024
+ad_ip_parameter axi_apollo_rx_dma CONFIG.DMA_DATA_WIDTH_DEST 1024
 
 # extra GPIO peripheral
 
@@ -213,7 +213,7 @@ ad_data_offload_create $dac_data_offload_name \
                        1 \
                        $dac_do_mem_type \
                        $dac_data_offload_size \
-                       $dac_data_width \
+                       1024 \
                        $dac_data_width \
                        $do_axi_data_width \
                        $SHARED_DEVCLK
@@ -229,8 +229,8 @@ ad_ip_parameter axi_apollo_tx_dma CONFIG.DMA_LENGTH_WIDTH 24
 ad_ip_parameter axi_apollo_tx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_apollo_tx_dma CONFIG.CYCLIC 1
 ad_ip_parameter axi_apollo_tx_dma CONFIG.MAX_BYTES_PER_BURST 4096
-ad_ip_parameter axi_apollo_tx_dma CONFIG.DMA_DATA_WIDTH_SRC $dac_dma_data_width
-ad_ip_parameter axi_apollo_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_dma_data_width
+ad_ip_parameter axi_apollo_tx_dma CONFIG.DMA_DATA_WIDTH_SRC 1024
+ad_ip_parameter axi_apollo_tx_dma CONFIG.DMA_DATA_WIDTH_DEST 1024
 
 # reference clocks & resets
 

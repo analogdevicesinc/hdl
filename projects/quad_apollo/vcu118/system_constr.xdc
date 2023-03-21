@@ -242,15 +242,3 @@ set_property  -dict {PACKAGE_PIN AP13 IOSTANDARD LVCMOS18                       
 set_property  -dict {PACKAGE_PIN AR13 IOSTANDARD LVCMOS18                                     } [get_ports gp5[2]           ]; ## LA24_N          H29  IO_L14N_T2L_N3_GC_67
 set_property  -dict {PACKAGE_PIN AT12 IOSTANDARD LVCMOS18                                     } [get_ports gp4[3]           ]; ## LA25_P          G27  IO_L1P_T0L_N0_DBC_67
 set_property  -dict {PACKAGE_PIN AU12 IOSTANDARD LVCMOS18                                     } [get_ports gp5[3]           ]; ## LA25_N          G28  IO_L1N_T0L_N1_DBC_67
-
-create_pblock pblock_axi_mem_interconnect
-resize_pblock pblock_axi_mem_interconnect -add SLR0:SLR0
-add_cells_to_pblock pblock_axi_mem_interconnect [get_cells -quiet [list i_system_wrapper/system_i/axi_mem_interconnect]]
-
-create_pblock pblock_apollo_tx_data_offload
-resize_pblock pblock_apollo_tx_data_offload -add SLR0:SLR0
-add_cells_to_pblock pblock_apollo_tx_data_offload [get_cells -quiet [list i_system_wrapper/system_i/apollo_tx_data_offload]]
-
-create_pblock pblock_apollo_rx_data_offload
-resize_pblock pblock_apollo_rx_data_offload -add SLR2:SLR2
-add_cells_to_pblock pblock_apollo_rx_data_offload [get_cells -quiet [list i_system_wrapper/system_i/apollo_rx_data_offload]]
