@@ -114,17 +114,21 @@ module system_top (
   inout             hdmi_i2c_scl,
   inout             hdmi_i2c_sda,
 
+  input             ltc2308_miso,
+  output            ltc2308_mosi,
+  output            ltc2308_sclk,
+  output            ltc2308_cs,
+
   // ad77684
 
   input             adc_clk_in,
   input             adc_ready_in,
-  input    [ 3:0]  adc_data_in,
+  input    [ 3:0]   adc_data_in,
   output            spi_csn,
   output            spi_clk,
   output            spi_mosi,
   input             spi_miso,
   output            reset_n,
-  output            start_n,
   output            shutdown_n,
 
   // dac i2c
@@ -152,13 +156,13 @@ module system_top (
 
   // adc control gpio assign
 
-  assign shutdown_n = 1;
-  assign reset_n = gpio_o[32];
+  assign shutdown_n    = 1;
+  assign reset_n       = gpio_o[32];
   assign gpio_i[63:15] = gpio_o[63:15];
 
   // bd gpio
 
-  assign gpio_i[13:8] = gpio_bd_i[5:0];
+  assign gpio_i[13:8]   = gpio_bd_i[5:0];
   assign gpio_bd_o[7:0] = gpio_o[7:0];
 
   // IO Buffers for I2C
@@ -260,6 +264,10 @@ module system_top (
     .sys_gpio_bd_out_port(gpio_o[31:0]),
     .sys_gpio_in_export(gpio_i[63:32]),
     .sys_gpio_out_export(gpio_o[63:32]),
+    .ltc2308_spi_MISO(ltc2308_miso),
+    .ltc2308_spi_MOSI(ltc2308_mosi),
+    .ltc2308_spi_SCLK(ltc2308_sclk),
+    .ltc2308_spi_SS_n(ltc2308_cs),
     .sys_spi_MISO(spi_miso),
     .sys_spi_MOSI(spi_mosi),
     .sys_spi_SCLK(spi_clk),
