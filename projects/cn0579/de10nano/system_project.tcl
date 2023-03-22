@@ -1,4 +1,4 @@
-set REQUIRED_QUARTUS_VERSION 21.1
+set REQUIRED_QUARTUS_VERSION 21.1.0
 set QUARTUS_PRO_ISUSED 0
 source ../../../scripts/adi_env.tcl
 source ../../scripts/adi_project_intel.tcl
@@ -6,6 +6,12 @@ source ../../scripts/adi_project_intel.tcl
 adi_project cn0579_de10nano
 
 source $ad_hdl_dir/projects/common/de10nano/de10nano_system_assign.tcl
+
+## downgrade Critical Warning related to an asynchronous RAM in the DMAC
+#
+## "mixed_port_feed_through_mode" parameter of RAM can not have value "old"
+
+set_global_assignment -name MESSAGE_DISABLE 15003
 
 # ad77684 interface
 
