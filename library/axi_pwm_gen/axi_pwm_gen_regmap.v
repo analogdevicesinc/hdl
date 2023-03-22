@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2019 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2023 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -246,7 +246,7 @@ module axi_pwm_gen_regmap #(
       .in_data ({up_pwm_offset_3,
                  up_pwm_offset_2,
                  up_pwm_offset_1,
-                 32'd0}),
+                 up_pwm_offset_0}),
       .out_clk (clk_out),
       .out_data (pwm_offset));
 
@@ -265,7 +265,7 @@ module axi_pwm_gen_regmap #(
     assign pwm_gen_resetn = ~up_reset;
     assign pwm_period = {up_pwm_period_3, up_pwm_period_2, up_pwm_period_1, up_pwm_period_0};
     assign pwm_width = {up_pwm_width_3, up_pwm_width_2, up_pwm_width_1, up_pwm_width_0};
-    assign pwm_offset = {up_pwm_offset_3, up_pwm_offset_2, up_pwm_offset_1, 32'd0};
+    assign pwm_offset = {up_pwm_offset_3, up_pwm_offset_2, up_pwm_offset_1, up_pwm_offset_0};
     assign load_config = up_load_config;
 
   end
