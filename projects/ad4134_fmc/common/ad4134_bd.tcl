@@ -1,4 +1,3 @@
-
 create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 ad4134_di
 create_bd_port -dir O ad4134_odr
 
@@ -6,17 +5,10 @@ create_bd_port -dir O ad4134_odr
 
 source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
 
-if {$adc_resolution == 16} {
-  set data_width 24
-} elseif {$adc_resolution == 24} {
-  set data_width 32
-} elseif {$adc_resolution == 32} {
-  set data_width 64
-};
-
+set data_width    32
 set async_spi_clk 1
 set num_cs        1
-set num_sdi       $adc_num_of_channels
+set num_sdi       4
 set num_sdo       0
 set sdi_delay     0
 set echo_sclk     0
@@ -40,7 +32,7 @@ ad_ip_parameter axi_ad4134_dma CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_ad4134_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_ad4134_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_ad4134_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_ad4134_dma CONFIG.DMA_DATA_WIDTH_SRC [expr $data_width * $adc_num_of_channels]
+ad_ip_parameter axi_ad4134_dma CONFIG.DMA_DATA_WIDTH_SRC 128
 ad_ip_parameter axi_ad4134_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 # odr generator

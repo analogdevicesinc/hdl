@@ -11,4 +11,3 @@ adi_project_files cn0561_zed [list \
     "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc"]
 
 adi_project_run cn0561_zed
-

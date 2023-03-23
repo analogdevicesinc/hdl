@@ -12,6 +12,7 @@ M_DEPS += ../../common/coraz7s/coraz7s_system_ps7.tcl
 M_DEPS += ../../common/coraz7s/coraz7s_system_constr.xdc
 M_DEPS += ../../common/coraz7s/coraz7s_system_bd.tcl
 M_DEPS += ../../../library/util_cdc/sync_bits.v
+M_DEPS += ../../../library/spi_engine/scripts/spi_engine.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/common/ad_edge_detect.v
 

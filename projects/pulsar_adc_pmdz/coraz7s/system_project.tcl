@@ -11,4 +11,3 @@ adi_project_files pulsar_adc_pmdz_coraz7s [list \
     "$ad_hdl_dir/projects/common/coraz7s/coraz7s_system_constr.xdc"]
 
 adi_project_run pulsar_adc_pmdz_coraz7s
-

@@ -1,4 +1,3 @@
-
 # ad4696_fmc SPI interface
 
 set_property -dict {PACKAGE_PIN N19 IOSTANDARD LVCMOS25} [get_ports ad469x_spi_sdi]       ; ## D08  FMC_LPC_LA01_CC_P
