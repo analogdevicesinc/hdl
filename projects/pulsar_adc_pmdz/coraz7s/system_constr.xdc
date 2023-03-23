@@ -1,4 +1,3 @@
-
 # ad40xx_fmc SPI interface
 
 set_property -dict {PACKAGE_PIN Y19 IOSTANDARD LVCMOS33 IOB TRUE} [get_ports pulsar_adc_spi_sdo]       ; ##  PMOD JA [2]
@@ -17,4 +16,3 @@ set_multicycle_path -setup 8 -to [get_cells -hierarchical -filter {NAME=~*/data_
 set_multicycle_path -hold  7 -to [get_cells -hierarchical -filter {NAME=~*/data_sdo_shift_reg[*]}] -from [get_clocks spi_clk]
 set_multicycle_path -setup 8 -to [get_cells -hierarchical -filter {NAME=~*/spi_pulsar_adc_execution/inst/left_aligned_reg*}] -from [get_clocks spi_clk]
 set_multicycle_path -hold  7 -to [get_cells -hierarchical -filter {NAME=~*/spi_pulsar_adc_execution/inst/left_aligned_reg*}] -from [get_clocks spi_clk]
-
