@@ -1,4 +1,3 @@
-
 # ad713x SPI configuration interface
 
 set_property -dict {PACKAGE_PIN N22 IOSTANDARD LVCMOS25} [get_ports ad713x_spi_sdi]       ; ## FMC_LPC_LA03_P

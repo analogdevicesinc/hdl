@@ -80,4 +80,3 @@ switch [get_env_param NUM_OF_SDI 4] {
 }
 
 adi_project_run ad4630_fmc_zed
-
