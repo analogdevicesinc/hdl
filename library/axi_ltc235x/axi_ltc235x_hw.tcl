@@ -24,7 +24,7 @@ ad_ip_files axi_ltc235x [list \
     axi_ltc235x_cmos.v \
     axi_ltc235x_lvds.v \
     axi_ltc235x.v]
-# add_documentation_link <title> <path>
+add_documentation_link "AXI_LTC235x IP core" https://wiki.analog.com/resources/fpga/docs/axi_ltc235x
 
 ad_ip_parameter ID INTEGER 0
 ad_ip_parameter LVDS_CMOS_N INTEGER 0
