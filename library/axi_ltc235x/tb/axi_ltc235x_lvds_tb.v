@@ -132,12 +132,6 @@ module axi_ltc235x_lvds_tb ();
     .NUM_CHANNELS (NUM_CHANNELS),
     .DATA_WIDTH (DATA_WIDTH)
   ) i_ltc235x_lvds (
-    // debug
-    /*
-    .adc_lane_debug (adc_lane_debug),
-    .scko_d_debug (scko_d_debug),
-    .data_counter_debug (data_counter_debug),
-*/
     .rst (!resetn),
     .clk (clk),
     .adc_enable (adc_enable),
@@ -180,8 +174,7 @@ module axi_ltc235x_lvds_tb ();
     .adc_softspan_6 (adc_softspan_6),
     .adc_softspan_7 (adc_softspan_7),
 
-    .adc_valid (adc_valid)
-  );
+    .adc_valid (adc_valid));
 
   // single-ended to diff SCKO
   cyclonev_io_obuf # (

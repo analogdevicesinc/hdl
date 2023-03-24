@@ -245,13 +245,13 @@ module axi_ltc235x_lvds #(
   end
 
   assign acquire_data = ~((ch_data_lock | ~adc_enable[0]) &
-                         (ch_data_lock | ~adc_enable[1]) &
-                         (ch_data_lock | ~adc_enable[2]) &
-                         (ch_data_lock | ~adc_enable[3]) &
-                         (ch_data_lock | ~adc_enable[4]) &
-                         (ch_data_lock | ~adc_enable[5]) &
-                         (ch_data_lock | ~adc_enable[6]) &
-                         (ch_data_lock | ~adc_enable[7]));
+                          (ch_data_lock | ~adc_enable[1]) &
+                          (ch_data_lock | ~adc_enable[2]) &
+                          (ch_data_lock | ~adc_enable[3]) &
+                          (ch_data_lock | ~adc_enable[4]) &
+                          (ch_data_lock | ~adc_enable[5]) &
+                          (ch_data_lock | ~adc_enable[6]) &
+                          (ch_data_lock | ~adc_enable[7]));
 
   // stores the data from the rx buffer, but now based on ch
   // from the whole buffer into the per channel buffer

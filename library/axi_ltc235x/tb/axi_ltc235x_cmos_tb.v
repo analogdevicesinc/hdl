@@ -159,8 +159,7 @@ module axi_ltc235x_cmos_tb ();
     .adc_softspan_6 (adc_softspan_6),
     .adc_softspan_7 (adc_softspan_7),
 
-    .adc_valid (adc_valid)
-  );
+    .adc_valid (adc_valid));
 
   always #1 clk = ~clk;
 
