@@ -233,7 +233,6 @@ module axi_ltc235x_tb ();
         ch_index_lane_6 <= (6 + ring_buffer_index) < 8? 6 + ring_buffer_index : (6 + ring_buffer_index) -8;
         ch_index_lane_7 <= (7 + ring_buffer_index) < 8? 7 + ring_buffer_index : (7 + ring_buffer_index) -8;
 
-        
         db_i_shift[0] <= LANE_0_ENABLE == 1? rx_db_i_24[ch_index_lane_0][db_i_index] : 0;
         db_i_shift[1] <= LANE_1_ENABLE == 1? rx_db_i_24[ch_index_lane_1][db_i_index] : 0;
         db_i_shift[2] <= LANE_2_ENABLE == 1? rx_db_i_24[ch_index_lane_2][db_i_index] : 0;
@@ -336,28 +335,26 @@ module axi_ltc235x_tb ();
     .adc_enable_5 (),
     .adc_enable_6 (),
     .adc_enable_7 (),
-
-    .s_axi_aclk      (clk),
+    .s_axi_aclk     (clk),
     .s_axi_aresetn  (resetn),
     .s_axi_awvalid  ('d0),
     .s_axi_awaddr   ('d0),
     .s_axi_awprot   ('d0),
-    .s_axi_awready  (   ),
+    .s_axi_awready  (),
     .s_axi_wvalid   ('d0),
     .s_axi_wdata    ('d0),
     .s_axi_wstrb    ('d0),
-    .s_axi_wready   (   ),
-    .s_axi_bvalid   (   ),
-    .s_axi_bresp    (   ),
+    .s_axi_wready   (),
+    .s_axi_bvalid   (),
+    .s_axi_bresp    (),
     .s_axi_bready   ('d0),
     .s_axi_arvalid  ('d0),
     .s_axi_araddr   ('d0),
     .s_axi_arprot   ('d0),
-    .s_axi_arready  (   ),
-    .s_axi_rvalid   (   ),
-    .s_axi_rresp    (   ),
-    .s_axi_rdata    (   ),
-    .s_axi_rready   ('d0)
-  );
+    .s_axi_arready  (),
+    .s_axi_rvalid   (),
+    .s_axi_rresp    (),
+    .s_axi_rdata    (),
+    .s_axi_rready   ('d0));
 
 endmodule
