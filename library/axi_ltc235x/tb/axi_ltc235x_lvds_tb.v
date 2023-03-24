@@ -132,7 +132,7 @@ module axi_ltc235x_lvds_tb ();
     .NUM_CHANNELS (NUM_CHANNELS),
     .DATA_WIDTH (DATA_WIDTH)
   ) i_ltc235x_lvds (
-    .rst (!resetn),
+    .rst (~resetn),
     .clk (clk),
     .adc_enable (adc_enable),
     .softspan_next (softspan_next_24),
@@ -252,7 +252,7 @@ module axi_ltc235x_lvds_tb ();
   end
 
   // simulate softspan_next from up_adc_channel
-  assign softspan_next_24 = {softspan_next_3[7], softspan_next_3[6], softspan_next_3[5], softspan_next_3[4], softspan_next_3[3], softspan_next_3[2], softspan_next_3[1], softspan_next_3[0]};
+  assign softspan_next_24 = {softspan_next_3[7:0]};
 
   // {18-bit data, channel id, softspan}
   generate
