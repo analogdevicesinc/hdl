@@ -47,12 +47,12 @@ create_clock -name rx2_dclk_out   -period  2.034 [get_ports rx2_dclk_in_p]
 create_clock -name tx1_dclk_out   -period  2.034 [get_ports tx1_dclk_in_p]
 create_clock -name tx2_dclk_out   -period  2.034 [get_ports tx2_dclk_in_p]
 
-# Allow max skew of 0.25 ns between input clocks
-set_clock_latency -source -early -0.125 [get_clocks rx1_dclk_out]
-set_clock_latency -source -early -0.125 [get_clocks rx2_dclk_out]
+# Allow max skew of 0.2 ns between input clocks
+set_clock_latency -source -early -0.1 [get_clocks rx1_dclk_out]
+set_clock_latency -source -early -0.1 [get_clocks rx2_dclk_out]
 
-set_clock_latency -source -late 0.125 [get_clocks rx1_dclk_out]
-set_clock_latency -source -late 0.125 [get_clocks rx2_dclk_out]
+set_clock_latency -source -late 0.1 [get_clocks rx1_dclk_out]
+set_clock_latency -source -late 0.1 [get_clocks rx2_dclk_out]
 
 set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_1 \
   [list [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_rx_1_phy/i_div_clk_buf/O]] \
