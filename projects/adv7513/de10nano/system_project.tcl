@@ -1,4 +1,4 @@
-set REQUIRED_QUARTUS_VERSION 21.1.0
+set REQUIRED_QUARTUS_VERSION 22.1std.0
 set QUARTUS_PRO_ISUSED 0
 source ../../../scripts/adi_env.tcl
 source ../../scripts/adi_project_intel.tcl
