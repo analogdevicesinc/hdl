@@ -56,7 +56,7 @@ ad_ip_parameter axi_ad7606x_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 ad_ip_instance util_cpack2 ad7606x_adc_pack
 ad_ip_parameter ad7606x_adc_pack CONFIG.NUM_OF_CHANNELS 8
-ad_ip_parameter ad7606x_adc_pack CONFIG.SAMPLE_DATA_WIDTH $ADC_N_BITS
+ad_ip_parameter ad7606x_adc_pack CONFIG.SAMPLE_DATA_WIDTH $ADC_TO_DMA_N_BITS
 
 if {$EXT_CLK == 1} {
   # use Xilinx's clocking wizard in order to generate th clock from the CPU clock, this being then assigned to the adc_clk in the axi_ad7606x IP
