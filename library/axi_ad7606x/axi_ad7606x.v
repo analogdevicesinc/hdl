@@ -382,14 +382,14 @@ module axi_ad7606x #(
   endgenerate
 
   assign adc_data_s = {adc_data_0_s,adc_data_1_s,adc_data_2_s,adc_data_3_s,adc_data_4_s,adc_data_5_s,adc_data_6_s,adc_data_7_s};
-  assign adc_data_0 = dma_data[0*ADC_TO_DMA_N_BITS+(ADC_N_BITS-1):0*ADC_TO_DMA_N_BITS];
-  assign adc_data_1 = dma_data[1*ADC_TO_DMA_N_BITS+(ADC_N_BITS-1):1*ADC_TO_DMA_N_BITS];
-  assign adc_data_2 = dma_data[2*ADC_TO_DMA_N_BITS+(ADC_N_BITS-1):2*ADC_TO_DMA_N_BITS];
-  assign adc_data_3 = dma_data[3*ADC_TO_DMA_N_BITS+(ADC_N_BITS-1):3*ADC_TO_DMA_N_BITS];
-  assign adc_data_4 = dma_data[4*ADC_TO_DMA_N_BITS+(ADC_N_BITS-1):4*ADC_TO_DMA_N_BITS];
-  assign adc_data_5 = dma_data[5*ADC_TO_DMA_N_BITS+(ADC_N_BITS-1):5*ADC_TO_DMA_N_BITS];
-  assign adc_data_6 = dma_data[6*ADC_TO_DMA_N_BITS+(ADC_N_BITS-1):6*ADC_TO_DMA_N_BITS];
-  assign adc_data_7 = dma_data[7*ADC_TO_DMA_N_BITS+(ADC_N_BITS-1):7*ADC_TO_DMA_N_BITS];
+  assign adc_data_7 = dma_data[0*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):0*ADC_TO_DMA_N_BITS];
+  assign adc_data_6 = dma_data[1*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):1*ADC_TO_DMA_N_BITS];
+  assign adc_data_5 = dma_data[2*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):2*ADC_TO_DMA_N_BITS];
+  assign adc_data_4 = dma_data[3*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):3*ADC_TO_DMA_N_BITS];
+  assign adc_data_3 = dma_data[4*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):4*ADC_TO_DMA_N_BITS];
+  assign adc_data_2 = dma_data[5*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):5*ADC_TO_DMA_N_BITS];
+  assign adc_data_1 = dma_data[6*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):6*ADC_TO_DMA_N_BITS];
+  assign adc_data_0 = dma_data[7*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):7*ADC_TO_DMA_N_BITS];
 
   up_adc_common #(
     .ID (ID),
