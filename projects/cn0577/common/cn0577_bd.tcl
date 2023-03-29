@@ -1,3 +1,5 @@
+set RES [get_env_param RES 18]
+
 # ltc2387
 
 create_bd_port -dir I ref_clk
@@ -14,8 +16,14 @@ create_bd_port -dir O clk_gate
 # adc peripheral
 
 ad_ip_instance axi_ltc2387 axi_ltc2387
-ad_ip_parameter axi_ltc2387 CONFIG.ADC_RES 18
-ad_ip_parameter axi_ltc2387 CONFIG.OUT_RES 32
+
+if {$RES == "18"} {
+  ad_ip_parameter axi_ltc2387 CONFIG.ADC_RES 18
+  ad_ip_parameter axi_ltc2387 CONFIG.OUT_RES 32
+} else {
+  ad_ip_parameter axi_ltc2387 CONFIG.ADC_RES 16
+  ad_ip_parameter axi_ltc2387 CONFIG.OUT_RES 16
+}
 ad_ip_parameter axi_ltc2387 CONFIG.TWOLANES $two_lanes
 ad_ip_parameter axi_ltc2387 CONFIG.ADC_INIT_DELAY 27
 
@@ -23,11 +31,22 @@ ad_ip_parameter axi_ltc2387 CONFIG.ADC_INIT_DELAY 27
 
 ad_ip_instance axi_pwm_gen axi_pwm_gen
 ad_ip_parameter axi_pwm_gen CONFIG.N_PWMS 2
-ad_ip_parameter axi_pwm_gen CONFIG.PULSE_0_WIDTH 1
-ad_ip_parameter axi_pwm_gen CONFIG.PULSE_0_PERIOD 8
-ad_ip_parameter axi_pwm_gen CONFIG.PULSE_1_WIDTH 5
-ad_ip_parameter axi_pwm_gen CONFIG.PULSE_1_PERIOD 8
-ad_ip_parameter axi_pwm_gen CONFIG.PULSE_1_OFFSET 0
+
+if {$RES == "18"} {
+  ad_ip_parameter axi_pwm_gen CONFIG.PULSE_0_PERIOD 8
+  ad_ip_parameter axi_pwm_gen CONFIG.PULSE_0_WIDTH 1
+  ad_ip_parameter axi_pwm_gen CONFIG.PULSE_0_OFFSET 0
+  ad_ip_parameter axi_pwm_gen CONFIG.PULSE_1_PERIOD 8
+  ad_ip_parameter axi_pwm_gen CONFIG.PULSE_1_WIDTH 5
+  ad_ip_parameter axi_pwm_gen CONFIG.PULSE_1_OFFSET 0
+} else {
+  ad_ip_parameter axi_pwm_gen CONFIG.PULSE_0_PERIOD 8
+  ad_ip_parameter axi_pwm_gen CONFIG.PULSE_0_WIDTH 1
+  ad_ip_parameter axi_pwm_gen CONFIG.PULSE_0_OFFSET 0
+  ad_ip_parameter axi_pwm_gen CONFIG.PULSE_1_PERIOD 8
+  ad_ip_parameter axi_pwm_gen CONFIG.PULSE_1_WIDTH 4
+  ad_ip_parameter axi_pwm_gen CONFIG.PULSE_1_OFFSET 1
+}
 
 # dma
 
@@ -39,7 +58,11 @@ ad_ip_parameter axi_ltc2387_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_ltc2387_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_ltc2387_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_ltc2387_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_ltc2387_dma CONFIG.DMA_DATA_WIDTH_SRC 32
+if {$RES == "18"} {
+  ad_ip_parameter axi_ltc2387_dma CONFIG.DMA_DATA_WIDTH_SRC 32
+} else {
+  ad_ip_parameter axi_ltc2387_dma CONFIG.DMA_DATA_WIDTH_SRC 16
+}
 ad_ip_parameter axi_ltc2387_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 # connections

@@ -37,8 +37,8 @@
 
 module axi_ltc2387_channel #(
 
-  parameter ADC_RES = 16,
-  parameter OUT_RES = 16,
+  parameter ADC_RES = 18,
+  parameter OUT_RES = 32,
   parameter TWOLANES = 1,
   parameter USERPORTS_DISABLE = 0,
   parameter DATAFORMAT_DISABLE = 0

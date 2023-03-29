@@ -48,11 +48,11 @@ module axi_ltc2387 #(
   parameter USERPORTS_DISABLE = 0,
   parameter DATAFORMAT_DISABLE = 0,
   parameter ADC_INIT_DELAY = 22,
-  parameter ADC_RES = 16,
-  parameter OUT_RES = 16,
+  parameter ADC_RES = 18,
+  parameter OUT_RES = 32,
   parameter TWOLANES = 1
 ) (
-  input                     delay_clk,
+  input                    delay_clk,
 
   // adc interface
 

@@ -43,8 +43,8 @@ module axi_ltc2387_if #(
   parameter IO_DELAY_GROUP = "adc_if_delay_group",
   parameter IODELAY_CTRL = 1,
   parameter DELAY_REFCLK_FREQUENCY = 200,
-  parameter [0:0] TWOLANES = 1, // 0 for Single Lane, 1 for Two Lanes
-  parameter RESOLUTION = 16     // 16 or 18 bits
+  parameter TWOLANES = 1,    // 0 - one lane, 1 - two lanes
+  parameter RESOLUTION = 18  // 16 or 18 bits
 ) (
 
   // delay interface
