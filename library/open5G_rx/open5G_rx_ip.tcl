@@ -30,6 +30,7 @@ add_files -norecurse -scan_for_includes -fileset $proj_fileset [list \
   "hdl/channel_estimator.sv" \
   "hdl/demap.sv" \
   "hdl/PSS_correlator.sv" \
+  "hdl/PSS_correlator_mr.sv" \
   "hdl/PSS_detector.sv" \
   "hdl/PSS_detector_regmap.sv" \
   "hdl/ressource_grid_subscriber.sv" \
@@ -78,6 +79,9 @@ set_property top receiver $proj_fileset
 update_compile_order -fileset sources_1
 
 adi_ip_properties_lite open5G_rx
+set_property vendor_display_name Catkira [ipx::current_core]
+set_property vendor Catkira [ipx::current_core]
+set_property company_url http://www.github.com/catkira/open5G_rx [ipx::current_core]
 set_property display_name "Open5G receiver" [ipx::current_core]
 set_property description "Open5G receiver" [ipx::current_core]
 adi_ip_ttcl open5G_rx "open5G_rx_constr.ttcl"
@@ -102,7 +106,11 @@ adi_add_bus "m_axis_out" "master" \
 		{"m_axis_out_tvalid" "TVALID"} \
 		{"m_axis_out_tdata"  "TDATA"} \
 	}
+
 adi_ip_infer_mm_interfaces open5G_rx
+#ipx::infer_bus_interface reset_ni xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+#ipx::add_bus_parameter POLARITY [ipx::get_bus_interfaces reset_ni -of_objects [ipx::current_core]]
+#set_property value ACTIVE_LOW [ipx::get_bus_parameters POLARITY -of_objects [ipx::get_bus_interfaces reset_ni -of_objects [ipx::current_core]]]
 
 adi_add_bus_clock "clk_i" "m_axis_out:s_axi_if" "reset_ni"
 

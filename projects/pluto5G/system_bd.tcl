@@ -353,4 +353,12 @@ ad_cpu_interrupt ps-13 mb-13 axi_ad9361_adc_dma/irq
 ad_cpu_interrupt ps-12 mb-12 axi_ad9361_dac_dma/irq
 ad_cpu_interrupt ps-11 mb-11 axi_spi/ip2intc_irpt
 
+# open5G_rx
+ad_ip_instance open5G_rx open5G_rx
+ad_ip_parameter open5G_rx CONFIG.MULT_REUSE 32
 
+ad_connect  axi_ad9361/l_clk open5G_rx/sample_clk_i
+ad_connect  sys_cpu_clk open5G_rx/clk_i
+ad_connect sys_cpu_resetn open5G_rx/reset_n
+ad_connect axi_ad9361/adc_data_i0 open5G_rx/s_axis_in_I_tdata
+ad_connect axi_ad9361/adc_data_q0 open5G_rx/s_axis_in_Q_tdata
