@@ -31,10 +31,11 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 #      make JESD_MODE=64B66B RX_LANE_RATE=24.75 TX_LANE_RATE=24.75 RX_JESD_M=4 RX_JESD_L=4 RX_JESD_S=2 RX_JESD_NP=12 TX_JESD_M=4 TX_JESD_L=4 TX_JESD_S=2 TX_JESD_NP=12
 
+# Limiting the lane rate because of problems at higher speeds
 adi_project ad9081_fmca_ebz_vck190 0 [list \
   JESD_MODE         [get_env_param JESD_MODE     64B66B ]\
-  RX_LANE_RATE      [get_env_param RX_LANE_RATE   24.75 ] \
-  TX_LANE_RATE      [get_env_param TX_LANE_RATE   24.75 ] \
+  RX_LANE_RATE      [get_env_param RX_LANE_RATE  12.375 ] \
+  TX_LANE_RATE      [get_env_param TX_LANE_RATE  12.375 ] \
   REF_CLK_RATE      [get_env_param REF_CLK_RATE     375 ] \
   RX_JESD_M         [get_env_param RX_JESD_M          4 ] \
   RX_JESD_L         [get_env_param RX_JESD_L          4 ] \
