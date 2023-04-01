@@ -17,5 +17,6 @@ LIB_DEPS += axi_ad9361
 LIB_DEPS += axi_dmac
 LIB_DEPS += util_pack/util_cpack2
 LIB_DEPS += util_pack/util_upack2
+LIB_DEPS += open5G_rx
 
 include ../scripts/project-xilinx.mk

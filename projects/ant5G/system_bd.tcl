@@ -231,6 +231,21 @@ ad_add_decimation_filter "rx_fir_decimator" 8 2 1 {61.44} {61.44} \
 ad_ip_instance xlslice decim_slice
 ad_ip_instance util_cpack2 cpack
 
+# open5G_rx
+ad_ip_instance open5G_rx open5G_rx
+ad_ip_parameter open5G_rx CONFIG.MULT_REUSE 32
+
+ad_ip_instance axi_dmac open5G_rx_dma
+ad_ip_parameter open5G_rx_dma CONFIG.DMA_TYPE_SRC 1
+ad_ip_parameter open5G_rx_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter open5G_rx_dma CONFIG.CYCLIC 0
+ad_ip_parameter open5G_rx_dma CONFIG.SYNC_TRANSFER_START 0
+ad_ip_parameter open5G_rx_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter open5G_rx_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter open5G_rx_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter open5G_rx_dma CONFIG.DMA_DATA_WIDTH_SRC 16
+ad_ip_parameter open5G_rx_dma CONFIG.DISABLE_DEBUG_REGISTERS 1
+
 # connections
 
 ad_connect  rx_clk_in axi_ad9361/rx_clk_in
@@ -284,13 +299,13 @@ ad_connect axi_ad9361/dac_enable_q0 tx_fir_interpolator/dac_enable_1
 ad_connect axi_ad9361/dac_valid_q0 tx_fir_interpolator/dac_valid_1
 ad_connect axi_ad9361/dac_data_q0 tx_fir_interpolator/data_out_1
 
-ad_connect  axi_ad9361/l_clk tx_upack/clk
-ad_connect  axi_ad9361/rst tx_upack/reset
+ad_connect axi_ad9361/l_clk tx_upack/clk
+ad_connect axi_ad9361/rst tx_upack/reset
 
-ad_connect  tx_upack/fifo_rd_data_0  tx_fir_interpolator/data_in_0
-ad_connect  tx_upack/enable_0  tx_fir_interpolator/enable_out_0
-ad_connect  tx_upack/fifo_rd_data_1  tx_fir_interpolator/data_in_1
-ad_connect  tx_upack/enable_1  tx_fir_interpolator/enable_out_1
+ad_connect tx_upack/fifo_rd_data_0  tx_fir_interpolator/data_in_0
+ad_connect tx_upack/enable_0  tx_fir_interpolator/enable_out_0
+ad_connect tx_upack/fifo_rd_data_1  tx_fir_interpolator/data_in_1
+ad_connect tx_upack/enable_1  tx_fir_interpolator/enable_out_1
 
 ad_connect axi_ad9361/dac_enable_i1 tx_upack/enable_2
 ad_connect axi_ad9361/dac_data_i1 tx_upack/fifo_rd_data_2
@@ -303,16 +318,26 @@ ad_ip_instance util_vector_logic logic_or [list \
   C_OPERATION {or} \
   C_SIZE 1]
 
-ad_connect  logic_or/Op1  tx_fir_interpolator/valid_out_0
-ad_connect  logic_or/Op2  axi_ad9361/dac_valid_i1
-ad_connect  logic_or/Res  tx_upack/fifo_rd_en
+ad_connect logic_or/Op1  tx_fir_interpolator/valid_out_0
+ad_connect logic_or/Op2  axi_ad9361/dac_valid_i1
+ad_connect logic_or/Res  tx_upack/fifo_rd_en
 
 ad_connect axi_ad9361/up_dac_gpio_out interp_slice/Din
-ad_connect  tx_fir_interpolator/active interp_slice/Dout
+ad_connect tx_fir_interpolator/active interp_slice/Dout
 
-ad_connect  axi_ad9361/l_clk axi_ad9361_adc_dma/fifo_wr_clk
-ad_connect  axi_ad9361/l_clk axi_ad9361_dac_dma/m_axis_aclk
-ad_connect  cpack/fifo_wr_overflow axi_ad9361/adc_dovf
+ad_connect axi_ad9361/l_clk axi_ad9361_adc_dma/fifo_wr_clk
+ad_connect axi_ad9361/l_clk axi_ad9361_dac_dma/m_axis_aclk
+ad_connect cpack/fifo_wr_overflow axi_ad9361/adc_dovf
+
+ad_connect axi_ad9361/l_clk open5G_rx/sample_clk_i
+ad_connect sys_cpu_clk open5G_rx/clk_i
+ad_connect sys_cpu_resetn open5G_rx/reset_n
+ad_connect axi_ad9361/adc_data_i0 open5G_rx/s_axis_in_I_tdata
+ad_connect axi_ad9361/adc_data_q0 open5G_rx/s_axis_in_Q_tdata
+ad_connect axi_ad9361/adc_valid_i0 open5G_rx/s_axis_in_tvalid
+ad_connect open5G_rx/m_axis_out_tdata open5G_rx_dma/s_axis_data
+ad_connect open5G_rx/m_axis_out_tvalid open5G_rx_dma/s_axis_valid
+ad_connect open5G_rx_dma/s_axis_last GND
 
 # interconnects
 
@@ -320,6 +345,8 @@ ad_cpu_interconnect 0x79020000 axi_ad9361
 ad_cpu_interconnect 0x7C400000 axi_ad9361_adc_dma
 ad_cpu_interconnect 0x7C420000 axi_ad9361_dac_dma
 ad_cpu_interconnect 0x7C430000 axi_spi
+ad_cpu_interconnect 0x7C440000 open5G_rx
+ad_cpu_interconnect 0x7C450000 open5G_rx_dma
 
 ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP1 {1}
 ad_connect sys_cpu_clk sys_ps7/S_AXI_HP1_ACLK
@@ -339,10 +366,23 @@ create_bd_addr_seg -range 0x40000000 -offset 0x00000000 \
                     [get_bd_addr_segs sys_ps7/S_AXI_HP2/HP2_DDR_LOWOCM] \
                     SEG_sys_ps7_HP2_DDR_LOWOCM
 
+ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP3 {1}
+ad_connect sys_cpu_clk sys_ps7/S_AXI_HP3_ACLK
+ad_connect open5G_rx_dma/m_dest_axi sys_ps7/S_AXI_HP3
+
+create_bd_addr_seg -range 0x40000000 -offset 0x00000000 \
+                    [get_bd_addr_spaces open5G_rx_dma/m_dest_axi] \
+                    [get_bd_addr_segs sys_ps7/S_AXI_HP3/HP3_DDR_LOWOCM] \
+                    SEG_sys_ps7_HP3_DDR_LOWOCM                    
+
 ad_connect sys_cpu_clk axi_ad9361_dac_dma/m_src_axi_aclk
 ad_connect sys_cpu_clk axi_ad9361_adc_dma/m_dest_axi_aclk
+ad_connect sys_cpu_clk open5G_rx_dma/m_dest_axi_aclk
 ad_connect sys_cpu_resetn axi_ad9361_adc_dma/m_dest_axi_aresetn
 ad_connect sys_cpu_resetn axi_ad9361_dac_dma/m_src_axi_aresetn
+ad_connect sys_cpu_resetn open5G_rx_dma/m_dest_axi_aresetn
+
+ad_connect sys_cpu_clk open5G_rx_dma/s_axis_aclk
 
 # interrupts
 
