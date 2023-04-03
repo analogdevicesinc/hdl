@@ -28,6 +28,7 @@ add_files -norecurse -scan_for_includes -fileset $proj_fileset [list \
   "hdl/CFO_calc.sv" \
   "hdl/frame_sync.sv" \
   "hdl/channel_estimator.sv" \
+  "hdl/axis_fifo_asym.sv" \
   "hdl/demap.sv" \
   "hdl/PSS_correlator.sv" \
   "hdl/PSS_correlator_mr.sv" \
