@@ -144,3 +144,4 @@ set_property PACKAGE_PIN D18 [get_ports VCTX2_H]
 set_property PACKAGE_PIN D19 [get_ports VCTX2_L]
 
 set_false_path -from [get_cells -hier *wr_ptr_grey_reg*] -to [get_cells -hier *wr_ptr_f_reg*]
+set_false_path -to [get_cells -hier *reset_f_reg*]
