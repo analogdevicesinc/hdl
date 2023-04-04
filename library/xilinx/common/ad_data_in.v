@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2023 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -39,6 +39,12 @@ module ad_data_in #(
   parameter   SINGLE_ENDED = 0,
   parameter   FPGA_TECHNOLOGY = 0,
   parameter   IDDR_CLK_EDGE ="SAME_EDGE",
+  // for 7 series devices
+  parameter   IDELAY_TYPE = "VAR_LOAD",
+  // for ultrascale devices
+  parameter   DELAY_FORMAT = "COUNT",
+  parameter   US_DELAY_TYPE = "VAR_LOAD",
+  // for all
   parameter   IODELAY_ENABLE = 1,
   parameter   IODELAY_CTRL = 0,
   parameter   IODELAY_GROUP = "dev_if_delay_group",
@@ -74,19 +80,67 @@ module ad_data_in #(
   localparam  ULTRASCALE = 2;
   localparam  ULTRASCALE_PLUS = 3;
 
-  localparam  IODELAY_CTRL_ENABLED = (IODELAY_ENABLE == 1) ? IODELAY_CTRL : 0;
+  // do not instantiate an IDELAYCTRL if no IDELAY is instantiated
+  localparam  IODELAY_CTRL_ENABLED = (IODELAY_ENABLE & IODELAY_CTRL);
   localparam  IODELAY_CTRL_SIM_DEVICE = (FPGA_TECHNOLOGY == ULTRASCALE_PLUS) ? "ULTRASCALE" :
     (FPGA_TECHNOLOGY == ULTRASCALE) ? "ULTRASCALE" : "7SERIES";
 
-  localparam  IODELAY_FPGA_TECHNOLOGY = (IODELAY_ENABLE == 1) ? FPGA_TECHNOLOGY : NONE;
   localparam  IODELAY_SIM_DEVICE = (FPGA_TECHNOLOGY == ULTRASCALE_PLUS) ? "ULTRASCALE_PLUS" :
     (FPGA_TECHNOLOGY == ULTRASCALE) ? "ULTRASCALE" : "7SERIES";
+
+/*
+* For 7 series, IDELAYCTRL is enabled ALWAYS, meaning in the following situations:
+  * when IDELAY_TYPE = FIXED
+  * when IDELAY_TYPE = VARIABLE
+  * when IDELAY_TYPE = VAR_LOAD
+**/
+
+/*
+ * For UltraScale/UltraScale+:
+   * when DELAY_FORMAT = TIME:
+     * IDELAYCTRL must be used
+     * REFCLK_FREQUENCY must reflect the clock frequency of REF_CLK applied to
+      the IDELAYCTRL component
+     * DELAY_VALUE attribute represents an amount in ps
+     * The total delay through the IDELAYE3 is the align delay + DELAY_VALUE
+     * EN_VTC depends on DELAY_TYPE attribute:
+       * when FIXED mode: EN_VTC = 1
+       * It must be actively manipulated when the delay line is used in
+        VARIABLE or VAR_LOAD mode
+        (this section is NOT IMPLEMENTED! More details in UG571, DELAY_TYPE = VAR_LOAD mode and VARIABLE mode)
+
+   * when DELAY_FORMAT = COUNT:
+     * DO NOT use an IDELAYCTRL
+     * REFCLK_FREQUENCY must be set to default frequency (300MHz)
+     * Delay line represents an amount of taps (512 taps available)
+     * CNTVALUEIN/OUT[8:0] values represent the amount of taps the delay line
+      is set to
+     * EN_VTC = 0
+   **/
 
   // internal signals
 
   wire                rx_data_ibuf_s;
   wire                rx_data_idelay_s;
   wire        [ 8:0]  up_drdata_s;
+
+  // internal registers
+
+  reg           en_vtc;
+
+  // determine EN_VTC (VAR_LOAD and VARIABLE modes not implemented as in UG571)
+
+  always @(posedge rx_clk) begin
+    if (DELAY_FORMAT == "TIME") begin
+      if (US_DELAY_TYPE == "FIXED") begin
+        en_vtc <= 1'b1;
+      end else begin // "VAR_LOAD", "VARIABLE"
+        en_vtc <= ~up_dld;
+      end
+    end else begin // "COUNT"
+      en_vtc <= 1'b0;
+    end
+  end
 
   // delay controller
 
@@ -106,6 +160,8 @@ module ad_data_in #(
 
   // receive data interface, ibuf -> idelay -> iddr
 
+  // ibuf
+
   generate
   if (SINGLE_ENDED == 1) begin
     IBUF i_rx_data_ibuf (
@@ -119,16 +175,25 @@ module ad_data_in #(
   end
   endgenerate
 
+  // bypass IDELAY
+
+  generate
+  if (IODELAY_ENABLE == 0) begin
+    assign rx_data_idelay_s = rx_data_ibuf_s;
+    assign up_drdata = 5'd0;
+  end
+  endgenerate
+
   // idelay
 
   generate
-  if (IODELAY_FPGA_TECHNOLOGY == SEVEN_SERIES) begin
+  if (FPGA_TECHNOLOGY == SEVEN_SERIES && IODELAY_ENABLE == 1) begin
     (* IODELAY_GROUP = IODELAY_GROUP *)
     IDELAYE2 #(
       .CINVCTRL_SEL ("FALSE"),
       .DELAY_SRC ("IDATAIN"),
       .HIGH_PERFORMANCE_MODE ("FALSE"),
-      .IDELAY_TYPE ("VAR_LOAD"),
+      .IDELAY_TYPE (IDELAY_TYPE),
       .IDELAY_VALUE (0),
       .REFCLK_FREQUENCY (REFCLK_FREQUENCY),
       .PIPE_SEL ("FALSE"),
@@ -150,15 +215,17 @@ module ad_data_in #(
   endgenerate
 
   generate
-  if ((IODELAY_FPGA_TECHNOLOGY == ULTRASCALE) || (IODELAY_FPGA_TECHNOLOGY == ULTRASCALE_PLUS)) begin
+  if ((FPGA_TECHNOLOGY == ULTRASCALE || FPGA_TECHNOLOGY == ULTRASCALE_PLUS)
+    && (IODELAY_ENABLE == 1)) begin
+
     assign up_drdata = up_drdata_s[8:4];
     (* IODELAY_GROUP = IODELAY_GROUP *)
     IDELAYE3 #(
       .SIM_DEVICE (IODELAY_SIM_DEVICE),
       .DELAY_SRC ("IDATAIN"),
-      .DELAY_TYPE ("VAR_LOAD"),
+      .DELAY_TYPE (US_DELAY_TYPE),
       .REFCLK_FREQUENCY (REFCLK_FREQUENCY),
-      .DELAY_FORMAT ("COUNT")
+      .DELAY_FORMAT (DELAY_FORMAT)
     ) i_rx_data_idelay (
       .CASC_RETURN (1'b0),
       .CASC_IN (1'b0),
@@ -173,21 +240,14 @@ module ad_data_in #(
       .IDATAIN (rx_data_ibuf_s),
       .DATAOUT (rx_data_idelay_s),
       .RST (1'b0),
-      .EN_VTC (~up_dld));
-  end
-  endgenerate
-
-  generate
-  if (IODELAY_FPGA_TECHNOLOGY == NONE) begin
-    assign rx_data_idelay_s = rx_data_ibuf_s;
-    assign up_drdata = 5'd0;
+      .EN_VTC (en_vtc));
   end
   endgenerate
 
   // iddr
 
   generate
-  if ((FPGA_TECHNOLOGY == ULTRASCALE) || (FPGA_TECHNOLOGY == ULTRASCALE_PLUS)) begin
+  if (FPGA_TECHNOLOGY == ULTRASCALE || FPGA_TECHNOLOGY == ULTRASCALE_PLUS) begin
     IDDRE1 #(
       .DDR_CLK_EDGE (IDDR_CLK_EDGE)
     ) i_rx_data_iddr (
