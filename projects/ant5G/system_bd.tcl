@@ -389,5 +389,3 @@ ad_connect sys_cpu_clk open5G_rx_dma/s_axis_aclk
 ad_cpu_interrupt ps-13 mb-13 axi_ad9361_adc_dma/irq
 ad_cpu_interrupt ps-12 mb-12 axi_ad9361_dac_dma/irq
 ad_cpu_interrupt ps-11 mb-11 axi_spi/ip2intc_irpt
-
-
