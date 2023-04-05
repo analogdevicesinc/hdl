@@ -97,6 +97,8 @@ module system_top (
   output          qadc_xtal2_mclk,
   inout           qadc_sync,
 
+  inout   [ 3:0]  qadc_pgood,
+
   inout   [ 1:0]  qadc_muxa,
   inout   [ 1:0]  qadc_muxb,
   inout   [ 1:0]  qadc_muxc,
@@ -118,15 +120,19 @@ module system_top (
 
   // instantiations
 
-  assign gpio_i[63:41] = gpio_o[63:41];
+  assign gpio_i[63:45] = gpio_o[63:45];
 
   ad_iobuf #(
-    .DATA_WIDTH(9)
+    .DATA_WIDTH(13)
   ) qadc_gpio (
-    .dio_t(gpio_t[40:32]),
-    .dio_i(gpio_o[40:32]),
-    .dio_o(gpio_i[40:32]),
-    .dio_p({qadc_muxa[1],
+    .dio_t(gpio_t[44:32]),
+    .dio_i(gpio_o[44:32]),
+    .dio_o(gpio_i[44:32]),
+    .dio_p({qadc_pgood[3],
+            qadc_pgood[2],
+            qadc_pgood[1],
+            qadc_pgood[0],
+            qadc_muxa[1],
             qadc_muxa[0],
             qadc_muxb[1],
             qadc_muxb[0],
