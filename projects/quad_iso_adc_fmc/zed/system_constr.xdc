@@ -23,14 +23,19 @@ set_property -dict {PACKAGE_PIN L18 IOSTANDARD LVCMOS25} [get_ports qadc_mclk_re
 set_property -dict {PACKAGE_PIN B19 IOSTANDARD LVCMOS25} [get_ports qadc_xtal2_mclk]              ; ##  FMC_LA17_CC_P
 set_property -dict {PACKAGE_PIN P20 IOSTANDARD LVCMOS25} [get_ports qadc_sync]                    ; ##  FMC_LPC_LA12_P
 
-set_property -dict {PACKAGE_PIN G19 IOSTANDARD LVCMOS25} [get_ports qadc_muxa[0]]                   ; ##  FMC_LPC_LA22_P
-set_property -dict {PACKAGE_PIN E15 IOSTANDARD LVCMOS25} [get_ports qadc_muxa[1]]                   ; ##  FMC_LPC_LA23_P
-set_property -dict {PACKAGE_PIN A18 IOSTANDARD LVCMOS25} [get_ports qadc_muxb[0]]                   ; ##  FMC_LPC_LA24_P
-set_property -dict {PACKAGE_PIN D22 IOSTANDARD LVCMOS25} [get_ports qadc_muxb[1]]                   ; ##  FMC_LPC_LA25_P
-set_property -dict {PACKAGE_PIN F18 IOSTANDARD LVCMOS25} [get_ports qadc_muxc[0]]                   ; ##  FMC_LPC_LA26_P
-set_property -dict {PACKAGE_PIN E21 IOSTANDARD LVCMOS25} [get_ports qadc_muxc[1]]                   ; ##  FMC_LPC_LA27_P
-set_property -dict {PACKAGE_PIN A16 IOSTANDARD LVCMOS25} [get_ports qadc_muxd[0]]                   ; ##  FMC_LPC_LA28_P
-set_property -dict {PACKAGE_PIN C17 IOSTANDARD LVCMOS25} [get_ports qadc_muxd[1]]                   ; ##  FMC_LPC_LA29_P
+set_property -dict {PACKAGE_PIN G19 IOSTANDARD LVCMOS25} [get_ports qadc_muxa[0]]                 ; ##  FMC_LPC_LA22_P
+set_property -dict {PACKAGE_PIN E15 IOSTANDARD LVCMOS25} [get_ports qadc_muxa[1]]                 ; ##  FMC_LPC_LA23_P
+set_property -dict {PACKAGE_PIN A18 IOSTANDARD LVCMOS25} [get_ports qadc_muxb[0]]                 ; ##  FMC_LPC_LA24_P
+set_property -dict {PACKAGE_PIN D22 IOSTANDARD LVCMOS25} [get_ports qadc_muxb[1]]                 ; ##  FMC_LPC_LA25_P
+set_property -dict {PACKAGE_PIN F18 IOSTANDARD LVCMOS25} [get_ports qadc_muxc[0]]                 ; ##  FMC_LPC_LA26_P
+set_property -dict {PACKAGE_PIN E21 IOSTANDARD LVCMOS25} [get_ports qadc_muxc[1]]                 ; ##  FMC_LPC_LA27_P
+set_property -dict {PACKAGE_PIN A16 IOSTANDARD LVCMOS25} [get_ports qadc_muxd[0]]                 ; ##  FMC_LPC_LA28_P
+set_property -dict {PACKAGE_PIN C17 IOSTANDARD LVCMOS25} [get_ports qadc_muxd[1]]                 ; ##  FMC_LPC_LA29_P
+
+set_property -dict {PACKAGE_PIN C15 IOSTANDARD LVCMOS25} [get_ports qadc_pgood[0]]                ; ##  FMC-LA30_P
+set_property -dict {PACKAGE_PIN B16 IOSTANDARD LVCMOS25} [get_ports qadc_pgood[1]]                ; ## "FMC-LA31_P"
+set_property -dict {PACKAGE_PIN A21 IOSTANDARD LVCMOS25} [get_ports qadc_pgood[2]]                ; ## "FMC-LA32_P"
+set_property -dict {PACKAGE_PIN B21 IOSTANDARD LVCMOS25} [get_ports qadc_pgood[3]]                ; ## "FMC-LA33_P"
 
 create_clock -period 30.5175781 -name qadc_mclk_refclk [get_ports qadc_mclk_refclk]
 ## There is a multi-cycle path between the axi_spi_engine's SDO_FIFO and the
