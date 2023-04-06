@@ -121,6 +121,10 @@ proc adi_project {project_name {mode 0} {parameter_list {}} } {
     set device "xc7vx690tffg1761-2"
     set board [lindex [lsearch -all -inline [get_board_parts] *vc709*] end]
   }
+  if [regexp "_kv260" $project_name] {
+    set device "xck26-sfvc784-2LV-c"
+    set board [lindex [lsearch -all -inline [get_board_parts] *kv260*] end]
+  }
 
   adi_project_create $project_name $mode $parameter_list $device $board
 }
@@ -163,6 +167,8 @@ proc adi_project_create {project_name mode parameter_list device {board "not-app
 
   if [regexp "^xc7z" $p_device] {
     set sys_zynq 1
+  } elseif [regexp "^xck" $p_device] {
+    set sys_zynq 2
   } elseif [regexp "^xczu" $p_device]  {
     set sys_zynq 2
   } elseif [regexp "^xcv\[ecmph\]" $p_device]  {
