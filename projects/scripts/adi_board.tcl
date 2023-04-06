@@ -1,8 +1,7 @@
-
 package require math
 
 ## Global variables for interconnect interface indexing
-#
+
 set sys_cpu_interconnect_index 0
 set sys_hpc0_interconnect_index -1
 set sys_hpc1_interconnect_index -1
@@ -579,6 +578,12 @@ proc ad_xcvrpll {m_src m_dst} {
 
 ###################################################################################################
 ###################################################################################################
+
+# sys_zynq represents the architecture of the carrier used
+# 0 - 7Series FPGAs
+# 1 - Zynq7000 SoC
+# 2 - Zynq UltraScale/+ MP SoC
+# 3 - Versal
 
 ## Create an memory mapped interface connection to PS8 IP, using a
 #  HPC0 high speed interface.
