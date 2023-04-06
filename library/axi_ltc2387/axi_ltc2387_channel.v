@@ -116,6 +116,13 @@ module axi_ltc2387_channel #(
     end
   endgenerate
 
+   my_ila_1 i_ila_1 (
+    .clk (adc_clk),
+    .probe0 (expected_pattern),
+    .probe1 (test_pattern),
+    .probe2 (adc_data),
+    .probe3 (adc_pn_err));
+
   always @(posedge adc_clk) begin
     if (test_pattern == adc_data) begin
       adc_pn_err <= 1'b0;

@@ -99,6 +99,13 @@ module axi_ltc2387_if #(
   // adc_valid is 1 for the current sample that is sent
   assign adc_valid = clk_gate_d[1] & ~clk_gate_d[0];
 
+  my_ila_2 i_ila_2 (
+   .clk (clk),
+   .probe0 (adc_valid),
+   .probe1 (clk_gate),
+   .probe2 (clk_gate_d[0]),
+   .probe3 (clk_gate_d[1]));
+
   always @(posedge clk) begin
     clk_gate_d <= {clk_gate_d[1:0], clk_gate};
     if (clk_gate_d[1] == 1'b1 && clk_gate_d[0] == 1'b0) begin
