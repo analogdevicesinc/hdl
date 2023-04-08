@@ -70,7 +70,7 @@ add_files -norecurse -scan_for_includes -fileset $proj_fileset [list \
   "hdl/CIC/downsampler.sv" \
   "hdl/CIC/downsampler_variable.sv" \
   "hdl/DDS/dds.sv" \
-  "hdl/complex_multiplier/complex_multiplier.v" \
+  "hdl/complex_multiplier/complex_multiplier.sv" \
   "hdl/axil_interconnect_wrap_1x4.v" \
   "hdl/verilog-axi/axil_interconnect.v" \
   "hdl/verilog-axi/arbiter.v" \
