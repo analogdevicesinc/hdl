@@ -17,6 +17,7 @@ set_property part xc7z010clg400-1 [current_project]
 set proj_fileset [get_filesets sources_1]
 add_files -norecurse -scan_for_includes -fileset $proj_fileset [list \
   "hdl/receiver.sv" \
+  "hdl/receiver_regmap.sv" \
   "hdl/dot_product.sv" \
   "hdl/Peak_detector.sv" \
   "hdl/atan.sv" \
@@ -109,11 +110,35 @@ adi_add_bus "m_axis_out" "master" \
 	}
 
 adi_ip_infer_mm_interfaces open5G_rx
+set memory_maps [ipx::get_memory_maps * -of_objects [ipx::current_core]]
+foreach map $memory_maps {
+  ipx::remove_memory_map [lindex $map 2] [ipx::current_core]
+}
+
+set raddr_width [expr [get_property SIZE_LEFT [ipx::get_ports -nocase true s_axi_if_araddr -of_objects [ipx::current_core]]] + 1]
+set waddr_width [expr [get_property SIZE_LEFT [ipx::get_ports -nocase true s_axi_if_awaddr -of_objects [ipx::current_core]]] + 1]
+  if {$raddr_width != $waddr_width} {
+    puts [format "WARNING: AXI address width mismatch for %s (r=%d, w=%d)" $ip_name $raddr_width, $waddr_width]
+    set range 65536
+  } else {
+    if {$raddr_width >= 16} {
+      set range 65536
+    } else {
+      set range [expr 1 << $raddr_width]
+    }
+  }
+
+ipx::add_memory_map {s_axi_if} [ipx::current_core]
+set_property slave_memory_map_ref {s_axi_if} [ipx::get_bus_interfaces s_axi_if -of_objects [ipx::current_core]]
+ipx::add_address_block {axi_lite} [ipx::get_memory_maps s_axi_if -of_objects [ipx::current_core]]
+set_property range $range [ipx::get_address_blocks axi_lite \
+  -of_objects [ipx::get_memory_maps s_axi_if -of_objects [ipx::current_core]]]
+#ipx::associate_bus_interfaces -clock clk_i -reset reset_n [ipx::current_core]
+adi_add_bus_clock "clk_i" "m_axis_out:s_axi_if" "reset_n"
+
 #ipx::infer_bus_interface reset_ni xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
 #ipx::add_bus_parameter POLARITY [ipx::get_bus_interfaces reset_ni -of_objects [ipx::current_core]]
 #set_property value ACTIVE_LOW [ipx::get_bus_parameters POLARITY -of_objects [ipx::get_bus_interfaces reset_ni -of_objects [ipx::current_core]]]
-
-adi_add_bus_clock "clk_i" "m_axis_out:s_axi_if" "reset_ni"
 
 ipx::create_xgui_files [ipx::current_core]
 ipx::save_core [ipx::current_core]
