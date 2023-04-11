@@ -28,3 +28,4 @@ adi_project_files ad9694_fmc_zcu102 [list \
   "$ad_hdl_dir/projects/common/zcu102/zcu102_system_constr.xdc" ]
 
 adi_project_run ad9694_fmc_zcu102
+
