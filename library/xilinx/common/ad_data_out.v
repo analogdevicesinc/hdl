@@ -176,8 +176,8 @@ module ad_data_out #(
     ) i_tx_data_oddr (
       .SR (1'b0),
       .C (tx_clk),
-      .D1 (tx_data_p),
-      .D2 (tx_data_n),
+      .D1 (tx_data_n),
+      .D2 (tx_data_p),
       .Q (tx_data_oddr_s));
   end
   endgenerate
@@ -191,8 +191,8 @@ module ad_data_out #(
       .R (1'b0),
       .S (1'b0),
       .C (tx_clk),
-      .D1 (tx_data_p),
-      .D2 (tx_data_n),
+      .D1 (tx_data_n),
+      .D2 (tx_data_p),
       .Q (tx_data_oddr_s));
   end
   endgenerate
