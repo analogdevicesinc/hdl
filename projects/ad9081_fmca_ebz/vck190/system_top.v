@@ -70,28 +70,28 @@ module system_top  #(
   input  [1:0]  agc3,
   input         clkin6_n,
   input         clkin6_p,
-  input         clkin10_n,
-  input         clkin10_p,
+//  input         clkin10_n,
+//  input         clkin10_p,
   input         fpga_refclk_in_n,
   input         fpga_refclk_in_p,
-  input  [RX_JESD_L*RX_NUM_LINKS-1:0]  rx_data_n,
-  input  [RX_JESD_L*RX_NUM_LINKS-1:0]  rx_data_p,
+//  input  [RX_JESD_L*RX_NUM_LINKS-1:0]  rx_data_n,
+//  input  [RX_JESD_L*RX_NUM_LINKS-1:0]  rx_data_p,
   output [TX_JESD_L*TX_NUM_LINKS-1:0]  tx_data_n,
   output [TX_JESD_L*TX_NUM_LINKS-1:0]  tx_data_p,
   input                                fpga_syncin_0_n,
   input                                fpga_syncin_0_p,
   inout                                fpga_syncin_1_n,
   inout                                fpga_syncin_1_p,
-  output                               fpga_syncout_0_n,
-  output                               fpga_syncout_0_p,
-  inout                                fpga_syncout_1_n,
-  inout                                fpga_syncout_1_p,
+  //output                               fpga_syncout_0_n,
+  //output                               fpga_syncout_0_p,
+ // inout                                fpga_syncout_1_n,
+ // inout                                fpga_syncout_1_p,
   inout  [10:0] gpio,
   inout         hmc_gpio1,
   output        hmc_sync,
   input  [1:0]  irqb,
   output        rstb,
-  output [1:0]  rxen,
+//  output [1:0]  rxen,
   output        spi0_csb,
   input         spi0_miso,
   output        spi0_mosi,
@@ -118,17 +118,17 @@ module system_top  #(
 
   wire            sysref;
   wire    [TX_NUM_LINKS-1:0]   tx_syncin;
-  wire    [RX_NUM_LINKS-1:0]   rx_syncout;
+  //wire    [RX_NUM_LINKS-1:0]   rx_syncout;
 
-  wire    [7:0]   rx_data_p_loc;
-  wire    [7:0]   rx_data_n_loc;
+ // wire    [7:0]   rx_data_p_loc;
+ // wire    [7:0]   rx_data_n_loc;
   wire    [7:0]   tx_data_p_loc;
   wire    [7:0]   tx_data_n_loc;
 
   wire            clkin6;
   wire            clkin10;
   wire            tx_device_clk;
-  wire            rx_device_clk;
+ // wire            rx_device_clk;
 
   // instantiations
   IBUFDS_GTE5 i_ibufds_ref_clk (
@@ -148,28 +148,28 @@ module system_top  #(
     .IB (clkin6_n),
     .O (clkin6));
 
-  IBUFDS i_ibufds_rx_device_clk (
-    .I (clkin10_p),
-    .IB (clkin10_n),
-    .O (clkin10));
+ // IBUFDS i_ibufds_rx_device_clk (
+//  .I (clkin10_p),
+ //   .IB (clkin10_n),
+ //   .O (clkin10));
 
   IBUFDS i_ibufds_syncin_0 (
     .I (fpga_syncin_0_p),
     .IB (fpga_syncin_0_n),
     .O (tx_syncin[0]));
 
-  OBUFDS i_obufds_syncout_0 (
-    .I (rx_syncout[0]),
-    .O (fpga_syncout_0_p),
-    .OB (fpga_syncout_0_n));
+  //OBUFDS i_obufds_syncout_0 (
+  //  .I (rx_syncout[0]),
+  //  .O (fpga_syncout_0_p),
+  //  .OB (fpga_syncout_0_n));
 
   BUFG i_tx_device_clk (
     .I (clkin6),
     .O (tx_device_clk));
 
-  BUFG i_rx_device_clk (
-    .I (clkin10),
-    .O (rx_device_clk));
+  //BUFG i_rx_device_clk (
+  //  .I (clkin10),
+  //  .O (rx_device_clk));
 
   // spi
 
@@ -210,8 +210,8 @@ module system_top  #(
 
   assign hmc_sync   = gpio_o[54];
   assign rstb       = gpio_o[55];
-  assign rxen[0]    = gpio_o[56];
-  assign rxen[1]    = gpio_o[57];
+  //assign rxen[0]    = gpio_o[56];
+  //assign rxen[1]    = gpio_o[57];
   assign txen[0]    = gpio_o[58];
   assign txen[1]    = gpio_o[59];
 
@@ -228,7 +228,7 @@ module system_top  #(
       .dio_p ({fpga_syncin_1_n,      // 61
                fpga_syncin_1_p}));   // 60
   end
-
+ /*
   if (RX_NUM_LINKS > 1 & JESD_MODE == "8B10B") begin
     assign fpga_syncout_1_p = rx_syncout[1];
     assign fpga_syncout_1_n = 0;
@@ -242,7 +242,9 @@ module system_top  #(
       .dio_p ({fpga_syncout_1_n,      // 63
                fpga_syncout_1_p}));   // 62
   end
+  */
   endgenerate
+ 
 
   /* Board GPIOS. Buttons, LEDs, etc... */
   assign gpio_led = gpio_o[3:0];
@@ -292,25 +294,25 @@ module system_top  #(
     // FMC HPC
     .GT_Serial_0_0_gtx_p (tx_data_p_loc[3:0]),
     .GT_Serial_0_0_gtx_n (tx_data_n_loc[3:0]),
-    .GT_Serial_0_0_grx_p (rx_data_p_loc[3:0]),
-    .GT_Serial_0_0_grx_n (rx_data_n_loc[3:0]),
+  //  .GT_Serial_0_0_grx_p (rx_data_p_loc[3:0]),
+  //  .GT_Serial_0_0_grx_n (rx_data_n_loc[3:0]),
     .GT_Serial_1_0_gtx_p (tx_data_p_loc[7:4]),
     .GT_Serial_1_0_gtx_n (tx_data_n_loc[7:4]),
-    .GT_Serial_1_0_grx_p (rx_data_p_loc[7:4]),
-    .GT_Serial_1_0_grx_n (rx_data_n_loc[7:4]),
+   // .GT_Serial_1_0_grx_p (rx_data_p_loc[7:4]),
+   // .GT_Serial_1_0_grx_n (rx_data_n_loc[7:4]),
 
     .ref_clk_q0 (ref_clk),
     .ref_clk_q1 (ref_clk),
 
-    .rx_device_clk (rx_device_clk),
+   // .rx_device_clk (rx_device_clk),
     .tx_device_clk (tx_device_clk),
-    .rx_sync_0 (rx_syncout),
+    //.rx_sync_0 (rx_syncout),
     .tx_sync_0 (tx_syncin),
-    .rx_sysref_0 (sysref),
+    //.rx_sysref_0 (sysref),
     .tx_sysref_0 (sysref));
 
-  assign rx_data_p_loc[RX_JESD_L*RX_NUM_LINKS-1:0] = rx_data_p[RX_JESD_L*RX_NUM_LINKS-1:0];
-  assign rx_data_n_loc[RX_JESD_L*RX_NUM_LINKS-1:0] = rx_data_n[RX_JESD_L*RX_NUM_LINKS-1:0];
+  //assign rx_data_p_loc[RX_JESD_L*RX_NUM_LINKS-1:0] = rx_data_p[RX_JESD_L*RX_NUM_LINKS-1:0];
+  // assign rx_data_n_loc[RX_JESD_L*RX_NUM_LINKS-1:0] = rx_data_n[RX_JESD_L*RX_NUM_LINKS-1:0];
 
   assign tx_data_p[TX_JESD_L*TX_NUM_LINKS-1:0] = tx_data_p_loc[TX_JESD_L*TX_NUM_LINKS-1:0];
   assign tx_data_n[TX_JESD_L*TX_NUM_LINKS-1:0] = tx_data_n_loc[TX_JESD_L*TX_NUM_LINKS-1:0];
