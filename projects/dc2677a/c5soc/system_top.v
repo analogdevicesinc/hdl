@@ -119,7 +119,16 @@ module system_top (
   output          sdi,
   output          scki,
   input           scko,
-  input   [ 7:0]  sdo
+  input   [ 7:0]  sdo,
+
+  output          sdi_p,
+  output          sdi_n,
+  output          scki_p,
+  output          scki_n,
+  input           scko_p,
+  input           scko_n,
+  input           sdo_p,
+  input           sdo_n
 );
 
   // internal signals
@@ -228,6 +237,14 @@ module system_top (
     .axi_ltc235x_device_if_sdo (sdo),
     .axi_ltc235x_device_if_scki (scki),
     .axi_ltc235x_device_if_scko (scko),
-    .axi_ltc235x_device_if_sdi (sdi));
+    .axi_ltc235x_device_if_sdi (sdi),
+    .axi_ltc235x_device_if_sdo_p (sdo_p),
+    .axi_ltc235x_device_if_sdo_n (sdo_n),
+    .axi_ltc235x_device_if_scki_p (scki_p),
+    .axi_ltc235x_device_if_scki_n (scki_n),
+    .axi_ltc235x_device_if_scko_p (scko_p),
+    .axi_ltc235x_device_if_scko_n (scko_n),
+    .axi_ltc235x_device_if_sdi_p (sdi_p),
+    .axi_ltc235x_device_if_sdi_n (sdi_n));
 
 endmodule

@@ -27,6 +27,7 @@ ad_ip_files axi_ltc235x [list \
 add_documentation_link "AXI_LTC235x IP core" https://wiki.analog.com/resources/fpga/docs/axi_ltc235x
 
 ad_ip_parameter ID INTEGER 0
+ad_ip_parameter XILINX_INTEL_N INTEGER 0
 ad_ip_parameter LVDS_CMOS_N INTEGER 0
 ad_ip_parameter LANE_0_ENABLE INTEGER 1
 ad_ip_parameter LANE_1_ENABLE INTEGER 1
@@ -53,11 +54,20 @@ proc axi_ltc235x_elab {} {
   add_interface_port device_if lvds_cmos_n lvds_cmos_n Output 1
   add_interface_port device_if cs_n cs_n Output 1
   add_interface_port device_if pd pd Output 1
-  # lvds-cmos
+  # cmos
   add_interface_port device_if scki scki Output 1
   add_interface_port device_if scko scko Input 1
   add_interface_port device_if sdi sdi Output 1
   add_interface_port device_if sdo sdo Input 8
+  # lvds
+  add_interface_port device_if scki_p scki_p Output 1
+  add_interface_port device_if scki_n scki_n Output 1
+  add_interface_port device_if scko_p scko_p Input 1
+  add_interface_port device_if scko_n scko_n Input 1
+  add_interface_port device_if sdi_p sdi_p Output 1
+  add_interface_port device_if sdi_n sdi_n Output 1
+  add_interface_port device_if sdo_p sdo_p Input 1
+  add_interface_port device_if sdo_n sdo_n Input 1
 
   # clock
   ad_interface clock external_clk input 1

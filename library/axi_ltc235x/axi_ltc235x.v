@@ -38,6 +38,7 @@
 module axi_ltc235x #(
 
   parameter       ID = 0,
+  parameter       XILINX_INTEL_N = 0,
   parameter       FPGA_TECHNOLOGY = 0,
   parameter       FPGA_FAMILY = 0,
   parameter       SPEED_GRADE = 0,
@@ -67,11 +68,21 @@ module axi_ltc235x #(
   output                  cs_n,
   output                  pd,
 
-  // lvds-cmos
+  // cmos
   output                  sdi,
   output                  scki,
   input                   scko,
   input       [ 7:0]      sdo,
+
+  // lvds
+  output                  sdi_p,
+  output                  sdi_n,
+  output                  scki_p,
+  output                  scki_n,
+  input                   scko_p,
+  input                   scko_n,
+  input                   sdo_p,
+  input                   sdo_n,
 
   // AXI Slave Memory Map
 
@@ -247,6 +258,7 @@ module axi_ltc235x #(
 
     if (LVDS_CMOS_N == 1) begin
       axi_ltc235x_lvds #(
+        .XILINX_INTEL_N (XILINX_INTEL_N),
         .LTC235X_FAMILY (LTC235X_FAMILY),
         .NUM_CHANNELS (NUM_CHANNELS),
         .DATA_WIDTH (DATA_WIDTH)
@@ -255,14 +267,14 @@ module axi_ltc235x #(
         .clk (adc_clk_s),
         .adc_enable (adc_enable),
         .softspan_next (softspan_24),
-        .scki_p (scki),
-        .scki_n (),
-        .sdi_p (sdi),
-        .sdi_n (),
-        .scko_p (scko),
-        .scko_n (1'b0),
-        .sdo_p (sdo[0]),
-        .sdo_n (1'b0),
+        .scki_p (scki_p),
+        .scki_n (scki_n),
+        .sdi_p (sdi_p),
+        .sdi_n (sdi_n),
+        .scko_p (scko_p),
+        .scko_n (scko_n),
+        .sdo_p (sdo_p),
+        .sdo_n (sdo_n),
         .busy (busy),
         .adc_ch0_id (adc_status_header[0]),
         .adc_ch1_id (adc_status_header[1]),

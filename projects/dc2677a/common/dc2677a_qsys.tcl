@@ -41,6 +41,7 @@ if {$LTC235X_FAMILY % 2 == 0} {
 
 add_instance axi_ltc235x axi_ltc235x
 set_instance_parameter_value axi_ltc235x {ID} {0}
+set_instance_parameter_value axi_ltc235x {XILINX_INTEL_N} $xilinx_intel_n
 set_instance_parameter_value axi_ltc235x {LVDS_CMOS_N} $LVDS_CMOS_N
 set_instance_parameter_value axi_ltc235x {LANE_0_ENABLE} $ADC_LANE_0_ENABLE
 set_instance_parameter_value axi_ltc235x {LANE_1_ENABLE} $ADC_LANE_1_ENABLE
