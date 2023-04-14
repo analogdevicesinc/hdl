@@ -69,8 +69,8 @@ set_instance_parameter_value adc_pwm_gen {ASYNC_CLK_EN} {0}
 set_instance_parameter_value adc_pwm_gen {N_PWMS} {1}
 set_instance_parameter_value adc_pwm_gen {PWM_EXT_SYNC} {0}
 set_instance_parameter_value adc_pwm_gen {EXT_ASYNC_SYNC} {0}
-set_instance_parameter_value adc_pwm_gen {PULSE_0_WIDTH} {1}
-set_instance_parameter_value adc_pwm_gen {PULSE_0_PERIOD} {8}
+set_instance_parameter_value adc_pwm_gen {PULSE_0_WIDTH} {3}
+set_instance_parameter_value adc_pwm_gen {PULSE_0_PERIOD} {400}
 set_instance_parameter_value adc_pwm_gen {PULSE_0_OFFSET} {0}
 add_interface axi_ltc235x_cnv_if conduit end
 set_interface_property axi_ltc235x_cnv_if EXPORT_OF adc_pwm_gen.if_pwm_0
