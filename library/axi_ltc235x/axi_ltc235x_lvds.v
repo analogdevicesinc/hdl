@@ -36,6 +36,7 @@
 `timescale 1ns/100ps
 
 module axi_ltc235x_lvds #(
+  parameter XILINX_INTEL_N = 0,
   parameter LTC235X_FAMILY = 0,
   parameter NUM_CHANNELS = 8,	// 8 for 2358, 4 for 2357, 2 for 2353
   parameter DATA_WIDTH = 18	// 18 or 16 based on -18/-16
@@ -165,12 +166,42 @@ module axi_ltc235x_lvds #(
   wire                scko;
   wire                sdo;
 
-  assign scki_p = scki;
-  assign scki_n = 1'b0;
-  assign sdi_p = sdi;
-  assign sdi_n = 1'b0;
-  assign scko = scko_p;
-  assign sdo = sdo_p;
+  generate
+    if (XILINX_INTEL_N == 0) begin
+      assign scki_p = scki;
+      assign scki_n = 1'b0;
+      assign sdi_p = sdi;
+      assign sdi_n = 1'b0;
+      assign scko = scko_p;
+      assign sdo = sdo_p;
+    end else begin
+      OBUFDS obufds_scki (
+        .O(scki_n),
+        .OB(scki_p),
+        .I(scki));
+
+      OBUFDS obufds_sdi (
+        .O(sdi_n),
+        .OB(sdi_p),
+        .I(sdi));
+
+      IBUFDS #(
+        .CCIO_EN_M("TRUE"),
+        .CCIO_EN_S("TRUE")
+      ) ibufds_scko (
+        .O(scko),
+        .I(scko_p),
+        .IB(scko_n));
+
+      IBUFDS #(
+        .CCIO_EN_M("TRUE"),
+        .CCIO_EN_S("TRUE")
+      ) ibufds_sdo (
+        .O(sdo),
+        .I(sdo_p),
+        .IB(sdo_n));
+    end
+  endgenerate
 
   always @(posedge clk) begin
     if (rst == 1'b1) begin

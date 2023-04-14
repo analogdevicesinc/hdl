@@ -38,22 +38,22 @@ if {$LVDS_CMOS_N == 1} {
   set_instance_assignment -name IO_STANDARD "2.5V" -to cs_n
   set_instance_assignment -name IO_STANDARD "2.5V" -to pd
 
-  set_location_assignment PIN_G10 -to sdi         ; # sdo_1 60 lvds_rxp2 / sdi_p
-  set_location_assignment PIN_F10 -to "sdi(n)"    ; # sdo_2 62 lvds_rxn2 / sdi_n
-  set_location_assignment PIN_J10 -to scki        ; # sdo_3 66 lvds_rxp3 / scki_p
-  set_location_assignment PIN_J9 -to "scki(n)"    ; # scki 68 lvds_rxn3 / scki_n
-  set_location_assignment PIN_K7 -to scko         ; # scko 72 lvds_rxp4 / scko_p
-  set_location_assignment PIN_K8 -to "scko(n)"    ; # sdo_4 74 lvds_rxn4 / scko_n
-  set_location_assignment PIN_J7 -to sdo[0]       ; # sdo_5 78 lvds_rxp5 / sdo_p
-  set_location_assignment PIN_H7 -to "sdo[0](n)"  ; # sdo_6 80 lvds_rxn5 / sdo_n
+  set_location_assignment PIN_G10 -to sdi_p         ; # sdo_1 60 lvds_rxp2 / sdi_p
+  set_location_assignment PIN_F10 -to "sdi_p(n)"    ; # sdo_2 62 lvds_rxn2 / sdi_n
+  set_location_assignment PIN_J10 -to scki_p        ; # sdo_3 66 lvds_rxp3 / scki_p
+  set_location_assignment PIN_J9 -to "scki_p(n)"    ; # scki 68 lvds_rxn3 / scki_n
+  set_location_assignment PIN_K7 -to scko_p         ; # scko 72 lvds_rxp4 / scko_p
+  set_location_assignment PIN_K8 -to "scko_p(n)"    ; # sdo_4 74 lvds_rxn4 / scko_n
+  set_location_assignment PIN_J7 -to sdo_p          ; # sdo_5 78 lvds_rxp5 / sdo_p
+  set_location_assignment PIN_H7 -to "sdo_p(n)"     ; # sdo_6 80 lvds_rxn5 / sdo_n
 
-  set_instance_assignment -name IO_STANDARD "mini-LVDS_E_1R" -to sdi
-  set_instance_assignment -name IO_STANDARD "mini-LVDS_E_1R" -to scki
-  set_instance_assignment -name IO_STANDARD "LVDS" -to scko
-  set_instance_assignment -name IO_STANDARD "LVDS" -to sdo[0]
+  set_instance_assignment -name IO_STANDARD "mini-LVDS_E_1R" -to sdi_p
+  set_instance_assignment -name IO_STANDARD "mini-LVDS_E_1R" -to scki_p
+  set_instance_assignment -name IO_STANDARD "LVDS" -to scko_p
+  set_instance_assignment -name IO_STANDARD "LVDS" -to sdo_p
 
-  set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to scko
-  set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to sdo[0]
+  set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to scko_p
+  set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to sdo_p
 } else {
   # cmos
 

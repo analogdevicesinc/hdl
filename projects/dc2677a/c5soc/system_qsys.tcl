@@ -1,5 +1,6 @@
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 source $ad_hdl_dir/projects/common/c5soc/c5soc_system_qsys.tcl
+set xilinx_intel_n 0
 source $ad_hdl_dir/projects/dc2677a/common/dc2677a_qsys.tcl
 
 #system ID
