@@ -308,4 +308,4 @@ create_bd_addr_seg -range 0x80000 -offset 0x0 [get_bd_addr_spaces sys_mb/Data] \
 create_bd_addr_seg -range 0x80000 -offset 0x0 [get_bd_addr_spaces sys_mb/Instruction] \
   [get_bd_addr_segs sys_ilmb_cntlr/SLMB/Mem] SEG_ilmb_cntlr
 
-set_property range 0x2000000 [get_bd_addr_segs {sys_mb/Data/SEG_data_axi_linear_flash}]
+set_property range 0x8000000 [get_bd_addr_segs {sys_mb/Data/SEG_data_axi_linear_flash}]
