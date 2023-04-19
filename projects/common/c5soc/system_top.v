@@ -199,6 +199,11 @@ module system_top (
     .sys_hps_hps_io_hps_io_uart0_inst_RX (uart0_rx),
     .sys_hps_hps_io_hps_io_uart0_inst_TX (uart0_tx),
 
+    .sys_hps_i2c0_out_data(),
+    .sys_hps_i2c0_sda(1'b0),
+    .sys_hps_i2c0_clk_clk(),
+    .sys_hps_i2c0_scl_in_clk(1'b0),
+
     .sys_gpio_bd_in_port (sys_gpio_bd_i),
     .sys_gpio_bd_out_port (sys_gpio_bd_o),
     .sys_gpio_in_export (sys_gpio_i),
