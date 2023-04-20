@@ -362,3 +362,4 @@ ad_connect  sys_cpu_clk open5G_rx/clk_i
 ad_connect sys_cpu_resetn open5G_rx/reset_n
 ad_connect axi_ad9361/adc_data_i0 open5G_rx/s_axis_in_I_tdata
 ad_connect axi_ad9361/adc_data_q0 open5G_rx/s_axis_in_Q_tdata
+ad_connect axi_ad9361/adc_valid_i0 open5G_rx/s_axis_in_tvalid
