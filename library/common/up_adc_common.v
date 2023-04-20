@@ -131,7 +131,7 @@ module up_adc_common #(
 
   // parameters
 
-  localparam  VERSION = 32'h000a0262;
+  localparam  VERSION = 32'h000a0300;
 
   // internal registers
 
