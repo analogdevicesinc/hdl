@@ -82,7 +82,8 @@ set_property -dict {PACKAGE_PIN C15 IOSTANDARD LVCMOS25} [get_ports spi_csb[1]] 
 
 # control signals
 
-set_property -dict {PACKAGE_PIN A21 IOSTANDARD LVCMOS25} [get_ports direction]                 ; ## H37  FMC_LA32_P     IO_L15P_T2_DQS_AD12P_35
+set_property -dict {PACKAGE_PIN A21 IOSTANDARD LVCMOS25} [get_ports direction_dac_0]           ; ## H37  FMC_LA32_P     IO_L15P_T2_DQS_AD12P_35
+set_property -dict {PACKAGE_PIN B15 IOSTANDARD LVCMOS25} [get_ports direction_dac_1]           ; ## H35  FMC_LA30_N     IO_L7N_T1_AD2N_35
 set_property -dict {PACKAGE_PIN A22 IOSTANDARD LVCMOS25} [get_ports reset]                     ; ## H38  FMC_LA32_N     IO_L15N_T2_DQS_AD12N_35
 set_property -dict {PACKAGE_PIN J20 IOSTANDARD LVCMOS25} [get_ports dac_0_alert]               ; ## G18  FMC_LA16_P     IO_L9P_T1_DQS_34
 set_property -dict {PACKAGE_PIN B21 IOSTANDARD LVCMOS25} [get_ports dac_1_alert]               ; ## G36  FMC_LA33_P     IO_L18P_T2_AD13P_35

@@ -105,7 +105,8 @@ module system_top(
   output                  spi_sck,
   output        [1:0]     spi_csb,
 
-  output                  direction,
+  output                  direction_dac_0,
+  output                  direction_dac_1,
   output                  reset,
 
   output                  dac_0_spi_cs,
@@ -152,7 +153,8 @@ module system_top(
   assign gpio_i[63:40] = gpio_o[63:40];
   assign gpio_i[33]    = dac_1_alert;
   assign gpio_i[32]    = dac_0_alert;
-  assign direction     = dac_1_spi_cs == 1'h0 ? ~dac_1_spi_sdo_t : ~dac_0_spi_sdo_t;
+  assign direction_dac_0 = dac_0_spi_sdo_t;
+  assign direction_dac_1 = dac_1_spi_sdo_t;
 
   // instantiations
 
