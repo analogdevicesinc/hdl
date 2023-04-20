@@ -356,6 +356,10 @@ ad_cpu_interrupt ps-11 mb-11 axi_spi/ip2intc_irpt
 # open5G_rx
 ad_ip_instance open5G_rx open5G_rx
 ad_ip_parameter open5G_rx CONFIG.MULT_REUSE 32
+ad_ip_parameter open5G_rx CONFIG.SEPARATE_IQ_IN 1
+ad_ip_parameter open5G_rx CONFIG.NFFT 8
+ad_ip_parameter open5G_rx CONFIG.CLK_FREQ 100000000
+ad_ip_parameter open5G_rx CONFIG.USE_TAP_FILE 1
 
 ad_connect  axi_ad9361/l_clk open5G_rx/sample_clk_i
 ad_connect  sys_cpu_clk open5G_rx/clk_i
