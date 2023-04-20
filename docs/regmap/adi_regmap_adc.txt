@@ -956,6 +956,29 @@ ENDFIELD
 ############################################################################################
 
 REG
+0x010A
+REG_CHAN_CNTRL_4
+ADC Interface Control & Status
+ENDREG
+
+FIELD
+[31:3] 0x00000000
+RESERVED[28:0]
+RO
+Reserved for backward compatibility.
+ENDFIELD
+
+FIELD
+[2:0] 0x7
+SOFTSPAN [2:0]
+RW
+Softspan configuration register.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
 0x0110
 REG_*
 Channel 1, similar to register 0x100 to 0x10f.
