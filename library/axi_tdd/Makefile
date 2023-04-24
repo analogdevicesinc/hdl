@@ -17,6 +17,7 @@ GENERIC_DEPS += axi_tdd_pkg.sv
 GENERIC_DEPS += axi_tdd_regmap.sv
 GENERIC_DEPS += axi_tdd_sync_gen.sv
 
+XILINX_DEPS += axi_tdd_constr.ttcl
 XILINX_DEPS += axi_tdd_ip.tcl
 
 INTEL_DEPS += axi_tdd_constr.sdc
