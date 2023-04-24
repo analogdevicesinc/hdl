@@ -290,6 +290,8 @@ set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_gpio[4]
 set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_gpio[5]
 set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_gpio[6]
 
+# TODO: Check actual pinout after we get the development kit
+
 # set_location_assignment PIN_D43  -to gpio_bd_o[0]  ; ## led[0]
 # set_location_assignment PIN_B43  -to gpio_bd_o[1]  ; ## led[1]
 # set_location_assignment PIN_C42  -to gpio_bd_o[2]  ; ## led[2]
@@ -317,54 +319,6 @@ set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_gpio[6]
 # set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to gpio_bd_i[2]
 # set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to gpio_bd_i[3]
 
-# Quartus settings for Power Management
-# proc config_pwrmgt {} {
-#     global board_pwrmgt
-#     if {$board_pwrmgt == "linear"} {
-#         # Linear tech
-#         set_global_assignment -name INI_VARS "ASM_ENABLE_ADVANCED_DEVICES=ON;"
-#         set_global_assignment -name VID_OPERATION_MODE "PMBUS MASTER"
-#         set_global_assignment -name USE_PWRMGT_SCL SDM_IO0
-#         set_global_assignment -name USE_PWRMGT_SDA SDM_IO12
-#         set_global_assignment -name PWRMGT_BUS_SPEED_MODE "400 KHZ"
-#         set_global_assignment -name PWRMGT_PAGE_COMMAND_ENABLE ON
-#         set_global_assignment -name PWRMGT_SLAVE_DEVICE_TYPE OTHER
-#         set_global_assignment -name PWRMGT_SLAVE_DEVICE0_ADDRESS 42
-#         set_global_assignment -name PWRMGT_SLAVE_DEVICE1_ADDRESS 43
-#         set_global_assignment -name PWRMGT_SLAVE_DEVICE2_ADDRESS 44
-#         set_global_assignment -name PWRMGT_SLAVE_DEVICE3_ADDRESS 00
-#         set_global_assignment -name PWRMGT_SLAVE_DEVICE4_ADDRESS 00
-#         set_global_assignment -name PWRMGT_SLAVE_DEVICE5_ADDRESS 00
-#         set_global_assignment -name PWRMGT_SLAVE_DEVICE6_ADDRESS 00
-#         set_global_assignment -name PWRMGT_SLAVE_DEVICE7_ADDRESS 00
-#         set_global_assignment -name PWRMGT_PAGE_COMMAND_ENABLE ON
-#         set_global_assignment -name PWRMGT_VOLTAGE_OUTPUT_FORMAT "LINEAR FORMAT"
-#         set_global_assignment -name PWRMGT_LINEAR_FORMAT_N "-12"
-#         set_global_assignment -name PWRMGT_TRANSLATED_VOLTAGE_VALUE_UNIT VOLTS
-#     } else {
-#         # Enpirion
-#         set_global_assignment -name INI_VARS "ASM_ENABLE_ADVANCED_DEVICES=ON;"
-#         set_global_assignment -name VID_OPERATION_MODE "PMBUS MASTER"
-#         set_global_assignment -name USE_PWRMGT_SCL SDM_IO0
-#         set_global_assignment -name USE_PWRMGT_SDA SDM_IO12
-#         set_global_assignment -name PWRMGT_BUS_SPEED_MODE "100 KHZ"
-#         set_global_assignment -name PWRMGT_PAGE_COMMAND_ENABLE ON
-#         set_global_assignment -name PWRMGT_SLAVE_DEVICE_TYPE ED8401
-#         set_global_assignment -name PWRMGT_SLAVE_DEVICE0_ADDRESS 62
-#         set_global_assignment -name PWRMGT_SLAVE_DEVICE1_ADDRESS 00
-#         set_global_assignment -name PWRMGT_SLAVE_DEVICE2_ADDRESS 00
-#         set_global_assignment -name PWRMGT_SLAVE_DEVICE3_ADDRESS 00
-#         set_global_assignment -name PWRMGT_SLAVE_DEVICE4_ADDRESS 00
-#         set_global_assignment -name PWRMGT_SLAVE_DEVICE5_ADDRESS 00
-#         set_global_assignment -name PWRMGT_SLAVE_DEVICE6_ADDRESS 00
-#         set_global_assignment -name PWRMGT_SLAVE_DEVICE7_ADDRESS 00
-#         set_global_assignment -name PWRMGT_PAGE_COMMAND_ENABLE OFF
-#         set_global_assignment -name PWRMGT_VOLTAGE_OUTPUT_FORMAT "LINEAR FORMAT"
-#         set_global_assignment -name PWRMGT_LINEAR_FORMAT_N "-13"
-#         set_global_assignment -name PWRMGT_TRANSLATED_VOLTAGE_VALUE_UNIT VOLTS
-#     }
-# }
-
 # set_location_assignment PIN_Y49 -to fpga_sgpio_sync
 # set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_sgpio_sync
 # set_location_assignment PIN_W48 -to fpga_sgpio_clk
@@ -378,13 +332,30 @@ set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_gpio[6]
 # set_location_assignment PIN_CW48 -to fpga_button_pio[1]
 # set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_button_pio[1]
 
-set_global_assignment -name USE_HPS_COLD_RESET SDM_IO11
+# Agilex development kit's global assignments
+
 set_global_assignment -name HPS_INITIALIZATION "HPS FIRST"
 set_global_assignment -name HPS_DAP_SPLIT_MODE "SDM PINS"
 set_global_assignment -name INI_VARS "ASM_ENABLE_ADVANCED_DEVICES=ON;"
+set_global_assignment -name USE_HPS_COLD_RESET SDM_IO11
+set_global_assignment -name USE_CONF_DONE SDM_IO16
+set_global_assignment -name VID_OPERATION_MODE "PMBUS MASTER"
 set_global_assignment -name USE_PWRMGT_SCL SDM_IO0
 set_global_assignment -name USE_PWRMGT_SDA SDM_IO12
+set_global_assignment -name PWRMGT_BUS_SPEED_MODE "100 KHZ"
+set_global_assignment -name PWRMGT_PAGE_COMMAND_ENABLE ON
 set_global_assignment -name PWRMGT_SLAVE_DEVICE_TYPE ED8401
 set_global_assignment -name PWRMGT_SLAVE_DEVICE0_ADDRESS 62
+set_global_assignment -name PWRMGT_SLAVE_DEVICE1_ADDRESS 00
+set_global_assignment -name PWRMGT_SLAVE_DEVICE2_ADDRESS 00
+set_global_assignment -name PWRMGT_SLAVE_DEVICE3_ADDRESS 00
+set_global_assignment -name PWRMGT_SLAVE_DEVICE4_ADDRESS 00
+set_global_assignment -name PWRMGT_SLAVE_DEVICE5_ADDRESS 00
+set_global_assignment -name PWRMGT_SLAVE_DEVICE6_ADDRESS 00
+set_global_assignment -name PWRMGT_SLAVE_DEVICE7_ADDRESS 00
+set_global_assignment -name PWRMGT_PAGE_COMMAND_ENABLE OFF
 set_global_assignment -name PWRMGT_VOLTAGE_OUTPUT_FORMAT "LINEAR FORMAT"
 set_global_assignment -name PWRMGT_LINEAR_FORMAT_N "-13"
+set_global_assignment -name PWRMGT_TRANSLATED_VOLTAGE_VALUE_UNIT VOLTS
+
+set device_initialization_clock INIT_INTOSC
