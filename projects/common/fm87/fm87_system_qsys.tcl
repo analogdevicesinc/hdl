@@ -462,6 +462,17 @@ set_instance_parameter_value emif_hps PHY_DDR4_USER_STARTING_VREFIN {70.0}
 #set_interface_property local_cal_success EXPORT_OF emif_hps.local_cal_success
 #set_interface_property local_cal_fail EXPORT_OF emif_hps.local_cal_fail
 
+# ocm
+
+add_instance sys_ocm altera_avalon_onchip_memory2
+set_instance_parameter_value sys_ocm memorySize {262144.0}
+set_instance_parameter_value sys_ocm slave1Latency {2}
+set_instance_parameter_value sys_ocm slave2Latency {1}
+add_interface s1 avalon INPUT
+
+add_connection sys_clk.clk sys_ocm.clk1
+add_connection sys_clk.clk_reset sys_ocm.reset1
+
 # jtag
 
 add_instance fpga_m altera_jtag_avalon_master
@@ -475,43 +486,6 @@ add_connection sys_clk.clk_reset hps_m.clk_reset
 set_interface_property fpga_m_master EXPORT_OF fpga_m.master
 set_interface_property hps_m_master EXPORT_OF hps_m.master
 add_connection hps_m.master sys_hps.f2h_axi_slave
-
-# ocm
-
-add_instance sys_ocm altera_avalon_onchip_memory2
-set_instance_parameter_value sys_ocm memorySize {262144.0}
-set_instance_parameter_value sys_ocm slave1Latency {2}
-set_instance_parameter_value sys_ocm slave2Latency {1}
-add_interface s1 avalon INPUT
-
-add_connection sys_clk.clk sys_ocm.clk1
-add_connection sys_clk.clk_reset sys_ocm.reset1
-
-# fpga_m2ocm_pb
-
-add_instance fpga_m2ocm altera_avalon_mm_bridge
-set_instance_parameter_value fpga_m2ocm ADDRESS_UNITS {SYMBOLS}
-set_instance_parameter_value fpga_m2ocm ADDRESS_WIDTH {18}
-set_instance_parameter_value fpga_m2ocm DATA_WIDTH {128}
-set_instance_parameter_value fpga_m2ocm LINEWRAPBURSTS {0}
-set_instance_parameter_value fpga_m2ocm MAX_BURST_SIZE {1}
-set_instance_parameter_value fpga_m2ocm MAX_PENDING_RESPONSES {4}
-set_instance_parameter_value fpga_m2ocm MAX_PENDING_WRITES {0}
-set_instance_parameter_value fpga_m2ocm PIPELINE_COMMAND {1}
-set_instance_parameter_value fpga_m2ocm PIPELINE_RESPONSE {1}
-set_instance_parameter_value fpga_m2ocm SYMBOL_WIDTH {8}
-set_instance_parameter_value fpga_m2ocm SYNC_RESET {0}
-set_instance_parameter_value fpga_m2ocm USE_AUTO_ADDRESS_WIDTH {0}
-set_instance_parameter_value fpga_m2ocm USE_RESPONSE {0}
-set_instance_parameter_value fpga_m2ocm USE_WRITERESPONSE {0}
-
-add_connection sys_clk.clk_reset fpga_m2ocm.reset
-add_connection sys_clk.clk fpga_m2ocm.clk
-
-add_connection fpga_m2ocm.m0 sys_ocm.s1
-set_connection_parameter_value fpga_m2ocm.m0/sys_ocm.s1 addressMapSysInfo {<address-map><slave name='sys_ocm.s1' start='0x0' end='0x40000' datawidth='128' /></address-map>}
-add_connection fpga_m.master fpga_m2ocm.s0
-set_connection_parameter_value fpga_m.master/fpga_m2ocm.s0 baseAddress {0x80000000}
 
 # cpu/hps handling
 
