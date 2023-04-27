@@ -175,7 +175,9 @@ if {$ADI_PHY_SEL == 1} {
   source $ad_hdl_dir/projects/ad9081_fmca_ebz/common/versal_transceiver.tcl
 
   set REF_CLK_RATE [ expr { [info exists ad_project_params(REF_CLK_RATE)] \
-                            ? $ad_project_params(REF_CLK_RATE) : 360 } ]
+                            ? $ad_project_params(REF_CLK_RATE) : 375 } ]
+
+  create_bd_port -dir I gt_reset
 
   switch $INTF_CFG {
     "RXTX" {
@@ -188,7 +190,7 @@ if {$ADI_PHY_SEL == 1} {
     "TX" {
       create_versal_phy jesd204_phy $TX_NUM_OF_LANES $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE $INTF_CFG
     }
-  }  
+  }
 }
 
 # Instantiate ADC (Rx) path
@@ -346,13 +348,13 @@ if {$ADI_PHY_SEL == 1} {
   }
 } else {
   ad_connect ref_clk_q0 jesd204_phy/GT_REFCLK
+  ad_connect gt_reset jesd204_phy/gtreset_in
   if {$INTF_CFG != "TX"} {
     set rx_link_clock  jesd204_phy/rxusrclk_out
     # Connect PHY to Link Layer
     for {set j 0}  {$j < $RX_NUM_OF_LANES} {incr j} {
       ad_connect  axi_mxfe_rx_jesd/rx_phy${j} jesd204_phy/rx${j}
     }
-    ad_connect axi_mxfe_rx_jesd/rx_axi/device_reset jesd204_phy/reset_rx_pll_and_datapath_in
     ad_connect  $rx_link_clock /axi_mxfe_rx_jesd/link_clk
     ad_connect  rx_device_clk /axi_mxfe_rx_jesd/device_clk
 
@@ -367,7 +369,6 @@ if {$ADI_PHY_SEL == 1} {
     for {set j 0}  {$j < $TX_NUM_OF_LANES} {incr j} {
       ad_connect  axi_mxfe_tx_jesd/tx_phy${j} jesd204_phy/tx${j}
     }
-    ad_connect axi_mxfe_tx_jesd/tx_axi/device_reset jesd204_phy/reset_tx_pll_and_datapath_in
     ad_connect  $tx_link_clock /axi_mxfe_tx_jesd/link_clk
     ad_connect  tx_device_clk /axi_mxfe_tx_jesd/device_clk
 
