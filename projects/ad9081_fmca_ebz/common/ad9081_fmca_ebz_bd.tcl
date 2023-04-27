@@ -138,8 +138,9 @@ if {$ADI_PHY_SEL == 1} {
   source $ad_hdl_dir/projects/ad9081_fmca_ebz/common/versal_transceiver.tcl
 
   set REF_CLK_RATE [ expr { [info exists ad_project_params(REF_CLK_RATE)] \
-                            ? $ad_project_params(REF_CLK_RATE) : 360 } ]
-  # TODO: 
+                            ? $ad_project_params(REF_CLK_RATE) : 375 } ]
+  create_bd_port -dir I gt_reset
+  # TODO:
   # Assumption is that number of Tx and Rx lane is the same
   create_versal_phy jesd204_phy $TX_NUM_OF_LANES $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE
 
@@ -296,6 +297,7 @@ if {$ADI_PHY_SEL == 1} {
 } else {
 
   ad_connect ref_clk_q0 jesd204_phy/GT_REFCLK
+  ad_connect gt_reset jesd204_phy/gtreset_in
 
   set rx_link_clock  jesd204_phy/rxusrclk_out
   set tx_link_clock  jesd204_phy/txusrclk_out
@@ -309,9 +311,6 @@ if {$ADI_PHY_SEL == 1} {
   }
 
   ad_connect $sys_cpu_clk jesd204_phy/apb3clk
-
-  ad_connect axi_mxfe_rx_jesd/rx_axi/device_reset jesd204_phy/reset_rx_pll_and_datapath_in
-  ad_connect axi_mxfe_tx_jesd/tx_axi/device_reset jesd204_phy/reset_tx_pll_and_datapath_in
 
   ad_connect  $rx_link_clock /axi_mxfe_rx_jesd/link_clk
   ad_connect  rx_device_clk /axi_mxfe_rx_jesd/device_clk
@@ -450,7 +449,7 @@ if {$ADI_PHY_SEL == 1} {
 }
 
 #
-# Sync at TPL level 
+# Sync at TPL level
 #
 
 create_bd_port -dir I ext_sync_in
