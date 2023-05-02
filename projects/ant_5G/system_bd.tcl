@@ -238,6 +238,7 @@ ad_ip_parameter open5G_rx CONFIG.SEPARATE_IQ_IN 1
 ad_ip_parameter open5G_rx CONFIG.NFFT 8
 ad_ip_parameter open5G_rx CONFIG.CLK_FREQ 100000000
 ad_ip_parameter open5G_rx CONFIG.USE_TAP_FILE 1
+ad_ip_parameter open5G_rx CONFIG.HALF_CP_ADVANCE 1
 
 ad_ip_instance axi_dmac open5G_rx_dma
 ad_ip_parameter open5G_rx_dma CONFIG.DMA_TYPE_SRC 1
