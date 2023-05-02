@@ -219,6 +219,28 @@ ad_connect  axi_ethernet_0/axi_txc_arstn axi_ethernet_dma/mm2s_cntrl_reset_out_n
 ad_connect  axi_ethernet_0/axi_rxd_arstn axi_ethernet_dma/s2mm_prmry_reset_out_n
 ad_connect  axi_ethernet_0/axi_rxs_arstn axi_ethernet_dma/s2mm_sts_reset_out_n
 
+# QSPI flash
+
+ad_ip_instance axi_quad_spi axi_cfg_spi [list \
+  C_SPI_MEMORY {2} \
+  C_USE_STARTUP {1} \
+  C_USE_STARTUP_INT {1} \
+  C_SPI_MODE {2} \
+  C_DUAL_QUAD_MODE {1} \
+  C_NUM_SS_BITS {2} \
+  C_SCK_RATIO {2} \
+  C_FIFO_DEPTH {256} \
+  C_TYPE_OF_AXI4_INTERFACE {0} \
+  QSPI_BOARD_INTERFACE {spi_flash} \
+  ]
+
+make_bd_intf_pins_external  [get_bd_intf_pins axi_cfg_spi/SPI_1]
+
+ad_cpu_interconnect 0x44A80000 axi_cfg_spi
+
+set_property -dict [list CONFIG.ADDN_UI_CLKOUT4_FREQ_HZ {50}] [get_bd_cells axi_ddr_cntrl]
+ad_connect  /axi_ddr_cntrl/addn_ui_clkout4 axi_cfg_spi/ext_spi_clk
+
 # system id
 
 ad_ip_instance axi_sysid axi_sysid_0
@@ -257,7 +279,7 @@ ad_connect sys_concat_intc/In3    axi_ethernet_dma/s2mm_introut
 ad_connect sys_concat_intc/In4    axi_uart/interrupt
 ad_connect sys_concat_intc/In5    GND
 ad_connect sys_concat_intc/In6    GND
-ad_connect sys_concat_intc/In7    GND
+ad_connect sys_concat_intc/In7    axi_cfg_spi/ip2intc_irpt
 ad_connect sys_concat_intc/In8    GND
 ad_connect sys_concat_intc/In9    axi_iic_main/iic2intc_irpt
 ad_connect sys_concat_intc/In10   axi_spi/ip2intc_irpt
@@ -298,4 +320,3 @@ create_bd_addr_seg -range 0x80000 -offset 0x0 [get_bd_addr_spaces sys_mb/Data] \
   [get_bd_addr_segs sys_dlmb_cntlr/SLMB/Mem] SEG_dlmb_cntlr
 create_bd_addr_seg -range 0x80000 -offset 0x0 [get_bd_addr_spaces sys_mb/Instruction] \
   [get_bd_addr_segs sys_ilmb_cntlr/SLMB/Mem] SEG_ilmb_cntlr
-
