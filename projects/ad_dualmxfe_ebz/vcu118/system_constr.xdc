@@ -211,21 +211,21 @@ set_property -dict {PACKAGE_PIN AA46} [get_ports serdes1_m2c_n[5]]              
 set_property -dict {PACKAGE_PIN AB44} [get_ports serdes1_m2c_n[6]]                      ; ## Z17  FMC_DP13_M2C_N       MGTYRXN1_125
 set_property -dict {PACKAGE_PIN AC46} [get_ports serdes1_m2c_n[7]]                      ; ## Y15  FMC_DP12_M2C_N       MGTYRXN0_125
 
-set_property -dict {PACKAGE_PIN AT35 IOSTANDARD LVDS} [get_ports syncin_p[0]]           ; ## C10  FMC_LA06_P           IO_L2P_T0L_N2_43
-set_property -dict {PACKAGE_PIN AP35 IOSTANDARD LVDS} [get_ports syncin_p[1]]           ; ## C14  FMC_LA10_P           IO_L3P_T0L_N4_AD15P_43
-set_property -dict {PACKAGE_PIN AG31 IOSTANDARD LVDS} [get_ports syncin_p[2]]           ; ## C18  FMC_LA14_P           IO_L23P_T3U_N8_43
-set_property -dict {PACKAGE_PIN AH31 IOSTANDARD LVDS} [get_ports syncin_p[3]]           ; ## C19  FMC_LA14_N           IO_L23N_T3U_N9_43
+set_property -dict {PACKAGE_PIN AT35 IOSTANDARD LVDS} [get_ports mxfe0_syncin_p_0]           ; ## C10  FMC_LA06_P           IO_L2P_T0L_N2_43
+set_property -dict {PACKAGE_PIN AP35 IOSTANDARD LVDS} [get_ports mxfe0_syncin_p_1]           ; ## C14  FMC_LA10_P           IO_L3P_T0L_N4_AD15P_43
+set_property -dict {PACKAGE_PIN AG31 IOSTANDARD LVDS} [get_ports mxfe1_syncin_p_2]           ; ## C18  FMC_LA14_P           IO_L23P_T3U_N8_43
+set_property -dict {PACKAGE_PIN AH31 IOSTANDARD LVDS} [get_ports mxfe1_syncin_p_3]           ; ## C19  FMC_LA14_N           IO_L23N_T3U_N9_43
 
-set_property -dict {PACKAGE_PIN AT36 IOSTANDARD LVDS} [get_ports syncin_n[0]]           ; ## C11  FMC_LA06_N           IO_L2N_T0L_N3_43
-set_property -dict {PACKAGE_PIN AR35 IOSTANDARD LVDS} [get_ports syncin_n[1]]           ; ## C15  FMC_LA10_N           IO_L3N_T0L_N5_AD15N_43
+set_property -dict {PACKAGE_PIN AT36 IOSTANDARD LVDS} [get_ports mxfe0_syncin_n_0]           ; ## C11  FMC_LA06_N           IO_L2N_T0L_N3_43
+set_property -dict {PACKAGE_PIN AR35 IOSTANDARD LVDS} [get_ports mxfe1_syncin_n_1]           ; ## C15  FMC_LA10_N           IO_L3N_T0L_N5_AD15N_43
 
-set_property -dict {PACKAGE_PIN AP38 IOSTANDARD LVDS} [get_ports syncout_p[0]]          ; ## D11  FMC_LA05_P           IO_L1P_T0L_N0_DBC_43
-set_property -dict {PACKAGE_PIN AJ33 IOSTANDARD LVDS} [get_ports syncout_p[1]]          ; ## D14  FMC_LA09_P           IO_L19P_T3L_N0_DBC_AD9P_43
-set_property -dict {PACKAGE_PIN AJ35 IOSTANDARD LVDS} [get_ports syncout_p[2]]          ; ## D17  FMC_LA13_P           IO_L20P_T3L_N2_AD1P_43
-set_property -dict {PACKAGE_PIN AJ36 IOSTANDARD LVDS} [get_ports syncout_p[3]]          ; ## D18  FMC_LA13_N           IO_L20N_T3L_N3_AD1N_43
+set_property -dict {PACKAGE_PIN AP38 IOSTANDARD LVDS} [get_ports mxfe0_syncout_p_0]          ; ## D11  FMC_LA05_P           IO_L1P_T0L_N0_DBC_43
+set_property -dict {PACKAGE_PIN AJ33 IOSTANDARD LVDS} [get_ports mxfe0_syncout_p_1]          ; ## D14  FMC_LA09_P           IO_L19P_T3L_N0_DBC_AD9P_43
+set_property -dict {PACKAGE_PIN AJ35 IOSTANDARD LVDS} [get_ports mxfe1_syncout_p_2]          ; ## D17  FMC_LA13_P           IO_L20P_T3L_N2_AD1P_43
+set_property -dict {PACKAGE_PIN AJ36 IOSTANDARD LVDS} [get_ports mxfe1_syncout_p_3]          ; ## D18  FMC_LA13_N           IO_L20N_T3L_N3_AD1N_43
 
-set_property -dict {PACKAGE_PIN AR38 IOSTANDARD LVDS} [get_ports syncout_n[0]]          ; ## D12  FMC_LA05_N           IO_L1N_T0L_N1_DBC_43
-set_property -dict {PACKAGE_PIN AK33 IOSTANDARD LVDS} [get_ports syncout_n[1]]          ; ## D15  FMC_LA09_N           IO_L19N_T3L_N1_DBC_AD9N_43
+set_property -dict {PACKAGE_PIN AR38 IOSTANDARD LVDS} [get_ports mxfe0_syncout_n_0]          ; ## D12  FMC_LA05_N           IO_L1N_T0L_N1_DBC_43
+set_property -dict {PACKAGE_PIN AK33 IOSTANDARD LVDS} [get_ports mxfe1_syncout_n_1]          ; ## D15  FMC_LA09_N           IO_L19N_T3L_N1_DBC_AD9N_43
 
 # i'm not sure if it's needed, but it appears in the schematic and also for quad mxfe
 # !!! the pin might not be ok

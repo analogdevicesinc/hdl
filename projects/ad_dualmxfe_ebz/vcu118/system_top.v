@@ -47,16 +47,16 @@ module system_top (
   output        ddr4_act_n,
   output [16:0] ddr4_addr,
   output [ 1:0] ddr4_ba,
-  output [ 0:0] ddr4_bg,
+  output        ddr4_bg,
   output        ddr4_ck_p,
   output        ddr4_ck_n,
-  output [ 0:0] ddr4_cke,
-  output [ 0:0] ddr4_cs_n,
+  output        ddr4_cke,
+  output        ddr4_cs_n,
   inout  [ 7:0] ddr4_dm_n,
   inout  [63:0] ddr4_dq,
   inout  [ 7:0] ddr4_dqs_p,
   inout  [ 7:0] ddr4_dqs_n,
-  output [ 0:0] ddr4_odt,
+  output        ddr4_odt,
   output        ddr4_reset_n,
 
   output        mdio_mdc,
@@ -75,15 +75,17 @@ module system_top (
   inout         iic_scl,
   inout         iic_sda,
 
-  input         vadj_1v8_pgood,
+//  input         vadj_1v8_pgood,
 
   //---------- FMCp IOs ----------
 
-  output [ 3:0] adf4371_cs,
-  output        adf4371_sclk,
-  inout         adf4371_sdio,
-
-  output        adrf5020_ctrl,
+  output        adf4377_ce,
+  output        adf4377_csb,
+  output        adf4377_enclk1,
+  output        adf4377_enclk2,
+  output        adf4377_sclk,
+  inout         adf4377_sdio,
+  inout         adf4377_sdo,
 
   // reference clock
   input         fpga_clk0_p,
@@ -99,13 +101,17 @@ module system_top (
   input         fpga_clk3_p,
   input         fpga_clk3_n,
 
+  // unused so far
+  input         fpga_clk4_p,
+  input         fpga_clk4_n,
+
   // sysref for RX
-  input         fpga_sysref0_n,
   input         fpga_sysref0_p,
+  input         fpga_sysref0_n,
 
   // sysref for TX
-  input         fpga_sysref1_n,
   input         fpga_sysref1_p,
+  input         fpga_sysref1_n,
 
   input  [ 7:0] serdes0_m2c_p,
   input  [ 7:0] serdes0_m2c_n,
@@ -119,31 +125,49 @@ module system_top (
   output [ 7:0] serdes1_c2m_p,
   output [ 7:0] serdes1_c2m_n,
 
-  output        mxfe_syncin_0_p,
-  output        mxfe_syncin_2_p,
-  output        mxfe_syncin_4_p,
-  output        mxfe_syncin_6_p,
-
-  input         mxfe_syncout_0_p,
-  input         mxfe_syncout_2_p,
-  input         mxfe_syncout_4_p,
-  input         mxfe_syncout_6_p,
-
+//  output        mxfe_syncin_0_p,
+//  output        mxfe_syncin_2_p,
+//  output        mxfe_syncin_4_p,
+//  output        mxfe_syncin_6_p,
+//
+//  input         mxfe_syncout_0_p,
+//  input         mxfe_syncout_2_p,
+//  input         mxfe_syncout_4_p,
+//  input         mxfe_syncout_6_p,
+//
   // Sync pins used as GPIOs
   // MxFE0 GPIOs
-  inout         mxfe_syncin_0_n,
-  inout         mxfe_syncin_1_p,
-  inout         mxfe_syncout_0_n,
-  inout         mxfe_syncout_1_p,
-  inout  [8:0]  mxfe0_gpio,
-  // MxFE1 GPIOs
-  inout         mxfe_syncin_1_n,
-  inout         mxfe_syncin_3_p,
-  inout         mxfe_syncout_1_n,
-  inout         mxfe_syncout_3_p,
-  inout  [8:0]  mxfe1_gpio,
+  output        mxfe0_syncin_p_1,
+  output        mxfe0_syncin_p_0,
 
-  output  [4:1] hmc425a_v,
+  output        mxfe0_syncin_n_0,
+
+  output        mxfe0_syncout_p_1,
+  output        mxfe0_syncout_p_0,
+
+  output        mxfe0_syncout_n_0,
+  output  [8:0] mxfe0_gpio,
+
+  // MxFE1 GPIOs
+  output        mxfe1_syncin_p_3,
+  output        mxfe1_syncin_p_2,
+
+  output        mxfe1_syncin_n_1,
+
+  output        mxfe1_syncout_p_3,
+  output        mxfe1_syncout_p_2,
+
+  output        mxfe1_syncout_n_1,
+  output  [8:0] mxfe1_gpio,
+
+  output        hmc7044_reset,
+  output        hmc7044_sclk,
+  output        hmc7044_slen,
+  inout         hmc7044_miso,
+  inout         hmc7044_mosi,
+
+  input         m0_irq,
+  input         m1_irq,
 
   output  [1:0] mxfe_sclk,
   output  [1:0] mxfe_cs,
@@ -156,16 +180,8 @@ module system_top (
   output  [1:0] mxfe_tx_en0,
   output  [1:0] mxfe_tx_en1,
 
-  // PMOD1 for calibration board
-  output        pmod1_adc_sync_n,
-  output        pmod1_adc_sdi,
-  input         pmod1_adc_sdo,
-  output        pmod1_adc_sclk,
-
-  output        pmod1_5045_v2,
-  output        pmod1_5045_v1,
-  output        pmod1_ctrl_ind,
-  output        pmod1_ctrl_rx_combined
+  output [22:0] gpio_fmcp_p,
+  output [22:0] gpio_fmcp_n
 );
 
   // internal signals
@@ -279,8 +295,6 @@ module system_top (
 
   assign spi_miso = ~spi_csn[0] ? mxfe_miso[0] :
                     ~spi_csn[1] ? mxfe_miso[1] :
-                    ~spi_csn[2] ? mxfe_miso[2] :
-                    ~spi_csn[3] ? mxfe_miso[3] :
                     1'b0;
 
   assign spi_2_miso =  |(~spi_2_csn[3:0]) ? spi_4371_miso :
