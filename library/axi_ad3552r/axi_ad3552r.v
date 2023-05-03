@@ -50,6 +50,7 @@ module axi_ad3552r #(
 
   input       [31:0]      dma_data,
   input                   valid_in_dma,
+  input                   valid_in_dma_sec,
   output                  dac_data_ready,
 
   input       [15:0]      data_in_a,
@@ -62,6 +63,11 @@ module axi_ad3552r #(
   input       [ 3:0]      sdio_i,
   output      [ 3:0]      sdio_o,
   output                  sdio_t,
+
+  // sync transfer between 2 DAC'S
+
+  input                   external_sync,
+  output                  sync_ext_device,
 
   // axi interface
 
@@ -115,6 +121,8 @@ module axi_ad3552r #(
   wire    [31:0]    dac_data;
   wire              dac_valid;
   wire              if_busy;
+  wire              dac_ext_sync_arm;
+  wire              dac_ext_sync_disarm;
   // signal name changes
 
   assign up_clk  = s_axi_aclk;
@@ -126,6 +134,7 @@ module axi_ad3552r #(
     .reset_in(dac_rst_s),
     .dac_data(dac_data),
     .dac_data_valid(dac_valid),
+    .dac_data_valid_ext(valid_in_dma_sec),
     .dac_data_ready(dac_data_ready),
     .address(address),
     .data_read(data_read),
@@ -134,7 +143,12 @@ module axi_ad3552r #(
     .symb_8_16b(symb_8_16b),
     .transfer_data(transfer_data),
     .stream(stream),
+    
     .if_busy(if_busy),
+    .external_sync(external_sync),
+    .external_sync_arm(dac_ext_sync_arm),
+    .external_sync_disarm(dac_ext_sync_disarm),
+    .sync_ext_device(sync_ext_device),
     .sclk(dac_sclk),
     .csn(dac_csn),
     .sdio_i(sdio_i),
@@ -167,6 +181,8 @@ module axi_ad3552r #(
     .symb_8_16b(symb_8_16b),
     .transfer_data(transfer_data),
     .stream(stream),
+    .dac_ext_sync_arm(dac_ext_sync_arm),
+    .dac_ext_sync_disarm(dac_ext_sync_disarm),
     .if_busy(if_busy),
     .up_rstn(up_rstn),
     .up_clk(up_clk),

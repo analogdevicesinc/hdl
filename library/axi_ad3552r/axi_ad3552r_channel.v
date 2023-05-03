@@ -101,12 +101,11 @@ module axi_ad3552r_channel #(
   // ramp generator
 
   always @(posedge dac_clk) begin
+    ramp_valid <= 1'b1;
     if(dac_data_ready == 1'b1) begin
         ramp_pattern <= ramp_pattern + 1'b1;
-        ramp_valid <= 1'b1;
     end else begin
       ramp_pattern <= ramp_pattern;
-      ramp_valid <= 1'b0;
     end
     if(ramp_pattern == 16'hffff || dac_rst == 1'b1) begin
       ramp_pattern <= 16'h0;
