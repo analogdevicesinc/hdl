@@ -125,39 +125,27 @@ module system_top (
   output [ 7:0] serdes1_c2m_p,
   output [ 7:0] serdes1_c2m_n,
 
-//  output        mxfe_syncin_0_p,
-//  output        mxfe_syncin_2_p,
-//  output        mxfe_syncin_4_p,
-//  output        mxfe_syncin_6_p,
-//
-//  input         mxfe_syncout_0_p,
-//  input         mxfe_syncout_2_p,
-//  input         mxfe_syncout_4_p,
-//  input         mxfe_syncout_6_p,
-//
-  // Sync pins used as GPIOs
+  output        syncin_p_0,
+  output        syncin_p_2,
+
+  input         syncout_p_0,
+  input         syncout_p_2,
+
+// Sync pins used as GPIOs
   // MxFE0 GPIOs
-  output        mxfe0_syncin_p_1,
-  output        mxfe0_syncin_p_0,
+  output        syncin_p_1,
+  output        syncin_n_0,
 
-  output        mxfe0_syncin_n_0,
-
-  output        mxfe0_syncout_p_1,
-  output        mxfe0_syncout_p_0,
-
-  output        mxfe0_syncout_n_0,
+  output        syncout_p_1,
+  output        syncout_n_0,
   output  [8:0] mxfe0_gpio,
 
   // MxFE1 GPIOs
-  output        mxfe1_syncin_p_3,
-  output        mxfe1_syncin_p_2,
+  output        syncin_p_3,
+  output        syncin_n_1,
 
-  output        mxfe1_syncin_n_1,
-
-  output        mxfe1_syncout_p_3,
-  output        mxfe1_syncout_p_2,
-
-  output        mxfe1_syncout_n_1,
+  output        syncout_p_3,
+  output        syncout_n_1,
   output  [8:0] mxfe1_gpio,
 
   output        hmc7044_reset,
@@ -212,23 +200,21 @@ module system_top (
   wire            sysref0;
   wire            sysref1;
 
-  wire     [3:0]  link0_tx_syncin;
-  wire     [3:0]  link0_rx_syncout;
+  wire     [1:0]  link0_tx_syncin;
+  wire     [1:0]  link0_rx_syncout;
+
+  wire            dac_fifo_bypass;
 
   assign iic_rstn = 1'b1;
 
   // instantiations
 
   // Link 0 SYNC single ended lines
-  assign mxfe_syncin_0_p = link0_rx_syncout[0];
-  assign mxfe_syncin_2_p = link0_rx_syncout[1];
-  assign mxfe_syncin_4_p = link0_rx_syncout[2];
-  assign mxfe_syncin_6_p = link0_rx_syncout[3];
+  assign syncin_p_0 = link0_rx_syncout[0];
+  assign syncin_p_2 = link0_rx_syncout[1];
 
-  assign link0_tx_syncin[0] = mxfe_syncout_0_p;
-  assign link0_tx_syncin[1] = mxfe_syncout_2_p;
-  assign link0_tx_syncin[2] = mxfe_syncout_4_p;
-  assign link0_tx_syncin[3] = mxfe_syncout_6_p;
+  assign link0_tx_syncin[0] = syncout_p_0;
+  assign link0_tx_syncin[1] = syncout_p_2;
 
   // REFCLK
 
@@ -315,15 +301,13 @@ module system_top (
 
   // gpios
 
-  assign adrf5020_ctrl = gpio_o[34];
-  assign hmc425a_v     = gpio_o[38:35];
-  assign mxfe_reset    = gpio_o[44:41];
-  assign mxfe_rx_en0   = gpio_o[48:45];
-  assign mxfe_rx_en1   = gpio_o[52:49];
-  assign mxfe_tx_en0   = gpio_o[56:53];
-  assign mxfe_tx_en1   = gpio_o[60:57];
+  assign mxfe_reset  = gpio_o[44:41];
+  assign mxfe_rx_en0 = gpio_o[48:45];
+  assign mxfe_rx_en1 = gpio_o[52:49];
+  assign mxfe_tx_en0 = gpio_o[56:53];
+  assign mxfe_tx_en1 = gpio_o[60:57];
 
-  assign dac_fifo_bypass  = gpio_o[61];
+  assign dac_fifo_bypass = gpio_o[61];
 
   ad_iobuf #(
     .DATA_WIDTH (17)
@@ -346,10 +330,10 @@ module system_top (
     .mxfe0_gpio8 (mxfe0_gpio[6]),
     .mxfe0_gpio9 (mxfe0_gpio[7]),
     .mxfe0_gpio10 (mxfe0_gpio[8]),
-    .mxfe0_syncin_1_n (mxfe_syncin_0_n),
-    .mxfe0_syncin_1_p (mxfe_syncin_1_p),
-    .mxfe0_syncout_1_n (mxfe_syncout_0_n),
-    .mxfe0_syncout_1_p (mxfe_syncout_1_p),
+    .mxfe0_syncin_1_n (syncin_n_0),
+    .mxfe0_syncin_1_p (syncin_p_1),
+    .mxfe0_syncout_1_n (syncout_n_0),
+    .mxfe0_syncout_1_p (syncout_p_1),
 
     .mxfe1_gpio0 (mxfe1_gpio[0]),
     .mxfe1_gpio1 (mxfe1_gpio[1]),
@@ -360,10 +344,10 @@ module system_top (
     .mxfe1_gpio8 (mxfe1_gpio[6]),
     .mxfe1_gpio9 (mxfe1_gpio[7]),
     .mxfe1_gpio10 (mxfe1_gpio[8]),
-    .mxfe1_syncin_1_n (mxfe_syncin_1_n),
-    .mxfe1_syncin_1_p (mxfe_syncin_3_p),
-    .mxfe1_syncout_1_n (mxfe_syncout_1_n),
-    .mxfe1_syncout_1_p (mxfe_syncout_3_p),
+    .mxfe1_syncin_1_n (syncin_n_1),
+    .mxfe1_syncin_1_p (syncin_p_3),
+    .mxfe1_syncout_1_n (syncout_n_1),
+    .mxfe1_syncout_1_p (syncout_p_3),
 
     .gpio_t (gpio_t[127:64]),
     .gpio_i (gpio_i[127:64]),
