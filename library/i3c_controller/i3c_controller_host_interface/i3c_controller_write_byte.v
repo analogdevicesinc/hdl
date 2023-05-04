@@ -33,7 +33,7 @@
 // ***************************************************************************
 // ***************************************************************************
 /**
- * Packs u8 stream into u32 packages.
+ * Packs u8 stream into u32.
  * Restrictions:
  * Length must be > 0
  * At partial payload, e.g. 3-bytes, the remaining byte value is unknown.
@@ -44,7 +44,7 @@
 
 module i3c_controller_write_byte (
   input  wire clk,
-  input  wire resetn,
+  input  wire reset_n,
 
   input  wire u32_ready,
   output wire u32_valid,
@@ -69,7 +69,7 @@ module i3c_controller_write_byte (
   reg [1:0] c;
 
   always @(posedge clk) begin
-    if (resetn) begin
+    if (~reset_n) begin
       sm <= idle;
       c <= 2'b00;
       u32_valid_ctrl <= 1'b0;
@@ -92,9 +92,6 @@ module i3c_controller_write_byte (
               sm <= idle;
             end
           end
-        end
-        default: begin
-          sm <= idle;
         end
       endcase
     end

@@ -46,7 +46,7 @@
 
 module i3c_controller_read_byte (
   input  wire clk,
-  input  wire resetn,
+  input  wire reset_n,
 
   output wire u32_ready,
   input  wire u32_valid,
@@ -74,7 +74,7 @@ module i3c_controller_read_byte (
   reg  [1:0] c;
 
   always @(posedge clk) begin
-    if (resetn) begin
+    if (~reset_n) begin
       sm <= idle;
       c <= 2'b00;
     end else begin
@@ -108,7 +108,7 @@ module i3c_controller_read_byte (
 
   // Debug signals
   always @(posedge clk) begin
-    if (resetn) begin
+    if (~reset_n) begin
       debug_u32_underflow <= 1'b0;
     end else begin
       case (sm)
