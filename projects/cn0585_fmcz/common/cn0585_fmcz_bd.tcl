@@ -107,8 +107,8 @@ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 const_vcc_1
 
 # sys_rstgen
 
-ad_ip_instance proc_sys_reset pack_sys_rstgen
-ad_ip_parameter pack_sys_rstgen CONFIG.C_EXT_RST_WIDTH 1
+ad_ip_instance proc_sys_reset sampling_clk_rstgen
+ad_ip_parameter sampling_clk_rstgen CONFIG.C_EXT_RST_WIDTH 1
 
 # util_cpack2
 
@@ -139,8 +139,8 @@ ad_ip_parameter axi_clkgen CONFIG.CLK0_DIV 5
 ad_connect sys_ps7/FCLK_CLK0  axi_clkgen/clk
 ad_connect axi_clkgen/clk_0   sampling_clk
 
-ad_connect sys_ps7/FCLK_RESET0_N  pack_sys_rstgen/ext_reset_in
-ad_connect axi_clkgen/clk_0       pack_sys_rstgen/slowest_sync_clk
+ad_connect sys_ps7/FCLK_RESET0_N  sampling_clk_rstgen/ext_reset_in
+ad_connect axi_clkgen/clk_0       sampling_clk_rstgen/slowest_sync_clk
 
 # ltc adc connections
 
@@ -198,9 +198,9 @@ ad_connect axi_clkgen/clk_0   axi_pwm_gen/ext_clk
 ad_connect sys_cpu_resetn     axi_pwm_gen/s_axi_aresetn
 ad_connect sys_cpu_clk        axi_pwm_gen/s_axi_aclk
 
-ad_connect axi_clkgen/clk_0                  util_ltc2387_adc_pack/clk
-ad_connect pack_sys_rstgen/peripheral_reset  util_ltc2387_adc_pack/reset
-ad_connect axi_ltc2387_0/adc_valid           util_ltc2387_adc_pack/fifo_wr_en
+ad_connect axi_clkgen/clk_0                      util_ltc2387_adc_pack/clk
+ad_connect sampling_clk_rstgen/peripheral_reset  util_ltc2387_adc_pack/reset
+ad_connect axi_ltc2387_0/adc_valid               util_ltc2387_adc_pack/fifo_wr_en
 
 for {set i 0} {$i < 4} {incr i} {
   ad_connect axi_ltc2387_$i/adc_data  util_ltc2387_adc_pack/fifo_wr_data_$i
@@ -261,7 +261,7 @@ ad_connect axi_dac_0_dma/m_axis_aclk axi_clkgen/clk_0
 
 ad_connect axi_ad3552r_0/dac_data_ready axi_dac_0_dma/m_axis_ready
 ad_connect axi_ad3552r_0/dma_data       axi_dac_0_dma/m_axis_data
-ad_connect axi_dac_0_dma/m_axis_valid   axi_ad3552r_0/valid_in_dma
+ad_connect axi_ad3552r_0/valid_in_dma   axi_dac_0_dma/m_axis_valid   
 
 ad_connect axi_ltc2387_0/adc_data  axi_ad3552r_0/data_in_a
 ad_connect axi_ltc2387_1/adc_data  axi_ad3552r_0/data_in_b
@@ -293,7 +293,7 @@ ad_connect axi_clkgen/clk_0             axi_ad3552r_1/dac_clk
 ad_connect axi_clkgen/clk_0             axi_dac_1_dma/m_axis_aclk
 ad_connect axi_ad3552r_1/dac_data_ready axi_dac_1_dma/m_axis_ready
 ad_connect axi_ad3552r_1/dma_data       axi_dac_1_dma/m_axis_data
-ad_connect axi_dac_1_dma/m_axis_valid   axi_ad3552r_1/valid_in_dma
+ad_connect axi_ad3552r_1/valid_in_dma   axi_dac_1_dma/m_axis_valid   
 
 ad_connect axi_ltc2387_2/adc_data  axi_ad3552r_1/data_in_a
 ad_connect axi_ltc2387_3/adc_data  axi_ad3552r_1/data_in_b
@@ -305,6 +305,13 @@ ad_connect axi_ad3552r_1/dac_sclk  dac1_spi_sclk
 ad_connect axi_ad3552r_1/sdio_i    dac1_spi_sdi
 ad_connect axi_ad3552r_1/sdio_o    dac1_spi_sdo
 ad_connect axi_ad3552r_1/sdio_t    dac1_spi_sdo_t
+
+# synchronization between connecting devices  
+
+ad_connect axi_ad3552r_0/sync_ext_device  axi_ad3552r_0/external_sync 
+ad_connect axi_ad3552r_0/sync_ext_device  axi_ad3552r_1/external_sync 
+ad_connect axi_ad3552r_0/valid_in_dma_sec axi_dac_1_dma/m_axis_valid  
+ad_connect axi_ad3552r_1/valid_in_dma_sec axi_dac_0_dma/m_axis_valid 
 
 # address mapping
 
