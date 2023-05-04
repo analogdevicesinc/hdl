@@ -33,6 +33,7 @@
 // ***************************************************************************
 
 `timescale 1ns/100ps
+`default_nettype none
 
 module axi_i3c_controller #(
   parameter ID = 0,
@@ -44,69 +45,69 @@ module axi_i3c_controller #(
 
   // Slave AXI interface
 
-  input         s_axi_aclk,
-  input         s_axi_aresetn,
-  input         s_axi_awvalid,
-  input  [15:0] s_axi_awaddr,
-  output        s_axi_awready,
-  input   [2:0] s_axi_awprot,
-  input         s_axi_wvalid,
-  input  [31:0] s_axi_wdata,
-  input  [ 3:0] s_axi_wstrb,
-  output        s_axi_wready,
-  output        s_axi_bvalid,
-  output [ 1:0] s_axi_bresp,
-  input         s_axi_bready,
-  input         s_axi_arvalid,
-  input  [15:0] s_axi_araddr,
-  output        s_axi_arready,
-  input   [2:0] s_axi_arprot,
-  output        s_axi_rvalid,
-  input         s_axi_rready,
-  output [ 1:0] s_axi_rresp,
-  output [31:0] s_axi_rdata,
+  input  wire        s_axi_aclk,
+  input  wire        s_axi_aresetn,
+  input  wire        s_axi_awvalid,
+  input  wire [15:0] s_axi_awaddr,
+  output wire        s_axi_awready,
+  input  wire  [2:0] s_axi_awprot,
+  input  wire        s_axi_wvalid,
+  input  wire [31:0] s_axi_wdata,
+  input  wire [ 3:0] s_axi_wstrb,
+  output wire        s_axi_wready,
+  output wire        s_axi_bvalid,
+  output wire [ 1:0] s_axi_bresp,
+  input  wire        s_axi_bready,
+  input  wire        s_axi_arvalid,
+  input  wire [15:0] s_axi_araddr,
+  output wire        s_axi_arready,
+  input  wire  [2:0] s_axi_arprot,
+  output wire        s_axi_rvalid,
+  input  wire        s_axi_rready,
+  output wire [ 1:0] s_axi_rresp,
+  output wire [31:0] s_axi_rdata,
 
   // up interface
 
-  input                           up_clk,
-  input                           up_rstn,
-  input                           up_wreq,
-  input  [13:0]                   up_waddr,
-  input  [31:0]                   up_wdata,
-  output                          up_wack,
-  input                           up_rreq,
-  input  [13:0]                   up_raddr,
-  output [31:0]                   up_rdata,
-  output                          up_rack,
+  input  wire        up_clk,
+  input  wire        up_rstn,
+  input  wire        up_wreq,
+  input  wire [13:0] up_waddr,
+  input  wire [31:0] up_wdata,
+  output wire        up_wack,
+  input  wire        up_rreq,
+  input  wire [13:0] up_raddr,
+  output wire [31:0] up_rdata,
+  output wire        up_rack,
 
   output reg irq,
 
   // I3C basic signals
 
-  input i3c_clk,
-  output i3c_resetn,
+  input  wire i3c_clk,
+  output wire i3c_reset_n,
 
   // I3C control signals
 
-  input  cmd_ready,
-  output cmd_valid,
-  output [DATA_WIDTH-1:0] cmd_data,
+  input  wire cmd_ready,
+  output wire cmd_valid,
+  output wire [DATA_WIDTH-1:0] cmd,
 
-  output cmdr_ready,
-  input  cmdr_valid,
-  input  [DATA_WIDTH-1:0] cmdr_data,
+  output wire cmdr_ready,
+  input  wire cmdr_valid,
+  input  wire [DATA_WIDTH-1:0] cmdr,
 
-  input  sdo_read,
-  output sdo_valid,
-  output [DATA_WIDTH-1:0] sdo_data,
+  input  wire sdo_ready,
+  output wire sdo_valid,
+  output wire [DATA_WIDTH-1:0] sdo,
 
-  output sdi_ready,
-  input  sdi_valid,
-  input  [DATA_WIDTH-1:0] sdi_data,
+  output wire sdi_ready,
+  input  wire sdi_valid,
+  input  wire [DATA_WIDTH-1:0] sdi,
 
-  output ibi_ready,
-  input  ibi_valid,
-  input  [DATA_WIDTH-1:0] ibi_data
+  output wire ibi_ready,
+  input  wire ibi_valid,
+  input  wire [DATA_WIDTH-1:0] ibi
 );
 
   localparam PCORE_VERSION = 'h12345678;
@@ -163,14 +164,14 @@ module axi_i3c_controller #(
   reg up_sw_reset = 1'b1;
   wire up_sw_resetn = ~up_sw_reset;
 
-  reg  [31:0]                     up_rdata_ff = 'd0;
-  reg                             up_wack_ff = 1'b0;
-  reg                             up_rack_ff = 1'b0;
-  wire                            up_wreq_s;
-  wire                            up_rreq_s;
-  wire [31:0]                     up_wdata_s;
-  wire [13:0]                     up_waddr_s;
-  wire [13:0]                     up_raddr_s;
+  reg  [31:0] up_rdata_ff = 'd0;
+  reg         up_wack_ff = 1'b0;
+  reg         up_rack_ff = 1'b0;
+  wire        up_wreq_s;
+  wire        up_rreq_s;
+  wire [31:0] up_wdata_s;
+  wire [13:0] up_waddr_s;
+  wire [13:0] up_raddr_s;
 
   // Scratch register
   reg [31:0] up_scratch = 'h00;
@@ -275,7 +276,7 @@ module axi_i3c_controller #(
 
   // the software reset should reset all the registers
   always @(posedge clk) begin
-    if (up_sw_resetn == 1'b0) begin
+    if (!up_sw_resetn) begin
       up_irq_mask <= 'h00;
     end else begin
       if (up_wreq_s) begin
@@ -311,9 +312,9 @@ module axi_i3c_controller #(
       .clk(i3c_clk),
       .rst(i3c_reset),
       .rstn());
-    assign i3c_resetn = ~i3c_reset;
+    assign i3c_reset_n = ~i3c_reset;
   end else begin /* ASYNC_I3C_CLK == 0 */
-    assign i3c_resetn = ~up_sw_reset;
+    assign i3c_reset_n = ~up_sw_reset;
   end
   endgenerate
 
@@ -338,10 +339,10 @@ module axi_i3c_controller #(
     .s_axis_full(),
     .s_axis_almost_full(),
     .m_axis_aclk(i3c_clk),
-    .m_axis_aresetn(i3c_resetn),
+    .m_axis_aresetn(i3c_reset_n),
     .m_axis_ready(cmd_ready),
     .m_axis_valid(cmd_valid),
-    .m_axis_data(cmd_data),
+    .m_axis_data(cmd),
     .m_axis_tlast(),
     .m_axis_empty(),
     .m_axis_almost_empty(cmd_fifo_almost_empty),
@@ -358,10 +359,10 @@ module axi_i3c_controller #(
     .ALMOST_FULL_THRESHOLD(31)
   ) i_cmdr_fifo (
     .s_axis_aclk(i3c_clk),
-    .s_axis_aresetn(i3c_resetn),
+    .s_axis_aresetn(i3c_reset_n),
     .s_axis_ready(cmdr_ready),
     .s_axis_valid(cmdr_valid),
-    .s_axis_data(cmdr_data),
+    .s_axis_data(cmdr),
     .s_axis_room(),
     .s_axis_tlast(),
     .s_axis_full(),
@@ -397,10 +398,10 @@ module axi_i3c_controller #(
     .s_axis_full(),
     .s_axis_almost_full(),
     .m_axis_aclk(i3c_clk),
-    .m_axis_aresetn(i3c_resetn),
-    .m_axis_ready(sdo_data_ready),
-    .m_axis_valid(sdo_data_valid),
-    .m_axis_data(sdo_data),
+    .m_axis_aresetn(i3c_reset_n),
+    .m_axis_ready(sdo_ready),
+    .m_axis_valid(sdo_valid),
+    .m_axis_data(sdo),
     .m_axis_tlast(),
     .m_axis_level(),
     .m_axis_empty(),
@@ -417,10 +418,10 @@ module axi_i3c_controller #(
     .ALMOST_FULL_THRESHOLD(31)
   ) i_sdi_fifo (
     .s_axis_aclk(i3c_clk),
-    .s_axis_aresetn(i3c_resetn),
+    .s_axis_aresetn(i3c_reset_n),
     .s_axis_ready(sdi_ready),
     .s_axis_valid(sdi_valid),
-    .s_axis_data(sdi_data),
+    .s_axis_data(sdi),
     .s_axis_room(),
     .s_axis_tlast(),
     .s_axis_full(),
@@ -446,10 +447,10 @@ module axi_i3c_controller #(
     .ALMOST_FULL_THRESHOLD(31)
   ) i_ibi_fifo (
     .s_axis_aclk(i3c_clk),
-    .s_axis_aresetn(i3c_resetn),
+    .s_axis_aresetn(i3c_reset_n),
     .s_axis_ready(ibi_ready),
     .s_axis_valid(ibi_valid),
-    .s_axis_data(ibi_data),
+    .s_axis_data(ibi),
     .s_axis_room(),
     .s_axis_tlast(),
     .s_axis_full(),

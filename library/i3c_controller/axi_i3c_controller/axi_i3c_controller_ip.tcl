@@ -31,21 +31,21 @@ adi_add_bus "ctrl" "master" \
 	{
 		{"cmd_ready"  "CMD_READY"} \
 		{"cmd_valid"  "CMD_VALID"} \
-		{"cmd_data"   "CMD_DATA"} \
+		{"cmd"        "CMD_DATA"} \
 		{"cmdr_ready" "CMDR_READY"} \
 		{"cmdr_valid" "CMDR_VALID"} \
-		{"cmdr_data"  "CMDR_DATA"} \
+		{"cmdr"       "CMDR_DATA"} \
 		{"sdo_ready"  "SDO_READY"} \
 		{"sdo_valid"  "SDO_VALID"} \
-		{"sdo_data"   "SDO_DATA"} \
+		{"sdo"        "SDO_DATA"} \
 		{"sdi_ready"  "SDI_READY"} \
 		{"sdi_valid"  "SDI_VALID"} \
-		{"sdi_data"   "SDI_DATA"} \
+		{"sdi"        "SDI_DATA"} \
 		{"ibi_ready"  "IBI_READY"} \
 		{"ibi_valid"  "IBI_VALID"} \
-		{"ibi_data"   "IBI_DATA"} \
+		{"ibi"        "IBI_DATA"} \
 	}
-adi_add_bus_clock "i3c_clk" "ctrl" "i3c_resetn" "master"
+adi_add_bus_clock "i3c_clk" "ctrl" "i3c_reset_n" "master"
 
 foreach port {"up_clk" "up_rstn" "up_wreq" "up_waddr" "up_wdata" "up_rreq" "up_raddr"} {
   set_property DRIVER_VALUE "0" [ipx::get_ports $port]

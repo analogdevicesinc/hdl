@@ -69,7 +69,7 @@ module i3c_controller_write_byte (
   reg [1:0] c;
 
   always @(posedge clk) begin
-    if (~reset_n) begin
+    if (!reset_n) begin
       sm <= idle;
       c <= 2'b00;
       u32_valid_ctrl <= 1'b0;
@@ -77,7 +77,7 @@ module i3c_controller_write_byte (
       case (sm)
         idle: begin
           u8_len_reg <= u8_len;
-          sm <= u8_len_valid && u32_ready ? transfer : idle;
+          sm <= u8_len_valid & u32_ready ? transfer : idle;
           c <= 2'b00;
           u32_valid_ctrl <= 1'b0;
         end
@@ -97,9 +97,9 @@ module i3c_controller_write_byte (
     end
   end
 
-  assign u8_len_ready = sm == idle ? 1'b1 : 1'b0;
-  assign u8_ready = (sm == transfer && u32_ready) ? 1'b1 : 1'b0;
-  assign u32_valid = (sm == transfer && (c == 2'b00 || u8_len_reg == 12'd0) && u8_valid && u32_valid_ctrl) ? 1'b1 : 1'b0;
+  assign u8_len_ready = (sm == idle);
+  assign u8_ready = (sm == transfer & u32_ready);
+  assign u32_valid = (sm == transfer & (c == 2'b00 || u8_len_reg == 12'd0) & u8_valid & u32_valid_ctrl);
   genvar i;
   for (i=0; i<4; i=i+1) begin
     assign u32[8*i+7:8*i] = u32_reg[3-i];

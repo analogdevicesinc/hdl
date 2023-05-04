@@ -101,7 +101,7 @@ proc p_elaboration {} {
 
   # I3C Controller interfaces
   ad_interface clock i3c_clk     input 1
-  ad_interface reset i3c_resetn  output 1
+  ad_interface reset i3c_reset_n  output 1
 
   add_interface cmd axi4stream start
   add_interface_port cmd cmd_ready tready   input  1
@@ -109,7 +109,7 @@ proc p_elaboration {} {
   add_interface_port cmd cmd_data  tdata    output 32
 
   set_interface_property cmd associatedClock if_i3c_clk
-  set_interface_property cmd associatedReset if_i3c_resetn
+  set_interface_property cmd associatedReset if_i3c_reset_n
 
   add_interface cmdr axi4stream end
   add_interface_port cmdr cmdr_ready  tready output 1
@@ -117,7 +117,7 @@ proc p_elaboration {} {
   add_interface_port cmdr cmdr_data   tdata  input  32
 
   set_interface_property cmdr associatedClock if_i3c_clk
-  set_interface_property cmdr associatedReset if_i3c_resetn
+  set_interface_property cmdr associatedReset if_i3c_reset_n
 
   add_interface sdo axi4stream start
   add_interface_port sdo sdo_ready tready   input  1
@@ -125,7 +125,7 @@ proc p_elaboration {} {
   add_interface_port sdo sdo_data  tdata    output 32
 
   set_interface_property sdo associatedClock if_i3c_clk
-  set_interface_property sdo associatedReset if_i3c_resetn
+  set_interface_property sdo associatedReset if_i3c_reset_n
 
   add_interface sdi axi4stream end
   add_interface_port sdi sdi_ready  tready output 1
@@ -133,7 +133,7 @@ proc p_elaboration {} {
   add_interface_port sdi sdi_data   tdata  input  32
 
   set_interface_property sdi associatedClock if_i3c_clk
-  set_interface_property sdi associatedReset if_i3c_resetn
+  set_interface_property sdi associatedReset if_i3c_reset_n
 
   add_interface ibi axi4stream end
   add_interface_port ibi ibi_ready  tready output 1
@@ -141,6 +141,6 @@ proc p_elaboration {} {
   add_interface_port ibi ibi_data   tdata  input  32
 
   set_interface_property ibi associatedClock if_i3c_clk
-  set_interface_property ibi associatedReset if_i3c_resetn
+  set_interface_property ibi associatedReset if_i3c_reset_n
 }
 

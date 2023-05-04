@@ -34,18 +34,48 @@
 // ***************************************************************************
 
 `timescale 1ns/100ps
+`default_nettype none
 
-module i3c_controller_execution #(
+module i3c_controller_core #(
   parameter DEFAULT_CLK_DIV = 0
 ) (
-  input clk,
-  input resetn,
+  input  wire clk,
+  input  wire reset_n,
 
-  output cmd_ready,
-  input cmd_valid,
-  input [15:0] cmd,
+  // Command parsed
 
-  output scl,
-  inout sda
+  input  wire cmdp_valid,
+  output wire cmdp_ready,
+  input  wire cmdp_ccc,
+  input  wire cmdp_broad_header,
+  input  wire [1:0] cmdp_xmit,
+  input  wire cmdp_sr,
+  input  wire [11:0] cmdp_buffer_len,
+  input  wire [6:0] cmdp_da,
+  input  wire cmdp_rnw,
+  input  wire cmdp_do_daa,
+
+  // Byte stream
+
+  output reg sdo_ready,
+  input  wire sdo_valid,
+  input  wire [7:0] sdo,
+
+  input  wire sdi_ready,
+  output wire sdi_valid,
+  output wire [7:0] sdi,
+
+  // I3C bus signals
+
+  output wire scl,
+  inout  wire sda
 );
+  wire clk_quarter;
+
+  i3c_controller_quarter_clk #(
+  ) i_i3c_controller_quarter_clk (
+    .reset_n(reset_n),
+    .clk(clk),
+    .clk_quarter(clk_quarter)
+  );
 endmodule

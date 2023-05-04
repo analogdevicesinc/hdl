@@ -74,7 +74,7 @@ module i3c_controller_read_byte (
   reg  [1:0] c;
 
   always @(posedge clk) begin
-    if (~reset_n) begin
+    if (!reset_n) begin
       sm <= idle;
       c <= 2'b00;
     end else begin
@@ -116,7 +116,7 @@ module i3c_controller_read_byte (
           debug_u32_underflow <= ~u32_valid & u8_len_valid;
         end
         transfer: begin
-          if (u8_ready && |i && j == 2'd0) begin
+          if (u8_ready & |i & j == 2'd0) begin
             debug_u32_underflow <= ~u32_valid;
           end
         end
@@ -125,9 +125,9 @@ module i3c_controller_read_byte (
     end
   end
 
-  assign u8_len_ready = sm == idle ? 1'b1 : 1'b0;
-  assign u32_ready = (sm == idle && u8_len_valid & u32_valid) || (sm == transfer && u8_ready && |i && c == 2'b00) ? 1'b1 : 1'b0;
-  assign u8_valid = sm == transfer ? 1'b1 : 1'b0;
+  assign u8_len_ready = (sm == idle);
+  assign u32_ready = (sm == idle & u8_len_valid & u32_valid) || (sm == transfer & u8_ready & |i & c == 2'b00);
+  assign u8_valid = (sm == transfer);
   assign j = u8_len_reg[1:0];
   assign i = u8_len_reg[11:2];
   assign u8 = u32_reg[31:24];

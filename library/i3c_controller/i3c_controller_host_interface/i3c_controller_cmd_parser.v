@@ -40,26 +40,26 @@ module i3c_controller_cmd_parser #(
   parameter DEFAULT_CLK_DIV = 0
 ) (
   input  wire clk,
-  input  wire resetn,
+  input  wire reset_n,
 
   // Command FIFO
-  output wire reg cmd_ready,
+
+  output reg  cmd_ready,
   input  wire cmd_valid,
-  input  wire [15:0] cmd,
+  input  wire [31:0] cmd,
 
   // Command parsed
-  output wire reg cmdp_valid,
-  input  wire cmdp_ready,
-  output wire reg cmdp_ccc,
-  output wire reg cmdp_broad_header,
-  output wire reg [1:0] cmdp_xmit,
-  output wire reg cmdp_sr,
-  output wire reg [11:0] cmdp_buffer_len,
-  output wire reg [6:0] cmdp_da,
-  output wire reg cmdp_rnw,
 
-  output wire scl,
-  inout  wire sda
+  output reg  cmdp_valid,
+  input  wire cmdp_ready,
+  output reg  cmdp_ccc,
+  output reg  cmdp_broad_header,
+  output reg  [1:0] cmdp_xmit,
+  output reg  cmdp_sr,
+  output reg  [11:0] cmdp_buffer_len,
+  output reg  [6:0] cmdp_da,
+  output reg  cmdp_rnw,
+  output reg  cmdp_do_daa
 );
   reg [1:0] sm;
   localparam [1:0]
@@ -68,7 +68,7 @@ module i3c_controller_cmd_parser #(
     await = 2;
 
   always @(posedge clk) begin
-    if (resetn) begin
+    if (!reset_n) begin
       cmd_ready <= 1'b0;
       cmdp_valid <= 1'b0;
       sm <= idle;

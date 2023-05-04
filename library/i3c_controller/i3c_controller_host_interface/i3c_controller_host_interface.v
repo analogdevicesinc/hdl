@@ -43,48 +43,119 @@ module i3c_controller_host_interface #(
   // I3C basic signals
 
   input  wire clk,
-  input  wire resetn,
+  input  wire reset_n,
 
   // I3C control signals
 
-  output wire reg cmd_ready,
+  output wire cmd_ready,
   input  wire cmd_valid,
   input  wire [DATA_WIDTH-1:0] cmd,
 
   input  wire cmdr_ready,
   output wire cmdr_valid,
-  output wire [DATA_WIDTH-1:0] cmd_data,
+  output wire [DATA_WIDTH-1:0] cmdr,
 
-  output wire reg sdo_ready,
+  output wire sdo_ready,
   input  wire sdo_valid,
-  input  wire [DATA_WIDTH:0] sdo,
+  input  wire [DATA_WIDTH-1:0] sdo,
 
   input  wire sdi_ready,
   output wire sdi_valid,
-  output wire [DATA_WIDTH-1:0] sdi_data,
+  output wire [DATA_WIDTH-1:0] sdi,
 
   input  wire ibi_ready,
   output wire ibi_valid,
-  output wire [DATA_WIDTH-1:0] ibi_data,
+  output wire [DATA_WIDTH-1:0] ibi,
+
+  // Command parsed
+
+  output wire cmdp_valid,
+  input  wire cmdp_ready,
+  output wire cmdp_ccc,
+  output wire cmdp_broad_header,
+  output wire [1:0] cmdp_xmit,
+  output wire cmdp_sr,
+  output wire [11:0] cmdp_buffer_len,
+  output wire [6:0] cmdp_da,
+  output wire cmdp_rnw,
+  output wire cmdp_do_daa,
+
+  // Byte stream
+
+  input  wire sdo_u8_ready,
+  output wire sdo_u8_valid,
+  output wire [7:0] sdo_u8,
+
+  output wire sdi_u8_ready,
+  input  wire sdi_u8_valid,
+  input  wire [7:0] sdi_u8
 );
+  wire rd_bytes_valid;
+  wire rd_bytes_ready;
+  wire wr_bytes_valid;
+  wire wr_bytes_ready;
+  wire cmdp_ready_w;
 
   i3c_controller_read_byte #(
-    .DATA_WIDTH(DATA_WIDTH)
-  ) i_read_byte (
+  ) i_i3c_controller_read_byte (
     .clk(clk),
-    .resetn(resetn),
+    .reset_n(reset_n),
 
     .u32_ready(sdo_ready),
     .u32_valid(sdo_valid),
     .u32(sdo),
 
-    .u8_len_ready(sdo_len_ready_s),
-    .u8_len_valid(sdo_len_valid_s),
-    .u8_len(sdo_length_s),
+    .u8_len_ready(rd_bytes_ready),
+    .u8_len_valid(rd_bytes_valid),
+    .u8_len(cmdp_buffer_len),
 
-    .u8_ready(sdo_byte_ready_s),
-    .u8_valid(sdo_byte_valid_s),
-    .u8(sdo_byte_s)
+    .u8_ready(sdo_u8_ready),
+    .u8_valid(sdo_u8_valid),
+    .u8(sdo_u8),
+
+    .debug_u32_underflow()
   );
 
+  i3c_controller_write_byte #(
+  ) i_i3c_controller_write_byte (
+    .clk(clk),
+    .reset_n(reset_n),
+
+    .u32_ready(sdi_ready),
+    .u32_valid(sdi_valid),
+    .u32(sdi),
+
+    .u8_len_ready(wr_bytes_ready),
+    .u8_len_valid(wr_bytes_valid),
+    .u8_len(cmdp_buffer_len),
+
+    .u8_ready(sdi_u8_ready),
+    .u8_valid(sdi_u8_valid),
+    .u8(sdi_u8)
+  );
+
+  i3c_controller_cmd_parser #(
+  ) i_i3c_controller_cmd_parser (
+    .clk(clk),
+    .reset_n(reset_n),
+
+    .cmd_ready(cmd_ready),
+    .cmd_valid(cmd_valid),
+    .cmd(cmd),
+
+    .cmdp_valid(cmdp_valid),
+    .cmdp_ready(cmdp_ready_w),
+    .cmdp_ccc(cmdp_ccc),
+    .cmdp_broad_header(cmdp_broad_header),
+    .cmdp_xmit(cmdp_xmit),
+    .cmdp_sr(cmdp_sr),
+    .cmdp_buffer_len(cmdp_buffer_len),
+    .cmdp_da(cmdp_da),
+    .cmdp_rnw(cmdp_rnw),
+    .cmdp_do_daa(cmdp_do_daa)
+  );
+
+  assign rd_bytes_valid = (cmdp_valid & ~cmdp_ccc & cmdp_rnw);
+  assign wr_bytes_valid = (cmdp_valid & ~cmdp_ccc & ~cmdp_rnw);
+  assign cmdp_ready_w = (wr_bytes_ready & rd_bytes_ready & cmdp_ready);
 endmodule
