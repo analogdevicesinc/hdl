@@ -44,7 +44,7 @@
 
 package require qsys
 
-source ../../scripts/adi_env.tcl
+source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_intel.tcl
 
 ad_ip_create jesd204c_phy_adaptor_rx "ADI JESD204C PHY Adapter RX"
