@@ -462,16 +462,19 @@ set_instance_parameter_value emif_hps PHY_DDR4_USER_STARTING_VREFIN {70.0}
 #set_interface_property local_cal_success EXPORT_OF emif_hps.local_cal_success
 #set_interface_property local_cal_fail EXPORT_OF emif_hps.local_cal_fail
 
-# ocm
+# system id
 
-add_instance sys_ocm altera_avalon_onchip_memory2
-set_instance_parameter_value sys_ocm memorySize {262144.0}
-set_instance_parameter_value sys_ocm slave1Latency {2}
-set_instance_parameter_value sys_ocm slave2Latency {1}
-add_interface s1 avalon INPUT
+add_instance axi_sysid_0 axi_sysid
+add_instance rom_sys_0 sysid_rom
 
-add_connection sys_clk.clk sys_ocm.clk1
-add_connection sys_clk.clk_reset sys_ocm.reset1
+add_connection axi_sysid_0.if_rom_addr rom_sys_0.if_rom_addr
+add_connection rom_sys_0.if_rom_data axi_sysid_0.if_sys_rom_data
+add_connection sys_clk.clk rom_sys_0.if_clk
+add_connection sys_clk.clk axi_sysid_0.s_axi_clock
+add_connection sys_clk.clk_reset axi_sysid_0.s_axi_reset
+
+add_interface pr_rom_data_nc conduit end
+set_interface_property pr_rom_data_nc EXPORT_OF axi_sysid_0.if_pr_rom_data
 
 # jtag
 
@@ -501,7 +504,7 @@ proc ad_cpu_interrupt {m_irq m_port} {
     set_connection_parameter_value sys_hps.f2h_irq0/${m_port} irqNumber ${m_irq}
 }
 
-proc ad_cpu_interconnect {m_base m_port {avl_bridge ""} {avl_bridge_base 0x00000000} {avl_address_width 20}} {
+proc ad_cpu_interconnect {m_base m_port {avl_bridge ""} {avl_bridge_base 0x00000000} {avl_address_width 18}} {
   if {[string equal ${avl_bridge} ""]} {
     add_connection sys_hps.h2f_lw_axi_master ${m_port}
     set_connection_parameter_value sys_hps.h2f_lw_axi_master/${m_port} baseAddress ${m_base}
@@ -608,20 +611,6 @@ add_connection sys_clk.clk sys_spi.clk
 add_interface sys_spi conduit end
 set_interface_property sys_spi EXPORT_OF sys_spi.external
 
-# sysid
-
-add_instance axi_sysid_0 axi_sysid
-add_instance rom_sys_0 sysid_rom
-
-add_connection axi_sysid_0.if_rom_addr rom_sys_0.if_rom_addr
-add_connection rom_sys_0.if_rom_data axi_sysid_0.if_sys_rom_data
-add_connection sys_clk.clk rom_sys_0.if_clk
-add_connection sys_clk.clk axi_sysid_0.s_axi_clock
-add_connection sys_clk.clk_reset axi_sysid_0.s_axi_reset
-
-add_interface pr_rom_data_nc conduit end
-set_interface_property pr_rom_data_nc EXPORT_OF axi_sysid_0.if_pr_rom_data
-
 ## connections
 
 # exports
@@ -648,17 +637,15 @@ set_interface_property emif_hps_pll_ref_clk EXPORT_OF emif_hps.pll_ref_clk
 # cpu interconnect
 
 # TODO: Check if we need to connect the button & dipsw as slaves
-ad_cpu_interconnect 0x00000000 sys_gpio_in.s1 "avl_peripheral_mm_bridge"
-ad_cpu_interconnect 0x00000020 sys_gpio_out.s1 "avl_peripheral_mm_bridge"
-ad_cpu_interconnect 0x00000040 sys_spi.spi_control_port "avl_peripheral_mm_bridge"
-ad_cpu_interconnect 0x000000e0 sys_id.control_slave "avl_peripheral_mm_bridge"
-ad_cpu_interconnect 0x000000d0 sys_gpio_bd.s1 "avl_peripheral_mm_bridge"
-ad_cpu_interconnect 0x00000100 sys_gpio_button.s1 "avl_peripheral_mm_bridge"
-ad_cpu_interconnect 0x00000120 sys_gpio_dipsw.s1 "avl_peripheral_mm_bridge"
-ad_cpu_interconnect 0x00000140 sys_gpio_led.s1 "avl_peripheral_mm_bridge"
-
-ad_cpu_interconnect 0x00040000 sys_ocm.s1 "avl_peripheral_mm_bridge"
-ad_cpu_interconnect 0x00080000 axi_sysid_0.s_axi "avl_peripheral_mm_bridge"
+ad_cpu_interconnect 0x00000000 sys_gpio_in.s1
+ad_cpu_interconnect 0x00000020 sys_gpio_out.s1
+ad_cpu_interconnect 0x00000040 sys_spi.spi_control_port
+ad_cpu_interconnect 0x000000e0 sys_id.control_slave
+ad_cpu_interconnect 0x000000d0 sys_gpio_bd.s1
+ad_cpu_interconnect 0x00000100 sys_gpio_button.s1
+ad_cpu_interconnect 0x00000120 sys_gpio_dipsw.s1
+ad_cpu_interconnect 0x00000140 sys_gpio_led.s1
+ad_cpu_interconnect 0x00018000 axi_sysid_0.s_axi
 
 # interrupts
 
