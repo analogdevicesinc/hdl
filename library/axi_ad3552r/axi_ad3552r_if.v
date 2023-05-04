@@ -41,22 +41,26 @@ module axi_ad3552r_if (
   input                   reset_in,
   input       [31:0]      dac_data,
   input                   dac_data_valid,
-  output reg              dac_data_ready,
+  input                   dac_data_valid_ext,
+  output                  dac_data_ready,
 
   input       [ 7:0]      address,
-  output reg  [23:0]      data_read,
   input       [23:0]      data_write,
   input                   sdr_ddr_n,
   input                   symb_8_16b,
   input                   transfer_data,
   input                   stream,
+  input                   external_sync,
+  input                   external_sync_arm,
+
+  output                  if_busy,
+  output                  sync_ext_device,
+  output reg  [23:0]      data_read,
 
   // DAC control signals
 
   output                  sclk,
   output reg              csn,
-  output                  if_busy,
-
   input       [ 3:0]      sdio_i,
   output      [ 3:0]      sdio_o,
   output                  sdio_t
@@ -65,6 +69,8 @@ module axi_ad3552r_if (
   wire            transfer_data_s;
   wire            start_synced;
   wire   [31:0]   dac_data_int;
+  wire            dac_data_valid_synced;
+  wire            external_sync_s;
 
   reg    [55:0]   transfer_reg        = 56'h0;
   reg    [15:0]   counter             = 16'h0;
@@ -81,6 +87,8 @@ module axi_ad3552r_if (
   reg             valid_captured      = 1'b0;
   reg             start_transfer      = 1'b0;
   reg             if_busy_reg         = 1'b0;
+  reg             dac_data_ready_s    = 1'b0;
+  reg             external_sync_arm_reg = 1'b0;
 
   localparam  [ 2:0]  IDLE = 3'h0,
                       CS_LOW = 3'h1,
@@ -95,36 +103,57 @@ module axi_ad3552r_if (
   // transform the transfer data rising edge into a pulse
 
   assign transfer_data_s = transfer_data_d & ~transfer_data_dd;
+
+  // start the data stream transfer after valid has been captured
+
   assign start_synced = valid_captured_d[1] & start_transfer & stream;
+  assign sync_ext_device = start_synced ;
+
+  // use dac_data valid from an external source only if external_sync_arm_reg is 1
+
+  assign dac_data_valid_synced = (external_sync_arm_reg == 1'b1) ? (dac_data_valid & dac_data_valid_ext) : dac_data_valid ;
+  assign dac_data_ready = dac_data_ready_s & dac_data_valid_synced;
+  assign dac_data_int = dac_data;
+
+  // sync the data only if the synchronizations has been armed in software 
+
+  assign external_sync_s =  ~external_sync_arm_reg | external_sync;
 
   always @(posedge clk_in) begin
     if(reset_in == 1'b1) begin
       transfer_data_d  <= 'd0;
       transfer_data_dd <= 'd0;
       valid_captured_d <= 4'b0;
-      valid_captured <= 1'b0;
+      valid_captured   <= 1'b0;
     end else begin
       transfer_data_d  <= transfer_data;
       transfer_data_dd <= transfer_data_d;
       valid_captured_d <= {valid_captured_d[2:0], valid_captured};
-    end
-    if(dac_data_valid == 1'b1 && start_transfer == 1'b1) begin
-      valid_captured <= 1'b1;
-    end
-    if( transfer_data == 1'b1) begin
-      start_transfer <= 1'b1;
     end
     if(transfer_state == CS_HIGH || stream == 1'b0) begin
       start_transfer <= 1'b0;
       valid_captured <= 1'b0;
       valid_captured_d <= 4'b0;
     end
+   
+   // pulse to level conversion 
+
+    if(external_sync_arm == 1'b1) begin
+      external_sync_arm_reg <= 1'b1;
+    end 
+
+    if(transfer_state == CS_HIGH) begin
+      external_sync_arm_reg <= 1'b0;
+    end  
+ 
+    if(dac_data_valid == 1'b1 && start_transfer == 1'b1) begin
+      valid_captured <= 1'b1;
+    end
+    if(transfer_data == 1'b1) begin
+      start_transfer <= 1'b1;
+    end
+
   end
-
-// dac_data_int is a register allows capturing asinchronously with the
-// transmission
-
-  assign dac_data_int = dac_data;
 
   always @(posedge clk_in) begin
     if (reset_in == 1'b1) begin
@@ -139,7 +168,8 @@ module axi_ad3552r_if (
   always @(*) begin
     case (transfer_state)
       IDLE : begin
-        transfer_state_next = ((transfer_data_s == 1'b1 && stream == 1'b0) || start_synced == 1'b1)  ? CS_LOW : IDLE;
+        // goes in to the next state only if the control is to transfer register or synced transfer(if it's armed in software)
+        transfer_state_next = ((transfer_data_s == 1'b1 && stream == 1'b0) || (start_synced == 1'b1 && external_sync_s))  ? CS_LOW : IDLE;
         csn = 1'b1;
         transfer_step = 0;
         cycle_done = 0;
@@ -182,7 +212,7 @@ module axi_ad3552r_if (
         // in DDR mode needs to be make sure the clock and data is shifted by 2 ns
         cycle_done = stream ? (sdr_ddr_n ? (counter == 16'h0f) : (counter == 16'h7)):
                               (sdr_ddr_n ? (counter == 16'h10) : (counter == 16'h7));
-        transfer_state_next = stream ? STREAM: (cycle_done ?  CS_HIGH :STREAM);
+        transfer_state_next = (stream && external_sync_s) ? STREAM: ((cycle_done || external_sync_s == 1'b0) ?  CS_HIGH :STREAM);
         csn = 1'b0;
         transfer_step = sdr_ddr_n ? counter[0] :  1'b1;
       end
@@ -205,7 +235,7 @@ module axi_ad3552r_if (
   // depends on number of clock cycles per phase
 
   always @(posedge clk_in) begin
-    if (transfer_state == IDLE | reset_in == 1'b1) begin
+    if (transfer_state == IDLE || reset_in == 1'b1) begin
       counter <= 'b0;
     end else if (transfer_state == WRITE_ADDRESS | transfer_state == TRANSFER_REGISTER | transfer_state == STREAM) begin
       if (cycle_done) begin
@@ -234,16 +264,14 @@ module axi_ad3552r_if (
     end else if (transfer_state == CS_HIGH) begin
       data_r_wn <=1'b0;
     end
-    if (transfer_state == CS_LOW & stream) begin
-      dac_data_ready <= 1'b1;
-    end else if (transfer_state == STREAM) begin
+    if (transfer_state == STREAM) begin
       if (cycle_done == 1'b1) begin
-        dac_data_ready <= stream;
+        dac_data_ready_s <= stream;
       end else begin
-        dac_data_ready <= 1'b0;
+        dac_data_ready_s <= 1'b0;
       end
     end else begin
-      dac_data_ready <= 1'b0;
+      dac_data_ready_s <= 1'b0;
     end
     if (transfer_state == CS_LOW) begin
       full_speed = stream;

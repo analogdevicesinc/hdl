@@ -67,6 +67,7 @@ module axi_ad3552r_core #(
   output                  symb_8_16b,
   output                  transfer_data,
   output                  stream,
+  output                  dac_ext_sync_arm,
 
   // processor interface
 
@@ -200,7 +201,7 @@ module axi_ad3552r_core #(
     .dac_symb_op(),
     .dac_symb_8_16b(symb_8_16b),
     .dac_sync(dac_data_sync),
-    .dac_ext_sync_arm(),
+    .dac_ext_sync_arm(dac_ext_sync_arm),
     .dac_ext_sync_disarm(),
     .dac_ext_sync_manual_req(),
     .dac_frame(),
