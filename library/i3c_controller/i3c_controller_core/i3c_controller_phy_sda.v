@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2023 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -32,76 +32,20 @@
 //
 // ***************************************************************************
 // ***************************************************************************
+/**
+ * Tristate, p 'HIGH for push-pull SDA, and 'LOW for open-drain.
+ */
 
 `timescale 1ns/100ps
 `default_nettype none
-`include "i3c_controller_bit_mod_cmd.v"
 
-module i3c_controller_core #(
-  parameter DEFAULT_CLK_DIV = 0
+module i3c_controller_phy_sda #(
 ) (
-  input  wire clk,
-  input  wire reset_n,
-
-  // Command parsed
-
-  input  wire cmdp_valid,
-  output wire cmdp_ready,
-  input  wire cmdp_ccc,
-  input  wire cmdp_broad_header,
-  input  wire [1:0] cmdp_xmit,
-  input  wire cmdp_sr,
-  input  wire [11:0] cmdp_buffer_len,
-  input  wire [6:0] cmdp_da,
-  input  wire cmdp_rnw,
-  input  wire cmdp_do_daa,
-
-  // Byte stream
-
-  output reg  sdo_ready,
-  input  wire sdo_valid,
-  input  wire [7:0] sdo,
-
-  input  wire sdi_ready,
-  output wire sdi_valid,
-  output wire [7:0] sdi,
-
-  // I3C bus signals
-
-  output wire scl,
+  output wire sdo,
+  input  wire sdi,
+  input  wire t,
   inout  wire sda
 );
-  wire clk_quarter;
-  wire [`MOD_BIT_CMD_WIDTH:0] cmd;
-  wire cmd_tick;
-  wire t;
-  wire sdo_bit;
-  wire sdi_bit;
-
-  i3c_controller_quarter_clk #(
-  ) i_i3c_controller_quarter_clk (
-    .reset_n(reset_n),
-    .clk(clk),
-    .clk_quarter(clk_quarter)
-  );
-
-  i3c_controller_bit_mod #(
-  ) i_i3c_controller_bit_mod (
-    .reset_n(reset_n),
-    .clk(clk),
-    .clk_quarter(clk_quarter),
-    .cmd(cmd),
-    .cmd_tick(cmd_tick),
-    .scl(scl),
-    .sdi(sdi_bit),
-    .t(t)
-  );
-
-  i3c_controller_phy_sda #(
-  ) i_i3c_controller_phy_sda (
-    .sdo(sdo_bit),
-    .sdi(sdi_bit),
-    .t(t),
-    .sda(sda)
-  );
+  assign sda = ~t ? sdi : 1'bZ;
+  assign sdo = sda;
 endmodule
