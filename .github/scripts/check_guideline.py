@@ -1127,7 +1127,7 @@ else:
                     print (file)
 
     if (not guideline_ok):
-        print("\nGuideline not respected\n")
+        print("\nGUIDELINE RULES ARE NOT FOLLOWED\n")
         sys.exit(1)
     else:
         sys.exit(0)

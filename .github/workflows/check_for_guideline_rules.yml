@@ -22,15 +22,16 @@ jobs:
         uses: actions/checkout@v3
         # repository that retrieves all the changed files
       - name: Load get-changed-files repo
-        uses: Ana06/get-changed-files@v1.2
+        uses: Ana06/get-changed-files@v2.2.0
         id: changed_files
         with:
           format: space-delimited
       - name: Print changed files
         run: |
-          echo "Changed files:"
+          echo "::group::Click here to see the Changed files"
           echo "${{ steps.changed_files.outputs.all }}"
-      - name: Execute py script for guideline check
+          echo "::endgroup::"
+      - name: Executing Py script for guideline check
         id: execution
         # -p flag means that files will be specified with their relative path
         run: |
