@@ -184,7 +184,7 @@ module system_top (
   wire     [7:0]  spi_csn;
   wire            spi_mosi;
   wire            spi_miso;
-  wire            spi_4371_miso;
+  wire            spi_adf4377_miso;
   wire            spi_hmc_miso;
 
   wire            spi_2_clk;
@@ -269,28 +269,51 @@ module system_top (
   assign mxfe_mosi = {2{spi_mosi}};
   assign mxfe_sclk = {2{spi_clk}};
 
-  assign adf4371_cs = spi_2_csn[3:0];
-  assign adf4371_sclk = spi_2_clk;
+  assign adf4377_cs = spi_2_csn[3:0];
+  assign adf4377_sclk = spi_2_clk;
+
+  assign hmc7044_slen = spi_2_csn[4];
+  assign hmc7044_sclk = spi_2_clk;
 
   assign spi_miso = ~spi_csn[0] ? mxfe_miso[0] :
                     ~spi_csn[1] ? mxfe_miso[1] :
                     1'b0;
 
-  assign spi_2_miso =  |(~spi_2_csn[3:0]) ? spi_4371_miso :
-                         ~spi_2_csn[4]    ? spi_hmc_miso :
+  assign spi_2_miso =  |(~spi_2_csn[3:0]) ? spi_adf4377_miso :
+                         ~spi_2_csn[4]    ? spi_hmc7044_miso :
                           1'b0;
 
   ad_3w_spi #(
     .NUM_OF_SLAVES (1)
-  ) i_spi_4371 (
+  ) i_spi_hmc7044 (
+    .spi_csn (&spi_2_csn[4]),
+    .spi_clk (spi_2_clk),
+    .spi_mosi (spi_2_mosi),
+    .spi_miso (spi_7044_miso),
+    .spi_sdio (hmc7044_sdio),
+    .spi_dir ());
+
+  ad_3w_spi #(
+    .NUM_OF_SLAVES (1)
+  ) i_spi_adf4377 (
     .spi_csn (&spi_2_csn[3:0]),
     .spi_clk (spi_2_clk),
     .spi_mosi (spi_2_mosi),
-    .spi_miso (spi_4371_miso),
-    .spi_sdio (adf4371_sdio),
+    .spi_miso (spi_adf4377_miso),
+    .spi_sdio (adf4377_sdio),
     .spi_dir ());
 
   // gpios
+
+  ad_iobuf #(
+    .DATA_WIDTH (1)
+  ) i_iobuf (
+    .dio_t (gpio_t[32]),
+    .dio_i (gpio_o[32]),
+    .dio_o (gpio_i[32]),
+    .dio_p (hmc7044_gpio));
+
+  assign hmc7044_reset = gpio_o[33];
 
   assign mxfe_reset  = gpio_o[44:41];
   assign mxfe_rx_en0 = gpio_o[48:45];
@@ -399,6 +422,7 @@ module system_top (
     .gpio1_i (gpio_i[63:32]),
     .gpio1_o (gpio_o[63:32]),
     .gpio1_t (gpio_t[63:32]),
+
     // FMCp
 
     .gpio_fmcp_p (gpio_fmcp_p),
