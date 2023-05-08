@@ -22,6 +22,7 @@
 				<spirit:onSlave>
 					<spirit:presence>required</spirit:presence>
 					<spirit:width>1</spirit:width>
+					<spirit:direction>out</spirit:direction>
 				</spirit:onSlave>
 			</spirit:wire>
 		</spirit:port>
@@ -31,6 +32,7 @@
 				<spirit:onMaster>
 					<spirit:presence>required</spirit:presence>
 					<spirit:width>1</spirit:width>
+					<spirit:direction>out</spirit:direction>
 				</spirit:onMaster>
 				<spirit:onSlave>
 					<spirit:presence>required</spirit:presence>
@@ -45,6 +47,22 @@
 				<spirit:onMaster>
 					<spirit:presence>required</spirit:presence>
 					<spirit:width>1</spirit:width>
+					<spirit:direction>out</spirit:direction>
+				</spirit:onMaster>
+				<spirit:onSlave>
+					<spirit:presence>required</spirit:presence>
+					<spirit:width>1</spirit:width>
+					<spirit:direction>in</spirit:direction>
+				</spirit:onSlave>
+			</spirit:wire>
+    </spirit:port>
+		<spirit:port>
+			<spirit:logicalName>CMDP_CCC_BROADCAST</spirit:logicalName>
+			<spirit:wire>
+				<spirit:onMaster>
+					<spirit:presence>required</spirit:presence>
+					<spirit:width>1</spirit:width>
+					<spirit:direction>out</spirit:direction>
 				</spirit:onMaster>
 				<spirit:onSlave>
 					<spirit:presence>required</spirit:presence>
@@ -54,11 +72,27 @@
 			</spirit:wire>
 		</spirit:port>
 		<spirit:port>
-			<spirit:logicalName>CMDP_BROAD_HEADER</spirit:logicalName>
+			<spirit:logicalName>CMDP_CCC_ID</spirit:logicalName>
+			<spirit:wire>
+				<spirit:onMaster>
+					<spirit:presence>required</spirit:presence>
+					<spirit:width>6</spirit:width>
+					<spirit:direction>out</spirit:direction>
+				</spirit:onMaster>
+				<spirit:onSlave>
+					<spirit:presence>required</spirit:presence>
+					<spirit:width>6</spirit:width>
+					<spirit:direction>in</spirit:direction>
+				</spirit:onSlave>
+			</spirit:wire>
+		</spirit:port>
+		<spirit:port>
+			<spirit:logicalName>CMDP_BROADCAST_HEADER</spirit:logicalName>
 			<spirit:wire>
 				<spirit:onMaster>
 					<spirit:presence>required</spirit:presence>
 					<spirit:width>1</spirit:width>
+					<spirit:direction>out</spirit:direction>
 				</spirit:onMaster>
 				<spirit:onSlave>
 					<spirit:presence>required</spirit:presence>
@@ -73,6 +107,7 @@
 				<spirit:onMaster>
 					<spirit:presence>required</spirit:presence>
 					<spirit:width>2</spirit:width>
+					<spirit:direction>out</spirit:direction>
 				</spirit:onMaster>
 				<spirit:onSlave>
 					<spirit:presence>required</spirit:presence>
@@ -87,6 +122,7 @@
 				<spirit:onMaster>
 					<spirit:presence>required</spirit:presence>
 					<spirit:width>1</spirit:width>
+					<spirit:direction>out</spirit:direction>
 				</spirit:onMaster>
 				<spirit:onSlave>
 					<spirit:presence>required</spirit:presence>
@@ -101,6 +137,7 @@
 				<spirit:onMaster>
 					<spirit:presence>required</spirit:presence>
 					<spirit:width>12</spirit:width>
+					<spirit:direction>out</spirit:direction>
 				</spirit:onMaster>
 				<spirit:onSlave>
 					<spirit:presence>required</spirit:presence>
@@ -115,6 +152,7 @@
 				<spirit:onMaster>
 					<spirit:presence>required</spirit:presence>
 					<spirit:width>7</spirit:width>
+					<spirit:direction>out</spirit:direction>
 				</spirit:onMaster>
 				<spirit:onSlave>
 					<spirit:presence>required</spirit:presence>
@@ -129,6 +167,7 @@
 				<spirit:onMaster>
 					<spirit:presence>required</spirit:presence>
 					<spirit:width>1</spirit:width>
+					<spirit:direction>out</spirit:direction>
 				</spirit:onMaster>
 				<spirit:onSlave>
 					<spirit:presence>required</spirit:presence>
@@ -139,6 +178,21 @@
 		</spirit:port>
 		<spirit:port>
 			<spirit:logicalName>CMDP_DO_DAA</spirit:logicalName>
+			<spirit:wire>
+				<spirit:onMaster>
+					<spirit:presence>required</spirit:presence>
+					<spirit:width>1</spirit:width>
+					<spirit:direction>out</spirit:direction>
+				</spirit:onMaster>
+				<spirit:onSlave>
+					<spirit:presence>required</spirit:presence>
+					<spirit:width>1</spirit:width>
+					<spirit:direction>in</spirit:direction>
+				</spirit:onSlave>
+			</spirit:wire>
+		</spirit:port>
+		<spirit:port>
+			<spirit:logicalName>CMDP_DO_DAA_READY</spirit:logicalName>
 			<spirit:wire>
 				<spirit:onMaster>
 					<spirit:presence>required</spirit:presence>

@@ -45,16 +45,19 @@ adi_add_bus "cmdp" "master" \
 	"analog.com:interface:i3c_controller_cmdp_rtl:1.0" \
 	"analog.com:interface:i3c_controller_cmdp:1.0" \
 	{
-		{"cmdp_valid"        "CMDP_VALID"} \
-		{"cmdp_ready"        "CMDP_READY"} \
-		{"cmdp_ccc"          "CMDP_CCC"} \
-		{"cmdp_broad_header" "CMD_BROAD_HEADER"} \
-		{"cmdp_xmit"         "CMDP_XMIT"} \
-		{"cmdp_sr"           "CMDP_SR"} \
-		{"cmdp_buffer_len"   "CMDP_BUFFER_LEN"} \
-		{"cmdp_da"           "CMDP_DA"} \
-		{"cmdp_rnw"          "CMDP_RNW"} \
-		{"cmdp_do_daa"       "CMDP_DO_DAA"} \
+		{"cmdp_valid"         "CMDP_VALID"} \
+		{"cmdp_ready"         "CMDP_READY"} \
+		{"cmdp_ccc"           "CMDP_CCC"} \
+		{"cmdp_ccc_broadcast" "CMDP_CCC_BROADCAST"} \
+		{"cmdp_ccc_id"        "CMDP_CCC_ID"} \
+		{"cmdp_broad_header"  "CMD_BROAD_HEADER"} \
+		{"cmdp_xmit"          "CMDP_XMIT"} \
+		{"cmdp_sr"            "CMDP_SR"} \
+		{"cmdp_buffer_len"    "CMDP_BUFFER_LEN"} \
+		{"cmdp_da"            "CMDP_DA"} \
+		{"cmdp_rnw"           "CMDP_RNW"} \
+		{"cmdp_do_daa"        "CMDP_DO_DAA"} \
+		{"cmdp_do_daa_ready"  "CMDP_DO_DAA_READY"} \
 	}
 adi_add_bus_clock "clk" "cmdp" "reset_n"
 

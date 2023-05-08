@@ -32,70 +32,118 @@
 //
 // ***************************************************************************
 // ***************************************************************************
+/**
+ * Parse commands.
+ * When the first command indicates a pair command (e.g. CCC), await next
+ * command to complete request (e.g. add CCC ID to parsed CCC command).
+ * If it is a simple command (e.g. private transfer), a "blank" command
+ * is not required.
+ */
 
 `timescale 1ns/100ps
 `default_nettype none
 
 module i3c_controller_cmd_parser #(
-  parameter DEFAULT_CLK_DIV = 0
 ) (
   input  wire clk,
   input  wire reset_n,
 
   // Command FIFO
 
-  output reg  cmd_ready,
+  output wire cmd_ready,
   input  wire cmd_valid,
   input  wire [31:0] cmd,
 
   // Command parsed
 
-  output reg  cmdp_valid,
-  input  wire cmdp_ready,
-  output reg  cmdp_ccc,
-  output reg  cmdp_broad_header,
-  output reg  [1:0] cmdp_xmit,
-  output reg  cmdp_sr,
+  output wire        cmdp_valid,
+  input  wire        cmdp_ready,
+  output reg         cmdp_ccc,
+  output reg         cmdp_ccc_broadcast,
+  output reg  [6:0]  cmdp_ccc_id,
+  output reg         cmdp_broadcast_header,
+  output reg  [1:0]  cmdp_xmit,
+  output reg         cmdp_sr,
   output reg  [11:0] cmdp_buffer_len,
-  output reg  [6:0] cmdp_da,
-  output reg  cmdp_rnw,
-  output reg  cmdp_do_daa
+  output reg  [6:0]  cmdp_da,
+  output reg         cmdp_rnw,
+  output wire        cmdp_do_daa,
+  input  wire        cmdp_do_daa_ready
 );
-  reg [1:0] sm;
-  localparam [1:0]
-    idle  = 0,
-    init  = 1,
-    await = 2;
+  wire        cmd_ccc;
+  wire        cmd_ccc_broadcast;
+  wire [6:0]  cmd_ccc_id;
+  wire        cmd_broadcast_header;
+  wire [1:0]  cmd_xmit;
+  wire        cmd_sr;
+  wire [11:0] cmd_buffer_len;
+  wire [6:0]  cmd_da;
+  wire        cmd_rnw;
+
+  localparam [6:0] CCC_ENTDAA = 7'd7;
+
+  reg [2:0] sm;
+  localparam [2:0]
+    receive    = 0,
+    xfer_await = 1,
+    ccc_await  = 2,
+    daa_await  = 3,
+    daa_await_ready = 4;
 
   always @(posedge clk) begin
     if (!reset_n) begin
-      cmd_ready <= 1'b0;
-      cmdp_valid <= 1'b0;
-      sm <= idle;
+      sm <= receive;
     end else begin
       case (sm)
-        idle: begin
-          sm <= cmd_valid ? init : idle;
-          cmdp_valid <= cmd_valid;
-          cmd_ready <= 1'b1;
+        receive: begin
+          cmdp_ccc              <= cmd_ccc;
+          cmdp_broadcast_header <= cmd_broadcast_header;
+          cmdp_xmit             <= cmd_xmit;
+          cmdp_sr               <= cmd_sr;
+          cmdp_buffer_len       <= cmd_buffer_len;
+          cmdp_da               <= cmd_da;
+          cmdp_rnw              <= cmd_rnw;
+
+          // !cmdp_do_daa_ready disables the interface until daa is finished.
+          if (cmd_valid & cmdp_do_daa_ready) begin
+            sm <= cmd_ccc ? ccc_await : xfer_await;
+          end else begin
+            sm <= receive;
+          end
         end
-        init: begin
-          cmd_ready <= 1'b0;
-          sm <= await;
+        xfer_await: begin
+          sm <= cmdp_ready ? receive : sm;
         end
-        await: begin
-          cmd_ready <= cmdp_ready ? 1'b1: 1'b0;
-          cmdp_valid <= 1'b0;
-          sm <= cmdp_ready ? idle : await;
+        ccc_await: begin
+          cmdp_ccc_broadcast <= cmd_ccc_broadcast;
+          cmdp_ccc_id        <= cmd_ccc_id;
+
+          sm <= cmd_valid ? (cmd_ccc_id == CCC_ENTDAA ? daa_await : xfer_await) : sm;
+        end
+        daa_await: begin
+          sm <= !cmdp_do_daa_ready ? daa_await_ready : sm;
+        end
+        daa_await_ready: begin
+          sm <= cmdp_do_daa_ready ? receive : sm;
         end
         default: begin
-          sm <= idle;
+          sm <= receive;
         end
       endcase
     end
-
-
-
   end
 
+  assign cmd_ready    = (sm == receive || sm == ccc_await) & reset_n & cmdp_do_daa_ready;
+  assign cmdp_valid   = sm == xfer_await & reset_n;
+  assign cmdp_do_daa  = sm == daa_await & reset_n;
+
+  assign cmd_ccc              = cmd[30];
+  assign cmd_ccc_broadcast    = cmd[7];
+  assign cmd_ccc_id           = cmd[6:0];
+  assign cmd_broadcast_header = cmd[29];
+  assign cmd_xmit             = cmd[28:27];
+  assign cmd_sr               = cmd[25];
+  assign cmd_buffer_len       = cmd[23:12];
+  assign cmd_da               = cmd[07:01];
+  assign cmd_rnw              = cmd[00];
 endmodule

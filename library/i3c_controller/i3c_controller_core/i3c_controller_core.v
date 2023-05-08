@@ -48,13 +48,16 @@ module i3c_controller_core #(
   input  wire cmdp_valid,
   output wire cmdp_ready,
   input  wire cmdp_ccc,
-  input  wire cmdp_broad_header,
+  input  wire cmdp_ccc_broadcast,
+  input  wire [6:0] cmdp_ccc_id,
+  input  wire cmdp_broadcast_header,
   input  wire [1:0] cmdp_xmit,
   input  wire cmdp_sr,
   input  wire [11:0] cmdp_buffer_len,
   input  wire [6:0] cmdp_da,
   input  wire cmdp_rnw,
   input  wire cmdp_do_daa,
+  output wire cmdp_do_daa_ready,
 
   // Byte stream
 
@@ -77,6 +80,11 @@ module i3c_controller_core #(
   wire t;
   wire sdo_bit;
   wire sdi_bit;
+
+  wire [63:0] o_pid_bcr_dcr;
+  wire [6:0] o_da;
+  wire o_pid_da_valid;
+  wire error;
 
   i3c_controller_quarter_clk #(
   ) i_i3c_controller_quarter_clk (
@@ -104,4 +112,20 @@ module i3c_controller_core #(
     .t(t),
     .sda(sda)
   );
+
+  i3c_controller_daa #(
+  ) i_i3c_controller_daa (
+    .reset_n(reset_n),
+    .clk(clk),
+    .clk_quarter(clk_quarter),
+    .cmdp_do_daa(cmdp_do_daa),
+    .cmdp_do_daa_ready(cmdp_do_daa_ready),
+    .sdo(sdo_bit),
+    .cmd(cmd),
+    .o_pid_bcr_dcr(o_pid_bcr_dcr),
+    .o_da(o_da),
+    .o_pid_da_valid(o_pid_da_valid),
+    .error(error)
+  );
+
 endmodule

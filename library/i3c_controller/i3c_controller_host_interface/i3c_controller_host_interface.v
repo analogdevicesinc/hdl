@@ -72,13 +72,16 @@ module i3c_controller_host_interface #(
   output wire cmdp_valid,
   input  wire cmdp_ready,
   output wire cmdp_ccc,
-  output wire cmdp_broad_header,
+  output wire cmdp_ccc_broadcast,
+  output wire [6:0] cmdp_ccc_id,
+  output wire cmdp_broadcast_header,
   output wire [1:0] cmdp_xmit,
   output wire cmdp_sr,
   output wire [11:0] cmdp_buffer_len,
   output wire [6:0] cmdp_da,
   output wire cmdp_rnw,
   output wire cmdp_do_daa,
+  input  wire cmdp_do_daa_ready,
 
   // Byte stream
 
@@ -146,13 +149,16 @@ module i3c_controller_host_interface #(
     .cmdp_valid(cmdp_valid),
     .cmdp_ready(cmdp_ready_w),
     .cmdp_ccc(cmdp_ccc),
-    .cmdp_broad_header(cmdp_broad_header),
+    .cmdp_ccc_broadcast(cmdp_ccc_broadcast),
+    .cmdp_ccc_id(cmdp_ccc_id),
+    .cmdp_broadcast_header(cmdp_broadcast_header),
     .cmdp_xmit(cmdp_xmit),
     .cmdp_sr(cmdp_sr),
     .cmdp_buffer_len(cmdp_buffer_len),
     .cmdp_da(cmdp_da),
     .cmdp_rnw(cmdp_rnw),
-    .cmdp_do_daa(cmdp_do_daa)
+    .cmdp_do_daa(cmdp_do_daa),
+    .cmdp_do_daa_ready(cmdp_do_daa_ready)
   );
 
   assign rd_bytes_valid = (cmdp_valid & ~cmdp_ccc & cmdp_rnw);

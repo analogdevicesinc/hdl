@@ -59,7 +59,7 @@
  *       x | A | B | C | D | *
  */
 
-`timescale 1ns / 1ps
+`timescale 1ns/100ps
 `default_nettype none
 `include "i3c_controller_bit_mod_cmd.v"
 
