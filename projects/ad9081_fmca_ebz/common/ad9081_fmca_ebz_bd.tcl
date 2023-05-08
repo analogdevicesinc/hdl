@@ -23,7 +23,9 @@ source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 source $ad_hdl_dir/library/axi_tdd/scripts/axi_tdd.tcl
 
-set INTF_CFG $ad_project_params(INTF_CFG)
+if {![info exists INTF_CFG]} {
+  set INTF_CFG RXTX
+}
 
 # Common parameter for TX and RX
 set JESD_MODE  $ad_project_params(JESD_MODE)
@@ -118,8 +120,10 @@ if {$TX_DMA_SAMPLE_WIDTH == 12} {
 
 set TX_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $TX_JESD_L $TX_JESD_M $TX_JESD_S $TX_JESD_NP $TX_TPL_WIDTH]
 
-set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8* $TX_DATAPATH_WIDTH / ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)]
+set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8 * $TX_DATAPATH_WIDTH / ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)]
 
+# TODO: Increase the maximum number of quads if necessary
+set max_num_quads 2
 set num_quads [expr int(round(1.0 * $RX_NUM_OF_LANES / 4))]
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
@@ -248,8 +252,8 @@ if {$INTF_CFG != "TX"} {
   ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_2D_TRANSFER 0
   ad_ip_parameter axi_mxfe_rx_dma CONFIG.MAX_BYTES_PER_BURST 4096
   ad_ip_parameter axi_mxfe_rx_dma CONFIG.CYCLIC 0
-  ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $dac_dma_data_width
-  ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_DATA_WIDTH_DEST [expr min(512, $dac_dma_data_width)]
+  ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_dma_data_width
+  ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_DATA_WIDTH_DEST [expr min(512, $adc_dma_data_width)]
 }
 
 # Instantiate DAC (Tx) path
@@ -506,6 +510,17 @@ if {$ADI_PHY_SEL == 1} {
 } else {
   for {set j 0} {$j < $num_quads} {incr j} {
     make_bd_intf_pins_external  [get_bd_intf_pins jesd204_phy/GT_Serial_${j}]
+  }
+  # Unused serial lanes
+  for {set i $num_quads} {$i < $max_num_quads} {incr i} {
+    if {$INTF_CFG != "TX"} {
+      create_bd_port -dir I -from 3 -to 0 GT_Serial_${i}_0_grx_p
+      create_bd_port -dir I -from 3 -to 0 GT_Serial_${i}_0_grx_n
+    }
+    if {$INTF_CFG != "RX"} {
+      create_bd_port -dir O -from 3 -to 0 GT_Serial_${i}_0_gtx_p
+      create_bd_port -dir O -from 3 -to 0 GT_Serial_${i}_0_gtx_n
+    }
   }
 }
 

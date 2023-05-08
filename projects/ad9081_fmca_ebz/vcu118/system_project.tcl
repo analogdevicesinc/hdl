@@ -32,7 +32,6 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #
 
 adi_project ad9081_fmca_ebz_vcu118 0 [list \
-  INTF_CFG          RXTX \
   JESD_MODE         [get_env_param JESD_MODE      8B10B ] \
   RX_LANE_RATE      [get_env_param RX_LANE_RATE      10 ] \
   TX_LANE_RATE      [get_env_param TX_LANE_RATE      10 ] \
