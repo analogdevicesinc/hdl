@@ -75,7 +75,9 @@ module system_top (
   inout         iic_scl,
   inout         iic_sda,
 
-//  input         vadj_1v8_pgood,
+  input         vadj_1v8_pgood,
+  output        fan_pwm,
+  output        fan_tach,
 
   //---------- FMCp IOs ----------
 
@@ -190,11 +192,6 @@ module system_top (
   wire            spi_2_mosi;
   wire            spi_2_miso;
 
-  wire            spi_3_clk;
-  wire     [7:0]  spi_3_csn;
-  wire            spi_3_mosi;
-  wire            spi_3_miso;
-
   wire            ref_clk;
 
   wire            sysref0;
@@ -275,10 +272,6 @@ module system_top (
   assign adf4371_cs = spi_2_csn[3:0];
   assign adf4371_sclk = spi_2_clk;
 
-  assign pmod1_adc_sync_n = spi_3_csn[0];
-  assign pmod1_adc_sdi = spi_3_mosi;
-  assign pmod1_adc_sclk = spi_3_clk;
-
   assign spi_miso = ~spi_csn[0] ? mxfe_miso[0] :
                     ~spi_csn[1] ? mxfe_miso[1] :
                     1'b0;
@@ -286,8 +279,6 @@ module system_top (
   assign spi_2_miso =  |(~spi_2_csn[3:0]) ? spi_4371_miso :
                          ~spi_2_csn[4]    ? spi_hmc_miso :
                           1'b0;
-
-  assign spi_3_miso =  ~pmod1_adc_sync_n ? pmod1_adc_sdo : 1'b0;
 
   ad_3w_spi #(
     .NUM_OF_SLAVES (1)
@@ -353,11 +344,6 @@ module system_top (
     .gpio_i (gpio_i[127:64]),
     .gpio_o (gpio_o[127:64]));
 
-  assign pmod1_5045_v2 = gpio_o[120];
-  assign pmod1_5045_v1 = gpio_o[121];
-  assign pmod1_ctrl_ind = gpio_o[122];
-  assign pmod1_ctrl_rx_combined = gpio_o[123];
-
   system_wrapper i_system_wrapper (
     .sys_rst (sys_rst),
     .sys_clk_clk_n (sys_clk_n),
@@ -407,14 +393,6 @@ module system_top (
     .spi_2_sdo_i (spi_2_mosi),
     .spi_2_sdo_o (spi_2_mosi),
 
-    .spi_3_clk_i (spi_3_clk),
-    .spi_3_clk_o (spi_3_clk),
-    .spi_3_csn_i (spi_3_csn),
-    .spi_3_csn_o (spi_3_csn),
-    .spi_3_sdi_i (spi_3_miso),
-    .spi_3_sdo_i (spi_3_mosi),
-    .spi_3_sdo_o (spi_3_mosi),
-
     .gpio0_i (gpio_i[31:0]),
     .gpio0_o (gpio_o[31:0]),
     .gpio0_t (gpio_t[31:0]),
@@ -422,6 +400,9 @@ module system_top (
     .gpio1_o (gpio_o[63:32]),
     .gpio1_t (gpio_t[63:32]),
     // FMCp
+
+    .gpio_fmcp_p (gpio_fmcp_p),
+    .gpio_fmcp_n (gpio_fmcp_n),
 
     // see "RX connect PHY to link Layer" section from ad_dualmxfe_ebz_bd.tcl
     //         serdes0_m2c index ## serdes1_m2c index-8
