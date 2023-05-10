@@ -106,6 +106,13 @@ module system_top (
   output                  sysref_p,
   output                  sysref_n,
 
+  // Second Dual SPI flash
+  inout                   SPI_1_0_io0_io,
+  inout                   SPI_1_0_io1_io,
+  inout                   SPI_1_0_io2_io,
+  inout                   SPI_1_0_io3_io,
+  inout                   SPI_1_0_ss_io,
+
   output                  spi_csn_clk,
   output                  spi_csn_dac,
   output                  spi_csn_adc,
@@ -283,6 +290,11 @@ module system_top (
     .tx_ref_clk_0 (tx_ref_clk),
     .tx_sync_0 (tx_sync),
     .tx_sysref_0 (tx_sysref),
+    .SPI_1_0_io0_io (SPI_1_0_io0_io),
+    .SPI_1_0_io1_io (SPI_1_0_io1_io),
+    .SPI_1_0_io2_io (SPI_1_0_io2_io),
+    .SPI_1_0_io3_io (SPI_1_0_io3_io),
+    .SPI_1_0_ss_io  (SPI_1_0_ss_io ),
     .uart_sin (uart_sin),
     .uart_sout (uart_sout));
 

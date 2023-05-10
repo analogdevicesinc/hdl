@@ -74,6 +74,13 @@ module system_top #(
   output        phy_tx_n,
 
   inout  [16:0] gpio_bd,
+  
+  // Second Dual SPI flash
+  inout         SPI_1_0_io0_io,
+  inout         SPI_1_0_io1_io,
+  inout         SPI_1_0_io2_io,
+  inout         SPI_1_0_io3_io,
+  inout         SPI_1_0_ss_io,
 
   output        iic_rstn,
   inout         iic_scl,
@@ -304,6 +311,11 @@ module system_top #(
     .spi_sdi_i (spi_miso),
     .spi_sdo_i (spi_mosi),
     .spi_sdo_o (spi_mosi),
+    .SPI_1_0_io0_io (SPI_1_0_io0_io),
+    .SPI_1_0_io1_io (SPI_1_0_io1_io),
+    .SPI_1_0_io2_io (SPI_1_0_io2_io),
+    .SPI_1_0_io3_io (SPI_1_0_io3_io),
+    .SPI_1_0_ss_io  (SPI_1_0_ss_io ),
     .gpio0_i (gpio_i[31:0]),
     .gpio0_o (gpio_o[31:0]),
     .gpio0_t (gpio_t[31:0]),

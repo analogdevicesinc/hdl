@@ -153,6 +153,13 @@ module system_top (
   output  [3:0] mxfe_rx_en1,
   output  [3:0] mxfe_tx_en0,
   output  [3:0] mxfe_tx_en1,
+  
+  // Second Dual SPI flash
+  inout         SPI_1_0_io0_io,
+  inout         SPI_1_0_io1_io,
+  inout         SPI_1_0_io2_io,
+  inout         SPI_1_0_io3_io,
+  inout         SPI_1_0_ss_io,
 
   // PMOD1 for calibration board
   output pmod1_adc_sync_n,
@@ -461,6 +468,12 @@ module system_top (
     .spi_3_sdi_i (spi_3_miso),
     .spi_3_sdo_i (spi_3_mosi),
     .spi_3_sdo_o (spi_3_mosi),
+    
+    .SPI_1_0_io0_io (SPI_1_0_io0_io),
+    .SPI_1_0_io1_io (SPI_1_0_io1_io),
+    .SPI_1_0_io2_io (SPI_1_0_io2_io),
+    .SPI_1_0_io3_io (SPI_1_0_io3_io),
+    .SPI_1_0_ss_io  (SPI_1_0_ss_io ),
 
     .gpio0_i (gpio_i[31:0]),
     .gpio0_o (gpio_o[31:0]),
