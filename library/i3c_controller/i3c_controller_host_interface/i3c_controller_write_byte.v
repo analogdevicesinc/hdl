@@ -97,7 +97,7 @@ module i3c_controller_write_byte (
     end
   end
 
-  assign u8_len_ready = (sm == idle);
+  assign u8_len_ready = (sm == idle & u32_ready);
   assign u8_ready = (sm == transfer & u32_ready);
   assign u32_valid = (sm == transfer & (c == 2'b00 || u8_len_reg == 12'd0) & u8_valid & u32_valid_ctrl);
   genvar i;

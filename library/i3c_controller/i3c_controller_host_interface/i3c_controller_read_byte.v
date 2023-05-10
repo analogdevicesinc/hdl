@@ -125,7 +125,7 @@ module i3c_controller_read_byte (
     end
   end
 
-  assign u8_len_ready = (sm == idle);
+  assign u8_len_ready = (sm == idle & u8_ready);
   assign u32_ready = (sm == idle & u8_len_valid & u32_valid) || (sm == transfer & u8_ready & |i & c == 2'b00);
   assign u8_valid = (sm == transfer);
   assign j = u8_len_reg[1:0];

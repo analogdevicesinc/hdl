@@ -102,6 +102,8 @@ module i3c_controller_daa #(
   reg r2_clk_quarter;
   reg r3_clk_quarter;
 
+  reg do_daa_ready_ctrl;
+
   localparam [6:0]
     I3C_RESERVED = 7'h7e;
   localparam [7:0]
@@ -145,12 +147,14 @@ module i3c_controller_daa #(
     if (!reset_n) begin
       start <= 1'b0;
       reset <= 1'b0;
+      do_daa_ready_ctrl <= 1'b1;
     end else begin
       case (sm)
         idle: begin
           if (cmdp_do_daa == 1'b1) begin
             start <= 1'b1;
           end
+          do_daa_ready_ctrl <= cmdp_do_daa | start ? 1'b0 : 1'b1;
         end
         default: begin
         end
@@ -318,5 +322,5 @@ module i3c_controller_daa #(
     end
   end
   assign o_pid_bcr_dcr = r_pid_bcr_dcr [63:0];
-  assign cmdp_do_daa_ready = sm == idle;
+  assign cmdp_do_daa_ready = sm == idle & do_daa_ready_ctrl;
 endmodule
