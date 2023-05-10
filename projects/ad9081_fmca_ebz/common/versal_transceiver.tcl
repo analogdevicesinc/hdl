@@ -1,9 +1,9 @@
 proc create_versal_phy {
   {ip_name versal_phy}
-  {num_lanes 2}
-  {rx_lane_rate 11.88}
-  {tx_lane_rate 11.88}
-  {ref_clock 360}
+  {num_lanes 4}
+  {rx_lane_rate 24.75}
+  {tx_lane_rate 24.75}
+  {ref_clock 375}
   {intf_cfg RXTX}
 } {
 
@@ -27,14 +27,13 @@ create_bd_cell -type hier ${ip_name}
 # Common interface
 if {$intf_cfg != "TX"} {
   create_bd_pin -dir O ${ip_name}/rxusrclk_out -type clk
-  create_bd_pin -dir I ${ip_name}/reset_rx_pll_and_datapath_in
 }
 if {$intf_cfg != "RX"} {
   create_bd_pin -dir O ${ip_name}/txusrclk_out -type clk
-  create_bd_pin -dir I ${ip_name}/reset_tx_pll_and_datapath_in
 }
 create_bd_pin -dir I ${ip_name}/GT_REFCLK -type clk
 create_bd_pin -dir I ${ip_name}/apb3clk -type clk
+create_bd_pin -dir I ${ip_name}/gtreset_in
 
 ad_ip_instance gt_bridge_ip ${ip_name}/gt_bridge_ip_0
 set_property -dict [list \
@@ -211,7 +210,7 @@ for {set j 0} {$j < $num_quads} {incr j} {
     ad_ip_instance bufg_gt ${ip_name}/bufg_gt_tx_${j}
     ad_connect ${ip_name}/gt_quad_base_${j}/ch0_txoutclk ${ip_name}/bufg_gt_tx_${j}/outclk
   }
-  
+
   create_bd_intf_pin -mode Master -vlnv	xilinx.com:interface:gt_rtl:1.0 ${ip_name}/GT_Serial_${j}
   ad_connect ${ip_name}/gt_quad_base_${j}/GT_Serial ${ip_name}/GT_Serial_${j}
 }
@@ -233,9 +232,6 @@ if {$intf_cfg != "TX"} {
 
     ad_connect ${ip_name}/bufg_gt_rx_${quad_index}/usrclk ${ip_name}/rx_adapt_${j}/usr_clk
   }
-  # Clocks and resets
-  ad_connect ${ip_name}/reset_rx_pll_and_datapath_in ${ip_name}/gt_bridge_ip_0/reset_rx_pll_and_datapath_in
-
 }
 if {$intf_cfg != "RX"} {
   ad_connect ${ip_name}/bufg_gt_tx_0/usrclk ${ip_name}/gt_bridge_ip_0/gt_txusrclk
@@ -254,8 +250,6 @@ if {$intf_cfg != "RX"} {
 
     ad_connect ${ip_name}/bufg_gt_tx_${quad_index}/usrclk ${ip_name}/tx_adapt_${j}/usr_clk
   }
-  # Clocks and resets
-  ad_connect ${ip_name}/reset_tx_pll_and_datapath_in ${ip_name}/gt_bridge_ip_0/reset_tx_pll_and_datapath_in
 }
 
 for {set i 0} {$i < $num_quads} {incr i} {
@@ -269,9 +263,8 @@ for {set i 0} {$i < $num_quads} {incr i} {
   }
 }
 
-# Clocks and resets
+# Clocks and gtpowergood
 ad_connect ${ip_name}/apb3clk ${ip_name}/gt_bridge_ip_0/apb3clk
-ad_connect GND ${ip_name}/gt_bridge_ip_0/gtreset_in
 
 ad_ip_instance xlconcat ${ip_name}/xlconcat_0 [list \
    NUM_PORTS $num_quads \
@@ -288,5 +281,65 @@ for {set j 0} {$j < $num_quads} {incr j} {
 
 ad_connect ${ip_name}/xlconcat_0/dout ${ip_name}/util_reduced_logic_0/Op1
 ad_connect ${ip_name}/util_reduced_logic_0/Res ${ip_name}/gt_bridge_ip_0/gtpowergood
+
+# Reset
+ad_connect ${ip_name}/gtreset_in ${ip_name}/gt_bridge_ip_0/gtreset_in
+
+for {set j 0} {$j < ${num_lanes}} {incr j} {
+  set quad_index [expr int($j / 4)]
+  set ch_index [expr $j % 4]
+  ad_connect ${ip_name}/gt_bridge_ip_0/gt_ilo_reset ${ip_name}/gt_quad_base_${quad_index}/ch${ch_index}_iloreset
+}
+ad_ip_instance xlconcat ${ip_name}/xlconcat_iloresetdone [list \
+    NUM_PORTS ${num_lanes} \
+ ]
+ad_ip_instance util_reduced_logic ${ip_name}/util_reduced_logic_iloresetdone [list \
+    C_SIZE ${num_lanes} \
+ ]
+for {set j 0} {$j < ${num_lanes}} {incr j} {
+  set quad_index [expr int($j / 4)]
+  set ch_index [expr $j % 4]
+  ad_connect ${ip_name}/xlconcat_iloresetdone/In${j} ${ip_name}/gt_quad_base_${quad_index}/ch${ch_index}_iloresetdone
+}
+ad_connect ${ip_name}/xlconcat_iloresetdone/dout ${ip_name}/util_reduced_logic_iloresetdone/Op1
+ad_connect ${ip_name}/util_reduced_logic_iloresetdone/Res ${ip_name}/gt_bridge_ip_0/ilo_resetdone
+
+for {set j 0} {$j < ${num_quads}} {incr j} {
+  ad_connect ${ip_name}/gt_bridge_ip_0/gt_pll_reset ${ip_name}/gt_quad_base_${j}/hsclk0_lcpllreset
+  ad_connect ${ip_name}/gt_bridge_ip_0/gt_pll_reset ${ip_name}/gt_quad_base_${j}/hsclk1_lcpllreset
+}
+
+set num_cplllocks [expr 2 * ${num_quads}]
+ad_ip_instance xlconcat ${ip_name}/xlconcat_cplllock [list \
+    NUM_PORTS ${num_cplllocks} \
+ ]
+ad_ip_instance util_reduced_logic ${ip_name}/util_reduced_logic_cplllock [list \
+    C_SIZE ${num_cplllocks} \
+ ]
+
+for {set j 0} {$j < ${num_quads}} {incr j} {
+  set in_index_0 [expr $j * 2 + 0]
+  set in_index_1 [expr $j * 2 + 1]
+  ad_connect ${ip_name}/xlconcat_cplllock/In${in_index_0} ${ip_name}/gt_quad_base_${j}/hsclk0_lcplllock
+  ad_connect ${ip_name}/xlconcat_cplllock/In${in_index_1} ${ip_name}/gt_quad_base_${j}/hsclk1_lcplllock
+}
+
+ad_connect ${ip_name}/xlconcat_cplllock/dout ${ip_name}/util_reduced_logic_cplllock/Op1
+ad_connect ${ip_name}/util_reduced_logic_cplllock/Res ${ip_name}/gt_bridge_ip_0/gt_lcpll_lock
+
+ad_ip_instance xlconcat ${ip_name}/xlconcat_ch [list \
+   NUM_PORTS ${num_lanes} \
+ ]
+for {set j 0} {$j < ${num_lanes}} {incr j} {
+  set quad_index [expr int($j / 4)]
+  set ch_index [expr $j % 4]
+  ad_ip_instance xlslice ${ip_name}/slice_ch${j} [list \
+    DIN_WIDTH 16 \
+  ]
+  ad_connect ${ip_name}/slice_ch${j}/Din ${ip_name}/gt_quad_base_${quad_index}/ch${ch_index}_pcsrsvdout
+
+  ad_connect ${ip_name}/slice_ch${j}/Dout ${ip_name}/xlconcat_ch/In${j}
+}
+ad_connect ${ip_name}/xlconcat_ch/dout ${ip_name}/gt_bridge_ip_0/ch_phystatus_in
 
 }
