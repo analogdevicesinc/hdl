@@ -221,7 +221,10 @@ module system_top (
   assign spi_csn_ad9528 =  spi_csn[1];
 
   system_wrapper i_system_wrapper (
+
     .dac_fifo_bypass (gpio_o[69]),
+    .adc_fir_filter_active (gpio_o[70]),
+    .dac_fir_filter_active (gpio_o[71]),
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .gpio_t (gpio_t),

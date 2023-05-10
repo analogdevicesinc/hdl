@@ -27,11 +27,15 @@ set dac_data_width [expr 32*$TX_NUM_OF_LANES]
 set dac_dma_data_width 128
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
+source $ad_hdl_dir/projects/common/xilinx/adi_fir_filter_bd.tcl
 
 # adrv9026
 
 create_bd_port -dir I dac_fifo_bypass
 create_bd_port -dir I core_clk
+
+create_bd_port -dir I adc_fir_filter_active
+create_bd_port -dir I dac_fir_filter_active
 
 # dac peripherals
 
@@ -55,6 +59,9 @@ adi_tpl_jesd204_tx_create tx_adrv9026_tpl_core $TX_NUM_OF_LANES \
                                                $TX_NUM_OF_CONVERTERS \
                                                $TX_SAMPLES_PER_FRAME \
                                                $TX_SAMPLE_WIDTH
+
+ad_add_interpolation_filter "tx_fir_interpolator" 8 $TX_NUM_OF_CONVERTERS 2 {122.88} {15.36} \
+                             "$ad_hdl_dir/library/util_fir_int/coefile_int.coe"
 
 ad_ip_instance axi_dmac axi_adrv9026_tx_dma
 ad_ip_parameter axi_adrv9026_tx_dma CONFIG.DMA_TYPE_SRC 0
@@ -93,6 +100,9 @@ adi_tpl_jesd204_rx_create rx_adrv9026_tpl_core $RX_NUM_OF_LANES \
                                                $RX_NUM_OF_CONVERTERS \
                                                $RX_SAMPLES_PER_FRAME \
                                                $RX_SAMPLE_WIDTH
+
+ad_add_decimation_filter "rx_fir_decimator" 8 $RX_NUM_OF_CONVERTERS 1 {122.88} {122.88} \
+                          "$ad_hdl_dir/library/util_fir_int/coefile_int.coe"
 
 ad_ip_instance axi_dmac axi_adrv9026_rx_dma
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.DMA_TYPE_SRC 2
@@ -205,12 +215,31 @@ ad_connect  axi_adrv9026_tx_jesd/tx_data tx_adrv9026_tpl_core/link
 ad_connect  core_clk util_adrv9026_tx_upack/clk
 ad_connect  core_clk_rstgen/peripheral_reset util_adrv9026_tx_upack/reset
 
-for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
-  ad_connect  tx_adrv9026_tpl_core/dac_enable_$i util_adrv9026_tx_upack/enable_$i
-  ad_connect  util_adrv9026_tx_upack/fifo_rd_data_$i tx_adrv9026_tpl_core/dac_data_$i
+if {$TX_NUM_OF_CONVERTERS <= 2} {
+  ad_connect  tx_fir_interpolator/valid_out_0  util_adrv9026_tx_upack/fifo_rd_en
+} else {
+  ad_ip_instance util_vector_logic logic_or [list \
+  C_OPERATION {or} \
+  C_SIZE 1]
+
+  ad_connect  logic_or/Op1  tx_fir_interpolator/valid_out_0
+  ad_connect  logic_or/Op2  tx_fir_interpolator/valid_out_2
+  ad_connect  logic_or/Res  util_adrv9026_tx_upack/fifo_rd_en
 }
 
-ad_connect  tx_adrv9026_tpl_core/dac_valid_0  util_adrv9026_tx_upack/fifo_rd_en
+ad_connect tx_fir_interpolator/aclk core_clk
+for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
+  ad_connect  tx_adrv9026_tpl_core/dac_enable_$i  tx_fir_interpolator/dac_enable_$i
+  ad_connect  tx_adrv9026_tpl_core/dac_valid_$i  tx_fir_interpolator/dac_valid_$i
+
+  ad_connect  util_adrv9026_tx_upack/fifo_rd_data_$i  tx_fir_interpolator/data_in_${i}
+  ad_connect  util_adrv9026_tx_upack/enable_$i  tx_fir_interpolator/enable_out_${i}
+
+  ad_connect  tx_fir_interpolator/data_out_${i}  tx_adrv9026_tpl_core/dac_data_$i
+}
+
+ad_connect  tx_fir_interpolator/active dac_fir_filter_active
+
 ad_connect  core_clk axi_adrv9026_dacfifo/dac_clk
 ad_connect  core_clk_rstgen/peripheral_reset axi_adrv9026_dacfifo/dac_rst
 
@@ -238,13 +267,20 @@ ad_connect  axi_adrv9026_rx_jesd/rx_data_tdata rx_adrv9026_tpl_core/link_data
 ad_connect  axi_adrv9026_rx_jesd/rx_data_tvalid rx_adrv9026_tpl_core/link_valid
 ad_connect  core_clk util_adrv9026_rx_cpack/clk
 ad_connect  core_clk_rstgen/peripheral_reset util_adrv9026_rx_cpack/reset
-
+ad_connect  rx_fir_decimator/aclk core_clk
 for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
-  ad_connect  rx_adrv9026_tpl_core/adc_enable_$i util_adrv9026_rx_cpack/enable_$i
-  ad_connect  rx_adrv9026_tpl_core/adc_data_$i util_adrv9026_rx_cpack/fifo_wr_data_$i
+  ad_connect  rx_adrv9026_tpl_core/adc_valid_$i rx_fir_decimator/valid_in_$i
+  ad_connect  rx_adrv9026_tpl_core/adc_enable_$i rx_fir_decimator/enable_in_$i
+  ad_connect  rx_adrv9026_tpl_core/adc_data_$i rx_fir_decimator/data_in_${i}
+
+  ad_connect  rx_fir_decimator/enable_out_$i util_adrv9026_rx_cpack/enable_$i
+  ad_connect  rx_fir_decimator/data_out_${i} util_adrv9026_rx_cpack/fifo_wr_data_$i
 }
 
-ad_connect  rx_adrv9026_tpl_core/adc_valid_0 util_adrv9026_rx_cpack/fifo_wr_en
+ad_connect rx_fir_decimator/active adc_fir_filter_active
+
+ad_connect  rx_fir_decimator/valid_out_0 util_adrv9026_rx_cpack/fifo_wr_en
+
 ad_connect  rx_adrv9026_tpl_core/adc_dovf util_adrv9026_rx_cpack/fifo_wr_overflow
 
 ad_connect  core_clk axi_adrv9026_rx_dma/fifo_wr_clk
