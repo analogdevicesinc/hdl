@@ -299,6 +299,7 @@ module system_top  #(
     .GT_Serial_1_0_grx_p (rx_data_p_loc[7:4]),
     .GT_Serial_1_0_grx_n (rx_data_n_loc[7:4]),
 
+    .gt_reset (~rstb),
     .ref_clk_q0 (ref_clk),
     .ref_clk_q1 (ref_clk),
 
