@@ -73,8 +73,8 @@ create_bd_port -dir O -from 22 -to 0 gpio_fmcp_p
 create_bd_port -dir O -from 22 -to 0 gpio_fmcp_n
 
 # Second SPI controller
-create_bd_port -dir O -from 7 -to 0 spi_2_csn_o
-create_bd_port -dir I -from 7 -to 0 spi_2_csn_i
+create_bd_port -dir O spi_2_csn_o
+create_bd_port -dir I spi_2_csn_i
 create_bd_port -dir I spi_2_clk_i
 create_bd_port -dir O spi_2_clk_o
 create_bd_port -dir I spi_2_sdo_i
@@ -83,7 +83,7 @@ create_bd_port -dir I spi_2_sdi_i
 
 ad_ip_instance axi_quad_spi axi_spi_2
 ad_ip_parameter axi_spi_2 CONFIG.C_USE_STARTUP 0
-ad_ip_parameter axi_spi_2 CONFIG.C_NUM_SS_BITS 8
+ad_ip_parameter axi_spi_2 CONFIG.C_NUM_SS_BITS 1
 ad_ip_parameter axi_spi_2 CONFIG.C_SCK_RATIO 8
 
 ad_connect spi_2_csn_i axi_spi_2/ss_i
@@ -101,8 +101,8 @@ ad_cpu_interrupt ps-15 mb-7 axi_spi_2/ip2intc_irpt
 ad_cpu_interconnect 0x44A80000 axi_spi_2
 
 # Third SPI controller
-create_bd_port -dir O -from 7 -to 0 spi_3_csn_o
-create_bd_port -dir I -from 7 -to 0 spi_3_csn_i
+create_bd_port -dir O spi_3_csn_o
+create_bd_port -dir I spi_3_csn_i
 create_bd_port -dir I spi_3_clk_i
 create_bd_port -dir O spi_3_clk_o
 create_bd_port -dir I spi_3_sdo_i
@@ -111,9 +111,8 @@ create_bd_port -dir I spi_3_sdi_i
 
 ad_ip_instance axi_quad_spi axi_spi_3
 ad_ip_parameter axi_spi_3 CONFIG.C_USE_STARTUP 0
-ad_ip_parameter axi_spi_3 CONFIG.C_NUM_SS_BITS 8
-ad_ip_parameter axi_spi_3 CONFIG.C_SCK_RATIO 16
-ad_ip_parameter axi_spi_3 CONFIG.Multiples16 16
+ad_ip_parameter axi_spi_3 CONFIG.C_NUM_SS_BITS 1
+ad_ip_parameter axi_spi_3 CONFIG.C_SCK_RATIO 8
 
 ad_connect spi_3_csn_i axi_spi_3/ss_i
 ad_connect spi_3_csn_o axi_spi_3/ss_o
@@ -128,32 +127,3 @@ ad_connect sys_cpu_clk axi_spi_3/ext_spi_clk
 ad_cpu_interrupt ps-15 mb-6 axi_spi_3/ip2intc_irpt
 
 ad_cpu_interconnect 0x44B80000 axi_spi_3
-
-# Forth SPI controller
-create_bd_port -dir O -from 7 -to 0 spi_4_csn_o
-create_bd_port -dir I -from 7 -to 0 spi_4_csn_i
-create_bd_port -dir I spi_4_clk_i
-create_bd_port -dir O spi_4_clk_o
-create_bd_port -dir I spi_4_sdo_i
-create_bd_port -dir O spi_4_sdo_o
-create_bd_port -dir I spi_4_sdi_i
-
-ad_ip_instance axi_quad_spi axi_spi_4
-ad_ip_parameter axi_spi_4 CONFIG.C_USE_STARTUP 0
-ad_ip_parameter axi_spi_4 CONFIG.C_NUM_SS_BITS 8
-ad_ip_parameter axi_spi_4 CONFIG.C_SCK_RATIO 16
-ad_ip_parameter axi_spi_4 CONFIG.Multiples16 16
-
-ad_connect spi_4_csn_i axi_spi_4/ss_i
-ad_connect spi_4_csn_o axi_spi_4/ss_o
-ad_connect spi_4_clk_i axi_spi_4/sck_i
-ad_connect spi_4_clk_o axi_spi_4/sck_o
-ad_connect spi_4_sdo_i axi_spi_4/io0_i
-ad_connect spi_4_sdo_o axi_spi_4/io0_o
-ad_connect spi_4_sdi_i axi_spi_4/io1_i
-
-ad_connect sys_cpu_clk axi_spi_4/ext_spi_clk
-
-ad_cpu_interrupt ps-15 mb-5 axi_spi_4/ip2intc_irpt
-
-ad_cpu_interconnect 0x44C80000 axi_spi_4

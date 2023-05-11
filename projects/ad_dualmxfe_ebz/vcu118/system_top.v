@@ -188,9 +188,14 @@ module system_top (
   wire            spi_hmc_miso;
 
   wire            spi_2_clk;
-  wire     [7:0]  spi_2_csn;
+  wire            spi_2_csn;
   wire            spi_2_mosi;
   wire            spi_2_miso;
+
+  wire            spi_3_clk;
+  wire            spi_3_csn;
+  wire            spi_3_mosi;
+  wire            spi_3_miso;
 
   wire            ref_clk;
 
@@ -269,11 +274,11 @@ module system_top (
   assign mxfe_mosi = {2{spi_mosi}};
   assign mxfe_sclk = {2{spi_clk}};
 
-  assign adf4377_cs = spi_2_csn[3:0];
+  assign adf4377_cs = spi_2_csn;
   assign adf4377_sclk = spi_2_clk;
 
-  assign hmc7044_slen = spi_2_csn[4];
-  assign hmc7044_sclk = spi_2_clk;
+  assign hmc7044_slen = spi_3_csn;
+  assign hmc7044_sclk = spi_3_clk;
 
   assign spi_miso = ~spi_csn[0] ? mxfe_miso[0] :
                     ~spi_csn[1] ? mxfe_miso[1] :
@@ -286,20 +291,20 @@ module system_top (
   ad_3w_spi #(
     .NUM_OF_SLAVES (1)
   ) i_spi_hmc7044 (
-    .spi_csn (&spi_2_csn[4]),
-    .spi_clk (spi_2_clk),
-    .spi_mosi (spi_2_mosi),
-    .spi_miso (spi_7044_miso),
-    .spi_sdio (hmc7044_sdio),
+    .spi_csn (spi_3_csn),
+    .spi_clk (spi_3_clk),
+    .spi_mosi (spi_3_mosi),
+    .spi_miso (spi_3_miso),
+    .spi_sdio (hmc7044_miso),
     .spi_dir ());
 
   ad_3w_spi #(
     .NUM_OF_SLAVES (1)
   ) i_spi_adf4377 (
-    .spi_csn (&spi_2_csn[3:0]),
+    .spi_csn (spi_2_csn),
     .spi_clk (spi_2_clk),
     .spi_mosi (spi_2_mosi),
-    .spi_miso (spi_adf4377_miso),
+    .spi_miso (spi_2_miso),
     .spi_sdio (adf4377_sdio),
     .spi_dir ());
 
@@ -415,6 +420,14 @@ module system_top (
     .spi_2_sdi_i (spi_2_miso),
     .spi_2_sdo_i (spi_2_mosi),
     .spi_2_sdo_o (spi_2_mosi),
+
+    .spi_3_clk_i (spi_3_clk),
+    .spi_3_clk_o (spi_3_clk),
+    .spi_3_csn_i (spi_3_csn),
+    .spi_3_csn_o (spi_3_csn),
+    .spi_3_sdi_i (spi_3_miso),
+    .spi_3_sdo_i (spi_3_mosi),
+    .spi_3_sdo_o (spi_3_mosi),
 
     .gpio0_i (gpio_i[31:0]),
     .gpio0_o (gpio_o[31:0]),
@@ -536,7 +549,5 @@ module system_top (
     .gpio3_t (gpio_t[127:96]),
 
     .ext_sync (sysref));
-
-  assign link1_rx_syncout = 4'b1111;
 
 endmodule
