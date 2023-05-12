@@ -72,7 +72,7 @@ if {$ad_project_params(JESD_MODE) == "8B10B"} {
 create_bd_port -dir O -from 22 -to 0 gpio_fmcp_p
 create_bd_port -dir O -from 22 -to 0 gpio_fmcp_n
 
-# Second SPI controller
+# Second SPI controller - HMC7044
 create_bd_port -dir O spi_2_csn_o
 create_bd_port -dir I spi_2_csn_i
 create_bd_port -dir I spi_2_clk_i
@@ -100,7 +100,7 @@ ad_cpu_interrupt ps-15 mb-7 axi_spi_2/ip2intc_irpt
 
 ad_cpu_interconnect 0x44A80000 axi_spi_2
 
-# Third SPI controller
+# Third SPI controller - ADF4377
 create_bd_port -dir O spi_3_csn_o
 create_bd_port -dir I spi_3_csn_i
 create_bd_port -dir I spi_3_clk_i

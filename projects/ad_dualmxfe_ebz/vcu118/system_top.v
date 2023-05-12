@@ -75,11 +75,11 @@ module system_top (
   inout         iic_scl,
   inout         iic_sda,
 
+  // dual_mxfe specific
+
   input         vadj_1v8_pgood,
   output        fan_pwm,
   output        fan_tach,
-
-  //---------- FMCp IOs ----------
 
   output        adf4377_ce,
   output        adf4377_csb,
@@ -133,7 +133,7 @@ module system_top (
   input         syncout_p_0,
   input         syncout_p_2,
 
-// Sync pins used as GPIOs
+  // Sync pins used as GPIOs
   // MxFE0 GPIOs
   output        syncin_p_1,
   output        syncin_n_0,
@@ -181,11 +181,9 @@ module system_top (
   wire   [127:0]  gpio_t;
 
   wire            spi_clk;
-  wire     [7:0]  spi_csn;
+  wire     [1:0]  spi_csn;
   wire            spi_mosi;
   wire            spi_miso;
-  wire            spi_adf4377_miso;
-  wire            spi_hmc_miso;
 
   wire            spi_2_clk;
   wire            spi_2_csn;
@@ -274,37 +272,37 @@ module system_top (
   assign mxfe_mosi = {2{spi_mosi}};
   assign mxfe_sclk = {2{spi_clk}};
 
-  assign adf4377_cs = spi_2_csn;
-  assign adf4377_sclk = spi_2_clk;
+  assign hmc7044_slen = spi_2_csn;
+  assign hmc7044_sclk = spi_2_clk;
 
-  assign hmc7044_slen = spi_3_csn;
-  assign hmc7044_sclk = spi_3_clk;
+  assign adf4377_cs = spi_3_csn;
+  assign adf4377_sclk = spi_3_clk;
 
   assign spi_miso = ~spi_csn[0] ? mxfe_miso[0] :
                     ~spi_csn[1] ? mxfe_miso[1] :
                     1'b0;
 
-  assign spi_2_miso =  |(~spi_2_csn[3:0]) ? spi_adf4377_miso :
-                         ~spi_2_csn[4]    ? spi_hmc7044_miso :
-                          1'b0;
+  // spi_2 - hmc7044
 
   ad_3w_spi #(
     .NUM_OF_SLAVES (1)
   ) i_spi_hmc7044 (
-    .spi_csn (spi_3_csn),
-    .spi_clk (spi_3_clk),
-    .spi_mosi (spi_3_mosi),
-    .spi_miso (spi_3_miso),
-    .spi_sdio (hmc7044_miso),
-    .spi_dir ());
-
-  ad_3w_spi #(
-    .NUM_OF_SLAVES (1)
-  ) i_spi_adf4377 (
     .spi_csn (spi_2_csn),
     .spi_clk (spi_2_clk),
     .spi_mosi (spi_2_mosi),
     .spi_miso (spi_2_miso),
+    .spi_sdio (hmc7044_miso),
+    .spi_dir ());
+
+  // spi_3 - adf4377
+
+  ad_3w_spi #(
+    .NUM_OF_SLAVES (1)
+  ) i_spi_adf4377 (
+    .spi_csn (spi_3_csn),
+    .spi_clk (spi_3_clk),
+    .spi_mosi (spi_3_mosi),
+    .spi_miso (spi_3_miso),
     .spi_sdio (adf4377_sdio),
     .spi_dir ());
 
@@ -440,6 +438,8 @@ module system_top (
 
     .gpio_fmcp_p (gpio_fmcp_p),
     .gpio_fmcp_n (gpio_fmcp_n),
+
+    // quads
 
     // see "RX connect PHY to link Layer" section from ad_dualmxfe_ebz_bd.tcl
     //         serdes0_m2c index ## serdes1_m2c index-8
