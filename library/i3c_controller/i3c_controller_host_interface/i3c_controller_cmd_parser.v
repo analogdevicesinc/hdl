@@ -59,9 +59,9 @@ module i3c_controller_cmd_parser #(
   output wire        cmdp_valid,
   input  wire        cmdp_ready,
   output reg         cmdp_ccc,
-  output reg         cmdp_ccc_broadcast,
+  output reg         cmdp_ccc_bcast,
   output reg  [6:0]  cmdp_ccc_id,
-  output reg         cmdp_broadcast_header,
+  output reg         cmdp_bcast_header,
   output reg  [1:0]  cmdp_xmit,
   output reg         cmdp_sr,
   output reg  [11:0] cmdp_buffer_len,
@@ -71,9 +71,9 @@ module i3c_controller_cmd_parser #(
   input  wire        cmdp_do_daa_ready
 );
   wire        cmd_ccc;
-  wire        cmd_ccc_broadcast;
+  wire        cmd_ccc_bcast;
   wire [6:0]  cmd_ccc_id;
-  wire        cmd_broadcast_header;
+  wire        cmd_bcast_header;
   wire [1:0]  cmd_xmit;
   wire        cmd_sr;
   wire [11:0] cmd_buffer_len;
@@ -97,7 +97,7 @@ module i3c_controller_cmd_parser #(
       case (sm)
         receive: begin
           cmdp_ccc              <= cmd_ccc;
-          cmdp_broadcast_header <= cmd_broadcast_header;
+          cmdp_bcast_header     <= cmd_bcast_header;
           cmdp_xmit             <= cmd_xmit;
           cmdp_sr               <= cmd_sr;
           cmdp_buffer_len       <= cmd_buffer_len;
@@ -115,8 +115,8 @@ module i3c_controller_cmd_parser #(
           sm <= cmdp_ready ? receive : sm;
         end
         ccc_await: begin
-          cmdp_ccc_broadcast <= cmd_ccc_broadcast;
-          cmdp_ccc_id        <= cmd_ccc_id;
+          cmdp_ccc_bcast <= cmd_ccc_bcast;
+          cmdp_ccc_id    <= cmd_ccc_id;
 
           sm <= cmd_valid ? (cmd_ccc_id == CCC_ENTDAA ? daa_await : xfer_await) : sm;
         end
@@ -138,9 +138,9 @@ module i3c_controller_cmd_parser #(
   assign cmdp_do_daa  = sm == daa_await & reset_n;
 
   assign cmd_ccc              = cmd[30];
-  assign cmd_ccc_broadcast    = cmd[7];
+  assign cmd_ccc_bcast        = cmd[7];
   assign cmd_ccc_id           = cmd[6:0];
-  assign cmd_broadcast_header = cmd[29];
+  assign cmd_bcast_header     = cmd[29];
   assign cmd_xmit             = cmd[28:27];
   assign cmd_sr               = cmd[25];
   assign cmd_buffer_len       = cmd[23:12];

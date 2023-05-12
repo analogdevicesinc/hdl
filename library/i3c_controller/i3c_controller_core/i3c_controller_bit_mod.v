@@ -38,25 +38,33 @@
  * without returning to idle, A/B/C/D/*, where * is a next command
  * first state A or idle.
  *
- * start:  SCL  ~~~~~~~~~~\____
- *      SDA  ~~~~~~~~\______
- *       x | A | B | C | D | *
+ * start   SCL ====--------\____
+ *         SDA -~-~-~-~\________
+ *          x  | A | B | C | D | *
  *
- * repstart  SCL  ____/~~~~\___
- *      SDA  __/~~~\______
- *       x | A | B | C | D | *
+ * stop    SCL   ___/-----------
+ *         SDA   ==____/~~~~~~~~
+ *          x  | A | B | C | D | *
  *
- * stop    SCL  ____/~~~~~~~~
- *      SDA  ==\____/~~~~~
- *       x | A | B | C | D | *
+ * write  SCL ____/-------\____
+ *        SDA X===============X
+ *         x  | A | B | C | D | *
  *
- * write  SCL  ____/~~~~\____
- *      SDA  ==X=========X=
- *       x | A | B | C | D | *
+ * read    SCL ____/-------\____
+ *         SDA ~~~~~~~~~~~~~~~~~
+ *          x  | A | B | C | D | *
  *
- * read    SCL  ____/~~~~\____
- *      SDA  XXXX=====XXXX
- *       x | A | B | C | D | *
+ * T(read) SCL ____/-------\____
+ *         SDA ~~~~S============
+ *          x  | A | B | C | D | *
+ *
+ * S: sample lane and drive it to the value.
+ * =: keep last value.
+ * X: set lane to value
+ * ~: open-drain high
+ * ~: push-pull high
+ * _: low
+ * ~-: either pp or od
  */
 
 `timescale 1ns/100ps
@@ -67,13 +75,15 @@ module i3c_controller_bit_mod (
   input wire reset_n,
   input wire clk,
   input wire clk_quarter,
-  // Command from byte controller
+
+  // Bit Modulation Command
   // "cmd_valid" is embed in known enum values
   input wire [`MOD_BIT_CMD_WIDTH:0] cmd,
-  output reg cmd_tick, // indicate sample window
+  output reg cmd_ready, // indicate sample window
 
   output reg  scl,
   output reg  sdi,
+  input  wire sdo,
   output wire t
 );
 
@@ -96,21 +106,22 @@ module i3c_controller_bit_mod (
     wr_b     = 10,
     wr_c     = 11,
     wr_d     = 12,
-    thigh_b  = 13,
-    thigh_c  = 14;
+    t_rd_b   = 13,
+    t_rd_c   = 14,
+    t_rd_d   = 15;
 
   always @(posedge clk) begin
     if (!reset_n)
     begin
-      cmd_tick <= 1'b0;
+      cmd_ready <= 1'b0;
       scl <= 1'b1;
       sdi <= 1'b1;
       sm <= idle;
     end
     else
     begin
-      cmd_tick <= 1'b0;
-      cmd_tick <= ~clk_quarter_reg && clk_quarter ? 1'b1 : 1'b0;
+      cmd_ready <= 1'b0;
+      cmd_ready <= ~clk_quarter_reg && clk_quarter ? 1'b1 : 1'b0;
       case (sm)
         idle:
         begin
@@ -144,6 +155,13 @@ module i3c_controller_bit_mod (
                 scl <= 1'b0;
                 sdi <= cmd[0];
               end
+              `MOD_BIT_CMD_T_READ_:
+              begin
+                sm <= t_rd_b;
+                pp_en <= 1'b0;
+                scl <= 1'b0;
+                sdi <= 1'b1;
+              end
               default: begin
                 sm <= idle;
                 pp_en <= 1'b0;
@@ -157,13 +175,13 @@ module i3c_controller_bit_mod (
         stop_b, stop_c,
         rd_b, rd_c,
         wr_b, wr_c,
-        thigh_b:
+        t_rd_b, t_rd_c:
         begin
           sm <= sm + 1;
         end
         start_d, stop_d,
         rd_d, wr_d,
-        thigh_c:
+        t_rd_d:
         begin
           sm <= idle;
         end
@@ -224,13 +242,17 @@ module i3c_controller_bit_mod (
           scl <= 1'b0;
           sdi <= sdi;
         end
-        thigh_b: begin
+        t_rd_b: begin
           scl <= 1'b1;
-          sdi <= 1'b1;
+          sdi <= sdo;
         end
-        thigh_c: begin
+        t_rd_c: begin
           scl <= 1'b1;
-          sdi <= 1'b1;
+          sdi <= sdi;
+        end
+        t_rd_d: begin
+          scl <= 1'b0;
+          sdi <= sdi;
         end
         default:
           sm <= idle;

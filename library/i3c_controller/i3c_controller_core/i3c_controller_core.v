@@ -36,9 +36,9 @@
 `timescale 1ns/100ps
 `default_nettype none
 `include "i3c_controller_bit_mod_cmd.v"
+`include "i3c_controller_word_cmd.v"
 
 module i3c_controller_core #(
-  parameter DEFAULT_CLK_DIV = 0
 ) (
   input  wire clk,
   input  wire reset_n,
@@ -48,9 +48,9 @@ module i3c_controller_core #(
   input  wire cmdp_valid,
   output wire cmdp_ready,
   input  wire cmdp_ccc,
-  input  wire cmdp_ccc_broadcast,
+  input  wire cmdp_ccc_bcast,
   input  wire [6:0] cmdp_ccc_id,
-  input  wire cmdp_broadcast_header,
+  input  wire cmdp_bcast_header,
   input  wire [1:0] cmdp_xmit,
   input  wire cmdp_sr,
   input  wire [11:0] cmdp_buffer_len,
@@ -61,7 +61,7 @@ module i3c_controller_core #(
 
   // Byte stream
 
-  output reg  sdo_ready,
+  output wire sdo_ready,
   input  wire sdo_valid,
   input  wire [7:0] sdo,
 
@@ -76,7 +76,7 @@ module i3c_controller_core #(
 );
   wire clk_quarter;
   wire [`MOD_BIT_CMD_WIDTH:0] cmd;
-  wire cmd_tick;
+  wire cmd_ready;
   wire t;
   wire sdo_bit;
   wire sdi_bit;
@@ -85,6 +85,73 @@ module i3c_controller_core #(
   wire [6:0] o_da;
   wire o_pid_da_valid;
   wire error;
+
+  wire cmdw_ready;
+  wire [`CMDW_HEADER_WIDTH+8:0] cmdw;
+  wire cmdw_nack;
+
+  wire cmdw_rx_ready;
+  wire cmdw_rx_valid;
+  wire [7:0] cmdw_rx;
+
+  /**i3c_controller_daa #(
+  ) i_i3c_controller_daa (
+    .reset_n(reset_n),
+    .clk(clk),
+    .clk_quarter(clk_quarter),
+    .cmdp_do_daa(cmdp_do_daa),
+    .cmdp_do_daa_ready(cmdp_do_daa_ready),
+    .sdo(sdo_bit),
+    .cmd(cmd),
+    .o_pid_bcr_dcr(o_pid_bcr_dcr),
+    .o_da(o_da),
+    .o_pid_da_valid(o_pid_da_valid),
+    .error(error)
+  );*/
+
+  i3c_controller_framing #(
+  ) i_i3c_controller_framing (
+    .reset_n(reset_n),
+    .clk(clk),
+    .cmdp_valid(cmdp_valid),
+    .cmdp_ready(cmdp_ready),
+    .cmdp_ccc(cmdp_ccc),
+    .cmdp_ccc_bcast(cmdp_ccc_bcast),
+    .cmdp_ccc_id(cmdp_ccc_id),
+    .cmdp_bcast_header(cmdp_bcast_header),
+    .cmdp_xmit(cmdp_xmit),
+    .cmdp_sr(cmdp_sr),
+    .cmdp_buffer_len(cmdp_buffer_len),
+    .cmdp_da(cmdp_da),
+    .cmdp_rnw(cmdp_rnw),
+    .sdo_ready(sdo_ready),
+    .sdo_valid(sdo_valid),
+    .sdo(sdo),
+    .sdi_ready(sdi_ready),
+    .sdi_valid(sdi_valid),
+    .sdi(sdi),
+    .cmdw_ready(cmdw_ready),
+    .cmdw(cmdw),
+    .cmdw_nack(cmdw_nack),
+    .cmdw_rx_ready(cmdw_rx_ready),
+    .cmdw_rx_valid(cmdw_rx_valid),
+    .cmdw_rx(cmdw_rx)
+  );
+
+  i3c_controller_word #(
+  ) i_i3c_controller_word (
+    .reset_n(reset_n),
+    .clk(clk),
+    .cmdw_ready(cmdw_ready),
+    .cmdw(cmdw),
+    .cmdw_nack(cmdw_nack),
+    .cmdw_rx_ready(cmdw_rx_ready),
+    .cmdw_rx_valid(cmdw_rx_valid),
+    .cmdw_rx(cmdw_rx),
+    .cmd(cmd),
+    .cmd_ready(cmd_ready),
+    .sdo(sdo_bit)
+  );
 
   i3c_controller_quarter_clk #(
   ) i_i3c_controller_quarter_clk (
@@ -99,9 +166,10 @@ module i3c_controller_core #(
     .clk(clk),
     .clk_quarter(clk_quarter),
     .cmd(cmd),
-    .cmd_tick(cmd_tick),
+    .cmd_ready(cmd_ready),
     .scl(scl),
     .sdi(sdi_bit),
+    .sdo(sdo_bit),
     .t(t)
   );
 
@@ -111,21 +179,6 @@ module i3c_controller_core #(
     .sdi(sdi_bit),
     .t(t),
     .sda(sda)
-  );
-
-  i3c_controller_daa #(
-  ) i_i3c_controller_daa (
-    .reset_n(reset_n),
-    .clk(clk),
-    .clk_quarter(clk_quarter),
-    .cmdp_do_daa(cmdp_do_daa),
-    .cmdp_do_daa_ready(cmdp_do_daa_ready),
-    .sdo(sdo_bit),
-    .cmd(cmd),
-    .o_pid_bcr_dcr(o_pid_bcr_dcr),
-    .o_da(o_da),
-    .o_pid_da_valid(o_pid_da_valid),
-    .error(error)
   );
 
 endmodule

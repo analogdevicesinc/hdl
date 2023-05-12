@@ -57,7 +57,7 @@
 			</spirit:wire>
     </spirit:port>
 		<spirit:port>
-			<spirit:logicalName>CMDP_CCC_BROADCAST</spirit:logicalName>
+			<spirit:logicalName>CMDP_CCC_BCAST</spirit:logicalName>
 			<spirit:wire>
 				<spirit:onMaster>
 					<spirit:presence>required</spirit:presence>
@@ -87,7 +87,7 @@
 			</spirit:wire>
 		</spirit:port>
 		<spirit:port>
-			<spirit:logicalName>CMDP_BROADCAST_HEADER</spirit:logicalName>
+			<spirit:logicalName>CMDP_BCAST_HEADER</spirit:logicalName>
 			<spirit:wire>
 				<spirit:onMaster>
 					<spirit:presence>required</spirit:presence>

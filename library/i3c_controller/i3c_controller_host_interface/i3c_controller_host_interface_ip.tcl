@@ -48,9 +48,9 @@ adi_add_bus "cmdp" "master" \
 		{"cmdp_valid"         "CMDP_VALID"} \
 		{"cmdp_ready"         "CMDP_READY"} \
 		{"cmdp_ccc"           "CMDP_CCC"} \
-		{"cmdp_ccc_broadcast" "CMDP_CCC_BROADCAST"} \
+		{"cmdp_ccc_bcast"     "CMDP_CCC_BCAST"} \
 		{"cmdp_ccc_id"        "CMDP_CCC_ID"} \
-		{"cmdp_broad_header"  "CMD_BROAD_HEADER"} \
+		{"cmdp_bcast_header"  "CMD_BCAST_HEADER"} \
 		{"cmdp_xmit"          "CMDP_XMIT"} \
 		{"cmdp_sr"            "CMDP_SR"} \
 		{"cmdp_buffer_len"    "CMDP_BUFFER_LEN"} \

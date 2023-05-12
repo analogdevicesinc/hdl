@@ -1,13 +1,17 @@
-`ifndef WORD_CMD_V
-`define WORD_CMD_V
+`ifndef WORD_COMMAND_V
+`define WORD_COMMAND_V
 
-`define WORD_CMD_HEADER_LEN 3
+`define CMDW_HEADER_WIDTH 3
 
-`define WORD_CMD_BCAST_7E_W            3'd00
-`define WORD_CMD_TARGET_ADDR           3'd01
-`define WORD_CMD_PVT_MSG_SR            3'd02
-`define WORD_CMD_PVT_MSG_TX            3'd03
-`define WORD_CMD_PVT_MSG_RX            3'd04
-`define WORD_CMD_BCAST_CCC             3'd05
+`define CMDW_NOP                   4'd00
+`define CMDW_START                 4'd01
+`define CMDW_BCAST_7E_W0           4'd02
+`define CMDW_PVT_MSG_SR            4'd03
+`define CMDW_TARGET_ADDR           4'd04
+`define CMDW_PVT_MSG_TX            4'd05
+`define CMDW_PVT_MSG_RX            4'd06
+`define CMDW_BCAST_CCC             4'd07
+`define CMDW_STOP                  4'd08
+`define CMDW_BCAST_7E_W1           4'd09
 
 `endif

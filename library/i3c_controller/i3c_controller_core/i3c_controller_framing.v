@@ -34,7 +34,8 @@
 // ***************************************************************************
 /**
  * Frames commands to the word module.
- * That means, joins cmdp and sdio bus into single interface cmdw.
+ * That means, cojoins cmdp and sdio bus into single interface cmdw.
+ * It is the main state-machine for the Command Descriptors received.
  */
 
 `timescale 1ns/100ps
@@ -51,9 +52,9 @@ module i3c_controller_framing #(
   input  wire        cmdp_valid,
   output wire        cmdp_ready,
   input  wire        cmdp_ccc,
-  input  wire        cmdp_ccc_broadcast,
+  input  wire        cmdp_ccc_bcast,
   input  wire [6:0]  cmdp_ccc_id,
-  input  wire        cmdp_broadcast_header,
+  input  wire        cmdp_bcast_header,
   input  wire [1:0]  cmdp_xmit,
   input  wire        cmdp_sr,
   input  wire [11:0] cmdp_buffer_len,
@@ -62,125 +63,117 @@ module i3c_controller_framing #(
 
   // Byte stream
 
-  output reg  sdo_u8_ready,
-  input  wire sdo_u8_valid,
-  input  wire [7:0] sdo_u8,
+  output wire sdo_ready,
+  input  wire sdo_valid,
+  input  wire [7:0] sdo,
 
-  input  wire sdi_u8_ready,
-  output wire sdi_u8_valid,
-  output wire [7:0] sdi_u8,
+  input  wire sdi_ready,
+  output wire sdi_valid,
+  output wire [7:0] sdi,
+  // TODO: What happens when got NACK?
+  // should it empty SDO until LEN 0?
+  // And SDI?
 
   // Word command
 
   input  wire cmdw_ready,
-  output wire cmdw_valid,
-  output wire [`WORD_CMD_HEADER_LEN+7:0] cmdw,
-  // NACK is 'HIGH when an ACK is not satisfied in the I3C bus, acts as reset.
+  output wire [`CMDW_HEADER_WIDTH+8:0] cmdw,
   input  wire cmdw_nack,
 
   output wire cmdw_rx_ready,
   input  wire cmdw_rx_valid,
-  output wire [7:0] cmdw_rx,
-
+  input  wire [7:0] cmdw_rx
 );
   reg        cmdp_ccc_reg;
-  reg        cmdp_ccc_broadcast_reg;
+  reg        cmdp_ccc_bcast_reg;
   reg [6:0]  cmdp_ccc_id_reg;
-  reg        cmdp_broadcast_header_reg;
+  reg        cmdp_bcast_header_reg;
   reg [1:0]  cmdp_xmit_reg;
   reg        cmdp_sr_reg;
   reg [11:0] cmdp_buffer_len_reg;
   reg [6:0]  cmdp_da_reg;
   reg        cmdp_rnw_reg;
 
-  reg [`WORD_CMD_HEADER_LEN-1:0] cmdw_header;
+  reg [`CMDW_HEADER_WIDTH:0] sm;
   reg [7:0] cmdw_body;
-
-  localparam [6:0] CCC_ENTDAA = 7'd7;
-
-  reg [3:0] sm;
-  localparam [3:0]
-    receive    = 0,
-    bcast_7e_w = 1,
-    target_addr= 2,
-    pvt_msg_sr = 3,
-    pvt_msg_tx = 4,
-    pvt_msg_rx = 5,
-    bcast_ccc  = 6,
-    exit       = 7;
 
   always @(posedge clk) begin
     if (!reset_n | cmdw_nack) begin
-      sm <= receive;
-    end else begin
+      sm <= `CMDW_NOP;
+      cmdw_body <= 8'h00;
+    end else if (cmdw_ready) begin
+      if (sm == `CMDW_NOP | ((sm == `CMDW_PVT_MSG_TX | sm == `CMDW_PVT_MSG_RX) & cmdp_buffer_len_reg == 0)) begin
+        cmdp_ccc_reg        <= cmdp_ccc;
+        cmdp_ccc_bcast_reg  <= cmdp_ccc_bcast_reg;
+        cmdp_ccc_id_reg     <= cmdp_ccc_id_reg;
+        cmdp_xmit_reg       <= cmdp_xmit;
+        cmdp_sr_reg         <= cmdp_sr;
+        cmdp_buffer_len_reg <= cmdp_buffer_len;
+        cmdp_da_reg         <= cmdp_da;
+        cmdp_rnw_reg        <= cmdp_rnw;
+      end
+
+      // Sr from cmdp_sr is ignored if no cmdp to be sampled at the
+      // correct time.
+      // However, software must ensure the next cmdp is from the same branch,
+      // e.g, Sr'ing from a priv transfer to a BCAST CCC is a forbidden
+      // path.
+      // SDIO Ready/Valid are not monitored, data will be lost and gibberish
+      // will be sent if they do not accept/provide data when needed.
       case (sm)
-        receive: begin
-          cmdp_ccc_reg              <= cmdp_ccc;
-          cmdp_ccc_broadcast_reg    <= cmdp_ccc_broadcast_reg;
-          cmdp_ccc_id_reg           <= cmdp_ccc_id_reg;
-          cmdp_xmit_reg             <= cmdp_xmit;
-          cmdp_sr_reg               <= cmdp_sr;
-          cmdp_buffer_len_reg       <= cmdp_buffer_len;
-          cmdp_da_reg               <= cmdp_da;
-          cmdp_rnw_reg              <= cmdp_rnw;
-
+        `CMDW_NOP: begin
           if (cmdp_valid) begin
-            cmdw_header <= cmdp_sr ? `WORD_CMD_BCAST_7E_W : (cmdp_ccc ? `WORD_CMD_BCAST_CCC : `WORD_CMD_PVT_MSG_SR);
-          end else begin
-            sm <= cmdp_sr ? bcast_7e_w : (cmdp_ccc ? bcast_ccc : pvt_msg_sr);
-            sm <= receive;
+            sm <= `CMDW_START;
           end
         end
-        bcast_7e_w: begin
-          if (cmdw_ready) begin
-            cmdw_header <= cmdp_ccc_reg ? `WORD_CMD_BCAST_CCC : `WORD_CMD_PVT_MSG_SR;
-            sm <= cmdp_ccc_reg ? bcast_ccc : pvt_msg_sr;
-          end
+        `CMDW_START: begin
+            sm <= `CMDW_BCAST_7E_W0;
         end
-        bcast_ccc: begin
+        `CMDW_BCAST_7E_W0: begin
+          sm <= cmdp_ccc_reg ? `CMDW_BCAST_CCC : `CMDW_PVT_MSG_SR;
         end
-        target_addr: begin
-          cmdw_body   <= sdo_u8;
-          if (cmdw_ready) begin
-            if (cmdp_rnw_reg) begin
-              cmdw_header <= `WORD_CMD_PVT_MSG_RX;
-            end else begin
-              cmdw_header <= `WORD_CMD_PVT_MSG_TX;
-              sdo_u8_ready <= 1'b1;
-            end
-            sm <= cmdp_rnw_reg ? pvt_msg_rx : (sdo_u8_valid ? pvt_msg_tx : sm);
-          end
+        `CMDW_BCAST_CCC: begin
         end
-        pvt_msg_sr: begin
-          if (cmdw_ready) begin
-            cmdw_header <= `WORD_CMD_TARGET_ADDR;
-            sm <= target_addr;
-          end
+        `CMDW_PVT_MSG_SR: begin
+          cmdw_body   <= {cmdp_da, cmdp_rnw}; // Attention to RnW here
+          sm <= `CMDW_TARGET_ADDR;
         end
-        pvt_msg_rx: begin
+        `CMDW_TARGET_ADDR: begin
+          cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
+          cmdw_body <= sdo; // Don't matter for RX
+          sm <= cmdp_rnw_reg ? `CMDW_PVT_MSG_RX : `CMDW_PVT_MSG_TX;
         end
-        pvt_msg_tx: begin
-          cmdw_body   <= sdo_u8;
-          cmdw_header <= `WORD_CMD_PVT_MSG_TX;
-          sdo_u8_ready <= cmdw_ready;
-          sm <= !sdo_u8_valid ? exit : sm;
-
+        `CMDW_PVT_MSG_RX: begin
+          cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
+          sm <= cmdp_buffer_len_reg == 0 ? (cmdp_sr_reg & cmdp_valid ? `CMDW_PVT_MSG_SR : `CMDW_STOP) : `CMDW_PVT_MSG_RX;
         end
-        exit: begin
+        `CMDW_PVT_MSG_TX: begin
+          cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
+          sm <= cmdp_buffer_len_reg == 0 ? (cmdp_sr_reg & cmdp_valid ? `CMDW_PVT_MSG_SR : `CMDW_STOP) : `CMDW_PVT_MSG_TX;
+          cmdw_body   <= sdo;
+        end
+        `CMDW_STOP: begin
+          sm <= `CMDW_NOP;
         end
         default: begin
-          sm <= receive;
+          sm <= `CMDW_NOP;
         end
       endcase
+    end else begin
+      sm <= sm;
     end
   end
 
-  assign cmdp_ready = (sm == receive) & reset_n & !cmdw_nack;
-  assign cmdw_valid = (sm == bcast_7e_w) |
-                      (sm == bcast_ccc) |
-                      (sm == target_addr & (sdo_u8_valid | cmdp_rnw_reg)) |
-                      (sm == pvt_msg_tx) |
-                      (sm == pvt_msg_rx) |
-                      (sm == pvt_msg_sr);
-  assign cmdw = {cmdw_header, cmdw_body};
+  // TODO: consider replacing cmdw_ready with a synced copy (is acting as a PWM to narrow ready/valid signals)
+  assign cmdp_ready = (sm == `CMDW_NOP |
+                       ((sm == `CMDW_PVT_MSG_TX | sm == `CMDW_PVT_MSG_RX) & cmdp_buffer_len_reg == 0)
+                      ) & reset_n & !cmdw_nack & cmdw_ready;
+  assign sdo_ready = ((sm == `CMDW_TARGET_ADDR & !cmdp_rnw_reg) |
+                      (sm == `CMDW_PVT_MSG_TX & cmdp_buffer_len_reg != 0)) &
+                     cmdw_ready & reset_n;
+  assign cmdw = {sm, cmdw_body};
+
+  assign sdi_valid = cmdw_rx_valid;
+  assign sdi = cmdw_rx[7:0];
+  assign cmdw_rx_ready = sdi_ready;
 endmodule
