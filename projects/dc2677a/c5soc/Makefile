@@ -6,8 +6,8 @@
 
 PROJECT_NAME := dc2677a_c5soc
 
-M_DEPS += ../common/dc2677a_qsys.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
+M_DEPS += ../../dc2677a/common/dc2677a_qsys.tcl
 M_DEPS += ../../common/c5soc/c5soc_system_qsys.tcl
 M_DEPS += ../../common/c5soc/c5soc_system_assign.tcl
 
