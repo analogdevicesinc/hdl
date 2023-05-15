@@ -149,6 +149,9 @@ module system_top (
 
   assign sys_gpio_i[31:0] = sys_gpio_o[31:0];
 
+  assign pd = sys_gpio_o[0];
+  assign cs_n = sys_gpio_o[1];
+
   // instantiations
   system_bd i_system_bd (
     .sys_clk_clk (sys_clk),
@@ -231,8 +234,6 @@ module system_top (
     .vga_out_vga_if_vga_vsync (vga_vsync),
     .axi_ltc235x_device_if_lvds_cmos_n (lvds_cmos_n),
     .axi_ltc235x_device_if_busy (busy),
-    .axi_ltc235x_device_if_pd (pd),
-    .axi_ltc235x_device_if_cs_n (cs_n),
     .axi_ltc235x_cnv_if_pwm_0(cnv),
     .axi_ltc235x_device_if_sdo (sdo),
     .axi_ltc235x_device_if_scki (scki),

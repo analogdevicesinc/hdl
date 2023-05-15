@@ -52,8 +52,6 @@ proc axi_ltc235x_elab {} {
   # common
   add_interface_port device_if busy busy Input 1
   add_interface_port device_if lvds_cmos_n lvds_cmos_n Output 1
-  add_interface_port device_if cs_n cs_n Output 1
-  add_interface_port device_if pd pd Output 1
   # cmos
   add_interface_port device_if scki scki Output 1
   add_interface_port device_if scko scko Input 1
