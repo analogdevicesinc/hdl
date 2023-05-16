@@ -441,25 +441,25 @@ module up_dac_channel #(
   ) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_data_cntrl ({ up_dac_iq_mode,
-                      up_dac_iqcor_enb,
-                      up_dac_iqcor_coeff_tc_1,
-                      up_dac_iqcor_coeff_tc_2,
-                      up_dac_dds_scale_tc_1,
-                      up_dac_dds_init_1,
-                      up_dac_dds_incr_1,
-                      up_dac_dds_scale_tc_2,
-                      up_dac_dds_init_2,
-                      up_dac_dds_incr_2,
-                      up_dac_dds_init_1_extend,
-                      up_dac_dds_incr_1_extend,
-                      up_dac_dds_init_2_extend,
-                      up_dac_dds_incr_2_extend,
-                      up_dac_pat_data_1,
-                      up_dac_pat_data_2,
-                      up_dac_data_sel_m,
-                      up_dac_mask_enable,
-                      up_dac_src_chan_sel}),
+    .up_data_cntrl ({ up_dac_iq_mode,           // 2
+                      up_dac_iqcor_enb,         // 1
+                      up_dac_iqcor_coeff_tc_1,  // 16
+                      up_dac_iqcor_coeff_tc_2,  // 16
+                      up_dac_dds_scale_tc_1,    // 16
+                      up_dac_dds_init_1,        // 16
+                      up_dac_dds_incr_1,        // 16
+                      up_dac_dds_scale_tc_2,    // 16
+                      up_dac_dds_init_2,        // 16
+                      up_dac_dds_incr_2,        // 16
+                      up_dac_dds_init_1_extend, // 16
+                      up_dac_dds_incr_1_extend, // 16
+                      up_dac_dds_init_2_extend, // 16
+                      up_dac_dds_incr_2_extend, // 16
+                      up_dac_pat_data_1,        // 16
+                      up_dac_pat_data_2,        // 16
+                      up_dac_data_sel_m,        // 4
+                      up_dac_mask_enable,       // 1
+                      up_dac_src_chan_sel}),    // 8
     .up_xfer_done (),
     .d_rst (dac_rst),
     .d_clk (dac_clk),
