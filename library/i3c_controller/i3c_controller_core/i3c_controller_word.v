@@ -51,10 +51,13 @@ module i3c_controller_word #(
 
   // Word command
 
-  output wire cmdw_ready,
-  input  wire [`CMDW_HEADER_WIDTH+8:0] cmdw,
-  // NACK is HIGH when an ACK is not satisfied in the I3C bus, acts as reset.
+  input wire cmdw_mux,
   output reg cmdw_nack,
+  // NACK is HIGH when an ACK is not satisfied in the I3C bus, acts as reset.
+  output wire cmdw_ready,
+  input  wire [`CMDW_HEADER_WIDTH+8:0] cmdw_framing, // From Framing
+  input  wire [`CMDW_HEADER_WIDTH+8:0] cmdw_daa, // From DAA
+
 
   input  wire cmdw_rx_ready,
   output wire cmdw_rx_valid,
@@ -71,6 +74,7 @@ module i3c_controller_word #(
 );
 
   wire [`CMDW_HEADER_WIDTH:0] cmdw_header;
+  wire [`CMDW_HEADER_WIDTH+8:0] cmdw;
 
   reg [7:0] cmdw_body;
   reg [`CMDW_HEADER_WIDTH:0] sm;
@@ -88,17 +92,19 @@ module i3c_controller_word #(
   // # of Bit Modulation Commands - 1 per word
   always @(sm) begin
     case (sm)
-      `CMDW_NOP         : i_ = 0;
-      `CMDW_START       : i_ = 0;
-      `CMDW_BCAST_7E_W0 : i_ = 8; // 7'h7e+RnW=0+ACK
-      `CMDW_BCAST_CCC   : i_ = 0;
-      `CMDW_TARGET_ADDR : i_ = 8; // DA+RNW+ACK
-      `CMDW_PVT_MSG_SR  : i_ = 0;
-      `CMDW_PVT_MSG_RX  : i_ = 8; // SDI+T
-      `CMDW_PVT_MSG_TX  : i_ = 8; // SDO+T
-      `CMDW_STOP        : i_ = 0;
-      `CMDW_BCAST_7E_W1 : i_ = 8; // 7'h7e+RnW=1+ACK
-      default           : i_ = 0;
+      `CMDW_NOP             : i_ =  0;
+      `CMDW_START           : i_ =  0;
+      `CMDW_BCAST_7E_W0     : i_ =  8; // 7'h7e+RnW=0+ACK
+      `CMDW_CCC             : i_ =  8; // Direct/Bcast+CCC+T
+      `CMDW_TARGET_ADDR     : i_ =  8; // DA+RNW+ACK
+      `CMDW_MSG_SR          : i_ =  0;
+      `CMDW_MSG_RX          : i_ =  8; // SDI+T
+      `CMDW_MSG_TX          : i_ =  8; // SDO+T
+      `CMDW_STOP            : i_ =  0;
+      `CMDW_BCAST_7E_W1     : i_ =  8; // 7'h7e+RnW=1+ACK
+      `CMDW_PROV_ID_BCR_DCR : i_ = 63; // 48-bitUniqueID+BCR+DCR
+      `CMDW_DYN_ADDR        : i_ =  8; // DA+T+ACK
+      default               : i_ =  0;
     endcase
   end
 
@@ -109,6 +115,8 @@ module i3c_controller_word #(
       cmd <= `MOD_BIT_CMD_NOP;
       cmdw_nack <= 1'b0;
       cmdw_rx_valid_reg <= 1'b0;
+      sm <= `CMDW_NOP;
+      i <= 0;
     end else if (cmd_ready) begin
       sm <= i == i_ ? cmdw_header : sm;
       cmdw_body <= i == i_ ? cmdw[7:0] : cmdw_body;
@@ -132,43 +140,44 @@ module i3c_controller_word #(
           `CMDW_BCAST_7E_W0: begin
             if (i == 7) begin
               // RnW=0
-              cmd <= {`MOD_BIT_CMD_WRITE_,1'b0,1'b0};
+              cmd <= {`MOD_BIT_CMD_WRITE_,1'b1,1'b0};
             end else if (i == 8) begin
               // ACK
               cmd <= {`MOD_BIT_CMD_READ};
               `DO_ACK
             end else begin
               // 7'h7e
-              cmd <= {`MOD_BIT_CMD_WRITE_,1'b0,I3C_RESERVED[7 - i[2:0]]};
+              cmd <= {`MOD_BIT_CMD_WRITE_,1'b0,I3C_RESERVED[6 - i[2:0]]};
             end
           end
           `CMDW_BCAST_7E_W1: begin
             if (i == 7) begin
               // RnW=1
-              cmd <= {`MOD_BIT_CMD_WRITE_,1'b0,1'b1};
+              cmd <= {`MOD_BIT_CMD_WRITE_,1'b1,1'b1};
             end else if (i == 8) begin
               // ACK
               cmd <= {`MOD_BIT_CMD_READ};
               `DO_ACK
             end else begin
               // 7'h7e
-              cmd <= {`MOD_BIT_CMD_WRITE_,1'b0,I3C_RESERVED[7 - i[2:0]]};
+              cmd <= {`MOD_BIT_CMD_WRITE_,1'b1,I3C_RESERVED[6 - i[2:0]]};
             end
           end
+          `CMDW_DYN_ADDR,
           `CMDW_TARGET_ADDR: begin
             if (i == 8) begin
               // ACK
               cmd <= {`MOD_BIT_CMD_READ};
               `DO_ACK
             end else begin
-              // DA+RnW
-              cmd <= {`MOD_BIT_CMD_WRITE_,1'b0,cmdw_body[7 - i[2:0]]};
+              // DA+RnW/DA+T
+              cmd <= {`MOD_BIT_CMD_WRITE_,1'b1,cmdw_body[7 - i[2:0]]};
             end
           end
-          `CMDW_PVT_MSG_SR: begin
-              cmd <= `MOD_BIT_CMD_START_OD;
+          `CMDW_MSG_SR: begin
+              cmd <= `MOD_BIT_CMD_START_PP;
           end
-          `CMDW_PVT_MSG_RX: begin
+          `CMDW_MSG_RX: begin
             if (i == 8) begin
               cmdw_rx_valid_reg <= 1'b1;
               // T
@@ -184,20 +193,22 @@ module i3c_controller_word #(
             end
             cmdw_rx_reg[8-i] <= sdo;
           end
-          `CMDW_PVT_MSG_TX: begin
+          `CMDW_CCC,
+          `CMDW_MSG_TX: begin
             if (i == 8) begin
               // T
-              cmd <= {`MOD_BIT_CMD_WRITE_,1'b0,~^cmdw_body};
-              cmdw_rx_valid_reg <= 1'b1;
+              cmd <= {`MOD_BIT_CMD_WRITE_,1'b1,~^cmdw_body};
             end else begin
-              // SDO
-              cmd <= {`MOD_BIT_CMD_WRITE_,1'b0,cmdw_body[7 - i[2:0]]};
+              // SDO/BCAST+CCC
+              cmd <= {`MOD_BIT_CMD_WRITE_,1'b1,cmdw_body[7 - i[2:0]]};
             end
-          end
-          `CMDW_BCAST_CCC: begin
           end
           `CMDW_STOP: begin
             cmd <= `MOD_BIT_CMD_STOP;
+          end
+          `CMDW_PROV_ID_BCR_DCR: begin
+            cmd <= `MOD_BIT_CMD_READ;
+            // TODO: Figure out what to do with PID,BCR,DCR
           end
           default: begin
             sm <= `CMDW_NOP;
@@ -208,6 +219,7 @@ module i3c_controller_word #(
   end
 
   assign cmdw_ready = (i == i_ & cmd_ready) & reset_n;
+  assign cmdw = cmdw_mux ? cmdw_framing : cmdw_daa;
   assign cmdw_header = cmdw[`CMDW_HEADER_WIDTH+8 -: `CMDW_HEADER_WIDTH+1];
   assign cmdw_rx = cmdw_rx_reg[7:0];
   assign cmdw_rx_valid = cmdw_rx_valid_reg & cmd_ready;

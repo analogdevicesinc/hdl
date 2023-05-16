@@ -81,33 +81,31 @@ module i3c_controller_core #(
   wire sdo_bit;
   wire sdi_bit;
 
-  wire [63:0] o_pid_bcr_dcr;
-  wire [6:0] o_da;
-  wire o_pid_da_valid;
-  wire error;
+  //wire [63:0] o_pid_bcr_dcr;
+  //wire [6:0] o_da;
+  //wire o_pid_da_valid;
+  //wire error;
 
   wire cmdw_ready;
-  wire [`CMDW_HEADER_WIDTH+8:0] cmdw;
+  wire cmdw_mux;
+  wire [`CMDW_HEADER_WIDTH+8:0] cmdw_framing;
+  wire [`CMDW_HEADER_WIDTH+8:0] cmdw_daa;
   wire cmdw_nack;
 
   wire cmdw_rx_ready;
   wire cmdw_rx_valid;
   wire [7:0] cmdw_rx;
 
-  /**i3c_controller_daa #(
+  i3c_controller_daa #(
   ) i_i3c_controller_daa (
     .reset_n(reset_n),
     .clk(clk),
-    .clk_quarter(clk_quarter),
     .cmdp_do_daa(cmdp_do_daa),
     .cmdp_do_daa_ready(cmdp_do_daa_ready),
-    .sdo(sdo_bit),
-    .cmd(cmd),
-    .o_pid_bcr_dcr(o_pid_bcr_dcr),
-    .o_da(o_da),
-    .o_pid_da_valid(o_pid_da_valid),
-    .error(error)
-  );*/
+    .cmdw_ready(cmdw_ready),
+    .cmdw(cmdw_daa),
+    .cmdw_nack(cmdw_nack)
+  );
 
   i3c_controller_framing #(
   ) i_i3c_controller_framing (
@@ -124,6 +122,7 @@ module i3c_controller_core #(
     .cmdp_buffer_len(cmdp_buffer_len),
     .cmdp_da(cmdp_da),
     .cmdp_rnw(cmdp_rnw),
+    .cmdp_do_daa_ready(cmdp_do_daa_ready),
     .sdo_ready(sdo_ready),
     .sdo_valid(sdo_valid),
     .sdo(sdo),
@@ -131,7 +130,7 @@ module i3c_controller_core #(
     .sdi_valid(sdi_valid),
     .sdi(sdi),
     .cmdw_ready(cmdw_ready),
-    .cmdw(cmdw),
+    .cmdw(cmdw_framing),
     .cmdw_nack(cmdw_nack),
     .cmdw_rx_ready(cmdw_rx_ready),
     .cmdw_rx_valid(cmdw_rx_valid),
@@ -143,7 +142,9 @@ module i3c_controller_core #(
     .reset_n(reset_n),
     .clk(clk),
     .cmdw_ready(cmdw_ready),
-    .cmdw(cmdw),
+    .cmdw_mux(cmdw_mux),
+    .cmdw_framing(cmdw_framing),
+    .cmdw_daa(cmdw_daa),
     .cmdw_nack(cmdw_nack),
     .cmdw_rx_ready(cmdw_rx_ready),
     .cmdw_rx_valid(cmdw_rx_valid),
@@ -181,4 +182,5 @@ module i3c_controller_core #(
     .sda(sda)
   );
 
+  assign cmdw_mux = cmdp_do_daa_ready;
 endmodule

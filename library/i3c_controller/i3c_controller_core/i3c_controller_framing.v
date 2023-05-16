@@ -60,6 +60,7 @@ module i3c_controller_framing #(
   input  wire [11:0] cmdp_buffer_len,
   input  wire [6:0]  cmdp_da,
   input  wire        cmdp_rnw,
+  input  wire        cmdp_do_daa_ready,
 
   // Byte stream
 
@@ -84,6 +85,8 @@ module i3c_controller_framing #(
   input  wire cmdw_rx_valid,
   input  wire [7:0] cmdw_rx
 );
+  wire cmdp_valid_w;
+
   reg        cmdp_ccc_reg;
   reg        cmdp_ccc_bcast_reg;
   reg [6:0]  cmdp_ccc_id_reg;
@@ -102,10 +105,10 @@ module i3c_controller_framing #(
       sm <= `CMDW_NOP;
       cmdw_body <= 8'h00;
     end else if (cmdw_ready) begin
-      if (sm == `CMDW_NOP | ((sm == `CMDW_PVT_MSG_TX | sm == `CMDW_PVT_MSG_RX) & cmdp_buffer_len_reg == 0)) begin
+      if (sm == `CMDW_NOP | ((sm == `CMDW_MSG_TX | sm == `CMDW_MSG_RX | sm == `CMDW_CCC) & cmdp_buffer_len_reg == 0)) begin
         cmdp_ccc_reg        <= cmdp_ccc;
-        cmdp_ccc_bcast_reg  <= cmdp_ccc_bcast_reg;
-        cmdp_ccc_id_reg     <= cmdp_ccc_id_reg;
+        cmdp_ccc_bcast_reg  <= cmdp_ccc_bcast;
+        cmdp_ccc_id_reg     <= cmdp_ccc_id;
         cmdp_xmit_reg       <= cmdp_xmit;
         cmdp_sr_reg         <= cmdp_sr;
         cmdp_buffer_len_reg <= cmdp_buffer_len;
@@ -115,14 +118,11 @@ module i3c_controller_framing #(
 
       // Sr from cmdp_sr is ignored if no cmdp to be sampled at the
       // correct time.
-      // However, software must ensure the next cmdp is from the same branch,
-      // e.g, Sr'ing from a priv transfer to a BCAST CCC is a forbidden
-      // path.
       // SDIO Ready/Valid are not monitored, data will be lost and gibberish
       // will be sent if they do not accept/provide data when needed.
       case (sm)
         `CMDW_NOP: begin
-          if (cmdp_valid) begin
+          if (cmdp_valid_w) begin
             sm <= `CMDW_START;
           end
         end
@@ -130,26 +130,29 @@ module i3c_controller_framing #(
             sm <= `CMDW_BCAST_7E_W0;
         end
         `CMDW_BCAST_7E_W0: begin
-          sm <= cmdp_ccc_reg ? `CMDW_BCAST_CCC : `CMDW_PVT_MSG_SR;
+          sm <= cmdp_ccc_reg ? `CMDW_CCC : `CMDW_MSG_SR;
+          cmdw_body   <= {cmdp_ccc_bcast_reg, cmdp_ccc_id_reg}; // Attention to BCAST here
         end
-        `CMDW_BCAST_CCC: begin
+        `CMDW_CCC: begin
+          sm <= cmdp_ccc_bcast_reg ? `CMDW_MSG_SR :
+            (cmdp_buffer_len_reg == 0 ? (cmdp_sr_reg & cmdp_valid_w ? `CMDW_MSG_SR : `CMDW_STOP) : `CMDW_MSG_TX);
         end
-        `CMDW_PVT_MSG_SR: begin
+        `CMDW_MSG_SR: begin
           cmdw_body   <= {cmdp_da, cmdp_rnw}; // Attention to RnW here
           sm <= `CMDW_TARGET_ADDR;
         end
         `CMDW_TARGET_ADDR: begin
           cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
           cmdw_body <= sdo; // Don't matter for RX
-          sm <= cmdp_rnw_reg ? `CMDW_PVT_MSG_RX : `CMDW_PVT_MSG_TX;
+          sm <= cmdp_rnw_reg ? `CMDW_MSG_RX : `CMDW_MSG_TX;
         end
-        `CMDW_PVT_MSG_RX: begin
+        `CMDW_MSG_RX: begin
           cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
-          sm <= cmdp_buffer_len_reg == 0 ? (cmdp_sr_reg & cmdp_valid ? `CMDW_PVT_MSG_SR : `CMDW_STOP) : `CMDW_PVT_MSG_RX;
+          sm <= cmdp_buffer_len_reg == 0 ? (cmdp_sr_reg & cmdp_valid_w ? `CMDW_MSG_SR : `CMDW_STOP) : `CMDW_MSG_RX;
         end
-        `CMDW_PVT_MSG_TX: begin
+        `CMDW_MSG_TX: begin
           cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
-          sm <= cmdp_buffer_len_reg == 0 ? (cmdp_sr_reg & cmdp_valid ? `CMDW_PVT_MSG_SR : `CMDW_STOP) : `CMDW_PVT_MSG_TX;
+          sm <= cmdp_buffer_len_reg == 0 ? (cmdp_sr_reg & cmdp_valid_w ? `CMDW_MSG_SR : `CMDW_STOP) : `CMDW_MSG_TX;
           cmdw_body   <= sdo;
         end
         `CMDW_STOP: begin
@@ -166,14 +169,15 @@ module i3c_controller_framing #(
 
   // TODO: consider replacing cmdw_ready with a synced copy (is acting as a PWM to narrow ready/valid signals)
   assign cmdp_ready = (sm == `CMDW_NOP |
-                       ((sm == `CMDW_PVT_MSG_TX | sm == `CMDW_PVT_MSG_RX) & cmdp_buffer_len_reg == 0)
+                       ((sm == `CMDW_MSG_TX | sm == `CMDW_MSG_RX | sm == `CMDW_CCC)
+                       & cmdp_buffer_len_reg == 0)
                       ) & reset_n & !cmdw_nack & cmdw_ready;
   assign sdo_ready = ((sm == `CMDW_TARGET_ADDR & !cmdp_rnw_reg) |
-                      (sm == `CMDW_PVT_MSG_TX & cmdp_buffer_len_reg != 0)) &
+                      (sm == `CMDW_MSG_TX & cmdp_buffer_len_reg != 0)) &
                      cmdw_ready & reset_n;
   assign cmdw = {sm, cmdw_body};
-
   assign sdi_valid = cmdw_rx_valid;
   assign sdi = cmdw_rx[7:0];
   assign cmdw_rx_ready = sdi_ready;
+  assign cmdp_valid_w = cmdp_valid & cmdp_do_daa_ready;
 endmodule
