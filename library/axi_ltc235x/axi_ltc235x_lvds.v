@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2023 (c) Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -100,96 +100,78 @@ module axi_ltc235x_lvds #(
 
   // internal registers
 
-  reg                 busy_m1;
-  reg                 busy_m2;
-  reg                 busy_m3;
+  reg        busy_m1;
+  reg        busy_m2;
+  reg        busy_m3;
 
-  reg         [ 8:0]  scki_counter = 9'h0;
-  reg         [ 8:0]  data_counter = 9'h0;
+  reg [ 8:0] scki_counter = 9'h0;
+  reg [ 8:0] data_counter = 9'h0;
 
-  reg                 scki_i;
-  reg                 scki_d;
+  reg        scki_i;
+  reg        scki_d;
 
-  reg       [BW_8:0]  adc_lane;
-  reg       [BW_8:0]  adc_data_init;
-  reg         [BW:0]  adc_data_store[7:0];
+  reg [BW_8:0] adc_lane;
+  reg [BW_8:0] adc_data_init;
+  reg [  BW:0] adc_data_store[7:0];
 
-  reg         [ 3:0]  adc_lane0_shift;
-  reg         [ 3:0]  adc_lane1_shift;
-  reg         [ 3:0]  adc_lane2_shift;
-  reg         [ 3:0]  adc_lane3_shift;
-  reg         [ 3:0]  adc_lane4_shift;
-  reg         [ 3:0]  adc_lane5_shift;
-  reg         [ 3:0]  adc_lane6_shift;
-  reg         [ 3:0]  adc_lane7_shift;
+  reg        adc_valid_init;
+  reg        adc_valid_init_d;
 
-  reg         [ 3:0]  adc_lane0_shift_d;
-  reg         [ 3:0]  adc_lane1_shift_d;
-  reg         [ 3:0]  adc_lane2_shift_d;
-  reg         [ 3:0]  adc_lane3_shift_d;
-  reg         [ 3:0]  adc_lane4_shift_d;
-  reg         [ 3:0]  adc_lane5_shift_d;
-  reg         [ 3:0]  adc_lane6_shift_d;
-  reg         [ 3:0]  adc_lane7_shift_d;
+  reg        ch_data_lock = 1;
+  reg        ch_capture;
+  reg        ch_captured;
 
-  reg                 adc_valid_init;
-  reg                 adc_valid_init_d;
+  reg        scko_d;
+  reg        sdo_d;
 
-  reg                 ch_data_lock = 1;
-  reg                 ch_capture;
-  reg                 ch_captured;
+  reg [ 4:0] sdi_index = 5'd23;
 
-  reg                 scko_d;
-  reg                 sdo_d;
-
-  reg         [ 4:0]  sdi_index = 5'd23;
-
-  reg         [23:0]  softspan_next_int;
+  reg [23:0] softspan_next_int;
 
   // internal wires
 
-  wire                start_transfer_s;
+  wire        start_transfer_s;
 
-  wire                scki_cnt_rst;
+  wire        scki_cnt_rst;
 
-  wire                acquire_data;
+  wire        acquire_data;
 
-  wire        [DATA_WIDTH-1:0] adc_data_raw_s [7:0];
-  wire        [31:0]  adc_data_sign_s [7:0];
-  wire        [31:0]  adc_data_zero_s [7:0];
-  wire        [31:0]  adc_data_s [7:0];
-  wire        [ 2:0]  adc_ch_id_s [7:0];
-  wire        [ 2:0]  adc_softspan_s [7:0];
+  wire [DATA_WIDTH-1:0] adc_data_raw_s [7:0];
+  wire [31:0] adc_data_sign_s [7:0];
+  wire [31:0] adc_data_zero_s [7:0];
+  wire [31:0] adc_data_s [7:0];
+  wire [ 2:0] adc_ch_id_s [7:0];
+  wire [ 2:0] adc_softspan_s [7:0];
 
-  wire                scki;
-  wire                sdi;
-  wire                scko;
-  wire                sdo;
+  wire        scki_s;
+  wire        sdi_s;
+  wire        scko_s;
+  wire        sdo_s;
 
   generate
     if (XILINX_INTEL_N == 0) begin
-      assign scki_p = scki;
+      assign scki_p = scki_s;
       assign scki_n = 1'b0;
-      assign sdi_p = sdi;
+      assign sdi_p = sdi_s;
       assign sdi_n = 1'b0;
-      assign scko = scko_p;
-      assign sdo = sdo_p;
+      assign scko_s = scko_p;
+      assign sdo_s = sdo_p;
     end else begin
       OBUFDS obufds_scki (
         .O(scki_n),
         .OB(scki_p),
-        .I(scki));
+        .I(scki_s));
 
       OBUFDS obufds_sdi (
         .O(sdi_n),
         .OB(sdi_p),
-        .I(sdi));
+        .I(sdi_s));
 
       IBUFDS #(
         .CCIO_EN_M("TRUE"),
         .CCIO_EN_S("TRUE")
       ) ibufds_scko (
-        .O(scko),
+        .O(scko_s),
         .I(scko_p),
         .IB(scko_n));
 
@@ -197,7 +179,7 @@ module axi_ltc235x_lvds #(
         .CCIO_EN_M("TRUE"),
         .CCIO_EN_S("TRUE")
       ) ibufds_sdo (
-        .O(sdo),
+        .O(sdo_s),
         .I(sdo_p),
         .IB(sdo_n));
     end
@@ -238,21 +220,20 @@ module axi_ltc235x_lvds #(
   end
 
   assign scki_cnt_rst = (scki_counter == DW_8);
-  assign scki = scki_i & acquire_data;
+  assign scki_s = scki_i & acquire_data;
 
-  // capture data per lane in rx buffer on every edge of scko
-  // ignore when busy forced scko to 0
+  // capture data per lane in rx buffer on every edge of scko_s
+  // ignore when busy forced scko_s to 0
   always @(posedge clk) begin
-    scko_d <= scko;
-    sdo_d <= sdo;
-    if (scko != scko_d && scki != scki_d) begin
+    scko_d <= scko_s;
+    sdo_d <= sdo_s;
+    if (scko_s != scko_d && scki_s != scki_d) begin
       adc_lane <= {adc_lane[BW_8-1:0], sdo_d};
     end
   end
 
   // store the data from the rx buffers when all bits are received
   // when data transaction window is done
-  // index is based by lane
   always @(posedge clk) begin
     if (rst == 1'b1) begin
       adc_data_init <= 'h0;
@@ -265,8 +246,7 @@ module axi_ltc235x_lvds #(
     end
   end
 
-  // lane_x_data - ch corresponds to which lane
-  // ch_data_lock[i] - locks ch i, means dont acquire data if all ch's are lock while acquire_data = 0
+  // ch_data_lock - locks all the channel, means dont acquire data if all ch's are lock while acquire_data = 0
   always @(posedge clk) begin
     if (start_transfer_s) begin
       ch_data_lock <= 1'd0;
@@ -398,12 +378,12 @@ module axi_ltc235x_lvds #(
     end
   end
 
-  // every negedge of clk, update index of sdi
+  // every negedge of clk, update index of sdi_s
   always @(negedge clk) begin
     if (start_transfer_s || rst) begin
       sdi_index <= 5'd23;
     end else begin
-      if (scki != scki_d && sdi_index != 5'b11111) begin
+      if (scki_s != scki_d && sdi_index != 5'b11111) begin
         sdi_index <= sdi_index - 5'b1;
       end
     end
@@ -422,6 +402,6 @@ module axi_ltc235x_lvds #(
     end
   end
 
-  assign sdi = (sdi_index != 5'b11111)? softspan_next_int[sdi_index] : 1'b0;
+  assign sdi_s = (sdi_index != 5'b11111)? softspan_next_int[sdi_index] : 1'b0;
 
 endmodule

@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2023 (c) Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -43,7 +43,7 @@ module axi_ltc235x #(
   parameter       FPGA_FAMILY = 0,
   parameter       SPEED_GRADE = 0,
   parameter       DEV_PACKAGE = 0,
-  parameter [0:0] LVDS_CMOS_N = 0,
+  parameter       LVDS_CMOS_N = 0,
   parameter       LANE_0_ENABLE = 1,
   parameter       LANE_1_ENABLE = 1,
   parameter       LANE_2_ENABLE = 1,
