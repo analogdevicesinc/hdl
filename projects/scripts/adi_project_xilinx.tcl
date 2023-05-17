@@ -125,6 +125,10 @@ proc adi_project {project_name {mode 0} {parameter_list {}} } {
     set device "xck26-sfvc784-2LV-c"
     set board [lindex [lsearch -all -inline [get_board_parts] *kv260*] end]
   }
+  if [regexp "_k26" $project_name] {
+    set device "xck26-sfvc784-2LVI-i"
+    set board [lindex [lsearch -all -inline [get_board_parts] *k26*] end]
+  }
 
   adi_project_create $project_name $mode $parameter_list $device $board
 }
@@ -167,9 +171,9 @@ proc adi_project_create {project_name mode parameter_list device {board "not-app
 
   if [regexp "^xc7z" $p_device] {
     set sys_zynq 1
-  } elseif [regexp "^xck" $p_device] {
+  } elseif [regexp "^xczu" $p_device] {
     set sys_zynq 2
-  } elseif [regexp "^xczu" $p_device]  {
+  } elseif [regexp "^xck" $p_device] {
     set sys_zynq 2
   } elseif [regexp "^xcv\[ecmph\]" $p_device]  {
     set sys_zynq 3
@@ -194,7 +198,7 @@ proc adi_project_create {project_name mode parameter_list device {board "not-app
     }
   }
 
-   if {[info exists ::env(ADI_MATLAB)]} {
+  if {[info exists ::env(ADI_MATLAB)]} {
     set ADI_MATLAB 1
     set actual_project_name "$ad_hdl_dir/vivado_prj"
     if {$mode != 0} {
@@ -206,10 +210,10 @@ proc adi_project_create {project_name mode parameter_list device {board "not-app
   }
 
   if {$mode == 0} {
-     set project_system_dir "${actual_project_name}.srcs/sources_1/bd/system"
-     if {$ADI_MATLAB == 0} {
-       create_project ${actual_project_name} . -part $p_device -force
-     }
+    set project_system_dir "${actual_project_name}.srcs/sources_1/bd/system"
+    if {$ADI_MATLAB == 0} {
+      create_project ${actual_project_name} . -part $p_device -force
+    }
   } else {
     set project_system_dir "${actual_project_name}.srcs/sources_1/bd/system"
     create_project -in_memory -part $p_device
@@ -229,6 +233,7 @@ proc adi_project_create {project_name mode parameter_list device {board "not-app
     set lib_dirs [get_property ip_repo_paths [current_fileset]]
      lappend lib_dirs $ad_hdl_dir/library
   }
+
   if {[info exists ::env(ADI_GHDL_DIR)]} {
     if {$ad_hdl_dir ne $ad_ghdl_dir} {
       lappend lib_dirs $ad_ghdl_dir/library
@@ -338,6 +343,7 @@ proc adi_project_run {project_name} {
     set actual_project_name "$::env(ADI_PROJECT_DIR)${project_name}"
     set ad_project_dir "$::env(ADI_PROJECT_DIR)"
   }
+
   if {[info exists ::env(ADI_SKIP_SYNTHESIS)]} {
     puts "Skipping synthesis"
     return
