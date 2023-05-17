@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2023 (c) Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -92,83 +92,83 @@ module axi_ltc235x_cmos #(
 
   // internal registers
 
-  reg                 busy_m1;
-  reg                 busy_m2;
-  reg                 busy_m3;
+  reg        busy_m1;
+  reg        busy_m2;
+  reg        busy_m3;
 
-  reg         [ 4:0]  scki_counter = 5'h0;
-  reg         [ 4:0]  data_counter = 5'h0;
+  reg [ 4:0] scki_counter = 5'h0;
+  reg [ 4:0] data_counter = 5'h0;
 
-  reg                 scki_i;
-  reg                 scki_d;
+  reg        scki_i;
+  reg        scki_d;
 
-  reg         [BW:0]  adc_lane_0;
-  reg         [BW:0]  adc_lane_1;
-  reg         [BW:0]  adc_lane_2;
-  reg         [BW:0]  adc_lane_3;
-  reg         [BW:0]  adc_lane_4;
-  reg         [BW:0]  adc_lane_5;
-  reg         [BW:0]  adc_lane_6;
-  reg         [BW:0]  adc_lane_7;
+  reg [BW:0] adc_lane_0;
+  reg [BW:0] adc_lane_1;
+  reg [BW:0] adc_lane_2;
+  reg [BW:0] adc_lane_3;
+  reg [BW:0] adc_lane_4;
+  reg [BW:0] adc_lane_5;
+  reg [BW:0] adc_lane_6;
+  reg [BW:0] adc_lane_7;
 
-  reg         [BW:0]  adc_data_init[7:0];
-  reg         [BW:0]  adc_data_store[7:0];
+  reg [BW:0] adc_data_init[7:0];
+  reg [BW:0] adc_data_store[7:0];
 
-  reg         [ 2:0]  lane_0_ch = 3'd0;
-  reg         [ 2:0]  lane_1_ch = 3'd0;
-  reg         [ 2:0]  lane_2_ch = 3'd0;
-  reg         [ 2:0]  lane_3_ch = 3'd0;
-  reg         [ 2:0]  lane_4_ch = 3'd0;
-  reg         [ 2:0]  lane_5_ch = 3'd0;
-  reg         [ 2:0]  lane_6_ch = 3'd0;
-  reg         [ 2:0]  lane_7_ch = 3'd0;
+  reg [ 2:0] lane_0_ch = 3'd0;
+  reg [ 2:0] lane_1_ch = 3'd0;
+  reg [ 2:0] lane_2_ch = 3'd0;
+  reg [ 2:0] lane_3_ch = 3'd0;
+  reg [ 2:0] lane_4_ch = 3'd0;
+  reg [ 2:0] lane_5_ch = 3'd0;
+  reg [ 2:0] lane_6_ch = 3'd0;
+  reg [ 2:0] lane_7_ch = 3'd0;
 
-  reg         [ 3:0]  adc_lane0_shift;
-  reg         [ 3:0]  adc_lane1_shift;
-  reg         [ 3:0]  adc_lane2_shift;
-  reg         [ 3:0]  adc_lane3_shift;
-  reg         [ 3:0]  adc_lane4_shift;
-  reg         [ 3:0]  adc_lane5_shift;
-  reg         [ 3:0]  adc_lane6_shift;
-  reg         [ 3:0]  adc_lane7_shift;
+  reg [ 3:0] adc_lane0_shift;
+  reg [ 3:0] adc_lane1_shift;
+  reg [ 3:0] adc_lane2_shift;
+  reg [ 3:0] adc_lane3_shift;
+  reg [ 3:0] adc_lane4_shift;
+  reg [ 3:0] adc_lane5_shift;
+  reg [ 3:0] adc_lane6_shift;
+  reg [ 3:0] adc_lane7_shift;
 
-  reg         [ 3:0]  adc_lane0_shift_d;
-  reg         [ 3:0]  adc_lane1_shift_d;
-  reg         [ 3:0]  adc_lane2_shift_d;
-  reg         [ 3:0]  adc_lane3_shift_d;
-  reg         [ 3:0]  adc_lane4_shift_d;
-  reg         [ 3:0]  adc_lane5_shift_d;
-  reg         [ 3:0]  adc_lane6_shift_d;
-  reg         [ 3:0]  adc_lane7_shift_d;
+  reg [ 3:0] adc_lane0_shift_d;
+  reg [ 3:0] adc_lane1_shift_d;
+  reg [ 3:0] adc_lane2_shift_d;
+  reg [ 3:0] adc_lane3_shift_d;
+  reg [ 3:0] adc_lane4_shift_d;
+  reg [ 3:0] adc_lane5_shift_d;
+  reg [ 3:0] adc_lane6_shift_d;
+  reg [ 3:0] adc_lane7_shift_d;
 
-  reg                 adc_valid_init;
-  reg                 adc_valid_init_d;
+  reg        adc_valid_init;
+  reg        adc_valid_init_d;
 
-  reg         [ 7:0]  ch_data_lock = 8'hff;
-  reg         [ 7:0]  ch_capture;
-  reg         [ 7:0]  ch_captured;
+  reg [ 7:0] ch_data_lock = 8'hff;
+  reg [ 7:0] ch_capture;
+  reg [ 7:0] ch_captured;
 
-  reg                 scko_d;
-  reg         [7:0]   sdo_d;
+  reg        scko_d;
+  reg [ 7:0] sdo_d;
 
-  reg         [ 4:0]  sdi_index = 5'd23;
+  reg [ 4:0] sdi_index = 5'd23;
 
-  reg         [23:0]  softspan_next_int;
+  reg [23:0] softspan_next_int;
 
   // internal wires
 
-  wire                start_transfer_s;
+  wire        start_transfer_s;
 
-  wire                scki_cnt_rst;
+  wire        scki_cnt_rst;
 
-  wire                acquire_data;
+  wire        acquire_data;
 
-  wire        [17:0]  adc_data_raw_s [7:0];
-  wire        [31:0]  adc_data_sign_s [7:0];
-  wire        [31:0]  adc_data_zero_s [7:0];
-  wire        [31:0]  adc_data_s [7:0];
-  wire        [ 2:0]  adc_ch_id_s [7:0];
-  wire        [ 2:0]  adc_softspan_s [7:0];
+  wire [17:0] adc_data_raw_s [7:0];
+  wire [31:0] adc_data_sign_s [7:0];
+  wire [31:0] adc_data_zero_s [7:0];
+  wire [31:0] adc_data_s [7:0];
+  wire [ 2:0] adc_ch_id_s [7:0];
+  wire [ 2:0] adc_softspan_s [7:0];
 
   always @(posedge clk) begin
     if (rst == 1'b1) begin
@@ -188,7 +188,7 @@ module axi_ltc235x_cmos #(
     if (rst) begin
       scki_counter <= 5'h0;
       scki_i <= 1'b1;
-      scki_d <=  1'b0;
+      scki_d <= 1'b0;
     end else begin
       scki_d <= scki_i;
       if (acquire_data == 1'b0) begin
@@ -287,14 +287,9 @@ module axi_ltc235x_cmos #(
     end
   end
 
-  /*
-  lane_X_ch - channel number that lane X has
-  e.g., lane_0_ch = 2, means lane 0 has channel 2
-  ch_data_lock[i] - locks channel i
-  e.g., ch_data_lock[7] = 1, means data from channel 7 has already been
-  sent to an active lane, channel 7 should now be locked.
-  Don't acquire data if all channels are all already locked.
-  */
+  // lane_x_ch - channel corresponds to which lane, e.g. lane_0_ch stores the current channel lane 0 has
+  // ch_data_lock[i] - locks ch i, e.g. ch_data_lock[7] = 1 means data from channel 7 has already been sent to an active lane, channel 7 should now be locked
+  // dont acquire data if all channels are all already locked
   always @(posedge clk) begin
     if (start_transfer_s) begin
       lane_0_ch <= 3'd0;
