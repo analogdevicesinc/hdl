@@ -14,12 +14,12 @@ if {$JESD_MODE == "8B10B"} {
 }
 
 # These are max values specific to the board
-set MAX_RX_LANES_PER_LINK 4
-set MAX_TX_LANES_PER_LINK 4
+set MAX_RX_LANES_PER_LINK 8
+set MAX_TX_LANES_PER_LINK 8
 # verify this
-set MAX_RX_LINKS 4
+set MAX_RX_LINKS 2
 # verify this
-set MAX_TX_LINKS 4
+set MAX_TX_LINKS 2
 set MAX_RX_LANES [expr $MAX_RX_LANES_PER_LINK*$MAX_RX_LINKS]
 set MAX_TX_LANES [expr $MAX_TX_LANES_PER_LINK*$MAX_TX_LINKS]
 

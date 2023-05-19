@@ -181,7 +181,7 @@ module system_top (
   wire   [127:0]  gpio_t;
 
   wire            spi_clk;
-  wire     [1:0]  spi_csn;
+  wire     [7:0]  spi_csn;
   wire            spi_mosi;
   wire            spi_miso;
 
