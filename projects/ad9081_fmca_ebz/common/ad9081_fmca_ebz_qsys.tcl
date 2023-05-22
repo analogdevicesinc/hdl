@@ -309,8 +309,9 @@ for {set i 0} {$i < $MAX_NUM_OF_LANES} {incr i} {
   add_instance avl_adxcfg_${i} avl_adxcfg
   add_connection sys_clk.clk avl_adxcfg_${i}.rcfg_clk
   add_connection sys_clk.clk_reset avl_adxcfg_${i}.rcfg_reset_n
-  add_connection avl_adxcfg_${i}.rcfg_m0 mxfe_tx_jesd204.phy_reconfig_${i}
-  add_connection avl_adxcfg_${i}.rcfg_m1 mxfe_rx_jesd204.phy_reconfig_${i}
+  #TODO: Fix this for other carriers
+  #add_connection avl_adxcfg_${i}.rcfg_m0 mxfe_tx_jesd204.phy_reconfig_${i}
+  #add_connection avl_adxcfg_${i}.rcfg_m1 mxfe_rx_jesd204.phy_reconfig_${i}
 
   set_instance_parameter_value avl_adxcfg_${i} {ADDRESS_WIDTH} $xcvr_reconfig_addr_width
 
@@ -323,7 +324,8 @@ for {set i 0} {$i < $MAX_NUM_OF_LANES} {incr i} {
 ## NOTE: if bridge is used, the address will be bridge_base_addr + peripheral_base_addr
 #
 
-ad_cpu_interconnect 0x00020000 mxfe_rx_jesd204.link_pll_reconfig "avl_mm_bridge_0" 0x00040000
+#TODO: Fix this for other carriers
+ad_cpu_interconnect 0x00020000 mxfe_rx_jesd204.link_reconfig "avl_mm_bridge_0" 0x00040000
 if {$RX_NUM_OF_LANES > 0} {ad_cpu_interconnect 0x00000000 avl_adxcfg_0.rcfg_s0    "avl_mm_bridge_0"}
 if {$RX_NUM_OF_LANES > 1} {ad_cpu_interconnect 0x00002000 avl_adxcfg_1.rcfg_s0    "avl_mm_bridge_0"}
 if {$RX_NUM_OF_LANES > 2} {ad_cpu_interconnect 0x00004000 avl_adxcfg_2.rcfg_s0    "avl_mm_bridge_0"}
@@ -333,7 +335,7 @@ if {$RX_NUM_OF_LANES > 5} {ad_cpu_interconnect 0x0000A000 avl_adxcfg_5.rcfg_s0  
 if {$RX_NUM_OF_LANES > 6} {ad_cpu_interconnect 0x0000C000 avl_adxcfg_6.rcfg_s0    "avl_mm_bridge_0"}
 if {$RX_NUM_OF_LANES > 7} {ad_cpu_interconnect 0x0000E000 avl_adxcfg_7.rcfg_s0    "avl_mm_bridge_0"}
 
-ad_cpu_interconnect 0x00020000 mxfe_tx_jesd204.link_pll_reconfig "avl_mm_bridge_1" 0x00080000
+ad_cpu_interconnect 0x00020000 mxfe_tx_jesd204.link_reconfig "avl_mm_bridge_1" 0x00080000
 if {$TX_NUM_OF_LANES > 0} {ad_cpu_interconnect 0x00000000 avl_adxcfg_0.rcfg_s1    "avl_mm_bridge_1"}
 if {$TX_NUM_OF_LANES > 1} {ad_cpu_interconnect 0x00002000 avl_adxcfg_1.rcfg_s1    "avl_mm_bridge_1"}
 if {$TX_NUM_OF_LANES > 2} {ad_cpu_interconnect 0x00004000 avl_adxcfg_2.rcfg_s1    "avl_mm_bridge_1"}
@@ -347,7 +349,7 @@ ad_cpu_interconnect 0x000C0000 mxfe_rx_jesd204.link_reconfig
 ad_cpu_interconnect 0x000C4000 mxfe_rx_jesd204.link_management
 ad_cpu_interconnect 0x000C8000 mxfe_tx_jesd204.link_reconfig
 ad_cpu_interconnect 0x000CC000 mxfe_tx_jesd204.link_management
-ad_cpu_interconnect 0x000D0000 mxfe_tx_jesd204.lane_pll_reconfig
+#ad_cpu_interconnect 0x000D0000 mxfe_tx_jesd204.lane_pll_reconfig
 ad_cpu_interconnect 0x000D2000 mxfe_rx_tpl.s_axi
 ad_cpu_interconnect 0x000D4000 mxfe_tx_tpl.s_axi
 ad_cpu_interconnect 0x000D8000 mxfe_rx_dma.s_axi
