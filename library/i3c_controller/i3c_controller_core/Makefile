@@ -14,7 +14,7 @@ GENERIC_DEPS += i3c_controller_word.v
 GENERIC_DEPS += i3c_controller_word_cmd.v
 GENERIC_DEPS += i3c_controller_bit_mod.v
 GENERIC_DEPS += i3c_controller_bit_mod_cmd.v
-GENERIC_DEPS += i3c_controller_quarter_clk.v
+GENERIC_DEPS += i3c_controller_clk_div.v
 
 XILINX_DEPS += i3c_controller_core_constr.ttcl
 XILINX_DEPS += i3c_controller_core_ip.tcl
