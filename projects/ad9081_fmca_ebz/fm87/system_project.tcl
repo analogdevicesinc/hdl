@@ -87,7 +87,7 @@ set_location_assignment PIN_J46    -to "agc3[0]"             ; ## H25  LA21_P
 set_location_assignment PIN_K47    -to "agc3[1]"             ; ## H26  LA21_N
 set_location_assignment PIN_T43    -to "clkin6(n)"           ; ## G03  CLK1_M2C_N
 set_location_assignment PIN_U42    -to "clkin6"              ; ## G02  CLK1_M2C_P
-#set_location_assignment PIN_BD57   -to "fpga_refclk_in(n)"   ; ## D05  GBTCLK0_M2C_N
+set_location_assignment PIN_BD57   -to "fpga_refclk_in(n)"   ; ## D05  GBTCLK0_M2C_N
 set_location_assignment PIN_AM57   -to "fpga_refclk_in"      ; ## D04  GBTCLK0_M2C_P
 
 set_location_assignment PIN_AP69   -to "rx_data[0]"          ; ## C06  DP0_M2C_P
@@ -144,26 +144,26 @@ set_location_assignment PIN_AY59    -to "tx_data[3](n)"       ; ## A31  DP3_C2M_
 
 set_location_assignment PIN_AB47   -to "fpga_syncin_0(n)"    ; ## H08  LA02_N
 set_location_assignment PIN_AA46   -to "fpga_syncin_0"       ; ## H07  LA02_P
-#set_location_assignment PIN_AK48   -to "fpga_syncin_1_n"     ; ## G10  LA03_N
-#set_location_assignment PIN_AN47   -to "fpga_syncin_1_p"     ; ## G09  LA03_P
+set_location_assignment PIN_P49    -to "fpga_syncin_1_n"     ; ## G10  LA03_N
+set_location_assignment PIN_R48    -to "fpga_syncin_1_p"     ; ## G09  LA03_P
 set_location_assignment PIN_T45    -to "fpga_syncout_0(n)"   ; ## D09  LA01_CC_N
 set_location_assignment PIN_U44    -to "fpga_syncout_0"      ; ## D08  LA01_CC_P
-#set_location_assignment PIN_AD52   -to "fpga_syncout_1_n"    ; ## C11  LA06_N
-#set_location_assignment PIN_AA51   -to "fpga_syncout_1_p"    ; ## C10  LA06_P
-# set_location_assignment PIN_W44    -to "gpio[0]"             ; ## H19  LA15_P
-# set_location_assignment PIN_Y45    -to "gpio[1]"             ; ## H20  LA15_N
-# set_location_assignment PIN_J48    -to "gpio[2]"             ; ## H22  LA19_P
-# set_location_assignment PIN_K49    -to "gpio[3]"             ; ## H23  LA19_N
-# set_location_assignment PIN_E60   -to "gpio[4]"             ; ## D17  LA13_P
-# set_location_assignment PIN_D61   -to "gpio[5]"             ; ## D18  LA13_N
-# set_location_assignment PIN_J56    -to "gpio[6]"             ; ## C18  LA14_P
-# set_location_assignment PIN_K57    -to "gpio[7]"             ; ## C19  LA14_N
-# set_location_assignment PIN_W42   -to "gpio[8]"             ; ## G18  LA16_P
-# set_location_assignment PIN_Y43   -to "gpio[9]"             ; ## G19  LA16_N
-# set_location_assignment PIN_B59   -to "gpio[10]"            ; ## G25  LA22_N
+set_location_assignment PIN_AB43   -to "fpga_syncout_1_n"    ; ## C11  LA06_N
+set_location_assignment PIN_AA42   -to "fpga_syncout_1_p"    ; ## C10  LA06_P
+set_location_assignment PIN_W44    -to "gpio[0]"             ; ## H19  LA15_P
+set_location_assignment PIN_Y45    -to "gpio[1]"             ; ## H20  LA15_N
+set_location_assignment PIN_J48    -to "gpio[2]"             ; ## H22  LA19_P
+set_location_assignment PIN_K49    -to "gpio[3]"             ; ## H23  LA19_N
+set_location_assignment PIN_E60    -to "gpio[4]"             ; ## D17  LA13_P
+set_location_assignment PIN_D61    -to "gpio[5]"             ; ## D18  LA13_N
+set_location_assignment PIN_J56    -to "gpio[6]"             ; ## C18  LA14_P
+set_location_assignment PIN_K57    -to "gpio[7]"             ; ## C19  LA14_N
+set_location_assignment PIN_W42    -to "gpio[8]"             ; ## G18  LA16_P
+set_location_assignment PIN_Y43    -to "gpio[9]"             ; ## G19  LA16_N
+set_location_assignment PIN_B59    -to "gpio[10]"            ; ## G25  LA22_N
 set_location_assignment PIN_T47    -to "hmc_gpio1"           ; ## H17  LA11_N
 set_location_assignment PIN_Y47    -to "hmc_sync"            ; ## H14  LA07_N
-# set_location_assignment PIN_AE46   -to "irqb[0]"             ; ## G12  LA08_P
+set_location_assignment PIN_AE46   -to "irqb[0]"             ; ## G12  LA08_P
 set_location_assignment PIN_AD47   -to "irqb[1]"             ; ## G13  LA08_N
 set_location_assignment PIN_W46    -to "rstb"                ; ## H13  LA07_P
 set_location_assignment PIN_J52    -to "rxen[0]"             ; ## C14  LA10_P
