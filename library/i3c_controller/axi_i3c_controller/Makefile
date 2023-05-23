@@ -24,6 +24,8 @@ INTEL_DEPS += ../../common/ad_mem.v
 INTEL_DEPS += ../../intel/common/up_rst_constr.sdc
 INTEL_DEPS += ../../util_axis_fifo/util_axis_fifo.v
 INTEL_DEPS += ../../util_axis_fifo/util_axis_fifo_address_generator.v
+INTEL_DEPS += ../../util_cdc/sync_bits.v
+INTEL_DEPS += ../../util_cdc/sync_gray.v
 INTEL_DEPS += axi_i3c_controller_constr.sdc
 INTEL_DEPS += axi_i3c_controller_hw.tcl
 

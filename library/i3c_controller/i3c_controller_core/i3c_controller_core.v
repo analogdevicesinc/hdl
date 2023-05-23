@@ -39,8 +39,10 @@
 `include "i3c_controller_word_cmd.v"
 
 module i3c_controller_core #(
+  parameter ASYNC_I3C_CLK = 0
 ) (
   input  wire clk,
+  input  wire clk_bus,
   input  wire reset_n,
 
   // Command parsed
@@ -74,7 +76,7 @@ module i3c_controller_core #(
   output wire scl,
   inout  wire sda
 );
-  wire clk_quarter;
+  wire clk_bus_2;
   wire [`MOD_BIT_CMD_WIDTH:0] cmd;
   wire cmd_ready;
   wire t;
@@ -95,6 +97,8 @@ module i3c_controller_core #(
   wire cmdw_rx_ready;
   wire cmdw_rx_valid;
   wire [7:0] cmdw_rx;
+
+  wire clk_sel;
 
   i3c_controller_daa #(
   ) i_i3c_controller_daa (
@@ -151,21 +155,26 @@ module i3c_controller_core #(
     .cmdw_rx(cmdw_rx),
     .cmd(cmd),
     .cmd_ready(cmd_ready),
-    .sdo(sdo_bit)
+    .sdo(sdo_bit),
+    .clk_sel(clk_sel)
   );
 
-  i3c_controller_quarter_clk #(
-  ) i_i3c_controller_quarter_clk (
+  i3c_controller_clk_div #(
+    .ASYNC_CLK(ASYNC_I3C_CLK)
+  ) i_i3c_controller_clk_div (
     .reset_n(reset_n),
+    .sel(clk_sel),
+    .cmd_ready(cmd_ready),
     .clk(clk),
-    .clk_quarter(clk_quarter)
+    .clk_bus(clk_bus),
+    .clk_out(clk_bus_2)
   );
 
   i3c_controller_bit_mod #(
   ) i_i3c_controller_bit_mod (
     .reset_n(reset_n),
     .clk(clk),
-    .clk_quarter(clk_quarter),
+    .clk_bus(clk_bus_2),
     .cmd(cmd),
     .cmd_ready(cmd_ready),
     .scl(scl),

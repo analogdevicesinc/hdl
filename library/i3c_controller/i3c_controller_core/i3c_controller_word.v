@@ -70,11 +70,16 @@ module i3c_controller_word #(
 
   // I3C Bus SDA, used for ACK and T (read) check
 
-  input wire sdo
+  input wire sdo,
+
+  // Modulation clock selection
+
+  output reg clk_sel
 );
 
   wire [`CMDW_HEADER_WIDTH:0] cmdw_header;
   wire [`CMDW_HEADER_WIDTH+8:0] cmdw;
+  reg cmd_ready_reg;
 
   reg [7:0] cmdw_body;
   reg [`CMDW_HEADER_WIDTH:0] sm;
@@ -86,6 +91,7 @@ module i3c_controller_word #(
 
   reg do_ack; // Peripheral did NACK?
   reg do_rx_t; // Peripheral end Message at T in Read Data?
+  reg sdo_reg;
 
   reg [5:0] i;
   reg [5:0] i_;
@@ -108,6 +114,24 @@ module i3c_controller_word #(
     endcase
   end
 
+  always @(sm) begin
+    case (sm)
+      `CMDW_NOP             : clk_sel = 0;
+      `CMDW_START           : clk_sel = 0;
+      `CMDW_BCAST_7E_W0     : clk_sel = 0;
+      `CMDW_CCC             : clk_sel = 1;
+      `CMDW_TARGET_ADDR     : clk_sel = 1;
+      `CMDW_MSG_SR          : clk_sel = 1;
+      `CMDW_MSG_RX          : clk_sel = 1;
+      `CMDW_MSG_TX          : clk_sel = 1;
+      `CMDW_STOP            : clk_sel = 1;
+      `CMDW_BCAST_7E_W1     : clk_sel = 0;
+      `CMDW_PROV_ID_BCR_DCR : clk_sel = 0;
+      `CMDW_DYN_ADDR        : clk_sel = 0;
+      default               : clk_sel = 0;
+    endcase
+  end
+
   always @(posedge clk) begin
     if (!reset_n) begin
       do_ack <= 1'b0;
@@ -117,14 +141,14 @@ module i3c_controller_word #(
       cmdw_rx_valid_reg <= 1'b0;
       sm <= `CMDW_NOP;
       i <= 0;
-    end else if (cmd_ready) begin
+    end else if (cmd_ready_reg) begin
       sm <= i == i_ ? cmdw_header : sm;
       cmdw_body <= i == i_ ? cmdw[7:0] : cmdw_body;
       i <= sm == `CMDW_NOP ? 0 : (i == i_ ? 0 : i + 1);
       do_ack <= 1'b0;
       do_rx_t <= 1'b0;
       cmdw_rx_valid_reg <= 1'b0;
-      if ((do_ack & !(sdo === 1'b0)) | (do_rx_t & (sdo === 1'b0))) begin
+      if ((do_ack & !(sdo_reg === 1'b0)) | (do_rx_t & (sdo_reg === 1'b0))) begin
         cmd <= `MOD_BIT_CMD_STOP;
         sm <= `CMDW_NOP;
         cmdw_nack <= 1'b1;
@@ -191,7 +215,7 @@ module i3c_controller_word #(
               // SDI
               cmd <= `MOD_BIT_CMD_READ;
             end
-            cmdw_rx_reg[8-i] <= sdo;
+            cmdw_rx_reg[8-i] <= sdo_reg;
           end
           `CMDW_CCC,
           `CMDW_MSG_TX: begin
@@ -216,11 +240,13 @@ module i3c_controller_word #(
         endcase
       end
     end
+    sdo_reg <= sdo;
+    cmd_ready_reg <= cmd_ready;
   end
 
-  assign cmdw_ready = (i == i_ & cmd_ready) & reset_n;
+  assign cmdw_ready = (i == i_ & cmd_ready_reg) & reset_n;
   assign cmdw = cmdw_mux ? cmdw_framing : cmdw_daa;
   assign cmdw_header = cmdw[`CMDW_HEADER_WIDTH+8 -: `CMDW_HEADER_WIDTH+1];
   assign cmdw_rx = cmdw_rx_reg[7:0];
-  assign cmdw_rx_valid = cmdw_rx_valid_reg & cmd_ready;
+  assign cmdw_rx_valid = cmdw_rx_valid_reg & cmd_ready_reg;
 endmodule

@@ -69,8 +69,8 @@ module i3c_controller_framing #(
   input  wire [7:0] sdo,
 
   input  wire sdi_ready,
-  output wire sdi_valid,
-  output wire [7:0] sdi,
+  output reg sdi_valid,
+  output reg [7:0] sdi,
   // TODO: What happens when got NACK?
   // should it empty SDO until LEN 0?
   // And SDI?
@@ -99,8 +99,20 @@ module i3c_controller_framing #(
 
   reg [`CMDW_HEADER_WIDTH:0] sm;
   reg [7:0] cmdw_body;
+  reg cmdw_ready_reg;
 
   always @(posedge clk) begin
+    cmdw_ready_reg <= cmdw_ready;
+    if (reset_n) begin
+      if (sm == `CMDW_NOP & cmdp_valid_w) begin
+        sm <= `CMDW_START;
+        sdi_valid <= 1'b0;
+        sdi <= 8'd0;
+      end
+    end else begin
+      sdi_valid <= cmdw_rx_valid;
+      sdi <= cmdw_rx[7:0];
+    end
     if (!reset_n | cmdw_nack) begin
       sm <= `CMDW_NOP;
       cmdw_body <= 8'h00;
@@ -122,9 +134,6 @@ module i3c_controller_framing #(
       // will be sent if they do not accept/provide data when needed.
       case (sm)
         `CMDW_NOP: begin
-          if (cmdp_valid_w) begin
-            sm <= `CMDW_START;
-          end
         end
         `CMDW_START: begin
             sm <= `CMDW_BCAST_7E_W0;
@@ -167,17 +176,14 @@ module i3c_controller_framing #(
     end
   end
 
-  // TODO: consider replacing cmdw_ready with a synced copy (is acting as a PWM to narrow ready/valid signals)
   assign cmdp_ready = (sm == `CMDW_NOP |
                        ((sm == `CMDW_MSG_TX | sm == `CMDW_MSG_RX | sm == `CMDW_CCC)
                        & cmdp_buffer_len_reg == 0)
-                      ) & reset_n & !cmdw_nack & cmdw_ready;
+                      ) & reset_n & !cmdw_nack & cmdw_ready_reg;
   assign sdo_ready = ((sm == `CMDW_TARGET_ADDR & !cmdp_rnw_reg) |
                       (sm == `CMDW_MSG_TX & cmdp_buffer_len_reg != 0)) &
-                     cmdw_ready & reset_n;
+                     cmdw_ready_reg & reset_n;
   assign cmdw = {sm, cmdw_body};
-  assign sdi_valid = cmdw_rx_valid;
-  assign sdi = cmdw_rx[7:0];
   assign cmdw_rx_ready = sdi_ready;
   assign cmdp_valid_w = cmdp_valid & cmdp_do_daa_ready;
 endmodule

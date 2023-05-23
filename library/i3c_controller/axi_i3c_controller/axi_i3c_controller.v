@@ -33,7 +33,7 @@
 // ***************************************************************************
 
 `timescale 1ns/100ps
-`default_nettype none
+`default_nettype wire
 
 module axi_i3c_controller #(
   parameter ID = 0,
@@ -247,7 +247,13 @@ module axi_i3c_controller #(
   wire [4:0] up_irq_source;
   wire [4:0] up_irq_pending;
 
-  assign up_irq_source = {5{1'b0}};
+  assign up_irq_source = {
+    up_ibi_fifo_almost_full,
+    up_sdi_fifo_almost_full,
+    up_sdo_fifo_almost_empty,
+    up_cmdr_fifo_almost_full,
+    up_cmd_fifo_almost_empty
+  };
 
   assign up_irq_pending = up_irq_mask & up_irq_source;
 
@@ -301,6 +307,17 @@ module axi_i3c_controller #(
       14'h00: up_rdata_ff <= PCORE_VERSION;
       14'h01: up_rdata_ff <= ID;
       14'h02: up_rdata_ff <= up_scratch;
+      14'h10: up_rdata_ff <= up_sw_reset;
+      14'h20: up_rdata_ff <= up_irq_mask;
+      14'h21: up_rdata_ff <= up_irq_pending;
+      14'h22: up_rdata_ff <= up_irq_source;
+      14'h30: up_rdata_ff <= cmd_fifo_room;
+      14'h31: up_rdata_ff <= cmdr_fifo_level;
+      14'h32: up_rdata_ff <= sdo_fifo_room;
+      14'h33: up_rdata_ff <= sdi_fifo_level;
+      14'h34: up_rdata_ff <= ibi_fifo_level;
+      14'h38: up_rdata_ff <= sdi_fifo_out_data;
+      14'h39: up_rdata_ff <= ibi_fifo_out_data;
       default: up_rdata_ff <= 'h00;
     endcase
   end
@@ -464,5 +481,14 @@ module axi_i3c_controller #(
     .m_axis_level(ibi_fifo_level),
     .m_axis_empty(),
     .m_axis_almost_empty());
+
+  sync_bits #(
+    .NUM_OF_BITS (5),
+    .ASYNC_CLK (ASYNC_I3C_CLK)
+  ) i_fifo_status (
+    .in_bits ({cmd_fifo_almost_empty, cmdr_fifo_almost_full, sdo_fifo_almost_empty, sdi_fifo_almost_full, ibi_fifo_almost_full}),
+    .out_resetn (up_sw_resetn),
+    .out_clk (clk),
+    .out_bits ({up_cmd_fifo_almost_empty, up_cmdr_fifo_almost_full, up_sdo_fifo_almost_empty, up_sdi_fifo_almost_full, up_ibi_fifo_almost_full}));
 
 endmodule

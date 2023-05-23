@@ -93,6 +93,10 @@ module i3c_controller_daa #(
   always @(posedge clk) begin
     if (!reset_n) begin
       da_reg <= 0;
+    end else begin
+      if (sm == `CMDW_NOP & cmdp_do_daa) begin
+        sm <= `CMDW_START;
+      end
     end
     if (!reset_n | cmdw_nack) begin
       sm <= `CMDW_NOP;
@@ -101,9 +105,6 @@ module i3c_controller_daa #(
     end else if (cmdw_ready) begin
       case (sm)
         `CMDW_NOP: begin
-          if (cmdp_do_daa) begin
-            sm <= `CMDW_START;
-          end
           ctrl <= 1'b0;
           da_reg <= 0;
         end

@@ -6,6 +6,8 @@ ad_ip_create axi_i3c_controller {AXI I3C Controller} p_elaboration
 ad_ip_files axi_i3c_controller [list\
   $ad_hdl_dir/library/util_axis_fifo/util_axis_fifo.v \
   $ad_hdl_dir/library/util_axis_fifo/util_axis_fifo_address_generator.v \
+  $ad_hdl_dir/library/util_cdc/sync_bits.v \
+  $ad_hdl_dir/library/util_cdc/sync_gray.v \
   $ad_hdl_dir/library/common/ad_mem.v \
   $ad_hdl_dir/library/common/up_axi.v \
   $ad_hdl_dir/library/common/ad_rst.v \
@@ -100,6 +102,7 @@ proc p_elaboration {} {
   }
 
   # I3C Controller interfaces
+
   ad_interface clock i3c_clk     input 1
   ad_interface reset i3c_reset_n  output 1
 

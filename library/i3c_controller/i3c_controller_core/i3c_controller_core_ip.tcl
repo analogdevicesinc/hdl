@@ -12,7 +12,7 @@ adi_ip_files i3c_controller_core [list \
  	"i3c_controller_word_cmd.v" \
 	"i3c_controller_bit_mod.v" \
  	"i3c_controller_bit_mod_cmd.v" \
-	"i3c_controller_quarter_clk.v"
+	"i3c_controller_clk_div.v"
 ]
 
 adi_ip_properties_lite i3c_controller_core
@@ -66,8 +66,24 @@ adi_add_bus "sdio" "slave" \
 	}
 adi_add_bus_clock "clk" "sdio" "reset_n"
 
+adi_set_ports_dependency "clk_bus" \
+      "(spirit:decode(id('MODELPARAM_VALUE.ASYNC_I3C_CLK')) = 1)"
+
 ## Parameter validations
+
 set cc [ipx::current_core]
+
+## ASYNC_I3C_CLK
+set_property -dict [list \
+  "value_format" "bool" \
+  "value" "false" \
+ ] \
+ [ipx::get_user_parameters ASYNC_I3C_CLK -of_objects $cc]
+set_property -dict [list \
+  "value_format" "bool" \
+  "value" "false" \
+ ] \
+ [ipx::get_hdl_parameters ASYNC_I3C_CLK -of_objects $cc]
 
 ## Customize IP Layout
 ## Remove the automatically generated GUI page
@@ -80,6 +96,12 @@ set page0 [ipgui::get_pagespec -name "I3C Controller Core" -component $cc]
 
 set general_group [ipgui::add_group -name "General Configuration" -component $cc \
     -parent $page0 -display_name "General Configuration" ]
+
+ipgui::add_param -name "ASYNC_I3C_CLK" -component $cc -parent $general_group
+set_property -dict [list \
+  "display_name" "Asynchronous core clock" \
+  "tooltip" "\[ASYNC_I3C_CLK\] Define the relationship between the core clock and the memory mapped interface clock, if disabled, the mmi clock is divided internally to reach the bus clock frequency" \
+] [ipgui::get_guiparamspec -name "ASYNC_I3C_CLK" -component $cc]
 
 ## Create and save the XGUI file
 ipx::create_xgui_files $cc

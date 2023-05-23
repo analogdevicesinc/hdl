@@ -2,7 +2,7 @@ package require qsys 14.0
 source ../../../scripts/adi_env.tcl
 source ../../scripts/adi_ip_intel.tcl
 
-ad_ip_create i3c_controller_core {I3C Controller Core}
+ad_ip_create i3c_controller_core {I3C Controller Core} p_elaboration
 set_module_property ELABORATION_CALLBACK p_elaboration
 ad_ip_files i3c_controller_core [list \
   i3c_controller_core.v \
@@ -13,14 +13,21 @@ ad_ip_files i3c_controller_core [list \
   i3c_controller_word_cmd.v \
   i3c_controller_bit_mod.v \
   i3c_controller_bit_mod_cmd.v \
-  i3c_controller_quarter_clk.v \
+  i3c_controller_clk_div.v \
 ]
 
 # parameters
 
+ad_ip_parameter ASYNC_I3C_CLK INTEGER 0
+
 proc p_elaboration {} {
 
+  # read parameters
+
+  set async_i3c_clk [get_parameter_value "ASYNC_I3C_CLK"]
+
   # clock and reset interface
+
   ad_interface clock   clk     input 1
   ad_interface reset   resetn  input 1 if_clk
 
@@ -30,7 +37,12 @@ proc p_elaboration {} {
   set_interface_property sync associatedReset if_resetn
 
   # physical I3C interface
+
   ad_interface clock scl output 1
   ad_interface signal sda   inout 1
+
+  if {!($async_i3c_clk)} {
+    lappend disabled_intfs clk_bus
+  }
 }
 

@@ -5,6 +5,7 @@ proc i3c_controller_create {{name "i3c_controller"} {async_i3c_clk 1}} {
 
   if {$async_i3c_clk == 1} {
     create_bd_pin -dir I -type clk i3c_clk
+    create_bd_pin -dir I -type clk i3c_clk_bus
   }
   create_bd_pin -dir I -type clk clk
   create_bd_pin -dir I -type rst reset_n
@@ -16,14 +17,17 @@ proc i3c_controller_create {{name "i3c_controller"} {async_i3c_clk 1}} {
 
   ad_ip_instance axi_i3c_controller axi_regmap
   ad_ip_parameter axi_regmap CONFIG.ASYNC_I3C_CLK $async_i3c_clk
+  ad_ip_parameter core       CONFIG.ASYNC_I3C_CLK $async_i3c_clk
 
   if {$async_i3c_clk == 1} {
     ad_connect i3c_clk host_interface/clk
     ad_connect i3c_clk core/clk
+    ad_connect i3c_clk_bus core/clk_bus
     ad_connect i3c_clk axi_regmap/i3c_clk
   } else {
     ad_connect clk host_interface/clk
     ad_connect clk core/clk
+    ad_connect clk core/clk_bus
     ad_connect clk axi_regmap/i3c_clk
   }
 

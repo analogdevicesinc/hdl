@@ -33,22 +33,60 @@
 // ***************************************************************************
 // ***************************************************************************
 /**
- * Divides the input clock by 4.
+ * Async I3C: Divides the input clock by 1 (sel=1) or 2 (sel=0).
+ * Sync I3C: Divides the input clock by 16 (sel=1) or 8 (sel=0).
+ * Multipath constraints should be tuned.
  */
 
 `timescale 1ns/100ps
 `default_nettype none
 
-module i3c_controller_quarter_clk (
+module i3c_controller_clk_div #(
+  parameter ASYNC_CLK = 0
+) (
   input  wire reset_n,
+  input  wire sel,
+  input  wire cmd_ready,
   input  wire clk,
-  output wire clk_quarter
+  input  wire clk_bus,
+  output wire  clk_out
   );
 
-  reg [1:0] counter;
+  reg sel_reg;
   always @(posedge clk) begin
-    counter <= reset_n ? counter + 1 : 2'b00;
+    if (!reset_n) begin
+      sel_reg <= 1'b0;
+    end else begin
+      if (cmd_ready) begin
+        sel_reg <= sel;
+      end
+    end
   end
 
-  assign clk_quarter = counter[1];
+  generate if (ASYNC_CLK) begin
+    reg clk_reg;
+    always @(posedge clk_bus) begin
+      if (!reset_n) begin
+        clk_reg <= 1'b0;
+      end else begin
+        clk_reg <= ~clk_reg;
+      end
+    end
+    assign clk_out = sel_reg ? clk_bus : clk_reg;
+  end
+  endgenerate
+
+  generate if (!ASYNC_CLK) begin
+    reg [3:0] clk_reg;
+    always @(posedge clk) begin
+      if (!reset_n) begin
+        clk_reg <= 5'd0;
+      end else begin
+        clk_reg <= clk_reg + 1;
+      end
+    end
+    assign clk_out = sel_reg ? clk_reg[2] : clk_reg[3];
+  end
+  endgenerate
+
 endmodule

@@ -46,6 +46,15 @@ module i3c_controller_phy_sda #(
   input  wire t,
   inout  wire sda
 );
-  assign sda = ~t ? sdi : 1'bZ;
-  assign sdo = sda;
+  // TODO: Add Intel tristate primitive, select dependin on target.
+  IOBUF #(
+  ) IOBUF_inst (
+     .O(sdo),
+     .IO(sda),
+     .I(sdi),
+     .T(t)
+  );
+  // Same as, but sometimes Xilinx was not inferring IOBUF from this...
+  //assign sda = ~t ? sdi : 1'bZ;
+  //assign sdo = sda;
 endmodule
