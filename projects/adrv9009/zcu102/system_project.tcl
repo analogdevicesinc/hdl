@@ -25,7 +25,7 @@ adi_project adrv9009_zcu102 0 [list \
   RX_JESD_M       [get_env_param RX_JESD_M       4 ] \
   RX_JESD_L       [get_env_param RX_JESD_L       2 ] \
   RX_JESD_S       [get_env_param RX_JESD_S       1 ] \
-  RX_OS_JESD_M    [get_env_param RX_OS_JESD_M    2 ] \
+  RX_OS_JESD_M    [get_env_param RX_OS_JESD_M    4 ] \
   RX_OS_JESD_L    [get_env_param RX_OS_JESD_L    2 ] \
   RX_OS_JESD_S    [get_env_param RX_OS_JESD_S    1 ] \
 ]
