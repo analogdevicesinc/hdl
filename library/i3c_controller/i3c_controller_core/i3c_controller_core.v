@@ -83,6 +83,11 @@ module i3c_controller_core #(
   wire sdo_bit;
   wire sdi_bit;
 
+  wire rx;
+  wire rx_valid;
+  wire rx_stop;
+  wire rx_nack;
+
   //wire [63:0] o_pid_bcr_dcr;
   //wire [6:0] o_da;
   //wire o_pid_da_valid;
@@ -155,7 +160,10 @@ module i3c_controller_core #(
     .cmdw_rx(cmdw_rx),
     .cmd(cmd),
     .cmd_ready(cmd_ready),
-    .sdo(sdo_bit),
+    .rx(rx),
+    .rx_valid(rx_valid),
+    .rx_stop(rx_stop),
+    .rx_nack(rx_nack),
     .clk_sel(clk_sel)
   );
 
@@ -177,6 +185,10 @@ module i3c_controller_core #(
     .clk_bus(clk_bus_2),
     .cmd(cmd),
     .cmd_ready(cmd_ready),
+    .rx(rx),
+    .rx_valid(rx_valid),
+    .rx_stop(rx_stop),
+    .rx_nack(rx_nack),
     .scl(scl),
     .sdi(sdi_bit),
     .sdo(sdo_bit),

@@ -34,7 +34,7 @@
 // ***************************************************************************
 /**
  * Translate simple commands into SCL/SDA transitions
- * Each command has 4 states and shall jump to a new command
+ * Each command has 8 states and shall jump to a new command
  * without returning to idle, A/B/C/D/*, where * is a next command
  * first state A or idle.
  *
@@ -75,13 +75,23 @@
 
 module i3c_controller_bit_mod (
   input wire reset_n,
-  input wire clk, // 200MHz
-  input wire clk_bus, // 50Mhz, 25MHz
+  input wire clk, // 100MHz
+  input wire clk_bus, // 100Mhz, 50MHz
 
   // Bit Modulation Command
-  // "cmd_valid" is embed in known enum values
+
   input wire [`MOD_BIT_CMD_WIDTH:0] cmd,
-  output wire cmd_ready, // indicate sample window
+  output wire cmd_ready,
+
+  // RX and ACK
+
+  output wire rx,
+  output wire rx_valid,
+  output wire rx_stop,
+  output wire rx_nack,
+
+
+  // Bus drive signals
 
   output reg  scl,
   output reg  sdi,
@@ -89,200 +99,147 @@ module i3c_controller_bit_mod (
   output wire t
 );
 
-  wire clk_scl;
-  wire [2:0] key;
+  reg reset_n_ctl;
+  reg reset_n_clr;
+
+  reg pp;
+  reg [2:0] i ;
+  reg [2:0] i_;
+  reg [7:0] scl_;
+  reg [7:0] sdi_;
+
+  reg [1:0] rx_valid_reg;
+  reg [1:0] rx_stop_reg;
+  reg [1:0] rx_nack_reg;
+  reg cmd_ready_ctrl;
+
+  reg  [1:0] st;
+  reg  [`MOD_BIT_CMD_WIDTH:2] sm;
 
   reg sdo_reg;
-  reg clk_scl_reg;
-  reg clk_scl_posedge;
-  reg reset_n_reg;
-  reg reset_n_clr;
-  reg pp_en;
-  reg [1:0] clk_counter;
+  reg scl_reg;
 
-  reg [4:0] sm;
-  localparam [4:0]
-    idle     = 0,
-    start_b  = 1,
-    start_c  = 2,
-    start_d  = 3,
-    stop_b   = 4,
-    stop_c   = 5,
-    stop_d   = 6,
-    rd_b     = 7,
-    rd_c     = 8,
-    rd_d     = 9,
-    wr_b     = 10,
-    wr_c     = 11,
-    wr_d     = 12,
-    t_rd_b   = 13,
-    t_rd_c   = 14,
-    t_rd_d   = 15;
+  always @(sm) begin
+    case (sm)
+      `MOD_BIT_CMD_NOP_ : i_ = 0;
+      default           : i_ = 7;
+    endcase
+
+    case (sm)
+      `MOD_BIT_CMD_STOP_     : scl_ = 8'b00011111;
+      default                : scl_ = 8'b00011100;
+    endcase
+
+    case (sm)
+      `MOD_BIT_CMD_START_    : sdi_ = 8'b11111000;
+      `MOD_BIT_CMD_STOP_     : sdi_ = 8'b00000111;
+      `MOD_BIT_CMD_ACK_IBI_  : sdi_ = 8'b00001111;
+      default                : sdi_ = 8'b00000000;
+    endcase
+  end
 
   always @(posedge clk) begin
     if (!reset_n) begin
-      reset_n_reg <= 1'b0;
-      clk_scl_posedge <= 1'b1;
-    end else begin
-      if (reset_n_clr) begin
-        reset_n_reg <= 1'b1;
-      end
-      clk_scl_posedge <= clk_scl;
+      reset_n_ctl <= 1'b0;
+    end else if (reset_n_clr) begin
+      reset_n_ctl <= 1'b1;
     end
+    rx_valid_reg [1] <= rx_valid_reg [0];
+    rx_stop_reg  [1] <= rx_stop_reg  [0];
+    rx_nack_reg  [1] <= rx_nack_reg  [0];
+    cmd_ready_ctrl <= i == i_ & cmd[`MOD_BIT_CMD_WIDTH:2] != `MOD_BIT_CMD_NOP_;
   end
 
   always @(posedge clk_bus) begin
-    if (!reset_n_reg) begin
+    rx_nack_reg[0]  <= 1'b0;
+    rx_valid_reg[0] <= 1'b0;
+    rx_stop_reg[0]  <= 1'b0;
+    if (!reset_n_ctl) begin
       reset_n_clr <= 1'b1;
+      sm  <= `MOD_BIT_CMD_NOP_;
       scl <= 1'b1;
       sdi <= 1'b1;
-      sm <= idle;
-      clk_counter <= 2'b00;
+      pp  <= 1'b0;
+      i   <= 0;
     end else begin
       reset_n_clr <= 1'b0;
-      clk_counter <= clk_counter + 1;
+
+      if (i == i_) begin
+        sm <= cmd[`MOD_BIT_CMD_WIDTH:2];
+        st <= cmd[1:0];
+        i  <= 0;
+      end else begin
+        sm <= sm;
+        st <= st;
+        i  <= i + 1;
+      end
+
+      scl <= scl_[7-i];
+      sdi <= sdi_[7-i];
+      pp  <= st[1];
       case (sm)
-        idle:
-        begin
-          if (~clk_scl_reg && clk_scl) begin
-            case (key)
-              `MOD_BIT_CMD_START_:
-              begin
-                sm <= start_b;
-                pp_en <= cmd[1];
-                scl <= scl;
-                sdi <= 1'b1;
-              end
-              `MOD_BIT_CMD_STOP_:
-              begin
-                sm <= stop_b;
-                pp_en <= 1'b0;
-                scl <= 1'b0;
-                sdi <= 1'b0;
-              end
-              `MOD_BIT_CMD_READ_:
-              begin
-                sm <= rd_b;
-                pp_en <= 1'b0;
-                scl <= 1'b0;
-                sdi <= 1'b1;
-              end
-              `MOD_BIT_CMD_WRITE_:
-              begin
-                sm <= wr_b;
-                pp_en <= cmd[1];
-                scl <= 1'b0;
-                sdi <= cmd[0];
-              end
-              `MOD_BIT_CMD_T_READ_:
-              begin
-                sm <= t_rd_b;
-                pp_en <= 1'b0;
-                scl <= 1'b0;
-                sdi <= 1'b1;
-              end
-              default: begin
-                sm <= idle;
-                pp_en <= 1'b0;
-                sdi <= sdi;
-                scl <= scl;
-              end
-            endcase
+        `MOD_BIT_CMD_NOP_: begin
+          sdi <= 1'b1;
+          pp  <= 1'b0;
+          scl <= 1'b1;
+        end
+        `MOD_BIT_CMD_WRITE_: begin
+          sdi <= st[0];
+          if (i == 5) begin
+            rx_valid_reg[0] <= 1'b1;
           end
         end
-        start_b, start_c,
-        stop_b, stop_c,
-        rd_b, rd_c,
-        wr_b, wr_c,
-        t_rd_b, t_rd_c:
-        begin
-          sm <= sm + 1;
-        end
-        start_d, stop_d,
-        rd_d, wr_d,
-        t_rd_d:
-        begin
-          sm <= idle;
-        end
-        default:
-        begin
-          sm <= idle;
-        end
-      endcase
-
-      case (sm)
-        idle: begin
-        end
-        start_b: begin
-          scl <= 1'b1;
+        `MOD_BIT_CMD_READ_: begin
           sdi <= 1'b1;
+          pp  <= 1'b0;
         end
-        start_c: begin
-          scl <= 1'b1;
-          sdi <= 1'b0;
+        `MOD_BIT_CMD_START_: begin
+          // For Sr
+          if (i <= 2) begin
+            scl <= scl_reg;
+          end
         end
-        start_d: begin
-          scl <= 1'b0;
-          sdi <= 1'b0;
+        `MOD_BIT_CMD_STOP_: begin
         end
-        stop_b: begin
-          scl <= 1'b1;
-          sdi <= 1'b0;
+        `MOD_BIT_CMD_ACK_SDR_: begin
+          if (i == 0 || i == 1) begin
+            sdi <= 1'b1;
+            pp  <= 1'b0;
+          end else if (i == 2) begin
+            sdi <=  sdo_reg;
+            rx_nack_reg[0] <= sdo_reg;
+          end else begin
+            sdi <= sdi;
+          end
         end
-        stop_c: begin
-          scl <= 1'b1;
-          sdi <= 1'b0;
+        `MOD_BIT_CMD_T_READ_: begin
+          if (i == 0 || i == 1) begin
+            sdi <= 1'b1;
+            pp  <= 1'b0;
+          end else if (i == 2) begin
+            sdi <= st[0] ? 1'b0 : sdo_reg;
+            rx_stop_reg[0] <= ~sdo_reg;
+          end else begin
+            sdi <= sdi;
+          end
         end
-        stop_d: begin
-          scl <= 1'b1;
-          sdi <= 1'b1;
+        `MOD_BIT_CMD_ACK_IBI_: begin
+          pp  <= 1'b0;
         end
-        rd_b: begin
-          scl <= 1'b1;
-          sdi <= 1'b1;
+        default: begin
+          sm <= `MOD_BIT_CMD_NOP_;
         end
-        rd_c: begin
-          scl <= 1'b1;
-          sdi <= 1'b1;
-        end
-        rd_d: begin
-          scl <= 1'b0;
-          sdi <= 1'b1;
-        end
-        wr_b: begin
-          scl <= 1'b1;
-          sdi <= sdi;
-        end
-        wr_c: begin
-          scl <= 1'b1;
-          sdi <= sdi;
-        end
-        wr_d: begin
-          scl <= 1'b0;
-          sdi <= sdi;
-        end
-        t_rd_b: begin
-          scl <= 1'b1;
-          sdi <= sdo_reg;
-        end
-        t_rd_c: begin
-          scl <= 1'b1;
-          sdi <= sdi;
-        end
-        t_rd_d: begin
-          scl <= 1'b0;
-          sdi <= sdi;
-        end
-        default:
-          sm <= idle;
       endcase
     end
-    clk_scl_reg <= clk_scl;
-    sdo_reg <= sdo;
+    sdo_reg <= sdo === 1'b0 ? 1'b0 : 1'b1;
+    scl_reg <= scl;
   end
 
-  assign key = cmd[`MOD_BIT_CMD_WIDTH:2];
-  assign t = ~pp_en & sdi ? 1'b1 : 1'b0;
-  assign clk_scl = clk_counter[1];
-  assign cmd_ready = clk_scl & !clk_scl_posedge;
+  assign rx_valid = rx_valid_reg[0] & ~rx_valid_reg[1];
+  assign rx_stop  = rx_stop_reg [0] & ~rx_stop_reg [1];
+  assign rx_nack  = rx_nack_reg [0] & ~rx_nack_reg [1];
+  assign rx = sdo_reg;
+
+  assign cmd_ready = i == i_ & ~cmd_ready_ctrl & reset_n;
+  assign t = ~pp & sdi ? 1'b1 : 1'b0;
 endmodule

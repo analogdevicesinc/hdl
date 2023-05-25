@@ -34,7 +34,7 @@
 // ***************************************************************************
 /**
  * Async I3C: Divides the input clock by 1 (sel=1) or 2 (sel=0).
- * Sync I3C: Divides the input clock by 16 (sel=1) or 8 (sel=0).
+ * Sync I3C: Divides the input clock by 8 (sel=1) or 4 (sel=0).
  * Multipath constraints should be tuned.
  */
 
@@ -46,46 +46,43 @@ module i3c_controller_clk_div #(
 ) (
   input  wire reset_n,
   input  wire sel,
+  input  wire clr,
   input  wire cmd_ready,
   input  wire clk,
   input  wire clk_bus,
-  output wire  clk_out
+  output wire clk_out
   );
 
-  reg sel_reg;
+  reg [1:0] sel_reg;
   always @(posedge clk) begin
-    if (!reset_n) begin
-      sel_reg <= 1'b0;
-    end else begin
-      if (cmd_ready) begin
-        sel_reg <= sel;
-      end
+    if (clr) begin
+      sel_reg <= 2'b00;
+    end else if (cmd_ready) begin
+      sel_reg <= {sel_reg[0], sel};
     end
   end
 
   generate if (ASYNC_CLK) begin
-    reg clk_reg;
-    always @(posedge clk_bus) begin
-      if (!reset_n) begin
-        clk_reg <= 1'b0;
-      end else begin
-        clk_reg <= ~clk_reg;
-      end
-    end
-    assign clk_out = sel_reg ? clk_bus : clk_reg;
+    BUFGMUX #(
+    ) i_BUFGMUX (
+       .O(clk_out),
+       .I0(clk_bus),
+       .I1(clk),
+       .S(sel_reg)
+    );
   end
   endgenerate
 
   generate if (!ASYNC_CLK) begin
-    reg [3:0] clk_reg;
-    always @(posedge clk) begin
+    reg [2:0] clk_reg;
+      always @(posedge clk) begin
       if (!reset_n) begin
         clk_reg <= 5'd0;
       end else begin
         clk_reg <= clk_reg + 1;
       end
     end
-    assign clk_out = sel_reg ? clk_reg[2] : clk_reg[3];
+    assign clk_out = sel_reg[1] ? clk_reg[1] : clk_reg[2];
   end
   endgenerate
 
