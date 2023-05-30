@@ -38,10 +38,10 @@ set_property -dict {PACKAGE_PIN P36  IOSTANDARD LVDS} [get_ports fpga_clk3_n]   
 set_property -dict {PACKAGE_PIN AF38} [get_ports fpga_clk4_p]                           ; ## L12  FMC_GBTCLK2_M2C_C_P  MGTREFCLK0P_122
 set_property -dict {PACKAGE_PIN AF39} [get_ports fpga_clk4_n]                           ; ## L13  FMC_GBTCLK2_M2C_C_N  MGTREFCLK0N_122
 
-set_property -dict {PACKAGE_PIN AL30 IOSTANDARD LVDS} [get_ports fpga_sysref0_p]        ; ## D8   FMC_LA01_CC_P        IO_L16P_T2U_N6_QBC_AD3P_43
-set_property -dict {PACKAGE_PIN AL31 IOSTANDARD LVDS} [get_ports fpga_sysref0_n]        ; ## D9   FMC_LA01_CC_N        IO_L16N_T2U_N7_QBC_AD3N_43
-set_property -dict {PACKAGE_PIN R31  IOSTANDARD LVDS} [get_ports fpga_sysref1_p]        ; ## C22  FMC_LA18_CC_P        IO_L10P_T1U_N6_QBC_AD4P_45
-set_property -dict {PACKAGE_PIN P31  IOSTANDARD LVDS} [get_ports fpga_sysref1_n]        ; ## C23  FMC_LA18_CC_N        IO_L10N_T1U_N7_QBC_AD4N_45
+set_property -dict {PACKAGE_PIN AL30 IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports fpga_sysref0_p]        ; ## D8   FMC_LA01_CC_P        IO_L16P_T2U_N6_QBC_AD3P_43
+set_property -dict {PACKAGE_PIN AL31 IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports fpga_sysref0_n]        ; ## D9   FMC_LA01_CC_N        IO_L16N_T2U_N7_QBC_AD3N_43
+set_property -dict {PACKAGE_PIN R31  IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports fpga_sysref1_p]        ; ## C22  FMC_LA18_CC_P        IO_L10P_T1U_N6_QBC_AD4P_45
+set_property -dict {PACKAGE_PIN P31  IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports fpga_sysref1_n]        ; ## C23  FMC_LA18_CC_N        IO_L10N_T1U_N7_QBC_AD4N_45
 
 set_property -dict {PACKAGE_PIN R14  IOSTANDARD LVCMOS18} [get_ports gpio_fmcp_p[0]]    ; ## E6   FMC_HA05_P           IO_L14P_T2L_N2_GC_70
 set_property -dict {PACKAGE_PIN W14  IOSTANDARD LVCMOS18} [get_ports gpio_fmcp_p[1]]    ; ## E9   FMC_HA09_P           IO_L6P_T0U_N10_AD6P_70
