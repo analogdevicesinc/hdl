@@ -105,7 +105,8 @@ module i3c_controller_word #(
       `CMDW_START           : i_ =  0;
       `CMDW_BCAST_7E_W0     : i_ =  8; // 7'h7e+RnW=0+ACK
       `CMDW_CCC             : i_ =  8; // Direct/Bcast+CCC+T
-      `CMDW_TARGET_ADDR     : i_ =  8; // DA+RNW+ACK
+      `CMDW_TARGET_ADDR_OD  : i_ =  8; // DA+RNW+ACK
+      `CMDW_TARGET_ADDR_PP  : i_ =  8; // DA+RNW+ACK
       `CMDW_MSG_SR          : i_ =  0;
       `CMDW_MSG_RX          : i_ =  8; // SDI+T
       `CMDW_MSG_TX          : i_ =  8; // SDO+T
@@ -121,7 +122,8 @@ module i3c_controller_word #(
       `CMDW_START           : clk_sel = 0;
       `CMDW_BCAST_7E_W0     : clk_sel = 0;
       `CMDW_CCC             : clk_sel = 1;
-      `CMDW_TARGET_ADDR     : clk_sel = 1;
+      `CMDW_TARGET_ADDR_OD  : clk_sel = 0;
+      `CMDW_TARGET_ADDR_PP  : clk_sel = 1;
       `CMDW_MSG_SR          : clk_sel = 1;
       `CMDW_MSG_RX          : clk_sel = 1;
       `CMDW_MSG_TX          : clk_sel = 1;
@@ -188,14 +190,15 @@ module i3c_controller_word #(
           end
         end
         `CMDW_DYN_ADDR,
-        `CMDW_TARGET_ADDR: begin
+        `CMDW_TARGET_ADDR_OD,
+        `CMDW_TARGET_ADDR_PP: begin
           if (i == 8) begin
             // ACK
             cmd <= `MOD_BIT_CMD_ACK_SDR;
             do_ack <= 1'b1;
           end else begin
             // DA+RnW/DA+T
-            cmd <= {`MOD_BIT_CMD_WRITE_,1'b1,cmdw_body[7 - i[2:0]]};
+            cmd <= {`MOD_BIT_CMD_WRITE_,clk_sel,cmdw_body[7 - i[2:0]]};
           end
         end
         `CMDW_MSG_SR: begin
@@ -228,7 +231,7 @@ module i3c_controller_word #(
           end
         end
         `CMDW_STOP: begin
-          cmd <= `MOD_BIT_CMD_STOP_PP;
+          cmd <= `MOD_BIT_CMD_STOP_OD;
         end
         `CMDW_PROV_ID_BCR_DCR: begin
           cmd <= `MOD_BIT_CMD_READ;

@@ -23,6 +23,8 @@ XILINX_DEPS += ../../i3c_controller/interfaces/i3c_controller_ctrl.xml
 XILINX_DEPS += ../../i3c_controller/interfaces/i3c_controller_ctrl_rtl.xml
 XILINX_DEPS += ../../i3c_controller/interfaces/i3c_controller.xml
 XILINX_DEPS += ../../i3c_controller/interfaces/i3c_controller_rtl.xml
+XILINX_DEPS += ../../i3c_controller/interfaces/i3c_controller_rmap.xml
+XILINX_DEPS += ../../i3c_controller/interfaces/i3c_controller_rmap_rtl.xml
 
 INTEL_DEPS += i3c_controller_core_hw.tcl
 

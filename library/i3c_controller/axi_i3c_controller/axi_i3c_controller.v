@@ -34,13 +34,15 @@
 
 `timescale 1ns/100ps
 `default_nettype wire
+`include "i3c_controller_regmap.v"
 
 module axi_i3c_controller #(
   parameter ID = 0,
   parameter MM_IF_TYPE = 0,
   parameter ASYNC_I3C_CLK = 0,
   parameter ADDRESS_WIDTH = 8, // Const
-  parameter DATA_WIDTH = 32 // Const
+  parameter DATA_WIDTH = 32, // Const
+  parameter DA_LENGTH_WIDTH = 2
 ) (
 
   // Slave AXI interface
@@ -107,7 +109,14 @@ module axi_i3c_controller #(
 
   output wire ibi_ready,
   input  wire ibi_valid,
-  input  wire [DATA_WIDTH-1:0] ibi
+  input  wire [DATA_WIDTH-1:0] ibi,
+
+  // uP accessible info
+
+  input  wire rmap_daa_status_in_progress,
+  input  wire [DA_LENGTH_WIDTH-1:0] rmap_daa_status_registered,
+  output reg  [DA_LENGTH_WIDTH-1:0] rmap_daa_peripheral_index,
+  input  wire [6:0] rmap_daa_peripheral_da
 );
 
   localparam PCORE_VERSION = 'h12345678;
@@ -273,8 +282,9 @@ module axi_i3c_controller #(
       up_wack_ff <= up_wreq_s;
       if (up_wreq_s) begin
         case (up_waddr_s)
-          14'h02: up_scratch <= up_wdata_s;
-          14'h10: up_sw_reset <= up_wdata_s[0];
+          `I3C_REGMAP_SCRATCH:        up_scratch <= up_wdata_s;
+          `I3C_REGMAP_ENABLE:         up_sw_reset <= up_wdata_s[0];
+          `I3C_REGMAP_DAA_PERIPHERAL: rmap_daa_peripheral_index <= up_wdata_s[DA_LENGTH_WIDTH-1:0];
         endcase
       end
     end
@@ -287,7 +297,7 @@ module axi_i3c_controller #(
     end else begin
       if (up_wreq_s) begin
         case (up_waddr_s)
-          14'h20: up_irq_mask <= up_wdata_s[4:0];
+          `I3C_REGMAP_IRQ_MASK: up_irq_mask <= up_wdata_s[4:0];
         endcase
       end
     end
@@ -301,26 +311,34 @@ module axi_i3c_controller #(
     end
   end
 
+  wire [DA_LENGTH_WIDTH:0] rmap_daa_status;
+  wire [13:0] rmap_daa_peripheral;
 
   always @(posedge clk) begin
     case (up_raddr_s)
-      14'h00: up_rdata_ff <= PCORE_VERSION;
-      14'h01: up_rdata_ff <= ID;
-      14'h02: up_rdata_ff <= up_scratch;
-      14'h10: up_rdata_ff <= up_sw_reset;
-      14'h20: up_rdata_ff <= up_irq_mask;
-      14'h21: up_rdata_ff <= up_irq_pending;
-      14'h22: up_rdata_ff <= up_irq_source;
-      14'h30: up_rdata_ff <= cmd_fifo_room;
-      14'h31: up_rdata_ff <= cmdr_fifo_level;
-      14'h32: up_rdata_ff <= sdo_fifo_room;
-      14'h33: up_rdata_ff <= sdi_fifo_level;
-      14'h34: up_rdata_ff <= ibi_fifo_level;
-      14'h38: up_rdata_ff <= sdi_fifo_out_data;
-      14'h39: up_rdata_ff <= ibi_fifo_out_data;
+      `I3C_REGMAP_VERSION:        up_rdata_ff <= PCORE_VERSION;
+      `I3C_REGMAP_PERIPHERAL_ID:  up_rdata_ff <= ID;
+      `I3C_REGMAP_SCRATCH:        up_rdata_ff <= up_scratch;
+      `I3C_REGMAP_ENABLE:         up_rdata_ff <= up_sw_reset;
+      `I3C_REGMAP_IRQ_MASK:       up_rdata_ff <= up_irq_mask;
+      `I3C_REGMAP_IRQ_PENDING:    up_rdata_ff <= up_irq_pending;
+      `I3C_REGMAP_IRQ_SOURCE:     up_rdata_ff <= up_irq_source;
+      `I3C_REGMAP_CMD_FIFO_ROOM:  up_rdata_ff <= cmd_fifo_room;
+      `I3C_REGMAP_CMDR_FIFO_LEVEL:up_rdata_ff <= cmdr_fifo_level;
+      `I3C_REGMAP_SDO_FIFO_ROOM:  up_rdata_ff <= sdo_fifo_room;
+      `I3C_REGMAP_SDI_FIFO_LEVEL: up_rdata_ff <= sdi_fifo_level;
+      `I3C_REGMAP_IBI_FIFO_LEVEL: up_rdata_ff <= ibi_fifo_level;
+      `I3C_REGMAP_CMDR_FIFO:      up_rdata_ff <= cmdr_fifo_out_data;
+      `I3C_REGMAP_SDI_FIFO:       up_rdata_ff <= sdi_fifo_out_data;
+      `I3C_REGMAP_IBI_FIFO:       up_rdata_ff <= ibi_fifo_out_data;
+      `I3C_REGMAP_DAA_STATUS:     up_rdata_ff <= rmap_daa_status;
+      `I3C_REGMAP_DAA_PERIPHERAL: up_rdata_ff <= rmap_daa_peripheral;
       default: up_rdata_ff <= 'h00;
     endcase
   end
+
+  assign rmap_daa_status = {rmap_daa_status_registered, rmap_daa_status_in_progress};
+  assign rmap_daa_peripheral = {rmap_daa_peripheral_da, {7-DA_LENGTH_WIDTH{1'b0}}, rmap_daa_peripheral_index};
 
   generate if (ASYNC_I3C_CLK) begin
     wire i3c_reset;
@@ -335,8 +353,8 @@ module axi_i3c_controller #(
   end
   endgenerate
 
-  assign cmd_fifo_in_valid = up_wreq_s == 1'b1 && up_waddr_s == 8'h35;
-  assign cmd_fifo_in_data = up_wdata_s[15:0];
+  assign cmd_fifo_in_valid = up_wreq_s == 1'b1 && up_waddr_s == `I3C_REGMAP_CMD_FIFO;
+  assign cmd_fifo_in_data = up_wdata_s;
 
   util_axis_fifo #(
     .DATA_WIDTH(DATA_WIDTH),
@@ -365,7 +383,7 @@ module axi_i3c_controller #(
     .m_axis_almost_empty(cmd_fifo_almost_empty),
     .m_axis_level());
 
-  assign cmdr_fifo_out_ready = up_rreq_s == 1'b1 && up_raddr_s == 8'h36;
+  assign cmdr_fifo_out_ready = up_rreq_s == 1'b1 && up_raddr_s == `I3C_REGMAP_CMDR_FIFO;
 
   util_axis_fifo #(
     .DATA_WIDTH(DATA_WIDTH),
@@ -394,7 +412,7 @@ module axi_i3c_controller #(
     .m_axis_empty(),
     .m_axis_almost_empty());
 
-  assign sdo_fifo_in_valid = up_wreq_s == 1'b1 && up_waddr_s == 8'h37;
+  assign sdo_fifo_in_valid = up_wreq_s == 1'b1 && up_waddr_s == `I3C_REGMAP_SDO_FIFO;
   assign sdo_fifo_in_data = up_wdata_s[31:0];
 
   util_axis_fifo #(
@@ -424,7 +442,7 @@ module axi_i3c_controller #(
     .m_axis_empty(),
     .m_axis_almost_empty(sdo_fifo_almost_empty));
 
-  assign sdi_fifo_out_ready = up_rreq_s == 1'b1 && up_raddr_s == 8'h38;
+  assign sdi_fifo_out_ready = up_rreq_s == 1'b1 && up_raddr_s == `I3C_REGMAP_SDI_FIFO;
 
   util_axis_fifo #(
     .DATA_WIDTH(DATA_WIDTH),
@@ -453,7 +471,7 @@ module axi_i3c_controller #(
     .m_axis_empty(),
     .m_axis_almost_empty());
 
-  assign ibi_fifo_out_ready = up_rreq_s == 1'b1 && up_raddr_s == 8'h39;
+  assign ibi_fifo_out_ready = up_rreq_s == 1'b1 && up_raddr_s == `I3C_REGMAP_IBI_FIFO;
 
   util_axis_fifo #(
     .DATA_WIDTH(DATA_WIDTH),

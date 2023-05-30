@@ -58,7 +58,7 @@
  */
 
 `timescale 1ns/100ps
-`default_nettype none
+`default_nettype wire
 `include "i3c_controller_word_cmd.v"
 
 module i3c_controller_daa #(
@@ -67,21 +67,27 @@ module i3c_controller_daa #(
   // See I3C Target Address Restrictions for valid values
   parameter [7*DA_LENGTH-1:0] DA = {7'h0b, 7'h0a, 7'h09, 7'h08}
 )(
-  input wire reset_n,
-  input wire clk,
+  input reset_n,
+  input clk,
 
   // Command interface
 
-  input  wire cmdp_do_daa,
-  output wire cmdp_do_daa_ready,
+  input  cmdp_do_daa,
+  output cmdp_do_daa_ready,
 
   // Word command
 
-  input  wire cmdw_ready,
-  output wire [`CMDW_HEADER_WIDTH+8:0] cmdw,
-  input  wire cmdw_nack
-  );
+  input  cmdw_ready,
+  output [`CMDW_HEADER_WIDTH+8:0] cmdw,
+  input  cmdw_nack,
 
+  // uP accessible info
+
+  output rmap_daa_status_in_progress,
+  output [DA_LENGTH_WIDTH-1:0] rmap_daa_status_registered,
+  input  [DA_LENGTH_WIDTH-1:0] rmap_daa_peripheral_index,
+  output [6:0] rmap_daa_peripheral_da
+);
   reg [DA_LENGTH_WIDTH-1:0] da_reg;
   reg [7:0] cmdw_body;
   reg [`CMDW_HEADER_WIDTH:0] sm;
@@ -135,6 +141,9 @@ module i3c_controller_daa #(
         end
         `CMDW_STOP: begin
             sm <= `CMDW_NOP;
+         end
+         default: begin
+            sm <= `CMDW_NOP;
         end
       endcase
     end
@@ -142,4 +151,8 @@ module i3c_controller_daa #(
 
   assign cmdw = {sm, cmdw_body};
   assign cmdp_do_daa_ready = sm == `CMDW_NOP & reset_n;
+
+  assign rmap_daa_status_in_progress = ~cmdp_do_daa_ready;
+  assign rmap_daa_status_registered  = da_reg;
+  assign rmap_daa_peripheral_da = DA[7*rmap_daa_peripheral_index+:7];
 endmodule

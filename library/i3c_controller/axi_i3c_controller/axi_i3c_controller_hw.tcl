@@ -13,7 +13,9 @@ ad_ip_files axi_i3c_controller [list\
   $ad_hdl_dir/library/common/ad_rst.v \
   $ad_hdl_dir/library/intel/common/up_rst_constr.sdc \
   axi_i3c_controller_constr.sdc \
-  axi_i3c_controller.v]
+  axi_i3c_controller.v \
+  i3c_controller_regmap.v \
+]
 
 # parameters
 

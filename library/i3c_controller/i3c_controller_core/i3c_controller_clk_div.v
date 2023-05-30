@@ -48,14 +48,14 @@ module i3c_controller_clk_div #(
   input  wire sel,
   input  wire clr,
   input  wire cmd_ready,
-  input  wire clk,
-  input  wire clk_bus,
+  input  wire clk_0,
+  input  wire clk_1,
   output wire clk_out
   );
 
   reg [1:0] sel_reg;
-  always @(posedge clk) begin
-    if (clr) begin
+  always @(posedge clk_0) begin
+    if (!reset_n | clr) begin
       sel_reg <= 2'b00;
     end else if (cmd_ready) begin
       sel_reg <= {sel_reg[0], sel};
@@ -66,8 +66,8 @@ module i3c_controller_clk_div #(
     BUFGMUX #(
     ) i_BUFGMUX (
        .O(clk_out),
-       .I0(clk_bus),
-       .I1(clk),
+       .I0(clk_1),
+       .I1(clk_0),
        .S(sel_reg)
     );
   end
@@ -75,9 +75,9 @@ module i3c_controller_clk_div #(
 
   generate if (!ASYNC_CLK) begin
     reg [2:0] clk_reg;
-      always @(posedge clk) begin
+      always @(posedge clk_0) begin
       if (!reset_n) begin
-        clk_reg <= 5'd0;
+        clk_reg <= 3'd0;
       end else begin
         clk_reg <= clk_reg + 1;
       end

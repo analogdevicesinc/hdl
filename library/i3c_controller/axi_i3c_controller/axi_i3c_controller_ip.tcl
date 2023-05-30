@@ -10,6 +10,7 @@ adi_ip_files axi_i3c_controller [list \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "axi_i3c_controller_constr.ttcl" \
   "axi_i3c_controller.v" \
+  "i3c_controller_regmap.v" \
 ]
 
 adi_ip_properties axi_i3c_controller
@@ -46,6 +47,17 @@ adi_add_bus "ctrl" "master" \
 		{"ibi"        "IBI_DATA"} \
 	}
 adi_add_bus_clock "i3c_clk" "ctrl" "i3c_reset_n" "master"
+
+adi_add_bus "rmap" "master" \
+	"analog.com:interface:i3c_controller_rmap_rtl:1.0" \
+	"analog.com:interface:i3c_controller_rmap:1.0" \
+	{
+		{"rmap_daa_status_in_progress" "RMAP_DAA_STATUS_IN_PROGRESS"} \
+		{"rmap_daa_status_registered"  "RMAP_DAA_STATUS_REGISTERED"} \
+		{"rmap_daa_peripheral_index"   "RMAP_DAA_PERIPHERAL_INDEX"} \
+		{"rmap_daa_peripheral_da"      "RMAP_DAA_PERIPHERAL_DA"} \
+	}
+adi_add_bus_clock "i3c_clk" "rmap" "i3c_reset_n" "master"
 
 foreach port {"up_clk" "up_rstn" "up_wreq" "up_waddr" "up_wdata" "up_rreq" "up_raddr"} {
   set_property DRIVER_VALUE "0" [ipx::get_ports $port]

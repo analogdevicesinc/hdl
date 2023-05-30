@@ -16,14 +16,14 @@ ad_ip_parameter i3c_clkgen CONFIG.VCO_DIV 1
 ad_ip_parameter i3c_clkgen CONFIG.VCO_MUL 8
 
 ad_connect $sys_cpu_clk i3c_clkgen/clk
-ad_connect i3c_clk i3c_clkgen/clk_0
-ad_connect i3c_clk_bus i3c_clkgen/clk_1
+ad_connect i3c_clk_0 i3c_clkgen/clk_0
+ad_connect i3c_clk_1 i3c_clkgen/clk_1
 
 ad_connect $hier_i3c_controller/m_i3c i3c_controller_0
 
 ad_connect $sys_cpu_clk $hier_i3c_controller/clk
-ad_connect i3c_clk $hier_i3c_controller/i3c_clk
-ad_connect i3c_clk_bus $hier_i3c_controller/i3c_clk_bus
+ad_connect i3c_clk_0 $hier_i3c_controller/i3c_clk_0
+ad_connect i3c_clk_1 $hier_i3c_controller/i3c_clk_1
 ad_connect sys_cpu_resetn $hier_i3c_controller/reset_n
 
 ad_cpu_interconnect 0x44a00000 $hier_i3c_controller/axi_regmap

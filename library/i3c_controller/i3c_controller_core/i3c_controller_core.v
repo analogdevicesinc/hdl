@@ -34,15 +34,19 @@
 // ***************************************************************************
 
 `timescale 1ns/100ps
-`default_nettype none
+`default_nettype wire
 `include "i3c_controller_bit_mod_cmd.v"
 `include "i3c_controller_word_cmd.v"
 
 module i3c_controller_core #(
-  parameter ASYNC_I3C_CLK = 0
+  parameter ASYNC_I3C_CLK = 0,
+  parameter DA_LENGTH = 4,
+  parameter DA_LENGTH_WIDTH = 2,
+  // See I3C Target Address Restrictions for valid values
+  parameter [7*DA_LENGTH-1:0] DA = {7'h0b, 7'h0a, 7'h09, 7'h08}
 ) (
-  input  wire clk,
-  input  wire clk_bus,
+  input  wire clk_0,
+  input  wire clk_1,
   input  wire reset_n,
 
   // Command parsed
@@ -71,12 +75,19 @@ module i3c_controller_core #(
   output wire sdi_valid,
   output wire [7:0] sdi,
 
+  // uP accessible info
+
+  output wire rmap_daa_status_in_progress,
+  output wire [DA_LENGTH_WIDTH-1:0] rmap_daa_status_registered,
+  input  wire [DA_LENGTH_WIDTH-1:0] rmap_daa_peripheral_index,
+  output wire [6:0] rmap_daa_peripheral_da,
+
   // I3C bus signals
 
   output wire scl,
   inout  wire sda
 );
-  wire clk_bus_2;
+  wire clk_out;
   wire [`MOD_BIT_CMD_WIDTH:0] cmd;
   wire cmd_ready;
   wire t;
@@ -87,11 +98,6 @@ module i3c_controller_core #(
   wire rx_valid;
   wire rx_stop;
   wire rx_nack;
-
-  //wire [63:0] o_pid_bcr_dcr;
-  //wire [6:0] o_da;
-  //wire o_pid_da_valid;
-  //wire error;
 
   wire cmdw_ready;
   wire cmdw_mux;
@@ -104,22 +110,30 @@ module i3c_controller_core #(
   wire [7:0] cmdw_rx;
 
   wire clk_sel;
+  wire clk_clr;
 
   i3c_controller_daa #(
+    .DA_LENGTH(DA_LENGTH),
+    .DA_LENGTH_WIDTH(DA_LENGTH_WIDTH),
+    .DA(DA)
   ) i_i3c_controller_daa (
     .reset_n(reset_n),
-    .clk(clk),
+    .clk(clk_0),
     .cmdp_do_daa(cmdp_do_daa),
     .cmdp_do_daa_ready(cmdp_do_daa_ready),
     .cmdw_ready(cmdw_ready),
     .cmdw(cmdw_daa),
-    .cmdw_nack(cmdw_nack)
+    .cmdw_nack(cmdw_nack),
+    .rmap_daa_status_in_progress(rmap_daa_status_in_progress),
+    .rmap_daa_status_registered(rmap_daa_status_registered),
+    .rmap_daa_peripheral_index(rmap_daa_peripheral_index),
+    .rmap_daa_peripheral_da(rmap_daa_peripheral_da)
   );
 
   i3c_controller_framing #(
   ) i_i3c_controller_framing (
     .reset_n(reset_n),
-    .clk(clk),
+    .clk(clk_0),
     .cmdp_valid(cmdp_valid),
     .cmdp_ready(cmdp_ready),
     .cmdp_ccc(cmdp_ccc),
@@ -149,7 +163,7 @@ module i3c_controller_core #(
   i3c_controller_word #(
   ) i_i3c_controller_word (
     .reset_n(reset_n),
-    .clk(clk),
+    .clk(clk_0),
     .cmdw_ready(cmdw_ready),
     .cmdw_mux(cmdw_mux),
     .cmdw_framing(cmdw_framing),
@@ -164,7 +178,8 @@ module i3c_controller_core #(
     .rx_valid(rx_valid),
     .rx_stop(rx_stop),
     .rx_nack(rx_nack),
-    .clk_sel(clk_sel)
+    .clk_sel(clk_sel),
+    .clk_clr(clk_clr)
   );
 
   i3c_controller_clk_div #(
@@ -172,17 +187,18 @@ module i3c_controller_core #(
   ) i_i3c_controller_clk_div (
     .reset_n(reset_n),
     .sel(clk_sel),
+    .clr(clk_clr),
     .cmd_ready(cmd_ready),
-    .clk(clk),
-    .clk_bus(clk_bus),
-    .clk_out(clk_bus_2)
+    .clk_0(clk_0),
+    .clk_1(clk_1),
+    .clk_out(clk_out)
   );
 
   i3c_controller_bit_mod #(
   ) i_i3c_controller_bit_mod (
     .reset_n(reset_n),
-    .clk(clk),
-    .clk_bus(clk_bus_2),
+    .clk_0(clk_0),
+    .clk_1(clk_out),
     .cmd(cmd),
     .cmd_ready(cmd_ready),
     .rx(rx),

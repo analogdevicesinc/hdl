@@ -12,7 +12,7 @@ adi_ip_files i3c_controller_core [list \
  	"i3c_controller_word_cmd.v" \
 	"i3c_controller_bit_mod.v" \
  	"i3c_controller_bit_mod_cmd.v" \
-	"i3c_controller_clk_div.v"
+	"i3c_controller_clk_div.v" \
 ]
 
 adi_ip_properties_lite i3c_controller_core
@@ -65,6 +65,17 @@ adi_add_bus "sdio" "slave" \
 		{"sdi"       "SDI_DATA"} \
 	}
 adi_add_bus_clock "clk" "sdio" "reset_n"
+
+adi_add_bus "rmap" "slave" \
+	"analog.com:interface:i3c_controller_rmap_rtl:1.0" \
+	"analog.com:interface:i3c_controller_rmap:1.0" \
+	{
+		{"rmap_daa_status_in_progress" "RMAP_DAA_STATUS_IN_PROGRESS"} \
+		{"rmap_daa_status_registered"  "RMAP_DAA_STATUS_REGISTERED"} \
+		{"rmap_daa_peripheral_index"   "RMAP_DAA_PERIPHERAL_INDEX"} \
+		{"rmap_daa_peripheral_da"      "RMAP_DAA_PERIPHERAL_DA"} \
+	}
+adi_add_bus_clock "i3c_clk" "rmap" "i3c_reset_n" "master"
 
 adi_set_ports_dependency "clk_bus" \
       "(spirit:decode(id('MODELPARAM_VALUE.ASYNC_I3C_CLK')) = 1)"

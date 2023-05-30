@@ -54,31 +54,30 @@ module i3c_controller_cmd_parser #(
   input  wire cmd_valid,
   input  wire [31:0] cmd,
 
+  input  wire cmdr_ready,
+  output wire cmdr_valid,
+  output wire [31:0] cmdr,
+
   // Command parsed
 
   output wire        cmdp_valid,
   input  wire        cmdp_ready,
-  output reg         cmdp_ccc,
-  output reg         cmdp_ccc_bcast,
-  output reg  [6:0]  cmdp_ccc_id,
-  output reg         cmdp_bcast_header,
-  output reg  [1:0]  cmdp_xmit,
-  output reg         cmdp_sr,
-  output reg  [11:0] cmdp_buffer_len,
-  output reg  [6:0]  cmdp_da,
-  output reg         cmdp_rnw,
+  output wire        cmdp_ccc,
+  output wire        cmdp_ccc_bcast,
+  output wire [6:0]  cmdp_ccc_id,
+  output wire        cmdp_bcast_header,
+  output wire [1:0]  cmdp_xmit,
+  output wire        cmdp_sr,
+  output wire [11:0] cmdp_buffer_len,
+  output wire [6:0]  cmdp_da,
+  output wire        cmdp_rnw,
   output wire        cmdp_do_daa,
   input  wire        cmdp_do_daa_ready
 );
-  wire        cmd_ccc;
-  wire        cmd_ccc_bcast;
-  wire [6:0]  cmd_ccc_id;
-  wire        cmd_bcast_header;
-  wire [1:0]  cmd_xmit;
-  wire        cmd_sr;
-  wire [11:0] cmd_buffer_len;
-  wire [6:0]  cmd_da;
-  wire        cmd_rnw;
+  wire cmd_ccc;
+  wire [6:0] cmd_ccc_id;
+  reg [31:0] cmdr1;
+  reg [31:0] cmdr2;
 
   localparam [6:0] CCC_ENTDAA = 7'd7;
 
@@ -90,44 +89,57 @@ module i3c_controller_cmd_parser #(
     daa_await  = 3,
     daa_await_ready = 4;
 
+  reg [1:0] smr;
+  localparam [1:0]
+    await     = 0,
+    cmd1      = 1,
+    cmd2      = 2;
+
   always @(posedge clk) begin
     if (!reset_n) begin
-      sm <= receive;
+      sm  <= receive;
+      smr <= await;
     end else begin
       case (sm)
         receive: begin
-          cmdp_ccc              <= cmd_ccc;
-          cmdp_bcast_header     <= cmd_bcast_header;
-          cmdp_xmit             <= cmd_xmit;
-          cmdp_sr               <= cmd_sr;
-          cmdp_buffer_len       <= cmd_buffer_len;
-          cmdp_da               <= cmd_da;
-          cmdp_rnw              <= cmd_rnw;
-
+          cmdr1 <= cmd;
           // !cmdp_do_daa_ready disables the interface until daa is finished.
-          if (cmd_valid & cmdp_do_daa_ready) begin
+          if (cmd_valid & cmdp_do_daa_ready & cmdr_ready) begin
             sm <= cmd_ccc ? ccc_await : xfer_await;
           end else begin
             sm <= receive;
           end
         end
         xfer_await: begin
-          sm <= cmdp_ready ? receive : sm;
+          sm <= cmdp_ready & cmdr_ready ? receive : sm;
         end
         ccc_await: begin
-          cmdp_ccc_bcast <= cmd_ccc_bcast;
-          cmdp_ccc_id    <= cmd_ccc_id;
-
+          cmdr2 <= cmd;
           sm <= cmd_valid ? (cmd_ccc_id == CCC_ENTDAA ? daa_await : xfer_await) : sm;
         end
         daa_await: begin
           sm <= !cmdp_do_daa_ready ? daa_await_ready : sm;
         end
         daa_await_ready: begin
-          sm <= cmdp_do_daa_ready ? receive : sm;
+          sm <= cmdp_do_daa_ready & cmdr_ready ? receive : sm;
         end
         default: begin
           sm <= receive;
+        end
+      endcase
+
+      case (smr)
+        await: begin
+          smr <= (sm == xfer_await & cmdp_ready) | (sm == daa_await_ready & cmdp_do_daa_ready) ? cmd1 : await;
+        end
+        cmd1: begin
+          smr <= cmdr_ready ? (cmdp_ccc ? cmd2 : await) : smr;
+        end
+        cmd2: begin
+          smr <= cmdr_ready ? await : smr;
+        end
+        default: begin
+          smr <= await;
         end
       endcase
     end
@@ -137,13 +149,18 @@ module i3c_controller_cmd_parser #(
   assign cmdp_valid   = sm == xfer_await & reset_n;
   assign cmdp_do_daa  = sm == daa_await & reset_n;
 
-  assign cmd_ccc              = cmd[30];
-  assign cmd_ccc_bcast        = cmd[7];
-  assign cmd_ccc_id           = cmd[6:0];
-  assign cmd_bcast_header     = cmd[29];
-  assign cmd_xmit             = cmd[28:27];
-  assign cmd_sr               = cmd[25];
-  assign cmd_buffer_len       = cmd[23:12];
-  assign cmd_da               = cmd[07:01];
-  assign cmd_rnw              = cmd[00];
+  assign cmd_ccc               = cmd  [30];
+  assign cmdp_ccc              = cmdr1[30];
+  assign cmdp_ccc_bcast        = cmdr2[7];
+  assign cmdp_ccc_id           = cmdr2[6:0];
+  assign cmd_ccc_id            = cmd  [6:0];
+  assign cmdp_bcast_header     = cmdr1[29];
+  assign cmdp_xmit             = cmdr1[28:27];
+  assign cmdp_sr               = cmdr1[25];
+  assign cmdp_buffer_len       = cmdr1[23:12];
+  assign cmdp_da               = cmdr1[07:01];
+  assign cmdp_rnw              = cmdr1[00];
+
+  assign cmdr = smr == cmd2 ? cmdr2 : cmdr1;
+  assign cmdr_valid = smr == cmd1 | smr == cmd2;
 endmodule

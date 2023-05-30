@@ -34,7 +34,7 @@
 // ***************************************************************************
 
 `timescale 1ns/100ps
-`default_nettype none
+`default_nettype wire
 
 module i3c_controller_host_interface #(
   parameter DATA_WIDTH = 32, // Const
@@ -145,6 +145,10 @@ module i3c_controller_host_interface #(
     .cmd_ready(cmd_ready),
     .cmd_valid(cmd_valid),
     .cmd(cmd),
+
+    .cmdr_ready(cmdr_ready),
+    .cmdr_valid(cmdr_valid),
+    .cmdr(cmdr),
 
     .cmdp_valid(cmdp_valid),
     .cmdp_ready(cmdp_ready_w),

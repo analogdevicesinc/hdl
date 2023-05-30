@@ -65,7 +65,7 @@
  * ~: push-pull high
  * _: low
  * ~-: either pp or od
- * The clk_bus is scaled depending on the requirements, e.g. in open-drain, is
+ * The clk_1 is scaled depending on the requirements, e.g. in open-drain, is
  * slower and must be in synced with clk.
  */
 
@@ -75,8 +75,8 @@
 
 module i3c_controller_bit_mod (
   input wire reset_n,
-  input wire clk, // 100MHz
-  input wire clk_bus, // 100Mhz, 50MHz
+  input wire clk_0, // 100MHz
+  input wire clk_1, // 100Mhz, 50MHz
 
   // Bit Modulation Command
 
@@ -138,7 +138,7 @@ module i3c_controller_bit_mod (
     endcase
   end
 
-  always @(posedge clk) begin
+  always @(posedge clk_0) begin
     if (!reset_n) begin
       reset_n_ctl <= 1'b0;
     end else if (reset_n_clr) begin
@@ -150,7 +150,7 @@ module i3c_controller_bit_mod (
     cmd_ready_ctrl <= i == i_ & cmd[`MOD_BIT_CMD_WIDTH:2] != `MOD_BIT_CMD_NOP_;
   end
 
-  always @(posedge clk_bus) begin
+  always @(posedge clk_1) begin
     rx_nack_reg[0]  <= 1'b0;
     rx_valid_reg[0] <= 1'b0;
     rx_stop_reg[0]  <= 1'b0;
