@@ -173,14 +173,14 @@ set_instance_parameter_value mxfe_rx_dma {MAX_BYTES_PER_BURST} {4096}
 
 # mxfe gpio
 
-add_instance avl_mxfe_gpio altera_avalon_pio
-set_instance_parameter_value avl_mxfe_gpio {direction} {Bidir}
-set_instance_parameter_value avl_mxfe_gpio {generateIRQ} {1}
-set_instance_parameter_value avl_mxfe_gpio {width} {19}
-add_connection sys_clk.clk avl_mxfe_gpio.clk
-add_connection sys_clk.clk_reset avl_mxfe_gpio.reset
+add_instance mxfe_gpio altera_avalon_pio
+set_instance_parameter_value mxfe_gpio {direction} {Input}
+set_instance_parameter_value mxfe_gpio {generateIRQ} {1}
+set_instance_parameter_value mxfe_gpio {width} {15}
+add_connection sys_clk.clk mxfe_gpio.clk
+add_connection sys_clk.clk_reset mxfe_gpio.reset
 add_interface mxfe_gpio conduit end
-set_interface_property mxfe_gpio EXPORT_OF avl_mxfe_gpio.external_connection
+set_interface_property mxfe_gpio EXPORT_OF mxfe_gpio.external_connection
 
 #
 ## clocks and resets
@@ -354,7 +354,8 @@ ad_cpu_interconnect 0x000D2000 mxfe_rx_tpl.s_axi
 ad_cpu_interconnect 0x000D4000 mxfe_tx_tpl.s_axi
 ad_cpu_interconnect 0x000D8000 mxfe_rx_dma.s_axi
 ad_cpu_interconnect 0x000DC000 mxfe_tx_dma.s_axi
-ad_cpu_interconnect 0x000E0000 avl_mxfe_gpio.s1
+# ad_cpu_interconnect 0x000E0000 mxfe_sync.s1
+ad_cpu_interconnect 0x000E0000 mxfe_gpio.s1
 
 #
 ## interrupts
@@ -364,6 +365,6 @@ ad_cpu_interrupt 11  mxfe_rx_dma.interrupt_sender
 ad_cpu_interrupt 12  mxfe_tx_dma.interrupt_sender
 ad_cpu_interrupt 13  mxfe_rx_jesd204.interrupt
 ad_cpu_interrupt 14  mxfe_tx_jesd204.interrupt
-ad_cpu_interrupt 15  avl_mxfe_gpio.irq
+ad_cpu_interrupt 15  mxfe_gpio.irq
 
 

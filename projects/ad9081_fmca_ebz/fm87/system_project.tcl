@@ -156,15 +156,15 @@ set_location_assignment PIN_U44    -to "fpga_syncout_0"      ; ## D08  LA01_CC_P
 # set_location_assignment PIN_AB43   -to "fpga_syncout_1_n"    ; ## C11  LA06_N
 # set_location_assignment PIN_AA42   -to "fpga_syncout_1_p"    ; ## C10  LA06_P
 set_location_assignment PIN_W44    -to "gpio[0]"             ; ## H19  LA15_P
-#set_location_assignment PIN_Y45    -to "gpio[1]"             ; ## H20  LA15_N
+set_location_assignment PIN_Y45    -to "gpio[1]"             ; ## H20  LA15_N
 set_location_assignment PIN_J48    -to "gpio[2]"             ; ## H22  LA19_P
-#set_location_assignment PIN_K49    -to "gpio[3]"             ; ## H23  LA19_N
+set_location_assignment PIN_K49    -to "gpio[3]"             ; ## H23  LA19_N
 set_location_assignment PIN_E60    -to "gpio[4]"             ; ## D17  LA13_P
-#set_location_assignment PIN_D61    -to "gpio[5]"             ; ## D18  LA13_N
+set_location_assignment PIN_D61    -to "gpio[5]"             ; ## D18  LA13_N
 set_location_assignment PIN_J56    -to "gpio[6]"             ; ## C18  LA14_P
-#set_location_assignment PIN_K57    -to "gpio[7]"             ; ## C19  LA14_N
+set_location_assignment PIN_K57    -to "gpio[7]"             ; ## C19  LA14_N
 set_location_assignment PIN_W42    -to "gpio[8]"             ; ## G18  LA16_P
-#set_location_assignment PIN_Y43    -to "gpio[9]"             ; ## G19  LA16_N
+set_location_assignment PIN_Y43    -to "gpio[9]"             ; ## G19  LA16_N
 set_location_assignment PIN_B59    -to "gpio[10]"            ; ## G25  LA22_N
 set_location_assignment PIN_T47    -to "hmc_gpio1"           ; ## H17  LA11_N
 set_location_assignment PIN_Y47    -to "hmc_sync"            ; ## H14  LA07_N
@@ -227,15 +227,15 @@ set_instance_assignment -name IO_STANDARD "1.2 V" -to agc2[1]
 set_instance_assignment -name IO_STANDARD "1.2 V" -to agc3[0]
 set_instance_assignment -name IO_STANDARD "1.2 V" -to agc3[1]
 set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio[0]
-#set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio[1]
+set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio[1]
 set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio[2]
-#set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio[3]
+set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio[3]
 set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio[4]
-#set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio[5]
+set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio[5]
 set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio[6]
-#set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio[7]
+set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio[7]
 set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio[8]
-#set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio[9]
+set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio[9]
 set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio[10]
 set_instance_assignment -name IO_STANDARD "1.2 V" -to hmc_gpio1
 set_instance_assignment -name IO_STANDARD "1.2 V" -to hmc_sync
