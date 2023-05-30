@@ -126,11 +126,11 @@ module system_top #(
   input   [RX_JESD_L-1:0] rx_data,
   output  [TX_JESD_L-1:0] tx_data,
   input                   fpga_syncin_0,
-  inout                   fpga_syncin_1_n,
-  inout                   fpga_syncin_1_p,
+  output                  fpga_syncin_1_n,
+  output                  fpga_syncin_1_p,
   output                  fpga_syncout_0,
-  inout                   fpga_syncout_1_n,
-  inout                   fpga_syncout_1_p,
+  output                  fpga_syncout_1_n,
+  output                  fpga_syncout_1_p,
   input                   sysref2,
 
   // spi
@@ -147,7 +147,7 @@ module system_top #(
   input   [1:0]           agc1,
   input   [1:0]           agc2,
   input   [1:0]           agc3,
-  inout   [10:0]          gpio,
+  output  [10:0]          gpio,
   inout                   hmc_gpio1,
   output                  hmc_sync,
   input   [1:0]           irqb,
@@ -161,8 +161,6 @@ module system_top #(
   wire  [43:0]  stm_hw_events;
   wire  [31:0]  f2h_irq1;
 
-  wire          hps_mem_cal_success;
-  wire          hps_mem_cal_fail;
   wire  [ 9:0]  gpio_bd_i;
   wire  [ 7:0]  gpio_bd_o;
   wire  [63:0]  gpio_i;
@@ -194,17 +192,40 @@ module system_top #(
                     1'b0;
 
   // assignments
-  assign gpio_i[63:32] = gpio_o[63:32];
+
+  assign hmc_gpio1 = gpio_o[43];
+
+  assign gpio_i[44] = agc0[0];
+  assign gpio_i[45] = agc0[1];
+  assign gpio_i[46] = agc1[0];
+  assign gpio_i[47] = agc1[1];
+  assign gpio_i[48] = agc2[0];
+  assign gpio_i[49] = agc2[1];
+  assign gpio_i[50] = agc3[0];
+  assign gpio_i[51] = agc3[1];
+  assign gpio_i[52] = irqb[0];
+  assign gpio_i[53] = irqb[1];
+
+  assign hmc_sync   = gpio_o[54];
+  assign rstb       = gpio_o[55];
+  assign rxen[0]    = gpio_o[56];
+  assign rxen[1]    = gpio_o[57];
+  assign txen[0]    = gpio_o[58];
+  assign txen[1]    = gpio_o[59];
 
   // board stuff
   assign gpio_i[31:19] = gpio_o[31:19];
 
-  assign gpio_i[18:18] = hps_mem_cal_success;
-  assign gpio_i[17:17] = hps_mem_cal_fail;
+  assign gpio_i[18:18] = 1'b1;
+  assign gpio_i[17:17] = 1'b0;
   assign gpio_i[16:15] = gpio_bd_i[9:8]; // buttons
   assign gpio_i[14: 7] = gpio_bd_i[7:0]; // dipsws
   assign gpio_i[ 6: 0] = gpio_o[6:0];    // leds
+
   assign gpio_bd_o     = gpio_o[6:0];
+
+  assign gpio_i[63:59] = gpio_o[63:59];
+  assign gpio_i[43:32] = gpio_o[43:32];
 
   assign f2h_irq1      = 32'b0;
   assign stm_hw_events = 44'b0;
@@ -213,11 +234,11 @@ module system_top #(
   // instantiations
 
   system_bd i_system_bd (
-    .mxfe_gpio_export ({fpga_syncout_1_n,  // 14
-                        fpga_syncout_1_p,  // 13
-                        fpga_syncin_1_n,   // 12
-                        fpga_syncin_1_p,   // 11
-                        gpio}),            // 10 :0
+    .mxfe_gpio_export                          ({fpga_syncout_1_n,  // 14
+                                                 fpga_syncout_1_p,  // 13
+                                                 fpga_syncin_1_n,   // 12
+                                                 fpga_syncin_1_p,   // 11
+                                                 gpio}),            // 10:0
     .sys_clk_clk                               (sys_clk),
     .sys_hps_io_hps_osc_clk                    (hps_io_ref_clk),
 
@@ -325,18 +346,18 @@ module system_top #(
     .sys_spi_SCLK                              (spi_clk),
     .sys_spi_SS_n                              (spi_csn_s),
 
-    .tx_serial_data_tx_serial_data (tx_data[TX_JESD_L-1:0]),
-    .tx_ref_clk_clk (refclk_fgt_2),
-    .tx_sync_export (fpga_syncin_0),
-    .tx_sysref_export (sysref2),
-    .tx_device_clk_clk (clkin6),
-    .rx_serial_data_rx_serial_data (rx_data[RX_JESD_L-1:0]),
-    .rx_ref_clk_clk (refclk_fgt_2),
-    .rx_sync_export (fpga_syncout_0),
-    .rx_sysref_export (sysref2),
-    .rx_device_clk_clk (clkin6),
-    .ref_clk_in_in_refclk_fgt_2 (fpga_refclk_in),
-    .ref_clk_fgt_2_clk (refclk_fgt_2)
+    .tx_serial_data_tx_serial_data             (tx_data[TX_JESD_L-1:0]),
+    .tx_ref_clk_clk                            (refclk_fgt_2),
+    .tx_sync_export                            (fpga_syncin_0),
+    .tx_sysref_export                          (sysref2),
+    .tx_device_clk_clk                         (clkin6),
+    .rx_serial_data_rx_serial_data             (rx_data[RX_JESD_L-1:0]),
+    .rx_ref_clk_clk                            (refclk_fgt_2),
+    .rx_sync_export                            (fpga_syncout_0),
+    .rx_sysref_export                          (sysref2),
+    .rx_device_clk_clk                         (clkin6),
+    .ref_clk_in_in_refclk_fgt_2                (fpga_refclk_in),
+    .ref_clk_fgt_2_clk                         (refclk_fgt_2)
    // .ref_clk_clk (ref_clk),
    // .ref_clk_in_in_refclk_fgt_2 (refclk_fgt_2)
   );
