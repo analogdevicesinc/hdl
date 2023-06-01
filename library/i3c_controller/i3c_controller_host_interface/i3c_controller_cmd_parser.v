@@ -72,46 +72,54 @@ module i3c_controller_cmd_parser #(
   output wire [6:0]  cmdp_da,
   output wire        cmdp_rnw,
   output wire        cmdp_do_daa,
-  input  wire        cmdp_do_daa_ready
+  input  wire        cmdp_do_daa_ready,
+
+  input  wire rd_bytes_ready,
+  output wire rd_bytes_valid,
+  input  wire wr_bytes_ready,
+  output wire wr_bytes_valid
 );
   wire cmd_ccc;
   wire [6:0] cmd_ccc_id;
-  reg [31:0] cmdr1;
-  reg [31:0] cmdr2;
+  reg  [31:0] cmdr1;
+  reg  [31:0] cmdr2;
 
   localparam [6:0] CCC_ENTDAA = 7'd7;
 
   reg [2:0] sm;
   localparam [2:0]
-    receive    = 0,
-    xfer_await = 1,
-    ccc_await  = 2,
-    daa_await  = 3,
-    daa_await_ready = 4;
-
-  reg [1:0] smr;
-  localparam [1:0]
-    await     = 0,
-    cmd1      = 1,
-    cmd2      = 2;
+    receive      = 0,
+    buffer_setup = 1,
+    xfer_await   = 2,
+    ccc_await    = 3,
+    daa_await    = 4,
+    daa_await_ready = 5,
+    receipt_1   = 6,
+    receipt_2   = 7;
 
   always @(posedge clk) begin
     if (!reset_n) begin
       sm  <= receive;
-      smr <= await;
     end else begin
       case (sm)
         receive: begin
           cmdr1 <= cmd;
           // !cmdp_do_daa_ready disables the interface until daa is finished.
-          if (cmd_valid & cmdp_do_daa_ready & cmdr_ready) begin
-            sm <= cmd_ccc ? ccc_await : xfer_await;
+          if (cmd_valid & cmdp_do_daa_ready) begin
+            sm <= buffer_setup;
           end else begin
             sm <= receive;
           end
         end
+        buffer_setup: begin
+          if ((rd_bytes_ready & !cmdp_rnw) | (wr_bytes_ready & cmdp_rnw)) begin
+            sm <= cmd_ccc ? ccc_await : xfer_await;
+          end else begin
+            sm <= sm;
+          end
+        end
         xfer_await: begin
-          sm <= cmdp_ready & cmdr_ready ? receive : sm;
+          sm <= cmdp_ready ? receipt_1 : sm;
         end
         ccc_await: begin
           cmdr2 <= cmd;
@@ -121,25 +129,16 @@ module i3c_controller_cmd_parser #(
           sm <= !cmdp_do_daa_ready ? daa_await_ready : sm;
         end
         daa_await_ready: begin
-          sm <= cmdp_do_daa_ready & cmdr_ready ? receive : sm;
+          sm <= cmdp_do_daa_ready ? receipt_1 : sm;
+        end
+        receipt_1: begin
+          sm <= cmdr_ready ? (cmdp_ccc ? receipt_2 : receive) : sm;
+        end
+        receipt_2: begin
+          sm <= cmdr_ready ? receive : sm;
         end
         default: begin
           sm <= receive;
-        end
-      endcase
-
-      case (smr)
-        await: begin
-          smr <= (sm == xfer_await & cmdp_ready) | (sm == daa_await_ready & cmdp_do_daa_ready) ? cmd1 : await;
-        end
-        cmd1: begin
-          smr <= cmdr_ready ? (cmdp_ccc ? cmd2 : await) : smr;
-        end
-        cmd2: begin
-          smr <= cmdr_ready ? await : smr;
-        end
-        default: begin
-          smr <= await;
         end
       endcase
     end
@@ -161,6 +160,9 @@ module i3c_controller_cmd_parser #(
   assign cmdp_da               = cmdr1[07:01];
   assign cmdp_rnw              = cmdr1[00];
 
-  assign cmdr = smr == cmd2 ? cmdr2 : cmdr1;
-  assign cmdr_valid = smr == cmd1 | smr == cmd2;
+  assign cmdr = sm == receipt_2 ? cmdr2 : cmdr1;
+  assign cmdr_valid = sm == receipt_1 | sm == receipt_2;
+
+  assign rd_bytes_valid = (sm == buffer_setup & ~cmdp_rnw);
+  assign wr_bytes_valid = (sm == buffer_setup &  cmdp_rnw);
 endmodule

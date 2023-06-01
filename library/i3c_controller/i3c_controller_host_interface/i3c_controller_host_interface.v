@@ -94,10 +94,7 @@ module i3c_controller_host_interface #(
   input  wire [7:0] sdi_u8
 );
   wire rd_bytes_valid;
-  wire rd_bytes_ready;
   wire wr_bytes_valid;
-  wire wr_bytes_ready;
-  wire cmdp_ready_w;
 
   i3c_controller_read_byte #(
   ) i_i3c_controller_read_byte (
@@ -151,7 +148,7 @@ module i3c_controller_host_interface #(
     .cmdr(cmdr),
 
     .cmdp_valid(cmdp_valid),
-    .cmdp_ready(cmdp_ready_w),
+    .cmdp_ready(cmdp_ready),
     .cmdp_ccc(cmdp_ccc),
     .cmdp_ccc_bcast(cmdp_ccc_bcast),
     .cmdp_ccc_id(cmdp_ccc_id),
@@ -162,10 +159,11 @@ module i3c_controller_host_interface #(
     .cmdp_da(cmdp_da),
     .cmdp_rnw(cmdp_rnw),
     .cmdp_do_daa(cmdp_do_daa),
-    .cmdp_do_daa_ready(cmdp_do_daa_ready)
-  );
+    .cmdp_do_daa_ready(cmdp_do_daa_ready),
 
-  assign rd_bytes_valid = (cmdp_valid & ~cmdp_ccc & cmdp_rnw);
-  assign wr_bytes_valid = (cmdp_valid & ~cmdp_ccc & ~cmdp_rnw);
-  assign cmdp_ready_w = (wr_bytes_ready & rd_bytes_ready & cmdp_ready);
+    .rd_bytes_ready(rd_bytes_ready),
+    .rd_bytes_valid(rd_bytes_valid),
+    .wr_bytes_ready(wr_bytes_ready),
+    .wr_bytes_valid(wr_bytes_valid)
+  );
 endmodule

@@ -82,7 +82,6 @@ module i3c_controller_word #(
   wire [`CMDW_HEADER_WIDTH:0] cmdw_header;
   wire [`CMDW_HEADER_WIDTH+8:0] cmdw;
   reg cmd_ready_reg;
-  reg cmd_lock;
 
   reg [7:0] cmdw_body;
   reg [`CMDW_HEADER_WIDTH:0] sm;
@@ -114,7 +113,6 @@ module i3c_controller_word #(
       `CMDW_BCAST_7E_W1     : i_ =  8; // 7'h7e+RnW=1+ACK
       `CMDW_PROV_ID_BCR_DCR : i_ = 63; // 48-bitUniqueID+BCR+DCR
       `CMDW_DYN_ADDR        : i_ =  8; // DA+T+ACK
-      default               : i_ =  0;
     endcase
 
     case (sm)
@@ -136,7 +134,6 @@ module i3c_controller_word #(
   end
 
   always @(posedge clk) begin
-    cmd_lock <= 1'b0;
     do_ack <= 1'b0;
     do_rx_t <= 1'b0;
     cmdw_nack <= 1'b0;
@@ -151,7 +148,7 @@ module i3c_controller_word #(
       cmd <= `MOD_BIT_CMD_STOP_OD;
       cmdw_nack <= 1'b1;
       clk_clr <= 1'b1;
-    end else if (cmd_ready & ~cmd_lock) begin
+    end else if (cmd_ready) begin
       sm <= i == i_ ? cmdw_header : sm;
       cmdw_body <= i == i_ ? cmdw[7:0] : cmdw_body;
       i <= sm == `CMDW_NOP ? 0 : (i == i_ ? 0 : i + 1);
@@ -161,7 +158,6 @@ module i3c_controller_word #(
         end
         `CMDW_START: begin
           cmd <= `MOD_BIT_CMD_START_OD;
-          cmd_lock <= 1'b1;
         end
         `CMDW_BCAST_7E_W0: begin
           if (i == 7) begin

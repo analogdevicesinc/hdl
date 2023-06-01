@@ -100,89 +100,101 @@ module i3c_controller_framing #(
   reg [`CMDW_HEADER_WIDTH:0] sm;
   reg [7:0] cmdw_body;
   reg cmdw_ready_reg;
+  reg sr;
+
+  localparam [0:0]
+    setup    = 0,
+    transfer = 1;
+  reg [0:0] smt;
 
   always @(posedge clk) begin
     cmdw_ready_reg <= cmdw_ready;
-    if (reset_n) begin
-      if (sm == `CMDW_NOP & cmdp_valid_w) begin
-        sm <= `CMDW_START;
-        sdi_valid <= 1'b0;
-        sdi <= 8'd0;
-      end
-    end else begin
-      sdi_valid <= cmdw_rx_valid;
-      sdi <= cmdw_rx[7:0];
-    end
     if (!reset_n | cmdw_nack) begin
-      sm <= `CMDW_NOP;
+      smt <= setup;
+      sm  <= `CMDW_NOP;
       cmdw_body <= 8'h00;
-    end else if (cmdw_ready) begin
-      if (sm == `CMDW_NOP | ((sm == `CMDW_MSG_TX | sm == `CMDW_MSG_RX | sm == `CMDW_CCC) & cmdp_buffer_len_reg == 0)) begin
-        cmdp_ccc_reg          <= cmdp_ccc;
-        cmdp_ccc_bcast_reg    <= cmdp_ccc_bcast;
-        cmdp_ccc_id_reg       <= cmdp_ccc_id;
-        cmdp_bcast_header_reg <= cmdp_bcast_header;
-        cmdp_xmit_reg         <= cmdp_xmit;
-        cmdp_sr_reg           <= cmdp_sr;
-        cmdp_buffer_len_reg   <= cmdp_buffer_len;
-        cmdp_da_reg           <= cmdp_da;
-        cmdp_rnw_reg          <= cmdp_rnw;
-      end
-
-      // Sr from cmdp_sr is ignored if no cmdp to be sampled at the
-      // correct time.
+    end else begin
       // SDIO Ready/Valid are not monitored, data will be lost and gibberish
       // will be sent if they do not accept/provide data when needed.
-      case (sm)
-        `CMDW_NOP: begin
+      case (smt)
+        setup: begin
+          sr <= cmdw_ready ? 1'b0 : sr;
+          sm <= cmdp_valid_w ? (cmdw_ready | ~sr ? `CMDW_START : `CMDW_MSG_SR) : (cmdw_ready ? `CMDW_NOP : sm);
+          smt <= cmdp_valid_w ? transfer : setup;
+          cmdp_ccc_reg          <= cmdp_ccc;
+          cmdp_ccc_bcast_reg    <= cmdp_ccc_bcast;
+          cmdp_ccc_id_reg       <= cmdp_ccc_id;
+          cmdp_bcast_header_reg <= cmdp_bcast_header;
+          cmdp_xmit_reg         <= cmdp_xmit;
+          cmdp_sr_reg           <= cmdp_sr;
+          cmdp_buffer_len_reg   <= cmdp_buffer_len;
+          cmdp_da_reg           <= cmdp_da;
+          cmdp_rnw_reg          <= cmdp_rnw;
         end
-        `CMDW_START: begin
-          cmdw_body <= {cmdp_da, cmdp_rnw}; // Attention to RnW here
-          sm <= ~cmdp_bcast_header_reg & ~cmdp_ccc_reg ? `CMDW_TARGET_ADDR_OD : `CMDW_BCAST_7E_W0;
-        end
-        `CMDW_BCAST_7E_W0: begin
-          sm <= cmdp_ccc_reg ? `CMDW_CCC : `CMDW_MSG_SR;
-          cmdw_body   <= {cmdp_ccc_bcast_reg, cmdp_ccc_id_reg}; // Attention to BCAST here
-        end
-        `CMDW_CCC: begin
-          sm <= cmdp_ccc_bcast_reg ? `CMDW_MSG_SR :
-            (cmdp_buffer_len_reg == 0 ? (cmdp_sr_reg & cmdp_valid_w ? `CMDW_MSG_SR : `CMDW_STOP) : `CMDW_MSG_TX);
-        end
-        `CMDW_MSG_SR: begin
-          cmdw_body   <= {cmdp_da, cmdp_rnw}; // Attention to RnW here
-          sm <= `CMDW_TARGET_ADDR_PP;
-        end
-        `CMDW_TARGET_ADDR_OD,
-        `CMDW_TARGET_ADDR_PP: begin
-          cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
-          cmdw_body <= sdo; // Don't matter for RX
-          sm <= cmdp_rnw_reg ? `CMDW_MSG_RX : `CMDW_MSG_TX;
-        end
-        `CMDW_MSG_RX: begin
-          cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
-          sm <= cmdp_buffer_len_reg == 0 ? (cmdp_sr_reg & cmdp_valid_w ? `CMDW_MSG_SR : `CMDW_STOP) : `CMDW_MSG_RX;
-        end
-        `CMDW_MSG_TX: begin
-          cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
-          sm <= cmdp_buffer_len_reg == 0 ? (cmdp_sr_reg & cmdp_valid_w ? `CMDW_MSG_SR : `CMDW_STOP) : `CMDW_MSG_TX;
-          cmdw_body   <= sdo;
-        end
-        `CMDW_STOP: begin
-          sm <= `CMDW_NOP;
-        end
-        default: begin
-          sm <= `CMDW_NOP;
+        transfer: begin
+          sr <= cmdp_sr_reg;
+          if (cmdw_ready) begin
+            case(sm)
+              `CMDW_NOP: begin
+                smt <= setup;
+              end
+              `CMDW_START: begin
+                cmdw_body <= {cmdp_da, cmdp_rnw}; // Attention to RnW here
+                sm <= ~cmdp_bcast_header_reg & ~cmdp_ccc_reg ? `CMDW_TARGET_ADDR_OD : `CMDW_BCAST_7E_W0;
+              end
+              `CMDW_BCAST_7E_W0: begin
+                sm <= cmdp_ccc_reg ? `CMDW_CCC : `CMDW_MSG_SR;
+                cmdw_body   <= {cmdp_ccc_bcast_reg, cmdp_ccc_id_reg}; // Attention to BCAST here
+              end
+              `CMDW_CCC: begin
+                if (cmdp_ccc_bcast_reg) begin
+                  sm <= `CMDW_MSG_SR;
+                end else if (cmdp_buffer_len_reg == 0) begin
+                  sm  <= `CMDW_STOP;
+                  smt <= sr ? setup : transfer;
+                end else begin
+                  sm <= `CMDW_MSG_TX;
+                end
+              end
+              `CMDW_MSG_SR: begin
+                cmdw_body   <= {cmdp_da, cmdp_rnw}; // Attention to RnW here
+                sm <= `CMDW_TARGET_ADDR_PP;
+              end
+              `CMDW_TARGET_ADDR_OD,
+              `CMDW_TARGET_ADDR_PP: begin
+                cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
+                cmdw_body <= sdo; // Don't matter for RX
+                sm <= cmdp_rnw_reg ? `CMDW_MSG_RX : `CMDW_MSG_TX;
+              end
+              `CMDW_MSG_RX: begin
+                cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
+                if (cmdp_buffer_len_reg == 0) begin
+                  sm  <= `CMDW_STOP;
+                  smt <= sr ? setup : transfer;
+                end
+              end
+              `CMDW_MSG_TX: begin
+                cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
+                cmdw_body   <= sdo;
+                if (cmdp_buffer_len_reg == 0) begin
+                  sm  <= `CMDW_STOP;
+                  smt <= sr ? setup : transfer;
+                end
+              end
+              `CMDW_STOP: begin
+                sm <= `CMDW_NOP;
+              end
+              default: begin
+                sm <= `CMDW_NOP;
+              end
+            endcase
+          end
         end
       endcase
-    end else begin
-      sm <= sm;
     end
   end
 
-  assign cmdp_ready = (sm == `CMDW_NOP |
-                       ((sm == `CMDW_MSG_TX | sm == `CMDW_MSG_RX | sm == `CMDW_CCC)
-                       & cmdp_buffer_len_reg == 0)
-                      ) & reset_n & !cmdw_nack & cmdw_ready_reg;
+  assign cmdp_ready = smt == setup & reset_n & !cmdw_nack;
   assign sdo_ready = ((
                         (sm == `CMDW_TARGET_ADDR_OD | sm == `CMDW_TARGET_ADDR_PP)
                         & !cmdp_rnw_reg

@@ -104,14 +104,14 @@ module i3c_controller_bit_mod (
 
   reg pp;
   reg [2:0] i ;
-  reg [2:0] i_;
+  reg [2:0] i_ = 7;
   reg [7:0] scl_;
   reg [7:0] sdi_;
 
   reg [1:0] rx_valid_reg;
   reg [1:0] rx_stop_reg;
   reg [1:0] rx_nack_reg;
-  reg cmd_ready_ctrl;
+  reg cmd_ready_reg;
 
   reg  [1:0] st;
   reg  [`MOD_BIT_CMD_WIDTH:2] sm;
@@ -120,11 +120,6 @@ module i3c_controller_bit_mod (
   reg scl_reg;
 
   always @(sm) begin
-    case (sm)
-      `MOD_BIT_CMD_NOP_ : i_ = 0;
-      default           : i_ = 7;
-    endcase
-
     case (sm)
       `MOD_BIT_CMD_STOP_     : scl_ = 8'b00011111;
       default                : scl_ = 8'b00011100;
@@ -141,13 +136,22 @@ module i3c_controller_bit_mod (
   always @(posedge clk_0) begin
     if (!reset_n) begin
       reset_n_ctl <= 1'b0;
+      sm  <= `MOD_BIT_CMD_NOP_;
     end else if (reset_n_clr) begin
       reset_n_ctl <= 1'b1;
-    end
+	end else begin
+      if (cmd_ready) begin
+        sm <= cmd[`MOD_BIT_CMD_WIDTH:2];
+        st <= cmd[1:0];
+      end else begin
+        sm <= sm;
+        st <= st;
+      end
+	end
     rx_valid_reg [1] <= rx_valid_reg [0];
     rx_stop_reg  [1] <= rx_stop_reg  [0];
     rx_nack_reg  [1] <= rx_nack_reg  [0];
-    cmd_ready_ctrl <= i == i_ & cmd[`MOD_BIT_CMD_WIDTH:2] != `MOD_BIT_CMD_NOP_;
+    cmd_ready_reg <= cmd_ready;
   end
 
   always @(posedge clk_1) begin
@@ -156,7 +160,6 @@ module i3c_controller_bit_mod (
     rx_stop_reg[0]  <= 1'b0;
     if (!reset_n_ctl) begin
       reset_n_clr <= 1'b1;
-      sm  <= `MOD_BIT_CMD_NOP_;
       scl <= 1'b1;
       sdi <= 1'b1;
       pp  <= 1'b0;
@@ -164,15 +167,10 @@ module i3c_controller_bit_mod (
     end else begin
       reset_n_clr <= 1'b0;
 
-      if (i == i_) begin
-        sm <= cmd[`MOD_BIT_CMD_WIDTH:2];
-        st <= cmd[1:0];
-        i  <= 0;
-      end else begin
-        sm <= sm;
-        st <= st;
-        i  <= i + 1;
-      end
+      case (sm)
+        `MOD_BIT_CMD_NOP_: i <= 0;
+        default:  i <= i == i_ ? 0 : i + 1;
+      endcase
 
       scl <= scl_[7-i];
       sdi <= sdi_[7-i];
@@ -227,7 +225,6 @@ module i3c_controller_bit_mod (
           pp  <= 1'b0;
         end
         default: begin
-          sm <= `MOD_BIT_CMD_NOP_;
         end
       endcase
     end
@@ -240,6 +237,6 @@ module i3c_controller_bit_mod (
   assign rx_nack  = rx_nack_reg [0] & ~rx_nack_reg [1];
   assign rx = sdo_reg;
 
-  assign cmd_ready = i == i_ & ~cmd_ready_ctrl & reset_n;
+  assign cmd_ready = ((i == i_ & ~cmd_ready_reg) | sm == `MOD_BIT_CMD_NOP_) & reset_n;
   assign t = ~pp & sdi ? 1'b1 : 1'b0;
 endmodule
