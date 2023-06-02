@@ -1,6 +1,6 @@
 # Primary clock definitions
 
-# Set clocks depending on the requested LANE_RATE paramter from the util_adxcvr block
+# Set clocks depending on the requested LANE_RATE parameter from the util_adxcvr block
 # Maximum values for Link clock:
 # 204B - 15.5 Gbps /40 = 387.5MHz
 # 204C - 24.75 Gbps /66 = 375MHz
@@ -26,7 +26,7 @@ set tx_device_clk [expr $tx_link_clk*$tx_ll_width/$tx_tpl_width]
 set rx_device_clk_period [expr 1000/$rx_device_clk]
 set tx_device_clk_period [expr 1000/$tx_device_clk]
 
-# refclk and refclk_replica are connect to the same source on the PCB
+# refclk and refclk_replica are connected to the same source on the PCB
 # Set reference clock to same frequency as the link clock,
 # this will ease the XCVR out clocks propagation calculation.
 # TODO: this restricts RX_LANE_RATE=TX_LANE_RATE
