@@ -307,13 +307,10 @@ module dual_mxfe_gpio_mux (
 
   //loopback unused gpios
   assign gpio_i[68:67] = gpio_o[68:67];
-  assign gpio_i[107:79] = gpio_o[107:79];
+  assign gpio_i[127:79] = gpio_o[127:79];
 
   // 0 - Software controlled GPIO
   // 1 - LMFC based Master-Slave NCO Sync
   assign gpio0_mode = gpio_o[108];
-
-  //loopback unused gpios
-  assign gpio_i[127:108] = gpio_o[127:108];
 
 endmodule
