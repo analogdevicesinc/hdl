@@ -111,9 +111,7 @@ module i3c_controller_host_interface #(
 
     .u8_ready(sdo_u8_ready),
     .u8_valid(sdo_u8_valid),
-    .u8(sdo_u8),
-
-    .debug_u32_underflow()
+    .u8(sdo_u8)
   );
 
   i3c_controller_write_byte #(

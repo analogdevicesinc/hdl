@@ -11,7 +11,7 @@ i3c_controller_create $hier_i3c_controller $async_i3c_clk
 ad_ip_instance axi_clkgen i3c_clkgen
 ad_ip_parameter i3c_clkgen CONFIG.ENABLE_CLKOUT1 true
 ad_ip_parameter i3c_clkgen CONFIG.CLK0_DIV 8
-ad_ip_parameter i3c_clkgen CONFIG.CLK1_DIV 16
+ad_ip_parameter i3c_clkgen CONFIG.CLK1_DIV 32
 ad_ip_parameter i3c_clkgen CONFIG.VCO_DIV 1
 ad_ip_parameter i3c_clkgen CONFIG.VCO_MUL 8
 

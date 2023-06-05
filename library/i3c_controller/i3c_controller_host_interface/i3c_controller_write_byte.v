@@ -58,48 +58,50 @@ module i3c_controller_write_byte (
   input  wire u8_valid,
   input  wire [7:0] u8
 );
-  reg [0:0] sm;
-  localparam [0:0]
+  reg [1:0] sm;
+  localparam [1:0]
     idle     = 0,
-    transfer = 1;
+    transfer = 1,
+    move     = 2;
 
   reg [11:0] u8_len_reg;
   reg [7:0] u32_reg [3:0];
-  reg u32_valid_ctrl;
   reg [1:0] c;
 
   always @(posedge clk) begin
     if (!reset_n) begin
       sm <= idle;
       c <= 2'b00;
-      u32_valid_ctrl <= 1'b0;
     end else begin
       case (sm)
         idle: begin
           u8_len_reg <= u8_len;
           sm <= u8_len_valid & u32_ready ? transfer : idle;
           c <= 2'b00;
-          u32_valid_ctrl <= 1'b0;
         end
         transfer: begin
           if (u8_valid) begin // tick
-            u32_valid_ctrl <= 1'b1;
             u32_reg[c] <= u8;
             u8_len_reg <= u8_len_reg - 1;
             c <= c + 1;
-
-            if (~|u8_len_reg) begin
-              sm <= idle;
+            if (c == 2'b11 | u8_len_reg == 12'd1) begin
+              sm <= move;
             end
           end
+        end
+        move: begin
+          sm <= u32_ready ? (~|u8_len_reg ? idle : transfer) : sm;
+        end
+        default: begin
+          sm <= idle;
         end
       endcase
     end
   end
 
   assign u8_len_ready = sm == idle;
-  assign u8_ready = (sm == transfer & u32_ready);
-  assign u32_valid = (sm == transfer & (c == 2'b00 || u8_len_reg == 12'd0) & u8_valid & u32_valid_ctrl);
+  assign u8_ready = (sm == transfer & |u8_len_reg);
+  assign u32_valid = sm == move;
   genvar i;
   for (i=0; i<4; i=i+1) begin
     assign u32[8*i+7:8*i] = u32_reg[3-i];

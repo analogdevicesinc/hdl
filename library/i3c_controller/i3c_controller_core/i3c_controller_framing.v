@@ -69,11 +69,8 @@ module i3c_controller_framing #(
   input  wire [7:0] sdo,
 
   input  wire sdi_ready,
-  output reg sdi_valid,
-  output reg [7:0] sdi,
-  // TODO: What happens when got NACK?
-  // should it empty SDO until LEN 0?
-  // And SDI?
+  output wire sdi_valid,
+  output wire [7:0] sdi,
 
   // Word command
 
@@ -99,23 +96,25 @@ module i3c_controller_framing #(
 
   reg [`CMDW_HEADER_WIDTH:0] sm;
   reg [7:0] cmdw_body;
-  reg cmdw_ready_reg;
   reg sr;
 
-  localparam [0:0]
-    setup    = 0,
-    transfer = 1;
-  reg [0:0] smt;
+  localparam [1:0]
+    setup      = 0,
+    transfer   = 1,
+    setup_sdo  = 2,
+    cleanup    = 3;
+  reg [1:0] smt;
 
   always @(posedge clk) begin
-    cmdw_ready_reg <= cmdw_ready;
-    if (!reset_n | cmdw_nack) begin
-      smt <= setup;
+    if (!reset_n) begin
       sm  <= `CMDW_NOP;
-      cmdw_body <= 8'h00;
+      smt <= setup;
+    end else if (cmdw_nack) begin
+      sm  <= `CMDW_NOP;
+      smt <= cleanup;
     end else begin
-      // SDIO Ready/Valid are not monitored, data will be lost and gibberish
-      // will be sent if they do not accept/provide data when needed.
+      // SDI Ready is are not checked, data will be lost
+      // if it do not accept/provide data when needed.
       case (smt)
         setup: begin
           sr <= cmdw_ready ? 1'b0 : sr;
@@ -153,7 +152,9 @@ module i3c_controller_framing #(
                   sm  <= `CMDW_STOP;
                   smt <= sr ? setup : transfer;
                 end else begin
-                  sm <= `CMDW_MSG_TX;
+                  smt <= setup_sdo;
+                  sm  <= `CMDW_STOP;
+                  sm  <= `CMDW_NOP;
                 end
               end
               `CMDW_MSG_SR: begin
@@ -163,8 +164,12 @@ module i3c_controller_framing #(
               `CMDW_TARGET_ADDR_OD,
               `CMDW_TARGET_ADDR_PP: begin
                 cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
-                cmdw_body <= sdo; // Don't matter for RX
-                sm <= cmdp_rnw_reg ? `CMDW_MSG_RX : `CMDW_MSG_TX;
+                if (cmdp_rnw_reg) begin
+                  sm <= `CMDW_MSG_RX;
+                end else begin
+                  smt <= setup_sdo;
+                  sm  <= `CMDW_NOP;
+                end
               end
               `CMDW_MSG_RX: begin
                 cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
@@ -175,14 +180,17 @@ module i3c_controller_framing #(
               end
               `CMDW_MSG_TX: begin
                 cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
-                cmdw_body   <= sdo;
                 if (cmdp_buffer_len_reg == 0) begin
-                  sm  <= `CMDW_STOP;
                   smt <= sr ? setup : transfer;
+                  sm  <= `CMDW_STOP;
+                end else begin
+                  smt <= setup_sdo;
+                  sm  <= `CMDW_NOP;
                 end
               end
               `CMDW_STOP: begin
                 sm <= `CMDW_NOP;
+                cmdp_sr_reg <= 1'b0;
               end
               default: begin
                 sm <= `CMDW_NOP;
@@ -190,17 +198,34 @@ module i3c_controller_framing #(
             endcase
           end
         end
+        setup_sdo: begin
+          if (sdo_valid) begin
+            sm  <= `CMDW_MSG_TX;
+            smt <= transfer;
+          end
+          cmdw_body <= sdo;
+        end
+        cleanup: begin
+          // The peripheral did not ACK the transfer, so it is cancelled.
+          // the SDO data is discarted
+          if (sdo_valid) begin
+            smt <= cmdp_buffer_len_reg == 0 ? setup : smt;
+            cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
+          end
+        end
+        default: begin
+          smt <= setup;
+        end
       endcase
     end
   end
 
   assign cmdp_ready = smt == setup & reset_n & !cmdw_nack;
-  assign sdo_ready = ((
-                        (sm == `CMDW_TARGET_ADDR_OD | sm == `CMDW_TARGET_ADDR_PP)
-                        & !cmdp_rnw_reg
-                      ) | (sm == `CMDW_MSG_TX & cmdp_buffer_len_reg != 0))
-                      & cmdw_ready_reg & reset_n;
+  assign sdo_ready = (smt == setup_sdo | smt == cleanup) & reset_n;
   assign cmdw = {sm, cmdw_body};
-  assign cmdw_rx_ready = sdi_ready;
   assign cmdp_valid_w = cmdp_valid & cmdp_do_daa_ready;
+
+  assign cmdw_rx_ready = sdi_ready;
+  assign sdi_valid = cmdw_rx_valid;
+  assign sdi = cmdw_rx;
 endmodule

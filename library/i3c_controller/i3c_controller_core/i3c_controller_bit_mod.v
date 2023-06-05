@@ -67,6 +67,8 @@
  * ~-: either pp or od
  * The clk_1 is scaled depending on the requirements, e.g. in open-drain, is
  * slower and must be in synced with clk.
+ *
+ * Note: clk_1 must be at least 3x slower than clk_0.
  */
 
 `timescale 1ns/100ps
@@ -76,7 +78,8 @@
 module i3c_controller_bit_mod (
   input wire reset_n,
   input wire clk_0, // 100MHz
-  input wire clk_1, // 100Mhz, 50MHz
+  input wire clk_1, // 12.5MHz
+  input wire clk_sel,
 
   // Bit Modulation Command
 
@@ -99,7 +102,7 @@ module i3c_controller_bit_mod (
   output wire t
 );
 
-  reg reset_n_ctl;
+  reg reset_n_ctrl;
   reg reset_n_clr;
 
   reg pp;
@@ -111,7 +114,6 @@ module i3c_controller_bit_mod (
   reg [1:0] rx_valid_reg;
   reg [1:0] rx_stop_reg;
   reg [1:0] rx_nack_reg;
-  reg cmd_ready_reg;
 
   reg  [1:0] st;
   reg  [`MOD_BIT_CMD_WIDTH:2] sm;
@@ -135,51 +137,59 @@ module i3c_controller_bit_mod (
 
   always @(posedge clk_0) begin
     if (!reset_n) begin
-      reset_n_ctl <= 1'b0;
+      reset_n_ctrl <= 1'b0;
       sm  <= `MOD_BIT_CMD_NOP_;
+      cmd_ready_reg_ctrl <= 1'b0;
     end else if (reset_n_clr) begin
-      reset_n_ctl <= 1'b1;
+      reset_n_ctrl <= 1'b1;
 	end else begin
-      if (cmd_ready) begin
-        sm <= cmd[`MOD_BIT_CMD_WIDTH:2];
-        st <= cmd[1:0];
+      if (cmd_ready_reg | sm == `MOD_BIT_CMD_NOP_) begin
+        if (!cmd_ready_reg_ctrl) begin
+          sm <= cmd[`MOD_BIT_CMD_WIDTH:2];
+          st <= cmd[1:0];
+        end
       end else begin
         sm <= sm;
         st <= st;
+      end
+      if (cmd_ready_reg) begin
+        cmd_ready_reg_ctrl <= 1'b1;
+      end else begin
+        cmd_ready_reg_ctrl <= 1'b0;
       end
 	end
     rx_valid_reg [1] <= rx_valid_reg [0];
     rx_stop_reg  [1] <= rx_stop_reg  [0];
     rx_nack_reg  [1] <= rx_nack_reg  [0];
-    cmd_ready_reg <= cmd_ready;
   end
 
+  reg cmd_ready_reg;
+  reg cmd_ready_reg_ctrl;
   always @(posedge clk_1) begin
     rx_nack_reg[0]  <= 1'b0;
     rx_valid_reg[0] <= 1'b0;
     rx_stop_reg[0]  <= 1'b0;
-    if (!reset_n_ctl) begin
+    if (!reset_n_ctrl) begin
       reset_n_clr <= 1'b1;
       scl <= 1'b1;
       sdi <= 1'b1;
       pp  <= 1'b0;
       i   <= 0;
+      cmd_ready_reg <= 1'b0;
     end else begin
       reset_n_clr <= 1'b0;
 
-      case (sm)
-        `MOD_BIT_CMD_NOP_: i <= 0;
-        default:  i <= i == i_ ? 0 : i + 1;
-      endcase
+      i <= sm == `MOD_BIT_CMD_NOP_ ? 0 : i + 1;
+      cmd_ready_reg <= (i == i_ - 1 & clk_sel) | (i == i_ & ~clk_sel);
 
       scl <= scl_[7-i];
       sdi <= sdi_[7-i];
       pp  <= st[1];
       case (sm)
         `MOD_BIT_CMD_NOP_: begin
-          sdi <= 1'b1;
+          sdi <= sdi;
           pp  <= 1'b0;
-          scl <= 1'b1;
+          scl <= scl;
         end
         `MOD_BIT_CMD_WRITE_: begin
           sdi <= st[0];
@@ -237,6 +247,6 @@ module i3c_controller_bit_mod (
   assign rx_nack  = rx_nack_reg [0] & ~rx_nack_reg [1];
   assign rx = sdo_reg;
 
-  assign cmd_ready = ((i == i_ & ~cmd_ready_reg) | sm == `MOD_BIT_CMD_NOP_) & reset_n;
+  assign cmd_ready = (cmd_ready_reg | sm == `MOD_BIT_CMD_NOP_) & !cmd_ready_reg_ctrl & reset_n;
   assign t = ~pp & sdi ? 1'b1 : 1'b0;
 endmodule

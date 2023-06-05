@@ -178,8 +178,7 @@ module i3c_controller_core #(
     .rx_valid(rx_valid),
     .rx_stop(rx_stop),
     .rx_nack(rx_nack),
-    .clk_sel(clk_sel),
-    .clk_clr(clk_clr)
+    .clk_sel(clk_sel)
   );
 
   i3c_controller_clk_div #(
@@ -187,7 +186,6 @@ module i3c_controller_core #(
   ) i_i3c_controller_clk_div (
     .reset_n(reset_n),
     .sel(clk_sel),
-    .clr(clk_clr),
     .cmd_ready(cmd_ready),
     .clk_0(clk_0),
     .clk_1(clk_1),
@@ -199,6 +197,7 @@ module i3c_controller_core #(
     .reset_n(reset_n),
     .clk_0(clk_0),
     .clk_1(clk_out),
+    .clk_sel(clk_sel),
     .cmd(cmd),
     .cmd_ready(cmd_ready),
     .rx(rx),

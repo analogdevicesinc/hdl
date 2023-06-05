@@ -75,8 +75,7 @@ module i3c_controller_word #(
 
   // Modulation clock selection
 
-  output reg clk_sel,
-  output reg clk_clr
+  output wire clk_sel
 );
 
   wire [`CMDW_HEADER_WIDTH:0] cmdw_header;
@@ -91,9 +90,11 @@ module i3c_controller_word #(
   localparam [6:0]
     I3C_RESERVED = 7'h7e;
 
-  reg do_ack; // Peripheral did NACK?
-  reg do_rx_t; // Peripheral end Message at T in Read Data?
+  reg [1:0] do_ack; // Peripheral did NACK?
+  reg [1:0] do_rx_t; // Peripheral end Message at T in Read Data?
   reg rx_sampled;
+  reg clk_sel_lut;
+  reg [1:0] clk_sel_reg;
 
   reg [5:0] i;
   reg [5:0] i_;
@@ -113,42 +114,44 @@ module i3c_controller_word #(
       `CMDW_BCAST_7E_W1     : i_ =  8; // 7'h7e+RnW=1+ACK
       `CMDW_PROV_ID_BCR_DCR : i_ = 63; // 48-bitUniqueID+BCR+DCR
       `CMDW_DYN_ADDR        : i_ =  8; // DA+T+ACK
+      default               : i_ =  0;
     endcase
 
     case (sm)
-      `CMDW_NOP             : clk_sel = 0;
-      `CMDW_START           : clk_sel = 0;
-      `CMDW_BCAST_7E_W0     : clk_sel = 0;
-      `CMDW_CCC             : clk_sel = 1;
-      `CMDW_TARGET_ADDR_OD  : clk_sel = 0;
-      `CMDW_TARGET_ADDR_PP  : clk_sel = 1;
-      `CMDW_MSG_SR          : clk_sel = 1;
-      `CMDW_MSG_RX          : clk_sel = 1;
-      `CMDW_MSG_TX          : clk_sel = 1;
-      `CMDW_STOP            : clk_sel = 1;
-      `CMDW_BCAST_7E_W1     : clk_sel = 0;
-      `CMDW_PROV_ID_BCR_DCR : clk_sel = 0;
-      `CMDW_DYN_ADDR        : clk_sel = 0;
-      default               : clk_sel = 0;
+      `CMDW_NOP             : clk_sel_lut = 0;
+      `CMDW_START           : clk_sel_lut = 0;
+      `CMDW_BCAST_7E_W0     : clk_sel_lut = 0;
+      `CMDW_CCC             : clk_sel_lut = 1;
+      `CMDW_TARGET_ADDR_OD  : clk_sel_lut = 0;
+      `CMDW_TARGET_ADDR_PP  : clk_sel_lut = 1;
+      `CMDW_MSG_SR          : clk_sel_lut = 1;
+      `CMDW_MSG_RX          : clk_sel_lut = 1;
+      `CMDW_MSG_TX          : clk_sel_lut = 1;
+      `CMDW_STOP            : clk_sel_lut = 1;
+      `CMDW_BCAST_7E_W1     : clk_sel_lut = 0;
+      `CMDW_PROV_ID_BCR_DCR : clk_sel_lut = 0;
+      `CMDW_DYN_ADDR        : clk_sel_lut = 0;
+      default               : clk_sel_lut = 0;
       endcase
   end
 
   always @(posedge clk) begin
-    do_ack <= 1'b0;
-    do_rx_t <= 1'b0;
     cmdw_nack <= 1'b0;
     cmdw_rx_valid_reg <= 1'b0;
-    clk_clr <= 1'b0;
     if (!reset_n) begin
       cmd <= `MOD_BIT_CMD_NOP;
       sm <= `CMDW_NOP;
       i <= 0;
-    end if ((do_ack & rx_nack) | (do_rx_t & rx_stop)) begin
+      clk_sel_reg <= 2'b00;
+    end if ((do_ack[1] & rx_nack) | (do_rx_t[1] & rx_stop)) begin
       sm <= `CMDW_NOP;
       cmd <= `MOD_BIT_CMD_STOP_OD;
       cmdw_nack <= 1'b1;
-      clk_clr <= 1'b1;
+      clk_sel_reg <= 2'b00;
     end else if (cmd_ready) begin
+      clk_sel_reg <= {clk_sel_reg[0], clk_sel_lut};
+      do_ack  <= {do_ack[0], 1'b0};
+      do_rx_t <= {do_rx_t[0], 1'b0};
       sm <= i == i_ ? cmdw_header : sm;
       cmdw_body <= i == i_ ? cmdw[7:0] : cmdw_body;
       i <= sm == `CMDW_NOP ? 0 : (i == i_ ? 0 : i + 1);
@@ -166,7 +169,7 @@ module i3c_controller_word #(
           end else if (i == 8) begin
             // ACK
             cmd <= `MOD_BIT_CMD_ACK_SDR;
-            do_ack <= 1'b1;
+            do_ack[0] <= 1'b1;
           end else begin
             // 7'h7e
             cmd <= {`MOD_BIT_CMD_WRITE_,1'b0,I3C_RESERVED[6 - i[2:0]]};
@@ -179,7 +182,7 @@ module i3c_controller_word #(
           end else if (i == 8) begin
             // ACK
             cmd <= `MOD_BIT_CMD_ACK_SDR;
-            do_ack <= 1'b1;
+            do_ack[0] <= 1'b1;
           end else begin
             // 7'h7e
             cmd <= {`MOD_BIT_CMD_WRITE_,1'b1,I3C_RESERVED[6 - i[2:0]]};
@@ -191,10 +194,10 @@ module i3c_controller_word #(
           if (i == 8) begin
             // ACK
             cmd <= `MOD_BIT_CMD_ACK_SDR;
-            do_ack <= 1'b1;
+            do_ack[0] <= 1'b1;
           end else begin
             // DA+RnW/DA+T
-            cmd <= {`MOD_BIT_CMD_WRITE_,clk_sel,cmdw_body[7 - i[2:0]]};
+            cmd <= {`MOD_BIT_CMD_WRITE_,clk_sel_lut,cmdw_body[7 - i[2:0]]};
           end
         end
         `CMDW_MSG_SR: begin
@@ -205,7 +208,7 @@ module i3c_controller_word #(
             cmdw_rx_valid_reg <= 1'b1;
             // T
             if (cmdw_rx_ready) begin
-              do_rx_t <= 1'b1;
+              do_rx_t[0] <= 1'b1;
               cmd <= `MOD_BIT_CMD_T_READ_CONT; // continue, if peripheral wishes to do so
             end else begin
               cmd <= `MOD_BIT_CMD_T_READ_STOP; // stop
@@ -247,4 +250,5 @@ module i3c_controller_word #(
   assign cmdw_header = cmdw[`CMDW_HEADER_WIDTH+8 -: `CMDW_HEADER_WIDTH+1];
   assign cmdw_rx = cmdw_rx_reg[7:0];
   assign cmdw_rx_valid = cmdw_rx_valid_reg & cmd_ready_reg;
+  assign clk_sel = clk_sel_reg[1];
 endmodule

@@ -34,10 +34,6 @@
 // ***************************************************************************
 /**
  * Unpacks u32 packages into u8 stream.
- * Restrictions:
- * "u32" must have enough elements, won't stall on ~u32_valid,
- * with exception of the first item, when both u8_len_valid and u32_valid
- * must be high at the same time to initiate the transfer.
  * Length must be > 0
  */
 
@@ -58,19 +54,16 @@ module i3c_controller_read_byte (
 
   input  wire u8_ready,
   output wire u8_valid,
-  output wire [7:0] u8,
-
-  output reg debug_u32_underflow
+  output wire [7:0] u8
 );
-  reg [0:0] sm;
-  localparam [0:0]
+  reg [1:0] sm;
+  localparam [1:0]
     idle     = 0,
-    transfer = 1;
+    move     = 1,
+    transfer = 2;
 
   reg [11:0] u8_len_reg;
   reg [31:0] u32_reg;
-  wire [9:0] i;
-  wire [1:0] j;
   reg  [1:0] c;
 
   always @(posedge clk) begin
@@ -81,22 +74,19 @@ module i3c_controller_read_byte (
       case (sm)
         idle: begin
           u8_len_reg <= u8_len - 1;
-          sm <= u8_len_valid & u32_valid ? transfer : idle;
+          sm <= u8_len_valid ? move : idle;
+          c <= 2'b00;
+        end
+        move: begin
+          sm <= u32_valid ? transfer : sm;
           u32_reg <= u32;
-          c <= 2'b11;
         end
         transfer: begin
           if (u8_ready) begin // tick
-            if (~|i && j == ~c) begin
-                sm <= idle;
-            end
-            if (c == 2'd0) begin
-              u8_len_reg <= u8_len_reg - 12'b100;
-              u32_reg <= u32;
-            end else begin
-              u32_reg <= u32_reg << 8;
-            end
-            c <= c - 1;
+            u8_len_reg <= u8_len_reg - 12'b1;
+            sm <= ~|u8_len_reg ? idle : (c == 2'b11 ? move : sm);
+            c <= c + 1;
+            u32_reg <= u32_reg << 8;
           end
         end
         default: begin
@@ -106,29 +96,8 @@ module i3c_controller_read_byte (
     end
   end
 
-  // Debug signals
-  always @(posedge clk) begin
-    if (~reset_n) begin
-      debug_u32_underflow <= 1'b0;
-    end else begin
-      case (sm)
-        idle: begin
-          debug_u32_underflow <= ~u32_valid & u8_len_valid;
-        end
-        transfer: begin
-          if (u8_ready & |i & j == 2'd0) begin
-            debug_u32_underflow <= ~u32_valid;
-          end
-        end
-      endcase
-
-    end
-  end
-
   assign u8_len_ready = sm == idle;
-  assign u32_ready = (sm == idle & u8_len_valid & u32_valid) || (sm == transfer & u8_ready & |i & c == 2'b00);
-  assign u8_valid = (sm == transfer);
-  assign j = u8_len_reg[1:0];
-  assign i = u8_len_reg[11:2];
+  assign u32_ready = sm == move;
+  assign u8_valid = sm == transfer;
   assign u8 = u32_reg[31:24];
 endmodule
