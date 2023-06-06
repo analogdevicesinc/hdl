@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2018 (c) Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2018-2023 Analog Devices, Inc. All rights reserved.
 //
 // Each core or library found in this collection may have its own licensing terms.
 // The user should keep this in in mind while exploring these cores.

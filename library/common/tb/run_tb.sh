@@ -1,3 +1,7 @@
+##############################################################################
+## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+##############################################################################
+
 export NAME=`basename $0`
 
 # MODE not defined or defined to something else than 'batch'

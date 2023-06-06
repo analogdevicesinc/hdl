@@ -1,3 +1,6 @@
+// ***************************************************************************
+// ***************************************************************************
+// Copyright (C) 2020-2023 Analog Devices, Inc. All rights reserved.
 //
 // The ADI JESD204 Core is released under the following license, which is
 // different than all other HDL cores in this repository.
@@ -5,7 +8,7 @@
 // Please read this, and understand the freedoms and responsibilities you have
 // by using this source code/core.
 //
-// The JESD204 HDL, is copyright © 2016-2017 Analog Devices Inc.
+// The JESD204 HDL, is copyright © 2020-2023 Analog Devices Inc.
 //
 // This core is free software, you can use run, copy, study, change, ask
 // questions about and improve this core. Distribution of source, or resulting
@@ -39,8 +42,7 @@
 // to do so; it is up to your common sense to decide whether you want to comply
 // with this request or not.) For general publications, we suggest referencing :
 // “The design and implementation of the JESD204 HDL Core used in this project
-// is copyright © 2016-2017, Analog Devices, Inc.”
-//
+// is copyright © 2020-2023, Analog Devices, Inc.”
 
 `timescale 1ns/100ps
 
