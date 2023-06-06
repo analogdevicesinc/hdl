@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 
 ##############################################################################
-########################### HOW TO USE THIS SCRIPT ###########################
-##############################################################################
-##
+## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+#
 ## Check readme_check_guideline.md from the same folder, for more details.
-##
 ##############################################################################
 
 import os
@@ -114,12 +113,14 @@ def string_in_list (module_path, modified_files):
 ###############################################################################
 #
 # Check if file has correct properties, meaning that the file extension has to
-# be .v/.sv and it should not be some certain files.
+# be .v  and it should not be some certain files (.sv, tb)
 # Returns true or false.
 ###############################################################################
 def check_filename (filename):
 
-    if (filename.endswith('.v') == False and filename.endswith('.sv') == False):
+    if (filename.endswith('.v') == False):
+        return False
+    if (filename.endswith('.sv') == True):
         return False
     if (filename.find("tb") != -1):
         return False
@@ -261,7 +262,7 @@ def get_digit (number, n):
 # check for the license header.
 ###############################################################################
 avoid_list = []
-avoid_list.append("jesd")
+#avoid_list.append("jesd")
 avoid_list.append("fir_interp")
 avoid_list.append("cic_interp")
 
@@ -280,43 +281,43 @@ def header_check_allowed (module_path):
 # until the current year
 # or just the current year, if this is the first commit.
 ###############################################################################
-def check_license (list_of_lines, lw, edit_files):
+def check_copyright (list_of_lines, lw, edit_files):
 
     currentYear = datetime.now().year
-    license_header = """// ***************************************************************************
-// ***************************************************************************
-// Copyright """ + str(currentYear) + """ (c) Analog Devices, Inc. All rights reserved.
-//
-// In this HDL repository, there are many different and unique modules, consisting
-// of various HDL (Verilog or VHDL) components. The individual modules are
-// developed independently, and may be accompanied by separate and unique license
-// terms.
-//
-// The user should read each of these license terms, and understand the
-// freedoms and responsibilities that he or she has by using this source/core.
-//
-// This core is distributed in the hope that it will be useful, but WITHOUT ANY
-// WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-// A PARTICULAR PURPOSE.
-//
-// Redistribution and use of source or resulting binaries, with or without modification
-// of this file, are permitted under one of the following two license terms:
-//
-//   1. The GNU General Public License version 2 as published by the
-//      Free Software Foundation, which can be found in the top level directory
-//      of this repository (LICENSE_GPL2), and also online at:
-//      <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
-//
-// OR
-//
-//   2. An ADI specific BSD license, which can be found in the top level directory
-//      of this repository (LICENSE_ADIBSD), and also on-line at:
-//      https://github.com/analogdevicesinc/hdl/blob/master/LICENSE_ADIBSD
-//      This will allow to generate bit files and not release the source code,
-//      as long as it attaches to an ADI device.
-//
-// ***************************************************************************
-// ***************************************************************************"""
+#    license_header = """// ***************************************************************************
+#// ***************************************************************************
+#// Copyright (C) """ + str(currentYear) + """ Analog Devices, Inc. All rights reserved.
+#//
+#// In this HDL repository, there are many different and unique modules, consisting
+#// of various HDL (Verilog or VHDL) components. The individual modules are
+#// developed independently, and may be accompanied by separate and unique license
+#// terms.
+#//
+#// The user should read each of these license terms, and understand the
+#// freedoms and responsibilities that he or she has by using this source/core.
+#//
+#// This core is distributed in the hope that it will be useful, but WITHOUT ANY
+#// WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+#// A PARTICULAR PURPOSE.
+#//
+#// Redistribution and use of source or resulting binaries, with or without modification
+#// of this file, are permitted under one of the following two license terms:
+#//
+#//   1. The GNU General Public License version 2 as published by the
+#//      Free Software Foundation, which can be found in the top level directory
+#//      of this repository (LICENSE_GPL2), and also online at:
+#//      <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
+#//
+#// OR
+#//
+#//   2. An ADI specific BSD license, which can be found in the top level directory
+#//      of this repository (LICENSE_ADIBSD), and also on-line at:
+#//      https://github.com/analogdevicesinc/hdl/blob/master/LICENSE_ADIBSD
+#//      This will allow to generate bit files and not release the source code,
+#//      as long as it attaches to an ADI device.
+#//
+#// ***************************************************************************
+#// ***************************************************************************"""
 
     changed = False
     template_matches = True
@@ -328,43 +329,45 @@ def check_license (list_of_lines, lw, edit_files):
 
     # if this is the line with the Copyright year
     line_nb = 2
-    ## from [13-23] is the range of years
-    ## or [13-16] is the year
+    ## from [17-25] is the range of years
+    ## [17-20] is the beginning year
+    ## [21] is the dash [-]
+    ## [22-25] is the last year
     aux = list(list_of_lines[line_nb])
     # match a year range
-    match = re.match(r'.*(Copyright\s20[0-9]{2}\s[-]\s20[0-9]{2}\s\(c\))', list_of_lines[line_nb])
+    match = re.match(r'.*(Copyright\s\(C\)\s20[0-9]{2}[-]20[0-9]{2})', list_of_lines[line_nb])
     if (match is not None):
-        # only the last year must be updated (chars [20-23])
+        # only the last year must be updated (chars [22-25])
         c1 = str(get_digit(currentYear, 3))
         c2 = str(get_digit(currentYear, 2))
         c3 = str(get_digit(currentYear, 1))
         c4 = str(get_digit(currentYear, 0))
 
         # if already set to current year, then no edits and no warnings
-        if (aux[20] == c1 and aux[21] == c2 and aux[22] == c3 and aux[23] == c4):
+        if (aux[22] == c1 and aux[23] == c2 and aux[24] == c3 and aux[25] == c4):
             changed = False
         else:
-            aux[20] = c1
-            aux[21] = c2
-            aux[22] = c3
-            aux[23] = c4
+            aux[22] = c1
+            aux[23] = c2
+            aux[24] = c3
+            aux[25] = c4
+            #list_of_lines[line_nb] = "// Copyright (C) " + list_of_lines[line_nb][17] + list_of_lines[line_nb][18] + list_of_lines[line_nb][19] + list_of_lines[line_nb][20] + "-" + str(currentYear) + " Analog Devices, Inc. All rights reserved.\n"
             changed = True
     else:
         # match a single year
-        match = re.match(r'.*(Copyright\s20[0-9]{2}\s\(c\))', list_of_lines[line_nb])
+        match = re.match(r'.*(Copyright\s\(C\)\s20[0-9]{2})', list_of_lines[line_nb])
 
         if (match is not None):
             ## if the year is different than the currentYear,
-            ## then must make a year range [13-23]
-            year = aux[13] + aux[14] + aux[15] + aux[16]
+            ## then must make a year range [17-25]
+            year = aux[17] + aux[18] + aux[19] + aux[20]
             if (year != str(currentYear)):
-                aux.insert(17, ' ')
-                aux.insert(18, '-')
-                aux.insert(19, ' ')
-                aux.insert(20, str(get_digit(currentYear, 3)))
-                aux.insert(21, str(get_digit(currentYear, 2)))
-                aux.insert(22, str(get_digit(currentYear, 1)))
-                aux.insert(23, str(get_digit(currentYear, 0)))
+                aux.insert(21, '-')
+                aux.insert(22, str(get_digit(currentYear, 3)))
+                aux.insert(23, str(get_digit(currentYear, 2)))
+                aux.insert(24, str(get_digit(currentYear, 1)))
+                aux.insert(25, str(get_digit(currentYear, 0)))
+                #list_of_lines[line_nb] = "// Copyright (C) " + str(year) + "-" + str(currentYear) + " Analog Devices, Inc. All rights reserved.\n"
                 changed = True
             else:
                 changed = False
@@ -382,10 +385,15 @@ def check_license (list_of_lines, lw, edit_files):
     if (not changed and template_matches):
         header_status = 2
 
-    # files cannot be updated and header is not up-to-date
+    # files not to be edited and header is not up-to-date
     if (not edit_files and changed and template_matches):
-        lw.append(module_path + " : license header is not updated")
+        lw.append(module_path + " : license header cannot be updated")
         header_status = 3
+
+    # template doesn't match
+    if (not template_matches):
+        lw.append(module_path + " : copyright template doesn't match")
+        header_status = 4
 
     return header_status
 
@@ -410,11 +418,11 @@ def get_and_check_module (module_path, lw, edit_files):
     ## do not check the license status for the files that must be avoided,
     ## since it doesn't apply
     if (header_check_allowed(module_path)):
-        header_status = check_license(list_of_lines, lw, edit_files)
+        header_status = check_copyright(list_of_lines, lw, edit_files)
         # GC: check if the license header is updated
         if (header_status == -1):
             edited = False
-            lw.append(module_path + " : license header doesn't match the pattern for the Copyright year")
+            lw.append(module_path + " : copyright text doesn't match the pattern for the Copyright year")
     else:
         header_status = -1
 
