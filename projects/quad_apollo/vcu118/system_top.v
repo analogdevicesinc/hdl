@@ -104,6 +104,15 @@ module system_top (
   input         ltc6953_sdo,  
   output  [1:0] ltc6953_csn,
 
+  output  [3:0] hsci_ckin_p,
+  output  [3:0] hsci_ckin_n,
+  output  [3:0] hsci_din_p,
+  output  [3:0] hsci_din_n,
+  input   [3:0] hsci_cko_p,
+  input   [3:0] hsci_cko_n,
+  input   [3:0] hsci_do_p,
+  input   [3:0] hsci_do_n,
+
   output  [3:0] trig0_a,
   output  [3:0] trig1_a,
   output  [3:0] trig0_b,
@@ -159,6 +168,20 @@ module system_top (
   wire            rx_device_clk;
   wire            tx_device_clk;
 
+  wire            pll_inclk;
+  wire    [ 0:1]  hsci_pll_reset;
+  wire    [ 0:1]  hsci_pclk;
+  wire    [ 0:1]  hsci_pll_locked;
+  wire    [ 0:3]  hsci_vtc_rdy_bsc_tx;
+  wire    [ 0:3]  hsci_dly_rdy_bsc_tx;
+  wire    [ 0:3]  hsci_vtc_rdy_bsc_rx;
+  wire    [ 0:3]  hsci_dly_rdy_bsc_rx;
+  wire    [ 0:1]  hsci_rst_seq_done;
+
+  wire            selectio_clk_in;
+  wire    [ 7:0]  hsci_data_in  [0:3];
+  wire    [ 7:0]  hsci_data_out [0:3];
+
   assign iic_rstn = 1'b1;
 
   // instantiations
@@ -200,6 +223,10 @@ module system_top (
   BUFG i_rx_device_clk (
     .I (clkin1),
     .O (rx_device_clk));
+
+  BUFG i_selectio_clk_in(
+    .I (selectio_clk_in),
+    .O (pll_inclk));
 
   // spi
 
@@ -287,6 +314,42 @@ module system_top (
 
   assign gpio_i[127:101] = gpio_o[127:101];
   assign gpio_i[ 31:17] = gpio_o[ 31:17];
+
+  hsci_phy_top hsci_phy_top(
+    .pll_inclk        (pll_inclk),
+    .hsci_pll_reset   (hsci_pll_reset),
+
+    .hsci_pclk        (hsci_pclk),
+    .hsci_mosi_d_p    (hsci_din_p),
+    .hsci_mosi_d_n    (hsci_din_n),
+
+    .hsci_miso_d_p    (hsci_do_p),
+    .hsci_miso_d_n    (hsci_do_n),
+
+    .hsci_pll_locked  (hsci_pll_locked),
+
+    .hsci_mosi_clk_p  (hsci_ckin_p),
+    .hsci_mosi_clk_n  (hsci_ckin_n),
+
+    .hsci_miso_clk_p  (hsci_cko_p),
+    .hsci_miso_clk_n  (hsci_cko_n),
+
+    .hsci_mosi_data_0 (hsci_data_out[0]),
+    .hsci_mosi_data_1 (hsci_data_out[1]),
+    .hsci_mosi_data_2 (hsci_data_out[2]),
+    .hsci_mosi_data_3 (hsci_data_out[3]),
+
+    .hsci_miso_data_0 (hsci_data_in[0]),
+    .hsci_miso_data_1 (hsci_data_in[1]),
+    .hsci_miso_data_2 (hsci_data_in[2]),
+    .hsci_miso_data_3 (hsci_data_in[3]),
+
+    .vtc_rdy_bsc_tx   (hsci_vtc_rdy_bsc_tx),
+    .dly_rdy_bsc_tx   (hsci_dly_rdy_bsc_tx),
+    .vtc_rdy_bsc_rx   (hsci_vtc_rdy_bsc_rx),
+    .dly_rdy_bsc_rx   (hsci_dly_rdy_bsc_rx),
+    .rst_seq_done     (hsci_rst_seq_done)
+  );
 
   system_wrapper i_system_wrapper (
     .sys_rst (sys_rst),
@@ -422,6 +485,41 @@ module system_top (
     .tx_data_14_p (c2m_p[14]),
     .tx_data_15_n (c2m_n[15]),
     .tx_data_15_p (c2m_p[15]),
+
+    .selectio_clk_in (selectio_clk_in),
+
+    .hsci_data_out_0       (hsci_data_out[0]),
+    .hsci_data_out_1       (hsci_data_out[1]),
+    .hsci_data_out_2       (hsci_data_out[2]),
+    .hsci_data_out_3       (hsci_data_out[3]),
+    .hsci_data_in_0        (hsci_data_in[0]),
+    .hsci_data_in_1        (hsci_data_in[1]),
+    .hsci_data_in_2        (hsci_data_in[2]),
+    .hsci_data_in_3        (hsci_data_in[3]),
+    .hsci_pclk_0           (hsci_pclk[0]),
+    .hsci_pclk_1           (hsci_pclk[1]),
+    .hsci_pll_reset_0      (hsci_pll_reset[0]),
+    .hsci_pll_reset_1      (hsci_pll_reset[1]),
+    .hsci_rst_seq_done_0   (hsci_rst_seq_done[0]),
+    .hsci_rst_seq_done_1   (hsci_rst_seq_done[1]),
+    .hsci_pll_locked_0     (hsci_pll_locked[0]),
+    .hsci_pll_locked_1     (hsci_pll_locked[1]),
+    .hsci_vtc_rdy_bsc_tx_0 (hsci_vtc_rdy_bsc_tx[0]),
+    .hsci_vtc_rdy_bsc_tx_1 (hsci_vtc_rdy_bsc_tx[1]),
+    .hsci_vtc_rdy_bsc_tx_2 (hsci_vtc_rdy_bsc_tx[2]),
+    .hsci_vtc_rdy_bsc_tx_3 (hsci_vtc_rdy_bsc_tx[3]),
+    .hsci_dly_rdy_bsc_tx_0 (hsci_dly_rdy_bsc_tx[0]),
+    .hsci_dly_rdy_bsc_tx_1 (hsci_dly_rdy_bsc_tx[1]),
+    .hsci_dly_rdy_bsc_tx_2 (hsci_dly_rdy_bsc_tx[2]),
+    .hsci_dly_rdy_bsc_tx_3 (hsci_dly_rdy_bsc_tx[3]),
+    .hsci_vtc_rdy_bsc_rx_0 (hsci_vtc_rdy_bsc_rx[0]),
+    .hsci_vtc_rdy_bsc_rx_1 (hsci_vtc_rdy_bsc_rx[1]),
+    .hsci_vtc_rdy_bsc_rx_2 (hsci_vtc_rdy_bsc_rx[2]),
+    .hsci_vtc_rdy_bsc_rx_3 (hsci_vtc_rdy_bsc_rx[3]),
+    .hsci_dly_rdy_bsc_rx_0 (hsci_dly_rdy_bsc_rx[0]),
+    .hsci_dly_rdy_bsc_rx_1 (hsci_dly_rdy_bsc_rx[1]),
+    .hsci_dly_rdy_bsc_rx_2 (hsci_dly_rdy_bsc_rx[2]),
+    .hsci_dly_rdy_bsc_rx_3 (hsci_dly_rdy_bsc_rx[3]),
 
     .ref_clk_q0 (ref_clk),
     .ref_clk_q1 (ref_clk_replica),

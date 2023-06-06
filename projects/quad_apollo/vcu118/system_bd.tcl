@@ -153,3 +153,8 @@ ad_connect sys_cpu_clk axi_spi_2/ext_spi_clk
 ad_cpu_interrupt ps-15 mb-7 axi_spi_2/ip2intc_irpt
 
 ad_cpu_interconnect 0x44A80000 axi_spi_2
+
+set_property range 256K [get_bd_addr_segs {sys_mb/Data/SEG_data_axi_hsci_0}]
+set_property range 256K [get_bd_addr_segs {sys_mb/Data/SEG_data_axi_hsci_1}]
+set_property range 256K [get_bd_addr_segs {sys_mb/Data/SEG_data_axi_hsci_2}]
+set_property range 256K [get_bd_addr_segs {sys_mb/Data/SEG_data_axi_hsci_3}]

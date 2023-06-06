@@ -6,6 +6,8 @@ set JESD_MODE  $ad_project_params(JESD_MODE)
 set RX_LANE_RATE $ad_project_params(RX_LANE_RATE)
 set TX_LANE_RATE $ad_project_params(TX_LANE_RATE)
 
+set HSCI_BYPASS [ expr { [info exists ad_project_params(HSCI_BYPASS)] \
+                          ? $ad_project_params(HSCI_BYPASS) : 0 } ]
 set TDD_SUPPORT [ expr { [info exists ad_project_params(TDD_SUPPORT)] \
                           ? $ad_project_params(TDD_SUPPORT) : 0 } ]
 set SHARED_DEVCLK [ expr { [info exists ad_project_params(SHARED_DEVCLK)] \
@@ -97,6 +99,67 @@ set dac_fifo_address_width [expr int(ceil(log(($dac_fifo_samples_per_converter*$
 
 create_bd_port -dir I rx_device_clk
 create_bd_port -dir I tx_device_clk
+
+##AXI_HSCI IP
+if {!$HSCI_BYPASS} {
+  for {set i 0} {$i < 2} {incr i} {
+    create_bd_port -dir O hsci_pll_reset_$i
+    create_bd_port -dir I hsci_pclk_$i
+    create_bd_port -dir I hsci_rst_seq_done_$i
+    create_bd_port -dir I hsci_pll_locked_$i
+  }
+
+  for {set i 0} {$i < 4} {incr i} {
+    set j [expr $i > 1 ? 1 : 0]
+
+    create_bd_port -dir O -from 7 -to 0 hsci_data_out_$i
+    create_bd_port -dir I -from 7 -to 0 hsci_data_in_$i
+
+    create_bd_port -dir I hsci_vtc_rdy_bsc_tx_$i
+    create_bd_port -dir I hsci_dly_rdy_bsc_tx_$i
+    create_bd_port -dir I hsci_vtc_rdy_bsc_rx_$i
+    create_bd_port -dir I hsci_dly_rdy_bsc_rx_$i
+
+    ad_ip_instance axi_hsci axi_hsci_$i
+    ad_connect axi_hsci_${i}/hsci_miso_data hsci_data_in_$i
+    ad_connect axi_hsci_${i}/hsci_pclk hsci_pclk_$j
+    ad_connect axi_hsci_${i}/hsci_rst_seq_done hsci_rst_seq_done_$j
+    ad_connect axi_hsci_${i}/hsci_pll_locked hsci_pll_locked_$j
+    ad_connect axi_hsci_${i}/hsci_vtc_rdy_bsc_tx hsci_vtc_rdy_bsc_tx_$i
+    ad_connect axi_hsci_${i}/hsci_dly_rdy_bsc_tx hsci_dly_rdy_bsc_tx_$i
+    ad_connect axi_hsci_${i}/hsci_vtc_rdy_bsc_rx hsci_vtc_rdy_bsc_rx_$i
+    ad_connect axi_hsci_${i}/hsci_dly_rdy_bsc_rx hsci_dly_rdy_bsc_rx_$i
+    ad_connect hsci_data_out_$i axi_hsci_${i}/hsci_mosi_data
+  }
+
+  ad_ip_instance  util_vector_logic hsci_pll_reset_logic_0
+  ad_ip_parameter hsci_pll_reset_logic_0 config.c_operation {and}
+  ad_ip_parameter hsci_pll_reset_logic_0 config.c_size {1}
+
+  ad_connect axi_hsci_0/hsci_pll_reset hsci_pll_reset_logic_0/Op1
+  ad_connect axi_hsci_1/hsci_pll_reset hsci_pll_reset_logic_0/Op2
+  ad_connect hsci_pll_reset_logic_0/Res hsci_pll_reset_0
+
+  ad_ip_instance  util_vector_logic hsci_pll_reset_logic_1
+  ad_ip_parameter hsci_pll_reset_logic_1 config.c_operation {and}
+  ad_ip_parameter hsci_pll_reset_logic_1 config.c_size {1}
+
+  ad_connect axi_hsci_2/hsci_pll_reset hsci_pll_reset_logic_1/Op1
+  ad_connect axi_hsci_3/hsci_pll_reset hsci_pll_reset_logic_1/Op2
+  ad_connect hsci_pll_reset_logic_1/Res hsci_pll_reset_1
+
+  ad_ip_instance axi_clkgen axi_hsci_clkgen
+  ad_ip_parameter axi_hsci_clkgen CONFIG.ID 1
+  ad_ip_parameter axi_hsci_clkgen CONFIG.CLKIN_PERIOD 10
+  ad_ip_parameter axi_hsci_clkgen CONFIG.VCO_DIV 1
+  ad_ip_parameter axi_hsci_clkgen CONFIG.VCO_MUL 8
+  ad_ip_parameter axi_hsci_clkgen CONFIG.CLK0_DIV 4
+
+  create_bd_port -dir O selectio_clk_in
+
+  ad_connect axi_ddr_cntrl/addn_ui_clkout1 axi_hsci_clkgen/clk
+  ad_connect selectio_clk_in axi_hsci_clkgen/clk_0
+}
 
 # common xcvr
 
@@ -367,6 +430,13 @@ ad_cpu_interconnect 0x7c430000 axi_apollo_tx_dma
 ad_cpu_interconnect 0x7c440000 $dac_data_offload_name
 ad_cpu_interconnect 0x7c450000 $adc_data_offload_name
 ad_cpu_interconnect 0x7c470000 axi_gpio_2
+if {!$HSCI_BYPASS} {
+  ad_cpu_interconnect 0x44ad0000 axi_hsci_clkgen
+  ad_cpu_interconnect 0x7c500000 axi_hsci_0
+  ad_cpu_interconnect 0x7c600000 axi_hsci_1
+  ad_cpu_interconnect 0x7c700000 axi_hsci_2
+  ad_cpu_interconnect 0x7c800000 axi_hsci_3
+}
 # Reserved for TDD! 0x7c460000
 
 # interconnect (gt/adc)

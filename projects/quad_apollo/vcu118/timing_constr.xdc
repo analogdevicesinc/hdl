@@ -38,6 +38,12 @@ create_clock -name refclk1 -period  $rx_link_clk_period [get_ports ref_clk_repli
 create_clock -name tx_device_clk     -period  $tx_device_clk_period [get_ports ref_clk_p[1]]
 create_clock -name rx_device_clk     -period  $rx_device_clk_period [get_ports ref_clk_p[2]]
 
+# hsci input clocks
+create_clock -name hsci_clk_out_0    -period  1.25 [get_ports hsci_cko_p[0]]
+create_clock -name hsci_clk_out_1    -period  1.25 [get_ports hsci_cko_p[1]]
+create_clock -name hsci_clk_out_2    -period  1.25 [get_ports hsci_cko_p[2]]
+create_clock -name hsci_clk_out_3    -period  1.25 [get_ports hsci_cko_p[3]]
+
 # Constraint SYSREFs
 # Assumption is that REFCLK and SYSREF have similar propagation delay,
 # and the SYSREF is a source synchronous Edge-Aligned signal to REFCLK
@@ -48,7 +54,6 @@ set_input_delay -clock [get_clocks tx_device_clk] -add_delay\
   [get_property PERIOD [get_clocks tx_device_clk]] \
   [get_ports {sysref_m2c*}]
 set_clock_groups -group rx_device_clk -group tx_device_clk -asynchronous
-
 
 # For transceiver output clocks use reference clock divided by one 
 # This will help autoderive the clocks correcly

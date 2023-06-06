@@ -8,6 +8,7 @@ PROJECT_NAME := ad_xband16_ebz_vcu118
 hdl_dir := ../../../../hdl
 
 M_DEPS += timing_constr.xdc
+M_DEPS += ../common/hsci_phy_top.sv
 M_DEPS += $(hdl_dir)/projects/scripts/adi_pd.tcl
 M_DEPS += $(hdl_dir)/projects/common/xilinx/data_offload_bd.tcl
 M_DEPS += $(hdl_dir)/projects/common/xilinx/dacfifo_bd.tcl
@@ -23,6 +24,8 @@ M_DEPS += $(hdl_dir)/library/common/ad_3w_spi.v
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_sysid
 LIB_DEPS += axi_tdd
+LIB_DEPS += axi_hsci
+LIB_DEPS += axi_clkgen
 LIB_DEPS += data_offload
 LIB_DEPS += jesd204/ad_ip_jesd204_tpl_adc
 LIB_DEPS += jesd204/ad_ip_jesd204_tpl_dac
