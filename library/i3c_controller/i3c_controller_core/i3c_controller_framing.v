@@ -61,6 +61,7 @@ module i3c_controller_framing #(
   input  wire [6:0]  cmdp_da,
   input  wire        cmdp_rnw,
   input  wire        cmdp_do_daa_ready,
+  output wire        cmdp_cancelled, // by the peripheral
 
   // Byte stream
 
@@ -209,9 +210,9 @@ module i3c_controller_framing #(
           // The peripheral did not ACK the transfer, so it is cancelled.
           // the SDO data is discarted
           if (sdo_valid) begin
-            smt <= cmdp_buffer_len_reg == 0 ? setup : smt;
             cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
           end
+          smt <= cmdp_buffer_len_reg == 0 ? setup : smt;
         end
         default: begin
           smt <= setup;
@@ -224,6 +225,7 @@ module i3c_controller_framing #(
   assign sdo_ready = (smt == setup_sdo | smt == cleanup) & reset_n;
   assign cmdw = {sm, cmdw_body};
   assign cmdp_valid_w = cmdp_valid & cmdp_do_daa_ready;
+  assign cmdp_cancelled = cmdw_nack;
 
   assign cmdw_rx_ready = sdi_ready;
   assign sdi_valid = cmdw_rx_valid;

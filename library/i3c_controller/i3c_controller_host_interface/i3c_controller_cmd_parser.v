@@ -38,6 +38,9 @@
  * command to complete request (e.g. add CCC ID to parsed CCC command).
  * If it is a simple command (e.g. private transfer), a "blank" command
  * is not required.
+ * cmdr (Command receipts) are transfered at the end of a transer, with
+ * updated lenght field indicating the number of bytes actually transfered,
+ * since the peripheral shall cancel the transfer.
  */
 
 `timescale 1ns/100ps
@@ -68,34 +71,40 @@ module i3c_controller_cmd_parser #(
   output wire        cmdp_bcast_header,
   output wire [1:0]  cmdp_xmit,
   output wire        cmdp_sr,
-  output wire [11:0] cmdp_buffer_len,
+  output reg  [11:0] cmdp_buffer_len,
   output wire [6:0]  cmdp_da,
   output wire        cmdp_rnw,
   output wire        cmdp_do_daa,
   input  wire        cmdp_do_daa_ready,
+  input  wire        cmdp_cancelled,
 
   input  wire rd_bytes_ready,
   output wire rd_bytes_valid,
   input  wire wr_bytes_ready,
-  output wire wr_bytes_valid
+  output wire wr_bytes_valid,
+  input  wire [11:0] wr_bytes_lvl
 );
   wire cmd_ccc;
   wire [6:0] cmd_ccc_id;
-  reg  [31:0] cmdr1;
+  reg  [19:0] cmdr1_reg;
+  wire [11:0] cmdr1_len;
+  wire [31:0] cmdr1;
   reg  [31:0] cmdr2;
+  reg  cmdp_cancelled_reg;
 
   localparam [6:0] CCC_ENTDAA = 7'd7;
 
-  reg [2:0] sm;
-  localparam [2:0]
-    receive      = 0,
-    buffer_setup = 1,
-    xfer_await   = 2,
-    ccc_await    = 3,
-    daa_await    = 4,
-    daa_await_ready = 5,
-    receipt_1   = 6,
-    receipt_2   = 7;
+  reg [3:0] sm;
+  localparam [3:0]
+    receive          = 0,
+    buffer_setup     = 1,
+    xfer_await       = 2,
+    xfer_await_ready = 3,
+    ccc_await        = 4,
+    daa_await        = 5,
+    daa_await_ready  = 6,
+    receipt_1        = 7,
+    receipt_2        = 8;
 
   always @(posedge clk) begin
     if (!reset_n) begin
@@ -103,13 +112,15 @@ module i3c_controller_cmd_parser #(
     end else begin
       case (sm)
         receive: begin
-          cmdr1 <= cmd;
+          cmdr1_reg <= {cmd[31:24], cmd[11:0]};
+          cmdp_buffer_len <= cmd[23:12];
           // !cmdp_do_daa_ready disables the interface until daa is finished.
           if (cmd_valid & cmdp_do_daa_ready) begin
             sm <= buffer_setup;
           end else begin
             sm <= receive;
           end
+          cmdp_cancelled_reg <= 1'b0;
         end
         buffer_setup: begin
           if ((rd_bytes_ready & !cmdp_rnw) | (wr_bytes_ready & cmdp_rnw)) begin
@@ -119,7 +130,13 @@ module i3c_controller_cmd_parser #(
           end
         end
         xfer_await: begin
+          sm <= cmdp_ready ? xfer_await_ready : sm;
+        end
+        xfer_await_ready: begin
           sm <= cmdp_ready ? receipt_1 : sm;
+          if (cmdp_cancelled) begin
+            cmdp_cancelled_reg <= cmdp_cancelled;
+          end
         end
         ccc_await: begin
           cmdr2 <= cmd;
@@ -156,7 +173,6 @@ module i3c_controller_cmd_parser #(
   assign cmdp_bcast_header     = cmdr1[29];
   assign cmdp_xmit             = cmdr1[28:27];
   assign cmdp_sr               = cmdr1[25];
-  assign cmdp_buffer_len       = cmdr1[23:12];
   assign cmdp_da               = cmdr1[07:01];
   assign cmdp_rnw              = cmdr1[00];
 
@@ -165,4 +181,10 @@ module i3c_controller_cmd_parser #(
 
   assign rd_bytes_valid = (sm == buffer_setup & ~cmdp_rnw);
   assign wr_bytes_valid = (sm == buffer_setup &  cmdp_rnw);
+  assign cmdr1 = {cmdr1_reg[19:12], cmdr1_len, cmdr1_reg[11:0]};
+  // For read bytes (write to peripheral), it is either all transfered or none,
+  // since the peripheral can only reject during the address ACK.
+  // For write bytes (read from peripheral), the peripheral shall cancel
+  // before finishing the transfer.
+  assign cmdr1_len = cmdp_rnw ? cmdp_buffer_len - wr_bytes_lvl : (cmdp_cancelled_reg ? 12'd0 : cmdp_buffer_len);
 endmodule

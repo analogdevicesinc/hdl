@@ -62,9 +62,9 @@ module i3c_controller_read_byte (
     move     = 1,
     transfer = 2;
 
-  reg [11:0] u8_len_reg;
+  reg [11:0] u8_lvl;
   reg [31:0] u32_reg;
-  reg  [1:0] c;
+  reg [1:0]  c;
 
   always @(posedge clk) begin
     if (!reset_n) begin
@@ -73,7 +73,7 @@ module i3c_controller_read_byte (
     end else begin
       case (sm)
         idle: begin
-          u8_len_reg <= u8_len - 1;
+          u8_lvl <= u8_len;
           sm <= u8_len_valid ? move : idle;
           c <= 2'b00;
         end
@@ -83,8 +83,8 @@ module i3c_controller_read_byte (
         end
         transfer: begin
           if (u8_ready) begin // tick
-            u8_len_reg <= u8_len_reg - 12'b1;
-            sm <= ~|u8_len_reg ? idle : (c == 2'b11 ? move : sm);
+            u8_lvl <= u8_lvl - 12'b1;
+            sm <= ~|u8_lvl[11:1] ? idle : (c == 2'b11 ? move : sm);
             c <= c + 1;
             u32_reg <= u32_reg << 8;
           end

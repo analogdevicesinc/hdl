@@ -51,19 +51,20 @@ module i3c_controller_core #(
 
   // Command parsed
 
-  input  wire cmdp_valid,
-  output wire cmdp_ready,
-  input  wire cmdp_ccc,
-  input  wire cmdp_ccc_bcast,
-  input  wire [6:0] cmdp_ccc_id,
-  input  wire cmdp_bcast_header,
-  input  wire [1:0] cmdp_xmit,
-  input  wire cmdp_sr,
+  input  wire        cmdp_valid,
+  output wire        cmdp_ready,
+  input  wire        cmdp_ccc,
+  input  wire        cmdp_ccc_bcast,
+  input  wire [6:0]  cmdp_ccc_id,
+  input  wire        cmdp_bcast_header,
+  input  wire [1:0]  cmdp_xmit,
+  input  wire        cmdp_sr,
   input  wire [11:0] cmdp_buffer_len,
-  input  wire [6:0] cmdp_da,
-  input  wire cmdp_rnw,
-  input  wire cmdp_do_daa,
-  output wire cmdp_do_daa_ready,
+  input  wire [6:0]  cmdp_da,
+  input  wire        cmdp_rnw,
+  input  wire        cmdp_do_daa,
+  output wire        cmdp_do_daa_ready,
+  output wire        cmdp_cancelled,
 
   // Byte stream
 
@@ -146,6 +147,7 @@ module i3c_controller_core #(
     .cmdp_da(cmdp_da),
     .cmdp_rnw(cmdp_rnw),
     .cmdp_do_daa_ready(cmdp_do_daa_ready),
+    .cmdp_cancelled(cmdp_cancelled),
     .sdo_ready(sdo_ready),
     .sdo_valid(sdo_valid),
     .sdo(sdo),

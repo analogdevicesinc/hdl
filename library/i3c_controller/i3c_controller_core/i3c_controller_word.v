@@ -145,9 +145,8 @@ module i3c_controller_word #(
       clk_sel_reg <= 2'b00;
     end if ((do_ack[1] & rx_nack) | (do_rx_t[1] & rx_stop)) begin
       sm <= `CMDW_NOP;
-      cmd <= `MOD_BIT_CMD_STOP_OD;
+      cmd <= {`MOD_BIT_CMD_STOP_,cmd[1],1'b0};
       cmdw_nack <= 1'b1;
-      clk_sel_reg <= 2'b00;
     end else if (cmd_ready) begin
       clk_sel_reg <= {clk_sel_reg[0], clk_sel_lut};
       do_ack  <= {do_ack[0], 1'b0};

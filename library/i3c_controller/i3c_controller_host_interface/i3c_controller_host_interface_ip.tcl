@@ -58,6 +58,7 @@ adi_add_bus "cmdp" "master" \
 		{"cmdp_rnw"           "CMDP_RNW"} \
 		{"cmdp_do_daa"        "CMDP_DO_DAA"} \
 		{"cmdp_do_daa_ready"  "CMDP_DO_DAA_READY"} \
+		{"cmdp_cancelled"    "CMDP_CANCELLED"} \
 	}
 adi_add_bus_clock "clk" "cmdp" "reset_n"
 

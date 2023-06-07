@@ -34,11 +34,11 @@ set tsco_max   12;
 set tsco_min    8;
 set trc_dly_max 1;
 set trc_dly_min 0;
-set_input_delay  -clock $i3c_clock_bus -max [expr $tsco_max + $trc_dly_max] [get_ports i3c_controller_0_sda]
-set_input_delay  -clock $i3c_clock_bus -min [expr $tsco_min + $trc_dly_min] [get_ports i3c_controller_0_sda]
+set_input_delay  -clock $i3c_clock_0 -max [expr $tsco_max + $trc_dly_max] [get_ports i3c_controller_0_sda]
+set_input_delay  -clock $i3c_clock_0 -min [expr $tsco_min + $trc_dly_min] [get_ports i3c_controller_0_sda]
 set tsu         2;
 set thd         0;
-set_output_delay  -clock $i3c_clock_bus -max [expr $trc_dly_max + $tsu] [get_ports i3c_controller_0_sda]
-set_output_delay  -clock $i3c_clock_bus -min [expr $trc_dly_min - $thd] [get_ports i3c_controller_0_sda]
-set_output_delay  -clock $i3c_clock_bus -max [expr $trc_dly_max + $tsu] [get_ports i3c_controller_0_scl]
-set_output_delay  -clock $i3c_clock_bus -min [expr $trc_dly_min - $thd] [get_ports i3c_controller_0_scl]
+set_output_delay  -clock $i3c_clock_0 -max [expr $trc_dly_max + $tsu] [get_ports i3c_controller_0_sda]
+set_output_delay  -clock $i3c_clock_0 -min [expr $trc_dly_min - $thd] [get_ports i3c_controller_0_sda]
+set_output_delay  -clock $i3c_clock_0 -max [expr $trc_dly_max + $tsu] [get_ports i3c_controller_0_scl]
+set_output_delay  -clock $i3c_clock_0 -min [expr $trc_dly_min - $thd] [get_ports i3c_controller_0_scl]

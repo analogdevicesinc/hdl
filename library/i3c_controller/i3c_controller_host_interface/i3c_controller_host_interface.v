@@ -37,8 +37,7 @@
 `default_nettype wire
 
 module i3c_controller_host_interface #(
-  parameter DATA_WIDTH = 32, // Const
-  parameter DEFAULT_CLK_DIV = 0
+  parameter DATA_WIDTH = 32 // Const
 ) (
   // I3C basic signals
 
@@ -69,19 +68,20 @@ module i3c_controller_host_interface #(
 
   // Command parsed
 
-  output wire cmdp_valid,
-  input  wire cmdp_ready,
-  output wire cmdp_ccc,
-  output wire cmdp_ccc_bcast,
-  output wire [6:0] cmdp_ccc_id,
-  output wire cmdp_bcast_header,
-  output wire [1:0] cmdp_xmit,
-  output wire cmdp_sr,
+  output wire        cmdp_valid,
+  input  wire        cmdp_ready,
+  output wire        cmdp_ccc,
+  output wire        cmdp_ccc_bcast,
+  output wire [6:0]  cmdp_ccc_id,
+  output wire        cmdp_bcast_header,
+  output wire [1:0]  cmdp_xmit,
+  output wire        cmdp_sr,
   output wire [11:0] cmdp_buffer_len,
-  output wire [6:0] cmdp_da,
-  output wire cmdp_rnw,
-  output wire cmdp_do_daa,
-  input  wire cmdp_do_daa_ready,
+  output wire [6:0]  cmdp_da,
+  output wire        cmdp_rnw,
+  output wire        cmdp_do_daa,
+  input  wire        cmdp_do_daa_ready,
+  input  wire        cmdp_cancelled,
 
   // Byte stream
 
@@ -94,7 +94,10 @@ module i3c_controller_host_interface #(
   input  wire [7:0] sdi_u8
 );
   wire rd_bytes_valid;
+  wire rd_bytes_ready;
   wire wr_bytes_valid;
+  wire wr_bytes_ready;
+  wire [11:0] wr_bytes_lvl;
 
   i3c_controller_read_byte #(
   ) i_i3c_controller_read_byte (
@@ -126,6 +129,7 @@ module i3c_controller_host_interface #(
     .u8_len_ready(wr_bytes_ready),
     .u8_len_valid(wr_bytes_valid),
     .u8_len(cmdp_buffer_len),
+    .u8_lvl(wr_bytes_lvl),
 
     .u8_ready(sdi_u8_ready),
     .u8_valid(sdi_u8_valid),
@@ -158,10 +162,12 @@ module i3c_controller_host_interface #(
     .cmdp_rnw(cmdp_rnw),
     .cmdp_do_daa(cmdp_do_daa),
     .cmdp_do_daa_ready(cmdp_do_daa_ready),
+    .cmdp_cancelled(cmdp_cancelled),
 
     .rd_bytes_ready(rd_bytes_ready),
     .rd_bytes_valid(rd_bytes_valid),
     .wr_bytes_ready(wr_bytes_ready),
-    .wr_bytes_valid(wr_bytes_valid)
+    .wr_bytes_valid(wr_bytes_valid),
+    .wr_bytes_lvl(wr_bytes_lvl)
   );
 endmodule
