@@ -164,7 +164,6 @@ module i3c_controller_framing #(
               end
               `CMDW_TARGET_ADDR_OD,
               `CMDW_TARGET_ADDR_PP: begin
-                cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
                 if (cmdp_rnw_reg) begin
                   sm <= `CMDW_MSG_RX;
                 end else begin
@@ -174,14 +173,14 @@ module i3c_controller_framing #(
               end
               `CMDW_MSG_RX: begin
                 cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
-                if (cmdp_buffer_len_reg == 0) begin
+                if (~|cmdp_buffer_len_reg[11:1]) begin
                   sm  <= `CMDW_STOP;
                   smt <= sr ? setup : transfer;
                 end
               end
               `CMDW_MSG_TX: begin
                 cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
-                if (cmdp_buffer_len_reg == 0) begin
+                if (~|cmdp_buffer_len_reg[11:1]) begin
                   smt <= sr ? setup : transfer;
                   sm  <= `CMDW_STOP;
                 end else begin
