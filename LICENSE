@@ -1,4 +1,3 @@
-
 In this HDL repository, there are many different and unique modules, consisting
 of various HDL (Verilog or VHDL) components. The individual modules are
 developed independently, and may be accompanied by separate and unique license
@@ -59,4 +58,3 @@ license.
          and special avenues for support may be possible. If you are interested
          in such a license, contact us at jesd204-licensing@analog.com for more
          information.
-
