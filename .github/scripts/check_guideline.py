@@ -2,6 +2,7 @@
 
 ##############################################################################
 ## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
 #
 ## Check readme_check_guideline.md from the same folder, for more details.
 ##############################################################################
