@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2015-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
 set_false_path  -from [get_registers *hdmi_fs_toggle*]                                    -to [get_registers *vdma_fs_toggle_m1]
 set_false_path  -from [get_registers *hdmi_raddr_g*]                                      -to [get_registers *vdma_raddr_g_m1*]

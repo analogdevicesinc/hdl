@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 # Primary clock definitions
 create_clock -name refclk         -period  2.667 [get_ports fpga_refclk_in_p]
 

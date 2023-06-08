@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2015-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 set ctrl_clk [get_clocks -of_objects [get_ports s_axi_aclk]]
 set data_clk [get_clocks -of_objects [get_ports data_clk_i]]
 

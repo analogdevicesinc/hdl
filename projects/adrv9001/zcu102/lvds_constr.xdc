@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2020-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 set_property  -dict {PACKAGE_PIN Y3     IOSTANDARD LVDS  DIFF_TERM_ADV TERM_100}  [get_ports rx1_dclk_in_n]     ;## FMC_HPC0_LA00_CC_N IO_L13N_T2L_N1_GC_QBC_66
 set_property  -dict {PACKAGE_PIN Y4     IOSTANDARD LVDS  DIFF_TERM_ADV TERM_100}  [get_ports rx1_dclk_in_p]     ;## FMC_HPC0_LA00_CC_P IO_L13P_T2L_N0_GC_QBC_66
 set_property  -dict {PACKAGE_PIN Y1     IOSTANDARD LVDS  DIFF_TERM_ADV TERM_100}  [get_ports rx1_idata_in_n]    ;## FMC_HPC0_LA03_N    IO_L22N_T3U_N7_DBC_AD0N_66

@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
 set_property ASYNC_REG TRUE [get_cells -hier -filter {name =~ *vdma_fs_toggle*}]
 set_property ASYNC_REG TRUE [get_cells -hier -filter {name =~ *vdma_raddr_g*}]

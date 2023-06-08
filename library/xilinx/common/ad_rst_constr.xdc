@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 # the "-quiet" option is added for the axi_spi_engine ip where the ad_rst.v 
 # module is not always inferred and this causes critical warnings
 

@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 set_property  -dict {PACKAGE_PIN AB9   IOSTANDARD LVCMOS33}  [get_ports adc_clk_in]     ; #DCLK          P24_P9    JA1_9 
 set_property  -dict {PACKAGE_PIN AB10  IOSTANDARD LVCMOS33}  [get_ports adc_ready_in]   ; #DRDY_N        P24_P8    JA1_8 
 set_property  -dict {PACKAGE_PIN AA8   IOSTANDARD LVCMOS33}  [get_ports adc_data_in[0]] ; #DOUT0         P24_P10   JA1_10  

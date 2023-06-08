@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2016-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 set_property ASYNC_REG TRUE \
   [get_cells -hier *dma_mem_*_m*] \
   [get_cells -hier *axi_xfer_*_m*] \

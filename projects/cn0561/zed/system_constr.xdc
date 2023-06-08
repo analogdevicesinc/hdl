@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 # cn0561 SPI configuration interface
 
 set_property -dict {PACKAGE_PIN N22 IOSTANDARD LVCMOS25} [get_ports cn0561_spi_sdi]       ; ## FMC_LPC_LA03_P

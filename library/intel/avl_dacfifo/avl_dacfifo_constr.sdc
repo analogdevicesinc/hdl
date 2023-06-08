@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 # CDC paths
 
 set_false_path  -from [get_registers *avl_dacfifo_rd:i_rd|dac_mem_raddr_g*] \

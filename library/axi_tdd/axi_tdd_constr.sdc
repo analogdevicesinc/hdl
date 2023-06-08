@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 set_false_path \
   -from [get_registers {*|i_regmap|up_tdd_burst_count[*]}] \
   -to [get_registers {*|i_counter|tdd_burst_count[*]}]

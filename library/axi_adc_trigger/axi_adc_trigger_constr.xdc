@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 set_property ASYNC_REG TRUE [get_cells -hier -filter {name =~ *up_xfer_toggle*}]
 set_property ASYNC_REG TRUE [get_cells -hier -filter {name =~ *trigger_a_d*}]
 set_property ASYNC_REG TRUE [get_cells -hier -filter {name =~ *trigger_b_d*}]

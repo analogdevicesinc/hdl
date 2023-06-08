@@ -1,8 +1,9 @@
-#
-## dual_ad9208
-#
+###############################################################################
+## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
-#
+## dual_ad9208
 ##                                                                                                                   FMCp_PORT      FPGA_IO
 #
 set_property  -dict {PACKAGE_PIN AK38} [get_ports  rx_ref_clk_0_p]                                            ; ##   GBTCLK0_M2C_P  MGTREFCLK0P_121
@@ -88,4 +89,3 @@ create_clock -name global_clk_0   -period  2.66 [get_ports glbl_clk_0_p]
 set_input_delay -clock [get_clocks global_clk_0] \
   [expr [get_property PERIOD [get_clocks global_clk_0]] / 2] \
   [get_ports {rx_sysref_*}]
-

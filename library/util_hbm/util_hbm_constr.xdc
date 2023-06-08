@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 set_property ASYNC_REG TRUE \
 	[get_cells -quiet -hier *cdc_sync_stage1_reg*] \
 	[get_cells -quiet -hier *cdc_sync_stage2_reg*]

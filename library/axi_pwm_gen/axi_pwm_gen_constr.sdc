@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 set script_dir [file dirname [info script]]
 
 source "$script_dir/util_cdc_constr.tcl"

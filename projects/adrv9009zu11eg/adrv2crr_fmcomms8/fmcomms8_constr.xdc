@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2020-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 set_property PACKAGE_PIN V10    [get_ports ref_clk_c_p];
 set_property PACKAGE_PIN V9     [get_ports ref_clk_c_n];
 
