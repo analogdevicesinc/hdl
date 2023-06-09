@@ -86,7 +86,7 @@ proc adi_project {project_name {parameter_list {}}} {
 
   if [regexp "fm87" $project_name] {
     set family "Agilex"
-    set device AGIB027R31B1E1VAA
+    set device AGIB027R31B1E1V
     set system_qip_file ${ad_project_dir}/system_bd/synthesis/system_bd.qip
   }
 
