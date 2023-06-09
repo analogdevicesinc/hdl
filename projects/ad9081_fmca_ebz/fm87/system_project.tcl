@@ -47,6 +47,7 @@ source $ad_hdl_dir/projects/common/fm87/fm87_system_assign.tcl
 # files
 
 set_global_assignment -name VERILOG_FILE ../../../library/common/ad_3w_spi.v
+set_global_assignment -name VERILOG_FILE ../../common/fm87/sgpio_slave.v
 
 # Note: This projects requires a hardware rework to function correctly.
 # The rework connects FMC header pins directly to the FPGA so that they can be
@@ -65,6 +66,15 @@ set_global_assignment -name VERILOG_FILE ../../../library/common/ad_3w_spi.v
 #  R577: DNI -> R0    PIN_W6
 #  R576: R0 -> DNI
 #  R575: R0 -> DNI
+
+set_instance_assignment -name IO_STANDARD "HCSL" -to fpga_refclk_in
+set_instance_assignment -name IO_STANDARD "TRUE DIFFERENTIAL SIGNALING" -to clkin6
+set_instance_assignment -name IO_STANDARD "TRUE DIFFERENTIAL SIGNALING" -to fpga_syncin_0
+set_instance_assignment -name IO_STANDARD "TRUE DIFFERENTIAL SIGNALING" -to fpga_syncout_0
+set_instance_assignment -name IO_STANDARD "TRUE DIFFERENTIAL SIGNALING" -to sysref2
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to fpga_syncin_0
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to fpga_syncout_0
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to sysref2s
 
 set_location_assignment PIN_J50    -to "agc0[0]"             ; ## D20  LA17_CC_P
 set_location_assignment PIN_K51    -to "agc0[1]"             ; ## D21  LA17_CC_N
@@ -203,13 +213,6 @@ for {set i 0} {$i < $common_lanes} {incr i} {
   set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_${i} -to tx_data[${i}]
 }
 
-set_instance_assignment -name IO_STANDARD "HCSL" -to fpga_refclk_in
-set_instance_assignment -name IO_STANDARD "TRUE DIFFERENTIAL SIGNALING" -to clkin6
-set_instance_assignment -name IO_STANDARD "TRUE DIFFERENTIAL SIGNALING" -to fpga_syncin_0
-set_instance_assignment -name IO_STANDARD "TRUE DIFFERENTIAL SIGNALING" -to fpga_syncout_0
-set_instance_assignment -name IO_STANDARD "TRUE DIFFERENTIAL SIGNALING" -to sysref2
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to fpga_syncin_0
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to sysref2
 # set_instance_assignment -name IO_STANDARD "True Differential Signaling" -to fpga_syncin_0
 # set_instance_assignment -name IO_STANDARD "True Differential Signaling" -to fpga_syncin_1_p
 # set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.2-V HSTL" -to fpga_syncout_0

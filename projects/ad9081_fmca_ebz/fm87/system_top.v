@@ -59,12 +59,19 @@ module system_top #(
   // input                refclk_bti, // additional refclk_bti to preserve Etile XCVR
   input                   sys_resetn,
 
+  // gpio
+  input                   sys_sgpio_sync,
+  input                   sys_sgpio_clk,
+  input                   sys_sgpi,
+  input                   sys_sgpo,
+  input   [ 1:0]          sys_button_pio,
+
   // hps-emif
   input                   emif_hps_pll_ref_clk,
   output                  emif_hps_mem_clk_p,
   output                  emif_hps_mem_clk_n,
   output  [16:0]          emif_hps_mem_a,
-  output  [1:0]           emif_hps_mem_ba,
+  output  [ 1:0]          emif_hps_mem_ba,
   output                  emif_hps_mem_bg,
   output                  emif_hps_mem_cke,
   output                  emif_hps_mem_cs_n,
@@ -73,9 +80,9 @@ module system_top #(
   output                  emif_hps_mem_act_n,
   output                  emif_hps_mem_par,
   input                   emif_hps_mem_alert_n,
-  inout   [8:0]           emif_hps_mem_dqs_p,
-  inout   [8:0]           emif_hps_mem_dqs_n,
-  inout   [8:0]           emif_hps_mem_dbi_n,
+  inout   [ 8:0]          emif_hps_mem_dqs_p,
+  inout   [ 8:0]          emif_hps_mem_dqs_n,
+  inout   [ 8:0]          emif_hps_mem_dbi_n,
   inout   [71:0]          emif_hps_mem_dq,
   input                   emif_hps_oct_rzq,
 
@@ -159,15 +166,16 @@ module system_top #(
   wire          sys_reset_n;
   wire          h2f_reset;
   wire  [43:0]  stm_hw_events;
-  wire  [31:0]  f2h_irq1;
-
+  // wire  [31:0]  f2h_irq1;
+  wire  [ 7:0]  sys_dipsw_pio;
   wire  [ 9:0]  gpio_bd_i;
-  wire  [ 7:0]  gpio_bd_o;
+  wire  [ 6:0]  gpio_bd_o;
   wire  [63:0]  gpio_i;
   wire  [63:0]  gpio_o;
   wire  [ 7:0]  spi_csn_s;
 
   // assignmnets
+  assign stm_hw_events = {15'b0, gpio_bd_o, gpio_bd_i};
 
   assign spi0_csb = spi_csn_s[0];
   assign spi1_csb = spi_csn_s[1];
@@ -191,8 +199,17 @@ module system_top #(
                     ~spi_csn_s[1] ? spi_hmc_miso :
                     1'b0;
 
-  // assignments
+  sgpio_slave sgpio_slave_inst (
+    .i_rstn     (sys_reset_n),
+    .i_clk      (sys_sgpio_clk),
+    .i_sync     (sys_sgpio_sync),
+    .i_mosi     (sys_sgpi),
+    .o_miso     (sys_sgpo),
+    .o_user_sw  (sys_dipsw_pio),
+    .i_user_led (gpio_bd_o));
 
+  // assignments
+  assign gpio_bd_i = {sys_button_pio, sys_dipsw_pio};
   assign hmc_gpio1 = gpio_o[43];
 
   assign gpio_i[44] = agc0[0];
@@ -222,13 +239,12 @@ module system_top #(
   assign gpio_i[14: 7] = gpio_bd_i[7:0]; // dipsws
   assign gpio_i[ 6: 0] = gpio_o[6:0];    // leds
 
-  assign gpio_bd_o     = gpio_o[6:0];
+  // assign gpio_bd_o     = gpio_o[6:0];
 
   assign gpio_i[63:59] = gpio_o[63:59];
   assign gpio_i[43:32] = gpio_o[43:32];
 
-  assign f2h_irq1      = 32'b0;
-  assign stm_hw_events = 44'b0;
+  // assign f2h_irq1      = 32'b0;
   assign sys_reset_n   = sys_resetn & ~h2f_reset & ~ninit_done;
 
   // instantiations
@@ -246,13 +262,14 @@ module system_top #(
    // .src_prb_rst_sources_source              (1'b1), // temporary disable
     .rst_ninit_done_ninit_done                 (ninit_done),
 
-    .sys_gpio_led_export                       (gpio_bd_o),      // leds
-    .sys_gpio_button_export                    (gpio_bd_i[9:8]), // buttons
-    .sys_gpio_dipsw_export                     (gpio_bd_i[7:0]), // dipsws
-    .sys_gpio_bd_in_port                       (gpio_i[31:0]),
-    .sys_gpio_bd_out_port                      (gpio_o[31:0]),
-    .sys_gpio_in_export                        (gpio_i[63:32]),
-    .sys_gpio_out_export                       (gpio_o[63:32]),
+    .sys_gpio_led_in_port                      (gpio_bd_o),      // leds
+    .sys_gpio_led_out_port                     (gpio_bd_o),
+    .sys_gpio_button_export                    (sys_button_pio), // buttons
+    .sys_gpio_dipsw_export                     (sys_dipsw_pio), // dipsws
+    // .sys_gpio_bd_in_port                       (gpio_i[31:0]),
+    // .sys_gpio_bd_out_port                      (gpio_o[31:0]),
+    // .sys_gpio_in_export                        (gpio_i[63:32]),
+    // .sys_gpio_out_export                       (gpio_o[63:32]),
 
     .emif_hps_mem_mem_ck                       (emif_hps_mem_clk_p),
     .emif_hps_mem_mem_ck_n                     (emif_hps_mem_clk_n),
@@ -339,7 +356,7 @@ module system_top #(
     .h2f_reset_reset                           (h2f_reset),
 
     .sys_hps_f2h_stm_hw_events_stm_hwevents    (stm_hw_events),
-    .f2h_irq1_irq                              (f2h_irq1),
+    // .f2h_irq1_irq                              (f2h_irq1),
     // FMC HPC
     .sys_spi_MISO                              (spi_miso),
     .sys_spi_MOSI                              (spi_mosi),

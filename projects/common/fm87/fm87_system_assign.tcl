@@ -179,6 +179,8 @@ set_instance_assignment -name AUTO_OPEN_DRAIN_PINS ON -to hps_emac_mdio
 
 # hps-sdio
 
+set_location_assignment PIN_T21  -to hps_io_ref_clk
+
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_sdio_cmd
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_sdio_clk
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_sdio_d[0]
@@ -292,70 +294,43 @@ set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_gpio[6]
 
 # TODO: Check actual pinout after we get the development kit
 
-# set_location_assignment PIN_D43  -to gpio_bd_o[0]  ; ## led[0]
-# set_location_assignment PIN_B43  -to gpio_bd_o[1]  ; ## led[1]
-# set_location_assignment PIN_C42  -to gpio_bd_o[2]  ; ## led[2]
-# set_location_assignment PIN_A42  -to gpio_bd_o[3]  ; ## led[3]
-# set_location_assignment PIN_H45  -to gpio_bd_i[0]  ; ## dipsw[0]
-# set_location_assignment PIN_F45  -to gpio_bd_i[1]  ; ## dipsw[1]
-# set_location_assignment PIN_J44  -to gpio_bd_i[2]  ; ## dipsw[2]
-# set_location_assignment PIN_G44  -to gpio_bd_i[3]  ; ## dipsw[3]
-# set_location_assignment PIN_CY47 -to gpio_bd_i[0]  ; ## pb[0]
-# set_location_assignment PIN_CW48 -to gpio_bd_i[1]  ; ## pb[1]
+set_location_assignment PIN_CY47 -to sys_button_pio[0]  ; ## pb[0]
+set_location_assignment PIN_CW48 -to sys_button_pio[1]  ; ## pb[1]
 
-# set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio_bd_o[0]
-# set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio_bd_o[1]
-# set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio_bd_o[2]
-# set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio_bd_o[3]
-# set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio_bd_i[0]
-# set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio_bd_i[1]
-# set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio_bd_i[2]
-# set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio_bd_i[3]
-# set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio_bd_i[4]
-# set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio_bd_i[5]
+set_instance_assignment -name IO_STANDARD "1.2 V" -to sys_button_pio[0]
+set_instance_assignment -name IO_STANDARD "1.2 V" -to sys_button_pio[1]
 
-# set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to gpio_bd_i[0]
-# set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to gpio_bd_i[1]
-# set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to gpio_bd_i[2]
-# set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to gpio_bd_i[3]
-
-# set_location_assignment PIN_Y49 -to fpga_sgpio_sync
-# set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_sgpio_sync
-# set_location_assignment PIN_W48 -to fpga_sgpio_clk
-# set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_sgpio_clk
-# set_location_assignment PIN_T49 -to fpga_sgpi
-# set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_sgpi
-# set_location_assignment PIN_U48 -to fpga_sgpo
-# set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_sgpo
-# set_location_assignment PIN_CY47 -to fpga_button_pio[0]
-# set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_button_pio[0]
-# set_location_assignment PIN_CW48 -to fpga_button_pio[1]
-# set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_button_pio[1]
+set_location_assignment PIN_Y49 -to sys_sgpio_sync
+set_instance_assignment -name IO_STANDARD "1.2 V" -to sys_sgpio_sync
+set_location_assignment PIN_W48 -to sys_sgpio_clk
+set_instance_assignment -name IO_STANDARD "1.2 V" -to sys_sgpio_clk
+set_location_assignment PIN_T49 -to sys_sgpi
+set_instance_assignment -name IO_STANDARD "1.2 V" -to sys_sgpi
+set_location_assignment PIN_U48 -to sys_sgpo
+set_instance_assignment -name IO_STANDARD "1.2 V" -to sys_sgpo
 
 # Agilex development kit's global assignments
-
-set_global_assignment -name HPS_INITIALIZATION "HPS FIRST"
-set_global_assignment -name HPS_DAP_SPLIT_MODE "SDM PINS"
-set_global_assignment -name INI_VARS "ASM_ENABLE_ADVANCED_DEVICES=ON;"
 set_global_assignment -name USE_HPS_COLD_RESET SDM_IO11
 set_global_assignment -name USE_CONF_DONE SDM_IO16
+
+set_global_assignment -name INI_VARS "ASM_ENABLE_ADVANCED_DEVICES=ON;"
 set_global_assignment -name VID_OPERATION_MODE "PMBUS MASTER"
 set_global_assignment -name USE_PWRMGT_SCL SDM_IO0
 set_global_assignment -name USE_PWRMGT_SDA SDM_IO12
-set_global_assignment -name PWRMGT_BUS_SPEED_MODE "100 KHZ"
+set_global_assignment -name PWRMGT_BUS_SPEED_MODE "400 KHZ"
 set_global_assignment -name PWRMGT_PAGE_COMMAND_ENABLE ON
-set_global_assignment -name PWRMGT_SLAVE_DEVICE_TYPE ED8401
-set_global_assignment -name PWRMGT_SLAVE_DEVICE0_ADDRESS 62
-set_global_assignment -name PWRMGT_SLAVE_DEVICE1_ADDRESS 00
-set_global_assignment -name PWRMGT_SLAVE_DEVICE2_ADDRESS 00
+set_global_assignment -name PWRMGT_SLAVE_DEVICE_TYPE OTHER
+set_global_assignment -name PWRMGT_SLAVE_DEVICE0_ADDRESS 42
+set_global_assignment -name PWRMGT_SLAVE_DEVICE1_ADDRESS 43
+set_global_assignment -name PWRMGT_SLAVE_DEVICE2_ADDRESS 44
 set_global_assignment -name PWRMGT_SLAVE_DEVICE3_ADDRESS 00
 set_global_assignment -name PWRMGT_SLAVE_DEVICE4_ADDRESS 00
 set_global_assignment -name PWRMGT_SLAVE_DEVICE5_ADDRESS 00
 set_global_assignment -name PWRMGT_SLAVE_DEVICE6_ADDRESS 00
 set_global_assignment -name PWRMGT_SLAVE_DEVICE7_ADDRESS 00
-set_global_assignment -name PWRMGT_PAGE_COMMAND_ENABLE OFF
+set_global_assignment -name PWRMGT_PAGE_COMMAND_ENABLE ON
 set_global_assignment -name PWRMGT_VOLTAGE_OUTPUT_FORMAT "LINEAR FORMAT"
-set_global_assignment -name PWRMGT_LINEAR_FORMAT_N "-13"
+set_global_assignment -name PWRMGT_LINEAR_FORMAT_N "-12"
 set_global_assignment -name PWRMGT_TRANSLATED_VOLTAGE_VALUE_UNIT VOLTS
 
 set device_initialization_clock INIT_INTOSC
