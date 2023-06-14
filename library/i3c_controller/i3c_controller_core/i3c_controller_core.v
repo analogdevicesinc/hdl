@@ -122,6 +122,7 @@ module i3c_controller_core #(
   wire [7:0] cmdw_rx;
 
   wire ibi_requested;
+  wire ibi_requested_auto;
   wire ibi_tick;
   wire [6:0] ibi_da;
   wire [7:0] ibi_mdb;
@@ -144,6 +145,7 @@ module i3c_controller_core #(
     .cmdw_ready(cmdw_ready),
     .cmdw(cmdw_daa),
     .cmdw_nack(cmdw_nack),
+    .idle_bus(idle_bus),
     .rmap_daa_status(rmap_daa_status),
     .rmap_daa_peripheral_index(rmap_daa_peripheral_index),
     .rmap_daa_peripheral_da(rmap_daa_peripheral_da)
@@ -181,6 +183,7 @@ module i3c_controller_core #(
     .rx(rx),
     .idle_bus(idle_bus),
     .ibi_requested(ibi_requested),
+    .ibi_requested_auto(ibi_requested_auto),
     .rmap_ibi_config(rmap_ibi_config)
   );
 
@@ -207,6 +210,7 @@ module i3c_controller_core #(
     .rx_nack(rx_nack),
     .clk_sel(clk_sel),
     .ibi_requested(ibi_requested),
+    .ibi_requested_auto(ibi_requested_auto),
     .ibi_tick(ibi_tick),
     .ibi_da(ibi_da),
     .ibi_mdb(ibi_mdb),

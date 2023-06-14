@@ -82,6 +82,10 @@ module i3c_controller_daa #(
   output [`CMDW_HEADER_WIDTH+8:0] cmdw,
   input  cmdw_nack,
 
+  // Bus status
+
+  input idle_bus,
+
   // uP accessible info
 
   output [DA_LENGTH_WIDTH:0] rmap_daa_status,
@@ -92,68 +96,90 @@ module i3c_controller_daa #(
   reg [7:0] cmdw_body;
   reg [`CMDW_HEADER_WIDTH:0] sm;
   reg ctrl;
+  reg lock;
 
   localparam [6:0]
     CCC_ENTDAA = 'h03;
 
+  reg [0:0] smt;
+  localparam [0:0]
+    idle       = 0,
+    transfer   = 1;
+
   always @(posedge clk) begin
     if (!reset_n) begin
-      da_reg <= 0;
-    end else begin
-      if (sm == `CMDW_NOP & cmdp_do_daa) begin
-        sm <= `CMDW_START;
-      end
-    end
-    if (!reset_n | cmdw_nack) begin
+      smt <= idle;
       sm <= `CMDW_NOP;
+      da_reg <= 0;
       cmdw_body <= 8'h00;
       ctrl <= 1'b0;
-    end else if (cmdw_ready) begin
-      case (sm)
-        `CMDW_NOP: begin
-          ctrl <= 1'b0;
-          da_reg <= 0;
+      lock <= 1'b0;
+    end else if (cmdw_nack) begin
+      smt <= idle;
+      cmdw_body <= 8'h00;
+      ctrl <= 1'b0;
+    end else begin
+      case (smt)
+        idle: begin
+          if (cmdp_do_daa & ~lock) begin
+            smt <= transfer;
+            sm <= `CMDW_START;
+            lock <= 1'b1;
+          end else if (idle_bus) begin
+            lock <= 1'b0;
+          end
         end
-        `CMDW_START: begin
-          sm <= ctrl ? `CMDW_BCAST_7E_W1 : `CMDW_BCAST_7E_W0;
-          ctrl <= 1'b1;
-        end
-        `CMDW_BCAST_7E_W0: begin
-          sm <= `CMDW_CCC;
-          cmdw_body <= {1'b0, CCC_ENTDAA}; // BROAD+ENTDAA
-        end
-        `CMDW_CCC: begin
-          sm <= `CMDW_START;
-        end
-        `CMDW_BCAST_7E_W1: begin
-          sm <= `CMDW_PROV_ID_BCR_DCR;
-        end
-        `CMDW_PROV_ID_BCR_DCR: begin
-          sm <= `CMDW_DYN_ADDR;
-          cmdw_body <= {DA[7*da_reg +:7], ~^DA[7*da_reg +:7]};
-        end
-        `CMDW_DYN_ADDR: begin
-          // If there is no more DA available, exit
-          // However, DA should have at least the # peripherals expected in
-          // the bus
-          sm <= da_reg == DA_LENGTH-1 ? `CMDW_STOP : `CMDW_START;
-            da_reg <= da_reg + 1;
-        end
-        `CMDW_STOP: begin
-            sm <= `CMDW_NOP;
-         end
-         default: begin
-            sm <= `CMDW_NOP;
+        transfer: begin
+          if (cmdw_ready) begin
+            case (sm)
+              `CMDW_NOP: begin
+                ctrl <= 1'b0;
+                da_reg <= 0;
+                smt <= idle;
+              end
+              `CMDW_START: begin
+                sm <= ctrl ? `CMDW_BCAST_7E_W1 : `CMDW_BCAST_7E_W0;
+                ctrl <= 1'b1;
+              end
+              `CMDW_BCAST_7E_W0: begin
+                sm <= `CMDW_CCC_OD;
+                cmdw_body <= {1'b0, CCC_ENTDAA}; // BROAD+ENTDAA
+              end
+              `CMDW_CCC_OD: begin
+                sm <= `CMDW_START;
+              end
+              `CMDW_BCAST_7E_W1: begin
+                sm <= `CMDW_PROV_ID_BCR_DCR;
+              end
+              `CMDW_PROV_ID_BCR_DCR: begin
+                sm <= `CMDW_DYN_ADDR;
+                cmdw_body <= {DA[7*da_reg +:7], ~^DA[7*da_reg +:7]};
+              end
+              `CMDW_DYN_ADDR: begin
+                // If there is no more DA available, exit
+                // However, DA should have at least the # peripherals expected in
+                // the bus
+                sm <= da_reg == DA_LENGTH-1 ? `CMDW_STOP : `CMDW_START;
+                da_reg <= da_reg + 1;
+              end
+              `CMDW_STOP: begin
+                 sm <= `CMDW_NOP;
+              end
+              default: begin
+                 sm <= `CMDW_NOP;
+              end
+            endcase
+          end
         end
       endcase
     end
   end
 
   assign cmdw = {sm, cmdw_body};
-  assign cmdp_do_daa_ready = sm == `CMDW_NOP & reset_n;
+  assign cmdp_do_daa_ready = ~lock;
 
   assign rmap_daa_peripheral_da = DA[7*rmap_daa_peripheral_index+:7];
   assign rmap_daa_status[DA_LENGTH_WIDTH] = ~cmdp_do_daa_ready; // in_progress
   assign rmap_daa_status[DA_LENGTH_WIDTH-1:0] = da_reg; // registered
-  assign cmdw_valid = sm != `CMDW_NOP;
+  assign cmdw_valid = smt == transfer;
 endmodule

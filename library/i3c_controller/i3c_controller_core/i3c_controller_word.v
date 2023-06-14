@@ -83,6 +83,7 @@ module i3c_controller_word #(
   // IBI interface
 
   output reg  ibi_requested,
+  input  wire ibi_requested_auto,
   output reg  ibi_tick,
   output wire [6:0] ibi_da,
   output wire [7:0] ibi_mdb,
@@ -129,7 +130,8 @@ module i3c_controller_word #(
       `CMDW_NOP             : i_ =  0;
       `CMDW_START           : i_ =  0;
       `CMDW_BCAST_7E_W0     : i_ =  8; // 7'h7e+RnW=0+ACK / DA+RnW=1+ACK_IBI
-      `CMDW_CCC             : i_ =  8; // Direct/Bcast+CCC+T
+      `CMDW_CCC_OD          : i_ =  8; // Direct/Bcast+CCC+T
+      `CMDW_CCC_PP          : i_ =  8; // Direct/Bcast+CCC+T
       `CMDW_TARGET_ADDR_OD  : i_ =  8; // DA+RNW+ACK
       `CMDW_TARGET_ADDR_PP  : i_ =  8; // DA+RNW+ACK
       `CMDW_MSG_SR          : i_ =  0;
@@ -148,7 +150,8 @@ module i3c_controller_word #(
       `CMDW_NOP             : clk_sel_lut = 0;
       `CMDW_START           : clk_sel_lut = 0;
       `CMDW_BCAST_7E_W0     : clk_sel_lut = 0;
-      `CMDW_CCC             : clk_sel_lut = 1;
+      `CMDW_CCC_OD          : clk_sel_lut = 0;
+      `CMDW_CCC_PP          : clk_sel_lut = 1;
       `CMDW_TARGET_ADDR_OD  : clk_sel_lut = 0;
       `CMDW_TARGET_ADDR_PP  : clk_sel_lut = 1;
       `CMDW_MSG_SR          : clk_sel_lut = 1;
@@ -197,6 +200,7 @@ module i3c_controller_word #(
           end
          sm <= cmdw_header;
          cmdw_body <= cmdw[7:0];
+         ibi_requested <= ibi_requested_auto;
          i <= 0;
         end
         transfer: begin
@@ -216,6 +220,10 @@ module i3c_controller_word #(
 
             // RX pipelines, delayed twice to match bit_mod
             case (sm_reg_2)
+              `CMDW_NOP,
+              `CMDW_STOP: begin
+                ibi_requested <= ibi_requested;
+               end
               `CMDW_BCAST_7E_W0: begin
                 ibi_da_reg[8-i_reg_2] <= rx_sampled;
                 ibi_requested <= i_reg_2 < 6 & rx_sampled === 1'b0 ? 1'b1 : ibi_requested;
@@ -268,14 +276,14 @@ module i3c_controller_word #(
               `CMDW_BCAST_7E_W1: begin
                 if (i == 7) begin
                   // RnW=1
-                  cmd <= {`MOD_BIT_CMD_WRITE_,1'b1,1'b1};
+                  cmd <= {`MOD_BIT_CMD_WRITE_,1'b0,1'b1};
                 end else if (i == 8) begin
                   // ACK
                   cmd <= `MOD_BIT_CMD_ACK_SDR;
                   do_ack[0] <= 1'b1;
                 end else begin
                   // 7'h7e
-                  cmd <= {`MOD_BIT_CMD_WRITE_,1'b1,I3C_RESERVED[6 - i[2:0]]};
+                  cmd <= {`MOD_BIT_CMD_WRITE_,1'b0,I3C_RESERVED[6 - i[2:0]]};
                 end
               end
               `CMDW_DYN_ADDR,
@@ -308,14 +316,15 @@ module i3c_controller_word #(
                   cmd <= `MOD_BIT_CMD_READ;
                 end
               end
-              `CMDW_CCC,
+              `CMDW_CCC_OD,
+              `CMDW_CCC_PP,
               `CMDW_MSG_TX: begin
                 if (i == 8) begin
                   // T
-                  cmd <= {`MOD_BIT_CMD_WRITE_,1'b1,~^cmdw_body};
+                  cmd <= {`MOD_BIT_CMD_WRITE_,clk_sel_lut,~^cmdw_body};
                 end else begin
                   // SDO/BCAST+CCC
-                  cmd <= {`MOD_BIT_CMD_WRITE_,1'b1,cmdw_body[7 - i[2:0]]};
+                  cmd <= {`MOD_BIT_CMD_WRITE_,clk_sel_lut,cmdw_body[7 - i[2:0]]};
                 end
               end
               `CMDW_STOP: begin
@@ -351,7 +360,7 @@ module i3c_controller_word #(
   assign cmdw_valid = cmdw_mux ? cmdw_framing_valid : cmdw_daa_valid;
   assign cmdw_header = cmdw[`CMDW_HEADER_WIDTH+8 -: `CMDW_HEADER_WIDTH+1];
   assign cmdw_rx = cmdw_rx_reg[8:1];
-  assign clk_sel = clk_sel_reg[1];
+  assign clk_sel = cmdw_mux ? clk_sel_reg[1] : 1'b0; // DAA must occur in OD
 
   assign ibi_da  = ibi_da_reg [8:2];
   assign ibi_mdb = ibi_mdb_reg[8:1];

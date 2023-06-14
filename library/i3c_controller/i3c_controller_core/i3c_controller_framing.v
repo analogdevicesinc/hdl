@@ -90,7 +90,8 @@ module i3c_controller_framing #(
 
   // IBI interface
 
-  input wire ibi_requested,
+  input  wire ibi_requested,
+  output reg  ibi_requested_auto,
 
   // uP accessible info
 
@@ -139,6 +140,7 @@ module i3c_controller_framing #(
           if (idle_bus & ibi_auto & ibi_enable & ~rx) begin
             sm <= `CMDW_BCAST_7E_W0;
             smt <= transfer;
+            ibi_requested_auto <= 1'b1;
           end else if (cmdp_valid) begin
             sm <= cmdw_ready | ~sr ? `CMDW_START : `CMDW_MSG_SR;
             smt <= transfer;
@@ -164,6 +166,7 @@ module i3c_controller_framing #(
             ibi_requested_lock <= 1'b1;
           end
           if (cmdw_ready) begin
+            ibi_requested_auto <= 1'b0;
             case(sm)
               `CMDW_NOP: begin
                 smt <= setup;
@@ -174,10 +177,10 @@ module i3c_controller_framing #(
                 sm <= ~cmdp_bcast_header_reg & ~cmdp_ccc_reg ? `CMDW_TARGET_ADDR_OD : `CMDW_BCAST_7E_W0;
               end
               `CMDW_BCAST_7E_W0: begin
-                sm <= cmdp_ccc_reg ? `CMDW_CCC : `CMDW_MSG_SR;
+                sm <= cmdp_ccc_reg ? `CMDW_CCC_PP : `CMDW_MSG_SR;
                 cmdw_body   <= {cmdp_ccc_bcast_reg, cmdp_ccc_id_reg}; // Attention to BCAST here
               end
-              `CMDW_CCC: begin
+              `CMDW_CCC_PP: begin
                 if (cmdp_ccc_bcast_reg) begin
                   sm <= `CMDW_MSG_SR;
                 end else if (cmdp_buffer_len_reg == 0) begin

@@ -93,7 +93,7 @@ module i3c_controller_cmd_parser #(
   reg [3:0] cmdr_error;
   reg [7:0] cmdr_sync;
 
-  localparam [6:0] CCC_ENTDAA = 7'd7;
+  localparam [6:0] CCC_ENTDAA = 7'h7;
 
   localparam [3:0]
     NO_ERROR  = 4'd0,
@@ -122,7 +122,7 @@ module i3c_controller_cmd_parser #(
         receive: begin
           cmdr_error <= NO_ERROR;
           cmdr1 <= cmd;
-          if (cmd_valid & cmdp_ready) begin
+          if (cmd_valid) begin
             sm <= buffer_setup;
           end else begin
             sm <= receive;
