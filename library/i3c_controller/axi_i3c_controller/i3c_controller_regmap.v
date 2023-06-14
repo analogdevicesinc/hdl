@@ -20,5 +20,6 @@
 `define I3C_REGMAP_IBI_FIFO        14'h39
 `define I3C_REGMAP_DAA_STATUS      14'h40
 `define I3C_REGMAP_DAA_PERIPHERAL  14'h41
+`define I3C_REGMAP_IBI_CONFIG      14'h50
 
 `endif

@@ -87,7 +87,7 @@ module i3c_controller_cmd_parser #(
   wire [6:0] cmd_ccc_id;
   wire [11:0] cmdr1_len;
   reg  [31:0] cmdr1;
-  reg   [7:0] cmdr2;
+  reg  [7:0]  cmdr2;
   reg  cmdp_cancelled_reg;
 
   reg [3:0] cmdr_error;
@@ -122,8 +122,7 @@ module i3c_controller_cmd_parser #(
         receive: begin
           cmdr_error <= NO_ERROR;
           cmdr1 <= cmd;
-          // !cmdp_do_daa_ready disables the interface until daa is finished.
-          if (cmd_valid & cmdp_do_daa_ready) begin
+          if (cmd_valid & cmdp_ready) begin
             sm <= buffer_setup;
           end else begin
             sm <= receive;

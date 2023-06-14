@@ -52,7 +52,6 @@ module i3c_controller_core #(
   // Command parsed
 
   input  wire        cmdp_valid,
-  output wire        cmdp_ready,
   input  wire        cmdp_ccc,
   input  wire        cmdp_ccc_bcast,
   input  wire [6:0]  cmdp_ccc_id,
@@ -64,6 +63,7 @@ module i3c_controller_core #(
   input  wire        cmdp_rnw,
   input  wire        cmdp_do_daa,
   output wire        cmdp_do_daa_ready,
+  output wire        cmdp_ready,
   output wire        cmdp_cancelled,
 
   // Byte stream
@@ -76,12 +76,16 @@ module i3c_controller_core #(
   output wire sdi_valid,
   output wire [7:0] sdi,
 
+  input  wire ibi_ready,
+  output wire ibi_valid,
+  output wire [14:0] ibi,
+
   // uP accessible info
 
-  output wire rmap_daa_status_in_progress,
-  output wire [DA_LENGTH_WIDTH-1:0] rmap_daa_status_registered,
+  output wire [2:0] rmap_daa_status,
   input  wire [DA_LENGTH_WIDTH-1:0] rmap_daa_peripheral_index,
   output wire [6:0] rmap_daa_peripheral_da,
+  input  wire [1:0] rmap_ibi_config,
 
   // I3C bus signals
 
@@ -90,6 +94,7 @@ module i3c_controller_core #(
 );
   wire clk_out;
   wire [`MOD_BIT_CMD_WIDTH:0] cmd;
+  wire cmd_valid;
   wire cmd_ready;
   wire t;
   wire sdo_bit;
@@ -100,18 +105,31 @@ module i3c_controller_core #(
   wire rx_stop;
   wire rx_nack;
 
+  wire cmdp_ready_w;
+  wire cmdp_valid_w;
+
+  wire cmdw_framing_valid;
+  wire cmdw_daa_valid;
   wire cmdw_ready;
   wire cmdw_mux;
   wire [`CMDW_HEADER_WIDTH+8:0] cmdw_framing;
   wire [`CMDW_HEADER_WIDTH+8:0] cmdw_daa;
+  wire [`CMDW_HEADER_WIDTH+8:0] cmdw_ibi;
   wire cmdw_nack;
 
   wire cmdw_rx_ready;
   wire cmdw_rx_valid;
   wire [7:0] cmdw_rx;
 
+  wire ibi_requested;
+  wire ibi_tick;
+  wire [6:0] ibi_da;
+  wire [7:0] ibi_mdb;
+
   wire clk_sel;
   wire clk_clr;
+
+  wire idle_bus;
 
   i3c_controller_daa #(
     .DA_LENGTH(DA_LENGTH),
@@ -122,11 +140,11 @@ module i3c_controller_core #(
     .clk(clk_0),
     .cmdp_do_daa(cmdp_do_daa),
     .cmdp_do_daa_ready(cmdp_do_daa_ready),
+    .cmdw_valid(cmdw_daa_valid),
     .cmdw_ready(cmdw_ready),
     .cmdw(cmdw_daa),
     .cmdw_nack(cmdw_nack),
-    .rmap_daa_status_in_progress(rmap_daa_status_in_progress),
-    .rmap_daa_status_registered(rmap_daa_status_registered),
+    .rmap_daa_status(rmap_daa_status),
     .rmap_daa_peripheral_index(rmap_daa_peripheral_index),
     .rmap_daa_peripheral_da(rmap_daa_peripheral_da)
   );
@@ -135,8 +153,8 @@ module i3c_controller_core #(
   ) i_i3c_controller_framing (
     .reset_n(reset_n),
     .clk(clk_0),
-    .cmdp_valid(cmdp_valid),
-    .cmdp_ready(cmdp_ready),
+    .cmdp_valid(cmdp_valid_w),
+    .cmdp_ready(cmdp_ready_w),
     .cmdp_ccc(cmdp_ccc),
     .cmdp_ccc_bcast(cmdp_ccc_bcast),
     .cmdp_ccc_id(cmdp_ccc_id),
@@ -146,7 +164,6 @@ module i3c_controller_core #(
     .cmdp_buffer_len(cmdp_buffer_len),
     .cmdp_da(cmdp_da),
     .cmdp_rnw(cmdp_rnw),
-    .cmdp_do_daa_ready(cmdp_do_daa_ready),
     .cmdp_cancelled(cmdp_cancelled),
     .sdo_ready(sdo_ready),
     .sdo_valid(sdo_valid),
@@ -154,18 +171,25 @@ module i3c_controller_core #(
     .sdi_ready(sdi_ready),
     .sdi_valid(sdi_valid),
     .sdi(sdi),
+    .cmdw_valid(cmdw_framing_valid),
     .cmdw_ready(cmdw_ready),
     .cmdw(cmdw_framing),
     .cmdw_nack(cmdw_nack),
     .cmdw_rx_ready(cmdw_rx_ready),
     .cmdw_rx_valid(cmdw_rx_valid),
-    .cmdw_rx(cmdw_rx)
+    .cmdw_rx(cmdw_rx),
+    .rx(rx),
+    .idle_bus(idle_bus),
+    .ibi_requested(ibi_requested),
+    .rmap_ibi_config(rmap_ibi_config)
   );
 
   i3c_controller_word #(
   ) i_i3c_controller_word (
     .reset_n(reset_n),
     .clk(clk_0),
+    .cmdw_framing_valid(cmdw_framing_valid),
+    .cmdw_daa_valid(cmdw_daa_valid),
     .cmdw_ready(cmdw_ready),
     .cmdw_mux(cmdw_mux),
     .cmdw_framing(cmdw_framing),
@@ -175,12 +199,18 @@ module i3c_controller_core #(
     .cmdw_rx_valid(cmdw_rx_valid),
     .cmdw_rx(cmdw_rx),
     .cmd(cmd),
+    .cmd_valid(cmd_valid),
     .cmd_ready(cmd_ready),
     .rx(rx),
     .rx_valid(rx_valid),
     .rx_stop(rx_stop),
     .rx_nack(rx_nack),
-    .clk_sel(clk_sel)
+    .clk_sel(clk_sel),
+    .ibi_requested(ibi_requested),
+    .ibi_tick(ibi_tick),
+    .ibi_da(ibi_da),
+    .ibi_mdb(ibi_mdb),
+    .rmap_ibi_config(rmap_ibi_config)
   );
 
   i3c_controller_clk_div #(
@@ -201,11 +231,13 @@ module i3c_controller_core #(
     .clk_1(clk_out),
     .clk_sel(clk_sel),
     .cmd(cmd),
+    .cmd_valid(cmd_valid),
     .cmd_ready(cmd_ready),
     .rx(rx),
     .rx_valid(rx_valid),
     .rx_stop(rx_stop),
     .rx_nack(rx_nack),
+    .idle_bus(idle_bus),
     .scl(scl),
     .sdi(sdi_bit),
     .sdo(sdo_bit),
@@ -221,4 +253,9 @@ module i3c_controller_core #(
   );
 
   assign cmdw_mux = cmdp_do_daa_ready;
+  assign cmdp_ready = cmdp_ready_w & cmdp_do_daa_ready;
+  assign cmdp_valid_w = cmdp_valid & cmdp_do_daa_ready;
+
+  assign ibi = {ibi_da, ibi_mdb};
+  assign ibi_valid = ibi_tick;
 endmodule

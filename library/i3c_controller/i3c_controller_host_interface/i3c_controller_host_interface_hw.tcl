@@ -9,6 +9,7 @@ ad_ip_files i3c_controller_host_interface [list \
   i3c_controller_cmd_parser.v \
   i3c_controller_write_byte.v \
   i3c_controller_read_byte.v \
+  i3c_controller_write_ibi.v \
 ]
 
 # parameters

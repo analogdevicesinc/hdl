@@ -8,6 +8,7 @@ adi_ip_files i3c_controller_host_interface [list \
 	"i3c_controller_cmd_parser.v" \
 	"i3c_controller_write_byte.v" \
 	"i3c_controller_read_byte.v" \
+	"i3c_controller_write_ibi.v" \
 ]
 
 adi_ip_properties_lite i3c_controller_host_interface
@@ -50,7 +51,7 @@ adi_add_bus "cmdp" "master" \
 		{"cmdp_ccc"           "CMDP_CCC"} \
 		{"cmdp_ccc_bcast"     "CMDP_CCC_BCAST"} \
 		{"cmdp_ccc_id"        "CMDP_CCC_ID"} \
-		{"cmdp_bcast_header"  "CMD_BCAST_HEADER"} \
+		{"cmdp_bcast_header"  "CMDP_BCAST_HEADER"} \
 		{"cmdp_xmit"          "CMDP_XMIT"} \
 		{"cmdp_sr"            "CMDP_SR"} \
 		{"cmdp_buffer_len"    "CMDP_BUFFER_LEN"} \
@@ -58,7 +59,7 @@ adi_add_bus "cmdp" "master" \
 		{"cmdp_rnw"           "CMDP_RNW"} \
 		{"cmdp_do_daa"        "CMDP_DO_DAA"} \
 		{"cmdp_do_daa_ready"  "CMDP_DO_DAA_READY"} \
-		{"cmdp_cancelled"    "CMDP_CANCELLED"} \
+		{"cmdp_cancelled"     "CMDP_CANCELLED"} \
 	}
 adi_add_bus_clock "clk" "cmdp" "reset_n"
 
@@ -66,12 +67,15 @@ adi_add_bus "sdio" "master" \
 	"analog.com:interface:i3c_controller_sdio_rtl:1.0" \
 	"analog.com:interface:i3c_controller_sdio:1.0" \
 	{
-		{"sdo_u8_ready" "SDO_READY"} \
-		{"sdo_u8_valid" "SDO_VALID"} \
-		{"sdo_u8"       "SDO_DATA"} \
-		{"sdi_u8_ready" "SDI_READY"} \
-		{"sdi_u8_valid" "SDI_VALID"} \
-		{"sdi_u8"       "SDI_DATA"} \
+		{"sdo_u8_ready"  "SDO_READY"} \
+		{"sdo_u8_valid"  "SDO_VALID"} \
+		{"sdo_u8"        "SDO_DATA"} \
+		{"sdi_u8_ready"  "SDI_READY"} \
+		{"sdi_u8_valid"  "SDI_VALID"} \
+		{"sdi_u8"        "SDI_DATA"} \
+		{"ibi_u_ready"   "IBI_READY"} \
+		{"ibi_u_valid"   "IBI_VALID"} \
+		{"ibi_u"         "IBI_DATA"} \
 	}
 adi_add_bus_clock "clk" "sdio" "reset_n"
 

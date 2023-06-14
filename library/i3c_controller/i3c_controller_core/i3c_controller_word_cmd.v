@@ -16,4 +16,6 @@
 `define CMDW_BCAST_7E_W1           4'd10
 `define CMDW_PROV_ID_BCR_DCR       4'd11
 `define CMDW_DYN_ADDR              4'd12
+`define CMDW_IBI_MDB               4'd13
+`define CMDW_SR                    4'd14
 `endif

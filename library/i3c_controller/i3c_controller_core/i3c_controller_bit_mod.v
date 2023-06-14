@@ -84,6 +84,7 @@ module i3c_controller_bit_mod (
   // Bit Modulation Command
 
   input wire [`MOD_BIT_CMD_WIDTH:0] cmd,
+  input wire cmd_valid,
   output wire cmd_ready,
 
   // RX and ACK
@@ -93,6 +94,9 @@ module i3c_controller_bit_mod (
   output wire rx_stop,
   output wire rx_nack,
 
+  // Status
+
+  output wire idle_bus,
 
   // Bus drive signals
 
@@ -106,8 +110,7 @@ module i3c_controller_bit_mod (
   reg reset_n_clr;
 
   reg pp;
-  reg [2:0] i ;
-  reg [2:0] i_ = 7;
+  reg [2:0] i;
   reg [7:0] scl_;
   reg [7:0] sdi_;
 
@@ -120,6 +123,8 @@ module i3c_controller_bit_mod (
 
   reg sdo_reg;
   reg scl_reg;
+
+  localparam [2:0] i_ = 7;
 
   always @(sm) begin
     case (sm)
@@ -142,11 +147,13 @@ module i3c_controller_bit_mod (
       cmd_ready_reg_ctrl <= 1'b0;
     end else if (reset_n_clr) begin
       reset_n_ctrl <= 1'b1;
-	end else begin
-      if (cmd_ready_reg | sm == `MOD_BIT_CMD_NOP_) begin
-        if (!cmd_ready_reg_ctrl) begin
+	  end else begin
+      if ((cmd_ready_reg & !cmd_ready_reg_ctrl) | sm == `MOD_BIT_CMD_NOP_) begin
+        if (cmd_valid) begin
           sm <= cmd[`MOD_BIT_CMD_WIDTH:2];
           st <= cmd[1:0];
+        end else begin
+          sm <= `MOD_BIT_CMD_NOP_;
         end
       end else begin
         sm <= sm;
@@ -193,13 +200,13 @@ module i3c_controller_bit_mod (
         end
         `MOD_BIT_CMD_WRITE_: begin
           sdi <= st[0];
-          if (i == 5) begin
-            rx_valid_reg[0] <= 1'b1;
-          end
         end
         `MOD_BIT_CMD_READ_: begin
           sdi <= 1'b1;
           pp  <= 1'b0;
+          if (i == 5) begin
+            rx_valid_reg[0] <= 1'b1;
+          end
         end
         `MOD_BIT_CMD_START_: begin
           // For Sr
@@ -214,7 +221,7 @@ module i3c_controller_bit_mod (
             sdi <= 1'b1;
             pp  <= 1'b0;
           end else if (i == 2) begin
-            sdi <=  sdo_reg;
+            sdi <= sdo_reg;
             rx_nack_reg[0] <= sdo_reg;
           end else begin
             sdi <= sdi;
@@ -249,4 +256,5 @@ module i3c_controller_bit_mod (
 
   assign cmd_ready = (cmd_ready_reg | sm == `MOD_BIT_CMD_NOP_) & !cmd_ready_reg_ctrl & reset_n;
   assign t = ~pp & sdi ? 1'b1 : 1'b0;
+  assign idle_bus = sm == `MOD_BIT_CMD_NOP_;
 endmodule

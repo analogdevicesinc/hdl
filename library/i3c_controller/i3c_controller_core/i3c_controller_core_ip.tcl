@@ -42,7 +42,7 @@ adi_add_bus "cmdp" "slave" \
 		{"cmdp_ccc"          "CMDP_CCC"} \
 		{"cmdp_ccc_bcast"    "CMDP_CCC_BCAST"} \
 		{"cmdp_ccc_id"       "CMDP_CCC_ID"} \
-		{"cmdp_bcast_header" "CMD_BCAST_HEADER"} \
+		{"cmdp_bcast_header" "CMDP_BCAST_HEADER"} \
 		{"cmdp_xmit"         "CMDP_XMIT"} \
 		{"cmdp_sr"           "CMDP_SR"} \
 		{"cmdp_buffer_len"   "CMDP_BUFFER_LEN"} \
@@ -64,6 +64,9 @@ adi_add_bus "sdio" "slave" \
 		{"sdi_ready" "SDI_READY"} \
 		{"sdi_valid" "SDI_VALID"} \
 		{"sdi"       "SDI_DATA"} \
+		{"ibi_ready" "IBI_READY"} \
+		{"ibi_valid" "IBI_VALID"} \
+		{"ibi"       "IBI_DATA"} \
 	}
 adi_add_bus_clock "clk" "sdio" "reset_n"
 
@@ -71,10 +74,10 @@ adi_add_bus "rmap" "slave" \
 	"analog.com:interface:i3c_controller_rmap_rtl:1.0" \
 	"analog.com:interface:i3c_controller_rmap:1.0" \
 	{
-		{"rmap_daa_status_in_progress" "RMAP_DAA_STATUS_IN_PROGRESS"} \
-		{"rmap_daa_status_registered"  "RMAP_DAA_STATUS_REGISTERED"} \
+		{"rmap_daa_status"             "RMAP_DAA_STATUS"} \
 		{"rmap_daa_peripheral_index"   "RMAP_DAA_PERIPHERAL_INDEX"} \
 		{"rmap_daa_peripheral_da"      "RMAP_DAA_PERIPHERAL_DA"} \
+		{"rmap_ibi_config"             "RMAP_IBI_CONFIG"} \
 	}
 adi_add_bus_clock "i3c_clk" "rmap" "i3c_reset_n" "master"
 

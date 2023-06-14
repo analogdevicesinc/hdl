@@ -9,6 +9,7 @@ LIBRARY_NAME := i3c_controller_host_interface
 GENERIC_DEPS += i3c_controller_host_interface.v
 GENERIC_DEPS += i3c_controller_write_byte.v
 GENERIC_DEPS += i3c_controller_read_byte.v
+GENERIC_DEPS += i3c_controller_write_ibi.v
 GENERIC_DEPS += i3c_controller_cmd_parser.v
 
 XILINX_DEPS += i3c_controller_host_interface_constr.ttcl

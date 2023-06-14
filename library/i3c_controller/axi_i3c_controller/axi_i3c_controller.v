@@ -113,10 +113,10 @@ module axi_i3c_controller #(
 
   // uP accessible info
 
-  input  wire rmap_daa_status_in_progress,
-  input  wire [DA_LENGTH_WIDTH-1:0] rmap_daa_status_registered,
+  input  wire [DA_LENGTH_WIDTH:0] rmap_daa_status,
   output reg  [DA_LENGTH_WIDTH-1:0] rmap_daa_peripheral_index,
-  input  wire [6:0] rmap_daa_peripheral_da
+  input  wire [6:0] rmap_daa_peripheral_da,
+  output reg  [1:0] rmap_ibi_config
 );
 
   localparam PCORE_VERSION = 'h12345678;
@@ -285,6 +285,7 @@ module axi_i3c_controller #(
           `I3C_REGMAP_SCRATCH:        up_scratch <= up_wdata_s;
           `I3C_REGMAP_ENABLE:         up_sw_reset <= up_wdata_s[0];
           `I3C_REGMAP_DAA_PERIPHERAL: rmap_daa_peripheral_index <= up_wdata_s[DA_LENGTH_WIDTH-1:0];
+          `I3C_REGMAP_IBI_CONFIG:     rmap_ibi_config <= up_wdata_s[1:0];
         endcase
       end
     end
@@ -311,7 +312,6 @@ module axi_i3c_controller #(
     end
   end
 
-  wire [DA_LENGTH_WIDTH:0] rmap_daa_status;
   wire [13:0] rmap_daa_peripheral;
 
   always @(posedge clk) begin
@@ -337,7 +337,6 @@ module axi_i3c_controller #(
     endcase
   end
 
-  assign rmap_daa_status = {rmap_daa_status_registered, rmap_daa_status_in_progress};
   assign rmap_daa_peripheral = {rmap_daa_peripheral_da, {7-DA_LENGTH_WIDTH{1'b0}}, rmap_daa_peripheral_index};
 
   generate if (ASYNC_I3C_CLK) begin

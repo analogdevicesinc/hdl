@@ -77,14 +77,14 @@ module i3c_controller_daa #(
 
   // Word command
 
+  output cmdw_valid,
   input  cmdw_ready,
   output [`CMDW_HEADER_WIDTH+8:0] cmdw,
   input  cmdw_nack,
 
   // uP accessible info
 
-  output rmap_daa_status_in_progress,
-  output [DA_LENGTH_WIDTH-1:0] rmap_daa_status_registered,
+  output [DA_LENGTH_WIDTH:0] rmap_daa_status,
   input  [DA_LENGTH_WIDTH-1:0] rmap_daa_peripheral_index,
   output [6:0] rmap_daa_peripheral_da
 );
@@ -137,7 +137,7 @@ module i3c_controller_daa #(
           // However, DA should have at least the # peripherals expected in
           // the bus
           sm <= da_reg == DA_LENGTH-1 ? `CMDW_STOP : `CMDW_START;
-          da_reg <= da_reg + 1;
+            da_reg <= da_reg + 1;
         end
         `CMDW_STOP: begin
             sm <= `CMDW_NOP;
@@ -152,7 +152,8 @@ module i3c_controller_daa #(
   assign cmdw = {sm, cmdw_body};
   assign cmdp_do_daa_ready = sm == `CMDW_NOP & reset_n;
 
-  assign rmap_daa_status_in_progress = ~cmdp_do_daa_ready;
-  assign rmap_daa_status_registered  = da_reg;
   assign rmap_daa_peripheral_da = DA[7*rmap_daa_peripheral_index+:7];
+  assign rmap_daa_status[DA_LENGTH_WIDTH] = ~cmdp_do_daa_ready; // in_progress
+  assign rmap_daa_status[DA_LENGTH_WIDTH-1:0] = da_reg; // registered
+  assign cmdw_valid = sm != `CMDW_NOP;
 endmodule

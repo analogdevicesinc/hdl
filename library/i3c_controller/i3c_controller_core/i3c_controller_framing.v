@@ -60,7 +60,6 @@ module i3c_controller_framing #(
   input  wire [11:0] cmdp_buffer_len,
   input  wire [6:0]  cmdp_da,
   input  wire        cmdp_rnw,
-  input  wire        cmdp_do_daa_ready,
   output wire        cmdp_cancelled, // by the peripheral
 
   // Byte stream
@@ -75,15 +74,30 @@ module i3c_controller_framing #(
 
   // Word command
 
+  output wire cmdw_valid,
   input  wire cmdw_ready,
   output wire [`CMDW_HEADER_WIDTH+8:0] cmdw,
   input  wire cmdw_nack,
 
   output wire cmdw_rx_ready,
   input  wire cmdw_rx_valid,
-  input  wire [7:0] cmdw_rx
+  input  wire [7:0] cmdw_rx,
+
+  // Raw SDO input & bus condition
+
+  input wire rx,
+  input wire idle_bus,
+
+  // IBI interface
+
+  input wire ibi_requested,
+
+  // uP accessible info
+
+  input wire [1:0] rmap_ibi_config
 );
-  wire cmdp_valid_w;
+  wire ibi_enable;
+  wire ibi_auto;
 
   reg        cmdp_ccc_reg;
   reg        cmdp_ccc_bcast_reg;
@@ -95,16 +109,19 @@ module i3c_controller_framing #(
   reg [6:0]  cmdp_da_reg;
   reg        cmdp_rnw_reg;
 
+  reg ibi_requested_lock;
+
   reg [`CMDW_HEADER_WIDTH:0] sm;
   reg [7:0] cmdw_body;
   reg sr;
 
+  reg [1:0] smt;
   localparam [1:0]
     setup      = 0,
     transfer   = 1,
     setup_sdo  = 2,
     cleanup    = 3;
-  reg [1:0] smt;
+  reg cmdp_valid_reg;
 
   always @(posedge clk) begin
     if (!reset_n) begin
@@ -119,8 +136,16 @@ module i3c_controller_framing #(
       case (smt)
         setup: begin
           sr <= cmdw_ready ? 1'b0 : sr;
-          sm <= cmdp_valid_w ? (cmdw_ready | ~sr ? `CMDW_START : `CMDW_MSG_SR) : (cmdw_ready ? `CMDW_NOP : sm);
-          smt <= cmdp_valid_w ? transfer : setup;
+          if (idle_bus & ibi_auto & ibi_enable & ~rx) begin
+            sm <= `CMDW_BCAST_7E_W0;
+            smt <= transfer;
+          end else if (cmdp_valid) begin
+            sm <= cmdw_ready | ~sr ? `CMDW_START : `CMDW_MSG_SR;
+            smt <= transfer;
+          end else begin
+            sm <= cmdw_ready ? `CMDW_NOP : sm;
+          end
+          cmdp_valid_reg <= cmdp_valid;
           cmdp_ccc_reg          <= cmdp_ccc;
           cmdp_ccc_bcast_reg    <= cmdp_ccc_bcast;
           cmdp_ccc_id_reg       <= cmdp_ccc_id;
@@ -130,14 +155,20 @@ module i3c_controller_framing #(
           cmdp_buffer_len_reg   <= cmdp_buffer_len;
           cmdp_da_reg           <= cmdp_da;
           cmdp_rnw_reg          <= cmdp_rnw;
+          ibi_requested_lock <= 1'b0;
         end
         transfer: begin
           sr <= cmdp_sr_reg;
+          if (ibi_requested & ~ibi_requested_lock) begin
+            sm <= ibi_enable ? `CMDW_IBI_MDB : `CMDW_SR;
+            ibi_requested_lock <= 1'b1;
+          end
           if (cmdw_ready) begin
             case(sm)
               `CMDW_NOP: begin
                 smt <= setup;
               end
+              `CMDW_SR,
               `CMDW_START: begin
                 cmdw_body <= {cmdp_da, cmdp_rnw}; // Attention to RnW here
                 sm <= ~cmdp_bcast_header_reg & ~cmdp_ccc_reg ? `CMDW_TARGET_ADDR_OD : `CMDW_BCAST_7E_W0;
@@ -192,6 +223,9 @@ module i3c_controller_framing #(
                 sm <= `CMDW_NOP;
                 cmdp_sr_reg <= 1'b0;
               end
+              `CMDW_IBI_MDB: begin
+                sm <= cmdp_valid_reg ? `CMDW_SR : `CMDW_STOP;
+              end
               default: begin
                 sm <= `CMDW_NOP;
               end
@@ -220,13 +254,16 @@ module i3c_controller_framing #(
     end
   end
 
-  assign cmdp_ready = smt == setup & reset_n & !cmdw_nack;
+  assign cmdp_ready = smt == setup & cmdw_ready & !cmdw_nack & reset_n;
   assign sdo_ready = (smt == setup_sdo | smt == cleanup) & reset_n;
   assign cmdw = {sm, cmdw_body};
-  assign cmdp_valid_w = cmdp_valid & cmdp_do_daa_ready;
   assign cmdp_cancelled = cmdw_nack;
+  assign cmdw_valid = smt == transfer;
 
   assign cmdw_rx_ready = sdi_ready;
   assign sdi_valid = cmdw_rx_valid;
   assign sdi = cmdw_rx;
+
+  assign ibi_enable = rmap_ibi_config[0];
+  assign ibi_auto   = rmap_ibi_config[1];
 endmodule
