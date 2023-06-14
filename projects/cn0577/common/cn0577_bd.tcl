@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 # ltc2387
 
 create_bd_port -dir I ref_clk

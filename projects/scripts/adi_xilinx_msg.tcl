@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2018-2023 Analog Devices, Inc. All rights reserved.
+# SPDX short identifier: ADIBSD
+###############################################################################
 
 ################################################################################
 ## This file contains all the message severity changes for Vivado 20xx.x.x

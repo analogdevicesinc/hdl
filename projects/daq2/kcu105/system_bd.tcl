@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 ## Offload attributes
 set adc_offload_type 0
 set adc_offload_size [expr 512 * 1024]

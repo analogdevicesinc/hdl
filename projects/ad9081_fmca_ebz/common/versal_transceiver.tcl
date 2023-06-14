@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+# SPDX short identifier: ADIBSD
+###############################################################################
 proc create_versal_phy {
   {ip_name versal_phy}
   {num_lanes 4}

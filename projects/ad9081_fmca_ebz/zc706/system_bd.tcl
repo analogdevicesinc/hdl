@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+# SPDX short identifier: ADIBSD
+###############################################################################
 ## ADC FIFO depth in samples per converter
 set adc_fifo_samples_per_converter [expr 32*1024]
 ## DAC FIFO depth in samples per converter

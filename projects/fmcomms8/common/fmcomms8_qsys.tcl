@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2020-2023 Analog Devices, Inc. All rights reserved.
+# SPDX short identifier: ADIBSD
+###############################################################################
 
 # TX parameters
 set TX_NUM_OF_LANES 8      ; # L

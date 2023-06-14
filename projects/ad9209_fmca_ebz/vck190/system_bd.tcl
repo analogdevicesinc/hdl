@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2023-2023 Analog Devices, Inc. All rights reserved.
+# SPDX short identifier: ADIBSD
+###############################################################################
 # Create only the RX path
 set INTF_CFG RX
 

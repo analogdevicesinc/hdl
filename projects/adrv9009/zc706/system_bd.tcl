@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2016-2023 Analog Devices, Inc. All rights reserved.
+# SPDX short identifier: ADIBSD
+###############################################################################
 set dac_fifo_address_width 10
 
 source $ad_hdl_dir/projects/common/zc706/zc706_system_bd.tcl

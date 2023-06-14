@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+# SPDX short identifier: ADIBSD
+###############################################################################
 
 proc ad_adcfifo_create {adc_fifo_name adc_data_width adc_dma_data_width adc_fifo_address_width} {
 

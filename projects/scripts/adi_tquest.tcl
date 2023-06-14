@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2015-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
 report_timing -detail full_path -npaths 20 -setup -file timing_impl.log
 report_timing -detail full_path -npaths 20 -hold -append -file timing_impl.log

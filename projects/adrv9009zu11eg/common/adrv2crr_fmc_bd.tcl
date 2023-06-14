@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+# SPDX short identifier: ADIBSD
+###############################################################################
 
 create_bd_port -dir O -type clk i2s_mclk
 create_bd_intf_port -mode Master -vlnv analog.com:interface:i2s_rtl:1.0 i2s

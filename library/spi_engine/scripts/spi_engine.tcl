@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2020-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 proc spi_engine_create {{name "spi_engine"} {data_width 32} {async_spi_clk 1} {num_cs 1} {num_sdi 1} {num_sdo 1} {sdi_delay 0} {echo_sclk 0}} {
 
   puts "echo_sclk: $echo_sclk"

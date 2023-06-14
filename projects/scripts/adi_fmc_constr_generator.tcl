@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 # To use this script you can source it in any tcl shell or simply
 # run it e.g. tclsh ../../scripts/adi_fmc_constr_generator.tcl fmc0
 

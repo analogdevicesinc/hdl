@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
+# SPDX short identifier: ADIBSD
+###############################################################################
 ## FIFO depth is 16Mb - 1M samples
 set dac_fifo_address_width 17
 

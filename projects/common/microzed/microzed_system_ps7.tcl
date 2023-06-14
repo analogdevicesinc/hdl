@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2015-2023 Analog Devices, Inc. All rights reserved.
+# SPDX short identifier: ADIBSD
+###############################################################################
 
 ad_ip_parameter sys_ps7 CONFIG.PCW_PRESET_BANK0_VOLTAGE                      {LVCMOS 3.3V}
 ad_ip_parameter sys_ps7 CONFIG.PCW_PRESET_BANK1_VOLTAGE                      {LVCMOS 1.8V}

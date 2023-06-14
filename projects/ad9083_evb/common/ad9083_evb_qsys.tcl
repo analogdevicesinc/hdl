@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+# SPDX short identifier: ADIBSD
+###############################################################################
 # JESD204B attributes
 
 set RX_NUM_OF_LANES 4           ; # L

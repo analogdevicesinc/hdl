@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 ad_ip_parameter sys_ps7 CONFIG.PCW_ACT_APU_PERIPHERAL_FREQMHZ {650.000000}
 ad_ip_parameter sys_ps7 CONFIG.PCW_ACT_DCI_PERIPHERAL_FREQMHZ {10.096154}
 ad_ip_parameter sys_ps7 CONFIG.PCW_ACT_ENET0_PERIPHERAL_FREQMHZ {125.000000}

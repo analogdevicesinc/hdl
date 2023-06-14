@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2016-2023 Analog Devices, Inc. All rights reserved.
+# SPDX short identifier: ADIBSD
+###############################################################################
 #
 # Parameter description:
 #   [TX/RX/RX_OS]_JESD_M  : Number of converters per link

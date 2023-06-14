@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 ## Instantiate Xilinx Virtual Cable debug bridge
 #  This procedure will instantiate the two debug bridges that make
 #  up the XVC logic, and hook them up to the main CPU interconnect

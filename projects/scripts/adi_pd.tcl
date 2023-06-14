@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2020-2023 Analog Devices, Inc. All rights reserved.
+# SPDX short identifier: ADIBSD
+###############################################################################
 ## Converts a string input to hex and adds whitespace as padding to obtain the size defined by
 # the blocksize parameter.
 #

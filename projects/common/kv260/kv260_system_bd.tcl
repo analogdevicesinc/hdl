@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+# SPDX short identifier: ADIBSD
+###############################################################################
 # create board design
 
 # set Kria SOM240_1 connector to KV260 evaluation carrier

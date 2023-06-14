@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 # density 4GB,8GB
 proc ad_create_hbm {ip_name {density "4GB"}} {
   global hbm_sim;

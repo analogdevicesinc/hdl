@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 set_property -dict {PACKAGE_PIN AE8  IOSTANDARD LVCMOS18 PULLUP true} [get_ports mdio_fmc_a]      ; ## H16 FMC_HPC1_LA11_P
 set_property -dict {PACKAGE_PIN AF8  IOSTANDARD LVCMOS18} [get_ports mdc_fmc_a]                   ; ## H17 FMC_HPC1_LA11_N
 set_property -dict {PACKAGE_PIN AD10 IOSTANDARD LVCMOS18} [get_ports reset_a]                     ; ## H19 FMC_HPC1_LA15_P

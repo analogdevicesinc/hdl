@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 # ad77684
 
 add_instance axi_ad77684_adc axi_ad7768

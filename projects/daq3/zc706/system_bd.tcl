@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 ## FIFO depth is 1GB, PL_DDR is used
 set adc_fifo_address_width 16
 

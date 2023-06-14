@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2020-2023 Analog Devices, Inc. All rights reserved.
+# SPDX short identifier: ADIBSD
+###############################################################################
 
 # For Arria 10 architecture
 set_global_assignment -name MESSAGE_DISABLE 17951 ; ## unused RX channels

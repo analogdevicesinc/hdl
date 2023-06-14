@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+# SPDX short identifier: ADIBSD
+###############################################################################
 
 create_bd_port -dir I -type rst sys_rst
 create_bd_port -dir I sys_clk_p

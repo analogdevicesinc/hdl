@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 cn0561_di
 create_bd_port -dir O cn0561_odr
 

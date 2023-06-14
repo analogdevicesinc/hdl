@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+# SPDX short identifier: ADIBSD
+###############################################################################
 # de10nano
 # clocks (V11, Y13, E11 - PL 50MHz)
 # clocks (E20, D20 - HPS 25MHz)

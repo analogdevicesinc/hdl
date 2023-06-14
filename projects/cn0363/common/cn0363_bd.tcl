@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2016-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 proc load_fir_filter_vector {filter_file} {
 	set fp [open $filter_file r]
 	set data [split [read $fp] "\n"]

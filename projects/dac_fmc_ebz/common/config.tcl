@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 # Select the device and mode you want the project synthesise for, by setting the
 # ADI_DAC_DEVICE and ADI_DAC_MODE environment variables:
 #

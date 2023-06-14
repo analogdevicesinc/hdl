@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+# SPDX short identifier: ADIBSD
+###############################################################################
 # pl ddr3 (use only when dma is not capable of keeping up).
 # generic fifo interface - existence is oblivious to software.
 

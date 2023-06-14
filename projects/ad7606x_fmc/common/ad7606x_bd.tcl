@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 # system level parameters
 
 set DEV_CONFIG $ad_project_params(DEV_CONFIG)

@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+# SPDX short identifier: ADIBSD
+###############################################################################
 source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl

@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2016-2023 Analog Devices, Inc. All rights reserved.
+# SPDX short identifier: ADIBSD
+###############################################################################
 # a10gx carrier qsys
 
 set system_type nios

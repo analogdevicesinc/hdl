@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+# SPDX short identifier: ADIBSD
+###############################################################################
 # environment related stuff
 
 set ad_hdl_dir [file normalize [file join [file dirname [info script]] "../"]]

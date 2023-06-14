@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 # receive dma
 
 add_instance axi_dmac_0 axi_dmac

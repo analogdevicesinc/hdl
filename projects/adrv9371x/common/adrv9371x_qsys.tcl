@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2016-2023 Analog Devices, Inc. All rights reserved.
+# SPDX short identifier: ADIBSD
+###############################################################################
 set dac_fifo_name avl_ad9371_tx_fifo
 set dac_data_width 128
 set dac_dma_data_width 128
