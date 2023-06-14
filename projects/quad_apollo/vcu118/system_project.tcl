@@ -23,8 +23,8 @@ source ../../../../hdl/projects/scripts/adi_board.tcl
 
 adi_project ad_xband16_ebz_vcu118 0 [list \
   JESD_MODE    [get_env_param JESD_MODE           64B66B] \
-  RX_LANE_RATE [get_env_param RX_RATE              26.4 ] \
-  TX_LANE_RATE [get_env_param TX_RATE              26.4 ] \
+  RX_LANE_RATE [get_env_param RX_RATE              13.2 ] \
+  TX_LANE_RATE [get_env_param TX_RATE              13.2 ] \
   RX_JESD_M    [get_env_param RX_JESD_M               8 ] \
   RX_JESD_L    [get_env_param RX_JESD_L               4 ] \
   RX_JESD_S    [get_env_param RX_JESD_S               1 ] \

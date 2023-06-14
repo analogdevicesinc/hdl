@@ -20,7 +20,9 @@ GENERIC_DEPS += hsci_mlink_ctrl.sv
 GENERIC_DEPS += lfsr15_8.v
 GENERIC_DEPS += pulse_sync.v
 GENERIC_DEPS += axi4_lite.sv
+GENERIC_DEPS += ../common/ad_rst.v
 
+XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
 XILINX_DEPS += axi_hsci_constr.ttcl
 XILINX_DEPS += axi_hsci_ip.tcl
 

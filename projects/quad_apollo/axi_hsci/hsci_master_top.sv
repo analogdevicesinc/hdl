@@ -100,8 +100,10 @@ module hsci_master_top #(
   wire                              axi_bram_wr_en;
   
   wire                              run_s;
-  wire                              hsci_rstn;
   wire                              hsci_clear_errors;
+  logic                             hsci_rstn_async;
+  logic                             hsci_rst_sync;
+
 
   assign I.hsci_reset_seq_done = hsci_rst_seq_done;
   assign I.hsci_phy_pll_locked = hsci_pll_locked;
@@ -111,24 +113,30 @@ module hsci_master_top #(
   assign I.hsci_dly_rdy_rx     = hsci_dly_rdy_bsc_rx;
 
   assign hsci_pll_reset = O.hsci_pll_reset.data;
-  assign hsci_rstn = O.hsci_master_rstn.data & hsci_pll_locked;
+  assign hsci_rstn_async = O.hsci_master_rstn.data & hsci_pll_locked;
   assign hsci_clear_errors = O.hsci_master_clear_errors.data;
   assign bram_strt_addr = (O.hsci_master_bram_address_hsci_bram_start_address.data)-1;//*'h4 - 16'h4;
-  
+
+   ad_rst i_hsci_rstn_reg (
+     .rst_async(~hsci_rstn_async),
+     .clk(hsci_pclk),
+     .rstn(),
+     .rst(hsci_rst_sync));
+
    pulse_sync sync_run (
      .dout       (run_s),  
      .inclk      (axi_clk),
      .rst_inclk  (~axi_resetn),
      .outclk     (hsci_pclk),
-     .rst_outclk (~hsci_rstn),
+     .rst_outclk (hsci_rst_sync),
      .din        (O.hsci_master_run_hsci_run.data)
    );  
-    
+
    // HSCI Core Instantiation
    hsci_mcore hsci_mcore (
    //globals
    .hsci_pclk              (hsci_pclk),
-   .hsci_rstn              (hsci_rstn),
+   .hsci_rstn              (hsci_rstn_async),
    // register inputs
    .hsci_master_run        (run_s),
    .hsci_cmd_sel           (O.hsci_master_ctrl_hsci_cmd_sel.data),
@@ -231,7 +239,7 @@ module hsci_master_top #(
   .dbiterra          (dbiterra),
   // Port B module ports
   .clkb              (hsci_pclk),
-  .rstb              (~hsci_rstn),
+  .rstb              (hsci_rst_sync),
   .enb               (bram_ce),                
   .regceb            (1'b1),
   .web               (bram_we),

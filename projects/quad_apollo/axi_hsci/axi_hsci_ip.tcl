@@ -5,6 +5,8 @@ source ../scripts/adi_ip_xilinx.tcl
 
 adi_ip_create axi_hsci
 adi_ip_files axi_hsci [list \
+  "../common/ad_rst.v" \
+  "../xilinx/common/ad_rst_constr.xdc" \
   "axi_hsci.sv" \
   "hsci_master_axi_slave.sv" \
   "hsci_master_logic.sv" \

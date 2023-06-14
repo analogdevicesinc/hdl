@@ -133,22 +133,22 @@ set_property  -dict {PACKAGE_PIN AG31 IOSTANDARD LVDS                           
 set_property  -dict {PACKAGE_PIN AH31 IOSTANDARD LVDS                                         } [get_ports hsci_din_n[2]    ]; ## LA14_N          C19  IO_L23N_T3U_N9_43
 set_property  -dict {PACKAGE_PIN AP36 IOSTANDARD LVDS                                         } [get_ports hsci_din_p[3]    ]; ## LA07_P          H13  IO_L5P_T0U_N8_AD14P_43
 set_property  -dict {PACKAGE_PIN AP37 IOSTANDARD LVDS                                         } [get_ports hsci_din_n[3]    ]; ## LA07_N          H14  IO_L5N_T0U_N9_AD14N_43
-set_property  -dict {PACKAGE_PIN N33  IOSTANDARD LVDS                                         } [get_ports hsci_cko_p[0]    ]; ## LA19_P          H22  IO_L22P_T3U_N6_DBC_AD0P_45
-set_property  -dict {PACKAGE_PIN M33  IOSTANDARD LVDS                                         } [get_ports hsci_cko_n[0]    ]; ## LA19_N          H23  IO_L22N_T3U_N7_DBC_AD0N_45
-set_property  -dict {PACKAGE_PIN U35  IOSTANDARD LVDS                                         } [get_ports hsci_cko_p[1]    ]; ## LA29_P          G30  IO_L4P_T0U_N6_DBC_AD7P_45
-set_property  -dict {PACKAGE_PIN T36  IOSTANDARD LVDS                                         } [get_ports hsci_cko_n[1]    ]; ## LA29_N          G31  IO_L4N_T0U_N7_DBC_AD7N_45
-set_property  -dict {PACKAGE_PIN AJ33 IOSTANDARD LVDS                                         } [get_ports hsci_cko_p[2]    ]; ## LA09_P          D14  IO_L19P_T3L_N0_DBC_AD9P_43
-set_property  -dict {PACKAGE_PIN AK33 IOSTANDARD LVDS                                         } [get_ports hsci_cko_n[2]    ]; ## LA09_N          D15  IO_L19N_T3L_N1_DBC_AD9N_43
-set_property  -dict {PACKAGE_PIN AP38 IOSTANDARD LVDS                                         } [get_ports hsci_cko_p[3]    ]; ## LA05_P          D11  IO_L1P_T0L_N0_DBC_43
-set_property  -dict {PACKAGE_PIN AR38 IOSTANDARD LVDS                                         } [get_ports hsci_cko_n[3]    ]; ## LA05_N          D12  IO_L1N_T0L_N1_DBC_43
-set_property  -dict {PACKAGE_PIN N32  IOSTANDARD LVDS                                         } [get_ports hsci_do_p[0]     ]; ## LA20_P          G21  IO_L23P_T3U_N8_45
-set_property  -dict {PACKAGE_PIN M32  IOSTANDARD LVDS                                         } [get_ports hsci_do_n[0]     ]; ## LA20_N          G22  IO_L23N_T3U_N9_45
-set_property  -dict {PACKAGE_PIN V34  IOSTANDARD LVDS                                         } [get_ports hsci_do_n[1]     ]; ## LA27_N          C27  IO_L5P_T0U_N8_AD14P_45
-set_property  -dict {PACKAGE_PIN V33  IOSTANDARD LVDS                                         } [get_ports hsci_do_p[1]     ]; ## LA27_P          C26  IO_L5N_T0U_N9_AD14N_45
-set_property  -dict {PACKAGE_PIN AJ35 IOSTANDARD LVDS                                         } [get_ports hsci_do_p[2]     ]; ## LA13_P          D17  IO_L20P_T3L_N2_AD1P_43
-set_property  -dict {PACKAGE_PIN AJ36 IOSTANDARD LVDS                                         } [get_ports hsci_do_n[2]     ]; ## LA13_N          D18  IO_L20N_T3L_N3_AD1N_43
-set_property  -dict {PACKAGE_PIN AT35 IOSTANDARD LVDS                                         } [get_ports hsci_do_p[3]     ]; ## LA06_P          C10  IO_L2P_T0L_N2_43
-set_property  -dict {PACKAGE_PIN AT36 IOSTANDARD LVDS                                         } [get_ports hsci_do_n[3]     ]; ## LA06_N          C11  IO_L2N_T0L_N3_43
+set_property  -dict {PACKAGE_PIN N33  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100              } [get_ports hsci_cko_p[0]    ]; ## LA19_P          H22  IO_L22P_T3U_N6_DBC_AD0P_45
+set_property  -dict {PACKAGE_PIN M33  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100              } [get_ports hsci_cko_n[0]    ]; ## LA19_N          H23  IO_L22N_T3U_N7_DBC_AD0N_45
+set_property  -dict {PACKAGE_PIN U35  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100              } [get_ports hsci_cko_p[1]    ]; ## LA29_P          G30  IO_L4P_T0U_N6_DBC_AD7P_45
+set_property  -dict {PACKAGE_PIN T36  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100              } [get_ports hsci_cko_n[1]    ]; ## LA29_N          G31  IO_L4N_T0U_N7_DBC_AD7N_45
+set_property  -dict {PACKAGE_PIN AJ33 IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100              } [get_ports hsci_cko_p[2]    ]; ## LA09_P          D14  IO_L19P_T3L_N0_DBC_AD9P_43
+set_property  -dict {PACKAGE_PIN AK33 IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100              } [get_ports hsci_cko_n[2]    ]; ## LA09_N          D15  IO_L19N_T3L_N1_DBC_AD9N_43
+set_property  -dict {PACKAGE_PIN AP38 IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100              } [get_ports hsci_cko_p[3]    ]; ## LA05_P          D11  IO_L1P_T0L_N0_DBC_43
+set_property  -dict {PACKAGE_PIN AR38 IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100              } [get_ports hsci_cko_n[3]    ]; ## LA05_N          D12  IO_L1N_T0L_N1_DBC_43
+set_property  -dict {PACKAGE_PIN N32  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100              } [get_ports hsci_do_p[0]     ]; ## LA20_P          G21  IO_L23P_T3U_N8_45
+set_property  -dict {PACKAGE_PIN M32  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100              } [get_ports hsci_do_n[0]     ]; ## LA20_N          G22  IO_L23N_T3U_N9_45
+set_property  -dict {PACKAGE_PIN V34  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100              } [get_ports hsci_do_n[1]     ]; ## LA27_N          C27  IO_L5P_T0U_N8_AD14P_45
+set_property  -dict {PACKAGE_PIN V33  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100              } [get_ports hsci_do_p[1]     ]; ## LA27_P          C26  IO_L5N_T0U_N9_AD14N_45
+set_property  -dict {PACKAGE_PIN AJ35 IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100              } [get_ports hsci_do_p[2]     ]; ## LA13_P          D17  IO_L20P_T3L_N2_AD1P_43
+set_property  -dict {PACKAGE_PIN AJ36 IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100              } [get_ports hsci_do_n[2]     ]; ## LA13_N          D18  IO_L20N_T3L_N3_AD1N_43
+set_property  -dict {PACKAGE_PIN AT35 IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100              } [get_ports hsci_do_p[3]     ]; ## LA06_P          C10  IO_L2P_T0L_N2_43
+set_property  -dict {PACKAGE_PIN AT36 IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100              } [get_ports hsci_do_n[3]     ]; ## LA06_N          C11  IO_L2N_T0L_N3_43
 ## Trigger
 set_property  -dict {PACKAGE_PIN W14  IOSTANDARD LVCMOS18                                     } [get_ports trig0_a[0]       ]; ## HA09_P          E9   IO_L6P_T0U_N10_AD6P_70
 set_property  -dict {PACKAGE_PIN T14  IOSTANDARD LVCMOS18                                     } [get_ports trig0_a[1]       ]; ## HA16_P          E15  IO_L11P_T1U_N8_GC_70
