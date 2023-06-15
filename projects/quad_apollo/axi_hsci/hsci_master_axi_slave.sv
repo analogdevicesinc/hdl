@@ -63,7 +63,7 @@ module hsci_master_axi_slave #(
   localparam [AXI_STATE_WIDTH-1:0]  AXI_STATE_RDD        = 3;  // gives us 2 cyc latency to latch the data
   localparam [AXI_STATE_WIDTH-1:0]  AXI_STATE_DELAY_RDR  = 4;  // gives us another 1 cycle latency
   localparam [AXI_STATE_WIDTH-1:0]  AXI_STATE_RDR        = 5; 
-  localparam [17:0]                 BRAM_END             = 'h20000;
+  localparam [17:0]                 BRAM_END             = 'h8000;
 
   reg  [AXI_STATE_WIDTH-1:0]        axi_last, axi_curr, axi_next;
   
@@ -121,7 +121,7 @@ module hsci_master_axi_slave #(
 
   // Decode Logic
   always @(posedge axi_clk) begin
-      if( (axi.araddr == 'h00000) | (axi.araddr > BRAM_END) | (axi.awaddr > BRAM_END) ) begin
+      if((regaddr == 'h00000) | (regaddr > BRAM_END)) begin
          en_bram   <= 0;
          en_regmap <= 1;
       end else begin
