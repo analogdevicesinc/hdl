@@ -56,20 +56,20 @@
 				</spirit:onSlave>
 			</spirit:wire>
 		</spirit:port>
+		<spirit:port>
+				<spirit:logicalName>RMAP_IBI_CONFIG</spirit:logicalName>
+				<spirit:wire>
+					<spirit:onMaster>
+						<spirit:presence>required</spirit:presence>
+						<spirit:width>2</spirit:width>
+						<spirit:direction>out</spirit:direction>
+					</spirit:onMaster>
+					<spirit:onSlave>
+						<spirit:presence>optional</spirit:presence>
+						<spirit:width>2</spirit:width>
+						<spirit:direction>in</spirit:direction>
+					</spirit:onSlave>
+				</spirit:wire>
+		</spirit:port>
 	</spirit:ports>
-	<spirit:port>
-			<spirit:logicalName>RMAP_IBI_CONFIG</spirit:logicalName>
-			<spirit:wire>
-				<spirit:onMaster>
-					<spirit:presence>required</spirit:presence>
-					<spirit:width>2</spirit:width>
-					<spirit:direction>out</spirit:direction>
-				</spirit:onMaster>
-				<spirit:onSlave>
-					<spirit:presence>optional</spirit:presence>
-					<spirit:width>2</spirit:width>
-					<spirit:direction>in</spirit:direction>
-				</spirit:onSlave>
-			</spirit:wire>
-	</spirit:port>
 </spirit:abstractionDefinition>

@@ -22,6 +22,7 @@
 				<spirit:onSlave>
 					<spirit:presence>required</spirit:presence>
 					<spirit:width>1</spirit:width>
+					<spirit:direction>out</spirit:direction>
 				</spirit:onSlave>
 			</spirit:wire>
 		</spirit:port>
@@ -31,6 +32,7 @@
 				<spirit:onMaster>
 					<spirit:presence>required</spirit:presence>
 					<spirit:width>1</spirit:width>
+					<spirit:direction>out</spirit:direction>
 				</spirit:onMaster>
 				<spirit:onSlave>
 					<spirit:presence>required</spirit:presence>
@@ -45,6 +47,7 @@
 				<spirit:onMaster>
 					<spirit:presence>required</spirit:presence>
 					<spirit:width>32</spirit:width>
+					<spirit:direction>out</spirit:direction>
 				</spirit:onMaster>
 				<spirit:onSlave>
 					<spirit:presence>required</spirit:presence>
@@ -109,6 +112,7 @@
 				<spirit:onSlave>
 					<spirit:presence>required</spirit:presence>
 					<spirit:width>1</spirit:width>
+					<spirit:direction>out</spirit:direction>
 				</spirit:onSlave>
 			</spirit:wire>
 		</spirit:port>
@@ -118,6 +122,7 @@
 				<spirit:onMaster>
 					<spirit:presence>required</spirit:presence>
 					<spirit:width>1</spirit:width>
+					<spirit:direction>out</spirit:direction>
 				</spirit:onMaster>
 				<spirit:onSlave>
 					<spirit:presence>required</spirit:presence>
@@ -132,6 +137,7 @@
 				<spirit:onMaster>
 					<spirit:presence>required</spirit:presence>
 					<spirit:width>32</spirit:width>
+					<spirit:direction>out</spirit:direction>
 				</spirit:onMaster>
 				<spirit:onSlave>
 					<spirit:presence>required</spirit:presence>

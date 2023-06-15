@@ -339,6 +339,8 @@ module axi_i3c_controller #(
 
   assign rmap_daa_peripheral = {rmap_daa_peripheral_da, {7-DA_LENGTH_WIDTH{1'b0}}, rmap_daa_peripheral_index};
 
+  wire clk_1;
+
   generate if (ASYNC_I3C_CLK) begin
     wire i3c_reset;
     ad_rst i_spi_resetn (
@@ -347,8 +349,10 @@ module axi_i3c_controller #(
       .rst(i3c_reset),
       .rstn());
     assign i3c_reset_n = ~i3c_reset;
+    assign clk_1 = i3c_clk;
   end else begin /* ASYNC_I3C_CLK == 0 */
     assign i3c_reset_n = ~up_sw_reset;
+    assign clk_1 = clk;
   end
   endgenerate
 
@@ -372,7 +376,7 @@ module axi_i3c_controller #(
     .s_axis_tlast(1'b0),
     .s_axis_full(),
     .s_axis_almost_full(),
-    .m_axis_aclk(i3c_clk),
+    .m_axis_aclk(clk_1),
     .m_axis_aresetn(i3c_reset_n),
     .m_axis_ready(cmd_ready),
     .m_axis_valid(cmd_valid),
@@ -392,7 +396,7 @@ module axi_i3c_controller #(
     .ALMOST_EMPTY_THRESHOLD(1),
     .ALMOST_FULL_THRESHOLD(31)
   ) i_cmdr_fifo (
-    .s_axis_aclk(i3c_clk),
+    .s_axis_aclk(clk_1),
     .s_axis_aresetn(i3c_reset_n),
     .s_axis_ready(cmdr_ready),
     .s_axis_valid(cmdr_valid),
@@ -431,7 +435,7 @@ module axi_i3c_controller #(
     .s_axis_tlast(1'b0),
     .s_axis_full(),
     .s_axis_almost_full(),
-    .m_axis_aclk(i3c_clk),
+    .m_axis_aclk(clk_1),
     .m_axis_aresetn(i3c_reset_n),
     .m_axis_ready(sdo_ready),
     .m_axis_valid(sdo_valid),
@@ -451,7 +455,7 @@ module axi_i3c_controller #(
     .ALMOST_EMPTY_THRESHOLD(1),
     .ALMOST_FULL_THRESHOLD(31)
   ) i_sdi_fifo (
-    .s_axis_aclk(i3c_clk),
+    .s_axis_aclk(clk_1),
     .s_axis_aresetn(i3c_reset_n),
     .s_axis_ready(sdi_ready),
     .s_axis_valid(sdi_valid),
@@ -480,7 +484,7 @@ module axi_i3c_controller #(
     .ALMOST_EMPTY_THRESHOLD(1),
     .ALMOST_FULL_THRESHOLD(31)
   ) i_ibi_fifo (
-    .s_axis_aclk(i3c_clk),
+    .s_axis_aclk(clk_1),
     .s_axis_aresetn(i3c_reset_n),
     .s_axis_ready(ibi_ready),
     .s_axis_valid(ibi_valid),

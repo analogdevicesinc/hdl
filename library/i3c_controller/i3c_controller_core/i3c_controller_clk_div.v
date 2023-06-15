@@ -33,61 +33,53 @@
 // ***************************************************************************
 // ***************************************************************************
 /**
- * Async I3C:
- * Select clock clk_1/2 (sel=0) or clk_0/1 (sel=1) output.
- * Sync I3C:
- * Select clock clk_0/32 (sel=0) or clk_0/8 (sel=1) output.
+ * Select clock clk/4 (sel=0) or clk/1 (sel=1) output.
  */
 
 `timescale 1ns/100ps
 `default_nettype none
 
 module i3c_controller_clk_div #(
-  parameter ASYNC_CLK = 0
+  parameter SIM_DEVICE = "7SERIES",
+  parameter CLK_DIV = 4
 ) (
   input  wire reset_n,
   input  wire sel,
   input  wire cmd_ready,
-  input  wire clk_0,
-  input  wire clk_1,
+  input  wire clk,
   output wire clk_out
   );
-  wire clk_0_w;
-  wire clk_1_w;
+  wire clk_1;
 
-  generate if (ASYNC_CLK) begin
-    reg [0:0] clk_2;
-    always @(posedge clk_1) begin
-      if (!reset_n) begin
-        clk_2 <= 1'd0;
-      end else begin
-        clk_2 <= ~clk_2;
-      end
-    end
-    assign clk_0_w = clk_0;
-    assign clk_1_w = clk_2;
-  end
-  endgenerate
-
-  generate if (!ASYNC_CLK) begin
-    reg [4:0] clk_reg;
-      always @(posedge clk_0) begin
-      if (!reset_n) begin
-        clk_reg <= 5'd0;
-      end else begin
-        clk_reg <= clk_reg + 1;
-      end
-    end
-    assign clk_0_w = clk_reg[1];
-    assign clk_1_w = clk_reg[4];
+  generate if (SIM_DEVICE == "7SERIES") begin
+    BUFR #(
+      .BUFR_DIVIDE(CLK_DIV)
+    ) i_BUFR (
+      .O(clk_1),
+      .CE(reset_n),
+      .CLR(reset_n),
+      .I(clk)
+    );
+  end else if (SIM_DEVICE == "ULTRASCALE") begin
+    BUFGCE_DIV #(
+      .BUFGCE_DIVIDE(CLK_DIV),
+      .IS_CE_INVERTED(1'b1),
+      .IS_CLR_INVERTED(1'b0),
+      .IS_I_INVERTED(1'b0)
+    ) i_BUFGCE_DIV (
+      .O(clk_1),
+      .CE(reset_n),
+      .CLR(reset_n),
+      .I(clk)
+    );
   end
   endgenerate
 
   BUFGMUX #(
   ) i_BUFGMUX (
      .O(clk_out),
-     .I0(clk_1_w),
-     .I1(clk_0_w),
+     .I0(clk_1),
+     .I1(clk),
      .S(sel)
   );
 

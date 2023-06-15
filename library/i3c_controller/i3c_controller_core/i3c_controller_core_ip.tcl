@@ -81,24 +81,27 @@ adi_add_bus "rmap" "slave" \
 	}
 adi_add_bus_clock "i3c_clk" "rmap" "i3c_reset_n" "master"
 
-adi_set_ports_dependency "clk_bus" \
-      "(spirit:decode(id('MODELPARAM_VALUE.ASYNC_I3C_CLK')) = 1)"
-
 ## Parameter validations
 
 set cc [ipx::current_core]
 
-## ASYNC_I3C_CLK
+## SIM_DEVICE
 set_property -dict [list \
-  "value_format" "bool" \
-  "value" "false" \
+  "value_validation_type" "pairs" \
+  "value_validation_pairs" { \
+      "Ultrascale" "ULTRASCALE" \
+      "7 Series" "7SERIES" \
+    } \
  ] \
- [ipx::get_user_parameters ASYNC_I3C_CLK -of_objects $cc]
+ [ipx::get_user_parameters SIM_DEVICE -of_objects $cc]
+
+## CLK_DIV
 set_property -dict [list \
-  "value_format" "bool" \
-  "value" "false" \
+  "value_validation_type" "range_long" \
+  "value_validation_range_minimum" "1" \
+  "value_validation_range_maximum" "8" \
  ] \
- [ipx::get_hdl_parameters ASYNC_I3C_CLK -of_objects $cc]
+ [ipx::get_user_parameters CLK_DIV -of_objects $cc]
 
 ## Customize IP Layout
 ## Remove the automatically generated GUI page
@@ -112,11 +115,18 @@ set page0 [ipgui::get_pagespec -name "I3C Controller Core" -component $cc]
 set general_group [ipgui::add_group -name "General Configuration" -component $cc \
     -parent $page0 -display_name "General Configuration" ]
 
-ipgui::add_param -name "ASYNC_I3C_CLK" -component $cc -parent $general_group
+ipgui::add_param -name "SIM_DEVICE" -component $cc -parent $general_group
+
 set_property -dict [list \
-  "display_name" "Asynchronous core clock" \
-  "tooltip" "\[ASYNC_I3C_CLK\] Define the relationship between the core clock and the memory mapped interface clock, if disabled, the mmi clock is divided internally to reach the bus clock frequency" \
-] [ipgui::get_guiparamspec -name "ASYNC_I3C_CLK" -component $cc]
+  "display_name" "Target simulation device" \
+  "tooltip" "\[SIM_DEVICE\] Specify the target device for simulation" \
+] [ipgui::get_guiparamspec -name "SIM_DEVICE" -component $cc]
+
+ipgui::add_param -name "CLK_DIV" -component $cc -parent $general_group
+set_property -dict [list \
+  "display_name" "Core clock divider" \
+  "tooltip" "\[CLK_DIV\] Divide the core clock to obtain the derivated clock used in the Open-Drain mode modulation" \
+] [ipgui::get_guiparamspec -name "CLK_DIV" -component $cc]
 
 ## Create and save the XGUI file
 ipx::create_xgui_files $cc

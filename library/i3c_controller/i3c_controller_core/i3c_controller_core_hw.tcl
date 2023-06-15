@@ -18,13 +18,15 @@ ad_ip_files i3c_controller_core [list \
 
 # parameters
 
-ad_ip_parameter ASYNC_I3C_CLK INTEGER 0
+ad_ip_parameter SIM_DEVICE STRING "7SERIES"
+ad_ip_parameter CLK_DIV INTEGER 4
 
 proc p_elaboration {} {
 
   # read parameters
 
-  set async_i3c_clk [get_parameter_value "ASYNC_I3C_CLK"]
+  set sim_device [get_parameter_value "SIM_DEVICE"]
+  set clk_div [get_parameter_value "CLK_DIV"]
 
   # clock and reset interface
 
@@ -41,8 +43,5 @@ proc p_elaboration {} {
   ad_interface clock scl output 1
   ad_interface signal sda   inout 1
 
-  if {!($async_i3c_clk)} {
-    lappend disabled_intfs clk_bus
-  }
 }
 

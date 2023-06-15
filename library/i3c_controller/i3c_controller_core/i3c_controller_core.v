@@ -39,14 +39,14 @@
 `include "i3c_controller_word_cmd.v"
 
 module i3c_controller_core #(
-  parameter ASYNC_I3C_CLK = 0,
+  parameter SIM_DEVICE = "7SERIES",
+  parameter CLK_DIV = 4,
   parameter DA_LENGTH = 4,
   parameter DA_LENGTH_WIDTH = 2,
   // See I3C Target Address Restrictions for valid values
   parameter [7*DA_LENGTH-1:0] DA = {7'h0b, 7'h0a, 7'h09, 7'h08}
 ) (
-  input  wire clk_0,
-  input  wire clk_1,
+  input  wire clk,
   input  wire reset_n,
 
   // Command parsed
@@ -138,7 +138,7 @@ module i3c_controller_core #(
     .DA(DA)
   ) i_i3c_controller_daa (
     .reset_n(reset_n),
-    .clk(clk_0),
+    .clk(clk),
     .cmdp_do_daa(cmdp_do_daa),
     .cmdp_do_daa_ready(cmdp_do_daa_ready),
     .cmdw_valid(cmdw_daa_valid),
@@ -154,7 +154,7 @@ module i3c_controller_core #(
   i3c_controller_framing #(
   ) i_i3c_controller_framing (
     .reset_n(reset_n),
-    .clk(clk_0),
+    .clk(clk),
     .cmdp_valid(cmdp_valid_w),
     .cmdp_ready(cmdp_ready_w),
     .cmdp_ccc(cmdp_ccc),
@@ -190,7 +190,7 @@ module i3c_controller_core #(
   i3c_controller_word #(
   ) i_i3c_controller_word (
     .reset_n(reset_n),
-    .clk(clk_0),
+    .clk(clk),
     .cmdw_framing_valid(cmdw_framing_valid),
     .cmdw_daa_valid(cmdw_daa_valid),
     .cmdw_ready(cmdw_ready),
@@ -218,20 +218,20 @@ module i3c_controller_core #(
   );
 
   i3c_controller_clk_div #(
-    .ASYNC_CLK(ASYNC_I3C_CLK)
+    .SIM_DEVICE(SIM_DEVICE),
+    .CLK_DIV(CLK_DIV)
   ) i_i3c_controller_clk_div (
     .reset_n(reset_n),
     .sel(clk_sel),
     .cmd_ready(cmd_ready),
-    .clk_0(clk_0),
-    .clk_1(clk_1),
+    .clk(clk),
     .clk_out(clk_out)
   );
 
   i3c_controller_bit_mod #(
   ) i_i3c_controller_bit_mod (
     .reset_n(reset_n),
-    .clk_0(clk_0),
+    .clk_0(clk),
     .clk_1(clk_out),
     .clk_sel(clk_sel),
     .cmd(cmd),
