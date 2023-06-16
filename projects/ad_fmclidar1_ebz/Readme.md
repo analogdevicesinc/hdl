@@ -136,7 +136,23 @@ For technical support please visit [FPGA Referece Designs](https://ez.analog.com
 
 Here are some pointers to help you:
   * [Board Product Page](https://www.analog.com/AD-FMCLIDAR1-EBZ)
-  * Parts : []()
+  * Parts : 
+           * Laser Board
+           [3.3 V, 200 Mbps, Half-Duplex, High Speed M-LVDS Transceiver with Type 1 Receiver](https://www.analog.com/adn4691e)
+           [High Speed, Dual, 4 A MOSFET Driver, non-inverting A/B input pins, 9.5V < VIN < 18V](https://www.analog.com/adp3634)
+           [Ultralow Noise Drivers for Low Voltage ADCs](https://www.analog.com/ada4930-1)
+           * DAQ Board
+           [8-Bit, 1 GSPS, JESD204B, Quad Analog-to-Digital Converter](https://www.analog.com/ad9094)
+           [Integrated Synthesizer and VCO](https://www.analog.com/adf4360-7)
+           [JESD204B/JESD204C Clock Generator with 14 LVDS/HSTL Outputs](https://www.analog.com/ad9528)
+           [1.2 A, Ultralow Noise, High PSRR, Fixed Output, RF Linear Regulator](https://www.analog.com/adp7156)
+           [2 A, Ultralow Noise, High PSRR, Adjustable Output, RF Linear Regulator](https://www.analog.com/adp7159)
+           * AFE Board
+           [Four-Channel Multiplexed Transimpedance Amplifier with Output Multiplexing](https://www.analog.com/ltc6561)
+           [Low Power Selectable Gain Differential ADC Driver](https://www.analog.com/ada4950-1)
+           [Dual 3.2MHz, 0.8V/μs Low Power, Over-The-Top Precision Op Amp](https://www.analog.com/lt6016)
+           [Micropower, Precision, Auto Qualified 2.5V Voltage Reference](https://www.analog.com/adr3525)
+           [Low IQ Boost/SEPIC/Flyback/Inverting Converter with 0.5A, 140V Switch](https://www.analog.com/lt8331)
   * Project Doc: https://wiki.analog.com/resources/eval/user-guides/ad-fmclidar1-ebz
   * HDL Doc: https://wiki.analog.com/resources/fpga/docs/hdl
   * Linux Drivers: https://wiki.analog.com/resources/fpga/docs/axi_laser_driver
