@@ -40,7 +40,7 @@
 
 module i3c_controller_core #(
   parameter SIM_DEVICE = "7SERIES",
-  parameter CLK_DIV = 4,
+  parameter CLK_DIV = "4",
   parameter DA_LENGTH = 4,
   parameter DA_LENGTH_WIDTH = 2,
   // See I3C Target Address Restrictions for valid values

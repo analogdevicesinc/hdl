@@ -97,9 +97,9 @@ set_property -dict [list \
 
 ## CLK_DIV
 set_property -dict [list \
-  "value_validation_type" "range_long" \
-  "value_validation_range_minimum" "1" \
-  "value_validation_range_maximum" "8" \
+  "value_validation_list" { \
+  "2" "3" "4" "5" "6" "7" "8" \
+  } \
  ] \
  [ipx::get_user_parameters CLK_DIV -of_objects $cc]
 
@@ -123,6 +123,7 @@ set_property -dict [list \
 ] [ipgui::get_guiparamspec -name "SIM_DEVICE" -component $cc]
 
 ipgui::add_param -name "CLK_DIV" -component $cc -parent $general_group
+
 set_property -dict [list \
   "display_name" "Core clock divider" \
   "tooltip" "\[CLK_DIV\] Divide the core clock to obtain the derivated clock used in the Open-Drain mode modulation" \

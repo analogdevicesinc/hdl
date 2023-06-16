@@ -19,7 +19,7 @@ ad_ip_files i3c_controller_core [list \
 # parameters
 
 ad_ip_parameter SIM_DEVICE STRING "7SERIES"
-ad_ip_parameter CLK_DIV INTEGER 4
+ad_ip_parameter CLK_DIV STRING "4"
 
 proc p_elaboration {} {
 

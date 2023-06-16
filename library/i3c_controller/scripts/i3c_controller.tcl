@@ -1,4 +1,4 @@
-proc i3c_controller_create {{name "i3c_controller"} {async_i3c_clk 0} {clk_div 4} {sim_device "7SERIES"}} {
+proc i3c_controller_create {{name "i3c_controller"} {async_i3c_clk 0} {clk_div "4"} {sim_device "7SERIES"}} {
 
   create_bd_cell -type hier $name
   current_bd_instance /$name

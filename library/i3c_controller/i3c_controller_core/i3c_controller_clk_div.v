@@ -41,7 +41,7 @@
 
 module i3c_controller_clk_div #(
   parameter SIM_DEVICE = "7SERIES",
-  parameter CLK_DIV = 4
+  parameter CLK_DIV = "4"
 ) (
   input  wire reset_n,
   input  wire sel,
@@ -57,19 +57,16 @@ module i3c_controller_clk_div #(
     ) i_BUFR (
       .O(clk_1),
       .CE(reset_n),
-      .CLR(reset_n),
+      .CLR(!reset_n),
       .I(clk)
     );
   end else if (SIM_DEVICE == "ULTRASCALE") begin
     BUFGCE_DIV #(
-      .BUFGCE_DIVIDE(CLK_DIV),
-      .IS_CE_INVERTED(1'b1),
-      .IS_CLR_INVERTED(1'b0),
-      .IS_I_INVERTED(1'b0)
+      .BUFGCE_DIVIDE(CLK_DIV)
     ) i_BUFGCE_DIV (
       .O(clk_1),
       .CE(reset_n),
-      .CLR(reset_n),
+      .CLR(!reset_n),
       .I(clk)
     );
   end

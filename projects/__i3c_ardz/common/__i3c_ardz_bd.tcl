@@ -4,7 +4,7 @@ source $ad_hdl_dir/library/i3c_controller/scripts/i3c_controller.tcl
 
 set async_i3c_clk 0
 set sim_device "7SERIES"
-set clk_div 4
+set clk_div "4"
 
 set hier_i3c_controller i3c_controller_0
 

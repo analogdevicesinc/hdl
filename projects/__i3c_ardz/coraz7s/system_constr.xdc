@@ -12,8 +12,6 @@ set i3c_clk clk_fpga_0
 # Input data driven the peripherals toggles every 4 cycles max (PP) of the capture clock
 set_multicycle_path -from [get_ports i3c_controller_0_sda] -to [get_clocks clk_fpga_0] -setup 4
 set_multicycle_path -from [get_ports i3c_controller_0_sda] -to [get_clocks clk_fpga_0] -hold 1
-set_multicycle_path -from [get_ports i3c_controller_0_scl] -to [get_clocks clk_fpga_0] -setup 4
-set_multicycle_path -from [get_ports i3c_controller_0_scl] -to [get_clocks clk_fpga_0] -hold 1
 
 # Output data toggles every 2 cycles max of the capture clock (PP)
 set_multicycle_path -from [get_clocks clk_fpga_0] -to [get_ports i3c_controller_0_sda] -setup 2
@@ -21,9 +19,10 @@ set_multicycle_path -from [get_clocks clk_fpga_0] -to [get_ports i3c_controller_
 set_multicycle_path -from [get_clocks clk_fpga_0] -to [get_ports i3c_controller_0_scl] -setup 2
 set_multicycle_path -from [get_clocks clk_fpga_0] -to [get_ports i3c_controller_0_scl] -hold 1
 
+#set_multicycle_path -from [get_clocks clk_fpga_0] -to [get_clocks clk_1] -setup 4
+#set_multicycle_path -from [get_clocks clk_fpga_0] -to [get_clocks clk_1] -hold  3
 set_multicycle_path -from [get_clocks clk_1] -to [get_clocks clk_fpga_0] -setup 4
 set_multicycle_path -from [get_clocks clk_1] -to [get_clocks clk_fpga_0] -hold  3
-
 
 # Notes
 # tcr/tcf rising/fall time for SCL is 150e06 * 1 / fSCL, at fSCL = 12.5 MHz => 12ns, at fSCL = 6.25 MHz, 24ns.

@@ -111,7 +111,7 @@ module i3c_controller_bit_mod (
 
   reg pp;
   reg [2:0] i;
-  reg [7:0] scl_;
+  reg [7:0] scl_ = 8'b00001110;
   reg [7:0] sdi_;
 
   reg [1:0] rx_valid_reg;
@@ -122,19 +122,13 @@ module i3c_controller_bit_mod (
   reg  [`MOD_BIT_CMD_WIDTH:2] sm;
 
   reg sdo_reg;
-  reg scl_reg;
 
   localparam [2:0] i_ = 7;
 
   always @(sm) begin
     case (sm)
-      `MOD_BIT_CMD_STOP_     : scl_ = 8'b00011111;
-      default                : scl_ = 8'b00011100;
-    endcase
-
-    case (sm)
       `MOD_BIT_CMD_START_    : sdi_ = 8'b11111000;
-      `MOD_BIT_CMD_STOP_     : sdi_ = 8'b00000111;
+      `MOD_BIT_CMD_STOP_     : sdi_ = 8'b00000011;
       `MOD_BIT_CMD_ACK_IBI_  : sdi_ = 8'b00001111;
       default                : sdi_ = 8'b00000000;
     endcase
@@ -178,75 +172,73 @@ module i3c_controller_bit_mod (
     rx_stop_reg[0]  <= 1'b0;
     if (!reset_n_ctrl) begin
       reset_n_clr <= 1'b1;
-      scl <= 1'b1;
-      sdi <= 1'b1;
-      pp  <= 1'b0;
-      i   <= 0;
+      i <= 0;
       cmd_ready_reg <= 1'b0;
     end else begin
       reset_n_clr <= 1'b0;
-
-      i <= sm == `MOD_BIT_CMD_NOP_ ? 0 : i + 1;
       cmd_ready_reg <= (i == i_ - 1 & clk_sel) | (i == i_ & ~clk_sel);
+      i <= sm == `MOD_BIT_CMD_NOP_ ? 0 : i + 1;
+    end
 
-      scl <= scl_[7-i];
-      sdi <= sdi_[7-i];
-      pp  <= st[1];
-      case (sm)
-        `MOD_BIT_CMD_NOP_: begin
-          sdi <= sdi;
-          pp  <= 1'b0;
+    scl <= scl_[7-i];
+    sdi <= sdi_[7-i];
+    pp  <= st[1];
+    case (sm)
+      `MOD_BIT_CMD_NOP_: begin
+        sdi <= 1'b1;
+        pp  <= 1'b0;
+        scl <= 1'b1;
+      end
+      `MOD_BIT_CMD_WRITE_: begin
+        sdi <= st[0];
+      end
+      `MOD_BIT_CMD_READ_: begin
+        sdi <= 1'b1;
+        pp  <= 1'b0;
+        if (i == 5) begin
+          rx_valid_reg[0] <= 1'b1;
+        end
+      end
+      `MOD_BIT_CMD_START_: begin
+        // For Sr
+        if (i <= 3) begin
           scl <= scl;
         end
-        `MOD_BIT_CMD_WRITE_: begin
-          sdi <= st[0];
+      end
+      `MOD_BIT_CMD_STOP_: begin
+        if (i == 3'd7) begin
+          scl <= scl;
         end
-        `MOD_BIT_CMD_READ_: begin
+      end
+      `MOD_BIT_CMD_ACK_SDR_: begin
+        if (i == 0 || i == 1) begin
           sdi <= 1'b1;
           pp  <= 1'b0;
-          if (i == 5) begin
-            rx_valid_reg[0] <= 1'b1;
-          end
+        end else if (i == 2) begin
+          sdi <= sdo_reg;
+          rx_nack_reg[0] <= sdo_reg;
+        end else begin
+          sdi <= sdi;
         end
-        `MOD_BIT_CMD_START_: begin
-          // For Sr
-          if (i <= 2) begin
-            scl <= scl_reg;
-          end
-        end
-        `MOD_BIT_CMD_STOP_: begin
-        end
-        `MOD_BIT_CMD_ACK_SDR_: begin
-          if (i == 0 || i == 1) begin
-            sdi <= 1'b1;
-            pp  <= 1'b0;
-          end else if (i == 2) begin
-            sdi <= sdo_reg;
-            rx_nack_reg[0] <= sdo_reg;
-          end else begin
-            sdi <= sdi;
-          end
-        end
-        `MOD_BIT_CMD_T_READ_: begin
-          if (i == 0 || i == 1) begin
-            sdi <= 1'b1;
-            pp  <= 1'b0;
-          end else if (i == 2) begin
-            sdi <= st[0] ? 1'b0 : sdo_reg;
-            rx_stop_reg[0] <= ~sdo_reg;
-          end else begin
-            sdi <= sdi;
-          end
-        end
-        `MOD_BIT_CMD_ACK_IBI_: begin
+      end
+      `MOD_BIT_CMD_T_READ_: begin
+        if (~|i[2:1]) begin
+          sdi <= 1'b1;
           pp  <= 1'b0;
+        end else begin
+          sdi <= st[0] ? 1'b0 : sdo_reg;
         end
-        default: begin
+        if (i == 2) begin
+          rx_stop_reg[0] <= ~sdo_reg;
         end
-      endcase
-    end
+      end
+      `MOD_BIT_CMD_ACK_IBI_: begin
+        pp  <= 1'b0;
+      end
+      default: begin
+      end
+    endcase
     sdo_reg <= sdo === 1'b0 ? 1'b0 : 1'b1;
-    scl_reg <= scl;
   end
 
   assign rx_valid = rx_valid_reg[0] & ~rx_valid_reg[1];
