@@ -8,6 +8,7 @@ Here are some pointers to help you:
   * Parts : AD7606B [8 Channels, 18-bit, 1 MSPS Bipolar Input, Simultaneous sampling ADC](https://www.analog.com/en/products/ad7606c-18.html)
   * Project Doc: https://wiki.analog.com/resources/eval/user-guides/ad7606x-fmcz
   * HDL Doc: https://wiki.analog.com/resources/eval/user-guides/ad7606x-fmc/hdl
+  * NO-OS Drivers: [AD7606 - No-OS Driver](https://wiki.analog.com/resources/tools-software/uc-drivers/ad7606)
   * Linux Drivers: https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/axi-adc-hdl
 ## Building, Generating Bit Files 
 
