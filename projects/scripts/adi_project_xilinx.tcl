@@ -116,15 +116,16 @@ proc adi_project {project_name {mode 0} {parameter_list {}} } {
   if [regexp "_vck190" $project_name] {
     if {[info exists ::env(ADI_BOARD)]} {
 
-      enable_beta_device xcvm*
-      xhub::refresh_catalog [xhub::get_xstores xilinx_board_store]
-      xhub::install [xhub::get_xitems xilinx.com:xilinx_board_store:vck190:*] -quiet
-      set_param board.repoPaths [get_property LOCAL_ROOT_DIR [xhub::get_xstores xilinx_board_store]]
+      #enable_beta_device xcvm*
+      #xhub::refresh_catalog [xhub::get_xstores xilinx_board_store]
+      #xhub::install [xhub::get_xitems xilinx.com:xilinx_board_store:vck190:*] -quiet
+      #set_param board.repoPaths [get_property LOCAL_ROOT_DIR [xhub::get_xstores xilinx_board_store]]
 
+      puts -nonewline "got $::env(ADI_BOARD).\n"
       set device "xcvc1902-vsva2197-2MP-e-S"
       # i.e., xilinx.com:vck190:part0:2.2
       set board $::env(ADI_BOARD)
-      # or it could be done that ADI_BOARD to contain only the version:
+      # or it could be done (?) that ADI_BOARD to contain only the version:
       # set board "xilinx.com:vck190:part0:${ADI_BOARD}"
 
     } else {
