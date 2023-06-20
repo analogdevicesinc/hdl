@@ -114,8 +114,24 @@ proc adi_project {project_name {mode 0} {parameter_list {}} } {
     set board [lindex [lsearch -all -inline [get_board_parts] *vmk180*] end]
   }
   if [regexp "_vck190" $project_name] {
-    set device "xcvc1902-vsva2197-2MP-e-S"
-    set board [lindex [lsearch -all -inline [get_board_parts] *vck190*] end]
+    if {[info exists ::env(ADI_BOARD)]} {
+
+      enable_beta_device xcvm*
+      xhub::refresh_catalog [xhub::get_xstores xilinx_board_store]
+      xhub::install [xhub::get_xitems xilinx.com:xilinx_board_store:vck190:*] -quiet
+      set_param board.repoPaths [get_property LOCAL_ROOT_DIR [xhub::get_xstores xilinx_board_store]]
+
+      set device "xcvc1902-vsva2197-2MP-e-S"
+      # i.e., xilinx.com:vck190:part0:2.2
+      set board $::env(ADI_BOARD)
+      # or it could be done that ADI_BOARD to contain only the version:
+      # set board "xilinx.com:vck190:part0:${ADI_BOARD}"
+
+    } else {
+      set device "xcvc1902-vsva2197-2MP-e-S"
+      # by default, it sets xilinx.com:vck190_newl:part0:1.0
+      set board [lindex [lsearch -all -inline [get_board_parts] *vck190*] end]
+    }
   }
   if [regexp "_vc709" $project_name] {
     set device "xc7vx690tffg1761-2"
@@ -163,7 +179,11 @@ proc adi_project_create {project_name mode parameter_list device {board "not-app
   if {$p_device eq "none"} {
     set p_device $device
   }
-  set p_board $board
+
+  ## update the value of $p_board only if it was not already updated elsewhere
+  if {$p_board eq "none"} {
+    set p_board $board
+  }
 
   if [regexp "^xc7z" $p_device] {
     set sys_zynq 1
