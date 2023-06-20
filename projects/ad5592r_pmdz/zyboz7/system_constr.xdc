@@ -7,3 +7,4 @@ set_property -dict {PACKAGE_PIN T14 IOSTANDARD LVCMOS33} [get_ports adc_spi_cs_s
 set_property -dict {PACKAGE_PIN T15 IOSTANDARD LVCMOS33} [get_ports adc_spi_mosi_scopy]
 set_property -dict {PACKAGE_PIN P14 IOSTANDARD LVCMOS33} [get_ports adc_spi_miso_scopy]
 set_property -dict {PACKAGE_PIN R14 IOSTANDARD LVCMOS33} [get_ports adc_spi_sclk_scopy]
+

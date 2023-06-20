@@ -80,6 +80,10 @@ module system_top (
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
+  wire    pwm_led_0;
+  wire    pwm_led_1;
+  wire    pwm_led_2;
+  wire    pwm_led_3;
 
   // instantiations
 
@@ -94,8 +98,11 @@ module system_top (
   ad_iobuf #(
     .DATA_WIDTH (4)
   ) i_iobuf_leds (
-    .dio_t (gpio_t[7:4]),
-    .dio_i (gpio_o[7:4]),
+    .dio_t (4'h0),
+    .dio_i ({pwm_led_3,
+             pwm_led_2,
+             pwm_led_1,
+             pwm_led_0}),
     .dio_o (gpio_i[7:4]),
     .dio_p (led));
 
@@ -147,6 +154,10 @@ module system_top (
     .spi1_csn_i (1'b1),
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
-    .spi1_sdo_o ());
+    .spi1_sdo_o (),
+    .pwm_led_0 (pwm_led_0),
+    .pwm_led_1 (pwm_led_1),
+    .pwm_led_2 (pwm_led_2),
+    .pwm_led_3 (pwm_led_3));
 
 endmodule

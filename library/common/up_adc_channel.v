@@ -74,6 +74,7 @@ module up_adc_channel #(
   output          up_adc_pn_err,
   output          up_adc_pn_oos,
   output          up_adc_or,
+  output  [11:0]  adc_data_channel,
 
   // user controls
 
@@ -142,6 +143,7 @@ module up_adc_channel #(
   reg     [ 3:0]  up_adc_pnseq_sel_m = 'd0;
   reg     [ 3:0]  up_adc_data_sel_m = 'd0;
   reg     [ 2:0]  up_adc_softspan_int = 3'h7;
+  reg     [11:0]  up_adc_data_channel_int ='d0;
 
   // internal signals
 
@@ -154,6 +156,7 @@ module up_adc_channel #(
   wire    [31:0]  up_adc_read_data_s;
   wire    [ 7:0]  up_adc_status_header_s;
   wire    [ 2:0]  up_adc_softspan_s;
+  wire    [11:0]  up_adc_data_channel_s; 
 
   // 2's complement function
 
@@ -183,6 +186,7 @@ module up_adc_channel #(
   assign up_usr_decimation_m = up_usr_decimation_m_int;
   assign up_usr_decimation_n = up_usr_decimation_n_int;
   assign up_adc_softspan_s = up_adc_softspan_int;
+  assign up_adc_data_channel_s = up_adc_data_channel_int;
 
   // decode block select
 
@@ -398,9 +402,13 @@ module up_adc_channel #(
   always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_adc_softspan_int <= 3'd7;
+      up_adc_data_channel_int <= 12'd0;
     end else begin
       if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'hA)) begin
         up_adc_softspan_int <= up_wdata[2:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'hB)) begin
+        up_adc_data_channel_int <= up_wdata[11:0];
       end
     end
   end
@@ -432,6 +440,7 @@ module up_adc_channel #(
                                   adc_usr_datatype_bits};
           4'h9: up_rdata_int <= { adc_usr_decimation_m, adc_usr_decimation_n};
           4'hA: up_rdata_int <= { 29'd0, up_adc_softspan_int};
+          4'hB: up_rdata_int <= { 20'd0, up_adc_data_channel_int};
           default: up_rdata_int <= 0;
         endcase
       end else begin
@@ -475,7 +484,7 @@ module up_adc_channel #(
   // adc control & status
 
   up_xfer_cntrl #(
-    .DATA_WIDTH(81)
+    .DATA_WIDTH(93)
   ) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
@@ -491,7 +500,8 @@ module up_adc_channel #(
                       up_adc_iqcor_coeff_tc_2,
                       up_adc_pnseq_sel_m,
                       up_adc_data_sel_m,
-                      up_adc_softspan_s}),
+                      up_adc_softspan_s,
+                      up_adc_data_channel_s}),
     .up_xfer_done (),
     .d_rst (adc_rst),
     .d_clk (adc_clk),
@@ -507,7 +517,8 @@ module up_adc_channel #(
                       adc_iqcor_coeff_2,
                       adc_pnseq_sel,
                       adc_data_sel,
-                      adc_softspan}));
+                      adc_softspan,
+                      adc_data_channel}));
 
   up_xfer_status #(
     .DATA_WIDTH(44)
