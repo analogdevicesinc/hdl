@@ -37,7 +37,11 @@
 
 module axi_ad3552r_channel #(
 
-  parameter CHANNEL_ID = 32'h0
+  parameter CHANNEL_ID = 32'h0,
+  parameter   DDS_DISABLE = 0,
+  parameter   DDS_TYPE = 1,
+  parameter   DDS_CORDIC_DW = 16,
+  parameter   DDS_CORDIC_PHASE_DW = 16
 ) (
 
   // dac interface
@@ -81,6 +85,15 @@ module axi_ad3552r_channel #(
   wire    [ 3:0]   dac_data_sel_s;
   wire             dac_data_valid_int;
   wire    [15:0]   dac_data_int;
+  wire    [15:0]   dac_dds_data_s;
+  wire    [15:0]   dac_dds_scale_1_s;
+  wire    [15:0]   dac_dds_init_1_s;
+  wire    [15:0]   dac_dds_incr_1_s;
+  wire    [15:0]   dac_dds_scale_2_s;
+  wire    [15:0]   dac_dds_init_2_s;
+  wire    [15:0]   dac_dds_incr_2_s;
+  wire    [15:0]   dac_pat_data_1_s;
+  wire    [15:0]   dac_pat_data_2_s;
 
   reg     [15:0]   ramp_pattern = 16'h0000;
   reg              ramp_valid   = 1'b0;
@@ -94,9 +107,14 @@ module axi_ad3552r_channel #(
   assign formatted_adc_data [14:0] = adc_data[14:0];
 
   assign dac_data_int = (dac_data_sel_s == 4'hb) ? ramp_pattern :
-                        ((dac_data_sel_s == 4'h3) ? 16'b0 : ((dac_data_sel_s == 4'h8) ? formatted_adc_data : formatted_dma_data));
+                        ((dac_data_sel_s == 4'h3) ? 16'b0 :
+                        (((dac_data_sel_s == 4'h8) ? formatted_adc_data :
+                        ((dac_data_sel_s == 4'h2) ? formatted_dma_data: dac_dds_data_s ))));
+
   assign dac_data_valid_int = (dac_data_sel_s == 4'hb) ? ramp_valid :
-                              ((dac_data_sel_s == 4'h3) ? 1'b1 : ((dac_data_sel_s == 4'h8) ? valid_in_adc : valid_in_dma));
+                              ((dac_data_sel_s == 4'h3) ? 1'b1 :
+                              (((dac_data_sel_s == 4'h8) ? valid_in_adc :
+                              ((dac_data_sel_s == 4'h2) ? valid_in_dma: 1'b1 ))));
 
   // ramp generator
 
@@ -112,6 +130,27 @@ module axi_ad3552r_channel #(
     end
   end
 
+  ad_dds #(
+    .DISABLE (DDS_DISABLE),
+    .DDS_DW (16),
+    .PHASE_DW (16),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW),
+    .CORDIC_PHASE_DW (DDS_CORDIC_PHASE_DW),
+    .CLK_RATIO (1)
+  ) i_dds (
+    .clk (dac_clk),
+    .dac_dds_format (dac_dfmt_type),
+    .dac_data_sync (dac_data_sync),
+    .dac_valid (dac_data_ready),
+    .tone_1_scale (dac_dds_scale_1_s),
+    .tone_2_scale (dac_dds_scale_2_s),
+    .tone_1_init_offset (dac_dds_init_1_s),
+    .tone_2_init_offset (dac_dds_init_2_s),
+    .tone_1_freq_word (dac_dds_incr_1_s),
+    .tone_2_freq_word (dac_dds_incr_2_s),
+    .dac_dds_data (dac_dds_data_s));
+
   // single channel processor
 
   up_dac_channel #(
@@ -119,14 +158,14 @@ module axi_ad3552r_channel #(
   ) dac_channel (
     .dac_clk(dac_clk),
     .dac_rst(dac_rst),
-    .dac_dds_scale_1(),
-    .dac_dds_init_1(),
-    .dac_dds_incr_1(),
-    .dac_dds_scale_2(),
-    .dac_dds_init_2(),
-    .dac_dds_incr_2(),
-    .dac_pat_data_1(),
-    .dac_pat_data_2(),
+    .dac_dds_scale_1(dac_dds_scale_1_s),
+    .dac_dds_init_1(dac_dds_init_1_s),
+    .dac_dds_incr_1(dac_dds_incr_1_s),
+    .dac_dds_scale_2(dac_dds_scale_2_s),
+    .dac_dds_init_2(dac_dds_init_2_s),
+    .dac_dds_incr_2(dac_dds_incr_2_s),
+    .dac_pat_data_1(dac_pat_data_1_s),
+    .dac_pat_data_2(dac_pat_data_2_s),
     .dac_data_sel(dac_data_sel_s),
     .dac_mask_enable(),
     .dac_iq_mode(),

@@ -11,6 +11,13 @@ adi_ip_files axi_ad3552r [list \
   "$ad_hdl_dir/library/common/up_clock_mon.v" \
   "$ad_hdl_dir/library/common/up_dac_common.v" \
   "$ad_hdl_dir/library/common/up_dac_channel.v" \
+  "$ad_hdl_dir/library/common/ad_dds_cordic_pipe.v" \
+  "$ad_hdl_dir/library/common/ad_dds_sine_cordic.v" \
+  "$ad_hdl_dir/library/common/ad_dds_sine.v" \
+  "$ad_hdl_dir/library/common/ad_dds_2.v" \
+  "$ad_hdl_dir/library/common/ad_dds_1.v" \
+  "$ad_hdl_dir/library/common/ad_dds.v" \
+  "$ad_hdl_dir/library/common/ad_addsub.v" \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \

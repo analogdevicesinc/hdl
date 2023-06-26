@@ -40,7 +40,11 @@ module axi_ad3552r_core #(
   parameter   FPGA_TECHNOLOGY = 0,
   parameter   FPGA_FAMILY = 0,
   parameter   SPEED_GRADE = 0,
-  parameter   DEV_PACKAGE = 0
+  parameter   DEV_PACKAGE = 0,
+  parameter   DDS_DISABLE = 0,
+  parameter   DDS_TYPE = 1,
+  parameter   DDS_CORDIC_DW = 16,
+  parameter   DDS_CORDIC_PHASE_DW = 16
 ) (
 
   // dac interface
@@ -133,7 +137,11 @@ module axi_ad3552r_core #(
   // DAC CHANNEL 0
 
   axi_ad3552r_channel #(
-    .CHANNEL_ID(0)
+    .CHANNEL_ID(0),
+    .DDS_DISABLE(DDS_DISABLE),
+    .DDS_TYPE(DDS_TYPE),
+    .DDS_CORDIC_DW(DDS_CORDIC_DW),
+    .DDS_CORDIC_PHASE_DW(DDS_CORDIC_PHASE_DW)
   ) axi_ad3552r_channel_0 (
     .dac_clk(dac_clk),
     .dac_rst(dac_rst_s),
@@ -160,7 +168,11 @@ module axi_ad3552r_core #(
   // DAC CHANNEL 1
 
   axi_ad3552r_channel #(
-    .CHANNEL_ID(1)
+    .CHANNEL_ID(1),
+    .DDS_DISABLE(DDS_DISABLE),
+    .DDS_TYPE(DDS_TYPE),
+    .DDS_CORDIC_DW(DDS_CORDIC_DW),
+    .DDS_CORDIC_PHASE_DW(DDS_CORDIC_PHASE_DW)
   ) axi_ad3552r_channel_1(
     .dac_clk(dac_clk),
     .dac_rst(dac_rst_s),
@@ -218,7 +230,7 @@ module axi_ad3552r_core #(
     .dac_status(),
     .dac_sync_in_status(),
     .dac_status_unf(),
-    .dac_clk_ratio(32'd2),
+    .dac_clk_ratio(32'd1),
     .up_dac_ce(),
     .up_pps_rcounter(32'd0),
     .up_pps_status(1'd0),
