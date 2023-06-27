@@ -69,6 +69,8 @@ adi_ip_files jesd204_rx [list \
   "bd/bd.tcl"
 ]
 
+set_property source_mgmt_mode DisplayOnly [current_project]
+
 adi_ip_properties_lite jesd204_rx
 adi_ip_ttcl jesd204_rx "jesd204_rx_constr.ttcl"
 adi_ip_ttcl jesd204_rx "jesd204_rx_ooc.ttcl"

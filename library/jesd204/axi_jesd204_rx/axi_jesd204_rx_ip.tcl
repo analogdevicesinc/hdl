@@ -58,6 +58,8 @@ adi_ip_files axi_jesd204_rx [list \
   "axi_jesd204_rx.v" \
 ]
 
+set_property source_mgmt_mode DisplayOnly [current_project]
+
 adi_ip_properties axi_jesd204_rx
 
 adi_ip_ttcl axi_jesd204_rx "axi_jesd204_rx_ooc.ttcl"
