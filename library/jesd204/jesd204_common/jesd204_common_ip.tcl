@@ -58,6 +58,8 @@ add_files -fileset [get_filesets sources_1] [list \
   "pipeline_stage.v" \
 ]
 
+set_property source_mgmt_mode DisplayOnly [current_project]
+
 adi_ip_properties_lite jesd204_common
 
 set_property display_name "ADI JESD204C Common Library" [ipx::current_core]

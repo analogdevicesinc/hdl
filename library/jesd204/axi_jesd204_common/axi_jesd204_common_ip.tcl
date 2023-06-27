@@ -56,6 +56,8 @@ add_files -fileset [get_filesets sources_1] [list \
   "jesd204_up_sysref.v" \
 ]
 
+set_property source_mgmt_mode DisplayOnly [current_project]
+
 adi_ip_properties_lite axi_jesd204_common
 
 adi_ip_add_core_dependencies [list \

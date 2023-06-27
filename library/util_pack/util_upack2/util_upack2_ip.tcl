@@ -16,6 +16,8 @@ adi_ip_files util_upack2 [list \
   "util_upack2_impl.v" \
   "util_upack2.v" ]
 
+set_property source_mgmt_mode DisplayOnly [current_project]
+
 adi_ip_properties_lite util_upack2
 
 adi_add_bus "s_axis" "slave" \

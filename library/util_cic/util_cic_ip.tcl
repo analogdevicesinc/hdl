@@ -13,6 +13,8 @@ add_files -fileset [get_filesets sources_1] [list \
   "cic_comb.v" \
 ]
 
+set_property source_mgmt_mode DisplayOnly [current_project]
+
 adi_ip_properties_lite util_cic
 
 set_property name "util_cic" [ipx::current_core]

@@ -15,6 +15,8 @@ add_files -fileset [get_filesets sources_1] [list \
   "sync_event.v" \
 ]
 
+set_property source_mgmt_mode DisplayOnly [current_project]
+
 adi_ip_properties_lite util_cdc
 
 set_property name "util_cdc" [ipx::current_core]
