@@ -15,7 +15,7 @@ if [info exists ::env(ADI_GHDL_DIR)] {
 }
 
 # Define the supported tool version
-set required_vivado_version "2022.2"
+set required_vivado_version "2023.1"
 if {[info exists ::env(REQUIRED_VIVADO_VERSION)]} {
   set required_vivado_version $::env(REQUIRED_VIVADO_VERSION)
 } elseif {[info exists REQUIRED_VIVADO_VERSION]} {
