@@ -37,7 +37,7 @@
 module data_offload #(
 
   parameter          ID = 0,
-  parameter   [ 0:0] MEM_TYPE = 1'b0,               // 1'b0 -FPGA RAM; 1'b1 - external memory
+  parameter          MEM_TYPE = 0,                  // 1'b0 -FPGA RAM; 1'b1 - external memory
   parameter          MEM_SIZE_LOG2 = 10,            // log2 of memory size in bytes
 
   parameter          TX_OR_RXN_PATH = 0,            // if set IP is used in TX path, other wise in RX path
