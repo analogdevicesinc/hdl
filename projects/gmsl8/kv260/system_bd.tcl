@@ -52,13 +52,6 @@ set_property -dict [list \
 
 connect_bd_intf_net -intf_net mipi_phy_if_0_1 [get_bd_intf_ports mipi_phy_if_0] [get_bd_intf_pins mipi_csi2_rx_subsyst_0/mipi_phy_if]
 
-ad_ip_instance axis_subset_converter axis_subset_cnv
-ad_ip_parameter axis_subset_cnv CONFIG.M_TDATA_NUM_BYTES {3}
-ad_ip_parameter axis_subset_cnv CONFIG.S_TDATA_NUM_BYTES {2}
-ad_ip_parameter axis_subset_cnv CONFIG.TDATA_REMAP {8'b00000000,tdata[15:0]}
-ad_ip_parameter axis_subset_cnv CONFIG.TKEEP_REMAP {1'b0}
-ad_ip_parameter axis_subset_cnv CONFIG.TSTRB_REMAP {1'b0}
-
 ad_ip_instance clk_wiz dphy_clk_generator
 ad_ip_parameter dphy_clk_generator CONFIG.PRIMITIVE PLL
 ad_ip_parameter dphy_clk_generator CONFIG.RESET_TYPE ACTIVE_LOW
@@ -85,10 +78,17 @@ ad_connect mipi_csi2_rx_subsyst_0/lite_aclk $sys_cpu_clk
 ad_connect mipi_csi2_rx_subsyst_0/lite_aresetn $sys_cpu_resetn
 ad_connect mipi_csi2_rx_subsyst_0/dphy_clk_200M dphy_clk_generator/clk_out1
 
-ad_connect mipi_csi2_rx_subsyst_0/video_out axis_subset_cnv/S_AXIS
-ad_connect axis_subset_cnv/aclk $sys_cpu_clk
-ad_connect axis_subset_cnv/aresetn ap_rstn_frmbuf
-ad_connect axis_subset_cnv/M_AXIS v_frmbuf_wr_0/s_axis_video
+
+# add colorspace converter IP 
+
+ad_ip_instance yuv422torgb colorspace_converter
+
+ad_connect mipi_csi2_rx_subsyst_0/video_out colorspace_converter/video_in
+ad_connect v_frmbuf_wr_0/s_axis_video       colorspace_converter/video_out            
+ad_connect $sys_cpu_clk                     colorspace_converter/video_clk
+
+### 
+
 ad_connect v_frmbuf_wr_0/ap_clk $sys_cpu_clk
 ad_connect v_frmbuf_wr_0/ap_rst_n ap_rstn_frmbuf
 
