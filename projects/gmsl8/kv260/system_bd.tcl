@@ -81,13 +81,28 @@ ad_connect mipi_csi2_rx_subsyst_0/dphy_clk_200M dphy_clk_generator/clk_out1
 
 # add colorspace converter IP 
 
-ad_ip_instance yuv422torgb colorspace_converter
+# ad_ip_instance yuv422torgb colorspace_converter
+# 
+# ad_connect mipi_csi2_rx_subsyst_0/video_out colorspace_converter/video_in
+# ad_connect v_frmbuf_wr_0/s_axis_video       colorspace_converter/video_out            
+# ad_connect $sys_cpu_clk                     colorspace_converter/video_clk
 
-ad_connect mipi_csi2_rx_subsyst_0/video_out colorspace_converter/video_in
-ad_connect v_frmbuf_wr_0/s_axis_video       colorspace_converter/video_out            
-ad_connect $sys_cpu_clk                     colorspace_converter/video_clk
+ad_ip_instance v_proc_ss colorspace_converter
 
-### 
+ad_ip_parameter colorspace_converter CONFIG.C_COLORSPACE_SUPPORT 1
+ad_ip_parameter colorspace_converter CONFIG.C_CSC_ENABLE_WINDOW false
+ad_ip_parameter colorspace_converter CONFIG.C_H_CHROMA_ALGORITHM 2
+ad_ip_parameter colorspace_converter CONFIG.C_MAX_DATA_WIDTH 8
+ad_ip_parameter colorspace_converter CONFIG.C_SAMPLES_PER_CLK 1
+ad_ip_parameter colorspace_converter CONFIG.C_TOPOLOGY 3
+
+ad_connect mipi_csi2_rx_subsyst_0/video_out colorspace_converter/s_axis
+ad_connect v_frmbuf_wr_0/s_axis_video       colorspace_converter/m_axis            
+ad_connect $sys_cpu_clk                     colorspace_converter/aclk
+ad_connect $sys_cpu_resetn                  colorspace_converter/aresetn
+
+
+###
 
 ad_connect v_frmbuf_wr_0/ap_clk $sys_cpu_clk
 ad_connect v_frmbuf_wr_0/ap_rst_n ap_rstn_frmbuf
@@ -98,6 +113,7 @@ ad_connect axi_iic_mipi/s_axi_aresetn $sys_cpu_resetn
 ad_cpu_interconnect 0x44A00000  mipi_csi2_rx_subsyst_0
 ad_cpu_interconnect 0x44A20000  axi_iic_mipi
 ad_cpu_interconnect 0x44A40000  v_frmbuf_wr_0
+ad_cpu_interconnect 0x44A50000  colorspace_converter
 
 ad_mem_hp1_interconnect $sys_cpu_clk sys_ps8/S_AXI_HP1
 ad_mem_hp1_interconnect $sys_cpu_clk v_frmbuf_wr_0/m_axi_mm_video
