@@ -37,30 +37,15 @@
 
 module system_top (
 
-  input [1:0] mipi_csi1_data_n,
-  input [1:0] mipi_csi1_data_p,
+  input [3:0] mipi_csi1_data_n,
+  input [3:0] mipi_csi1_data_p,
   input       mipi_csi1_clk_n,
   input       mipi_csi1_clk_p,
 
-  input [1:0] mipi_csi2_data_n,
-  input [1:0] mipi_csi2_data_p,
+  input [3:0] mipi_csi2_data_n,
+  input [3:0] mipi_csi2_data_p,
   input       mipi_csi2_clk_n,
   input       mipi_csi2_clk_p,
-
-  input [1:0] mipi_csi3_data_n,
-  input [1:0] mipi_csi3_data_p,
-  input       mipi_csi3_clk_n,
-  input       mipi_csi3_clk_p,
-
-  input [1:0] mipi_csi4_data_n,
-  input [1:0] mipi_csi4_data_p,
-  input       mipi_csi4_clk_n,
-  input       mipi_csi4_clk_p,
-
-  input [1:0] mipi_csi5_data_n,
-  input [1:0] mipi_csi5_data_p,
-  input       mipi_csi5_clk_n,
-  input       mipi_csi5_clk_p,
 
 //  output    pps_out,
   input       sfp_rx_n,
@@ -69,22 +54,8 @@ module system_top (
   output      sfp_tx_p,
 
   input       sfp_ref_clk_p,
-  input       sfp_ref_clk_n,
+  input       sfp_ref_clk_n
 
-  input [1:0] mipi_csi6_data_n,
-  input [1:0] mipi_csi6_data_p,
-  input       mipi_csi6_clk_n,
-  input       mipi_csi6_clk_p,
-
-  input [1:0] mipi_csi7_data_n,
-  input [1:0] mipi_csi7_data_p,
-  input       mipi_csi7_clk_n,
-  input       mipi_csi7_clk_p,
-
-  input [1:0] mipi_csi8_data_n,
-  input [1:0] mipi_csi8_data_p,
-  input       mipi_csi8_clk_n,
-  input       mipi_csi8_clk_p
 );
 
   wire            ap_rstn_frmbuf;
@@ -117,36 +88,6 @@ module system_top (
     .mipi_csi2_data_p (mipi_csi2_data_p),
     .mipi_csi2_clk_n (mipi_csi2_clk_n),
     .mipi_csi2_clk_p (mipi_csi2_clk_p),
-
-    .mipi_csi3_data_n (mipi_csi3_data_n),
-    .mipi_csi3_data_p (mipi_csi3_data_p),
-    .mipi_csi3_clk_n (mipi_csi3_clk_n),
-    .mipi_csi3_clk_p (mipi_csi3_clk_p),
-
-    .mipi_csi4_data_n (mipi_csi4_data_n),
-    .mipi_csi4_data_p (mipi_csi4_data_p),
-    .mipi_csi4_clk_n (mipi_csi4_clk_n),
-    .mipi_csi4_clk_p (mipi_csi4_clk_p),
-
-    .mipi_csi5_data_n (mipi_csi5_data_n),
-    .mipi_csi5_data_p (mipi_csi5_data_p),
-    .mipi_csi5_clk_n (mipi_csi5_clk_n),
-    .mipi_csi5_clk_p (mipi_csi5_clk_p),
-
-    .mipi_csi6_data_n (mipi_csi6_data_n),
-    .mipi_csi6_data_p (mipi_csi6_data_p),
-    .mipi_csi6_clk_n (mipi_csi6_clk_n),
-    .mipi_csi6_clk_p (mipi_csi6_clk_p),
-
-    .mipi_csi7_data_n (mipi_csi7_data_n),
-    .mipi_csi7_data_p (mipi_csi7_data_p),
-    .mipi_csi7_clk_n (mipi_csi7_clk_n),
-    .mipi_csi7_clk_p (mipi_csi7_clk_p),
-
-    .mipi_csi8_data_n (mipi_csi8_data_n),
-    .mipi_csi8_data_p (mipi_csi8_data_p),
-    .mipi_csi8_clk_n (mipi_csi8_clk_n),
-    .mipi_csi8_clk_p (mipi_csi8_clk_p),
 
     .ap_rstn_frmbuf (ap_rstn_frmbuf),
     .csirxss_rstn (csirxss_rstn),
