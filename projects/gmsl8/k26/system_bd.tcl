@@ -666,3 +666,5 @@ ad_mem_hp1_interconnect $sys_cpu_clk v_frmbuf_wr_4/m_axi_mm_video
 ad_mem_hp1_interconnect $sys_cpu_clk v_frmbuf_wr_5/m_axi_mm_video
 ad_mem_hp1_interconnect $sys_cpu_clk v_frmbuf_wr_6/m_axi_mm_video
 ad_mem_hp1_interconnect $sys_cpu_clk v_frmbuf_wr_7/m_axi_mm_video
+
+source ./ptp_eth10g.tcl

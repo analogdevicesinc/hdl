@@ -64,4 +64,13 @@ set_property -dict {PACKAGE_PIN AG3 IOSTANDARD MIPI_DPHY_DCI DIFF_TERM_ADV TERM_
 set_property -dict {PACKAGE_PIN AH4 IOSTANDARD MIPI_DPHY_DCI DIFF_TERM_ADV TERM_100} [get_ports mipi_csi8_clk_n];  # Bank 65 VCCO - som240_2_a44 - IO_L19N_T3L_N1_DBC_AD9N_64
 set_property -dict {PACKAGE_PIN AG4 IOSTANDARD MIPI_DPHY_DCI DIFF_TERM_ADV TERM_100} [get_ports mipi_csi8_clk_p]; # Bank 65 VCCO - som240_2_a44 - IO_L19P_T3L_N0_DBC_AD9P_64
 
+# ETH
+set_property PACKAGE_PIN Y6 [get_ports sfp_ref_clk_p]
+create_clock -period 6.400 -name gt_ref_clk [get_ports sfp_ref_clk_p]
+
+set_property PACKAGE_PIN T2 [get_ports sfp_rx_p]
+set_property PACKAGE_PIN T1 [get_ports sfp_rx_n]
+set_property PACKAGE_PIN R4 [get_ports sfp_tx_p]
+set_property PACKAGE_PIN R3 [get_ports sfp_tx_n]
+
 set_property BITSTREAM.CONFIG.OVERTEMPSHUTDOWN ENABLE [current_design];

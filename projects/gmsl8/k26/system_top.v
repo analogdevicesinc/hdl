@@ -62,6 +62,15 @@ module system_top (
   input       mipi_csi5_clk_n,
   input       mipi_csi5_clk_p,
 
+//  output    pps_out,
+  input       sfp_rx_n,
+  input       sfp_rx_p,
+  output      sfp_tx_n,
+  output      sfp_tx_p,
+
+  input       sfp_ref_clk_p,
+  input       sfp_ref_clk_n,
+
   input [1:0] mipi_csi6_data_n,
   input [1:0] mipi_csi6_data_p,
   input       mipi_csi6_clk_n,
@@ -81,6 +90,7 @@ module system_top (
   wire            ap_rstn_frmbuf;
   wire            ap_rstn_v_proc;
   wire            csirxss_rstn;
+  wire            pps_out;
 
   wire    [94:0]  gpio_i;
   wire    [94:0]  gpio_o;
@@ -91,6 +101,10 @@ module system_top (
   assign ap_rstn_frmbuf = gpio_o[2];
   assign ap_rstn_v_proc = gpio_o[3];
 
+  wire        [47:0]      tx_tod_sec_0;
+  wire        [31:0]      tx_tod_ns_0;
+  wire        [47:0]      rx_tod_sec_0;
+  wire        [31:0]      rx_tod_ns_0;
 
   // instantiations
   system_wrapper i_system_wrapper (
@@ -138,6 +152,16 @@ module system_top (
     .csirxss_rstn (csirxss_rstn),
     .ap_rstn_v_proc (ap_rstn_v_proc),
 
+    .sfp_txr_grx_n (sfp_rx_n),
+    .sfp_txr_grx_p (sfp_rx_p),
+    .sfp_txr_gtx_n (sfp_tx_n),
+    .sfp_txr_gtx_p (sfp_tx_p),
+
+    .sfp_ref_clk_0_clk_n (sfp_ref_clk_n),
+    .sfp_ref_clk_0_clk_p (sfp_ref_clk_p),
+
+    .pps_out(pps_out),
+
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .gpio_t (),
@@ -148,4 +172,3 @@ module system_top (
     .spi0_sclk ());
 
 endmodule
-
