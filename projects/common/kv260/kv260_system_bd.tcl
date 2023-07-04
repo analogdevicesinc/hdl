@@ -140,11 +140,11 @@ ad_connect  sys_concat_intc_0/In0 GND
 
 # system id
 
-ad_ip_instance axi_sysid axi_sysid_0
-ad_ip_instance sysid_rom rom_sys_0
+#ad_ip_instance axi_sysid axi_sysid_0
+#ad_ip_instance sysid_rom rom_sys_0
 
-ad_connect  axi_sysid_0/rom_addr   	rom_sys_0/rom_addr
-ad_connect  axi_sysid_0/sys_rom_data   	rom_sys_0/rom_data
-ad_connect  sys_cpu_clk                 rom_sys_0/clk
+#ad_connect  axi_sysid_0/rom_addr   	rom_sys_0/rom_addr
+#ad_connect  axi_sysid_0/sys_rom_data   	rom_sys_0/rom_data
+#ad_connect  sys_cpu_clk                 rom_sys_0/clk
 
-ad_cpu_interconnect 0x45000000 axi_sysid_0
+#ad_cpu_interconnect 0x45000000 axi_sysid_0
