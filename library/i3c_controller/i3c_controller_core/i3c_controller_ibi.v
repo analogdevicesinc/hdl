@@ -57,7 +57,7 @@ module i3c_controller_ibi #(
   input  cmdw_ready,
   output [`CMDW_HEADER_WIDTH+8:0] cmdw,
   input  cmdw_nack,
-  
+
   output wire cmdw_rx_ready,
   input  wire cmdw_rx_valid,
   input  wire [7:0] cmdw_rx
@@ -142,5 +142,5 @@ module i3c_controller_ibi #(
   assign cmdp_do_daa_ready = sm == `CMDW_NOP & reset_n;
 
   assign enable = rmap_ibi_config[0];
-  assign auto = rmap_ibi_config[1]; 
+  assign auto = rmap_ibi_config[1];
 endmodule

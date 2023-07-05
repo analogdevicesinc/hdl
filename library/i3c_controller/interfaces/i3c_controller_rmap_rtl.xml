@@ -16,42 +16,87 @@
 			<spirit:wire>
 				<spirit:onMaster>
 					<spirit:presence>required</spirit:presence>
-					<spirit:width>8</spirit:width>
+					<spirit:width>1</spirit:width>
 					<spirit:direction>in</spirit:direction>
 				</spirit:onMaster>
 				<spirit:onSlave>
 					<spirit:presence>optional</spirit:presence>
-					<spirit:width>8</spirit:width>
+					<spirit:width>1</spirit:width>
 					<spirit:direction>out</spirit:direction>
 				</spirit:onSlave>
 			</spirit:wire>
 		</spirit:port>
 		<spirit:port>
-			<spirit:logicalName>RMAP_DAA_PERIPHERAL_INDEX</spirit:logicalName>
+			<spirit:logicalName>RMAP_DEV_CLR</spirit:logicalName>
 			<spirit:wire>
 				<spirit:onMaster>
 					<spirit:presence>required</spirit:presence>
-					<spirit:width>7</spirit:width>
+					<spirit:width>16</spirit:width>
 					<spirit:direction>out</spirit:direction>
 				</spirit:onMaster>
 				<spirit:onSlave>
 					<spirit:presence>optional</spirit:presence>
-					<spirit:width>7</spirit:width>
+					<spirit:width>16</spirit:width>
 					<spirit:direction>in</spirit:direction>
 				</spirit:onSlave>
 			</spirit:wire>
 		</spirit:port>
 		<spirit:port>
-			<spirit:logicalName>RMAP_DAA_PERIPHERAL_DA</spirit:logicalName>
+			<spirit:logicalName>RMAP_DEVS_CTRL</spirit:logicalName>
 			<spirit:wire>
 				<spirit:onMaster>
 					<spirit:presence>required</spirit:presence>
-					<spirit:width>7</spirit:width>
+					<spirit:width>15</spirit:width>
 					<spirit:direction>in</spirit:direction>
 				</spirit:onMaster>
 				<spirit:onSlave>
 					<spirit:presence>optional</spirit:presence>
-					<spirit:width>7</spirit:width>
+					<spirit:width>15</spirit:width>
+					<spirit:direction>out</spirit:direction>
+				</spirit:onSlave>
+			</spirit:wire>
+		</spirit:port>
+		<spirit:port>
+			<spirit:logicalName>RMAP_DEV_CHAR_0</spirit:logicalName>
+			<spirit:wire>
+				<spirit:onMaster>
+					<spirit:presence>required</spirit:presence>
+					<spirit:width>135</spirit:width>
+					<spirit:direction>out</spirit:direction>
+				</spirit:onMaster>
+				<spirit:onSlave>
+					<spirit:presence>optional</spirit:presence>
+					<spirit:width>135</spirit:width>
+					<spirit:direction>in</spirit:direction>
+				</spirit:onSlave>
+			</spirit:wire>
+		</spirit:port>
+		<spirit:port>
+			<spirit:logicalName>RMAP_DEV_CHAR_1</spirit:logicalName>
+			<spirit:wire>
+				<spirit:onMaster>
+					<spirit:presence>required</spirit:presence>
+					<spirit:width>480</spirit:width>
+					<spirit:direction>in</spirit:direction>
+				</spirit:onMaster>
+				<spirit:onSlave>
+					<spirit:presence>optional</spirit:presence>
+					<spirit:width>480</spirit:width>
+					<spirit:direction>out</spirit:direction>
+				</spirit:onSlave>
+			</spirit:wire>
+		</spirit:port>
+		<spirit:port>
+			<spirit:logicalName>RMAP_DEV_CHAR_2</spirit:logicalName>
+			<spirit:wire>
+				<spirit:onMaster>
+					<spirit:presence>required</spirit:presence>
+					<spirit:width>480</spirit:width>
+					<spirit:direction>in</spirit:direction>
+				</spirit:onMaster>
+				<spirit:onSlave>
+					<spirit:presence>optional</spirit:presence>
+					<spirit:width>480</spirit:width>
 					<spirit:direction>out</spirit:direction>
 				</spirit:onSlave>
 			</spirit:wire>

@@ -41,10 +41,7 @@
 module i3c_controller_core #(
   parameter SIM_DEVICE = "7SERIES",
   parameter CLK_DIV = "4",
-  parameter DA_LENGTH = 4,
-  parameter DA_LENGTH_WIDTH = 2,
-  // See I3C Target Address Restrictions for valid values
-  parameter [7*DA_LENGTH-1:0] DA = {7'h0b, 7'h0a, 7'h09, 7'h08}
+  parameter MAX_DEVS = 15
 ) (
   input  wire clk,
   input  wire reset_n,
@@ -82,10 +79,13 @@ module i3c_controller_core #(
 
   // uP accessible info
 
-  output wire [2:0] rmap_daa_status,
-  input  wire [DA_LENGTH_WIDTH-1:0] rmap_daa_peripheral_index,
-  output wire [6:0] rmap_daa_peripheral_da,
+  output wire rmap_daa_status,
   input  wire [1:0] rmap_ibi_config,
+  input  wire [15:0] rmap_dev_clr,
+  output wire [14:0] rmap_devs_ctrl,
+  input  wire [(MAX_DEVS)*9-1:0] rmap_dev_char_0,
+  output wire [(MAX_DEVS)*32-1:0] rmap_dev_char_1,
+  output wire [(MAX_DEVS)*32-1:0] rmap_dev_char_2,
 
   // I3C bus signals
 
@@ -127,15 +127,16 @@ module i3c_controller_core #(
   wire [6:0] ibi_da;
   wire [7:0] ibi_mdb;
 
+  wire [63:0] pid_bcr_dcr;
+  wire pid_bcr_dcr_tick;
+
   wire clk_sel;
   wire clk_clr;
 
   wire idle_bus;
 
   i3c_controller_daa #(
-    .DA_LENGTH(DA_LENGTH),
-    .DA_LENGTH_WIDTH(DA_LENGTH_WIDTH),
-    .DA(DA)
+    .MAX_DEVS(MAX_DEVS)
   ) i_i3c_controller_daa (
     .reset_n(reset_n),
     .clk(clk),
@@ -146,9 +147,14 @@ module i3c_controller_core #(
     .cmdw(cmdw_daa),
     .cmdw_nack(cmdw_nack),
     .idle_bus(idle_bus),
+    .pid_bcr_dcr_tick(pid_bcr_dcr_tick),
+    .pid_bcr_dcr(pid_bcr_dcr),
     .rmap_daa_status(rmap_daa_status),
-    .rmap_daa_peripheral_index(rmap_daa_peripheral_index),
-    .rmap_daa_peripheral_da(rmap_daa_peripheral_da)
+    .rmap_dev_clr(rmap_dev_clr),
+    .rmap_devs_ctrl(rmap_devs_ctrl),
+    .rmap_dev_char_0(rmap_dev_char_0),
+    .rmap_dev_char_1(rmap_dev_char_1),
+    .rmap_dev_char_2(rmap_dev_char_2)
   );
 
   i3c_controller_framing #(
@@ -214,6 +220,8 @@ module i3c_controller_core #(
     .ibi_tick(ibi_tick),
     .ibi_da(ibi_da),
     .ibi_mdb(ibi_mdb),
+    .pid_bcr_dcr_tick(pid_bcr_dcr_tick),
+    .pid_bcr_dcr(pid_bcr_dcr),
     .rmap_ibi_config(rmap_ibi_config)
   );
 

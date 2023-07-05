@@ -4,6 +4,7 @@
 `define I3C_REGMAP_VERSION         14'h00
 `define I3C_REGMAP_PERIPHERAL_ID   14'h01
 `define I3C_REGMAP_SCRATCH         14'h02
+`define I3C_REGMAP_PARAMETERS      14'h03
 `define I3C_REGMAP_ENABLE          14'h10
 `define I3C_REGMAP_IRQ_MASK        14'h20
 `define I3C_REGMAP_IRQ_PENDING     14'h21
@@ -18,8 +19,14 @@
 `define I3C_REGMAP_SDO_FIFO        14'h37
 `define I3C_REGMAP_SDI_FIFO        14'h38
 `define I3C_REGMAP_IBI_FIFO        14'h39
+`define I3C_REGMAP_FIFO_STATUS     14'h3a
 `define I3C_REGMAP_DAA_STATUS      14'h40
-`define I3C_REGMAP_DAA_PERIPHERAL  14'h41
 `define I3C_REGMAP_IBI_CONFIG      14'h50
+`define I3C_REGMAP_DEV_CHAR_0_      4'h6
+`define I3C_REGMAP_DEV_CHAR_1_      4'h7
+`define I3C_REGMAP_DEV_CHAR_2_      4'h8
+`define I3C_REGMAP_DEVS_CTRL       14'h90
+
+`define I3C_REGMAP_IRQ_PENDING_CMDR_PENDING 5
 
 `endif

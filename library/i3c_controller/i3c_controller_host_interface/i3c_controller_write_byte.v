@@ -78,7 +78,7 @@ module i3c_controller_write_byte (
           if (u8_len_valid) begin
             u8_lvl <= u8_len;
           end
-          sm <= u8_len_valid & u32_ready ? transfer : idle;
+          sm <= u8_len_valid & u8_len != 0 & u32_ready ? transfer : idle;
           c <= 2'b00;
         end
         transfer: begin

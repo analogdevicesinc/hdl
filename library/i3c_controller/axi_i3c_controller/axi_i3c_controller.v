@@ -42,7 +42,11 @@ module axi_i3c_controller #(
   parameter ASYNC_I3C_CLK = 0,
   parameter ADDRESS_WIDTH = 8, // Const
   parameter DATA_WIDTH = 32, // Const
-  parameter DA_LENGTH_WIDTH = 2
+  parameter DA_LENGTH_WIDTH = 2,
+  parameter MAX_DEVS = 15,
+  parameter PID = 48'hC00FFE123456,
+  parameter DCR = 8'h7b,
+  parameter BCR = 8'b01000000
 ) (
 
   // Slave AXI interface
@@ -113,10 +117,13 @@ module axi_i3c_controller #(
 
   // uP accessible info
 
-  input  wire [DA_LENGTH_WIDTH:0] rmap_daa_status,
-  output reg  [DA_LENGTH_WIDTH-1:0] rmap_daa_peripheral_index,
-  input  wire [6:0] rmap_daa_peripheral_da,
-  output reg  [1:0] rmap_ibi_config
+  input  wire rmap_daa_status,
+  output reg  [1:0] rmap_ibi_config,
+  output reg  [15:0] rmap_dev_clr,
+  input  wire [14:0] rmap_devs_ctrl,
+  output wire [(MAX_DEVS)*9-1:0]  rmap_dev_char_0,
+  input  wire [(MAX_DEVS)*32-1:0] rmap_dev_char_1,
+  input  wire [(MAX_DEVS)*32-1:0] rmap_dev_char_2
 );
 
   localparam PCORE_VERSION = 'h12345678;
@@ -131,44 +138,47 @@ module axi_i3c_controller #(
   wire cmd_fifo_almost_empty;
   wire up_cmd_fifo_almost_empty;
 
-  wire [DATA_WIDTH-1:0] cmd_fifo_in_data;
-  wire cmd_fifo_in_ready;
-  wire cmd_fifo_in_valid;
+  wire [DATA_WIDTH-1:0] cmd_fifo_data;
+  wire cmd_fifo_ready;
+  wire cmd_fifo_valid;
   // CMDR FIFO
-  wire cmdr_fifo_out_data_msb_s;
+  wire cmdr_fifo_data_msb_s;
   wire [ADDRESS_WIDTH-1:0] cmdr_fifo_level;
   wire cmdr_fifo_almost_full;
   wire up_cmdr_fifo_almost_full;
 
-  wire [DATA_WIDTH-1:0] cmdr_fifo_out_data;
-  wire cmdr_fifo_out_ready;
-  wire cmdr_fifo_out_valid;
+  wire [DATA_WIDTH-1:0] cmdr_fifo_data;
+  wire cmdr_fifo_ready;
+  wire cmdr_fifo_valid;
+  wire cmdr_fifo_empty;
   // SDO FIFO
   wire [ADDRESS_WIDTH-1:0] sdo_fifo_room;
   wire sdo_fifo_almost_empty;
   wire up_sdo_fifo_almost_empty;
 
-  wire [DATA_WIDTH-1:0] sdo_fifo_in_data;
-  wire sdo_fifo_in_ready;
-  wire sdo_fifo_in_valid;
+  wire [DATA_WIDTH-1:0] sdo_fifo_data;
+  wire sdo_fifo_ready;
+  wire sdo_fifo_valid;
   // SDI FIFO
-  wire sdi_fifo_out_data_msb_s;
+  wire sdi_fifo_data_msb_s;
   wire [ADDRESS_WIDTH-1:0] sdi_fifo_level;
   wire sdi_fifo_almost_full;
   wire up_sdi_fifo_almost_full;
 
-  wire [DATA_WIDTH-1:0] sdi_fifo_out_data;
-  wire sdi_fifo_out_ready;
-  wire sdi_fifo_out_valid;
+  wire [DATA_WIDTH-1:0] sdi_fifo_data;
+  wire sdi_fifo_ready;
+  wire sdi_fifo_valid;
+  wire sdi_fifo_empty;
   // IBI FIFO
-  wire ibi_fifo_out_data_msb_s;
+  wire ibi_fifo_data_msb_s;
   wire [ADDRESS_WIDTH-1:0] ibi_fifo_level;
   wire ibi_fifo_almost_full;
   wire up_ibi_fifo_almost_full;
 
-  wire [DATA_WIDTH-1:0] ibi_fifo_out_data;
-  wire ibi_fifo_out_ready;
-  wire ibi_fifo_out_valid;
+  wire [DATA_WIDTH-1:0] ibi_fifo_data;
+  wire ibi_fifo_ready;
+  wire ibi_fifo_valid;
+  wire ibi_fifo_empty;
 
   reg up_sw_reset = 1'b1;
   wire up_sw_resetn = ~up_sw_reset;
@@ -184,6 +194,8 @@ module axi_i3c_controller #(
 
   // Scratch register
   reg [31:0] up_scratch = 'h00;
+
+  reg        cmdr_id_pending = 1'b0;
 
   generate if (MM_IF_TYPE == S_AXI) begin
 
@@ -252,11 +264,12 @@ module axi_i3c_controller #(
   endgenerate
 
   // IRQ handling
-  reg [4:0] up_irq_mask = 5'h0;
-  wire [4:0] up_irq_source;
-  wire [4:0] up_irq_pending;
+  reg  [5:0] up_irq_mask = 6'h0;
+  wire [5:0] up_irq_source;
+  wire [5:0] up_irq_pending;
 
   assign up_irq_source = {
+    cmdr_id_pending,
     up_ibi_fifo_almost_full,
     up_sdi_fifo_almost_full,
     up_sdo_fifo_almost_empty,
@@ -282,10 +295,8 @@ module axi_i3c_controller #(
       up_wack_ff <= up_wreq_s;
       if (up_wreq_s) begin
         case (up_waddr_s)
-          `I3C_REGMAP_SCRATCH:        up_scratch <= up_wdata_s;
           `I3C_REGMAP_ENABLE:         up_sw_reset <= up_wdata_s[0];
-          `I3C_REGMAP_DAA_PERIPHERAL: rmap_daa_peripheral_index <= up_wdata_s[DA_LENGTH_WIDTH-1:0];
-          `I3C_REGMAP_IBI_CONFIG:     rmap_ibi_config <= up_wdata_s[1:0];
+          `I3C_REGMAP_SCRATCH:        up_scratch <= up_wdata_s;
         endcase
       end
     end
@@ -295,11 +306,40 @@ module axi_i3c_controller #(
   always @(posedge clk) begin
     if (!up_sw_resetn) begin
       up_irq_mask <= 'h00;
+      rmap_ibi_config <= 'h00;
+      devs_ctrl_0 <= 1'b0;
     end else begin
       if (up_wreq_s) begin
         case (up_waddr_s)
-          `I3C_REGMAP_IRQ_MASK: up_irq_mask <= up_wdata_s[4:0];
+          `I3C_REGMAP_IRQ_MASK:       up_irq_mask <= up_wdata_s[5:0];
+          `I3C_REGMAP_IBI_CONFIG:     rmap_ibi_config <= up_wdata_s[1:0];
+          `I3C_REGMAP_DEVS_CTRL:      rmap_dev_clr[14:0] <= up_wdata_s[31:17];
+          default: begin
+            case (up_waddr_s[7:4])
+              `I3C_REGMAP_DEV_CHAR_0_: dev_char_0[up_waddr_s[3:0]*9 +: 9] <= up_wdata_s;
+            endcase
+          end
         endcase
+
+        if (up_waddr_s == {`I3C_REGMAP_DEV_CHAR_0_, 4'd0}) begin
+          devs_ctrl_0 <= 1'b1;
+        end
+        if (up_waddr_s == `I3C_REGMAP_DEVS_CTRL) begin
+          rmap_dev_clr[15] <= 1'b1;
+          if (up_wdata_s[16] == 1'b1) begin
+            // The controller bit gets cleared right away.
+            devs_ctrl_0 <= 1'b0;
+          end
+          // TODO: Might be useful for debugging.
+          //for (i = 0; i < MAX_DEVS+1; i = i+1) begin
+          //  if (up_wdata_s[i<<16] == 1'b1) begin
+          //    rmap_dev_char_0[i*9 +: 9] <= 8'd0;
+          //  end
+          //end
+        end else begin
+          rmap_dev_clr[15] <= 1'b0;
+        end
+
       end
     end
   end
@@ -314,11 +354,18 @@ module axi_i3c_controller #(
 
   wire [13:0] rmap_daa_peripheral;
 
+  reg [(MAX_DEVS+1)*9-1:0] dev_char_0;
+  wire [(MAX_DEVS+1)*32-1:0] dev_char_1;
+  wire [(MAX_DEVS+1)*32-1:0] dev_char_2;
+  reg devs_ctrl_0;
+  wire [15:0] rmap_devs_ctrl_w = {rmap_devs_ctrl, devs_ctrl_0};
+  integer i;
   always @(posedge clk) begin
     case (up_raddr_s)
       `I3C_REGMAP_VERSION:        up_rdata_ff <= PCORE_VERSION;
       `I3C_REGMAP_PERIPHERAL_ID:  up_rdata_ff <= ID;
       `I3C_REGMAP_SCRATCH:        up_rdata_ff <= up_scratch;
+      `I3C_REGMAP_PARAMETERS:     up_rdata_ff <= {28'd0, MAX_DEVS[3:0]};
       `I3C_REGMAP_ENABLE:         up_rdata_ff <= up_sw_reset;
       `I3C_REGMAP_IRQ_MASK:       up_rdata_ff <= up_irq_mask;
       `I3C_REGMAP_IRQ_PENDING:    up_rdata_ff <= up_irq_pending;
@@ -328,16 +375,37 @@ module axi_i3c_controller #(
       `I3C_REGMAP_SDO_FIFO_ROOM:  up_rdata_ff <= sdo_fifo_room;
       `I3C_REGMAP_SDI_FIFO_LEVEL: up_rdata_ff <= sdi_fifo_level;
       `I3C_REGMAP_IBI_FIFO_LEVEL: up_rdata_ff <= ibi_fifo_level;
-      `I3C_REGMAP_CMDR_FIFO:      up_rdata_ff <= cmdr_fifo_out_data;
-      `I3C_REGMAP_SDI_FIFO:       up_rdata_ff <= sdi_fifo_out_data;
-      `I3C_REGMAP_IBI_FIFO:       up_rdata_ff <= ibi_fifo_out_data;
+      `I3C_REGMAP_CMDR_FIFO:      up_rdata_ff <= cmdr_fifo_data;
+      `I3C_REGMAP_SDI_FIFO:       up_rdata_ff <= sdi_fifo_data;
+      `I3C_REGMAP_IBI_FIFO:       up_rdata_ff <= ibi_fifo_data;
+      `I3C_REGMAP_FIFO_STATUS:    up_rdata_ff <= {sdi_fifo_empty, ibi_fifo_empty, cmdr_fifo_empty};
       `I3C_REGMAP_DAA_STATUS:     up_rdata_ff <= rmap_daa_status;
-      `I3C_REGMAP_DAA_PERIPHERAL: up_rdata_ff <= rmap_daa_peripheral;
-      default: up_rdata_ff <= 'h00;
+      `I3C_REGMAP_DEVS_CTRL:      up_rdata_ff <= rmap_devs_ctrl_w;
+      default: begin
+        case (up_raddr_s[7:4])
+          `I3C_REGMAP_DEV_CHAR_0_: up_rdata_ff <= dev_char_0[up_raddr_s[3:0]*9 +: 9];
+          `I3C_REGMAP_DEV_CHAR_1_: up_rdata_ff <= dev_char_1[up_raddr_s[3:0]*32 +: 32];
+          `I3C_REGMAP_DEV_CHAR_2_: up_rdata_ff <= dev_char_2[up_raddr_s[3:0]*32 +: 32];
+          default: up_rdata_ff <= 'h00;
+        endcase
+      end
     endcase
   end
+  assign dev_char_1 = {rmap_dev_char_1, {PID[15:0], BCR, DCR}};
+  assign dev_char_2 = {rmap_dev_char_2, PID[47:16]};
+  assign rmap_dev_char_0 = dev_char_0[(MAX_DEVS+1)*9-1:9];
 
-  assign rmap_daa_peripheral = {rmap_daa_peripheral_da, {7-DA_LENGTH_WIDTH{1'b0}}, rmap_daa_peripheral_index};
+  always @(posedge clk) begin
+    if (up_sw_resetn == 1'b0) begin
+      cmdr_id_pending <= 1'b0;
+    end else begin
+      if (cmdr_fifo_valid == 1'b1) begin
+        cmdr_id_pending <= 1'b1;
+      end else if (up_wreq_s == 1'b1 && up_waddr_s == `I3C_REGMAP_IRQ_PENDING && up_wdata_s[`I3C_REGMAP_IRQ_PENDING_CMDR_PENDING] == 1'b1) begin
+        cmdr_id_pending <= 1'b0;
+      end
+    end
+  end
 
   wire clk_1;
 
@@ -356,8 +424,8 @@ module axi_i3c_controller #(
   end
   endgenerate
 
-  assign cmd_fifo_in_valid = up_wreq_s == 1'b1 && up_waddr_s == `I3C_REGMAP_CMD_FIFO;
-  assign cmd_fifo_in_data = up_wdata_s;
+  assign cmd_fifo_valid = up_wreq_s == 1'b1 && up_waddr_s == `I3C_REGMAP_CMD_FIFO;
+  assign cmd_fifo_data = up_wdata_s;
 
   util_axis_fifo #(
     .DATA_WIDTH(DATA_WIDTH),
@@ -369,9 +437,9 @@ module axi_i3c_controller #(
   ) i_cmd_fifo (
     .s_axis_aclk(clk),
     .s_axis_aresetn(up_sw_resetn),
-    .s_axis_ready(cmd_fifo_in_ready),
-    .s_axis_valid(cmd_fifo_in_valid),
-    .s_axis_data(cmd_fifo_in_data),
+    .s_axis_ready(cmd_fifo_ready),
+    .s_axis_valid(cmd_fifo_valid),
+    .s_axis_data(cmd_fifo_data),
     .s_axis_room(cmd_fifo_room),
     .s_axis_tlast(1'b0),
     .s_axis_full(),
@@ -386,7 +454,7 @@ module axi_i3c_controller #(
     .m_axis_almost_empty(cmd_fifo_almost_empty),
     .m_axis_level());
 
-  assign cmdr_fifo_out_ready = up_rreq_s == 1'b1 && up_raddr_s == `I3C_REGMAP_CMDR_FIFO;
+  assign cmdr_fifo_ready = up_rreq_s == 1'b1 && up_raddr_s == `I3C_REGMAP_CMDR_FIFO;
 
   util_axis_fifo #(
     .DATA_WIDTH(DATA_WIDTH),
@@ -407,16 +475,16 @@ module axi_i3c_controller #(
     .s_axis_almost_full(cmdr_fifo_almost_full),
     .m_axis_aclk(clk),
     .m_axis_aresetn(up_sw_resetn),
-    .m_axis_ready(cmdr_fifo_out_ready),
-    .m_axis_valid(cmdr_fifo_out_valid),
-    .m_axis_data(cmdr_fifo_out_data),
+    .m_axis_ready(cmdr_fifo_ready),
+    .m_axis_valid(cmdr_fifo_valid),
+    .m_axis_data(cmdr_fifo_data),
     .m_axis_tlast(),
     .m_axis_level(cmdr_fifo_level),
-    .m_axis_empty(),
+    .m_axis_empty(cmdr_fifo_empty),
     .m_axis_almost_empty());
 
-  assign sdo_fifo_in_valid = up_wreq_s == 1'b1 && up_waddr_s == `I3C_REGMAP_SDO_FIFO;
-  assign sdo_fifo_in_data = up_wdata_s[31:0];
+  assign sdo_fifo_valid = up_wreq_s == 1'b1 && up_waddr_s == `I3C_REGMAP_SDO_FIFO;
+  assign sdo_fifo_data = up_wdata_s[31:0];
 
   util_axis_fifo #(
     .DATA_WIDTH(DATA_WIDTH),
@@ -428,9 +496,9 @@ module axi_i3c_controller #(
   ) i_sdo_fifo (
     .s_axis_aclk(clk),
     .s_axis_aresetn(up_sw_resetn),
-    .s_axis_ready(sdo_fifo_in_ready),
-    .s_axis_valid(sdo_fifo_in_valid),
-    .s_axis_data(sdo_fifo_in_data),
+    .s_axis_ready(sdo_fifo_ready),
+    .s_axis_valid(sdo_fifo_valid),
+    .s_axis_data(sdo_fifo_data),
     .s_axis_room(sdo_fifo_room),
     .s_axis_tlast(1'b0),
     .s_axis_full(),
@@ -445,7 +513,7 @@ module axi_i3c_controller #(
     .m_axis_empty(),
     .m_axis_almost_empty(sdo_fifo_almost_empty));
 
-  assign sdi_fifo_out_ready = up_rreq_s == 1'b1 && up_raddr_s == `I3C_REGMAP_SDI_FIFO;
+  assign sdi_fifo_ready = up_rreq_s == 1'b1 && up_raddr_s == `I3C_REGMAP_SDI_FIFO;
 
   util_axis_fifo #(
     .DATA_WIDTH(DATA_WIDTH),
@@ -466,15 +534,15 @@ module axi_i3c_controller #(
     .s_axis_almost_full(sdi_fifo_almost_full),
     .m_axis_aclk(clk),
     .m_axis_aresetn(up_sw_resetn),
-    .m_axis_ready(sdi_fifo_out_ready),
-    .m_axis_valid(sdi_fifo_out_valid),
-    .m_axis_data(sdi_fifo_out_data),
+    .m_axis_ready(sdi_fifo_ready),
+    .m_axis_valid(sdi_fifo_valid),
+    .m_axis_data(sdi_fifo_data),
     .m_axis_tlast(),
     .m_axis_level(sdi_fifo_level),
-    .m_axis_empty(),
+    .m_axis_empty(sdi_fifo_empty),
     .m_axis_almost_empty());
 
-  assign ibi_fifo_out_ready = up_rreq_s == 1'b1 && up_raddr_s == `I3C_REGMAP_IBI_FIFO;
+  assign ibi_fifo_ready = up_rreq_s == 1'b1 && up_raddr_s == `I3C_REGMAP_IBI_FIFO;
 
   util_axis_fifo #(
     .DATA_WIDTH(DATA_WIDTH),
@@ -495,12 +563,12 @@ module axi_i3c_controller #(
     .s_axis_almost_full(ibi_fifo_almost_full),
     .m_axis_aclk(clk),
     .m_axis_aresetn(up_sw_resetn),
-    .m_axis_ready(ibi_fifo_out_ready),
-    .m_axis_valid(ibi_fifo_out_valid),
-    .m_axis_data(ibi_fifo_out_data),
+    .m_axis_ready(ibi_fifo_ready),
+    .m_axis_valid(ibi_fifo_valid),
+    .m_axis_data(ibi_fifo_data),
     .m_axis_tlast(),
     .m_axis_level(ibi_fifo_level),
-    .m_axis_empty(),
+    .m_axis_empty(ibi_fifo_empty),
     .m_axis_almost_empty());
 
   sync_bits #(

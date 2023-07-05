@@ -53,8 +53,11 @@ adi_add_bus "rmap" "master" \
 	"analog.com:interface:i3c_controller_rmap:1.0" \
 	{
 		{"rmap_daa_status"             "RMAP_DAA_STATUS"} \
-		{"rmap_daa_peripheral_index"   "RMAP_DAA_PERIPHERAL_INDEX"} \
-		{"rmap_daa_peripheral_da"      "RMAP_DAA_PERIPHERAL_DA"} \
+		{"rmap_dev_clr"                "RMAP_DEV_CLR"} \
+		{"rmap_devs_ctrl"              "RMAP_DEVS_CTRL"} \
+		{"rmap_dev_char_0"             "RMAP_DEV_CHAR_0"} \
+		{"rmap_dev_char_1"             "RMAP_DEV_CHAR_1"} \
+		{"rmap_dev_char_2"             "RMAP_DEV_CHAR_2"} \
 		{"rmap_ibi_config"             "RMAP_IBI_CONFIG"} \
 	}
 adi_add_bus_clock "i3c_clk" "rmap" "i3c_reset_n" "master"
@@ -118,11 +121,14 @@ set_property -dict [list \
   "value" "false" \
  ] \
  [ipx::get_user_parameters ASYNC_I3C_CLK -of_objects $cc]
+
+## MAX_DEVS
 set_property -dict [list \
-  "value_format" "bool" \
-  "value" "false" \
+  "value_validation_type" "range_long" \
+  "value_validation_range_minimum" "0" \
+  "value_validation_range_maximum" "15" \
  ] \
- [ipx::get_hdl_parameters ASYNC_I3C_CLK -of_objects $cc]
+ [ipx::get_user_parameters MAX_DEVS -of_objects $cc]
 
 ## Customize IP Layout
 
@@ -154,6 +160,12 @@ set_property -dict [list \
   "display_name" "Asynchronous core clock" \
   "tooltip" "\[ASYNC_I3C_CLK\] Define the relationship between the core clock and the memory mapped interface clock" \
 ] [ipgui::get_guiparamspec -name "ASYNC_I3C_CLK" -component $cc]
+
+ipgui::add_param -name "MAX_DEVS" -component $cc -parent $general_group
+set_property -dict [list \
+  "display_name" "Maximum number of peripherals" \
+  "tooltip" "\[MAX_DEVS\] Maximum number of peripherals in the bus, not counting the controller" \
+] [ipgui::get_guiparamspec -name "MAX_DEVS" -component $cc]
 
 ## Create and save the XGUI file
 ipx::create_xgui_files $cc

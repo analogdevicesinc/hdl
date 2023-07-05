@@ -22,6 +22,7 @@ ad_ip_files axi_i3c_controller [list\
 ad_ip_parameter ID INTEGER 0
 ad_ip_parameter MM_IF_TYPE INTEGER 1
 ad_ip_parameter ASYNC_I3C_CLK INTEGER 0
+ad_ip_parameter MAX_DEVS INTEGER 15
 
 proc p_elaboration {} {
 
@@ -29,6 +30,7 @@ proc p_elaboration {} {
 
   set mm_if_type [get_parameter_value "MM_IF_TYPE"]
   set async_i3c_clk [get_parameter_value "ASYNC_I3C_CLK"]
+  set max_devs [get_parameter_value "MAX_DEVS"]
 
   # interrupt
 

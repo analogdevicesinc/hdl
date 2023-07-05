@@ -62,10 +62,7 @@
 `include "i3c_controller_word_cmd.v"
 
 module i3c_controller_daa #(
-  parameter DA_LENGTH = 4,
-  parameter DA_LENGTH_WIDTH = 2,
-  // See I3C Target Address Restrictions for valid values
-  parameter [7*DA_LENGTH-1:0] DA = {7'h0b, 7'h0a, 7'h09, 7'h08}
+  parameter MAX_DEVS = 15
 )(
   input reset_n,
   input clk,
@@ -86,13 +83,23 @@ module i3c_controller_daa #(
 
   input idle_bus,
 
+  // DAA interface
+
+  input pid_bcr_dcr_tick,
+  input [63:0] pid_bcr_dcr,
+
   // uP accessible info
 
-  output [DA_LENGTH_WIDTH:0] rmap_daa_status,
-  input  [DA_LENGTH_WIDTH-1:0] rmap_daa_peripheral_index,
-  output [6:0] rmap_daa_peripheral_da
+  output rmap_daa_status,
+  input  [15:0] rmap_dev_clr,
+  output reg [14:0] rmap_devs_ctrl,
+  input  [(MAX_DEVS)*9-1:0] rmap_dev_char_0,
+  output reg  [(MAX_DEVS)*32-1:0] rmap_dev_char_1,
+  output reg  [(MAX_DEVS)*32-1:0] rmap_dev_char_2
 );
-  reg [DA_LENGTH_WIDTH-1:0] da_reg;
+  // TODO: Use BRAM for dev_char
+  integer i;
+  reg [3:0] j;
   reg [7:0] cmdw_body;
   reg [`CMDW_HEADER_WIDTH:0] sm;
   reg ctrl;
@@ -101,19 +108,22 @@ module i3c_controller_daa #(
   localparam [6:0]
     CCC_ENTDAA = 'h03;
 
-  reg [0:0] smt;
-  localparam [0:0]
+  reg [1:0] smt;
+  localparam [1:0]
     idle       = 0,
-    transfer   = 1;
+    transfer   = 1,
+    seek       = 2,
+    commit     = 3;
 
   always @(posedge clk) begin
     if (!reset_n) begin
       smt <= idle;
       sm <= `CMDW_NOP;
-      da_reg <= 0;
+      j <= 0;
       cmdw_body <= 8'h00;
       ctrl <= 1'b0;
       lock <= 1'b0;
+      rmap_devs_ctrl <= 'd0;
     end else if (cmdw_nack) begin
       smt <= idle;
       cmdw_body <= 8'h00;
@@ -122,11 +132,17 @@ module i3c_controller_daa #(
       case (smt)
         idle: begin
           if (cmdp_do_daa & ~lock) begin
-            smt <= transfer;
+            smt <= seek;
             sm <= `CMDW_START;
             lock <= 1'b1;
           end else if (idle_bus) begin
             lock <= 1'b0;
+          end
+
+          for (i = 0; i < MAX_DEVS; i = i+1) begin
+            if (rmap_dev_clr[15] & rmap_dev_clr[i]) begin
+              rmap_devs_ctrl[i] <= 1'b0;
+            end
           end
         end
         transfer: begin
@@ -134,7 +150,7 @@ module i3c_controller_daa #(
             case (sm)
               `CMDW_NOP: begin
                 ctrl <= 1'b0;
-                da_reg <= 0;
+                j <= 0;
                 smt <= idle;
               end
               `CMDW_START: begin
@@ -150,17 +166,15 @@ module i3c_controller_daa #(
               end
               `CMDW_BCAST_7E_W1: begin
                 sm <= `CMDW_PROV_ID_BCR_DCR;
+                smt <= seek;
               end
               `CMDW_PROV_ID_BCR_DCR: begin
                 sm <= `CMDW_DYN_ADDR;
-                cmdw_body <= {DA[7*da_reg +:7], ~^DA[7*da_reg +:7]};
+                cmdw_body <= rmap_dev_char_0[j*9 +: 8];
               end
               `CMDW_DYN_ADDR: begin
-                // If there is no more DA available, exit
-                // However, DA should have at least the # peripherals expected in
-                // the bus
-                sm <= da_reg == DA_LENGTH-1 ? `CMDW_STOP : `CMDW_START;
-                da_reg <= da_reg + 1;
+                sm <= j == MAX_DEVS-1 ? `CMDW_STOP : `CMDW_START;
+                smt <= commit;
               end
               `CMDW_STOP: begin
                  sm <= `CMDW_NOP;
@@ -171,15 +185,37 @@ module i3c_controller_daa #(
             endcase
           end
         end
+        seek: begin
+          if (rmap_devs_ctrl[j] == 1'b0 & rmap_dev_char_0[j*9+8] == 1'b1) begin
+            smt <= transfer;
+          end else begin
+            j <= j + 1;
+          end
+          if (rmap_dev_char_0[j*9+8] == 1'b0) begin
+            // If I2C, just set it as attached
+            rmap_devs_ctrl[j] <= 1'b1;
+          end
+        end
+        commit: begin
+          if (cmdw_ready) begin
+            rmap_devs_ctrl[j] <= 1'b1;
+            smt <= transfer;
+          end
+        end
       endcase
+    end
+  end
+
+  always @(posedge clk) begin
+    if (reset_n & pid_bcr_dcr_tick) begin
+      rmap_dev_char_1[j*32+:32] <= pid_bcr_dcr[63:32];
+      rmap_dev_char_2[j*32+:32] <= pid_bcr_dcr[31:0];
     end
   end
 
   assign cmdw = {sm, cmdw_body};
   assign cmdp_do_daa_ready = ~lock;
 
-  assign rmap_daa_peripheral_da = DA[7*rmap_daa_peripheral_index+:7];
-  assign rmap_daa_status[DA_LENGTH_WIDTH] = ~cmdp_do_daa_ready; // in_progress
-  assign rmap_daa_status[DA_LENGTH_WIDTH-1:0] = da_reg; // registered
+  assign rmap_daa_status = ~cmdp_do_daa_ready;
   assign cmdw_valid = smt == transfer;
 endmodule

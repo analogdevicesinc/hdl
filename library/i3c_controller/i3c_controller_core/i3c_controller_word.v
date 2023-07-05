@@ -88,6 +88,11 @@ module i3c_controller_word #(
   output wire [6:0] ibi_da,
   output wire [7:0] ibi_mdb,
 
+  // DAA interface
+
+  output reg pid_bcr_dcr_tick,
+  output reg [63:0] pid_bcr_dcr,
+
   // uP accessible info
 
   input wire [1:0] rmap_ibi_config
@@ -139,7 +144,7 @@ module i3c_controller_word #(
       `CMDW_MSG_TX          : i_ =  8; // SDO+T
       `CMDW_STOP            : i_ =  0;
       `CMDW_BCAST_7E_W1     : i_ =  8; // 7'h7e+RnW=1+ACK
-      `CMDW_PROV_ID_BCR_DCR : i_ =  8; // 48-bitUniqueID+BCR+DCR
+      `CMDW_PROV_ID_BCR_DCR : i_ = 63; // 48-bitUniqueID+BCR+DCR
       `CMDW_DYN_ADDR        : i_ =  8; // DA+T+ACK
       `CMDW_IBI_MDB         : i_ =  8; // MDB+T
       `CMDW_SR              : i_ =  0;
@@ -176,6 +181,7 @@ module i3c_controller_word #(
     cmdw_nack <= 1'b0;
     cmdw_rx_valid <= 1'b0;
     ibi_tick <= 1'b0;
+    pid_bcr_dcr_tick <= 1'b0;
     if (!reset_n) begin
       cmd <= `MOD_BIT_CMD_NOP;
       smt <= setup;
@@ -239,6 +245,12 @@ module i3c_controller_word #(
                   ibi_tick <= 1'b1;
                 end
                 ibi_mdb_reg[8-i_reg_2] <= rx_sampled;
+              end
+              `CMDW_PROV_ID_BCR_DCR: begin
+                if (i_reg_2 == 63) begin
+                  pid_bcr_dcr_tick <= 1'b1;
+                end
+                pid_bcr_dcr[63 - i_reg_2] <= rx_sampled;
               end
               default: begin
               end
@@ -332,7 +344,6 @@ module i3c_controller_word #(
               end
               `CMDW_PROV_ID_BCR_DCR: begin
                 cmd <= `MOD_BIT_CMD_READ;
-                // TODO: Figure out what to do with PID,BCR,DCR
               end
               `CMDW_IBI_MDB: begin
                 if (i == 8) begin

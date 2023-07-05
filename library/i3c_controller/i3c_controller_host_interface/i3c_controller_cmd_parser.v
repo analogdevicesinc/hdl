@@ -86,6 +86,7 @@ module i3c_controller_cmd_parser #(
 );
   wire [6:0] cmd_ccc_id;
   wire [11:0] cmdr1_len;
+  wire buffer_len_valid;
   reg  [31:0] cmdr1;
   reg  [7:0]  cmdr2;
   reg  cmdp_cancelled_reg;
@@ -196,8 +197,9 @@ module i3c_controller_cmd_parser #(
   assign cmdr = {4'd0, cmdr_error, 4'd0, cmdr1_len, cmdr_sync};
   assign cmdr_valid = sm == receipt;
 
-  assign rd_bytes_valid = (sm == buffer_setup & ~cmdp_rnw);
-  assign wr_bytes_valid = (sm == buffer_setup &  cmdp_rnw);
+  assign buffer_len_valid = sm == buffer_setup & cmdp_buffer_len != 0;
+  assign rd_bytes_valid = buffer_len_valid & ~cmdp_rnw;
+  assign wr_bytes_valid = buffer_len_valid &  cmdp_rnw;
   // For read bytes (write to peripheral), it is either all transfered or none,
   // since the peripheral can only reject during the address ACK.
   // For write bytes (read from peripheral), the peripheral shall cancel

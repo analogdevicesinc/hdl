@@ -75,8 +75,11 @@ adi_add_bus "rmap" "slave" \
 	"analog.com:interface:i3c_controller_rmap:1.0" \
 	{
 		{"rmap_daa_status"             "RMAP_DAA_STATUS"} \
-		{"rmap_daa_peripheral_index"   "RMAP_DAA_PERIPHERAL_INDEX"} \
-		{"rmap_daa_peripheral_da"      "RMAP_DAA_PERIPHERAL_DA"} \
+		{"rmap_dev_clr"                "RMAP_DEV_CLR"} \
+		{"rmap_devs_ctrl"              "RMAP_DEVS_CTRL"} \
+		{"rmap_dev_char_0"             "RMAP_DEV_CHAR_0"} \
+		{"rmap_dev_char_1"             "RMAP_DEV_CHAR_1"} \
+		{"rmap_dev_char_2"             "RMAP_DEV_CHAR_2"} \
 		{"rmap_ibi_config"             "RMAP_IBI_CONFIG"} \
 	}
 adi_add_bus_clock "i3c_clk" "rmap" "i3c_reset_n" "master"

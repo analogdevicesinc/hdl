@@ -74,7 +74,7 @@ module i3c_controller_read_byte (
       case (sm)
         idle: begin
           u8_lvl <= u8_len;
-          sm <= u8_len_valid ? move : idle;
+          sm <= u8_len_valid & u8_len != 0 ? move : idle;
           c <= 2'b00;
         end
         move: begin
