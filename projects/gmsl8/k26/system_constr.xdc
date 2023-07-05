@@ -26,7 +26,7 @@ set_property -dict {PACKAGE_PIN L1 IOSTANDARD MIPI_DPHY_DCI DIFF_TERM_ADV TERM_1
 
 # ETH
 set_property PACKAGE_PIN Y6 [get_ports sfp_ref_clk_p]
-create_clock -period 6.400 -name gt_ref_clk [get_ports sfp_ref_clk_p]
+#create_clock -period 6.400 -name gt_ref_clk [get_ports sfp_ref_clk_p]
 
 set_property PACKAGE_PIN T2 [get_ports sfp_rx_p]
 set_property PACKAGE_PIN T1 [get_ports sfp_rx_n]
