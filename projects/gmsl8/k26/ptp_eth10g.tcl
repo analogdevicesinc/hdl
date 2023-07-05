@@ -148,24 +148,24 @@ ad_ip_parameter axis_data_fifo_0 CONFIG.HAS_WR_DATA_COUNT {0}
 ad_ip_parameter axis_data_fifo_0 CONFIG.TDATA_NUM_BYTES {4}
 
 ad_ip_instance axis_data_fifo axis_data_fifo_1
-ad_ip_parameter axis_data_fifo_1 CONFIG.FIFO_DEPTH {16384}
+ad_ip_parameter axis_data_fifo_1 CONFIG.FIFO_DEPTH {8192}
 ad_ip_parameter axis_data_fifo_1 CONFIG.HAS_PROG_FULL {0}
 ad_ip_parameter axis_data_fifo_1 CONFIG.HAS_WR_DATA_COUNT {0}
 ad_ip_parameter axis_data_fifo_1 CONFIG.IS_ACLK_ASYNC {1}
 
 ad_ip_instance axis_data_fifo axis_rxd_fifo
-ad_ip_parameter axis_rxd_fifo CONFIG.FIFO_DEPTH {16384}
+ad_ip_parameter axis_rxd_fifo CONFIG.FIFO_DEPTH {8192}
 ad_ip_parameter axis_rxd_fifo CONFIG.FIFO_MODE {2}
 ad_ip_parameter axis_rxd_fifo CONFIG.HAS_PROG_FULL {1}
 ad_ip_parameter axis_rxd_fifo CONFIG.HAS_TKEEP {1}
 ad_ip_parameter axis_rxd_fifo CONFIG.HAS_WR_DATA_COUNT {0}
 ad_ip_parameter axis_rxd_fifo CONFIG.IS_ACLK_ASYNC {0}
-ad_ip_parameter axis_rxd_fifo CONFIG.PROG_FULL_THRESH {15000}
+ad_ip_parameter axis_rxd_fifo CONFIG.PROG_FULL_THRESH {7000}
 ad_ip_parameter axis_rxd_fifo CONFIG.TDATA_NUM_BYTES {8}
 ad_ip_parameter axis_rxd_fifo CONFIG.TUSER_WIDTH {1}
 
 ad_ip_instance axis_data_fifo axis_txd_fifo
-ad_ip_parameter axis_txd_fifo CONFIG.FIFO_DEPTH {16384}
+ad_ip_parameter axis_txd_fifo CONFIG.FIFO_DEPTH {8192}
 ad_ip_parameter axis_txd_fifo CONFIG.FIFO_MODE {2}
 ad_ip_parameter axis_txd_fifo CONFIG.HAS_TKEEP {1}
 ad_ip_parameter axis_txd_fifo CONFIG.IS_ACLK_ASYNC {0}
