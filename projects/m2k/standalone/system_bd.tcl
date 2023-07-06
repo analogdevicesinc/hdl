@@ -1,5 +1,9 @@
-set_msg_config -id {PSU-1} -new_severity {WARNING}
+###############################################################################
+## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
+set_msg_config -id {PSU-1} -new_severity {WARNING}
 set DEBUG_BUILD 0
 
 # create board design

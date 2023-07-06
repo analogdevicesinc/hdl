@@ -1,4 +1,8 @@
-#
+###############################################################################
+## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
+
 # Parameter description:
 #   JESD_MODE : Used link layer encoder mode
 #      64B66B - 64b66b link layer defined in JESD 204C

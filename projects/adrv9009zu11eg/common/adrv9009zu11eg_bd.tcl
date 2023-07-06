@@ -1,10 +1,15 @@
-#
+###############################################################################
+## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
+
+
 # Parameter description:
 #   [TX/RX/RX_OS]_JESD_M  : Number of converters per link
 #   [TX/RX/RX_OS]_JESD_L  : Number of lanes per link
 #   [TX/RX/RX_OS]_JESD_S  : Number of samples per frame
 #   [TX/RX/RX_OS]_JESD_NP : Number of bits per sample
-#
+
 if {[info exists FMCOMMS8]} {
   set MAX_TX_NUM_OF_LANES 16
   set MAX_RX_NUM_OF_LANES 8

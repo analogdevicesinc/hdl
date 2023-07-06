@@ -1,5 +1,9 @@
-# ad9434 interface
+###############################################################################
+## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
+# ad9434 interface
 create_bd_port -dir I adc_clk_p
 create_bd_port -dir I adc_clk_n
 create_bd_port -dir I -from 11 -to 0 adc_data_p

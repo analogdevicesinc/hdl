@@ -1,5 +1,9 @@
-# create board design
+###############################################################################
+## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
+# create board design
 # set Kria SOM240_1 connector to KV260 evaluation carrier
 set_property board_connections {som240_1_connector xilinx.com:kv260_carrier:som240_1_connector:1.3} [current_project]
 

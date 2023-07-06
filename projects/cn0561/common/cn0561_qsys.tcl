@@ -1,5 +1,9 @@
-# receive dma
+###############################################################################
+## Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
+# receive dma
 add_instance axi_dmac_0 axi_dmac
 set_instance_parameter_value axi_dmac_0 {DMA_TYPE_SRC} {1}
 set_instance_parameter_value axi_dmac_0 {DMA_TYPE_DEST} {0}

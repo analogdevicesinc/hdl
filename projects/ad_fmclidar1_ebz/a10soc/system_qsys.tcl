@@ -1,5 +1,9 @@
-# Configurable parameters
+###############################################################################
+## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
+# Configurable parameters
 set SAMPLE_RATE_MHZ 1000.0
 set NUM_OF_CHANNELS 4           ; # M
 set SAMPLES_PER_FRAME 1         ; # S

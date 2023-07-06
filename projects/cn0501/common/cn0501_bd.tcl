@@ -1,5 +1,9 @@
-# ad7768 interface
+###############################################################################
+## Copyright (C) 2015-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
+# ad7768 interface
 create_bd_port -dir I clk_in
 create_bd_port -dir I ready_in
 create_bd_port -dir I -from 7 -to 0 data_in

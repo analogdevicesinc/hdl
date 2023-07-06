@@ -1,5 +1,9 @@
-# report delays
+###############################################################################
+## Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
+# report delays
 set m_file [open "axi_ad9361_delay.log" w]
 set m_ios [get_ports -filter {NAME =~ rx_*_in*}]
 set m_ddr_ios [get_pins -hierarchical -filter {NAME =~ *i_rx_data_iddr/C || NAME =~ *i_rx_data_iddr/D}]

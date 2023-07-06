@@ -1,5 +1,9 @@
-# stratix10soc carrier defaults
+###############################################################################
+## Copyright (C) 2020-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
+# stratix10soc carrier defaults
 # clocks and resets
 
 set_location_assignment PIN_AW10                  -to sys_clk        ; ## 100 MHz
