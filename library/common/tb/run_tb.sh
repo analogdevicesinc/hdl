@@ -1,3 +1,8 @@
+##############################################################################
+## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: BSD-1-Clause
+##############################################################################
+
 export NAME=`basename $0`
 
 # MODE not defined or defined to something else than 'batch'

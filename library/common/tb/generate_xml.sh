@@ -1,5 +1,10 @@
 #!/bin/bash
 
+##############################################################################
+## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: BSD-1-Clause
+##############################################################################
+
 # Depending on simulator, search for errors or 'SUCCESS' keyword in specific log
 if [[ "$SIMULATOR" == "modelsim" ]]; then
 	ERRS=`grep -i -e '# Error ' -e '# Fatal' -e '# Failed' -C 10 ${NAME}_modelsim.log`
@@ -15,7 +20,7 @@ else
 fi
 
 # If DURATION is not defined, try to extract it from log file. If it's not found, just use 0
-if [[ -z ${DURATION+x} ]]; then 
+if [[ -z ${DURATION+x} ]]; then
 	DURATION=$(grep -i 'elapsed' ${NAME}_${SIMULATOR}.log | cut -d ' ' -f '10')
 	if [[ -z "$DURATION" ]]; then DURATION="0";fi
 fi

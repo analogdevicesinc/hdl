@@ -1,6 +1,12 @@
 #!/bin/sh
+
+##############################################################################
+## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: BSD-1-Clause
 #
-# Ensure there are README.md (case insensitive name) files in all the project directories
+# The purpose of this script:
+## Ensure there are README.md (case insensitive name) files in all the project directories
+##############################################################################
 
 set -e
 #set -x

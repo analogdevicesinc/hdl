@@ -1,12 +1,14 @@
 #!/usr/bin/perl -w
 
-################################################################################
+###############################################################################
+## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
 #
 # This script is meant to be used together with gtwizard_generator.tcl
-# It parses and provides as output a list of unique parameters to a provided GT wizard configuration 
+# It parses and provides as output a list of unique parameters to a provided GT wizard configuration
 # Must be called from the project folder, where the IP instance is (*.gen/sources_1/ip)
-#
-################################################################################
+###############################################################################
+
 use strict;
 use warnings;
 # use bigint;
@@ -58,7 +60,7 @@ sub get_attribute_name {
   $xcvr_params_str = $xcvr_params_str=~s/$comment_regex/$subst/rg;
 
   # return the attribute block from the *_[COMMON|CHANNEL] instance
-  # Ultrascale/Ultrascale+ version  
+  # Ultrascale/Ultrascale+ version
   # if ($xcvr_params_str =~ m/#\(((\n(.*\),\n){2,}).*\)\n)/) {
   # Version that works for both 7 series and Ultrascale/Ultrascale+
   # This regex searches for the IP instance in the verilog code. In 7 series there are spaces at the begining of the line, while for Ultrascale there are not. After that searches for the name of the instance followed by spaces (0 or more) and a #. The next characters are maybe a \n followed by spaces and (. Going forward, it accepts \n followed by anything as long as it ends with '),'. Or a space followed by anything. The '?' is there to make the regex be non-greedy. The group after ( is searched for at least 2 times and must be followed by a ')\n'. This regex matches . with \n becouse of the /m at the end.
@@ -78,7 +80,7 @@ sub get_attribute_name {
   # parse out the attribute names
   foreach my $i (0..$#xcvr_params) {
     # remove leading white space
-    $xcvr_params[$i] =~ s/^\s+//;  
+    $xcvr_params[$i] =~ s/^\s+//;
 
     # remove trailing text, keep just the first word
     $xcvr_params[$i] =~ s/\s+.*$//;
@@ -322,7 +324,7 @@ sub xcvr_default {
       } else {
         $default_attributes{$param} = $old_value;
       }
-      
+
     }
   }
 
@@ -713,7 +715,7 @@ sub prune_drp_access {
     foreach my $gt_ref_conf_attribute_key (keys %{ $$gt_drp_ref{$ref_conf}{$gt_ref_conf_type_key} }) {
       $is_generic = 1;
       foreach my $gt_drp_config_key (keys %{ $gt_drp_ref }) {
-        
+
         if ($gt_drp_config_key ne $ref_conf) {
           if (exists $$gt_drp_ref{$gt_drp_config_key}{$gt_ref_conf_type_key}{$gt_ref_conf_attribute_key}) {
             if ($$gt_drp_ref{$gt_drp_config_key}{$gt_ref_conf_type_key}{$gt_ref_conf_attribute_key} eq '') {
