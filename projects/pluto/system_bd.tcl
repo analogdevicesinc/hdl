@@ -1,5 +1,9 @@
-# create board design
+###############################################################################
+## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
+# create board design
 source $ad_hdl_dir/projects/common/xilinx/adi_fir_filter_bd.tcl
 
 # default ports

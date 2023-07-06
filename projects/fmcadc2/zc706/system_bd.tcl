@@ -1,5 +1,9 @@
-set adc_fifo_address_width 18
+###############################################################################
+## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
+set adc_fifo_address_width 18
 source $ad_hdl_dir/projects/common/zc706/zc706_system_bd.tcl
 source $ad_hdl_dir/projects/common/zc706/zc706_plddr3_adcfifo_bd.tcl
 source ../common/fmcadc2_bd.tcl

@@ -1,3 +1,8 @@
+###############################################################################
+## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
+
 # instantiate the base design
 source $ad_hdl_dir/projects/common/zc706/zc706_system_bd.tcl
 

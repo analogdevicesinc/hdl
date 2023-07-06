@@ -1,5 +1,9 @@
-source $ad_hdl_dir/library/scripts/adi_xilinx_device_info_enc.tcl
+###############################################################################
+## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
+source $ad_hdl_dir/library/scripts/adi_xilinx_device_info_enc.tcl
 if {[info exists ::env(ADI_VIVADO_IP_LIBRARY)]} {
   set VIVADO_IP_LIBRARY $::env(ADI_VIVADO_IP_LIBRARY)
 } else {

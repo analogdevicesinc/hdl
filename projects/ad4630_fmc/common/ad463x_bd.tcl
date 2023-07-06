@@ -1,5 +1,9 @@
-source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
+###############################################################################
+## Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
+source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
 # system level parameters
 set NUM_OF_SDI  $ad_project_params(NUM_OF_SDI)
 set CAPTURE_ZONE $ad_project_params(CAPTURE_ZONE)

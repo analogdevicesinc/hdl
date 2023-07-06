@@ -1,5 +1,9 @@
-# system level parameters
+###############################################################################
+## Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
+# system level parameters
 set DEV_CONFIG $ad_project_params(DEV_CONFIG)
 set ADC_N_BITS [expr {$DEV_CONFIG == 2 ? 18 : 16}]
 set ADC_TO_DMA_N_BITS [expr {$ADC_N_BITS == 16 ? 16 : 32}]

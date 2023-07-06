@@ -1,5 +1,9 @@
-create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 pulsar_adc_spi
+###############################################################################
+## Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
+create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 pulsar_adc_spi
 source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
 
 set data_width    32

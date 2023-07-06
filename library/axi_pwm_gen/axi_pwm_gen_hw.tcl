@@ -1,5 +1,9 @@
-# ip
+###############################################################################
+## Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
+# ip
 package require qsys 14.0
 package require quartus::device
 

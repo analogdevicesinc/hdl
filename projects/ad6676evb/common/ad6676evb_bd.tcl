@@ -1,7 +1,10 @@
-#
+###############################################################################
+## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
+
 # Parameter description:
 #   RX_JESD_L : Number of lanes per link
-#
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 

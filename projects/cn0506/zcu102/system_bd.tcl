@@ -1,5 +1,9 @@
-source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl
+###############################################################################
+## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
+source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl
 ##--------------------------------------------------------------
 # IMPORTANT: Set CN0506 interface mode
 #

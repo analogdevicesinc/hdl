@@ -1,3 +1,8 @@
+###############################################################################
+## Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
+
 # de10nano carrier qsys
 # system clock
 

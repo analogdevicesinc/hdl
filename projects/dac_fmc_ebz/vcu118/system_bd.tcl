@@ -1,5 +1,9 @@
-set dac_fifo_address_width 14
+###############################################################################
+## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
+set dac_fifo_address_width 14
 source $ad_hdl_dir/projects/common/vcu118/vcu118_system_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
 source ../common/dac_fmc_ebz_bd.tcl

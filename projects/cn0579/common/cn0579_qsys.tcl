@@ -1,5 +1,9 @@
-# ad77684
+###############################################################################
+## Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
+# ad77684
 add_instance axi_ad77684_adc axi_ad7768
 set_instance_parameter_value axi_ad77684_adc {NUM_CHANNELS} {4}
 add_interface if_clk_in_bd                         conduit end

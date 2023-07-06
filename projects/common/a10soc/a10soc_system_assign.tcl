@@ -1,3 +1,8 @@
+###############################################################################
+## Copyright (C) 2016-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
+
 # a10soc carrier defaults
 # clocks and resets
 

@@ -1,4 +1,7 @@
 ###############################################################################
+## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+#
 # CPLL - generate reference clocks for a given Lane Rate
 #
 # Attributes: NOTE lane rate should be define in kHz
@@ -290,7 +293,7 @@ proc ad_gth_generator { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} } {
             set float_clk [format "%.3f" [expr {$ref_clk}]]
 
             create_ip -name gtwizard -vendor xilinx.com -library ip -version 3.6 -module_name $ip_name
-            
+
             set_property -dict [list \
             CONFIG.identical_protocol_file {JESD204} \
             CONFIG.identical_val_tx_reference_clock $float_clk \
@@ -353,7 +356,7 @@ proc ad_gth_generator { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} } {
             CONFIG.gt0_val_align_comma_enable {1111111111} \
             ] [get_ips $ip_name]
 
-           puts "\n IP generated \n" 
+           puts "\n IP generated \n"
 
             ## generate output products and run synthesis
             generate_target all [get_files  \
@@ -406,7 +409,7 @@ proc ad_gth_generator { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} } {
                 CONFIG.RX_COMMA_MASK {1111111111} \
             ] [get_ips $ip_name]
 
-           puts "\n IP generated \n" 
+           puts "\n IP generated \n"
 
             ## generate output products and run synthesis
             generate_target all [get_files  \
@@ -474,13 +477,13 @@ proc get_diff_params { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} {keep_ip "
     "xcvu37p" {
       set gt_type GTYE4
     }
-    
+
     default {
       puts "ERROR ad_gth_generator: Unsupported device."
       return 1
     }
   }
-  
+
   set current_dir [pwd]
   set project_name [get_property NAME [current_project]]
 
@@ -521,10 +524,10 @@ proc get_diff_params { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} {keep_ip "
         }
       }
     } else {
-    puts "\ngenerated files can be find at $project_name\.gen/sources_1/ip" 
+    puts "\ngenerated files can be find at $project_name\.gen/sources_1/ip"
     }
 
-    
+
     puts "\nconfiguration file for the tranciever is $project_name\.gen/sources_1/ip/$gt_type\_cfng.txt"
   }
 

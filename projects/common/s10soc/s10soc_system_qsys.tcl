@@ -1,5 +1,9 @@
-# stratix10soc carrier qsys
+###############################################################################
+## Copyright (C) 2016-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
+# stratix10soc carrier qsys
 
 set system_type s10soc
 
