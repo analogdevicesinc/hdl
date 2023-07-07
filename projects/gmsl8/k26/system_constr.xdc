@@ -33,4 +33,64 @@ set_property PACKAGE_PIN T1 [get_ports sfp_rx_n]
 set_property PACKAGE_PIN R4 [get_ports sfp_tx_p]
 set_property PACKAGE_PIN R3 [get_ports sfp_tx_n]
 
+#
+set_property -dict {PACKAGE_PIN F11  IOSTANDARD LVCMOS33} [get_ports crr_gpio[0]] ;# VCCO_HDA B13 SOM1
+set_property -dict {PACKAGE_PIN J12  IOSTANDARD LVCMOS33} [get_ports crr_gpio[1]]
+set_property -dict {PACKAGE_PIN H12  IOSTANDARD LVCMOS33} [get_ports crr_gpio[2]]
+set_property -dict {PACKAGE_PIN J10  IOSTANDARD LVCMOS33} [get_ports crr_gpio[3]]
+set_property -dict {PACKAGE_PIN K13  IOSTANDARD LVCMOS33} [get_ports crr_gpio[4]]
+set_property -dict {PACKAGE_PIN K12  IOSTANDARD LVCMOS33} [get_ports crr_gpio[5]]
+set_property -dict {PACKAGE_PIN H11  IOSTANDARD LVCMOS33} [get_ports crr_gpio[6]]
+set_property -dict {PACKAGE_PIN G10  IOSTANDARD LVCMOS33} [get_ports crr_gpio[7]]
+set_property -dict {PACKAGE_PIN F12  IOSTANDARD LVCMOS33} [get_ports crr_gpio[8]]
+set_property -dict {PACKAGE_PIN G11  IOSTANDARD LVCMOS33} [get_ports crr_gpio[9]]
+set_property -dict {PACKAGE_PIN F10  IOSTANDARD LVCMOS33} [get_ports crr_gpio[10]]
+set_property -dict {PACKAGE_PIN J11  IOSTANDARD LVCMOS33} [get_ports crr_gpio[11]]
+
+set_property -dict {PACKAGE_PIN AB13 IOSTANDARD LVCMOS18} [get_ports led_gpio]
+set_property -dict {PACKAGE_PIN AF10 IOSTANDARD LVCMOS18} [get_ports btn_gpio]
+
+set_property -dict {PACKAGE_PIN A2   IOSTANDARD LVCMOS18} [get_ports ad9545_miso] ;# VCCO_HPA D1 SOM1
+set_property -dict {PACKAGE_PIN A1   IOSTANDARD LVCMOS18} [get_ports ad9545_sclk]
+set_property -dict {PACKAGE_PIN E4   IOSTANDARD LVCMOS18} [get_ports ad9545_mosi]
+set_property -dict {PACKAGE_PIN E3   IOSTANDARD LVCMOS18} [get_ports ad9545_cs]
+set_property -dict {PACKAGE_PIN B3   IOSTANDARD LVCMOS18} [get_ports ad9545_resetb]
+
+set_property -dict {PACKAGE_PIN E10  IOSTANDARD LVCMOS33} [get_ports uart_rxd] ;# VCCO_HDA
+set_property -dict {PACKAGE_PIN D10  IOSTANDARD LVCMOS33} [get_ports uart_txd]
+
+set_property -dict {PACKAGE_PIN AF11 IOSTANDARD LVCMOS18} [get_ports tca_i2c_scl]
+set_property -dict {PACKAGE_PIN AG11 IOSTANDARD LVCMOS18} [get_ports tca_i2c_sda]
+set_property -dict {PACKAGE_PIN AE10 IOSTANDARD LVCMOS18} [get_ports tca_i2c_rstn]
+
+# max gpios
+set_property -dict {PACKAGE_PIN AD11 IOSTANDARD LVCMOS18} [get_ports a_gmsl_pwdnb] ;#bank 43 1v8
+set_property -dict {PACKAGE_PIN W10  IOSTANDARD LVCMOS18} [get_ports a_gmsl_mfp0]
+set_property -dict {PACKAGE_PIN Y10  IOSTANDARD LVCMOS18} [get_ports a_gmsl_mfp1]
+set_property -dict {PACKAGE_PIN Y9   IOSTANDARD LVCMOS18} [get_ports a_gmsl_mfp2]
+set_property -dict {PACKAGE_PIN AD10 IOSTANDARD LVCMOS18} [get_ports a_gmsl_mfp3]
+set_property -dict {PACKAGE_PIN AA11 IOSTANDARD LVCMOS18} [get_ports a_gmsl_mfp4]
+set_property -dict {PACKAGE_PIN AH12 IOSTANDARD LVCMOS18} [get_ports a_gmsl_mfp5]
+
+set_property -dict {PACKAGE_PIN AA10 IOSTANDARD LVCMOS18} [get_ports b_gmsl_pwdnb]
+set_property -dict {PACKAGE_PIN AA8  IOSTANDARD LVCMOS18} [get_ports b_gmsl_mfp0]
+set_property -dict {PACKAGE_PIN AB10 IOSTANDARD LVCMOS18} [get_ports b_gmsl_mfp1]
+set_property -dict {PACKAGE_PIN AB9  IOSTANDARD LVCMOS18} [get_ports b_gmsl_mfp2]
+set_property -dict {PACKAGE_PIN AB11 IOSTANDARD LVCMOS18} [get_ports b_gmsl_mfp3]
+set_property -dict {PACKAGE_PIN AC11 IOSTANDARD LVCMOS18} [get_ports b_gmsl_mfp4]
+set_property -dict {PACKAGE_PIN AC12 IOSTANDARD LVCMOS18} [get_ports b_gmsl_mfp5]
+
+set_property -dict {PACKAGE_PIN AA13 IOSTANDARD LVCMOS18} [get_ports sfp_tx_disable]
+
+set_property -dict {PACKAGE_PIN C3  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100}   [get_ports refclk_0_p]
+set_property -dict {PACKAGE_PIN C2  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100}   [get_ports refclk_0_n]
+#set_property -dict {PACKAGE_PIN C3   IOSTANDARD LVDS}     [get_ports refclk_0_p]
+#set_property -dict {PACKAGE_PIN C2   IOSTANDARD LVDS}     [get_ports refclk_0_n]
+set_property -dict {PACKAGE_PIN C1   IOSTANDARD LVCMOS18} [get_ports refclk_0]
+
+
+set_property -dict {PACKAGE_PIN B11  IOSTANDARD LVCMOS33} [get_ports fan_tach1]
+set_property -dict {PACKAGE_PIN A12  IOSTANDARD LVCMOS33} [get_ports fan_tach2]
+set_property -dict {PACKAGE_PIN A10  IOSTANDARD LVCMOS33} [get_ports fan_pwm]
+
 set_property BITSTREAM.CONFIG.OVERTEMPSHUTDOWN ENABLE [current_design];

@@ -187,3 +187,4 @@ ad_mem_hp1_interconnect $sys_cpu_clk v_frmbuf_wr_0/m_axi_mm_video
 ad_mem_hp1_interconnect $sys_cpu_clk v_frmbuf_wr_1/m_axi_mm_video
 
 source ./ptp_eth10g.tcl
+source ./auxiliary.tcl
