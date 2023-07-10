@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
 create_clock -period "10.000 ns"  -name sys_clk_100mhz      [get_ports {sys_clk}]
 create_clock -period  "3.000 ns"  -name rx_ref_clk          [get_ports {rx_ref_clk}]
