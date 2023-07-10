@@ -1,5 +1,9 @@
-# Primary clock definitions
+###############################################################################
+## Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
+# Primary clock definitions
 # These two reference clocks are connect to the same source on the PCB
 create_clock -name refclk         -period  4.00 [get_ports fpga_clk_m2c_p[0]]
 create_clock -name refclk_replica -period  4.00 [get_ports fpga_clk_m2c_0_replica_n]

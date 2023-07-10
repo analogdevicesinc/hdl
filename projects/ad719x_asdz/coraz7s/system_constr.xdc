@@ -1,5 +1,9 @@
-# coraz7s
+###############################################################################
+## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
+# coraz7s
 # ad719x spi connections
 
 set_property -dict {PACKAGE_PIN Y17 IOSTANDARD LVCMOS33} [get_ports {adc_spi_sclk}];      # IO_L7N_T1_34  Sch=ja_n[2]

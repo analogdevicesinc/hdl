@@ -1,5 +1,9 @@
-# ad9434
+###############################################################################
+## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
+# ad9434
 set_property  -dict {PACKAGE_PIN  AE13   IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports adc_clk_p]       ; ## G6   FMC_LPC_LA00_CC_P
 set_property  -dict {PACKAGE_PIN  AF13   IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports adc_clk_n]       ; ## G7   FMC_LPC_LA00_CC_N
 

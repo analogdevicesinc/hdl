@@ -1,5 +1,9 @@
-# adaq8092
+###############################################################################
+## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
+# adaq8092
 set_property -dict {PACKAGE_PIN M19    IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports adc_clk_in_p]        ; #G06   FMC_LPC_LA00_P 
 set_property -dict {PACKAGE_PIN M20    IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports adc_clk_in_n]        ; #G07   FMC_LPC_LA00_N 
 set_property -dict {PACKAGE_PIN P17    IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports adc_data_in1_p[0]]   ; #H07   FMC_LPC_LA02_P D1_0

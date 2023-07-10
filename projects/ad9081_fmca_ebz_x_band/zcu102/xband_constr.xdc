@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
 set_property         -dict {PACKAGE_PIN A20   IOSTANDARD LVCMOS33                       } [get_ports pmod0_0_1_PA_ON      ]; ## J55.1
 set_property         -dict {PACKAGE_PIN B20   IOSTANDARD LVCMOS33                       } [get_ports pmod0_1_3_MOSI       ]; ## J55.3

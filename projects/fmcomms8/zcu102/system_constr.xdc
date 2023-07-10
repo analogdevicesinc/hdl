@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2020-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
 set_property PACKAGE_PIN G8 [get_ports ref_clk_c_p]; # D04 FMC_HPC0_GBTCLK0_M2C_C_P
 set_property PACKAGE_PIN G7 [get_ports ref_clk_c_n]; # D05 FMC_HPC0_GBTCLK0_M2C_C_N

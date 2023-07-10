@@ -1,3 +1,8 @@
+###############################################################################
+## Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
+
 set_clock_groups \
   -group [get_clocks -of_objects [get_pins clk_divide_sel_0/O]] \
   -group [get_clocks -of_objects [get_pins clk_divide_sel_1/O]] \

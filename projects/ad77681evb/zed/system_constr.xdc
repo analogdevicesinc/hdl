@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
 # SPI interface
 
@@ -19,4 +23,3 @@ set_property -dict {PACKAGE_PIN  N17 IOSTANDARD LVCMOS25}                       
 set_property -dict {PACKAGE_PIN  J18 IOSTANDARD LVCMOS25 IOB TRUE}                  [get_ports ad7768_drdy]        ; ## FMC_LPC_LA05_P
 set_property -dict {PACKAGE_PIN  L19 IOSTANDARD LVCMOS25}                           [get_ports ad7768_sync_out]    ; ## FMC_LPC_CLK0_M2C_N
 set_property -dict {PACKAGE_PIN  L21 IOSTANDARD LVCMOS25}                           [get_ports ad7768_sync_in]     ; ## FMC_LPC_LA06_P
-
