@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
 set_property  -dict {PACKAGE_PIN  F14 IOSTANDARD LVCMOS33 PULLTYPE PULLUP} [get_ports iic_scl]
 set_property  -dict {PACKAGE_PIN  F13 IOSTANDARD LVCMOS33 PULLTYPE PULLUP} [get_ports iic_sda]

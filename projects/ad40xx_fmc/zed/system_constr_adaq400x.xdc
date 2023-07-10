@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
 # adaq400x PMOD SPI interface - the PMOD JA1 is used
 

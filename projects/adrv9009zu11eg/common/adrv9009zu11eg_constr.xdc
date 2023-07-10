@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
 set_property PACKAGE_PIN G24 [get_ports {ddr4_rtl_1_adr[0]}]
 set_property PACKAGE_PIN G25 [get_ports {ddr4_rtl_1_adr[1]}]

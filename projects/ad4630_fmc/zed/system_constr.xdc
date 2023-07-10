@@ -1,5 +1,9 @@
-# ad463x_fmc SPI interface
+###############################################################################
+## Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
+# ad463x_fmc SPI interface
 set_property -dict {PACKAGE_PIN L22 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports ad463x_spi_sdo]
 set_property -dict {PACKAGE_PIN M19 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports ad463x_spi_sclk]
 set_property -dict {PACKAGE_PIN M20 IOSTANDARD LVCMOS25}          [get_ports ad463x_spi_cs]

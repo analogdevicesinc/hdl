@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
 set_property ASYNC_REG true [get_cells -hierarchical -filter {name =~ *up_count_running_m*}]
 set_property ASYNC_REG true [get_cells -hierarchical -filter {name =~ *d_count_run_m*}]

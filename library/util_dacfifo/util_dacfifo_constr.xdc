@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2016-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
 set_property ASYNC_REG TRUE [get_cells -hierarchical -filter {name =~ *dac_waddr_m*}] \
   [get_cells -hierarchical -filter {name =~ *dac_lastaddr_m*}] \

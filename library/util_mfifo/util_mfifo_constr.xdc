@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2015-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
 set_property SHREG_EXTRACT NO [get_cells -hier *din_dout_toggle_m*]
 set_property SHREG_EXTRACT NO [get_cells -hier *dout_din_toggle_m*]

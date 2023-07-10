@@ -1,5 +1,9 @@
-# FMC_HPC 0
+###############################################################################
+## Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
+# FMC_HPC 0
 # ad9371
 
 set_property  -dict {PACKAGE_PIN  Y2   IOSTANDARD LVDS} [get_ports rx_sync_p]                         ; ## G09  FMC_HPC0_LA03_P

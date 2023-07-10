@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
 set_property ASYNC_REG TRUE [get_cells -hier -filter {name =~ *up_cal_done_t_m1* && IS_SEQUENTIAL}]
 set_property ASYNC_REG TRUE [get_cells -hier -filter {name =~ *up_sysref_ack_t_m1* && IS_SEQUENTIAL}]
