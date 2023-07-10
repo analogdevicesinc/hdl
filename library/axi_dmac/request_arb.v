@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2023 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -309,7 +309,6 @@ module request_arb #(
   wire [ID_WIDTH+3-1:0] rewind_req_data;
 
   reg src_throttler_enabled = 1'b1;
-  wire src_throttler_enable;
   wire rewind_state;
 
   /* Unused for now
@@ -772,6 +771,26 @@ module request_arb #(
     .m_axis_level(),
     .m_axis_empty());
 
+  wire src_throttler_enable;
+
+  sync_event #(
+    .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
+  ) sync_rewind (
+    .in_clk(req_clk),
+    .in_event(rewind_state),
+    .out_clk(src_clk),
+    .out_event(src_throttler_enable));
+
+  always @(posedge src_clk) begin
+    if (src_resetn == 1'b0) begin
+      src_throttler_enabled <= 'b1;
+    end else if (rewind_req_valid) begin
+      src_throttler_enabled <= 'b0;
+    end else if (src_throttler_enable) begin
+      src_throttler_enabled <= 'b1;
+    end
+  end
+
   end else begin
 
   assign s_axis_ready = 1'b0;
@@ -877,24 +896,6 @@ module request_arb #(
       end
     end
   endfunction
-
-  sync_event #(
-    .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
-  ) sync_rewind (
-    .in_clk(req_clk),
-    .in_event(rewind_state),
-    .out_clk(src_clk),
-    .out_event(src_throttler_enable));
-
-  always @(posedge src_clk) begin
-    if (src_resetn == 1'b0) begin
-      src_throttler_enabled <= 'b1;
-    end else if (rewind_req_valid) begin
-      src_throttler_enabled <= 'b0;
-    end else if (src_throttler_enable) begin
-      src_throttler_enabled <= 'b1;
-    end
-  end
 
   /*
    * Make sure that we do not request more data than what fits into the
