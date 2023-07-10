@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
 set_false_path -to [get_registers *dac_bypass_m1*]
 set_false_path -to [get_registers *dma_bypass_m1*]
