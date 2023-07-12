@@ -1,1 +1,561 @@
-/home/me/Documents/adi/i3c/hdl/docs/regmap/adi_regmap_i3c_controller.txt
+TITLE
+I3C Controller (axi_i3c_controller)
+ENDTITLE
+
+############################################################################################
+############################################################################################
+
+REG
+0x00
+VERSION
+Version of the peripheral. Follows semantic versioning. Current version 0.01.00
+ENDREG
+
+FIELD
+[31:16] 0x00
+VERSION_MAJOR
+RO
+ENDFIELD
+
+FIELD
+[15:8] 0x01
+VERSION_MINOR
+RO
+ENDFIELD
+
+FIELD
+[7:0] 0x00
+VERSION_PATCH
+RO
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x01
+PERIPHERAL_ID
+ENDREG
+
+FIELD
+[31:0] ''ID''
+PERIPHERAL_ID
+RO
+Value of the ID configuration parameter.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x02
+SCRATCH
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+SCRATCH
+RW
+Scratch register useful for debug.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x03
+PARAMETERS
+Controller parameters values.
+ENDREG
+
+FIELD
+[3:0] 0x00000000
+MAX_DEVS
+RO
+Maximum number of peripherals in the bus (does not count the controller).
+Valid range is 0 to 15 devices.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x10
+ENABLE
+ENDREG
+
+FIELD
+[0] 0x1
+ENABLE
+RW
+Enable register. If the enable bit is set to 1 the internal state of the peripheral is reset.
+For proper operation, the bit needs to be set to 0.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x20
+IRQ_MASK
+ENDREG
+
+FIELD
+[0] 0x00
+CMD_ALMOST_EMPTY
+RW
+If set to 0 the CMD_ALMOST_EMPTY interrupt is masked.
+ENDFIELD
+
+FIELD
+[1] 0x00
+CMDR_ALMOST_FULL
+RW
+If set to 0 the CMDR_ALMOST_FULL interrupt is masked.
+ENDFIELD
+
+FIELD
+[2] 0x00
+SDO_ALMOST_EMPTY
+RW
+If set to 0 the SDO_ALMOST_EMPTY interrupt is masked.
+ENDFIELD
+
+FIELD
+[3] 0x00
+SDI_ALMOST_FULL
+RW
+If set to 0 the SDI_ALMOST_FULL interrupt is masked.
+ENDFIELD
+
+FIELD
+[4] 0x00
+IBI_ALMOST_FULL
+RW
+If set to 0 the IBI_ALMOST_FULL interrupt is masked.
+
+FIELD
+[5] 0x00
+CMDR_PENDING
+RW
+If set to 0 the CMDR_PENDING interrupt is masked.
+
+############################################################################################
+############################################################################################
+
+REG
+0x21
+IRQ_PENDING
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+IRQ_PENDING
+RW
+Pending IRQs with mask.
+Write 1 at the CMDR_PENDING bit to clear it.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x22
+IRQ_SOURCE
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+IRQ_SOURCE
+RO
+Pending IRQs without mask.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x30
+CMD_FIFO_ROOM
+ENDREG
+
+FIELD
+[31:0] 0x???????? %TODO
+CMD_FIFO_ROOM
+RO
+Number of free entries in the CMD FIFO.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x31
+CMDR_FIFO_LEVEL
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+CMDR_FIFO_LEVEL
+RO
+Number of valid entries in the CMDR FIFO.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x32
+SDO_FIFO_ROOM
+ENDREG
+
+FIELD
+[31:0] 0x????????
+SDO_FIFO_ROOM
+RO
+Number of free entries in the SDO FIFO.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x33
+SDI_FIFO_LEVEL
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+SDI_FIFO_LEVEL
+RO
+Number of valid entries in the serial-data-in FIFO.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x34
+IBI_FIFO_LEVEL
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+IBI_FIFO_LEVEL
+RO
+Number of valid entries in the in-bus-interrupt FIFO.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x35
+CMD_FIFO
+Command FIFO register. Writing to this register inserts an entry into the CMD FIFO.
+Writing to this register when the CMD FIFO is full has no effect and the written entry
+is discarded. Reading from this register always returns 0x00000000.
+The Software is responsive for a valid sequence of commands.
+If the peripheral does not ACK when required during a command, the procedure exits and the
+next command in the FIFO is interpreted.
+See Instruction Set Specification in the wiki documentation for the structure of the command.
+ENDFIELD
+FIELD
+[31:0] 0x??
+CMD_FIFO
+The command to the I3C controller to execute.
+WO
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x36
+CMDR_FIFO
+CMDR FIFO register. Reading from this register removes the first entry from the CMDR FIFO.
+Reading this register when the CMDR FIFO is empty will return undefined data.
+Writing to it has no effect.
+ENDREG
+
+FIELD
+[31:0] 0x??
+CMDR_FIFO
+RO
+ENDFIELD
+
+
+############################################################################################
+############################################################################################
+
+REG
+0x37
+SDO_FIFO
+SDO FIFO register. Writing to this register inserts an entry into the SDO FIFO.
+Writing to this register when the SDO FIFO is full has no effect and the written entry
+is discarded. Reading from this register always returns 0x00000000.
+
+FIELD
+[31:24] 0x??
+SDO_FIFO_BYTE_3
+RO
+ENDFIELD
+
+FIELD
+[23:16] 0x??
+SDO_FIFO_BYTE_2
+RO
+ENDFIELD
+
+FIELD
+[15:8] 0x??
+SDO_FIFO_BYTE_1
+RO
+ENDFIELD
+
+FIELD
+[7:0] 0x??
+SDO_FIFO_BYTE_0
+RO
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x38
+SDI_FIFO
+SDI FIFO register. Reading from this register removes the first entry from the SDI FIFO.
+Reading this register when the SDI FIFO is empty will return undefined data.
+Writing to it has no effect.
+ENDREG
+
+FIELD
+[31:0] 0x??
+SDI_FIFO
+RO
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x39
+IBI_FIFO
+ENDREG
+
+FIELD
+[31:24] 0x??
+IBI_FIFO_BYTE_3
+RO
+ENDFIELD
+
+FIELD
+[23:16] 0x??
+IBI_FIFO_BYTE_2
+RO
+ENDFIELD
+
+FIELD
+[15:8] 0x??
+IBI_FIFO_BYTE_1
+RO
+ENDFIELD
+
+FIELD
+[7:0] 0x??
+IBI_FIFO_BYTE_0
+RO
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x3a
+FIFO_STATUS
+ENDREG
+
+FIELD
+[0] 0x1
+CMDR_EMPTY
+RO
+If there is no element to be read in the CMDR FIFO.
+ENDFIELD
+
+FIELD
+[1] 0x1
+IBI_EMPTY
+RO
+If there is no element to be read in the IBIR FIFO.
+ENDFIELD
+
+FIELD
+[2] 0x1
+SDI_EMPTY
+RO
+If there is no element to be read in the IBIR FIFO.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x40
+DAA_STATUS :TODO: Update to be a high level controller state, with DAA one of the states.
+ENDREG
+
+FIELD
+[0] 0x??
+DAA_STATUS_IN_PROGRESS
+RO
+This bit is set to 1 when the assignment is in progress.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x50
+IBI_CONFIG
+ENDREG
+
+FIELD
+[0] 0x??
+IBI_CONFIG_ENABLE
+WO
+Set this bit to accept (ACK) IBI requests.
+If disabled, the controller will NACK IBI requests.
+If enabled, the controller will ACK the IBI request and receive the MDB.
+In both cases, the controller will proceed with the cmd transfer after resolving the IBI
+request.
+Accepted IBIs fill the IBI_FIFO and generate an interruption in the PS.
+ENDFIELD
+
+FIELD
+[1] 0x??
+IBI_CONFIG_AUTO
+WO
+Set this bit to listen for IBI requests (when a peripheral pulls SDA Low during quiet times).
+After the IBI request is resolved, the controller returns to idle, since it is was not doing
+a cmd transfer.
+IBI_CONFIG_ENABLE must be set 1.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x6[0-f]
+DEV_CHAR_0_[0-15]
+Controller/peripheral bus and device characteristics, fields defined by the I3C specification.
+0x60 is the controller.
+ENDREG
+
+FIELD
+[0:0] 0x???
+DEV_CHAR_0_*_DA_PARIETY
+Pariety of the dynamic address.
+RW
+ENDFIELD
+
+FIELD
+[7:1] 0x???
+DEV_CHAR_0_*_DA
+Dynamic address.
+RW
+ENDFIELD
+
+FIELD
+[8:8] 0x1
+DEV_CHAR_0_*_IS_I3C
+Indicates if the device is an I3C device.
+Since only I3C is supported, will always be 1.
+RW
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x7[0-f]
+DEV_CHAR_1_[0-15]
+Controller/peripheral bus and device characteristics, fields defined by the I3C specification.
+The values are fetched from the peripheral during the DAA.
+For the controller slot, the values are preset by parameters.
+0x70 is the controller.
+ENDREG
+
+FIELD
+[31:0] 0x???
+DEV_CHAR_1_*_PID_1
+32-MSB from the PID.
+RW
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x8[0-f]
+DEV_CHAR_2_[0-15]
+Controller/peripheral bus and device characteristics, fields defined by the I3C specification.
+The values are fetched from the peripheral during the DAA.
+For the controller slot, the values are preset by parameters.
+0x80 is the controller.
+ENDREG
+
+FIELD
+[7:0] 0x???
+DEV_CHAR_2_*_DCR/LVR
+Stores the DCR of I3C devices or LVR of I2C devices.
+LVR should only be written, and DCR only be read.
+Currently, LVR has no effect.
+RW
+ENDFIELD
+
+FIELD
+[15:8] 0x???
+DEV_CHAR_2_*_BCR
+Should only be read.
+RW
+ENDFIELD
+
+FIELD
+[31:16] 0x???
+DEV_CHAR_2_*_PID_0
+16-LSB from the PID.
+Should only be read.
+RW
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x90
+DEVS_CTRL
+ENDREG
+
+FIELD
+[15:0] 0x??
+DEV_CTRL
+Slots for peripherals, each HIGH bit represents a peripherals attached.
+The index match the DEV_CHAR_*_ indexes.
+The Controller, index 0, is set to HIGH when a DA is written to DEV_CHAR_0_0,
+while the others peripherals are set HIGH when the peripherals actually
+receives the DA during the DAA.
+The state can also be overwritten to explicit attach device (e.g. has static addr).
+RW
+ENDFIELD
+
+FIELD
+[31:16] 0x??
+DEV_CLR
+Write the index of a peripheral (offset by 16) bit to clear its slot.
+The stored value in DEV_CHAR_*_* is not affected by this register.
+WO
+ENDFIELD
+
+############################################################################################
+############################################################################################
