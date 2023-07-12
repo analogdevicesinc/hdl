@@ -91,7 +91,7 @@ module i3c_controller_word #(
   // DAA interface
 
   output reg pid_bcr_dcr_tick,
-  output reg [63:0] pid_bcr_dcr,
+  output reg [31:0] pid_bcr_dcr,
 
   // uP accessible info
 
@@ -144,7 +144,8 @@ module i3c_controller_word #(
       `CMDW_MSG_TX          : i_ =  8; // SDO+T
       `CMDW_STOP            : i_ =  0;
       `CMDW_BCAST_7E_W1     : i_ =  8; // 7'h7e+RnW=1+ACK
-      `CMDW_PROV_ID_BCR_DCR : i_ = 63; // 48-bitUniqueID+BCR+DCR
+      `CMDW_DAA_DEV_CHAR_1  : i_ = 31; // 32-bitMSB_PID
+      `CMDW_DAA_DEV_CHAR_2  : i_ = 31; // 16-bitLSB_PID+BCR+DCR
       `CMDW_DYN_ADDR        : i_ =  8; // DA+T+ACK
       `CMDW_IBI_MDB         : i_ =  8; // MDB+T
       `CMDW_SR              : i_ =  0;
@@ -164,7 +165,8 @@ module i3c_controller_word #(
       `CMDW_MSG_TX          : clk_sel_lut = 1;
       `CMDW_STOP            : clk_sel_lut = 1;
       `CMDW_BCAST_7E_W1     : clk_sel_lut = 0;
-      `CMDW_PROV_ID_BCR_DCR : clk_sel_lut = 0;
+      `CMDW_DAA_DEV_CHAR_1  : clk_sel_lut = 0;
+      `CMDW_DAA_DEV_CHAR_2  : clk_sel_lut = 0;
       `CMDW_DYN_ADDR        : clk_sel_lut = 0;
       `CMDW_IBI_MDB         : clk_sel_lut = 1;
       `CMDW_SR              : clk_sel_lut = 1;
@@ -246,11 +248,12 @@ module i3c_controller_word #(
                 end
                 ibi_mdb_reg[8-i_reg_2] <= rx_sampled;
               end
-              `CMDW_PROV_ID_BCR_DCR: begin
-                if (i_reg_2 == 63) begin
+              `CMDW_DAA_DEV_CHAR_1,
+              `CMDW_DAA_DEV_CHAR_2: begin
+                if (i_reg_2 == 31) begin
                   pid_bcr_dcr_tick <= 1'b1;
                 end
-                pid_bcr_dcr[63 - i_reg_2] <= rx_sampled;
+                pid_bcr_dcr[31 - i_reg_2] <= rx_sampled;
               end
               default: begin
               end
@@ -342,7 +345,8 @@ module i3c_controller_word #(
               `CMDW_STOP: begin
                 cmd <= `MOD_BIT_CMD_STOP_OD;
               end
-              `CMDW_PROV_ID_BCR_DCR: begin
+              `CMDW_DAA_DEV_CHAR_1,
+              `CMDW_DAA_DEV_CHAR_2: begin
                 cmd <= `MOD_BIT_CMD_READ;
               end
               `CMDW_IBI_MDB: begin

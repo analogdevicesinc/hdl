@@ -7,6 +7,7 @@
 LIBRARY_NAME := axi_i3c_controller
 
 GENERIC_DEPS += ../../common/ad_rst.v
+GENREIC_DEPS += ../../common/ad_mem_dual.v
 GENERIC_DEPS += ../../common/up_axi.v
 GENERIC_DEPS += axi_i3c_controller.v
 GENERIC_DEPS += i3c_controller_regmap.v
@@ -23,7 +24,6 @@ XILINX_DEPS += ../../i3c_controller/interfaces/i3c_controller_rmap_rtl.xml
 XILINX_LIB_DEPS += util_axis_fifo
 XILINX_LIB_DEPS += util_cdc
 
-INTEL_DEPS += ../../common/ad_mem.v
 INTEL_DEPS += ../../intel/common/up_rst_constr.sdc
 INTEL_DEPS += ../../util_axis_fifo/util_axis_fifo.v
 INTEL_DEPS += ../../util_axis_fifo/util_axis_fifo_address_generator.v

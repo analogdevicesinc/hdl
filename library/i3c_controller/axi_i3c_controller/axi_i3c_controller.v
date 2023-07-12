@@ -42,11 +42,10 @@ module axi_i3c_controller #(
   parameter ASYNC_I3C_CLK = 0,
   parameter ADDRESS_WIDTH = 8, // Const
   parameter DATA_WIDTH = 32, // Const
-  parameter DA_LENGTH_WIDTH = 2,
-  parameter MAX_DEVS = 15,
+  parameter MAX_DEVS = 15, // Const
   parameter PID = 48'hC00FFE123456,
   parameter DCR = 8'h7b,
-  parameter BCR = 8'b01000000
+  parameter BCR = 8'h40
 ) (
 
   // Slave AXI interface
@@ -119,11 +118,13 @@ module axi_i3c_controller #(
 
   input  wire rmap_daa_status,
   output reg  [1:0] rmap_ibi_config,
-  output reg  [15:0] rmap_dev_clr,
+  output reg  [29:0] rmap_devs_ctrl_mr,
   input  wire [14:0] rmap_devs_ctrl,
-  output wire [(MAX_DEVS)*9-1:0]  rmap_dev_char_0,
-  input  wire [(MAX_DEVS)*32-1:0] rmap_dev_char_1,
-  input  wire [(MAX_DEVS)*32-1:0] rmap_dev_char_2
+  input rmap_dev_char_e,
+  input rmap_dev_char_we,
+  input [5:0]  rmap_dev_char_addr,
+  input [31:0] rmap_dev_char_wdata,
+  output [8:0] rmap_dev_char_rdata
 );
 
   localparam PCORE_VERSION = 'h12345678;
@@ -180,10 +181,11 @@ module axi_i3c_controller #(
   wire ibi_fifo_valid;
   wire ibi_fifo_empty;
 
-  reg up_sw_reset = 1'b1;
+  reg  up_sw_reset = 1'b1;
   wire up_sw_resetn = ~up_sw_reset;
 
   reg  [31:0] up_rdata_ff = 'd0;
+  wire [31:0] up_rdata_ff_w;
   reg         up_wack_ff = 1'b0;
   reg         up_rack_ff = 1'b0;
   wire        up_wreq_s;
@@ -234,7 +236,7 @@ module axi_i3c_controller #(
       .up_wack(up_wack_ff),
       .up_rreq(up_rreq_s),
       .up_raddr(up_raddr_s),
-      .up_rdata(up_rdata_ff),
+      .up_rdata(up_rdata_ff_w),
       .up_rack(up_rack_ff));
 
     assign up_rdata = 32'b0;
@@ -257,7 +259,7 @@ module axi_i3c_controller #(
     assign up_wack = up_wack_ff;
     assign up_rreq_s = up_rreq;
     assign up_raddr_s = up_raddr;
-    assign up_rdata = up_rdata_ff;
+    assign up_rdata = up_rdata_ff_w;
     assign up_rack = up_rack_ff;
 
   end
@@ -304,6 +306,7 @@ module axi_i3c_controller #(
 
   // the software reset should reset all the registers
   always @(posedge clk) begin
+    rmap_devs_ctrl_mr <= 'd0;
     if (!up_sw_resetn) begin
       up_irq_mask <= 'h00;
       rmap_ibi_config <= 'h00;
@@ -311,35 +314,19 @@ module axi_i3c_controller #(
     end else begin
       if (up_wreq_s) begin
         case (up_waddr_s)
-          `I3C_REGMAP_IRQ_MASK:       up_irq_mask <= up_wdata_s[5:0];
-          `I3C_REGMAP_IBI_CONFIG:     rmap_ibi_config <= up_wdata_s[1:0];
-          `I3C_REGMAP_DEVS_CTRL:      rmap_dev_clr[14:0] <= up_wdata_s[31:17];
+          `I3C_REGMAP_IRQ_MASK:   up_irq_mask <= up_wdata_s[5:0];
+          `I3C_REGMAP_IBI_CONFIG: rmap_ibi_config <= up_wdata_s[1:0];
+          `I3C_REGMAP_DEVS_CTRL:  rmap_devs_ctrl_mr <= {up_wdata_s[31:17], up_wdata_s[15:1]};
           default: begin
-            case (up_waddr_s[7:4])
-              `I3C_REGMAP_DEV_CHAR_0_: dev_char_0[up_waddr_s[3:0]*9 +: 9] <= up_wdata_s;
-            endcase
           end
         endcase
 
+        // Special cases for the controller
         if (up_waddr_s == {`I3C_REGMAP_DEV_CHAR_0_, 4'd0}) begin
           devs_ctrl_0 <= 1'b1;
+        end else if (up_waddr_s == `I3C_REGMAP_DEVS_CTRL & up_wdata_s[16] == 1'b1) begin
+          devs_ctrl_0 <= 1'b0;
         end
-        if (up_waddr_s == `I3C_REGMAP_DEVS_CTRL) begin
-          rmap_dev_clr[15] <= 1'b1;
-          if (up_wdata_s[16] == 1'b1) begin
-            // The controller bit gets cleared right away.
-            devs_ctrl_0 <= 1'b0;
-          end
-          // TODO: Might be useful for debugging.
-          //for (i = 0; i < MAX_DEVS+1; i = i+1) begin
-          //  if (up_wdata_s[i<<16] == 1'b1) begin
-          //    rmap_dev_char_0[i*9 +: 9] <= 8'd0;
-          //  end
-          //end
-        end else begin
-          rmap_dev_clr[15] <= 1'b0;
-        end
-
       end
     end
   end
@@ -354,9 +341,6 @@ module axi_i3c_controller #(
 
   wire [13:0] rmap_daa_peripheral;
 
-  reg [(MAX_DEVS+1)*9-1:0] dev_char_0;
-  wire [(MAX_DEVS+1)*32-1:0] dev_char_1;
-  wire [(MAX_DEVS+1)*32-1:0] dev_char_2;
   reg devs_ctrl_0;
   wire [15:0] rmap_devs_ctrl_w = {rmap_devs_ctrl, devs_ctrl_0};
   integer i;
@@ -380,21 +364,54 @@ module axi_i3c_controller #(
       `I3C_REGMAP_IBI_FIFO:       up_rdata_ff <= ibi_fifo_data;
       `I3C_REGMAP_FIFO_STATUS:    up_rdata_ff <= {sdi_fifo_empty, ibi_fifo_empty, cmdr_fifo_empty};
       `I3C_REGMAP_DAA_STATUS:     up_rdata_ff <= rmap_daa_status;
-      `I3C_REGMAP_DEVS_CTRL:      up_rdata_ff <= rmap_devs_ctrl_w;
-      default: begin
-        case (up_raddr_s[7:4])
-          `I3C_REGMAP_DEV_CHAR_0_: up_rdata_ff <= dev_char_0[up_raddr_s[3:0]*9 +: 9];
-          `I3C_REGMAP_DEV_CHAR_1_: up_rdata_ff <= dev_char_1[up_raddr_s[3:0]*32 +: 32];
-          `I3C_REGMAP_DEV_CHAR_2_: up_rdata_ff <= dev_char_2[up_raddr_s[3:0]*32 +: 32];
-          default: up_rdata_ff <= 'h00;
-        endcase
-      end
+      `I3C_REGMAP_DEV_CHAR_1_0:   up_rdata_ff <= PID[47:16];
+      `I3C_REGMAP_DEV_CHAR_2_0:   up_rdata_ff <= {PID[16:0], BCR, DCR};
+      `I3C_REGMAP_DEVS_CTRL:      up_rdata_ff <= {16'd0, rmap_devs_ctrl_w};
+      default:                    up_rdata_ff <= 'h00;
     endcase
   end
-  assign dev_char_1 = {rmap_dev_char_1, {PID[15:0], BCR, DCR}};
-  assign dev_char_2 = {rmap_dev_char_2, PID[47:16]};
-  assign rmap_dev_char_0 = dev_char_0[(MAX_DEVS+1)*9-1:9];
+  // NOTE: Could pre-load the Controller PID in the BRAM instead.
+  assign up_rdata_ff_w =   up_raddr_s[7:4] == `I3C_REGMAP_DEV_CHAR_0_ ? dev_char_out :
+                         ~|up_raddr_s[3:0] ? up_rdata_ff :
+                           up_raddr_s[7:4] == `I3C_REGMAP_DEV_CHAR_1_ ? dev_char_out :
+                           up_raddr_s[7:4] == `I3C_REGMAP_DEV_CHAR_2_ ? dev_char_out :
+                           up_rdata_ff;
 
+  wire dev_char_e;
+  wire dev_char_wr;
+  wire dev_char_rd;
+  wire [31:0] dev_char_out;
+  wire [5:0] dev_char_addr;
+  ad_mem_dual #(
+    .DATA_WIDTH(32),
+    .ADDRESS_WIDTH(6)
+  ) i_dev_char_1_2 (
+    .clka(clk),
+    .wea(dev_char_wr),
+    .ea(dev_char_e),
+    .addra(dev_char_addr),
+    .dina(up_wdata_s),
+    .douta(dev_char_out),
+    .clkb(clk),
+    .web(rmap_dev_char_we),
+    .eb(rmap_dev_char_e),
+    .addrb(rmap_dev_char_addr),
+    .dinb(rmap_dev_char_wdata),
+    .doutb(rmap_dev_char_rdata)
+  );
+  
+  assign dev_char_addr = up_wreq_s ?
+                      {up_waddr_s[7], up_waddr_s[6] & up_waddr_s[4], up_waddr_s[3:0]} :
+                      {up_raddr_s[7], up_raddr_s[6] & up_raddr_s[4], up_raddr_s[3:0]};
+  assign dev_char_rd = up_rreq_s == 1'b1 &&
+                      (up_raddr_s[7:4] == `I3C_REGMAP_DEV_CHAR_0_ |
+                       up_raddr_s[7:4] == `I3C_REGMAP_DEV_CHAR_1_ |
+                       up_raddr_s[7:4] == `I3C_REGMAP_DEV_CHAR_2_ );
+  assign dev_char_wr = up_wreq_s == 1'b1 &&
+                      (up_waddr_s[7:4] == `I3C_REGMAP_DEV_CHAR_0_ |
+                       up_waddr_s[7:4] == `I3C_REGMAP_DEV_CHAR_2_ );
+  assign dev_char_e = dev_char_rd | dev_char_wr;
+  
   always @(posedge clk) begin
     if (up_sw_resetn == 1'b0) begin
       cmdr_id_pending <= 1'b0;

@@ -75,11 +75,13 @@ adi_add_bus "rmap" "slave" \
 	"analog.com:interface:i3c_controller_rmap:1.0" \
 	{
 		{"rmap_daa_status"             "RMAP_DAA_STATUS"} \
-		{"rmap_dev_clr"                "RMAP_DEV_CLR"} \
+		{"rmap_devs_ctrl_mr"           "RMAP_DEVS_CTRL_MR"} \
 		{"rmap_devs_ctrl"              "RMAP_DEVS_CTRL"} \
-		{"rmap_dev_char_0"             "RMAP_DEV_CHAR_0"} \
-		{"rmap_dev_char_1"             "RMAP_DEV_CHAR_1"} \
-		{"rmap_dev_char_2"             "RMAP_DEV_CHAR_2"} \
+		{"rmap_dev_char_e"             "RMAP_DEV_CHAR_E"} \
+		{"rmap_dev_char_we"            "RMAP_DEV_CHAR_WE"} \
+		{"rmap_dev_char_addr"          "RMAP_DEV_CHAR_ADDR"} \
+		{"rmap_dev_char_wdata"         "RMAP_DEV_CHAR_WDATA"} \
+		{"rmap_dev_char_rdata"         "RMAP_DEV_CHAR_RDATA"} \
 		{"rmap_ibi_config"             "RMAP_IBI_CONFIG"} \
 	}
 adi_add_bus_clock "i3c_clk" "rmap" "i3c_reset_n" "master"
@@ -98,6 +100,7 @@ set_property -dict [list \
  ] \
  [ipx::get_user_parameters SIM_DEVICE -of_objects $cc]
 
+# TODO: Remove if we end up really only supporting one clock speed
 ## CLK_DIV
 set_property -dict [list \
   "value_validation_list" { \
@@ -105,6 +108,14 @@ set_property -dict [list \
   } \
  ] \
  [ipx::get_user_parameters CLK_DIV -of_objects $cc]
+
+## MAX_DEVS
+set_property -dict [list \
+  "value_validation_type" "range_long" \
+  "value_validation_range_minimum" "0" \
+  "value_validation_range_maximum" "15" \
+ ] \
+ [ipx::get_user_parameters MAX_DEVS -of_objects $cc]
 
 ## Customize IP Layout
 ## Remove the automatically generated GUI page
@@ -131,6 +142,12 @@ set_property -dict [list \
   "display_name" "Core clock divider" \
   "tooltip" "\[CLK_DIV\] Divide the core clock to obtain the derivated clock used in the Open-Drain mode modulation" \
 ] [ipgui::get_guiparamspec -name "CLK_DIV" -component $cc]
+
+ipgui::add_param -name "MAX_DEVS" -component $cc -parent $general_group
+set_property -dict [list \
+  "display_name" "Maximum number of peripherals" \
+  "tooltip" "\[MAX_DEVS\] Maximum number of peripherals in the bus, not counting the controller" \
+] [ipgui::get_guiparamspec -name "MAX_DEVS" -component $cc]
 
 ## Create and save the XGUI file
 ipx::create_xgui_files $cc

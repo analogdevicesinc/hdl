@@ -24,7 +24,9 @@
 `define I3C_REGMAP_IBI_CONFIG      14'h50
 `define I3C_REGMAP_DEV_CHAR_0_      4'h6
 `define I3C_REGMAP_DEV_CHAR_1_      4'h7
+`define I3C_REGMAP_DEV_CHAR_1_0    14'h70
 `define I3C_REGMAP_DEV_CHAR_2_      4'h8
+`define I3C_REGMAP_DEV_CHAR_2_0    14'h80
 `define I3C_REGMAP_DEVS_CTRL       14'h90
 
 `define I3C_REGMAP_IRQ_PENDING_CMDR_PENDING 5

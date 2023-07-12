@@ -7,6 +7,7 @@ adi_ip_create axi_i3c_controller
 adi_ip_files axi_i3c_controller [list \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/common/ad_rst.v" \
+  "$ad_hdl_dir/library/common/ad_mem_dual.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "axi_i3c_controller_constr.ttcl" \
   "axi_i3c_controller.v" \
@@ -53,11 +54,13 @@ adi_add_bus "rmap" "master" \
 	"analog.com:interface:i3c_controller_rmap:1.0" \
 	{
 		{"rmap_daa_status"             "RMAP_DAA_STATUS"} \
-		{"rmap_dev_clr"                "RMAP_DEV_CLR"} \
+		{"rmap_devs_ctrl_mr"           "RMAP_DEVS_CTRL_MR"} \
 		{"rmap_devs_ctrl"              "RMAP_DEVS_CTRL"} \
-		{"rmap_dev_char_0"             "RMAP_DEV_CHAR_0"} \
-		{"rmap_dev_char_1"             "RMAP_DEV_CHAR_1"} \
-		{"rmap_dev_char_2"             "RMAP_DEV_CHAR_2"} \
+		{"rmap_dev_char_e"             "RMAP_DEV_CHAR_E"} \
+		{"rmap_dev_char_we"            "RMAP_DEV_CHAR_WE"} \
+		{"rmap_dev_char_addr"          "RMAP_DEV_CHAR_ADDR"} \
+		{"rmap_dev_char_wdata"         "RMAP_DEV_CHAR_WDATA"} \
+		{"rmap_dev_char_rdata"         "RMAP_DEV_CHAR_RDATA"} \
 		{"rmap_ibi_config"             "RMAP_IBI_CONFIG"} \
 	}
 adi_add_bus_clock "i3c_clk" "rmap" "i3c_reset_n" "master"
@@ -130,6 +133,22 @@ set_property -dict [list \
  ] \
  [ipx::get_user_parameters MAX_DEVS -of_objects $cc]
 
+## No validation...
+### PID
+#set_property -dict [list \
+# ] \
+# [ipx::get_user_parameters PID -of_objects $cc]
+#
+### DCR
+#set_property -dict [list \
+# ] \
+# [ipx::get_user_parameters DCR -of_objects $cc]
+#
+### BCR
+#set_property -dict [list \
+# ] \
+# [ipx::get_user_parameters BCR -of_objects $cc]
+
 ## Customize IP Layout
 
 ## Remove the automatically generated GUI page
@@ -167,6 +186,23 @@ set_property -dict [list \
   "tooltip" "\[MAX_DEVS\] Maximum number of peripherals in the bus, not counting the controller" \
 ] [ipgui::get_guiparamspec -name "MAX_DEVS" -component $cc]
 
+ipgui::add_param -name "PID" -component $cc -parent $general_group
+set_property -dict [list \
+  "display_name" "Controller's PID" \
+  "tooltip" "\[PID\] Controller's provisioned identifier" \
+] [ipgui::get_guiparamspec -name "PID" -component $cc]
+
+ipgui::add_param -name "DCR" -component $cc -parent $general_group
+set_property -dict [list \
+  "display_name" "Controller's DCR" \
+  "tooltip" "\[DCR\] Controller's device characteristics" \
+] [ipgui::get_guiparamspec -name "DCR" -component $cc]
+
+ipgui::add_param -name "BCR" -component $cc -parent $general_group
+set_property -dict [list \
+  "display_name" "Controller's BCR" \
+  "tooltip" "\[BCR\] Controller's bus characteristics" \
+] [ipgui::get_guiparamspec -name "BCR" -component $cc]
 ## Create and save the XGUI file
 ipx::create_xgui_files $cc
 

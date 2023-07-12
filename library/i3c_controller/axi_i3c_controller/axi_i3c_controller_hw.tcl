@@ -8,9 +8,9 @@ ad_ip_files axi_i3c_controller [list\
   $ad_hdl_dir/library/util_axis_fifo/util_axis_fifo_address_generator.v \
   $ad_hdl_dir/library/util_cdc/sync_bits.v \
   $ad_hdl_dir/library/util_cdc/sync_gray.v \
-  $ad_hdl_dir/library/common/ad_mem.v \
-  $ad_hdl_dir/library/common/up_axi.v \
+  $ad_hdl_dir/library/common/ad_mem_dual.v \
   $ad_hdl_dir/library/common/ad_rst.v \
+  $ad_hdl_dir/library/common/up_axi.v \
   $ad_hdl_dir/library/intel/common/up_rst_constr.sdc \
   axi_i3c_controller_constr.sdc \
   axi_i3c_controller.v \
@@ -23,6 +23,9 @@ ad_ip_parameter ID INTEGER 0
 ad_ip_parameter MM_IF_TYPE INTEGER 1
 ad_ip_parameter ASYNC_I3C_CLK INTEGER 0
 ad_ip_parameter MAX_DEVS INTEGER 15
+ad_ip_parameter PID INTEGER 0xC00FFE123456
+ad_ip_parameter DCR INTEGER 0x7B
+ad_ip_parameter BCR INTEGER 0x40
 
 proc p_elaboration {} {
 
@@ -31,6 +34,9 @@ proc p_elaboration {} {
   set mm_if_type [get_parameter_value "MM_IF_TYPE"]
   set async_i3c_clk [get_parameter_value "ASYNC_I3C_CLK"]
   set max_devs [get_parameter_value "MAX_DEVS"]
+  set pid [get_parameter_value "PID"]
+  set dcr [get_parameter_value "DCR"]
+  set bcr [get_parameter_value "BCR"]
 
   # interrupt
 

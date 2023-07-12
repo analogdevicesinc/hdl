@@ -27,16 +27,16 @@
 			</spirit:wire>
 		</spirit:port>
 		<spirit:port>
-			<spirit:logicalName>RMAP_DEV_CLR</spirit:logicalName>
+			<spirit:logicalName>RMAP_DEVS_CTRL_MR</spirit:logicalName>
 			<spirit:wire>
 				<spirit:onMaster>
 					<spirit:presence>required</spirit:presence>
-					<spirit:width>16</spirit:width>
+					<spirit:width>30</spirit:width>
 					<spirit:direction>out</spirit:direction>
 				</spirit:onMaster>
 				<spirit:onSlave>
 					<spirit:presence>optional</spirit:presence>
-					<spirit:width>16</spirit:width>
+					<spirit:width>30</spirit:width>
 					<spirit:direction>in</spirit:direction>
 				</spirit:onSlave>
 			</spirit:wire>
@@ -55,52 +55,82 @@
 					<spirit:direction>out</spirit:direction>
 				</spirit:onSlave>
 			</spirit:wire>
-		</spirit:port>
+    </spirit:port>
 		<spirit:port>
-			<spirit:logicalName>RMAP_DEV_CHAR_0</spirit:logicalName>
+			<spirit:logicalName>RMAP_DEV_CHAR_E</spirit:logicalName>
 			<spirit:wire>
 				<spirit:onMaster>
 					<spirit:presence>required</spirit:presence>
-					<spirit:width>135</spirit:width>
-					<spirit:direction>out</spirit:direction>
-				</spirit:onMaster>
-				<spirit:onSlave>
-					<spirit:presence>optional</spirit:presence>
-					<spirit:width>135</spirit:width>
-					<spirit:direction>in</spirit:direction>
-				</spirit:onSlave>
-			</spirit:wire>
-		</spirit:port>
-		<spirit:port>
-			<spirit:logicalName>RMAP_DEV_CHAR_1</spirit:logicalName>
-			<spirit:wire>
-				<spirit:onMaster>
-					<spirit:presence>required</spirit:presence>
-					<spirit:width>480</spirit:width>
+					<spirit:width>1</spirit:width>
 					<spirit:direction>in</spirit:direction>
 				</spirit:onMaster>
 				<spirit:onSlave>
 					<spirit:presence>optional</spirit:presence>
-					<spirit:width>480</spirit:width>
+					<spirit:width>1</spirit:width>
+					<spirit:direction>out</spirit:direction>
+				</spirit:onSlave>
+			</spirit:wire>
+    </spirit:port>
+		<spirit:port>
+			<spirit:logicalName>RMAP_DEV_CHAR_WE</spirit:logicalName>
+			<spirit:wire>
+				<spirit:onMaster>
+					<spirit:presence>required</spirit:presence>
+					<spirit:width>1</spirit:width>
+					<spirit:direction>in</spirit:direction>
+				</spirit:onMaster>
+				<spirit:onSlave>
+					<spirit:presence>optional</spirit:presence>
+					<spirit:width>1</spirit:width>
 					<spirit:direction>out</spirit:direction>
 				</spirit:onSlave>
 			</spirit:wire>
 		</spirit:port>
 		<spirit:port>
-			<spirit:logicalName>RMAP_DEV_CHAR_2</spirit:logicalName>
+			<spirit:logicalName>RMAP_DEV_CHAR_ADDR</spirit:logicalName>
 			<spirit:wire>
 				<spirit:onMaster>
 					<spirit:presence>required</spirit:presence>
-					<spirit:width>480</spirit:width>
+					<spirit:width>6</spirit:width>
 					<spirit:direction>in</spirit:direction>
 				</spirit:onMaster>
 				<spirit:onSlave>
 					<spirit:presence>optional</spirit:presence>
-					<spirit:width>480</spirit:width>
+					<spirit:width>6</spirit:width>
 					<spirit:direction>out</spirit:direction>
 				</spirit:onSlave>
 			</spirit:wire>
 		</spirit:port>
+		<spirit:port>
+			<spirit:logicalName>RMAP_DEV_CHAR_WDATA</spirit:logicalName>
+			<spirit:wire>
+				<spirit:onMaster>
+					<spirit:presence>required</spirit:presence>
+					<spirit:width>31</spirit:width>
+					<spirit:direction>in</spirit:direction>
+				</spirit:onMaster>
+				<spirit:onSlave>
+					<spirit:presence>optional</spirit:presence>
+					<spirit:width>31</spirit:width>
+					<spirit:direction>out</spirit:direction>
+				</spirit:onSlave>
+			</spirit:wire>
+    </spirit:port>
+		<spirit:port>
+			<spirit:logicalName>RMAP_DEV_CHAR_RDATA</spirit:logicalName>
+			<spirit:wire>
+				<spirit:onMaster>
+					<spirit:presence>required</spirit:presence>
+					<spirit:width>9</spirit:width>
+					<spirit:direction>in</spirit:direction>
+				</spirit:onMaster>
+				<spirit:onSlave>
+					<spirit:presence>optional</spirit:presence>
+					<spirit:width>9</spirit:width>
+					<spirit:direction>out</spirit:direction>
+				</spirit:onSlave>
+			</spirit:wire>
+    </spirit:port>
 		<spirit:port>
 				<spirit:logicalName>RMAP_IBI_CONFIG</spirit:logicalName>
 				<spirit:wire>

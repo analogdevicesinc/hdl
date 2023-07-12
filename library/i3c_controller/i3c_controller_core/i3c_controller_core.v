@@ -81,11 +81,13 @@ module i3c_controller_core #(
 
   output wire rmap_daa_status,
   input  wire [1:0] rmap_ibi_config,
-  input  wire [15:0] rmap_dev_clr,
+  input  wire [29:0] rmap_devs_ctrl_mr,
   output wire [14:0] rmap_devs_ctrl,
-  input  wire [(MAX_DEVS)*9-1:0] rmap_dev_char_0,
-  output wire [(MAX_DEVS)*32-1:0] rmap_dev_char_1,
-  output wire [(MAX_DEVS)*32-1:0] rmap_dev_char_2,
+  output wire rmap_dev_char_e,
+  output wire rmap_dev_char_we,
+  output wire [5:0]  rmap_dev_char_addr,
+  output wire [31:0] rmap_dev_char_wdata,
+  input  wire [8:0]  rmap_dev_char_rdata,
 
   // I3C bus signals
 
@@ -127,7 +129,7 @@ module i3c_controller_core #(
   wire [6:0] ibi_da;
   wire [7:0] ibi_mdb;
 
-  wire [63:0] pid_bcr_dcr;
+  wire [31:0] pid_bcr_dcr;
   wire pid_bcr_dcr_tick;
 
   wire clk_sel;
@@ -150,11 +152,13 @@ module i3c_controller_core #(
     .pid_bcr_dcr_tick(pid_bcr_dcr_tick),
     .pid_bcr_dcr(pid_bcr_dcr),
     .rmap_daa_status(rmap_daa_status),
-    .rmap_dev_clr(rmap_dev_clr),
+    .rmap_devs_ctrl_mr(rmap_devs_ctrl_mr),
     .rmap_devs_ctrl(rmap_devs_ctrl),
-    .rmap_dev_char_0(rmap_dev_char_0),
-    .rmap_dev_char_1(rmap_dev_char_1),
-    .rmap_dev_char_2(rmap_dev_char_2)
+    .rmap_dev_char_e(rmap_dev_char_e),
+    .rmap_dev_char_we(rmap_dev_char_we),
+    .rmap_dev_char_addr(rmap_dev_char_addr),
+    .rmap_dev_char_wdata(rmap_dev_char_wdata),
+    .rmap_dev_char_rdata(rmap_dev_char_rdata)
   );
 
   i3c_controller_framing #(
