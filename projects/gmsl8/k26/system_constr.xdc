@@ -88,6 +88,12 @@ set_property -dict {PACKAGE_PIN C2  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100}   [g
 #set_property -dict {PACKAGE_PIN C2   IOSTANDARD LVDS}     [get_ports refclk_0_n]
 set_property -dict {PACKAGE_PIN C1   IOSTANDARD LVCMOS18} [get_ports refclk_0]
 
+set_property -dict {PACKAGE_PIN E5  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100}   [get_ports refclk_1_p]
+set_property -dict {PACKAGE_PIN D5  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100}   [get_ports refclk_1_n]
+#set_property -dict {PACKAGE_PIN C3   IOSTANDARD LVDS}     [get_ports refclk_0_p]
+#set_property -dict {PACKAGE_PIN C2   IOSTANDARD LVDS}     [get_ports refclk_0_n]
+set_property -dict {PACKAGE_PIN A3   IOSTANDARD LVCMOS18} [get_ports refclk_1]
+
 
 set_property -dict {PACKAGE_PIN B11  IOSTANDARD LVCMOS33} [get_ports fan_tach1]
 set_property -dict {PACKAGE_PIN A12  IOSTANDARD LVCMOS33} [get_ports fan_tach2]

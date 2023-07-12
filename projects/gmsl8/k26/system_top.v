@@ -66,6 +66,10 @@ module system_top (
   input        refclk_0_n,
   output       refclk_0,
 
+  input        refclk_1_p,
+  input        refclk_1_n,
+  output       refclk_1,
+
   input        uart_rxd,
   output       uart_txd,
 
@@ -74,7 +78,7 @@ module system_top (
   inout        fan_pwm,
 
   inout [11:0] crr_gpio,
-  
+
   inout        led_gpio,
   inout        btn_gpio,
 
@@ -116,10 +120,15 @@ module system_top (
 //  assign ap_rstn_frmbuf = gpio_o[2];
 //  assign ap_rstn_v_proc = gpio_o[3];
 
-  IBUFDS ibufds_ad9545 (
+  IBUFDS ibufds_0_ad9545 (
     .I (refclk_0_p),
     .IB (refclk_0_n),
     .O (refclk_0));
+
+  IBUFDS ibufds_1_ad9545 (
+    .I (refclk_1_p),
+    .IB (refclk_1_n),
+    .O (refclk_1));
 
   ad_iobuf #(.DATA_WIDTH(35)) iobuf_0 (
     .dio_t ({gpio_t[34:0]}),
