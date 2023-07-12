@@ -1,4 +1,4 @@
-source $ad_hdl_dir/projects/common/kv260/kv260_system_bd.tcl
+ource $ad_hdl_dir/projects/common/kv260/kv260_system_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 create_bd_port -dir I ap_rstn_frmbuf
@@ -15,8 +15,8 @@ create_bd_port -dir I mipi_csi2_clk_n
 create_bd_port -dir I -from 3 -to 0 mipi_csi2_data_p
 create_bd_port -dir I -from 3 -to 0 mipi_csi2_data_n
 
-set mipi_csi2_rx_subsyst_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:mipi_csi2_rx_subsystem:5.2 mipi_csi2_rx_subsyst_1 ]
-  set_property -dict [ list \
+#set mipi_csi2_rx_subsyst_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:mipi_csi2_rx_subsystem:5.2 mipi_csi2_rx_subsyst_1 ]
+#  set_property -dict [ list \
    CONFIG.CLK_LANE_IO_LOC {W8} \
    CONFIG.CLK_LANE_IO_LOC_NAME {IO_L1P_T0L_N0_DBC_65} \
    CONFIG.CMN_NUM_LANES {4} \
@@ -41,8 +41,8 @@ set mipi_csi2_rx_subsyst_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:mipi_cs
    CONFIG.SupportLevel {1} \
  ] $mipi_csi2_rx_subsyst_1
 
-set mipi_csi2_rx_subsyst_2 [ create_bd_cell -type ip -vlnv xilinx.com:ip:mipi_csi2_rx_subsystem:5.2 mipi_csi2_rx_subsyst_2 ]
-  set_property -dict [ list \
+#set mipi_csi2_rx_subsyst_2 [ create_bd_cell -type ip -vlnv xilinx.com:ip:mipi_csi2_rx_subsystem:5.2 mipi_csi2_rx_subsyst_2 ]
+#  set_property -dict [ list \
    CONFIG.CLK_LANE_IO_LOC {L1} \
    CONFIG.CLK_LANE_IO_LOC_NAME {IO_L7P_T1L_N0_QBC_AD13P_65} \
    CONFIG.CMN_NUM_LANES {4} \
@@ -57,6 +57,58 @@ set mipi_csi2_rx_subsyst_2 [ create_bd_cell -type ip -vlnv xilinx.com:ip:mipi_cs
    CONFIG.DATA_LANE2_IO_LOC_NAME {IO_L10P_T1U_N6_QBC_AD4P_65} \
    CONFIG.DATA_LANE3_IO_LOC {K4} \
    CONFIG.DATA_LANE3_IO_LOC_NAME {IO_L11P_T1U_N8_GC_65} \
+   CONFIG.DPY_LINE_RATE {576} \
+   CONFIG.C_EN_CSI_V2_0 {false} \
+   CONFIG.CMN_INC_VFB {true} \
+   CONFIG.DPY_EN_REG_IF {true} \
+   CONFIG.CSI_EMB_NON_IMG {false} \
+   CONFIG.VFB_TU_WIDTH {2} \
+   CONFIG.HP_IO_BANK_SELECTION {65} \
+   CONFIG.SupportLevel {1} \
+ ] $mipi_csi2_rx_subsyst_2
+
+set mipi_csi2_rx_subsyst_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:mipi_csi2_rx_subsystem:5.2 mipi_csi2_rx_subsyst_1 ]
+  set_property -dict [ list \
+   CONFIG.CLK_LANE_IO_LOC {L7} \
+   CONFIG.CLK_LANE_IO_LOC_NAME {IO_L13P_T2L_N0_GC_QBC_65} \
+   CONFIG.CMN_NUM_LANES {4} \
+   CONFIG.CMN_PXL_FORMAT {YUV422_8bit} \
+   CONFIG.C_DPHY_LANES {4} \
+   CONFIG.C_HS_SETTLE_NS {153} \
+   CONFIG.DATA_LANE0_IO_LOC {M6} \
+   CONFIG.DATA_LANE0_IO_LOC_NAME {IO_L14P_T2L_N2_GC_65} \
+   CONFIG.DATA_LANE1_IO_LOC {N7} \
+   CONFIG.DATA_LANE1_IO_LOC_NAME {IO_L15P_T2L_N4_AD11P_65} \
+   CONFIG.DATA_LANE2_IO_LOC {P7} \
+   CONFIG.DATA_LANE2_IO_LOC_NAME {IO_L16P_T2U_N6_QBC_AD3P_65} \
+   CONFIG.DATA_LANE3_IO_LOC {N9} \
+   CONFIG.DATA_LANE3_IO_LOC_NAME {IO_L17P_T2U_N8_AD10P_65} \
+   CONFIG.DPY_LINE_RATE {576} \
+   CONFIG.C_EN_CSI_V2_0 {false} \
+   CONFIG.CMN_INC_VFB {true} \
+   CONFIG.DPY_EN_REG_IF {true} \
+   CONFIG.CSI_EMB_NON_IMG {false} \
+   CONFIG.VFB_TU_WIDTH {2} \
+   CONFIG.HP_IO_BANK_SELECTION {65} \
+   CONFIG.SupportLevel {1} \
+ ] $mipi_csi2_rx_subsyst_1
+
+set mipi_csi2_rx_subsyst_2 [ create_bd_cell -type ip -vlnv xilinx.com:ip:mipi_csi2_rx_subsystem:5.2 mipi_csi2_rx_subsyst_2 ]
+  set_property -dict [ list \
+   CONFIG.CLK_LANE_IO_LOC {J5} \
+   CONFIG.CLK_LANE_IO_LOC_NAME {IO_L19P_T3L_N0_DBC_AD9P_65} \
+   CONFIG.CMN_NUM_LANES {4} \
+   CONFIG.CMN_PXL_FORMAT {YUV422_8bit} \
+   CONFIG.C_DPHY_LANES {4} \
+   CONFIG.C_HS_SETTLE_NS {153} \
+   CONFIG.DATA_LANE0_IO_LOC {J7} \
+   CONFIG.DATA_LANE0_IO_LOC_NAME {IO_L21P_T3L_N4_AD8P_65} \
+   CONFIG.DATA_LANE1_IO_LOC {K8} \
+   CONFIG.DATA_LANE1_IO_LOC_NAME {IO_L22P_T3U_N6_DBC_AD0P_65} \
+   CONFIG.DATA_LANE2_IO_LOC {K9} \
+   CONFIG.DATA_LANE2_IO_LOC_NAME {IO_L23P_T3U_N8_I2C_SCLK_65} \
+   CONFIG.DATA_LANE3_IO_LOC {H9} \
+   CONFIG.DATA_LANE3_IO_LOC_NAME {IO_L24P_T3U_N10_PERSTN1_I2C_SDA_65} \
    CONFIG.DPY_LINE_RATE {576} \
    CONFIG.C_EN_CSI_V2_0 {false} \
    CONFIG.CMN_INC_VFB {true} \
