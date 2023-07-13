@@ -167,7 +167,7 @@ proc adi_project_create {project_name mode parameter_list device {board "not-app
 
   if [regexp "^xc7z" $p_device] {
     set sys_zynq 1
-  } elseif [regexp "^xck" $p_device] {
+  } elseif [regexp "^xck26" $p_device] {
     set sys_zynq 2
   } elseif [regexp "^xczu" $p_device]  {
     set sys_zynq 2
