@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2023 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2023 - 2023 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -130,7 +130,6 @@ module i3c_controller_framing #(
   output     [5:0]  rmap_dev_char_addr,
   output     [31:0] rmap_dev_char_wdata,
   input      [8:0]  rmap_dev_char_rdata
-
 );
   wire ibi_enable;
   wire ibi_auto;

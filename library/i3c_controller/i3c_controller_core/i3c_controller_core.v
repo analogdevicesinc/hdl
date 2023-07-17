@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2023 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -173,8 +173,7 @@ module i3c_controller_core #(
     .rmap_dev_char_we(rmap_dev_char_we),
     .rmap_dev_char_addr(rmap_dev_char_addr),
     .rmap_dev_char_wdata(rmap_dev_char_wdata),
-    .rmap_dev_char_rdata(rmap_dev_char_rdata)
-  );
+    .rmap_dev_char_rdata(rmap_dev_char_rdata));
 
   i3c_controller_word #(
   ) i_i3c_controller_word (
@@ -202,8 +201,7 @@ module i3c_controller_core #(
     .ibi_mdb(ibi_mdb),
     .pid_bcr_dcr_tick(pid_bcr_dcr_tick),
     .pid_bcr_dcr(pid_bcr_dcr),
-    .rmap_ibi_config(rmap_ibi_config)
-  );
+    .rmap_ibi_config(rmap_ibi_config));
 
   i3c_controller_clk_div #(
     .SIM_DEVICE(SIM_DEVICE),
@@ -213,8 +211,7 @@ module i3c_controller_core #(
     .sel(clk_sel),
     .cmd_ready(cmd_ready),
     .clk(clk),
-    .clk_out(clk_out)
-  );
+    .clk_out(clk_out));
 
   i3c_controller_bit_mod #(
   ) i_i3c_controller_bit_mod (
@@ -233,16 +230,14 @@ module i3c_controller_core #(
     .scl(scl),
     .sdi(sdi_bit),
     .sdo(sdo_bit),
-    .t(t)
-  );
+    .t(t));
 
   i3c_controller_phy_sda #(
   ) i_i3c_controller_phy_sda (
     .sdo(sdo_bit),
     .sdi(sdi_bit),
     .t(t),
-    .sda(sda)
-  );
+    .sda(sda));
 
   assign ibi = {ibi_da, ibi_mdb};
   assign ibi_valid = ibi_tick;

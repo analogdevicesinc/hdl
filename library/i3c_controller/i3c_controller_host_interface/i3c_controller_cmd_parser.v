@@ -46,8 +46,7 @@
 `timescale 1ns/100ps
 `default_nettype none
 
-module i3c_controller_cmd_parser #(
-) (
+module i3c_controller_cmd_parser (
   input  wire clk,
   input  wire reset_n,
 

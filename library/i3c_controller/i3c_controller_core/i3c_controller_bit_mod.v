@@ -158,7 +158,7 @@ module i3c_controller_bit_mod (
       end else begin
         cmd_ready_reg_ctrl <= 1'b0;
       end
-	end
+	  end
     rx_valid_reg [1] <= rx_valid_reg [0];
     rx_stop_reg  [1] <= rx_stop_reg  [0];
     rx_nack_reg  [1] <= rx_nack_reg  [0];

@@ -1,4 +1,5 @@
 // ***************************************************************************
+// ***************************************************************************
 // Copyright 2023 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
@@ -429,8 +430,7 @@ module axi_i3c_controller #(
     .eb(rmap_dev_char_e),
     .addrb(rmap_dev_char_addr),
     .dinb(rmap_dev_char_wdata),
-    .doutb(rmap_dev_char_rdata)
-  );
+    .doutb(rmap_dev_char_rdata));
 
   assign dev_char_addra = up_wreq_s ?
                        {up_waddr_s[7], up_waddr_s[4], up_waddr_s[3:0]} :
@@ -473,8 +473,7 @@ module axi_i3c_controller #(
       .eb(offload_eb),
       .addrb(offload_addrb),
       .dinb('d0),
-      .doutb(offload_doutb)
-    );
+      .doutb(offload_doutb));
 
     assign offload_addra = up_wreq_s ?
                         {up_waddr_s[6], up_waddr_s[3:0]} :
@@ -486,7 +485,6 @@ module axi_i3c_controller #(
                         (up_waddr_s[7:4] == `I3C_REGMAP_OFFLOAD_CMD_ |
                          up_waddr_s[7:4] == `I3C_REGMAP_OFFLOAD_SDO_ );
     assign offload_ea = offload_rea | offload_wea;
-
 
     reg [1:0] smt;
     reg [3:0] k;
@@ -545,7 +543,6 @@ module axi_i3c_controller #(
     assign offload_sdo = offload_doutb;
   end
   endgenerate
-
 
   always @(posedge clk) begin
     if (up_sw_resetn == 1'b0) begin

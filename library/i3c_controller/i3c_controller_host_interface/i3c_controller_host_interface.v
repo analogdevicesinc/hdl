@@ -108,67 +108,52 @@ module i3c_controller_host_interface #(
   ) i_i3c_controller_read_byte (
     .clk(clk),
     .reset_n(reset_n),
-
     .u32_ready(sdo_ready),
     .u32_valid(sdo_valid),
     .u32(sdo),
-
     .u8_len_ready(rd_bytes_ready),
     .u8_len_valid(rd_bytes_valid),
     .u8_len(cmdp_buffer_len),
-
     .u8_ready(sdo_u8_ready),
     .u8_valid(sdo_u8_valid),
-    .u8(sdo_u8)
-  );
+    .u8(sdo_u8));
 
   i3c_controller_write_byte #(
   ) i_i3c_controller_write_byte (
     .clk(clk),
     .reset_n(reset_n),
-
     .u32_ready(sdi_ready),
     .u32_valid(sdi_valid),
     .u32(sdi),
-
     .u8_len_ready(wr_bytes_ready),
     .u8_len_valid(wr_bytes_valid),
     .u8_len(cmdp_buffer_len),
     .u8_lvl(wr_bytes_lvl),
-
     .u8_ready(sdi_u8_ready),
     .u8_valid(sdi_u8_valid),
-    .u8(sdi_u8)
-  );
+    .u8(sdi_u8));
 
   i3c_controller_write_ibi #(
   ) i_i3c_controller_write_ibi (
     .clk(clk),
     .reset_n(reset_n),
-
     .out_ready(ibi_ready),
     .out_valid(ibi_valid),
     .out(ibi),
-
     .in_ready(ibi_u_ready),
     .in_valid(ibi_u_valid),
-    .in(ibi_u)
-  );
-
+    .in(ibi_u));
 
   i3c_controller_cmd_parser #(
   ) i_i3c_controller_cmd_parser (
     .clk(clk),
     .reset_n(reset_n),
-
     .cmd_ready(cmd_ready),
     .cmd_valid(cmd_valid),
     .cmd(cmd),
-
     .cmdr_ready(cmdr_ready),
     .cmdr_valid(cmdr_valid),
     .cmdr(cmdr),
-
     .cmdp_valid(cmdp_valid),
     .cmdp_ready(cmdp_ready),
     .cmdp_ccc(cmdp_ccc),
@@ -181,13 +166,11 @@ module i3c_controller_host_interface #(
     .cmdp_da(cmdp_da),
     .cmdp_rnw(cmdp_rnw),
     .cmdp_cancelled(cmdp_cancelled),
-
     .rd_bytes_ready(rd_bytes_ready),
     .rd_bytes_valid(rd_bytes_valid),
     .wr_bytes_ready(wr_bytes_ready),
     .wr_bytes_valid(wr_bytes_valid),
-    .wr_bytes_lvl(wr_bytes_lvl)
-  );
+    .wr_bytes_lvl(wr_bytes_lvl));
 
   always @(posedge clk) begin
     quiet_times <= cmdp_idle_bus;

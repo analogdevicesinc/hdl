@@ -39,8 +39,7 @@
 `timescale 1ns/100ps
 `default_nettype none
 
-module i3c_controller_phy_sda #(
-) (
+module i3c_controller_phy_sda (
   output wire sdo,
   input  wire sdi,
   input  wire t,

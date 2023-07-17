@@ -42,8 +42,7 @@
 `include "i3c_controller_word_cmd.v"
 `include "i3c_controller_bit_mod_cmd.v"
 
-module i3c_controller_word #(
-) (
+module i3c_controller_word (
   input  wire clk,
   input  wire reset_n,
 

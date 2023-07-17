@@ -48,7 +48,7 @@ module i3c_controller_clk_div #(
   input  wire cmd_ready,
   input  wire clk,
   output wire clk_out
-  );
+);
   wire clk_1;
 
   generate if (SIM_DEVICE == "7SERIES") begin
@@ -58,8 +58,7 @@ module i3c_controller_clk_div #(
       .O(clk_1),
       .CE(reset_n),
       .CLR(!reset_n),
-      .I(clk)
-    );
+      .I(clk));
   end else if (SIM_DEVICE == "ULTRASCALE") begin
     BUFGCE_DIV #(
       .BUFGCE_DIVIDE(CLK_DIV)
@@ -67,17 +66,15 @@ module i3c_controller_clk_div #(
       .O(clk_1),
       .CE(reset_n),
       .CLR(!reset_n),
-      .I(clk)
-    );
+      .I(clk));
   end
   endgenerate
 
   BUFGMUX #(
   ) i_BUFGMUX (
-     .O(clk_out),
-     .I0(clk_1),
-     .I1(clk),
-     .S(sel)
-  );
+    .O(clk_out),
+    .I0(clk_1),
+    .I1(clk),
+    .S(sel));
 
 endmodule
