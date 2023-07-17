@@ -66,6 +66,8 @@ module i3c_controller_host_interface #(
   output wire ibi_valid,
   output wire [DATA_WIDTH-1:0] ibi,
 
+  output reg quiet_times,
+
   // Command parsed
 
   output wire        cmdp_valid,
@@ -79,9 +81,8 @@ module i3c_controller_host_interface #(
   output wire [11:0] cmdp_buffer_len,
   output wire [6:0]  cmdp_da,
   output wire        cmdp_rnw,
-  output wire        cmdp_do_daa,
-  input  wire        cmdp_do_daa_ready,
   input  wire        cmdp_cancelled,
+  input  wire        cmdp_idle_bus,
 
   // Byte stream
 
@@ -179,8 +180,6 @@ module i3c_controller_host_interface #(
     .cmdp_buffer_len(cmdp_buffer_len),
     .cmdp_da(cmdp_da),
     .cmdp_rnw(cmdp_rnw),
-    .cmdp_do_daa(cmdp_do_daa),
-    .cmdp_do_daa_ready(cmdp_do_daa_ready),
     .cmdp_cancelled(cmdp_cancelled),
 
     .rd_bytes_ready(rd_bytes_ready),
@@ -189,4 +188,8 @@ module i3c_controller_host_interface #(
     .wr_bytes_valid(wr_bytes_valid),
     .wr_bytes_lvl(wr_bytes_lvl)
   );
+
+  always @(posedge clk) begin
+    quiet_times <= cmdp_idle_bus;
+  end
 endmodule

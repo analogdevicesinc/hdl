@@ -24,21 +24,22 @@ adi_add_bus "ctrl" "slave" \
 	"analog.com:interface:i3c_controller_ctrl_rtl:1.0" \
 	"analog.com:interface:i3c_controller_ctrl:1.0" \
 	{
-		{"cmd_ready"  "CMD_READY"} \
-		{"cmd_valid"  "CMD_VALID"} \
-		{"cmd"        "CMD_DATA"} \
-		{"cmdr_ready" "CMDR_READY"} \
-		{"cmdr_valid" "CMDR_VALID"} \
-		{"cmdr"       "CMDR_DATA"} \
-		{"sdo_ready"  "SDO_READY"} \
-		{"sdo_valid"  "SDO_VALID"} \
-		{"sdo"        "SDO_DATA"} \
-		{"sdi_ready"  "SDI_READY"} \
-		{"sdi_valid"  "SDI_VALID"} \
-		{"sdi"        "SDI_DATA"} \
-		{"ibi_ready"  "IBI_READY"} \
-		{"ibi_valid"  "IBI_VALID"} \
-		{"ibi"        "IBI_DATA"} \
+		{"cmd_ready"   "CMD_READY"} \
+		{"cmd_valid"   "CMD_VALID"} \
+		{"cmd"         "CMD_DATA"} \
+		{"cmdr_ready"  "CMDR_READY"} \
+		{"cmdr_valid"  "CMDR_VALID"} \
+		{"cmdr"        "CMDR_DATA"} \
+		{"sdo_ready"   "SDO_READY"} \
+		{"sdo_valid"   "SDO_VALID"} \
+		{"sdo"         "SDO_DATA"} \
+		{"sdi_ready"   "SDI_READY"} \
+		{"sdi_valid"   "SDI_VALID"} \
+		{"sdi"         "SDI_DATA"} \
+		{"ibi_ready"   "IBI_READY"} \
+		{"ibi_valid"   "IBI_VALID"} \
+		{"ibi"         "IBI_DATA"} \
+		{"quiet_times" "QUIET_TIMES"} \
 	}
 adi_add_bus_clock "clk" "ctrl" "reset_n"
 
@@ -46,20 +47,19 @@ adi_add_bus "cmdp" "master" \
 	"analog.com:interface:i3c_controller_cmdp_rtl:1.0" \
 	"analog.com:interface:i3c_controller_cmdp:1.0" \
 	{
-		{"cmdp_valid"         "CMDP_VALID"} \
-		{"cmdp_ready"         "CMDP_READY"} \
-		{"cmdp_ccc"           "CMDP_CCC"} \
-		{"cmdp_ccc_bcast"     "CMDP_CCC_BCAST"} \
-		{"cmdp_ccc_id"        "CMDP_CCC_ID"} \
-		{"cmdp_bcast_header"  "CMDP_BCAST_HEADER"} \
-		{"cmdp_xmit"          "CMDP_XMIT"} \
-		{"cmdp_sr"            "CMDP_SR"} \
-		{"cmdp_buffer_len"    "CMDP_BUFFER_LEN"} \
-		{"cmdp_da"            "CMDP_DA"} \
-		{"cmdp_rnw"           "CMDP_RNW"} \
-		{"cmdp_do_daa"        "CMDP_DO_DAA"} \
-		{"cmdp_do_daa_ready"  "CMDP_DO_DAA_READY"} \
-		{"cmdp_cancelled"     "CMDP_CANCELLED"} \
+		{"cmdp_valid"        "CMDP_VALID"} \
+		{"cmdp_ready"        "CMDP_READY"} \
+		{"cmdp_ccc"          "CMDP_CCC"} \
+		{"cmdp_ccc_bcast"    "CMDP_CCC_BCAST"} \
+		{"cmdp_ccc_id"       "CMDP_CCC_ID"} \
+		{"cmdp_bcast_header" "CMDP_BCAST_HEADER"} \
+		{"cmdp_xmit"         "CMDP_XMIT"} \
+		{"cmdp_sr"           "CMDP_SR"} \
+		{"cmdp_buffer_len"   "CMDP_BUFFER_LEN"} \
+		{"cmdp_da"           "CMDP_DA"} \
+		{"cmdp_rnw"          "CMDP_RNW"} \
+		{"cmdp_cancelled"    "CMDP_CANCELLED"} \
+		{"cmdp_idle_bus"     "CMDP_IDLE_BUS"} \
 	}
 adi_add_bus_clock "clk" "cmdp" "reset_n"
 

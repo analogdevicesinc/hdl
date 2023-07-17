@@ -49,15 +49,11 @@ module i3c_controller_word #(
 
   // Word command
 
-  input wire cmdw_mux,
   output reg cmdw_nack,
   // NACK is HIGH when an ACK is not satisfied in the I3C bus, acts as reset.
-  output wire cmdw_framing_valid,
-  output wire cmdw_daa_valid,
+  output wire cmdw_valid,
   output wire cmdw_ready,
-  input  wire [`CMDW_HEADER_WIDTH+8:0] cmdw_framing, // From Framing
-  input  wire [`CMDW_HEADER_WIDTH+8:0] cmdw_daa, // From DAA
-
+  input  wire [`CMDW_HEADER_WIDTH+8:0] cmdw,
 
   input  wire cmdw_rx_ready,
   output reg  cmdw_rx_valid,
@@ -101,8 +97,6 @@ module i3c_controller_word #(
   wire ibi_auto;
 
   wire [`CMDW_HEADER_WIDTH:0] cmdw_header;
-  wire [`CMDW_HEADER_WIDTH+8:0] cmdw;
-  wire cmdw_valid;
   reg cmd_ready_reg;
 
   reg [7:0] cmdw_body;
@@ -110,9 +104,7 @@ module i3c_controller_word #(
   reg [`CMDW_HEADER_WIDTH:0] sm_reg;
   reg [`CMDW_HEADER_WIDTH:0] sm_reg_2;
   reg [8:0] cmdw_rx_reg;
-  reg cmdw_rx_valid_reg;
 
-  reg ibi_tick_reg;
   reg  [8:0] ibi_da_reg;
   reg  [8:0] ibi_mdb_reg;
 
@@ -178,6 +170,8 @@ module i3c_controller_word #(
   localparam [0:0]
     setup      = 0,
     transfer   = 1;
+  reg ibi_da_valid;
+  wire ibi_should_ack;
 
   always @(posedge clk) begin
     cmdw_nack <= 1'b0;
@@ -269,15 +263,16 @@ module i3c_controller_word #(
               `CMDW_BCAST_7E_W0: begin
                 // During the header broadcast, the peripheral shall issue an IBI, due
                 // to this the SDO is monitored and if the controller loses arbitration,
-                // shall ACK if IBI is enabled and receive the MDB, of NACK and Sr.
+                // shall ACK if IBI is enabled and receive the MDB+bytes (if the DCR says so),
+                // or NACK and Sr.
                 // In both cases, the cmd's transfer will continue after the IBI is
                 // resolved;
                 if (i[2:1] == 2'b11) begin
                   // 1'b0+RnW=0
                   cmd <= ibi_requested ? `MOD_BIT_CMD_READ : {`MOD_BIT_CMD_WRITE_,1'b0,1'b0};
                 end else if (i == 8) begin
-                  if (ibi_requested) begin
-                    cmd <= ibi_enable ? `MOD_BIT_CMD_ACK_IBI : `MOD_BIT_CMD_READ;
+                  if (ibi_requested) begin // also ibi_len ...
+                    cmd <= ibi_enable ? `MOD_BIT_CMD_ACK_IBI : `MOD_BIT_CMD_READ; // & ibi_ack
                   end else begin
                     // ACK
                     cmd <= `MOD_BIT_CMD_ACK_SDR;
@@ -287,6 +282,13 @@ module i3c_controller_word #(
                   // 6'b111111
                   cmd <= `MOD_BIT_CMD_READ;
                 end
+
+                if (i == 7) begin
+                  if (ibi_requested) begin
+                    ibi_da_valid <= 1'b1;
+                  end
+                end
+
               end
               `CMDW_BCAST_7E_W1: begin
                 if (i == 7) begin
@@ -371,11 +373,9 @@ module i3c_controller_word #(
   end
 
   assign cmdw_ready = smt == setup; // i == 0 & cmd_ready_reg & reset_n;
-  assign cmdw = cmdw_mux ? cmdw_framing : cmdw_daa;
-  assign cmdw_valid = cmdw_mux ? cmdw_framing_valid : cmdw_daa_valid;
   assign cmdw_header = cmdw[`CMDW_HEADER_WIDTH+8 -: `CMDW_HEADER_WIDTH+1];
   assign cmdw_rx = cmdw_rx_reg[8:1];
-  assign clk_sel = cmdw_mux ? clk_sel_reg[1] : 1'b0; // DAA must occur in OD
+  assign clk_sel = clk_sel_reg[1];
 
   assign ibi_da  = ibi_da_reg [8:2];
   assign ibi_mdb = ibi_mdb_reg[8:1];

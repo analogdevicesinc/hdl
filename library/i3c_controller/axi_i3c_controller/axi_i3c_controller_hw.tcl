@@ -26,6 +26,7 @@ ad_ip_parameter MAX_DEVS INTEGER 15
 ad_ip_parameter PID INTEGER 0xC00FFE123456
 ad_ip_parameter DCR INTEGER 0x7B
 ad_ip_parameter BCR INTEGER 0x40
+ad_ip_parameter OFFLOAD INTEGER 0
 
 proc p_elaboration {} {
 
@@ -37,6 +38,7 @@ proc p_elaboration {} {
   set pid [get_parameter_value "PID"]
   set dcr [get_parameter_value "DCR"]
   set bcr [get_parameter_value "BCR"]
+  set offload [get_parameter_value "OFFLOAD"]
 
   # interrupt
 
@@ -103,6 +105,10 @@ proc p_elaboration {} {
 
   }
 
+  if {!($offload)} {
+    lappend disabled_intfs offload offload_trigger
+  }
+
   if {!($async_i3c_clk)} {
     lappend disabled_intfs i3c_clk
   }
@@ -117,43 +123,48 @@ proc p_elaboration {} {
   ad_interface reset i3c_reset_n  output 1
 
   add_interface cmd axi4stream start
-  add_interface_port cmd cmd_ready tready   input  1
-  add_interface_port cmd cmd_valid tvalid   output 1
-  add_interface_port cmd cmd_data  tdata    output 32
+  add_interface_port cmd cmd_ready tready input  1
+  add_interface_port cmd cmd_valid tvalid output 1
+  add_interface_port cmd cmd_data  tdata  output 32
 
   set_interface_property cmd associatedClock if_i3c_clk
   set_interface_property cmd associatedReset if_i3c_reset_n
 
   add_interface cmdr axi4stream end
-  add_interface_port cmdr cmdr_ready  tready output 1
-  add_interface_port cmdr cmdr_valid  tvalid input  1
-  add_interface_port cmdr cmdr_data   tdata  input  32
+  add_interface_port cmdr cmdr_ready tready output 1
+  add_interface_port cmdr cmdr_valid tvalid input  1
+  add_interface_port cmdr cmdr_data  tdata  input  32
 
   set_interface_property cmdr associatedClock if_i3c_clk
   set_interface_property cmdr associatedReset if_i3c_reset_n
 
   add_interface sdo axi4stream start
-  add_interface_port sdo sdo_ready tready   input  1
-  add_interface_port sdo sdo_valid tvalid   output 1
-  add_interface_port sdo sdo_data  tdata    output 32
+  add_interface_port sdo sdo_ready tready input  1
+  add_interface_port sdo sdo_valid tvalid output 1
+  add_interface_port sdo sdo_data  tdata  output 32
 
   set_interface_property sdo associatedClock if_i3c_clk
   set_interface_property sdo associatedReset if_i3c_reset_n
 
   add_interface sdi axi4stream end
-  add_interface_port sdi sdi_ready  tready output 1
-  add_interface_port sdi sdi_valid  tvalid input  1
-  add_interface_port sdi sdi_data   tdata  input  32
+  add_interface_port sdi sdi_ready tready output 1
+  add_interface_port sdi sdi_valid tvalid input  1
+  add_interface_port sdi sdi_data  tdata  input  32
 
   set_interface_property sdi associatedClock if_i3c_clk
   set_interface_property sdi associatedReset if_i3c_reset_n
 
   add_interface ibi axi4stream end
-  add_interface_port ibi ibi_ready  tready output 1
-  add_interface_port ibi ibi_valid  tvalid input  1
-  add_interface_port ibi ibi_data   tdata  input  32
+  add_interface_port ibi ibi_ready tready output 1
+  add_interface_port ibi ibi_valid tvalid input  1
+  add_interface_port ibi ibi_data  tdata  input  32
 
   set_interface_property ibi associatedClock if_i3c_clk
   set_interface_property ibi associatedReset if_i3c_reset_n
+
+  add_interface offload axi4stream start
+  add_interface_port offload offload_sdi_ready tready input  1
+  add_interface_port offload offload_sdi_valid tvalid output 1
+  add_interface_port offload offload_sdi_data  tdata  output 32
 }
 

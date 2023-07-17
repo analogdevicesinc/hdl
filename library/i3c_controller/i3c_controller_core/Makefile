@@ -8,7 +8,6 @@ LIBRARY_NAME := i3c_controller_core
 
 GENERIC_DEPS += i3c_controller_core.v
 GENERIC_DEPS += i3c_controller_framing.v
-GENERIC_DEPS += i3c_controller_daa.v
 GENERIC_DEPS += i3c_controller_phy_sda.v
 GENERIC_DEPS += i3c_controller_word.v
 GENERIC_DEPS += i3c_controller_word_cmd.v

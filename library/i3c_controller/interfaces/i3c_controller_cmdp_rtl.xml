@@ -177,37 +177,22 @@
 			</spirit:wire>
 		</spirit:port>
 		<spirit:port>
-			<spirit:logicalName>CMDP_DO_DAA</spirit:logicalName>
-			<spirit:wire>
-				<spirit:onMaster>
-					<spirit:presence>required</spirit:presence>
-					<spirit:width>1</spirit:width>
-					<spirit:direction>out</spirit:direction>
-				</spirit:onMaster>
-				<spirit:onSlave>
-					<spirit:presence>required</spirit:presence>
-					<spirit:width>1</spirit:width>
-					<spirit:direction>in</spirit:direction>
-				</spirit:onSlave>
-			</spirit:wire>
-		</spirit:port>
-		<spirit:port>
-			<spirit:logicalName>CMDP_DO_DAA_READY</spirit:logicalName>
-			<spirit:wire>
-				<spirit:onMaster>
-					<spirit:presence>required</spirit:presence>
-					<spirit:width>1</spirit:width>
-					<spirit:direction>in</spirit:direction>
-				</spirit:onMaster>
-				<spirit:onSlave>
-					<spirit:presence>required</spirit:presence>
-					<spirit:width>1</spirit:width>
-					<spirit:direction>out</spirit:direction>
-				</spirit:onSlave>
-			</spirit:wire>
-		</spirit:port>
-		<spirit:port>
 			<spirit:logicalName>CMDP_CANCELLED</spirit:logicalName>
+			<spirit:wire>
+				<spirit:onMaster>
+					<spirit:presence>required</spirit:presence>
+					<spirit:width>1</spirit:width>
+					<spirit:direction>in</spirit:direction>
+				</spirit:onMaster>
+				<spirit:onSlave>
+					<spirit:presence>required</spirit:presence>
+					<spirit:width>1</spirit:width>
+					<spirit:direction>out</spirit:direction>
+				</spirit:onSlave>
+			</spirit:wire>
+		</spirit:port>
+		<spirit:port>
+			<spirit:logicalName>CMDP_IDLE_BUS</spirit:logicalName>
 			<spirit:wire>
 				<spirit:onMaster>
 					<spirit:presence>required</spirit:presence>

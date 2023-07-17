@@ -63,23 +63,6 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x03
-PARAMETERS
-Controller parameters values.
-ENDREG
-
-FIELD
-[3:0] 0x00000000
-MAX_DEVS
-RO
-Maximum number of peripherals in the bus (does not count the controller).
-Valid range is 0 to 15 devices.
-ENDFIELD
-
-############################################################################################
-############################################################################################
-
-REG
 0x10
 ENABLE
 ENDREG
@@ -139,6 +122,12 @@ FIELD
 CMDR_PENDING
 RW
 If set to 0 the CMDR_PENDING interrupt is masked.
+
+FIELD
+[6] 0x00
+IBI_PENDING
+RW
+If set to 0 the IBI_PENDING interrupt is masked.
 
 ############################################################################################
 ############################################################################################
@@ -387,14 +376,14 @@ FIELD
 [1] 0x1
 IBI_EMPTY
 RO
-If there is no element to be read in the IBIR FIFO.
+If there is no element to be read in the IBI FIFO.
 ENDFIELD
 
 FIELD
 [2] 0x1
 SDI_EMPTY
 RO
-If there is no element to be read in the IBIR FIFO.
+If there is no element to be read in the SDI FIFO.
 ENDFIELD
 
 ############################################################################################
@@ -402,14 +391,40 @@ ENDFIELD
 
 REG
 0x40
-DAA_STATUS :TODO: Update to be a high level controller state, with DAA one of the states.
+OPS
 ENDREG
 
 FIELD
 [0] 0x??
-DAA_STATUS_IN_PROGRESS
+OPS_MODE
+WO
+Set 0 to private transfers, 1 to offload.
+Setting to DAA automatically trigger the DAA process.
+ENDFIELD
+
+FIELD
+[4:1] 0x??
+OPS_OFFLOAD_LENGTH
+WO
+Offload commands length.
+ENDFIELD
+
+[5] 0x0
+OPS_STATUS_DAA
 RO
 This bit is set to 1 when the assignment is in progress.
+ENDFIELD
+
+[6] 0x0
+OPS_STATUS_PRIV_TRANSFER TODO: These status signals
+RO
+This bit is set to 1 when a private transfer is in progress.
+ENDFIELD
+
+[7] 0x0
+OPS_STATUS_OFFLOAD
+RO
+This bit is set to 1 when a offload transfer is in progress.
 ENDFIELD
 
 ############################################################################################
@@ -533,7 +548,7 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x90
+0xa0
 DEVS_CTRL
 ENDREG
 
@@ -556,6 +571,26 @@ Write the index of a peripheral (offset by 16) bit to clear its slot.
 The stored value in DEV_CHAR_*_* is not affected by this register.
 WO
 ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0xb[0-f]
+OFFLOAD_CMD_*
+Offload command memory. Write commands in sequence to these addresses and update the
+OFFLOAD_CMD_LENGTH register.
+ENDREG
+
+############################################################################################
+############################################################################################
+
+REG
+0xc[0-f]
+OFFLOAD_SDO_*
+Offload SDO memory.
+The length is infered by the commands and reset after each burst.
+ENDREG
 
 ############################################################################################
 ############################################################################################

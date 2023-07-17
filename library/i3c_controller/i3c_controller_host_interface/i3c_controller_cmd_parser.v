@@ -74,8 +74,6 @@ module i3c_controller_cmd_parser #(
   output wire [11:0] cmdp_buffer_len,
   output wire [6:0]  cmdp_da,
   output wire        cmdp_rnw,
-  output wire        cmdp_do_daa,
-  input  wire        cmdp_do_daa_ready,
   input  wire        cmdp_cancelled,
 
   input  wire rd_bytes_ready,
@@ -84,7 +82,6 @@ module i3c_controller_cmd_parser #(
   output wire wr_bytes_valid,
   input  wire [11:0] wr_bytes_lvl
 );
-  wire [6:0] cmd_ccc_id;
   wire [11:0] cmdr1_len;
   wire buffer_len_valid;
   reg  [31:0] cmdr1;
@@ -93,8 +90,6 @@ module i3c_controller_cmd_parser #(
 
   reg [3:0] cmdr_error;
   reg [7:0] cmdr_sync;
-
-  localparam [6:0] CCC_ENTDAA = 7'h7;
 
   localparam [3:0]
     NO_ERROR  = 4'd0,
@@ -109,9 +104,7 @@ module i3c_controller_cmd_parser #(
     xfer_await       = 2,
     xfer_await_ready = 3,
     ccc_await        = 4,
-    daa_await        = 5,
-    daa_await_ready  = 6,
-    receipt          = 7;
+    receipt          = 5;
 
   always @(posedge clk) begin
     if (!reset_n) begin
@@ -158,13 +151,7 @@ module i3c_controller_cmd_parser #(
         end
         ccc_await: begin
           cmdr2 <= cmd[7:0];
-          sm <= cmd_valid ? (cmd_ccc_id == CCC_ENTDAA ? daa_await : xfer_await) : sm;
-        end
-        daa_await: begin
-          sm <= !cmdp_do_daa_ready ? daa_await_ready : sm;
-        end
-        daa_await_ready: begin
-          sm <= cmdp_do_daa_ready ? receipt : sm;
+          sm <= cmd_valid ? xfer_await : sm;
         end
         receipt: begin
           if (cmdr_ready) begin
@@ -179,14 +166,12 @@ module i3c_controller_cmd_parser #(
     end
   end
 
-  assign cmd_ready    = (sm == receive || sm == ccc_await) & reset_n & cmdp_do_daa_ready;
+  assign cmd_ready    = (sm == receive || sm == ccc_await) & reset_n;
   assign cmdp_valid   = sm == xfer_await & reset_n;
-  assign cmdp_do_daa  = sm == daa_await & reset_n;
 
   assign cmdp_ccc              = cmdr1[30];
   assign cmdp_ccc_bcast        = cmdr2[7];
   assign cmdp_ccc_id           = cmdr2[6:0];
-  assign cmd_ccc_id            = cmd  [6:0];
   assign cmdp_bcast_header     = cmdr1[29];
   assign cmdp_xmit             = cmdr1[28:27];
   assign cmdp_buffer_len       = cmdr1[23:12];

@@ -1,34 +1,37 @@
 `ifndef I3C_CONTROLLER_REGMAP_V
 `define I3C_CONTROLLER_REGMAP_V
 
-`define I3C_REGMAP_VERSION         14'h00
-`define I3C_REGMAP_PERIPHERAL_ID   14'h01
-`define I3C_REGMAP_SCRATCH         14'h02
-`define I3C_REGMAP_PARAMETERS      14'h03
-`define I3C_REGMAP_ENABLE          14'h10
-`define I3C_REGMAP_IRQ_MASK        14'h20
-`define I3C_REGMAP_IRQ_PENDING     14'h21
-`define I3C_REGMAP_IRQ_SOURCE      14'h22
-`define I3C_REGMAP_CMD_FIFO_ROOM   14'h30
-`define I3C_REGMAP_CMDR_FIFO_LEVEL 14'h31
-`define I3C_REGMAP_SDO_FIFO_ROOM   14'h32
-`define I3C_REGMAP_SDI_FIFO_LEVEL  14'h33
-`define I3C_REGMAP_IBI_FIFO_LEVEL  14'h34
-`define I3C_REGMAP_CMD_FIFO        14'h35
-`define I3C_REGMAP_CMDR_FIFO       14'h36
-`define I3C_REGMAP_SDO_FIFO        14'h37
-`define I3C_REGMAP_SDI_FIFO        14'h38
-`define I3C_REGMAP_IBI_FIFO        14'h39
-`define I3C_REGMAP_FIFO_STATUS     14'h3a
-`define I3C_REGMAP_DAA_STATUS      14'h40
-`define I3C_REGMAP_IBI_CONFIG      14'h50
+`define I3C_REGMAP_VERSION          8'h00
+`define I3C_REGMAP_PERIPHERAL_ID    8'h01
+`define I3C_REGMAP_SCRATCH          8'h02
+`define I3C_REGMAP_PARAMETERS       8'h03
+`define I3C_REGMAP_ENABLE           8'h10
+`define I3C_REGMAP_IRQ_MASK         8'h20
+`define I3C_REGMAP_IRQ_PENDING      8'h21
+`define I3C_REGMAP_IRQ_SOURCE       8'h22
+`define I3C_REGMAP_CMD_FIFO_ROOM    8'h30
+`define I3C_REGMAP_CMDR_FIFO_LEVEL  8'h31
+`define I3C_REGMAP_SDO_FIFO_ROOM    8'h32
+`define I3C_REGMAP_SDI_FIFO_LEVEL   8'h33
+`define I3C_REGMAP_IBI_FIFO_LEVEL   8'h34
+`define I3C_REGMAP_CMD_FIFO         8'h35
+`define I3C_REGMAP_CMDR_FIFO        8'h36
+`define I3C_REGMAP_SDO_FIFO         8'h37
+`define I3C_REGMAP_SDI_FIFO         8'h38
+`define I3C_REGMAP_IBI_FIFO         8'h39
+`define I3C_REGMAP_FIFO_STATUS      8'h3a
+`define I3C_REGMAP_OPS              8'h40
+`define I3C_REGMAP_IBI_CONFIG       8'h50
 `define I3C_REGMAP_DEV_CHAR_0_      4'h6
 `define I3C_REGMAP_DEV_CHAR_1_      4'h7
-`define I3C_REGMAP_DEV_CHAR_1_0    14'h70
+`define I3C_REGMAP_DEV_CHAR_1_0     8'h70
 `define I3C_REGMAP_DEV_CHAR_2_      4'h8
-`define I3C_REGMAP_DEV_CHAR_2_0    14'h80
-`define I3C_REGMAP_DEVS_CTRL       14'h90
+`define I3C_REGMAP_DEV_CHAR_2_0     8'h80
+`define I3C_REGMAP_DEVS_CTRL        8'ha0
+`define I3C_REGMAP_OFFLOAD_CMD_     4'hb
+`define I3C_REGMAP_OFFLOAD_SDO_     4'hc
 
 `define I3C_REGMAP_IRQ_PENDING_CMDR_PENDING 5
+`define I3C_REGMAP_IRQ_PENDING_IBI_PENDING  6
 
 `endif

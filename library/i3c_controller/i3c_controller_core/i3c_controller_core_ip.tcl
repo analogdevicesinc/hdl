@@ -6,7 +6,6 @@ adi_ip_files i3c_controller_core [list \
 	"i3c_controller_core_constr.ttcl" \
 	"i3c_controller_core.v" \
 	"i3c_controller_framing.v" \
-	"i3c_controller_daa.v" \
 	"i3c_controller_phy_sda.v" \
 	"i3c_controller_word.v" \
  	"i3c_controller_word_cmd.v" \
@@ -48,9 +47,8 @@ adi_add_bus "cmdp" "slave" \
 		{"cmdp_buffer_len"   "CMDP_BUFFER_LEN"} \
 		{"cmdp_da"           "CMDP_DA"} \
 		{"cmdp_rnw"          "CMDP_RNW"} \
-		{"cmdp_do_daa"       "CMDP_DO_DAA"} \
-		{"cmdp_do_daa_ready" "CMDP_DO_DAA_READY"} \
 		{"cmdp_cancelled"    "CMDP_CANCELLED"} \
+		{"cmdp_idle_bus"     "CMDP_IDLE_BUS"} \
 	}
 adi_add_bus_clock "clk" "cmdp" "reset_n"
 

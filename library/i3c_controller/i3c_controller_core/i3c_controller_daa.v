@@ -54,7 +54,6 @@
  * finishing the DAA. At B, goto on sm state before A, Sr.
  * The first and last ACK are mandatory in the flowchart, if a NACK is received,
  * it is considered an error and the module resets.
- * The controller writes in push-pull mode.
  */
 
 `timescale 1ns/100ps
@@ -123,7 +122,7 @@ module i3c_controller_daa #(
   always @(posedge clk) begin
     if (!reset_n) begin
       smt <= idle;
-    smr <= request;
+      smr <= request;
       sm <= `CMDW_NOP;
       j <= 0;
       cmdw_body <= 8'h00;
@@ -132,7 +131,7 @@ module i3c_controller_daa #(
       rmap_devs_ctrl <= 'd0;
     end else if (cmdw_nack) begin
       smt <= idle;
-    smr <= request;
+      smr <= request;
       cmdw_body <= 8'h00;
       ctrl <= 1'b0;
     end else begin
@@ -145,8 +144,8 @@ module i3c_controller_daa #(
           end else if (idle_bus) begin
             lock <= 1'b0;
           end
-      rmap_devs_ctrl <= (rmap_devs_ctrl | rmap_devs_ctrl_mr[14:0])
-                        & ~rmap_devs_ctrl_mr[29:15];
+		  rmap_devs_ctrl <= (rmap_devs_ctrl | rmap_devs_ctrl_mr[14:0])
+                          & ~rmap_devs_ctrl_mr[29:15];
         end
         transfer: begin
           if (cmdw_ready) begin

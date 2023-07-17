@@ -58,10 +58,9 @@ module i3c_controller_core #(
   input  wire [11:0] cmdp_buffer_len,
   input  wire [6:0]  cmdp_da,
   input  wire        cmdp_rnw,
-  input  wire        cmdp_do_daa,
-  output wire        cmdp_do_daa_ready,
   output wire        cmdp_ready,
   output wire        cmdp_cancelled,
+  output wire        cmdp_idle_bus,
 
   // Byte stream
 
@@ -107,16 +106,10 @@ module i3c_controller_core #(
   wire rx_stop;
   wire rx_nack;
 
-  wire cmdp_ready_w;
-  wire cmdp_valid_w;
-
-  wire cmdw_framing_valid;
-  wire cmdw_daa_valid;
+  wire cmdw_valid;
   wire cmdw_ready;
   wire cmdw_mux;
-  wire [`CMDW_HEADER_WIDTH+8:0] cmdw_framing;
-  wire [`CMDW_HEADER_WIDTH+8:0] cmdw_daa;
-  wire [`CMDW_HEADER_WIDTH+8:0] cmdw_ibi;
+  wire [`CMDW_HEADER_WIDTH+8:0] cmdw;
   wire cmdw_nack;
 
   wire cmdw_rx_ready;
@@ -137,36 +130,13 @@ module i3c_controller_core #(
 
   wire idle_bus;
 
-  i3c_controller_daa #(
-    .MAX_DEVS(MAX_DEVS)
-  ) i_i3c_controller_daa (
-    .reset_n(reset_n),
-    .clk(clk),
-    .cmdp_do_daa(cmdp_do_daa),
-    .cmdp_do_daa_ready(cmdp_do_daa_ready),
-    .cmdw_valid(cmdw_daa_valid),
-    .cmdw_ready(cmdw_ready),
-    .cmdw(cmdw_daa),
-    .cmdw_nack(cmdw_nack),
-    .idle_bus(idle_bus),
-    .pid_bcr_dcr_tick(pid_bcr_dcr_tick),
-    .pid_bcr_dcr(pid_bcr_dcr),
-    .rmap_daa_status(rmap_daa_status),
-    .rmap_devs_ctrl_mr(rmap_devs_ctrl_mr),
-    .rmap_devs_ctrl(rmap_devs_ctrl),
-    .rmap_dev_char_e(rmap_dev_char_e),
-    .rmap_dev_char_we(rmap_dev_char_we),
-    .rmap_dev_char_addr(rmap_dev_char_addr),
-    .rmap_dev_char_wdata(rmap_dev_char_wdata),
-    .rmap_dev_char_rdata(rmap_dev_char_rdata)
-  );
-
   i3c_controller_framing #(
+    .MAX_DEVS(MAX_DEVS)
   ) i_i3c_controller_framing (
     .reset_n(reset_n),
     .clk(clk),
-    .cmdp_valid(cmdp_valid_w),
-    .cmdp_ready(cmdp_ready_w),
+    .cmdp_valid(cmdp_valid),
+    .cmdp_ready(cmdp_ready),
     .cmdp_ccc(cmdp_ccc),
     .cmdp_ccc_bcast(cmdp_ccc_bcast),
     .cmdp_ccc_id(cmdp_ccc_id),
@@ -183,9 +153,9 @@ module i3c_controller_core #(
     .sdi_ready(sdi_ready),
     .sdi_valid(sdi_valid),
     .sdi(sdi),
-    .cmdw_valid(cmdw_framing_valid),
+    .cmdw_valid(cmdw_valid),
     .cmdw_ready(cmdw_ready),
-    .cmdw(cmdw_framing),
+    .cmdw(cmdw),
     .cmdw_nack(cmdw_nack),
     .cmdw_rx_ready(cmdw_rx_ready),
     .cmdw_rx_valid(cmdw_rx_valid),
@@ -194,19 +164,25 @@ module i3c_controller_core #(
     .idle_bus(idle_bus),
     .ibi_requested(ibi_requested),
     .ibi_requested_auto(ibi_requested_auto),
-    .rmap_ibi_config(rmap_ibi_config)
+    .pid_bcr_dcr_tick(pid_bcr_dcr_tick),
+    .pid_bcr_dcr(pid_bcr_dcr),
+    .rmap_ibi_config(rmap_ibi_config),
+    .rmap_devs_ctrl_mr(rmap_devs_ctrl_mr),
+    .rmap_devs_ctrl(rmap_devs_ctrl),
+    .rmap_dev_char_e(rmap_dev_char_e),
+    .rmap_dev_char_we(rmap_dev_char_we),
+    .rmap_dev_char_addr(rmap_dev_char_addr),
+    .rmap_dev_char_wdata(rmap_dev_char_wdata),
+    .rmap_dev_char_rdata(rmap_dev_char_rdata)
   );
 
   i3c_controller_word #(
   ) i_i3c_controller_word (
     .reset_n(reset_n),
     .clk(clk),
-    .cmdw_framing_valid(cmdw_framing_valid),
-    .cmdw_daa_valid(cmdw_daa_valid),
+    .cmdw_valid(cmdw_valid),
     .cmdw_ready(cmdw_ready),
-    .cmdw_mux(cmdw_mux),
-    .cmdw_framing(cmdw_framing),
-    .cmdw_daa(cmdw_daa),
+    .cmdw(cmdw),
     .cmdw_nack(cmdw_nack),
     .cmdw_rx_ready(cmdw_rx_ready),
     .cmdw_rx_valid(cmdw_rx_valid),
@@ -268,10 +244,7 @@ module i3c_controller_core #(
     .sda(sda)
   );
 
-  assign cmdw_mux = cmdp_do_daa_ready;
-  assign cmdp_ready = cmdp_ready_w & cmdp_do_daa_ready;
-  assign cmdp_valid_w = cmdp_valid & cmdp_do_daa_ready;
-
   assign ibi = {ibi_da, ibi_mdb};
   assign ibi_valid = ibi_tick;
+  assign cmdp_idle_bus = idle_bus;
 endmodule

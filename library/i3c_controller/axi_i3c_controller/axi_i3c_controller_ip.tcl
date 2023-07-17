@@ -46,8 +46,19 @@ adi_add_bus "ctrl" "master" \
 		{"ibi_ready"  "IBI_READY"} \
 		{"ibi_valid"  "IBI_VALID"} \
 		{"ibi"        "IBI_DATA"} \
+		{"quiet_times" "QUIET_TIMES"} \
 	}
 adi_add_bus_clock "i3c_clk" "ctrl" "i3c_reset_n" "master"
+
+adi_add_bus "offload" "master" \
+	"xilinx.com:interface:axis_rtl:1.0" \
+	"xilinx.com:interface:axis:1.0" \
+	{
+		{"offload_sdi_ready"  "OFFLOAD_SDI_READY"} \
+		{"offload_sdi_valid"  "OFFLOAD_SDI_VALID"} \
+		{"offload_sdi"        "OFFLOAD_SDI"} \
+	}
+adi_add_bus_clock "i3c_clk" "offload" "i3c_reset_n" "master"
 
 adi_add_bus "rmap" "master" \
 	"analog.com:interface:i3c_controller_rmap_rtl:1.0" \
@@ -95,6 +106,11 @@ adi_set_ports_dependency "up_rack" \
 
 adi_set_ports_dependency "i3c_clk" \
       "(spirit:decode(id('MODELPARAM_VALUE.ASYNC_I3C_CLK')) = 1)"
+
+adi_set_ports_dependency "offload" \
+      "(spirit:decode(id('MODELPARAM_VALUE.OFFLOAD')) = 1)"
+adi_set_ports_dependency "offload_trigger" \
+      "(spirit:decode(id('MODELPARAM_VALUE.OFFLOAD')) = 1)"
 
 ## Parameter validations
 
@@ -148,6 +164,14 @@ set_property -dict [list \
 #set_property -dict [list \
 # ] \
 # [ipx::get_user_parameters BCR -of_objects $cc]
+
+## OFFLOAD
+set_property -dict [list \
+  "value_format" "bool" \
+  "value" "true" \
+ ] \
+ [ipx::get_user_parameters OFFLOAD -of_objects $cc]
+
 
 ## Customize IP Layout
 
@@ -203,6 +227,13 @@ set_property -dict [list \
   "display_name" "Controller's BCR" \
   "tooltip" "\[BCR\] Controller's bus characteristics" \
 ] [ipgui::get_guiparamspec -name "BCR" -component $cc]
+
+ipgui::add_param -name "OFFLOAD" -component $cc -parent $general_group
+set_property -dict [list \
+  "display_name" "Offload engine" \
+  "tooltip" "\[OFFLOAD\] Allows to offload output data to a external receiver, like a DMA" \
+] [ipgui::get_guiparamspec -name "OFFLOAD" -component $cc]
+
 ## Create and save the XGUI file
 ipx::create_xgui_files $cc
 

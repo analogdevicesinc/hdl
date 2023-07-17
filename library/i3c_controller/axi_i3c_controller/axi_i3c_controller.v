@@ -38,6 +38,7 @@
 
 module axi_i3c_controller #(
   parameter ID = 0,
+  parameter OFFLOAD = 1,
   parameter MM_IF_TYPE = 0,
   parameter ASYNC_I3C_CLK = 0,
   parameter ADDRESS_WIDTH = 8, // Const
@@ -110,9 +111,17 @@ module axi_i3c_controller #(
   input  wire sdi_valid,
   input  wire [DATA_WIDTH-1:0] sdi,
 
+  input  wire offload_sdi_ready,
+  output wire offload_sdi_valid,
+  output wire [DATA_WIDTH-1:0] offload_sdi,
+
   output wire ibi_ready,
   input  wire ibi_valid,
   input  wire [DATA_WIDTH-1:0] ibi,
+
+  input  wire quiet_times,
+
+  input  wire offload_trigger,
 
   // uP accessible info
 
@@ -120,11 +129,11 @@ module axi_i3c_controller #(
   output reg  [1:0] rmap_ibi_config,
   output reg  [29:0] rmap_devs_ctrl_mr,
   input  wire [14:0] rmap_devs_ctrl,
-  input rmap_dev_char_e,
-  input rmap_dev_char_we,
-  input [5:0]  rmap_dev_char_addr,
-  input [31:0] rmap_dev_char_wdata,
-  output [8:0] rmap_dev_char_rdata
+  input  wire rmap_dev_char_e,
+  input  wire rmap_dev_char_we,
+  input  wire [5:0]  rmap_dev_char_addr,
+  input  wire [31:0] rmap_dev_char_wdata,
+  output wire [8:0] rmap_dev_char_rdata
 );
 
   localparam PCORE_VERSION = 'h12345678;
@@ -197,7 +206,8 @@ module axi_i3c_controller #(
   // Scratch register
   reg [31:0] up_scratch = 'h00;
 
-  reg        cmdr_id_pending = 1'b0;
+  reg        cmdr_pending = 1'b0;
+  reg        ibi_pending = 1'b0;
 
   generate if (MM_IF_TYPE == S_AXI) begin
 
@@ -266,12 +276,13 @@ module axi_i3c_controller #(
   endgenerate
 
   // IRQ handling
-  reg  [5:0] up_irq_mask = 6'h0;
-  wire [5:0] up_irq_source;
-  wire [5:0] up_irq_pending;
+  reg  [6:0] up_irq_mask = 7'h0;
+  wire [6:0] up_irq_source;
+  wire [6:0] up_irq_pending;
 
   assign up_irq_source = {
-    cmdr_id_pending,
+    ibi_pending,
+    cmdr_pending,
     up_ibi_fifo_almost_full,
     up_sdi_fifo_almost_full,
     up_sdo_fifo_almost_empty,
@@ -296,10 +307,28 @@ module axi_i3c_controller #(
     end else begin
       up_wack_ff <= up_wreq_s;
       if (up_wreq_s) begin
-        case (up_waddr_s)
+        case (up_waddr_s[7:0])
           `I3C_REGMAP_ENABLE:         up_sw_reset <= up_wdata_s[0];
           `I3C_REGMAP_SCRATCH:        up_scratch <= up_wdata_s;
         endcase
+      end
+    end
+  end
+
+  reg  [4:0] ops;
+  reg  [4:0] ops_candidate;
+  wire       ops_mode;
+  wire [3:0] ops_offload_len;
+  wire       offload_idle;
+  assign ops_mode = ops[0];
+  assign ops_offload_len = ops[4:1];
+
+  always @(posedge clk) begin
+    if (!up_sw_resetn) begin
+      ops <= 6'd0;
+    end else if (quiet_times) begin
+      if ((~ops_mode & ~cmd_valid_w) | (ops_mode & offload_idle)) begin
+       ops <= ops_candidate;
       end
     end
   end
@@ -311,20 +340,22 @@ module axi_i3c_controller #(
       up_irq_mask <= 'h00;
       rmap_ibi_config <= 'h00;
       devs_ctrl_0 <= 1'b0;
+	  ops_candidate <= 6'd0;
     end else begin
       if (up_wreq_s) begin
-        case (up_waddr_s)
-          `I3C_REGMAP_IRQ_MASK:   up_irq_mask <= up_wdata_s[5:0];
+        case (up_waddr_s[7:0])
+          `I3C_REGMAP_IRQ_MASK:   up_irq_mask <= up_wdata_s[6:0];
           `I3C_REGMAP_IBI_CONFIG: rmap_ibi_config <= up_wdata_s[1:0];
           `I3C_REGMAP_DEVS_CTRL:  rmap_devs_ctrl_mr <= {up_wdata_s[31:17], up_wdata_s[15:1]};
+          `I3C_REGMAP_OPS:        ops_candidate <= up_wdata_s[5:0];
           default: begin
           end
         endcase
 
         // Special cases for the controller
-        if (up_waddr_s == {`I3C_REGMAP_DEV_CHAR_0_, 4'd0}) begin
+        if (up_waddr_s[7:0] == {`I3C_REGMAP_DEV_CHAR_0_, 4'd0}) begin
           devs_ctrl_0 <= 1'b1;
-        end else if (up_waddr_s == `I3C_REGMAP_DEVS_CTRL & up_wdata_s[16] == 1'b1) begin
+        end else if (up_waddr_s[7:0] == `I3C_REGMAP_DEVS_CTRL & up_wdata_s[16] == 1'b1) begin
           devs_ctrl_0 <= 1'b0;
         end
       end
@@ -343,13 +374,11 @@ module axi_i3c_controller #(
 
   reg devs_ctrl_0;
   wire [15:0] rmap_devs_ctrl_w = {rmap_devs_ctrl, devs_ctrl_0};
-  integer i;
   always @(posedge clk) begin
-    case (up_raddr_s)
+    case (up_raddr_s[7:0])
       `I3C_REGMAP_VERSION:        up_rdata_ff <= PCORE_VERSION;
       `I3C_REGMAP_PERIPHERAL_ID:  up_rdata_ff <= ID;
       `I3C_REGMAP_SCRATCH:        up_rdata_ff <= up_scratch;
-      `I3C_REGMAP_PARAMETERS:     up_rdata_ff <= {28'd0, MAX_DEVS[3:0]};
       `I3C_REGMAP_ENABLE:         up_rdata_ff <= up_sw_reset;
       `I3C_REGMAP_IRQ_MASK:       up_rdata_ff <= up_irq_mask;
       `I3C_REGMAP_IRQ_PENDING:    up_rdata_ff <= up_irq_pending;
@@ -363,7 +392,7 @@ module axi_i3c_controller #(
       `I3C_REGMAP_SDI_FIFO:       up_rdata_ff <= sdi_fifo_data;
       `I3C_REGMAP_IBI_FIFO:       up_rdata_ff <= ibi_fifo_data;
       `I3C_REGMAP_FIFO_STATUS:    up_rdata_ff <= {sdi_fifo_empty, ibi_fifo_empty, cmdr_fifo_empty};
-      `I3C_REGMAP_DAA_STATUS:     up_rdata_ff <= rmap_daa_status;
+      `I3C_REGMAP_OPS:            up_rdata_ff <= {rmap_daa_status, ops};
       `I3C_REGMAP_DEV_CHAR_1_0:   up_rdata_ff <= PID[47:16];
       `I3C_REGMAP_DEV_CHAR_2_0:   up_rdata_ff <= {PID[16:0], BCR, DCR};
       `I3C_REGMAP_DEVS_CTRL:      up_rdata_ff <= {16'd0, rmap_devs_ctrl_w};
@@ -371,27 +400,30 @@ module axi_i3c_controller #(
     endcase
   end
   // NOTE: Could pre-load the Controller PID in the BRAM instead.
-  assign up_rdata_ff_w =   up_raddr_s[7:4] == `I3C_REGMAP_DEV_CHAR_0_ ? dev_char_out :
+  assign up_rdata_ff_w =   up_raddr_s[7:4] == `I3C_REGMAP_DEV_CHAR_0_  ? dev_char_douta :
+                           up_raddr_s[7:4] == `I3C_REGMAP_OFFLOAD_CMD_ ? offload_douta :
+                           up_raddr_s[7:4] == `I3C_REGMAP_OFFLOAD_SDO_ ? offload_douta :
                          ~|up_raddr_s[3:0] ? up_rdata_ff :
-                           up_raddr_s[7:4] == `I3C_REGMAP_DEV_CHAR_1_ ? dev_char_out :
-                           up_raddr_s[7:4] == `I3C_REGMAP_DEV_CHAR_2_ ? dev_char_out :
+                           up_raddr_s[7:4] == `I3C_REGMAP_DEV_CHAR_1_  ? dev_char_douta :
+                           up_raddr_s[7:4] == `I3C_REGMAP_DEV_CHAR_2_  ? dev_char_douta :
                            up_rdata_ff;
 
-  wire dev_char_e;
-  wire dev_char_wr;
-  wire dev_char_rd;
-  wire [31:0] dev_char_out;
-  wire [5:0] dev_char_addr;
+  wire dev_char_ea;
+  wire dev_char_wea;
+  wire dev_char_rea;
+  wire [31:0] dev_char_douta;
+  wire [5:0] dev_char_addra;
+
   ad_mem_dual #(
     .DATA_WIDTH(32),
     .ADDRESS_WIDTH(6)
   ) i_dev_char_1_2 (
     .clka(clk),
-    .wea(dev_char_wr),
-    .ea(dev_char_e),
-    .addra(dev_char_addr),
+    .wea(dev_char_wea),
+    .ea(dev_char_ea),
+    .addra(dev_char_addra),
     .dina(up_wdata_s),
-    .douta(dev_char_out),
+    .douta(dev_char_douta),
     .clkb(clk),
     .web(rmap_dev_char_we),
     .eb(rmap_dev_char_e),
@@ -399,27 +431,136 @@ module axi_i3c_controller #(
     .dinb(rmap_dev_char_wdata),
     .doutb(rmap_dev_char_rdata)
   );
-  
-  assign dev_char_addr = up_wreq_s ?
-                      {up_waddr_s[7], up_waddr_s[6] & up_waddr_s[4], up_waddr_s[3:0]} :
-                      {up_raddr_s[7], up_raddr_s[6] & up_raddr_s[4], up_raddr_s[3:0]};
-  assign dev_char_rd = up_rreq_s == 1'b1 &&
-                      (up_raddr_s[7:4] == `I3C_REGMAP_DEV_CHAR_0_ |
-                       up_raddr_s[7:4] == `I3C_REGMAP_DEV_CHAR_1_ |
-                       up_raddr_s[7:4] == `I3C_REGMAP_DEV_CHAR_2_ );
-  assign dev_char_wr = up_wreq_s == 1'b1 &&
-                      (up_waddr_s[7:4] == `I3C_REGMAP_DEV_CHAR_0_ |
-                       up_waddr_s[7:4] == `I3C_REGMAP_DEV_CHAR_2_ );
-  assign dev_char_e = dev_char_rd | dev_char_wr;
-  
+
+  assign dev_char_addra = up_wreq_s ?
+                       {up_waddr_s[7], up_waddr_s[4], up_waddr_s[3:0]} :
+                       {up_raddr_s[7], up_raddr_s[4], up_raddr_s[3:0]};
+  assign dev_char_rea = up_rreq_s == 1'b1 &&
+                       (up_raddr_s[7:4] == `I3C_REGMAP_DEV_CHAR_0_ |
+                        up_raddr_s[7:4] == `I3C_REGMAP_DEV_CHAR_1_ |
+                        up_raddr_s[7:4] == `I3C_REGMAP_DEV_CHAR_2_ );
+  assign dev_char_wea = up_wreq_s == 1'b1 &&
+                       (up_waddr_s[7:4] == `I3C_REGMAP_DEV_CHAR_0_ |
+                        up_waddr_s[7:4] == `I3C_REGMAP_DEV_CHAR_2_ );
+  assign dev_char_ea = dev_char_rea | dev_char_wea;
+
+  wire [31:0] offload_douta;
+  wire [31:0] offload_cmd;
+  wire [31:0] offload_sdo;
+  wire offload_cmd_valid;
+  wire offload_sdo_valid;
+  generate if (OFFLOAD == 1) begin
+    wire offload_ea;
+    wire offload_wea;
+    wire offload_rea;
+    wire [4:0] offload_addra;
+    wire offload_eb;
+    wire [4:0] offload_addrb;
+    wire [31:0] offload_doutb;
+
+    ad_mem_dual #(
+      .DATA_WIDTH(32),
+      .ADDRESS_WIDTH(5)
+    ) i_dev_char_1_2 (
+      .clka(clk),
+      .wea(offload_wea),
+      .ea(offload_ea),
+      .addra(offload_addra),
+      .dina(up_wdata_s),
+      .douta(offload_douta),
+      .clkb(clk),
+      .web(1'b0),
+      .eb(offload_eb),
+      .addrb(offload_addrb),
+      .dinb('d0),
+      .doutb(offload_doutb)
+    );
+
+    assign offload_addra = up_wreq_s ?
+                        {up_waddr_s[6], up_waddr_s[3:0]} :
+                        {up_raddr_s[6], up_raddr_s[3:0]};
+    assign offload_rea = up_rreq_s == 1'b1 &&
+                        (up_raddr_s[7:4] == `I3C_REGMAP_OFFLOAD_CMD_ |
+                         up_raddr_s[7:4] == `I3C_REGMAP_OFFLOAD_SDO_ );
+    assign offload_wea = up_wreq_s == 1'b1 &&
+                        (up_waddr_s[7:4] == `I3C_REGMAP_OFFLOAD_CMD_ |
+                         up_waddr_s[7:4] == `I3C_REGMAP_OFFLOAD_SDO_ );
+    assign offload_ea = offload_rea | offload_wea;
+
+
+    reg [1:0] smt;
+    reg [3:0] k;
+    reg [3:0] j;
+    localparam [1:0]
+      cmd_setup    = 0,
+      cmd_transfer = 1,
+      sdo_setup    = 2,
+      sdo_transfer = 3;
+
+    always @(posedge clk) begin
+      if (!i3c_reset_n | ~ops_mode | ops_offload_len == 0) begin
+         smt <= cmd_setup;
+         k <= 'd0;
+      end else begin
+        case (smt)
+          cmd_setup: begin
+            if (offload_trigger | k != 0) begin
+              smt <= cmd_transfer;
+              if (k == ops_offload_len - 1) begin
+                k <= 0;
+              end else begin
+                k <= k + 1;
+              end
+            end
+            j <= 0;
+          end
+          cmd_transfer: begin
+            if (cmd_ready) begin
+              smt <= sdo_setup;
+            end
+          end
+          sdo_setup: begin
+            smt <= sdo_transfer;
+          end
+          sdo_transfer: begin
+            if (cmd_ready) begin
+              smt <= cmd_setup;
+            end else if (sdo_ready) begin
+              smt <= sdo_setup;
+              j <= j + 1;
+            end
+          end
+          default: begin
+           smt <= cmd_setup;
+          end
+       endcase
+      end
+    end
+    assign offload_idle = smt == cmd_setup & k == 0;
+    assign offload_addrb = smt[1] == 1'b0 ? {1'b0,k} : {1'b1,j};
+    assign offload_eb    = smt[0] == 1'b0 & ops_mode;
+    assign offload_cmd_valid = smt == cmd_transfer;
+    assign offload_sdo_valid = smt == sdo_transfer;
+    assign offload_cmd = offload_doutb;
+    assign offload_sdo = offload_doutb;
+  end
+  endgenerate
+
+
   always @(posedge clk) begin
     if (up_sw_resetn == 1'b0) begin
-      cmdr_id_pending <= 1'b0;
+      cmdr_pending <= 1'b0;
+      ibi_pending <= 1'b0;
     end else begin
       if (cmdr_fifo_valid == 1'b1) begin
-        cmdr_id_pending <= 1'b1;
+        cmdr_pending <= 1'b1;
       end else if (up_wreq_s == 1'b1 && up_waddr_s == `I3C_REGMAP_IRQ_PENDING && up_wdata_s[`I3C_REGMAP_IRQ_PENDING_CMDR_PENDING] == 1'b1) begin
-        cmdr_id_pending <= 1'b0;
+        cmdr_pending <= 1'b0;
+      end
+      if (ibi_fifo_valid == 1'b1) begin
+        ibi_pending <= 1'b1;
+      end else if (up_wreq_s == 1'b1 && up_waddr_s == `I3C_REGMAP_IRQ_PENDING && up_wdata_s[`I3C_REGMAP_IRQ_PENDING_IBI_PENDING] == 1'b1) begin
+        ibi_pending <= 1'b0;
       end
     end
   end
@@ -441,6 +582,12 @@ module axi_i3c_controller #(
   end
   endgenerate
 
+  wire [31:0] cmd_w;
+  wire cmd_valid_w;
+  wire cmd_ready_w;
+  assign cmd = ~ops_mode ? cmd_w : offload_cmd;
+  assign cmd_valid   = ~ops_mode ? cmd_valid_w : offload_cmd_valid;
+  assign cmd_ready_w = ~ops_mode ? cmd_ready   : 1'b0;
   assign cmd_fifo_valid = up_wreq_s == 1'b1 && up_waddr_s == `I3C_REGMAP_CMD_FIFO;
   assign cmd_fifo_data = up_wdata_s;
 
@@ -463,14 +610,18 @@ module axi_i3c_controller #(
     .s_axis_almost_full(),
     .m_axis_aclk(clk_1),
     .m_axis_aresetn(i3c_reset_n),
-    .m_axis_ready(cmd_ready),
-    .m_axis_valid(cmd_valid),
-    .m_axis_data(cmd),
+    .m_axis_ready(cmd_ready_w),
+    .m_axis_valid(cmd_valid_w),
+    .m_axis_data(cmd_w),
     .m_axis_tlast(),
     .m_axis_empty(),
     .m_axis_almost_empty(cmd_fifo_almost_empty),
     .m_axis_level());
 
+  wire cmdr_valid_w;
+  wire cmdr_ready_w;
+  assign cmdr_ready   = ~ops_mode ? cmdr_ready_w : 1'b1; // In offload, discard cmdr
+  assign cmdr_valid_w = ~ops_mode ? cmdr_valid   : 1'b0;
   assign cmdr_fifo_ready = up_rreq_s == 1'b1 && up_raddr_s == `I3C_REGMAP_CMDR_FIFO;
 
   util_axis_fifo #(
@@ -483,8 +634,8 @@ module axi_i3c_controller #(
   ) i_cmdr_fifo (
     .s_axis_aclk(clk_1),
     .s_axis_aresetn(i3c_reset_n),
-    .s_axis_ready(cmdr_ready),
-    .s_axis_valid(cmdr_valid),
+    .s_axis_ready(cmdr_ready_w),
+    .s_axis_valid(cmdr_valid_w),
     .s_axis_data(cmdr),
     .s_axis_room(),
     .s_axis_tlast(),
@@ -500,6 +651,12 @@ module axi_i3c_controller #(
     .m_axis_empty(cmdr_fifo_empty),
     .m_axis_almost_empty());
 
+  wire [31:0] sdo_w;
+  wire sdo_valid_w;
+  wire sdo_ready_w;
+  assign sdo = ~ops_mode ? sdo_w : offload_sdo;
+  assign sdo_valid   = ~ops_mode ? sdo_valid_w : offload_sdo_valid;
+  assign sdo_ready_w = ~ops_mode ? sdo_ready   : 1'b0;
   assign sdo_fifo_valid = up_wreq_s == 1'b1 && up_waddr_s == `I3C_REGMAP_SDO_FIFO;
   assign sdo_fifo_data = up_wdata_s[31:0];
 
@@ -522,14 +679,20 @@ module axi_i3c_controller #(
     .s_axis_almost_full(),
     .m_axis_aclk(clk_1),
     .m_axis_aresetn(i3c_reset_n),
-    .m_axis_ready(sdo_ready),
-    .m_axis_valid(sdo_valid),
-    .m_axis_data(sdo),
+    .m_axis_ready(sdo_ready_w),
+    .m_axis_valid(sdo_valid_w),
+    .m_axis_data(sdo_w),
     .m_axis_tlast(),
     .m_axis_level(),
     .m_axis_empty(),
     .m_axis_almost_empty(sdo_fifo_almost_empty));
 
+  wire sdi_valid_w;
+  wire sdi_ready_w;
+  assign offload_sdi = sdi;
+  assign offload_sdi_valid =  ops_mode ? sdi_valid : 1'b0;
+  assign sdi_valid_w       = ~ops_mode ? sdi_valid : 1'b0;
+  assign sdi_ready = ops_mode ? offload_sdi_ready : sdi_ready_w;
   assign sdi_fifo_ready = up_rreq_s == 1'b1 && up_raddr_s == `I3C_REGMAP_SDI_FIFO;
 
   util_axis_fifo #(
@@ -542,8 +705,8 @@ module axi_i3c_controller #(
   ) i_sdi_fifo (
     .s_axis_aclk(clk_1),
     .s_axis_aresetn(i3c_reset_n),
-    .s_axis_ready(sdi_ready),
-    .s_axis_valid(sdi_valid),
+    .s_axis_ready(sdi_ready_w),
+    .s_axis_valid(sdi_valid_w),
     .s_axis_data(sdi),
     .s_axis_room(),
     .s_axis_tlast(),

@@ -26,7 +26,7 @@ proc p_elaboration {} {
   set_interface_property sync associatedReset if_resetn
 
   # physical I3C interface
-  ad_interface clock scl output 1
-  ad_interface signal sda   inout 1
+  ad_interface clock  scl output 1
+  ad_interface signal sda inout 1
 }
 

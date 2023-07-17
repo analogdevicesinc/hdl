@@ -10,7 +10,7 @@
 			spirit:library="interface"
 			spirit:name="i3c_controller_ctrl"
 			spirit:version="1.0"/>
-  <spirit:ports>
+	<spirit:ports>
 		<spirit:port>
 			<spirit:logicalName>CMD_READY</spirit:logicalName>
 			<spirit:wire>
@@ -232,6 +232,21 @@
 				<spirit:onSlave>
 					<spirit:presence>required</spirit:presence>
 					<spirit:width>32</spirit:width>
+					<spirit:direction>out</spirit:direction>
+				</spirit:onSlave>
+			</spirit:wire>
+		</spirit:port>
+		<spirit:port>
+			<spirit:logicalName>QUIET_TIMES</spirit:logicalName>
+			<spirit:wire>
+				<spirit:onMaster>
+					<spirit:presence>required</spirit:presence>
+					<spirit:width>1</spirit:width>
+					<spirit:direction>in</spirit:direction>
+				</spirit:onMaster>
+				<spirit:onSlave>
+					<spirit:presence>required</spirit:presence>
+					<spirit:width>1</spirit:width>
 					<spirit:direction>out</spirit:direction>
 				</spirit:onSlave>
 			</spirit:wire>

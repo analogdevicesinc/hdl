@@ -7,7 +7,6 @@ set_module_property ELABORATION_CALLBACK p_elaboration
 ad_ip_files i3c_controller_core [list \
   i3c_controller_core.v \
   i3c_controller_framing.v \
-  i3c_controller_daa.v \
   i3c_controller_phy_sda.v \
   i3c_controller_word.v \
   i3c_controller_word_cmd.v \

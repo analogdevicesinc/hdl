@@ -19,8 +19,6 @@ set_multicycle_path -from [get_clocks clk_fpga_0] -to [get_ports i3c_controller_
 set_multicycle_path -from [get_clocks clk_fpga_0] -to [get_ports i3c_controller_0_scl] -setup 2
 set_multicycle_path -from [get_clocks clk_fpga_0] -to [get_ports i3c_controller_0_scl] -hold 1
 
-#set_multicycle_path -from [get_clocks clk_fpga_0] -to [get_clocks clk_1] -setup 4
-#set_multicycle_path -from [get_clocks clk_fpga_0] -to [get_clocks clk_1] -hold  3
 set_multicycle_path -from [get_clocks clk_1] -to [get_clocks clk_fpga_0] -setup 4
 set_multicycle_path -from [get_clocks clk_1] -to [get_clocks clk_fpga_0] -hold  3
 
