@@ -1,0 +1,3 @@
+Project Doc: https://wiki.analog.com/resources/eval/user-guides/ad2s1210_sdz
+- Connect on FMC LPC via SDP-I-FMC interpoaser board.
+- VADJ = 3.3V !
