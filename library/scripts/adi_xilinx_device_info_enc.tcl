@@ -55,6 +55,8 @@ set speed_grade_list { \
         { -2L     21 } \
         { -2LV    22 } \
         { -2MP    23 } \
+        { -2LVC   24 } \
+        { -2LVI   25 } \
         { -3      30 }}
 
 set dev_package_list { \
