@@ -60,9 +60,6 @@ module system_top (
   inout           fixed_io_ps_porb,
   inout           fixed_io_ps_srstb,
 
-  inout           iic_scl,
-  inout           iic_sda,
-
   input           rx_clk_in,
   input           rx_frame_in,
   input   [11:0]  rx_data_in,
@@ -84,16 +81,28 @@ module system_top (
   output          spi_mosi,
   input           spi_miso,
 
-  output          pl_spi_clk_o,
-  output          pl_spi_mosi,
-  input           pl_spi_miso
+  output          pl_gpio0,
+  input           pl_gpio1,
+  inout           pl_gpio2,
+  inout           pl_gpio3,
+  inout           pl_gpio4
 );
 
   // internal signals
 
-  wire    [16:0]  gpio_i;
-  wire    [16:0]  gpio_o;
-  wire    [16:0]  gpio_t;
+  wire    [17:0]  gpio_i;
+  wire    [17:0]  gpio_o;
+  wire    [17:0]  gpio_t;
+
+  wire            iic_scl;
+  wire            iic_sda;
+  wire            phaser_enable;
+  wire            pl_burst;
+  wire            pl_muxout;
+  wire            pl_spi_clk_o;
+  wire            pl_spi_miso;
+  wire            pl_spi_mosi;
+  wire            pl_txdata;
 
   // instantiations
 
@@ -109,6 +118,27 @@ module system_top (
               gpio_status}));     //  7: 0
 
   assign gpio_i[16:14] = gpio_o[16:14];
+  assign gpio_i[17] = pl_muxout;
+  assign phaser_enable = gpio_o[14];
+
+  assign pl_gpio4 = iic_scl;      //PL_GPIO4
+  assign pl_gpio3 = iic_sda;      //PL_GPIO3
+
+  //PL_GPIO2
+  ad_iobuf #(
+    .DATA_WIDTH(1)
+  ) i_pl_gpio_iobuf (
+    .dio_t (phaser_enable),
+    .dio_i (pl_spi_clk_o),
+    .dio_o (pl_muxout),
+    .dio_p (pl_gpio2));
+
+  //PL_GPIO1
+  assign pl_spi_miso = pl_gpio1 & ~phaser_enable;
+  assign pl_burst    = pl_gpio1 &  phaser_enable;
+
+  //PL_GPIO0
+  assign pl_gpio0 = phaser_enable ? pl_txdata : pl_spi_mosi;
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
@@ -159,6 +189,9 @@ module system_top (
     .spi_sdi_i(pl_spi_miso),
     .spi_sdo_i(1'b0),
     .spi_sdo_o(pl_spi_mosi),
+
+    .tdd_ext_sync(pl_burst),
+    .txdata_o(pl_txdata),
 
     .tx_clk_out (tx_clk_out),
     .tx_data_out (tx_data_out),
