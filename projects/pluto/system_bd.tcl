@@ -5,6 +5,7 @@
 
 # create board design
 source $ad_hdl_dir/projects/common/xilinx/adi_fir_filter_bd.tcl
+source $ad_hdl_dir/library/axi_tdd/scripts/axi_tdd.tcl
 
 # default ports
 
@@ -21,9 +22,9 @@ create_bd_port -dir I spi0_sdo_i
 create_bd_port -dir O spi0_sdo_o
 create_bd_port -dir I spi0_sdi_i
 
-create_bd_port -dir I -from 16 -to 0 gpio_i
-create_bd_port -dir O -from 16 -to 0 gpio_o
-create_bd_port -dir O -from 16 -to 0 gpio_t
+create_bd_port -dir I -from 17 -to 0 gpio_i
+create_bd_port -dir O -from 17 -to 0 gpio_o
+create_bd_port -dir O -from 17 -to 0 gpio_t
 
 create_bd_port -dir O spi_csn_o
 create_bd_port -dir I spi_csn_i
@@ -32,6 +33,9 @@ create_bd_port -dir O spi_clk_o
 create_bd_port -dir I spi_sdo_i
 create_bd_port -dir O spi_sdo_o
 create_bd_port -dir I spi_sdi_i
+
+create_bd_port -dir O txdata_o
+create_bd_port -dir I tdd_ext_sync
 
 # instance: sys_ps7
 
@@ -49,7 +53,7 @@ ad_ip_parameter sys_ps7 CONFIG.PCW_EN_RST1_PORT 1
 ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ 100.0
 ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA1_PERIPHERAL_FREQMHZ 200.0
 ad_ip_parameter sys_ps7 CONFIG.PCW_GPIO_EMIO_GPIO_ENABLE 1
-ad_ip_parameter sys_ps7 CONFIG.PCW_GPIO_EMIO_GPIO_IO 17
+ad_ip_parameter sys_ps7 CONFIG.PCW_GPIO_EMIO_GPIO_IO 18
 ad_ip_parameter sys_ps7 CONFIG.PCW_SPI1_PERIPHERAL_ENABLE 0
 ad_ip_parameter sys_ps7 CONFIG.PCW_I2C0_PERIPHERAL_ENABLE 0
 ad_ip_parameter sys_ps7 CONFIG.PCW_UART1_PERIPHERAL_ENABLE 1
@@ -219,6 +223,7 @@ ad_ip_parameter axi_ad9361_adc_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_ad9361_adc_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_DATA_WIDTH_SRC 64
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.SYNC_TRANSFER_START {true}
 
 ad_add_decimation_filter "rx_fir_decimator" 8 2 1 {61.44} {61.44} \
                          "$ad_hdl_dir/library/util_fir_int/coefile_int.coe"
@@ -279,7 +284,6 @@ ad_connect axi_ad9361/dac_valid_q0 tx_fir_interpolator/dac_valid_1
 ad_connect axi_ad9361/dac_data_q0 tx_fir_interpolator/data_out_1
 
 ad_connect  axi_ad9361/l_clk tx_upack/clk
-ad_connect  axi_ad9361/rst tx_upack/reset
 
 ad_connect  tx_upack/fifo_rd_data_0  tx_fir_interpolator/data_in_0
 ad_connect  tx_upack/enable_0  tx_fir_interpolator/enable_out_0
@@ -309,12 +313,50 @@ ad_connect  axi_ad9361/l_clk axi_ad9361_adc_dma/fifo_wr_clk
 ad_connect  axi_ad9361/l_clk axi_ad9361_dac_dma/m_axis_aclk
 ad_connect  cpack/fifo_wr_overflow axi_ad9361/adc_dovf
 
+# External TDD
+set TDD_CHANNEL_CNT 3
+set TDD_DEFAULT_POL 0b010
+set TDD_REG_WIDTH 32
+set TDD_BURST_WIDTH 32
+set TDD_SYNC_WIDTH 0
+set TDD_SYNC_INT 0
+set TDD_SYNC_EXT 1
+set TDD_SYNC_EXT_CDC 1
+ad_tdd_gen_create axi_tdd_0 $TDD_CHANNEL_CNT \
+                            $TDD_DEFAULT_POL \
+                            $TDD_REG_WIDTH \
+                            $TDD_BURST_WIDTH \
+                            $TDD_SYNC_WIDTH \
+                            $TDD_SYNC_INT \
+                            $TDD_SYNC_EXT \
+                            $TDD_SYNC_EXT_CDC
+
+ad_ip_instance util_vector_logic logic_inv [list \
+  C_OPERATION {not} \
+  C_SIZE 1]
+
+ad_ip_instance util_vector_logic logic_or_1 [list \
+  C_OPERATION {or} \
+  C_SIZE 1]
+
+ad_connect logic_inv/Op1  axi_ad9361/rst
+ad_connect logic_inv/Res  axi_tdd_0/resetn
+ad_connect axi_ad9361/l_clk axi_tdd_0/clk
+ad_connect axi_tdd_0/sync_in tdd_ext_sync
+ad_connect axi_tdd_0/tdd_channel_0 txdata_o
+ad_connect axi_tdd_0/tdd_channel_1 axi_ad9361_adc_dma/fifo_wr_sync
+
+ad_connect  logic_or_1/Op1  axi_ad9361/rst
+ad_connect  logic_or_1/Op2  axi_tdd_0/tdd_channel_2
+ad_connect  logic_or_1/Res  tx_upack/reset
+
 # interconnects
 
 ad_cpu_interconnect 0x79020000 axi_ad9361
 ad_cpu_interconnect 0x7C400000 axi_ad9361_adc_dma
 ad_cpu_interconnect 0x7C420000 axi_ad9361_dac_dma
 ad_cpu_interconnect 0x7C430000 axi_spi
+ad_cpu_interconnect 0x7C440000 axi_tdd_0
 
 ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP1 {1}
 ad_connect sys_cpu_clk sys_ps7/S_AXI_HP1_ACLK
@@ -344,5 +386,4 @@ ad_connect sys_cpu_resetn axi_ad9361_dac_dma/m_src_axi_aresetn
 ad_cpu_interrupt ps-13 mb-13 axi_ad9361_adc_dma/irq
 ad_cpu_interrupt ps-12 mb-12 axi_ad9361_dac_dma/irq
 ad_cpu_interrupt ps-11 mb-11 axi_spi/ip2intc_irpt
-
 
