@@ -7,8 +7,9 @@ In general, a given reference design for an FMC board is deployed to just a few
 carriers, although several :git-hdl:`FPGA boards <projects/common>`
 are supported in ADI's HDL repository. The simple reason behind this practice is
 that it would create a tremendous maintenance workload, that would require a lot
-of human resources, and would increase the required time for testing. The
-general rule of thumb is to support a given project with a fairly popular
+of human resources, and would increase the required time for testing.
+
+The general rule of thumb is to support a given project with a fairly popular
 carrier (e.g. ZC706 or A10SoC), which is powerful enough to showcase the board
 features and maximum performance.
 
@@ -27,26 +28,31 @@ Quick Compatibility Check
 .. note::
 
    All ADI's FPGA Mezzanine Cards (FMC) are designed to respect all the
-   specifications and requirements defined in the ANSI/VITA 57.1 FPGA Mezzanine
-   Card Standard (if not otherwise stated on board's wiki page). If the new FPGA
-   carrier is fully compliant with this standard, there will be no obstacles
-   preventing the user to port the project to the required carrier card.
+   specifications and requirements defined in the ANSI/VITA 57.1/57.4 FPGA
+   Mezzanine Card Standard (if not otherwise stated on board's wiki page).
 
-There are two types of FMC connectors: LPC (Low Pin Count) and HPC (High Pin
-Count). In general, an FMC board is using the FMC connector type that has enough
+   If the new FPGA carrier is fully compliant with this standard, there
+   will be no obstacles preventing the user to port the project to the required
+   carrier card.
+
+There are three types of FMC connectors: LPC (Low Pin Count), HPC (High Pin
+Count) and FMC+ (VITA 57.4).
+
+In general, an FMC board is using the FMC connector type that has enough
 pins for the required interfaces between the I/O devices and FPGA. A carrier
 with an FMC HPC connector can host FMC boards with an LPC or HPC connector, but
 a carrier with an FMC LPC can host a board just with an FMC LPC connector.
 
 .. tip::
 
-   First, always check out the already available :git-hdl:`base designs <projects/common>`.
-   If your board is present among our supported base designs, you do not need to
-   verify the following things and you can jump to the Project creation
+   First, always check out the already available
+   :git-hdl:`base designs <projects/common>`.
+   If your board is present among our supported base designs, you do not need
+   to verify the following things and you can jump to the Project creation
    section.
 
 The most important things to check before porting are related to the ANSI/VITA
-57.1 standard (the list is not necessarily exhaustive):
+57.1/57.4 standard (the list is not necessarily exhaustive):
 
 - Power and ground lines - 3P3V/3P3VAUX/12P0V/GND
 - VADJ - adjustable voltage level power from the carrier, each board has a
@@ -58,10 +64,10 @@ The most important things to check before porting are related to the ANSI/VITA
 
 .. attention::
 
-   To check all the requirements, please refer to the ANSI/VITA 57.1 standard.
+   To check all the requirements, please refer to the ANSI/VITA 57.1/57.4
+   standard.
    The above few hints do not cover all the FMC standards and you
    may miss something that can prevent the porting of the project.
-
 
 .. tip::
 
@@ -77,32 +83,32 @@ components of it. The user should look at it as a suggestion only.
 
 .. tip::
 
-   In :git-hdl:`/projects/common </projects/common>`/<carrier_name>
+   In :git-hdl:`projects/common <master:projects/common>`/<carrier_name>
    you can find templates for the *system_top.v*, *Makefile*, etc. to help you
    when creating a new project.
 
-Example with a Xilinx board
+Example with an AMD Xilinx board
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In this section, we are presenting all the necessary steps to create a base
-design for the Xilinx ZCU102 development board.
+design for the AMD :xilinx:`ZCU102` development board.
 
-First, you need to create a new directory in *~/projects/common* with the name
+First, you need to create a new directory in ``hdl/projects/common`` with the name
 of the carrier.
 
 .. code:: bash
 
-   cd projects/common
-   mkdir zcu102
+   ~/hdl$ cd projects/common
+   ~/hdl/projects/common$ mkdir zcu102
 
 The **zcu102** directory must contain the following files:
 
-- **zcu102_system_bd.tcl** - This script describes the base block design
+- **zcu102_system_bd.tcl** - this script describes the base block design
 - **zcu102_system_constr.xdc** - I/O constraint file for the base design. It
   will contain I/O definitions for GPIO, switches, LEDs or other peripherals of
   the board
-- MIG configuration file (if needed) - This file can be borrowed for the golden
-  reference design of the board
+- MIG configuration file (if needed) - this file can be borrowed from the
+  golden reference design of the board
 - Other constraints files if needed
 
 You should define the board and its device in the project flow script
@@ -129,13 +135,14 @@ The **sys_zynq** constant variable should be set in the following way:
 
 - 0 - 7 Series FPGA (e.g. Kintex7, Virtex7)
 - 1 - Zynq7000 SoC
-- 2 - Zynq Ultrascale+ SoC
+- 2 - Zynq UltraScale+ SoC
+- 3 - Versal
 
 Example with an Intel board
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To create a new base design for a given Intel FPGA carrier board, the following
-steps should be taken (the A10SoC carrier was used as an example).
+steps should be taken (the `A10SoC`_ carrier was used as an example).
 
 The following files should be created or copied into the directory:
 
@@ -158,66 +165,70 @@ process:
 Project files
 -------------------------------------------------------------------------------
 
-Project files for Xilinx boards
+Project files for AMD boards
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To follow the project framework as much as possible, the easiest way is to copy
-all the projects files from an already existing project and modifying those
-files to support the new carrier. A project for a Xilinx FPGA board should
-contain the following files:
+all the projects files from an already existing project and to modify those
+files to support the new carrier.
 
-- **system_project.tcl** - This script is creating the actual Vivado project
+A project for an AMD FPGA board should contain the following files:
+
+- **system_project.tcl** - this script is creating the actual Vivado project
   and runs the synthesis/implementation of the design. The name of the carrier
   from inside the file, must be updated.
 
-- **system_bd.tcl** - In this file is sourced the *base* design's Tcl script
-  and the *board* design's Tcl script. Again, the name of the carrier must be
+- **system_bd.tcl** - in this file is sourced the **base** design's Tcl script
+  and the **board** design's Tcl script. Again, the name of the carrier must be
   updated.
 
-- **system_constr.xdc** - Constraint file of the board design. Here are defined
-  the FMC I/O pins and board specific clock signals. All the I/O definitions
-  must be updated, with the new pin names.
+- **system_constr.xdc** - constraints file of the **board** design.
+  Here are defined the FMC I/O pins and board specific clock signals.
+  All the I/O definitions must be updated, with the new pin names.
 
-- **system_top.v** - Top wrapper file, in which the system_wrapper.v module is
-  instantiated, and a few I/O macros are defined. The I/O port of this Verilog
-  module will be connected to actual I/O pads of the FPGA. The simplest way to
-  update the *system_top* is to let the synthesis fail and the tool will tell
-  you which ports are missing or which ports are redundant. The first thing to
-  do after the failure is to verify the instantiation of the system_wrapper.v.
-  This file is a tool generated file and can be found at
-  *<project_name>.srcs/sources_1/bd/system/hdl/system_wrapper.v*. Fixing the
-  instantiation of the wrapper module in most cases eliminates all the errors.
-  If you get errors that you cannot fix, ask for support.
+- **system_top.v** - top wrapper file, in which the **system_wrapper.v**
+  module is instantiated, and a few I/O macros are defined.
+  The I/O port of this Verilog module will be connected to actual I/O pads
+  of the FPGA. The simplest way to update the **system_top** is to let
+  the synthesis fail and the tool will tell you which ports are missing
+  or which ports are redundant.
+  The first thing to do after the failure, is to verify the instantiation
+  of the **system_wrapper.v**.
+  This file is a tool-generated file and can be found at
+  **<project_name>.srcs/sources_1/bd/system/hdl/system_wrapper.v**.
+  Fixing the instantiation of the wrapper module in most cases eliminates
+  all the errors.
 
-- **Makefile** - This is an auto-generated file, but after updating the carrier
+- **Makefile** - this is an auto-generated file, but after updating the carrier
   name, should work with the new project without an issue.
 
 Project files for Intel boards
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To follow the project framework as much as possible the easiest way is to copy
-all the projects file from an already existing project and modifying those files
-to support the new carrier. A project for an Intel FPGA board should contain the
-following files:
+To follow the project framework as much as possible, the easiest way is to copy
+all the projects file from an already existing project and to modify those
+files to support the new carrier.
 
-- **system_project.tcl** - This script is creating the actual Quartus project
+A project for an Intel FPGA board should contain the following files:
+
+- **system_project.tcl** - this script is creating the actual Quartus project
   and runs the synthesis/implementation of the design. It also contains the I/O
   definitions for the interfaces between the FMC board and FPGA. The carrier
   name and all the I/O pin names inside the file, must be updated.
 
-- **system_qsys.tcl** - In this file is sourced the *base* design's Tcl script
-  and the *board* design's Tcl script. Again, the name of the carrier must be
-  updated.
+- **system_qsys.tcl** - in this file is sourced the **base** design's Tcl
+  script and the **board** design's Tcl script. Again, the name of the carrier
+  must be updated.
 
-- **system_constr.sdc** - Contains clock definitions and other path constraints
+- **system_constr.sdc** - contains clock definitions and other path constraints
 
-- **system_top.v** - Top wrapper file of the project. The I/O ports of this
+- **system_top.v** - top wrapper file of the project. The I/O ports of this
   Verilog module will be actual I/O pads of the FPGA. You must make sure that
   the base design's I/Os are updated (delete nonexistent I/Os or add new ones).
   The simplest way to update the *system_top* is to let the synthesis fail and
   the tool will you tell which ports are missing or which ports are redundant.
 
-- **Makefile** - This is an auto-generated file, but after updating the carrier
+- **Makefile** - this is an auto-generated file, but after updating the carrier
   name, it should work with the new project without an issue.
 
 Tips
@@ -226,8 +237,8 @@ Tips
 Generating the FMC I/O constraints
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The easiest way of writing the constraints for FMC I/O pins is making use of the
-script :git-hdl:`projects/scripts/adi_fmc_constr_generator.tcl`.
+The easiest way of writing the constraints for FMC I/O pins is making use
+of the script :git-hdl:`projects/scripts/adi_fmc_constr_generator.tcl`.
 
 Required setup:
 
@@ -244,10 +255,10 @@ Required setup:
 
 Calling the script:
 
-To use this script you can source it in any tcl shell or simply call the
-adi_fmc_constr_generator.tcl with argument(s) <fmc_port>. But before sourcing or
-calling it, your current directory needs to be
-:git-hdl:`projects`/<project>/<carrier>
+To use this script you can source it in any Tcl shell or simply call the
+adi_fmc_constr_generator.tcl **with argument(s) <fmc_port>**.
+But before sourcing or calling it, your current directory needs to be
+:git-hdl:`projects`/<project>/<carrier>.
 
 For example:
 
@@ -256,8 +267,8 @@ For example:
 - :code:`tclsh ../../scripts/adi_fmc_constr_generator.tcl fmc0 fmc1`
   (the project uses two FMC ports at a time)
 
-If sourced without argument(s) then you can simply call gen_fmc_constr
-<fmc_port>.
+If sourced **without argument(s)**, then you can simply call ``gen_fmc_constr
+<fmc_port>``.
 
 For example:
 
@@ -270,7 +281,7 @@ For example:
    (:git-hdl:`projects/common <projects/common>`/<carrier>/<carrier>_<fmc_port>.txt).
 
 The generated file will appear in the current directory as **fmc_constr.xdc**
-(Xilinx board) or **fmc_constr.tcl** (Intel board). If ran from an open Vivado
+(AMD board) or **fmc_constr.tcl** (Intel board). If ran from an open Vivado
 project, the generated file will be automatically added to the project.
 
 .. _creating_fmc:
@@ -302,6 +313,8 @@ To create a carrier common FMC connections file:
    * If the carrier has more FMC ports, the script should be called with:
 
      * One parameter indicating the FMC port: fmc_lpc/hpc, fmc0/1, fmcp0/1
-       (see projects/common/<carrier>/\*.txt).
+       (see **projects/common/<carrier>/\*.txt**).
      * Two parameters indicating both FMC ports in the desired order for projects
        that use both FMC connectors.
+
+.. _A10SoC: https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html
