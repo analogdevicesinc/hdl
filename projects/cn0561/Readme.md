@@ -6,3 +6,4 @@ Here are some pointers to help you:
   * Project Doc: https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/cn0561
   * HDL Doc: https://wiki.analog.com/resources/eval/user-guides/cn0561/hdl
   * Linux Drivers: https://wiki.analog.com/resources/tools-software/linux-drivers-all
+  * NO-OS Drivers: https://wiki.analog.com/resources/tools-software/uc-drivers/ad713x
