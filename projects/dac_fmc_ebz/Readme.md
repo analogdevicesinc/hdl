@@ -1,13 +1,13 @@
 # DAC-FMC-EBZ HDL Project
 
 Here are some pointers to help you:
-  * [Board Product Page](https://www.analog.com/eval-AD9135)
-  * [Board Product Page](https://www.analog.com/eval-AD9136)
-  * [Board Product Page](https://www.analog.com/eval-AD9144)
-  * [Board Product Page](https://www.analog.com/eval-AD9152)
-  * [Board Product Page](https://www.analog.com/eval-AD9154)
-  * [Board Product Page](https://www.analog.com/eval-AD916x)
-  * [Board Product Page](https://www.analog.com/eval-AD9172)
+  * [Board Product Page | EVAL-AD9135](https://www.analog.com/eval-AD9135)
+  * [Board Product Page | EVAL-AD9136](https://www.analog.com/eval-AD9136)
+  * [Board Product Page | EVAL-AD9144](https://www.analog.com/eval-AD9144)
+  * [Board Product Page | EVAL-AD9152](https://www.analog.com/eval-AD9152)
+  * [Board Product Page | EVAL-AD9154](https://www.analog.com/eval-AD9154)
+  * [Board Product Page | EVAL-AD916x](https://www.analog.com/eval-AD916x)
+  * [Board Product Page | EVAL-AD917x](https://www.analog.com/eval-AD9172)
   * Parts : [Dual, 11-Bit, 2.8 GSPS, TxDAC+® Digital-to-Analog Converter](https://www.analog.com/ad9135)
   * Parts : [Dual, 16-Bit, 2.8 GSPS, TxDAC+® Digital-to-Analog Converter](https://www.analog.com/ad9136)
   * Parts : [Quad, 16-Bit, 2.8 GSPS, TxDAC+® Digital-to-Analog Converter](https://www.analog.com/AD9144)

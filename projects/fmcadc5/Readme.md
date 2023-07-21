@@ -6,4 +6,4 @@ Here are some pointers to help you:
   * Project Doc: https://wiki.analog.com/resources/eval/user-guides/ad-fmcadc5-ebz
   * HDL Doc: https://wiki.analog.com/resources/eval/user-guides/ad-fmcadc5-ebz/quickstart/microblaze
   * HDL Doc: https://wiki.analog.com/resources/eval/user-guides/ad-fmcadc5-ebz
-  * Linux Drivers: https://wiki.analog.com/resources/tools-software/linux-drivers-all
+  * Linux Drivers: https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/axi-adc-hdl

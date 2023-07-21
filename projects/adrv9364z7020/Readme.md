@@ -56,7 +56,7 @@ FMC & BOB carrier designs includes loopback daughtercards for connectivity testi
 
 Here are some pointers to help you:
   * [Board Product Page](https://www.analog.com/adrv9364-z7020)
-  * Parts : [RF Agile Transceiver](https://www.analog.com/ad9361)
+  * Parts : [RF Agile Transceiver](https://www.analog.com/ad9364)
   * Project Doc: https://wiki.analog.com/resources/eval/user-guides/adrv9364-z7020
   * HDL Doc:  https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms4-ebz
   * Linux Drivers: https://wiki.analog.com/resources/tools-software/linux-drivers/iio-transceiver/ad9361
