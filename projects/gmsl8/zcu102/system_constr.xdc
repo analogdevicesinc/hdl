@@ -10,6 +10,7 @@ set_property -dict {PACKAGE_PIN AE2 IOSTANDARD MIPI_DPHY_DCI   DIFF_TERM_ADV TER
 set_property -dict {PACKAGE_PIN AJ5 IOSTANDARD MIPI_DPHY_DCI   DIFF_TERM_ADV TERM_100} [get_ports mipi_ch0_clk_n];
 set_property -dict {PACKAGE_PIN AJ6 IOSTANDARD MIPI_DPHY_DCI   DIFF_TERM_ADV TERM_100} [get_ports mipi_ch0_clk_p];
 
+set_property -dict {PACKAGE_PIN A20 IOSTANDARD LVCMOS33} [get_ports gpio_pmod_0]
 # RX bitslice pins
 set_property -dict {PACKAGE_PIN AH1 IOSTANDARD LVCMOS12        DATA_RATE DDR}          [get_ports bg3_pin6_nc_0];
 
