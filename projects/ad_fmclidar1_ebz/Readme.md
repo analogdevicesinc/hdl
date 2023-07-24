@@ -154,5 +154,5 @@ Here are some pointers to help you:
            [Micropower, Precision, Auto Qualified 2.5V Voltage Reference](https://www.analog.com/adr3525)
            [Low IQ Boost/SEPIC/Flyback/Inverting Converter with 0.5A, 140V Switch](https://www.analog.com/lt8331)
   * Project Doc: https://wiki.analog.com/resources/eval/user-guides/ad-fmclidar1-ebz
-  * HDL Doc: https://wiki.analog.com/resources/fpga/docs/hdl
+  * HDL Doc: https://wiki.analog.com/resources/eval/user-guides/ad-fmclidar1-ebz
   * Linux Drivers: https://wiki.analog.com/resources/fpga/docs/axi_laser_driver

@@ -1,4 +1,4 @@
-# AD4134 HDL Project
+# AD4134-FMC HDL Project
 
 Here are some pointers to help you:
   * [Board Product Page](https://www.analog.com/EVAL-AD4134)
