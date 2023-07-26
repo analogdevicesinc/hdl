@@ -32,6 +32,7 @@ if {![info exists INTF_CFG]} {
 }
 
 # Common parameter for TX and RX
+set MUX_SEL  $ad_project_params(MUX_SEL)
 set JESD_MODE  $ad_project_params(JESD_MODE)
 set RX_LANE_RATE $ad_project_params(RX_LANE_RATE)
 set TX_LANE_RATE $ad_project_params(TX_LANE_RATE)
@@ -224,13 +225,23 @@ if {$INTF_CFG != "TX"} {
   ad_ip_parameter axi_mxfe_rx_jesd/rx CONFIG.SYSREF_IOB false
   ad_ip_parameter axi_mxfe_rx_jesd/rx CONFIG.NUM_INPUT_PIPELINE 1
 
-  adi_tpl_jesd204_rx_create rx_mxfe_tpl_core $RX_NUM_OF_LANES \
-                                            $RX_NUM_OF_CONVERTERS \
-                                            $RX_SAMPLES_PER_FRAME \
-                                            $RX_SAMPLE_WIDTH \
-                                            $RX_DATAPATH_WIDTH \
-                                            $RX_DMA_SAMPLE_WIDTH
-
+  if {$MUX_SEL == 1} {
+    adi_tpl_jesd204_rx_create rx_mxfe_tpl_core $RX_NUM_OF_LANES \
+                                              $RX_NUM_OF_CONVERTERS \
+                                              $RX_SAMPLES_PER_FRAME \
+                                              $RX_SAMPLE_WIDTH \
+                                              $RX_DATAPATH_WIDTH \
+                                              $RX_DMA_SAMPLE_WIDTH
+    puts "MUX_SEL is ${MUX_SEL}"
+  } else {
+    adi_tpl_jesd204_rx_create rx_mxfe_tpl_cor2e $RX_NUM_OF_LANES \
+                                              $RX_NUM_OF_CONVERTERS \
+                                              $RX_SAMPLES_PER_FRAME \
+                                              $RX_SAMPLE_WIDTH \
+                                              $RX_DATAPATH_WIDTH \
+                                              $RX_DMA_SAMPLE_WIDTH
+    puts "MUX_SEL is ${MUX_SEL}"
+  }
   ad_ip_instance util_cpack2 util_mxfe_cpack [list \
     NUM_OF_CHANNELS $RX_NUM_OF_CONVERTERS \
     SAMPLES_PER_CHANNEL $RX_SAMPLES_PER_CHANNEL \
@@ -288,14 +299,31 @@ if {$INTF_CFG != "RX"} {
   ad_ip_parameter axi_mxfe_tx_jesd/tx CONFIG.SYSREF_IOB false
   #ad_ip_parameter axi_mxfe_tx_jesd/tx CONFIG.NUM_OUTPUT_PIPELINE 1
 
-  adi_tpl_jesd204_tx_create tx_mxfe_tpl_core $TX_NUM_OF_LANES \
+  if {$MUX_SEL == 1} {
+    adi_tpl_jesd204_tx_create tx_mxfe_tpl_core $TX_NUM_OF_LANES \
+                                              $TX_NUM_OF_CONVERTERS \
+                                              $TX_SAMPLES_PER_FRAME \
+                                              $TX_SAMPLE_WIDTH \
+                                              $TX_DATAPATH_WIDTH \
+                                              $TX_DMA_SAMPLE_WIDTH
+    puts "MUX_SEL is ${MUX_SEL}"
+  } else {
+  adi_tpl_jesd204_tx_create tx_mxfe_tpl_cor2e $TX_NUM_OF_LANES \
                                             $TX_NUM_OF_CONVERTERS \
                                             $TX_SAMPLES_PER_FRAME \
                                             $TX_SAMPLE_WIDTH \
                                             $TX_DATAPATH_WIDTH \
                                             $TX_DMA_SAMPLE_WIDTH
+    puts "MUX_SEL is ${MUX_SEL}"
+  }
 
-  ad_ip_parameter tx_mxfe_tpl_core/dac_tpl_core CONFIG.IQCORRECTION_DISABLE 0
+  if {$MUX_SEL == 1} {
+    puts "MUX_SEL is ${MUX_SEL}"
+    ad_ip_parameter tx_mxfe_tpl_core/dac_tpl_core CONFIG.IQCORRECTION_DISABLE 0
+  } else {
+    puts "MUX_SEL is ${MUX_SEL}"
+    ad_ip_parameter tx_mxfe_tpl_cor2e/dac_tpl_core CONFIG.IQCORRECTION_DISABLE 0
+  }
 
   ad_ip_instance util_upack2 util_mxfe_upack [list \
     NUM_OF_CHANNELS $TX_NUM_OF_CONVERTERS \
@@ -388,7 +416,12 @@ if {$ADI_PHY_SEL == 1} {
 if {$INTF_CFG != "TX"} {
   # RX connections
   # Device clock domain
-  ad_connect  rx_device_clk rx_mxfe_tpl_core/link_clk
+
+  if {$MUX_SEL == 1} {
+    ad_connect  rx_device_clk rx_mxfe_tpl_core/link_clk
+  } else {
+    ad_connect  rx_device_clk rx_mxfe_tpl_cor2e/link_clk
+  }
   ad_connect  rx_device_clk util_mxfe_cpack/clk
   ad_connect  rx_device_clk $adc_data_offload_name/s_axis_aclk
 
@@ -403,17 +436,31 @@ if {$INTF_CFG != "TX"} {
   ad_connect  $sys_cpu_resetn $adc_data_offload_name/s_axi_aresetn
 
   # Link Layer to Transport Layer
-  ad_connect  axi_mxfe_rx_jesd/rx_sof rx_mxfe_tpl_core/link_sof
-  ad_connect  axi_mxfe_rx_jesd/rx_data_tdata rx_mxfe_tpl_core/link_data
-  ad_connect  axi_mxfe_rx_jesd/rx_data_tvalid rx_mxfe_tpl_core/link_valid
-
-  ad_connect rx_mxfe_tpl_core/adc_valid_0 util_mxfe_cpack/fifo_wr_en
-  for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
-    ad_connect  rx_mxfe_tpl_core/adc_enable_$i util_mxfe_cpack/enable_$i
-    ad_connect  rx_mxfe_tpl_core/adc_data_$i util_mxfe_cpack/fifo_wr_data_$i
+  if {$MUX_SEL == 1} {
+    ad_connect  axi_mxfe_rx_jesd/rx_sof rx_mxfe_tpl_core/link_sof
+    ad_connect  axi_mxfe_rx_jesd/rx_data_tdata rx_mxfe_tpl_core/link_data
+    ad_connect  axi_mxfe_rx_jesd/rx_data_tvalid rx_mxfe_tpl_core/link_valid
+    ad_connect rx_mxfe_tpl_core/adc_valid_0 util_mxfe_cpack/fifo_wr_en
+  } else {
+    ad_connect  axi_mxfe_rx_jesd/rx_sof rx_mxfe_tpl_cor2e/link_sof
+    ad_connect  axi_mxfe_rx_jesd/rx_data_tdata rx_mxfe_tpl_cor2e/link_data
+    ad_connect  axi_mxfe_rx_jesd/rx_data_tvalid rx_mxfe_tpl_cor2e/link_valid
+    ad_connect rx_mxfe_tpl_cor2e/adc_valid_0 util_mxfe_cpack/fifo_wr_en
   }
-  ad_connect rx_mxfe_tpl_core/adc_dovf util_mxfe_cpack/fifo_wr_overflow
 
+  if {$MUX_SEL == 1} {
+    for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
+      ad_connect  rx_mxfe_tpl_core/adc_enable_$i util_mxfe_cpack/enable_$i
+      ad_connect  rx_mxfe_tpl_core/adc_data_$i util_mxfe_cpack/fifo_wr_data_$i
+    }
+    ad_connect rx_mxfe_tpl_core/adc_dovf util_mxfe_cpack/fifo_wr_overflow
+  } else {
+    for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
+      ad_connect  rx_mxfe_tpl_cor2e/adc_enable_$i util_mxfe_cpack/enable_$i
+      ad_connect  rx_mxfe_tpl_cor2e/adc_data_$i util_mxfe_cpack/fifo_wr_data_$i
+    }
+    ad_connect rx_mxfe_tpl_cor2e/adc_dovf util_mxfe_cpack/fifo_wr_overflow
+  }
   ad_connect  util_mxfe_cpack/packed_fifo_wr_data $adc_data_offload_name/s_axis_tdata
   ad_connect  util_mxfe_cpack/packed_fifo_wr_en $adc_data_offload_name/s_axis_tvalid
   ad_connect  $adc_data_offload_name/s_axis_tlast GND
@@ -428,7 +475,11 @@ if {$INTF_CFG != "TX"} {
   if {$ADI_PHY_SEL == 1} {
     ad_cpu_interconnect 0x44a60000 axi_mxfe_rx_xcvr
   }
-  ad_cpu_interconnect 0x44a10000 rx_mxfe_tpl_core
+  if {$MUX_SEL == 1} {
+    ad_cpu_interconnect 0x44a10000 rx_mxfe_tpl_core
+  } else {
+    ad_cpu_interconnect 0x44a10000 rx_mxfe_tpl_cor2e
+  }
   ad_cpu_interconnect 0x44a90000 axi_mxfe_rx_jesd
   ad_cpu_interconnect 0x7c420000 axi_mxfe_rx_dma
   ad_cpu_interconnect 0x7c450000 $adc_data_offload_name
@@ -447,7 +498,11 @@ if {$INTF_CFG != "TX"} {
 if {$INTF_CFG != "RX"} {
   # TX connections
   # Device clock domain
-  ad_connect  tx_device_clk tx_mxfe_tpl_core/link_clk
+  if {$MUX_SEL == 1} {
+    ad_connect  tx_device_clk tx_mxfe_tpl_core/link_clk
+  } else {
+    ad_connect  tx_device_clk tx_mxfe_tpl_cor2e/link_clk
+  }
   ad_connect  tx_device_clk util_mxfe_upack/clk
   ad_connect  tx_device_clk $dac_data_offload_name/m_axis_aclk
 
@@ -462,20 +517,37 @@ if {$INTF_CFG != "RX"} {
   ad_connect  $sys_cpu_resetn $dac_data_offload_name/s_axi_aresetn
 
   # Link Layer to Transport Layer
-  ad_connect  tx_mxfe_tpl_core/link axi_mxfe_tx_jesd/tx_data
+  if {$MUX_SEL == 1} {
+    ad_connect  tx_mxfe_tpl_core/link axi_mxfe_tx_jesd/tx_data
 
-  ad_connect  tx_mxfe_tpl_core/dac_valid_0 util_mxfe_upack/fifo_rd_en
-  for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
-    ad_connect  util_mxfe_upack/fifo_rd_data_$i tx_mxfe_tpl_core/dac_data_$i
-    ad_connect  tx_mxfe_tpl_core/dac_enable_$i  util_mxfe_upack/enable_$i
+    ad_connect  tx_mxfe_tpl_core/dac_valid_0 util_mxfe_upack/fifo_rd_en
+    for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
+      ad_connect  util_mxfe_upack/fifo_rd_data_$i tx_mxfe_tpl_core/dac_data_$i
+      ad_connect  tx_mxfe_tpl_core/dac_enable_$i  util_mxfe_upack/enable_$i
+    }
+
+    ad_connect $dac_data_offload_name/s_axis axi_mxfe_tx_dma/m_axis
+
+    ad_connect  util_mxfe_upack/s_axis $dac_data_offload_name/m_axis
+
+    ad_connect $dac_data_offload_name/init_req axi_mxfe_tx_dma/m_axis_xfer_req
+    ad_connect tx_mxfe_tpl_core/dac_dunf GND
+  } else {
+    ad_connect  tx_mxfe_tpl_cor2e/link axi_mxfe_tx_jesd/tx_data
+
+    ad_connect  tx_mxfe_tpl_cor2e/dac_valid_0 util_mxfe_upack/fifo_rd_en
+    for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
+      ad_connect  util_mxfe_upack/fifo_rd_data_$i tx_mxfe_tpl_cor2e/dac_data_$i
+      ad_connect  tx_mxfe_tpl_cor2e/dac_enable_$i  util_mxfe_upack/enable_$i
+    }
+
+    ad_connect $dac_data_offload_name/s_axis axi_mxfe_tx_dma/m_axis
+
+    ad_connect  util_mxfe_upack/s_axis $dac_data_offload_name/m_axis
+
+    ad_connect $dac_data_offload_name/init_req axi_mxfe_tx_dma/m_axis_xfer_req
+    ad_connect tx_mxfe_tpl_cor2e/dac_dunf GND
   }
-
-  ad_connect $dac_data_offload_name/s_axis axi_mxfe_tx_dma/m_axis
-
-  ad_connect  util_mxfe_upack/s_axis $dac_data_offload_name/m_axis
-
-  ad_connect $dac_data_offload_name/init_req axi_mxfe_tx_dma/m_axis_xfer_req
-  ad_connect tx_mxfe_tpl_core/dac_dunf GND
 
   # Interconnect
   if {$ADI_PHY_SEL == 1} {
@@ -483,7 +555,11 @@ if {$INTF_CFG != "RX"} {
     ad_cpu_interconnect 0x44b60000 axi_mxfe_tx_xcvr
   }
   # CPU
-  ad_cpu_interconnect 0x44b10000 tx_mxfe_tpl_core
+  if {$MUX_SEL == 1} {
+    ad_cpu_interconnect 0x44b10000 tx_mxfe_tpl_core
+  } else {
+    ad_cpu_interconnect 0x44b10000 tx_mxfe_tpl_cor2e
+  }
   ad_cpu_interconnect 0x44b90000 axi_mxfe_tx_jesd
   ad_cpu_interconnect 0x7c430000 axi_mxfe_tx_dma
   ad_cpu_interconnect 0x7c440000 $dac_data_offload_name
@@ -534,19 +610,36 @@ create_bd_port -dir I ext_sync_in
 
 if {$INTF_CFG != "TX"} {
   # ADC (Rx) external sync
-  ad_ip_parameter rx_mxfe_tpl_core/adc_tpl_core CONFIG.EXT_SYNC 1
-  ad_connect ext_sync_in rx_mxfe_tpl_core/adc_tpl_core/adc_sync_in
-  if {$INTF_CFG == "RXTX"} {
-    # Rx & Tx
-    ad_ip_instance util_vector_logic manual_sync_or [list \
-      C_SIZE 1 \
-      C_OPERATION {or} \
-    ]
-    ad_connect rx_mxfe_tpl_core/adc_tpl_core/adc_sync_manual_req_out manual_sync_or/Op1
-    ad_connect manual_sync_or/Res rx_mxfe_tpl_core/adc_tpl_core/adc_sync_manual_req_in
+  if {$MUX_SEL == 1} {
+    ad_ip_parameter rx_mxfe_tpl_core/adc_tpl_core CONFIG.EXT_SYNC 1
+    ad_connect ext_sync_in rx_mxfe_tpl_core/adc_tpl_core/adc_sync_in
+    if {$INTF_CFG == "RXTX"} {
+      # Rx & Tx
+      ad_ip_instance util_vector_logic manual_sync_or [list \
+        C_SIZE 1 \
+        C_OPERATION {or} \
+      ]
+      ad_connect rx_mxfe_tpl_core/adc_tpl_core/adc_sync_manual_req_out manual_sync_or/Op1
+      ad_connect manual_sync_or/Res rx_mxfe_tpl_core/adc_tpl_core/adc_sync_manual_req_in
+    } else {
+      # Only Rx
+      ad_connect rx_mxfe_tpl_core/adc_tpl_core/adc_sync_manual_req_out rx_mxfe_tpl_core/adc_tpl_core/adc_sync_manual_req_in
+    }
   } else {
-    # Only Rx
-    ad_connect rx_mxfe_tpl_core/adc_tpl_core/adc_sync_manual_req_out rx_mxfe_tpl_core/adc_tpl_core/adc_sync_manual_req_in
+    ad_ip_parameter rx_mxfe_tpl_cor2e/adc_tpl_core CONFIG.EXT_SYNC 1
+    ad_connect ext_sync_in rx_mxfe_tpl_cor2e/adc_tpl_core/adc_sync_in
+    if {$INTF_CFG == "RXTX"} {
+      # Rx & Tx
+      ad_ip_instance util_vector_logic manual_sync_or [list \
+        C_SIZE 1 \
+        C_OPERATION {or} \
+      ]
+      ad_connect rx_mxfe_tpl_cor2e/adc_tpl_core/adc_sync_manual_req_out manual_sync_or/Op1
+      ad_connect manual_sync_or/Res rx_mxfe_tpl_cor2e/adc_tpl_core/adc_sync_manual_req_in
+    } else {
+      # Only Rx
+      ad_connect rx_mxfe_tpl_cor2e/adc_tpl_core/adc_sync_manual_req_out rx_mxfe_tpl_cor2e/adc_tpl_core/adc_sync_manual_req_in
+    }
   }
   # Reset pack cores
   ad_ip_instance util_reduced_logic cpack_rst_logic
@@ -562,7 +655,11 @@ if {$INTF_CFG != "TX"} {
   ad_ip_instance xlconcat cpack_reset_sources
   ad_ip_parameter cpack_reset_sources config.num_ports {3}
   ad_connect rx_device_clk_rstgen/peripheral_reset cpack_reset_sources/in0
-  ad_connect rx_mxfe_tpl_core/adc_tpl_core/adc_rst cpack_reset_sources/in1
+  if {$MUX_SEL == 1} {
+    ad_connect rx_mxfe_tpl_core/adc_tpl_core/adc_rst cpack_reset_sources/in1
+  } else {
+    ad_connect rx_mxfe_tpl_cor2e/adc_tpl_core/adc_rst cpack_reset_sources/in1
+  }
   ad_connect rx_do_rstout_logic/res cpack_reset_sources/in2
 
   ad_connect cpack_reset_sources/dout cpack_rst_logic/op1
@@ -570,15 +667,28 @@ if {$INTF_CFG != "TX"} {
 }
 if {$INTF_CFG != "RX"} {
   # DAC (Tx) external sync
-  ad_ip_parameter tx_mxfe_tpl_core/dac_tpl_core CONFIG.EXT_SYNC 1
-  ad_connect ext_sync_in tx_mxfe_tpl_core/dac_tpl_core/dac_sync_in
-  if {$INTF_CFG == "RXTX"} {
-    # Rx & Tx
-    ad_connect tx_mxfe_tpl_core/dac_tpl_core/dac_sync_manual_req_out manual_sync_or/Op2
-    ad_connect manual_sync_or/Res tx_mxfe_tpl_core/dac_tpl_core/dac_sync_manual_req_in
+  if {$MUX_SEL == 1} {
+    ad_ip_parameter tx_mxfe_tpl_core/dac_tpl_core CONFIG.EXT_SYNC 1
+    ad_connect ext_sync_in tx_mxfe_tpl_core/dac_tpl_core/dac_sync_in
+    if {$INTF_CFG == "RXTX"} {
+      # Rx & Tx
+      ad_connect tx_mxfe_tpl_core/dac_tpl_core/dac_sync_manual_req_out manual_sync_or/Op2
+      ad_connect manual_sync_or/Res tx_mxfe_tpl_core/dac_tpl_core/dac_sync_manual_req_in
+    } else {
+      # Only Tx
+      ad_connect tx_mxfe_tpl_core/dac_tpl_core/dac_sync_manual_req_out tx_mxfe_tpl_core/dac_tpl_core/dac_sync_manual_req_in
+    }
   } else {
-    # Only Tx
-    ad_connect tx_mxfe_tpl_core/dac_tpl_core/dac_sync_manual_req_out tx_mxfe_tpl_core/dac_tpl_core/dac_sync_manual_req_in
+    ad_ip_parameter tx_mxfe_tpl_cor2e/dac_tpl_core CONFIG.EXT_SYNC 1
+    ad_connect ext_sync_in tx_mxfe_tpl_cor2e/dac_tpl_core/dac_sync_in
+    if {$INTF_CFG == "RXTX"} {
+      # Rx & Tx
+      ad_connect tx_mxfe_tpl_cor2e/dac_tpl_core/dac_sync_manual_req_out manual_sync_or/Op2
+      ad_connect manual_sync_or/Res tx_mxfe_tpl_cor2e/dac_tpl_core/dac_sync_manual_req_in
+    } else {
+      # Only Tx
+      ad_connect tx_mxfe_tpl_cor2e/dac_tpl_core/dac_sync_manual_req_out tx_mxfe_tpl_cor2e/dac_tpl_core/dac_sync_manual_req_in
+    }
   }
   # Reset upack cores
   ad_ip_instance util_reduced_logic upack_rst_logic
@@ -588,7 +698,12 @@ if {$INTF_CFG != "RX"} {
   ad_ip_instance xlconcat upack_reset_sources
   ad_ip_parameter upack_reset_sources config.num_ports {2}
   ad_connect tx_device_clk_rstgen/peripheral_reset upack_reset_sources/in0
-  ad_connect tx_mxfe_tpl_core/dac_tpl_core/dac_rst upack_reset_sources/in1
+
+  if {$MUX_SEL == 1} {
+    ad_connect tx_mxfe_tpl_core/dac_tpl_core/dac_rst upack_reset_sources/in1
+  } else {
+    ad_connect tx_mxfe_tpl_cor2e/dac_tpl_core/dac_rst upack_reset_sources/in1
+  }
 
   ad_connect upack_reset_sources/dout upack_rst_logic/op1
   ad_connect upack_rst_logic/res util_mxfe_upack/reset
