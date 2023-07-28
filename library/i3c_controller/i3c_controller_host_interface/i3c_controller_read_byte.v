@@ -38,23 +38,23 @@
  */
 
 `timescale 1ns/100ps
-`default_nettype none
+`default_nettype wire
 
 module i3c_controller_read_byte (
-  input  wire clk,
-  input  wire reset_n,
+  input  clk,
+  input  reset_n,
 
-  output wire u32_ready,
-  input  wire u32_valid,
-  input  wire [31:0] u32,
+  output u32_ready,
+  input  u32_valid,
+  input  [31:0] u32,
 
-  output wire u8_len_ready,
-  input  wire u8_len_valid,
-  input  wire [11:0] u8_len,
+  output u8_len_ready,
+  input  u8_len_valid,
+  input  [11:0] u8_len,
 
-  input  wire u8_ready,
-  output wire u8_valid,
-  output wire [7:0] u8
+  input  u8_ready,
+  output u8_valid,
+  output [7:0] u8
 );
   reg [1:0] sm;
   localparam [1:0]

@@ -1,5 +1,5 @@
 ####################################################################################
-## Copyright (c) 2018 - 2021 Analog Devices, Inc.
+## Copyright (c) 2023 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
@@ -18,12 +18,14 @@ GENERIC_DEPS += i3c_controller_clk_div.v
 XILINX_DEPS += i3c_controller_core_constr.ttcl
 XILINX_DEPS += i3c_controller_core_ip.tcl
 
-XILINX_DEPS += ../../i3c_controller/interfaces/i3c_controller_ctrl.xml
-XILINX_DEPS += ../../i3c_controller/interfaces/i3c_controller_ctrl_rtl.xml
-XILINX_DEPS += ../../i3c_controller/interfaces/i3c_controller.xml
-XILINX_DEPS += ../../i3c_controller/interfaces/i3c_controller_rtl.xml
+XILINX_DEPS += ../../i3c_controller/interfaces/i3c_controller_sdio.xml
+XILINX_DEPS += ../../i3c_controller/interfaces/i3c_controller_sdio_rtl.xml
+XILINX_DEPS += ../../i3c_controller/interfaces/i3c_controller_cmdp.xml
+XILINX_DEPS += ../../i3c_controller/interfaces/i3c_controller_cmdp_rtl.xml
 XILINX_DEPS += ../../i3c_controller/interfaces/i3c_controller_rmap.xml
 XILINX_DEPS += ../../i3c_controller/interfaces/i3c_controller_rmap_rtl.xml
+XILINX_DEPS += ../../i3c_controller/interfaces/i3c_controller.xml
+XILINX_DEPS += ../../i3c_controller/interfaces/i3c_controller_rtl.xml
 
 INTEL_DEPS += i3c_controller_core_hw.tcl
 

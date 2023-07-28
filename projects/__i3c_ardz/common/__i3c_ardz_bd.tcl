@@ -2,14 +2,13 @@ create_bd_intf_port -mode Master -vlnv analog.com:interface:i3c_controller_rtl:1
 
 source $ad_hdl_dir/library/i3c_controller/scripts/i3c_controller.tcl
 
-set async_i3c_clk 0
+set async_clk 0
 set sim_device "7SERIES"
-set clk_div "4"
 set offload 1
 
 set hier_i3c_controller i3c_controller_0
 
-i3c_controller_create $hier_i3c_controller $async_i3c_clk $clk_div $sim_device $offload
+i3c_controller_create $hier_i3c_controller $async_clk $sim_device $offload
 
 # pwm to trigger on offload data burst
 ad_ip_instance axi_pwm_gen i3c_offload_pwm
@@ -41,7 +40,7 @@ ad_connect $sys_cpu_clk i3c_offload_dma/s_axis_aclk
 ad_connect sys_cpu_resetn $hier_i3c_controller/reset_n
 ad_connect sys_cpu_resetn i3c_offload_dma/m_dest_axi_aresetn
 
-ad_cpu_interconnect 0x44a00000 $hier_i3c_controller/axi_regmap
+ad_cpu_interconnect 0x44a00000 $hier_i3c_controller/host_interface
 ad_cpu_interconnect 0x44a30000 i3c_offload_dma
 ad_cpu_interconnect 0x44b00000 i3c_offload_pwm
 

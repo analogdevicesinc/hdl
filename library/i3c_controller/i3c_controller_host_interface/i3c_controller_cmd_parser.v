@@ -44,42 +44,42 @@
  */
 
 `timescale 1ns/100ps
-`default_nettype none
+`default_nettype wire
 
 module i3c_controller_cmd_parser (
-  input  wire clk,
-  input  wire reset_n,
+  input  clk,
+  input  reset_n,
 
   // Command FIFO
 
-  output wire cmd_ready,
-  input  wire cmd_valid,
-  input  wire [31:0] cmd,
+  output cmd_ready,
+  input  cmd_valid,
+  input  [31:0] cmd,
 
-  input  wire cmdr_ready,
-  output wire cmdr_valid,
-  output wire [31:0] cmdr,
+  input  cmdr_ready,
+  output cmdr_valid,
+  output [31:0] cmdr,
 
   // Command parsed
 
-  output wire        cmdp_valid,
-  input  wire        cmdp_ready,
-  output wire        cmdp_ccc,
-  output wire        cmdp_ccc_bcast,
-  output wire [6:0]  cmdp_ccc_id,
-  output wire        cmdp_bcast_header,
-  output wire [1:0]  cmdp_xmit,
-  output wire        cmdp_sr,
-  output wire [11:0] cmdp_buffer_len,
-  output wire [6:0]  cmdp_da,
-  output wire        cmdp_rnw,
-  input  wire        cmdp_cancelled,
+  output        cmdp_valid,
+  input         cmdp_ready,
+  output        cmdp_ccc,
+  output        cmdp_ccc_bcast,
+  output [6:0]  cmdp_ccc_id,
+  output        cmdp_bcast_header,
+  output [1:0]  cmdp_xmit,
+  output        cmdp_sr,
+  output [11:0] cmdp_buffer_len,
+  output [6:0]  cmdp_da,
+  output        cmdp_rnw,
+  input         cmdp_cancelled,
 
-  input  wire rd_bytes_ready,
-  output wire rd_bytes_valid,
-  input  wire wr_bytes_ready,
-  output wire wr_bytes_valid,
-  input  wire [11:0] wr_bytes_lvl
+  input  rd_bytes_ready,
+  output rd_bytes_valid,
+  input  wr_bytes_ready,
+  output wr_bytes_valid,
+  input  [11:0] wr_bytes_lvl
 );
   wire [11:0] cmdr1_len;
   wire buffer_len_valid;

@@ -38,60 +38,61 @@
 `include "i3c_controller_bit_mod_cmd.v"
 `include "i3c_controller_word_cmd.v"
 
+`define CLK_DIV "4"
+`define MAX_DEVS 15
+
 module i3c_controller_core #(
-  parameter SIM_DEVICE = "7SERIES",
-  parameter CLK_DIV = "4",
-  parameter MAX_DEVS = 15
+  parameter SIM_DEVICE = "7SERIES"
 ) (
-  input  wire clk,
-  input  wire reset_n,
+  input clk,
+  input reset_n,
 
   // Command parsed
 
-  input  wire        cmdp_valid,
-  input  wire        cmdp_ccc,
-  input  wire        cmdp_ccc_bcast,
-  input  wire [6:0]  cmdp_ccc_id,
-  input  wire        cmdp_bcast_header,
-  input  wire [1:0]  cmdp_xmit,
-  input  wire        cmdp_sr,
-  input  wire [11:0] cmdp_buffer_len,
-  input  wire [6:0]  cmdp_da,
-  input  wire        cmdp_rnw,
-  output wire        cmdp_ready,
-  output wire        cmdp_cancelled,
-  output wire        cmdp_idle_bus,
+  input         cmdp_valid,
+  input         cmdp_ccc,
+  input         cmdp_ccc_bcast,
+  input  [6:0]  cmdp_ccc_id,
+  input         cmdp_bcast_header,
+  input  [1:0]  cmdp_xmit,
+  input         cmdp_sr,
+  input  [11:0] cmdp_buffer_len,
+  input  [6:0]  cmdp_da,
+  input         cmdp_rnw,
+  output        cmdp_ready,
+  output        cmdp_cancelled,
+  output        cmdp_idle_bus,
 
   // Byte stream
 
-  output wire sdo_ready,
-  input  wire sdo_valid,
-  input  wire [7:0] sdo,
+  output sdo_ready,
+  input  sdo_valid,
+  input  [7:0] sdo,
 
-  input  wire sdi_ready,
-  output wire sdi_valid,
-  output wire [7:0] sdi,
+  input  sdi_ready,
+  output sdi_valid,
+  output [7:0] sdi,
 
-  input  wire ibi_ready,
-  output wire ibi_valid,
-  output wire [14:0] ibi,
+  input  ibi_ready,
+  output ibi_valid,
+  output [14:0] ibi,
 
   // uP accessible info
 
-  output wire rmap_daa_status,
-  input  wire [1:0] rmap_ibi_config,
-  input  wire [29:0] rmap_devs_ctrl_mr,
-  output wire [14:0] rmap_devs_ctrl,
-  output wire rmap_dev_char_e,
-  output wire rmap_dev_char_we,
-  output wire [5:0]  rmap_dev_char_addr,
-  output wire [31:0] rmap_dev_char_wdata,
-  input  wire [8:0]  rmap_dev_char_rdata,
+  output rmap_daa_status,
+  input  [1:0] rmap_ibi_config,
+  input  [29:0] rmap_devs_ctrl_mr,
+  output [14:0] rmap_devs_ctrl,
+  output rmap_dev_char_e,
+  output rmap_dev_char_we,
+  output [5:0]  rmap_dev_char_addr,
+  output [31:0] rmap_dev_char_wdata,
+  input  [8:0]  rmap_dev_char_rdata,
 
   // I3C bus signals
 
-  output wire scl,
-  inout  wire sda
+  output scl,
+  inout  sda
 );
   wire clk_out;
   wire [`MOD_BIT_CMD_WIDTH:0] cmd;
@@ -131,7 +132,7 @@ module i3c_controller_core #(
   wire idle_bus;
 
   i3c_controller_framing #(
-    .MAX_DEVS(MAX_DEVS)
+    .MAX_DEVS(`MAX_DEVS)
   ) i_i3c_controller_framing (
     .reset_n(reset_n),
     .clk(clk),
@@ -205,7 +206,7 @@ module i3c_controller_core #(
 
   i3c_controller_clk_div #(
     .SIM_DEVICE(SIM_DEVICE),
-    .CLK_DIV(CLK_DIV)
+    .CLK_DIV(`CLK_DIV)
   ) i_i3c_controller_clk_div (
     .reset_n(reset_n),
     .sel(clk_sel),

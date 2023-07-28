@@ -34,19 +34,19 @@
 // ***************************************************************************
 
 `timescale 1ns/100ps
-`default_nettype none
+`default_nettype wire
 
 module i3c_controller_write_ibi (
-  input  wire clk,
-  input  wire reset_n,
+  input  clk,
+  input  reset_n,
 
-  input  wire out_ready,
-  output wire out_valid,
-  output wire [31:0] out,
+  input  out_ready,
+  output out_valid,
+  output [31:0] out,
 
-  output wire in_ready,
-  input  wire in_valid,
-  input  wire [14:0] in
+  output in_ready,
+  input  in_valid,
+  input  [14:0] in
 );
   reg [0:0] sm;
   localparam [0:0]

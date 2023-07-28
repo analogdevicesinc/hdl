@@ -14,7 +14,6 @@ M_DEPS += ../../../library/i3c_controller/scripts/i3c_controller.tcl
 
 LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_sysid
-LIB_DEPS += i3c_controller/axi_i3c_controller
 LIB_DEPS += i3c_controller/i3c_controller_host_interface
 LIB_DEPS += i3c_controller/i3c_controller_core
 LIB_DEPS += sysid_rom

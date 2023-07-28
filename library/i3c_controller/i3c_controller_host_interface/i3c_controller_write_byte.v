@@ -40,24 +40,24 @@
  */
 
 `timescale 1ns/100ps
-`default_nettype none
+`default_nettype wire
 
 module i3c_controller_write_byte (
-  input  wire clk,
-  input  wire reset_n,
+  input  clk,
+  input  reset_n,
 
-  input  wire u32_ready,
-  output wire u32_valid,
-  output wire [31:0] u32,
+  input  u32_ready,
+  output u32_valid,
+  output [31:0] u32,
 
-  output wire u8_len_ready,
-  input  wire u8_len_valid,
-  input  wire [11:0] u8_len,
-  output reg  [11:0] u8_lvl,
+  output u8_len_ready,
+  input  u8_len_valid,
+  input  [11:0] u8_len,
+  output [11:0] u8_lvl,
 
-  output wire u8_ready,
-  input  wire u8_valid,
-  input  wire [7:0] u8
+  output u8_ready,
+  input  u8_valid,
+  input  [7:0] u8
 );
   reg [1:0] sm;
   localparam [1:0]
@@ -65,7 +65,8 @@ module i3c_controller_write_byte (
     transfer = 1,
     move     = 2;
 
-  reg [7:0] u32_reg [3:0];
+  reg [7:0]  u32_reg [3:0];
+  reg [11:0] u8_lvl_reg;
   reg [1:0] c;
 
   always @(posedge clk) begin
@@ -76,7 +77,7 @@ module i3c_controller_write_byte (
       case (sm)
         idle: begin
           if (u8_len_valid) begin
-            u8_lvl <= u8_len;
+            u8_lvl_reg <= u8_len;
           end
           sm <= u8_len_valid & u8_len != 0 & u32_ready ? transfer : idle;
           c <= 2'b00;
@@ -84,15 +85,15 @@ module i3c_controller_write_byte (
         transfer: begin
           if (u8_valid) begin // tick
             u32_reg[c] <= u8;
-            u8_lvl <= u8_lvl - 12'b1;
+            u8_lvl_reg <= u8_lvl_reg - 12'b1;
             c <= c + 1;
-            if (c == 2'b11 | u8_lvl == 12'd1) begin
+            if (c == 2'b11 | u8_lvl_reg == 12'd1) begin
               sm <= move;
             end
           end
         end
         move: begin
-          sm <= u32_ready ? (~|u8_lvl ? idle : transfer) : sm;
+          sm <= u32_ready ? (~|u8_lvl_reg ? idle : transfer) : sm;
         end
         default: begin
           sm <= idle;
@@ -102,8 +103,9 @@ module i3c_controller_write_byte (
   end
 
   assign u8_len_ready = sm == idle;
-  assign u8_ready = (sm == transfer & |u8_lvl);
+  assign u8_ready = (sm == transfer & |u8_lvl_reg);
   assign u32_valid = sm == move;
+  assign u8_lvl = u8_lvl_reg;
   genvar i;
   for (i=0; i<4; i=i+1) begin
     assign u32[8*i+7:8*i] = u32_reg[3-i];

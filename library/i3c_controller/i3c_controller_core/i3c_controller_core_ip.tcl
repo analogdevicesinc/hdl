@@ -82,7 +82,7 @@ adi_add_bus "rmap" "slave" \
 		{"rmap_dev_char_rdata"         "RMAP_DEV_CHAR_RDATA"} \
 		{"rmap_ibi_config"             "RMAP_IBI_CONFIG"} \
 	}
-adi_add_bus_clock "i3c_clk" "rmap" "i3c_reset_n" "master"
+adi_add_bus_clock "clk" "rmap" "reset_n" "master"
 
 ## Parameter validations
 
@@ -97,23 +97,6 @@ set_property -dict [list \
     } \
  ] \
  [ipx::get_user_parameters SIM_DEVICE -of_objects $cc]
-
-# TODO: Remove if we end up really only supporting one clock speed
-## CLK_DIV
-set_property -dict [list \
-  "value_validation_list" { \
-  "2" "3" "4" "5" "6" "7" "8" \
-  } \
- ] \
- [ipx::get_user_parameters CLK_DIV -of_objects $cc]
-
-## MAX_DEVS
-set_property -dict [list \
-  "value_validation_type" "range_long" \
-  "value_validation_range_minimum" "0" \
-  "value_validation_range_maximum" "15" \
- ] \
- [ipx::get_user_parameters MAX_DEVS -of_objects $cc]
 
 ## Customize IP Layout
 ## Remove the automatically generated GUI page
