@@ -1,0 +1,13 @@
+# This file contains code owners for PRs against next_stable branch.
+#
+# Code owners are added automatically as reviewers in PRs to next_stable
+# branch and all PRs will require approval of at least one codeowner.
+#
+# More general documentation about code owners can be found here:
+# https://github.blog/2017-07-06-introducing-code-owners/
+
+# CODEOWNERS file format: <pattern> + <mail address of one or more owners>
+# The last matching line will take precedence.
+
+##### Global code owners (for folders with no later match) #####
+*      adrian.costina@analog.com andrei.grozav@analog.com stefan.raus@analog.com
