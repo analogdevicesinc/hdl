@@ -49,28 +49,22 @@ Configuration Parameters
 Signal and Interface Pins
 --------------------------------------------------------------------------------
 
-.. list-table::
-   :widths: 10 25 65
-   :header-rows: 1
+.. hdl-interfaces::
 
-   * - Name
-     - Type
-     - Description
-   * - ``clk``
-     - Clock
+   * - clk
      - A signals of the module are synchronous to this clock.
-   * - ``resetn``
-     - Synchronous active-low reset
-     - Resets the internal state of the module.
-   * - ``s0_ctrl``
-     - :ref:`spi_engine control-interface` slave
-     - Connects to the first control interface master
-   * - ``s1_ctrl``
-     - :ref:`spi_engine control-interface` slave
-     - Connects to the second control interface master
-   * - ``m_ctrl``
-     - :ref:`spi_engine control-interface` master
-     - Connects to the control interface slave
+   * - resetn
+     - Synchronous active-low reset.
+       Resets the internal state of the module.
+   * - s0_ctrl
+     - :ref:`spi_engine control-interface` slave.
+       Connects to the first control interface master.
+   * - s1_ctrl
+     - :ref:`spi_engine control-interface` slave.
+       Connects to the second control interface master.
+   * - m_ctrl
+     - :ref:`spi_engine control-interface` master.
+       Connects to the control interface slave.
 
 Theory of Operation
 --------------------------------------------------------------------------------

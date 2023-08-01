@@ -1,9 +1,9 @@
 sphinx
+lxml
+furo
 wavedrom
 sphinxcontrib-wavedrom
 sphinxcontrib-mermaid
-sphinxcontrib-bibtex
 sphinxcontrib-svg2pdfconverter
-furo
 https://github.com/hdl/pyhdlparser/tarball/master
 https://github.com/hdl/symbolator/tarball/master
