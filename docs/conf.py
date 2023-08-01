@@ -18,7 +18,6 @@ sys.path.append(os.path.abspath("./extensions"))
 extensions = [
 	"sphinx.ext.todo",
 	"sphinx.ext.viewcode",
-	"sphinxcontrib.bibtex",
 	"sphinxcontrib.mermaid",
 	"sphinxcontrib.wavedrom",
 	"symbolator_sphinx",
@@ -31,7 +30,6 @@ templates_path = ['sources/template']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # -- Custom extensions configuration -------------------------------------------
-
 
 # -- todo configuration -------------------------------------------------------
 

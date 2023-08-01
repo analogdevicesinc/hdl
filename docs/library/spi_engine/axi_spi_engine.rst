@@ -32,7 +32,6 @@ Configuration Parameters
 --------------------------------------------------------------------------------
 
 .. hdl-parameters::
-   :path: library/spi_engine/axi_spi_engine
 
    * - ASYNC_SPI_CLK
      - If set to 1 the ``s_axi_aclk`` and ``spi_clk`` clocks are assumed
@@ -49,36 +48,28 @@ Configuration Parameters
 Signal and Interface Pins
 --------------------------------------------------------------------------------
 
-.. list-table::
-   :widths: 10 25 65
-   :header-rows: 1
+.. hdl-interfaces::
 
-   * - Name
-     - Type
-     - Description
-   * - ``s_axi_aclk``
-     - Clock
+   * - s_axi_aclk
      - All ``s_axi`` signals and ``irq`` are synchronous to this clock.
-   * - ``s_axi_aresetn``
-     - Synchronous active-low reset
-     - Resets the internal state of the peripheral.
-   * - ``s_axi``
-     - AXI-Lite bus slave
-     - Memory-mapped AXI-lite bus that provides access to modules register map.
-   * - ``irq``
-     - Level-High Interrupt
-     - Interrupt output of the module. Is asserted when at least one of the
+   * - s_axi_aresetn
+     - Synchronous active-low reset.
+       Resets the internal state of the peripheral.
+   * - s_axi
+     - AXI-Lite bus slave.
+       Memory-mapped AXI-lite bus that provides access to modules register map.
+   * - irq
+     - Level-High Interrupt.
+       Interrupt output of the module. Is asserted when at least one of the
        modules interrupt is pending and unmasked.
-   * - ``spi_clk``
-     - Clock
+   * - spi_clk
      - All ``spi_engine_ctrl`` signals and ``spi_resetn`` are
        synchronous to this clock.
-   * - ``spi_engine_ctrl``
-     - :ref:`spi_engine control-interface` slave
-     - SPI Engine Control stream that contains commands and data for the
+   * - spi_engine_ctrl
+     - :ref:`spi_engine control-interface` slave.
+       SPI Engine Control stream that contains commands and data for the
        execution module.
-   * - ``spi_resetn``
-     - Output
+   * - spi_resetn
      - This signal is asserted when the module is disabled through the ENABLE
        register. Typically used as the reset for the SPI Engine modules
        connected to these modules.

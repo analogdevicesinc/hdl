@@ -28,7 +28,6 @@ Configuration Parameters
 --------------------------------------------------------------------------------
 
 .. hdl-parameters::
-   :path: library/spi_engine/spi_engine_execution
 
    * - NUM_OF_CS
      - Number of chip-select signals for the SPI bus (min: 1, max: 8).
@@ -47,30 +46,22 @@ Configuration Parameters
 Signal and Interface Pins
 --------------------------------------------------------------------------------
 
-.. list-table::
-   :widths: 10 25 65
-   :header-rows: 1
+.. hdl-interfaces::
 
-   * - Name
-     - Type
-     - Description
-   * - ``clk``
-     - Clock
+   * - clk
      - All other signals are synchronous to this clock.
-   * - ``resetn``
-     - Synchronous active-low reset
+   * - resetn
      - Resets the internal state machine of the core.
-   * - ``active``
-     - Output
+   * - active
      - Indicates whether the peripheral is currently active and processing
        commands.
-   * - ``ctrl``
-     - :ref:`spi_engine control-interface` slave
-     - SPI Engine Control stream that contains commands and data for the
+   * - ctrl
+     - :ref:`spi_engine control-interface` slave.
+       SPI Engine Control stream that contains commands and data for the
        execution module.
-   * - ``spi``
-     - :ref:`spi_engine spi-bus-interface` master
-     - Low-level SPI bus interface that is controlled by peripheral.
+   * - spi
+     - :ref:`spi_engine spi-bus-interface` master.
+       Low-level SPI bus interface that is controlled by peripheral.
 
 Theory of Operation
 --------------------------------------------------------------------------------

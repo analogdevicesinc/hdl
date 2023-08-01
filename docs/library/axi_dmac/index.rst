@@ -1,6 +1,9 @@
 High-Speed DMA Controller
 ================================================================================
 
+.. symbolator:: ../../../library/axi_dmac/axi_dmac.v
+   :caption: axi_dmac
+
 The AXI DMAC is a high-speed, high-throughput, general purpose DMA controller
 intended to be used to transfer data between system memory and other peripherals
 like high-speed converters.
@@ -64,67 +67,47 @@ Block Diagram
 Configuration Parameters
 --------------------------------------------------------------------------------
 
-.. list-table::
-   :header-rows: 1
+.. hdl-parameters::
+   :path: library/axi_dmac
 
-   * - Name
-     - Description
-     - Default
-   * - ``ID``
+   * - ID
      - Instance identification number.
-     - 0
-   * - ``DMA_DATA_WIDTH_SRC``
+   * - DMA_DATA_WIDTH_SRC
      - Data path width of the source interface in bits.
-     - 64
-   * - ``DMA_DATA_WIDTH_DEST``
+   * - DMA_DATA_WIDTH_DEST
      - Data path width of the destination interface in bits.
-     - 64
-   * - ``DMA_LENGTH_WIDTH``
+   * - DMA_LENGTH_WIDTH
      - Width of transfer length control register in bits.
        Limits length of the transfers to 2*\*\ ``DMA_LENGTH_WIDTH``.
-     - 24
-   * - ``DMA_2D_TRANSFER``
+   * - DMA_2D_TRANSFER
      - Enable support for 2D transfers.
-     - 1
-   * - ``ASYNC_CLK_REQ_SRC``
+   * - ASYNC_CLK_REQ_SRC
      - Whether the request and source clock domains are asynchronous.
-     - 1
-   * - ``ASYNC_CLK_SRC_DEST``
+   * - ASYNC_CLK_SRC_DEST
      - Whether the source and destination clock domains are asynchronous.
-     - 1
-   * - ``ASYNC_CLK_DEST_REQ``
+   * - ASYNC_CLK_DEST_REQ
      - Whether the destination and request clock domains are asynchronous.
-     - 1
-   * - ``AXI_SLICE_DEST``
+   * - AXI_SLICE_DEST
      - Whether to insert a extra register slice on the source data path.
-     - 0
-   * - ``AXI_SLICE_SRC``
+   * - AXI_SLICE_SRC
      - Whether to insert a extra register slice on the destination data path.
-     - 0
-   * - ``SYNC_TRANSFER_START``
+   * - SYNC_TRANSFER_START
      - Enable the transfer start synchronization feature.
-     - 0
-   * - ``CYCLIC``
+   * - CYCLIC
      - Enable support for Cyclic transfers.
-     - 1
-   * - ``DMA_AXI_PROTOCOL_SRC``
+   * - DMA_AXI_PROTOCOL_SRC
      - AXI protocol version of the source interface (0 = AXI4, 1 = AXI3).
-     - 0
-   * - ``DMA_AXI_PROTOCOL_DEST``
+   * - DMA_AXI_PROTOCOL_DEST
      - AXI protocol version of the destionation interface (0 = AXI4, 1 = AXI3).
-     - 0
-   * - ``DMA_TYPE_SRC``
+   * - DMA_TYPE_SRC
      - Interface type for the source interface
        (0 = AXI-MM, 1 = AXI-Streaming, 2 = ADI-FIFO).
-     - 2
-   * - ``DMA_TYPE_DEST``
+   * - DMA_TYPE_DEST
      - Interface type for the destination interface
        (0 = AXI-MM, 1 = AXI-Streaming, 2 = ADI-FIFO).
-     - 0
-   * - ``DMA_AXI_ADDR_WIDTH``
+   * - DMA_AXI_ADDR_WIDTH
      - Maximum address width for AXI interfaces.
-     - 32
-   * - ``MAX_BYTES_PER_BURST``
+   * - MAX_BYTES_PER_BURST
      - Maximum size of bursts in bytes. Must be power of 2 in a range of 2
        beats to 4096 bytes
        The size of the burst is limited by the largest burst that both source
@@ -133,100 +116,71 @@ Configuration Parameters
        non AXI interfaces the maximum beats per burst is in theory unlimited
        but it is set to 1024 to provide a reasonable upper threshold.
        This limitation is done internally in the core.
-     - 128
-   * - ``FIFO_SIZE``
+   * - FIFO_SIZE
      - Size of the store-and-forward memory in bursts. Size of a burst is
        defined by the ``MAX_BYTES_PER_BURST`` parameter. Must be power of 2 in
        the range of 2 to 32.
-     - 4
-   * - ``DISABLE_DEBUG_REGISTERS``
+   * - DISABLE_DEBUG_REGISTERS
      - Disable debug registers.
-     - 0
-   * - ``ENABLE_DIAGNOSTICS_IF``
+   * - ENABLE_DIAGNOSTICS_IF
      - Add insight into internal operation of the core, for debug purposes
        only.
-     - 0
 
 Interface
 --------------------------------------------------------------------------------
 
-.. list-table::
-   :header-rows: 1
+.. hdl-interfaces::
 
-   * - Name
-     - Type
-     - Description
-   * - ``s_axi_aclk``
-     - Clock
+   * - s_axi_aclk
      - All ``s_axi`` signals and ``irq`` are synchronous to this clock.
-   * - ``s_axi_aresetn``
-     - Synchronous active low reset
+   * - s_axi_aresetn
      - Resets the internal state of the peripheral.
-   * - ``s_axi``
-     - AXI4-Lite bus slave
+   * - s_axi
      - Memory mapped AXI-lite bus that provides access to modules register map.
-   * - ``irq``
-     - Level-High Interrupt
+   * - irq
      - Interrupt output of the module. Is asserted when at least one of the
        modules interrupt is pending and enabled.
-   * - ``m_src_axi_aclk``
-     - Clock
-     - The ``m_src_axi`` interface is synchronous to this clock.
+   * - m_src_axi_aclk
+     - The m_src_axi interface is synchronous to this clock.
        Only present when ``DMA_TYPE_SRC`` parameter is set to AXI-MM (0).
-   * - ``m_src_axi_aresetn``
-     - Synchronous active low reset
+   * - m_src_axi_aresetn
      - Reset for the ``m_src_axi`` interface.
        Only present when ``DMA_TYPE_SRC`` parameter is set to AXI-MM (0).
-   * - ``m_src_axi``
-     - AXI3/AXI4 bus master
+   * - m_src_axi
      -
-   * - ``m_dest_axi_aclk``
-     - Clock
+   * - m_dest_axi_aclk
      - The ``m_src_axi`` interface is synchronous to this clock.
        Only present when ``DMA_TYPE_DEST`` parameter is set to AXI-MM (0).
-   * - ``m_dest_axi_aresetn``
-     - Synchronous active low reset
+   * - m_dest_axi_aresetn
      - Reset for the ``m_dest_axi`` interface.
        Only present when ``DMA_TYPE_DEST`` parameter is set to AXI-MM (0).
-   * - ``m_dest_axi``
-     - AXI3/AXI4 bus master
+   * - m_dest_axi
      -
-   * - ``s_axis_aclk``
-     - Clock
+   * - s_axis_aclk
      - The ``s_axis`` interface is synchronous to this clock.
        Only present when ``DMA_TYPE_SRC`` parameter is set to AXI-Streaming
        (1).
-   * - ``s_axis``
-     - AXI-streaming bus slave
-     -
-       Only present when ``DMA_TYPE_SRC`` parameter is set to AXI-Streaming
+   * - s_axis
+     - Only present when ``DMA_TYPE_SRC`` parameter is set to AXI-Streaming
        (1).
-   * - ``m_axis_aclk``
-     - Clock
+   * - m_axis_aclk
      - The ``m_axis`` interface is synchronous to this clock.
        Only present when ``DMA_TYPE_DEST`` parameter is set to AXI-Streaming
        (1).
-   * - ``m_axis``
-     - AXI-streaming bus master
+   * - m_axis
      - Only present when ``DMA_TYPE_DEST`` parameter is set to AXI-Streaming
        (1).
-   * - ``fifo_wr_clk``
-     - Clock
-     - The ``fifo_wr`` interface is synchronous to this clock.
+   * - fifo_wr_clk
+     - The fifo_wr interface is synchronous to this clock.
        Only present when ``DMA_TYPE_SRC`` parameter is set to FIFO (2).
-   * - ``fifo_wr``
-     - FIFO write interface
-     -
-       Only present when ``DMA_TYPE_SRC`` parameter is set to FIFO (2).
-   * - ``fifo_rd_clk``
-     - Clock
+   * - fifo_wr
+     - Only present when ``DMA_TYPE_SRC`` parameter is set to FIFO (2).
+   * - fifo_rd_clk
      - The ``fifo_rd`` interface is synchronous to this clock.
        Only present when ``DMA_TYPE_DEST`` parameter is set to FIFO (2).
-   * - ``fifo_rd``
-     - FIFO read interface
+   * - fifo_rd
      - Only present when ``DMA_TYPE_DEST`` parameter is set to FIFO (2).
-   * - ``dest_diag_level_bursts``
-     - Diagnostics interface
+   * - dest_diag_level_bursts
      - Only present when ``ENABLE_DIAGNOSTICS_IF`` parameter is set.
 
 Register Map

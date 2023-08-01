@@ -29,7 +29,6 @@ Configuration Parameters
 --------------------------------------------------------------------------------
 
 .. hdl-parameters::
-   :path: library/spi_engine/spi_engine_offload
 
    * - ASYNC_SPI_CLK
      - If set to 1 the ``ctrl_clk`` and ``spi_clk`` are assumed to be
@@ -44,34 +43,26 @@ Configuration Parameters
 Signal and Interface Pins
 --------------------------------------------------------------------------------
 
-.. list-table::
-   :widths: 10 25 65
-   :header-rows: 1
+.. hdl-interfaces::
 
-   * - Name
-     - Type
-     - Description
-   * - ``ctrl_clk``
-     - Clock
+   * - ctrl_clk
      - The ``spi_engine_offload_ctrl`` signals are synchronous to this clock.
-   * - ``spi_clk``
-     - Clock
+   * - spi_clk
      - The ``spi_engine_ctrl`` signals, ``offload_sdi`` signals and
        trigger are synchronous to this clock.
-   * - ``spi_resetn``
+   * - spi_resetn
      - Synchronous active low reset
      - Resets the internal state machine of the core.
-   * - ``trigger``
-     - Input
+   * - trigger
      - When asserted the stored command and data stream is send out on the
        ``spi_engine_ctrl`` interface.
-   * - ``spi_engine_offload_ctrl``
-     - :ref:`spi_engine offload-control-interface` slave
-     - Control interface which allows to re-program the stored command and SDO
+   * - spi_engine_offload_ctrl
+     - :ref:`spi_engine offload-control-interface` slave.
+       Control interface which allows to re-program the stored command and SDO
        data stream.
-   * - ``spi_engine_ctrl``
-     - :ref:`spi_engine control-interface` master
-     - SPI Engine Control stream that contains commands and data.
-   * - ``offload_sdi``
+   * - spi_engine_ctrl
+     - :ref:`spi_engine control-interface` master.
+       SPI Engine Control stream that contains commands and data.
+   * - offload_sdi
      - Streaming AXI master
-     - Output stream of the received SPI data.
+       Output stream of the received SPI data.

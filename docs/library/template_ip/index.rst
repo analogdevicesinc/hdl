@@ -5,6 +5,9 @@
 IP Template
 ================================================================================
 
+.. symbolator:: ../../../library/spi_engine/spi_engine_execution/spi_engine_execution.v
+   :caption: spi_engine_execution
+
 Features
 --------------------------------------------------------------------------------
 

@@ -16,13 +16,6 @@ HDL Reference Designs
 
    contributing/guidelines
 
-.. toctree::
-   :caption: Appendix
-   :hidden:
-
-   appendix/glossary
-   appendix/bibliography
-
 .. attention::
 
    Work-in-progress, not all content available at the
