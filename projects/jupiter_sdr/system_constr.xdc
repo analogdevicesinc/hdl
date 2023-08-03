@@ -7,7 +7,7 @@
 
 set_property -dict {PACKAGE_PIN J7 IOSTANDARD LVCMOS18} [get_ports gp_int]                                      ; ## IO_L24P_65_ADRV9002_GP_INT
 set_property -dict {PACKAGE_PIN L4 IOSTANDARD LVCMOS18} [get_ports mode]                                        ; ## IO_65_ADRV9002_MODE
-set_property -dict {PACKAGE_PIN U7 IOSTANDARD LVCMOS18} [get_ports resetb]                                      ; ## IO_65_ADRV9002_RST
+set_property -dict {PACKAGE_PIN U7 IOSTANDARD LVCMOS18} [get_ports reset_trx]                                   ; ## IO_65_ADRV9002_RST
 set_property -dict {PACKAGE_PIN J6 IOSTANDARD LVCMOS18} [get_ports clksrc]                                      ; ## IO_66_ADRV9002_CLKSRC
 
 set_property -dict {PACKAGE_PIN U1 IOSTANDARD LVCMOS18} [get_ports spi_di]                                      ; ## IO_L2P_65_SPI_DO
@@ -124,7 +124,8 @@ set_property -dict {PACKAGE_PIN C9  IOSTANDARD LVCMOS33} [get_ports ext_gpio[11]
 set_property -dict {PACKAGE_PIN F9  IOSTANDARD LVCMOS33} [get_ports ext_gpio[12]]; # IO_L7P_AD5P_26   IO_L7P_HDGC_AD5P_26
 set_property -dict {PACKAGE_PIN E9  IOSTANDARD LVCMOS33} [get_ports ext_gpio[13]]; # IO_L7N_AD5N_26   IO_L7N_HDGC_AD5N_26
 set_property -dict {PACKAGE_PIN E11 IOSTANDARD LVCMOS33} [get_ports ext_gpio[14]]; # IO_L8P_AD4P_26   IO_L8P_HDGC_AD4P_26
-set_property -dict {PACKAGE_PIN E10 IOSTANDARD LVCMOS33} [get_ports ext_gpio[15]]; # IO_L8N_AD4N_26   IO_L8N_HDGC_AD4N_26
+
+set_property -dict {PACKAGE_PIN E10 IOSTANDARD LVCMOS33} [get_ports tdd_sync]    ; # IO_L8N_AD4N_26   IO_L8N_HDGC_AD4N_26
 
 # add-on board connector
 

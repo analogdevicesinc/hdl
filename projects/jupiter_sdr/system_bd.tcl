@@ -272,6 +272,9 @@ create_bd_port -dir I gpio_rx2_enable_in
 create_bd_port -dir I gpio_tx1_enable_in
 create_bd_port -dir I gpio_tx2_enable_in
 
+create_bd_port -dir I tdd_sync
+create_bd_port -dir O tdd_sync_cntr
+
 create_bd_port -dir I ref_clk
 create_bd_port -dir I tx_output_enable
 create_bd_port -dir I mssi_sync
@@ -493,6 +496,9 @@ ad_connect  gpio_rx1_enable_in            axi_adrv9001/gpio_rx1_enable_in
 ad_connect  gpio_rx2_enable_in            axi_adrv9001/gpio_rx2_enable_in
 ad_connect  gpio_tx1_enable_in            axi_adrv9001/gpio_tx1_enable_in
 ad_connect  gpio_tx2_enable_in            axi_adrv9001/gpio_tx2_enable_in
+
+ad_connect  tdd_sync                      axi_adrv9001/tdd_sync
+ad_connect  tdd_sync_cntr                 axi_adrv9001/tdd_sync_cntr
 
 ad_connect  rx1_enable                    axi_adrv9001/rx1_enable
 ad_connect  rx2_enable                    axi_adrv9001/rx2_enable

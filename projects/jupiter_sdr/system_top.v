@@ -48,14 +48,14 @@ module system_top (
   output                  fan_ctl,
   output                  adrv9002_mcssrc,
 
-  inout      [15:0]       ext_gpio,
+  inout      [14:0]       ext_gpio,
   inout      [14:0]       add_on_gpio,
   output                  add_on_power,
   inout      [11:0]       dgpio,
 
-  input                   gp_int,
-  output                  mode,
-  output                  resetb,
+  inout                   gp_int,
+  inout                   mode,
+  inout                   reset_trx,
   output                  clksrc,
 
   input                   vin_poe_valid_n,
@@ -69,6 +69,8 @@ module system_top (
   input                   fpga_mcs_in_p,
   output                  dev_mcs_fpga_out_n,
   output                  dev_mcs_fpga_out_p,
+
+  inout                   tdd_sync,
 
   input                   rx1_dclk_in_n,
   input                   rx1_dclk_in_p,
@@ -172,6 +174,9 @@ module system_top (
   wire          mcs_start;
   wire          system_sync;
   wire          mcs_or_system_sync_n;
+  wire          tdd_sync_loc;
+  wire          tdd_sync_i;
+  wire          tdd_sync_cntr;
 
   wire          gpio_rx1_enable_in;
   wire          gpio_rx2_enable_in;
@@ -180,71 +185,87 @@ module system_top (
 
   // assignments
 
-  assign gpio_i[94:68] = gpio_o[94:68];
-  assign gpio_i[64] = gpio_o[64];
-  assign gpio_i[15:7] = gpio_o[15:7];
-  assign gpio_i[3:1] = gpio_o[3:1];
-
-  assign gpio_i[0] = gp_int;
-  assign clksrc = gpio_o[1];
-  assign mode   = gpio_o[2];
-  assign resetb = gpio_o[3];
-
-  assign gpio_i[4] = vin_poe_valid_n;
-  assign gpio_i[5] = vin_usb2_valid_n;
-  assign gpio_i[6] = vin_usb1_valid_n;
-
-  assign mssi_sync = mcs_sync_busy | gpio_o[7];
-
-  // TO-DO
-  //assign usb_pd_reset = gpio_o[8];
-  assign adrv9002_mcssrc = gpio_o[65];
-  assign usb_flash_prog_en = gpio_o[66];
-  assign fan_en  = 1'b1;
-  assign fan_ctl = gpio_o[67];
-
-  assign rf_rx1a_mux_ctl = gpio_o[ 8];
-  assign rf_rx1b_mux_ctl = gpio_o[ 9];
-  assign rf_rx2a_mux_ctl = gpio_o[10];
-  assign rf_rx2b_mux_ctl = gpio_o[11];
-  assign rf_tx1_mux_ctl1 = gpio_o[12];
-  assign rf_tx1_mux_ctl2 = gpio_o[13];
-  assign rf_tx2_mux_ctl1 = gpio_o[14];
-  assign rf_tx2_mux_ctl2 = gpio_o[15];
-
   assign spi_enb = spi0_csn;
 
-  // instantiations
-
-  ad_iobuf #(
-    .DATA_WIDTH(16)
-  ) i_ext_gpio_buf (
-    .dio_t (gpio_t[31:16]),
-    .dio_i (gpio_o[31:16]),
-    .dio_o (gpio_i[31:16]),
-    .dio_p (ext_gpio));
-
-  ad_iobuf #(
-    .DATA_WIDTH(16)
-  ) i_iobuf (
-    .dio_t ({gpio_t[47:32]}),
-    .dio_i ({gpio_o[47:32]}),
-    .dio_o ({gpio_i[47:32]}),
-    .dio_p ({gpio_rx1_enable_in, // 47
-             gpio_rx2_enable_in, // 46
-             gpio_tx1_enable_in, // 45
-             gpio_tx2_enable_in, // 44
-             dgpio[11:0]}));     // 43:32
+  assign gpio_i[94:79] = gpio_o[94:79];
+  assign gpio_i[63:47] = gpio_o[63:47];
+  assign gpio_i[15:7] = gpio_o[15:7];
+  assign gpio_i[3:0] = gpio_o[3:0];
 
   ad_iobuf #(
     .DATA_WIDTH(15)
   ) i_iobuf_addon (
-    .dio_t ({gpio_t[62:48]}),
-    .dio_i ({gpio_o[62:48]}),
-    .dio_o ({gpio_i[62:48]}),
+    .dio_t ({gpio_t[78:64]}),
+    .dio_i ({gpio_o[78:64]}),
+    .dio_o ({gpio_i[78:64]}),
     .dio_p (add_on_gpio));
 
   assign add_on_power = gpio_o[63];
+
+  assign tdd_sync_loc = gpio_o[56];
+  assign mcs_or_system_sync_n = gpio_o[55];
+  assign mssi_sync = gpio_o[54];
+
+  assign gpio_tx2_enable_in = gpio_o[51];
+  assign gpio_tx1_enable_in = gpio_o[50];
+  assign gpio_rx2_enable_in = gpio_o[49];
+  assign gpio_rx1_enable_in = gpio_o[48];
+
+  ad_iobuf #(
+    .DATA_WIDTH(15)
+  ) i_iobuf (
+    .dio_t ({gpio_t[46:32]}),
+    .dio_i ({gpio_o[46:32]}),
+    .dio_o ({gpio_i[46:32]}),
+    .dio_p ({reset_trx,    // 46
+             mode,         // 45
+             gp_int,       // 44
+             dgpio_11,     // 43
+             dgpio_10,     // 42
+             dgpio_9,      // 41
+             dgpio_8,      // 40
+             dgpio_7,      // 39
+             dgpio_6,      // 38
+             dgpio_5,      // 37
+             dgpio_4,      // 36
+             dgpio_3,      // 35
+             dgpio_2,      // 34
+             dgpio_1,      // 33
+             dgpio_0 }));  // 32
+
+  ad_iobuf #(
+    .DATA_WIDTH(15)
+  ) i_ext_gpio_buf (
+    .dio_t (gpio_t[30:16]),
+    .dio_i (gpio_o[30:16]),
+    .dio_o (gpio_i[30:16]),
+    .dio_p (ext_gpio));
+
+  assign rf_tx2_mux_ctl2 = gpio_o[15];
+  assign rf_tx2_mux_ctl1 = gpio_o[14];
+  assign rf_tx1_mux_ctl2 = gpio_o[13];
+  assign rf_tx1_mux_ctl1 = gpio_o[12];
+  assign rf_rx2b_mux_ctl = gpio_o[11];
+  assign rf_rx2a_mux_ctl = gpio_o[10];
+  assign rf_rx1b_mux_ctl = gpio_o[ 9];
+  assign rf_rx1a_mux_ctl = gpio_o[ 8];
+
+  assign fan_ctl = gpio_o[7];
+  assign fan_en  = 1'b1;
+
+  assign gpio_i[6] = vin_usb1_valid_n;
+  assign gpio_i[5] = vin_usb2_valid_n;
+  assign gpio_i[4] = vin_poe_valid_n;
+
+  assign usb_flash_prog_en = gpio_o[3];
+  assign adrv9002_mcssrc = gpio_o[2];
+  assign clksrc = gpio_o[1];
+  // assign usb_pd_reset = gpio_o[0]; // TO-DO
+
+  // tdd_sync_loc - local sync signal from a GPIO or other source(external)
+
+  assign tdd_sync_i = tdd_sync_cntr ? tdd_sync_loc : tdd_sync;
+  assign tdd_sync = tdd_sync_cntr ? tdd_sync_loc : 1'bz;
 
   IBUFDS i_ibufgs_fpga_ref_clk (
     .I (fpga_ref_clk_p),
@@ -295,7 +316,6 @@ module system_top (
 
   assign mcs_start = !mcs_sync_m & fpga_mcs_in & !mcs_sync_busy & mcs_or_system_sync_n;
   assign system_sync = fpga_mcs_in & !mcs_or_system_sync_n;
-  assign mcs_or_system_sync_n = gpio_o[64];
 
   system_wrapper i_system_wrapper (
     .gpio_i (gpio_i),
@@ -361,6 +381,9 @@ module system_top (
     .gpio_rx2_enable_in (gpio_rx2_enable_in),
     .gpio_tx1_enable_in (gpio_tx1_enable_in),
     .gpio_tx2_enable_in (gpio_tx2_enable_in),
+
+    .tdd_sync (tdd_sync_i),
+    .tdd_sync_cntr (tdd_sync_cntr),
 
     .s_1p0_rf_sns_p (s_1p0_rf_sns_p),
     .s_1p0_rf_sns_n (s_1p0_rf_sns_n),
