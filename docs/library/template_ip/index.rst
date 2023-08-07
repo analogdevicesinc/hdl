@@ -47,41 +47,8 @@ Configuration Parameters
 Interface
 --------------------------------------------------------------------------------
 
-.. list-table:: Clock and reset
-   :header-rows: 1
-
-   * - Name
-     - Type
-     - Description
-   * - ``clk``
-     - input
-     - All signals are synchronous to this clock.
-   * - ``resetn``
-     - input
-     - Synchronous active low resey.
-
-.. list-table:: DMA_TX interface
-   :header-rows: 1
-
-   * - Name
-     - Type
-     - Description
-   * - ``dac_enable_*``
-     - output
-     -  If set, the channel is enabled (one for each channel).
-   * - ``dac_valid``
-     - output
-     - Indicates valid data request for all channels
-
-.. list-table:: AXI_S_MM interface
-   :header-rows: 1
-
-   * - Name
-     - Type
-     - Description
-   * - ``s_axi_*``
-     -
-     - Standard AXI Slave Memory Map interface .
+.. hdl-interfaces::
+   :path: library/axi_ad9783
 
 Detailed Architecture
 --------------------------------------------------------------------------------
@@ -110,20 +77,17 @@ basic monitoring and control of the ADC's channel.
 Register Map
 --------------------------------------------------------------------------------
 
-.. csv-table:: Base (common to all cores)
-   :file: ../common/regmap_base.csv
-   :class: regmap
-   :header-rows: 2
+.. hdl-regmap::
+   :name: COMMON
+   :no-type-info:
 
-.. csv-table:: ADC Common (axi_ad*)
-   :file: ../common/regmap_adc_common.csv
-   :class: regmap
-   :header-rows: 2
+.. hdl-regmap::
+   :name: ADC_COMMON
+   :no-type-info:
 
-.. csv-table:: ADC Channel (axi_ad*)
-   :file: ../common/regmap_adc_channel.csv
-   :class: regmap
-   :header-rows: 2
+.. hdl-regmap::
+   :name: ADC_CHANNEL
+   :no-type-info:
 
 Design Guidelines
 --------------------------------------------------------------------------------

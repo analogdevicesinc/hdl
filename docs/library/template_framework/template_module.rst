@@ -34,22 +34,8 @@ Configuration Parameters
 Signal and Interface Pins
 --------------------------------------------------------------------------------
 
-.. list-table::
-   :widths: 10 25 65
-   :header-rows: 1
-
-   * - Name
-     - Type
-     - Description
-   * - ``clk``
-     - Clock
-     - All other signals are synchronous to this clock.
-   * - ``resetn``
-     - Synchronous active-low reset
-     - Resets the internal state machine of the core.
-   * - ``ctrl``
-     - :ref:`template_framework interface` master
-     - {brief description}.
+.. hdl-interfaces::
+   :path: library/spi_engine/spi_engine_interconnect
 
 Theory of Operation
 --------------------------------------------------------------------------------

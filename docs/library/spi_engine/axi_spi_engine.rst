@@ -77,33 +77,8 @@ Signal and Interface Pins
 Register Map
 --------------------------------------------------------------------------------
 
-.. csv-table::
-   :file: regmap.csv
-   :class: regmap
-   :header-rows: 2
-
-.. list-table::
-   :widths: 10 20 70
-   :header-rows: 1
-
-   * - Access Type
-     - Name
-     - Description
-   * - RO
-     - Read-only
-     - Reads will return the current register value. Writes have no effect.
-   * - RW
-     - Read-write
-     - Reads will return the current register value. Writes will change the
-       current register value.
-   * - WO
-     - Write-only
-     - Writes will change the current register value. Reads have no effect.
-   * - RW1C
-     - Write-1-to-clear
-     - Reads will return the current register value. Writing the register will
-       clear those bits of the register which were set to 1 in the value written.
-       Bits are set by hardware.
+.. hdl-regmap::
+   :name: axi_spi_engine
 
 Theory of Operation
 --------------------------------------------------------------------------------

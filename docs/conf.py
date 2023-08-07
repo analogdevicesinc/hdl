@@ -31,6 +31,8 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # -- Custom extensions configuration -------------------------------------------
 
+hide_collapsible_content = False
+
 # -- todo configuration -------------------------------------------------------
 
 todo_include_todos = True
@@ -40,10 +42,6 @@ todo_emit_warnings = True
 
 symbolator_cmd = '~/.local/bin/symbolator' # Update with your installed location
 symbolator_cmd_args = ['-t', '--scale=0.75']
-
-# -- BibTeX configuration -----------------------------------------------------
-
-bibtex_bibfiles = ['appendix/references.bib']
 
 # -- Options for HTML output --------------------------------------------------
 

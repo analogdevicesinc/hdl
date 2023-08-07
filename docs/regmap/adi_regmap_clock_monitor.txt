@@ -2,6 +2,7 @@
 
 TITLE
 Clock Monitor (axi_clock_monitor)
+axi_clock_monitor
 ENDTITLE
 
 ############################################################################################
