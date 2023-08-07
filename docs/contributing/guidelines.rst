@@ -15,6 +15,7 @@ Templates are available:
 
 * :git-hdl:`docs/library/template_ip` (:ref:`rendered <template_ip>`).
 * :git-hdl:`docs/library/template_framework` (:ref:`rendered <template_framework>`).
+* :git-hdl:`docs/projects/template` (:ref:`rendered <template_project>`).
 
 Remove the ``:orphan:`` in the first line, it is to hide the templates from the
 `TOC tree <https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-toctree>`_.
@@ -282,7 +283,7 @@ Renders as:
    * - NUM_OF_SDI
      - Number of SDI lines on the physical SPI interface.
 
-Descriptions in the directive have higher precedece tha in the *component.xml*
+Descriptions in the directive have higher precedence than in the *component.xml*
 file.
 
 The ``:path:`` option is optional, and should **not** be included if the
@@ -316,23 +317,56 @@ For example:
    .. hdl-interfaces::
       :path: library/spi_engine/spi_engine_interconnect
 
-
-Renders as:
-
-::
-
-   .. hdl-interfaces::
-      :path: library/spi_engine/spi_engine_interconnect
-
-
-Descriptions in the directive have higher precedece than in the *component.xml*
+Descriptions in the directive have higher precedence than in the *component.xml*
 file.
 You can provide description to a port or a bus, but not for a bus port.
 
 The ``:path:`` option is optional, and should **not** be included if the
 documentation file path matches the *component.xml* hierarchically.
 
+HDL regmap directive
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The HDL regmap directive gets information from *docs/regmap/adi_regmap_\*.txt* files
+and generates tables with the register maps.
+
+The directive syntax is:
+
+.. code:: rst
+
+   .. hdl-regmap::
+      :name: <regmap_name>
+      :no-type-info:
+
+For example:
+
+.. code:: rst
+
+   .. hdl-regmap::
+      :name: DMAC
+
+.. note::
+
+  The register map name is the title-tool, the value above ``ENDTITLE`` in the
+  source file.
+
+This directive does not support content for descriptions, since the source file
+already have proper descriptions.
+
+The ``:name:`` option is **required**, because the title tool does not match
+the IP name and one single *docs/regmap/adi_regmap_\*.txt* file can have more than
+one register map.
+The ``:no-type-info:`` option is optional, and should **not** be included if it is
+in the main IP documentation page. It appends an auxiliary table explaining the
+register access types.
+
 .. _installing_pandoc:
+
+Global options for HDL directives
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Use the `hide_collapsible_content` to set the default state of the collapsibles,
+if you set to False, they be expanded by default.
 
 Installing pandoc
 --------------------------------------------------------------------------------
