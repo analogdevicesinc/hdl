@@ -260,7 +260,7 @@ proc gen_intel_fmc {fmc_index fmc_file constr_file} {
         for {set k $current_index} {$k <= $i} {incr k} {
           set col_e [join [lindex $line_e $k] " "]
           set col_e [constrToIntel $line_e $col_e $k]
-          if {[string match "*[0]*" [lindex $col_e 3]] && ![string match "*(n)*" [lindex $col_e 3]]} {
+          if {[string match "*\[0\]*" [lindex $col_e 3]] && ![string match "*(n)*" [lindex $col_e 3]]} {
             puts $constr_file "set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 1_0V -to [string map -nocase {[0] ""} [lindex $col_e 3]]"
           }
         }
@@ -268,7 +268,7 @@ proc gen_intel_fmc {fmc_index fmc_file constr_file} {
         for {set k $current_index} {$k <= $i} {incr k} {
           set col_e [join [lindex $line_e $k] " "]
           set col_e [constrToIntel $line_e $col_e $k]
-          if {[string match "*[0]*" [lindex $col_e 3]] && ![string match "*(n)*" [lindex $col_e 3]]} {
+          if {[string match "*\[0\]*" [lindex $col_e 3]] && ![string match "*(n)*" [lindex $col_e 3]]} {
             set xcvrCount 0
             puts $constr_file "set_instance_assignment -name IO_STANDARD \"HIGH SPEED DIFFERENTIAL I/O\" -to [string map -nocase {[0] ""} [lindex $col_e 3]]"
           } else {incr xcvrCount}
@@ -278,7 +278,7 @@ proc gen_intel_fmc {fmc_index fmc_file constr_file} {
         for {set k $current_index} {$k <= $i} {incr k} {
           set col_e [join [lindex $line_e $k] " "]
           set col_e [constrToIntel $line_e $col_e $k]
-          if {[string match "*[0]*" [lindex $col_e 3]] && ![string match "*(n)*" [lindex $col_e 3]]} {
+          if {[string match "*\[0\]*" [lindex $col_e 3]] && ![string match "*(n)*" [lindex $col_e 3]]} {
             if {[string match "*data_*" [lindex $col_e 3]]} {set xcvrType "xcvr_[string index [lindex $col_e 3] [expr [string last _ [lindex $col_e 3]] + 1]]_\$\{i\}"}
             puts $constr_file "  set_instance_assignment -name XCVR_RECONFIG_GROUP $xcvrType -to [string map -nocase {[0] \[\$\{i\}\]} [lindex $col_e 3]]"
           }
