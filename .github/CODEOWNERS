@@ -1,0 +1,220 @@
+# This file contains code owners per hdl project, for Pull Requests to master.
+#
+# Code owners are added automatically as reviewers in Pull Requests open
+# to master, depending on the folders/projects affected by PR changes.
+# All PRs open against 'master' will require approval of at least one codeowner.
+#
+# More general documentation about code owners can be found here:
+# https://github.blog/2017-07-06-introducing-code-owners/
+
+# CODEOWNERS file format: <pattern> + <mail address of one or more owners>
+# The last matching line will take precedence.
+
+##### Global code owners (for folders with no later match) #####
+*      adrian.costina@analog.com andrei.grozav@analog.com paul.pop@analog.com
+
+##### Code owners for projects #####
+# Code owners for ad40xx_fmc folder
+/projects/ad40xx_fmc/      paul.pop@analog.com adrian.costina@analog.com
+
+# Code owners for ad4630_fmc folder
+/projects/ad4630_fmc/      sergiu.arpadi@analog.com paul.pop@analog.com
+
+# Code owners for ad469x_fmc folder
+/projects/ad469x_fmc/      paul.pop@analog.com adrian.costina@analog.com
+
+# Code owners for ad5758_sdz folder
+/projects/ad5758_sdz/      stanca.pop@analog.com adrian.costina@analog.com
+
+# Code owners for ad5766_sdz folder
+/projects/ad5766_sdz/      stanca.pop@analog.com adrian.costina@analog.com
+
+# Code owners for ad6676evb folder
+/projects/ad6676evb/       andrei.grozav@analog.com adrian.costina@analog.com
+
+# Code owners for ad7134_fmc folder
+/projects/ad7134_fmc/      paul.pop@analog.com laurentiu.popa@analog.com
+
+# Code owners for ad719x_asdz folder
+/projects/ad719x_asdz/     iulia.moldovan@analog.com adrian.costina@analog.com
+
+# Code owners for ad783x_fmc folder
+/projects/ad783x_fmc/      paul.pop@analog.com adrian.costina@analog.com
+
+# Code owners for ad7405_fmc folder
+/projects/ad7405_fmc/      paul.pop@analog.com adrian.costina@analog.com
+
+# Code owners for ad7606x_fmc folder
+/projects/ad7606_fmc/      alin-tudor.sferle@analog.com liviu.adace@analog.com
+
+# Code owners for ad7616_sdz folder
+/projects/ad7616_sdz/      stanca.pop@analog.com adrian.costina@analog.com
+
+# Code owners for ad77681evb folder
+/projects/ad77681evb/      liviu.adace@analog.com adrian.costina@analog.com
+
+# Code owners for ad7768evb
+/projects/ad7768evb/       paul.pop@analog.com adrian.costina@analog.com
+
+# Code owners for ad777x_ardz folder
+/projects/ad777x_ardz/     paul.pop@analog.com adrian.costina@analog.com
+
+# Code owners for ad9081_fmca_ebz folders
+/projects/ad9081_fmca_ebz/  iulia.moldovan@analog.com adrian.costina@analog.com
+/projects/ad9081_fmca_ebz_x_band/  iulia.moldovan@analog.com adrian.costina@analog.com
+
+# Code owners for ad9082_fmca_ebz folder
+/projects/ad9082_fmca_ebz/  iulia.moldovan@analog.com adrian.costina@analog.com
+
+# Code owners for ad9083 folders
+/projects/ad9083_evb/       andrei.grozav@analog.com adrian.costina@analog.com
+/projects/ad9083_vna/       andrei.grozav@analog.com adrian.costina@analog.com
+
+# Code owners for ad9208_dual_ebz folder
+/projects/ad9208_dual_ebz/  andrei.grozav@analog.com adrian.costina@analog.com
+
+# Code owners for ad9213_dual_ebz folder
+/projects/ad9213_dual_ebz/  andrei.dragomir@analog.com adrian.costina@analog.com
+
+# Code owners for ad9265_fmc folder
+/projects/ad9265_fmc/       andrei.grozav@analog.com adrian.costina@analog.com
+
+# Code owners for ad9434_fmc folder
+/projects/ad9434_fmc/       andrei.grozav@analog.com adrian.costina@analog.com
+
+# Code owners for ad9467_fmc folder
+/projects/ad9467_fmc/       andrei.grozav@analog.com iulia.moldovan@analog.com
+
+# Code owners for ad9695_fmc folder
+/projects/ad9695_fmc/       andrei.dragomir@analog.com adrian.costina@analog.com
+
+# Code owners for ad9739a_fmc folder
+/projects/ad9739a_fmc/      iulia.moldovan@analog.com adrian.costina@analog.com
+
+# Code owners for ad9783_ebz folder
+/projects/ad9783_ebz/       iulia.moldovan@analog.com adrian.costina@analog.com
+
+# Code owners for ad_fmclidar1_ebz folder
+/projects/ad_fmclidar1_ebz/ adrian.costina@analog.com
+
+# Code owners for ad_quadmxfe1_ebz folder
+/projects/ad_quadmxfe1_ebz/ filip.gherman@analog.com adrian.costina@analog.com
+
+# Code owners for adaq7980_sdz folder
+/projects/adaq7980_sdz/     stanca.pop@analog.com adrian.costina@analog.com
+
+# Code owners for adaq8092_fmc folder
+/projects/adaq8092_fmc/     paul.pop@analog.com adrian.costina@analog.com
+
+# Code owners for adrv9001 folder
+/projects/adrv9001/         andrei.grozav@analog.com alin-tudor.sferle@analog.com
+
+# Code owners for adrv9009 folder
+/projects/adrv9009/         andrei.dragomir@analog.com filip.gherman@analog.com
+
+# Code owners for adrv9009zu11eg folder
+/projects/adrv9009zu11eg/   andrei.dragomir@analog.com adrian.costina@analog.com
+
+# Code owners for adrv9361z7035 folder
+/projects/adrv9361z7035/    andrei.grozav@analog.com adrian.costina@analog.com
+
+# Code owners for adrv9364z7020 folder
+/projects/adrv9364z7020/    andrei.grozav@analog.com adrian.costina@analog.com
+
+# Code owners for adrv9371x folder
+/projects/adrv9371x/        andrei.dragomir@analog.com adrian.costina@analog.com
+
+# Code owners for adv7511 folder
+/projects/adv7511/          alin-tudor.sferle@analog.com adrian.costina@analog.com
+
+# Code owners for adv7513 folder
+/projects/adv7513/          alin-tudor.sferle@analog.com adrian.costina@analog.com
+
+# Code owners for arradio folder
+/projects/arradio/          andrei.grozav@analog.com adrian.costina@analog.com
+
+# Code owners for cn0501 folder
+/projects/cn0501/           paul.pop@analog.com adrian.costina@analog.com
+
+# Code owners for cn0506 folder
+/projects/cn0506/           alin-tudor.sferle@analog.com adrian.costina@analog.com
+
+# Code owners for cn0540 folder
+/projects/cn0540/           liviu.adace@analog.com adrian.costina@analog.com
+
+# Code owners for cn0561 folder
+/projects/cn0561/           paul.pop@analog.com laurentiu.popa@analog.com
+
+# Code owners for cn0577 folder
+/projects/cn0577/           iulia.moldovan@analog.com adrian.costina@analog.com
+
+# Code owners for dac_fmc_ebz folder
+/projects/dac_fmc_ebz/      andrei.dragomir@analog.com bogdan.luncan@analog.com
+
+# Code owners for daq2 folder
+/projects/daq2/             andrei.grozav@analog.com filip.gherman@analog.com
+
+# Code owners for daq3 folder
+/projects/daq3/             andrei.grozav@analog.com adrian.costina@analog.com
+
+# Code owners for fmcadc2 folder
+/projects/fmcadc2/          andrei.grozav@analog.com adrian.costina@analog.com
+
+# Code owners for fmcadc5 folder
+/projects/fmcadc5/          andrei.grozav@analog.com adrian.costina@analog.com
+
+# Code owners for fmcjesdadc1 folder
+/projects/fmcjesdadc1/      andrei.grozav@analog.com adrian.costina@analog.com
+
+# Code owners for fmcomms11 folder
+/projects/fmcomms11/        andrei.grozav@analog.com bogdan.luncan@analog.com
+
+# Code owners for fmcomms2 folder
+/projects/fmcomms2/         andrei.grozav@analog.com adrian.costina@analog.com
+
+# Code owners for fmcomms5 folder
+/projects/fmcomms5/         andrei.grozav@analog.com adrian.costina@analog.com
+
+# Code owners for fmcomms8 folder
+/projects/fmcomms8/         andrei.dragomir@analog.com adrian.costina@analog.com
+
+# Code owners for imageon folder
+/projects/imageon/          alin-tudor.sferle@analog.com adrian.costina@analog.com
+
+# Code owners for jupiter_sdr folder
+/projects/jupiter_sdr/      andrei.grozav@analog.com  alin-tudor.sferle@analog.com
+
+# Code owners for m2k folder
+/projects/m2k/              andrei.grozav@analog.com  iulia.moldovan@analog.com
+
+# Code owners for pluto folder
+/projects/pluto/            andrei.grozav@analog.com  adrian.costina@analog.com
+
+# Code owners for pulsar_adc_pmdz folder
+/projects/pulsar_adc_pmdz/  paul.pop@analog.com  adrian.costina@analog.com
+
+# Code owners for sidekiqz2 folder
+/projects/sidekiqz2/        andrei.grozav@analog.com  adrian.costina@analog.com
+
+# Code owners for usrpe31x folder
+/projects/usrpe31x/         andrei.grozav@analog.com  adrian.costina@analog.com
+
+##### Code owners for IPs (if no one specified, global owners applies) #####
+
+# Code owner for axi_ad9361 IP
+/library/axi_ad9361/        andrei.grozav@analog.com  adrian.costina@analog.com
+
+# Code owners for axi_ad9467 IP
+/library/axi_ad9467/        iulia.moldovan@analog.com  adrian.costina@analog.com
+
+# Code owners for axi_ad9739a IP
+/library/axi_ad9739a/       iulia.moldovan@analog.com  adrian.costina@analog.com
+
+# Code owners for axi_ad9783 IP
+/library/axi_ad9783/        iulia.moldovan@analog.com  adrian.costina@analog.com
+
+# Code owners for axi_dmac IP
+/library/axi_dmac/          ionut.podgoreanu@analog.com  filip.gherman@analog.com
+
+# Code owners for jesd204  IP
+/library/jesd204/           ionut.podgoreanu@analog.com  adrian.costina@analog.com
