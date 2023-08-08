@@ -313,22 +313,18 @@ set_instance_assignment -name IO_STANDARD "1.2 V" -to sys_sgpo
 set_global_assignment -name USE_HPS_COLD_RESET SDM_IO11
 set_global_assignment -name USE_CONF_DONE SDM_IO16
 
+set_global_assignment -name HPS_INITIALIZATION "HPS FIRST"
+set_global_assignment -name HPS_DAP_SPLIT_MODE "SDM PINS"
+
 set_global_assignment -name INI_VARS "ASM_ENABLE_ADVANCED_DEVICES=ON;"
 set_global_assignment -name VID_OPERATION_MODE "PMBUS MASTER"
 set_global_assignment -name USE_PWRMGT_SCL SDM_IO0
 set_global_assignment -name USE_PWRMGT_SDA SDM_IO12
-set_global_assignment -name PWRMGT_BUS_SPEED_MODE "400 KHZ"
-set_global_assignment -name PWRMGT_PAGE_COMMAND_ENABLE ON
-set_global_assignment -name PWRMGT_SLAVE_DEVICE_TYPE OTHER
-set_global_assignment -name PWRMGT_SLAVE_DEVICE0_ADDRESS 42
-set_global_assignment -name PWRMGT_SLAVE_DEVICE1_ADDRESS 43
-set_global_assignment -name PWRMGT_SLAVE_DEVICE2_ADDRESS 44
-set_global_assignment -name PWRMGT_SLAVE_DEVICE3_ADDRESS 00
-set_global_assignment -name PWRMGT_SLAVE_DEVICE4_ADDRESS 00
-set_global_assignment -name PWRMGT_SLAVE_DEVICE5_ADDRESS 00
-set_global_assignment -name PWRMGT_SLAVE_DEVICE6_ADDRESS 00
-set_global_assignment -name PWRMGT_SLAVE_DEVICE7_ADDRESS 00
-set_global_assignment -name PWRMGT_PAGE_COMMAND_ENABLE ON
+set_global_assignment -name USE_CONF_DONE SDM_IO16
+set_global_assignment -name PWRMGT_BUS_SPEED_MODE "100 KHZ"
+set_global_assignment -name PWRMGT_SLAVE_DEVICE_TYPE LTC3888
+set_global_assignment -name NUMBER_OF_SLAVE_DEVICE 1
+set_global_assignment -name PWRMGT_SLAVE_DEVICE0_ADDRESS 62
 set_global_assignment -name PWRMGT_VOLTAGE_OUTPUT_FORMAT "LINEAR FORMAT"
 set_global_assignment -name PWRMGT_LINEAR_FORMAT_N "-12"
 set_global_assignment -name PWRMGT_TRANSLATED_VOLTAGE_VALUE_UNIT VOLTS
