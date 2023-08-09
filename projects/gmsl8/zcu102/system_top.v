@@ -40,8 +40,6 @@ module system_top (
   input   [12:0]    gpio_bd_i,
   output  [ 7:0]    gpio_bd_o,
 
-  output            gpio_pmod_0,
-
   input    [3:0]    mipi_ch0_data_n,
   input    [3:0]    mipi_ch0_data_p,
   input             mipi_ch0_clk_n,
@@ -58,9 +56,7 @@ module system_top (
   wire            ap_rstn_frmbuf3;
   wire            csirxss_rstn;
 
-  assign gpio_pmod_0 = gpio_o[26];
-
-  assign gpio_i[94:27] = gpio_o[94:27];
+  assign gpio_i[94:26] = gpio_o[94:26];
 
   assign gpio_i[ 7:0] = gpio_o[7:0];
 

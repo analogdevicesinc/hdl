@@ -17,6 +17,10 @@ create_bd_port -dir I ap_rstn_frmbuf2
 create_bd_port -dir I ap_rstn_frmbuf3
 create_bd_port -dir I csirxss_rstn
 
+# zcu pl clocking
+ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL0_REF_CTRL__FREQMHZ 300
+ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL2_REF_CTRL__FREQMHZ 300
+
 # mipi rx subsystem instances
 
 ad_ip_instance mipi_csi2_rx_subsystem mipi_csi_ch0
@@ -169,7 +173,7 @@ ad_connect dphy_clk_generator/resetn $sys_dma_resetn
 ad_connect mipi_csi_ch0/video_aclk $sys_cpu_clk
 ad_connect mipi_csi_ch0/video_aresetn csirxss_rstn
 ad_connect mipi_csi_ch0/lite_aclk $sys_cpu_clk
-ad_connect mipi_csi_ch0/lite_aresetn $sys_cpu_resetn 
+ad_connect mipi_csi_ch0/lite_aresetn $sys_cpu_resetn
 ad_connect mipi_csi_ch0/dphy_clk_200M dphy_clk_generator/clk_out1
 ad_connect mipi_csi_ch0/bg3_pin6_nc bg3_pin6_nc
 
