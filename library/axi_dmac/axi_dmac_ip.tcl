@@ -30,6 +30,7 @@ adi_ip_files axi_dmac [list \
   "response_handler.v" \
   "axi_register_slice.v" \
   "dmac_2d_transfer.v" \
+  "dmac_sg.v" \
   "dest_axi_mm.v" \
   "dest_axi_stream.v" \
   "dest_fifo_inf.v" \
@@ -91,6 +92,8 @@ adi_set_bus_dependency "m_src_axi" "m_src_axi" \
 	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE_SRC')) = 0)"
 adi_set_bus_dependency "m_dest_axi" "m_dest_axi" \
 	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE_DEST')) = 0)"
+adi_set_bus_dependency "m_sg_axi" "m_sg_axi" \
+	"(spirit:decode(id('MODELPARAM_VALUE.DMA_SG_TRANSFER')) = 1)"
 adi_set_bus_dependency "s_axis" "s_axis" \
 	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE_SRC')) = 1)"
 adi_set_bus_dependency "m_axis" "m_axis" \
@@ -118,7 +121,6 @@ set dummy_axi_ports [list \
 	"m_dest_axi_rdata" \
 	"m_src_axi_awvalid" \
 	"m_src_axi_awready" \
-	"m_src_axi_awvalid" \
 	"m_src_axi_awaddr" \
 	"m_src_axi_awlen" \
 	"m_src_axi_awsize" \
@@ -127,13 +129,28 @@ set dummy_axi_ports [list \
 	"m_src_axi_awprot" \
 	"m_src_axi_wvalid" \
 	"m_src_axi_wready" \
-	"m_src_axi_wvalid" \
 	"m_src_axi_wdata" \
 	"m_src_axi_wstrb" \
 	"m_src_axi_wlast" \
 	"m_src_axi_bready" \
 	"m_src_axi_bvalid" \
 	"m_src_axi_bresp" \
+	"m_sg_axi_awvalid" \
+	"m_sg_axi_awready" \
+	"m_sg_axi_awaddr" \
+	"m_sg_axi_awlen" \
+	"m_sg_axi_awsize" \
+	"m_sg_axi_awburst" \
+	"m_sg_axi_awcache" \
+	"m_sg_axi_awprot" \
+	"m_sg_axi_wvalid" \
+	"m_sg_axi_wready" \
+	"m_sg_axi_wdata" \
+	"m_sg_axi_wstrb" \
+	"m_sg_axi_wlast" \
+	"m_sg_axi_bready" \
+	"m_sg_axi_bvalid" \
+	"m_sg_axi_bresp" \
 ]
 
 # These are in the design to keep the Intel tools happy which require
@@ -153,7 +170,14 @@ lappend dummy_axi_ports \
 	"m_src_axi_awid" \
 	"m_src_axi_awlock" \
 	"m_src_axi_wid" \
-	"m_src_axi_bid"
+	"m_src_axi_bid" \
+	"m_sg_axi_arid" \
+	"m_sg_axi_arlock" \
+	"m_sg_axi_rid" \
+	"m_sg_axi_awid" \
+	"m_sg_axi_awlock" \
+	"m_sg_axi_wid" \
+	"m_sg_axi_bid"
 
 
 foreach p $dummy_axi_ports {
@@ -165,6 +189,9 @@ set_property master_address_space_ref m_dest_axi \
     -of_objects [ipx::current_core]]
 set_property master_address_space_ref m_src_axi \
     [ipx::get_bus_interfaces m_src_axi \
+    -of_objects [ipx::current_core]]
+set_property master_address_space_ref m_sg_axi \
+    [ipx::get_bus_interfaces m_sg_axi \
     -of_objects [ipx::current_core]]
 
 adi_add_bus "fifo_wr" "slave" \
@@ -198,7 +225,7 @@ adi_add_bus_clock "fifo_rd_clk" "fifo_rd"
 adi_set_bus_dependency "fifo_rd" "fifo_rd" \
 	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE_DEST')) = 2)"
 
-foreach port {"m_dest_axi_aresetn" "m_src_axi_aresetn" \
+foreach port {"m_dest_axi_aresetn" "m_src_axi_aresetn" "m_sg_axi_aresetn" \
   "s_axis_valid" "s_axis_data" "s_axis_last" "m_axis_ready" \
   "fifo_wr_en" "fifo_wr_din" "fifo_rd_en"} {
 	set_property DRIVER_VALUE "0" [ipx::get_ports $port]
@@ -240,17 +267,21 @@ set_property -dict [list \
 	[ipx::get_user_parameters DMA_AXI_ADDR_WIDTH -of_objects $cc]
 
 foreach {k v} { \
-		"ASYNC_CLK_REQ_SRC" "true" \
-		"ASYNC_CLK_SRC_DEST" "true" \
-		"ASYNC_CLK_DEST_REQ" "true" \
-		"CYCLIC" "false" \
-		"DMA_2D_TRANSFER" "false" \
-		"SYNC_TRANSFER_START" "false" \
-		"AXI_SLICE_SRC" "false" \
-		"AXI_SLICE_DEST" "false" \
-		"DISABLE_DEBUG_REGISTERS" "false" \
-    "ENABLE_DIAGNOSTICS_IF" "false" \
-    "CACHE_COHERENT_DEST" "false" \
+        "ASYNC_CLK_REQ_SRC" "true" \
+        "ASYNC_CLK_SRC_DEST" "true" \
+        "ASYNC_CLK_DEST_REQ" "true" \
+        "ASYNC_CLK_REQ_SG" "true" \
+        "ASYNC_CLK_SRC_SG" "true" \
+        "ASYNC_CLK_DEST_SG" "true" \
+        "CYCLIC" "false" \
+        "DMA_2D_TRANSFER" "false" \
+        "DMA_SG_TRANSFER" "false" \
+        "SYNC_TRANSFER_START" "false" \
+        "AXI_SLICE_SRC" "false" \
+        "AXI_SLICE_DEST" "false" \
+        "DISABLE_DEBUG_REGISTERS" "false" \
+        "ENABLE_DIAGNOSTICS_IF" "false" \
+        "CACHE_COHERENT_DEST" "false" \
 	} { \
 	set_property -dict [list \
 			"value_format" "bool" \
@@ -263,11 +294,6 @@ foreach {k v} { \
 		] \
 		[ipx::get_hdl_parameters $k -of_objects $cc]
 }
-
-set_property -dict [list \
-	"enablement_tcl_expr" "\$DMA_TYPE_SRC != 0" \
-] \
-[ipx::get_user_parameters SYNC_TRANSFER_START -of_objects $cc]
 
 foreach dir {"SRC" "DEST"} {
 	set_property -dict [list \
@@ -302,6 +328,8 @@ set src_group [ipgui::add_group -name {Source} -component $cc -parent $g \
 		-display_name {Source}]
 set dest_group [ipgui::add_group -name {Destination} -component $cc -parent $g \
 		-display_name {Destination}]
+set sg_group [ipgui::add_group -name {Scatter-Gather} -component $cc -parent $g \
+		-display_name {Scatter-Gather}]
 
 foreach {dir group} [list "SRC" $src_group "DEST" $dest_group] {
 	set p [ipgui::get_guiparamspec -name "DMA_TYPE_${dir}" -component $cc]
@@ -337,6 +365,9 @@ ipgui::move_param -component $cc -order 4 $p -parent $src_group
 set_property -dict [list \
 	"display_name" "Transfer Start Synchronization Support" \
 ] $p
+set_property -dict [list \
+	"enablement_tcl_expr" "\$DMA_TYPE_SRC != 0" \
+] [ipx::get_user_parameters SYNC_TRANSFER_START -of_objects $cc]
 
 set p [ipgui::get_guiparamspec -name "CACHE_COHERENT_DEST" -component $cc]
 ipgui::move_param -component $cc -order 4 $p -parent $dest_group
@@ -349,6 +380,32 @@ set_property -dict [list \
 	"value_tcl_expr" "\$DMA_TYPE_DEST == 0 && \$DMA_AXI_PROTOCOL_DEST == 0" \
 	"enablement_value" "false" \
 ] [ipx::get_user_parameters CACHE_COHERENT_DEST -of_objects $cc]
+
+set p [ipgui::get_guiparamspec -name "DMA_AXI_PROTOCOL_SG" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $sg_group
+set_property -dict [list \
+	"display_name" "AXI Protocol" \
+] $p
+set_property -dict [list \
+	"enablement_tcl_expr" "\$DMA_SG_TRANSFER == true" \
+] [ipx::get_user_parameters DMA_AXI_PROTOCOL_SG -of_objects $cc]
+set_property -dict [list \
+	"value_validation_type" "pairs" \
+	"value_validation_pairs" {"AXI3" "1" "AXI4" "0"} \
+] [ipx::get_user_parameters DMA_AXI_PROTOCOL_SG -of_objects $cc]
+
+set p [ipgui::get_guiparamspec -name "DMA_DATA_WIDTH_SG" -component $cc]
+ipgui::move_param -component $cc -order 1 $p -parent $sg_group
+set_property -dict [list \
+	"display_name" "Bus Width" \
+] $p
+set_property -dict [list \
+	"enablement_tcl_expr" "\$DMA_SG_TRANSFER == true" \
+] [ipx::get_user_parameters DMA_DATA_WIDTH_SG -of_objects $cc]
+set_property -dict [list \
+	"value_validation_type" "list" \
+	"value_validation_list" "64" \
+] [ipx::get_user_parameters DMA_DATA_WIDTH_SG -of_objects $cc]
 
 set general_group [ipgui::add_group -name "General Configuration" -component $cc \
 		-parent $page0 -display_name "General Configuration"]
@@ -399,6 +456,12 @@ set_property -dict [list \
 	"display_name" "2D Transfer Support" \
 ] $p
 
+set p [ipgui::get_guiparamspec -name "DMA_SG_TRANSFER" -component $cc]
+ipgui::move_param -component $cc -order 2 $p -parent $feature_group
+set_property -dict [list \
+	"display_name" "SG Transfer Support" \
+] $p
+
 set clk_group [ipgui::add_group -name {Clock Domain Configuration} -component $cc \
 		-parent $page0 -display_name {Clock Domain Configuration}]
 
@@ -420,6 +483,24 @@ set_property -dict [list \
 	"display_name" "Destination and Request Clock Asynchronous" \
 ] $p
 
+set p [ipgui::get_guiparamspec -name "ASYNC_CLK_REQ_SG" -component $cc]
+ipgui::move_param -component $cc -order 3 $p -parent $clk_group
+set_property -dict [list \
+	"display_name" "Request and Scatter-Gather Clock Asynchronous" \
+] $p
+
+set p [ipgui::get_guiparamspec -name "ASYNC_CLK_SRC_SG" -component $cc]
+ipgui::move_param -component $cc -order 4 $p -parent $clk_group
+set_property -dict [list \
+	"display_name" "Source and Scatter-Gather Clock Asynchronous" \
+] $p
+
+set p [ipgui::get_guiparamspec -name "ASYNC_CLK_DEST_SG" -component $cc]
+ipgui::move_param -component $cc -order 5 $p -parent $clk_group
+set_property -dict [list \
+	"display_name" "Destination and Scatter-Gather Clock Asynchronous" \
+] $p
+
 set dbg_group [ipgui::add_group -name {Debug} -component $cc \
 		-parent $page0 -display_name {Debug}]
 
@@ -437,6 +518,7 @@ set_property -dict [list \
 
 ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "AXI_ID_WIDTH_SRC" -component $cc]
 ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "AXI_ID_WIDTH_DEST" -component $cc]
+ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "AXI_ID_WIDTH_SG" -component $cc]
 ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "ALLOW_ASYM_MEM" -component $cc]
 ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "DMA_AXIS_ID_W" -component $cc]
 ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "DMA_AXIS_DEST_W" -component $cc]

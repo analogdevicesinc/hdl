@@ -208,9 +208,6 @@ module request_arb #(
   wire [ID_WIDTH-1:0] source_id;
   wire [ID_WIDTH-1:0] response_id;
 
-  wire enabled_src;
-  wire enabled_dest;
-
   wire req_gen_valid;
   wire req_gen_ready;
   wire src_dest_valid;
