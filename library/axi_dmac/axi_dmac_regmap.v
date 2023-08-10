@@ -40,6 +40,7 @@ module axi_dmac_regmap #(
   parameter DISABLE_DEBUG_REGISTERS = 0,
   parameter BYTES_PER_BEAT_WIDTH_DEST = 1,
   parameter BYTES_PER_BEAT_WIDTH_SRC = 1,
+  parameter BYTES_PER_BEAT_WIDTH_SG = 1,
   parameter BYTES_PER_BURST_WIDTH = 7,
   parameter DMA_TYPE_DEST = 0,
   parameter DMA_TYPE_SRC = 2,
@@ -50,6 +51,7 @@ module axi_dmac_regmap #(
   parameter HAS_DEST_ADDR = 1,
   parameter HAS_SRC_ADDR = 1,
   parameter DMA_2D_TRANSFER = 0,
+  parameter DMA_SG_TRANSFER = 0,
   parameter SYNC_TRANSFER_START = 0,
   parameter CACHE_COHERENT_DEST = 0
 ) (
@@ -88,12 +90,14 @@ module axi_dmac_regmap #(
   // Control interface
   output reg ctrl_enable = 1'b0,
   output reg ctrl_pause = 1'b0,
+  output reg ctrl_hwdesc = 1'b0,
 
   // DMA request interface
   output request_valid,
   input request_ready,
   output [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] request_dest_address,
   output [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] request_src_address,
+  output [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SG] request_sg_address,
   output [DMA_LENGTH_WIDTH-1:0] request_x_length,
   output [DMA_LENGTH_WIDTH-1:0] request_y_length,
   output [DMA_LENGTH_WIDTH-1:0] request_dest_stride,
@@ -103,6 +107,7 @@ module axi_dmac_regmap #(
 
   // DMA response interface
   input response_eot,
+  input [31:0] response_sg_desc_id,
   input [BYTES_PER_BURST_WIDTH-1:0] response_measured_burst_length,
   input response_partial,
   input response_valid,
@@ -116,7 +121,7 @@ module axi_dmac_regmap #(
   input [31:0] dbg_ids1
 );
 
-  localparam PCORE_VERSION = 'h00040461;
+  localparam PCORE_VERSION = 'h00040561;
   localparam HAS_ADDR_HIGH = DMA_AXI_ADDR_WIDTH > 32;
   localparam ADDR_LOW_MSB = HAS_ADDR_HIGH ? 31 : DMA_AXI_ADDR_WIDTH-1;
 
@@ -174,6 +179,7 @@ module axi_dmac_regmap #(
     if (s_axi_aresetn == 1'b0) begin
       ctrl_enable <= 1'b0;
       ctrl_pause <= 1'b0;
+      ctrl_hwdesc <= 1'b0;
       up_irq_mask <= 2'b11;
       up_scratch <= 32'h00;
       up_wack <= 1'b0;
@@ -182,9 +188,17 @@ module axi_dmac_regmap #(
 
       if (up_wreq == 1'b1) begin
         case (up_waddr)
-        9'h002: up_scratch <= up_wdata;
-        9'h020: up_irq_mask <= up_wdata[1:0];
-        9'h100: {ctrl_pause, ctrl_enable} <= up_wdata[1:0];
+        9'h002: begin
+          up_scratch <= up_wdata;
+          end
+        9'h020: begin
+          up_irq_mask <= up_wdata[1:0];
+          end
+        9'h100: begin
+          ctrl_hwdesc <= up_wdata[2] & DMA_SG_TRANSFER;
+          ctrl_pause <= up_wdata[1];
+          ctrl_enable <= up_wdata[0];
+          end
         endcase
       end
     end
@@ -213,7 +227,7 @@ module axi_dmac_regmap #(
       9'h020: up_rdata <= up_irq_mask;
       9'h021: up_rdata <= up_irq_pending;
       9'h022: up_rdata <= up_irq_source;
-      9'h100: up_rdata <= {ctrl_pause, ctrl_enable};
+      9'h100: up_rdata <= {ctrl_hwdesc, ctrl_pause, ctrl_enable};
       9'h10d: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_dest_addr[ADDR_LOW_MSB:0];
       9'h10e: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_src_addr[ADDR_LOW_MSB:0];
       9'h10f: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_status;
@@ -230,6 +244,7 @@ module axi_dmac_regmap #(
     .DISABLE_DEBUG_REGISTERS(DISABLE_DEBUG_REGISTERS),
     .BYTES_PER_BEAT_WIDTH_DEST(BYTES_PER_BEAT_WIDTH_DEST),
     .BYTES_PER_BEAT_WIDTH_SRC(BYTES_PER_BEAT_WIDTH_SRC),
+    .BYTES_PER_BEAT_WIDTH_SG(BYTES_PER_BEAT_WIDTH_SG),
     .BYTES_PER_BURST_WIDTH(BYTES_PER_BURST_WIDTH),
     .DMA_AXI_ADDR_WIDTH(DMA_AXI_ADDR_WIDTH),
     .DMA_LENGTH_WIDTH(DMA_LENGTH_WIDTH),
@@ -238,6 +253,7 @@ module axi_dmac_regmap #(
     .HAS_DEST_ADDR(HAS_DEST_ADDR),
     .HAS_SRC_ADDR(HAS_SRC_ADDR),
     .DMA_2D_TRANSFER(DMA_2D_TRANSFER),
+    .DMA_SG_TRANSFER(DMA_SG_TRANSFER),
     .SYNC_TRANSFER_START(SYNC_TRANSFER_START)
   ) i_regmap_request (
     .clk(s_axi_aclk),
@@ -254,11 +270,13 @@ module axi_dmac_regmap #(
     .up_rdata(up_rdata_request),
 
     .ctrl_enable(ctrl_enable),
+    .ctrl_hwdesc(ctrl_hwdesc),
 
     .request_valid(request_valid),
     .request_ready(request_ready),
     .request_dest_address(request_dest_address),
     .request_src_address(request_src_address),
+    .request_sg_address(request_sg_address),
     .request_x_length(request_x_length),
     .request_y_length(request_y_length),
     .request_dest_stride(request_dest_stride),
@@ -267,6 +285,7 @@ module axi_dmac_regmap #(
     .request_last(request_last),
 
     .response_eot(response_eot),
+    .response_sg_desc_id(response_sg_desc_id),
     .response_measured_burst_length(response_measured_burst_length),
     .response_partial(response_partial),
     .response_valid(response_valid),

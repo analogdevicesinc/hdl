@@ -38,13 +38,16 @@
 module axi_dmac_reset_manager #(
   parameter ASYNC_CLK_REQ_SRC = 1,
   parameter ASYNC_CLK_SRC_DEST = 1,
-  parameter ASYNC_CLK_DEST_REQ = 1
+  parameter ASYNC_CLK_DEST_REQ = 1,
+  parameter ASYNC_CLK_REQ_SG = 1,
+  parameter DMA_SG_TRANSFER = 0
 ) (
   input clk,
   input resetn,
 
   input ctrl_enable,
   input ctrl_pause,
+  input ctrl_hwdesc,
 
   output req_resetn,
   output req_enable,
@@ -61,6 +64,12 @@ module axi_dmac_reset_manager #(
   output src_resetn,
   output src_enable,
   input src_enabled,
+
+  input sg_clk,
+  input sg_ext_resetn,
+  output sg_resetn,
+  output sg_enable,
+  input sg_enabled,
 
   output [11:0] dbg_status
 );
@@ -87,16 +96,22 @@ module axi_dmac_reset_manager #(
 
   wire enabled_dest;
   wire enabled_src;
+  wire enabled_sg;
 
   wire enabled_all;
   wire disabled_all;
 
+  generate if (DMA_SG_TRANSFER == 1) begin
+  assign enabled_all = req_enabled & enabled_src & enabled_dest & (enabled_sg | ~ctrl_hwdesc);
+  assign disabled_all = ~(req_enabled | enabled_src | enabled_dest | (enabled_sg & ctrl_hwdesc));
+  end else begin
   assign enabled_all = req_enabled & enabled_src & enabled_dest;
   assign disabled_all = ~(req_enabled | enabled_src | enabled_dest);
+  end endgenerate
 
   assign req_enable = do_enable;
 
-  assign dbg_status = {needs_reset,req_resetn,src_resetn,dest_resetn,1'b0,req_enabled,enabled_src,enabled_dest,1'b0,state};
+  assign dbg_status = {needs_reset,req_resetn,src_resetn,dest_resetn,sg_resetn,req_enabled,enabled_src,enabled_dest,enabled_sg,state};
 
   always @(posedge clk) begin
     if (state == STATE_DO_RESET) begin
@@ -201,15 +216,17 @@ module axi_dmac_reset_manager #(
    * successive domains have the same clock they'll share their reset signal.
    */
 
-  wire [3:0] reset_async_chain;
-  wire [3:0] reset_sync_chain;
-  wire [2:0] reset_chain_clks = {clk, src_clk, dest_clk};
-
+  localparam NUM_RESET_LINKS = DMA_SG_TRANSFER ? 4 : 3;
   localparam GEN_ASYNC_RESET = {
+    ASYNC_CLK_REQ_SG ? 1'b1 : 1'b0,
     ASYNC_CLK_REQ_SRC ? 1'b1 : 1'b0,
     ASYNC_CLK_SRC_DEST ? 1'b1 : 1'b0,
     1'b1
   };
+
+  wire [NUM_RESET_LINKS:0] reset_async_chain;
+  wire [NUM_RESET_LINKS:0] reset_sync_chain;
+  wire [3:0] reset_chain_clks = {sg_clk, clk, src_clk, dest_clk};
 
   assign reset_async_chain[0] = 1'b0;
   assign reset_sync_chain[0] = reset_async_chain[3];
@@ -217,7 +234,7 @@ module axi_dmac_reset_manager #(
   generate
   genvar i;
 
-  for (i = 0; i < 3; i = i + 1) begin: reset_gen
+  for (i = 0; i < NUM_RESET_LINKS; i = i + 1) begin: reset_gen
 
     if (GEN_ASYNC_RESET[i] == 1'b1) begin
 
@@ -260,6 +277,11 @@ module axi_dmac_reset_manager #(
   assign dest_resetn = ~reset_sync_chain[1];
   assign src_resetn = ~reset_sync_chain[2];
   assign req_resetn = ~reset_sync_chain[3];
+  generate if (DMA_SG_TRANSFER == 1) begin
+  assign sg_resetn = ~reset_sync_chain[4];
+  end else begin
+  assign sg_resetn = 1'b0;
+  end endgenerate
 
   sync_bits #(
     .NUM_OF_BITS (1),
@@ -296,5 +318,29 @@ module axi_dmac_reset_manager #(
     .out_resetn (1'b1),
     .in_bits (src_enabled),
     .out_bits (enabled_src));
+
+  generate if (DMA_SG_TRANSFER == 1) begin
+  sync_bits #(
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK (ASYNC_CLK_REQ_SG)
+  ) i_sync_control_sg (
+    .out_clk (sg_clk),
+    .out_resetn (1'b1),
+    .in_bits (do_enable),
+    .out_bits (sg_enable));
+
+  sync_bits #(
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK (ASYNC_CLK_REQ_SG)
+  ) i_sync_status_sg (
+    .out_clk (clk),
+    .out_resetn (1'b1),
+    .in_bits (sg_enabled),
+    .out_bits (enabled_sg));
+
+  end else begin
+  assign sg_enable = 1'b0;
+  assign enabled_sg = 1'b0;
+  end endgenerate
 
 endmodule

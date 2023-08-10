@@ -39,6 +39,7 @@ module axi_dmac_regmap_request #(
   parameter DISABLE_DEBUG_REGISTERS = 0,
   parameter BYTES_PER_BEAT_WIDTH_DEST = 1,
   parameter BYTES_PER_BEAT_WIDTH_SRC = 1,
+  parameter BYTES_PER_BEAT_WIDTH_SG = 1,
   parameter BYTES_PER_BURST_WIDTH = 7,
   parameter DMA_AXI_ADDR_WIDTH = 32,
   parameter DMA_LENGTH_WIDTH = 24,
@@ -47,6 +48,7 @@ module axi_dmac_regmap_request #(
   parameter HAS_DEST_ADDR = 1,
   parameter HAS_SRC_ADDR = 1,
   parameter DMA_2D_TRANSFER = 0,
+  parameter DMA_SG_TRANSFER = 0,
   parameter SYNC_TRANSFER_START = 0
 ) (
   input clk,
@@ -66,12 +68,14 @@ module axi_dmac_regmap_request #(
 
   // Control interface
   input ctrl_enable,
+  input ctrl_hwdesc,
 
   // DMA request interface
   output request_valid,
   input request_ready,
   output [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] request_dest_address,
   output [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] request_src_address,
+  output [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SG] request_sg_address,
   output [DMA_LENGTH_WIDTH-1:0] request_x_length,
   output [DMA_LENGTH_WIDTH-1:0] request_y_length,
   output [DMA_LENGTH_WIDTH-1:0] request_dest_stride,
@@ -81,6 +85,7 @@ module axi_dmac_regmap_request #(
 
   // DMA response interface
   input response_eot,
+  input [31:0] response_sg_desc_id,
   input [BYTES_PER_BURST_WIDTH-1:0] response_measured_burst_length,
   input response_partial,
   input response_valid,
@@ -128,8 +133,8 @@ module axi_dmac_regmap_request #(
 
   always @(posedge clk) begin
     if (reset == 1'b1) begin
-      up_dma_src_address <= 'h00;
       up_dma_dest_address <= 'h00;
+      up_dma_src_address <= 'h00;
       up_dma_x_length[DMA_LENGTH_WIDTH-1:DMA_LENGTH_ALIGN] <= 'h00;
       up_dma_req_valid <= 1'b0;
       up_dma_cyclic <= DMA_CYCLIC ? 1'b1 : 1'b0;
@@ -186,8 +191,11 @@ module axi_dmac_regmap_request #(
     9'h112: up_rdata <= up_measured_transfer_length;
     9'h113: up_rdata <= up_tlf_data[MEASURED_LENGTH_WIDTH-1 : 0];   // Length
     9'h114: up_rdata <= up_tlf_data[MEASURED_LENGTH_WIDTH+: 2];  // ID
+    9'h115: up_rdata <= response_sg_desc_id;
+    9'h11f: up_rdata <= {request_sg_address[ADDR_LOW_MSB:BYTES_PER_BEAT_WIDTH_SG],{BYTES_PER_BEAT_WIDTH_SG{1'b0}}};
     9'h124: up_rdata <= (HAS_ADDR_HIGH && HAS_DEST_ADDR) ? up_dma_dest_address[DMA_AXI_ADDR_WIDTH-1:32] : 32'h00;
     9'h125: up_rdata <= (HAS_ADDR_HIGH && HAS_SRC_ADDR) ? up_dma_src_address[DMA_AXI_ADDR_WIDTH-1:32] : 32'h00;
+    9'h12f: up_rdata <= HAS_ADDR_HIGH ? request_sg_address[DMA_AXI_ADDR_WIDTH-1:32] : 32'h00;
     default: up_rdata <= 32'h00;
     endcase
   end
@@ -221,9 +229,32 @@ module axi_dmac_regmap_request #(
   end
   endgenerate
 
+  generate
+  if (DMA_SG_TRANSFER == 1) begin
+    reg [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SG]  up_dma_sg_address = 'h00;
+
+    always @(posedge clk) begin
+      if (reset == 1'b1) begin
+        up_dma_sg_address <= 'h00;
+      end else if (up_wreq == 1'b1) begin
+        case (up_waddr)
+        9'h11f: up_dma_sg_address[ADDR_LOW_MSB:BYTES_PER_BEAT_WIDTH_SG] <= up_wdata[ADDR_LOW_MSB:BYTES_PER_BEAT_WIDTH_SG];
+        9'h12f:
+          if (HAS_ADDR_HIGH) begin
+            up_dma_sg_address[DMA_AXI_ADDR_WIDTH-1:32] <= up_wdata[ADDR_HIGH_MSB:0];
+          end
+        endcase
+      end
+    end
+    assign request_sg_address = up_dma_sg_address;
+  end else begin
+    assign request_sg_address = 'h00;
+  end
+  endgenerate
+
   // In cyclic mode the same transfer is submitted over and over again
-  assign up_sot = up_dma_cyclic ? 1'b0 : up_dma_req_valid & up_dma_req_ready;
-  assign up_eot = up_dma_cyclic ? 1'b0 : response_eot & response_valid & response_ready;
+  assign up_sot = (up_dma_cyclic && !ctrl_hwdesc) ? 1'b0 : up_dma_req_valid & up_dma_req_ready;
+  assign up_eot = (up_dma_cyclic && !ctrl_hwdesc) ? 1'b0 : response_eot & response_valid & response_ready;
 
   assign request_valid = up_dma_req_valid;
   assign up_dma_req_ready = request_ready;

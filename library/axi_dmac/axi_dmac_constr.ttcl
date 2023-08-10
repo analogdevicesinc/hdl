@@ -11,6 +11,10 @@
 <: set async_dest_req [getBooleanValue "ASYNC_CLK_DEST_REQ"] :>
 <: set async_req_src [getBooleanValue "ASYNC_CLK_REQ_SRC"] :>
 <: set async_src_dest [getBooleanValue "ASYNC_CLK_SRC_DEST"] :>
+<: set async_req_sg [getBooleanValue "ASYNC_CLK_REQ_SG"] :>
+<: set async_src_sg [getBooleanValue "ASYNC_CLK_SRC_SG"] :>
+<: set async_dest_sg [getBooleanValue "ASYNC_CLK_DEST_SG"] :>
+<: set sg_enabled [getBooleanValue "DMA_SG_TRANSFER"] :>
 <: set disable_debug_registers [getBooleanValue "DISABLE_DEBUG_REGISTERS"] :>
 
 set req_clk_ports_base {s_axi_aclk}
@@ -31,11 +35,28 @@ set dest_clk_ports "$dest_clk_ports $src_clk_ports_base"
 set req_clk_ports "$req_clk_ports $dest_clk_ports_base"
 set dest_clk_ports "$dest_clk_ports $req_clk_ports_base"
 <: } :>
+<: if {$sg_enabled} { :>
+set sg_clk_ports_base {m_sg_axi_aclk}
+set sg_clk_ports $sg_clk_ports_base
+<: if {[expr {!$async_req_sg}]} { :>
+set req_clk_ports "$req_clk_ports $sg_clk_ports_base"
+set sg_clk_ports "$sg_clk_ports $req_clk_ports_base"
+<: } :>
+<: if {[expr {!$async_src_sg}]} { :>
+set src_clk_ports "$src_clk_ports $sg_clk_ports_base"
+set sg_clk_ports "$sg_clk_ports $src_clk_ports_base"
+<: } :>
+<: if {[expr {!$async_dest_sg}]} { :>
+set dest_clk_ports "$dest_clk_ports $sg_clk_ports_base"
+set sg_clk_ports "$sg_clk_ports $dest_clk_ports_base"
+<: } :>
+set sg_clk [get_clocks -of_objects [get_ports -quiet $sg_clk_ports]]
+<: } :>
 set req_clk [get_clocks -of_objects [get_ports -quiet $req_clk_ports]]
 set src_clk [get_clocks -of_objects [get_ports -quiet $src_clk_ports]]
 set dest_clk [get_clocks -of_objects [get_ports -quiet $dest_clk_ports]]
 
-<: if {$async_req_src || $async_src_dest || $async_dest_req} { :>
+<: if {$async_req_src || $async_src_dest || $async_dest_req || ($async_req_sg && $sg_enabled)} { :>
 set_property ASYNC_REG TRUE \
 	[get_cells -quiet -hier *cdc_sync_stage1_reg*] \
 	[get_cells -quiet -hier *cdc_sync_stage2_reg*]
@@ -140,6 +161,7 @@ set_max_delay -quiet -datapath_only \
 	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
 		-filter {NAME =~ *i_dest_response_fifo/zerodeep.i_raddr_sync* && IS_SEQUENTIAL}] \
 	[get_property -min PERIOD $req_clk]
+
 set_max_delay -quiet -datapath_only \
 	-from [get_cells -quiet -hier *cdc_sync_fifo_ram_reg* \
 		-filter {NAME =~ *i_dest_response_fifo* && IS_SEQUENTIAL}] \
@@ -209,12 +231,61 @@ set_max_delay -quiet -datapath_only \
 	-to $dest_clk \
 	[get_property -min PERIOD $dest_clk]
 
-  set_max_delay -quiet -datapath_only \
+set_max_delay -quiet -datapath_only \
   -from $src_clk \
   -through [get_cells -quiet -hier DP \
     -filter {NAME =~ *i_request_arb/eot_mem_dest_reg*}] \
 	-to $dest_clk \
 	[get_property -min PERIOD $dest_clk]
+
+<: } :>
+<: if {$async_req_sg && $sg_enabled} { :>
+set_false_path -quiet \
+	-from $req_clk \
+	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+		-filter {NAME =~ *i_sync_sg_enable* && IS_SEQUENTIAL}]
+
+set_max_delay -quiet -datapath_only \
+	-from $req_clk \
+	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+		-filter {NAME =~ *i_sg_addr_fifo/zerodeep.i_waddr_sync* && IS_SEQUENTIAL}] \
+	[get_property -min PERIOD $req_clk]
+
+set_max_delay -quiet -datapath_only \
+	-from $sg_clk \
+	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+		-filter {NAME =~ *i_sg_addr_fifo/zerodeep.i_raddr_sync* && IS_SEQUENTIAL}] \
+	[get_property -min PERIOD $sg_clk]
+
+set_max_delay -quiet -datapath_only \
+	-from [get_cells -quiet -hier *cdc_sync_fifo_ram_reg* \
+		-filter {NAME =~ *i_sg_addr_fifo* && IS_SEQUENTIAL}] \
+	-to $sg_clk \
+	[get_property -min PERIOD $sg_clk]
+
+set_max_delay -quiet -datapath_only \
+	-from $sg_clk \
+	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+		-filter {NAME =~ *i_sg_desc_fifo/zerodeep.i_waddr_sync* && IS_SEQUENTIAL}] \
+	[get_property -min PERIOD $sg_clk]
+
+set_max_delay -quiet -datapath_only \
+	-from $req_clk \
+	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+		-filter {NAME =~ *i_sg_desc_fifo/zerodeep.i_raddr_sync* && IS_SEQUENTIAL}] \
+	[get_property -min PERIOD $req_clk]
+
+set_max_delay -quiet -datapath_only \
+	-from [get_cells -quiet -hier *cdc_sync_fifo_ram_reg* \
+		-filter {NAME =~ *i_sg_desc_fifo* && IS_SEQUENTIAL}] \
+	-to $req_clk \
+	[get_property -min PERIOD $req_clk]
+
+set_false_path \
+  -to [get_pins -hierarchical * -filter {NAME=~*i_waddr_sync_gray/cdc_sync_stage1_reg[*]/D}]
+
+set_false_path \
+  -to [get_pins -hierarchical * -filter {NAME=~*i_raddr_sync_gray/cdc_sync_stage1_reg[*]/D}]
 
 <: } :>
 # Reset signals
