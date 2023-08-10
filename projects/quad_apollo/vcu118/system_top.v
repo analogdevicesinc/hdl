@@ -136,7 +136,18 @@ module system_top (
   output  [5:0] rx_dsa,
 
   inout   [3:0] gp4,
-  inout   [3:0] gp5
+  inout   [3:0] gp5,
+
+  // PMOD1 for calibration board
+  output pmod1_adc_sync_n,
+  output pmod1_adc_sdi,
+  input  pmod1_adc_sdo,
+  output pmod1_adc_sclk,
+
+  output pmod1_5045_v2,
+  output pmod1_5045_v1,
+  output pmod1_ctrl_ind,
+  output pmod1_ctrl_rx_combined
 );
 
   // internal signals
@@ -156,6 +167,11 @@ module system_top (
   wire            spi_2_mosi;
   wire            spi_2_miso;
   wire            art_miso;
+
+  wire            spi_3_clk;
+  wire    [ 7:0]  spi_3_csn;
+  wire            spi_3_mosi;
+  wire            spi_3_miso;
 
   wire            ref_clk;
   wire            ref_clk_replica;
@@ -240,6 +256,10 @@ module system_top (
   assign ltc6953_sclk = spi_2_clk;
   assign ltc6953_sdi = spi_2_mosi;
 
+  assign pmod1_adc_sync_n = spi_3_csn[0];
+  assign pmod1_adc_sdi = spi_3_mosi;
+  assign pmod1_adc_sclk = spi_3_clk;
+
   assign spi_miso = ~spi_csn[0] ? apollo_miso[0] :
                     ~spi_csn[1] ? apollo_miso[1] :
                     ~spi_csn[2] ? apollo_miso[2] :
@@ -247,6 +267,8 @@ module system_top (
 
   assign spi_2_miso =  |(~spi_2_csn[3:0]) ? art_miso :
                        |(~spi_2_csn[5:4]) ? ltc6953_sdo : 1'b0;
+
+  assign spi_3_miso =  ~pmod1_adc_sync_n ? pmod1_adc_sdo : 1'b0;
 
   genvar i;
   generate
@@ -303,6 +325,10 @@ module system_top (
   assign lpf_b         = gpio_o[93:90];
   assign admv8913_cs_n = gpio_o[94];
   assign rx_dsa        = gpio_o[100:95];
+  assign pmod1_5045_v2 = gpio_o[101];
+  assign pmod1_5045_v1 = gpio_o[102];
+  assign pmod1_ctrl_ind = gpio_o[103];
+  assign pmod1_ctrl_rx_combined = gpio_o[104];
 
   ad_iobuf #(
     .DATA_WIDTH(17)
@@ -312,7 +338,7 @@ module system_top (
     .dio_o (gpio_i[16:0]),
     .dio_p (gpio_bd));
 
-  assign gpio_i[127:101] = gpio_o[127:101];
+  assign gpio_i[127:105] = gpio_o[127:105];
   assign gpio_i[ 31:17] = gpio_o[ 31:17];
 
   hsci_phy_top hsci_phy_top(
@@ -398,6 +424,14 @@ module system_top (
     .spi_2_sdi_i (spi_2_miso),
     .spi_2_sdo_i (spi_2_mosi),
     .spi_2_sdo_o (spi_2_mosi),
+
+    .spi_3_clk_i (spi_3_clk),
+    .spi_3_clk_o (spi_3_clk),
+    .spi_3_csn_i (spi_3_csn),
+    .spi_3_csn_o (spi_3_csn),
+    .spi_3_sdi_i (spi_3_miso),
+    .spi_3_sdo_i (spi_3_mosi),
+    .spi_3_sdo_o (spi_3_mosi),
 
     .gpio0_i (gpio_i[31:0]),
     .gpio0_o (gpio_o[31:0]),

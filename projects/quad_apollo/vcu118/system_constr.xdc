@@ -242,3 +242,14 @@ set_property  -dict {PACKAGE_PIN AP13 IOSTANDARD LVCMOS18                       
 set_property  -dict {PACKAGE_PIN AR13 IOSTANDARD LVCMOS18                                     } [get_ports gp5[2]           ]; ## LA24_N          H29  IO_L14N_T2L_N3_GC_67
 set_property  -dict {PACKAGE_PIN AT12 IOSTANDARD LVCMOS18                                     } [get_ports gp4[3]           ]; ## LA25_P          G27  IO_L1P_T0L_N0_DBC_67
 set_property  -dict {PACKAGE_PIN AU12 IOSTANDARD LVCMOS18                                     } [get_ports gp5[3]           ]; ## LA25_N          G28  IO_L1N_T0L_N1_DBC_67
+
+# PMOD1 calibration board connector
+set_property  -dict {PACKAGE_PIN N28  IOSTANDARD LVCMOS12                                     } [get_ports pmod1_adc_sync_n           ]; ## PMOD1_0 J53.1
+set_property  -dict {PACKAGE_PIN M30  IOSTANDARD LVCMOS12                                     } [get_ports pmod1_adc_sdi              ]; ## PMOD1_1 J53.3
+set_property  -dict {PACKAGE_PIN N30  IOSTANDARD LVCMOS12                                     } [get_ports pmod1_adc_sdo              ]; ## PMOD1_2 J53.5
+set_property  -dict {PACKAGE_PIN P30  IOSTANDARD LVCMOS12                                     } [get_ports pmod1_adc_sclk             ]; ## PMOD1_3 J53.7
+
+set_property  -dict {PACKAGE_PIN P29  IOSTANDARD LVCMOS12                                     } [get_ports pmod1_5045_v2              ]; ## PMOD1_4 J53.2
+set_property  -dict {PACKAGE_PIN L31  IOSTANDARD LVCMOS12                                     } [get_ports pmod1_5045_v1              ]; ## PMOD1_5 J53.4
+set_property  -dict {PACKAGE_PIN M31  IOSTANDARD LVCMOS12                                     } [get_ports pmod1_ctrl_ind             ]; ## PMOD1_6 J53.6
+set_property  -dict {PACKAGE_PIN R29  IOSTANDARD LVCMOS12                                     } [get_ports pmod1_ctrl_rx_combined     ]; ## PMOD1_7 J53.8
