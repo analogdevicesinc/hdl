@@ -155,7 +155,7 @@ module axi_dmac_response_manager #(
     end
   end
 
-  assign response_eot = (state == STATE_WRITE_RESPR) ? req_eot : 1'b1;
+  assign response_eot = (state == STATE_WRITE_RESPR) ? req_eot : 1'b0;
   assign response_partial = (state == STATE_WRITE_RESPR) ? req_response_partial : 1'b0;
 
   always @(posedge req_clk)

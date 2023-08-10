@@ -7,7 +7,7 @@ proc init {cellpath otherInfo} {
 	set ip [get_bd_cells $cellpath]
 
 	bd::mark_propagate_override $ip \
-		"ASYNC_CLK_REQ_SRC ASYNC_CLK_SRC_DEST ASYNC_CLK_DEST_REQ"
+		"ASYNC_CLK_REQ_SRC ASYNC_CLK_SRC_DEST ASYNC_CLK_DEST_REQ ASYNC_CLK_REQ_SG ASYNC_CLK_SRC_SG ASYNC_CLK_DEST_SG"
 
 	bd::mark_propagate_override $ip \
 		"DMA_AXI_ADDR_WIDTH"
@@ -22,13 +22,18 @@ proc init {cellpath otherInfo} {
 	}
 
 	foreach dir {SRC DEST} {
-		# This is a bit of a hack, but we can't change the protocol if the type
-		# is not AXI MM
+		# Change the protocol by first enabling the parameter - setting the type to AXI MM
 		set old [get_property "CONFIG.DMA_TYPE_${dir}" $ip]
 		set_property "CONFIG.DMA_TYPE_${dir}" "0" $ip
 		set_property "CONFIG.DMA_AXI_PROTOCOL_${dir}" $axi_protocol $ip
 		set_property "CONFIG.DMA_TYPE_${dir}" $old $ip
 	}
+
+	# Change the protocol by first enabling the parameter - enabling the SG transfers 
+	set old [get_property "CONFIG.DMA_SG_TRANSFER" $ip]
+	set_property "CONFIG.DMA_SG_TRANSFER" "true" $ip
+	set_property "CONFIG.DMA_AXI_PROTOCOL_SG" $axi_protocol $ip
+	set_property "CONFIG.DMA_SG_TRANSFER" $old $ip
 
   # Versions earlier than 2017.3 infer sub-optimal asymmetric memory
   # See https://www.xilinx.com/support/answers/69179.html
@@ -80,6 +85,27 @@ proc post_config_ip {cellpath otherinfo} {
 			set_property CONFIG.NUM_READ_OUTSTANDING 0 $intf
 		}
 	}
+
+	# SG interface configuration
+	set sg_enabled [get_property CONFIG.DMA_SG_TRANSFER $ip]
+	if {$sg_enabled == "true"} {
+		set axi_protocol [get_property "CONFIG.DMA_AXI_PROTOCOL_SG" $ip]
+
+		if {$axi_protocol == 0} {
+			set axi_protocol_str "AXI4"
+			set max_beats_per_burst 256
+		} else {
+			set axi_protocol_str "AXI3"
+			set max_beats_per_burst 16
+		}
+
+		set intf [get_bd_intf_pins [format "%s/m_sg_axi" $cellpath]]
+		set_property CONFIG.PROTOCOL $axi_protocol_str $intf
+		set_property CONFIG.MAX_BURST_LENGTH $max_beats_per_burst $intf
+
+		set_property CONFIG.NUM_WRITE_OUTSTANDING 0 $intf
+		set_property CONFIG.NUM_READ_OUTSTANDING 0 $intf
+	}
 }
 
 proc axi_dmac_detect_async_clk { cellpath ip param_name clk_a clk_b } {
@@ -118,6 +144,7 @@ proc propagate {cellpath otherinfo} {
 	set ip [get_bd_cells $cellpath]
 	set src_type [get_property CONFIG.DMA_TYPE_SRC $ip]
 	set dest_type [get_property CONFIG.DMA_TYPE_DEST $ip]
+	set sg_enabled [get_property CONFIG.DMA_SG_TRANSFER $ip]
 
 	set req_clk [get_bd_pins "$ip/s_axi_aclk"]
 
@@ -140,6 +167,13 @@ proc propagate {cellpath otherinfo} {
 	axi_dmac_detect_async_clk $cellpath $ip "ASYNC_CLK_REQ_SRC" $req_clk $src_clk
 	axi_dmac_detect_async_clk $cellpath $ip "ASYNC_CLK_SRC_DEST" $src_clk $dest_clk
 	axi_dmac_detect_async_clk $cellpath $ip "ASYNC_CLK_DEST_REQ" $dest_clk $req_clk
+
+	if {$sg_enabled == "true"} {
+		set sg_clk [get_bd_pins "$ip/m_sg_axi_aclk"]
+		axi_dmac_detect_async_clk $cellpath $ip "ASYNC_CLK_REQ_SG" $req_clk $sg_clk
+		axi_dmac_detect_async_clk $cellpath $ip "ASYNC_CLK_SRC_SG" $src_clk $sg_clk
+		axi_dmac_detect_async_clk $cellpath $ip "ASYNC_CLK_DEST_SG" $dest_clk $sg_clk
+	}
 }
 
 proc post_propagate {cellpath otherinfo} {

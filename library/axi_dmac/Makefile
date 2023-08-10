@@ -24,6 +24,7 @@ GENERIC_DEPS += dest_axi_mm.v
 GENERIC_DEPS += dest_axi_stream.v
 GENERIC_DEPS += dest_fifo_inf.v
 GENERIC_DEPS += dmac_2d_transfer.v
+GENERIC_DEPS += dmac_sg.v
 GENERIC_DEPS += inc_id.vh
 GENERIC_DEPS += request_arb.v
 GENERIC_DEPS += request_generator.v
@@ -52,6 +53,7 @@ INTEL_DEPS += ../util_axis_fifo/util_axis_fifo.v
 INTEL_DEPS += ../util_axis_fifo/util_axis_fifo_address_generator.v
 INTEL_DEPS += ../util_cdc/sync_bits.v
 INTEL_DEPS += ../util_cdc/sync_event.v
+INTEL_DEPS += ../util_cdc/sync_gray.v
 INTEL_DEPS += axi_dmac_constr.sdc
 INTEL_DEPS += axi_dmac_hw.tcl
 
