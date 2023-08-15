@@ -39,7 +39,7 @@ module jesd204_soft_pcs_tx #(
                             /* 37-20 */ 18'b0,
                             /* 19-00 */ data_inv_s[19:0]};
   end
-  
+
   generate
   genvar lane;
   genvar i;

@@ -66,109 +66,105 @@ module jesd204c_phy_adaptor_tx #(
   output reg o_status_rate_mismatch = 'b0
 );
 
+  // shallow FIFO
+  parameter SIZE = 4;
+  localparam ADDR_WIDTH = $clog2(SIZE);
 
-// shallow FIFO
-parameter SIZE = 4;
-localparam ADDR_WIDTH = $clog2(SIZE);
+  reg [ADDR_WIDTH:0] i_wr_addr = 'h00;
+  reg [ADDR_WIDTH:0] o_rd_addr = 'h00;
 
-reg [ADDR_WIDTH:0] i_wr_addr = 'h00;
-reg [ADDR_WIDTH:0] o_rd_addr = 'h00;
+  wire [65:0] o_data;
+  wire o_mem_rd;
+  wire o_mem_rd_en;
 
-wire [65:0] o_data;
-wire o_mem_rd;
-wire o_mem_rd_en;
+  wire i_tx_ready;
 
-wire i_tx_ready;
+  // Valid to output interface can be high for 32 cycles out of 33
+  reg [5:0] rate_cnt = 6'd32;
 
-// Valid to output interface can be high for 32 cycles out of 33
-reg [5:0] rate_cnt = 6'd32;
-
-always @(posedge o_clk) begin
-  if (~o_mem_rd_en) begin
-    rate_cnt <= 6'd32;
-  end else if (rate_cnt[5] ) begin
-    rate_cnt <= 6'd0;
-  end else begin
-    rate_cnt <= rate_cnt + 6'd1;
+  always @(posedge o_clk) begin
+    if (~o_mem_rd_en) begin
+      rate_cnt <= 6'd32;
+    end else if (rate_cnt[5] ) begin
+      rate_cnt <= 6'd0;
+    end else begin
+      rate_cnt <= rate_cnt + 6'd1;
+    end
   end
-end
 
-assign o_mem_rd = ~rate_cnt[5];
+  assign o_mem_rd = ~rate_cnt[5];
 
-// write to memory when PHY is ready and link clock domain is
-// also running achieved with two sync_bits
-always @(posedge i_clk) begin
-  if (~i_tx_ready) begin
-    i_wr_addr <= 'h00;
-  end else if (1'b1) begin
-    i_wr_addr <= i_wr_addr + 1'b1;
+  // write to memory when PHY is ready and link clock domain is
+  // also running achieved with two sync_bits
+  always @(posedge i_clk) begin
+    if (~i_tx_ready) begin
+      i_wr_addr <= 'h00;
+    end else if (1'b1) begin
+      i_wr_addr <= i_wr_addr + 1'b1;
+    end
   end
-end
 
-sync_bits #(
-  .NUM_OF_BITS (1),
-  .ASYNC_CLK (1)
-) i_tx_ready_cdc (
-  .in_bits(o_phy_tx_ready),
-  .out_clk(i_clk),
-  .out_resetn(1'b1),
-  .out_bits(i_tx_ready)
-);
+  sync_bits #(
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK (1)
+  ) i_tx_ready_cdc (
+    .in_bits(o_phy_tx_ready),
+    .out_clk(i_clk),
+    .out_resetn(1'b1),
+    .out_bits(i_tx_ready));
 
-sync_bits #(
-  .NUM_OF_BITS (1),
-  .ASYNC_CLK (1)
-) i_tx_ready_back_cdc (
-  .in_bits(i_tx_ready),
-  .out_clk(o_clk),
-  .out_resetn(1'b1),
-  .out_bits(o_mem_rd_en)
-);
+  sync_bits #(
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK (1)
+  ) i_tx_ready_back_cdc (
+    .in_bits(i_tx_ready),
+    .out_clk(o_clk),
+    .out_resetn(1'b1),
+    .out_bits(o_mem_rd_en));
 
-ad_mem #(
-  .DATA_WIDTH (1+66),
-  .ADDRESS_WIDTH (ADDR_WIDTH)
-) i_ad_mem (
-  .clka(i_clk),
-  .wea(1'b1),
-  .addra(i_wr_addr[ADDR_WIDTH-1:0]),
-  .dina({i_wr_addr[ADDR_WIDTH],i_phy_header,i_phy_data}),
+  ad_mem #(
+    .DATA_WIDTH (1+66),
+    .ADDRESS_WIDTH (ADDR_WIDTH)
+  ) i_ad_mem (
+    .clka(i_clk),
+    .wea(1'b1),
+    .addra(i_wr_addr[ADDR_WIDTH-1:0]),
+    .dina({i_wr_addr[ADDR_WIDTH],i_phy_header,i_phy_data}),
 
-  .clkb(o_clk),
-  .reb(o_mem_rd),
-  .addrb(o_rd_addr[ADDR_WIDTH-1:0]),
-  .doutb({o_tag,o_data})
-);
+    .clkb(o_clk),
+    .reb(o_mem_rd),
+    .addrb(o_rd_addr[ADDR_WIDTH-1:0]),
+    .doutb({o_tag,o_data}));
 
-reg o_ref_tag = 1'b0;
+  reg o_ref_tag = 1'b0;
 
-always @(posedge o_clk) begin
-  if (~o_phy_tx_ready) begin
-    o_rd_addr <= 'h00;
-    o_ref_tag <= 1'b0;
-  end else if (o_mem_rd) begin
-    o_rd_addr <= o_rd_addr + 1'b1;
-    o_ref_tag <= o_rd_addr[ADDR_WIDTH];
+  always @(posedge o_clk) begin
+    if (~o_phy_tx_ready) begin
+      o_rd_addr <= 'h00;
+      o_ref_tag <= 1'b0;
+    end else if (o_mem_rd) begin
+      o_rd_addr <= o_rd_addr + 1'b1;
+      o_ref_tag <= o_rd_addr[ADDR_WIDTH];
+    end
   end
-end
 
-// Detect overflow or underflow by checking reference tag against received
-// one over the memory
-always @(posedge o_clk) begin
-  if (~o_phy_tx_ready) begin
-    o_status_rate_mismatch <= 1'b0;
-  end else if (o_tag ^ o_ref_tag) begin
-    o_status_rate_mismatch <= 1'b1;
+  // Detect overflow or underflow by checking reference tag against received
+  // one over the memory
+  always @(posedge o_clk) begin
+    if (~o_phy_tx_ready) begin
+      o_status_rate_mismatch <= 1'b0;
+    end else if (o_tag ^ o_ref_tag) begin
+      o_status_rate_mismatch <= 1'b1;
+    end
   end
-end
 
-always @(posedge o_clk) begin
- o_phy_data[68] <= o_mem_rd;
-end
+  always @(posedge o_clk) begin
+   o_phy_data[68] <= o_mem_rd;
+  end
 
-always @(*) begin
-  o_phy_data[38:0] = o_data[38:0];
-  o_phy_data[66:40] = o_data[65:39];
-end
+  always @(*) begin
+    o_phy_data[38:0] = o_data[38:0];
+    o_phy_data[66:40] = o_data[65:39];
+  end
 
 endmodule

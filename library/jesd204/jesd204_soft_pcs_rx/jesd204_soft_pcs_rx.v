@@ -115,5 +115,4 @@ module jesd204_soft_pcs_rx #(
     end
   end
   endgenerate
-
 endmodule
