@@ -1,0 +1,61 @@
+.sidebar-brand {
+	background-color: #f8f9fb;
+	border-radius: .25em;
+	margin: var(--sidebar-item-spacing-vertical)
+				calc(var(--sidebar-item-spacing-horizontal)/2)
+				0
+				calc(var(--sidebar-item-spacing-horizontal)/2);
+	padding: 0;
+}
+.sidebar-brand::before {
+	content: "";
+	display: inline-block;
+	width: 100%;
+	height: 4rem;
+	background-image: url(HDL_logo.svg);
+	background-size: auto 4rem;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+.sidebar-brand-text {
+	display: none;
+}
+body[data-theme="dark"] .sidebar-brand {
+	color: #fff;
+}
+@media (min-width: 56em){
+	.content {
+		width: 52em;
+	}
+}
+figure > object {
+	max-width: 100%;
+}
+img {
+	background: #fff;
+	border-radius: .25em;
+	padding: .5em 0;
+}
+iframe {
+	width: calc(50.625rem - 1rem);
+	height: calc(28.47rem - 0.5625rem);
+	margin-left: -1rem;
+}
+@media (max-width:50.625rem) {
+	iframe {
+		width: calc(100vw - 1rem);
+		height: calc(56.25vw - 1rem);
+		margin-left: -1rem;
+	}
+}
+.WaveDrom {
+	background: #fff;
+	border-radius: .25em;
+	padding: .5em 0;
+}
+table.regmap {
+	font-size: .75em;
+}
+table.regmap .caption-text{
+	font-size: 1rem;
+}

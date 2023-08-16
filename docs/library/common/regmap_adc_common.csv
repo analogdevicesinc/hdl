@@ -1,0 +1,78 @@
+Address ,,,,,,
+DWORD ,BYTE ,Bits ,Name ,Type ,Default ,Description
+0x0010 ,0x0040 ,,REG_RSTN ,,,ADC Interface Control & Status
+,,[2] ,CE_N ,RW ,0x0 ,"Clock enable, default is enabled(0x0). An inverse version of the signal is exported out of the module to control clock enables "
+,,[1] ,MMCM_RSTN ,RW ,0x0 ,"MMCM reset only (required for DRP access). Reset, default is IN-RESET (0x0), software must write 0x1 to bring up the core. "
+,,[0] ,RSTN ,RW ,0x0 ,"Reset, default is IN-RESET (0x0), software must write 0x1 to bring up the core. "
+0x0011 ,0x0044 ,,REG_CNTRL ,,,ADC Interface Control & Status
+,,[16] ,SDR_DDR_N ,RW ,0x0 ,"Interface type (1 represents SDR, 0 represents DDR) "
+,,[15] ,SYMB_OP ,RW ,0x0 ,Select symbol data format mode (0x1)
+,,[14] ,SYMB_8_16B ,RW ,0x0 ,"Select number of bits for symbol format mode (1 represents 8b, 0 represents 16b) "
+,,[12:8] ,NUM_LANES[4:0] ,RW ,0x0 ,"Number of active lanes (1 : CSSI 1-lane, LSSI 1-lane, 2 : LSSI 2-lane, 4 : CSSI 4-lane). For AD7768, AD7768-4 and AD777x number of active lanes : 1/2/4/8 where supported. "
+,,[3] ,SYNC ,RW ,0x0 ,Initialize synchronization between multiple ADCs
+,,[2] ,R1_MODE ,RW ,0x0 ,Select number of RF channels 1 (0x1) or 2 (0x0).
+,,[1] ,DDR_EDGESEL ,RW ,0x0 ,Select rising edge (0x0) or falling edge (0x1) for the first part of a sample (if applicable) followed by the successive edges for the remaining parts. This only controls how the sample is delineated from the incoming data post DDR registers.
+,,[0] ,PIN_MODE ,RW ,0x0 ,"Select interface pin mode to be clock multiplexed (0x1) or pin multiplexed (0x0). In clock multiplexed mode, samples are received on alternative clock edges. In pin multiplexed mode, samples are interleaved or grouped on the pins at the same clock edge. "
+0x0012 ,0x0048 ,,REG_CNTRL_2 ,,,ADC Interface Control & Status
+,,[1] ,EXT_SYNC_ARM ,RW ,0x0 ,"Setting this bit will arm the trigger mechanism sensitive to an external sync signal. Once the external sync signal goes high it synchronizes channels within a ADC, and across multiple instances. This bit has an effect only the EXT_SYNC synthesis parameter is set. This bit self clears. "
+,,[2] ,EXT_SYNC_DISARM ,RW ,0x0 ,Setting this bit will disarm the trigger mechanism sensitive to an external sync signal. This bit has an effect only the EXT_SYNC synthesis parameter is set. This bit self clears.
+,,[8] ,MANUAL_SYNC_REQUEST ,RW ,0x0 ,Setting this bit will issue an external sync event if it is hooked up inside the fabric. This bit has an effect only the EXT_SYNC synthesis parameter is set. This bit self clears.
+0x0013 ,0x004c ,,REG_CNTRL_3 ,,,ADC Interface Control & Status
+,,[8] ,CRC_EN ,RW ,0x0 ,Setting this bit will enable the CRC generation.
+,,[7:0] ,CUSTOM_CONTROL ,RW ,0x00 ,"Select output format decode mode.(for ADAQ8092: bit 0 - enables digital output randomizer decode , bit 1 - enables alternate bit polarity decode). "
+0x0015 ,0x0054 ,,REG_CLK_FREQ ,,,ADC Interface Control & Status
+,,[31:0] ,CLK_FREQ[31:0] ,RO ,0x0000 ,Interface clock frequency. This is relative to the processor clock and in many cases is 100MHz. The number is represented as unsigned 16.16 format. Assuming a 100MHz processor clock the minimum is 1.523kHz and maximum is 6.554THz. The actual interface clock is CLK_FREQ * CLK_RATIO (see below). Note that the actual sampling clock may not be the same as the interface clock- software must consider device specific implementation parameters to calculate the final sampling clock.
+0x0016 ,0x0058 ,,REG_CLK_RATIO ,,,ADC Interface Control & Status
+,,[31:0] ,CLK_RATIO[31:0] ,RO ,0x0000 ,Interface clock ratio - as a factor actual received clock. This is implementation specific and depends on any serial to parallel conversion and interface type (ddr/sdr/qdr).
+0x0017 ,0x005c ,,REG_STATUS ,,,ADC Interface Control & Status
+,,[4] ,ADC_CTRL_STATUS ,RO ,0x0 ,"If set, indicates that the device'​s register data is available on the data bus. "
+,,[3] ,PN_ERR ,RO ,0x0 ,"If set, indicates pn error in one or more channels. "
+,,[2] ,PN_OOS ,RO ,0x0 ,"If set, indicates pn oos in one or more channels. "
+,,[1] ,OVER_RANGE ,RO ,0x0 ,"If set, indicates over range in one or more channels. "
+,,[0] ,STATUS ,RO ,0x0 ,"Interface status, if set indicates no errors. If not set, there are errors, software may try resetting the cores. "
+0x0018 ,0x0060 ,,REG_DELAY_CNTRL ,,,ADC Interface Control & Status(Deprecated from version 9)
+,,[17] ,DELAY_SEL ,RW ,0x0 ,"Delay select, a 0x0 to 0x1 transition in this register initiates a delay access controlled by the registers below. "
+,,[16] ,DELAY_RWN ,RW ,0x0 ,"Delay read (0x1) or write (0x0), the delay is accessed directly (no increment or decrement) with an address corresponding to each pin, and data corresponding to the total delay. "
+,,[15:8] ,DELAY_ADDRESS[7:0] ,RW ,0x00 ,"Delay address, the range depends on the interface pins, data pins are usually at the lower range. "
+,,[4:0] ,DELAY_WDATA[4:0] ,RW ,0x0 ,"Delay write data, a value of 1 corresponds to (1/200)ns for most devices. "
+0x0019 ,0x0064 ,,REG_DELAY_STATUS ,,,ADC Interface Control & Status(Deprecated from version 9)
+,,[9] ,DELAY_LOCKED ,RO ,0x0 ,"Indicates delay locked (0x1) state. If this bit is read 0x0, delay control has failed to calibrate the elements. "
+,,[8] ,DELAY_STATUS ,RO ,0x0 ,"If set, indicates busy status (access pending). The read data may not be valid if this bit is set. "
+,,[4:0] ,DELAY_RDATA[4:0] ,RO ,0x0 ,"Delay read data, current delay value in the elements "
+0x001A ,0x0068 ,,REG_SYNC_STATUS ,,,ADC Synchronization Status register
+,,[0] ,ADC_SYNC ,RO ,0x0 ,ADC synchronization status. Will be set to 1 after the synchronization has been completed or while waiting for the synchronization signal in JESD204 systems.
+0x001C ,0x0070 ,,REG_DRP_CNTRL ,,,ADC Interface Control & Status
+,,[28] ,DRP_RWN ,RW ,0x0 ,DRP read (0x1) or write (0x0) select (does not include GTX lanes). NOT-APPLICABLE if DRP_DISABLE is set (0x1).
+,,[27:16] ,DRP_ADDRESS[11:0] ,RW ,0x00 ,"DRP address, designs that contain more than one DRP accessible primitives have selects based on the most significant bits (does not include GTX lanes). NOT-APPLICABLE if DRP_DISABLE is set (0x1). "
+,,[15:0] ,RESERVED[15:0] ,RO ,0x0000 ,Reserved for backward compatibility.
+0x001D ,0x0074 ,,REG_DRP_STATUS ,,,ADC Interface Control & Status
+,,[17] ,DRP_LOCKED ,RO ,0x0 ,If set indicates that the DRP has been locked.
+,,[16] ,DRP_STATUS ,RO ,0x0 ,If set indicates busy (access pending). The read data may not be valid if this bit is set (does not include GTX lanes). NOT-APPLICABLE if DRP_DISABLE is set (0x1).
+,,[15:0] ,RESERVED[15:0] ,RO ,0x00 ,Reserved for backward compatibility.
+0x001E ,0x0078 ,,REG_DRP_WDATA ,,,ADC DRP Write Data
+,,[15:0] ,DRP_WDATA[15:0] ,RW ,0x00 ,DRP write data (does not include GTX lanes). NOT-APPLICABLE if DRP_DISABLE is set (0x1).
+0x001F ,0x007c ,,REG_DRP_RDATA ,,,ADC DRP Read Data
+,,[15:0] ,DRP_RDATA[15:0] ,RO ,0x00 ,DRP read data (does not include GTX lanes).
+0x0020 ,0x0080 ,,REG_ADC_CONFIG_WR ,,,ADC Write Configuration ​Data
+,,[31:0] ,ADC_CONFIG_WR[31:0] ,RW ,0x0000 ,Custom ​Write to the available registers.
+0x0021 ,0x0084 ,,REG_ADC_CONFIG_RD ,,,ADC Read Configuration ​Data
+,,[31:0] ,ADC_CONFIG_RD[31:0] ,RO ,0x0000 ,Custom read of the available registers.
+0x0022 ,0x0088 ,,REG_UI_STATUS ,,,User Interface Status
+,,[2] ,UI_OVF ,RW1C ,0x0 ,"User Interface overflow. If set, indicates an overflow occurred during data transfer at the user interface (FIFO interface). Software must write a 0x1 to clear this register bit. "
+,,[1] ,UI_UNF ,RW1C ,0x0 ,"User Interface underflow. If set, indicates an underflow occurred during data transfer at the user interface (FIFO interface). Software must write a 0x1 to clear this register bit. "
+,,[0] ,UI_RESERVED ,RW1C ,0x0 ,Reserved for backward compatibility.
+0x0023 ,0x008c ,,REG_ADC_CONFIG_CTRL ,,,ADC RD/WR configuration
+,,[31:0] ,ADC_CONFIG_CTRL[31:​0] ,RW ,0x0000 ,"Control RD/WR requests to the device'​s register map: bit 1 - RD ('b1) , WR ('b0), bit 0 - enable WR/RD operation. "
+0x0028 ,0x00a0 ,,REG_USR_CNTRL_1 ,,,ADC Interface Control & Status
+,,[7:0] ,USR_CHANMAX[7:0] ,RW ,0x00 ,This indicates the maximum number of inputs for the channel data multiplexers. User may add different processing modules post data capture as another input to this common multiplexer. NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).
+0x0029 ,0x00a4 ,,REG_ADC_START_CODE ,,,ADC Synchronization start word
+,,[31:0] ,ADC_START_CODE[31:0] ,RW ,0x00000000 ,This sets the startcode that is used by the ADCs for synchronization NOT-APPLICABLE if START_CODE_DISABLE is set (0x1).
+0x002E ,0x00b8 ,,REG_ADC_GPIO_IN ,,,ADC GPIO inputs
+,,[31:0] ,ADC_GPIO_IN[31:0] ,RO ,0x00000000 ,This reads auxiliary GPI pins of the ADC core
+0x002F ,0x00bc ,,REG_ADC_GPIO_OUT ,,,ADC GPIO outputs
+,,[31:0] ,ADC_GPIO_OUT[31:0] ,RW ,0x00000000 ,This controls auxiliary GPO pins of the ADC core NOT-APPLICABLE if GPIO_DISABLE is set (0x1).
+0x0030 ,0x00c0 ,,REG_PPS_COUNTER ,,,PPS Counter register
+,,[31:0] ,PPS_COUNTER[31:0] ,RO ,0x00000000 ,Counts the core clock cycles (can be a device clock or interface clock) between two 1PPS pulse.
+0x0031 ,0x00c4 ,,REG_PPS_STATUS ,,,PPS Status register
+,,[0] ,PPS_STATUS ,RO ,0x0 ,If this bit is asserted there is no incomming 1PPS signal. Maybe the source is out of sync or it's not active.
+,,,,,,Tue Mar 14 10:17:59 2023
