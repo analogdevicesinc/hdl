@@ -11,7 +11,7 @@ dft_url_datasheet	= 'https://www.analog.com/media/en/technical-documentation/dat
 dft_url_dokuwiki	= 'https://wiki.analog.com'
 dft_url_ez			= 'https://ez.analog.com'
 dft_url_git			= 'https://github.com/analogdevicesinc'
-dft_url_part		= 'https://www.analog.com/products'
+dft_url_part		= 'https://www.analog.com'
 dft_url_xilinx		= 'https://www.xilinx.com'
 dft_url_intel		= 'https://www.intel.com'
 

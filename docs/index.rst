@@ -16,6 +16,9 @@ HDL Reference Designs
    library/spi_engine/index
    library/axi_dmac/index
 
+.. role:: red
+.. role:: green
+
 .. attention::
 
    Work-in-progress, not all content available at the

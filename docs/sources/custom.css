@@ -67,6 +67,12 @@ td.description {
 	width: 45%;
 	font-size:.8em;
 }
+.red {
+	color: red;
+}
+.green {
+	color: green;
+}
 #signal-and-interface-pins h3 {
 	font-weight: normal;
 }
