@@ -3,7 +3,6 @@ lxml
 furo
 wavedrom
 sphinxcontrib-wavedrom
-sphinxcontrib-mermaid
 sphinxcontrib-svg2pdfconverter
 https://github.com/hdl/pyhdlparser/tarball/master
 https://github.com/hdl/symbolator/tarball/master

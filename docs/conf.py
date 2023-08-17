@@ -19,7 +19,6 @@ sys.path.append(os.path.abspath("./extensions"))
 extensions = [
 	"sphinx.ext.todo",
 	"sphinx.ext.viewcode",
-	"sphinxcontrib.mermaid",
 	"sphinxcontrib.wavedrom",
 	"symbolator_sphinx",
 	"adi_links",
