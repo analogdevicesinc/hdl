@@ -1,6 +1,6 @@
 .. _spi_engine offload:
 
-SPI Engine Offload
+SPI Engine Offload Module
 ================================================================================
 
 .. symbolator:: ../../../library/spi_engine/spi_engine_offload/spi_engine_offload.v

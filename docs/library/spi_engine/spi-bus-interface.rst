@@ -71,3 +71,20 @@ In some configurations three-wire support may not be required and ``sdi`` can
 directly be connected to the input buffer for the ``miso`` signal. Similarly
 when ``mosi`` tri-stating is not required the ``sdo`` signal can be directly
 connected to the ``mosi`` signal leaving the ``sdo_t`` signal unconnected.
+
+Example Verilog IO configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ The following example Verilog code shows the most generic IO configuration,
+ which represents the diagram above. Depending on system requirements some
+ simplification might be possible.
+
+Signals with phy prefix are assumed to be connected to the physical input/output
+pins and signals with the spi prefix are assumed to be connected SPI-Engine bus
+interface.
+
+.. code-block:: verilog
+
+   assign phy_sclk = spi_sclk;
+   assign phy_cs = spi_cs;
+   assign phy_mosi = spi_sdo_t ? 1'bz : spi_sdo;
+   assign spi_sdi = spi_three_wire ? phy_mosi : phy_miso;
