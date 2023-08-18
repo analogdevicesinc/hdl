@@ -93,7 +93,7 @@ In order to reduce the necessary context switches the AXI SPI Engine peripheral
 incorporates FIFOs to buffer the command as well as the data streams.
 
 FIFOs
---------------------------------------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The AXI SPI Engine peripheral has three FIFOs, one for each of the command, SDO
 and SDI streams.
@@ -124,7 +124,7 @@ If the peripheral is disabled by setting the ENABLE register to 0 any data
 stored in the FIFOs is discarded and the state of the FIFO is reset.
 
 Synchronization Events
---------------------------------------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Synchronization events can be used to notify the software application about the
 progress of the command stream.
@@ -175,7 +175,7 @@ IRQ_PENDING register.
    IRQ = |IRQ_PENDING;
 
 FIFO Threshold Interrupts
---------------------------------------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The FIFO threshold interrupts can be used by software for flow control of the
 command, SDI and SDO streams.
@@ -191,7 +191,7 @@ watermark and is automatically de-asserted when the level drops below the
 watermark.
 
 SYNC_EVENT Interrupt
---------------------------------------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The SYNC_EVENT interrupt is asserted when a new sync event is received from the
 sync stream.
