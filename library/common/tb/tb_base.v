@@ -1,46 +1,37 @@
+// ***************************************************************************
+// ***************************************************************************
+// Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
 //
-// The ADI JESD204 Core is released under the following license, which is
-// different than all other HDL cores in this repository.
+// In this HDL repository, there are many different and unique modules, consisting
+// of various HDL (Verilog or VHDL) components. The individual modules are
+// developed independently, and may be accompanied by separate and unique license
+// terms.
 //
-// Please read this, and understand the freedoms and responsibilities you have
-// by using this source code/core.
+// The user should read each of these license terms, and understand the
+// freedoms and responsibilities that he or she has by using this source/core.
 //
-// The JESD204 HDL, is copyright © 2016-2017 Analog Devices Inc.
-//
-// This core is free software, you can use run, copy, study, change, ask
-// questions about and improve this core. Distribution of source, or resulting
-// binaries (including those inside an FPGA or ASIC) require you to release the
-// source of the entire project (excluding the system libraries provide by the
-// tools/compiler/FPGA vendor). These are the terms of the GNU General Public
-// License version 2 as published by the Free Software Foundation.
-//
-// This core  is distributed in the hope that it will be useful, but WITHOUT ANY
+// This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-// A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+// A PARTICULAR PURPOSE.
 //
-// You should have received a copy of the GNU General Public License version 2
-// along with this source code, and binary.  If not, see
-// <http://www.gnu.org/licenses/>.
+// Redistribution and use of source or resulting binaries, with or without modification
+// of this file, are permitted under one of the following two license terms:
 //
-// Commercial licenses (with commercial support) of this JESD204 core are also
-// available under terms different than the General Public License. (e.g. they
-// do not require you to accompany any image (FPGA or ASIC) using the JESD204
-// core with any corresponding source code.) For these alternate terms you must
-// purchase a license from Analog Devices Technology Licensing Office. Users
-// interested in such a license should contact jesd204-licensing@analog.com for
-// more information. This commercial license is sub-licensable (if you purchase
-// chips from Analog Devices, incorporate them into your PCB level product, and
-// purchase a JESD204 license, end users of your product will also have a
-// license to use this core in a commercial setting without releasing their
-// source code).
+//   1. The GNU General Public License version 2 as published by the
+//      Free Software Foundation, which can be found in the top level directory
+//      of this repository (LICENSE_GPL2), and also online at:
+//      <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
 //
-// In addition, we kindly ask you to acknowledge ADI in any program, application
-// or publication in which you use this JESD204 HDL core. (You are not required
-// to do so; it is up to your common sense to decide whether you want to comply
-// with this request or not.) For general publications, we suggest referencing :
-// “The design and implementation of the JESD204 HDL Core used in this project
-// is copyright © 2016-2017, Analog Devices, Inc.”
+// OR
 //
+//   2. An ADI specific BSD license, which can be found in the top level directory
+//      of this repository (LICENSE_ADIBSD), and also on-line at:
+//      https://github.com/analogdevicesinc/hdl/blob/master/LICENSE_ADIBSD
+//      This will allow to generate bit files and not release the source code,
+//      as long as it attaches to an ADI device.
+//
+// ***************************************************************************
+// ***************************************************************************
 
   reg clk = 1'b0;
   reg [3:0] reset_shift = 4'b1111;
