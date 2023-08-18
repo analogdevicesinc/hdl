@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 
+###############################################################################
+## Copyright (C) 2018 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIJESD204
+###############################################################################
+
 import math
 import os
 import sys

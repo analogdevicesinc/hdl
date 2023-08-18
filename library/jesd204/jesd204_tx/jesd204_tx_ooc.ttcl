@@ -1,25 +1,7 @@
-# along with this source code, and binary.  If not, see
-# <http://www.gnu.org/licenses/>.
-#
-# Commercial licenses (with commercial support) of this JESD204 core are also
-# available under terms different than the General Public License. (e.g. they
-# do not require you to accompany any image (FPGA or ASIC) using the JESD204
-# core with any corresponding source code.) For these alternate terms you must
-# purchase a license from Analog Devices Technology Licensing Office. Users
-# interested in such a license should contact jesd204-licensing@analog.com for
-# more information. This commercial license is sub-licensable (if you purchase
-# chips from Analog Devices, incorporate them into your PCB level product, and
-# purchase a JESD204 license, end users of your product will also have a
-# license to use this core in a commercial setting without releasing their
-# source code).
-#
-# In addition, we kindly ask you to acknowledge ADI in any program, application
-# or publication in which you use this JESD204 HDL core. (You are not required
-# to do so; it is up to your common sense to decide whether you want to comply
-# with this request or not.) For general publications, we suggest referencing :
-# “The design and implementation of the JESD204 HDL Core used in this project
-# is copyright © 2016-2017, Analog Devices, Inc.”
-#
+###############################################################################
+## Copyright (C) 2017-2019, 2021 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIJESD204
+###############################################################################
 
 <: setFileUsedIn { out_of_context synthesis implementation } :>
 <: ;#Component and file information :>
