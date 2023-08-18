@@ -1,3 +1,8 @@
+###############################################################################
+## Copyright (C) 2021 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIJESD204
+###############################################################################
+
 proc init {cellpath otherInfo} {
   set ip [get_bd_cells $cellpath]
 
