@@ -269,45 +269,61 @@ set_instance_assignment -name AUTO_OPEN_DRAIN_PINS ON -to hps_i2c_scl
 
 # hps-gpio
 
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_gpio[0]
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_gpio[1]
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_gpio[2]
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_gpio[3]
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_gpio[4]
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_gpio[5]
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_gpio[6]
+set_instance_assignment -name IO_STANDARD "1.8V" -to hps_gpio_eth_irq
+set_instance_assignment -name IO_STANDARD "1.8V" -to hps_gpio_usb_oci
+set_instance_assignment -name IO_STANDARD "1.8V" -to hps_gpio_btn[0]
+set_instance_assignment -name IO_STANDARD "1.8V" -to hps_gpio_btn[1]
+set_instance_assignment -name IO_STANDARD "1.8V" -to hps_gpio_led[0]
+set_instance_assignment -name IO_STANDARD "1.8V" -to hps_gpio_led[1]
+set_instance_assignment -name IO_STANDARD "1.8V" -to hps_gpio_led[2]
 
-set_instance_assignment -name CURRENT_STRENGTH_NEW 2MA -to hps_gpio[0]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 2MA -to hps_gpio[1]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 2MA -to hps_gpio[2]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 2MA -to hps_gpio[3]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 2MA -to hps_gpio[4]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 2MA -to hps_gpio[5]
-set_instance_assignment -name CURRENT_STRENGTH_NEW 2MA -to hps_gpio[6]
-set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_gpio[0]
-set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_gpio[1]
-set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_gpio[2]
-set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_gpio[3]
-set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_gpio[4]
-set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_gpio[5]
-set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_gpio[6]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 2MA -to hps_gpio_eth_irq
+set_instance_assignment -name CURRENT_STRENGTH_NEW 2MA -to hps_gpio_usb_oci
+set_instance_assignment -name CURRENT_STRENGTH_NEW 2MA -to hps_gpio_btn[0]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 2MA -to hps_gpio_btn[1]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 2MA -to hps_gpio_led[0]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 2MA -to hps_gpio_led[1]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 2MA -to hps_gpio_led[2]
 
-# TODO: Check actual pinout after we get the development kit
+# gpio
 
-set_location_assignment PIN_CY47 -to sys_button_pio[0]  ; ## pb[0]
-set_location_assignment PIN_CW48 -to sys_button_pio[1]  ; ## pb[1]
+set_location_assignment PIN_CY47 -to fpga_gpio[0]
+set_location_assignment PIN_CW48 -to fpga_gpio[1]
+set_location_assignment PIN_CT47 -to fpga_gpio[2]
+set_location_assignment PIN_CU48 -to fpga_gpio[3]
+set_location_assignment PIN_CY49 -to fpga_gpio[4]
+set_location_assignment PIN_CW50 -to fpga_gpio[5]
+set_location_assignment PIN_CT49 -to fpga_gpio[6]
+set_location_assignment PIN_CU50 -to fpga_gpio[7]
+set_location_assignment PIN_CY51 -to fpga_gpio[8]
+set_location_assignment PIN_CW52 -to fpga_gpio[9]
+set_location_assignment PIN_CT51 -to fpga_gpio[10]
+set_location_assignment PIN_CU52 -to fpga_gpio[11]
+set_location_assignment PIN_DA50 -to fpga_gpio[12]
 
-set_instance_assignment -name IO_STANDARD "1.2 V" -to sys_button_pio[0]
-set_instance_assignment -name IO_STANDARD "1.2 V" -to sys_button_pio[1]
+set_location_assignment PIN_Y49 -to fpga_sgpio_sync
+set_location_assignment PIN_W48 -to fpga_sgpio_clk
+set_location_assignment PIN_T49 -to fpga_sgpi
+set_location_assignment PIN_U48 -to fpga_sgpo
 
-set_location_assignment PIN_Y49 -to sys_sgpio_sync
-set_instance_assignment -name IO_STANDARD "1.2 V" -to sys_sgpio_sync
-set_location_assignment PIN_W48 -to sys_sgpio_clk
-set_instance_assignment -name IO_STANDARD "1.2 V" -to sys_sgpio_clk
-set_location_assignment PIN_T49 -to sys_sgpi
-set_instance_assignment -name IO_STANDARD "1.2 V" -to sys_sgpi
-set_location_assignment PIN_U48 -to sys_sgpo
-set_instance_assignment -name IO_STANDARD "1.2 V" -to sys_sgpo
+set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_gpio[0]
+set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_gpio[1]
+set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_gpio[2]
+set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_gpio[3]
+set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_gpio[4]
+set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_gpio[5]
+set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_gpio[6]
+set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_gpio[7]
+set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_gpio[8]
+set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_gpio[9]
+set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_gpio[10]
+set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_gpio[11]
+set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_gpio[12]
+
+set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_sgpio_sync
+set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_sgpio_clk
+set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_sgpi
+set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_sgpo
 
 # Agilex development kit's global assignments
 set_global_assignment -name USE_HPS_COLD_RESET SDM_IO11

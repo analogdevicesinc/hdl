@@ -348,84 +348,39 @@ proc ad_cpu_interconnect {m_base m_port {avl_bridge ""} {avl_bridge_base 0x00000
 
 # gpio-bd
 
-# add_instance sys_gpio_bd altera_avalon_pio
-# set_instance_parameter_value sys_gpio_bd {direction} {InOut}
-# set_instance_parameter_value sys_gpio_bd {generateIRQ} {1}
-# set_instance_parameter_value sys_gpio_bd {width} {32}
+add_instance sys_gpio_bd altera_avalon_pio
+set_instance_parameter_value sys_gpio_bd {direction} {InOut}
+set_instance_parameter_value sys_gpio_bd {generateIRQ} {1}
+set_instance_parameter_value sys_gpio_bd {width} {32}
 
-# add_connection sys_clk.clk_reset sys_gpio_bd.reset
-# add_connection sys_clk.clk sys_gpio_bd.clk
-# add_interface sys_gpio_bd conduit end
-# set_interface_property sys_gpio_bd EXPORT_OF sys_gpio_bd.external_connection
+add_connection sys_clk.clk sys_gpio_bd.clk
+add_connection sys_clk.clk_reset sys_gpio_bd.reset
+add_interface sys_gpio_bd conduit end
+set_interface_property sys_gpio_bd EXPORT_OF sys_gpio_bd.external_connection
 
 # gpio-in
 
-# add_instance sys_gpio_in altera_avalon_pio
-# set_instance_parameter_value sys_gpio_in {direction} {Input}
-# set_instance_parameter_value sys_gpio_in {generateIRQ} {1}
-# set_instance_parameter_value sys_gpio_in {width} {32}
+add_instance sys_gpio_in altera_avalon_pio
+set_instance_parameter_value sys_gpio_in {direction} {Input}
+set_instance_parameter_value sys_gpio_in {generateIRQ} {1}
+set_instance_parameter_value sys_gpio_in {width} {32}
 
-# add_connection sys_clk.clk_reset sys_gpio_in.reset
-# add_connection sys_clk.clk sys_gpio_in.clk
-# add_interface sys_gpio_in conduit end
-# set_interface_property sys_gpio_in EXPORT_OF sys_gpio_in.external_connection
+add_connection sys_clk.clk_reset sys_gpio_in.reset
+add_connection sys_clk.clk sys_gpio_in.clk
+add_interface sys_gpio_in conduit end
+set_interface_property sys_gpio_in EXPORT_OF sys_gpio_in.external_connection
 
 # gpio-out
 
-# add_instance sys_gpio_out altera_avalon_pio
-# set_instance_parameter_value sys_gpio_out {direction} {Output}
-# set_instance_parameter_value sys_gpio_out {generateIRQ} {0}
-# set_instance_parameter_value sys_gpio_out {width} {32}
+add_instance sys_gpio_out altera_avalon_pio
+set_instance_parameter_value sys_gpio_out {direction} {Output}
+set_instance_parameter_value sys_gpio_out {generateIRQ} {0}
+set_instance_parameter_value sys_gpio_out {width} {32}
 
-# add_connection sys_clk.clk_reset sys_gpio_out.reset
-# add_connection sys_clk.clk sys_gpio_out.clk
-# add_interface sys_gpio_out conduit end
-# set_interface_property sys_gpio_out EXPORT_OF sys_gpio_out.external_connection
-
-# leds
-
-add_instance sys_gpio_led altera_avalon_pio
-set_instance_parameter_value sys_gpio_led {direction} {InOut}
-set_instance_parameter_value sys_gpio_led {generateIRQ} {0}
-set_instance_parameter_value sys_gpio_led {width} {7}
-set_instance_parameter_value sys_gpio_led {resetValue} {0x7F}
-
-add_connection sys_clk.clk_reset sys_gpio_led.reset
-add_connection sys_clk.clk sys_gpio_led.clk
-add_interface sys_gpio_led conduit end
-set_interface_property sys_gpio_led EXPORT_OF sys_gpio_led.external_connection
-
-# dipsw
-
-add_instance sys_gpio_dipsw altera_avalon_pio
-set_instance_parameter_value sys_gpio_dipsw {direction} {Input}
-set_instance_parameter_value sys_gpio_dipsw {generateIRQ} {1}
-set_instance_parameter_value sys_gpio_dipsw {width} {8}
-set_instance_parameter_value sys_gpio_dipsw {bitClearingEdgeCapReg} {1}
-set_instance_parameter_value sys_gpio_dipsw {captureEdge} {1}
-set_instance_parameter_value sys_gpio_dipsw {edgeType} {FALLING}
-set_instance_parameter_value sys_gpio_dipsw {irqType} {EDGE}
-
-add_connection sys_clk.clk_reset sys_gpio_dipsw.reset
-add_connection sys_clk.clk sys_gpio_dipsw.clk
-add_interface sys_gpio_dipsw conduit end
-set_interface_property sys_gpio_dipsw EXPORT_OF sys_gpio_dipsw.external_connection
-
-# buttons
-
-add_instance sys_gpio_button altera_avalon_pio
-set_instance_parameter_value sys_gpio_button {direction} {Input}
-set_instance_parameter_value sys_gpio_button {generateIRQ} {1}
-set_instance_parameter_value sys_gpio_button {width} {2}
-set_instance_parameter_value sys_gpio_button {bitClearingEdgeCapReg} {1}
-set_instance_parameter_value sys_gpio_button {captureEdge} {1}
-set_instance_parameter_value sys_gpio_button {edgeType} {FALLING}
-set_instance_parameter_value sys_gpio_button {irqType} {EDGE}
-
-add_connection sys_clk.clk_reset sys_gpio_button.reset
-add_connection sys_clk.clk sys_gpio_button.clk
-add_interface sys_gpio_button conduit end
-set_interface_property sys_gpio_button EXPORT_OF sys_gpio_button.external_connection
+add_connection sys_clk.clk_reset sys_gpio_out.reset
+add_connection sys_clk.clk sys_gpio_out.clk
+add_interface sys_gpio_out conduit end
+set_interface_property sys_gpio_out EXPORT_OF sys_gpio_out.external_connection
 
 # spi
 
@@ -446,11 +401,6 @@ set_interface_property sys_spi EXPORT_OF sys_spi.external
 
 # exports
 
-# add_interface f2h_irq0 interrupt OUTPUT
-# set_interface_property f2h_irq0 EXPORT_OF sys_hps.f2h_irq0
-# add_interface f2h_irq1 interrupt OUTPUT
-# set_interface_property f2h_irq1 EXPORT_OF sys_hps.f2h_irq1
-
 add_interface emif_calbus_0 conduit INPUT
 add_interface hps_emif conduit INPUT
 add_interface emif_calbus_clk clock OUTPUT
@@ -459,29 +409,29 @@ add_connection emif_hps.hps_emif/sys_hps.hps_emif
 add_connection emif_calbus_0.emif_calbus_clk/emif_hps.emif_calbus_clk
 add_connection emif_hps.emif_calbus/emif_calbus_0.emif_calbus_0
 
-set_interface_property emif_hps_oct EXPORT_OF emif_hps.oct
-set_interface_property emif_hps_mem EXPORT_OF emif_hps.mem
+set_interface_property emif_hps EXPORT_OF emif_hps.oct
+set_interface_property emif_hps_ddr EXPORT_OF emif_hps.mem
+# set_interface_property emif_hps_mem_clk_p EXPORT_OF emif_hps.mem_ck_p
+# set_interface_property emif_hps_mem_clk_n EXPORT_OF emif_hps.mem_ck_n
 set_interface_property sys_hps_f2h_stm_hw_events EXPORT_OF sys_hps.f2h_stm_hw_events
 set_interface_property sys_hps_h2f_cs EXPORT_OF sys_hps.h2f_cs
-set_interface_property emif_hps_pll_ref_clk EXPORT_OF emif_hps.pll_ref_clk
+set_interface_property emif_hps_pll_ref EXPORT_OF emif_hps.pll_ref_clk
 
 # cpu interconnect
 
 # TODO: Check if we need to connect the button & dipsw as slaves
 ad_cpu_interconnect 0x000000e0 sys_id.control_slave "avl_peripheral_mm_bridge" 0x0000 17
-ad_cpu_interconnect 0x000000d0 sys_gpio_dipsw.s1 "avl_peripheral_mm_bridge"
-ad_cpu_interconnect 0x00000000 sys_gpio_button.s1 "avl_peripheral_mm_bridge"
-ad_cpu_interconnect 0x00000020 sys_gpio_led.s1 "avl_peripheral_mm_bridge"
+ad_cpu_interconnect 0x000000d0 sys_gpio_bd.s1 "avl_peripheral_mm_bridge"
+ad_cpu_interconnect 0x00000000 sys_gpio_in.s1 "avl_peripheral_mm_bridge"
+ad_cpu_interconnect 0x00000020 sys_gpio_out.s1 "avl_peripheral_mm_bridge"
 ad_cpu_interconnect 0x00000040 sys_spi.spi_control_port "avl_peripheral_mm_bridge"
 ad_cpu_interconnect 0x00018000 axi_sysid_0.s_axi "avl_peripheral_mm_bridge"
 
 # interrupts
 
 # TODO: Check if we need to connect the button & dipsw irqs
-ad_cpu_interrupt 5 sys_gpio_button.irq
-ad_cpu_interrupt 6 sys_gpio_dipsw.irq
-# ad_cpu_interrupt 5 sys_gpio_in.irq
-# ad_cpu_interrupt 5 sys_gpio_bd.irq
+ad_cpu_interrupt 5 sys_gpio_in.irq
+ad_cpu_interrupt 6 sys_gpio_bd.irq
 ad_cpu_interrupt 7 sys_spi.irq
 
 set xcvr_reconfig_addr_width 11
