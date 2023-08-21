@@ -385,6 +385,39 @@ The ``:no-type-info:`` option is optional, and should **not** be included if it 
 in the main IP documentation page. It appends an auxiliary table explaining the
 register access types.
 
+Collapsible directive
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The collapsible directive creates a collapsible/dropdown/"HTML details".
+
+The directive syntax is:
+
+.. code:: rst
+
+   .. collapsible:: <label>
+
+      <content>
+
+For example:
+
+.. code:: rst
+
+   .. collapsible:: Python code example.
+
+      .. code:: python
+
+         print("Hello World!")
+
+Renders as:
+
+.. collapsible:: Python code example.
+
+   .. code:: python
+
+      print("Hello World!")
+
+Notice how you can use any Sphinx syntax, even nest other directives.
+
 .. _installing_pandoc:
 
 Global options for HDL directives

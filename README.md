@@ -1,4 +1,32 @@
+<p align="center">
+<img src="docs/sources/HDL_logo.png" width="500" alt="ADI HDL Logo"> </br>
+</p>
 
+<p align="center">
+<a href="https://github.com/analogdevicesinc/hdl/actions">
+<img src="https://github.com/analogdevicesinc/hdl/actions/workflows/check_for_guideline_rules.yml/badge.svg" alt="Build Status">
+</a>
+
+<a href="https://github.com/analogdevicesinc/hdl/actions">
+<img src="https://github.com/analogdevicesinc/hdl/actions/workflows/test_n_lint.yml/badge.svg" alt="Build Status">
+</a>
+</p>
+
+<p align="center">
+<a href="http://analogdevicesinc.github.io/hdl/">
+<img alt="GitHub Pages" src="https://img.shields.io/badge/docs-GitHub%20Pages-blue.svg">
+</a>
+
+<a href="https://ez.analog.com/fpga/f/q-a">
+<img alt="EngineerZone" src="https://img.shields.io/badge/Support-on%20EngineerZone-blue.svg">
+</a>
+
+<a href="https://wiki.analog.com/resources/fpga/docs/hdl">
+<img alt="Analog Wiki" src="https://img.shields.io/badge/Wiki-on%20wiki.analog.com-blue.svg">
+</a>
+</p>
+
+---
 # HDL Reference Designs
 
 [Analog Devices Inc.](http://www.analog.com/en/index.html) HDL libraries and projects for various reference design and prototyping systems.
@@ -16,6 +44,18 @@ There is no free replacement for consulting services. If you have questions that
 ## Getting started
 
 This repository supports reference designs for different [Analog Devices boards](../master/projects) based on [Intel and Xilinx FPGA development boards](../master/projects/common) or standalone.
+
+### Building documentation
+
+Install necessary tools
+```
+cd docs
+pip install -r requirements.txt
+```
+Then build the documentation with sphinx
+```
+make html
+```
 
 ### Prerequisites
 
@@ -35,8 +75,8 @@ Windows user please checkout [this page](https://wiki.analog.com/resources/fpga/
 To build a project, checkout the [latest release](https://github.com/analogdevicesinc/hdl/releases), after that just **cd** to the 
 project that you want to build and run make:
 ```
- [~]cd projects/fmcomms2/zc706
- [~]make
+cd projects/fmcomms2/zc706
+make
 ```
 
 A more comprehensive build guide can be found under the following link: 

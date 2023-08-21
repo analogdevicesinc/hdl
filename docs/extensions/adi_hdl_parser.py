@@ -1,3 +1,8 @@
+###############################################################################
+## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
+
 import os.path
 from docutils import nodes
 from docutils.statemachine import ViewList
@@ -96,7 +101,7 @@ class directive_base(Directive):
 			else:
 				items[key].append(line)
 		for key in items:
-			items[key] = ' '.join(items[key]).strip().replace('- ', '', 1)
+			items[key] = ' '.join(items[key]).replace('-', '', 1).strip()
 		return items
 
 	def column_entry(self, row, text, node_type, classes=[]):
@@ -198,8 +203,8 @@ class directive_base(Directive):
 			is_div=True,
 			classes=['collapsible_content']
 		)
-		label += icon
 		label += nodes.paragraph(text=text)
+		label += icon
 
 		container += input_
 		container += label
@@ -209,6 +214,23 @@ class directive_base(Directive):
 
 		return (content, label)
 
+class directive_collapsible(directive_base):
+	option_spec = {'path': directives.unchanged}
+	required_arguments = 1
+	optional_arguments = 0
+
+	def run(self):
+		self.assert_has_content()
+
+		env = self.state.document.settings.env
+		self.current_doc = env.doc2path(env.docname)
+
+		node = node_div()
+
+		content, _ = self.collapsible(node, self.arguments[0].strip())
+		self.state.nested_parse(self.content, self.content_offset, content)
+
+		return [ node ]
 
 class directive_interfaces(directive_base):
 	option_spec = {'path': directives.unchanged}
@@ -230,8 +252,9 @@ class directive_interfaces(directive_base):
 			section += title
 
 			if bs[tag]['dependency'] is not None:
-				dependency = nodes.paragraph(text=f"Depends on {pretty_dep(bs[tag]['dependency'])}.")
-				section += dependency
+				section += [nodes.inline(text="Enabled if "),
+					nodes.literal(text=pretty_dep(bs[tag]['dependency'])),
+					nodes.inline(text=".")]
 			if tag in description:
 				rst = ViewList()
 				rst.append(description[tag], f"virtual_{str(uuid4())}", 0)
@@ -283,15 +306,28 @@ class directive_interfaces(directive_base):
 
 		rows = []
 		pr = component['ports']
+		dm = component['bus_domain']
 		for key in pr:
 			row = nodes.row()
 			self.column_entry(row, key, 'literal')
 			self.column_entry(row, pr[key]['direction'], 'paragraph')
 			self.column_entry(row, pretty_dep(pr[key]['dependency']), 'paragraph')
-			if key in description:
-				self.column_entry(row, description[key], 'reST', classes=['description'])
+			if 'clk' in key or 'clock' in key:
+				domain = 'clock domain'
+			elif 'reset':
+				domain = 'reset signal'
 			else:
-				self.column_entry(row, '', 'paragraph')
+				domain = 'domain'
+			if key in dm:
+				bus = 'Buses' if len(dm[key]) > 1 else 'Bus'
+				plr = 'are' if len(dm[key]) > 1 else 'is'
+				in_domain = f"{bus} ``{'``, ``'.join(dm[key])}`` {plr} synchronous to this {domain}."
+			else:
+				in_domain = ""
+			if key in description:
+				self.column_entry(row, " ".join([description[key], in_domain]), 'reST', classes=['description'])
+			else:
+				self.column_entry(row, in_domain, 'reST', classes=['description'])
 			rows.append(row)
 
 		tbody = nodes.tbody()
@@ -507,6 +543,7 @@ class directive_parameters(directive_base):
 def parse_hdl_component(path, ctime):
 	component = {
 		'bus_interface':{},
+		'bus_domain':{},
 		'ports': {},
 		'parameters': {},
 		'ctime': ctime
@@ -580,8 +617,22 @@ def parse_hdl_component(path, ctime):
 	name = get(root, 'name').text
 
 	bs = component['bus_interface']
+	dm = component['bus_domain']
 	for bus_interface in get_all(root, 'busInterfaces/busInterface'):
 		bus_name = get(bus_interface, 'name').text
+		if '_signal_clock' in bus_name:
+			signal_name = get(get(bus_interface, 'portMaps/portMap'), 'physicalPort/name').text
+			if signal_name not in dm:
+				dm[signal_name] = []
+			dm[signal_name].append(bus_name[0:bus_name.find('_signal_clock')])
+			continue
+		if '_signal_reset' in bus_name:
+			signal_name = get(get(bus_interface, 'portMaps/portMap'), 'physicalPort/name').text
+			if signal_name not in dm:
+				dm[signal_name] = []
+			dm[signal_name].append(bus_name[0:bus_name.find('_signal_reset')])
+			continue
+
 		bs[bus_name] = {
 			'name': sattrib(get(bus_interface, 'busType'), 'name'),
 			'dependency': get_dependency(bus_interface, 'busInterface'),
@@ -830,6 +881,7 @@ def manage_hdl_artifacts(app, env, docnames):
 	manage_hdl_regmaps(env, docnames)
 
 def setup(app):
+	app.add_directive('collapsible', directive_collapsible)
 	app.add_directive('hdl-parameters', directive_parameters)
 	app.add_directive('hdl-interfaces', directive_interfaces)
 	app.add_directive('hdl-regmap', directive_regmap)

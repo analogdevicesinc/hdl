@@ -63,8 +63,7 @@ Signal and Interface Pins
        Interrupt output of the module. Is asserted when at least one of the
        modules interrupt is pending and unmasked.
    * - spi_clk
-     - All ``spi_engine_ctrl`` signals and ``spi_resetn`` are
-       synchronous to this clock.
+     - ``spi_resetn`` is synchronous to this clock.
    * - spi_engine_ctrl
      - :ref:`spi_engine control-interface` slave.
        SPI Engine Control stream that contains commands and data for the
