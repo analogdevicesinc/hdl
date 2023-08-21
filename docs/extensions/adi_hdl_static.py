@@ -1,3 +1,8 @@
+###############################################################################
+## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
+
 class hdl_strings ():
 	access_type = {
 		'RO':{
