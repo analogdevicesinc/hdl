@@ -226,4 +226,4 @@ foreach port {hmc_gpio1 hmc_sync rstb spi0_csb spi0_miso spi0_mosi spi0_sclk spi
 # set optimization to get a better timing closure
 set_global_assignment -name OPTIMIZATION_MODE "HIGH PERFORMANCE EFFORT"
 
-execute_flow -compile
+#execute_flow -compile
