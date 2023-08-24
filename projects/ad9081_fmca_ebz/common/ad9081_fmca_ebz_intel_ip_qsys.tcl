@@ -283,8 +283,8 @@ add_connection jtag_avmm_bridge.master mm_bridge.s0
 add_connection jtag_avmm_bridge.master rst_seq_0.av_csr
 add_connection jtag_avmm_bridge.master rst_seq_1.av_csr
 add_connection jtag_avmm_bridge.master ed_control.j204c_f_ed_ctrl_avs
+add_connection jtag_avmm_bridge.master intel_jesd204c_f_0.reconfig_xcvr
 add_connection jtag_avmm_bridge.master_reset jtag_rst_bridge.in_reset
-add_connection jtag_avmm_bridge.master_reset intel_jesd204c_f_0.reconfig_xcvr
 
 add_connection jtag_reset.out_reset mm_bridge.reset
 add_connection jtag_reset.out_reset jtag_avmm_bridge.clk_reset
@@ -336,16 +336,13 @@ set_interface_property pio_status_external        EXPORT_OF pio_status.external_
 set_interface_property jtag_reset_clk             EXPORT_OF jtag_reset.clk
 set_interface_property jtag_reset_in_reset        EXPORT_OF jtag_reset.in_reset
 set_interface_property jtag_rst_bridge_out_reset  EXPORT_OF jtag_rst_bridge.out_reset
-set_interface_property jesd204c_f_reconfig_xcvr   EXPORT_OF intel_jesd204c_f_0.reconfig_xcvr
-set_interface_property rst_seq_0_av_csr           EXPORT_OF rst_seq_0.av_csr
-set_interface_property rst_seq_1_av_csr           EXPORT_OF rst_seq_1.av_csr
 
 set_connection_parameter_value jtag_avmm_bridge.master/mm_bridge.s0 baseAddress {0x0000}
 set_connection_parameter_value jtag_avmm_bridge.master/pio_control.s1 baseAddress {0x01020020}
 set_connection_parameter_value jtag_avmm_bridge.master/pio_status.s1 baseAddress {0x01020040}
-set_connection_parameter_value jtag_avmm_bridge.master/rst_seq.0_av_csr baseAddress {0x01020100}
-set_connection_parameter_value jtag_avmm_bridge.master/rst_seq.1_av_csr baseAddress {0x01020200}
+set_connection_parameter_value jtag_avmm_bridge.master/rst_seq_0.av_csr baseAddress {0x01020100}
+set_connection_parameter_value jtag_avmm_bridge.master/rst_seq_1.av_csr baseAddress {0x01020200}
 set_connection_parameter_value jtag_avmm_bridge.master/spi_0.spi_control_port baseAddress {0x01020000}
-set_connection_parameter_value mm_bridge.m0/intel_jesd204c_f_0_j204c_tx_avs baseAddress {0x000c0000}
+set_connection_parameter_value mm_bridge.m0/intel_jesd204c_f_0.j204c_tx_avs baseAddress {0x000c0000}
 set_connection_parameter_value jtag_avmm_bridge.master/ed_control.j204c_f_ed_ctrl_avs baseAddress {0x01020400}
 set_connection_parameter_value jtag_avmm_bridge.master/intel_jesd204c_f_0.reconfig_xcvr baseAddress {0x02000000}
