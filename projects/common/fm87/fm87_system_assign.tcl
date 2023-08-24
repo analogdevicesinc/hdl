@@ -284,6 +284,13 @@ set_instance_assignment -name CURRENT_STRENGTH_NEW 2MA -to hps_gpio_btn[1]
 set_instance_assignment -name CURRENT_STRENGTH_NEW 2MA -to hps_gpio_led[0]
 set_instance_assignment -name CURRENT_STRENGTH_NEW 2MA -to hps_gpio_led[1]
 set_instance_assignment -name CURRENT_STRENGTH_NEW 2MA -to hps_gpio_led[2]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_gpio_eth_irq
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_gpio_usb_oci
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_gpio_btn[0]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_gpio_btn[1]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_gpio_led[0]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_gpio_led[1]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_gpio_led[2]
 
 # gpio
 
@@ -326,17 +333,16 @@ set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_sgpi
 set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_sgpo
 
 # Agilex development kit's global assignments
-set_global_assignment -name USE_HPS_COLD_RESET SDM_IO11
-set_global_assignment -name USE_CONF_DONE SDM_IO16
 
 set_global_assignment -name HPS_INITIALIZATION "HPS FIRST"
 set_global_assignment -name HPS_DAP_SPLIT_MODE "SDM PINS"
 
 set_global_assignment -name INI_VARS "ASM_ENABLE_ADVANCED_DEVICES=ON;"
-set_global_assignment -name VID_OPERATION_MODE "PMBUS MASTER"
 set_global_assignment -name USE_PWRMGT_SCL SDM_IO0
+set_global_assignment -name USE_HPS_COLD_RESET SDM_IO11
 set_global_assignment -name USE_PWRMGT_SDA SDM_IO12
 set_global_assignment -name USE_CONF_DONE SDM_IO16
+set_global_assignment -name VID_OPERATION_MODE "PMBUS MASTER"
 set_global_assignment -name PWRMGT_BUS_SPEED_MODE "100 KHZ"
 set_global_assignment -name PWRMGT_SLAVE_DEVICE_TYPE LTC3888
 set_global_assignment -name NUMBER_OF_SLAVE_DEVICE 1

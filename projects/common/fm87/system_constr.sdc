@@ -1,7 +1,6 @@
 create_clock -period "10.000 ns"  -name sys_clk_100mhz      [get_ports {sys_clk}]
 create_clock -period  "6.000 ns"  -name emif_ref_clk        [get_ports {emif_hps_pll_ref_clk}]
 
-derive_pll_clocks
 derive_clock_uncertainty
 
 source ./jtag.sdc
