@@ -15,7 +15,7 @@ set_instance_parameter_value sys_clk {resetSynchronousEdges} {DEASSERT}
 
 add_instance agilex_reset altera_s10_user_rst_clkgate
 add_interface rst_ninit_done reset source
-set_interface_property rst_ninit_done EXPORT_OF agilex_reset.ninit_done
+set_interface_property rst EXPORT_OF agilex_reset.ninit_done
 
 # hps
 # round-about way - qsys-script doesn't support {*}?
@@ -411,9 +411,7 @@ add_connection emif_hps.emif_calbus/emif_calbus_0.emif_calbus_0
 
 set_interface_property emif_hps EXPORT_OF emif_hps.oct
 set_interface_property emif_hps_ddr EXPORT_OF emif_hps.mem
-# set_interface_property emif_hps_mem_clk_p EXPORT_OF emif_hps.mem_ck_p
-# set_interface_property emif_hps_mem_clk_n EXPORT_OF emif_hps.mem_ck_n
-set_interface_property sys_hps_f2h_stm_hw_events EXPORT_OF sys_hps.f2h_stm_hw_events
+set_interface_property sys_hps_f2h EXPORT_OF sys_hps.f2h_stm_hw_events
 set_interface_property sys_hps_h2f_cs EXPORT_OF sys_hps.h2f_cs
 set_interface_property emif_hps_pll_ref EXPORT_OF emif_hps.pll_ref_clk
 

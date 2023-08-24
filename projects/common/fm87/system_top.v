@@ -117,13 +117,15 @@ module system_top (
   wire  [63:0]  gpio_o;
   wire  [ 7:0]  fpga_dipsw;
   wire  [ 7:0]  fpga_led;
+  wire          nconf_done;
   wire          ninit_done;
   wire          sys_reset_n;
   wire          h2f_reset;
+  wire  [43:0]  stm_hw_events;
 
   // Board GPIOs
-  assign fpga_led = gpio_o[7:0];
-  assign gpio_i[ 7:0] = gpio_o[7:0];
+  assign fpga_led      = gpio_o[7:0];
+  assign gpio_i[ 7: 0] = gpio_o[7:0];
   assign gpio_i[15: 8] = fpga_dipsw;
   assign gpio_i[17:16] = fpga_gpio[ 1:0]; // push buttons
   assign gpio_i[28:18] = fpga_gpio[12:2];
@@ -133,6 +135,16 @@ module system_top (
   assign gpio_i[63:32] = gpio_o[63:32];
 
   assign sys_reset_n   = sys_resetn & ~h2f_reset & ~ninit_done;
+  assign stm_hw_events = {14'b0, fpga_led, fpga_dipsw, fpga_gpio[1:0]};
+
+  gpio_slave i_gpio_slave (
+    .reset_n    (sys_reset_n),
+    .clk        (fpga_sgpio_clk),
+    .sync       (fpga_sgpio_sync),
+    .miso       (fpga_sgpo),
+    .mosi       (fpga_sgpi),
+    .leds       (fpga_led),
+    .dipsw      (fpga_dipsw));
 
   system_bd i_system_bd (
     .sys_clk_clk                               (sys_clk),
@@ -140,7 +152,7 @@ module system_top (
 
     .sys_rst_reset_n                           (sys_reset_n),
   //.src_prb_rst_sources_source                (1'b1), // temporary disable
-    .rst_ninit_done_ninit_done                 (ninit_done),
+    .rst_ninit_done                            (ninit_done),
     .sys_gpio_bd_in_port                       (gpio_i[31: 0]),
     .sys_gpio_bd_out_port                      (gpio_o[31: 0]),
     .sys_gpio_in_export                        (gpio_i[63:32]),
@@ -228,19 +240,12 @@ module system_top (
 
     .h2f_reset_reset                           (h2f_reset),
 
+    .sys_hps_f2h_stm_hwevents                  (stm_hw_events),
+
     .sys_spi_MISO                              (1'b0),
     .sys_spi_MOSI                              (),
     .sys_spi_SCLK                              (),
-    .sys_spi_SS_n                              ());
-
-  sgpio_slave sgpio_slave_inst(
-    .i_rstn     (sys_resetn),
-    .i_clk      (fpga_sgpio_clk),
-    .i_sync     (fpga_sgpio_sync),
-    .i_mosi     (fpga_sgpi),
-    .o_miso     (fpga_sgpo),
-    .o_user_sw  (fpga_dipsw),
-    .i_user_led (fpga_led)
-  );
+    .sys_spi_SS_n                              ()
+    );
 
 endmodule
