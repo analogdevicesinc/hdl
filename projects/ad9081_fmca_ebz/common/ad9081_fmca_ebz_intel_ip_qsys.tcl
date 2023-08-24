@@ -22,6 +22,7 @@
 # ED_SIM_PAT_TESTMODE = 3
 
 add_instance intel_jesd204c_f_0 intel_jesd204c_f
+set_instance_parameter_value intel_jesd204c_f_0 DATA_PATH {rx_tx}
 set_instance_parameter_value intel_jesd204c_f_0 CF {0}
 set_instance_parameter_value intel_jesd204c_f_0 CS {0}
 set_instance_parameter_value intel_jesd204c_f_0 E  {4}
@@ -30,6 +31,18 @@ set_instance_parameter_value intel_jesd204c_f_0 L  {8}
 set_instance_parameter_value intel_jesd204c_f_0 M  {8}
 set_instance_parameter_value intel_jesd204c_f_0 N  {16}
 set_instance_parameter_value intel_jesd204c_f_0 NP {16}
+set_instance_parameter_value intel_jesd204c_f_0 S  {1}
+set_instance_parameter_value intel_jesd204c_f_0 RX_GB_8DEEP {0}
+set_instance_parameter_value intel_jesd204c_f_0 RX_GB_MLAB {0}
+set_instance_parameter_value intel_jesd204c_f_0 RX_GB_PIPE {1}
+set_instance_parameter_value intel_jesd204c_f_0 RX_GB_RD_DLY {1}
+set_instance_parameter_value intel_jesd204c_f_0 RX_LEMC_OFFSET {0}
+set_instance_parameter_value intel_jesd204c_f_0 RX_PIPELINE {0}
+set_instance_parameter_value intel_jesd204c_f_0 RX_POL_EN {255}
+set_instance_parameter_value intel_jesd204c_f_0 RX_POL_EN_ATTR {1}
+set_instance_parameter_value intel_jesd204c_f_0 RX_POL_INV {255}
+set_instance_parameter_value intel_jesd204c_f_0 RX_THRESH_EMB_ERR {8}
+set_instance_parameter_value intel_jesd204c_f_0 RX_THRESH_SH_ERR {16}
 
 add_instance systemclk_f_0 systemclk_f
 set_instance_parameter_value systemclk_f_0 refclk_fgt_freq_mhz_0 {156.250000}
@@ -53,15 +66,23 @@ add_instance mgmt_clk altera_clock_bridge
 set_instance_parameter_value mgmt_clk EXPLICIT_CLOCK_RATE {100000000.0}
 set_instance_parameter_value mgmt_clk NUM_CLOCK_OUTPUTS {1}
 
-add_instance txframe_clk altera_clock_bridge
-set_instance_parameter_value txframe_clk EXPLICIT_CLOCK_RATE {245760000.0}
-set_instance_parameter_value txframe_clk NUM_CLOCK_OUTPUTS {1}
-
 add_instance refclk_core altera_clock_bridge
 set_instance_parameter_value refclk_core EXPLICIT_CLOCK_RATE {324403200.0}
 set_instance_parameter_value refclk_core NUM_CLOCK_OUTPUTS {1}
 
+add_instance txframe_clk altera_clock_bridge
+set_instance_parameter_value txframe_clk EXPLICIT_CLOCK_RATE {245760000.0}
+set_instance_parameter_value txframe_clk NUM_CLOCK_OUTPUTS {1}
+
 add_instance txlink_clk altera_clock_bridge
+set_instance_parameter_value txlink_clk EXPLICIT_CLOCK_RATE {245760000.0}
+set_instance_parameter_value txlink_clk NUM_CLOCK_OUTPUTS {1}
+
+add_instance rxframe_clk altera_clock_bridge
+set_instance_parameter_value txframe_clk EXPLICIT_CLOCK_RATE {245760000.0}
+set_instance_parameter_value txframe_clk NUM_CLOCK_OUTPUTS {1}
+
+add_instance rxlink_clk altera_clock_bridge
 set_instance_parameter_value txlink_clk EXPLICIT_CLOCK_RATE {245760000.0}
 set_instance_parameter_value txlink_clk NUM_CLOCK_OUTPUTS {1}
 
@@ -235,12 +256,16 @@ add_connection systemclk_f_0.out_systempll_clk_0 intel_jesd204c_f_0.sysclk
 add_connection core_pll.outclk0 ed_control.in_clk
 add_connection core_pll.outclk1 ed_control.in_clk2x
 
-add_connection ed_control.txlink_clk txlink_clk.in_clk
 add_connection ed_control.txlink_clk sysref_rst_n_bridge.clk
+add_connection ed_control.txlink_clk txlink_clk.in_clk
+add_connection ed_control.txlink_clk intel_jesd204c_f_0.j204c_txlink_clk
+add_connection ed_control.rxlink_clk rxlink_clk.in_clk
+add_connection ed_control.rxlink_clk intel_jesd204c_f_0.j204c_rxlink_clk
 
 add_connection mgmt_clk.out_clk intel_jesd204c_f_0.j204c_tx_avs_clk
 add_connection mgmt_clk.out_clk intel_jesd204c_f_0.reconfig_xcvr_clk
 add_connection mgmt_clk.out_clk intel_jesd204c_f_0.j204c_txlink_clk
+add_connection mgmt_clk.out_clk intel_jesd204c_f_0.j204c_rx_avs_clk
 add_connection mgmt_clk.out_clk reset_controller_0.clk
 add_connection mgmt_clk.out_clk rst_seq_0.clk
 add_connection mgmt_clk.out_clk rst_seq_1.clk
@@ -255,11 +280,13 @@ add_connection mgmt_clk.out_clk jtag_rst_bridge.clk
 add_connection mgmt_clk.out_clk jtag_avmm_bridge.clk
 
 add_connection txframe_clk.out_clk intel_jesd204c_f_0.j204c_txframe_clk
+add_connection rxframe_clk.out_clk intel_jesd204c_f_0.j204c_rxframe_clk
 
 add_connection refclk_core.out_clk core_pll.refclk
 add_connection refclk_core.out_clk rst_seq0_out0_bridge.clk
 
 add_connection rst_seq_0.reset_out0 intel_jesd204c_f_0.j204c_tx_avs_rst_n
+add_connection rst_seq_0.reset_out0 intel_jesd204c_f_0.j204c_rx_avs_rst_n
 add_connection rst_seq_0.reset_out0 rst_seq0_out0_bridge.in_reset
 add_connection rst_seq_0.reset_out1 sysref_rst_n_bridge.in_reset
 
@@ -290,6 +317,7 @@ add_connection jtag_reset.out_reset mm_bridge.reset
 add_connection jtag_reset.out_reset jtag_avmm_bridge.clk_reset
 
 add_connection mm_bridge.m0 intel_jesd204c_f_0.j204c_tx_avs
+add_connection mm_bridge.m0 intel_jesd204c_f_0.j204c_rx_avs
 
 add_connection edctl_reset_bridge.out_reset rst_seq_0.csr_reset
 add_connection edctl_reset_bridge.out_reset rst_seq_1.csr_reset
@@ -297,18 +325,23 @@ add_connection edctl_reset_bridge.out_reset ed_control.edctl_rst_n
 
 add_connection mgmt_reset_bridge.out_reset reset_controller_0.reset_in0
 
+add_connection intel_jesd204c_f_0.j204c_rx_alldev_lane_align intel_jesd204c_f_0.j204c_rx_dev_lane_align
+
 ## Exported signals
 
 add_interface mgmt_clk                   clock     sink
 add_interface mgmt_reset                 reset     sink
 add_interface txframe_clk                clock     sink
+add_interface rxframe_clk                clock     sink
 add_interface refclk_core                clock     sink
 add_interface j204c_tx_rst_n             reset     sink
+add_interface j204c_rx_rst_n             reset     sink
 add_interface edctl_rst                  reset     sink
 add_interface jtag_reset_clk             clock     sink
 add_interface jtag_reset_in_reset        reset     sink
 add_interface jtag_rst_bridge_out_reset  reset     sink
 add_interface txlink_clk                 clock     sink
+add_interface rxlink_clk                 clock     sink
 add_interface ed_control_txframe_clk     clock     sink
 add_interface ed_control_tx_phase        clock     sink
 add_interface ed_control_rxframe_clk     clock     sink
@@ -320,10 +353,13 @@ add_interface pio_status_external        conduit   end
 
 set_interface_property mgmt_clk                   EXPORT_OF mgmt_clk.in_clk
 set_interface_property mgmt_reset                 EXPORT_OF mgmt_reset_bridge.in_reset
-set_interface_property txframe_clk                EXPORT_OF txframe_clk.in_clk
 set_interface_property refclk_core                EXPORT_OF refclk_core.in_clk
+set_interface_property txframe_clk                EXPORT_OF txframe_clk.in_clk
 set_interface_property txlink_clk                 EXPORT_OF txlink_clk.out_clk
+set_interface_property rxframe_clk                EXPORT_OF rxframe_clk.in_clk
+set_interface_property rxlink_clk                 EXPORT_OF rxlink_clk.out_clk
 set_interface_property j204c_tx_rst_n             EXPORT_OF intel_jesd204c_f_0.j204c_tx_rst_n
+set_interface_property j204c_rx_rst_n             EXPORT_OF intel_jesd204c_f_0.j204c_rx_rst_n
 set_interface_property ed_control_txframe_clk     EXPORT_OF ed_control.txframe_clk
 set_interface_property ed_control_tx_phase        EXPORT_OF ed_control.tx_phase
 set_interface_property ed_control_rxframe_clk     EXPORT_OF ed_control.rxframe_clk
