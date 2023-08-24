@@ -1,3 +1,73 @@
+# mxfe params
+# -------------------------------------------------------------------
+
+# RX parameters
+set RX_NUM_OF_LINKS $ad_project_params(RX_NUM_LINKS)
+
+# RX JESD parameter per link
+set RX_JESD_M     $ad_project_params(RX_JESD_M)
+set RX_JESD_L     $ad_project_params(RX_JESD_L)
+set RX_JESD_S     $ad_project_params(RX_JESD_S)
+set RX_JESD_NP    $ad_project_params(RX_JESD_NP)
+
+set RX_TPL_DATA_PATH_WIDTH 4
+if {$RX_JESD_NP==12} {
+  set RX_TPL_DATA_PATH_WIDTH 6
+}
+
+set RX_NUM_OF_LANES      [expr $RX_JESD_L * $RX_NUM_OF_LINKS]
+set RX_NUM_OF_CONVERTERS [expr $RX_JESD_M * $RX_NUM_OF_LINKS]
+set RX_SAMPLES_PER_FRAME $RX_JESD_S
+set RX_SAMPLE_WIDTH      $RX_JESD_NP
+set RX_DMA_SAMPLE_WIDTH  16
+
+set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 8*$RX_TPL_DATA_PATH_WIDTH / \
+                                ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)]
+
+# TX parameters
+set TX_NUM_OF_LINKS $ad_project_params(TX_NUM_LINKS)
+
+# TX JESD parameter per link
+set TX_JESD_M     $ad_project_params(TX_JESD_M)
+set TX_JESD_L     $ad_project_params(TX_JESD_L)
+set TX_JESD_S     $ad_project_params(TX_JESD_S)
+set TX_JESD_NP    $ad_project_params(TX_JESD_NP)
+
+set TX_TPL_DATA_PATH_WIDTH 4
+if {$TX_JESD_NP==12} {
+  set TX_TPL_DATA_PATH_WIDTH 6
+}
+
+set TX_NUM_OF_LANES      [expr $TX_JESD_L * $TX_NUM_OF_LINKS]
+set TX_NUM_OF_CONVERTERS [expr $TX_JESD_M * $TX_NUM_OF_LINKS]
+set TX_SAMPLES_PER_FRAME $TX_JESD_S
+set TX_SAMPLE_WIDTH      $TX_JESD_NP
+set TX_DMA_SAMPLE_WIDTH  16
+
+set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8*$TX_TPL_DATA_PATH_WIDTH / \
+                                ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)]
+
+# Lane Rate = I/Q Sample Rate x M x N' x (10 \ 8) \ L
+set RX_LANE_RATE [expr $ad_project_params(RX_LANE_RATE)*1000]
+set TX_LANE_RATE [expr $ad_project_params(TX_LANE_RATE)*1000]
+
+# Lane Rate = I/Q Sample Rate x M x N' x (10 \ 8) \ L
+set RX_LANE_RATE [expr $ad_project_params(RX_LANE_RATE)*1000]
+set TX_LANE_RATE [expr $ad_project_params(TX_LANE_RATE)*1000]
+
+set adc_fifo_name mxfe_adc_fifo
+set adc_data_width [expr 8*$RX_TPL_DATA_PATH_WIDTH*$RX_NUM_OF_LANES*$RX_DMA_SAMPLE_WIDTH/$RX_SAMPLE_WIDTH]
+set adc_dma_data_width $adc_data_width
+set adc_fifo_address_width [expr int(ceil(log(($adc_fifo_samples_per_converter*$RX_NUM_OF_CONVERTERS) / ($adc_data_width/$RX_DMA_SAMPLE_WIDTH))/log(2)))]
+
+set dac_fifo_name mxfe_dac_fifo
+set dac_data_width [expr 8*$TX_TPL_DATA_PATH_WIDTH*$TX_NUM_OF_LANES*$TX_DMA_SAMPLE_WIDTH/$TX_SAMPLE_WIDTH]
+set dac_dma_data_width $dac_data_width
+set dac_fifo_address_width [expr int(ceil(log(($dac_fifo_samples_per_converter*$TX_NUM_OF_CONVERTERS) / ($dac_data_width/$TX_DMA_SAMPLE_WIDTH))/log(2)))]
+
+
+# From example design
+# --------------------------------------------------------------------
 # LINK = 1,
 # L = 8,
 # M = 8,
@@ -382,3 +452,78 @@ set_connection_parameter_value jtag_avmm_bridge.master/spi_0.spi_control_port ba
 set_connection_parameter_value mm_bridge.m0/intel_jesd204c_f_0.j204c_tx_avs baseAddress {0x000c0000}
 set_connection_parameter_value jtag_avmm_bridge.master/ed_control.j204c_f_ed_ctrl_avs baseAddress {0x01020400}
 set_connection_parameter_value jtag_avmm_bridge.master/intel_jesd204c_f_0.reconfig_xcvr baseAddress {0x02000000}
+
+# From mxfe
+# -------------------------------------------------------------------------------------------
+
+add_instance mxfe_rx_tpl ad_ip_jesd204_tpl_adc
+set_instance_parameter_value mxfe_rx_tpl {ID} {0}
+set_instance_parameter_value mxfe_rx_tpl {NUM_CHANNELS} $RX_NUM_OF_CONVERTERS
+set_instance_parameter_value mxfe_rx_tpl {NUM_LANES} $RX_NUM_OF_LANES
+set_instance_parameter_value mxfe_rx_tpl {BITS_PER_SAMPLE} $RX_SAMPLE_WIDTH
+set_instance_parameter_value mxfe_rx_tpl {CONVERTER_RESOLUTION} $RX_SAMPLE_WIDTH
+set_instance_parameter_value mxfe_rx_tpl {TWOS_COMPLEMENT} {1}
+set_instance_parameter_value mxfe_rx_tpl {OCTETS_PER_BEAT} $RX_TPL_DATA_PATH_WIDTH
+set_instance_parameter_value mxfe_rx_tpl {DMA_BITS_PER_SAMPLE} $RX_DMA_SAMPLE_WIDTH
+
+add_instance mxfe_tx_tpl ad_ip_jesd204_tpl_dac
+set_instance_parameter_value mxfe_tx_tpl {ID} {0}
+set_instance_parameter_value mxfe_tx_tpl {NUM_CHANNELS} $TX_NUM_OF_CONVERTERS
+set_instance_parameter_value mxfe_tx_tpl {NUM_LANES} $TX_NUM_OF_LANES
+set_instance_parameter_value mxfe_tx_tpl {BITS_PER_SAMPLE} $TX_SAMPLE_WIDTH
+set_instance_parameter_value mxfe_tx_tpl {CONVERTER_RESOLUTION} $TX_SAMPLE_WIDTH
+set_instance_parameter_value mxfe_tx_tpl {OCTETS_PER_BEAT} $TX_TPL_DATA_PATH_WIDTH
+set_instance_parameter_value mxfe_tx_tpl {DMA_BITS_PER_SAMPLE} $TX_DMA_SAMPLE_WIDTH
+
+# pack(s) & unpack(s)
+
+add_instance mxfe_tx_upack util_upack2
+set_instance_parameter_value mxfe_tx_upack {NUM_OF_CHANNELS} $TX_NUM_OF_CONVERTERS
+set_instance_parameter_value mxfe_tx_upack {SAMPLES_PER_CHANNEL} $TX_SAMPLES_PER_CHANNEL
+set_instance_parameter_value mxfe_tx_upack {SAMPLE_DATA_WIDTH} $TX_DMA_SAMPLE_WIDTH
+set_instance_parameter_value mxfe_tx_upack {INTERFACE_TYPE} {1}
+
+add_instance mxfe_rx_cpack util_cpack2
+set_instance_parameter_value mxfe_rx_cpack {NUM_OF_CHANNELS} $RX_NUM_OF_CONVERTERS
+set_instance_parameter_value mxfe_rx_cpack {SAMPLES_PER_CHANNEL} $RX_SAMPLES_PER_CHANNEL
+set_instance_parameter_value mxfe_rx_cpack {SAMPLE_DATA_WIDTH} $RX_DMA_SAMPLE_WIDTH
+
+# RX and TX data offload buffers
+
+ad_adcfifo_create $adc_fifo_name $adc_data_width $adc_dma_data_width $adc_fifo_address_width
+ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_dma_data_width $dac_fifo_address_width
+
+add_connection sys_clk.clk mxfe_rx_tpl.s_axi_clock
+add_connection sys_clk.clk mxfe_tx_tpl.s_axi_clock
+add_connection sys_clk.clk_reset mxfe_rx_tpl.s_axi_reset
+add_connection sys_clk.clk_reset mxfe_tx_tpl.s_axi_reset
+
+add_connection mgmt_clk.out_clk mxfe_rx_tpl.link_clk
+add_connection mgmt_clk.out_clk mxfe_tx_tpl.link_clk
+add_connection mgmt_clk.out_clk mxfe_tx_upack.clk
+add_connection mgmt_clk.out_clk mxfe_rx_cpack.clk
+
+add_connection sysref_rst_n_bridge.out_reset mxfe_tx_upack.reset
+add_connection sysref_rst_n_bridge.out_reset mxfe_rx_cpack.reset
+
+add_connection intel_jesd204c_f_0.j204c_rx_avst mxfe_rx_tpl.link_data
+add_connection mxfe_tx_tpl.link_data intel_jesd204c_f_0.j204c_tx_avst
+
+# RX cpack to offload
+add_connection mxfe_rx_cpack.if_packed_fifo_wr_en $adc_fifo_name.if_adc_wr
+add_connection mxfe_rx_cpack.if_packed_fifo_wr_data $adc_fifo_name.if_adc_wdata
+add_connection mxfe_rx_tpl.if_adc_dovf $adc_fifo_name.if_adc_wovf
+# RX tpl to cpack
+for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
+  add_connection mxfe_rx_tpl.adc_ch_$i mxfe_rx_cpack.adc_ch_$i
+}
+# TX upack to offload
+add_connection mxfe_tx_upack.if_packed_fifo_rd_en $dac_fifo_name.if_dac_valid
+add_connection $dac_fifo_name.if_dac_data mxfe_tx_upack.if_packed_fifo_rd_data
+add_connection $dac_fifo_name.if_dac_dunf mxfe_tx_tpl.if_dac_dunf
+# TX tpl to pack
+for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
+  add_connection mxfe_tx_upack.dac_ch_$i mxfe_tx_tpl.dac_ch_$i
+}
+ad_cpu_interconnect 0x000D2000 mxfe_rx_tpl.s_axi
+ad_cpu_interconnect 0x000D4000 mxfe_tx_tpl.s_axi
