@@ -66,8 +66,8 @@ set dac_dma_data_width $dac_data_width
 set dac_fifo_address_width [expr int(ceil(log(($dac_fifo_samples_per_converter*$TX_NUM_OF_CONVERTERS) / ($dac_data_width/$TX_DMA_SAMPLE_WIDTH))/log(2)))]
 
 
-# From example design
-# --------------------------------------------------------------------
+# Generic JESD
+# ------------------------------------------------------------------------------
 # LINK = 1,
 # L = 8,
 # M = 8,
@@ -331,6 +331,9 @@ add_connection ed_control.txlink_clk txlink_clk.in_clk
 add_connection ed_control.txlink_clk intel_jesd204c_f_0.j204c_txlink_clk
 add_connection ed_control.rxlink_clk rxlink_clk.in_clk
 add_connection ed_control.rxlink_clk intel_jesd204c_f_0.j204c_rxlink_clk
+# Connect on the top
+#add_connection ed_control.tx_phase intel_jesd204c_f_0.j204c_txfclk_ctrl
+#add_connection ed_control.rx_phase intel_jesd204c_f_0.j204c_rxfclk_ctrl
 
 add_connection mgmt_clk.out_clk intel_jesd204c_f_0.j204c_tx_avs_clk
 add_connection mgmt_clk.out_clk intel_jesd204c_f_0.reconfig_xcvr_clk
@@ -413,13 +416,22 @@ add_interface jtag_rst_bridge_out_reset  reset     sink
 add_interface txlink_clk                 clock     sink
 add_interface rxlink_clk                 clock     sink
 add_interface ed_control_txframe_clk     clock     sink
-add_interface ed_control_tx_phase        clock     sink
 add_interface ed_control_rxframe_clk     clock     sink
 add_interface ed_control_rx_phase        clock     sink
 add_interface spi_0_irq                  interrupt sender
 add_interface spi_0_external             conduit   end
 add_interface pio_control_external       conduit   end
 add_interface pio_status_external        conduit   end
+add_interface ed_control_rx_phase        clock     source
+add_interface ed_control_tx_phase        clock     source
+add_interface j204c_rxfclk_ctrl          conduit   end
+add_interface j204c_txfclk_ctrl          conduit   end
+# const HIGH
+add_interface j204c_rxlclk_ctrl          conduit   end
+add_interface j204c_txlclk_ctrl          conduit   end
+#
+add_interface j204c_tx_cmd_data          avalon    sink
+add_interface j204c_rx_cmd_data          avalon    source
 
 set_interface_property mgmt_clk                   EXPORT_OF mgmt_clk.in_clk
 set_interface_property mgmt_reset                 EXPORT_OF mgmt_reset_bridge.in_reset
@@ -431,9 +443,7 @@ set_interface_property rxlink_clk                 EXPORT_OF rxlink_clk.out_clk
 set_interface_property j204c_tx_rst_n             EXPORT_OF intel_jesd204c_f_0.j204c_tx_rst_n
 set_interface_property j204c_rx_rst_n             EXPORT_OF intel_jesd204c_f_0.j204c_rx_rst_n
 set_interface_property ed_control_txframe_clk     EXPORT_OF ed_control.txframe_clk
-set_interface_property ed_control_tx_phase        EXPORT_OF ed_control.tx_phase
 set_interface_property ed_control_rxframe_clk     EXPORT_OF ed_control.rxframe_clk
-set_interface_property ed_control_rx_phase        EXPORT_OF ed_control.rx_phase
 set_interface_property edctl_rst                  EXPORT_OF edctl_reset_bridge.in_reset
 set_interface_property spi_0_irq                  EXPORT_OF spi_0.irq
 set_interface_property spi_0_external             EXPORT_OF spi_0.external
@@ -442,6 +452,12 @@ set_interface_property pio_status_external        EXPORT_OF pio_status.external_
 set_interface_property jtag_reset_clk             EXPORT_OF jtag_reset.clk
 set_interface_property jtag_reset_in_reset        EXPORT_OF jtag_reset.in_reset
 set_interface_property jtag_rst_bridge_out_reset  EXPORT_OF jtag_rst_bridge.out_reset
+set_interface_property ed_control_rx_phase        EXPORT_OF ed_control.rx_phase
+set_interface_property ed_control_tx_phase        EXPORT_OF ed_control.tx_phase
+set_interface_property j204c_rxfclk_ctrl          EXPORT_OF intel_jesd204c_f_0.j204c_rxfclk_ctrl
+set_interface_property j204c_txfclk_ctrl          EXPORT_OF intel_jesd204c_f_0.j204c_txfclk_ctrl
+set_interface_property j204c_rxlclk_ctrl          EXPORT_OF intel_jesd204c_f_0.j204c_rxlclk_ctrl
+set_interface_property j204c_txlclk_ctrl          EXPORT_OF intel_jesd204c_f_0.j204c_txlclk_ctrl
 
 set_connection_parameter_value jtag_avmm_bridge.master/mm_bridge.s0 baseAddress {0x0000}
 set_connection_parameter_value jtag_avmm_bridge.master/pio_control.s1 baseAddress {0x01020020}
@@ -453,8 +469,8 @@ set_connection_parameter_value mm_bridge.m0/intel_jesd204c_f_0.j204c_tx_avs base
 set_connection_parameter_value jtag_avmm_bridge.master/ed_control.j204c_f_ed_ctrl_avs baseAddress {0x01020400}
 set_connection_parameter_value jtag_avmm_bridge.master/intel_jesd204c_f_0.reconfig_xcvr baseAddress {0x02000000}
 
-# From mxfe
-# -------------------------------------------------------------------------------------------
+# Mxfe specific
+# ------------------------------------------------------------------------------
 
 add_instance mxfe_rx_tpl ad_ip_jesd204_tpl_adc
 set_instance_parameter_value mxfe_rx_tpl {ID} {0}
@@ -493,26 +509,97 @@ set_instance_parameter_value mxfe_rx_cpack {SAMPLE_DATA_WIDTH} $RX_DMA_SAMPLE_WI
 ad_adcfifo_create $adc_fifo_name $adc_data_width $adc_dma_data_width $adc_fifo_address_width
 ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_dma_data_width $dac_fifo_address_width
 
-add_connection sys_clk.clk mxfe_rx_tpl.s_axi_clock
-add_connection sys_clk.clk mxfe_tx_tpl.s_axi_clock
-add_connection sys_clk.clk_reset mxfe_rx_tpl.s_axi_reset
-add_connection sys_clk.clk_reset mxfe_tx_tpl.s_axi_reset
+# RX and TX DMA instance and connections
 
-add_connection mgmt_clk.out_clk mxfe_rx_tpl.link_clk
+add_instance mxfe_tx_dma axi_dmac
+set_instance_parameter_value mxfe_tx_dma {ID} {0}
+set_instance_parameter_value mxfe_tx_dma {DMA_DATA_WIDTH_SRC} {128}
+set_instance_parameter_value mxfe_tx_dma {DMA_DATA_WIDTH_DEST} $dac_dma_data_width
+set_instance_parameter_value mxfe_tx_dma {DMA_LENGTH_WIDTH} {24}
+set_instance_parameter_value mxfe_tx_dma {DMA_2D_TRANSFER} {0}
+set_instance_parameter_value mxfe_tx_dma {AXI_SLICE_DEST} {0}
+set_instance_parameter_value mxfe_tx_dma {AXI_SLICE_SRC} {0}
+set_instance_parameter_value mxfe_tx_dma {SYNC_TRANSFER_START} {0}
+set_instance_parameter_value mxfe_tx_dma {CYCLIC} {1}
+set_instance_parameter_value mxfe_tx_dma {DMA_TYPE_DEST} {1}
+set_instance_parameter_value mxfe_tx_dma {DMA_TYPE_SRC} {0}
+set_instance_parameter_value mxfe_tx_dma {FIFO_SIZE} {16}
+set_instance_parameter_value mxfe_tx_dma {HAS_AXIS_TLAST} {1}
+set_instance_parameter_value mxfe_tx_dma {DMA_AXI_PROTOCOL_SRC} {0}
+set_instance_parameter_value mxfe_tx_dma {MAX_BYTES_PER_BURST} {4096}
+
+add_instance mxfe_rx_dma axi_dmac
+set_instance_parameter_value mxfe_rx_dma {ID} {0}
+set_instance_parameter_value mxfe_rx_dma {DMA_DATA_WIDTH_SRC} $adc_dma_data_width
+set_instance_parameter_value mxfe_rx_dma {DMA_DATA_WIDTH_DEST} {128}
+set_instance_parameter_value mxfe_rx_dma {DMA_LENGTH_WIDTH} {24}
+set_instance_parameter_value mxfe_rx_dma {DMA_2D_TRANSFER} {0}
+set_instance_parameter_value mxfe_rx_dma {AXI_SLICE_DEST} {0}
+set_instance_parameter_value mxfe_rx_dma {AXI_SLICE_SRC} {0}
+set_instance_parameter_value mxfe_rx_dma {SYNC_TRANSFER_START} {0}
+set_instance_parameter_value mxfe_rx_dma {CYCLIC} {0}
+set_instance_parameter_value mxfe_rx_dma {DMA_TYPE_DEST} {0}
+set_instance_parameter_value mxfe_rx_dma {DMA_TYPE_SRC} {1}
+set_instance_parameter_value mxfe_rx_dma {FIFO_SIZE} {16}
+set_instance_parameter_value mxfe_rx_dma {DMA_AXI_PROTOCOL_DEST} {0}
+set_instance_parameter_value mxfe_rx_dma {MAX_BYTES_PER_BURST} {4096}
+
+#
+## clocks and resets
+#
+
+# system clock and reset
+
+add_connection sys_clk.clk mxfe_rx_tpl.s_axi_clock
+add_connection sys_clk.clk mxfe_rx_dma.s_axi_clock
+add_connection sys_clk.clk mxfe_tx_tpl.s_axi_clock
+add_connection sys_clk.clk mxfe_tx_dma.s_axi_clock
+
+add_connection sys_clk.clk_reset mxfe_rx_tpl.s_axi_reset
+add_connection sys_clk.clk_reset mxfe_rx_dma.s_axi_reset
+add_connection sys_clk.clk_reset mxfe_tx_tpl.s_axi_reset
+add_connection sys_clk.clk_reset mxfe_tx_dma.s_axi_reset
+
 add_connection mgmt_clk.out_clk mxfe_tx_tpl.link_clk
 add_connection mgmt_clk.out_clk mxfe_tx_upack.clk
-add_connection mgmt_clk.out_clk mxfe_rx_cpack.clk
+add_connection mgmt_clk.out_clk $dac_fifo_name.if_dac_clk
 
-add_connection sysref_rst_n_bridge.out_reset mxfe_tx_upack.reset
 add_connection sysref_rst_n_bridge.out_reset mxfe_rx_cpack.reset
+add_connection sysref_rst_n_bridge.out_reset $adc_fifo_name.if_adc_rst
+add_connection sysref_rst_n_bridge.out_reset mxfe_tx_upack.reset
+add_connection sysref_rst_n_bridge.out_reset $dac_fifo_name.if_dac_rst
+
+add_connection ed_control.rxlink_clk mxfe_rx_cpack.clk
+add_connection ed_control.rxlink_clk mxfe_rx_tpl.link_clk
+add_connection ed_control.rxlink_clk $adc_fifo_name.if_adc_clk
 
 add_connection intel_jesd204c_f_0.j204c_rx_avst mxfe_rx_tpl.link_data
 add_connection mxfe_tx_tpl.link_data intel_jesd204c_f_0.j204c_tx_avst
+
+# dma clock and reset
+
+add_connection sys_dma_clk.clk $adc_fifo_name.if_dma_clk
+add_connection sys_dma_clk.clk mxfe_rx_dma.if_s_axis_aclk
+add_connection sys_dma_clk.clk mxfe_rx_dma.m_dest_axi_clock
+
+add_connection sys_dma_clk.clk_reset mxfe_rx_dma.m_dest_axi_reset
+
+add_connection sys_dma_clk.clk $dac_fifo_name.if_dma_clk
+add_connection sys_dma_clk.clk mxfe_tx_dma.if_m_axis_aclk
+add_connection sys_dma_clk.clk mxfe_tx_dma.m_src_axi_clock
+
+add_connection sys_dma_clk.clk_reset mxfe_tx_dma.m_src_axi_reset
+add_connection sys_dma_clk.clk_reset $dac_fifo_name.if_dma_rst
 
 # RX cpack to offload
 add_connection mxfe_rx_cpack.if_packed_fifo_wr_en $adc_fifo_name.if_adc_wr
 add_connection mxfe_rx_cpack.if_packed_fifo_wr_data $adc_fifo_name.if_adc_wdata
 add_connection mxfe_rx_tpl.if_adc_dovf $adc_fifo_name.if_adc_wovf
+# RX offload to dma
+add_connection $adc_fifo_name.if_dma_xfer_req mxfe_rx_dma.if_s_axis_xfer_req
+add_connection $adc_fifo_name.m_axis mxfe_rx_dma.s_axis
+# RX dma to HPS
+ad_dma_interconnect mxfe_rx_dma.m_dest_axi
 # RX tpl to cpack
 for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
   add_connection mxfe_rx_tpl.adc_ch_$i mxfe_rx_cpack.adc_ch_$i
@@ -521,6 +608,11 @@ for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
 add_connection mxfe_tx_upack.if_packed_fifo_rd_en $dac_fifo_name.if_dac_valid
 add_connection $dac_fifo_name.if_dac_data mxfe_tx_upack.if_packed_fifo_rd_data
 add_connection $dac_fifo_name.if_dac_dunf mxfe_tx_tpl.if_dac_dunf
+# TX offload to dma
+add_connection mxfe_tx_dma.if_m_axis_xfer_req $dac_fifo_name.if_dma_xfer_req
+add_connection mxfe_tx_dma.m_axis $dac_fifo_name.s_axis
+# TX dma to HPS
+ad_dma_interconnect mxfe_tx_dma.m_src_axi
 # TX tpl to pack
 for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
   add_connection mxfe_tx_upack.dac_ch_$i mxfe_tx_tpl.dac_ch_$i
