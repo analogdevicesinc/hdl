@@ -113,6 +113,7 @@ set_instance_parameter_value intel_jesd204c_f_0 RX_POL_EN_ATTR {1}
 set_instance_parameter_value intel_jesd204c_f_0 RX_POL_INV {255}
 set_instance_parameter_value intel_jesd204c_f_0 RX_THRESH_EMB_ERR {8}
 set_instance_parameter_value intel_jesd204c_f_0 RX_THRESH_SH_ERR {16}
+set_instance_parameter_value intel_jesd204c_f_0 rcfg_enable {0}
 
 add_instance systemclk_f_0 systemclk_f
 set_instance_parameter_value systemclk_f_0 refclk_fgt_freq_mhz_0 {156.250000}
@@ -120,6 +121,7 @@ set_instance_parameter_value systemclk_f_0 refclk_fgt_freq_mhz_6 {324.403200}
 set_instance_parameter_value systemclk_f_0 refclk_fgt_freq_mhz_txt_0 {100}
 set_instance_parameter_value systemclk_f_0 refclk_fgt_freq_mhz_txt_6 {100}
 set_instance_parameter_value systemclk_f_0 refclk_fgt_output_enable_6 {1}
+set_instance_parameter_value systemclk_f_0 refclk_fgt_always_active_6 {1}
 set_instance_parameter_value systemclk_f_0 syspll_freq_mhz_0 {506.880000}
 set_instance_parameter_value systemclk_f_0 syspll_freq_mhz_1 {805.6640625}
 set_instance_parameter_value systemclk_f_0 syspll_freq_mhz_2 {805.6640625}
@@ -250,7 +252,7 @@ set_instance_parameter_value jtag_rst_bridge SYNC_RESET {0}
 set_instance_parameter_value jtag_rst_bridge USE_RESET_REQUEST {0}
 
 add_instance ed_control j204c_f_edctl
-set_instance_parameter_value ed_control DATA_PATH_2 {1}
+set_instance_parameter_value ed_control DATA_PATH_2 {2}
 set_instance_parameter_value ed_control E {4}
 set_instance_parameter_value ed_control ED_SIM_PAT_TESTMODE {3}
 set_instance_parameter_value ed_control FCLK_MULP {1}
@@ -336,7 +338,7 @@ add_connection ed_control.rxlink_clk intel_jesd204c_f_0.j204c_rxlink_clk
 #add_connection ed_control.rx_phase intel_jesd204c_f_0.j204c_rxfclk_ctrl
 
 add_connection mgmt_clk.out_clk intel_jesd204c_f_0.j204c_tx_avs_clk
-add_connection mgmt_clk.out_clk intel_jesd204c_f_0.reconfig_xcvr_clk
+#add_connection mgmt_clk.out_clk intel_jesd204c_f_0.reconfig_xcvr_clk
 add_connection mgmt_clk.out_clk intel_jesd204c_f_0.j204c_txlink_clk
 add_connection mgmt_clk.out_clk intel_jesd204c_f_0.j204c_rx_avs_clk
 add_connection mgmt_clk.out_clk reset_controller_0.clk
@@ -371,7 +373,7 @@ add_connection fpga_m.master_reset reset_controller_0.reset_in0
 
 add_connection reset_controller_0.reset_out rst_seq_0.reset_in0
 add_connection reset_controller_0.reset_out rst_seq_1.reset_in0
-add_connection reset_controller_0.reset_out intel_jesd204c_f_0.reconfig_xcvr_reset
+#add_connection reset_controller_0.reset_out intel_jesd204c_f_0.reconfig_xcvr_reset
 add_connection reset_controller_0.reset_out spi_0.reset
 add_connection reset_controller_0.reset_out pio_control.reset
 add_connection reset_controller_0.reset_out pio_status.reset
@@ -383,7 +385,7 @@ add_connection jtag_avmm_bridge.master mm_bridge.s0
 add_connection jtag_avmm_bridge.master rst_seq_0.av_csr
 add_connection jtag_avmm_bridge.master rst_seq_1.av_csr
 add_connection jtag_avmm_bridge.master ed_control.j204c_f_ed_ctrl_avs
-add_connection jtag_avmm_bridge.master intel_jesd204c_f_0.reconfig_xcvr
+#add_connection jtag_avmm_bridge.master intel_jesd204c_f_0.reconfig_xcvr
 add_connection jtag_avmm_bridge.master_reset jtag_rst_bridge.in_reset
 
 add_connection jtag_reset.out_reset mm_bridge.reset
@@ -418,6 +420,7 @@ add_interface rxlink_clk                 clock     sink
 add_interface ed_control_txframe_clk     clock     sink
 add_interface ed_control_rxframe_clk     clock     sink
 add_interface ed_control_rx_phase        clock     sink
+add_interface ed_control_in_sysref       conduit   sink
 add_interface spi_0_irq                  interrupt sender
 add_interface spi_0_external             conduit   end
 add_interface pio_control_external       conduit   end
@@ -432,6 +435,27 @@ add_interface j204c_txlclk_ctrl          conduit   end
 #
 add_interface j204c_tx_cmd_data          avalon    sink
 add_interface j204c_rx_cmd_data          avalon    source
+add_interface ed_control_rst_sts_detected0_rst_sts_set_i conduit sink
+add_interface ed_control_tst_err0_tst_error_i            conduit sink
+add_interface ed_control_rst_sts0_rst_status_i           conduit sink
+add_interface j204c_rx_avst_control      conduit sink
+add_interface j204c_tx_avst_control      conduit sink
+# AD9081 SYSREF
+add_interface j204c_rx_sysref            conduit sink
+add_interface j204c_tx_sysref            conduit sink
+# To JESD204C ports
+add_interface j204c_rx_serial_data_p     conduit sink
+add_interface j204c_rx_serial_data_n     conduit sink
+add_interface j204c_rx_serial_data_p     conduit sink
+add_interface j204c_tx_serial_data_n     conduit sink
+#
+add_interface rst_seq_0_reset1_dsrt_qual conduit sink
+add_interface rst_seq_0_reset2_dsrt_qual conduit sink
+add_interface rst_seq_1_reset0_dsrt_qual conduit sink
+add_interface rst_seq_1_reset1_dsrt_qual conduit sink
+add_interface systemclk_f_0_refclk_fgt   conduit sink
+add_interface j204c_rx_int               conduit sink
+add_interface j204c_tx_int               conduit sink
 
 set_interface_property mgmt_clk                   EXPORT_OF mgmt_clk.in_clk
 set_interface_property mgmt_reset                 EXPORT_OF mgmt_reset_bridge.in_reset
@@ -458,6 +482,25 @@ set_interface_property j204c_rxfclk_ctrl          EXPORT_OF intel_jesd204c_f_0.j
 set_interface_property j204c_txfclk_ctrl          EXPORT_OF intel_jesd204c_f_0.j204c_txfclk_ctrl
 set_interface_property j204c_rxlclk_ctrl          EXPORT_OF intel_jesd204c_f_0.j204c_rxlclk_ctrl
 set_interface_property j204c_txlclk_ctrl          EXPORT_OF intel_jesd204c_f_0.j204c_txlclk_ctrl
+set_interface_property ed_control_in_sysref       EXPORT_OF ed_control.in_sysref
+set_interface_property ed_control_rst_sts_detected0_rst_sts_set_i EXPORT_OF ed_control.rst_sts_detected0_rst_sts_set_i
+set_interface_property ed_control_tst_err0_tst_error_i            EXPORT_OF ed_control.tst_err0_tst_error_i
+set_interface_property ed_control_rst_sts0_rst_status_i           EXPORT_OF ed_control.rst_sts0_rst_status_i
+set_interface_property j204c_rx_avst_control      EXPORT_OF intel_jesd204c_f_0.j204c_rx_avst_control
+set_interface_property j204c_tx_avst_control      EXPORT_OF intel_jesd204c_f_0.j204c_tx_avst_control
+set_interface_property j204c_rx_sysref            EXPORT_OF intel_jesd204c_f_0.j204c_rx_sysref
+set_interface_property j204c_tx_sysref            EXPORT_OF intel_jesd204c_f_0.j204c_tx_sysref
+set_interface_property j204c_rx_serial_data_p     EXPORT_OF intel_jesd204c_f_0.rx_serial_data
+set_interface_property j204c_rx_serial_data_n     EXPORT_OF intel_jesd204c_f_0.rx_serial_data_n
+set_interface_property j204c_rx_serial_data_p     EXPORT_OF intel_jesd204c_f_0.rx_serial_data
+set_interface_property j204c_tx_serial_data_n     EXPORT_OF intel_jesd204c_f_0.tx_serial_data_n
+set_interface_property rst_seq_0_reset1_dsrt_qual EXPORT_OF rst_seq_0.reset1_dsrt_qual
+set_interface_property rst_seq_0_reset2_dsrt_qual EXPORT_OF rst_seq_0.reset2_dsrt_qual
+set_interface_property rst_seq_1_reset0_dsrt_qual EXPORT_OF rst_seq_1.reset0_dsrt_qual
+set_interface_property rst_seq_1_reset1_dsrt_qual EXPORT_OF rst_seq_1.reset1_dsrt_qual
+set_interface_property systemclk_f_0_refclk_fgt   EXPORT_OF systemclk_f_0.refclk_fgt
+set_interface_property j204c_rx_int               EXPORT_OF intel_jesd204c_f_0.j204c_rx_int
+set_interface_property j204c_tx_int               EXPORT_OF intel_jesd204c_f_0.j204c_tx_int
 
 set_connection_parameter_value jtag_avmm_bridge.master/mm_bridge.s0 baseAddress {0x0000}
 set_connection_parameter_value jtag_avmm_bridge.master/pio_control.s1 baseAddress {0x01020020}
@@ -467,7 +510,7 @@ set_connection_parameter_value jtag_avmm_bridge.master/rst_seq_1.av_csr baseAddr
 set_connection_parameter_value jtag_avmm_bridge.master/spi_0.spi_control_port baseAddress {0x01020000}
 set_connection_parameter_value mm_bridge.m0/intel_jesd204c_f_0.j204c_tx_avs baseAddress {0x000c0000}
 set_connection_parameter_value jtag_avmm_bridge.master/ed_control.j204c_f_ed_ctrl_avs baseAddress {0x01020400}
-set_connection_parameter_value jtag_avmm_bridge.master/intel_jesd204c_f_0.reconfig_xcvr baseAddress {0x02000000}
+#set_connection_parameter_value jtag_avmm_bridge.master/intel_jesd204c_f_0.reconfig_xcvr baseAddress {0x02000000}
 
 # Mxfe specific
 # ------------------------------------------------------------------------------
@@ -544,6 +587,17 @@ set_instance_parameter_value mxfe_rx_dma {FIFO_SIZE} {16}
 set_instance_parameter_value mxfe_rx_dma {DMA_AXI_PROTOCOL_DEST} {0}
 set_instance_parameter_value mxfe_rx_dma {MAX_BYTES_PER_BURST} {4096}
 
+# mxfe gpio
+
+add_instance mxfe_gpio altera_avalon_pio
+set_instance_parameter_value mxfe_gpio {direction} {Input}
+set_instance_parameter_value mxfe_gpio {generateIRQ} {1}
+set_instance_parameter_value mxfe_gpio {width} {15}
+add_connection sys_clk.clk mxfe_gpio.clk
+add_connection sys_clk.clk_reset mxfe_gpio.reset
+add_interface mxfe_gpio conduit end
+set_interface_property mxfe_gpio EXPORT_OF mxfe_gpio.external_connection
+
 #
 ## clocks and resets
 #
@@ -617,5 +671,19 @@ ad_dma_interconnect mxfe_tx_dma.m_src_axi
 for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
   add_connection mxfe_tx_upack.dac_ch_$i mxfe_tx_tpl.dac_ch_$i
 }
+
+add_interface mxfe_rx_tpl_if_link_sof    conduit sink
+
+set_interface_property mxfe_rx_tpl_if_link_sof    EXPORT_OF mxfe_rx_tpl.if_link_sof
+
 ad_cpu_interconnect 0x000D2000 mxfe_rx_tpl.s_axi
 ad_cpu_interconnect 0x000D4000 mxfe_tx_tpl.s_axi
+ad_cpu_interconnect 0x000E0000 mxfe_gpio.s1
+
+#
+## interrupts
+#
+
+ad_cpu_interrupt 11  mxfe_rx_dma.interrupt_sender
+ad_cpu_interrupt 12  mxfe_tx_dma.interrupt_sender
+ad_cpu_interrupt 15  mxfe_gpio.irq

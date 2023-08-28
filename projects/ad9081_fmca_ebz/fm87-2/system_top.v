@@ -35,25 +35,9 @@
 
 `timescale 1ns/100ps
 
-module system_top #(
-  // Dummy parameters to workaround critical warning
-  parameter RX_LANE_RATE       = 10,
-  parameter TX_LANE_RATE       = 10,
-  parameter RX_JESD_M          = 8,
-  parameter RX_JESD_L          = 4,
-  parameter RX_JESD_S          = 1,
-  parameter RX_JESD_NP         = 16,
-  parameter RX_NUM_LINKS       = 1,
-  parameter TX_JESD_M          = 8,
-  parameter TX_JESD_L          = 4,
-  parameter TX_JESD_S          = 1,
-  parameter TX_JESD_NP         = 16,
-  parameter TX_NUM_LINKS       = 1,
-  parameter RX_KS_PER_CHANNEL  = 32,
-  parameter TX_KS_PER_CHANNEL  = 32
-) (
+module system_top (
 
-   // clock and resets
+  // clock and resets
   input            sys_clk,
   input            hps_io_ref_clk,
   // input         refclk_bti, // additional refclk_bti to preserve Etile XCVR
@@ -126,125 +110,49 @@ module system_top #(
   inout            hps_gpio_eth_irq,
   inout            hps_gpio_usb_oci,
   inout   [ 1:0]   hps_gpio_btn,
-  inout   [ 2:0]   hps_gpio_led,
-
-  // FMC HPC IOs
-
-  // lane interface
-  input                   clkin6,
-  input                   fpga_refclk_in,
-  input   [RX_JESD_L-1:0] rx_data,
-  output  [TX_JESD_L-1:0] tx_data,
-  input                   fpga_syncin_0,
-  output                  fpga_syncin_1_n,
-  output                  fpga_syncin_1_p,
-  output                  fpga_syncout_0,
-  output                  fpga_syncout_1_n,
-  output                  fpga_syncout_1_p,
-  input                   sysref2,
-
-  // spi
-  output                  spi0_csb,
-  input                   spi0_miso,
-  output                  spi0_mosi,
-  output                  spi0_sclk,
-  output                  spi1_csb,
-  output                  spi1_sclk,
-  inout                   spi1_sdio,
-
-  // gpio
-  input   [1:0]           agc0,
-  input   [1:0]           agc1,
-  input   [1:0]           agc2,
-  input   [1:0]           agc3,
-  output  [10:0]          gpio,
-  inout                   hmc_gpio1,
-  output                  hmc_sync,
-  input   [1:0]           irqb,
-  output                  rstb,
-  output  [1:0]           rxen,
-  output  [1:0]           txen);
+  inout   [ 2:0]   hps_gpio_led);
 
   // internal signals
   wire  [63:0]  gpio_i;
   wire  [63:0]  gpio_o;
   wire  [ 7:0]  fpga_dipsw;
   wire  [ 7:0]  fpga_led;
+  wire          nconf_done;
   wire          ninit_done;
   wire          sys_reset_n;
   wire          h2f_reset;
-  wire  [ 7:0]  spi_csn_s;
+  wire  [43:0]  stm_hw_events;
 
   // Board GPIOs
-  assign fpga_led = gpio_o[7:0];
-  assign gpio_i[ 7:0] = gpio_o[7:0];
+  assign fpga_led      = gpio_o[7:0];
+  assign gpio_i[ 7: 0] = gpio_o[7:0];
   assign gpio_i[15: 8] = fpga_dipsw;
   assign gpio_i[17:16] = fpga_gpio[ 1:0]; // push buttons
   assign gpio_i[28:18] = fpga_gpio[12:2];
 
-  // HMC GPIOs
-  assign gpio_i[44] = agc0[0];
-  assign gpio_i[45] = agc0[1];
-  assign gpio_i[46] = agc1[0];
-  assign gpio_i[47] = agc1[1];
-  assign gpio_i[48] = agc2[0];
-  assign gpio_i[49] = agc2[1];
-  assign gpio_i[50] = agc3[0];
-  assign gpio_i[51] = agc3[1];
-  assign gpio_i[52] = irqb[0];
-  assign gpio_i[53] = irqb[1];
-
-  assign hmc_sync   = gpio_o[54];
-  assign rstb       = gpio_o[55];
-  assign rxen[0]    = gpio_o[56];
-  assign rxen[1]    = gpio_o[57];
-  assign txen[0]    = gpio_o[58];
-  assign txen[1]    = gpio_o[59];
-
   // Unused GPIOs
-  assign gpio_i[63:54] = gpio_o[63:54];
-  assign gpio_i[43:32] = gpio_o[43:32];
+  assign gpio_i[31:29] = gpio_o[31:29];
+  assign gpio_i[63:32] = gpio_o[63:32];
 
-  // assignmnets
-  assign sys_reset_n = sys_resetn & ~h2f_reset & ~ninit_done;
-  assign spi0_csb = spi_csn_s[0];
-  assign spi1_csb = spi_csn_s[1];
+  assign sys_reset_n   = sys_resetn & ~h2f_reset & ~ninit_done;
+  assign stm_hw_events = {14'b0, fpga_led, fpga_dipsw, fpga_gpio[1:0]};
 
-  assign spi0_sclk = spi_clk;
-  assign spi1_sclk = spi_clk;
-
-  assign spi0_mosi = spi_mosi;
-
-  ad_3w_spi #(
-    .NUM_OF_SLAVES(1)
-  ) i_spi_hmc (
-    .spi_csn (spi_csn_s[1]),
-    .spi_clk (spi_clk),
-    .spi_mosi (spi_mosi),
-    .spi_miso (spi_hmc_miso),
-    .spi_sdio (spi1_sdio),
-    .spi_dir ());
-
-  assign spi_miso = ~spi_csn_s[0] ? spi0_miso :
-                    ~spi_csn_s[1] ? spi_hmc_miso :
-                    1'b0;
-
-  sgpio_slave sgpio_slave_inst(
-    .i_rstn     (sys_resetn),
-    .i_clk      (fpga_sgpio_clk),
-    .i_sync     (fpga_sgpio_sync),
-    .i_mosi     (fpga_sgpi),
-    .o_miso     (fpga_sgpo),
-    .o_user_sw  (fpga_dipsw),
-    .i_user_led (fpga_led)
-  );
+  gpio_slave i_gpio_slave (
+    .reset_n    (sys_reset_n),
+    .clk        (fpga_sgpio_clk),
+    .sync       (fpga_sgpio_sync),
+    .miso       (fpga_sgpo),
+    .mosi       (fpga_sgpi),
+    .leds       (fpga_led),
+    .dipsw      (fpga_dipsw));
 
   system_bd i_system_bd (
     .sys_clk_clk                               (sys_clk),
     .sys_hps_io_hps_osc_clk                    (hps_io_ref_clk),
 
     .sys_rst_reset_n                           (sys_reset_n),
-    .rst_ninit_done_ninit_done                 (ninit_done),
+  //.src_prb_rst_sources_source                (1'b1), // temporary disable
+    .rst_ninit_done                            (ninit_done),
     .sys_gpio_bd_in_port                       (gpio_i[31: 0]),
     .sys_gpio_bd_out_port                      (gpio_o[31: 0]),
     .sys_gpio_in_export                        (gpio_i[63:32]),
@@ -332,31 +240,12 @@ module system_top #(
 
     .h2f_reset_reset                           (h2f_reset),
 
-    // FMC HPC
-    .sys_spi_MISO                              (spi_miso),
-    .sys_spi_MOSI                              (spi_mosi),
-    .sys_spi_SCLK                              (spi_clk),
-    .sys_spi_SS_n                              (spi_csn_s),
+    .sys_hps_f2h_stm_hwevents                  (stm_hw_events),
 
-    .tx_serial_data_tx_serial_data             (tx_data[TX_JESD_L-1:0]),
-    .tx_ref_clk_clk                            (refclk_fgt_2),
-    .tx_sync_export                            (fpga_syncin_0),
-    .tx_sysref_export                          (sysref2),
-    .tx_device_clk_clk                         (clkin6),
-    .rx_serial_data_rx_serial_data             (rx_data[RX_JESD_L-1:0]),
-    .rx_ref_clk_clk                            (refclk_fgt_2),
-    .rx_sync_export                            (fpga_syncout_0),
-    .rx_sysref_export                          (sysref2),
-    .rx_device_clk_clk                         (clkin6),
-    .ref_clk_in_in_refclk_fgt_2                (fpga_refclk_in),
-    .ref_clk_fgt_2_clk                         (refclk_fgt_2),
-    .mxfe_gpio_export                          ({fpga_syncout_1_n,  // 14
-                                                 fpga_syncout_1_p,  // 13
-                                                 fpga_syncin_1_n,   // 12
-                                                 fpga_syncin_1_p,   // 11
-                                                 gpio})            // 10:0
-   // .ref_clk_clk (ref_clk),
-   // .ref_clk_in_in_refclk_fgt_2 (refclk_fgt_2)
-  );
+    .sys_spi_MISO                              (1'b0),
+    .sys_spi_MOSI                              (),
+    .sys_spi_SCLK                              (),
+    .sys_spi_SS_n                              ()
+    );
 
 endmodule
