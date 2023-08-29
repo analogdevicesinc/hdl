@@ -157,7 +157,7 @@ module system_top #(
   input   [1:0]           agc1,
   input   [1:0]           agc2,
   input   [1:0]           agc3,
-  output  [10:0]          gpio,
+  inout   [10:0]          gpio,
   inout                   hmc_gpio1,
   output                  hmc_sync,
   input   [1:0]           irqb,
@@ -170,14 +170,14 @@ module system_top #(
   wire  [63:0]  gpio_o;
   wire  [ 7:0]  fpga_dipsw;
   wire  [ 7:0]  fpga_led;
-  wire          ninit_done;
   wire          sys_reset_n;
+  wire  [43:0]  stm_hw_events;
   wire          h2f_reset;
   wire  [ 7:0]  spi_csn_s;
 
   // Board GPIOs
-  assign fpga_led = gpio_o[7:0];
-  assign gpio_i[ 7:0] = gpio_o[7:0];
+  assign fpga_led      = gpio_o[7:0];
+  assign gpio_i[ 7:0]  = gpio_o[7:0];
   assign gpio_i[15: 8] = fpga_dipsw;
   assign gpio_i[17:16] = fpga_gpio[ 1:0]; // push buttons
   assign gpio_i[28:18] = fpga_gpio[12:2];
@@ -204,9 +204,12 @@ module system_top #(
   // Unused GPIOs
   assign gpio_i[63:54] = gpio_o[63:54];
   assign gpio_i[43:32] = gpio_o[43:32];
+  assign gpio_i[31:29] = gpio_o[31:29];
 
   // assignmnets
-  assign sys_reset_n = sys_resetn & ~h2f_reset & ~ninit_done;
+  assign sys_reset_n   = sys_resetn & ~h2f_reset & ~ninit_done;
+  assign stm_hw_events = {14'b0, fpga_led, fpga_dipsw, fpga_gpio[1:0]};
+
   assign spi0_csb = spi_csn_s[0];
   assign spi1_csb = spi_csn_s[1];
 
@@ -229,22 +232,21 @@ module system_top #(
                     ~spi_csn_s[1] ? spi_hmc_miso :
                     1'b0;
 
-  sgpio_slave sgpio_slave_inst(
-    .i_rstn     (sys_resetn),
-    .i_clk      (fpga_sgpio_clk),
-    .i_sync     (fpga_sgpio_sync),
-    .i_mosi     (fpga_sgpi),
-    .o_miso     (fpga_sgpo),
-    .o_user_sw  (fpga_dipsw),
-    .i_user_led (fpga_led)
-  );
+  gpio_slave i_gpio_slave (
+    .reset_n    (sys_reset_n),
+    .clk        (fpga_sgpio_clk),
+    .sync       (fpga_sgpio_sync),
+    .miso       (fpga_sgpo),
+    .mosi       (fpga_sgpi),
+    .leds       (fpga_led),
+    .dipsw      (fpga_dipsw));
 
   system_bd i_system_bd (
     .sys_clk_clk                               (sys_clk),
     .sys_hps_io_hps_osc_clk                    (hps_io_ref_clk),
 
     .sys_rst_reset_n                           (sys_reset_n),
-    .rst_ninit_done_ninit_done                 (ninit_done),
+    .rst_ninit_done                            (ninit_done),
     .sys_gpio_bd_in_port                       (gpio_i[31: 0]),
     .sys_gpio_bd_out_port                      (gpio_o[31: 0]),
     .sys_gpio_in_export                        (gpio_i[63:32]),
@@ -331,6 +333,8 @@ module system_top #(
     .sys_hps_io_gpio1_io21                     (hps_gpio_led[2]),
 
     .h2f_reset_reset                           (h2f_reset),
+
+    .sys_hps_f2h_stm_hwevents                  (stm_hw_events),
 
     // FMC HPC
     .sys_spi_MISO                              (spi_miso),

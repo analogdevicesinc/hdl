@@ -371,5 +371,3 @@ ad_cpu_interrupt 12  mxfe_tx_dma.interrupt_sender
 ad_cpu_interrupt 13  mxfe_rx_jesd204.interrupt
 ad_cpu_interrupt 14  mxfe_tx_jesd204.interrupt
 ad_cpu_interrupt 15  mxfe_gpio.irq
-
-

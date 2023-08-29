@@ -1,6 +1,6 @@
 # fm87 carrier qsys
 
-set system_type agilex
+set system_type "Agilex 7"
 
 # clocks & reset
 

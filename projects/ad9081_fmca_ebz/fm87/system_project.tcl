@@ -26,18 +26,18 @@ source ../../scripts/adi_project_intel.tcl
 #
 
  adi_project ad9081_fmca_ebz_fm87 [list \
-  RX_LANE_RATE       [get_env_param RX_RATE      10 ] \
-  TX_LANE_RATE       [get_env_param TX_RATE      10 ] \
-  RX_JESD_M          [get_env_param RX_JESD_M    8 ] \
-  RX_JESD_L          [get_env_param RX_JESD_L    8 ] \
-  RX_JESD_S          [get_env_param RX_JESD_S    1 ] \
-  RX_JESD_NP         [get_env_param RX_JESD_NP   16 ] \
-  RX_NUM_LINKS       [get_env_param RX_NUM_LINKS 1 ] \
-  TX_JESD_M          [get_env_param TX_JESD_M    8 ] \
-  TX_JESD_L          [get_env_param TX_JESD_L    8 ] \
-  TX_JESD_S          [get_env_param TX_JESD_S    1 ] \
-  TX_JESD_NP         [get_env_param TX_JESD_NP   16 ] \
-  TX_NUM_LINKS       [get_env_param TX_NUM_LINKS 1 ] \
+  RX_LANE_RATE       [get_env_param RX_LANE_RATE      10 ] \
+  TX_LANE_RATE       [get_env_param TX_LANE_RATE      10 ] \
+  RX_JESD_M          [get_env_param RX_JESD_M          8 ] \
+  RX_JESD_L          [get_env_param RX_JESD_L          8 ] \
+  RX_JESD_S          [get_env_param RX_JESD_S          1 ] \
+  RX_JESD_NP         [get_env_param RX_JESD_NP        16 ] \
+  RX_NUM_LINKS       [get_env_param RX_NUM_LINKS       1 ] \
+  TX_JESD_M          [get_env_param TX_JESD_M          8 ] \
+  TX_JESD_L          [get_env_param TX_JESD_L          8 ] \
+  TX_JESD_S          [get_env_param TX_JESD_S          1 ] \
+  TX_JESD_NP         [get_env_param TX_JESD_NP        16 ] \
+  TX_NUM_LINKS       [get_env_param TX_NUM_LINKS       1 ] \
   RX_KS_PER_CHANNEL  [get_env_param RX_KS_PER_CHANNEL 32 ] \
   TX_KS_PER_CHANNEL  [get_env_param TX_KS_PER_CHANNEL 32 ] \
 ]
@@ -47,7 +47,7 @@ source $ad_hdl_dir/projects/common/fm87/fm87_system_assign.tcl
 # files
 
 set_global_assignment -name VERILOG_FILE ../../../library/common/ad_3w_spi.v
-set_global_assignment -name VERILOG_FILE ../../common/fm87/sgpio_slave.v
+set_global_assignment -name VERILOG_FILE ../../common/fm87/gpio_slave.v
 
 # Note: This projects requires a hardware rework to function correctly.
 # The rework connects FMC header pins directly to the FPGA so that they can be
@@ -74,7 +74,7 @@ set_instance_assignment -name IO_STANDARD "TRUE DIFFERENTIAL SIGNALING" -to fpga
 set_instance_assignment -name IO_STANDARD "TRUE DIFFERENTIAL SIGNALING" -to sysref2
 set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to fpga_syncin_0
 set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to fpga_syncout_0
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to sysref2s
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to sysref2
 
 set_location_assignment PIN_J50    -to "agc0[0]"             ; ## D20  LA17_CC_P
 set_location_assignment PIN_K51    -to "agc0[1]"             ; ## D21  LA17_CC_N
