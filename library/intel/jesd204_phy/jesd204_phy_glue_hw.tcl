@@ -117,7 +117,7 @@ proc glue_add_if_port {num ifname port role dir width {bcast false} {phy_role {}
   }
 
   set device [get_parameter DEVICE]
-  if {[string equal $device "Agilex"]} {
+  if {[string equal $device "Agilex 7"]} {
     if {$phy_role == {}} {
       set phy_role $port
     }
@@ -251,7 +251,7 @@ proc jesd204_phy_glue_elab {} {
   } elseif {[string equal $device "Stratix 10"]} {
     set reconfig_avmm_address_width 11
     set unused_width_per_lane 40
-  } elseif {[string equal $device "Agilex"]} {
+  } elseif {[string equal $device "Agilex 7"]} {
     set parallel_data_w 80
     set reconfig_avmm_address_width [expr 18 + int(ceil((log($num_of_lanes) / log(2))))]
     # Unused are unused here
@@ -260,7 +260,7 @@ proc jesd204_phy_glue_elab {} {
     send_message error "Only Arria 10/Stratix 10/Agilex are supported."
   }
 
-  if {[string equal $device "Agilex"]} {
+  if {[string equal $device "Agilex 7"]} {
     glue_add_if 1 reconfig_clk clock sink true
     glue_add_if_port 1 reconfig_clk reconfig_clk clk Input 1 true clk
 
@@ -310,7 +310,7 @@ proc jesd204_phy_glue_elab {} {
     glue_add_if $num_of_lanes tx_coreclkin clock sink true
     glue_add_if_port $num_of_lanes tx_coreclkin tx_coreclkin clk Input 1 true
 
-    if {[string equal $device "Agilex"]} {
+    if {[string equal $device "Agilex 7"]} {
       glue_add_if $num_of_lanes ref_clk ftile_hssi_reference_clock sink true
       glue_add_if_port $num_of_lanes ref_clk ref_clk clk Input 1 true clk
 
@@ -357,7 +357,7 @@ proc jesd204_phy_glue_elab {} {
     glue_add_if $num_of_lanes rx_coreclkin clock sink true
     glue_add_if_port $num_of_lanes rx_coreclkin rx_coreclkin clk Input 1 true
 
-    if {[string equal $device "Agilex"]} {
+    if {[string equal $device "Agilex 7"]} {
       glue_add_if $num_of_lanes ref_clk ftile_hssi_reference_clock sink true
       glue_add_if_port $num_of_lanes ref_clk ref_clk clk Input 1 true clk
 

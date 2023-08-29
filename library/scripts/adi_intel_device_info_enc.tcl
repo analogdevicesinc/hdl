@@ -72,7 +72,7 @@ set fpga_technology_list { \
         { "Cyclone 10" 102 } \
         { "Arria 10"   103 } \
         { "Stratix 10" 104 } \
-        { "Agilex"     105 }}
+        { "Agilex 7"   105 }}
 
 set fpga_family_list { \
         { Unknown   0 } \
@@ -81,7 +81,7 @@ set fpga_family_list { \
         { GT        3 } \
         { GZ        4 } \
         { "SE Base" 5 } \
-        { "I-Series with HPS only" 6} \
+        { "I-Series with HPS only" 6 } \
         { TX        6 }}
 
        #technology 5 generation
@@ -165,7 +165,7 @@ proc get_part_param {} {
     }
 
     # user and system values (sys_val)
-    if { $fpga_technology == {{Agilex}} } {
+    if { $fpga_technology == "{{Agilex 7}}" } {
       # TODO : Transform VID2 to some voltage
       set fpga_voltage "0"
     } else {

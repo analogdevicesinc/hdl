@@ -316,9 +316,9 @@ proc jesd204_validate {{quiet false}} {
   set num_of_lanes [get_parameter_value "NUM_OF_LANES"]
   set tx_or_rx_n [get_parameter_value "TX_OR_RX_N"]
 
-  if {$device_family != "Arria 10" && $device_family != "Stratix 10" && $device_family != "Agilex"} {
+  if {$device_family != "Arria 10" && $device_family != "Stratix 10" && $device_family != "Agilex 7"} {
     if {!$quiet} {
-      send_message error "Only Arria 10/Startix 10/Agilex are supported."
+      send_message error "Only Arria 10/Startix 10/Agilex 7 are supported."
     }
     return false
   }
@@ -474,13 +474,13 @@ proc jesd204_compose {} {
 
     ## No fPLL here, PLL embedded in Native PHY
 
-  } elseif {$device_family == "Agilex"} {
+  } elseif {$device_family == "Agilex 7"} {
 
     ## No fPLL here, PLL embedded in Native PHY
 
   } else {
     ## Unsupported device
-    send_message error "Only Arria 10/Stratix 10/Agilex are supported."
+    send_message error "Only Arria 10/Stratix 10/Agilex 7 are supported."
   }
 
   add_interface link_clk clock source
@@ -569,8 +569,7 @@ proc jesd204_compose {} {
   if {$device_family == "Arria 10" || $device_family == "Stratix 10"} {
    # add_connection ref_clock.out_clk phy.ref_clk
 
-  } elseif {$device_family == "Agilex"} {
-
+  } elseif {$device_family == "Agilex 7"} {
     add_connection phy.clkout link_clock.in_clk
 
     # PHY <-> AXI_XCVR
@@ -590,7 +589,7 @@ proc jesd204_compose {} {
 
   } else {
     ## Unsupported device
-    send_message error "Only Arria 10/Stratix 10/Agilex are supported."
+    send_message error "Only Arria 10/Stratix 10/Agilex 7 are supported."
   }
 
   if {$tx_or_rx_n} {
@@ -670,7 +669,7 @@ proc jesd204_compose {} {
       add_interface phy_reconfig_${i} avalon slave
       set_interface_property phy_reconfig_${i} EXPORT_OF phy.reconfig_avmm_${i}
     }
-  } elseif {$device_family == "Agilex"} {
+  } elseif {$device_family == "Agilex 7"} {
     add_interface phy_reconfig avalon slave
     set_interface_property phy_reconfig EXPORT_OF phy.reconfig_avmm
   }

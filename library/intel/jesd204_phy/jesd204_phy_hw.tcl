@@ -99,7 +99,7 @@ proc jesd204_phy_composition_callback {} {
     set device_type 1
   } elseif {[string equal $device "Stratix 10"]} {
     set device_type 2
-  } elseif {[string equal $device "Agilex"]} {
+  } elseif {[string equal $device "Agilex 7"]} {
     set device_type 3
   } else {
     set device_type 0
@@ -137,7 +137,7 @@ proc jesd204_phy_composition_callback {} {
 
   ## Unsupported device
   } else {
-    send_message error "Only Arria 10/Stratix 10/Agilex are supported."
+    send_message error "Only Arria 10/Stratix 10/Agilex 7 are supported."
   }
 
   # Common paramters to all PHYs

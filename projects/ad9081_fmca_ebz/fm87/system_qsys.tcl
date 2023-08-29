@@ -8,7 +8,6 @@ source $ad_hdl_dir/projects/common/fm87/fm87_system_qsys.tcl
 source $ad_hdl_dir/projects/common/intel/dacfifo_qsys.tcl
 source $ad_hdl_dir/projects/common/intel/adcfifo_qsys.tcl
 
-
 set jesd204_ref_clock 250.000000
 # DUT F-Tile Ref clock
 add_instance systemclk systemclk_f
