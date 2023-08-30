@@ -176,15 +176,10 @@ ad_ip_parameter PN15_ENABLE boolean 1 true [list \
   GROUP $group \
 ]
 
-# axi4 slave
-
-ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn 12
-
 # core clock and start of frame
 
 add_interface link_clk clock end
 add_interface_port link_clk link_clk clk Input 1
-ad_interface signal link_sof input 4 export
 
 # We don't expect too large values for a and b, trivial implementation will do
 proc gcd {a b} {
@@ -273,11 +268,11 @@ proc p_ad_ip_jesd204_tpl_adc_elab {} {
   # link layer interface
 
   add_interface link_data avalon_streaming sink
-  add_interface_port link_data link_data  data  input  [expr $OPB*8*$L]
+  add_interface_port link_data link_data  data  input  [expr $OPB*8*$L*2]
   add_interface_port link_data link_valid valid input  1
   add_interface_port link_data link_ready ready output 1
   set_interface_property link_data associatedClock link_clk
-  set_interface_property link_data dataBitsPerSymbol [expr $OPB*8*$L]
+  set_interface_property link_data dataBitsPerSymbol [expr $OPB*8*$L*2]
 
   # dma interface
 

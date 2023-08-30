@@ -433,7 +433,7 @@ module pack_shell #(
 
       if (PACK == 1) begin: gen_pack
         /*
-         * Mask the qualifies the samples in the out_data vector. There is on
+         * Mask the qualifies the samples in the out_data vector. There is no
          * entry for each sample. If the entry is 1 that means the corresponding
          * sample has valid data. If the entry is 0 the data is undefined.
          */

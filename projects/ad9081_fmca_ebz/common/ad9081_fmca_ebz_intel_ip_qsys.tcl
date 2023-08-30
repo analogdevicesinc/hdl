@@ -44,6 +44,7 @@ set TX_SAMPLES_PER_FRAME $TX_JESD_S
 set TX_SAMPLE_WIDTH      $TX_JESD_NP
 set TX_DMA_SAMPLE_WIDTH  16
 
+# 8*8*4/8/16=2
 set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8*$TX_TPL_DATA_PATH_WIDTH / \
                                 ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)]
 
@@ -56,6 +57,7 @@ set RX_LANE_RATE [expr $ad_project_params(RX_LANE_RATE)*1000]
 set TX_LANE_RATE [expr $ad_project_params(TX_LANE_RATE)*1000]
 
 set adc_fifo_name mxfe_adc_fifo
+#8*4*8*16/16
 set adc_data_width [expr 8*$RX_TPL_DATA_PATH_WIDTH*$RX_NUM_OF_LANES*$RX_DMA_SAMPLE_WIDTH/$RX_SAMPLE_WIDTH]
 set adc_dma_data_width $adc_data_width
 set adc_fifo_address_width [expr int(ceil(log(($adc_fifo_samples_per_converter*$RX_NUM_OF_CONVERTERS) / ($adc_data_width/$RX_DMA_SAMPLE_WIDTH))/log(2)))]
@@ -68,40 +70,29 @@ set dac_fifo_address_width [expr int(ceil(log(($dac_fifo_samples_per_converter*$
 
 # Generic JESD
 # ------------------------------------------------------------------------------
-# LINK = 1,
-# L = 8,
-# M = 8,
-# F = 4,
-# E = 4,
-# S = 1,
-# N = 16,
-# NP = 16,
-# CS = 0,
-# TL_EN = 1,
-# CF = 0,
-# HD = 0,
-# FCLK_MULP = 1,
-# SUBCLASSV = 0,
-# WIDTH_MULP = 2,
-# TOTAL_SAMPLE = M*S*WIDTH_MULP,
-# TOTAL_CS = (CS==0)? 1: (TOTAL_SAMPLE*CS),
-# SH_CONFIG = 0,
-# SL_CMD = 0,
-# ED_CMD_RMP_EN = 1,
-# CMD_WIDTH = 48,
-# ED_SIM_PAT_TESTMODE = 3
+set RX_JESD_F [expr $RX_JESD_M * $RX_JESD_S * $RX_JESD_NP / \
+                                (8 * $RX_NUM_OF_LANES)]
 
+if {$RX_JESD_L != $TX_JESD_L} {puts {Mismatch RX_JESD_L,TX_JESD_L in duplex mode.}}
+if {$RX_JESD_M != $TX_JESD_M} {puts {Mismatch RX_JESD_M,TX_JESD_M in duplex mode.}}
+if {$RX_JESD_NP != $TX_JESD_NP} {puts {Mismatch RX_JESD_NP,TX_JESD_NP in duplex mode.}}
+if {$RX_JESD_S != $TX_JESD_S} {puts {Mismatch RX_JESD_S,TX_JESD_S in duplex mode.}}
+
+# E (multiblock) fixed at 1.
+# WIDTH_MULT is fixed based gui result, need to create a formula for it
+# Using RX params for TX also (duplex). Could split into 2 instances (RX and TX).
 add_instance intel_jesd204c_f_0 intel_jesd204c_f
 set_instance_parameter_value intel_jesd204c_f_0 DATA_PATH {rx_tx}
 set_instance_parameter_value intel_jesd204c_f_0 CF {0}
 set_instance_parameter_value intel_jesd204c_f_0 CS {0}
-set_instance_parameter_value intel_jesd204c_f_0 E  {4}
-set_instance_parameter_value intel_jesd204c_f_0 F  {4}
-set_instance_parameter_value intel_jesd204c_f_0 L  {8}
-set_instance_parameter_value intel_jesd204c_f_0 M  {8}
-set_instance_parameter_value intel_jesd204c_f_0 N  {16}
-set_instance_parameter_value intel_jesd204c_f_0 NP {16}
-set_instance_parameter_value intel_jesd204c_f_0 S  {1}
+set_instance_parameter_value intel_jesd204c_f_0 E  {1}
+set_instance_parameter_value intel_jesd204c_f_0 F  $RX_JESD_F
+set_instance_parameter_value intel_jesd204c_f_0 L  $RX_JESD_L
+set_instance_parameter_value intel_jesd204c_f_0 M  $RX_JESD_M
+set_instance_parameter_value intel_jesd204c_f_0 N  $RX_JESD_NP
+set_instance_parameter_value intel_jesd204c_f_0 NP $RX_JESD_NP
+set_instance_parameter_value intel_jesd204c_f_0 S  $RX_JESD_S
+set_instance_parameter_value intel_jesd204c_f_0 WIDTH_MULP {4}
 set_instance_parameter_value intel_jesd204c_f_0 RX_GB_8DEEP {0}
 set_instance_parameter_value intel_jesd204c_f_0 RX_GB_MLAB {0}
 set_instance_parameter_value intel_jesd204c_f_0 RX_GB_PIPE {1}
@@ -502,16 +493,6 @@ set_interface_property systemclk_f_0_refclk_fgt   EXPORT_OF systemclk_f_0.refclk
 set_interface_property j204c_rx_int               EXPORT_OF intel_jesd204c_f_0.j204c_rx_int
 set_interface_property j204c_tx_int               EXPORT_OF intel_jesd204c_f_0.j204c_tx_int
 
-set_connection_parameter_value jtag_avmm_bridge.master/mm_bridge.s0 baseAddress {0x0000}
-set_connection_parameter_value jtag_avmm_bridge.master/pio_control.s1 baseAddress {0x01020020}
-set_connection_parameter_value jtag_avmm_bridge.master/pio_status.s1 baseAddress {0x01020040}
-set_connection_parameter_value jtag_avmm_bridge.master/rst_seq_0.av_csr baseAddress {0x01020100}
-set_connection_parameter_value jtag_avmm_bridge.master/rst_seq_1.av_csr baseAddress {0x01020200}
-set_connection_parameter_value jtag_avmm_bridge.master/spi_0.spi_control_port baseAddress {0x01020000}
-set_connection_parameter_value mm_bridge.m0/intel_jesd204c_f_0.j204c_tx_avs baseAddress {0x000c0000}
-set_connection_parameter_value jtag_avmm_bridge.master/ed_control.j204c_f_ed_ctrl_avs baseAddress {0x01020400}
-#set_connection_parameter_value jtag_avmm_bridge.master/intel_jesd204c_f_0.reconfig_xcvr baseAddress {0x02000000}
-
 # Mxfe specific
 # ------------------------------------------------------------------------------
 
@@ -604,14 +585,14 @@ set_interface_property mxfe_gpio EXPORT_OF mxfe_gpio.external_connection
 
 # system clock and reset
 
-add_connection sys_clk.clk mxfe_rx_tpl.s_axi_clock
+#add_connection sys_clk.clk mxfe_rx_tpl.s_axi_clock
 add_connection sys_clk.clk mxfe_rx_dma.s_axi_clock
-add_connection sys_clk.clk mxfe_tx_tpl.s_axi_clock
+#add_connection sys_clk.clk mxfe_tx_tpl.s_axi_clock
 add_connection sys_clk.clk mxfe_tx_dma.s_axi_clock
 
-add_connection sys_clk.clk_reset mxfe_rx_tpl.s_axi_reset
+#add_connection sys_clk.clk_reset mxfe_rx_tpl.s_axi_reset
 add_connection sys_clk.clk_reset mxfe_rx_dma.s_axi_reset
-add_connection sys_clk.clk_reset mxfe_tx_tpl.s_axi_reset
+#add_connection sys_clk.clk_reset mxfe_tx_tpl.s_axi_reset
 add_connection sys_clk.clk_reset mxfe_tx_dma.s_axi_reset
 
 add_connection mgmt_clk.out_clk mxfe_tx_tpl.link_clk
@@ -648,7 +629,7 @@ add_connection sys_dma_clk.clk_reset $dac_fifo_name.if_dma_rst
 # RX cpack to offload
 add_connection mxfe_rx_cpack.if_packed_fifo_wr_en $adc_fifo_name.if_adc_wr
 add_connection mxfe_rx_cpack.if_packed_fifo_wr_data $adc_fifo_name.if_adc_wdata
-add_connection mxfe_rx_tpl.if_adc_dovf $adc_fifo_name.if_adc_wovf
+#add_connection mxfe_rx_tpl.if_adc_dovf $adc_fifo_name.if_adc_wovf
 # RX offload to dma
 add_connection $adc_fifo_name.if_dma_xfer_req mxfe_rx_dma.if_s_axis_xfer_req
 add_connection $adc_fifo_name.m_axis mxfe_rx_dma.s_axis
@@ -661,7 +642,7 @@ for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
 # TX upack to offload
 add_connection mxfe_tx_upack.if_packed_fifo_rd_en $dac_fifo_name.if_dac_valid
 add_connection $dac_fifo_name.if_dac_data mxfe_tx_upack.if_packed_fifo_rd_data
-add_connection $dac_fifo_name.if_dac_dunf mxfe_tx_tpl.if_dac_dunf
+#add_connection $dac_fifo_name.if_dac_dunf mxfe_tx_tpl.if_dac_dunf
 # TX offload to dma
 add_connection mxfe_tx_dma.if_m_axis_xfer_req $dac_fifo_name.if_dma_xfer_req
 add_connection mxfe_tx_dma.m_axis $dac_fifo_name.s_axis
@@ -672,13 +653,22 @@ for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
   add_connection mxfe_tx_upack.dac_ch_$i mxfe_tx_tpl.dac_ch_$i
 }
 
-add_interface mxfe_rx_tpl_if_link_sof    conduit sink
+#add_interface mxfe_rx_tpl_if_link_sof    conduit sink
 
-set_interface_property mxfe_rx_tpl_if_link_sof    EXPORT_OF mxfe_rx_tpl.if_link_sof
+#set_interface_property mxfe_rx_tpl_if_link_sof    EXPORT_OF mxfe_rx_tpl.if_link_sof
 
-ad_cpu_interconnect 0x000D2000 mxfe_rx_tpl.s_axi
-ad_cpu_interconnect 0x000D4000 mxfe_tx_tpl.s_axi
+#ad_cpu_interconnect 0x000D2000 mxfe_rx_tpl.s_axi
+#ad_cpu_interconnect 0x000D4000 mxfe_tx_tpl.s_axi
 ad_cpu_interconnect 0x000E0000 mxfe_gpio.s1
+
+set_connection_parameter_value jtag_avmm_bridge.master/pio_status.s1 baseAddress {0x01020040}
+set_connection_parameter_value jtag_avmm_bridge.master/mm_bridge.s0 baseAddress {0x0000}
+set_connection_parameter_value jtag_avmm_bridge.master/pio_control.s1 baseAddress {0x01020020}
+set_connection_parameter_value jtag_avmm_bridge.master/rst_seq_0.av_csr baseAddress {0x01020100}
+set_connection_parameter_value jtag_avmm_bridge.master/rst_seq_1.av_csr baseAddress {0x01020200}
+set_connection_parameter_value jtag_avmm_bridge.master/spi_0.spi_control_port baseAddress {0x01020000}
+set_connection_parameter_value mm_bridge.m0/intel_jesd204c_f_0.j204c_tx_avs baseAddress {0x000c0000}
+set_connection_parameter_value jtag_avmm_bridge.master/ed_control.j204c_f_ed_ctrl_avs baseAddress {0x01020400}
 
 #
 ## interrupts

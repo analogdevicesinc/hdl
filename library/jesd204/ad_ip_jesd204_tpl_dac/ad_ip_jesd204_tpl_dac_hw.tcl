@@ -223,10 +223,6 @@ ad_ip_parameter XBAR_ENABLE boolean 0 true [list \
   GROUP $group \
 ]
 
-# axi4 slave
-
-ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn 12
-
 # core clock and start of frame
 
 add_interface link_clk clock end
@@ -508,11 +504,11 @@ proc p_ad_ip_jesd204_tpl_dac_elab {} {
   # link layer interface
 
   add_interface link_data avalon_streaming source
-  add_interface_port link_data link_data  data  output  [expr $OPB*8*$L]
+  add_interface_port link_data link_data  data  output  [expr $OPB*8*$L*2]
   add_interface_port link_data link_valid valid output  1
   add_interface_port link_data link_ready ready input   1
   set_interface_property link_data associatedClock link_clk
-  set_interface_property link_data dataBitsPerSymbol [expr $OPB*8*$L]
+  set_interface_property link_data dataBitsPerSymbol [expr $OPB*8*$L*2]
 
   # dma interface
 
