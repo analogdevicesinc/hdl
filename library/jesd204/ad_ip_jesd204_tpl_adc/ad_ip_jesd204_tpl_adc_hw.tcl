@@ -288,5 +288,4 @@ proc p_ad_ip_jesd204_tpl_adc_elab {} {
     set_interface_property adc_ch_$i associatedClock link_clk
   }
 
-  ad_interface signal  adc_dovf  input  1 ovf
 }

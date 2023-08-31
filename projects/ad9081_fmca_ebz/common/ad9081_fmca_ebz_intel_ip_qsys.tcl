@@ -447,6 +447,13 @@ add_interface rst_seq_1_reset1_dsrt_qual conduit sink
 add_interface systemclk_f_0_refclk_fgt   conduit sink
 add_interface j204c_rx_int               conduit sink
 add_interface j204c_tx_int               conduit sink
+add_interface rst_seq_0_av_csr_irq       conduit sink
+add_interface rst_seq_1_av_csr_irq       conduit sink
+add_interface rst_seq_0_reset_out3       conduit sink
+add_interface rst_seq_1_reset_out2       conduit sink
+add_interface ed_control_out_ip_sysref   conduit sink
+add_interface j204c_tx_rst_ack_n         conduit sink
+add_interface j204c_rx_rst_ack_n         conduit sink
 
 set_interface_property mgmt_clk                   EXPORT_OF mgmt_clk.in_clk
 set_interface_property mgmt_reset                 EXPORT_OF mgmt_reset_bridge.in_reset
@@ -485,6 +492,8 @@ set_interface_property j204c_rx_serial_data_p     EXPORT_OF intel_jesd204c_f_0.r
 set_interface_property j204c_rx_serial_data_n     EXPORT_OF intel_jesd204c_f_0.rx_serial_data_n
 set_interface_property j204c_rx_serial_data_p     EXPORT_OF intel_jesd204c_f_0.rx_serial_data
 set_interface_property j204c_tx_serial_data_n     EXPORT_OF intel_jesd204c_f_0.tx_serial_data_n
+set_interface_property j204c_tx_rst_ack_n         EXPORT_OF intel_jesd204c_f_0.j204c_tx_rst_ack_n
+set_interface_property j204c_rx_rst_ack_n         EXPORT_OF intel_jesd204c_f_0.j204c_rx_rst_ack_n
 set_interface_property rst_seq_0_reset1_dsrt_qual EXPORT_OF rst_seq_0.reset1_dsrt_qual
 set_interface_property rst_seq_0_reset2_dsrt_qual EXPORT_OF rst_seq_0.reset2_dsrt_qual
 set_interface_property rst_seq_1_reset0_dsrt_qual EXPORT_OF rst_seq_1.reset0_dsrt_qual
@@ -492,6 +501,11 @@ set_interface_property rst_seq_1_reset1_dsrt_qual EXPORT_OF rst_seq_1.reset1_dsr
 set_interface_property systemclk_f_0_refclk_fgt   EXPORT_OF systemclk_f_0.refclk_fgt
 set_interface_property j204c_rx_int               EXPORT_OF intel_jesd204c_f_0.j204c_rx_int
 set_interface_property j204c_tx_int               EXPORT_OF intel_jesd204c_f_0.j204c_tx_int
+set_interface_property rst_seq_0_av_csr_irq       EXPORT_OF rst_seq_0.av_csr_irq
+set_interface_property rst_seq_1_av_csr_irq       EXPORT_OF rst_seq_1.av_csr_irq
+set_interface_property rst_seq_0_reset_out3       EXPORT_OF rst_seq_0.reset_out3
+set_interface_property rst_seq_1_reset_out2       EXPORT_OF rst_seq_1.reset_out2
+set_interface_property ed_control_out_ip_sysref   EXPORT_OF ed_control.out_ip_sysref
 
 # Mxfe specific
 # ------------------------------------------------------------------------------
