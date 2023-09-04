@@ -9,6 +9,7 @@ set RX_JESD_M     $ad_project_params(RX_JESD_M)
 set RX_JESD_L     $ad_project_params(RX_JESD_L)
 set RX_JESD_S     $ad_project_params(RX_JESD_S)
 set RX_JESD_NP    $ad_project_params(RX_JESD_NP)
+set RX_WIDTH_MULP $ad_project_params(RX_WIDTH_MULP)
 
 set RX_TPL_DATA_PATH_WIDTH 4
 if {$RX_JESD_NP==12} {
@@ -32,6 +33,7 @@ set TX_JESD_M     $ad_project_params(TX_JESD_M)
 set TX_JESD_L     $ad_project_params(TX_JESD_L)
 set TX_JESD_S     $ad_project_params(TX_JESD_S)
 set TX_JESD_NP    $ad_project_params(TX_JESD_NP)
+set TX_WIDTH_MULP $ad_project_params(TX_WIDTH_MULP)
 
 set TX_TPL_DATA_PATH_WIDTH 4
 if {$TX_JESD_NP==12} {
@@ -73,10 +75,11 @@ set dac_fifo_address_width [expr int(ceil(log(($dac_fifo_samples_per_converter*$
 set RX_JESD_F [expr $RX_JESD_M * $RX_JESD_S * $RX_JESD_NP / \
                                 (8 * $RX_NUM_OF_LANES)]
 
-if {$RX_JESD_L != $TX_JESD_L} {puts {Mismatch RX_JESD_L,TX_JESD_L in duplex mode.}}
-if {$RX_JESD_M != $TX_JESD_M} {puts {Mismatch RX_JESD_M,TX_JESD_M in duplex mode.}}
-if {$RX_JESD_NP != $TX_JESD_NP} {puts {Mismatch RX_JESD_NP,TX_JESD_NP in duplex mode.}}
-if {$RX_JESD_S != $TX_JESD_S} {puts {Mismatch RX_JESD_S,TX_JESD_S in duplex mode.}}
+if {$RX_JESD_L != $TX_JESD_L} {send_message WARNING {Mismatch RX_JESD_L,TX_JESD_L in duplex mode.}}
+if {$RX_JESD_M != $TX_JESD_M} {send_message WARNING {Mismatch RX_JESD_M,TX_JESD_M in duplex mode.}}
+if {$RX_JESD_NP != $TX_JESD_NP} {send_message WARNING {Mismatch RX_JESD_NP,TX_JESD_NP in duplex mode.}}
+if {$RX_JESD_S != $TX_JESD_S} {send_message WARNING {Mismatch RX_JESD_S,TX_JESD_S in duplex mode.}}
+if {$RX_WIDTH_MULP != $TX_WIDTH_MULP} {send_message WARNING {Mismatch RX_WIDTH_MULP,TX_WIDTH_MULP in duplex mode.}}
 
 # E (multiblock) fixed at 1.
 # WIDTH_MULT is fixed based gui result, need to create a formula for it
@@ -92,7 +95,7 @@ set_instance_parameter_value intel_jesd204c_f_0 M  $RX_JESD_M
 set_instance_parameter_value intel_jesd204c_f_0 N  $RX_JESD_NP
 set_instance_parameter_value intel_jesd204c_f_0 NP $RX_JESD_NP
 set_instance_parameter_value intel_jesd204c_f_0 S  $RX_JESD_S
-set_instance_parameter_value intel_jesd204c_f_0 WIDTH_MULP {4}
+set_instance_parameter_value intel_jesd204c_f_0 WIDTH_MULP $RX_WIDTH_MULP
 set_instance_parameter_value intel_jesd204c_f_0 RX_GB_8DEEP {0}
 set_instance_parameter_value intel_jesd204c_f_0 RX_GB_MLAB {0}
 set_instance_parameter_value intel_jesd204c_f_0 RX_GB_PIPE {1}
@@ -395,40 +398,37 @@ add_connection intel_jesd204c_f_0.j204c_rx_alldev_lane_align intel_jesd204c_f_0.
 
 ## Exported signals
 
-add_interface mgmt_clk                   clock     sink
-add_interface mgmt_reset                 reset     sink
-add_interface txframe_clk                clock     sink
-add_interface rxframe_clk                clock     sink
-add_interface refclk_core                clock     sink
-add_interface j204c_tx_rst_n             reset     sink
-add_interface j204c_rx_rst_n             reset     sink
-add_interface edctl_rst                  reset     sink
-add_interface jtag_reset_clk             clock     sink
-add_interface jtag_reset_in_reset        reset     sink
-add_interface jtag_rst_bridge_out_reset  reset     sink
-add_interface txlink_clk                 clock     sink
-add_interface rxlink_clk                 clock     sink
-add_interface ed_control_txframe_clk     clock     sink
-add_interface ed_control_rxframe_clk     clock     sink
-add_interface ed_control_rx_phase        clock     sink
-add_interface ed_control_in_sysref       conduit   sink
 add_interface spi_0_irq                  interrupt sender
-add_interface spi_0_external             conduit   end
-add_interface pio_control_external       conduit   end
-add_interface pio_status_external        conduit   end
-add_interface ed_control_rx_phase        clock     source
-add_interface ed_control_tx_phase        clock     source
-add_interface j204c_rxfclk_ctrl          conduit   end
-add_interface j204c_txfclk_ctrl          conduit   end
+add_interface mgmt_clk                   clock   sink
+add_interface mgmt_reset                 reset   sink
+add_interface txframe_clk                clock   sink
+add_interface rxframe_clk                clock   sink
+add_interface refclk_core                clock   sink
+add_interface j204c_tx_rst_n             reset   sink
+add_interface j204c_rx_rst_n             reset   sink
+add_interface edctl_rst                  reset   sink
+add_interface jtag_reset_clk             clock   sink
+add_interface jtag_reset_in_reset        reset   sink
+add_interface jtag_rst_bridge_out_reset  reset   sink
+add_interface txlink_clk                 clock   sink
+add_interface rxlink_clk                 clock   sink
+add_interface ed_control_txframe_clk     clock   sink
+add_interface ed_control_rxframe_clk     clock   sink
+add_interface ed_control_rx_phase        clock   sink
+add_interface ed_control_in_sysref       conduit sink
+add_interface spi_0_external             conduit end
+add_interface pio_control_external       conduit end
+add_interface pio_status_external        conduit end
+add_interface ed_control_rx_phase        clock   source
+add_interface ed_control_tx_phase        clock   source
+add_interface j204c_rxfclk_ctrl          conduit end
+add_interface j204c_txfclk_ctrl          conduit end
 # const HIGH
-add_interface j204c_rxlclk_ctrl          conduit   end
-add_interface j204c_txlclk_ctrl          conduit   end
+add_interface j204c_rxlclk_ctrl          conduit end
+add_interface j204c_txlclk_ctrl          conduit end
 #
-add_interface j204c_tx_cmd_data          avalon    sink
-add_interface j204c_rx_cmd_data          avalon    source
-add_interface ed_control_rst_sts_detected0_rst_sts_set_i conduit sink
-add_interface ed_control_tst_err0_tst_error_i            conduit sink
-add_interface ed_control_rst_sts0_rst_status_i           conduit sink
+add_interface j204c_tx_cmd_data          avalon  sink
+add_interface j204c_rx_cmd_data          avalon  source
 add_interface j204c_rx_avst_control      conduit sink
 add_interface j204c_tx_avst_control      conduit sink
 # AD9081 SYSREF
@@ -437,7 +437,7 @@ add_interface j204c_tx_sysref            conduit sink
 # To JESD204C ports
 add_interface j204c_rx_serial_data_p     conduit sink
 add_interface j204c_rx_serial_data_n     conduit sink
-add_interface j204c_rx_serial_data_p     conduit sink
+add_interface j204c_tx_serial_data_p     conduit sink
 add_interface j204c_tx_serial_data_n     conduit sink
 #
 add_interface rst_seq_0_reset1_dsrt_qual conduit sink
@@ -454,6 +454,10 @@ add_interface rst_seq_1_reset_out2       conduit sink
 add_interface ed_control_out_ip_sysref   conduit sink
 add_interface j204c_tx_rst_ack_n         conduit sink
 add_interface j204c_rx_rst_ack_n         conduit sink
+add_interface ed_control_rst_sts_detected0_rst_sts_set_i conduit sink
+add_interface ed_control_tst_err0_tst_error_i            conduit sink
+add_interface ed_control_rst_sts0_rst_status_i           conduit sink
+add_interface ed_control_csr_rst_ctl_rst_assert          conduit sink
 
 set_interface_property mgmt_clk                   EXPORT_OF mgmt_clk.in_clk
 set_interface_property mgmt_reset                 EXPORT_OF mgmt_reset_bridge.in_reset
@@ -490,7 +494,7 @@ set_interface_property j204c_rx_sysref            EXPORT_OF intel_jesd204c_f_0.j
 set_interface_property j204c_tx_sysref            EXPORT_OF intel_jesd204c_f_0.j204c_tx_sysref
 set_interface_property j204c_rx_serial_data_p     EXPORT_OF intel_jesd204c_f_0.rx_serial_data
 set_interface_property j204c_rx_serial_data_n     EXPORT_OF intel_jesd204c_f_0.rx_serial_data_n
-set_interface_property j204c_rx_serial_data_p     EXPORT_OF intel_jesd204c_f_0.rx_serial_data
+set_interface_property j204c_tx_serial_data_p     EXPORT_OF intel_jesd204c_f_0.tx_serial_data
 set_interface_property j204c_tx_serial_data_n     EXPORT_OF intel_jesd204c_f_0.tx_serial_data_n
 set_interface_property j204c_tx_rst_ack_n         EXPORT_OF intel_jesd204c_f_0.j204c_tx_rst_ack_n
 set_interface_property j204c_rx_rst_ack_n         EXPORT_OF intel_jesd204c_f_0.j204c_rx_rst_ack_n
@@ -506,6 +510,7 @@ set_interface_property rst_seq_1_av_csr_irq       EXPORT_OF rst_seq_1.av_csr_irq
 set_interface_property rst_seq_0_reset_out3       EXPORT_OF rst_seq_0.reset_out3
 set_interface_property rst_seq_1_reset_out2       EXPORT_OF rst_seq_1.reset_out2
 set_interface_property ed_control_out_ip_sysref   EXPORT_OF ed_control.out_ip_sysref
+set_interface_property ed_control_csr_rst_ctl_rst_assert EXPORT_OF ed_control.csr_rst_ctl_rst_assert
 
 # Mxfe specific
 # ------------------------------------------------------------------------------

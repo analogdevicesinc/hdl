@@ -44,16 +44,17 @@ module system_top #(
   parameter RX_JESD_S          = 1,
   parameter RX_JESD_NP         = 16,
   parameter RX_NUM_LINKS       = 1,
+  parameter RX_WIDTH_MULP      = 4,
+  parameter RX_KS_PER_CHANNEL  = 32,
   parameter TX_JESD_M          = 8,
   parameter TX_JESD_L          = 4,
   parameter TX_JESD_S          = 1,
   parameter TX_JESD_NP         = 16,
   parameter TX_NUM_LINKS       = 1,
-  parameter RX_KS_PER_CHANNEL  = 32,
+  parameter TX_WIDTH_MULP      = 4,
   parameter TX_KS_PER_CHANNEL  = 32
 ) (
-
-   // clock and resets
+  // clock and resets
   input            sys_clk,
   input            hps_io_ref_clk,
   // input         refclk_bti, // additional refclk_bti to preserve Etile XCVR
@@ -167,19 +168,26 @@ module system_top #(
 
   // New
   // external sysref input
+	input                   global_rst_n,
   input                   mgmt_clk,
   input                   in_sysref,
-  output  [LINK-1:0]      tx_link_error,
-  output  [LINK-1:0]      rx_link_error,
-  input   [LINK*L-1:0]    rx_serial_data_p,
-  input   [LINK*L-1:0]    rx_serial_data_n,
-  output  [LINK*L-1:0]    tx_serial_data_p,
-  output  [LINK*L-1:0]    tx_serial_data_n,
+  output  [RX_NUM_LINKS-1:0]              rx_link_error,
+  input   [RX_NUM_LINKS*RX_JESD_L-1:0]    rx_serial_data_p,
+  input   [RX_NUM_LINKS*RX_JESD_L-1:0]    rx_serial_data_n,
+  output  [TX_NUM_LINKS-1:0]              tx_link_error,
+  output  [TX_NUM_LINKS*TX_JESD_L-1:0]    tx_serial_data_p,
+  output  [TX_NUM_LINKS*TX_JESD_L-1:0]    tx_serial_data_n,
   input                   refclk_core,
   input                   spi_MISO,
   output                  spi_MOSI,
   output                  spi_SCLK,
   output  [2:0]           spi_SS_n);
+
+  localparam CS = 0;
+  localparam RX_TOTAL_SAMPLE = RX_JESD_M*RX_JESD_S*RX_WIDTH_MULP;
+  localparam TX_TOTAL_SAMPLE = TX_JESD_M*TX_JESD_S*TX_WIDTH_MULP;
+	localparam RX_TOTAL_CS = (RX_JESD_S==0)? 1: (RX_TOTAL_SAMPLE*CS);
+	localparam TX_TOTAL_CS = (TX_JESD_S==0)? 1: (TX_TOTAL_SAMPLE*CS);
 
   // internal signals
   wire  [63:0]  gpio_i;
@@ -190,6 +198,7 @@ module system_top #(
   wire  [43:0]  stm_hw_events;
   wire          h2f_reset;
   wire  [ 7:0]  spi_csn_s;
+  wire          db_global_rst_n;
 
   // Board GPIOs
   assign fpga_led      = gpio_o[7:0];
@@ -266,30 +275,35 @@ module system_top #(
   wire                                            ed_ctrl_out_ip_sysref_mgmtclk;
   wire [3:0]                                      ed_control_tst_err0_tst_error_i;
   wire [0:0]                                      ed_control_rst_sts0_rst_status_i;
-  wire                                             edctl_rst_n;
+  wire                                            edctl_rst_n;
 
-  wire [LINK-1:0]                                  tx_rst;
-  wire [LINK-1:0]                                  rx_rst;
-  wire [LINK-1:0][(TOTAL_CS)-1:0]                  tx_avst_control;
-  wire [LINK-1:0][(TOTAL_CS)-1:0]                  rx_avst_control;
-  wire [LINK-1:0]                                  tx_sysref;
-  wire [LINK-1:0]                                  rx_sysref;
+  wire [TX_NUM_LINKS-1:0]                         tx_rst;
+  wire [TX_NUM_LINKS*TX_TOTAL_CS-1:0]             tx_avst_control;
+  wire [TX_NUM_LINKS-1:0]                         tx_sysref;
+  wire [RX_NUM_LINKS-1:0]                         rx_rst;
+  wire [RX_NUM_LINKS*RX_TOTAL_CS-1:0]             rx_avst_control;
+  wire [RX_NUM_LINKS-1:0]                         rx_sysref;
   wire                                            ed_ctrl_out_ip_sysref;
-  wire [LINK-1:0][L-1:0]                           tx_serial_data_p_reordered;
-  wire [LINK-1:0][L-1:0]                           tx_serial_data_n_reordered;
-  wire [LINK-1:0][L-1:0]                           rx_serial_data_p_reordered;
-  wire [LINK-1:0][L-1:0]                           rx_serial_data_n_reordered;
-  wire [LINK-1:0]                                  tx_rst_ack_n;
-  wire [LINK-1:0]                                  rx_rst_ack_n;
-  wire                                             txlink_clk;
-  wire                                             rxlink_clk;
-  wire                                             ninit_done;
-  wire                                             mgmt_rst_in_n;
-  wire                                             core_pll_locked_reg2;
+  wire [TX_NUM_LINKS*TX_JESD_L-1:0]               tx_serial_data_p_reordered;
+  wire [TX_NUM_LINKS*TX_JESD_L-1:0]               tx_serial_data_n_reordered;
+  wire [TX_NUM_LINKS-1:0]                         tx_rst_ack_n;
+  wire [RX_NUM_LINKS*RX_JESD_L-1:0]               rx_serial_data_p_reordered;
+  wire [RX_NUM_LINKS*RX_JESD_L-1:0]               rx_serial_data_n_reordered;
+  wire [RX_NUM_LINKS-1:0]                         rx_rst_ack_n;
+  wire                                            txlink_clk;
+  wire                                            rxlink_clk;
+  wire                                            ninit_done;
+  wire                                            mgmt_rst_in_n;
+  wire                                            core_pll_locked_reg2;
+	wire [0:0]                             					csr_rst_ctl_rst_assert;
+  wire                                            hw_rst;
 
+
+	assign hw_rst   = csr_rst_ctl_rst_assert[0];
 
   assign ed_control_rst_sts_detected0_rst_sts_set_i = ed_ctrl_out_ip_sysref_mgmtclk;
-  assign ed_control_tst_err0_tst_error_i = {cmd_ramp_chk_err_mgmtclk[0], rx_link_error_mgmtclk[0], tx_link_error_mgmtclk[0], rx_patchk_data_error_mgmtclk[0]};
+  //assign ed_control_tst_err0_tst_error_i = {cmd_ramp_chk_err_mgmtclk[0], rx_link_error_mgmtclk[0], tx_link_error_mgmtclk[0], rx_patchk_data_error_mgmtclk[0]};
+  assign ed_control_tst_err0_tst_error_i = {1'b0, rx_link_error[0], tx_link_error[0], 1'b0};
   assign ed_control_rst_sts0_rst_status_i = core_pll_locked_reg2;
 
   system_bd i_system_bd (
@@ -303,6 +317,7 @@ module system_top #(
     .ed_control_rst_sts_detected0_rst_sts_set_i_export (ed_control_rst_sts_detected0_rst_sts_set_i),
     .ed_control_tst_err0_tst_error_i_export  (ed_control_tst_err0_tst_error_i),
     .ed_control_rst_sts0_rst_status_i_export (ed_control_rst_sts0_rst_status_i),
+    .ed_control_csr_rst_ctl_rst_assert_export (csr_rst_ctl_rst_assert),
     .ed_control_out_ip_sysref_export         (ed_ctrl_out_ip_sysref),
     .edctl_rst_reset_n                       (edctl_rst_n),
     .emif_hps_pll_ref_clk                    (emif_hps_pll_ref_clk),
@@ -334,7 +349,7 @@ module system_top #(
     .j204c_tx_rst_n_reset_n                  (~tx_rst[0]),
     .j204c_txlclk_ctrl_export                (1'b1),
     .j204c_txfclk_ctrl_export                (tx_fclk),
-    .j204c_tx_avst_control_export            (tx_avst_control[0]),
+    .j204c_tx_avst_control_export            (tx_avst_control[TX_TOTAL_CS-1:0]),
     .j204c_tx_sysref_export                  (tx_sysref),
     .j204c_tx_int_irq                        (tx_link_error[0]),
     .j204c_rx_int_irq                        (rx_link_error[0]),
@@ -342,7 +357,7 @@ module system_top #(
     .j204c_rxfclk_ctrl_export                (rx_fclk),
     .j204c_rx_sysref_export                  (rx_sysref),
     .j204c_rx_rst_n_reset_n                  (~rx_rst[0]),
-    .j204c_rx_avst_control_export            (rx_avst_control[0]),
+    .j204c_rx_avst_control_export            (rx_avst_control[RX_TOTAL_CS-1:0]),
     .j204c_tx_serial_data_p_export           (tx_serial_data_p_reordered),
     .j204c_tx_serial_data_n_export           (tx_serial_data_n_reordered),
     .j204c_rx_serial_data_p_export           (rx_serial_data_p_reordered),
@@ -457,17 +472,21 @@ module system_top #(
   );
 
   generate
-  for (i=0; i<LINK; i=i+1) begin: GEN_BLOCK
-      assign rx_serial_data_p_reordered[i] = rx_serial_data_p[i*L+L-1:i*L];
-      assign rx_serial_data_n_reordered[i] = rx_serial_data_n[i*L+L-1:i*L];
-      assign tx_serial_data_p[i*L+L-1:i*L] = tx_serial_data_p_reordered[i];
-      assign tx_serial_data_n[i*L+L-1:i*L] = tx_serial_data_n_reordered[i];
+    genvar i;
+    for (i=0; i<TX_NUM_LINKS; i=i+1) begin: GEN_BLOCK_TX
+      assign tx_serial_data_p[i*TX_JESD_L+:TX_JESD_L] = tx_serial_data_p_reordered[TX_JESD_L*i+:TX_JESD_L];
+      assign tx_serial_data_n[i*TX_JESD_L+:TX_JESD_L] = tx_serial_data_n_reordered[TX_JESD_L*i+:TX_JESD_L];
+    end
+    for (i=0; i<RX_NUM_LINKS; i=i+1) begin: GEN_BLOCK_RX
+      assign rx_serial_data_p_reordered[RX_JESD_L*i+:RX_JESD_L] = rx_serial_data_p[i*RX_JESD_L+:RX_JESD_L];
+      assign rx_serial_data_n_reordered[RX_JESD_L*i+:RX_JESD_L] = rx_serial_data_n[i*RX_JESD_L+:RX_JESD_L];
     end
   endgenerate
   generate
-    for (i=0; i<LINK; i=i+1) begin: GEN_SYSREF
-        assign tx_sysref[i] = ed_ctrl_out_ip_sysref;
-        assign rx_sysref[i] = ed_ctrl_out_ip_sysref;
+    genvar j;
+    for (j=0; j<RX_NUM_LINKS; j=j+1) begin: GEN_SYSREF
+        assign tx_sysref[j] = ed_ctrl_out_ip_sysref;
+        assign rx_sysref[j] = ed_ctrl_out_ip_sysref;
     end
   endgenerate
 
@@ -504,6 +523,14 @@ module system_top #(
     );
     assign mgmt_rst_in_n = db_global_rst_n & ~hw_rst & edctl_rst_n;
   `endif
+
+	//De-bounce push button inputs
+	j204c_f_switch_debouncer u_switch_debouncer_global_rst_n (
+		.clk            (mgmt_clk),
+		.reset_n        (~ninit_done),
+		.data_in        (global_rst_n),
+		.data_out       (db_global_rst_n)
+	);
 
   altera_s10_user_rst_clkgate_0 u_j204c_ed_reset (
     .ninit_done   (ninit_done)
