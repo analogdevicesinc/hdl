@@ -83,8 +83,8 @@ module axi_ad3552r_channel #(
   wire    [15:0]   formatted_dma_data;
   wire    [15:0]   formatted_adc_data;
   wire    [ 3:0]   dac_data_sel_s;
-  wire             dac_data_valid_int;
-  wire    [15:0]   dac_data_int;
+ 
+ 
   wire    [15:0]   dac_dds_data_s;
   wire    [15:0]   dac_dds_scale_1_s;
   wire    [15:0]   dac_dds_init_1_s;
@@ -97,6 +97,8 @@ module axi_ad3552r_channel #(
 
   reg     [15:0]   ramp_pattern = 16'h0000;
   reg              ramp_valid   = 1'b0;
+  reg    [15:0]    dac_data_int;
+  reg              dac_data_valid_int;
 
   assign dac_data       = dac_data_int;
   assign dac_data_valid = dac_data_valid_int;
@@ -106,15 +108,41 @@ module axi_ad3552r_channel #(
   assign formatted_adc_data [15]   = dac_dfmt_type ^ adc_data[15];
   assign formatted_adc_data [14:0] = adc_data[14:0];
 
-  assign dac_data_int = (dac_data_sel_s == 4'hb) ? ramp_pattern :
-                        ((dac_data_sel_s == 4'h3) ? 16'b0 :
-                        (((dac_data_sel_s == 4'h8) ? formatted_adc_data :
-                        ((dac_data_sel_s == 4'h2) ? formatted_dma_data: dac_dds_data_s ))));
 
-  assign dac_data_valid_int = (dac_data_sel_s == 4'hb) ? ramp_valid :
-                              ((dac_data_sel_s == 4'h3) ? 1'b1 :
-                              (((dac_data_sel_s == 4'h8) ? valid_in_adc :
-                              ((dac_data_sel_s == 4'h2) ? valid_in_dma: 1'b1 ))));
+  always @ (*) begin
+    case(dac_data_sel_s)
+      4'h0 :
+      begin
+        dac_data_int       = dac_dds_data_s;
+        dac_data_valid_int = 1'b1;
+      end
+      4'h2 :
+      begin
+        dac_data_int       = formatted_dma_data;
+        dac_data_valid_int = valid_in_dma;
+      end
+      4'h3 :
+      begin
+        dac_data_int       = 16'b0;
+        dac_data_valid_int = 1'b1;
+      end
+      4'h8 :
+      begin
+        dac_data_int       = formatted_adc_data;
+        dac_data_valid_int = valid_in_adc;
+      end
+      4'hb :
+      begin
+        dac_data_int       = ramp_pattern;
+        dac_data_valid_int = ramp_valid;
+      end
+      default :
+      begin
+        dac_data_int       = 16'b0;
+        dac_data_valid_int = 1'b1;
+      end
+    endcase
+  end
 
   // ramp generator
 
@@ -154,7 +182,8 @@ module axi_ad3552r_channel #(
   // single channel processor
 
   up_dac_channel #(
-    .CHANNEL_ID(CHANNEL_ID)
+    .CHANNEL_ID(CHANNEL_ID),
+    .COMMON_ID(6'h01)
   ) dac_channel (
     .dac_clk(dac_clk),
     .dac_rst(dac_rst),

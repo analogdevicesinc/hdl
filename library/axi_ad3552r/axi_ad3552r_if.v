@@ -89,6 +89,7 @@ module axi_ad3552r_if (
   reg             if_busy_reg         = 1'b0;
   reg             dac_data_ready_s    = 1'b0;
   reg             external_sync_arm_reg = 1'b0;
+  reg             external_sync_reg = 1'b0;
 
   localparam  [ 2:0]  IDLE = 3'h0,
                       CS_LOW = 3'h1,
@@ -117,7 +118,7 @@ module axi_ad3552r_if (
 
   // sync the data only if the synchronizations has been armed in software
 
-  assign external_sync_s =  ~external_sync_arm_reg | external_sync;
+  assign external_sync_s =  ~external_sync_arm_reg | external_sync_reg;
 
   always @(posedge clk_in) begin
     if(reset_in == 1'b1) begin
@@ -141,9 +142,13 @@ module axi_ad3552r_if (
     if(external_sync_arm == 1'b1) begin
       external_sync_arm_reg <= 1'b1;
     end
+    if(external_sync == 1'b1) begin
+      external_sync_reg <= 1'b1;
+    end
 
     if(transfer_state == CS_HIGH) begin
       external_sync_arm_reg <= 1'b0;
+      external_sync_reg <= 1'b0;
     end
 
     if(dac_data_valid == 1'b1 && start_transfer == 1'b1) begin
@@ -282,7 +287,7 @@ module axi_ad3552r_if (
       end
     end else if ((transfer_state == STREAM & cycle_done) || (transfer_state != STREAM  && transfer_state_next == STREAM)) begin
       transfer_reg <= {dac_data_int, 24'h0};
-    end else if (transfer_step) begin
+    end else if (transfer_step && transfer_state != CS_HIGH) begin
       transfer_reg <= {transfer_reg[51:0], sdio_i};
     end
 

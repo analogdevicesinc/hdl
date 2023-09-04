@@ -203,7 +203,8 @@ module axi_ad3552r_core #(
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
     .FPGA_FAMILY(FPGA_FAMILY),
     .SPEED_GRADE(SPEED_GRADE),
-    .DEV_PACKAGE(DEV_PACKAGE)
+    .DEV_PACKAGE(DEV_PACKAGE),
+    .COMMON_ID(6'h00)
   ) axi_ad3552r_common_core (
     .mmcm_rst(),
     .dac_clk(dac_clk),
