@@ -231,7 +231,7 @@ module system_top #(
   assign gpio_i[43:32] = gpio_o[43:32];
   assign gpio_i[31:29] = gpio_o[31:29];
 
-  // assignmnets
+  // assignments
   assign sys_reset_n   = sys_resetn & ~h2f_reset & ~ninit_done;
   assign stm_hw_events = {14'b0, fpga_led, fpga_dipsw, fpga_gpio[1:0]};
 
@@ -525,15 +525,15 @@ module system_top #(
   `endif
 
 	//De-bounce push button inputs
-	j204c_f_switch_debouncer u_switch_debouncer_global_rst_n (
+	switch_debouncer u_switch_debouncer_global_rst_n (
 		.clk            (mgmt_clk),
 		.reset_n        (~ninit_done),
 		.data_in        (global_rst_n),
 		.data_out       (db_global_rst_n)
 	);
 
-  altera_s10_user_rst_clkgate_0 u_j204c_ed_reset (
-    .ninit_done   (ninit_done)
-  );
+  //altera_s10_user_rst_clkgate_0 u_j204c_ed_reset (
+  //  .ninit_done   (ninit_done)
+  //);
 
 endmodule

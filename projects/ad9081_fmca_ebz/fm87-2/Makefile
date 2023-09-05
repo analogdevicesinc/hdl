@@ -12,7 +12,9 @@ M_DEPS += ../../common/intel/dacfifo_qsys.tcl
 M_DEPS += ../../common/intel/adcfifo_qsys.tcl
 M_DEPS += ../../common/fm87/fm87_system_qsys.tcl
 M_DEPS += ../../common/fm87/fm87_system_assign.tcl
+M_DEPS += ../../../library/common/ad_3w_spi.v
 M_DEPS += ../../common/fm87/gpio_slave.v
+M_DEPS += ../../common/fm87/switch_debouncer.v
 
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_sysid
