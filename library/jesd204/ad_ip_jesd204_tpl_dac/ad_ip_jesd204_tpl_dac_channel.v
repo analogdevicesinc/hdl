@@ -96,6 +96,12 @@ module ad_ip_jesd204_tpl_dac_channel #(
   wire [CHANNEL_DATA_WIDTH-1:0] dac_pat_data_s;
   wire [CHANNEL_DATA_WIDTH-1:0] dac_iqcor_data_s;
 
+  reg dac_data_sync_d;
+
+  always @(posedge clk) begin
+    dac_data_sync_d <= dac_data_sync;
+  end
+
   generate
     if (DATA_PATH_WIDTH > 1) begin
       assign dac_pat_data_s = {DATA_PATH_WIDTH/2{dac_pat_data_1[0+:CR],dac_pat_data_0[0+:CR]}};
@@ -167,7 +173,7 @@ module ad_ip_jesd204_tpl_dac_channel #(
   ) i_dds (
     .clk (clk),
     .dac_dds_format (dac_dds_format),
-    .dac_data_sync (dac_data_sync),
+    .dac_data_sync (dac_data_sync_d),
     .dac_valid (1'b1),
     .tone_1_scale (dac_dds_scale_0),
     .tone_2_scale (dac_dds_scale_1),
