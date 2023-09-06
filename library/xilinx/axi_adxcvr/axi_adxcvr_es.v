@@ -155,7 +155,7 @@ module axi_adxcvr_es (
   reg     [11:0]  up_addr = 'd0;
   reg             up_wr = 'd0;
   reg     [15:0]  up_data = 'd0;
-  reg             up_rstn_d;
+  (* keep = "true" *) reg up_rstn_d;
 
   // internal signals
 

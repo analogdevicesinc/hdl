@@ -65,7 +65,7 @@ module axi_adxcvr_mdrp (
   reg             up_ready_i = 'd0;
   reg     [15:0]  up_rdata_m = 'd0;
   reg             up_ready_m = 'd0;
-  reg             up_rstn_d;
+  (* keep = "true" *) reg up_rstn_d;
 
   // internal signals
 
