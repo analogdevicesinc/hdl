@@ -94,7 +94,7 @@ endif
 
 CLEAN_DIRS := $(dir $(wildcard */*_quartus.log))
 
-M_DEPS += system_top.v
+M_DEPS += $(wildcard system_top*.v)
 M_DEPS += system_qsys.tcl
 M_DEPS += system_project.tcl
 M_DEPS += system_constr.sdc
