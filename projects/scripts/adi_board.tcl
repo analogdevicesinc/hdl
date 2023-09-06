@@ -1192,3 +1192,182 @@ proc ad_cpu_interrupt {p_ps_index p_mb_index p_name} {
     ad_connect sys_concat_intc/In$p_index $p_name
   }
 }
+
+## Optimizes/reduces the high fanout of rsets by getting a reset signal
+# of a rstgen and configuring multiple outputs of that reset and conecting
+# individual resets to each IP. Interconnects have dedicated reset channels
+# in rstgen
+#
+#  \param[rstgen_name] - a rstgen to optimize or "all" for automatic search
+#
+proc optimize_bd_resets {instance add_to_hier} {
+  if { $instance == "all" } { ;# autodetect all r
+    set core_to_optimize [get_bd_cells *_rstgen]
+  } else {
+    set core_to_optimize [get_bd_cells $instance]
+  }
+
+  #######################
+  # find what to optimize
+  #######################
+
+  # resulting list structure
+
+  #--------------------------------------------------
+  #    core       | type    |  destination | status |
+  #--------------------------------------------------
+  # rstgen_core_1 | reset   | reset_dest_1 | done   |
+  #               |         | reset_dest_2 | todo   |
+  #               |         | reset_dest_3 | todo   |
+  #               |---------|--------------|--------|
+  #               | aresetn | reset_dest_1 | todo   |
+  #               |         | reset_dest_2 | todo   |
+  #               |         | reset_dest_3 | todo   |
+  #--------------------------------------------------
+  # rstgen_core_2 | reset   | reset_dest   | ok     |
+  #--------------------------------------------------
+
+  foreach i $core_to_optimize {
+    set dest_reset   [find_bd_objs -relation connected_to [get_bd_pins $i/peripheral_reset]]
+    set overall_struct($i,reset,size) 0
+    set j_index 0
+    foreach j $dest_reset {
+      if { [regexp xlslice $j] } {
+        set overall_struct($i,reset,$j_index) [list $j "ok"]
+      } else {
+        set overall_struct($i,reset,$j_index) [list $j "todo"]
+      }
+      incr j_index
+      set overall_struct($i,reset,size) $j_index
+      puts "+++++++ overall_struct($i,reset,size) $j_index"
+    }
+    if { $j_index == 1 } {
+      set overall_struct($i,reset,$j_index) [list $j "ok"]
+    }
+    set dest_aresetn [find_bd_objs -relation connected_to [get_bd_pins $i/peripheral_aresetn]]
+    set overall_struct($i,aresetn,size) 0
+    set j_index 0
+    foreach j $dest_aresetn {
+      if { [regexp xlslice $j] } {
+        set overall_struct($i,aresetn,$j_index) [list $j "ok"]
+      } elseif { [regexp interconnect $j] } {
+        set overall_struct($i,aresetn,$j_index) [list $j "interconnect"]
+      } else {
+        set overall_struct($i,aresetn,$j_index) [list $j "todo"]
+      }
+      incr j_index
+    }
+    set overall_struct($i,aresetn,size) $j_index
+    if { $j_index == 1 } {
+      set overall_struct($i,aresetn,$j_index) [list $j "ok"]
+    }
+  }
+
+  #######################
+  # optimization
+  #######################
+  set new_slice_list ""
+  set reset_types [list "reset" "aresetn"]
+  set core_index 0
+  foreach i $core_to_optimize {
+    foreach rst_type $reset_types {
+      if {$rst_type == "reset"} {
+        set cfg_param "C_NUM_PERP_RST"
+        set slice_for "r"
+      } elseif {$rst_type == "aresetn"} {
+        set cfg_param "C_NUM_PERP_ARESETN"
+        set slice_for "rn"
+      }
+      set elements $overall_struct($i,$rst_type,size)
+      puts "\n--------------------------------------------------"
+      puts "$i  $elements"
+      if { $elements > 1} {
+        startgroup
+        for { set index 0 }  { $index < $elements }  { incr index } {
+          puts "$i  | $rst_type   | $overall_struct($i,$rst_type,$index)"
+          set instance_and_pin [lindex $overall_struct($i,$rst_type,$index) 0]
+          regsub -all {.*/} $instance_and_pin "" pin
+          set status [lindex $overall_struct($i,$rst_type,$index) 1]
+          if { $status == "todo" } {
+            # increase rstgen rst_type output bus
+            set rst_type_bus_width [get_property CONFIG.$cfg_param $i]
+            if { $rst_type_bus_width < 16 } { ;# maximum reset width of one rstgen is 16
+              incr rst_type_bus_width
+              set_property CONFIG.$cfg_param $rst_type_bus_width $i
+              set slice_index $index
+              set used_rest_gen $i
+            } else {
+              # this code only supports one extendeed rstgen, to add more start here
+              set extended_rstgen [get_bd_cells -quiet ${i}_extend]
+              if { $extended_rstgen == "" } { ; # create new rstgen
+                ad_ip_instance proc_sys_reset ${i}_extend
+                ad_ip_parameter ${i}_extend CONFIG.C_EXT_RST_WIDTH 1
+                set old_rstgen_inputs [get_bd_pins -of [get_bd_cells -hierarchical $i] -filter {DIR == I}]
+                # connect the clock and input resets from the original to the extended rstgen
+                foreach input $old_rstgen_inputs {
+                  set source_input [find_bd_objs -relation connected_to [get_bd_pins $input]]
+                  if { $source_input != "" } {
+                    regsub -all {.*/} $input "" input_rstgen_pin
+                    ad_connect $source_input ${i}_extend/$input_rstgen_pin
+                  }
+                }
+              } else { ; # add resets on an existing rstgen extension
+                set rst_type_bus_width [get_property CONFIG.$cfg_param $extended_rstgen]
+                set slice_index [expr $index - 16]
+                if { $slice_index != 0 } { ;# not first element
+                  incr rst_type_bus_width
+                }
+                set_property CONFIG.$cfg_param $rst_type_bus_width $extended_rstgen
+              }
+              set used_rest_gen ${i}_extend
+            }
+
+            # remove old connection
+            puts " --- disconnect_bd_net [get_bd_nets -of_objects [get_bd_pins $instance_and_pin]] [get_bd_pins $instance_and_pin]"
+
+            disconnect_bd_net [get_bd_nets -of_objects [get_bd_pins $instance_and_pin]] [get_bd_pins $instance_and_pin]
+
+            # create xlslice
+            ad_ip_instance xlslice xlslice_${core_index}_${index}_$slice_for
+            ad_ip_parameter xlslice_${core_index}_${index}_$slice_for CONFIG.DIN_WIDTH $elements
+            ad_ip_parameter xlslice_${core_index}_${index}_$slice_for CONFIG.DIN_FROM $slice_index
+            ad_ip_parameter xlslice_${core_index}_${index}_$slice_for CONFIG.DIN_TO $slice_index
+            append new_slice_list "xlslice_${core_index}_${index}_$slice_for "
+
+            # connect reset resetgen pin to xslice
+            puts "ad_connect $used_rest_gen/peripheral_aresetn xlslice_${core_index}_${index}_$slice_for/Din"
+            ad_connect $used_rest_gen/peripheral_aresetn xlslice_${core_index}_${index}_$slice_for/Din
+
+            # connect xslice to reset destination
+            puts "ad_connect xlslice_${core_index}_${index}_$slice_for/Dout $instance_and_pin"
+            ad_connect xlslice_${core_index}_${index}_$slice_for/Dout $instance_and_pin
+          } elseif { $status == "interconnect" } {
+            puts " --- disconnect_bd_net $i/peripheral_aresetn [get_bd_pins $instance_and_pin]"
+            disconnect_bd_net [get_bd_nets -of_objects [get_bd_pins $instance_and_pin]] [get_bd_pins $instance_and_pin]
+            ad_connect $used_rest_gen/interconnect_aresetn $instance_and_pin
+          } else {
+            puts "No optimization to be done for [lindex $overall_struct($i,$rst_type,$index)]"
+          }
+
+        }
+        endgroup
+      }
+      incr core_index
+    }
+    if {$add_to_hier == "yes"} {
+      set reset_hierarchi [get_bd_cells reset_hier]
+      if {$reset_hierarchi == ""} {
+        group_bd_cells reset_hier $i
+      } else {
+        if { ![regexp reset_hier $i] } {
+          move_bd_cells [get_bd_cells reset_hier] $i
+        }
+      }
+    }
+  }
+  if {$add_to_hier == "yes"} {
+    foreach slice $new_slice_list {
+      move_bd_cells [get_bd_cells reset_hier] [get_bd_cells $slice]
+    }
+  }
+}
