@@ -56,7 +56,7 @@ Interfaces
 Software
 --------------------------------------------------------------------------------
 
-* :dokuwiki:`Linux Driver:resources/tools-software/linux-drivers/spi/spi_engine`:
+* :dokuwiki:`Linux Driver <resources/tools-software/linux-drivers/spi/spi_engine>`:
   Linux driver for the SPI Engine framework.
 * :ref:`spi_engine instruction-format`: Overview of the SPI Engine Instruction
   format.
@@ -68,25 +68,25 @@ This list contains cores that are not part of the core SPI engine framework but
 make use of its interfaces and are intend to be used together with the SPI engine
 framework.
 
-* :dokuwiki:`util-sigma-delta-spi:resources/fpga/peripherals/util_sigma_delta_spi`:
+* :dokuwiki:`util-sigma-delta-spi <resources/fpga/peripherals/util_sigma_delta_spi>`:
   Helper module for interfacing ADCs from the Analog Devices Sigma-Delta family.
 
 Examples
 --------------------------------------------------------------------------------
 
-* :dokuwiki:`CN0363:resources/eval/user-guides/eval-cn0363-pmdz`:
+* :dokuwiki:`CN0363 <resources/eval/user-guides/eval-cn0363-pmdz>`:
   Colorimeter application using the :part:`AD7175-2` Sigma-Delta ADC.
 * :dokuwiki:`resources/eval/user-guides/adaq7980-sdz`:
   A 16-bit ADC subsystem with four common signal processing and conditioning blocks.
 * :dokuwiki:`resources/tools-software/uc-drivers/ad5766`:
   16-channel, 16-/12-bit, voltage output Digital-to-Analog Converters (DAC).
-* :dokuwiki:`CN0363:resources/eval/user-guides/eval-cn0363-pmdz`:
+* :dokuwiki:`CN0363 <resources/eval/user-guides/eval-cn0363-pmdz>`:
   The AD7768-1 is a low power, high performance, Σ-Δ analog-to-digital converter (ADC).
 * :git-hdl:`master:projects/ad40xx_fmc`
   Evaluation Board for the AD4000 Series 16-/18-/20-Bit Precision SAR ADCs.
-* :dokuwiki:`AD469x:resources/eval/user-guides/ad469x`:
+* :dokuwiki:`AD469x <resources/eval/user-guides/ad469x>`:
   16-Bit, 16-Channel, 500 kSPS/1 MSPS, Easy Drive Multiplexed SAR ADC.
-* :dokuwiki:`AD4630-24 / AD4030-24 / AD4630-16:resources/eval/user-guides/ad463x/hdl`:
+* :dokuwiki:`AD4630-24 / AD4030-24 / AD4630-16 <resources/eval/user-guides/ad463x/hdl>`:
   16/24-Bit, 2 MSPS Single or Dual Channel SAR ADC.
 
 Additional Resources

@@ -13,7 +13,7 @@ Evaluating the target device
 
 The aim of this project is to provide support for a family of ADCs which come in
 the form of
-:dokuwiki:`pulsar-adc-pmods:resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods`.
+:dokuwiki:`pulsar-adc-pmods <resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods>`.
 They all share the same interface and the same PCB, the differences being found
 in their performance. The table below offers a comparison between the timing
 parameters of the SPI interface for these devices. Using this table we can see
@@ -67,8 +67,8 @@ SPI Engine hierarchy instantiation
 --------------------------------------------------------------------------------
 
 The SPI Engine can be implemented in two ways, either by placing and connecting
-each IP individually or by using the function provided by the spi_engine.tcl
-script :git-hdl:`master:library/spi_engine/scripts/spi_engine.tcl`
+each IP individually or by using the function provided by the
+:git-hdl:`master:library/spi_engine/scripts/spi_engine.tcl` script.
 
 Using the script ensures that the correct connections are being made and that
 the IP cores will receive the correct parameter configuration since certain
@@ -264,7 +264,7 @@ Testbench
 --------------------------------------------------------------------------------
 
 To check the overall performance of the design and also to expose any major
-bugs, the system can be tested using a testbench (:git-testbenches:`main:`).
+bugs, the system can be tested using a testbench from :git-testbenches:`/`.
 
 The testbench framework is designed to use the same bd.tcl as the actual project
 :git-testbenches:`main:pulsar_adc_pmdz/system_bd.tcl#L50`

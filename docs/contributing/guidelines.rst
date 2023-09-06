@@ -172,36 +172,47 @@ have been written, which are located in the *docs/extensions* folder.
 Extensions are straight forward to create, if some functionality is missing,
 consider requesting or creating one.
 
+.. note::
+
+   Link-like roles use the :code:`:role:\`text <link>\`` synthax, like external
+   links, but without the undescore in the end.
+
+
 Git role
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Git role allows to create links to the Git repository with a shorter syntax.
-The role syntax is :code:`:git-<repo>:\`<branch>:<path>\``, for example,
-:code:`:git-hdl:\`master:contributing/guidelines.rst\``
-is rendered as :git-hdl:`master:contributing/guidelines.rst`.
-You can leave the branch blank to autofill the link with the current branch.
+The role syntax is :code:`:git-repo:\`text <branch:path>\``, for example:
 
-You can also do :code:`:git-<repo>:\`/\`` for a link to the root of the
+* :code:`:git-hdl:\`master:docs/contributing/guidelines.rst\``
+  renders as :git-hdl:`master:docs/contributing/guidelines.rst`.
+* :code:`:git-hdl:\`Guidelines <docs/contributing/guidelines.rst>\``
+  renders as :git-hdl:`Guidelines <docs/contributing/guidelines.rst>`.
+
+The branch field is optional and will be filled with the current branch.
+The text field is optional and will be filled with the file or directory name.
+
+Finally, you can do :code:`:git-repo:\`/\`` for a link to the root of the
 repository with pretty naming, for example, :code:`:git-hdl:\`/\`` is rendered
 as :git-hdl:`/`.
 
 Part role
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The part role creates links for a part to the Analog Devices website.
+The part role creates links for a part to the Analog Devices Inc. website.
 
-The role syntax is :code:`:part:\`<part_id>:<part_name>\``, for example,
-:code:`:part:\`ad7175-2:AD7175-2\``.
+The role syntax is :code:`:part:\`text <part_id>\``, for example,
+:code:`:part:\`AD7175-2 <ad7175-2>\``.
 Since links are case insensitive, you can also reduce it to
-:code:`:part:\`AD7175-2\``, when *part_id* is the same as *part_name*.
-It is rendered as :part:`AD7175-2`.
+:code:`:part:\`AD7175-2\``, when *part_id* is the same as *text* and will render
+as :part:`AD7175-2`.
 
 Datasheet role
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The datasheet role creates links for a datasheet in the Analog Devices website.
+The datasheet role creates links for a datasheet in the Analog Devices Inc. website.
 
-The role syntax is :code:`:datasheet:\`<part_id>:<anchor>\``, for example,
+The role syntax is :code:`:datasheet:\`part_id:anchor\``, for example,
 :code:`:datasheet:\`AD7984:[{"num"%3A51%2C"gen"%3A0}%2C{"name"%3A"XYZ"}%2C52%2C713%2C0]\``
 is rendered as
 :datasheet:`AD7984:[{"num"%3A51%2C"gen"%3A0}%2C{"name"%3A"XYZ"}%2C52%2C713%2C0]`.
@@ -216,29 +227,36 @@ by just copying the link in the table of contents.
 Dokuwiki role
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The dokuwiki role creates links to the Analog Devices wiki website.
-The role syntax is :code:`:dokuwiki:\`<name>:<path>\``, for example,
-:code:`:dokuwiki:\`pulsar-adc-pmods:resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods\``
+The dokuwiki role creates links to the Analog Devices Inc. wiki website.
+The role syntax is :code:`:dokuwiki:\`text <path>\``, for example,
+:code:`:dokuwiki:\`pulsar-adc-pmods <resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods>\``
 gets rendered as
-:dokuwiki:`pulsar-adc-pmods:resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods`.
+:dokuwiki:`pulsar-adc-pmods <resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods>`.
 
 EngineerZone role
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The ez role creates links to the Analog Devices EngineerZone support website.
-The role syntax is :code:`:ez:\`<community>\``, for example, :code:`:ez:\`fpga\``
+The ez role creates links to the Analog Devices Inc. EngineerZone support website.
+The role syntax is :code:`:ez:\`community\``, for example, :code:`:ez:\`fpga\``
 gets rendered as :ez:`fpga`.
 
-Xilinx role
+Vendor role
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The xilinx role creates links to the Xilinx website.
-The role syntax is :code:`:xilinx:\`<name>:<path>\``, for example,
-:code:`:xilinx:\`Zynq-7000 SoC Overview:support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf\``
+The vendor role creates links to the vendor's website.
+The role syntax is :code:`:vendor:\`text <path>\``, for example,
+:code:`:xilinx:\`Zynq-7000 SoC Overview <support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf>\``
 gets rendered
-:xilinx:`Zynq-7000 SoC Overview:support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf`.
+:xilinx:`Zynq-7000 SoC Overview <support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf>`.
 
-The name parameter is optional, if absent, the file name will be used as the name.
+The text parameter is optional, if absent, the file name will be used as the text,
+for example,
+:code:`:intel:\`content/www/us/en/docs/programmable/683780/22-4/general-purpose-i-o-overview.html\``
+gets rendered
+:intel:`content/www/us/en/docs/programmable/683780/22-4/general-purpose-i-o-overview.html`
+(not very readable).
+
+Supported vendors are: `xilinx` and `intel`.
 
 HDL parameters directive
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

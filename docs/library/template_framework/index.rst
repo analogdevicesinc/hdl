@@ -35,13 +35,13 @@ Related IP Cores
 This list contains cores that are not part of the core {ip name} but
 make use of its interfaces and are intend to be used together with the {ip name}.
 
-* :dokuwiki:`util-sigma-delta-spi:resources/fpga/peripherals/util_sigma_delta_spi`:
+* :dokuwiki:`util-sigma-delta-spi <resources/fpga/peripherals/util_sigma_delta_spi>`:
   Helper module for interfacing ADCs from the Analog Devices Sigma-Delta family.
 
 Examples
 --------------------------------------------------------------------------------
 
-* :dokuwiki:`CN0363:resources/eval/user-guides/eval-cn0363-pmdz`:
+* :dokuwiki:`CN0363 <resources/eval/user-guides/eval-cn0363-pmdz>`:
   Colorimeter application using the :part:`AD7175-2` Sigma-Delta ADC.
 
 Additional Resources
