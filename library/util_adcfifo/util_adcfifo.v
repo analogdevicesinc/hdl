@@ -38,6 +38,7 @@
 module util_adcfifo #(
 
   parameter   FPGA_TECHNOLOGY = 0,
+  parameter   BRAM_CASCADE_HEIGHT = -1,
   parameter   ADC_DATA_WIDTH = 256,
   parameter   DMA_DATA_WIDTH =  64,
   parameter   DMA_READY_ENABLE = 1,
@@ -221,6 +222,7 @@ module util_adcfifo #(
     .mem_o_dataout_dataout (dma_rdata_s));
   end else begin
   ad_mem_asym #(
+    .CASCADE_HEIGHT (BRAM_CASCADE_HEIGHT),
     .A_ADDRESS_WIDTH (ADC_ADDRESS_WIDTH),
     .A_DATA_WIDTH (ADC_DATA_WIDTH),
     .B_ADDRESS_WIDTH (DMA_ADDRESS_WIDTH),
