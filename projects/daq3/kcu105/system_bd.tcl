@@ -31,3 +31,9 @@ ad_ip_parameter util_daq3_xcvr CONFIG.QPLL_REFCLK_DIV 1
 ad_ip_parameter util_daq3_xcvr CONFIG.CPLL_CFG0 0x67f8
 ad_ip_parameter util_daq3_xcvr CONFIG.CPLL_CFG1 0xa4ac
 ad_ip_parameter util_daq3_xcvr CONFIG.CPLL_CFG2 0x0007
+
+optimize_bd_resets "all" "yes"
+set_property CONFIG.AXI_SLICE_SRC {true} [get_bd_cells axi_ad9680_dma]
+set_property CONFIG.AXI_SLICE_DEST {true} [get_bd_cells axi_ad9680_dma]
+set_property CONFIG.BRAM_CASCADE_HEIGHT {7} [get_bd_cells axi_ad9680_fifo]
+set_property strategy Flow_RuntimeOptimized [get_runs synth_1]
