@@ -4,17 +4,17 @@ HDL Reference Designs
 ===============================================================================
 
 .. toctree::
+   :caption: User guide
+   :hidden:
+
+   user_guide/index
+
+.. toctree::
    :caption: Libraries
    :hidden:
 
    library/spi_engine/index
    library/axi_dmac/index
-
-.. toctree::
-   :caption: Contributing
-   :hidden:
-
-   contributing/guidelines
 
 .. attention::
 

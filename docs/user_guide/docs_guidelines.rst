@@ -1,4 +1,6 @@
-Guidelines
+.. _docs_guidelines:
+
+Documentation guidelines
 ================================================================================
 
 A brief set-of-rules for the documentation.
@@ -56,8 +58,12 @@ while respecting word-breaks:
 
    cat imported.txt | fold -sw 80 > imported.rst
 
-Or use the pandoc command provided in the next topic, since it will also fold
-at column 80.
+Or use :code:`pandoc`:
+
+.. code:: bash
+
+   pandoc imported.txt -f dokuwiki -t rst --columns=80 -s -o imported.rst
+
 
 Tables
 --------------------------------------------------------------------------------
@@ -69,15 +75,11 @@ and imported
 (using the file option), because they are faster to create, easier to maintain
 and the 80 column-width rule can be respected with list-tables.
 
-Converting dokuwiki tables to list-table would be very time consuming, however
-there is a pandoc `list-table filter <https://github.com/jgm/pandoc/issues/4564>`_,
-see :ref:`installing_pandoc` for install instructions.
-
 You can use the following command:
 
 .. code:: bash
 
-    pandoc <input.txt> -f dokuwiki -t rst --columns=80 -s -o <output.rst> --list-tables
+   pandoc imported.txt -f dokuwiki -t rst --columns=80 -s -o imported.rst --list-tables
 
 The :code:`list-tables` parameter requires *pandoc-types* >= 1.23, if it is not
 an option, you shall remove it and export in the *grid* table format.
@@ -177,6 +179,11 @@ consider requesting or creating one.
    Link-like roles use the :code:`:role:\`text <link>\`` synthax, like external
    links, but without the undescore in the end.
 
+
+Color role
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To print text in red or green, use :code:`:red:\`text\`` and :code:`:green:\`text\``.
 
 Git role
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -385,25 +392,3 @@ Global options for HDL directives
 
 Use the `hide_collapsible_content` to set the default state of the collapsibles,
 if you set to False, they be expanded by default.
-
-Installing pandoc
---------------------------------------------------------------------------------
-
-The recommended way to import dokuwiki to reST is to use
-`pandoc <https://pandoc.org>`_.
-
-To ensure a up-to date version, considering installing from source:
-
-.. code::
-
-   curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
-   cabal v2-update
-   cabal v2-install pandoc-cli
-
-If custom pandoc haskell filters are needed, also install as a library:
-
-.. code::
-
-   cabal v2-install --lib pandoc-types --package-env .
-
-The tested *pandoc* version is 3.1.5, with *pandoc-types* version 2.13.

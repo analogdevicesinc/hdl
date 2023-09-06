@@ -10,6 +10,18 @@ dft_url_part		= 'https://www.analog.com/products'
 dft_url_xilinx		= 'https://www.xilinx.com'
 dft_url_intel		= 'https://www.intel.com'
 
+git_repos = [
+	# url_path           name
+	['hdl',              "HDL"],
+	['testbenches',      "Testbenches"],
+	['linux',            "Linux"],
+	['no-os',            "no-OS"],
+	['libiio',           "libiio"],
+	['scopy',            "Scopy"],
+	['iio-oscilloscope', "IIO Oscilloscope"]
+]
+vendors = ['xilinx', 'intel']
+
 def get_url_config(name, inliner):
 	app = inliner.document.settings.env.app
 	return getattr(app.config, "url_"+name)
@@ -100,12 +112,11 @@ def setup(app):
 	app.add_role("datasheet",       datasheet())
 	app.add_role("dokuwiki",        dokuwiki())
 	app.add_role("ez",              ez())
-	app.add_role("git-hdl",         git('hdl', "HDL"))
-	app.add_role("git-testbenches", git('testbenches', "Testbenches"))
-	app.add_role("git-linux",       git('linux', "Linux"))
 	app.add_role("part",            part())
-	app.add_role("xilinx",          vendor('xilinx'))
-	app.add_role("intel",           vendor('intel'))
+	for name in vendors:
+		app.add_role(name,          vendor(name))
+	for path, name in git_repos:
+		app.add_role("git-"+path,   git(path, name))
 
 	app.add_config_value('url_datasheet', dft_url_datasheet, 'env')
 	app.add_config_value('url_dokuwiki',  dft_url_dokuwiki,  'env')
