@@ -8,15 +8,21 @@ dft_url_ez			= 'https://ez.analog.com'
 dft_url_git			= 'https://github.com/analogdevicesinc'
 dft_url_part		= 'https://www.analog.com/products'
 dft_url_xilinx		= 'https://www.xilinx.com'
+dft_url_intel		= 'https://www.intel.com'
 
 def get_url_config(name, inliner):
 	app = inliner.document.settings.env.app
-	try:
-		if not eval("app.config.url_"+name):
-			raise AttributeError
-	except AttributeError as err:
-		raise ValueError(str(err))
-	return eval("app.config.url_"+name)
+	return getattr(app.config, "url_"+name)
+
+def get_outer_inner(text):
+	"""
+	Extract 'outer <inner>' fields.
+	"""
+	pos = text.find('<')
+	if pos != -1 and text[len(text)-1] == '>':
+		return (text[0:pos].strip(), text[pos+1:-1])
+	else:
+		return (None, text)
 
 def datasheet():
 	def role(name, rawtext, text, lineno, inliner, options={}, content=[]):
@@ -32,10 +38,11 @@ def datasheet():
 
 def dokuwiki():
 	def role(name, rawtext, text, lineno, inliner, options={}, content=[]):
-		path = text[text.find(':')+1:]
-		name = path[path.rfind('/')+1:] if text.find(':') in [0, -1] else text[0:text.find(':')]
+		text, path = get_outer_inner(text)
+		if text is None:
+			text = path[path.rfind('/')+1:]
 		url = get_url_config('dokuwiki', inliner) + '/' + path
-		node = nodes.reference(rawtext, name, refuri=url, **options)
+		node = nodes.reference(rawtext, text, refuri=url, **options)
 		return [node], []
 	return role
 
@@ -58,28 +65,34 @@ def git(repo, alt_name):
 			name = "ADI " + alt_name + " repository"
 			node = nodes.reference(rawtext, name, refuri=url, **options)
 		else:
-			branch = get_active_branch_name() if text.find(':') in [0, -1] else text[0:text.find(':')]
-			path = text[text.find(':')+1:]
+			text, path = get_outer_inner(text)
+			pos = path.find(':')
+			branch = get_active_branch_name() if pos in [0, -1] else path[0:pos]
+			path = path[pos+1:]
+			if text is None:
+				text = path[path.rfind('/')+1:]
 			url = url + '/blob/' + branch + '/' + path
-			node = nodes.reference(rawtext, path[path.rfind('/')+1:], refuri=url, **options)
+			node = nodes.reference(rawtext, text, refuri=url, **options)
 		return [node], []
 	return role
 
 def part():
 	def role(name, rawtext, text, lineno, inliner, options={}, content=[]):
-		part_name = text[text.find(':')+1:]
-		part_id = part_name if text.find(':') in [0, -1] else text[0:text.find(':')]
+		name, part_id = get_outer_inner(text)
+		if name is None:
+			name = part_id
 		url = get_url_config('part', inliner) + '/' + part_id + '.html'
-		node = nodes.reference(rawtext, part_name, refuri=url, **options)
+		node = nodes.reference(rawtext, name, refuri=url, **options)
 		return [node], []
 	return role
 
-def xilinx():
+def vendor(vendor_name):
 	def role(name, rawtext, text, lineno, inliner, options={}, content=[]):
-		name = text[text.rfind('/')+1:] if text.find(':') in [0, -1] else text[0:text.find(':')]
-		path = text[text.find(':')+1:]
-		url = get_url_config('xilinx', inliner) + '/' + path
-		node = nodes.reference(rawtext, name, refuri=url, **options)
+		text, path = get_outer_inner(text)
+		if text is None:
+			text = path[path.rfind('/')+1:]
+		url = get_url_config(vendor_name, inliner) + '/' + path
+		node = nodes.reference(rawtext, text, refuri=url, **options)
 		return [node], []
 	return role
 
@@ -91,7 +104,8 @@ def setup(app):
 	app.add_role("git-testbenches", git('testbenches', "Testbenches"))
 	app.add_role("git-linux",       git('linux', "Linux"))
 	app.add_role("part",            part())
-	app.add_role("xilinx",          xilinx())
+	app.add_role("xilinx",          vendor('xilinx'))
+	app.add_role("intel",           vendor('intel'))
 
 	app.add_config_value('url_datasheet', dft_url_datasheet, 'env')
 	app.add_config_value('url_dokuwiki',  dft_url_dokuwiki,  'env')
@@ -99,6 +113,7 @@ def setup(app):
 	app.add_config_value('url_git',       dft_url_git,       'env')
 	app.add_config_value('url_part',      dft_url_part,      'env')
 	app.add_config_value('url_xilinx',    dft_url_xilinx,    'env')
+	app.add_config_value('url_intel',     dft_url_intel,     'env')
 
 	return {
 		'version': '0.1',

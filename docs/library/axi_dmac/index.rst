@@ -620,8 +620,8 @@ Software Support
 
 Analog Devices recommends to use the provided software drivers.
 
-- :dokuwiki:`Analog Device AXI-DMAC DMA Controller Linux Driver:
-  resources/tools-software/linux-drivers/axi-dmac`
+- :dokuwiki:`Analog Device AXI-DMAC DMA Controller Linux Driver
+  <resources/tools-software/linux-drivers/axi-dmac>`
 
 Known Issues
 --------------------------------------------------------------------------------

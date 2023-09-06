@@ -102,6 +102,8 @@ library/**/bd/bd.tcl
 qdb
 tmp-clearbox
 *.bin
+__pycache__
+_build
 .qsys_edit
 .github/CODEOWNERS
 .github/PULL_REQUEST_TEMPLATE.md
