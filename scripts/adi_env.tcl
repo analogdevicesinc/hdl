@@ -31,7 +31,7 @@ if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
 
 # Define the supported tool version
 if {![info exists REQUIRED_QUARTUS_VERSION]} {
-  set REQUIRED_QUARTUS_VERSION "22.4.0"
+  set REQUIRED_QUARTUS_VERSION "23.2.0"
 }
 
 # This helper pocedure retrieves the value of varible from environment if exists,
