@@ -1,0 +1,18 @@
+# ad3552r
+
+FMC_pin   FMC_port       Schematic_name     System_top_name       IOSTANDARD  Termination
+
+ D12      FMC_LA05_N     /RESET              ad3552r_resetn       LVCMOS25    #N/A
+ G6       FMC_LA00_CC_P  SPI_SCLK            ad3552r_spi_sclk     LVCMOS25    #N/A
+ G7       FMC_LA00_CC_N  SPI_/CS             ad3552r_spi_cs       LVCMOS25    #N/A
+ H7       FMC_LA02_P     SPI_SDIO0           ad3552r_spi_sdio[0]  LVCMOS25    #N/A
+ H8       FMC_LA02_N     SPI_SDIO1           ad3552r_spi_sdio[1]  LVCMOS25    #N/A
+ G9       FMC_LA03_P     SPI_SDIO2           ad3552r_spi_sdio[2]  LVCMOS25    #N/A
+ G10      FMC_LA03_N     SPI_SDIO3           ad3552r_spi_sdio[3]  LVCMOS25    #N/A
+ D11      FMC_LA05_P     /LDAC               ad3552r_ldacn        LVCMOS25    #N/A
+ H10      FMC_LA04_P     /ALERT              ad3552r_alertn       LVCMOS25    #N/A
+ H11      FMC_LA04_N     SPI_QPI             ad3552r_qspi_sel     LVCMOS25    #N/A
+ C10      FMC_LA06_P     GPIO_6              ad3552r_gpio_6       LVCMOS25    #N/A
+ C11      FMC_LA06_N     GPIO_7              ad3552r_gpio_7       LVCMOS25    #N/A
+ H13      FMC_LA07_P     GPIO_8              ad3552r_gpio_8       LVCMOS25    #N/A
+ H14      FMC_LA07_N     GPIO_9              ad3552r_gpio_9       LVCMOS25    #N/A
