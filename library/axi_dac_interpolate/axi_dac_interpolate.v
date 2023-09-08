@@ -58,7 +58,6 @@ module axi_dac_interpolate #(
   output      [15:0]    dac_int_data_b,
   output                dac_valid_out_a,
   output                dac_valid_out_b,
-  output                hold_last_sample,
   output                underflow,
 
   input       [ 1:0]    trigger_i,
@@ -152,8 +151,7 @@ module axi_dac_interpolate #(
   wire              underflow_a;
   wire              underflow_b;
 
-  wire    [ 1:0]    lsample_hold_config;
-  wire              sync_stop_channels;
+  wire              stop_sync_channels;
 
   // signal name changes
 
@@ -206,9 +204,6 @@ module axi_dac_interpolate #(
     low_level_trigger <= ~trigger_i_m3 & low_level;
   end
 
-  assign hold_last_sample = lsample_hold_config[0];
-  assign sync_stop_channels = lsample_hold_config[1];
-
   assign underflow = underflow_a | underflow_b;
 
   axi_dac_interpolate_filter #(
@@ -220,7 +215,7 @@ module axi_dac_interpolate #(
     .dac_data (dac_data_a),
     .dac_valid (dac_valid_a),
     .dac_valid_out (dac_valid_out_a),
-    .sync_stop_channels (sync_stop_channels),
+    .sync_stop_channels (stop_sync_channels),
 
     .dac_enable (dac_enable_a),
     .dac_int_data (dac_int_data_a),
@@ -249,7 +244,7 @@ module axi_dac_interpolate #(
     .dac_data (dac_data_b),
     .dac_valid (dac_valid_b),
     .dac_valid_out (dac_valid_out_b),
-    .sync_stop_channels (sync_stop_channels),
+    .sync_stop_channels (stop_sync_channels),
     .underflow (underflow_b),
 
     .dac_enable (dac_enable_b),
@@ -285,7 +280,7 @@ module axi_dac_interpolate #(
     .dac_correction_coefficient_a(dac_correction_coefficient_a),
     .dac_correction_coefficient_b(dac_correction_coefficient_b),
     .trigger_config (trigger_config),
-    .lsample_hold_config (lsample_hold_config),
+    .stop_sync_channels (stop_sync_channels),
 
     .up_rstn (up_rstn),
     .up_clk (up_clk),
