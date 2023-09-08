@@ -177,11 +177,7 @@ module system_top #(
   output  [TX_NUM_LINKS-1:0]              tx_link_error,
   output  [TX_NUM_LINKS*TX_JESD_L-1:0]    tx_serial_data_p,
   output  [TX_NUM_LINKS*TX_JESD_L-1:0]    tx_serial_data_n,
-  input                   refclk_core,
-  input                   spi_MISO,
-  output                  spi_MOSI,
-  output                  spi_SCLK,
-  output  [2:0]           spi_SS_n);
+  input                   refclk_core);
 
   localparam CS = 0;
   localparam RX_TOTAL_SAMPLE = RX_JESD_M*RX_JESD_S*RX_WIDTH_MULP;
@@ -387,11 +383,6 @@ module system_top #(
     .rst_seq_1_av_csr_irq_irq                (),
     .rxframe_clk_clk                         (rxframe_clk),
     .rxlink_clk_clk                          (rxlink_clk),
-    .spi_0_irq_irq                           (),
-    .spi_0_external_MISO                     (spi_MISO),
-    .spi_0_external_MOSI                     (spi_MOSI_buf),
-    .spi_0_external_SCLK                     (spi_SCLK),
-    .spi_0_external_SS_n                     (spi_SS_n),
     .sys_clk_clk                             (sys_clk),
     .sys_rst_reset_n                         (sys_reset_n),
     .sys_gpio_bd_in_port                     (gpio_i[31: 0]),

@@ -252,20 +252,6 @@ set_instance_parameter_value ed_control ED_SIM_PAT_TESTMODE {3}
 set_instance_parameter_value ed_control FCLK_MULP {1}
 set_instance_parameter_value ed_control SYSREF_MODE {1}
 
-add_instance spi_0 altera_avalon_spi
-set_instance_parameter_value spi_0 clockPhase {0}
-set_instance_parameter_value spi_0 clockPolarity {0}
-set_instance_parameter_value spi_0 dataWidth {24}
-set_instance_parameter_value spi_0 disableAvalonFlowControl {0}
-set_instance_parameter_value spi_0 insertDelayBetweenSlaveSelectAndSClk {0}
-set_instance_parameter_value spi_0 insertSync {0}
-set_instance_parameter_value spi_0 lsbOrderedFirst {0}
-set_instance_parameter_value spi_0 masterSPI {1}
-set_instance_parameter_value spi_0 numberOfSlaves {3}
-set_instance_parameter_value spi_0 syncRegDepth {2}
-set_instance_parameter_value spi_0 targetClockRate {20000000.0}
-set_instance_parameter_value spi_0 targetSlaveSelectToSClkDelay {0.0}
-
 add_instance pio_control altera_avalon_pio
 set_instance_parameter_value pio_control bitClearingEdgeCapReg {0}
 set_instance_parameter_value pio_control bitModifyingOutReg {0}
@@ -341,7 +327,6 @@ add_connection mgmt_clk.out_clk rst_seq_1.clk
 add_connection mgmt_clk.out_clk ed_control.mgmt_clk
 add_connection mgmt_clk.out_clk edctl_reset_bridge.clk
 add_connection mgmt_clk.out_clk mgmt_reset_bridge.clk
-add_connection mgmt_clk.out_clk spi_0.clk
 add_connection mgmt_clk.out_clk pio_control.clk
 add_connection mgmt_clk.out_clk pio_status.clk
 add_connection mgmt_clk.out_clk mm_bridge.clk
@@ -368,11 +353,9 @@ add_connection fpga_m.master_reset reset_controller_0.reset_in0
 add_connection reset_controller_0.reset_out rst_seq_0.reset_in0
 add_connection reset_controller_0.reset_out rst_seq_1.reset_in0
 #add_connection reset_controller_0.reset_out intel_jesd204c_f_0.reconfig_xcvr_reset
-add_connection reset_controller_0.reset_out spi_0.reset
 add_connection reset_controller_0.reset_out pio_control.reset
 add_connection reset_controller_0.reset_out pio_status.reset
 
-add_connection jtag_avmm_bridge.master spi_0.spi_control_port
 add_connection jtag_avmm_bridge.master pio_control.s1
 add_connection jtag_avmm_bridge.master pio_status.s1
 add_connection jtag_avmm_bridge.master mm_bridge.s0
@@ -398,7 +381,6 @@ add_connection intel_jesd204c_f_0.j204c_rx_alldev_lane_align intel_jesd204c_f_0.
 
 ## Exported signals
 
-add_interface spi_0_irq                  interrupt sender
 add_interface mgmt_clk                   clock   sink
 add_interface mgmt_reset                 reset   sink
 add_interface txframe_clk                clock   sink
@@ -416,7 +398,6 @@ add_interface ed_control_txframe_clk     clock   sink
 add_interface ed_control_rxframe_clk     clock   sink
 add_interface ed_control_rx_phase        clock   sink
 add_interface ed_control_in_sysref       conduit sink
-add_interface spi_0_external             conduit end
 add_interface pio_control_external       conduit end
 add_interface pio_status_external        conduit end
 add_interface ed_control_rx_phase        clock   source
@@ -471,8 +452,6 @@ set_interface_property j204c_rx_rst_n             EXPORT_OF intel_jesd204c_f_0.j
 set_interface_property ed_control_txframe_clk     EXPORT_OF ed_control.txframe_clk
 set_interface_property ed_control_rxframe_clk     EXPORT_OF ed_control.rxframe_clk
 set_interface_property edctl_rst                  EXPORT_OF edctl_reset_bridge.in_reset
-set_interface_property spi_0_irq                  EXPORT_OF spi_0.irq
-set_interface_property spi_0_external             EXPORT_OF spi_0.external
 set_interface_property pio_control_external       EXPORT_OF pio_control.external_connection
 set_interface_property pio_status_external        EXPORT_OF pio_status.external_connection
 set_interface_property jtag_reset_clk             EXPORT_OF jtag_reset.clk
@@ -685,7 +664,6 @@ set_connection_parameter_value jtag_avmm_bridge.master/mm_bridge.s0 baseAddress 
 set_connection_parameter_value jtag_avmm_bridge.master/pio_control.s1 baseAddress {0x01020020}
 set_connection_parameter_value jtag_avmm_bridge.master/rst_seq_0.av_csr baseAddress {0x01020100}
 set_connection_parameter_value jtag_avmm_bridge.master/rst_seq_1.av_csr baseAddress {0x01020200}
-set_connection_parameter_value jtag_avmm_bridge.master/spi_0.spi_control_port baseAddress {0x01020000}
 set_connection_parameter_value mm_bridge.m0/intel_jesd204c_f_0.j204c_tx_avs baseAddress {0x000c0000}
 set_connection_parameter_value jtag_avmm_bridge.master/ed_control.j204c_f_ed_ctrl_avs baseAddress {0x01020400}
 
