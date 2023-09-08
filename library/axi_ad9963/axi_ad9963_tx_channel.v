@@ -58,7 +58,6 @@ module axi_ad9963_tx_channel #(
   output reg  [11:0]  dac_data_out,
   input       [11:0]  dac_data_in,
   input               dma_valid,
-  output              out_data_valid,
 
   // processor interface
 
@@ -112,8 +111,6 @@ module axi_ad9963_tx_channel #(
   wire            dac_iqcor_enb_s;
   wire    [15:0]  dac_iqcor_coeff_1_s;
   wire    [15:0]  dac_iqcor_coeff_2_s;
-
-  assign out_data_valid = dac_iqcor_valid_s;
 
   // dac iq correction
 
