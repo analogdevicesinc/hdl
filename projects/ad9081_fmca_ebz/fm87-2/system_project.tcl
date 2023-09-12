@@ -28,7 +28,7 @@ set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/ad_3w_spi.v
 set_global_assignment -name VERILOG_FILE ../../common/fm87/gpio_slave.v
 set_global_assignment -name VERILOG_FILE ../../common/fm87/switch_debouncer.v
 
-set_instance_assignment -name IO_STANDARD "HCSL" -to fpga_refclk_in
+set_instance_assignment -name IO_STANDARD "CURRENT MODE LOGIC (CML)" -to fpga_refclk_in
 foreach port {clkin6 fpga_syncin_0 fpga_syncin_1 fpga_syncout_0 fpga_syncout_1 sysref2} {
   set_instance_assignment -name IO_STANDARD "TRUE DIFFERENTIAL SIGNALING" -to $port
 }
@@ -73,39 +73,39 @@ set_location_assignment PIN_W42 -to "gpio[ 8]"          ; ## G18 LA16_P
 set_location_assignment PIN_Y43 -to "gpio[ 9]"          ; ## G19 LA16_N
 set_location_assignment PIN_B59 -to "gpio[10]"          ; ## G25 LA22_N
 # RX
-set_location_assignment PIN_BE66 -to "rx_data[0]"        ; ## A6  DP2_M2C_P
-set_location_assignment PIN_BD65 -to "rx_data[0](n)"     ; ## A7  DP2_M2C_N
-set_location_assignment PIN_BJ66 -to "rx_data[1]"        ; ## C7  DP7_M2C_P
-set_location_assignment PIN_BH65 -to "rx_data[1](n)"     ; ## C7  DP7_M2C_N
-set_location_assignment PIN_AP69 -to "rx_data[2]"        ; ## B12 DP6_M2C_P
-set_location_assignment PIN_AR68 -to "rx_data[2](n)"     ; ## B13 DP6_M2C_N
-set_location_assignment PIN_AU66 -to "rx_data[3]"        ; ## B16 DP1_C2M_P
-set_location_assignment PIN_AT65 -to "rx_data[3](n)"     ; ## B17 DP1_C2M_N
-set_location_assignment PIN_AV69 -to "rx_data[4]"        ; ## A18 DP5_C2M_P
-set_location_assignment PIN_AW68 -to "rx_data[4](n)"     ; ## A19 DP5_C2M_N
-set_location_assignment PIN_BA66 -to "rx_data[5]"        ; ## A14 DP4_M2C_P
-set_location_assignment PIN_AY65 -to "rx_data[5](n)"     ; ## A15 DP4_M2C_N
-set_location_assignment PIN_BB69 -to "rx_data[6]"        ; ## A10 DP3_M2C_P
-set_location_assignment PIN_BC68 -to "rx_data[6](n)"     ; ## A11 DP3_M2C_N
-set_location_assignment PIN_BF69 -to "rx_data[7]"        ; ## A2  DP1_M2C_P
-set_location_assignment PIN_BG68 -to "rx_data[7](n)"     ; ## A3  DP1_M2C_N
+set_location_assignment PIN_AP69 -to "rx_data[0]"        ; ## A6  DP2_M2C_P
+set_location_assignment PIN_AR68 -to "rx_data[0](n)"     ; ## A7  DP2_M2C_N
+set_location_assignment PIN_AU66 -to "rx_data[1]"        ; ## C7  DP7_M2C_P
+set_location_assignment PIN_AT65 -to "rx_data[1](n)"     ; ## C7  DP7_M2C_N
+set_location_assignment PIN_AV69 -to "rx_data[2]"        ; ## B12 DP6_M2C_P
+set_location_assignment PIN_AW68 -to "rx_data[2](n)"     ; ## B13 DP6_M2C_N
+set_location_assignment PIN_BA66 -to "rx_data[3]"        ; ## B16 DP1_C2M_P
+set_location_assignment PIN_AY65 -to "rx_data[3](n)"     ; ## B17 DP1_C2M_N
+set_location_assignment PIN_BB69 -to "rx_data[4]"        ; ## A18 DP5_C2M_P
+set_location_assignment PIN_BC68 -to "rx_data[4](n)"     ; ## A19 DP5_C2M_N
+set_location_assignment PIN_BE66 -to "rx_data[5]"        ; ## A14 DP4_M2C_P
+set_location_assignment PIN_BD65 -to "rx_data[5](n)"     ; ## A15 DP4_M2C_N
+set_location_assignment PIN_BF69 -to "rx_data[6]"        ; ## A10 DP3_M2C_P
+set_location_assignment PIN_BG68 -to "rx_data[6](n)"     ; ## A11 DP3_M2C_N
+set_location_assignment PIN_BJ66 -to "rx_data[7]"        ; ## A2  DP1_M2C_P
+set_location_assignment PIN_BH65 -to "rx_data[7](n)"     ; ## A3  DP1_M2C_N
 # TX
-set_location_assignment PIN_BJ60 -to "tx_data[0]"        ; ## C2  DP0_C2M_P
-set_location_assignment PIN_BH59 -to "tx_data[0](n)"     ; ## C3  DP0_C2M_N
-set_location_assignment PIN_BE60 -to "tx_data[1]"        ; ## A26 DP2_C2M_P
-set_location_assignment PIN_BD59 -to "tx_data[1](n)"     ; ## A27 DP2_C2M_N
-set_location_assignment PIN_AP63 -to "tx_data[2]"        ; ## B32 DP7_C2M_P
-set_location_assignment PIN_AR62 -to "tx_data[2](n)"     ; ## B33 DP7_C2M_N
-set_location_assignment PIN_AU60 -to "tx_data[3]"        ; ## B36 DP6_C2M_P
-set_location_assignment PIN_AT59 -to "tx_data[3](n)"     ; ## B37 DP6_C2M_N
-set_location_assignment PIN_BF63 -to "tx_data[4]"        ; ## A22 DP1_C2M_P
-set_location_assignment PIN_BG62 -to "tx_data[4](n)"     ; ## A23 DP1_C2M_N
-set_location_assignment PIN_AV63 -to "tx_data[5]"        ; ## A38 DP5_C2M_P
-set_location_assignment PIN_AW62 -to "tx_data[5](n)"     ; ## A39 DP5_C2M_N
-set_location_assignment PIN_BA60 -to "tx_data[6]"        ; ## A34 DP4_C2M_P
-set_location_assignment PIN_AY59 -to "tx_data[6](n)"     ; ## A35 DP4_C2M_N
-set_location_assignment PIN_BB63 -to "tx_data[7]"        ; ## A30 DP3_C2M_P
-set_location_assignment PIN_BC62 -to "tx_data[7](n)"     ; ## A31 DP3_C2M_N
+set_location_assignment PIN_AP63 -to "tx_data[0]"        ; ## C2  DP0_C2M_P
+set_location_assignment PIN_AR62 -to "tx_data[0](n)"     ; ## C3  DP0_C2M_N
+set_location_assignment PIN_AU60 -to "tx_data[1]"        ; ## A26 DP2_C2M_P
+set_location_assignment PIN_AT59 -to "tx_data[1](n)"     ; ## A27 DP2_C2M_N
+set_location_assignment PIN_AV63 -to "tx_data[2]"        ; ## B32 DP7_C2M_P
+set_location_assignment PIN_AW62 -to "tx_data[2](n)"     ; ## B33 DP7_C2M_N
+set_location_assignment PIN_BA60 -to "tx_data[3]"        ; ## B36 DP6_C2M_P
+set_location_assignment PIN_AY59 -to "tx_data[3](n)"     ; ## B37 DP6_C2M_N
+set_location_assignment PIN_BB63 -to "tx_data[4]"        ; ## A22 DP1_C2M_P
+set_location_assignment PIN_BC62 -to "tx_data[4](n)"     ; ## A23 DP1_C2M_N
+set_location_assignment PIN_BE60 -to "tx_data[5]"        ; ## A38 DP5_C2M_P
+set_location_assignment PIN_BD59 -to "tx_data[5](n)"     ; ## A39 DP5_C2M_N
+set_location_assignment PIN_BF63 -to "tx_data[6]"        ; ## A34 DP4_C2M_P
+set_location_assignment PIN_BG62 -to "tx_data[6](n)"     ; ## A35 DP4_C2M_N
+set_location_assignment PIN_BJ60 -to "tx_data[7]"        ; ## A30 DP3_C2M_P
+set_location_assignment PIN_BH59 -to "tx_data[7](n)"     ; ## A31 DP3_C2M_N
 # RXEN
 set_location_assignment PIN_J52  -to "rxen[0]"           ; ## C14 LA10_P
 set_location_assignment PIN_K53  -to "rxen[1]"           ; ## C15 LA10_N
@@ -159,6 +159,10 @@ set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 1_0V -to rx_data
 set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 1_0V -to tx_data
 for {set i 0} {$i < 11} {incr i} {
   set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio[$i]
+}
+for {set i 0} {$i < 8} {incr i} {
+  set_instance_assignment -name IO_STANDARD "High Speed Differential I/O" -to rx_data[$i]
+  set_instance_assignment -name IO_STANDARD "High Speed Differential I/O" -to tx_data[$i]
 }
 foreach port {agc0 agc1 agc2 agc3 irqb rxen txen} {
   foreach i {0 1} {
