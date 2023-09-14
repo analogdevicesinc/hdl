@@ -56,6 +56,7 @@ module hsci_mcore(// globals
                   input alink_fsm_stall,
                   input alink_fsm_step,
                   input clear_errors,
+                  input ver_b_na,
                   // status sigs
                   output master_done,
                   output master_running,
@@ -75,6 +76,8 @@ module hsci_mcore(// globals
                   output unk_instr_err,
                   output [31:0] link_err_info,
                   output alink_fsm_stalled,
+                  output txclk_adj_mismatch,
+                  output txclk_inv_mismatch,
                   // dpram i/f
                   output [14:0] mem_addr,
                   output mem_en,
@@ -106,11 +109,11 @@ module hsci_mcore(// globals
    wire menc_val;
    wire [9:0] menc_word;
 
-   // hsci_mfrm_det internqal outputs
+   // hsci_mfrm_det internal outputs
    wire frm_det;
    wire next_frm_start;
    wire [9:0] mdec_sfrm;
-   wire [31:0] mdec_ber_cnt;
+//   wire [31:0] mdec_ber_cnt;
 
    // hsci_mdec internal outputs
    wire [14:0] dec_addr;
@@ -118,12 +121,15 @@ module hsci_mcore(// globals
    wire [31:0] dec_data;
    wire [3:0] dec_we;
    wire alink_dval;
+   wire [1:0] rd_tsize;
    wire [7:0] alink_data;
    wire signal_det;
    wire signal_acquire;
    wire idle_state;
+   wire [3:0] tx_clk_adj_rcvd;
+   wire tx_clk_inv_rcvd;
    wire read_done;
-   wire [1:0] rd_tsize;
+   wire [31:0] mdec_ber_cnt;
 
    // linkup control
    hsci_mlink_ctrl ctrl0(// global
@@ -136,12 +142,15 @@ module hsci_mcore(// globals
                          .mosi_test_mode(mosi_test_mode),
                          .alink_fsm_stall(alink_fsm_stall),
                          .alink_fsm_step(alink_fsm_step),
+                         .ver_b_na(ver_b_na),
                          // status sigs
                          .alink_fsm(alink_fsm),
                          .alink_table(alink_table),
                          .alink_txclk_adj(alink_txclk_adj),
                          .alink_txclk_inv(alink_txclk_inv),
                          .alink_fsm_stalled(alink_fsm_stalled),
+                         .txclk_adj_mismatch(txclk_adj_mismatch),
+                         .txclk_inv_mismatch(txclk_inv_mismatch),
                          // menc sigs
                          .menc_pause(menc_pause),
                          .lfsr_word(lfsr_word),
@@ -152,6 +161,8 @@ module hsci_mcore(// globals
                          .alink_data(alink_data),
                          .idle_state(idle_state),
                          .frm_acq(frm_acq),
+                         .tx_clk_adj_rcvd(tx_clk_adj_rcvd),
+                         .tx_clk_inv_rcvd(tx_clk_inv_rcvd),
                          // output
                          .linkup_word(linkup_word),
                          .link_active(link_active),
@@ -159,7 +170,7 @@ module hsci_mcore(// globals
                          );
 
    // drive link_err_info out ber_cnt if auto link fsm = link_err
-  assign miso_ber_cnt[31:0] = (alink_fsm == 4'hB) ? link_err_info[31:0]: mdec_ber_cnt[31:0];
+//  assign miso_ber_cnt[31:0] = (alink_fsm == 4'hB) ? link_err_info[31:0]: mdec_ber_cnt[31:0];
 
    // hsci_menc
    hsci_menc enc0(// globals
@@ -216,7 +227,7 @@ module hsci_mcore(// globals
                                           .capture_mode(capture_mode),
                                           .capture_word(capture_word),
                                           .miso_test_mode(miso_test_mode),
-                                          .miso_ber_cnt(mdec_ber_cnt),
+                                          .miso_ber_cnt(miso_ber_cnt),
                                           .miso_test_lfsr_acq(miso_test_lfsr_acq),
                                            // link control sigs
                                           .man_linkup(man_linkup),                  
@@ -253,6 +264,7 @@ module hsci_mcore(// globals
                   .parity_err(parity_err),
                   .unk_instr_err(unk_instr_err),
                   // link control sigs
+                  .ver_b_na(ver_b_na),
                   .man_linkup(man_linkup),                  
                   .auto_linkup(auto_linkup),
                   .alink_fsm(alink_fsm),
@@ -261,6 +273,8 @@ module hsci_mcore(// globals
                   .signal_det(signal_det),
                   .signal_acquired(signal_acquired),
                   .idle_state(idle_state),
+                  .tx_clk_adj_rcvd(tx_clk_adj_rcvd),
+                  .tx_clk_inv_rcvd(tx_clk_inv_rcvd),
                   // i/f to menc
                   .menc_state(menc_state),
                   .xfer_mode(xfer_mode),

@@ -64,7 +64,7 @@ module hsci_master_logic #(
       I_int = I;
       
       // Self-clearing spi_master_run
-      I_int.hsci_master_run_hsci_run.sclr = O.hsci_master_run_hsci_run.data;
+      I_int.hsci_run.sclr = O.hsci_run.data;
    end
 
    always_comb begin

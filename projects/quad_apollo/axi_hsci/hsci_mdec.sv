@@ -57,6 +57,7 @@ module hsci_mdec(// globals
                  output reg parity_err,
                  output reg unk_instr_err,
                  // link control sigs
+                 input ver_b_na,
                  input man_linkup,
                  input auto_linkup,
                  input [3:0] alink_fsm,
@@ -65,7 +66,9 @@ module hsci_mdec(// globals
                  output reg signal_det,
                  output reg signal_acquired,
                  output idle_state,
-                  // i/f to menc
+                 output reg [3:0] tx_clk_adj_rcvd,
+                 output reg tx_clk_inv_rcvd,
+                 // i/f to menc
                  input [3:0] menc_state,
                  input xfer_mode,
                  input read_op,
@@ -91,11 +94,10 @@ typedef enum reg [2:0] {D_IDLE      = 3'b000,
    // internal variables
 state dec_state;
 
-   
    wire [7:0]  mdec_word;
    wire mdec_par;
    wire mdec_cont;
-   
+
    reg p_calc;
 
    reg [16:0] read_byte_cnt;
@@ -110,11 +112,11 @@ state dec_state;
    reg new_dec_addr;
 
    reg [4:0] idle_cnt;
-
+   
    assign mdec_word = mdec_sfrm[9:2];
    assign mdec_par = mdec_sfrm[1];
    assign mdec_cont = mdec_sfrm[0];
-         
+                  
  
    assign p_calc = mdec_word[7] + mdec_word[6] + mdec_word[5] + mdec_word[4] + mdec_word[3] + mdec_word[2] + mdec_word[1] + mdec_word[0] + mdec_cont;
    // during active xfer, check parity
@@ -299,6 +301,9 @@ state dec_state;
        alink_dval <= 1'b0;
        alink_data <= 8'h00;
        signal_acquired <= 1'b0;
+
+       tx_clk_adj_rcvd <= 4'h0;
+       tx_clk_inv_rcvd <= 1'b0;
        end
      else
        begin
@@ -313,8 +318,28 @@ state dec_state;
            store_data <= 1'b0;
            store_we <= 4'h0;
 
-           if (frm_det == 1'b1)
-             rd_tsize <= mdec_word[2:0];
+           if (auto_linkup == 1'b1)
+             begin
+             if (ver_b_na == 1'b1)
+               begin
+               if ( (mdec_word[7] == 1'b1) & (mdec_word[6:3] == ALINK) )
+                 begin
+                 tx_clk_adj_rcvd <= {mdec_word[1:0], mdec_par, mdec_cont};
+                 tx_clk_inv_rcvd <=  mdec_word[2];
+                 end
+               end
+             else
+               begin
+               tx_clk_adj_rcvd <= 4'h0;
+               tx_clk_inv_rcvd <= 1'b0;
+               end // else: !if(ver_b_na == 1'b1)
+             end // if (auto_linkup == 1'b1)
+           else
+             begin
+             if (frm_det == 1'b1)
+               rd_tsize <= mdec_word[1:0];
+             end // else: !if(auto_linkup == 1'b1)
+              
 
            alink_dval <= 1'b0;
            alink_data <= 8'h00;
@@ -323,6 +348,7 @@ state dec_state;
          D_INSTR:
            begin
            rd_index_cnt <= 2'b00;
+//           rd_data_cnt <= 2'b00;
            store_data <= 1'b0;
            store_we <= 4'h0;
            end

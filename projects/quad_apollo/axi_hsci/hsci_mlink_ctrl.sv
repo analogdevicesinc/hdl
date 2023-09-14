@@ -45,12 +45,15 @@ module hsci_mlink_ctrl(// globals
                        input mosi_test_mode,
                        input alink_fsm_stall,
                        input alink_fsm_step,
+                       input ver_b_na,
                        // status sigs for regmap
                        output [3:0] alink_fsm,
                        output [15:0] alink_table,
                        output [3:0] alink_txclk_adj,
                        output alink_txclk_inv,
                        output alink_fsm_stalled,
+                       output txclk_adj_mismatch,
+                       output txclk_inv_mismatch,
                        // menc_sigs
                        input menc_pause,
                        output [7:0] lfsr_word,
@@ -60,7 +63,9 @@ module hsci_mlink_ctrl(// globals
                        input alink_dval,
                        input [7:0] alink_data,
                        input idle_state,
-                       output frm_acq,
+                       input [3:0] tx_clk_adj_rcvd,
+                       input tx_clk_inv_rcvd,
+                       output reg frm_acq,
                        // outputs
                        output reg [9:0] linkup_word,
                        output reg link_active,
@@ -71,15 +76,13 @@ typedef enum reg [3:0] {M_IDLE             = 4'h0,
                                        M_RX_LINK        = 4'h1,
                                        M_TX_DETECT   = 4'h2,
                                        M_TX_CLK_ADJ  = 4'h3,
-//                                       M_TX_ACK         = 4'h4,
                                        M_TX_ACQ         = 4'h5,
                                        M_TX_ENDLP     = 4'h6,
                                        M_TX_STALL      = 4'h7,
                                        M_TX_DECIDE    = 4'h8,
                                        M_TX_CLK_INV   = 4'h9,
-                                       M_SET_TXCLK  = 4'hA,
-//                                       M_TX_ACK2        = 4'hA,
-//                                       M_TX_REACQ     = 4'hB,
+                                       M_SET_TXCLK    = 4'hA, 
+                                       M_TX_REACQ     = 4'hB,
                                        M_TX_LINKUP     = 4'hC,
                                        M_LINKUP           = 4'hD,
                                        M_LINK_ERR       = 4'hE
@@ -106,6 +109,7 @@ state prev_state;
    reg tx_clk_inv;
    reg [2:0] tx_ctrl;
    reg tx_linkup_achieved;
+   reg [4:0] tx_ctrl_b0;
 
    reg [15:0] auto_link_table;
    reg [7:0] lock_data_cntr;
@@ -165,7 +169,7 @@ state prev_state;
 
          M_TX_CLK_ADJ:
            begin
-           mlink_state <= M_TX_ACQ;
+           mlink_state <= M_TX_ACQ;  // A0
            end
            
          M_TX_ACQ:
@@ -224,13 +228,30 @@ state prev_state;
            mlink_state <= M_TX_CLK_ADJ;
            end
 
-         M_SET_TXCLK:
+         M_SET_TXCLK:  
            begin
-           if ( (tx_clk_adj == tx_clk_adj_val) & (tx_del_cntr == 4'h0) )
+           if (ver_b_na == 1'b0)  // A0
+             begin
+             if ( (tx_clk_adj == tx_clk_adj_val) & (tx_del_cntr == 4'h0) )
+               mlink_state <= M_TX_LINKUP;
+             else
+               mlink_state <= M_SET_TXCLK;
+             end
+           else    // B0
+             begin
+             mlink_state <= M_TX_REACQ;
+             end // else: !if(ver_b_na == 1'b0)
+           end // case: M_SET_TXCLK
+
+         M_TX_REACQ:
+           begin
+           if (tx_acq_to == 1'b1)
+             mlink_state <= M_LINK_ERR;
+           else if (signal_lock == 1'b1)
              mlink_state <= M_TX_LINKUP;
            else
-             mlink_state <= M_SET_TXCLK;
-           end   
+             mlink_state <= M_TX_REACQ;
+           end
 
          M_TX_LINKUP:
            begin
@@ -288,37 +309,45 @@ state prev_state;
        alink_cntr <= 3'b000;
        tx_clk_adj_d <= 4'hf;
        tx_ctrl <= 3'b000;
+       tx_ctrl_b0 <= 5'h00;
        end
      else
        begin
        if ( (auto_linkup== 1'b1) & (tx_linkup_achieved == 1'b0) )
          begin
-         if (mlink_state == M_TX_CLK_INV)
-           tx_ctrl <= 3'b011;  // clock invert
-         else if ( (mlink_state == M_TX_ACQ) | (mlink_state == M_SET_TXCLK) )
+         if (ver_b_na == 1'b0)   // A0
            begin
-           if ( (mlink_state == M_TX_ACQ) & (alink_fsm_stall == 1'b1) )
+           if (mlink_state == M_TX_CLK_INV)
+             tx_ctrl <= 3'b011;  // clock invert
+           else if ( (mlink_state == M_TX_ACQ) | (mlink_state == M_SET_TXCLK) )
              begin
-             if ( (tx_acq_cntr == 16'h07D0) & (tx_clk_adj != 4'hF) )
-               tx_ctrl <= 3'b010;  // decrement
-             else if ( (alink_cntr == 3'b000) & (menc_pause == 1'b0) )
-               tx_ctrl <= 3'b000;
+             if ( (mlink_state == M_TX_ACQ) & (alink_fsm_stall == 1'b1) )
+               begin
+               if ( (tx_acq_cntr == 16'h07D0) & (tx_clk_adj != 4'hF) )
+                 tx_ctrl <= 3'b010;  // decrement
+               else if ( (alink_cntr == 3'b000) & (menc_pause == 1'b0) )
+                 tx_ctrl <= 3'b000;
+               else
+                 tx_ctrl <= tx_ctrl;
+               end
              else
-               tx_ctrl <= tx_ctrl;
-             end
-           else
-             begin
-             if (tx_clk_adj < tx_clk_adj_d)
-               tx_ctrl <= 3'b010;  // decrement
-             else if (tx_clk_adj > tx_clk_adj_d)
-               tx_ctrl <= 3'b001;  // increment
-             else if ((alink_cntr == 3'b000) & (menc_pause == 1'b0) )
-               tx_ctrl <= 3'b000;
-             else
-               tx_ctrl <= tx_ctrl;
-             end // else: !if(alink_fsm_stall == 1'b1)
-           end // if ( (mlink_state == M_TX_ACQ) | (mlink_state == M_SET_TXCLK) )
-         end // if ( (auto_linkup== 1'b1) & (tx_linkup_achieved == 1'b0) ) 
+               begin
+               if (tx_clk_adj < tx_clk_adj_d)
+                 tx_ctrl <= 3'b010;  // decrement
+               else if (tx_clk_adj > tx_clk_adj_d)
+                 tx_ctrl <= 3'b001;  // increment
+               else if ((alink_cntr == 3'b000) & (menc_pause == 1'b0) )
+                 tx_ctrl <= 3'b000;
+               else
+                 tx_ctrl <= tx_ctrl;
+               end // else: !if( (mlink_state == M_TX_ACQ) & (alink_fsm_stall == 1'b1) )
+             end // if ( (mlink_state == M_TX_ACQ) | (mlink_state == M_SET_TXCLK) )
+           end // if (ver_b_na == 1'b0)
+         else
+           begin   // B0
+           tx_ctrl_b0 <= {tx_clk_inv, tx_clk_adj};
+           end // else: !if(ver_b_na == 1'b0)
+         end // if ( (auto_linkup== 1'b1) & (tx_linkup_achieved == 1'b0) )               
        else
          tx_ctrl <= 3'b000;
             
@@ -345,24 +374,25 @@ state prev_state;
              case(alink_cntr)
                3'b000: 
                  begin
-                 linkup_word[9:2] <= {1'b1, LINKUP_INSTR, tx_ctrl};
-                 linkup_word[1]   <= (linkup_word[9] + linkup_word[8] + linkup_word[7] + linkup_word[6] + linkup_word[5] + linkup_word[4] + linkup_word[3]);
-                 linkup_word[0]   <= 1'b0;
+                 linkup_word[9:2] <= (ver_b_na == 1'b0) ? {1'b1, LINKUP_INSTR, tx_ctrl}:  {1'b1, LINKUP_INSTR, tx_ctrl_b0[4:2]};
+                 linkup_word[1]   <=  (ver_b_na == 1'b0) ? (linkup_word[9] + linkup_word[8] + linkup_word[7] + linkup_word[6] + linkup_word[5] + linkup_word[4] + linkup_word[3]): tx_ctrl_b0[1];
+                 linkup_word[0]   <=  (ver_b_na == 1'b0) ? 1'b0: tx_ctrl_b0[0];
                  end
                3'b001, 3'b010, 3'b011, 3'b100, 3'b101:
                  begin
                  linkup_word[9:2] <= lfsr_out[7:0];
-                 linkup_word[1]   <= (linkup_word[9] + linkup_word[8] + linkup_word[7] + linkup_word[6] + linkup_word[5] + linkup_word[4] + linkup_word[3] + 1'b1);
-                 linkup_word[0]   <= 1'b1;
-                 end
+                 linkup_word[1]   <=  (linkup_word[9] + linkup_word[8] + linkup_word[7] + linkup_word[6] + linkup_word[5] + linkup_word[4] + linkup_word[3] + 1'b1);
+                 linkup_word[0]   <=  1'b1;
+                end
                3'b110:
                  begin
                  linkup_word[9:2] <= lfsr_out[7:0];
-                 linkup_word[1]   <= (linkup_word[9] + linkup_word[8] + linkup_word[7] + linkup_word[6] + linkup_word[5] + linkup_word[4] + linkup_word[3]);
-                 linkup_word[0]   <= 1'b0;
+                 linkup_word[1]   <=  (linkup_word[9] + linkup_word[8] + linkup_word[7] + linkup_word[6] + linkup_word[5] + linkup_word[4] + linkup_word[3]);
+                 linkup_word[0]   <=  1'b0;
                  end
                3'b111: linkup_word <= 10'h000;  // IDLE
              endcase // case (alink_cntr)
+
              alink_cntr <= alink_cntr + 3'b001;
              end // else: !if( (mlink_state == M_LINKUP) | (mlink_state == M_TX_LINKUP) )
            end // if (menc_pause == 1'b0)
@@ -371,9 +401,7 @@ state prev_state;
          linkup_word <= 10'h000;
        end // else: !if(~rstn)
      end // always @ (posedge hsci_pclk or negedge rstn)
-   
-   
-            
+           
 
    assign lfsr_en = ( (mosi_test_mode == 1'b1) |  ( (alink_cntr != 3'b000) & (alink_cntr != 3'b111) & (menc_pause != 1'b1) ) );
 
@@ -384,6 +412,10 @@ state prev_state;
                    );
    assign lfsr_word = (mosi_test_mode == 1'b1) ? lfsr_out: 8'h00;
 
+
+   // generate tx clock mismatch sigs
+   assign txclk_adj_mismatch = (ver_b_na == 1'b1) ? ~(tx_clk_adj == tx_clk_adj_rcvd): 1'b0; 
+   assign txclk_inv_mismatch = (ver_b_na == 1'b1) ? ~(tx_clk_inv == tx_clk_inv_rcvd): 1'b0; 
    
    always @ (posedge hsci_pclk or negedge rstn)
      begin
@@ -474,42 +506,48 @@ state prev_state;
                end
              dec_cntr <= 3'b111;
            end // case: M_TX_CLK_ADJ
-         
 
          M_TX_ACQ:  // find a link frame, linkup cmd, 6 data sub frames
            begin
            tx_acq_cntr <= (tx_acq_cntr == 16'h0000) ? 16'h0000: tx_acq_cntr - 1;
            tx_acq_to <= (tx_acq_cntr == 16'h0000);
-              
-           if (alink_dval == 1'b1)
+
+           if ( (txclk_adj_mismatch == 1'b0) & (txclk_inv_mismatch == 1'b0) )
              begin
-             if (alink_data != next_lock_data)
+             if (alink_dval == 1'b1)
                begin
-               lock_sreg <= {lock_sreg[6:0], alink_data};
-               lock_data_cntr <= 8'h00;
-              end
-             else
-               begin
-               if (lock_sreg == 15'h0000)
+               if (alink_data != next_lock_data)
                  begin
-                 lock_sreg <= 15'h7fff;
+                 if (lock_sreg == 15'h0000)
+                    lock_sreg <= 15'h7fff;
+                 else
+                    lock_sreg <= {lock_sreg[6:0], alink_data};
+                 
+                 lock_data_cntr <= 8'h00;
                  end
                else
                  begin
-                 lock_sreg[14:8] <= lock_sreg[6:0];
-                 lock_sreg[7]    <= lock_sreg[14] ^ lock_sreg[13];
-                 lock_sreg[6]    <= lock_sreg[13] ^ lock_sreg[12];
-                 lock_sreg[5]    <= lock_sreg[12] ^ lock_sreg[11];
-                 lock_sreg[4]    <= lock_sreg[11] ^ lock_sreg[10];
-                 lock_sreg[3]    <= lock_sreg[10] ^ lock_sreg[9];
-                 lock_sreg[2]    <= lock_sreg[9]  ^ lock_sreg[8];
-                 lock_sreg[1]    <= lock_sreg[8]  ^ lock_sreg[7];
-                 lock_sreg[0]    <= lock_sreg[7]  ^ lock_sreg[6];
-                 lock_data_cntr <= (lock_data_cntr == 8'h7f) ? lock_data_cntr: lock_data_cntr + 8'h01;
-                 signal_lock <= (lock_data_cntr == 8'h7f);
-                 end // else: !if(lock_sreg == 15'h0000)
-               end
-             end // if (alink_dval == 1'b1)
+                 if (lock_sreg == 15'h0000)
+                   begin
+                   lock_sreg <= 15'h7fff;
+                   end
+                 else
+                   begin
+                   lock_sreg[14:8] <= lock_sreg[6:0];
+                   lock_sreg[7]    <= lock_sreg[14] ^ lock_sreg[13];
+                   lock_sreg[6]    <= lock_sreg[13] ^ lock_sreg[12];
+                   lock_sreg[5]    <= lock_sreg[12] ^ lock_sreg[11];
+                   lock_sreg[4]    <= lock_sreg[11] ^ lock_sreg[10];
+                   lock_sreg[3]    <= lock_sreg[10] ^ lock_sreg[9];
+                   lock_sreg[2]    <= lock_sreg[9]  ^ lock_sreg[8];
+                   lock_sreg[1]    <= lock_sreg[8]  ^ lock_sreg[7];
+                   lock_sreg[0]    <= lock_sreg[7]  ^ lock_sreg[6];
+                   lock_data_cntr <= (lock_data_cntr == 8'h7f) ? lock_data_cntr: lock_data_cntr + 8'h01;
+                   signal_lock <= (lock_data_cntr == 8'h7f);
+                   end // else: !if(lock_sreg == 15'h0000)
+                 end
+               end // if (alink_dval == 1'b1)
+             end // if ( (txclk_adj_mismatch == 1'b0) & (txclk_inv_mismatch == 1'b0) )
            end // case: H_ACQ
 
          M_TX_ENDLP:
@@ -519,7 +557,7 @@ state prev_state;
            signal_lock <= 1'b0;
            auto_link_table[tx_clk_adj] <= signal_lock;
                       
-           // reset aqc counter, etc
+          // reset acq counter, etc
            tx_acq_cntr <= ACQUIRE_CNT_DEF;                               
            tx_acq_to <= 1'b0;
            end
@@ -738,16 +776,63 @@ state prev_state;
            begin
            tx_clk_inv <= 1'b1;
            tx_clk_adj <= 4'hf;  // tx_clk_inv also resets tx_clk_adj
+           auto_link_table <= 16'h0000;
            end
 
-         M_SET_TXCLK:
+         M_SET_TXCLK:   // TX_ACK2 for B0
            begin
-           if ( (alink_cntr == 3'b111) & ( (tx_clk_adj != tx_clk_adj_val) ) )
+           if (ver_b_na == 1'b0)   // A0
              begin
-             tx_clk_adj <= tx_clk_adj + 4'h1;
+             if ( (alink_cntr == 3'b111) & ( (tx_clk_adj != tx_clk_adj_val) ) )
+               tx_clk_adj <= tx_clk_adj + 4'h1;
              end
-           end // case: M_SET_TXCLK
-         
+           else
+             tx_clk_adj <= tx_clk_adj_val;
+           end
+                 
+         M_TX_REACQ:  // re-acquire with desired txclk_adj
+           begin
+           tx_acq_cntr <= (tx_acq_cntr == 16'h0000) ? 16'h0000: tx_acq_cntr - 1;
+           tx_acq_to <= (tx_acq_cntr == 16'h0000);
+
+           if ( (txclk_adj_mismatch == 1'b0) & (txclk_inv_mismatch == 1'b0) )
+             begin
+             if (alink_dval == 1'b1)
+               begin
+               if (alink_data != next_lock_data)
+                 begin
+                 if (lock_sreg == 15'h0000)
+                    lock_sreg <= 15'h7fff;
+                 else
+                    lock_sreg <= {lock_sreg[6:0], alink_data};
+                 
+                 lock_data_cntr <= 8'h00;
+                 end
+               else
+                 begin
+                 if (lock_sreg == 15'h0000)
+                   begin
+                   lock_sreg <= 15'h7fff;
+                   end
+                 else
+                   begin
+                   lock_sreg[14:8] <= lock_sreg[6:0];
+                   lock_sreg[7]    <= lock_sreg[14] ^ lock_sreg[13];
+                   lock_sreg[6]    <= lock_sreg[13] ^ lock_sreg[12];
+                   lock_sreg[5]    <= lock_sreg[12] ^ lock_sreg[11];
+                   lock_sreg[4]    <= lock_sreg[11] ^ lock_sreg[10];
+                   lock_sreg[3]    <= lock_sreg[10] ^ lock_sreg[9];
+                   lock_sreg[2]    <= lock_sreg[9]  ^ lock_sreg[8];
+                   lock_sreg[1]    <= lock_sreg[8]  ^ lock_sreg[7];
+                   lock_sreg[0]    <= lock_sreg[7]  ^ lock_sreg[6];
+                   lock_data_cntr <= (lock_data_cntr == 8'h7f) ? lock_data_cntr: lock_data_cntr + 8'h01;
+                   signal_lock <= (lock_data_cntr == 8'h7f);
+                   end // else: !if(lock_sreg == 15'h0000)
+                 end
+               end // if (alink_dval == 1'b1)
+             end // if ( (txclk_adj_mismatch == 1'b0) & (txclk_inv_mismatch == 1'b0) )
+           end // case: H_ACQ
+
          M_TX_LINKUP:
            begin
            tx_linkup_achieved <= 1'b1;
@@ -794,8 +879,6 @@ state prev_state;
      end // always @ (posedge hsci_pclk or negedge rstn)
    assign fsm_step = (fsm_step_d1 & !fsm_step_d2);
        
-
-
    assign next_lock_data = {(lock_sreg[14] ^ lock_sreg[13]),
                             (lock_sreg[13] ^ lock_sreg[12]),
                             (lock_sreg[12] ^ lock_sreg[11]),
@@ -837,5 +920,6 @@ state prev_state;
        end // else: !if(~rstn)
      end // always @ (posedge hsci_pclk or negedge rstn)
    assign frm_acq = (lock_fail_cntr >= 3'b110);
+   
 
 endmodule

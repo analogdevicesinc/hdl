@@ -115,7 +115,7 @@ module hsci_master_top #(
   assign hsci_pll_reset = O.hsci_pll_reset.data;
   assign hsci_rstn_async = O.hsci_master_rstn.data & hsci_pll_locked;
   assign hsci_clear_errors = O.hsci_master_clear_errors.data;
-  assign bram_strt_addr = (O.hsci_master_bram_address_hsci_bram_start_address.data)-1;//*'h4 - 16'h4;
+  assign bram_strt_addr = (O.hsci_bram_start_address.data)-1;//*'h4 - 16'h4;
 
    ad_rst i_hsci_rstn_reg (
      .rst_async(~hsci_rstn_async),
@@ -129,7 +129,7 @@ module hsci_master_top #(
      .rst_inclk  (~axi_resetn),
      .outclk     (hsci_pclk),
      .rst_outclk (hsci_rst_sync),
-     .din        (O.hsci_master_run_hsci_run.data)
+     .din        (O.hsci_run.data)
    );  
 
    // HSCI Core Instantiation
@@ -139,41 +139,44 @@ module hsci_master_top #(
    .hsci_rstn              (hsci_rstn_async),
    // register inputs
    .hsci_master_run        (run_s),
-   .hsci_cmd_sel           (O.hsci_master_ctrl_hsci_cmd_sel.data),
-   .hsci_master_xfer_num   (O.hsci_master_xfer_num_hsci_xfer_num.data),
-   .hsci_master_byte_num   (O.hsci_master_byte_num_hsci_byte_num.data),
-   .hsci_master_addr_size  (O.hsci_master_addr_size_hsci_addr_size.data), 
+   .hsci_cmd_sel           (O.hsci_cmd_sel.data),
+   .hsci_master_xfer_num   (O.hsci_xfer_num.data),
+   .hsci_master_byte_num   (O.hsci_byte_num.data),
+   .hsci_master_addr_size  (O.hsci_addr_size.data), 
    .hsci_master_bram_addr  (bram_strt_addr),
-   .tsize                  (O.hsci_master_ctrl_hsci_slave_ahb_tsize.data),
-   .man_linkup             (O.hsci_master_linkup_ctrl_hsci_man_linkup.data),
-   .man_linkup_word        (O.hsci_master_linkup_ctrl_hsci_man_linkup_word.data),
-   .auto_linkup            (O.hsci_master_linkup_ctrl_hsci_auto_linkup.data),
-   .capture_mode           (O.hsci_master_test_ctrl_hsci_capture_mode.data),
-   .capture_word           (I.hsci_debug_status_capture_word.data),
-   .mosi_test_mode         (O.hsci_master_test_ctrl_hsci_mosi_test_mode.data),
-   .miso_test_mode         (O.hsci_master_test_ctrl_hsci_miso_test_mode.data),
-   .alink_fsm_stall            (1'b0),
-   .alink_fsm_step            (1'b0),
+   .tsize                  (O.hsci_slave_ahb_tsize.data),
+   .man_linkup             (O.hsci_man_linkup.data),
+   .man_linkup_word        (O.hsci_man_linkup_word.data),
+   .auto_linkup            (O.hsci_auto_linkup.data),
+   .capture_mode           (O.hsci_capture_mode.data),
+   .capture_word           (I.capture_word.data),
+   .mosi_test_mode         (O.hsci_mosi_test_mode.data),
+   .miso_test_mode         (O.hsci_miso_test_mode.data),
+   .alink_fsm_stall        (1'b0),
+   .alink_fsm_step         (1'b0),
    .clear_errors           (hsci_clear_errors),
+   .ver_b_na               (O.ver_b__na.data),
    // status signals
-   .master_done            (I.hsci_master_status_master_done.data),
-   .master_running         (I.hsci_master_status_master_running.data),
-   .master_wr_in_prog      (I.hsci_master_status_master_wr_in_prog.data),
-   .master_rd_in_prog      (I.hsci_master_status_master_rd_in_prog.data),
-   .enc_fsm                (I.hsci_debug_status_enc_fsm.data),
-   .dec_fsm                (I.hsci_debug_status_dec_fsm.data),
-   .link_active            (I.hsci_master_linkup_status_link_active.data),
-   .alink_fsm              (I.hsci_master_linkup_status2_alink_fsm.data),
-   .alink_table            (I.hsci_master_linkup_status2_alink_table.data),
-   .alink_txclk_adj        (I.hsci_master_linkup_status_alink_txclk_adj.data),
-   .alink_txclk_inv        (I.hsci_master_linkup_status_alink_txclk_inv.data),
-   .miso_ber_cnt           (I.miso_test_ber_miso_test_ber.data),
-   .miso_test_lfsr_acq     (I.hsci_master_status_miso_test_lfsr_acq.data),
-   .error_code             (I.hsci_debug_status_slave_error_code.data),
-   .parity_err             (I.hsci_debug_status_parity_error.data),
-   .unk_instr_err          (I.hsci_debug_status_unkown_instruction_error.data),
-   .link_err_info           (),
-   .alink_fsm_stalled   (),
+   .master_done            (I.master_done.data),
+   .master_running         (I.master_running.data),
+   .master_wr_in_prog      (I.master_wr_in_prog.data),
+   .master_rd_in_prog      (I.master_rd_in_prog.data),
+   .enc_fsm                (I.enc_fsm.data),
+   .dec_fsm                (I.dec_fsm.data),
+   .link_active            (I.link_active.data),
+   .alink_fsm              (I.alink_fsm.data),
+   .alink_table            (I.alink_table.data),
+   .alink_txclk_adj        (I.alink_txclk_adj.data),
+   .alink_txclk_inv        (I.alink_txclk_inv.data),
+   .miso_ber_cnt           (I.miso_test_ber.data),
+   .miso_test_lfsr_acq     (I.miso_test_lfsr_acq.data),
+   .error_code             (I.slave_error_code.data),
+   .parity_err             (I.parity_error.data),
+   .unk_instr_err          (I.unkown_instruction_error.data),
+   .link_err_info          (I.hsci_link_err_info.data),
+   .alink_fsm_stalled      (), // Output
+   .txclk_adj_mismatch     (I.txclk_adj_mismatch.data),
+   .txclk_inv_mismatch     (I.txclk_inv_mismatch.data), 
    // tdpram i/f
    .mem_addr               (bram_addr),
    .mem_en                 (bram_ce),
