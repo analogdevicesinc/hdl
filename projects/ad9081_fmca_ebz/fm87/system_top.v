@@ -136,11 +136,11 @@ module system_top #(
   input   [RX_JESD_L-1:0] rx_data,
   output  [TX_JESD_L-1:0] tx_data,
   input                   fpga_syncin_0,
-  output                  fpga_syncin_1_n,
-  output                  fpga_syncin_1_p,
+  inout                   fpga_syncin_1_n,
+  inout                   fpga_syncin_1_p,
   output                  fpga_syncout_0,
-  output                  fpga_syncout_1_n,
-  output                  fpga_syncout_1_p,
+  inout                   fpga_syncout_1_n,
+  inout                   fpga_syncout_1_p,
   input                   sysref2,
 
   // spi
@@ -207,8 +207,8 @@ module system_top #(
   assign gpio_i[31:29] = gpio_o[31:29];
 
   // assignmnets
-  assign sys_reset_n   = sys_resetn & ~h2f_reset & ~ninit_done;
-  assign stm_hw_events = {14'b0, fpga_led, fpga_dipsw, fpga_gpio[1:0]};
+  assign sys_reset_n    = sys_resetn & ~h2f_reset & ~ninit_done;
+  assign stm_hw_events  = {14'b0, fpga_led, fpga_dipsw, fpga_gpio[1:0]};
 
   assign spi0_csb = spi_csn_s[0];
   assign spi1_csb = spi_csn_s[1];
