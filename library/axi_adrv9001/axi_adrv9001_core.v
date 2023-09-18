@@ -221,6 +221,7 @@ module axi_adrv9001_core #(
   wire           adc_sync_m;
   wire           dac_sync_m;
   wire           dac_sync_out_1;
+  wire           dac_sync_out_2;
 
   reg            tx1_data_valid_A_d;
   reg    [15:0]  tx1_data_i_A_d;
@@ -533,7 +534,7 @@ module axi_adrv9001_core #(
     .up_dac_r1_mode (up_tx1_r1_mode),
     .tdd_tx_valid (tdd_tx1_valid),
     .dac_clk_ratio (dac_clk_ratio),
-    .dac_sync_in (external_dac_sync | dac_sync_out_1),
+    .dac_sync_in (external_dac_sync | dac_sync_out_1 | dac_sync_out_2),
     .dac_sync_out (dac_sync_out_1),
     .dac_ext_sync_arm (dac_ext_sync_arm),
     .dac_enable_i0 (dac_1_enable_i0),
@@ -588,8 +589,8 @@ module axi_adrv9001_core #(
     .dac_sdr_ddr_n (tx2_sdr_ddr_n_loc),
     .dac_symb_op (tx2_symb_op_loc),
     .dac_symb_8_16b (tx2_symb_8_16b_loc),
-    .dac_sync_in (external_dac_sync | dac_sync_out_1),
-    .dac_sync_out (),
+    .dac_sync_in (external_dac_sync | dac_sync_out_1 | dac_sync_out_2),
+    .dac_sync_out (dac_sync_out_2),
     .dac_valid (dac_2_valid),
     .dac_enable_i0 (dac_2_enable_i0),
     .dac_data_i0 (dac_2_data_i0[15:0]),
