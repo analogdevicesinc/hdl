@@ -502,12 +502,11 @@ ad_connect  tx2_enable                    axi_adrv9001/tx2_enable
 ad_connect  system_sync                   axi_adrv9001/adc_sync_in
 ad_connect  system_sync                   axi_adrv9001/dac_sync_in
 
-# sysytem monitor
+# system monitor
 
 ad_ip_instance system_management_wiz pl_sysmon
 
 set_property -dict [list \
-  CONFIG.CHANNEL_ENABLE_VBRAM {true} \
   CONFIG.CHANNEL_ENABLE_VP_VN {false} \
   CONFIG.CHANNEL_ENABLE_VAUXP0_VAUXN0 {true} \
   CONFIG.CHANNEL_ENABLE_VAUXP1_VAUXN1 {true} \
@@ -521,6 +520,20 @@ set_property -dict [list \
   CONFIG.CHANNEL_ENABLE_VAUXP9_VAUXN9 {true} \
   CONFIG.CHANNEL_ENABLE_VAUXP10_VAUXN10 {true} \
   CONFIG.CHANNEL_ENABLE_VUSER0 {true} \
+  CONFIG.CHANNEL_ENABLE_VUSER1 {true} \
+  CONFIG.SELECT_USER_SUPPLY1 {VCCO} \
+  CONFIG.USER_SUPPLY1_BANK {26} \
+  CONFIG.CHANNEL_ENABLE_TEMPERATURE {true} \
+  CONFIG.CHANNEL_ENABLE_VBRAM {false} \
+  CONFIG.CHANNEL_ENABLE_VCCAUX {true} \
+  CONFIG.CHANNEL_ENABLE_VCCINT {true} \
+  CONFIG.ENABLE_VCCPSAUX_ALARM {false} \
+  CONFIG.ENABLE_VCCPSINTFP_ALARM {false} \
+  CONFIG.ENABLE_VCCPSINTLP_ALARM {false} \
+  CONFIG.OT_ALARM {true} \
+  CONFIG.USER_TEMP_ALARM {false} \
+  CONFIG.VCCAUX_ALARM {false} \
+  CONFIG.VCCINT_ALARM {false} \
   CONFIG.USER_SUPPLY0_ALARM {false} \
   CONFIG.USER_SUPPLY0_BANK {66} \
   CONFIG.ANALOG_BANK_SELECTION {66} \
@@ -599,6 +612,7 @@ ad_cpu_interrupt ps-13 mb-12 axi_adrv9001_rx1_dma/irq
 ad_cpu_interrupt ps-12 mb-11 axi_adrv9001_rx2_dma/irq
 ad_cpu_interrupt ps-11 mb-6 axi_adrv9001_tx1_dma/irq
 ad_cpu_interrupt ps-10 mb-5 axi_adrv9001_tx2_dma/irq
+ad_cpu_interrupt ps-9 mb-4 pl_sysmon/ip2intc_irpt
 
 set mem_init_sys_path [get_env_param ADI_PROJECT_DIR ""]mem_init_sys.txt;
 
