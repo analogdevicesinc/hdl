@@ -28,13 +28,11 @@ set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/ad_3w_spi.v
 set_global_assignment -name VERILOG_FILE ../../common/fm87/gpio_slave.v
 set_global_assignment -name VERILOG_FILE ../../common/fm87/switch_debouncer.v
 
-set_instance_assignment -name IO_STANDARD "CURRENT MODE LOGIC (CML)" -to fpga_refclk_in
-foreach port {clkin6 fpga_syncin_0 fpga_syncin_1 fpga_syncout_0 fpga_syncout_1 sysref2} {
+set_instance_assignment   -name IO_STANDARD "CURRENT MODE LOGIC (CML)"    -to fpga_refclk_in
+set_instance_assignment   -name IO_STANDARD "Differential HSTL-12"        -to fpga_syncout_1
+foreach port {clkin6 fpga_syncin_1_p sysref2} {
   set_instance_assignment -name IO_STANDARD "TRUE DIFFERENTIAL SIGNALING" -to $port
 }
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to fpga_syncin_0
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to fpga_syncout_0
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to sysref2
 
 # CLK
 set_location_assignment PIN_AY57 -to "fpga_refclk_in"    ; ## D4  GBTCLK0_M2C_P
@@ -118,14 +116,14 @@ set_location_assignment PIN_K55  -to "txen[1]"           ; ## D15 LA09_N
 #set_location_assignment PIN_V5   -to ""                 ; ## D1  PG_C2M
 # -----
 # SYNCOUT
-set_location_assignment PIN_U44  -to "fpga_syncout_0"    ; ## D8  LA01_P_CC
-set_location_assignment PIN_T45  -to "fpga_syncout_0(n)" ; ## D9  LA01_N_CC
+#set_location_assignment PIN_U44  -to ""                 ; ## D8  LA01_P_CC
+#set_location_assignment PIN_T45  -to ""                 ; ## D9  LA01_N_CC
 set_location_assignment PIN_AA42 -to "fpga_syncout_1"    ; ## C10 LA06_P
 set_location_assignment PIN_AB43 -to "fpga_syncout_1(n)" ; ## C11 LA06_N
 
 # SYNCIN
-set_location_assignment PIN_AA46 -to "fpga_syncin_0"     ; ## H7  LA02_P
-set_location_assignment PIN_AB47 -to "fpga_syncin_0(n)"  ; ## H8  LA02_N
+#set_location_assignment PIN_AA46 -to ""                 ; ## H7  LA02_P
+#set_location_assignment PIN_AB47 -to ""                 ; ## H8  LA02_N
 set_location_assignment PIN_R48  -to "fpga_syncin_1"     ; ## G9  LA03_P
 set_location_assignment PIN_P49  -to "fpga_syncin_1(n)"  ; ## G10 LA03_N
 # IRQ

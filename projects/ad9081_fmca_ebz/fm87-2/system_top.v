@@ -134,12 +134,12 @@ module system_top #(
   // lane interface
   input                   clkin6,
   input                   fpga_refclk_in,
-  input   [RX_JESD_L-1:0] rx_data,
-  output  [TX_JESD_L-1:0] tx_data,
-  input                   fpga_syncin_0,
+  input   [RX_NUM_LINKS*RX_JESD_L-1:0]    rx_data_p,
+  input   [RX_NUM_LINKS*RX_JESD_L-1:0]    rx_data_n,
+  output  [TX_NUM_LINKS*TX_JESD_L-1:0]    tx_data_p,
+  output  [TX_NUM_LINKS*TX_JESD_L-1:0]    tx_data_n,
   output                  fpga_syncin_1_n,
   output                  fpga_syncin_1_p,
-  output                  fpga_syncout_0,
   output                  fpga_syncout_1_n,
   output                  fpga_syncout_1_p,
   input                   sysref2,
@@ -168,22 +168,15 @@ module system_top #(
 
   // New
   // external sysref input
-	input                   global_rst_n,
-  input                   mgmt_clk,
-  input                   in_sysref,
+  input                   global_rst_n,
   output  [RX_NUM_LINKS-1:0]              rx_link_error,
-  input   [RX_NUM_LINKS*RX_JESD_L-1:0]    rx_serial_data_p,
-  input   [RX_NUM_LINKS*RX_JESD_L-1:0]    rx_serial_data_n,
-  output  [TX_NUM_LINKS-1:0]              tx_link_error,
-  output  [TX_NUM_LINKS*TX_JESD_L-1:0]    tx_serial_data_p,
-  output  [TX_NUM_LINKS*TX_JESD_L-1:0]    tx_serial_data_n,
-  input                   refclk_core);
+  output  [TX_NUM_LINKS-1:0]              tx_link_error);
 
   localparam CS = 0;
   localparam RX_TOTAL_SAMPLE = RX_JESD_M*RX_JESD_S*RX_WIDTH_MULP;
   localparam TX_TOTAL_SAMPLE = TX_JESD_M*TX_JESD_S*TX_WIDTH_MULP;
-	localparam RX_TOTAL_CS = (RX_JESD_S==0)? 1: (RX_TOTAL_SAMPLE*CS);
-	localparam TX_TOTAL_CS = (TX_JESD_S==0)? 1: (TX_TOTAL_SAMPLE*CS);
+    localparam RX_TOTAL_CS = (RX_JESD_S==0)? 1: (RX_TOTAL_SAMPLE*CS);
+    localparam TX_TOTAL_CS = (TX_JESD_S==0)? 1: (TX_TOTAL_SAMPLE*CS);
 
   // internal signals
   wire  [63:0]  gpio_i;
@@ -291,11 +284,11 @@ module system_top #(
   wire                                            ninit_done;
   wire                                            mgmt_rst_in_n;
   wire                                            core_pll_locked_reg2;
-	wire [0:0]                             					csr_rst_ctl_rst_assert;
+  wire [0:0]                                                 csr_rst_ctl_rst_assert;
   wire                                            hw_rst;
 
 
-	assign hw_rst   = csr_rst_ctl_rst_assert[0];
+    assign hw_rst   = csr_rst_ctl_rst_assert[0];
 
   assign ed_control_rst_sts_detected0_rst_sts_set_i = ed_ctrl_out_ip_sysref_mgmtclk;
   //assign ed_control_tst_err0_tst_error_i = {cmd_ramp_chk_err_mgmtclk[0], rx_link_error_mgmtclk[0], tx_link_error_mgmtclk[0], rx_patchk_data_error_mgmtclk[0]};
@@ -309,7 +302,7 @@ module system_top #(
     .ed_control_tx_phase_clk                  (tx_fclk),
     .ed_control_rxframe_clk_clk               (rxframe_clk),
     .ed_control_rx_phase_clk                  (rx_fclk),
-    .ed_control_in_sysref_export              (in_sysref),
+    .ed_control_in_sysref_export              (sysref2),
     .ed_control_rst_sts_detected0_rst_sts_set_i_export (ed_control_rst_sts_detected0_rst_sts_set_i),
     .ed_control_tst_err0_tst_error_i_export  (ed_control_tst_err0_tst_error_i),
     .ed_control_rst_sts0_rst_status_i_export (ed_control_rst_sts0_rst_status_i),
@@ -360,10 +353,10 @@ module system_top #(
     .j204c_rx_serial_data_n_export           (rx_serial_data_n_reordered),
     .j204c_rx_rst_ack_n_export               (rx_rst_ack_n[0]),
     .j204c_tx_rst_ack_n_export               (tx_rst_ack_n[0]),
-    .jtag_reset_clk_clk                      (mgmt_clk),
+    .jtag_reset_clk_clk                      (sys_ref),
     .jtag_reset_in_reset_reset_n             (~ninit_done),
     .jtag_rst_bridge_out_reset_reset_n       (),
-    .mgmt_clk_clk                            (mgmt_clk),
+    .mgmt_clk_clk                            (sys_ref),
     .mgmt_reset_reset_n                      (mgmt_rst_in_n),
     .mxfe_gpio_export                        ({fpga_syncout_1_n,  // 14
                                                fpga_syncout_1_p,  // 13
@@ -372,7 +365,7 @@ module system_top #(
                                                gpio}),            // 10:0
     .pio_control_external_export             (),
     .pio_status_external_export              (),
-    .refclk_core_clk                         (refclk_core),
+    .refclk_core_clk                         (clkin6),
     .rst_seq_0_reset_out3_reset              (tx_rst[0]),
     .rst_seq_1_reset_out2_reset              (rx_rst[0]),
     .rst_seq_0_reset1_dsrt_qual_reset1_dsrt_qual(core_pll_locked_reg2),
@@ -449,14 +442,14 @@ module system_top #(
     .sys_spi_MOSI                            (spi_mosi),
     .sys_spi_SCLK                            (spi_clk),
     .sys_spi_SS_n                            (spi_csn_s),
-    .systemclk_f_0_refclk_fgt_in_refclk_fgt_6(),
+    .systemclk_f_0_refclk_fgt_in_refclk_fgt_6(fpga_refclk_in),
     .txframe_clk_clk                         (txframe_clk),
     .txlink_clk_clk                          (txlink_clk));
 
   j204c_gdr_bit_synchronizer core_pll_locked_sync (
     .source_clk(1'b0),
     .source_clk_rstn(1'b0),
-    .dest_clk(mgmt_clk),
+    .dest_clk(sys_ref),
     .dest_clk_rstn(mgmt_rst_in_n),
     .datain(core_pll_locked),
     .dataout(core_pll_locked_reg2)
@@ -465,12 +458,12 @@ module system_top #(
   generate
     genvar i;
     for (i=0; i<TX_NUM_LINKS; i=i+1) begin: GEN_BLOCK_TX
-      assign tx_serial_data_p[i*TX_JESD_L+:TX_JESD_L] = tx_serial_data_p_reordered[TX_JESD_L*i+:TX_JESD_L];
-      assign tx_serial_data_n[i*TX_JESD_L+:TX_JESD_L] = tx_serial_data_n_reordered[TX_JESD_L*i+:TX_JESD_L];
+      assign tx_data_p[i*TX_JESD_L+:TX_JESD_L] = tx_serial_data_p_reordered[TX_JESD_L*i+:TX_JESD_L];
+      assign tx_data_n[i*TX_JESD_L+:TX_JESD_L] = tx_serial_data_n_reordered[TX_JESD_L*i+:TX_JESD_L];
     end
     for (i=0; i<RX_NUM_LINKS; i=i+1) begin: GEN_BLOCK_RX
-      assign rx_serial_data_p_reordered[RX_JESD_L*i+:RX_JESD_L] = rx_serial_data_p[i*RX_JESD_L+:RX_JESD_L];
-      assign rx_serial_data_n_reordered[RX_JESD_L*i+:RX_JESD_L] = rx_serial_data_n[i*RX_JESD_L+:RX_JESD_L];
+      assign rx_serial_data_p_reordered[RX_JESD_L*i+:RX_JESD_L] = rx_data_p[i*RX_JESD_L+:RX_JESD_L];
+      assign rx_serial_data_n_reordered[RX_JESD_L*i+:RX_JESD_L] = rx_data_n[i*RX_JESD_L+:RX_JESD_L];
     end
   endgenerate
   generate
@@ -484,7 +477,7 @@ module system_top #(
     j204c_gdr_pulse_cdc sysref_sts_sync_inst(
              .source_clk        (txlink_clk),
              .source_clk_rstn   (mgmt_txlinkrst_n),
-             .dest_clk          (mgmt_clk),
+             .dest_clk          (sys_ref),
              .dest_clk_rstn     (mgmt_rst_in_n),
              .datain          (ip_sysref_rise),
              .dataout           (ed_ctrl_out_ip_sysref_mgmtclk)
@@ -496,7 +489,7 @@ module system_top #(
     j204c_gdr_bit_synchronizer edctl_rstn_sync_inst (
       .source_clk(1'b0),
       .source_clk_rstn(1'b0),
-      .dest_clk(mgmt_clk),
+      .dest_clk(sys_ref),
       .dest_clk_rstn(~ninit_done),
       .datain(1'b1),
       .dataout(edctl_rst_n)
@@ -507,7 +500,7 @@ module system_top #(
     j204c_gdr_bit_synchronizer edctl_rstn_sync_inst (
       .source_clk(1'b0),
       .source_clk_rstn(1'b0),
-      .dest_clk(mgmt_clk),
+      .dest_clk(sys_ref),
       .dest_clk_rstn(~jtag_avmm_rst),
       .datain(1'b1),
       .dataout(edctl_rst_n)
@@ -515,13 +508,13 @@ module system_top #(
     assign mgmt_rst_in_n = db_global_rst_n & ~hw_rst & edctl_rst_n;
   `endif
 
-	//De-bounce push button inputs
-	switch_debouncer u_switch_debouncer_global_rst_n (
-		.clk            (mgmt_clk),
-		.reset_n        (~ninit_done),
-		.data_in        (global_rst_n),
-		.data_out       (db_global_rst_n)
-	);
+    //De-bounce push button inputs
+    switch_debouncer u_switch_debouncer_global_rst_n (
+        .clk            (sys_ref),
+        .reset_n        (~ninit_done),
+        .data_in        (global_rst_n),
+        .data_out       (db_global_rst_n)
+    );
 
   //altera_s10_user_rst_clkgate_0 u_j204c_ed_reset (
   //  .ninit_done   (ninit_done)
