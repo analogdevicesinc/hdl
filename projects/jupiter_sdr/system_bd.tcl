@@ -54,7 +54,11 @@ ad_ip_parameter sys_ps8 CONFIG.PSU__QSPI__PERIPHERAL__ENABLE {1}
 ad_ip_parameter sys_ps8 CONFIG.PSU__QSPI__PERIPHERAL__MODE {Dual Parallel}
 ad_ip_parameter sys_ps8 CONFIG.PSU__QSPI__PERIPHERAL__DATA_MODE {x4}
 ad_ip_parameter sys_ps8 CONFIG.PSU__SD1__PERIPHERAL__ENABLE {1}
-ad_ip_parameter sys_ps8 CONFIG.PSU__SD1__PERIPHERAL__IO {MIO 39 .. 51}
+ad_ip_parameter sys_ps8 CONFIG.PSU__SD1__SLOT_TYPE {SD 3.0 AUTODIR}
+ad_ip_parameter sys_ps8 CONFIG.PSU__SD1__GRP_CD__ENABLE {1}
+ad_ip_parameter sys_ps8 CONFIG.PSU__SD1__GRP_POW__ENABLE {0}
+ad_ip_parameter sys_ps8 CONFIG.PSU__SD1__GRP_WP__ENABLE {0}
+ad_ip_parameter sys_ps8 CONFIG.PSU__SD1__PERIPHERAL__IO {MIO 39 46 .. 51}
 ad_ip_parameter sys_ps8 CONFIG.PSU__SWDT0__PERIPHERAL__ENABLE {1}
 ad_ip_parameter sys_ps8 CONFIG.PSU__SWDT1__PERIPHERAL__ENABLE {1}
 ad_ip_parameter sys_ps8 CONFIG.PSU__TTC0__PERIPHERAL__ENABLE {1}
