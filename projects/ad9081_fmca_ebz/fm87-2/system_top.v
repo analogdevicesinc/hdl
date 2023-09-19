@@ -138,10 +138,10 @@ module system_top #(
   input   [RX_NUM_LINKS*RX_JESD_L-1:0]    rx_data_n,
   output  [TX_NUM_LINKS*TX_JESD_L-1:0]    tx_data_p,
   output  [TX_NUM_LINKS*TX_JESD_L-1:0]    tx_data_n,
-  output                  fpga_syncin_1_n,
-  output                  fpga_syncin_1_p,
   output                  fpga_syncout_1_n,
   output                  fpga_syncout_1_p,
+  input                   fpga_syncin_1_n,
+  input                   fpga_syncin_1_p,
   input                   sysref2,
 
   // spi
@@ -168,15 +168,15 @@ module system_top #(
 
   // New
   // external sysref input
-  input                   global_rst_n,
-  output  [RX_NUM_LINKS-1:0]              rx_link_error,
-  output  [TX_NUM_LINKS-1:0]              tx_link_error);
-
+  input                      global_rst_n,
+  output  [RX_NUM_LINKS-1:0] rx_link_error,
+  output  [TX_NUM_LINKS-1:0] tx_link_error
+);
   localparam CS = 0;
   localparam RX_TOTAL_SAMPLE = RX_JESD_M*RX_JESD_S*RX_WIDTH_MULP;
   localparam TX_TOTAL_SAMPLE = TX_JESD_M*TX_JESD_S*TX_WIDTH_MULP;
-    localparam RX_TOTAL_CS = (RX_JESD_S==0)? 1: (RX_TOTAL_SAMPLE*CS);
-    localparam TX_TOTAL_CS = (TX_JESD_S==0)? 1: (TX_TOTAL_SAMPLE*CS);
+  localparam RX_TOTAL_CS = (RX_JESD_S==0)? 1: (RX_TOTAL_SAMPLE*CS);
+  localparam TX_TOTAL_CS = (TX_JESD_S==0)? 1: (TX_TOTAL_SAMPLE*CS);
 
   // internal signals
   wire  [63:0]  gpio_i;
