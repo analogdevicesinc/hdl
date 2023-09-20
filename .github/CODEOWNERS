@@ -133,9 +133,6 @@
 # Code owners for arradio folder
 /projects/arradio/          andrei.grozav@analog.com adrian.costina@analog.com
 
-# Code owners for cn0501 folder
-/projects/cn0501/           paul.pop@analog.com adrian.costina@analog.com
-
 # Code owners for cn0506 folder
 /projects/cn0506/           alin-tudor.sferle@analog.com adrian.costina@analog.com
 
