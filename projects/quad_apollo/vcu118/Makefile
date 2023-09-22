@@ -9,6 +9,7 @@ hdl_dir := ../../../../hdl
 
 M_DEPS += timing_constr.xdc
 M_DEPS += ../common/hsci_phy_top.sv
+M_DEPS += ../common/trigger_generator.v
 M_DEPS += $(hdl_dir)/projects/scripts/adi_pd.tcl
 M_DEPS += $(hdl_dir)/projects/common/xilinx/data_offload_bd.tcl
 M_DEPS += $(hdl_dir)/projects/common/xilinx/dacfifo_bd.tcl
@@ -20,6 +21,8 @@ M_DEPS += $(hdl_dir)/library/util_hbm/scripts/adi_util_hbm.tcl
 M_DEPS += $(hdl_dir)/library/jesd204/scripts/jesd204.tcl
 M_DEPS += $(hdl_dir)/library/common/ad_iobuf.v
 M_DEPS += $(hdl_dir)/library/common/ad_3w_spi.v
+M_DEPS += $(hdl_dir)/library/common/ad_rst.v
+M_DEPS += $(hdl_dir)/library/xilinx/common/ad_rst_constr.xdc
 
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_sysid

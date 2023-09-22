@@ -44,8 +44,11 @@ adi_project_files ad_xband16_ebz_vcu118 [list \
   "system_constr.xdc"\
   "timing_constr.xdc"\
   "../common/hsci_phy_top.sv"\
+  "../common/trigger_generator.v"\
   "../../../../hdl/library/common/ad_3w_spi.v" \
+  "../../../../hdl/library/common/ad_rst.v"\
   "../../../../hdl/library/common/ad_iobuf.v" \
+  "../../../../hdl/library/xilinx/common/ad_rst_constr.xdc"\
   "../../../../hdl/projects/common/vcu118/vcu118_system_constr.xdc" ]
 
 create_ip -name high_speed_selectio_wiz -vendor xilinx.com -library ip -version 3.6 -module_name high_speed_selectio_wiz_0

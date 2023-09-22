@@ -198,6 +198,9 @@ module system_top (
   wire    [ 7:0]  hsci_data_in  [0:3];
   wire    [ 7:0]  hsci_data_out [0:3];
 
+  wire            trig_rstn;
+  wire            trig;
+
   assign iic_rstn = 1'b1;
 
   // instantiations
@@ -309,10 +312,10 @@ module system_top (
   assign gpio_i[43:40] = irqa;
   assign gpio_i[47:44] = irqb;
 
-  assign trig0_a       = gpio_o[51:48];
-  assign trig1_a       = gpio_o[55:52];
-  assign trig0_b       = gpio_o[59:56];
-  assign trig1_b       = gpio_o[63:60];
+  assign trig0_a       = {4{trig}};
+  assign trig1_a       = {4{trig}};
+  assign trig0_b       = {4{trig}};
+  assign trig1_b       = {4{trig}};
   assign resetb        = gpio_o[67:64];
   assign txen          = gpio_o[69:68];
   assign rxen          = gpio_o[71:70];
@@ -340,6 +343,14 @@ module system_top (
 
   assign gpio_i[127:105] = gpio_o[127:105];
   assign gpio_i[ 31:17] = gpio_o[ 31:17];
+
+  trigger_generator trig_i (
+    .sysref     (sysref),
+    .device_clk (rx_device_clk),
+    .gpio       (gp4[0]),
+    .rstn       (trig_rstn),
+    .trigger    (trig)
+  );
 
   hsci_phy_top hsci_phy_top(
     .pll_inclk        (pll_inclk),
@@ -519,6 +530,8 @@ module system_top (
     .tx_data_14_p (c2m_p[14]),
     .tx_data_15_n (c2m_n[15]),
     .tx_data_15_p (c2m_p[15]),
+
+    .rx_device_clk_rstn(trig_rstn),
 
     .selectio_clk_in (selectio_clk_in),
 
