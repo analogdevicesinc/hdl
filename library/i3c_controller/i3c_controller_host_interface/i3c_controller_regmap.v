@@ -461,17 +461,17 @@ module i3c_controller_regmap #(
          smt <= cmd_setup;
          k <= 'd0;
       end else begin
+        // The same BRAM provides both cmd and sdo,
+        // thefore a request-like interface is used
+        if (smt[1] == 1'b0) begin
+          j <= 0;
+        end
         case (smt)
           cmd_setup: begin
             if (offload_trigger | k != 0) begin
               smt <= cmd_transfer;
-              if (k == ops_offload_len - 1) begin
-                k <= 0;
-              end else begin
-                k <= k + 1;
-              end
+              k <= k == ops_offload_len - 1 ? 0 : k + 1;
             end
-            j <= 0;
           end
           cmd_transfer: begin
             if (cmd_ready) begin
@@ -480,17 +480,15 @@ module i3c_controller_regmap #(
           end
           sdo_setup: begin
             smt <= sdo_transfer;
+            j <= j + 1;
           end
           sdo_transfer: begin
+            // New payload requested is cmd or sdo?
             if (cmd_ready) begin
               smt <= cmd_setup;
             end else if (sdo_ready) begin
               smt <= sdo_setup;
-              j <= j + 1;
             end
-          end
-          default: begin
-           smt <= cmd_setup;
           end
        endcase
       end

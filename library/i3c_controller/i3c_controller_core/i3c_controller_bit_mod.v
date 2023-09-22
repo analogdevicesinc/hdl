@@ -32,221 +32,133 @@
 //
 // ***************************************************************************
 // ***************************************************************************
-/**
- * Translate simple commands into SCL/SDA transitions
- * Each command has 8 states and shall jump to a new command
- * without returning to idle, A/B/C/D/*, where * is a next command
- * first state A or idle.
- *
- * start   SCL ====--------\____
- *         SDA -~-~-~-~\________
- *          x  | A | B | C | D | *
- *
- * stop    SCL   ___/-----------
- *         SDA   ==____/~~~~~~~~
- *          x  | A | B | C | D | *
- *
- * write  SCL ____/-------\____
- *        SDA X===============X
- *         x  | A | B | C | D | *
- *
- * read    SCL ____/-------\____
- *         SDA ~~~~~~~~~~~~~~~~~
- *          x  | A | B | C | D | *
- *
- * T(read) SCL ____/-------\____
- *         SDA ~~~~S============
- *          x  | A | B | C | D | *
- *
- * S: sample lane and drive it to the value.
- * =: keep last value.
- * X: set lane to value
- * ~: open-drain high
- * ~: push-pull high
- * _: low
- * ~-: either pp or od
- * The clk_1 is scaled depending on the requirements, e.g. in open-drain, is
- * slower and must be in synced with clk.
- *
- * Note: clk_1 must be at least 3x slower than clk_0.
- */
 
 `timescale 1ns/100ps
-`default_nettype none
+`default_nettype wire
 `include "i3c_controller_bit_mod_cmd.v"
 
 module i3c_controller_bit_mod (
-  input wire reset_n,
-  input wire clk_0, // 100MHz
-  input wire clk_1, // 12.5MHz
-  input wire clk_sel,
+  input reset_n,
+  input clk,   // 100 MHz
 
   // Bit Modulation Command
 
-  input wire [`MOD_BIT_CMD_WIDTH:0] cmd,
-  input wire cmd_valid,
-  output wire cmd_ready,
+  input  [`MOD_BIT_CMD_WIDTH:0] cmd,
+  input  cmd_valid,
+  output cmd_ready,
+  // Indicates that the bus is not transfering,
+  // is different from bus idle because does not wait 200us after Stop.
+  output cmd_nop,
+  // 0: 12.50MHz
+  // 1:  6.25MHz
+  // 2:  3.12MHz
+  // 3:  1.56MHz
+  input [1:0] scl_pp_sg, // SCL Push-pull speed grade
 
-  // RX and ACK
+  output reg rx,
+  output reg rx_raw,
+  output reg rx_valid,
 
-  output wire rx,
-  output wire rx_valid,
-  output wire rx_stop,
-  output wire rx_nack,
-
-  // Status
-
-  output wire idle_bus,
 
   // Bus drive signals
 
-  output reg  scl,
-  output reg  sdi,
-  input  wire sdo,
-  output wire t
+  output reg sdo,
+  output scl,
+  input  sdi,
+  output t
 );
 
-  reg reset_n_ctrl;
-  reg reset_n_clr;
+  reg [`MOD_BIT_CMD_WIDTH:0] cmd_r;
+  reg [1:0] pp_sg;
+  reg [5:0] count; // Worst-case: 1.56MHz, 32-bits per half-bit.
+  reg transfer;
+  reg sr;
 
-  reg pp;
-  reg [2:0] i;
-  reg [7:0] scl_ = 8'b00001110;
-  reg [7:0] sdi_;
+  reg scl_high_reg;
+  wire scl_high = count[pp_sg+2];
+  wire sdo_w;
+  wire t_w;
 
-  reg [1:0] rx_valid_reg;
-  reg [1:0] rx_stop_reg;
-  reg [1:0] rx_nack_reg;
-
-  reg  [1:0] st;
-  reg  [`MOD_BIT_CMD_WIDTH:2] sm;
-
-  reg sdo_reg;
-
-  localparam [2:0] i_ = 7;
-
-  always @(sm) begin
-    case (sm)
-      `MOD_BIT_CMD_START_    : sdi_ = 8'b11111000;
-      `MOD_BIT_CMD_STOP_     : sdi_ = 8'b00000011;
-      `MOD_BIT_CMD_ACK_IBI_  : sdi_ = 8'b00001111;
-      default                : sdi_ = 8'b00000000;
-    endcase
+  wire scl_end;
+  wire [3:0] scl_end_multi;
+  genvar i;
+  for (i = 0; i < 4; i = i+1) begin
+    assign scl_end_multi[i] = &count[i+2:0];
   end
+  assign scl_end = scl_end_multi[pp_sg];
 
-  always @(posedge clk_0) begin
+  assign cmd_ready = (scl_end | !transfer) & reset_n;
+
+  wire [1:0] st = cmd_r[1:0];
+  wire [`MOD_BIT_CMD_WIDTH:2] sm = cmd_r[`MOD_BIT_CMD_WIDTH:2];
+
+  always @(posedge clk) begin
     if (!reset_n) begin
-      reset_n_ctrl <= 1'b0;
-      sm  <= `MOD_BIT_CMD_NOP_;
-      cmd_ready_reg_ctrl <= 1'b0;
-    end else if (reset_n_clr) begin
-      reset_n_ctrl <= 1'b1;
-	  end else begin
-      if ((cmd_ready_reg & !cmd_ready_reg_ctrl) | sm == `MOD_BIT_CMD_NOP_) begin
-        if (cmd_valid) begin
-          sm <= cmd[`MOD_BIT_CMD_WIDTH:2];
-          st <= cmd[1:0];
-        end else begin
-          sm <= `MOD_BIT_CMD_NOP_;
-        end
-      end else begin
-        sm <= sm;
-        st <= st;
-      end
-      if (cmd_ready_reg) begin
-        cmd_ready_reg_ctrl <= 1'b1;
-      end else begin
-        cmd_ready_reg_ctrl <= 1'b0;
-      end
-	  end
-    rx_valid_reg [1] <= rx_valid_reg [0];
-    rx_stop_reg  [1] <= rx_stop_reg  [0];
-    rx_nack_reg  [1] <= rx_nack_reg  [0];
-  end
-
-  reg cmd_ready_reg;
-  reg cmd_ready_reg_ctrl;
-  always @(posedge clk_1) begin
-    rx_nack_reg[0]  <= 1'b0;
-    rx_valid_reg[0] <= 1'b0;
-    rx_stop_reg[0]  <= 1'b0;
-    if (!reset_n_ctrl) begin
-      reset_n_clr <= 1'b1;
-      i <= 0;
-      cmd_ready_reg <= 1'b0;
+      cmd_r <= {`MOD_BIT_CMD_NOP_, 2'b01};
+      pp_sg <= 2'b11;
     end else begin
-      reset_n_clr <= 1'b0;
-      cmd_ready_reg <= (i == i_ - 1 & clk_sel) | (i == i_ & ~clk_sel);
-      i <= sm == `MOD_BIT_CMD_NOP_ ? 0 : i + 1;
+      if (cmd_ready) begin
+        if (cmd_valid) begin
+          cmd_r <= cmd;
+          pp_sg <= cmd[1] ? scl_pp_sg : 2'b11;
+        end else begin
+          cmd_r <= {`MOD_BIT_CMD_NOP_, 2'b01};
+        end
+      end
     end
-
-    scl <= scl_[7-i];
-    sdi <= sdi_[7-i];
-    pp  <= st[1];
-    case (sm)
-      `MOD_BIT_CMD_NOP_: begin
-        sdi <= 1'b1;
-        pp  <= 1'b0;
-        scl <= 1'b1;
-      end
-      `MOD_BIT_CMD_WRITE_: begin
-        sdi <= st[0];
-      end
-      `MOD_BIT_CMD_READ_: begin
-        sdi <= 1'b1;
-        pp  <= 1'b0;
-        if (i == 5) begin
-          rx_valid_reg[0] <= 1'b1;
-        end
-      end
-      `MOD_BIT_CMD_START_: begin
-        // For Sr
-        if (i <= 3) begin
-          scl <= scl;
-        end
-      end
-      `MOD_BIT_CMD_STOP_: begin
-        if (i == 3'd7) begin
-          scl <= scl;
-        end
-      end
-      `MOD_BIT_CMD_ACK_SDR_: begin
-        if (i == 0 || i == 1) begin
-          sdi <= 1'b1;
-          pp  <= 1'b0;
-        end else if (i == 2) begin
-          sdi <= sdo_reg;
-          rx_nack_reg[0] <= sdo_reg;
-        end else begin
-          sdi <= sdi;
-        end
-      end
-      `MOD_BIT_CMD_T_READ_: begin
-        if (~|i[2:1]) begin
-          sdi <= 1'b1;
-          pp  <= 1'b0;
-        end else begin
-          sdi <= st[0] ? 1'b0 : sdo_reg;
-        end
-        if (i == 2) begin
-          rx_stop_reg[0] <= ~sdo_reg;
-        end
-      end
-      `MOD_BIT_CMD_ACK_IBI_: begin
-        pp  <= 1'b0;
-      end
-      default: begin
-      end
-    endcase
-    sdo_reg <= sdo === 1'b0 ? 1'b0 : 1'b1;
   end
 
-  assign rx_valid = rx_valid_reg[0] & ~rx_valid_reg[1];
-  assign rx_stop  = rx_stop_reg [0] & ~rx_stop_reg [1];
-  assign rx_nack  = rx_nack_reg [0] & ~rx_nack_reg [1];
-  assign rx = sdo_reg;
+  always @(posedge clk) begin
+    count <= 0;
+    if (!reset_n) begin
+      transfer <= 1'b0;
+      sr <= 1'b0;
+    end else begin
+      if (cmd_valid) begin
+        transfer <= 1'b1;
+      end else if (scl_end) begin
+        transfer <= 1'b0;
+      end
+      if (transfer & ~scl_end) begin
+        count <= count + 1;
+      end
 
-  assign cmd_ready = (cmd_ready_reg | sm == `MOD_BIT_CMD_NOP_) & !cmd_ready_reg_ctrl & reset_n;
-  assign t = ~pp & sdi ? 1'b1 : 1'b0;
-  assign idle_bus = sm == `MOD_BIT_CMD_NOP_;
+      if (scl_end) begin
+        sr <= cmd_valid & sm != `MOD_BIT_CMD_NOP_ ? 1'b1 : 1'b0;
+      end
+    end
+  end
+
+  always @(posedge clk) begin
+    scl_high_reg <= scl_high;
+    rx_valid  <= 1'b0;
+    sdo <= sdo_w;
+    rx_raw <= sdi;
+    if (~scl_high_reg & scl_high) begin
+      rx <= sdi; // Multi-cycle-path worst-case: 4 clks (12.5MHz, half-bit ack)
+      rx_valid <= 1'b1;
+    end
+  end
+
+  assign sdo_w = sm == `MOD_BIT_CMD_START_   ? (scl_high ? ~count[pp_sg+1] : 1'b1) :
+                 sm == `MOD_BIT_CMD_STOP_    ? (scl_high ?  count[pp_sg+1] : 1'b0) :
+                 sm == `MOD_BIT_CMD_WRITE_   ? st[0] :
+                 sm == `MOD_BIT_CMD_ACK_SDR_ ? (scl_high ? rx   : 1'b1) :
+                 sm == `MOD_BIT_CMD_ACK_IBI_ ? (scl_high ? 1'b1 : 1'b0) :
+                 1'b1;
+
+  // Gets optimized to
+  assign t_w = sm[4] ? 1'b0 : st[1];
+  //assign t_w = sm == `MOD_BIT_CMD_STOP_    ? 1'b0 :
+  //             sm == `MOD_BIT_CMD_START_   ? 1'b0 :
+  //             sm == `MOD_BIT_CMD_READ_    ? 1'b0 :
+  //             sm == `MOD_BIT_CMD_ACK_SDR_ ? 1'b0 :
+  //             st[1];
+  assign t = ~t_w & sdo ? 1'b1 : 1'b0;
+
+  assign scl = sm == `MOD_BIT_CMD_START_ ? (sr ? scl_high : 1'b1) :
+               sm == `MOD_BIT_CMD_NOP_   ? 1'b1 :
+               scl_high;
+
+  assign cmd_nop = sm == `MOD_BIT_CMD_NOP_;
 endmodule

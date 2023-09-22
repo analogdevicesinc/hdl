@@ -1,6 +1,6 @@
 source $ad_hdl_dir/projects/common/coraz7s/coraz7s_system_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
-source ../common/__i3c_ardz_bd.tcl
+source ../common/ad405x_i3c_ardz_bd.tcl
 
 set mem_init_sys_path [get_env_param ADI_PROJECT_DIR ""]mem_init_sys.txt;
 

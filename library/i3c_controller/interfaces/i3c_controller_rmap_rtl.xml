@@ -122,12 +122,12 @@
 				<spirit:onMaster>
 					<spirit:presence>required</spirit:presence>
 					<spirit:width>9</spirit:width>
-					<spirit:direction>in</spirit:direction>
+					<spirit:direction>out</spirit:direction>
 				</spirit:onMaster>
 				<spirit:onSlave>
 					<spirit:presence>optional</spirit:presence>
 					<spirit:width>9</spirit:width>
-					<spirit:direction>out</spirit:direction>
+					<spirit:direction>in</spirit:direction>
 				</spirit:onSlave>
 			</spirit:wire>
     </spirit:port>

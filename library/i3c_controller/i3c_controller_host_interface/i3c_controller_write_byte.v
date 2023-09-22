@@ -43,8 +43,9 @@
 `default_nettype wire
 
 module i3c_controller_write_byte (
-  input  clk,
-  input  reset_n,
+  input clk,
+  input reset_n,
+  input cancel,
 
   input  u32_ready,
   output u32_valid,
@@ -68,6 +69,7 @@ module i3c_controller_write_byte (
   reg [7:0]  u32_reg [3:0];
   reg [11:0] u8_lvl_reg;
   reg [1:0] c;
+  reg cancel_reg;
 
   always @(posedge clk) begin
     if (!reset_n) begin
@@ -77,23 +79,28 @@ module i3c_controller_write_byte (
       case (sm)
         idle: begin
           if (u8_len_valid) begin
+            // In if to hold old lvl until next cmd, after cmdr resolves.
             u8_lvl_reg <= u8_len;
           end
-          sm <= u8_len_valid & u8_len != 0 & u32_ready ? transfer : idle;
+          sm <= u8_len_valid & u8_len != 0 ? transfer : idle;
           c <= 2'b00;
+          cancel_reg <= 1'b0;
         end
         transfer: begin
           if (u8_valid) begin // tick
             u32_reg[c] <= u8;
             u8_lvl_reg <= u8_lvl_reg - 12'b1;
             c <= c + 1;
-            if (c == 2'b11 | u8_lvl_reg == 12'd1) begin
+            // Cancel always occur with at least 1 byte at the same cc as
+            // u8_valid
+            if (c == 2'b11 | u8_lvl_reg == 12'd1 | cancel) begin
               sm <= move;
             end
+            cancel_reg <= cancel;
           end
         end
         move: begin
-          sm <= u32_ready ? (~|u8_lvl_reg ? idle : transfer) : sm;
+          sm <= u32_ready ? (~|u8_lvl_reg | cancel_reg ? idle : transfer) : sm;
         end
         default: begin
           sm <= idle;

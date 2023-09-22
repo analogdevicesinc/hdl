@@ -150,7 +150,9 @@ module i3c_controller_cmd_parser (
         end
         ccc_await: begin
           cmdr2 <= cmd[7:0];
-          sm <= cmd_valid ? xfer_await : sm;
+          if (cmd_valid) begin
+            sm <= xfer_await;
+          end
         end
         receipt: begin
           if (cmdr_ready) begin
@@ -181,7 +183,7 @@ module i3c_controller_cmd_parser (
   assign cmdr = {4'd0, cmdr_error, 4'd0, cmdr1_len, cmdr_sync};
   assign cmdr_valid = sm == receipt;
 
-  assign buffer_len_valid = sm == buffer_setup & cmdp_buffer_len != 0;
+  assign buffer_len_valid = sm == buffer_setup;
   assign rd_bytes_valid = buffer_len_valid & ~cmdp_rnw;
   assign wr_bytes_valid = buffer_len_valid &  cmdp_rnw;
   // For read bytes (write to peripheral), it is either all transfered or none,

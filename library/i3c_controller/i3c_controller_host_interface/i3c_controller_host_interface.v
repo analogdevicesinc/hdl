@@ -241,6 +241,7 @@ module i3c_controller_host_interface #(
   ) i_i3c_controller_write_byte (
     .clk(clk_w),
     .reset_n(reset_n),
+    .cancel(cmdp_cancelled),
     .u32_ready(sdi_ready_w),
     .u32_valid(sdi_valid_w),
     .u32(sdi_w),

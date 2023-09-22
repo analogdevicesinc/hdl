@@ -107,8 +107,8 @@ module i3c_controller_framing #(
 
   // Raw SDO input & bus condition
 
-  input rx,
-  input idle_bus,
+  input rx_raw,
+  input cmd_nop,
 
   // IBI interface
 
@@ -177,9 +177,10 @@ module i3c_controller_framing #(
       ctrl_daa <= 1'b0;
       rmap_devs_ctrl <= 'd0;
       j <= 0;
+      ibi_requested_auto <= 1'b0;
     end else if (cmdw_nack) begin
       sm  <= `CMDW_NOP;
-      smt <= cleanup;
+      smt <= cmdp_rnw_reg ? setup : cleanup;
       smr <= request;
       ctrl_daa <= 1'b0;
     end else begin
@@ -190,7 +191,7 @@ module i3c_controller_framing #(
       case (smt)
         setup: begin
           sr <= cmdw_ready ? 1'b0 : sr;
-          if (idle_bus & ibi_auto & ibi_enable & ~rx) begin
+          if (cmd_nop & ibi_auto & ibi_enable & rx_raw === 1'b0) begin
             sm <= `CMDW_BCAST_7E_W0;
             smt <= transfer;
             ibi_requested_auto <= 1'b1;
@@ -327,7 +328,9 @@ module i3c_controller_framing #(
           if (sdo_valid) begin
             cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
           end
-          smt <= cmdp_buffer_len_reg == 0 ? setup : smt;
+          if (cmdp_buffer_len_reg == 0) begin
+           smt <= setup;
+          end
         end
         seek: begin
           case (smr)

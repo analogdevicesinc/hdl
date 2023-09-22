@@ -63,8 +63,7 @@ module system_top (
   inout  i3c_controller_0_sda,
 
   inout   [ 1:0]  btn,
-  inout   [ 5:0]  led
-);
+  inout   [ 5:0]  led);
 
   // internal signals
 

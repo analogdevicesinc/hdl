@@ -1,4 +1,4 @@
-# __i3c_ardz I3C interface
+# ad405x_i3c_ardz I3C interface
 
 # Ultrascale devices could use IOB_TRI_REG.
 # Since IOB_TRI_REG is not available in the zynq7000 the tristate flip-flop is placed in the device fabric.

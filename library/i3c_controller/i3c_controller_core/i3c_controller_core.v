@@ -103,6 +103,7 @@ module i3c_controller_core #(
   wire sdi_bit;
 
   wire rx;
+  wire rx_raw;
   wire rx_valid;
   wire rx_stop;
   wire rx_nack;
@@ -126,10 +127,9 @@ module i3c_controller_core #(
   wire [31:0] pid_bcr_dcr;
   wire pid_bcr_dcr_tick;
 
-  wire clk_sel;
   wire clk_clr;
 
-  wire idle_bus;
+  wire cmd_nop;
 
   i3c_controller_framing #(
     .MAX_DEVS(`MAX_DEVS)
@@ -161,8 +161,8 @@ module i3c_controller_core #(
     .cmdw_rx_ready(cmdw_rx_ready),
     .cmdw_rx_valid(cmdw_rx_valid),
     .cmdw_rx(cmdw_rx),
-    .rx(rx),
-    .idle_bus(idle_bus),
+    .rx_raw(rx_raw),
+    .cmd_nop(cmd_nop),
     .ibi_requested(ibi_requested),
     .ibi_requested_auto(ibi_requested_auto),
     .pid_bcr_dcr_tick(pid_bcr_dcr_tick),
@@ -192,9 +192,6 @@ module i3c_controller_core #(
     .cmd_ready(cmd_ready),
     .rx(rx),
     .rx_valid(rx_valid),
-    .rx_stop(rx_stop),
-    .rx_nack(rx_nack),
-    .clk_sel(clk_sel),
     .ibi_requested(ibi_requested),
     .ibi_requested_auto(ibi_requested_auto),
     .ibi_tick(ibi_tick),
@@ -204,30 +201,19 @@ module i3c_controller_core #(
     .pid_bcr_dcr(pid_bcr_dcr),
     .rmap_ibi_config(rmap_ibi_config));
 
-  i3c_controller_clk_div #(
-    .SIM_DEVICE(SIM_DEVICE),
-    .CLK_DIV(`CLK_DIV)
-  ) i_i3c_controller_clk_div (
-    .reset_n(reset_n),
-    .sel(clk_sel),
-    .cmd_ready(cmd_ready),
-    .clk(clk),
-    .clk_out(clk_out));
-
+  reg [1:0] scl_pp_sg = 2'b10;
   i3c_controller_bit_mod #(
   ) i_i3c_controller_bit_mod (
     .reset_n(reset_n),
-    .clk_0(clk),
-    .clk_1(clk_out),
-    .clk_sel(clk_sel),
+    .clk(clk),
     .cmd(cmd),
+    .scl_pp_sg(scl_pp_sg),
     .cmd_valid(cmd_valid),
     .cmd_ready(cmd_ready),
     .rx(rx),
+    .rx_raw(rx_raw),
     .rx_valid(rx_valid),
-    .rx_stop(rx_stop),
-    .rx_nack(rx_nack),
-    .idle_bus(idle_bus),
+    .cmd_nop(cmd_nop),
     .scl(scl),
     .sdi(sdi_bit),
     .sdo(sdo_bit),
@@ -242,5 +228,5 @@ module i3c_controller_core #(
 
   assign ibi = {ibi_da, ibi_mdb};
   assign ibi_valid = ibi_tick;
-  assign cmdp_idle_bus = idle_bus;
+  assign cmdp_idle_bus = cmd_nop;
 endmodule

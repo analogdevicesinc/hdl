@@ -37,20 +37,19 @@
  */
 
 `timescale 1ns/100ps
-`default_nettype none
 
 module i3c_controller_phy_sda (
-  output wire sdo,
-  input  wire sdi,
-  input  wire t,
-  inout  wire sda
+  input  sdo,
+  output sdi,
+  input  t,
+  inout  sda
 );
   // TODO: Add Intel tristate primitive, select dependin on target.
   IOBUF #(
   ) IOBUF_inst (
-     .O(sdo),
+     .O(sdi),
      .IO(sda),
-     .I(sdi),
+     .I(sdo),
      .T(t)
   );
   // Same as, but sometimes Xilinx was not inferring IOBUF from this...
