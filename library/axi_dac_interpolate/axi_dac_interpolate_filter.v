@@ -49,7 +49,6 @@ module axi_dac_interpolate_filter #(
   output  reg [15:0]    dac_int_data,
   output                dma_ready,
   output                dac_valid_out,
-  input                 sync_stop_channels,
   output                underflow,
 
   input       [ 2:0]    filter_mask,
@@ -58,6 +57,10 @@ module axi_dac_interpolate_filter #(
   input                 dac_correction_enable,
   input                 dma_transfer_suspend,
   input                 start_sync_channels,
+  input                 sync_stop_channels,
+  input                 flush_dma_in,
+  input                 raw_transfer_en,
+  input       [15:0]    dac_raw_ch_data,
   input                 trigger,
   input                 trigger_active,
   input                 en_start_trigger,
@@ -66,7 +69,14 @@ module axi_dac_interpolate_filter #(
   input                 dma_valid_adjacent
 );
 
-  // internal signals
+  // local parameters
+
+  localparam [1:0] IDLE = 0;
+  localparam [1:0] WAIT = 1;
+  localparam [1:0] TRANSFER = 2;
+  localparam [1:0] FLUSHING = 3;
+
+  // internal registers
 
   reg               dac_int_ready;
   reg               dac_filt_int_valid;
@@ -75,14 +85,19 @@ module axi_dac_interpolate_filter #(
   reg               cic_change_rate;
   reg     [31:0]    interpolation_counter;
 
-  reg               transmit_ready = 1'b0;
   reg               dma_data_valid = 1'b0;
   reg               dma_data_valid_adjacent = 1'b0;
 
   reg               filter_enable = 1'b0;
-  reg               transfer = 1'b0;
   reg     [15:0]    dma_valid_m = 16'd0;
   reg               stop_transfer = 1'd0;
+
+  reg               transfer = 1'd0;
+  reg     [ 1:0]    transfer_sm = 2'd0;
+  reg     [ 1:0]    transfer_sm_next = 2'd0;
+  reg               raw_dma_n = 1'd0;
+
+  // internal signals
 
   wire              dac_valid_corrected;
   wire    [15:0]    dac_data_corrected;
@@ -94,6 +109,28 @@ module axi_dac_interpolate_filter #(
 
   wire              dma_valid_ch_sync;
   wire              dma_valid_ch;
+  wire              flush_dma;
+
+  wire     [15:0]   iqcor_data_in;
+  wire              iqcor_valid_in;
+
+  wire              transfer_start;
+  wire              transfer_ready;
+
+  // Once enabled the raw value will be selected until the DMA has valid data.
+  // This is a workaround for when DAC channels are start/stopped independent
+  // of each other and working in cyclic mode at a lower samplerate. It is
+  // used to solve a system limitation(delay) between the application and
+  // Linux kernel, which resulted in a pulse at the beginning of a new buffer
+  // consisting in the last sample on the DMA bus.
+  always @(posedge dac_clk) begin
+    raw_dma_n <= raw_transfer_en | flush_dma ? 1'b1 : raw_dma_n & !dma_valid;
+  end
+
+  assign reset_filt = !raw_dma_n & dma_transfer_suspend;
+
+  assign iqcor_data_in  = raw_dma_n ? dac_raw_ch_data : dac_data;
+  assign iqcor_valid_in = raw_dma_n ? 1'b1 : dac_valid;
 
   ad_iqcor #(
     .Q_OR_I_N (0),
@@ -101,8 +138,8 @@ module axi_dac_interpolate_filter #(
     .SCALE_ONLY(1)
   ) i_ad_iqcor (
     .clk (dac_clk),
-    .valid (dac_valid),
-    .data_in (dac_data),
+    .valid (iqcor_valid_in),
+    .data_in (iqcor_data_in),
     .data_iq (16'h0),
     .valid_out (dac_valid_corrected),
     .data_out (dac_data_corrected),
@@ -113,7 +150,7 @@ module axi_dac_interpolate_filter #(
   fir_interp fir_interpolation (
     .clk (dac_clk),
     .clk_enable (dac_cic_valid),
-    .reset (dac_rst | dma_transfer_suspend),
+    .reset (dac_rst | reset_filt),
     .filter_in (dac_data_corrected),
     .filter_out (dac_fir_data),
     .ce_out (dac_fir_valid));
@@ -121,27 +158,12 @@ module axi_dac_interpolate_filter #(
   cic_interp cic_interpolation (
     .clk (dac_clk),
     .clk_enable (dac_valid_corrected),
-    .reset (dac_rst | cic_change_rate | dma_transfer_suspend),
+    .reset (dac_rst | cic_change_rate | reset_filt),
     .rate (interp_rate_cic),
     .load_rate (1'b0),
     .filter_in (dac_fir_data[30:0]),
     .filter_out (dac_cic_data),
     .ce_out (dac_cic_valid));
-
-  assign dma_valid_ch_sync = sync_stop_channels ?
-                             dma_valid & dma_valid_adjacent & !dma_transfer_suspend :
-                             dma_valid & !dma_transfer_suspend;
-
-  assign dma_valid_ch = dma_valid_ch_sync & !stop_transfer;
-  always @(posedge dac_clk) begin
-    if (dac_rst == 1'b1) begin
-      dma_valid_m <= 'd0;
-    end else begin
-      dma_valid_m <= {dma_valid_m[14:0], dma_valid_ch};
-    end
-  end
-
-  assign dac_valid_out = dma_valid_m[4'h5];
 
   always @(posedge dac_clk) begin
     filter_mask_d1 <= filter_mask;
@@ -157,9 +179,7 @@ module axi_dac_interpolate_filter #(
   // paths randomly ready, only when using data buffers
 
   always @(posedge dac_clk) begin
-    if (dac_filt_int_valid &
-        (!start_sync_channels & dma_valid |
-        (dma_valid & dma_valid_adjacent))) begin
+    if (dac_filt_int_valid & transfer_ready) begin
       if (interpolation_counter == interpolation_ratio) begin
         interpolation_counter <= 0;
         dac_int_ready <= 1'b1;
@@ -173,26 +193,71 @@ module axi_dac_interpolate_filter #(
     end
   end
 
+  assign transfer_ready =  start_sync_channels ?
+                             dma_valid & dma_valid_adjacent :
+                             dma_valid;
+  assign transfer_start = !(en_start_trigger ^ trigger) & transfer_ready;
+
   always @(posedge dac_clk) begin
-    if (dma_transfer_suspend == 1'b0) begin
-      transfer <= trigger ? 1'b1 : transfer | !(trigger_active & en_start_trigger);
+    stop_transfer <= transfer_sm == IDLE ? 1'b0 :
+                     stop_transfer |
+                     dma_transfer_suspend |
+                     (en_stop_trigger & trigger) |
+                     (sync_stop_channels & dma_valid & dma_valid_adjacent);
+  end
+
+  // transfer state machine
+  always @(posedge dac_clk) begin
+    case (transfer_sm)
+      IDLE: begin
+        transfer <= 1'b0;
+        if (dac_int_ready) begin
+          transfer_sm_next <= WAIT;
+        end
+      end
+      WAIT: begin
+        transfer <= 1'b0;
+        if (transfer_start) begin
+          transfer_sm_next <= TRANSFER;
+        end
+      end
+      TRANSFER: begin
+        transfer <= 1'b1;
+        if (stop_transfer) begin
+          if (flush_dma_in) begin
+            transfer_sm_next <= FLUSHING;
+          end else begin
+            transfer_sm_next <= WAIT;
+          end
+        end else if (dma_valid == 1'b0) begin
+          transfer_sm_next <= IDLE;
+        end
+      end
+      FLUSHING: begin
+        transfer <= 1'b1;
+        if (dma_valid == 1'b0) begin
+          transfer_sm_next <= IDLE;
+        end
+      end
+    endcase
+    transfer_sm <= transfer_sm_next;
+  end
+
+  assign flush_dma = transfer_sm_next == FLUSHING ? 1'b1 : raw_transfer_en & flush_dma_in;
+  assign dma_ready = transfer_sm_next == TRANSFER ? dac_int_ready : flush_dma;
+  assign underflow = dac_enable & dma_ready & ~dma_valid & !flush_dma;
+
+  assign dma_valid_ch = transfer | raw_transfer_en;
+
+  always @(posedge dac_clk) begin
+    if (dac_rst == 1'b1) begin
+      dma_valid_m <= 'd0;
     end else begin
-      transfer <= 1'b0;
-    end
-    if (start_sync_channels == 1'b0) begin
-      transmit_ready <= dma_valid & transfer;
-    end else begin
-      transmit_ready <= dma_valid & dma_valid_adjacent & transfer;
+      dma_valid_m <= {dma_valid_m[14:0], dma_valid_ch};
     end
   end
 
-  always @(posedge dac_clk) begin
-    stop_transfer <= !en_stop_trigger | dma_transfer_suspend ? 1'b0 :
-                     stop_transfer | (trigger_active & trigger & transfer);
-  end
-
-  assign dma_ready = transmit_ready ? dac_int_ready : 1'b0;
-  assign underflow = dac_enable & dma_ready & ~dma_valid;
+  assign dac_valid_out = dma_valid_m[4'h2];
 
   always @(posedge dac_clk) begin
     case (filter_mask)

@@ -44,6 +44,10 @@ module axi_dac_interpolate_reg(
   output      [31:0]  dac_interpolation_ratio_b,
   output      [ 2:0]  dac_filter_mask_b,
   output              dma_transfer_suspend,
+  output              flush_dma_out,
+  output      [ 1:0]  raw_transfer_en,
+  output      [15:0]  dac_raw_ch_a_data,
+  output      [15:0]  dac_raw_ch_b_data,
   output              start_sync_channels,
   output              stop_sync_channels,
   output              dac_correction_enable_a,
@@ -74,17 +78,21 @@ module axi_dac_interpolate_reg(
   reg     [ 2:0]  up_filter_mask_a = 3'h0;
   reg     [31:0]  up_interpolation_ratio_b = 32'h0;
   reg     [ 2:0]  up_filter_mask_b = 3'h0;
-  reg     [2:0]   up_flags = 3'h2;
-  reg     [1:0]   up_config = 2'h0;
+  reg     [ 5:0]  up_flags = 6'ha;
+  reg     [ 1:0]  up_config = 2'h0;
   reg     [15:0]  up_correction_coefficient_a = 16'h0;
   reg     [15:0]  up_correction_coefficient_b = 16'h0;
   reg     [19:0]  up_trigger_config = 20'h0;
+  reg     [15:0]  up_dac_raw_ch_a_data;
+  reg     [15:0]  up_dac_raw_ch_b_data;
 
-  wire    [ 2:0]  flags;
+  wire    [ 5:0]  flags;
 
   assign  dma_transfer_suspend = flags[0];
   assign  start_sync_channels = flags[1];
   assign  stop_sync_channels = flags[2];
+  assign  flush_dma_out = flags[3];
+  assign  raw_transfer_en = flags[5:4]; //5-b; 4-a
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
@@ -94,11 +102,13 @@ module axi_dac_interpolate_reg(
       up_filter_mask_a <= 'd0;
       up_interpolation_ratio_b <= 'd0;
       up_filter_mask_b <= 'd0;
-      up_flags <= 'd2;
+      up_flags <= 'ha;
       up_config <= 'd0;
       up_correction_coefficient_a <= 'd0;
       up_correction_coefficient_b <= 'd0;
       up_trigger_config <= 'd0;
+      up_dac_raw_ch_a_data <= 16'd0;
+      up_dac_raw_ch_b_data <= 16'd0;
     end else begin
       up_wack <= up_wreq;
       if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h1)) begin
@@ -117,7 +127,7 @@ module axi_dac_interpolate_reg(
         up_filter_mask_b <= up_wdata[2:0];
       end
       if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h14)) begin
-        up_flags <= {29'h0,up_wdata[2:0]};
+        up_flags <= up_wdata[5:0];
       end
       if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h15)) begin
         up_config <= up_wdata[1:0];
@@ -130,6 +140,10 @@ module axi_dac_interpolate_reg(
       end
       if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h18)) begin
         up_trigger_config <= up_wdata[19:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h19)) begin
+        up_dac_raw_ch_a_data <= up_wdata[15:0];
+        up_dac_raw_ch_b_data <= up_wdata[31:16];
       end
     end
   end
@@ -150,11 +164,12 @@ module axi_dac_interpolate_reg(
           5'h11: up_rdata <= {29'h0,up_filter_mask_a};
           5'h12: up_rdata <= up_interpolation_ratio_b;
           5'h13: up_rdata <= {29'h0,up_filter_mask_b};
-          5'h14: up_rdata <= {29'h0,up_flags};
+          5'h14: up_rdata <= {26'h0,up_flags};
           5'h15: up_rdata <= {30'h0,up_config};
           5'h16: up_rdata <= {16'h0,up_correction_coefficient_a};
           5'h17: up_rdata <= {16'h0,up_correction_coefficient_b};
           5'h18: up_rdata <= {12'h0,up_trigger_config};
+          5'h19: up_rdata <= {up_dac_raw_ch_b_data, up_dac_raw_ch_a_data};
           default: up_rdata <= 0;
         endcase
       end else begin
@@ -164,7 +179,7 @@ module axi_dac_interpolate_reg(
   end
 
   up_xfer_cntrl #(
-    .DATA_WIDTH(127)
+    .DATA_WIDTH(162)
   ) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
@@ -173,7 +188,9 @@ module axi_dac_interpolate_reg(
                       up_correction_coefficient_b,// 16
                       up_correction_coefficient_a,// 16
                       up_trigger_config,          // 20
-                      up_flags,                   //  3
+                      up_flags,                   //  6
+                      up_dac_raw_ch_a_data,       // 16
+                      up_dac_raw_ch_b_data,       // 16
                       up_interpolation_ratio_b,   // 32
                       up_interpolation_ratio_a,   // 32
                       up_filter_mask_b,           // 3
@@ -187,7 +204,9 @@ module axi_dac_interpolate_reg(
                       dac_correction_coefficient_b, // 16
                       dac_correction_coefficient_a, // 16
                       trigger_config,               // 20
-                      flags,                        // 3
+                      flags,                        // 6
+                      dac_raw_ch_a_data,            // 16
+                      dac_raw_ch_b_data,            // 16
                       dac_interpolation_ratio_b,    // 32
                       dac_interpolation_ratio_a,    // 32
                       dac_filter_mask_b,            // 3
