@@ -124,6 +124,7 @@ module axi_dac_interpolate #(
   wire    [ 2:0]    filter_mask_b;
 
   wire              dma_transfer_suspend;
+  wire              flush_dma_s;
   wire              start_sync_channels;
 
   wire              dac_correction_enable_a;
@@ -152,6 +153,9 @@ module axi_dac_interpolate #(
   wire              underflow_b;
 
   wire              stop_sync_channels;
+  wire    [ 1:0]    raw_transfer_en;
+  wire    [15:0]    dac_raw_ch_a_data;
+  wire    [15:0]    dac_raw_ch_b_data;
 
   // signal name changes
 
@@ -215,7 +219,6 @@ module axi_dac_interpolate #(
     .dac_data (dac_data_a),
     .dac_valid (dac_valid_a),
     .dac_valid_out (dac_valid_out_a),
-    .sync_stop_channels (stop_sync_channels),
 
     .dac_enable (dac_enable_a),
     .dac_int_data (dac_int_data_a),
@@ -226,6 +229,10 @@ module axi_dac_interpolate #(
     .interpolation_ratio (interpolation_ratio_a),
     .dma_transfer_suspend (dma_transfer_suspend),
     .start_sync_channels (start_sync_channels),
+    .sync_stop_channels (stop_sync_channels),
+    .flush_dma_in (flush_dma_s),
+    .raw_transfer_en (raw_transfer_en[0]),
+    .dac_raw_ch_data (dac_raw_ch_a_data),
     .trigger (trigger),
     .trigger_active (trigger_active),
     .en_start_trigger (en_start_trigger),
@@ -244,7 +251,6 @@ module axi_dac_interpolate #(
     .dac_data (dac_data_b),
     .dac_valid (dac_valid_b),
     .dac_valid_out (dac_valid_out_b),
-    .sync_stop_channels (stop_sync_channels),
     .underflow (underflow_b),
 
     .dac_enable (dac_enable_b),
@@ -255,6 +261,10 @@ module axi_dac_interpolate #(
     .interpolation_ratio (interpolation_ratio_b),
     .dma_transfer_suspend (dma_transfer_suspend),
     .start_sync_channels (start_sync_channels),
+    .sync_stop_channels (stop_sync_channels),
+    .flush_dma_in (flush_dma_s),
+    .raw_transfer_en (raw_transfer_en[1]),
+    .dac_raw_ch_data (dac_raw_ch_b_data),
     .trigger (trigger),
     .trigger_active (trigger_active),
     .en_start_trigger (en_start_trigger),
@@ -274,6 +284,10 @@ module axi_dac_interpolate #(
     .dac_filter_mask_b (filter_mask_b),
 
     .dma_transfer_suspend (dma_transfer_suspend),
+    .flush_dma_out (flush_dma_s),
+    .raw_transfer_en (raw_transfer_en),
+    .dac_raw_ch_a_data (dac_raw_ch_a_data),
+    .dac_raw_ch_b_data (dac_raw_ch_b_data),
     .start_sync_channels (start_sync_channels),
     .dac_correction_enable_a(dac_correction_enable_a),
     .dac_correction_enable_b(dac_correction_enable_b),
