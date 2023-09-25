@@ -337,6 +337,10 @@ class directive_interfaces(directive_base):
 
 		subnode += section
 
+		for tag in description:
+			if tag not in bs and tag not in pr:
+				logger.warning(f"Signal {tag} defined in the directive does not exist in the source code!")
+
 		return subnode 
 
 	def run(self):
@@ -515,7 +519,7 @@ class directive_parameters(directive_base):
 
 		for tag in description:
 			if tag not in parameter:
-					logger.warning(f"{tag} does not exist in {file_2}!")
+					logger.warning(f"{tag} defined in the directive does not exist in the source code!")
 
 		return table
 
