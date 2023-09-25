@@ -192,7 +192,7 @@
 			</spirit:wire>
 		</spirit:port>
 		<spirit:port>
-			<spirit:logicalName>CMDP_IDLE_BUS</spirit:logicalName>
+			<spirit:logicalName>CMDP_NOP</spirit:logicalName>
 			<spirit:wire>
 				<spirit:onMaster>
 					<spirit:presence>required</spirit:presence>

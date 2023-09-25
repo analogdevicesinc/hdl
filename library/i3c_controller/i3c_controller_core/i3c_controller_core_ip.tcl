@@ -48,7 +48,7 @@ adi_add_bus "cmdp" "slave" \
 		{"cmdp_da"           "CMDP_DA"} \
 		{"cmdp_rnw"          "CMDP_RNW"} \
 		{"cmdp_cancelled"    "CMDP_CANCELLED"} \
-		{"cmdp_idle_bus"     "CMDP_IDLE_BUS"} \
+		{"cmdp_nop"          "CMDP_NOP"} \
 	}
 adi_add_bus_clock "clk" "cmdp" "reset_n"
 
@@ -81,6 +81,7 @@ adi_add_bus "rmap" "slave" \
 		{"rmap_dev_char_wdata"         "RMAP_DEV_CHAR_WDATA"} \
 		{"rmap_dev_char_rdata"         "RMAP_DEV_CHAR_RDATA"} \
 		{"rmap_ibi_config"             "RMAP_IBI_CONFIG"} \
+		{"rmap_pp_sg"                  "RMAP_PP_SG"} \
 	}
 adi_add_bus_clock "clk" "rmap" "reset_n" "master"
 

@@ -83,6 +83,7 @@ module i3c_controller_regmap #(
   // I3C control signals
 
   input  cmd_ready,
+  input  cmd_nop,
   output cmd_valid,
   output [DATA_WIDTH-1:0] cmd,
 
@@ -106,14 +107,13 @@ module i3c_controller_regmap #(
   input  ibi_valid,
   input  [DATA_WIDTH-1:0] ibi,
 
-  input  quiet_times,
-
   input  offload_trigger,
 
   // uP accessible info
 
   input              rmap_daa_status,
   output reg  [1:0]  rmap_ibi_config,
+  output      [1:0]  rmap_pp_sg,
   output reg  [29:0] rmap_devs_ctrl_mr,
   input       [14:0] rmap_devs_ctrl,
   input              rmap_dev_char_e,
@@ -192,8 +192,9 @@ module i3c_controller_regmap #(
   // Scratch register
   reg [31:0] up_scratch = 'h00;
 
-  reg        cmdr_pending = 1'b0;
-  reg        ibi_pending = 1'b0;
+  reg cmdr_pending = 1'b0;
+  reg ibi_pending = 1'b0;
+  reg cmd_nop_reg;
 
   // assign clock and reset
 
@@ -272,24 +273,28 @@ module i3c_controller_regmap #(
     end
   end
 
-  reg  [4:0] ops;
-  reg  [4:0] ops_candidate;
+  reg  [6:0] ops;
+  reg  [6:0] ops_candidate;
   wire       ops_mode;
   wire [3:0] ops_offload_len;
+  wire [1:0] ops_sg;
   wire       offload_idle;
   assign ops_mode = ops[0];
   assign ops_offload_len = ops[4:1];
+  assign ops_sg = ops[6:5];
+  assign rmap_pp_sg = ops_sg;
 
   wire [31:0] cmd_w;
   wire cmd_valid_w;
   wire cmd_ready_w;
 
   always @(posedge s_axi_aclk) begin
+    cmd_nop_reg <= cmd_nop;
     if (!up_sw_resetn) begin
-      ops <= 6'd0;
-    end else if (quiet_times) begin
+      ops <= 7'b1100000;
+    end else if (cmd_nop_reg) begin
       if ((~ops_mode & ~cmd_valid_w) | (ops_mode & offload_idle)) begin
-       ops <= ops_candidate;
+        ops <= ops_candidate;
       end
     end
   end
@@ -303,14 +308,14 @@ module i3c_controller_regmap #(
       up_irq_mask <= 'h00;
       rmap_ibi_config <= 'h00;
       devs_ctrl_0 <= 1'b0;
-	  ops_candidate <= 6'd0;
+	    ops_candidate <= 7'd0;
     end else begin
       if (up_wreq_s) begin
         case (up_waddr_s[7:0])
           `I3C_REGMAP_IRQ_MASK:   up_irq_mask <= up_wdata_s[6:0];
           `I3C_REGMAP_IBI_CONFIG: rmap_ibi_config <= up_wdata_s[1:0];
           `I3C_REGMAP_DEVS_CTRL:  rmap_devs_ctrl_mr <= {up_wdata_s[31:17], up_wdata_s[15:1]};
-          `I3C_REGMAP_OPS:        ops_candidate <= up_wdata_s[5:0];
+          `I3C_REGMAP_OPS:        ops_candidate <= up_wdata_s[6:0];
           default: begin
           end
         endcase
@@ -360,7 +365,7 @@ module i3c_controller_regmap #(
       `I3C_REGMAP_SDI_FIFO:       up_rdata_ff <= sdi_fifo_data;
       `I3C_REGMAP_IBI_FIFO:       up_rdata_ff <= ibi_fifo_data;
       `I3C_REGMAP_FIFO_STATUS:    up_rdata_ff <= {sdi_fifo_empty, ibi_fifo_empty, cmdr_fifo_empty};
-      `I3C_REGMAP_OPS:            up_rdata_ff <= {rmap_daa_status, ops};
+      `I3C_REGMAP_OPS:            up_rdata_ff <= {cmd_nop_reg, rmap_daa_status, ops};
       `I3C_REGMAP_DEV_CHAR_1_0:   up_rdata_ff <= PID[47:16];
       `I3C_REGMAP_DEV_CHAR_2_0:   up_rdata_ff <= {PID[16:0], BCR, DCR};
       `I3C_REGMAP_DEVS_CTRL:      up_rdata_ff <= {16'd0, rmap_devs_ctrl_w};

@@ -61,7 +61,7 @@ module i3c_controller_core #(
   input         cmdp_rnw,
   output        cmdp_ready,
   output        cmdp_cancelled,
-  output        cmdp_idle_bus,
+  output        cmdp_nop,
 
   // Byte stream
 
@@ -81,6 +81,7 @@ module i3c_controller_core #(
 
   output rmap_daa_status,
   input  [1:0] rmap_ibi_config,
+  input  [1:0]  rmap_pp_sg,
   input  [29:0] rmap_devs_ctrl_mr,
   output [14:0] rmap_devs_ctrl,
   output rmap_dev_char_e,
@@ -201,13 +202,12 @@ module i3c_controller_core #(
     .pid_bcr_dcr(pid_bcr_dcr),
     .rmap_ibi_config(rmap_ibi_config));
 
-  reg [1:0] scl_pp_sg = 2'b10;
   i3c_controller_bit_mod #(
   ) i_i3c_controller_bit_mod (
     .reset_n(reset_n),
     .clk(clk),
     .cmd(cmd),
-    .scl_pp_sg(scl_pp_sg),
+    .scl_pp_sg(rmap_pp_sg),
     .cmd_valid(cmd_valid),
     .cmd_ready(cmd_ready),
     .rx(rx),
@@ -228,5 +228,5 @@ module i3c_controller_core #(
 
   assign ibi = {ibi_da, ibi_mdb};
   assign ibi_valid = ibi_tick;
-  assign cmdp_idle_bus = cmd_nop;
+  assign cmdp_nop = cmd_nop;
 endmodule

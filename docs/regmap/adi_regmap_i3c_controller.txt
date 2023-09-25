@@ -399,7 +399,6 @@ FIELD
 OPS_MODE
 WO
 Set 0 to private transfers, 1 to offload.
-Setting to DAA automatically trigger the DAA process.
 ENDFIELD
 
 FIELD
@@ -409,6 +408,18 @@ WO
 Offload commands length.
 ENDFIELD
 
+FIELD
+[6:5] 0x??
+OPS_SPEED_GRADE
+RW
+Sets the speed grade in push-pull mode.
+Speed with 100MHz driver clock are:
+00: 12.50MHz
+01:  6.25MHz
+10:  3.12MHz
+11:  1.56MHz (default)
+ENDFIELD
+
 [5] 0x0
 OPS_STATUS_DAA
 RO
@@ -416,15 +427,10 @@ This bit is set to 1 when the assignment is in progress.
 ENDFIELD
 
 [6] 0x0
-OPS_STATUS_PRIV_TRANSFER TODO: These status signals
+OPS_STATUS_NOP
 RO
-This bit is set to 1 when a private transfer is in progress.
-ENDFIELD
-
-[7] 0x0
-OPS_STATUS_OFFLOAD
-RO
-This bit is set to 1 when a offload transfer is in progress.
+This bit is set to 1 when the bus is not executing any procedure.
+Is not idle bus condition since it does take 200us after Stop to set.
 ENDFIELD
 
 ############################################################################################
@@ -461,29 +467,29 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x6[0-f]
-DEV_CHAR_0_[0-15]
+0x60 + 0x01*n
+DEV_CHAR_0_n
 Controller/peripheral bus and device characteristics, fields defined by the I3C specification.
 0x60 is the controller.
 ENDREG
 
 FIELD
 [0:0] 0x???
-DEV_CHAR_0_*_DA_PARIETY
+DEV_CHAR_0_n_DA_PARIETY
 Pariety of the dynamic address.
 RW
 ENDFIELD
 
 FIELD
 [7:1] 0x???
-DEV_CHAR_0_*_DA
+DEV_CHAR_0_n_DA
 Dynamic address.
 RW
 ENDFIELD
 
 FIELD
 [8:8] 0x1
-DEV_CHAR_0_*_IS_I3C
+DEV_CHAR_0_n_IS_I3C
 Indicates if the device is an I3C device.
 Since only I3C is supported, will always be 1.
 RW
@@ -493,8 +499,8 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x7[0-f]
-DEV_CHAR_1_[0-15]
+0x70 + 0x01*n
+DEV_CHAR_1_n
 Controller/peripheral bus and device characteristics, fields defined by the I3C specification.
 The values are fetched from the peripheral during the DAA.
 For the controller slot, the values are preset by parameters.
@@ -503,7 +509,7 @@ ENDREG
 
 FIELD
 [31:0] 0x???
-DEV_CHAR_1_*_PID_1
+DEV_CHAR_1_n_PID_1
 32-MSB from the PID.
 RW
 ENDFIELD
@@ -512,8 +518,8 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x8[0-f]
-DEV_CHAR_2_[0-15]
+0x80 + 0x01*n
+DEV_CHAR_2_n
 Controller/peripheral bus and device characteristics, fields defined by the I3C specification.
 The values are fetched from the peripheral during the DAA.
 For the controller slot, the values are preset by parameters.
@@ -522,7 +528,7 @@ ENDREG
 
 FIELD
 [7:0] 0x???
-DEV_CHAR_2_*_DCR/LVR
+DEV_CHAR_2_n_DCR/LVR
 Stores the DCR of I3C devices or LVR of I2C devices.
 LVR should only be written, and DCR only be read.
 Currently, LVR has no effect.
@@ -531,14 +537,14 @@ ENDFIELD
 
 FIELD
 [15:8] 0x???
-DEV_CHAR_2_*_BCR
+DEV_CHAR_2_n_BCR
 Should only be read.
 RW
 ENDFIELD
 
 FIELD
 [31:16] 0x???
-DEV_CHAR_2_*_PID_0
+DEV_CHAR_2_n_PID_0
 16-LSB from the PID.
 Should only be read.
 RW
@@ -576,8 +582,8 @@ ENDFIELD
 ############################################################################################
 
 REG
-0xb[0-f]
-OFFLOAD_CMD_*
+0xb0 + 0x01*n
+OFFLOAD_CMD_n
 Offload command memory. Write commands in sequence to these addresses and update the
 OFFLOAD_CMD_LENGTH register.
 ENDREG
@@ -586,8 +592,8 @@ ENDREG
 ############################################################################################
 
 REG
-0xc[0-f]
-OFFLOAD_SDO_*
+0xc0 + 0x01*n
+OFFLOAD_SDO_n
 Offload SDO memory.
 The length is infered by the commands and reset after each burst.
 ENDREG

@@ -92,7 +92,7 @@ module i3c_controller_host_interface #(
   output [6:0]  cmdp_da,
   output        cmdp_rnw,
   input         cmdp_cancelled,
-  input         cmdp_idle_bus,
+  input         cmdp_nop,
 
   // Byte stream
 
@@ -116,6 +116,7 @@ module i3c_controller_host_interface #(
 
   input         rmap_daa_status,
   output [1:0]  rmap_ibi_config,
+  output [1:0]  rmap_pp_sg,
   output [29:0] rmap_devs_ctrl_mr,
   input  [14:0] rmap_devs_ctrl,
   input         rmap_dev_char_e,
@@ -149,8 +150,6 @@ module i3c_controller_host_interface #(
   wire ibi_ready_w;
   wire ibi_valid_w;
   wire [`DATA_WIDTH-1:0] ibi_w;
-
-  reg quiet_times;
 
   wire clk_w;
   generate if (ASYNC_CLK) begin
@@ -193,6 +192,7 @@ module i3c_controller_host_interface #(
     .irq(irq),
     .clk(clk),
     .a_reset_n(reset_n),
+    .cmd_nop(cmdp_nop),
     .cmd_ready(cmd_ready),
     .cmd_valid(cmd_valid),
     .cmd(cmd),
@@ -211,10 +211,10 @@ module i3c_controller_host_interface #(
     .ibi_ready(ibi_ready_w),
     .ibi_valid(ibi_valid_w),
     .ibi(ibi_w),
-    .quiet_times(quiet_times),
     .offload_trigger(offload_trigger),
     .rmap_daa_status(rmap_daa_status),
     .rmap_ibi_config(rmap_ibi_config),
+    .rmap_pp_sg(rmap_pp_sg),
     .rmap_devs_ctrl_mr(rmap_devs_ctrl_mr),
     .rmap_devs_ctrl(rmap_devs_ctrl),
     .rmap_dev_char_e(rmap_dev_char_e),
@@ -292,7 +292,4 @@ module i3c_controller_host_interface #(
     .wr_bytes_valid(wr_bytes_valid),
     .wr_bytes_lvl(wr_bytes_lvl));
 
-  always @(posedge clk_w) begin
-    quiet_times <= cmdp_idle_bus;
-  end
 endmodule

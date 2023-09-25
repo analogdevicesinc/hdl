@@ -39,7 +39,6 @@
 `define I3C_REGMAP_VERSION          8'h00
 `define I3C_REGMAP_PERIPHERAL_ID    8'h01
 `define I3C_REGMAP_SCRATCH          8'h02
-`define I3C_REGMAP_PARAMETERS       8'h03
 `define I3C_REGMAP_ENABLE           8'h10
 `define I3C_REGMAP_IRQ_MASK         8'h20
 `define I3C_REGMAP_IRQ_PENDING      8'h21
