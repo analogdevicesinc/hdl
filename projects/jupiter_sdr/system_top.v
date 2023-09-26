@@ -196,8 +196,7 @@ module system_top (
 
   assign mssi_sync = mcs_sync_busy | gpio_o[7];
 
-  // TO-DO
-  //assign usb_pd_reset = gpio_o[8];
+  assign usb_pd_reset = 1'b0;
   assign adrv9002_mcssrc = gpio_o[65];
   assign usb_flash_prog_en = gpio_o[66];
   assign fan_en  = 1'b1;
