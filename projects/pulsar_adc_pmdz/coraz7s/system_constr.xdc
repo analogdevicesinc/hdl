@@ -5,11 +5,11 @@
 
 # ad40xx_fmc SPI interface
 set_property -dict {PACKAGE_PIN Y19 IOSTANDARD LVCMOS33 IOB TRUE} [get_ports pulsar_adc_spi_sdo]       ; ##  PMOD JA [2]
-set_property -dict {PACKAGE_PIN Y16 IOSTANDARD LVCMOS33 IOB TRUE} [get_ports pulsar_adc_spi_sdi]       ; ##  PMOD JA [1]
-set_property -dict {PACKAGE_PIN Y17 IOSTANDARD LVCMOS33 IOB TRUE} [get_ports pulsar_adc_spi_sclk]      ; ##  PMOD JA [3]
-set_property -dict {PACKAGE_PIN Y18 IOSTANDARD LVCMOS33 IOB TRUE} [get_ports pulsar_adc_spi_cs]        ; ##  PMOD JA [0]
+set_property -dict {PACKAGE_PIN Y16 IOSTANDARD LVCMOS33 IOB TRUE} [get_ports pulsar_adc_spi_sdi]       ; ##  PMOD JA [3]
+set_property -dict {PACKAGE_PIN Y17 IOSTANDARD LVCMOS33 IOB TRUE} [get_ports pulsar_adc_spi_sclk]      ; ##  PMOD JA [4]
+set_property -dict {PACKAGE_PIN Y18 IOSTANDARD LVCMOS33 IOB TRUE} [get_ports pulsar_adc_spi_cs]        ; ##  PMOD JA [1]
 
-set_property -dict {PACKAGE_PIN U18 IOSTANDARD LVCMOS33} [get_ports pulsar_adc_spi_pd]                 ; ##  PMOD JA [4]
+set_property -dict {PACKAGE_PIN U18 IOSTANDARD LVCMOS33} [get_ports pulsar_adc_spi_pd]                 ; ##  PMOD JA [7]
 
 # rename auto-generated clock for SPIEngine to spi_clk - 160MHz
 # NOTE: clk_fpga_0 is the first PL fabric clock, also called $sys_cpu_clk

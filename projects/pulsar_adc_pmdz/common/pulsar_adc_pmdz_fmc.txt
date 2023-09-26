@@ -1,0 +1,9 @@
+# pulsar_adc_pmdz
+
+Pin            Port               Schematic_name     System_top_name        IOSTANDARD  Termination
+
+PMOD J5 [8]    PMOD JA [4]        SCK                pulsar_adc_spi_sclk    LVCMOS33    #N/A
+PMOD J5 [6]    PMOD JA [2]        SDO                pulsar_adc_spi_sdi     LVCMOS33    #N/A
+PMOD J5 [4]    PMOD JA [3]        SDI                pulsar_adc_spi_sdo     LVCMOS33    #N/A
+PMOD J5 [2]    PMOD JA [1]        CS                 pulsar_adc_spi_cs      LVCMOS33    #N/A
+PMOD J5 [1]    PMOD JA [7]        INT                pulsar_adc_spi_pd      LVCMOS33    #N/A
