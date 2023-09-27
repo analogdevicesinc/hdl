@@ -1,0 +1,26 @@
+FMC_pin FMC_port             Schematic_name   System_top_name   IOSTANDARD  Termination
+
+# ad7616 - Serial mode
+# Note: The design uses an SDP to FMC interposer.
+
+P22     FMC_LPC_LA03_N       SCLK/RDn         ad7616_spi_sclk   LVCOMOS25     #N/A
+L21     FMC_LPC_LA03_P       DB3              ad7616_spi_sdo    LVCOMOS25     #N/A
+M19     FMC_LPC_LA00_CC_P    DB11/DOUT0       ad7616_spi_sdi[0] LVCOMOS25     #N/A
+N20     FMC_LPC_LA01_CC_N    DB7              ad7616_spi_sdi[1] LVCOMOS25     #N/A
+M22     FMC_LPC_LA04_N       CSn              ad7616_spi_cs     LVCOMOS25     #N/A
+
+A18     FMC_LPC_LA24_P       CONVST           adc_cnvst         LVCOMOS25     #N/A
+E20     FMC_LPC_LA21_N       CHSEL0           adc_chsel[0]      LVCOMOS25     #N/A
+E18     FMC_LPC_LA26_N       CHSEL1           adc_chsel[1]      LVCOMOS25     #N/A
+D22     FMC_LPC_LA25_P       CHSEL2           adc_chsel[2       LVCOMOS25     #N/A
+E19     FMC_LPC_LA21_P       HW_RNGSEL0       adc_hw_rngsel[0]  LVCOMOS25     #N/A
+F18     FMC_LPC_LA26_P       HW_RNGSEL1       adc_hw_rngsel[1]  LVCOMOS25     #N/A
+T19     FMC_LPC_LA10_N       BUSY             adc_busy          LVCOMOS25     #N/A
+E21     FMC_LPC_LA27_P       SEQEN            adc_seq_en        LVCOMOS25     #N/A
+F19     FMC_LPC_LA22_N       RESETn           adc_reset_n       LVCOMOS25     #N/A
+
+L19     FMC_LPC_CLK0_M2C_N   DB13             adc_os[0]         LVCOMOS25     #N/A
+L18     FMC_LPC_CLK0_M2C_P   DB14             adc_os[1]         LVCOMOS25     #N/A
+N19     FMC_LPC_LA01_CC_P    DB15             adc_os[2]         LVCOMOS25     #N/A
+R21     FMC_LPC_LA09_N       WRn              adc_burst         LVCOMOS25     #N/A
+P18     FMC_LPC_LA02_N       DB5              adc_crcen         LVCOMOS25     #N/A
