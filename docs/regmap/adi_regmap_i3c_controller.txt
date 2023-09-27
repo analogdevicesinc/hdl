@@ -1,5 +1,6 @@
 TITLE
-I3C Controller (axi_i3c_controller)
+I3C Controller (i3c_controller_host_interface)
+i3c_controller_host_interface
 ENDTITLE
 
 ############################################################################################
@@ -248,12 +249,13 @@ The Software is responsive for a valid sequence of commands.
 If the peripheral does not ACK when required during a command, the procedure exits and the
 next command in the FIFO is interpreted.
 See Instruction Set Specification in the wiki documentation for the structure of the command.
-ENDFIELD
+ENDREG
+
 FIELD
 [31:0] 0x??
 CMD_FIFO
-The command to the I3C controller to execute.
 WO
+The command to the I3C controller to execute.
 ENDFIELD
 
 ############################################################################################
@@ -283,6 +285,7 @@ SDO_FIFO
 SDO FIFO register. Writing to this register inserts an entry into the SDO FIFO.
 Writing to this register when the SDO FIFO is full has no effect and the written entry
 is discarded. Reading from this register always returns 0x00000000.
+ENDREG
 
 FIELD
 [31:24] 0x??
@@ -476,23 +479,23 @@ ENDREG
 FIELD
 [0:0] 0x???
 DEV_CHAR_0_n_DA_PARIETY
-Pariety of the dynamic address.
 RW
+Pariety of the dynamic address.
 ENDFIELD
 
 FIELD
 [7:1] 0x???
 DEV_CHAR_0_n_DA
-Dynamic address.
 RW
+Dynamic address.
 ENDFIELD
 
 FIELD
 [8:8] 0x1
 DEV_CHAR_0_n_IS_I3C
+RW
 Indicates if the device is an I3C device.
 Since only I3C is supported, will always be 1.
-RW
 ENDFIELD
 
 ############################################################################################
@@ -510,8 +513,8 @@ ENDREG
 FIELD
 [31:0] 0x???
 DEV_CHAR_1_n_PID_1
-32-MSB from the PID.
 RW
+32-MSB from the PID.
 ENDFIELD
 
 ############################################################################################
@@ -529,25 +532,25 @@ ENDREG
 FIELD
 [7:0] 0x???
 DEV_CHAR_2_n_DCR/LVR
+RW
 Stores the DCR of I3C devices or LVR of I2C devices.
 LVR should only be written, and DCR only be read.
 Currently, LVR has no effect.
-RW
 ENDFIELD
 
 FIELD
 [15:8] 0x???
 DEV_CHAR_2_n_BCR
-Should only be read.
 RW
+Should only be read.
 ENDFIELD
 
 FIELD
 [31:16] 0x???
 DEV_CHAR_2_n_PID_0
+RW
 16-LSB from the PID.
 Should only be read.
-RW
 ENDFIELD
 
 ############################################################################################
@@ -560,22 +563,22 @@ ENDREG
 
 FIELD
 [15:0] 0x??
-DEV_CTRL
+DEVS_CTRL
+RW
 Slots for peripherals, each HIGH bit represents a peripherals attached.
 The index match the DEV_CHAR_*_ indexes.
 The Controller, index 0, is set to HIGH when a DA is written to DEV_CHAR_0_0,
 while the others peripherals are set HIGH when the peripherals actually
 receives the DA during the DAA.
 The state can also be overwritten to explicit attach device (e.g. has static addr).
-RW
 ENDFIELD
 
 FIELD
 [31:16] 0x??
-DEV_CLR
+DEVS_CLR
+WO
 Write the index of a peripheral (offset by 16) bit to clear its slot.
 The stored value in DEV_CHAR_*_* is not affected by this register.
-WO
 ENDFIELD
 
 ############################################################################################

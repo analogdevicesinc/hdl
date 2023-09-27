@@ -13,8 +13,9 @@ HDL Reference Designs
    :caption: Libraries
    :hidden:
 
-   library/spi_engine/index
    library/axi_dmac/index
+   library/spi_engine/index
+   library/i3c_controller/index
 
 .. attention::
 
