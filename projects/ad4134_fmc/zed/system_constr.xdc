@@ -6,17 +6,17 @@
 # ad4134 SPI configuration interface
 set_property -dict {PACKAGE_PIN N22 IOSTANDARD LVCMOS25} [get_ports ad4134_spi_sdi]       ; ## FMC_LPC_LA03_P
 set_property -dict {PACKAGE_PIN M22 IOSTANDARD LVCMOS25} [get_ports ad4134_spi_sdo]       ; ## FMC_LPC_LA04_N
-set_property -dict {PACKAGE_PIN N19 IOSTANDARD LVCMOS25} [get_ports ad4134_spi_sclk]      ; ## FMC_LPC_LA01_CC_P
+set_property -dict {PACKAGE_PIN N19 IOSTANDARD LVCMOS25} [get_ports ad4134_spi_sclk]      ; ## FMC_LPC_LA01_P_CC
 set_property -dict {PACKAGE_PIN J18 IOSTANDARD LVCMOS25} [get_ports ad4134_spi_cs]        ; ## FMC_LPC_LA05_P
 
 # ad4134 data interface
 
 set_property -dict {PACKAGE_PIN L18 IOSTANDARD LVCMOS25} [get_ports ad4134_dclk]          ; ## FMC_LPC_CLK0_M2C_P
-set_property -dict {PACKAGE_PIN M20 IOSTANDARD LVCMOS25} [get_ports ad4134_din[0]]        ; ## FMC_LPC_LA00_CC_N
+set_property -dict {PACKAGE_PIN M20 IOSTANDARD LVCMOS25} [get_ports ad4134_din[0]]        ; ## FMC_LPC_LA00_N_CC
 set_property -dict {PACKAGE_PIN L22 IOSTANDARD LVCMOS25} [get_ports ad4134_din[1]]        ; ## FMC_LPC_LA06_N
 set_property -dict {PACKAGE_PIN P17 IOSTANDARD LVCMOS25} [get_ports ad4134_din[2]]        ; ## FMC_LPC_LA02_P
 set_property -dict {PACKAGE_PIN P18 IOSTANDARD LVCMOS25} [get_ports ad4134_din[3]]        ; ## FMC_LPC_LA02_N
-set_property -dict {PACKAGE_PIN M19 IOSTANDARD LVCMOS25} [get_ports ad4134_odr]           ; ## FMC_LPC_LA00_CC_P
+set_property -dict {PACKAGE_PIN M19 IOSTANDARD LVCMOS25} [get_ports ad4134_odr]           ; ## FMC_LPC_LA00_P_CC
 
 # ad4134 GPIO lines
 
