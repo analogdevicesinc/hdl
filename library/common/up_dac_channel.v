@@ -483,19 +483,19 @@ module up_dac_channel #(
                       dac_mask_enable,
                       dac_src_chan_sel}));
 
-generate
-if (DDS_PHASE_DW > 16) begin
-  localparam  DDS_EXT_DW = DDS_PHASE_DW - 16 - 1;
-  assign dac_dds_init_1 = {dac_dds_init_1_extend[DDS_EXT_DW:0], dac_dds_init_1_s};
-  assign dac_dds_incr_1 = {dac_dds_incr_1_extend[DDS_EXT_DW:0], dac_dds_incr_1_s};
-  assign dac_dds_init_2 = {dac_dds_init_2_extend[DDS_EXT_DW:0], dac_dds_init_2_s};
-  assign dac_dds_incr_2 = {dac_dds_incr_2_extend[DDS_EXT_DW:0], dac_dds_incr_2_s};
-end else begin
-  assign dac_dds_init_1 = dac_dds_init_1_s[DDS_PHASE_DW-1:0];
-  assign dac_dds_incr_1 = dac_dds_incr_1_s[DDS_PHASE_DW-1:0];
-  assign dac_dds_init_2 = dac_dds_init_2_s[DDS_PHASE_DW-1:0];
-  assign dac_dds_incr_2 = dac_dds_incr_2_s[DDS_PHASE_DW-1:0];
-end
-endgenerate
+  generate
+    if (DDS_PHASE_DW > 16) begin
+      localparam  DDS_EXT_DW = DDS_PHASE_DW - 16 - 1;
+      assign dac_dds_init_1 = {dac_dds_init_1_extend[DDS_EXT_DW:0], dac_dds_init_1_s};
+      assign dac_dds_incr_1 = {dac_dds_incr_1_extend[DDS_EXT_DW:0], dac_dds_incr_1_s};
+      assign dac_dds_init_2 = {dac_dds_init_2_extend[DDS_EXT_DW:0], dac_dds_init_2_s};
+      assign dac_dds_incr_2 = {dac_dds_incr_2_extend[DDS_EXT_DW:0], dac_dds_incr_2_s};
+    end else begin
+      assign dac_dds_init_1 = dac_dds_init_1_s[DDS_PHASE_DW-1:0];
+      assign dac_dds_incr_1 = dac_dds_incr_1_s[DDS_PHASE_DW-1:0];
+      assign dac_dds_init_2 = dac_dds_init_2_s[DDS_PHASE_DW-1:0];
+      assign dac_dds_incr_2 = dac_dds_incr_2_s[DDS_PHASE_DW-1:0];
+    end
+  endgenerate
 
 endmodule
