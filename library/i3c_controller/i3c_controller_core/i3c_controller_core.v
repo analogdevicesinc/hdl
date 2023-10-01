@@ -119,11 +119,14 @@ module i3c_controller_core #(
   wire cmdw_rx_valid;
   wire [7:0] cmdw_rx;
 
+  wire arbitration_valid;
+  wire ibi_bcr_2;
   wire ibi_requested;
   wire ibi_requested_auto;
   wire ibi_tick;
   wire [6:0] ibi_da;
   wire [7:0] ibi_mdb;
+  wire ibi_da_attached;
 
   wire [31:0] pid_bcr_dcr;
   wire pid_bcr_dcr_tick;
@@ -164,8 +167,12 @@ module i3c_controller_core #(
     .cmdw_rx(cmdw_rx),
     .rx_raw(rx_raw),
     .cmd_nop(cmd_nop),
+    .arbitration_valid(arbitration_valid),
+    .ibi_bcr_2(ibi_bcr_2),
     .ibi_requested(ibi_requested),
     .ibi_requested_auto(ibi_requested_auto),
+    .ibi_da(ibi_da),
+    .ibi_da_attached(ibi_da_attached),
     .pid_bcr_dcr_tick(pid_bcr_dcr_tick),
     .pid_bcr_dcr(pid_bcr_dcr),
     .rmap_ibi_config(rmap_ibi_config),
@@ -193,10 +200,13 @@ module i3c_controller_core #(
     .cmd_ready(cmd_ready),
     .rx(rx),
     .rx_valid(rx_valid),
+    .arbitration_valid(arbitration_valid),
+    .ibi_bcr_2(ibi_bcr_2),
     .ibi_requested(ibi_requested),
     .ibi_requested_auto(ibi_requested_auto),
     .ibi_tick(ibi_tick),
     .ibi_da(ibi_da),
+    .ibi_da_attached(ibi_da_attached),
     .ibi_mdb(ibi_mdb),
     .pid_bcr_dcr_tick(pid_bcr_dcr_tick),
     .pid_bcr_dcr(pid_bcr_dcr),

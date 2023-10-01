@@ -55,9 +55,9 @@ module i3c_controller_bit_mod (
   // 3:  1.56MHz
   input [1:0] scl_pp_sg, // SCL Push-pull speed grade
 
-  output reg rx,
+  output rx,
   output reg rx_raw,
-  output reg rx_valid,
+  output rx_valid,
 
 
   // Bus drive signals
@@ -131,14 +131,12 @@ module i3c_controller_bit_mod (
 
   always @(posedge clk) begin
     scl_high_reg <= scl_high;
-    rx_valid  <= 1'b0;
     sdo <= sdo_w;
-    rx_raw <= sdi;
-    if (~scl_high_reg & scl_high) begin
-      rx <= sdi; // Multi-cycle-path worst-case: 4 clks (12.5MHz, half-bit ack)
-      rx_valid <= 1'b1;
-    end
+    rx_raw <= sdi === 1'b0 ? 1'b0 : 1'b1;
   end
+  // Multi-cycle-path worst-case: 4 clks (12.5MHz, half-bit ack)
+  assign rx = rx_raw;
+  assign rx_valid = ~scl_high_reg & scl_high;
 
   assign sdo_w = sm == `MOD_BIT_CMD_START_   ? (scl_high ? ~count[pp_sg+1] : 1'b1) :
                  sm == `MOD_BIT_CMD_STOP_    ? (scl_high ?  count[pp_sg+1] : 1'b0) :

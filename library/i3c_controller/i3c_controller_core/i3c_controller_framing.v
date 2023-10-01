@@ -112,8 +112,12 @@ module i3c_controller_framing #(
 
   // IBI interface
 
-  input      ibi_requested,
-  output reg ibi_requested_auto,
+  input       arbitration_valid,
+  output      ibi_bcr_2,
+  input       ibi_requested,
+  output reg  ibi_requested_auto,
+  input [6:0] ibi_da,
+  output      ibi_da_attached,
 
   // DAA interface
 
@@ -124,7 +128,7 @@ module i3c_controller_framing #(
 
   input      [1:0]  rmap_ibi_config,
   input      [29:0] rmap_devs_ctrl_mr,
-  output reg [14:0] rmap_devs_ctrl,
+  output     [14:0] rmap_devs_ctrl,
   output            rmap_dev_char_e,
   output            rmap_dev_char_we,
   output     [5:0]  rmap_dev_char_addr,
@@ -144,13 +148,13 @@ module i3c_controller_framing #(
   reg [6:0]  cmdp_da_reg;
   reg        cmdp_rnw_reg;
 
-  reg ibi_requested_lock;
-
   reg [`CMDW_HEADER_WIDTH:0] sm;
   reg [7:0] cmdw_body;
   reg sr;
   reg ctrl_daa;
   reg [3:0] j;
+  reg [15:0] devs_ctrl; // first bit is unused
+  reg [14:0] devs_ctrl_mask;
 
   reg [2:0] smt;
   localparam [2:0]
@@ -159,7 +163,8 @@ module i3c_controller_framing #(
     setup_sdo  = 2,
     cleanup    = 3,
     seek       = 4,
-    commit     = 5;
+    commit     = 5,
+    arbitration= 6;
   reg [0:0] smr;
   localparam [0:0]
     request    = 0,
@@ -175,7 +180,8 @@ module i3c_controller_framing #(
       smt <= setup;
       smr <= request;
       ctrl_daa <= 1'b0;
-      rmap_devs_ctrl <= 'd0;
+      devs_ctrl <= 'd1;
+      devs_ctrl_mask <= 15'hffff;
       j <= 0;
       ibi_requested_auto <= 1'b0;
     end else if (cmdw_nack) begin
@@ -184,7 +190,7 @@ module i3c_controller_framing #(
       smr <= request;
       ctrl_daa <= 1'b0;
     end else begin
-		  rmap_devs_ctrl <= (rmap_devs_ctrl | rmap_devs_ctrl_mr[14:0])
+		  devs_ctrl_mask <= (devs_ctrl_mask | rmap_devs_ctrl_mr[14:0])
                       & ~rmap_devs_ctrl_mr[29:15];
       // SDI Ready is are not checked, data will be lost
       // if it do not accept/provide data when needed.
@@ -211,20 +217,15 @@ module i3c_controller_framing #(
           cmdp_buffer_len_reg   <= cmdp_buffer_len;
           cmdp_da_reg           <= cmdp_da;
           cmdp_rnw_reg          <= cmdp_rnw;
-          ibi_requested_lock <= 1'b0;
         end
         transfer: begin
           sr <= cmdp_sr_reg;
-          if (ibi_requested & ~ibi_requested_lock) begin
-            sm <= ibi_enable ? `CMDW_IBI_MDB : `CMDW_SR;
-            ibi_requested_lock <= 1'b1;
-          end
           if (cmdw_ready) begin
             ibi_requested_auto <= 1'b0;
             case(sm)
               `CMDW_NOP: begin
                 smt <= setup;
-                j <= 0;
+                j <= 'd0;
               end
               `CMDW_SR,
               `CMDW_START: begin
@@ -234,9 +235,7 @@ module i3c_controller_framing #(
                 ctrl_daa <= 1'b0;
               end
               `CMDW_BCAST_7E_W0: begin
-                sm <= cmdp_ccc_reg ?
-                     (cmdp_ccc_id_reg == CCC_ENTDAA ? `CMDW_CCC_OD : `CMDW_CCC_PP) :
-                      `CMDW_MSG_SR;
+                smt <= arbitration;
                 cmdw_body   <= {cmdp_ccc_bcast_reg, cmdp_ccc_id_reg}; // Attention to BCAST here
               end
               `CMDW_CCC_OD: begin
@@ -248,11 +247,10 @@ module i3c_controller_framing #(
                 if (cmdp_ccc_bcast_reg) begin
                   sm <= `CMDW_MSG_SR;
                 end else if (cmdp_buffer_len_reg == 0) begin
-                  sm  <= `CMDW_STOP;
+                  sm  <= `CMDW_STOP_PP;
                   smt <= sr ? setup : transfer;
                 end else begin
                   smt <= setup_sdo;
-                  sm  <= `CMDW_STOP;
                   sm  <= `CMDW_NOP;
                 end
               end
@@ -266,10 +264,10 @@ module i3c_controller_framing #(
               end
               `CMDW_DAA_DEV_CHAR_2: begin
                 sm <= `CMDW_DYN_ADDR;
-                cmdw_body <= rmap_dev_char_rdata;
+                cmdw_body <= rmap_dev_char_rdata[7:0];
               end
               `CMDW_DYN_ADDR: begin
-                sm <= j == MAX_DEVS ? `CMDW_STOP : `CMDW_START;
+                sm <= j == MAX_DEVS ? `CMDW_STOP_OD : `CMDW_START;
                 smt <= commit;
               end
               `CMDW_MSG_SR: begin
@@ -288,7 +286,7 @@ module i3c_controller_framing #(
               `CMDW_MSG_RX: begin
                 cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
                 if (~|cmdp_buffer_len_reg[11:1]) begin
-                  sm  <= `CMDW_STOP;
+                  sm  <= `CMDW_STOP_PP;
                   smt <= sr ? setup : transfer;
                 end
               end
@@ -296,18 +294,19 @@ module i3c_controller_framing #(
                 cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
                 if (~|cmdp_buffer_len_reg[11:1]) begin
                   smt <= sr ? setup : transfer;
-                  sm  <= `CMDW_STOP;
+                  sm  <= `CMDW_STOP_PP;
                 end else begin
                   smt <= setup_sdo;
                   sm  <= `CMDW_NOP;
                 end
               end
-              `CMDW_STOP: begin
+              `CMDW_STOP_OD,
+              `CMDW_STOP_PP: begin
                 sm <= `CMDW_NOP;
                 cmdp_sr_reg <= 1'b0;
               end
               `CMDW_IBI_MDB: begin
-                sm <= cmdp_valid_reg ? `CMDW_SR : `CMDW_STOP;
+                sm <= cmdp_valid_reg ? `CMDW_SR : `CMDW_STOP_PP;
               end
               default: begin
                 sm <= `CMDW_NOP;
@@ -337,22 +336,47 @@ module i3c_controller_framing #(
             request: begin
             end
             read: begin
-              if (rmap_devs_ctrl[j] == 1'b0 & rmap_dev_char_rdata[8] == 1'b1) begin
+              if (devs_ctrl[j] == 1'b0 & rmap_dev_char_rdata[8] == 1'b1) begin
                 smt <= transfer;
               end
               if (rmap_dev_char_rdata[8] == 1'b0) begin
                 // If I2C, just set it as attached
-                rmap_devs_ctrl[j] <= 1'b1;
+                devs_ctrl[j] <= 1'b1;
               end
-              j <= j + 1;
+              if (devs_ctrl[j] == 1'b1) begin
+                j <= j + 1;
+              end
             end
           endcase
           smr <= ~smr;
         end
         commit: begin
+          devs_ctrl[j] <= 1'b1;
           if (cmdw_ready) begin
-            rmap_devs_ctrl[j-1] <= 1'b1;
             smt <= transfer;
+          end
+        end
+        arbitration: begin
+          if (arbitration_valid) begin
+            smt <= transfer;
+            // IBI requested during CMDW_BCAST_7E_W0.
+            // At the word module, was ACKed if IBI is enabled and DA is known, if not, NACKed.
+            if (ibi_requested) begin
+              // Receive MSB if IBI is enabled, DA is known and device .
+              if (ibi_enable & ibi_da_attached & ibi_bcr_2) begin
+                sm <= `CMDW_IBI_MDB;
+              // NACKed if BCR[2] is High or
+              // ACKed/NACKed if BCR[2] is Low.
+              end else begin
+                sm <= cmdp_valid_reg ? `CMDW_START : `CMDW_STOP_OD;
+              end
+            // No IBI requested during CMDW_BCAST_7E_W0.
+            end else if (cmdp_valid_reg) begin
+              sm <= cmdp_ccc_reg ?
+                    (cmdp_ccc_id_reg == CCC_ENTDAA ? `CMDW_CCC_OD : `CMDW_CCC_PP) : `CMDW_MSG_SR;
+            end else begin
+              sm <= `CMDW_STOP_OD;
+            end
           end
         end
         default: begin
@@ -361,6 +385,53 @@ module i3c_controller_framing #(
       endcase
     end
   end
+
+  // 7-bit addr RAM for 1 cc data request.
+
+  genvar i;
+
+  // Obtain addr index in dev_ctrl, 0 means unknown device,
+  // since index 0 is reserved for this controller.
+
+  wire [3:0] pos;
+  wire       wen;
+  wire [6:0] rwaddr;
+  wire [6:0] raddr;
+  wire [3:0] rout;
+  assign ibi_da_attached = rmap_devs_ctrl[rout] & rout != 'd0;
+  assign pos = j;
+  assign wen = smt == commit;
+  assign rwaddr = cmdw_body[7:1];
+  assign raddr  = ibi_da;
+
+  generate
+    for (i=0; i < 4; i=i+1) begin
+      // TODO Replace with inferred
+      RAM128X1D #(
+        .INIT(128'd0)
+      ) i_mem_pos (
+        .A(rwaddr),    // Read/write port 7-bit address input
+        .DPRA(raddr),  // Read 7-bit address input
+        .SPO(),        // Read/write port 1-bit output
+        .DPO(rout[i]), // Read port 1-bit output
+        .D(pos[i]),    // Write data input
+        .WE(wen),      // Write enable input
+        .WCLK(clk));   // Write clock input
+    end
+  endgenerate
+
+  // Obtain BCR[2] from device, unknown devs return 0.
+
+   RAM128X1D #(
+     .INIT(128'd0)
+   ) i_mem_bcr_2 (
+     .A(rwaddr),
+     .DPRA(raddr),
+     .SPO(),
+     .DPO(ibi_bcr_2),
+     .D(pid_bcr_dcr[10]),
+     .WE(wen),
+     .WCLK(clk));
 
   reg  [1:0] k;
   wire [1:0] l;
@@ -373,6 +444,7 @@ module i3c_controller_framing #(
   assign rmap_dev_char_wdata = pid_bcr_dcr;
   assign rmap_dev_char_we = pid_bcr_dcr_tick;
   assign rmap_dev_char_e = smt == seek | pid_bcr_dcr_tick;
+  assign rmap_devs_ctrl = devs_ctrl[15:1] & devs_ctrl_mask;
 
   assign cmdp_ready = smt == setup & cmdw_ready & !cmdw_nack & reset_n;
   assign sdo_ready = (smt == setup_sdo | smt == cleanup) & reset_n;

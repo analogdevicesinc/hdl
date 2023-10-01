@@ -383,7 +383,7 @@ module i3c_controller_regmap #(
   ad_mem_dual #(
     .DATA_WIDTH(32),
     .ADDRESS_WIDTH(6)
-  ) i_dev_char_1_2 (
+  ) i_mem_dev_char (
     .clka(s_axi_aclk),
     .wea(dev_char_wea),
     .ea(dev_char_ea),
@@ -427,7 +427,7 @@ module i3c_controller_regmap #(
     ad_mem_dual #(
       .DATA_WIDTH(32),
       .ADDRESS_WIDTH(5)
-    ) i_dev_char_1_2 (
+    ) i_mem_offload (
       .clka(s_axi_aclk),
       .wea(offload_wea),
       .ea(offload_ea),

@@ -96,6 +96,9 @@ module i3c_controller_cmd_parser (
     CE2_ERROR = 4'd3,
     NACK_RESP = 4'd9;
 
+  localparam [6:0]
+    CCC_ENTDAA = 'h07;
+
   reg [2:0] sm;
   localparam [2:0]
     receive          = 0,
@@ -115,6 +118,7 @@ module i3c_controller_cmd_parser (
         receive: begin
           cmdr_error <= NO_ERROR;
           cmdr1 <= cmd;
+          cmdr2 <= 8'd0;
           if (cmd_valid) begin
             sm <= buffer_setup;
           end else begin
@@ -134,7 +138,7 @@ module i3c_controller_cmd_parser (
         end
         xfer_await_ready: begin
           if (cmdp_ready) begin
-            sm <= receipt;
+            sm <= cmdp_ccc_id == CCC_ENTDAA ? receive : receipt; // DAA does not throw cmdr
             // TODO: implement NACK_RESP error, for that, need to differentiate bcast
             // address from da address ack (or drop it and handle any NACK as
             // CE2).

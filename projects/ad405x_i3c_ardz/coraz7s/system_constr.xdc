@@ -23,10 +23,6 @@ set_multicycle_path -from [get_clocks clk_fpga_0] -to [get_ports i3c_controller_
 set_multicycle_path -from [get_clocks clk_1] -to [get_clocks $i3c_clk] -setup 4
 set_multicycle_path -from [get_clocks clk_1] -to [get_clocks $i3c_clk] -hold  3
 
-# The rx_raw_reg is used to observe the SDA lane for IBI requests during bus idle condition,
-# and the delay does not matter.
-set_false_path -from  [get_ports i3c_controller_0_sda] -to [get_cells -hierarchical -filter {NAME =~ *i3c_controller_bit_mod/rx_raw_reg}]
-
 # Notes
 # tcr/tcf rising/fall time for SCL is 150e06 * 1 / fSCL, at fSCL = 12.5 MHz => 12ns, at fSCL = 6.25 MHz, 24ns.
 # and t_SCO has a minimum/default value of 8ns and max of 12 ns

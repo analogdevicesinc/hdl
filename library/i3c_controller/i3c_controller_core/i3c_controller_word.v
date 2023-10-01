@@ -71,10 +71,13 @@ module i3c_controller_word (
 
   // IBI interface
 
+  output reg  arbitration_valid,
+  input  wire ibi_bcr_2,
   output reg  ibi_requested,
   input  wire ibi_requested_auto,
   output reg  ibi_tick,
   output wire [6:0] ibi_da,
+  input  wire ibi_da_attached,
   output wire [7:0] ibi_mdb,
 
   // DAA interface
@@ -126,7 +129,8 @@ module i3c_controller_word (
       `CMDW_MSG_SR          : i_ =  0;
       `CMDW_MSG_RX          : i_ =  8; // SDI+T
       `CMDW_MSG_TX          : i_ =  8; // SDO+T
-      `CMDW_STOP            : i_ =  0;
+      `CMDW_STOP_OD         : i_ =  0;
+      `CMDW_STOP_PP         : i_ =  0;
       `CMDW_BCAST_7E_W1     : i_ =  8; // 7'h7e+RnW=1+ACK
       `CMDW_DAA_DEV_CHAR_1  : i_ = 31; // 32-bitMSB_PID
       `CMDW_DAA_DEV_CHAR_2  : i_ = 31; // 16-bitLSB_PID+BCR+DCR
@@ -147,7 +151,8 @@ module i3c_controller_word (
       `CMDW_MSG_SR          : sg = 1;
       `CMDW_MSG_RX          : sg = 1;
       `CMDW_MSG_TX          : sg = 1;
-      `CMDW_STOP            : sg = 1;
+      `CMDW_STOP_OD         : sg = 0;
+      `CMDW_STOP_PP         : sg = 1;
       `CMDW_BCAST_7E_W1     : sg = 0;
       `CMDW_DAA_DEV_CHAR_1  : sg = 0;
       `CMDW_DAA_DEV_CHAR_2  : sg = 0;
@@ -168,6 +173,7 @@ module i3c_controller_word (
   always @(posedge clk) begin
     cmdw_nack <= 1'b0;
     cmdw_rx_valid <= 1'b0;
+    arbitration_valid <= 1'b0;
     ibi_tick <= 1'b0;
     pid_bcr_dcr_tick <= 1'b0;
     if (!reset_n) begin
@@ -191,7 +197,6 @@ module i3c_controller_word (
         end
         setup: begin
             smt <= transfer;
-            ibi_requested <= 1'b0;
             do_ack  <= 1'b0;
             do_rx_t <= 1'b0;
 
@@ -205,17 +210,20 @@ module i3c_controller_word (
               `CMDW_BCAST_7E_W0: begin
                 // During the header broadcast, the peripheral shall issue an IBI, due
                 // to this the SDO is monitored and if the controller loses arbitration,
-                // shall ACK if IBI is enabled and receive the MDB+bytes (if the DCR says so),
+                // shall ACK if IBI is enabled and the DA is attached.
+                // If the peripheral's DCR[2] == 1'b1, also receive the MDB.
                 // or NACK and Sr.
                 // In both cases, the cmd's transfer will continue after the IBI is
                 // resolved;
-                if (i[2:1] == 2'b11) begin
+                // TODO multiple ibi bytes.
+                if (i[2:1] == 2'b11 & ~ibi_requested) begin
                   // 1'b0+RnW=0
                   cmd_r <= `MOD_BIT_CMD_WRITE_;
                   cmd_wr <= 1'b0;
                 end else if (i == 8) begin
                   if (ibi_requested) begin // also ibi_len ...
-                    cmd_r <= ibi_enable ? `MOD_BIT_CMD_ACK_IBI_ : `MOD_BIT_CMD_READ_; // & ibi_ack
+                    // ACK if IBI is enabled and DA is known, if not, NACK.
+                    cmd_r <= ibi_enable & ibi_da_attached ? `MOD_BIT_CMD_ACK_IBI_ : `MOD_BIT_CMD_READ_;
                   end else begin
                     // ACK
                     cmd_r <= `MOD_BIT_CMD_ACK_SDR_;
@@ -285,7 +293,8 @@ module i3c_controller_word (
                   cmd_wr <= cmdw_body[7 - i[2:0]];
                 end
               end
-              `CMDW_STOP: begin
+              `CMDW_STOP_OD,
+              `CMDW_STOP_PP: begin
                 cmd_r <= `MOD_BIT_CMD_STOP_;
               end
               `CMDW_DAA_DEV_CHAR_1,
@@ -323,7 +332,7 @@ module i3c_controller_word (
               `CMDW_BCAST_7E_W1,
               `CMDW_BCAST_7E_W0: begin
                 if (do_ack & rx !== 1'b0) begin
-                  sm <= `CMDW_STOP;
+                  sm <= `CMDW_STOP_OD;
                   smt <= setup;
                   cmdw_nack <= 1'b1; // Tick
                   // Due to NACK'ED STOP inheriting NACK'ED word i value,
@@ -333,7 +342,7 @@ module i3c_controller_word (
               end
               `CMDW_MSG_RX: begin
                 if (do_rx_t & rx === 1'b0) begin
-                  sm <= `CMDW_STOP;
+                  sm <= `CMDW_STOP_OD;
                   smt <= setup;
                   cmdw_nack <= 1'b1;
                   cmdw_nacked <= 1'b1;
@@ -345,12 +354,24 @@ module i3c_controller_word (
 
             case (sm)
               `CMDW_NOP,
-              `CMDW_STOP: begin
+              `CMDW_STOP_OD,
+              `CMDW_STOP_PP: begin
                 ibi_requested <= ibi_requested;
                end
               `CMDW_BCAST_7E_W0: begin
                 ibi_da_reg[8-i] <= rx;
+                // Arbitration for IBI request.
                 ibi_requested <= i < 6 & rx === 1'b0 ? 1'b1 : ibi_requested;
+                if (i == 7) begin
+                  arbitration_valid <= 1'b1;
+                end
+                if (i == 8 & ibi_requested) begin
+                  ibi_requested <= 1'b0;
+                  // IBI from known peripheral without MDB (BCR[2] is Low).
+                  if (ibi_da_attached & ~ibi_bcr_2) begin
+                    ibi_tick <= 1'b1;
+                  end
+                end
               end
               `CMDW_MSG_RX: begin
                 if (i == 8) begin
