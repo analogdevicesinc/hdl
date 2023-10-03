@@ -12,6 +12,7 @@ from sphinx.util import logging
 from lxml import etree
 from adi_hdl_static import hdl_strings
 from uuid import uuid4
+from hashlib import sha1
 import contextlib
 
 logger = logging.getLogger(__name__)
@@ -178,7 +179,7 @@ class directive_base(Directive):
 	def collapsible(self, section, text=""):
 		env = self.state.document.settings.env
 
-		_id = str(uuid4())
+		_id = sha1(text.encode('utf-8')).hexdigest()
 		container = nodes.container(
 			"",
 			is_div=True,
