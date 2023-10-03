@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created by Symbolator http://kevinpt.github.io/symbolator -->
+<svg xmlns="http://www.w3.org/2000/svg"
+xmlns:xlink="http://www.w3.org/1999/xlink"
+xml:space="preserve"
+width="664" height="359" viewBox="-313 -20 886.0 479.0" version="1.1">
+<style type="text/css">
+<![CDATA[
+.fnt1 {fill:#000000;
+    font-family:Helvetica; font-size:12pt; font-weight:normal; font-style:normal;}
+.label {fill:#000;
+  text-anchor:middle;
+  font-size:16pt; font-weight:bold; font-family:Sans;}
+.link {fill: #0D47A1;}
+.link:hover {fill: #0D47A1; text-decoration:underline;}
+.link:visited {fill: #4A148C;}
+]]>
+</style>
+<defs>
+<marker id="clock" markerWidth="8.0" markerHeight="15.0" viewBox="0 0 8.0 15.0" refX="0.5" refY="7.5" orient="auto" markerUnits="userSpaceOnUse">
+<g transform="translate(0.5,7.5)"><path d="M 0 -7 L 0 7 L 7 0 z" stroke="#000000" fill="#FFFFFF" stroke-width="1"/>
+</g>
+</marker>
+</defs>
+<g transform="translate(0,0)">
+<rect x="0" y="-15.0" width="260" height="50.0" stroke="#646464" fill="#C8C8C8" stroke-width="1"/>
+<g transform="translate(0,0)">
+<line x1="-20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="1"/>
+<text class="fnt1" x="10" y="0" text-anchor="normal" dy="5.5">DATA_WIDTH</text>
+</g>
+<g transform="translate(0,20)">
+<line x1="-20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="1"/>
+<text class="fnt1" x="10" y="0" text-anchor="normal" dy="5.5">NUM_OF_SDI</text>
+</g>
+</g>
+<rect x="1.0" y="-14.0" width="258.0" height="48.0" stroke="#646464" fill="none" stroke-width="3"/>
+<g transform="translate(0,58.0)">
+<rect x="0" y="-15.0" width="260" height="410.0" stroke="#000000" fill="#C5DBFB" stroke-width="1"/>
+<g transform="translate(0,0)">
+<line x1="-20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="1" marker-end="url(#clock)"/>
+<text class="fnt1" x="10" y="0" text-anchor="normal" dy="5.5">clk</text>
+</g>
+<g transform="translate(0,20)">
+<line x1="-20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="1"/>
+<text class="fnt1" x="10" y="0" text-anchor="normal" dy="5.5">resetn</text>
+</g>
+<g transform="translate(0,40)">
+<line x1="-20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="1"/>
+<text class="fnt1" x="10" y="0" text-anchor="normal" dy="5.5">m_cmd_ready</text>
+</g>
+<g transform="translate(0,60)">
+<line x1="-20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="1"/>
+<text class="fnt1" x="10" y="0" text-anchor="normal" dy="5.5">m_sdo_ready</text>
+</g>
+<g transform="translate(0,80)">
+<line x1="-20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="1"/>
+<text class="fnt1" x="10" y="0" text-anchor="normal" dy="5.5">m_sdi_valid</text>
+</g>
+<g transform="translate(0,100)">
+<line x1="-20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="3"/>
+<text class="fnt1" x="10" y="0" text-anchor="normal" dy="5.5">m_sdi_data</text>
+<text class="fnt1" x="-30" y="0" text-anchor="end" dy="5.5" style="fill:#969696"> <tspan fill="#039BE5">[(NUM_OF_SDI*DATA_WIDTH-1):0]</tspan></text>
+</g>
+<g transform="translate(0,120)">
+<line x1="-20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="1"/>
+<text class="fnt1" x="10" y="0" text-anchor="normal" dy="5.5">m_sync_valid</text>
+</g>
+<g transform="translate(0,140)">
+<line x1="-20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="3"/>
+<text class="fnt1" x="10" y="0" text-anchor="normal" dy="5.5">m_sync</text>
+<text class="fnt1" x="-30" y="0" text-anchor="end" dy="5.5" style="fill:#969696"> <tspan fill="#039BE5">[7:0]</tspan></text>
+</g>
+<g transform="translate(0,160)">
+<line x1="-20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="1"/>
+<text class="fnt1" x="10" y="0" text-anchor="normal" dy="5.5">s0_cmd_valid</text>
+</g>
+<g transform="translate(0,180)">
+<line x1="-20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="3"/>
+<text class="fnt1" x="10" y="0" text-anchor="normal" dy="5.5">s0_cmd_data</text>
+<text class="fnt1" x="-30" y="0" text-anchor="end" dy="5.5" style="fill:#969696"> <tspan fill="#039BE5">[15:0]</tspan></text>
+</g>
+<g transform="translate(0,200)">
+<line x1="-20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="1"/>
+<text class="fnt1" x="10" y="0" text-anchor="normal" dy="5.5">s0_sdo_valid</text>
+</g>
+<g transform="translate(0,220)">
+<line x1="-20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="3"/>
+<text class="fnt1" x="10" y="0" text-anchor="normal" dy="5.5">s0_sdo_data</text>
+<text class="fnt1" x="-30" y="0" text-anchor="end" dy="5.5" style="fill:#969696"> <tspan fill="#039BE5">[(DATA_WIDTH-1):0]</tspan></text>
+</g>
+<g transform="translate(0,240)">
+<line x1="-20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="1"/>
+<text class="fnt1" x="10" y="0" text-anchor="normal" dy="5.5">s0_sdi_ready</text>
+</g>
+<g transform="translate(0,260)">
+<line x1="-20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="1"/>
+<text class="fnt1" x="10" y="0" text-anchor="normal" dy="5.5">s0_sync_ready</text>
+</g>
+<g transform="translate(0,280)">
+<line x1="-20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="1"/>
+<text class="fnt1" x="10" y="0" text-anchor="normal" dy="5.5">s1_cmd_valid</text>
+</g>
+<g transform="translate(0,300)">
+<line x1="-20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="3"/>
+<text class="fnt1" x="10" y="0" text-anchor="normal" dy="5.5">s1_cmd_data</text>
+<text class="fnt1" x="-30" y="0" text-anchor="end" dy="5.5" style="fill:#969696"> <tspan fill="#039BE5">[15:0]</tspan></text>
+</g>
+<g transform="translate(0,320)">
+<line x1="-20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="1"/>
+<text class="fnt1" x="10" y="0" text-anchor="normal" dy="5.5">s1_sdo_valid</text>
+</g>
+<g transform="translate(0,340)">
+<line x1="-20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="3"/>
+<text class="fnt1" x="10" y="0" text-anchor="normal" dy="5.5">s1_sdo_data</text>
+<text class="fnt1" x="-30" y="0" text-anchor="end" dy="5.5" style="fill:#969696"> <tspan fill="#039BE5">[(DATA_WIDTH-1):0]</tspan></text>
+</g>
+<g transform="translate(0,360)">
+<line x1="-20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="1"/>
+<text class="fnt1" x="10" y="0" text-anchor="normal" dy="5.5">s1_sdi_ready</text>
+</g>
+<g transform="translate(0,380)">
+<line x1="-20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="1"/>
+<text class="fnt1" x="10" y="0" text-anchor="normal" dy="5.5">s1_sync_ready</text>
+</g>
+<g transform="translate(260,0)">
+<line x1="20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="1"/>
+<text class="fnt1" x="-10" y="0" text-anchor="end" dy="5.5">m_cmd_valid</text>
+</g>
+<g transform="translate(260,20)">
+<line x1="20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="3"/>
+<text class="fnt1" x="-10" y="0" text-anchor="end" dy="5.5">m_cmd_data</text>
+<text class="fnt1" x="30" y="0" text-anchor="normal" dy="5.5" style="fill:#969696"> <tspan fill="#039BE5">[15:0]</tspan></text>
+</g>
+<g transform="translate(260,40)">
+<line x1="20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="1"/>
+<text class="fnt1" x="-10" y="0" text-anchor="end" dy="5.5">m_sdo_valid</text>
+</g>
+<g transform="translate(260,60)">
+<line x1="20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="3"/>
+<text class="fnt1" x="-10" y="0" text-anchor="end" dy="5.5">m_sdo_data</text>
+<text class="fnt1" x="30" y="0" text-anchor="normal" dy="5.5" style="fill:#969696"> <tspan fill="#039BE5">[(DATA_WIDTH-1):0]</tspan></text>
+</g>
+<g transform="translate(260,80)">
+<line x1="20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="1"/>
+<text class="fnt1" x="-10" y="0" text-anchor="end" dy="5.5">m_sdi_ready</text>
+</g>
+<g transform="translate(260,100)">
+<line x1="20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="1"/>
+<text class="fnt1" x="-10" y="0" text-anchor="end" dy="5.5">m_sync_ready</text>
+</g>
+<g transform="translate(260,120)">
+<line x1="20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="1"/>
+<text class="fnt1" x="-10" y="0" text-anchor="end" dy="5.5">s0_cmd_ready</text>
+</g>
+<g transform="translate(260,140)">
+<line x1="20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="1"/>
+<text class="fnt1" x="-10" y="0" text-anchor="end" dy="5.5">s0_sdo_ready</text>
+</g>
+<g transform="translate(260,160)">
+<line x1="20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="1"/>
+<text class="fnt1" x="-10" y="0" text-anchor="end" dy="5.5">s0_sdi_valid</text>
+</g>
+<g transform="translate(260,180)">
+<line x1="20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="3"/>
+<text class="fnt1" x="-10" y="0" text-anchor="end" dy="5.5">s0_sdi_data</text>
+<text class="fnt1" x="30" y="0" text-anchor="normal" dy="5.5" style="fill:#969696"> <tspan fill="#039BE5">[(NUM_OF_SDI*DATA_WIDTH-1):0]</tspan></text>
+</g>
+<g transform="translate(260,200)">
+<line x1="20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="1"/>
+<text class="fnt1" x="-10" y="0" text-anchor="end" dy="5.5">s0_sync_valid</text>
+</g>
+<g transform="translate(260,220)">
+<line x1="20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="3"/>
+<text class="fnt1" x="-10" y="0" text-anchor="end" dy="5.5">s0_sync</text>
+<text class="fnt1" x="30" y="0" text-anchor="normal" dy="5.5" style="fill:#969696"> <tspan fill="#039BE5">[7:0]</tspan></text>
+</g>
+<g transform="translate(260,240)">
+<line x1="20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="1"/>
+<text class="fnt1" x="-10" y="0" text-anchor="end" dy="5.5">s1_cmd_ready</text>
+</g>
+<g transform="translate(260,260)">
+<line x1="20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="1"/>
+<text class="fnt1" x="-10" y="0" text-anchor="end" dy="5.5">s1_sdo_ready</text>
+</g>
+<g transform="translate(260,280)">
+<line x1="20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="1"/>
+<text class="fnt1" x="-10" y="0" text-anchor="end" dy="5.5">s1_sdi_valid</text>
+</g>
+<g transform="translate(260,300)">
+<line x1="20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="3"/>
+<text class="fnt1" x="-10" y="0" text-anchor="end" dy="5.5">s1_sdi_data</text>
+<text class="fnt1" x="30" y="0" text-anchor="normal" dy="5.5" style="fill:#969696"> <tspan fill="#039BE5">[(NUM_OF_SDI*DATA_WIDTH-1):0]</tspan></text>
+</g>
+<g transform="translate(260,320)">
+<line x1="20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="1"/>
+<text class="fnt1" x="-10" y="0" text-anchor="end" dy="5.5">s1_sync_valid</text>
+</g>
+<g transform="translate(260,340)">
+<line x1="20" y1="0" x2="0" y2="0" stroke="#000000" fill="none" stroke-width="3"/>
+<text class="fnt1" x="-10" y="0" text-anchor="end" dy="5.5">s1_sync</text>
+<text class="fnt1" x="30" y="0" text-anchor="normal" dy="5.5" style="fill:#969696"> <tspan fill="#039BE5">[7:0]</tspan></text>
+</g>
+</g>
+<rect x="1.0" y="44.0" width="258.0" height="408.0" stroke="#000000" fill="none" stroke-width="3"/>
+</svg>

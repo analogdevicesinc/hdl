@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg preserveAspectRatio="xMidYMid slice" version="1.1" viewBox="0 0 590 430" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <defs>
+  <marker id="TriangleInM" overflow="visible" orient="auto">
+   <path transform="scale(-.4)" d="m5.77 0-8.65 5v-10l8.65 5z" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  </marker>
+  <marker id="TriangleOutM" overflow="visible" orient="auto">
+   <path transform="scale(.4)" d="m5.77 0-8.65 5v-10l8.65 5z" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  </marker>
+ </defs>
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g transform="translate(-243.46 -391.52)">
+  <path d="m302.94 743.4h-22.651v51.394" fill="none" marker-start="url(#TriangleInM)" stroke="#000" stroke-width="1.6611px"/>
+  <path d="m474.87 745.96h21.522v48.84" fill="none" marker-end="url(#TriangleOutM)" stroke="#000" stroke-width="1.6611px"/>
+  <text x="269.15515" y="814.40948" fill="#000000" font-family="'Liberation Sans'" letter-spacing="0px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="269.15515" y="814.40948" font-size="16.611px" style="line-height:1.25">sdi</tspan></text>
+  <text x="481.29056" y="814.40948" fill="#000000" font-family="'Liberation Sans'" letter-spacing="0px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="481.29056" y="814.40948" font-size="16.611px" style="line-height:1.25">sdo</tspan></text>
+  <g transform="matrix(1.6611 0 0 1.6611 -164.25 -225.71)">
+   <rect x="286.31" y="573.7" width="95.039" height="18" fill="none" stroke="#2e3436" stroke-linecap="square" stroke-linejoin="round" stroke-width="2"/>
+   <text x="291.52399" y="585.28876" fill="#000000" font-family="'Liberation Sans'" letter-spacing="0px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="291.52399" y="585.28876" font-size="10px" style="line-height:1.25">Data Shift Register</tspan></text>
+  </g>
+  <g transform="matrix(1.6611 0 0 1.6611 -136.25 -262.12)">
+   <text x="264.92651" y="403.62927" fill="#000000" font-family="'Liberation Sans'" letter-spacing="0px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="264.92651" y="403.62927" font-size="10px" style="line-height:1.25">SDI</tspan></text>
+   <path d="m273.03 591.14v-183.07" fill="none" marker-end="url(#TriangleOutM)" stroke="#000" stroke-width="1px"/>
+   <g transform="translate(-2.2781 -51.385)">
+    <path d="m272.23 532.13 6.1607 6.1607" fill="none" stroke="#000" stroke-width="1px"/>
+    <path d="m272.23 534.13 6.1607 6.1607" fill="none" stroke="#000" stroke-width="1px"/>
+   </g>
+  </g>
+  <g transform="matrix(1.6611 0 0 1.6611 -128.58 -262.12)">
+   <text x="282.72534" y="403.62927" fill="#000000" font-family="'Liberation Sans'" letter-spacing="0px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="282.72534" y="403.62927" font-size="10px" style="line-height:1.25">SDO</tspan></text>
+   <g fill="none" stroke="#000" stroke-width="1px">
+    <path d="m292.46 408.08v181.44" marker-end="url(#TriangleOutM)"/>
+    <g transform="translate(-28.214 -49.385)">
+     <path d="m317.59 530.13 6.1607 6.1607"/>
+     <path d="m317.59 532.13 6.1607 6.1607"/>
+    </g>
+   </g>
+  </g>
+  <g transform="matrix(1.6611 0 0 1.6611 -276.13 -183.46)">
+   <rect x="392.95" y="443.75" width="103.54" height="57.326" fill="none" stroke="#2e3436" stroke-linecap="square" stroke-linejoin="round" stroke-width="2"/>
+   <text x="444.73187" y="463.48257" fill="#000000" font-family="'Liberation Sans'" font-size="10px" letter-spacing="0px" text-anchor="middle" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="444.73187" y="463.48257" text-align="center" style="line-height:1.25">Multifunction</tspan><tspan x="444.73187" y="472.0856" text-align="center" style="line-height:1.25">Counter and Compare</tspan><tspan x="444.73187" y="480.6886" text-align="center" style="line-height:1.25">Unit</tspan></text>
+  </g>
+  <g transform="matrix(1.6611 0 0 1.6611 -344.81 -188.26)">
+   <rect x="434.99" y="388.69" width="49.497" height="27.274" fill="none" stroke="#2e3436" stroke-dasharray="2, 4" stroke-linecap="square" stroke-linejoin="round" stroke-width="2"/>
+   <text x="438.2764" y="405.90323" fill="#000000" font-family="'Liberation Sans'" letter-spacing="0px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="438.2764" y="405.90323" font-size="10px" style="line-height:1.25">Prescaler</tspan></text>
+  </g>
+  <path d="m418.85 509.59v33.558" fill="none" marker-end="url(#TriangleOutM)" stroke="#000" stroke-width="1.6611px"/>
+  <path d="m418.85 415.72v30.108" fill="none" marker-end="url(#TriangleOutM)" stroke="#000" stroke-width="1.6611px"/>
+  <text x="408.78012" y="408.55118" fill="#000000" font-family="'Liberation Sans'" letter-spacing="0px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="408.78012" y="408.55118" font-size="16.611px" style="line-height:1.25">clk</tspan></text>
+  <path d="m421.4 653.25v64.193" fill="none" marker-end="url(#TriangleOutM)" stroke="#000" stroke-width="1.6611px"/>
+  <text x="427.23248" y="661.8313" fill="#000000" font-family="'Liberation Sans'" letter-spacing="0px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="427.23248" y="661.8313" font-size="9.9663px" style="line-height:1.25">trigger</tspan></text>
+  <path d="m573.42 760.92v33.751" fill="none" marker-end="url(#TriangleOutM)" stroke="#000" stroke-width="1.6611px"/>
+  <text x="558.86859" y="814.40948" fill="#000000" font-family="'Liberation Sans'" letter-spacing="0px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="558.86859" y="814.40948" font-size="16.611px" style="line-height:1.25">sclk</tspan></text>
+  <rect x="506.7" y="470.89" width="172.04" height="39.153" fill="none" stroke="#2e3436" stroke-linecap="square" stroke-linejoin="round" stroke-width="3.3221"/>
+  <text x="521.4248" y="496.40375" fill="#000000" font-family="'Liberation Sans'" letter-spacing="0px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="521.4248" y="496.40375" font-size="16.611px" style="line-height:1.25">Instruction Decoder</tspan></text>
+  <g transform="matrix(1.6611 0 0 1.6611 -188.63 -262.12)">
+   <g transform="translate(118.62 -108.22)" fill="none" stroke="#000" stroke-width="1px">
+    <path d="m323.62 530.13 6.1607 6.1607"/>
+    <path d="m323.62 532.13 6.1607 6.1607"/>
+   </g>
+   <path d="m445.32 408.08v28.636" fill="none" marker-end="url(#TriangleOutM)" stroke="#000" stroke-width="1px"/>
+   <text x="433.90973" y="403.62927" fill="#000000" font-family="'Liberation Sans'" letter-spacing="0px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="433.90973" y="403.62927" font-size="10px" style="line-height:1.25">CMD</tspan></text>
+  </g>
+  <g transform="matrix(1.6611 0 0 1.6611 -164.25 -230.61)">
+   <rect x="490.71" y="576.65" width="57.857" height="18" fill="none" stroke="#2e3436" stroke-linecap="square" stroke-linejoin="round" stroke-width="2"/>
+   <text x="495.54861" y="588.23334" fill="#000000" font-family="'Liberation Sans'" letter-spacing="0px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="495.54861" y="588.23334" font-size="10px" style="line-height:1.25">chip-select</tspan></text>
+  </g>
+  <path d="m698.91 794.67v-33.751" fill="none" marker-start="url(#TriangleInM)" stroke="#000" stroke-width="1.6611px"/>
+  <text x="690.55219" y="812.86035" fill="#000000" font-family="'Liberation Sans'" letter-spacing="0px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="690.55219" y="812.86035" font-size="16.611px" style="line-height:1.25">cs</tspan></text>
+  <path d="m553.43 618.61h110.58v101.32" fill="none" marker-end="url(#TriangleOutM)" stroke="#000" stroke-width="1.6611px"/>
+  <text x="649.83191" y="722.30597" fill="#000000" font-family="'Liberation Sans'" letter-spacing="0px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="649.83191" y="722.30597" font-size="6.6442px" style="line-height:1.25">CE</tspan></text>
+  <path d="m618.13 518.97v81.811h70.338l0.22581 119.15" fill="none" marker-end="url(#TriangleOutM)" stroke="#000" stroke-width="1.6611px"/>
+  <text x="678.35834" y="722.16583" fill="#000000" font-family="'Liberation Sans'" letter-spacing="0px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="678.35834" y="722.16583" font-size="6.6442px" style="line-height:1.25">D</tspan></text>
+  <text x="690.59619" y="766.43829" fill="#000000" font-family="'Liberation Sans'" letter-spacing="0px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="690.59619" y="766.43829" font-size="6.6442px" style="line-height:1.25">Q</tspan></text>
+  <g transform="matrix(1.6611 0 0 1.6611 -164.25 -262.12)">
+   <path d="m462.46 438.77v-30.694" fill="none" marker-end="url(#TriangleOutM)" stroke="#000" stroke-width="1px"/>
+   <text x="448.52087" y="403.62927" fill="#000000" font-family="'Liberation Sans'" letter-spacing="0px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="448.52087" y="403.62927" font-size="10px" style="line-height:1.25">SYNC</tspan></text>
+   <g transform="translate(135.76 -108.22)" fill="none" stroke="#000" stroke-width="1px">
+    <path d="m323.62 530.13 6.1607 6.1607"/>
+    <path d="m323.62 532.13 6.1607 6.1607"/>
+   </g>
+  </g>
+  <g transform="matrix(1.6611 0 0 1.6611 -177.12 -262.12)" fill="none" stroke="#000" stroke-width="1px">
+   <path d="m416.43 469.61v16.25" marker-end="url(#TriangleOutM)"/>
+   <g transform="translate(89.732 -55.444)">
+    <path d="m323.62 530.13 6.1607 6.1607"/>
+    <path d="m323.62 532.13 6.1607 6.1607"/>
+   </g>
+  </g>
+  <path d="m502.31 492.25h-20.218v-8.3053h-15.029" fill="none" marker-end="url(#TriangleOutM)" stroke="#000" stroke-dasharray="1.66105601, 3.32211201" stroke-width="1.6611"/>
+  <g transform="matrix(1.6611 0 0 1.6611 282.82 -52.635)">
+   <text x="151.66971" y="482.07889" fill="#000000" font-family="'Liberation Sans'" letter-spacing="0px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="151.66971" y="482.07889" font-size="10px" style="line-height:1.25">Clock Gen</tspan></text>
+   <rect x="145.34" y="469.5" width="59.213" height="18" fill="none" stroke="#2e3436" stroke-linecap="square" stroke-linejoin="round" stroke-width="2"/>
+  </g>
+  <path d="m421.07 670.2h119.92v47.421" fill="none" marker-end="url(#TriangleOutM)" stroke="#000" stroke-width="1.6611px"/>
+  <text x="407.35889" y="718.92664" fill="#000000" font-family="'Liberation Sans'" letter-spacing="0px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="407.35889" y="718.92664" font-size="6.6442px" style="line-height:1.25">CE</tspan></text>
+  <text x="740.84778" y="812.84009" fill="#000000" font-family="'Liberation Sans'" letter-spacing="0px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="740.84778" y="812.84009" font-size="16.611px" style="line-height:1.25">three_wire</tspan></text>
+  <g transform="matrix(1.6611 0 0 1.6611 -339.88 -355.36)">
+   <text x="598.7677" y="555.29401" fill="#000000" font-family="'Liberation Sans'" letter-spacing="0px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="598.7677" y="555.29401" font-size="10px" style="line-height:1.25">Config</tspan></text>
+   <rect x="592.13" y="544.06" width="43.307" height="17.302" fill="none" stroke="#2e3436" stroke-linecap="square" stroke-linejoin="round" stroke-width="2"/>
+  </g>
+  <g fill="none" stroke="#000">
+   <path d="m718.99 563.32h59.612v231.35" marker-end="url(#TriangleOutM)" stroke-width="1.6611px"/>
+   <g>
+    <rect x="250.95" y="432.11" width="574.3" height="346.16" stroke-linecap="square" stroke-linejoin="round" stroke-width="4.9832"/>
+    <rect x="190.86" y="404.01" width="1.2773" height="0" stroke-linecap="square" stroke-linejoin="round" stroke-width="3.3221"/>
+    <path d="m528.07 548.15v-27.322" marker-end="url(#TriangleOutM)" stroke-dasharray="1.66105601, 3.32211201" stroke-width="1.6611"/>
+    <path d="m664.75 517.35v21.715" marker-end="url(#TriangleOutM)" stroke-dasharray="1.66105601, 3.32211201" stroke-width="1.6611"/>
+   </g>
+   <path d="m639.39 563.32h-58.483v156.03" marker-end="url(#TriangleOutM)" stroke-width="1.6611px"/>
+  </g>
+  <text x="584.97272" y="699.13763" fill="#000000" font-family="'Liberation Sans'" font-size="9.9663px" letter-spacing="0px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="584.97272" y="699.13763" style="line-height:1.25">cpha</tspan><tspan x="584.97272" y="721.73303" style="line-height:1.25">cpol</tspan></text>
+  <text x="531.49805" y="537.35901" fill="#000000" font-family="'Liberation Sans'" letter-spacing="0px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="531.49805" y="537.35901" font-size="9.9663px" style="line-height:1.25">sleep_compare</tspan></text>
+  <path d="m664.37 465.87v-49.088" fill="none" marker-end="url(#TriangleOutM)" stroke="#000" stroke-width="1.6611px"/>
+  <text x="643.03412" y="408.55118" fill="#000000" font-family="'Liberation Sans'" letter-spacing="0px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="643.03412" y="408.55118" font-size="16.611px" style="line-height:1.25">active</tspan></text>
+ </g>
+</svg>

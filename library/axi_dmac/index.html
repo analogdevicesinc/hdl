@@ -1,0 +1,3533 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="prev" title="SPI Engine Tutorial - PulSAR-ADC" href="../spi_engine/tutorial.html" />
+
+    <link rel="shortcut icon" href="../../_static/icon.svg"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.17 -->
+        <title>High-Speed DMA Controller - HDL, Analog Devices v0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=36a5483c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6000fc3f" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">HDL, Analog Devices v0.1 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  
+  <span class="sidebar-brand-text">HDL, Analog Devices v0.1 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">User guide</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../user_guide/index.html">User Guide</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of User Guide</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/porting_project.html">Porting reference designs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/docs_guidelines.html">Documentation guidelines</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Libraries</span></p>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../spi_engine/index.html">SPI Engine</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of SPI Engine</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../spi_engine/spi_engine_execution.html">Execution Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../spi_engine/axi_spi_engine.html">AXI Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../spi_engine/spi_engine_offload.html">Offload Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../spi_engine/spi_engine_interconnect.html">Interconnect Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../spi_engine/control-interface.html">Control Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../spi_engine/offload-control-interface.html">Offload Control Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../spi_engine/spi-bus-interface.html">SPI Bus Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../spi_engine/instruction-format.html">Instruction Set Specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../spi_engine/tutorial.html">Tutorial - PulSAR ADC</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">High-Speed DMA Controller</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="high-speed-dma-controller">
+<h1>High-Speed DMA Controller<a class="headerlink" href="#high-speed-dma-controller" title="Link to this heading">#</a></h1>
+<figure class="align-default" id="id1">
+<object data="../../_images/symbol-0fe96d96a916443e0221aed20d2a6e1f8801c152.svg" type="image/svg+xml">
+            <p class="warning">// ***************************************************************************
+// ***************************************************************************
+// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+//
+// In this HDL repository, there are many different and unique modules, consisting
+// of various HDL (Verilog or VHDL) components. The individual modules are
+// developed independently, and may be accompanied by separate and unique license
+// terms.
+//
+// The user should read each of these license terms, and understand the
+// freedoms and responsibilities that he or she has by using this source/core.
+//
+// This core is distributed in the hope that it will be useful, but WITHOUT ANY
+// WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+// A PARTICULAR PURPOSE.
+//
+// Redistribution and use of source or resulting binaries, with or without modification
+// of this file, are permitted under one of the following two license terms:
+//
+//   1. The GNU General Public License version 2 as published by the
+//      Free Software Foundation, which can be found in the top level directory
+//      of this repository (LICENSE_GPL2), and also online at:
+//      &lt;https://www.gnu.org/licenses/old-licenses/gpl-2.0.html&gt;
+//
+// OR
+//
+//   2. An ADI specific BSD license, which can be found in the top level directory
+//      of this repository (LICENSE_ADIBSD), and also on-line at:
+//      https://github.com/analogdevicesinc/hdl/blob/master/LICENSE_ADIBSD
+//      This will allow to generate bit files and not release the source code,
+//      as long as it attaches to an ADI device.
+//
+// ***************************************************************************
+// ***************************************************************************
+
+`timescale 1ns/100ps
+
+module axi_dmac #(
+
+  parameter ID = 0,
+  parameter DMA_DATA_WIDTH_SRC = 64,
+  parameter DMA_DATA_WIDTH_DEST = 64,
+  parameter DMA_LENGTH_WIDTH = 24,
+  parameter DMA_2D_TRANSFER = 0,
+  parameter ASYNC_CLK_REQ_SRC = 1,
+  parameter ASYNC_CLK_SRC_DEST = 1,
+  parameter ASYNC_CLK_DEST_REQ = 1,
+  parameter AXI_SLICE_DEST = 0,
+  parameter AXI_SLICE_SRC = 0,
+  parameter SYNC_TRANSFER_START = 0,
+  parameter CYCLIC = 1,
+  parameter DMA_AXI_PROTOCOL_DEST = 0,
+  parameter DMA_AXI_PROTOCOL_SRC = 0,
+  parameter DMA_TYPE_DEST = 0,
+  parameter DMA_TYPE_SRC = 2,
+  parameter DMA_AXI_ADDR_WIDTH = 32,
+  parameter MAX_BYTES_PER_BURST = 128,
+  parameter FIFO_SIZE = 8, // In bursts
+  parameter AXI_ID_WIDTH_SRC = 1,
+  parameter AXI_ID_WIDTH_DEST = 1,
+  parameter DMA_AXIS_ID_W = 8,
+  parameter DMA_AXIS_DEST_W = 4,
+  parameter DISABLE_DEBUG_REGISTERS = 0,
+  parameter ENABLE_DIAGNOSTICS_IF = 0,
+  parameter ALLOW_ASYM_MEM = 0,
+  parameter CACHE_COHERENT_DEST = 0
+) (
+
+  // Slave AXI interface
+  input s_axi_aclk,
+  input s_axi_aresetn,
+
+  input         s_axi_awvalid,
+  input  [10:0] s_axi_awaddr,
+  output        s_axi_awready,
+  input   [2:0] s_axi_awprot,
+  input         s_axi_wvalid,
+  input  [31:0] s_axi_wdata,
+  input  [ 3:0] s_axi_wstrb,
+  output        s_axi_wready,
+  output        s_axi_bvalid,
+  output [ 1:0] s_axi_bresp,
+  input         s_axi_bready,
+  input         s_axi_arvalid,
+  input  [10:0] s_axi_araddr,
+  output        s_axi_arready,
+  input   [2:0] s_axi_arprot,
+  output        s_axi_rvalid,
+  input         s_axi_rready,
+  output [ 1:0] s_axi_rresp,
+  output [31:0] s_axi_rdata,
+
+  // Interrupt
+  output irq,
+
+  // Master AXI interface
+  input                                    m_dest_axi_aclk,
+  input                                    m_dest_axi_aresetn,
+
+  // Write address
+  output [DMA_AXI_ADDR_WIDTH-1:0]          m_dest_axi_awaddr,
+  output [7-(4*DMA_AXI_PROTOCOL_DEST):0]   m_dest_axi_awlen,
+  output [ 2:0]                            m_dest_axi_awsize,
+  output [ 1:0]                            m_dest_axi_awburst,
+  output [ 2:0]                            m_dest_axi_awprot,
+  output [ 3:0]                            m_dest_axi_awcache,
+  output                                   m_dest_axi_awvalid,
+  input                                    m_dest_axi_awready,
+  output [AXI_ID_WIDTH_DEST-1:0]           m_dest_axi_awid,
+  output [DMA_AXI_PROTOCOL_DEST:0]         m_dest_axi_awlock,
+
+  // Write data
+  output [DMA_DATA_WIDTH_DEST-1:0]         m_dest_axi_wdata,
+  output [(DMA_DATA_WIDTH_DEST/8)-1:0]     m_dest_axi_wstrb,
+  input                                    m_dest_axi_wready,
+  output                                   m_dest_axi_wvalid,
+  output                                   m_dest_axi_wlast,
+  output [AXI_ID_WIDTH_DEST-1:0]           m_dest_axi_wid,
+
+  // Write response
+  input                                    m_dest_axi_bvalid,
+  input  [ 1:0]                            m_dest_axi_bresp,
+  output                                   m_dest_axi_bready,
+  input  [AXI_ID_WIDTH_DEST-1:0]           m_dest_axi_bid,
+
+  // Unused read interface
+  output                                   m_dest_axi_arvalid,
+  output [DMA_AXI_ADDR_WIDTH-1:0]          m_dest_axi_araddr,
+  output [7-(4*DMA_AXI_PROTOCOL_DEST):0]   m_dest_axi_arlen,
+  output [ 2:0]                            m_dest_axi_arsize,
+  output [ 1:0]                            m_dest_axi_arburst,
+  output [ 3:0]                            m_dest_axi_arcache,
+  output [ 2:0]                            m_dest_axi_arprot,
+  input                                    m_dest_axi_arready,
+  input                                    m_dest_axi_rvalid,
+  input  [ 1:0]                            m_dest_axi_rresp,
+  input  [DMA_DATA_WIDTH_DEST-1:0]         m_dest_axi_rdata,
+  output                                   m_dest_axi_rready,
+  output [AXI_ID_WIDTH_DEST-1:0]           m_dest_axi_arid,
+  output [DMA_AXI_PROTOCOL_DEST:0]         m_dest_axi_arlock,
+  input  [AXI_ID_WIDTH_DEST-1:0]           m_dest_axi_rid,
+  input                                    m_dest_axi_rlast,
+
+  // Master AXI interface
+  input                                    m_src_axi_aclk,
+  input                                    m_src_axi_aresetn,
+
+  // Read address
+  input                                    m_src_axi_arready,
+  output                                   m_src_axi_arvalid,
+  output [DMA_AXI_ADDR_WIDTH-1:0]          m_src_axi_araddr,
+  output [7-(4*DMA_AXI_PROTOCOL_SRC):0]    m_src_axi_arlen,
+  output [ 2:0]                            m_src_axi_arsize,
+  output [ 1:0]                            m_src_axi_arburst,
+  output [ 2:0]                            m_src_axi_arprot,
+  output [ 3:0]                            m_src_axi_arcache,
+  output [AXI_ID_WIDTH_SRC-1:0]            m_src_axi_arid,
+  output [DMA_AXI_PROTOCOL_SRC:0]          m_src_axi_arlock,
+
+  // Read data and response
+  input  [DMA_DATA_WIDTH_SRC-1:0]          m_src_axi_rdata,
+  output                                   m_src_axi_rready,
+  input                                    m_src_axi_rvalid,
+  input  [ 1:0]                            m_src_axi_rresp,
+  input  [AXI_ID_WIDTH_SRC-1:0]            m_src_axi_rid,
+  input                                    m_src_axi_rlast,
+
+  // Unused write interface
+  output                                   m_src_axi_awvalid,
+  output [DMA_AXI_ADDR_WIDTH-1:0]          m_src_axi_awaddr,
+  output [7-(4*DMA_AXI_PROTOCOL_SRC):0]    m_src_axi_awlen,
+  output [ 2:0]                            m_src_axi_awsize,
+  output [ 1:0]                            m_src_axi_awburst,
+  output [ 3:0]                            m_src_axi_awcache,
+  output [ 2:0]                            m_src_axi_awprot,
+  input                                    m_src_axi_awready,
+  output                                   m_src_axi_wvalid,
+  output [DMA_DATA_WIDTH_SRC-1:0]          m_src_axi_wdata,
+  output [(DMA_DATA_WIDTH_SRC/8)-1:0]      m_src_axi_wstrb,
+  output                                   m_src_axi_wlast,
+  input                                    m_src_axi_wready,
+  input                                    m_src_axi_bvalid,
+  input  [ 1:0]                            m_src_axi_bresp,
+  output                                   m_src_axi_bready,
+  output [AXI_ID_WIDTH_SRC-1:0]            m_src_axi_awid,
+  output [DMA_AXI_PROTOCOL_SRC:0]          m_src_axi_awlock,
+  output [AXI_ID_WIDTH_SRC-1:0]            m_src_axi_wid,
+  input  [AXI_ID_WIDTH_SRC-1:0]            m_src_axi_bid,
+
+  // Slave streaming AXI interface
+  input                                    s_axis_aclk,
+  output                                   s_axis_ready,
+  input                                    s_axis_valid,
+  input  [DMA_DATA_WIDTH_SRC-1:0]          s_axis_data,
+  input  [DMA_DATA_WIDTH_SRC/8-1:0]        s_axis_strb,
+  input  [DMA_DATA_WIDTH_SRC/8-1:0]        s_axis_keep,
+  input  [0:0]                             s_axis_user,
+  input  [DMA_AXIS_ID_W-1:0]               s_axis_id,
+  input  [DMA_AXIS_DEST_W-1:0]             s_axis_dest,
+  input                                    s_axis_last,
+  output                                   s_axis_xfer_req,
+
+  // Master streaming AXI interface
+  input                                    m_axis_aclk,
+  input                                    m_axis_ready,
+  output                                   m_axis_valid,
+  output [DMA_DATA_WIDTH_DEST-1:0]         m_axis_data,
+  output [DMA_DATA_WIDTH_DEST/8-1:0]       m_axis_strb,
+  output [DMA_DATA_WIDTH_DEST/8-1:0]       m_axis_keep,
+  output [0:0]                             m_axis_user,
+  output [DMA_AXIS_ID_W-1:0]               m_axis_id,
+  output [DMA_AXIS_DEST_W-1:0]             m_axis_dest,
+  output                                   m_axis_last,
+  output                                   m_axis_xfer_req,
+
+  // Input FIFO interface
+  input                                    fifo_wr_clk,
+  input                                    fifo_wr_en,
+  input  [DMA_DATA_WIDTH_SRC-1:0]          fifo_wr_din,
+  output                                   fifo_wr_overflow,
+  input                                    fifo_wr_sync,
+  output                                   fifo_wr_xfer_req,
+
+  // Input FIFO interface
+  input                                    fifo_rd_clk,
+  input                                    fifo_rd_en,
+  output                                   fifo_rd_valid,
+  output [DMA_DATA_WIDTH_DEST-1:0]         fifo_rd_dout,
+  output                                   fifo_rd_underflow,
+  output                                   fifo_rd_xfer_req,
+
+  // Diagnostics interface
+  output  [7:0] dest_diag_level_bursts
+);
+
+  localparam DMA_TYPE_AXI_MM = 0;
+  localparam DMA_TYPE_AXI_STREAM = 1;
+  localparam DMA_TYPE_FIFO = 2;
+
+  localparam HAS_DEST_ADDR = DMA_TYPE_DEST == DMA_TYPE_AXI_MM;
+  localparam HAS_SRC_ADDR = DMA_TYPE_SRC == DMA_TYPE_AXI_MM;
+
+  // Argh... &quot;[Synth 8-2722] system function call clog2 is not allowed here&quot;
+  localparam BYTES_PER_BEAT_WIDTH_DEST = DMA_DATA_WIDTH_DEST &gt; 1024 ? 8 :
+    DMA_DATA_WIDTH_DEST &gt; 512 ? 7 :
+    DMA_DATA_WIDTH_DEST &gt; 256 ? 6 :
+    DMA_DATA_WIDTH_DEST &gt; 128 ? 5 :
+    DMA_DATA_WIDTH_DEST &gt; 64 ? 4 :
+    DMA_DATA_WIDTH_DEST &gt; 32 ? 3 :
+    DMA_DATA_WIDTH_DEST &gt; 16 ? 2 :
+    DMA_DATA_WIDTH_DEST &gt; 8 ? 1 : 0;
+  localparam BYTES_PER_BEAT_WIDTH_SRC = DMA_DATA_WIDTH_SRC &gt; 1024 ? 8 :
+    DMA_DATA_WIDTH_SRC &gt; 512 ? 7 :
+    DMA_DATA_WIDTH_SRC &gt; 256 ? 6 :
+    DMA_DATA_WIDTH_SRC &gt; 128 ? 5 :
+    DMA_DATA_WIDTH_SRC &gt; 64 ? 4 :
+    DMA_DATA_WIDTH_SRC &gt; 32 ? 3 :
+    DMA_DATA_WIDTH_SRC &gt; 16 ? 2 :
+    DMA_DATA_WIDTH_SRC &gt; 8 ? 1 : 0;
+  localparam ID_WIDTH = (FIFO_SIZE) &gt; 64 ? 8 :
+    (FIFO_SIZE) &gt; 32 ? 7 :
+    (FIFO_SIZE) &gt; 16 ? 6 :
+    (FIFO_SIZE) &gt; 8 ? 5 :
+    (FIFO_SIZE) &gt; 4 ? 4 :
+    (FIFO_SIZE) &gt; 2 ? 3 :
+    (FIFO_SIZE) &gt; 1 ? 2 : 1;
+  localparam DBG_ID_PADDING = ID_WIDTH &gt; 8 ? 0 : 8 - ID_WIDTH;
+
+  /* AXI3 supports a maximum of 16 beats per burst. AXI4 supports a maximum of
+     256 beats per burst. If either bus is AXI3 set the maximum number of beats
+     per burst to 16. For non AXI interfaces the maximum beats per burst is in
+     theory unlimted. Set it to 1024 to provide a reasonable upper threshold */
+  localparam BEATS_PER_BURST_LIMIT_DEST =
+    (DMA_TYPE_DEST == DMA_TYPE_AXI_MM) ?
+      (DMA_AXI_PROTOCOL_DEST == 1 ? 16 : 256) :
+      1024;
+  localparam BYTES_PER_BURST_LIMIT_DEST =
+      BEATS_PER_BURST_LIMIT_DEST * DMA_DATA_WIDTH_DEST / 8;
+  localparam BEATS_PER_BURST_LIMIT_SRC =
+    (DMA_TYPE_SRC == DMA_TYPE_AXI_MM) ?
+      (DMA_AXI_PROTOCOL_SRC == 1 ? 16 : 256) :
+      1024;
+  localparam BYTES_PER_BURST_LIMIT_SRC =
+      BEATS_PER_BURST_LIMIT_SRC * DMA_DATA_WIDTH_SRC / 8;
+
+  /* The smaller bus limits the maximum bytes per burst. */
+  localparam BYTES_PER_BURST_LIMIT =
+    (BYTES_PER_BURST_LIMIT_DEST &lt; BYTES_PER_BURST_LIMIT_SRC) ?
+    BYTES_PER_BURST_LIMIT_DEST : BYTES_PER_BURST_LIMIT_SRC;
+
+  /* Make sure the requested MAX_BYTES_PER_BURST does not exceed what the
+     interfaces can support. Limit the value if necessary. */
+  localparam REAL_MAX_BYTES_PER_BURST =
+    BYTES_PER_BURST_LIMIT &lt; MAX_BYTES_PER_BURST ?
+      BYTES_PER_BURST_LIMIT : MAX_BYTES_PER_BURST;
+
+  /* MM has no alignment requirements */
+  localparam DMA_LENGTH_ALIGN_SRC =
+    DMA_TYPE_SRC == DMA_TYPE_AXI_MM ? 0 : BYTES_PER_BEAT_WIDTH_SRC;
+  localparam DMA_LENGTH_ALIGN_DEST =
+    DMA_TYPE_DEST == DMA_TYPE_AXI_MM ? 0 : BYTES_PER_BEAT_WIDTH_DEST;
+
+  /* Choose the larger of the two */
+   localparam DMA_LENGTH_ALIGN =
+     DMA_LENGTH_ALIGN_SRC &lt; DMA_LENGTH_ALIGN_DEST ?
+       DMA_LENGTH_ALIGN_DEST : DMA_LENGTH_ALIGN_SRC;
+
+  localparam BYTES_PER_BURST_WIDTH =
+    REAL_MAX_BYTES_PER_BURST &gt; 2048 ? 12 :
+    REAL_MAX_BYTES_PER_BURST &gt; 1024 ? 11 :
+    REAL_MAX_BYTES_PER_BURST &gt; 512 ? 10 :
+    REAL_MAX_BYTES_PER_BURST &gt; 256 ? 9 :
+    REAL_MAX_BYTES_PER_BURST &gt; 128 ? 8 :
+    REAL_MAX_BYTES_PER_BURST &gt; 64 ? 7 :
+    REAL_MAX_BYTES_PER_BURST &gt; 32 ? 6 :
+    REAL_MAX_BYTES_PER_BURST &gt; 16 ? 5 :
+    REAL_MAX_BYTES_PER_BURST &gt; 8 ? 4 :
+    REAL_MAX_BYTES_PER_BURST &gt; 4 ? 3 :
+    REAL_MAX_BYTES_PER_BURST &gt; 2 ? 2 : 1;
+
+  // ID signals from the DMAC, just for debugging
+  wire [ID_WIDTH-1:0] dest_request_id;
+  wire [ID_WIDTH-1:0] dest_data_id;
+  wire [ID_WIDTH-1:0] dest_address_id;
+  wire [ID_WIDTH-1:0] dest_response_id;
+  wire [ID_WIDTH-1:0] src_request_id;
+  wire [ID_WIDTH-1:0] src_data_id;
+  wire [ID_WIDTH-1:0] src_address_id;
+  wire [ID_WIDTH-1:0] src_response_id;
+  wire [11:0] dbg_status;
+  wire [31:0] dbg_ids0;
+  wire [31:0] dbg_ids1;
+
+  assign m_dest_axi_araddr = 'd0;
+  assign m_dest_axi_arlen = 'd0;
+  assign m_dest_axi_arsize = 'd0;
+  assign m_dest_axi_arburst = 'd0;
+  assign m_dest_axi_arcache = 'd0;
+  assign m_dest_axi_arprot = 'd0;
+  assign m_dest_axi_awid = 'h0;
+  assign m_dest_axi_awlock = 'h0;
+  assign m_dest_axi_wid = 'h0;
+  assign m_dest_axi_arid = 'h0;
+  assign m_dest_axi_arlock = 'h0;
+  assign m_src_axi_awaddr = 'd0;
+  assign m_src_axi_awlen = 'd0;
+  assign m_src_axi_awsize = 'd0;
+  assign m_src_axi_awburst = 'd0;
+  assign m_src_axi_awcache = 'd0;
+  assign m_src_axi_awprot = 'd0;
+  assign m_src_axi_wdata = 'd0;
+  assign m_src_axi_wstrb = 'd0;
+  assign m_src_axi_wlast = 'd0;
+  assign m_src_axi_awid = 'h0;
+  assign m_src_axi_awlock = 'h0;
+  assign m_src_axi_wid = 'h0;
+  assign m_src_axi_arid = 'h0;
+  assign m_src_axi_arlock = 'h0;
+
+  wire up_req_eot;
+  wire [BYTES_PER_BURST_WIDTH-1:0] up_req_measured_burst_length;
+  wire up_response_partial;
+  wire up_response_valid;
+  wire up_response_ready;
+
+  wire ctrl_enable;
+  wire ctrl_pause;
+
+  wire up_dma_req_valid;
+  wire up_dma_req_ready;
+  wire [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] up_dma_req_dest_address;
+  wire [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] up_dma_req_src_address;
+  wire [DMA_LENGTH_WIDTH-1:0] up_dma_req_x_length;
+  wire [DMA_LENGTH_WIDTH-1:0] up_dma_req_y_length;
+  wire [DMA_LENGTH_WIDTH-1:0] up_dma_req_dest_stride;
+  wire [DMA_LENGTH_WIDTH-1:0] up_dma_req_src_stride;
+  wire up_dma_req_sync_transfer_start;
+  wire up_dma_req_last;
+
+  assign dbg_ids0 = {
+    {DBG_ID_PADDING{1'b0}}, dest_response_id,
+    {DBG_ID_PADDING{1'b0}}, dest_data_id,
+    {DBG_ID_PADDING{1'b0}}, dest_address_id,
+    {DBG_ID_PADDING{1'b0}}, dest_request_id
+  };
+
+  assign dbg_ids1 = {
+    {DBG_ID_PADDING{1'b0}}, src_response_id,
+    {DBG_ID_PADDING{1'b0}}, src_data_id,
+    {DBG_ID_PADDING{1'b0}}, src_address_id,
+    {DBG_ID_PADDING{1'b0}}, src_request_id
+  };
+
+  axi_dmac_regmap #(
+    .ID(ID),
+    .DISABLE_DEBUG_REGISTERS(DISABLE_DEBUG_REGISTERS),
+    .BYTES_PER_BEAT_WIDTH_DEST(BYTES_PER_BEAT_WIDTH_DEST),
+    .BYTES_PER_BEAT_WIDTH_SRC(BYTES_PER_BEAT_WIDTH_SRC),
+    .BYTES_PER_BURST_WIDTH(BYTES_PER_BURST_WIDTH),
+    .DMA_TYPE_DEST(DMA_TYPE_DEST),
+    .DMA_TYPE_SRC(DMA_TYPE_SRC),
+    .DMA_AXI_ADDR_WIDTH(DMA_AXI_ADDR_WIDTH),
+    .DMA_LENGTH_WIDTH(DMA_LENGTH_WIDTH),
+    .DMA_LENGTH_ALIGN(DMA_LENGTH_ALIGN),
+    .DMA_CYCLIC(CYCLIC),
+    .HAS_DEST_ADDR(HAS_DEST_ADDR),
+    .HAS_SRC_ADDR(HAS_SRC_ADDR),
+    .DMA_2D_TRANSFER(DMA_2D_TRANSFER),
+    .SYNC_TRANSFER_START(SYNC_TRANSFER_START),
+    .CACHE_COHERENT_DEST(CACHE_COHERENT_DEST)
+  ) i_regmap (
+    .s_axi_aclk(s_axi_aclk),
+    .s_axi_aresetn(s_axi_aresetn),
+
+    .s_axi_awvalid(s_axi_awvalid),
+    .s_axi_awaddr(s_axi_awaddr),
+    .s_axi_awready(s_axi_awready),
+    .s_axi_awprot(s_axi_awprot),
+    .s_axi_wvalid(s_axi_wvalid),
+    .s_axi_wdata(s_axi_wdata),
+    .s_axi_wstrb(s_axi_wstrb),
+    .s_axi_wready(s_axi_wready),
+    .s_axi_bvalid(s_axi_bvalid),
+    .s_axi_bresp(s_axi_bresp),
+    .s_axi_bready(s_axi_bready),
+    .s_axi_arvalid(s_axi_arvalid),
+    .s_axi_araddr(s_axi_araddr),
+    .s_axi_arready(s_axi_arready),
+    .s_axi_arprot(s_axi_arprot),
+    .s_axi_rvalid(s_axi_rvalid),
+    .s_axi_rready(s_axi_rready),
+    .s_axi_rresp(s_axi_rresp),
+    .s_axi_rdata(s_axi_rdata),
+
+    // Interrupt
+    .irq(irq),
+
+     // Control interface
+    .ctrl_enable(ctrl_enable),
+    .ctrl_pause(ctrl_pause),
+
+     // Request interface
+    .request_valid(up_dma_req_valid),
+    .request_ready(up_dma_req_ready),
+    .request_dest_address(up_dma_req_dest_address),
+    .request_src_address(up_dma_req_src_address),
+    .request_x_length(up_dma_req_x_length),
+    .request_y_length(up_dma_req_y_length),
+    .request_dest_stride(up_dma_req_dest_stride),
+    .request_src_stride(up_dma_req_src_stride),
+    .request_sync_transfer_start(up_dma_req_sync_transfer_start),
+    .request_last(up_dma_req_last),
+
+    // DMA response interface
+    .response_eot(up_req_eot),
+    .response_measured_burst_length(up_req_measured_burst_length),
+    .response_partial(up_response_partial),
+    .response_valid(up_response_valid),
+    .response_ready(up_response_ready),
+
+    // Debug interface
+    .dbg_dest_addr(m_dest_axi_awaddr),
+    .dbg_src_addr(m_src_axi_araddr),
+    .dbg_status(dbg_status),
+    .dbg_ids0(dbg_ids0),
+    .dbg_ids1(dbg_ids1));
+
+  axi_dmac_transfer #(
+    .DMA_DATA_WIDTH_SRC(DMA_DATA_WIDTH_SRC),
+    .DMA_DATA_WIDTH_DEST(DMA_DATA_WIDTH_DEST),
+    .DMA_LENGTH_WIDTH(DMA_LENGTH_WIDTH),
+    .DMA_LENGTH_ALIGN(DMA_LENGTH_ALIGN),
+    .BYTES_PER_BEAT_WIDTH_DEST(BYTES_PER_BEAT_WIDTH_DEST),
+    .BYTES_PER_BEAT_WIDTH_SRC(BYTES_PER_BEAT_WIDTH_SRC),
+    .BYTES_PER_BURST_WIDTH(BYTES_PER_BURST_WIDTH),
+    .DMA_TYPE_DEST(DMA_TYPE_DEST),
+    .DMA_TYPE_SRC(DMA_TYPE_SRC),
+    .DMA_AXI_ADDR_WIDTH(DMA_AXI_ADDR_WIDTH),
+    .DMA_2D_TRANSFER(DMA_2D_TRANSFER),
+    .ASYNC_CLK_REQ_SRC(ASYNC_CLK_REQ_SRC),
+    .ASYNC_CLK_SRC_DEST(ASYNC_CLK_SRC_DEST),
+    .ASYNC_CLK_DEST_REQ(ASYNC_CLK_DEST_REQ),
+    .AXI_SLICE_DEST(AXI_SLICE_DEST),
+    .AXI_SLICE_SRC(AXI_SLICE_SRC),
+    .MAX_BYTES_PER_BURST(REAL_MAX_BYTES_PER_BURST),
+    .FIFO_SIZE(FIFO_SIZE),
+    .ID_WIDTH(ID_WIDTH),
+    .AXI_LENGTH_WIDTH_SRC(8-(4*DMA_AXI_PROTOCOL_SRC)),
+    .AXI_LENGTH_WIDTH_DEST(8-(4*DMA_AXI_PROTOCOL_DEST)),
+    .ENABLE_DIAGNOSTICS_IF(ENABLE_DIAGNOSTICS_IF),
+    .ALLOW_ASYM_MEM(ALLOW_ASYM_MEM),
+    .CACHE_COHERENT_DEST(CACHE_COHERENT_DEST)
+  ) i_transfer (
+    .ctrl_clk(s_axi_aclk),
+    .ctrl_resetn(s_axi_aresetn),
+
+    .ctrl_enable(ctrl_enable),
+    .ctrl_pause(ctrl_pause),
+
+    .req_valid(up_dma_req_valid),
+    .req_ready(up_dma_req_ready),
+    .req_dest_address(up_dma_req_dest_address),
+    .req_src_address(up_dma_req_src_address),
+    .req_x_length(up_dma_req_x_length),
+    .req_y_length(up_dma_req_y_length),
+    .req_dest_stride(up_dma_req_dest_stride),
+    .req_src_stride(up_dma_req_src_stride),
+    .req_sync_transfer_start(up_dma_req_sync_transfer_start),
+    .req_last(up_dma_req_last),
+
+    .req_eot(up_req_eot),
+    .req_measured_burst_length(up_req_measured_burst_length),
+    .req_response_partial(up_response_partial),
+    .req_response_valid(up_response_valid),
+    .req_response_ready(up_response_ready),
+
+    .m_dest_axi_aclk(m_dest_axi_aclk),
+    .m_dest_axi_aresetn(m_dest_axi_aresetn),
+    .m_src_axi_aclk(m_src_axi_aclk),
+    .m_src_axi_aresetn(m_src_axi_aresetn),
+
+    .m_axi_awaddr(m_dest_axi_awaddr),
+    .m_axi_awlen(m_dest_axi_awlen),
+    .m_axi_awsize(m_dest_axi_awsize),
+    .m_axi_awburst(m_dest_axi_awburst),
+    .m_axi_awprot(m_dest_axi_awprot),
+    .m_axi_awcache(m_dest_axi_awcache),
+    .m_axi_awvalid(m_dest_axi_awvalid),
+    .m_axi_awready(m_dest_axi_awready),
+
+    .m_axi_wdata(m_dest_axi_wdata),
+    .m_axi_wstrb(m_dest_axi_wstrb),
+    .m_axi_wready(m_dest_axi_wready),
+    .m_axi_wvalid(m_dest_axi_wvalid),
+    .m_axi_wlast(m_dest_axi_wlast),
+
+    .m_axi_bvalid(m_dest_axi_bvalid),
+    .m_axi_bresp(m_dest_axi_bresp),
+    .m_axi_bready(m_dest_axi_bready),
+
+    .m_axi_arready(m_src_axi_arready),
+    .m_axi_arvalid(m_src_axi_arvalid),
+    .m_axi_araddr(m_src_axi_araddr),
+    .m_axi_arlen(m_src_axi_arlen),
+    .m_axi_arsize(m_src_axi_arsize),
+    .m_axi_arburst(m_src_axi_arburst),
+    .m_axi_arprot(m_src_axi_arprot),
+    .m_axi_arcache(m_src_axi_arcache),
+
+    .m_axi_rdata(m_src_axi_rdata),
+    .m_axi_rready(m_src_axi_rready),
+    .m_axi_rvalid(m_src_axi_rvalid),
+    .m_axi_rlast(m_src_axi_rlast),
+    .m_axi_rresp(m_src_axi_rresp),
+
+    .s_axis_aclk(s_axis_aclk),
+    .s_axis_ready(s_axis_ready),
+    .s_axis_valid(s_axis_valid),
+    .s_axis_data(s_axis_data),
+    .s_axis_user(s_axis_user),
+    .s_axis_last(s_axis_last),
+    .s_axis_xfer_req(s_axis_xfer_req),
+
+    .m_axis_aclk(m_axis_aclk),
+    .m_axis_ready(m_axis_ready),
+    .m_axis_valid(m_axis_valid),
+    .m_axis_data(m_axis_data),
+    .m_axis_last(m_axis_last),
+    .m_axis_xfer_req(m_axis_xfer_req),
+
+    .fifo_wr_clk(fifo_wr_clk),
+    .fifo_wr_en(fifo_wr_en),
+    .fifo_wr_din(fifo_wr_din),
+    .fifo_wr_overflow(fifo_wr_overflow),
+    .fifo_wr_sync(fifo_wr_sync),
+    .fifo_wr_xfer_req(fifo_wr_xfer_req),
+
+    .fifo_rd_clk(fifo_rd_clk),
+    .fifo_rd_en(fifo_rd_en),
+    .fifo_rd_valid(fifo_rd_valid),
+    .fifo_rd_dout(fifo_rd_dout),
+    .fifo_rd_underflow(fifo_rd_underflow),
+    .fifo_rd_xfer_req(fifo_rd_xfer_req),
+
+    // DBG
+    .dbg_dest_request_id(dest_request_id),
+    .dbg_dest_address_id(dest_address_id),
+    .dbg_dest_data_id(dest_data_id),
+    .dbg_dest_response_id(dest_response_id),
+    .dbg_src_request_id(src_request_id),
+    .dbg_src_address_id(src_address_id),
+    .dbg_src_data_id(src_data_id),
+    .dbg_src_response_id(src_response_id),
+    .dbg_status(dbg_status),
+
+    .dest_diag_level_bursts(dest_diag_level_bursts));
+
+  assign m_dest_axi_arvalid = 1'b0;
+  assign m_dest_axi_rready = 1'b0;
+  assign m_dest_axi_araddr = 'h0;
+  assign m_dest_axi_arlen = 'h0;
+  assign m_dest_axi_arsize = 'h0;
+  assign m_dest_axi_arburst = 'h0;
+  assign m_dest_axi_arcache = 'h0;
+  assign m_dest_axi_arprot = 'h0;
+
+  assign m_src_axi_awvalid = 1'b0;
+  assign m_src_axi_wvalid = 1'b0;
+  assign m_src_axi_bready = 1'b0;
+  assign m_src_axi_awvalid = 'h0;
+  assign m_src_axi_awaddr = 'h0;
+  assign m_src_axi_awlen = 'h0;
+  assign m_src_axi_awsize = 'h0;
+  assign m_src_axi_awburst = 'h0;
+  assign m_src_axi_awcache = 'h0;
+  assign m_src_axi_awprot = 'h0;
+  assign m_src_axi_wvalid = 'h0;
+  assign m_src_axi_wdata = 'h0;
+  assign m_src_axi_wstrb = 'h0;
+  assign m_src_axi_wlast = 'h0;
+
+  assign m_axis_keep = {DMA_DATA_WIDTH_DEST/8{1'b1}};
+  assign m_axis_strb = {DMA_DATA_WIDTH_DEST/8{1'b1}};
+  assign m_axis_id = 'h0;
+  assign m_axis_dest = 'h0;
+  assign m_axis_user = 'h0;
+
+endmodule</p></object>
+<figcaption>
+<p><span class="caption-text">axi_dmac</span><a class="headerlink" href="#id1" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>The AXI DMAC is a high-speed, high-throughput, general purpose DMA controller
+intended to be used to transfer data between system memory and other peripherals
+like high-speed converters.</p>
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Supports multiple interface types</p>
+<ul>
+<li><p>AXI3/4 memory mapped</p></li>
+<li><p>AXI4 Streaming</p></li>
+<li><p>ADI FIFO interface</p></li>
+</ul>
+</li>
+<li><p>Zero-latency transfer switch-over architecture</p>
+<ul>
+<li><p>Allows <strong>continuous</strong> high-speed streaming</p></li>
+</ul>
+</li>
+<li><p>Cyclic transfers</p></li>
+<li><p>2D transfers</p></li>
+</ul>
+</section>
+<section id="utilization">
+<h2>Utilization<a class="headerlink" href="#utilization" title="Link to this heading">#</a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Device Family</p></th>
+<th class="head"><p>LUTs</p></th>
+<th class="head"><p>FFs</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Intel Arria 10</p></td>
+<td><p>TBD</p></td>
+<td><p>TBD</p></td>
+</tr>
+<tr class="row-odd"><td><p>Xilinx Artix 7</p></td>
+<td><p>TBD</p></td>
+<td><p>TBD</p></td>
+</tr>
+<tr class="row-even"><td><p>Xilinx Kintex 7</p></td>
+<td><p>TBD</p></td>
+<td><p>TBD</p></td>
+</tr>
+<tr class="row-odd"><td><p>Xilinx Virtex 7</p></td>
+<td><p>TBD</p></td>
+<td><p>TBD</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="files">
+<h2>Files<a class="headerlink" href="#files" title="Link to this heading">#</a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/library/axi_dmac/axi_dmac.v">axi_dmac.v</a></p></td>
+<td><p>Verilog source for the peripheral.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="block-diagram">
+<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Link to this heading">#</a></h2>
+<img alt="AXI DMAC block diagram" class="align-center" src="../../_images/block_diagram.svg" /></section>
+<section id="configuration-parameters">
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading">#</a></h2>
+<div><section id="hdl-parameters">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Choices/Range</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
+<td class="description"><section>
+<p>Instance identification number.</p>
+</section>
+</td>
+<td><p>Long</p></td>
+<td><p>0</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DMA_DATA_WIDTH_SRC</span></code></td>
+<td class="description"><section>
+<p>Data path width of the source interface in bits.</p>
+</section>
+</td>
+<td><p>Long</p></td>
+<td><p>64</p></td>
+<td><p>16, 32, 64, 128, 256, 512, 1024, 2048</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DMA_DATA_WIDTH_DEST</span></code></td>
+<td class="description"><section>
+<p>Data path width of the destination interface in bits.</p>
+</section>
+</td>
+<td><p>Long</p></td>
+<td><p>64</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DMA_LENGTH_WIDTH</span></code></td>
+<td class="description"><section>
+<p>Width of transfer length control register in bits.     Limits length of the transfers to 2**<code class="docutils literal notranslate"><span class="pre">DMA_LENGTH_WIDTH</span></code>.</p>
+</section>
+</td>
+<td><p>Long</p></td>
+<td><p>24</p></td>
+<td><p>From 8 to 32.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DMA_2D_TRANSFER</span></code></td>
+<td class="description"><section>
+<p>Enable support for 2D transfers.</p>
+</section>
+</td>
+<td><p>Bool</p></td>
+<td><p>False</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ASYNC_CLK_REQ_SRC</span></code></td>
+<td class="description"><section>
+<p>Whether the request and source clock domains are asynchronous.</p>
+</section>
+</td>
+<td><p>Bool</p></td>
+<td><p>True</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ASYNC_CLK_SRC_DEST</span></code></td>
+<td class="description"><section>
+<p>Whether the source and destination clock domains are asynchronous.</p>
+</section>
+</td>
+<td><p>Bool</p></td>
+<td><p>True</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ASYNC_CLK_DEST_REQ</span></code></td>
+<td class="description"><section>
+<p>Whether the destination and request clock domains are asynchronous.</p>
+</section>
+</td>
+<td><p>Bool</p></td>
+<td><p>True</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">AXI_SLICE_DEST</span></code></td>
+<td class="description"><section>
+<p>Whether to insert a extra register slice on the source data path.</p>
+</section>
+</td>
+<td><p>Bool</p></td>
+<td><p>False</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">AXI_SLICE_SRC</span></code></td>
+<td class="description"><section>
+<p>Whether to insert a extra register slice on the destination data path.</p>
+</section>
+</td>
+<td><p>Bool</p></td>
+<td><p>False</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">SYNC_TRANSFER_START</span></code></td>
+<td class="description"><section>
+<p>Enable the transfer start synchronization feature.</p>
+</section>
+</td>
+<td><p>Bool</p></td>
+<td><p>False</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">CYCLIC</span></code></td>
+<td class="description"><section>
+<p>Enable support for Cyclic transfers.</p>
+</section>
+</td>
+<td><p>Bool</p></td>
+<td><p>False</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DMA_AXI_PROTOCOL_DEST</span></code></td>
+<td class="description"><section>
+<p>AXI protocol version of the destionation interface (0 = AXI4, 1 = AXI3).</p>
+</section>
+</td>
+<td><p>Long</p></td>
+<td><p>0</p></td>
+<td><p>AXI3 (1), AXI4 (0)</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DMA_AXI_PROTOCOL_SRC</span></code></td>
+<td class="description"><section>
+<p>AXI protocol version of the source interface (0 = AXI4, 1 = AXI3).</p>
+</section>
+</td>
+<td><p>Long</p></td>
+<td><p>0</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code></td>
+<td class="description"><section>
+<p>Interface type for the destination interface     (0 = AXI-MM, 1 = AXI-Streaming, 2 = ADI-FIFO).</p>
+</section>
+</td>
+<td><p>Long</p></td>
+<td><p>0</p></td>
+<td><p>Memory-Mapped AXI (0), Streaming AXI (1), FIFO Interface (2)</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code></td>
+<td class="description"><section>
+<p>Interface type for the source interface     (0 = AXI-MM, 1 = AXI-Streaming, 2 = ADI-FIFO).</p>
+</section>
+</td>
+<td><p>Long</p></td>
+<td><p>2</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DMA_AXI_ADDR_WIDTH</span></code></td>
+<td class="description"><section>
+<p>Maximum address width for AXI interfaces.</p>
+</section>
+</td>
+<td><p>Long</p></td>
+<td><p>32</p></td>
+<td><p>From 16 to 64.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">MAX_BYTES_PER_BURST</span></code></td>
+<td class="description"><section>
+<p>Maximum size of bursts in bytes. Must be power of 2 in a range of 2     beats to 4096 bytes     The size of the burst is limited by the largest burst that both source     and destination supports. This depends on the selected protocol.     For AXI3 the maximum beats per burst is 16, while for AXI4 is 256. For     non AXI interfaces the maximum beats per burst is in theory unlimited     but it is set to 1024 to provide a reasonable upper threshold.     This limitation is done internally in the core.</p>
+</section>
+</td>
+<td><p>Long</p></td>
+<td><p>128</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">FIFO_SIZE</span></code></td>
+<td class="description"><section>
+<p>Size of the store-and-forward memory in bursts. Size of a burst is     defined by the <code class="docutils literal notranslate"><span class="pre">MAX_BYTES_PER_BURST</span></code> parameter. Must be power of 2 in     the range of 2 to 32.</p>
+</section>
+</td>
+<td><p>Long</p></td>
+<td><p>8</p></td>
+<td><p>2, 4, 8, 16, 32</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">AXI_ID_WIDTH_SRC</span></code></td>
+<td class="description"><p>Axi Id Width Src.</p></td>
+<td><p>Long</p></td>
+<td><p>1</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">AXI_ID_WIDTH_DEST</span></code></td>
+<td class="description"><p>Axi Id Width Dest.</p></td>
+<td><p>Long</p></td>
+<td><p>1</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DMA_AXIS_ID_W</span></code></td>
+<td class="description"><p>Dma Axis Id W.</p></td>
+<td><p>Long</p></td>
+<td><p>8</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DMA_AXIS_DEST_W</span></code></td>
+<td class="description"><p>Dma Axis Dest W.</p></td>
+<td><p>Long</p></td>
+<td><p>4</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DISABLE_DEBUG_REGISTERS</span></code></td>
+<td class="description"><section>
+<p>Disable debug registers.</p>
+</section>
+</td>
+<td><p>Bool</p></td>
+<td><p>False</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ENABLE_DIAGNOSTICS_IF</span></code></td>
+<td class="description"><section>
+<p>Add insight into internal operation of the core, for debug purposes     only.</p>
+</section>
+</td>
+<td><p>Bool</p></td>
+<td><p>False</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ALLOW_ASYM_MEM</span></code></td>
+<td class="description"><p>Allow Asym Mem.</p></td>
+<td><p>Long</p></td>
+<td><p>0</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">CACHE_COHERENT_DEST</span></code></td>
+<td class="description"><p>Assume cache coherent.</p></td>
+<td><p>Bool</p></td>
+<td><p>True</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div></section>
+<section id="interface">
+<h2>Interface<a class="headerlink" href="#interface" title="Link to this heading">#</a></h2>
+<div><section id="bus-interface-s_axi">
+<h3>s_axi<a class="headerlink" href="#bus-interface-s_axi" title="Link to this heading">#</a></h3>
+<section>
+<p>Memory mapped AXI-lite bus that provides access to modules register map.</p>
+</section>
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="8adb6956-fee7-486a-ac83-2a525c4935a8" name="8adb6956-fee7-486a-ac83-2a525c4935a8" type="checkbox"></input><label for="8adb6956-fee7-486a-ac83-2a525c4935a8"><p>Ports of s_axi bus.</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awaddr</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWADDR</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awprot</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWPROT</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWVALID</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWREADY</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wdata</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WDATA</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wstrb</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WSTRB</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WVALID</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WREADY</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bresp</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BRESP</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BVALID</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BREADY</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_araddr</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARADDR</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arprot</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARPROT</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARVALID</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARREADY</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rdata</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RDATA</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rresp</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RRESP</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RVALID</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RREADY</span></code></td>
+<td><p>in</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-s_axi_aclk">
+<h3>s_axi_aclk<a class="headerlink" href="#bus-interface-s_axi_aclk" title="Link to this heading">#</a></h3>
+<section>
+<p>All <code class="docutils literal notranslate"><span class="pre">s_axi</span></code> signals and <code class="docutils literal notranslate"><span class="pre">irq</span></code> are synchronous to this clock.</p>
+</section>
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="db270816-ab15-44bd-9cb7-f77e7c3d2cb7" name="db270816-ab15-44bd-9cb7-f77e7c3d2cb7" type="checkbox"></input><label for="db270816-ab15-44bd-9cb7-f77e7c3d2cb7"><p>Ports of s_axi_aclk bus.</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_aclk</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
+<td><p>in</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-s_axi_aresetn">
+<h3>s_axi_aresetn<a class="headerlink" href="#bus-interface-s_axi_aresetn" title="Link to this heading">#</a></h3>
+<section>
+<p>Resets the internal state of the peripheral.</p>
+</section>
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="0d1f512a-45e2-4105-adaf-7bd624266f5c" name="0d1f512a-45e2-4105-adaf-7bd624266f5c" type="checkbox"></input><label for="0d1f512a-45e2-4105-adaf-7bd624266f5c"><p>Ports of s_axi_aresetn bus.</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_aresetn</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RST</span></code></td>
+<td><p>in</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-m_dest_axi">
+<h3>m_dest_axi<a class="headerlink" href="#bus-interface-m_dest_axi" title="Link to this heading">#</a></h3>
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">0</span></code><span>.</span><section>
+</section>
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="cec6654f-e881-496e-b8e2-45e9c54f692b" name="cec6654f-e881-496e-b8e2-45e9c54f692b" type="checkbox"></input><label for="cec6654f-e881-496e-b8e2-45e9c54f692b"><p>Ports of m_dest_axi bus.</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_awid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWID</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_awaddr</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWADDR</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_awlen</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWLEN</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_awsize</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWSIZE</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_awburst</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWBURST</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_awlock</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWLOCK</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_awcache</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWCACHE</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_awprot</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWPROT</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_awvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWVALID</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_awready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWREADY</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_wid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WID</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_wdata</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WDATA</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_wstrb</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WSTRB</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_wlast</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WLAST</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_wvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WVALID</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_wready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WREADY</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_bid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BID</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_bresp</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BRESP</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_bvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BVALID</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_bready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BREADY</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_arid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARID</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_araddr</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARADDR</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_arlen</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARLEN</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_arsize</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARSIZE</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_arburst</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARBURST</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_arlock</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARLOCK</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_arcache</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARCACHE</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_arprot</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARPROT</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_arvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARVALID</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_arready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARREADY</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_rid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RID</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_rdata</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RDATA</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_rresp</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RRESP</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_rlast</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RLAST</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_rvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RVALID</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_rready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RREADY</span></code></td>
+<td><p>out</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-m_src_axi">
+<h3>m_src_axi<a class="headerlink" href="#bus-interface-m_src_axi" title="Link to this heading">#</a></h3>
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">0</span></code><span>.</span><section>
+</section>
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="2159f007-c372-4941-a19d-46b345d6f084" name="2159f007-c372-4941-a19d-46b345d6f084" type="checkbox"></input><label for="2159f007-c372-4941-a19d-46b345d6f084"><p>Ports of m_src_axi bus.</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_awid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWID</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_awaddr</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWADDR</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_awlen</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWLEN</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_awsize</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWSIZE</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_awburst</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWBURST</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_awlock</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWLOCK</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_awcache</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWCACHE</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_awprot</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWPROT</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_awvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWVALID</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_awready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWREADY</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_wid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WID</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_wdata</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WDATA</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_wstrb</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WSTRB</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_wlast</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WLAST</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_wvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WVALID</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_wready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WREADY</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_bid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BID</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_bresp</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BRESP</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_bvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BVALID</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_bready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BREADY</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_arid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARID</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_araddr</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARADDR</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_arlen</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARLEN</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_arsize</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARSIZE</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_arburst</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARBURST</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_arlock</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARLOCK</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_arcache</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARCACHE</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_arprot</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARPROT</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_arvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARVALID</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_arready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARREADY</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_rid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RID</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_rdata</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RDATA</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_rresp</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RRESP</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_rlast</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RLAST</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_rvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RVALID</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_rready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RREADY</span></code></td>
+<td><p>out</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-fifo_rd_clk">
+<h3>fifo_rd_clk<a class="headerlink" href="#bus-interface-fifo_rd_clk" title="Link to this heading">#</a></h3>
+<section>
+<p>The <code class="docutils literal notranslate"><span class="pre">fifo_rd</span></code> interface is synchronous to this clock.     Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code> parameter is set to FIFO (2).</p>
+</section>
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="2b6eebb9-bcc8-4c59-b4e2-92f0e5b6a37d" name="2b6eebb9-bcc8-4c59-b4e2-92f0e5b6a37d" type="checkbox"></input><label for="2b6eebb9-bcc8-4c59-b4e2-92f0e5b6a37d"><p>Ports of fifo_rd_clk bus.</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">fifo_rd_clk</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
+<td><p>in</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-fifo_wr_clk">
+<h3>fifo_wr_clk<a class="headerlink" href="#bus-interface-fifo_wr_clk" title="Link to this heading">#</a></h3>
+<section>
+<p>The fifo_wr interface is synchronous to this clock.     Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code> parameter is set to FIFO (2).</p>
+</section>
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="a75f20f3-3593-4bb6-ae3a-b1fc5a5dc1f0" name="a75f20f3-3593-4bb6-ae3a-b1fc5a5dc1f0" type="checkbox"></input><label for="a75f20f3-3593-4bb6-ae3a-b1fc5a5dc1f0"><p>Ports of fifo_wr_clk bus.</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">fifo_wr_clk</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
+<td><p>in</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-m_axis_aclk">
+<h3>m_axis_aclk<a class="headerlink" href="#bus-interface-m_axis_aclk" title="Link to this heading">#</a></h3>
+<section>
+<p>The <code class="docutils literal notranslate"><span class="pre">m_axis</span></code> interface is synchronous to this clock.     Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code> parameter is set to AXI-Streaming     (1).</p>
+</section>
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="75ec63e1-963c-4ae5-849e-266ceb45c8cd" name="75ec63e1-963c-4ae5-849e-266ceb45c8cd" type="checkbox"></input><label for="75ec63e1-963c-4ae5-849e-266ceb45c8cd"><p>Ports of m_axis_aclk bus.</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_axis_aclk</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
+<td><p>in</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-m_dest_axi_aclk">
+<h3>m_dest_axi_aclk<a class="headerlink" href="#bus-interface-m_dest_axi_aclk" title="Link to this heading">#</a></h3>
+<section>
+<p>The <code class="docutils literal notranslate"><span class="pre">m_src_axi</span></code> interface is synchronous to this clock.     Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code> parameter is set to AXI-MM (0).</p>
+</section>
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="36ad839b-960e-4291-8e00-55e8147d22d9" name="36ad839b-960e-4291-8e00-55e8147d22d9" type="checkbox"></input><label for="36ad839b-960e-4291-8e00-55e8147d22d9"><p>Ports of m_dest_axi_aclk bus.</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_aclk</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
+<td><p>in</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-m_src_axi_aclk">
+<h3>m_src_axi_aclk<a class="headerlink" href="#bus-interface-m_src_axi_aclk" title="Link to this heading">#</a></h3>
+<section>
+<p>The m_src_axi interface is synchronous to this clock.     Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code> parameter is set to AXI-MM (0).</p>
+</section>
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="8859bdd8-a566-4333-b4dc-285bbf285ee0" name="8859bdd8-a566-4333-b4dc-285bbf285ee0" type="checkbox"></input><label for="8859bdd8-a566-4333-b4dc-285bbf285ee0"><p>Ports of m_src_axi_aclk bus.</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_aclk</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
+<td><p>in</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-s_axis_aclk">
+<h3>s_axis_aclk<a class="headerlink" href="#bus-interface-s_axis_aclk" title="Link to this heading">#</a></h3>
+<section>
+<p>The <code class="docutils literal notranslate"><span class="pre">s_axis</span></code> interface is synchronous to this clock.     Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code> parameter is set to AXI-Streaming     (1).</p>
+</section>
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="1561b32c-a5f3-49f5-978a-57f6f00dc8cf" name="1561b32c-a5f3-49f5-978a-57f6f00dc8cf" type="checkbox"></input><label for="1561b32c-a5f3-49f5-978a-57f6f00dc8cf"><p>Ports of s_axis_aclk bus.</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axis_aclk</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
+<td><p>in</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-m_dest_axi_aresetn">
+<h3>m_dest_axi_aresetn<a class="headerlink" href="#bus-interface-m_dest_axi_aresetn" title="Link to this heading">#</a></h3>
+<section>
+<p>Reset for the <code class="docutils literal notranslate"><span class="pre">m_dest_axi</span></code> interface.     Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code> parameter is set to AXI-MM (0).</p>
+</section>
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="4b20c7e4-6672-4ed0-8f7d-ab687045dcc7" name="4b20c7e4-6672-4ed0-8f7d-ab687045dcc7" type="checkbox"></input><label for="4b20c7e4-6672-4ed0-8f7d-ab687045dcc7"><p>Ports of m_dest_axi_aresetn bus.</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_aresetn</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RST</span></code></td>
+<td><p>in</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-m_src_axi_aresetn">
+<h3>m_src_axi_aresetn<a class="headerlink" href="#bus-interface-m_src_axi_aresetn" title="Link to this heading">#</a></h3>
+<section>
+<p>Reset for the <code class="docutils literal notranslate"><span class="pre">m_src_axi</span></code> interface.     Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code> parameter is set to AXI-MM (0).</p>
+</section>
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="9fccdb1f-1a3f-40c5-b2e3-058c24d1e5f6" name="9fccdb1f-1a3f-40c5-b2e3-058c24d1e5f6" type="checkbox"></input><label for="9fccdb1f-1a3f-40c5-b2e3-058c24d1e5f6"><p>Ports of m_src_axi_aresetn bus.</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_aresetn</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RST</span></code></td>
+<td><p>in</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-s_axis">
+<h3>s_axis<a class="headerlink" href="#bus-interface-s_axis" title="Link to this heading">#</a></h3>
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">1</span></code><span>.</span><section>
+<p>Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code> parameter is set to AXI-Streaming     (1).</p>
+</section>
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="3f770cd3-594d-4329-bf49-621371309976" name="3f770cd3-594d-4329-bf49-621371309976" type="checkbox"></input><label for="3f770cd3-594d-4329-bf49-621371309976"><p>Ports of s_axis bus.</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axis_ready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TREADY</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axis_valid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TVALID</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axis_data</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TDATA</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axis_strb</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TSTRB</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axis_keep</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TKEEP</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axis_user</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TUSER</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axis_id</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TID</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axis_dest</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TDEST</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axis_last</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TLAST</span></code></td>
+<td><p>in</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-m_axis">
+<h3>m_axis<a class="headerlink" href="#bus-interface-m_axis" title="Link to this heading">#</a></h3>
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">1</span></code><span>.</span><section>
+<p>Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code> parameter is set to AXI-Streaming     (1).</p>
+</section>
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="f1230b4c-0e7f-4b6e-be72-dd41dd5a8b9f" name="f1230b4c-0e7f-4b6e-be72-dd41dd5a8b9f" type="checkbox"></input><label for="f1230b4c-0e7f-4b6e-be72-dd41dd5a8b9f"><p>Ports of m_axis bus.</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_axis_ready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TREADY</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_axis_valid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TVALID</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_axis_data</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TDATA</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_axis_strb</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TSTRB</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_axis_keep</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TKEEP</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_axis_user</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TUSER</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_axis_id</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TID</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_axis_dest</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TDEST</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_axis_last</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TLAST</span></code></td>
+<td><p>out</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-fifo_wr">
+<h3>fifo_wr<a class="headerlink" href="#bus-interface-fifo_wr" title="Link to this heading">#</a></h3>
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">2</span></code><span>.</span><section>
+<p>Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code> parameter is set to FIFO (2).</p>
+</section>
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="c80c1543-cf3c-46a9-98e1-6531ead49e56" name="c80c1543-cf3c-46a9-98e1-6531ead49e56" type="checkbox"></input><label for="c80c1543-cf3c-46a9-98e1-6531ead49e56"><p>Ports of fifo_wr bus.</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">fifo_wr_en</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">EN</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">fifo_wr_din</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DATA</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">fifo_wr_overflow</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">OVERFLOW</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">fifo_wr_sync</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SYNC</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">fifo_wr_xfer_req</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">XFER_REQ</span></code></td>
+<td><p>out</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-fifo_rd">
+<h3>fifo_rd<a class="headerlink" href="#bus-interface-fifo_rd" title="Link to this heading">#</a></h3>
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">2</span></code><span>.</span><section>
+<p>Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code> parameter is set to FIFO (2).</p>
+</section>
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="10238d5b-cd73-4828-895c-650371b6b7bd" name="10238d5b-cd73-4828-895c-650371b6b7bd" type="checkbox"></input><label for="10238d5b-cd73-4828-895c-650371b6b7bd"><p>Ports of fifo_rd bus.</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">fifo_rd_en</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">EN</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">fifo_rd_dout</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DATA</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">fifo_rd_valid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">VALID</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">fifo_rd_underflow</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">UNDERFLOW</span></code></td>
+<td><p>out</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-irq">
+<h3>irq<a class="headerlink" href="#bus-interface-irq" title="Link to this heading">#</a></h3>
+<section>
+<p>Interrupt output of the module. Is asserted when at least one of the     modules interrupt is pending and enabled.</p>
+</section>
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="8268c341-cac6-4da4-856c-36f7a9bb6ddd" name="8268c341-cac6-4da4-856c-36f7a9bb6ddd" type="checkbox"></input><label for="8268c341-cac6-4da4-856c-36f7a9bb6ddd"><p>Ports of irq bus.</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">irq</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">INTERRUPT</span></code></td>
+<td><p>out</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="ports">
+<h3>Ports<a class="headerlink" href="#ports" title="Link to this heading">#</a></h3>
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="edc000a3-b2cc-4df6-b616-c3a2de844f85" name="edc000a3-b2cc-4df6-b616-c3a2de844f85" type="checkbox"></input><label for="edc000a3-b2cc-4df6-b616-c3a2de844f85"><p>Ports table.</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axis_xfer_req</span></code></td>
+<td><p>out</p></td>
+<td><p>DMA_TYPE_SRC = 1</p></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_axis_xfer_req</span></code></td>
+<td><p>out</p></td>
+<td><p>DMA_TYPE_DEST = 1</p></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">fifo_rd_xfer_req</span></code></td>
+<td><p>out</p></td>
+<td><p>DMA_TYPE_DEST = 2</p></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dest_diag_level_bursts</span></code></td>
+<td><p>out</p></td>
+<td><p>ENABLE_DIAGNOSTICS_IF = 1</p></td>
+<td class="description"><section>
+<p>Only present when <code class="docutils literal notranslate"><span class="pre">ENABLE_DIAGNOSTICS_IF</span></code> parameter is set.</p>
+</section>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</div></section>
+<section id="register-map">
+<h2>Register Map<a class="headerlink" href="#register-map" title="Link to this heading">#</a></h2>
+<div><section id="hdl-regmap">
+<section id="register-map-DMA Controller (axi_dmac)">
+<h4>DMA Controller (axi_dmac) (DMA Controller (axi_dmac))<a class="headerlink" href="#register-map-DMA Controller (axi_dmac)" title="Link to this heading">#</a></h4>
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="f8dd1f99-7c54-41d1-bf8f-d92f621a6339" name="f8dd1f99-7c54-41d1-bf8f-d92f621a6339" type="checkbox"></input><label for="f8dd1f99-7c54-41d1-bf8f-d92f621a6339"><p>Register map table.</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper regmap docutils container">
+<table class="regmap docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>DWORD</p></th>
+<th class="head"><p>BYTE</p></th>
+<th class="head"><p>BITS</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">VERSION</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td class="description"><section>
+<p>Version of the peripheral. Follows semantic versioning. Current version 4.04.61.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">VERSION_MAJOR</span></code></td>
+<td><p>RO</p></td>
+<td class="default"><p>0x04</p></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">VERSION_MINOR</span></code></td>
+<td><p>RO</p></td>
+<td class="default"><p>0x03</p></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">VERSION_PATCH</span></code></td>
+<td><p>RO</p></td>
+<td class="default"><p>0x61</p></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">0x4</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">PERIPHERAL_ID</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">PERIPHERAL_ID</span></code></td>
+<td><p>RO</p></td>
+<td class="default"><p>‘’ID’’</p></td>
+<td class="description"><section>
+<p>Value of the ID configuration parameter.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">0x2</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">0x8</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SCRATCH</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SCRATCH</span></code></td>
+<td><p>RW</p></td>
+<td class="default"><p>0x00000000</p></td>
+<td class="description"><section>
+<p>Scratch register useful for debug.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">0x3</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">0xc</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">IDENTIFICATION</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">IDENTIFICATION</span></code></td>
+<td><p>RO</p></td>
+<td class="default"><p>0x444D4143</p></td>
+<td class="description"><section>
+<p>Peripheral identification (‘D’, ‘M’, ‘A’, ‘C’).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">0x4</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">0x10</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">INTERFACE_DESCRIPTION</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[3:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BYTES_PER_BEAT_DEST_LOG2</span></code></td>
+<td><p>RO</p></td>
+<td class="default"><p>log2(‘’DMA_DATA_WIDTH_DEST’’/8)</p></td>
+<td class="description"><section>
+<p>Width of data bus on destination interface. Log2 of interface data widths in bytes.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[5:4]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code></td>
+<td><p>RO</p></td>
+<td class="default"><p>‘’DMA_TYPE_DEST’’</p></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[11:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BYTES_PER_BEAT_SRC_LOG2</span></code></td>
+<td><p>RO</p></td>
+<td class="default"><p>log2(‘’DMA_DATA_WIDTH_SRC’’/8)</p></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[13:12]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code></td>
+<td><p>RO</p></td>
+<td class="default"><p>‘’DMA_TYPE_SRC’’</p></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[19:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BYTES_PER_BURST_WIDTH</span></code></td>
+<td><p>RO</p></td>
+<td class="default"><p>‘’BYTES_PER_BURST_WIDTH’’</p></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">0x20</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">0x80</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">IRQ_MASK</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TRANSFER_COMPLETED</span></code></td>
+<td><p>RW</p></td>
+<td class="default"><p>0x1</p></td>
+<td class="description"><section>
+<p>Masks the TRANSFER_COMPLETED IRQ.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TRANSFER_QUEUED</span></code></td>
+<td><p>RW</p></td>
+<td class="default"><p>0x1</p></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">0x21</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">0x84</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">IRQ_PENDING</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TRANSFER_COMPLETED</span></code></td>
+<td><p>RW1C</p></td>
+<td class="default"><p>0x0</p></td>
+<td class="description"><section>
+<p>This bit will be asserted if a transfer has been completed and the TRANSFER_COMPLETED bit in the IRQ_MASK register is not set. Either if all bytes have been transferred or an error occurred during the transfer.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TRANSFER_QUEUED</span></code></td>
+<td><p>RW1C</p></td>
+<td class="default"><p>0x0</p></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">0x22</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">0x88</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">IRQ_SOURCE</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TRANSFER_COMPLETED</span></code></td>
+<td><p>RO</p></td>
+<td class="default"><p>0x0</p></td>
+<td class="description"><section>
+<p>This bit will be asserted if a transfer has been completed. Either if all bytes have been transferred or an error occurred during the transfer. Cleared together with the corresponding IRQ_PENDING bit.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TRANSFER_QUEUED</span></code></td>
+<td><p>RO</p></td>
+<td class="default"><p>0x0</p></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">0x100</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">0x400</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CONTROL</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">PAUSE</span></code></td>
+<td><p>RW</p></td>
+<td class="default"><p>0x0</p></td>
+<td class="description"><section>
+<p>When set to 1 the currently active transfer is paused. It will be resumed once the bit is cleared again.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ENABLE</span></code></td>
+<td><p>RW</p></td>
+<td class="default"><p>0x0</p></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">0x101</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">0x404</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TRANSFER_ID</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TRANSFER_ID</span></code></td>
+<td><p>RO</p></td>
+<td class="default"><p>0x00</p></td>
+<td class="description"><section>
+<p>This register contains the ID of the next transfer. The ID is generated by the DMAC and after the transfer has been started can be used to check if the transfer has finished by checking the corresponding bit in the TRANSFER_DONE register. The contents of this register is only valid if TRANSFER_SUBMIT is 0.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">0x102</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">0x408</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TRANSFER_SUBMIT</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TRANSFER_SUBMIT</span></code></td>
+<td><p>RW</p></td>
+<td class="default"><p>0x00</p></td>
+<td class="description"><section>
+<p>Writing a 1 to this register queues a new transfer. The bit transitions back to 0 once the transfer has been queued or the DMA channel is disabled.  Writing a 0 to this register has no effect.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">0x103</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">0x40c</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">FLAGS</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CYCLIC</span></code></td>
+<td><p>RW</p></td>
+<td class="default"><p>‘’CYCLIC’’</p></td>
+<td class="description"><section>
+<p>Setting this field to 1 puts the DMA transfer into cyclic mode. In cyclic mode the controller will re-start a transfer again once it has finished. In cyclic mode no end-of-transfer interrupts will be generated.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TLAST</span></code></td>
+<td><p>RW</p></td>
+<td class="default"><p>0x1</p></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">PARTIAL_REPORTING_EN</span></code></td>
+<td><p>RW</p></td>
+<td class="default"><p>0x0</p></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">0x104</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">0x410</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DEST_ADDRESS</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DEST_ADDRESS</span></code></td>
+<td><p>RW</p></td>
+<td class="default"><p>0x00000000</p></td>
+<td class="description"><section>
+<p>This register contains the destination address of the transfer. The address needs to be aligned to the bus width.  This register is only valid if the DMA channel has been configured for write to memory support.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">0x105</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">0x414</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SRC_ADDRESS</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SRC_ADDRESS</span></code></td>
+<td><p>RW</p></td>
+<td class="default"><p>0x00000000</p></td>
+<td class="description"><section>
+<p>This register contains the source address of the transfer. The address needs to be aligned to the bus width.  This register is only valid if the DMA channel has been configured for read from memory support.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">0x106</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">0x418</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">X_LENGTH</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[23:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">X_LENGTH</span></code></td>
+<td><p>RW</p></td>
+<td class="default"><p>{log2(max(\n’’DMA_DATA_WIDTH_SRC’’,\n’’DMA_DATA_WIDTH_DEST’’\n)/8){1’b1}}</p></td>
+<td class="description"><section>
+<p>Number of bytes to transfer - 1.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">0x107</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">0x41c</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">Y_LENGTH</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[23:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">Y_LENGTH</span></code></td>
+<td><p>RW</p></td>
+<td class="default"><p>0x000000</p></td>
+<td class="description"><section>
+<p>Number of rows to transfer - 1.  Note, this field is only valid if the DMA channel has been configured with 2D transfer support.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">0x108</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">0x420</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DEST_STRIDE</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[23:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DEST_STRIDE</span></code></td>
+<td><p>RW</p></td>
+<td class="default"><p>0x000000</p></td>
+<td class="description"><section>
+<p>The number of bytes between the start of one row and the next row for the destination address. Needs to be aligned to the bus width.  Note, this field is only valid if the DMA channel has been configured with 2D transfer support and write to memory support.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">0x109</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">0x424</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SRC_STRIDE</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[23:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SRC_STRIDE</span></code></td>
+<td><p>RW</p></td>
+<td class="default"><p>0x000000</p></td>
+<td class="description"><section>
+<p>The number of bytes between the start of one row and the next row for the source address. Needs to be aligned to the bus width.  Note, this field is only valid if the DMA channel has been configured with 2D transfer and read from memory support.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">0x10a</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">0x428</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TRANSFER_DONE</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td class="description"><section>
+<p>If bit x is set in this register the transfer with ID x has been completed. The bit will automatically be cleared when a new transfer with this ID is queued and will be set when the transfer has been completed.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TRANSFER_0_DONE</span></code></td>
+<td><p>RO</p></td>
+<td class="default"><p>0x0</p></td>
+<td class="description"><section>
+<p>If this bit is set the transfer with ID 0 has been completed.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TRANSFER_1_DONE</span></code></td>
+<td><p>RO</p></td>
+<td class="default"><p>0x0</p></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TRANSFER_2_DONE</span></code></td>
+<td><p>RO</p></td>
+<td class="default"><p>0x0</p></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[3]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TRANSFER_3_DONE</span></code></td>
+<td><p>RO</p></td>
+<td class="default"><p>0x0</p></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">PARTIAL_TRANSFER_DONE</span></code></td>
+<td><p>RO</p></td>
+<td class="default"><p>0x0</p></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">0x10b</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">0x42c</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ACTIVE_TRANSFER_ID</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[4:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ACTIVE_TRANSFER_ID</span></code></td>
+<td><p>RO</p></td>
+<td class="default"><p>0x00</p></td>
+<td class="description"><section>
+<p>ID of the currently active transfer. When no transfer is active this register will be equal to the TRANSFER_ID register.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">0x10c</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">0x430</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">STATUS</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
+<td><p>RO</p></td>
+<td class="default"><p>0x00</p></td>
+<td class="description"><section>
+<p>This register is reserved for future usage. Reading it will always return 0.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">0x10d</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">0x434</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CURRENT_DEST_ADDRESS</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CURRENT_DEST_ADDRESS</span></code></td>
+<td><p>RO</p></td>
+<td class="default"><p>0x00</p></td>
+<td class="description"><section>
+<p>Address to which the next data sample is written to.  This register is only valid if the DMA channel has been configured for write to memory support.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">0x10e</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">0x438</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CURRENT_SRC_ADDRESS</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CURRENT_SRC_ADDRESS</span></code></td>
+<td><p>RO</p></td>
+<td class="default"><p>0x00</p></td>
+<td class="description"><section>
+<p>Address form which the next data sample is read.  This register is only valid if the DMA channel has been configured for read from memory support.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">0x112</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">0x448</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TRANSFER_PROGRESS</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[23:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TRANSFER_PROGRESS</span></code></td>
+<td><p>RO</p></td>
+<td class="default"><p>0x000000</p></td>
+<td class="description"><section>
+<p>This field presents the number of bytes transferred to the destination for the current transfer. This register will be cleared once the transfer completes. This should be used for debugging purposes only.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">0x113</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">0x44c</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">PARTIAL_TRANSFER_LENGTH</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">PARTIAL_LENGTH</span></code></td>
+<td><p>RO</p></td>
+<td class="default"><p>0x000000</p></td>
+<td class="description"><section>
+<p>Length of the partial transfer in bytes. Represents the number of bytes received until the moment of TLAST assertion. This will be smaller than the programmed length from the X_LENGTH and Y_LENGTH registers.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">0x114</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">0x450</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">PARTIAL_TRANSFER_ID</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td class="description"><section>
+<p>Must be read after the PARTIAL_TRANSFER_LENGTH registers.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">PARTIAL_TRANSFER_ID</span></code></td>
+<td><p>RO</p></td>
+<td class="default"><p>0x0</p></td>
+<td class="description"><section>
+<p>ID of the transfer that was partial.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">0x124</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">0x490</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DEST_ADDRESS_HIGH</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DEST_ADDRESS_HIGH</span></code></td>
+<td><p>RW</p></td>
+<td class="default"><p>0x00000000</p></td>
+<td class="description"><section>
+<p>This register contains the HIGH segment of the destination address of the transfer.  This register is only valid if the DMA_AXI_ADDR_WIDTH is bigger than 32 and if DMA channel has been configured for write to memory support.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">0x125</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">0x494</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SRC_ADDRESS_HIGH</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SRC_ADDRESS_HIGH</span></code></td>
+<td><p>RW</p></td>
+<td class="default"><p>0x00000000</p></td>
+<td class="description"><section>
+<p>This register contains the HIGH segment of the source address of the transfer.  This register is only valid if the DMA_AXI_ADDR_WIDTH is bigger than 32 and if the DMA channel has been configured for read from memory support.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">0x126</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">0x498</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CURRENT_DEST_ADDRESS_HIGH</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CURRENT_DEST_ADDRESS_HIGH</span></code></td>
+<td><p>RO</p></td>
+<td class="default"><p>0x00</p></td>
+<td class="description"><section>
+<p>HIGH segment of the address to which the next data sample is written to.  This register is only valid if the DMA_AXI_ADDR_WIDTH is bigger than 32 and if the DMA channel has been configured for write to memory support.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">0x127</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">0x49c</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CURRENT_SRC_ADDRESS_HIGH</span></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td class="description"><section>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CURRENT_SRC_ADDRESS_HIGH</span></code></td>
+<td><p>RO</p></td>
+<td class="default"><p>0x00</p></td>
+<td class="description"><section>
+<p>HIGH segment of the address from which the next data sample is read.  This register is only valid if the DMA_AXI_ADDR_WIDTH is bigger than 32 and if the DMA channel has been configured for read from memory support.</p>
+</section>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Access Type</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>RO</p></td>
+<td><p>Read-only</p></td>
+<td><p>Reads will return the current register value. Writes have no effect.</p></td>
+</tr>
+<tr class="row-odd"><td><p>RW</p></td>
+<td><p>Read-write</p></td>
+<td><p>Reads will return the current register value. Writes will change the current register value.</p></td>
+</tr>
+<tr class="row-even"><td><p>RW1C</p></td>
+<td><p>Read,write-1-to-clear</p></td>
+<td><p>Reads will return the current register value. Writing the register will clear those bits of the register which were set to 1 in the value written. Bits are set by hardware.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+</div></section>
+<section id="theory-of-operation">
+<h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Link to this heading">#</a></h2>
+<section id="hdl-synthesis-settings">
+<h3>HDL Synthesis Settings<a class="headerlink" href="#hdl-synthesis-settings" title="Link to this heading">#</a></h3>
+<section id="sizing-of-the-internal-store-and-forward-data-buffer">
+<h4>Sizing of the internal store-and-forward data buffer<a class="headerlink" href="#sizing-of-the-internal-store-and-forward-data-buffer" title="Link to this heading">#</a></h4>
+<p>An internal buffer is used to store data from the source interface before it is
+forwarded to the destination once that can accept it. The purpose of the buffer
+is to even out the rate mismatches between the source and destination. e.g if
+the destination is a FIFO interface with a fixed data rate and the source is a
+MM interface, the intent is to keep the buffer as full as possible so in case of
+the MM interface is not ready data can be still provided to the destination
+without risking an underflow. Similarly in case the destination is a MM
+interface and the source a FIFO interface with a fixed data rate, the intent is
+to keep the buffer as empty as possible so in case the MM interface is not ready
+data can be still accepted from the source without risking an overflow.</p>
+<p>The size of the buffer in bytes is determined by the synthesis parameters of the
+module and it is equal to <code class="docutils literal notranslate"><span class="pre">FIFO_SIZE</span></code> * <code class="docutils literal notranslate"><span class="pre">MAX_BYTES_PER_BURST</span></code></p>
+<p>The width of the buffer is sized to be the largest width from the source and
+destination interfaces.</p>
+<ul class="simple">
+<li><p>BUFFER_WIDTH_IN_BYTES =
+MAX(<code class="docutils literal notranslate"><span class="pre">DMA_DATA_WIDTH_SRC</span></code>,<code class="docutils literal notranslate"><span class="pre">DMA_DATA_WIDTH_DEST</span></code>)/8</p></li>
+<li><p>BUFFER_DEPTH = <code class="docutils literal notranslate"><span class="pre">FIFO_SIZE</span></code>*<code class="docutils literal notranslate"><span class="pre">MAX_BYTES_PER_BURST</span></code> /
+BUFFER_WIDTH_IN_BYTES</p></li>
+</ul>
+</section>
+</section>
+<section id="interfaces-and-signals">
+<h3>Interfaces and Signals<a class="headerlink" href="#interfaces-and-signals" title="Link to this heading">#</a></h3>
+<section id="register-map-configuration-interface">
+<h4>Register Map Configuration Interface<a class="headerlink" href="#register-map-configuration-interface" title="Link to this heading">#</a></h4>
+<p>The register map configuration interface can be accessed through the AXI4-Lite
+<code class="docutils literal notranslate"><span class="pre">S_AXI</span></code> interface. The interface is synchronous to the <code class="docutils literal notranslate"><span class="pre">s_axi_aclk</span></code>. The
+<code class="docutils literal notranslate"><span class="pre">s_axi_aresetn</span></code> signal is used to reset the peripheral and should be asserted
+during system startup until the <code class="docutils literal notranslate"><span class="pre">s_axi_aclk</span></code> is active and stable.
+De-assertion of the reset signal should by synchronous to <code class="docutils literal notranslate"><span class="pre">s_axi_aclk</span></code>.</p>
+</section>
+<section id="data-interfaces">
+<h4>Data Interfaces<a class="headerlink" href="#data-interfaces" title="Link to this heading">#</a></h4>
+<section id="axi-streaming-slave">
+<h5>AXI-Streaming slave<a class="headerlink" href="#axi-streaming-slave" title="Link to this heading">#</a></h5>
+<p>The interface back-pressures through the <code class="docutils literal notranslate"><span class="pre">s_axis_ready</span></code> signal. If the core is
+in the idle state the <code class="docutils literal notranslate"><span class="pre">s_axis_ready</span></code> signal will stay low until a descriptor
+is submitted. The <code class="docutils literal notranslate"><span class="pre">s_axis_ready</span></code> will go low once the internal buffer of the
+core is full. It will go high only after enough space is available to store at
+least a burst (<code class="docutils literal notranslate"><span class="pre">MAX_BYTES_PER_BURST</span></code> bytes); Once the current transfer is
+finished and a new descriptor was not submitted the <code class="docutils literal notranslate"><span class="pre">s_axis_ready</span></code> will go
+low. The <code class="docutils literal notranslate"><span class="pre">s_axis_ready</span></code> will go low also when the TLAST is used that asserts
+unexpectedly. Unexpectedly means that the transfer length defined by TLAST is
+shorter than the transfer length programmed in the descriptor (<code class="docutils literal notranslate"><span class="pre">X_LENGTH</span></code>
+register). If the next descriptor was already submitted the <code class="docutils literal notranslate"><span class="pre">s_axis_ready</span></code>
+will assert within few cycles, in other hand will stay low until a new
+descriptor is submitted.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">xfer_req</span></code> is asserted once a transfer is submitted to the descriptor
+queue and stays high until all data from the current transfer is received/send
+through the AXI Stream/FIFO interface. If during the current transfer another
+descriptor is queued (submitted) it will stay high and so on.</p>
+</section>
+</section>
+</section>
+<section id="configuration-interface">
+<h3>Configuration Interface<a class="headerlink" href="#configuration-interface" title="Link to this heading">#</a></h3>
+<p>The peripheral features a register map configuration interface that can be
+accessed through the AXI4-Lite <code class="docutils literal notranslate"><span class="pre">S_AXI</span></code> port. The register map can be used to
+configure the peripherals operational parameters, query the current status of
+the device and query the features supported by the device.</p>
+<section id="peripheral-identification">
+<h4>Peripheral Identification<a class="headerlink" href="#peripheral-identification" title="Link to this heading">#</a></h4>
+<p>The peripheral contains multiple registers that allow the identification of the
+peripheral as well as discovery of features that were configured at HDL
+synthesis time. Apart from the <code class="docutils literal notranslate"><span class="pre">SCRATCH</span></code> register all registers in this
+section are read only and writes to them will be ignored.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">VERSION</span></code> (<code class="docutils literal notranslate"><span class="pre">0x000</span></code>) register contains the version of the peripheral. The
+version determines the register map layout and general features supported by the
+peripheral. The version number follows <a class="reference external" href="http://semver.org/">semantic versioning</a>.
+Increments in the major number indicate backwards incompatible changes, increments
+in the minor number indicate backwards compatible changes, patch letter increments
+indicate fixed incorrect behavior.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">PERIPHERAL_ID</span></code> (<code class="docutils literal notranslate"><span class="pre">0x004</span></code>) register contains the value of the <code class="docutils literal notranslate"><span class="pre">ID</span></code> HDL
+configuration parameter that was set during synthesis. Its primary function is
+to allow to distinguish between multiple instances of the peripheral in the same
+design.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">SCRATCH</span></code> (<code class="docutils literal notranslate"><span class="pre">0x008</span></code>) register is a general purpose 32-bit register that
+can be set to an arbitrary values. Reading the register will yield the value
+previously written (The value will be cleared when the peripheral is reset).
+It’s content does not affect the operation of the peripheral. It can be used by
+software to test whether the register map is accessible or store custom
+peripheral associated data.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">IDENTIFICATION</span></code> (<code class="docutils literal notranslate"><span class="pre">0x00c</span></code>) register contains the value of <code class="docutils literal notranslate"><span class="pre">&quot;DMAC&quot;</span></code>.
+This value is unique to this type of peripheral and can be used to ensure that
+the peripheral exists at the expected location in the memory mapped IO register
+space.</p>
+</section>
+<section id="interrupt-handling">
+<h4>Interrupt Handling<a class="headerlink" href="#interrupt-handling" title="Link to this heading">#</a></h4>
+<p>Interrupt processing is handled by three closely related registers. All three
+registers follow the same layout, each bit in the register corresponds to one
+particular interrupt.</p>
+<p>When an interrupt event occurs it is recorded in the <code class="docutils literal notranslate"><span class="pre">IRQ_SOURCE</span></code> (<code class="docutils literal notranslate"><span class="pre">0x088</span></code>)
+register. For a recorded interrupt event the corresponding bit is set to 1. If
+an interrupt event occurs while the bit is already set to 1 it will stay set to
+1.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">IRQ_MASK</span></code> (<code class="docutils literal notranslate"><span class="pre">0x080</span></code>) register controls how recorded interrupt events
+propagate. An interrupt is considered to be enabled if the corresponding bit in
+the <code class="docutils literal notranslate"><span class="pre">IRQ_MASK</span></code> register is set to 0, it is considered to be disabled if the
+bit is set to 1.</p>
+<p>Disabling an interrupt will not prevent it from being recorded, but only its
+propagation. This means if an interrupt event was previously recorded while the
+interrupt was disabled and the interrupt is being enabled the interrupt event
+will then propagate.</p>
+<p>An interrupt event that has been recorded and is enabled propagates to the
+<code class="docutils literal notranslate"><span class="pre">IRQ_PENDING</span></code> (<code class="docutils literal notranslate"><span class="pre">0x084</span></code>) register. The corresponding bit for such an
+interrupt will read as 1. Disabled or interrupts for which no events have been
+recorded will read as 0. Also if at least one interrupt has been recorded and is
+enabled the external <code class="docutils literal notranslate"><span class="pre">irq</span></code> signal will be asserted to signal the IRQ event to
+the upstream IRQ controller.</p>
+<p>A recorded interrupt event can be cleared (or acknowledged) by writing a 1 to
+the corresponding bit to either the <code class="docutils literal notranslate"><span class="pre">IRQ_SOURCE</span></code> or <code class="docutils literal notranslate"><span class="pre">IRQ_PENDING</span></code> register.
+It is possible to clear multiple interrupt events at the same time by setting
+multiple bits in a single write operation.</p>
+<p>For more details regarding interrupt operation see the <a class="reference internal" href="#axi-dmac-interrupts"><span class="std std-ref">Interrupts</span></a>.</p>
+</section>
+<section id="transfer-configuration">
+<h4>Transfer Configuration<a class="headerlink" href="#transfer-configuration" title="Link to this heading">#</a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">DEST_ADDRESS</span></code> (<code class="docutils literal notranslate"><span class="pre">0x410</span></code>) register contains the destination address of
+the transfer. The address must be aligned to the destination bus width.
+Non-aligned addresses will be automatically aligned internally by setting the
+LSBs to 0. This register is only valid if the DMA channel has been configured
+for write to memory support.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">SRC_ADDRESS</span></code> (<code class="docutils literal notranslate"><span class="pre">0x414</span></code>) register contains the source address of the
+transfer. The address must be aligned to the source bus width. Non-aligned
+addresses will be automatically aligned internally by setting the LSBs to 0.
+This register is only valid if the DMA channel has been configured for write
+from memory support.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">X_LENGTH</span></code> (<code class="docutils literal notranslate"><span class="pre">0x418</span></code>) register contains the number of bytes to transfer
+per row. The number of bytes is equal to the value of the register + 1 (E.g. a
+value of 0x3ff means 0x400 bytes).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">Y_LENGTH</span></code> (<code class="docutils literal notranslate"><span class="pre">0x41C</span></code>) register contains the number of rows to transfer.
+The number of rows is equal to the value of the register + 1 (E.g. a value of
+1079 means 1080 rows). This register is only valid if the DMA channel has been
+configured with 2D transfer support. If 2D transfer support is disabled the
+number of rows is always 1 per transfer.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">SRC_STRIDE</span></code> (<code class="docutils literal notranslate"><span class="pre">0x424</span></code>) and <code class="docutils literal notranslate"><span class="pre">DEST_STRIDE</span></code> (<code class="docutils literal notranslate"><span class="pre">0x420</span></code>) registers contain
+the number of bytes between the start of one row and the next row. Needs to be
+aligned to the bus width. This field is only valid if the DMA channel has been
+configured with 2D transfer support.</p>
+<p>The total number of bytes transferred is equal to (<code class="docutils literal notranslate"><span class="pre">X_LENGTH</span></code> + <code class="docutils literal notranslate"><span class="pre">1</span></code>) *
+(<code class="docutils literal notranslate"><span class="pre">Y_LENGTH</span></code> + <code class="docutils literal notranslate"><span class="pre">1</span></code>).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">FLAGS</span></code> (<code class="docutils literal notranslate"><span class="pre">0x40C</span></code>) register controls the behavior of the transfer.</p>
+<ul class="simple">
+<li><p>If the <code class="docutils literal notranslate"><span class="pre">CYCLIC</span></code> (<code class="docutils literal notranslate"><span class="pre">[0]</span></code>) bit is set the transfer will run in
+<a class="reference internal" href="#axi-dmac-cyclic-transfers"><span class="std std-ref">Cyclic Transfers</span></a>.</p></li>
+<li><p>If the <code class="docutils literal notranslate"><span class="pre">TLAST</span></code> (<code class="docutils literal notranslate"><span class="pre">[1]</span></code>) bit is set the TLAST signal will be asserted
+during the last beat of the AXI Stream transfer.</p></li>
+</ul>
+</section>
+<section id="transfer-submission">
+<h4>Transfer Submission<a class="headerlink" href="#transfer-submission" title="Link to this heading">#</a></h4>
+<p>Writing a 1 to the <code class="docutils literal notranslate"><span class="pre">TRANSFER_SUBMIT</span></code> (<code class="docutils literal notranslate"><span class="pre">0x408</span></code>) register queues a new
+transfer. If the internal transfer queue is full the <code class="docutils literal notranslate"><span class="pre">TRANSFER_SUBMIT</span></code> bit
+will stay asserted until room becomes available, the bit transitions back to 0
+once the transfer has been queued. Writing a 0 to this register has no effect.
+Writing a 1 to the register while it is already 1 will also have no effect. When
+submitting a new transfer software should always check that the
+<code class="docutils literal notranslate"><span class="pre">TRANSFER_SUBMIT</span></code> [0] bit is 0 before setting it, otherwise the transfer will
+not be queued.</p>
+<p>If the DMA channel is disabled (<code class="docutils literal notranslate"><span class="pre">ENABLE</span></code> control bit is set to 0) while a
+queuing operation is in progress it will be aborted and the <code class="docutils literal notranslate"><span class="pre">TRANSFER_SUBMIT</span></code>
+bit will de-assert.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">TRANSFER_ID</span></code> (<code class="docutils literal notranslate"><span class="pre">0x404</span></code>) register contains the ID of the next transfer.
+The ID is generated by the DMA controller and can be used to check if a transfer
+has been completed by checking the corresponding bit in the <code class="docutils literal notranslate"><span class="pre">TRANSFER_DONE</span></code>
+(<code class="docutils literal notranslate"><span class="pre">0x428</span></code>) register. The contents of this register is only valid if
+<code class="docutils literal notranslate"><span class="pre">TRANSFER_SUBMIT</span></code> is 0. Software should read this register before asserting
+the <code class="docutils literal notranslate"><span class="pre">TRANSFER_SUBMIT</span></code> bit.</p>
+</section>
+<section id="transfer-status">
+<h4>Transfer Status<a class="headerlink" href="#transfer-status" title="Link to this heading">#</a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">TRANSFER_DONE</span></code> (<code class="docutils literal notranslate"><span class="pre">0x428</span></code>) register indicates whether a submitted
+transfer has been completed. Each bit in the register corresponds to transfer
+ID. When a new transfer is submitted the corresponding bit in the register is
+cleared, once the the transfer has been completed the corresponding bit will be
+set.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">ACTIVE_TRANSFER_ID</span></code> (<code class="docutils literal notranslate"><span class="pre">0x42C</span></code>) register holds the ID of the currently
+active transfer. When no transfer is active the value of register will be equal
+to the value of the <code class="docutils literal notranslate"><span class="pre">TRANSFER_ID</span></code> (<code class="docutils literal notranslate"><span class="pre">0x404</span></code>) register.</p>
+</section>
+<section id="transfer-length-reporting">
+<h4>Transfer length reporting<a class="headerlink" href="#transfer-length-reporting" title="Link to this heading">#</a></h4>
+<p>When using MM or FIFO source interfaces the amount of data which the core will
+transfer is defined by <code class="docutils literal notranslate"><span class="pre">X_LENGTH</span></code> and <code class="docutils literal notranslate"><span class="pre">Y_LENGTH</span></code> registers in the moment of
+the transfer submission. Once the corresponding bit from the <code class="docutils literal notranslate"><span class="pre">TRANSFER_DONE</span></code>
+is set the programmed amount of data is transferred.</p>
+<p>When using streaming interface (AXIS) as source, the length of transfers will be
+defined by the assertion of <code class="docutils literal notranslate"><span class="pre">TLAST</span></code> signal which is unknown at the moment of
+transfer submission. In this case <code class="docutils literal notranslate"><span class="pre">X_LENGTH</span></code> and <code class="docutils literal notranslate"><span class="pre">Y_LENGTH</span></code> specified during
+the transfer submission will act as upper limits for the transfer. Transfers
+where the TLAST occurs ahead of programmed length will be noted as partial
+transfers. If <code class="docutils literal notranslate"><span class="pre">PARTIAL_REPORTING_EN</span></code> bit from the <code class="docutils literal notranslate"><span class="pre">FLAGS</span></code> register is set,
+the length of partial transfers will be recorded and exposed through the
+<code class="docutils literal notranslate"><span class="pre">PARTIAL_TRANSFER_LENGTH</span></code> and <code class="docutils literal notranslate"><span class="pre">PARTIAL_TRANSFER_ID</span></code> registers. The
+availability of information regarding partial transfers is done through the
+<code class="docutils literal notranslate"><span class="pre">PARTIAL_TRANSFER_DONE</span></code> field of <code class="docutils literal notranslate"><span class="pre">TRANSFER_DONE</span></code> register.</p>
+<p>During operation the <code class="docutils literal notranslate"><span class="pre">TRANSFER_PROGRESS</span></code> register can be consulted to check
+the progress of the current transfer. The register presents the number of bytes
+the destination accepted during the in progress transfer. This register will be
+cleared once the transfer completes. This register should be used for debugging
+purposes only.</p>
+</section>
+<section id="transfer-tear-down">
+<h4>Transfer Tear-down<a class="headerlink" href="#transfer-tear-down" title="Link to this heading">#</a></h4>
+<p>Non-cyclic transfers stop once the programmed amount of data is transferred to
+the destination. Cyclic transfers needs to be stopped with software intervention
+by setting the <code class="docutils literal notranslate"><span class="pre">ENABLE</span></code> control bit to 0. In case if required, non cyclic
+transfers can be interrupted in the same way. The transfer tear down is done
+gracefully and is done at a burst resolution on MM interfaces and beat
+resolution on non-MM interfaces. DMAC shuts down gracefully as fast as possible
+while completing all in-progress MM transactions.</p>
+<p>Source side: For MM interface once the <code class="docutils literal notranslate"><span class="pre">ENABLE</span></code> bit de-asserts the DMAC won’t
+issue new requests towards the source interface but will wait until all pending
+requests are fulfilled by the source. For non-MM interfaces, once the <code class="docutils literal notranslate"><span class="pre">ENABLE</span></code>
+bit de-asserts the DMAC will stop to accept new data. This will lead to partial
+bursts in the internal buffer but this data will be cleared/lost once the
+destination side completes all pending bursts.</p>
+<p>Destination side: For MM interface the DMAC will complete all pending requests
+that have been started by issuing the address. For non-MM interfaces once the
+<code class="docutils literal notranslate"><span class="pre">ENABLE</span></code> bit de-asserts the DMAC will stop to drive new data. All the data
+from the internal buffer will be cleared/lost. In case of AXIS the DMAC will
+wait for data to be accepted if valid is high since it can’t just de-assert
+valid without breaking the interface semantics</p>
+</section>
+</section>
+<section id="interrupts">
+<span id="axi-dmac-interrupts"></span><h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading">#</a></h3>
+<p>The DMA controller supports interrupts to allow asynchronous notification of
+certain events to the CPU. This can be used as an alternative to busy-polling
+the status registers. Two types of interrupt events are implemented by the DMA
+controller.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">TRANSFER_QUEUED</span></code> interrupt is asserted when a transfer is moved from the
+register map to the internal transfer queue. This is equivalent to the
+<code class="docutils literal notranslate"><span class="pre">TRANSFER_SUBMIT</span></code> register transitioning from 1 to 0. Software can use this
+interrupt as an indication that the next transfer can be submitted.</p>
+<p>Note that a transfer being queued does not mean that it has been started yet. If
+other transfers are already queued those will be processed first.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">TRANSFER_COMPLETED</span></code> interrupt is asserted when a previously submitted
+transfer has been completed. To find out which transfer has been completed the
+<code class="docutils literal notranslate"><span class="pre">TRANSFER_DONE</span></code> register should be checked.</p>
+<p>Note that depending on the transfer size and interrupt latency it is possible
+for multiple transfers to complete before the interrupt handler runs. In that
+case the interrupt handler will only run once. Software should always check all
+submitted transfers for completion.</p>
+</section>
+<section id="d-transfers">
+<h3>2D Transfers<a class="headerlink" href="#d-transfers" title="Link to this heading">#</a></h3>
+<p>If the <code class="docutils literal notranslate"><span class="pre">DMA_2D_TRANSFER</span></code> HDL synthesis configuration parameter is set the DMA
+controller has support for 2D transfers.</p>
+<p>A 2D transfer is composed of a number of rows with each row containing a certain
+number of bytes. Between each row there might be a certain amount of padding
+bytes that are skipped by the DMA.</p>
+<p>For 2D transfers the <code class="docutils literal notranslate"><span class="pre">X_LENGTH</span></code> register configures the number of bytes per
+row and the <code class="docutils literal notranslate"><span class="pre">Y_LENGTH</span></code> register configures the number of rows. The
+<code class="docutils literal notranslate"><span class="pre">SRC_STRIDE</span></code> and <code class="docutils literal notranslate"><span class="pre">DEST_STRIDE</span></code> registers configure the number of bytes in
+between start of two rows.</p>
+<p>E.g. the first row will start at the configured source or destination address,
+the second row will start at the configured source or destination address plus
+the stride and so on.</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ROW\_SRC\_ADDRESS = SRC\_ADDRESS + SRC\_STRIDE * N\]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ROW\_DEST\_ADDRESS = DEST\_ADDRESS + DEST\_STRIDE * N\]</div>
+</div>
+<p>If support for 2D transfers is disabled only the X_LENGTH register is
+considered and the number of rows per transfer is fixed to 1.</p>
+</section>
+<section id="cyclic-transfers">
+<span id="axi-dmac-cyclic-transfers"></span><h3>Cyclic Transfers<a class="headerlink" href="#cyclic-transfers" title="Link to this heading">#</a></h3>
+<p>If the <code class="docutils literal notranslate"><span class="pre">CYCLIC</span></code> HDL synthesis configuration parameter is set the DMA
+controller has support for cyclic transfers.</p>
+<p>A cyclic transfer once completed will restart automatically with the same
+configuration. The behavior of cyclic transfer is equivalent to submitting the
+same transfer over and over again, but generates less software management
+overhead.</p>
+<p>A transfer is cyclic if the <code class="docutils literal notranslate"><span class="pre">CYCLIC</span></code> (<code class="docutils literal notranslate"><span class="pre">[0]</span></code>) bit of the <code class="docutils literal notranslate"><span class="pre">FLAGS</span></code>
+(<code class="docutils literal notranslate"><span class="pre">0x40C</span></code>) is set to 1 during transfer submission.</p>
+<p>For cyclic transfers no end-of-transfer interrupts will be generated. To stop a
+cyclic transfer the DMA channel must be disabled.</p>
+<p>Any additional transfers that are submitted after the submission of a cyclic
+transfer (and before stopping the cyclic transfer) will never be executed.</p>
+</section>
+<section id="transfer-start-synchronization">
+<h3>Transfer Start Synchronization<a class="headerlink" href="#transfer-start-synchronization" title="Link to this heading">#</a></h3>
+<p>If the transfer start synchronization feature of the DMA controller is enabled
+the start of a transfer is synchronized to a flag in the data stream. This is
+primarily useful if the data stream does not have any back-pressure and one unit
+of data spans multiple beats (e.g. packetized data). This ensures that the data
+is properly aligned to the beginning of the memory buffer.</p>
+<p>Data that is received before the synchronization flag is asserted will be
+ignored by the DMA controller.</p>
+<p>For the FIFO write interface the <code class="docutils literal notranslate"><span class="pre">fifo_wr_sync</span></code> signal is the synchronization
+flag signal. For the AXI-Streaming interface the synchronization flag is carried
+in <code class="docutils literal notranslate"><span class="pre">s_axis_user[0]</span></code>. In both cases the synchronization flag is qualified by
+the same control signal as the data.</p>
+</section>
+<section id="diagnostics-interface">
+<h3>Diagnostics interface<a class="headerlink" href="#diagnostics-interface" title="Link to this heading">#</a></h3>
+<p>For debug purposes a diagnostics interface is added to the core.
+The <code class="docutils literal notranslate"><span class="pre">dest_diag_level_bursts</span></code> signal adds insight into the fullness of the
+internal memory buffer during operation. The information is exposed in number
+of bursts where the size of a burst is defined by the <code class="docutils literal notranslate"><span class="pre">MAX_BYTES_PER_BURST</span></code>
+parameter. The value of <code class="docutils literal notranslate"><span class="pre">dest_diag_level_bursts</span></code> increments for each burst
+accumulated in the DMACs internal buffer. It decrements once the burst leaves
+the DMAC on its destination port. The signal is synchronous to the destination
+clock domain (<code class="docutils literal notranslate"><span class="pre">m_dest_axi_aclk</span></code> or <code class="docutils literal notranslate"><span class="pre">m_axis_aclk</span></code> depending on <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code>).</p>
+</section>
+<section id="limitations">
+<h3>Limitations<a class="headerlink" href="#limitations" title="Link to this heading">#</a></h3>
+<section id="axi-4kbyte-address-boundary">
+<h4>AXI 4kByte Address Boundary<a class="headerlink" href="#axi-4kbyte-address-boundary" title="Link to this heading">#</a></h4>
+<p>Software must program the <code class="docutils literal notranslate"><span class="pre">SRC_ADDRESS</span></code> and <code class="docutils literal notranslate"><span class="pre">DEST_ADDRESS</span></code> registers in such
+way that AXI burst won’t cross the 4kB address boundary. The following condition
+must hold:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">MAX_BYTES_PER_BURST</span></code> ≤ 4096;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MAX_BYTES_PER_BURST</span></code> is power of 2;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">​SRC/​DEST_ADDRESS</span></code> ​mod <code class="docutils literal notranslate"><span class="pre">​MAX_BYTES_PER_BURST</span></code> ​== 0</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SRC/DEST_ADDRESS[11:0]</span></code> + MIN(<code class="docutils literal notranslate"><span class="pre">X_LENGTH</span></code>+1,<code class="docutils literal notranslate"><span class="pre">MAX_BYTES_PER_BURST</span></code>) ≤ 4096</p></li>
+</ul>
+</section>
+<section id="address-alignment">
+<h4>Address Alignment<a class="headerlink" href="#address-alignment" title="Link to this heading">#</a></h4>
+<p>Software must program the <code class="docutils literal notranslate"><span class="pre">SRC_ADDRESS</span></code> and <code class="docutils literal notranslate"><span class="pre">DEST_ADDRESS</span></code>registers to be
+multiple of the corresponding MM data bus. The following conditions must hold:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SRC_ADDRESS</span></code> MOD (<code class="docutils literal notranslate"><span class="pre">DMA_DATA_WIDTH_SRC</span></code>/8) == 0</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DEST_ADDRESS</span></code> MOD (<code class="docutils literal notranslate"><span class="pre">DMA_DATA_WIDTH_DEST</span></code>/8) == 0</p></li>
+</ul>
+</section>
+<section id="transfer-length-alignment">
+<h4>Transfer Length Alignment<a class="headerlink" href="#transfer-length-alignment" title="Link to this heading">#</a></h4>
+<p>Software must program the <code class="docutils literal notranslate"><span class="pre">X_LENGTH</span></code> register to be multiple of the widest
+data bus. The following condition must hold:</p>
+<ul class="simple">
+<li><p>(<code class="docutils literal notranslate"><span class="pre">X_LENGTH</span></code>+1) MOD MAX(<code class="docutils literal notranslate"><span class="pre">DMA_DATA_WIDTH_SRC</span></code>, <code class="docutils literal notranslate"><span class="pre">DMA_DATA_WIDTH_DEST</span></code>)/8
+== 0</p></li>
+</ul>
+<p>This restriction can be relaxed for the memory mapped interfaces. This is done
+by partially ignoring data of a beat from/to the MM interface:</p>
+<ul class="simple">
+<li><p>For write access the strobe bits are used to mask out bytes that do not
+contain valid data.</p></li>
+<li><p>For read access a full beat is read but part of the data is discarded. This
+works fine as long as the read access is side effect free. I.e. this method
+should not be used to access data from memory mapped peripherals like a FIFO.</p></li>
+</ul>
+<p>E.g. the length alignment requirement of a DMA configured for a 64-bit memory
+mapped interface and a 16-bit streaming interface is only 2 bytes instead of 8
+bytes.</p>
+<p>Note that the address alignment requirement is not affected by this. The address
+still needs to be aligned to the width of the MM interface that it belongs to.</p>
+</section>
+</section>
+</section>
+<section id="software-support">
+<h2>Software Support<a class="headerlink" href="#software-support" title="Link to this heading">#</a></h2>
+<p>Analog Devices recommends to use the provided software drivers.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/axi-dmac">Analog Device AXI-DMAC DMA Controller Linux Driver</a></p></li>
+</ul>
+</section>
+<section id="known-issues">
+<h2>Known Issues<a class="headerlink" href="#known-issues" title="Link to this heading">#</a></h2>
+<p>1. When max bytes per burst matches the data width of destination interface an
+erroneous extra beat is inserted after every valid beat on the destination side.
+Example configuration:</p>
+<ul class="simple">
+<li><p>axi mm -&gt; axi stream</p></li>
+<li><p>max bytes per burst = 128</p></li>
+<li><p>destination width = 1024 bits</p></li>
+</ul>
+<p>Workaround: increase the max bytes per burst to larger than 128</p>
+</section>
+<section id="technical-support">
+<h2>Technical Support<a class="headerlink" href="#technical-support" title="Link to this heading">#</a></h2>
+<p>Analog Devices will provide limited online support for anyone using the core
+with Analog Devices components (ADC, DAC, Video, Audio, etc) via the <a class="reference external" href="https://ez.analog.com/fpga">EngineerZone</a>.</p>
+</section>
+<section id="glossary">
+<h2>Glossary<a class="headerlink" href="#glossary" title="Link to this heading">#</a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Term</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>beat</p></td>
+<td><p>Represents the amount of data that is transferred in one clock cycle.</p></td>
+</tr>
+<tr class="row-odd"><td><p>burst</p></td>
+<td><p>Represents the amount of data that is transferred in a group of
+consecutive beats.</p></td>
+</tr>
+<tr class="row-even"><td><p>partial transfer</p></td>
+<td><p>Represents a transfer which is shorter than the programmed length that
+is based on the X_LENGTH and Y_LENGTH registers. This can occur on AXIS
+source interfaces when TLAST asserts earlier than the programmed
+length.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+
+    <script type="text/javascript">
+        function init() {
+            WaveDrom.ProcessAll();
+        }
+        window.onload = init;
+    </script>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          <a class="prev-page" href="../spi_engine/tutorial.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">SPI Engine Tutorial - PulSAR-ADC</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2023, Analog Devices Inc
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">High-Speed DMA Controller</a><ul>
+<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#utilization">Utilization</a></li>
+<li><a class="reference internal" href="#files">Files</a></li>
+<li><a class="reference internal" href="#block-diagram">Block Diagram</a></li>
+<li><a class="reference internal" href="#configuration-parameters">Configuration Parameters</a></li>
+<li><a class="reference internal" href="#interface">Interface</a></li>
+<li><a class="reference internal" href="#register-map">Register Map</a></li>
+<li><a class="reference internal" href="#theory-of-operation">Theory of Operation</a><ul>
+<li><a class="reference internal" href="#hdl-synthesis-settings">HDL Synthesis Settings</a><ul>
+<li><a class="reference internal" href="#sizing-of-the-internal-store-and-forward-data-buffer">Sizing of the internal store-and-forward data buffer</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#interfaces-and-signals">Interfaces and Signals</a><ul>
+<li><a class="reference internal" href="#register-map-configuration-interface">Register Map Configuration Interface</a></li>
+<li><a class="reference internal" href="#data-interfaces">Data Interfaces</a><ul>
+<li><a class="reference internal" href="#axi-streaming-slave">AXI-Streaming slave</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#configuration-interface">Configuration Interface</a><ul>
+<li><a class="reference internal" href="#peripheral-identification">Peripheral Identification</a></li>
+<li><a class="reference internal" href="#interrupt-handling">Interrupt Handling</a></li>
+<li><a class="reference internal" href="#transfer-configuration">Transfer Configuration</a></li>
+<li><a class="reference internal" href="#transfer-submission">Transfer Submission</a></li>
+<li><a class="reference internal" href="#transfer-status">Transfer Status</a></li>
+<li><a class="reference internal" href="#transfer-length-reporting">Transfer length reporting</a></li>
+<li><a class="reference internal" href="#transfer-tear-down">Transfer Tear-down</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#interrupts">Interrupts</a></li>
+<li><a class="reference internal" href="#d-transfers">2D Transfers</a></li>
+<li><a class="reference internal" href="#cyclic-transfers">Cyclic Transfers</a></li>
+<li><a class="reference internal" href="#transfer-start-synchronization">Transfer Start Synchronization</a></li>
+<li><a class="reference internal" href="#diagnostics-interface">Diagnostics interface</a></li>
+<li><a class="reference internal" href="#limitations">Limitations</a><ul>
+<li><a class="reference internal" href="#axi-4kbyte-address-boundary">AXI 4kByte Address Boundary</a></li>
+<li><a class="reference internal" href="#address-alignment">Address Alignment</a></li>
+<li><a class="reference internal" href="#transfer-length-alignment">Transfer Length Alignment</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#software-support">Software Support</a></li>
+<li><a class="reference internal" href="#known-issues">Known Issues</a></li>
+<li><a class="reference internal" href="#technical-support">Technical Support</a></li>
+<li><a class="reference internal" href="#glossary">Glossary</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=34cd777e"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
+    <script src="https://wavedrom.com/skins/default.js"></script>
+    <script src="https://wavedrom.com/wavedrom.min.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    </body>
+</html>
