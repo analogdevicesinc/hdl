@@ -89,8 +89,10 @@ add_instance axi_adc_dma axi_dmac
 set_instance_parameter_value axi_adc_dma {ID} {0}
 set_instance_parameter_value axi_adc_dma {DMA_DATA_WIDTH_SRC} {64}
 set_instance_parameter_value axi_adc_dma {DMA_DATA_WIDTH_DEST} {128}
+set_instance_parameter_value axi_adc_dma {DMA_DATA_WIDTH_SG} {64}
 set_instance_parameter_value axi_adc_dma {DMA_LENGTH_WIDTH} {24}
 set_instance_parameter_value axi_adc_dma {DMA_2D_TRANSFER} {0}
+set_instance_parameter_value axi_adc_dma {DMA_SG_TRANSFER} {1}
 set_instance_parameter_value axi_adc_dma {AXI_SLICE_DEST} {0}
 set_instance_parameter_value axi_adc_dma {AXI_SLICE_SRC} {0}
 set_instance_parameter_value axi_adc_dma {SYNC_TRANSFER_START} {1}
@@ -102,6 +104,8 @@ add_connection sys_clk.clk axi_adc_dma.s_axi_clock
 add_connection sys_clk.clk_reset axi_adc_dma.s_axi_reset
 add_connection sys_dma_clk.clk axi_adc_dma.m_dest_axi_clock
 add_connection sys_dma_clk.clk_reset axi_adc_dma.m_dest_axi_reset
+add_connection sys_dma_clk.clk axi_adc_dma.m_sg_axi_clock
+add_connection sys_dma_clk.clk_reset axi_adc_dma.m_sg_axi_reset
 add_connection sys_dma_clk.clk axi_adc_dma.if_fifo_wr_clk
 add_connection util_adc_pack.if_packed_fifo_wr_en axi_adc_dma.if_fifo_wr_en
 add_connection util_adc_pack.if_packed_fifo_wr_sync axi_adc_dma.if_fifo_wr_sync
@@ -114,8 +118,10 @@ add_instance axi_dac_dma axi_dmac
 set_instance_parameter_value axi_dac_dma {ID} {0}
 set_instance_parameter_value axi_dac_dma {DMA_DATA_WIDTH_SRC} {64}
 set_instance_parameter_value axi_dac_dma {DMA_DATA_WIDTH_DEST} {64}
+set_instance_parameter_value axi_dac_dma {DMA_DATA_WIDTH_SG} {64}
 set_instance_parameter_value axi_dac_dma {DMA_LENGTH_WIDTH} {24}
 set_instance_parameter_value axi_dac_dma {DMA_2D_TRANSFER} {0}
+set_instance_parameter_value axi_dac_dma {DMA_SG_TRANSFER} {1}
 set_instance_parameter_value axi_dac_dma {AXI_SLICE_DEST} {0}
 set_instance_parameter_value axi_dac_dma {AXI_SLICE_SRC} {0}
 set_instance_parameter_value axi_dac_dma {SYNC_TRANSFER_START} {0}
@@ -127,6 +133,8 @@ add_connection sys_clk.clk axi_dac_dma.s_axi_clock
 add_connection sys_clk.clk_reset axi_dac_dma.s_axi_reset
 add_connection sys_dma_clk.clk axi_dac_dma.m_src_axi_clock
 add_connection sys_dma_clk.clk_reset axi_dac_dma.m_src_axi_reset
+add_connection sys_dma_clk.clk axi_dac_dma.m_sg_axi_clock
+add_connection sys_dma_clk.clk_reset axi_dac_dma.m_sg_axi_reset
 add_connection sys_dma_clk.clk axi_dac_dma.if_m_axis_aclk
 
 add_connection axi_dac_dma.m_axis util_dac_upack.s_axis
@@ -147,4 +155,6 @@ set_instance_parameter_value sys_hps {F2SDRAM_Width} {64 128 64}
 
 ad_dma_interconnect axi_adc_dma.m_dest_axi 1
 ad_dma_interconnect axi_dac_dma.m_src_axi 2
+ad_dma_interconnect axi_adc_dma.m_sg_axi 3
+ad_dma_interconnect axi_dac_dma.m_sg_axi 4
 
