@@ -24,7 +24,7 @@ ad_ip_parameter spi_clkgen CONFIG.VCO_DIV 1
 ad_ip_parameter spi_clkgen CONFIG.VCO_MUL 8
 
 ad_ip_instance axi_pwm_gen pulsar_adc_trigger_gen
-ad_ip_parameter pulsar_adc_trigger_gen CONFIG.PULSE_0_PERIOD 120
+ad_ip_parameter pulsar_adc_trigger_gen CONFIG.PULSE_0_PERIOD 89
 ad_ip_parameter pulsar_adc_trigger_gen CONFIG.PULSE_0_WIDTH 1
 
 # dma to receive data stream
