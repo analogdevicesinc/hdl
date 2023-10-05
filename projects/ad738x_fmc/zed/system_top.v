@@ -87,7 +87,7 @@ module system_top (
   input           spi_sdib,
   output          spi_sdo,
   output          spi_sclk,
-  output          spi_cs
+  output          spi_csn
 );
 
   // internal signals
@@ -175,7 +175,7 @@ module system_top (
     .spi_sdo (spi_sdo),
     .spi_sdo_t (),
     .spi_sdi ({spi_sdib, spi_sdia}),
-    .spi_cs (spi_cs),
+    .spi_csn (spi_csn),
     .spi_sclk (spi_sclk),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));

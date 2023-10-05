@@ -72,7 +72,7 @@ module spi_engine_execution #(
   output reg sdo,
   output reg sdo_t,
   input [NUM_OF_SDI-1:0] sdi,
-  output reg [NUM_OF_CS-1:0] cs,
+  output reg [NUM_OF_CS-1:0] csn,
   output reg three_wire
 );
 
@@ -289,9 +289,9 @@ module spi_engine_execution #(
 
   always @(posedge clk) begin
     if (resetn == 1'b0) begin
-      cs <= 'hff;
+      csn <= 'hff;
     end else if (cs_gen) begin
-      cs <= cmd_d1[NUM_OF_CS-1:0];
+      csn <= cmd_d1[NUM_OF_CS-1:0];
     end
   end
 

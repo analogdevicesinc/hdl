@@ -50,7 +50,7 @@ adi_add_bus "spi" "master" \
 		{"sdo" "SDO"} \
 		{"sdo_t" "SDO_T"} \
 		{"three_wire" "THREE_WIRE"} \
-		{"cs" "CS"} \
+		{"csn" "CSn"} \
 	}
 adi_add_bus_clock "clk" "spi" "resetn"
 

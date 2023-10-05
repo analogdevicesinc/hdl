@@ -94,7 +94,7 @@
 			</spirit:wire>
 		</spirit:port>
 		<spirit:port>
-			<spirit:logicalName>CS</spirit:logicalName>
+			<spirit:logicalName>CSn</spirit:logicalName>
 			<spirit:description>Chip select</spirit:description>
 			<spirit:wire>
 				<spirit:onMaster>
