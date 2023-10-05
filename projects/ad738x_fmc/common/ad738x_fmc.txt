@@ -1,6 +1,6 @@
-# ad738x
-
 FMC_pin   FMC_port               Schematic_name     System_top_name     IOSTANDARD  Termination
+
+# ad738x
 					             
 D8        FMC_LA01_CC_P          SDOA               spi_sdia            LVCMOS25    #N/A
 D9        FMC_LA01_CC_N          SDOB               spi_sdib            LVCMOS25    #N/A
