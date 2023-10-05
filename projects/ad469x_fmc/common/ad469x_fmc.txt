@@ -1,6 +1,6 @@
-# ad469x
-
 FMC_pin   FMC_port               Schematic_name     System_top_name        IOSTANDARD  Termination
+
+# ad469x
 
 D8        FMC_LA01_CC_P          SDO                ad469x_spi_sdi         LVCMOS25    #N/A
 D9        FMC_LA01_CC_N          SCK                ad469x_spi_sclk        LVCMOS25    #N/A
