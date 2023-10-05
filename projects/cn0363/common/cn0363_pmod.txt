@@ -1,6 +1,6 @@
-# cn0363
-
 Pin            Port               Schematic_name     System_top_name        IOSTANDARD  Termination
+
+# cn0363
 
 PMOD [2]       PMOD JA1           GAIN0              gain0_o                LVCMOS33    #N/A
 PMOD [4]       PMOD JA2           GAIN1              gain1_o                LVCMOS33    #N/A
