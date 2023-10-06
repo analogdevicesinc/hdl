@@ -39,7 +39,7 @@ The HDL is provided "AS IS", support is only provided on [EngineerZone](https://
 
 If you feel you can not, or do not want to ask questions on [EngineerZone](https://ez.analog.com/community/fpga), you should not use or look at the HDL found in this repository. Just like you have the freedom and rights to use this software in your products (with the obligations found in individual licenses) and get support on [EngineerZone](https://ez.analog.com/community/fpga), you have the freedom and rights not to use this software and get datasheet level support from traditional ADI contacts that you may have.
 
-There is no free replacement for consulting services. If you have questions that are best handed one-on-one engagement, and are time sensitive, consider hiring a consultant. If you want to find a consultant who is familar with the HDL found in this repository - ask on [EngineerZone](https://ez.analog.com/community/fpga).
+There is no free replacement for consulting services. If you have questions that are best handed one-on-one engagement, and are time sensitive, consider hiring a consultant. If you want to find a consultant who is familiar with the HDL found in this repository - ask on [EngineerZone](https://ez.analog.com/community/fpga).
 
 ## Getting started
 
@@ -47,15 +47,19 @@ This repository supports reference designs for different [Analog Devices boards]
 
 ### Building documentation
 
-Install necessary tools
+Install the documentation tools.
 ```
-cd docs
-pip install -r requirements.txt
+(cd docs ; pip install -r requirements.txt)
 ```
-Then build the documentation with sphinx
+Build the libraries (recommended).
 ```
-make html
+(cd library ; make)
 ```
+Build the documentation with Sphinx.
+```
+(cd docs ; make html)
+```
+The generated documentation will be available at `docs/_build/html`.
 
 ### Prerequisites
 

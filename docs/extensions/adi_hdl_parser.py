@@ -12,6 +12,7 @@ from sphinx.util import logging
 from lxml import etree
 from adi_hdl_static import hdl_strings
 from uuid import uuid4
+from hashlib import sha1
 import contextlib
 
 logger = logging.getLogger(__name__)
@@ -178,7 +179,7 @@ class directive_base(Directive):
 	def collapsible(self, section, text=""):
 		env = self.state.document.settings.env
 
-		_id = str(uuid4())
+		_id = sha1(text.encode('utf-8')).hexdigest()
 		container = nodes.container(
 			"",
 			is_div=True,
@@ -491,7 +492,7 @@ class directive_parameters(directive_base):
 		table = nodes.table()
 		table += tgroup
 
-		self.table_header(tgroup, ["Name", "Description", "Type", "Default Value", "Choices/Range"])
+		self.table_header(tgroup, ["Name", "Description", "Data Type", "Default Value", "Choices/Range"])
 
 		rows = []
 		for key in parameter:
@@ -501,13 +502,16 @@ class directive_parameters(directive_base):
 				self.column_entry(row, description[key], 'reST', classes=['description'])
 			else:
 				self.column_entry(row, dot_fix(parameter[key]['description']), 'paragraph', classes=['description'])
-			for tag in ['type', 'default']:
-				self.column_entry(row, parameter[key][tag].title(), 'paragraph')
+			for tag, ty in zip(['type', 'default'], ['paragraph', 'literal']):
+				if parameter[key][tag] is not None:
+					self.column_entry(row, parameter[key][tag], ty, classes=[tag])
+				else:
+					logger.warning(f"Got empty {tag} at parameter {key}!")
+					self.column_entry(row, "", 'paragraph')
 			crange = []
-			if parameter[key]['choices'] is not None:
-				crange.append(parameter[key]['choices'])
-			if parameter[key]['range'] is not None:
-				crange.append(parameter[key]['range'])
+			for tag in ['choices', 'range']:
+				if parameter[key][tag] is not None:
+					crange.append(parameter[key][tag])
 			crange = '. '.join(crange)
 			self.column_entry(row, crange, 'paragraph')
 
@@ -615,6 +619,15 @@ def parse_hdl_component(path, ctime):
 	def get_choice_type(name):
 		return name[name.find('_')+1:name.rfind('_')]
 
+	def format_default_value(value, fmt):
+		if fmt == "bitString" and value[0:2].lower() == "0x":
+			return f"'h{value[2:].upper()}"
+		if fmt == "bitString" and value[0] == '"' and value[-1] == '"':
+			return f"'b{value[1:-1]}"
+		if fmt == "bool":
+			return value.title()
+		return value
+
 	root = etree.parse(path).getroot()
 	spirit, xilinx, _ = get_namespaces(root)
 	vendor = get(root, 'vendor').text
@@ -673,14 +686,27 @@ def parse_hdl_component(path, ctime):
 		if param_description is not None:
 			param_name = get(parameter, 'name').text
 			param_value = get(parameter, 'value')
+			param_format = sattrib(param_value, 'format')
 			pr[param_name] = {
 				'description': param_description.text,
-				'default': param_value.text,
-				'type': sattrib(param_value, 'format'),
+				'default': format_default_value(param_value.text, param_format),
+				'type': param_format,
 				'_choice_ref': sattrib(param_value, 'choiceRef'),
 				'choices': None,
 				'range': get_range(param_value)
 			}
+
+	for parameter in get_all(root, 'model/modelParameters/modelParameter'):
+		param_name = get(parameter, 'name').text
+		param_type = sattrib(parameter, 'dataType')
+		if param_type == "std_logic_vector":
+			param_type = "logic vector"
+		if param_type is not None and param_name in pr:
+			if pr[param_name]['type'] is None:
+				pr[param_name]['type'] = param_type.capitalize()
+			else:
+				param_format = pr[param_name]['type']
+				pr[param_name]['type'] = param_format[0].upper()+param_format[1:]
 
 	for choice in get_all(root, 'choices/choice'):
 		name = get(choice, 'name').text
