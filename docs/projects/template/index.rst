@@ -5,3 +5,723 @@
 Project template
 ================================================================================
 
+Overview
+-------------------------------------------------------------------------------
+
+**\*Some specifications about the board, the chip, etc. Typically the
+information found on the** https://www.analog.com/en/products/
+**website**\ \*
+
+Supported boards
+-------------------------------------------------------------------------------
+
+**\*IF IT APPLIES**\ \*
+
+-  :part:`AD9081-FMCA-EBZ <EVAL-AD9081>`
+-  :part:`AD9082-FMCA-EBZ <EVAL-AD9082>`
+
+Supported devices
+-------------------------------------------------------------------------------
+
+**\*EXAMPLES**\ \*
+
+-  :part:`AD9081`
+-  :part:`AD9177`
+-  :part:`AD9209`
+
+Supported carriers
+-------------------------------------------------------------------------------
+
+**\*At least one. Should be updated each time the project is ported to
+another carrier. Take these tables as an example:**\ \*
+
+.. list-table::
+   :widths: 35 35 30
+   :header-rows: 1
+
+   * - Evaluation board
+     - Carrier
+     - FMC slot
+   * - :part:`AD9081-FMCA-EBZ <EVAL-AD9081>`
+     - `A10SoC`_
+     - FMCA
+   * -
+     - :xilinx:`VCK190`
+     - FMC0
+   * -
+     - :xilinx:`VCU118`
+     - FMC+
+   * -
+     - :xilinx:`VCU128`
+     - FMC+
+   * -
+     - :xilinx:`ZCU102`
+     - FMC HPC0
+   * -
+     - :xilinx:`ZC706`
+     - FMC HPC
+
+.. list-table::
+   :widths: 35 35 30
+   :header-rows: 1
+
+   * - Evaluation board
+     - Carrier
+     - FMC slot
+   * - :part:`AD9082-FMCA-EBZ <EVAL-AD9082>`
+     - :xilinx:`VCK190`
+     - FMC0
+   * -
+     - :xilinx:`VCU118`
+     - FMC+
+   * -
+     - :xilinx:`ZCU102`
+     - FMC HPC0
+   * -
+     - :xilinx:`ZC706`
+     - FMC HPC
+
+Block design
+-------------------------------------------------------------------------------
+
+Block diagram
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+\**\* MUST HAVE \**\* The data path and clock domains are depicted in
+the below diagram:
+
+\*\* TIP: upload the .svg file for the diagram to have high quality \*\*
+
+If the project has multiple ways of configuration, then make subsections to
+this section and show the default configuration and some other popular modes.
+
+.. image:: ../images/ad9783_ebz/ad9783_zcu102_block_diagram.svg
+   :width: 800
+   :align: center
+   :alt: AD9783-EBZ/ZCU102 block diagram
+
+Configuration modes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+\**\* MENTION IF ANY MODES ARE AVAILABLE FOR CONFIGURATION \**\*
+
+**EXAMPLES BUT NOT LIMITED TO**
+
+The following are the parameters of this project that can be configured:
+
+-  JESD_MODE: used link layer encoder mode
+
+   -  64B66B - 64b66b link layer defined in JESD204C, uses AMD IP as Physical
+      Layer
+   -  8B10B  - 8b10b link layer defined in JESD204B, uses ADI IP as Physical
+      Layer
+
+-  RX_LANE_RATE: lane rate of the Rx link (MxFE to FPGA)
+-  TX_LANE_RATE: lane rate of the Tx link (FPGA to MxFE)
+-  REF_CLK_RATE: the rate of the reference clock
+-  [RX/TX]_JESD_M: number of converters per link
+-  [RX/TX]_JESD_L: number of lanes per link
+-  [RX/TX]_JESD_S: number of samples per frame
+-  [RX/TX]_JESD_NP: number of bits per sample
+-  [RX/TX]_NUM_LINKS: number of links
+-  [RX/TX]_TPL_WIDTH
+-  TDD_SUPPORT: set to 1, adds the TDD; enables external synchronization through TDD. Must be set to 1 when SHARED_DEVCLK=1
+-  SHARED_DEVCLK
+-  TDD_CHANNEL_CNT
+-  TDD_SYNC_WIDTH
+-  TDD_SYNC_INT
+-  TDD_SYNC_EXT
+-  TDD_SYNC_EXT_CDC: if enabled, the CDC circuitry for the external sync signal is added
+-  [RX/TX]_KS_PER_CHANNEL: Number of samples stored in internal buffers in
+   kilosamples per converter (M)
+-  [ADC/DAC]_DO_MEM_TYPE
+-  Check out this guide on more details regarding these parameters:
+   :dokuwiki:`resources/fpga/docs/axi_tdd`
+
+Clock scheme
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-  External clock source
+   :dokuwiki:`AD-SYNCHRONA14-EBZ <resources/eval/user-guides/ad-synchrona14-ebz>`
+-  SYSREF clocks are LVDS
+-  ADCCLK and REFCLK are LVPECL
+
+\*\* ADD IMAGE IF APPLIES! TIP: upload the .svg file for the diagram to have
+high quality \*\*
+
+**\*DESCRIBE OTHER COMPONENTS FROM THE PROJECT, EX: SYNCHRONA**\ \*
+
+Only the channels presented in the clocking selection are relevant. For
+the rest, you can either disable them or just put a divided frequency of
+the source clock.
+
+Limitations
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**\*EXAMPLE OF CONFIGURATION/LIMITATION. PLEASE WRITE THIS KIND OF
+INFORMATION IF IT APPLIES TO THE PROJECT**\ \*
+
+The design has one JESD receive chain with 4 lanes at rate of 13Gbps.
+The JESD receive chain consists of a physical layer represented by an
+XCVR module, a link layer represented by an RX JESD LINK module and
+transport layer represented by a RX JESD TPL module. The link operates
+in Subclass 1.
+
+The link is set for full bandwidth mode and operate with the following
+parameters:
+
+Deframer paramaters: L=4, M=2, F=1, S=1, NP=16
+
+| SYSREF - 5.078125 MHZ
+| REFCLK - 325MHz (Lane Rate/40)
+| DEVICECLK - 325 MHz
+| ADCCLK - 1300MHz
+| JESD204B Lane Rate - 13Gbps
+
+The transport layer component presents on its output 128 bits at once on
+every clock cycle, representing 4 samples per converter. The two receive
+chains are merged together and transferred to the DDR with a single DMA.
+
+CPU/Memory interconnects addresses
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The addresses are dependent on the architecture of the FPGA, having an offset
+added to the base address from HDL (see more at :ref:`architecture`).
+
+**If there are any PL SPI connections, they must be added in this table too**
+
+\**\* THIS IS JUST AN EXAMPLE \**\*
+
+Depending on the values of parameters $INTF_CFG, $ADI_PHY_SEL and $TDD_SUPPORT,
+some IPs are instatiated and some are not.
+
+Check-out the table below to find out the conditions.
+
+==================== ================================= =============== =========== ============
+Instance             Depends on parameter              Zynq/Microblaze ZynqMP      Versal
+==================== ================================= =============== =========== ============
+axi_mxfe_rx_xcvr     $INTF_CFG!="TX" & $ADI_PHY_SEL==1 0x44A6_0000     0x84A6_0000 0xA4A6_00000
+rx_mxfe_tpl_core     $INTF_CFG!="TX"                   0x44A1_0000     0x84A1_0000 0xA4A1_00000
+axi_mxfe_rx_jesd     $INTF_CFG!="TX"                   0x44A9_0000     0x84A9_0000 0xA4A9_00000
+axi_mxfe_rx_dma      $INTF_CFG!="TX"                   0x7C42_0000     0x9C42_0000 0xBC42_00000
+mxfe_rx_data_offload $INTF_CFG!="TX"                   0x7C45_0000     0x9C45_0000 0xBC45_00000
+axi_mxfe_tx_xcvr     $INTF_CFG!="RX" & $ADI_PHY_SEL==1 0x44B6_0000     0x84B6_0000 0xA4B6_00000
+tx_mxfe_tpl_core     $INTF_CFG!="RX"                   0x44B1_0000     0x84B1_0000 0xA4B1_00000
+axi_mxfe_tx_jesd     $INTF_CFG!="RX"                   0x44B9_0000     0x84B9_0000 0xA4B9_00000
+axi_mxfe_tx_dma      $INTF_CFG!="RX"                   0x7C43_0000     0x9C43_0000 0xBC43_00000
+mxfe_tx_data_offload $INTF_CFG!="RX"                   0x7C44_0000     0x9C44_0000 0xBC44_00000
+axi_tdd_0            $TDD_SUPPORT==1                   0x7C46_0000     0x9C46_0000 0xBC46_00000
+==================== ================================= =============== =========== ============
+
+I2C connections
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :widths: 20 20 20 20 20
+   :header-rows: 1
+
+   * - I2C type
+     - I2C manager instance
+     - Alias
+     - Address
+     - I2C subordinate
+   * -
+     -
+     -
+     -
+     -
+
+SPI connections
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+THESE ARE JUST EXAMPLES!!!
+USE WHICHEVER FITS BEST YOUR CASE
+
+.. list-table::
+   :widths: 25 25 25 25
+   :header-rows: 1
+
+   * - SPI type
+     - SPI manager instance
+     - SPI subordinate
+     - CS
+   * - PS
+     - SPI 0
+     - ADXYZT
+     - 0
+   * - PS
+     - SPI 1
+     - AD0000
+     - 0
+   * - PL
+     - axi_spi_bus_1
+     - AD23456
+     - 0
+
+GPIOs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Add explanation depending on your case**
+
+.. list-table::
+   :widths: 25 20 20 20 15
+   :header-rows: 2
+
+   * - GPIO signal
+     - Direction
+     - HDL GPIO EMIO
+     - Software GPIO
+     - Software GPIO
+   * -
+     - (from FPGA view)
+     -
+     - Zynq-7000
+     - Zynq MP
+   * - signal name
+     - IN/OUT/INOUT
+     - 32-63
+     - 86-117
+     - 110-141
+   * - signal name
+     - IN/OUT/INOUT
+     - 64-95
+     - 118-149
+     - 142-173
+   * - signal name
+     - IN/OUT/INOUT
+     - 96-127
+     - 150-181
+     - 174-205
+
+Interrupts
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Below are the Programmable Logic interrupts used in this project.
+
+You have many ways of writing this table: as a list-table or really to draw
+it. Take a look in the .rst of this page to see how they're written and
+which suits best your case.
+
+.. list-table::
+   :widths: 30 10 15 15 15 15
+   :header-rows: 1
+
+   * - Instance name
+     - HDL
+     - Linux Zynq
+     - Actual Zynq
+     - Linux ZynqMP
+     - Actual ZynqMP
+   * - ---
+     - 15
+     - 59
+     - 91
+     - 111
+     - 143
+   * - ---
+     - 14
+     - 58
+     - 90
+     - 110
+     - 142
+   * - ---
+     - 13
+     - 57
+     - 89
+     - 109
+     - 141
+   * - ---
+     - 12
+     - 56
+     - 88
+     - 108
+     - 140
+   * - ---
+     - 11
+     - 55
+     - 87
+     - 107
+     - 139
+   * - ---
+     - 10
+     - 54
+     - 86
+     - 106
+     - 138
+   * - ---
+     - 9
+     - 53
+     - 85
+     - 105
+     - 137
+   * - ---
+     - 8
+     - 52
+     - 84
+     - 104
+     - 136
+   * - ---
+     - 7
+     - 36
+     - 68
+     - 96
+     - 128
+   * - ---
+     - 6
+     - 35
+     - 67
+     - 95
+     - 127
+   * - ---
+     - 5
+     - 34
+     - 66
+     - 94
+     - 126
+   * - ---
+     - 4
+     - 33
+     - 65
+     - 93
+     - 125
+   * - ---
+     - 3
+     - 32
+     - 64
+     - 92
+     - 124
+   * - ---
+     - 2
+     - 31
+     - 63
+     - 91
+     - 123
+   * - ---
+     - 1
+     - 30
+     - 62
+     - 90
+     - 122
+   * - ---
+     - 0
+     - 29
+     - 61
+     - 89
+     - 121
+
+================ === ========== =========== ============ ============= ====== =============== ================
+Instance name    HDL Linux Zynq Actual Zynq Linux ZynqMP Actual ZynqMP S10SoC Linux Cyclone V Actual Cyclone V
+================ === ========== =========== ============ ============= ====== =============== ================
+---              15  59         91          111          143           32     55              87
+---              14  58         90          110          142           31     54              86
+---              13  57         89          109          141           30     53              85
+---              12  56         88          108          140           29     52              84
+---              11  55         87          107          139           28     51              83
+---              10  54         86          106          138           27     50              82
+---              9   53         85          105          137           26     49              81
+---              8   52         84          104          136           25     48              80
+---              7   36         68          96           128           24     47              79
+---              6   35         67          95           127           23     46              78
+---              5   34         66          94           126           22     45              77
+---              4   33         65          93           125           21     44              76
+---              3   32         64          92           124           20     43              75
+---              2   31         63          91           123           19     42              74
+---              1   30         62          90           122           18     41              73
+---              0   29         61          89           121           17     40              72
+================ === ========== =========== ============ ============= ====== =============== ================
+
+!!!! These are the project-specific interrupts (usually found in
+/project_name/common/Project_name_bd,tcl).
+Add the name of the component that uses that interrupt.
+Delete the dropdown section when you insert the table in your page
+
+NOTE THAT FOR ULTRASCALE\+ DEVICES, THE PS I2C IS NOT SUPPORTED IN LINUX!!
+ALWAYS USE PL I2C FOR THESE DESIGNS!!
+
+Building the HDL project
+-------------------------------------------------------------------------------
+
+**\*YOU CAN KEEP THE FIRST PARAGRAPH SINCE IT IS GENERIC**\ \*
+
+The design is built upon ADI's generic HDL reference design framework.
+ADI does not distribute the bit/elf files of these projects so they
+must be built from the sources available :git-hdl:`here <master:/>`. To get
+the source you must
+`clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
+the HDL repository.
+
+Then go to the **\*PROJECT LOCATION WITHIN HDL (EX:
+projects/ad9695/zcu102)**\ \* location and run the make command by
+typing in your command prompt:
+
+**Linux/Cygwin/WSL**
+
+**\*Say which is the default configuration that's built when running
+``make``, give examples of running with all parameters and also with
+just one. Say that it will create a folder with the name ... when
+running with the following parameters.**\ \*
+
+.. code-block::
+   :linenos:
+   :emphasize-lines: 2, 6
+
+   user@analog:~$ cd hdl/projects/ad9081_fmca_ebz/zcu102
+   // these are just examples of how to write the *make* command with parameters
+   user@analog:~/hdl/projects/ad9081_fmca_ebz/zcu102$ make parameter1=value parameter2=value
+
+   user@analog:~$ cd hdl/projects/ad9081_fmca_ebz/a10soc
+   // these are just examples of how to write the *make* command with parameters
+   user@analog:~/hdl/projects/ad9081_fmca_ebz/a10soc$ make RX_LANE_RATE=2.5 TX_LANE_RATE=2.5 RX_JESD_L=8 RX_JESD_M=4 RX_JESD_S=1 RX_JESD_NP=16 TX_JESD_L=8 TX_JESD_M=4 TX_JESD_S=1 TX_JESD_NP=16
+
+The following dropdowns contain tables with the parameters that can be used to
+configure this project, depending on the carrier used.
+Where a cell contains a --- (dash) it means that the parameter doesn't exist
+for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).
+
+.. collapsible:: Default values of the ``make`` parameters for AD9082-FMCA-EBZ
+
+   +-------------------+-----------------------------------------------+
+   | Parameter         | Default value of the parameters               |
+   |                   |            depending on carrier               |
+   |                   +--------+--------+--------------+--------------+
+   |                   | VCK190 | VCU118 |        ZC706 |       ZCU102 |
+   +===================+========+========+==============+==============+
+   | JESD_MODE         | 64B66B |  8B10B | :red:`8B10B*`| :red:`8B10B*`|
+   +-------------------+--------+--------+--------------+--------------+
+   | RX_LANE_RATE      |  24.75 |     15 |           10 |           15 |
+   +-------------------+--------+--------+--------------+--------------+
+   | TX_LANE_RATE      |  24.75 |     15 |           10 |           15 |
+   +-------------------+--------+--------+--------------+--------------+
+   | REF_CLK_RATE      |    375 |    --- |          --- |          --- |
+   +-------------------+--------+--------+--------------+--------------+
+   | RX_JESD_M         |      4 |      4 |            8 |            4 |
+   +-------------------+--------+--------+--------------+--------------+
+   | RX_JESD_L         |      8 |      8 |            4 |            8 |
+   +-------------------+--------+--------+--------------+--------------+
+   | RX_JESD_S         |      4 |      1 |            1 |            1 |
+   +-------------------+--------+--------+--------------+--------------+
+   | RX_JESD_NP        |     12 |     16 |           16 |           16 |
+   +-------------------+--------+--------+--------------+--------------+
+   | RX_NUM_LINKS      |      1 |      1 |            1 |            1 |
+   +-------------------+--------+--------+--------------+--------------+
+   | RX_TPL_WIDTH      |    --- |    --- |          --- |           {} |
+   +-------------------+--------+--------+--------------+--------------+
+   | TX_JESD_M         |      4 |      4 |            8 |            4 |
+   +-------------------+--------+--------+--------------+--------------+
+   | TX_JESD_L         |      8 |      8 |            4 |            8 |
+   +-------------------+--------+--------+--------------+--------------+
+   | TX_JESD_S         |      8 |      1 |            1 |            1 |
+   +-------------------+--------+--------+--------------+--------------+
+   | TX_JESD_NP        |     12 |     16 |           16 |           16 |
+   +-------------------+--------+--------+--------------+--------------+
+   | TX_NUM_LINKS      |      1 |      1 |            1 |            1 |
+   +-------------------+--------+--------+--------------+--------------+
+   | TX_TPL_WIDTH      |    --- |    --- |          --- |           {} |
+   +-------------------+--------+--------+--------------+--------------+
+   | RX_KS_PER_CHANNEL |     64 |     64 |          --- |          --- |
+   +-------------------+--------+--------+--------------+--------------+
+   | TX_KS_PER_CHANNEL |     64 |     64 |          --- |          --- |
+   +-------------------+--------+--------+--------------+--------------+
+
+   .. warning::
+
+      ``*`` --- for this carrier only the 8B10B mode is supported
+
+The result of the build, if parameters were used, will be in a folder named
+by the configuration used:
+
+if the following command was run
+
+``make RX_LANE_RATE=2.5 TX_LANE_RATE=2.5 RX_JESD_L=8 RX_JESD_M=4 RX_JESD_S=1 RX_JESD_NP=16 TX_JESD_L=8 TX_JESD_M=4 TX_JESD_S=1 TX_JESD_NP=16``
+
+then the folder name will be:
+
+``RXRATE2_5_TXRATE2_5_RXL8_RXM4_RXS1_RXNP16_TXL8_TXM4_TXS1_TXNP16``
+because of truncation of some keywords so the name will not exceed the limits
+of the Operating System (``JESD``, ``LANE``, etc. are removed) of 260
+characters.
+
+**\*KEEP THIS LINE TOO**\ \*
+A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
+
+Software considerations
+-------------------------------------------------------------------------------
+
+\**\* MENTION THESE \**\*
+
+ADC - crossbar config \**\* THIS IS JUST AN EXAMPLE \**\*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Due to physical constraints, Rx lanes are reordered as described in the
+following table.
+
+e.g physical lane 2 from ADC connects to logical lane 7
+from the FPGA. Therefore the crossbar from the device must be set
+accordingly.
+
+============ ===========================
+ADC phy Lane FPGA Rx lane / Logical Lane
+============ ===========================
+0            2
+1            0
+2            7
+3            6
+4            5
+5            4
+6            3
+7            1
+============ ===========================
+
+DAC - crossbar config \**\* THIS IS JUST AN EXAMPLE \**\*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Due to physical constraints, Tx lanes are reordered as described in the
+following table:
+
+e.g physical lane 2 from DAC connects to logical lane 7
+from the FPGA. Therefore the crossbar from the device must be set
+accordingly.
+
+============ ===========================
+DAC phy Lane FPGA Tx lane / Logical Lane
+============ ===========================
+0            0
+1            2
+2            7
+3            6
+4            1
+5            5
+6            4
+7            3
+============ ===========================
+
+Resources
+-------------------------------------------------------------------------------
+
+Systems related
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-  Links to the Quick start guides, to the pages where the hardware changes are
+   specified in detail, etc. in the form of a table as the one below
+
+**THIS IS JUST AN EXAMPLE**
+
+-  :dokuwiki:`[Wiki] AD9081 & AD9082 & AD9988 & AD9986 Prototyping Platform User Guide <resources/eval/user-guides/ad9081_fmca_ebz>`
+-  Here you can find all the quick start guides on wiki documentation:dokuwiki:`[Wiki] AD9081 Quick Start Guides <resources/eval/user-guides/ad9081_fmca_ebz/quickstart>`
+
+Here you can find the quick start guides available for these evaluation boards:
+
+.. list-table::
+   :widths: 20 10 20 20 20 10
+   :header-rows: 1
+
+   * - Evaluation board
+     - Zynq-7000
+     - Zynq UltraScale+ MP
+     - Microblaze
+     - Versal
+     - Arria 10
+   * - AD9081/AD9082-FMCA-EBZ
+     - :dokuwiki:`ZC706 <resources/eval/user-guides/ad9081_fmca_ebz/quickstart/zynq>`
+     - :dokuwiki:`ZCU102 <resources/eval/user-guides/ad9081_fmca_ebz/quickstart/zynqmp>`
+     - :dokuwiki:`VCU118 <resources/eval/user-guides/ad9081_fmca_ebz/quickstart/microblaze>`
+     - :dokuwiki:`VCK190/VMK180 <resources/eval/user-guides/ad9081_fmca_ebz/quickstart/versal>`
+     - :dokuwiki:`A10SoC <resources/eval/user-guides/ad9081/quickstart/a10soc>`
+
+-  Other relevant information
+
+Hardware related
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-  Product datasheets:
+
+   -  :part:`AD9081`
+   -  :part:`AD9082`
+   -  :part:`AD9988`
+   -  :part:`AD9986`
+-  `UG-1578, Device User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/ad9081-ad9082-ug-1578.pdf>`__
+-  `UG-1829, Evaluation Board User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/ad9081-fmca-ebz-9082-fmca-ebz-ug-1829.pdf>`__
+
+HDL related
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-  Link to the project source code
+-  Table like the one below. Must have as first IP (if it exists) the IP that
+   was created with this project (i.e., axi_ad9783). If there isn't, then to
+   be taken in the order they are written in the Makefile of the project,
+   stating the source code link in a column and the documentation link in
+   another column
+-  Other relevant information
+
+**THIS IS JUST AN EXAMPLE**
+
+-  :git-hdl:`AD9081_FMCA_EBZ HDL project source code <master:projects/ad9081_fmca_ebz>`
+-  :git-hdl:`AD9082_FMCA_EBZ HDL project source code <master:projects/ad9082_fmca_ebz>`
+
+.. list-table::
+   :widths: 30 35 35
+   :header-rows: 1
+
+   * - IP name
+     - Source code link
+     - Documentation link
+   * - AXI_DMAC
+     - :git-hdl:`library/axi_dmac <master:library/axi_dmac>`
+     - :ref:`here <axi_dmac>`
+   * - AXI_SYSID
+     - :git-hdl:`library/axi_sysid <master:library/axi_sysid>`
+     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
+   * - SYSID_ROM
+     - :git-hdl:`library/sysid_rom <master:library/sysid_rom>`
+     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
+   * - UTIL_CPACK2
+     - :git-hdl:`library/util_pack/util_cpack2 <master:library/util_pack/util_cpack2>`
+     - :dokuwiki:`[Wiki] <resources/fpga/docs/util_cpack>`
+   * - UTIL_UPACK2
+     - :git-hdl:`library/util_pack/util_upack2 <master:library/util_pack/util_upack2>`
+     - :dokuwiki:`[Wiki] <resources/fpga/docs/util_upack>`
+   * - UTIL_ADXCVR for AMD
+     -  :git-hdl:`library/xilinx/util_adxcvr <master:library/xilinx/util_adxcvr>`
+     -  :dokuwiki:`[Wiki] <resources/fpga/docs/util_xcvr>`
+   * - AXI_ADXCVR for Intel
+     -  :git-hdl:`library/intel/axi_adxcvr <master:library/intel/axi_adxcvr>`
+     -  :dokuwiki:`[Wiki] <resources/fpga/docs/axi_adxcvr>`
+   * - AXI_ADXCVR for AMD
+     -  :git-hdl:`library/intel/axi_adxcvr <master:library/xilinx/axi_adxcvr>`
+     -  :dokuwiki:`[Wiki] <resources/fpga/docs/axi_adxcvr>`
+   * - AXI_JESD204_RX
+     -  :git-hdl:`library/jesd204/axi_jesd204_rx <master:library/jesd204/axi_jesd204_rx>`
+     -  :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/axi_jesd204_rx>`
+   * - AXI_JESD204_TX
+     -  :git-hdl:`library/jesd204/axi_jesd204_tx <master:library/jesd204/axi_jesd204_tx>`
+     -  :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/axi_jesd204_tx>`
+   * - JESD204_TPL_ADC
+     -  :git-hdl:`library/jesd204/jesd204_tpl_adc <master:library/jesd204/jesd204_tpl_adc>`
+     -  :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/jesd204_tpl_adc>`
+   * - JESD204_TPL_DAC
+     -  :git-hdl:`library/jesd204/jesd204_tpl_dac <master:library/jesd204/jesd204_tpl_dac>`
+     -  :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/jesd204_tpl_dac>`
+
+-  :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
+-  :dokuwiki:`[Wiki] JESD204B High-Speed Serial Interface Support <resources/fpga/peripherals/jesd204>`
+
+Software related
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**THIS IS JUST AN EXAMPLE**
+
+-  :dokuwiki:`[Wiki] AD9081-FMCA-EBZ Linux driver wiki page <resources/tools-software/linux-drivers/iio-mxfe/ad9081>`
+
+If there is no Linux driver page, then insert a link to the code of the driver
+and of the device tree.
+
+-  Python support (THIS IS JUST AN EXAMPLE):
+
+   -  `AD9081 class documentation <https://analogdevicesinc.github.io/pyadi-iio/devices/adi.ad9081.html>`__
+   -  `PyADI-IIO documentation <https://analogdevicesinc.github.io/pyadi-iio/>`__
+
+.. include:: ../common/more_information.rst
+
+.. include:: ../common/support.rst
+
+.. _A10SoC: https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html
