@@ -13,8 +13,14 @@ HDL Reference Designs
    :caption: Libraries
    :hidden:
 
-   library/spi_engine/index
    library/axi_dmac/index
+   library/spi_engine/index
+
+.. toctree::
+   :caption: Projects
+   :hidden:
+
+   projects/ad9081_fmca_ebz/index
 
 .. role:: red
 .. role:: green

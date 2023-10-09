@@ -1,0 +1,2618 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="297mm"
+   height="100mm"
+   viewBox="0 0 297.00001 99.99999"
+   version="1.1"
+   id="svg1993"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   sodipodi:docname="ad9081_clock_scheme_zcu102.svg"
+   inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs1987">
+    <marker
+       style="overflow:visible"
+       id="Arrow1Sstart"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Sstart"
+       inkscape:isstock="true">
+      <path
+         transform="matrix(0.2,0,0,0.2,1.2,0)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path16626" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker7952"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lend">
+      <path
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path7950"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker6604"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path6602"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker5946"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lend">
+      <path
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path5944"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5160"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path5158"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker8688"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInL">
+      <path
+         inkscape:connector-curvature="0"
+         transform="scale(-0.8)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path8686" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleInL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker8264"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path8262"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.8)" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleInL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker7840"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path7838"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.8)" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleInL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker7422"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path7420"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.8)" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker7010"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInL">
+      <path
+         inkscape:connector-curvature="0"
+         transform="scale(-0.8)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path7008" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker6598"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInL">
+      <path
+         inkscape:connector-curvature="0"
+         transform="scale(-0.8)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path6596" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleInL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker6192"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path6190"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.8)" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleInL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5792"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path5790"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.8)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleInL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5356"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path5354"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.8)" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker4962"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInL">
+      <path
+         inkscape:connector-curvature="0"
+         transform="scale(-0.8)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path4960" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleInL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker4580"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4578"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.8)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5797"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path5795"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker35336"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="CurveOut">
+      <path
+         transform="scale(0.6)"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="m -5.4129913,-5.0456926 c 2.76,0 4.99999999,2.24 4.99999999,5.00000002 0,2.75999998 -2.23999999,4.99999998 -4.99999999,4.99999998"
+         id="path35334"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker34969"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="CurveOut">
+      <path
+         transform="scale(0.6)"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="m -5.4129913,-5.0456926 c 2.76,0 4.99999999,2.24 4.99999999,5.00000002 0,2.75999998 -2.23999999,4.99999998 -4.99999999,4.99999998"
+         id="path34967"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       inkscape:stockid="InfiniteLineEnd"
+       id="marker33756"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:isstock="true">
+      <g
+         id="g33754"
+         style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1">
+        <circle
+           id="circle33748"
+           r="0.80000001"
+           cy="0"
+           cx="3"
+           style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1" />
+        <circle
+           id="circle33750"
+           r="0.80000001"
+           cy="0"
+           cx="6.5"
+           style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1" />
+        <circle
+           id="circle33752"
+           r="0.80000001"
+           cy="0"
+           cx="10"
+           style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1" />
+      </g>
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker32164"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path32162"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker31770"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lend">
+      <path
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path31768"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Legs"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Legs"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <g
+         id="g4525"
+         transform="scale(-0.7)"
+         style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1">
+        <g
+           id="g4519"
+           transform="matrix(0,-1,-1,0,20.70862,21.31391)"
+           style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1">
+          <path
+             id="path4515"
+             d="m 21.22125,20.67536 c -6.910151,4.721157 -2.454525,6.606844 -5.841071,13.443235"
+             style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+             inkscape:connector-curvature="0" />
+          <path
+             id="path4517"
+             d="m 21.39811,20.54812 c -1.360509,8.347524 3.536072,8.76994 4.505041,13.824958"
+             style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+             inkscape:connector-curvature="0" />
+        </g>
+        <path
+           id="path4521"
+           d="m -14.09007,-6.7318716 -0.922168,4.043383 3.962751,-1.22307 z"
+           style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+           inkscape:connector-curvature="0" />
+        <path
+           id="path4523"
+           d="m -15.215679,4.5567534 1.874127,3.699613 2.266874,-3.472855 z"
+           style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+           inkscape:connector-curvature="0" />
+      </g>
+    </marker>
+    <marker
+       inkscape:stockid="CurvyCross"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker30405"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <g
+         id="g30403"
+         transform="scale(0.6)"
+         style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1">
+        <path
+           id="path30399"
+           d="m 4.625493,-5.0456926 c -2.76,0 -5.00000002,2.24 -5.00000002,5.00000002 0,2.75999998 2.24000002,4.99999998 5.00000002,4.99999998"
+           style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+           inkscape:connector-curvature="0" />
+        <path
+           id="path30401"
+           d="m -5.4129913,-5.0456926 c 2.76,0 4.99999999,2.24 4.99999999,5.00000002 0,2.75999998 -2.23999999,4.99999998 -4.99999999,4.99999998"
+           style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+           inkscape:connector-curvature="0" />
+      </g>
+    </marker>
+    <marker
+       inkscape:stockid="CurvyCross"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="CurvyCross"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <g
+         id="g4510"
+         transform="scale(0.6)"
+         style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1">
+        <path
+           id="path4506"
+           d="m 4.625493,-5.0456926 c -2.76,0 -5.00000002,2.24 -5.00000002,5.00000002 0,2.75999998 2.24000002,4.99999998 5.00000002,4.99999998"
+           style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+           inkscape:connector-curvature="0" />
+        <path
+           id="path4508"
+           d="m -5.4129913,-5.0456926 c 2.76,0 4.99999999,2.24 4.99999999,5.00000002 0,2.75999998 -2.23999999,4.99999998 -4.99999999,4.99999998"
+           style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+           inkscape:connector-curvature="0" />
+      </g>
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker28903"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path28901"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker28185"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lend"
+       inkscape:collect="always">
+      <path
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path28183"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleInL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker26677"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path26675"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.8)" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker13050"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInL">
+      <path
+         transform="scale(-0.8)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path13048"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker12518"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInL">
+      <path
+         transform="scale(-0.8)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path12516"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <linearGradient
+       id="linearGradient5412"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop5410" />
+    </linearGradient>
+    <marker
+       inkscape:stockid="Arrow2Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Lstart"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path4334"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.625;stroke-linejoin:round;stroke-opacity:1"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(1.1,0,0,1.1,1.1,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Lstart"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path5209"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(0.8,0,0,0.8,10,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker1849"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path1847"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(0.8,0,0,0.8,10,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker1853"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path1851"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(0.8,0,0,0.8,10,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker1857"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path1855"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(0.8,0,0,0.8,10,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker1861"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path1859"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(0.8,0,0,0.8,10,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker1865"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path1863"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(0.8,0,0,0.8,10,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker1869"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path1867"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(0.8,0,0,0.8,10,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker1873"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path1871"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(0.8,0,0,0.8,10,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker1877"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path1875"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(0.8,0,0,0.8,10,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker1881"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path1879"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(0.8,0,0,0.8,10,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker1885"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path1883"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(0.8,0,0,0.8,10,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker1889"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path1887"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(0.8,0,0,0.8,10,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker1893"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path1891"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(0.8,0,0,0.8,10,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker1897"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path1895"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(0.8,0,0,0.8,10,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker1901"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path1899"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(0.8,0,0,0.8,10,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker1905"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path1903"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(0.8,0,0,0.8,10,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Mend"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path5218"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker1911"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path1909"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker1915"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path1913"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)" />
+    </marker>
+    <pattern
+       y="0"
+       x="0"
+       height="6"
+       width="6"
+       patternUnits="userSpaceOnUse"
+       id="EMFhbasepattern" />
+    <marker
+       inkscape:stockid="TriangleOutM"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="TriangleOutM"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path4669"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(0.4)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleInM"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="TriangleInM-7-1"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4660-1-6"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.4)" />
+    </marker>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5412"
+       id="linearGradient7686"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(0.59788991,-6.5861623)"
+       x1="172.53362"
+       y1="161.85487"
+       x2="184.83434"
+       y2="161.85487" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5412"
+       id="linearGradient7819"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-6.9336906,-29.333945)"
+       x1="172.53362"
+       y1="161.85487"
+       x2="184.83434"
+       y2="161.85487" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5412"
+       id="linearGradient7823"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(22.332432,-25.386502)"
+       x1="172.53362"
+       y1="161.85487"
+       x2="184.83434"
+       y2="161.85487" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5412"
+       id="linearGradient15218"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-43.358219,-26.840352)"
+       x1="172.53362"
+       y1="161.85487"
+       x2="184.83434"
+       y2="161.85487" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5412"
+       id="linearGradient2563"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-102.90742,-5.9494363)"
+       x1="172.53362"
+       y1="161.85487"
+       x2="184.83434"
+       y2="161.85487" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5412"
+       id="linearGradient2567"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-135.12912,-32.392246)"
+       x1="172.53362"
+       y1="161.85487"
+       x2="184.83434"
+       y2="161.85487" />
+    <linearGradient
+       y2="161.85487"
+       x2="184.83434"
+       y1="161.85487"
+       x1="172.53362"
+       gradientTransform="matrix(3.7795276,0,0,3.7795276,-651.00059,-606.49938)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient2984"
+       xlink:href="#linearGradient5412"
+       inkscape:collect="always" />
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Mend-8"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path5218-0"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Mend-8-5"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path5218-0-9"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleInL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker4580-6"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4578-6"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.8)" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker4962-0"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInL">
+      <path
+         inkscape:connector-curvature="0"
+         transform="scale(-0.8)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path4960-1" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleInL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5356-7"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path5354-3"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.8)" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleInL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5792-6"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path5790-2"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.8)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleInL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker6192-7"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path6190-1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.8)" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleInL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker8264-2"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path8262-6"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.8)" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker7010-7"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInL">
+      <path
+         inkscape:connector-curvature="0"
+         transform="scale(-0.8)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path7008-5" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker8688-5"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInL">
+      <path
+         inkscape:connector-curvature="0"
+         transform="scale(-0.8)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path8686-4" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleInL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker7422-5"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path7420-1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.8)" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleInL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker7840-1"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path7838-0"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.8)" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker6598-9"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInL">
+      <path
+         inkscape:connector-curvature="0"
+         transform="scale(-0.8)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path6596-8" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Mend-80"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path5218-5"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker2465"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path2463"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker2469"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path2467"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleOutM"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="TriangleOutM-4"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path4669-8"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(0.4)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleInM"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="TriangleInM-7-1-0"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4660-1-6-9"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.4)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Mend-2"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path5218-05"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker4474"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4472"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Mend-2-1"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path5218-05-0"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)" />
+    </marker>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5412"
+       id="linearGradient2732"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-35.823565,134.33793)"
+       x1="172.53362"
+       y1="161.85487"
+       x2="184.83434"
+       y2="161.85487" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5412"
+       id="linearGradient2730"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(1.3166877,134.33793)"
+       x1="172.53362"
+       y1="161.85487"
+       x2="184.83434"
+       y2="161.85487" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5412"
+       id="linearGradient2728"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(0.25835369,134.33793)"
+       x1="172.53362"
+       y1="161.85487"
+       x2="184.83434"
+       y2="161.85487" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5412"
+       id="linearGradient2726"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(24.245696,134.33793)"
+       x1="172.53362"
+       y1="161.85487"
+       x2="184.83434"
+       y2="161.85487" />
+    <marker
+       inkscape:stockid="TriangleInL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker4580-6-6"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4578-6-2"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.8)" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker4962-0-3"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInL">
+      <path
+         inkscape:connector-curvature="0"
+         transform="scale(-0.8)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path4960-1-9" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleInL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5356-7-4"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path5354-3-3"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.8)" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleInL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5792-6-6"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path5790-2-0"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.8)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleInL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker6192-7-1"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path6190-1-3"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.8)" />
+    </marker>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5412"
+       id="linearGradient2724"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-0.27081331,134.33793)"
+       x1="172.53362"
+       y1="161.85487"
+       x2="184.83434"
+       y2="161.85487" />
+    <marker
+       inkscape:stockid="TriangleInL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker8264-2-9"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path8262-6-9"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.8)" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker7010-7-8"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInL">
+      <path
+         inkscape:connector-curvature="0"
+         transform="scale(-0.8)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path7008-5-7" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker8688-5-4"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInL">
+      <path
+         inkscape:connector-curvature="0"
+         transform="scale(-0.8)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path8686-4-2" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleInL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker7422-5-2"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path7420-1-0"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.8)" />
+    </marker>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5412"
+       id="linearGradient2722"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(28.995314,135.63954)"
+       x1="172.53362"
+       y1="161.85487"
+       x2="184.83434"
+       y2="161.85487" />
+    <marker
+       inkscape:stockid="TriangleInL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker7840-1-2"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path7838-0-6"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.8)" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker6598-9-3"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInL">
+      <path
+         inkscape:connector-curvature="0"
+         transform="scale(-0.8)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path6596-8-6" />
+    </marker>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5412"
+       id="linearGradient2718"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-35.469226,79.111065)"
+       x1="172.53362"
+       y1="161.85487"
+       x2="184.83434"
+       y2="161.85487" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5412"
+       id="linearGradient2716"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(1.3166877,79.111065)"
+       x1="172.53362"
+       y1="161.85487"
+       x2="184.83434"
+       y2="161.85487" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5412"
+       id="linearGradient2714"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(0.25835369,79.111065)"
+       x1="172.53362"
+       y1="161.85487"
+       x2="184.83434"
+       y2="161.85487" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5412"
+       id="linearGradient2712"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(24.600029,79.111065)"
+       x1="172.53362"
+       y1="161.85487"
+       x2="184.83434"
+       y2="161.85487" />
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Mend-80-4"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path5218-5-5"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker3401"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path3399"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)" />
+    </marker>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5412"
+       id="linearGradient2710"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-0.27081331,79.111065)"
+       x1="172.53362"
+       y1="161.85487"
+       x2="184.83434"
+       y2="161.85487" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5412"
+       id="linearGradient2708"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(28.995314,80.412665)"
+       x1="172.53362"
+       y1="161.85487"
+       x2="184.83434"
+       y2="161.85487" />
+    <marker
+       inkscape:stockid="TriangleOutM"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="TriangleOutM-4-3"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path4669-8-2"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(0.4)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleInM"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="TriangleInM-7-1-0-5"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4660-1-6-9-3"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.4)" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker28185-1"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lend"
+       inkscape:collect="always">
+      <path
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path28183-3"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker28185-1-3"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lend"
+       inkscape:collect="always">
+      <path
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path28183-3-0"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker28185-5"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lend"
+       inkscape:collect="always">
+      <path
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path28183-8"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5160-4"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path5158-3"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker28903-5"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path28901-8"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker28185-5-7"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lend"
+       inkscape:collect="always">
+      <path
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path28183-8-8"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker28185-5-2"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lend"
+       inkscape:collect="always">
+      <path
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path28183-8-82"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker36002-0"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lend"
+       inkscape:collect="always">
+      <path
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path36000-2"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker36776-8"
+       style="overflow:visible"
+       inkscape:isstock="true"
+       inkscape:collect="always">
+      <path
+         id="path36774-2"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker28185-5-7-1"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lend"
+       inkscape:collect="always">
+      <path
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path28183-8-8-5"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5160-1"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path5158-1"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.7071068"
+     inkscape:cx="437.69909"
+     inkscape:cy="224.15284"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:snap-global="false"
+     inkscape:pagecheckerboard="0"
+     units="mm"
+     scale-x="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid16232" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata1990">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(148.16207,119.05895)">
+    <g
+       inkscape:export-ydpi="180"
+       inkscape:export-xdpi="180"
+       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Tx_JESD_path.png"
+       id="use13535"
+       transform="matrix(0.26458333,0,0,0.26458333,-176.3204,566.91768)">
+      <ellipse
+         ry="17.766058"
+         rx="16.440233"
+         cy="105.8836"
+         cx="220.97087"
+         transform="matrix(0.05769296,0.00601709,-0.00642573,0.05402397,514.17289,-347.71141)"
+         id="ellipse7720"
+         style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#003366;stroke:#000000;stroke-width:17.802px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate" />
+      <ellipse
+         transform="matrix(0.99460524,0.1037324,-0.11810967,0.99300056,0,0)"
+         id="ellipse7722"
+         style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#003366;stroke:#000000;stroke-width:0.264597px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
+         cx="110.49487"
+         cy="26.148258"
+         rx="0.25231469"
+         ry="0.25573522" />
+      <ellipse
+         transform="matrix(0.99460524,0.1037324,-0.11810967,0.99300056,0,0)"
+         id="ellipse7724"
+         style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#003366;stroke:#000000;stroke-width:0.264597px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
+         cx="111.32887"
+         cy="33.171391"
+         rx="0.25231469"
+         ry="0.25573522" />
+    </g>
+    <g
+       inkscape:export-ydpi="180"
+       inkscape:export-xdpi="180"
+       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Tx_JESD_path.png"
+       id="use13535-0"
+       transform="matrix(0.26458333,0,0,0.26458333,-176.3204,566.91768)">
+      <ellipse
+         ry="17.766058"
+         rx="16.440233"
+         cy="105.8836"
+         cx="220.97087"
+         transform="matrix(0.05769296,0.00601709,-0.00642573,0.05402397,514.17289,-347.71141)"
+         id="ellipse7743"
+         style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#003366;stroke:#000000;stroke-width:17.802px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate" />
+      <ellipse
+         transform="matrix(0.99460524,0.1037324,-0.11810967,0.99300056,0,0)"
+         id="ellipse7745"
+         style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#003366;stroke:#000000;stroke-width:0.264597px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
+         cx="110.49487"
+         cy="26.148258"
+         rx="0.25231469"
+         ry="0.25573522" />
+      <ellipse
+         transform="matrix(0.99460524,0.1037324,-0.11810967,0.99300056,0,0)"
+         id="ellipse7747"
+         style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#003366;stroke:#000000;stroke-width:0.264597px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
+         cx="111.32887"
+         cy="33.171391"
+         rx="0.25231469"
+         ry="0.25573522" />
+    </g>
+    <rect
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       style="display:inline;opacity:1;vector-effect:none;fill:#aaccee;fill-opacity:1;fill-rule:nonzero;stroke:#003366;stroke-width:0.594305;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;shape-rendering:crispEdges;enable-background:new"
+       id="rect17734"
+       width="50.386124"
+       height="65.040627"
+       x="-138.78259"
+       y="-96.181931"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png" />
+    <text
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:5.58431px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465361px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       x="45.203575"
+       y="-124.926"
+       id="text17738"
+       transform="rotate(-90)"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         sodipodi:role="line"
+         id="tspan17736"
+         x="45.203575"
+         y="-124.926"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:8.14381px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke:none;stroke-width:0.465361px;stroke-opacity:1">HMC_7044</tspan></text>
+    <g
+       id="g35957"
+       transform="matrix(2.1625098,0,0,1.2566551,-169.16618,-58.04152)"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png">
+      <rect
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         style="display:inline;opacity:1;vector-effect:none;fill:#aaccee;fill-opacity:1;fill-rule:nonzero;stroke:#003366;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;shape-rendering:crispEdges;enable-background:new"
+         id="rect17740"
+         width="12.806378"
+         height="51.96344"
+         x="130.34352"
+         y="-30.454613" />
+      <text
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         xml:space="preserve"
+         style="font-style:normal;font-weight:normal;font-size:3.175px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+         x="-2.6747115"
+         y="138.31087"
+         id="text27277"
+         transform="rotate(-90)"><tspan
+           sodipodi:role="line"
+           id="tspan27275"
+           x="-2.6747115"
+           y="138.31087"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.63021px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke:none;stroke-width:0.264583px;stroke-opacity:1">FPGA</tspan></text>
+    </g>
+    <g
+       id="g35957-7"
+       transform="matrix(1.2496492,0,0,1.2567868,-161.02953,-58.037492)"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png">
+      <rect
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         style="display:inline;opacity:1;vector-effect:none;fill:#aaccee;fill-opacity:1;fill-rule:nonzero;stroke:#003366;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;shape-rendering:crispEdges;enable-background:new"
+         id="rect17740-4"
+         width="12.806378"
+         height="51.96344"
+         x="130.34352"
+         y="-30.454613" />
+      <text
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         xml:space="preserve"
+         style="font-style:normal;font-weight:normal;font-size:3.175px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+         x="-3.55163"
+         y="138.31087"
+         id="text27277-8"
+         transform="rotate(-90)"><tspan
+           sodipodi:role="line"
+           id="tspan27275-0"
+           x="-3.55163"
+           y="138.31087"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.63021px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke:none;stroke-width:0.264583px;stroke-opacity:1" /></text>
+    </g>
+    <text
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       id="text6707-1-8-4-7-0-9"
+       y="-45.021366"
+       x="2.4201453"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
+       xml:space="preserve"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.465361"
+         y="-45.021366"
+         x="2.4201453"
+         sodipodi:role="line"
+         id="tspan6705-1-3-9-0-1-3">H4,5</tspan></text>
+    <text
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       id="text6707-1-8-4-7-0-0"
+       y="-57.649849"
+       x="2.4201453"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
+       xml:space="preserve"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.465361"
+         y="-57.649849"
+         x="2.4201453"
+         sodipodi:role="line"
+         id="tspan6705-1-3-9-0-1-8">G6,7</tspan></text>
+    <text
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       id="text6707-1-8-4-7-0"
+       y="-69.551338"
+       x="2.5372784"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
+       xml:space="preserve"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.465361"
+         y="-69.551338"
+         x="2.5372784"
+         sodipodi:role="line"
+         id="tspan6705-1-3-9-0-1">G2,3</tspan></text>
+    <text
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       id="text6707-1-8-4-7"
+       y="-80.613525"
+       x="2.4206314"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
+       xml:space="preserve"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.465361"
+         y="-80.613525"
+         x="2.4206314"
+         sodipodi:role="line"
+         id="tspan6705-1-3-9-0">D4,5</tspan></text>
+    <text
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.96383px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
+       x="-28.868187"
+       y="-48.323616"
+       id="text27307"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         id="tspan27305"
+         sodipodi:role="line"
+         x="-28.868187"
+         y="-48.323616"
+         style="stroke-width:0.465361">SYSREF2</tspan></text>
+    <path
+       inkscape:connector-curvature="0"
+       id="path27315"
+       d="M -88.08606,-46.155144 H 0.82530457"
+       style="fill:none;stroke:#000000;stroke-width:0.410516px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker28903)"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png" />
+    <text
+       id="text28157"
+       y="-83.35923"
+       x="-115.96132"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.96383px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
+       xml:space="preserve"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         style="stroke-width:0.465361"
+         y="-83.35923"
+         x="-115.96132"
+         sodipodi:role="line"
+         id="tspan28155">CLKOUT12 </tspan></text>
+    <path
+       inkscape:connector-curvature="0"
+       id="path28181"
+       d="M -88.08606,-70.4787 H 1.1044987"
+       style="fill:none;stroke:#000000;stroke-width:0.411158px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker28185)"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png" />
+    <text
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.96383px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
+       x="-115.96132"
+       y="-47.385971"
+       id="text28465"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         id="tspan28463"
+         sodipodi:role="line"
+         x="-115.96132"
+         y="-47.385971"
+         style="stroke-width:0.465361">CLKOUT13</tspan></text>
+    <text
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.96383px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
+       x="-115.96132"
+       y="-71.437614"
+       id="text28859"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         id="tspan28857"
+         sodipodi:role="line"
+         x="-115.96132"
+         y="-71.437614"
+         style="stroke-width:0.465361">CLKOUT6 </tspan></text>
+    <text
+       id="text35788"
+       y="-108.01256"
+       x="77.609154"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.96383px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
+       xml:space="preserve"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         style="stroke-width:0.465361"
+         y="-108.01256"
+         x="77.609154"
+         sodipodi:role="line"
+         id="tspan35786">ZCU102</tspan></text>
+    <text
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.96383px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
+       x="-76.750298"
+       y="-108.01334"
+       id="text35792"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         id="tspan35790"
+         sodipodi:role="line"
+         x="-76.750298"
+         y="-108.01334"
+         style="stroke-width:0.465361">AD9081-FMCA-EBZ</tspan></text>
+    <text
+       id="text35998"
+       y="-83.038155"
+       x="73.716347"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.96379px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465357;shape-rendering:crispEdges;enable-background:new"
+       xml:space="preserve"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         style="stroke-width:0.465357"
+         y="-83.038155"
+         x="73.716347"
+         sodipodi:role="line"
+         id="tspan35996">ref_clk</tspan></text>
+    <path
+       inkscape:connector-curvature="0"
+       id="path35994-74"
+       d="M 63.129455,-48.976622 H 111.48639"
+       style="fill:none;stroke:#000000;stroke-width:0.441;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker36002-0)"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png" />
+    <text
+       id="text35998-56"
+       y="-50.688122"
+       x="74.118645"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.96384px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465362;shape-rendering:crispEdges;enable-background:new"
+       xml:space="preserve"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         style="stroke-width:0.465362"
+         y="-50.688122"
+         x="74.118645"
+         sodipodi:role="line"
+         id="tspan35996-3">rx_sysref</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.441;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker36776-8)"
+       d="M 63.313868,-42.097771 H 111.62007"
+       id="path36772-3"
+       inkscape:connector-curvature="0"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png" />
+    <text
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.96384px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465362;shape-rendering:crispEdges;enable-background:new"
+       x="74.118645"
+       y="-43.26812"
+       id="text37206-7"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         id="tspan37204-5"
+         sodipodi:role="line"
+         x="74.118645"
+         y="-43.26812"
+         style="stroke-width:0.465362">tx_sysref</tspan></text>
+    <text
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       id="text6707-1"
+       y="-71.954567"
+       x="-29.176264"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.96383px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
+       xml:space="preserve"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         style="stroke-width:0.465361"
+         y="-71.954567"
+         x="-29.176264"
+         sodipodi:role="line"
+         id="tspan6705-1">CLKIN6</tspan></text>
+    <path
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       style="fill:none;stroke:#000000;stroke-width:0.409876px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker5160)"
+       d="M -88.08606,-58.530522 H 0.54919599"
+       id="path5148"
+       inkscape:connector-curvature="0" />
+    <text
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"
+       id="text5152"
+       y="-59.633789"
+       x="-115.96251"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.96383px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
+       xml:space="preserve"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         style="stroke-width:0.465361"
+         y="-59.633789"
+         x="-115.96251"
+         sodipodi:role="line"
+         id="tspan5150">CLKOUT10 </tspan></text>
+    <text
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.96383px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
+       x="-28.866138"
+       y="-60.578457"
+       id="text5156"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         id="tspan5154"
+         sodipodi:role="line"
+         x="-28.866138"
+         y="-60.578457"
+         style="stroke-width:0.465361">CLKIN10</tspan></text>
+    <text
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.96383px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
+       x="-85.868874"
+       y="-48.323616"
+       id="text28465-9"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         id="tspan28463-0"
+         sodipodi:role="line"
+         x="-85.868874"
+         y="-48.323616"
+         style="stroke-width:0.465361">SYSREF2</tspan></text>
+    <text
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.96383px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
+       x="-85.868027"
+       y="-60.579346"
+       id="text28465-9-2"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         id="tspan28463-0-5"
+         sodipodi:role="line"
+         x="-85.868027"
+         y="-60.579346"
+         style="stroke-width:0.465361">CLKOUT_10</tspan></text>
+    <text
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.96383px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
+       x="-85.868034"
+       y="-72.567619"
+       id="text28465-9-2-0"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         id="tspan28463-0-5-8"
+         sodipodi:role="line"
+         x="-85.868034"
+         y="-72.567619"
+         style="stroke-width:0.465361">CLKOUT_6</tspan></text>
+    <text
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.96383px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
+       x="-86.074951"
+       y="-83.26828"
+       id="text28465-9-2-0-3"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         id="tspan28463-0-5-8-0"
+         sodipodi:role="line"
+         x="-86.074951"
+         y="-83.26828"
+         style="stroke-width:0.465361">FPGA_REFCLK</tspan></text>
+    <text
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       id="text6707-1-8"
+       y="-83.268715"
+       x="-41.68045"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.13475px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
+       xml:space="preserve"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.13475px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.465361"
+         y="-83.268715"
+         x="-41.68045"
+         sodipodi:role="line"
+         id="tspan6705-1-3">FPGA_REFCLK_IN</tspan></text>
+    <text
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:5.58431px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465361px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       x="1.6142108"
+       y="-105.77497"
+       id="text17738-3"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         sodipodi:role="line"
+         id="tspan17736-1"
+         x="1.6142108"
+         y="-105.77497"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:8.14381px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke:none;stroke-width:0.465361px;stroke-opacity:1">FMC</tspan></text>
+    <path
+       inkscape:connector-curvature="0"
+       id="path28181-7"
+       d="M -87.758696,-81.45904 H 1.4317387"
+       style="fill:none;stroke:#000000;stroke-width:0.411158px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker28185-1)"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path28181-9"
+       d="M 17.906485,-70.156468 H 111.6317"
+       style="fill:none;stroke:#000000;stroke-width:0.422447px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker28185-5)"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path28181-9-10"
+       d="m 48.41626,-70.020102 v 7.049224"
+       style="fill:none;stroke:#000000;stroke-width:0.442;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path28181-9-10-1"
+       d="M 48.162573,-62.927732 H 62.558989"
+       style="fill:none;stroke:#000000;stroke-width:0.308077;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker5160)"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path28181-9-10-18"
+       d="M 42.030358,-50.913239 H 67.017792"
+       style="fill:none;stroke:#000000;stroke-width:0.4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path28181-9-10-1-7"
+       d="M 67.073112,-50.799552 V -55.06265"
+       style="fill:none;stroke:#000000;stroke-width:0.19;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker5160-1)"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png" />
+    <text
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.96388px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465366;shape-rendering:crispEdges;enable-background:new"
+       x="20.606249"
+       y="-72.237328"
+       id="text28465-9-2-0-5"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         id="tspan28463-0-5-8-02"
+         sodipodi:role="line"
+         x="20.606249"
+         y="-72.237328"
+         style="stroke-width:0.465366">clkin6</tspan></text>
+    <text
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.96383px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
+       x="20.39917"
+       y="-83.037811"
+       id="text28465-9-2-0-3-9"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         id="tspan28463-0-5-8-0-7"
+         sodipodi:role="line"
+         x="20.39917"
+         y="-83.037811"
+         style="stroke-width:0.465361">fpga_refclk_in</tspan></text>
+    <path
+       inkscape:connector-curvature="0"
+       id="path28181-7-0"
+       d="M 18.188428,-81.314409 H 111.54228"
+       style="fill:none;stroke:#000000;stroke-width:0.421608px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker28185-1-3)"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png" />
+    <text
+       id="text35998-5"
+       y="-71.446449"
+       x="72.498001"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.96384px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465362;shape-rendering:crispEdges;enable-background:new"
+       xml:space="preserve"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         style="stroke-width:0.465362"
+         y="-71.446449"
+         x="72.498001"
+         sodipodi:role="line"
+         id="tspan35996-0">tx_device_clk</tspan></text>
+    <path
+       inkscape:connector-curvature="0"
+       id="path28181-9-1"
+       d="m 69.67151,-60.290522 h 42.35385"
+       style="fill:none;stroke:#000000;stroke-width:0.283984px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker28185-5-7)"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path28181-9-1-2"
+       d="M 17.992612,-58.297523 H 62.734944"
+       style="fill:none;stroke:#000000;stroke-width:0.291881px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker28185-5-7-1)"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png" />
+    <text
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.96388px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465366;shape-rendering:crispEdges;enable-background:new"
+       x="20.985645"
+       y="-60.477325"
+       id="text28465-9-2-0-5-7"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         id="tspan28463-0-5-8-02-8"
+         sodipodi:role="line"
+         x="20.985645"
+         y="-60.477325"
+         style="stroke-width:0.465366">clkin10</tspan></text>
+    <text
+       id="text35998-5-3"
+       y="-61.686356"
+       x="72.87738"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.96384px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465362;shape-rendering:crispEdges;enable-background:new"
+       xml:space="preserve"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         style="stroke-width:0.465362"
+         y="-61.686356"
+         x="72.87738"
+         sodipodi:role="line"
+         id="tspan35996-0-0">rx_device_clk</tspan></text>
+    <path
+       inkscape:connector-curvature="0"
+       id="path28181-9-0"
+       d="M 17.860428,-45.913291 H 62.887172"
+       style="fill:none;stroke:#000000;stroke-width:0.292805px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker28185-5-2)"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png" />
+    <text
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.96388px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465366;shape-rendering:crispEdges;enable-background:new"
+       x="20.97448"
+       y="-48.198555"
+       id="text28465-9-2-0-5-3"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         id="tspan28463-0-5-8-02-2"
+         sodipodi:role="line"
+         x="20.97448"
+         y="-48.198555"
+         style="stroke-width:0.465366">sysref2</tspan></text>
+    <text
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       id="text6707-1-8-4"
+       y="-77.607384"
+       x="-11.828721"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
+       xml:space="preserve"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#808080;stroke-width:0.465361"
+         y="-77.607384"
+         x="-11.828721"
+         sodipodi:role="line"
+         id="tspan6705-1-3-9">GBTCLK0_M2C</tspan></text>
+    <text
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       id="text6707-1-8-4-0"
+       y="-77.607094"
+       x="13.342795"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
+       xml:space="preserve"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#808080;stroke-width:0.465361"
+         y="-77.607094"
+         x="13.342795"
+         sodipodi:role="line"
+         id="tspan6705-1-3-9-4">FMC0_GBTCLK0_M2C_P</tspan></text>
+    <text
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       id="text6707-1-8-4-1"
+       y="-66.394783"
+       x="-11.539998"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
+       xml:space="preserve"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#808080;stroke-width:0.465361"
+         y="-66.394783"
+         x="-11.539998"
+         sodipodi:role="line"
+         id="tspan6705-1-3-9-2">CLK1_M2C</tspan></text>
+    <text
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       id="text6707-1-8-4-1-0"
+       y="-54.546936"
+       x="-11.484143"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
+       xml:space="preserve"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#808080;stroke-width:0.465361"
+         y="-54.546936"
+         x="-11.484143"
+         sodipodi:role="line"
+         id="tspan6705-1-3-9-2-9">GBTCLK1_M2C</tspan></text>
+    <text
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       id="text6707-1-8-4-1-0-7"
+       y="-42.225094"
+       x="-11.16582"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
+       xml:space="preserve"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#808080;stroke-width:0.465361"
+         y="-42.225094"
+         x="-11.16582"
+         sodipodi:role="line"
+         id="tspan6705-1-3-9-2-9-6">CLK0_M2C</tspan></text>
+    <text
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       id="text6707-1-8-4-0-1"
+       y="-66.394783"
+       x="13.342338"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
+       xml:space="preserve"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#808080;stroke-width:0.465361"
+         y="-66.394783"
+         x="13.342338"
+         sodipodi:role="line"
+         id="tspan6705-1-3-9-4-4">FMC0_CLK1_M2C_P</tspan></text>
+    <text
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       id="text6707-1-8-4-0-1-2"
+       y="-54.547092"
+       x="13.342338"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
+       xml:space="preserve"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#808080;stroke-width:0.465361"
+         y="-54.547092"
+         x="13.342338"
+         sodipodi:role="line"
+         id="tspan6705-1-3-9-4-4-3">FMC0_CLK2_IO_P</tspan></text>
+    <text
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       id="text6707-1-8-4-0-1-5"
+       y="-42.225094"
+       x="13.342338"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
+       xml:space="preserve"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#808080;stroke-width:0.465361"
+         y="-42.225094"
+         x="13.342338"
+         sodipodi:role="line"
+         id="tspan6705-1-3-9-4-4-6">FMC0_CLK0_M2C_P</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.508386;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 63.388435,-49.035013 v 7.15614"
+       id="path2299" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 69.40084,-63.237754 v 6.03458 l -6.080087,3.510347 v -12.983631 z"
+       id="path16267" />
+    <text
+       id="text35998-5-3-8"
+       y="-51.425182"
+       x="40.959858"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465;stroke-miterlimit:4;stroke-dasharray:none;shape-rendering:crispEdges;enable-background:new"
+       xml:space="preserve"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.465;stroke-miterlimit:4;stroke-dasharray:none"
+         y="-51.425182"
+         x="40.959858"
+         sodipodi:role="line"
+         id="tspan35996-0-0-4">SHARED_DEVCLK</tspan></text>
+    <text
+       id="text35998-5-3-8-3"
+       y="-57.128944"
+       x="63.742271"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465362;shape-rendering:crispEdges;enable-background:new"
+       xml:space="preserve"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.465362"
+         y="-57.128944"
+         x="63.742271"
+         sodipodi:role="line"
+         id="tspan35996-0-0-4-9">0</tspan></text>
+    <text
+       id="text35998-5-3-8-3-7"
+       y="-61.902473"
+       x="63.687141"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465362;shape-rendering:crispEdges;enable-background:new"
+       xml:space="preserve"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.465362"
+         y="-61.902473"
+         x="63.687141"
+         sodipodi:role="line"
+         id="tspan35996-0-0-4-9-2">1</tspan></text>
+  </g>
+</svg>
+
