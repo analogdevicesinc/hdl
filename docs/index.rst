@@ -21,6 +21,7 @@ HDL Reference Designs
    :hidden:
 
    projects/ad9081_fmca_ebz/index
+   projects/ad9783_ebz/index
 
 .. role:: red
 .. role:: green
