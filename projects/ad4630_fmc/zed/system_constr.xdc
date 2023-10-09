@@ -4,15 +4,15 @@
 ###############################################################################
 
 # ad463x_fmc SPI interface
-set_property -dict {PACKAGE_PIN L22 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports ad463x_spi_sdo]
-set_property -dict {PACKAGE_PIN M19 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports ad463x_spi_sclk]
-set_property -dict {PACKAGE_PIN M20 IOSTANDARD LVCMOS25}          [get_ports ad463x_spi_cs]
+set_property -dict {PACKAGE_PIN L22 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports ad463x_spi_sdo]    ; ## C11  FMC_LA06_N
+set_property -dict {PACKAGE_PIN M19 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports ad463x_spi_sclk]   ; ## G6  FMC_LA00_CC_P
+set_property -dict {PACKAGE_PIN M20 IOSTANDARD LVCMOS25}          [get_ports ad463x_spi_cs]     ; ## G7  FMC_LA00_CC_N
 
-set_property -dict {PACKAGE_PIN B19 IOSTANDARD LVCMOS25} [get_ports ad463x_echo_sclk]
-set_property -dict {PACKAGE_PIN N20 IOSTANDARD LVCMOS25} [get_ports ad463x_resetn]
-set_property -dict {PACKAGE_PIN D20 IOSTANDARD LVCMOS25} [get_ports ad463x_busy]
-set_property -dict {PACKAGE_PIN N19 IOSTANDARD LVCMOS25} [get_ports ad463x_cnv]
-set_property -dict {PACKAGE_PIN L18 IOSTANDARD LVCMOS25} [get_ports ad463x_ext_clk]
+set_property -dict {PACKAGE_PIN B19 IOSTANDARD LVCMOS25} [get_ports ad463x_echo_sclk]           ; ## D20  FMC_LA17_CC_P
+set_property -dict {PACKAGE_PIN N20 IOSTANDARD LVCMOS25} [get_ports ad463x_resetn]              ; ## D9  FMC_LA01_CC_N
+set_property -dict {PACKAGE_PIN D20 IOSTANDARD LVCMOS25} [get_ports ad463x_busy]                ; ## C22  FMC_LA18_CC_P
+set_property -dict {PACKAGE_PIN N19 IOSTANDARD LVCMOS25} [get_ports ad463x_cnv]                 ; ## D8  FMC_LA01_CC_P
+set_property -dict {PACKAGE_PIN L18 IOSTANDARD LVCMOS25} [get_ports ad463x_ext_clk]             ; ## H4  FMC_CLK0_P
 
 # external clock, that drives the CNV generator, must have a maximum 100 MHz frequency
 create_clock -period 10.000 -name cnv_ext_clk [get_ports ad463x_ext_clk]
