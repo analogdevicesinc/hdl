@@ -189,11 +189,11 @@ module system_top (
     .iic_mux_sda_i (iic_mux_sda_i_s),
     .iic_mux_sda_o (iic_mux_sda_o_s),
     .iic_mux_sda_t (iic_mux_sda_t_s),
-    .spi_sdo (),
-    .spi_sdo_t (),
-    .spi_sdi (spi_sdi),
-    .spi_cs (spi_cs),
-    .spi_sclk (spi_sclk),
+    .adaq7980_spi_sdo (),
+    .adaq7980_spi_sdo_t (),
+    .adaq7980_spi_sdi (spi_sdi),
+    .adaq7980_spi_cs (spi_cs),
+    .adaq7980_spi_sclk (spi_sclk),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));
 
