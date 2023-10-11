@@ -35,8 +35,9 @@
 
 `timescale 1ns/100ps
 
-module system_top (
-
+module system_top #(
+  parameter NUM_OF_SDI = 2
+) (
   inout       [14:0]      ddr_addr,
   inout       [ 2:0]      ddr_ba,
   inout                   ddr_cas_n,
@@ -83,20 +84,19 @@ module system_top (
 
   input                   otg_vbusoc,
 
-  inout       [15:0]      adc_db,
-  output                  adc_rd_n,
-  output                  adc_wr_n,
+  output                       ad7606_spi_cs,
+  output                       ad7606_spi_sclk,
+  input       [NUM_OF_SDI-1:0] ad7606_spi_sdi,
+  output                       ad7606_spi_sdo,
 
-  input                   adc_busy,
+  inout                   adc_serpar,
+  inout                   adc_busy,
   output                  adc_cnvst_n,
-  output                  adc_cs_n,
-  input                   adc_first_data,
-  output                  adc_reset,
-  output      [2:0]       adc_os,
-  output                  adc_stby,
-  output                  adc_range,
-  output                  adc_refsel,
-  output                  adc_serpar
+  inout                   adc_first_data,
+  inout                   adc_reset,
+  inout       [ 2:0]      adc_os,
+  inout                   adc_stby,
+  inout                   adc_range
 );
 
   // internal signals
@@ -111,31 +111,20 @@ module system_top (
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
 
-  wire            adc_db_t;
-  wire    [15:0]  adc_db_o;
-  wire    [15:0]  adc_db_i;
+    // instantiations
 
-  genvar i;
-
-  // instantiations
-
-  assign adc_serpar = gpio_o[39];
-  assign adc_refsel = gpio_o[38];
-  assign adc_reset = gpio_o[37];
-  assign adc_stby = gpio_o[36];
-  assign adc_range = gpio_o[35];
-  assign adc_os = gpio_o[34:32];
-  assign gpio_i[63:32] = gpio_o[63:32];
-
-  generate
-    for (i = 0; i < 16; i = i + 1) begin: adc_db_io
-      ad_iobuf i_iobuf_adc_db (
-        .dio_t(adc_db_t),
-        .dio_i(adc_db_o[i]),
-        .dio_o(adc_db_i[i]),
-        .dio_p(adc_db[i]));
-    end
-  endgenerate
+  ad_iobuf #(
+    .DATA_WIDTH(8)
+  ) i_iobuf_adc_cntrl (
+    .dio_t (gpio_t[39:32]),
+    .dio_i (gpio_o[39:32]),
+    .dio_o (gpio_i[39:32]),
+    .dio_p ({adc_first_data,  // 39 
+             adc_serpar,      // 38 
+             adc_reset,       // 37
+             adc_stby,        // 36
+             adc_range,       // 35
+             adc_os}));       // 34:32
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -145,7 +134,9 @@ module system_top (
     .dio_o(gpio_i[31:0]),
     .dio_p(gpio_bd));
 
-  ad_iobuf #(
+  assign gpio_i[63:40] = gpio_o[63:40];
+
+ ad_iobuf #(
     .DATA_WIDTH(2)
   ) i_iobuf_iic_mux_scl (
     .dio_t({iic_mux_scl_t_s, iic_mux_scl_t_s}),
@@ -206,14 +197,11 @@ module system_top (
     .iic_mux_sda_t (iic_mux_sda_t_s),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif),
+    .ad7606_spi_sdo (ad7606_spi_sdo),
+    .ad7606_spi_sdi (ad7606_spi_sdi),
+    .ad7606_spi_cs (ad7606_spi_cs),
+    .ad7606_spi_sclk (ad7606_spi_sclk),
     .rx_busy (adc_busy),
-    .rx_cnvst_n (adc_cnvst_n),
-    .rx_cs_n (adc_cs_n),
-    .rx_db_i (adc_db_i),
-    .rx_db_o (adc_db_o),
-    .rx_db_t (adc_db_t),
-    .rx_first_data (adc_first_data),
-    .rx_rd_n (adc_rd_n),
-    .rx_wr_n (adc_wr_n));
+    .rx_cnvst_n (adc_cnvst_n));
 
 endmodule
