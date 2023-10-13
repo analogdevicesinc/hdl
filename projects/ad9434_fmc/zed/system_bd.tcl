@@ -1,6 +1,6 @@
-source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 source $ad_hdl_dir/projects/common/zed/zed_system_bd.tcl
 source ../common/ad9434_bd.tcl
+source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 set mem_init_sys_path [get_env_param ADI_PROJECT_DIR ""]mem_init_sys.txt;
 
