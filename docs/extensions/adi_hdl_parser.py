@@ -75,16 +75,6 @@ def pretty_dep(string):
 		return ''
 	return string.replace("'MODELPARAM_VALUE.",'').replace("'",'')
 
-def sanitized_bool(string):
-	string_ = string.strip().lower()
-	if string_ in ['1', 'true', 'yes', 'y']:
-		return True
-	elif string_ in ['0', 'false', 'no', 'n']:
-		return False
-	else:
-		logger.warning(f"Got malformed bool value {string}.")
-		return False
-
 class directive_base(Directive):
 	has_content = True
 	add_index = True

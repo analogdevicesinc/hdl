@@ -75,7 +75,7 @@ Examples
 --------------------------------------------------------------------------------
 
 * :dokuwiki:`CN0363 <resources/eval/user-guides/eval-cn0363-pmdz>`:
-  Colorimeter application using the :part:`AD7175-2` Sigma-Delta ADC.
+  Colorimeter application using the :adi:`AD7175-2` Sigma-Delta ADC.
 * :dokuwiki:`resources/eval/user-guides/adaq7980-sdz`:
   A 16-bit ADC subsystem with four common signal processing and conditioning blocks.
 * :dokuwiki:`resources/tools-software/uc-drivers/ad5766`:

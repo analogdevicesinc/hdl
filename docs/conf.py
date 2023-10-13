@@ -32,6 +32,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # -- Custom extensions configuration -------------------------------------------
 
 hide_collapsible_content = True
+validate_links = False
 
 # -- todo configuration -------------------------------------------------------
 

@@ -151,13 +151,12 @@ it is not recommended.
 Third-party directives and roles
 --------------------------------------------------------------------------------
 
-Third-party tools are used to expand Sphinx functionality, for example, to
-generate component diagrams.
+Third-party tools are used to expand Sphinx functionality, if you haven't already,
+do:
 
-.. tip::
+.. code:: bash
 
-   Check :git-hdl:`docs/Containterfile` for a recipe to install these
-   tools, either in the host or in a container.
+   pip install -r requirements.txt
 
 Symbolator directive
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -183,16 +182,26 @@ Color role
 
 To print text in red or green, use :code:`:red:\`text\`` and :code:`:green:\`text\``.
 
-Git role
+Link roles
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The link roles are a group of roles defined by ``adi_links.py``.
+
+The ``validate_links`` global option is used to validate each link during build.
+These links are not managed, that means, only links from changed files are checked.
+You can run a build with it set to False, then touch the desired files to check
+the links of only these files.
+
+Git role
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 The Git role allows to create links to the Git repository with a shorter syntax.
 The role syntax is :code:`:git-repo:\`text <branch:path>\``, for example:
 
-* :code:`:git-hdl:\`master:docs/contributing/guidelines.rst\``
-  renders as :git-hdl:`master:docs/contributing/guidelines.rst`.
-* :code:`:git-hdl:\`Guidelines <docs/contributing/guidelines.rst>\``
-  renders as :git-hdl:`Guidelines <docs/contributing/guidelines.rst>`.
+* :code:`:git-hdl:\`master:docs/user_guide/docs_guidelines.rst\``
+  renders as :git-hdl:`master:docs/user_guide/docs_guidelines.rst`.
+* :code:`:git-hdl:\`Guidelines <docs/user_guide/docs_guidelines.rst>\``
+  renders as :git-hdl:`Guidelines <docs/user_guide/docs_guidelines.rst>`.
 
 The branch field is optional and will be filled with the current branch.
 The text field is optional and will be filled with the file or directory name.
@@ -201,19 +210,19 @@ Finally, you can do :code:`:git-repo:\`/\`` for a link to the root of the
 repository with pretty naming, for example, :code:`:git-hdl:\`/\`` is rendered
 as :git-hdl:`/`.
 
-Part role
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ADI role
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-The part role creates links for a part to the Analog Devices Inc. website.
+The adi role creates links for a webpage to the Analog Devices Inc. website.
 
-The role syntax is :code:`:part:\`text <part_id>\``, for example,
-:code:`:part:\`AD7175-2 <ad7175-2>\``.
+The role syntax is :code:`:adi:\`text <webpage>\``, for example,
+:code:`:adi:\`AD7175-2 <ad7175-2>\``.
 Since links are case insensitive, you can also reduce it to
-:code:`:part:\`AD7175-2\``, when *part_id* is the same as *text* and will render
-as :part:`AD7175-2`.
+:code:`:adi:\`AD7175-2\``, when *webpage* is the same as *text* and will render
+as :adi:`AD7175-2`.
 
 Datasheet role
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 The datasheet role creates links for a datasheet in the Analog Devices Inc. website.
 
@@ -230,7 +239,7 @@ by just copying the link in the table of contents.
    figure number!
 
 Dokuwiki role
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 The dokuwiki role creates links to the Analog Devices Inc. wiki website.
 The role syntax is :code:`:dokuwiki:\`text <path>\``, for example,
@@ -239,7 +248,7 @@ gets rendered as
 :dokuwiki:`pulsar-adc-pmods <resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods>`.
 
 EngineerZone role
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 The ez role creates links to the Analog Devices Inc. EngineerZone support website.
 The role syntax is :code:`:ez:\`community\``, for example, :code:`:ez:\`fpga\``
@@ -250,7 +259,7 @@ For Linux Software Drivers, it is :code:`:ez:\`linux-software-drivers\``.
 For Microcontroller no-OS Drivers it is :code:`:ez:\`microcontroller-no-os-drivers\``.
 
 Vendor role
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 The vendor role creates links to the vendor's website.
 The role syntax is :code:`:vendor:\`text <path>\``, for example,
@@ -265,18 +274,19 @@ gets rendered
 :intel:`content/www/us/en/docs/programmable/683780/22-4/general-purpose-i-o-overview.html`
 (not very readable).
 
-Supported vendors are: `xilinx` and `intel`.
+Supported vendors are: ``xilinx`` (AMD Xilinx), ``intel`` (Intel Altera) and
+``mw`` (MathWorks).
 
 HDL parameters directive
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The HDL parameters directive gets information parsed from *component.xml* library
-and generates a table with the IP parameters.
+The HDL parameters directive gets information parsed from IP-XACT (*component.xml*)
+library and generates a table with the IP parameters.
 
 .. note::
 
-   The *component.xml* files are generated by Vivado during the library build
-   and not by the documentation tooling.
+   The IP-XACT files are generated by Vivado during the library build and not by
+   the documentation tooling.
 
 The directive syntax is:
 
@@ -425,8 +435,12 @@ Notice how you can use any Sphinx syntax, even nest other directives.
 Global options for HDL directives
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Use the `hide_collapsible_content` to set the default state of the collapsibles,
-if you set to False, they be expanded by default.
+Set ``hide_collapsible_content`` to True to hide the collapsibles by default.
+
+Set ``validate_links`` to True to validate each link during build.
+These links are not managed, that means, only links from changed files are checked.
+You can run a build with it set to False, then touch the desired files to check
+the links of only these files.
 
 Common sections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
