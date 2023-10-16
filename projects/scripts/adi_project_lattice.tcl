@@ -176,3 +176,150 @@ proc adi_project_create {project_name args}  {
 
   cd $dir
 }
+
+###############################################################################
+## Adds files to the specified project.
+## Works in auto or manual -usage modes.
+## In auto you have to use -exts option.
+## In manual mode you have to use -flist option.
+## You can use with normalized paths, or with paths relative to the radiant
+## project file .rdf for spath (search path).
+## The ppath (project path) has to be a folder that contains the .rdf project
+## file max 3 directory deep.
+#
+# \opt[usage] -usage auto/manual
+# \opt[exts] -exts {csacsi.v a_szamar.v *.ipx}
+# \opt[spath] -spath ./$project_name/lib
+# \opt[ppath] -ppath .
+# \opt[sdepth] -sdepth 7
+# \opt[flist] -flist {./csacsi.v ./a_szamar.v}
+###############################################################################
+proc adi_project_files {project_name args} {
+  puts "\nadi_project_files:\n"
+
+  array set opt [list -usage "auto" \
+    -exts {*.ipx} \
+    -spath ./$project_name/lib \
+    -ppath "." \
+    -sdepth "6" \
+    -flist "" {*}$args]
+
+  set exts $opt(-exts)
+  set spath $opt(-spath)
+  set ppath $opt(-ppath)
+  set sdepth $opt(-sdepth)
+  set flist $opt(-flist)
+  set usage $opt(-usage)
+
+  puts "args:\n"
+  puts "Usage: $usage"
+  puts "Project path: $ppath"
+  puts "Extentions: $exts"
+  puts "Search path: $spath"
+  puts "search depth: $sdepth\n"
+
+  # Searching for the radiant project file.
+  set sbx_lsit [get_file_list $ppath *${project_name}.rdf 3]
+  set radiant_project [lindex $sbx_lsit 0]
+
+  # setting the current directory
+  set dir [pwd]
+
+  if { [file exists $radiant_project] == 1} {
+    puts "\n------Adding files to $radiant_project project.------\n"
+
+    # When i open the radiant project this tool enters the direcctory
+    # where the radiant .rdf project file is.
+    # So if we add files with relative path, then the path has to be relative
+    # to this file.
+    prj_open $radiant_project
+
+    if { [string match "auto" $usage] } {
+      set flist [get_file_list $spath $exts $sdepth]
+      puts "\n------List of files to be added:------ \n"
+      foreach file $flist {
+        puts $file
+      }
+    } elseif { [string match "manual" $usage] } {
+      puts "\n------List of files to be added:------ \n"
+      foreach file $flist {
+        puts $file
+      }
+    } else {
+      puts "Wrong parameter for -usage option!"
+      exit 2
+    }
+  } else {
+    puts "Project does not exist."
+    exit 2
+  }
+
+  puts "\n"
+
+  foreach pfile $flist {
+    if { [catch {prj_add_source $pfile} fid] } {
+        puts "$pfile already added to $radiant_project project!"
+    } else {
+      puts "$pfile added to $radiant_project project!"
+    }
+  }
+
+  prj_save
+  prj_close
+
+  # changing directory back, becouse radiant enters the project directory
+  # and lets it like that so if we use relative paths somewhere in scripts
+  # it would affect our code.
+  cd $dir
+}
+
+###############################################################################
+## Returns a list of files in a given path searching recursively.
+#
+# \param[path] - the base directory
+# \param[extention_list] - the list of extention files, for example:
+#                                                              {*.v *.tcl *.xdc}
+# \param[depth] - the depth of recursive search
+# \return - file_list
+#
+# The return path depends on what path you use as input.
+# For example you can use like:
+#                                    get_file_list [file normalize ./] {*.ipx} 7
+#   to get the list of .ipx files from the current directory 7 directories deep
+#   with normalised paths or u can use with relative paths like:
+#                                                     get_file_list ./ {*.ipx} 7
+###############################################################################
+proc get_file_list {path {extention_list {*.ipx}} {depth 5}} {
+  set file_list {}
+  foreach ext $extention_list {
+    set file_list [list {*}$file_list \
+      {*}[glob -nocomplain -type f -directory $path $ext]]
+  }
+  if {$depth > 0} {
+    foreach dir [glob -nocomplain -type d -directory $path *] {
+      set file_list [list {*}$file_list \
+        {*}[get_file_list $dir $extention_list [expr {$depth-1}]]]
+    }
+  }
+  return $file_list
+}
+
+###############################################################################
+## Returns a list of file paths and replaces the base_to_cut part
+## at start of file paths with base_to_add.
+#
+# \param[full_path_flist] - list of file paths
+# \param[base_to_cut] - the start of file paths to cut
+# \param[base_to_add] - the start of file paths to add
+###############################################################################
+proc adopt_path {full_path_flist base_to_cut {base_to_add ""}} {
+  set bpath_length [string length $base_to_cut]
+  set flist {}
+
+  foreach file $full_path_flist {
+    set flist [list {*}$flist \
+      $base_to_add[string range $file [expr {$bpath_length + 1}] end]]
+  }
+
+  return $flist
+}
