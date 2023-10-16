@@ -399,12 +399,12 @@ module system_top(
     .spi1_sdo_i(1'b0),
     .spi1_sdo_o(),
 
-    .max_spi_clk_i(spi_sck),
+    .max_spi_clk_i(1'b0),
     .max_spi_clk_o(spi_sck),
-    .max_spi_sdo_i(spi_mosi),
+    .max_spi_sdo_i(1'b0),
     .max_spi_sdo_o(spi_mosi),
     .max_spi_sdi_i(spi_miso),
-    .max_spi_csn_i(spi_csb),
+    .max_spi_csn_i(2'b0),
     .max_spi_csn_o(spi_csb),
 
     .rx_0_dco_p(rx_dco_p[0]),
