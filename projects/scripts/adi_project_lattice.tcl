@@ -323,3 +323,116 @@ proc adopt_path {full_path_flist base_to_cut {base_to_add ""}} {
 
   return $flist
 }
+
+###############################################################################
+## Runs the Radiant project with the defined options.
+## Optionally runs a list of commands before running the design in specified
+## in specified mode.
+## Searches for the .rdf project 3 directories deep from -ppath (project path).
+#
+# \opt[ppath] -ppath ./$project_name
+# \opt[mode] -mode synth
+# \opt[impl] -impl "impl_1"
+# \opt[top] -top "system_top"
+# \opt[cmd_list] -cmd_list {{source csacsi.tcl} {source a_szamar.tcl}}
+###############################################################################
+proc adi_project_run {project_name args} {
+  puts "\nadi_project_run:\n"
+
+  array set opt [list -ppath "./$project_name" \
+    -mode "export" \
+    -impl "impl_1" \
+    -top "system_top" \
+    -cmd_list { \
+    {prj_clean_impl -impl $impl} \
+    {prj_set_strategy_value -strategy Strategy1 bit_ip_eval=True}} \
+    {*}$args]
+
+  set ppath $opt(-ppath)
+  set mode $opt(-mode)
+  set impl $opt(-impl)
+  set top $opt(-top)
+  set cmd_list $opt(-cmd_list)
+
+  set sbx_lsit [get_file_list $ppath *${project_name}.rdf 3]
+  set radiant_project [lindex $sbx_lsit 0]
+
+  set dir [pwd]
+
+  if {[file exists $radiant_project] == 1} {
+    prj_open $radiant_project
+  } else {
+    puts "\nProject does not exist.\n"
+    exit 2
+  }
+
+  prj_set_impl_opt -impl $impl "include path" "."
+  prj_set_impl_opt -impl $impl "top" $top
+
+  foreach cmd $cmd_list {
+    puts "Executing cmd: $cmd"
+    eval $cmd
+  }
+
+  if {[string match "export" $mode]} {
+    puts "\nRun Export design.\n"
+    prj_run Export -impl $impl
+  } elseif {[string match "synth" $mode]} {
+    puts "\nRun Synthesis design.\n"
+    prj_run Synthesis -impl $impl
+  } elseif {[string match "map" $mode]} {
+    puts "\nRun Map design.\n"
+    prj_run Map -impl $impl
+  } elseif {[string match "par" $mode]} {
+    puts "\nRun PAR design.\n"
+    prj_run PAR -impl $impl
+  } else {
+    puts "\nRun Export design.\n"
+    prj_run Export -impl $impl
+  }
+
+  prj_save
+  prj_close
+
+  cd $dir
+}
+
+###############################################################################
+## Opens the Radiant project and runs a list of commands given as option
+## saves and closes the project.
+## Searches for the .rdf project 3 directories deep from -ppath (project path).
+#
+# \opt[ppath] -ppath ./
+# \opt[cmd_list] -cmd_list {{source csacsi.tcl} {source a_szamar.tcl}}
+###############################################################################
+proc adi_project_run_cmd {project_name args} {
+  puts "\nadi_project_run_cmd:\n"
+  set dir [pwd]
+
+  array set opt [list -ppath "./$project_name" -cmd_list "" {*}$args]
+  set ppath $opt(-ppath)
+  set cmd_list $opt(-cmd_list)
+
+  set sbx_lsit [get_file_list $ppath *${project_name}.rdf 3]
+  set radiant_project [lindex $sbx_lsit 0]
+
+  if { [file exists $radiant_project] == 1} {
+    prj_open $radiant_project
+  } else {
+    puts "\nProject does not exist.\n"
+    exit 2
+  }
+
+  foreach cmd $cmd_list {
+    puts "Executing cmd: $cmd"
+    eval $cmd
+  }
+
+  prj_save
+  prj_close
+
+  cd $dir
+}
+
+proc adi_project_verify {project_name args} {
+}
