@@ -11,7 +11,6 @@ adi_project template_vck190
 adi_project_files template_vck190 [list \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/vck190/vck190_system_constr.xdc" \
-  "system_constr.xdc" \
   "system_top.v" ]
 
 adi_project_run template_vck190
