@@ -105,11 +105,11 @@ module system_top (
     .ddr4_dimm1_odt (ddr4_odt),
     .ddr4_dimm1_reset_n (ddr4_reset_n),
 
-    .spi0_csn (1'b1),
+    .spi0_csn (),
     .spi0_miso (1'b0),
     .spi0_mosi (),
     .spi0_sclk (),
-    .spi1_csn (1'b1),
+    .spi1_csn (),
     .spi1_miso (1'b0),
     .spi1_mosi (),
     .spi1_sclk ());

@@ -166,23 +166,35 @@ set sys_cpu_resetn        [get_bd_nets sys_cpu_resetn]
 set sys_dma_reset         [get_bd_nets sys_350m_reset]
 set sys_dma_resetn        [get_bd_nets sys_350m_resetn]
 
-# spi
+#
+
+ad_ip_instance xlconcat spi0_csn_sources
+ad_ip_parameter spi0_csn_sources config.num_ports {3}
+ad_connect spi0_csn_sources/dout spi0_csn
 
 ad_connect  sys_cips/spi0_sck_o spi0_sclk
 ad_connect  sys_cips/spi0_sck_i GND
 ad_connect  sys_cips/spi0_io0_o spi0_mosi
 ad_connect  sys_cips/spi0_io0_i spi0_miso
 ad_connect  sys_cips/spi0_io1_i GND
-ad_connect  sys_cips/spi0_ss_o spi0_csn
-ad_connect  sys_cips/spi0_ss_i VCC
+ad_connect  sys_cips/spi0_ss_o  spi0_csn_sources/in0
+ad_connect  sys_cips/spi0_ss1_o spi0_csn_sources/in1
+ad_connect  sys_cips/spi0_ss2_o spi0_csn_sources/in2
+ad_connect  sys_cips/spi0_ss_i  VCC
+
+ad_ip_instance xlconcat spi1_csn_sources
+ad_ip_parameter spi1_csn_sources config.num_ports {3}
+ad_connect spi1_csn_sources/dout spi1_csn
 
 ad_connect  sys_cips/spi1_sck_o spi1_sclk
 ad_connect  sys_cips/spi1_sck_i GND
 ad_connect  sys_cips/spi1_io0_o spi1_mosi
 ad_connect  sys_cips/spi1_io0_i spi1_miso
 ad_connect  sys_cips/spi1_io1_i GND
-ad_connect  sys_cips/spi1_ss_o spi1_csn
-ad_connect  sys_cips/spi1_ss_i VCC
+ad_connect  sys_cips/spi1_ss_o  spi1_csn_sources/in0
+ad_connect  sys_cips/spi1_ss1_o spi1_csn_sources/in1
+ad_connect  sys_cips/spi1_ss2_o spi1_csn_sources/in2
+ad_connect  sys_cips/spi1_ss_i  VCC
 
 # system id
 
