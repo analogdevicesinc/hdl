@@ -71,10 +71,22 @@ module system_top (
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
 
+  wire i3c_controller_0_sdo;
+  wire i3c_controller_0_sdi;
+  wire i3c_controller_0_t;
+
   // instantiations
 
   assign gpio_i[31:8] = gpio_o[31:8];
   assign gpio_i[63:33] = gpio_o[63:33];
+
+  ad_iobuf #(
+    .DATA_WIDTH(1)
+  ) i_iobuf_sda (
+    .dio_t(i3c_controller_0_t),
+    .dio_i(i3c_controller_0_sdo),
+    .dio_o(i3c_controller_0_sdi),
+    .dio_p(i3c_controller_0_sda));
 
   ad_iobuf #(
     .DATA_WIDTH(2)
@@ -135,7 +147,9 @@ module system_top (
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o (),
-    .i3c_controller_0_scl(i3c_controller_0_scl),
-    .i3c_controller_0_sda(i3c_controller_0_sda));
+    .i3c_controller_0_scl (i3c_controller_0_scl),
+    .i3c_controller_0_sdi (i3c_controller_0_sdi),
+    .i3c_controller_0_sdo (i3c_controller_0_sdo),
+    .i3c_controller_0_t (i3c_controller_0_t));
 
 endmodule

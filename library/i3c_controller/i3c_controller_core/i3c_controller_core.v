@@ -92,8 +92,10 @@ module i3c_controller_core #(
 
   // I3C bus signals
 
-  output scl,
-  inout  sda
+  output i3c_scl,
+  output i3c_sdo,
+  input  i3c_sdi,
+  output i3c_t
 );
   wire clk_out;
   wire [`MOD_BIT_CMD_WIDTH:0] cmd;
@@ -224,17 +226,10 @@ module i3c_controller_core #(
     .rx_raw(rx_raw),
     .rx_valid(rx_valid),
     .cmd_nop(cmd_nop),
-    .scl(scl),
-    .sdi(sdi_bit),
-    .sdo(sdo_bit),
-    .t(t));
-
-  i3c_controller_phy_sda #(
-  ) i_i3c_controller_phy_sda (
-    .sdo(sdo_bit),
-    .sdi(sdi_bit),
-    .t(t),
-    .sda(sda));
+    .scl(i3c_scl),
+    .sdo(i3c_sdo),
+    .sdi(i3c_sdi),
+    .t(i3c_t));
 
   assign ibi = {ibi_da, ibi_mdb};
   assign ibi_valid = ibi_tick;

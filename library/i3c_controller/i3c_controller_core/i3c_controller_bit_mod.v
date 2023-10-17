@@ -49,10 +49,10 @@ module i3c_controller_bit_mod (
   // Indicates that the bus is not transfering,
   // is different from bus idle because does not wait 200us after Stop.
   output cmd_nop,
-  // 0: 12.50MHz
-  // 1:  6.25MHz
-  // 2:  3.12MHz
-  // 3:  1.56MHz
+  // 0:  1.56MHz
+  // 1:  3.12MHz
+  // 2:  6.25MHz
+  // 3: 12.50MHz
   input [1:0] scl_pp_sg, // SCL Push-pull speed grade
 
   output rx,
@@ -62,8 +62,8 @@ module i3c_controller_bit_mod (
 
   // Bus drive signals
 
-  output reg sdo,
   output scl,
+  output reg sdo,
   input  sdi,
   output t
 );
@@ -75,7 +75,7 @@ module i3c_controller_bit_mod (
   reg sr;
 
   reg scl_high_reg;
-  wire scl_high = count[pp_sg+2];
+  wire scl_high = count[5-pp_sg];
   wire sdo_w;
   wire t_w;
 
@@ -85,7 +85,7 @@ module i3c_controller_bit_mod (
   for (i = 0; i < 4; i = i+1) begin
     assign scl_end_multi[i] = &count[i+2:0];
   end
-  assign scl_end = scl_end_multi[pp_sg];
+  assign scl_end = scl_end_multi[3-pp_sg];
 
   assign cmd_ready = (scl_end | !transfer) & reset_n;
 
@@ -95,12 +95,12 @@ module i3c_controller_bit_mod (
   always @(posedge clk) begin
     if (!reset_n) begin
       cmd_r <= {`MOD_BIT_CMD_NOP_, 2'b01};
-      pp_sg <= 2'b11;
+      pp_sg <= 2'b00;
     end else begin
       if (cmd_ready) begin
         if (cmd_valid) begin
           cmd_r <= cmd;
-          pp_sg <= cmd[1] ? scl_pp_sg : 2'b11;
+          pp_sg <= cmd[1] ? scl_pp_sg : 2'b00;
         end else begin
           cmd_r <= {`MOD_BIT_CMD_NOP_, 2'b01};
         end
@@ -138,8 +138,8 @@ module i3c_controller_bit_mod (
   assign rx = rx_raw;
   assign rx_valid = ~scl_high_reg & scl_high;
 
-  assign sdo_w = sm == `MOD_BIT_CMD_START_   ? (scl_high ? ~count[pp_sg+1] : 1'b1) :
-                 sm == `MOD_BIT_CMD_STOP_    ? (scl_high ?  count[pp_sg+1] : 1'b0) :
+  assign sdo_w = sm == `MOD_BIT_CMD_START_   ? (scl_high ? ~count[4-pp_sg] : 1'b1) :
+                 sm == `MOD_BIT_CMD_STOP_    ? (scl_high ?  count[4-pp_sg] : 1'b0) :
                  sm == `MOD_BIT_CMD_WRITE_   ? st[0] :
                  sm == `MOD_BIT_CMD_ACK_SDR_ ? (scl_high ? rx   : 1'b1) :
                  sm == `MOD_BIT_CMD_ACK_IBI_ ? (scl_high ? 1'b1 : 1'b0) :

@@ -421,14 +421,14 @@ ENDREG
 FIELD
 [0] 0x??
 OPS_MODE
-WO
+RW
 Set 0 to private transfers, 1 to offload.
 ENDFIELD
 
 FIELD
 [4:1] 0x??
 OPS_OFFLOAD_LENGTH
-WO
+RW
 Offload commands length.
 ENDFIELD
 
@@ -438,10 +438,10 @@ OPS_SPEED_GRADE
 RW
 Sets the speed grade in push-pull mode.
 Speed with 100MHz driver clock are:
-00: 12.50MHz
-01:  6.25MHz
-10:  3.12MHz
-11:  1.56MHz (default)
+00:  1.56MHz (default)
+01:  3.12MHz
+10:  6.25MHz
+11: 12.50MHz
 ENDFIELD
 
 [5] 0x0
@@ -595,6 +595,8 @@ The state can also be overwritten to explicit attach device (e.g. has static add
 A slot cannot be recycled, when the device is detached, it still keeps its slot in
 case it is attached again, effectively, only its IBIs are rejectedin the detached
 state.
+The controller cannot be detached, instead, poll OPS_STATUS_NOP to identify if the
+controller is doing free/not doing any procedure before recondiguring it.
 ENDFIELD
 
 FIELD

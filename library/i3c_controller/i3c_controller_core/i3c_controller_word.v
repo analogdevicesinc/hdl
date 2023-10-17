@@ -38,47 +38,49 @@
  */
 
 `timescale 1ns/100ps
-`default_nettype none
+`default_nettype wire
 `include "i3c_controller_word_cmd.v"
 `include "i3c_controller_bit_mod_cmd.v"
 
-module i3c_controller_word (
-  input  wire clk,
-  input  wire reset_n,
+module i3c_controller_word #(
+  parameter DEBUG_IGNORE_NACK = 0
+) (
+  input clk,
+  input reset_n,
 
   // Word command
 
   output reg cmdw_nack,
   // NACK is HIGH when an ACK is not satisfied in the I3C bus, acts as reset.
-  output wire cmdw_ready,
-  input  wire cmdw_valid,
-  input  wire [`CMDW_HEADER_WIDTH+8:0] cmdw,
+  output cmdw_ready,
+  input  cmdw_valid,
+  input  [`CMDW_HEADER_WIDTH+8:0] cmdw,
 
-  input  wire cmdw_rx_ready,
-  output reg  cmdw_rx_valid,
-  output wire [7:0] cmdw_rx,
+  input        cmdw_rx_ready,
+  output reg   cmdw_rx_valid,
+  output [7:0] cmdw_rx,
 
   // Bit Modulation Command
 
-  output wire [`MOD_BIT_CMD_WIDTH:0] cmd,
-  output wire cmd_valid,
-  input  wire cmd_ready,
+  output [`MOD_BIT_CMD_WIDTH:0] cmd,
+  output cmd_valid,
+  input  cmd_ready,
 
   // RX and ACK
 
-  input wire rx,
-  input wire rx_valid,
+  input rx,
+  input rx_valid,
 
   // IBI interface
 
-  output reg  arbitration_valid,
-  input  wire ibi_bcr_2,
-  output reg  ibi_requested,
-  input  wire ibi_requested_auto,
-  output reg  ibi_tick,
-  output wire [6:0] ibi_da,
-  input  wire ibi_da_attached,
-  output wire [7:0] ibi_mdb,
+  output reg   arbitration_valid,
+  input        ibi_bcr_2,
+  output reg   ibi_requested,
+  input        ibi_requested_auto,
+  output reg   ibi_tick,
+  output [6:0] ibi_da,
+  input        ibi_da_attached,
+  output [7:0] ibi_mdb,
 
   // DAA interface
 
@@ -87,10 +89,9 @@ module i3c_controller_word (
 
   // uP accessible info
 
-  input wire [1:0] rmap_ibi_config
+  input [1:0] rmap_ibi_config
 );
   wire ibi_enable;
-  wire ibi_auto;
 
   wire [`CMDW_HEADER_WIDTH:0] cmdw_header;
 
@@ -107,14 +108,11 @@ module i3c_controller_word (
 
   reg do_ack; // Peripheral did NACK?
   reg do_rx_t; // Peripheral end Message at T in Read Data?
-  reg rx_sampled;
   reg sg;
   reg [`MOD_BIT_CMD_WIDTH:2] cmd_r;
   reg cmd_wr;
 
   reg [5:0] i;
-  reg [5:0] i_reg;
-  reg [5:0] i_reg_2;
   reg [5:0] i_;
   // # of Bit Modulation Commands - 1 per word
   always @(sm) begin
@@ -331,13 +329,17 @@ module i3c_controller_word (
               `CMDW_TARGET_ADDR_PP,
               `CMDW_BCAST_7E_W1,
               `CMDW_BCAST_7E_W0: begin
-                if (do_ack & rx !== 1'b0) begin
-                  sm <= `CMDW_STOP_OD;
-                  smt <= setup;
-                  cmdw_nack <= 1'b1; // Tick
-                  // Due to NACK'ED STOP inheriting NACK'ED word i value,
-                  // this flag makes sm goto get after STOP cmd.
-                  cmdw_nacked <= 1'b1;
+                // Debug parameter to pretend all ACK bits have been ACKed,
+                // useful for bus testing without a part.
+                if (!DEBUG_IGNORE_NACK) begin
+                  if (do_ack & rx !== 1'b0) begin
+                    sm <= `CMDW_STOP_OD;
+                    smt <= setup;
+                    cmdw_nack <= 1'b1; // Tick
+                    // Due to NACK'ED STOP inheriting NACK'ED word i value,
+                    // this flag makes sm goto get after STOP cmd.
+                    cmdw_nacked <= 1'b1;
+                  end
                 end
               end
               `CMDW_MSG_RX: begin
@@ -411,7 +413,6 @@ module i3c_controller_word (
   assign ibi_da  = ibi_da_reg [8:2];
   assign ibi_mdb = ibi_mdb_reg[8:1];
   assign ibi_enable = rmap_ibi_config[0];
-  assign ibi_auto   = rmap_ibi_config[1];
   assign cmd_valid = smt == transfer;
   assign cmd = {cmd_r, sg, cmd_wr};
 endmodule

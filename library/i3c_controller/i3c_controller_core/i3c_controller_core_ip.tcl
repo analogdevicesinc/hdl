@@ -6,12 +6,10 @@ adi_ip_files i3c_controller_core [list \
 	"i3c_controller_core_constr.ttcl" \
 	"i3c_controller_core.v" \
 	"i3c_controller_framing.v" \
-	"i3c_controller_phy_sda.v" \
 	"i3c_controller_word.v" \
  	"i3c_controller_word_cmd.v" \
 	"i3c_controller_bit_mod.v" \
  	"i3c_controller_bit_mod_cmd.v" \
-	"i3c_controller_clk_div.v" \
 ]
 
 adi_ip_properties_lite i3c_controller_core
@@ -27,8 +25,10 @@ adi_add_bus "i3c" "master" \
 	"analog.com:interface:i3c_controller_rtl:1.0" \
 	"analog.com:interface:i3c_controller:1.0" \
 	{
-		{"scl" "SCL"} \
-		{"sda" "SDA"} \
+		{"i3c_scl" "SCL"} \
+		{"i3c_sdo" "SDO"} \
+		{"i3c_sdi" "SDI"} \
+		{"i3c_t"   "T"} \
 	}
 adi_add_bus_clock "clk" "i3c" "reset_n"
 
