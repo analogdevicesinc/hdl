@@ -146,7 +146,6 @@ proc adi_project_create_bd {project_name args} {
   <builder-resource>
     <socProject sbxfile="./%s/%s.sbx"/>
   </builder-resource>
-  <builderInfo version="2022.1.2211240753"/>
 </propelProject>} $project_name $project_name]
   close $file
 
