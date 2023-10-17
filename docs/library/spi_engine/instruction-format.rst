@@ -69,7 +69,7 @@ instruction is twice the delay.
 
 .. math::
 
-   delay = t * \frac{div + 1}{f_{clk}}
+   delay = t * \frac{(div + 1)*2}{f_{clk}}
 
 .. list-table::
    :widths: 10 15 75
