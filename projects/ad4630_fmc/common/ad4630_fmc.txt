@@ -18,5 +18,3 @@ D12       LA05_N         SDO7_FMC           ad463x_spi_sdi[7]   LVCMOS25    #N/A
 D20       LA17_P_CC      SCK_OUT_FMC        ad463x_echo_sclk    LVCMOS25    #N/A
 C11       LA06_N         SDI_FMC            ad463x_spi_sdo      LVCMOS25    #N/A
 C22       LA18_P_CC      BUSY_FMC           ad463x_busy         LVCMOS25    #N/A
-C30       SCL            SCL                iic_scl             LVCMOS33    #N/A
-C31       SDA            SDA                iic_sda             LVCMOS33    #N/A
