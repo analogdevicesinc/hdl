@@ -352,9 +352,7 @@ proc adi_project_run {project_name args} {
     -mode "export" \
     -impl "impl_1" \
     -top "system_top" \
-    -cmd_list { \
-    {prj_clean_impl -impl $impl} \
-    {prj_set_strategy_value -strategy Strategy1 bit_ip_eval=True}} \
+    -cmd_list "" \
     {*}$args]
 
   set ppath $opt(-ppath)
