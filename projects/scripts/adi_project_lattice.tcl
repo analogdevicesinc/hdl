@@ -273,6 +273,15 @@ proc adi_project_files {project_name args} {
   cd $dir
 }
 
+# Adds the default project files to the Radiant project ($project_name.rdf)
+proc adi_project_files_default {project_name} {
+  adi_project_files $project_name
+  adi_project_files $project_name \
+    -spath ../ -exts [list *.v *.pdc *.sdc *.mem] -sdepth 0
+  adi_project_files $project_name -usage manual \
+  -flist [list ./$project_name/$project_name.v]
+}
+
 ###############################################################################
 ## Returns a list of files in a given path searching recursively.
 #
