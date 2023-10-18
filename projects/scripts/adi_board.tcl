@@ -1155,6 +1155,7 @@ proc ad_hpmx_interconnect {p_sel p_address p_name {p_intf_name {}}} {
           set p_address [expr ($p_address + 0x20000000)]
         }
       }
+      puts "create_bd_addr_seg -range $p_seg_range -offset $p_address $sys_addr_cntrl_space $p_seg_name SEG_data_$p_name"
       create_bd_addr_seg -range $p_seg_range \
         -offset $p_address $sys_addr_cntrl_space \
         $p_seg_name "SEG_data_${p_name}"
