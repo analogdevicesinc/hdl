@@ -39,12 +39,12 @@ clean:
 
 $(PROJECT_NAME)/$(PROJECT_NAME)/$(PROJECT_NAME).sbx: $(M_DEPS)
 	$(call build, \
-		$(PROPEL_BUILDER) system_project_bd.tcl, \
+		$(PROPEL_BUILDER) system_project_bd.tcl ${PROJECT_NAME}, \
 		$(PROJECT_NAME)_propel_builder.log, \
 		$(HL)$(PROJECT_NAME)$(NC) project)
 
 $(PROJECT_NAME)/$(PROJECT_NAME).rdf: $(M_DEPS)
 	$(call build, \
-		$(RADIANT) system_project.tcl, \
+		$(RADIANT) system_project.tcl ${PROJECT_NAME}, \
 		$(PROJECT_NAME)_radiant.log, \
 		$(HL)$(PROJECT_NAME)$(NC) project)
