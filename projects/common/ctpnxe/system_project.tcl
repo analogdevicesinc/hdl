@@ -6,21 +6,26 @@
 source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project_lattice.tcl
 
-adi_project template_ctpnxe
+# getting the projects name that is defined in Makefile like PROJECT_NAME
+if {$argc == 1} {
+  set project_name [lindex $argv 0]
+}
+
+adi_project $project_name
   # example commands:
   # -cmd_list { \
   # {prj_clean_impl -impl "impl_1"} \
   # {prj_set_strategy_value -strategy Strategy1 bit_ip_eval=True}}
 
-adi_project_files template_ctpnxe -ppath ./template_ctpnxe
-adi_project_files template_ctpnxe -ppath ./template_ctpnxe \
+adi_project_files $project_name -ppath ./$project_name
+adi_project_files $project_name -ppath ./$project_name \
   -spath ../ -exts {*.v *.pdc *.sdc *.mem} -sdepth 0
-adi_project_files template_ctpnxe -ppath ./template_ctpnxe \
-  -spath ./template_ctpnxe -exts {template_ctpnxe.v} -sdepth 0
-adi_project_files template_ctpnxe -ppath ./ -usage manual \
-  -flist {./template_ctpnxe/template_ctpnxe.v}
+adi_project_files $project_name -ppath ./$project_name \
+  -spath ./$project_name -exts [list $project_name.v] -sdepth 0
+adi_project_files $project_name -ppath ./ -usage manual \
+  -flist [list ./$project_name/$project_name.v]
 
-# adi_project_run_cmd template_ctpnxe -ppath ./template_ctpnxe
+# adi_project_run_cmd $project_name -ppath ./$project_name
   # example commands:
   # -cmd_list { \
   # {prj_clean_impl -impl $impl} \
@@ -33,7 +38,7 @@ adi_project_files template_ctpnxe -ppath ./ -usage manual \
   # {prj_set_strategy_value -strategy Strategy1 par_stop_zero=True} \
   # }
 
-adi_project_run template_ctpnxe -ppath ./ -mode export \
+adi_project_run $project_name -ppath ./ -mode export \
   -top system_top -impl impl_1
   # you can clear the default commands by -cmd_list ""
   # default commands:
