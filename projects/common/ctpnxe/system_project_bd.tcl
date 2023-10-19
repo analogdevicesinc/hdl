@@ -11,6 +11,12 @@ if {$argc == 1} {
   set project_name [lindex $argv 0]
 }
 
-# {source ./system_bd.tcl} is the default cmd.
-adi_project_bd $project_name -ppath ./ -cmd_list { \
-  {source ./system_bd.tcl}}
+## Default options for adi_project_bd #########################################
+# adi_project_bd $project_name \
+#     -ppath "." \
+#     -device "" \
+#     -board "" \
+#     -speed "" \
+#     -language "verilog" \
+#     -cmd_list {{source ./system_bd.tcl}}
+adi_project_bd $project_name
