@@ -17,7 +17,6 @@ LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_hdmi_tx
 LIB_DEPS += axi_i2s_adi
-LIB_DEPS += axi_pulse_gen
 LIB_DEPS += axi_pwm_gen
 LIB_DEPS += axi_spdif_tx
 LIB_DEPS += axi_sysid
