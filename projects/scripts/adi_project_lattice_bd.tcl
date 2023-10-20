@@ -129,6 +129,7 @@ proc adi_project_create_bd {project_name args} {
         Be aware that ADI will not support you, if you are using a different \
         tool version.\n"
       exit 2
+      error
     }
   }
 
