@@ -22,6 +22,8 @@ set xcvr_tx_index 0
 set xcvr_rx_index 0
 set xcvr_instance NONE
 
+set use_smartconnect 1
+
 ## Add an instance of an IP to the block design.
 #
 # \param[i_ip] - name of the IP
@@ -708,14 +710,14 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
   set p_name_int $p_name
   set p_clk_source [get_bd_pins -filter {DIR == O} -of_objects [get_bd_nets $p_clk]]
 
-  set connecttype "smartconnect"
+  set connect_type "smartconnect"
   if {$use_smartconnect == 0} {
-    set connecttype "axi_interconnect"
+    set connect_type "axi_interconnect"
   }
 
   if {$p_sel eq "SIM"} {
     if {$sys_mem_interconnect_index < 0} {
-      ad_ip_instance $connecttype axi_mem_interconnect
+      ad_ip_instance $connect_type axi_mem_interconnect
     }
     set m_interconnect_index $sys_mem_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_mem_interconnect]
@@ -724,7 +726,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
 
   if {$p_sel eq "MEM"} {
     if {$sys_mem_interconnect_index < 0} {
-      ad_ip_instance $connecttype axi_mem_interconnect
+      ad_ip_instance $connect_type axi_mem_interconnect
     }
     set m_interconnect_index $sys_mem_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_mem_interconnect]
@@ -735,7 +737,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     if {$sys_hp0_interconnect_index < 0} {
       set p_name_int sys_ps7/S_AXI_HP0
       set_property CONFIG.PCW_USE_S_AXI_HP0 {1} [get_bd_cells sys_ps7]
-      ad_ip_instance $connecttype axi_hp0_interconnect
+      ad_ip_instance $connect_type axi_hp0_interconnect
     }
     set m_interconnect_index $sys_hp0_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hp0_interconnect]
@@ -746,7 +748,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     if {$sys_hp1_interconnect_index < 0} {
       set p_name_int sys_ps7/S_AXI_HP1
       set_property CONFIG.PCW_USE_S_AXI_HP1 {1} [get_bd_cells sys_ps7]
-      ad_ip_instance $connecttype axi_hp1_interconnect
+      ad_ip_instance $connect_type axi_hp1_interconnect
     }
     set m_interconnect_index $sys_hp1_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hp1_interconnect]
@@ -757,7 +759,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     if {$sys_hp2_interconnect_index < 0} {
       set p_name_int sys_ps7/S_AXI_HP2
       set_property CONFIG.PCW_USE_S_AXI_HP2 {1} [get_bd_cells sys_ps7]
-      ad_ip_instance $connecttype axi_hp2_interconnect
+      ad_ip_instance $connect_type axi_hp2_interconnect
     }
     set m_interconnect_index $sys_hp2_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hp2_interconnect]
@@ -768,7 +770,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     if {$sys_hp3_interconnect_index < 0} {
       set p_name_int sys_ps7/S_AXI_HP3
       set_property CONFIG.PCW_USE_S_AXI_HP3 {1} [get_bd_cells sys_ps7]
-      ad_ip_instance $connecttype axi_hp3_interconnect
+      ad_ip_instance $connect_type axi_hp3_interconnect
     }
     set m_interconnect_index $sys_hp3_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hp3_interconnect]
@@ -780,7 +782,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
       set p_name_int sys_ps8/S_AXI_HPC0_FPD
       set_property CONFIG.PSU__USE__S_AXI_GP0 {1} [get_bd_cells sys_ps8]
       set_property CONFIG.PSU__AFI0_COHERENCY {1} [get_bd_cells sys_ps8]
-      ad_ip_instance $connecttype axi_hpc0_interconnect
+      ad_ip_instance $connect_type axi_hpc0_interconnect
     }
     set m_interconnect_index $sys_hpc0_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hpc0_interconnect]
@@ -792,7 +794,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
       set p_name_int sys_ps8/S_AXI_HPC1_FPD
       set_property CONFIG.PSU__USE__S_AXI_GP1 {1} [get_bd_cells sys_ps8]
       set_property CONFIG.PSU__AFI1_COHERENCY {1} [get_bd_cells sys_ps8]
-      ad_ip_instance $connecttype axi_hpc1_interconnect
+      ad_ip_instance $connect_type axi_hpc1_interconnect
     }
     set m_interconnect_index $sys_hpc1_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hpc1_interconnect]
@@ -803,7 +805,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     if {$sys_hp0_interconnect_index < 0} {
       set p_name_int sys_ps8/S_AXI_HP0_FPD
       set_property CONFIG.PSU__USE__S_AXI_GP2 {1} [get_bd_cells sys_ps8]
-      ad_ip_instance $connecttype axi_hp0_interconnect
+      ad_ip_instance $connect_type axi_hp0_interconnect
     }
     set m_interconnect_index $sys_hp0_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hp0_interconnect]
@@ -814,7 +816,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     if {$sys_hp1_interconnect_index < 0} {
       set p_name_int sys_ps8/S_AXI_HP1_FPD
       set_property CONFIG.PSU__USE__S_AXI_GP3 {1} [get_bd_cells sys_ps8]
-      ad_ip_instance $connecttype axi_hp1_interconnect
+      ad_ip_instance $connect_type axi_hp1_interconnect
     }
     set m_interconnect_index $sys_hp1_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hp1_interconnect]
@@ -825,7 +827,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     if {$sys_hp2_interconnect_index < 0} {
       set p_name_int sys_ps8/S_AXI_HP2_FPD
       set_property CONFIG.PSU__USE__S_AXI_GP4 {1} [get_bd_cells sys_ps8]
-      ad_ip_instance $connecttype axi_hp2_interconnect
+      ad_ip_instance $connect_type axi_hp2_interconnect
     }
     set m_interconnect_index $sys_hp2_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hp2_interconnect]
@@ -836,7 +838,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     if {$sys_hp3_interconnect_index < 0} {
       set p_name_int sys_ps8/S_AXI_HP3_FPD
       set_property CONFIG.PSU__USE__S_AXI_GP5 {1} [get_bd_cells sys_ps8]
-      ad_ip_instance $connecttype axi_hp3_interconnect
+      ad_ip_instance $connect_type axi_hp3_interconnect
     }
     set m_interconnect_index $sys_hp3_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hp3_interconnect]
