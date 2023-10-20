@@ -34,8 +34,7 @@ all: $(PROJECT_NAME)/$(PROJECT_NAME)/$(PROJECT_NAME).sbx \
 
 clean:
 	-rm -Rf ${PROJECT_NAME}
-	-rm -f $(PROJECT_NAME)_radiant.log
-	-rm -f $(PROJECT_NAME)_propel_builder.log
+	-rm -f $(wildcard *.log)
 
 $(PROJECT_NAME)/$(PROJECT_NAME)/$(PROJECT_NAME).sbx: $(M_DEPS)
 	$(call build, \
