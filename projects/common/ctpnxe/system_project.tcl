@@ -22,7 +22,8 @@
 #   -spath ./$project_name/lib \
 #   -ppath "." \
 #   -sdepth "6" \
-#   -flist ""
+#   -flist "" \
+#   -opt_args ""
 ## use case 0 #################################################################
 # adi_project_files $project_name \
 #   -usage "auto" \
@@ -30,7 +31,8 @@
 #   -spath ../ \
 #   -ppath "." \
 #   -sdepth "0" \
-#   -flist ""
+#   -flist "" \
+#   -opt_args "<opt args for prj_add_source Radiant tcl command>"
 ## use case 1 #################################################################
 # adi_project_files $project_name \
 #   -usage "manual" \
@@ -39,6 +41,7 @@
 #   -ppath "." \
 #   -sdepth "" \
 #   -flist [list ./$project_name/$project_name.v]
+#   -opt_args "<opt args for prj_add_source Radiant tcl command>"
 
 ## default options for adi_project_run_cmd ####################################
 # adi_project_run_cmd $project_name \
