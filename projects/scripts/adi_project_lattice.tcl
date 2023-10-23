@@ -193,6 +193,7 @@ proc adi_project_create {project_name args}  {
 # \opt[ppath] -ppath .
 # \opt[sdepth] -sdepth 7
 # \opt[flist] -flist {./csacsi.v ./a_szamar.v}
+# \opt[opt_args] -opt_args {<opt args for prj_add_source Radiant tcl command>}
 ###############################################################################
 proc adi_project_files {project_name args} {
   puts "\nadi_project_files:\n"
@@ -202,7 +203,9 @@ proc adi_project_files {project_name args} {
     -spath ./$project_name/lib \
     -ppath "." \
     -sdepth "6" \
-    -flist "" {*}$args]
+    -flist "" \
+    -opt_args "" \
+    {*}$args]
 
   set exts $opt(-exts)
   set spath $opt(-spath)
@@ -210,13 +213,15 @@ proc adi_project_files {project_name args} {
   set sdepth $opt(-sdepth)
   set flist $opt(-flist)
   set usage $opt(-usage)
+  set opt_args $opt(-opt_args)
 
   puts "args:\n"
   puts "Usage: $usage"
   puts "Project path: $ppath"
   puts "Extentions: $exts"
   puts "Search path: $spath"
-  puts "search depth: $sdepth\n"
+  puts "search depth: $sdepth"
+  puts "Optional arguments: $opt_args\n"
 
   # Searching for the radiant project file.
   set sbx_lsit [get_file_list $ppath *${project_name}.rdf 3]
@@ -257,10 +262,9 @@ proc adi_project_files {project_name args} {
   puts "\n"
 
   foreach pfile $flist {
-    if { [catch {prj_add_source $pfile} fid] } {
+    puts "Trying to add $pfile to the $radiant_project project"
+    if { [catch {prj_add_source $opt_args $pfile} fid] } {
         puts "$pfile already added to $radiant_project project!"
-    } else {
-      puts "$pfile added to $radiant_project project!"
     }
   }
 
