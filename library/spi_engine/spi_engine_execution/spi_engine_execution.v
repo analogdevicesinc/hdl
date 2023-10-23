@@ -169,7 +169,7 @@ module spi_engine_execution #(
 
   (* direct_enable = "yes" *) wire cs_gen;
 
-  assign cs_gen = inst_d1 == CMD_CHIPSELECT 
+  assign cs_gen = inst_d1 == CMD_CHIPSELECT
                   && ((cs_sleep_counter_compare == 1'b1) || cs_sleep_early_exit)
                   && (cs_sleep_repeat == 1'b0)
                   && (idle == 1'b0);
