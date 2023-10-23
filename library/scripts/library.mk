@@ -51,7 +51,7 @@ CLEAN_TARGET += tb/libraries
 
 GENERIC_DEPS += $(HDL_LIBRARY_PATH)../scripts/adi_env.tcl
 
-.PHONY: all intel intel_dep xilinx xilinx_dep clean clean-all
+.PHONY: all intel intel_dep xilinx clean clean-all
 
 all: intel xilinx
 
@@ -83,22 +83,24 @@ ifneq ($(XILINX_DEPS),)
 
 XILINX_DEPS += $(GENERIC_DEPS)
 XILINX_DEPS += $(HDL_LIBRARY_PATH)scripts/adi_ip_xilinx.tcl
-XILINX_DEPS += $(foreach dep,$(XILINX_LIB_DEPS),$(HDL_LIBRARY_PATH)$(dep)/component.xml)
+_XILINX_LIB_DEPS = $(foreach dep,$(XILINX_LIB_DEPS),$(HDL_LIBRARY_PATH)$(dep)/component.xml)
+_XILINX_INTF_DEPS = $(foreach dep,$(XILINX_INTERFACE_DEPS),$(HDL_LIBRARY_PATH)$(dep))
 
-xilinx: xilinx_dep component.xml
+xilinx: component.xml
 
-component.xml: $(XILINX_DEPS)
+component.xml: $(XILINX_DEPS) $(_XILINX_INTF_DEPS) $(_XILINX_LIB_DEPS)
 	-rm -rf $(CLEAN_TARGET)
 	$(call build, \
 		$(VIVADO) $(LIBRARY_NAME)_ip.tcl, \
 		$(LIBRARY_NAME)_ip.log, \
 		$(HL)$(LIBRARY_NAME)$(NC) library)
 
-xilinx_dep:
-	@for lib in $(XILINX_LIB_DEPS); do \
-		$(MAKE) -C $(HDL_LIBRARY_PATH)$${lib} xilinx || exit $$?; \
-	done
-	@for intf in $(XILINX_INTERFACE_DEPS); do \
-		$(MAKE) -C $(HDL_LIBRARY_PATH)$${intf} xilinx || exit $$?; \
-	done
+$(_XILINX_INTF_DEPS):
+	$(MAKE) -C $(dir $@) $(notdir $@)
+
+$(_XILINX_LIB_DEPS):
+	$(MAKE) -C $(dir $@) xilinx
+
+%.xml:
+	$(MAKE) -C $(dir $@) $(notdir $@)
 endif

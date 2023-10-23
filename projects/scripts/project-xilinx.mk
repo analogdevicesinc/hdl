@@ -78,7 +78,8 @@ M_DEPS += $(foreach dep,$(LIB_DEPS),$(HDL_LIBRARY_PATH)$(dep)/component.xml)
 
 .PHONY: all lib clean clean-all
 
-all: lib $(PROJECT_NAME).sdk/system_top.xsa
+all: $(PROJECT_NAME).sdk/system_top.xsa
+lib: $(M_DEPS)
 
 clean:
 	-rm -f reference.dcp
@@ -115,12 +116,9 @@ $(PROJECT_NAME).sdk/system_top.xsa: $(M_DEPS)
 		$(PROJECT_NAME)_vivado.log, \
 		$(HL)$(PROJECT_NAME)$(NC) project)
 
-lib:
-	@for lib in $(LIB_DEPS); do \
-		if [ -n "${REQUIRED_VIVADO_VERSION}" ]; then \
-			$(MAKE) -C $(HDL_LIBRARY_PATH)$${lib} xilinx REQUIRED_VIVADO_VERSION=${REQUIRED_VIVADO_VERSION} || exit $$?; \
-		else \
-			$(MAKE) -C $(HDL_LIBRARY_PATH)$${lib} xilinx || exit $$?; \
-		fi; \
-	done
-
+$(HDL_LIBRARY_PATH)%/component.xml:
+	if [ -n "${REQUIRED_VIVADO_VERSION}" ]; then \
+		$(MAKE) -C $(dir $@) xilinx REQUIRED_VIVADO_VERSION=${REQUIRED_VIVADO_VERSION} || exit $$?; \
+	else \
+		$(MAKE) -C $(dir $@) xilinx || exit $$?; \
+	fi;
