@@ -169,7 +169,8 @@ module spi_engine_execution #(
 
   (* direct_enable = "yes" *) wire cs_gen;
 
-  assign cs_gen = inst_d1 == CMD_CHIPSELECT && (cs_sleep_counter_compare == 1'b1) 
+  assign cs_gen = inst_d1 == CMD_CHIPSELECT 
+                  && ((cs_sleep_counter_compare == 1'b1) || cs_sleep_early_exit)
                   && (cs_sleep_repeat == 1'b0)
                   && (idle == 1'b0);
   assign cmd_ready = idle;
@@ -243,9 +244,9 @@ module spi_engine_execution #(
   assign trigger_tx = trigger == 1'b1 && ntx_rx == 1'b0;
   assign trigger_rx = trigger == 1'b1 && ntx_rx == 1'b1;
 
-  assign sleep_counter_compare = sleep_counter == cmd_d1[7:0] && clk_div_last == 1'b1;
-  assign cs_sleep_counter_compare = cs_sleep_counter == cmd_d1[9:8] && clk_div_last == 1'b1;
-  assign cs_sleep_early_exit = (cmd_d1[9:8] == 0);
+  assign sleep_counter_compare = sleep_counter == cmd_d1[7:0];
+  assign cs_sleep_counter_compare = cs_sleep_counter == cmd_d1[9:8];
+  assign cs_sleep_early_exit = (cmd_d1[9:8] == 2'b00);
 
   always @(posedge clk) begin
     if (resetn == 1'b0) begin
@@ -257,7 +258,6 @@ module spi_engine_execution #(
         cs_sleep_repeat <= !cs_sleep_repeat;
       end
     end
-    
   end
 
   always @(posedge clk) begin
@@ -265,7 +265,7 @@ module spi_engine_execution #(
       counter <= 'h00;
     end else if (clk_div_last == 1'b1 && wait_for_io == 1'b0) begin
       if (bit_counter == word_length) begin
-          counter <= (counter & BIT_COUNTER_CLEAR) + (transfer_active ? 'h1 : (2**BIT_COUNTER_WIDTH)) + BIT_COUNTER_CARRY;
+        counter <= (counter & BIT_COUNTER_CLEAR) + (transfer_active ? 'h1 : (2**BIT_COUNTER_WIDTH)) + BIT_COUNTER_CARRY;
       end else begin
         counter <= counter + (transfer_active ? 'h1 : (2**BIT_COUNTER_WIDTH));
       end

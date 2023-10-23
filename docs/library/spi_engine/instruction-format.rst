@@ -65,7 +65,8 @@ specified delay. The length of the delay depends on the module clock frequency,
 the setting of the prescaler register and the t parameter of the instruction.
 This delay is inserted before and after the update of the chip-select signal,
 so the total execution time of the chip-select
-instruction is twice the delay.
+instruction is twice the delay, plus a fixed 2 clock cycles (fast clock, not prescaled)
+for the internal logic.
 
 .. math::
 
@@ -152,11 +153,12 @@ Sleep Instruction
 The sleep instruction stops the execution of the command stream for the
 specified amount of time. The time is based on the external clock frequency the
 configuration value of the prescaler register and the time parameter of the
-instruction.
+instruction. A fixed delay of two clock cycles (fast, not affected by the prescaler)
+is the minimum, needed by the internal logic.
 
 .. math::
 
-   sleep\_time = \frac{(t + 1) * ((div + 1) * 2)}{f_{clk}}
+   sleep\_time = \frac{2+(t) * ((div + 1) * 2)}{f_{clk}}
 
 .. list-table::
    :widths: 10 15 75
