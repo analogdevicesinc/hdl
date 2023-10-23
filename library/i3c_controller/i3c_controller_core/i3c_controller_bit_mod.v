@@ -59,7 +59,6 @@ module i3c_controller_bit_mod (
   output reg rx_raw,
   output rx_valid,
 
-
   // Bus drive signals
 
   output scl,
@@ -71,6 +70,7 @@ module i3c_controller_bit_mod (
   reg [`MOD_BIT_CMD_WIDTH:0] cmd_r;
   reg [1:0] pp_sg;
   reg [5:0] count; // Worst-case: 1.56MHz, 32-bits per half-bit.
+  reg scl_shorten;
   reg transfer;
   reg sr;
 
@@ -134,6 +134,17 @@ module i3c_controller_bit_mod (
     sdo <= sdo_w;
     rx_raw <= sdi === 1'b0 ? 1'b0 : 1'b1;
   end
+
+  // Reduce high width of SCL to 40ns to be filtered out
+  // at mixed fast bus operation by 50ns Spike filters.
+  always @(posedge clk) begin
+    if (~scl_high) begin
+      scl_shorten <= 1'b0;
+    end else if (scl_high & count[1:0] == 2'b11) begin
+      scl_shorten <= 1'b1;
+    end
+  end
+
   // Multi-cycle-path worst-case: 4 clks (12.5MHz, half-bit ack)
   assign rx = rx_raw;
   assign rx_valid = ~scl_high_reg & scl_high;
@@ -155,7 +166,9 @@ module i3c_controller_bit_mod (
   assign t = ~t_w & sdo ? 1'b1 : 1'b0;
 
   assign scl = sm == `MOD_BIT_CMD_START_ ? (sr ? scl_high : 1'b1) :
+               sm == `MOD_BIT_CMD_STOP_  ? scl_high :
                sm == `MOD_BIT_CMD_NOP_   ? 1'b1 :
+               cmd_r[1] == 1'b1 ? scl_high & ~scl_shorten :
                scl_high;
 
   assign cmd_nop = sm == `MOD_BIT_CMD_NOP_;
