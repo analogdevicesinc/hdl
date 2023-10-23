@@ -378,22 +378,22 @@ Checking the build and analyzing results of library components
 If you look closely, you see what it is actually doing. It enters a
 library component folder then calls 'Vivado' in batch mode. The IP
 commands are in the source 'Tcl' file and output is redirected to a log
-file. In the below example that is 'axi_ad9144_ip.log' inside the
-'library/axi_ad9144' directory.
+file. In the below example that is 'axi_ad7768_ip.log' inside the
+'library/axi_ad7768' directory.
 
 .. code-block:: bash
 
-   make[1]: Entering directory '/home/RKutty/gitadi/hdl/library/axi_ad9144'
+   make[1]: Entering directory '/home/RKutty/gitadi/hdl/library/axi_ad7768'
    rm -rf *.cache *.data *.xpr *.log component.xml *.jou xgui *.ip_user_files *.srcs *.hw *.sim .Xil
-   vivado -mode batch -source axi_ad9144_ip.tcl  >> axi_ad9144_ip.log 2>&1
+   vivado -mode batch -source axi_ad7768_ip.tcl  >> axi_ad7768_ip.log 2>&1
 
 If the ``make`` command returns an error (and stops), **you must first check
 the contents of this log file**. You may also check the generated files for more information.
 
 .. code-block:: bash
 
-   ls -ltr library/axi_ad9144
-   tail library/axi_ad9144/axi_ad9144_ip.log
+   ls -ltr library/axi_ad7768
+   tail library/axi_ad7768/axi_ad7768_ip.log
 
 Checking the build and analyzing results of projects
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
