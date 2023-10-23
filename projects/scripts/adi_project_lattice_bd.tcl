@@ -14,6 +14,8 @@
 # * adi_project_create_bd - Creates the Propel Builder project itself and
 #     executes some optional commands that are piped trough adi_project_bd
 #     procedure.
+# * adi_ip_instance - Creates a Propel Builder ip config file and adds the
+#     specified ip to the opened project with that configuration.
 ###############################################################################
 
 ###############################################################################
@@ -169,4 +171,41 @@ proc adi_project_create_bd {project_name args} {
   sbp_design save
   sbp_design generate
   sbp_design close
+}
+
+###############################################################################
+## Creates a Propel Builder ip config file and adds the specified ip to the
+## opened project with that configuration.
+## Project has to be open.
+#
+# \opt[cfg_path] -cfg_path "./ipcfg"
+# \opt[vlnv] -vlnv {latticesemi.com:ip:cpu0:2.4.0}
+# \opt[ip_path] -ip_path "$ip_download_path/latticesemi.com_ip_riscv_mc_2.4.0"
+# \opt[ip_params] -ip_params {"SIMULATION": false, "DEBUG_ENABLE": true}
+# \opt[ip_iname] -ip_iname cpu0_inst
+###############################################################################
+proc adi_ip_instance {args} {
+  puts "\nadi_ip_instance:\n"
+
+  array set opt [list -cfg_path "./ipcfg" \
+    -vlnv "" \
+    -ip_path "" \
+    -ip_params "" \
+    -ip_iname "" \
+    {*}$args]
+
+  set cfg_path $opt(-cfg_path)
+  set vlnv $opt(-vlnv)
+  set ip_path $opt(-ip_path)
+  set ip_params $opt(-ip_params)
+  set ip_iname $opt(-ip_iname)
+
+  set file [open $cfg_path w]
+  puts $file [format {{%s}} $ip_params]
+  close $file
+
+  sbp_design config_ip -vlnv $vlnv \
+  -meta_loc $ip_path \
+  -cfg "$cfg_path"
+  sbp_add_component -vlnv $vlnv -name $ip_iname
 }
