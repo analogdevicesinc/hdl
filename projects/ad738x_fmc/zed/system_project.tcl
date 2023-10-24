@@ -16,4 +16,3 @@ adi_project_files ad738x_fmc_zed [list \
     "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc"]
 
 adi_project_run ad738x_fmc_zed
-
