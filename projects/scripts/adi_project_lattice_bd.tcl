@@ -185,8 +185,6 @@ proc adi_project_create_bd {project_name args} {
 # \opt[ip_iname] -ip_iname cpu0_inst
 ###############################################################################
 proc adi_ip_instance {args} {
-  puts "\nadi_ip_instance:\n"
-
   array set opt [list -cfg_path "./ipcfg" \
     -vlnv "" \
     -ip_path "" \
@@ -200,12 +198,18 @@ proc adi_ip_instance {args} {
   set ip_params $opt(-ip_params)
   set ip_iname $opt(-ip_iname)
 
-  set file [open $cfg_path w]
+  puts "adi_ip_instance: $ip_iname"
+
+  if {[file exists $cfg_path] != 1} {
+    file mkdir $cfg_path
+  }
+
+  set file [open "$cfg_path/$ip_iname.cfg" w]
   puts $file [format {{%s}} $ip_params]
   close $file
 
   sbp_design config_ip -vlnv $vlnv \
   -meta_loc $ip_path \
-  -cfg "$cfg_path"
+  -cfg "$cfg_path/$ip_iname.cfg"
   sbp_add_component -vlnv $vlnv -name $ip_iname
 }
