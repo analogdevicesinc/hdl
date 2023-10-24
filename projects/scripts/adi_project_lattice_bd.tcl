@@ -209,7 +209,8 @@ proc adi_ip_instance {args} {
   close $file
 
   sbp_design config_ip -vlnv $vlnv \
-  -meta_loc $ip_path \
-  -cfg "$cfg_path/$ip_iname.cfg"
+    -meta_loc $ip_path \
+    -cfg "$cfg_path/$ip_iname.cfg"
+
   sbp_add_component -vlnv $vlnv -name $ip_iname
 }
