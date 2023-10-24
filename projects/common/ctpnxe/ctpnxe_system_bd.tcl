@@ -10,54 +10,94 @@ set preinst_ip_mod_dir ${env(TOOLRTF)}
 set ip_download_path ${env(USERPROFILE)}/PropelIPLocal
 set conf_dir $ad_hdl_dir/projects/common/ctpnxe/ipcfg
 
-#config libraries from library sources and config options
-sbp_design config_ip -vlnv {latticesemi.com:ip:cpu0:2.4.0} \
-  -meta_loc "$ip_download_path/latticesemi.com_ip_riscv_mc_2.4.0" \
-  -cfg "$conf_dir/cpu0.cfg"
-sbp_design config_ip -vlnv {latticesemi.com:ip:gpio0:1.6.1} \
-  -meta_loc "$ip_download_path/latticesemi.com_ip_gpio_1.6.1" \
-  -cfg "$conf_dir/gpio0.cfg"
-sbp_design config_ip -vlnv {latticesemi.com:ip:uart0:1.3.0} \
-  -meta_loc "$ip_download_path/latticesemi.com_ip_uart_1.3.0" \
-  -cfg "$conf_dir/uart0.cfg"
-sbp_design config_ip -vlnv {latticesemi.com:ip:spi0:1.4.1} \
-  -meta_loc "$ip_download_path/latticesemi.com_ip_spi_master_1.4.1" \
-  -cfg "$conf_dir/spi0.cfg"
-sbp_design config_ip -vlnv {latticesemi.com:ip:i2c0:1.5.0} \
-  -meta_loc "$ip_download_path/latticesemi.com_ip_i2c_master_1.5.0" \
-  -cfg "$conf_dir/i2c0.cfg"
+## configure ip components and add to design. #################################
+adi_ip_instance -vlnv {latticesemi.com:ip:cpu0:2.4.0} \
+  -ip_path "$ip_download_path/latticesemi.com_ip_riscv_mc_2.4.0" \
+  -ip_params {
+    "SIMULATION": false,
+    "DEBUG_ENABLE": true,
+    "M_STANDALONE": true,
+    "IRQ_NUM": 4
+  } \
+  -ip_iname "cpu0_inst"
+adi_ip_instance -vlnv {latticesemi.com:ip:gpio0:1.6.1} \
+  -ip_path "$ip_download_path/latticesemi.com_ip_gpio_1.6.1" \
+  -ip_params {
+    "IO_LINES_COUNT": 32,
+    "DIRECTION_DEF_VAL_INPUT": "FF"
+  } \
+  -ip_iname "gpio0_inst"
+adi_ip_instance -vlnv {latticesemi.com:ip:uart0:1.3.0} \
+  -ip_path "$ip_download_path/latticesemi.com_ip_uart_1.3.0" \
+  -ip_params {
+    "SYS_CLOCK_FREQ": 18.0
+  } \
+  -ip_iname "uart0_inst"
+adi_ip_instance -vlnv {latticesemi.com:ip:spi0:1.4.1} \
+  -ip_path "$ip_download_path/latticesemi.com_ip_spi_master_1.4.1" \
+  -ip_params {
+    "SYS_CLOCK_FREQ": 108
+  } \
+  -ip_iname "spi0_inst"
+adi_ip_instance -vlnv {latticesemi.com:ip:i2c0:1.5.0} \
+  -ip_path "$ip_download_path/latticesemi.com_ip_i2c_master_1.5.0" \
+  -ip_params {
+    "SYS_CLOCK_FREQ": 18
+  } \
+  -ip_iname "i2c0_inst"
 
-sbp_design config_ip -vlnv {latticesemi.com:module:pll0:1.7.0} \
-  -meta_loc "$preinst_ip_mod_dir/ip/lifcl/pll" \
-  -cfg "$conf_dir/pll0.cfg"
-sbp_design config_ip -vlnv {latticesemi.com:module:osc0:1.4.0} \
-  -meta_loc "$preinst_ip_mod_dir/ip/lifcl/osc" \
-  -cfg "$conf_dir/osc0.cfg"
-sbp_design config_ip -vlnv {latticesemi.com:module:ahbl0:1.3.0} \
-  -meta_loc "$preinst_ip_mod_dir/ip/common/ahb_lite_interconnect" \
-  -cfg "$conf_dir/ahbl0.cfg"
-sbp_design config_ip -vlnv {latticesemi.com:module:ahbl2apb0:1.1.0} \
-  -meta_loc "$preinst_ip_mod_dir/ip/common/ahb_lite_to_apb_bridge" \
-  -cfg "$conf_dir/ahbl2apb0.cfg"
-sbp_design config_ip -vlnv {latticesemi.com:module:apb0:1.2.0} \
-  -meta_loc "$preinst_ip_mod_dir/ip/common/apb_interconnect" \
-  -cfg "$conf_dir/apb0.cfg"
-sbp_design config_ip -vlnv {latticesemi.com:ip:sysmem0:1.1.2} \
-  -meta_loc "$preinst_ip_mod_dir/ip/common/system_memory" \
-  -cfg "$conf_dir/sysmem0.cfg"
-
-sbp_add_component -vlnv {latticesemi.com:ip:cpu0:2.4.0} -name cpu0_inst
-sbp_add_component -vlnv {latticesemi.com:ip:gpio0:1.6.1} -name gpio0_inst
-sbp_add_component -vlnv {latticesemi.com:ip:sysmem0:1.1.2} -name sysmem0_inst
-sbp_add_component -vlnv {latticesemi.com:ip:uart0:1.3.0} -name uart0_inst
-sbp_add_component -vlnv {latticesemi.com:module:ahbl0:1.3.0} -name ahbl0_inst
-sbp_add_component -vlnv {latticesemi.com:module:ahbl2apb0:1.1.0} \
-	-name ahbl2apb0_inst
-sbp_add_component -vlnv {latticesemi.com:module:apb0:1.2.0} -name apb0_inst
-sbp_add_component -vlnv {latticesemi.com:module:osc0:1.4.0} -name osc0_inst
-sbp_add_component -vlnv {latticesemi.com:module:pll0:1.7.0} -name pll0_inst
-sbp_add_component -vlnv {latticesemi.com:ip:spi0:1.4.1} -name spi0_inst
-sbp_add_component -vlnv {latticesemi.com:ip:i2c0:1.5.0} -name i2c0_inst
+adi_ip_instance -vlnv {latticesemi.com:module:pll0:1.7.0} \
+  -ip_path "$preinst_ip_mod_dir/ip/lifcl/pll" \
+  -ip_params {
+    "gui_en_frac_n": false,
+    "gui_en_ssc": false,
+    "gui_en_int_fbkdel_sel": false,
+    "gui_refclk_freq": 18.0,
+    "gui_clk_op_freq": 108.0,
+    "gui_clk_op_tol": 0.0,
+    "gui_clk_os_en": true,
+    "gui_clk_os_freq": 18.0,
+    "gui_en_pll_reset": true,
+    "gui_en_pll_lock": true
+  } \
+  -ip_iname "pll0_inst"
+adi_ip_instance -vlnv {latticesemi.com:module:osc0:1.4.0} \
+  -ip_path "$preinst_ip_mod_dir/ip/lifcl/osc" \
+  -ip_params {
+    "HF_CLK_FREQ": 18.0
+  } \
+  -ip_iname "osc0_inst"
+adi_ip_instance -vlnv {latticesemi.com:module:ahbl0:1.3.0} \
+  -ip_path "$preinst_ip_mod_dir/ip/common/ahb_lite_interconnect" \
+  -ip_params {
+    "TOTAL_MASTER_CNT": 1,
+    "TOTAL_SLAVE_CNT": 3
+  } \
+  -ip_iname "ahbl0_inst"
+adi_ip_instance -vlnv {latticesemi.com:module:ahbl2apb0:1.1.0} \
+  -ip_path "$preinst_ip_mod_dir/ip/common/ahb_lite_to_apb_bridge" \
+  -ip_params {
+    "APB_CLK_EN": true
+  } \
+  -ip_iname "ahbl2apb0_inst"
+adi_ip_instance -vlnv {latticesemi.com:module:apb0:1.2.0} \
+  -ip_path "$preinst_ip_mod_dir/ip/common/apb_interconnect" \
+  -ip_params {
+    "TOTAL_MASTER_CNT": 1,
+    "TOTAL_SLAVE_CNT": 3
+  } \
+  -ip_iname "apb0_inst"
+adi_ip_instance -vlnv {latticesemi.com:ip:sysmem0:1.1.2} \
+  -ip_path "$preinst_ip_mod_dir/ip/common/system_memory" \
+  -ip_params {
+    "ADDR_DEPTH": 8192,
+    "PORT_COUNT": 2,
+    "INIT_MEM": true,
+    "INIT_FILE": "../../riscvmc.mem",
+    "REGMODE_S0": true,
+    "REGMODE_S1": true
+  } \
+  -ip_iname "sysmem0_inst"
 
 sbp_add_gluelogic -name equation_module0_inst \
   -logicinfo [sbp_create_glue_logic equation equation_module0 {} { {
