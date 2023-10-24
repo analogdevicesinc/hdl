@@ -88,10 +88,12 @@ _XILINX_INTF_DEPS = $(foreach dep,$(XILINX_INTERFACE_DEPS),$(HDL_LIBRARY_PATH)$(
 
 xilinx: component.xml
 
+.DELETE_ON_ERROR:
+
 component.xml: $(XILINX_DEPS) $(_XILINX_INTF_DEPS) $(_XILINX_LIB_DEPS)
 	-rm -rf $(CLEAN_TARGET)
 	$(call build, \
-		$(VIVADO) $(LIBRARY_NAME)_ip.tcl, \
+		flock component.xml -c "$(VIVADO) $(LIBRARY_NAME)_ip.tcl", \
 		$(LIBRARY_NAME)_ip.log, \
 		$(HL)$(LIBRARY_NAME)$(NC) library)
 
