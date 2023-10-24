@@ -35,6 +35,7 @@ all: $(PROJECT_NAME)/$(PROJECT_NAME)/$(PROJECT_NAME).sbx \
 clean:
 	-rm -Rf ${PROJECT_NAME}
 	-rm -f $(wildcard *.log)
+	-rm -Rf ./ipcfg
 
 $(PROJECT_NAME)/$(PROJECT_NAME)/$(PROJECT_NAME).sbx: $(M_DEPS)
 	$(call build, \
