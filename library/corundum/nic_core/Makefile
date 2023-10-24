@@ -1,0 +1,127 @@
+####################################################################################
+## Copyright (c) 2018 - 2023 Analog Devices, Inc.
+### SPDX short identifier: BSD-1-Clause
+## Auto-generated, do not modify!
+####################################################################################
+
+LIBRARY_NAME := nic_core
+
+corundum_dir_common = ../../../corundum/fpga/common
+corundum_dir_mod = ../../../corundum/fpga/lib
+corundum_dir_zcu102 = ../../../corundum/fpga/mqnic/ZCU102/fpga
+
+GENERIC_DEPS += nic_core.v
+GENERIC_DEPS += $(corundum_dir_zcu102)/rtl/fpga_core.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/mqnic_core_axi.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/mqnic_core.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/mqnic_dram_if.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/mqnic_interface.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/mqnic_interface_tx.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/mqnic_interface_rx.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/mqnic_port.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/mqnic_port_tx.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/mqnic_port_rx.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/mqnic_egress.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/mqnic_ingress.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/mqnic_l2_egress.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/mqnic_l2_ingress.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/mqnic_rx_queue_map.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/mqnic_ptp.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/mqnic_ptp_clock.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/mqnic_ptp_perout.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/mqnic_rb_clk_info.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/mqnic_port_map_phy_xgmii.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/cpl_write.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/cpl_op_mux.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/desc_fetch.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/desc_op_mux.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/queue_manager.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/cpl_queue_manager.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/tx_fifo.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/rx_fifo.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/tx_req_mux.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/tx_engine.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/rx_engine.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/tx_checksum.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/rx_hash.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/rx_checksum.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/rb_drp.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/stats_counter.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/stats_collect.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/stats_dma_if_axi.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/stats_dma_latency.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/mqnic_tx_scheduler_block_rr.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/tx_scheduler_rr.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/tdma_scheduler.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/tdma_ber.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/tdma_ber_ch.v
+GENERIC_DEPS += $(corundum_dir_mod)/eth/rtl/eth_mac_10g.v
+GENERIC_DEPS += $(corundum_dir_mod)/eth/rtl/axis_xgmii_rx_64.v
+GENERIC_DEPS += $(corundum_dir_mod)/eth/rtl/axis_xgmii_tx_64.v
+GENERIC_DEPS += $(corundum_dir_mod)/eth/rtl/lfsr.v
+GENERIC_DEPS += $(corundum_dir_mod)/eth/rtl/ptp_clock.v
+GENERIC_DEPS += $(corundum_dir_mod)/eth/rtl/ptp_clock_cdc.v
+GENERIC_DEPS += $(corundum_dir_mod)/eth/rtl/ptp_perout.v
+GENERIC_DEPS += $(corundum_dir_mod)/axi/rtl/axil_interconnect.v
+GENERIC_DEPS += $(corundum_dir_mod)/axi/rtl/axil_crossbar.v
+GENERIC_DEPS += $(corundum_dir_mod)/axi/rtl/axil_crossbar_addr.v
+GENERIC_DEPS += $(corundum_dir_mod)/axi/rtl/axil_crossbar_rd.v
+GENERIC_DEPS += $(corundum_dir_mod)/axi/rtl/axil_crossbar_wr.v
+GENERIC_DEPS += $(corundum_dir_mod)/axi/rtl/axil_reg_if.v
+GENERIC_DEPS += $(corundum_dir_mod)/axi/rtl/axil_reg_if_rd.v
+GENERIC_DEPS += $(corundum_dir_mod)/axi/rtl/axil_reg_if_wr.v
+GENERIC_DEPS += $(corundum_dir_mod)/axi/rtl/axil_register_rd.v
+GENERIC_DEPS += $(corundum_dir_mod)/axi/rtl/axil_register_wr.v
+GENERIC_DEPS += $(corundum_dir_mod)/axi/rtl/arbiter.v
+GENERIC_DEPS += $(corundum_dir_mod)/axi/rtl/priority_encoder.v
+GENERIC_DEPS += $(corundum_dir_mod)/axis/rtl/axis_adapter.v
+GENERIC_DEPS += $(corundum_dir_mod)/axis/rtl/axis_arb_mux.v
+GENERIC_DEPS += $(corundum_dir_mod)/axis/rtl/axis_async_fifo.v
+GENERIC_DEPS += $(corundum_dir_mod)/axis/rtl/axis_async_fifo_adapter.v
+GENERIC_DEPS += $(corundum_dir_mod)/axis/rtl/axis_demux.v
+GENERIC_DEPS += $(corundum_dir_mod)/axis/rtl/axis_fifo.v
+GENERIC_DEPS += $(corundum_dir_mod)/axis/rtl/axis_fifo_adapter.v
+GENERIC_DEPS += $(corundum_dir_mod)/axis/rtl/axis_pipeline_fifo.v
+GENERIC_DEPS += $(corundum_dir_mod)/axis/rtl/axis_register.v
+GENERIC_DEPS += $(corundum_dir_mod)/axis/rtl/sync_reset.v
+GENERIC_DEPS += $(corundum_dir_mod)/pcie/rtl/dma_client_axis_sink.v
+GENERIC_DEPS += $(corundum_dir_mod)/pcie/rtl/dma_client_axis_source.v
+GENERIC_DEPS += $(corundum_dir_mod)/pcie/rtl/irq_rate_limit.v
+GENERIC_DEPS += $(corundum_dir_mod)/pcie/rtl/dma_if_axi.v
+GENERIC_DEPS += $(corundum_dir_mod)/pcie/rtl/dma_if_axi_rd.v
+GENERIC_DEPS += $(corundum_dir_mod)/pcie/rtl/dma_if_axi_wr.v
+GENERIC_DEPS += $(corundum_dir_mod)/pcie/rtl/dma_if_mux.v
+GENERIC_DEPS += $(corundum_dir_mod)/pcie/rtl/dma_if_mux_rd.v
+GENERIC_DEPS += $(corundum_dir_mod)/pcie/rtl/dma_if_mux_wr.v
+GENERIC_DEPS += $(corundum_dir_mod)/pcie/rtl/dma_if_desc_mux.v
+GENERIC_DEPS += $(corundum_dir_mod)/pcie/rtl/dma_ram_demux_rd.v
+GENERIC_DEPS += $(corundum_dir_mod)/pcie/rtl/dma_ram_demux_wr.v
+GENERIC_DEPS += $(corundum_dir_mod)/pcie/rtl/dma_psdpram.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/eth_xcvr_phy_10g_gty_quad_wrapper.v
+GENERIC_DEPS += $(corundum_dir_common)/rtl/eth_xcvr_phy_10g_gty_wrapper.v
+GENERIC_DEPS += $(corundum_dir_mod)/eth/lib/axis/rtl/sync_reset.v
+GENERIC_DEPS += $(corundum_dir_mod)/eth/rtl/eth_phy_10g.v
+GENERIC_DEPS += $(corundum_dir_mod)/eth/rtl/eth_phy_10g_rx.v
+GENERIC_DEPS += $(corundum_dir_mod)/eth/rtl/eth_phy_10g_rx_if.v
+GENERIC_DEPS += $(corundum_dir_mod)/eth/rtl/eth_phy_10g_rx_frame_sync.v
+GENERIC_DEPS += $(corundum_dir_mod)/eth/rtl/eth_phy_10g_rx_ber_mon.v
+GENERIC_DEPS += $(corundum_dir_mod)/eth/rtl/eth_phy_10g_rx_watchdog.v
+GENERIC_DEPS += $(corundum_dir_mod)/eth/rtl/eth_phy_10g_tx.v
+GENERIC_DEPS += $(corundum_dir_mod)/eth/rtl/eth_phy_10g_tx_if.v
+GENERIC_DEPS += $(corundum_dir_mod)/eth/rtl/lfsr.v
+GENERIC_DEPS += $(corundum_dir_mod)/eth/rtl/xgmii_baser_dec_64.v
+GENERIC_DEPS += $(corundum_dir_mod)/eth/rtl/xgmii_baser_enc_64.v
+
+XILINX_DEPS += nic_core_ip.tcl
+XILINX_DEPS += $(corundum_dir_mod)/eth/lib/axis/syn/vivado/axis_async_fifo.tcl
+XILINX_DEPS += $(corundum_dir_common)/syn/vivado/mqnic_port.tcl
+XILINX_DEPS += $(corundum_dir_common)/syn/vivado/mqnic_ptp_clock.tcl
+XILINX_DEPS += $(corundum_dir_common)/syn/vivado/mqnic_rb_clk_info.tcl
+XILINX_DEPS += $(corundum_dir_mod)/eth/syn/vivado/ptp_clock_cdc.tcl
+XILINX_DEPS += $(corundum_dir_common)/syn/vivado/rb_drp.tcl
+XILINX_DEPS += $(corundum_dir_mod)/eth/lib/axis/syn/vivado/sync_reset.tcl
+XILINX_DEPS += $(corundum_dir_common)/syn/vivado/tdma_ber_ch.tcl
+XILINX_DEPS += $(corundum_dir_common)/syn/vivado/eth_xcvr_phy_10g_gty_wrapper.tcl
+XILINX_DEPS += $(corundum_dir_mod)/eth/lib/axis/syn/vivado/sync_reset.tcl
+
+include ../../scripts/library.mk
