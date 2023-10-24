@@ -27,15 +27,36 @@ M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_project_lattice_bd.tcl
 M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_project_lattice.tcl
 M_DEPS += $(HDL_PROJECT_PATH)../scripts/adi_env.tcl
 
-.PHONY: all clean
+.PHONY: all pb rd clean clean-pb clean-rd
 
 all: $(PROJECT_NAME)/$(PROJECT_NAME)/$(PROJECT_NAME).sbx \
 		$(PROJECT_NAME)/$(PROJECT_NAME).rdf
+
+pb: $(PROJECT_NAME)/$(PROJECT_NAME)/$(PROJECT_NAME).sbx
+
+rd: $(PROJECT_NAME)/$(PROJECT_NAME).rdf
 
 clean:
 	-rm -Rf ${PROJECT_NAME}
 	-rm -f $(wildcard *.log)
 	-rm -Rf ./ipcfg
+	-rm -Rf $(filter-out . .. ./. ./.., $(wildcard .*))
+
+clean-pb:
+	-rm -Rf $(filter-out $(PROJECT_NAME)/$(PROJECT_NAME)/$(PROJECT_NAME).v, \
+		$(wildcard $(PROJECT_NAME)/$(PROJECT_NAME)/*))
+	-rm -f $(PROJECT_NAME)/.socproject
+	-rm -Rf ./ipcfg
+	-rm -Rf $(filter-out . .. ./. ./.., $(wildcard .*))
+
+clean-rd:
+	-rm -Rf $(filter-out $(PROJECT_NAME)/$(PROJECT_NAME) \
+		$(PROJECT_NAME)/.socproject, \
+		$(wildcard $(PROJECT_NAME)/*))
+	-rm -Rf $(filter-out $(PROJECT_NAME)/$(PROJECT_NAME) \
+		$(PROJECT_NAME)/.socproject \
+		$(PROJECT_NAME)/. \
+		$(PROJECT_NAME)/.., $(wildcard $(PROJECT_NAME)/.*))
 
 $(PROJECT_NAME)/$(PROJECT_NAME)/$(PROJECT_NAME).sbx: $(M_DEPS)
 	$(call build, \
