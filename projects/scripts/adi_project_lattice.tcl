@@ -153,6 +153,10 @@ proc adi_project_create {project_name args}  {
   }
 
   set dir [pwd]
+
+  if {[file exists $ppath] != 1} {
+    file mkdir $ppath
+  }
   cd $ppath
 
   if { [file exists $project_name.rdf] == 1} {
