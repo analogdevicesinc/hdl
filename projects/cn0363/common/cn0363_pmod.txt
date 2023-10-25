@@ -1,0 +1,12 @@
+Pin            Port               Schematic_name     System_top_name        IOSTANDARD  Termination
+
+# cn0363
+
+2       PMOD_1           GAIN0              gain0_o                LVCMOS33    #N/A
+4       PMOD_2           GAIN1              gain1_o                LVCMOS33    #N/A
+8       PMOD_4           EXT_LED_CLK        led_clk_o              LVCMOS33    #N/A
+6       PMOD_3           DA_CSn             spi_cs[1]              LVCMOS33    #N/A
+1       PMOD_7           AD_CSn             spi_cs[0]              LVCMOS33    #N/A
+3       PMOD_8           AD_DIN             spi_sdo                LVCMOS33    PULLTYPE PULLUP
+5       PMOD_9           AD_DOUT            spi_sdi                LVCMOS33    PULLTYPE PULLUP
+7       PMOD_10          AD_CLK             spi_sclk               LVCMOS33    #N/A
