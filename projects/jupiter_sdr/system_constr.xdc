@@ -196,3 +196,6 @@ set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_2 \
   [list [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_rx_2_phy/i_div_clk_buf/O]] \
         [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_rx_2_phy/i_clk_buf_fast/O]] \
   ]
+
+# debug
+set_false_path -to [get_clocks clk_pl_3]
