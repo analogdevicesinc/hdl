@@ -277,9 +277,12 @@ create_bd_port -dir I gpio_tx1_enable_in
 create_bd_port -dir I gpio_tx2_enable_in
 
 create_bd_port -dir I ref_clk
+create_bd_port -dir I mcs_in
+create_bd_port -dir O mcs_out
+create_bd_port -dir I mcs_src
+create_bd_port -dir I mcs_or_transfer_sync_n
+#create_bd_port -dir I mssi_sync
 create_bd_port -dir I tx_output_enable
-create_bd_port -dir I mssi_sync
-create_bd_port -dir I system_sync
 
 create_bd_port -dir I s_1p0_rf_sns_p
 create_bd_port -dir I s_1p0_rf_sns_n
@@ -317,7 +320,7 @@ ad_ip_instance axi_dmac axi_adrv9001_rx1_dma
 ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.CYCLIC 0
-ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.SYNC_TRANSFER_START 0
+ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.SYNC_TRANSFER_START 1
 ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.DMA_2D_TRANSFER 0
@@ -334,7 +337,7 @@ ad_ip_instance axi_dmac axi_adrv9001_rx2_dma
 ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.CYCLIC 0
-ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.SYNC_TRANSFER_START 0
+ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.SYNC_TRANSFER_START 1
 ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.DMA_2D_TRANSFER 0
@@ -393,11 +396,14 @@ ad_connect  axi_adrv9001/dac_1_clk util_dac_1_upack/clk
 ad_connect  axi_adrv9001/dac_2_clk axi_adrv9001_tx2_dma/m_axis_aclk
 ad_connect  axi_adrv9001/dac_2_clk util_dac_2_upack/clk
 
-ad_connect ref_clk           axi_adrv9001/ref_clk
+ad_connect ref_clk                 axi_adrv9001/ref_clk
+ad_connect mcs_in                  axi_adrv9001/mcs_in
+ad_connect mcs_out                 axi_adrv9001/mcs_out
+ad_connect mcs_src                 axi_adrv9001/mcs_src
+#ad_connect mssi_sync               axi_adrv9001/_external_mssi_sync ;# is it used by linux ?? /remove or not
+ad_connect mcs_or_transfer_sync_n  axi_adrv9001/mcs_or_transfer_sync_n
+ad_connect tx_output_enable        axi_adrv9001/tx_output_enable
 
-ad_connect tx_output_enable  axi_adrv9001/tx_output_enable
-
-ad_connect mssi_sync         axi_adrv9001/mssi_sync
 
 ad_connect rx1_dclk_in_n     axi_adrv9001/rx1_dclk_in_n_NC
 ad_connect rx1_dclk_in_p     axi_adrv9001/rx1_dclk_in_p_dclk_in
@@ -455,6 +461,8 @@ ad_connect  axi_adrv9001/adc_1_dovf      util_adc_1_pack/fifo_wr_overflow
 
 ad_connect util_adc_1_pack/packed_fifo_wr axi_adrv9001_rx1_dma/fifo_wr
 
+ad_connect  axi_adrv9001/adc_1_start_sync   axi_adrv9001_rx1_dma/fifo_wr_sync
+
 # RX2 - CPACK - RX_DMA2
 ad_connect  axi_adrv9001/adc_2_rst       util_adc_2_pack/reset
 ad_connect  axi_adrv9001/adc_2_valid_i0  util_adc_2_pack/fifo_wr_en
@@ -466,6 +474,8 @@ ad_connect  axi_adrv9001/adc_2_data_q0   util_adc_2_pack/fifo_wr_data_1
 ad_connect  axi_adrv9001/adc_2_dovf       util_adc_2_pack/fifo_wr_overflow
 
 ad_connect util_adc_2_pack/packed_fifo_wr axi_adrv9001_rx2_dma/fifo_wr
+
+ad_connect  axi_adrv9001/adc_2_start_sync   axi_adrv9001_rx2_dma/fifo_wr_sync
 
 # TX_DMA1 - UPACK - TX1
 ad_connect  axi_adrv9001/dac_1_rst        util_dac_1_upack/reset
@@ -502,9 +512,6 @@ ad_connect  rx1_enable                    axi_adrv9001/rx1_enable
 ad_connect  rx2_enable                    axi_adrv9001/rx2_enable
 ad_connect  tx1_enable                    axi_adrv9001/tx1_enable
 ad_connect  tx2_enable                    axi_adrv9001/tx2_enable
-
-ad_connect  system_sync                   axi_adrv9001/adc_sync_in
-ad_connect  system_sync                   axi_adrv9001/dac_sync_in
 
 # system monitor
 
@@ -626,3 +633,38 @@ ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/$mem_init_sys_path"
 ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 
 sysid_gen_sys_init_file
+
+# debug
+
+startgroup
+set_property -dict [list \
+  CONFIG.PSU__CRL_APB__PL3_REF_CTRL__FREQMHZ {250} \
+  CONFIG.PSU__CRL_APB__PL3_REF_CTRL__SRCSEL {IOPLL} \
+  CONFIG.PSU__FPGA_PL3_ENABLE {1} \
+] [get_bd_cells sys_ps8]
+endgroup
+
+ad_connect axi_adrv9001/ila_clk sys_ps8/pl_clk3
+
+############################################ MIPI ##############################
+#  set mipi_phy_if_0 [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:mipi_phy_rtl:1.0 mipi_phy_if_0 ]
+#
+#  # Create instance: mipi_csi2_rx_subsyst_0, and set properties
+#  set mipi_csi2_rx_subsyst_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:mipi_csi2_rx_subsystem:5.1 mipi_csi2_rx_subsyst_0 ]
+#  set_property -dict [ list \
+#   CONFIG.CLK_LANE_IO_LOC {H1} \
+#   CONFIG.CLK_LANE_IO_LOC_NAME {IO_L1P_T0L_N0_DBC_66} \
+#   CONFIG.CMN_NUM_LANES {2} \
+#   CONFIG.C_DPHY_LANES {2} \
+#   CONFIG.DATA_LANE0_IO_LOC {F4} \
+#   CONFIG.DATA_LANE0_IO_LOC_NAME {IO_L2P_T0L_N2_66} \
+#   CONFIG.DATA_LANE1_IO_LOC {E2} \
+#   CONFIG.DATA_LANE1_IO_LOC_NAME {IO_L3P_T0L_N4_AD15P_66} \
+#   CONFIG.HP_IO_BANK_SELECTION {66} \
+#   CONFIG.SupportLevel {1} \
+# ] $mipi_csi2_rx_subsyst_0
+#
+#  connect_bd_intf_net -intf_net mipi_phy_if_0_1 [get_bd_intf_ports mipi_phy_if_0] [get_bd_intf_pins mipi_csi2_rx_subsyst_0/mipi_phy_if]
+#  connect_bd_net [get_bd_pins mipi_csi2_rx_subsyst_0/dphy_clk_200M] [get_bd_pins sys_ps8/pl_clk1]
+#  connect_bd_net [get_bd_pins mipi_csi2_rx_subsyst_0/lite_aclk] [get_bd_pins mipi_csi2_rx_subsyst_0/video_aclk] [get_bd_pins sys_ps8/pl_clk0]
+#  connect_bd_net [get_bd_pins mipi_csi2_rx_subsyst_0/lite_aresetn] [get_bd_pins mipi_csi2_rx_subsyst_0/video_aresetn] [get_bd_pins pl_sysmon/s_axi_aresetn]

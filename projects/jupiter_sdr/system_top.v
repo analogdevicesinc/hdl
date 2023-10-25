@@ -148,17 +148,6 @@ module system_top (
   input                   s_1v8_mgtravtt_sns_n
 );
 
-  // internal registers
-
-  reg         mcs_sync_m = 'd0;
-  reg [31:0]  mcs_sync_pulse_period = 32'd1000; // 26us    (ref_clk = 38.4M clk)
-  reg [31:0]  mcs_sync_pulse_delay = 32'd4000;  // 104.1us (ref_clk = 38.4M clk)
-  reg [31:0]  mcs_sync_pulse_period_cnt = 32'd0;
-  reg [31:0]  mcs_sync_pulse_delay_cnt = 32'd0;
-  reg [ 2:0]  mcs_sync_pulse_num = 3'd0;
-  reg         mcs_sync_busy = 1'b0;
-  reg         mcs_out = 1'b0;
-
   // internal signals
 
   wire  [94:0]  gpio_i;
@@ -168,10 +157,9 @@ module system_top (
 
   wire          fpga_ref_clk;
   wire          fpga_mcs_in;
+  wire          mcs_out;
   wire          mssi_sync;
-  wire          mcs_start;
-  wire          system_sync;
-  wire          mcs_or_system_sync_n;
+  wire          mcs_or_transfer_sync_n_s;
 
   wire          gpio_rx1_enable_in;
   wire          gpio_rx2_enable_in;
@@ -194,13 +182,15 @@ module system_top (
   assign gpio_i[5] = vin_usb2_valid_n;
   assign gpio_i[6] = vin_usb1_valid_n;
 
-  assign mssi_sync = mcs_sync_busy | gpio_o[7];
+  //assign mssi_sync = gpio_o[7];
 
   assign usb_pd_reset = 1'b0;
-  assign adrv9002_mcssrc = gpio_o[65];
-  assign usb_flash_prog_en = gpio_o[66];
   assign fan_en  = 1'b1;
+  assign usb_flash_prog_en = gpio_o[66];
   assign fan_ctl = gpio_o[67];
+  assign adrv9002_mcssrc = gpio_o[65]; // 0 = external, 1 = internal
+  assign mcs_or_transfer_sync_n_s = gpio_o[64];
+  assign add_on_power = gpio_o[63];
 
   assign rf_rx1a_mux_ctl = gpio_o[ 8];
   assign rf_rx1b_mux_ctl = gpio_o[ 9];
@@ -243,8 +233,6 @@ module system_top (
     .dio_o ({gpio_i[62:48]}),
     .dio_p (add_on_gpio));
 
-  assign add_on_power = gpio_o[63];
-
   IBUFDS i_ibufgs_fpga_ref_clk (
     .I (fpga_ref_clk_p),
     .IB (fpga_ref_clk_n),
@@ -260,42 +248,6 @@ module system_top (
     .O (dev_mcs_fpga_out_p),
     .OB (dev_mcs_fpga_out_n));
 
-  // multi-chip or system synchronization
-
-  // consider fpga_ref_clk = 38.4M (26.042n)
-  // the MCS sync requires 6 pulses of min 10us with a in between delay of min 100us
-  always @(posedge fpga_ref_clk) begin
-    mcs_sync_m <= fpga_mcs_in;
-    if (mcs_start) begin
-      mcs_sync_busy <= 1'b1;
-      mcs_sync_pulse_period_cnt <= mcs_sync_pulse_period;
-      mcs_sync_pulse_delay_cnt <= mcs_sync_pulse_delay;
-      mcs_sync_pulse_num <= 3'd0;
-      mcs_out <= 1'b0;
-    end else if (mcs_sync_busy == 1'b1) begin
-      if (mcs_sync_pulse_period_cnt != 32'd0) begin
-        mcs_sync_pulse_period_cnt <= mcs_sync_pulse_period_cnt - 32'd1;
-        mcs_out <= 1'b1;
-      end else if (mcs_sync_pulse_delay_cnt != 32'd0) begin
-        mcs_sync_pulse_delay_cnt <= mcs_sync_pulse_delay_cnt - 32'd1;
-        mcs_out <= 1'b0;
-      end else begin
-        if (mcs_sync_pulse_num < 5) begin
-          mcs_sync_pulse_num <= mcs_sync_pulse_num + 3'd1;
-          mcs_sync_pulse_period_cnt <= mcs_sync_pulse_period;
-          mcs_sync_pulse_delay_cnt <= mcs_sync_pulse_delay;
-        end else begin
-          mcs_sync_busy <= 1'b0;
-        end
-        mcs_out <= 1'b0;
-      end
-    end
-  end
-
-  assign mcs_start = !mcs_sync_m & fpga_mcs_in & !mcs_sync_busy & mcs_or_system_sync_n;
-  assign system_sync = fpga_mcs_in & !mcs_or_system_sync_n;
-  assign mcs_or_system_sync_n = gpio_o[64];
-
   system_wrapper i_system_wrapper (
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
@@ -306,9 +258,11 @@ module system_top (
     .spi0_sclk(spi_clk),
 
     .ref_clk (fpga_ref_clk),
-    .mssi_sync (mssi_sync),
-    .system_sync (system_sync),
-
+    .mcs_in (fpga_mcs_in),
+    .mcs_out (mcs_out),
+    .mcs_src (adrv9002_mcssrc),
+    //.mssi_sync (mssi_sync),
+    .mcs_or_transfer_sync_n(mcs_or_transfer_sync_n_s),
     .tx_output_enable (1'b1),
 
     .rx1_dclk_in_n (rx1_dclk_in_n),
