@@ -50,8 +50,8 @@ module axi_adrv9001_if #(
   parameter USE_RX_CLK_FOR_TX = 0
 ) (
   input             ref_clk,
+  input             mcs,
   input             tx_output_enable,
-
   input             mssi_sync,
 
   // device interface
@@ -117,6 +117,9 @@ module axi_adrv9001_if #(
   output [ 31:0]    adc_clk_ratio,
   output [ 31:0]    dac_clk_ratio,
 
+  output [  9:0]    rx1_mcs_to_strobe_delay,
+  output [  9:0]    rx2_mcs_to_strobe_delay,
+
   output            rx1_clk,
   input             rx1_rst,
   output            rx1_data_valid,
@@ -173,7 +176,6 @@ module axi_adrv9001_if #(
   wire  [7:0] adc_1_data_strobe;
   wire        adc_1_clk;
   wire        adc_1_valid;
-  wire        adc_1_ssi_rst;
 
   wire        adc_2_clk_div;
   wire  [7:0] adc_2_data_0;
@@ -183,7 +185,6 @@ module axi_adrv9001_if #(
   wire  [7:0] adc_2_data_strobe;
   wire        adc_2_clk;
   wire        adc_2_valid;
-  wire        adc_2_ssi_rst;
 
   wire        dac_1_clk_div;
   wire  [7:0] dac_1_data_0;
@@ -202,8 +203,6 @@ module axi_adrv9001_if #(
   wire  [7:0] dac_2_data_strobe;
   wire  [7:0] dac_2_data_clk;
   wire        dac_2_data_valid;
-
-  wire        rx_ssi_sync_out;
 
   adrv9001_rx #(
     .CMOS_LVDS_N (CMOS_LVDS_N),
@@ -224,8 +223,12 @@ module axi_adrv9001_if #(
     .rx_strobe_in_n_NC (rx1_strobe_in_n_NC),
     .rx_strobe_in_p_strobe_in (rx1_strobe_in_p_strobe_in),
 
+    .ref_clk (ref_clk),
+    .mcs (mcs),
+
     .adc_rst (rx1_rst),
     .adc_clk (adc_1_clk),
+    .adc_if_rst (adc_1_if_rst),
     .adc_clk_div (adc_1_clk_div),
     .adc_data_0 (adc_1_data_0),
     .adc_data_1 (adc_1_data_1),
@@ -235,6 +238,7 @@ module axi_adrv9001_if #(
     .adc_valid (adc_1_valid),
 
     .adc_clk_ratio (adc_clk_ratio),
+    .mcs_to_strobe_delay (rx1_mcs_to_strobe_delay),
 
     .up_clk (up_clk),
     .up_adc_dld (up_rx1_dld),
@@ -243,16 +247,12 @@ module axi_adrv9001_if #(
     .delay_clk (delay_clk),
     .delay_rst (delay_rx1_rst),
     .delay_locked (delay_rx1_locked),
-
-    .mssi_sync (mssi_sync),
-    .ssi_sync_out (rx_ssi_sync_out),
-    .ssi_sync_in (rx_ssi_sync_out),
-    .ssi_rst (adc_1_ssi_rst));
+    .mssi_sync (mssi_sync));
 
   adrv9001_rx_link #(
     .CMOS_LVDS_N (CMOS_LVDS_N)
   ) i_rx_1_link (
-    .adc_rst (rx1_rst),
+    .adc_rst (adc_1_if_rst),
     .adc_clk_div (adc_1_clk_div),
     .adc_data_0 (adc_1_data_0),
     .adc_data_1 (adc_1_data_1),
@@ -260,6 +260,7 @@ module axi_adrv9001_if #(
     .adc_data_3 (adc_1_data_3),
     .adc_data_strobe (adc_1_data_strobe),
     .adc_valid (adc_1_valid),
+
     // ADC interface
     .rx_clk (rx1_clk),
     .rx_data_valid (rx1_data_valid),
@@ -290,6 +291,9 @@ module axi_adrv9001_if #(
       .rx_strobe_in_n_NC (rx2_strobe_in_n_NC),
       .rx_strobe_in_p_strobe_in (rx2_strobe_in_p_strobe_in),
 
+      .ref_clk (ref_clk),
+      .mcs (mcs),
+
       .adc_rst (rx2_rst),
       .adc_clk (adc_2_clk),
       .adc_clk_div (adc_2_clk_div),
@@ -300,6 +304,8 @@ module axi_adrv9001_if #(
       .adc_data_strobe (adc_2_data_strobe),
       .adc_valid (adc_2_valid),
 
+      .mcs_to_strobe_delay (rx2_mcs_to_strobe_delay),
+
       .up_clk (up_clk),
       .up_adc_dld (up_rx2_dld),
       .up_adc_dwdata (up_rx2_dwdata),
@@ -307,16 +313,12 @@ module axi_adrv9001_if #(
       .delay_clk (delay_clk),
       .delay_rst (delay_rx2_rst),
       .delay_locked (delay_rx2_locked),
-
-      .mssi_sync (1'b0),
-      .ssi_sync_out (),
-      .ssi_sync_in (rx_ssi_sync_out),
-      .ssi_rst (adc_2_ssi_rst));
+      .mssi_sync (mssi_sync));
 
     adrv9001_rx_link #(
       .CMOS_LVDS_N (CMOS_LVDS_N)
     ) i_rx_2_link (
-      .adc_rst (rx2_rst),
+      .adc_rst (adc_2_if_rst),
       .adc_clk_div (adc_2_clk_div),
       .adc_data_0 (adc_2_data_0),
       .adc_data_1 (adc_2_data_1),
@@ -324,6 +326,7 @@ module axi_adrv9001_if #(
       .adc_data_3 (adc_2_data_3),
       .adc_data_strobe (adc_2_data_strobe),
       .adc_valid (adc_2_valid),
+
       // ADC interface
       .rx_clk (rx2_clk),
       .rx_data_valid (rx2_data_valid),
@@ -368,7 +371,6 @@ module axi_adrv9001_if #(
 
     .rx_clk_div (adc_1_clk_div),
     .rx_clk (adc_1_clk),
-    .rx_ssi_rst (adc_1_ssi_rst),
 
     .dac_rst (tx1_rst),
     .dac_clk_div (dac_1_clk_div),
@@ -380,9 +382,7 @@ module axi_adrv9001_if #(
     .dac_data_strb (dac_1_data_strobe),
     .dac_data_clk (dac_1_data_clk),
     .dac_data_valid (dac_1_data_valid),
-
     .dac_clk_ratio (dac_clk_ratio),
-
     .mssi_sync (mssi_sync));
 
   adrv9001_tx_link #(
@@ -434,7 +434,6 @@ module axi_adrv9001_if #(
 
       .rx_clk_div (adc_2_clk_div),
       .rx_clk (adc_2_clk),
-      .rx_ssi_rst (adc_2_ssi_rst),
 
       .dac_rst (tx2_rst),
       .dac_clk_div (dac_2_clk_div),
@@ -446,7 +445,6 @@ module axi_adrv9001_if #(
       .dac_data_strb (dac_2_data_strobe),
       .dac_data_clk (dac_2_data_clk),
       .dac_data_valid (dac_2_data_valid),
-
       .mssi_sync (mssi_sync));
 
     adrv9001_tx_link #(

@@ -31,6 +31,7 @@ adi_ip_files axi_adrv9001 [list \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
   "$ad_hdl_dir/library/common/up_dac_common.v" \
   "$ad_hdl_dir/library/common/up_dac_channel.v" \
+  "$ad_hdl_dir/library/common/util_ext_sync.v" \
   "$ad_hdl_dir/library/common/ad_pnmon.v" \
   "$ad_hdl_dir/library/common/ad_pngen.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
@@ -38,6 +39,8 @@ adi_ip_files axi_adrv9001 [list \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
+  "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
+  "$ad_hdl_dir/library/util_cdc/sync_event.v" \
   "adrv9001_rx.v" \
   "adrv9001_tx.v" \
   "adrv9001_pack.v" \
@@ -51,6 +54,7 @@ adi_ip_files axi_adrv9001 [list \
   "axi_adrv9001_tx.v" \
   "axi_adrv9001_tx_channel.v" \
   "axi_adrv9001_core.v" \
+  "axi_adrv9001_sync.v" \
   "axi_adrv9001_constr.xdc" \
   "axi_adrv9001_tdd.v" \
   "axi_adrv9001.v" ]
@@ -93,7 +97,9 @@ set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.DISABLE_T
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.DISABLE_RX2_SSI')) == 0} \
   [ipx::get_ports *rx2_* -of_objects $cc]
 
-set_property driver_value 0 [ipx::get_ports *_sync_in* -of_objects $cc]
+set_property driver_value 0 [ipx::get_ports mcs_in -of_objects $cc]
+set_property driver_value 0 [ipx::get_ports mcs_src -of_objects $cc]
+set_property driver_value 0 [ipx::get_ports mcs_or_transfer_sync_n -of_objects $cc]
 
 ## Customize XGUI layout
 

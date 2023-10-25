@@ -56,9 +56,13 @@ module adrv9001_rx #(
   input                   rx_strobe_in_n_NC,
   input                   rx_strobe_in_p_strobe_in,
 
+  input                   ref_clk,
+  input                   mcs,
+
   // internal reset and clocks
   input                   adc_rst,
   output                  adc_clk,
+  output                  adc_if_rst,
   output                  adc_clk_div,
   output      [7:0]       adc_data_0,
   output      [7:0]       adc_data_1,
@@ -68,6 +72,7 @@ module adrv9001_rx #(
   output                  adc_valid,
 
   output     [31:0]       adc_clk_ratio,
+  output     [ 9:0]       mcs_to_strobe_delay,
 
   // delay interface (for IDELAY macros)
   input                             up_clk,
@@ -77,11 +82,7 @@ module adrv9001_rx #(
   input                   delay_clk,
   input                   delay_rst,
   output                  delay_locked,
-
-  input                   mssi_sync,
-  output                  ssi_sync_out,
-  input                   ssi_sync_in,
-  output                  ssi_rst
+  input                   mssi_sync
 );
 
   // Use always DDR mode
@@ -104,8 +105,21 @@ module adrv9001_rx #(
   wire [NUM_LANES-1:0] data_s6;
   wire [NUM_LANES-1:0] data_s7;
   wire                 adc_clk_in_fast;
+  wire                 reset;
 
   // internal registers
+
+  reg [2:0] state_cnt = 7;
+  reg [2:0] bufdiv_clr_state = 3;
+  reg       bufdiv_ce = 1'b1;
+  reg       bufdiv_clr = 1'b0;
+  reg       serdes_reset = 1'b0;
+  reg       serdes_next_reset = 1'b0;
+
+  reg [7:0] serdes_min_reset_cycle = 8'hff;
+  reg       adc_data_strobe_event;
+  reg       mcs_6th_pulse;
+  reg [9:0] mcs_to_strobe_cnt;
 
   // data interface
   ad_serdes_in #(
@@ -119,7 +133,7 @@ module adrv9001_rx #(
     .DRP_WIDTH (DRP_WIDTH),
     .SERDES_FACTOR (8)
   ) i_serdes (
-    .rst (adc_rst|ssi_rst),
+    .rst (adc_rst|serdes_reset),
     .clk (adc_clk_in_fast),
     .div_clk (adc_clk_div),
     .data_s0 (data_s0),
@@ -189,6 +203,94 @@ module adrv9001_rx #(
   end
   endgenerate
 
+  // mcs to strobe measure
+
+  always @(posedge clk_in_s) begin
+    adc_data_strobe_event <= |adc_data_strobe;
+  end
+
+  // cdc + constraints
+  always @(posedge clk_in_s) begin
+    if (adc_data_strobe_event) begin
+      mcs_6th_pulse <= 0;
+    end else begin
+      mcs_6th_pulse <= (mcs_6th_pulse | mcs) & ~mssi_sync;
+    end
+  end
+
+  always @(posedge clk_in_s or posedge mssi_sync) begin
+    if (mssi_sync) begin
+      mcs_to_strobe_cnt <= 0;
+    end else begin
+      if (mcs_6th_pulse) begin
+        mcs_to_strobe_cnt <= mcs_to_strobe_cnt + 1;
+      end
+    end
+  end
+
+  assign mcs_to_strobe_delay = mcs_to_strobe_cnt;
+
+  // reset logic
+
+  assign adc_if_rst = adc_rst | mssi_sync;
+
+  always @(posedge clk_in_s, posedge mssi_sync) begin
+    if (mssi_sync == 1'b1) begin
+      bufdiv_ce <= 1'b0;
+      bufdiv_clr <= 1'b0;
+      bufdiv_clr_state <= 3'd0;
+      state_cnt <= 3'd7;
+    end else begin
+      if (bufdiv_ce == 1'b0) begin
+        if (state_cnt == 3'd0) begin
+          bufdiv_clr_state <= bufdiv_clr_state + 1;
+        end else begin
+          state_cnt <= state_cnt - 3'd1;
+        end
+      end
+
+      case (bufdiv_clr_state)
+        3'd0 : begin
+          bufdiv_ce <= 1'b0;
+          bufdiv_clr <= 1'b0;
+        end
+        3'd1 : begin
+          bufdiv_ce <= 1'b0;
+          bufdiv_clr <= 1'b1;
+        end
+        3'd2 : begin
+          bufdiv_ce <= 1'b0;
+          bufdiv_clr <= 1'b0;
+        end
+        default: begin
+          bufdiv_ce <= 1'b1;
+          bufdiv_clr <= 1'b0;
+        end
+      endcase
+    end
+  end
+
+  always @(posedge adc_clk_div, posedge adc_if_rst) begin
+    if (adc_if_rst == 1'b1) begin
+      serdes_reset <= 1'b0;
+      serdes_next_reset <= 1'b1;
+      serdes_min_reset_cycle <= 8'hff;
+    end else begin
+      if (serdes_next_reset == 1'b1) begin
+        serdes_reset <= 1'b1;
+        if (serdes_min_reset_cycle == 8'd0) begin
+          serdes_next_reset <= 1'b0;
+        end else begin
+          serdes_min_reset_cycle <= serdes_min_reset_cycle >> 1;
+        end
+      end else begin
+        serdes_reset <= 1'b0;
+        serdes_next_reset <= 1'b0;
+        serdes_min_reset_cycle <= 8'd0;
+      end
+    end
+  end
+
   generate
   if (FPGA_TECHNOLOGY == SEVEN_SERIES) begin
 
@@ -199,8 +301,8 @@ module adrv9001_rx #(
     BUFR #(
       .BUFR_DIVIDE("4")
     ) i_div_clk_buf (
-      .CLR (mssi_sync),
-      .CE (1'b1),
+      .CE (bufdiv_ce),
+      .CLR (bufdiv_clr),
       .I (clk_in_s),
       .O (adc_clk_div_s));
 
@@ -212,37 +314,7 @@ module adrv9001_rx #(
       assign adc_clk_div = adc_clk_div_s;
     end
 
-    xpm_cdc_async_rst #(
-      .DEST_SYNC_FF    (10), // DECIMAL; range: 2-10
-      .INIT_SYNC_FF    ( 0), // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
-      .RST_ACTIVE_HIGH ( 1)  // DECIMAL; 0=active low reset, 1=active high reset
-    ) rst_syncro (
-      .src_arst (mssi_sync),
-      .dest_clk (adc_clk_div),
-      .dest_arst(ssi_rst));
-
   end else begin
-    wire adc_clk_in;
-
-    reg mssi_sync_d = 1'b0;
-    reg mssi_sync_2d = 1'b0;
-    reg mssi_sync_3d = 1'b0;
-    reg mssi_sync_edge = 1'b0;
-    always @(posedge adc_clk_in) begin
-      mssi_sync_d <= mssi_sync;
-      mssi_sync_2d <= mssi_sync_d;
-      mssi_sync_3d <= mssi_sync_2d;
-      mssi_sync_edge <= mssi_sync_2d & ~mssi_sync_3d;
-    end
-
-    assign ssi_sync_out = mssi_sync_edge;
-
-    reg ssi_rst_pos;
-    always @(posedge adc_clk_in) begin
-      ssi_rst_pos <= ssi_sync_in;
-    end
-
-    assign adc_clk_in = clk_in_s;
 
     BUFGCE #(
       .CE_TYPE ("SYNC"),
@@ -251,7 +323,7 @@ module adrv9001_rx #(
     ) i_clk_buf_fast (
       .O (adc_clk_in_fast),
       .CE (1'b1),
-      .I (adc_clk_in));
+      .I (clk_in_s));
 
     BUFGCE_DIV #(
       .BUFGCE_DIVIDE (4),
@@ -260,11 +332,9 @@ module adrv9001_rx #(
       .IS_I_INVERTED (1'b0)
     ) i_div_clk_buf (
       .O (adc_clk_div),
-      .CE (1'b1),
-      .CLR (ssi_rst),
-      .I (adc_clk_in));
-
-    assign ssi_rst = ssi_rst_pos;
+      .CE (bufdiv_ce),
+      .CLR (bufdiv_clr),
+      .I (clk_in_s));
 
   end
 

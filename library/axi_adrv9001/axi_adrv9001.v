@@ -57,12 +57,12 @@ module axi_adrv9001 #(
   parameter USE_RX_CLK_FOR_TX = 0
 ) (
   input                   ref_clk,
-  input                   mssi_sync,
+  //input                   external_mssi,
+  input                   mcs_in,
+  output                  mcs_out,
+  input                   mcs_src,
+  input                   mcs_or_transfer_sync_n,
   input                   tx_output_enable,
-
-  // external synchronization signals
-  input                   adc_sync_in,
-  input                   dac_sync_in,
 
   // physical interface
   input                   rx1_dclk_in_n_NC,
@@ -130,6 +130,7 @@ module axi_adrv9001 #(
   output                  adc_1_enable_q1,
   output      [15:0]      adc_1_data_q1,
   input                   adc_1_dovf,
+  output                  adc_1_start_sync,
 
   output                  adc_2_clk,
   output                  adc_2_rst,
@@ -140,6 +141,7 @@ module axi_adrv9001 #(
   output                  adc_2_enable_q0,
   output      [15:0]      adc_2_data_q0,
   input                   adc_2_dovf,
+  output                  adc_2_start_sync,
 
   output                  dac_1_clk,
   output                  dac_1_rst,
@@ -254,6 +256,8 @@ module axi_adrv9001 #(
   wire            dac_1_valid;
   wire            dac_2_valid;
 
+  wire            mssi_sync;
+  wire            transfer_sync;
   // internal clocks & resets
   wire            up_rstn;
   wire            up_clk;
@@ -275,6 +279,16 @@ module axi_adrv9001 #(
   wire                       [31:0] adc_clk_ratio;
   wire                       [31:0] dac_clk_ratio;
 
+  axi_adrv9001_sync sync (
+    .ref_clk (ref_clk),
+    .request_mcs (mcs_in),
+    .mcs_src (mcs_src),
+    .mcs_transfer_n (mcs_or_transfer_sync_n),
+    .mcs_out (mcs_out),
+    .mssi_sync (mssi_sync),
+    .transfer_sync (transfer_sync)
+  );
+
   axi_adrv9001_if #(
     .CMOS_LVDS_N (CMOS_LVDS_N),
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
@@ -294,6 +308,7 @@ module axi_adrv9001 #(
     // Physical interface
     //
     .ref_clk (ref_clk),
+    .mcs (mcs_out),
     .mssi_sync (mssi_sync),
     .tx_output_enable (tx_output_enable),
 
@@ -355,6 +370,13 @@ module axi_adrv9001 #(
     .up_rx2_dld (up_rx2_dld),
     .up_rx2_dwdata (up_rx2_dwdata),
     .up_rx2_drdata (up_rx2_drdata),
+
+    //
+    // MCS sync
+    //
+
+    .rx1_mcs_to_strobe_delay (rx1_mcs_to_strobe_delay),
+    .rx2_mcs_to_strobe_delay (rx2_mcs_to_strobe_delay),
 
     //
     // Transport layer interface
@@ -489,6 +511,7 @@ module axi_adrv9001 #(
     .adc_1_enable_q1 (adc_1_enable_q1),
     .adc_1_data_q1 (adc_1_data_q1),
     .adc_1_dovf (adc_1_dovf),
+    .adc_1_start_sync (adc_1_start_sync),
 
     .adc_2_valid (adc_2_valid),
     .adc_2_enable_i (adc_2_enable_i0),
@@ -496,6 +519,7 @@ module axi_adrv9001 #(
     .adc_2_enable_q (adc_2_enable_q0),
     .adc_2_data_q (adc_2_data_q0),
     .adc_2_dovf (adc_2_dovf),
+    .adc_2_start_sync (adc_2_start_sync),
 
     .dac_1_valid (dac_1_valid),
     .dac_1_enable_i0 (dac_1_enable_i0),
@@ -539,9 +563,12 @@ module axi_adrv9001 #(
     .tdd_tx2_rf_en (tdd_tx2_rf_en),
     .tdd_if2_mode (tdd_if2_mode),
 
+    .rate_sync (mssi_sync),
     .ref_clk (ref_clk),
-    .adc_sync_in (adc_sync_in),
-    .dac_sync_in (dac_sync_in),
+    .transfer_sync_in (transfer_sync),
+
+    .rx1_mcs_to_strobe_delay (rx1_mcs_to_strobe_delay),
+    .rx2_mcs_to_strobe_delay (rx2_mcs_to_strobe_delay),
 
     .up_rstn (up_rstn),
     .up_clk (up_clk),
