@@ -421,6 +421,28 @@ module axi_adrv9001_core #(
     .sync_armed (dac_sync_armed_cd_2_s)
   );
 
+  // debug
+   (* MARK_DEBUG = "TRUE" *)  wire ila_dac_1_valid           = dac_1_valid;
+   (* MARK_DEBUG = "TRUE" *)  wire ila_dac_2_valid           = dac_2_valid;
+   (* MARK_DEBUG = "TRUE" *)  wire ila_dac_sync_cd_1         = dac_sync_cd_1;
+   (* MARK_DEBUG = "TRUE" *)  wire ila_dac_sync_cd_2         = dac_sync_cd_2;
+   (* MARK_DEBUG = "TRUE" *)  wire ila_dac_sync_armed_cd_1_s = dac_sync_armed_cd_1_s;
+   (* MARK_DEBUG = "TRUE" *)  wire ila_dac_sync_armed_cd_2_s = dac_sync_armed_cd_2_s;
+   (* MARK_DEBUG = "TRUE" *)  wire ila_tx1_data_i            = tx1_data_i;
+   (* MARK_DEBUG = "TRUE" *)  wire ila_tx2_data_i            = tx2_data_i;
+   (* MARK_DEBUG = "TRUE" *)  wire ila_adc_1_valid           = adc_1_valid;
+   (* MARK_DEBUG = "TRUE" *)  wire ila_adc_2_valid           = adc_2_valid;
+   (* MARK_DEBUG = "TRUE" *)  wire ila_adc_sync_cd_1         = adc_sync_cd_1;
+   (* MARK_DEBUG = "TRUE" *)  wire ila_adc_sync_cd_2         = adc_sync_cd_2;
+   (* MARK_DEBUG = "TRUE" *)  wire ila_adc_1_start_sync      = adc_1_start_sync;
+   (* MARK_DEBUG = "TRUE" *)  wire ila_adc_2_start_sync      = adc_2_start_sync;
+   (* MARK_DEBUG = "TRUE" *)  wire ila_rx1_data_i            = rx1_data_i;
+   (* MARK_DEBUG = "TRUE" *)  wire ila_rx1_data_q            = rx1_data_q;
+   (* MARK_DEBUG = "TRUE" *)  wire ila_rx2_data_i            = rx2_data_i;
+   (* MARK_DEBUG = "TRUE" *)  wire ila_rx2_data_q            = rx2_data_q;
+
+  // end debug
+
   assign tx1_rst = tx1_rst_s;
   assign tx2_rst = tx1_r1_mode ? tx2_rst_loc : tx1_rst_cdc_s;
 

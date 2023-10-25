@@ -234,6 +234,11 @@ module axi_adrv9001_tx #(
       end
     end
 
+    (* MARK_DEBUG = "TRUE" *)  wire ila_dac_rate_cnt  = dac_rate_cnt;
+    (* MARK_DEBUG = "TRUE" *)  wire ila_dac_valid_int = dac_valid_int;
+    (* MARK_DEBUG = "TRUE" *)  wire ila_dac_rate_sync_in_s = dac_rate_sync_in_s;
+    (* MARK_DEBUG = "TRUE" *)  wire ila_dac_sync_out  = dac_sync_out;
+
     // dac channel 0
 
     axi_adrv9001_tx_channel #(

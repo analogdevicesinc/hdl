@@ -307,4 +307,16 @@ module adrv9001_tx #(
 
   assign dac_clk_ratio = 4;
 
+  // debug
+
+  (* MARK_DEBUG = "TRUE" *)  wire ila_dac_clk_div   = dac_clk_div  ;
+  (* MARK_DEBUG = "TRUE" *)  wire ila_dac_bufdiv_ce     = bufdiv_ce    ;
+  (* MARK_DEBUG = "TRUE" *)  wire ila_dac_bufdiv_clr    = bufdiv_clr   ;
+  (* MARK_DEBUG = "TRUE" *)  wire ila_dac_serdes_reset  = serdes_reset ;
+  (* MARK_DEBUG = "TRUE" *)  wire ila_dac_fast_clk  = dac_fast_clk ;
+  (* MARK_DEBUG = "TRUE" *)  wire ila_dac_data_0    = dac_data_0   ;
+  (* MARK_DEBUG = "TRUE" *)  wire ila_dac_data_1    = dac_data_1   ;
+  (* MARK_DEBUG = "TRUE" *)  wire ila_dac_data_strb = dac_data_strb;
+  (* MARK_DEBUG = "TRUE" *)  wire ila_dac_data_clk  = dac_data_clk ;
+
 endmodule

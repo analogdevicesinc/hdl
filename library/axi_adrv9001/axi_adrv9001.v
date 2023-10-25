@@ -279,6 +279,48 @@ module axi_adrv9001 #(
   wire                       [31:0] adc_clk_ratio;
   wire                       [31:0] dac_clk_ratio;
 
+  // debug
+
+  (* MARK_DEBUG = "TRUE" *) reg [ 15:0] dac_clk1_cnt;
+  (* MARK_DEBUG = "TRUE" *) reg [ 15:0] dac_clk2_cnt;
+  (* MARK_DEBUG = "TRUE" *) reg [ 15:0] adc_clk1_cnt;
+  (* MARK_DEBUG = "TRUE" *) reg [ 15:0] adc_clk2_cnt;
+
+  // clk cnt
+  always @(posedge dac_1_clk) begin
+    if (mcs_out) begin
+      dac_clk1_cnt <= 0;
+    end else begin
+      dac_clk1_cnt <= dac_clk1_cnt + 1;
+    end
+  end
+
+  always @(posedge dac_2_clk) begin
+    if (mcs_out) begin
+      dac_clk2_cnt <= 0;
+    end else begin
+      dac_clk2_cnt <= dac_clk2_cnt + 1;
+    end
+  end
+
+  always @(posedge adc_1_clk) begin
+    if (mcs_out) begin
+      adc_clk1_cnt <= 0;
+    end else begin
+      adc_clk1_cnt <= adc_clk1_cnt + 1;
+    end
+  end
+
+  always @(posedge adc_2_clk) begin
+    if (mcs_out) begin
+      adc_clk2_cnt <= 0;
+    end else begin
+      adc_clk2_cnt <= adc_clk2_cnt + 1;
+    end
+  end
+
+  // end debug
+
   axi_adrv9001_sync sync (
     .ref_clk (ref_clk),
     .request_mcs (mcs_in),

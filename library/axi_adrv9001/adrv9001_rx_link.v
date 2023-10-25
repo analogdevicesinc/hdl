@@ -329,4 +329,14 @@ module adrv9001_rx_link #(
   end
   endgenerate
 
+  // debug
+  (* MARK_DEBUG = "TRUE" *)  wire ila_rx_data16_0_packed_valid =  rx_data16_0_packed_valid;
+  (* MARK_DEBUG = "TRUE" *)  wire ila_rx_data32_0_packed_valid =  rx_data32_0_packed_valid;
+  (* MARK_DEBUG = "TRUE" *)  wire ila_rx_data16_1_packed_valid =  rx_data16_1_packed_valid;
+  (* MARK_DEBUG = "TRUE" *)  wire ila_data_strobe              =  data_strobe            ;
+  (* MARK_DEBUG = "TRUE" *)  wire ila_rx_data8_strobe_aligned  =  rx_data8_strobe_aligned;
+  (* MARK_DEBUG = "TRUE" *)  wire ila_rx_data16_0_packed_osof  =  rx_data16_0_packed_osof;
+  (* MARK_DEBUG = "TRUE" *)  wire ila_rx_data16_1_packed_osof  =  rx_data16_1_packed_osof;
+  (* MARK_DEBUG = "TRUE" *)  wire ila_rx_data32_0_packed_osof  =  rx_data32_0_packed_osof;
+
 endmodule

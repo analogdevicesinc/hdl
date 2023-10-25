@@ -344,4 +344,16 @@ module adrv9001_rx #(
   assign adc_valid = ~adc_rst;
   assign adc_clk_ratio = 4;
 
+  // debug
+
+  (* MARK_DEBUG = "TRUE" *)  wire ila_adc_clk_div   = adc_clk_div  ;
+  (* MARK_DEBUG = "TRUE" *)  wire ila_adc_bufdiv_ce     = bufdiv_ce    ;
+  (* MARK_DEBUG = "TRUE" *)  wire ila_adc_bufdiv_clr    = bufdiv_clr   ;
+  (* MARK_DEBUG = "TRUE" *)  wire ila_adc_serdes_reset  = serdes_reset ;
+  (* MARK_DEBUG = "TRUE" *)  wire ila_adc_fast_clk  = clk_in_s ;
+  (* MARK_DEBUG = "TRUE" *)  wire ila_adc_data_0    = adc_data_0   ;
+  (* MARK_DEBUG = "TRUE" *)  wire ila_adc_data_1    = adc_data_1   ;
+  (* MARK_DEBUG = "TRUE" *)  wire ila_adc_data_strb = adc_data_strobe;
+  (* MARK_DEBUG = "TRUE" *)  wire ila_adc_data_clk  = adc_clk_div ;
+
 endmodule
