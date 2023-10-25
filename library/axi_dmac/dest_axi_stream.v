@@ -104,7 +104,7 @@ module dest_axi_stream #(
       data_enabled <= 1'b0;
     end else if (enable == 1'b1) begin
       data_enabled <= 1'b1;
-    end else if (m_axis_valid == 1'b0 || m_axis_ready == 1'b1) begin
+    end else if (m_axis_valid == 1'b0 || m_axis_ready == 1'b0) begin
       data_enabled <= 1'b0;
     end
   end
