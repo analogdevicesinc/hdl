@@ -19,13 +19,22 @@ endif
 M_DEPS += system_project_bd.tcl
 M_DEPS += system_bd.tcl
 M_DEPS += system_project.tcl
-M_DEPS += system_top.v
-M_DEPS += $(wildcard *system_constr.pdc) # Not all projects have this file
-M_DEPS += $(wildcard *system_constr.sdc) # Not all projects have this file
-M_DEPS += $(wildcard *system_constr.tcl) # Not all projects have this file
 M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_project_lattice_bd.tcl
 M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_project_lattice.tcl
 M_DEPS += $(HDL_PROJECT_PATH)../scripts/adi_env.tcl
+M_DEPS += system_top.v
+M_DEPS += $(PROJECT_NAME)/$(PROJECT_NAME)/$(PROJECT_NAME).v
+M_DEPS += $(wildcard *system_constr.pdc)
+M_DEPS += $(wildcard *system_constr.sdc)
+
+R_DEPS_FILTER += %.v
+R_DEPS_FILTER += %.vhdl
+R_DEPS_FILTER += %.sdc
+R_DEPS_FILTER += %.pdc
+R_DEPS_FILTER += %.mem
+
+PB_DEPS_FILTER += %.tcl
+PB_DEPS_FILTER += %.mem
 
 .PHONY: all pb rd clean clean-pb clean-rd
 
@@ -48,6 +57,7 @@ clean-pb:
 	-rm -f $(PROJECT_NAME)/.socproject
 	-rm -Rf ./ipcfg
 	-rm -Rf $(filter-out . .. ./. ./.., $(wildcard .*))
+	-rm -f $(PROJECT_NAME)_propel_builder.log
 
 clean-rd:
 	-rm -Rf $(filter-out $(PROJECT_NAME)/$(PROJECT_NAME) \
@@ -57,14 +67,15 @@ clean-rd:
 		$(PROJECT_NAME)/.socproject \
 		$(PROJECT_NAME)/. \
 		$(PROJECT_NAME)/.., $(wildcard $(PROJECT_NAME)/.*))
+	-rm -f $(PROJECT_NAME)_radiant.log
 
-$(PROJECT_NAME)/$(PROJECT_NAME)/$(PROJECT_NAME).sbx: $(M_DEPS)
+$(PROJECT_NAME)/$(PROJECT_NAME)/$(PROJECT_NAME).sbx: $(filter $(PB_DEPS_FILTER), $(M_DEPS))
 	$(call build, \
 		$(PROPEL_BUILDER) system_project_bd.tcl ${PROJECT_NAME}, \
 		$(PROJECT_NAME)_propel_builder.log, \
 		$(HL)$(PROJECT_NAME)$(NC) project)
 
-$(PROJECT_NAME)/$(PROJECT_NAME).rdf: $(M_DEPS)
+$(PROJECT_NAME)/$(PROJECT_NAME).rdf: $(filter $(R_DEPS_FILTER), $(M_DEPS))
 	$(call build, \
 		$(RADIANT) system_project.tcl ${PROJECT_NAME}, \
 		$(PROJECT_NAME)_radiant.log, \
