@@ -3,14 +3,14 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="prev" title="SPI Engine Tutorial - PulSAR-ADC" href="../spi_engine/tutorial.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="SPI Engine" href="../spi_engine/index.html" /><link rel="prev" title="Third party forks" href="../../user_guide/third_party.html" />
 
     <link rel="shortcut icon" href="../../_static/icon.svg"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.17 -->
         <title>High-Speed DMA Controller - HDL, Analog Devices v0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=36a5483c" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6000fc3f" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=73e8d488" />
     
     
 
@@ -158,13 +158,23 @@
   <p class="caption" role="heading"><span class="caption-text">User guide</span></p>
 <ul>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../user_guide/index.html">User Guide</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of User Guide</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/git_repository.html">Git repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/releases.html">Releases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_hdl.html">Build an HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/architecture.html">HDL architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/ip_cores.html">IP cores</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/porting_project.html">Porting reference designs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/customize_hdl.html">Customize HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/hdl_coding_guideline.html">HDL coding guideline</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/docs_guidelines.html">Documentation guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/third_party.html">Third party forks</a></li>
 </ul>
 </li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Libraries</span></p>
 <ul class="current">
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">High-Speed DMA Controller</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../spi_engine/index.html">SPI Engine</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of SPI Engine</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../spi_engine/spi_engine_execution.html">Execution Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../spi_engine/axi_spi_engine.html">AXI Module</a></li>
@@ -177,7 +187,13 @@
 <li class="toctree-l2"><a class="reference internal" href="../spi_engine/tutorial.html">Tutorial - PulSAR ADC</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">High-Speed DMA Controller</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Projects</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../projects/ad7616_sdz/index.html">AD7616-SDZ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projects/ad9081_fmca_ebz/index.html">AD9081-FMCA-EBZ/AD9082-FMCA-EBZ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projects/adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
 </ul>
 
 </div>
@@ -213,7 +229,7 @@
         </div>
         <article role="main">
           <section id="high-speed-dma-controller">
-<h1>High-Speed DMA Controller<a class="headerlink" href="#high-speed-dma-controller" title="Link to this heading">#</a></h1>
+<span id="axi-dmac"></span><h1>High-Speed DMA Controller<a class="headerlink" href="#high-speed-dma-controller" title="Link to this heading">#</a></h1>
 <figure class="align-default" id="id1">
 <object data="../../_images/symbol-0fe96d96a916443e0221aed20d2a6e1f8801c152.svg" type="image/svg+xml">
             <p class="warning">// ***************************************************************************
@@ -911,7 +927,7 @@ like high-speed converters.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/library/axi_dmac/axi_dmac.v">axi_dmac.v</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_dmac/axi_dmac.v">library/axi_dmac/axi_dmac.v</a></p></td>
 <td><p>Verilog source for the peripheral.</p></td>
 </tr>
 </tbody>
@@ -929,7 +945,7 @@ like high-speed converters.</p>
 <thead>
 <tr class="row-odd"><th class="head"><p>Name</p></th>
 <th class="head"><p>Description</p></th>
-<th class="head"><p>Type</p></th>
+<th class="head"><p>Data Type</p></th>
 <th class="head"><p>Default Value</p></th>
 <th class="head"><p>Choices/Range</p></th>
 </tr>
@@ -940,8 +956,8 @@ like high-speed converters.</p>
 <p>Instance identification number.</p>
 </section>
 </td>
-<td><p>Long</p></td>
-<td><p>0</p></td>
+<td class="type"><p>Long</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DMA_DATA_WIDTH_SRC</span></code></td>
@@ -949,8 +965,8 @@ like high-speed converters.</p>
 <p>Data path width of the source interface in bits.</p>
 </section>
 </td>
-<td><p>Long</p></td>
-<td><p>64</p></td>
+<td class="type"><p>Long</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">64</span></code></td>
 <td><p>16, 32, 64, 128, 256, 512, 1024, 2048</p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DMA_DATA_WIDTH_DEST</span></code></td>
@@ -958,8 +974,8 @@ like high-speed converters.</p>
 <p>Data path width of the destination interface in bits.</p>
 </section>
 </td>
-<td><p>Long</p></td>
-<td><p>64</p></td>
+<td class="type"><p>Long</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">64</span></code></td>
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DMA_LENGTH_WIDTH</span></code></td>
@@ -967,8 +983,8 @@ like high-speed converters.</p>
 <p>Width of transfer length control register in bits.     Limits length of the transfers to 2**<code class="docutils literal notranslate"><span class="pre">DMA_LENGTH_WIDTH</span></code>.</p>
 </section>
 </td>
-<td><p>Long</p></td>
-<td><p>24</p></td>
+<td class="type"><p>Long</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">24</span></code></td>
 <td><p>From 8 to 32.</p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DMA_2D_TRANSFER</span></code></td>
@@ -976,8 +992,8 @@ like high-speed converters.</p>
 <p>Enable support for 2D transfers.</p>
 </section>
 </td>
-<td><p>Bool</p></td>
-<td><p>False</p></td>
+<td class="type"><p>Bool</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">False</span></code></td>
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ASYNC_CLK_REQ_SRC</span></code></td>
@@ -985,8 +1001,8 @@ like high-speed converters.</p>
 <p>Whether the request and source clock domains are asynchronous.</p>
 </section>
 </td>
-<td><p>Bool</p></td>
-<td><p>True</p></td>
+<td class="type"><p>Bool</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">True</span></code></td>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ASYNC_CLK_SRC_DEST</span></code></td>
@@ -994,8 +1010,8 @@ like high-speed converters.</p>
 <p>Whether the source and destination clock domains are asynchronous.</p>
 </section>
 </td>
-<td><p>Bool</p></td>
-<td><p>True</p></td>
+<td class="type"><p>Bool</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">True</span></code></td>
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ASYNC_CLK_DEST_REQ</span></code></td>
@@ -1003,8 +1019,8 @@ like high-speed converters.</p>
 <p>Whether the destination and request clock domains are asynchronous.</p>
 </section>
 </td>
-<td><p>Bool</p></td>
-<td><p>True</p></td>
+<td class="type"><p>Bool</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">True</span></code></td>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">AXI_SLICE_DEST</span></code></td>
@@ -1012,8 +1028,8 @@ like high-speed converters.</p>
 <p>Whether to insert a extra register slice on the source data path.</p>
 </section>
 </td>
-<td><p>Bool</p></td>
-<td><p>False</p></td>
+<td class="type"><p>Bool</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">False</span></code></td>
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">AXI_SLICE_SRC</span></code></td>
@@ -1021,8 +1037,8 @@ like high-speed converters.</p>
 <p>Whether to insert a extra register slice on the destination data path.</p>
 </section>
 </td>
-<td><p>Bool</p></td>
-<td><p>False</p></td>
+<td class="type"><p>Bool</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">False</span></code></td>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">SYNC_TRANSFER_START</span></code></td>
@@ -1030,8 +1046,8 @@ like high-speed converters.</p>
 <p>Enable the transfer start synchronization feature.</p>
 </section>
 </td>
-<td><p>Bool</p></td>
-<td><p>False</p></td>
+<td class="type"><p>Bool</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">False</span></code></td>
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">CYCLIC</span></code></td>
@@ -1039,8 +1055,8 @@ like high-speed converters.</p>
 <p>Enable support for Cyclic transfers.</p>
 </section>
 </td>
-<td><p>Bool</p></td>
-<td><p>False</p></td>
+<td class="type"><p>Bool</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">False</span></code></td>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DMA_AXI_PROTOCOL_DEST</span></code></td>
@@ -1048,8 +1064,8 @@ like high-speed converters.</p>
 <p>AXI protocol version of the destionation interface (0 = AXI4, 1 = AXI3).</p>
 </section>
 </td>
-<td><p>Long</p></td>
-<td><p>0</p></td>
+<td class="type"><p>Long</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
 <td><p>AXI3 (1), AXI4 (0)</p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DMA_AXI_PROTOCOL_SRC</span></code></td>
@@ -1057,8 +1073,8 @@ like high-speed converters.</p>
 <p>AXI protocol version of the source interface (0 = AXI4, 1 = AXI3).</p>
 </section>
 </td>
-<td><p>Long</p></td>
-<td><p>0</p></td>
+<td class="type"><p>Long</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code></td>
@@ -1066,8 +1082,8 @@ like high-speed converters.</p>
 <p>Interface type for the destination interface     (0 = AXI-MM, 1 = AXI-Streaming, 2 = ADI-FIFO).</p>
 </section>
 </td>
-<td><p>Long</p></td>
-<td><p>0</p></td>
+<td class="type"><p>Long</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
 <td><p>Memory-Mapped AXI (0), Streaming AXI (1), FIFO Interface (2)</p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code></td>
@@ -1075,8 +1091,8 @@ like high-speed converters.</p>
 <p>Interface type for the source interface     (0 = AXI-MM, 1 = AXI-Streaming, 2 = ADI-FIFO).</p>
 </section>
 </td>
-<td><p>Long</p></td>
-<td><p>2</p></td>
+<td class="type"><p>Long</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">2</span></code></td>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DMA_AXI_ADDR_WIDTH</span></code></td>
@@ -1084,8 +1100,8 @@ like high-speed converters.</p>
 <p>Maximum address width for AXI interfaces.</p>
 </section>
 </td>
-<td><p>Long</p></td>
-<td><p>32</p></td>
+<td class="type"><p>Long</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">32</span></code></td>
 <td><p>From 16 to 64.</p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">MAX_BYTES_PER_BURST</span></code></td>
@@ -1093,8 +1109,8 @@ like high-speed converters.</p>
 <p>Maximum size of bursts in bytes. Must be power of 2 in a range of 2     beats to 4096 bytes     The size of the burst is limited by the largest burst that both source     and destination supports. This depends on the selected protocol.     For AXI3 the maximum beats per burst is 16, while for AXI4 is 256. For     non AXI interfaces the maximum beats per burst is in theory unlimited     but it is set to 1024 to provide a reasonable upper threshold.     This limitation is done internally in the core.</p>
 </section>
 </td>
-<td><p>Long</p></td>
-<td><p>128</p></td>
+<td class="type"><p>Long</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">128</span></code></td>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">FIFO_SIZE</span></code></td>
@@ -1102,32 +1118,32 @@ like high-speed converters.</p>
 <p>Size of the store-and-forward memory in bursts. Size of a burst is     defined by the <code class="docutils literal notranslate"><span class="pre">MAX_BYTES_PER_BURST</span></code> parameter. Must be power of 2 in     the range of 2 to 32.</p>
 </section>
 </td>
-<td><p>Long</p></td>
-<td><p>8</p></td>
+<td class="type"><p>Long</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">8</span></code></td>
 <td><p>2, 4, 8, 16, 32</p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">AXI_ID_WIDTH_SRC</span></code></td>
 <td class="description"><p>Axi Id Width Src.</p></td>
-<td><p>Long</p></td>
-<td><p>1</p></td>
+<td class="type"><p>Long</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">AXI_ID_WIDTH_DEST</span></code></td>
 <td class="description"><p>Axi Id Width Dest.</p></td>
-<td><p>Long</p></td>
-<td><p>1</p></td>
+<td class="type"><p>Long</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DMA_AXIS_ID_W</span></code></td>
 <td class="description"><p>Dma Axis Id W.</p></td>
-<td><p>Long</p></td>
-<td><p>8</p></td>
+<td class="type"><p>Long</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">8</span></code></td>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DMA_AXIS_DEST_W</span></code></td>
 <td class="description"><p>Dma Axis Dest W.</p></td>
-<td><p>Long</p></td>
-<td><p>4</p></td>
+<td class="type"><p>Long</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">4</span></code></td>
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DISABLE_DEBUG_REGISTERS</span></code></td>
@@ -1135,8 +1151,8 @@ like high-speed converters.</p>
 <p>Disable debug registers.</p>
 </section>
 </td>
-<td><p>Bool</p></td>
-<td><p>False</p></td>
+<td class="type"><p>Bool</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">False</span></code></td>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ENABLE_DIAGNOSTICS_IF</span></code></td>
@@ -1144,20 +1160,20 @@ like high-speed converters.</p>
 <p>Add insight into internal operation of the core, for debug purposes     only.</p>
 </section>
 </td>
-<td><p>Bool</p></td>
-<td><p>False</p></td>
+<td class="type"><p>Bool</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">False</span></code></td>
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ALLOW_ASYM_MEM</span></code></td>
 <td class="description"><p>Allow Asym Mem.</p></td>
-<td><p>Long</p></td>
-<td><p>0</p></td>
+<td class="type"><p>Long</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">CACHE_COHERENT_DEST</span></code></td>
 <td class="description"><p>Assume cache coherent.</p></td>
-<td><p>Bool</p></td>
-<td><p>True</p></td>
+<td class="type"><p>Bool</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">True</span></code></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -1173,7 +1189,7 @@ like high-speed converters.</p>
 <p>Memory mapped AXI-lite bus that provides access to modules register map.</p>
 </section>
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="8adb6956-fee7-486a-ac83-2a525c4935a8" name="8adb6956-fee7-486a-ac83-2a525c4935a8" type="checkbox"></input><label for="8adb6956-fee7-486a-ac83-2a525c4935a8"><p>Ports of s_axi bus.</p>
+<input class="collapsible_input" id="7c2939cc6d8ba9fb250cd3f8615bf6ad602aa8c2" name="7c2939cc6d8ba9fb250cd3f8615bf6ad602aa8c2" type="checkbox"></input><label for="7c2939cc6d8ba9fb250cd3f8615bf6ad602aa8c2"><p>Ports of s_axi bus.</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1272,7 +1288,7 @@ like high-speed converters.</p>
 <p>All <code class="docutils literal notranslate"><span class="pre">s_axi</span></code> signals and <code class="docutils literal notranslate"><span class="pre">irq</span></code> are synchronous to this clock.</p>
 </section>
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="db270816-ab15-44bd-9cb7-f77e7c3d2cb7" name="db270816-ab15-44bd-9cb7-f77e7c3d2cb7" type="checkbox"></input><label for="db270816-ab15-44bd-9cb7-f77e7c3d2cb7"><p>Ports of s_axi_aclk bus.</p>
+<input class="collapsible_input" id="911464785d98ecc1c3ca88b0d8d2c463bbac2fc2" name="911464785d98ecc1c3ca88b0d8d2c463bbac2fc2" type="checkbox"></input><label for="911464785d98ecc1c3ca88b0d8d2c463bbac2fc2"><p>Ports of s_axi_aclk bus.</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1299,7 +1315,7 @@ like high-speed converters.</p>
 <p>Resets the internal state of the peripheral.</p>
 </section>
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="0d1f512a-45e2-4105-adaf-7bd624266f5c" name="0d1f512a-45e2-4105-adaf-7bd624266f5c" type="checkbox"></input><label for="0d1f512a-45e2-4105-adaf-7bd624266f5c"><p>Ports of s_axi_aresetn bus.</p>
+<input class="collapsible_input" id="ebaade304b94d37a6170de1baf4c3aee707b7eb1" name="ebaade304b94d37a6170de1baf4c3aee707b7eb1" type="checkbox"></input><label for="ebaade304b94d37a6170de1baf4c3aee707b7eb1"><p>Ports of s_axi_aresetn bus.</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1325,7 +1341,7 @@ like high-speed converters.</p>
 <span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">0</span></code><span>.</span><section>
 </section>
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="cec6654f-e881-496e-b8e2-45e9c54f692b" name="cec6654f-e881-496e-b8e2-45e9c54f692b" type="checkbox"></input><label for="cec6654f-e881-496e-b8e2-45e9c54f692b"><p>Ports of m_dest_axi bus.</p>
+<input class="collapsible_input" id="7a620fa7136ad8da920e318f8f920ab153aacb5f" name="7a620fa7136ad8da920e318f8f920ab153aacb5f" type="checkbox"></input><label for="7a620fa7136ad8da920e318f8f920ab153aacb5f"><p>Ports of m_dest_axi bus.</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1491,7 +1507,7 @@ like high-speed converters.</p>
 <span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">0</span></code><span>.</span><section>
 </section>
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="2159f007-c372-4941-a19d-46b345d6f084" name="2159f007-c372-4941-a19d-46b345d6f084" type="checkbox"></input><label for="2159f007-c372-4941-a19d-46b345d6f084"><p>Ports of m_src_axi bus.</p>
+<input class="collapsible_input" id="84bf34f499d0f2a128526c9d8dd0552b74c0cfa0" name="84bf34f499d0f2a128526c9d8dd0552b74c0cfa0" type="checkbox"></input><label for="84bf34f499d0f2a128526c9d8dd0552b74c0cfa0"><p>Ports of m_src_axi bus.</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1658,7 +1674,7 @@ like high-speed converters.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">fifo_rd</span></code> interface is synchronous to this clock.     Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code> parameter is set to FIFO (2).</p>
 </section>
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="2b6eebb9-bcc8-4c59-b4e2-92f0e5b6a37d" name="2b6eebb9-bcc8-4c59-b4e2-92f0e5b6a37d" type="checkbox"></input><label for="2b6eebb9-bcc8-4c59-b4e2-92f0e5b6a37d"><p>Ports of fifo_rd_clk bus.</p>
+<input class="collapsible_input" id="b2b58e27834c6e10530fe392e079b0c747079bc4" name="b2b58e27834c6e10530fe392e079b0c747079bc4" type="checkbox"></input><label for="b2b58e27834c6e10530fe392e079b0c747079bc4"><p>Ports of fifo_rd_clk bus.</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1685,7 +1701,7 @@ like high-speed converters.</p>
 <p>The fifo_wr interface is synchronous to this clock.     Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code> parameter is set to FIFO (2).</p>
 </section>
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="a75f20f3-3593-4bb6-ae3a-b1fc5a5dc1f0" name="a75f20f3-3593-4bb6-ae3a-b1fc5a5dc1f0" type="checkbox"></input><label for="a75f20f3-3593-4bb6-ae3a-b1fc5a5dc1f0"><p>Ports of fifo_wr_clk bus.</p>
+<input class="collapsible_input" id="ea590b63c342edbb0687a022b5c2afe6fbf7df85" name="ea590b63c342edbb0687a022b5c2afe6fbf7df85" type="checkbox"></input><label for="ea590b63c342edbb0687a022b5c2afe6fbf7df85"><p>Ports of fifo_wr_clk bus.</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1712,7 +1728,7 @@ like high-speed converters.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">m_axis</span></code> interface is synchronous to this clock.     Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code> parameter is set to AXI-Streaming     (1).</p>
 </section>
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="75ec63e1-963c-4ae5-849e-266ceb45c8cd" name="75ec63e1-963c-4ae5-849e-266ceb45c8cd" type="checkbox"></input><label for="75ec63e1-963c-4ae5-849e-266ceb45c8cd"><p>Ports of m_axis_aclk bus.</p>
+<input class="collapsible_input" id="3d33ad575ab8763537ca7c5b88191e4d496d9aa3" name="3d33ad575ab8763537ca7c5b88191e4d496d9aa3" type="checkbox"></input><label for="3d33ad575ab8763537ca7c5b88191e4d496d9aa3"><p>Ports of m_axis_aclk bus.</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1739,7 +1755,7 @@ like high-speed converters.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">m_src_axi</span></code> interface is synchronous to this clock.     Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code> parameter is set to AXI-MM (0).</p>
 </section>
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="36ad839b-960e-4291-8e00-55e8147d22d9" name="36ad839b-960e-4291-8e00-55e8147d22d9" type="checkbox"></input><label for="36ad839b-960e-4291-8e00-55e8147d22d9"><p>Ports of m_dest_axi_aclk bus.</p>
+<input class="collapsible_input" id="cb4825888cfb0fe40ec82857e1d61ee4b494f6f4" name="cb4825888cfb0fe40ec82857e1d61ee4b494f6f4" type="checkbox"></input><label for="cb4825888cfb0fe40ec82857e1d61ee4b494f6f4"><p>Ports of m_dest_axi_aclk bus.</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1766,7 +1782,7 @@ like high-speed converters.</p>
 <p>The m_src_axi interface is synchronous to this clock.     Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code> parameter is set to AXI-MM (0).</p>
 </section>
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="8859bdd8-a566-4333-b4dc-285bbf285ee0" name="8859bdd8-a566-4333-b4dc-285bbf285ee0" type="checkbox"></input><label for="8859bdd8-a566-4333-b4dc-285bbf285ee0"><p>Ports of m_src_axi_aclk bus.</p>
+<input class="collapsible_input" id="4c4a55977cff2b3a29038fdb41aec7b1b43e737f" name="4c4a55977cff2b3a29038fdb41aec7b1b43e737f" type="checkbox"></input><label for="4c4a55977cff2b3a29038fdb41aec7b1b43e737f"><p>Ports of m_src_axi_aclk bus.</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1793,7 +1809,7 @@ like high-speed converters.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">s_axis</span></code> interface is synchronous to this clock.     Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code> parameter is set to AXI-Streaming     (1).</p>
 </section>
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="1561b32c-a5f3-49f5-978a-57f6f00dc8cf" name="1561b32c-a5f3-49f5-978a-57f6f00dc8cf" type="checkbox"></input><label for="1561b32c-a5f3-49f5-978a-57f6f00dc8cf"><p>Ports of s_axis_aclk bus.</p>
+<input class="collapsible_input" id="723870e0dcb8506f86561c2edc4a04b1a3725a5a" name="723870e0dcb8506f86561c2edc4a04b1a3725a5a" type="checkbox"></input><label for="723870e0dcb8506f86561c2edc4a04b1a3725a5a"><p>Ports of s_axis_aclk bus.</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1820,7 +1836,7 @@ like high-speed converters.</p>
 <p>Reset for the <code class="docutils literal notranslate"><span class="pre">m_dest_axi</span></code> interface.     Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code> parameter is set to AXI-MM (0).</p>
 </section>
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="4b20c7e4-6672-4ed0-8f7d-ab687045dcc7" name="4b20c7e4-6672-4ed0-8f7d-ab687045dcc7" type="checkbox"></input><label for="4b20c7e4-6672-4ed0-8f7d-ab687045dcc7"><p>Ports of m_dest_axi_aresetn bus.</p>
+<input class="collapsible_input" id="1517487fcd931029998cf2939e49777092ce2657" name="1517487fcd931029998cf2939e49777092ce2657" type="checkbox"></input><label for="1517487fcd931029998cf2939e49777092ce2657"><p>Ports of m_dest_axi_aresetn bus.</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1847,7 +1863,7 @@ like high-speed converters.</p>
 <p>Reset for the <code class="docutils literal notranslate"><span class="pre">m_src_axi</span></code> interface.     Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code> parameter is set to AXI-MM (0).</p>
 </section>
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="9fccdb1f-1a3f-40c5-b2e3-058c24d1e5f6" name="9fccdb1f-1a3f-40c5-b2e3-058c24d1e5f6" type="checkbox"></input><label for="9fccdb1f-1a3f-40c5-b2e3-058c24d1e5f6"><p>Ports of m_src_axi_aresetn bus.</p>
+<input class="collapsible_input" id="d800c5ed8d42a2236aa17cdad4f4bd4d4fb6d193" name="d800c5ed8d42a2236aa17cdad4f4bd4d4fb6d193" type="checkbox"></input><label for="d800c5ed8d42a2236aa17cdad4f4bd4d4fb6d193"><p>Ports of m_src_axi_aresetn bus.</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1874,7 +1890,7 @@ like high-speed converters.</p>
 <p>Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code> parameter is set to AXI-Streaming     (1).</p>
 </section>
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="3f770cd3-594d-4329-bf49-621371309976" name="3f770cd3-594d-4329-bf49-621371309976" type="checkbox"></input><label for="3f770cd3-594d-4329-bf49-621371309976"><p>Ports of s_axis bus.</p>
+<input class="collapsible_input" id="81388f518f7586ab9610399f42c7aa50147347bf" name="81388f518f7586ab9610399f42c7aa50147347bf" type="checkbox"></input><label for="81388f518f7586ab9610399f42c7aa50147347bf"><p>Ports of s_axis bus.</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1933,7 +1949,7 @@ like high-speed converters.</p>
 <p>Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code> parameter is set to AXI-Streaming     (1).</p>
 </section>
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="f1230b4c-0e7f-4b6e-be72-dd41dd5a8b9f" name="f1230b4c-0e7f-4b6e-be72-dd41dd5a8b9f" type="checkbox"></input><label for="f1230b4c-0e7f-4b6e-be72-dd41dd5a8b9f"><p>Ports of m_axis bus.</p>
+<input class="collapsible_input" id="bfc3491cb8db184689eddcba506e8958242a5414" name="bfc3491cb8db184689eddcba506e8958242a5414" type="checkbox"></input><label for="bfc3491cb8db184689eddcba506e8958242a5414"><p>Ports of m_axis bus.</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1992,7 +2008,7 @@ like high-speed converters.</p>
 <p>Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code> parameter is set to FIFO (2).</p>
 </section>
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="c80c1543-cf3c-46a9-98e1-6531ead49e56" name="c80c1543-cf3c-46a9-98e1-6531ead49e56" type="checkbox"></input><label for="c80c1543-cf3c-46a9-98e1-6531ead49e56"><p>Ports of fifo_wr bus.</p>
+<input class="collapsible_input" id="5ddb6e7d8da74226553f6bd9ea9d427f63b24aa6" name="5ddb6e7d8da74226553f6bd9ea9d427f63b24aa6" type="checkbox"></input><label for="5ddb6e7d8da74226553f6bd9ea9d427f63b24aa6"><p>Ports of fifo_wr bus.</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -2035,7 +2051,7 @@ like high-speed converters.</p>
 <p>Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code> parameter is set to FIFO (2).</p>
 </section>
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="10238d5b-cd73-4828-895c-650371b6b7bd" name="10238d5b-cd73-4828-895c-650371b6b7bd" type="checkbox"></input><label for="10238d5b-cd73-4828-895c-650371b6b7bd"><p>Ports of fifo_rd bus.</p>
+<input class="collapsible_input" id="c93bc646a8e0f4e14403549469777417da1d46ed" name="c93bc646a8e0f4e14403549469777417da1d46ed" type="checkbox"></input><label for="c93bc646a8e0f4e14403549469777417da1d46ed"><p>Ports of fifo_rd bus.</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -2074,7 +2090,7 @@ like high-speed converters.</p>
 <p>Interrupt output of the module. Is asserted when at least one of the     modules interrupt is pending and enabled.</p>
 </section>
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="8268c341-cac6-4da4-856c-36f7a9bb6ddd" name="8268c341-cac6-4da4-856c-36f7a9bb6ddd" type="checkbox"></input><label for="8268c341-cac6-4da4-856c-36f7a9bb6ddd"><p>Ports of irq bus.</p>
+<input class="collapsible_input" id="589d19a03634b2541864f70f5377e02878cc28ca" name="589d19a03634b2541864f70f5377e02878cc28ca" type="checkbox"></input><label for="589d19a03634b2541864f70f5377e02878cc28ca"><p>Ports of irq bus.</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -2098,7 +2114,7 @@ like high-speed converters.</p>
 <section id="ports">
 <h3>Ports<a class="headerlink" href="#ports" title="Link to this heading">#</a></h3>
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="edc000a3-b2cc-4df6-b616-c3a2de844f85" name="edc000a3-b2cc-4df6-b616-c3a2de844f85" type="checkbox"></input><label for="edc000a3-b2cc-4df6-b616-c3a2de844f85"><p>Ports table.</p>
+<input class="collapsible_input" id="1130f9d1c1635dd7229a2efad01389094ea6d999" name="1130f9d1c1635dd7229a2efad01389094ea6d999" type="checkbox"></input><label for="1130f9d1c1635dd7229a2efad01389094ea6d999"><p>Ports table.</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -2152,7 +2168,7 @@ like high-speed converters.</p>
 <section id="register-map-DMA Controller (axi_dmac)">
 <h4>DMA Controller (axi_dmac) (DMA Controller (axi_dmac))<a class="headerlink" href="#register-map-DMA Controller (axi_dmac)" title="Link to this heading">#</a></h4>
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="f8dd1f99-7c54-41d1-bf8f-d92f621a6339" name="f8dd1f99-7c54-41d1-bf8f-d92f621a6339" type="checkbox"></input><label for="f8dd1f99-7c54-41d1-bf8f-d92f621a6339"><p>Register map table.</p>
+<input class="collapsible_input" id="cc26e3cbc5121058c1531ab9056a6838885ff6ea" name="cc26e3cbc5121058c1531ab9056a6838885ff6ea" type="checkbox"></input><label for="cc26e3cbc5121058c1531ab9056a6838885ff6ea"><p>Register map table.</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper regmap docutils container">
 <table class="regmap docutils align-default">
@@ -2162,7 +2178,7 @@ like high-speed converters.</p>
 <th class="head"><p>BITS</p></th>
 <th class="head"><p>Name</p></th>
 <th class="head"><p>Type</p></th>
-<th class="head"><p>Default</p></th>
+<th class="head"><p>Default Value</p></th>
 <th class="head"><p>Description</p></th>
 </tr>
 </thead>
@@ -2182,8 +2198,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_MAJOR</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x04</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x04</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2192,8 +2208,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_MINOR</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x03</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x03</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2202,8 +2218,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_PATCH</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x61</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x61</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2222,8 +2238,11 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PERIPHERAL_ID</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>‘’ID’’</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><section>
+<p><code class="docutils literal notranslate"><span class="pre">ID</span></code></p>
+</section>
+</td>
 <td class="description"><section>
 <p>Value of the ID configuration parameter.</p>
 </section>
@@ -2243,8 +2262,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SCRATCH</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x00000000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Scratch register useful for debug.</p>
 </section>
@@ -2264,8 +2283,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IDENTIFICATION</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x444D4143</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x444D4143</span></code></td>
 <td class="description"><section>
 <p>Peripheral identification (‘D’, ‘M’, ‘A’, ‘C’).</p>
 </section>
@@ -2285,8 +2304,11 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[3:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BYTES_PER_BEAT_DEST_LOG2</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>log2(‘’DMA_DATA_WIDTH_DEST’’/8)</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><section>
+<p>log2(<code class="docutils literal notranslate"><span class="pre">DMA_DATA_WIDTH_DEST</span></code>/8)</p>
+</section>
+</td>
 <td class="description"><section>
 <p>Width of data bus on destination interface. Log2 of interface data widths in bytes.</p>
 </section>
@@ -2296,8 +2318,11 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[5:4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>‘’DMA_TYPE_DEST’’</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><section>
+<p><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code></p>
+</section>
+</td>
 <td class="description"><section>
 </section>
 </td>
@@ -2306,8 +2331,11 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[11:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BYTES_PER_BEAT_SRC_LOG2</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>log2(‘’DMA_DATA_WIDTH_SRC’’/8)</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><section>
+<p>log2(<code class="docutils literal notranslate"><span class="pre">DMA_DATA_WIDTH_SRC</span></code>/8)</p>
+</section>
+</td>
 <td class="description"><section>
 </section>
 </td>
@@ -2316,8 +2344,11 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[13:12]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>‘’DMA_TYPE_SRC’’</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><section>
+<p><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code></p>
+</section>
+</td>
 <td class="description"><section>
 </section>
 </td>
@@ -2326,8 +2357,11 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[19:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BYTES_PER_BURST_WIDTH</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>‘’BYTES_PER_BURST_WIDTH’’</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><section>
+<p><code class="docutils literal notranslate"><span class="pre">BYTES_PER_BURST_WIDTH</span></code></p>
+</section>
+</td>
 <td class="description"><section>
 </section>
 </td>
@@ -2346,8 +2380,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_COMPLETED</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x1</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
 <td class="description"><section>
 <p>Masks the TRANSFER_COMPLETED IRQ.</p>
 </section>
@@ -2357,8 +2391,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_QUEUED</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x1</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2377,8 +2411,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_COMPLETED</span></code></td>
-<td><p>RW1C</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>This bit will be asserted if a transfer has been completed and the TRANSFER_COMPLETED bit in the IRQ_MASK register is not set. Either if all bytes have been transferred or an error occurred during the transfer.</p>
 </section>
@@ -2388,8 +2422,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_QUEUED</span></code></td>
-<td><p>RW1C</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2408,8 +2442,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_COMPLETED</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>This bit will be asserted if a transfer has been completed. Either if all bytes have been transferred or an error occurred during the transfer. Cleared together with the corresponding IRQ_PENDING bit.</p>
 </section>
@@ -2419,8 +2453,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_QUEUED</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2439,8 +2473,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PAUSE</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>When set to 1 the currently active transfer is paused. It will be resumed once the bit is cleared again.</p>
 </section>
@@ -2450,8 +2484,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ENABLE</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2470,8 +2504,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_ID</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x00</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>This register contains the ID of the next transfer. The ID is generated by the DMAC and after the transfer has been started can be used to check if the transfer has finished by checking the corresponding bit in the TRANSFER_DONE register. The contents of this register is only valid if TRANSFER_SUBMIT is 0.</p>
 </section>
@@ -2491,8 +2525,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_SUBMIT</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x00</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>Writing a 1 to this register queues a new transfer. The bit transitions back to 0 once the transfer has been queued or the DMA channel is disabled.  Writing a 0 to this register has no effect.</p>
 </section>
@@ -2512,8 +2546,11 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CYCLIC</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>‘’CYCLIC’’</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><section>
+<p><code class="docutils literal notranslate"><span class="pre">CYCLIC</span></code></p>
+</section>
+</td>
 <td class="description"><section>
 <p>Setting this field to 1 puts the DMA transfer into cyclic mode. In cyclic mode the controller will re-start a transfer again once it has finished. In cyclic mode no end-of-transfer interrupts will be generated.</p>
 </section>
@@ -2523,8 +2560,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TLAST</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x1</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2533,8 +2570,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PARTIAL_REPORTING_EN</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2553,8 +2590,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEST_ADDRESS</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x00000000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>This register contains the destination address of the transfer. The address needs to be aligned to the bus width.  This register is only valid if the DMA channel has been configured for write to memory support.</p>
 </section>
@@ -2574,8 +2611,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SRC_ADDRESS</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x00000000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>This register contains the source address of the transfer. The address needs to be aligned to the bus width.  This register is only valid if the DMA channel has been configured for read from memory support.</p>
 </section>
@@ -2595,8 +2632,11 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[23:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">X_LENGTH</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>{log2(max(\n’’DMA_DATA_WIDTH_SRC’’,\n’’DMA_DATA_WIDTH_DEST’’\n)/8){1’b1}}</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><section>
+<p>{log2(max(<code class="docutils literal notranslate"><span class="pre">DMA_DATA_WIDTH_SRC</span></code>, <code class="docutils literal notranslate"><span class="pre">DMA_DATA_WIDTH_DEST</span></code>)/8){1’b1}}</p>
+</section>
+</td>
 <td class="description"><section>
 <p>Number of bytes to transfer - 1.</p>
 </section>
@@ -2616,8 +2656,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[23:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">Y_LENGTH</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x000000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x000000</span></code></td>
 <td class="description"><section>
 <p>Number of rows to transfer - 1.  Note, this field is only valid if the DMA channel has been configured with 2D transfer support.</p>
 </section>
@@ -2637,8 +2677,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[23:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEST_STRIDE</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x000000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x000000</span></code></td>
 <td class="description"><section>
 <p>The number of bytes between the start of one row and the next row for the destination address. Needs to be aligned to the bus width.  Note, this field is only valid if the DMA channel has been configured with 2D transfer support and write to memory support.</p>
 </section>
@@ -2658,8 +2698,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[23:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SRC_STRIDE</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x000000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x000000</span></code></td>
 <td class="description"><section>
 <p>The number of bytes between the start of one row and the next row for the source address. Needs to be aligned to the bus width.  Note, this field is only valid if the DMA channel has been configured with 2D transfer and read from memory support.</p>
 </section>
@@ -2680,8 +2720,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_0_DONE</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If this bit is set the transfer with ID 0 has been completed.</p>
 </section>
@@ -2691,8 +2731,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_1_DONE</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2701,8 +2741,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_2_DONE</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2711,8 +2751,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[3]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_3_DONE</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2721,8 +2761,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PARTIAL_TRANSFER_DONE</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2741,8 +2781,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[4:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ACTIVE_TRANSFER_ID</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x00</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>ID of the currently active transfer. When no transfer is active this register will be equal to the TRANSFER_ID register.</p>
 </section>
@@ -2762,8 +2802,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x00</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>This register is reserved for future usage. Reading it will always return 0.</p>
 </section>
@@ -2783,8 +2823,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CURRENT_DEST_ADDRESS</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x00</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>Address to which the next data sample is written to.  This register is only valid if the DMA channel has been configured for write to memory support.</p>
 </section>
@@ -2804,8 +2844,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CURRENT_SRC_ADDRESS</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x00</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>Address form which the next data sample is read.  This register is only valid if the DMA channel has been configured for read from memory support.</p>
 </section>
@@ -2825,8 +2865,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[23:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_PROGRESS</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x000000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x000000</span></code></td>
 <td class="description"><section>
 <p>This field presents the number of bytes transferred to the destination for the current transfer. This register will be cleared once the transfer completes. This should be used for debugging purposes only.</p>
 </section>
@@ -2846,8 +2886,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PARTIAL_LENGTH</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x000000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x000000</span></code></td>
 <td class="description"><section>
 <p>Length of the partial transfer in bytes. Represents the number of bytes received until the moment of TLAST assertion. This will be smaller than the programmed length from the X_LENGTH and Y_LENGTH registers.</p>
 </section>
@@ -2868,8 +2908,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PARTIAL_TRANSFER_ID</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>ID of the transfer that was partial.</p>
 </section>
@@ -2889,8 +2929,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEST_ADDRESS_HIGH</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x00000000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>This register contains the HIGH segment of the destination address of the transfer.  This register is only valid if the DMA_AXI_ADDR_WIDTH is bigger than 32 and if DMA channel has been configured for write to memory support.</p>
 </section>
@@ -2910,8 +2950,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SRC_ADDRESS_HIGH</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x00000000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>This register contains the HIGH segment of the source address of the transfer.  This register is only valid if the DMA_AXI_ADDR_WIDTH is bigger than 32 and if the DMA channel has been configured for read from memory support.</p>
 </section>
@@ -2931,8 +2971,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CURRENT_DEST_ADDRESS_HIGH</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x00</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>HIGH segment of the address to which the next data sample is written to.  This register is only valid if the DMA_AXI_ADDR_WIDTH is bigger than 32 and if the DMA channel has been configured for write to memory support.</p>
 </section>
@@ -2952,8 +2992,8 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CURRENT_SRC_ADDRESS_HIGH</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x00</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>HIGH segment of the address from which the next data sample is read.  This register is only valid if the DMA_AXI_ADDR_WIDTH is bigger than 32 and if the DMA channel has been configured for read from memory support.</p>
 </section>
@@ -3421,15 +3461,23 @@ length.</p></td>
       <footer>
         
         <div class="related-pages">
-          
-          <a class="prev-page" href="../spi_engine/tutorial.html">
+          <a class="next-page" href="../spi_engine/index.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">SPI Engine</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="../../user_guide/third_party.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">SPI Engine Tutorial - PulSAR-ADC</div>
+                <div class="title">Third party forks</div>
                 
               </div>
             </a>

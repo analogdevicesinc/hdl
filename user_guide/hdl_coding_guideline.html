@@ -1,0 +1,980 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Documentation guidelines" href="docs_guidelines.html" /><link rel="prev" title="Customize HDL projects" href="customize_hdl.html" />
+
+    <link rel="shortcut icon" href="../_static/icon.svg"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.17 -->
+        <title>ADI HDL coding guideline - HDL, Analog Devices v0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=36a5483c" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=73e8d488" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">HDL, Analog Devices v0.1 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  
+  <span class="sidebar-brand-text">HDL, Analog Devices v0.1 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">User guide</span></p>
+<ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">User Guide</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of User Guide</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="git_repository.html">Git repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="releases.html">Releases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_hdl.html">Build an HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html">HDL architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ip_cores.html">IP cores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_project.html">Porting reference designs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="customize_hdl.html">Customize HDL projects</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">HDL coding guideline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs_guidelines.html">Documentation guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="third_party.html">Third party forks</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Libraries</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../library/axi_dmac/index.html">High-Speed DMA Controller</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../library/spi_engine/index.html">SPI Engine</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of SPI Engine</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../library/spi_engine/spi_engine_execution.html">Execution Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/spi_engine/axi_spi_engine.html">AXI Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/spi_engine/spi_engine_offload.html">Offload Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/spi_engine/spi_engine_interconnect.html">Interconnect Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/spi_engine/control-interface.html">Control Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/spi_engine/offload-control-interface.html">Offload Control Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/spi_engine/spi-bus-interface.html">SPI Bus Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/spi_engine/instruction-format.html">Instruction Set Specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/spi_engine/tutorial.html">Tutorial - PulSAR ADC</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Projects</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../projects/ad7616_sdz/index.html">AD7616-SDZ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../projects/ad9081_fmca_ebz/index.html">AD9081-FMCA-EBZ/AD9082-FMCA-EBZ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../projects/adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="adi-hdl-coding-guideline">
+<span id="hdl-coding-guideline"></span><h1>ADI HDL coding guideline<a class="headerlink" href="#adi-hdl-coding-guideline" title="Link to this heading">#</a></h1>
+<section id="introduction">
+<h2>1. Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>This document contains coding and documentation guidelines which must be
+followed by all HDL projects. The purpose of this document is to
+establish a set of rules that specify the layout, naming conventions and
+some general coding practices for the HDL modules implementation.
+Specific HDL coding practices meant to obtain maximum performance from a
+FPGA design are described by external documents such as
+<a class="reference external" href="http://www.xilinx.com/support/documentation/white_papers/wp231.pdf">[1]</a>
+and
+<a class="reference external" href="http://www.asic-world.com/code/verilog_tutorial/peter_chambers_10_commandments.pdf">[2]</a>
+and are not included in this document.</p>
+<dl class="simple">
+<dt>There are two types of rules: <em>should</em> and <em>must</em> rules</dt><dd><ul class="simple">
+<li><p><em>Should</em> rules are advisory rules. They suggest the recommended way of doing things.</p></li>
+<li><p><strong>Must</strong> rules are mandatory requirements.</p></li>
+</ul>
+</dd>
+</dl>
+<p>The coding rules are intended to be applied to HDL modules written using
+VHDL or Verilog.</p>
+<p>When an external IP is used, the naming conventions practiced by the IP
+<em>should</em> be kept, even if they do not match the rules specified in this
+document.</p>
+</section>
+<section id="coding-style">
+<h2>2. Coding style<a class="headerlink" href="#coding-style" title="Link to this heading">#</a></h2>
+<section id="a-layout">
+<h3>A. Layout<a class="headerlink" href="#a-layout" title="Link to this heading">#</a></h3>
+<p><strong>A1</strong></p>
+<p>Spaces <strong>must</strong> be used instead of tabs.</p>
+<p>This allows the code to be properly visualized by any editor. <strong>Do not</strong>
+leave spaces at the end of a line. The following editor settings <strong>must</strong>
+be used: <em>Tab Size</em>: 2, <em>Indent Size</em>: 2.</p>
+<p><strong>A2</strong></p>
+<p>One white space <strong>must</strong> be inserted around operators, such as
+=, ==, &amp;&amp;, ||, &amp;, |, ^, etc.</p>
+<p id="example-a2">Incorrect:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="p">((</span><span class="n">my_signal1</span><span class="o">==</span><span class="mi">1</span><span class="s1">&#39;b0)&amp;&amp;(my_bus[3:0]==4&#39;</span><span class="n">d5</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Correct:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">((</span><span class="n">my_signal</span> <span class="o">==</span> <span class="mi">1</span><span class="s1">&#39;b0) &amp;&amp; (my_bus[3:0] == 4&#39;</span><span class="n">d5</span><span class="p">))</span>
+</pre></div>
+</div>
+<p><strong>A3</strong></p>
+<p>The <em>always</em> block <em>should</em> have a space before <a class="reference external" href="mailto:**&#37;&#52;&#48;**">**<span>&#64;</span>**</a> symbol.</p>
+<p id="example-a3">Incorrect:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">always</span><span class="o">@</span><span class="p">(</span><span class="n">posedge</span> <span class="n">clk</span><span class="p">)</span> <span class="n">begin</span>
+  <span class="o">...</span>
+<span class="n">end</span>
+</pre></div>
+</div>
+<p>Correct:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">always</span> <span class="o">@</span><span class="p">(</span><span class="n">posedge</span> <span class="n">clk</span><span class="p">)</span> <span class="n">begin</span>
+  <span class="o">...</span>
+<span class="n">end</span>
+</pre></div>
+</div>
+<p><strong>A4</strong></p>
+<p>The Verilog <code class="docutils literal notranslate"><span class="pre">begin</span></code>/<code class="docutils literal notranslate"><span class="pre">end</span></code> block <strong>must</strong> always be used,
+even if there is only one statement. This makes adding lines of code
+much easier and with fewer errors.</p>
+<p><strong>A5</strong></p>
+<p>Indentation levels <strong>must</strong> be used to show code nesting. Blank
+lines may be used as desired to improve code readability, but <em>not</em> in
+all cases.</p>
+<p id="example-a5">Incorrect:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">if</span> <span class="p">(</span><span class="n">my_signal</span> <span class="o">==</span> <span class="mi">1</span><span class="s1">&#39;b0) begin</span>
+<span class="linenos"> 2</span>  <span class="k">if</span> <span class="p">(</span><span class="n">my_bus</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">4</span><span class="s1">&#39;d5) begin</span>
+<span class="linenos"> 3</span>  <span class="n">statement1</span><span class="p">;</span>
+<span class="linenos"> 4</span>  <span class="n">statement2</span><span class="p">;</span>
+<span class="linenos"> 5</span>  <span class="n">end</span>
+<span class="linenos"> 6</span><span class="n">statement3</span><span class="p">;</span>
+<span class="linenos"> 7</span><span class="n">statement4</span><span class="p">;</span>
+<span class="linenos"> 8</span><span class="n">end</span>
+<span class="linenos"> 9</span><span class="k">else</span>
+<span class="linenos">10</span><span class="n">statement5</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Correct:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">if</span> <span class="p">(</span><span class="n">my_signal</span> <span class="o">==</span> <span class="mi">1</span><span class="s1">&#39;b0) begin</span>
+<span class="hll"><span class="linenos"> 2</span>  <span class="k">if</span> <span class="p">(</span><span class="n">my_bus</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">4</span><span class="s1">&#39;d5) begin</span>
+</span><span class="hll"><span class="linenos"> 3</span>    <span class="n">statement1</span><span class="p">;</span>
+</span><span class="hll"><span class="linenos"> 4</span>    <span class="n">statement2</span><span class="p">;</span>
+</span><span class="linenos"> 5</span>  <span class="n">end</span>
+<span class="linenos"> 6</span>  <span class="n">statement3</span><span class="p">;</span>
+<span class="hll"><span class="linenos"> 7</span>  <span class="n">statement4</span><span class="p">;</span>
+</span><span class="linenos"> 8</span><span class="n">end</span> <span class="k">else</span> <span class="n">begin</span>
+<span class="linenos"> 9</span>  <span class="n">statement5</span><span class="p">;</span>
+<span class="linenos">10</span><span class="n">end</span>
+</pre></div>
+</div>
+<p><strong>A6</strong></p>
+<p>In a <code class="docutils literal notranslate"><span class="pre">case</span></code> definition, indentation levels <strong>must</strong> be used to
+offset the statements that are encapsulated, but the use of blank lines
+can be used or omitted to best show the statement groupings (if really
+necessary). <code class="docutils literal notranslate"><span class="pre">end</span></code> should be indented as in the correct example.</p>
+<p id="example-a6">Incorrect:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">case</span> <span class="p">(</span> <span class="n">my_bus</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
+<span class="linenos"> 2</span>  <span class="mi">4</span><span class="s1">&#39;b0000 : my_signal1 = TRUE;</span>
+<span class="linenos"> 3</span>  <span class="mi">4</span><span class="s1">&#39;b0001 : my_signal1 = FALSE;</span>
+<span class="linenos"> 4</span>  <span class="mi">4</span><span class="s1">&#39;b0010 :</span>
+<span class="linenos"> 5</span>  <span class="n">begin</span>
+<span class="linenos"> 6</span>  <span class="n">my_signal1</span> <span class="o">=</span> <span class="n">TRUE</span><span class="p">;</span>
+<span class="linenos"> 7</span>  <span class="n">my_signal2</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">;</span>
+<span class="linenos"> 8</span>  <span class="n">end</span>
+<span class="linenos"> 9</span>  <span class="mi">4</span><span class="s1">&#39;b0100 : my_signal2 = FALSE;</span>
+<span class="linenos">10</span>  <span class="n">default</span> <span class="p">:</span> <span class="n">my_signal1</span> <span class="o">=</span> <span class="n">TRUE</span><span class="p">;</span>
+<span class="linenos">11</span><span class="n">endcase</span>
+</pre></div>
+</div>
+<p>Correct:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">case</span> <span class="p">(</span><span class="n">my_bus</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">0</span><span class="p">])</span>
+<span class="hll"><span class="linenos"> 2</span>  <span class="mi">4</span><span class="s1">&#39;b0000: begin</span>
+</span><span class="hll"><span class="linenos"> 3</span>    <span class="n">my_signal1</span> <span class="o">=</span> <span class="n">TRUE</span><span class="p">;</span>
+</span><span class="hll"><span class="linenos"> 4</span>    <span class="n">end</span>
+</span><span class="linenos"> 5</span>  <span class="mi">4</span><span class="s1">&#39;b0001: begin</span>
+<span class="linenos"> 6</span>    <span class="n">my_signal1</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">;</span>
+<span class="linenos"> 7</span>    <span class="n">end</span>
+<span class="linenos"> 8</span>  <span class="mi">4</span><span class="s1">&#39;b0010: begin</span>
+<span class="linenos"> 9</span>    <span class="n">my_signal1</span> <span class="o">=</span> <span class="n">TRUE</span><span class="p">;</span>
+<span class="linenos">10</span>    <span class="n">my_signal2</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">;</span>
+<span class="linenos">11</span>    <span class="n">end</span>
+<span class="linenos">12</span>  <span class="mi">4</span><span class="s1">&#39;b0100: begin</span>
+<span class="linenos">13</span>    <span class="n">my_signal2</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">;</span>
+<span class="linenos">14</span>    <span class="n">end</span>
+<span class="linenos">15</span>  <span class="n">default</span><span class="p">:</span> <span class="n">begin</span>
+<span class="linenos">16</span>    <span class="n">my_signal1</span> <span class="o">=</span> <span class="n">TRUE</span><span class="p">;</span>
+<span class="linenos">17</span>    <span class="n">end</span>
+<span class="linenos">18</span><span class="n">endcase</span>
+</pre></div>
+</div>
+<p><strong>A7</strong></p>
+<p>Alignment <strong>should</strong> be used in declarations, assignments,
+multi-line statements, and end of line comments. The code <strong>must</strong> be
+written in a tabular format.</p>
+<p id="example-a7">Incorrect:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">reg</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span> <span class="n">my_signal1</span><span class="p">;</span> <span class="o">//</span> <span class="n">description</span>
+<span class="linenos">2</span><span class="n">reg</span><span class="p">[</span><span class="mi">31</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span> <span class="n">my_decoded_signal1</span><span class="p">;</span> <span class="o">//</span> <span class="n">description</span>
+<span class="linenos">3</span><span class="n">reg</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span> <span class="n">my_signal2</span><span class="p">,</span> <span class="n">my_signal3</span><span class="p">;</span> <span class="o">//</span> <span class="n">description</span>
+<span class="linenos">4</span><span class="n">wire</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span> <span class="n">my_select</span><span class="p">;</span> <span class="o">//</span> <span class="n">description</span>
+</pre></div>
+</div>
+<p>Correct:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">reg</span>  <span class="p">[</span> <span class="mi">3</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>  <span class="n">my_signal1</span><span class="p">;</span>         <span class="o">//</span> <span class="n">description</span>
+<span class="linenos">2</span><span class="n">reg</span>  <span class="p">[</span><span class="mi">31</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>  <span class="n">my_decoded_signal1</span><span class="p">;</span> <span class="o">//</span> <span class="n">description</span>
+<span class="linenos">3</span><span class="n">reg</span>  <span class="p">[</span> <span class="mi">4</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>  <span class="n">my_signal2</span><span class="p">;</span>         <span class="o">//</span> <span class="n">description</span>
+<span class="linenos">4</span><span class="n">reg</span>          <span class="n">my_signal3</span><span class="p">;</span>         <span class="o">//</span> <span class="n">description</span>
+<span class="linenos">5</span>
+<span class="linenos">6</span><span class="n">wire</span> <span class="p">[</span> <span class="mi">2</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>  <span class="n">my_select</span><span class="p">;</span>          <span class="o">//</span> <span class="n">description</span>
+</pre></div>
+</div>
+<p><strong>A8</strong></p>
+<p>Parentheses <strong>must</strong> be used around all boolean statements and
+in complex equations, in order to force the order of operations and
+avoid confusion. Complex boolean expressions <em>should</em> be expressed as
+multi-line aligned statements.</p>
+<p id="example-a8">Incorrect:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>if ((my_signal1 &amp;&amp; your_signal1) || (my_signal2 &amp;&amp; your_signal2) || (my_signal3 &amp;&amp; your_signal3)) begin
+<span class="linenos">2</span>  my_signal1 = TRUE;
+<span class="linenos">3</span>  my_delayed_signal1 = !your_signal;
+<span class="linenos">4</span>end
+</pre></div>
+</div>
+<p>Correct:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="linenos">1</span>if ((my_signal1 &amp;&amp; your_signal1) ||
+</span><span class="hll"><span class="linenos">2</span>    (my_signal2 &amp;&amp; your_signal2) ||
+</span><span class="hll"><span class="linenos">3</span>    (my_signal3 &amp;&amp; your_signal3)) begin
+</span><span class="linenos">4</span>  my_signal1 = TRUE;
+<span class="linenos">5</span>  my_delayed_signal1 = !your_signal;
+<span class="linenos">6</span>end
+</pre></div>
+</div>
+<p><strong>A9</strong></p>
+<p>A line <strong>must</strong> not contain more than one statement. <strong>Do not</strong>
+concatenate multiple statements on the same line.</p>
+<p id="example-a9">Incorrect:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>upper_en = (p5type &amp;&amp; xadr1[0]); lower_en = (p5type &amp;&amp; !xadr1[0]);
+</pre></div>
+</div>
+<p>Correct:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>upper_en = (p5type &amp;&amp; xadr1[0]);
+lower_en = (p5type &amp;&amp; !xadr1[0]);
+</pre></div>
+</div>
+<p><strong>A10</strong></p>
+<p>In module instances:</p>
+<p><strong>A10.1</strong></p>
+<p><strong>All</strong> parameters and ports, <strong>must</strong> be written on a
+separate line, even if there are few of them or their names are short.</p>
+<p id="example-a10-1">Incorrect:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_module</span> <span class="c1">#(.PARAMETER1 (PARAMETER1)) i_my_module (.clk (clk));</span>
+</pre></div>
+</div>
+<p>Correct:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">my_module</span> <span class="c1">#(</span>
+<span class="linenos">2</span>  <span class="o">.</span><span class="n">PARAMETER1</span> <span class="p">(</span><span class="n">PARAMETER1</span><span class="p">)</span>
+<span class="linenos">3</span><span class="p">)</span> <span class="n">i_my_module</span> <span class="p">(</span>
+<span class="linenos">4</span>  <span class="o">.</span><span class="n">clk</span> <span class="p">(</span><span class="n">clk</span><span class="p">));</span>
+</pre></div>
+</div>
+<p><strong>A10.2</strong></p>
+<p>When instantiating a module, the label of the module instance
+<strong>must</strong> be on a separate line, with the closing parenthesis of the
+parameters list (if that’s the case) and the opening parenthesis of the
+ports list. The closing parenthesis of the ports list must be right next
+to the last parenthesis of the last port.</p>
+<div class="highlight-default notranslate" id="example-a10-2"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">my_module</span> <span class="c1">#(</span>
+<span class="linenos">2</span>  <span class="o">.</span><span class="n">PARAMETER1</span> <span class="p">(</span><span class="n">PARAMETER1</span><span class="p">),</span>
+<span class="linenos">3</span>  <span class="o">.</span><span class="n">PARAMETER2</span> <span class="p">(</span><span class="n">PARAMETER2</span><span class="p">)</span>
+<span class="hll"><span class="linenos">4</span><span class="p">)</span> <span class="n">i_my_module</span> <span class="p">(</span>
+</span><span class="linenos">5</span>  <span class="o">.</span><span class="n">clk</span> <span class="p">(</span><span class="n">clk</span><span class="p">),</span>
+<span class="linenos">6</span>  <span class="o">.</span><span class="n">rst</span> <span class="p">(</span><span class="n">rst</span><span class="p">),</span>
+<span class="linenos">7</span>  <span class="o">.</span><span class="n">data_in</span> <span class="p">(</span><span class="n">data_in</span><span class="p">),</span>
+<span class="linenos">8</span>  <span class="o">.</span><span class="n">en</span> <span class="p">(</span><span class="n">en</span><span class="p">),</span>
+<span class="linenos">9</span>  <span class="o">.</span><span class="n">response_out</span> <span class="p">(</span><span class="n">response_out</span><span class="p">));</span>
+</pre></div>
+</div>
+<p><strong>A10.3</strong></p>
+<p>Commented parts of code <strong>must</strong> not be added to the main
+branch (i.e if, case, module instances, etc).</p>
+<p><strong>A11</strong></p>
+<p>In module declarations:</p>
+<p><strong>A11.1</strong></p>
+<p>Verilog modules <strong>must</strong> use Verilog-2001 style parameter
+declarations. This increases legibility and consistency.</p>
+<div class="highlight-default notranslate" id="example-a11-1"><div class="highlight"><pre><span></span><span class="hll"><span class="linenos"> 1</span><span class="n">module</span> <span class="n">my_module</span> <span class="c1">#(</span>
+</span><span class="hll"><span class="linenos"> 2</span>  <span class="n">parameter</span> <span class="n">PARAMETER1</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class="hll"><span class="linenos"> 3</span><span class="p">)</span> <span class="p">(</span>
+</span><span class="hll"><span class="linenos"> 4</span>  <span class="nb">input</span>         <span class="n">clk</span><span class="p">,</span>
+</span><span class="linenos"> 5</span>  <span class="nb">input</span>         <span class="n">rst</span><span class="p">,</span>
+<span class="linenos"> 6</span>  <span class="nb">input</span>  <span class="p">[</span><span class="mi">7</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>  <span class="n">data_0</span><span class="p">,</span>
+<span class="linenos"> 7</span>  <span class="nb">input</span>  <span class="p">[</span><span class="mi">7</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>  <span class="n">data_1</span><span class="p">,</span>
+<span class="linenos"> 8</span>  <span class="nb">input</span>         <span class="n">enable</span><span class="p">,</span>
+<span class="linenos"> 9</span>  <span class="nb">input</span>         <span class="n">valid</span><span class="p">,</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span>  <span class="o">//</span> <span class="n">interface</span> <span class="mi">1</span>
+<span class="linenos">12</span>  <span class="nb">input</span>         <span class="n">interf1_clk</span><span class="p">,</span>
+<span class="linenos">13</span>  <span class="n">inout</span>         <span class="n">interf1_some_signal</span><span class="p">,</span>
+<span class="linenos">14</span>  <span class="n">output</span> <span class="p">[</span><span class="mi">15</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span> <span class="n">interf1_data_i</span><span class="p">,</span>
+<span class="linenos">15</span>  <span class="n">output</span> <span class="p">[</span><span class="mi">15</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span> <span class="n">interf1_data_q</span><span class="p">,</span>
+<span class="linenos">16</span>
+<span class="linenos">17</span>  <span class="o">//</span> <span class="n">interface</span> <span class="mi">2</span>
+<span class="linenos">18</span>  <span class="nb">input</span>         <span class="n">interf2_some_signal</span><span class="p">,</span>
+<span class="hll"><span class="linenos">19</span>  <span class="n">output</span>        <span class="n">interf2_data_out</span>
+</span><span class="hll"><span class="linenos">20</span><span class="p">);</span>
+</span></pre></div>
+</div>
+<p><strong>A11.2</strong></p>
+<p>Comments are allowed inside a module declaration <strong>only</strong> for
+separating the interfaces by specifying the name and giving
+supplementary explanations.</p>
+<p><strong>A11.3</strong></p>
+<p>When declaring a module, the closing parenthesis of the
+parameters list <strong>must</strong> be on the same line with the last parameter and
+with the opening parenthesis of the ports list (as shown in the correct
+examples).</p>
+<p><strong>A11.4</strong></p>
+<p>After <code class="docutils literal notranslate"><span class="pre">endmodule</span></code> there <strong>must</strong> be only one newline, and
+nothing else after.</p>
+<p><strong>A12</strong></p>
+<p>Ports <strong>must</strong> be indicated individually; that is, one port per
+line must be declared, using the direction indication and data type with
+each port.</p>
+<p><strong>A13</strong></p>
+<p>Signals and variables <strong>must</strong> be declared individually; that
+is, one signal/variable per line <strong>must</strong> be declared.</p>
+<p><strong>A14</strong></p>
+<p>All ports and signals <strong>must</strong> be grouped by interface. Group
+ports declaration by direction starting with input, inout and output
+ports.</p>
+<p><strong>A15</strong></p>
+<p>The clock and reset ports <strong>must</strong> be declared first.</p>
+<p><strong>A16</strong></p>
+<p>Verilog wires and registers declarations <strong>must</strong> be grouped in
+separate sections. <strong>Firstly</strong> register types and then wire types.</p>
+<p><strong>A17</strong></p>
+<p>The source files <em>should</em> have the format shown in Annex 1 for
+Verilog code and Annex 2 for VHDL code.</p>
+</section>
+<section id="b-naming-conventions">
+<h3>B. Naming Conventions<a class="headerlink" href="#b-naming-conventions" title="Link to this heading">#</a></h3>
+<p><strong>B1</strong></p>
+<p>All the names in the source code <strong>must</strong> be written in English.</p>
+<p><strong>B2</strong></p>
+<p>Names <strong>must</strong> start with a letter, be composed of alphanumeric
+characters or underscores <strong>[A-Z, a-z, 0-9,_]</strong>.</p>
+<p><strong>B3</strong></p>
+<p>All modules, signal and register names <strong>must</strong> be lower case,
+delimited by underscores _.</p>
+<div class="highlight-default notranslate" id="example-b3"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">module</span> <span class="n">my_module</span> <span class="p">(</span>
+<span class="linenos">2</span>  <span class="nb">input</span>           <span class="n">ena_fft</span><span class="p">,</span>
+<span class="linenos">3</span>  <span class="nb">input</span>           <span class="n">ena_mdi</span><span class="p">,</span>
+<span class="linenos">4</span>  <span class="nb">input</span>           <span class="n">fft_in</span><span class="p">,</span>
+<span class="linenos">5</span>  <span class="n">output</span>          <span class="n">mdi_out</span><span class="p">,</span>
+<span class="linenos">6</span>  <span class="n">output</span> <span class="p">[</span><span class="mi">15</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>   <span class="n">my_signal1</span>
+<span class="linenos">7</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><strong>B4</strong></p>
+<p>A file <strong>must</strong> contain a single module. File name <strong>must</strong> be
+the same as the module name. For sub-modules the name <strong>must</strong> be
+composed in the following way:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">top_module_name</span><span class="o">&gt;</span><span class="n">_</span><span class="o">&lt;</span><span class="n">sub_module_description</span><span class="o">&gt;.</span>
+</pre></div>
+</div>
+<p><strong>B5</strong></p>
+<p>All parameter names <strong>must</strong> be upper case with underscore
+delimiters.</p>
+<p><strong>B6</strong></p>
+<p>Signals names <em>should</em> be composed in the following way:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">interface</span><span class="o">|</span><span class="n">clock</span> <span class="n">domain</span><span class="p">]</span><span class="n">_</span><span class="o">&lt;</span><span class="n">signal_name</span><span class="o">&gt;</span><span class="p">[</span><span class="n">_ns</span><span class="p">][</span><span class="n">_l</span><span class="p">][</span><span class="n">_p</span><span class="p">][</span><span class="n">_n</span><span class="p">][</span><span class="n">_m1</span><span class="p">][</span><span class="n">_m2</span><span class="p">][</span><span class="n">_s</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The suffix component may be used as described below and, in the case of
+multiple suffixes being used in the same signal name, must only be used
+in the order specified in the signal name descriptions above.</p>
+<p><code class="docutils literal notranslate"><span class="pre">*_ns</span></code> - State machine next state.</p>
+<p><code class="docutils literal notranslate"><span class="pre">*_l</span></code> - Latch output. Optional for signals leaving top-level module
+or sub-module, required for signals internal to a module</p>
+<p><code class="docutils literal notranslate"><span class="pre">*_p</span></code> - Positive side of differential signal.</p>
+<p><code class="docutils literal notranslate"><span class="pre">*_n</span></code> - Negative side of differential signal. - Active low signal.
+Can also be used for negative side of differential signal.</p>
+<p><code class="docutils literal notranslate"><span class="pre">*_m1/\_m2</span></code> - Used to describe registers synchronizers
+(e.g. up_ack_m1, up_ack_m2)</p>
+<p><code class="docutils literal notranslate"><span class="pre">*_s</span></code> - Used to qualify wires/signals (e.g. up_ack_s)</p>
+<p>This rule is useful for complex modules where it is possible to
+incorrectly use a signal if its name does not contain a suffix to
+specify its purpose. Generally this rule can lead to an unnecessary
+naming complexity and thus can be overlooked unless it is absolutely
+necessary.</p>
+<p><strong>B7</strong></p>
+<p>Ports names <em>should</em> be composed in the following way:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">interface_name</span><span class="o">&gt;</span><span class="n">_</span><span class="o">&lt;</span><span class="n">port_name</span><span class="o">&gt;</span><span class="p">[</span><span class="n">_clk</span><span class="p">][</span><span class="n">_rst</span><span class="p">][</span><span class="n">_p</span><span class="p">][</span><span class="n">_n</span><span class="p">]</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">*_clk</span></code> - Clock signal. Exception: Signals whose names obviously
+indicate clocks (e.g. system_clock or clk32m), or when specifying a
+clock with a certain frequency (in this case clk <em>should</em> be used as a
+prefix: e.g. clk_625mhz)</p>
+<p><code class="docutils literal notranslate"><span class="pre">*_rst</span> <span class="pre">/</span> <span class="pre">\_rstn</span></code> - Reset signal (e.g. module_rst). Exception: Signals
+whose names obviously indicate resets.</p>
+<p><code class="docutils literal notranslate"><span class="pre">*_p</span></code> - Positive side of differential signal.</p>
+<p><code class="docutils literal notranslate"><span class="pre">*_n</span></code> - Active low signal. Can also be used for negative side of
+differential signal.</p>
+<p><strong>B8</strong></p>
+<p>Global text macros specified by the <code class="docutils literal notranslate"><span class="pre">`define</span></code> directive
+<strong>must</strong> be preceded with the top-level module name, as in:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">top_level_module_name</span><span class="o">&gt;</span><span class="n">_</span><span class="o">&lt;</span><span class="n">text</span> <span class="n">macro</span> <span class="n">name</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p><strong>B9</strong></p>
+<p>Consistent usage in the spelling and naming style of nets and
+variables <strong>must</strong> be used throughout the design.</p>
+<p><strong>B10</strong></p>
+<p>Abbreviations used in a module <strong>must</strong> be documented and
+uncommon abbreviations <em>should</em> be avoided.</p>
+<p><strong>B11</strong></p>
+<p>Reset and clock names <strong>must</strong> remain the same across
+hierarchy.</p>
+</section>
+<section id="c-comments">
+<h3>C. Comments<a class="headerlink" href="#c-comments" title="Link to this heading">#</a></h3>
+<p><strong>C1</strong></p>
+<p>Comments <strong>must</strong> be used to describe the functionality of the
+HDL code. Liberal use of comments is strongly encouraged. Adding obvious
+comments is discouraged. Basically, extensive comments that proceed
+blocks of code, coupled with sparse back references, guide the reader
+through the code.</p>
+<p><strong>C2</strong></p>
+<p>Each functional section of the code <em>should</em> be preceded by
+comments describing the code’s intent and function.</p>
+<p><strong>C3</strong></p>
+<p>Unusual or non-obvious implementations <strong>must</strong> be explained and
+their limitations documented with a comment.</p>
+<p><strong>C4</strong></p>
+<p>Each port declaration <em>should</em> have a descriptive comment,
+<strong>only</strong> on the preceding line.</p>
+<p><strong>C5</strong></p>
+<p>Other declarations, such as regs, wires, local parameters,
+<em>should</em> have a descriptive comment. Either on the same line
+(discouraged), or on the preceding line. This rule is optional for
+auto-generated code.</p>
+<p><strong>C6</strong></p>
+<p>All synthesis-specific directives <strong>must</strong> be documented where
+used, identifying the reason they are used, the tool and the directive
+used.</p>
+<p><strong>C7</strong></p>
+<p>The comments inserted in the code <strong>must</strong> comply with the
+format shown in Annex 1 for Verilog code and Annex 2 for VHDL code.</p>
+</section>
+<section id="d-general">
+<h3>D. General<a class="headerlink" href="#d-general" title="Link to this heading">#</a></h3>
+<p><strong>D1</strong></p>
+<p>A file <strong>must</strong> contain a single module.</p>
+<p><strong>D2</strong></p>
+<p>A file <strong>must</strong> contain either: digital-only Verilog code (files
+with .v extension); analog-only Verilog code (files with .va or .vams
+extension); or mixed-signal Verilog code (files with .vams extension).</p>
+<p><strong>D3</strong></p>
+<p>Symbolic constants (local parameter) <em>should</em> be used for
+register field values rather than fixed numerical constants. The fields
+may be one or more bits or the entire register.</p>
+<p><strong>D4</strong></p>
+<p>Port connection width <strong>must</strong> match. In module instantiations,
+nets connected to ports must have the same width as the respective port
+declaration.</p>
+<p><strong>D5</strong></p>
+<p>The ranges in both the vector port declaration and the
+net/variable declaration <strong>must</strong> be equal.</p>
+<p><strong>D6</strong></p>
+<p>Operands sizes <strong>must</strong> match. No expression may have its size
+implicitly extended or reduced. In a <code class="docutils literal notranslate"><span class="pre">case</span></code> statement, all the
+<code class="docutils literal notranslate"><span class="pre">case</span></code> item expressions and the <code class="docutils literal notranslate"><span class="pre">case</span></code> expression must have the same
+size.</p>
+<p><strong>D7</strong></p>
+<p>Combinational logic <strong>must</strong> be specified completely (i.e., a
+value must be assigned to the logic outputs for all input combinations).
+In a construct derived from either a <code class="docutils literal notranslate"><span class="pre">case</span></code> or an <code class="docutils literal notranslate"><span class="pre">if</span></code> statement,
+the outputs may be assigned default values before the <code class="docutils literal notranslate"><span class="pre">case</span></code> or <code class="docutils literal notranslate"><span class="pre">if</span></code>
+statement, and then the logic is completely specified.</p>
+<p><strong>D8</strong></p>
+<p>The sensitivity list of Verilog <code class="docutils literal notranslate"><span class="pre">always</span></code> and VHDL <code class="docutils literal notranslate"><span class="pre">process</span></code>
+constructs <strong>must</strong> be completely specified.</p>
+<p><strong>D9</strong></p>
+<p>Modules <strong>must</strong> be instantiated with all I/O: port names
+and signal connections must be listed on all module instantiations. Do
+not leave any input ports open (even if they are unused), always tie
+them to 0 or 1. Leave unused outputs open <strong>but do</strong> list them.</p>
+<p><strong>D10</strong></p>
+<p>A <code class="docutils literal notranslate"><span class="pre">`timescale</span></code> directive that is best for simulation <em>should</em>
+be used in Verilog modules.</p>
+<p><strong>D11</strong></p>
+<p>Compile warnings <strong>must</strong> be treated as potential errors and
+<em>should</em> always try to be resolved. In case a warning is not resolved
+its cause and effects must be fully understood.</p>
+<p><strong>D12</strong></p>
+<p>Critical warnings <strong>must</strong> be treated and fixed.</p>
+<p><strong>D13</strong></p>
+<p>Each file <strong>must</strong> contain a license header, and when changes
+are made to a file, when making a PR, the year <em>should</em> be updated to
+the current year.</p>
+</section>
+</section>
+<section id="annexes">
+<h2>3. Annexes<a class="headerlink" href="#annexes" title="Link to this heading">#</a></h2>
+<section id="annex-1-verilog-file-format">
+<h3>Annex 1 Verilog file format<a class="headerlink" href="#annex-1-verilog-file-format" title="Link to this heading">#</a></h3>
+<div class="highlight-verilog notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">// ***************************************************************************</span>
+<span class="linenos"> 2</span><span class="c1">// ***************************************************************************</span>
+<span class="linenos"> 3</span><span class="c1">// Copyright (C) year-year Analog Devices, Inc. All rights reserved.</span>
+<span class="linenos"> 4</span><span class="c1">//</span>
+<span class="linenos"> 5</span><span class="c1">// In this HDL repository, there are many different and unique modules, consisting</span>
+<span class="linenos"> 6</span><span class="c1">// of various HDL (Verilog or VHDL) components. The individual modules are</span>
+<span class="linenos"> 7</span><span class="c1">// developed independently, and may be accompanied by separate and unique license</span>
+<span class="linenos"> 8</span><span class="c1">// terms.</span>
+<span class="linenos"> 9</span><span class="c1">//</span>
+<span class="linenos">10</span><span class="c1">// The user should read each of these license terms, and understand the</span>
+<span class="linenos">11</span><span class="c1">// freedoms and responsabilities that he or she has by using this source/core.</span>
+<span class="linenos">12</span><span class="c1">//</span>
+<span class="linenos">13</span><span class="c1">// This core is distributed in the hope that it will be useful, but WITHOUT ANY</span>
+<span class="linenos">14</span><span class="c1">// WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR</span>
+<span class="linenos">15</span><span class="c1">// A PARTICULAR PURPOSE.</span>
+<span class="linenos">16</span><span class="c1">//</span>
+<span class="linenos">17</span><span class="c1">// Redistribution and use of source or resulting binaries, with or without modification</span>
+<span class="linenos">18</span><span class="c1">// of this file, are permitted under one of the following two license terms:</span>
+<span class="linenos">19</span><span class="c1">//</span>
+<span class="linenos">20</span><span class="c1">//   1. The GNU General Public License version 2 as published by the</span>
+<span class="linenos">21</span><span class="c1">//      Free Software Foundation, which can be found in the top level directory</span>
+<span class="linenos">22</span><span class="c1">//      of this repository (LICENSE_GPL2), and also online at:</span>
+<span class="linenos">23</span><span class="c1">//      &lt;https://www.gnu.org/licenses/old-licenses/gpl-2.0.html&gt;</span>
+<span class="linenos">24</span><span class="c1">//</span>
+<span class="linenos">25</span><span class="c1">// OR</span>
+<span class="linenos">26</span><span class="c1">//</span>
+<span class="linenos">27</span><span class="c1">//   2. An ADI specific BSD license, which can be found in the top level directory</span>
+<span class="linenos">28</span><span class="c1">//      of this repository (LICENSE_ADIBSD), and also on-line at:</span>
+<span class="linenos">29</span><span class="c1">//      https://github.com/analogdevicesinc/hdl/blob/master/LICENSE_ADIBSD</span>
+<span class="linenos">30</span><span class="c1">//      This will allow to generate bit files and not release the source code,</span>
+<span class="linenos">31</span><span class="c1">//      as long as it attaches to an ADI device.</span>
+<span class="linenos">32</span><span class="c1">//</span>
+<span class="linenos">33</span><span class="c1">// ***************************************************************************</span>
+<span class="linenos">34</span><span class="c1">// ***************************************************************************</span>
+<span class="linenos">35</span>
+<span class="linenos">36</span><span class="no">`timescale</span><span class="w"> </span><span class="mh">1</span><span class="n">ns</span><span class="o">/</span><span class="mh">100</span><span class="n">ps</span>
+<span class="linenos">37</span>
+<span class="linenos">38</span><span class="k">module</span><span class="w"> </span><span class="n">prescaler</span><span class="w"> </span><span class="p">#(</span>
+<span class="linenos">39</span><span class="w">  </span><span class="c1">// range = 1-16</span>
+<span class="linenos">40</span><span class="w">  </span><span class="k">parameter</span><span class="w"> </span><span class="n">FIRST_PARAMETER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">8</span><span class="p">,</span>
+<span class="linenos">41</span><span class="w">  </span><span class="c1">// range = N/A</span>
+<span class="linenos">42</span><span class="w">  </span><span class="k">parameter</span><span class="w"> </span><span class="n">SECOND_PARAMETER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">12</span>
+<span class="linenos">43</span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos">44</span><span class="w">  </span><span class="k">input</span><span class="w">           </span><span class="n">core_32m_clk</span><span class="p">,</span><span class="w">         </span><span class="c1">// 32 MHz clock</span>
+<span class="linenos">45</span><span class="w">  </span><span class="k">input</span><span class="w">           </span><span class="n">system_clk</span><span class="p">,</span><span class="w">           </span><span class="c1">// system clock</span>
+<span class="linenos">46</span><span class="w">  </span><span class="k">input</span><span class="w">           </span><span class="n">scan_mode_test</span><span class="p">,</span><span class="w">       </span><span class="c1">// scan mode clock</span>
+<span class="linenos">47</span><span class="w">  </span><span class="k">input</span><span class="w">           </span><span class="n">reset_n</span><span class="p">,</span><span class="w">              </span><span class="c1">// active low hard reset, synch w/</span>
+<span class="linenos">48</span><span class="w">                                        </span><span class="c1">// system_clk</span>
+<span class="linenos">49</span><span class="w">  </span><span class="k">output</span><span class="w">  </span><span class="kt">reg</span><span class="w">     </span><span class="n">div16_clk</span><span class="p">,</span><span class="w">            </span><span class="c1">// input clock divided by 16</span>
+<span class="linenos">50</span><span class="w">  </span><span class="k">output</span><span class="w">  </span><span class="kt">reg</span><span class="w">     </span><span class="n">div16_clk_n</span><span class="w">           </span><span class="c1">// input clock divided by 16 and inverted</span>
+<span class="linenos">51</span><span class="p">);</span>
+<span class="linenos">52</span><span class="w">  </span><span class="c1">// local parameters</span>
+<span class="linenos">53</span>
+<span class="linenos">54</span><span class="w">  </span><span class="c1">// registers declarations</span>
+<span class="linenos">55</span>
+<span class="linenos">56</span><span class="w">  </span><span class="kt">reg</span><span class="w">     </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">count</span><span class="p">;</span><span class="w">          </span><span class="c1">// 4-bit counter to make clock divider</span>
+<span class="linenos">57</span><span class="w">  </span><span class="kt">reg</span><span class="w">     </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">count1</span><span class="p">;</span><span class="w">         </span><span class="c1">// 4-bit counter to make clock divider</span>
+<span class="linenos">58</span>
+<span class="linenos">59</span><span class="w">  </span><span class="c1">// wires declarations</span>
+<span class="linenos">60</span>
+<span class="linenos">61</span><span class="w">  </span><span class="kt">wire</span><span class="w">    </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">count1_ns</span><span class="p">;</span><span class="w">      </span><span class="c1">// clock divider next state input</span>
+<span class="linenos">62</span>
+<span class="linenos">63</span><span class="w">  </span><span class="c1">// functions definitions</span>
+<span class="linenos">64</span>
+<span class="linenos">65</span><span class="w">  </span><span class="c1">// this block updates the internal counter</span>
+<span class="linenos">66</span><span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">core_32m_clk</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">negedge</span><span class="w"> </span><span class="n">reset_n</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="linenos">67</span><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">reset_n</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="linenos">68</span><span class="w">      </span><span class="n">count</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">4</span><span class="mb">&#39;b0000</span><span class="p">;</span>
+<span class="linenos">69</span><span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span>
+<span class="linenos">70</span><span class="w">      </span><span class="c1">// update counter</span>
+<span class="linenos">71</span><span class="w">      </span><span class="n">count</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mh">4</span><span class="mb">&#39;b0001</span><span class="p">;</span>
+<span class="linenos">72</span><span class="w">    </span><span class="k">end</span>
+<span class="linenos">73</span><span class="w">  </span><span class="k">end</span>
+<span class="linenos">74</span>
+<span class="linenos">75</span><span class="w">  </span><span class="c1">// this block updates the output clock signals</span>
+<span class="linenos">76</span><span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="n">scan_mode_test</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="n">system_clk</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="n">count</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="linenos">77</span><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">scan_mode_test</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="linenos">78</span><span class="w">      </span><span class="c1">// normal operation clock assign</span>
+<span class="linenos">79</span><span class="w">      </span><span class="n">div16_clk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">count</span><span class="p">[</span><span class="mh">3</span><span class="p">];</span>
+<span class="linenos">80</span><span class="w">      </span><span class="n">div16_clk_n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="n">count</span><span class="p">[</span><span class="mh">3</span><span class="p">];</span>
+<span class="linenos">81</span><span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span>
+<span class="linenos">82</span><span class="w">      </span><span class="c1">// scan mode clock assign</span>
+<span class="linenos">83</span><span class="w">      </span><span class="n">div16_clk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">system_clk</span><span class="p">;</span>
+<span class="linenos">84</span><span class="w">      </span><span class="n">div16_clk_n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">system_clk</span><span class="p">;</span>
+<span class="linenos">85</span><span class="w">    </span><span class="k">end</span>
+<span class="linenos">86</span><span class="w">  </span><span class="k">end</span>
+<span class="linenos">87</span>
+<span class="linenos">88</span><span class="w">  </span><span class="c1">// Modules Instantiations</span>
+<span class="linenos">89</span>
+<span class="linenos">90</span><span class="k">endmodule</span>
+</pre></div>
+</div>
+</section>
+<section id="annex-2-vhdl-file-format">
+<h3>Annex 2 VHDL file format<a class="headerlink" href="#annex-2-vhdl-file-format" title="Link to this heading">#</a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">-- ***************************************************************************</span>
+<span class="linenos"> 2</span><span class="c1">-- ***************************************************************************</span>
+<span class="linenos"> 3</span><span class="c1">-- Copyright (C) year-year Analog Devices, Inc. All rights reserved.</span>
+<span class="linenos"> 4</span><span class="c1">--</span>
+<span class="linenos"> 5</span><span class="c1">-- In this HDL repository, there are many different and unique modules, consisting</span>
+<span class="linenos"> 6</span><span class="c1">-- of various HDL (Verilog or VHDL) components. The individual modules are</span>
+<span class="linenos"> 7</span><span class="c1">-- developed independently, and may be accompanied by separate and unique license</span>
+<span class="linenos"> 8</span><span class="c1">-- terms.</span>
+<span class="linenos"> 9</span><span class="c1">--</span>
+<span class="linenos">10</span><span class="c1">-- The user should read each of these license terms, and understand the</span>
+<span class="linenos">11</span><span class="c1">-- freedoms and responsabilities that he or she has by using this source/core.</span>
+<span class="linenos">12</span><span class="c1">--</span>
+<span class="linenos">13</span><span class="c1">-- This core is distributed in the hope that it will be useful, but WITHOUT ANY</span>
+<span class="linenos">14</span><span class="c1">-- WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR</span>
+<span class="linenos">15</span><span class="c1">-- A PARTICULAR PURPOSE.</span>
+<span class="linenos">16</span><span class="c1">--</span>
+<span class="linenos">17</span><span class="c1">-- Redistribution and use of source or resulting binaries, with or without modification</span>
+<span class="linenos">18</span><span class="c1">-- of this file, are permitted under one of the following two license terms:</span>
+<span class="linenos">19</span><span class="c1">--</span>
+<span class="linenos">20</span><span class="c1">--   1. The GNU General Public License version 2 as published by the</span>
+<span class="linenos">21</span><span class="c1">--      Free Software Foundation, which can be found in the top level directory</span>
+<span class="linenos">22</span><span class="c1">--      of this repository (LICENSE_GPL2), and also online at:</span>
+<span class="linenos">23</span><span class="c1">--      &lt;https://www.gnu.org/licenses/old-licenses/gpl-2.0.html&gt;</span>
+<span class="linenos">24</span><span class="c1">--</span>
+<span class="linenos">25</span><span class="c1">-- OR</span>
+<span class="linenos">26</span><span class="c1">--</span>
+<span class="linenos">27</span><span class="c1">--   2. An ADI specific BSD license, which can be found in the top level directory</span>
+<span class="linenos">28</span><span class="c1">--      of this repository (LICENSE_ADIBSD), and also on-line at:</span>
+<span class="linenos">29</span><span class="c1">--      https://github.com/analogdevicesinc/hdl/blob/master/LICENSE_ADIBSD</span>
+<span class="linenos">30</span><span class="c1">--      This will allow to generate bit files and not release the source code,</span>
+<span class="linenos">31</span><span class="c1">--      as long as it attaches to an ADI device.</span>
+<span class="linenos">32</span><span class="c1">--</span>
+<span class="linenos">33</span><span class="c1">-- ***************************************************************************</span>
+<span class="linenos">34</span><span class="c1">-- ***************************************************************************</span>
+<span class="linenos">35</span>
+<span class="linenos">36</span><span class="k">entity</span><span class="w"> </span><span class="nc">prescaler</span><span class="w"> </span><span class="k">is</span>
+<span class="linenos">37</span><span class="w">  </span><span class="k">Port</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos">38</span><span class="w">    </span><span class="n">core_32m_clk</span><span class="w">      </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w">  </span><span class="kt">std_logic</span><span class="p">,</span><span class="w">    </span><span class="c1">-- 32 MHz clock</span>
+<span class="linenos">39</span><span class="w">    </span><span class="n">system_clk</span><span class="w">        </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w">  </span><span class="kt">std_logic</span><span class="p">,</span><span class="w">    </span><span class="c1">-- system clock</span>
+<span class="linenos">40</span><span class="w">    </span><span class="n">scan_mode_test</span><span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w">  </span><span class="kt">std_logic</span><span class="p">,</span><span class="w">    </span><span class="c1">-- scan mode clock</span>
+<span class="linenos">41</span><span class="w">    </span><span class="n">reset_n</span><span class="w">           </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w">  </span><span class="kt">std_logic</span><span class="p">,</span><span class="w">    </span><span class="c1">-- active low hard reset, synch</span>
+<span class="linenos">42</span><span class="w">    </span><span class="c1">-- w/ system_clock</span>
+<span class="linenos">43</span><span class="w">    </span><span class="n">div16_clk</span><span class="w">         </span><span class="o">:</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">std_logic</span><span class="p">,</span><span class="w">    </span><span class="c1">-- input clock divided by 16</span>
+<span class="linenos">44</span><span class="w">    </span><span class="n">div16_clk_n</span><span class="w">       </span><span class="o">:</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">std_logic</span><span class="w">     </span><span class="c1">-- input clock divided by 16</span>
+<span class="linenos">45</span><span class="w">     </span><span class="c1">-- and inverted</span>
+<span class="linenos">46</span><span class="w">  </span><span class="p">);</span>
+<span class="linenos">47</span><span class="k">end</span><span class="w"> </span><span class="nc">prescaler</span><span class="p">;</span>
+<span class="linenos">48</span>
+<span class="linenos">49</span><span class="k">architecture</span><span class="w"> </span><span class="nc">Behavioral</span><span class="w"> </span><span class="k">of</span><span class="w">  </span><span class="nc">prescaler</span><span class="w"> </span><span class="k">is</span>
+<span class="linenos">50</span>
+<span class="linenos">51</span><span class="c1">-- Components Declarations</span>
+<span class="linenos">52</span>
+<span class="linenos">53</span><span class="c1">-- Local Types Declarations</span>
+<span class="linenos">54</span>
+<span class="linenos">55</span><span class="c1">--  Constants Declarations</span>
+<span class="linenos">56</span>
+<span class="linenos">57</span><span class="c1">-- Signals Declarations</span>
+<span class="linenos">58</span><span class="w">  </span><span class="k">signal</span><span class="w"> </span><span class="n">count</span><span class="w">        </span><span class="o">:</span><span class="w"> </span><span class="kt">std_logic_vector</span><span class="p">(</span><span class="mi">3</span><span class="w"> </span><span class="k">downto</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="c1">-- 4-bit counter to</span>
+<span class="linenos">59</span><span class="w">  </span><span class="c1">-- make clock divider</span>
+<span class="linenos">60</span><span class="w">  </span><span class="k">signal</span><span class="w"> </span><span class="n">count_ns</span><span class="w">     </span><span class="o">:</span><span class="w"> </span><span class="kt">std_logic_vector</span><span class="p">(</span><span class="mi">3</span><span class="w"> </span><span class="k">downto</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="c1">-- clock divider next</span>
+<span class="linenos">61</span><span class="w">  </span><span class="c1">-- state input</span>
+<span class="linenos">62</span>
+<span class="linenos">63</span><span class="c1">-- Module Implementation</span>
+<span class="linenos">64</span><span class="k">begin</span>
+<span class="linenos">65</span>
+<span class="linenos">66</span><span class="w">  </span><span class="c1">-- This process updates the internal counter</span>
+<span class="linenos">67</span><span class="w">  </span><span class="k">process</span><span class="p">(</span><span class="n">core_32m_clk</span><span class="p">)</span>
+<span class="linenos">68</span><span class="w">  </span><span class="k">begin</span>
+<span class="linenos">69</span><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rising_edge</span><span class="p">(</span><span class="n">core_32m_clk</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="linenos">70</span><span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">reset_n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;0&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="linenos">71</span><span class="w">        </span><span class="c1">-- reset counter</span>
+<span class="linenos">72</span><span class="w">        </span><span class="n">count</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="s">&quot;0000&quot;</span><span class="p">;</span>
+<span class="linenos">73</span><span class="w">      </span><span class="k">else</span>
+<span class="linenos">74</span><span class="w">        </span><span class="c1">-- update counter</span>
+<span class="linenos">75</span><span class="w">        </span><span class="n">count</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;0001&quot;</span><span class="p">;</span>
+<span class="linenos">76</span><span class="w">      </span><span class="k">end</span><span class="w"> </span><span class="k">if</span><span class="p">;</span>
+<span class="linenos">77</span><span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">if</span><span class="p">;</span>
+<span class="linenos">78</span><span class="w">  </span><span class="k">end</span><span class="w"> </span><span class="k">process</span><span class="p">;</span>
+<span class="linenos">79</span>
+<span class="linenos">80</span><span class="w">  </span><span class="c1">-- This process updates the output clock signals</span>
+<span class="linenos">81</span><span class="w">  </span><span class="k">process</span><span class="p">(</span><span class="n">scan_mode_test</span><span class="p">,</span><span class="w"> </span><span class="n">system_clk</span><span class="p">,</span><span class="w"> </span><span class="n">count</span><span class="p">)</span>
+<span class="linenos">82</span><span class="w">  </span><span class="k">begin</span>
+<span class="linenos">83</span><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">scan_mode_test</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;0&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="linenos">84</span><span class="w">      </span><span class="c1">-- normal operation clock assign</span>
+<span class="linenos">85</span><span class="w">      </span><span class="n">div16_clk</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">count</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+<span class="linenos">86</span><span class="w">      </span><span class="n">div16_clk_n</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="n">count</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+<span class="linenos">87</span><span class="w">    </span><span class="k">else</span>
+<span class="linenos">88</span><span class="w">      </span><span class="c1">-- scan mode clock assign</span>
+<span class="linenos">89</span><span class="w">      </span><span class="n">div16_clk</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">system_clk</span><span class="p">;</span>
+<span class="linenos">90</span><span class="w">      </span><span class="n">div16_clk_n</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">system_clk</span><span class="p">;</span>
+<span class="linenos">91</span><span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">if</span><span class="p">;</span>
+<span class="linenos">92</span><span class="w">  </span><span class="k">end</span><span class="w"> </span><span class="k">process</span><span class="p">;</span>
+<span class="linenos">93</span>
+<span class="linenos">94</span><span class="k">end</span><span class="w"> </span><span class="nc">Behavioral</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="references">
+<h2>4. References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<p><a class="reference external" href="http://www.xilinx.com/support/documentation/white_papers/wp231.pdf">[1] Philippe Garrault, Brian Philofsky, “HDL Coding Practices to Accelerate
+Design Performance”, Xilinx, 2006</a></p>
+<p><a class="reference external" href="http://www.asic-world.com/code/verilog_tutorial/peter_chambers_10_commandments.pdf">[2] Peter Chambers, “The Ten Commandments of Excellent Design”, VLSI
+Technology, 1997</a></p>
+<p><a class="reference external" href="http://courses.cit.cornell.edu/ece576/Verilog/FreescaleVerilog.pdf">[3] “Verilog Coding Techniques, v3.2”, Freescale Semiconductor, 2005</a></p>
+<p><a class="reference external" href="http://www.engr.sjsu.edu/cpham/VERILOG/VerilogCodingStyle.pdf">[4] Jane Smith, “Verilog Coding Guidelines, Rev. B”, Cisco Systems 2000</a></p>
+</section>
+</section>
+
+    <script type="text/javascript">
+        function init() {
+            WaveDrom.ProcessAll();
+        }
+        window.onload = init;
+    </script>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="docs_guidelines.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Documentation guidelines</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="customize_hdl.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Customize HDL projects</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2023, Analog Devices Inc
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">ADI HDL coding guideline</a><ul>
+<li><a class="reference internal" href="#introduction">1. Introduction</a></li>
+<li><a class="reference internal" href="#coding-style">2. Coding style</a><ul>
+<li><a class="reference internal" href="#a-layout">A. Layout</a></li>
+<li><a class="reference internal" href="#b-naming-conventions">B. Naming Conventions</a></li>
+<li><a class="reference internal" href="#c-comments">C. Comments</a></li>
+<li><a class="reference internal" href="#d-general">D. General</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#annexes">3. Annexes</a><ul>
+<li><a class="reference internal" href="#annex-1-verilog-file-format">Annex 1 Verilog file format</a></li>
+<li><a class="reference internal" href="#annex-2-vhdl-file-format">Annex 2 VHDL file format</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#references">4. References</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=34cd777e"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=32e29ea5"></script>
+    <script src="https://wavedrom.com/skins/default.js"></script>
+    <script src="https://wavedrom.com/wavedrom.min.js"></script>
+    </body>
+</html>

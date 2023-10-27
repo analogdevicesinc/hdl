@@ -10,7 +10,7 @@
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=36a5483c" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6000fc3f" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=73e8d488" />
     
     
 
@@ -158,13 +158,23 @@
   <p class="caption" role="heading"><span class="caption-text">User guide</span></p>
 <ul>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../user_guide/index.html">User Guide</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of User Guide</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/git_repository.html">Git repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/releases.html">Releases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_hdl.html">Build an HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/architecture.html">HDL architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/ip_cores.html">IP cores</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/porting_project.html">Porting reference designs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/customize_hdl.html">Customize HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/hdl_coding_guideline.html">HDL coding guideline</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/docs_guidelines.html">Documentation guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/third_party.html">Third party forks</a></li>
 </ul>
 </li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Libraries</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../axi_dmac/index.html">High-Speed DMA Controller</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../spi_engine/index.html">SPI Engine</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of SPI Engine</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../spi_engine/spi_engine_execution.html">Execution Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../spi_engine/axi_spi_engine.html">AXI Module</a></li>
@@ -177,7 +187,13 @@
 <li class="toctree-l2"><a class="reference internal" href="../spi_engine/tutorial.html">Tutorial - PulSAR ADC</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../axi_dmac/index.html">High-Speed DMA Controller</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Projects</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../projects/ad7616_sdz/index.html">AD7616-SDZ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projects/ad9081_fmca_ebz/index.html">AD9081-FMCA-EBZ/AD9082-FMCA-EBZ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projects/adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
 </ul>
 
 </div>
@@ -215,7 +231,7 @@
           <section id="ip-template">
 <span id="template-ip"></span><h1>IP Template<a class="headerlink" href="#ip-template" title="Link to this heading">#</a></h1>
 <figure class="align-default" id="id1">
-<object data="../../_images/symbol-5615329cad08feceacf00638ba63deefa7f7665a.svg" type="image/svg+xml">
+<object data="../../_images/symbol-9172b0007c63391890d67a9da816d7c8f2e7ac5e.svg" type="image/svg+xml">
             <p class="warning">// ***************************************************************************
 // ***************************************************************************
 // Copyright (C) 2015-2023 Analog Devices, Inc. All rights reserved.
@@ -375,6 +391,8 @@ module spi_engine_execution #(
 
   wire sleep_counter_compare;
   wire cs_sleep_counter_compare;
+  wire cs_sleep_early_exit;
+  reg cs_sleep_repeat;
 
   wire io_ready1;
   wire io_ready2;
@@ -385,7 +403,10 @@ module spi_engine_execution #(
 
   (* direct_enable = &quot;yes&quot; *) wire cs_gen;
 
-  assign cs_gen = inst_d1 == CMD_CHIPSELECT &amp;&amp; cs_sleep_counter_compare == 1'b1;
+  assign cs_gen = inst_d1 == CMD_CHIPSELECT
+                  &amp;&amp; ((cs_sleep_counter_compare == 1'b1) || cs_sleep_early_exit)
+                  &amp;&amp; (cs_sleep_repeat == 1'b0)
+                  &amp;&amp; (idle == 1'b0);
   assign cmd_ready = idle;
 
   always &#64;(posedge clk) begin
@@ -457,17 +478,30 @@ module spi_engine_execution #(
   assign trigger_tx = trigger == 1'b1 &amp;&amp; ntx_rx == 1'b0;
   assign trigger_rx = trigger == 1'b1 &amp;&amp; ntx_rx == 1'b1;
 
-  assign sleep_counter_compare = sleep_counter == cmd_d1[7:0] &amp;&amp; clk_div_last == 1'b1;
-  assign cs_sleep_counter_compare = cs_sleep_counter == cmd_d1[9:8] &amp;&amp; clk_div_last == 1'b1;
+  assign sleep_counter_compare = sleep_counter == cmd_d1[7:0];
+  assign cs_sleep_counter_compare = cs_sleep_counter == cmd_d1[9:8];
+  assign cs_sleep_early_exit = (cmd_d1[9:8] == 2'b00);
 
   always &#64;(posedge clk) begin
-    if (idle == 1'b1) begin
+    if (resetn == 1'b0) begin
+      cs_sleep_repeat &lt;= 1'b0;
+    end else begin
+      if (idle) begin
+        cs_sleep_repeat &lt;= 1'b0;
+      end else if (cs_sleep_counter_compare &amp;&amp; (inst_d1 == CMD_CHIPSELECT)) begin
+        cs_sleep_repeat &lt;= !cs_sleep_repeat;
+      end
+    end
+  end
+
+  always &#64;(posedge clk) begin
+    if (idle == 1'b1 || (cs_sleep_counter_compare &amp;&amp; !cs_sleep_repeat &amp;&amp; inst_d1 == CMD_CHIPSELECT)) begin
       counter &lt;= 'h00;
     end else if (clk_div_last == 1'b1 &amp;&amp; wait_for_io == 1'b0) begin
       if (bit_counter == word_length) begin
-          counter &lt;= (counter &amp; BIT_COUNTER_CLEAR) + (transfer_active ? 'h1 : 'h10) + BIT_COUNTER_CARRY;
+        counter &lt;= (counter &amp; BIT_COUNTER_CLEAR) + (transfer_active ? 'h1 : (2**BIT_COUNTER_WIDTH)) + BIT_COUNTER_CARRY;
       end else begin
-        counter &lt;= counter + (transfer_active ? 'h1 : 'h10);
+        counter &lt;= counter + (transfer_active ? 'h1 : (2**BIT_COUNTER_WIDTH));
       end
     end
   end
@@ -485,7 +519,7 @@ module spi_engine_execution #(
             idle &lt;= 1'b1;
         end
         CMD_CHIPSELECT: begin
-          if (cs_sleep_counter_compare)
+          if ((cs_sleep_counter_compare &amp;&amp; cs_sleep_repeat) || cs_sleep_early_exit)
             idle &lt;= 1'b1;
         end
         CMD_MISC: begin
@@ -833,7 +867,7 @@ endmodule</p></object>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/library/axi_dmac/axi_dmac.v">axi_dmac.v</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_dmac/axi_dmac.v">library/axi_dmac/axi_dmac.v</a></p></td>
 <td><p>Verilog source for the peripheral.</p></td>
 </tr>
 </tbody>
@@ -851,7 +885,7 @@ endmodule</p></object>
 <thead>
 <tr class="row-odd"><th class="head"><p>Name</p></th>
 <th class="head"><p>Description</p></th>
-<th class="head"><p>Type</p></th>
+<th class="head"><p>Data Type</p></th>
 <th class="head"><p>Default Value</p></th>
 <th class="head"><p>Choices/Range</p></th>
 </tr>
@@ -862,14 +896,14 @@ endmodule</p></object>
 <p>Data width of the parallel SDI/SDO data interfaces.</p>
 </section>
 </td>
-<td><p>Long</p></td>
-<td><p>8</p></td>
+<td class="type"><p>Long</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">8</span></code></td>
 <td><p>From 8 to 256.</p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">NUM_OF_SDI</span></code></td>
 <td class="description"><p>Number of MISO lines.</p></td>
-<td><p>Long</p></td>
-<td><p>1</p></td>
+<td class="type"><p>Long</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
 <td><p>From 1 to 8.</p></td>
 </tr>
 </tbody>
@@ -908,7 +942,7 @@ basic monitoring and control of the ADC’s channel.</p>
 <section id="register-map-Base (common to all cores)">
 <h4>Base (common to all cores) (Base (common to all cores))<a class="headerlink" href="#register-map-Base (common to all cores)" title="Link to this heading">#</a></h4>
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="d76bd779-6fdb-49be-9b5a-18bfed4f9a87" name="d76bd779-6fdb-49be-9b5a-18bfed4f9a87" type="checkbox"></input><label for="d76bd779-6fdb-49be-9b5a-18bfed4f9a87"><p>Register map table.</p>
+<input class="collapsible_input" id="cc26e3cbc5121058c1531ab9056a6838885ff6ea" name="cc26e3cbc5121058c1531ab9056a6838885ff6ea" type="checkbox"></input><label for="cc26e3cbc5121058c1531ab9056a6838885ff6ea"><p>Register map table.</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper regmap docutils container">
 <table class="regmap docutils align-default">
@@ -918,7 +952,7 @@ basic monitoring and control of the ADC’s channel.</p>
 <th class="head"><p>BITS</p></th>
 <th class="head"><p>Name</p></th>
 <th class="head"><p>Type</p></th>
-<th class="head"><p>Default</p></th>
+<th class="head"><p>Default Value</p></th>
 <th class="head"><p>Description</p></th>
 </tr>
 </thead>
@@ -938,8 +972,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION[31:0]</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x00000000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Version number. Unique to all cores.</p>
 </section>
@@ -960,8 +994,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ID[31:0]</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x00000000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Instance identifier number.</p>
 </section>
@@ -982,8 +1016,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SCRATCH[31:0]</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x00000000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Scratch register.</p>
 </section>
@@ -1004,8 +1038,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IQCORRECTION_DISABLE</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If set, indicates that the IQ Correction module was not implemented. (as a result of a configuration of the IP instance)</p>
 </section>
@@ -1015,8 +1049,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DCFILTER_DISABLE</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1025,8 +1059,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DATAFORMAT_DISABLE</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1035,8 +1069,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[3]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">USERPORTS_DISABLE</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1045,8 +1079,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">MODE_1R1T</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1055,8 +1089,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[5]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DELAY_CONTROL_DISABLE</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1065,8 +1099,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[6]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DDS_DISABLE</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1075,8 +1109,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMOS_OR_LVDS_N</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1085,8 +1119,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PPS_RECEIVER_ENABLE</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1095,8 +1129,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[9]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SCALECORRECTION_ONLY</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1105,8 +1139,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[12]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">EXT_SYNC</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1115,8 +1149,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[13]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RD_RAW_DATA</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1136,8 +1170,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PPS_IRQ_MASK</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x1</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
 <td class="description"><section>
 <p>Mask bit for the 1PPS receiver interrupt</p>
 </section>
@@ -1150,7 +1184,7 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"></code></td>
 <td class="description"><section>
-<p>FPGA device information <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/library/scripts/adi_intel_device_info_enc.tcl">adi_intel_device_info_enc.tcl</a> (Intel encoded values) <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/library/scripts/adi_xilinx_device_info_enc.tcl">adi_xilinx_device_info_enc.tcl</a> (Xilinx encoded values)</p>
+<p>FPGA device information <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/scripts/adi_intel_device_info_enc.tcl">library/scripts/adi_intel_device_info_enc.tcl</a> (Intel encoded values) <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/scripts/adi_xilinx_device_info_enc.tcl">library/scripts/adi_xilinx_device_info_enc.tcl</a> (Xilinx encoded values)</p>
 </section>
 </td>
 </tr>
@@ -1158,8 +1192,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:24]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">FPGA_TECHNOLOGY</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Encoded value describing the technology/generation of the FPGA device (arria 10/7series)</p>
 </section>
@@ -1169,8 +1203,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[23:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">FPGA_FAMILY</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1179,8 +1213,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SPEED_GRADE</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1189,8 +1223,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEV_PACKAGE</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1206,7 +1240,7 @@ basic monitoring and control of the ADC’s channel.</p>
 <section id="register-map-ADC Common (axi_ad*)">
 <h4>ADC Common (axi_ad*) (ADC Common (axi_ad*))<a class="headerlink" href="#register-map-ADC Common (axi_ad*)" title="Link to this heading">#</a></h4>
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="d09ae8ed-c35e-42ce-a0f7-256667420b31" name="d09ae8ed-c35e-42ce-a0f7-256667420b31" type="checkbox"></input><label for="d09ae8ed-c35e-42ce-a0f7-256667420b31"><p>Register map table.</p>
+<input class="collapsible_input" id="cc26e3cbc5121058c1531ab9056a6838885ff6ea" name="cc26e3cbc5121058c1531ab9056a6838885ff6ea" type="checkbox"></input><label for="cc26e3cbc5121058c1531ab9056a6838885ff6ea"><p>Register map table.</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper regmap docutils container">
 <table class="regmap docutils align-default">
@@ -1216,7 +1250,7 @@ basic monitoring and control of the ADC’s channel.</p>
 <th class="head"><p>BITS</p></th>
 <th class="head"><p>Name</p></th>
 <th class="head"><p>Type</p></th>
-<th class="head"><p>Default</p></th>
+<th class="head"><p>Default Value</p></th>
 <th class="head"><p>Description</p></th>
 </tr>
 </thead>
@@ -1236,8 +1270,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CE_N</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Clock enable, default is enabled(0x0). An inverse version of the signal is exported out of the module to control clock enables</p>
 </section>
@@ -1247,8 +1281,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">MMCM_RSTN</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1257,8 +1291,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RSTN</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1278,8 +1312,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDR_DDR_N</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Interface type (1 represents SDR, 0 represents DDR)</p>
 </section>
@@ -1289,8 +1323,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYMB_OP</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1299,8 +1333,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[14]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYMB_8_16B</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1309,8 +1343,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[12:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">NUM_LANES[4:0]</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1319,8 +1353,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[3]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1329,8 +1363,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">R1_MODE</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1339,8 +1373,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DDR_EDGESEL</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1349,8 +1383,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PIN_MODE</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1370,8 +1404,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">EXT_SYNC_ARM</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Setting this bit will arm the trigger mechanism sensitive to an external sync signal. Once the external sync signal goes high it synchronizes channels within a ADC, and across multiple instances. This bit has an effect only the EXT_SYNC synthesis parameter is set. This bit self clears.</p>
 </section>
@@ -1381,8 +1415,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">EXT_SYNC_DISARM</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1391,8 +1425,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">MANUAL_SYNC_REQUEST</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1412,8 +1446,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CRC_EN</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Setting this bit will enable the CRC generation.</p>
 </section>
@@ -1423,8 +1457,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CUSTOM_CONTROL</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x00</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1444,8 +1478,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CLK_FREQ[31:0]</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>Interface clock frequency. This is relative to the processor clock and in many cases is 100MHz. The number is represented as unsigned 16.16 format. Assuming a 100MHz processor clock the minimum is 1.523kHz and maximum is 6.554THz. The actual interface clock is CLK_FREQ * CLK_RATIO (see below). Note that the actual sampling clock may not be the same as the interface clock- software must consider device specific implementation parameters to calculate the final sampling clock.</p>
 </section>
@@ -1466,8 +1500,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CLK_RATIO[31:0]</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>Interface clock ratio - as a factor actual received clock. This is implementation specific and depends on any serial to parallel conversion and interface type (ddr/sdr/qdr).</p>
 </section>
@@ -1488,8 +1522,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ADC_CTRL_STATUS</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If set, indicates that the device’​s register data is available on the data bus.</p>
 </section>
@@ -1499,8 +1533,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[3]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PN_ERR</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1509,8 +1543,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PN_OOS</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1519,8 +1553,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OVER_RANGE</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1529,8 +1563,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">STATUS</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1550,8 +1584,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[17]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DELAY_SEL</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Delay select, a 0x0 to 0x1 transition in this register initiates a delay access controlled by the registers below.</p>
 </section>
@@ -1561,8 +1595,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DELAY_RWN</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1571,8 +1605,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DELAY_ADDRESS[7:0]</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x00</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1581,8 +1615,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[4:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DELAY_WDATA[4:0]</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1602,8 +1636,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[9]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DELAY_LOCKED</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Indicates delay locked (0x1) state. If this bit is read 0x0, delay control has failed to calibrate the elements.</p>
 </section>
@@ -1613,8 +1647,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DELAY_STATUS</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1623,8 +1657,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[4:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DELAY_RDATA[4:0]</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1644,8 +1678,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ADC_SYNC</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>ADC synchronization status. Will be set to 1 after the synchronization has been completed or while waiting for the synchronization signal in JESD204 systems.</p>
 </section>
@@ -1666,8 +1700,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[28]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DRP_RWN</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>DRP read (0x1) or write (0x0) select (does not include GTX lanes). NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
 </section>
@@ -1677,8 +1711,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[27:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DRP_ADDRESS[11:0]</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x00</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1687,8 +1721,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED[15:0]</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1708,8 +1742,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[17]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DRP_LOCKED</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If set indicates that the DRP has been locked.</p>
 </section>
@@ -1719,8 +1753,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DRP_STATUS</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1729,8 +1763,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED[15:0]</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x00</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1750,8 +1784,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DRP_WDATA[15:0]</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x00</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>DRP write data (does not include GTX lanes). NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
 </section>
@@ -1772,8 +1806,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DRP_RDATA[15:0]</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x00</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>DRP read data (does not include GTX lanes).</p>
 </section>
@@ -1794,8 +1828,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ADC_CONFIG_WR[31:0]</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>Custom ​Write to the available registers.</p>
 </section>
@@ -1816,8 +1850,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ADC_CONFIG_RD[31:0]</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>Custom read of the available registers.</p>
 </section>
@@ -1838,8 +1872,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">UI_OVF</span></code></td>
-<td><p>RW1C</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>User Interface overflow. If set, indicates an overflow occurred during data transfer at the user interface (FIFO interface). Software must write a 0x1 to clear this register bit.</p>
 </section>
@@ -1849,8 +1883,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">UI_UNF</span></code></td>
-<td><p>RW1C</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1859,8 +1893,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">UI_RESERVED</span></code></td>
-<td><p>RW1C</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -1880,8 +1914,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ADC_CONFIG_CTRL[31:​0]</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>Control RD/WR requests to the device’​s register map: bit 1 - RD (‘b1) , WR (‘b0), bit 0 - enable WR/RD operation.</p>
 </section>
@@ -1902,8 +1936,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">USR_CHANMAX[7:0]</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x00</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>This indicates the maximum number of inputs for the channel data multiplexers. User may add different processing modules post data capture as another input to this common multiplexer. NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
 </section>
@@ -1924,8 +1958,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ADC_START_CODE[31:0]</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x00000000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>This sets the startcode that is used by the ADCs for synchronization NOT-APPLICABLE if START_CODE_DISABLE is set (0x1).</p>
 </section>
@@ -1946,8 +1980,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ADC_GPIO_IN[31:0]</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x00000000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>This reads auxiliary GPI pins of the ADC core</p>
 </section>
@@ -1968,8 +2002,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ADC_GPIO_OUT[31:0]</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x00000000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>This controls auxiliary GPO pins of the ADC core NOT-APPLICABLE if GPIO_DISABLE is set (0x1).</p>
 </section>
@@ -1990,8 +2024,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PPS_COUNTER[31:0]</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x00000000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Counts the core clock cycles (can be a device clock or interface clock) between two 1PPS pulse.</p>
 </section>
@@ -2012,8 +2046,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PPS_STATUS</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If this bit is asserted there is no incomming 1PPS signal. Maybe the source is out of sync or it’s not active.</p>
 </section>
@@ -2030,7 +2064,7 @@ basic monitoring and control of the ADC’s channel.</p>
 <section id="register-map-ADC Channel (axi_ad*)">
 <h4>ADC Channel (axi_ad*) (ADC Channel (axi_ad*))<a class="headerlink" href="#register-map-ADC Channel (axi_ad*)" title="Link to this heading">#</a></h4>
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="2cad1ea8-2b34-47e7-a580-107f41387594" name="2cad1ea8-2b34-47e7-a580-107f41387594" type="checkbox"></input><label for="2cad1ea8-2b34-47e7-a580-107f41387594"><p>Register map table.</p>
+<input class="collapsible_input" id="cc26e3cbc5121058c1531ab9056a6838885ff6ea" name="cc26e3cbc5121058c1531ab9056a6838885ff6ea" type="checkbox"></input><label for="cc26e3cbc5121058c1531ab9056a6838885ff6ea"><p>Register map table.</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper regmap docutils container">
 <table class="regmap docutils align-default">
@@ -2040,7 +2074,7 @@ basic monitoring and control of the ADC’s channel.</p>
 <th class="head"><p>BITS</p></th>
 <th class="head"><p>Name</p></th>
 <th class="head"><p>Type</p></th>
-<th class="head"><p>Default</p></th>
+<th class="head"><p>Default Value</p></th>
 <th class="head"><p>Description</p></th>
 </tr>
 </thead>
@@ -2060,8 +2094,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[11]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ADC_LB_OWR</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If set, forces ADC_DATA_SEL to 1, enabling data loopback</p>
 </section>
@@ -2071,8 +2105,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[10]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ADC_PN_SEL_OWR</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2081,8 +2115,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[9]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IQCOR_ENB</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2091,8 +2125,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DCFILT_ENB</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2101,8 +2135,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[6]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">FORMAT_SIGNEXT</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2111,8 +2145,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[5]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">FORMAT_TYPE</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2121,8 +2155,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">FORMAT_ENABLE</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2131,8 +2165,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[3]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2141,8 +2175,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2151,8 +2185,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ADC_PN_TYPE_OWR</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2161,8 +2195,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ENABLE</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2182,8 +2216,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[12]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CRC_ERR</span></code></td>
-<td><p>RW1C</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>CRC errors. If set, indicates CRC error. Software must first clear this bit before initiating a transfer and monitor afterwards.</p>
 </section>
@@ -2193,8 +2227,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[11:4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">STATUS_HEADER</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x00</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2203,8 +2237,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PN_ERR</span></code></td>
-<td><p>RW1C</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2213,8 +2247,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PN_OOS</span></code></td>
-<td><p>RW1C</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2223,8 +2257,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OVER_RANGE</span></code></td>
-<td><p>RW1C</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2244,8 +2278,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ADC_READ_DATA[31:0]</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>Raw data read from the ADC.</p>
 </section>
@@ -2266,8 +2300,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DCFILT_OFFSET[15:0]</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>DC removal (if equipped) offset. This is a 2’s complement number added to the incoming data to remove a known DC offset. NOT-APPLICABLE if DCFILTER_DISABLE is set (0x1).</p>
 </section>
@@ -2277,8 +2311,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DCFILT_COEFF[15:0]</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2298,8 +2332,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IQCOR_COEFF_1[15:0]</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>IQ correction (if equipped) coefficient. If scale &amp; offset is implemented, this is the scale value and the format is 1.1.14 (sign, integer and fractional bits). If matrix multiplication is used, this is the channel I coefficient and the format is 1.1.14 (sign, integer and fractional bits). If SCALECORRECTION_ONLY is set, this implements the scale value correction for the current channel with the format 1.1.14 (sign, integer and fractional bits). NOT-APPLICABLE if IQCORRECTION_DISABLE is set (0x1).</p>
 </section>
@@ -2309,8 +2343,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IQCOR_COEFF_2[15:0]</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2330,8 +2364,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[19:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ADC_PN_SEL[3:0]</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Selects the PN monitor sequence type (available only if ADC supports it). \ - 0x0: pn9a (device specific, modified pn9) \ - 0x1: pn23a (device specific, modified pn23) \ - 0x4: pn7 (standard O.150) \ - 0x5: pn15 (standard O.150) \ - 0x6: pn23 (standard O.150) \ - 0x7: pn31 (standard O.150) \ - 0x9: pnX (device specific, e.g. ad9361) \ - 0x0A: Nibble ramp (Device specific e.g. adrv9001) \ - 0x0B: 16 bit ramp (Device specific e.g. adrv9001) \</p>
 </section>
@@ -2341,8 +2375,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[3:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ADC_DATA_SEL[3:0]</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2362,8 +2396,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[25]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">USR_DATATYPE_BE</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>The user data type format- if set, indicates big endian (default is little endian). NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
 </section>
@@ -2373,8 +2407,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[24]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">USR_DATATYPE_SIGNED</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x0</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2383,8 +2417,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[23:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">USR_DATATYPE_SHIFT[7:0]</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x00</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2393,8 +2427,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">USR_DATATYPE_TOTAL_BITS[7:0]</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x00</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2403,8 +2437,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">USR_DATATYPE_BITS[7:0]</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x00</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2424,8 +2458,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">USR_DECIMATION_M[15:0]</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>This holds the user decimation M value of the channel that is currently being selected on the multiplexer above. The total decimation factor is of the form M/N. NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
 </section>
@@ -2435,8 +2469,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">USR_DECIMATION_N[15:0]</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x0000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2456,8 +2490,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:3]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED[28:0]</span></code></td>
-<td><p>RO</p></td>
-<td class="default"><p>0x00000000</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Reserved for backward compatibility.</p>
 </section>
@@ -2467,8 +2501,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">[2:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SOFTSPAN</span> <span class="pre">[2:0]</span></code></td>
-<td><p>RW</p></td>
-<td class="default"><p>0x7</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x7</span></code></td>
 <td class="description"><section>
 </section>
 </td>
@@ -2528,13 +2562,13 @@ from the interface module.</p>
 </section>
 <section id="software-guidelines">
 <h2>Software Guidelines<a class="headerlink" href="#software-guidelines" title="Link to this heading">#</a></h2>
-<p>Linux is supported also using <a class="reference external" href="https://github.com/analogdevicesinc/linux">ADI Linux repository</a>.</p>
+<p>Linux is supported also using <a class="reference external" href="https://github.com/analogdevicesinc/linux/blob/master//">/</a>.</p>
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl">ADI HDL repository</a>, <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/library/axi_ad777x">axi_ad777x</a> library.</p></li>
-<li><p><a class="reference external" href="https://github.com/analogdevicesinc/linux">ADI Linux repository</a>.</p></li>
+<li><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl">ADI HDL repository</a>, <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_ad777x">library/axi_ad777x</a> library.</p></li>
+<li><p><a class="reference external" href="https://github.com/analogdevicesinc/linux/blob/master//">/</a>.</p></li>
 <li><p><a class="reference external" href="https://www.xilinx.com/support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf">Zynq-7000 SoC Overview</a>.</p></li>
 <li><p><a class="reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug865-Zynq-7000-Pkg-Pinout.pdf">Zynq-7000 SoC Packaging and Pinout</a>.</p></li>
 </ul>

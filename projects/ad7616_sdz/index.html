@@ -1,0 +1,869 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="AD9081-FMCA-EBZ/AD9082-FMCA-EBZ HDL project" href="../ad9081_fmca_ebz/index.html" /><link rel="prev" title="SPI Engine Tutorial - PulSAR-ADC" href="../../library/spi_engine/tutorial.html" />
+
+    <link rel="shortcut icon" href="../../_static/icon.svg"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.17 -->
+        <title>AD7616-SDZ HDL project - HDL, Analog Devices v0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=36a5483c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=73e8d488" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">HDL, Analog Devices v0.1 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  
+  <span class="sidebar-brand-text">HDL, Analog Devices v0.1 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">User guide</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../user_guide/index.html">User Guide</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of User Guide</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/git_repository.html">Git repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/releases.html">Releases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_hdl.html">Build an HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/architecture.html">HDL architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/ip_cores.html">IP cores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/porting_project.html">Porting reference designs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/customize_hdl.html">Customize HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/hdl_coding_guideline.html">HDL coding guideline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/docs_guidelines.html">Documentation guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/third_party.html">Third party forks</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Libraries</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../library/axi_dmac/index.html">High-Speed DMA Controller</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../library/spi_engine/index.html">SPI Engine</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of SPI Engine</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../library/spi_engine/spi_engine_execution.html">Execution Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/spi_engine/axi_spi_engine.html">AXI Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/spi_engine/spi_engine_offload.html">Offload Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/spi_engine/spi_engine_interconnect.html">Interconnect Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/spi_engine/control-interface.html">Control Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/spi_engine/offload-control-interface.html">Offload Control Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/spi_engine/spi-bus-interface.html">SPI Bus Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/spi_engine/instruction-format.html">Instruction Set Specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/spi_engine/tutorial.html">Tutorial - PulSAR ADC</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Projects</span></p>
+<ul class="current">
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">AD7616-SDZ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ad9081_fmca_ebz/index.html">AD9081-FMCA-EBZ/AD9082-FMCA-EBZ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ad9783_ebz/index.html">AD9783-EBZ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="ad7616-sdz-hdl-project">
+<span id="ad7616-sdz"></span><h1>AD7616-SDZ HDL project<a class="headerlink" href="#ad7616-sdz-hdl-project" title="Link to this heading">#</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
+<p>The <a class="reference external" href="https://www.analog.com/AD7616">AD7616</a> is a 16-bit, data acquisition system (DAS) that supports
+dual simultaneous sampling of 16 channels. The <a class="reference external" href="https://www.analog.com/AD7616">AD7616</a> operates from a
+single 5 V supply and can accommodate ±10 V, ±5 V, and ±2.5 V true bipolar
+input signals while sampling at throughput rates up to 1 MSPS per channel pair
+with 90 dB SNR. Higher SNR performance can be achieved with the on-chip
+oversampling mode; 92 dB for an oversampling ratio of 2.</p>
+<p>The input clamp protection circuitry can tolerate voltages up to ±20 V.
+The <a class="reference external" href="https://www.analog.com/AD7616">AD7616</a> has 1 MΩ analog input impedance regardless of sampling
+frequency. The single supply operation, on-chip filtering, and high input
+impedance eliminate the need for driver op-amps and external bipolar supplies.</p>
+<p>Each device contains analog input clamp protection, a dual, 16-bit charge
+redistribution successive approximation analog-to-digital converter (ADC),
+a flexible digital filter, a 2.5 V reference and reference buffer, and
+high-speed serial and parallel interfaces.</p>
+</section>
+<section id="supported-boards">
+<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.analog.com/EVAL-AD7616">EVAL-AD7616</a></p></li>
+</ul>
+</section>
+<section id="supported-devices">
+<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.analog.com/AD7616">AD7616</a></p></li>
+</ul>
+</section>
+<section id="supported-carriers">
+<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html">ZedBoard</a> on FMC slot</p></li>
+<li><p><a class="reference external" href="https://www.xilinx.com/ZC706">ZC706</a> on FMC LPC slot</p></li>
+</ul>
+</section>
+<section id="other-required-hardware">
+<h2>Other required hardware<a class="headerlink" href="#other-required-hardware" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.analog.com/EVAL-SDP-I-FMC">SDP-I-FMC</a></p></li>
+</ul>
+</section>
+<section id="block-design">
+<h2>Block design<a class="headerlink" href="#block-design" title="Link to this heading">#</a></h2>
+<p>The data path of the HDL design is simple as follows:</p>
+<ul class="simple">
+<li><p>the parallel interface is controlled by the axi_ad7616 IP core</p></li>
+<li><p>the serial interface is controlled by the SPI Engine Framework</p></li>
+<li><p>data is written into memory by a DMA (axi_dmac core)</p></li>
+<li><p>all the control pins of the device are driven by GPIOs</p></li>
+</ul>
+<section id="block-diagram">
+<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Link to this heading">#</a></h3>
+<section id="ad7616-sdz-serial-interface">
+<h4>AD7616_SDZ serial interface<a class="headerlink" href="#ad7616-sdz-serial-interface" title="Link to this heading">#</a></h4>
+<a class="reference internal image-reference" href="../../_images/ad7616_serial_hdl.svg"><img alt="AD7616_SDZ using the serial interface block diagram" class="align-center" src="../../_images/ad7616_serial_hdl.svg" width="800" /></a>
+</section>
+<section id="ad7616-sdz-parallel-interface">
+<h4>AD7616_SDZ parallel interface<a class="headerlink" href="#ad7616-sdz-parallel-interface" title="Link to this heading">#</a></h4>
+<a class="reference internal image-reference" href="../../_images/ad7616_parallel_hdl.svg"><img alt="AD7616_SDZ using the parallel interface block diagram" class="align-center" src="../../_images/ad7616_parallel_hdl.svg" width="800" /></a>
+</section>
+</section>
+<section id="configuration-modes">
+<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Link to this heading">#</a></h3>
+<p>The SER_PAR_N configuration parameter defines the interface type (Serial or
+Parallel). By default it is set to 1. Depending on the required interface mode,
+some hardware modifications need to be done on the board and/or make command:</p>
+<p>In case of the <strong>PARALLEL</strong> interface:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">SER_PAR_N</span><span class="o">=</span><span class="mi">0</span>
+</pre></div>
+</div>
+<p>In case of the <strong>SERIAL</strong> interface:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">SER_PAR_N</span><span class="o">=</span><span class="mi">1</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This switch is a <em>hardware</em> switch. Please rebuild the  design if the
+variable has been changed.</p>
+<ul class="simple">
+<li><p>SL5 - unmounted - Parallel interface</p></li>
+<li><p>SL5 - mounted - Serial interface</p></li>
+</ul>
+</div>
+</section>
+<section id="jumper-setup">
+<h3>Jumper setup<a class="headerlink" href="#jumper-setup" title="Link to this heading">#</a></h3>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Jumper/Solder link</p></th>
+<th class="head"><p>Position</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SL1</p></td>
+<td><p>Unmounted</p></td>
+<td><p>Channel Sequencer Enable</p></td>
+</tr>
+<tr class="row-odd"><td><p>SL2</p></td>
+<td><p>Unmounted</p></td>
+<td><p>RC Enable Input</p></td>
+</tr>
+<tr class="row-even"><td><p>SL3</p></td>
+<td><p>Mounted</p></td>
+<td><p>Selects 2 MISO mode</p></td>
+</tr>
+<tr class="row-odd"><td><p>SL4</p></td>
+<td><p>Unmounted</p></td>
+<td><p>Oversampling Ratio Selection OS2</p></td>
+</tr>
+<tr class="row-even"><td><p>SL5</p></td>
+<td><p>Mounted</p></td>
+<td><p>If mounted, selects serial interface</p></td>
+</tr>
+<tr class="row-odd"><td><p>SL6</p></td>
+<td><p>Unmounted</p></td>
+<td><p>Oversampling Ratio Selection OS1</p></td>
+</tr>
+<tr class="row-even"><td><p>SL7</p></td>
+<td><p>Unmounted</p></td>
+<td><p>Oversampling Ratio Selection OS0</p></td>
+</tr>
+<tr class="row-odd"><td><p>LK40</p></td>
+<td><p>A</p></td>
+<td><p>Onboard 5v0 power supply selected</p></td>
+</tr>
+<tr class="row-even"><td><p>LK41</p></td>
+<td><p>A</p></td>
+<td><p>Onboard 3v3 power supply selected</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="cpu-memory-interconnects-addresses">
+<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Link to this heading">#</a></h3>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Instance</p></th>
+<th class="head"><p>Address</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>axi_ad7616_dma</p></td>
+<td><p>0x44a30000</p></td>
+</tr>
+<tr class="row-odd"><td><p>spi_clkgen</p></td>
+<td><p>0x44a70000</p></td>
+</tr>
+<tr class="row-even"><td><p>ad7616_pwm_gen</p></td>
+<td><p>0x44b00000</p></td>
+</tr>
+<tr class="row-odd"><td><p>spi_ad7616_axi_regmap **</p></td>
+<td><p>0x44a00000</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_ad7616 *</p></td>
+<td><p>0x44a80000</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="note admonition">
+<p class="admonition-title">Legend</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> instantiated only for SER_PAR_N=0 (parallel interface)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> instantiated only for SER_PAR_N=1 (serial interface)</p></li>
+</ul>
+</div>
+</section>
+<section id="i2c-connections">
+<h3>I2C connections<a class="headerlink" href="#i2c-connections" title="Link to this heading">#</a></h3>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>I2C type</p></th>
+<th class="head"><p>I2C manager instance</p></th>
+<th class="head"><p>Alias</p></th>
+<th class="head"><p>Address</p></th>
+<th class="head"><p>I2C subordinate</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PL</p></td>
+<td><p>iic_fmc</p></td>
+<td><p>axi_iic_fmc</p></td>
+<td><p>0x4162_0000</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-odd"><td><p>PL</p></td>
+<td><p>iic_main</p></td>
+<td><p>axi_iic_main</p></td>
+<td><p>0x4160_0000</p></td>
+<td><p>-</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="spi-connections">
+<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Link to this heading">#</a></h3>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>SPI type</p></th>
+<th class="head"><p>SPI manager instance</p></th>
+<th class="head"><p>SPI subordinate</p></th>
+<th class="head"><p>CS</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PL</p></td>
+<td><p>axi_spi_engine</p></td>
+<td><p>AD7616</p></td>
+<td><p>0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="gpios">
+<h3>GPIOs<a class="headerlink" href="#gpios" title="Link to this heading">#</a></h3>
+<p>The Software GPIO number is calculated as follows:</p>
+<ul class="simple">
+<li><p>Zynq-7000: if PS7 is used, then offset is 54</p></li>
+</ul>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>GPIO signal</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>HDL GPIO EMIO</p></th>
+<th class="head"><p>Software GPIO</p></th>
+</tr>
+<tr class="row-even"><th class="head"></th>
+<th class="head"><p>(from FPGA view)</p></th>
+<th class="head"></th>
+<th class="head"><p>Zynq-7000</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td><p>adc_reset_n</p></td>
+<td><p>OUT</p></td>
+<td><p>43</p></td>
+<td><p>97</p></td>
+</tr>
+<tr class="row-even"><td><p>adc_hw_rngsel</p></td>
+<td><p>OUT</p></td>
+<td><p>42:41</p></td>
+<td><p>96:95</p></td>
+</tr>
+<tr class="row-odd"><td><p>adc_os **</p></td>
+<td><p>OUT</p></td>
+<td><p>40:38</p></td>
+<td><p>94:92</p></td>
+</tr>
+<tr class="row-even"><td><p>adc_seq_en</p></td>
+<td><p>OUT</p></td>
+<td><p>37</p></td>
+<td><p>91</p></td>
+</tr>
+<tr class="row-odd"><td><p>adc_burst **</p></td>
+<td><p>OUT</p></td>
+<td><p>36</p></td>
+<td><p>90</p></td>
+</tr>
+<tr class="row-even"><td><p>adc_chsel</p></td>
+<td><p>OUT</p></td>
+<td><p>35:33</p></td>
+<td><p>89:87</p></td>
+</tr>
+<tr class="row-odd"><td><p>adc_crcen **</p></td>
+<td><p>OUT</p></td>
+<td><p>32</p></td>
+<td><p>86</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="note admonition">
+<p class="admonition-title">Legend</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> instantiated only for SER_PAR_N=1 (serial interface)</p></li>
+</ul>
+</div>
+</section>
+<section id="interrupts">
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading">#</a></h3>
+<p>Below are the Programmable Logic interrupts used in this project.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Instance name</p></th>
+<th class="head"><p>HDL</p></th>
+<th class="head"><p>Linux Zynq</p></th>
+<th class="head"><p>Actual Zynq</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>axi_ad7616_dma</p></td>
+<td><p>13</p></td>
+<td><p>57</p></td>
+<td><p>89</p></td>
+</tr>
+<tr class="row-odd"><td><p>spi_ad7616 **</p></td>
+<td><p>12</p></td>
+<td><p>56</p></td>
+<td><p>88</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_ad7616 *</p></td>
+<td><p>10</p></td>
+<td><p>54</p></td>
+<td><p>87</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="note admonition">
+<p class="admonition-title">Legend</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> instantiated only for SER_PAR_N=0 (parallel interface)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> instantiated only for SER_PAR_N=1 (serial interface)</p></li>
+</ul>
+</div>
+</section>
+</section>
+<section id="building-the-hdl-project">
+<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Link to this heading">#</a></h2>
+<p>The design is built upon ADI’s generic HDL reference design framework.
+ADI does not distribute the bit/elf files of these projects so they
+must be built from the sources available <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main//">here</a>. To get
+the source you must
+<a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
+the HDL repository, and then build the project as follows:.</p>
+<p><strong>Linux/Cygwin/WSL</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>user@analog:~$ cd hdl/projects/ad7616_sdz/zed
+<span class="linenos">2</span>user@analog:~/hdl/projects/ad7616_sdz/zed$ make SER_PAR_N=0
+</pre></div>
+</div>
+<p>The result of the build, if parameters were used, will be in a folder named
+by the configuration used:</p>
+<p>if the following command was run</p>
+<p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">SER_PAR_N=0</span></code></p>
+<p>then the folder name will be:</p>
+<p><code class="docutils literal notranslate"><span class="pre">SERPARN0</span></code></p>
+<p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
+<section id="connections-and-hardware-changes">
+<h3>Connections and hardware changes<a class="headerlink" href="#connections-and-hardware-changes" title="Link to this heading">#</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><strong>The following hardware changes are required:</strong></p>
+<p>(<strong>Please note:</strong> Because of the <strong>SDP-I-FMC</strong> the level of the <strong>VADJ</strong> in
+the carrier board needs to be set to <strong>3.3V</strong>.</p>
+<p>Depending on the required interface mode, some hardware modifications need to
+be done.</p>
+<ul class="simple">
+<li><p><strong>SL5</strong> - unmounted - Parallel interface</p></li>
+<li><p><strong>SL5</strong> - mounted - Serial interface</p></li>
+</ul>
+</div>
+</section>
+</section>
+<section id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading">#</a></h2>
+<section id="systems-related">
+<h3>Systems related<a class="headerlink" href="#systems-related" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad7616-sdz">AD7616 User guide</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/no-os/build">How to build No-OS</a></p></li>
+</ul>
+</section>
+<section id="hardware-related">
+<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Product datasheet: <a class="reference external" href="https://www.analog.com/AD7616">AD7616</a></p></li>
+<li><p><a class="reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/EVAL-AD7616SDZ-7616-PSDZ-UG-1012.pdf">UG-1012, Evaluation Board User Guide</a></p></li>
+</ul>
+</section>
+<section id="hdl-related">
+<h3>HDL related<a class="headerlink" href="#hdl-related" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/ad7616_sdz">ad7616_sdz HDL project</a></p></li>
+</ul>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 35.0%" />
+<col style="width: 35.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>IP name</p></th>
+<th class="head"><p>Source code link</p></th>
+<th class="head"><p>Documentation link</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>AD_EDGE_DETECT</p></td>
+<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/common/ad_edge_detect.v">library/common/ad_edge_detect.v</a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_AD7616</p></td>
+<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_ad7616">library/axi_ad7616</a> *</p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_ad7616">[Wiki]</a></p></td>
+</tr>
+<tr class="row-even"><td><p>AXI_CLKGEN</p></td>
+<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_clkgen">library/axi_clkgen</a></p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_clkgen">[Wiki]</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_DMAC</p></td>
+<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_dmac">library/axi_dmac</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>AXI_HDMI_TX</p></td>
+<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_hdmi_tx">library/axi_hdmi_tx</a></p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_hdmi_tx">[Wiki]</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_I2S_ADI</p></td>
+<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_i2s_adi">library/axi_i2s_adi</a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>AXI_PWM_GEN</p></td>
+<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_pwm_gen">library/axi_pwm_gen</a></p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_pwm_gen">[Wiki]</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_SPDIF_TX</p></td>
+<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_spdif_tx">library/axi_spdif_tx</a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>AXI_SPI_ENGINE</p></td>
+<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/axi_spi_engine">library/spi_engine/axi_spi_engine</a>  **</p></td>
+<td><p><a class="reference internal" href="../../library/spi_engine/axi_spi_engine.html#spi-engine-axi"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_SYSID</p></td>
+<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_sysid">library/axi_sysid</a></p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_sysid">[Wiki]</a></p></td>
+</tr>
+<tr class="row-even"><td><p>SPI_ENGINE_EXECUTION</p></td>
+<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/spi_engine_execution">library/spi_engine/spi_engine_execution</a> **</p></td>
+<td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_execution.html#spi-engine-execution"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>SPI_ENGINE_INTERCONNECT</p></td>
+<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/spi_engine_interconnect">library/spi_engine/spi_engine_interconnect</a> **</p></td>
+<td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_interconnect.html#spi-engine-interconnect"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>SPI_ENGINE_OFFLOAD</p></td>
+<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/spi_engine_offload">library/spi_engine/spi_engine_offload</a> **</p></td>
+<td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_offload.html#spi-engine-offload"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>SYNC_BITS</p></td>
+<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/util_cdc/sync_bits.v">library/util_cdc/sync_bits.v</a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>SYSID_ROM</p></td>
+<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/sysid_rom">library/sysid_rom</a></p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_sysid">[Wiki]</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="note admonition">
+<p class="admonition-title">Legend</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> instantiated only for SER_PAR_N=0 (parallel interface)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> instantiated only for SER_PAR_N=1 (serial interface)</p></li>
+</ul>
+</div>
+<ul class="simple">
+<li><p><a class="reference internal" href="../../library/spi_engine/index.html#spi-engine"><span class="std std-ref">SPI_ENGINE</span></a></p></li>
+</ul>
+</section>
+<section id="software-related">
+<h3>Software related<a class="headerlink" href="#software-related" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/analogdevicesinc/no-os/blob/main/projects/ad7616-sdz">No-OS project</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/no-os/build">How to build No-OS</a></p></li>
+</ul>
+</section>
+</section>
+<section id="more-information">
+<h2>More information<a class="headerlink" href="#more-information" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="../../user_guide/index.html#user-guide"><span class="std std-ref">ADI HDL User guide</span></a></p></li>
+</ul>
+</section>
+<section id="support">
+<h2>Support<a class="headerlink" href="#support" title="Link to this heading">#</a></h2>
+<p><a class="reference external" href="https://www.analog.com/en/index.html">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone using
+the <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">reference design</a> with <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> components
+via the <a class="reference external" href="https://ez.analog.com/fpga">EngineerZone</a> FPGA reference designs forum.</p>
+<p>For questions regarding the <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> Linux device drivers, device trees, etc. from
+our <a class="reference external" href="https://github.com/analogdevicesinc/linux/blob/master//">Linux GitHub repository</a>, the team will offer
+support on the <a class="reference external" href="https://ez.analog.com/linux-software-drivers">EngineerZone</a> Linux software drivers forum.</p>
+<p>For questions concerning the <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> No-OS drivers, from our
+<a class="reference external" href="https://github.com/analogdevicesinc/no-os/blob/main//">No-OS GitHub repository</a>, the team will offer support
+on the <a class="reference external" href="https://ez.analog.com/microcontroller-no-os-drivers">EngineerZone</a> microcontroller No-OS drivers forum.</p>
+<p>It should be noted, that the older the tools’ versions and release
+branches are, the lower the chances to receive support from <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a>
+engineers.</p>
+</section>
+</section>
+
+    <script type="text/javascript">
+        function init() {
+            WaveDrom.ProcessAll();
+        }
+        window.onload = init;
+    </script>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="../ad9081_fmca_ebz/index.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">AD9081-FMCA-EBZ/AD9082-FMCA-EBZ HDL project</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="../../library/spi_engine/tutorial.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">SPI Engine Tutorial - PulSAR-ADC</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2023, Analog Devices Inc
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">AD7616-SDZ HDL project</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#supported-boards">Supported boards</a></li>
+<li><a class="reference internal" href="#supported-devices">Supported devices</a></li>
+<li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
+<li><a class="reference internal" href="#other-required-hardware">Other required hardware</a></li>
+<li><a class="reference internal" href="#block-design">Block design</a><ul>
+<li><a class="reference internal" href="#block-diagram">Block diagram</a><ul>
+<li><a class="reference internal" href="#ad7616-sdz-serial-interface">AD7616_SDZ serial interface</a></li>
+<li><a class="reference internal" href="#ad7616-sdz-parallel-interface">AD7616_SDZ parallel interface</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#configuration-modes">Configuration modes</a></li>
+<li><a class="reference internal" href="#jumper-setup">Jumper setup</a></li>
+<li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
+<li><a class="reference internal" href="#i2c-connections">I2C connections</a></li>
+<li><a class="reference internal" href="#spi-connections">SPI connections</a></li>
+<li><a class="reference internal" href="#gpios">GPIOs</a></li>
+<li><a class="reference internal" href="#interrupts">Interrupts</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#building-the-hdl-project">Building the HDL project</a><ul>
+<li><a class="reference internal" href="#connections-and-hardware-changes">Connections and hardware changes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#resources">Resources</a><ul>
+<li><a class="reference internal" href="#systems-related">Systems related</a></li>
+<li><a class="reference internal" href="#hardware-related">Hardware related</a></li>
+<li><a class="reference internal" href="#hdl-related">HDL related</a></li>
+<li><a class="reference internal" href="#software-related">Software related</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#more-information">More information</a></li>
+<li><a class="reference internal" href="#support">Support</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=34cd777e"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
+    <script src="https://wavedrom.com/skins/default.js"></script>
+    <script src="https://wavedrom.com/wavedrom.min.js"></script>
+    </body>
+</html>

@@ -3,14 +3,14 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="SPI Engine" href="../library/spi_engine/index.html" /><link rel="prev" title="Porting ADI’s HDL reference designs" href="porting_project.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Third party forks" href="third_party.html" /><link rel="prev" title="ADI HDL coding guideline" href="hdl_coding_guideline.html" />
 
     <link rel="shortcut icon" href="../_static/icon.svg"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.17 -->
         <title>Documentation guidelines - HDL, Analog Devices v0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=36a5483c" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6000fc3f" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=73e8d488" />
     
     
 
@@ -158,13 +158,23 @@
   <p class="caption" role="heading"><span class="caption-text">User guide</span></p>
 <ul class="current">
 <li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">User Guide</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of User Guide</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="git_repository.html">Git repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="releases.html">Releases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_hdl.html">Build an HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html">HDL architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ip_cores.html">IP cores</a></li>
 <li class="toctree-l2"><a class="reference internal" href="porting_project.html">Porting reference designs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="customize_hdl.html">Customize HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hdl_coding_guideline.html">HDL coding guideline</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Documentation guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="third_party.html">Third party forks</a></li>
 </ul>
 </li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Libraries</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../library/axi_dmac/index.html">High-Speed DMA Controller</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../library/spi_engine/index.html">SPI Engine</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of SPI Engine</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../library/spi_engine/spi_engine_execution.html">Execution Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/spi_engine/axi_spi_engine.html">AXI Module</a></li>
@@ -177,7 +187,13 @@
 <li class="toctree-l2"><a class="reference internal" href="../library/spi_engine/tutorial.html">Tutorial - PulSAR ADC</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../library/axi_dmac/index.html">High-Speed DMA Controller</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Projects</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../projects/ad7616_sdz/index.html">AD7616-SDZ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../projects/ad9081_fmca_ebz/index.html">AD9081-FMCA-EBZ/AD9082-FMCA-EBZ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../projects/adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
 </ul>
 
 </div>
@@ -225,9 +241,9 @@ in this page to convert it to reST.</p>
 <h2>Templates<a class="headerlink" href="#templates" title="Link to this heading">#</a></h2>
 <p>Templates are available:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/docs/library/template_ip">template_ip</a> (<a class="reference internal" href="../library/template_ip/index.html#template-ip"><span class="std std-ref">rendered</span></a>).</p></li>
-<li><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/docs/library/template_framework">template_framework</a> (<a class="reference internal" href="../library/template_framework/index.html#template-framework"><span class="std std-ref">rendered</span></a>).</p></li>
-<li><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/docs/projects/template">template</a> (<a class="reference internal" href="../projects/template/index.html#template-project"><span class="std std-ref">rendered</span></a>).</p></li>
+<li><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/docs/library/template_ip">docs/library/template_ip</a> (<a class="reference internal" href="../library/template_ip/index.html#template-ip"><span class="std std-ref">rendered</span></a>).</p></li>
+<li><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/docs/library/template_framework">docs/library/template_framework</a> (<a class="reference internal" href="../library/template_framework/index.html#template-framework"><span class="std std-ref">rendered</span></a>).</p></li>
+<li><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/docs/projects/template">docs/projects/template</a> (<a class="reference internal" href="../projects/template/index.html#template-project"><span class="std std-ref">rendered</span></a>).</p></li>
 </ul>
 <p>Remove the <code class="docutils literal notranslate"><span class="pre">:orphan:</span></code> in the first line, it is to hide the templates from the
 <a class="reference external" href="https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-toctree">TOC tree</a>.</p>
@@ -236,8 +252,42 @@ in this page to convert it to reST.</p>
 <h2>Indentation<a class="headerlink" href="#indentation" title="Link to this heading">#</a></h2>
 <p>Directives are indented with 3 space, which is Sphinx’s default.
 At code directives, the code keeps its original indentation (e.g. 2 spaces for
-verilog code), but is offset by 3 spaces at the beginning of every line, to
+Verilog code), but is offset by 3 spaces at the beginning of every line, to
 instruct Sphinx the beginning and end of the code directive.</p>
+</section>
+<section id="table-of-contents">
+<h2>Table of contents<a class="headerlink" href="#table-of-contents" title="Link to this heading">#</a></h2>
+<p>The relation between pages are created with the <code class="docutils literal notranslate"><span class="pre">toctree</span></code> directive,
+which allows to generate the table of contents and navigation bars.
+The <code class="docutils literal notranslate"><span class="pre">toctree</span></code> directive has the following format:</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">toctree</span><span class="p">::</span>
+   <span class="nc">:caption:</span> Caption
+   <span class="nc">:hidden:</span>
+
+   Custom title &lt;path/to/page&gt;
+</pre></div>
+</div>
+<p>For pages with shorter titles, such as libraries, the label is inherited from
+the page itself, for example:</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">toctree</span><span class="p">::</span>
+   <span class="nc">:caption:</span> Libraries
+   <span class="nc">:hidden:</span>
+
+   library/axi_dmac/index
+   library/spi_engine/index
+</pre></div>
+</div>
+<p>And for pages with long titles, such as projects, overwrite the full title with
+a custom title, e.g:</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">toctree</span><span class="p">::</span>
+   <span class="nc">:caption:</span> Projects
+   <span class="nc">:hidden:</span>
+
+   AD7616-SDZ &lt;projects/ad7616_sdz/index&gt;
+</pre></div>
+</div>
+<p>This way, only “AD7616-SDZ” will be displayed in the page navigation bar instead
+of “AD7616-SDZ HDL project”.</p>
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
@@ -312,6 +362,16 @@ and emphasizing lines.</p>
 <h2>Images<a class="headerlink" href="#images" title="Link to this heading">#</a></h2>
 <p>Prefer the SVG format for images, and save it as <em>Optimized SVG</em> in
 <a class="reference external" href="https://inkscape.org/">inkscape</a> to use less space.</p>
+<p>Store them in a hierarchically, do not use <code class="docutils literal notranslate"><span class="pre">images</span></code> subdirectories.
+The idea is to have simpler relative paths, for example, e.g.:</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="cp">.. image: ad2234_sdz_schematic.svg</span>
+</pre></div>
+</div>
+<p>Instead of overly complicated paths like:</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="cp">.. image: ../../project/images/ad2234_sdz/ad2234_sdz_schematic.svg</span>
+</pre></div>
+</div>
+<p>In general, this avoids dangling artifacts and keeps the documentation simple.</p>
 <section id="vivado-block-diagrams">
 <h3>Vivado block-diagrams<a class="headerlink" href="#vivado-block-diagrams" title="Link to this heading">#</a></h3>
 <p>Vivado block-diagrams can be exported as PDF and then converted to SVG with
@@ -335,12 +395,10 @@ it is not recommended.</p>
 </section>
 <section id="third-party-directives-and-roles">
 <h2>Third-party directives and roles<a class="headerlink" href="#third-party-directives-and-roles" title="Link to this heading">#</a></h2>
-<p>Third-party tools are used to expand Sphinx functionality, for example, to
-generate component diagrams.</p>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>Check <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/docs/Containterfile">Containterfile</a> for a recipe to install these
-tools, either in the host or in a container.</p>
+<p>Third-party tools are used to expand Sphinx functionality, if you haven’t already,
+do:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</pre></div>
 </div>
 <section id="symbolator-directive">
 <h3>Symbolator directive<a class="headerlink" href="#symbolator-directive" title="Link to this heading">#</a></h3>
@@ -363,33 +421,45 @@ links, but without the undescore in the end.</p>
 <h3>Color role<a class="headerlink" href="#color-role" title="Link to this heading">#</a></h3>
 <p>To print text in red or green, use <code class="code docutils literal notranslate"><span class="pre">:red:`text`</span></code> and <code class="code docutils literal notranslate"><span class="pre">:green:`text`</span></code>.</p>
 </section>
+<section id="link-roles">
+<h3>Link roles<a class="headerlink" href="#link-roles" title="Link to this heading">#</a></h3>
+<p>The link roles are a group of roles defined by <code class="docutils literal notranslate"><span class="pre">adi_links.py</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">validate_links</span></code> global option is used to validate each link during build.
+These links are not managed, that means, only links from changed files are checked.
+You can run a build with it set to False, then touch the desired files to check
+the links of only these files.</p>
 <section id="git-role">
-<h3>Git role<a class="headerlink" href="#git-role" title="Link to this heading">#</a></h3>
+<h4>Git role<a class="headerlink" href="#git-role" title="Link to this heading">#</a></h4>
 <p>The Git role allows to create links to the Git repository with a shorter syntax.
 The role syntax is <code class="code docutils literal notranslate"><span class="pre">:git-repo:`text</span> <span class="pre">&lt;branch:path&gt;`</span></code>, for example:</p>
 <ul class="simple">
-<li><p><code class="code docutils literal notranslate"><span class="pre">:git-hdl:`master:docs/contributing/guidelines.rst`</span></code>
-renders as <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/docs/contributing/guidelines.rst">guidelines.rst</a>.</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">:git-hdl:`Guidelines</span> <span class="pre">&lt;docs/contributing/guidelines.rst&gt;`</span></code>
-renders as <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/docs/contributing/guidelines.rst">Guidelines</a>.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">:git-hdl:`main:docs/user_guide/docs_guidelines.rst`</span></code>
+renders as <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/docs/user_guide/docs_guidelines.rst">docs/user_guide/docs_guidelines.rst</a>.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">:git-hdl:`Guidelines</span> <span class="pre">&lt;docs/user_guide/docs_guidelines.rst&gt;`</span></code>
+renders as <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/docs/user_guide/docs_guidelines.rst">Guidelines</a>.</p></li>
 </ul>
-<p>The branch field is optional and will be filled with the current branch.
-The text field is optional and will be filled with the file or directory name.</p>
+<p>When the branch field is not present, it will be filled with the current branch.
+It is recommended to not provide this field when it is a link to its own repository,
+because it is useful to auto-fill it for documentation releases
+(e.g. <code class="docutils literal notranslate"><span class="pre">hdl_2023_r2</span></code>).
+A scenario where it is recommended to provide the branch is when linking others
+repositories.</p>
+<p>The text field is optional and will be filled with the full path.</p>
 <p>Finally, you can do <code class="code docutils literal notranslate"><span class="pre">:git-repo:`/`</span></code> for a link to the root of the
 repository with pretty naming, for example, <code class="code docutils literal notranslate"><span class="pre">:git-hdl:`/`</span></code> is rendered
 as <a class="reference external" href="https://github.com/analogdevicesinc/hdl">ADI HDL repository</a>.</p>
 </section>
-<section id="part-role">
-<h3>Part role<a class="headerlink" href="#part-role" title="Link to this heading">#</a></h3>
-<p>The part role creates links for a part to the Analog Devices Inc. website.</p>
-<p>The role syntax is <code class="code docutils literal notranslate"><span class="pre">:part:`text</span> <span class="pre">&lt;part_id&gt;`</span></code>, for example,
-<code class="code docutils literal notranslate"><span class="pre">:part:`AD7175-2</span> <span class="pre">&lt;ad7175-2&gt;`</span></code>.
+<section id="adi-role">
+<h4>ADI role<a class="headerlink" href="#adi-role" title="Link to this heading">#</a></h4>
+<p>The adi role creates links for a webpage to the Analog Devices Inc. website.</p>
+<p>The role syntax is <code class="code docutils literal notranslate"><span class="pre">:adi:`text</span> <span class="pre">&lt;webpage&gt;`</span></code>, for example,
+<code class="code docutils literal notranslate"><span class="pre">:adi:`AD7175-2</span> <span class="pre">&lt;ad7175-2&gt;`</span></code>.
 Since links are case insensitive, you can also reduce it to
-<code class="code docutils literal notranslate"><span class="pre">:part:`AD7175-2`</span></code>, when <em>part_id</em> is the same as <em>text</em> and will render
-as <a class="reference external" href="https://www.analog.com/products/AD7175-2.html">AD7175-2</a>.</p>
+<code class="code docutils literal notranslate"><span class="pre">:adi:`AD7175-2`</span></code>, when <em>webpage</em> is the same as <em>text</em> and will render
+as <a class="reference external" href="https://www.analog.com/AD7175-2">AD7175-2</a>.</p>
 </section>
 <section id="datasheet-role">
-<h3>Datasheet role<a class="headerlink" href="#datasheet-role" title="Link to this heading">#</a></h3>
+<h4>Datasheet role<a class="headerlink" href="#datasheet-role" title="Link to this heading">#</a></h4>
 <p>The datasheet role creates links for a datasheet in the Analog Devices Inc. website.</p>
 <p>The role syntax is <code class="code docutils literal notranslate"><span class="pre">:datasheet:`part_id:anchor`</span></code>, for example,
 <code class="code docutils literal notranslate"><span class="pre">:datasheet:`AD7984:[{&quot;num&quot;%3A51%2C&quot;gen&quot;%3A0}%2C{&quot;name&quot;%3A&quot;XYZ&quot;}%2C52%2C713%2C0]`</span></code>
@@ -404,7 +474,7 @@ figure number!</p>
 </div>
 </section>
 <section id="dokuwiki-role">
-<h3>Dokuwiki role<a class="headerlink" href="#dokuwiki-role" title="Link to this heading">#</a></h3>
+<h4>Dokuwiki role<a class="headerlink" href="#dokuwiki-role" title="Link to this heading">#</a></h4>
 <p>The dokuwiki role creates links to the Analog Devices Inc. wiki website.
 The role syntax is <code class="code docutils literal notranslate"><span class="pre">:dokuwiki:`text</span> <span class="pre">&lt;path&gt;`</span></code>, for example,
 <code class="code docutils literal notranslate"><span class="pre">:dokuwiki:`pulsar-adc-pmods</span> <span class="pre">&lt;resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods&gt;`</span></code>
@@ -412,13 +482,15 @@ gets rendered as
 <a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods">pulsar-adc-pmods</a>.</p>
 </section>
 <section id="engineerzone-role">
-<h3>EngineerZone role<a class="headerlink" href="#engineerzone-role" title="Link to this heading">#</a></h3>
+<h4>EngineerZone role<a class="headerlink" href="#engineerzone-role" title="Link to this heading">#</a></h4>
 <p>The ez role creates links to the Analog Devices Inc. EngineerZone support website.
 The role syntax is <code class="code docutils literal notranslate"><span class="pre">:ez:`community`</span></code>, for example, <code class="code docutils literal notranslate"><span class="pre">:ez:`fpga`</span></code>
 gets rendered as <a class="reference external" href="https://ez.analog.com/fpga">EngineerZone</a>.</p>
+<p>For Linux Software Drivers, it is <code class="code docutils literal notranslate"><span class="pre">:ez:`linux-software-drivers`</span></code>.</p>
+<p>For Microcontroller no-OS Drivers it is <code class="code docutils literal notranslate"><span class="pre">:ez:`microcontroller-no-os-drivers`</span></code>.</p>
 </section>
 <section id="vendor-role">
-<h3>Vendor role<a class="headerlink" href="#vendor-role" title="Link to this heading">#</a></h3>
+<h4>Vendor role<a class="headerlink" href="#vendor-role" title="Link to this heading">#</a></h4>
 <p>The vendor role creates links to the vendor’s website.
 The role syntax is <code class="code docutils literal notranslate"><span class="pre">:vendor:`text</span> <span class="pre">&lt;path&gt;`</span></code>, for example,
 <code class="code docutils literal notranslate"><span class="pre">:xilinx:`Zynq-7000</span> <span class="pre">SoC</span> <span class="pre">Overview</span> <span class="pre">&lt;support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf&gt;`</span></code>
@@ -430,16 +502,18 @@ for example,
 gets rendered
 <a class="reference external" href="https://www.intel.com/content/www/us/en/docs/programmable/683780/22-4/general-purpose-i-o-overview.html">general-purpose-i-o-overview.html</a>
 (not very readable).</p>
-<p>Supported vendors are: <cite>xilinx</cite> and <cite>intel</cite>.</p>
+<p>Supported vendors are: <code class="docutils literal notranslate"><span class="pre">xilinx</span></code> (AMD Xilinx), <code class="docutils literal notranslate"><span class="pre">intel</span></code> (Intel Altera) and
+<code class="docutils literal notranslate"><span class="pre">mw</span></code> (MathWorks).</p>
+</section>
 </section>
 <section id="hdl-parameters-directive">
 <h3>HDL parameters directive<a class="headerlink" href="#hdl-parameters-directive" title="Link to this heading">#</a></h3>
-<p>The HDL parameters directive gets information parsed from <em>component.xml</em> library
-and generates a table with the IP parameters.</p>
+<p>The HDL parameters directive gets information parsed from IP-XACT (<em>component.xml</em>)
+library and generates a table with the IP parameters.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The <em>component.xml</em> files are generated by Vivado during the library build
-and not by the documentation tooling.</p>
+<p>The IP-XACT files are generated by Vivado during the library build and not by
+the documentation tooling.</p>
 </div>
 <p>The directive syntax is:</p>
 <div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">hdl-parameters</span><span class="p">::</span>
@@ -466,7 +540,7 @@ and not by the documentation tooling.</p>
 <thead>
 <tr class="row-odd"><th class="head"><p>Name</p></th>
 <th class="head"><p>Description</p></th>
-<th class="head"><p>Type</p></th>
+<th class="head"><p>Data Type</p></th>
 <th class="head"><p>Default Value</p></th>
 <th class="head"><p>Choices/Range</p></th>
 </tr>
@@ -477,8 +551,8 @@ and not by the documentation tooling.</p>
 <p>Data width of the parallel SDI/SDO data interfaces.</p>
 </section>
 </td>
-<td><p>Long</p></td>
-<td><p>8</p></td>
+<td class="type"><p>Long</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">8</span></code></td>
 <td><p>From 8 to 256.</p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">NUM_OF_SDI</span></code></td>
@@ -486,8 +560,8 @@ and not by the documentation tooling.</p>
 <p>Number of SDI lines on the physical SPI interface.</p>
 </section>
 </td>
-<td><p>Long</p></td>
-<td><p>1</p></td>
+<td class="type"><p>Long</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
 <td><p>From 1 to 8.</p></td>
 </tr>
 </tbody>
@@ -575,7 +649,7 @@ register access types.</p>
 </div>
 <p>Renders as:</p>
 <div><div class="collapsible docutils container">
-<input class="collapsible_input" id="cd95aa5f-002e-4f85-9705-cd50a45375ba" name="cd95aa5f-002e-4f85-9705-cd50a45375ba" type="checkbox"></input><label for="cd95aa5f-002e-4f85-9705-cd50a45375ba"><p>Python code example.</p>
+<input class="collapsible_input" id="810827ffe82f9e7edf97b6814d10ae473e58fb19" name="810827ffe82f9e7edf97b6814d10ae473e58fb19" type="checkbox"></input><label for="810827ffe82f9e7edf97b6814d10ae473e58fb19"><p>Python code example.</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello World!&quot;</span><span class="p">)</span>
 </pre></div>
@@ -586,8 +660,27 @@ register access types.</p>
 </section>
 <section id="global-options-for-hdl-directives">
 <span id="installing-pandoc"></span><h3>Global options for HDL directives<a class="headerlink" href="#global-options-for-hdl-directives" title="Link to this heading">#</a></h3>
-<p>Use the <cite>hide_collapsible_content</cite> to set the default state of the collapsibles,
-if you set to False, they be expanded by default.</p>
+<p>Set <code class="docutils literal notranslate"><span class="pre">hide_collapsible_content</span></code> to True to hide the collapsibles by default.</p>
+<p>Set <code class="docutils literal notranslate"><span class="pre">validate_links</span></code> to True to validate each link during build.
+These links are not managed, that means, only links from changed files are checked.
+You can run a build with it set to False, then touch the desired files to check
+the links of only these files.</p>
+</section>
+<section id="common-sections">
+<h3>Common sections<a class="headerlink" href="#common-sections" title="Link to this heading">#</a></h3>
+<p>The <strong>More information</strong> and <strong>Support</strong> sections that are present in
+the HDL project documentation, are actually separate pages inserted as links.
+They’re located at hdl/projects/common/more_information.rst and /support.rst,
+and cannot be referenced here because they don’t have an ID at the beginning
+of the page, so not to have warnings when the documentation is rendered that
+they’re not included in any toctree.</p>
+<p>They are inserted like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">..</span> <span class="n">include</span><span class="p">::</span> <span class="o">../</span><span class="n">common</span><span class="o">/</span><span class="n">more_information</span><span class="o">.</span><span class="n">rst</span>
+
+<span class="o">..</span> <span class="n">include</span><span class="p">::</span> <span class="o">../</span><span class="n">common</span><span class="o">/</span><span class="n">support</span><span class="o">.</span><span class="n">rst</span>
+</pre></div>
+</div>
+<p>and will be rendered as sections of the page.</p>
 </section>
 </section>
 </section>
@@ -603,23 +696,23 @@ if you set to False, they be expanded by default.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../library/spi_engine/index.html">
+          <a class="next-page" href="third_party.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">SPI Engine</div>
+                <div class="title">Third party forks</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="porting_project.html">
+          <a class="prev-page" href="hdl_coding_guideline.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Porting ADI’s HDL reference designs</div>
+                <div class="title">ADI HDL coding guideline</div>
                 
               </div>
             </a>
@@ -656,6 +749,7 @@ if you set to False, they be expanded by default.</p>
 <li><a class="reference internal" href="#">Documentation guidelines</a><ul>
 <li><a class="reference internal" href="#templates">Templates</a></li>
 <li><a class="reference internal" href="#indentation">Indentation</a></li>
+<li><a class="reference internal" href="#table-of-contents">Table of contents</a></li>
 <li><a class="reference internal" href="#references">References</a></li>
 <li><a class="reference internal" href="#text-width">Text width</a></li>
 <li><a class="reference internal" href="#tables">Tables</a></li>
@@ -671,17 +765,21 @@ if you set to False, they be expanded by default.</p>
 </li>
 <li><a class="reference internal" href="#custom-directives-and-roles">Custom directives and roles</a><ul>
 <li><a class="reference internal" href="#color-role">Color role</a></li>
+<li><a class="reference internal" href="#link-roles">Link roles</a><ul>
 <li><a class="reference internal" href="#git-role">Git role</a></li>
-<li><a class="reference internal" href="#part-role">Part role</a></li>
+<li><a class="reference internal" href="#adi-role">ADI role</a></li>
 <li><a class="reference internal" href="#datasheet-role">Datasheet role</a></li>
 <li><a class="reference internal" href="#dokuwiki-role">Dokuwiki role</a></li>
 <li><a class="reference internal" href="#engineerzone-role">EngineerZone role</a></li>
 <li><a class="reference internal" href="#vendor-role">Vendor role</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#hdl-parameters-directive">HDL parameters directive</a></li>
 <li><a class="reference internal" href="#hdl-interface-directive">HDL interface directive</a></li>
 <li><a class="reference internal" href="#hdl-regmap-directive">HDL regmap directive</a></li>
 <li><a class="reference internal" href="#collapsible-directive">Collapsible directive</a></li>
 <li><a class="reference internal" href="#global-options-for-hdl-directives">Global options for HDL directives</a></li>
+<li><a class="reference internal" href="#common-sections">Common sections</a></li>
 </ul>
 </li>
 </ul>

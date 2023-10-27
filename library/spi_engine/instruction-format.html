@@ -10,7 +10,7 @@
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=36a5483c" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6000fc3f" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=73e8d488" />
     
     
 
@@ -158,13 +158,23 @@
   <p class="caption" role="heading"><span class="caption-text">User guide</span></p>
 <ul>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../user_guide/index.html">User Guide</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of User Guide</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/git_repository.html">Git repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/releases.html">Releases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_hdl.html">Build an HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/architecture.html">HDL architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/ip_cores.html">IP cores</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/porting_project.html">Porting reference designs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/customize_hdl.html">Customize HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/hdl_coding_guideline.html">HDL coding guideline</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/docs_guidelines.html">Documentation guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/third_party.html">Third party forks</a></li>
 </ul>
 </li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Libraries</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../axi_dmac/index.html">High-Speed DMA Controller</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">SPI Engine</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of SPI Engine</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="spi_engine_execution.html">Execution Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="axi_spi_engine.html">AXI Module</a></li>
@@ -177,7 +187,13 @@
 <li class="toctree-l2"><a class="reference internal" href="tutorial.html">Tutorial - PulSAR ADC</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../axi_dmac/index.html">High-Speed DMA Controller</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Projects</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../projects/ad7616_sdz/index.html">AD7616-SDZ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projects/ad9081_fmca_ebz/index.html">AD9081-FMCA-EBZ/AD9082-FMCA-EBZ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projects/adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
 </ul>
 
 </div>
@@ -304,9 +320,8 @@ the SDO pin.</p></td>
 </table>
 </div>
 </section>
-</section>
 <section id="chip-select-instruction">
-<h2>Chip-select Instruction<a class="headerlink" href="#chip-select-instruction" title="Link to this heading">#</a></h2>
+<h3>Chip-select Instruction<a class="headerlink" href="#chip-select-instruction" title="Link to this heading">#</a></h3>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -356,10 +371,11 @@ specified delay. The length of the delay depends on the module clock frequency,
 the setting of the prescaler register and the t parameter of the instruction.
 This delay is inserted before and after the update of the chip-select signal,
 so the total execution time of the chip-select
-instruction is twice the delay.</p>
+instruction is twice the delay, plus a fixed 2 clock cycles (fast clock, not prescaled)
+for the internal logic.</p>
 <div class="math-wrapper docutils container">
 <div class="math notranslate nohighlight">
-\[delay = t * \frac{div + 1}{f_{clk}}\]</div>
+\[delay = t * \frac{(div + 1)*2}{f_{clk}}\]</div>
 </div>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -388,7 +404,7 @@ instruction is twice the delay.</p>
 </div>
 </section>
 <section id="configuration-write-instruction">
-<h2>Configuration Write Instruction<a class="headerlink" href="#configuration-write-instruction" title="Link to this heading">#</a></h2>
+<h3>Configuration Write Instruction<a class="headerlink" href="#configuration-write-instruction" title="Link to this heading">#</a></h3>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -464,7 +480,7 @@ of the SPI Engine execution module with a new value.</p>
 </div>
 </section>
 <section id="synchronize-instruction">
-<h2>Synchronize Instruction<a class="headerlink" href="#synchronize-instruction" title="Link to this heading">#</a></h2>
+<h3>Synchronize Instruction<a class="headerlink" href="#synchronize-instruction" title="Link to this heading">#</a></h3>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -534,7 +550,7 @@ module to identify the end of a transaction and re-start the arbitration process
 </div>
 </section>
 <section id="sleep-instruction">
-<h2>Sleep Instruction<a class="headerlink" href="#sleep-instruction" title="Link to this heading">#</a></h2>
+<h3>Sleep Instruction<a class="headerlink" href="#sleep-instruction" title="Link to this heading">#</a></h3>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -580,10 +596,11 @@ module to identify the end of a transaction and re-start the arbitration process
 <p>The sleep instruction stops the execution of the command stream for the
 specified amount of time. The time is based on the external clock frequency the
 configuration value of the prescaler register and the time parameter of the
-instruction.</p>
+instruction. A fixed delay of two clock cycles (fast, not affected by the prescaler)
+is the minimum, needed by the internal logic.</p>
 <div class="math-wrapper docutils container">
 <div class="math notranslate nohighlight">
-\[sleep\_time = \frac{(t + 1) * ((div + 1) * 2)}{f_{clk}}\]</div>
+\[sleep\_time = \frac{2+(t) * ((div + 1) * 2)}{f_{clk}}\]</div>
 </div>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -606,14 +623,14 @@ instruction.</p>
 </tbody>
 </table>
 </div>
+</section>
+</section>
 <section id="configuration-registers">
-<span id="spi-engine-configutarion-registers"></span><h3>Configuration Registers<a class="headerlink" href="#configuration-registers" title="Link to this heading">#</a></h3>
+<span id="spi-engine-configutarion-registers"></span><h2>Configuration Registers<a class="headerlink" href="#configuration-registers" title="Link to this heading">#</a></h2>
 <p>The SPI Engine execution module has a set of 8-bit configuration registers which
 can be used to dynamically modify the behavior of the module at runtime.</p>
-</section>
-</section>
 <section id="spi-configuration-register">
-<span id="spi-engine-spi-configuration-register"></span><h2>SPI Configuration Register<a class="headerlink" href="#spi-configuration-register" title="Link to this heading">#</a></h2>
+<span id="spi-engine-spi-configuration-register"></span><h3>SPI Configuration Register<a class="headerlink" href="#spi-configuration-register" title="Link to this heading">#</a></h3>
 <p>The SPI configuration register configures various aspects of the low-level SPI
 bus behavior.</p>
 <div class="table-wrapper colwidths-given docutils container">
@@ -655,7 +672,7 @@ sampled on the leading edge and updated on the trailing edge.</p></td>
 </div>
 </section>
 <section id="prescaler-configuration-register">
-<span id="spi-engine-prescaler-configuration-register"></span><h2>Prescaler Configuration Register<a class="headerlink" href="#prescaler-configuration-register" title="Link to this heading">#</a></h2>
+<span id="spi-engine-prescaler-configuration-register"></span><h3>Prescaler Configuration Register<a class="headerlink" href="#prescaler-configuration-register" title="Link to this heading">#</a></h3>
 <p>The prescaler configuration register configures the divider that is applied to
 the module clock when generating the SCLK signal and other internal control
 signals used by the sleep and chip-select commands.</p>
@@ -684,7 +701,7 @@ using the following formula:</p>
 <p>If no prescaler block is present div is 0.</p>
 </section>
 <section id="dynamic-transfer-length-register">
-<span id="spi-engine-dynamic-transfer-length-register"></span><h2>Dynamic Transfer Length Register<a class="headerlink" href="#dynamic-transfer-length-register" title="Link to this heading">#</a></h2>
+<span id="spi-engine-dynamic-transfer-length-register"></span><h3>Dynamic Transfer Length Register<a class="headerlink" href="#dynamic-transfer-length-register" title="Link to this heading">#</a></h3>
 <p>The dynamic transfer length register sets the length (in bits) of a transfer. By
 default, the transfer length is equal to the DATA_WIDTH of the execution module.
 If required the user can reduce this length by setting this register. A general
@@ -706,6 +723,7 @@ supported by the target device.</p>
 </tbody>
 </table>
 </div>
+</section>
 </section>
 </section>
 
@@ -773,18 +791,18 @@ supported by the target device.</p>
 <li><a class="reference internal" href="#">SPI Engine Instruction Set Specification</a><ul>
 <li><a class="reference internal" href="#instructions">Instructions</a><ul>
 <li><a class="reference internal" href="#transfer-instruction">Transfer Instruction</a></li>
-</ul>
-</li>
 <li><a class="reference internal" href="#chip-select-instruction">Chip-select Instruction</a></li>
 <li><a class="reference internal" href="#configuration-write-instruction">Configuration Write Instruction</a></li>
 <li><a class="reference internal" href="#synchronize-instruction">Synchronize Instruction</a></li>
-<li><a class="reference internal" href="#sleep-instruction">Sleep Instruction</a><ul>
-<li><a class="reference internal" href="#configuration-registers">Configuration Registers</a></li>
+<li><a class="reference internal" href="#sleep-instruction">Sleep Instruction</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#configuration-registers">Configuration Registers</a><ul>
 <li><a class="reference internal" href="#spi-configuration-register">SPI Configuration Register</a></li>
 <li><a class="reference internal" href="#prescaler-configuration-register">Prescaler Configuration Register</a></li>
 <li><a class="reference internal" href="#dynamic-transfer-length-register">Dynamic Transfer Length Register</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

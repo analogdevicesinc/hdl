@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="AD9783-EBZ HDL project" href="../ad9783_ebz/index.html" /><link rel="prev" title="AD7616-SDZ HDL project" href="../ad7616_sdz/index.html" />
 
     <link rel="shortcut icon" href="../../_static/icon.svg"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.17 -->
-        <title>Project template - HDL, Analog Devices v0.1 documentation</title>
+        <title>AD9081-FMCA-EBZ/AD9082-FMCA-EBZ HDL project - HDL, Analog Devices v0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=36a5483c" />
@@ -189,9 +189,9 @@
 </li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Projects</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../ad7616_sdz/index.html">AD7616-SDZ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ad9081_fmca_ebz/index.html">AD9081-FMCA-EBZ/AD9082-FMCA-EBZ</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">AD9081-FMCA-EBZ/AD9082-FMCA-EBZ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ad9783_ebz/index.html">AD9783-EBZ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
 </ul>
@@ -228,17 +228,37 @@
           </label>
         </div>
         <article role="main">
-          <section id="project-template">
-<span id="template-project"></span><h1>Project template<a class="headerlink" href="#project-template" title="Link to this heading">#</a></h1>
+          <section id="ad9081-fmca-ebz-ad9082-fmca-ebz-hdl-project">
+<span id="ad9081-fmca-ebz"></span><h1>AD9081-FMCA-EBZ/AD9082-FMCA-EBZ HDL project<a class="headerlink" href="#ad9081-fmca-ebz-ad9082-fmca-ebz-hdl-project" title="Link to this heading">#</a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
-<p><strong>*Some specifications about the board, the chip, etc. Typically the
-information found on the</strong> <a class="reference external" href="https://www.analog.com/en/products/">https://www.analog.com/en/products/</a>
-<strong>website</strong>*</p>
+<p>The <a class="reference external" href="https://www.analog.com/EVAL-AD9081">AD9081-FMCA-EBZ</a> / <a class="reference external" href="https://www.analog.com/EVAL-AD9082">AD9082-FMCA-EBZ</a>
+reference design (also known as Single MxFE) is a processor based
+(e.g. Microblaze) embedded system.
+The design consists from a receive and a transmit chain.</p>
+<p>The receive chain transports the captured samples from ADC to the system
+memory (DDR). Before transferring the data to DDR the samples are stored
+in a buffer implemented on block rams from the FPGA fabric
+(util_adc_fifo). The space allocated in the buffer for each channel
+depends on the number of currently active channels. It goes up to M x
+64k samples if a single channel is selected or 64k samples per channel
+if all channels are selected.</p>
+<p>The transmit chain transports samples from the system memory to the DAC
+devices. Before streaming out the data to the DAC through the JESD link
+the samples first are loaded into a buffer (util_dac_fifo) which will
+cyclically stream the samples at the tx_device_clk data rate. The space
+allocated in the transmit buffer for each channel depends on the number
+of currently active channels. It goes up to M x 64k samples if a single
+channel is selected or 64k samples per channel if all channels are
+selected.</p>
+<p>All cores from the receive and transmit chains are programmable through
+an AXI-Lite interface.</p>
+<p>The transmit and receive chains can operate at different data rates
+having separate rx_device_clk/tx_device_clk and corresponding lane rates
+but must share the same reference clock.</p>
 </section>
 <section id="supported-boards">
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Link to this heading">#</a></h2>
-<p><strong>*IF IT APPLIES</strong>*</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://www.analog.com/EVAL-AD9081">AD9081-FMCA-EBZ</a></p></li>
 <li><p><a class="reference external" href="https://www.analog.com/EVAL-AD9082">AD9082-FMCA-EBZ</a></p></li>
@@ -246,17 +266,18 @@ information found on the</strong> <a class="reference external" href="https://ww
 </section>
 <section id="supported-devices">
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Link to this heading">#</a></h2>
-<p><strong>*EXAMPLES</strong>*</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://www.analog.com/AD9081">AD9081</a></p></li>
+<li><p><a class="reference external" href="https://www.analog.com/AD9082">AD9082</a></p></li>
 <li><p><a class="reference external" href="https://www.analog.com/AD9177">AD9177</a></p></li>
+<li><p><a class="reference external" href="https://www.analog.com/AD9207">AD9207</a></p></li>
 <li><p><a class="reference external" href="https://www.analog.com/AD9209">AD9209</a></p></li>
+<li><p><a class="reference external" href="https://www.analog.com/AD9986">AD9986</a></p></li>
+<li><p><a class="reference external" href="https://www.analog.com/AD9988">AD9988</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
 <h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Link to this heading">#</a></h2>
-<p><strong>*At least one. Should be updated each time the project is ported to
-another carrier. Take these tables as an example:</strong>*</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -336,17 +357,126 @@ another carrier. Take these tables as an example:</strong>*</p>
 <h2>Block design<a class="headerlink" href="#block-design" title="Link to this heading">#</a></h2>
 <section id="block-diagram">
 <h3>Block diagram<a class="headerlink" href="#block-diagram" title="Link to this heading">#</a></h3>
-<p>*** MUST HAVE *** The data path and clock domains are depicted in
-the below diagram:</p>
-<p>** TIP: upload the .svg file for the diagram to have high quality **</p>
-<p>If the project has multiple ways of configuration, then make subsections to
-this section and show the default configuration and some other popular modes.</p>
-<a class="reference internal image-reference" href="../../_images/ad9783_zcu102_block_diagram.svg"><img alt="AD9783-EBZ/ZCU102 block diagram" class="align-center" src="../../_images/ad9783_zcu102_block_diagram.svg" width="800" /></a>
+<section id="example-block-design-for-single-link-m-8-l-4">
+<h4>Example block design for Single link; M=8; L=4<a class="headerlink" href="#example-block-design-for-single-link-m-8-l-4" title="Link to this heading">#</a></h4>
+<a class="reference internal image-reference" href="../../_images/ad9081_204b_M8L4.svg"><img alt="AD9081-FMCA-EBZ JESD204B M=8 L=4 block diagram" class="align-center" src="../../_images/ad9081_204b_M8L4.svg" width="800" /></a>
+<p>The Rx links (ADC Path) operate with the following parameters:</p>
+<ul class="simple">
+<li><p>Rx Deframer parameters: L=4, M=8, F=4, S=1, NP=16, N=16 (Quick
+Config 0x0A)</p></li>
+<li><p>Sample Rate: 250 MSPS</p></li>
+<li><p>Dual link: No</p></li>
+<li><p>RX_DEVICE_CLK: 250 MHz (Lane Rate/40)</p></li>
+<li><p>REF_CLK: 500MHz (Lane Rate/20)</p></li>
+<li><p>JESD204B Lane Rate: 10Gbps</p></li>
+<li><p>QPLL0 or CPLL</p></li>
+</ul>
+<p>The Tx links (DAC Path) operate with the following parameters:</p>
+<ul class="simple">
+<li><p>Tx Framer parameters: L=4, M=8, F=4, S=1, NP=16, N=16 (Quick Config
+0x09)</p></li>
+<li><p>Sample Rate: 250 MSPS</p></li>
+<li><p>Dual link: No</p></li>
+<li><p>TX_DEVICE_CLK: 250 MHz (Lane Rate/40)</p></li>
+<li><p>REF_CLK: 500MHz (Lane Rate/20)</p></li>
+<li><p>JESD204B Lane Rate: 10Gbps</p></li>
+<li><p>QPLL0 or CPLL</p></li>
+</ul>
+</section>
+<section id="example-block-design-for-single-link-m-4-l-8">
+<h4>Example block design for Single link; M=4; L=8<a class="headerlink" href="#example-block-design-for-single-link-m-4-l-8" title="Link to this heading">#</a></h4>
+<a class="reference internal image-reference" href="../../_images/ad9081_204b_M4L8.svg"><img alt="AD9081-FMCA-EBZ JESD204B M=4 L=8 block diagram" class="align-center" src="../../_images/ad9081_204b_M4L8.svg" width="800" /></a>
+<p>The Rx links are set for full bandwidth mode and operate with the
+following parameters:</p>
+<ul class="simple">
+<li><p>Rx Deframer parameters: L=8, M=4, F=1, S=1, NP=16, N=16 (Quick
+Config 0x12)</p></li>
+<li><p>Sample Rate: 1550 MSPS</p></li>
+<li><p>Dual link: No</p></li>
+<li><p>RX_DEVICE_CLK: 387.5 MHz (Lane Rate/40)</p></li>
+<li><p>REF_CLK: 775MHz (Lane Rate/20)</p></li>
+<li><p>JESD204B Lane Rate: 15.5Gbps</p></li>
+<li><p>QPLL0</p></li>
+</ul>
+<p>The Tx links are set for full bandwidth mode and operate with the
+following parameters:</p>
+<ul class="simple">
+<li><p>Tx Framer parameters: L=8, M=4, F=1, S=1, NP=16, N=16 (Quick Config
+0x11)</p></li>
+<li><p>Sample Rate: 1550 MSPS</p></li>
+<li><p>Dual link: No</p></li>
+<li><p>TX_DEVICE_CLK: 387.5 MHz (Lane Rate/40)</p></li>
+<li><p>REF_CLK: 775MHz (Lane Rate/20)</p></li>
+<li><p>JESD204B Lane Rate: 15.5Gbps</p></li>
+<li><p>QPLL0</p></li>
+</ul>
+</section>
+<section id="example-block-design-for-single-link-m-2-l-8-jesd204c">
+<h4>Example block design for Single link; M=2; L=8; JESD204C<a class="headerlink" href="#example-block-design-for-single-link-m-2-l-8-jesd204c" title="Link to this heading">#</a></h4>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In 2019_R2 release, the AMD JESD Physical layer IP Core is used,
+however in newer versions it is replaced with ADI’s util_adxcvr IP core.</p>
+</div>
+<a class="reference internal image-reference" href="../../_images/ad9081_204c_M2L8.svg"><img alt="AD9081-FMCA-EBZ JESD204C M=2 L=8 block diagram" class="align-center" src="../../_images/ad9081_204c_M2L8.svg" width="800" /></a>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><strong>Build instructions:</strong></p>
+<p>The project must be built with the following parameters:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">JESD_MODE</span><span class="o">=</span>64B66B<span class="w"> </span><span class="se">\</span>
+<span class="nv">RX_RATE</span><span class="o">=</span><span class="m">16</span>.5<span class="w"> </span><span class="se">\</span>
+<span class="nv">TX_RATE</span><span class="o">=</span><span class="m">16</span>.5<span class="w"> </span><span class="se">\</span>
+<span class="nv">RX_JESD_M</span><span class="o">=</span><span class="m">2</span><span class="w"> </span><span class="se">\</span>
+<span class="nv">RX_JESD_L</span><span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="se">\</span>
+<span class="nv">RX_JESD_S</span><span class="o">=</span><span class="m">2</span><span class="w"> </span><span class="se">\</span>
+<span class="nv">RX_JESD_NP</span><span class="o">=</span><span class="m">16</span><span class="w"> </span><span class="se">\</span>
+<span class="nv">TX_JESD_M</span><span class="o">=</span><span class="m">2</span><span class="w"> </span><span class="se">\</span>
+<span class="nv">TX_JESD_L</span><span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="se">\</span>
+<span class="nv">TX_JESD_S</span><span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="se">\</span>
+<span class="nv">TX_JESD_NP</span><span class="o">=</span><span class="m">8</span>
+</pre></div>
+</div>
+</div>
+<p>The Rx link is operating with the following parameters:</p>
+<ul class="simple">
+<li><p>Rx Deframer parameters: L=8, M=2, F=1, S=2, NP=16, N=16 (Quick Config
+0x13)</p></li>
+<li><p>Sample Rate: 4000 MSPS</p></li>
+<li><p>Dual link: No</p></li>
+<li><p>RX_DEVICE_CLK: 250 MHz (Lane Rate/66)</p></li>
+<li><p>REF_CLK: 500 MHz (Lane Rate/33)</p></li>
+<li><p>JESD204C Lane Rate: 16.5Gbps</p></li>
+<li><p>QPLL1</p></li>
+</ul>
+<p>The Tx link is operating with the following parameters:</p>
+<ul class="simple">
+<li><p>Tx Framer parameters: L=8, M=2, F=1, S=4, NP=8, N=8 (Quick Config
+0x13)</p></li>
+<li><p>Sample Rate: 8000 MSPS</p></li>
+<li><p>Dual link: No</p></li>
+<li><p>TX_DEVICE_CLK: 250 MHz (Lane Rate/66)</p></li>
+<li><p>REF_CLK: 500 MHz (Lane Rate/33)</p></li>
+<li><p>JESD204C Lane Rate: 16.5Gbps</p></li>
+<li><p>QPLL1</p></li>
+</ul>
+</section>
 </section>
 <section id="configuration-modes">
 <h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Link to this heading">#</a></h3>
-<p>*** MENTION IF ANY MODES ARE AVAILABLE FOR CONFIGURATION ***</p>
-<p><strong>EXAMPLES BUT NOT LIMITED TO</strong></p>
+<p>The block design supports configuration of parameters and scales.</p>
+<p>We have listed a couple of examples at section
+<a class="reference internal" href="#building-the-hdl-project">Building the HDL project</a> and the default modes
+for each project.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The parameters for Rx or Tx links can be changed from the
+<strong>system_project.tcl</strong> file, located in
+hdl/projects/ad9081_fmca_ebz/$CARRIER/system_project.tcl</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code class="docutils literal notranslate"><span class="pre">Lane</span> <span class="pre">Rate</span> <span class="pre">=</span> <span class="pre">I/Q</span> <span class="pre">Sample</span> <span class="pre">Rate</span> <span class="pre">x</span> <span class="pre">M</span> <span class="pre">x</span> <span class="pre">N'</span> <span class="pre">x</span> <span class="pre">(10</span> <span class="pre">\</span> <span class="pre">8)</span> <span class="pre">\</span> <span class="pre">L</span></code></p>
+</div>
 <p>The following are the parameters of this project that can be configured:</p>
 <ul class="simple">
 <li><p>JESD_MODE: used link layer encoder mode</p>
@@ -382,48 +512,33 @@ kilosamples per converter (M)</p></li>
 </section>
 <section id="clock-scheme">
 <h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>External clock source
-<a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-synchrona14-ebz">AD-SYNCHRONA14-EBZ</a></p></li>
-<li><p>SYSREF clocks are LVDS</p></li>
-<li><p>ADCCLK and REFCLK are LVPECL</p></li>
-</ul>
-<p>** ADD IMAGE IF APPLIES! TIP: upload the .svg file for the diagram to have
-high quality **</p>
-<p><strong>*DESCRIBE OTHER COMPONENTS FROM THE PROJECT, EX: SYNCHRONA</strong>*</p>
-<p>Only the channels presented in the clocking selection are relevant. For
-the rest, you can either disable them or just put a divided frequency of
-the source clock.</p>
+<p>The clock sources depend on the carrier that is used:</p>
+<section id="zcu102">
+<h4><a class="reference external" href="https://www.xilinx.com/ZCU102">ZCU102</a><a class="headerlink" href="#zcu102" title="Link to this heading">#</a></h4>
+<a class="reference internal image-reference" href="../../_images/ad9081_clock_scheme_zcu102.svg"><img alt="AD9081-FMCA-EBZ ZCU102 clock scheme" class="align-center" src="../../_images/ad9081_clock_scheme_zcu102.svg" width="800" /></a>
+</section>
+<section id="vcu118">
+<h4><a class="reference external" href="https://www.xilinx.com/VCU118">VCU118</a><a class="headerlink" href="#vcu118" title="Link to this heading">#</a></h4>
+<a class="reference internal image-reference" href="../../_images/ad9081_clock_scheme_vcu118.svg"><img alt="AD9081-FMCA-EBZ VCU118 clock scheme" class="align-center" src="../../_images/ad9081_clock_scheme_vcu118.svg" width="800" /></a>
+</section>
 <section id="limitations">
 <h4>Limitations<a class="headerlink" href="#limitations" title="Link to this heading">#</a></h4>
-<p><strong>*EXAMPLE OF CONFIGURATION/LIMITATION. PLEASE WRITE THIS KIND OF
-INFORMATION IF IT APPLIES TO THE PROJECT</strong>*</p>
-<p>The design has one JESD receive chain with 4 lanes at rate of 13Gbps.
-The JESD receive chain consists of a physical layer represented by an
-XCVR module, a link layer represented by an RX JESD LINK module and
-transport layer represented by a RX JESD TPL module. The link operates
-in Subclass 1.</p>
-<p>The link is set for full bandwidth mode and operate with the following
-parameters:</p>
-<p>Deframer paramaters: L=4, M=2, F=1, S=1, NP=16</p>
-<div class="line-block">
-<div class="line">SYSREF - 5.078125 MHZ</div>
-<div class="line">REFCLK - 325MHz (Lane Rate/40)</div>
-<div class="line">DEVICECLK - 325 MHz</div>
-<div class="line">ADCCLK - 1300MHz</div>
-<div class="line">JESD204B Lane Rate - 13Gbps</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>For the parameter selection, the following restrictions apply:</p>
+<ul class="simple">
+<li><p>NP = 8, 12, 16</p></li>
+<li><p>F = 1, 2, 3, 4, 6, 8</p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/axi_jesd204_rx#restrictions">https://wiki.analog.com/resources/fpga/peripherals/jesd204/axi_jesd204_rx#restrictions</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/axi_jesd204_tx#restrictions">https://wiki.analog.com/resources/fpga/peripherals/jesd204/axi_jesd204_tx#restrictions</a></p></li>
+</ul>
 </div>
-<p>The transport layer component presents on its output 128 bits at once on
-every clock cycle, representing 4 samples per converter. The two receive
-chains are merged together and transferred to the DDR with a single DMA.</p>
 </section>
 </section>
 <section id="cpu-memory-interconnects-addresses">
 <h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Link to this heading">#</a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture"><span class="std std-ref">HDL Architecture</span></a>).</p>
-<p><strong>If there are any PL SPI connections, they must be added in this table too</strong></p>
-<p>*** THIS IS JUST AN EXAMPLE ***</p>
 <p>Depending on the values of parameters $INTF_CFG, $ADI_PHY_SEL and $TDD_SUPPORT,
 some IPs are instatiated and some are not.</p>
 <p>Check-out the table below to find out the conditions.</p>
@@ -508,40 +623,8 @@ some IPs are instatiated and some are not.</p>
 </table>
 </div>
 </section>
-<section id="i2c-connections">
-<h3>I2C connections<a class="headerlink" href="#i2c-connections" title="Link to this heading">#</a></h3>
-<div class="table-wrapper colwidths-given docutils container">
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>I2C type</p></th>
-<th class="head"><p>I2C manager instance</p></th>
-<th class="head"><p>Alias</p></th>
-<th class="head"><p>Address</p></th>
-<th class="head"><p>I2C subordinate</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
 <section id="spi-connections">
 <h3>SPI connections<a class="headerlink" href="#spi-connections" title="Link to this heading">#</a></h3>
-<p>THESE ARE JUST EXAMPLES!!!
-USE WHICHEVER FITS BEST YOUR CASE</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -559,18 +642,13 @@ USE WHICHEVER FITS BEST YOUR CASE</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>PS</p></td>
-<td><p>SPI 0</p></td>
-<td><p>ADXYZT</p></td>
+<td><p>spi0</p></td>
+<td><p>AD9081</p></td>
 <td><p>0</p></td>
 </tr>
 <tr class="row-odd"><td><p>PS</p></td>
-<td><p>SPI 1</p></td>
-<td><p>AD0000</p></td>
-<td><p>0</p></td>
-</tr>
-<tr class="row-even"><td><p>PL</p></td>
-<td><p>axi_spi_bus_1</p></td>
-<td><p>AD23456</p></td>
+<td><p>spi1</p></td>
+<td><p>HMC7044</p></td>
 <td><p>0</p></td>
 </tr>
 </tbody>
@@ -579,7 +657,6 @@ USE WHICHEVER FITS BEST YOUR CASE</p>
 </section>
 <section id="gpios">
 <h3>GPIOs<a class="headerlink" href="#gpios" title="Link to this heading">#</a></h3>
-<p><strong>Add explanation depending on your case</strong></p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -604,23 +681,71 @@ USE WHICHEVER FITS BEST YOUR CASE</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-odd"><td><p>signal name</p></td>
-<td><p>IN/OUT/INOUT</p></td>
-<td><p>32-63</p></td>
-<td><p>86-117</p></td>
-<td><p>110-141</p></td>
+<tr class="row-odd"><td><p>gpio[0:10]</p></td>
+<td><p>INOUT</p></td>
+<td><p>32-42</p></td>
+<td><p>86-96</p></td>
+<td><p>110-120</p></td>
 </tr>
-<tr class="row-even"><td><p>signal name</p></td>
-<td><p>IN/OUT/INOUT</p></td>
-<td><p>64-95</p></td>
-<td><p>118-149</p></td>
-<td><p>142-173</p></td>
+<tr class="row-even"><td><p>hmc_gpio1</p></td>
+<td><p>INOUT</p></td>
+<td><p>43</p></td>
+<td><p>97</p></td>
+<td><p>121</p></td>
 </tr>
-<tr class="row-odd"><td><p>signal name</p></td>
-<td><p>IN/OUT/INOUT</p></td>
-<td><p>96-127</p></td>
-<td><p>150-181</p></td>
-<td><p>174-205</p></td>
+<tr class="row-odd"><td><p>agc0[0:1]</p></td>
+<td><p>IN</p></td>
+<td><p>44, 45</p></td>
+<td><p>98, 99</p></td>
+<td><p>122, 123</p></td>
+</tr>
+<tr class="row-even"><td><p>agc1[0:1]</p></td>
+<td><p>IN</p></td>
+<td><p>46, 47</p></td>
+<td><p>100, 101</p></td>
+<td><p>124, 125</p></td>
+</tr>
+<tr class="row-odd"><td><p>agc2[0:1]</p></td>
+<td><p>IN</p></td>
+<td><p>48, 49</p></td>
+<td><p>102, 103</p></td>
+<td><p>126, 127</p></td>
+</tr>
+<tr class="row-even"><td><p>agc3[0:1]</p></td>
+<td><p>IN</p></td>
+<td><p>50, 51</p></td>
+<td><p>104, 105</p></td>
+<td><p>128, 129</p></td>
+</tr>
+<tr class="row-odd"><td><p>irqb[0:1]</p></td>
+<td><p>IN</p></td>
+<td><p>52, 53</p></td>
+<td><p>106, 107</p></td>
+<td><p>130, 131</p></td>
+</tr>
+<tr class="row-even"><td><p>hmc_sync</p></td>
+<td><p>OUT</p></td>
+<td><p>54</p></td>
+<td><p>108</p></td>
+<td><p>132</p></td>
+</tr>
+<tr class="row-odd"><td><p>rstb</p></td>
+<td><p>OUT</p></td>
+<td><p>55</p></td>
+<td><p>109</p></td>
+<td><p>133</p></td>
+</tr>
+<tr class="row-even"><td><p>rxen[0:1]</p></td>
+<td><p>OUT</p></td>
+<td><p>56, 57</p></td>
+<td><p>110, 111</p></td>
+<td><p>134, 135</p></td>
+</tr>
+<tr class="row-odd"><td><p>txen[0:1]</p></td>
+<td><p>OUT</p></td>
+<td><p>58, 59</p></td>
+<td><p>112, 113</p></td>
+<td><p>136, 137</p></td>
 </tr>
 </tbody>
 </table>
@@ -629,144 +754,6 @@ USE WHICHEVER FITS BEST YOUR CASE</p>
 <section id="interrupts">
 <h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading">#</a></h3>
 <p>Below are the Programmable Logic interrupts used in this project.</p>
-<p>You have many ways of writing this table: as a list-table or really to draw
-it. Take a look in the .rst of this page to see how they’re written and
-which suits best your case.</p>
-<div class="table-wrapper colwidths-given docutils container">
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 30.0%" />
-<col style="width: 10.0%" />
-<col style="width: 15.0%" />
-<col style="width: 15.0%" />
-<col style="width: 15.0%" />
-<col style="width: 15.0%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Instance name</p></th>
-<th class="head"><p>HDL</p></th>
-<th class="head"><p>Linux Zynq</p></th>
-<th class="head"><p>Actual Zynq</p></th>
-<th class="head"><p>Linux ZynqMP</p></th>
-<th class="head"><p>Actual ZynqMP</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>—</p></td>
-<td><p>15</p></td>
-<td><p>59</p></td>
-<td><p>91</p></td>
-<td><p>111</p></td>
-<td><p>143</p></td>
-</tr>
-<tr class="row-odd"><td><p>—</p></td>
-<td><p>14</p></td>
-<td><p>58</p></td>
-<td><p>90</p></td>
-<td><p>110</p></td>
-<td><p>142</p></td>
-</tr>
-<tr class="row-even"><td><p>—</p></td>
-<td><p>13</p></td>
-<td><p>57</p></td>
-<td><p>89</p></td>
-<td><p>109</p></td>
-<td><p>141</p></td>
-</tr>
-<tr class="row-odd"><td><p>—</p></td>
-<td><p>12</p></td>
-<td><p>56</p></td>
-<td><p>88</p></td>
-<td><p>108</p></td>
-<td><p>140</p></td>
-</tr>
-<tr class="row-even"><td><p>—</p></td>
-<td><p>11</p></td>
-<td><p>55</p></td>
-<td><p>87</p></td>
-<td><p>107</p></td>
-<td><p>139</p></td>
-</tr>
-<tr class="row-odd"><td><p>—</p></td>
-<td><p>10</p></td>
-<td><p>54</p></td>
-<td><p>86</p></td>
-<td><p>106</p></td>
-<td><p>138</p></td>
-</tr>
-<tr class="row-even"><td><p>—</p></td>
-<td><p>9</p></td>
-<td><p>53</p></td>
-<td><p>85</p></td>
-<td><p>105</p></td>
-<td><p>137</p></td>
-</tr>
-<tr class="row-odd"><td><p>—</p></td>
-<td><p>8</p></td>
-<td><p>52</p></td>
-<td><p>84</p></td>
-<td><p>104</p></td>
-<td><p>136</p></td>
-</tr>
-<tr class="row-even"><td><p>—</p></td>
-<td><p>7</p></td>
-<td><p>36</p></td>
-<td><p>68</p></td>
-<td><p>96</p></td>
-<td><p>128</p></td>
-</tr>
-<tr class="row-odd"><td><p>—</p></td>
-<td><p>6</p></td>
-<td><p>35</p></td>
-<td><p>67</p></td>
-<td><p>95</p></td>
-<td><p>127</p></td>
-</tr>
-<tr class="row-even"><td><p>—</p></td>
-<td><p>5</p></td>
-<td><p>34</p></td>
-<td><p>66</p></td>
-<td><p>94</p></td>
-<td><p>126</p></td>
-</tr>
-<tr class="row-odd"><td><p>—</p></td>
-<td><p>4</p></td>
-<td><p>33</p></td>
-<td><p>65</p></td>
-<td><p>93</p></td>
-<td><p>125</p></td>
-</tr>
-<tr class="row-even"><td><p>—</p></td>
-<td><p>3</p></td>
-<td><p>32</p></td>
-<td><p>64</p></td>
-<td><p>92</p></td>
-<td><p>124</p></td>
-</tr>
-<tr class="row-odd"><td><p>—</p></td>
-<td><p>2</p></td>
-<td><p>31</p></td>
-<td><p>63</p></td>
-<td><p>91</p></td>
-<td><p>123</p></td>
-</tr>
-<tr class="row-even"><td><p>—</p></td>
-<td><p>1</p></td>
-<td><p>30</p></td>
-<td><p>62</p></td>
-<td><p>90</p></td>
-<td><p>122</p></td>
-</tr>
-<tr class="row-odd"><td><p>—</p></td>
-<td><p>0</p></td>
-<td><p>29</p></td>
-<td><p>61</p></td>
-<td><p>89</p></td>
-<td><p>121</p></td>
-</tr>
-</tbody>
-</table>
-</div>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -776,200 +763,53 @@ which suits best your case.</p>
 <th class="head"><p>Actual Zynq</p></th>
 <th class="head"><p>Linux ZynqMP</p></th>
 <th class="head"><p>Actual ZynqMP</p></th>
-<th class="head"><p>S10SoC</p></th>
-<th class="head"><p>Linux Cyclone V</p></th>
-<th class="head"><p>Actual Cyclone V</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>—</p></td>
-<td><p>15</p></td>
-<td><p>59</p></td>
-<td><p>91</p></td>
-<td><p>111</p></td>
-<td><p>143</p></td>
-<td><p>32</p></td>
-<td><p>55</p></td>
-<td><p>87</p></td>
-</tr>
-<tr class="row-odd"><td><p>—</p></td>
-<td><p>14</p></td>
-<td><p>58</p></td>
-<td><p>90</p></td>
-<td><p>110</p></td>
-<td><p>142</p></td>
-<td><p>31</p></td>
-<td><p>54</p></td>
-<td><p>86</p></td>
-</tr>
-<tr class="row-even"><td><p>—</p></td>
+<tr class="row-even"><td><p>axi_mxfe_rx_dma</p></td>
 <td><p>13</p></td>
 <td><p>57</p></td>
 <td><p>89</p></td>
 <td><p>109</p></td>
 <td><p>141</p></td>
-<td><p>30</p></td>
-<td><p>53</p></td>
-<td><p>85</p></td>
 </tr>
-<tr class="row-odd"><td><p>—</p></td>
+<tr class="row-odd"><td><p>axi_mxfe_tx_dma</p></td>
 <td><p>12</p></td>
 <td><p>56</p></td>
 <td><p>88</p></td>
 <td><p>108</p></td>
 <td><p>140</p></td>
-<td><p>29</p></td>
-<td><p>52</p></td>
-<td><p>84</p></td>
 </tr>
-<tr class="row-even"><td><p>—</p></td>
+<tr class="row-even"><td><p>axi_mxfe_rx_jesd</p></td>
 <td><p>11</p></td>
 <td><p>55</p></td>
 <td><p>87</p></td>
 <td><p>107</p></td>
 <td><p>139</p></td>
-<td><p>28</p></td>
-<td><p>51</p></td>
-<td><p>83</p></td>
 </tr>
-<tr class="row-odd"><td><p>—</p></td>
+<tr class="row-odd"><td><p>axi_mxfe_tx_jesd</p></td>
 <td><p>10</p></td>
 <td><p>54</p></td>
 <td><p>86</p></td>
 <td><p>106</p></td>
 <td><p>138</p></td>
-<td><p>27</p></td>
-<td><p>50</p></td>
-<td><p>82</p></td>
-</tr>
-<tr class="row-even"><td><p>—</p></td>
-<td><p>9</p></td>
-<td><p>53</p></td>
-<td><p>85</p></td>
-<td><p>105</p></td>
-<td><p>137</p></td>
-<td><p>26</p></td>
-<td><p>49</p></td>
-<td><p>81</p></td>
-</tr>
-<tr class="row-odd"><td><p>—</p></td>
-<td><p>8</p></td>
-<td><p>52</p></td>
-<td><p>84</p></td>
-<td><p>104</p></td>
-<td><p>136</p></td>
-<td><p>25</p></td>
-<td><p>48</p></td>
-<td><p>80</p></td>
-</tr>
-<tr class="row-even"><td><p>—</p></td>
-<td><p>7</p></td>
-<td><p>36</p></td>
-<td><p>68</p></td>
-<td><p>96</p></td>
-<td><p>128</p></td>
-<td><p>24</p></td>
-<td><p>47</p></td>
-<td><p>79</p></td>
-</tr>
-<tr class="row-odd"><td><p>—</p></td>
-<td><p>6</p></td>
-<td><p>35</p></td>
-<td><p>67</p></td>
-<td><p>95</p></td>
-<td><p>127</p></td>
-<td><p>23</p></td>
-<td><p>46</p></td>
-<td><p>78</p></td>
-</tr>
-<tr class="row-even"><td><p>—</p></td>
-<td><p>5</p></td>
-<td><p>34</p></td>
-<td><p>66</p></td>
-<td><p>94</p></td>
-<td><p>126</p></td>
-<td><p>22</p></td>
-<td><p>45</p></td>
-<td><p>77</p></td>
-</tr>
-<tr class="row-odd"><td><p>—</p></td>
-<td><p>4</p></td>
-<td><p>33</p></td>
-<td><p>65</p></td>
-<td><p>93</p></td>
-<td><p>125</p></td>
-<td><p>21</p></td>
-<td><p>44</p></td>
-<td><p>76</p></td>
-</tr>
-<tr class="row-even"><td><p>—</p></td>
-<td><p>3</p></td>
-<td><p>32</p></td>
-<td><p>64</p></td>
-<td><p>92</p></td>
-<td><p>124</p></td>
-<td><p>20</p></td>
-<td><p>43</p></td>
-<td><p>75</p></td>
-</tr>
-<tr class="row-odd"><td><p>—</p></td>
-<td><p>2</p></td>
-<td><p>31</p></td>
-<td><p>63</p></td>
-<td><p>91</p></td>
-<td><p>123</p></td>
-<td><p>19</p></td>
-<td><p>42</p></td>
-<td><p>74</p></td>
-</tr>
-<tr class="row-even"><td><p>—</p></td>
-<td><p>1</p></td>
-<td><p>30</p></td>
-<td><p>62</p></td>
-<td><p>90</p></td>
-<td><p>122</p></td>
-<td><p>18</p></td>
-<td><p>41</p></td>
-<td><p>73</p></td>
-</tr>
-<tr class="row-odd"><td><p>—</p></td>
-<td><p>0</p></td>
-<td><p>29</p></td>
-<td><p>61</p></td>
-<td><p>89</p></td>
-<td><p>121</p></td>
-<td><p>17</p></td>
-<td><p>40</p></td>
-<td><p>72</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>!!!! These are the project-specific interrupts (usually found in
-/project_name/common/Project_name_bd,tcl).
-Add the name of the component that uses that interrupt.
-Delete the dropdown section when you insert the table in your page</p>
-<p>NOTE THAT FOR ULTRASCALE+ DEVICES, THE PS I2C IS NOT SUPPORTED IN LINUX!!
-ALWAYS USE PL I2C FOR THESE DESIGNS!!</p>
 </section>
 </section>
 <section id="building-the-hdl-project">
 <h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Link to this heading">#</a></h2>
-<p><strong>*YOU CAN KEEP THE FIRST PARAGRAPH SINCE IT IS GENERIC</strong>*</p>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI does not distribute the bit/elf files of these projects so they
-must be built from the sources available <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">here</a>. To get
+must be built from the sources available <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main//">here</a>. To get
 the source you must
 <a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
 the HDL repository.</p>
-<p>Then go to the <strong>*PROJECT LOCATION WITHIN HDL (EX:
-projects/ad9695/zcu102)</strong>* location and run the make command by
-typing in your command prompt:</p>
+<p>Then go to the <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/ad9081_fmca_ebz">projects/ad9081_fmca_ebz</a>
+location and run the make command by typing in your command prompt:</p>
 <p><strong>Linux/Cygwin/WSL</strong></p>
-<p><strong>*Say which is the default configuration that’s built when running
-``make``, give examples of running with all parameters and also with
-just one. Say that it will create a folder with the name … when
-running with the following parameters.</strong>*</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>user@analog:~$ cd hdl/projects/ad9081_fmca_ebz/zcu102
 <span class="hll"><span class="linenos">2</span>// these are just examples of how to write the *make* command with parameters
 </span><span class="linenos">3</span>user@analog:~/hdl/projects/ad9081_fmca_ebz/zcu102$ make parameter1=value parameter2=value
@@ -983,7 +823,257 @@ running with the following parameters.</strong>*</p>
 configure this project, depending on the carrier used.
 Where a cell contains a — (dash) it means that the parameter doesn’t exist
 for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>For the parameter selection, the following restrictions apply:</p>
+<ul class="simple">
+<li><p>NP = 8, 12, 16</p></li>
+<li><p>F = 1, 2, 3, 4, 6, 8</p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/axi_jesd204_rx#restrictions">https://wiki.analog.com/resources/fpga/peripherals/jesd204/axi_jesd204_rx#restrictions</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/axi_jesd204_tx#restrictions">https://wiki.analog.com/resources/fpga/peripherals/jesd204/axi_jesd204_tx#restrictions</a></p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">NP</span></code> notation is equivalent with <code class="docutils literal notranslate"><span class="pre">N'</span></code></p>
+</div>
 <div><div class="collapsible docutils container">
+<input class="collapsible_input" id="b8aafcd90068233e586ae9dfbdde843dcf08330b" name="b8aafcd90068233e586ae9dfbdde843dcf08330b" type="checkbox"></input><label for="b8aafcd90068233e586ae9dfbdde843dcf08330b"><p>Default values of the ``make`` parameters for AD9081-FMCA-EBZ</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head" rowspan="2"><p>Parameter</p></th>
+<th class="head" colspan="6"><p>Default value of the parameters depending on carrier</p></th>
+</tr>
+<tr class="row-even"><th class="head"><p>A10SoC</p></th>
+<th class="head"><p>VCK190</p></th>
+<th class="head"><p>VCU118</p></th>
+<th class="head"><p>VCU128</p></th>
+<th class="head"><p>ZC706</p></th>
+<th class="head"><p>ZCU102</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td><p>JESD_MODE</p></td>
+<td><p>—</p></td>
+<td><p>64B66B</p></td>
+<td><p>8B10B</p></td>
+<td><p>8B10B</p></td>
+<td><p>8B10B</p></td>
+<td><p>8B10B</p></td>
+</tr>
+<tr class="row-even"><td><p>RX_LANE_RATE</p></td>
+<td><p>10</p></td>
+<td><p>24.75</p></td>
+<td><p>10</p></td>
+<td><p>10</p></td>
+<td><p>10</p></td>
+<td><p>10</p></td>
+</tr>
+<tr class="row-odd"><td><p>TX_LANE_RATE</p></td>
+<td><p>10</p></td>
+<td><p>24.75</p></td>
+<td><p>10</p></td>
+<td><p>10</p></td>
+<td><p>10</p></td>
+<td><p>10</p></td>
+</tr>
+<tr class="row-even"><td><p>REF_CLK_RATE</p></td>
+<td><p>—</p></td>
+<td><p>375</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p>RX_JESD_M</p></td>
+<td><p>8</p></td>
+<td><p>8</p></td>
+<td><p>8</p></td>
+<td><p>8</p></td>
+<td><p>8</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-even"><td><p>RX_JESD_L</p></td>
+<td><p>4</p></td>
+<td><p>8</p></td>
+<td><p>4</p></td>
+<td><p>4</p></td>
+<td><p>4</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-odd"><td><p>RX_JESD_S</p></td>
+<td><p>1</p></td>
+<td><p>2</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>RX_JESD_NP</p></td>
+<td><p>16</p></td>
+<td><p>12</p></td>
+<td><p>16</p></td>
+<td><p>16</p></td>
+<td><p>16</p></td>
+<td><p>16</p></td>
+</tr>
+<tr class="row-odd"><td><p>RX_NUM_LINKS</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>RX_TPL_WIDTH</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>{}</p></td>
+</tr>
+<tr class="row-odd"><td><p>TX_JESD_M</p></td>
+<td><p>8</p></td>
+<td><p>8</p></td>
+<td><p>8</p></td>
+<td><p>8</p></td>
+<td><p>8</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-even"><td><p>TX_JESD_L</p></td>
+<td><p>4</p></td>
+<td><p>8</p></td>
+<td><p>4</p></td>
+<td><p>4</p></td>
+<td><p>4</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-odd"><td><p>TX_JESD_S</p></td>
+<td><p>1</p></td>
+<td><p>2</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>TX_JESD_NP</p></td>
+<td><p>16</p></td>
+<td><p>12</p></td>
+<td><p>16</p></td>
+<td><p>16</p></td>
+<td><p>16</p></td>
+<td><p>16</p></td>
+</tr>
+<tr class="row-odd"><td><p>TX_NUM_LINKS</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>TX_TPL_WIDTH</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>{}</p></td>
+</tr>
+<tr class="row-odd"><td><p>TDD_SUPPORT</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>SHARED_DEVCLK</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>TDD_CHANNEL_CNT</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-even"><td><p>TDD_SYNC_WIDTH</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>32</p></td>
+</tr>
+<tr class="row-odd"><td><p>TDD_SYNC_INT</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>TDD_SYNC_EXT</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>TDD_SYNC_EXT_CDC</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>RX_KS_PER_CHANNEL</p></td>
+<td><p>32</p></td>
+<td><p>64</p></td>
+<td><p>64</p></td>
+<td><p>16384</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p>TX_KS_PER_CHANNEL</p></td>
+<td><p>32</p></td>
+<td><p>64</p></td>
+<td><p>64</p></td>
+<td><p>16384</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-even"><td><p>ADC_DO_MEM_TYPE</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>2</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p>DAC_DO_MEM_TYPE</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>2</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div><div><div class="collapsible docutils container">
 <input class="collapsible_input" id="0ac3edf16516bf32c861b8fb1448a489820d45b9" name="0ac3edf16516bf32c861b8fb1448a489820d45b9" type="checkbox"></input><label for="0ac3edf16516bf32c861b8fb1448a489820d45b9"><p>Default values of the ``make`` parameters for AD9082-FMCA-EBZ</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
@@ -1129,14 +1219,12 @@ by the configuration used:</p>
 because of truncation of some keywords so the name will not exceed the limits
 of the Operating System (<code class="docutils literal notranslate"><span class="pre">JESD</span></code>, <code class="docutils literal notranslate"><span class="pre">LANE</span></code>, etc. are removed) of 260
 characters.</p>
-<p><strong>*KEEP THIS LINE TOO</strong>*
-A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
+<p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 </section>
 <section id="software-considerations">
 <h2>Software considerations<a class="headerlink" href="#software-considerations" title="Link to this heading">#</a></h2>
-<p>*** MENTION THESE ***</p>
-<section id="adc-crossbar-config-this-is-just-an-example">
-<h3>ADC - crossbar config *** THIS IS JUST AN EXAMPLE ***<a class="headerlink" href="#adc-crossbar-config-this-is-just-an-example" title="Link to this heading">#</a></h3>
+<section id="adc-crossbar-config">
+<h3>ADC - crossbar config<a class="headerlink" href="#adc-crossbar-config" title="Link to this heading">#</a></h3>
 <p>Due to physical constraints, Rx lanes are reordered as described in the
 following table.</p>
 <p>e.g physical lane 2 from ADC connects to logical lane 7
@@ -1178,18 +1266,18 @@ accordingly.</p>
 </table>
 </div>
 </section>
-<section id="dac-crossbar-config-this-is-just-an-example">
-<h3>DAC - crossbar config *** THIS IS JUST AN EXAMPLE ***<a class="headerlink" href="#dac-crossbar-config-this-is-just-an-example" title="Link to this heading">#</a></h3>
+<section id="dac-crossbar-config">
+<h3>DAC - crossbar config<a class="headerlink" href="#dac-crossbar-config" title="Link to this heading">#</a></h3>
 <p>Due to physical constraints, Tx lanes are reordered as described in the
-following table:</p>
+following table.</p>
 <p>e.g physical lane 2 from DAC connects to logical lane 7
 from the FPGA. Therefore the crossbar from the device must be set
 accordingly.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>DAC phy Lane</p></th>
-<th class="head"><p>FPGA Tx lane / Logical Lane</p></th>
+<tr class="row-odd"><th class="head"><p>DAC phy lane</p></th>
+<th class="head"><p>FPGA Tx lane / Logical lane</p></th>
 </tr>
 </thead>
 <tbody>
@@ -1227,11 +1315,6 @@ accordingly.</p>
 <section id="systems-related">
 <h3>Systems related<a class="headerlink" href="#systems-related" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Links to the Quick start guides, to the pages where the hardware changes are
-specified in detail, etc. in the form of a table as the one below</p></li>
-</ul>
-<p><strong>THIS IS JUST AN EXAMPLE</strong></p>
-<ul class="simple">
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9081_fmca_ebz">[Wiki] AD9081 &amp; AD9082 &amp; AD9988 &amp; AD9986 Prototyping Platform User Guide</a></p></li>
 <li><p>Here you can find all the quick start guides on wiki documentation:dokuwiki:<cite>[Wiki] AD9081 Quick Start Guides &lt;resources/eval/user-guides/ad9081_fmca_ebz/quickstart&gt;</cite></p></li>
 </ul>
@@ -1266,9 +1349,6 @@ specified in detail, etc. in the form of a table as the one below</p></li>
 </tbody>
 </table>
 </div>
-<ul class="simple">
-<li><p>Other relevant information</p></li>
-</ul>
 </section>
 <section id="hardware-related">
 <h3>Hardware related<a class="headerlink" href="#hardware-related" title="Link to this heading">#</a></h3>
@@ -1287,16 +1367,6 @@ specified in detail, etc. in the form of a table as the one below</p></li>
 </section>
 <section id="hdl-related">
 <h3>HDL related<a class="headerlink" href="#hdl-related" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Link to the project source code</p></li>
-<li><p>Table like the one below. Must have as first IP (if it exists) the IP that
-was created with this project (i.e., axi_ad9783). If there isn’t, then to
-be taken in the order they are written in the Makefile of the project,
-stating the source code link in a column and the documentation link in
-another column</p></li>
-<li><p>Other relevant information</p></li>
-</ul>
-<p><strong>THIS IS JUST AN EXAMPLE</strong></p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/ad9081_fmca_ebz">AD9081_FMCA_EBZ HDL project source code</a></p></li>
 <li><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/ad9082_fmca_ebz">AD9082_FMCA_EBZ HDL project source code</a></p></li>
@@ -1373,14 +1443,9 @@ another column</p></li>
 </section>
 <section id="software-related">
 <h3>Software related<a class="headerlink" href="#software-related" title="Link to this heading">#</a></h3>
-<p><strong>THIS IS JUST AN EXAMPLE</strong></p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-mxfe/ad9081">[Wiki] AD9081-FMCA-EBZ Linux driver wiki page</a></p></li>
-</ul>
-<p>If there is no Linux driver page, then insert a link to the code of the driver
-and of the device tree.</p>
-<ul class="simple">
-<li><p>Python support (THIS IS JUST AN EXAMPLE):</p>
+<li><p>Python support:</p>
 <ul>
 <li><p><a class="reference external" href="https://analogdevicesinc.github.io/pyadi-iio/devices/adi.ad9081.html">AD9081 class documentation</a></p></li>
 <li><p><a class="reference external" href="https://analogdevicesinc.github.io/pyadi-iio/">PyADI-IIO documentation</a></p></li>
@@ -1423,8 +1488,26 @@ engineers.</p>
       <footer>
         
         <div class="related-pages">
-          
-          
+          <a class="next-page" href="../ad9783_ebz/index.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">AD9783-EBZ HDL project</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="../ad7616_sdz/index.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">AD7616-SDZ HDL project</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -1455,20 +1538,26 @@ engineers.</p>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Project template</a><ul>
+<li><a class="reference internal" href="#">AD9081-FMCA-EBZ/AD9082-FMCA-EBZ HDL project</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
 <li><a class="reference internal" href="#supported-boards">Supported boards</a></li>
 <li><a class="reference internal" href="#supported-devices">Supported devices</a></li>
 <li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
 <li><a class="reference internal" href="#block-design">Block design</a><ul>
-<li><a class="reference internal" href="#block-diagram">Block diagram</a></li>
+<li><a class="reference internal" href="#block-diagram">Block diagram</a><ul>
+<li><a class="reference internal" href="#example-block-design-for-single-link-m-8-l-4">Example block design for Single link; M=8; L=4</a></li>
+<li><a class="reference internal" href="#example-block-design-for-single-link-m-4-l-8">Example block design for Single link; M=4; L=8</a></li>
+<li><a class="reference internal" href="#example-block-design-for-single-link-m-2-l-8-jesd204c">Example block design for Single link; M=2; L=8; JESD204C</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#configuration-modes">Configuration modes</a></li>
 <li><a class="reference internal" href="#clock-scheme">Clock scheme</a><ul>
+<li><a class="reference internal" href="#zcu102">ZCU102</a></li>
+<li><a class="reference internal" href="#vcu118">VCU118</a></li>
 <li><a class="reference internal" href="#limitations">Limitations</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
-<li><a class="reference internal" href="#i2c-connections">I2C connections</a></li>
 <li><a class="reference internal" href="#spi-connections">SPI connections</a></li>
 <li><a class="reference internal" href="#gpios">GPIOs</a></li>
 <li><a class="reference internal" href="#interrupts">Interrupts</a></li>
@@ -1476,8 +1565,8 @@ engineers.</p>
 </li>
 <li><a class="reference internal" href="#building-the-hdl-project">Building the HDL project</a></li>
 <li><a class="reference internal" href="#software-considerations">Software considerations</a><ul>
-<li><a class="reference internal" href="#adc-crossbar-config-this-is-just-an-example">ADC - crossbar config *** THIS IS JUST AN EXAMPLE ***</a></li>
-<li><a class="reference internal" href="#dac-crossbar-config-this-is-just-an-example">DAC - crossbar config *** THIS IS JUST AN EXAMPLE ***</a></li>
+<li><a class="reference internal" href="#adc-crossbar-config">ADC - crossbar config</a></li>
+<li><a class="reference internal" href="#dac-crossbar-config">DAC - crossbar config</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#resources">Resources</a><ul>

@@ -1,0 +1,1116 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="HDL Architecture" href="architecture.html" /><link rel="prev" title="Releases" href="releases.html" />
+
+    <link rel="shortcut icon" href="../_static/icon.svg"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.17 -->
+        <title>Build an HDL project - HDL, Analog Devices v0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=36a5483c" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=73e8d488" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">HDL, Analog Devices v0.1 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  
+  <span class="sidebar-brand-text">HDL, Analog Devices v0.1 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">User guide</span></p>
+<ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">User Guide</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of User Guide</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="git_repository.html">Git repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="releases.html">Releases</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Build an HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html">HDL architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ip_cores.html">IP cores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_project.html">Porting reference designs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="customize_hdl.html">Customize HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hdl_coding_guideline.html">HDL coding guideline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs_guidelines.html">Documentation guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="third_party.html">Third party forks</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Libraries</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../library/axi_dmac/index.html">High-Speed DMA Controller</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../library/spi_engine/index.html">SPI Engine</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of SPI Engine</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../library/spi_engine/spi_engine_execution.html">Execution Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/spi_engine/axi_spi_engine.html">AXI Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/spi_engine/spi_engine_offload.html">Offload Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/spi_engine/spi_engine_interconnect.html">Interconnect Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/spi_engine/control-interface.html">Control Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/spi_engine/offload-control-interface.html">Offload Control Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/spi_engine/spi-bus-interface.html">SPI Bus Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/spi_engine/instruction-format.html">Instruction Set Specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/spi_engine/tutorial.html">Tutorial - PulSAR ADC</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Projects</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../projects/ad7616_sdz/index.html">AD7616-SDZ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../projects/ad9081_fmca_ebz/index.html">AD9081-FMCA-EBZ/AD9082-FMCA-EBZ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../projects/adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="build-an-hdl-project">
+<span id="build-hdl"></span><h1>Build an HDL project<a class="headerlink" href="#build-an-hdl-project" title="Link to this heading">#</a></h1>
+<p><strong>Please note that ADI only provides the source files necessary to create
+and build the designs. This means that you are responsible for modifying
+and building these projects.</strong></p>
+<p>Here, we are giving you a quick rundown on how we build things. That said,
+the steps below are <strong>not a recommendation</strong>, but a suggestion.
+How you want to build these projects is entirely up to you.
+The only catch is that if you run into problems, you have to resolve them independently.</p>
+<p>The build process depends on certain software and tools, which you could use in many ways.
+We use <strong>command line</strong> and mostly <strong>Linux systems</strong>. On Windows, we use <strong>Cygwin</strong>.</p>
+<section id="setup-and-check-your-environment">
+<h2>Setup and check your environment<a class="headerlink" href="#setup-and-check-your-environment" title="Link to this heading">#</a></h2>
+<p>This section contains a guide about how to setup your environment to build any
+HDL project from the repository:</p>
+<ol class="arabic simple">
+<li><p>Install the required FPGA design suite. We use <a class="reference external" href="https://www.xilinx.com/support/download.html">AMD Xilinx Vivado</a> and
+<a class="reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-tools/quartus-prime/resource.html">Intel Quartus Prime Pro and Standard</a>.
+You can find information about the proper version in our
+<a class="reference external" href="https://github.com/analogdevicesinc/hdl/releases">release notes</a>.
+Make sure that you’re always using the latest release.</p></li>
+<li><p>The proper Vivado/Quartus version can be found in:</p>
+<ul class="simple">
+<li><p>Starting with <code class="docutils literal notranslate"><span class="pre">hdl_2021_r1</span></code> release branch:
+<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/scripts/adi_env.tcl">scripts/adi_env.tcl</a></p></li>
+<li><p>For <code class="docutils literal notranslate"><span class="pre">hdl_2019_r2</span></code> and older:
+<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/scripts/adi_project_xilinx.tcl">hdl/projects/scripts/adi_project_xilinx.tcl</a> for Vivado, and
+<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/scripts/adi_project_intel.tcl">hdl/projects/scripts/adi_project_intel.tcl</a> for Quartus.</p></li>
+</ul>
+</li>
+<li><p>Download the tools from the following links:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.xilinx.com/support/download.html">AMD tools</a> (make sure you’re
+downloading the proper installer. For full installation, it is
+better to choose the one that downloads and installs both Vivado
+and Vitis at the same time)</p></li>
+<li><p><a class="reference external" href="https://www.intel.com/content/www/us/en/programmable/downloads/download-center.html">Intel
+tools</a></p></li>
+</ul>
+</li>
+<li><p>After you have installed the above-mentioned tools, you will need the
+paths to those directories in the following steps, so have them in a
+note.</p></li>
+<li><p>We are using <a class="reference external" href="https://git-scm.com/">git</a> for version control and
+<a class="reference external" href="https://www.gnu.org/software/make/">GNU Make</a> to build the
+projects. Depending on what OS you’re using, you have these options:</p></li>
+</ol>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="cea666a6d7a115b9bcddd5094edc27aa351210b7" name="cea666a6d7a115b9bcddd5094edc27aa351210b7" type="checkbox"></input><label for="cea666a6d7a115b9bcddd5094edc27aa351210b7"><p>For Windows environment with Cygwin</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<p>Because GNU Make is not supported on Windows, you need to install
+<a class="reference external" href="https://www.cygwin.com/">Cygwin</a>, which is a UNIX-like environment
+and command-line interface for Microsoft Windows. You do not need to
+install any special package, other than <code class="docutils literal notranslate"><span class="pre">git</span></code> and <code class="docutils literal notranslate"><span class="pre">make</span></code>.</p>
+<p>After you have installed Cygwin, you need to add your FPGA Design Tools
+installation directory to your PATH environment variable. You can do
+that by modifying your <strong>.bashrc</strong> file, by adding the following lines
+(<strong>changed accordingly to your installation directories</strong>). For example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/path_to/Xilinx/Vivado/202x.x/bin
+<span class="linenos">2</span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/path_to/Xilinx/Vivado_HLS/202x.x/bin
+<span class="linenos">3</span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/path_to/Xilinx/Vitis/202x.x/bin
+<span class="linenos">4</span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/path_to/Xilinx/Vitis/202x.x/gnu/microblaze/nt/bin
+<span class="linenos">5</span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/path_to/Xilinx/Vitis/202x.x/gnu/arm/nt/bin
+<span class="linenos">6</span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/path_to/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_be/bin
+<span class="linenos">7</span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/path_to/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_le/bin
+<span class="linenos">8</span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/path_to/Xilinx/Vitis/202x.x/gnu/aarch32/nt/gcc-arm-none-eabi/bin
+<span class="linenos">9</span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/path_to/intelFPGA_pro/2x.x/quartus/bin
+</pre></div>
+</div>
+<p>Replace the <strong>path_to</strong> string with your path to the installation folder
+and the <strong>tools version</strong> with the proper one.</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils container">
+<input class="collapsible_input" id="3d9210c2f56efb8253b724d250a57fc25766d5e2" name="3d9210c2f56efb8253b724d250a57fc25766d5e2" type="checkbox"></input><label for="3d9210c2f56efb8253b724d250a57fc25766d5e2"><p>How to verify your environment setup</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<p>Run any of the following commands. These commands will return a valid path
+if your setup is good.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span>~<span class="o">]</span><span class="w"> </span>which<span class="w"> </span>git
+<span class="o">[</span>~<span class="o">]</span><span class="w"> </span>which<span class="w"> </span>make
+<span class="o">[</span>~<span class="o">]</span><span class="w"> </span>which<span class="w"> </span>vivado
+<span class="o">[</span>~<span class="o">]</span><span class="w"> </span>which<span class="w"> </span>quartus
+</pre></div>
+</div>
+</div>
+</div>
+</div></section>
+<section id="setup-the-hdl-repository">
+<h2>Setup the HDL repository<a class="headerlink" href="#setup-the-hdl-repository" title="Link to this heading">#</a></h2>
+<p>These designs are built upon ADI’s generic HDL reference designs framework.
+ADI does not distribute the bit/elf files of these projects so they
+must be built from the sources available <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/master//">here</a>. To get
+the source you must
+<a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
+the repository. This is the best method to get the sources. Here, we are
+cloning the repository inside a directory called <strong>adi</strong>. Please refer
+to the <a class="reference internal" href="git_repository.html#git-repository"><span class="std std-ref">HDL Git repository</span></a> section for more details.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span>~<span class="o">]</span><span class="w"> </span>mkdir<span class="w"> </span>adi
+<span class="o">[</span>~<span class="o">]</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>adi
+<span class="o">[</span>~<span class="o">]</span><span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:analogdevicesinc/hdl.git
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Cloning the HDL repository is done now using SSH, because of
+GitHub security reasons. Check out this documentation on <a class="reference external" href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">how to deal
+with SSH keys in
+GitHub</a>.
+Both for <a class="reference external" href="https://www.cygwin.com/">Cygwin</a> and
+<a class="reference external" href="https://learn.microsoft.com/en-us/windows/wsl/install/">WSL</a> it is
+necessary to create a unique SSH key. If you use WSL,to get the best
+performance, you must clone your hdl repository in the WSL file system.
+For example: (<code class="code docutils literal notranslate"><span class="pre">\\wsl.localhost\Ubuntu\home\username\hdl</span></code>)</p>
+</div>
+<p>The above command clones the <strong>default</strong> branch, which is the <strong>main</strong> for
+HDL. The <strong>main</strong> branch always points to the latest stable release
+branch, but it also has features <strong>that are not fully tested</strong>. If you
+want to switch to any other branch you need to checkout that branch:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span>~<span class="o">]</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>hdl/
+<span class="o">[</span>~<span class="o">]</span><span class="w"> </span>git<span class="w"> </span>status
+<span class="o">[</span>~<span class="o">]</span><span class="w"> </span>git<span class="w"> </span>checkout<span class="w"> </span>hdl_2021_r2
+</pre></div>
+</div>
+<p>If this is your first time cloning, you have all the latest source
+files. If not, you can simply pull the latest sources
+using <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">pull</span></code> or <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">rebase</span></code> if you have local changes.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span>~<span class="o">]</span><span class="w"> </span>git<span class="w"> </span>fetch<span class="w"> </span>origin<span class="w">               </span><span class="c1"># this shows you what changes will be pulled on your local copy</span>
+<span class="o">[</span>~<span class="o">]</span><span class="w"> </span>git<span class="w"> </span>rebase<span class="w"> </span>origin/hdl_2021_r2<span class="w">  </span><span class="c1"># this updates your local copy</span>
+</pre></div>
+</div>
+</section>
+<section id="building-the-projects">
+<h2>Building the projects<a class="headerlink" href="#building-the-projects" title="Link to this heading">#</a></h2>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>Before building any project, you must have the environment prepared and the
+proper tools. See <a class="reference internal" href="#tools">Tools</a> section on what you need to download and
+<a class="reference internal" href="#environment">Environment</a> section on how to set-up your environment.</p>
+</div>
+<section id="building-an-intel-project">
+<h3>Building an Intel project<a class="headerlink" href="#building-an-intel-project" title="Link to this heading">#</a></h3>
+<p>An Intel project build is relatively easy. There is no need to build any
+library components. Go to the directory of the project of interest,
+then inside the desired carrier run <code class="docutils literal notranslate"><span class="pre">make</span></code> to build
+the project. In this example, I am only interested in the
+<strong>ADRV9371X</strong> project on the <strong>A10SOC</strong> carrier.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>projects/adrv9371x/a10soc
+make
+</pre></div>
+</div>
+<p>This assumes that you have the tools and licenses setup correctly. If
+you don’t get to the last line, the make failed to build the project.
+There is nothing you can gather from the <code class="docutils literal notranslate"><span class="pre">make</span></code> output (other than the
+build failed or not), the actual failure is in a log file. So, let’s see
+how to analyze the build log files and results.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you want to use a NIOS-II based project with no-OS
+software, you have to turn off the MMU feature of the NIOS_II processor.
+In that case, the make will get an additional attribute:
+<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">NIOS2_MMU=0</span></code></p>
+</div>
+<section id="checking-the-build-and-analyzing-results">
+<h4>Checking the build and analyzing results<a class="headerlink" href="#checking-the-build-and-analyzing-results" title="Link to this heading">#</a></h4>
+<p>If you look closely at the <strong>rule</strong> for this target, you see it is just
+calling <code class="docutils literal notranslate"><span class="pre">quartus_sh</span></code> with the project TCL file and redirecting the
+output to a log file. In this case it is called <strong>adrv9371_a10soc_quartus.log</strong>
+and is inside the <strong>projects/adrv9371x/a10soc</strong> directory.</p>
+<p>Do a quick (or detailed) check on files. If you are seeking support from us,
+this contains the most relevant information that you need to provide.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Do NOT copy-paste <code class="docutils literal notranslate"><span class="pre">make</span></code> command line text</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>projects/adrv9371x/a10soc
+tail<span class="w"> </span>projects/adrv9371x/a10soc/adrv9371x_a10soc_quartus.log
+</pre></div>
+</div>
+<p>And finally, if the project was built is successfully, the <strong>.sopcinfo</strong> and
+<strong>.sof</strong> files should be in the same folder.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>projects/adrv9371x/a10soc/*.sopcinfo
+ls<span class="w"> </span>-ltr<span class="w"> </span>projects/adrv9371x/a10soc/*.sof
+</pre></div>
+</div>
+<p>You may now use this <strong>sopcinfo</strong> file as the input to your no-OS and/or
+Linux build. The <strong>sof</strong> file is used to program the device.</p>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="d72b31e7492d45fd5e4bd200981e9c0cf5d05f8b" name="d72b31e7492d45fd5e4bd200981e9c0cf5d05f8b" type="checkbox"></input><label for="d72b31e7492d45fd5e4bd200981e9c0cf5d05f8b"><p>Building an Intel project in WSL - known issues</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<p>For a10Soc and s10Soc projects it’s very possible to face the following
+error when you try to build the project:</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Current module quartus_fit was
+unexpectedly terminated by signal 9. This may be because some system
+resource has been exhausted, or quartus_fit performed an illegal
+operation.</p>
+</div>
+<p>It can also happen that <code class="docutils literal notranslate"><span class="pre">make</span></code> gets stuck when
+synthesizing some IPs. These errors may appear because your device does
+not have enough RAM memory to build your FPGA design. This problem can
+be solved if you create a Linux Swap file.</p>
+<p>You can find more information about what a swap file is at this link:
+<a class="reference external" href="https://linuxize.com/post/create-a-linux-swap-file/">SwapFile</a>.</p>
+<p>Depending on the size of the project, more or less virtual memory must
+be allocated. If you type in the search bar <strong>System Information</strong>, you
+can see Total Physical Memory and Total Virtual Memory of your system.
+For example, for the AD9213 with S10SoC project, it was necessary to
+allocate 15 GB of virtual memory, to be able to make a build for the
+project. To create a swap file you can use the following commands:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>:~$<span class="w"> </span>sudo<span class="w"> </span>fallocate<span class="w"> </span>-l<span class="w"> </span><span class="s2">&quot;memory size (e.g 1G, 2G, 8G, etc.)&quot;</span><span class="w"> </span>/swapfile
+:~$<span class="w"> </span>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>/swapfile
+:~$<span class="w"> </span>sudo<span class="w"> </span>mkswap<span class="w"> </span>/swapfile
+:~$<span class="w"> </span>sudo<span class="w"> </span>swapon<span class="w"> </span>/swapfile
+</pre></div>
+</div>
+<p>If you want to make the change permanent:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># in /etc/fstab file type the command:</span>
+/swapfile<span class="w"> </span>swap<span class="w"> </span>swap<span class="w"> </span>defaults<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span>
+</pre></div>
+</div>
+<p>If you want to deactivate the swap memory:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>:~$<span class="w"> </span>sudo<span class="w"> </span>swapoff<span class="w"> </span>-v<span class="w"> </span>/swapfile
+</pre></div>
+</div>
+</div>
+</div>
+</div><div><div class="collapsible docutils container">
+<input class="collapsible_input" id="80857d2b90b02213b6ba59e93e72ddba2243326b" name="80857d2b90b02213b6ba59e93e72ddba2243326b" type="checkbox"></input><label for="80857d2b90b02213b6ba59e93e72ddba2243326b"><p>Building manually in Quartus GUI</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>We do not recommend using this flow, in general people are losing a lot
+of valuable time and nerve during this process.</p>
+</div>
+<p>There is no need to build any library for Quartus. However, you do need
+to specify the IP search path for QSYS. This is a global property, so
+only need to do it once. If you have multiple paths simply add to it.
+You get to this menu from the <strong>Tools-&gt;Options</strong>. The tool then parses
+these directories and picks up a <strong>_hw.tcl</strong> file (e.g.
+<strong>axi_ad9250_hw.tcl</strong>). The peripherals should show up on QSYS library.</p>
+<p>You may now run the project (generate the sof and software hand-off
+files) on Quartus. Open the GUI and select TCL console. At the prompt
+change the directory to where the project is, and source the
+<strong>system_project.tcl</strong> file.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>c:/github/hdl/projects/daq2/a10soc
+<span class="nb">source</span><span class="w"> </span>./system_project.tcl
+</pre></div>
+</div>
+<p>You will see commands being executed, the script uses a board design in
+QSYS, generate all the IP targets, synthesize the netlist and
+implementation.</p>
+</div>
+</div>
+</div></section>
+</section>
+<section id="building-an-amd-project">
+<h3>Building an AMD project<a class="headerlink" href="#building-an-amd-project" title="Link to this heading">#</a></h3>
+<p>An AMD project is built the same way as an Intel project. The only
+exception is that there are a few ‘sub-make(s)’ for the library
+components. The way of building a project in Cygwin and WSL is almost the same.
+In this example, it is building the <strong>DAQ2</strong>
+project on the <strong>ZC706</strong> carrier.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>projects/daq2/zc706
+make
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">make</span></code> builds all the libraries first and then builds the project.
+This assumes that you have the tools and licenses setup correctly. If
+you don’t get to the last line, the make failed to build one or more
+targets: it could be a library component or the project itself. There is
+nothing you can gather from the <code class="docutils literal notranslate"><span class="pre">make</span></code> output (other than which one
+failed). The actual information about the failure is in a log file inside
+the project directory.</p>
+<p>On projects which support this, some <code class="docutils literal notranslate"><span class="pre">make</span></code> parameters can be added, to
+configure the project (you can check the <strong>system_project.tcl</strong> file
+to see if your project supports this).</p>
+<p>If parameters were used, the result of the build will be in a folder named
+by the configuration used. Here are some examples:</p>
+<p><strong>Example 1</strong></p>
+<p>Running the command below will create a folder named
+<strong>RXRATE2_5_TXRATE2_5_RXL8_RXM4_RXS1_RXNP16_TXL8_TXM4_TXS1_TXNP16</strong>
+because of truncation of some keywords so the name will not exceed the limits
+of the Operating System (<strong>JESD</strong>, <strong>LANE</strong>, etc. are removed) of 260
+characters.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">RX_LANE_RATE</span><span class="o">=</span><span class="m">2</span>.5<span class="w"> </span><span class="nv">TX_LANE_RATE</span><span class="o">=</span><span class="m">2</span>.5<span class="w"> </span><span class="nv">RX_JESD_L</span><span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="nv">RX_JESD_M</span><span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="nv">RX_JESD_S</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">RX_JESD_NP</span><span class="o">=</span><span class="m">16</span><span class="w"> </span><span class="nv">TX_JESD_L</span><span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="nv">TX_JESD_M</span><span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="nv">TX_JESD_S</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">TX_JESD_NP</span><span class="o">=</span><span class="m">16</span>
+</pre></div>
+</div>
+<p><strong>Example 2</strong></p>
+<p>Running the command below will create a folder named <strong>LVDSCMOSN1</strong>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">LVDS_CMOS_N</span><span class="o">=</span><span class="m">1</span>
+</pre></div>
+</div>
+<section id="enabling-out-of-context-synthesis">
+<h4>Enabling Out-of-Context synthesis<a class="headerlink" href="#enabling-out-of-context-synthesis" title="Link to this heading">#</a></h4>
+<p>You can opt in for out-of-context synthesis during the build by defining
+the <code class="docutils literal notranslate"><span class="pre">ADI_USE_OOC_SYNTHESIS</span></code> system variable. By setting the
+<code class="docutils literal notranslate"><span class="pre">ADI_MAX_OOC_JOBS</span></code> system variable you can adjust the number of
+maximum parallel out-of-context synthesis jobs. If not set, the default
+parallel job number is set to 4.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">ADI_USE_OOC_SYNTHESIS</span><span class="o">=</span>y
+<span class="nb">export</span><span class="w"> </span><span class="nv">ADI_MAX_OOC_JOBS</span><span class="o">=</span><span class="m">8</span>
+<span class="nb">cd</span><span class="w"> </span>projects/daq2/zc706
+make
+</pre></div>
+</div>
+<p>This will synthesize each IP from the block design individually and will
+store it in a common cache for future re-use. The cache is located in
+the <strong>ipcache</strong> folder and is common for all the projects, this way
+speeding up re-compile of the same project or compile time of common
+blocks used in base designs. Example: a MicroBlaze base design for
+VCU118 once compiled, it will be reused on other projects. Using the IP
+cache will speed up the re-compiles of every project in OOC mode since
+the cache is not cleared as with normal compile flow.</p>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>Starting with Vivado 2020.2, Out-of-Context is the
+default mode. There is no need to set ADI_USE_OOC_SYNTHESIS variable.</p>
+<p>Set:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">ADI_USE_OOC_SYNTHESIS</span><span class="o">=</span>n
+</pre></div>
+</div>
+<p>only in case you want to use Project Mode.</p>
+</div>
+</section>
+<section id="checking-the-build-and-analyzing-results-of-library-components">
+<h4>Checking the build and analyzing results of library components<a class="headerlink" href="#checking-the-build-and-analyzing-results-of-library-components" title="Link to this heading">#</a></h4>
+<p>If you look closely, you see what it is actually doing. It enters a
+library component folder then calls <strong>Vivado</strong> in batch mode. The IP
+commands are in the source Tcl file and output is redirected to a log
+file. In the below example that is <strong>axi_ad7768_ip.log</strong> inside the
+<strong>library/axi_ad7768</strong> directory.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="o">[</span><span class="m">1</span><span class="o">]</span>:<span class="w"> </span>Entering<span class="w"> </span>directory<span class="w"> </span><span class="s1">&#39;/home/RKutty/gitadi/hdl/library/axi_ad7768&#39;</span>
+rm<span class="w"> </span>-rf<span class="w"> </span>*.cache<span class="w"> </span>*.data<span class="w"> </span>*.xpr<span class="w"> </span>*.log<span class="w"> </span>component.xml<span class="w"> </span>*.jou<span class="w"> </span>xgui<span class="w"> </span>*.ip_user_files<span class="w"> </span>*.srcs<span class="w"> </span>*.hw<span class="w"> </span>*.sim<span class="w"> </span>.Xil
+vivado<span class="w"> </span>-mode<span class="w"> </span>batch<span class="w"> </span>-source<span class="w"> </span>axi_ad7768_ip.tcl<span class="w">  </span>&gt;&gt;<span class="w"> </span>axi_ad7768_ip.log<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+</pre></div>
+</div>
+<p>If the <code class="docutils literal notranslate"><span class="pre">make</span></code> command returns an error (and stops), <strong>you must first check
+the contents of the log file</strong>. You may also check the generated files for more information.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>library/axi_ad7768
+tail<span class="w"> </span>library/axi_ad7768/axi_ad7768_ip.log
+</pre></div>
+</div>
+</section>
+<section id="checking-the-build-and-analyzing-results-of-projects">
+<h4>Checking the build and analyzing results of projects<a class="headerlink" href="#checking-the-build-and-analyzing-results-of-projects" title="Link to this heading">#</a></h4>
+<p>The last thing that <code class="docutils literal notranslate"><span class="pre">make</span></code> does in this above example is building the project.
+It is exactly the same <strong>rule</strong> as the library component. The log file, in
+this example, is called <strong>daq2_zc706_vivado.log</strong> and is inside the
+<strong>projects/daq2/zc706</strong> directory.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rm<span class="w"> </span>-rf<span class="w"> </span>*.cache<span class="w"> </span>*.data<span class="w"> </span>*.xpr<span class="w"> </span>*.log<span class="w"> </span>*.jou<span class="w"> </span>xgui<span class="w"> </span>*.runs<span class="w"> </span>*.srcs<span class="w"> </span>*.sdk<span class="w"> </span>*.hw<span class="w"> </span>*.sim<span class="w"> </span>.Xil<span class="w"> </span>*.ip_user_files
+vivado<span class="w"> </span>-mode<span class="w"> </span>batch<span class="w"> </span>-source<span class="w"> </span>system_project.tcl<span class="w"> </span>&gt;&gt;<span class="w"> </span>daq2_zc706_vivado.log<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+make:<span class="w"> </span>Leaving<span class="w"> </span>directory<span class="w"> </span><span class="s1">&#39;/home/RKutty/gitadi/hdl/projects/daq2/zc706&#39;</span>
+</pre></div>
+</div>
+<p>Do a quick (or detailed) check on files.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Do NOT copy-paste <code class="docutils literal notranslate"><span class="pre">make</span></code> command line text</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>projects/daq2/zc706
+tail<span class="w"> </span>projects/daq2/zc706/daq2_zc706_vivado.log
+</pre></div>
+</div>
+<p>And finally, if the project build is successful, the <strong>.xsa</strong> file should be
+in the <strong>.sdk</strong> folder.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>projects/daq2/zc706/daq2_zc706.sdk
+</pre></div>
+</div>
+<p>You may now use this <strong>.xsa</strong> file as the input to your no-OS and/or Linux
+build.</p>
+<p>Starting with Vivado 2019.3, the output file extension was changed from
+<strong>.hdf</strong> to <strong>.xsa</strong>.</p>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="0a31c7c0b3d524201f0027f16565206ad716fb69" name="0a31c7c0b3d524201f0027f16565206ad716fb69" type="checkbox"></input><label for="0a31c7c0b3d524201f0027f16565206ad716fb69"><p>Building an AMD project in WSL - known issues</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<p>For some projects it is very possible to face the following error when you make a
+build:</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code class="docutils literal notranslate"><span class="pre">$RDI_PROG&quot;</span> <span class="pre">&quot;$&#64;&quot;</span> <span class="pre">crash&quot;</span> <span class="pre">&quot;Killed</span> <span class="pre">&quot;$RDI_PROG&quot;</span> <span class="pre">&quot;$&#64;&quot;</span></code></p>
+<p>This error may appear because your device does not have enough
+RAM memory to build your FPGA design.</p>
+</div>
+<p>For example, the project AD-FMCDAQ3-EBZ with Virtex UltraScale+ VCU118
+(XCVU9P device) requires 20GB (typical memory) and a peak of 32GB RAM
+memory. The following link shows the typical and peak Vivado memory usage
+per target device: <a class="reference external" href="https://www.xilinx.com/products/design-tools/vivado/vivado-ml.html#memory">MemoryUsage</a>.</p>
+<p>This problem can be solved if a linux Swap file is created. You can
+find more information about what a swap file is at this link:
+<a class="reference external" href="https://linuxize.com/post/create-a-linux-swap-file/">SwapFile</a></p>
+<p>To create a swap file you can use the following commands:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>:~$<span class="w"> </span>sudo<span class="w"> </span>fallocate<span class="w"> </span>-l<span class="w"> </span><span class="s2">&quot;memory size (e.g 1G, 2G, 8G, etc.)&quot;</span><span class="w"> </span>/swapfile
+:~$<span class="w"> </span>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>/swapfile
+:~$<span class="w"> </span>sudo<span class="w"> </span>mkswap<span class="w"> </span>/swapfile
+:~$<span class="w"> </span>sudo<span class="w"> </span>swapon<span class="w"> </span>/swapfile
+</pre></div>
+</div>
+<p>If you want to make the change permanent:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># in /etc/fstab file type the command:</span>
+/swapfile<span class="w"> </span>swap<span class="w"> </span>swap<span class="w"> </span>defaults<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span>
+</pre></div>
+</div>
+<p>If you want to deactivate the swap memory:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>:~$<span class="w"> </span>sudo<span class="w"> </span>swapoff<span class="w"> </span>-v<span class="w"> </span>/swapfile
+</pre></div>
+</div>
+</div>
+</div>
+</div><div><div class="collapsible docutils container">
+<input class="collapsible_input" id="734115b089b8a81360e11b0f94e806b32c2be3ed" name="734115b089b8a81360e11b0f94e806b32c2be3ed" type="checkbox"></input><label for="734115b089b8a81360e11b0f94e806b32c2be3ed"><p>Building manually in Vivado GUI</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>We do not recommend using this flow, in general people are losing a lot
+of valuable time and nerve during this process.</p>
+</div>
+<p>In Vivado (AMD projects), <strong>you must build all the required libraries</strong>
+for your targeted project. Open the GUI and at the TCL console change
+the directory to where the libraries are, then source the <strong>_ip.tcl</strong>
+file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">c</span><span class="p">:</span><span class="o">/</span><span class="n">github</span><span class="o">/</span><span class="n">hdl</span><span class="o">/</span><span class="n">library</span><span class="o">/</span><span class="n">axi_ltc2387</span>
+<span class="n">source</span> <span class="o">./</span><span class="n">axi_ltc2387_ip</span><span class="o">.</span><span class="n">tcl</span>
+</pre></div>
+</div>
+<p>You will see commands being executed, and the GUI will change into a
+project window. There is nothing to do here, you could browse the source
+if you prefer to do synthesis as stand-alone and such things. After
+you’re done, quit and change the directory to the next library and
+continue the process.</p>
+<p>After you built all the required libraries for your project, you can run
+the project (generate bitstream and export the design to SDK). This is
+the same procedure as above except for changes in path and Tcl file
+names:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>c:/github/hdl/projects/cn0577/zed
+<span class="nb">source</span><span class="w"> </span>./system_project.tcl
+</pre></div>
+</div>
+<p>Same behavior as above, the GUI will change into a project window. The
+script will create a board design in IPI (IP Integrator), generate all the
+IP targets, synthesize the netlist and implementation.</p>
+</div>
+</div>
+</div></section>
+</section>
+<section id="supported-targets-of-make-command">
+<h3>Supported targets of <code class="docutils literal notranslate"><span class="pre">make</span></code> command<a class="headerlink" href="#supported-targets-of-make-command" title="Link to this heading">#</a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference external" href="https://www.gnu.org/software/make/manual/make.html">Make</a> is a build
+automation tool, which uses <strong>Makefile(s)</strong> to define a set of
+directives (‘rules’) about how to compile and/or link a program
+(‘targets’).</p>
+</div>
+<p>In general, always run <code class="docutils literal notranslate"><span class="pre">make</span></code> within a project folder such as
+<strong>hdl/projects/daq2/a10soc</strong> or <strong>hdl/projects/daq2/zc706</strong>. There should
+not be a need for you to run <code class="docutils literal notranslate"><span class="pre">make</span></code> inside the library or root folders.
+The <code class="docutils literal notranslate"><span class="pre">make</span></code> framework passes the top level ‘targets’ to any sub-makes
+inside its sub-folders. What this means is that if you run <code class="docutils literal notranslate"><span class="pre">make</span></code> inside
+<strong>hdl/projects/daq2</strong>, it builds all the carriers (<strong>kc705</strong>, <strong>a10soc</strong>,
+<strong>kcu105</strong>, <strong>zc706</strong> to <strong>zcu102</strong>) instead of just the target carrier.</p>
+<p>The following ‘targets’ are supported.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>argument</p></th>
+<th class="head"><p>description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>all</p></td>
+<td><p>This builds everything in the current folder and
+its sub-folders, see context examples below.</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>make -C library/axi_ad9122 all; ## build AD9122
+library component (AMD only).</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>make -C library all; ## build <strong>ALL</strong> library
+components inside ‘library’ (AMD only).</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>make -C projects/daq2/zc706 all; ## build
+DAQ2_ZC706 (AMD) project.</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>make -C projects/daq2/a10soc all; ## build
+DAQ2_A10SOC(Intel) project.</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>make -C projects/daq2 all; ## build DAQ2 <strong>ALL</strong>
+carrier (including Intel &amp; AMD) projects.</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>make -C projects all; ## build <strong>ALL</strong> projects
+(something you really should NOT do).</p></td>
+</tr>
+<tr class="row-odd"><td><p>clean</p></td>
+<td><p>This removes all tool and temporary files in the
+current folder and its sub-folders, same context
+as above.</p></td>
+</tr>
+<tr class="row-even"><td><p>clean-all</p></td>
+<td><p>This removes all tool and temporary files in the
+current folder, its sub-folders and from all the
+IPs that are specified in the Makefile file;
+same context as above.</p></td>
+</tr>
+<tr class="row-odd"><td><p>lib</p></td>
+<td><p>This is same as ‘all’ in the library folder,
+ignored inside project folders.</p></td>
+</tr>
+<tr class="row-even"><td><p>project.platform</p></td>
+<td><p>This is a special target available only in the
+‘hdl’ root folder and is ignored everywhere
+else, see syntax below.</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>make daq2.a10soc ; ## build
+projects/daq2/a10soc.</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>make daq2.zc706 ; ## build projects/daq2/zc706.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="tools-and-their-versions">
+<h2>Tools and their versions<a class="headerlink" href="#tools-and-their-versions" title="Link to this heading">#</a></h2>
+<section id="tools">
+<h3>Tools<a class="headerlink" href="#tools" title="Link to this heading">#</a></h3>
+<p>ADI provides reference designs for both Intel and AMD. Please note
+that we have no preference over Intel or AMD; if possible, we try to
+port the designs on both platforms. However, there are a few things you
+should be aware of when building the projects.</p>
+<p>This is NOT a comparison (generic or otherwise)- this is what you should
+expect and understand when using ADI HDL repository on these tools.
+<strong>A red text indicates that you must pay extra attention.</strong></p>
+<div class="table-wrapper colwidths-auto docutils container" id="id1">
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Tools</span><a class="headerlink" href="#id1" title="Link to this table">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Notes</p></th>
+<th class="head"><p>Intel</p></th>
+<th class="head"><p>AMD</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Main tools</p></td>
+<td><p>Quartus</p></td>
+<td><p>Vivado</p></td>
+</tr>
+<tr class="row-odd"><td><p>EDK tools</p></td>
+<td><p>QSys</p></td>
+<td><p>IP Integrator</p></td>
+</tr>
+<tr class="row-even"><td><p>SDK tools</p></td>
+<td><p>Eclipse-Nios, Eclipse-DS5</p></td>
+<td><p>Eclipse</p></td>
+</tr>
+<tr class="row-odd"><td><p>Building library</p></td>
+<td><p><span class="green">Do nothing. Quartus only needs the _hw.tcl and QSys parses them
+whenever invoked</span></p></td>
+<td><p><span class="red">Need to build each and every library component. Vivado has its
+own way of identifying library components. This means you must build
+ALL the library components first before starting the project. You must
+re-run these scripts if there are any modifications</span></p></td>
+</tr>
+<tr class="row-even"><td><p>Building the project</p></td>
+<td><p>Source the system_project.tcl file</p></td>
+<td><p>Source the system_project.tcl file</p></td>
+</tr>
+<tr class="row-odd"><td><p>Timing analysis</p></td>
+<td><p>The projects are usually tested and should be free of timing errors.
+There is no straightforward method to verify a timing pass (it usually
+involves writing a TCL proc by itself) on both the tools. The make
+build will fail and return with an error if the timing is not met.</p></td>
+<td><p>The projects are usually tested and should be free of timing errors.
+There is no straightforward method to verify a timing pass (it usually
+involves writing a TCL proc by itself) on both the tools. The make
+build will fail and return with an error if the timing is not met.</p></td>
+</tr>
+<tr class="row-even"><td><p>SDK (Microblaze/Nios)</p></td>
+<td><p>Use SOPCINFO and SOF files</p></td>
+<td><p>Use XSA file</p></td>
+</tr>
+<tr class="row-odd"><td><p>SDK (ARM/FPGA combo)</p></td>
+<td><p><span class="red">Not so well-thought procedure. Need to run different tools,
+manually edit build files etc. The steps involved are running
+bsp-editor, running make, modifying linker scripts, makefiles and
+sources, importing to SDK</span></p></td>
+<td><p><span class="green">Same procedure as Microblaze</span></p></td>
+</tr>
+<tr class="row-even"><td><p>Upgrading/Version changes (non-ADI cores)</p></td>
+<td><p><span class="green">Quartus automatically updates the cores. Almost hassle-free for
+most of the cores</span></p></td>
+<td><p><span class="red">Vivado does not automatically update the revisions in TCL flow
+(it does on GUI). It will stop at the first version mismatch (a rather
+slow and frustrating process)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="tool-versions">
+<h3>Tool versions<a class="headerlink" href="#tool-versions" title="Link to this heading">#</a></h3>
+<p>Though the ADI libraries work across different versions of the tools,
+the projects we provide <strong>may not</strong>. The AMD and Intel IPs may or may not
+work across versions. We can only assure you that they are tested and
+<strong>work only for the versions we specify</strong>.</p>
+<p>The projects are usually upgraded to the latest tools after they are
+publicly released. The used tool versions can be found in the
+<a class="reference external" href="https://github.com/analogdevicesinc/hdl/releases">release notes</a>
+for each branch. The script, which builds the project always double
+checks the used tools version, and notifies the user if he or she is trying
+to use an unsupported version of tools.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There are several ways to find out which tool version you should use.
+The easiest way is to check the <a class="reference external" href="https://github.com/analogdevicesinc/hdl/releases">release
+notes</a>. You may
+also check out or browse the desired branch, and verify the tool version
+in the base Tcl script
+(<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/projects/scripts/adi_project_xilinx.tcl#L4">./hdl/projects/scripts/adi_project_xilinx.tcl</a>)
+or
+(<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/projects/scripts/adi_project_intel.tcl#L5">./hdl/projects/scripts/adi_project_intel.tcl</a>),
+which build the projects.</p>
+</div>
+</section>
+</section>
+<section id="environment">
+<h2>Environment<a class="headerlink" href="#environment" title="Link to this heading">#</a></h2>
+<p>As said above, our recommended build flow is to use <code class="docutils literal notranslate"><span class="pre">make</span></code> and the
+command line version of the tools. This method facilitates our
+overall build and release process as it automatically builds the
+required libraries and dependencies.</p>
+<section id="linux-environment-setup">
+<h3>Linux environment setup<a class="headerlink" href="#linux-environment-setup" title="Link to this heading">#</a></h3>
+<p>All major distributions should have <code class="docutils literal notranslate"><span class="pre">make</span></code> installed by default. If not,
+if you try the command, it should tell you how to install it with the
+package name.</p>
+<p>You may have to install <code class="docutils literal notranslate"><span class="pre">git</span></code> (<code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">git</span></code>)
+and the Intel and AMD tools. These tools come with certain
+<strong>settings*.sh</strong> scripts that you may source in your <strong>.bashrc</strong> file to
+set up the environment. You may also do this manually (for better or
+worse); the following snippet is from a <strong>.bashrc</strong> file. Please note
+that unless you are an expert at manipulating these things, it is best to leave it to
+the tools to set up the environment.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/Xilinx/Vivado/202x.x/bin:/opt/Xilinx/Vitis/202x.x/bin
+<span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/intelFPGA_pro/2x.x/quartus/bin
+</pre></div>
+</div>
+</section>
+<section id="windows-environment-setup">
+<h3>Windows environment setup<a class="headerlink" href="#windows-environment-setup" title="Link to this heading">#</a></h3>
+<p>The best option on Windows is to use
+<a class="reference external" href="https://www.cygwin.com">Cygwin</a>. When installing it, select the
+<code class="docutils literal notranslate"><span class="pre">make</span></code> and <code class="docutils literal notranslate"><span class="pre">git</span></code> packages. The manual changes to your <strong>.bashrc</strong> do a lot
+look like that of the Linux environment.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/d/Xilinx/Vivado/202x.x/bin:/cygdrive/d/Xilinx/Vitis/202x.x/bin
+<span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/d/intelFPGA_pro/2x.x/quartus/bin64
+</pre></div>
+</div>
+<p>A very good alternative to Cygwin is
+<a class="reference external" href="https://learn.microsoft.com/en-us/windows/wsl/install/">WSL</a>. The
+manual changes to your <strong>.bashrc</strong> should look like:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/path_to/Vivado/202x.x/bin:/opt/Vitis/202x.x/bin
+<span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/path_to/quartus/bin
+</pre></div>
+</div>
+<p>If you do not want to install Cygwin, there might still be some
+alternative. There are <code class="docutils literal notranslate"><span class="pre">make</span></code> alternatives for <strong>Windows Command
+Prompt</strong>, minimalist GNU for Windows (<strong>MinGW</strong>), or the <strong>Cygwin
+variations</strong> installed by the tools itself.</p>
+<p>Some of these may not be fully functional with our scripts and/or projects.
+If you are an Intel user, the <strong>Nios II Command Shell</strong> does support make.
+If you are an AMD user, use the <strong>gnuwin</strong> installed as part of the SDK,
+usually at <code class="docutils literal notranslate"><span class="pre">C:\Xilinx\Vitis\202x.x\gnuwin\bin</span></code>.</p>
+</section>
+</section>
+<section id="preparing-the-sd-card">
+<h2>Preparing the SD card<a class="headerlink" href="#preparing-the-sd-card" title="Link to this heading">#</a></h2>
+<p>Firstly, you have to check this
+<a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/zynq_images/windows_hosts">tutorial</a>
+on how to put the Linux image on your SD card. Once you are done with
+that, you can go on with the following steps.</p>
+<p>On the BOOT partition recently created, you will find folders for each
+carrier that we support, and each of these folders contain an archive
+called <strong>bootgen_sysfiles.tgz</strong>. These have all the files needed to
+generate the <strong>BOOT.BIN</strong>.</p>
+<p>Copy the corresponding archive (checking for the name of your carrier
+and components) into the root folder of your project, unzip it twice,
+and there you will find the files that are needed to generate the
+<strong>BOOT.BIN</strong>. Copy them to be in the root directory.</p>
+<ol class="arabic simple">
+<li><p>fsbl.elf</p></li>
+<li><p>zynq.bif</p></li>
+<li><p>u-boot.elf</p></li>
+<li><p>and if you’re using ZCU102, then bl31.elf and pmu.elf</p></li>
+</ol>
+<p>Next, what your project needs, is the <strong>uImage</strong> (for Zynq based
+carriers) or <strong>Image</strong> (for Zynq UltraScale - ZCU102 and ADRV9009-ZU11EG
+carriers) or <strong>zImage</strong> (for Intel based carriers) file that you will find
+in the <strong>zynq-common</strong> or <strong>zynqmp-common</strong>, <strong>socfpga_arria10_common</strong> or
+<strong>socfpga_cyclone5_common</strong> on your <strong>boot</strong> partition. Copy this file also in
+the root directory of your project.</p>
+<p>More info on how to generate this file you will find in the
+<a class="reference internal" href="#references">References</a> section or in the <strong>ReadMe.txt</strong> file from <strong>boot</strong> partition.</p>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="847e41da20f18b87b580ad40c9c64192796613df" name="847e41da20f18b87b580ad40c9c64192796613df" type="checkbox"></input><label for="847e41da20f18b87b580ad40c9c64192796613df"><p>How to build the boot image BOOT.BIN in WSL</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<p>After obtaining <strong>.xsa</strong> file, you must be sure that you have done source for
+Vivado and Vitis. To create <strong>boot.bin</strong> is recommended to run
+<code class="docutils literal notranslate"><span class="pre">build_boot_bin.sh</span></code> in terminal.To do this, the file can be called in the
+following manner:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>chmod<span class="w"> </span>+x<span class="w"> </span>build_boot_bin.sh
+usage:<span class="w"> </span>build_boot_bin.sh<span class="w"> </span>system_top.xsa<span class="w"> </span>u-boot.elf<span class="w"> </span><span class="o">[</span>output-archive<span class="o">]</span>
+</pre></div>
+</div>
+<p>You can download the script by accessing the following link:
+<a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/build-the-zynq-boot-image">build_boot_bin.sh</a>.</p>
+</div>
+</div>
+</div></section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/build-the-zynq-boot-image">How to build the Zynq boot image
+BOOT.BIN</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/build-the-zynqmp-boot-image">How to build the ZynqMP boot image
+BOOT.BIN</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers-all">Building the ADI Linux
+kernel</a></p></li>
+</ul>
+</section>
+<section id="errors-warnings-and-notes">
+<h2>Errors, Warnings and Notes<a class="headerlink" href="#errors-warnings-and-notes" title="Link to this heading">#</a></h2>
+<p>Assuming the right to make an honest comment, the tools (both Quartus
+and Vivado) are not that useful or friendly when it comes to messages.
+In most cases, you may see <strong>hacked-in</strong> debugging <code class="docutils literal notranslate"><span class="pre">printf</span></code> sort of
+messages (AMD notoriously ranks high in this regard). So you are
+going to see a lot of <strong>warnings</strong> and some <strong>critical-warnings</strong> (critical
+to what could be hard to answer). Here are some of the commonly asked
+EngineerZone questions and their explanations.</p>
+<section id="amd-vivado">
+<h3>AMD: Vivado<a class="headerlink" href="#amd-vivado" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ERROR</span><span class="p">:</span> <span class="p">[</span><span class="n">BD</span> <span class="mi">5</span><span class="o">-</span><span class="mi">216</span><span class="p">]</span> <span class="n">VLNV</span> <span class="o">&lt;</span><span class="n">analog</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">user</span><span class="p">:</span><span class="n">axi_clkgen</span><span class="p">:</span><span class="mf">1.0</span><span class="o">&gt;</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">supported</span> <span class="k">for</span> <span class="n">the</span> <span class="n">current</span> <span class="n">part</span><span class="o">.</span>
+
+<span class="n">ERROR</span><span class="p">:</span> <span class="p">[</span><span class="n">Common</span> <span class="mi">17</span><span class="o">-</span><span class="mi">39</span><span class="p">]</span> <span class="s1">&#39;create_bd_cell&#39;</span> <span class="n">failed</span> <span class="n">due</span> <span class="n">to</span> <span class="n">earlier</span> <span class="n">errors</span> <span class="k">while</span> <span class="n">executing</span>
+<span class="s2">&quot;create_bd_cell -type ip -vlnv analog.com:user:axi_clkgen:1.0 axi_hdmi_clkgen&quot;</span> <span class="n">invoked</span> <span class="kn">from</span> <span class="nn">within</span>
+<span class="s2">&quot;set axi_hdmi_clkgen [create_bd_cell -type ip -vlnv analog.com:user:axi_clkgen:1.0 axi_hdmi_clkgen]&quot;</span> <span class="p">(</span><span class="n">file</span> <span class="s2">&quot;../../../projects/common/zc706/zc706_system_bd.tcl&quot;</span> <span class="n">line</span> <span class="mi">57</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You haven’t generated the library component or have the wrong user IP
+repository setting. If you were using the GUI flow, now is a good time
+to evaluate the <code class="docutils literal notranslate"><span class="pre">make</span></code> flow.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CRITICAL</span> <span class="n">WARNING</span><span class="p">:</span> <span class="p">[</span><span class="n">IP_Flow</span> <span class="mi">19</span><span class="o">-</span><span class="mi">459</span><span class="p">]</span> <span class="n">IP</span> <span class="n">file</span> <span class="s1">&#39;C:/Git/hdl/library/common/ad_pnmon.v&#39;</span> <span class="n">appears</span> <span class="n">to</span> <span class="n">be</span> <span class="n">outside</span> <span class="n">of</span> <span class="n">the</span>
+<span class="n">project</span> <span class="n">area</span> <span class="s1">&#39;C:/Git/hdl/library/axi_ad9467&#39;</span><span class="o">.</span> <span class="n">You</span> <span class="n">can</span> <span class="n">use</span> <span class="n">the</span>
+<span class="n">ipx</span><span class="p">::</span><span class="n">package_project</span> <span class="o">-</span><span class="n">import_files</span> <span class="n">option</span> <span class="n">to</span> <span class="n">copy</span> <span class="n">remote</span> <span class="n">files</span> <span class="n">into</span> <span class="n">the</span> <span class="n">IP</span> <span class="n">directory</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>These warnings appear because the libraries are using common modules
+which are located under the <strong>./library/common/</strong>. These warnings can be
+ignored, they won’t affect the functionality of the IP or the project.
+However, you may not be able to archive these projects. The irony is
+that it does copy these files to the project area, but ignores them.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/javascript">
+        function init() {
+            WaveDrom.ProcessAll();
+        }
+        window.onload = init;
+    </script>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="architecture.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">HDL Architecture</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="releases.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Releases</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2023, Analog Devices Inc
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Build an HDL project</a><ul>
+<li><a class="reference internal" href="#setup-and-check-your-environment">Setup and check your environment</a></li>
+<li><a class="reference internal" href="#setup-the-hdl-repository">Setup the HDL repository</a></li>
+<li><a class="reference internal" href="#building-the-projects">Building the projects</a><ul>
+<li><a class="reference internal" href="#building-an-intel-project">Building an Intel project</a><ul>
+<li><a class="reference internal" href="#checking-the-build-and-analyzing-results">Checking the build and analyzing results</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#building-an-amd-project">Building an AMD project</a><ul>
+<li><a class="reference internal" href="#enabling-out-of-context-synthesis">Enabling Out-of-Context synthesis</a></li>
+<li><a class="reference internal" href="#checking-the-build-and-analyzing-results-of-library-components">Checking the build and analyzing results of library components</a></li>
+<li><a class="reference internal" href="#checking-the-build-and-analyzing-results-of-projects">Checking the build and analyzing results of projects</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#supported-targets-of-make-command">Supported targets of <code class="docutils literal notranslate"><span class="pre">make</span></code> command</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tools-and-their-versions">Tools and their versions</a><ul>
+<li><a class="reference internal" href="#tools">Tools</a></li>
+<li><a class="reference internal" href="#tool-versions">Tool versions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#environment">Environment</a><ul>
+<li><a class="reference internal" href="#linux-environment-setup">Linux environment setup</a></li>
+<li><a class="reference internal" href="#windows-environment-setup">Windows environment setup</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#preparing-the-sd-card">Preparing the SD card</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+<li><a class="reference internal" href="#errors-warnings-and-notes">Errors, Warnings and Notes</a><ul>
+<li><a class="reference internal" href="#amd-vivado">AMD: Vivado</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=34cd777e"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=32e29ea5"></script>
+    <script src="https://wavedrom.com/skins/default.js"></script>
+    <script src="https://wavedrom.com/wavedrom.min.js"></script>
+    </body>
+</html>

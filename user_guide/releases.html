@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Introduction" href="introduction.html" /><link rel="prev" title="HDL Reference Designs" href="../index.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Build an HDL project" href="build_hdl.html" /><link rel="prev" title="HDL Git repository" href="git_repository.html" />
 
     <link rel="shortcut icon" href="../_static/icon.svg"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.17 -->
-        <title>User Guide - HDL, Analog Devices v0.1 documentation</title>
+        <title>Releases - HDL, Analog Devices v0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=36a5483c" />
@@ -157,10 +157,10 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">User guide</span></p>
 <ul class="current">
-<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">User Guide</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of User Guide</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">User Guide</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of User Guide</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="git_repository.html">Git repository</a></li>
-<li class="toctree-l2"><a class="reference internal" href="releases.html">Releases</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Releases</a></li>
 <li class="toctree-l2"><a class="reference internal" href="build_hdl.html">Build an HDL project</a></li>
 <li class="toctree-l2"><a class="reference internal" href="architecture.html">HDL architecture</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ip_cores.html">IP cores</a></li>
@@ -228,32 +228,167 @@
           </label>
         </div>
         <article role="main">
-          <section id="user-guide">
-<span id="id1"></span><h1>User Guide<a class="headerlink" href="#user-guide" title="Link to this heading">#</a></h1>
-<div class="toctree-wrapper compound">
+          <section id="releases">
+<span id="id1"></span><h1>Releases<a class="headerlink" href="#releases" title="Link to this heading">#</a></h1>
+<p>The HDL is released as git branches bi-annually. The release branches
+are created first and then tested before being made official. That is,
+the existence of a branch does not mean it is a fully tested release.</p>
+<p>Also, the release branch is tested <strong>only</strong> on certain versions of the tools
+and may <strong>not</strong> work with other versions of the tools.
+The projects that are tested and supported in a release branch are listed
+along with the ADI library cores that are used.</p>
+<p>The release branch may contain other projects that are in development;
+one must assume these are <strong>not</strong> tested, therefore <strong>not</strong> supported by
+this release.</p>
+<section id="porting-a-release-branch-to-another-tool-version">
+<h2>Porting a release branch to another Tool version<a class="headerlink" href="#porting-a-release-branch-to-another-tool-version" title="Link to this heading">#</a></h2>
+<p>It is possible to port a release branch to another tool version, though
+not recommended. The ADI libraries should work across different versions
+of the tools, but the projects may not. The issues are most likely with
+the Intel and AMD Xilinx cores. If you must still do this, note the
+following:</p>
+<p>First, disable the version check of the scripts.</p>
+<p>The ADI build scripts are making sure that the releases are being run on
+the validated tool version. It will promptly notify the user if he or
+she trying to use an unsupported version of tools. You need to disable
+this check by setting the environment variable <code class="docutils literal notranslate"><span class="pre">ADI_IGNORE_VERSION_CHECK</span></code>.</p>
+<p>Second, make Intel and AMD IP cores version change.</p>
+<p>The Intel projects should automatically be changed by Quartus. The
+Vivado projects are a bit tricky. The GUI automatically updates the
+cores, but the <strong>Tcl flow does not</strong>.</p>
+<p>Thus, it may be easier to create the project file with the supported version
+first, then opening it with the new version.
+After which, update the Tcl scripts accordingly.</p>
+<p>The versions are specified in the following format.</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="nv">add_instance</span><span class="w"> </span>sys_cpu<span class="w"> </span>altera_nios2_gen2<span class="w"> </span><span class="mf">16.0</span>
+<span class="linenos">2</span><span class="k">set</span><span class="w"> </span>sys_mb<span class="w"> </span><span class="k">[</span><span class="nv">create_bd_cell</span><span class="w"> </span><span class="o">-</span>type<span class="w"> </span>ip<span class="w"> </span><span class="o">-</span>vlnv<span class="w"> </span>xilinx.com:ip:microblaze:9.5<span class="w"> </span>sys_mb<span class="k">]</span>
+</pre></div>
 </div>
-<p><a class="reference external" href="https://www.analog.com/en/index.html">Analog Devices, Inc.</a> provides FPGA reference designs for selected hardware
-featuring some of our products interfacing to publicly available FPGA
-evaluation boards.</p>
-<p>This wiki documentation explains the HDL resources of these reference designs.</p>
-<section id="contents">
-<h2>Contents<a class="headerlink" href="#contents" title="Link to this heading">#</a></h2>
-<ol class="arabic simple">
-<li><p><a class="reference internal" href="introduction.html#introduction"><span class="std std-ref">Introduction</span></a></p></li>
-<li><p><a class="reference internal" href="git_repository.html#git-repository"><span class="std std-ref">HDL Git repository</span></a>: Our HDL GitHub repository</p></li>
-<li><p><a class="reference internal" href="releases.html#releases"><span class="std std-ref">Releases</span></a>: Releases and supported tool versions</p></li>
-<li><p><a class="reference internal" href="build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a>: Building and generating the programming files</p></li>
-<li><p><a class="reference internal" href="architecture.html#architecture"><span class="std std-ref">HDL Architecture</span></a>: HDL project architecture explained</p></li>
-<li><p><a class="reference internal" href="ip_cores.html#ip-cores"><span class="std std-ref">ADI IP cores</span></a>: List of IP cores</p></li>
-<li><p><a class="reference internal" href="porting_project.html#porting-project"><span class="std std-ref">Porting ADI’s HDL reference designs</span></a>: How to port a project to a non-supported carrier</p></li>
-<li><p><a class="reference internal" href="customize_hdl.html#customize-hdl"><span class="std std-ref">Customize HDL projects</span></a>: Using and modifying the HDL design</p></li>
-<li><p><a class="reference internal" href="hdl_coding_guideline.html#hdl-coding-guideline"><span class="std std-ref">ADI HDL coding guideline</span></a>: The Verilog/VHDL coding guidelines that the
-HDL team is following</p></li>
-<li><p><a class="reference internal" href="docs_guidelines.html#docs-guidelines"><span class="std std-ref">Documentation guidelines</span></a>: Documentation guidelines</p></li>
-<li><p><a class="reference internal" href="third_party.html#third-party"><span class="std std-ref">Third party forks</span></a>: Third party forks with derived work</p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/alliances/xilinx">Reference designs using AMD Xilinx hardware</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/alliances/altera">Reference designs using Intel hardware</a></p></li>
-</ol>
+<p>You should now be able to build the design and test things out. In most
+cases, it should work without much effort. If it doesn’t, do an
+incremental update and debug accordingly.</p>
+<section id="release-branches">
+<h3>Release branches<a class="headerlink" href="#release-branches" title="Link to this heading">#</a></h3>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Releases</p></th>
+<th class="head"><p>Intel</p></th>
+<th class="head"><p>AMD Xilinx</p></th>
+<th class="head"><p>Release notes</p></th>
+<th class="head"><p>List of supported projects and IP cores</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main//">main</a></p></td>
+<td><p>Quartus Pro 23.2</p></td>
+<td><p>Vivado 2023.1</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/hdl_2021_r2/">hdl_2021_r2</a></p></td>
+<td><p>Quartus Pro 21.4</p></td>
+<td><p>Vivado 2021.2</p></td>
+<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/releases/tag/2021_R2">Release notes 2021_R2</a></p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2021_r2">Wiki list for hdl_2021_r2</a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/hdl_2021_r1/">hdl_2021_r1</a></p></td>
+<td><p>Quartus Pro 21.2</p></td>
+<td><p>Vivado 2021.1</p></td>
+<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/releases/tag/2021_R1">Release notes 2021_R1</a></p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2021_r1">Wiki list for hdl_2021_r1</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/hdl_2019_r2/">hdl_2019_r2</a></p></td>
+<td><p>Quartus Pro 19.3</p></td>
+<td><p>Vivado 2019.1</p></td>
+<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/releases/tag/2019_R2">Release notes 2019_R2</a></p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2019_r2">Wiki list for hdl_2019_r2</a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/hdl_2019_r1/">hdl_2019_r1</a></p></td>
+<td><p>Quartus Pro 18.1</p></td>
+<td><p>Vivado 2018.3</p></td>
+<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/releases/tag/2019_R1">Release notes 2019_R1</a></p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2019_r1">Wiki list for hdl_2019_r1</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/hdl_2018_r2/">hdl_2018_r2</a></p></td>
+<td><p>Quartus Pro 18.0</p></td>
+<td><p>Vivado 2018.2</p></td>
+<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/releases/tag/2018_R2">Release notes 2018_R2</a></p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2018_r2">Wiki list for hdl_2018_r2</a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/hdl_2018_r1/">hdl_2018_r1</a></p></td>
+<td><p>Quartus Pro 17.1.1</p></td>
+<td><p>Vivado 2017.4.1</p></td>
+<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/releases/tag/2018_R1">Release notes 2018_R1</a></p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2018_r1">Wiki list for hdl_2018_r1</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/hdl_2017_r1/">hdl_2017_r1</a></p></td>
+<td><p>Quartus Pro 16.1</p></td>
+<td><p>Vivado 2016.4</p></td>
+<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/releases/tag/2017_R1">Release notes 2017_R1</a></p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2017_r1">Wiki list for hdl_2017_r1</a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/hdl_2016_r2/">hdl_2016_r2</a></p></td>
+<td><p>Quartus Pro 16.0</p></td>
+<td><p>Vivado 2016.2</p></td>
+<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/releases/tag/2016_R2">Release notes 2016_R2</a></p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2016_r2">Wiki list for hdl_2016_r2</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/hdl_2016_r1/">hdl_2016_r1</a></p></td>
+<td><p>Quartus Pro 15.1</p></td>
+<td><p>Vivado 2015.4.2</p></td>
+<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/releases/tag/2016_R1">Release notes 2016_R1</a></p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2016_r1">Wiki list for hdl_2016_r1</a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/hdl_2015_r2/">hdl_2015_r2</a></p></td>
+<td><p>Quartus Pro 15.0.2</p></td>
+<td><p>Vivado 2015.2</p></td>
+<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/releases/tag/2015_R2">Release notes 2015_R2</a></p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2015_r2">Wiki list for hdl_2015_r2</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/hdl_2015_r1/">hdl_2015_r1</a></p></td>
+<td><p>Quartus Pro 14.1</p></td>
+<td><p>Vivado 2014.4.1</p></td>
+<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/releases/tag/2015_R1">Release notes 2015_R1</a></p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2015_r1">Wiki list for hdl_2015_r1</a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/hdl_2014_r2/">hdl_2014_r2</a></p></td>
+<td><p>Quartus Pro 14.0</p></td>
+<td><p>Vivado 2014.2</p></td>
+<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/releases/tag/2014_R2">Release notes 2014_R2</a></p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2014_r2">Wiki list for hdl_2014_r2</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/hdl_2014_r1/">hdl_2014_r1</a></p></td>
+<td><p>Quartus Pro 14.0</p></td>
+<td><p>Vivado 2013.4</p></td>
+<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/releases/tag/2014_R1">Release notes 2014_R1</a></p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2014_r1">Wiki list for hdl_2014_r1</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="about-the-tools-we-use">
+<h2>About the tools we use<a class="headerlink" href="#about-the-tools-we-use" title="Link to this heading">#</a></h2>
+<p>When Intel or AMD have a new release, we usually follow them and update our
+tools in a timely manner.</p>
+<p>Changing the version of tool used on a branch is done by updating the
+git-hdl:<cite>adi_env.tcl &lt;scripts/adi_env.tcl&gt;</cite> script.</p>
+<p>If the tool version is not the one you want to use, keep in mind that when
+making a setup, you will have to build the software files with the same
+version, otherwise you might encounter problems in your setup.</p>
+<p>For example, you want to use an older version of Vivado on the main branch
+which uses a newer one. Then you will need to manually build the software
+files from the main branch, with the same version of Vitis too. Or for
+Linux, to use the proper version of CROSS_COMPILE, etc.</p>
 </section>
 </section>
 
@@ -268,23 +403,23 @@ HDL team is following</p></li>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="introduction.html">
+          <a class="next-page" href="build_hdl.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Introduction</div>
+                <div class="title">Build an HDL project</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../index.html">
+          <a class="prev-page" href="git_repository.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Home</div>
+                <div class="title">HDL Git repository</div>
                 
               </div>
             </a>
@@ -318,8 +453,12 @@ HDL team is following</p></li>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">User Guide</a><ul>
-<li><a class="reference internal" href="#contents">Contents</a></li>
+<li><a class="reference internal" href="#">Releases</a><ul>
+<li><a class="reference internal" href="#porting-a-release-branch-to-another-tool-version">Porting a release branch to another Tool version</a><ul>
+<li><a class="reference internal" href="#release-branches">Release branches</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#about-the-tools-we-use">About the tools we use</a></li>
 </ul>
 </li>
 </ul>

@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Introduction" href="introduction.html" /><link rel="prev" title="HDL Reference Designs" href="../index.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Porting ADI’s HDL reference designs" href="porting_project.html" /><link rel="prev" title="HDL Architecture" href="architecture.html" />
 
     <link rel="shortcut icon" href="../_static/icon.svg"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.17 -->
-        <title>User Guide - HDL, Analog Devices v0.1 documentation</title>
+        <title>ADI IP cores - HDL, Analog Devices v0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=36a5483c" />
@@ -157,13 +157,13 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">User guide</span></p>
 <ul class="current">
-<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">User Guide</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of User Guide</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">User Guide</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of User Guide</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="git_repository.html">Git repository</a></li>
 <li class="toctree-l2"><a class="reference internal" href="releases.html">Releases</a></li>
 <li class="toctree-l2"><a class="reference internal" href="build_hdl.html">Build an HDL project</a></li>
 <li class="toctree-l2"><a class="reference internal" href="architecture.html">HDL architecture</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ip_cores.html">IP cores</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">IP cores</a></li>
 <li class="toctree-l2"><a class="reference internal" href="porting_project.html">Porting reference designs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="customize_hdl.html">Customize HDL projects</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hdl_coding_guideline.html">HDL coding guideline</a></li>
@@ -228,32 +228,77 @@
           </label>
         </div>
         <article role="main">
-          <section id="user-guide">
-<span id="id1"></span><h1>User Guide<a class="headerlink" href="#user-guide" title="Link to this heading">#</a></h1>
-<div class="toctree-wrapper compound">
-</div>
-<p><a class="reference external" href="https://www.analog.com/en/index.html">Analog Devices, Inc.</a> provides FPGA reference designs for selected hardware
-featuring some of our products interfacing to publicly available FPGA
-evaluation boards.</p>
-<p>This wiki documentation explains the HDL resources of these reference designs.</p>
-<section id="contents">
-<h2>Contents<a class="headerlink" href="#contents" title="Link to this heading">#</a></h2>
-<ol class="arabic simple">
-<li><p><a class="reference internal" href="introduction.html#introduction"><span class="std std-ref">Introduction</span></a></p></li>
-<li><p><a class="reference internal" href="git_repository.html#git-repository"><span class="std std-ref">HDL Git repository</span></a>: Our HDL GitHub repository</p></li>
-<li><p><a class="reference internal" href="releases.html#releases"><span class="std std-ref">Releases</span></a>: Releases and supported tool versions</p></li>
-<li><p><a class="reference internal" href="build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a>: Building and generating the programming files</p></li>
-<li><p><a class="reference internal" href="architecture.html#architecture"><span class="std std-ref">HDL Architecture</span></a>: HDL project architecture explained</p></li>
-<li><p><a class="reference internal" href="ip_cores.html#ip-cores"><span class="std std-ref">ADI IP cores</span></a>: List of IP cores</p></li>
-<li><p><a class="reference internal" href="porting_project.html#porting-project"><span class="std std-ref">Porting ADI’s HDL reference designs</span></a>: How to port a project to a non-supported carrier</p></li>
-<li><p><a class="reference internal" href="customize_hdl.html#customize-hdl"><span class="std std-ref">Customize HDL projects</span></a>: Using and modifying the HDL design</p></li>
-<li><p><a class="reference internal" href="hdl_coding_guideline.html#hdl-coding-guideline"><span class="std std-ref">ADI HDL coding guideline</span></a>: The Verilog/VHDL coding guidelines that the
-HDL team is following</p></li>
-<li><p><a class="reference internal" href="docs_guidelines.html#docs-guidelines"><span class="std std-ref">Documentation guidelines</span></a>: Documentation guidelines</p></li>
-<li><p><a class="reference internal" href="third_party.html#third-party"><span class="std std-ref">Third party forks</span></a>: Third party forks with derived work</p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/alliances/xilinx">Reference designs using AMD Xilinx hardware</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/alliances/altera">Reference designs using Intel hardware</a></p></li>
-</ol>
+          <section id="adi-ip-cores">
+<span id="ip-cores"></span><h1>ADI IP cores<a class="headerlink" href="#adi-ip-cores" title="Link to this heading">#</a></h1>
+<p>Here you can find documentations of all the available ADI IP cores.</p>
+<p>Other useful information:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/hdl/use_adi_ips">Use ADI IPs</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/hdl/creating_new_ip_guide">Creating a new IP</a></p></li>
+</ul>
+<section id="frameworks">
+<h2>Frameworks<a class="headerlink" href="#frameworks" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="/resources/fpga/peripherals/jesd204">JESD204 Interface Framework</a></p></li>
+<li><p><a class="reference internal" href="../library/spi_engine/index.html#spi-engine"><span class="std std-ref">SPI Engine</span></a></p></li>
+</ul>
+</section>
+<section id="adc-dac">
+<h2>ADC/DAC<a class="headerlink" href="#adc-dac" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="axi_adc_ip">Generic AXI ADC</a></p></li>
+<li><p><a class="reference external" href="axi_dac_ip">Generic AXI DAC</a></p></li>
+<li><p><a class="reference external" href="axi_ad3552r">AXI_AD3552R</a></p></li>
+<li><p><a class="reference external" href="axi_ad7606x">AXI_AD7606X</a></p></li>
+<li><p><a class="reference external" href="axi_ad7616">AXI_AD7616</a></p></li>
+<li><p><a class="reference external" href="ad7768">AXI_AD7768</a></p></li>
+<li><p><a class="reference external" href="ad777x">AXI_AD777x</a></p></li>
+<li><p><a class="reference external" href="axi_ad9265">AXI_AD9265</a></p></li>
+<li><p><a class="reference external" href="axi_ad9361">AXI_AD9361</a></p></li>
+<li><p><a class="reference external" href="axi_ad9467">AXI_AD9467</a></p></li>
+<li><p><a class="reference external" href="axi_ad9671">AXI_AD9671</a></p></li>
+<li><p><a class="reference external" href="axi_ad9783">AXI_AD9783</a></p></li>
+<li><p><a class="reference external" href="axi_ad9963">AXI_AD9963</a></p></li>
+<li><p><a class="reference external" href="adaq8092">AXI_ADAQ8092</a></p></li>
+</ul>
+</section>
+<section id="dma">
+<h2>DMA<a class="headerlink" href="#dma" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">High-Speed DMA Controller (AXI_DMAC)</span></a></p></li>
+</ul>
+</section>
+<section id="video">
+<h2>Video<a class="headerlink" href="#video" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="axi_hdmi_tx">AXI_HDMI_TX</a></p></li>
+<li><p><a class="reference external" href="axi_hdmi_rx">AXI_HDMI_RX</a></p></li>
+</ul>
+</section>
+<section id="utilities">
+<h2>Utilities<a class="headerlink" href="#utilities" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="dds">AD_DDS</a></p></li>
+<li><p><a class="reference external" href="axi_adc_decimate">AXI_ADC_DECIMATE</a></p></li>
+<li><p><a class="reference external" href="axi_adc_trigger">AXI_ADC_TRIGGER</a></p></li>
+<li><p><a class="reference external" href="axi_clkgen">AXI_CLKGEN</a></p></li>
+<li><p><a class="reference external" href="axi_dac_interpolate">AXI_DAC_INTERPOLATE</a></p></li>
+<li><p><a class="reference external" href="axi_fan_control">AXI_FAN_CONTROL</a></p></li>
+<li><p><a class="reference external" href="axi_laser_driver">AXI_LASER_DRIVER</a></p></li>
+<li><p><a class="reference external" href="axi_logic_analyzer">AXI_LOGIC_ANALYZER</a></p></li>
+<li><p><a class="reference external" href="axi_pwm_gen">AXI_PWM_GEN</a></p></li>
+<li><p><a class="reference external" href="axi_sysid">AXI_SYSID</a></p></li>
+<li><p><a class="reference external" href="axi_tdd">AXI_TDD</a></p></li>
+<li><p><a class="reference external" href="util_axis_fifo">UTIL_AXIS_FIFO</a></p></li>
+<li><p><a class="reference external" href="util_axis_fifo_asym">UTIL_AXIS_FIFO_ASYM</a></p></li>
+<li><p><a class="reference external" href="util_cpack">UTIL_CPACK</a></p></li>
+<li><p><a class="reference external" href="util_extract">UTIL_EXTRACT</a></p></li>
+<li><p><a class="reference external" href="util_mii_to_rmii">UTIL_MII_TO_RMII</a></p></li>
+<li><p><a class="reference external" href="util_upack">UTIL_UPACK</a></p></li>
+<li><p><a class="reference external" href="util_rfifo">UTIL_RFIFO</a></p></li>
+<li><p><a class="reference external" href="util_wfifo">UTIL_WFIFO</a></p></li>
+<li><p><a class="reference external" href="util_var_fifo">UTIL_VAR_FIFO</a></p></li>
+</ul>
 </section>
 </section>
 
@@ -268,23 +313,23 @@ HDL team is following</p></li>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="introduction.html">
+          <a class="next-page" href="porting_project.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Introduction</div>
+                <div class="title">Porting ADI’s HDL reference designs</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../index.html">
+          <a class="prev-page" href="architecture.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Home</div>
+                <div class="title">HDL Architecture</div>
                 
               </div>
             </a>
@@ -318,8 +363,12 @@ HDL team is following</p></li>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">User Guide</a><ul>
-<li><a class="reference internal" href="#contents">Contents</a></li>
+<li><a class="reference internal" href="#">ADI IP cores</a><ul>
+<li><a class="reference internal" href="#frameworks">Frameworks</a></li>
+<li><a class="reference internal" href="#adc-dac">ADC/DAC</a></li>
+<li><a class="reference internal" href="#dma">DMA</a></li>
+<li><a class="reference internal" href="#video">Video</a></li>
+<li><a class="reference internal" href="#utilities">Utilities</a></li>
 </ul>
 </li>
 </ul>

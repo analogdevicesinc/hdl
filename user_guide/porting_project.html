@@ -3,14 +3,14 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Documentation guidelines" href="docs_guidelines.html" /><link rel="prev" title="User Guide" href="index.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Customize HDL projects" href="customize_hdl.html" /><link rel="prev" title="ADI IP cores" href="ip_cores.html" />
 
     <link rel="shortcut icon" href="../_static/icon.svg"/><!-- Generated with Sphinx 7.2.2 and Furo 2023.08.17 -->
         <title>Porting ADI’s HDL reference designs - HDL, Analog Devices v0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=36a5483c" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6000fc3f" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=73e8d488" />
     
     
 
@@ -158,13 +158,23 @@
   <p class="caption" role="heading"><span class="caption-text">User guide</span></p>
 <ul class="current">
 <li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">User Guide</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of User Guide</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="git_repository.html">Git repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="releases.html">Releases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_hdl.html">Build an HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html">HDL architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ip_cores.html">IP cores</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Porting reference designs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="customize_hdl.html">Customize HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hdl_coding_guideline.html">HDL coding guideline</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs_guidelines.html">Documentation guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="third_party.html">Third party forks</a></li>
 </ul>
 </li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Libraries</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../library/axi_dmac/index.html">High-Speed DMA Controller</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../library/spi_engine/index.html">SPI Engine</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of SPI Engine</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../library/spi_engine/spi_engine_execution.html">Execution Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/spi_engine/axi_spi_engine.html">AXI Module</a></li>
@@ -177,7 +187,13 @@
 <li class="toctree-l2"><a class="reference internal" href="../library/spi_engine/tutorial.html">Tutorial - PulSAR ADC</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../library/axi_dmac/index.html">High-Speed DMA Controller</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Projects</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../projects/ad7616_sdz/index.html">AD7616-SDZ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../projects/ad9081_fmca_ebz/index.html">AD9081-FMCA-EBZ/AD9082-FMCA-EBZ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../projects/adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
 </ul>
 
 </div>
@@ -215,11 +231,11 @@
           <section id="porting-adi-s-hdl-reference-designs">
 <span id="porting-project"></span><h1>Porting ADI’s HDL reference designs<a class="headerlink" href="#porting-adi-s-hdl-reference-designs" title="Link to this heading">#</a></h1>
 <p>In general, a given reference design for an FMC board is deployed to just a few
-carriers, although several <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/projects/common">FPGA boards</a>
+carriers, although several <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/common">FPGA boards</a>
 are supported in ADI’s HDL repository. The simple reason behind this practice is
 that it would create a tremendous maintenance workload, that would require a lot
-of human resources, and would increase the required time for testing. The
-general rule of thumb is to support a given project with a fairly popular
+of human resources, and would increase the required time for testing.</p>
+<p>The general rule of thumb is to support a given project with a fairly popular
 carrier (e.g. ZC706 or A10SoC), which is powerful enough to showcase the board
 features and maximum performance.</p>
 <p>All the HDL projects were designed to maximize source code reuse, minimize
@@ -234,25 +250,28 @@ carrier.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>All ADI’s FPGA Mezzanine Cards (FMC) are designed to respect all the
-specifications and requirements defined in the ANSI/VITA 57.1 FPGA Mezzanine
-Card Standard (if not otherwise stated on board’s wiki page). If the new FPGA
-carrier is fully compliant with this standard, there will be no obstacles
-preventing the user to port the project to the required carrier card.</p>
+specifications and requirements defined in the ANSI/VITA 57.1/57.4 FPGA
+Mezzanine Card Standard (if not otherwise stated on board’s wiki page).</p>
+<p>If the new FPGA carrier is fully compliant with this standard, there
+will be no obstacles preventing the user to port the project to the required
+carrier card.</p>
 </div>
-<p>There are two types of FMC connectors: LPC (Low Pin Count) and HPC (High Pin
-Count). In general, an FMC board is using the FMC connector type that has enough
+<p>There are three types of FMC connectors: LPC (Low Pin Count), HPC (High Pin
+Count) and FMC+ (VITA 57.4).</p>
+<p>In general, an FMC board is using the FMC connector type that has enough
 pins for the required interfaces between the I/O devices and FPGA. A carrier
 with an FMC HPC connector can host FMC boards with an LPC or HPC connector, but
 a carrier with an FMC LPC can host a board just with an FMC LPC connector.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>First, always check out the already available <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/projects/common">base designs</a>.
-If your board is present among our supported base designs, you do not need to
-verify the following things and you can jump to the Project creation
+<p>First, always check out the already available
+<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/common">base designs</a>.
+If your board is present among our supported base designs, you do not need
+to verify the following things and you can jump to the Project creation
 section.</p>
 </div>
 <p>The most important things to check before porting are related to the ANSI/VITA
-57.1 standard (the list is not necessarily exhaustive):</p>
+57.1/57.4 standard (the list is not necessarily exhaustive):</p>
 <ul class="simple">
 <li><p>Power and ground lines - 3P3V/3P3VAUX/12P0V/GND</p></li>
 <li><p>VADJ - adjustable voltage level power from the carrier, each board has a
@@ -264,7 +283,8 @@ receive and/or transmit a clock signal)</p></li>
 </ul>
 <div class="admonition attention">
 <p class="admonition-title">Attention</p>
-<p>To check all the requirements, please refer to the ANSI/VITA 57.1 standard.
+<p>To check all the requirements, please refer to the ANSI/VITA 57.1/57.4
+standard.
 The above few hints do not cover all the FMC standards and you
 may miss something that can prevent the porting of the project.</p>
 </div>
@@ -277,36 +297,36 @@ FMC board. If you’re not sure, ask!</p>
 </section>
 <section id="base-design-files">
 <h2>Base design files<a class="headerlink" href="#base-design-files" title="Link to this heading">#</a></h2>
-<p>At <span class="xref std std-ref">architecture</span> it is described a generic base design and possible
+<p>At <a class="reference internal" href="architecture.html#architecture"><span class="std std-ref">HDL Architecture</span></a> it is described a generic base design and possible
 components of it. The user should look at it as a suggestion only.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>In <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/master//projects/common">/projects/common</a>/&lt;carrier_name&gt;
+<p>In <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/common">projects/common</a>/&lt;carrier_name&gt;
 you can find templates for the <em>system_top.v</em>, <em>Makefile</em>, etc. to help you
 when creating a new project.</p>
 </div>
-<section id="example-with-a-xilinx-board">
-<h3>Example with a Xilinx board<a class="headerlink" href="#example-with-a-xilinx-board" title="Link to this heading">#</a></h3>
+<section id="example-with-an-amd-xilinx-board">
+<h3>Example with an AMD Xilinx board<a class="headerlink" href="#example-with-an-amd-xilinx-board" title="Link to this heading">#</a></h3>
 <p>In this section, we are presenting all the necessary steps to create a base
-design for the Xilinx ZCU102 development board.</p>
-<p>First, you need to create a new directory in <em>~/projects/common</em> with the name
+design for the AMD <a class="reference external" href="https://www.xilinx.com/ZCU102">ZCU102</a> development board.</p>
+<p>First, you need to create a new directory in <code class="docutils literal notranslate"><span class="pre">hdl/projects/common</span></code> with the name
 of the carrier.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>projects/common
-mkdir<span class="w"> </span>zcu102
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>~/hdl$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>projects/common
+~/hdl/projects/common$<span class="w"> </span>mkdir<span class="w"> </span>zcu102
 </pre></div>
 </div>
 <p>The <strong>zcu102</strong> directory must contain the following files:</p>
 <ul class="simple">
-<li><p><strong>zcu102_system_bd.tcl</strong> - This script describes the base block design</p></li>
+<li><p><strong>zcu102_system_bd.tcl</strong> - this script describes the base block design</p></li>
 <li><p><strong>zcu102_system_constr.xdc</strong> - I/O constraint file for the base design. It
 will contain I/O definitions for GPIO, switches, LEDs or other peripherals of
 the board</p></li>
-<li><p>MIG configuration file (if needed) - This file can be borrowed for the golden
-reference design of the board</p></li>
+<li><p>MIG configuration file (if needed) - this file can be borrowed from the
+golden reference design of the board</p></li>
 <li><p>Other constraints files if needed</p></li>
 </ul>
 <p>You should define the board and its device in the project flow script
-<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/projects/scripts/adi_project_xilinx.tcl">adi_project_xilinx.tcl</a>
+<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/scripts/adi_project_xilinx.tcl">projects/scripts/adi_project_xilinx.tcl</a>
 by adding the following lines to the beginning of the <strong>adi_project_create</strong>
 process:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="k">[</span><span class="nb">regexp</span><span class="w"> </span><span class="s2">&quot;_zcu102$&quot;</span><span class="w"> </span><span class="nv">$project_name</span><span class="k">]</span><span class="w"> </span><span class="k">{</span>
@@ -327,20 +347,21 @@ a separate line.</p>
 <ul class="simple">
 <li><p>0 - 7 Series FPGA (e.g. Kintex7, Virtex7)</p></li>
 <li><p>1 - Zynq7000 SoC</p></li>
-<li><p>2 - Zynq Ultrascale+ SoC</p></li>
+<li><p>2 - Zynq UltraScale+ SoC</p></li>
+<li><p>3 - Versal</p></li>
 </ul>
 </section>
 <section id="example-with-an-intel-board">
 <h3>Example with an Intel board<a class="headerlink" href="#example-with-an-intel-board" title="Link to this heading">#</a></h3>
 <p>To create a new base design for a given Intel FPGA carrier board, the following
-steps should be taken (the A10SoC carrier was used as an example).</p>
+steps should be taken (the <a class="reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html">A10SoC</a> carrier was used as an example).</p>
 <p>The following files should be created or copied into the directory:</p>
 <ul class="simple">
 <li><p><strong>a10soc_system_assign.tcl</strong> - global and I/O assignments of the base design</p></li>
 <li><p><strong>a10soc_system_qsys.tcl</strong> - the QSYS base design</p></li>
 </ul>
 <p>You should define the board and its device in the flow script
-<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/projects/scripts/adi_project_intel.tcl">adi_project_intel.tcl</a>,
+<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/scripts/adi_project_intel.tcl">projects/scripts/adi_project_intel.tcl</a>,
 by adding the following lines to the beginning of the <strong>adi_project_altera</strong>
 process:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="k">[</span><span class="nb">regexp</span><span class="w"> </span><span class="s2">&quot;_a10soc$&quot;</span><span class="w"> </span><span class="nv">$project_name</span><span class="k">]</span><span class="w"> </span><span class="k">{</span>
@@ -354,57 +375,59 @@ process:</p>
 </section>
 <section id="project-files">
 <h2>Project files<a class="headerlink" href="#project-files" title="Link to this heading">#</a></h2>
-<section id="project-files-for-xilinx-boards">
-<h3>Project files for Xilinx boards<a class="headerlink" href="#project-files-for-xilinx-boards" title="Link to this heading">#</a></h3>
+<section id="project-files-for-amd-boards">
+<h3>Project files for AMD boards<a class="headerlink" href="#project-files-for-amd-boards" title="Link to this heading">#</a></h3>
 <p>To follow the project framework as much as possible, the easiest way is to copy
-all the projects files from an already existing project and modifying those
-files to support the new carrier. A project for a Xilinx FPGA board should
-contain the following files:</p>
+all the projects files from an already existing project and to modify those
+files to support the new carrier.</p>
+<p>A project for an AMD FPGA board should contain the following files:</p>
 <ul class="simple">
-<li><p><strong>system_project.tcl</strong> - This script is creating the actual Vivado project
+<li><p><strong>system_project.tcl</strong> - this script is creating the actual Vivado project
 and runs the synthesis/implementation of the design. The name of the carrier
 from inside the file, must be updated.</p></li>
-<li><p><strong>system_bd.tcl</strong> - In this file is sourced the <em>base</em> design’s Tcl script
-and the <em>board</em> design’s Tcl script. Again, the name of the carrier must be
+<li><p><strong>system_bd.tcl</strong> - in this file is sourced the <strong>base</strong> design’s Tcl script
+and the <strong>board</strong> design’s Tcl script. Again, the name of the carrier must be
 updated.</p></li>
-<li><p><strong>system_constr.xdc</strong> - Constraint file of the board design. Here are defined
-the FMC I/O pins and board specific clock signals. All the I/O definitions
-must be updated, with the new pin names.</p></li>
-<li><p><strong>system_top.v</strong> - Top wrapper file, in which the system_wrapper.v module is
-instantiated, and a few I/O macros are defined. The I/O port of this Verilog
-module will be connected to actual I/O pads of the FPGA. The simplest way to
-update the <em>system_top</em> is to let the synthesis fail and the tool will tell
-you which ports are missing or which ports are redundant. The first thing to
-do after the failure is to verify the instantiation of the system_wrapper.v.
-This file is a tool generated file and can be found at
-<em>&lt;project_name&gt;.srcs/sources_1/bd/system/hdl/system_wrapper.v</em>. Fixing the
-instantiation of the wrapper module in most cases eliminates all the errors.
-If you get errors that you cannot fix, ask for support.</p></li>
-<li><p><strong>Makefile</strong> - This is an auto-generated file, but after updating the carrier
+<li><p><strong>system_constr.xdc</strong> - constraints file of the <strong>board</strong> design.
+Here are defined the FMC I/O pins and board specific clock signals.
+All the I/O definitions must be updated, with the new pin names.</p></li>
+<li><p><strong>system_top.v</strong> - top wrapper file, in which the <strong>system_wrapper.v</strong>
+module is instantiated, and a few I/O macros are defined.
+The I/O port of this Verilog module will be connected to actual I/O pads
+of the FPGA. The simplest way to update the <strong>system_top</strong> is to let
+the synthesis fail and the tool will tell you which ports are missing
+or which ports are redundant.
+The first thing to do after the failure, is to verify the instantiation
+of the <strong>system_wrapper.v</strong>.
+This file is a tool-generated file and can be found at
+<strong>&lt;project_name&gt;.srcs/sources_1/bd/system/hdl/system_wrapper.v</strong>.
+Fixing the instantiation of the wrapper module in most cases eliminates
+all the errors.</p></li>
+<li><p><strong>Makefile</strong> - this is an auto-generated file, but after updating the carrier
 name, should work with the new project without an issue.</p></li>
 </ul>
 </section>
 <section id="project-files-for-intel-boards">
 <h3>Project files for Intel boards<a class="headerlink" href="#project-files-for-intel-boards" title="Link to this heading">#</a></h3>
-<p>To follow the project framework as much as possible the easiest way is to copy
-all the projects file from an already existing project and modifying those files
-to support the new carrier. A project for an Intel FPGA board should contain the
-following files:</p>
+<p>To follow the project framework as much as possible, the easiest way is to copy
+all the projects file from an already existing project and to modify those
+files to support the new carrier.</p>
+<p>A project for an Intel FPGA board should contain the following files:</p>
 <ul class="simple">
-<li><p><strong>system_project.tcl</strong> - This script is creating the actual Quartus project
+<li><p><strong>system_project.tcl</strong> - this script is creating the actual Quartus project
 and runs the synthesis/implementation of the design. It also contains the I/O
 definitions for the interfaces between the FMC board and FPGA. The carrier
 name and all the I/O pin names inside the file, must be updated.</p></li>
-<li><p><strong>system_qsys.tcl</strong> - In this file is sourced the <em>base</em> design’s Tcl script
-and the <em>board</em> design’s Tcl script. Again, the name of the carrier must be
-updated.</p></li>
-<li><p><strong>system_constr.sdc</strong> - Contains clock definitions and other path constraints</p></li>
-<li><p><strong>system_top.v</strong> - Top wrapper file of the project. The I/O ports of this
+<li><p><strong>system_qsys.tcl</strong> - in this file is sourced the <strong>base</strong> design’s Tcl
+script and the <strong>board</strong> design’s Tcl script. Again, the name of the carrier
+must be updated.</p></li>
+<li><p><strong>system_constr.sdc</strong> - contains clock definitions and other path constraints</p></li>
+<li><p><strong>system_top.v</strong> - top wrapper file of the project. The I/O ports of this
 Verilog module will be actual I/O pads of the FPGA. You must make sure that
 the base design’s I/Os are updated (delete nonexistent I/Os or add new ones).
 The simplest way to update the <em>system_top</em> is to let the synthesis fail and
 the tool will you tell which ports are missing or which ports are redundant.</p></li>
-<li><p><strong>Makefile</strong> - This is an auto-generated file, but after updating the carrier
+<li><p><strong>Makefile</strong> - this is an auto-generated file, but after updating the carrier
 name, it should work with the new project without an issue.</p></li>
 </ul>
 </section>
@@ -413,14 +436,14 @@ name, it should work with the new project without an issue.</p></li>
 <h2>Tips<a class="headerlink" href="#tips" title="Link to this heading">#</a></h2>
 <section id="generating-the-fmc-i-o-constraints">
 <h3>Generating the FMC I/O constraints<a class="headerlink" href="#generating-the-fmc-i-o-constraints" title="Link to this heading">#</a></h3>
-<p>The easiest way of writing the constraints for FMC I/O pins is making use of the
-script <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/projects/scripts/adi_fmc_constr_generator.tcl">adi_fmc_constr_generator.tcl</a>.</p>
+<p>The easiest way of writing the constraints for FMC I/O pins is making use
+of the script <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/scripts/adi_fmc_constr_generator.tcl">projects/scripts/adi_fmc_constr_generator.tcl</a>.</p>
 <p>Required setup:</p>
 <ul class="simple">
 <li><p>Carrier common FMC connections file
-(<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/projects/common">projects/common</a>/&lt;carrier&gt;/&lt;carrier&gt;_&lt;fmc_port&gt;.txt)</p></li>
+(<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/common">projects/common</a>/&lt;carrier&gt;/&lt;carrier&gt;_&lt;fmc_port&gt;.txt)</p></li>
 <li><p>Project common FMC connections file
-(<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/projects">projects</a>/&lt;project&gt;/common/&lt;project&gt;_fmc.txt)</p></li>
+(<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects">projects</a>/&lt;project&gt;/common/&lt;project&gt;_fmc.txt)</p></li>
 </ul>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
@@ -429,10 +452,10 @@ by following some existing ones as an example.
 For project common files, you can easily make them following <a class="reference internal" href="#creating-fmc"><span class="std std-ref">Creating carrier common FMC connections</span></a>.</p>
 </div>
 <p>Calling the script:</p>
-<p>To use this script you can source it in any tcl shell or simply call the
-adi_fmc_constr_generator.tcl with argument(s) &lt;fmc_port&gt;. But before sourcing or
-calling it, your current directory needs to be
-<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/projects">projects</a>/&lt;project&gt;/&lt;carrier&gt;</p>
+<p>To use this script you can source it in any Tcl shell or simply call the
+adi_fmc_constr_generator.tcl <strong>with argument(s) &lt;fmc_port&gt;</strong>.
+But before sourcing or calling it, your current directory needs to be
+<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects">projects</a>/&lt;project&gt;/&lt;carrier&gt;.</p>
 <p>For example:</p>
 <ul class="simple">
 <li><p><code class="code docutils literal notranslate"><span class="pre">tclsh</span> <span class="pre">../../scripts/adi_fmc_constr_generator.tcl</span> <span class="pre">fmc0</span></code>
@@ -440,8 +463,8 @@ calling it, your current directory needs to be
 <li><p><code class="code docutils literal notranslate"><span class="pre">tclsh</span> <span class="pre">../../scripts/adi_fmc_constr_generator.tcl</span> <span class="pre">fmc0</span> <span class="pre">fmc1</span></code>
 (the project uses two FMC ports at a time)</p></li>
 </ul>
-<p>If sourced without argument(s) then you can simply call gen_fmc_constr
-&lt;fmc_port&gt;.</p>
+<p>If sourced <strong>without argument(s)</strong>, then you can simply call <code class="docutils literal notranslate"><span class="pre">gen_fmc_constr</span>
+<span class="pre">&lt;fmc_port&gt;</span></code>.</p>
 <p>For example:</p>
 <ul class="simple">
 <li><p><code class="code docutils literal notranslate"><span class="pre">gen_fmc_constr</span> <span class="pre">fmc0</span></code> (the project uses only one FMC port at a time)</p></li>
@@ -450,10 +473,10 @@ calling it, your current directory needs to be
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The fmc port name can be deduced from the common carrier file name
-(<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/projects/common">projects/common</a>/&lt;carrier&gt;/&lt;carrier&gt;_&lt;fmc_port&gt;.txt).</p>
+(<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/common">projects/common</a>/&lt;carrier&gt;/&lt;carrier&gt;_&lt;fmc_port&gt;.txt).</p>
 </div>
 <p>The generated file will appear in the current directory as <strong>fmc_constr.xdc</strong>
-(Xilinx board) or <strong>fmc_constr.tcl</strong> (Intel board). If ran from an open Vivado
+(AMD board) or <strong>fmc_constr.tcl</strong> (Intel board). If ran from an open Vivado
 project, the generated file will be automatically added to the project.</p>
 <section id="creating-carrier-common-fmc-connections">
 <span id="creating-fmc"></span><h4>Creating carrier common FMC connections<a class="headerlink" href="#creating-carrier-common-fmc-connections" title="Link to this heading">#</a></h4>
@@ -462,11 +485,11 @@ project, the generated file will be automatically added to the project.</p>
 <li><p>Open the space divided .txt file corresponding to the desired connector type,
 either with a text editor or importing in a spreadsheet editor
 (with Excel, export as .prn).
-<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/docs/user_guide/sources/fmc.txt">fmc.txt</a>,
-<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/docs/user_guide/sources/fmc_hpc.txt">fmc_hpc.txt</a>,
-<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/docs/user_guide/sources/fmc+.txt">fmc+.txt</a>.</p></li>
+<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/docs/user_guide/sources/fmc.txt">docs/user_guide/sources/fmc.txt</a>,
+<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/docs/user_guide/sources/fmc_hpc.txt">docs/user_guide/sources/fmc_hpc.txt</a>,
+<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/docs/user_guide/sources/fmc+.txt">docs/user_guide/sources/fmc+.txt</a>.</p></li>
 <li><p>Fill the table by replacing the <strong>#</strong>’s where it’s needed.</p></li>
-<li><p>Save as .txt inside <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/projects">projects</a>/&lt;project_name&gt;/common/.</p></li>
+<li><p>Save as .txt inside <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects">projects</a>/&lt;project_name&gt;/common/.</p></li>
 <li><p>Clean up the file by removing the lines containing <strong>#</strong> for system_top_name.</p></li>
 <li><p>Rearrange the lines following one of the existing examples.</p></li>
 <li><p>To generate empty lines, leave an empty line in the .txt file.
@@ -481,7 +504,7 @@ otherwise it will appear in the current directory.</p></li>
 <li><p>If the carrier has more FMC ports, the script should be called with:</p>
 <ul>
 <li><p>One parameter indicating the FMC port: fmc_lpc/hpc, fmc0/1, fmcp0/1
-(see projects/common/&lt;carrier&gt;/*.txt).</p></li>
+(see <strong>projects/common/&lt;carrier&gt;/*.txt</strong>).</p></li>
 <li><p>Two parameters indicating both FMC ports in the desired order for projects
 that use both FMC connectors.</p></li>
 </ul>
@@ -505,23 +528,23 @@ that use both FMC connectors.</p></li>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="docs_guidelines.html">
+          <a class="next-page" href="customize_hdl.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Documentation guidelines</div>
+                <div class="title">Customize HDL projects</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="index.html">
+          <a class="prev-page" href="ip_cores.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">User Guide</div>
+                <div class="title">ADI IP cores</div>
                 
               </div>
             </a>
@@ -558,12 +581,12 @@ that use both FMC connectors.</p></li>
 <li><a class="reference internal" href="#">Porting ADI’s HDL reference designs</a><ul>
 <li><a class="reference internal" href="#quick-compatibility-check">Quick Compatibility Check</a></li>
 <li><a class="reference internal" href="#base-design-files">Base design files</a><ul>
-<li><a class="reference internal" href="#example-with-a-xilinx-board">Example with a Xilinx board</a></li>
+<li><a class="reference internal" href="#example-with-an-amd-xilinx-board">Example with an AMD Xilinx board</a></li>
 <li><a class="reference internal" href="#example-with-an-intel-board">Example with an Intel board</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#project-files">Project files</a><ul>
-<li><a class="reference internal" href="#project-files-for-xilinx-boards">Project files for Xilinx boards</a></li>
+<li><a class="reference internal" href="#project-files-for-amd-boards">Project files for AMD boards</a></li>
 <li><a class="reference internal" href="#project-files-for-intel-boards">Project files for Intel boards</a></li>
 </ul>
 </li>
