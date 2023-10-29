@@ -10,7 +10,7 @@
 			spirit:library="interface"
 			spirit:name="i3c_controller_cmdp"
 			spirit:version="1.0"/>
-  <spirit:ports>
+		<spirit:ports>
 		<spirit:port>
 			<spirit:logicalName>CMDP_READY</spirit:logicalName>
 			<spirit:wire>
@@ -55,7 +55,7 @@
 					<spirit:direction>in</spirit:direction>
 				</spirit:onSlave>
 			</spirit:wire>
-    </spirit:port>
+		</spirit:port>
 		<spirit:port>
 			<spirit:logicalName>CMDP_CCC_BCAST</spirit:logicalName>
 			<spirit:wire>
@@ -178,6 +178,21 @@
 		</spirit:port>
 		<spirit:port>
 			<spirit:logicalName>CMDP_CANCELLED</spirit:logicalName>
+			<spirit:wire>
+				<spirit:onMaster>
+					<spirit:presence>required</spirit:presence>
+					<spirit:width>1</spirit:width>
+					<spirit:direction>in</spirit:direction>
+				</spirit:onMaster>
+				<spirit:onSlave>
+					<spirit:presence>required</spirit:presence>
+					<spirit:width>1</spirit:width>
+					<spirit:direction>out</spirit:direction>
+				</spirit:onSlave>
+			</spirit:wire>
+		</spirit:port>
+		<spirit:port>
+			<spirit:logicalName>CMDP_UNKNOWN_DA</spirit:logicalName>
 			<spirit:wire>
 				<spirit:onMaster>
 					<spirit:presence>required</spirit:presence>

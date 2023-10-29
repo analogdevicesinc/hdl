@@ -79,7 +79,6 @@ module i3c_controller_word #(
   input        ibi_requested_auto,
   output reg   ibi_tick,
   output [6:0] ibi_da,
-  input        ibi_da_attached,
   output [7:0] ibi_mdb,
 
   // DAA interface
@@ -220,8 +219,10 @@ module i3c_controller_word #(
                   cmd_wr <= 1'b0;
                 end else if (i == 8) begin
                   if (ibi_requested) begin // also ibi_len ...
-                    // ACK if IBI is enabled and DA is known, if not, NACK.
-                    cmd_r <= ibi_enable & ibi_da_attached ? `MOD_BIT_CMD_ACK_IBI_ : `MOD_BIT_CMD_READ_;
+                    // ACK if IBI is enabled if not, NACK.
+                    // Will ACK even if the DA is not known (up to the driver
+                    // to handle that).
+                    cmd_r <= ibi_enable ? `MOD_BIT_CMD_ACK_IBI_ : `MOD_BIT_CMD_READ_;
                   end else begin
                     // ACK
                     cmd_r <= `MOD_BIT_CMD_ACK_SDR_;
@@ -369,8 +370,8 @@ module i3c_controller_word #(
                 end
                 if (i == 8 & ibi_requested) begin
                   ibi_requested <= 1'b0;
-                  // IBI from known peripheral without MDB (BCR[2] is Low).
-                  if (ibi_da_attached & ~ibi_bcr_2) begin
+                  // IBI from peripheral without MDB (BCR[2] is Low).
+                  if (~ibi_bcr_2) begin
                     ibi_tick <= 1'b1;
                   end
                 end

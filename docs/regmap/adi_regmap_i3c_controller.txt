@@ -493,7 +493,7 @@ ENDFIELD
 REG
 0x60 + 0x01*n
 DEV_CHAR_0_n
-Controller/peripheral bus and device characteristics, fields defined by the I3C specification.
+Controller/peripheral pariety, address and if is I3C or I²C.
 0x60 is the controller.
 ENDREG
 
@@ -588,12 +588,11 @@ DEVS_CTRL
 RW
 Slots for peripherals, each HIGH bit represents a peripherals attached.
 The index match the DEV_CHAR_*_ indexes.
-The Controller, index 0, is set to HIGH when a DA is written to DEV_CHAR_0_0,
-while the others peripherals are set HIGH when the peripherals actually
-receives the DA during the DAA.
+The Controller (index 0) and I2C devices, is set to HIGH when a DA is written,
+while the I3C peripherals are set HIGH during the assiment at the DAA.
 The state can also be overwritten to explicit attach device (e.g. has static addr).
 A slot cannot be recycled, when the device is detached, it still keeps its slot in
-case it is attached again, effectively, only its IBIs are rejectedin the detached
+case it is attached again, effectively, only its IBIs are rejected in the detached
 state.
 The controller cannot be detached, instead, poll OPS_STATUS_NOP to identify if the
 controller is doing free/not doing any procedure before recondiguring it.

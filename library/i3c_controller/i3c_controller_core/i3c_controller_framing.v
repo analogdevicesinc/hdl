@@ -83,6 +83,7 @@ module i3c_controller_framing #(
   input  [6:0]  cmdp_da,
   input         cmdp_rnw,
   output        cmdp_cancelled, // by the peripheral
+  output reg    cmdp_unknown_da,
 
   // Byte stream
 
@@ -117,7 +118,6 @@ module i3c_controller_framing #(
   input       ibi_requested,
   output reg  ibi_requested_auto,
   input [6:0] ibi_da,
-  output      ibi_da_attached,
 
   // DAA interface
 
@@ -126,9 +126,12 @@ module i3c_controller_framing #(
 
   // uP accessible info
 
+  input      [15:0] devs_ctrl,
+  input      [15:0] devs_ctrl_is_i2c,
+  input      [15:0] devs_ctrl_candidate,
+  output reg [15:0] devs_ctrl_commit,
+
   input      [1:0]  rmap_ibi_config,
-  input      [29:0] rmap_devs_ctrl_mr,
-  output     [14:0] rmap_devs_ctrl,
   output            rmap_dev_char_e,
   output            rmap_dev_char_we,
   output     [5:0]  rmap_dev_char_addr,
@@ -153,18 +156,18 @@ module i3c_controller_framing #(
   reg sr;
   reg ctrl_daa;
   reg [3:0] j;
-  reg [15:0] devs_ctrl; // first bit is unused
-  reg [14:0] devs_ctrl_mask;
 
   reg [2:0] smt;
   localparam [2:0]
     setup      = 0,
-    transfer   = 1,
-    setup_sdo  = 2,
-    cleanup    = 3,
-    seek       = 4,
-    commit     = 5,
-    arbitration= 6;
+    validate   = 1,
+    transfer   = 2,
+    setup_sdo  = 3,
+    cleanup    = 4,
+    seek       = 5,
+    commit     = 6,
+    arbitration= 7;
+
   reg [0:0] smr;
   localparam [0:0]
     request    = 0,
@@ -175,13 +178,12 @@ module i3c_controller_framing #(
     CCC_ENTDAA = 'h07;
 
   always @(posedge clk) begin
+    cmdp_unknown_da <= 1'b0;
     if (!reset_n) begin
       sm  <= `CMDW_NOP;
       smt <= setup;
       smr <= request;
       ctrl_daa <= 1'b0;
-      devs_ctrl <= 'd1;
-      devs_ctrl_mask <= 15'hffff;
       j <= 0;
       ibi_requested_auto <= 1'b0;
     end else if (cmdw_nack) begin
@@ -190,20 +192,24 @@ module i3c_controller_framing #(
       smr <= request;
       ctrl_daa <= 1'b0;
     end else begin
-		  devs_ctrl_mask <= (devs_ctrl_mask | rmap_devs_ctrl_mr[14:0])
-                      & ~rmap_devs_ctrl_mr[29:15];
+      devs_ctrl_commit <= 'b0;
       // SDI Ready is are not checked, data will be lost
       // if it do not accept/provide data when needed.
       case (smt)
         setup: begin
+          j <= 'd0;
           sr <= cmdw_ready ? 1'b0 : sr;
+          // Condition where a peripheral requested a IBI during quiet times.
           if (cmd_nop & ibi_auto & ibi_enable & rx_raw === 1'b0) begin
             sm <= `CMDW_BCAST_7E_W0;
             smt <= transfer;
             ibi_requested_auto <= 1'b1;
+          // Got new parsed command from host interface.
           end else if (cmdp_valid) begin
             sm <= cmdw_ready | ~sr ? `CMDW_START : `CMDW_MSG_SR;
-            smt <= transfer;
+            // CCC Broadcast casts to all devices, validation not required.
+            // Direct is CCC_BCAST 1'b1
+            smt <= cmdp_ccc & ~cmdp_ccc_bcast ? transfer : validate;
           end else begin
             sm <= cmdw_ready ? `CMDW_NOP : sm;
           end
@@ -218,6 +224,18 @@ module i3c_controller_framing #(
           cmdp_da_reg           <= cmdp_da;
           cmdp_rnw_reg          <= cmdp_rnw;
         end
+        validate: begin
+          if (dev_is_i2c) begin
+            // TODO CONTINUE HERE
+            // Implement I2C transfer flow (OD only).
+          end
+          if (dev_is_known) begin
+            smt <= transfer;
+          end else begin
+            cmdp_unknown_da <= 1'b1;
+            smt <= cleanup;
+          end
+        end
         transfer: begin
           sr <= cmdp_sr_reg;
           if (cmdw_ready) begin
@@ -225,7 +243,6 @@ module i3c_controller_framing #(
             case(sm)
               `CMDW_NOP: begin
                 smt <= setup;
-                j <= 'd0;
               end
               `CMDW_SR,
               `CMDW_START: begin
@@ -236,7 +253,7 @@ module i3c_controller_framing #(
               end
               `CMDW_BCAST_7E_W0: begin
                 smt <= arbitration;
-                cmdw_body   <= {cmdp_ccc_bcast_reg, cmdp_ccc_id_reg}; // Attention to BCAST here
+                cmdw_body <= {cmdp_ccc_bcast_reg, cmdp_ccc_id_reg}; // Attention to BCAST here
               end
               `CMDW_CCC_OD: begin
                 // Occurs only during the DAA
@@ -271,7 +288,7 @@ module i3c_controller_framing #(
                 smt <= commit;
               end
               `CMDW_MSG_SR: begin
-                cmdw_body   <= {cmdp_da, cmdp_rnw}; // Attention to RnW here
+                cmdw_body <= {cmdp_da, cmdp_rnw}; // Attention to RnW here
                 sm <= `CMDW_TARGET_ADDR_PP;
               end
               `CMDW_TARGET_ADDR_OD,
@@ -332,28 +349,17 @@ module i3c_controller_framing #(
           end
         end
         seek: begin
-          case (smr)
-            request: begin
-            end
-            read: begin
-              if (devs_ctrl[j] == 1'b0 & rmap_dev_char_rdata[8] == 1'b1) begin
-                smt <= transfer;
-              end
-              if (rmap_dev_char_rdata[8] == 1'b0) begin
-                // If I2C, just set it as attached
-                devs_ctrl[j] <= 1'b1;
-              end
-              if (devs_ctrl[j] == 1'b1) begin
-                j <= j + 1;
-              end
-            end
-          endcase
-          smr <= ~smr;
+          if (devs_ctrl_candidate[j] == 1'b1) begin
+            smt <= transfer;
+          end else begin
+            j <= j + 1;
+          end
         end
         commit: begin
-          devs_ctrl[j] <= 1'b1;
+          devs_ctrl_commit[j] <= 1'b1;
           if (cmdw_ready) begin
             smt <= transfer;
+            j <= j + 1;
           end
         end
         arbitration: begin
@@ -362,8 +368,10 @@ module i3c_controller_framing #(
             // IBI requested during CMDW_BCAST_7E_W0.
             // At the word module, was ACKed if IBI is enabled and DA is known, if not, NACKed.
             if (ibi_requested) begin
-              // Receive MSB if IBI is enabled, DA is known and device .
-              if (ibi_enable & ibi_da_attached & ibi_bcr_2) begin
+              // Receive MSB if IBI is enabled and BCR[2] is 1'b1.
+              // If the DA is unknown, BCR[2] is 1'b0.
+              // The controller will ACK even if the DA is unknown.
+              if (ibi_enable & ibi_bcr_2) begin
                 sm <= `CMDW_IBI_MDB;
               // NACKed if BCR[2] is High or
               // ACKed/NACKed if BCR[2] is Low.
@@ -388,7 +396,10 @@ module i3c_controller_framing #(
 
   // 7-bit addr RAM for 1 cc data request.
 
-  genvar i;
+  // Interface to check if device exists and if is I2C
+
+  wire dev_is_known;
+  wire dev_is_i2c;
 
   // Obtain addr index in dev_ctrl, 0 means unknown device,
   // since index 0 is reserved for this controller.
@@ -398,12 +409,17 @@ module i3c_controller_framing #(
   wire [6:0] rwaddr;
   wire [6:0] raddr;
   wire [3:0] rout;
-  assign ibi_da_attached = rmap_devs_ctrl[rout] & rout != 'd0;
   assign pos = j;
   assign wen = smt == commit;
   assign rwaddr = cmdw_body[7:1];
-  assign raddr  = ibi_da;
+  assign raddr  = cmdp_da_reg;
 
+  assign dev_is_known = rout != 0;
+  assign dev_is_i2c = devs_ctrl_is_i2c[rout];
+
+  // Obtain index from device, unknown devs return 0 (TODO cleared when detatched).
+
+  genvar i;
   generate
     for (i=0; i < 4; i=i+1) begin
       // TODO Replace with inferred
@@ -420,13 +436,15 @@ module i3c_controller_framing #(
     end
   endgenerate
 
-  // Obtain BCR[2] from device, unknown devs return 0.
+  // Obtain BCR[2] from device, unknown devs is 0.
 
+  wire [6:0] raddr_bcr2;
+  assign raddr_bcr2 = ibi_da;
    RAM128X1D #(
      .INIT(128'd0)
    ) i_mem_bcr_2 (
      .A(rwaddr),
-     .DPRA(raddr),
+     .DPRA(raddr_bcr2),
      .SPO(),
      .DPO(ibi_bcr_2),
      .D(pid_bcr_dcr[10]),
@@ -444,7 +462,6 @@ module i3c_controller_framing #(
   assign rmap_dev_char_wdata = pid_bcr_dcr;
   assign rmap_dev_char_we = pid_bcr_dcr_tick;
   assign rmap_dev_char_e = smt == seek | pid_bcr_dcr_tick;
-  assign rmap_devs_ctrl = devs_ctrl[15:1] & devs_ctrl_mask;
 
   assign cmdp_ready = smt == setup & cmdw_ready & !cmdw_nack & reset_n;
   assign sdo_ready = (smt == setup_sdo | smt == cleanup) & reset_n;

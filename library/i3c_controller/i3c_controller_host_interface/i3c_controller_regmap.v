@@ -111,11 +111,14 @@ module i3c_controller_regmap #(
 
   // uP accessible info
 
+  output reg  [15:0] devs_ctrl,
+  output reg  [15:0] devs_ctrl_is_i2c,
+  output reg  [15:0] devs_ctrl_candidate,
+  input       [15:0] devs_ctrl_commit,
+
   input              rmap_daa_status,
   output reg  [1:0]  rmap_ibi_config,
   output      [1:0]  rmap_pp_sg,
-  output reg  [29:0] rmap_devs_ctrl_mr,
-  input       [14:0] rmap_devs_ctrl,
   input              rmap_dev_char_e,
   input              rmap_dev_char_we,
   input       [5:0]  rmap_dev_char_addr,
@@ -299,32 +302,62 @@ module i3c_controller_regmap #(
     end
   end
 
-  reg devs_ctrl_0;
-
   // the software reset should reset all the registers
+  integer i;
   always @(posedge s_axi_aclk) begin
-    rmap_devs_ctrl_mr <= 'd0;
     if (!up_sw_resetn) begin
       up_irq_mask <= 'h00;
       rmap_ibi_config <= 'h00;
-      devs_ctrl_0 <= 1'b0;
+      devs_ctrl <= 'b0;
+      devs_ctrl_is_i2c <= 'b0;
+      devs_ctrl_candidate <= 'b0;
 	    ops_candidate <= 7'd0;
     end else begin
       if (up_wreq_s) begin
         case (up_waddr_s[7:0])
           `I3C_REGMAP_IRQ_MASK:   up_irq_mask <= up_wdata_s[6:0];
           `I3C_REGMAP_IBI_CONFIG: rmap_ibi_config <= up_wdata_s[1:0];
-          `I3C_REGMAP_DEVS_CTRL:  rmap_devs_ctrl_mr <= {up_wdata_s[31:17], up_wdata_s[15:1]};
           `I3C_REGMAP_OPS:        ops_candidate <= up_wdata_s[6:0];
           default: begin
           end
         endcase
 
-        // Special cases for the controller
+        // When assigning an address...
+        // Controller: set as attached.
         if (up_waddr_s[7:0] == {`I3C_REGMAP_DEV_CHAR_0_, 4'd0}) begin
-          devs_ctrl_0 <= 1'b1;
-        end else if (up_waddr_s[7:0] == `I3C_REGMAP_DEVS_CTRL & up_wdata_s[16] == 1'b1) begin
-          devs_ctrl_0 <= 1'b0;
+          devs_ctrl[0] <= 1'b1;
+        end
+        // I2C peripherals: set as attached.
+        if (up_waddr_s[7:4] == `I3C_REGMAP_DEV_CHAR_0_) begin
+          if (up_wdata_s[8] == 1'b0) begin
+            devs_ctrl[up_waddr_s[3:0]] <= 1'b1;
+            devs_ctrl_is_i2c[up_waddr_s[3:0]] <= 1'b1;
+          end
+        end
+
+        // I3C peripherals: set as candidate [1]...
+        if (up_waddr_s[7:4] == `I3C_REGMAP_DEV_CHAR_0_ & up_waddr_s[3:0] != 4'h0) begin
+          if (up_wdata_s[8] == 1'b1) begin
+            devs_ctrl_candidate[up_waddr_s[3:0]] <= 1'b1;
+          end
+        end
+
+        // Any device: clear
+        if (up_waddr_s[7:0] == `I3C_REGMAP_DEVS_CTRL) begin
+          for (i = 0; i < 16 ; i = i + 1) begin
+            if (up_wdata_s[i+15] == 1'b1) begin
+              devs_ctrl[i] <= 1'b0;
+              devs_ctrl_candidate[i] <= 1'b0;
+            end
+          end
+        end
+
+      end
+      // ...[1] then commit.
+      for (i = 0; i < 16 ; i = i + 1) begin
+        if (devs_ctrl_commit[i] == 1'b1) begin
+          devs_ctrl_candidate[i] <= 1'b0;
+          devs_ctrl[i] <= 1'b1;
         end
       end
     end
@@ -346,7 +379,6 @@ module i3c_controller_regmap #(
   wire [31:0] dev_char_douta;
   wire [5:0] dev_char_addra;
 
-  wire [15:0] rmap_devs_ctrl_w = {rmap_devs_ctrl, devs_ctrl_0};
   always @(posedge s_axi_aclk) begin
     case (up_raddr_s[7:0])
       `I3C_REGMAP_VERSION:        up_rdata_ff <= PCORE_VERSION;
@@ -368,7 +400,7 @@ module i3c_controller_regmap #(
       `I3C_REGMAP_OPS:            up_rdata_ff <= {cmd_nop_reg, rmap_daa_status, ops};
       `I3C_REGMAP_DEV_CHAR_1_0:   up_rdata_ff <= PID[47:16];
       `I3C_REGMAP_DEV_CHAR_2_0:   up_rdata_ff <= {PID[16:0], BCR, DCR};
-      `I3C_REGMAP_DEVS_CTRL:      up_rdata_ff <= {16'd0, rmap_devs_ctrl_w};
+      `I3C_REGMAP_DEVS_CTRL:      up_rdata_ff <= {16'd0, devs_ctrl};
       default:                    up_rdata_ff <= 'h00;
     endcase
   end

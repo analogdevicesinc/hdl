@@ -92,6 +92,7 @@ module i3c_controller_host_interface #(
   output [6:0]  cmdp_da,
   output        cmdp_rnw,
   input         cmdp_cancelled,
+  input         cmdp_unknown_da,
   input         cmdp_nop,
 
   // Byte stream
@@ -114,11 +115,14 @@ module i3c_controller_host_interface #(
 
   // uP accessible info
 
+  output [15:0] devs_ctrl,
+  output [15:0] devs_ctrl_is_i2c,
+  output [15:0] devs_ctrl_candidate,
+  input  [15:0] devs_ctrl_commit,
+
   input         rmap_daa_status,
   output [1:0]  rmap_ibi_config,
   output [1:0]  rmap_pp_sg,
-  output [29:0] rmap_devs_ctrl_mr,
-  input  [14:0] rmap_devs_ctrl,
   input         rmap_dev_char_e,
   input         rmap_dev_char_we,
   input  [5:0]  rmap_dev_char_addr,
@@ -212,11 +216,13 @@ module i3c_controller_host_interface #(
     .ibi_valid(ibi_valid_w),
     .ibi(ibi_w),
     .offload_trigger(offload_trigger),
+    .devs_ctrl(devs_ctrl),
+    .devs_ctrl_is_i2c(devs_ctrl_is_i2c),
+    .devs_ctrl_candidate(devs_ctrl_candidate),
+    .devs_ctrl_commit(devs_ctrl_commit),
     .rmap_daa_status(rmap_daa_status),
     .rmap_ibi_config(rmap_ibi_config),
     .rmap_pp_sg(rmap_pp_sg),
-    .rmap_devs_ctrl_mr(rmap_devs_ctrl_mr),
-    .rmap_devs_ctrl(rmap_devs_ctrl),
     .rmap_dev_char_e(rmap_dev_char_e),
     .rmap_dev_char_we(rmap_dev_char_we),
     .rmap_dev_char_addr(rmap_dev_char_addr),
@@ -286,6 +292,7 @@ module i3c_controller_host_interface #(
     .cmdp_da(cmdp_da),
     .cmdp_rnw(cmdp_rnw),
     .cmdp_cancelled(cmdp_cancelled),
+    .cmdp_unknown_da(cmdp_unknown_da),
     .rd_bytes_ready(rd_bytes_ready),
     .rd_bytes_valid(rd_bytes_valid),
     .wr_bytes_ready(wr_bytes_ready),

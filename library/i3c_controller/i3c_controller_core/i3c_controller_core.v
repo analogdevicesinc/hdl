@@ -61,6 +61,7 @@ module i3c_controller_core #(
   input         cmdp_rnw,
   output        cmdp_ready,
   output        cmdp_cancelled,
+  output        cmdp_unknown_da,
   output        cmdp_nop,
 
   // Byte stream
@@ -79,11 +80,14 @@ module i3c_controller_core #(
 
   // uP accessible info
 
+  input  [15:0] devs_ctrl,
+  input  [15:0] devs_ctrl_is_i2c,
+  input  [15:0] devs_ctrl_candidate,
+  output [15:0] devs_ctrl_commit,
+
   output rmap_daa_status,
   input  [1:0] rmap_ibi_config,
   input  [1:0]  rmap_pp_sg,
-  input  [29:0] rmap_devs_ctrl_mr,
-  output [14:0] rmap_devs_ctrl,
   output rmap_dev_char_e,
   output rmap_dev_char_we,
   output [5:0]  rmap_dev_char_addr,
@@ -128,7 +132,6 @@ module i3c_controller_core #(
   wire ibi_tick;
   wire [6:0] ibi_da;
   wire [7:0] ibi_mdb;
-  wire ibi_da_attached;
 
   wire [31:0] pid_bcr_dcr;
   wire pid_bcr_dcr_tick;
@@ -154,6 +157,7 @@ module i3c_controller_core #(
     .cmdp_da(cmdp_da),
     .cmdp_rnw(cmdp_rnw),
     .cmdp_cancelled(cmdp_cancelled),
+    .cmdp_unknown_da(cmdp_unknown_da),
     .sdo_ready(sdo_ready),
     .sdo_valid(sdo_valid),
     .sdo(sdo),
@@ -174,12 +178,13 @@ module i3c_controller_core #(
     .ibi_requested(ibi_requested),
     .ibi_requested_auto(ibi_requested_auto),
     .ibi_da(ibi_da),
-    .ibi_da_attached(ibi_da_attached),
     .pid_bcr_dcr_tick(pid_bcr_dcr_tick),
     .pid_bcr_dcr(pid_bcr_dcr),
+    .devs_ctrl(devs_ctrl),
+    .devs_ctrl_is_i2c(devs_ctrl_is_i2c),
+    .devs_ctrl_candidate(devs_ctrl_candidate),
+    .devs_ctrl_commit(devs_ctrl_commit),
     .rmap_ibi_config(rmap_ibi_config),
-    .rmap_devs_ctrl_mr(rmap_devs_ctrl_mr),
-    .rmap_devs_ctrl(rmap_devs_ctrl),
     .rmap_dev_char_e(rmap_dev_char_e),
     .rmap_dev_char_we(rmap_dev_char_we),
     .rmap_dev_char_addr(rmap_dev_char_addr),
@@ -208,7 +213,6 @@ module i3c_controller_core #(
     .ibi_requested_auto(ibi_requested_auto),
     .ibi_tick(ibi_tick),
     .ibi_da(ibi_da),
-    .ibi_da_attached(ibi_da_attached),
     .ibi_mdb(ibi_mdb),
     .pid_bcr_dcr_tick(pid_bcr_dcr_tick),
     .pid_bcr_dcr(pid_bcr_dcr),

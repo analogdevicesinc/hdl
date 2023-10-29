@@ -43,6 +43,7 @@ adi_add_bus "cmdp" "master" \
 		{"cmdp_da"           "CMDP_DA"} \
 		{"cmdp_rnw"          "CMDP_RNW"} \
 		{"cmdp_cancelled"    "CMDP_CANCELLED"} \
+		{"cmdp_unknown_da"   "CMDP_UNKNOWN_DA"} \
 		{"cmdp_nop"          "CMDP_NOP"} \
 	}
 adi_add_bus_clock "clk" "cmdp" "reset_n"
@@ -67,9 +68,11 @@ adi_add_bus "rmap" "master" \
 	"analog.com:interface:i3c_controller_rmap_rtl:1.0" \
 	"analog.com:interface:i3c_controller_rmap:1.0" \
 	{
+		{"devs_ctrl"                   "DEVS_CTRL"} \
+		{"devs_ctrl_candidate"         "DEVS_CTRL_CANDIDATE"} \
+		{"devs_ctrl_commit"            "DEVS_CTRL_COMMIT"} \
+		{"devs_ctrl_is_i2c"            "DEVS_CTRL_IS_I2C"} \
 		{"rmap_daa_status"             "RMAP_DAA_STATUS"} \
-		{"rmap_devs_ctrl_mr"           "RMAP_DEVS_CTRL_MR"} \
-		{"rmap_devs_ctrl"              "RMAP_DEVS_CTRL"} \
 		{"rmap_dev_char_e"             "RMAP_DEV_CHAR_E"} \
 		{"rmap_dev_char_we"            "RMAP_DEV_CHAR_WE"} \
 		{"rmap_dev_char_addr"          "RMAP_DEV_CHAR_ADDR"} \

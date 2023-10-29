@@ -74,6 +74,7 @@ module i3c_controller_cmd_parser (
   output [6:0]  cmdp_da,
   output        cmdp_rnw,
   input         cmdp_cancelled,
+  input         cmdp_unknown_da,
 
   input  rd_bytes_ready,
   output rd_bytes_valid,
@@ -86,6 +87,7 @@ module i3c_controller_cmd_parser (
   reg  [31:0] cmdr1;
   reg  [7:0]  cmdr2;
   reg  cmdp_cancelled_reg;
+  reg  cmdp_unknown_da_reg;
 
   reg [3:0] cmdr_error;
   reg [7:0] cmdr_sync;
@@ -94,7 +96,8 @@ module i3c_controller_cmd_parser (
     NO_ERROR  = 4'd0,
     CE0_ERROR = 4'd1,
     CE2_ERROR = 4'd3,
-    NACK_RESP = 4'd9;
+    NACK_RESP = 4'd9,
+    UDA_ERROR = 4'd10;
 
   localparam [6:0]
     CCC_ENTDAA = 'h07;
@@ -117,14 +120,15 @@ module i3c_controller_cmd_parser (
       case (sm)
         receive: begin
           cmdr_error <= NO_ERROR;
-          cmdr1 <= cmd;
           cmdr2 <= 8'd0;
           if (cmd_valid) begin
+            cmdr1 <= cmd;
             sm <= buffer_setup;
           end else begin
             sm <= receive;
           end
           cmdp_cancelled_reg <= 1'b0;
+          cmdp_unknown_da_reg <= 1'b0;
         end
         buffer_setup: begin
           if ((rd_bytes_ready & !cmdp_rnw) | (wr_bytes_ready & cmdp_rnw)) begin
@@ -146,10 +150,15 @@ module i3c_controller_cmd_parser (
               cmdr_error <= CE0_ERROR;
             end else if (cmdp_ccc & |wr_bytes_lvl) begin
               cmdr_error <= CE2_ERROR;
+            end if (cmdp_unknown_da_reg) begin
+              cmdr_error <= UDA_ERROR;
             end
           end
           if (cmdp_cancelled) begin
             cmdp_cancelled_reg <= cmdp_cancelled;
+          end
+          if (cmdp_unknown_da) begin
+            cmdp_unknown_da_reg <= cmdp_unknown_da;
           end
         end
         ccc_await: begin

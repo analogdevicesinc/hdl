@@ -233,6 +233,8 @@ The error codes are:
 +------+-----------+--------------------------------------------------+
 | 9    | NACK_RESP | The peripheral did not ACK the transfer.         |
 +------+-----------+--------------------------------------------------+
+| 10   | UNK_DA    | DA in sent cmd is not known (not valid for IBIs).|
++------+-----------+--------------------------------------------------+
 
 The C01-3 errors are defined by the I3C specification.
 The CE0 occurs when an unexpected number of bytes are received by the controller
