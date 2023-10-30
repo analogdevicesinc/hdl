@@ -22,6 +22,8 @@ set xcvr_tx_index 0
 set xcvr_rx_index 0
 set xcvr_instance NONE
 
+set use_smartconnect 1
+
 ## Add an instance of an IP to the block design.
 #
 # \param[i_ip] - name of the IP
@@ -703,13 +705,19 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
   global sys_hp3_interconnect_index
   global sys_mem_interconnect_index
   global sys_mem_clk_index
+  global use_smartconnect
 
   set p_name_int $p_name
   set p_clk_source [get_bd_pins -filter {DIR == O} -of_objects [get_bd_nets $p_clk]]
 
+  set connect_type "smartconnect"
+  if {$use_smartconnect == 0} {
+    set connect_type "axi_interconnect"
+  }
+
   if {$p_sel eq "SIM"} {
     if {$sys_mem_interconnect_index < 0} {
-      ad_ip_instance smartconnect axi_mem_interconnect
+      ad_ip_instance $connect_type axi_mem_interconnect
     }
     set m_interconnect_index $sys_mem_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_mem_interconnect]
@@ -718,7 +726,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
 
   if {$p_sel eq "MEM"} {
     if {$sys_mem_interconnect_index < 0} {
-      ad_ip_instance smartconnect axi_mem_interconnect
+      ad_ip_instance $connect_type axi_mem_interconnect
     }
     set m_interconnect_index $sys_mem_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_mem_interconnect]
@@ -729,7 +737,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     if {$sys_hp0_interconnect_index < 0} {
       set p_name_int sys_ps7/S_AXI_HP0
       set_property CONFIG.PCW_USE_S_AXI_HP0 {1} [get_bd_cells sys_ps7]
-      ad_ip_instance smartconnect axi_hp0_interconnect
+      ad_ip_instance $connect_type axi_hp0_interconnect
     }
     set m_interconnect_index $sys_hp0_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hp0_interconnect]
@@ -740,7 +748,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     if {$sys_hp1_interconnect_index < 0} {
       set p_name_int sys_ps7/S_AXI_HP1
       set_property CONFIG.PCW_USE_S_AXI_HP1 {1} [get_bd_cells sys_ps7]
-      ad_ip_instance smartconnect axi_hp1_interconnect
+      ad_ip_instance $connect_type axi_hp1_interconnect
     }
     set m_interconnect_index $sys_hp1_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hp1_interconnect]
@@ -751,7 +759,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     if {$sys_hp2_interconnect_index < 0} {
       set p_name_int sys_ps7/S_AXI_HP2
       set_property CONFIG.PCW_USE_S_AXI_HP2 {1} [get_bd_cells sys_ps7]
-      ad_ip_instance smartconnect axi_hp2_interconnect
+      ad_ip_instance $connect_type axi_hp2_interconnect
     }
     set m_interconnect_index $sys_hp2_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hp2_interconnect]
@@ -762,7 +770,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     if {$sys_hp3_interconnect_index < 0} {
       set p_name_int sys_ps7/S_AXI_HP3
       set_property CONFIG.PCW_USE_S_AXI_HP3 {1} [get_bd_cells sys_ps7]
-      ad_ip_instance smartconnect axi_hp3_interconnect
+      ad_ip_instance $connect_type axi_hp3_interconnect
     }
     set m_interconnect_index $sys_hp3_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hp3_interconnect]
@@ -774,7 +782,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
       set p_name_int sys_ps8/S_AXI_HPC0_FPD
       set_property CONFIG.PSU__USE__S_AXI_GP0 {1} [get_bd_cells sys_ps8]
       set_property CONFIG.PSU__AFI0_COHERENCY {1} [get_bd_cells sys_ps8]
-      ad_ip_instance smartconnect axi_hpc0_interconnect
+      ad_ip_instance $connect_type axi_hpc0_interconnect
     }
     set m_interconnect_index $sys_hpc0_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hpc0_interconnect]
@@ -786,7 +794,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
       set p_name_int sys_ps8/S_AXI_HPC1_FPD
       set_property CONFIG.PSU__USE__S_AXI_GP1 {1} [get_bd_cells sys_ps8]
       set_property CONFIG.PSU__AFI1_COHERENCY {1} [get_bd_cells sys_ps8]
-      ad_ip_instance smartconnect axi_hpc1_interconnect
+      ad_ip_instance $connect_type axi_hpc1_interconnect
     }
     set m_interconnect_index $sys_hpc1_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hpc1_interconnect]
@@ -797,7 +805,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     if {$sys_hp0_interconnect_index < 0} {
       set p_name_int sys_ps8/S_AXI_HP0_FPD
       set_property CONFIG.PSU__USE__S_AXI_GP2 {1} [get_bd_cells sys_ps8]
-      ad_ip_instance smartconnect axi_hp0_interconnect
+      ad_ip_instance $connect_type axi_hp0_interconnect
     }
     set m_interconnect_index $sys_hp0_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hp0_interconnect]
@@ -808,7 +816,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     if {$sys_hp1_interconnect_index < 0} {
       set p_name_int sys_ps8/S_AXI_HP1_FPD
       set_property CONFIG.PSU__USE__S_AXI_GP3 {1} [get_bd_cells sys_ps8]
-      ad_ip_instance smartconnect axi_hp1_interconnect
+      ad_ip_instance $connect_type axi_hp1_interconnect
     }
     set m_interconnect_index $sys_hp1_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hp1_interconnect]
@@ -819,7 +827,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     if {$sys_hp2_interconnect_index < 0} {
       set p_name_int sys_ps8/S_AXI_HP2_FPD
       set_property CONFIG.PSU__USE__S_AXI_GP4 {1} [get_bd_cells sys_ps8]
-      ad_ip_instance smartconnect axi_hp2_interconnect
+      ad_ip_instance $connect_type axi_hp2_interconnect
     }
     set m_interconnect_index $sys_hp2_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hp2_interconnect]
@@ -830,7 +838,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     if {$sys_hp3_interconnect_index < 0} {
       set p_name_int sys_ps8/S_AXI_HP3_FPD
       set_property CONFIG.PSU__USE__S_AXI_GP5 {1} [get_bd_cells sys_ps8]
-      ad_ip_instance smartconnect axi_hp3_interconnect
+      ad_ip_instance $connect_type axi_hp3_interconnect
     }
     set m_interconnect_index $sys_hp3_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hp3_interconnect]
@@ -872,20 +880,29 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     ad_connect $p_rst $m_interconnect_cell/ARESETN
     ad_connect $p_clk $m_interconnect_cell/ACLK
     ad_connect $m_interconnect_cell/M00_AXI $p_name_int
+    if {$use_smartconnect == 0} {
+      ad_connect $p_rst $m_interconnect_cell/M00_ARESETN
+      ad_connect $p_clk $m_interconnect_cell/M00_ACLK
+    }
     if {$p_intf_clock ne ""} {
       ad_connect $p_clk $p_intf_clock
     }
   } else {
 
     set_property CONFIG.NUM_SI $m_interconnect_index $m_interconnect_cell
-    set clk_index [lsearch [get_bd_nets -of_object [get_bd_pins $m_interconnect_cell/ACLK*]] [get_bd_nets $p_clk]]
-    if { $clk_index == -1 } {
-        incr sys_mem_clk_index
-        set_property CONFIG.NUM_CLKS [expr $sys_mem_clk_index +1] $m_interconnect_cell
-        ad_connect $p_clk $m_interconnect_cell/ACLK$sys_mem_clk_index
-        set asocc_clk_pin  $m_interconnect_cell/ACLK$sys_mem_clk_index
+    if {$use_smartconnect == 1} {
+      set clk_index [lsearch [get_bd_nets -of_object [get_bd_pins $m_interconnect_cell/ACLK*]] [get_bd_nets $p_clk]]
+      if { $clk_index == -1 } {
+          incr sys_mem_clk_index
+          set_property CONFIG.NUM_CLKS [expr $sys_mem_clk_index +1] $m_interconnect_cell
+          ad_connect $p_clk $m_interconnect_cell/ACLK$sys_mem_clk_index
+          set asocc_clk_pin  $m_interconnect_cell/ACLK$sys_mem_clk_index
+      } else {
+        set asocc_clk_pin [lindex [get_bd_pins $m_interconnect_cell/ACLK*] $clk_index]
+      }
     } else {
-      set asocc_clk_pin [lindex [get_bd_pins $m_interconnect_cell/ACLK*] $clk_index]
+      ad_connect $p_rst $m_interconnect_cell/${i_str}_ARESETN
+      ad_connect $p_clk $m_interconnect_cell/${i_str}_ACLK
     }
     ad_connect $m_interconnect_cell/${i_str}_AXI $p_name_int
     if {$p_intf_clock ne ""} {
@@ -919,6 +936,10 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     }
   }
 
+  if {($use_smartconnect == 0) && ($m_interconnect_index > 1)} {
+    set_property CONFIG.STRATEGY {2} $m_interconnect_cell
+  }
+
   if {$p_sel eq "SIM"} {set sys_mem_interconnect_index $m_interconnect_index}
   if {$p_sel eq "MEM"} {set sys_mem_interconnect_index $m_interconnect_index}
   if {$p_sel eq "HPC0"} {set sys_hpc0_interconnect_index $m_interconnect_index}
@@ -941,21 +962,16 @@ proc ad_cpu_interconnect {p_address p_name {p_intf_name {}}} {
 
   global sys_zynq
   global sys_cpu_interconnect_index
+  global use_smartconnect
 
   set i_str "M$sys_cpu_interconnect_index"
   if {$sys_cpu_interconnect_index < 10} {
     set i_str "M0$sys_cpu_interconnect_index"
   }
 
-  set use_smart_connect 1
-  # SmartConnect has higher resource utilization and worse timing closure on older families
-  if {$sys_zynq == 1} {
-    set use_smart_connect 0
-  }
-
   if {$sys_cpu_interconnect_index == 0} {
 
-    if {$use_smart_connect == 1} {
+    if {$use_smartconnect == 1} {
       ad_ip_instance smartconnect axi_cpu_interconnect [ list \
         NUM_MI 1 \
         NUM_SI 1 \
@@ -1091,7 +1107,7 @@ proc ad_cpu_interconnect {p_address p_name {p_intf_name {}}} {
 
   set_property CONFIG.NUM_MI $sys_cpu_interconnect_index [get_bd_cells axi_cpu_interconnect]
 
-  if {$use_smart_connect == 0} {
+  if {$use_smartconnect == 0} {
     ad_connect sys_cpu_clk axi_cpu_interconnect/${i_str}_ACLK
     ad_connect sys_cpu_resetn axi_cpu_interconnect/${i_str}_ARESETN
   }
