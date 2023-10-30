@@ -9,7 +9,7 @@ ENDTITLE
 REG
 0x000
 VERSION
-Version of the peripheral. Follows semantic versioning. Current version 4.04.61.
+Version of the peripheral. Follows semantic versioning. Current version 4.05.61.
 ENDREG
 
 FIELD
@@ -19,7 +19,7 @@ RO
 ENDFIELD
 
 FIELD
-[15:8] 0x03
+[15:8] 0x05
 VERSION_MINOR
 RO
 ENDFIELD
@@ -201,6 +201,15 @@ CONTROL
 ENDREG
 
 FIELD
+[2] 0x0
+HWDESC
+RW
+When set to 1 the scatter-gather transfers are enabled.
+
+Note, this field is only valid if the DMA channel has been configured with SG transfer support.
+ENDFIELD
+
+FIELD
 [1] 0x0
 PAUSE
 RW
@@ -242,7 +251,7 @@ TRANSFER_SUBMIT
 ENDREG
 
 FIELD
-[0] 0x00
+[0] 0x0
 TRANSFER_SUBMIT
 RW
 Writing a 1 to this register queues a new transfer. The bit transitions back to 0 once
@@ -464,7 +473,7 @@ STATUS
 ENDREG
 
 FIELD
-[31:0] 0x00
+[31:0] 0x00000000
 RESERVED
 RO
 This register is reserved for future usage. Reading it will always return 0.
@@ -479,7 +488,7 @@ CURRENT_DEST_ADDRESS
 ENDREG
 
 FIELD
-[31:0] 0x00
+[31:0] 0x00000000
 CURRENT_DEST_ADDRESS
 RO
 Address to which the next data sample is written to.
@@ -496,7 +505,7 @@ CURRENT_SRC_ADDRESS
 ENDREG
 
 FIELD
-[31:0] 0x00
+[31:0] 0x00000000
 CURRENT_SRC_ADDRESS
 RO
 Address form which the next data sample is read.
@@ -530,7 +539,7 @@ PARTIAL_TRANSFER_LENGTH
 ENDREG
 
 FIELD
-[31:0] 0x000000
+[31:0] 0x00000000
 PARTIAL_LENGTH
 RO
 Length of the partial transfer in bytes. Represents the number of bytes received
@@ -559,6 +568,41 @@ ENDFIELD
 ############################################################################################
 
 REG
+0x115
+DESCRIPTOR_ID
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+DESCRIPTOR_ID
+RO
+ID of the descriptor that points to the current memory segment being transferred.
+If HWDESC is set to 0, then this register returns 0.
+
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x11f
+SG_ADDRESS
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+SG_ADDRESS
+RW
+This register contains the starting address of the scatter-gather transfer. The address needs
+to be aligned to the bus width.
+
+This register is only valid if the DMA channel has been configured with SG transfer support.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
 0x124
 DEST_ADDRESS_HIGH
 ENDREG
@@ -569,7 +613,8 @@ DEST_ADDRESS_HIGH
 RW
 This register contains the HIGH segment of the destination address of the transfer.
 
-This register is only valid if the DMA_AXI_ADDR_WIDTH is bigger than 32 and if DMA channel has been configured for write to memory support.
+This register is only valid if the DMA_AXI_ADDR_WIDTH is bigger than 32 and if DMA channel
+has been configured for write to memory support.
 ENDFIELD
 
 ############################################################################################
@@ -586,7 +631,8 @@ SRC_ADDRESS_HIGH
 RW
 This register contains the HIGH segment of the source address of the transfer.
 
-This register is only valid if the DMA_AXI_ADDR_WIDTH is bigger than 32 and if the DMA channel has been configured for read from memory support.
+This register is only valid if the DMA_AXI_ADDR_WIDTH is bigger than 32 and if the DMA channel
+has been configured for read from memory support.
 ENDFIELD
 
 ############################################################################################
@@ -598,12 +644,13 @@ CURRENT_DEST_ADDRESS_HIGH
 ENDREG
 
 FIELD
-[31:0] 0x00
+[31:0] 0x00000000
 CURRENT_DEST_ADDRESS_HIGH
 RO
 HIGH segment of the address to which the next data sample is written to.
 
-This register is only valid if the DMA_AXI_ADDR_WIDTH is bigger than 32 and if the DMA channel has been configured for write to memory support.
+This register is only valid if the DMA_AXI_ADDR_WIDTH is bigger than 32 and if the DMA channel
+has been configured for write to memory support.
 ENDFIELD
 
 ############################################################################################
@@ -615,12 +662,31 @@ CURRENT_SRC_ADDRESS_HIGH
 ENDREG
 
 FIELD
-[31:0] 0x00
+[31:0] 0x00000000
 CURRENT_SRC_ADDRESS_HIGH
 RO
 HIGH segment of the address from which the next data sample is read.
 
-This register is only valid if the DMA_AXI_ADDR_WIDTH is bigger than 32 and if the DMA channel has been configured for read from memory support.
+This register is only valid if the DMA_AXI_ADDR_WIDTH is bigger than 32 and if the DMA channel
+has been configured for read from memory support.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x12f
+SG_ADDRESS_HIGH
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+SG_ADDRESS_HIGH
+RW
+HIGH segment of the starting address of the scatter-gather transfer.
+
+This register is only valid if the DMA_AXI_ADDR_WIDTH is bigger than 32 and if the DMA channel
+has been configured with SG transfer support.
 ENDFIELD
 
 ############################################################################################
