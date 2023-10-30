@@ -308,11 +308,13 @@ module util_hbm #(
        // Control interface
       .ctrl_enable(wr_request_enable),
       .ctrl_pause(1'b0),
+      .ctrl_hwdesc(1'b0),
 
       .req_valid(wr_request_valid),
       .req_ready(wr_request_ready_loc[i]),
       .req_dest_address(ADDR_OFFSET[AXI_ADDR_WIDTH-1:AXI_BYTES_PER_BEAT_WIDTH]),
       .req_src_address('h0),
+      .req_sg_address('h0),
       .req_x_length(wr_request_length >> NUM_M_LOG2),
       .req_y_length(0),
       .req_dest_stride(0),
@@ -321,6 +323,7 @@ module util_hbm #(
       .req_last(1'b1),
 
       .req_eot(wr_request_eot_loc[i]),
+      .req_sg_desc_id(),
       .req_measured_burst_length(wr_measured_burst_length[BYTES_PER_BURST_WIDTH*i+:BYTES_PER_BURST_WIDTH]),
       .req_response_partial(),
       .req_response_valid(wr_response_valid_loc[i]),
@@ -330,6 +333,8 @@ module util_hbm #(
       .m_dest_axi_aresetn(m_axi_aresetn),
       .m_src_axi_aclk(1'b0),
       .m_src_axi_aresetn(1'b0),
+      .m_sg_axi_aclk(1'b0),
+      .m_sg_axi_aresetn(1'b0),
 
       .m_axi_awaddr(m_axi_awaddr[AXI_ADDR_WIDTH*i+:AXI_ADDR_WIDTH]),
       .m_axi_awlen(m_axi_awlen[AXI_ALEN*i+:AXI_ALEN]),
@@ -350,7 +355,7 @@ module util_hbm #(
       .m_axi_bresp(m_axi_bresp[2*i+:2]),
       .m_axi_bready(m_axi_bready[i]),
 
-      .m_axi_arready(),
+      .m_axi_arready(1'b0),
       .m_axi_arvalid(),
       .m_axi_araddr(),
       .m_axi_arlen(),
@@ -359,11 +364,26 @@ module util_hbm #(
       .m_axi_arprot(),
       .m_axi_arcache(),
 
-      .m_axi_rdata(),
+      .m_axi_rdata('h0),
+      .m_axi_rlast(1'b0),
       .m_axi_rready(),
-      .m_axi_rvalid(),
-      .m_axi_rlast(),
-      .m_axi_rresp(),
+      .m_axi_rvalid(1'b0),
+      .m_axi_rresp(2'b00),
+
+      .m_sg_axi_arready(1'b0),
+      .m_sg_axi_arvalid(),
+      .m_sg_axi_araddr(),
+      .m_sg_axi_arlen(),
+      .m_sg_axi_arsize(),
+      .m_sg_axi_arburst(),
+      .m_sg_axi_arprot(),
+      .m_sg_axi_arcache(),
+
+      .m_sg_axi_rdata('h0),
+      .m_sg_axi_rlast(1'b0),
+      .m_sg_axi_rready(),
+      .m_sg_axi_rvalid(1'b0),
+      .m_sg_axi_rresp(2'b00),
 
       .s_axis_aclk(s_axis_aclk),
       .s_axis_ready(s_axis_ready_loc[i]),
@@ -458,11 +478,13 @@ module util_hbm #(
        // Control interface
       .ctrl_enable(rd_request_enable),
       .ctrl_pause(1'b0),
+      .ctrl_hwdesc(1'b0),
 
       .req_valid(rd_request_valid),
       .req_ready(rd_request_ready_loc[i]),
       .req_dest_address(0),
       .req_src_address(ADDR_OFFSET[AXI_ADDR_WIDTH-1:AXI_BYTES_PER_BEAT_WIDTH]),
+      .req_sg_address('h0),
       .req_x_length(rd_request_length >> NUM_M_LOG2),
       .req_y_length(0),
       .req_dest_stride(0),
@@ -471,6 +493,7 @@ module util_hbm #(
       .req_last(1'b1),
 
       .req_eot(rd_request_eot_loc[i]),
+      .req_sg_desc_id(),
       .req_measured_burst_length(),
       .req_response_partial(),
       .req_response_valid(rd_response_valid_loc[i]),
@@ -480,6 +503,8 @@ module util_hbm #(
       .m_dest_axi_aresetn(1'b0),
       .m_src_axi_aclk(m_axi_aclk),
       .m_src_axi_aresetn(m_axi_aresetn),
+      .m_sg_axi_aclk(1'b0),
+      .m_sg_axi_aresetn(1'b0),
 
       .m_axi_awaddr(),
       .m_axi_awlen(),
@@ -510,10 +535,25 @@ module util_hbm #(
       .m_axi_arcache(),
 
       .m_axi_rdata(m_axi_rdata[AXI_DATA_WIDTH*i+:AXI_DATA_WIDTH]),
+      .m_axi_rlast(m_axi_rlast[i]),
       .m_axi_rready(m_axi_rready[i]),
       .m_axi_rvalid(m_axi_rvalid[i]),
-      .m_axi_rlast(m_axi_rlast[i]),
       .m_axi_rresp(m_axi_rresp[2*i+:2]),
+
+      .m_sg_axi_arready (1'b0),
+      .m_sg_axi_arvalid (),
+      .m_sg_axi_araddr (),
+      .m_sg_axi_arlen (),
+      .m_sg_axi_arsize (),
+      .m_sg_axi_arburst (),
+      .m_sg_axi_arprot (),
+      .m_sg_axi_arcache (),
+
+      .m_sg_axi_rdata ('h0),
+      .m_sg_axi_rlast (1'b0),
+      .m_sg_axi_rready (),
+      .m_sg_axi_rvalid (1'b0),
+      .m_sg_axi_rresp (2'b00),
 
       .s_axis_aclk(1'b0),
       .s_axis_ready(),
