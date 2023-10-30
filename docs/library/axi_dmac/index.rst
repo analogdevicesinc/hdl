@@ -25,6 +25,7 @@ Features
 
 - Cyclic transfers
 - 2D transfers
+- Scatter-Gather transfers
 
 Utilization
 --------------------------------------------------------------------------------
@@ -78,21 +79,31 @@ Configuration Parameters
      - Data path width of the source interface in bits.
    * - DMA_DATA_WIDTH_DEST
      - Data path width of the destination interface in bits.
+   * - DMA_DATA_WIDTH_SG
+     - Data path width of the scatter-gather interface in bits.
    * - DMA_LENGTH_WIDTH
      - Width of transfer length control register in bits.
        Limits length of the transfers to 2*\*\ ``DMA_LENGTH_WIDTH``.
    * - DMA_2D_TRANSFER
      - Enable support for 2D transfers.
+   * - DMA_SG_TRANSFER
+     - Enable support for scatter-gather transfers.
    * - ASYNC_CLK_REQ_SRC
      - Whether the request and source clock domains are asynchronous.
    * - ASYNC_CLK_SRC_DEST
      - Whether the source and destination clock domains are asynchronous.
    * - ASYNC_CLK_DEST_REQ
      - Whether the destination and request clock domains are asynchronous.
+   * - ASYNC_CLK_REQ_SG
+     - Whether the request and scatter-gather clock domains are asynchronous.
+   * - ASYNC_CLK_SRC_SG
+     - Whether the source and scatter-gather clock domains are asynchronous.
+   * - ASYNC_CLK_DEST_SG
+     - Whether the destination and scatter-gather clock domains are asynchronous.
    * - AXI_SLICE_DEST
-     - Whether to insert a extra register slice on the source data path.
+     - Whether to insert an extra register slice on the source data path.
    * - AXI_SLICE_SRC
-     - Whether to insert a extra register slice on the destination data path.
+     - Whether to insert an extra register slice on the destination data path.
    * - SYNC_TRANSFER_START
      - Enable the transfer start synchronization feature.
    * - CYCLIC
@@ -100,7 +111,9 @@ Configuration Parameters
    * - DMA_AXI_PROTOCOL_SRC
      - AXI protocol version of the source interface (0 = AXI4, 1 = AXI3).
    * - DMA_AXI_PROTOCOL_DEST
-     - AXI protocol version of the destionation interface (0 = AXI4, 1 = AXI3).
+     - AXI protocol version of the destination interface (0 = AXI4, 1 = AXI3).
+   * - DMA_AXI_PROTOCOL_SG
+     - AXI protocol version of the scatter-gather interface (0 = AXI4, 1 = AXI3).
    * - DMA_TYPE_SRC
      - Interface type for the source interface
        (0 = AXI-MM, 1 = AXI-Streaming, 2 = ADI-FIFO).
@@ -149,7 +162,7 @@ Interface
      - Reset for the ``m_src_axi`` interface.
        Only present when ``DMA_TYPE_SRC`` parameter is set to AXI-MM (0).
    * - m_src_axi
-     -
+     - Only present when ``DMA_TYPE_SRC`` parameter is set to AXI-MM (0).
    * - m_dest_axi_aclk
      - The ``m_src_axi`` interface is synchronous to this clock.
        Only present when ``DMA_TYPE_DEST`` parameter is set to AXI-MM (0).
@@ -157,7 +170,15 @@ Interface
      - Reset for the ``m_dest_axi`` interface.
        Only present when ``DMA_TYPE_DEST`` parameter is set to AXI-MM (0).
    * - m_dest_axi
-     -
+     - Only present when ``DMA_TYPE_DEST`` parameter is set to AXI-MM (0).
+   * - m_sg_axi_aclk
+     - The ``m_sg_axi`` interface is synchronous to this clock.
+       Only present when ``DMA_SG_TRANSFER`` parameter is set.
+   * - m_sg_axi_aresetn
+     - Reset for the ``m_sg_axi`` interface.
+       Only present when ``DMA_SG_TRANSFER`` parameter is set.
+   * - m_sg_axi
+     - Only present when ``DMA_SG_TRANSFER`` parameter is set.
    * - s_axis_aclk
      - The ``s_axis`` interface is synchronous to this clock.
        Only present when ``DMA_TYPE_SRC`` parameter is set to AXI-Streaming
@@ -539,6 +560,101 @@ cyclic transfer the DMA channel must be disabled.
 Any additional transfers that are submitted after the submission of a cyclic
 transfer (and before stopping the cyclic transfer) will never be executed.
 
+Scatter-Gather Transfers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If the ``DMA_SG_TRANSFER`` HDL synthesis configuration parameter is set the DMA
+controller has support for scatter-gather transfers.
+
+The scatter-gather optional feature allows the DMA to access noncontiguous areas
+of memory within a single transfer.
+
+The DMA can read from or write to different memory addresses in one transaction
+by using a list of vectors called *descriptors*. Each descriptor provides the
+starting address and the length of the current memory block to be accessed, as
+well as the next address of the following descriptor to be processed. By chaining
+these descriptors, the DMA can *gather* the data into a contiguous transfer from
+the *scattered* memory data from multiple addresses.
+
+The scatter-gather has its own dedicated AXI3/4 memory mapped interface
+``m_sg_axi`` through which it receives the descriptor data.
+
+Descriptor Structure
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The scatter-gather interface fetches the descriptor information from memory in
+the following order:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Size
+     - Name
+     - Description
+   * - 32-bit
+     - flags
+     - | This field includes 2 control bits:
+
+       * bit0: if set, the transfer will complete after this last descriptor is
+         processed and the DMA core will go back to idle state; if cleared, the
+         next DMA descriptor pointed to by ``next_sg_addr`` will be loaded.
+       * bit1: if set, an end-of-transfer interrupt will be raised after the
+         memory segment pointed to by this descriptor has been transferred.
+   * - 32-bit
+     - id
+     - This field corresponds to an identifier of the descriptor.
+   * - 64-bit
+     - dest_addr 
+     - This field contains the destination address of the transfer.
+   * - 64-bit
+     - src_addr
+     - This field contains the source address of the transfer.
+   * - 64-bit
+     - next_sg_addr
+     - This field contains the address of the next descriptor.
+   * - 32-bit
+     - y_len
+     - This field contains the number of rows to transfer, minus one.
+   * - 32-bit
+     - x_len
+     - This field contains the number of bytes to transfer, minus one.
+   * - 32-bit
+     - src_stride 
+     - This field contains the number of bytes between the start of one row and
+       the next row for the source address.
+   * - 32-bit
+     - dst_stride
+     - This field contains the number of bytes between the start of one row and
+       the next row for the destination address.
+
+The ``y_len``, ``src_stride`` and ``dst_stride`` fields are only useful for 2D
+transfers and should be set to 0 if 2D transfers are not required.
+
+Transfer Configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The scatter-gather transfers are enabled through the ``HWDESC`` bit from the
+``CONTROL`` (``0x400``) register. Once this bit is set, cyclic transfers are
+disabled, since the same cyclic behavior can be replicated using a descriptor
+chain loop.
+
+To start a scatter-gather transfer, the address of the first DMA descriptor must
+be written to the register pair [``SG_ADDRESS_HIGH`` (``0x4BC``), ``SG_ADDRESS``
+(``0x47C``)].
+
+To end a scatter-gather transfer, the last descriptor of the transfer must have
+the ``flags[0]`` bit set.
+
+The scatter-gather transfer is queued in a similar way to the simple transfers,
+through the ``TRANSFER_SUBMIT``. Software should always poll this bit to be 0
+before setting it, otherwise the scatter-gather transfer will not be queued.
+
+The scatter-gather transfers support the generation of the same two types of
+interrupt events as the simple transfers. However, the scatter-gather transfers
+have the distinct advantage of generating fewer interrupts by treating the
+chained descriptor transfers as a single transfer, thus improving the performance
+of the application.
+
 Transfer Start Synchronization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -580,7 +696,7 @@ must hold:
 
 * ``MAX_BYTES_PER_BURST`` ≤ 4096;
 * ``MAX_BYTES_PER_BURST`` is power of 2;
-* ``​SRC/​DEST_ADDRESS`` ​mod ``​MAX_BYTES_PER_BURST`` ​== 0
+* ``SRC/DEST_ADDRESS`` mod ``MAX_BYTES_PER_BURST`` == 0
 * ``SRC/DEST_ADDRESS[11:0]`` + MIN(``X_LENGTH``\ +1,\ ``MAX_BYTES_PER_BURST``) ≤ 4096
 
 Address Alignment
@@ -616,6 +732,12 @@ bytes.
 
 Note that the address alignment requirement is not affected by this. The address
 still needs to be aligned to the width of the MM interface that it belongs to.
+
+Scatter-Gather Datapath Width
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The scatter-gather dedicated interface ``m_sg_axi`` currently supports only
+64-bit transfers. ``DMA_DATA_WIDTH_SG`` can only be set to 64.
 
 Software Support
 --------------------------------------------------------------------------------
@@ -659,6 +781,6 @@ Glossary
        consecutive beats.
    * - partial transfer
      - Represents a transfer which is shorter than the programmed length that
-       is based on the X_LENGTH and Y_LENGTH registers. This can occur on AXIS
-       source interfaces when TLAST asserts earlier than the programmed
+       is based on the ``X_LENGTH`` and ``Y_LENGTH`` registers. This can occur
+       on AXIS source interfaces when TLAST asserts earlier than the programmed
        length.
