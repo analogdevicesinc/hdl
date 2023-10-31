@@ -45,10 +45,19 @@ ad_ip_parameter axi_ad7616_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_ad7616_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad7616_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
+# axi_pwm_gen
+
 ad_ip_instance axi_pwm_gen ad7616_pwm_gen
 ad_ip_parameter ad7616_pwm_gen CONFIG.PULSE_0_PERIOD 100
 ad_ip_parameter ad7616_pwm_gen CONFIG.PULSE_0_WIDTH 5
-ad_ip_parameter ad7616_pwm_gen CONFIG.ASYNC_CLK_EN 0
+ad_ip_parameter ad7616_pwm_gen CONFIG.ASYNC_CLK_EN 1
+
+# axi_clkgen
+
+ad_ip_instance axi_clkgen spi_clkgen
+ad_ip_parameter spi_clkgen CONFIG.CLK0_DIV 6
+ad_ip_parameter spi_clkgen CONFIG.VCO_DIV 1
+ad_ip_parameter spi_clkgen CONFIG.VCO_MUL 6
 
 # trigger to BUSY's negative edge
 
@@ -56,9 +65,9 @@ create_bd_cell -type module -reference sync_bits busy_sync
 create_bd_cell -type module -reference ad_edge_detect busy_capture
 set_property -dict [list CONFIG.EDGE 1] [get_bd_cells busy_capture]
 
-ad_connect sys_cpu_clk busy_capture/clk
+ad_connect spi_clk busy_capture/clk
 ad_connect busy_capture/rst GND
-ad_connect sys_cpu_clk busy_sync/out_clk
+ad_connect spi_clk busy_sync/out_clk
 ad_connect busy_sync/in_bits rx_busy
 ad_connect busy_sync/out_bits busy_capture/signal_in
 
@@ -68,7 +77,7 @@ if {$SER_PAR_N == 1} {
   source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
 
   set data_width    16
-  set async_spi_clk 0
+  set async_spi_clk 1
   set num_cs        1
   set num_sdi       2
   set sdi_delay     1
@@ -84,15 +93,16 @@ if {$SER_PAR_N == 1} {
 
   # interface connections
 
-  ad_connect  sys_cpu_clk $hier_spi_engine/clk
+  ad_connect  $sys_cpu_clk $hier_spi_engine/clk
+  ad_connect  spi_clk $hier_spi_engine/spi_clk
   ad_connect  sys_cpu_resetn $hier_spi_engine/resetn
   ad_connect  $hier_spi_engine/m_spi ad7616_spi
 
-  ad_connect  sys_cpu_clk axi_ad7616_dma/s_axis_aclk
+  ad_connect  spi_clk axi_ad7616_dma/s_axis_aclk
   ad_connect  axi_ad7616_dma/s_axis $hier_spi_engine/m_axis_sample
 
-  ad_connect busy_sync/out_resetn $hier_spi_engine/${hier_spi_engine}_axi_regmap/spi_resetn
-  ad_connect busy_capture/signal_out $hier_spi_engine/${hier_spi_engine}_offload/trigger
+  ad_connect  busy_sync/out_resetn $hier_spi_engine/${hier_spi_engine}_axi_regmap/spi_resetn
+  ad_connect  busy_capture/signal_out $hier_spi_engine/${hier_spi_engine}_offload/trigger
 
   # interconnect
 
@@ -126,7 +136,7 @@ if {$SER_PAR_N == 1} {
   ad_connect  rx_wr_n axi_ad7616/rx_wr_n
   ad_connect  rx_cs_n axi_ad7616/rx_cs_n
 
-  ad_connect  sys_cpu_clk axi_ad7616_dma/fifo_wr_clk
+  ad_connect  $sys_cpu_clk axi_ad7616_dma/fifo_wr_clk
   ad_connect  axi_ad7616/adc_valid axi_ad7616_dma/fifo_wr_en
   ad_connect  axi_ad7616/adc_data axi_ad7616_dma/fifo_wr_din
   ad_connect  axi_ad7616/adc_sync axi_ad7616_dma/fifo_wr_sync
@@ -141,22 +151,26 @@ if {$SER_PAR_N == 1} {
 }
 
 # interface connections
-
+ad_connect  $sys_cpu_clk spi_clkgen/clk
+ad_connect  spi_clk spi_clkgen/clk_0
+  
 ad_connect  ad7616_pwm_gen/pwm_0 rx_cnvst
 ad_connect  $sys_cpu_clk ad7616_pwm_gen/s_axi_aclk
 ad_connect  sys_cpu_resetn ad7616_pwm_gen/s_axi_aresetn
-ad_connect  sys_cpu_clk axi_ad7616_dma/s_axi_aclk
+ad_connect  spi_clk ad7616_pwm_gen/ext_clk
+ad_connect  $sys_cpu_clk axi_ad7616_dma/s_axi_aclk
 ad_connect  sys_cpu_resetn axi_ad7616_dma/m_dest_axi_aresetn
 
 # interconnect
 
 ad_cpu_interconnect  0x44A30000 axi_ad7616_dma
+ad_cpu_interconnect  0x44A70000 spi_clkgen
 ad_cpu_interconnect  0x44B00000 ad7616_pwm_gen
 
 # memory interconnect
 
-ad_mem_hp1_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1
-ad_mem_hp1_interconnect sys_cpu_clk axi_ad7616_dma/m_dest_axi
+ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
+ad_mem_hp1_interconnect $sys_cpu_clk axi_ad7616_dma/m_dest_axi
 
 # interrupts
 
