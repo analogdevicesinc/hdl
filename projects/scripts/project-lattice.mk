@@ -91,6 +91,12 @@ $(R_TARGETS): $(filter $(R_DEPS_FILTER), $(M_DEPS))
 		$(PROJECT_NAME)_radiant.log, \
 		$(HL)$(PROJECT_NAME)$(NC) project)
 
+rd-force:
+	$(call build, \
+	$(RADIANT) system_project.tcl ${PROJECT_NAME}, \
+	$(PROJECT_NAME)_radiant.log, \
+	$(HL)$(PROJECT_NAME)$(NC) project)
+
 # for easily check included roject dependencies for propel builder and radiant
 # watch-pb:
 # 	echo $(filter-out $(PB_DEPS_FILTER_OUT),$(filter $(PB_DEPS_FILTER), $(M_DEPS)))
