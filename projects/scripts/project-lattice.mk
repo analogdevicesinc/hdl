@@ -48,7 +48,7 @@ PB_TARGETS += $(PROJECT_NAME)/$(PROJECT_NAME)/$(PROJECT_NAME).v
 R_TARGETS += $(PROJECT_NAME)/$(PROJECT_NAME).rdf
 R_TARGETS += $(PROJECT_NAME)/impl_1/$(PROJECT_NAME)_impl_1.bit
 
-.PHONY: all pb rd clean clean-pb clean-rd # watch-pb watch-rd
+.PHONY: all pb rd rd-force clean clean-pb clean-rd # watch-pb watch-rd
 
 all: pb rd
 
