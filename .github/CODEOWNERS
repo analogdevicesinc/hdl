@@ -215,3 +215,6 @@
 
 # Code owners for jesd204  IP
 /library/jesd204/           ionut.podgoreanu@analog.com  adrian.costina@analog.com
+
+# Code owners for docs
+/docs/                      iulia.moldovan@analog.com  jorge.marques@analog.com  stanca.pop@analog.com  laez.barbosa@analog.com
