@@ -180,7 +180,7 @@ Checking the build and analyzing results
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If you look closely at the **rule** for this target, you see it is just
-calling ```quartus_sh`` with the project TCL file and redirecting the
+calling ``quartus_sh`` with the project TCL file and redirecting the
 output to a log file. In this case it is called **adrv9371_a10soc_quartus.log**
 and is inside the **projects/adrv9371x/a10soc** directory.
 
