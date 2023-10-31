@@ -330,7 +330,7 @@ X_LENGTH
 ENDREG
 
 FIELD
-[23:0] {log2(max(\n''DMA_DATA_WIDTH_SRC'',\n''DMA_DATA_WIDTH_DEST''\n)/8){1'b1}}
+[23:0] {log2(max(''DMA_DATA_WIDTH_SRC'', ''DMA_DATA_WIDTH_DEST'')/8){1'b1}}
 X_LENGTH
 RW
 Number of bytes to transfer - 1.
