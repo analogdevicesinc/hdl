@@ -77,8 +77,8 @@ ad_cpu_interconnect  0x44A30000 axi_ad7616_dma
 
 # memory interconnect
 
-ad_mem_hp1_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1
-ad_mem_hp1_interconnect sys_cpu_clk axi_ad7616_dma/m_dest_axi
+ad_mem_hpc1_interconnect sys_cpu_clk sys_ps8/S_AXI_HPC1
+ad_mem_hpc1_interconnect sys_cpu_clk axi_ad7616_dma/m_dest_axi
 ad_connect sys_cpu_resetn axi_ad7616_dma/m_dest_axi_aresetn
 
 # interrupts
