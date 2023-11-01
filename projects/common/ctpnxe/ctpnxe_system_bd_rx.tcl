@@ -29,13 +29,13 @@ adi_ip_instance -vlnv {latticesemi.com:ip:gpio0:1.6.1} \
 adi_ip_instance -vlnv {latticesemi.com:ip:spi0:1.4.1} \
   -ip_path "$ip_download_path/latticesemi.com_ip_spi_master_1.4.1" \
   -ip_params {
-    "SYS_CLOCK_FREQ": 50.0
+    "SYS_CLOCK_FREQ": 100
   } \
   -ip_iname "spi0_inst"
 adi_ip_instance -vlnv {latticesemi.com:ip:i2c0:1.5.0} \
   -ip_path "$ip_download_path/latticesemi.com_ip_i2c_master_1.5.0" \
   -ip_params {
-    "SYS_CLOCK_FREQ": 50.0
+    "SYS_CLOCK_FREQ": 100
   } \
   -ip_iname "i2c0_inst"
 
