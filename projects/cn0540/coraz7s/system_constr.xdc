@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2020-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2020-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -8,7 +8,7 @@
 set_property -dict {PACKAGE_PIN  G15 IOSTANDARD LVCMOS33 IOB TRUE}                  [get_ports cn0540_spi_sclk]    ; ## CK_IO13
 set_property -dict {PACKAGE_PIN  J18 IOSTANDARD LVCMOS33 IOB TRUE PULLTYPE PULLUP}  [get_ports cn0540_spi_miso]    ; ## CK_IO12
 set_property -dict {PACKAGE_PIN  K18 IOSTANDARD LVCMOS33 IOB TRUE PULLTYPE PULLUP}  [get_ports cn0540_spi_mosi]    ; ## CK_IO11
-set_property -dict {PACKAGE_PIN  U15 IOSTANDARD LVCMOS33}                           [get_ports cn0540_spi_cs]      ; ## CK_IO10
+set_property -dict {PACKAGE_PIN  U15 IOSTANDARD LVCMOS33 IOB TRUE}                  [get_ports cn0540_spi_cs]      ; ## CK_IO10
 
 # reset and GPIO signals
 
@@ -57,4 +57,3 @@ set_property -dict { PACKAGE_PIN J20   IOSTANDARD LVCMOS33 } [get_ports { cn0540
 set_property -dict { PACKAGE_PIN H20   IOSTANDARD LVCMOS33 } [get_ports { cn0540_ck_an4_n }]; #IO_L17N_T2_AD5N_35 Sch=ck_an_n[4]
 set_property -dict { PACKAGE_PIN G19   IOSTANDARD LVCMOS33 } [get_ports { cn0540_ck_an5_p }]; #IO_L18P_T2_AD13P_35 Sch=ck_an_p[5]
 set_property -dict { PACKAGE_PIN G20   IOSTANDARD LVCMOS33 } [get_ports { cn0540_ck_an5_n }]; #IO_L18N_T2_AD13N_35 Sch=ck_an_n[5]
-
