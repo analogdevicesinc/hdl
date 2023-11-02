@@ -445,7 +445,7 @@ Building the HDL project
 
 The design is built upon ADI's generic HDL reference design framework.
 ADI does not distribute the bit/elf files of these projects so they
-must be built from the sources available :git-hdl:`here <master:/>`. To get
+must be built from the sources available :git-hdl:`here <>`. To get
 the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
@@ -655,8 +655,8 @@ HDL related
 
 **THIS IS JUST AN EXAMPLE**
 
--  :git-hdl:`AD9081_FMCA_EBZ HDL project source code <master:projects/ad9081_fmca_ebz>`
--  :git-hdl:`AD9082_FMCA_EBZ HDL project source code <master:projects/ad9082_fmca_ebz>`
+-  :git-hdl:`AD9081_FMCA_EBZ HDL project source code <projects/ad9081_fmca_ebz>`
+-  :git-hdl:`AD9082_FMCA_EBZ HDL project source code <projects/ad9082_fmca_ebz>`
 
 .. list-table::
    :widths: 30 35 35
@@ -666,40 +666,40 @@ HDL related
      - Source code link
      - Documentation link
    * - AXI_DMAC
-     - :git-hdl:`library/axi_dmac <master:library/axi_dmac>`
+     - :git-hdl:`library/axi_dmac`
      - :ref:`here <axi_dmac>`
    * - AXI_SYSID
-     - :git-hdl:`library/axi_sysid <master:library/axi_sysid>`
+     - :git-hdl:`library/axi_sysid`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
    * - SYSID_ROM
-     - :git-hdl:`library/sysid_rom <master:library/sysid_rom>`
+     - :git-hdl:`library/sysid_rom`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
    * - UTIL_CPACK2
-     - :git-hdl:`library/util_pack/util_cpack2 <master:library/util_pack/util_cpack2>`
+     - :git-hdl:`library/util_pack/util_cpack2`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/util_cpack>`
    * - UTIL_UPACK2
-     - :git-hdl:`library/util_pack/util_upack2 <master:library/util_pack/util_upack2>`
+     - :git-hdl:`library/util_pack/util_upack2`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/util_upack>`
    * - UTIL_ADXCVR for AMD
-     -  :git-hdl:`library/xilinx/util_adxcvr <master:library/xilinx/util_adxcvr>`
+     -  :git-hdl:`library/xilinx/util_adxcvr`
      -  :dokuwiki:`[Wiki] <resources/fpga/docs/util_xcvr>`
    * - AXI_ADXCVR for Intel
-     -  :git-hdl:`library/intel/axi_adxcvr <master:library/intel/axi_adxcvr>`
+     -  :git-hdl:`library/intel/axi_adxcvr`
      -  :dokuwiki:`[Wiki] <resources/fpga/docs/axi_adxcvr>`
    * - AXI_ADXCVR for AMD
-     -  :git-hdl:`library/intel/axi_adxcvr <master:library/xilinx/axi_adxcvr>`
+     -  :git-hdl:`library/xilinx/axi_adxcvr`
      -  :dokuwiki:`[Wiki] <resources/fpga/docs/axi_adxcvr>`
    * - AXI_JESD204_RX
-     -  :git-hdl:`library/jesd204/axi_jesd204_rx <master:library/jesd204/axi_jesd204_rx>`
+     -  :git-hdl:`library/jesd204/axi_jesd204_rx`
      -  :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/axi_jesd204_rx>`
    * - AXI_JESD204_TX
-     -  :git-hdl:`library/jesd204/axi_jesd204_tx <master:library/jesd204/axi_jesd204_tx>`
+     -  :git-hdl:`library/jesd204/axi_jesd204_tx`
      -  :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/axi_jesd204_tx>`
    * - JESD204_TPL_ADC
-     -  :git-hdl:`library/jesd204/jesd204_tpl_adc <master:library/jesd204/jesd204_tpl_adc>`
+     -  :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_adc`
      -  :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/jesd204_tpl_adc>`
    * - JESD204_TPL_DAC
-     -  :git-hdl:`library/jesd204/jesd204_tpl_dac <master:library/jesd204/jesd204_tpl_dac>`
+     -  :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_dac`
      -  :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/jesd204_tpl_dac>`
 
 -  :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`

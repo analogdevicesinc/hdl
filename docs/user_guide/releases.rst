@@ -66,7 +66,7 @@ Release branches
      - AMD Xilinx
      - Release notes
      - List of supported projects and IP cores
-   * - :git-hdl:`master`
+   * - :git-hdl:`main <main:/>`
      - Quartus Pro 23.2
      - Vivado 2023.1
      -
@@ -145,13 +145,13 @@ When Intel or AMD have a new release, we usually follow them and update our
 tools in a timely manner.
 
 Changing the version of tool used on a branch is done by updating the
-git-hdl:`adi_env.tcl <master:scripts/adi_env.tcl>` script.
+git-hdl:`adi_env.tcl <scripts/adi_env.tcl>` script.
 
 If the tool version is not the one you want to use, keep in mind that when
 making a setup, you will have to build the software files with the same
 version, otherwise you might encounter problems in your setup.
 
-For example, you want to use an older version of Vivado on the master branch
+For example, you want to use an older version of Vivado on the main branch
 which uses a newer one. Then you will need to manually build the software
-files from the master branch, with the same version of Vitis too. Or for
+files from the main branch, with the same version of Vitis too. Or for
 Linux, to use the proper version of CROSS_COMPILE, etc.

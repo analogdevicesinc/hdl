@@ -82,7 +82,7 @@ Examples
   16-channel, 16-/12-bit, voltage output Digital-to-Analog Converters (DAC).
 * :dokuwiki:`CN0363 <resources/eval/user-guides/eval-cn0363-pmdz>`:
   The AD7768-1 is a low power, high performance, Σ-Δ analog-to-digital converter (ADC).
-* :git-hdl:`master:projects/ad40xx_fmc`
+* :git-hdl:`projects/ad40xx_fmc`
   Evaluation Board for the AD4000 Series 16-/18-/20-Bit Precision SAR ADCs.
 * :dokuwiki:`AD469x <resources/eval/user-guides/ad469x>`:
   16-Bit, 16-Channel, 500 kSPS/1 MSPS, Easy Drive Multiplexed SAR ADC.

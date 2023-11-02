@@ -27,9 +27,9 @@ Files
 
    * - Name
      - Description
-   * - :git-hdl:`master:library/spi_engine/spi_engine_interconnect/spi_engine_interconnect.v`
+   * - :git-hdl:`library/spi_engine/spi_engine_interconnect/spi_engine_interconnect.v`
      - Verilog source for the peripheral.
-   * - :git-hdl:`master:library/spi_engine/spi_engine_interconnect/spi_engine_interconnect_ip.tcl`
+   * - :git-hdl:`library/spi_engine/spi_engine_interconnect/spi_engine_interconnect_ip.tcl`
      - TCL script to generate the Vivado IP-integrator project for the
        peripheral.
 

@@ -107,7 +107,7 @@ def git(repo, alt_name):
 			branch = get_active_branch_name() if pos in [0, -1] else path[0:pos]
 			path = path[pos+1:]
 			if text is None:
-				text = path[path.rfind('/')+1:]
+				text = path
 			url = url + '/blob/' + branch + '/' + path
 			node = nodes.reference(rawtext, text, refuri=url, **options)
 		add_link(inliner, lineno, url)

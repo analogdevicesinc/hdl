@@ -162,7 +162,7 @@ Repository releases and branches
 -------------------------------------------------------------------------------
 
 The repository may contain multiple branches and tags. The
-:git-hdl:`master <master:>` branch
+:git-hdl:`main </>` branch
 is the development branch (latest sources, but not stable). If you check
 out this branch, some builds may fail. If you are not into any kind of
 experimentation, you should only check out one of the release branch.
@@ -173,7 +173,7 @@ All our release branches have the following naming convention:
 
 ADI does two releases each year when all the projects get an update to
 support the latest tools and get additional new features. \*\* The
-master branch is always synchronized with the latest release.*\* If you
+main branch is always synchronized with the latest release.*\* If you
 are in doubt, ask us on :ez:`fpga`.
 
 .. note::
@@ -183,7 +183,7 @@ are in doubt, ask us on :ez:`fpga`.
 
    https://github.com/analogdevicesinc/hdl/releases
 
-   The latest version of tools used on master can be found at:
-   :git-hdl:`master:scripts/adi_env.tcl` (*required_vivado_version* and
+   The latest version of tools used on main can be found at:
+   :git-hdl:`scripts/adi_env.tcl` (*required_vivado_version* and
    *required_quartus_version* variables). For Intel Quartus Standard, the version
    is specified in each project that uses it, depending on the carrier.

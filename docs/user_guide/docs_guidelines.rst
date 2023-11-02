@@ -17,7 +17,7 @@ Templates are available:
 
 * :git-hdl:`docs/library/template_ip` (:ref:`rendered <template_ip>`).
 * :git-hdl:`docs/library/template_framework` (:ref:`rendered <template_framework>`).
-* :git-hdl:`docs/projects/template_project` (:ref:`rendered <template_project>`).
+* :git-hdl:`docs/projects/template` (:ref:`rendered <template_project>`).
 
 Remove the ``:orphan:`` in the first line, it is to hide the templates from the
 `TOC tree <https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-toctree>`_.
@@ -198,13 +198,19 @@ Git role
 The Git role allows to create links to the Git repository with a shorter syntax.
 The role syntax is :code:`:git-repo:\`text <branch:path>\``, for example:
 
-* :code:`:git-hdl:\`master:docs/user_guide/docs_guidelines.rst\``
-  renders as :git-hdl:`master:docs/user_guide/docs_guidelines.rst`.
+* :code:`:git-hdl:\`main:docs/user_guide/docs_guidelines.rst\``
+  renders as :git-hdl:`main:docs/user_guide/docs_guidelines.rst`.
 * :code:`:git-hdl:\`Guidelines <docs/user_guide/docs_guidelines.rst>\``
   renders as :git-hdl:`Guidelines <docs/user_guide/docs_guidelines.rst>`.
 
-The branch field is optional and will be filled with the current branch.
-The text field is optional and will be filled with the file or directory name.
+When the branch field is not present, it will be filled with the current branch.
+It is recommended to not provide this field when it is a link to its own repository,
+because it is useful to auto-fill it for documentation releases
+(e.g. ``hdl_2023_r2``).
+A scenario where it is recommended to provide the branch is when linking others
+repositories.
+
+The text field is optional and will be filled with the full path.
 
 Finally, you can do :code:`:git-repo:\`/\`` for a link to the root of the
 repository with pretty naming, for example, :code:`:git-hdl:\`/\`` is rendered

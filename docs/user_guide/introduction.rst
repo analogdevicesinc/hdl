@@ -7,10 +7,10 @@ The main purpose of this user guide is to help the user understand and use
 (modify or otherwise) the HDL resources provided by `Analog Devices, Inc.`_,
 and to provide advices and instructions for using these resources.
 These resources are found on the GitHub, the
-:git-hdl:`HDL repository <master:/>`.
+:git-hdl:`/`.
 
 After reading this guide, the user should be able to build a specific project
-from the :git-hdl:`HDL repository <master:/>` and be able to modify
+from the :git-hdl:`/` and be able to modify
 (if so desire) the digital data path implemented in the FPGA.
 Furthermore, all ADI developed and supported IPs are presented in detail.
 

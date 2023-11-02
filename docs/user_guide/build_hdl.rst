@@ -34,10 +34,10 @@ HDL project from the repository:
 #. The proper Vivado/Quartus version can be found in:
 
    -  Starting with ``hdl_2021_r1`` release branch:
-      :git-hdl:`master:scripts/adi_env.tcl`
+      :git-hdl:`scripts/adi_env.tcl`
    -  For ``hdl_2019_r2`` and older:
-      :git-hdl:`hdl/projects/scripts/adi_project_xilinx.tcl <master:projects/scripts/adi_project_xilinx.tcl>` for Vivado, and
-      :git-hdl:`hdl/projects/scripts/adi_project_intel.tcl <master:projects/scripts/adi_project_intel.tcl>` for Quartus.
+      :git-hdl:`hdl/projects/scripts/adi_project_xilinx.tcl <projects/scripts/adi_project_xilinx.tcl>` for Vivado, and
+      :git-hdl:`hdl/projects/scripts/adi_project_intel.tcl <projects/scripts/adi_project_intel.tcl>` for Quartus.
 
 #. Download the tools from the following links:
 
@@ -100,7 +100,7 @@ Setup the HDL repository
 
 These designs are built upon ADI's generic HDL reference designs framework.
 ADI does not distribute the bit/elf files of these projects so they
-must be built from the sources available :git-hdl:`here <master:/>`. To get
+must be built from the sources available :git-hdl:`here </>`. To get
 the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
@@ -126,8 +126,8 @@ to the :ref:`git_repository` section for more details.
    performance, you must clone your hdl repository in the WSL file system.
    For example: (:code:`\\\\wsl.localhost\\Ubuntu\\home\\username\\hdl`)
 
-The above command clones the 'default' branch, which is the 'master' for
-HDL. The 'master' branch always points to the latest stable release
+The above command clones the 'default' branch, which is the 'main' for
+HDL. The 'main' branch always points to the latest stable release
 branch, but it also has features **that are not fully tested**. If you
 want to switch to any other branch you need to checkout that branch:
 

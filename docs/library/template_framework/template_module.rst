@@ -17,9 +17,9 @@ Files
 
    * - Name
      - Description
-   * - :git-hdl:`master:library/spi_engine/spi_engine_execution/spi_engine_execution.v`
+   * - :git-hdl:`library/spi_engine/spi_engine_execution/spi_engine_execution.v`
      - Verilog source for the peripheral.
-   * - :git-hdl:`master:library/spi_engine/spi_engine_execution/spi_engine_execution_ip.tcl`
+   * - :git-hdl:`library/spi_engine/spi_engine_execution/spi_engine_execution_ip.tcl`
      - TCL script to generate the Vivado IP-integrator project for the peripheral.
 
 Configuration Parameters

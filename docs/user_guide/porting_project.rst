@@ -83,7 +83,7 @@ components of it. The user should look at it as a suggestion only.
 
 .. tip::
 
-   In :git-hdl:`projects/common <master:projects/common>`/<carrier_name>
+   In :git-hdl:`projects/common <projects/common>`/<carrier_name>
    you can find templates for the *system_top.v*, *Makefile*, etc. to help you
    when creating a new project.
 

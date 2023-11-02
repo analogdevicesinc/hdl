@@ -13,7 +13,7 @@ Files
 
    * - Name
      - Description
-   * - :git-hdl:`master:library/spi_engine/interfaces/spi_master_rtl.xml`
+   * - :git-hdl:`library/spi_engine/interfaces/spi_master_rtl.xml`
      - Interface definition file
 
 Signal Pins

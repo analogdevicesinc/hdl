@@ -23,9 +23,9 @@ Files
 
    * - Name
      - Description
-   * - :git-hdl:`master:library/spi_engine/axi_spi_engine/axi_spi_engine.v`
+   * - :git-hdl:`library/spi_engine/axi_spi_engine/axi_spi_engine.v`
      - Verilog source for the peripheral.
-   * - :git-hdl:`master:library/spi_engine/axi_spi_engine/axi_spi_engine_ip.tcl`
+   * - :git-hdl:`library/spi_engine/axi_spi_engine/axi_spi_engine_ip.tcl`
      - TCL script to generate the Vivado IP-integrator project for the peripheral.
 
 Configuration Parameters
