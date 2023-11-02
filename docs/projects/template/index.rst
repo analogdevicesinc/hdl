@@ -17,17 +17,17 @@ Supported boards
 
 **\*IF IT APPLIES**\ \*
 
--  :part:`AD9081-FMCA-EBZ <EVAL-AD9081>`
--  :part:`AD9082-FMCA-EBZ <EVAL-AD9082>`
+-  :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>`
+-  :adi:`AD9082-FMCA-EBZ <EVAL-AD9082>`
 
 Supported devices
 -------------------------------------------------------------------------------
 
 **\*EXAMPLES**\ \*
 
--  :part:`AD9081`
--  :part:`AD9177`
--  :part:`AD9209`
+-  :adi:`AD9081`
+-  :adi:`AD9177`
+-  :adi:`AD9209`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -42,7 +42,7 @@ another carrier. Take these tables as an example:**\ \*
    * - Evaluation board
      - Carrier
      - FMC slot
-   * - :part:`AD9081-FMCA-EBZ <EVAL-AD9081>`
+   * - :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>`
      - `A10SoC`_
      - FMCA
    * -
@@ -68,7 +68,7 @@ another carrier. Take these tables as an example:**\ \*
    * - Evaluation board
      - Carrier
      - FMC slot
-   * - :part:`AD9082-FMCA-EBZ <EVAL-AD9082>`
+   * - :adi:`AD9082-FMCA-EBZ <EVAL-AD9082>`
      - :xilinx:`VCK190`
      - FMC0
    * -
@@ -635,10 +635,10 @@ Hardware related
 
 -  Product datasheets:
 
-   -  :part:`AD9081`
-   -  :part:`AD9082`
-   -  :part:`AD9988`
-   -  :part:`AD9986`
+   -  :adi:`AD9081`
+   -  :adi:`AD9082`
+   -  :adi:`AD9988`
+   -  :adi:`AD9986`
 -  `UG-1578, Device User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/ad9081-ad9082-ug-1578.pdf>`__
 -  `UG-1829, Evaluation Board User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/ad9081-fmca-ebz-9082-fmca-ebz-ug-1829.pdf>`__
 

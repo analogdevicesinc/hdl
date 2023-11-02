@@ -6,7 +6,7 @@ AD9783-EBZ HDL project
 Overview
 -------------------------------------------------------------------------------
 
-The :part:`AD9783` includes pin-compatible, high dynamic range, dual
+The :adi:`AD9783` includes pin-compatible, high dynamic range, dual
 digital-to-analog converters (DACs) with 16-bit resolution, and sample rates of
 up to 500 MSPS.
 
@@ -14,20 +14,20 @@ The device includes specific features for direct conversion transmit
 applications, including gain and offset compensation, interfacing seamlessly
 with analog quadrature modulators.
 
-The :part:`EVAL-AD9783` board is connected to the FPGA carrier through
-:part:`AD-DAC-FMC`-ADP interposer board.
+The :adi:`EVAL-AD9783` board is connected to the FPGA carrier through
+:adi:`AD-DAC-FMC`-ADP interposer board.
 
 Supported boards
 -------------------------------------------------------------------------------
 
--  :part:`EVAL-AD9783`
+-  :adi:`EVAL-AD9783`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :part:`AD9780`
--  :part:`AD9781`
--  :part:`AD9783`
+-  :adi:`AD9780`
+-  :adi:`AD9781`
+-  :adi:`AD9783`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -53,7 +53,7 @@ Clock scheme
 -  External clock source connected to J1 (CLOCK IN)
 -  For maximum performance, give a 500 MHz clock
 
-To make the connection between the :part:`EVAL-AD9783` evaluation board and
+To make the connection between the :adi:`EVAL-AD9783` evaluation board and
 the carrier using SPI, some hardware changes must be done to the evaluation
 board. These are presented in detail in the **Connections and hardware changes**
 section.
@@ -159,11 +159,11 @@ Hardware related
 
 -  Product datasheets:
 
-   -  :part:`AD9780`
-   -  :part:`AD9781`
-   -  :part:`AD9783`
-   -  :part:`EVAL-AD9783`
-   -  :part:`AD-DAC-FMC`-ADP
+   -  :adi:`AD9780`
+   -  :adi:`AD9781`
+   -  :adi:`AD9783`
+   -  :adi:`EVAL-AD9783`
+   -  :adi:`AD-DAC-FMC`-ADP
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

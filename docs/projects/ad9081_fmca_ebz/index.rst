@@ -6,7 +6,7 @@ AD9081-FMCA-EBZ/AD9082-FMCA-EBZ HDL project
 Overview
 -------------------------------------------------------------------------------
 
-The :part:`AD9081-FMCA-EBZ <EVAL-AD9081>` / :part:`AD9082-FMCA-EBZ <EVAL-AD9082>`
+The :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>` / :adi:`AD9082-FMCA-EBZ <EVAL-AD9082>`
 reference design (also known as Single MxFE) is a processor based
 (e.g. Microblaze) embedded system.
 The design consists from a receive and a transmit chain.
@@ -38,19 +38,19 @@ but must share the same reference clock.
 Supported boards
 -------------------------------------------------------------------------------
 
--  :part:`AD9081-FMCA-EBZ <EVAL-AD9081>`
--  :part:`AD9082-FMCA-EBZ <EVAL-AD9082>`
+-  :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>`
+-  :adi:`AD9082-FMCA-EBZ <EVAL-AD9082>`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :part:`AD9081`
--  :part:`AD9082`
--  :part:`AD9177`
--  :part:`AD9207`
--  :part:`AD9209`
--  :part:`AD9986`
--  :part:`AD9988`
+-  :adi:`AD9081`
+-  :adi:`AD9082`
+-  :adi:`AD9177`
+-  :adi:`AD9207`
+-  :adi:`AD9209`
+-  :adi:`AD9986`
+-  :adi:`AD9988`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -62,7 +62,7 @@ Supported carriers
    * - Evaluation board
      - Carrier
      - FMC slot
-   * - :part:`AD9081-FMCA-EBZ <EVAL-AD9081>`
+   * - :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>`
      - `A10SoC`_
      - FMCA
    * -
@@ -88,7 +88,7 @@ Supported carriers
    * - Evaluation board
      - Carrier
      - FMC slot
-   * - :part:`AD9082-FMCA-EBZ <EVAL-AD9082>`
+   * - :adi:`AD9082-FMCA-EBZ <EVAL-AD9082>`
      - :xilinx:`VCK190`
      - FMC0
    * -
@@ -692,10 +692,10 @@ Hardware related
 
 -  Product datasheets:
 
-   -  :part:`AD9081`
-   -  :part:`AD9082`
-   -  :part:`AD9988`
-   -  :part:`AD9986`
+   -  :adi:`AD9081`
+   -  :adi:`AD9082`
+   -  :adi:`AD9988`
+   -  :adi:`AD9986`
 -  `UG-1578, Device User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/ad9081-ad9082-ug-1578.pdf>`__
 -  `UG-1829, Evaluation Board User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/ad9081-fmca-ebz-9082-fmca-ebz-ug-1829.pdf>`__
 

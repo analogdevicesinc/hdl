@@ -6,15 +6,15 @@ AD7616-SDZ HDL project
 Overview
 -------------------------------------------------------------------------------
 
-The :part:`AD7616` is a 16-bit, data acquisition system (DAS) that supports
-dual simultaneous sampling of 16 channels. The :part:`AD7616` operates from a
+The :adi:`AD7616` is a 16-bit, data acquisition system (DAS) that supports
+dual simultaneous sampling of 16 channels. The :adi:`AD7616` operates from a
 single 5 V supply and can accommodate ±10 V, ±5 V, and ±2.5 V true bipolar
 input signals while sampling at throughput rates up to 1 MSPS per channel pair
 with 90 dB SNR. Higher SNR performance can be achieved with the on-chip
 oversampling mode; 92 dB for an oversampling ratio of 2.
 
 The input clamp protection circuitry can tolerate voltages up to ±20 V.
-The :part:`AD7616` has 1 MΩ analog input impedance regardless of sampling
+The :adi:`AD7616` has 1 MΩ analog input impedance regardless of sampling
 frequency. The single supply operation, on-chip filtering, and high input
 impedance eliminate the need for driver op-amps and external bipolar supplies.
 
@@ -26,12 +26,12 @@ high-speed serial and parallel interfaces.
 Supported boards
 -------------------------------------------------------------------------------
 
--  :part:`EVAL-AD7616 <EVAL-AD7616>`
+-  :adi:`EVAL-AD7616 <EVAL-AD7616>`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :part:`AD7616`
+-  :adi:`AD7616`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -42,7 +42,7 @@ Supported carriers
 Other required hardware
 -------------------------------------------------------------------------------
 
--   :part:`SDP-I-FMC <EVAL-SDP-I-FMC>`
+-   :adi:`SDP-I-FMC <EVAL-SDP-I-FMC>`
 
 Block design
 -------------------------------------------------------------------------------
@@ -331,7 +331,7 @@ Systems related
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheet: :part:`AD7616`
+-  Product datasheet: :adi:`AD7616`
 
 -  `UG-1012, Evaluation Board User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/EVAL-AD7616SDZ-7616-PSDZ-UG-1012.pdf>`__
 
