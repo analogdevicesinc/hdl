@@ -1,10 +1,11 @@
 # SPDX-License-Identifier: BSD-2-Clause-Views
 # Copyright (c) 2022-2023 The Regents of the University of California
 
-create_bd_port -dir I clk_125mhz_p
-create_bd_port -dir I clk_125mhz_n
-create_bd_port -dir I clk_user_si570_p
-create_bd_port -dir I clk_user_si570_n
+create_bd_port -dir I clk_125mhz
+#create_bd_port -dir I clk_125mhz_p
+#create_bd_port -dir I clk_125mhz_n
+#create_bd_port -dir I clk_user_si570_p
+#create_bd_port -dir I clk_user_si570_n
 
 create_bd_port -dir I sfp0_rx_p
 create_bd_port -dir I sfp0_rx_n
@@ -22,8 +23,10 @@ create_bd_port -dir I sfp3_rx_p
 create_bd_port -dir I sfp3_rx_n
 create_bd_port -dir O sfp3_tx_p
 create_bd_port -dir O sfp3_tx_n
+
 create_bd_port -dir I sfp_mgt_refclk_0_p
 create_bd_port -dir I sfp_mgt_refclk_0_n
+
 create_bd_port -dir O sfp0_tx_disable_b
 create_bd_port -dir O sfp1_tx_disable_b
 create_bd_port -dir O sfp2_tx_disable_b
@@ -153,35 +156,99 @@ set_property -dict [list \
   CONFIG.AXIL_APP_CTRL_ADDR_WIDTH {24} \
 ] [get_bd_cells nic_core]
 
-ad_connect nic_core/clk_125mhz_p clk_125mhz_p
-ad_connect nic_core/clk_125mhz_n clk_125mhz_n
-ad_connect nic_core/clk_user_si570_p clk_user_si570_p
-ad_connect nic_core/clk_user_si570_n clk_user_si570_n
+ad_ip_instance nic_phy nic_phy
+
+ad_ip_instance clk_wiz eth_clkgen
+ad_ip_parameter eth_clkgen CONFIG.PRIM_IN_FREQ.VALUE_SRC USER
+ad_ip_parameter eth_clkgen CONFIG.PRIM_SOURCE {Global_buffer}
+ad_ip_parameter eth_clkgen CONFIG.PRIM_IN_FREQ {125.000}
+ad_ip_parameter eth_clkgen CONFIG.CLKIN1_JITTER_PS {80.0}
+ad_ip_parameter eth_clkgen CONFIG.CLKOUT1_JITTER {107.164}
+ad_ip_parameter eth_clkgen CONFIG.CLKOUT1_PHASE_ERROR {85.285}
+ad_ip_parameter eth_clkgen CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {125.000}
+ad_ip_parameter eth_clkgen CONFIG.MMCM_CLKFBOUT_MULT_F {9.625}
+ad_ip_parameter eth_clkgen CONFIG.MMCM_CLKIN1_PERIOD {8.000}
+ad_ip_parameter eth_clkgen CONFIG.MMCM_CLKOUT0_DIVIDE_F {9.625}
+ad_ip_parameter eth_clkgen CONFIG.MMCM_DIVCLK_DIVIDE {1}
+
+ad_connect eth_clkgen/reset sys_cpu_reset
+ad_connect eth_clkgen/clk_in1 clk_125mhz
+#ad_connect eth_clkgen/clk_in1_n clk_125mhz_n
+
+#ad_ip_instance axi_clkgen axi_eth_clkgen
+#ad_ip_parameter axi_eth_clkgen CONFIG.CLK0_DIV 10
+#ad_ip_parameter axi_eth_clkgen CONFIG.VCO_DIV 1
+#ad_ip_parameter axi_eth_clkgen CONFIG.VCO_MUL 10
+
+#ad_connect $sys_cpu_clk axi_eth_clkgen/clk
+#ad_connect clk_125mhz axi_eth_clkgen/clk
+ad_connect eth_clkgen/clk_out1 nic_core/ptp_sample_clk
+ad_connect eth_clkgen/clk_out1 nic_phy/ctrl_clk
+
+ad_connect eth_clkgen/clk_out1 nic_core/sfp_drp_clk
+ad_connect eth_clkgen/clk_out1 nic_phy/sfp_drp_clk
+
+ad_connect nic_core/ptp_clk nic_phy/ptp_mgt_refclk
+
+ad_connect nic_core/phy_drp nic_phy/phy_drp
+ad_connect nic_core/phy_mac_0 nic_phy/phy_mac_0
+ad_connect nic_core/phy_mac_1 nic_phy/phy_mac_1
+ad_connect nic_core/phy_mac_2 nic_phy/phy_mac_2
+ad_connect nic_core/phy_mac_3 nic_phy/phy_mac_3
+
+#ad_connect nic_phy/clk_125mhz_p clk_125mhz_p
+#ad_connect nic_phy/clk_125mhz_n clk_125mhz_n
+
+#ad_connect nic_core/clk_125mhz_p clk_125mhz_p
+#ad_connect nic_core/clk_125mhz_n clk_125mhz_n
+#ad_connect nic_core/clk_user_si570_p clk_user_si570_p
+#ad_connect nic_core/clk_user_si570_n clk_user_si570_n
 
 ad_connect nic_core/core_clk $sys_cpu_clk
 ad_connect nic_core/core_rst $sys_cpu_reset
-ad_connect nic_core/sfp0_rx_p sfp0_rx_p
-ad_connect nic_core/sfp0_rx_n sfp0_rx_n
-ad_connect nic_core/sfp0_tx_p sfp0_tx_p
-ad_connect nic_core/sfp0_tx_n sfp0_tx_n
-ad_connect nic_core/sfp1_rx_p sfp1_rx_p
-ad_connect nic_core/sfp1_rx_n sfp1_rx_n
-ad_connect nic_core/sfp1_tx_p sfp1_tx_p
-ad_connect nic_core/sfp1_tx_n sfp1_tx_n
-ad_connect nic_core/sfp2_rx_p sfp2_rx_p
-ad_connect nic_core/sfp2_rx_n sfp2_rx_n
-ad_connect nic_core/sfp2_tx_p sfp2_tx_p
-ad_connect nic_core/sfp2_tx_n sfp2_tx_n
-ad_connect nic_core/sfp3_rx_p sfp3_rx_p
-ad_connect nic_core/sfp3_rx_n sfp3_rx_n
-ad_connect nic_core/sfp3_tx_p sfp3_tx_p
-ad_connect nic_core/sfp3_tx_n sfp3_tx_n
-ad_connect nic_core/sfp_mgt_refclk_0_p sfp_mgt_refclk_0_p
-ad_connect nic_core/sfp_mgt_refclk_0_n sfp_mgt_refclk_0_n
-ad_connect nic_core/sfp0_tx_disable_b spf0_tx_disable_b
+ad_connect nic_phy/sfp0_rx_p sfp0_rx_p
+ad_connect nic_phy/sfp0_rx_n sfp0_rx_n
+ad_connect nic_phy/sfp0_tx_p sfp0_tx_p
+ad_connect nic_phy/sfp0_tx_n sfp0_tx_n
+ad_connect nic_phy/sfp1_rx_p sfp1_rx_p
+ad_connect nic_phy/sfp1_rx_n sfp1_rx_n
+ad_connect nic_phy/sfp1_tx_p sfp1_tx_p
+ad_connect nic_phy/sfp1_tx_n sfp1_tx_n
+ad_connect nic_phy/sfp2_rx_p sfp2_rx_p
+ad_connect nic_phy/sfp2_rx_n sfp2_rx_n
+ad_connect nic_phy/sfp2_tx_p sfp2_tx_p
+ad_connect nic_phy/sfp2_tx_n sfp2_tx_n
+ad_connect nic_phy/sfp3_rx_p sfp3_rx_p
+ad_connect nic_phy/sfp3_rx_n sfp3_rx_n
+ad_connect nic_phy/sfp3_tx_p sfp3_tx_p
+ad_connect nic_phy/sfp3_tx_n sfp3_tx_n
+
+#ad_connect nic_phy/sfp_drp_clk clk_125mhz_p
+#ad_connect nic_core/sfp_drp_clk clk_125mhz_p
+
+ad_connect nic_phy/sfp_mgt_refclk_0_p sfp_mgt_refclk_0_p
+ad_connect nic_phy/sfp_mgt_refclk_0_n sfp_mgt_refclk_0_n
+
+ad_connect nic_core/sfp0_tx_disable_b sfp0_tx_disable_b
 ad_connect nic_core/sfp1_tx_disable_b sfp1_tx_disable_b
 ad_connect nic_core/sfp2_tx_disable_b sfp2_tx_disable_b
 ad_connect nic_core/sfp3_tx_disable_b sfp3_tx_disable_b
+
+ad_ip_instance proc_sys_reset nic_reset_dcm
+ad_connect nic_reset_dcm/slowest_sync_clk eth_clkgen/clk_out1
+ad_connect nic_reset_dcm/ext_reset_in sys_ps8/pl_resetn0
+ad_connect nic_reset_dcm/dcm_locked eth_clkgen/locked
+
+ad_ip_instance proc_sys_reset nic_reset_mgt
+ad_connect nic_reset_mgt/slowest_sync_clk nic_phy/ptp_mgt_refclk
+ad_connect nic_reset_mgt/ext_reset_in nic_reset_dcm/peripheral_reset
+ad_connect nic_reset_mgt/dcm_locked VCC
+
+#resets active high
+ad_connect nic_phy/ctrl_rst nic_reset_mgt/peripheral_reset
+ad_connect nic_core/ptp_rst nic_reset_mgt/peripheral_reset
+ad_connect nic_phy/sfp_drp_rst nic_reset_dcm/peripheral_reset
+ad_connect nic_core/sfp_drp_rst nic_reset_dcm/peripheral_reset
 
 ad_cpu_interconnect 0x44AA0000 nic_core
 

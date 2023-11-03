@@ -30,8 +30,10 @@ M_DEPS += $(corundum_dir_common)/syn/vivado/eth_xcvr_phy_10g_gty_wrapper.tcl
 M_DEPS += $(corundum_dir_mod)/eth/lib/axis/rtl/sync_reset.v
 
 LIB_DEPS += axi_dmac
+LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_sysid
 LIB_DEPS += corundum/nic_core
+LIB_DEPS += corundum/nic_phy
 LIB_DEPS += sysid_rom
 
 include ../../scripts/project-xilinx.mk

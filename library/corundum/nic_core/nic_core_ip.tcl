@@ -11,7 +11,7 @@ global VIVADO_IP_LIBRARY
 adi_ip_create nic_core
 
 set_property PART xczu9eg-ffvb1156-2-e [current_project]
-source $corundum_dir_zcu102/ip/eth_xcvr_gth.tcl
+#source $corundum_dir_zcu102/ip/eth_xcvr_gth.tcl
 
 adi_ip_files nic_core [list \
   "nic_core.v" \
@@ -86,8 +86,6 @@ adi_ip_files nic_core [list \
   "$corundum_dir_mod/axis/rtl/axis_fifo.v" \
   "$corundum_dir_mod/axis/rtl/axis_fifo_adapter.v" \
   "$corundum_dir_mod/axis/rtl/axis_pipeline_fifo.v" \
-  "$corundum_dir_mod/axis/rtl/axis_register.v" \
-  "$corundum_dir_mod/axis/rtl/sync_reset.v" \
   "$corundum_dir_mod/pcie/rtl/dma_client_axis_sink.v" \
   "$corundum_dir_mod/pcie/rtl/dma_client_axis_source.v" \
   "$corundum_dir_mod/pcie/rtl/irq_rate_limit.v" \
@@ -107,23 +105,7 @@ adi_ip_files nic_core [list \
   "$corundum_dir_common/syn/vivado/mqnic_rb_clk_info.tcl" \
   "$corundum_dir_mod/eth/syn/vivado/ptp_clock_cdc.tcl" \
   "$corundum_dir_common/syn/vivado/rb_drp.tcl" \
-  "$corundum_dir_mod/eth/lib/axis/syn/vivado/sync_reset.tcl" \
   "$corundum_dir_common/syn/vivado/tdma_ber_ch.tcl" \
-  "$corundum_dir_common/rtl/eth_xcvr_phy_10g_gty_quad_wrapper.v" \
-  "$corundum_dir_common/rtl/eth_xcvr_phy_10g_gty_wrapper.v" \
-  "$corundum_dir_mod/eth/lib/axis/rtl/sync_reset.v" \
-  "$corundum_dir_mod/eth/rtl/eth_phy_10g.v" \
-  "$corundum_dir_mod/eth/rtl/eth_phy_10g_rx.v" \
-  "$corundum_dir_mod/eth/rtl/eth_phy_10g_rx_if.v" \
-  "$corundum_dir_mod/eth/rtl/eth_phy_10g_rx_frame_sync.v" \
-  "$corundum_dir_mod/eth/rtl/eth_phy_10g_rx_ber_mon.v" \
-  "$corundum_dir_mod/eth/rtl/eth_phy_10g_rx_watchdog.v" \
-  "$corundum_dir_mod/eth/rtl/eth_phy_10g_tx.v" \
-  "$corundum_dir_mod/eth/rtl/eth_phy_10g_tx_if.v" \
-  "$corundum_dir_mod/eth/rtl/lfsr.v" \
-  "$corundum_dir_mod/eth/rtl/xgmii_baser_dec_64.v" \
-  "$corundum_dir_mod/eth/rtl/xgmii_baser_enc_64.v" \
-  "$corundum_dir_common/syn/vivado/eth_xcvr_phy_10g_gty_wrapper.tcl" \
 ]
 
 adi_ip_properties_lite nic_core
@@ -250,6 +232,91 @@ adi_add_bus "axil_app_ctrl" "slave" \
 adi_set_bus_dependency "axil_app_ctrl" "axil_app_ctrl" \
 	"(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1)"
 
+adi_add_bus "phy_drp" "master" \
+	"analog.com:interface:phy_drp_rtl:1.0" \
+	"analog.com:interface:phy_drp:1.0" \
+	{
+		{"sfp_drp_addr" "SFP_DRP_ADDR"} \
+		{"sfp_drp_di" "SFP_DRP_DI"} \
+		{"sfp_drp_en" "SFP_DRP_EN"} \
+		{"sfp_drp_we" "SFP_DRP_WE"} \
+		{"sfp_drp_do" "SFP_DRP_DO"} \
+		{"sfp_drp_rdy" "SFP_DRP_RDY"} \
+	}
+adi_add_bus_clock "sfp_drp_clk" "phy_drp" "sfp_drp_rst" "slave"
+
+adi_add_bus "phy_mac_0" "master" \
+	"analog.com:interface:phy_mac_rtl:1.0" \
+	"analog.com:interface:phy_mac:1.0" \
+	{
+		{"sfp0_tx_clk" "SFP_TX_CLK"} \
+		{"sfp0_tx_rst" "SFP_XT_RST"} \
+		{"sfp0_txd" "SFP_TXD"} \
+		{"sfp0_txc" "SFP_TXC"} \
+		{"sfp0_tx_prbs31_enable" "SFP_TX_PRBS31_ENABLE"} \
+		{"sfp0_rx_clk" "SFP_RX_CLK"} \
+		{"sfp0_rx_rst" "SFP_RX_RST"} \
+		{"sfp0_rxd" "SFP_RXD"} \
+		{"sfp0_rxc" "SFP_RXC"} \
+		{"sfp0_rx_prbs31_enable" "SFP_RX_PRBS31_ENABLE"} \
+		{"sfp0_rx_error_count" "SFP_RX_ERROR_COUNT"} \
+		{"sfp0_rx_status" "SFP_RX_STATUS"} \
+	}
+
+adi_add_bus "phy_mac_1" "master" \
+	"analog.com:interface:phy_mac_rtl:1.0" \
+	"analog.com:interface:phy_mac:1.0" \
+	{
+		{"sfp1_tx_clk" "SFP_TX_CLK"} \
+		{"sfp1_tx_rst" "SFP_XT_RST"} \
+		{"sfp1_txd" "SFP_TXD"} \
+		{"sfp1_txc" "SFP_TXC"} \
+		{"sfp1_tx_prbs31_enable" "SFP_TX_PRBS31_ENABLE"} \
+		{"sfp1_rx_clk" "SFP_RX_CLK"} \
+		{"sfp1_rx_rst" "SFP_RX_RST"} \
+		{"sfp1_rxd" "SFP_RXD"} \
+		{"sfp1_rxc" "SFP_RXC"} \
+		{"sfp1_rx_prbs31_enable" "SFP_RX_PRBS31_ENABLE"} \
+		{"sfp1_rx_error_count" "SFP_RX_ERROR_COUNT"} \
+		{"sfp1_rx_status" "SFP_RX_STATUS"} \
+	}
+
+adi_add_bus "phy_mac_2" "master" \
+	"analog.com:interface:phy_mac_rtl:1.0" \
+	"analog.com:interface:phy_mac:1.0" \
+	{
+		{"sfp2_tx_clk" "SFP_TX_CLK"} \
+		{"sfp2_tx_rst" "SFP_XT_RST"} \
+		{"sfp2_txd" "SFP_TXD"} \
+		{"sfp2_txc" "SFP_TXC"} \
+		{"sfp2_tx_prbs31_enable" "SFP_TX_PRBS31_ENABLE"} \
+		{"sfp2_rx_clk" "SFP_RX_CLK"} \
+		{"sfp2_rx_rst" "SFP_RX_RST"} \
+		{"sfp2_rxd" "SFP_RXD"} \
+		{"sfp2_rxc" "SFP_RXC"} \
+		{"sfp2_rx_prbs31_enable" "SFP_RX_PRBS31_ENABLE"} \
+		{"sfp2_rx_error_count" "SFP_RX_ERROR_COUNT"} \
+		{"sfp2_rx_status" "SFP_RX_STATUS"} \
+	}
+
+adi_add_bus "phy_mac_3" "master" \
+	"analog.com:interface:phy_mac_rtl:1.0" \
+	"analog.com:interface:phy_mac:1.0" \
+	{
+		{"sfp3_tx_clk" "SFP_TX_CLK"} \
+		{"sfp3_tx_rst" "SFP_XT_RST"} \
+		{"sfp3_txd" "SFP_TXD"} \
+		{"sfp3_txc" "SFP_TXC"} \
+		{"sfp3_tx_prbs31_enable" "SFP_TX_PRBS31_ENABLE"} \
+		{"sfp3_rx_clk" "SFP_RX_CLK"} \
+		{"sfp3_rx_rst" "SFP_RX_RST"} \
+		{"sfp3_rxd" "SFP_RXD"} \
+		{"sfp3_rxc" "SFP_RXC"} \
+		{"sfp3_rx_prbs31_enable" "SFP_RX_PRBS31_ENABLE"} \
+		{"sfp3_rx_error_count" "SFP_RX_ERROR_COUNT"} \
+		{"sfp3_rx_status" "SFP_RX_STATUS"} \
+	}
+
 #foreach port {"s_axil_app_ctrl_awaddr" "s_axil_app_ctrl_awprot" \
   "s_axil_app_ctrl_awvalid" "s_axil_app_ctrl_awready" "s_axil_app_ctrl_wdata" "s_axil_app_ctrl_wstrb" \
   "s_axil_app_ctrl_wvalid" "s_axil_app_ctrl_wready" "s_axil_app_ctrl_bresp" "s_axil_app_ctrl_bvalid" \
@@ -285,6 +352,9 @@ ipx::infer_bus_interface {\
 ipx::infer_bus_interface core_irq xilinx.com:signal:interrupt_rtl:1.0 [ipx::current_core]
 
 ipx::infer_bus_interface core_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+
+ipx::infer_bus_interface ptp_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface ptp_sample_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 
 set core_rst_intf [ipx::infer_bus_interface core_rst xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]]
 set core_rst_polarity [ipx::add_bus_parameter "POLARITY" $core_rst_intf]
@@ -382,59 +452,61 @@ set_property -dict [list \
 set group [ipgui::add_group -name "PTP Configuration" -component $cc \
  -parent $page1 -display_name "PTP Configuration"]
 
-ipgui::add_param -name "PTP_CLK_PERIOD_NS_NUM" -component $cc
-set p [ipgui::get_guiparamspec -name "PTP_CLK_PERIOD_NS_NUM" -component $cc]
-ipgui::move_param -component $cc -order 0 $p -parent $group
-set_property -dict [list \
+# is localparam
+#
+#ipgui::add_param -name "PTP_CLK_PERIOD_NS_NUM" -component $cc
+#set p [ipgui::get_guiparamspec -name "PTP_CLK_PERIOD_NS_NUM" -component $cc]
+#ipgui::move_param -component $cc -order 0 $p -parent $group
+#set_property -dict [list \
   "display_name" "PTP_CLK_PERIOD_NS_NUM" \
 ] [ipgui::get_guiparamspec -name "PTP_CLK_PERIOD_NS_NUM" -component $cc]
 
-ipgui::add_param -name "PTP_CLK_PERIOD_NS_DENOM" -component $cc
-set p [ipgui::get_guiparamspec -name "PTP_CLK_PERIOD_NS_DENOM" -component $cc]
-ipgui::move_param -component $cc -order 1 $p -parent $group
-set_property -dict [list \
+#ipgui::add_param -name "PTP_CLK_PERIOD_NS_DENOM" -component $cc
+#set p [ipgui::get_guiparamspec -name "PTP_CLK_PERIOD_NS_DENOM" -component $cc]
+#ipguiean:move_param -component $cc -order 1 $p -parent $group
+#set_property -dict [list \
   "display_name" "PTP_CLK_PERIOD_NS_DENOM" \
 ] [ipgui::get_guiparamspec -name "PTP_CLK_PERIOD_NS_DENOM" -component $cc]
 
-ipgui::add_param -name "PTP_TS_WIDTH" -component $cc
-set p [ipgui::get_guiparamspec -name "PTP_TS_WIDTH" -component $cc]
-ipgui::move_param -component $cc -order 2 $p -parent $group
-set_property -dict [list \
+#ipgui::add_param -name "PTP_TS_WIDTH" -component $cc
+#set p [ipgui::get_guiparamspec -name "PTP_TS_WIDTH" -component $cc]
+#ipgui::move_param -component $cc -order 2 $p -parent $group
+#set_property -dict [list \
   "display_name" "PTP_TS_WIDTH" \
 ] [ipgui::get_guiparamspec -name "PTP_TS_WIDTH" -component $cc]
 
 ipgui::add_param -name "PTP_CLOCK_PIPELINE" -component $cc
 set p [ipgui::get_guiparamspec -name "PTP_CLOCK_PIPELINE" -component $cc]
-ipgui::move_param -component $cc -order 3 $p -parent $group
+ipgui::move_param -component $cc -order 0 $p -parent $group
 set_property -dict [list \
   "display_name" "PTP_CLOCK_PIPELINE" \
 ] [ipgui::get_guiparamspec -name "PTP_CLOCK_PIPELINE" -component $cc]
 
 ipgui::add_param -name "PTP_CLOCK_CDC_PIPELINE" -component $cc
 set p [ipgui::get_guiparamspec -name "PTP_CLOCK_CDC_PIPELINE" -component $cc]
-ipgui::move_param -component $cc -order 4 $p -parent $group
+ipgui::move_param -component $cc -order 1 $p -parent $group
 set_property -dict [list \
   "display_name" "PTP_CLOCK_CDC_PIPELINE" \
 ] [ipgui::get_guiparamspec -name "PTP_CLOCK_CDC_PIPELINE" -component $cc]
 
-ipgui::add_param -name "PTP_USE_SAMPLE_CLOCK" -component $cc
-set p [ipgui::get_guiparamspec -name "PTP_USE_SAMPLE_CLOCK" -component $cc]
-ipgui::move_param -component $cc -order 5 $p -parent $group
-set_property -dict [list \
+#ipgui::add_param -name "PTP_USE_SAMPLE_CLOCK" -component $cc
+#set p [ipgui::get_guiparamspec -name "PTP_USE_SAMPLE_CLOCK" -component $cc]
+#ipgui::move_param -component $cc -order 2 $p -parent $group
+#set_property -dict [list \
   "widget" "checkBox" \
   "display_name" "PTP_USE_SAMPLE_CLOCK" \
 ] [ipgui::get_guiparamspec -name "PTP_USE_SAMPLE_CLOCK" -component $cc]
 
 ipgui::add_param -name "PTP_PORT_CDC_PIPELINE" -component $cc
 set p [ipgui::get_guiparamspec -name "PTP_PORT_CDC_PIPELINE" -component $cc]
-ipgui::move_param -component $cc -order 6 $p -parent $group
+ipgui::move_param -component $cc -order 2 $p -parent $group
 set_property -dict [list \
   "display_name" "PTP_PORT_CDC_PIPELINE" \
 ] [ipgui::get_guiparamspec -name "PTP_PORT_CDC_PIPELINE" -component $cc]
 
 ipgui::add_param -name "PTP_PEROUT_ENABLE" -component $cc
 set p [ipgui::get_guiparamspec -name "PTP_PEROUT_ENABLE" -component $cc]
-ipgui::move_param -component $cc -order 7 $p -parent $group
+ipgui::move_param -component $cc -order 3 $p -parent $group
 set_property -dict [list \
   "widget" "checkBox" \
   "display_name" "PTP_PEROUT_ENABLE" \
@@ -442,22 +514,22 @@ set_property -dict [list \
 
 ipgui::add_param -name "PTP_PEROUT_COUNT" -component $cc
 set p [ipgui::get_guiparamspec -name "PTP_PEROUT_COUNT" -component $cc]
-ipgui::move_param -component $cc -order 8 $p -parent $group
+ipgui::move_param -component $cc -order 4 $p -parent $group
 set_property -dict [list \
   "display_name" "PTP_PEROUT_COUNT" \
 ] [ipgui::get_guiparamspec -name "PTP_PEROUT_COUNT" -component $cc]
 
-ipgui::add_param -name "IF_PTP_PERIOD_NS" -component $cc
-set p [ipgui::get_guiparamspec -name "IF_PTP_PERIOD_NS" -component $cc]
-ipgui::move_param -component $cc -order 9 $p -parent $group
-set_property -dict [list \
+#ipgui::add_param -name "IF_PTP_PERIOD_NS" -component $cc
+#set p [ipgui::get_guiparamspec -name "IF_PTP_PERIOD_NS" -component $cc]
+#ipgui::move_param -component $cc -order 5 $p -parent $group
+#set_property -dict [list \
   "display_name" "IF_PTP_PERIOD_NS" \
 ] [ipgui::get_guiparamspec -name "IF_PTP_PERIOD_NS" -component $cc]
 
-ipgui::add_param -name "IF_PTP_PERIOD_FNS" -component $cc
-set p [ipgui::get_guiparamspec -name "IF_PTP_PERIOD_FNS" -component $cc]
-ipgui::move_param -component $cc -order 10 $p -parent $group
-set_property -dict [list \
+#ipgui::add_param -name "IF_PTP_PERIOD_FNS" -component $cc
+#set p [ipgui::get_guiparamspec -name "IF_PTP_PERIOD_FNS" -component $cc]
+#ipgui::move_param -component $cc -order 6 $p -parent $group
+#set_property -dict [list \
   "display_name" "IF_PTP_PERIOD_FNS" \
 ] [ipgui::get_guiparamspec -name "IF_PTP_PERIOD_FNS" -component $cc]
 
@@ -564,26 +636,26 @@ set_property -dict [list \
   "display_name" "PTP_TS_ENABLE" \
 ] [ipgui::get_guiparamspec -name "PTP_TS_ENABLE" -component $cc]
 
-ipgui::add_param -name "ENABLE_PADDING" -component $cc
-set p [ipgui::get_guiparamspec -name "ENABLE_PADDING" -component $cc]
-ipgui::move_param -component $cc -order 1 $p -parent $group
-set_property -dict [list \
+#ipgui::add_param -name "ENABLE_PADDING" -component $cc
+#set p [ipgui::get_guiparamspec -name "ENABLE_PADDING" -component $cc]
+#ipgui::move_param -component $cc -order 1 $p -parent $group
+#set_property -dict [list \
   "widget" "checkBox" \
   "display_name" "ENABLE_PADDING" \
 ] [ipgui::get_guiparamspec -name "ENABLE_PADDING" -component $cc]
 
-ipgui::add_param -name "ENABLE_DIC" -component $cc
-set p [ipgui::get_guiparamspec -name "ENABLE_DIC" -component $cc]
-ipgui::move_param -component $cc -order 2 $p -parent $group
-set_property -dict [list \
+#ipgui::add_param -name "ENABLE_DIC" -component $cc
+#set p [ipgui::get_guiparamspec -name "ENABLE_DIC" -component $cc]
+#ipgui::move_param -component $cc -order 2 $p -parent $group
+#set_property -dict [list \
   "widget" "checkBox" \
   "display_name" "ENABLE_DIC" \
 ] [ipgui::get_guiparamspec -name "ENABLE_DIC" -component $cc]
 
-ipgui::add_param -name "MIN_FRAME_LENGTH" -component $cc
-set p [ipgui::get_guiparamspec -name "MIN_FRAME_LENGTH" -component $cc]
-ipgui::move_param -component $cc -order 3 $p -parent $group
-set_property -dict [list \
+#ipgui::add_param -name "MIN_FRAME_LENGTH" -component $cc
+#set p [ipgui::get_guiparamspec -name "MIN_FRAME_LENGTH" -component $cc]
+#ipgui::move_param -component $cc -order 3 $p -parent $group
+#set_property -dict [list \
   "display_name" "MIN_FRAME_LENGTH" \
 ] [ipgui::get_guiparamspec -name "MIN_FRAME_LENGTH" -component $cc]
 
@@ -597,16 +669,16 @@ set_property -dict [list \
   "display_name" "TX_CPL_FIFO_DEPTH" \
 ] [ipgui::get_guiparamspec -name "TX_CPL_FIFO_DEPTH" -component $cc]
 
-ipgui::add_param -name "TX_TAG_WIDTH" -component $cc
-set p [ipgui::get_guiparamspec -name "TX_TAG_WIDTH" -component $cc]
-ipgui::move_param -component $cc -order 1 $p -parent $group
-set_property -dict [list \
+#ipgui::add_param -name "TX_TAG_WIDTH" -component $cc
+#set p [ipgui::get_guiparamspec -name "TX_TAG_WIDTH" -component $cc]
+#ipgui::move_param -component $cc -order 1 $p -parent $group
+#set_property -dict [list \
   "display_name" "TX_TAG_WIDTH" \
 ] [ipgui::get_guiparamspec -name "TX_TAG_WIDTH" -component $cc]
 
 ipgui::add_param -name "TX_CHECKSUM_ENABLE" -component $cc
 set p [ipgui::get_guiparamspec -name "TX_CHECKSUM_ENABLE" -component $cc]
-ipgui::move_param -component $cc -order 2 $p -parent $group
+ipgui::move_param -component $cc -order 1 $p -parent $group
 set_property -dict [list \
   "widget" "checkBox" \
   "display_name" "TX_CHECKSUM_ENABLE" \
@@ -614,21 +686,21 @@ set_property -dict [list \
 
 ipgui::add_param -name "TX_FIFO_DEPTH" -component $cc
 set p [ipgui::get_guiparamspec -name "TX_FIFO_DEPTH" -component $cc]
-ipgui::move_param -component $cc -order 3 $p -parent $group
+ipgui::move_param -component $cc -order 2 $p -parent $group
 set_property -dict [list \
   "display_name" "TX_FIFO_DEPTH" \
 ] [ipgui::get_guiparamspec -name "TX_FIFO_DEPTH" -component $cc]
 
 ipgui::add_param -name "MAX_TX_SIZE" -component $cc
 set p [ipgui::get_guiparamspec -name "MAX_TX_SIZE" -component $cc]
-ipgui::move_param -component $cc -order 4 $p -parent $group
+ipgui::move_param -component $cc -order 3 $p -parent $group
 set_property -dict [list \
   "display_name" "MAX_TX_SIZE" \
 ] [ipgui::get_guiparamspec -name "MAX_TX_SIZE" -component $cc]
 
 ipgui::add_param -name "TX_RAM_SIZE" -component $cc
 set p [ipgui::get_guiparamspec -name "TX_RAM_SIZE" -component $cc]
-ipgui::move_param -component $cc -order 5 $p -parent $group
+ipgui::move_param -component $cc -order 4 $p -parent $group
 set_property -dict [list \
   "display_name" "TX_RAM_SIZE" \
 ] [ipgui::get_guiparamspec -name "TX_RAM_SIZE" -component $cc]

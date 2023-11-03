@@ -110,6 +110,46 @@ module system_top (
   assign gpio_i[20: 8] = gpio_bd_i;
   assign gpio_bd_o = gpio_o[ 7: 0];
 
+  wire clk_125mhz_ibufg;
+//  wire clk_125mhz_bufg;
+
+  IBUFGDS #(
+    .DIFF_TERM("FALSE"),
+    .IBUF_LOW_PWR("FALSE")
+  )
+  clk_125mhz_ibufg_inst (
+    .O   (clk_125mhz_ibufg),
+    .I   (clk_125mhz_p),
+    .IB  (clk_125mhz_n)
+  );
+
+//  BUFG clk_125mhz_bufg_in_inst (
+//    .I(clk_125mhz_ibufg),
+//    .O(clk_125mhz_bufg)
+//  );
+
+//  wire sfp_mgt_refclk_0_int;
+//  wire sfp_mgt_refclk_0_bufg;
+//  wire sfp_mgt_refclk_0;
+
+//  IBUFDS_GTE4 ibufds_gte4_sfp_mgt_refclk_0_inst (
+//    .I     (sfp_mgt_refclk_0_p),
+//    .IB    (sfp_mgt_refclk_0_n),
+//    .CEB   (1'b0),
+//    .O     (sfp_mgt_refclk_0),
+//    .ODIV2 (sfp_mgt_refclk_0_int)
+//  );
+
+//  BUFG_GT bufg_gt_sfp_mgt_refclk_0_inst (
+//    .CE      (sfp_gtpowergood),
+//    .CEMASK  (1'b1),
+//    .CLR     (1'b0),
+//    .CLRMASK (1'b1),
+//    .DIV     (3'd0),
+//    .I       (sfp_mgt_refclk_0_int),
+//    .O       (sfp_mgt_refclk_0_bufg)
+//  );
+
   system_wrapper i_system_wrapper (
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
@@ -129,16 +169,15 @@ module system_top (
     .ap_rstn_frmbuf2 (ap_rstn_frmbuf2),
     .ap_rstn_frmbuf3 (ap_rstn_frmbuf3),
     .csirxss_rstn (csirxss_rstn),
-
+    .clk_125mhz(clk_125mhz_ibufg),
     .mipi_csi_ch0_data_n (mipi_ch0_data_n),
     .mipi_csi_ch0_data_p (mipi_ch0_data_p),
     .mipi_csi_ch0_clk_n (mipi_ch0_clk_n),
     .mipi_csi_ch0_clk_p (mipi_ch0_clk_p),
-
-    .clk_125mhz_p (clk_125mhz_p),
-    .clk_125mhz_n (clk_125mhz_n),
-    .clk_user_si570_p (clk_user_si570_p),
-    .clk_user_si570_n (clk_user_si570_n),
+//    .clk_125mhz_p (clk_125mhz_p),
+//    .clk_125mhz_n (clk_125mhz_n),
+//    .clk_user_si570_p (clk_user_si570_p),
+//    .clk_user_si570_n (clk_user_si570_n),
     .sfp0_rx_p (sfp0_rx_p),
     .sfp0_rx_n (sfp0_rx_n),
     .sfp0_tx_p (sfp0_tx_p),

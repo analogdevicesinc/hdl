@@ -4,13 +4,13 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-LIBRARY_NAME := nic_core
+LIBRARY_NAME := nic_phy
 
 corundum_dir_common = ../../../corundum/fpga/common
 corundum_dir_mod = ../../../corundum/fpga/lib
 corundum_dir_zcu102 = ../../../corundum/fpga/mqnic/ZCU102/fpga
 
-GENERIC_DEPS += nic_core.v
+GENERIC_DEPS += nic_phy.v
 GENERIC_DEPS += $(corundum_dir_zcu102)/rtl/fpga_core.v
 GENERIC_DEPS += $(corundum_dir_common)/rtl/mqnic_core_axi.v
 GENERIC_DEPS += $(corundum_dir_common)/rtl/mqnic_core.v
@@ -82,6 +82,7 @@ GENERIC_DEPS += $(corundum_dir_mod)/axis/rtl/axis_demux.v
 GENERIC_DEPS += $(corundum_dir_mod)/axis/rtl/axis_fifo.v
 GENERIC_DEPS += $(corundum_dir_mod)/axis/rtl/axis_fifo_adapter.v
 GENERIC_DEPS += $(corundum_dir_mod)/axis/rtl/axis_pipeline_fifo.v
+GENERIC_DEPS += $(corundum_dir_mod)/axis/rtl/axis_register.v
 GENERIC_DEPS += $(corundum_dir_mod)/axis/rtl/sync_reset.v
 GENERIC_DEPS += $(corundum_dir_mod)/pcie/rtl/dma_client_axis_sink.v
 GENERIC_DEPS += $(corundum_dir_mod)/pcie/rtl/dma_client_axis_source.v
@@ -111,7 +112,7 @@ GENERIC_DEPS += $(corundum_dir_mod)/eth/rtl/lfsr.v
 GENERIC_DEPS += $(corundum_dir_mod)/eth/rtl/xgmii_baser_dec_64.v
 GENERIC_DEPS += $(corundum_dir_mod)/eth/rtl/xgmii_baser_enc_64.v
 
-XILINX_DEPS += nic_core_ip.tcl
+XILINX_DEPS += nic_phy_ip.tcl
 XILINX_DEPS += ../../corundum/interfaces/phy_drp.xml
 XILINX_DEPS += ../../corundum/interfaces/phy_mac.xml
 XILINX_DEPS += $(corundum_dir_mod)/eth/lib/axis/syn/vivado/axis_async_fifo.tcl
@@ -123,5 +124,6 @@ XILINX_DEPS += $(corundum_dir_common)/syn/vivado/rb_drp.tcl
 XILINX_DEPS += $(corundum_dir_mod)/eth/lib/axis/syn/vivado/sync_reset.tcl
 XILINX_DEPS += $(corundum_dir_common)/syn/vivado/tdma_ber_ch.tcl
 XILINX_DEPS += $(corundum_dir_common)/syn/vivado/eth_xcvr_phy_10g_gty_wrapper.tcl
+XILINX_DEPS += $(corundum_dir_mod)/eth/lib/axis/syn/vivado/sync_reset.tcl
 
 include ../../scripts/library.mk
