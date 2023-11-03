@@ -61,6 +61,7 @@ clean:
 	-rm -f $(wildcard *.log)
 	-rm -Rf ./ipcfg
 	-rm -Rf $(filter-out . .. ./. ./.., $(wildcard .*))
+	-rm -Rf ./sge
 
 clean-pb:
 	-rm -Rf $(wildcard $(PROJECT_NAME)/$(PROJECT_NAME)/*)
@@ -68,6 +69,7 @@ clean-pb:
 	-rm -Rf ./ipcfg
 	-rm -Rf $(filter-out . .. ./. ./.., $(wildcard .*))
 	-rm -f $(PROJECT_NAME)_propel_builder.log
+	-rm -Rf ./sge
 
 clean-rd:
 	-rm -Rf $(filter-out $(PROJECT_NAME)/$(PROJECT_NAME) \
