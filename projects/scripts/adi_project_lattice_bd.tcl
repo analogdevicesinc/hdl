@@ -41,7 +41,6 @@ proc adi_project_bd {project_name args} {
     -speed "" \
     -language "verilog" \
     -cmd_list {{source ./system_bd.tcl} \
-    {sbp_design save} \
     {sbp_design pge sge \
       -i "$ppath/$project_name/$project_name/$project_name.sbx" \
       -o "$ppath"}} \
