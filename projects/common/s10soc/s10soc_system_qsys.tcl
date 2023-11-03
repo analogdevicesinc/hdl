@@ -24,10 +24,16 @@ set_interface_property rst_ninit_done EXPORT_OF s10_reset.ninit_done
 
 # sysid
 
+add_instance axi_sysid_0 axi_sysid
+add_instance rom_sys_0 sysid_rom
+
 add_instance sys_id altera_avalon_sysid_qsys
 set_instance_parameter_value sys_id {ID} {0x00000100}
 add_connection sys_clk.clk sys_id.clk
 add_connection sys_clk.clk_reset sys_id.reset
+add_connection sys_clk.clk rom_sys_0.if_clk
+add_connection sys_clk.clk axi_sysid_0.s_axi_clock
+add_connection sys_clk.clk_reset axi_sysid_0.s_axi_reset
 
 # hps
 # round-about way - qsys-script doesn't support {*}?
