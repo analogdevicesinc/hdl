@@ -91,7 +91,8 @@ module system_top (
   output          ad40xx_spi_sclk,
   output          ad40xx_spi_cs,
 
-  inout           ad40xx_amp_pd);
+  inout           ad40xx_amp_pd,
+  inout           ad7944_turbo);
 
   // internal signals
 
@@ -107,15 +108,15 @@ module system_top (
 
   // instantiations
 
-  assign gpio_i[63:33] = gpio_o[63:33];
+  assign gpio_i[63:34] = gpio_o[63:34];
 
   ad_iobuf #(
-    .DATA_WIDTH(1)
+    .DATA_WIDTH(2)
   ) i_admp_pd_iobuf (
-    .dio_t(gpio_t[32]),
-    .dio_i(gpio_o[32]),
-    .dio_o(gpio_i[32]),
-    .dio_p(ad40xx_amp_pd));
+    .dio_t(gpio_t[33:32]),
+    .dio_i(gpio_o[33:32]),
+    .dio_o(gpio_i[33:32]),
+    .dio_p({ad7944_turbo,ad40xx_amp_pd}));
 
   ad_iobuf #(
     .DATA_WIDTH(32)
