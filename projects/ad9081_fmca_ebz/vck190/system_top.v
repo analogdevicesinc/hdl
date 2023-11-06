@@ -40,7 +40,8 @@ module system_top  #(
   parameter TX_NUM_LINKS = 1,
   parameter RX_JESD_L = 4,
   parameter RX_NUM_LINKS = 1,
-  parameter JESD_MODE = "8B10B"
+  parameter JESD_MODE = "8B10B",
+  parameter GENERATE_LINK_CLK = 1
 ) (
   input         sys_clk_n,
   input         sys_clk_p,
@@ -129,14 +130,22 @@ module system_top  #(
   wire            clkin10;
   wire            tx_device_clk;
   wire            rx_device_clk;
+  wire            link_clk;
+  wire            rx_sysref;
+  wire            tx_sysref;
+
+  wire            gt_powergood;
+  wire            ref_clk_odiv;
 
   // instantiations
-  IBUFDS_GTE5 i_ibufds_ref_clk (
-    .CEB (1'd0),
+  IBUFDS_GTE5 #(
+    .REFCLK_HROW_CK_SEL (0)
+  ) i_ibufds_ref_clk (
+    .CEB (1'b0),
     .I (fpga_refclk_in_p),
     .IB (fpga_refclk_in_n),
     .O (ref_clk),
-    .ODIV2 ());
+    .ODIV2 (ref_clk_odiv));
 
   IBUFDS i_ibufds_sysref (
     .I (sysref2_p),
@@ -170,6 +179,8 @@ module system_top  #(
   BUFG i_rx_device_clk (
     .I (clkin10),
     .O (rx_device_clk));
+
+  assign link_clk = (GENERATE_LINK_CLK == 0)? ref_clk_odiv : 1'b0;
 
   // spi
 
@@ -245,8 +256,8 @@ module system_top  #(
   endgenerate
 
   /* Board GPIOS. Buttons, LEDs, etc... */
-  assign gpio_led = gpio_o[3:0];
-  assign gpio_i[3:0] = gpio_o[3:0];
+  assign gpio_led     = gpio_o[3:0];
+  assign gpio_i[3:0]  = gpio_o[3:0];
   assign gpio_i[7: 4] = gpio_dip_sw;
   assign gpio_i[9: 8] = gpio_pb;
 
@@ -290,18 +301,20 @@ module system_top  #(
     .spi1_mosi (spi1_mosi),
     .spi1_sclk (spi1_sclk),
     // FMC HPC
-    .GT_Serial_0_0_gtx_p (tx_data_p_loc[3:0]),
-    .GT_Serial_0_0_gtx_n (tx_data_n_loc[3:0]),
-    .GT_Serial_0_0_grx_p (rx_data_p_loc[3:0]),
-    .GT_Serial_0_0_grx_n (rx_data_n_loc[3:0]),
-    .GT_Serial_1_0_gtx_p (tx_data_p_loc[7:4]),
-    .GT_Serial_1_0_gtx_n (tx_data_n_loc[7:4]),
-    .GT_Serial_1_0_grx_p (rx_data_p_loc[7:4]),
-    .GT_Serial_1_0_grx_n (rx_data_n_loc[7:4]),
+    .rx_0_p (rx_data_p_loc[3:0]),
+    .rx_0_n (rx_data_n_loc[3:0]),
+    .tx_0_p (tx_data_p_loc[3:0]),
+    .tx_0_n (tx_data_n_loc[3:0]),
+    .rx_1_p (rx_data_p_loc[7:4]),
+    .rx_1_n (rx_data_n_loc[7:4]),
+    .tx_1_p (tx_data_p_loc[7:4]),
+    .tx_1_n (tx_data_n_loc[7:4]),
 
-    .gt_reset (~rstb),
+    .gt_powergood (gt_powergood),
+    .gt_reset (~gt_powergood | ~rstb),
     .ref_clk_q0 (ref_clk),
     .ref_clk_q1 (ref_clk),
+    .link_clk   (link_clk),
 
     .rx_device_clk (rx_device_clk),
     .tx_device_clk (tx_device_clk),
