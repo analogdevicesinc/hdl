@@ -263,10 +263,10 @@ module system_top  #(
     .spi1_mosi (spi1_mosi),
     .spi1_sclk (spi1_sclk),
     // FMC HPC
-    .GT_Serial_0_0_grx_p (rx_data_p_loc[3:0]),
-    .GT_Serial_0_0_grx_n (rx_data_n_loc[3:0]),
-    .GT_Serial_1_0_grx_p (rx_data_p_loc[7:4]),
-    .GT_Serial_1_0_grx_n (rx_data_n_loc[7:4]),
+    .rx_0_p (rx_data_p_loc[3:0]),
+    .rx_0_n (rx_data_n_loc[3:0]),
+    .rx_1_p (rx_data_p_loc[7:4]),
+    .rx_1_n (rx_data_n_loc[7:4]),
 
     .gt_reset (gt_reset_s),
     .gt_reset_rx_datapath (rx_reset_datapath),
@@ -275,7 +275,6 @@ module system_top  #(
     .rx_resetdone (rx_resetdone),
     .ref_clk_q0 (ref_clk),
     .ref_clk_q1 (ref_clk),
-
     .rx_device_clk (rx_device_clk),
     .rx_sync_0 (rx_syncout),
     .rx_sysref_0 (sysref));
