@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2017-2022 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2017-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIJESD204
 ###############################################################################
 
@@ -22,6 +22,9 @@ adi_add_bus "TX_GT_IP_Interface" "master" \
   { \
    { "txdata" "ch_txdata" } \
    { "txheader" "ch_txheader" } \
+   { "txctrl0"  "ch_txctrl0"  } \
+   { "txctrl1"  "ch_txctrl1"  } \
+   { "txctrl2"  "ch_txctrl2"  } \
   }
 
 adi_add_bus "TX" "slave" \
@@ -30,6 +33,7 @@ adi_add_bus "TX" "slave" \
   { \
    { "tx_data" "txdata" } \
    { "tx_header" "txheader" } \
+   { "tx_charisk" "txcharisk" } \
   }
 
 ipx::save_core [ipx::current_core]
