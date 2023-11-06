@@ -36,7 +36,7 @@ Supported devices
 Supported carriers
 -------------------------------------------------------------------------------
 
--  :xilinx:`products/boards-and-kits/1-8dyf-11.html` on FMC slot
+-  :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
 -  :xilinx:`ZC706` on FMC LPC slot
 
 Other required hardware
@@ -116,31 +116,6 @@ SL7                Unmounted Oversampling Ratio Selection OS0
 LK40               A         Onboard 5v0 power supply selected
 LK41               A         Onboard 3v3 power supply selected
 ================== ========= ====================================
-
-IP list
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
--  :git-hdl:`AD_EDGE_DETECT <library/common/ad_edge_detect.v>`
--  :git-hdl:`AXI_AD7616 <library/axi_ad7616>` *
--  :git-hdl:`AXI_CLKGEN <library/axi_clkgen>`
--  :git-hdl:`AXI_DMAC <library/axi_dmac>`
--  :git-hdl:`AXI_HDMI_TX <library/axi_hdmi_tx>`
--  :git-hdl:`AXI_I2S_ADI <library/axi_i2s_adi>`
--  :git-hdl:`AXI_PWM_GEN <library/axi_pwm_gen>`
--  :git-hdl:`AXI_SPDIF_TX <library/axi_spdif_tx>`
--  :git-hdl:`AXI_SPI_ENGINE <library/spi_engine/axi_spi_engine>` **
--  :git-hdl:`AXI_SYSID <library/axi_sysid>`
--  :git-hdl:`SPI_ENGINE_EXECUTION <library/spi_engine/spi_engine_execution>` **
--  :git-hdl:`SPI_ENGINE_INTERCONNECT <library/spi_engine/spi_engine_interconnect>` **
--  :git-hdl:`SPI_ENGINE_OFFLOAD <library/spi_engine/spi_engine_offload>` **
--  :git-hdl:`SYNC_BITS <library/util_cdc/sync_bits.v>`
--  :git-hdl:`SYSID_ROM <library/sysid_rom>`
-
-.. admonition:: Legend
-   :class: note
-
-   -   ``*`` instantiated only for SER_PAR_N=0 (parallel interface)
-   -   ``**`` instantiated only for SER_PAR_N=1 (serial interface)
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -394,7 +369,7 @@ HDL related
      - 
    * - SYSID_ROM
      - :git-hdl:`library/sysid_rom`
-     -
+     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
 
 .. admonition:: Legend
    :class: note
