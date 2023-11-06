@@ -17,3 +17,7 @@ sysid_gen_sys_init_file
 
 source ../common/ad7616_bd.tcl
 
+# memory interconnect
+
+ad_mem_hp1_interconnect sys_cpu_clk sys_ps7/S_AXI_HPC1
+ad_mem_hp1_interconnect sys_cpu_clk axi_ad7616_dma/m_dest_axi

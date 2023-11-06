@@ -23,7 +23,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 # LEGEND: Serial    - 0
 #         Parallel  - 1
 #
-# NOTE : This switch is a 'hardware' switch. Please reimplenent the
+# NOTE : This switch is a 'hardware' switch. Please reimplement the
 # design if the variable has been changed.
 #
 ##--------------------------------------------------------------
