@@ -48,7 +48,7 @@ module axi_pwm_gen_1 #(
   input               sync,
 
   output  reg         pulse,
-  output      [31:0]  pulse_counter
+  output              pulse_armed
 );
 
   // internal registers
@@ -134,6 +134,6 @@ module axi_pwm_gen_1 #(
     end
   end
 
-  assign pulse_counter = pulse_period_cnt;
+  assign pulse_armed = phase_align_armed;
 
 endmodule
