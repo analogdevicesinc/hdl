@@ -10,9 +10,9 @@ set_property -dict {PACKAGE_PIN AJ1  IOSTANDARD LVCMOS18} [get_ports spi_sclk]  
 set_property -dict {PACKAGE_PIN AH1  IOSTANDARD LVCMOS18} [get_ports spi_sdo]          ; ## G9   FMC1_LA03_P      IO_L22P_T3U_N6_DBC_AD0P_65
 set_property -dict {PACKAGE_PIN AE5  IOSTANDARD LVCMOS18} [get_ports spi_sdi[0]]       ; ## G6   FMC1_LA00_CC_P   IO_L13P_T2L_N0_GC_QBC_65
 set_property -dict {PACKAGE_PIN AJ5  IOSTANDARD LVCMOS18} [get_ports spi_sdi[1]]       ; ## D9   FMC1_LA01_CC_N   IO_L16N_T2U_N7_QBC_AD3N_65
-set_property -dict {PACKAGE_PIN AF1  IOSTANDARD LVCMOS18} [get_ports spi_cs]           ; ## H11  FMC1_LA04_N      IO_L21N_T3L_N5_AD8N_65
+set_property -dict {PACKAGE_PIN AF1  IOSTANDARD LVCMOS18} [get_ports spi_cs_n]         ; ## H11  FMC1_LA04_N      IO_L21N_T3L_N5_AD8N_65
 
-set_property -dict {PACKAGE_PIN AH12 IOSTANDARD LVCMOS18} [get_ports adc_cnvst]        ; ## H28  FMC1_LA24_P      IO_L2P_T0L_N2_65
+set_property -dict {PACKAGE_PIN AH12 IOSTANDARD LVCMOS18} [get_ports adc_convst]       ; ## H28  FMC1_LA24_P      IO_L2P_T0L_N2_65
 set_property -dict {PACKAGE_PIN AC11 IOSTANDARD LVCMOS18} [get_ports adc_chsel[0]]     ; ## H26  FMC1_LA21_N      IO_L1N_T0L_N1_DBC_66
 set_property -dict {PACKAGE_PIN R12  IOSTANDARD LVCMOS18} [get_ports adc_chsel[1]]     ; ## D27  FMC1_LA26_N      IO_L4N_T0U_N7_DBC_AD7N_67
 set_property -dict {PACKAGE_PIN AE10 IOSTANDARD LVCMOS18} [get_ports adc_chsel[2]]     ; ## G27  FMC1_LA25_P      IO_L1P_T0L_N0_DBC_65

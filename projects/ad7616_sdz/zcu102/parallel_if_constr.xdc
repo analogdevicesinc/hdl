@@ -26,7 +26,7 @@ set_property -dict {PACKAGE_PIN AJ6  IOSTANDARD LVCMOS18} [get_ports adc_db[15]]
 set_property -dict {PACKAGE_PIN AJ1  IOSTANDARD LVCMOS18} [get_ports adc_rd_n]         ; ## G10  FMC1_LA03_N      IO_L22N_T3U_N7_DBC_AD0N_65
 set_property -dict {PACKAGE_PIN AE1  IOSTANDARD LVCMOS18} [get_ports adc_wr_n]         ; ## D15  FMC1_LA09_N      IO_L24N_T3U_N11_PERSTN0_65
 
-set_property -dict {PACKAGE_PIN AH12 IOSTANDARD LVCMOS18} [get_ports adc_cnvst]        ; ## H28  FMC1_LA24_P      IO_L2P_T0L_N2_65
+set_property -dict {PACKAGE_PIN AH12 IOSTANDARD LVCMOS18} [get_ports adc_convst]       ; ## H28  FMC1_LA24_P      IO_L2P_T0L_N2_65
 set_property -dict {PACKAGE_PIN AC11 IOSTANDARD LVCMOS18} [get_ports adc_chsel[0]]     ; ## H26  FMC1_LA21_N      IO_L1N_T0L_N1_DBC_66
 set_property -dict {PACKAGE_PIN R12  IOSTANDARD LVCMOS18} [get_ports adc_chsel[1]]     ; ## D27  FMC1_LA26_N      IO_L4N_T0U_N7_DBC_AD7N_67
 set_property -dict {PACKAGE_PIN AE10 IOSTANDARD LVCMOS18} [get_ports adc_chsel[2]]     ; ## G27  FMC1_LA25_P      IO_L1P_T0L_N0_DBC_65
