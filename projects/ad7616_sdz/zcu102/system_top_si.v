@@ -37,7 +37,7 @@
 module system_top (
 
   input   [12:0]  gpio_bd_i,
-  output  [ 7:0]  gpio_bd_o
+  output  [ 7:0]  gpio_bd_o,
 
   output                  spi_sclk,
   output                  spi_sdo,
