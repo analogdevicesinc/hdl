@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -52,7 +52,7 @@ module ad_mul #(
   // delay interface
 
   input       [(DELAY_DATA_WIDTH-1):0]  ddata_in,
-  output  reg [(DELAY_DATA_WIDTH-1):0]  ddata_out
+  output  reg [(DELAY_DATA_WIDTH-1):0]  ddata_out = 'd0
 );
 
   // internal registers
