@@ -190,11 +190,11 @@ ad_connect eth_clkgen/clk_out1 nic_phy/sfp_drp_clk
 
 ad_connect nic_core/ptp_clk nic_phy/ptp_mgt_refclk
 
-ad_connect nic_core/phy_drp nic_phy/phy_drp
-ad_connect nic_core/phy_mac_0 nic_phy/phy_mac_0
-ad_connect nic_core/phy_mac_1 nic_phy/phy_mac_1
-ad_connect nic_core/phy_mac_2 nic_phy/phy_mac_2
-ad_connect nic_core/phy_mac_3 nic_phy/phy_mac_3
+ad_connect nic_core/nic_drp nic_phy/nic_drp
+ad_connect nic_core/nic_mac_0 nic_phy/nic_mac_0
+ad_connect nic_core/nic_mac_1 nic_phy/nic_mac_1
+ad_connect nic_core/nic_mac_2 nic_phy/nic_mac_2
+ad_connect nic_core/nic_mac_3 nic_phy/nic_mac_3
 
 #ad_connect nic_phy/clk_125mhz_p clk_125mhz_p
 #ad_connect nic_phy/clk_125mhz_n clk_125mhz_n

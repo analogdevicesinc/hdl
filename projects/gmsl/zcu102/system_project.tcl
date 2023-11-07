@@ -1,8 +1,8 @@
 source ../../../scripts/adi_env.tcl
 
-set corundum_dir_common [file normalize [file join [file dirname [info script]] "../../../corundum/fpga/common"]]
-set corundum_dir_mod [file normalize [file join [file dirname [info script]] "../../../corundum/fpga/lib"]]
-set corundum_dir_zcu102 [file normalize [file join [file dirname [info script]] "../../../corundum/fpga/mqnic/ZCU102/fpga"]]
+set corundum_dir_common [file normalize [file join [file dirname [info script]] "../../../../corundum/fpga/common"]]
+set corundum_dir_mod [file normalize [file join [file dirname [info script]] "../../../../corundum/fpga/lib"]]
+set corundum_dir_zcu102 [file normalize [file join [file dirname [info script]] "../../../../corundum/fpga/mqnic/ZCU102/fpga"]]
 
 source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl

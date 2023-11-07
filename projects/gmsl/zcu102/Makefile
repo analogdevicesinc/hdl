@@ -5,9 +5,9 @@
 ####################################################################################
 
 PROJECT_NAME := gmsl_zcu102
-corundum_dir_common = ../../../corundum/fpga/common
-corundum_dir_mod = ../../../corundum/fpga/lib
-corundum_dir_zcu102 = ../../../corundum/fpga/mqnic/ZCU102/fpga
+corundum_dir_common = ../../../../corundum/fpga/common
+corundum_dir_mod = ../../../../corundum/fpga/lib
+corundum_dir_zcu102 = ../../../../corundum/fpga/mqnic/ZCU102/fpga
 
 M_DEPS += ../common/gmsl_bd.tcl
 M_DEPS += ../corundum/corundum_bd.tcl 
