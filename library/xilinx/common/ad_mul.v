@@ -52,7 +52,7 @@ module ad_mul #(
   // delay interface
 
   input       [(DELAY_DATA_WIDTH-1):0]  ddata_in,
-  output  reg [(DELAY_DATA_WIDTH-1):0]  ddata_out
+  output  reg [(DELAY_DATA_WIDTH-1):0]  ddata_out = 'd0
 );
 
   // internal registers
