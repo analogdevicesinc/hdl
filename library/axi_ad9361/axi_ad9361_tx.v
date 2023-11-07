@@ -45,9 +45,10 @@ module axi_ad9361_tx #(
   parameter   SPEED_GRADE = 0,
   parameter   DEV_PACKAGE = 0,
   parameter   MODE_1R1T = 0,
-  parameter   CLK_EDGE_SEL = 0,
   parameter   CMOS_OR_LVDS_N = 0,
   parameter   PPS_RECEIVER_ENABLE = 0,
+  parameter   CLK_EDGE_SEL = 0,
+  parameter   DAC_EXT_SYNC = 0,
   parameter   INIT_DELAY = 0,
   parameter   DAC_DDS_DISABLE = 0,
   parameter   DAC_DDS_TYPE = 1,
@@ -163,7 +164,7 @@ module axi_ad9361_tx #(
 
   // master/slave
 
-  assign dac_data_sync_s = (ID == 0) ? dac_sync_out : dac_sync_in;
+  assign dac_data_sync_s = dac_sync_out | (dac_sync_in & DAC_EXT_SYNC);
   assign dac_sync_out = dac_sync & dac_sync_enable;
 
   always @(posedge dac_clk) begin
