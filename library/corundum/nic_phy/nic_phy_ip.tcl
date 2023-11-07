@@ -2,9 +2,9 @@
 
 source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
-set corundum_dir_common [file normalize [file join [file dirname [info script]] "../../../corundum/fpga/common"]]
-set corundum_dir_mod [file normalize [file join [file dirname [info script]] "../../../corundum/fpga/lib"]]
-set corundum_dir_zcu102 [file normalize [file join [file dirname [info script]] "../../../corundum/fpga/mqnic/ZCU102/fpga"]]
+set corundum_dir_common [file normalize [file join [file dirname [info script]] "../../../../corundum/fpga/common"]]
+set corundum_dir_mod [file normalize [file join [file dirname [info script]] "../../../../corundum/fpga/lib"]]
+set corundum_dir_zcu102 [file normalize [file join [file dirname [info script]] "../../../../corundum/fpga/mqnic/ZCU102/fpga"]]
 
 global VIVADO_IP_LIBRARY
 
@@ -36,9 +36,9 @@ adi_ip_files nic_phy [list \
 
 adi_ip_properties_lite nic_phy
 
-adi_add_bus "phy_drp" "slave" \
-	"analog.com:interface:phy_drp_rtl:1.0" \
-	"analog.com:interface:phy_drp:1.0" \
+adi_add_bus "nic_drp" "slave" \
+	"analog.com:interface:nic_drp_rtl:1.0" \
+	"analog.com:interface:nic_drp:1.0" \
 	{
 		{"sfp_drp_addr" "SFP_DRP_ADDR"} \
 		{"sfp_drp_di" "SFP_DRP_DI"} \
@@ -47,11 +47,11 @@ adi_add_bus "phy_drp" "slave" \
 		{"sfp_drp_do" "SFP_DRP_DO"} \
 		{"sfp_drp_rdy" "SFP_DRP_RDY"} \
 	}
-adi_add_bus_clock "sfp_drp_clk" "phy_drp" "sfp_drp_rst" "slave"
+adi_add_bus_clock "sfp_drp_clk" "nic_drp" "sfp_drp_rst" "slave"
 
-adi_add_bus "phy_mac_0" "slave" \
-	"analog.com:interface:phy_mac_rtl:1.0" \
-	"analog.com:interface:phy_mac:1.0" \
+adi_add_bus "nic_mac_0" "slave" \
+	"analog.com:interface:nic_mac_rtl:1.0" \
+	"analog.com:interface:nic_mac:1.0" \
 	{
 		{"sfp0_tx_clk" "SFP_TX_CLK"} \
 		{"sfp0_tx_rst" "SFP_XT_RST"} \
@@ -67,9 +67,9 @@ adi_add_bus "phy_mac_0" "slave" \
 		{"sfp0_rx_status" "SFP_RX_STATUS"} \
 	}
 
-adi_add_bus "phy_mac_1" "slave" \
-	"analog.com:interface:phy_mac_rtl:1.0" \
-	"analog.com:interface:phy_mac:1.0" \
+adi_add_bus "nic_mac_1" "slave" \
+	"analog.com:interface:nic_mac_rtl:1.0" \
+	"analog.com:interface:nic_mac:1.0" \
 	{
 		{"sfp1_tx_clk" "SFP_TX_CLK"} \
 		{"sfp1_tx_rst" "SFP_XT_RST"} \
@@ -85,9 +85,9 @@ adi_add_bus "phy_mac_1" "slave" \
 		{"sfp1_rx_status" "SFP_RX_STATUS"} \
 	}
 
-adi_add_bus "phy_mac_2" "slave" \
-	"analog.com:interface:phy_mac_rtl:1.0" \
-	"analog.com:interface:phy_mac:1.0" \
+adi_add_bus "nic_mac_2" "slave" \
+	"analog.com:interface:nic_mac_rtl:1.0" \
+	"analog.com:interface:nic_mac:1.0" \
 	{
 		{"sfp2_tx_clk" "SFP_TX_CLK"} \
 		{"sfp2_tx_rst" "SFP_XT_RST"} \
@@ -103,9 +103,9 @@ adi_add_bus "phy_mac_2" "slave" \
 		{"sfp2_rx_status" "SFP_RX_STATUS"} \
 	}
 
-adi_add_bus "phy_mac_3" "slave" \
-	"analog.com:interface:phy_mac_rtl:1.0" \
-	"analog.com:interface:phy_mac:1.0" \
+adi_add_bus "nic_mac_3" "slave" \
+	"analog.com:interface:nic_mac_rtl:1.0" \
+	"analog.com:interface:nic_mac:1.0" \
 	{
 		{"sfp3_tx_clk" "SFP_TX_CLK"} \
 		{"sfp3_tx_rst" "SFP_XT_RST"} \

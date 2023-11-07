@@ -2,9 +2,9 @@
 
 source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
-set corundum_dir_common [file normalize [file join [file dirname [info script]] "../../../corundum/fpga/common"]]
-set corundum_dir_mod [file normalize [file join [file dirname [info script]] "../../../corundum/fpga/lib"]]
-set corundum_dir_zcu102 [file normalize [file join [file dirname [info script]] "../../../corundum/fpga/mqnic/ZCU102/fpga"]]
+set corundum_dir_common [file normalize [file join [file dirname [info script]] "../../../../corundum/fpga/common"]]
+set corundum_dir_mod [file normalize [file join [file dirname [info script]] "../../../../corundum/fpga/lib"]]
+set corundum_dir_zcu102 [file normalize [file join [file dirname [info script]] "../../../../corundum/fpga/mqnic/ZCU102/fpga"]]
 
 global VIVADO_IP_LIBRARY
 
@@ -232,9 +232,9 @@ adi_add_bus "axil_app_ctrl" "slave" \
 adi_set_bus_dependency "axil_app_ctrl" "axil_app_ctrl" \
 	"(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1)"
 
-adi_add_bus "phy_drp" "master" \
-	"analog.com:interface:phy_drp_rtl:1.0" \
-	"analog.com:interface:phy_drp:1.0" \
+adi_add_bus "nic_drp" "master" \
+	"analog.com:interface:nic_drp_rtl:1.0" \
+	"analog.com:interface:nic_drp:1.0" \
 	{
 		{"sfp_drp_addr" "SFP_DRP_ADDR"} \
 		{"sfp_drp_di" "SFP_DRP_DI"} \
@@ -245,9 +245,9 @@ adi_add_bus "phy_drp" "master" \
 	}
 adi_add_bus_clock "sfp_drp_clk" "phy_drp" "sfp_drp_rst" "slave"
 
-adi_add_bus "phy_mac_0" "master" \
-	"analog.com:interface:phy_mac_rtl:1.0" \
-	"analog.com:interface:phy_mac:1.0" \
+adi_add_bus "nic_mac_0" "master" \
+	"analog.com:interface:nic_mac_rtl:1.0" \
+	"analog.com:interface:nic_mac:1.0" \
 	{
 		{"sfp0_tx_clk" "SFP_TX_CLK"} \
 		{"sfp0_tx_rst" "SFP_XT_RST"} \
@@ -263,9 +263,9 @@ adi_add_bus "phy_mac_0" "master" \
 		{"sfp0_rx_status" "SFP_RX_STATUS"} \
 	}
 
-adi_add_bus "phy_mac_1" "master" \
-	"analog.com:interface:phy_mac_rtl:1.0" \
-	"analog.com:interface:phy_mac:1.0" \
+adi_add_bus "nic_mac_1" "master" \
+	"analog.com:interface:nic_mac_rtl:1.0" \
+	"analog.com:interface:nic_mac:1.0" \
 	{
 		{"sfp1_tx_clk" "SFP_TX_CLK"} \
 		{"sfp1_tx_rst" "SFP_XT_RST"} \
@@ -281,9 +281,9 @@ adi_add_bus "phy_mac_1" "master" \
 		{"sfp1_rx_status" "SFP_RX_STATUS"} \
 	}
 
-adi_add_bus "phy_mac_2" "master" \
-	"analog.com:interface:phy_mac_rtl:1.0" \
-	"analog.com:interface:phy_mac:1.0" \
+adi_add_bus "nic_mac_2" "master" \
+	"analog.com:interface:nic_mac_rtl:1.0" \
+	"analog.com:interface:nic_mac:1.0" \
 	{
 		{"sfp2_tx_clk" "SFP_TX_CLK"} \
 		{"sfp2_tx_rst" "SFP_XT_RST"} \
@@ -299,9 +299,9 @@ adi_add_bus "phy_mac_2" "master" \
 		{"sfp2_rx_status" "SFP_RX_STATUS"} \
 	}
 
-adi_add_bus "phy_mac_3" "master" \
-	"analog.com:interface:phy_mac_rtl:1.0" \
-	"analog.com:interface:phy_mac:1.0" \
+adi_add_bus "nic_mac_3" "master" \
+	"analog.com:interface:nic_mac_rtl:1.0" \
+	"analog.com:interface:nic_mac:1.0" \
 	{
 		{"sfp3_tx_clk" "SFP_TX_CLK"} \
 		{"sfp3_tx_rst" "SFP_XT_RST"} \

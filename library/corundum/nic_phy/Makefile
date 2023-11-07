@@ -6,9 +6,9 @@
 
 LIBRARY_NAME := nic_phy
 
-corundum_dir_common = ../../../corundum/fpga/common
-corundum_dir_mod = ../../../corundum/fpga/lib
-corundum_dir_zcu102 = ../../../corundum/fpga/mqnic/ZCU102/fpga
+corundum_dir_common = ../../../../corundum/fpga/common
+corundum_dir_mod = ../../../../corundum/fpga/lib
+corundum_dir_zcu102 = ../../../../corundum/fpga/mqnic/ZCU102/fpga
 
 GENERIC_DEPS += nic_phy.v
 GENERIC_DEPS += $(corundum_dir_zcu102)/rtl/fpga_core.v
@@ -113,8 +113,8 @@ GENERIC_DEPS += $(corundum_dir_mod)/eth/rtl/xgmii_baser_dec_64.v
 GENERIC_DEPS += $(corundum_dir_mod)/eth/rtl/xgmii_baser_enc_64.v
 
 XILINX_DEPS += nic_phy_ip.tcl
-XILINX_DEPS += ../../corundum/interfaces/phy_drp.xml
-XILINX_DEPS += ../../corundum/interfaces/phy_mac.xml
+XILINX_DEPS += ../../corundum/interfaces/nic_drp.xml
+XILINX_DEPS += ../../corundum/interfaces/nic_mac.xml
 XILINX_DEPS += $(corundum_dir_mod)/eth/lib/axis/syn/vivado/axis_async_fifo.tcl
 XILINX_DEPS += $(corundum_dir_common)/syn/vivado/mqnic_port.tcl
 XILINX_DEPS += $(corundum_dir_common)/syn/vivado/mqnic_ptp_clock.tcl
