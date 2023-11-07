@@ -15,9 +15,9 @@ adi_ip_files axi_pwm_gen [list \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "axi_pwm_gen_constr.ttcl" \
-  "axi_pwm_gen_regmap.v" \
+  "axi_pwm_gen_regmap.sv" \
   "axi_pwm_gen_1.v" \
-  "axi_pwm_gen.v"]
+  "axi_pwm_gen.sv"]
 
 adi_ip_properties axi_pwm_gen
 adi_ip_ttcl axi_pwm_gen "axi_pwm_gen_constr.ttcl"
@@ -100,8 +100,8 @@ set_property -dict [list \
   "widget" "checkBox" \
 ] [ipgui::get_guiparamspec -name "EXT_ASYNC_SYNC" -component $cc]
 
-# Maximum 4 pwms
-for {set i 0} {$i < 4} {incr i} {
+# Maximum 16 pwms
+for {set i 0} {$i < 16} {incr i} {
   ipgui::add_param -name "PULSE_${i}_WIDTH" -component $cc -parent $page0
   set_property -dict [list \
     "display_name" "PULSE $i width" \
@@ -142,7 +142,7 @@ for {set i 0} {$i < 4} {incr i} {
   [ipx::get_user_parameters PULSE_${i}_OFFSET -of_objects $cc]
 }
 
-for {set i 1} {$i < 4} {incr i} {
+for {set i 0} {$i < 16} {incr i} {
 	adi_set_ports_dependency "pwm_$i" \
 		"(spirit:decode(id('MODELPARAM_VALUE.N_PWMS')) > $i)"
 }
