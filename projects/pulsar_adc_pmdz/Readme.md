@@ -52,3 +52,15 @@ Here are some pointers to help you:
   * AD7984
   * AD7682
   * AD7689
+  * AD4000
+  * AD4001
+  * AD4002
+  * AD4003
+  * AD4004
+  * AD4005
+  * AD4006
+  * AD4007
+  * AD4008
+  * AD4010
+  * AD4011
+  * AD4020
