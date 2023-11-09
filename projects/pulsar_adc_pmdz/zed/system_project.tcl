@@ -15,7 +15,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 ##
 ##  ADAQ4003
 ##
-## NOTE: Make sure that you set up your required ADC resolution in system_bd.tcl
+## NOTE: Make sure that you set up your required ADC resolution in pulsar_adc_pmdz_bd.tcl
 ##  
 
 ## Please select which eval board do you want to use
