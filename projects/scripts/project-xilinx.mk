@@ -3,7 +3,7 @@
 ## SPDX short identifier: BSD-1-Clause
 ####################################################################################
 
-# Assumes this file is in prpojects/scripts/project-xilinx.mk
+# Assumes this file is in projects/scripts/project-xilinx.mk
 HDL_PROJECT_PATH := $(subst scripts/project-xilinx.mk,,$(lastword $(MAKEFILE_LIST)))
 HDL_LIBRARY_PATH := $(HDL_PROJECT_PATH)../library/
 
@@ -74,7 +74,7 @@ M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_project_xilinx.tcl
 M_DEPS += $(HDL_PROJECT_PATH)../scripts/adi_env.tcl
 M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_board.tcl
 
-M_DEPS += $(foreach dep,$(LIB_DEPS),$(HDL_LIBRARY_PATH)$(dep)/component.xml)
+M_DEPS += $(foreach dep,$(LIB_DEPS),$(HDL_LIBRARY_PATH)$(dep)/)
 
 .PHONY: all lib clean clean-all
 
@@ -114,7 +114,8 @@ $(PROJECT_NAME).sdk/system_top.xsa: $(M_DEPS)
 		$(PROJECT_NAME)_vivado.log, \
 		$(HL)$(PROJECT_NAME)$(NC) project)
 
-$(HDL_LIBRARY_PATH)%/component.xml:
+FORCE:
+$(HDL_LIBRARY_PATH)%/: FORCE
 	if [ -n "${REQUIRED_VIVADO_VERSION}" ]; then \
 		$(MAKE) -C $(dir $@) $(TARGET) REQUIRED_VIVADO_VERSION=${REQUIRED_VIVADO_VERSION} || exit $$?; \
 	else \
