@@ -6,13 +6,16 @@ AD9434-FMC HDL project
 Overview
 -------------------------------------------------------------------------------
 
-The :part:`AD9434` is a 12-bit monolithic sampling analog-to-digital converter (ADC) optimized for high performance, 
-low power, and ease of use. The part operates at up to a 500 MSPS conversion rate and is optimized for 
-outstanding dynamic performance in wideband carrier and broadband systems. All necessary functions, including 
-a sample-and-hold and voltage reference, are included on the chip to provide a complete signal conversion solution. 
-This reference design includes a data capture interface and the external DDR-DRAM interface for sample storage. 
-It allows programming the device and monitoring its internal status registers. The board also provides other options 
-to drive the clock and analog inputs of the ADC.
+The :part:`AD9434` is a 12-bit monolithic sampling analog-to-digital converter 
+(ADC) optimized for high performance, low power, and ease of use. The part 
+operates at up to a 500 MSPS conversion rate and is optimized for outstanding 
+dynamic performance in wideband carrier and broadband systems. All necessary 
+functions, including a sample-and-hold and voltage reference, are included on 
+the chip to provide a complete signal conversion solution. This reference 
+design includes a data capture interface and the external DDR-DRAM interface 
+for sample storage. It allows programming the device and monitoring its internal 
+status registers. The board also provides other options to drive the clock and 
+analog inputs of the ADC.
 
 Supported boards
 -------------------------------------------------------------------------------
@@ -48,7 +51,7 @@ Block design
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: ../images/ad9434_fmc/ad9434_fmc_block_diagram.svg
+.. image:: ad9434_fmc_block_diagram.svg
    :width: 800
    :align: center
    :alt: AD9783-EBZ/ZCU102 block diagram
@@ -56,7 +59,7 @@ Block diagram
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  An external clock source can be connected to CLKIN input of the EVAL-AD9434
+An external clock source can be connected to CLKIN input of the EVAL-AD9434.
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -115,8 +118,8 @@ the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
 
-Then go to the project location(**projects/ad9434_fmc/carrier**) and run the make command by
-typing in your command prompt(this example is for zc706):
+Then go to the project location(**projects/ad9434_fmc/carrier**) and run the 
+make command by typing in your command prompt(this example is for zc706):
 
 **Linux/Cygwin/WSL**
 
@@ -125,7 +128,8 @@ typing in your command prompt(this example is for zc706):
    user@analog:~$ cd hdl/projects/ad9434_fmc/zc706
    user@analog:~/hdl/projects/ad9434_fmc/zc706$ make
 
-A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
+A more comprehensive build guide can be found in the :ref:`build_hdl` user 
+guide.
 
 Resources
 -------------------------------------------------------------------------------
@@ -195,8 +199,8 @@ HDL related
      - :git-hdl:`library/axi_spdif_tx <master:library/axi_spdif_tx>`
      - \-
 
--  :dokuwiki:`[Wiki] AD9434 Native FMC Card <resources/fpga/xilinx/fmc/ad9434>`
--  :dokuwiki:`[Wiki] Ecaluating the AD9434 analog-to-digital converter <resources/eval/ad9434fmc-500ebz>`
+-  :dokuwiki:`AD9434 Native FMC Card <resources/fpga/xilinx/fmc/ad9434>`
+-  :dokuwiki:`Evaluating the AD9434 analog-to-digital converter <resources/eval/ad9434fmc-500ebz>`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
