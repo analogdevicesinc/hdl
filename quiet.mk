@@ -27,9 +27,9 @@ ifneq ($(VERBOSE),1)
 	@echo $(if $(filter -j%,$(MAKEFLAGS)),,-n) "Building $(strip $(3)) [$(HL)$(CURDIR)/$(strip $(2))$(NC)] ..."
 	$(strip $(1)) >> $(strip $(2)) 2>&1; \
 	(ERR=$$?; if [ $$ERR = 0 ]; then \
-		echo "$(if $(filter -j%,$(MAKEFLAGS)),Building $(strip $(3)) [$(HL)$(CURDIR)/$(strip $(2))$(NC)] ...,) $(GREEN)OK$(NC)"; \
+		echo "$(if $(filter -j%,$(MAKEFLAGS)),Build $(strip $(3)) [$(HL)$(CURDIR)/$(strip $(2))$(NC)]) $(GREEN)OK$(NC)"; \
 	else \
-		echo "$(if $(filter -j%,$(MAKEFLAGS)),Building $(strip $(3)) [$(HL)$(CURDIR)/$(strip $(2))$(NC)] ...,) $(RED)FAILED$(NC)"; \
+		echo "$(if $(filter -j%,$(MAKEFLAGS)),Build $(strip $(3)) [$(HL)$(CURDIR)/$(strip $(2))$(NC)]) $(RED)FAILED$(NC)"; \
 		echo "For details see $(HL)$(CURDIR)/$(strip $(2))$(NC)"; \
 		echo ""; \
 	fi; exit $$ERR)
