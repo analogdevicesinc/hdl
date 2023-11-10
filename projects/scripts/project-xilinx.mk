@@ -74,13 +74,12 @@ M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_project_xilinx.tcl
 M_DEPS += $(HDL_PROJECT_PATH)../scripts/adi_env.tcl
 M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_board.tcl
 
-M_DEPS += $(foreach dep,$(LIB_DEPS),$(HDL_LIBRARY_PATH)$(dep)/)
+M_DEPS += $(foreach dep,$(LIB_DEPS),$(HDL_LIBRARY_PATH)$(dep)/component.xml)
 
 .PHONY: all lib clean clean-all
 
 all: $(PROJECT_NAME).sdk/system_top.xsa
 
-lib: TARGET:=xilinx
 lib: $(M_DEPS)
 
 clean:
@@ -114,8 +113,8 @@ $(PROJECT_NAME).sdk/system_top.xsa: $(M_DEPS)
 		$(PROJECT_NAME)_vivado.log, \
 		$(HL)$(PROJECT_NAME)$(NC) project)
 
-FORCE:
-$(HDL_LIBRARY_PATH)%/: FORCE
+$(HDL_LIBRARY_PATH)%/component.xml: TARGET:=xilinx
+$(HDL_LIBRARY_PATH)%/component.xml: FORCE
 	if [ -n "${REQUIRED_VIVADO_VERSION}" ]; then \
 		$(MAKE) -C $(dir $@) $(TARGET) REQUIRED_VIVADO_VERSION=${REQUIRED_VIVADO_VERSION} || exit $$?; \
 	else \

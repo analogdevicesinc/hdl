@@ -102,12 +102,11 @@ M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_tquest.tcl
 M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_project_intel.tcl
 M_DEPS += $(HDL_PROJECT_PATH)../scripts/adi_env.tcl
 
-M_DEPS += $(foreach dep,$(LIB_DEPS),$(HDL_LIBRARY_PATH)$(dep)/)
+M_DEPS += $(foreach dep,$(LIB_DEPS),$(HDL_LIBRARY_PATH)$(dep)/.timestamp_intel)
 
 .PHONY: all lib clean clean-all
 all: $(PROJECT_NAME).sof
 
-lib: TARGET:=intel
 lib: $(M_DEPS)
 
 clean:
@@ -127,6 +126,7 @@ $(PROJECT_NAME).sof: $(M_DEPS)
 		$(PROJECT_NAME)_quartus.log, \
 		$(HL)$(PROJECT_NAME)$(NC))
 
+$(HDL_LIBRARY_PATH)%/.timestamp_intel: TARGET:=intel
 FORCE:
-$(HDL_LIBRARY_PATH)%/: FORCE
+$(HDL_LIBRARY_PATH)%/.timestamp_intel: FORCE
 	$(MAKE) -C $(dir $@) $(TARGET) || exit $$?; \
