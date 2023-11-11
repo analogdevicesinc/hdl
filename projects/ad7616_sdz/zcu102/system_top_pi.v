@@ -56,11 +56,11 @@ module system_top (
 
   // internal signals
 
-  assign gpio_bd_o = gpio_o[7:0];
+  //assign gpio_bd_o = gpio_o[7:0];
 
-  assign gpio_i[94:21] = gpio_o[94:21];
-  assign gpio_i[20: 8] = gpio_bd_i;
-  assign gpio_i[ 7: 0] = gpio_o[ 7: 0];
+  //assign gpio_i[94:21] = gpio_o[94:21];
+  //assign gpio_i[20: 8] = gpio_bd_i;
+  //assign gpio_i[ 7: 0] = gpio_o[ 7: 0];
 
   // internal signals
 
