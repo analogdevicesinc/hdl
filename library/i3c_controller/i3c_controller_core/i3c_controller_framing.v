@@ -156,8 +156,10 @@ module i3c_controller_framing #(
   reg sr;
   reg ctrl_daa;
   reg [3:0] j;
+  reg [3:0] j_reg;
 
   reg [2:0] smt;
+  reg [2:0] smt_reg;
   localparam [2:0]
     setup      = 0,
     validate   = 1,
@@ -179,16 +181,20 @@ module i3c_controller_framing #(
 
   always @(posedge clk) begin
     cmdp_unknown_da <= 1'b0;
+    smt_reg <= smt;
+    j_reg <= j;
     if (!reset_n) begin
+      j <= 0;
       sm  <= `CMDW_NOP;
       smt <= setup;
       smr <= request;
       ctrl_daa <= 1'b0;
-      j <= 0;
       ibi_requested_auto <= 1'b0;
     end else if (cmdw_nack) begin
+      j <= 0;
       sm  <= `CMDW_NOP;
-      smt <= cmdp_rnw_reg ? setup : cleanup;
+      smt <= cmdp_ccc_id_reg == CCC_ENTDAA ? commit :
+             cmdp_rnw_reg ? setup : cleanup;
       smr <= request;
       ctrl_daa <= 1'b0;
     end else begin
@@ -197,7 +203,7 @@ module i3c_controller_framing #(
       // if it do not accept/provide data when needed.
       case (smt)
         setup: begin
-          j <= 'd0;
+          j <= 0;
           sr <= cmdw_ready ? 1'b0 : sr;
           // Condition where a peripheral requested a IBI during quiet times.
           if (cmd_nop & ibi_auto & ibi_enable & rx_raw === 1'b0) begin
@@ -229,7 +235,7 @@ module i3c_controller_framing #(
             // TODO CONTINUE HERE
             // Implement I2C transfer flow (OD only).
           end
-          if (dev_is_known) begin
+          if (dev_is_attached) begin
             smt <= transfer;
           end else begin
             cmdp_unknown_da <= 1'b1;
@@ -285,7 +291,7 @@ module i3c_controller_framing #(
               end
               `CMDW_DYN_ADDR: begin
                 sm <= j == MAX_DEVS ? `CMDW_STOP_OD : `CMDW_START;
-                smt <= commit;
+                devs_ctrl_commit[j] <= 1'b1;
               end
               `CMDW_MSG_SR: begin
                 cmdw_body <= {cmdp_da, cmdp_rnw}; // Attention to RnW here
@@ -356,12 +362,13 @@ module i3c_controller_framing #(
           end
         end
         commit: begin
-          devs_ctrl_commit[j] <= 1'b1;
-          if (cmdw_ready) begin
+          j <= j + 1;
+          if (j == 15) begin
             smt <= transfer;
-            j <= j + 1;
           end
         end
+        // Iterate to end of dev_char so all I2C devices are properly
+        // addressed in the 1 clock cycle BRAM
         arbitration: begin
           if (arbitration_valid) begin
             smt <= transfer;
@@ -396,9 +403,10 @@ module i3c_controller_framing #(
 
   // 7-bit addr RAM for 1 cc data request.
 
-  // Interface to check if device exists and if is I2C
+  // Interface to check if device exists, is attached and if is I2C
 
   wire dev_is_known;
+  wire dev_is_attached;
   wire dev_is_i2c;
 
   // Obtain addr index in dev_ctrl, 0 means unknown device,
@@ -409,12 +417,13 @@ module i3c_controller_framing #(
   wire [6:0] rwaddr;
   wire [6:0] raddr;
   wire [3:0] rout;
-  assign pos = j;
-  assign wen = smt == commit;
-  assign rwaddr = cmdw_body[7:1];
+  assign pos = j_reg;
+  assign wen = smt_reg == commit;
+  assign rwaddr = rmap_dev_char_rdata[7:1];
   assign raddr  = cmdp_da_reg;
 
   assign dev_is_known = rout != 0;
+  assign dev_is_attached = devs_ctrl[rout] & dev_is_known;
   assign dev_is_i2c = devs_ctrl_is_i2c[rout];
 
   // Obtain index from device, unknown devs return 0 (TODO cleared when detatched).
@@ -457,11 +466,11 @@ module i3c_controller_framing #(
     k <= ~reset_n ? 2'b01 :
          pid_bcr_dcr_tick ? {k[0],k[1]} : k;
   end
-  assign l = smt == seek ? 2'b00 : k;
+  assign l = smt == seek | smt == commit ? 2'b00 : k;
   assign rmap_dev_char_addr = {l,j};
   assign rmap_dev_char_wdata = pid_bcr_dcr;
   assign rmap_dev_char_we = pid_bcr_dcr_tick;
-  assign rmap_dev_char_e = smt == seek | pid_bcr_dcr_tick;
+  assign rmap_dev_char_e = smt == seek | smt == commit | pid_bcr_dcr_tick;
 
   assign cmdp_ready = smt == setup & cmdw_ready & !cmdw_nack & reset_n;
   assign sdo_ready = (smt == setup_sdo | smt == cleanup) & reset_n;
