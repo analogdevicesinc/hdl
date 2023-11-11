@@ -87,7 +87,7 @@ module system_top (
              adc_seq_en,         // 37
              adc_chsel}));       // 35:33
 
-  assign gpio_i[63:44] = gpio_o[63:44];
+  assign gpio_i[94:44] = gpio_o[94:44];
   assign gpio_i[40:38] = gpio_o[40:38];
   assign gpio_i[36] = gpio_o[36];
 
@@ -101,19 +101,11 @@ module system_top (
     end
   endgenerate
 
-  ad_iobuf #(
-    .DATA_WIDTH(15)
-  ) i_iobuf_gpio (
-    .dio_t(gpio_t[14:0]),
-    .dio_i(gpio_o[14:0]),
-    .dio_o(gpio_i[14:0]),
-    .dio_p(gpio_bd));
-
   system_wrapper i_system_wrapper (
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
-    .gpio_t (),
-
+    .gpio_t (gpio_t),
+    
     .spi0_csn (1'b1),
     .spi0_miso (1'b0),
     .spi0_mosi (),
