@@ -254,7 +254,8 @@ module i3c_controller_framing #(
               `CMDW_START: begin
                 cmdw_body <= {cmdp_da, cmdp_rnw}; // Attention to RnW here
                 sm <= ctrl_daa ? `CMDW_BCAST_7E_W1 :
-                     ~cmdp_bcast_header_reg & ~cmdp_ccc_reg ? `CMDW_TARGET_ADDR_OD : `CMDW_BCAST_7E_W0;
+                      (~cmdp_bcast_header_reg & ~cmdp_ccc_reg) | dev_is_i2c ? `CMDW_TARGET_ADDR_OD :
+                      `CMDW_BCAST_7E_W0;
                 ctrl_daa <= 1'b0;
               end
               `CMDW_BCAST_7E_W0: begin
@@ -295,29 +296,37 @@ module i3c_controller_framing #(
               end
               `CMDW_MSG_SR: begin
                 cmdw_body <= {cmdp_da, cmdp_rnw}; // Attention to RnW here
-                sm <= `CMDW_TARGET_ADDR_PP;
+                sm <= dev_is_i2c ? `CMDW_TARGET_ADDR_OD : `CMDW_TARGET_ADDR_PP;
               end
               `CMDW_TARGET_ADDR_OD,
               `CMDW_TARGET_ADDR_PP: begin
                 if (cmdp_rnw_reg) begin
-                  sm <= `CMDW_MSG_RX;
+                  sm <= dev_is_i2c ? `CMDW_I2C_RX : `CMDW_MSG_RX;
                 end else begin
                   smt <= setup_sdo;
                   sm  <= `CMDW_NOP;
                 end
               end
+              `CMDW_I2C_RX,
               `CMDW_MSG_RX: begin
+                // I2C read transfers cannot be stopped by the controller,
+                // if the RX is not accepting any more bytes (cmdw_rx_ready),
+                // this is an malformed condition and the extra bytes are discarted.
+                // The exit from this state is always the peripheral NACKing.
+                // There is no problem in buffer_len underflowing in the
+                // malformed condition.
                 cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
-                if (~|cmdp_buffer_len_reg[11:1]) begin
+                if (~|cmdp_buffer_len_reg[11:1] & !dev_is_i2c) begin
                   sm  <= `CMDW_STOP_PP;
                   smt <= sr ? setup : transfer;
                 end
               end
+              `CMDW_I2C_TX,
               `CMDW_MSG_TX: begin
                 cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
                 if (~|cmdp_buffer_len_reg[11:1]) begin
                   smt <= sr ? setup : transfer;
-                  sm  <= `CMDW_STOP_PP;
+                  sm  <= dev_is_i2c ? `CMDW_STOP_OD :`CMDW_STOP_PP;
                 end else begin
                   smt <= setup_sdo;
                   sm  <= `CMDW_NOP;
@@ -339,7 +348,7 @@ module i3c_controller_framing #(
         end
         setup_sdo: begin
           if (sdo_valid) begin
-            sm  <= `CMDW_MSG_TX;
+            sm  <= dev_is_i2c ? `CMDW_I2C_TX : `CMDW_MSG_TX;
             smt <= transfer;
           end
           cmdw_body <= sdo;

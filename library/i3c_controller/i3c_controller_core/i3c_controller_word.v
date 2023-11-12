@@ -134,6 +134,8 @@ module i3c_controller_word #(
       `CMDW_DYN_ADDR        : i_ =  8; // DA+T+ACK
       `CMDW_IBI_MDB         : i_ =  8; // MDB+T
       `CMDW_SR              : i_ =  0;
+      `CMDW_I2C_TX          : i_ =  8; // SDO+ACK
+      `CMDW_I2C_RX          : i_ =  8; // SDI+ACK
       default               : i_ =  0;
     endcase
 
@@ -156,6 +158,8 @@ module i3c_controller_word #(
       `CMDW_DYN_ADDR        : sg = 0;
       `CMDW_IBI_MDB         : sg = 1;
       `CMDW_SR              : sg = 1;
+      `CMDW_I2C_TX          : sg = 0;
+      `CMDW_I2C_RX          : sg = 0;
       default               : sg = 0;
     endcase
   end
@@ -265,6 +269,19 @@ module i3c_controller_word #(
               `CMDW_MSG_SR: begin
                   cmd_r <= `MOD_BIT_CMD_START_;
               end
+              `CMDW_I2C_RX: begin
+                if (i == 8) begin
+                  // ACK
+                  // I2C read transfers cannot be stopped by the controller,
+                  // if the RX is not accepting any more bytes (cmdw_rx_ready),
+                  // this is an malformed condition and the extra bytes are discarted
+                  do_ack <= 1'b1;
+                  cmd_r <= `MOD_BIT_CMD_ACK_SDR_;
+                end else begin
+                  // SDI
+                  cmd_r <= `MOD_BIT_CMD_READ_;
+                end
+              end
               `CMDW_MSG_RX: begin
                 if (i == 8) begin
                   // T
@@ -277,6 +294,17 @@ module i3c_controller_word #(
                 end else begin
                   // SDI
                   cmd_r <= `MOD_BIT_CMD_READ_;
+                end
+              end
+              `CMDW_I2C_TX: begin
+                if (i == 8) begin
+                  // ACK
+                  do_ack <= 1'b1;
+                  cmd_r <= `MOD_BIT_CMD_ACK_SDR_;
+                end else begin
+                  // SDO
+                  cmd_r  <= `MOD_BIT_CMD_WRITE_;
+                  cmd_wr <= cmdw_body[7 - i[2:0]];
                 end
               end
               `CMDW_CCC_OD,
@@ -343,6 +371,16 @@ module i3c_controller_word #(
                   end
                 end
               end
+              `CMDW_I2C_RX: begin
+                // I2C RX has no DEBUG_IGNORE_NACK because it would cause the
+                // bus to be stuck into an endless RX transfer.
+                if (do_ack & rx !== 1'b0) begin
+                  sm <= `CMDW_STOP_OD;
+                  smt <= setup;
+                  cmdw_nack <= 1'b1;
+                  cmdw_nacked <= 1'b1;
+                end
+              end
               `CMDW_MSG_RX: begin
                 if (do_rx_t & rx === 1'b0) begin
                   sm <= `CMDW_STOP_OD;
@@ -376,6 +414,7 @@ module i3c_controller_word #(
                   end
                 end
               end
+              `CMDW_I2C_RX,
               `CMDW_MSG_RX: begin
                 if (i == 8) begin
                   cmdw_rx_valid <= 1'b1;

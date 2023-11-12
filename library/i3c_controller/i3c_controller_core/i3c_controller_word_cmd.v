@@ -56,4 +56,6 @@
 `define CMDW_DYN_ADDR              5'd15
 `define CMDW_IBI_MDB               5'd16
 `define CMDW_SR                    5'd17
+`define CMDW_I2C_TX                5'd18
+`define CMDW_I2C_RX                5'd19
 `endif
