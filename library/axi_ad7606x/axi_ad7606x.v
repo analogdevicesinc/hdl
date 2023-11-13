@@ -39,8 +39,9 @@ module axi_ad7606x #(
 
   parameter       ID = 0,
   parameter       DEV_CONFIG = 0,
-  parameter       ADC_CH_DW = 16,
+  parameter       ADC_TO_DMA_N_BITS = 16,
   parameter       ADC_N_BITS = 16,
+  parameter       ADC_READ_MODE = 0,
   parameter       EXTERNAL_CLK = 0
 ) (
 
@@ -87,14 +88,14 @@ module axi_ad7606x #(
   output                  adc_clk,
 
   output                  adc_valid,
-  output [ADC_CH_DW-1:0]  adc_data_0,
-  output [ADC_CH_DW-1:0]  adc_data_1,
-  output [ADC_CH_DW-1:0]  adc_data_2,
-  output [ADC_CH_DW-1:0]  adc_data_3,
-  output [ADC_CH_DW-1:0]  adc_data_4,
-  output [ADC_CH_DW-1:0]  adc_data_5,
-  output [ADC_CH_DW-1:0]  adc_data_6,
-  output [ADC_CH_DW-1:0]  adc_data_7,
+  output [ADC_TO_DMA_N_BITS-1:0]  adc_data_0,
+  output [ADC_TO_DMA_N_BITS-1:0]  adc_data_1,
+  output [ADC_TO_DMA_N_BITS-1:0]  adc_data_2,
+  output [ADC_TO_DMA_N_BITS-1:0]  adc_data_3,
+  output [ADC_TO_DMA_N_BITS-1:0]  adc_data_4,
+  output [ADC_TO_DMA_N_BITS-1:0]  adc_data_5,
+  output [ADC_TO_DMA_N_BITS-1:0]  adc_data_6,
+  output [ADC_TO_DMA_N_BITS-1:0]  adc_data_7,
   output                  adc_enable_0,
   output                  adc_enable_1,
   output                  adc_enable_2,
@@ -146,7 +147,7 @@ module axi_ad7606x #(
   wire    [ 7:0]                    adc_enable;
   wire                              adc_reset_s;
 
-  wire    [(8*ADC_CH_DW)-1:0]       dma_data;
+  wire    [(8*ADC_TO_DMA_N_BITS)-1:0]       dma_data;
   wire                              dma_dvalid;
 
   wire                              up_clk;
@@ -287,13 +288,13 @@ module axi_ad7606x #(
     for (k = 0;k < 8;k = k + 1) begin
       ad_datafmt #(
         .DATA_WIDTH (ADC_N_BITS),
-        .BITS_PER_SAMPLE (ADC_CH_DW)
+        .BITS_PER_SAMPLE (ADC_TO_DMA_N_BITS)
       ) i_datafmt (
         .clk (adc_clk),
         .valid (1'b1),
         .data (adc_data_s[k*ADC_N_BITS+(ADC_N_BITS-1):k*ADC_N_BITS]),
         .valid_out (dma_dvalid),
-        .data_out (dma_data[k*ADC_CH_DW+(ADC_CH_DW-1):k*ADC_CH_DW]),
+        .data_out (dma_data[k*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):k*ADC_TO_DMA_N_BITS]),
         .dfmt_enable (adc_dfmt_enable_s[k]),
         .dfmt_type (adc_dfmt_type_s[k]),
         .dfmt_se (adc_dfmt_se_s[k]));
@@ -385,14 +386,14 @@ module axi_ad7606x #(
   endgenerate
 
   assign adc_data_s = {adc_data_0_s,adc_data_1_s,adc_data_2_s,adc_data_3_s,adc_data_4_s,adc_data_5_s,adc_data_6_s,adc_data_7_s};
-  assign adc_data_7 = dma_data[0*ADC_CH_DW+(ADC_CH_DW-1):0*ADC_CH_DW];
-  assign adc_data_6 = dma_data[1*ADC_CH_DW+(ADC_CH_DW-1):1*ADC_CH_DW];
-  assign adc_data_5 = dma_data[2*ADC_CH_DW+(ADC_CH_DW-1):2*ADC_CH_DW];
-  assign adc_data_4 = dma_data[3*ADC_CH_DW+(ADC_CH_DW-1):3*ADC_CH_DW];
-  assign adc_data_3 = dma_data[4*ADC_CH_DW+(ADC_CH_DW-1):4*ADC_CH_DW];
-  assign adc_data_2 = dma_data[5*ADC_CH_DW+(ADC_CH_DW-1):5*ADC_CH_DW];
-  assign adc_data_1 = dma_data[6*ADC_CH_DW+(ADC_CH_DW-1):6*ADC_CH_DW];
-  assign adc_data_0 = dma_data[7*ADC_CH_DW+(ADC_CH_DW-1):7*ADC_CH_DW];
+  assign adc_data_7 = dma_data[0*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):0*ADC_TO_DMA_N_BITS];
+  assign adc_data_6 = dma_data[1*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):1*ADC_TO_DMA_N_BITS];
+  assign adc_data_5 = dma_data[2*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):2*ADC_TO_DMA_N_BITS];
+  assign adc_data_4 = dma_data[3*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):3*ADC_TO_DMA_N_BITS];
+  assign adc_data_3 = dma_data[4*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):4*ADC_TO_DMA_N_BITS];
+  assign adc_data_2 = dma_data[5*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):5*ADC_TO_DMA_N_BITS];
+  assign adc_data_1 = dma_data[6*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):6*ADC_TO_DMA_N_BITS];
+  assign adc_data_0 = dma_data[7*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):7*ADC_TO_DMA_N_BITS];
 
   up_adc_common #(
     .ID (ID),
