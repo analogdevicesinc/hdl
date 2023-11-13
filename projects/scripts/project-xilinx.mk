@@ -114,6 +114,7 @@ $(PROJECT_NAME).sdk/system_top.xsa: $(M_DEPS)
 		$(HL)$(PROJECT_NAME)$(NC) project)
 
 $(HDL_LIBRARY_PATH)%/component.xml: TARGET:=xilinx
+FORCE:
 $(HDL_LIBRARY_PATH)%/component.xml: FORCE
 	if [ -n "${REQUIRED_VIVADO_VERSION}" ]; then \
 		$(MAKE) -C $(dir $@) $(TARGET) REQUIRED_VIVADO_VERSION=${REQUIRED_VIVADO_VERSION} || exit $$?; \
