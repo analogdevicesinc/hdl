@@ -6,12 +6,11 @@ AD719x-ASDZ HDL PROJECT
 Overview
 -------------------------------------------------------------------------------
 
-The EVAL-AD719x boards are a fully featured evaluation Board for
-AD719x chip family. They can be operated in standalone mode or connected
-directly to the PC(:part:`EVAL-AD7190 <EVAL-AD7190>`) or connected via PMOD
-connector to a carrier(:part:`EVAL-AD7193 <EVAL-AD7193>` and
-:part:`EVAL-AD7195 <EVAL-AD7195>`). The AD719x chips are low noise, complete
-analog front end for high precision measurement applications.
+The AD719x family uses a low noise, higher speed, high precision ADC. They 
+can be used in a wide range of applications where the input signals can vary 
+from the milli-volt to volt level. The parts also operate with a wide range of 
+output data rates while still maintaining excellent noise performance over the 
+complete rate of output data ranges.
 
 Supported boards
 -------------------------------------------------------------------------------
@@ -38,13 +37,13 @@ Supported carriers
      - Carrier
      - Slot
    * - :part:`EVAL-AD7190 <EVAL-AD7190>`
-     - CORAZ7S_ 
+     - Cora-Z7S_ 
      - PMOD JA
    * - :part:`EVAL-AD7193 <EVAL-AD7193>`
-     - CORAZ7S_
+     - Cora-Z7S_
      - PMOD JA
    * - :part:`EVAL-AD7195 <EVAL-AD7195>`
-     - CORAZ7S_
+     - Cora-Z7S_
      - PMOD JA
 
 Block design
@@ -159,4 +158,4 @@ Software related
 
 .. include:: ../common/support.rst
 
-.. _CORAZ7S: https://digilent.com/reference/programmable-logic/cora-z7/start
+.. _Cora-Z7S: https://digilent.com/reference/programmable-logic/cora-z7/start
