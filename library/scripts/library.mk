@@ -100,12 +100,7 @@ $(_XILINX_INTF_DEPS):
 	$(MAKE) -C $(dir $@) $(notdir $@)
 
 $(_XILINX_LIB_DEPS):
-	while [ -e $(dir $@).lock ]; do \
-		sleep .5s ; \
-	done ; \
-	touch $(dir $@).lock
-	$(MAKE) -C $(dir $@) xilinx
-	rm $(dir $@).lock 2> /dev/null || true
+	flock $(dir $@).lock -c "$(MAKE) -C $(dir $@) xilinx"
 
 %.xml:
 	$(MAKE) -C $(dir $@) $(notdir $@)
