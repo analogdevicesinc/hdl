@@ -352,9 +352,6 @@ HDL related
    * - AXI_SYSID
      - :git-hdl:`library/axi_sysid`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
-   * - AXI_SPI_ENGINE
-     - :git-hdl:`library/spi_engine/axi_spi_engine`  **
-     - :ref:`here <spi_engine axi>`
    * - SPI_ENGINE_EXECUTION
      - :git-hdl:`library/spi_engine/spi_engine_execution` **
      - :ref:`here <spi_engine execution>`
