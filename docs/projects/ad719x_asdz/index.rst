@@ -1,16 +1,17 @@
 .. _ad719x_asdz:
 
-AD719x EBZ/ASDZ HDL PROJECT
+AD719x-ASDZ HDL PROJECT
 ================================================================================
 
 Overview
 -------------------------------------------------------------------------------
 
-The EVAL-AD719x boards are a fully featured evaluation Board for 
+The EVAL-AD719x boards are a fully featured evaluation Board for
 AD719x chip family. They can be operated in standalone mode or connected
-directly to the PC(7190 EBZ) or connected via PMOD connector to a carrier(7193 
-and 7195 ASDZ). The AD719x chips are low noise, complete analog front end for 
-high precision measurement applications.
+directly to the PC(:part:`EVAL-AD7190 <EVAL-AD7190>`) or connected via PMOD
+connector to a carrier(:part:`EVAL-AD7193 <EVAL-AD7193>` and
+:part:`EVAL-AD7195 <EVAL-AD7195>`). The AD719x chips are low noise, complete
+analog front end for high precision measurement applications.
 
 Supported boards
 -------------------------------------------------------------------------------
@@ -37,14 +38,14 @@ Supported carriers
      - Carrier
      - Slot
    * - :part:`EVAL-AD7190 <EVAL-AD7190>`
-     - CORAZ7S_
-     - PMOD
+     - CORAZ7S_ 
+     - PMOD JA
    * - :part:`EVAL-AD7193 <EVAL-AD7193>`
-     - 
-     - PMOD 
+     - CORAZ7S_
+     - PMOD JA
    * - :part:`EVAL-AD7195 <EVAL-AD7195>`
-     - 
-     - PMOD
+     - CORAZ7S_
+     - PMOD JA
 
 Block design
 -------------------------------------------------------------------------------
@@ -58,18 +59,6 @@ The data path and clock domains are depicted in the below diagram:
    :width: 800
    :align: center
    :alt: AD719x/CORAZ7S block diagram
-
-CPU/Memory interconnects addresses
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-For :part:`EVAL-AD719x`, given the simplicity of the project, we have don't have
-to use any interface to connect to the CPU.
-
-=========== ==========
-Instance    Address
-=========== ==========
-\-          \-
-=========== ==========
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
