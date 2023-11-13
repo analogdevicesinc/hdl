@@ -6,15 +6,15 @@ AD7616-SDZ HDL project
 Overview
 -------------------------------------------------------------------------------
 
-The :part:`AD7616` is a 16-bit, data acquisition system (DAS) that supports
-dual simultaneous sampling of 16 channels. The :part:`AD7616` operates from a
+The :adi:`AD7616` is a 16-bit, data acquisition system (DAS) that supports
+dual simultaneous sampling of 16 channels. The :adi:`AD7616` operates from a
 single 5 V supply and can accommodate ±10 V, ±5 V, and ±2.5 V true bipolar
 input signals while sampling at throughput rates up to 1 MSPS per channel pair
 with 90 dB SNR. Higher SNR performance can be achieved with the on-chip
 oversampling mode; 92 dB for an oversampling ratio of 2.
 
 The input clamp protection circuitry can tolerate voltages up to ±20 V.
-The :part:`AD7616` has 1 MΩ analog input impedance regardless of sampling
+The :adi:`AD7616` has 1 MΩ analog input impedance regardless of sampling
 frequency. The single supply operation, on-chip filtering, and high input
 impedance eliminate the need for driver op-amps and external bipolar supplies.
 
@@ -26,23 +26,23 @@ high-speed serial and parallel interfaces.
 Supported boards
 -------------------------------------------------------------------------------
 
--  :part:`EVAL-AD7616 <EVAL-AD7616>`
+-  :adi:`EVAL-AD7616 <EVAL-AD7616>`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :part:`AD7616`
+-  :adi:`AD7616`
 
 Supported carriers
 -------------------------------------------------------------------------------
 
--  :xilinx:`ZedBoard` on FMC slot
+-  :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
 -  :xilinx:`ZC706` on FMC LPC slot
 
 Other required hardware
 -------------------------------------------------------------------------------
 
--   :part:`SDP-I-FMC <EVAL-SDP-I-FMC>`
+-   :adi:`SDP-I-FMC <EVAL-SDP-I-FMC>`
 
 Block design
 -------------------------------------------------------------------------------
@@ -116,31 +116,6 @@ SL7                Unmounted Oversampling Ratio Selection OS0
 LK40               A         Onboard 5v0 power supply selected
 LK41               A         Onboard 3v3 power supply selected
 ================== ========= ====================================
-
-IP list
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
--  :git-hdl:`AD_EDGE_DETECT <main:library/common/ad_edge_detect.v>`
--  :git-hdl:`AXI_AD7616 <main:library/axi_ad7616>` *
--  :git-hdl:`AXI_CLKGEN <main:library/axi_clkgen>`
--  :git-hdl:`AXI_DMAC <main:library/axi_dmac>`
--  :git-hdl:`AXI_HDMI_TX <main:library/axi_hdmi_tx>`
--  :git-hdl:`AXI_I2S_ADI <main:library/axi_i2s_adi>`
--  :git-hdl:`AXI_PWM_GEN <main:library/axi_pwm_gen>`
--  :git-hdl:`AXI_SPDIF_TX <main:library/axi_spdif_tx>`
--  :git-hdl:`AXI_SPI_ENGINE <main:library/spi_engine/axi_spi_engine>` **
--  :git-hdl:`AXI_SYSID <main:library/axi_sysid>`
--  :git-hdl:`SPI_ENGINE_EXECUTION <main:library/spi_engine/spi_engine_execution>` **
--  :git-hdl:`SPI_ENGINE_INTERCONNECT <main:library/spi_engine/spi_engine_interconnect>` **
--  :git-hdl:`SPI_ENGINE_OFFLOAD <main:library/spi_engine/spi_engine_offload>` **
--  :git-hdl:`SYNC_BITS <main:library/util_cdc/sync_bits.v>`
--  :git-hdl:`SYSID_ROM <main:library/sysid_rom>`
-
-.. admonition:: Legend
-   :class: note
-
-   -   ``*`` instantiated only for SER_PAR_N=0 (parallel interface)
-   -   ``**`` instantiated only for SER_PAR_N=1 (serial interface)
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -277,7 +252,7 @@ Building the HDL project
 
 The design is built upon ADI's generic HDL reference design framework.
 ADI does not distribute the bit/elf files of these projects so they
-must be built from the sources available :git-hdl:`here <main:/>`. To get
+must be built from the sources available :git-hdl:`here </>`. To get
 the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository, and then build the project as follows:.
@@ -331,14 +306,14 @@ Systems related
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheet: :part:`AD7616`
+-  Product datasheet: :adi:`AD7616`
 
 -  `UG-1012, Evaluation Board User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/EVAL-AD7616SDZ-7616-PSDZ-UG-1012.pdf>`__
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`ad7616_sdz HDL project <main:projects/ad7616_sdz>`
+-  :git-hdl:`ad7616_sdz HDL project <projects/ad7616_sdz>`
 
 .. list-table::
    :widths: 30 35 35
@@ -348,53 +323,53 @@ HDL related
      - Source code link
      - Documentation link
    * - AD_EDGE_DETECT
-     - :git-hdl:`library/common/ad_edge_detect.v <main:library/common/ad_edge_detect.v>`
+     - :git-hdl:`library/common/ad_edge_detect.v`
      -
    * - AXI_AD7616
-     - :git-hdl:`library/axi_ad7616 <main:library/axi_ad7616>` *
+     - :git-hdl:`library/axi_ad7616` *
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_ad7616>`
    * - AXI_CLKGEN
-     - :git-hdl:`library/axi_dmac <main:library/axi_clkgen>`
+     - :git-hdl:`library/axi_clkgen`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_clkgen>`
    * - AXI_DMAC
-     - :git-hdl:`library/axi_dmac <master:library/axi_dmac>`
+     - :git-hdl:`library/axi_dmac`
      - :ref:`here <axi_dmac>`
    * - AXI_HDMI_TX
-     - :git-hdl:`library/axi_hdmi_tx <main:library/axi_hdmi_tx>`
+     - :git-hdl:`library/axi_hdmi_tx`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_hdmi_tx>`
    * - AXI_I2S_ADI
-     - :git-hdl:`library/axi_i2s_adi <main:library/axi_i2s_adi>`
+     - :git-hdl:`library/axi_i2s_adi`
      -
    * - AXI_PWM_GEN
-     - :git-hdl:`library/axi_pwm_gen <main:library/axi_pwm_gen>`
+     - :git-hdl:`library/axi_pwm_gen`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_pwm_gen>`
    * - AXI_SPDIF_TX
-     - :git-hdl:`library/axi_spdif_tx <main:library/axi_spdif_tx>`
+     - :git-hdl:`library/axi_spdif_tx`
      -
    * - AXI_SPI_ENGINE
-     - :git-hdl:`library/spi_engine/axi_spi_engine <main:library/spi_engine/axi_spi_engine>`  **
+     - :git-hdl:`library/spi_engine/axi_spi_engine`  **
      - :ref:`here <spi_engine axi>`
    * - AXI_SYSID
-     - :git-hdl:`library/axi_sysid <main:library/axi_sysid>`
+     - :git-hdl:`library/axi_sysid`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
    * - AXI_SPI_ENGINE
-     - :git-hdl:`library/spi_engine/axi_spi_engine <main:library/spi_engine/axi_spi_engine>`  **
+     - :git-hdl:`library/spi_engine/axi_spi_engine`  **
      - :ref:`here <spi_engine axi>`
    * - SPI_ENGINE_EXECUTION
-     - :git-hdl:`library/spi_engine/spi_engine_execution <main:library/spi_engine/spi_engine_execution>` **
+     - :git-hdl:`library/spi_engine/spi_engine_execution` **
      - :ref:`here <spi_engine execution>`
    * - SPI_ENGINE_INTERCONNECT
-     - :git-hdl:`library/spi_engine/spi_engine_interconnect <main:library/spi_engine/spi_engine_interconnect>` **
+     - :git-hdl:`library/spi_engine/spi_engine_interconnect` **
      - :ref:`here <spi_engine interconnect>`
    * - SPI_ENGINE_OFFLOAD
-     - :git-hdl:`library/spi_engine/spi_engine_offload <main:library/spi_engine/spi_engine_offload>` **
+     - :git-hdl:`library/spi_engine/spi_engine_offload` **
      - :ref:`here <spi_engine offload>`
    * - SYNC_BITS
-     - :git-hdl:`library/util_cdc/sync_bits.v <main:library/util_cdc/sync_bits.v>`
+     - :git-hdl:`library/util_cdc/sync_bits.v`
      - 
    * - SYSID_ROM
-     - :git-hdl:`library/sysid_rom <main:library/sysid_rom>`
-     -
+     - :git-hdl:`library/sysid_rom`
+     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
 
 .. admonition:: Legend
    :class: note

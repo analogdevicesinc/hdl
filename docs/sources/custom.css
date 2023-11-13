@@ -60,7 +60,10 @@ table.regmap {
 table.regmap .caption-text{
 	font-size: 1rem;
 }
-th, td.type, td.default {
+td {
+	min-width: 4em;
+}
+th, td.type {
 	white-space: nowrap;
 }
 td.description {
@@ -130,11 +133,18 @@ td.description {
 	transform: rotate(45deg);
 	margin-top: -.5em;
 }
+.collapsible_content {
+	overflow: auto;
+}
 .collapsible_input:checked ~ .collapsible_content {
 	height: 100%;
 	opacity: 1;
 }
 .default {
-	min-width: 7em;
+	min-width: 5em;
+	max-width: 11em;
 	line-break: anywhere;
+}
+.default .pre {
+	white-space: pre;
 }

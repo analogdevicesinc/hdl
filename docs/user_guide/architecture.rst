@@ -15,7 +15,7 @@ subsystems:
       dependent**
    -  it describes part of the ``system_wrapper`` module
    -  located in
-      :git-hdl:`projects/common <master:projects/common>`;
+      :git-hdl:`projects/common <projects/common>`;
       one for each carrier
 
 -  **Board design** --- description of what the **board** attached to
@@ -147,7 +147,7 @@ CPU/Memory interconnects addresses
 The memory addresses that will be used by software are based on the HDL
 addresses of the IP register map, to which an offset is added, depending
 on the architecture of the used FPGA (see also :git-hdl:`ad_cpu_interconnect
-procedure <master:projects/scripts/adi_board.tcl>`; architecture is
+procedure <projects/scripts/adi_board.tcl>`; architecture is
 specified by ``sys_zynq`` variable, for AMD FPGAs).
 
 **Zynq-7000 and 7 Series**
@@ -200,7 +200,7 @@ HDMI
 
 There is HDMI support for all the carriers which are using the ADV7511
 as HDMI transmitter. The HDMI transmitter core can be found
-`here <https://github.com/analogdevicesinc/hdl/tree/master/library/axi_hdmi_tx>`__.
+:git-hdl:`here <library/axi_hdmi_tx>`.
 
 GPIOs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

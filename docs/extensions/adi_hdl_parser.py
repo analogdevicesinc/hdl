@@ -75,16 +75,6 @@ def pretty_dep(string):
 		return ''
 	return string.replace("'MODELPARAM_VALUE.",'').replace("'",'')
 
-def sanitized_bool(string):
-	string_ = string.strip().lower()
-	if string_ in ['1', 'true', 'yes', 'y']:
-		return True
-	elif string_ in ['0', 'false', 'no', 'n']:
-		return False
-	else:
-		logger.warning(f"Got malformed bool value {string}.")
-		return False
-
 class directive_base(Directive):
 	has_content = True
 	add_index = True
@@ -118,6 +108,16 @@ class directive_base(Directive):
 			node.document = self.state.document
 			nested_parse_with_titles(self.state, rst, node)
 			entry += node
+		elif node_type == 'default_value':
+			if text[0:2] != '0x':
+				rst = ViewList()
+				rst.append(text, f"virtual_{str(uuid4())}", 0)
+				node = nodes.section()
+				node.document = self.state.document
+				nested_parse_with_titles(self.state, rst, node)
+				entry += node
+			else:
+				entry += nodes.literal(text=text)
 		else:
 			return
 		row += entry
@@ -380,7 +380,7 @@ class directive_regmap(directive_base):
 		table = nodes.table(classes=['regmap'])
 		table += tgroup
 
-		self.table_header(tgroup, ["DWORD", "BYTE", "BITS", "Name", "Type", "Default", "Description"])
+		self.table_header(tgroup, ["DWORD", "BYTE", "BITS", "Name", "Type", "Default Value", "Description"])
 
 		rows = []
 		for reg in obj['regmap']:
@@ -400,8 +400,8 @@ class directive_regmap(directive_base):
 					['', 'literal'],
 					[f"[{field['bits']}]", 'literal'],
 					[field['name'], 'literal'],
-					[field['rw'], 'paragraph'],
-					[field['default'], 'paragraph', ['default']],
+					[field['rw'], 'literal'],
+					[field['default'], 'default_value', ['default']],
 					[field['description'], 'reST', ['description']],
 				])
 
@@ -817,7 +817,7 @@ def parse_hdl_regmap(reg, ctime):
 				field_loc = data[fi + 1].strip()
 				field_loc = field_loc.split(" ")
 				field_bits = field_loc[0].replace("[", "").replace("]", "")
-				field_default = field_loc[1] if len(field_loc) > 1 else "NA"
+				field_default = ' '.join(field_loc[1:]) if len(field_loc) > 1 else "NA"
 
 				field_name = data[fi + 2].strip()
 				field_rw = data[fi + 3].strip()
@@ -838,6 +838,11 @@ def parse_hdl_regmap(reg, ctime):
 
 				field_desc = [data[fi].strip() for fi in range(fi + 4, efi)]
 				field_desc = " ".join(field_desc)
+
+				# TODO Remove dokuwiki scaping support
+				# Temporary dokuwiki scaping convert to not break current dokuwiki tables
+				field_default = field_default.replace("''", "``")
+				field_desc = field_desc.replace("''", "``")
 
 				fields.append(
 					{

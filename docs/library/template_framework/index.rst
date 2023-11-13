@@ -42,7 +42,7 @@ Examples
 --------------------------------------------------------------------------------
 
 * :dokuwiki:`CN0363 <resources/eval/user-guides/eval-cn0363-pmdz>`:
-  Colorimeter application using the :part:`AD7175-2` Sigma-Delta ADC.
+  Colorimeter application using the :adi:`AD7175-2` Sigma-Delta ADC.
 
 Additional Resources
 --------------------------------------------------------------------------------

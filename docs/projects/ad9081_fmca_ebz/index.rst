@@ -6,7 +6,7 @@ AD9081-FMCA-EBZ/AD9082-FMCA-EBZ HDL project
 Overview
 -------------------------------------------------------------------------------
 
-The :part:`AD9081-FMCA-EBZ <EVAL-AD9081>` / :part:`AD9082-FMCA-EBZ <EVAL-AD9082>`
+The :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>` / :adi:`AD9082-FMCA-EBZ <EVAL-AD9082>`
 reference design (also known as Single MxFE) is a processor based
 (e.g. Microblaze) embedded system.
 The design consists from a receive and a transmit chain.
@@ -38,19 +38,19 @@ but must share the same reference clock.
 Supported boards
 -------------------------------------------------------------------------------
 
--  :part:`AD9081-FMCA-EBZ <EVAL-AD9081>`
--  :part:`AD9082-FMCA-EBZ <EVAL-AD9082>`
+-  :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>`
+-  :adi:`AD9082-FMCA-EBZ <EVAL-AD9082>`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :part:`AD9081`
--  :part:`AD9082`
--  :part:`AD9177`
--  :part:`AD9207`
--  :part:`AD9209`
--  :part:`AD9986`
--  :part:`AD9988`
+-  :adi:`AD9081`
+-  :adi:`AD9082`
+-  :adi:`AD9177`
+-  :adi:`AD9207`
+-  :adi:`AD9209`
+-  :adi:`AD9986`
+-  :adi:`AD9988`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -62,7 +62,7 @@ Supported carriers
    * - Evaluation board
      - Carrier
      - FMC slot
-   * - :part:`AD9081-FMCA-EBZ <EVAL-AD9081>`
+   * - :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>`
      - `A10SoC`_
      - FMCA
    * -
@@ -88,7 +88,7 @@ Supported carriers
    * - Evaluation board
      - Carrier
      - FMC slot
-   * - :part:`AD9082-FMCA-EBZ <EVAL-AD9082>`
+   * - :adi:`AD9082-FMCA-EBZ <EVAL-AD9082>`
      - :xilinx:`VCK190`
      - FMC0
    * -
@@ -445,12 +445,12 @@ Building the HDL project
 
 The design is built upon ADI's generic HDL reference design framework.
 ADI does not distribute the bit/elf files of these projects so they
-must be built from the sources available :git-hdl:`here <master:/>`. To get
+must be built from the sources available :git-hdl:`here </>`. To get
 the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
 
-Then go to the :git-hdl:`projects/ad9081_fmca_ebz <master:projects/ad9081_fmca_ebz>`
+Then go to the :git-hdl:`projects/ad9081_fmca_ebz <projects/ad9081_fmca_ebz>`
 location and run the make command by typing in your command prompt:
 
 **Linux/Cygwin/WSL**
@@ -692,18 +692,18 @@ Hardware related
 
 -  Product datasheets:
 
-   -  :part:`AD9081`
-   -  :part:`AD9082`
-   -  :part:`AD9988`
-   -  :part:`AD9986`
+   -  :adi:`AD9081`
+   -  :adi:`AD9082`
+   -  :adi:`AD9988`
+   -  :adi:`AD9986`
 -  `UG-1578, Device User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/ad9081-ad9082-ug-1578.pdf>`__
 -  `UG-1829, Evaluation Board User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/ad9081-fmca-ebz-9082-fmca-ebz-ug-1829.pdf>`__
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD9081_FMCA_EBZ HDL project source code <master:projects/ad9081_fmca_ebz>`
--  :git-hdl:`AD9082_FMCA_EBZ HDL project source code <master:projects/ad9082_fmca_ebz>`
+-  :git-hdl:`AD9081_FMCA_EBZ HDL project source code <projects/ad9081_fmca_ebz>`
+-  :git-hdl:`AD9082_FMCA_EBZ HDL project source code <projects/ad9082_fmca_ebz>`
 
 .. list-table::
    :widths: 30 35 35
@@ -713,40 +713,40 @@ HDL related
      - Source code link
      - Documentation link
    * - AXI_DMAC
-     - :git-hdl:`library/axi_dmac <master:library/axi_dmac>`
+     - :git-hdl:`library/axi_dmac`
      - :ref:`here <axi_dmac>`
    * - AXI_SYSID
-     - :git-hdl:`library/axi_sysid <master:library/axi_sysid>`
+     - :git-hdl:`library/axi_sysid`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
    * - SYSID_ROM
-     - :git-hdl:`library/sysid_rom <master:library/sysid_rom>`
+     - :git-hdl:`library/sysid_rom`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
    * - UTIL_CPACK2
-     - :git-hdl:`library/util_pack/util_cpack2 <master:library/util_pack/util_cpack2>`
+     - :git-hdl:`library/util_pack/util_cpack2`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/util_cpack>`
    * - UTIL_UPACK2
-     - :git-hdl:`library/util_pack/util_upack2 <master:library/util_pack/util_upack2>`
+     - :git-hdl:`library/util_pack/util_upack2`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/util_upack>`
    * - UTIL_ADXCVR for AMD
-     -  :git-hdl:`library/xilinx/util_adxcvr <master:library/xilinx/util_adxcvr>`
+     -  :git-hdl:`library/xilinx/util_adxcvr`
      -  :dokuwiki:`[Wiki] <resources/fpga/docs/util_xcvr>`
    * - AXI_ADXCVR for Intel
-     -  :git-hdl:`library/intel/axi_adxcvr <master:library/intel/axi_adxcvr>`
+     -  :git-hdl:`library/intel/axi_adxcvr`
      -  :dokuwiki:`[Wiki] <resources/fpga/docs/axi_adxcvr>`
    * - AXI_ADXCVR for AMD
-     -  :git-hdl:`library/intel/axi_adxcvr <master:library/xilinx/axi_adxcvr>`
+     -  :git-hdl:`library/xilinx/axi_adxcvr`
      -  :dokuwiki:`[Wiki] <resources/fpga/docs/axi_adxcvr>`
    * - AXI_JESD204_RX
-     -  :git-hdl:`library/jesd204/axi_jesd204_rx <master:library/jesd204/axi_jesd204_rx>`
+     -  :git-hdl:`library/jesd204/axi_jesd204_rx`
      -  :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/axi_jesd204_rx>`
    * - AXI_JESD204_TX
-     -  :git-hdl:`library/jesd204/axi_jesd204_tx <master:library/jesd204/axi_jesd204_tx>`
+     -  :git-hdl:`library/jesd204/axi_jesd204_tx`
      -  :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/axi_jesd204_tx>`
    * - JESD204_TPL_ADC
-     -  :git-hdl:`library/jesd204/jesd204_tpl_adc <master:library/jesd204/jesd204_tpl_adc>`
+     -  :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_adc`
      -  :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/jesd204_tpl_adc>`
    * - JESD204_TPL_DAC
-     -  :git-hdl:`library/jesd204/jesd204_tpl_dac <master:library/jesd204/jesd204_tpl_dac>`
+     -  :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_dac`
      -  :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/jesd204_tpl_dac>`
 
 -  :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`

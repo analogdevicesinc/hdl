@@ -316,7 +316,7 @@ to the last parenthesis of the last port.
 
 **A10.3**
 
-Commented parts of code **must** not be added to the master
+Commented parts of code **must** not be added to the main
 branch (i.e if, case, module instances, etc).
 
 **A11**

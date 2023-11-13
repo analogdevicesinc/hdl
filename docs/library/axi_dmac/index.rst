@@ -56,7 +56,7 @@ Files
 
    * - Name
      - Description
-   * - :git-hdl:`master:library/axi_dmac/axi_dmac.v`
+   * - :git-hdl:`library/axi_dmac/axi_dmac.v`
      - Verilog source for the peripheral.
 
 Block Diagram

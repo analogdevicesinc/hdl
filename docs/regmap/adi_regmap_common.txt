@@ -169,8 +169,8 @@ REG
 0x0007
 REG_FPGA_INFO
 FPGA device information
-:git-hdl:`master:library/scripts/adi_intel_device_info_enc.tcl` (Intel encoded values)
-:git-hdl:`master:library/scripts/adi_xilinx_device_info_enc.tcl` (Xilinx encoded values)
+:git-hdl:`library/scripts/adi_intel_device_info_enc.tcl` (Intel encoded values)
+:git-hdl:`library/scripts/adi_xilinx_device_info_enc.tcl` (Xilinx encoded values)
 ENDREG
 
 FIELD

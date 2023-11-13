@@ -2,6 +2,8 @@ sphinx
 lxml
 furo
 wavedrom
+aiohttp
+aiodns
 sphinxcontrib-wavedrom
 sphinxcontrib-svg2pdfconverter
 https://github.com/hdl/pyhdlparser/tarball/master

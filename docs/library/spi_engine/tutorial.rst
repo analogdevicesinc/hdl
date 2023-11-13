@@ -68,7 +68,7 @@ SPI Engine hierarchy instantiation
 
 The SPI Engine can be implemented in two ways, either by placing and connecting
 each IP individually or by using the function provided by the
-:git-hdl:`master:library/spi_engine/scripts/spi_engine.tcl` script.
+:git-hdl:`library/spi_engine/scripts/spi_engine.tcl` script.
 
 Using the script ensures that the correct connections are being made and that
 the IP cores will receive the correct parameter configuration since certain

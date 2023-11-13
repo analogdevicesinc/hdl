@@ -75,14 +75,14 @@ Examples
 --------------------------------------------------------------------------------
 
 * :dokuwiki:`CN0363 <resources/eval/user-guides/eval-cn0363-pmdz>`:
-  Colorimeter application using the :part:`AD7175-2` Sigma-Delta ADC.
+  Colorimeter application using the :adi:`AD7175-2` Sigma-Delta ADC.
 * :dokuwiki:`resources/eval/user-guides/adaq7980-sdz`:
   A 16-bit ADC subsystem with four common signal processing and conditioning blocks.
 * :dokuwiki:`resources/tools-software/uc-drivers/ad5766`:
   16-channel, 16-/12-bit, voltage output Digital-to-Analog Converters (DAC).
 * :dokuwiki:`CN0363 <resources/eval/user-guides/eval-cn0363-pmdz>`:
   The AD7768-1 is a low power, high performance, Σ-Δ analog-to-digital converter (ADC).
-* :git-hdl:`master:projects/ad40xx_fmc`
+* :git-hdl:`projects/ad40xx_fmc`
   Evaluation Board for the AD4000 Series 16-/18-/20-Bit Precision SAR ADCs.
 * :dokuwiki:`AD469x <resources/eval/user-guides/ad469x>`:
   16-Bit, 16-Channel, 500 kSPS/1 MSPS, Easy Drive Multiplexed SAR ADC.
