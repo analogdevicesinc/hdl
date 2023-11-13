@@ -20,13 +20,12 @@ analog inputs of the ADC.
 Supported boards
 -------------------------------------------------------------------------------
 
--  :part:`EVAL-AD9434`
--  :part:`SDP-H1`
+- :part:`EVAL-AD9434`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :part:`AD9434`
+- :part:`AD9434`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -42,7 +41,7 @@ Supported carriers
      - :xilinx:`ZC706`
      - FMC LPC
    * -
-     - `ZEDBOARD`_
+     - :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`
      - FMC LPC
 
 Block design
@@ -84,7 +83,7 @@ SPI connections
    * - SPI type
      - SPI manager instance
      - SPI subordinate
-     - CSB
+     - CS
    * - PS
      - SPI 0
      - AD9517
@@ -105,8 +104,8 @@ Instance name    HDL Linux Zynq Actual Zynq
 axi_ad9783_dma   13  57         89             
 ================ === ========== ===========
 
-These are the project-specific interrupts (usually found in
-/ad9434_fmc/common/ad9434_fmc_bd.tcl).
+These are the board-specific interrupts 
+(found in :git-hdl:`here <master:projects/ad9434_fmc/common/ad9434_bd.tcl>`).
 
 Building the HDL project
 -------------------------------------------------------------------------------
@@ -118,8 +117,8 @@ the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
 
-Then go to the project location(**projects/ad9434_fmc/carrier**) and run the 
-make command by typing in your command prompt(this example is for zc706):
+Then go to the project location (**projects/ad9434_fmc/carrier**) and run the 
+make command by typing in your command prompt (this example is for zc706):
 
 **Linux/Cygwin/WSL**
 
@@ -163,7 +162,6 @@ Hardware related
 
    -  :part:`AD9434`
    -  :part:`EVAL-AD9434`
-   -  :part:`SDP-H1`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -188,7 +186,7 @@ HDL related
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
    * - axi_ad9434
      - :git-hdl:`library/axi_ad9434 <master:library/axi_ad9434>`
-     - \-
+     - ---
    * - axi_clkgen
      - :git-hdl:`library/axi_clkgen <master:library/axi_clkgen>`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_clkgen>`
@@ -197,10 +195,7 @@ HDL related
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_hdmi_tx>`
    * - axi_spdif_tx
      - :git-hdl:`library/axi_spdif_tx <master:library/axi_spdif_tx>`
-     - \-
-
--  :dokuwiki:`AD9434 Native FMC Card <resources/fpga/xilinx/fmc/ad9434>`
--  :dokuwiki:`Evaluating the AD9434 analog-to-digital converter <resources/eval/ad9434fmc-500ebz>`
+     - ---
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -211,5 +206,3 @@ Software related
 .. include:: ../common/more_information.rst
 
 .. include:: ../common/support.rst
-
-.. _ZEDBOARD: https://digilent.com/reference/programmable-logic/zedboard/start
