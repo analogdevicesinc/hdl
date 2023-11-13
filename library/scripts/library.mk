@@ -59,7 +59,7 @@ clean: clean-all
 
 clean-all:
 	$(call clean, \
-		$(CLEAN_TARGET), \
+		$(CLEAN_TARGET) .lock, \
 		$(HL)$(LIBRARY_NAME)$(NC) library)
 
 ifneq ($(INTEL_DEPS),)
@@ -92,7 +92,7 @@ xilinx: component.xml
 component.xml: $(XILINX_DEPS) $(_XILINX_INTF_DEPS) $(_XILINX_LIB_DEPS)
 	-rm -rf $(CLEAN_TARGET)
 	$(call build, \
-		flock component.xml -c "$(VIVADO) $(LIBRARY_NAME)_ip.tcl", \
+		$(VIVADO) $(LIBRARY_NAME)_ip.tcl, \
 		$(LIBRARY_NAME)_ip.log, \
 		$(HL)$(LIBRARY_NAME)$(NC) library)
 
@@ -100,7 +100,12 @@ $(_XILINX_INTF_DEPS):
 	$(MAKE) -C $(dir $@) $(notdir $@)
 
 $(_XILINX_LIB_DEPS):
+	while [ -e $(dir $@).lock ]; do \
+		sleep .5s ; \
+	done ; \
+	touch $(dir $@).lock
 	$(MAKE) -C $(dir $@) xilinx
+	rm $(dir $@).lock 2> /dev/null || true
 
 %.xml:
 	$(MAKE) -C $(dir $@) $(notdir $@)

@@ -116,8 +116,13 @@ $(PROJECT_NAME).sdk/system_top.xsa: $(M_DEPS)
 $(HDL_LIBRARY_PATH)%/component.xml: TARGET:=xilinx
 FORCE:
 $(HDL_LIBRARY_PATH)%/component.xml: FORCE
+	while [ -e $(dir $@).lock ]; do \
+		sleep .5s ; \
+	done ; \
+	touch $(dir $@).lock
 	if [ -n "${REQUIRED_VIVADO_VERSION}" ]; then \
 		$(MAKE) -C $(dir $@) $(TARGET) REQUIRED_VIVADO_VERSION=${REQUIRED_VIVADO_VERSION} || exit $$?; \
 	else \
 		$(MAKE) -C $(dir $@) $(TARGET) || exit $$?; \
 	fi;
+	rm $(dir $@).lock 2> /dev/null || true
