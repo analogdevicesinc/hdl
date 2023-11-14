@@ -60,7 +60,7 @@ Block diagram
 AD7616_SDZ serial interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. image:: ../images/ad7616_sdz/ad7616_serial_hdl.svg
+.. image:: ad7616_serial_hdl.svg
    :width: 800
    :align: center
    :alt: AD7616_SDZ using the serial interface block diagram
@@ -68,7 +68,7 @@ AD7616_SDZ serial interface
 AD7616_SDZ parallel interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. image:: ../images/ad7616_sdz/ad7616_parallel_hdl.svg
+.. image:: ad7616_parallel_hdl.svg
    :width: 800
    :align: center
    :alt: AD7616_SDZ using the parallel interface block diagram

@@ -42,7 +42,7 @@ Block diagram
 
 The data path and clock domains are depicted in the below diagram:
 
-.. image:: ../images/ad9783_ebz/ad9783_zcu102_block_diagram.svg
+.. image:: ad9783_zcu102_block_diagram.svg
    :width: 800
    :align: center
    :alt: AD9783-EBZ/ZCU102 block diagram
@@ -127,7 +127,10 @@ Software considerations
 The SPI communication is changed because of hardware modifications, so the
 connection looks like this:
 
-|ad9783_zcu102_spi_pmod.svg|
+.. image:: ad9783_zcu102_spi_pmod.svg
+   :width: 600
+   :align: center
+   :alt: AD9783-EBZ/ZCU102 SPI Pmod connection
 
 Resources
 -------------------------------------------------------------------------------
@@ -203,7 +206,3 @@ Software related
 
 .. include:: ../common/support.rst
 
-.. |ad9783_zcu102_spi_pmod.svg| image:: ../images/ad9783_ebz/ad9783_zcu102_spi_pmod.svg
-   :width: 600
-   :align: top
-   :alt: AD9783-EBZ/ZCU102 SPI Pmod connection

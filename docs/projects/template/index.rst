@@ -95,7 +95,7 @@ the below diagram:
 If the project has multiple ways of configuration, then make subsections to
 this section and show the default configuration and some other popular modes.
 
-.. image:: ../images/ad9783_ebz/ad9783_zcu102_block_diagram.svg
+.. image:: ../ad9783_ebz/ad9783_zcu102_block_diagram.svg
    :width: 800
    :align: center
    :alt: AD9783-EBZ/ZCU102 block diagram

@@ -110,7 +110,7 @@ Block diagram
 Example block design for Single link; M=8; L=4
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. image:: ../images/ad9081_fmca_ebz/ad9081_204b_M8L4.svg
+.. image:: ad9081_204b_M8L4.svg
    :width: 800
    :align: center
    :alt: AD9081-FMCA-EBZ JESD204B M=8 L=4 block diagram
@@ -140,7 +140,7 @@ The Tx links (DAC Path) operate with the following parameters:
 Example block design for Single link; M=4; L=8
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. image:: ../images/ad9081_fmca_ebz/ad9081_204b_M4L8.svg
+.. image:: ad9081_204b_M4L8.svg
    :width: 800
    :align: center
    :alt: AD9081-FMCA-EBZ JESD204B M=4 L=8 block diagram
@@ -176,7 +176,7 @@ Example block design for Single link; M=2; L=8; JESD204C
    In 2019_R2 release, the AMD JESD Physical layer IP Core is used,
    however in newer versions it is replaced with ADI's util_adxcvr IP core.
 
-.. image:: ../images/ad9081_fmca_ebz/ad9081_204c_M2L8.svg
+.. image:: ad9081_204c_M2L8.svg
    :width: 800
    :align: center
    :alt: AD9081-FMCA-EBZ JESD204C M=2 L=8 block diagram
@@ -281,7 +281,7 @@ The clock sources depend on the carrier that is used:
 :xilinx:`ZCU102`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. image:: ../images/ad9081_fmca_ebz/ad9081_clock_scheme_zcu102.svg
+.. image:: ad9081_clock_scheme_zcu102.svg
    :width: 800
    :align: center
    :alt: AD9081-FMCA-EBZ ZCU102 clock scheme
@@ -289,7 +289,7 @@ The clock sources depend on the carrier that is used:
 :xilinx:`VCU118`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. image:: ../images/ad9081_fmca_ebz/ad9081_clock_scheme_vcu118.svg
+.. image:: ad9081_clock_scheme_vcu118.svg
    :width: 800
    :align: center
    :alt: AD9081-FMCA-EBZ VCU118 clock scheme

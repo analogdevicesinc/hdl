@@ -125,6 +125,22 @@ Images
 Prefer the SVG format for images, and save it as *Optimized SVG* in
 `inkscape <https://inkscape.org/>`_ to use less space.
 
+Store them in a hierarchically, do not use ``images`` subdirectories.
+The idea is to have simpler relative paths, for example, e.g.:
+
+.. code:: rst
+
+   .. image: ad2234_sdz_schematic.svg
+
+
+Instead of overly complicated paths like:
+
+.. code:: rst
+
+   .. image: ../../project/images/ad2234_sdz/ad2234_sdz_schematic.svg
+
+In general, this avoids dangling artifacts and keeps the documentation simple.
+
 Vivado block-diagrams
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
