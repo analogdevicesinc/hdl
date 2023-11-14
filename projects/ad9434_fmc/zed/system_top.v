@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -83,12 +83,12 @@ module system_top (
 
   input           otg_vbusoc,
 
-  input                   adc_clk_p,
-  input                   adc_clk_n,
-  input       [11:0]      adc_data_p,
-  input       [11:0]      adc_data_n,
-  input                   adc_or_p,
-  input                   adc_or_n,
+  input           adc_clk_p,
+  input           adc_clk_n,
+  input   [11:0]  adc_data_p,
+  input   [11:0]  adc_data_n,
+  input           adc_or_p,
+  input           adc_or_n,
 
   output          spi_csn_clk,
   output          spi_csn_adc,
