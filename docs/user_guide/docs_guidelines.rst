@@ -27,8 +27,49 @@ Indentation
 
 Directives are indented with 3 space, which is Sphinx's default.
 At code directives, the code keeps its original indentation (e.g. 2 spaces for
-verilog code), but is offset by 3 spaces at the beginning of every line, to
+Verilog code), but is offset by 3 spaces at the beginning of every line, to
 instruct Sphinx the beginning and end of the code directive.
+
+Table of contents
+--------------------------------------------------------------------------------
+
+The relation between pages are created with the ``toctree`` directive,
+which allows to generate the table of contents and navigation bars.
+The ``toctree`` directive has the following format:
+
+.. code:: rst
+
+   .. toctree::
+      :caption: Caption
+      :hidden:
+
+      Custom title <path/to/page>
+
+For pages with shorter titles, such as libraries, the label is inherited from
+the page itself, for example:
+
+.. code:: rst
+
+   .. toctree::
+      :caption: Libraries
+      :hidden:
+
+      library/axi_dmac/index
+      library/spi_engine/index
+
+And for pages with long titles, such as projects, overwrite the full title with
+a custom title, e.g:
+
+.. code:: rst
+
+   .. toctree::
+      :caption: Projects
+      :hidden:
+
+      AD7616-SDZ <projects/ad7616_sdz/index>
+
+This way, only "AD7616-SDZ" will be displayed in the page navigation bar instead
+of "AD7616-SDZ HDL project".
 
 References
 --------------------------------------------------------------------------------
