@@ -4,21 +4,16 @@ Build an HDL project
 ===============================================================================
 
 **Please note that ADI only provides the source files necessary to create
-and build the designs. That means the burden of modifying and building
-these projects is on you.**
+and build the designs. This means that you are responsible for modifying
+and building these projects.**
 
-The build process, obviously, depends on certain software and tools.
-There are many ways you could use this software and tools.
+Here, we are giving you a quick rundown on how we build things. That said,
+the steps below are **not a recommendation**, but a suggestion.
+How you want to build these projects is entirely up to you.
+The only catch is that if you run into problems, you have to resolve them independently.
 
-In other words, how you want to build these projects is entirely up to you.
-The only catch is that if you run into problems, you must use basic diligence
-in resolving it yourself.
-
-Here we are giving you a quick rundown on how we build things. That is,
-the steps below are NOT a recommendation, but a suggestion. We use
-exclusively command line and mostly Linux systems. On Windows, we use
-Cygwin. Please **do not ask any installation and/or setup instructions on
-these.**
+The build process depends on certain software and tools, which you could use in many ways.
+We use **command line** and mostly **Linux systems**. On Windows, we use **Cygwin**.
 
 Setup and check your environment
 -------------------------------------------------------------------------------
@@ -42,15 +37,15 @@ HDL project from the repository:
 #. Download the tools from the following links:
 
    -  `AMD tools <https://www.xilinx.com/support/download.html>`__ (make sure you're
-      downloading the proper installer! For full installation, it is
+      downloading the proper installer. For full installation, it is
       better to choose the one that downloads and installs both Vivado
       and Vitis at the same time)
    -  `Intel
       tools <https://www.intel.com/content/www/us/en/programmable/downloads/download-center.html>`__
 
-#. After you have installed the above mentioned tools, you will need the
+#. After you have installed the above-mentioned tools, you will need the
    paths to those directories in the following steps, so have them in a
-   note
+   note.
 #. We are using `git <https://git-scm.com/>`__ for version control and
    `GNU Make <https://www.gnu.org/software/make/>`__ to build the
    projects. Depending on what OS you're using, you have these options:
@@ -60,12 +55,12 @@ HDL project from the repository:
    Because GNU Make is not supported on Windows, you need to install
    `Cygwin <https://www.cygwin.com/>`__, which is a UNIX-like environment
    and command-line interface for Microsoft Windows. You do not need to
-   install any special package, other than **git** and **make**.
+   install any special package, other than ``git`` and ``make``.
 
    After you have installed Cygwin, you need to add your FPGA Design Tools
    installation directory to your PATH environment variable. You can do
-   that by modifying your **~/.bashrc** file, by adding the following lines
-   **changed accordingly to your installation directories**. For example:
+   that by modifying your **.bashrc** file, by adding the following lines
+   (**changed accordingly to your installation directories**). For example:
 
    .. code-block:: bash
       :linenos:
@@ -81,7 +76,8 @@ HDL project from the repository:
       export PATH=$PATH:/cygdrive/path_to/intelFPGA_pro/2x.x/quartus/bin
 
    Replace the **path_to** string with your path to the installation folder
-   and the **tools version** with the proper one!
+   and the **tools version** with the proper one.
+
 
 .. collapsible::  How to verify your environment setup
 
@@ -97,14 +93,12 @@ HDL project from the repository:
 
 Setup the HDL repository
 -------------------------------------------------------------------------------
-
 These designs are built upon ADI's generic HDL reference designs framework.
 ADI does not distribute the bit/elf files of these projects so they
-must be built from the sources available :git-hdl:`here </>`. To get
+must be built from the sources available :git-hdl:`here <master:/>`. To get
 the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
-the HDL repository.
-This is the best method to get the sources. Here, we are
+the repository. This is the best method to get the sources. Here, we are
 cloning the repository inside a directory called **adi**. Please refer
 to the :ref:`git_repository` section for more details.
 
@@ -126,8 +120,8 @@ to the :ref:`git_repository` section for more details.
    performance, you must clone your hdl repository in the WSL file system.
    For example: (:code:`\\\\wsl.localhost\\Ubuntu\\home\\username\\hdl`)
 
-The above command clones the 'default' branch, which is the 'main' for
-HDL. The 'main' branch always points to the latest stable release
+The above command clones the **default** branch, which is the **main** for
+HDL. The **main** branch always points to the latest stable release
 branch, but it also has features **that are not fully tested**. If you
 want to switch to any other branch you need to checkout that branch:
 
@@ -138,8 +132,8 @@ want to switch to any other branch you need to checkout that branch:
    [~] git checkout hdl_2021_r2
 
 If this is your first time cloning, you have all the latest source
-files. If it has been a while, you can simply pull the latest sources
-using **git pull** or **git rebase** if you have local changes.
+files. If not, you can simply pull the latest sources
+using ``git pull`` or ``git rebase`` if you have local changes.
 
 .. code-block:: bash
 
@@ -159,9 +153,10 @@ Building an Intel project
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 An Intel project build is relatively easy. There is no need to build any
-library components. However, the flow is the same, run ``make`` to build
-your project of interest. In this example, I am only interested in the
-'ADRV9371X' project on the 'A10SOC' carrier.
+library components. Go to the directory of the project of interest,
+then inside the desired carrier run ``make`` to build
+the project. In this example, I am only interested in the
+**ADRV9371X** project on the **A10SOC** carrier.
 
 .. code-block:: bash
 
@@ -171,7 +166,7 @@ your project of interest. In this example, I am only interested in the
 This assumes that you have the tools and licenses setup correctly. If
 you don't get to the last line, the make failed to build the project.
 There is nothing you can gather from the ``make`` output (other than the
-build failed or not), the actual failure is in a log file. So let's see
+build failed or not), the actual failure is in a log file. So, let's see
 how to analyze the build log files and results.
 
 .. note::
@@ -179,18 +174,18 @@ how to analyze the build log files and results.
    If you want to use a NIOS-II based project with no-OS
    software, you have to turn off the MMU feature of the NIOS_II processor.
    In that case, the make will get an additional attribute:
-   ``make NIOS2_MMU=0``\
+   ``make NIOS2_MMU=0``
 
 Checking the build and analyzing results
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If you look closely at the 'rule' for this target, you see it is just
-calling 'quartus_sh' with the project TCL file and redirecting the
-output to a log file. In this case it is called 'adrv9371_a10soc_quartus.log'
-and is inside the 'projects/adrv9371x/a10soc' directory.
+If you look closely at the **rule** for this target, you see it is just
+calling ``quartus_sh`` with the project TCL file and redirecting the
+output to a log file. In this case it is called **adrv9371_a10soc_quartus.log**
+and is inside the **projects/adrv9371x/a10soc** directory.
 
-Quick (or detailed) check on files. If you are seeking support from us,
-this is the most relevant information you can provide
+Do a quick (or detailed) check on files. If you are seeking support from us,
+this contains the most relevant information that you need to provide.
 
 .. warning::
 
@@ -209,8 +204,8 @@ And finally, if the project was built is successfully, the **.sopcinfo** and
    ls -ltr projects/adrv9371x/a10soc/*.sopcinfo
    ls -ltr projects/adrv9371x/a10soc/*.sof
 
-You may now use this 'sopcinfo' file as the input to your no-OS and/or
-Linux build. The 'sof' file is used to program the device.
+You may now use this **sopcinfo** file as the input to your no-OS and/or
+Linux build. The **sof** file is used to program the device.
 
 .. collapsible:: Building an Intel project in WSL - known issues
 
@@ -224,7 +219,7 @@ Linux build. The 'sof' file is used to program the device.
       resource has been exhausted, or quartus_fit performed an illegal
       operation.
 
-   It can also happen that "**make**" gets stuck when
+   It can also happen that ``make`` gets stuck when
    synthesizing some IPs. These errors may appear because your device does
    not have enough RAM memory to build your FPGA design. This problem can
    be solved if you create a Linux Swap file.
@@ -271,7 +266,7 @@ Linux build. The 'sof' file is used to program the device.
    only need to do it once. If you have multiple paths simply add to it.
    You get to this menu from the **Tools->Options**. The tool then parses
    these directories and picks up a **\_hw.tcl** file (e.g.
-   axi_ad9250_hw.tcl). The peripherals should show up on QSYS library.
+   **axi_ad9250_hw.tcl**). The peripherals should show up on QSYS library.
 
    You may now run the project (generate the sof and software hand-off
    files) on Quartus. Open the GUI and select TCL console. At the prompt
@@ -290,61 +285,61 @@ Linux build. The 'sof' file is used to program the device.
 Building an AMD project
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-An AMD project is built the same way as an 'Intel' project. The only
+An AMD project is built the same way as an Intel project. The only
 exception is that there are a few 'sub-make(s)' for the library
-components. The way of building a project in Cygwin and WSL is the same,
-with small differences. In this example, it is building the 'DAQ2'
-project on the 'ZC706' carrier.
+components. The way of building a project in Cygwin and WSL is almost the same.
+In this example, it is building the **DAQ2**
+project on the **ZC706** carrier.
 
 .. code-block:: bash
 
    cd projects/daq2/zc706
    make
 
-The **make** builds all the libraries first and then builds the project.
+The ``make`` builds all the libraries first and then builds the project.
 This assumes that you have the tools and licenses setup correctly. If
 you don't get to the last line, the make failed to build one or more
 targets: it could be a library component or the project itself. There is
 nothing you can gather from the ``make`` output (other than which one
-failed). The actual failure is in a log file, so let's see how to
-analyze the build log files and results.
+failed). The actual information about the failure is in a log file inside
+the project directory.
 
 On projects which support this, some ``make`` parameters can be added, to
-configure the project (to see if your project has such things, enter in the
-**system_project.tcl** file and check there).
+configure the project (you can check the **system_project.tcl** file
+to see if your project supports this).
 
-The result of the build, if parameters were used, will be in a folder named
-by the configuration used:
+If parameters were used, the result of the build will be in a folder named
+by the configuration used. Here are some examples:
 
 **Example 1**
 
-running this command
-
-``make RX_LANE_RATE=2.5 TX_LANE_RATE=2.5 RX_JESD_L=8 RX_JESD_M=4 RX_JESD_S=1 RX_JESD_NP=16 TX_JESD_L=8 TX_JESD_M=4 TX_JESD_S=1 TX_JESD_NP=16``
-
-will create a folder named
-
-``RXRATE2_5_TXRATE2_5_RXL8_RXM4_RXS1_RXNP16_TXL8_TXM4_TXS1_TXNP16``
+Running the command below will create a folder named
+**RXRATE2_5_TXRATE2_5_RXL8_RXM4_RXS1_RXNP16_TXL8_TXM4_TXS1_TXNP16**
 because of truncation of some keywords so the name will not exceed the limits
-of the Operating System (``JESD``, ``LANE``, etc. are removed) of 260
+of the Operating System (**JESD**, **LANE**, etc. are removed) of 260
 characters.
+
+.. code-block:: bash
+
+   make RX_LANE_RATE=2.5 TX_LANE_RATE=2.5 RX_JESD_L=8 RX_JESD_M=4 RX_JESD_S=1 RX_JESD_NP=16 TX_JESD_L=8 TX_JESD_M=4 TX_JESD_S=1 TX_JESD_NP=16
+
 
 **Example 2**
 
-running this command
+Running the command below will create a folder named **LVDSCMOSN1**.
 
-``make LVDS_CMOS_N=1``
+.. code-block:: bash
 
-will create a folder named
+   make LVDS_CMOS_N=1
 
-``LVDSCMOSN1``
+
 
 Enabling Out-of-Context synthesis
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You can opt in for out-of-context synthesis during the build by defining
-the **ADI_USE_OOC_SYNTHESIS** system variable. By setting the
-**ADI_MAX_OOC_JOBS** system variable you can adjust the number of
+the ``ADI_USE_OOC_SYNTHESIS`` system variable. By setting the
+``ADI_MAX_OOC_JOBS`` system variable you can adjust the number of
 maximum parallel out-of-context synthesis jobs. If not set, the default
 parallel job number is set to 4.
 
@@ -381,34 +376,32 @@ Checking the build and analyzing results of library components
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If you look closely, you see what it is actually doing. It enters a
-library component folder then calls 'Vivado' in batch mode. The IP
-commands are in the source 'Tcl' file and output is redirected to a log
-file. In the below example that is 'axi_ad9144_ip.log' inside the
-'library/axi_ad9144' directory.
+library component folder then calls **Vivado** in batch mode. The IP
+commands are in the source Tcl file and output is redirected to a log
+file. In the below example that is **axi_ad7768_ip.log** inside the
+**library/axi_ad7768** directory.
 
 .. code-block:: bash
 
-   make[1]: Entering directory '/home/RKutty/gitadi/hdl/library/axi_ad9144'
+   make[1]: Entering directory '/home/RKutty/gitadi/hdl/library/axi_ad7768'
    rm -rf *.cache *.data *.xpr *.log component.xml *.jou xgui *.ip_user_files *.srcs *.hw *.sim .Xil
-   vivado -mode batch -source axi_ad9144_ip.tcl  >> axi_ad9144_ip.log 2>&1
+   vivado -mode batch -source axi_ad7768_ip.tcl  >> axi_ad7768_ip.log 2>&1
 
-If you see ``make`` command returns an error (and stops), **you must first check
-the contents of this log file** before going crazy on us. You may also
-do a sanity checking just to see what are the generated files and the
-log file contents.
+If the ``make`` command returns an error (and stops), **you must first check
+the contents of the log file**. You may also check the generated files for more information.
 
 .. code-block:: bash
 
-   ls -ltr library/axi_ad9144
-   tail library/axi_ad9144/axi_ad9144_ip.log
+   ls -ltr library/axi_ad7768
+   tail library/axi_ad7768/axi_ad7768_ip.log
 
 Checking the build and analyzing results of projects
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The last thing make does in this above example is building the project.
-It is exactly the same 'rule' as the library component. The log file, in
-this example, is called 'daq2_zc706_vivado.log' and is inside the
-'projects/daq2/zc706' directory.
+The last thing that ``make`` does in this above example is building the project.
+It is exactly the same **rule** as the library component. The log file, in
+this example, is called **daq2_zc706_vivado.log** and is inside the
+**projects/daq2/zc706** directory.
 
 .. code-block:: bash
 
@@ -416,7 +409,7 @@ this example, is called 'daq2_zc706_vivado.log' and is inside the
    vivado -mode batch -source system_project.tcl >> daq2_zc706_vivado.log 2>&1
    make: Leaving directory '/home/RKutty/gitadi/hdl/projects/daq2/zc706'
 
-Quick (or detailed) check on files.
+Do a quick (or detailed) check on files.
 
 .. warning::
 
@@ -427,18 +420,18 @@ Quick (or detailed) check on files.
    ls -ltr projects/daq2/zc706
    tail projects/daq2/zc706/daq2_zc706_vivado.log
 
-And finally, if the project build is successful, the .xsa file should be
-in the '.sdk' folder.
+And finally, if the project build is successful, the **.xsa** file should be
+in the **.sdk** folder.
 
 .. code-block:: bash
 
    ls -ltr projects/daq2/zc706/daq2_zc706.sdk
 
-You may now use this '.xsa' file as the input to your no-OS and/or Linux
+You may now use this **.xsa** file as the input to your no-OS and/or Linux
 build.
 
 Starting with Vivado 2019.3, the output file extension was changed from
-.hdf to .xsa.
+**.hdf** to **.xsa**.
 
 .. collapsible:: Building an AMD project in WSL - known issues
 
@@ -447,7 +440,7 @@ Starting with Vivado 2019.3, the output file extension was changed from
 
    .. warning::
 
-      $RDI_PROG" "$@" crash" "Killed "$RDI_PROG" "$@"
+      ``$RDI_PROG" "$@" crash" "Killed "$RDI_PROG" "$@"``
 
       This error may appear because your device does not have enough
       RAM memory to build your FPGA design.
@@ -493,7 +486,7 @@ Starting with Vivado 2019.3, the output file extension was changed from
 
    In Vivado (AMD projects), **you must build all the required libraries**
    for your targeted project. Open the GUI and at the TCL console change
-   the directory to where the libraries are, then source the '\_ip.tcl'
+   the directory to where the libraries are, then source the **\_ip.tcl**
    file.
 
    .. code-block::
@@ -532,12 +525,12 @@ Supported targets of ``make`` command
    ('targets').
 
 In general, always run ``make`` within a project folder such as
-'hdl/projects/daq2/a10soc' or 'hdl/projects/daq2/zc706'. There should
+**hdl/projects/daq2/a10soc** or **hdl/projects/daq2/zc706**. There should
 not be a need for you to run ``make`` inside the library or root folders.
 The ``make`` framework passes the top level 'targets' to any sub-makes
 inside its sub-folders. What this means is that if you run ``make`` inside
-'hdl/projects/daq2', it builds all the carriers ('kc705', 'a10soc',
-'kcu105', 'zc706' to 'zcu102') which is an overkill.
+**hdl/projects/daq2**, it builds all the carriers (**kc705**, **a10soc**,
+**kcu105**, **zc706** to **zcu102**) instead of just the target carrier.
 
 The following 'targets' are supported.
 
@@ -684,7 +677,7 @@ to use an unsupported version of tools.
 Environment
 -------------------------------------------------------------------------------
 
-As said above, our recommended build flow is to use **make** and the
+As said above, our recommended build flow is to use ``make`` and the
 command line version of the tools. This method facilitates our
 overall build and release process as it automatically builds the
 required libraries and dependencies.
@@ -692,16 +685,16 @@ required libraries and dependencies.
 Linux environment setup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-All major distributions should have ``make``  installed by default. If not,
+All major distributions should have ``make`` installed by default. If not,
 if you try the command, it should tell you how to install it with the
 package name.
 
-You may have to install ``git`` (sudo apt-get install git)
+You may have to install ``git`` (``sudo apt-get install git``)
 and the Intel and AMD tools. These tools come with certain
-``settings*.sh`` scripts that you may source in your ``.bashrc`` file to
+**settings*.sh** scripts that you may source in your **.bashrc** file to
 set up the environment. You may also do this manually (for better or
-worse); the following snippet is from a ``.bashrc`` file. Please note
-that unless you are an expert at manipulating these things, leave it to
+worse); the following snippet is from a **.bashrc** file. Please note
+that unless you are an expert at manipulating these things, it is best to leave it to
 the tools to set up the environment.
 
 .. code-block:: bash
@@ -714,7 +707,7 @@ Windows environment setup
 
 The best option on Windows is to use
 `Cygwin <https://www.cygwin.com>`__. When installing it, select the
-``make`` and ``git`` packages. The manual changes to your ``.bashrc`` do a lot
+``make`` and ``git`` packages. The manual changes to your **.bashrc** do a lot
 look like that of the Linux environment.
 
 .. code-block:: bash
@@ -724,7 +717,7 @@ look like that of the Linux environment.
 
 A very good alternative to Cygwin is
 `WSL <https://learn.microsoft.com/en-us/windows/wsl/install/>`__. The
-manual changes to your ``.bashrc`` should look like:
+manual changes to your **.bashrc** should look like:
 
 .. code-block:: bash
 
@@ -732,13 +725,13 @@ manual changes to your ``.bashrc`` should look like:
    export PATH=$PATH:/opt/path_to/quartus/bin
 
 If you do not want to install Cygwin, there might still be some
-alternative. There are ``make`` alternatives for 'windows command
-prompt', minimalist GNU for Windows ('MinGW'), or the 'cygwin'
-variations installed by the tools itself.
+alternative. There are ``make`` alternatives for **Windows Command
+Prompt**, minimalist GNU for Windows (**MinGW**), or the **Cygwin
+variations** installed by the tools itself.
 
 Some of these may not be fully functional with our scripts and/or projects.
-If you are an Intel user, the "Nios II Command Shell" does support make.
-If you are an AMD user, use the 'gnuwin' installed as part of the SDK,
+If you are an Intel user, the **Nios II Command Shell** does support make.
+If you are an AMD user, use the **gnuwin** installed as part of the SDK,
 usually at ``C:\Xilinx\Vitis\202x.x\gnuwin\bin``.
 
 Preparing the SD card
@@ -752,33 +745,33 @@ that, you can go on with the following steps.
 On the BOOT partition recently created, you will find folders for each
 carrier that we support, and each of these folders contain an archive
 called **bootgen_sysfiles.tgz**. These have all the files needed to
-generate the BOOT.BIN.
+generate the **BOOT.BIN**.
 
 Copy the corresponding archive (checking for the name of your carrier
 and components) into the root folder of your project, unzip it twice,
 and there you will find the files that are needed to generate the
-BOOT.BIN. Copy them to be in the root directory.
+**BOOT.BIN**. Copy them to be in the root directory.
 
 #. fsbl.elf
 #. zynq.bif
 #. u-boot.elf
 #. and if you're using ZCU102, then bl31.elf and pmu.elf
 
-Next, what your project needs, is the ``uImage`` (for Zynq based
-carriers) or ``Image`` (for Zynq UltraScale - ZCU102 and ADRV9009-ZU11EG
-carriers) or ``zImage`` (for Intel based carriers) file that you will find
-in the ``zynq-common`` or ``zynqmp-common``, ``socfpga_arria10_common`` or
-``socfpga_cyclone5_common`` on your ``boot`` partition. Copy this file also in
+Next, what your project needs, is the **uImage** (for Zynq based
+carriers) or **Image** (for Zynq UltraScale - ZCU102 and ADRV9009-ZU11EG
+carriers) or **zImage** (for Intel based carriers) file that you will find
+in the **zynq-common** or **zynqmp-common**, **socfpga_arria10_common** or
+**socfpga_cyclone5_common** on your **boot** partition. Copy this file also in
 the root directory of your project.
 
 More info on how to generate this file you will find in the
-`References`_ section or in the ReadMe.txt file from ``boot`` partition.
+`References`_ section or in the **ReadMe.txt** file from **boot** partition.
 
 .. collapsible:: How to build the boot image BOOT.BIN in WSL
 
-   After obtaining .xsa file, you must be sure that you have done source for
-   Vivado and Vitis. To create boot.bin is recommended to run
-   build_boot_bin.sh in terminal.To do this, the file can be called in the
+   After obtaining **.xsa** file, you must be sure that you have done source for
+   Vivado and Vitis. To create **boot.bin** is recommended to run
+   ``build_boot_bin.sh`` in terminal.To do this, the file can be called in the
    following manner:
 
    .. code-block:: bash
@@ -804,9 +797,9 @@ Errors, Warnings and Notes
 
 Assuming the right to make an honest comment, the tools (both Quartus
 and Vivado) are not that useful or friendly when it comes to messages.
-In most cases, you may see 'hacked-in' debugging 'printf' sort of
+In most cases, you may see **hacked-in** debugging ``printf`` sort of
 messages (AMD notoriously ranks high in this regard). So you are
-going to see a lot of 'warnings' and some 'critical-warnings' (critical
+going to see a lot of **warnings** and some **critical-warnings** (critical
 to what could be hard to answer). Here are some of the commonly asked
 EngineerZone questions and their explanations.
 
@@ -832,9 +825,9 @@ to evaluate the ``make`` flow.
    ipx::package_project -import_files option to copy remote files into the IP directory.
 
 These warnings appear because the libraries are using common modules
-which are located under the ``./library/common/``. These warnings can be
+which are located under the **./library/common/**. These warnings can be
 ignored, they won't affect the functionality of the IP or the project.
-However, you may not be able to 'archive' these projects. The irony is
+However, you may not be able to archive these projects. The irony is
 that it does copy these files to the project area, but ignores them.
 
 .. _AMD Xilinx Vivado: https://www.xilinx.com/support/download.html
