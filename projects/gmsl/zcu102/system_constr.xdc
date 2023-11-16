@@ -1,4 +1,3 @@
-
 set_property -dict {PACKAGE_PIN AJ2 IOSTANDARD MIPI_DPHY_DCI   DIFF_TERM_ADV TERM_100} [get_ports mipi_ch0_data_n[0]];
 set_property -dict {PACKAGE_PIN AH2 IOSTANDARD MIPI_DPHY_DCI   DIFF_TERM_ADV TERM_100} [get_ports mipi_ch0_data_p[0]];
 set_property -dict {PACKAGE_PIN AH3 IOSTANDARD MIPI_DPHY_DCI   DIFF_TERM_ADV TERM_100} [get_ports mipi_ch0_data_n[1]];
@@ -12,4 +11,3 @@ set_property -dict {PACKAGE_PIN AJ6 IOSTANDARD MIPI_DPHY_DCI   DIFF_TERM_ADV TER
 
 # RX bitslice pins
 set_property -dict {PACKAGE_PIN AH1 IOSTANDARD LVCMOS12        DATA_RATE DDR}          [get_ports bg3_pin6_nc_0];
-

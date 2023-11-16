@@ -1,11 +1,4 @@
-# SPDX-License-Identifier: BSD-2-Clause-Views
-# Copyright (c) 2022-2023 The Regents of the University of California
-
 create_bd_port -dir I clk_125mhz
-#create_bd_port -dir I clk_125mhz_p
-#create_bd_port -dir I clk_125mhz_n
-#create_bd_port -dir I clk_user_si570_p
-#create_bd_port -dir I clk_user_si570_n
 
 create_bd_port -dir I sfp0_rx_p
 create_bd_port -dir I sfp0_rx_n
@@ -85,6 +78,7 @@ set_property -dict [list \
   CONFIG.PSU__CRL_APB__PCAP_CTRL__SRCSEL {IOPLL} \
   CONFIG.PSU__CRL_APB__SDIO1_REF_CTRL__SRCSEL {IOPLL} \
   CONFIG.PSU__USE__S_AXI_GP3 {1} \
+  CONFIG.PSU__USE__M_AXI_GP0 {1} \
 ] [get_bd_cell sys_ps8]
 
 ad_ip_instance nic_core nic_core
@@ -173,15 +167,7 @@ ad_ip_parameter eth_clkgen CONFIG.MMCM_DIVCLK_DIVIDE {1}
 
 ad_connect eth_clkgen/reset sys_cpu_reset
 ad_connect eth_clkgen/clk_in1 clk_125mhz
-#ad_connect eth_clkgen/clk_in1_n clk_125mhz_n
 
-#ad_ip_instance axi_clkgen axi_eth_clkgen
-#ad_ip_parameter axi_eth_clkgen CONFIG.CLK0_DIV 10
-#ad_ip_parameter axi_eth_clkgen CONFIG.VCO_DIV 1
-#ad_ip_parameter axi_eth_clkgen CONFIG.VCO_MUL 10
-
-#ad_connect $sys_cpu_clk axi_eth_clkgen/clk
-#ad_connect clk_125mhz axi_eth_clkgen/clk
 ad_connect eth_clkgen/clk_out1 nic_core/ptp_sample_clk
 ad_connect eth_clkgen/clk_out1 nic_phy/ctrl_clk
 
@@ -195,14 +181,6 @@ ad_connect nic_core/nic_mac_0 nic_phy/nic_mac_0
 ad_connect nic_core/nic_mac_1 nic_phy/nic_mac_1
 ad_connect nic_core/nic_mac_2 nic_phy/nic_mac_2
 ad_connect nic_core/nic_mac_3 nic_phy/nic_mac_3
-
-#ad_connect nic_phy/clk_125mhz_p clk_125mhz_p
-#ad_connect nic_phy/clk_125mhz_n clk_125mhz_n
-
-#ad_connect nic_core/clk_125mhz_p clk_125mhz_p
-#ad_connect nic_core/clk_125mhz_n clk_125mhz_n
-#ad_connect nic_core/clk_user_si570_p clk_user_si570_p
-#ad_connect nic_core/clk_user_si570_n clk_user_si570_n
 
 ad_connect nic_core/core_clk $sys_cpu_clk
 ad_connect nic_core/core_rst $sys_cpu_reset
@@ -222,9 +200,6 @@ ad_connect nic_phy/sfp3_rx_p sfp3_rx_p
 ad_connect nic_phy/sfp3_rx_n sfp3_rx_n
 ad_connect nic_phy/sfp3_tx_p sfp3_tx_p
 ad_connect nic_phy/sfp3_tx_n sfp3_tx_n
-
-#ad_connect nic_phy/sfp_drp_clk clk_125mhz_p
-#ad_connect nic_core/sfp_drp_clk clk_125mhz_p
 
 ad_connect nic_phy/sfp_mgt_refclk_0_p sfp_mgt_refclk_0_p
 ad_connect nic_phy/sfp_mgt_refclk_0_n sfp_mgt_refclk_0_n
@@ -250,7 +225,12 @@ ad_connect nic_core/ptp_rst nic_reset_mgt/peripheral_reset
 ad_connect nic_phy/sfp_drp_rst nic_reset_dcm/peripheral_reset
 ad_connect nic_core/sfp_drp_rst nic_reset_dcm/peripheral_reset
 
-ad_cpu_interconnect 0x44AA0000 nic_core
+set_property CONFIG.NUM_SI {2} [get_bd_cells axi_cpu_interconnect]
+ad_connect sys_ps8/maxihpm0_fpd_aclk sys_cpu_clk
+ad_connect sys_ps8/M_AXI_HPM0_FPD axi_cpu_interconnect/S01_AXI
+
+ad_cpu_interconnect 0xA0000000 nic_core
+set_property range 16M [get_bd_addr_segs {sys_ps8/Data/SEG_data_nic_core}]
 
 ad_cpu_interrupt ps-7 mb-6 nic_core/core_irq_7
 ad_cpu_interrupt ps-6 mb-6 nic_core/core_irq_6
@@ -263,3 +243,5 @@ ad_cpu_interrupt ps-0 mb-0 nic_core/core_irq_0
 
 ad_connect sys_ps8/S_AXI_HP1_FPD nic_core/axim_dma
 ad_connect sys_ps8/pl_clk0 sys_ps8/saxihp1_fpd_aclk
+
+set_property strategy Performance_ExtraTimingOpt [get_runs impl_1]
