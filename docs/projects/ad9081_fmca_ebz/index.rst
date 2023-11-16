@@ -728,26 +728,26 @@ HDL related
      - :git-hdl:`library/util_pack/util_upack2`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/util_upack>`
    * - UTIL_ADXCVR for AMD
-     -  :git-hdl:`library/xilinx/util_adxcvr`
-     -  :dokuwiki:`[Wiki] <resources/fpga/docs/util_xcvr>`
+     - :git-hdl:`library/xilinx/util_adxcvr`
+     - :dokuwiki:`[Wiki] <resources/fpga/docs/util_xcvr>`
    * - AXI_ADXCVR for Intel
-     -  :git-hdl:`library/intel/axi_adxcvr`
-     -  :dokuwiki:`[Wiki] <resources/fpga/docs/axi_adxcvr>`
+     - :git-hdl:`library/intel/axi_adxcvr`
+     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_adxcvr>`
    * - AXI_ADXCVR for AMD
-     -  :git-hdl:`library/xilinx/axi_adxcvr`
-     -  :dokuwiki:`[Wiki] <resources/fpga/docs/axi_adxcvr>`
+     - :git-hdl:`library/xilinx/axi_adxcvr`
+     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_adxcvr>`
    * - AXI_JESD204_RX
-     -  :git-hdl:`library/jesd204/axi_jesd204_rx`
-     -  :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/axi_jesd204_rx>`
+     - :git-hdl:`library/jesd204/axi_jesd204_rx`
+     - :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/axi_jesd204_rx>`
    * - AXI_JESD204_TX
-     -  :git-hdl:`library/jesd204/axi_jesd204_tx`
-     -  :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/axi_jesd204_tx>`
+     - :git-hdl:`library/jesd204/axi_jesd204_tx`
+     - :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/axi_jesd204_tx>`
    * - JESD204_TPL_ADC
-     -  :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_adc`
-     -  :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/jesd204_tpl_adc>`
+     - :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_adc`
+     - :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/jesd204_tpl_adc>`
    * - JESD204_TPL_DAC
-     -  :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_dac`
-     -  :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/jesd204_tpl_dac>`
+     - :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_dac`
+     - :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/jesd204_tpl_dac>`
 
 -  :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
 -  :dokuwiki:`[Wiki] JESD204B High-Speed Serial Interface Support <resources/fpga/peripherals/jesd204>`

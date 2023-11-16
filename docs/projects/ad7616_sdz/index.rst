@@ -152,12 +152,12 @@ I2C connections
      - iic_fmc
      - axi_iic_fmc
      - 0x4162_0000
-     - \-
+     - ---
    * - PL
      - iic_main
      - axi_iic_main
      - 0x4160_0000
-     - \-
+     - ---
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -324,7 +324,7 @@ HDL related
      - Documentation link
    * - AD_EDGE_DETECT
      - :git-hdl:`library/common/ad_edge_detect.v`
-     -
+     - ---
    * - AXI_AD7616
      - :git-hdl:`library/axi_ad7616` *
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_ad7616>`
@@ -339,13 +339,13 @@ HDL related
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_hdmi_tx>`
    * - AXI_I2S_ADI
      - :git-hdl:`library/axi_i2s_adi`
-     -
+     - ---
    * - AXI_PWM_GEN
      - :git-hdl:`library/axi_pwm_gen`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_pwm_gen>`
    * - AXI_SPDIF_TX
      - :git-hdl:`library/axi_spdif_tx`
-     -
+     - ---
    * - AXI_SPI_ENGINE
      - :git-hdl:`library/spi_engine/axi_spi_engine`  **
      - :ref:`here <spi_engine axi>`
@@ -363,7 +363,7 @@ HDL related
      - :ref:`here <spi_engine offload>`
    * - SYNC_BITS
      - :git-hdl:`library/util_cdc/sync_bits.v`
-     - 
+     - ---
    * - SYSID_ROM
      - :git-hdl:`library/sysid_rom`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
