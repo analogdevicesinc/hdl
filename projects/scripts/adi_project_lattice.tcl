@@ -31,6 +31,7 @@
 ## to pass a list of tcl commands to be executed after creating the project in
 ## adi_project_create procedure.
 #
+# \opt[dev_select] -dev_select "auto"
 # \opt[ppath] -ppath ./
 # \opt[device] -device "LFCPNX-100-9LFG672C"
 # \opt[performance] -performance "9_High-Performance_1.0V"
@@ -42,33 +43,35 @@
 proc adi_project {project_name args} {
   puts "\nadi_project:\n"
 
-  array set opt [list -ppath "./$project_name" \
+  array set opt [list -dev_select "auto" \
+    -ppath "./$project_name" \
     -device "" \
-    -performance "" \
+    -speed "" \
     -board "" \
     -synthesis "synplify" \
     -impl "impl_1" \
     -cmd_list "" {*}$args]
 
+  set dev_select $opt(-dev_select)
   set ppath $opt(-ppath)
-  set device $opt(-device)
-  set performance $opt(-performance)
-  set board $opt(-board)
   set synthesis $opt(-synthesis)
   set impl $opt(-impl)
   set cmd_list $opt(-cmd_list)
 
-  # Determine the device based on the board name
-  if [regexp "_ctpnxe" $project_name] {
-    set device "LFCPNX-100-9LFG672C"
-    set performance "9_High-Performance_1.0V"
-    set board "Certus Pro NX Evaluation Board"
+  global ad_hdl_dir
+
+  if { [string match "auto" $dev_select] } {
+    source $ad_hdl_dir/projects/scripts/adi_lattice_dev_select.tcl
+  } elseif { [string match "manual" $dev_select] } {
+    set device $opt(-device)
+    set board $opt(-board)
+    set speed $opt(-speed)
   }
 
   adi_project_create $project_name \
     -ppath $ppath \
     -device $device \
-    -performance $performance \
+    -performance $speed \
     -board $board \
     -synthesis $synthesis \
     -impl $impl \
