@@ -6,7 +6,7 @@ AD9434-FMC HDL project
 Overview
 -------------------------------------------------------------------------------
 
-The :part:`AD9434` is a 12-bit monolithic sampling analog-to-digital converter 
+The :adi:`AD9434` is a 12-bit monolithic sampling analog-to-digital converter 
 (ADC) optimized for high performance, low power, and ease of use. The part 
 operates at up to a 500 MSPS conversion rate and is optimized for outstanding 
 dynamic performance in wideband carrier and broadband systems. All necessary 
@@ -20,12 +20,12 @@ analog inputs of the ADC.
 Supported boards
 -------------------------------------------------------------------------------
 
-- :part:`EVAL-AD9434`
+- :adi:`EVAL-AD9434`
 
 Supported devices
 -------------------------------------------------------------------------------
 
-- :part:`AD9434`
+- :adi:`AD9434`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -37,7 +37,7 @@ Supported carriers
    * - Evaluation board
      - Carrier
      - FMC slot
-   * - :part:`EVAL-AD9434-FMC-500EBZ <EVAL-AD9434>`
+   * - :adi:`EVAL-AD9434-FMC-500EBZ <EVAL-AD9434>`
      - :xilinx:`ZC706`
      - FMC LPC
    * -
@@ -58,7 +58,23 @@ Block diagram
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-An external clock source can be connected to CLKIN input of the EVAL-AD9434.
+There are multiple ways to configure the clock source for :adi:`AD9434`.
+In this section is presented a guide on how to rework the board to the desired 
+user clock circuitry. Below is a table on what components are needed to install 
+or uninstall on the evaluation board.
+
+==================== ======================================== ================ 
+Clock Configuration  Install                                  Uninstall
+==================== ======================================== ================
+Ext. Signal Gen.     as it is                                 as it is
+Oscillator           R209, P1(shunt)                          ---
+LVPECL               R208, R307, R308, C300, C311, C304, C305 C209, C210
+LVDS                 R208, C306, C307                         C209, C210, R311
+==================== ======================================== ================
+
+For LVPECL and LVDS configurations, appropriate charge pump filter circuit 
+values are necessary to have an optimized clock buffer performance from 
+:adi:`AD9517-4`.
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -105,20 +121,21 @@ axi_ad9783_dma   13  57         89
 ================ === ========== ===========
 
 These are the board-specific interrupts 
-(found in :git-hdl:`here <master:projects/ad9434_fmc/common/ad9434_bd.tcl>`).
+(found in :git-hdl:`here <projects/ad9434_fmc/common/ad9434_bd.tcl>`).
 
 Building the HDL project
 -------------------------------------------------------------------------------
 
 The design is built upon ADI's generic HDL reference design framework.
 ADI does not distribute the bit/elf files of these projects so they
-must be built from the sources available :git-hdl:`here <master:/>`. To get
+must be built from the sources available :git-hdl:`here </>`. To get
 the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
 
 Then go to the project location (**projects/ad9434_fmc/carrier**) and run the 
-make command by typing in your command prompt (this example is for zc706):
+make command by typing in your command prompt (this example is for 
+:xilinx:`ZC706`):
 
 **Linux/Cygwin/WSL**
 
@@ -158,15 +175,15 @@ Here you can find the quick start guides available for these evaluation boards:
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets:
+- Product datasheets:
 
-   -  :part:`AD9434`
-   -  :part:`EVAL-AD9434`
+   - :adi:`AD9434`
+   - :adi:`EVAL-AD9434`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD9434-FMC HDL project source code <master:projects/ad9434_fmc>`
+-  :git-hdl:`AD9434-FMC HDL project source code <projects/ad9434_fmc>`
 
 .. list-table::
    :widths: 30 35 35
@@ -175,33 +192,33 @@ HDL related
    * - IP name
      - Source code link
      - Documentation link
-   * - AXI_DMAC
-     - :git-hdl:`library/axi_dmac <master:library/axi_dmac>`
-     - :ref:`here <axi_dmac>`
-   * - AXI_SYSID
-     - :git-hdl:`library/axi_sysid <master:library/axi_sysid>`
-     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
-   * - SYSID_ROM
-     - :git-hdl:`library/sysid_rom <master:library/sysid_rom>`
-     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
    * - axi_ad9434
-     - :git-hdl:`library/axi_ad9434 <master:library/axi_ad9434>`
+     - :git-hdl:`library/axi_ad9434 <library/axi_ad9434>`
      - ---
+   * - axi_dmac
+     - :git-hdl:`library/axi_dmac <library/axi_dmac>`
+     - :ref:`here <axi_dmac>`
    * - axi_clkgen
-     - :git-hdl:`library/axi_clkgen <master:library/axi_clkgen>`
+     - :git-hdl:`library/axi_clkgen <library/axi_clkgen>`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_clkgen>`
    * - axi_hdmi_tx
-     - :git-hdl:`library/axi_hdmi_tx <master:library/axi_ad9434>`
+     - :git-hdl:`library/axi_hdmi_tx <library/axi_ad9434>`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_hdmi_tx>`
    * - axi_spdif_tx
-     - :git-hdl:`library/axi_spdif_tx <master:library/axi_spdif_tx>`
+     - :git-hdl:`library/axi_spdif_tx <library/axi_spdif_tx>`
      - ---
+   * - axi_sysid
+     - :git-hdl:`library/axi_sysid <library/axi_sysid>`
+     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
+   * - sysid_rom
+     - :git-hdl:`library/sysid_rom <library/sysid_rom>`
+     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-linux:`Devicetree <master:arch/arm/boot/dts/zynq-zc706-adv7511-ad9434-fmc-500ebz.dts>`
--  :git-linux:`Driver <master:drivers/iio/adc/ad9467.c>`
+- :git-linux:`Devicetree <arch/arm/boot/dts/zynq-zc706-adv7511-ad9434-fmc-500ebz.dts>`
+- :git-linux:`Driver <drivers/iio/adc/ad9467.c>`
 
 .. include:: ../common/more_information.rst
 
