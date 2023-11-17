@@ -3,8 +3,8 @@
 Here are some pointers to help you:
   * [EVAL-AD7606B Product Page](https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7606b-fmcz.html)
   * [EVAL-AD7606C-16/18 Product Page](https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7606c-18.html)
-  * Parts : [AD7606B 8, Channels, 16-bit, 800 kSPS Bipolar Input, Simultaneous sampling ADC](https://www.analog.com/en/products/ad7606b.html)
-  * Parts : [AD7606B 8, Channels, 18-bit, 1 MSPS Bipolar Input, Simultaneous sampling ADC](https://www.analog.com/en/products/ad7606c-18.html)
+  * Parts : [AD7606B, 8 Channels, 16-bit, 800 kSPS Bipolar Input, Simultaneous sampling ADC](https://www.analog.com/en/products/ad7606b.html)
+  * Parts : [AD7606B, 8 Channels, 18-bit, 1 MSPS Bipolar Input, Simultaneous sampling ADC](https://www.analog.com/en/products/ad7606c-18.html)
   * Parts : [AD7606C-16, 8 Channels, 16-bit, 1 MSPS Bipolar Input, Simultaneous sampling ADC](https://www.analog.com/en/products/ad7606c-16.html)
   * Project Doc: https://wiki.analog.com/resources/eval/user-guides/ad7606x-fmcz
   * HDL Doc: https://wiki.analog.com/resources/eval/user-guides/ad7606x-fmc/hdl
