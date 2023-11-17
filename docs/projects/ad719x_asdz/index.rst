@@ -1,6 +1,6 @@
 .. _ad719x_asdz:
 
-AD719x-ASDZ HDL PROJECT
+AD719x-ASDZ HDL project
 ================================================================================
 
 Overview
