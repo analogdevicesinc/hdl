@@ -4,12 +4,13 @@
 ###############################################################################
 
 ## default options for adi_project ############################################
-## if the project name does not match any board definitions, device parameters 
-## can be added by options manually.
+## if the -dev_select "manual" then the -device, -speed and -board options can
+## be set manually.
 # adi_project $project_name \
+#   -dev_select "auto" \
 #   -ppath "./$project_name" \
 #   -device "" \
-#   -performance "" \
+#   -speed "" \
 #   -board "" \
 #   -synthesis "synplify" \
 #   -impl "impl_1" \

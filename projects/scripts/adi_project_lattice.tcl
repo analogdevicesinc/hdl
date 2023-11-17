@@ -34,7 +34,7 @@
 # \opt[dev_select] -dev_select "auto"
 # \opt[ppath] -ppath ./
 # \opt[device] -device "LFCPNX-100-9LFG672C"
-# \opt[performance] -performance "9_High-Performance_1.0V"
+# \opt[speed] -speed "9_High-Performance_1.0V"
 # \opt[board] -board "Certus Pro NX Evaluation Board"
 # \opt[synthesis] -synthesis "synplify"
 # \opt[impl] -impl "impl_1"

@@ -12,7 +12,10 @@ if {$argc == 1} {
 }
 
 ## Default options for adi_project_bd #########################################
+## if the -dev_select "manual" then the -device, -speed and -board options can
+## be set manually.
 # adi_project_bd $project_name \
+#     -dev_select "auto" \
 #     -ppath "." \
 #     -device "" \
 #     -board "" \
