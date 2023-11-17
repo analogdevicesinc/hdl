@@ -9,7 +9,7 @@ name: Guideline checker
 on:
   pull_request:
     branches:
-      - master
+      - main
     paths:
       - 'library/**'
       - 'projects/**'
