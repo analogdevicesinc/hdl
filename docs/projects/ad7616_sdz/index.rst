@@ -379,7 +379,7 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-no-os:`No-OS project <main:projects/ad7616-sdz>`
+-  :git-no-os:`No-OS project <projects/ad7616-sdz>`
 
 -  :dokuwiki:`How to build No-OS <resources/no-os/build>`
 
