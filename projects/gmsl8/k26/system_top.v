@@ -69,12 +69,16 @@ module system_top (
   input        refclk_1_p,
   input        refclk_1_n,
   output       refclk_1,
+  
+  input        refclk_2_p,
+  input        refclk_2_n,
+  output       refclk_2,
 
   input        uart_rxd,
   output       uart_txd,
 
   inout        fan_tach1,
-  inout        fan_tach2,
+//  inout        fan_tach2,
   inout        fan_pwm,
 
   inout [11:0] crr_gpio,
@@ -83,7 +87,7 @@ module system_top (
   inout        btn_gpio,
 
   inout        sfp_tx_disable,
-
+  inout        en_i2c_alt,
   inout        tca_i2c_scl,
   inout        tca_i2c_sda,
   inout        tca_i2c_rstn,
@@ -95,6 +99,9 @@ module system_top (
   inout        a_gmsl_mfp3,
   inout        a_gmsl_mfp4,
   inout        a_gmsl_mfp5,
+  inout        a_gmsl_mfp6,
+  inout        a_gmsl_mfp7,
+  inout        a_gmsl_mfp8,
 
   inout        b_gmsl_pwdnb,
   inout        b_gmsl_mfp0,
@@ -102,7 +109,10 @@ module system_top (
   inout        b_gmsl_mfp2,
   inout        b_gmsl_mfp3,
   inout        b_gmsl_mfp4,
-  inout        b_gmsl_mfp5
+  inout        b_gmsl_mfp5,
+  inout        b_gmsl_mfp6,
+  inout        b_gmsl_mfp7,
+  inout        b_gmsl_mfp8
 );
 
   wire            ap_rstn_frmbuf;
@@ -129,11 +139,16 @@ module system_top (
     .I (refclk_1_p),
     .IB (refclk_1_n),
     .O (refclk_1));
+    
+  IBUFDS ibufds_2_ad9545 (
+    .I (refclk_2_p),
+    .IB (refclk_2_n),
+    .O (refclk_2));
 
-  ad_iobuf #(.DATA_WIDTH(35)) iobuf_0 (
-    .dio_t ({gpio_t[34:0]}),
-    .dio_i ({gpio_o[34:0]}),
-    .dio_o ({gpio_i[34:0]}),
+  ad_iobuf #(.DATA_WIDTH(41)) iobuf_0 (
+    .dio_t ({gpio_t[40:0]}),
+    .dio_i ({gpio_o[40:0]}),
+    .dio_o ({gpio_i[40:0]}),
     .dio_p ({
               crr_gpio[11],
               crr_gpio[10],
@@ -148,11 +163,12 @@ module system_top (
               crr_gpio[1],
               crr_gpio[0],
               fan_tach1,
-              fan_tach2,
+//              fan_tach2,
               fan_pwm,
               ad9545_resetb,
               sfp_tx_disable,
               tca_i2c_rstn,
+              en_i2c_alt,
               ap_rstn_v_proc,
               ap_rstn_frmbuf,
               csirxss_rstn,
@@ -163,13 +179,19 @@ module system_top (
               a_gmsl_mfp3,
               a_gmsl_mfp4,
               a_gmsl_mfp5,
+              a_gmsl_mfp6,
+              a_gmsl_mfp7,
+              a_gmsl_mfp8,
               b_gmsl_pwdnb,
               b_gmsl_mfp0,
               b_gmsl_mfp1,
               b_gmsl_mfp2,
               b_gmsl_mfp3,
               b_gmsl_mfp4,
-              b_gmsl_mfp5}));
+              b_gmsl_mfp5,
+              b_gmsl_mfp6,
+              b_gmsl_mfp7,
+              b_gmsl_mfp8}));
 
   // instantiations
   system_wrapper i_system_wrapper (

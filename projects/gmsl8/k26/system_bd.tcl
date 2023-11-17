@@ -1,4 +1,4 @@
-ource $ad_hdl_dir/projects/common/kv260/kv260_system_bd.tcl
+source $ad_hdl_dir/projects/common/kv260/kv260_system_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 create_bd_port -dir I ap_rstn_frmbuf
