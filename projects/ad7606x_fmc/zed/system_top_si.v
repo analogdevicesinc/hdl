@@ -119,8 +119,8 @@ module system_top #(
     .dio_t (gpio_t[39:32]),
     .dio_i (gpio_o[39:32]),
     .dio_o (gpio_i[39:32]),
-    .dio_p ({adc_serpar,      // 39 
-             adc_first_data,  // 38 
+    .dio_p ({adc_serpar,      // 39
+             adc_first_data,  // 38
              adc_reset,       // 37
              adc_stby,        // 36
              adc_range,       // 35
@@ -136,7 +136,7 @@ module system_top #(
 
   assign gpio_i[63:40] = gpio_o[63:40];
 
- ad_iobuf #(
+  ad_iobuf #(
     .DATA_WIDTH(2)
   ) i_iobuf_iic_mux_scl (
     .dio_t({iic_mux_scl_t_s, iic_mux_scl_t_s}),
