@@ -76,7 +76,6 @@ module system_top (
   output          i2s_sdata_out,
   input           i2s_sdata_in,
 
-
   inout           iic_scl,
   inout           iic_sda,
   inout   [ 1:0]  iic_mux_scl,
@@ -89,7 +88,8 @@ module system_top (
   input           adaq400x_spi_sdi,
   output          adaq400x_spi_sdo,
   output          adaq400x_spi_sclk,
-  output          adaq400x_spi_cs);
+  output          adaq400x_spi_cs
+);
 
   // internal signals
 
