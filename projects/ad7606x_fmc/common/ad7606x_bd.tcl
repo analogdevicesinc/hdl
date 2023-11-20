@@ -122,9 +122,9 @@ switch $INTF {
     }
     
     # interconnect
-    ad_cpu_interconnect  0x44A00000 axi_ad7606x
-    ad_cpu_interconnect  0x44A30000 axi_ad7606x_dma
-    ad_cpu_interconnect  0x44A60000 ad7606_pwm_gen
+    ad_cpu_interconnect  0x44a00000 axi_ad7606x
+    ad_cpu_interconnect  0x44a30000 axi_ad7606x_dma
+    ad_cpu_interconnect  0x44b00000 ad7606_pwm_gen
     
     # memory interconnect
     ad_mem_hp1_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1
