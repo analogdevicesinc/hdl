@@ -77,23 +77,27 @@ module system_top (
 
   // dual_mxfe specific
 
-  input         vadj_1v8_pgood,
+  output        fpga_vadj,
   output        fan_pwm,
-  output        fan_tach,
+  output        fmc_fan_tach,
 
   output        adf4377_ce,
   output        adf4377_csb,
   output        adf4377_enclk1,
   output        adf4377_enclk2,
   output        adf4377_sclk,
-  inout         adf4377_sdio,
-  inout         adf4377_sdo,
+  output        adf4377_sdio,
+  input         adf4377_sdo,
 
   // reference clock
   input         fpga_clk0_p,
   input         fpga_clk0_n,
   input         fpga_clk0_p_replica,
   input         fpga_clk0_n_replica,
+
+  // was forgotten
+  input         fpga_clk1_p,
+  input         fpga_clk1_n,
 
   // rx_device_clk
   input         fpga_clk2_p,
@@ -127,34 +131,29 @@ module system_top (
   output [ 7:0] serdes1_c2m_p,
   output [ 7:0] serdes1_c2m_n,
 
-  output        syncin_p_0,
-  output        syncin_p_2,
+  // MxFE0: syncin_p[2] (FMC_MXFE0_SYNCIN_P<1>) and [0]
+  // MxFE0: syncin_n[0]
+  // MxFE1: syncin_p[3] (FMC_MXFE1_SYNCIN_P<1>) and [1]
+  // MxFE1: syncin_n[1]
+  output [ 3:0] syncin_p,
+  output [ 1:0] syncin_n,
 
-  input         syncout_p_0,
-  input         syncout_p_2,
+  // MxFE0: syncout_p[2] (FMC_MXFE0_SYNCOUT_P<1>) and [0]
+  // MxFE0: syncout_n[0]
+  // MxFE1: syncout_p[3] (FMC_MXFE1_SYNCOUT_P<1>) and [1]
+  // MxFE1: syncout_n[1]
+  input  [ 3:0] syncout_p,
+  input  [ 1:0] syncout_n,
 
-  // Sync pins used as GPIOs
-  // MxFE0 GPIOs
-  output        syncin_p_1,
-  output        syncin_n_0,
-
-  output        syncout_p_1,
-  output        syncout_n_0,
   output  [8:0] mxfe0_gpio,
 
-  // MxFE1 GPIOs
-  output        syncin_p_3,
-  output        syncin_n_1,
-
-  output        syncout_p_3,
-  output        syncout_n_1,
   output  [8:0] mxfe1_gpio,
 
   output        hmc7044_reset,
   output        hmc7044_sclk,
   output        hmc7044_slen,
-  inout         hmc7044_miso,
-  inout         hmc7044_mosi,
+  input         hmc7044_miso,
+  output        hmc7044_mosi,
 
   input         m0_irq,
   input         m1_irq,
