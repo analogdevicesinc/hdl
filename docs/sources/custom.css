@@ -60,9 +60,6 @@ table.regmap {
 table.regmap .caption-text{
 	font-size: 1rem;
 }
-td {
-	min-width: 4em;
-}
 th, td.type {
 	white-space: nowrap;
 }

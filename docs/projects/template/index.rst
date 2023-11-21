@@ -87,18 +87,21 @@ Block design
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-\**\* MUST HAVE \**\* The data path and clock domains are depicted in
-the below diagram:
-
-\*\* TIP: upload the .svg file for the diagram to have high quality \*\*
-
 If the project has multiple ways of configuration, then make subsections to
 this section and show the default configuration and some other popular modes.
+
+\**\* KEEP THIS PARAGRAPH \**\*
+The data path and clock domains are depicted in the below diagram:
 
 .. image:: ../ad9783_ebz/ad9783_zcu102_block_diagram.svg
    :width: 800
    :align: center
    :alt: AD9783-EBZ/ZCU102 block diagram
+
+\*\* MUST: Use SVG format for the diagram \*\*
+
+\*\* TIP: Block diagrams should contain subtitles only if there are at least two
+different diagrams \*\*
 
 Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -146,8 +149,7 @@ Clock scheme
 -  SYSREF clocks are LVDS
 -  ADCCLK and REFCLK are LVPECL
 
-\*\* ADD IMAGE IF APPLIES! TIP: upload the .svg file for the diagram to have
-high quality \*\*
+\*\* ADD IMAGE IF APPLIES! MUST: Use SVG format \*\*
 
 **\*DESCRIBE OTHER COMPONENTS FROM THE PROJECT, EX: SYNCHRONA**\ \*
 
@@ -185,6 +187,7 @@ chains are merged together and transferred to the DDR with a single DMA.
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+\**\* KEEP THIS PARAGRAPH \**\*
 The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at :ref:`architecture`).
 
@@ -196,6 +199,8 @@ Depending on the values of parameters $INTF_CFG, $ADI_PHY_SEL and $TDD_SUPPORT,
 some IPs are instatiated and some are not.
 
 Check-out the table below to find out the conditions.
+
+\*\* MUST: Hexadecimal addresses are written in caps and separated by an underscore. \*\*
 
 ==================== ================================= =============== =========== ============
 Instance             Depends on parameter              Zynq/Microblaze ZynqMP      Versal
@@ -292,6 +297,9 @@ GPIOs
      - 63:32
      - 117:86
      - 141:110
+
+\*\* MUST: GPIOs should be listed in descending order and should have the number
+of bits specified next to their name \*\*
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

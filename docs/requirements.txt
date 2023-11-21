@@ -1,4 +1,5 @@
 sphinx
+regex
 lxml
 furo
 wavedrom
