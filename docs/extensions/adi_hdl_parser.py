@@ -4,6 +4,8 @@
 ###############################################################################
 
 import os.path
+import contextlib
+import re
 from docutils import nodes
 from docutils.statemachine import ViewList
 from docutils.parsers.rst import Directive, directives
@@ -13,7 +15,6 @@ from lxml import etree
 from adi_hdl_static import hdl_strings
 from uuid import uuid4
 from hashlib import sha1
-import contextlib
 
 logger = logging.getLogger(__name__)
 
@@ -340,7 +341,7 @@ class directive_interfaces(directive_base):
 
 		for tag in description:
 			if tag not in bs and tag not in pr:
-				logger.warning(f"Signal {tag} defined in the directive does not exist in the source code!")
+				logger.warning(f"Signal {tag} defined in the directive does not exist in the IP-XACT (component.xml)!")
 
 		return subnode 
 
@@ -523,7 +524,7 @@ class directive_parameters(directive_base):
 
 		for tag in description:
 			if tag not in parameter:
-					logger.warning(f"{tag} defined in the directive does not exist in the source code!")
+					logger.warning(f"{tag} defined in the directive does not exist in the IP-XACT (component.xml)!")
 
 		return table
 
@@ -893,21 +894,25 @@ def manage_hdl_regmaps(env, docnames):
 		if not os.path.isfile(f):
 			del rm[lib]
 	# Inconsistent naming convention, need to parse all in directory.
-	files = []
+	regmaps = []
 	for (dirpath, dirnames, filenames) in os.walk("regmap"):
-		files.extend(filenames)
-		break
-	regmaps = [f.replace('adi_regmap_','').replace('.txt','') for f in files]
-	for reg_name in regmaps:
-		ctime = os.path.getctime(f"regmap/adi_regmap_{reg_name}.txt")
-		if reg_name in rm and rm[reg_name]['ctime'] < ctime:
-			for o in rm[reg_name]['owners']:
-				if o not in docnames:
-					docnames.append(o)
-		if reg_name in rm and rm[reg_name]['ctime'] >= ctime:
-			pass
-		else:
-			rm[reg_name] = parse_hdl_regmap(reg_name, ctime)
+		for file in filenames:
+			m = re.search("adi_regmap_(\w+)\.txt", file)
+			if not bool(m):
+				continue
+
+			reg_name = m.group(1)
+			regmaps.extend(reg_name)
+
+			ctime = os.path.getctime(f"regmap/{file}")
+			if reg_name in rm and rm[reg_name]['ctime'] < ctime:
+				for o in rm[reg_name]['owners']:
+					if o not in docnames:
+						docnames.append(o)
+			if reg_name in rm and rm[reg_name]['ctime'] >= ctime:
+				pass
+			else:
+				rm[reg_name] = parse_hdl_regmap(reg_name, ctime)
 
 def manage_hdl_artifacts(app, env, docnames):
 	libraries =  [[k.replace('/index',''), k] for k in env.found_docs if k.find('library/') == 0]

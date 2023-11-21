@@ -128,6 +128,32 @@ an option, you shall remove it and export in the *grid* table format.
 Now you only have to adjust the widths and give the final touches, like using
 the correct directives and roles.
 
+Lists
+--------------------------------------------------------------------------------
+
+Unordered lists use ``*`` or ``-`` and ordered lists ``#.``.
+
+Child items must be aligned with the first letter of the parent item, that means,
+2 spaces for unordered list and 3 spaces for ordered lists, for example:
+
+.. code-block:: rst
+
+   #. Parent ordered item.
+
+      * Child unordeded item.
+
+        #. Child ordered item.
+        #. Child ordered item.
+
+Renders as:
+
+#. Parent numbered item.
+
+   * Child unordered item.
+
+     #. Child ordered item.
+     #. Child ordered item.
+
 Code
 --------------------------------------------------------------------------------
 
