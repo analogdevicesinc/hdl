@@ -1,4 +1,9 @@
-# dual_mxfe/vcu118
+###############################################################################
+## Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
+
+# dual_mxfe/vck190
 
 set_property -dict {PACKAGE_PIN M33  IOSTANDARD LVCMOS18} [get_ports adf4377_ce]        ; ## H23  FMC_LA19_N           IO_L22N_T3U_N7_DBC_AD0N_45
 set_property -dict {PACKAGE_PIN N33  IOSTANDARD LVCMOS18} [get_ports adf4377_csb]       ; ## H22  FMC_LA19_P           IO_L22P_T3U_N6_DBC_AD0P_45
