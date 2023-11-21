@@ -53,7 +53,7 @@ Block diagram
 .. image:: ad9434_fmc_block_diagram.svg
    :width: 800
    :align: center
-   :alt: AD9783-EBZ/ZCU102 block diagram
+   :alt: AD9434-FMC/ZC706/ZED block diagram
 
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -80,12 +80,12 @@ CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The addresses are dependent on the architecture of the FPGA, having an offset
-added to the base address from HDL.
+added to the base address from HDL(see more at :ref:`architecture`).
 
 ==================== ===============
 Instance             Zynq/Microblaze
 ==================== ===============
-axi_ad9434_dma       0x44A0_0000    
+axi_ad9434           0x44A0_0000    
 axi_ad9434_dma       0x44A3_0000    
 ==================== ===============
 
@@ -192,25 +192,25 @@ HDL related
    * - IP name
      - Source code link
      - Documentation link
-   * - axi_ad9434
+   * - AXI_AD9434
      - :git-hdl:`library/axi_ad9434 <library/axi_ad9434>`
      - ---
-   * - axi_dmac
+   * - AXI_DMAC
      - :git-hdl:`library/axi_dmac <library/axi_dmac>`
      - :ref:`here <axi_dmac>`
-   * - axi_clkgen
+   * - AXI_CLKGEN
      - :git-hdl:`library/axi_clkgen <library/axi_clkgen>`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_clkgen>`
-   * - axi_hdmi_tx
+   * - AXI_HDMI_TX
      - :git-hdl:`library/axi_hdmi_tx <library/axi_ad9434>`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_hdmi_tx>`
-   * - axi_spdif_tx
+   * - AXI_SPDIF_TX
      - :git-hdl:`library/axi_spdif_tx <library/axi_spdif_tx>`
      - ---
-   * - axi_sysid
+   * - AXI_SYSID
      - :git-hdl:`library/axi_sysid <library/axi_sysid>`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
-   * - sysid_rom
+   * - SYSID_ROM
      - :git-hdl:`library/sysid_rom <library/sysid_rom>`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
 
