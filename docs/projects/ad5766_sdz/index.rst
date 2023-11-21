@@ -58,9 +58,6 @@ Block design
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-AD5766_SDZ
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 .. image:: ad5766_spi_engine_hdl.svg
    :width: 800
    :align: center
@@ -69,13 +66,14 @@ AD5766_SDZ
 Jumper setup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-================== ================= ====================================
+================== ================= ==========================================
 Jumper/Solder link Default Position  Description
-================== ================= ==================================== 
+================== ================= ==========================================
 LK1,LK2,LK3        A                 Supplied by the 3.3 V supply (J12)
-LK4,LK5            B                 Supplied by the :adi:`ADP5071` power solution
-LK6                B                 Positive and negative output rails power up  
-                                     simultaneously when EN2 is high
+LK4,LK5            B                 Supplied by the :adi:`ADP5071` power
+                                     solution
+LK6                B                 Positive and negative output rails power
+                                     up simultaneously when EN2 is high
 LK7                A                 Selects the :adi:`ADR4525` 2.5 V reference
 LK8                B                 Supplied by the 3.3 V supply (J12)
 LK9                A                 1.2 MHz switching frequency (default)
@@ -83,7 +81,7 @@ LK10               A                 Slowest slew rate (best noise performance)
 LK11,LK12          Removed           Insert link to bypass the LC filter on the
                                      :adi:`ADP5071` positive output
 SW1                Pos-2             ADP5070_VPOS = +8V, ADP5070_VNEG = -22V
-================== ================= ====================================
+================== ================= ==========================================
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -220,42 +218,41 @@ HDL related
    * - IP name
      - Source code link
      - Documentation link
-
    * - AXI_AD5766
-     - :git-hdl:`library/axi_ad5766 <main:library/axi_ad5766>`
+     - :git-hdl:`library/axi_ad5766 <library/axi_ad5766>`
      - ---
    * - AXI_CLKGEN
-     - :git-hdl:`library/axi_dmac <main:library/axi_clkgen>`
+     - :git-hdl:`library/axi_dmac <library/axi_clkgen>`
      - :dokuwiki:`[Wiki]` 
    * - AXI_DMAC
-     - :git-hdl:`library/axi_dmac <master:library/axi_dmac>`
+     - :git-hdl:`library/axi_dmac <library/axi_dmac>`
      - :ref:`here <axi_dmac>`
    * - AXI_HDMI_TX
-     - :git-hdl:`library/axi_hdmi_tx <main:library/axi_hdmi_tx>`
+     - :git-hdl:`library/axi_hdmi_tx <library/axi_hdmi_tx>`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_hdmi_tx>`      
    * - AXI_I2S_ADI
-     - :git-hdl:`library/axi_i2s_adi <main:library/axi_i2s_adi>`
+     - :git-hdl:`library/axi_i2s_adi <library/axi_i2s_adi>`
      - ---
    * - AXI_SPDIF_TX
-     - :git-hdl:`library/axi_spdif_tx <main:library/axi_spdif_tx>`
+     - :git-hdl:`library/axi_spdif_tx <library/axi_spdif_tx>`
      - ---
    * - AXI_SYSID
-     - :git-hdl:`library/axi_sysid <main:library/axi_sysid>`
+     - :git-hdl:`library/axi_sysid <library/axi_sysid>`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
    * - AXI_SPI_ENGINE
-     - :git-hdl:`library/spi_engine/axi_spi_engine <main:library/spi_engine/axi_spi_engine>`
+     - :git-hdl:`library/spi_engine/axi_spi_engine <library/spi_engine/axi_spi_engine>`
      - :ref:`here <spi_engine axi>`
    * - SPI_ENGINE_EXECUTION
-     - :git-hdl:`library/spi_engine/spi_engine_execution <main:library/spi_engine/spi_engine_execution>`
+     - :git-hdl:`library/spi_engine/spi_engine_execution <library/spi_engine/spi_engine_execution>`
      - :ref:`here <spi_engine execution>`
    * - SPI_ENGINE_INTERCONNECT
-     - :git-hdl:`library/spi_engine/spi_engine_interconnect <main:library/spi_engine/spi_engine_interconnect>`
+     - :git-hdl:`library/spi_engine/spi_engine_interconnect <library/spi_engine/spi_engine_interconnect>`
      - :ref:`here <spi_engine interconnect>`
    * - SYSID_ROM
-     - :git-hdl:`library/sysid_rom <main:library/sysid_rom>`
+     - :git-hdl:`library/sysid_rom <library/sysid_rom>`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
    * - UTIL_I2C-MIXER
-     - :git-hdl:`library/util_i2c_mixer <main:library/util_i2c_mixer>`
+     - :git-hdl:`library/util_i2c_mixer <library/util_i2c_mixer>`
      - ---  
 
 Software related

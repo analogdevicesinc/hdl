@@ -1074,9 +1074,9 @@
      showgrid="true"
      inkscape:current-layer="g11134"
      inkscape:document-units="px"
-     inkscape:cy="367.87229"
-     inkscape:cx="611.2938"
-     inkscape:zoom="2.8284272"
+     inkscape:cy="388.37499"
+     inkscape:cx="669.24998"
+     inkscape:zoom="4.0000001"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
@@ -1366,7 +1366,7 @@
            x="551.98651"
            sodipodi:role="line">  <tspan
    style="font-size:9.32891px"
-   id="tspan4">50MHz Write/10MHz Read   </tspan></tspan></text>
+   id="tspan4">50MHz Read/10MHz Write   </tspan></tspan></text>
       <rect
          y="14.5533"
          x="154.90112"
