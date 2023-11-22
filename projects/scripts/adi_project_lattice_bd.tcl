@@ -171,6 +171,7 @@ proc adi_project_create_bd {project_name args} {
 
   foreach cmd $cmd_list {
     puts "Executing cmd: $cmd"
+    sbp_design save
     eval $cmd
   }
 
