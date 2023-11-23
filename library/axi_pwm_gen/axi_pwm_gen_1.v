@@ -47,7 +47,7 @@ module axi_pwm_gen_1 #(
   input               load_config,
   input               sync,
 
-  output  reg         pulse,
+  output              pulse,
   output              pulse_armed
 );
 
@@ -59,6 +59,8 @@ module axi_pwm_gen_1 #(
   reg     [31:0]               pulse_period_d = PULSE_PERIOD;
   reg     [31:0]               pulse_width_d = PULSE_WIDTH;
   reg                          phase_align_armed = 1'b1;
+  reg                          pulse_i = 1'b0;
+  reg                          busy = 1'b0;
 
   // internal wires
 
@@ -107,7 +109,19 @@ module axi_pwm_gen_1 #(
     end
   end
 
-  assign phase_align = phase_align_armed & sync;
+  always @(posedge clk) begin
+    if (rstn == 1'b0) begin
+      busy <= 1'b0;
+    end else begin
+      if (end_of_period) begin
+        busy <= 1'b0;
+      end else if ( ~(phase_align_armed & sync)) begin
+        busy <= 1'b1;
+      end
+    end
+  end
+
+  assign phase_align = phase_align_armed & sync & busy;
 
   // a free running counter
 
@@ -127,13 +141,14 @@ module axi_pwm_gen_1 #(
   // generate pulse with a specified width
 
   always @ (posedge clk) begin
-    if ((rstn == 1'b0) || (phase_align == 1'b1) || (end_of_pulse == 1'b1)) begin
-      pulse <= 1'b0;
-    end else if (end_of_period == 1'b1 && pulse_enable == 1'b1) begin
-      pulse <= 1'b1;
+    if ((rstn == 1'b0) || (end_of_pulse == 1'b1)) begin
+      pulse_i <= 1'b0;
+    end else if ((end_of_period == 1'b1 || phase_align == 1'b1) && pulse_enable == 1'b1) begin
+      pulse_i <= 1'b1;
     end
   end
 
+  assign pulse = pulse_i & !(phase_align_armed & sync);
   assign pulse_armed = phase_align_armed;
 
 endmodule
