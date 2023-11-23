@@ -69,3 +69,21 @@ G18      LA16_P           FPGA_ADF4371_SCLK        adf4371_sclk         LVCMOS18
 G19      LA16_N           FPGA_ADF4371_SDIO        adf4371_sdio         LVCMOS18     #N/A
 
 H20      LA15_N           FPGA_LTC6952_0_SDO       ltc6952_sdo          LVCMOS18     #N/A
+
+#ad4630
+
+D8       LA01_P_CC        SCK_FMC                  ad463x_spi_sclk      LVCMOS18     IOB TRUE
+D12      LA05_N           SDI_FMC                  ad463x_spi_sdo       LVCMOS18     IOB TRUE
+D11      LA05_P           CS_FMC                   ad463x_spi_cs        LVCMOS18     #N/A
+D23      LA23_P           SDO0_FMC                 ad463x_spi_sdi[0]    LVCMOS18     #N/A
+D24      LA23_N           SDO1_FMC                 ad463x_spi_sdi[1]    LVCMOS18     #N/A
+D26      LA26_P           SDO2_FMC                 ad463x_spi_sdi[2]    LVCMOS18     #N/A
+D27      LA26_N           SDO3_FMC                 ad463x_spi_sdi[3]    LVCMOS18     #N/A
+G33      LA31_P           SDO4_FMC                 ad463x_spi_sdi[4]    LVCMOS18     #N/A
+G34      LA31_N           SDO5_FMC                 ad463x_spi_sdi[5]    LVCMOS18     #N/A
+G36      LA33_P           SDO6_FMC                 ad463x_spi_sdi[6]    LVCMOS18     #N/A
+G37      LA33_N           SDO7_FMC                 ad463x_spi_sdi[7]    LVCMOS18     #N/A
+G30      LA29_P           CNV_FMC                  ad463x_cnv           LVCMOS18     #N/A
+G28      LA25_N           RESET_FMC                ad463x_resetn        LVCMOS18     #N/A
+D20      LA17_P_CC        SCK_OUT_FMC              ad463x_echo_sclk     LVCMOS18     #N/A
+G31      LA29_N           BUSY_FMC                 ad463x_busy          LVCMOS18     #N/A

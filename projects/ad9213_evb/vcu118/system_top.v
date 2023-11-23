@@ -35,7 +35,9 @@
 
 `timescale 1ns/100ps
 
-module system_top (
+module system_top  #(
+  parameter NUM_OF_SDI = 2
+) (
 
   input                   sys_rst,
   input                   sys_clk_p,
@@ -75,7 +77,7 @@ module system_top (
   inout                   iic_scl,
   inout                   iic_sda,
 
-  // FMC+ IOs
+  // FMC+ IOs AD9213
 
   input                   rx_ref_clk_p,
   input                   rx_ref_clk_n,
@@ -105,10 +107,31 @@ module system_top (
   inout       [ 4:0]      gpio,
 
   output                  rstb,
-  output                  hmc_sync_req
+  output                  hmc_sync_req,
+  
+  // ad463x SPI configuration interface
+
+  input [NUM_OF_SDI-1:0]  ad463x_spi_sdi,
+  output                  ad463x_spi_sdo,
+  output                  ad463x_spi_sclk,
+  output                  ad463x_spi_cs,
+
+  input                   ad463x_echo_sclk,
+  output                  ad463x_cnv,
+  input                   ad463x_busy,
+  inout                   ad463x_resetn
 );
 
   // internal signals
+  wire            ext_clk_s;
+
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+  wire            ad463x_echo_sclk_s;
 
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
@@ -165,26 +188,19 @@ module system_top (
     .O (glbl_clk_buf));
 
   ad_iobuf #(
-    .DATA_WIDTH(5)
+    .DATA_WIDTH(22)
   ) i_iobuf (
     .dio_t (gpio_t[36:32]),
     .dio_i (gpio_o[36:32]),
     .dio_o (gpio_i[36:32]),
-    .dio_p ({gpio[4:0]}));     // 36-32
+    .dio_p ({gpio[4:0],     // 36-32
+             gpio_bd}));    // 31-16  
 
   assign hmc_sync_req = gpio_o[37];
   assign rstb         = gpio_o[38];
 
-  ad_iobuf #(
-    .DATA_WIDTH(17)
-  ) i_iobuf_bd (
-    .dio_t (gpio_t[16:0]),
-    .dio_i (gpio_o[16:0]),
-    .dio_o (gpio_i[16:0]),
-    .dio_p (gpio_bd));
-
-  assign gpio_i[63:38] = gpio_o[63:38];
-  assign gpio_i[31:17] = gpio_o[31:17];
+  assign gpio_i[63:40] = gpio_o[63:40];
+  assign gpio_i[14:0] = gpio_o[14:0];
 
   ad_3w_spi #(
     .NUM_OF_SLAVES(2)
@@ -205,6 +221,39 @@ module system_top (
     .spi_miso (spi_miso),
     .spi_sdio (fpga_sdio),
     .spi_dir ());
+
+  ad_data_clk #(
+    .SINGLE_ENDED (1)
+  ) i_echo_sclk (
+    .rst (1'b0),
+    .locked (),
+    .clk_in_p (ad463x_echo_sclk),
+    .clk_in_n (1'b0),
+    .clk (ad463x_echo_sclk_s));
+
+  ad_iobuf #(
+    .DATA_WIDTH(1)
+  ) i_ad463x_gpio_iobuf (
+    .dio_t(gpio_t[39]),
+    .dio_i(gpio_o[39]),
+    .dio_o(gpio_i[39]),
+    .dio_p(ad463x_resetn));
+
+  ad_iobuf #(
+    .DATA_WIDTH(2)
+  ) i_iic_mux_scl (
+    .dio_t({iic_mux_scl_t_s, iic_mux_scl_t_s}),
+    .dio_i(iic_mux_scl_o_s),
+    .dio_o(iic_mux_scl_i_s),
+    .dio_p(iic_mux_scl));
+
+  ad_iobuf #(
+    .DATA_WIDTH(2)
+  ) i_iic_mux_sda (
+    .dio_t({iic_mux_sda_t_s, iic_mux_sda_t_s}),
+    .dio_i(iic_mux_sda_o_s),
+    .dio_o(iic_mux_sda_i_s),
+    .dio_p(iic_mux_sda));
 
   system_wrapper i_system_wrapper (
     .sys_rst (sys_rst),
@@ -258,7 +307,7 @@ module system_top (
     .gpio1_i (gpio_i[63:32]),
     .gpio1_o (gpio_o[63:32]),
     .gpio1_t (gpio_t[63:32]),
-    // FMC+
+     // FMC+
     .rx_data_0_n  (rx_data_n[1]),
     .rx_data_0_p  (rx_data_p[1]),
     .rx_data_1_n  (rx_data_n[3]),
@@ -291,11 +340,17 @@ module system_top (
     .rx_data_14_p (rx_data_p[13]),
     .rx_data_15_n (rx_data_n[11]),
     .rx_data_15_p (rx_data_p[11]),
-
     .rx_ref_clk_0 (rx_ref_clk),
     .rx_ref_clk_1 (rx_ref_clk_replica),
     .glbl_clk_0 (glbl_clk_buf),
     .rx_sync_0 (rx_sync),
-    .rx_sysref_0 (rx_sysref));
+    .rx_sysref_0 (rx_sysref),
+    .ad463x_spi_sdo (ad463x_spi_sdo),
+    .ad463x_spi_sdi (ad463x_spi_sdi),
+    .ad463x_spi_cs (ad463x_spi_cs),
+    .ad463x_spi_sclk (ad463x_spi_sclk),
+    .ad463x_echo_sclk (ad463x_echo_sclk_s),
+    .ad463x_busy (ad463x_busy),
+    .ad463x_cnv (ad463x_cnv));
 
 endmodule
