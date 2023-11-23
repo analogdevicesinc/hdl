@@ -30,17 +30,17 @@ ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports rxd_i]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports txd_o]
 
 #i2c pmod2
-ldc_set_location -site {AA2} [get_ports scl_io]
-ldc_set_location -site {AA1} [get_ports sda_io]
+ldc_set_location -site {AA2} [get_ports scl_io]; ## PMOD2_3
+ldc_set_location -site {AA1} [get_ports sda_io]; ## PMOD2_4
 
 ldc_set_port -iobuf {IO_TYPE=LVCMOS33 PULLMODE=UP} [get_ports scl_io]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS33 PULLMODE=UP} [get_ports sda_io]
 
 #spi pmod0
-ldc_set_location -site {Y1} [get_ports {ssn_o[0]}]
-ldc_set_location -site {W2} [get_ports mosi_o]
-ldc_set_location -site {V3} [get_ports miso_i]
-ldc_set_location -site {V1} [get_ports sclk_o]
+ldc_set_location -site {Y1} [get_ports {ssn_o[0]}];  ## PMOD0_1
+ldc_set_location -site {W2} [get_ports mosi_o];      ## PMOD0_2
+ldc_set_location -site {V3} [get_ports miso_i];      ## PMOD0_3
+ldc_set_location -site {V1} [get_ports sclk_o];      ## PMOD0_4
 
 ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports {ssn_o[0]}]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports mosi_o]
