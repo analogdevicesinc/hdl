@@ -333,7 +333,7 @@ module axi_pwm_gen #(
           if (pwm_gen_resetn == 1'b0) begin
             sync[i] <= 1'b1;
           end else begin
-            sync[i] <= (offset_cnt == pwm_offset_s[i]) ? 1'b0 : 1'b1;
+            sync[i] <= (offset_cnt == pwm_offset_s[i]) ? offset_alignment : 1'b1;
           end
         end
       end else begin
