@@ -1,5 +1,4 @@
 FMC_pin   FMC_port         Schematic_name   System_top_name     IOSTANDARD    Termination
-  
 # ad7606x  
   
 G7        FMC_LA00_CC_N    DOUTA_1          ad7606_spi_sdi[0]   LVCMOS25      #N/A

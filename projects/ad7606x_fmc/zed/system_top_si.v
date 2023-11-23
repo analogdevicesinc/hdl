@@ -84,10 +84,10 @@ module system_top #(
 
   input                   otg_vbusoc,
 
-  output                       ad7606_spi_cs,
-  output                       ad7606_spi_sclk,
-  input       [NUM_OF_SDI-1:0] ad7606_spi_sdi,
-  output                       ad7606_spi_sdo,
+  output                  ad7606_spi_cs,
+  output                  ad7606_spi_sclk,
+  input  [NUM_OF_SDI-1:0] ad7606_spi_sdi,
+  output                  ad7606_spi_sdo,
 
   inout                   adc_serpar,
   inout                   adc_busy,
