@@ -440,7 +440,7 @@ module system_top (
 
     // quads
 
-    // see "RX connect PHY to link Layer" section from ad_dualmxfe_ebz_bd.tcl
+    // see "RX connect PHY to link Layer" section from ../common/ad_dualmxfe_ebz_bd.tcl
     //         serdes0_m2c index ## serdes1_m2c index-8
     // index = { 1 0 6 3 2 7 5 4 ## 15 14 13 12 9 11 10 8 }
 
@@ -464,14 +464,14 @@ module system_top (
     .rx_data_7_p (serdes0_m2c_p[4]),
     // quad 125
     // so logic_lane(13) is serdes1_m2c[5]
-    .rx_data_8_n  (serdes1_m2c_n[7]),
-    .rx_data_8_p  (serdes1_m2c_p[7]),
-    .rx_data_9_n  (serdes1_m2c_n[6]),
-    .rx_data_9_p  (serdes1_m2c_p[6]),
-    .rx_data_10_n (serdes1_m2c_n[5]),
-    .rx_data_10_p (serdes1_m2c_p[5]),
-    .rx_data_11_n (serdes1_m2c_n[4]),
-    .rx_data_11_p (serdes1_m2c_p[4]),
+    //.rx_data_8_n  (),//serdes1_m2c_n[7]),
+    //.rx_data_8_p  (),//serdes1_m2c_p[7]),
+    //.rx_data_9_n  (),//serdes1_m2c_n[6]),
+    //.rx_data_9_p  (),//serdes1_m2c_p[6]),
+    //.rx_data_10_n (),//serdes1_m2c_n[5]),
+    //.rx_data_10_p (),//serdes1_m2c_p[5]),
+    //.rx_data_11_n (),//serdes1_m2c_n[4]),
+    //.rx_data_11_p (),//serdes1_m2c_p[4]),
     // quad 126
     .rx_data_12_n (serdes1_m2c_n[1]),
     .rx_data_12_p (serdes1_m2c_p[1]),
@@ -506,14 +506,14 @@ module system_top (
     .tx_data_7_p (serdes0_c2m_p[6]),
     // quad 125
     // so logic_lane(8) = serdes1_c2m[1]
-    .tx_data_8_n  (serdes1_c2m_n[7]),
-    .tx_data_8_p  (serdes1_c2m_p[7]),
-    .tx_data_9_n  (serdes1_c2m_n[1]),
-    .tx_data_9_p  (serdes1_c2m_p[1]),
-    .tx_data_10_n (serdes1_c2m_n[4]),
-    .tx_data_10_p (serdes1_c2m_p[4]),
-    .tx_data_11_n (serdes1_c2m_n[0]),
-    .tx_data_11_p (serdes1_c2m_p[0]),
+    //.tx_data_8_n  (),//serdes1_c2m_n[7]),
+    //.tx_data_8_p  (),//serdes1_c2m_p[7]),
+    //.tx_data_9_n  (),//serdes1_c2m_n[1]),
+    //.tx_data_9_p  (),//serdes1_c2m_p[1]),
+    //.tx_data_10_n (),//serdes1_c2m_n[4]),
+    //.tx_data_10_p (),//serdes1_c2m_p[4]),
+    //.tx_data_11_n (),//serdes1_c2m_n[0]),
+    //.tx_data_11_p (),//serdes1_c2m_p[0]),
     // quad 126
     .tx_data_12_n (serdes1_c2m_n[2]),
     .tx_data_12_p (serdes1_c2m_p[2]),
