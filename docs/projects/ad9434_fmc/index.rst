@@ -6,15 +6,15 @@ AD9434-FMC HDL project
 Overview
 -------------------------------------------------------------------------------
 
-The :adi:`AD9434` is a 12-bit monolithic sampling analog-to-digital converter 
-(ADC) optimized for high performance, low power, and ease of use. The part 
-operates at up to a 500 MSPS conversion rate and is optimized for outstanding 
-dynamic performance in wideband carrier and broadband systems. All necessary 
-functions, including a sample-and-hold and voltage reference, are included on 
+The :adi:`AD9434` is a 12-bit monolithic sampling analog-to-digital converter
+(ADC) optimized for high performance, low power, and ease of use. The part
+operates at up to a 500 MSPS conversion rate and is optimized for outstanding
+dynamic performance in wideband carrier and broadband systems. All necessary
+functions, including a sample-and-hold and voltage reference, are included on
 the chip to provide a complete signal conversion solution. This reference 
-design includes a data capture interface and the external DDR-DRAM interface 
-for sample storage. It allows programming the device and monitoring its internal 
-status registers. The board also provides other options to drive the clock and 
+design includes a data capture interface and the external DDR-DRAM interface
+for sample storage. It allows programming the device and monitoring its internal
+status registers. The board also provides other options to drive the clock and
 analog inputs of the ADC.
 
 Supported boards
@@ -59,11 +59,11 @@ Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 There are multiple ways to configure the clock source for :adi:`AD9434`.
-In this section is presented a guide on how to rework the board to the desired 
-user clock circuitry. Below is a table on what components are needed to install 
+In this section is presented a guide on how to rework the board to the desired
+user clock circuitry. Below is a table on what components are needed to install
 or uninstall on the evaluation board.
 
-==================== ======================================== ================ 
+==================== ======================================== ================
 Clock Configuration  Install                                  Uninstall
 ==================== ======================================== ================
 Ext. Signal Gen.     as it is                                 as it is
@@ -72,8 +72,8 @@ LVPECL               R208, R307, R308, C300, C311, C304, C305 C209, C210
 LVDS                 R208, C306, C307                         C209, C210, R311
 ==================== ======================================== ================
 
-For LVPECL and LVDS configurations, appropriate charge pump filter circuit 
-values are necessary to have an optimized clock buffer performance from 
+For LVPECL and LVDS configurations, appropriate charge pump filter circuit
+values are necessary to have an optimized clock buffer performance from
 :adi:`AD9517-4`.
 
 CPU/Memory interconnects addresses
@@ -85,8 +85,8 @@ added to the base address from HDL(see more at :ref:`architecture`).
 ==================== ===============
 Instance             Zynq/Microblaze
 ==================== ===============
-axi_ad9434           0x44A0_0000    
-axi_ad9434_dma       0x44A3_0000    
+axi_ad9434           0x44A0_0000
+axi_ad9434_dma       0x44A3_0000
 ==================== ===============
 
 SPI connections
@@ -120,7 +120,7 @@ Instance name    HDL Linux Zynq Actual Zynq
 axi_ad9783_dma   13  57         89             
 ================ === ========== ===========
 
-These are the board-specific interrupts 
+These are the board-specific interrupts
 (found in :git-hdl:`here <projects/ad9434_fmc/common/ad9434_bd.tcl>`).
 
 Building the HDL project
@@ -133,8 +133,8 @@ the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
 
-Then go to the project location (**projects/ad9434_fmc/carrier**) and run the 
-make command by typing in your command prompt (this example is for 
+Then go to the project location (**projects/ad9434_fmc/carrier**) and run the
+make command by typing in your command prompt (this example is for
 :xilinx:`ZC706`):
 
 **Linux/Cygwin/WSL**
@@ -144,7 +144,7 @@ make command by typing in your command prompt (this example is for
    user@analog:~$ cd hdl/projects/ad9434_fmc/zc706
    user@analog:~/hdl/projects/ad9434_fmc/zc706$ make
 
-A more comprehensive build guide can be found in the :ref:`build_hdl` user 
+A more comprehensive build guide can be found in the :ref:`build_hdl` user
 guide.
 
 Resources
@@ -177,8 +177,8 @@ Hardware related
 
 - Product datasheets:
 
-   - :adi:`AD9434`
-   - :adi:`EVAL-AD9434`
+  * :adi:`AD9434`
+  * :adi:`EVAL-AD9434`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
