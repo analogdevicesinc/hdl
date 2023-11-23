@@ -141,21 +141,13 @@ Systems related
 Here you can find the quick start guides available for these evaluation boards:
 
 .. list-table::
-   :widths: 20 10 20 20 20 10
+   :widths: 50 50
    :header-rows: 1
 
    * - Evaluation board
-     - Zynq-7000
      - Zynq UltraScale+ MP
-     - Microblaze
-     - Versal
-     - Arria 10
    * - AD9783-EBZ
-     - ---
      - :dokuwiki:`[Wiki] ZCU102 <resources/fpga/xilinx/interposer/ad9783>`
-     - ---
-     - ---
-     - ---
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

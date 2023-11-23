@@ -7,11 +7,11 @@ Overview
 -------------------------------------------------------------------------------
 
 The :adi:`AD7616` is a 16-bit, data acquisition system (DAS) that supports
-dual simultaneous sampling of 16 channels. The :adi:`AD7616` operates from a
-single 5 V supply and can accommodate ±10 V, ±5 V, and ±2.5 V true bipolar
-input signals while sampling at throughput rates up to 1 MSPS per channel pair
-with 90 dB SNR. Higher SNR performance can be achieved with the on-chip
-oversampling mode; 92 dB for an oversampling ratio of 2.
+dual simultaneous sampling of 16 channels. It operates from a single 5 V supply
+and can accommodate ±10 V, ±5 V, and ±2.5 V true bipolar input signals while
+sampling at throughput rates up to 1 MSPS per channel pair with 90 dB SNR.
+Higher SNR performance can be achieved with the on-chip oversampling mode;
+92 dB for an oversampling ratio of 2.
 
 The input clamp protection circuitry can tolerate voltages up to ±20 V.
 The :adi:`AD7616` has 1 MΩ analog input impedance regardless of sampling
@@ -56,6 +56,8 @@ The data path of the HDL design is simple as follows:
 
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The data path and clock domains are depicted in the below diagrams:
 
 AD7616_SDZ serial interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -120,15 +122,18 @@ LK41               A         Onboard 3v3 power supply selected
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-========================  ==========
+The addresses are dependent on the architecture of the FPGA, having an offset
+added to the base address from HDL(see more at :ref:`architecture`).
+
+========================  ===========
 Instance                  Address
-========================  ==========
-axi_ad7616_dma            0x44a30000
-spi_clkgen                0x44a70000
-ad7616_pwm_gen            0x44b00000
-spi_ad7616_axi_regmap **  0x44a00000
-axi_ad7616 *              0x44a80000
-========================  ==========
+========================  ===========
+axi_ad7616_dma            0x44A3_0000
+spi_clkgen                0x44A7_0000
+ad7616_pwm_gen            0x44B0_0000
+spi_ad7616_axi_regmap **  0x44A0_0000
+axi_ad7616 *              0x44A8_0000
+========================  ===========
 
 .. admonition:: Legend
    :class: note
@@ -198,11 +203,11 @@ The Software GPIO number is calculated as follows:
      - OUT
      - 43
      - 97
-   * - adc_hw_rngsel
+   * - adc_hw_rngsel[1:0]
      - OUT
      - 42:41
      - 96:95
-   * - adc_os **
+   * - adc_os[2:0] **
      - OUT
      - 40:38
      - 94:92
@@ -214,7 +219,7 @@ The Software GPIO number is calculated as follows:
      - OUT
      - 36
      - 90
-   * - adc_chsel
+   * - adc_chsel[2:0]
      - OUT
      - 35:33
      - 89:87
@@ -297,12 +302,6 @@ Connections and hardware changes
 Resources
 -------------------------------------------------------------------------------
 
-Systems related
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
--  :dokuwiki:`AD7616 User guide <resources/eval/user-guides/ad7616-sdz>`
--  :dokuwiki:`How to build No-OS <resources/no-os/build>`
-
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -313,7 +312,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`ad7616_sdz HDL project <projects/ad7616_sdz>`
+-  :git-hdl:`AD7616_SDZ HDL project source code <projects/ad7616_sdz>`
 
 .. list-table::
    :widths: 30 35 35
@@ -374,12 +373,12 @@ HDL related
    -   ``*`` instantiated only for SER_PAR_N=0 (parallel interface)
    -   ``**`` instantiated only for SER_PAR_N=1 (serial interface)
 
--  :ref:`SPI_ENGINE <spi_engine>`
+-  :ref:`SPI Engine Framework documentation <spi_engine>`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-no-os:`No-OS project <projects/ad7616-sdz>`
+-  :git-no-os:`AD7616_SDZ No-OS project source code <projects/ad7616-sdz>`
 
 -  :dokuwiki:`How to build No-OS <resources/no-os/build>`
 

@@ -60,6 +60,8 @@ Block design
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+The data path and clock domains are depicted in the below diagram:
+
 .. image:: adaq7980_sdz_hdl.svg
    :width: 800
    :align: center
@@ -68,14 +70,17 @@ Block diagram
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-===========================  ==========
+The addresses are dependent on the architecture of the FPGA, having an offset
+added to the base address from HDL (see more at :ref:`architecture`).
+
+===========================  ===========
 Instance                     Address
-===========================  ==========
-axi_adaq7980_dma             0x44a30000
-spi_clkgen                   0x44a70000
-spi_adaq7980_adc_axi_regmap  0x44a00000
-spi_trigger_gen              0x44b00000
-===========================  ==========
+===========================  ===========
+axi_adaq7980_dma             0x44A3_0000
+spi_clkgen                   0x44A7_0000
+spi_adaq7980_adc_axi_regmap  0x44A0_0000
+spi_trigger_gen              0x44B0_0000
+===========================  ===========
 
 I2C connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -143,7 +148,7 @@ The Software GPIO number is calculated as follows:
      - INOUT
      - 40
      - 94
-   * - adaq7980_gpio
+   * - adaq7980_gpio[7:0]
      - INOUT
      - 39:32
      - 93:86
@@ -182,12 +187,6 @@ A more comprehensive build guide can be found in the :ref:`build_hdl` user guide
 Resources
 -------------------------------------------------------------------------------
 
-Systems related
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
--  :dokuwiki:`ADAQ7980 User guide <resources/eval/user-guides/adaq7980-sdz>`
--  :dokuwiki:`How to build No-OS <resources/no-os/build>`
-
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -198,8 +197,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`adaq7980_sdz HDL project <projects/adaq7980_sdz>`
--  :ref:`SPI_ENGINE <spi_engine>`
+-  :git-hdl:`ADAQ7980_SDZ HDL project source code <projects/adaq7980_sdz>`
 
 .. list-table::
    :widths: 30 35 35
@@ -248,10 +246,12 @@ HDL related
      - :git-hdl:`library/util_i2c_mixer <main:library/util_i2c_mixer>`
      - :ref:`here <spi_engine offload>`
 
+-  :ref:`SPI Engine Framework documentation <spi_engine>`
+
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-no-os:`No-OS project <projects/adaq7980_sdz>`
+-  :git-no-os:`ADAQ7980_SDZ No-OS project <projects/adaq7980_sdz>`
 
 -  :dokuwiki:`How to build No-OS <resources/no-os/build>`
 
