@@ -86,13 +86,16 @@ SW1                Pos-2             ADP5070_VPOS = +8V, ADP5070_VNEG = -22V
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-========================  ==========
+The addresses are dependent on the architecture of the FPGA, having an offset
+added to the base address from HDL (see more at :ref:`architecture`).
+
+========================  ===========
 Instance                  Address
-========================  ==========
-spi/axi                   0x44a00000
-spi/axi_ad5766            0x44a10000
-axi_ad5766_dac_dma        0x44a20000
-========================  ==========
+========================  ===========
+spi/axi                   0x44A0_0000
+spi/axi_ad5766            0x44A1_0000
+axi_ad5766_dac_dma        0x44A2_0000
+========================  ===========
 
 I2C connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -200,10 +203,11 @@ Systems related
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheet: :adi:`AD5766`
--  Product datasheet: :adi:`AD5767`
+-  Product datasheets:
 
-`UG-1070, Evaluation Board User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/EVAL-AD5766SD2Z-5767SD2Z-UG-1070.pdf>`__
+   -  :adi:`AD5766`
+   -  :adi:`AD5767`
+-  `UG-1070, Evaluation Board User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/EVAL-AD5766SD2Z-5767SD2Z-UG-1070.pdf>`__
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -223,7 +227,7 @@ HDL related
      - ---
    * - AXI_CLKGEN
      - :git-hdl:`library/axi_dmac <library/axi_clkgen>`
-     - :dokuwiki:`[Wiki]` 
+     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_clkgen>`
    * - AXI_DMAC
      - :git-hdl:`library/axi_dmac <library/axi_dmac>`
      - :ref:`here <axi_dmac>`
@@ -259,7 +263,7 @@ Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :git-no-os:`AD7606 - No-OS Driver <projects/ad5766-sdz>`
-- :dokuwiki:`AD5766 - No-OS Driver <resources/tools-software/uc-drivers/ad5766>`
+- :dokuwiki:`AD5766 - No-OS Driver [Wiki] <resources/tools-software/uc-drivers/ad5766>`
 - :dokuwiki:`How to build No-OS <resources/no-os/build>`
 
 .. include:: ../common/more_information.rst
