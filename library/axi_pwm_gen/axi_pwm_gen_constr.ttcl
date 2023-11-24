@@ -17,35 +17,15 @@ set_property ASYNC_REG TRUE \
   [get_cells -hier {*cdc_sync_stage1_reg*}] \
   [get_cells -hier {*cdc_sync_stage2_reg*}]
 
-  set_false_path -from [get_cells -hierarchical * -filter {NAME=~*i_pwm_period_sync/cdc_hold_reg*}] \
-                 -to   [get_cells -hierarchical * -filter {NAME=~*i_pwm_period_sync/out_data_reg*}] \
-
-  set_false_path -from [get_cells -hierarchical * -filter {NAME=~*i_pwm_width_sync/cdc_hold_reg*}] \
-                 -to   [get_cells -hierarchical * -filter {NAME=~*i_pwm_width_sync/out_data_reg*}] \
-
-  set_false_path -from [get_cells -hierarchical * -filter {NAME=~*i_pwm_offset_sync/cdc_hold_reg*}] \
-                 -to   [get_cells -hierarchical * -filter {NAME=~*i_pwm_offset_sync/out_data_reg*}] \
+  set_false_path -from [get_cells -hierarchical * -filter {NAME=~*i_pwm_props/cdc_hold_reg*}] \
+                 -to   [get_cells -hierarchical * -filter {NAME=~*i_pwm_props/out_data_reg*}] \
 
   set_false_path \
-    -from [get_pins -hierarchical * -filter {NAME=~*i_pwm_period_sync/out_toggle_d1_reg/C}] \
-    -to [get_pins -hierarchical * -filter {NAME=~*i_pwm_period_sync/i_sync_in/cdc_sync_stage1_reg[0]/D}]
+    -from [get_pins -hierarchical * -filter {NAME=~*i_pwm_props/out_toggle_d1_reg/C}] \
+    -to [get_pins -hierarchical * -filter {NAME=~*i_pwm_props/i_sync_in/cdc_sync_stage1_reg[0]/D}]
   set_false_path \
-    -from [get_pins -hierarchical * -filter {NAME=~*i_pwm_period_sync/in_toggle_d1_reg/C}] \
-    -to [get_pins -hierarchical * -filter {NAME=~*i_pwm_period_sync/i_sync_out/cdc_sync_stage1_reg[0]/D}]
-
-  set_false_path \
-    -from [get_pins -hierarchical * -filter {NAME=~*i_pwm_width_sync/out_toggle_d1_reg/C}] \
-    -to [get_pins -hierarchical * -filter {NAME=~*i_pwm_width_sync/i_sync_in/cdc_sync_stage1_reg[0]/D}]
-  set_false_path \
-    -from [get_pins -hierarchical * -filter {NAME=~*i_pwm_width_sync/in_toggle_d1_reg/C}] \
-    -to [get_pins -hierarchical * -filter {NAME=~*i_pwm_width_sync/i_sync_out/cdc_sync_stage1_reg[0]/D}]
-
-  set_false_path \
-    -from [get_pins -hierarchical * -filter {NAME=~*i_pwm_offset_sync/out_toggle_d1_reg/C}] \
-    -to [get_pins -hierarchical * -filter {NAME=~*i_pwm_offset_sync/i_sync_in/cdc_sync_stage1_reg[0]/D}]
-  set_false_path \
-    -from [get_pins -hierarchical * -filter {NAME=~*i_pwm_offset_sync/in_toggle_d1_reg/C}] \
-    -to [get_pins -hierarchical * -filter {NAME=~*i_pwm_offset_sync/i_sync_out/cdc_sync_stage1_reg[0]/D}]
+    -from [get_pins -hierarchical * -filter {NAME=~*i_pwm_props/in_toggle_d1_reg/C}] \
+    -to [get_pins -hierarchical * -filter {NAME=~*i_pwm_props/i_sync_out/cdc_sync_stage1_reg[0]/D}]
 
   set_false_path \
     -from [get_pins -hierarchical * -filter {NAME=~*i_load_config_sync/out_toggle_d1_reg/C}] \
