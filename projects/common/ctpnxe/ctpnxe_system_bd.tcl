@@ -31,6 +31,7 @@ adi_ip_instance -vlnv {latticesemi.com:ip:gpio0:1.6.1} \
   -ip_path "$ip_download_path/latticesemi.com_ip_gpio_1.6.1" \
   -ip_params {
     "IO_LINES_COUNT": 32,
+    "EXTERNAL_BUF": true,
     "DIRECTION_DEF_VAL_INPUT": "FF"
   } \
   -ip_iname "gpio1_inst"
@@ -119,7 +120,10 @@ sbp_add_port -direction in rstn_i
 sbp_add_port -direction in rxd_i
 sbp_add_port -direction out txd_o
 sbp_add_port -from 31 -to 0 -direction inout gpio
-sbp_add_port -from 31 -to 0 -direction inout gpio_eval
+
+sbp_add_port -from 31 -to 0 -direction input  gpio_eval_i
+sbp_add_port -from 31 -to 0 -direction output gpio_eval_o
+sbp_add_port -from 31 -to 0 -direction output gpio_eval_en_o
 
 sbp_add_port -direction out mosi_o
 sbp_add_port -direction out sclk_o
@@ -157,8 +161,12 @@ sbp_connect_net "$project_name/uart0_inst/txd_o" \
 
 sbp_connect_net "$project_name/gpio0_inst/gpio_io" \
   "$project_name/gpio"
-sbp_connect_net "$project_name/gpio1_inst/gpio_io" \
-  "$project_name/gpio_eval"
+sbp_connect_net "$project_name/gpio1_inst/gpio_i" \
+  "$project_name/gpio_eval_i"
+sbp_connect_net "$project_name/gpio1_inst/gpio_o" \
+  "$project_name/gpio_eval_o"
+sbp_connect_net "$project_name/gpio1_inst/gpio_en_o" \
+  "$project_name/gpio_eval_en_o"
 
 sbp_connect_net "$project_name/i2c0_inst/scl_io" \
   "$project_name/scl_io"
