@@ -207,43 +207,43 @@ HDL related
      - Source code link
      - Documentation link
    * - AXI_CLKGEN
-     - :git-hdl:`library/axi_dmac <main:library/axi_clkgen>`
+     - :git-hdl:`library/axi_dmac <library/axi_clkgen>`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_clkgen>`
    * - AXI_DMAC
-     - :git-hdl:`library/axi_dmac <master:library/axi_dmac>`
+     - :git-hdl:`library/axi_dmac <library/axi_dmac>`
      - :ref:`here <axi_dmac>`
    * - AXI_HDMI_TX
-     - :git-hdl:`library/axi_hdmi_tx <main:library/axi_hdmi_tx>`
+     - :git-hdl:`library/axi_hdmi_tx <library/axi_hdmi_tx>`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_hdmi_tx>`
    * - AXI_I2S_ADI
-     - :git-hdl:`library/axi_i2s_adi <main:library/axi_i2s_adi>`
+     - :git-hdl:`library/axi_i2s_adi <library/axi_i2s_adi>`
      - ---
    * - AXI_PWM_GEN
-     - :git-hdl:`library/axi_pwm_gen <main:library/axi_pwm_gen>`
+     - :git-hdl:`library/axi_pwm_gen <library/axi_pwm_gen>`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_pwm_gen>`
    * - AXI_SPDIF_TX
-     - :git-hdl:`library/axi_spdif_tx <main:library/axi_spdif_tx>`
+     - :git-hdl:`library/axi_spdif_tx <library/axi_spdif_tx>`
      - ---
    * - AXI_SPI_ENGINE
-     - :git-hdl:`library/spi_engine/axi_spi_engine <main:library/spi_engine/axi_spi_engine>`
+     - :git-hdl:`library/spi_engine/axi_spi_engine <library/spi_engine/axi_spi_engine>`
      - :ref:`here <spi_engine axi>`
    * - AXI_SYSID
-     - :git-hdl:`library/axi_sysid <main:library/axi_sysid>`
+     - :git-hdl:`library/axi_sysid <library/axi_sysid>`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
    * - SPI_ENGINE_EXECUTION
-     - :git-hdl:`library/spi_engine/spi_engine_execution <main:library/spi_engine/spi_engine_execution>`
+     - :git-hdl:`library/spi_engine/spi_engine_execution <library/spi_engine/spi_engine_execution>`
      - :ref:`here <spi_engine execution>`
    * - SPI_ENGINE_INTERCONNECT
-     - :git-hdl:`library/spi_engine/spi_engine_interconnect <main:library/spi_engine/spi_engine_interconnect>`
+     - :git-hdl:`library/spi_engine/spi_engine_interconnect <library/spi_engine/spi_engine_interconnect>`
      - :ref:`here <spi_engine interconnect>`
    * - SPI_ENGINE_OFFLOAD
-     - :git-hdl:`library/spi_engine/spi_engine_offload <main:library/spi_engine/spi_engine_offload>`
+     - :git-hdl:`library/spi_engine/spi_engine_offload <library/spi_engine/spi_engine_offload>`
      - :ref:`here <spi_engine offload>`
    * - SYSID_ROM
-     - :git-hdl:`library/sysid_rom <main:library/sysid_rom>`
+     - :git-hdl:`library/sysid_rom <library/sysid_rom>`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
    * - UTIL_I2C_MIXER
-     - :git-hdl:`library/util_i2c_mixer <main:library/util_i2c_mixer>`
+     - :git-hdl:`library/util_i2c_mixer <library/util_i2c_mixer>`
      - :ref:`here <spi_engine offload>`
 
 -  :ref:`SPI Engine Framework documentation <spi_engine>`

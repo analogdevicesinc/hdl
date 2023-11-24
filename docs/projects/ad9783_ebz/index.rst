@@ -191,8 +191,8 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-linux:`Linux device tree zynqmp-zcu102-rev10-ad9783.dts <master:arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9783.dts>`
--  :git-linux:`Linux driver ad9783.c <master:drivers/iio/frequency>`
+-  :git-linux:`Linux device tree zynqmp-zcu102-rev10-ad9783.dts <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9783.dts>`
+-  :git-linux:`Linux driver ad9783.c <drivers/iio/frequency>`
 
 .. include:: ../common/more_information.rst
 
