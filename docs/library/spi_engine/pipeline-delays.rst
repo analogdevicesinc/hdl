@@ -83,7 +83,7 @@ sync handshake back to the master is completed to free the channel.
 * Sync valid from m side to s0/s1 sync valid (back to originating master): 0
   cycle.
 * Sync ready to idle (delay after finishing transaction response): 1 cycle
-* Thus, 2 cycles per command minimum if changing masters, 3 if acocunting for
+* Thus, 2 cycles per command minimum if changing masters, 3 if accounting for
   sync (this is the worst case).
 * 1 cycle per command (can accept back to back) if from same master.
 * Thus, :math:`2+N_{cmd}` minimum cycles per :math:`N_{cmd}` "burst" from same
