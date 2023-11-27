@@ -11,14 +11,17 @@ Digital-to-Analog Converters (DAC). The DAC generates output voltage ranges from
 an external 2.5 V reference. Depending on the span selected, the mid-point of
 the output span can be adjusted allowing for a minimum output voltage as low as
 −20 V or a maximum output voltage of up to +14 V.
+
 The :adi:`AD5766`/ :adi:`AD5767` have integrated output buffers which can sink
 or source up to 20 mA. This makes the AD5766/AD5767 suitable for Indium Phosphide
 Mach Zehnder Modulator (InP-MZM) biasing applications.
+
 The part incorporates a power-on reset circuit that ensures that the DAC outputs
 power up to 0V and remain at this level until the output range of the DAC is
 configured. The outputs of all DACs are updated through register configuration,
 with the added functionality of user-selectable DAC channels to be simultaneously
 updated.
+
 The :adi:`AD5766`/ :adi:`AD5767` require four power supplies. AVCC is the analog
 supply for the low voltage DAC circuitry. AVDD and AVSS are the positive and
 negative high voltage power supplies for the output amplifiers. A VLOGIC supply
@@ -27,6 +30,7 @@ The :adi:`AD5766`/ :adi:`AD5767` utilize a versatile 4-wire serial interface
 that operates at clock rates of up to 50 MHz for write mode and up to 10MHz for
 readback and daisy-chain mode, and is compatible with SPIR, QSPI., MICROWIRE. 
 and DSP interface standards.
+
 The :adi:`AD5766`/ :adi:`AD5767` are available in a 4mm x 4mm WLCSP package
 and operates at the range of -40C to +105C.
 
@@ -57,6 +61,8 @@ Block design
 
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The data path and clock domains are depicted in the below diagram:
 
 .. image:: ad5766_spi_engine_hdl.svg
    :width: 800
@@ -195,11 +201,6 @@ A more comprehensive build guide can be found in the :ref:`build_hdl` user guide
 Resources
 -------------------------------------------------------------------------------
 
-Systems related
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
--  :dokuwiki:`AD5766 - No-OS Driver <resources/tools-software/uc-drivers/ad5766>`
-
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -212,8 +213,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`ad5766_sdz HDL project <projects/ad5766_sdz>`
--  :ref:`SPI_ENGINE <spi_engine>`
+-  :git-hdl:`ad5766_sdz HDL project source code <projects/ad5766_sdz>`
 
 .. list-table::
    :widths: 30 35 35
@@ -259,10 +259,12 @@ HDL related
      - :git-hdl:`library/util_i2c_mixer <library/util_i2c_mixer>`
      - ---  
 
+-  :ref:`SPI Engine Framework documentation <spi_engine>`
+
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-no-os:`AD7606 - No-OS Driver <projects/ad5766-sdz>`
+- :git-no-os:`AD5766 - No-OS driver source code <projects/ad5766-sdz>`
 - :dokuwiki:`AD5766 - No-OS Driver [Wiki] <resources/tools-software/uc-drivers/ad5766>`
 - :dokuwiki:`How to build No-OS <resources/no-os/build>`
 
