@@ -15,16 +15,16 @@ complete rate of output data ranges.
 Supported boards
 -------------------------------------------------------------------------------
 
-- :part:`EVAL-AD7190 <EVAL-AD7190>`
-- :part:`EVAL-AD7193 <EVAL-AD7193>`
-- :part:`EVAL-AD7195 <EVAL-AD7195>`
+- :adi:`EVAL-AD7190 <EVAL-AD7190>`
+- :adi:`EVAL-AD7193 <EVAL-AD7193>`
+- :adi:`EVAL-AD7195 <EVAL-AD7195>`
 
 Supported devices
 -------------------------------------------------------------------------------
 
-- :part:`AD7190`
-- :part:`AD7193`
-- :part:`AD7195`
+- :adi:`AD7190`
+- :adi:`AD7193`
+- :adi:`AD7195`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -36,13 +36,13 @@ Supported carriers
    * - Evaluation board
      - Carrier
      - Slot
-   * - :part:`EVAL-AD7190 <EVAL-AD7190>`
+   * - :adi:`EVAL-AD7190 <EVAL-AD7190>`
      - Cora-Z7S_ 
      - PMOD JA
-   * - :part:`EVAL-AD7193 <EVAL-AD7193>`
+   * - :adi:`EVAL-AD7193 <EVAL-AD7193>`
      - Cora-Z7S_
      - PMOD JA
-   * - :part:`EVAL-AD7195 <EVAL-AD7195>`
+   * - :adi:`EVAL-AD7195 <EVAL-AD7195>`
      - Cora-Z7S_
      - PMOD JA
 
@@ -80,7 +80,7 @@ Building the HDL project
 
 The design is built upon ADI's generic HDL reference design framework.
 ADI does not distribute the bit/elf files of these projects so they
-must be built from the sources available :git-hdl:`here <master:/>`. To get
+must be built from the sources available :git-hdl:`here </>`. To get
 the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
@@ -119,17 +119,17 @@ Hardware related
 
 -  Product datasheets:
 
-   -  :part:`AD7190`
-   -  :part:`AD7193`
-   -  :part:`AD7195`
-   -  :part:`EVAL-AD7190`
-   -  :part:`EVAL-AD7193`
-   -  :part:`EVAL-AD7195`
+   -  :adi:`AD7190`
+   -  :adi:`AD7193`
+   -  :adi:`AD7195`
+   -  :adi:`EVAL-AD7190`
+   -  :adi:`EVAL-AD7193`
+   -  :adi:`EVAL-AD7195`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD719x-FMC HDL project source code <master:projects/ad719x_asdz>`
+-  :git-hdl:`AD719x-FMC HDL project source code <projects/ad719x_asdz>`
 
 .. list-table::
    :widths: 30 35 35
@@ -138,11 +138,11 @@ HDL related
    * - IP name
      - Source code link
      - Documentation link
-   * - AXI_SYSID
-     - :git-hdl:`library/axi_sysid <master:library/axi_sysid>`
+   * - axi_sysid
+     - :git-hdl:`library/axi_sysid <library/axi_sysid>`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
-   * - SYSID_ROM
-     - :git-hdl:`library/sysid_rom <master:library/sysid_rom>`
+   * - sysid_rom
+     - :git-hdl:`library/sysid_rom <library/sysid_rom>`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
 
 - :dokuwiki:`AD7193 Pmod Xilinx FPGA Reference Design <resources/fpga/xilinx/pmod/ad7193>`
@@ -150,7 +150,7 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-linux:`Driver <master:drivers/iio/adc/ad7192.c>`
+- :git-linux:`Driver <drivers/iio/adc/ad7192.c>`
 - :dokuwiki:`AD7190 - Microcontroller No-OS Driver <resources/tools-software/uc-drivers/renesas/ad7190>`
 - :dokuwiki:`Supported devices <resources/tools-software/uc-drivers/ad7193>`
 
