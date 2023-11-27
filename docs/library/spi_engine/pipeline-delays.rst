@@ -1,6 +1,6 @@
-.. _spi_engine delays:
+.. _spi_engine pipeline-delays:
 
-SPI Engine Execution Delays
+SPI Engine Pipeline Delays
 ================================================================================
 
 The SPI Engine implementation imposes certain constraints on the timing of

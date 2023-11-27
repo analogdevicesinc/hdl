@@ -14,8 +14,9 @@ SPI Engine
    Offload Control Interface<offload-control-interface>
    SPI Bus Interface<spi-bus-interface>
    Instruction Set Specification<instruction-format>
+   Pipeline Delays<pipeline-delays>
    Tutorial - PulSAR ADC<tutorial>
-   SPI Engine Execution Delays<spi_engine_delays>
+   
 
 SPI Engine is a highly flexible and powerful SPI controller framework.
 It consist out of multiple sub-modules which communicate over well defined
@@ -94,5 +95,5 @@ Additional Resources
 --------------------------------------------------------------------------------
 
 * :download:`Presentation: SPI Engine Design Philosophy <https://wiki.analog.com/_media/resources/fpga/peripherals/spi-engine3.pdf>`.
+* :ref:`spi_engine pipeline-delays`
 * :ref:`spi_engine tutorial`.
-* :ref:`spi_engine delays`
