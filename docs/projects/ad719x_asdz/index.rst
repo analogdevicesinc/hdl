@@ -1,27 +1,23 @@
-.. _ad719x_asdz_ebz:
+.. _ad719x_asdz:
 
-AD719x EBZ/ASDZ HDL project
+AD719x EBZ/ASDZ HDL PROJECT
 ================================================================================
 
 Overview
 -------------------------------------------------------------------------------
 
-The :part:`EVAL-AD719x` boards are a fully featured evaluation Board for 
-:part:`AD719x` family. They can be operated in standalone mode or connected
+The EVAL-AD719x boards are a fully featured evaluation Board for 
+AD719x chip family. They can be operated in standalone mode or connected
 directly to the PC(7190 EBZ) or connected via PMOD connector to a carrier(7193 
 and 7195 ASDZ). The AD719x chips are low noise, complete analog front end for 
 high precision measurement applications.
 
-**Some specifications about the board, the chip, etc. Typically the
-information found on the** https://www.analog.com/en/products/
-**website**
-
 Supported boards
 -------------------------------------------------------------------------------
 
-- :part:`EVAL-AD7190-EBZ`
-- :part:`EVAL-AD7193-ASDZ`
-- :part:`EVAL-AD7195-ASDZ`
+- :part:`EVAL-AD7190 <EVAL-AD7190>`
+- :part:`EVAL-AD7193 <EVAL-AD7193>`
+- :part:`EVAL-AD7195 <EVAL-AD7195>`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -33,7 +29,22 @@ Supported devices
 Supported carriers
 -------------------------------------------------------------------------------
 
-- CORAZ7S_
+.. list-table::
+   :widths: 35 35 30
+   :header-rows: 1
+
+   * - Evaluation board
+     - Carrier
+     - Slot
+   * - :part:`EVAL-AD7190 <EVAL-AD7190>`
+     - CORAZ7S_
+     - PMOD
+   * - :part:`EVAL-AD7193 <EVAL-AD7193>`
+     - 
+     - PMOD 
+   * - :part:`EVAL-AD7195 <EVAL-AD7195>`
+     - 
+     - PMOD
 
 Block design
 -------------------------------------------------------------------------------
@@ -41,30 +52,12 @@ Block design
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The data path and clock domains are depicted in
-the below diagram:
+The data path and clock domains are depicted in the below diagram:
 
-.. image:: ../images/ad719x_asdz/ad719x_block_diagram.png
+.. image:: ad719x_block_diagram.png
    :width: 800
    :align: center
    :alt: AD719x/CORAZ7S block diagram
-
-IP list
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
--  :git-hdl:`AXI_SYSID <master:library/axi_sysid>`
--  :git-hdl:`SYSID_ROM <master:library/sysid_rom>`
-
-SPI connections
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The SPI communication between CORAZ7S_ and the EVAL-AD719x will be realized
-using the PMOD ports. See the diagram below:
-
-.. image:: ../images/ad719x_asdz/ad7190_asdz_pmod_diagram.svg
-   :width: 800
-   :align: center
-   :alt: AD719x/CORAZ7S pmod diagram
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -78,6 +71,22 @@ Instance    Address
 \-          \-
 =========== ==========
 
+SPI connections
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :widths: 25 25 25 25
+   :header-rows: 1
+
+   * - SPI type
+     - SPI manager instance
+     - SPI subordinate
+     - CS
+   * - PS
+     - SPI 0
+     - AD719x
+     - 0
+
 Building the HDL project
 -------------------------------------------------------------------------------
 
@@ -88,74 +97,77 @@ the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
 
-Then go to the **projects/ad719x/coraz7s** location and run the make command by
-typing in your command prompt:
+Then go to the project location(**projects/ad719x/coraz7s**) and run the make 
+command by typing in your command prompt:
 
 **Linux/Cygwin/WSL**
 
 .. code-block::
 
    user@analog:~$ cd hdl/projects/ad719x_asdz/coraz7s
-   user@analog:~/hdl/projects/cn0577/zed$ make
+   user@analog:~/hdl/projects/ad719x_asdz/coraz7s$ make
 
-Check `this
-guide <resources/tools-software/linux-software/kuiper-linux>`__ on
+Check `this guide <resources/tools-software/linux-software/kuiper-linux>`__ on
 how to prepare your SD card with the proper boot files.
-A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
+A more comprehensive build guide can be found in the :ref:`build_hdl` user 
+guide.
+
+Software considerations 
+-------------------------------------------------------------------------------
+
+The SPI communication is changed because of hardware modifications, so the 
+connection looks like this:
+
+.. image:: ad7190_asdz_pmod_diagram.svg
+   :width: 800
+   :align: center
+   :alt: AD719x/CORAZ7S pmod diagram
 
 Resources
 -------------------------------------------------------------------------------
 
--  Link to the project source code:
+Hardware related
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-   - :git-hdl:`AD719x_ASDZ <master:projects/ad719x_asdz>`
+-  Product datasheets:
 
--  Links to the wiki documentation of the IPs that are used in this
-   project:
+   -  :part:`AD7190`
+   -  :part:`AD7193`
+   -  :part:`AD7195`
+   -  :part:`EVAL-AD7190`
+   -  :part:`EVAL-AD7193`
+   -  :part:`EVAL-AD7195`
 
-   - :dokuwiki:`AXI_SYSID & SYSID_ROM </resources/fpga/docs/axi_sysid>`
+HDL related
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Links to the Linux driver and devicetree source code and wiki
-   documentation:
+-  :git-hdl:`AD719x-FMC HDL project source code <master:projects/ad719x_asdz>`
 
-   - :dokuwiki:`Linux Drivers </resources/tools-software/linux-drivers-all>`
+.. list-table::
+   :widths: 30 35 35
+   :header-rows: 1
 
+   * - IP name
+     - Source code link
+     - Documentation link
+   * - AXI_SYSID
+     - :git-hdl:`library/axi_sysid <master:library/axi_sysid>`
+     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
+   * - SYSID_ROM
+     - :git-hdl:`library/sysid_rom <master:library/sysid_rom>`
+     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
 
-More information
--------------------------------------------------------------------------------
+- :dokuwiki:`AD7193 Pmod Xilinx FPGA Reference Design <resources/fpga/xilinx/pmod/ad7193>`
 
--  :ref:`ADI HDL User guide <user_guide>`
--  :ref:`ADI HDL project architecture <architecture>`
--  :ref:`ADI HDL project build guide <build_hdl>`
-  
-Other relevant information:
+Software related
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :dokuwiki:`AD719x IIO Application </resources/tools-software/product-support-software/ad719x_mbed_iio_application>`
--  :dokuwiki:`AD7193 Pmod Xilinx FPGA Reference Design </resources/fpga/xilinx/pmod/ad7193>`
--  :dokuwiki:`How to prepare an SD
-   card <resources/tools-software/linux-software/kuiper-linux>` with
-   boot files
--  :dokuwiki:`ADI reference designs HDL user guide <resources/fpga/docs/hdl>`
--  :dokuwiki:`ADI HDL architecture <resources/fpga/docs/arch>` wiki page
--  :dokuwiki:`How to build an ADI HDL project <resources/fpga/docs/build>`
--  :ref:`ADI HDL User guide <user_guide>`
--  :ref:`ADI HDL project architecture <architecture>`
--  :ref:`ADI HDL project build guide <build_hdl>`
+- :git-linux:`Driver <master:drivers/iio/adc/ad7192.c>`
+- :dokuwiki:`AD7190 - Microcontroller No-OS Driver <resources/tools-software/uc-drivers/renesas/ad7190>`
+- :dokuwiki:`Supported devices <resources/tools-software/uc-drivers/ad7193>`
 
-Support
--------------------------------------------------------------------------------
+.. include:: ../common/more_information.rst
 
-Analog Devices will provide **limited** online support for anyone using
-the reference design with Analog Devices components via the
-:ez:`fpga` FPGA reference designs forum.
-
-It should be noted, that the older the tools' versions and release
-branches are, the lower the chances to receive support from ADI
-engineers.
-
-.. |ad9783_zcu102_spi_pmod.svg| image:: ../images/ad971x_zcu102_spi_pmod.svg
-   :width: 600
-   :align: top
-   :alt: AD971x-EBZ/ZCU102 SPI Pmod connection
+.. include:: ../common/support.rst
 
 .. _CORAZ7S: https://digilent.com/reference/programmable-logic/cora-z7/start
