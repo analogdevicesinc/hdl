@@ -117,7 +117,7 @@ Below are the Programmable Logic interrupts used in this project.
 ================ === ========== ===========
 Instance name    HDL Linux Zynq Actual Zynq
 ================ === ========== ===========
-axi_ad9783_dma   13  57         89             
+axi_ad9783_dma   13  57         89
 ================ === ========== ===========
 
 These are the board-specific interrupts
@@ -156,29 +156,19 @@ Systems related
 Here you can find the quick start guides available for these evaluation boards:
 
 .. list-table::
-   :widths: 20 10 20 20 20 10
+   :widths: 20 10
    :header-rows: 1
 
    * - Evaluation board
      - Zynq-7000
-     - Zynq UltraScale+ MP
-     - Microblaze
-     - Versal
-     - Arria 10
    * - AD9434-FMC
      - :dokuwiki:`ZC706 <resources/fpga/xilinx/fmc/ad9434>`
-     - ---
-     - ---
-     - ---
-     - ---
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Product datasheets:
-
-  * :adi:`AD9434`
-  * :adi:`EVAL-AD9434`
+- Product datasheets: :adi:`AD9434`
+- :dokuwiki:`EVAL-AD9434 user guide <resources/eval/ad9434fmc-500ebz>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
