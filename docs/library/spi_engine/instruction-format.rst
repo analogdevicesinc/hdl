@@ -62,15 +62,17 @@ SPI Engine execution module.
 
 Before and after the update is performed the execution module is paused for the
 specified delay. The length of the delay depends on the module clock frequency,
-the setting of the prescaler register and the t parameter of the instruction.
+the setting of the prescaler register and the parameter :math:`t` of the instruction.
 This delay is inserted before and after the update of the chip-select signal,
-so the total execution time of the chip-select
-instruction is twice the delay, plus a fixed 2 clock cycles (fast clock, not prescaled)
-for the internal logic.
+so the total execution time of the chip-select instruction is twice the delay, 
+with an added fixed 2 clock cycles (fast clock, not prescaled) before for the internal 
+logic.
 
 .. math::
 
-   delay = t * \frac{(div + 1)*2}{f_{clk}}
+   delay_{before} = 2+ t * \frac{(div + 1)*2}{f_{clk}}
+
+   delay_{after}  = t * \frac{(div + 1)*2}{f_{clk}}
 
 .. list-table::
    :widths: 10 15 75
