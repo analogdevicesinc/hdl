@@ -62,11 +62,11 @@ SPI Engine execution module.
 
 Before and after the update is performed the execution module is paused for the
 specified delay. The length of the delay depends on the module clock frequency,
-the setting of the prescaler register and the parameter :math:`t` of the instruction.
-This delay is inserted before and after the update of the chip-select signal,
-so the total execution time of the chip-select instruction is twice the delay, 
-with an added fixed 2 clock cycles (fast clock, not prescaled) before for the internal 
-logic.
+the setting of the prescaler register and the parameter :math:`t` of the
+instruction. This delay is inserted before and after the update of the
+chip-select signal, so the total execution time of the chip-select instruction
+is twice the delay, with an added fixed 2 clock cycles (fast clock, not
+prescaled) before for the internal logic.
 
 .. math::
 
@@ -130,7 +130,8 @@ Synchronize Instruction
 The synchronize instruction generates a synchronization event on the SYNC output
 stream. This can be used to monitor the progress of the command stream. The
 synchronize instruction is also used by the :ref:`spi_engine interconnect`
-module to identify the end of a transaction and re-start the arbitration process.
+module to identify the end of a transaction and re-start the arbitration
+process.
 
 .. list-table::
    :widths: 10 15 75
