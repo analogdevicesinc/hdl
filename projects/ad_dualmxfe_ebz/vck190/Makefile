@@ -4,7 +4,7 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := ad_dualmxfe_ebz_vcu118
+PROJECT_NAME := ad_dualmxfe_ebz_vck190
 
 M_DEPS += timing_constr.xdc
 M_DEPS += ../common/dual_mxfe_gpio_mux.v
