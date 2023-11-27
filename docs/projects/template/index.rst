@@ -277,21 +277,21 @@ GPIOs
      -
      - Zynq-7000
      - Zynq MP
-   * - signal name
+   * - signal_name[31:0]
      - IN/OUT/INOUT
-     - 32-63
-     - 86-117
-     - 110-141
-   * - signal name
+     - 127:96
+     - 181:150
+     - 205:174
+   * - signal_name[31:0]
      - IN/OUT/INOUT
-     - 64-95
-     - 118-149
-     - 142-173
-   * - signal name
+     - 95:64
+     - 149:118
+     - 173:142
+   * - signal_name[31:0]
      - IN/OUT/INOUT
-     - 96-127
-     - 150-181
-     - 174-205
+     - 63:32
+     - 117:86
+     - 141:110
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -702,8 +702,14 @@ HDL related
      - :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_dac`
      - :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/jesd204_tpl_dac>`
 
+\**\* MENTION THESE for JESD reference designs \**\*
+
 -  :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
 -  :dokuwiki:`[Wiki] JESD204B High-Speed Serial Interface Support <resources/fpga/peripherals/jesd204>`
+
+\**\* MENTION THIS for SPI Engine reference designs \**\*
+
+-  :ref:`SPI Engine Framework documentation <spi_engine>`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

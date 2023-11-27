@@ -43,6 +43,8 @@ data stream at maximum data rate, is triggered by the BUSY signal of the device.
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+The data path and clock domains are depicted in the below diagram:
+
 .. image:: ad469x_hdl.svg
    :width: 800
    :align: center
@@ -51,14 +53,17 @@ Block diagram
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-=====================  ==========
+The addresses are dependent on the architecture of the FPGA, having an offset
+added to the base address from HDL(see more at :ref:`architecture`).
+
+=====================  ===========
 Instance               Address
-=====================  ==========
-axi_ad469x_dma         0x44a30000
-spi_clkgen             0x44a70000
-spi_ad469x_axi_regmap  0x44a00000
-ad469x_trigger_gen     0x44b00000
-=====================  ==========
+=====================  ===========
+axi_ad469x_dma         0x44A3_0000
+spi_clkgen             0x44A7_0000
+spi_ad469x_axi_regmap  0x44A0_0000
+ad469x_trigger_gen     0x44B0_0000
+=====================  ===========
 
 I2C connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -157,11 +162,6 @@ A more comprehensive build guide can be found in the :ref:`build_hdl` user guide
 Resources
 -------------------------------------------------------------------------------
 
-Systems related
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
--  :dokuwiki:`AD469X User guide <resources/eval/user-guides/ad469x>`
-
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -175,8 +175,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`ad469x_fmc HDL project <projects/ad469x_fmc>`
--  :ref:`SPI_ENGINE <spi_engine>`
+-  :git-hdl:`AD469X_FMC HDL project source code <projects/ad469x_fmc>`
 
 .. list-table::
    :widths: 30 35 35
@@ -225,10 +224,12 @@ HDL related
      - :git-hdl:`library/util_i2c_mixer <library/util_i2c_mixer>`
      - :ref:`here <spi_engine offload>`
 
+-  :ref:`SPI Engine Framework documentation <spi_engine>`
+
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-no-os:`No-OS project <projects/ad469x_fmcz>`
+-  :git-no-os:`AD469X_FMCZ No-OS project source code  <projects/ad469x_fmcz>`
 
 -  :dokuwiki:`How to build No-OS <resources/no-os/build>`
 

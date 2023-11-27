@@ -60,6 +60,8 @@ Block design
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+The data path and clock domains are depicted in the below diagram:
+
 .. image:: adaq7980_sdz_hdl.svg
    :width: 800
    :align: center
@@ -68,14 +70,17 @@ Block diagram
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-===========================  ==========
+The addresses are dependent on the architecture of the FPGA, having an offset
+added to the base address from HDL (see more at :ref:`architecture`).
+
+===========================  ===========
 Instance                     Address
-===========================  ==========
-axi_adaq7980_dma             0x44a30000
-spi_clkgen                   0x44a70000
-spi_adaq7980_adc_axi_regmap  0x44a00000
-spi_trigger_gen              0x44b00000
-===========================  ==========
+===========================  ===========
+axi_adaq7980_dma             0x44A3_0000
+spi_clkgen                   0x44A7_0000
+spi_adaq7980_adc_axi_regmap  0x44A0_0000
+spi_trigger_gen              0x44B0_0000
+===========================  ===========
 
 I2C connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -143,7 +148,7 @@ The Software GPIO number is calculated as follows:
      - INOUT
      - 40
      - 94
-   * - adaq7980_gpio
+   * - adaq7980_gpio[7:0]
      - INOUT
      - 39:32
      - 93:86
@@ -182,12 +187,6 @@ A more comprehensive build guide can be found in the :ref:`build_hdl` user guide
 Resources
 -------------------------------------------------------------------------------
 
-Systems related
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
--  :dokuwiki:`ADAQ7980 User guide <resources/eval/user-guides/adaq7980-sdz>`
--  :dokuwiki:`How to build No-OS <resources/no-os/build>`
-
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -198,8 +197,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`adaq7980_sdz HDL project <projects/adaq7980_sdz>`
--  :ref:`SPI_ENGINE <spi_engine>`
+-  :git-hdl:`ADAQ7980_SDZ HDL project source code <projects/adaq7980_sdz>`
 
 .. list-table::
    :widths: 30 35 35
@@ -209,49 +207,51 @@ HDL related
      - Source code link
      - Documentation link
    * - AXI_CLKGEN
-     - :git-hdl:`library/axi_dmac <main:library/axi_clkgen>`
+     - :git-hdl:`library/axi_dmac <library/axi_clkgen>`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_clkgen>`
    * - AXI_DMAC
-     - :git-hdl:`library/axi_dmac <master:library/axi_dmac>`
+     - :git-hdl:`library/axi_dmac <library/axi_dmac>`
      - :ref:`here <axi_dmac>`
    * - AXI_HDMI_TX
-     - :git-hdl:`library/axi_hdmi_tx <main:library/axi_hdmi_tx>`
+     - :git-hdl:`library/axi_hdmi_tx <library/axi_hdmi_tx>`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_hdmi_tx>`
    * - AXI_I2S_ADI
-     - :git-hdl:`library/axi_i2s_adi <main:library/axi_i2s_adi>`
+     - :git-hdl:`library/axi_i2s_adi <library/axi_i2s_adi>`
      - ---
    * - AXI_PWM_GEN
-     - :git-hdl:`library/axi_pwm_gen <main:library/axi_pwm_gen>`
+     - :git-hdl:`library/axi_pwm_gen <library/axi_pwm_gen>`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_pwm_gen>`
    * - AXI_SPDIF_TX
-     - :git-hdl:`library/axi_spdif_tx <main:library/axi_spdif_tx>`
+     - :git-hdl:`library/axi_spdif_tx <library/axi_spdif_tx>`
      - ---
    * - AXI_SPI_ENGINE
-     - :git-hdl:`library/spi_engine/axi_spi_engine <main:library/spi_engine/axi_spi_engine>`
+     - :git-hdl:`library/spi_engine/axi_spi_engine <library/spi_engine/axi_spi_engine>`
      - :ref:`here <spi_engine axi>`
    * - AXI_SYSID
-     - :git-hdl:`library/axi_sysid <main:library/axi_sysid>`
+     - :git-hdl:`library/axi_sysid <library/axi_sysid>`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
    * - SPI_ENGINE_EXECUTION
-     - :git-hdl:`library/spi_engine/spi_engine_execution <main:library/spi_engine/spi_engine_execution>`
+     - :git-hdl:`library/spi_engine/spi_engine_execution <library/spi_engine/spi_engine_execution>`
      - :ref:`here <spi_engine execution>`
    * - SPI_ENGINE_INTERCONNECT
-     - :git-hdl:`library/spi_engine/spi_engine_interconnect <main:library/spi_engine/spi_engine_interconnect>`
+     - :git-hdl:`library/spi_engine/spi_engine_interconnect <library/spi_engine/spi_engine_interconnect>`
      - :ref:`here <spi_engine interconnect>`
    * - SPI_ENGINE_OFFLOAD
-     - :git-hdl:`library/spi_engine/spi_engine_offload <main:library/spi_engine/spi_engine_offload>`
+     - :git-hdl:`library/spi_engine/spi_engine_offload <library/spi_engine/spi_engine_offload>`
      - :ref:`here <spi_engine offload>`
    * - SYSID_ROM
-     - :git-hdl:`library/sysid_rom <main:library/sysid_rom>`
+     - :git-hdl:`library/sysid_rom <library/sysid_rom>`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
    * - UTIL_I2C_MIXER
-     - :git-hdl:`library/util_i2c_mixer <main:library/util_i2c_mixer>`
+     - :git-hdl:`library/util_i2c_mixer <library/util_i2c_mixer>`
      - :ref:`here <spi_engine offload>`
+
+-  :ref:`SPI Engine Framework documentation <spi_engine>`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-no-os:`No-OS project <projects/adaq7980_sdz>`
+-  :git-no-os:`ADAQ7980_SDZ No-OS project <projects/adaq7980_sdz>`
 
 -  :dokuwiki:`How to build No-OS <resources/no-os/build>`
 

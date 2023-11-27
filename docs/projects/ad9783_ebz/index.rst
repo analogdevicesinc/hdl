@@ -141,21 +141,13 @@ Systems related
 Here you can find the quick start guides available for these evaluation boards:
 
 .. list-table::
-   :widths: 20 10 20 20 20 10
+   :widths: 50 50
    :header-rows: 1
 
    * - Evaluation board
-     - Zynq-7000
      - Zynq UltraScale+ MP
-     - Microblaze
-     - Versal
-     - Arria 10
    * - AD9783-EBZ
-     - ---
      - :dokuwiki:`[Wiki] ZCU102 <resources/fpga/xilinx/interposer/ad9783>`
-     - ---
-     - ---
-     - ---
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -199,8 +191,8 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-linux:`Linux device tree zynqmp-zcu102-rev10-ad9783.dts <master:arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9783.dts>`
--  :git-linux:`Linux driver ad9783.c <master:drivers/iio/frequency>`
+-  :git-linux:`Linux device tree zynqmp-zcu102-rev10-ad9783.dts <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9783.dts>`
+-  :git-linux:`Linux driver ad9783.c <drivers/iio/frequency>`
 
 .. include:: ../common/more_information.rst
 
