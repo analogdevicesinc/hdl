@@ -44,10 +44,6 @@ set_property -dict {PACKAGE_PIN BD22 IOSTANDARD LVDS15} [get_ports fpga_sysref0_
 set_property -dict {PACKAGE_PIN BE17 IOSTANDARD LVDS15} [get_ports fpga_sysref1_p]          ; ## C22  FMC1_LA18_CC_P        IO_L9P_GC_XCC_N3P0_M2P72_707
 set_property -dict {PACKAGE_PIN BD17 IOSTANDARD LVDS15} [get_ports fpga_sysref1_n]          ; ## C23  FMC1_LA18_CC_N        IO_L9N_GC_XCC_N3P1_M2P73_707
 
-# gpios
-
-
-
 # hmc7044
 
 set_property -dict {PACKAGE_PIN BG18 IOSTANDARD LVCMOS15} [get_ports hmc7044_miso]          ; ## G25  FMC1_LA22_N           IO_L4N_N1P3_M2P63_707

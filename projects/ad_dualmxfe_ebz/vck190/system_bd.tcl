@@ -72,11 +72,6 @@ if {$ad_project_params(JESD_MODE) == "8B10B"} {
   ad_connect  sys_cpu_clk_BUFGCE/BUFGCE_O jesd204_phy_125_126/drpclk
 }
 
-# fmcp gpios
-
-create_bd_port -dir O -from 22 -to 0 gpio_fmcp_p
-create_bd_port -dir O -from 22 -to 0 gpio_fmcp_n
-
 # Second SPI controller - HMC7044
 create_bd_port -dir O spi_2_csn_o
 create_bd_port -dir I spi_2_csn_i
