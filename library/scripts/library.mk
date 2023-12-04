@@ -100,7 +100,7 @@ $(_XILINX_INTF_DEPS):
 	$(MAKE) -C $(dir $@) $(notdir $@)
 
 $(_XILINX_LIB_DEPS):
-	flock $(dir $@).lock -c "$(MAKE) -C $(dir $@) xilinx"
+	flock $(dir $@).lock -c "$(MAKE) -C $(dir $@) xilinx"; exit $$?
 
 %.xml:
 	$(MAKE) -C $(dir $@) $(notdir $@)

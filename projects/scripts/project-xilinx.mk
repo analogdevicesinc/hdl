@@ -118,7 +118,7 @@ FORCE:
 $(HDL_LIBRARY_PATH)%/component.xml: FORCE
 	flock $(dir $@).lock -c " \
 	if [ -n "${REQUIRED_VIVADO_VERSION}" ]; then \
-		$(MAKE) -C $(dir $@) $(TARGET) REQUIRED_VIVADO_VERSION=${REQUIRED_VIVADO_VERSION} || exit $$?; \
+		$(MAKE) -C $(dir $@) $(TARGET) REQUIRED_VIVADO_VERSION=${REQUIRED_VIVADO_VERSION}; \
 	else \
-		$(MAKE) -C $(dir $@) $(TARGET) || exit $$?; \
-	fi"
+		$(MAKE) -C $(dir $@) $(TARGET); \
+	fi"; exit $$?
