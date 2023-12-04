@@ -463,7 +463,7 @@ module spi_engine_execution #(
       end
 
       always @(posedge echo_sclk or posedge cs_active) begin
-        if (cs_active == 1'b1) begin
+        if (cs_active) begin
           sdi_counter <= 8'b0;
           sdi_counter_d <= 8'b0;
         end else begin
@@ -492,7 +492,7 @@ module spi_engine_execution #(
       end
 
       always @(posedge echo_sclk or posedge cs_active) begin
-        if (cs_active == 1'b1) begin
+        if (cs_active) begin
           sdi_counter <= 8'b0;
           sdi_counter_d <= 8'b0;
         end else begin
@@ -562,7 +562,7 @@ module spi_engine_execution #(
       reg [DATA_WIDTH-1:0] data_sdi_shift;
 
       always @(posedge clk) begin
-        if (cs_active ) begin
+        if (cs_active) begin
           data_sdi_shift <= 0;
         end else begin
           if (trigger_rx_s == 1'b1) begin
