@@ -425,7 +425,7 @@ module spi_engine_execution #(
     if (!resetn) begin // set cs_active during reset for a cycle to clear shift reg
       cs_active <= 1;
     end else begin
-      cs_active <= (inst_d1 == CMD_CHIPSELECT) & ~(&cmd_d1[NUM_OF_CS-1:0]) & cs_gen;
+      cs_active <= ~(&cmd_d1[NUM_OF_CS-1:0]) & cs_gen;
     end
   end
 
