@@ -3,8 +3,7 @@
 AXI SPI Engine Module
 ================================================================================
 
-.. symbolator:: ../../../library/spi_engine/axi_spi_engine/axi_spi_engine.v
-   :caption: axi_spi_engine
+.. hdl-component-diagram::
 
 The AXI SPI Engine peripheral allows asynchronous interrupt-driven memory-mapped
 access to a SPI Engine Control Interface.

@@ -20,7 +20,6 @@ extensions = [
 	"sphinx.ext.todo",
 	"sphinx.ext.viewcode",
 	"sphinxcontrib.wavedrom",
-	"symbolator_sphinx",
 	"adi_links",
 	"adi_hdl_parser"
 ]
