@@ -3,8 +3,7 @@
 SPI Engine Execution Module
 ================================================================================
 
-.. symbolator:: ../../../library/spi_engine/spi_engine_execution/spi_engine_execution.v
-   :caption: spi_engine_execution
+.. hdl-component-diagram::
 
 The SPI Engine Execution peripheral forms the heart of the SPI Engine framework.
 It is responsible for handling a SPI Engine control stream and translates it

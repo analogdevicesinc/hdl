@@ -3,8 +3,7 @@
 High-Speed DMA Controller
 ================================================================================
 
-.. symbolator:: ../../../library/axi_dmac/axi_dmac.v
-   :caption: axi_dmac
+.. hdl-component-diagram::
 
 The AXI DMAC is a high-speed, high-throughput, general purpose DMA controller
 intended to be used to transfer data between system memory and other peripherals
@@ -71,7 +70,6 @@ Configuration Parameters
 --------------------------------------------------------------------------------
 
 .. hdl-parameters::
-   :path: library/axi_dmac
 
    * - ID
      - Instance identification number.

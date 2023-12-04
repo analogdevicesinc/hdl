@@ -7,5 +7,3 @@ aiohttp
 aiodns
 sphinxcontrib-wavedrom
 sphinxcontrib-svg2pdfconverter
-https://github.com/hdl/pyhdlparser/tarball/master
-https://github.com/hdl/symbolator/tarball/master

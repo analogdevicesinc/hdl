@@ -13,6 +13,7 @@ from sphinx.util.nodes import nested_parse_with_titles
 from sphinx.util import logging
 from lxml import etree
 from adi_hdl_static import hdl_strings
+from adi_hdl_render import hdl_component
 from uuid import uuid4
 from hashlib import sha1
 
@@ -343,7 +344,7 @@ class directive_interfaces(directive_base):
 			if tag not in bs and tag not in pr:
 				logger.warning(f"Signal {tag} defined in the directive does not exist in the IP-XACT (component.xml)!")
 
-		return subnode 
+		return subnode
 
 	def run(self):
 		env = self.state.document.settings.env
@@ -414,7 +415,7 @@ class directive_regmap(directive_base):
 		subnode += section
 
 		if 'no-type-info' in self.options:
-			return subnode 
+			return subnode
 
 		tgroup = nodes.tgroup(cols=3)
 		for _ in range(3):
@@ -438,7 +439,7 @@ class directive_regmap(directive_base):
 		tgroup += tbody
 		section += table
 
-		return subnode 
+		return subnode
 
 	def run(self):
 		env = self.state.document.settings.env
@@ -534,10 +535,9 @@ class directive_parameters(directive_base):
 
 		node = node_div()
 
-		if 'path' in self.options:
-			lib_name = self.options['path']
-		else:
-			lib_name = env.docname.replace('/index', '')
+		if 'path' not in self.options:
+			self.options['path'] = env.docname.replace('/index', '')
+		lib_name = self.options['path']
 
 		subnode = nodes.section(ids=["hdl-parameters"])
 		if lib_name in env.component:
@@ -548,6 +548,47 @@ class directive_parameters(directive_base):
 		node += subnode
 
 		return [ node ]
+
+class directive_component_diagram(directive_base):
+	option_spec = {'path': directives.unchanged}
+	required_arguments = 0
+	optional_arguments = 0
+
+	def missing_diagram(self):
+		svg_raw = hdl_component.render_placeholder(self.options['path'])
+
+		svg = nodes.raw('', svg_raw, format='html')
+		return [ svg ]
+
+	def diagram(self):
+		name = hdl_component.get_name(self.options['path'])
+		path = '_build/managed'
+		f = open(os.path.join(path, name))
+		svg_raw = f.read()
+
+		svg = nodes.raw('', svg_raw, format='html')
+		return [ svg ]
+
+	def run(self):
+		env = self.state.document.settings.env
+		self.current_doc = env.doc2path(env.docname)
+
+		node = node_div()
+
+		if 'path' not in self.options:
+			self.options['path'] = env.docname.replace('/index', '')
+		lib_name = self.options['path']
+
+		subnode = nodes.section(ids=["hdl-component-diagram"])
+		if lib_name in env.component:
+			subnode += self.diagram()
+		else:
+			subnode += self.missing_diagram()
+
+		node += subnode
+
+		return [ node ]
+
 
 def parse_hdl_component(path, ctime):
 	component = {
@@ -651,8 +692,16 @@ def parse_hdl_component(path, ctime):
 			dm[signal_name].append(bus_name[0:bus_name.find('_signal_reset')])
 			continue
 
+		if get(bus_interface, 'slave') is not None:
+			bus_role = 'slave'
+		elif get(bus_interface, 'master') is not None:
+			bus_role = 'master'
+		else:
+			bus_role = None
+
 		bs[bus_name] = {
 			'name': sattrib(get(bus_interface, 'busType'), 'name'),
+			'role': bus_role,
 			'dependency': get_dependency(bus_interface, 'busInterface'),
 			'port_map': {}
 		}
@@ -747,6 +796,7 @@ def manage_hdl_components(env, docnames, libraries):
 			pass
 		else:
 			cp[lib] = parse_hdl_component(f, ctime)
+			hdl_component.render(env, lib, cp[lib])
 			docnames.append(doc)
 
 # From https://github.com/tfcollins/vger/blob/main/vger/hdl_reg_map.py
@@ -923,6 +973,7 @@ def manage_hdl_artifacts(app, env, docnames):
 def setup(app):
 	app.add_directive('collapsible', directive_collapsible)
 	app.add_directive('hdl-parameters', directive_parameters)
+	app.add_directive('hdl-component-diagram', directive_component_diagram)
 	app.add_directive('hdl-interfaces', directive_interfaces)
 	app.add_directive('hdl-regmap', directive_regmap)
 

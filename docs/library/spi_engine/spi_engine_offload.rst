@@ -3,7 +3,7 @@
 SPI Engine Offload Module
 ================================================================================
 
-.. symbolator:: ../../../library/spi_engine/spi_engine_offload/spi_engine_offload.v
+.. hdl-component-diagram::
 
 The SPI Engine Offload peripheral allows to store a SPI Engine command and SDO
 data stream in a RAM or ROM module. The command stream is executed when the

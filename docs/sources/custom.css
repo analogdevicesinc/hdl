@@ -145,3 +145,11 @@ td.description {
 .default .pre {
 	white-space: pre;
 }
+
+#hdl-component-diagram {
+	text-align: center;
+}
+
+#hdl-component-diagram svg {
+	max-width: 100%;
+}
