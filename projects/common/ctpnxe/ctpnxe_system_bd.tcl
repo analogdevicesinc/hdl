@@ -36,7 +36,9 @@ adi_ip_instance -vlnv {latticesemi.com:ip:uart0:1.3.0} \
 adi_ip_instance -vlnv {latticesemi.com:ip:spi0:1.4.1} \
   -ip_path "$ip_download_path/latticesemi.com_ip_spi_master_1.4.1" \
   -ip_params {
-    "SYS_CLOCK_FREQ": 108
+    "DATA_WIDTH": 8,
+    "FIFO_DEPTH": 256,
+    "SYS_CLOCK_FREQ": 108.0
   } \
   -ip_iname "spi0_inst"
 adi_ip_instance -vlnv {latticesemi.com:ip:i2c0:1.5.0} \
