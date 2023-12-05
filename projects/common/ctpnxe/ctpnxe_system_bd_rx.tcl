@@ -29,6 +29,8 @@ adi_ip_instance -vlnv {latticesemi.com:ip:gpio0:1.6.1} \
 adi_ip_instance -vlnv {latticesemi.com:ip:spi0:1.4.1} \
   -ip_path "$ip_download_path/latticesemi.com_ip_spi_master_1.4.1" \
   -ip_params {
+    "DATA_WIDTH": 8,
+    "FIFO_DEPTH": 256,
     "SYS_CLOCK_FREQ": 100
   } \
   -ip_iname "spi0_inst"
@@ -64,6 +66,10 @@ adi_ip_instance -vlnv {latticesemi.com:ip:axi_ahb0:1.1.0} \
   -ip_path "$ip_download_path/latticesemi.com_ip_axi2ahb_bridge_1.1.0" \
   -ip_params {} \
   -ip_iname "axi_ahb0_inst"
+adi_ip_instance -vlnv {latticesemi.com:ip:axi_ahb1:1.1.0} \
+  -ip_path "$ip_download_path/latticesemi.com_ip_axi2ahb_bridge_1.1.0" \
+  -ip_params {} \
+  -ip_iname "axi_ahb1_inst"
 adi_ip_instance -vlnv {latticesemi.com:ip:axi_apb0:1.1.0} \
   -ip_path "$ip_download_path/latticesemi.com_ip_axi2apb_bridge_1.1.0" \
   -ip_params {} \
@@ -72,19 +78,22 @@ adi_ip_instance -vlnv {latticesemi.com:ip:axi_apb1:1.1.0} \
   -ip_path "$ip_download_path/latticesemi.com_ip_axi2apb_bridge_1.1.0" \
   -ip_params {} \
   -ip_iname "axi_apb1_inst"
-adi_ip_instance -vlnv {latticesemi.com:ip:sysmem0:2.0.0} \
+adi_ip_instance -vlnv {latticesemi.com:ip:sysmem0:1.1.2} \
   -ip_path "$preinst_ip_mod_dir/ip/common/system_memory" \
   -ip_params {
-    "INTERFACE": "AXI4",
-    "ADDR_DEPTH": 1024
+    "ADDR_DEPTH": 8192,
+    "REGMODE_S0": true
     } \
   -ip_iname "sysmem0_inst"
-adi_ip_instance -vlnv {latticesemi.com:ip:tcm0:1.3.9} \
+adi_ip_instance -vlnv {latticesemi.com:module:tcm0:1.0.0} \
   -ip_path "$preinst_ip_mod_dir/ip/common/localbus_tcm" \
   -ip_params {
-    "PORT_COUNT": 2,
+    "MEM_TYPE": "EBR",
+    "REGMODE_A": true,
+    "REGMODE_B": true,
     "ADDR_DEPTH_A": 16384,
-    "ADDR_DEPTH_B": 16384
+    "ADDR_DEPTH_B": 16384,
+    "INIT_MODE": "none"
     } \
   -ip_iname "tcm0_inst"
 
@@ -109,10 +118,11 @@ sbp_add_port -direction inout sda_io
 
 #cpu rst out
 sbp_connect_net "$project_name/cpu0_inst/system_resetn_o" \
-  "$project_name/sysmem0_inst/axi_resetn_i" \
+  "$project_name/sysmem0_inst/ahbl_hresetn_i" \
   "$project_name/tcm0_inst/sys_rst_n" \
   "$project_name/axi_interc0_inst/axi_aresetn_i" \
   "$project_name/axi_ahb0_inst/aresetn_i" \
+  "$project_name/axi_ahb1_inst/aresetn_i" \
   "$project_name/axi_apb0_inst/aresetn_i" \
   "$project_name/axi_apb1_inst/aresetn_i" \
   "$project_name/spi0_inst/rst_n_i" \
@@ -122,10 +132,11 @@ sbp_connect_net "$project_name/cpu0_inst/system_resetn_o" \
 #clk
 sbp_connect_net "$project_name/pll0_inst/clkop_o" \
   "$project_name/cpu0_inst/clk_system_i" \
-  "$project_name/sysmem0_inst/axi_aclk_i" \
+  "$project_name/sysmem0_inst/ahbl_hclk_i" \
   "$project_name/axi_interc0_inst/axi_aclk_i" \
   "$project_name/tcm0_inst/sys_clk" \
   "$project_name/axi_ahb0_inst/aclk_i" \
+  "$project_name/axi_ahb1_inst/aclk_i" \
   "$project_name/axi_apb0_inst/aclk_i" \
   "$project_name/axi_apb1_inst/aclk_i" \
   "$project_name/spi0_inst/clk_i" \
@@ -171,9 +182,13 @@ sbp_connect_net "$project_name/spi0_inst/sclk_o" \
 sbp_connect_net "$project_name/spi0_inst/ssn_o" \
   "$project_name/ssn_o"
 
-#axi to apb
+#axi to ahb
 sbp_connect_interface_net "$project_name/axi_interc0_inst/AXI_M00" \
   "$project_name/axi_ahb0_inst/AXI4_S"
+sbp_connect_interface_net "$project_name/cpu0_inst/AXI_M_INSTR" \
+  "$project_name/axi_ahb1_inst/AXI4_S"
+
+#axi to apb
 sbp_connect_interface_net "$project_name/axi_interc0_inst/AXI_M01" \
   "$project_name/axi_apb0_inst/AXI4_S"
 sbp_connect_interface_net "$project_name/axi_interc0_inst/AXI_M02" \
@@ -181,6 +196,9 @@ sbp_connect_interface_net "$project_name/axi_interc0_inst/AXI_M02" \
 
 sbp_connect_interface_net "$project_name/axi_ahb0_inst/AHBL_M" \
   "$project_name/spi0_inst/AHBL_S0"
+sbp_connect_interface_net "$project_name/axi_ahb1_inst/AHBL_M" \
+  "$project_name/sysmem0_inst/AHBL_S0"
+
 sbp_connect_interface_net "$project_name/axi_apb0_inst/APB3_M" \
   "$project_name/i2c0_inst/APB_S0"
 sbp_connect_interface_net "$project_name/axi_apb1_inst/APB3_M" \
@@ -188,8 +206,6 @@ sbp_connect_interface_net "$project_name/axi_apb1_inst/APB3_M" \
 
 sbp_connect_interface_net "$project_name/cpu0_inst/AXI_M_DATA" \
   "$project_name/axi_interc0_inst/AXI_S00"
-sbp_connect_interface_net "$project_name/cpu0_inst/AXI_M_INSTR" \
-  "$project_name/sysmem0_inst/AXI_S0"
 sbp_connect_interface_net "$project_name/cpu0_inst/LOCAL_BUS_M_DATA" \
   "$project_name/tcm0_inst/LOCAL_BUS_IF_S0"
 sbp_connect_interface_net "$project_name/cpu0_inst/LOCAL_BUS_M_INSTR" \
@@ -213,8 +229,8 @@ sbp_assign_addr_seg -offset 'h10000000 "$project_name/axi_ahb0_inst/AHBL_M" \
 sbp_assign_addr_seg -offset 'h00000000 "$project_name/cpu0_inst/LOCAL_BUS_M_DATA" \
   "$project_name/tcm0_inst/LOCAL_BUS_IF_S0"
 
-sbp_assign_addr_seg -offset 'h00200000 "$project_name/cpu0_inst/AXI_M_INSTR" \
-  "$project_name/sysmem0_inst/AXI_S0"
+sbp_assign_addr_seg -offset 'h00200000 "$project_name/axi_ahb1_inst/AHBL_M" \
+  "$project_name/sysmem0_inst/AHBL_S0"
 sbp_assign_addr_seg -offset 'h00000000 "$project_name/cpu0_inst/LOCAL_BUS_M_INSTR" \
   "$project_name/tcm0_inst/LOCAL_BUS_IF_S1"
 #sbp_design auto_assign_addresses
