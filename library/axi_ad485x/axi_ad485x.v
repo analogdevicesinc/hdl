@@ -39,7 +39,9 @@ module axi_ad485x #(
 
   parameter       FPGA_TECHNOLOGY = 0,
   parameter       DELAY_REFCLK_FREQ = 200,
+  parameter       IODELAY_CTRL = 1,
   parameter       IODELAY_ENABLE = 1,
+  parameter       IODELAY_GROUP = "dev_if_delay_group",
   parameter       ID = 0,
   parameter       DEVICE = "AD4858",
   parameter       DW = 31,
@@ -304,7 +306,10 @@ module axi_ad485x #(
         .DELAY_REFCLK_FREQ(DELAY_REFCLK_FREQ),
         .IODELAY_ENABLE (IODELAY_ENABLE),
         .N_CHANNELS (N_CHANNELS)
-      ) i_ad485x_lvds_interface (
+        .IODELAY_CTRL (IODELAY_CTRL),
+        .IODELAY_ENABLE (IODELAY_ENABLE),
+        .IODELAY_GROUP (IODELAY_GROUP)
+      ) i_ad4858_lvds_interface (
         .rst (adc_if_reset),
         .clk (adc_clk_s),
         .fast_clk (external_fast_clk),
@@ -333,6 +338,7 @@ module axi_ad485x #(
         .delay_locked (delay_locked));
 
       up_delay_cntrl #(
+        .DISABLE (~IODELAY_ENABLE),
         .DATA_WIDTH(1),
         .BASE_ADDRESS(6'h02)
       ) i_delay_cntrl (
@@ -371,10 +377,13 @@ module axi_ad485x #(
         .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
         .RESOLUTION (RESOLUTION),
         .DELAY_REFCLK_FREQ(DELAY_REFCLK_FREQ),
+        .IODELAY_CTRL (IODELAY_CTRL),
         .IODELAY_ENABLE (IODELAY_ENABLE),
         .ACTIVE_LANE (ACTIVE_LANES),
         .N_CHANNELS (N_CHANNELS)
-      ) i_ad485x_cmos_interface (
+        .IODELAY_GROUP (IODELAY_GROUP),
+        .ACTIVE_LANE (ACTIVE_LANES)
+      ) i_ad4858_cmos_interface (
         .rst (adc_if_reset),
         .clk (adc_clk_s),
         .adc_enable (adc_enable_s),
