@@ -39,7 +39,9 @@ module axi_ad4858 #(
 
   parameter       FPGA_TECHNOLOGY = 0,
   parameter       DELAY_REFCLK_FREQ = 200,
+  parameter       IODELAY_CTRL = 1,
   parameter       IODELAY_ENABLE = 1,
+  parameter       IODELAY_GROUP = "dev_if_delay_group",
   parameter       ID = 0,
   parameter       LVDS_CMOS_N = 1,
   parameter       LANE_0_ENABLE = "1",
@@ -283,7 +285,9 @@ module axi_ad4858 #(
         .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
         .ECHO_CLK_EN (ECHO_CLK_EN),
         .DELAY_REFCLK_FREQ(DELAY_REFCLK_FREQ),
-        .IODELAY_ENABLE (IODELAY_ENABLE)
+        .IODELAY_CTRL (IODELAY_CTRL),
+        .IODELAY_ENABLE (IODELAY_ENABLE),
+        .IODELAY_GROUP (IODELAY_GROUP)
       ) i_ad4858_lvds_interface (
         .rst (adc_if_reset),
         .clk (adc_clk_s),
@@ -313,6 +317,7 @@ module axi_ad4858 #(
         .delay_locked (delay_locked));
 
       up_delay_cntrl #(
+        .DISABLE (~IODELAY_ENABLE),
         .DATA_WIDTH(1),
         .BASE_ADDRESS(6'h02)
       ) i_delay_cntrl (
@@ -349,7 +354,9 @@ module axi_ad4858 #(
       axi_ad4858_cmos #(
         .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
         .DELAY_REFCLK_FREQ(DELAY_REFCLK_FREQ),
+        .IODELAY_CTRL (IODELAY_CTRL),
         .IODELAY_ENABLE (IODELAY_ENABLE),
+        .IODELAY_GROUP (IODELAY_GROUP),
         .ACTIVE_LANE (ACTIVE_LANES)
       ) i_ad4858_cmos_interface (
         .rst (adc_if_reset),

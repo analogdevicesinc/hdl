@@ -40,7 +40,9 @@ module axi_ad4858_lvds #(
   parameter FPGA_TECHNOLOGY = 0,
   parameter ECHO_CLK_EN = 1,
   parameter DELAY_REFCLK_FREQ = 200,
+  parameter IODELAY_CTRL = 1,
   parameter IODELAY_ENABLE = 1,
+  parameter IODELAY_GROUP = "dev_if_delay_group",
   parameter NEG_EDGE = 1
 ) (
 
@@ -310,8 +312,9 @@ module axi_ad4858_lvds #(
   ad_data_in #(
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .REFCLK_FREQUENCY (DELAY_REFCLK_FREQ),
-    .IODELAY_CTRL (1),
+    .IODELAY_CTRL (IODELAY_CTRL),
     .IODELAY_ENABLE (IODELAY_ENABLE),
+    .IODELAY_GROUP (IODELAY_GROUP),
     .IDDR_CLK_EDGE ("OPPOSITE_EDGE")
   ) i_rx (
     .rx_clk (scko),
