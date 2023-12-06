@@ -92,5 +92,5 @@ set_property -dict {PACKAGE_PIN AE4  IOSTANDARD LVCMOS18} [get_ports spi_mosi]  
 
 # clocks
 
-create_clock -name ref_clk   -period  4.00 [get_ports ref_clk_p]
+create_clock -name ref_clk   -period  2.00 [get_ports ref_clk_p]
 create_clock -name core_clk  -period  4.00 [get_ports core_clk_p]
