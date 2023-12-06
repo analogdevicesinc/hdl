@@ -26,7 +26,7 @@
 //
 //   2. An ADI specific BSD license, which can be found in the top level directory
 //      of this repository (LICENSE_ADIBSD), and also on-line at:
-//      https://github.com/analogdevicesinc/hdl/blob/main/LICENSE_ADIBSD
+//      https://github.com/analogdevicesinc/hdl/blob/master/LICENSE_ADIBSD
 //      This will allow to generate bit files and not release the source code,
 //      as long as it attaches to an ADI device.
 //
@@ -282,9 +282,9 @@ module system_top (
   wire    [94:0]  gpio_o;
   wire    [94:0]  gpio_t;
 
-  wire    [63:0]  xmicrowave_gpio_i;
-  wire    [63:0]  xmicrowave_gpio_o;
-  wire    [63:0]  xmicrowave_gpio_t;
+  wire    [63:0]  fmcxmwbr1_gpio_i;
+  wire    [63:0]  fmcxmwbr1_gpio_o;
+  wire    [63:0]  fmcxmwbr1_gpio_t;
 
   wire    [2:0]   spi_csn;
   wire    [7:0]   spi1_csn;
@@ -365,14 +365,14 @@ module system_top (
   assign gpio_i[31:28] = gpio_o[31:28];
   assign gpio_i[21:20] = gpio_o[21:20];
 
-  assign xmicrowave_gpio_i[63:16] = xmicrowave_gpio_o[63:16];
+  assign fmcxmwbr1_gpio_i[63:16] = fmcxmwbr1_gpio_o[63:16];
 
   ad_iobuf #(
     .DATA_WIDTH(16)
-  ) i_xmicrowave_iobuf (
-    .dio_t ({xmicrowave_gpio_t[15:0]}),
-    .dio_i ({xmicrowave_gpio_o[15:0]}),
-    .dio_o ({xmicrowave_gpio_i[15:0]}),
+  ) i_fmcxmwbr1_iobuf (
+    .dio_t ({fmcxmwbr1_gpio_t[15:0]}),
+    .dio_i ({fmcxmwbr1_gpio_o[15:0]}),
+    .dio_o ({fmcxmwbr1_gpio_i[15:0]}),
     .dio_p ({
               dir_gpio7,   // 15
               dir_gpio6,   // 14
@@ -667,11 +667,11 @@ module system_top (
     .iic_1_sda_io (sdaout1),
     .iic_2_scl_io (sclout2),
     .iic_2_sda_io (sdaout2),
-    .xmicrowave_gpio0_o(xmicrowave_gpio_o[31:0]),
-    .xmicrowave_gpio0_t(xmicrowave_gpio_t[31:0]),
-    .xmicrowave_gpio0_i(xmicrowave_gpio_i[31:0]),
-    .xmicrowave_gpio1_o(xmicrowave_gpio_o[63:32]),
-    .xmicrowave_gpio1_t(xmicrowave_gpio_t[63:32]),
-    .xmicrowave_gpio1_i(xmicrowave_gpio_i[63:32]));
+    .fmcxmwbr1_gpio0_o(fmcxmwbr1_gpio_o[31:0]),
+    .fmcxmwbr1_gpio0_t(fmcxmwbr1_gpio_t[31:0]),
+    .fmcxmwbr1_gpio0_i(fmcxmwbr1_gpio_i[31:0]),
+    .fmcxmwbr1_gpio1_o(fmcxmwbr1_gpio_o[63:32]),
+    .fmcxmwbr1_gpio1_t(fmcxmwbr1_gpio_t[63:32]),
+    .fmcxmwbr1_gpio1_i(fmcxmwbr1_gpio_i[63:32]));
 
 endmodule
