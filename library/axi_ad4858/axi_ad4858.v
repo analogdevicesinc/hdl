@@ -275,12 +275,13 @@ module axi_ad4858 #(
         assign scko_s_p = scko_p;
         assign scko_s_n = scko_n;
       end else begin
-        assign scko_s_p = scki_p;
-        assign scko_s_n = scki_n;
+        assign scko_s_p = 1'b0;
+        assign scko_s_n = 1'b0;
       end
 
       axi_ad4858_lvds #(
         .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+        .ECHO_CLK_EN (ECHO_CLK_EN),
         .DELAY_REFCLK_FREQ(DELAY_REFCLK_FREQ),
         .IODELAY_ENABLE (IODELAY_ENABLE)
       ) i_ad4858_lvds_interface (

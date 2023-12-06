@@ -38,6 +38,7 @@
 module axi_ad4858_lvds #(
 
   parameter FPGA_TECHNOLOGY = 0,
+  parameter ECHO_CLK_EN = 1,
   parameter DELAY_REFCLK_FREQ = 200,
   parameter IODELAY_ENABLE = 1,
   parameter NEG_EDGE = 1
@@ -285,10 +286,16 @@ module axi_ad4858_lvds #(
 
   assign capture_complete = dynamic_delay[4'd10];
 
-  IBUFDS i_scko_bufds (
-    .O(scko_s),
-    .I(scko_p),
-    .IB(scko_n));
+  generate
+    if (ECHO_CLK_EN == 1'b1) begin
+      IBUFDS i_scko_bufds (
+        .O(scko_s),
+        .I(scko_p),
+        .IB(scko_n));
+    end else begin
+      assign scko_s = fast_clk;
+    end
+  endgenerate
 
    // It is added to constraint the tool to keep the logic in the same region
    // as the input pins, otherwise the tool will automatically add a bufg and
