@@ -66,3 +66,53 @@ ad_cpu_interrupt "ps-12" "mb-12" /$hier_spi_engine/irq
 
 ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
 ad_mem_hp1_interconnect $sys_cpu_clk axi_pulsar_adc_dma/m_dest_axi
+
+create_bd_port -dir I ila_pulsar_adc_spi_cs
+create_bd_port -dir I ila_pulsar_adc_spi_sclk
+create_bd_port -dir I ila_pulsar_adc_spi_sdi
+create_bd_port -dir I ila_pulsar_adc_spi_sdo
+
+## debug instances####
+
+ set spi_engine_ila [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.2 spi_engine_ila]
+    set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $spi_engine_ila
+    set_property -dict [list CONFIG.C_NUM_OF_PROBES {4}] $spi_engine_ila
+    set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $spi_engine_ila
+    set_property -dict [list CONFIG.C_DATA_DEPTH {2048}] $spi_engine_ila
+    set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $spi_engine_ila
+    set_property -dict [list CONFIG.C_ADV_TRIGGER {true} ] $spi_engine_ila
+    set_property -dict [list CONFIG.C_PROBE1_MU_CNT {2} ] $spi_engine_ila
+    set_property -dict [list CONFIG.C_PROBE0_MU_CNT {2} ] $spi_engine_ila
+    set_property -dict [list CONFIG.ALL_PROBE_SAME_MU_CNT {2}] $spi_engine_ila
+    set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $spi_engine_ila
+    set_property -dict [list CONFIG.C_PROBE1_WIDTH {1}] $spi_engine_ila
+    set_property -dict [list CONFIG.C_PROBE2_WIDTH {1}] $spi_engine_ila
+    set_property -dict [list CONFIG.C_PROBE2_WIDTH {1}] $spi_engine_ila
+
+    ad_connect spi_engine_ila/clk    spi_clkgen/clk_0
+    ad_connect spi_engine_ila/probe0 ila_pulsar_adc_spi_cs
+    ad_connect spi_engine_ila/probe1 ila_pulsar_adc_spi_sclk
+    ad_connect spi_engine_ila/probe2 ila_pulsar_adc_spi_sdo
+    ad_connect spi_engine_ila/probe3 ila_pulsar_adc_spi_sdi
+
+
+    set clasic_spi_ila [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.2 clasic_spi_ila]
+    set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $clasic_spi_ila
+    set_property -dict [list CONFIG.C_NUM_OF_PROBES {4}] $clasic_spi_ila
+    set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $clasic_spi_ila
+    set_property -dict [list CONFIG.C_DATA_DEPTH {2048}] $clasic_spi_ila
+    set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $clasic_spi_ila
+    set_property -dict [list CONFIG.C_ADV_TRIGGER {true} ] $clasic_spi_ila
+    set_property -dict [list CONFIG.C_PROBE1_MU_CNT {2} ] $clasic_spi_ila
+    set_property -dict [list CONFIG.C_PROBE0_MU_CNT {2} ] $clasic_spi_ila
+    set_property -dict [list CONFIG.ALL_PROBE_SAME_MU_CNT {2}] $clasic_spi_ila
+    set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $clasic_spi_ila
+    set_property -dict [list CONFIG.C_PROBE1_WIDTH {1}] $clasic_spi_ila
+    set_property -dict [list CONFIG.C_PROBE2_WIDTH {1}] $clasic_spi_ila
+    set_property -dict [list CONFIG.C_PROBE3_WIDTH {1}] $clasic_spi_ila
+
+    ad_connect clasic_spi_ila/clk      $sys_cpu_clk
+    ad_connect clasic_spi_ila/probe0   sys_ps7/SPI0_SS_O
+    ad_connect clasic_spi_ila/probe1   sys_ps7/SPI0_SCLK_O
+    ad_connect clasic_spi_ila/probe2   sys_ps7/SPI0_MOSI_O
+    ad_connect clasic_spi_ila/probe3   sys_ps7/SPI0_MISO_I

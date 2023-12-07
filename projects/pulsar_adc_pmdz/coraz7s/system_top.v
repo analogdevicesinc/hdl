@@ -66,6 +66,19 @@ module system_top (
   output          pulsar_adc_spi_sdo,
   output          pulsar_adc_spi_pd,
 
+  output          pulsar2_adc_spi_cs,
+  output          pulsar2_adc_spi_sclk,
+  input           pulsar2_adc_spi_sdi,
+  output          pulsar2_adc_spi_sdo,
+  output          pulsar2_adc_spi_pd,
+
+  output           debug_pulsar2_adc_spi_cs,
+  output           debug_pulsar2_adc_spi_sclk,
+  output           debug_pulsar2_adc_spi_sdi,
+  output           debug_pulsar2_adc_spi_sdo,
+
+
+
   inout   [ 1:0]  btn,
   inout   [ 5:0]  led
 );
@@ -76,18 +89,29 @@ module system_top (
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
 
+  wire ila_pulsar_adc_spi_cs;
+  wire ila_pulsar_adc_spi_sclk;
+  wire ila_pulsar_adc_spi_sdi;
+  wire ila_pulsar_adc_spi_sdo;
+  
   // instantiations
 
-  assign gpio_i[31:8] = gpio_o[31:8];
-  assign gpio_i[63:33] = gpio_o[63:33];
+  assign gpio_i[31:8]  = gpio_o[31:8];
+  assign gpio_i[63:35] = gpio_o[63:35];
+  
+  assign debug_pulsar2_adc_spi_cs   = (gpio_o[34] == 1'b1) ? pulsar_adc_spi_cs   : pulsar2_adc_spi_cs;
+  assign debug_pulsar2_adc_spi_sclk = (gpio_o[34] == 1'b1) ? pulsar_adc_spi_sclk : pulsar2_adc_spi_sclk;
+  assign debug_pulsar2_adc_spi_sdi  = (gpio_o[34] == 1'b1) ? pulsar_adc_spi_sdi  : pulsar2_adc_spi_sdi;
+  assign debug_pulsar2_adc_spi_sdo  = (gpio_o[34] == 1'b1) ? pulsar_adc_spi_sdo  : pulsar2_adc_spi_sdo;
+
 
   ad_iobuf #(
-    .DATA_WIDTH(1)
+    .DATA_WIDTH(2)
   ) i_admp_pd_iobuf (
-    .dio_t(gpio_t[32]),
-    .dio_i(gpio_o[32]),
-    .dio_o(gpio_i[32]),
-    .dio_p(pulsar_adc_spi_pd));
+    .dio_t(gpio_t[33:32]),
+    .dio_i(gpio_o[33:32]),
+    .dio_o(gpio_i[33:32]),
+    .dio_p({pulsar2_adc_spi_pd,pulsar_adc_spi_pd}));
 
   ad_iobuf #(
     .DATA_WIDTH(2)
@@ -131,14 +155,14 @@ module system_top (
     .gpio_o (gpio_o),
     .gpio_t (gpio_t),
     .spi0_clk_i (1'b0),
-    .spi0_clk_o (),
-    .spi0_csn_0_o (),
+    .spi0_clk_o (pulsar2_adc_spi_sclk),
+    .spi0_csn_0_o (pulsar2_adc_spi_cs),
     .spi0_csn_1_o (),
     .spi0_csn_2_o (),
     .spi0_csn_i (1'b1),
-    .spi0_sdi_i (1'b0),
+    .spi0_sdi_i (pulsar2_adc_spi_sdi),
     .spi0_sdo_i (1'b0),
-    .spi0_sdo_o (),
+    .spi0_sdo_o (pulsar2_adc_spi_sdo),
     .spi1_clk_i (1'b0),
     .spi1_clk_o (),
     .spi1_csn_0_o (),
@@ -152,6 +176,10 @@ module system_top (
     .pulsar_adc_spi_sclk(pulsar_adc_spi_sclk),
     .pulsar_adc_spi_sdi(pulsar_adc_spi_sdi),
     .pulsar_adc_spi_sdo(pulsar_adc_spi_sdo),
+    .ila_pulsar_adc_spi_cs(pulsar_adc_spi_cs),
+    .ila_pulsar_adc_spi_sclk(pulsar_adc_spi_sclk),
+    .ila_pulsar_adc_spi_sdi(pulsar_adc_spi_sdi),
+    .ila_pulsar_adc_spi_sdo(pulsar_adc_spi_sdo),
     .pulsar_adc_spi_sdo_t(),
     .pulsar_adc_spi_three_wire());
 

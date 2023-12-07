@@ -4,12 +4,32 @@
 ###############################################################################
 
 # ad40xx_fmc SPI interface
-set_property -dict {PACKAGE_PIN Y19 IOSTANDARD LVCMOS33 IOB TRUE} [get_ports pulsar_adc_spi_sdo]       ; ##  PMOD JA1_N
-set_property -dict {PACKAGE_PIN Y16 IOSTANDARD LVCMOS33 IOB TRUE} [get_ports pulsar_adc_spi_sdi]       ; ##  PMOD JA2_P
-set_property -dict {PACKAGE_PIN Y17 IOSTANDARD LVCMOS33 IOB TRUE} [get_ports pulsar_adc_spi_sclk]      ; ##  PMOD JA2_N
-set_property -dict {PACKAGE_PIN Y18 IOSTANDARD LVCMOS33 IOB TRUE} [get_ports pulsar_adc_spi_cs]        ; ##  PMOD JA1_P
+set_property -dict {PACKAGE_PIN Y19 IOSTANDARD LVCMOS33 } [get_ports pulsar_adc_spi_sdo]       ; ##  PMOD JA1_N
+set_property -dict {PACKAGE_PIN Y16 IOSTANDARD LVCMOS33 } [get_ports pulsar_adc_spi_sdi]       ; ##  PMOD JA2_P
+set_property -dict {PACKAGE_PIN Y17 IOSTANDARD LVCMOS33 } [get_ports pulsar_adc_spi_sclk]      ; ##  PMOD JA2_N
+set_property -dict {PACKAGE_PIN Y18 IOSTANDARD LVCMOS33 } [get_ports pulsar_adc_spi_cs]        ; ##  PMOD JA1_P
 
-set_property -dict {PACKAGE_PIN U18 IOSTANDARD LVCMOS33} [get_ports pulsar_adc_spi_pd]                 ; ##  PMOD JA3_P
+set_property -dict {PACKAGE_PIN U18 IOSTANDARD LVCMOS33} [get_ports pulsar_adc_spi_pd]         ; ##  PMOD JA3_P
+
+
+
+# pulsar JB_CONNECTION SPI interface
+
+set_property -dict {PACKAGE_PIN Y14 IOSTANDARD LVCMOS33 } [get_ports pulsar2_adc_spi_sdo]       ; ##  PMOD JB1_N
+set_property -dict {PACKAGE_PIN T11 IOSTANDARD LVCMOS33 } [get_ports pulsar2_adc_spi_sdi]       ; ##  PMOD JB2_P
+set_property -dict {PACKAGE_PIN T10 IOSTANDARD LVCMOS33 } [get_ports pulsar2_adc_spi_sclk]      ; ##  PMOD JB2_N
+set_property -dict {PACKAGE_PIN W14 IOSTANDARD LVCMOS33 } [get_ports pulsar2_adc_spi_cs]        ; ##  PMOD JB1_P
+
+set_property -dict {PACKAGE_PIN V16 IOSTANDARD LVCMOS33} [get_ports pulsar2_adc_spi_pd]         ; ##  PMOD JB3_P
+
+# pulsar DEBUG SPI interface
+
+set_property -dict {PACKAGE_PIN U14 IOSTANDARD LVCMOS33 } [get_ports debug_pulsar2_adc_spi_cs]       ; ##  CK_IO0
+set_property -dict {PACKAGE_PIN V13 IOSTANDARD LVCMOS33 } [get_ports debug_pulsar2_adc_spi_sclk]     ; ##  CK_IO1
+set_property -dict {PACKAGE_PIN T14 IOSTANDARD LVCMOS33 } [get_ports debug_pulsar2_adc_spi_sdi]      ; ##  CK_IO2
+set_property -dict {PACKAGE_PIN T15 IOSTANDARD LVCMOS33 } [get_ports debug_pulsar2_adc_spi_sdo]      ; ##  CK_IO3
+
+
 
 # rename auto-generated clock for SPIEngine to spi_clk - 160MHz
 # NOTE: clk_fpga_0 is the first PL fabric clock, also called $sys_cpu_clk

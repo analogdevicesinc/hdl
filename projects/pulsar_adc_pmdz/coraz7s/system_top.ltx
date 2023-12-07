@@ -1,0 +1,1184 @@
+{
+    "ltx_root": {
+        "version": 4,
+        "minor": 0,
+        "ltx_data": [
+            {
+                "name": "EDA_PROBESET",
+                "active": true,
+                "debug_cores": [
+                    {
+                        "type": "XSDB_V3",
+                        "name": "dbg_hub",
+                        "spec": "labtools_xsdbm_v3",
+                        "clk_input_freq_hz": "159999998"
+                    },
+                    {
+                        "type": "ILA_V3",
+                        "name": "i_system_wrapper/system_i/clasic_spi_ila",
+                        "spec": "labtools_ila_v6",
+                        "ipName": "ila",
+                        "core_location": {
+                            "user_chain": 1,
+                            "slave_index": 0,
+                            "bscan_switch_index": 0
+                        },
+                        "uuid": "B4C54EC2DB0C54E48383929A57F70375",
+                        "pins": [
+                            {
+                                "name": "probe0",
+                                "id": 0,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": false,
+                                "leftIndex": 0,
+                                "rightIndex": 0,
+                                "portIndex": 0,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/sys_ps7_SPI0_SS_O",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe1",
+                                "id": 1,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": false,
+                                "leftIndex": 0,
+                                "rightIndex": 0,
+                                "portIndex": 1,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/sys_ps7_SPI0_SCLK_O",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 2,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": false,
+                                "leftIndex": 0,
+                                "rightIndex": 0,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/sys_ps7_SPI0_MOSI_O",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe3",
+                                "id": 3,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": false,
+                                "leftIndex": 0,
+                                "rightIndex": 0,
+                                "portIndex": 3,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/spi0_sdi_i_1",
+                                        "isBus": false
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "ILA_V3",
+                        "name": "i_system_wrapper/system_i/spi_engine_ila",
+                        "spec": "labtools_ila_v6",
+                        "ipName": "ila",
+                        "core_location": {
+                            "user_chain": 1,
+                            "slave_index": 1,
+                            "bscan_switch_index": 0
+                        },
+                        "uuid": "12428D4C6CDE5DC39C16120BF1AD1022",
+                        "pins": [
+                            {
+                                "name": "probe0",
+                                "id": 4,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": false,
+                                "leftIndex": 0,
+                                "rightIndex": 0,
+                                "portIndex": 0,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_cs_1",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe1",
+                                "id": 5,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": false,
+                                "leftIndex": 0,
+                                "rightIndex": 0,
+                                "portIndex": 1,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sclk_1",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 6,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 0,
+                                "rightIndex": 0,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_1",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 7,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 1,
+                                "rightIndex": 1,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_2",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 8,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 2,
+                                "rightIndex": 2,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_3",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 9,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 3,
+                                "rightIndex": 3,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_4",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 10,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 4,
+                                "rightIndex": 4,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_5",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 11,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 5,
+                                "rightIndex": 5,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_6",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 12,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 6,
+                                "rightIndex": 6,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_7",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 13,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 7,
+                                "rightIndex": 7,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_8",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 14,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 8,
+                                "rightIndex": 8,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_9",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 15,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 9,
+                                "rightIndex": 9,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_10",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 16,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 10,
+                                "rightIndex": 10,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_11",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 17,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 11,
+                                "rightIndex": 11,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_12",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 18,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 12,
+                                "rightIndex": 12,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_13",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 19,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 13,
+                                "rightIndex": 13,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_14",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 20,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 14,
+                                "rightIndex": 14,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_15",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 21,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 15,
+                                "rightIndex": 15,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_16",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 22,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 16,
+                                "rightIndex": 16,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_17",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 23,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 17,
+                                "rightIndex": 17,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_18",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 24,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 18,
+                                "rightIndex": 18,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_19",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 25,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 19,
+                                "rightIndex": 19,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_20",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 26,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 20,
+                                "rightIndex": 20,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_21",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 27,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 21,
+                                "rightIndex": 21,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_22",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 28,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 22,
+                                "rightIndex": 22,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_23",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 29,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 23,
+                                "rightIndex": 23,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_24",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 30,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 24,
+                                "rightIndex": 24,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_25",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 31,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 25,
+                                "rightIndex": 25,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_26",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 32,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 26,
+                                "rightIndex": 26,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_27",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 33,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 27,
+                                "rightIndex": 27,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_28",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 34,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 28,
+                                "rightIndex": 28,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_29",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 35,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 29,
+                                "rightIndex": 29,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_30",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 36,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 30,
+                                "rightIndex": 30,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_31",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 37,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 31,
+                                "rightIndex": 31,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_32",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 38,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 32,
+                                "rightIndex": 32,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_33",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 39,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 33,
+                                "rightIndex": 33,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_34",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 40,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 34,
+                                "rightIndex": 34,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_35",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 41,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 35,
+                                "rightIndex": 35,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_36",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 42,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 36,
+                                "rightIndex": 36,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_37",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 43,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 37,
+                                "rightIndex": 37,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_38",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 44,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 38,
+                                "rightIndex": 38,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_39",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 45,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 39,
+                                "rightIndex": 39,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_40",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 46,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 40,
+                                "rightIndex": 40,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_41",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 47,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 41,
+                                "rightIndex": 41,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_42",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 48,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 42,
+                                "rightIndex": 42,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_43",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 49,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 43,
+                                "rightIndex": 43,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_44",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 50,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 44,
+                                "rightIndex": 44,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_45",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 51,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 45,
+                                "rightIndex": 45,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_46",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 52,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 46,
+                                "rightIndex": 46,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_47",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 53,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 47,
+                                "rightIndex": 47,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_48",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 54,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 48,
+                                "rightIndex": 48,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_49",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 55,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 49,
+                                "rightIndex": 49,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_50",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 56,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 50,
+                                "rightIndex": 50,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_51",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 57,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 51,
+                                "rightIndex": 51,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_52",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 58,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 52,
+                                "rightIndex": 52,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_53",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 59,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 53,
+                                "rightIndex": 53,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_54",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 60,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 54,
+                                "rightIndex": 54,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_55",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 61,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 55,
+                                "rightIndex": 55,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_56",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 62,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 56,
+                                "rightIndex": 56,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_57",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 63,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 57,
+                                "rightIndex": 57,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_58",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 64,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 58,
+                                "rightIndex": 58,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_59",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 65,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 59,
+                                "rightIndex": 59,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_60",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 66,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 60,
+                                "rightIndex": 60,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_61",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 67,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 61,
+                                "rightIndex": 61,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_62",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 68,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 62,
+                                "rightIndex": 62,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1_63",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 69,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 63,
+                                "rightIndex": 63,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdo_1",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe3",
+                                "id": 70,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": false,
+                                "leftIndex": 0,
+                                "rightIndex": 0,
+                                "portIndex": 3,
+                                "nets": [
+                                    {
+                                        "name": "i_system_wrapper/system_i/ila_pulsar_adc_spi_sdi_1",
+                                        "isBus": false
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}
