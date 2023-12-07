@@ -37,7 +37,9 @@
 `default_nettype none
 
 module nic_phy #(
-  parameter DUMMY_PARAM =0
+  parameter COUNT = 1
+//  parameter GT_GTH = 1,
+//  parameter PRBS31_ENABLE = 1
 ) (
   /*
    * Clock: 125MHz LVDS
@@ -226,6 +228,7 @@ BUFG_GT bufg_gt_sfp_mgt_refclk_0_inst (
 );
 
 eth_xcvr_phy_10g_gty_quad_wrapper #(
+  .COUNT(COUNT),
   .GT_GTH(1),
   .PRBS31_ENABLE(1)
 ) sfp_phy_quad_inst (

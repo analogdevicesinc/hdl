@@ -2,110 +2,175 @@
 
 source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
-set corundum_dir_common [file normalize [file join [file dirname [info script]] "../../../../corundum/fpga/common"]]
-set corundum_dir_mod [file normalize [file join [file dirname [info script]] "../../../../corundum/fpga/lib"]]
-set corundum_dir_zcu102 [file normalize [file join [file dirname [info script]] "../../../../corundum/fpga/mqnic/ZCU102/fpga"]]
+
+#set corundum_dir_common [file normalize [file join [file dirname [info script]] "../../../../corundum/fpga/common"]]
+#set corundum_dir_mod [file normalize [file join [file dirname [info script]] "../../../../corundum/fpga/lib"]]
+
+#set corundum_dir_zcu102 [file normalize [file join [file dirname [info script]] "../../../../corundum/fpga/mqnic/KR260/fpga"]]
+#set corundum_dir_zcu102 [file normalize [file join [file dirname [info script]] "../../../../corundum/fpga/mqnic/ZCU102/fpga"]]
 
 global VIVADO_IP_LIBRARY
 
 adi_ip_create nic_core
 
-set_property PART xczu9eg-ffvb1156-2-e [current_project]
-#source $corundum_dir_zcu102/ip/eth_xcvr_gth.tcl
+#if {[info exists ::env(FPGA_CARRIER)]} {
+#  set S_FPGA_CARRIER [get_env_param FPGA_CARRIER 0]
+#} elseif {![info exists FPGA_CARRIER]} {
+#  set S_FPGA_CARRIER 0
+#}
+#puts "S_FPGA_CARRIER :$S_FPGA_CARRIER"
+#
+#switch $S_FPGA_CARRIER {
+#  ZCU102 {
+#    set_property board_part xilinx.com:zcu102:part0:3.4 [current_project]
+#  }
+#  K26I {
+#    set_property board_part xilinx.com:k26i:part0:1.4 [current_project]
+#  }
+#  default {
+#    set_property board_part xilinx.com:zcu102:part0:3.4 [current_project]
+#    source ../../../../corundum/fpga/mqnic/KR260/fpga/ip/eth_xcvr_gth.tcl
+#  }
+#}
 
+###
+
+#file copy ../../../../corundum/fpga/mqnic/KR260/fpga/rtl/fpga_core.v fpga_core_kr260.v
+#file copy ../../../../corundum/fpga/mqnic/ZCU102/fpga/rtl/fpga_core.v fpga_core_zcu102.v
+
+#file delete fpga_core_zcu102_1.v
+
+#set in [open "fpga_core_zcu102.v" r]
+#set out [open "fpga_core_zcu102_1.v" w]
+
+#source ../../../../corundum/fpga/mqnic/ZCU102/fpga/ip/eth_xcvr_gth.tcl
+
+set substring "module fpga_core #"
+set in [open "../../../../corundum/fpga/mqnic/ZCU102/fpga/rtl/fpga_core.v" r]
+set out [open "fpga_core_zcu102.v" w]
+
+while {[gets $in line] != -1} {
+  if {[string first $substring $line] != -1} {
+    puts "\"$substring\" found"
+    puts $out "module fpga_core_zcu102 #"
+  } else {
+   puts $out $line
+ }
+}
+
+close $in
+close $out
+
+set in [open "../../../../corundum/fpga/mqnic/KR260/fpga/rtl/fpga_core.v" r]
+set out [open "fpga_core_kr260.v" w]
+
+while {[gets $in line] != -1} {
+  if {[string first $substring $line] != -1} {
+    puts "\"$substring\" found"
+    puts $out "module fpga_core_kr260 #"
+  } else {
+   puts $out $line
+ }
+}
+
+close $in
+close $out
+
+###
 adi_ip_files nic_core [list \
+  "fpga_core_zcu102.v" \
+  "fpga_core_kr260.v" \
   "nic_core.v" \
-  "$corundum_dir_zcu102/rtl/fpga_core.v" \
-  "$corundum_dir_common/rtl/mqnic_core_axi.v" \
-  "$corundum_dir_common/rtl/mqnic_core.v" \
-  "$corundum_dir_common/rtl/mqnic_dram_if.v" \
-  "$corundum_dir_common/rtl/mqnic_interface.v" \
-  "$corundum_dir_common/rtl/mqnic_interface_tx.v" \
-  "$corundum_dir_common/rtl/mqnic_interface_rx.v" \
-  "$corundum_dir_common/rtl/mqnic_port.v" \
-  "$corundum_dir_common/rtl/mqnic_port_tx.v" \
-  "$corundum_dir_common/rtl/mqnic_port_rx.v" \
-  "$corundum_dir_common/rtl/mqnic_egress.v" \
-  "$corundum_dir_common/rtl/mqnic_ingress.v" \
-  "$corundum_dir_common/rtl/mqnic_l2_egress.v" \
-  "$corundum_dir_common/rtl/mqnic_l2_ingress.v" \
-  "$corundum_dir_common/rtl/mqnic_rx_queue_map.v" \
-  "$corundum_dir_common/rtl/mqnic_ptp.v" \
-  "$corundum_dir_common/rtl/mqnic_ptp_clock.v" \
-  "$corundum_dir_common/rtl/mqnic_ptp_perout.v" \
-  "$corundum_dir_common/rtl/mqnic_rb_clk_info.v" \
-  "$corundum_dir_common/rtl/mqnic_port_map_phy_xgmii.v" \
-  "$corundum_dir_common/rtl/cpl_write.v" \
-  "$corundum_dir_common/rtl/cpl_op_mux.v" \
-  "$corundum_dir_common/rtl/desc_fetch.v" \
-  "$corundum_dir_common/rtl/desc_op_mux.v" \
-  "$corundum_dir_common/rtl/queue_manager.v" \
-  "$corundum_dir_common/rtl/cpl_queue_manager.v" \
-  "$corundum_dir_common/rtl/tx_fifo.v" \
-  "$corundum_dir_common/rtl/rx_fifo.v" \
-  "$corundum_dir_common/rtl/tx_req_mux.v" \
-  "$corundum_dir_common/rtl/tx_engine.v" \
-  "$corundum_dir_common/rtl/rx_engine.v" \
-  "$corundum_dir_common/rtl/tx_checksum.v" \
-  "$corundum_dir_common/rtl/rx_hash.v" \
-  "$corundum_dir_common/rtl/rx_checksum.v" \
-  "$corundum_dir_common/rtl/rb_drp.v" \
-  "$corundum_dir_common/rtl/stats_counter.v" \
-  "$corundum_dir_common/rtl/stats_collect.v" \
-  "$corundum_dir_common/rtl/stats_dma_if_axi.v" \
-  "$corundum_dir_common/rtl/stats_dma_latency.v" \
-  "$corundum_dir_common/rtl/mqnic_tx_scheduler_block_rr.v" \
-  "$corundum_dir_common/rtl/tx_scheduler_rr.v" \
-  "$corundum_dir_common/rtl/tdma_scheduler.v" \
-  "$corundum_dir_common/rtl/tdma_ber.v" \
-  "$corundum_dir_common/rtl/tdma_ber_ch.v" \
-  "$corundum_dir_mod/eth/rtl/eth_mac_10g.v" \
-  "$corundum_dir_mod/eth/rtl/axis_xgmii_rx_64.v" \
-  "$corundum_dir_mod/eth/rtl/axis_xgmii_tx_64.v" \
-  "$corundum_dir_mod/eth/rtl/lfsr.v" \
-  "$corundum_dir_mod/eth/rtl/ptp_clock.v" \
-  "$corundum_dir_mod/eth/rtl/ptp_clock_cdc.v" \
-  "$corundum_dir_mod/eth/rtl/ptp_perout.v" \
-  "$corundum_dir_mod/axi/rtl/axil_interconnect.v" \
-  "$corundum_dir_mod/axi/rtl/axil_crossbar.v" \
-  "$corundum_dir_mod/axi/rtl/axil_crossbar_addr.v" \
-  "$corundum_dir_mod/axi/rtl/axil_crossbar_rd.v" \
-  "$corundum_dir_mod/axi/rtl/axil_crossbar_wr.v" \
-  "$corundum_dir_mod/axi/rtl/axil_reg_if.v" \
-  "$corundum_dir_mod/axi/rtl/axil_reg_if_rd.v" \
-  "$corundum_dir_mod/axi/rtl/axil_reg_if_wr.v" \
-  "$corundum_dir_mod/axi/rtl/axil_register_rd.v" \
-  "$corundum_dir_mod/axi/rtl/axil_register_wr.v" \
-  "$corundum_dir_mod/axi/rtl/arbiter.v" \
-  "$corundum_dir_mod/axi/rtl/priority_encoder.v" \
-  "$corundum_dir_mod/axis/rtl/axis_adapter.v" \
-  "$corundum_dir_mod/axis/rtl/axis_arb_mux.v" \
-  "$corundum_dir_mod/axis/rtl/axis_async_fifo.v" \
-  "$corundum_dir_mod/axis/rtl/axis_async_fifo_adapter.v" \
-  "$corundum_dir_mod/axis/rtl/axis_demux.v" \
-  "$corundum_dir_mod/axis/rtl/axis_fifo.v" \
-  "$corundum_dir_mod/axis/rtl/axis_fifo_adapter.v" \
-  "$corundum_dir_mod/axis/rtl/axis_pipeline_fifo.v" \
-  "$corundum_dir_mod/pcie/rtl/dma_client_axis_sink.v" \
-  "$corundum_dir_mod/pcie/rtl/dma_client_axis_source.v" \
-  "$corundum_dir_mod/pcie/rtl/irq_rate_limit.v" \
-  "$corundum_dir_mod/pcie/rtl/dma_if_axi.v" \
-  "$corundum_dir_mod/pcie/rtl/dma_if_axi_rd.v" \
-  "$corundum_dir_mod/pcie/rtl/dma_if_axi_wr.v" \
-  "$corundum_dir_mod/pcie/rtl/dma_if_mux.v" \
-  "$corundum_dir_mod/pcie/rtl/dma_if_mux_rd.v" \
-  "$corundum_dir_mod/pcie/rtl/dma_if_mux_wr.v" \
-  "$corundum_dir_mod/pcie/rtl/dma_if_desc_mux.v" \
-  "$corundum_dir_mod/pcie/rtl/dma_ram_demux_rd.v" \
-  "$corundum_dir_mod/pcie/rtl/dma_ram_demux_wr.v" \
-  "$corundum_dir_mod/pcie/rtl/dma_psdpram.v" \
-  "$corundum_dir_mod/eth/lib/axis/syn/vivado/axis_async_fifo.tcl" \
-  "$corundum_dir_common/syn/vivado/mqnic_port.tcl" \
-  "$corundum_dir_common/syn/vivado/mqnic_ptp_clock.tcl" \
-  "$corundum_dir_common/syn/vivado/mqnic_rb_clk_info.tcl" \
-  "$corundum_dir_mod/eth/syn/vivado/ptp_clock_cdc.tcl" \
-  "$corundum_dir_common/syn/vivado/rb_drp.tcl" \
-  "$corundum_dir_common/syn/vivado/tdma_ber_ch.tcl" \
+  "../../../../corundum/fpga/common/rtl/mqnic_core_axi.v" \
+  "../../../../corundum/fpga/common/rtl/mqnic_core.v" \
+  "../../../../corundum/fpga/common/rtl/mqnic_dram_if.v" \
+  "../../../../corundum/fpga/common/rtl/mqnic_interface.v" \
+  "../../../../corundum/fpga/common/rtl/mqnic_interface_tx.v" \
+  "../../../../corundum/fpga/common/rtl/mqnic_interface_rx.v" \
+  "../../../../corundum/fpga/common/rtl/mqnic_port.v" \
+  "../../../../corundum/fpga/common/rtl/mqnic_port_tx.v" \
+  "../../../../corundum/fpga/common/rtl/mqnic_port_rx.v" \
+  "../../../../corundum/fpga/common/rtl/mqnic_egress.v" \
+  "../../../../corundum/fpga/common/rtl/mqnic_ingress.v" \
+  "../../../../corundum/fpga/common/rtl/mqnic_l2_egress.v" \
+  "../../../../corundum/fpga/common/rtl/mqnic_l2_ingress.v" \
+  "../../../../corundum/fpga/common/rtl/mqnic_rx_queue_map.v" \
+  "../../../../corundum/fpga/common/rtl/mqnic_ptp.v" \
+  "../../../../corundum/fpga/common/rtl/mqnic_ptp_clock.v" \
+  "../../../../corundum/fpga/common/rtl/mqnic_ptp_perout.v" \
+  "../../../../corundum/fpga/common/rtl/mqnic_rb_clk_info.v" \
+  "../../../../corundum/fpga/common/rtl/mqnic_port_map_phy_xgmii.v" \
+  "../../../../corundum/fpga/common/rtl/cpl_write.v" \
+  "../../../../corundum/fpga/common/rtl/cpl_op_mux.v" \
+  "../../../../corundum/fpga/common/rtl/desc_fetch.v" \
+  "../../../../corundum/fpga/common/rtl/desc_op_mux.v" \
+  "../../../../corundum/fpga/common/rtl/queue_manager.v" \
+  "../../../../corundum/fpga/common/rtl/cpl_queue_manager.v" \
+  "../../../../corundum/fpga/common/rtl/tx_fifo.v" \
+  "../../../../corundum/fpga/common/rtl/rx_fifo.v" \
+  "../../../../corundum/fpga/common/rtl/tx_req_mux.v" \
+  "../../../../corundum/fpga/common/rtl/tx_engine.v" \
+  "../../../../corundum/fpga/common/rtl/rx_engine.v" \
+  "../../../../corundum/fpga/common/rtl/tx_checksum.v" \
+  "../../../../corundum/fpga/common/rtl/rx_hash.v" \
+  "../../../../corundum/fpga/common/rtl/rx_checksum.v" \
+  "../../../../corundum/fpga/common/rtl/rb_drp.v" \
+  "../../../../corundum/fpga/common/rtl/stats_counter.v" \
+  "../../../../corundum/fpga/common/rtl/stats_collect.v" \
+  "../../../../corundum/fpga/common/rtl/stats_dma_if_axi.v" \
+  "../../../../corundum/fpga/common/rtl/stats_dma_latency.v" \
+  "../../../../corundum/fpga/common/rtl/mqnic_tx_scheduler_block_rr.v" \
+  "../../../../corundum/fpga/common/rtl/tx_scheduler_rr.v" \
+  "../../../../corundum/fpga/common/rtl/tdma_scheduler.v" \
+  "../../../../corundum/fpga/common/rtl/tdma_ber.v" \
+  "../../../../corundum/fpga/common/rtl/tdma_ber_ch.v" \
+  "../../../../corundum/fpga/lib/eth/rtl/eth_mac_10g.v" \
+  "../../../../corundum/fpga/lib/eth/rtl/axis_xgmii_rx_64.v" \
+  "../../../../corundum/fpga/lib/eth/rtl/axis_xgmii_tx_64.v" \
+  "../../../../corundum/fpga/lib/eth/rtl/lfsr.v" \
+  "../../../../corundum/fpga/lib/eth/rtl/ptp_clock.v" \
+  "../../../../corundum/fpga/lib/eth/rtl/ptp_clock_cdc.v" \
+  "../../../../corundum/fpga/lib/eth/rtl/ptp_perout.v" \
+  "../../../../corundum/fpga/lib/axi/rtl/axil_interconnect.v" \
+  "../../../../corundum/fpga/lib/axi/rtl/axil_crossbar.v" \
+  "../../../../corundum/fpga/lib/axi/rtl/axil_crossbar_addr.v" \
+  "../../../../corundum/fpga/lib/axi/rtl/axil_crossbar_rd.v" \
+  "../../../../corundum/fpga/lib/axi/rtl/axil_crossbar_wr.v" \
+  "../../../../corundum/fpga/lib/axi/rtl/axil_reg_if.v" \
+  "../../../../corundum/fpga/lib/axi/rtl/axil_reg_if_rd.v" \
+  "../../../../corundum/fpga/lib/axi/rtl/axil_reg_if_wr.v" \
+  "../../../../corundum/fpga/lib/axi/rtl/axil_register_rd.v" \
+  "../../../../corundum/fpga/lib/axi/rtl/axil_register_wr.v" \
+  "../../../../corundum/fpga/lib/axi/rtl/arbiter.v" \
+  "../../../../corundum/fpga/lib/axi/rtl/priority_encoder.v" \
+  "../../../../corundum/fpga/lib/axis/rtl/axis_adapter.v" \
+  "../../../../corundum/fpga/lib/axis/rtl/axis_arb_mux.v" \
+  "../../../../corundum/fpga/lib/axis/rtl/axis_async_fifo.v" \
+  "../../../../corundum/fpga/lib/axis/rtl/axis_async_fifo_adapter.v" \
+  "../../../../corundum/fpga/lib/axis/rtl/axis_demux.v" \
+  "../../../../corundum/fpga/lib/axis/rtl/axis_fifo.v" \
+  "../../../../corundum/fpga/lib/axis/rtl/axis_fifo_adapter.v" \
+  "../../../../corundum/fpga/lib/axis/rtl/axis_pipeline_fifo.v" \
+  "../../../../corundum/fpga/lib/pcie/rtl/dma_client_axis_sink.v" \
+  "../../../../corundum/fpga/lib/pcie/rtl/dma_client_axis_source.v" \
+  "../../../../corundum/fpga/lib/pcie/rtl/irq_rate_limit.v" \
+  "../../../../corundum/fpga/lib/pcie/rtl/dma_if_axi.v" \
+  "../../../../corundum/fpga/lib/pcie/rtl/dma_if_axi_rd.v" \
+  "../../../../corundum/fpga/lib/pcie/rtl/dma_if_axi_wr.v" \
+  "../../../../corundum/fpga/lib/pcie/rtl/dma_if_mux.v" \
+  "../../../../corundum/fpga/lib/pcie/rtl/dma_if_mux_rd.v" \
+  "../../../../corundum/fpga/lib/pcie/rtl/dma_if_mux_wr.v" \
+  "../../../../corundum/fpga/lib/pcie/rtl/dma_if_desc_mux.v" \
+  "../../../../corundum/fpga/lib/pcie/rtl/dma_ram_demux_rd.v" \
+  "../../../../corundum/fpga/lib/pcie/rtl/dma_ram_demux_wr.v" \
+  "../../../../corundum/fpga/lib/pcie/rtl/dma_psdpram.v" \
+  "../../../../corundum/fpga/lib/eth/lib/axis/syn/vivado/axis_async_fifo.tcl" \
+  "../../../../corundum/fpga/common/syn/vivado/mqnic_port.tcl" \
+  "../../../../corundum/fpga/common/syn/vivado/mqnic_ptp_clock.tcl" \
+  "../../../../corundum/fpga/common/syn/vivado/mqnic_rb_clk_info.tcl" \
+  "../../../../corundum/fpga/lib/eth/syn/vivado/ptp_clock_cdc.tcl" \
+  "../../../../corundum/fpga/common/syn/vivado/rb_drp.tcl" \
+  "../../../../corundum/fpga/common/syn/vivado/tdma_ber_ch.tcl" \
 ]
 
 adi_ip_properties_lite nic_core

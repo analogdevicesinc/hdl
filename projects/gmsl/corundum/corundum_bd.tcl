@@ -151,6 +151,7 @@ set_property -dict [list \
 ] [get_bd_cells nic_core]
 
 ad_ip_instance nic_phy nic_phy
+ad_ip_parameter nic_phy CONFIG.COUNT {4}
 
 ad_ip_instance clk_wiz eth_clkgen
 ad_ip_parameter eth_clkgen CONFIG.PRIM_IN_FREQ.VALUE_SRC USER

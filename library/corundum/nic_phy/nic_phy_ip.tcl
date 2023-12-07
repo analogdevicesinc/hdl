@@ -4,34 +4,65 @@ source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 set corundum_dir_common [file normalize [file join [file dirname [info script]] "../../../../corundum/fpga/common"]]
 set corundum_dir_mod [file normalize [file join [file dirname [info script]] "../../../../corundum/fpga/lib"]]
-set corundum_dir_zcu102 [file normalize [file join [file dirname [info script]] "../../../../corundum/fpga/mqnic/ZCU102/fpga"]]
+
+#set corundum_dir_zcu102 [file normalize [file join [file dirname [info script]] "../../../../corundum/fpga/mqnic/ZCU102/fpga"]]
+set corundum_dir_zcu102 [file normalize [file join [file dirname [info script]] "../../../../corundum/fpga/mqnic/KR260/fpga"]]
 
 global VIVADO_IP_LIBRARY
 
 adi_ip_create nic_phy
 
-set_property PART xczu9eg-ffvb1156-2-e [current_project]
-source $corundum_dir_zcu102/ip/eth_xcvr_gth.tcl
+if {[info exists ::env(FPGA_CARRIER)]} {
+  set S_FPGA_CARRIER [get_env_param FPGA_CARRIER 0]
+} elseif {![info exists FPGA_CARRIER]} {
+  set S_FPGA_CARRIER 0
+}
+
+switch $S_FPGA_CARRIER {
+  ZCU102 {
+    puts "S_FPGA_CARRIER :$S_FPGA_CARRIER"
+#    set_property board_part xilinx.com:zcu102:part0:3.4 [current_project]
+   # adi_project_files ad7616_sdz_zed [list \
+      "system_top_si.v" \
+      "serial_if_constr.xdc"
+ #   ]
+  }
+
+  K26I {
+    puts "S_FPGA_CARRIER :$S_FPGA_CARRIER"
+ #   set_property board_part xilinx.com:k26i:part0:1.4 [current_project]
+  }
+
+  default {
+    puts "Carrier not explicitly selected. Default is ZCU102"
+  #  set_property board_part xilinx.com:zcu102:part0:3.4 [current_project]
+  }
+}
+
+set_property board_part xilinx.com:k26i:part0:1.4 [current_project]
+#set_property PART xczu9eg-ffvb1156-2-e [current_project]
+
+source ../../../../corundum/fpga/mqnic/KR260/fpga/ip/eth_xcvr_gth.tcl
 
 adi_ip_files nic_phy [list \
   "nic_phy.v" \
-  "$corundum_dir_mod/eth/rtl/lfsr.v" \
-  "$corundum_dir_mod/eth/lib/axis/syn/vivado/sync_reset.tcl" \
-  "$corundum_dir_common/rtl/eth_xcvr_phy_10g_gty_quad_wrapper.v" \
-  "$corundum_dir_common/rtl/eth_xcvr_phy_10g_gty_wrapper.v" \
-  "$corundum_dir_mod/eth/lib/axis/rtl/sync_reset.v" \
-  "$corundum_dir_mod/eth/rtl/eth_phy_10g.v" \
-  "$corundum_dir_mod/eth/rtl/eth_phy_10g_rx.v" \
-  "$corundum_dir_mod/eth/rtl/eth_phy_10g_rx_if.v" \
-  "$corundum_dir_mod/eth/rtl/eth_phy_10g_rx_frame_sync.v" \
-  "$corundum_dir_mod/eth/rtl/eth_phy_10g_rx_ber_mon.v" \
-  "$corundum_dir_mod/eth/rtl/eth_phy_10g_rx_watchdog.v" \
-  "$corundum_dir_mod/eth/rtl/eth_phy_10g_tx.v" \
-  "$corundum_dir_mod/eth/rtl/eth_phy_10g_tx_if.v" \
-  "$corundum_dir_mod/eth/rtl/lfsr.v" \
-  "$corundum_dir_mod/eth/rtl/xgmii_baser_dec_64.v" \
-  "$corundum_dir_mod/eth/rtl/xgmii_baser_enc_64.v" \
-  "$corundum_dir_common/syn/vivado/eth_xcvr_phy_10g_gty_wrapper.tcl" \
+  "../../../../corundum/fpga/lib/eth/rtl/lfsr.v" \
+  "../../../../corundum/fpga/lib/eth/lib/axis/syn/vivado/sync_reset.tcl" \
+  "../../../../corundum/fpga/common/rtl/eth_xcvr_phy_10g_gty_quad_wrapper.v" \
+  "../../../../corundum/fpga/common/rtl/eth_xcvr_phy_10g_gty_wrapper.v" \
+  "../../../../corundum/fpga/lib/eth/lib/axis/rtl/sync_reset.v" \
+  "../../../../corundum/fpga/lib/eth/rtl/eth_phy_10g.v" \
+  "../../../../corundum/fpga/lib/eth/rtl/eth_phy_10g_rx.v" \
+  "../../../../corundum/fpga/lib/eth/rtl/eth_phy_10g_rx_if.v" \
+  "../../../../corundum/fpga/lib/eth/rtl/eth_phy_10g_rx_frame_sync.v" \
+  "../../../../corundum/fpga/lib/eth/rtl/eth_phy_10g_rx_ber_mon.v" \
+  "../../../../corundum/fpga/lib/eth/rtl/eth_phy_10g_rx_watchdog.v" \
+  "../../../../corundum/fpga/lib/eth/rtl/eth_phy_10g_tx.v" \
+  "../../../../corundum/fpga/lib/eth/rtl/eth_phy_10g_tx_if.v" \
+  "../../../../corundum/fpga/lib/eth/rtl/lfsr.v" \
+  "../../../../corundum/fpga/lib/eth/rtl/xgmii_baser_dec_64.v" \
+  "../../../../corundum/fpga/lib/eth/rtl/xgmii_baser_enc_64.v" \
+  "../../../../corundum/fpga/common/syn/vivado/eth_xcvr_phy_10g_gty_wrapper.tcl" \
 ]
 
 adi_ip_properties_lite nic_phy
