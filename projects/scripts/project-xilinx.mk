@@ -117,7 +117,7 @@ $(HDL_LIBRARY_PATH)%/component.xml: TARGET:=xilinx
 FORCE:
 $(HDL_LIBRARY_PATH)%/component.xml: FORCE
 	flock $(dir $@).lock -c " \
-	if [ -n "${REQUIRED_VIVADO_VERSION}" ]; then \
+	if [ -n \"${REQUIRED_VIVADO_VERSION}\" ]; then \
 		$(MAKE) -C $(dir $@) $(TARGET) REQUIRED_VIVADO_VERSION=${REQUIRED_VIVADO_VERSION}; \
 	else \
 		$(MAKE) -C $(dir $@) $(TARGET); \
