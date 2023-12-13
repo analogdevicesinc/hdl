@@ -79,8 +79,8 @@ module system_top #(
 
   inout                   iic_scl,
   inout                   iic_sda,
-  inout       [ 1:0]      iic_mux_scl,
-  inout       [ 1:0]      iic_mux_sda,
+  inout       [1:0]       iic_mux_scl,
+  inout       [1:0]       iic_mux_sda,
 
   input                   otg_vbusoc,
 
@@ -90,13 +90,13 @@ module system_top #(
   output                  ad7606_spi_sdo,
 
   inout                   adc_serpar,
-  inout                   adc_busy,
+  input                   adc_busy,
   output                  adc_cnvst_n,
   inout                   adc_first_data,
-  inout                   adc_reset,
-  inout       [ 2:0]      adc_os,
-  inout                   adc_stby,
-  inout                   adc_range
+  output                  adc_reset,
+  output      [2:0]       adc_os,
+  output                  adc_stby,
+  output                  adc_range
 );
 
   // internal signals

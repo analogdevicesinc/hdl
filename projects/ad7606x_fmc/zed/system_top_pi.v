@@ -91,12 +91,12 @@ module system_top (
   output                  adc_cnvst_n,
   output                  adc_cs_n,
   input                   adc_first_data,
-  inout                   adc_reset,
-  inout       [2:0]       adc_os,
-  inout                   adc_stby,
-  inout                   adc_range,
+  output                  adc_reset,
+  output      [2:0]       adc_os,
+  output                  adc_stby,
+  output                  adc_range,
   output                  adc_refsel,
-  inout                   adc_serpar
+  output                  adc_serpar
 );
 
   // internal signals
