@@ -110,7 +110,7 @@ ENDFIELD
 REG
 0x0007
 FPGA_INFO
-FPGA device information [[https://github.com/analogdevicesinc/hdl/blob/master/library/scripts/adi_xilinx_device_info_enc.tcl |Xilinx encoded values]]
+FPGA device information [[https://github.com/analogdevicesinc/hdl/blob/main/library/scripts/adi_xilinx_device_info_enc.tcl |Xilinx encoded values]]
 ENDREG
 
 FIELD
@@ -198,7 +198,7 @@ FIELD
 [19:16]
 XCVR_TYPE[3:0]
 RO
-[[https://github.com/analogdevicesinc/hdl/blob/master/library/scripts/adi_xilinx_device_info_enc.tcl | Xilinx encoded values.]]
+[[https://github.com/analogdevicesinc/hdl/blob/main/library/scripts/adi_xilinx_device_info_enc.tcl | Xilinx encoded values.]]
 ENDFIELD
 
 FIELD
