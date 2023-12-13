@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="SPI Engine Offload Control Interface" href="offload-control-interface.html" /><link rel="prev" title="SPI Engine Interconnect Module" href="spi_engine_interconnect.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="SPI Engine Tutorial - PulSAR-ADC" href="tutorial.html" /><link rel="prev" title="SPI Engine Instruction Set Specification" href="instruction-format.html" />
 
     <link rel="shortcut icon" href="../../_static/icon.svg"/><!-- Generated with Sphinx 6.1.3 and Furo 2023.03.27 -->
-        <title>SPI Engine Control Interface - HDL, Analog Devices v0.1 documentation</title>
+        <title>SPI Engine Pipeline Delays - HDL, Analog Devices v0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
@@ -180,11 +180,11 @@
 <li class="toctree-l2"><a class="reference internal" href="axi_spi_engine.html">AXI Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="spi_engine_offload.html">Offload Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="spi_engine_interconnect.html">Interconnect Module</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Control Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control-interface.html">Control Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="offload-control-interface.html">Offload Control Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="spi-bus-interface.html">SPI Bus Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="instruction-format.html">Instruction Set Specification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pipeline-delays.html">Pipeline Delays</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Pipeline Delays</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorial.html">Tutorial - PulSAR ADC</a></li>
 </ul>
 </li>
@@ -233,123 +233,155 @@
           </label>
         </div>
         <article role="main">
-          <section id="spi-engine-control-interface">
-<span id="id1"></span><h1>SPI Engine Control Interface<a class="headerlink" href="#spi-engine-control-interface" title="Permalink to this heading">#</a></h1>
-<p>The SPI Engine Control Interface is used to exchange data between different
-cores within the SPI Engine framework. It is used to exchange the commands and
-synchronization points as well as the SPI bus transmit and receive data.</p>
-<p>The interface consists of four streams:</p>
-<ul class="simple">
-<li><p>The CMD stream which carries the SPI Engine commands. (Master to Slave)</p></li>
-<li><p>The SDO stream which carries the to be transmitted data for the SPI bus.
-(Master to Slave)</p></li>
-<li><p>The SDI stream which carries the received data from the SPI bus. (Slave to
-Master)</p></li>
-<li><p>The SYNC stream which carries the synchronization events. (Slave to Master)</p></li>
-</ul>
-<p>Each of the streams has a valid, ready and data signal. They follow the
-handshaking protocol as defined by the AXI standard. Meaning the master asserts
-valid when the data on the data signal is valid and the slave asserts ready when
-it is able to accept new data. If both valid and ready are asserted at the same
-time the data has been transmitted from the master to the slave.</p>
-<section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading">#</a></h2>
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Name</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/interfaces/spi_engine_ctrl_rtl.xml">library/spi_engine/interfaces/spi_engine_ctrl_rtl.xml</a></p></td>
-<td><p>Interface definition file</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="signal-pins">
-<h2>Signal Pins<a class="headerlink" href="#signal-pins" title="Permalink to this heading">#</a></h2>
+          <section id="spi-engine-pipeline-delays">
+<span id="id1"></span><h1>SPI Engine Pipeline Delays<a class="headerlink" href="#spi-engine-pipeline-delays" title="Permalink to this heading">#</a></h1>
+<p>The SPI Engine implementation imposes certain constraints on the timing of
+different commands. Each instruction requires some number of cycles to execute,
+which may depend on the instruction parameters. Additionally, there are delays
+associated with the internal architecture of the SPI Engine, which become
+relevant unless we are using the Offload functionality.</p>
+<section id="instruction-execution">
+<span id="instruction-execution-times"></span><h2>Instruction Execution<a class="headerlink" href="#instruction-execution" title="Permalink to this heading">#</a></h2>
+<p>Every instruction requires 1 cycle minimum for communication between the offload
+module and the execution module. Additionally, the Chip Select, Sleep, Transfer
+and Sync instructions require another cycle for checking the idle condition
+(total 2 fixed delay for these).</p>
+<p>The exact values are, counting from the execution
+module:</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 10%" />
-<col style="width: 10%" />
-<col style="width: 70%" />
+<col style="width: 11%" />
+<col style="width: 89%" />
 </colgroup>
 <thead>
-<tr class="row-odd"><th class="head"><p>Width</p></th>
-<th class="head"><p>Name</p></th>
-<th class="head"><p>Direction (Master)</p></th>
-<th class="head"><p>Description</p></th>
+<tr class="row-odd"><th class="head"><p>Instruction</p></th>
+<th class="head"><p>Cycles</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">cmd_ready</span></code></p></td>
-<td><p>Input</p></td>
-<td><p>Ready signal of the CMD stream</p></td>
+<tr class="row-even"><td><p>Configuration Write</p></td>
+<td><p>1 cycle.</p></td>
 </tr>
-<tr class="row-odd"><td></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">cmd_valid</span></code></p></td>
-<td><p>Output</p></td>
-<td><p>Valid signal of the CMD stream</p></td>
+<tr class="row-odd"><td><p>Sync</p></td>
+<td><p>2 cycles.</p></td>
 </tr>
-<tr class="row-even"><td><p>[15:0]</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">cmd_data</span></code></p></td>
-<td><p>Output</p></td>
-<td><p>Data signal of the CMD stream</p></td>
+<tr class="row-even"><td><p>Chip-select</p></td>
+<td><p><span class="math notranslate nohighlight">\(2+ 2*t*((div+1)*2)\)</span>. Where <span class="math notranslate nohighlight">\(t\)</span> is the chip select delay
+parameter on the instruction, and <span class="math notranslate nohighlight">\(div\)</span> is the prescaler register
+value. The CS value change happens after the first
+<span class="math notranslate nohighlight">\(2+t*((div+1)*2)\)</span> cycles.</p></td>
 </tr>
-<tr class="row-odd"><td></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">sdo_ready</span></code></p></td>
-<td><p>Input</p></td>
-<td><p>Ready signal of the SDO stream</p></td>
+<tr class="row-odd"><td><p>Sleep</p></td>
+<td><p><span class="math notranslate nohighlight">\(2 + t*((div+1)*2)\)</span>. Where <span class="math notranslate nohighlight">\(t\)</span> is the sleep delay parameter
+on the instruction, and <span class="math notranslate nohighlight">\(div\)</span> is the prescaler register value.</p></td>
 </tr>
-<tr class="row-even"><td></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">sdo_valid</span></code></p></td>
-<td><p>Output</p></td>
-<td><p>Valid signal of the SDO stream</p></td>
-</tr>
-<tr class="row-odd"><td><p>[DATA_WIDTH-1:0]</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">sdo_data</span></code></p></td>
-<td><p>Output</p></td>
-<td><p>Data signal of the SDO stream</p></td>
-</tr>
-<tr class="row-even"><td></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">sdi_ready</span></code></p></td>
-<td><p>Output</p></td>
-<td><p>Ready signal of the SDI stream</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">sdi_valid</span></code></p></td>
-<td><p>Input</p></td>
-<td><p>Valid signal of the SDI stream</p></td>
-</tr>
-<tr class="row-even"><td><p>[(NUM_OF_SDI*DATA_WIDTH-1):0]</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">sdi_data</span></code></p></td>
-<td><p>Input</p></td>
-<td><p>Data signal of the SDI stream</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">sync_ready</span></code></p></td>
-<td><p>Output</p></td>
-<td><p>Ready signal of the SYNC stream</p></td>
-</tr>
-<tr class="row-even"><td></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">sync_valid</span></code></p></td>
-<td><p>Input</p></td>
-<td><p>Valid signal of the SYNC stream</p></td>
-</tr>
-<tr class="row-odd"><td><p>[7:0]</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">sync_data</span></code></p></td>
-<td><p>Input</p></td>
-<td><p>Data signal of the sync stream</p></td>
+<tr class="row-even"><td><p>Transfer</p></td>
+<td><p>2 cycles, plus the transfer time.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+<p>Counting from the execution module means that these values are useful for
+calculating the delays on the offload case (simply add up each instruction
+execution time). For other cases, the detailed delays of the architecture are
+needed.</p>
+</section>
+<section id="detailed-delays">
+<span id="id2"></span><h2>Detailed Delays<a class="headerlink" href="#detailed-delays" title="Permalink to this heading">#</a></h2>
+<p>This section lists the delays inside the SPI Engine architecture. To make use of
+this information, one needs some degree of familiarity with the hdl
+implementation (knowledge of the sub-modules and the way they communicate).</p>
+<p>See also: <a class="reference internal" href="control-interface.html#spi-engine-control-interface"><span class="std std-ref">SPI Engine Control Interface</span></a>,
+<a class="reference internal" href="offload-control-interface.html#spi-engine-offload-control-interface"><span class="std std-ref">SPI Engine Offload Control Interface</span></a>.</p>
+<section id="offload-module">
+<h3>Offload Module<a class="headerlink" href="#offload-module" title="Permalink to this heading">#</a></h3>
+<p>All the delays measured for this module are in terms of SPI Engine clock cycles.</p>
+<ul class="simple">
+<li><p>Trigger input to command valid output: 1 + 1-2(from a 2FF CDC, 0 if not
+asynchronous) cycles.</p></li>
+<li><p>Trigger in to sdo_data_valid: 1 + 1-2(from a 2FF CDC, 0 if not asynchronous)
+cycles.</p></li>
+<li><p>Maximum command throughput: 1 command per cycle.</p></li>
+<li><p>sdi_data_valid to offload_sdi_valid: 0 cycles.</p></li>
+</ul>
+</section>
+<section id="interconnect-module">
+<h3>Interconnect Module<a class="headerlink" href="#interconnect-module" title="Permalink to this heading">#</a></h3>
+<p>All the delays measured for this module are in terms of SPI Engine clock cycles.</p>
+<p>The interconnect will only accept one master at a time, and will wait until a
+sync handshake back to the master is completed to free the channel.</p>
+<ul class="simple">
+<li><p>Command valid input to command valid output (s0/s1 to m): 1 cycle if idle, 0
+if already “owned” by the source (s0 or s1).</p></li>
+<li><p>Sync valid from m side to s0/s1 sync valid (back to originating master): 0
+cycle.</p></li>
+<li><p>Sync ready to idle (delay after finishing transaction response): 1 cycle</p></li>
+<li><p>Thus, 2 cycles per command minimum if changing masters, 3 if accounting for
+sync (this is the worst case).</p></li>
+<li><p>1 cycle per command (can accept back to back) if from same master.</p></li>
+<li><p>Thus, <span class="math notranslate nohighlight">\(2+N_{cmd}\)</span> minimum cycles per <span class="math notranslate nohighlight">\(N_{cmd}\)</span> “burst” from same
+source.</p></li>
+<li><p>s0/s1_sdo_valid to m_sdo_valid:  0 if already “owned” by the source (s0 or
+s1). Otherwise has to wait until s0/s1 owns the channel.</p></li>
+<li><p>m_sdi_valid to s0/s1_sdi_valid:  0 if already “owned” by the sink (s0 or s1).
+Otherwise has to wait until s0/s1 owns the channel.</p></li>
+</ul>
+</section>
+<section id="execution-module">
+<h3>Execution Module<a class="headerlink" href="#execution-module" title="Permalink to this heading">#</a></h3>
+<p>All the delays measured for this module are in terms of SPI Engine clock cycles.
+See above: <a class="reference internal" href="#instruction-execution-times"><span class="std std-ref">Instruction Execution</span></a></p>
+<ul class="simple">
+<li><p>Every instruction requires 1 cycle minimum for communication between the
+Offload Module and the Execution Module. Additionally, the Chip Select, Sleep,
+Transfer and Sync instructions require another cycle for checking the idle
+condition (total 2 fixed delay for these).</p>
+<ul>
+<li><p>Chip Select, Sleep and Transfer have additional cycle requirements due to
+intentional delays in execution. This is better detailed at
+<a class="reference internal" href="#instruction-execution-times"><span class="std std-ref">Instruction Execution</span></a>.</p></li>
+</ul>
+</li>
+<li><p>SDI data delay: 0 cycles (sdi_data_valid arrives at the same cycle as the
+Transfer instruction finishes and the next command is accepted).</p></li>
+</ul>
+</section>
+<section id="axi-module">
+<h3>AXI Module<a class="headerlink" href="#axi-module" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>AXI transaction to take effect internally: 1 (AXI clock).</p>
+<ul>
+<li><p>Meaning: if counting delay to other parts of the design (e.g. command fifo),
+this is the AXI delay. Other AXI delays affect only AXI throughput, creating
+backpressure for the AXI master.</p></li>
+</ul>
+</li>
+<li><p>Throughput: 4 cycles (AXI clock) per transaction.</p></li>
+<li><p>Command FIFO delay: depends on parametrization:</p>
+<ul>
+<li><p>Synchronous, 1 deep: 1 clk (AXI clock = SPI Engine clock).</p></li>
+<li><p>Asynchronous, 1 deep: 1 (AXI clock), + 1-2 (SPI Engine clock) (2FF CDC)
+input to output; + 1-2 (AXI clock) (2FF CDC) until ready to accept next.</p></li>
+<li><p>Asynchronous, true FIFO: 2 (AXI clock) (mem write + bin2gray addr), + 1-2
+(SPI Engine clock) (2FF CDC), + 2 (SPI Engine clock) (gray2bin + valid) .</p></li>
+</ul>
+</li>
+<li><p>AXI transaction start to command valid (total for async FIFO case): 3 AXI
+clock + 3-4 SPI Engine clock.</p></li>
+<li><p>SDO Data FIFO delay: same as Command FIFO.</p></li>
+<li><p>SDI Data FIFO delay: depends on parametrization:</p>
+<ul>
+<li><p>Synchronous, 1 deep: 1 clk (AXI clock = SPI Engine clock).</p></li>
+<li><p>Asynchronous, 1 deep: 1 (SPI Engine clock), + 1-2 (AXI clock) (2FF CDC)
+input to output; + 1-2 (SPI Engine clock) (2FF CDC) until ready to accept
+next.</p></li>
+<li><p>Asynchronous, true FIFO: 2 (SPI Engine clock) (mem write + bin2gray addr), +
+1-2 (AXI clock) (2FF CDC), + 2 (AXI clock) (gray2bin + valid) .</p></li>
+</ul>
+</li>
+</ul>
+</section>
 </section>
 </section>
 
@@ -364,23 +396,23 @@ time the data has been transmitted from the master to the slave.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="offload-control-interface.html">
+          <a class="next-page" href="tutorial.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">SPI Engine Offload Control Interface</div>
+                <div class="title">SPI Engine Tutorial - PulSAR-ADC</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="spi_engine_interconnect.html">
+          <a class="prev-page" href="instruction-format.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">SPI Engine Interconnect Module</div>
+                <div class="title">SPI Engine Instruction Set Specification</div>
                 
               </div>
             </a>
@@ -414,9 +446,15 @@ time the data has been transmitted from the master to the slave.</p>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">SPI Engine Control Interface</a><ul>
-<li><a class="reference internal" href="#files">Files</a></li>
-<li><a class="reference internal" href="#signal-pins">Signal Pins</a></li>
+<li><a class="reference internal" href="#">SPI Engine Pipeline Delays</a><ul>
+<li><a class="reference internal" href="#instruction-execution">Instruction Execution</a></li>
+<li><a class="reference internal" href="#detailed-delays">Detailed Delays</a><ul>
+<li><a class="reference internal" href="#offload-module">Offload Module</a></li>
+<li><a class="reference internal" href="#interconnect-module">Interconnect Module</a></li>
+<li><a class="reference internal" href="#execution-module">Execution Module</a></li>
+<li><a class="reference internal" href="#axi-module">AXI Module</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -434,5 +472,6 @@ time the data has been transmitted from the master to the slave.</p>
     <script src="../../_static/scripts/furo.js"></script>
     <script src="https://wavedrom.com/skins/default.js"></script>
     <script src="https://wavedrom.com/wavedrom.min.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     </body>
 </html>

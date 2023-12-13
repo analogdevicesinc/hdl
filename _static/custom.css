@@ -60,9 +60,6 @@ table.regmap {
 table.regmap .caption-text{
 	font-size: 1rem;
 }
-td {
-	min-width: 4em;
-}
 th, td.type {
 	white-space: nowrap;
 }
@@ -147,4 +144,12 @@ td.description {
 }
 .default .pre {
 	white-space: pre;
+}
+
+#hdl-component-diagram {
+	text-align: center;
+}
+
+#hdl-component-diagram svg {
+	max-width: 100%;
 }

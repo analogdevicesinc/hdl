@@ -1,4 +1,5 @@
-<svg width="585" height="245" preserveAspectRatio="xMidYMid slice" version="1.1" viewBox="0 0 585 245" xmlns="http://www.w3.org/2000/svg">
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="585" height="250" preserveAspectRatio="xMidYMid slice" version="1.1" viewBox="0 0 585 250" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
  <defs>
   <marker id="h" overflow="visible" orient="auto">
    <path transform="scale(.4)" d="m5.77 0-8.65 5v-10z" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
@@ -58,9 +59,22 @@
    <stop stop-color="#fce94f" offset="0"/>
    <stop stop-color="#729fcf" offset="1"/>
   </linearGradient>
+  <marker id="i-9" overflow="visible" orient="auto">
+   <path transform="scale(.4)" d="m5.77 0-8.65 5v-10z" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  </marker>
+  <marker id="e-2" overflow="visible" orient="auto">
+   <path transform="scale(.4)" d="m5.77 0-8.65 5v-10z" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  </marker>
+  <linearGradient id="linearGradient59824" x1="58.883" x2="77.454" y1="89.272" y2="89.272" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#008080" offset="0"/>
+   <stop stop-color="#008080" stop-opacity="0" offset="1"/>
+  </linearGradient>
+  <marker id="a-0" overflow="visible" orient="auto">
+   <path transform="scale(-.2)" d="m5.77 0-8.65 5v-10z" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  </marker>
  </defs>
- <g transform="matrix(4 0 0 4 -117.17 -304.15)">
-  <rect x="54.052" y="76.302" width="97.349" height="53.988" fill="#d3d7cf" fill-rule="evenodd" stroke="#000" stroke-width=".52917"/>
+ <g transform="matrix(4,0,0,4,-117.17,-304.15)">
+  <rect x="54.052" y="76.302" width="97.349" height="56.488" fill="#d3d7cf" fill-rule="evenodd" stroke="#000" stroke-width=".52917"/>
   <rect x="120.14" y="118.32" width="28.324" height="8.6862" fill="#fcaf3e" fill-rule="evenodd" stroke="#000" stroke-width=".52917"/>
   <g transform="translate(-.53474 -.4009)">
    <rect x="88.624" y="82.623" width="28.999" height="12.428" fill="url(#o)" fill-rule="evenodd" stroke="#000" stroke-width=".52917"/>
@@ -68,9 +82,9 @@
   </g>
   <g font-family="'Liberation Sans'" font-size="2.6458px" letter-spacing="0px" stroke-width=".26458px" word-spacing="0px">
    <text x="126.37469" y="123.3473" style="line-height:125%" xml:space="preserve"><tspan x="126.37469" y="123.3473" stroke-width=".26458px">Register Map</tspan></text>
-   <text x="119.46967" y="135.42929" style="line-height:125%" xml:space="preserve"><tspan x="119.46967" y="135.42929" stroke-width=".26458px">S_AXI</tspan></text>
-   <text x="129.22504" y="135.49905" style="line-height:125%" xml:space="preserve"><tspan x="129.22504" y="135.49905" stroke-width=".26458px">s_axi_aclk</tspan></text>
-   <text x="144.32582" y="135.49905" style="line-height:125%" xml:space="preserve"><tspan x="144.32582" y="135.49905" stroke-width=".26458px">irq</tspan></text>
+   <text x="119.46967" y="138.00647" style="line-height:125%" xml:space="preserve"><tspan x="119.46967" y="138.00647" stroke-width=".26458px">S_AXI</tspan></text>
+   <text x="129.22504" y="137.99905" style="line-height:125%" xml:space="preserve"><tspan x="129.22504" y="137.99905" stroke-width=".26458px">s_axi_aclk</tspan></text>
+   <text x="144.32582" y="137.99905" style="line-height:125%" xml:space="preserve"><tspan x="144.32582" y="137.99905" stroke-width=".26458px">irq</tspan></text>
   </g>
   <g transform="translate(-2.3947 -.19646)">
    <rect x="92.956" y="118.52" width="22.985" height="8.6862" fill="#ad7fa8" fill-rule="evenodd" stroke="#000" stroke-width=".52917"/>
@@ -90,12 +104,14 @@
     <path d="m117.73 88.436h7.0159" marker-end="url(#g)"/>
     <path d="m146.6 91.838h7.0159" marker-end="url(#f)"/>
     <path d="m49.178 92.405h7.0159" marker-end="url(#e)"/>
+    <path d="m49.178 126.67h7.0159" marker-end="url(#e-2)"/>
    </g>
-   <path d="m122.86 128.82v3.1851" marker-end="url(#p)" marker-start="url(#r)" stroke-width=".79375"/>
+   <path d="m122.86 128.82v5.6851" marker-end="url(#p)" marker-start="url(#r)" stroke-width=".79375"/>
    <g stroke-width=".79375">
-    <path d="m135.05 132.81v-4.154" marker-end="url(#c)" stroke-linecap="square"/>
-    <path d="m145.92 128.22v4.2876" marker-end="url(#b)" stroke-linecap="square"/>
+    <path d="m135.05 134.81v-6.154" marker-end="url(#c)" stroke-linecap="square"/>
+    <path d="m145.92 128.22v6.2876" marker-end="url(#b)" stroke-linecap="square"/>
     <path d="m115.81 122.66h3.0711" marker-start="url(#a)"/>
+    <path d="m87.961 122.87h-9.0342" marker-start="url(#a-0)"/>
    </g>
   </g>
   <text x="156.62027" y="89.125519" fill="#000000" font-family="'Liberation Sans'" font-size="2.6458px" letter-spacing="0px" stroke-width=".26458px" word-spacing="0px" style="line-height:125%" xml:space="preserve"><tspan x="156.62027" y="89.125519">AXI-MM /</tspan><tspan x="156.62027" y="92.432816">AXI-Streaming /</tspan><tspan x="156.62027" y="95.74012">FIFO</tspan></text>
@@ -121,5 +137,12 @@
   <text x="41.117294" y="85.428101" fill="#000000" font-family="'Liberation Sans'" font-size="2.6458px" letter-spacing="0px" stroke-width=".26458px" word-spacing="0px" style="line-height:125%" xml:space="preserve"><tspan x="41.117294" y="85.428101" stroke-width=".26458px">src_clk</tspan></text>
   <path d="m155.32 84.042h-7.0159" fill="none" marker-end="url(#h)" stroke="#000" stroke-width=".52917"/>
   <text x="155.82919" y="84.861137" fill="#000000" font-family="'Liberation Sans'" font-size="2.6458px" letter-spacing="0px" stroke-width=".26458px" word-spacing="0px" style="line-height:125%" xml:space="preserve"><tspan x="155.82919" y="84.861137" stroke-width=".26458px">dest_clk</tspan></text>
+  <g transform="translate(-.00024899 33.433)">
+   <rect x="59.148" y="80.92" width="18.041" height="16.704" fill="url(#linearGradient59824)" fill-rule="evenodd" stroke="#000" stroke-width=".52917"/>
+   <text transform="translate(.00024899 -33.433)" x="68.10511" y="120.30859" fill="#000000" font-family="'Liberation Sans'" font-size="2.6458px" letter-spacing="0px" stroke-width=".26458px" text-anchor="middle" word-spacing="0px" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:125%" xml:space="preserve"><tspan x="68.10511" y="120.30859">Scatter-</tspan><tspan x="68.10511" y="123.61584">Gather</tspan><tspan x="68.10511" y="126.9231">Interface</tspan></text>
+  </g>
+  <path d="m49.947 118.89h7.0159" fill="none" marker-end="url(#i-9)" stroke="#000" stroke-width=".52917"/>
+  <text x="41.867359" y="119.68142" fill="#000000" font-family="'Liberation Sans'" font-size="2.6458px" letter-spacing="0px" stroke-width=".26458px" word-spacing="0px" style="line-height:125%" xml:space="preserve"><tspan x="41.867359" y="119.68142" stroke-width=".26458px">sg_clk</tspan></text>
+  <text x="38.796375" y="127.43142" fill="#000000" font-family="'Liberation Sans'" font-size="2.6458px" letter-spacing="0px" stroke-width=".26458px" word-spacing="0px" style="line-height:125%" xml:space="preserve"><tspan x="38.796375" y="127.43142">AXI-MM</tspan></text>
  </g>
 </svg>
