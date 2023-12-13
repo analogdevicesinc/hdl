@@ -43,7 +43,7 @@ There is no free replacement for consulting services. If you have questions that
 
 ## Getting started
 
-This repository supports reference designs for different [Analog Devices boards](../master/projects) based on [Intel and Xilinx FPGA development boards](../master/projects/common) or standalone.
+This repository supports reference designs for different [Analog Devices boards](../main/projects) based on [Intel and Xilinx FPGA development boards](../main/projects/common) or standalone.
 
 ### Building documentation
 
@@ -95,12 +95,14 @@ more information.
 
   * If you want to use the most stable code base, always use the [latest release branch](https://github.com/analogdevicesinc/hdl/releases).
 
-  * If you want to use the greatest and latest, check out the [master branch](https://github.com/analogdevicesinc/hdl/tree/master).
+  * If you want to use the greatest and latest, check out the [main branch](https://github.com/analogdevicesinc/hdl/tree/main).
 
 ## Use already built files
 
-You can download already built files and use them as they are. They are available on [this link]( https://swdownloads.analog.com/cse/hdl_builds/master/latest_boot_partition.tar.gz).  
-The files are built from [master branch](https://github.com/analogdevicesinc/hdl/tree/master) whenever there are new commits in HDL or Linux repositories.  
+You can download already built files and use them as they are.
+For the main branch, they are available at the link inside [this document](https://swdownloads.analog.com/cse/boot_partition_files/main/latest_boot.txt). Keep in mind that the ones from the main branch are not stable all the time.
+We suggest using the latest release branch [2022_r2, here](https://swdownloads.analog.com/cse/boot_partition_files/2022_r2/latest_boot.txt).  
+The files are built from [main branch](https://github.com/analogdevicesinc/hdl/tree/main) whenever there are new commits in HDL or Linux repositories.  
 
 > :warning: Pay attention when using already built files, since they are not tested in HW!
 
@@ -114,14 +116,14 @@ terms.
 The user should read each of these license terms, and understand the
 freedoms and responsibilities that he or she has by using this source/core.
 
-See [LICENSE](../master/LICENSE) for more details. The separate license files
+See [LICENSE](../main/LICENSE) for more details. The separate license files
 cab be found here:
 
- * [LICENSE_ADIBSD](../master/LICENSE_ADIBSD)
+ * [LICENSE_ADIBSD](../main/LICENSE_ADIBSD)
 
- * [LICENSE_GPL2](../master/LICENSE_GPL2)
+ * [LICENSE_GPL2](../main/LICENSE_GPL2)
 
- * [LICENSE_LGPL](../master/LICENSE_LGPL)
+ * [LICENSE_LGPL](../main/LICENSE_LGPL)
 
 ## Comprehensive user guide
 

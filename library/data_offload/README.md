@@ -256,7 +256,7 @@ A general frequency relationship of the above clocks are:
   CLKdma <= CLKddr <= CLKconverter
 ```
 
-The clock domain crossing should be handled by the [util_axis_fifo](https://github.com/analogdevicesinc/hdl/tree/master/library/util_axis_fifo) module.
+The clock domain crossing should be handled by the [util_axis_fifo](https://github.com/analogdevicesinc/hdl/tree/main/library/util_axis_fifo) module.
   * **TODO** : Make sure that we support both AXIS and FIFO
   * **TODO** : Add support for asymmetric aspect ratio.
 

@@ -31,8 +31,8 @@ HDL project from the repository:
    -  Starting with ``hdl_2021_r1`` release branch:
       :git-hdl:`scripts/adi_env.tcl`
    -  For ``hdl_2019_r2`` and older:
-      :git-hdl:`hdl/projects/scripts/adi_project_xilinx.tcl <projects/scripts/adi_project_xilinx.tcl>` for Vivado, and
-      :git-hdl:`hdl/projects/scripts/adi_project_intel.tcl <projects/scripts/adi_project_intel.tcl>` for Quartus.
+      :git-hdl:`hdl/projects/scripts/adi_project_xilinx.tcl <hdl_2019_r2:projects/scripts/adi_project_xilinx.tcl>` for Vivado, and
+      :git-hdl:`hdl/projects/scripts/adi_project_intel.tcl <hdl_2019_r2:projects/scripts/adi_project_intel.tcl>` for Quartus.
 
 #. Download the tools from the following links:
 
@@ -95,7 +95,7 @@ Setup the HDL repository
 -------------------------------------------------------------------------------
 These designs are built upon ADI's generic HDL reference designs framework.
 ADI does not distribute the bit/elf files of these projects so they
-must be built from the sources available :git-hdl:`here <master:/>`. To get
+must be built from the sources available :git-hdl:`here </>`. To get
 the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the repository. This is the best method to get the sources. Here, we are
@@ -668,10 +668,10 @@ to use an unsupported version of tools.
    The easiest way is to check the `release
    notes <https://github.com/analogdevicesinc/hdl/releases>`__. You may
    also check out or browse the desired branch, and verify the tool version
-   in the base Tcl script
-   (`./hdl/projects/scripts/adi_project_xilinx.tcl <https://github.com/analogdevicesinc/hdl/blob/master/projects/scripts/adi_project_xilinx.tcl#L4>`__)
+   in the base Tcl script ./hdl/scripts/adi_env.tcl
+   (:git-hdl:`for Vivado version <scripts/adi_env.tcl#L18>`)
    or
-   (`./hdl/projects/scripts/adi_project_intel.tcl <https://github.com/analogdevicesinc/hdl/blob/master/projects/scripts/adi_project_intel.tcl#L5>`__),
+   (:git-hdl:`or for Quartus version <scripts/adi_env.tcl#L34>`),
    which build the projects.
 
 Environment
