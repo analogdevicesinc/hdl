@@ -1,4 +1,4 @@
-# User guide for [check_guideline.py](https://github.com/analogdevicesinc/hdl/tree/master/.github/scripts/check_guideline.py)
+# User guide for [check_guideline.py](https://github.com/analogdevicesinc/hdl/tree/main/.github/scripts/check_guideline.py)
 
 ## Prerequisites
 
@@ -10,7 +10,7 @@
 
 ## Rules that are checked
 
-These rules can be found in the [HDL coding guideline](https://github.com/analogdevicesinc/hdl/blob/master/docs/hdl_coding_guideline.md).
+These rules can be found in the [HDL coding guideline](https://github.com/analogdevicesinc/hdl/blob/main/docs/hdl_coding_guideline.md).
 
 ### 1. License header
 
