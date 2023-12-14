@@ -36,9 +36,13 @@
 `timescale 1ns/100ps
 
 module system_top(
-  inout [31:0] gpio,
+  output [23:0] leds_0_to_23,
+  input [7:0] dip_sw_1_to_8,
+  // inout [7:0] pmod1_io,
+  input sw_1,
+  input sw_4,
+  input sw_5,
   output [0:0] ssn_o,
-  input rstn_i,
   input rxd_i,
   output txd_o,
   output mosi_o,
@@ -48,11 +52,38 @@ module system_top(
   inout sda_io
 );
 
+wire [31:0] gpio0_o;
+wire [31:0] gpio0_i;
+wire [31:0] gpio0_en_o;
+
+wire [31:0] gpio1_o;
+wire [31:0] gpio1_i;
+wire [31:0] gpio1_en_o;
+
+assign leds_0_to_23 = gpio0_o[23:0];
+assign gpio0_i[31:24] = dip_sw_1_to_8;
+
+assign gpio1_i[31:30] = {sw_5, sw_4};
+
+// ad_iobuf #(
+//   .DATA_WIDTH(8)
+// ) iobuf_pmod1_io (
+//   .dio_t(gpio1_en_o[7:0]),
+//   .dio_i(gpio1_o[7:0]),
+//   .dio_o(gpio1_i[7:0]),
+//   .dio_p(pmod1_io)
+// );
+
   template_ctpnxe template_ctpnxe_inst (
-    .gpio (gpio),
+    .gpio0_o(gpio0_o),
+    .gpio0_i(gpio0_i),
+    .gpio0_en_o(gpio0_en_o),
+    .gpio1_o(gpio1_o),
+    .gpio1_i(gpio1_i),
+    .gpio1_en_o(gpio1_en_o),
     .scl_io (scl_io),
     .sda_io (sda_io),
-    .rstn_i (rstn_i),
+    .rstn_i (sw_1),
     .ssn_o (ssn_o),
     .mosi_o (mosi_o),
     .sclk_o (sclk_o),

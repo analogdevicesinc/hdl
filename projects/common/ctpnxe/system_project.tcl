@@ -83,6 +83,10 @@ adi_project $project_name
 
 # Adds the default project files to the Radiant project.
 adi_project_files_default $project_name
+# adi_project_files $project_name \
+#   -exts {ad_iobuf.v} \
+#   -spath $ad_hdl_dir/library/common\
+#   -sdepth "0"
 
 adi_project_run $project_name \
   -cmd_list { \
