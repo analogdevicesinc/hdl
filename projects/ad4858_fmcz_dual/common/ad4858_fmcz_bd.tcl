@@ -137,7 +137,7 @@ ad_ip_instance axi_ad4858 axi_ad4858_1
 ad_ip_parameter axi_ad4858_1 CONFIG.LVDS_CMOS_N $LVDS_CMOS_N
 ad_ip_parameter axi_ad4858_1 CONFIG.EXTERNAL_CLK 1
 ad_ip_parameter axi_ad4858_1 CONFIG.ECHO_CLK_EN 0
-ad_ip_parameter axi_ad4858_1 CONFIG.ID 1
+ad_ip_parameter axi_ad4858_1 CONFIG.ID 0
 ad_ip_parameter axi_ad4858_1 CONFIG.IODELAY_CTRL 0
 ad_ip_parameter axi_ad4858_1 CONFIG.IODELAY_GROUP "dev_if_delay_group_0"
 
