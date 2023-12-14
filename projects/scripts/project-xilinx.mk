@@ -3,7 +3,7 @@
 ## SPDX short identifier: BSD-1-Clause
 ####################################################################################
 
-# Assumes this file is in prpojects/scripts/project-xilinx.mk
+# Assumes this file is in projects/scripts/project-xilinx.mk
 HDL_PROJECT_PATH := $(subst scripts/project-xilinx.mk,,$(lastword $(MAKEFILE_LIST)))
 HDL_LIBRARY_PATH := $(HDL_PROJECT_PATH)../library/
 
@@ -78,7 +78,9 @@ M_DEPS += $(foreach dep,$(LIB_DEPS),$(HDL_LIBRARY_PATH)$(dep)/component.xml)
 
 .PHONY: all lib clean clean-all
 
-all: lib $(PROJECT_NAME).sdk/system_top.xsa
+all: $(PROJECT_NAME).sdk/system_top.xsa
+
+lib: $(M_DEPS)
 
 clean:
 	-rm -f reference.dcp
@@ -87,13 +89,9 @@ clean:
 		$(HL)$(PROJECT_NAME)$(NC) project)
 	-rm -Rf ${DIR_NAME}
 
-clean-all: clean
-	@for lib in $(LIB_DEPS); do \
-		$(MAKE) -C $(HDL_LIBRARY_PATH)$${lib} clean; \
-	done
-	@for dir in ${CLEAN_DIRS}; do \
-		rm -Rf $${dir}; \
-	done
+clean-all: TARGET:=clean
+clean-all: clean $(M_DEPS)
+	@rm -Rf $(CLEAN_DIRS)
 
 MODE ?= "default"
 
@@ -115,12 +113,12 @@ $(PROJECT_NAME).sdk/system_top.xsa: $(M_DEPS)
 		$(PROJECT_NAME)_vivado.log, \
 		$(HL)$(PROJECT_NAME)$(NC) project)
 
-lib:
-	@for lib in $(LIB_DEPS); do \
-		if [ -n "${REQUIRED_VIVADO_VERSION}" ]; then \
-			$(MAKE) -C $(HDL_LIBRARY_PATH)$${lib} xilinx REQUIRED_VIVADO_VERSION=${REQUIRED_VIVADO_VERSION} || exit $$?; \
-		else \
-			$(MAKE) -C $(HDL_LIBRARY_PATH)$${lib} xilinx || exit $$?; \
-		fi; \
-	done
-
+$(HDL_LIBRARY_PATH)%/component.xml: TARGET:=xilinx
+FORCE:
+$(HDL_LIBRARY_PATH)%/component.xml: FORCE
+	flock $(dir $@).lock -c " \
+	if [ -n \"${REQUIRED_VIVADO_VERSION}\" ]; then \
+		$(MAKE) -C $(dir $@) $(TARGET) REQUIRED_VIVADO_VERSION=${REQUIRED_VIVADO_VERSION}; \
+	else \
+		$(MAKE) -C $(dir $@) $(TARGET); \
+	fi"; exit $$?
