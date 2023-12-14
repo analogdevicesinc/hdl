@@ -247,3 +247,33 @@ proc adi_ip_instance {args} {
 
   sbp_add_component -vlnv $vlnv -name $ip_iname
 }
+
+###############################################################################
+## Updates a Propel Builder ip.
+## Project has to be open.
+#
+# \opt[cfg_path] -cfg_path "./ipcfg"
+# \opt[vlnv] -vlnv {latticesemi.com:ip:cpu0:2.4.0}
+# \opt[ip_path] -ip_path "$ip_download_path/latticesemi.com_ip_riscv_mc_2.4.0"
+# \opt[ip_params] -ip_params {"SIMULATION": false, "DEBUG_ENABLE": true}
+# \opt[ip_iname] -ip_iname cpu0_inst
+###############################################################################
+proc adi_ip_update {args} {
+  array set opt [list -cfg_path "./ipcfg" \
+    -vlnv "" \
+    -ip_path "" \
+    -ip_params "" \
+    -ip_iname "" \
+    {*}$args]
+
+  set vlnv $opt(-vlnv)
+  set ip_iname $opt(-ip_iname)
+
+  puts "adi_ip_instance: $ip_iname"
+
+  adi_ip_config {*}$args
+
+  global project_name
+
+  sbp_replace -vlnv $vlnv -name $ip_iname -component $project_name/$ip_iname
+}
