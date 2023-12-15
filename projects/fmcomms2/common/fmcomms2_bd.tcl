@@ -147,7 +147,6 @@ ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_DATA_WIDTH_SRC 64
 ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_DATA_WIDTH_SG 64
 
 ad_connect util_ad9361_divclk/clk_out axi_ad9361_adc_dma/fifo_wr_clk
-ad_connect util_ad9361_adc_pack/packed_fifo_wr axi_ad9361_adc_dma/fifo_wr
 ad_connect $sys_cpu_resetn axi_ad9361_adc_dma/m_dest_axi_aresetn
 ad_connect $sys_cpu_resetn axi_ad9361_adc_dma/m_sg_axi_aresetn
 
@@ -213,11 +212,26 @@ ad_connect axi_ad9361_dac_dma/m_axis util_ad9361_dac_upack/s_axis
 ad_connect $sys_cpu_resetn axi_ad9361_dac_dma/m_src_axi_aresetn
 ad_connect $sys_cpu_resetn axi_ad9361_dac_dma/m_sg_axi_aresetn
 
+# timestamp
+
+ad_ip_instance axi_time axi_ad9361_timestamp
+ad_ip_parameter axi_ad9361_timestamp CONFIG.ID 0
+ad_ip_parameter axi_ad9361_timestamp CONFIG.SYNC_EXTERNAL 0
+ad_ip_parameter axi_ad9361_timestamp CONFIG.SYNC_EXTERNAL_CDC 0
+
+ad_connect util_ad9361_divclk/clk_out axi_ad9361_timestamp/clk
+ad_connect util_ad9361_divclk_reset/peripheral_aresetn axi_ad9361_timestamp/resetn
+ad_connect axi_ad9361_timestamp/sync_in GND
+
+ad_connect util_ad9361_adc_pack/packed_fifo_wr axi_ad9361_timestamp/fifo_wr_in
+ad_connect axi_ad9361_timestamp/fifo_wr_out axi_ad9361_adc_dma/fifo_wr
+
 # interconnects
 
 ad_cpu_interconnect 0x79020000 axi_ad9361
 ad_cpu_interconnect 0x7C400000 axi_ad9361_adc_dma
 ad_cpu_interconnect 0x7C420000 axi_ad9361_dac_dma
+ad_cpu_interconnect 0x7C440000 axi_ad9361_timestamp
 ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
 ad_mem_hp1_interconnect $sys_cpu_clk axi_ad9361_adc_dma/m_dest_axi
 ad_mem_hp2_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP2
