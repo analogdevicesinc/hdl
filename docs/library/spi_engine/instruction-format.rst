@@ -210,9 +210,9 @@ bus behavior.
        high.
    * - [0]
      - CPHA
-     - Configures the phase of the SCLK signal. When 0, data is updated on the
-       leading edge and sampled on the trailing edge. When 1, data is is
-       sampled on the leading edge and updated on the trailing edge.
+     - Configures the phase of the SCLK signal. When 0, data is sampled on the
+       leading edge and updated on the trailing edge. When 1, data is 
+       sampled on the trailing edge and updated on the leading edge.
 
 .. _spi_engine prescaler-configuration-register:
 

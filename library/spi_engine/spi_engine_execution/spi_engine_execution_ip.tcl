@@ -62,7 +62,7 @@ set cc [ipx::current_core]
 set_property -dict [list \
   "value_validation_type" "range_long" \
   "value_validation_range_minimum" "8" \
-  "value_validation_range_maximum" "256" \
+  "value_validation_range_maximum" "32" \
  ] \
  [ipx::get_user_parameters DATA_WIDTH -of_objects $cc]
 
@@ -70,7 +70,7 @@ set_property -dict [list \
 set_property -dict [list \
   "value_validation_type" "range_long" \
   "value_validation_range_minimum" "1" \
-  "value_validation_range_maximum" "32" \
+  "value_validation_range_maximum" "8" \
  ] \
  [ipx::get_user_parameters NUM_OF_CS -of_objects $cc]
 
