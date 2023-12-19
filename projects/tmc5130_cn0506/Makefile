@@ -6,10 +6,9 @@
 
 PROJECT_NAME := tmc5130_cn0506_ctpnxe
 
-M_DEPS += ../common/ctpnxe/ctpnxe_system_constr.pdc
 M_DEPS += ../common/ctpnxe/ctpnxe_system_bd.tcl
 M_DEPS += ../common/ctpnxe/riscvmc.mem
 M_DEPS += tmc5130_cn0506_bd.tcl
-M_DEPS += tmc5130_cn0506_constr.sdc
+M_DEPS += tmc5130_cn0506_constr.pdc
 
 include ../scripts/project-lattice.mk
