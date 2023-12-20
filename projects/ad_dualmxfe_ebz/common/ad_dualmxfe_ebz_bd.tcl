@@ -20,13 +20,8 @@
 #         RX : RX only
 #         Tx : TX only
 
-if {![info exists ADI_PHY_SEL]} {
-  set ADI_PHY_SEL 1
-}
-
 source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
-source $ad_hdl_dir/library/axi_tdd/scripts/axi_tdd.tcl
 
 if {![info exists INTF_CFG]} {
   set INTF_CFG RXTX
@@ -42,18 +37,8 @@ set RX_TPL_WIDTH [ expr { [info exists ad_project_params(RX_TPL_WIDTH)] \
 set TX_TPL_WIDTH [ expr { [info exists ad_project_params(TX_TPL_WIDTH)] \
                           ? $ad_project_params(TX_TPL_WIDTH) : {} } ]
 
-set TDD_SUPPORT [ expr { [info exists ad_project_params(TDD_SUPPORT)] \
-                          ? $ad_project_params(TDD_SUPPORT) : 0 } ]
 set SHARED_DEVCLK [ expr { [info exists ad_project_params(SHARED_DEVCLK)] \
                             ? $ad_project_params(SHARED_DEVCLK) : 0 } ]
-
-if {$TDD_SUPPORT && !$SHARED_DEVCLK} {
-  error "ERROR: Cannot enable TDD support without shared deviceclocks!"
-}
-
-if {$TDD_SUPPORT && $INTF_CFG != "RXTX"} {
-  error "ERROR: Cannot enable TDD support with INTF_CFG != RXTX!"
-}
 
 set adc_do_mem_type [ expr { [info exists ad_project_params(ADC_DO_MEM_TYPE)] \
                           ? $ad_project_params(ADC_DO_MEM_TYPE) : 0 } ]
@@ -150,40 +135,6 @@ set dac_fifo_address_width [expr int(ceil(log(($dac_fifo_samples_per_converter*$
 create_bd_port -dir I ref_clk_q0
 create_bd_port -dir I ref_clk_q1
 
-# common xcvr
-if {$ADI_PHY_SEL == 1} {
-  ad_ip_instance util_adxcvr util_mxfe_xcvr
-  ad_ip_parameter util_mxfe_xcvr CONFIG.CPLL_FBDIV_4_5 5
-  switch $INTF_CFG {
-    "RXTX" {
-      # Rx & Tx
-      ad_ip_parameter util_mxfe_xcvr CONFIG.TX_NUM_OF_LANES $TX_NUM_OF_LANES
-      ad_ip_parameter util_mxfe_xcvr CONFIG.RX_NUM_OF_LANES $RX_NUM_OF_LANES
-      ad_ip_parameter util_mxfe_xcvr CONFIG.RX_OUT_DIV 1
-      ad_ip_parameter util_mxfe_xcvr CONFIG.LINK_MODE $ENCODER_SEL
-      ad_ip_parameter util_mxfe_xcvr CONFIG.RX_LANE_RATE $RX_LANE_RATE
-      ad_ip_parameter util_mxfe_xcvr CONFIG.TX_LANE_RATE $TX_LANE_RATE
-    }
-    "RX" {
-      # Rx only
-      ad_ip_parameter util_mxfe_xcvr CONFIG.TX_NUM_OF_LANES 0
-      ad_ip_parameter util_mxfe_xcvr CONFIG.RX_NUM_OF_LANES $RX_NUM_OF_LANES
-      ad_ip_parameter util_mxfe_xcvr CONFIG.RX_OUT_DIV 1
-      ad_ip_parameter util_mxfe_xcvr CONFIG.LINK_MODE $ENCODER_SEL
-      ad_ip_parameter util_mxfe_xcvr CONFIG.RX_LANE_RATE $RX_LANE_RATE
-      ad_ip_parameter util_mxfe_xcvr CONFIG.TX_LANE_RATE 0
-    }
-    "TX" {
-      # Tx only
-      ad_ip_parameter util_mxfe_xcvr CONFIG.TX_NUM_OF_LANES $TX_NUM_OF_LANES
-      ad_ip_parameter util_mxfe_xcvr CONFIG.RX_NUM_OF_LANES 0
-      ad_ip_parameter util_mxfe_xcvr CONFIG.RX_OUT_DIV 1
-      ad_ip_parameter util_mxfe_xcvr CONFIG.LINK_MODE $ENCODER_SEL
-      ad_ip_parameter util_mxfe_xcvr CONFIG.RX_LANE_RATE 0
-      ad_ip_parameter util_mxfe_xcvr CONFIG.TX_LANE_RATE $TX_LANE_RATE
-    }
-  }
-} else {
   source $ad_hdl_dir/projects/ad9081_fmca_ebz/common/versal_transceiver.tcl
 
   set REF_CLK_RATE [ expr { [info exists ad_project_params(REF_CLK_RATE)] \
@@ -242,28 +193,16 @@ if {$ADI_PHY_SEL == 1} {
       }
     }
   }
-}
+
 
 # Instantiate ADC (Rx) path
 if {$INTF_CFG != "TX"} {
   create_bd_port -dir I rx_device_clk
 
-  if {$ADI_PHY_SEL == 1} {
-    ad_ip_instance axi_adxcvr axi_mxfe_rx_xcvr
-    ad_ip_parameter axi_mxfe_rx_xcvr CONFIG.ID 0
-    ad_ip_parameter axi_mxfe_rx_xcvr CONFIG.LINK_MODE $ENCODER_SEL
-    ad_ip_parameter axi_mxfe_rx_xcvr CONFIG.NUM_OF_LANES $RX_NUM_OF_LANES
-    ad_ip_parameter axi_mxfe_rx_xcvr CONFIG.TX_OR_RX_N 0
-    ad_ip_parameter axi_mxfe_rx_xcvr CONFIG.QPLL_ENABLE 0
-    ad_ip_parameter axi_mxfe_rx_xcvr CONFIG.LPM_OR_DFE_N 1
-    ad_ip_parameter axi_mxfe_rx_xcvr CONFIG.SYS_CLK_SEL 0x3 ; # QPLL0
-  }
-  if {$ADI_PHY_SEL == 0} {
     # reset generator
     ad_ip_instance proc_sys_reset rx_device_clk_rstgen
     ad_connect  rx_device_clk rx_device_clk_rstgen/slowest_sync_clk
     ad_connect  $sys_cpu_resetn rx_device_clk_rstgen/ext_reset_in
-  }
 
   adi_axi_jesd204_rx_create axi_mxfe_rx_jesd $RX_NUM_OF_LANES $RX_NUM_LINKS $ENCODER_SEL
   ad_ip_parameter axi_mxfe_rx_jesd/rx CONFIG.TPL_DATA_PATH_WIDTH $RX_DATAPATH_WIDTH
@@ -313,21 +252,10 @@ if {$INTF_CFG != "TX"} {
 if {$INTF_CFG != "RX"} {
   create_bd_port -dir I tx_device_clk
 
-  if {$ADI_PHY_SEL == 1} {
-    ad_ip_instance axi_adxcvr axi_mxfe_tx_xcvr
-    ad_ip_parameter axi_mxfe_tx_xcvr CONFIG.ID 0
-    ad_ip_parameter axi_mxfe_tx_xcvr CONFIG.LINK_MODE $ENCODER_SEL
-    ad_ip_parameter axi_mxfe_tx_xcvr CONFIG.NUM_OF_LANES $TX_NUM_OF_LANES
-    ad_ip_parameter axi_mxfe_tx_xcvr CONFIG.TX_OR_RX_N 1
-    ad_ip_parameter axi_mxfe_tx_xcvr CONFIG.QPLL_ENABLE 1
-    ad_ip_parameter axi_mxfe_tx_xcvr CONFIG.SYS_CLK_SEL 0x3 ; # QPLL0
-  }
-  if {$ADI_PHY_SEL == 0} {
     # reset generator
     ad_ip_instance proc_sys_reset tx_device_clk_rstgen
     ad_connect  tx_device_clk tx_device_clk_rstgen/slowest_sync_clk
     ad_connect  $sys_cpu_resetn tx_device_clk_rstgen/ext_reset_in
-  }
 
   adi_axi_jesd204_tx_create axi_mxfe_tx_jesd $TX_NUM_OF_LANES $TX_NUM_LINKS $ENCODER_SEL
   ad_ip_parameter axi_mxfe_tx_jesd/tx CONFIG.TPL_DATA_PATH_WIDTH $TX_DATAPATH_WIDTH
@@ -375,26 +303,6 @@ if {$INTF_CFG != "RX"} {
   ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_dma_data_width
 }
 
-if {$ADI_PHY_SEL == 1} {
-  for {set i 0} {$i < [expr max($TX_NUM_OF_LANES,$RX_NUM_OF_LANES)]} {incr i} {
-    set quad_index [expr int($i / 4)]
-    ad_xcvrpll  ref_clk_q$quad_index  util_mxfe_xcvr/cpll_ref_clk_$i
-    if {[expr $i % 4] == 0} {
-      ad_xcvrpll  ref_clk_q$quad_index  util_mxfe_xcvr/qpll_ref_clk_$i
-    }
-  }
-  ad_connect  $sys_cpu_resetn util_mxfe_xcvr/up_rstn
-  ad_connect  $sys_cpu_clk util_mxfe_xcvr/up_clk
-
-  if {$INTF_CFG != "TX"} {
-    ad_xcvrpll  axi_mxfe_rx_xcvr/up_pll_rst util_mxfe_xcvr/up_cpll_rst_*
-    ad_xcvrcon  util_mxfe_xcvr axi_mxfe_rx_xcvr axi_mxfe_rx_jesd {} {} rx_device_clk
-  }
-  if {$INTF_CFG != "RX"} {
-    ad_xcvrpll  axi_mxfe_tx_xcvr/up_pll_rst util_mxfe_xcvr/up_qpll_rst_*
-    ad_xcvrcon  util_mxfe_xcvr axi_mxfe_tx_xcvr axi_mxfe_tx_jesd {} {} tx_device_clk
-  }
-} else {
   if {$INTF_CFG != "TX"} {
     set rx_link_clock  ${rx_phy}/rxusrclk_out
     # Connect PHY to Link Layer
@@ -432,7 +340,6 @@ if {$ADI_PHY_SEL == 1} {
       ad_connect axi_mxfe_tx_jesd/sync tx_sync_0
     }
   }
-}
 
 if {$INTF_CFG != "TX"} {
   # RX connections
@@ -474,17 +381,10 @@ if {$INTF_CFG != "TX"} {
 
   # Interconnect
   # CPU
-  if {$ADI_PHY_SEL == 1} {
-    ad_cpu_interconnect 0x44a60000 axi_mxfe_rx_xcvr
-  }
   ad_cpu_interconnect 0x44a10000 rx_mxfe_tpl_core
   ad_cpu_interconnect 0x44a90000 axi_mxfe_rx_jesd
   ad_cpu_interconnect 0x7c420000 axi_mxfe_rx_dma
   ad_cpu_interconnect 0x7c450000 $adc_data_offload_name
-  # GT / ADC
-  if {$ADI_PHY_SEL == 1} {
-    ad_mem_hp0_interconnect $sys_cpu_clk axi_mxfe_rx_xcvr/m_axi
-  }
   ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
   ad_mem_hp1_interconnect $sys_dma_clk axi_mxfe_rx_dma/m_dest_axi
 
@@ -526,10 +426,6 @@ if {$INTF_CFG != "RX"} {
   ad_connect tx_mxfe_tpl_core/dac_dunf GND
 
   # Interconnect
-  if {$ADI_PHY_SEL == 1} {
-    # CPU
-    ad_cpu_interconnect 0x44b60000 axi_mxfe_tx_xcvr
-  }
   # CPU
   ad_cpu_interconnect 0x44b10000 tx_mxfe_tpl_core
   ad_cpu_interconnect 0x44b90000 axi_mxfe_tx_jesd
@@ -545,22 +441,6 @@ if {$INTF_CFG != "RX"} {
 }
 
 # Dummy outputs for unused lanes
-if {$ADI_PHY_SEL == 1} {
-  if {$INTF_CFG != "TX"} {
-    # Unused Rx lanes
-    for {set i $RX_NUM_OF_LANES} {$i < 8} {incr i} {
-      create_bd_port -dir I rx_data_${i}_n
-      create_bd_port -dir I rx_data_${i}_p
-    }
-  }
-  if {$INTF_CFG != "RX"} {
-    # Unused Tx lanes
-    for {set i $TX_NUM_OF_LANES} {$i < 8} {incr i} {
-      create_bd_port -dir O tx_data_${i}_n
-      create_bd_port -dir O tx_data_${i}_p
-    }
-  }
-} else {
   for {set j 0} {$j < $num_quads} {incr j} {
     if {$INTF_CFG != "TX"} {
       create_bd_port -dir I -from 3 -to 0 rx_${j}_p
@@ -586,7 +466,6 @@ if {$ADI_PHY_SEL == 1} {
       create_bd_port -dir O -from 3 -to 0 tx_${j}_n
     }
   }
-}
 
 # Sync at TPL level
 create_bd_port -dir I ext_sync_in
@@ -651,47 +530,4 @@ if {$INTF_CFG != "RX"} {
 
   ad_connect upack_reset_sources/dout upack_rst_logic/op1
   ad_connect upack_rst_logic/res util_mxfe_upack/reset
-}
-
-if {$TDD_SUPPORT} {
-  set TDD_CHANNEL_CNT $ad_project_params(TDD_CHANNEL_CNT)
-
-  set TDD_DEFAULT_POL [ expr { [info exists ad_project_params(TDD_DEFAULT_POL)] \
-                               ? $ad_project_params(TDD_DEFAULT_POL) : 0 } ]
-  set TDD_REG_WIDTH [ expr { [info exists ad_project_params(TDD_REG_WIDTH)] \
-                             ? $ad_project_params(TDD_REG_WIDTH) : 32 } ]
-  set TDD_BURST_WIDTH [ expr { [info exists ad_project_params(TDD_BURST_WIDTH)] \
-                               ? $ad_project_params(TDD_BURST_WIDTH) : 32 } ]
-  set TDD_SYNC_WIDTH [ expr { [info exists ad_project_params(TDD_SYNC_WIDTH)] \
-                              ? $ad_project_params(TDD_SYNC_WIDTH) : 64 } ]
-
-  set TDD_SYNC_INT $ad_project_params(TDD_SYNC_INT)
-  set TDD_SYNC_EXT $ad_project_params(TDD_SYNC_EXT)
-  set TDD_SYNC_EXT_CDC $ad_project_params(TDD_SYNC_EXT_CDC)
-
-  ad_tdd_gen_create axi_tdd_0 $TDD_CHANNEL_CNT \
-                              $TDD_DEFAULT_POL \
-                              $TDD_REG_WIDTH \
-                              $TDD_BURST_WIDTH \
-                              $TDD_SYNC_WIDTH \
-                              $TDD_SYNC_INT \
-                              $TDD_SYNC_EXT \
-                              $TDD_SYNC_EXT_CDC
-
-  ad_connect tx_device_clk axi_tdd_0/clk
-  ad_connect tx_device_clk_rstgen/peripheral_aresetn axi_tdd_0/resetn
-  ad_connect $sys_cpu_clk axi_tdd_0/s_axi_aclk
-  ad_connect $sys_cpu_resetn axi_tdd_0/s_axi_aresetn
-  ad_connect axi_tdd_0/sync_in GND
-  ad_cpu_interconnect 0x7c460000 axi_tdd_0
-
-  ad_connect axi_tdd_0/tdd_channel_0 $dac_data_offload_name/sync_ext
-  ad_connect axi_tdd_0/tdd_channel_1 $adc_data_offload_name/sync_ext
-} else {
-  if {$INTF_CFG != "TX"} {
-    ad_connect GND $adc_data_offload_name/sync_ext
-  }
-  if {$INTF_CFG != "RX"} {
-    ad_connect GND $dac_data_offload_name/sync_ext
-  }
 }
