@@ -532,53 +532,37 @@ inside its sub-folders. What this means is that if you run ``make`` inside
 **hdl/projects/daq2**, it builds all the carriers (**kc705**, **a10soc**,
 **kcu105**, **zc706** to **zcu102**) instead of just the target carrier.
 
-The following 'targets' are supported.
+The following targets/arguments are supported:
 
-+------------------+--------------------------------------------------+
-| argument         | description                                      |
-+==================+==================================================+
-| all              | This builds everything in the current folder and |
-|                  | its sub-folders, see context examples below.     |
-+------------------+--------------------------------------------------+
-|                  | make -C library/axi_ad9122 all; ## build AD9122  |
-|                  | library component (AMD only).                    |
-+------------------+--------------------------------------------------+
-|                  | make -C library all; ## build **ALL** library    |
-|                  | components inside 'library' (AMD only).          |
-+------------------+--------------------------------------------------+
-|                  | make -C projects/daq2/zc706 all; ## build        |
-|                  | DAQ2_ZC706 (AMD) project.                        |
-+------------------+--------------------------------------------------+
-|                  | make -C projects/daq2/a10soc all; ## build       |
-|                  | DAQ2_A10SOC(Intel) project.                      |
-+------------------+--------------------------------------------------+
-|                  | make -C projects/daq2 all; ## build DAQ2 **ALL** |
-|                  | carrier (including Intel & AMD) projects.        |
-+------------------+--------------------------------------------------+
-|                  | make -C projects all; ## build **ALL** projects  |
-|                  | (something you really should NOT do).            |
-+------------------+--------------------------------------------------+
-| clean            | This removes all tool and temporary files in the |
-|                  | current folder and its sub-folders, same context |
-|                  | as above.                                        |
-+------------------+--------------------------------------------------+
-| clean-all        | This removes all tool and temporary files in the |
-|                  | current folder, its sub-folders and from all the |
-|                  | IPs that are specified in the Makefile file;     |
-|                  | same context as above.                           |
-+------------------+--------------------------------------------------+
-| lib              | This is same as 'all' in the library folder,     |
-|                  | ignored inside project folders.                  |
-+------------------+--------------------------------------------------+
-| project.platform | This is a special target available only in the   |
-|                  | 'hdl' root folder and is ignored everywhere      |
-|                  | else, see syntax below.                          |
-+------------------+--------------------------------------------------+
-|                  | make daq2.a10soc ; ## build                      |
-|                  | projects/daq2/a10soc.                            |
-+------------------+--------------------------------------------------+
-|                  | make daq2.zc706 ; ## build projects/daq2/zc706.  |
-+------------------+--------------------------------------------------+
+* ``all``:
+  This builds everything in the current folder and its sub-folders, for example:
+
+  * ``make -C library/axi_ad9122 all; # build AD9122 library component (AMD only).``
+  * ``make -C library all; # build ALL library components inside 'library' (AMD only).``
+  * ``make -C projects/daq2/zc706 all; # build DAQ2_ZC706 (AMD) project.``
+  * ``make -C projects/daq2/a10soc all; # build DAQ2_A10SOC (Intel) project.``
+  * ``make -C projects/daq2 all; # build DAQ2 ALL carrier (Intel & AMD) projects.``
+  * ``make -C projects all; # build ALL projects (not recommended).``
+* ``clean``:
+  Removes all tool and temporary files in the current folder and its
+  sub-folders, same context as above.
+* ``clean-all``:
+  This removes all tool and temporary files in the current folder, its
+  sub-folders and from all the IPs that are specified in the Makefile file;
+  same context as above.
+* ``lib``: This is same as ``all`` in the library folder, ignored inside project
+  folders.
+* ``projects.platform``: This is a special target available only in the 'hdl' root
+  folder and is ignored everywhere else, see syntax:
+
+  * ``make daq2.a10soc ; # build projects/daq2/a10soc.``
+  * ``make daq2.zc706 ; # build projects/daq2/zc706.``
+
+To speed up the building process, especially libraries, you can use the ``-j``
+option to run the targets in parallel, e.g. ``make -j4``.
+
+All artifacts generated by the build process should be "git"-ignored,
+e.g. ``component.xml`` and ``.lock`` files.
 
 Tools and their versions
 -------------------------------------------------------------------------------
