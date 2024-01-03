@@ -27,4 +27,5 @@ set_property display_name "ADI JESD204C Common Library" [ipx::current_core]
 set_property description "ADI JESD204C Common Library" [ipx::current_core]
 set_property hide_in_gui {1} [ipx::current_core]
 
+ipx::create_xgui_files [ipx::current_core]
 ipx::save_core [ipx::current_core]
