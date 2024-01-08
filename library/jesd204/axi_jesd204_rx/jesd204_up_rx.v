@@ -46,7 +46,8 @@
 
 module jesd204_up_rx #(
   parameter NUM_LANES = 1,
-  parameter DATA_PATH_WIDTH = 4
+  parameter DATA_PATH_WIDTH = 4,
+  parameter DATA_PATH_WIDTH_LOG2 = 2
 ) (
   input up_clk,
   input up_reset,
@@ -142,7 +143,7 @@ module jesd204_up_rx #(
       /* 17-31 */ 15'h00, /* Reserved for future additions */
       /*    16 */ up_cfg_buffer_early_release, /* Release buffer as soon as all lanes are ready. */
       /* 10-15 */ 6'b0000, /* Reserved for future extensions of buffer_delay */
-      /* 02-09 */ up_cfg_buffer_delay, /* Buffer release delay */
+      /* 02-09 */ up_cfg_buffer_delay << (DATA_PATH_WIDTH_LOG2-2), /* Buffer release delay */
       /* 00-01 */ 2'b00 /* Data path width alignment */
     };
     12'h91: up_rdata = {
@@ -187,7 +188,7 @@ module jesd204_up_rx #(
       /* JESD RX configuraton */
       12'h090: begin
         up_cfg_buffer_early_release <= up_wdata[16];
-        up_cfg_buffer_delay <= up_wdata[7:0];
+      	up_cfg_buffer_delay <= up_wdata[9:DATA_PATH_WIDTH_LOG2];
       end
       endcase
     end else if (up_wreq == 1'b1) begin

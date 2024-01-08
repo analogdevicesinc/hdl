@@ -56,7 +56,7 @@ module jesd204_rx_ctrl_64b #(
 
   input [NUM_LANES-1:0] emb_lock,
 
-  output all_emb_lock,
+  output reg all_emb_lock,
   input buffer_release_n,
 
   output [1:0] status_state,
@@ -74,23 +74,23 @@ module jesd204_rx_ctrl_64b #(
   reg rst_good_cnt;
   reg event_unexpected_lane_state_error_nx;
 
-  wire [NUM_LANES-1:0] phy_block_sync_masked;
-  wire [NUM_LANES-1:0] emb_lock_masked;
-  wire all_block_sync;
-
-  reg [NUM_LANES-1:0] emb_lock_d = {NUM_LANES{1'b0}};
-  reg buffer_release_d_n = 1'b1;
+  reg [NUM_LANES-1:0] phy_block_sync_masked;
+  reg [NUM_LANES-1:0] emb_lock_masked;
+  reg all_block_sync;
 
   always @(posedge clk) begin
-    emb_lock_d <= emb_lock;
-    buffer_release_d_n <= buffer_release_n;
+    if (reset == 1'b1) begin
+      phy_block_sync_masked <= {NUM_LANES{1'b0}};
+      emb_lock_masked <= {NUM_LANES{1'b0}};
+      all_block_sync <= 1'b0;
+      all_emb_lock <= 1'b0;
+    end else begin
+      phy_block_sync_masked <= phy_block_sync | cfg_lanes_disable;
+      emb_lock_masked <= emb_lock | cfg_lanes_disable;
+      all_block_sync <= &phy_block_sync_masked;
+      all_emb_lock <= &emb_lock_masked;
+    end
   end
-
-  assign phy_block_sync_masked = phy_block_sync | cfg_lanes_disable;
-  assign emb_lock_masked = emb_lock_d | cfg_lanes_disable;
-
-  assign all_block_sync = &phy_block_sync_masked;
-  assign all_emb_lock = &emb_lock_masked;
 
   always @(*) begin
     next_state = state;
@@ -109,7 +109,7 @@ module jesd204_rx_ctrl_64b #(
       STATE_BLOCK_SYNC:
         if (~all_block_sync) begin
           next_state = STATE_WAIT_BS;
-        end else if (all_emb_lock & ~buffer_release_d_n) begin
+        end else if (all_emb_lock & ~buffer_release_n) begin
           rst_good_cnt = 1'b0;
           if (&good_cnt) begin
             next_state = STATE_DATA;
@@ -119,7 +119,7 @@ module jesd204_rx_ctrl_64b #(
         if (~all_block_sync) begin
           next_state = STATE_WAIT_BS;
           event_unexpected_lane_state_error_nx = 1'b1;
-        end else if (~all_emb_lock | buffer_release_d_n) begin
+        end else if (~all_emb_lock | buffer_release_n) begin
           next_state = STATE_BLOCK_SYNC;
           event_unexpected_lane_state_error_nx = 1'b1;
         end

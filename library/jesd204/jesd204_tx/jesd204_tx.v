@@ -47,6 +47,7 @@
 module jesd204_tx #(
   parameter NUM_LANES = 1,
   parameter NUM_LINKS = 1,
+  parameter NUM_INPUT_PIPELINE = 0,
   parameter NUM_OUTPUT_PIPELINE = 0,
   parameter LINK_MODE = 1, // 2 - 64B/66B;  1 - 8B/10B
   /* Only 4 is supported at the moment for 8b/10b and 8 for 64b */
@@ -133,11 +134,17 @@ module jesd204_tx #(
   localparam DW = DATA_PATH_WIDTH * 8 * NUM_LANES;
   localparam CW = DATA_PATH_WIDTH * NUM_LANES;
   localparam HW = 2 * NUM_LANES;
+  localparam INPUT_PIPELINE_WIDTH = (LINK_MODE[0] == 1) ? (1+(NUM_LANES*(1+(DATA_PATH_WIDTH*19)))) : (4+(64*NUM_LANES));
+
+wire [DW-1:0] tx_data_r;
+wire          tx_ready_r;
 
   wire [DW-1:0] phy_data_r;
   wire [CW-1:0] phy_charisk_r;
   wire [HW-1:0] phy_header_r;
 
+  wire [INPUT_PIPELINE_WIDTH-1:0] input_pipeline_in;
+  wire [INPUT_PIPELINE_WIDTH-1:0] input_pipeline_out;
   wire eof_gen_reset;
   wire tx_ready_64b_next;
   reg tx_ready_64b = 1'b0;
@@ -353,6 +360,15 @@ module jesd204_tx #(
     tx_eomf_fm_d2 <= tx_eomf_fm_d1;
   end
 
+pipeline_stage #(
+  .WIDTH(INPUT_PIPELINE_WIDTH),
+  .REGISTERED(NUM_INPUT_PIPELINE)
+) i_input_pipeline_stage (
+  .clk(clk),
+  .in(input_pipeline_in),
+  .out(input_pipeline_out)
+);
+
   generate
   genvar i;
 
@@ -364,7 +380,16 @@ module jesd204_tx #(
   wire [DW-1:0] ilas_data;
   wire [DATA_PATH_WIDTH*NUM_LANES-1:0] ilas_charisk;
 
+  wire [DATA_PATH_WIDTH-1:0] tx_eof_fm_d3_r;
+  wire [DATA_PATH_WIDTH-1:0] tx_eomf_fm_d3_r;
+  wire [NUM_LANES-1:0] lane_cgs_enable_r;
+  wire [DW-1:0] ilas_data_r;
+  wire [DATA_PATH_WIDTH*NUM_LANES-1:0] ilas_charisk_r;
+
   wire cfg_generate_eomf = 1'b1;
+
+  assign input_pipeline_in = {tx_ready, gearbox_data, ilas_charisk, ilas_data, lane_cgs_enable, tx_eomf_fm_d3, tx_eof_fm_d3};
+  assign {tx_ready_r, tx_data_r, ilas_charisk_r, ilas_data_r, lane_cgs_enable_r, tx_eomf_fm_d3_r, tx_eof_fm_d3_r} = input_pipeline_out;
 
   always @(posedge clk) begin
     tx_eof_fm_d3 <= tx_eof_fm_d2;
@@ -424,16 +449,16 @@ module jesd204_tx #(
     ) i_lane (
       .clk(clk),
 
-      .eof(tx_eof_fm_d3),
-      .eomf(tx_eomf_fm_d3),
+      .eof(tx_eof_fm_d3_r),
+      .eomf(tx_eomf_fm_d3_r),
 
-      .cgs_enable(lane_cgs_enable[i]),
+      .cgs_enable(lane_cgs_enable_r[i]),
 
-      .ilas_data(ilas_data[D_STOP:D_START]),
-      .ilas_charisk(ilas_charisk[C_STOP:C_START]),
+      .ilas_data(ilas_data_r[D_STOP:D_START]),
+      .ilas_charisk(ilas_charisk_r[C_STOP:C_START]),
 
-      .tx_data(gearbox_data[D_STOP:D_START]),
-      .tx_ready(link_tx_ready),
+      .tx_data(tx_data_r[D_STOP:D_START]),
+      .tx_ready(tx_ready_r),
 
       .phy_data(phy_data_r[D_STOP:D_START]),
       .phy_charisk(phy_charisk_r[C_STOP:C_START]),
@@ -448,6 +473,13 @@ module jesd204_tx #(
   end
 
   if (LINK_MODE[1] == 1) begin : mode_64b66b
+  wire lmc_edge_r;
+  wire lmc_quarter_edge_r;
+  wire eoemb_r;
+  wire tx_ready_64b_r;
+
+  assign input_pipeline_in = {eoemb, lmc_quarter_edge, lmc_edge, tx_ready_64b, gearbox_data};
+  assign {eoemb_r, lmc_quarter_edge_r, lmc_edge_r, tx_ready_64b_r, tx_data_r} = input_pipeline_out;
 
     for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
       localparam D_START = i * DATA_PATH_WIDTH*8;
@@ -458,15 +490,15 @@ module jesd204_tx #(
         .clk(clk),
         .reset(reset),
 
-        .tx_data(gearbox_data[D_STOP:D_START]),
-        .tx_ready(tx_ready_64b),
+        .tx_data(tx_data_r[D_STOP:D_START]),
+        .tx_ready(tx_ready_64b_r),
 
         .phy_data(phy_data_r[D_STOP:D_START]),
         .phy_header(phy_header_r[H_STOP:H_START]),
 
-        .lmc_edge(lmc_edge),
-        .lmc_quarter_edge(lmc_quarter_edge),
-        .eoemb(eoemb),
+        .lmc_edge(lmc_edge_r),
+        .lmc_quarter_edge(lmc_quarter_edge_r),
+        .eoemb(eoemb_r),
 
         .cfg_disable_scrambler(cfg_disable_scrambler),
         .cfg_header_mode(2'b0),
