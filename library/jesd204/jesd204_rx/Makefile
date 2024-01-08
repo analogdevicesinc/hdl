@@ -28,6 +28,7 @@ XILINX_DEPS += jesd204_rx_header.v
 XILINX_DEPS += jesd204_rx_ip.tcl
 XILINX_DEPS += jesd204_rx_lane_64b.v
 XILINX_DEPS += jesd204_rx_ooc.ttcl
+XILINX_DEPS += jesd204_rx.xdc
 
 XILINX_DEPS += ../../jesd204/interfaces/jesd204_rx_cfg.xml
 XILINX_DEPS += ../../jesd204/interfaces/jesd204_rx_cfg_rtl.xml
