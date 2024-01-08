@@ -25,8 +25,10 @@ adi_ip_files jesd204_rx [list \
   "jesd204_rx_constr.ttcl" \
   "jesd204_rx_ooc.ttcl" \
   "jesd204_rx.v" \
+  "jesd204_rx.xdc" \
   "../../common/ad_pack.v" \
   "../../common/ad_upack.v" \
+  "../../common/util_pipeline_stage.v" \
   "bd/bd.tcl"
 ]
 
