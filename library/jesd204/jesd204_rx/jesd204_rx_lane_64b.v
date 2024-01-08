@@ -45,7 +45,7 @@ module jesd204_rx_lane_64b #(
   output reg [7:0] status_lane_skew
 );
 
-  reg [11:0] crc12_calculated_prev;
+  reg  [11:0] crc12_calculated_prev;
 
   wire [63:0] phy_data_r;
   wire [63:0] data_descrambled_s;
@@ -109,11 +109,25 @@ module jesd204_rx_lane_64b #(
     .event_unexpected_eomb(event_unexpected_eomb),
     .event_unexpected_eoemb(event_unexpected_eoemb));
 
+  util_pipeline_stage #(
+    .WIDTH(65),
+    .REGISTERED(1)
+  ) i_pipeline_crc12 (
+    .clk(clk),
+    .in({
+        eomb,
+        phy_data
+      }),
+    .out({
+        eomb_r,
+        phy_data_r
+      }));
+
   jesd204_crc12 i_crc12 (
     .clk(clk),
-    .reset(1'b0),
-    .init(eomb),
-    .data_in(phy_data),
+    .reset(reset),
+    .init(eomb_r),
+    .data_in(phy_data_r),
     .crc12(crc12_calculated));
 
   reg crc12_on = 'b0;
@@ -129,18 +143,18 @@ module jesd204_rx_lane_64b #(
   always @(posedge clk) begin
     if (reset == 1'b1) begin
       crc12_rdy <= 1'b0;
-    end else if (crc12_on && eomb) begin
+    end else if (crc12_on && eomb_r) begin
       crc12_rdy <= 1'b1;
     end
   end
 
   always @(posedge clk) begin
-    if (eomb) begin
+    if (eomb_r) begin
       crc12_calculated_prev <= crc12_calculated;
     end
   end
 
-  assign event_crc12_mismatch = crc12_rdy && eomb && (crc12_calculated_prev != crc12_received);
+  assign event_crc12_mismatch = crc12_rdy && eomb_r && (crc12_calculated_prev != crc12_received);
 
   assign err_cnt_rst = reset || ctrl_err_statistics_reset;
 
