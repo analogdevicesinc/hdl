@@ -108,23 +108,6 @@ module system_top (
 
   output                  rstb,
   output                  hmc_sync_req,
-  
-//  output                  hdmi_out_clk,
-//  output                  hdmi_vsync,
-//  output                  hdmi_hsync,
-//  output                  hdmi_data_e,
-//  output      [15:0]      hdmi_data,
-
-//  output                  i2s_mclk,
-//  output                  i2s_bclk,
-//  output                  i2s_lrclk,
-//  output                  i2s_sdata_out,
-//  input                   i2s_sdata_in,
-
-//  inout                   iic_scl,
-//  inout                   iic_sda,
-//  inout       [ 1:0]      iic_mux_scl,
-//  inout       [ 1:0]      iic_mux_sda,
 
   // FMC connector
 
@@ -141,25 +124,11 @@ module system_top (
   input                   db_n,
 
   // SPI data interface
-  input                   doa_fmc,
-  input                   dob_fmc,
-  input                   doc_fmc,
-  input                   dod_fmc,
 
-//  output                  gp0_dir,
-//  output                  gp1_dir,
-//  output                  gp2_dir,
-//  output                  gp3_dir,
+  output                  gpio0_fmc,
   inout                   gpio1_fmc,
   inout                   gpio2_fmc,
   inout                   gpio3_fmc,
-
-//  input                   pwrgd,
-//  input                   adf435x_lock,
-//  output                  en_psu,
-//  output                  pd_v33b,
-//  output                  osc_en,
-  output                  ad9508_sync,
 
 `ifdef ECHOED_CLK
   // Input for Echoed clock mode
@@ -173,21 +142,35 @@ module system_top (
   output                  fpga_cnvn,
 `endif
 
+  inout                   adrf5203_ctrl_0,
+  inout                   adrf5203_ctrl_1,
+  inout                   adrf5203_ctrl_2,
+  inout                   adg5419_ctrl,
+  inout                   ada4945_disable,
+  inout                   adl5580_en,
+  inout                   dig_ext_p,
+  inout                   dig_ext_n,
+  inout                   ltc2644_ldac,
+  inout                   ltc2644_clr,
+  inout                   ltc2644_tgp,
+  inout                   dig_ext_hs_p,
+  inout                   dig_ext_hs_n,
+
   // ADC SPI
 
-  input                   gpio0_fmc,
   output                  sclk_src,
   output                  cs_n_src,
-  inout                   sdio_src
+  input                   sdi_src,
 
-  // Clock chips SPI
+  output                  adl5580_sclk,
+  output                  adl5580_csb,
+  inout                   adl5580_sdio,
 
-//  input                   sdo_1,  //ad9508
-//  output                  sclk1,
-//  output                  sdin1,
-//  output                  cs1_0, //ad9508
-//  output                  cs1_1  //adf4350
-);
+  output                  ltc2644_sclk,
+  output                  ltc2644_cs,
+  input                   ltc2644_sdi,
+  output                  ltc2644_sdo
+  );
 
   // internal signals
 
@@ -197,25 +180,20 @@ module system_top (
 
   wire            spi_miso;
   wire            spi_mosi;
-  wire            spi0_miso;
-  wire            spi0_mosi;
   wire            hmc7044_miso;
   wire            hmc7044_mosi;
   wire    [ 1:0]  hmc7044_csn;
+  wire            adl5580_miso;
+  wire            adl5580_mosi;
 
   wire            rx_ref_clk;
   wire            rx_ref_clk_replica;
   wire            rx_sysref;
   wire            rx_sync;
 
-//  wire    [ 1:0]  cs1;
-
-  assign iic_rstn = 1'b1;
   assign hmc7044_csb = hmc7044_csn[0];
   assign adf4371_csb = hmc7044_csn[1];
 
-  //assign cs1_0 = cs1[0];
-  //assign cs1_1 = cs1[1];
   // instantiations
 
   IBUFDS_GTE4 i_ibufds_rx_ref_clk (
@@ -270,7 +248,7 @@ module system_top (
     .dio_o (gpio_i[16:0]),
     .dio_p (gpio_bd));
 
-  assign gpio_i[63:45] = gpio_o[63:43];
+  assign gpio_i[63:55] = gpio_o[63:55];
   assign gpio_i[31:17] = gpio_o[31:17];
 
   ad_3w_spi #(
@@ -292,49 +270,16 @@ module system_top (
     .spi_miso (spi_miso),
     .spi_sdio (fpga_sdio),
     .spi_dir ());
-    
+
   ad_3w_spi #(
     .NUM_OF_SLAVES(1)
-  ) i_spi0 (
-    .spi_csn (cs_n_src),
-    .spi_clk (sclk_src),
-    .spi_mosi (spi0_mosi),
-    .spi_miso (spi0_miso),
-    .spi_sdio (sdio_src),
+  ) i_adl5580_spi (
+    .spi_csn (adl5580_csb),
+    .spi_clk (adl5580_sclk),
+    .spi_mosi (adl5580_mosi),
+    .spi_miso (adl5580_miso),
+    .spi_sdio (adl5580_sdio),
     .spi_dir ());
-
-  wire    [ 1:0]  iic_mux_scl_i_s;
-  wire    [ 1:0]  iic_mux_scl_o_s;
-  wire            iic_mux_scl_t_s;
-  wire    [ 1:0]  iic_mux_sda_i_s;
-  wire    [ 1:0]  iic_mux_sda_o_s;
-  wire            iic_mux_sda_t_s;
-
-  reg             ad9508_sync_s = 1'b0;
-  reg     [ 3:0]  sync_req_d    = 4'b0; 
-
-  assign ad9508_sync   = ad9508_sync_s;
-//  assign gpio_i[43]    = adf435x_lock;
-//  assign gpio_i[44]    = pwrgd;
-
-  assign gp0_dir  = 1'b0;
-  assign gp1_dir  = 1'b0;
-  assign gp2_dir  = 1'b0;
-  assign gp3_dir  = 1'b0;
-  assign en_psu   = 1'b1;
-//  assign osc_en   = pwrgd;
-  
-  assign sync_req = gpio_o[42]; 
-  assign pd_v33b  = 1'b1;
-
-  always @(posedge sys_cpu_out_clk) begin
-    sync_req_d <= {sync_req_d[2:0],sync_req};
-    if (sync_req_d[1] & ~sync_req_d[3]) begin
-      ad9508_sync_s <= 1'b0;
-    end else if (~sync_req_d[2] & sync_req_d[3]) begin
-      ad9508_sync_s <= 1'b1;
-    end
-  end
 
   // instantiations
 
@@ -349,32 +294,27 @@ module system_top (
     .O (fpga_100_clk));
 
   ad_iobuf #(
-    .DATA_WIDTH(2)
-  ) i_gpio_4_3_mach1 (
-    .dio_t(gpio_t[40:39]),
-    .dio_i(gpio_o[40:39]),
-    .dio_o(gpio_i[40:39]),
-    .dio_p({gpio3_fmc,gpio2_fmc}));
-
-  ad_iobuf #(
-    .DATA_WIDTH(1)
-  ) i_gpio_2_mach1 (
-    .dio_t(gpio_t[41]),
-    .dio_i(gpio_o[41]),
-    .dio_o(gpio_i[41]),
-    .dio_p(gpio1_fmc));
-
-   ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_iic_scl (
-    .dio_t ({iic_mux_scl_t_s,iic_mux_scl_t_s}),
-    .dio_i (iic_mux_scl_o_s),
-    .dio_o (iic_mux_scl_i_s),
-    .dio_p (iic_mux_scl));
-
-   ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_iic_sda (
-    .dio_t ({iic_mux_sda_t_s,iic_mux_sda_t_s}),
-    .dio_i (iic_mux_sda_o_s),
-    .dio_o (iic_mux_sda_i_s),
-    .dio_p (iic_mux_sda));
+    .DATA_WIDTH(16)
+  ) i_gpio (
+    .dio_t(gpio_t[54:39]),
+    .dio_i(gpio_o[54:39]),
+    .dio_o(gpio_i[54:39]),
+    .dio_p({adrf5203_ctrl_0,
+            adrf5203_ctrl_1,
+            adrf5203_ctrl_2,
+            adg5419_ctrl,
+            ada4945_disable,
+            adl5580_en,
+            gpio3_fmc,
+            gpio2_fmc,
+            gpio1_fmc,
+            dig_ext_p,
+            dig_ext_n,
+            ltc2644_ldac,
+            ltc2644_clr,
+            ltc2644_tgp,
+            dig_ext_hs_p,
+            dig_ext_hs_n}));
 
   system_wrapper i_system_wrapper (
     .sys_rst (sys_rst),
@@ -467,37 +407,31 @@ module system_top (
     .glbl_clk_0 (glbl_clk_buf),
     .rx_sync_0 (rx_sync),
     .rx_sysref_0 (rx_sysref),
-    
-//    .hdmi_data (hdmi_data),
-//    .hdmi_data_e (hdmi_data_e),
-//    .hdmi_hsync (hdmi_hsync),
-//    .hdmi_out_clk (hdmi_out_clk),
-//    .hdmi_vsync (hdmi_vsync),
-//    .i2s_bclk (i2s_bclk),
-//    .i2s_lrclk (i2s_lrclk),
-//    .i2s_mclk (i2s_mclk),
-//    .i2s_sdata_in (i2s_sdata_in),
-//    .i2s_sdata_out (i2s_sdata_out),
-//    .iic_mux_scl_i (iic_mux_scl_i_s),
-//    .iic_mux_scl_o (iic_mux_scl_o_s),
-//    .iic_mux_scl_t (iic_mux_scl_t_s),
-//    .iic_mux_sda_i (iic_mux_sda_i_s),
-//    .iic_mux_sda_o (iic_mux_sda_o_s),
-//    .iic_mux_sda_t (iic_mux_sda_t_s),
-    .spi0_clk_i (sclk_src),
-    .spi0_clk_o (sclk_src),
-    .spi0_csn_i (cs_n_src),
-    .spi0_csn_o (cs_n_src),
-    .spi0_sdi_i (spi0_miso),
-    .spi0_sdo_i (spi0_mosi),
-    .spi0_sdo_o (spi0_mosi),
-//    .spi1_clk_i (sclk1),
-//    .spi1_clk_o (sclk1),
-//    .spi1_csn_i (cs1),
-//    .spi1_csn_o (cs1),
-//    .spi1_sdi_i (sdo_1),
-//    .spi1_sdo_i (sdin1),
-//    .spi1_sdo_o (sdin1),
+
+    .ad4080_clk_i (sclk_src),
+    .ad4080_clk_o (sclk_src),
+    .ad4080_csn_i (cs_n_src),
+    .ad4080_csn_o (cs_n_src),
+    .ad4080_sdi_i (sdi_src),
+//    .ad4080_sdo_i (gpio0_fmc),
+    .ad4080_sdo_o (gpio0_fmc),
+
+    .adl5580_clk_i (adl5580_sclk),
+    .adl5580_clk_o (adl5580_sclk),
+    .adl5580_csn_i (adl5580_csb),
+    .adl5580_csn_o (adl5580_csb),
+    .adl5580_sdi_i (adl5580_miso),
+    .adl5580_sdo_i (adl5580_mosi),
+    .adl5580_sdo_o (adl5580_mosi),
+
+    .ltc2644_clk_i (ltc2644_sclk),
+    .ltc2644_clk_o (ltc2644_sclk),
+    .ltc2644_csn_i (ltc2644_cs),
+    .ltc2644_csn_o (ltc2644_cs),
+    .ltc2644_sdi_i (ltc2644_sdi),
+//    .ltc2644_sdo_i (ltc2644_sdo),
+    .ltc2644_sdo_o (ltc2644_sdo),
+
     // FMC
     .dco_p (dco_p),
     .dco_n (dco_n),
@@ -505,7 +439,6 @@ module system_top (
     .da_n (da_n),
     .db_p (db_p),
     .db_n (db_n),
-    .sync_n (ad9508_sync),
     .sys_cpu_out_clk (sys_cpu_out_clk),
     .uncorrected_mode (1'b0)
     );

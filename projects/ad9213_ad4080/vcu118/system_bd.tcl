@@ -14,7 +14,10 @@ source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 # Set SPI clock to 100/16 =  6.25 MHz
 ad_ip_parameter axi_spi CONFIG.C_SCK_RATIO 16
 ad_ip_parameter hmc7044_spi CONFIG.C_SCK_RATIO 16
-ad_ip_parameter spi0 CONFIG.C_SCK_RATIO 16
+ad_ip_parameter ad4080_spi CONFIG.C_SCK_RATIO 16
+ad_ip_parameter adl5580_spi CONFIG.C_SCK_RATIO 16
+ad_ip_parameter ltc2644_spi CONFIG.C_SCK_RATIO 16
+
 #ad_ip_parameter spi1 CONFIG.C_SCK_RATIO 16
 
 #system ID
