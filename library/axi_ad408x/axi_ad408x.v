@@ -58,15 +58,12 @@ module axi_ad408x #(
   input                   data_b_in_n,
   input                   data_b_in_p,
   input                   sync_n,
-  input                   uncorrected_mode,
 
   // output data interface
 
   output                  adc_clk,
   output      [ 31:0]     adc_data,
   output                  adc_valid,
-  output      [127:0]     adc_uncor_data,
-  output                  adc_uncor_valid,
   input                   adc_dovf,
 
   // delay interface
@@ -287,7 +284,6 @@ module axi_ad408x #(
     .sdr_ddr_n(up_adc_sdr_ddr_n),
     .num_lanes(up_adc_num_lanes),
     .ddr_edge_sel(up_adc_ddr_edgesel),
-    .uncorrected_mode(uncorrected_mode),
     .up_clk(up_clk),
     .up_adc_dld(up_dld),
     .up_adc_dwdata(up_dwdata),
@@ -299,8 +295,6 @@ module axi_ad408x #(
     .adc_clk_div(adc_clk_s),
     .adc_data(adc_data),
     .adc_valid(adc_valid),
-    .adc_uncor_data(adc_uncor_data),
-    .adc_uncor_valid(adc_uncor_valid),
     .bitslip_enable(bitslip_enable),
     .sync_status(sync_status));
 
