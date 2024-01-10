@@ -187,7 +187,7 @@ module system_top (
 
   always @(posedge sys_cpu_out_clk) begin
     sync_req_d <= {sync_req_d[2:0],sync_req};
-    if (sync_req_d[1] & ~sync_req_d[3]) begin
+    if (sync_req_d[2] & ~sync_req_d[3]) begin
       ad9508_sync_s <= 1'b0;
     end else if (~sync_req_d[2] & sync_req_d[3]) begin
       ad9508_sync_s <= 1'b1;
@@ -340,7 +340,6 @@ module system_top (
     .db_p (db_p),
     .db_n (db_n),
     .sync_n (ad9508_sync),
-    .sys_cpu_out_clk (sys_cpu_out_clk),
-    .uncorrected_mode (1'b0));
+    .sys_cpu_out_clk (sys_cpu_out_clk));
 
 endmodule

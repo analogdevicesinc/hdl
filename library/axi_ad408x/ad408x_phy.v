@@ -63,11 +63,6 @@ module ad408x_phy #(
   input        [4:0]                num_lanes,
   input                             ddr_edge_sel,
 
-  // In uncorrected mode for each sample 80 bits are transferred
-  // the 20 LSBs are the corrected sample, the other bits are debug info
-
-  input                             uncorrected_mode,
-
   // delay interface(for IDELAY macros)
 
   input                             up_clk,
@@ -86,9 +81,6 @@ module ad408x_phy #(
 
   output      [31:0]                adc_data,
   output                            adc_valid,
-
-  output      [127:0]               adc_uncor_data,
-  output                            adc_uncor_valid,
 
   // Debug interface
 
@@ -354,8 +346,6 @@ module ad408x_phy #(
   wire [19:0] packed_4_20;
   wire [19:0] packed_8_20;
   wire [19:0] packed_16_20;
-  wire [79:0] packed_20_80;
-  wire        pack80_valid;
 
   ad_pack #(
     .I_W(4),
@@ -467,47 +457,16 @@ module ad408x_phy #(
   end
 
   reg [19:0]  adc_data_shifted;
-  reg packed_data_valid_d;
+  reg         packed_data_valid_d;
 
   always @(posedge adc_clk_div) begin
-    // >> 1 for sdr,single lane
-    // >> 14 for sdr,dual lane
     adc_data_shifted <= {packed_data_d,packed_data} >> shift_cnt;
     packed_data_valid_d <= packed_data_valid;
   end
 
   // Sign extend to 32 bits
 
-  assign adc_data =  ~uncorrected_mode ? {{12{adc_data_shifted[19]}},adc_data_shifted} :
-                                         {{12{packed_20_80[19]}},packed_20_80[19:0]};
-  assign adc_valid = ~uncorrected_mode ? packed_data_valid_d : pack80_valid;
-
-  // Pack to 80 bit for the uncorrected mode
-  // Start packing after first three samples since first sample is not
-  // received fully
-
-  reg [2:0] pack_rst = 3'b111;
-
-  always @(posedge adc_clk_div) begin
-    packed_data_valid_d <= packed_data_valid;
-    if(packed_data_valid_d)
-      pack_rst <= {pack_rst,1'b0};
-  end
-
-  ad_pack #(
-    .I_W(20),
-    .O_W(80),
-    .UNIT_W(1),
-    .ALIGN_TO_MSB(1)
-  ) i_ad_pack_80 (
-    .clk(adc_clk_div),
-    .reset(pack_rst[2]),
-    .idata(adc_data_shifted),
-    .ivalid(packed_data_valid_d),
-    .odata(packed_20_80),
-    .ovalid(pack80_valid));
-
-  assign adc_uncor_valid = uncorrected_mode ? pack80_valid : 1'b0;
-  assign adc_uncor_data = {48'b0,packed_20_80};
+  assign adc_data  = {{12{adc_data_shifted[19]}},adc_data_shifted};                       
+  assign adc_valid = packed_data_valid_d;
 
 endmodule
