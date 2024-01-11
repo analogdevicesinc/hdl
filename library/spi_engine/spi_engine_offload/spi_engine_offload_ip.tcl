@@ -32,43 +32,43 @@ adi_add_bus "spi_engine_ctrl" "master" \
 	"analog.com:interface:spi_engine_ctrl_rtl:1.0" \
 	"analog.com:interface:spi_engine_ctrl:1.0" \
 	{
-		{"cmd_ready" "CMD_READY"} \
-		{"cmd_valid" "CMD_VALID"} \
-		{"cmd" "CMD_DATA"} \
-		{"sdo_data_ready" "SDO_READY"} \
-		{"sdo_data_valid" "SDO_VALID"} \
-		{"sdo_data" "SDO_DATA"} \
-		{"sdi_data_ready" "SDI_READY"} \
-		{"sdi_data_valid" "SDI_VALID"} \
-		{"sdi_data" "SDI_DATA"} \
-		{"sync_ready" "SYNC_READY"} \
-		{"sync_valid" "SYNC_VALID"} \
-		{"sync_data" "SYNC_DATA"} \
+		{"cmd_ready" "cmd_ready"} \
+		{"cmd_valid" "cmd_valid"} \
+		{"cmd" "cmd_data"} \
+		{"sdo_data_ready" "sdo_ready"} \
+		{"sdo_data_valid" "sdo_valid"} \
+		{"sdo_data" "sdo_data"} \
+		{"sdi_data_ready" "sdi_ready"} \
+		{"sdi_data_valid" "sdi_valid"} \
+		{"sdi_data" "sdi_data"} \
+		{"sync_ready" "sync_ready"} \
+		{"sync_valid" "sync_valid"} \
+		{"sync_data" "sync_data"} \
 	}
 
 adi_add_bus "spi_engine_offload_ctrl" "slave" \
 	"analog.com:interface:spi_engine_offload_ctrl_rtl:1.0" \
 	"analog.com:interface:spi_engine_offload_ctrl:1.0" \
 	{ \
-		{ "ctrl_cmd_wr_en" "CMD_WR_EN"} \
-		{ "ctrl_cmd_wr_data" "CMD_WR_DATA"} \
-		{ "ctrl_sdo_wr_en" "SDO_WR_EN"} \
-		{ "ctrl_sdo_wr_data" "SDO_WR_DATA"} \
-		{ "ctrl_enable" "ENABLE"} \
-		{ "ctrl_enabled" "ENABLED"} \
-		{ "ctrl_mem_reset" "MEM_RESET"} \
-		{ "status_sync_ready" "SYNC_READY"} \
-		{ "status_sync_valid" "SYNC_VALID"} \
-		{ "status_sync_data" "SYNC_DATA"} \
+		{ "ctrl_cmd_wr_en" "cmd_wr_en"} \
+		{ "ctrl_cmd_wr_data" "cmd_wr_data"} \
+		{ "ctrl_sdo_wr_en" "sdo_wr_en"} \
+		{ "ctrl_sdo_wr_data" "sdo_wr_data"} \
+		{ "ctrl_enable" "enable"} \
+		{ "ctrl_enabled" "enabled"} \
+		{ "ctrl_mem_reset" "mem_reset"} \
+		{ "status_sync_ready" "sync_ready"} \
+		{ "status_sync_valid" "sync_valid"} \
+		{ "status_sync_data" "sync_data"} \
 	}
 
 adi_add_bus "offload_sdi" "master" \
 	"xilinx.com:interface:axis_rtl:1.0" \
 	"xilinx.com:interface:axis:1.0" \
 	{ \
-		{"offload_sdi_valid" "TVALID"} \
-		{"offload_sdi_ready" "TREADY"} \
-		{"offload_sdi_data" "TDATA"} \
+		{"offload_sdi_valid" "tvalid"} \
+		{"offload_sdi_ready" "tready"} \
+		{"offload_sdi_data" "tdata"} \
 	}
 
 adi_add_bus_clock "spi_clk" "spi_engine_ctrl:offload_sdi" "spi_resetn"

@@ -26,18 +26,18 @@ adi_add_bus "ctrl" "slave" \
 	"analog.com:interface:spi_engine_ctrl_rtl:1.0" \
 	"analog.com:interface:spi_engine_ctrl:1.0" \
 	{
-		{"cmd_ready" "CMD_READY"} \
-		{"cmd_valid" "CMD_VALID"} \
-		{"cmd" "CMD_DATA"} \
-		{"sdo_data_ready" "SDO_READY"} \
-		{"sdo_data_valid" "SDO_VALID"} \
-		{"sdo_data" "SDO_DATA"} \
-		{"sdi_data_ready" "SDI_READY"} \
-		{"sdi_data_valid" "SDI_VALID"} \
-		{"sdi_data" "SDI_DATA"} \
-		{"sync_ready" "SYNC_READY"} \
-		{"sync_valid" "SYNC_VALID"} \
-		{"sync" "SYNC_DATA"} \
+		{"cmd_ready" "cmd_ready"} \
+		{"cmd_valid" "cmd_valid"} \
+		{"cmd" "cmd_data"} \
+		{"sdo_data_ready" "sdo_ready"} \
+		{"sdo_data_valid" "sdo_valid"} \
+		{"sdo_data" "sdo_data"} \
+		{"sdi_data_ready" "sdi_ready"} \
+		{"sdi_data_valid" "sdi_valid"} \
+		{"sdi_data" "sdi_data"} \
+		{"sync_ready" "sync_ready"} \
+		{"sync_valid" "sync_valid"} \
+		{"sync" "sync_data"} \
 	}
 adi_add_bus_clock "clk" "ctrl" "resetn"
 
@@ -45,12 +45,12 @@ adi_add_bus "spi" "master" \
 	"analog.com:interface:spi_master_rtl:1.0" \
 	"analog.com:interface:spi_master:1.0" \
 	{
-		{"sclk" "SCLK"} \
-		{"sdi" "SDI"} \
-		{"sdo" "SDO"} \
-		{"sdo_t" "SDO_T"} \
-		{"three_wire" "THREE_WIRE"} \
-		{"cs" "CS"} \
+		{"sclk" "sclk"} \
+		{"sdi" "sdi"} \
+		{"sdo" "sdo"} \
+		{"sdo_t" "sdo_t"} \
+		{"three_wire" "three_wire"} \
+		{"cs" "cs"} \
 	}
 adi_add_bus_clock "clk" "spi" "resetn"
 
