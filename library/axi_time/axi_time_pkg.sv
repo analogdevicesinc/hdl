@@ -36,7 +36,7 @@
 package axi_time_pkg;
 
   localparam
-    PCORE_VERSION = 32'h00000061,
+    PCORE_VERSION = 32'h00000062,
     PCORE_MAGIC   = 32'h54494D45; // "TIME", big endian
 
   // register address offset
@@ -53,6 +53,10 @@ package axi_time_pkg;
     ADDR_TIME_RX_CAPT_LOW    = 8'h14,
     ADDR_TIME_RX_CAPT_HIGH   = 8'h15,
     ADDR_TIME_RX_TRIG_LOW    = 8'h16,
-    ADDR_TIME_RX_TRIG_HIGH   = 8'h17;
+    ADDR_TIME_RX_TRIG_HIGH   = 8'h17,
+    ADDR_TIME_TX_CAPT_LOW    = 8'h18,
+    ADDR_TIME_TX_CAPT_HIGH   = 8'h19,
+    ADDR_TIME_TX_TRIG_LOW    = 8'h1A,
+    ADDR_TIME_TX_TRIG_HIGH   = 8'h1B;
 
 endpackage

@@ -12,6 +12,7 @@ GENERIC_DEPS += axi_time_counter.sv
 GENERIC_DEPS += axi_time_pkg.sv
 GENERIC_DEPS += axi_time_regmap.sv
 GENERIC_DEPS += axi_time_rx.sv
+GENERIC_DEPS += axi_time_tx.sv
 
 XILINX_DEPS += axi_time_constr.ttcl
 XILINX_DEPS += axi_time_ip.tcl

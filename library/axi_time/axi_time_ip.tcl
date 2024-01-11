@@ -14,6 +14,7 @@ adi_ip_files axi_time [list \
   "axi_time_counter.sv" \
   "axi_time_regmap.sv" \
   "axi_time_rx.sv" \
+  "axi_time_tx.sv" \
   "axi_time.sv" ]
 
 adi_ip_properties axi_time
@@ -51,6 +52,34 @@ adi_add_bus "fifo_wr_out" "master" \
   }
 adi_add_bus_clock "clk" "fifo_wr_out"
 
+adi_add_bus "s_axis" "slave" \
+        "xilinx.com:interface:axis_rtl:1.0" \
+        "xilinx.com:interface:axis:1.0" \
+        [list {"s_axis_ready" "TREADY"} \
+          {"s_axis_valid" "TVALID"} \
+          {"s_axis_data" "TDATA"} \
+          {"s_axis_strb" "TSTRB"} \
+          {"s_axis_keep" "TKEEP"} \
+          {"s_axis_user" "TUSER"} \
+          {"s_axis_id" "TID"} \
+          {"s_axis_dest" "TDEST"} \
+          {"s_axis_last" "TLAST"}]
+adi_add_bus_clock "clk" "s_axis"
+
+adi_add_bus "m_axis" "master" \
+        "xilinx.com:interface:axis_rtl:1.0" \
+        "xilinx.com:interface:axis:1.0" \
+        [list {"m_axis_ready" "TREADY"} \
+          {"m_axis_valid" "TVALID"} \
+          {"m_axis_data" "TDATA"} \
+          {"m_axis_strb" "TSTRB"} \
+          {"m_axis_keep" "TKEEP"} \
+          {"m_axis_user" "TUSER"} \
+          {"m_axis_id" "TID"} \
+          {"m_axis_dest" "TDEST"} \
+          {"m_axis_last" "TLAST"}]
+adi_add_bus_clock "clk" "m_axis"
+
 adi_init_bd_tcl
 
 proc add_reset {name polarity} {
@@ -79,7 +108,13 @@ set_property -dict [list \
         "value_validation_type" "list" \
         "value_validation_list" "16 32 64 128 256 512 1024 2048" \
         ] \
-        [ipx::get_user_parameters DATA_WIDTH -of_objects [ipx::current_core]]
+        [ipx::get_user_parameters DATA_WIDTH_RX -of_objects [ipx::current_core]]
+
+set_property -dict [list \
+        "value_validation_type" "list" \
+        "value_validation_list" "16 32 64 128 256 512 1024 2048" \
+        ] \
+        [ipx::get_user_parameters DATA_WIDTH_TX -of_objects [ipx::current_core]]
 
 set_property -dict [list \
         "value_validation_type" "range_long" \

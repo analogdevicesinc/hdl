@@ -23,6 +23,7 @@ ad_ip_files axi_time [list\
   axi_time_counter.sv \
   axi_time_regmap.sv \
   axi_time_rx.sv \
+  axi_time_tx.sv \
   axi_time.sv \
   axi_time_constr.sdc]
 

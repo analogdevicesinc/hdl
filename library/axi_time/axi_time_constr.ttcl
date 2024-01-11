@@ -41,6 +41,10 @@ set_false_path \
   -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_up_running_sync/cdc_sync_stage1_reg[0]}]
 
 set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_tx_time/time_running_reg}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_up_running_sync/cdc_sync_stage1_reg[1]}]
+
+set_false_path \
   -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_time_soft_sync/in_toggle_d1_reg}] \
   -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_time_soft_sync/i_sync_out/cdc_sync_stage1_reg[*]}]
 
@@ -56,6 +60,10 @@ set_false_path \
   -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_up_underrun_sync/out_toggle_d1_reg}] \
   -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_up_underrun_sync/i_sync_in/cdc_sync_stage1_reg[*]}]
 
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_up_underrun_sync/cdc_hold_reg[*]}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_up_underrun_sync/out_event_reg[*]}]
+
 set_max_delay -quiet -datapath_only \
         -from $cpu_clk \
         -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
@@ -66,13 +74,13 @@ set_max_delay -quiet -datapath_only \
         -from $time_clk \
         -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
                 -filter {NAME =~ *i_write_cnt_ovwr_fifo/zerodeep.i_raddr_sync* && IS_SEQUENTIAL}] \
-        16
+        [get_property -min PERIOD $time_clk]
 
 set_max_delay -quiet -datapath_only \
         -from [get_cells -quiet -hier *cdc_sync_fifo_ram_reg* \
                 -filter {NAME =~ *i_write_cnt_ovwr_fifo* && IS_SEQUENTIAL}] \
         -to $time_clk \
-        16
+        [get_property -min PERIOD $time_clk]
 
 set_max_delay -quiet -datapath_only \
         -from $cpu_clk \
@@ -84,13 +92,31 @@ set_max_delay -quiet -datapath_only \
         -from $time_clk \
         -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
                 -filter {NAME =~ *i_write_rx_trig_fifo/zerodeep.i_raddr_sync* && IS_SEQUENTIAL}] \
-        16
+        [get_property -min PERIOD $time_clk]
 
 set_max_delay -quiet -datapath_only \
         -from [get_cells -quiet -hier *cdc_sync_fifo_ram_reg* \
                 -filter {NAME =~ *i_write_rx_trig_fifo* && IS_SEQUENTIAL}] \
         -to $time_clk \
-        16
+        [get_property -min PERIOD $time_clk]
+
+set_max_delay -quiet -datapath_only \
+        -from $cpu_clk \
+        -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+                -filter {NAME =~ *i_write_tx_trig_fifo/zerodeep.i_waddr_sync* && IS_SEQUENTIAL}] \
+        [get_property -min PERIOD $cpu_clk]
+
+set_max_delay -quiet -datapath_only \
+        -from $time_clk \
+        -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+                -filter {NAME =~ *i_write_tx_trig_fifo/zerodeep.i_raddr_sync* && IS_SEQUENTIAL}] \
+        [get_property -min PERIOD $time_clk]
+
+set_max_delay -quiet -datapath_only \
+        -from [get_cells -quiet -hier *cdc_sync_fifo_ram_reg* \
+                -filter {NAME =~ *i_write_tx_trig_fifo* && IS_SEQUENTIAL}] \
+        -to $time_clk \
+        [get_property -min PERIOD $time_clk]
 
 set_false_path \
   -to [get_pins -hierarchical * -filter {NAME=~*i_waddr_sync_gray/cdc_sync_stage1_reg[*]/D}]

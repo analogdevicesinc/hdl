@@ -44,7 +44,12 @@ module axi_time #(
   parameter         COUNT_WIDTH = 64,
 
   // Data path width.
-  parameter         DATA_WIDTH = 64,
+  parameter         DATA_WIDTH_RX = 64,
+  parameter         DATA_WIDTH_TX = 64,
+
+  // AXI Streaming.
+  parameter         AXIS_ID_TX = 8,
+  parameter         AXIS_DEST_TX = 4,
 
   // Enable external synchronization resetting.
   parameter         SYNC_EXTERNAL = 1,
@@ -53,48 +58,71 @@ module axi_time #(
   parameter         SYNC_EXTERNAL_CDC = 1
 ) (
 
-  input  logic                     clk,
-  input  logic                     resetn,
+  input  logic                       clk,
+  input  logic                       resetn,
 
   // Sync signal
-  input  logic                     sync_in,
+  input  logic                       sync_in,
+
+  // Input AXIS Interface
+  output logic                       s_axis_ready,
+  input  logic                       s_axis_valid,
+  input  logic [DATA_WIDTH_TX-1:0]   s_axis_data,
+  input  logic [DATA_WIDTH_TX/8-1:0] s_axis_strb,
+  input  logic [DATA_WIDTH_TX/8-1:0] s_axis_keep,
+  input  logic [0:0]                 s_axis_user,
+  input  logic [AXIS_ID_TX-1:0]      s_axis_id,
+  input  logic [AXIS_DEST_TX-1:0]    s_axis_dest,
+  input  logic                       s_axis_last,
+  input  logic                       s_axis_xfer_req,
+
+  input  logic                       m_axis_ready,
+  output logic                       m_axis_valid,
+  output logic [DATA_WIDTH_TX-1:0]   m_axis_data,
+  output logic [DATA_WIDTH_TX/8-1:0] m_axis_strb,
+  output logic [DATA_WIDTH_TX/8-1:0] m_axis_keep,
+  output logic [0:0]                 m_axis_user,
+  output logic [AXIS_ID_TX-1:0]      m_axis_id,
+  output logic [AXIS_DEST_TX-1:0]    m_axis_dest,
+  output logic                       m_axis_last,
+  output logic                       m_axis_xfer_req,
 
   // Input FIFO interface
-  input  logic                     fifo_wr_in_en,
-  input  logic [DATA_WIDTH-1:0]    fifo_wr_in_data,
-  output logic                     fifo_wr_in_overflow,
-  input  logic                     fifo_wr_in_sync,
-  output logic                     fifo_wr_in_xfer_req,
+  input  logic                       fifo_wr_in_en,
+  input  logic [DATA_WIDTH_RX-1:0]   fifo_wr_in_data,
+  output logic                       fifo_wr_in_overflow,
+  input  logic                       fifo_wr_in_sync,
+  output logic                       fifo_wr_in_xfer_req,
 
   // Output FIFO interface
-  output logic                     fifo_wr_out_en,
-  output logic [DATA_WIDTH-1:0]    fifo_wr_out_data,
-  input  logic                     fifo_wr_out_overflow,
-  output logic                     fifo_wr_out_sync,
-  input  logic                     fifo_wr_out_xfer_req,
+  output logic                       fifo_wr_out_en,
+  output logic [DATA_WIDTH_RX-1:0]   fifo_wr_out_data,
+  input  logic                       fifo_wr_out_overflow,
+  output logic                       fifo_wr_out_sync,
+  input  logic                       fifo_wr_out_xfer_req,
 
   // AXI BUS
-  input  logic                     s_axi_aresetn,
-  input  logic                     s_axi_aclk,
-  input  logic                     s_axi_awvalid,
-  input  logic [ 9:0]              s_axi_awaddr,
-  input  logic [ 2:0]              s_axi_awprot,
-  output logic                     s_axi_awready,
-  input  logic                     s_axi_wvalid,
-  input  logic [31:0]              s_axi_wdata,
-  input  logic [ 3:0]              s_axi_wstrb,
-  output logic                     s_axi_wready,
-  output logic                     s_axi_bvalid,
-  output logic [ 1:0]              s_axi_bresp,
-  input  logic                     s_axi_bready,
-  input  logic                     s_axi_arvalid,
-  input  logic [ 9:0]              s_axi_araddr,
-  input  logic [ 2:0]              s_axi_arprot,
-  output logic                     s_axi_arready,
-  output logic                     s_axi_rvalid,
-  output logic [ 1:0]              s_axi_rresp,
-  output logic [31:0]              s_axi_rdata,
-  input  logic                     s_axi_rready
+  input  logic                       s_axi_aresetn,
+  input  logic                       s_axi_aclk,
+  input  logic                       s_axi_awvalid,
+  input  logic [ 9:0]                s_axi_awaddr,
+  input  logic [ 2:0]                s_axi_awprot,
+  output logic                       s_axi_awready,
+  input  logic                       s_axi_wvalid,
+  input  logic [31:0]                s_axi_wdata,
+  input  logic [ 3:0]                s_axi_wstrb,
+  output logic                       s_axi_wready,
+  output logic                       s_axi_bvalid,
+  output logic [ 1:0]                s_axi_bresp,
+  input  logic                       s_axi_bready,
+  input  logic                       s_axi_arvalid,
+  input  logic [ 9:0]                s_axi_araddr,
+  input  logic [ 2:0]                s_axi_arprot,
+  output logic                       s_axi_arready,
+  output logic                       s_axi_rvalid,
+  output logic [ 1:0]                s_axi_rresp,
+  output logic [31:0]                s_axi_rdata,
+  input  logic                       s_axi_rready
 );
 
   // Package import
@@ -117,10 +145,12 @@ module axi_time #(
 
   // Control signals
   logic                         time_enable;
-  logic                         time_running;
   logic                         time_sync_ext;
   logic                         time_sync_soft;
-  logic                         time_underrun;
+  logic                         time_running_rx;
+  logic                         time_underrun_rx;
+  logic                         time_running_tx;
+  logic                         time_underrun_tx;
 
   // Current counter value
   logic  [COUNT_WIDTH-1:0]      time_counter;
@@ -129,6 +159,8 @@ module axi_time #(
   logic  [COUNT_WIDTH-1:0]      time_overwrite;
   logic  [COUNT_WIDTH-1:0]      time_rx_capture;
   logic  [COUNT_WIDTH-1:0]      time_rx_trigger;
+  logic  [COUNT_WIDTH-1:0]      time_tx_capture;
+  logic  [COUNT_WIDTH-1:0]      time_tx_trigger;
 
   // Control signals
   logic                         time_overwrite_ready;
@@ -136,6 +168,9 @@ module axi_time #(
   logic                         time_rx_capture_valid;
   logic                         time_rx_trigger_ready;
   logic                         time_rx_trigger_valid;
+  logic                         time_tx_capture_valid;
+  logic                         time_tx_trigger_ready;
+  logic                         time_tx_trigger_valid;
 
   axi_time_regmap #(
     .ID               (ID),
@@ -161,18 +196,25 @@ module axi_time #(
     .time_enable           (time_enable),
     .time_sync_ext         (time_sync_ext),
     .time_sync_soft        (time_sync_soft),
-    .time_running          (time_running),
-    .time_underrun         (time_underrun),
+    .time_running_rx       (time_running_rx),
+    .time_underrun_rx      (time_underrun_rx),
+    .time_running_tx       (time_running_tx),
+    .time_underrun_tx      (time_underrun_tx),
 
     .time_overwrite        (time_overwrite),
     .time_rx_capture       (time_rx_capture),
     .time_rx_trigger       (time_rx_trigger),
+    .time_tx_capture       (time_tx_capture),
+    .time_tx_trigger       (time_tx_trigger),
 
     .time_overwrite_ready  (time_overwrite_ready),
     .time_overwrite_valid  (time_overwrite_valid),
     .time_rx_capture_valid (time_rx_capture_valid),
     .time_rx_trigger_ready (time_rx_trigger_ready),
-    .time_rx_trigger_valid (time_rx_trigger_valid));
+    .time_rx_trigger_valid (time_rx_trigger_valid),
+    .time_tx_capture_valid (time_tx_capture_valid),
+    .time_tx_trigger_ready (time_tx_trigger_ready),
+    .time_tx_trigger_valid (time_tx_trigger_valid));
 
   axi_time_counter #(
     .COUNT_WIDTH      (COUNT_WIDTH),
@@ -196,14 +238,14 @@ module axi_time #(
 
   axi_time_rx #(
     .COUNT_WIDTH(COUNT_WIDTH),
-    .DATA_WIDTH (DATA_WIDTH)
+    .DATA_WIDTH (DATA_WIDTH_RX)
   ) i_rx_time (
     .clk                   (clk),
     .resetn                (resetn),
 
     .time_enable           (time_enable),
-    .time_running          (time_running),
-    .time_underrun         (time_underrun),
+    .time_running          (time_running_rx),
+    .time_underrun         (time_underrun_rx),
 
     .time_counter          (time_counter),
     .time_capture          (time_rx_capture),
@@ -224,6 +266,49 @@ module axi_time #(
     .fifo_wr_out_overflow  (fifo_wr_out_overflow),
     .fifo_wr_out_sync      (fifo_wr_out_sync),
     .fifo_wr_out_xfer_req  (fifo_wr_out_xfer_req));
+
+  axi_time_tx #(
+    .COUNT_WIDTH(COUNT_WIDTH),
+    .DATA_WIDTH (DATA_WIDTH_TX),
+    .AXIS_ID    (AXIS_ID_TX),
+    .AXIS_DEST  (AXIS_DEST_TX)
+  ) i_tx_time (
+    .clk                   (clk),
+    .resetn                (resetn),
+
+    .time_enable           (time_enable),
+    .time_running          (time_running_tx),
+    .time_underrun         (time_underrun_tx),
+
+    .time_counter          (time_counter),
+    .time_capture          (time_tx_capture),
+    .time_trigger          (time_tx_trigger),
+
+    .time_capture_valid    (time_tx_capture_valid),
+    .time_trigger_ready    (time_tx_trigger_ready),
+    .time_trigger_valid    (time_tx_trigger_valid),
+
+    .s_axis_ready          (s_axis_ready),
+    .s_axis_valid          (s_axis_valid),
+    .s_axis_data           (s_axis_data),
+    .s_axis_strb           (s_axis_strb),
+    .s_axis_keep           (s_axis_keep),
+    .s_axis_user           (s_axis_user),
+    .s_axis_id             (s_axis_id),
+    .s_axis_dest           (s_axis_dest),
+    .s_axis_last           (s_axis_last),
+    .s_axis_xfer_req       (s_axis_xfer_req),
+
+    .m_axis_ready          (m_axis_ready),
+    .m_axis_valid          (m_axis_valid),
+    .m_axis_data           (m_axis_data),
+    .m_axis_strb           (m_axis_strb),
+    .m_axis_keep           (m_axis_keep),
+    .m_axis_user           (m_axis_user),
+    .m_axis_id             (m_axis_id),
+    .m_axis_dest           (m_axis_dest),
+    .m_axis_last           (m_axis_last),
+    .m_axis_xfer_req       (m_axis_xfer_req));
 
   up_axi #(
     .AXI_ADDRESS_WIDTH(10)
