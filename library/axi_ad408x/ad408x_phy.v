@@ -151,7 +151,6 @@ module ad408x_phy #(
   wire [NUM_LANES-1:0] data_s6;
   wire [NUM_LANES-1:0] data_s7;
   wire                 adc_clk_in_fast;
-  (* MARK_DEBUG = "TRUE" *) wire                 cnv_in_s;
   (* MARK_DEBUG = "TRUE" *) wire                 cnv_in_io;
 
   assign single_lane = num_lanes[0];
@@ -179,10 +178,6 @@ module ad408x_phy #(
       .I(clk_in_s),
       .O(adc_clk_in_fast));
     
-    // BUFIO i_cnv_buf(
-      // .I(cnv_in_s),
-      // .O(cnv_in_io));
-
     BUFR #(
       .BUFR_DIVIDE("4")
     ) i_div_clk_buf (
@@ -219,29 +214,13 @@ module ad408x_phy #(
   assign serdes_in_p = {data_b_in_p, data_a_in_p};
   assign serdes_in_n = {data_b_in_n, data_a_in_n};
 
-  // cnv reset has to happen a single time after the clocks are stable
-
-  (* MARK_DEBUG = "TRUE" *) reg cnv_in_io_d = 1'b0;
-  (* MARK_DEBUG = "TRUE" *) reg cnv_rise    = 1'b0;
-  (* MARK_DEBUG = "TRUE" *) reg cnv_rise_d  = 1'b0;
-
-  always @(posedge adc_clk_div) begin
-    cnv_in_io_d <= cnv_in_io;
-    cnv_rise_d  <= cnv_rise;
-    if((~cnv_in_io_d & cnv_in_io) & sync_n ) begin
-      cnv_rise <= 1'b1;
-    end else if(~sync_n) begin
-      cnv_rise <= 1'b0;
-    end 
-  end
-
   // Min 2 div_clk cycles once div_clk is running after deassertion of sync
   // Control externally the reset of serdes for precise timing
 
   (* MARK_DEBUG = "TRUE" *) reg [5:0] serdes_reset = 6'b000110;
 
   always @(posedge adc_clk_div or negedge sync_n) begin
-    if((~cnv_rise_d & cnv_rise) || ~sync_n ) begin
+    if(~sync_n) begin
       serdes_reset <= 6'b000110;
     end else begin
       serdes_reset <= {serdes_reset[4:0],1'b0};
@@ -298,6 +277,7 @@ module ad408x_phy #(
   // Assert serdes valid after 2 clock cycles is pulled out of reset
 
   reg [1:0] serdes_valid = 2'b00;
+wire cnv_serdes_valid ;
 
   always @(posedge adc_clk_div) begin
     if(serdes_reset_s) begin
