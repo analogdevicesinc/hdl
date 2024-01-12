@@ -100,6 +100,8 @@ module system_top (
   input           da_n,
   input           db_p,
   input           db_n,
+  input           cnv_in_p,
+  input           cnv_in_n,
 
   // SPI data interface
 
@@ -339,6 +341,8 @@ module system_top (
     .da_n (da_n),
     .db_p (db_p),
     .db_n (db_n),
+    .cnv_in_p(cnv_in_p),
+    .cnv_in_n(cnv_in_n),
     .sync_n (ad9508_sync),
     .sys_cpu_out_clk (sys_cpu_out_clk));
 

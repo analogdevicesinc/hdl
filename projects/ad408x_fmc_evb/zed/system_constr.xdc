@@ -18,6 +18,9 @@ set_property -dict {PACKAGE_PIN P18 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports d
 set_property -dict {PACKAGE_PIN N22 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports db_p]      ; ## G9  FMC_LA03_P      IO_L16P_T2_34
 set_property -dict {PACKAGE_PIN P22 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports db_n]      ; ## G10 FMC_LA03_N      IO_L16N_T2_34 
 
+set_property -dict {PACKAGE_PIN M19 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports cnv_in_p]
+set_property -dict {PACKAGE_PIN M20 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports cnv_in_n]
+
 set_property -dict {PACKAGE_PIN T16 IOSTANDARD LVCMOS25} [get_ports gpio0_fmc]            ; ## H13 FMC_LA07_P      IO_L21P_T3_DQS_34 
 set_property -dict {PACKAGE_PIN L22 IOSTANDARD LVCMOS25} [get_ports gpio1_fmc]            ; ## C11 FMC_LA06_N      IO_L10N_T1_34    
 set_property -dict {PACKAGE_PIN R20 IOSTANDARD LVCMOS25} [get_ports gpio2_fmc]            ; ## D14 FMC_LA09_P      IO_L17P_T2_34       

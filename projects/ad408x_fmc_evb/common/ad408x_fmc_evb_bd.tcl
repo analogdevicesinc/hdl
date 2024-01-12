@@ -12,6 +12,8 @@ create_bd_port -dir I da_n
 create_bd_port -dir I db_p
 create_bd_port -dir I db_n
 create_bd_port -dir I sync_n
+create_bd_port -dir I cnv_in_p
+create_bd_port -dir I cnv_in_n
 create_bd_port -dir O sys_cpu_out_clk
 
 # axi_ad408x
@@ -43,7 +45,8 @@ ad_connect da_n             axi_ad4080_adc/data_a_in_n
 ad_connect db_p             axi_ad4080_adc/data_b_in_p
 ad_connect db_n             axi_ad4080_adc/data_b_in_n
 ad_connect sync_n           axi_ad4080_adc/sync_n
-
+ad_connect cnv_in_p         axi_ad4080_adc/cnv_in_p
+ad_connect cnv_in_n         axi_ad4080_adc/cnv_in_n
 
 ad_connect $sys_iodelay_clk axi_ad4080_adc/delay_clk
 

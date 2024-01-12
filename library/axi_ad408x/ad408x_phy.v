@@ -52,16 +52,19 @@ module ad408x_phy #(
   input                             data_b_in_n,
   input                             data_b_in_p,
 
+  input                             cnv_in_p,
+  input                             cnv_in_n,
+
   // control interface
 
-  input                              sync_n,
+  (* MARK_DEBUG = "TRUE" *) input                              sync_n,
 
     // Assumption:
     //  control bits are static after sync_n de-assertion
 
-  input                             sdr_ddr_n,
-  input        [4:0]                num_lanes,
-  input                             ddr_edge_sel,
+  (* MARK_DEBUG = "TRUE" *) input                             sdr_ddr_n,
+  (* MARK_DEBUG = "TRUE" *) input        [4:0]                num_lanes,
+  (* MARK_DEBUG = "TRUE" *) input                             ddr_edge_sel,
 
   // delay interface(for IDELAY macros)
 
@@ -75,18 +78,18 @@ module ad408x_phy #(
 
   // internal reset and clocks
 
-  input                             adc_rst,
+  (* MARK_DEBUG = "TRUE" *) input                             adc_rst,
   output                            adc_clk,
-  output                            adc_clk_div,
+   output                           adc_clk_div,
 
-  output      [31:0]                adc_data,
-  output                            adc_valid,
+  (* MARK_DEBUG = "TRUE" *) output      [31:0]                adc_data,
+  (* MARK_DEBUG = "TRUE" *) output                            adc_valid,
 
   // Debug interface
 
   output                            clk_in_s,
-  input                             bitslip_enable,
-  output                            sync_status
+  (* MARK_DEBUG = "TRUE" *) input                             bitslip_enable,
+  (* MARK_DEBUG = "TRUE" *) output                            sync_status
 );
 
   // Use always DDR mode for SERDES, useful for SDR mode to adjust capture
@@ -148,6 +151,8 @@ module ad408x_phy #(
   wire [NUM_LANES-1:0] data_s6;
   wire [NUM_LANES-1:0] data_s7;
   wire                 adc_clk_in_fast;
+  (* MARK_DEBUG = "TRUE" *) wire                 cnv_in_s;
+  (* MARK_DEBUG = "TRUE" *) wire                 cnv_in_io;
 
   assign single_lane = num_lanes[0];
   assign sdr_ddr_loc_n = DDR_SUPPORT ? sdr_ddr_n : 1'b1;
@@ -161,6 +166,11 @@ module ad408x_phy #(
     .I(dclk_in_p),
     .IB(dclk_in_n),
     .O(clk_in_s));
+    
+  IBUFDS i_cnv_in_ibuf(
+    .I(cnv_in_p),
+    .IB(cnv_in_n),
+    .O(cnv_in_io));
 
   generate
   if(FPGA_TECHNOLOGY == SEVEN_SERIES) begin
@@ -168,6 +178,10 @@ module ad408x_phy #(
     BUFIO i_clk_buf(
       .I(clk_in_s),
       .O(adc_clk_in_fast));
+    
+    // BUFIO i_cnv_buf(
+      // .I(cnv_in_s),
+      // .O(cnv_in_io));
 
     BUFR #(
       .BUFR_DIVIDE("4")
@@ -205,18 +219,35 @@ module ad408x_phy #(
   assign serdes_in_p = {data_b_in_p, data_a_in_p};
   assign serdes_in_n = {data_b_in_n, data_a_in_n};
 
+  // cnv reset has to happen a single time after the clocks are stable
+
+  (* MARK_DEBUG = "TRUE" *) reg cnv_in_io_d = 1'b0;
+  (* MARK_DEBUG = "TRUE" *) reg cnv_rise    = 1'b0;
+  (* MARK_DEBUG = "TRUE" *) reg cnv_rise_d  = 1'b0;
+
+  always @(posedge adc_clk_div) begin
+    cnv_in_io_d <= cnv_in_io;
+    cnv_rise_d  <= cnv_rise;
+    if((~cnv_in_io_d & cnv_in_io) & sync_n ) begin
+      cnv_rise <= 1'b1;
+    end else if(~sync_n) begin
+      cnv_rise <= 1'b0;
+    end 
+  end
+
   // Min 2 div_clk cycles once div_clk is running after deassertion of sync
   // Control externally the reset of serdes for precise timing
 
-  reg [5:0] serdes_reset = 6'b000110;
+  (* MARK_DEBUG = "TRUE" *) reg [5:0] serdes_reset = 6'b000110;
 
   always @(posedge adc_clk_div or negedge sync_n) begin
-    if(~sync_n) begin
+    if((~cnv_rise_d & cnv_rise) || ~sync_n ) begin
       serdes_reset <= 6'b000110;
     end else begin
       serdes_reset <= {serdes_reset[4:0],1'b0};
     end
   end
+  (* MARK_DEBUG = "TRUE" *) wire serdes_reset_s;
   assign serdes_reset_s = serdes_reset[5];
 
   ad_serdes_in #(
@@ -230,7 +261,7 @@ module ad408x_phy #(
     .SERDES_FACTOR(8),
     .EXT_SERDES_RESET(1)
   ) i_serdes(
-    .rst(serdes_reset_s),
+    .rst(1'b0),
     .ext_serdes_rst(serdes_reset_s),
     .clk(adc_clk_in_fast),
     .div_clk(adc_clk_div),
@@ -386,7 +417,7 @@ module ad408x_phy #(
     .odata(packed_16_20),
     .ovalid(pack16_valid));
 
-  reg [19:0] packed_data;
+    (* MARK_DEBUG = "TRUE" *) reg [19:0] packed_data;
   reg        packed_data_valid;
 
   always @(*) begin
@@ -412,7 +443,7 @@ module ad408x_phy #(
   // Latency from first clock edge post sync_n deasertion to the first valid
   // output of the packer should be constant allowing for a constant rotation every time.
 
-  reg [19:0] packed_data_d;
+  (* MARK_DEBUG = "TRUE" *)  reg [19:0] packed_data_d;
 
   always @(posedge adc_clk_div) begin
     if(packed_data_valid) begin
@@ -420,15 +451,15 @@ module ad408x_phy #(
     end
   end
 
-  reg  [ 4:0]  shift_cnt = 5'd0;
-  reg          shift_cnt_en = 1'b0;
-  reg          sync_status_int = 1'b0;
+  (* MARK_DEBUG = "TRUE" *) reg  [ 4:0]  shift_cnt = 5'd0;
+  (* MARK_DEBUG = "TRUE" *) reg          shift_cnt_en = 1'b0;
+  (* MARK_DEBUG = "TRUE" *) reg          sync_status_int = 1'b0;
   reg          slip_d;
   reg          slip_dd;
 
-  wire         shift_cnt_en_s;
-  wire [ 4:0]  shift_cnt_value;
-  wire [19:0]  pattern_value;
+  (* MARK_DEBUG = "TRUE" *) wire         shift_cnt_en_s;
+  (* MARK_DEBUG = "TRUE" *) wire [ 4:0]  shift_cnt_value;
+  (* MARK_DEBUG = "TRUE" *) wire [19:0]  pattern_value;
 
   always @(posedge adc_clk_div) begin
     slip_d <= bitslip_enable;
@@ -456,8 +487,8 @@ module ad408x_phy #(
     end
   end
 
-  reg [19:0]  adc_data_shifted;
-  reg         packed_data_valid_d;
+  (* MARK_DEBUG = "TRUE" *) reg [19:0]  adc_data_shifted;
+  (* MARK_DEBUG = "TRUE" *) reg         packed_data_valid_d;
 
   always @(posedge adc_clk_div) begin
     adc_data_shifted <= {packed_data_d,packed_data} >> shift_cnt;
