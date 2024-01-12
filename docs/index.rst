@@ -31,8 +31,9 @@ HDL Reference Designs
    AD9434-FMC <projects/ad9434_fmc/index>
    AD9783-EBZ <projects/ad9783_ebz/index>
    ADAQ7980-SDZ <projects/adaq7980_sdz/index>
+   CN0540 <projects/cn0540/index>
    CN0561 <projects/cn0561/index>
-
+   
 .. role:: red
 .. role:: green
 
