@@ -57,6 +57,8 @@ module axi_ad408x #(
   input                   data_a_in_p,
   input                   data_b_in_n,
   input                   data_b_in_p,
+  input                   cnv_in_p,
+  input                   cnv_in_n,
   input                   sync_n,
 
   // output data interface
@@ -280,6 +282,8 @@ module axi_ad408x #(
     .data_a_in_p(data_a_in_p),
     .data_b_in_n(data_b_in_n),
     .data_b_in_p(data_b_in_p),
+    .cnv_in_p(cnv_in_p),
+    .cnv_in_n(cnv_in_n),
     .sync_n(sync_n),
     .sdr_ddr_n(up_adc_sdr_ddr_n),
     .num_lanes(up_adc_num_lanes),
