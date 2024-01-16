@@ -6,39 +6,40 @@ AD7134-FMC HDL project
 Overview
 -------------------------------------------------------------------------------
 
-The :adi:`AD7134` is a quad channel, low noise, simultaneous sampling, precision
-analog-to-digital converter (ADC), based on the continuous time sigma-delta (CTSD)
-modulation scheme. The CTSD architecture inherently rejects signals around the ADC
-aliasing frequency band, giving the device its inherent antialiasing capability, 
-and removes the need for a complex external antialiasing filter.
+The :adi:`AD7134` is a quad channel, low noise, simultaneous sampling,
+precision analog-to-digital converter (ADC), based on the continuous time
+sigma-delta (CTSD) modulation scheme. The CTSD architecture inherently rejects
+signals around the ADC aliasing frequency band, giving the device its inherent
+antialiasing capability, and removes the need for a complex external
+antialiasing filter.
 
-The device has four independent converter channels in parallel, each with a CTSD
-modulator and a digital decimation and filtering path. The bandwidth of each ADC 
-channel ranges from dc to 391.5 kHz, making the device an ideal candidate for 
-universal precision data acquisition solutions supporting a breadth of sensor 
-types, from temperature and pressure to vibration and shock.
+The device has four independent converter channels in parallel, each with a
+CTSD modulator and a digital decimation and filtering path. The bandwidth of
+each ADC channel ranges from dc to 391.5 kHz, making the device an ideal
+candidate for universal precision data acquisition solutions supporting a
+breadth of sensor types, from temperature and pressure to vibration and shock.
 
 It supports a wide range of ODR frequencies, from 0.01 kSPS to 1496 kSPS
-with less than 0.01 SPS adjustment resolution, allowing the user to granularly vary
-sampling speed to achieve coherent sampling. The adc offers three main digital 
-filter profile options: a wideband low ripple filter (2.5 kSPS to 374 kSPS),
-a fast responding sinc3 filter (0.01 kSPS to 1496 kSPS), and a balanced sinc6 filter 
-with an ODR range 2.5 kSPS to 1.496 MSPS.
+with less than 0.01 SPS adjustment resolution, allowing the user to granularly
+vary sampling speed to achieve coherent sampling. The adc offers three main
+digital filter profile options: a wideband low ripple filter (2.5 kSPS to 374
+kSPS), a fast responding sinc3 filter (0.01 kSPS to 1496 kSPS), and a balanced
+sinc6 filter with an ODR range 2.5 kSPS to 1.496 MSPS.
 
 
-The :adi:`AD7134` supports two device configuration schemes: serial peripheral 
-interface (SPI) and hardware pin configuration (pin control mode). The SPI control 
-mode offers access to all the features and configuration options available on the chip.
-Pin control mode offers the benefit of simplifying the device configuration, 
-enabling the device to operate autonomously after power-up operating in a 
-standalone mode. In addition to the optional SPI, it has a flexible and 
-independent data interface for transmitting the ADC output data.
+The :adi:`AD7134` supports two device configuration schemes: serial peripheral
+interface (SPI) and hardware pin configuration (pin control mode). The SPI
+control mode offers access to all the features and configuration options
+available on the chip. Pin control mode offers the benefit of simplifying the
+device configuration, enabling the device to operate autonomously after power
+-up operating in a standalone mode. In addition to the optional SPI, it has a
+flexible and independent data interface for transmitting the ADC output data.
 
-The EVAL-AD7134FMCZ evaluation kit features the AD7134 24-bit, 4-channel, 
-simultaneous sampling adc. Two on-board AD7134 ADCs are included to demonstrate 
-multidevice simultaneous sampling. The HDL reference design provides all the 
-interfaces necessary to interact with the device using a Xilinx FPGA 
-development board.
+The EVAL-AD7134FMCZ evaluation kit features the AD7134 24-bit, 4-channel,
+simultaneous sampling adc. Two on-board AD7134 ADCs are included to
+demonstrate multidevice simultaneous sampling. The HDL reference design
+provides all the interfaces necessary to interact with the device using a
+Xilinx FPGA development board.
 
 Supported boards
 -------------------------------------------------------------------------------
@@ -80,14 +81,14 @@ The data path and clock domains are depicted in the below diagrams:
 Jumper setup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-================== ========= ====================================
+================== ========= ===================================
 Jumper/Solder link Position  Description
-================== ========= ====================================
-JP14	             Mounted	 DEC0/DCLKIO (Device 1) [DCLK Input]  
-JP15	             Mounted	 DEC0/DCLKIO (Device 2) [DCLK Input]
-JP16	             Mounted	 MODE (Device 1) [Slave Mode]
-JP17	             Mounted	 MODE (Device 2) [Slave Mode]
-================== ========= ====================================
+================== ========= ===================================
+JP14               Mounted   DEC0/DCLKIO (Device 1) [DCLK Input]
+JP15               Mounted   DEC0/DCLKIO (Device 2) [DCLK Input]
+JP16               Mounted   MODE (Device 1) [Slave Mode]
+JP17               Mounted   MODE (Device 2) [Slave Mode]
+================== ========= ===================================
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -203,7 +204,8 @@ the HDL repository, and then build the project as follows:.
    user@analog:~$ cd hdl/projects/ad7134_fmc/zed
    user@analog:~/hdl/projects/ad7134_fmc/zed$ make
 
-A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
+A more comprehensive build guide can be found in the :ref:`build_hdl`
+user guide.
 
 Resources
 -------------------------------------------------------------------------------
@@ -233,9 +235,21 @@ HDL related
    * - AXI_DMAC
      - :git-hdl:`library/axi_dmac`
      - :ref:`here <axi_dmac>`
+  * - AXI_HDMI_TX
+     - :git-hdl:`library/axi_hdmi_tx`
+     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_hdmi_tx>`
+   * - AXI_I2S_ADI
+     - :git-hdl:`library/axi_i2s_adi`
+     - ---
    * - AXI_PWM_GEN
      - :git-hdl:`library/axi_pwm_gen`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_pwm_gen>`
+   * - AXI_SDDIF_TX
+     - :git-hdl:`library/axi_spdif_tx`
+     - ---
+   * - AXI_SYSID
+     - :git-hdl:`library/axi_sysid`
+     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
    * - AXI_SPI_ENGINE
      - :git-hdl:`library/spi_engine/axi_spi_engine`
      - :ref:`here <spi_engine axi>`
@@ -248,19 +262,22 @@ HDL related
    * - SPI_ENGINE_OFFLOAD
      - :git-hdl:`library/spi_engine/spi_engine_offload`
      - :ref:`here <spi_engine offload>`
+   * - AXI_SYSID_ROM
+     - :git-hdl:`library/sysid_rom`
+     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
+   * - UTIL_I2C_MIXER
+     - :git-hdl:`library/util_i2c_mixer`
 
 -  :ref:`SPI Engine Framework documentation <spi_engine>`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-**No-OS support**
+-  :git-no-os:`AD7134-FMC No-OS project source code <projects/ad713x_fmcz>`
 
--  No-OS driver: :git-no-os:`AD7134 driver <drivers/adc/ad713x>`
+-  :git-no-os:`AD4134/AD7134 No-OS Driver source code <drivers/adc/ad713x>`
 
--  No-OS project source code: :git-no-os:`AD7134-FMC project <projects/ad713x_fmcz>`
-
-No-OS driver documentation: :dokuwiki:`AD7134 No-OS Software [Wiki] <resources/tools-software/uc-drivers/ad713x>`
+-  :dokuwiki:`AD4134/AD7134 No-OS Driver documentation <resources/tools-software/uc-drivers/ad713x>`
 
 -  :dokuwiki:`How to build No-OS <resources/no-os/build>`
 
