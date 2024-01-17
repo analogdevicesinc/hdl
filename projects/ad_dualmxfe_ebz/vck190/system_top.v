@@ -43,66 +43,127 @@ module system_top  #(
   parameter JESD_MODE = "8B10B",
   parameter GENERATE_LINK_CLK = 1
 ) (
-  input         sys_clk_n,
-  input         sys_clk_p,
-  output        ddr4_act_n,
-  output [16:0] ddr4_adr,
-  output  [1:0] ddr4_ba,
-  output  [1:0] ddr4_bg,
-  output        ddr4_ck_c,
-  output        ddr4_ck_t,
-  output        ddr4_cke,
-  output        ddr4_cs_n,
-  inout   [7:0] ddr4_dm_n,
-  inout  [63:0] ddr4_dq,
-  inout   [7:0] ddr4_dqs_c,
-  inout   [7:0] ddr4_dqs_t,
-  output        ddr4_odt,
-  output        ddr4_reset_n,
-  // GPIOs
-  output  [3:0] gpio_led,
-  input   [3:0] gpio_dip_sw,
-  input   [1:0] gpio_pb,
+  //input         sys_clk_n,
+  //input         sys_clk_p,
+  //output        ddr4_act_n,
+  //output [16:0] ddr4_adr,
+  //output  [1:0] ddr4_ba,
+  //output  [1:0] ddr4_bg,
+  //output        ddr4_ck_c,
+  //output        ddr4_ck_t,
+  //output        ddr4_cke,
+  //output        ddr4_cs_n,
+  //inout   [7:0] ddr4_dm_n,
+  //inout  [63:0] ddr4_dq,
+  //inout   [7:0] ddr4_dqs_c,
+  //inout   [7:0] ddr4_dqs_t,
+  //output        ddr4_odt,
+  //output        ddr4_reset_n,
+  //// GPIOs
+  //output  [3:0] gpio_led,
+  //input   [3:0] gpio_dip_sw,
+  //input   [1:0] gpio_pb,
 
-  // FMC HPC IOs
-  input  [1:0]  agc0,
-  input  [1:0]  agc1,
-  input  [1:0]  agc2,
-  input  [1:0]  agc3,
-  input         clkin6_n,
-  input         clkin6_p,
-  input         clkin10_n,
-  input         clkin10_p,
-  input         fpga_refclk_in_n,
-  input         fpga_refclk_in_p,
-  input  [RX_JESD_L*RX_NUM_LINKS-1:0]  rx_data_n,
-  input  [RX_JESD_L*RX_NUM_LINKS-1:0]  rx_data_p,
-  output [TX_JESD_L*TX_NUM_LINKS-1:0]  tx_data_n,
-  output [TX_JESD_L*TX_NUM_LINKS-1:0]  tx_data_p,
-  input                                fpga_syncin_0_n,
-  input                                fpga_syncin_0_p,
-  inout                                fpga_syncin_1_n,
-  inout                                fpga_syncin_1_p,
-  output                               fpga_syncout_0_n,
-  output                               fpga_syncout_0_p,
-  inout                                fpga_syncout_1_n,
-  inout                                fpga_syncout_1_p,
-  inout  [10:0] gpio,
-  inout         hmc_gpio1,
-  output        hmc_sync,
-  input  [1:0]  irqb,
-  output        rstb,
-  output [1:0]  rxen,
-  output        spi0_csb,
-  input         spi0_miso,
-  output        spi0_mosi,
-  output        spi0_sclk,
-  output        spi1_csb,
-  output        spi1_sclk,
-  inout         spi1_sdio,
-  input         sysref2_n,
-  input         sysref2_p,
-  output [1:0]  txen
+  // dual_mxfe specific
+
+  output        fpga_vadj,
+  output        fan_pwm,
+  output        fmc_fan_tach,
+
+  output        adf4377_ce,
+  output        adf4377_csb,
+  output        adf4377_enclk1,
+  output        adf4377_enclk2,
+  output        adf4377_sclk,
+  output        adf4377_sdio,
+  input         adf4377_sdo,
+
+  // reference clock
+  input         fpga_clk0_p,
+  input         fpga_clk0_n,
+
+  // was forgotten
+  input         fpga_clk1_p,
+  input         fpga_clk1_n,
+
+  // rx_device_clk
+  input         fpga_clk2_p,
+  input         fpga_clk2_n,
+
+  // tx_device_clk
+  input         fpga_clk3_p,
+  input         fpga_clk3_n,
+
+  // unused so far
+  input         fpga_clk4_p,
+  input         fpga_clk4_n,
+
+  // sysref for RX
+  input         fpga_sysref0_p,
+  input         fpga_sysref0_n,
+
+  // sysref for TX
+  input         fpga_sysref1_p,
+  input         fpga_sysref1_n,
+
+  input  [RX_JESD_L-1:0] serdes0_m2c_p,
+  input  [RX_JESD_L-1:0] serdes0_m2c_n,
+
+  output [TX_JESD_L-1:0] serdes0_c2m_p,
+  output [TX_JESD_L-1:0] serdes0_c2m_n,
+
+  input  [RX_JESD_L-1:0] serdes1_m2c_p,
+  input  [RX_JESD_L-1:0] serdes1_m2c_n,
+
+  output [TX_JESD_L-1:0] serdes1_c2m_p,
+  output [TX_JESD_L-1:0] serdes1_c2m_n,
+
+  // mxfe0_sync signals
+
+  output mxfe0_syncin_p_0,
+  output mxfe0_syncin_n_0,
+  output fmc_mxfe0_syncin_p_1,
+
+  input mxfe0_syncout_p_0,
+  input mxfe0_syncout_n_0,
+  input fmc_mxfe0_syncout_p_1,
+
+  // mxfe1_sync signals
+
+  output mxfe1_syncin_p_0,
+  output mxfe1_syncin_n_1,
+  output fmc_mxfe1_syncin_p_1,
+
+  input mxfe1_syncout_p_0,
+  input mxfe1_syncout_n_1,
+  input fmc_mxfe1_syncout_p_1,
+
+  output  [8:0] mxfe0_gpio,
+
+  output  [8:0] mxfe1_gpio,
+
+  output        hmc7044_reset,
+  output        hmc7044_sclk,
+  output        hmc7044_slen,
+  input         hmc7044_miso,
+  output        hmc7044_mosi,
+
+  input         m0_irq,
+  input         m1_irq,
+
+  output  [1:0] mxfe_sclk,
+  output  [1:0] mxfe_cs,
+  input   [1:0] mxfe_miso,
+  output  [1:0] mxfe_mosi,
+
+  output  [1:0] mxfe_reset,
+  output  [1:0] mxfe_rx_en0,
+  output  [1:0] mxfe_rx_en1,
+  output  [1:0] mxfe_tx_en0,
+  output  [1:0] mxfe_tx_en1,
+
+  output [22:0] gpio_fmcp_p,
+  output [22:0] gpio_fmcp_n
 );
 
   // internal signals
@@ -118,16 +179,7 @@ module system_top  #(
   wire            spi1_miso;
 
   wire            sysref;
-  wire    [TX_NUM_LINKS-1:0]   tx_syncin;
-  wire    [RX_NUM_LINKS-1:0]   rx_syncout;
 
-  wire    [7:0]   rx_data_p_loc;
-  wire    [7:0]   rx_data_n_loc;
-  wire    [7:0]   tx_data_p_loc;
-  wire    [7:0]   tx_data_n_loc;
-
-  wire            clkin6;
-  wire            clkin10;
   wire            tx_device_clk;
   wire            rx_device_clk;
   wire            link_clk;
@@ -138,47 +190,73 @@ module system_top  #(
   wire            ref_clk_odiv;
 
   // instantiations
+
   IBUFDS_GTE5 #(
     .REFCLK_HROW_CK_SEL (0)
   ) i_ibufds_ref_clk (
     .CEB (1'b0),
-    .I (fpga_refclk_in_p),
-    .IB (fpga_refclk_in_n),
+    .I (fpga_clk0_p),
+    .IB (fpga_clk0_n),
     .O (ref_clk),
     .ODIV2 (ref_clk_odiv));
 
-  IBUFDS i_ibufds_sysref (
-    .I (sysref2_p),
-    .IB (sysref2_n),
-    .O (sysref));
+  // sysref
 
-  IBUFDS i_ibufds_tx_device_clk (
-    .I (clkin6_p),
-    .IB (clkin6_n),
-    .O (clkin6));
+  IBUFDS i_ibufds_sysref0 (
+    .I (fpga_sysref0_p),
+    .IB (fpga_sysref0_n),
+    .O (sysref0));
+
+  IBUFDS i_ibufds_sysref1 (
+    .I (fpga_sysref1_p),
+    .IB (fpga_sysref1_n),
+    .O (sysref1));
+
+  // RX
 
   IBUFDS i_ibufds_rx_device_clk (
-    .I (clkin10_p),
-    .IB (clkin10_n),
-    .O (clkin10));
-
-  IBUFDS i_ibufds_syncin_0 (
-    .I (fpga_syncin_0_p),
-    .IB (fpga_syncin_0_n),
-    .O (tx_syncin[0]));
-
-  OBUFDS i_obufds_syncout_0 (
-    .I (rx_syncout[0]),
-    .O (fpga_syncout_0_p),
-    .OB (fpga_syncout_0_n));
-
-  BUFG i_tx_device_clk (
-    .I (clkin6),
-    .O (tx_device_clk));
+    .I (fpga_clk2_p),
+    .IB (fpga_clk2_n),
+    .O (fpga_clk2));
 
   BUFG i_rx_device_clk (
-    .I (clkin10),
+    .I (fpga_clk2),
     .O (rx_device_clk));
+
+  // TX
+
+  IBUFDS i_ibufds_tx_device_clk (
+    .I (fpga_clk3_p),
+    .IB (fpga_clk3_n),
+    .O (fpga_clk3));
+
+  BUFG i_tx_device_clk (
+    .I (fpga_clk3),
+    .O (tx_device_clk));
+
+  // SYNCIN
+
+  IBUFDS i_ibufds_mxfe0_syncin (
+    .I (mxfe0_syncin_p_0),
+    .IB (mxfe0_syncin_n_0),
+    .O (mxfe0_syncin));
+
+  IBUFDS i_ibufds_mxfe1_syncin (
+    .I (mxfe1_syncin_p_1),
+    .IB (mxfe1_syncin_n_1),
+    .O (mxfe1_syncin));
+
+  // SYNCOUT
+
+  OBUFDS i_obufds_mxfe0_syncout (
+    .I (mxfe0_syncout),
+    .O (mxfe0_syncout_p_0),
+    .OB (mxfe0_syncout_n_0));
+
+  OBUFDS i_obufds_mxfe1_syncout (
+    .I (mxfe1_syncout),
+    .O (mxfe1_syncout_p_1),
+    .OB (mxfe1_syncout_n_1));
 
   assign link_clk = (GENERATE_LINK_CLK == 0)? ref_clk_odiv : 1'b0;
 
