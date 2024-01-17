@@ -59,6 +59,8 @@ if {$JESD_MODE == "8B10B"} {
 }
 
 # These are max values specific to the board
+# TODO: now limiting to 4 lanes per link for starters but it has to be specific
+# to each mxfe in the end
 set MAX_RX_LANES_PER_LINK 4
 set MAX_TX_LANES_PER_LINK 4
 set MAX_RX_LINKS 2
