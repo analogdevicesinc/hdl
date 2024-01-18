@@ -89,9 +89,11 @@ clean:
 		$(HL)$(PROJECT_NAME)$(NC) project)
 	-rm -Rf ${DIR_NAME}
 
-clean-all: TARGET:=clean
-clean-all: clean $(M_DEPS)
+clean-all: clean
 	@rm -Rf $(CLEAN_DIRS)
+	@for lib in $(LIB_DEPS); do \
+		$(MAKE) -C $(HDL_LIBRARY_PATH)$${lib} clean; \
+	done
 
 MODE ?= "default"
 
