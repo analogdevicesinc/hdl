@@ -24,9 +24,9 @@ ADC driver is a high linearity FDA :adi:`ADA4945-1` and a 200mA programmable
 the switch :adi:`ADG5421F`.
 
 The design have a SPI Engine instance to control and acquire data from the 
-:adi:`AD7768-1` 24-bit precisions ADC, providing support to capture continuous samples
-at maximum sampling rate. Currently the design support FPGA carriers from both
-Intel and Xilinx.
+:adi:`AD7768-1` 24-bit precisions ADC, providing support to capture continuous
+samples at maximum sampling rate. Currently the design support FPGA carriers
+from both Intel and Xilinx.
 
 Supported boards
 -------------------------------------------------------------------------------
@@ -190,7 +190,7 @@ The Software GPIO number is calculated as follows:
      - 32
      - 86
 
--  De10-Nano: the offset is -32
+-  De10-Nano: the offset is 32
 
 .. list-table::
    :widths: 25 25 25 25
