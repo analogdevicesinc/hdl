@@ -9,12 +9,14 @@ proc create_versal_phy {
   {rx_lane_rate 24.75}
   {tx_lane_rate 24.75}
   {ref_clock 375}
+  {transceiver GTY}
   {intf_cfg RXTX}
 } {
 
 set num_quads [expr int(round(1.0 * $num_lanes / 4))]
 set rx_progdiv_clock [format %.3f [expr $rx_lane_rate * 1000 / 66]]
 set tx_progdiv_clock [format %.3f [expr $tx_lane_rate * 1000 / 66]]
+set preset ${transceiver}-JESD204_64B66B
 
 if {$intf_cfg == "RX"} {
   set gt_direction "SIMPLEX_RX"
@@ -43,11 +45,11 @@ create_bd_pin -dir I ${ip_name}/gtreset_in
 ad_ip_instance gt_bridge_ip ${ip_name}/gt_bridge_ip_0
 set_property -dict [list \
   CONFIG.BYPASS_MODE {true} \
-  CONFIG.IP_PRESET {GTY-JESD204_64B66B} \
+  CONFIG.IP_PRESET $preset \
   CONFIG.IP_GT_DIRECTION ${gt_direction} \
   ${no_lanes_property} ${num_lanes} \
   CONFIG.IP_LR0_SETTINGS [list \
-     PRESET GTY-JESD204_64B66B \
+     PRESET $preset \
      INTERNAL_PRESET JESD204_64B66B \
      GT_TYPE GTY \
      GT_DIRECTION $gt_direction \
