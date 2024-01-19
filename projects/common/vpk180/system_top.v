@@ -36,7 +36,6 @@
 `timescale 1ns/100ps
 
 module system_top (
-
   input           sys_clk_n,
   input           sys_clk_p,
 
