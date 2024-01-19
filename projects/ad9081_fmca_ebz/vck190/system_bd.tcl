@@ -14,6 +14,7 @@ source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
 
 # use versal transceiver wizard
 set ADI_PHY_SEL 0
+set TRANSCEIVER_TYPE GTY
 
 adi_project_files ad9081_fmca_ebz_vck190 [list \
   "$ad_hdl_dir/library/util_cdc/sync_bits.v" ]

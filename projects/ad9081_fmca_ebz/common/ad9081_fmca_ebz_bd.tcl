@@ -31,6 +31,10 @@ if {![info exists INTF_CFG]} {
   set INTF_CFG RXTX
 }
 
+if {![info exists TRANSCEIVER_TYPE]} {
+  set TRANSCEIVER_TYPE GTY
+}
+
 # Common parameter for TX and RX
 set JESD_MODE  $ad_project_params(JESD_MODE)
 set RX_LANE_RATE $ad_project_params(RX_LANE_RATE)
@@ -193,13 +197,13 @@ if {$ADI_PHY_SEL == 1} {
   switch $INTF_CFG {
     "RXTX" {
       # Assumption is that number of Tx and Rx lane is the same
-      create_versal_phy jesd204_phy $TX_NUM_OF_LANES $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE $INTF_CFG
+      create_versal_phy jesd204_phy $TX_NUM_OF_LANES $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE $TRANSCEIVER_TYPE $INTF_CFG
     }
     "RX" {
-      create_versal_phy jesd204_phy $RX_NUM_OF_LANES $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE $INTF_CFG
+      create_versal_phy jesd204_phy $RX_NUM_OF_LANES $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE $TRANSCEIVER_TYPE $INTF_CFG
     }
     "TX" {
-      create_versal_phy jesd204_phy $TX_NUM_OF_LANES $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE $INTF_CFG
+      create_versal_phy jesd204_phy $TX_NUM_OF_LANES $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE $TRANSCEIVER_TYPE $INTF_CFG
     }
   }
 
