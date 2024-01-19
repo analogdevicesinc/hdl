@@ -143,23 +143,23 @@ set_property -dict {PACKAGE_PIN P6   IOSTANDARD LVDS15} [get_ports serdes0_c2m_n
 set_property -dict {PACKAGE_PIN L8   IOSTANDARD LVDS15} [get_ports serdes0_c2m_n[6]]        ; ## Y27  FMC1_DP11_C2M_N       GTY_TXN3_203
 set_property -dict {PACKAGE_PIN M6   IOSTANDARD LVDS15} [get_ports serdes0_c2m_n[7]]        ; ## Z25  FMC1_DP10_C2M_N       GTY_TXN2_203
 
-set_property -dict {PACKAGE_PIN AA4  IOSTANDARD LVDS15} [get_ports serdes0_m2c_p[0]]        ; ## A2   FMC1_DP1_M2C_P        GTY_RXP1_201
-set_property -dict {PACKAGE_PIN AB2  IOSTANDARD LVDS15} [get_ports serdes0_m2c_p[1]]        ; ## C6   FMC1_DP0_M2C_P        GTY_RXP0_201
-set_property -dict {PACKAGE_PIN P2   IOSTANDARD LVDS15} [get_ports serdes0_m2c_p[2]]        ; ## B8   FMC1_DP8_M2C_P        GTY_RXP0_203
-set_property -dict {PACKAGE_PIN W4   IOSTANDARD LVDS15} [get_ports serdes0_m2c_p[3]]        ; ## A10  FMC1_DP3_M2C_P        GTY_RXP3_201
-set_property -dict {PACKAGE_PIN L4   IOSTANDARD LVDS15} [get_ports serdes0_m2c_p[4]]        ; ## Z12  FMC1_DP11_M2C_P       GTY_RXP3_203
-set_property -dict {PACKAGE_PIN M2   IOSTANDARD LVDS15} [get_ports serdes0_m2c_p[5]]        ; ## Y10  FMC1_DP10_M2C_P       GTY_RXP2_203
-set_property -dict {PACKAGE_PIN Y2   IOSTANDARD LVDS15} [get_ports serdes0_m2c_p[6]]        ; ## A6   FMC1_DP2_M2C_P        GTY_RXP2_201
-set_property -dict {PACKAGE_PIN N4   IOSTANDARD LVDS15} [get_ports serdes0_m2c_p[7]]        ; ## B4   FMC1_DP9_M2C_P        GTY_RXP1_203
+set_property -dict {PACKAGE_PIN AA4  IOSTANDARD LVDS15 DIFF_TERM TRUE} [get_ports serdes0_m2c_p[0]]        ; ## A2   FMC1_DP1_M2C_P        GTY_RXP1_201
+set_property -dict {PACKAGE_PIN AB2  IOSTANDARD LVDS15 DIFF_TERM TRUE} [get_ports serdes0_m2c_p[1]]        ; ## C6   FMC1_DP0_M2C_P        GTY_RXP0_201
+set_property -dict {PACKAGE_PIN P2   IOSTANDARD LVDS15 DIFF_TERM TRUE} [get_ports serdes0_m2c_p[2]]        ; ## B8   FMC1_DP8_M2C_P        GTY_RXP0_203
+set_property -dict {PACKAGE_PIN W4   IOSTANDARD LVDS15 DIFF_TERM TRUE} [get_ports serdes0_m2c_p[3]]        ; ## A10  FMC1_DP3_M2C_P        GTY_RXP3_201
+set_property -dict {PACKAGE_PIN L4   IOSTANDARD LVDS15 DIFF_TERM TRUE} [get_ports serdes0_m2c_p[4]]        ; ## Z12  FMC1_DP11_M2C_P       GTY_RXP3_203
+set_property -dict {PACKAGE_PIN M2   IOSTANDARD LVDS15 DIFF_TERM TRUE} [get_ports serdes0_m2c_p[5]]        ; ## Y10  FMC1_DP10_M2C_P       GTY_RXP2_203
+set_property -dict {PACKAGE_PIN Y2   IOSTANDARD LVDS15 DIFF_TERM TRUE} [get_ports serdes0_m2c_p[6]]        ; ## A6   FMC1_DP2_M2C_P        GTY_RXP2_201
+set_property -dict {PACKAGE_PIN N4   IOSTANDARD LVDS15 DIFF_TERM TRUE} [get_ports serdes0_m2c_p[7]]        ; ## B4   FMC1_DP9_M2C_P        GTY_RXP1_203
 
-set_property -dict {PACKAGE_PIN AA3  IOSTANDARD LVDS15} [get_ports serdes0_m2c_n[0]]        ; ## A3   FMC1_DP1_M2C_N        GTY_RXN1_201
-set_property -dict {PACKAGE_PIN AB1  IOSTANDARD LVDS15} [get_ports serdes0_m2c_n[1]]        ; ## C7   FMC1_DP0_M2C_N        GTY_RXN0_201
-set_property -dict {PACKAGE_PIN P1   IOSTANDARD LVDS15} [get_ports serdes0_m2c_n[2]]        ; ## B9   FMC1_DP8_M2C_N        GTY_RXN0_203
-set_property -dict {PACKAGE_PIN W3   IOSTANDARD LVDS15} [get_ports serdes0_m2c_n[3]]        ; ## A11  FMC1_DP3_M2C_N        GTY_RXN3_201
-set_property -dict {PACKAGE_PIN L3   IOSTANDARD LVDS15} [get_ports serdes0_m2c_n[4]]        ; ## Z13  FMC1_DP11_M2C_N       GTY_RXN3_203
-set_property -dict {PACKAGE_PIN M1   IOSTANDARD LVDS15} [get_ports serdes0_m2c_n[5]]        ; ## Y11  FMC1_DP10_M2C_N       GTY_RXN2_203
-set_property -dict {PACKAGE_PIN Y1   IOSTANDARD LVDS15} [get_ports serdes0_m2c_n[6]]        ; ## A7   FMC1_DP2_M2C_N        GTY_RXN2_201
-set_property -dict {PACKAGE_PIN N3   IOSTANDARD LVDS15} [get_ports serdes0_m2c_n[7]]        ; ## B5   FMC1_DP9_M2C_N        GTY_RXN1_203
+set_property -dict {PACKAGE_PIN AA3  IOSTANDARD LVDS15 DIFF_TERM TRUE} [get_ports serdes0_m2c_n[0]]        ; ## A3   FMC1_DP1_M2C_N        GTY_RXN1_201
+set_property -dict {PACKAGE_PIN AB1  IOSTANDARD LVDS15 DIFF_TERM TRUE} [get_ports serdes0_m2c_n[1]]        ; ## C7   FMC1_DP0_M2C_N        GTY_RXN0_201
+set_property -dict {PACKAGE_PIN P1   IOSTANDARD LVDS15 DIFF_TERM TRUE} [get_ports serdes0_m2c_n[2]]        ; ## B9   FMC1_DP8_M2C_N        GTY_RXN0_203
+set_property -dict {PACKAGE_PIN W3   IOSTANDARD LVDS15 DIFF_TERM TRUE} [get_ports serdes0_m2c_n[3]]        ; ## A11  FMC1_DP3_M2C_N        GTY_RXN3_201
+set_property -dict {PACKAGE_PIN L3   IOSTANDARD LVDS15 DIFF_TERM TRUE} [get_ports serdes0_m2c_n[4]]        ; ## Z13  FMC1_DP11_M2C_N       GTY_RXN3_203
+set_property -dict {PACKAGE_PIN M1   IOSTANDARD LVDS15 DIFF_TERM TRUE} [get_ports serdes0_m2c_n[5]]        ; ## Y11  FMC1_DP10_M2C_N       GTY_RXN2_203
+set_property -dict {PACKAGE_PIN Y1   IOSTANDARD LVDS15 DIFF_TERM TRUE} [get_ports serdes0_m2c_n[6]]        ; ## A7   FMC1_DP2_M2C_N        GTY_RXN2_201
+set_property -dict {PACKAGE_PIN N3   IOSTANDARD LVDS15 DIFF_TERM TRUE} [get_ports serdes0_m2c_n[7]]        ; ## B5   FMC1_DP9_M2C_N        GTY_RXN1_203
 
 # serdes1
 
