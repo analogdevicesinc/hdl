@@ -98,11 +98,11 @@ module system_top  #(
   input         fpga_clk4_p,
   input         fpga_clk4_n,
 
-  // sysref for RX
+  // sysref for mxfe0
   input         fpga_sysref0_p,
   input         fpga_sysref0_n,
 
-  // sysref for TX
+  // sysref for mxfe1
   input         fpga_sysref1_p,
   input         fpga_sysref1_n,
 
