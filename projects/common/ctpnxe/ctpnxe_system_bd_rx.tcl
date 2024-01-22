@@ -44,16 +44,12 @@ adi_ip_instance -vlnv {latticesemi.com:ip:i2c0:1.5.0} \
 adi_ip_instance -vlnv {latticesemi.com:module:pll0:1.7.0} \
   -ip_path "$preinst_ip_mod_dir/ip/lifcl/pll" \
   -ip_params {
-    "gui_refclk_freq": 50.0
+    "gui_refclk_freq": 125.0,
+    "gui_clk_os_en": true,
+    "gui_clk_os_byp": false,
+    "gui_clk_os_freq": 10.0
     } \
   -ip_iname "pll0_inst"
-adi_ip_instance -vlnv {latticesemi.com:module:osc0:1.4.0} \
-  -ip_path "$preinst_ip_mod_dir/ip/lifcl/osc" \
-  -ip_params {
-    "HF_CLK_FREQ": 50.0,
-    "LF_OUTPUT_EN": "ENABLED"
-    } \
-  -ip_iname "osc0_inst"
 
 adi_ip_instance -vlnv {latticesemi.com:ip:axi_interc0:1.2.0} \
   -ip_path "$ip_download_path/latticesemi.com_ip_axi_interconnect_1.2.0" \
@@ -103,6 +99,8 @@ sbp_add_gluelogic -name equation_module_inst -logicinfo [sbp_create_glue_logic e
 }
 }]
 
+sbp_add_port -direction in clk_125
+
 sbp_add_port -direction in rstn_i
 sbp_add_port -direction in rxd_i
 sbp_add_port -direction out txd_o
@@ -130,6 +128,12 @@ sbp_connect_net "$project_name/cpu0_inst/system_resetn_o" \
   "$project_name/gpio0_inst/resetn_i"
 
 #clk
+sbp_connect_net "$project_name/clk_125" \
+  "$project_name/pll0_inst/clki_i"
+
+sbp_connect_net "$project_name/pll0_inst/clkos_o" \
+  "$project_name/cpu0_inst/clk_realtime_i"
+
 sbp_connect_net "$project_name/pll0_inst/clkop_o" \
   "$project_name/cpu0_inst/clk_system_i" \
   "$project_name/sysmem0_inst/ahbl_hclk_i" \
@@ -143,7 +147,7 @@ sbp_connect_net "$project_name/pll0_inst/clkop_o" \
   "$project_name/i2c0_inst/clk_i" \
   "$project_name/gpio0_inst/clk_i"
 
-#osc rst
+#rst
 sbp_connect_net "$project_name/equation_module_inst/A" \
   "$project_name/pll0_inst/lock_o"
 sbp_connect_net "$project_name/equation_module_inst/B" \
@@ -151,10 +155,6 @@ sbp_connect_net "$project_name/equation_module_inst/B" \
   "$project_name/rstn_i"
 sbp_connect_net "$project_name/equation_module_inst/O" \
   "$project_name/cpu0_inst/rstn_i"
-sbp_connect_net "$project_name/osc0_inst/hf_clk_out_o" \
-  "$project_name/pll0_inst/clki_i"
-sbp_connect_net "$project_name/osc0_inst/lf_clk_out_o" \
-  "$project_name/cpu0_inst/clk_realtime_i"
 
 #uart
 sbp_connect_net "$project_name/cpu0_inst/uart_rxd_i" \
@@ -217,8 +217,6 @@ sbp_connect_interface_net "$project_name/i2c0_inst/INTR" \
   "$project_name/cpu0_inst/IRQ_S3"
 sbp_connect_interface_net "$project_name/gpio0_inst/INTR" \
   "$project_name/cpu0_inst/IRQ_S4"
-
-sbp_connect_constant -constant 1'B1 "$project_name/osc0_inst/hf_out_en_i"
 
 sbp_assign_addr_seg -offset 'h10003000 "$project_name/axi_apb1_inst/APB3_M" \
   "$project_name/gpio0_inst/APB_S0"
