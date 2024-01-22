@@ -63,7 +63,7 @@ adi_ip_instance -vlnv {latticesemi.com:module:pll0:1.7.0} \
     "gui_en_frac_n": false,
     "gui_en_ssc": false,
     "gui_en_int_fbkdel_sel": false,
-    "gui_refclk_freq": 25.0,
+    "gui_refclk_freq": 125.0,
     "gui_clk_op_freq": 75.0,
     "gui_clk_op_tol": 0.0,
     "gui_clk_os_en": false,
@@ -72,12 +72,7 @@ adi_ip_instance -vlnv {latticesemi.com:module:pll0:1.7.0} \
     "gui_en_pll_lock": true
   } \
   -ip_iname "pll0_inst"
-adi_ip_instance -vlnv {latticesemi.com:module:osc0:1.4.0} \
-  -ip_path "$preinst_ip_mod_dir/ip/lifcl/osc" \
-  -ip_params {
-    "HF_CLK_FREQ": 25.0
-  } \
-  -ip_iname "osc0_inst"
+
 adi_ip_instance -vlnv {latticesemi.com:module:ahbl0:1.3.0} \
   -ip_path "$preinst_ip_mod_dir/ip/common/ahb_lite_interconnect" \
   -ip_params {
@@ -124,6 +119,8 @@ sbp_add_gluelogic -name equation_module0_inst \
     "module_name": "equation_module0"
   }}]
 
+sbp_add_port -direction in clk_125
+
 sbp_add_port -direction in rstn_i
 sbp_add_port -direction in rxd_i
 sbp_add_port -direction out txd_o
@@ -159,7 +156,7 @@ sbp_connect_net "$project_name/cpu0_inst/system_resetn_o" \
 sbp_connect_net "$project_name/equation_module0_inst/O" \
   "$project_name/cpu0_inst/rst_n_i"
 
-sbp_connect_net "$project_name/osc0_inst/hf_clk_out_o" \
+sbp_connect_net "$project_name/clk_125" \
   "$project_name/pll0_inst/clki_i"
 
 sbp_connect_net "$project_name/pll0_inst/clkop_o" \
@@ -248,8 +245,6 @@ sbp_connect_interface_net "$project_name/spi0_inst/INTR" \
   "$project_name/cpu0_inst/IRQ_S2"
 sbp_connect_interface_net "$project_name/i2c0_inst/INTR" \
   "$project_name/cpu0_inst/IRQ_S3"
-
-sbp_connect_constant -constant 1'B1 "$project_name/osc0_inst/hf_out_en_i"
 
 # sbp_assign_addr_seg -offset 'h00190000 "$project_name/ahbl0_inst/AHBL_M00" \
 sbp_assign_addr_seg -offset 'h00000000 "$project_name/ahbl0_inst/AHBL_M00" \

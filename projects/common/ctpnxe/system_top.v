@@ -49,7 +49,8 @@ module system_top(
   output sclk_o,
   input miso_i,
   inout scl_io,
-  inout sda_io
+  inout sda_io,
+  inout clk_125
 );
 
 wire [31:0] gpio0_o;
@@ -89,7 +90,8 @@ assign gpio1_i[31:30] = {sw_5, sw_4};
     .sclk_o (sclk_o),
     .miso_i (miso_i),
     .rxd_i (rxd_i),
-    .txd_o (txd_o)
+    .txd_o (txd_o),
+    .clk_125 (clk_125)
   );
 
 endmodule

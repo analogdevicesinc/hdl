@@ -91,6 +91,10 @@ ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports mosi_o]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports miso_i]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports sclk_o]
 
+#clk
+ldc_set_location -site {N25} [get_ports clk_125]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports clk_125]
+
 #bank vcc_s
 ldc_set_vcc -bank 0 1.8
 ldc_set_vcc -bank 1 3.3
