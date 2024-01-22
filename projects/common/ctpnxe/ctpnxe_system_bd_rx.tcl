@@ -23,9 +23,18 @@ adi_ip_instance -vlnv {latticesemi.com:ip:gpio0:1.6.1} \
   -ip_path "$ip_download_path/latticesemi.com_ip_gpio_1.6.1" \
   -ip_params {
     "IO_LINES_COUNT": 32,
-    "DIRECTION_DEF_VAL_INPUT": "FF"
+    "EXTERNAL_BUF": true,
+    "DIRECTION_DEF_VAL_INPUT": "00FFFFFF"
   } \
   -ip_iname "gpio0_inst"
+adi_ip_instance -vlnv {latticesemi.com:ip:gpio1:1.6.1} \
+  -ip_path "$ip_download_path/latticesemi.com_ip_gpio_1.6.1" \
+  -ip_params {
+    "IO_LINES_COUNT": 32,
+    "EXTERNAL_BUF": true,
+    "DIRECTION_DEF_VAL_INPUT": "00000000"
+  } \
+  -ip_iname "gpio1_inst"
 adi_ip_instance -vlnv {latticesemi.com:ip:spi0:1.4.1} \
   -ip_path "$ip_download_path/latticesemi.com_ip_spi_master_1.4.1" \
   -ip_params {
@@ -55,7 +64,7 @@ adi_ip_instance -vlnv {latticesemi.com:ip:axi_interc0:1.2.0} \
   -ip_path "$ip_download_path/latticesemi.com_ip_axi_interconnect_1.2.0" \
   -ip_params {
     "TOTAL_EXTMAS_CNT": 1,
-    "TOTAL_EXTSLV_CNT": 3
+    "TOTAL_EXTSLV_CNT": 4
     } \
   -ip_iname "axi_interc0_inst"
 adi_ip_instance -vlnv {latticesemi.com:ip:axi_ahb0:1.1.0} \
@@ -74,6 +83,10 @@ adi_ip_instance -vlnv {latticesemi.com:ip:axi_apb1:1.1.0} \
   -ip_path "$ip_download_path/latticesemi.com_ip_axi2apb_bridge_1.1.0" \
   -ip_params {} \
   -ip_iname "axi_apb1_inst"
+adi_ip_instance -vlnv {latticesemi.com:ip:axi_apb2:1.1.0} \
+  -ip_path "$ip_download_path/latticesemi.com_ip_axi2apb_bridge_1.1.0" \
+  -ip_params {} \
+  -ip_iname "axi_apb2_inst"
 adi_ip_instance -vlnv {latticesemi.com:ip:sysmem0:1.1.2} \
   -ip_path "$preinst_ip_mod_dir/ip/common/system_memory" \
   -ip_params {
@@ -104,7 +117,14 @@ sbp_add_port -direction in clk_125
 sbp_add_port -direction in rstn_i
 sbp_add_port -direction in rxd_i
 sbp_add_port -direction out txd_o
-sbp_add_port -from 31 -to 0 -direction inout gpio
+
+sbp_add_port -from 31 -to 0 -direction out gpio0_o
+sbp_add_port -from 31 -to 0 -direction in gpio0_i
+sbp_add_port -from 31 -to 0 -direction out gpio0_en_o
+
+sbp_add_port -from 31 -to 0 -direction out gpio1_o
+sbp_add_port -from 31 -to 0 -direction in gpio1_i
+sbp_add_port -from 31 -to 0 -direction out gpio1_en_o
 
 sbp_add_port -direction out mosi_o
 sbp_add_port -direction out sclk_o
@@ -123,9 +143,11 @@ sbp_connect_net "$project_name/cpu0_inst/system_resetn_o" \
   "$project_name/axi_ahb1_inst/aresetn_i" \
   "$project_name/axi_apb0_inst/aresetn_i" \
   "$project_name/axi_apb1_inst/aresetn_i" \
+  "$project_name/axi_apb2_inst/aresetn_i" \
   "$project_name/spi0_inst/rst_n_i" \
   "$project_name/i2c0_inst/rst_n_i" \
-  "$project_name/gpio0_inst/resetn_i"
+  "$project_name/gpio0_inst/resetn_i" \
+  "$project_name/gpio1_inst/resetn_i"
 
 #clk
 sbp_connect_net "$project_name/clk_125" \
@@ -143,9 +165,11 @@ sbp_connect_net "$project_name/pll0_inst/clkop_o" \
   "$project_name/axi_ahb1_inst/aclk_i" \
   "$project_name/axi_apb0_inst/aclk_i" \
   "$project_name/axi_apb1_inst/aclk_i" \
+  "$project_name/axi_apb2_inst/aclk_i" \
   "$project_name/spi0_inst/clk_i" \
   "$project_name/i2c0_inst/clk_i" \
-  "$project_name/gpio0_inst/clk_i"
+  "$project_name/gpio0_inst/clk_i" \
+  "$project_name/gpio1_inst/clk_i"
 
 #rst
 sbp_connect_net "$project_name/equation_module_inst/A" \
@@ -163,8 +187,19 @@ sbp_connect_net "$project_name/cpu0_inst/uart_txd_o" \
   "$project_name/txd_o"
 
 #gpio
-sbp_connect_net "$project_name/gpio0_inst/gpio_io" \
-  "$project_name/gpio"
+sbp_connect_net "$project_name/gpio0_inst/gpio_i" \
+  "$project_name/gpio0_i"
+sbp_connect_net "$project_name/gpio0_inst/gpio_o" \
+  "$project_name/gpio0_o"
+sbp_connect_net "$project_name/gpio0_inst/gpio_en_o" \
+  "$project_name/gpio0_en_o"
+
+sbp_connect_net "$project_name/gpio1_inst/gpio_i" \
+  "$project_name/gpio1_i"
+sbp_connect_net "$project_name/gpio1_inst/gpio_o" \
+  "$project_name/gpio1_o"
+sbp_connect_net "$project_name/gpio1_inst/gpio_en_o" \
+  "$project_name/gpio1_en_o"
 
 #i2c
 sbp_connect_net "$project_name/i2c0_inst/scl_io" \
@@ -193,6 +228,8 @@ sbp_connect_interface_net "$project_name/axi_interc0_inst/AXI_M01" \
   "$project_name/axi_apb0_inst/AXI4_S"
 sbp_connect_interface_net "$project_name/axi_interc0_inst/AXI_M02" \
   "$project_name/axi_apb1_inst/AXI4_S"
+sbp_connect_interface_net "$project_name/axi_interc0_inst/AXI_M03" \
+  "$project_name/axi_apb2_inst/AXI4_S"
 
 sbp_connect_interface_net "$project_name/axi_ahb0_inst/AHBL_M" \
   "$project_name/spi0_inst/AHBL_S0"
@@ -203,6 +240,8 @@ sbp_connect_interface_net "$project_name/axi_apb0_inst/APB3_M" \
   "$project_name/i2c0_inst/APB_S0"
 sbp_connect_interface_net "$project_name/axi_apb1_inst/APB3_M" \
   "$project_name/gpio0_inst/APB_S0"
+sbp_connect_interface_net "$project_name/axi_apb2_inst/APB3_M" \
+  "$project_name/gpio1_inst/APB_S0"
 
 sbp_connect_interface_net "$project_name/cpu0_inst/AXI_M_DATA" \
   "$project_name/axi_interc0_inst/AXI_S00"
@@ -217,7 +256,11 @@ sbp_connect_interface_net "$project_name/i2c0_inst/INTR" \
   "$project_name/cpu0_inst/IRQ_S3"
 sbp_connect_interface_net "$project_name/gpio0_inst/INTR" \
   "$project_name/cpu0_inst/IRQ_S4"
+sbp_connect_interface_net "$project_name/gpio1_inst/INTR" \
+  "$project_name/cpu0_inst/IRQ_S5"
 
+sbp_assign_addr_seg -offset 'h10004000 "$project_name/axi_apb2_inst/APB3_M" \
+  "$project_name/gpio1_inst/APB_S0"
 sbp_assign_addr_seg -offset 'h10003000 "$project_name/axi_apb1_inst/APB3_M" \
   "$project_name/gpio0_inst/APB_S0"
 sbp_assign_addr_seg -offset 'h10002000 "$project_name/axi_apb0_inst/APB3_M" \
