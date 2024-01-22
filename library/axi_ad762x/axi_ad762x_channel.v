@@ -91,13 +91,13 @@ module axi_ad762x_channel #(
   wire  [ 3:0]  adc_data_sel_s;
 
   ad_datafmt #(
-    .DATA_WIDTH (18),
+    .DATA_WIDTH (16),
     .BITS_PER_SAMPLE (32),
     .DISABLE (DATAFORMAT_DISABLE)
   ) i_ad_datafmt (
     .clk (adc_clk),
     .valid (adc_valid_in),
-    .data (adc_data_in),
+    .data (adc_data_in[15:0]),
     .valid_out (adc_valid),
     .data_out (adc_data),
     .dfmt_enable (adc_dfmt_enable_s),
