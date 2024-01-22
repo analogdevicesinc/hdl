@@ -38,6 +38,7 @@
 module axi_ad4858_lvds #(
 
   parameter FPGA_TECHNOLOGY = 0,
+  parameter DRP_WIDTH = 5,
   parameter ECHO_CLK_EN = 1,
   parameter DELAY_REFCLK_FREQ = 200,
   parameter IODELAY_CTRL = 1,
@@ -77,10 +78,12 @@ module axi_ad4858_lvds #(
 
   // delay interface (for IDELAY macros)
 
+  input       [ 7:0]      path_delay_tap,
+
   input                   up_clk,
   input                   up_adc_dld,
-  input       [ 4:0]      up_adc_dwdata,
-  output      [ 4:0]      up_adc_drdata,
+  input  [DRP_WIDTH-1:0]  up_adc_dwdata,
+  output [DRP_WIDTH-1:0]  up_adc_drdata,
   input                   delay_clk,
   input                   delay_rst,
   output                  delay_locked
@@ -120,7 +123,8 @@ module axi_ad4858_lvds #(
   reg                 start_transfer;
   reg                 start_transfer_d;
 
-  reg        [ 15:0]  dynamic_delay;
+  reg        [ 15:0]  capture_complete_delay;
+  reg        [255:0]  sckio_delay;
   reg                 adc_valid_init;
   reg                 adc_valid_init_d;
   reg                 adc_valid_init_d2;
@@ -283,19 +287,52 @@ module axi_ad4858_lvds #(
 
   // valid delay (0 to 15)
   always @(posedge clk) begin
-    dynamic_delay <= {dynamic_delay[14:0], capture_complete_s};
+    capture_complete_delay <= {capture_complete_delay[14:0], capture_complete_s};
   end
 
-  assign capture_complete = dynamic_delay[4'd10];
+  assign capture_complete = capture_complete_delay[4'd10];
 
   generate
+    wire aquire_data_delay;
+  // DEBUG
+  (* MARK_DEBUG = "TRUE" *)  wire  [31:0]  ila_path_delay_tap     = path_delay_tap   ;
+  (* MARK_DEBUG = "TRUE" *)  wire  [31:0]  ila_aquire_data        = aquire_data      ;
+  (* MARK_DEBUG = "TRUE" *)  wire  [31:0]  ila_aquire_data_delay  = aquire_data_delay;
+
+    reg [15:0] test_cnt;
+    always @(posedge scko_s or posedge start_transfer) begin
+      if (start_transfer) begin
+        test_cnt <= 0;
+      end else begin
+        test_cnt <= test_cnt +1;
+      end
+    end
     if (ECHO_CLK_EN == 1'b1) begin
       IBUFDS i_scko_bufds (
         .O(scko_s),
         .I(scko_p),
         .IB(scko_n));
     end else begin
-      assign scko_s = fast_clk;
+      always @(posedge fast_clk) begin
+        sckio_delay <= {sckio_delay[254:0], aquire_data};
+      end
+      assign aquire_data_delay = sckio_delay[path_delay_tap];
+      //BUFGCE_1 BUFGCE_inst (
+      //  .O(scko_s),
+      //  .CE(aquire_data_delay),
+      //  .I(fast_clk)
+      //);
+
+      BUFGCE #(
+       .CE_TYPE("SYNC"),          // ASYNC, HARDSYNC, SYNC
+       .IS_CE_INVERTED(1'b0),     // Programmable inversion on CE
+       .IS_I_INVERTED(1'b1),      // Programmable inversion on I
+       .SIM_DEVICE("ULTRASCALE")  // ULTRASCALE
+      ) BUFGCE_inst (
+         .O(scko_s),             // 1-bit output: Buffer
+         .CE(aquire_data_delay), // 1-bit input: Buffer enable
+         .I(fast_clk)            // 1-bit input: Buffer
+      );
     end
   endgenerate
 
@@ -324,8 +361,8 @@ module axi_ad4858_lvds #(
     .rx_data_n (sdo_n_s),
     .up_clk (up_clk),
     .up_dld (up_adc_dld),
-    .up_dwdata (up_adc_dwdata[4:0]),
-    .up_drdata (up_adc_drdata[4:0]),
+    .up_dwdata (up_adc_dwdata),
+    .up_drdata (up_adc_drdata),
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
     .delay_locked (delay_locked));

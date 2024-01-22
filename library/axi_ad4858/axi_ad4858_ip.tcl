@@ -28,6 +28,7 @@ adi_ip_files axi_ad4858 [list \
     "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
     "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
     "$ad_hdl_dir/library/xilinx/common/ad_data_in.v" \
+    "$ad_hdl_dir/library/xilinx/common/ad_serdes_in.v" \
     "$ad_hdl_dir/library/xilinx/common/ad_serdes_out.v" \
     "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
     "axi_ad4858_constr.ttcl" \
@@ -35,9 +36,14 @@ adi_ip_files axi_ad4858 [list \
     "axi_ad4858_channel.v" \
     "axi_ad4858_crc.v" \
     "axi_ad4858_lvds.v" \
+    "axi_ad4858_lvds_nssi.v" \
     "axi_ad4858.v" ]
 
 adi_ip_properties axi_ad4858
+
+adi_ip_add_core_dependencies [list \
+  analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+]
 
 set cc [ipx::current_core]
 

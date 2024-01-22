@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2023 - 2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -53,6 +53,7 @@ module axi_ad4858 #(
   parameter       LANE_6_ENABLE = "1",
   parameter       LANE_7_ENABLE = "1",
   parameter       ECHO_CLK_EN = 1,
+  parameter       ECHO_DELAY = 0,
   parameter       EXTERNAL_CLK = 1
 ) (
 
@@ -138,6 +139,13 @@ module axi_ad4858 #(
 
   // localparam
 
+  localparam             SEVEN_SERIES  = 1;
+  localparam             ULTRASCALE  = 2;
+  localparam             ULTRASCALE_PLUS  = 3;
+
+  localparam             DRP_WIDTH = FPGA_TECHNOLOGY == ULTRASCALE ? 9 :
+                         FPGA_TECHNOLOGY == ULTRASCALE_PLUS ? 9 : 5;
+
   localparam  [ 0:0]     READ_RAW = 1'b1;
   localparam             CONFIG = {18'd0, READ_RAW, 5'd0, ~LVDS_CMOS_N[0], 7'd0};
   localparam  [ 7:0]     ACTIVE_LANES = {
@@ -192,6 +200,7 @@ module axi_ad4858 #(
   wire    [ 7:0]          up_adc_pn_oos;
 
   wire    [ 7:0]          adc_custom_control;
+  wire    [31:0]          adc_config_ctrl_s;
   wire    [ 1:0]          packet_format;
   wire                    oversampling_en;
   wire                    adc_crc_enable_s;
@@ -268,56 +277,98 @@ module axi_ad4858 #(
 
     if (LVDS_CMOS_N == 1) begin // LVDS
 
-      wire                    up_dld;
-      wire    [ 4:0]          up_dwdata;
-      wire    [ 4:0]          up_drdata;
+      wire                  up_dld;
+      wire [DRP_WIDTH-1:0]  up_dwdata;
+      wire [DRP_WIDTH-1:0]  up_drdata;
+
+     (* MARK_DEBUG = "TRUE" *)  wire  [7:0]  ila_adc_config_ctrl_s     = adc_config_ctrl_s[7:0];
 
       assign scki = 1'b0;
-      if (ECHO_CLK_EN == 1'b1) begin
-        assign scko_s_p = scko_p;
-        assign scko_s_n = scko_n;
-      end else begin
-        assign scko_s_p = 1'b0;
-        assign scko_s_n = 1'b0;
-      end
+      //if (ECHO_CLK_EN == 1'b1) begin
+        axi_ad4858_lvds #(
+          .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+          .DRP_WIDTH (DRP_WIDTH),
+          .ECHO_CLK_EN (ECHO_CLK_EN),
+          .DELAY_REFCLK_FREQ(DELAY_REFCLK_FREQ),
+          .IODELAY_CTRL (IODELAY_CTRL),
+          .IODELAY_ENABLE (IODELAY_ENABLE),
+          .IODELAY_GROUP (IODELAY_GROUP)
+        ) i_ad4858_lvds_interface (
+          .rst (adc_if_reset),
+          .clk (adc_clk_s),
+          .fast_clk (external_fast_clk),
+          .adc_enable (adc_enable_s),
+          .adc_crc_enable (adc_crc_enable_s),
+          .packet_format_in (packet_format),
+          .oversampling_en (oversampling_en),
+          .scki_p (scki_p),
+          .scki_n (scki_n),
+          .scko_p (scko_p),
+          .scko_n (scko_n),
+          .sdo_p (sdo_p),
+          .sdo_n (sdo_n),
+          .busy (busy),
+          .cnvs (cnvs),
+          .adc_data (adc_data_if_s),
+          .adc_valid (adc_valid_if),
+          .crc_error (crc_error),
+          .dev_status (),
+          .path_delay_tap (adc_config_ctrl_s[7:0]),
+          .up_clk (up_clk),
+          .up_adc_dld (up_dld),
+          .up_adc_dwdata (up_dwdata),
+          .up_adc_drdata (up_drdata),
+          .delay_clk (delay_clk),
+          .delay_rst (delay_rst),
+          .delay_locked (delay_locked));
+      //end else begin
+      //  if (ECHO_DELAY != 0) begin
+      //    wire [3:0] path_valid_delay_tap = ECHO_DELAY;
+      //    wire [3:0] path_index_delay_tap = ECHO_DELAY + 5;
+      //  end else begin
+      //    wire [3:0] path_valid_delay_tap = adc_config_ctrl_s[7:4];
+      //    wire [3:0] path_index_delay_tap = adc_config_ctrl_s[3:0];
+      //  end
 
-      axi_ad4858_lvds #(
-        .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
-        .ECHO_CLK_EN (ECHO_CLK_EN),
-        .DELAY_REFCLK_FREQ(DELAY_REFCLK_FREQ),
-        .IODELAY_CTRL (IODELAY_CTRL),
-        .IODELAY_ENABLE (IODELAY_ENABLE),
-        .IODELAY_GROUP (IODELAY_GROUP)
-      ) i_ad4858_lvds_interface (
-        .rst (adc_if_reset),
-        .clk (adc_clk_s),
-        .fast_clk (external_fast_clk),
-        .adc_enable (adc_enable_s),
-        .adc_crc_enable (adc_crc_enable_s),
-        .packet_format_in (packet_format),
-        .oversampling_en (oversampling_en),
-        .scki_p (scki_p),
-        .scki_n (scki_n),
-        .scko_p (scko_s_p),
-        .scko_n (scko_s_n),
-        .sdo_p (sdo_p),
-        .sdo_n (sdo_n),
-        .busy (busy),
-        .cnvs (cnvs),
-        .adc_data (adc_data_if_s),
-        .adc_valid (adc_valid_if),
-        .crc_error (crc_error),
-        .dev_status (),
-        .up_clk (up_clk),
-        .up_adc_dld (up_dld),
-        .up_adc_dwdata (up_dwdata),
-        .up_adc_drdata (up_drdata),
-        .delay_clk (delay_clk),
-        .delay_rst (delay_rst),
-        .delay_locked (delay_locked));
+      //  axi_ad4858_lvds_nssi #(
+      //    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+      //    .DRP_WIDTH (DRP_WIDTH),
+      //    .DELAY_REFCLK_FREQ(DELAY_REFCLK_FREQ),
+      //    .IODELAY_CTRL (IODELAY_CTRL),
+      //    .IODELAY_ENABLE (IODELAY_ENABLE),
+      //    .IODELAY_GROUP (IODELAY_GROUP)
+      //  ) i_ad4858_lvds_interface (
+      //    .rst (adc_if_reset),
+      //    .clk (adc_clk_s),
+      //    .fast_clk (external_fast_clk),
+      //    .adc_enable (adc_enable_s),
+      //    .adc_crc_enable (adc_crc_enable_s),
+      //    .packet_format_in (packet_format),
+      //    .oversampling_en (oversampling_en),
+      //    .scki_p (scki_p),
+      //    .scki_n (scki_n),
+      //    .sdo_p (sdo_p),
+      //    .sdo_n (sdo_n),
+      //    .busy (busy),
+      //    .cnvs (cnvs),
+      //    .adc_data (adc_data_if_s),
+      //    .adc_valid (adc_valid_if),
+      //    .crc_error (crc_error),
+      //    .dev_status (),
+      //    .path_valid_delay_tap (path_valid_delay_tap),
+      //    .path_index_delay_tap (path_index_delay_tap),
+      //    .up_clk (up_clk),
+      //    .up_adc_dld (up_dld),
+      //    .up_adc_dwdata (up_dwdata),
+      //    .up_adc_drdata (up_drdata),
+      //    .delay_clk (delay_clk),
+      //    .delay_rst (delay_rst),
+      //    .delay_locked (delay_locked));
+      //end
 
       up_delay_cntrl #(
         .DISABLE (~IODELAY_ENABLE),
+        .DRP_WIDTH(DRP_WIDTH),
         .DATA_WIDTH(1),
         .BASE_ADDRESS(6'h02)
       ) i_delay_cntrl (
@@ -340,9 +391,9 @@ module axi_ad4858 #(
 
     end else begin // CMOS
 
-      wire    [ 7:0]          up_dld;
-      wire    [39:0]          up_dwdata;
-      wire    [39:0]          up_drdata;
+      wire    [            7:0]  up_dld;
+      wire    [DRP_WIDTH*8-1:0]  up_dwdata;
+      wire    [DRP_WIDTH*8-1:0]  up_drdata;
 
       assign scki_p = 1'b0;
       assign scki_n = 1'b1;
@@ -353,6 +404,7 @@ module axi_ad4858 #(
       end
       axi_ad4858_cmos #(
         .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+        .DRP_WIDTH (DRP_WIDTH),
         .DELAY_REFCLK_FREQ(DELAY_REFCLK_FREQ),
         .IODELAY_CTRL (IODELAY_CTRL),
         .IODELAY_ENABLE (IODELAY_ENABLE),
@@ -391,6 +443,7 @@ module axi_ad4858 #(
 
       up_delay_cntrl #(
         .DATA_WIDTH(8),
+        .DRP_WIDTH(DRP_WIDTH),
         .BASE_ADDRESS(6'h02)
       ) i_delay_cntrl (
         .delay_clk (delay_clk),
@@ -493,7 +546,7 @@ module axi_ad4858 #(
     .up_drp_ready (1'd0),
     .up_drp_locked (1'd1),
     .adc_config_wr (),
-    .adc_config_ctrl (),
+    .adc_config_ctrl (adc_config_ctrl_s),
     .adc_config_rd ('d0),
     .adc_ctrl_status ('d0),
     .up_usr_chanmax_out (),
