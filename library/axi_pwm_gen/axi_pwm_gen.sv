@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2021-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -26,7 +26,7 @@
 //
 //   2. An ADI specific BSD license, which can be found in the top level directory
 //      of this repository (LICENSE_ADIBSD), and also on-line at:
-//      https://github.com/analogdevicesinc/hdl/blob/master/LICENSE_ADIBSD
+//      https://github.com/analogdevicesinc/hdl/blob/main/LICENSE_ADIBSD
 //      This will allow to generate bit files and not release the source code,
 //      as long as it attaches to an ADI device.
 //
@@ -41,6 +41,8 @@ module axi_pwm_gen #(
   parameter  N_PWMS = 1,
   parameter  PWM_EXT_SYNC = 0,
   parameter  EXT_ASYNC_SYNC = 0,
+  parameter  EXT_SYNC_NO_LOAD_CONFIG = 0,
+  parameter  EXT_SYNC_FASTER_CLK = 0,
   parameter  PULSE_0_WIDTH = 7,
   parameter  PULSE_1_WIDTH = 7,
   parameter  PULSE_2_WIDTH = 7,
@@ -116,6 +118,9 @@ module axi_pwm_gen #(
   input                   s_axi_rready,
   input                   ext_clk,
   input                   ext_sync,
+
+  input                   ext_sync_faster_clk,
+  input                   clk_ext_sync,
 
   output                  pwm_0,
   output                  pwm_1,
@@ -222,6 +227,7 @@ module axi_pwm_gen #(
   wire            pwm_gen_resetn;
   wire            ext_sync_s;
   wire            pause_cnt;
+  wire            sync_event_o;
 
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
@@ -281,20 +287,34 @@ module axi_pwm_gen #(
   // offset counter
 
   always @(posedge clk) begin
-    if (offset_alignment ==  1'b1 || pwm_gen_resetn == 1'b0) begin
-      offset_cnt <= 32'd0;
+    if (EXT_SYNC_NO_LOAD_CONFIG) begin
+      if (offset_alignment ==  1'b1 || pwm_gen_resetn == 1'b0 || sync_event_o == 1'b1) begin
+        offset_cnt <= 32'd0;
+      end else begin
+        offset_cnt <= offset_cnt + 1'b1;
+      end
     end else begin
-      offset_cnt <= offset_cnt + 1'b1;
+      if (offset_alignment  == 1'b1 || pwm_gen_resetn == 1'b0) begin
+        offset_cnt <= 32'd0;
+      end else begin
+        offset_cnt <= offset_cnt + 1'b1;
+      end
     end
 
     if (pwm_gen_resetn == 1'b0) begin
       offset_alignment <= 1'b0;
     end else begin
+      // case with no required load_config for the offset_alignment using the
+      // captured ext_sync
+      if (EXT_SYNC_NO_LOAD_CONFIG) begin
+        offset_alignment <= (load_config_s == 1'b1) ? 1'b1 : (offset_alignment & !pause_cnt);
       // when using external sync an offset alignment can be done only
       // after all pwm counters are paused(load_config)/reseated
-      offset_alignment <= (load_config_s == 1'b1) ? 1'b1 :
-                          offset_alignment &
-                          (ext_sync_s ? 1'b1 : !pause_cnt);
+      end else begin	
+	offset_alignment <= (load_config_s == 1'b1) ? 1'b1 :
+                            offset_alignment &
+                            (ext_sync_s ? 1'b1 : !pause_cnt);
+      end
     end
   end
 
@@ -318,6 +338,7 @@ module axi_pwm_gen #(
     for (i = 0; i <= 15; i = i + 1) begin: pwm_cnt
       if (i <= PWMS) begin
         axi_pwm_gen_1  #(
+          .EXT_SYNC_NO_LOAD_CONFIG (EXT_SYNC_NO_LOAD_CONFIG),
           .PULSE_WIDTH (PULSE_WIDTH_G[i]),
           .PULSE_PERIOD (PULSE_PERIOD_G[i])
         ) i_axi_pwm_gen_1 (
@@ -326,6 +347,7 @@ module axi_pwm_gen #(
           .pulse_width (pwm_width_s[i]),
           .pulse_period (pwm_period_s[i]),
           .load_config (load_config_s),
+	  .ext_sync_edge (sync_event_o),
           .sync (sync[i]),
           .pulse (pwm[i]),
           .pulse_armed (pwm_armed[i]));
@@ -359,6 +381,16 @@ module axi_pwm_gen #(
   assign pwm_13 = pwm[13];
   assign pwm_14 = pwm[14];
   assign pwm_15 = pwm[15];
+
+  generate
+    if (EXT_SYNC_FASTER_CLK) begin 
+      sync_event sync_ext_sync_faster_clk (
+        .in_clk (clk_ext_sync),
+        .out_clk (ext_clk),
+        .in_event (ext_sync_faster_clk),
+        .out_event (sync_event_o));
+    end
+  endgenerate
 
   up_axi #(
     .AXI_ADDRESS_WIDTH(16)

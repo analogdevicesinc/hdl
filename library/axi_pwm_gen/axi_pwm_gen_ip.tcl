@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2021-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -100,6 +100,20 @@ set_property -dict [list \
   "widget" "checkBox" \
 ] [ipgui::get_guiparamspec -name "EXT_ASYNC_SYNC" -component $cc]
 
+ipgui::add_param -name "EXT_SYNC_NO_LOAD_CONFIG" -component $cc -parent $page0
+set_property -dict [list \
+  "display_name" "External synchronization without load_config" \
+  "tooltip" "NOTE: If active the external synchronization would be made without load_config." \
+  "widget" "checkBox" \
+] [ipgui::get_guiparamspec -name "EXT_SYNC_NO_LOAD_CONFIG" -component $cc]
+
+ipgui::add_param -name "EXT_SYNC_FASTER_CLK" -component $cc -parent $page0
+set_property -dict [list \
+  "display_name" "External sync based on a faster clock" \
+  "tooltip" "NOTE: If active the external sync would be based on a faster clock than the pwm_gen logic." \
+  "widget" "checkBox" \
+] [ipgui::get_guiparamspec -name "EXT_SYNC_FASTER_CLK" -component $cc]
+
 # Maximum 16 pwms
 for {set i 0} {$i < 16} {incr i} {
   ipgui::add_param -name "PULSE_${i}_WIDTH" -component $cc -parent $page0
@@ -149,6 +163,12 @@ for {set i 0} {$i < 16} {incr i} {
 
 adi_set_ports_dependency "ext_sync" \
 	"(spirit:decode(id('MODELPARAM_VALUE.PWM_EXT_SYNC')) == 1)"
+
+adi_set_ports_dependency "ext_sync_faster_clk" \
+	"(spirit:decode(id('MODELPARAM_VALUE.EXT_SYNC_FASTER_CLK')) == 1)"
+
+adi_set_ports_dependency "clk_ext_sync" \
+	"(spirit:decode(id('MODELPARAM_VALUE.EXT_SYNC_FASTER_CLK')) == 1)"
 
 set_property driver_value 0 [ipx::get_ports -filter "direction==in" -of_objects $cc]
 

@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2021-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -26,7 +26,7 @@
 //
 //   2. An ADI specific BSD license, which can be found in the top level directory
 //      of this repository (LICENSE_ADIBSD), and also on-line at:
-//      https://github.com/analogdevicesinc/hdl/blob/master/LICENSE_ADIBSD
+//      https://github.com/analogdevicesinc/hdl/blob/main/LICENSE_ADIBSD
 //      This will allow to generate bit files and not release the source code,
 //      as long as it attaches to an ADI device.
 //
@@ -35,6 +35,7 @@
 `timescale 1ns/1ps
 
 module axi_pwm_gen_1 #(
+  parameter   EXT_SYNC_NO_LOAD_CONFIG = 0,
   // the width and period are defined in number of clock cycles
   parameter   PULSE_WIDTH = 7,
   parameter   PULSE_PERIOD = 100000000
@@ -45,6 +46,7 @@ module axi_pwm_gen_1 #(
   input       [31:0]  pulse_width,
   input       [31:0]  pulse_period,
   input               load_config,
+  input               ext_sync_edge,
   input               sync,
 
   output              pulse,
@@ -64,6 +66,7 @@ module axi_pwm_gen_1 #(
 
   // internal wires
 
+  wire                         ext_sync_load_cfg;
   wire                         phase_align;
   wire                         end_of_period;
   wire                         end_of_pulse;
@@ -72,6 +75,8 @@ module axi_pwm_gen_1 #(
   // enable pwm
 
   assign pulse_enable = (pulse_period_d != 32'd0) ? 1'b1 : 1'b0;
+
+  assign ext_sync_load_config = (EXT_SYNC_NO_LOAD_CONFIG) ? ext_sync_edge : 1'b0;
 
   // flop the desired period
 
@@ -102,6 +107,8 @@ module axi_pwm_gen_1 #(
       phase_align_armed <= 1'b1;
     end else begin
       if (load_config == 1'b1) begin
+        phase_align_armed <= sync;
+      end else if (ext_sync_edge == 1'b1) begin
         phase_align_armed <= sync;
       end else begin
         phase_align_armed <= phase_align_armed & sync;
