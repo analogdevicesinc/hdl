@@ -15,9 +15,10 @@ source $ad_hdl_dir/projects/common/a10soc/a10soc_plddr4_assign.tcl
 
 set_location_assignment PIN_N29 -to ref_clk                ; ## D4   FMCA_GBTCLK0_M2C_P  REFCLK_GXBL1H_CHTp
 set_location_assignment PIN_N28 -to "ref_clk(n)"           ; ## D5   FMCA_GBTCLK0_M2C_N  REFCLK_GXBL1H_CHTn
-#set_location_assignment PIN_E5  -to core_clk               ; ## H4   FMCA_CLK0_M2C_P     IO,CLK_3G_1p,LVDS3G_12p
-#set_location_assignment PIN_F5  -to "core_clk(n)"          ; ## H5   FMCA_CLK0_M2C_N     IO,CLK_3G_1n,LVDS3G_12n
+set_location_assignment PIN_E5  -to core_clk               ; ## H4   FMCA_CLK0_M2C_P     IO,CLK_3G_1p,LVDS3G_12p
+set_location_assignment PIN_F5  -to "core_clk(n)"          ; ## H5   FMCA_CLK0_M2C_N     IO,CLK_3G_1n,LVDS3G_12n
 
+set_instance_assignment -name IO_STANDARD LVDS -to ref_clk
 set_instance_assignment -name IO_STANDARD LVDS -to core_clk
 
 set_location_assignment PIN_R33 -to rx_serial_data[0]      ; ## A2   FMCA_DP01_M2C_P     GXBL1H_RX_CH1p,GXBL1H_REFCLK1p

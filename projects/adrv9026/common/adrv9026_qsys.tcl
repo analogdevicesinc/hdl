@@ -23,9 +23,11 @@ set dac_fifo_name avl_adrv9026_tx_fifo
 set dac_data_width 128
 set dac_dma_data_width 128
 
-# NOTE: The real lane rate is 2457.6 Gbps (Tx) and 4915.2 Gbps (RX/Rx_Obs),
-# with a real reference clock frequency of 122.88 MHz. A round up needed
-# because the fPLL's configuration interface does not support fractional numbers.
+add_instance device_clk altera_clock_bridge
+set_instance_parameter_value device_clk {EXPLICIT_CLOCK_RATE} {250000000}
+add_interface device_clk clock sink
+set_interface_property device_clk EXPORT_OF device_clk.in_clk
+
 
 # adrv9026_tx JESD204
 
@@ -33,9 +35,10 @@ add_instance adrv9026_tx_jesd204 adi_jesd204
 set_instance_parameter_value adrv9026_tx_jesd204 {ID} {0}
 set_instance_parameter_value adrv9026_tx_jesd204 {TX_OR_RX_N} {1}
 set_instance_parameter_value adrv9026_tx_jesd204 {SOFT_PCS} {true}
-set_instance_parameter_value adrv9026_tx_jesd204 {LANE_RATE} {2460}
-set_instance_parameter_value adrv9026_tx_jesd204 {REFCLK_FREQUENCY} {123}
+set_instance_parameter_value adrv9026_tx_jesd204 {LANE_RATE} {10000}
+set_instance_parameter_value adrv9026_tx_jesd204 {REFCLK_FREQUENCY} {250}
 set_instance_parameter_value adrv9026_tx_jesd204 {NUM_OF_LANES} $TX_NUM_OF_LANES
+set_instance_parameter_value adrv9026_tx_jesd204 {EXT_DEVICE_CLK_EN} {1}
 set_instance_parameter_value adrv9026_tx_jesd204 {LANE_MAP} {0 3 2 1}
 
 add_connection sys_clk.clk adrv9026_tx_jesd204.sys_clk
@@ -55,8 +58,9 @@ add_instance adrv9026_rx_jesd204 adi_jesd204
 set_instance_parameter_value adrv9026_rx_jesd204 {ID} {1}
 set_instance_parameter_value adrv9026_rx_jesd204 {TX_OR_RX_N} {0}
 set_instance_parameter_value adrv9026_rx_jesd204 {SOFT_PCS} {true}
-set_instance_parameter_value adrv9026_rx_jesd204 {LANE_RATE} {4920}
-set_instance_parameter_value adrv9026_rx_jesd204 {REFCLK_FREQUENCY} {123}
+set_instance_parameter_value adrv9026_rx_jesd204 {LANE_RATE} {10000}
+set_instance_parameter_value adrv9026_rx_jesd204 {REFCLK_FREQUENCY} {250}
+set_instance_parameter_value adrv9026_rx_jesd204 {EXT_DEVICE_CLK_EN} {1}
 set_instance_parameter_value adrv9026_rx_jesd204 {NUM_OF_LANES} $RX_NUM_OF_LANES
 set_instance_parameter_value adrv9026_rx_jesd204 {INPUT_PIPELINE_STAGES} {1}
 
@@ -93,9 +97,7 @@ add_connection sys_clk.clk_reset axi_adrv9026_tx.s_axi_reset
 add_connection sys_clk.clk axi_adrv9026_rx.s_axi_clock
 add_connection sys_clk.clk_reset axi_adrv9026_rx.s_axi_reset
 
-add_connection adrv9026_tx_jesd204.link_clk axi_adrv9026_tx.link_clk
 add_connection axi_adrv9026_tx.link_data adrv9026_tx_jesd204.link_data
-add_connection adrv9026_rx_jesd204.link_clk axi_adrv9026_rx.link_clk
 add_connection adrv9026_rx_jesd204.link_sof axi_adrv9026_rx.if_link_sof
 add_connection adrv9026_rx_jesd204.link_data axi_adrv9026_rx.link_data
 
@@ -106,8 +108,6 @@ set_instance_parameter_value axi_adrv9026_tx_upack {NUM_OF_CHANNELS} $TX_NUM_OF_
 set_instance_parameter_value axi_adrv9026_tx_upack {SAMPLES_PER_CHANNEL} $TX_SAMPLES_PER_CHANNEL
 set_instance_parameter_value axi_adrv9026_tx_upack {SAMPLE_DATA_WIDTH} $TX_SAMPLE_WIDTH
 set_instance_parameter_value axi_adrv9026_tx_upack {INTERFACE_TYPE} {1}
-add_connection adrv9026_tx_jesd204.link_clk axi_adrv9026_tx_upack.clk
-add_connection adrv9026_tx_jesd204.link_reset axi_adrv9026_tx_upack.reset
 for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
   add_connection axi_adrv9026_tx_upack.dac_ch_$i axi_adrv9026_tx.dac_ch_$i
 }
@@ -116,8 +116,6 @@ add_instance axi_adrv9026_rx_cpack util_cpack2
 set_instance_parameter_value axi_adrv9026_rx_cpack {NUM_OF_CHANNELS} $RX_NUM_OF_CONVERTERS
 set_instance_parameter_value axi_adrv9026_rx_cpack {SAMPLES_PER_CHANNEL} $RX_SAMPLES_PER_CHANNEL
 set_instance_parameter_value axi_adrv9026_rx_cpack {SAMPLE_DATA_WIDTH} $RX_SAMPLE_WIDTH
-add_connection adrv9026_rx_jesd204.link_reset axi_adrv9026_rx_cpack.reset
-add_connection adrv9026_rx_jesd204.link_clk axi_adrv9026_rx_cpack.clk
 for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
   add_connection axi_adrv9026_rx.adc_ch_$i axi_adrv9026_rx_cpack.adc_ch_$i
 }
@@ -130,11 +128,25 @@ ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_dma_data_width $dac_fifo_a
 add_interface tx_fifo_bypass conduit end
 set_interface_property tx_fifo_bypass EXPORT_OF avl_adrv9026_tx_fifo.if_bypass
 
-add_connection adrv9026_tx_jesd204.link_clk avl_adrv9026_tx_fifo.if_dac_clk
-add_connection adrv9026_tx_jesd204.link_reset avl_adrv9026_tx_fifo.if_dac_rst
 add_connection axi_adrv9026_tx_upack.if_packed_fifo_rd_en avl_adrv9026_tx_fifo.if_dac_valid
 add_connection avl_adrv9026_tx_fifo.if_dac_data axi_adrv9026_tx_upack.if_packed_fifo_rd_data
 add_connection avl_adrv9026_tx_fifo.if_dac_dunf axi_adrv9026_tx.if_dac_dunf
+
+# device clock and reset
+
+add_connection device_clk.out_clk adrv9026_rx_jesd204.device_clk
+add_connection device_clk.out_clk axi_adrv9026_rx.link_clk
+add_connection device_clk.out_clk axi_adrv9026_rx_cpack.clk
+
+add_connection device_clk.out_clk adrv9026_tx_jesd204.device_clk
+add_connection device_clk.out_clk axi_adrv9026_tx.link_clk
+add_connection device_clk.out_clk axi_adrv9026_tx_upack.clk
+add_connection device_clk.out_clk $dac_fifo_name.if_dac_clk
+
+add_connection adrv9026_rx_jesd204.link_reset axi_adrv9026_rx_cpack.reset
+
+add_connection adrv9026_tx_jesd204.link_reset axi_adrv9026_tx_upack.reset
+add_connection adrv9026_tx_jesd204.link_reset $dac_fifo_name.if_dac_rst
 
 # dac & adc dma
 
@@ -246,7 +258,8 @@ ad_dma_interconnect axi_adrv9026_rx_dma.m_dest_axi
 
 # interrupts
 
-ad_cpu_interrupt 11 axi_adrv9026_tx_dma.interrupt_sender
-ad_cpu_interrupt 12 axi_adrv9026_rx_dma.interrupt_sender
-ad_cpu_interrupt 14 avl_adrv9026_gpio.irq
-
+ad_cpu_interrupt 11 axi_adrv9026_rx_dma.interrupt_sender
+ad_cpu_interrupt 12 axi_adrv9026_tx_dma.interrupt_sender
+ad_cpu_interrupt 13 adrv9026_rx_jesd204.interrupt
+ad_cpu_interrupt 14 adrv9026_tx_jesd204.interrupt
+ad_cpu_interrupt 15 avl_adrv9026_gpio.irq

@@ -129,7 +129,8 @@ module system_top (
   output  [  3:0]   gpio_bd_o,
 
   // adrv9026-interface
-
+  
+  input             core_clk,
   input             ref_clk,
   input   [  3:0]   rx_serial_data,
   output  [  3:0]   tx_serial_data,
@@ -310,6 +311,7 @@ module system_top (
     .sys_spi_MOSI (spi_mosi),
     .sys_spi_SCLK (spi_clk),
     .sys_spi_SS_n (spi_csn_s),
+    .device_clk_clk(core_clk),
     .tx_serial_data_tx_serial_data (tx_serial_data),
     .tx_fifo_bypass_bypass (dac_fifo_bypass),
     .tx_ref_clk_clk (ref_clk),
