@@ -33,56 +33,36 @@
 // ***************************************************************************
 // ***************************************************************************
 
-`timescale 1ns/100ps
+`ifndef I3C_CONTROLLER_REGMAP_V
+`define I3C_CONTROLLER_REGMAP_V
 
-module ad_mem_dual #(
-  parameter INITIALIZE = 0,
-  parameter DATA_WIDTH = 16,
-  parameter ADDRESS_WIDTH = 5
-) (
-  input                            clka,
-  input                            wea,
-  input                            ea,
-  input      [(ADDRESS_WIDTH-1):0] addra,
-  input      [(DATA_WIDTH-1):0]    dina,
-  output reg [(DATA_WIDTH-1):0]    douta,
+`define I3C_REGMAP_VERSION          8'h00
+`define I3C_REGMAP_DEVICE_ID        8'h01
+`define I3C_REGMAP_SCRATCH          8'h02
+`define I3C_REGMAP_ENABLE           8'h10
+`define I3C_REGMAP_IRQ_MASK         8'h20
+`define I3C_REGMAP_IRQ_PENDING      8'h21
+`define I3C_REGMAP_IRQ_SOURCE       8'h22
+`define I3C_REGMAP_CMD_FIFO_ROOM    8'h30
+`define I3C_REGMAP_CMDR_FIFO_LEVEL  8'h31
+`define I3C_REGMAP_SDO_FIFO_ROOM    8'h32
+`define I3C_REGMAP_SDI_FIFO_LEVEL   8'h33
+`define I3C_REGMAP_IBI_FIFO_LEVEL   8'h34
+`define I3C_REGMAP_CMD_FIFO         8'h35
+`define I3C_REGMAP_CMDR_FIFO        8'h36
+`define I3C_REGMAP_SDO_FIFO         8'h37
+`define I3C_REGMAP_SDI_FIFO         8'h38
+`define I3C_REGMAP_IBI_FIFO         8'h39
+`define I3C_REGMAP_FIFO_STATUS      8'h3a
+`define I3C_REGMAP_OPS              8'h40
+`define I3C_REGMAP_IBI_CONFIG       8'h50
+`define I3C_REGMAP_DEV_CHAR         8'h60
+`define I3C_REGMAP_OFFLOAD_CMD_     4'hb
+`define I3C_REGMAP_OFFLOAD_SDO_     4'hc
 
-  input                            clkb,
-  input                            web,
-  input                            eb,
-  input      [(ADDRESS_WIDTH-1):0] addrb,
-  input      [(DATA_WIDTH-1):0]    dinb,
-  output reg [(DATA_WIDTH-1):0]    doutb
-);
+`define I3C_REGMAP_IRQ_WIDTH        7
+`define I3C_REGMAP_IRQ_CMDR_PENDING 5
+`define I3C_REGMAP_IRQ_IBI_PENDING  6
+`define I3C_REGMAP_IRQ_DAA_PENDING  7
 
-  (* ram_style = "block" *)
-  reg [(DATA_WIDTH-1):0] m_ram[0:((2**ADDRESS_WIDTH)-1)];
-
-  genvar i;
-  generate
-    if (INITIALIZE) begin
-      for (i = 0; i < (2**ADDRESS_WIDTH); i = i + 1) begin: gen_m_ram
-        initial m_ram[i] = 'b0;
-      end
-    end
-  endgenerate
-
-  always @(posedge clka) begin
-    if (ea == 1'b1) begin
-      if (wea == 1'b1) begin
-        m_ram[addra] <= dina;
-      end
-      douta <= m_ram[addra];
-    end
-  end
-
-  always @(posedge clkb) begin
-    if (eb == 1'b1) begin
-      if (web == 1'b1) begin
-        m_ram[addrb] <= dinb;
-      end
-      doutb <= m_ram[addrb];
-    end
-  end
-
-endmodule
+`endif

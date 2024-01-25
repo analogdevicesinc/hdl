@@ -32,57 +32,80 @@
 //
 // ***************************************************************************
 // ***************************************************************************
+/**
+ * Packs u8 stream into u32.
+ * Restrictions:
+ * At partial payload, e.g. 3-bytes, the remaining byte value is unknown.
+ */
 
 `timescale 1ns/100ps
 
-module ad_mem_dual #(
-  parameter INITIALIZE = 0,
-  parameter DATA_WIDTH = 16,
-  parameter ADDRESS_WIDTH = 5
-) (
-  input                            clka,
-  input                            wea,
-  input                            ea,
-  input      [(ADDRESS_WIDTH-1):0] addra,
-  input      [(DATA_WIDTH-1):0]    dina,
-  output reg [(DATA_WIDTH-1):0]    douta,
+module i3c_controller_pack (
+  input         clk,
+  input         reset_n,
 
-  input                            clkb,
-  input                            web,
-  input                            eb,
-  input      [(ADDRESS_WIDTH-1):0] addrb,
-  input      [(DATA_WIDTH-1):0]    dinb,
-  output reg [(DATA_WIDTH-1):0]    doutb
+  input         u32_ready,
+  output        u32_valid,
+  output [31:0] u32,
+
+  output [11:0] u8_lvl,
+
+  output       u8_ready,
+  input        u8_valid,
+  input        u8_last,
+  input  [7:0] u8
 );
 
-  (* ram_style = "block" *)
-  reg [(DATA_WIDTH-1):0] m_ram[0:((2**ADDRESS_WIDTH)-1)];
+  localparam [0:0] SM_GET = 0;
+  localparam [0:0] SM_PUT = 1;
+
+  reg [0:0]  sm;
+  reg [1:0]  c;
+  reg [7:0]  u32_reg [3:0];
+  reg [11:0] u8_lvl_reg;
+  reg        u8_last_reg;
+
+  always @(posedge clk) begin
+    if (!reset_n) begin
+      sm <= SM_GET;
+      c <= 2'b00;
+      u8_last_reg <= 1'b0;
+      u8_lvl_reg <= 0;
+    end else begin
+      case (sm)
+        SM_GET: begin
+          u8_last_reg <= u8_last;
+          if (u8_valid) begin // tick
+            u32_reg[3-c] <= u8;
+            u8_lvl_reg <= u8_lvl_reg + 1;
+            c <= c + 1;
+            if (c == 2'b11 | u8_last) begin
+              c <= 2'b00;
+              sm <= SM_PUT;
+            end
+          end
+        end
+        SM_PUT: begin
+          if (u32_ready) begin
+            sm <= SM_GET;
+            if (u8_last_reg) begin
+              u8_lvl_reg <= 0;
+            end
+          end
+        end
+      endcase
+    end
+  end
+
+  assign u8_ready = sm == SM_GET & reset_n;
+  assign u32_valid = sm == SM_PUT;
+  assign u8_lvl = u8_lvl_reg;
 
   genvar i;
   generate
-    if (INITIALIZE) begin
-      for (i = 0; i < (2**ADDRESS_WIDTH); i = i + 1) begin: gen_m_ram
-        initial m_ram[i] = 'b0;
-      end
+    for (i=0; i<4; i=i+1) begin: gen_u32
+      assign u32[8*i+7:8*i] = u32_reg[3-i];
     end
   endgenerate
-
-  always @(posedge clka) begin
-    if (ea == 1'b1) begin
-      if (wea == 1'b1) begin
-        m_ram[addra] <= dina;
-      end
-      douta <= m_ram[addra];
-    end
-  end
-
-  always @(posedge clkb) begin
-    if (eb == 1'b1) begin
-      if (web == 1'b1) begin
-        m_ram[addrb] <= dinb;
-      end
-      doutb <= m_ram[addrb];
-    end
-  end
 
 endmodule
