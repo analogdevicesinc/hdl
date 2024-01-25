@@ -207,7 +207,6 @@ ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_DATA_WIDTH_SG 64
 
 ad_connect util_ad9361_divclk/clk_out axi_ad9361_dac_dma/m_axis_aclk
-ad_connect axi_ad9361_dac_dma/m_axis util_ad9361_dac_upack/s_axis
 
 ad_connect $sys_cpu_resetn axi_ad9361_dac_dma/m_src_axi_aresetn
 ad_connect $sys_cpu_resetn axi_ad9361_dac_dma/m_sg_axi_aresetn
@@ -225,6 +224,10 @@ ad_connect axi_ad9361_timestamp/sync_in GND
 
 ad_connect util_ad9361_adc_pack/packed_fifo_wr axi_ad9361_timestamp/fifo_wr_in
 ad_connect axi_ad9361_timestamp/fifo_wr_out axi_ad9361_adc_dma/fifo_wr
+
+ad_connect axi_ad9361_dac_dma/m_axis axi_ad9361_timestamp/s_axis
+ad_connect axi_ad9361_dac_dma/m_axis_xfer_req axi_ad9361_timestamp/s_axis_xfer_req
+ad_connect axi_ad9361_timestamp/m_axis util_ad9361_dac_upack/s_axis
 
 # interconnects
 
