@@ -42,10 +42,7 @@ proc adi_project_bd {project_name args} {
     -board "" \
     -speed "" \
     -language "verilog" \
-    -cmd_list {{source ./system_bd.tcl} \
-      {sbp_design pge sge \
-        -i "$ppath/$project_name/$project_name/$project_name.sbx" \
-        -o "$ppath"}} \
+    -cmd_list {{source ./system_bd.tcl}} \
     {*}$args]
 
   set dev_select $opt(-dev_select)
@@ -175,8 +172,25 @@ proc adi_project_create_bd {project_name args} {
     eval $cmd
   }
 
+# Workaround for keeping the configured IP folders in Propel Builder 2023.2
+# command line version.
+# The 'sbp_design save' doesn't saves the temporary .lib folder to lib folder,
+# instead deletes if there is anything in lib folder.
+# I am copying the content of .lib (the configured IP cores) to lib after save
+# to keep the configured IP cores for the Radiant project.
+# Also generating the bsp after copying the configured IP cores to lib folder
+# because that's also based on the content of lib folder.
   sbp_design save
   sbp_design generate
+
+  file copy "$propel_builder_project_dir/.lib/latticesemi.com" \
+    "$propel_builder_project_dir/lib"
+
+# Generating the bsp.
+  sbp_design pge sge \
+    -i "$ppath/$project_name/$project_name/$project_name.sbx" \
+    -o "$ppath"
+
   sbp_design close
 }
 
