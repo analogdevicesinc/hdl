@@ -35,14 +35,14 @@ if {![info exists REQUIRED_QUARTUS_VERSION]} {
 }
 
 # Define the supported tool version
-set required_radiant_version "2022.1"
+set required_radiant_version "2023.2"
 if {[info exists ::env(REQUIRED_RADIANT_VERSION)]} {
   set required_radiant_version $::env(REQUIRED_RADIANT_VERSION)
 } elseif {[info exists REQUIRED_RADIANT_VERSION]} {
   set required_radiant_version $REQUIRED_RADIANT_VERSION
 }
 # Define the supported tool version
-set required_propel_builder_version "2022.1"
+set required_propel_builder_version "2023.2"
 if {[info exists ::env(REQUIRED_PROPEL_BUILDER_VERSION)]} {
   set required_propel_builder_version $::env(REQUIRED_PROPEL_BUILDER_VERSION)
 } elseif {[info exists REQUIRED_PROPEL_BUILDER_VERSION]} {
