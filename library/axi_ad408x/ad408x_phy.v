@@ -39,8 +39,8 @@ module ad408x_phy #(
   parameter FPGA_TECHNOLOGY = 0,
   parameter DRP_WIDTH = 5,
   parameter NUM_LANES = 2,  // Max number of lanes is 2
-  parameter DDR_SUPPORT = 1,
   parameter IODELAY_CTRL = 1,
+  parameter DELAY_REFCLK_FREQUENCY = 200,
   parameter IO_DELAY_GROUP = "dev_if_delay_group"
 ) (
 
@@ -57,19 +57,19 @@ module ad408x_phy #(
 
   // control interface
 
-  (* MARK_DEBUG = "TRUE" *) input                              sync_n,
+   input                              sync_n,
 
     // Assumption:
     //  control bits are static after sync_n de-assertion
 
-  (* MARK_DEBUG = "TRUE" *) input                             sdr_ddr_n,
-  (* MARK_DEBUG = "TRUE" *) input        [4:0]                num_lanes,
-  (* MARK_DEBUG = "TRUE" *) input                             ddr_edge_sel,
+  input                             sdr_ddr_n,
+  input        [4:0]                num_lanes,
+  input                             ddr_edge_sel,
 
   // delay interface(for IDELAY macros)
 
   input                             up_clk,
-  input   [NUM_LANES-1:0]           up_adc_dld,
+  input   [          NUM_LANES-1:0] up_adc_dld,
   input   [DRP_WIDTH*NUM_LANES-1:0] up_adc_dwdata,
   output  [DRP_WIDTH*NUM_LANES-1:0] up_adc_drdata,
   input                             delay_clk,
@@ -78,406 +78,182 @@ module ad408x_phy #(
 
   // internal reset and clocks
 
-  (* MARK_DEBUG = "TRUE" *) input                             adc_rst,
+  input                             adc_rst,
   output                            adc_clk,
-   output                           adc_clk_div,
+  output                            adc_clk_div,
 
-  (* MARK_DEBUG = "TRUE" *) output      [31:0]                adc_data,
-  (* MARK_DEBUG = "TRUE" *) output                            adc_valid,
+   output        [31:0]             adc_data,
+   output                           adc_valid,
 
   // Debug interface
 
   output                            clk_in_s,
-  (* MARK_DEBUG = "TRUE" *) input                             bitslip_enable,
-  (* MARK_DEBUG = "TRUE" *) output                            sync_status
+  input                             bitslip_enable,
+  output                            sync_status
 );
 
-  // Use always DDR mode for SERDES, useful for SDR mode to adjust capture
-
-  localparam DDR_OR_SDR_N    = 1;
-  localparam CMOS_LVDS_N     = 0; // Use always LVDS mode
   localparam SEVEN_SERIES    = 1;
   localparam ULTRASCALE      = 2;
   localparam ULTRASCALE_PLUS = 3;
 
-// Assumptions:
-//  A replica of sync_n on the external board serves as a reset signal
-//  for the clock received on the dclk_in_n/p pairs
-//  Clock will stay low if sync_n is low, once sync_n deasserts after an
-//  undefined amount of time the clock will start to toggle, glitch-less
-//  having a smooth start.
-//  Framing information will be reconstructed based on this assumption.
-//
-// Serdes reset
-//
-//  When deasserted synchronously with CLKDIV, internal logic re-times this
-//  deassertion to the first rising edge of CLK
-//  The reset signal should only be deasserted when it is known that CLK
-//  and CLKDIV are stable and present, and should be a minimum of two CLKDIV pulses
-//  wide. After deassertion of reset, the output is not valid until after two CLKDIV cycles.
-// Serdes factor
-//  A sample has 20 bits, this can be transferred either on one lane or two
-//  lanes, SDR or DDR.
-//
-//                                             clk_div per sample
-//   single_lane sdr_ddr_n  | dclk per sample | /5    | /4
-//   0           0          | 5               | 1     | 1.25
-//   0           1          | 10              | 2     | 2.5
-//   1           0          | 10              | 2     | 2.5
-//   1           1          | 20              | 4     | 5
-//
-//   To accommodate all cases a serdes factor of 10 could be used in DDR mode
-//   with a clock division of 5. This requires a cascaded serdes
-//   configuration. However this will work only in 7 series devices.
-//   Instead a serdes factor of 8 is used to support ultrascale devices too
-//  (which do not have the cascaded mode with a factor of 10). This requires
-//   additional packer circuitry from 4/8/16 bits to 20 bits depending on
-//   mode.
-//
-// Serdes output valid
-//   The latency of serdes in 7 series is two div_clk cycles. Output valid of
-//   the serdes will assert two cock cycles later its reset de-asserts.
+   wire              adc_clk_in_fast;
+   wire              cnv_in_io;
+   wire              rx_data_b_p;
+   wire              rx_data_b_n;
+   wire              rx_data_a_p;
+   wire              rx_data_a_n;
+   wire    [ 8:0]    adc_cnt_value;
+   wire              adc_cnt_enable_s;
+   wire    [ 1:0]    delay_locked_s;
+   wire              single_lane;
+   reg     [ 8:0]    adc_cnt_p   = 'b0;
+   reg     [ 4:0]    cnv_in_io_d = 'b0;
+   reg               adc_valid_p = 'd0;
+   reg     [19:0]    adc_data_p  = 19'b0;
 
-  // internal wire
-
-  wire [NUM_LANES-1:0] serdes_in_p;
-  wire [NUM_LANES-1:0] serdes_in_n;
-  wire [NUM_LANES-1:0] data_s0;
-  wire [NUM_LANES-1:0] data_s1;
-  wire [NUM_LANES-1:0] data_s2;
-  wire [NUM_LANES-1:0] data_s3;
-  wire [NUM_LANES-1:0] data_s4;
-  wire [NUM_LANES-1:0] data_s5;
-  wire [NUM_LANES-1:0] data_s6;
-  wire [NUM_LANES-1:0] data_s7;
-  wire                 adc_clk_in_fast;
-  (* MARK_DEBUG = "TRUE" *) wire                 cnv_in_io;
-
+  assign delay_locked = &delay_locked_s;
   assign single_lane = num_lanes[0];
-  assign sdr_ddr_loc_n = DDR_SUPPORT ? sdr_ddr_n : 1'b1;
-  assign sync_status = sync_status_int;
 
-  //
-  // data interface
-  //
+  my_ila i_ila (
+    .clk(adc_clk_in_fast),
+    .probe0(cnv_in_io),
+    .probe1(rx_data_b_p),
+    .probe2(rx_data_b_n),
+    .probe3(rx_data_a_p),
+    .probe4(rx_data_a_n),
+    .probe5(adc_data),
+    .probe6(adc_valid),
+    .probe7(adc_cnt_value),
+    .probe8(adc_cnt_enable_s),
+    .probe9(adc_cnt_p),
+    .probe10(cnv_in_io_d),
+    .probe11(adc_valid_p),
+    .probe12(adc_data_p));
 
-  IBUFGDS i_clk_in_ibuf(
-    .I(dclk_in_p),
-    .IB(dclk_in_n),
-    .O(clk_in_s));
-    
+
+  wire dclk_s;
+
   IBUFDS i_cnv_in_ibuf(
-    .I(cnv_in_p),
-    .IB(cnv_in_n),
-    .O(cnv_in_io));
+  .I(cnv_in_p),
+  .IB(cnv_in_n),
+  .O(cnv_in_io));
 
-  generate
-  if(FPGA_TECHNOLOGY == SEVEN_SERIES) begin
+  IBUFDS i_dclk_bufds (
+    .O(dclk_s),
+    .I(dclk_in_p),
+    .IB(dclk_in_n));
 
-    BUFIO i_clk_buf(
-      .I(clk_in_s),
-      .O(adc_clk_in_fast));
-    
-    BUFR #(
-      .BUFR_DIVIDE("4")
-    ) i_div_clk_buf (
-      .CLR(~sync_n),
-      .CE(1'b1),
-      .I(clk_in_s),
-      .O(adc_clk_div));
+   // It is added to constraint the tool to keep the logic in the same region
+   // as the input pins, otherwise the tool will automatically add a bufg and
+   // meeting the timing margins is harder.
 
-  end else begin
+  BUFH BUFH_inst (
+     .O(adc_clk_in_fast),
+     .I(dclk_s));
+  
 
-    BUFGCE #(
-      .CE_TYPE("SYNC"),
-      .IS_CE_INVERTED(1'b0),
-      .IS_I_INVERTED(1'b0)
-    ) i_clk_buf_fast(
-      .O(adc_clk_in_fast),
-      .CE(1'b1),
-      .I(clk_in_s));
-
-    BUFGCE_DIV #(
-      .BUFGCE_DIVIDE(4),
-      .IS_CE_INVERTED(1'b0),
-      .IS_CLR_INVERTED(1'b0),
-      .IS_I_INVERTED(1'b0)
-    ) i_div_clk_buf(
-      .O(adc_clk_div),
-      .CE(1'b1),
-      .CLR(~sync_n),
-      .I(clk_in_s));
-
-  end
-  endgenerate
-
-  assign serdes_in_p = {data_b_in_p, data_a_in_p};
-  assign serdes_in_n = {data_b_in_n, data_a_in_n};
-
-  // Min 2 div_clk cycles once div_clk is running after deassertion of sync
-  // Control externally the reset of serdes for precise timing
-
-  (* MARK_DEBUG = "TRUE" *) reg [5:0] serdes_reset = 6'b000110;
-
-  always @(posedge adc_clk_div or negedge sync_n) begin
-    if(~sync_n) begin
-      serdes_reset <= 6'b000110;
-    end else begin
-      serdes_reset <= {serdes_reset[4:0],1'b0};
-    end
-  end
-  (* MARK_DEBUG = "TRUE" *) wire serdes_reset_s;
-  assign serdes_reset_s = serdes_reset[5];
-
-  ad_serdes_in #(
-    .CMOS_LVDS_N(CMOS_LVDS_N),
+  ad_data_in # (
+    .SINGLE_ENDED(0),
+    .IDDR_CLK_EDGE("OPPOSITE_EDGE"),
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
+    .DDR_SDR_N(1),
     .IODELAY_CTRL(IODELAY_CTRL),
     .IODELAY_GROUP(IO_DELAY_GROUP),
-    .DDR_OR_SDR_N(DDR_OR_SDR_N),
-    .DATA_WIDTH(NUM_LANES),
-    .DRP_WIDTH(DRP_WIDTH),
-    .SERDES_FACTOR(8),
-    .EXT_SERDES_RESET(1)
-  ) i_serdes(
-    .rst(1'b0),
-    .ext_serdes_rst(serdes_reset_s),
-    .clk(adc_clk_in_fast),
-    .div_clk(adc_clk_div),
-    .data_s0(data_s0),
-    .data_s1(data_s1),
-    .data_s2(data_s2),
-    .data_s3(data_s3),
-    .data_s4(data_s4),
-    .data_s5(data_s5),
-    .data_s6(data_s6),
-    .data_s7(data_s7),
-    .data_in_p(serdes_in_p),
-    .data_in_n(serdes_in_n),
+    .REFCLK_FREQUENCY(DELAY_REFCLK_FREQUENCY)
+  ) da_iddr (
+    .rx_clk(adc_clk_in_fast),
+    .rx_data_in_p(data_a_in_p),
+    .rx_data_in_n(data_a_in_n),
+    .rx_data_p(rx_data_a_p),
+    .rx_data_n(rx_data_a_n),
     .up_clk(up_clk),
-    .up_dld(up_adc_dld),
-    .up_dwdata(up_adc_dwdata),
-    .up_drdata(up_adc_drdata),
+    .up_dld(up_adc_dld[0]),
+    .up_dwdata(up_adc_dwdata[4:0]),
+    .up_drdata(up_adc_drdata[4:0]),
     .delay_clk(delay_clk),
     .delay_rst(delay_rst),
-    .delay_locked(delay_locked));
+    .delay_locked(delay_locked_s[1]));
 
-  wire      [7:0]       serdes_data_0;
-  wire      [7:0]       serdes_data_1;
+    ad_data_in # (
+      .SINGLE_ENDED(0),
+      .IDDR_CLK_EDGE("OPPOSITE_EDGE"),
+      .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
+      .DDR_SDR_N(1),
+      .IODELAY_CTRL(IODELAY_CTRL),
+      .IODELAY_GROUP(IO_DELAY_GROUP),
+      .REFCLK_FREQUENCY(DELAY_REFCLK_FREQUENCY)
+    ) db_iddr (
+      .rx_clk(adc_clk_in_fast),
+      .rx_data_in_p(data_b_in_p),
+      .rx_data_in_n(data_b_in_n),
+      .rx_data_p(rx_data_b_p),
+      .rx_data_n(rx_data_b_n),
+      .up_clk(up_clk),
+      .up_dld(up_adc_dld[1]),
+      .up_dwdata(up_adc_dwdata[9:5]),
+      .up_drdata(up_adc_drdata[9:5]),
+      .delay_clk(delay_clk),
+      .delay_rst(delay_rst),
+      .delay_locked(delay_locked_s[0]));
 
-  assign {serdes_data_1[0],serdes_data_0[0]} = data_s0;  // f-e latest bit received
-  assign {serdes_data_1[1],serdes_data_0[1]} = data_s1;  // r-e
-  assign {serdes_data_1[2],serdes_data_0[2]} = data_s2;  // f-e
-  assign {serdes_data_1[3],serdes_data_0[3]} = data_s3;  // r-e
-  assign {serdes_data_1[4],serdes_data_0[4]} = data_s4;  // f-e
-  assign {serdes_data_1[5],serdes_data_0[5]} = data_s5;  // r-e
-  assign {serdes_data_1[6],serdes_data_0[6]} = data_s6;  // f-e
-  assign {serdes_data_1[7],serdes_data_0[7]} = data_s7;  // r-e oldest bit received
+  assign adc_cnt_value    = (single_lane) ? 'h9 : 'h4;
+  assign adc_cnt_enable_s = (adc_cnt_p < adc_cnt_value) ? 1'b1 : 1'b0;
 
-  // Assert serdes valid after 2 clock cycles is pulled out of reset
 
-  reg [1:0] serdes_valid = 2'b00;
-wire cnv_serdes_valid ;
+  always @(posedge adc_clk_in_fast) begin
+  
+    cnv_in_io_d <= {cnv_in_io_d[3:0],cnv_in_io};
 
-  always @(posedge adc_clk_div) begin
-    if(serdes_reset_s) begin
-      serdes_valid <= 2'b00;
+    if (~cnv_in_io_d[4] & cnv_in_io_d[3] ) begin
+      adc_cnt_p <= 'h000;
+    end else if (adc_cnt_enable_s == 1'b1) begin
+      adc_cnt_p <= adc_cnt_p + 1'b1;
+    end
+     if (adc_cnt_p == adc_cnt_value) begin
+      adc_valid_p <= 1'b1;
     end else begin
-      serdes_valid <= {serdes_valid[0],1'b1};
+      adc_valid_p <= 1'b0;
     end
   end
 
-  wire [ 3:0] serdes_data_4_lane0;
-  wire [ 3:0] serdes_data_4_lane1;
-  wire [ 7:0] serdes_data_8;
-  wire [15:0] serdes_data_16;
-
-  // The serdes produces 8 bits at a div_clk cycle
-  // In SDR only half of those bits are valid,
-  //
-  //  mode           | number of valid bits per div_clk beat
-  //  sdr singe lane    4 bits
-  //  sdr dual lane     8 bits
-  //  ddr single lane   8 bits
-  //  ddr dual lane     16 bits
-  //
-  //  ddr_edge_sel - 0 posedge
-  //                 1 negedge
-
-  assign serdes_data_4_lane0 = ddr_edge_sel ? {serdes_data_0[6],
-                                               serdes_data_0[4],
-                                               serdes_data_0[2],
-                                               serdes_data_0[0]}
-                                            : {serdes_data_0[7],
-                                               serdes_data_0[5],
-                                               serdes_data_0[3],
-                                               serdes_data_0[1]};
-
-  assign serdes_data_4_lane1 = ddr_edge_sel ? {serdes_data_1[6],
-                                               serdes_data_1[4],
-                                               serdes_data_1[2],
-                                               serdes_data_1[0]}
-                                            : {serdes_data_1[7],
-                                               serdes_data_1[5],
-                                               serdes_data_1[3],
-                                               serdes_data_1[1]};
-
-  // For SDR(dual lane) take data from two lanes interleaved
-  // for DDR(single lane) take data from a single lane
-
-  assign serdes_data_8 = sdr_ddr_loc_n ? {serdes_data_4_lane0[3],
-                                      serdes_data_4_lane1[3],
-                                      serdes_data_4_lane0[2],
-                                      serdes_data_4_lane1[2],
-                                      serdes_data_4_lane0[1],
-                                      serdes_data_4_lane1[1],
-                                      serdes_data_4_lane0[0],
-                                      serdes_data_4_lane1[0]}
-                                   : serdes_data_0;
-
-  // For DDR dual lane interleave the two sedres outputs;
-
-  assign serdes_data_16 = {serdes_data_0[7],
-                           serdes_data_1[7],
-                           serdes_data_0[6],
-                           serdes_data_1[6],
-                           serdes_data_0[5],
-                           serdes_data_1[5],
-                           serdes_data_0[4],
-                           serdes_data_1[4],
-                           serdes_data_0[3],
-                           serdes_data_1[3],
-                           serdes_data_0[2],
-                           serdes_data_1[2],
-                           serdes_data_0[1],
-                           serdes_data_1[1],
-                           serdes_data_0[0],
-                           serdes_data_1[0]};
-
-  wire [19:0] packed_4_20;
-  wire [19:0] packed_8_20;
-  wire [19:0] packed_16_20;
-
-  ad_pack #(
-    .I_W(4),
-    .O_W(20),
-    .UNIT_W(1),
-    .ALIGN_TO_MSB(1)
-  ) i_ad_pack_4 (
-    .clk(adc_clk_div),
-    .reset(~serdes_valid[0]),
-    .idata(serdes_data_4_lane0),
-    .ivalid(serdes_valid[1]),
-    .odata(packed_4_20),
-    .ovalid(pack4_valid));
-
-  ad_pack #(
-    .I_W(8),
-    .O_W(20),
-    .UNIT_W(1),
-    .ALIGN_TO_MSB(1)
-  ) i_ad_pack_8 (
-    .clk(adc_clk_div),
-    .reset(~serdes_valid[0]),
-    .idata(serdes_data_8),
-    .ivalid(serdes_valid[1]),
-    .odata(packed_8_20),
-    .ovalid(pack8_valid));
-
-  ad_pack #(
-    .I_W(16),
-    .O_W(20),
-    .UNIT_W(1),
-    .ALIGN_TO_MSB(1)
-  ) i_ad_pack_16 (
-    .clk(adc_clk_div),
-    .reset(~serdes_valid[0]),
-    .idata(serdes_data_16),
-    .ivalid(serdes_valid[1]),
-    .odata(packed_16_20),
-    .ovalid(pack16_valid));
-
-    (* MARK_DEBUG = "TRUE" *) reg [19:0] packed_data;
-  reg        packed_data_valid;
-
-  always @(*) begin
-    case({single_lane,sdr_ddr_loc_n})
-      2'b00 : packed_data = packed_16_20;
-      2'b01 : packed_data = packed_8_20;
-      2'b10 : packed_data = packed_8_20;
-      2'b11 : packed_data = packed_4_20;
-    endcase
-  end
-
-  always @(*) begin
-    case({single_lane,sdr_ddr_loc_n})
-      2'b00 : packed_data_valid = pack16_valid;
-      2'b01 : packed_data_valid = pack8_valid;
-      2'b10 : packed_data_valid = pack8_valid;
-      2'b11 : packed_data_valid = pack4_valid;
-    endcase
-  end
-
-  // Align data
-  // Use different rotations based on selected mode
-  // Latency from first clock edge post sync_n deasertion to the first valid
-  // output of the packer should be constant allowing for a constant rotation every time.
-
-  (* MARK_DEBUG = "TRUE" *)  reg [19:0] packed_data_d;
-
-  always @(posedge adc_clk_div) begin
-    if(packed_data_valid) begin
-      packed_data_d <= packed_data;
-    end
-  end
-
-  (* MARK_DEBUG = "TRUE" *) reg  [ 4:0]  shift_cnt = 5'd0;
-  (* MARK_DEBUG = "TRUE" *) reg          shift_cnt_en = 1'b0;
-  (* MARK_DEBUG = "TRUE" *) reg          sync_status_int = 1'b0;
-  reg          slip_d;
-  reg          slip_dd;
-
-  (* MARK_DEBUG = "TRUE" *) wire         shift_cnt_en_s;
-  (* MARK_DEBUG = "TRUE" *) wire [ 4:0]  shift_cnt_value;
-  (* MARK_DEBUG = "TRUE" *) wire [19:0]  pattern_value;
-
-  always @(posedge adc_clk_div) begin
-    slip_d <= bitslip_enable;
-    slip_dd <= slip_d;
-    if(serdes_reset_s || adc_data_shifted == pattern_value)
-      shift_cnt_en <= 1'b0;
-    else if(slip_d & ~slip_dd)
-      shift_cnt_en <= 1'b1;
-  end
-
-  assign shift_cnt_value = 'd19;
-  assign  pattern_value = 20'hac5d6;
-
-  always @(posedge adc_clk_div) begin
-    if(shift_cnt_en) begin
-      if(shift_cnt == shift_cnt_value || serdes_reset_s) begin
-        shift_cnt <= 0;
-        sync_status_int <= 1'b0;
-      end else if( adc_data_shifted != pattern_value &&(packed_data_valid_d & ~packed_data_valid) ) begin
-        shift_cnt <= shift_cnt + 1;
+  always @(posedge adc_clk_in_fast) begin
+    if(single_lane) begin 
+      if (adc_cnt_p == 'h000) begin
+        adc_data_p <= {18'd0, rx_data_a_p, rx_data_a_n};
+      end else begin
+        adc_data_p <= {adc_data_p[17:0], rx_data_a_p, rx_data_a_n};
       end
-      if(adc_data_shifted == pattern_value) begin
-        sync_status_int <= 1'b1;
+    end else begin
+      if (adc_cnt_p == 'h000) begin
+        adc_data_p <= {16'd0, rx_data_a_p, rx_data_b_p, rx_data_a_n, rx_data_b_n};
+      end else begin
+        adc_data_p <= {adc_data_p[15:0], rx_data_a_p, rx_data_b_p, rx_data_a_n, rx_data_b_n};
       end
     end
   end
 
-  (* MARK_DEBUG = "TRUE" *) reg [19:0]  adc_data_shifted;
-  (* MARK_DEBUG = "TRUE" *) reg         packed_data_valid_d;
 
-  always @(posedge adc_clk_div) begin
-    adc_data_shifted <= {packed_data_d,packed_data} >> shift_cnt;
-    packed_data_valid_d <= packed_data_valid;
-  end
+  // reg [19:0] adc_data_d;
+  // reg [19:0] adc_data_dd;
 
-  // Sign extend to 32 bits
+  // reg        adc_valid_d;
+  // reg        adc_valid_dd;
 
-  assign adc_data  = {{12{adc_data_shifted[19]}},adc_data_shifted};                       
-  assign adc_valid = packed_data_valid_d;
+  // always @(posedge adc_clk_in_fast) begin
+  //  
+    // adc_data_d <= adc_data_p;
+    // adc_valid_d <= adc_valid_p;
+    // 
+    // adc_data_dd  <= adc_data_d;
+    // adc_valid_dd <= adc_valid_d;
+  // end
 
+   // Sign extend to 32 bits
+
+  assign adc_data  = {{12{adc_data_p[19]}},adc_data_p};
+  assign adc_valid = adc_valid_p;
+
+  assign adc_clk     = adc_clk_in_fast;
+  assign adc_clk_div = adc_clk_in_fast;
+  
 endmodule

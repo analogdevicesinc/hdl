@@ -40,8 +40,7 @@ module axi_ad408x #(
   parameter   FPGA_TECHNOLOGY = 0,
   parameter   DRP_WIDTH = 5,
   parameter   NUM_LANES = 2,   // Max number of lanes is 2
-  parameter   NUM_OF_CHANNELS = 2,
-  parameter   DDR_SUPPORT = 1,
+  parameter   NUM_OF_CHANNELS = 1,
   parameter   HAS_DELAY_CTRL = 0,
   parameter   DELAY_CTRL_NUM_LANES = 1,
   parameter   DELAY_CTRL_DRP_WIDTH = 5,
@@ -272,7 +271,6 @@ module axi_ad408x #(
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
     .DRP_WIDTH(DRP_WIDTH),
     .NUM_LANES(NUM_LANES),
-    .DDR_SUPPORT(DDR_SUPPORT),
     .IODELAY_CTRL(IODELAY_CTRL),
     .IO_DELAY_GROUP(IO_DELAY_GROUP)
   ) ad408x_interface (
