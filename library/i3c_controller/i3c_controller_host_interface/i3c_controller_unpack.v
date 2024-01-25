@@ -32,57 +32,67 @@
 //
 // ***************************************************************************
 // ***************************************************************************
+/**
+ * Unpacks u32 packages into u8 stream.
+ */
 
 `timescale 1ns/100ps
 
-module ad_mem_dual #(
-  parameter INITIALIZE = 0,
-  parameter DATA_WIDTH = 16,
-  parameter ADDRESS_WIDTH = 5
-) (
-  input                            clka,
-  input                            wea,
-  input                            ea,
-  input      [(ADDRESS_WIDTH-1):0] addra,
-  input      [(DATA_WIDTH-1):0]    dina,
-  output reg [(DATA_WIDTH-1):0]    douta,
+module i3c_controller_unpack (
+  input         clk,
+  input         reset_n,
+  input         stop,
 
-  input                            clkb,
-  input                            web,
-  input                            eb,
-  input      [(ADDRESS_WIDTH-1):0] addrb,
-  input      [(DATA_WIDTH-1):0]    dinb,
-  output reg [(DATA_WIDTH-1):0]    doutb
+  output        u32_ready,
+  input         u32_valid,
+  input  [31:0] u32,
+
+  output [11:0] u8_lvl,
+
+  input         u8_ready,
+  output        u8_valid,
+  output [7:0]  u8
 );
 
-  (* ram_style = "block" *)
-  reg [(DATA_WIDTH-1):0] m_ram[0:((2**ADDRESS_WIDTH)-1)];
+  localparam [0:0] SM_GET = 0;
+  localparam [0:0] SM_PUT = 1;
 
-  genvar i;
-  generate
-    if (INITIALIZE) begin
-      for (i = 0; i < (2**ADDRESS_WIDTH); i = i + 1) begin: gen_m_ram
-        initial m_ram[i] = 'b0;
-      end
-    end
-  endgenerate
+  reg [0:0]  sm;
+  reg [1:0]  c;
+  reg [11:0] u8_lvl_reg;
+  reg [31:0] u32_reg;
 
-  always @(posedge clka) begin
-    if (ea == 1'b1) begin
-      if (wea == 1'b1) begin
-        m_ram[addra] <= dina;
-      end
-      douta <= m_ram[addra];
+  always @(posedge clk) begin
+    if (!reset_n | stop) begin
+      sm <= SM_GET;
+      c <= 2'b00;
+      u8_lvl_reg <= 0;
+    end else begin
+      case (sm)
+        SM_GET: begin
+          if (u32_valid) begin
+            sm <= SM_PUT;
+          end
+          u32_reg <= u32;
+          c <= 2'b00;
+        end
+        SM_PUT: begin
+          if (u8_ready) begin // tick
+            u8_lvl_reg <= u8_lvl_reg + 12'b1;
+            c <= c + 1;
+            if (c == 2'b11) begin
+              sm <= SM_GET;
+            end
+            u32_reg <= u32_reg >> 8;
+          end
+        end
+      endcase
     end
   end
 
-  always @(posedge clkb) begin
-    if (eb == 1'b1) begin
-      if (web == 1'b1) begin
-        m_ram[addrb] <= dinb;
-      end
-      doutb <= m_ram[addrb];
-    end
-  end
+  assign u32_ready = sm == SM_GET & (reset_n | stop);
+  assign u8_valid = sm == SM_PUT;
+  assign u8_lvl = u8_lvl_reg;
+  assign u8 = u32_reg[7:0];
 
 endmodule

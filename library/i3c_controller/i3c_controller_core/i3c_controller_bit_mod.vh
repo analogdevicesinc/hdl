@@ -33,56 +33,42 @@
 // ***************************************************************************
 // ***************************************************************************
 
-`timescale 1ns/100ps
+`ifndef BIT_MOD_CMD_V
+`define BIT_MOD_CMD_V
 
-module ad_mem_dual #(
-  parameter INITIALIZE = 0,
-  parameter DATA_WIDTH = 16,
-  parameter ADDRESS_WIDTH = 5
-) (
-  input                            clka,
-  input                            wea,
-  input                            ea,
-  input      [(ADDRESS_WIDTH-1):0] addra,
-  input      [(DATA_WIDTH-1):0]    dina,
-  output reg [(DATA_WIDTH-1):0]    douta,
+`define MOD_BIT_CMD_WIDTH 4
 
-  input                            clkb,
-  input                            web,
-  input                            eb,
-  input      [(ADDRESS_WIDTH-1):0] addrb,
-  input      [(DATA_WIDTH-1):0]    dinb,
-  output reg [(DATA_WIDTH-1):0]    doutb
-);
+`define MOD_BIT_CMD_NOP_     3'b000
+`define MOD_BIT_CMD_WRITE_   3'b001
+`define MOD_BIT_CMD_ACK_IBI_ 3'b010
 
-  (* ram_style = "block" *)
-  reg [(DATA_WIDTH-1):0] m_ram[0:((2**ADDRESS_WIDTH)-1)];
+`define MOD_BIT_CMD_START_   3'b100
+`define MOD_BIT_CMD_STOP_    3'b101
+`define MOD_BIT_CMD_ACK_SDR_ 3'b110
+`define MOD_BIT_CMD_READ_    3'b111
 
-  genvar i;
-  generate
-    if (INITIALIZE) begin
-      for (i = 0; i < (2**ADDRESS_WIDTH); i = i + 1) begin: gen_m_ram
-        initial m_ram[i] = 'b0;
-      end
-    end
-  endgenerate
+// Stop, read, ack_sdr have PP variants to preserve the PP
+// speed-grade, but the they never active drive SDA High.
+// T-bit for read:
+//  To continue, yield ACK_SDR:
+//    Read RX to check if the peripheral wishes to continue.
+//  To stop, yield Start, creating a Sr.
+// ACK IBI bit:
+//  To ACK, yield ACK_IBI.
+//  to NACK, yield WRITE_OD_1
 
-  always @(posedge clka) begin
-    if (ea == 1'b1) begin
-      if (wea == 1'b1) begin
-        m_ram[addra] <= dina;
-      end
-      douta <= m_ram[addra];
-    end
-  end
+`define MOD_BIT_CMD_NOP        {`MOD_BIT_CMD_NOP_,    2'b00}
+`define MOD_BIT_CMD_START_OD   {`MOD_BIT_CMD_START_,  2'b00}
+`define MOD_BIT_CMD_STOP_OD    {`MOD_BIT_CMD_STOP_,   2'b00}
+`define MOD_BIT_CMD_STOP_PP    {`MOD_BIT_CMD_STOP_,   2'b10}
+`define MOD_BIT_CMD_WRITE_OD_0 {`MOD_BIT_CMD_WRITE_,  2'b00}
+`define MOD_BIT_CMD_WRITE_OD_1 {`MOD_BIT_CMD_WRITE_,  2'b01}
+`define MOD_BIT_CMD_WRITE_PP_0 {`MOD_BIT_CMD_WRITE_,  2'b10}
+`define MOD_BIT_CMD_WRITE_PP_1 {`MOD_BIT_CMD_WRITE_,  2'b11}
+`define MOD_BIT_CMD_READ_OD    {`MOD_BIT_CMD_READ_,   2'b00}
+`define MOD_BIT_CMD_READ_PP    {`MOD_BIT_CMD_READ_,   2'b10}
+`define MOD_BIT_CMD_ACK_SDR_OD {`MOD_BIT_CMD_ACK_SDR_,2'b00}
+`define MOD_BIT_CMD_ACK_SDR_PP {`MOD_BIT_CMD_ACK_SDR_,2'b10}
+`define MOD_BIT_CMD_ACK_IBI    {`MOD_BIT_CMD_ACK_IBI_,2'b00}
 
-  always @(posedge clkb) begin
-    if (eb == 1'b1) begin
-      if (web == 1'b1) begin
-        m_ram[addrb] <= dinb;
-      end
-      doutb <= m_ram[addrb];
-    end
-  end
-
-endmodule
+`endif
