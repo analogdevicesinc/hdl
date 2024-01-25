@@ -6,8 +6,8 @@
 set_property -dict {PACKAGE_PIN L18 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports dco_p]     ; ## H4  FMC_CLK0_M2C_P  IO_L12P_T1_MRCC_34
 set_property -dict {PACKAGE_PIN L19 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports dco_n]     ; ## H5  FMC_CLK0_M2C_N  IO_L12N_T1_MRCC_34
 
-set_property -dict {PACKAGE_PIN D18 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports fpgaclk_p] ; ## G2  FMC_CLK1_M2C_P  IO_L12P_T1_MRCC_35
-set_property -dict {PACKAGE_PIN C19 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports fpgaclk_n] ; ## G3  FMC_CLK1_M2C_N  IO_L12N_T1_MRCC_35
+# set_property -dict {PACKAGE_PIN D18 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports fpgaclk_p] ; ## G2  FMC_CLK1_M2C_P  IO_L12P_T1_MRCC_35
+# set_property -dict {PACKAGE_PIN C19 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports fpgaclk_n] ; ## G3  FMC_CLK1_M2C_N  IO_L12N_T1_MRCC_35
 
 set_property -dict {PACKAGE_PIN N19 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports clk_p]     ; ## D8  FMC_LA01_CC_P   IO_L14P_T2_SRCC_34
 set_property -dict {PACKAGE_PIN N20 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports clk_n]     ; ## D9  FMC_LA01_CC_N   IO_L14N_T2_SRCC_34
@@ -18,8 +18,8 @@ set_property -dict {PACKAGE_PIN P18 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports d
 set_property -dict {PACKAGE_PIN N22 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports db_p]      ; ## G9  FMC_LA03_P      IO_L16P_T2_34
 set_property -dict {PACKAGE_PIN P22 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports db_n]      ; ## G10 FMC_LA03_N      IO_L16N_T2_34 
 
-set_property -dict {PACKAGE_PIN M19 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports cnv_in_p]
-set_property -dict {PACKAGE_PIN M20 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports cnv_in_n]
+set_property -dict {PACKAGE_PIN D18 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports cnv_in_p]  ;
+set_property -dict {PACKAGE_PIN C19 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports cnv_in_n]  ;
 
 set_property -dict {PACKAGE_PIN T16 IOSTANDARD LVCMOS25} [get_ports gpio0_fmc]            ; ## H13 FMC_LA07_P      IO_L21P_T3_DQS_34 
 set_property -dict {PACKAGE_PIN L22 IOSTANDARD LVCMOS25} [get_ports gpio1_fmc]            ; ## C11 FMC_LA06_N      IO_L10N_T1_34    
@@ -66,4 +66,19 @@ set_property -dict {PACKAGE_PIN C20 IOSTANDARD LVCMOS25} [get_ports adf435x_lock
 
 # clocks
 
-create_clock -period 2.500 -name dco_clk [get_ports dco_p]
+create_clock -period 5 -name dco_clk [get_ports dco_p]
+
+# set input_clock         dco_clk;      # Name of input clock
+# set input_clock_period  5;            # Period of input clock (full-period)
+# set skew_bre            1.000;        # Data invalid before the rising clock edge
+# set skew_are            1.000;        # Data invalid after the rising clock edge
+# set skew_bfe            1.000;        # Data invalid before the falling clock edge
+# set skew_afe            1.000;        # Data invalid after the falling clock edge
+# set input_ports         {da_p db_p};  # List of input ports
+
+# # Input Delay Constraint
+
+# set_input_delay -clock $input_clock -max [expr $input_clock_period/2 + $skew_afe] [get_ports $input_ports];
+# set_input_delay -clock $input_clock -min [expr $input_clock_period/2 - $skew_bfe] [get_ports $input_ports];
+# set_input_delay -clock $input_clock -max [expr $input_clock_period/2 + $skew_are] [get_ports $input_ports] -clock_fall -add_delay;
+# set_input_delay -clock $input_clock -min [expr $input_clock_period/2 - $skew_bre] [get_ports $input_ports] -clock_fall -add_delay;
