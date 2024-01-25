@@ -33,56 +33,29 @@
 // ***************************************************************************
 // ***************************************************************************
 
-`timescale 1ns/100ps
+`ifndef WORD_COMMAND_V
+`define WORD_COMMAND_V
 
-module ad_mem_dual #(
-  parameter INITIALIZE = 0,
-  parameter DATA_WIDTH = 16,
-  parameter ADDRESS_WIDTH = 5
-) (
-  input                            clka,
-  input                            wea,
-  input                            ea,
-  input      [(ADDRESS_WIDTH-1):0] addra,
-  input      [(DATA_WIDTH-1):0]    dina,
-  output reg [(DATA_WIDTH-1):0]    douta,
+`define CMDW_HEADER_WIDTH 4
 
-  input                            clkb,
-  input                            web,
-  input                            eb,
-  input      [(ADDRESS_WIDTH-1):0] addrb,
-  input      [(DATA_WIDTH-1):0]    dinb,
-  output reg [(DATA_WIDTH-1):0]    doutb
-);
+`define CMDW_NOP                   5'd00
+`define CMDW_START                 5'd01
+`define CMDW_BCAST_7E_W0           5'd02
+`define CMDW_MSG_SR                5'd03
+`define CMDW_TARGET_ADDR_OD        5'd04
+`define CMDW_TARGET_ADDR_PP        5'd05
+`define CMDW_MSG_TX                5'd06
+`define CMDW_MSG_RX                5'd07
+`define CMDW_CCC_OD                5'd08
+`define CMDW_CCC_PP                5'd09
+`define CMDW_STOP_OD               5'd10
+`define CMDW_STOP_PP               5'd11
+`define CMDW_BCAST_7E_W1           5'd12
+`define CMDW_DAA_DEV_CHAR          5'd13
+`define CMDW_DYN_ADDR              5'd14
+`define CMDW_IBI_MDB               5'd15
+`define CMDW_SR                    5'd16
+`define CMDW_I2C_TX                5'd17
+`define CMDW_I2C_RX                5'd18
 
-  (* ram_style = "block" *)
-  reg [(DATA_WIDTH-1):0] m_ram[0:((2**ADDRESS_WIDTH)-1)];
-
-  genvar i;
-  generate
-    if (INITIALIZE) begin
-      for (i = 0; i < (2**ADDRESS_WIDTH); i = i + 1) begin: gen_m_ram
-        initial m_ram[i] = 'b0;
-      end
-    end
-  endgenerate
-
-  always @(posedge clka) begin
-    if (ea == 1'b1) begin
-      if (wea == 1'b1) begin
-        m_ram[addra] <= dina;
-      end
-      douta <= m_ram[addra];
-    end
-  end
-
-  always @(posedge clkb) begin
-    if (eb == 1'b1) begin
-      if (web == 1'b1) begin
-        m_ram[addrb] <= dinb;
-      end
-      doutb <= m_ram[addrb];
-    end
-  end
-
-endmodule
+`endif
