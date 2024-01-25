@@ -89,8 +89,8 @@ module system_top (
 
   // Default 100 MHz clock
 
-  input           fpgaclk_p,
-  input           fpgaclk_n,
+  // input           fpgaclk_p,
+  // input           fpgaclk_n,
 
   // LVDS data interace
 
@@ -216,9 +216,9 @@ module system_top (
   // Even if the clock is not used the diff termination should help signal
   // integrity
 
-  always @(posedge fpga_100_clk) begin
-    dbg_cnt_100_f <= dbg_cnt_100_f + 1;
-  end
+  // always @(posedge fpga_100_clk) begin
+    // dbg_cnt_100_f <= dbg_cnt_100_f + 1;
+  // end
 
   // instantiations
 
@@ -227,10 +227,10 @@ module system_top (
     .IB (clk_n),
     .O (fpga_clk));
 
-  IBUFDS i_fpga_100_clk (
-    .I (fpgaclk_p),
-    .IB (fpgaclk_n),
-    .O (fpga_100_clk));
+  // IBUFDS i_fpga_100_clk (
+    // .I (fpgaclk_p),
+    // .IB (fpgaclk_n),
+    // .O (fpga_100_clk));
 
   ad_iobuf #(
     .DATA_WIDTH(2)

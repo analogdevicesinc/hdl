@@ -22,7 +22,6 @@ ad_ip_instance axi_ad408x axi_ad4080_adc
 ad_ip_parameter axi_ad4080_adc CONFIG.NUM_OF_CHANNELS 1
 ad_ip_parameter axi_ad4080_adc CONFIG.HAS_DELAY_CTRL 1
 ad_ip_parameter axi_ad4080_adc CONFIG.DELAY_CTRL_NUM_LANES 2
-ad_ip_parameter axi_ad4080_adc CONFIG.DDR_SUPPORT 1
 
 # dma for rx1
 
@@ -35,6 +34,7 @@ ad_ip_parameter axi_ad4080_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_ad4080_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_ad4080_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad4080_dma CONFIG.DMA_DATA_WIDTH_SRC 32
+ad_ip_parameter axi_ad4080_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 # connect interface to axi_ad4080_adc
 

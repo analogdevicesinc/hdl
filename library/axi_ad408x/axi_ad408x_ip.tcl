@@ -9,6 +9,27 @@ source ../../../hdl/library/scripts/adi_ip_xilinx.tcl
 
 adi_ip_create axi_ad408x
 
+ create_ip -name ila -vendor xilinx.com -library ip -version 6.2 -module_name my_ila
+    set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] [get_ips my_ila]
+    set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] [get_ips my_ila] ;# BASIC triggering enable
+    set_property -dict [list CONFIG.C_NUM_OF_PROBES {13}] [get_ips my_ila]
+    set_property -dict [list CONFIG.C_DATA_DEPTH {2048}] [get_ips my_ila]
+    set_property -dict [list CONFIG.C_TRIGIN_EN {false}] [get_ips my_ila]
+    set_property -dict [list CONFIG.C_PROBE0_WIDTH  {1}] [get_ips my_ila]
+    set_property -dict [list CONFIG.C_PROBE1_WIDTH  {1}] [get_ips my_ila]
+    set_property -dict [list CONFIG.C_PROBE2_WIDTH  {1}] [get_ips my_ila]
+    set_property -dict [list CONFIG.C_PROBE3_WIDTH  {1}] [get_ips my_ila]
+    set_property -dict [list CONFIG.C_PROBE4_WIDTH  {1}] [get_ips my_ila]
+    set_property -dict [list CONFIG.C_PROBE5_WIDTH  {31}] [get_ips my_ila]
+    set_property -dict [list CONFIG.C_PROBE6_WIDTH  {1}] [get_ips my_ila]
+    set_property -dict [list CONFIG.C_PROBE7_WIDTH  {9}] [get_ips my_ila]
+    set_property -dict [list CONFIG.C_PROBE8_WIDTH  {1}] [get_ips my_ila]
+    set_property -dict [list CONFIG.C_PROBE9_WIDTH  {9}] [get_ips my_ila]
+    set_property -dict [list CONFIG.C_PROBE10_WIDTH {3}] [get_ips my_ila]
+    set_property -dict [list CONFIG.C_PROBE11_WIDTH {1}] [get_ips my_ila]
+    set_property -dict [list CONFIG.C_PROBE12_WIDTH {20}] [get_ips my_ila]
+    generate_target {all} [get_files axi_ad408x.srcs/sources_1/ip/my_ila/my_ila.xci]
+
 adi_ip_files axi_ad408x [list \
   "$ad_hdl_dir/library/xilinx/common/ad_serdes_in.v" \
   "$ad_hdl_dir/library/common/ad_pack.v" \
