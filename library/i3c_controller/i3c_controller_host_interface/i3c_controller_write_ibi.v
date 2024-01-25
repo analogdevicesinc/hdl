@@ -35,54 +35,48 @@
 
 `timescale 1ns/100ps
 
-module ad_mem_dual #(
-  parameter INITIALIZE = 0,
-  parameter DATA_WIDTH = 16,
-  parameter ADDRESS_WIDTH = 5
-) (
-  input                            clka,
-  input                            wea,
-  input                            ea,
-  input      [(ADDRESS_WIDTH-1):0] addra,
-  input      [(DATA_WIDTH-1):0]    dina,
-  output reg [(DATA_WIDTH-1):0]    douta,
+module i3c_controller_write_ibi (
+  input  clk,
+  input  reset_n,
 
-  input                            clkb,
-  input                            web,
-  input                            eb,
-  input      [(ADDRESS_WIDTH-1):0] addrb,
-  input      [(DATA_WIDTH-1):0]    dinb,
-  output reg [(DATA_WIDTH-1):0]    doutb
+  input  out_ready,
+  output out_valid,
+  output [31:0] out,
+
+  output in_ready,
+  input  in_valid,
+  input  [14:0] in
 );
 
-  (* ram_style = "block" *)
-  reg [(DATA_WIDTH-1):0] m_ram[0:((2**ADDRESS_WIDTH)-1)];
+  reg [0:0] sm;
 
-  genvar i;
-  generate
-    if (INITIALIZE) begin
-      for (i = 0; i < (2**ADDRESS_WIDTH); i = i + 1) begin: gen_m_ram
-        initial m_ram[i] = 'b0;
-      end
-    end
-  endgenerate
+  reg [6:0] da;
+  reg [7:0] mdb;
+  reg [7:0] sync;
 
-  always @(posedge clka) begin
-    if (ea == 1'b1) begin
-      if (wea == 1'b1) begin
-        m_ram[addra] <= dina;
-      end
-      douta <= m_ram[addra];
-    end
-  end
+  localparam [0:0] SM_GET = 0;
+  localparam [0:0] SM_PUT = 1;
 
-  always @(posedge clkb) begin
-    if (eb == 1'b1) begin
-      if (web == 1'b1) begin
-        m_ram[addrb] <= dinb;
-      end
-      doutb <= m_ram[addrb];
+  always @(posedge clk) begin
+    if (!reset_n) begin
+      sm <= SM_GET;
+      sync <= 8'd0;
+    end else begin
+      case (sm)
+        SM_GET: begin
+          sm <= in_valid ? SM_PUT : sm;
+          da   <= in[14:8];
+          mdb  <= in[7:0];
+        end
+        SM_PUT: begin
+          sm <= out_ready ? SM_GET : sm;
+          sync <= out_ready ? sync+1 : sync;
+        end
+      endcase
     end
   end
 
+  assign out = {8'd0, da, 1'b0, mdb, sync};
+  assign in_ready = sm == SM_GET;
+  assign out_valid = sm == SM_PUT;
 endmodule
