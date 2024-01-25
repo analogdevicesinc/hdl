@@ -15,6 +15,7 @@ Contents
    :maxdepth: 1
 
    axi_dmac/index
+   i3c_controller/index
    spi_engine/index
    jesd204/index
    axi_adxcvr/index
