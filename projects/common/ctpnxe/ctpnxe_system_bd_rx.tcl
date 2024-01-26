@@ -64,7 +64,7 @@ adi_ip_instance -vlnv {latticesemi.com:ip:axi_interc0:1.2.0} \
   -ip_path "$ip_download_path/latticesemi.com_ip_axi_interconnect_1.2.0" \
   -ip_params {
     "TOTAL_EXTMAS_CNT": 1,
-    "TOTAL_EXTSLV_CNT": 4,
+    "TOTAL_EXTSLV_CNT": 5,
     "EXT_MAS_AXI_ID_WIDTH": 1,
     "EXT_SLV_AXI_ID_WIDTH": 8
     } \
@@ -73,12 +73,6 @@ adi_ip_instance -vlnv {latticesemi.com:ip:axi_ahb0:1.1.0} \
   -ip_path "$ip_download_path/latticesemi.com_ip_axi2ahb_bridge_1.1.0" \
   -ip_params {} \
   -ip_iname "axi_ahb0_inst"
-adi_ip_instance -vlnv {latticesemi.com:ip:axi_ahb1:1.1.0} \
-  -ip_path "$ip_download_path/latticesemi.com_ip_axi2ahb_bridge_1.1.0" \
-  -ip_params {
-    "AXI_ID_WIDTH": 1
-    } \
-  -ip_iname "axi_ahb1_inst"
 adi_ip_instance -vlnv {latticesemi.com:ip:axi_apb0:1.1.0} \
   -ip_path "$ip_download_path/latticesemi.com_ip_axi2apb_bridge_1.1.0" \
   -ip_params {} \
@@ -91,11 +85,16 @@ adi_ip_instance -vlnv {latticesemi.com:ip:axi_apb2:1.1.0} \
   -ip_path "$ip_download_path/latticesemi.com_ip_axi2apb_bridge_1.1.0" \
   -ip_params {} \
   -ip_iname "axi_apb2_inst"
+adi_ip_instance -vlnv {latticesemi.com:ip:axi_apb3:1.1.0} \
+  -ip_path "$ip_download_path/latticesemi.com_ip_axi2apb_bridge_1.1.0" \
+  -ip_params {} \
+  -ip_iname "axi_apb3_inst"
 adi_ip_instance -vlnv {latticesemi.com:ip:sysmem0:2.1.0} \
   -ip_path "$preinst_ip_mod_dir/ip/common/system_memory" \
   -ip_params {
     "INTERFACE": "AXI4",
     "ADDR_DEPTH": 8192,
+    "ID_WIDTH": 1,
     "REGMODE_S0": true
     } \
   -ip_iname "sysmem0_inst"
@@ -108,6 +107,25 @@ adi_ip_instance -vlnv {latticesemi.com:ip:tcm0:1.3.9} \
     "ADDR_DEPTH_B": 16384
     } \
   -ip_iname "tcm0_inst"
+adi_ip_instance -vlnv {latticesemi.com:ip:timer0:1.3.0} \
+  -ip_path "$ip_download_path/latticesemi.com_ip_gp_timer_1.3.0" \
+  -ip_params {
+    "t1_cnt_up": "count-up",
+    "T1_PERIOD_WIDTH": 32,
+    "t1_period_val": "0",
+    "t1_dis_pscaler": false,
+    "t2_cnt_up": "count-up",
+    "T2_PERIOD_WIDTH": 32,
+    "t2_period_val": "0",
+    "t2_dis_pscaler": false,
+    "t3_cnt_up": "count-up",
+    "T3_PERIOD_WIDTH": 32,
+    "t3_period_val": "0",
+    "t4_cnt_up": "count-up",
+    "T4_PERIOD_WIDTH": 32,
+    "t4_period_val": "0"
+    } \
+  -ip_iname "timer0_inst"
 
 sbp_add_gluelogic -name equation_module_inst -logicinfo [sbp_create_glue_logic equation equation_module {} { {
  "expr": "A & B",
@@ -143,14 +161,15 @@ sbp_connect_net "$project_name/cpu0_inst/system_resetn_o" \
   "$project_name/tcm0_inst/sys_rst_n" \
   "$project_name/axi_interc0_inst/axi_aresetn_i" \
   "$project_name/axi_ahb0_inst/aresetn_i" \
-  "$project_name/axi_ahb1_inst/aresetn_i" \
   "$project_name/axi_apb0_inst/aresetn_i" \
   "$project_name/axi_apb1_inst/aresetn_i" \
   "$project_name/axi_apb2_inst/aresetn_i" \
   "$project_name/spi0_inst/rst_n_i" \
   "$project_name/i2c0_inst/rst_n_i" \
   "$project_name/gpio0_inst/resetn_i" \
-  "$project_name/gpio1_inst/resetn_i"
+  "$project_name/gpio1_inst/resetn_i" \
+  "$project_name/axi_apb3_inst/aresetn_i" \
+  "$project_name/timer0_inst/rst_n_i"
 
 #clk
 sbp_connect_net "$project_name/clk_125" \
@@ -165,14 +184,15 @@ sbp_connect_net "$project_name/pll0_inst/clkop_o" \
   "$project_name/axi_interc0_inst/axi_aclk_i" \
   "$project_name/tcm0_inst/sys_clk" \
   "$project_name/axi_ahb0_inst/aclk_i" \
-  "$project_name/axi_ahb1_inst/aclk_i" \
   "$project_name/axi_apb0_inst/aclk_i" \
   "$project_name/axi_apb1_inst/aclk_i" \
   "$project_name/axi_apb2_inst/aclk_i" \
   "$project_name/spi0_inst/clk_i" \
   "$project_name/i2c0_inst/clk_i" \
   "$project_name/gpio0_inst/clk_i" \
-  "$project_name/gpio1_inst/clk_i"
+  "$project_name/gpio1_inst/clk_i" \
+  "$project_name/axi_apb3_inst/aclk_i" \
+  "$project_name/timer0_inst/clk_i"
 
 #rst
 sbp_connect_net "$project_name/equation_module_inst/A" \
@@ -231,6 +251,8 @@ sbp_connect_interface_net "$project_name/axi_interc0_inst/AXI_M02" \
   "$project_name/axi_apb1_inst/AXI4_S"
 sbp_connect_interface_net "$project_name/axi_interc0_inst/AXI_M03" \
   "$project_name/axi_apb2_inst/AXI4_S"
+sbp_connect_interface_net "$project_name/axi_interc0_inst/AXI_M04" \
+  "$project_name/axi_apb3_inst/AXI4_S"
 
 sbp_connect_interface_net "$project_name/axi_ahb0_inst/AHBL_M" \
   "$project_name/spi0_inst/AHBL_S0"
@@ -244,6 +266,8 @@ sbp_connect_interface_net "$project_name/axi_apb1_inst/APB3_M" \
   "$project_name/gpio0_inst/APB_S0"
 sbp_connect_interface_net "$project_name/axi_apb2_inst/APB3_M" \
   "$project_name/gpio1_inst/APB_S0"
+sbp_connect_interface_net "$project_name/axi_apb3_inst/APB3_M" \
+  "$project_name/timer0_inst/APB_S0"
 
 sbp_connect_interface_net "$project_name/cpu0_inst/AXI_M_DATA" \
   "$project_name/axi_interc0_inst/AXI_S00"
@@ -260,7 +284,11 @@ sbp_connect_interface_net "$project_name/gpio0_inst/INTR" \
   "$project_name/cpu0_inst/IRQ_S4"
 sbp_connect_interface_net "$project_name/gpio1_inst/INTR" \
   "$project_name/cpu0_inst/IRQ_S5"
+sbp_connect_interface_net "$project_name/timer0_inst/INTR" \
+  "$project_name/cpu0_inst/IRQ_S6"
 
+sbp_assign_addr_seg -offset 'h10005000 "$project_name/axi_apb3_inst/APB3_M" \
+  "$project_name/timer0_inst/APB_S0"
 sbp_assign_addr_seg -offset 'h10004000 "$project_name/axi_apb2_inst/APB3_M" \
   "$project_name/gpio1_inst/APB_S0"
 sbp_assign_addr_seg -offset 'h10003000 "$project_name/axi_apb1_inst/APB3_M" \
