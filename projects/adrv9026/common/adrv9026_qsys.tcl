@@ -24,7 +24,7 @@ set dac_data_width 128
 set dac_dma_data_width 128
 
 add_instance device_clk altera_clock_bridge
-set_instance_parameter_value device_clk {EXPLICIT_CLOCK_RATE} {250000000}
+set_instance_parameter_value device_clk {EXPLICIT_CLOCK_RATE} {246000000}
 add_interface device_clk clock sink
 set_interface_property device_clk EXPORT_OF device_clk.in_clk
 
@@ -35,8 +35,8 @@ add_instance adrv9026_tx_jesd204 adi_jesd204
 set_instance_parameter_value adrv9026_tx_jesd204 {ID} {0}
 set_instance_parameter_value adrv9026_tx_jesd204 {TX_OR_RX_N} {1}
 set_instance_parameter_value adrv9026_tx_jesd204 {SOFT_PCS} {true}
-set_instance_parameter_value adrv9026_tx_jesd204 {LANE_RATE} {10000}
-set_instance_parameter_value adrv9026_tx_jesd204 {REFCLK_FREQUENCY} {250}
+set_instance_parameter_value adrv9026_tx_jesd204 {LANE_RATE} {9840}
+set_instance_parameter_value adrv9026_tx_jesd204 {REFCLK_FREQUENCY} {246}
 set_instance_parameter_value adrv9026_tx_jesd204 {NUM_OF_LANES} $TX_NUM_OF_LANES
 set_instance_parameter_value adrv9026_tx_jesd204 {EXT_DEVICE_CLK_EN} {1}
 set_instance_parameter_value adrv9026_tx_jesd204 {LANE_MAP} {0 3 2 1}
@@ -58,8 +58,8 @@ add_instance adrv9026_rx_jesd204 adi_jesd204
 set_instance_parameter_value adrv9026_rx_jesd204 {ID} {1}
 set_instance_parameter_value adrv9026_rx_jesd204 {TX_OR_RX_N} {0}
 set_instance_parameter_value adrv9026_rx_jesd204 {SOFT_PCS} {true}
-set_instance_parameter_value adrv9026_rx_jesd204 {LANE_RATE} {10000}
-set_instance_parameter_value adrv9026_rx_jesd204 {REFCLK_FREQUENCY} {250}
+set_instance_parameter_value adrv9026_rx_jesd204 {LANE_RATE} {9840}
+set_instance_parameter_value adrv9026_rx_jesd204 {REFCLK_FREQUENCY} {246}
 set_instance_parameter_value adrv9026_rx_jesd204 {EXT_DEVICE_CLK_EN} {1}
 set_instance_parameter_value adrv9026_rx_jesd204 {NUM_OF_LANES} $RX_NUM_OF_LANES
 set_instance_parameter_value adrv9026_rx_jesd204 {INPUT_PIPELINE_STAGES} {1}
