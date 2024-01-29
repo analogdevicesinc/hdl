@@ -13,7 +13,6 @@ release = 'v0.1'
 
 import os, sys
 
-user = os.environ.get("USER")
 sys.path.append(os.path.abspath("./extensions"))
 
 extensions = [
@@ -37,11 +36,6 @@ validate_links = False
 
 todo_include_todos = True
 todo_emit_warnings = True
-
-# -- Symbolator configuration -------------------------------------------------
-
-symbolator_cmd = f"/home/{user}/.local/bin/symbolator"
-symbolator_cmd_args = ['-t', '--scale=0.75']
 
 # -- Options for HTML output --------------------------------------------------
 
