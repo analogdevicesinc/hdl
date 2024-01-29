@@ -235,7 +235,7 @@ HDL related
    * - AXI_DMAC
      - :git-hdl:`library/axi_dmac`
      - :ref:`here <axi_dmac>`
-  * - AXI_HDMI_TX
+   * - AXI_HDMI_TX
      - :git-hdl:`library/axi_hdmi_tx`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_hdmi_tx>`
    * - AXI_I2S_ADI
@@ -267,6 +267,7 @@ HDL related
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
    * - UTIL_I2C_MIXER
      - :git-hdl:`library/util_i2c_mixer`
+     - ---
 
 -  :ref:`SPI Engine Framework documentation <spi_engine>`
 
