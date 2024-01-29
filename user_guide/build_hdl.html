@@ -695,73 +695,40 @@ The <code class="docutils literal notranslate"><span class="pre">make</span></co
 inside its sub-folders. What this means is that if you run <code class="docutils literal notranslate"><span class="pre">make</span></code> inside
 <strong>hdl/projects/daq2</strong>, it builds all the carriers (<strong>kc705</strong>, <strong>a10soc</strong>,
 <strong>kcu105</strong>, <strong>zc706</strong> to <strong>zcu102</strong>) instead of just the target carrier.</p>
-<p>The following ‘targets’ are supported.</p>
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>argument</p></th>
-<th class="head"><p>description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>all</p></td>
-<td><p>This builds everything in the current folder and
-its sub-folders, see context examples below.</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td><p>make -C library/axi_ad9122 all; ## build AD9122
-library component (AMD only).</p></td>
-</tr>
-<tr class="row-even"><td></td>
-<td><p>make -C library all; ## build <strong>ALL</strong> library
-components inside ‘library’ (AMD only).</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td><p>make -C projects/daq2/zc706 all; ## build
-DAQ2_ZC706 (AMD) project.</p></td>
-</tr>
-<tr class="row-even"><td></td>
-<td><p>make -C projects/daq2/a10soc all; ## build
-DAQ2_A10SOC(Intel) project.</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td><p>make -C projects/daq2 all; ## build DAQ2 <strong>ALL</strong>
-carrier (including Intel &amp; AMD) projects.</p></td>
-</tr>
-<tr class="row-even"><td></td>
-<td><p>make -C projects all; ## build <strong>ALL</strong> projects
-(something you really should NOT do).</p></td>
-</tr>
-<tr class="row-odd"><td><p>clean</p></td>
-<td><p>This removes all tool and temporary files in the
-current folder and its sub-folders, same context
-as above.</p></td>
-</tr>
-<tr class="row-even"><td><p>clean-all</p></td>
-<td><p>This removes all tool and temporary files in the
-current folder, its sub-folders and from all the
-IPs that are specified in the Makefile file;
-same context as above.</p></td>
-</tr>
-<tr class="row-odd"><td><p>lib</p></td>
-<td><p>This is same as ‘all’ in the library folder,
-ignored inside project folders.</p></td>
-</tr>
-<tr class="row-even"><td><p>project.platform</p></td>
-<td><p>This is a special target available only in the
-‘hdl’ root folder and is ignored everywhere
-else, see syntax below.</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td><p>make daq2.a10soc ; ## build
-projects/daq2/a10soc.</p></td>
-</tr>
-<tr class="row-even"><td></td>
-<td><p>make daq2.zc706 ; ## build projects/daq2/zc706.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
+<p>The following targets/arguments are supported:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">all</span></code>:
+This builds everything in the current folder and its sub-folders, for example:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">-C</span> <span class="pre">library/axi_ad9122</span> <span class="pre">all;</span> <span class="pre">#</span> <span class="pre">build</span> <span class="pre">AD9122</span> <span class="pre">library</span> <span class="pre">component</span> <span class="pre">(AMD</span> <span class="pre">only).</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">-C</span> <span class="pre">library</span> <span class="pre">all;</span> <span class="pre">#</span> <span class="pre">build</span> <span class="pre">ALL</span> <span class="pre">library</span> <span class="pre">components</span> <span class="pre">inside</span> <span class="pre">'library'</span> <span class="pre">(AMD</span> <span class="pre">only).</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">-C</span> <span class="pre">projects/daq2/zc706</span> <span class="pre">all;</span> <span class="pre">#</span> <span class="pre">build</span> <span class="pre">DAQ2_ZC706</span> <span class="pre">(AMD)</span> <span class="pre">project.</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">-C</span> <span class="pre">projects/daq2/a10soc</span> <span class="pre">all;</span> <span class="pre">#</span> <span class="pre">build</span> <span class="pre">DAQ2_A10SOC</span> <span class="pre">(Intel)</span> <span class="pre">project.</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">-C</span> <span class="pre">projects/daq2</span> <span class="pre">all;</span> <span class="pre">#</span> <span class="pre">build</span> <span class="pre">DAQ2</span> <span class="pre">ALL</span> <span class="pre">carrier</span> <span class="pre">(Intel</span> <span class="pre">&amp;</span> <span class="pre">AMD)</span> <span class="pre">projects.</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">-C</span> <span class="pre">projects</span> <span class="pre">all;</span> <span class="pre">#</span> <span class="pre">build</span> <span class="pre">ALL</span> <span class="pre">projects</span> <span class="pre">(not</span> <span class="pre">recommended).</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">clean</span></code>:
+Removes all tool and temporary files in the current folder and its
+sub-folders, same context as above.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">clean-all</span></code>:
+This removes all tool and temporary files in the current folder, its
+sub-folders and from all the IPs that are specified in the Makefile file;
+same context as above.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lib</span></code>: This is same as <code class="docutils literal notranslate"><span class="pre">all</span></code> in the library folder, ignored inside project
+folders.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">projects.platform</span></code>: This is a special target available only in the ‘hdl’ root
+folder and is ignored everywhere else, see syntax:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">daq2.a10soc</span> <span class="pre">;</span> <span class="pre">#</span> <span class="pre">build</span> <span class="pre">projects/daq2/a10soc.</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">daq2.zc706</span> <span class="pre">;</span> <span class="pre">#</span> <span class="pre">build</span> <span class="pre">projects/daq2/zc706.</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p>To speed up the building process, especially libraries, you can use the <code class="docutils literal notranslate"><span class="pre">-j</span></code>
+option to run the targets in parallel, e.g. <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">-j4</span></code>.</p>
+<p>All artifacts generated by the build process should be “git”-ignored,
+e.g. <code class="docutils literal notranslate"><span class="pre">component.xml</span></code> and <code class="docutils literal notranslate"><span class="pre">.lock</span></code> files.</p>
 </section>
 </section>
 <section id="tools-and-their-versions">

@@ -1415,24 +1415,28 @@ the ID of the last completed event.</p>
 </section>
 <section id="interrupts">
 <h2>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading">#</a></h2>
-<p>The SPI Engine AXI peripheral has 4 internal interrupts. One for each of the
-FIFOs which are asserted when the FIFO level falls bellow the almost empty level
-(for the command or SDO FIFO) or rises above the almost full level (for the SDI
-FIFO).
-And one interrupt which is asserted when a new synchronization event arrives.
-The peripheral has 1 external interrupt which is supposed to be connected to the
+<p>The SPI Engine AXI peripheral has 4 internal interrupts, which are
+asserted when:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CMD_ALMOST_EMPTY</span></code>: the level falls bellow the almost empty level.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SDO_ALMOST_EMPTY</span></code>: the level falls bellow the almost empty level.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SDI_ALMOST_FULL</span></code>: the level rises above the almost full level.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SYNC_EVENT</span></code>: a new synchronization event arrives.</p></li>
+</ul>
+<p>The peripheral has 1 external interrupt which is supposed to be connected to the
 upstream interrupt controller.
 The external interrupt is a logical OR-operation over the internal interrupts,
 meaning if at least one of the internal interrupts is asserted the external
 interrupt is asserted and only if all internal interrupts are de-asserted the
-external interrupt is de-asserted. In addition, each interrupt has a mask bit
-which can be used to stop the propagation of the internal interrupt to the
-external interrupt. If an interrupt is masked it will count towards the external
-interrupt state as if it were not asserted.
-The mask bits can be modified by writing to the IRQ_MASK register.
-The raw interrupt status can be read from the IRQ_SOURCE register and the
-combined state of the IRQ_MASK and raw interrupt state can be read from the
-IRQ_PENDING register.</p>
+external interrupt is de-asserted.</p>
+<p>In addition, each interrupt has a mask bit which can be used to stop the propagation
+of the internal interrupt to the external interrupt.
+If an interrupt is masked it will count towards the external interrupt state as if
+it were not asserted.</p>
+<p>The mask bits can be modified by writing to the <code class="docutils literal notranslate"><span class="pre">IRQ_MASK</span></code> register.
+The raw interrupt status can be read from the <code class="docutils literal notranslate"><span class="pre">IRQ_SOURCE</span></code> register and the
+combined state of the <code class="docutils literal notranslate"><span class="pre">IRQ_MASK</span></code> and raw interrupt state can be read from the
+<code class="docutils literal notranslate"><span class="pre">IRQ_PENDING</span></code> register:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">IRQ_PENDING</span> <span class="o">=</span> <span class="n">IRQ_SOURCE</span> <span class="o">&amp;</span> <span class="n">IRQ_MASK</span><span class="p">;</span>
 <span class="n">IRQ</span> <span class="o">=</span> <span class="o">|</span><span class="n">IRQ_PENDING</span><span class="p">;</span>
 </pre></div>
@@ -1440,8 +1444,8 @@ IRQ_PENDING register.</p>
 <section id="fifo-threshold-interrupts">
 <h3>FIFO Threshold Interrupts<a class="headerlink" href="#fifo-threshold-interrupts" title="Permalink to this heading">#</a></h3>
 <p>The FIFO threshold interrupts can be used by software for flow control of the
-command, SDI and SDO streams.
-If an application wants to send more data than what fits into the FIFO can write
+command, <code class="docutils literal notranslate"><span class="pre">SDI</span></code> and <code class="docutils literal notranslate"><span class="pre">SDO</span></code> streams.</p>
+<p>If an application wants to send more data than what fits into the FIFO can write
 samples into the FIFO until it is full then suspend operation wait for the almost
 empty interrupt and continue writing data to the FIFO.
 Similarly, when the application wants to read more data than what fits into FIFO
@@ -1453,13 +1457,12 @@ watermark.</p>
 </section>
 <section id="sync-event-interrupt">
 <h3>SYNC_EVENT Interrupt<a class="headerlink" href="#sync-event-interrupt" title="Permalink to this heading">#</a></h3>
-<p>The SYNC_EVENT interrupt is asserted when a new sync event is received from the
-sync stream.
-An application that generated a SYNC instruction on the command stream can use
-this interrupt to be notified when the sync instruction has been completed.
-To de-assert, the SYNC_EVENT interrupt the reception of the interrupt needs to
-be acknowledged by the application by writing a 1 to the SYNC_EVENT bit in the
-IRQ_PENDING register.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">SYNC_EVENT</span></code> interrupt is asserted when a new sync event is received from
+the sync stream.
+An application that generated a <code class="docutils literal notranslate"><span class="pre">SYNC</span></code> instruction on the command stream can
+use this interrupt to be notified when the sync instruction has been completed.</p>
+<p>To de-assert the <code class="docutils literal notranslate"><span class="pre">SYNC_EVENT</span></code> interrupt, the application needs to acknowledge its
+reception by writing 1 to the <code class="docutils literal notranslate"><span class="pre">SYNC_EVENT</span></code> bit in the <code class="docutils literal notranslate"><span class="pre">IRQ_PENDING</span></code> register.</p>
 </section>
 </section>
 </section>
