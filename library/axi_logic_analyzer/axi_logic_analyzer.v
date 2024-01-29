@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2017-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -90,6 +90,7 @@ module axi_logic_analyzer (
   // internal registers
 
   reg     [15:0]    data_r = 'd0;
+  reg     [15:0]    data_src_select = 'd0;
   reg     [ 1:0]    trigger_m1 = 'd0;
   reg     [31:0]    downsampler_counter_la = 'd0;
   reg     [31:0]    upsampler_counter_pg = 'd0;
@@ -238,11 +239,22 @@ module axi_logic_analyzer (
   for (i = 0 ; i < 16; i = i + 1) begin
     assign data_t[i] = od_pp_n[i] ? io_selection[i] | data_o[i] : io_selection[i];
     always @(posedge clk_out) begin
-      data_o[i] <= overwrite_enable[i] ? overwrite_data[i] : data_r[i];
+      data_o[i] <= data_src_select[i] ? overwrite_data[i] : data_r[i];
     end
+
+    always @(posedge clk_out) begin
+      data_src_select[i] <= data_src_select[i] ?
+              (~dac_valid) | overwrite_enable[i]:
+              overwrite_enable[i];
+    end
+
     always @(posedge clk_out) begin
       if(dac_valid == 1'b1) begin
         data_r[i] <= dac_data[i];
+      end else begin
+        if (data_src_select[i] == 1'b1) begin
+          data_r[i] <= overwrite_data[i];
+        end
       end
       if (io_selection_s[i] == 1'b1) begin
         io_selection[i] <= 1'b1;
