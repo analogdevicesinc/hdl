@@ -10,6 +10,10 @@
 <a href="https://github.com/analogdevicesinc/hdl/actions">
 <img src="https://github.com/analogdevicesinc/hdl/actions/workflows/test_n_lint.yml/badge.svg" alt="Build Status">
 </a>
+
+<a href="Build_Status_Table.md">
+<img alt="Jenkins" src="https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Flargely-growing-salmon.ngrok-free.app%2Fjob%2Fmain%2Fjob%2Fhdl_jobs%2Fjob%2FMain_HDL_Commit%2F&style=flat&logo=jenkins&logoColor=white&label=Build%20Status&labelColor=%233f4750&cacheSeconds=360">
+</a>
 </p>
 
 <p align="center">
