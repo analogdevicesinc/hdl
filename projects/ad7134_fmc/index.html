@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="prev" title="ADAQ7980-SDZ HDL project" href="../adaq7980_sdz/index.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="AD719X-ASDZ HDL project" href="../ad719x_asdz/index.html" /><link rel="prev" title="AD5766-SDZ HDL project" href="../ad5766_sdz/index.html" />
 
     <link rel="shortcut icon" href="../../_static/icon.svg"/><!-- Generated with Sphinx 7.1.2 and Furo 2023.09.10 -->
-        <title>CN0561 HDL project - HDL, Analog Devices v0.1 documentation</title>
+        <title>AD7134-FMC HDL project - HDL, Analog Devices v0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=36a5483c" />
@@ -194,7 +194,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../ad4134_fmc/index.html">AD4134-FMC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ad469x_fmc/index.html">AD469X-FMC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ad5766_sdz/index.html">AD5766-SDZ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ad7134_fmc/index.html">AD7134-FMC</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">AD7134-FMC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ad719x_asdz/index.html">AD719X-ASDZ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ad738x_fmc/index.html">AD738X-FMC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ad7616_sdz/index.html">AD7616-SDZ</a></li>
@@ -202,7 +202,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../ad9434_fmc/index.html">AD9434-FMC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ad9783_ebz/index.html">AD9783-EBZ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">CN0561</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cn0561/index.html">CN0561</a></li>
 </ul>
 
 </div>
@@ -237,79 +237,76 @@
           </label>
         </div>
         <article role="main">
-          <section id="cn0561-hdl-project">
-<span id="cn0561"></span><h1>CN0561 HDL project<a class="headerlink" href="#cn0561-hdl-project" title="Permalink to this heading">#</a></h1>
+          <section id="ad7134-fmc-hdl-project">
+<span id="ad7134-fmc"></span><h1>AD7134-FMC HDL project<a class="headerlink" href="#ad7134-fmc-hdl-project" title="Permalink to this heading">#</a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h2>
-<p>The <a class="reference external" href="https://www.analog.com/AD4134">AD4134</a> is a quad channel, low noise, simultaneous sampling,
+<p>The <a class="reference external" href="https://www.analog.com/AD7134">AD7134</a> is a quad channel, low noise, simultaneous sampling,
 precision analog-to-digital converter (ADC), based on the continuous time
-sigma-delta (CTSD) modulation scheme. This architecture inherently rejects
+sigma-delta (CTSD) modulation scheme. The CTSD architecture inherently rejects
 signals around the ADC aliasing frequency band, giving the device its inherent
-antialiasing capability, and removesthe need for a complex external
+antialiasing capability, and removes the need for a complex external
 antialiasing filter.</p>
-<p>This device has four independent converter channels in parallel, each with a
-CTSD modulator and a digital decimation and filtering path. It enables
-simultaneous sampling of four signal sources, with a maximum input bandwidth
-of 391.5 kHz. It supports a wide range of ODR frequencies, from 0.01 kSPS to
-1496 kSPS wih less than 0.01 SPS adjustment resolution, allowing the user to
-granularly vary sampling speed to achieve coherent sampling.</p>
-<p>The <a class="reference external" href="https://www.analog.com/AD4134">AD4134</a> supports two device configuration schemes: serial peripheral
-interface (SPI) and hardware pin configuration (pin control mode).
-The SPI control mode offers access to all the features and configuration
-options available on the chip. Pin control mode offers the benefit of
-simplifying the device configuration, enabling the device to operate
-autonomously after power-up operating in a standalone mode.</p>
-<p>The HDL reference design for the EVAL-CN0561 provides all the interfaces that
-are necessary to interact with the device using a Xilinx FPGA development
-board; to acquire data from the ADC device, supporting continuous data
-capture at maximum 1.5 MSPS data rate. However, due to a hardware limitation,
-the Cora-Z7s variant will only support a maximum data clock of 24MHz,
-in contrast with 48MHz supported on the Zedboard.</p>
+<p>The device has four independent converter channels in parallel, each with a
+CTSD modulator and a digital decimation and filtering path. The bandwidth of
+each ADC channel ranges from dc to 391.5 kHz, making the device an ideal
+candidate for universal precision data acquisition solutions supporting a
+breadth of sensor types, from temperature and pressure to vibration and shock.</p>
+<p>It supports a wide range of ODR frequencies, from 0.01 kSPS to 1496 kSPS
+with less than 0.01 SPS adjustment resolution, allowing the user to granularly
+vary sampling speed to achieve coherent sampling. The adc offers three main
+digital filter profile options: a wideband low ripple filter (2.5 kSPS to 374
+kSPS), a fast responding sinc3 filter (0.01 kSPS to 1496 kSPS), and a balanced
+sinc6 filter with an ODR range 2.5 kSPS to 1.496 MSPS.</p>
+<p>The <a class="reference external" href="https://www.analog.com/AD7134">AD7134</a> supports two device configuration schemes: serial peripheral
+interface (SPI) and hardware pin configuration (pin control mode). The SPI
+control mode offers access to all the features and configuration options
+available on the chip. Pin control mode offers the benefit of simplifying the
+device configuration, enabling the device to operate autonomously after power
+-up operating in a standalone mode. In addition to the optional SPI, it has a
+flexible and independent data interface for transmitting the ADC output data.</p>
+<p>The EVAL-AD7134FMCZ evaluation kit features the AD7134 24-bit, 4-channel,
+simultaneous sampling adc. Two on-board AD7134 ADCs are included to
+demonstrate multidevice simultaneous sampling. The HDL reference design
+provides all the interfaces necessary to interact with the device using a
+Xilinx FPGA development board.</p>
 </section>
 <section id="supported-boards">
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="reference external" href="https://www.analog.com/design-center/reference-designs/circuits-from-the-lab/cn0531">EVAL-CN0561</a></p></li>
+<li><p><a class="reference external" href="https://www.analog.com/EVAL-AD7134FMCZ">EVAL-AD7134FMCZ</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="reference external" href="https://www.analog.com/AD4134">AD4134</a></p></li>
+<li><p><a class="reference external" href="https://www.analog.com/AD7134">AD7134</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
 <h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html">ZedBoard</a> on FMC slot</p></li>
-<li><p><a class="reference external" href="https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development/">Cora Z7-07S</a> on Arduino type headers</p></li>
-<li><p><a class="reference external" href="https://www.intel.com/content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html">DE10-Nano</a> on Arduino type headers</p></li>
+<li><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html">ZedBoard</a> on FMC slot *</p></li>
 </ul>
+<div class="note admonition">
+<p class="admonition-title">Legend</p>
+<p><code class="docutils literal notranslate"><span class="pre">*</span></code> FMC extender needed for connecting the EVAL board</p>
+</div>
 </section>
 <section id="block-design">
 <h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading">#</a></h2>
-<p>The reference design uses the SPI Engine Framework to interface with
-the AD4134 ADC and only supports the slave mode with both DCLK and ODR
-generated by the FPGA. The device sends data on the 4 DIN bits.</p>
+<p>The reference design uses the SPI Engine Framework to interface with the two
+AD7134 ADCs. It only supports the slave mode for both devices with both DCLK
+and ODR generated by the FPGA. Each device sends data on 4 of the 8 DIN bits.</p>
 <section id="block-diagram">
 <h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h3>
 <p>The data path and clock domains are depicted in the below diagrams:</p>
-<a class="reference internal image-reference" href="../../_images/cn0561_hdl.svg"><img alt="CN0561/ZED/Cora Z7-07S block diagram *" class="align-center" src="../../_images/cn0561_hdl.svg" width="800" /></a>
-<div class="note admonition">
-<p class="admonition-title">Legend</p>
-<p><code class="docutils literal notranslate"><span class="pre">*</span></code> The block design for Cora Z7-07S remains the same, the only
-difference is the data clock frequency of 24MHz.</p>
-</div>
+<a class="reference internal image-reference" href="../../_images/ad713x_hdl.svg"><img alt="AD7134-FMC/ZED block diagram" class="align-center" src="../../_images/ad713x_hdl.svg" width="800" /></a>
 </section>
 <section id="jumper-setup">
 <h3>Jumper setup<a class="headerlink" href="#jumper-setup" title="Permalink to this heading">#</a></h3>
-<div class="table-wrapper colwidths-given docutils container">
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 23.1%" />
-<col style="width: 7.7%" />
-<col style="width: 69.2%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Jumper/Solder link</p></th>
 <th class="head"><p>Position</p></th>
@@ -317,17 +314,21 @@ difference is the data clock frequency of 24MHz.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>P10</p></td>
+<tr class="row-even"><td><p>JP14</p></td>
 <td><p>Mounted</p></td>
-<td><p>MODE (Slave) and DEC0/DCLKIO (DCLK Input)</p></td>
+<td><p>DEC0/DCLKIO (Device 1) [DCLK Input]</p></td>
 </tr>
-<tr class="row-odd"><td><p>P13</p></td>
-<td><p>1-2</p></td>
-<td><p>Current sources and fault protection powered from board ±15V sources</p></td>
+<tr class="row-odd"><td><p>JP15</p></td>
+<td><p>Mounted</p></td>
+<td><p>DEC0/DCLKIO (Device 2) [DCLK Input]</p></td>
 </tr>
-<tr class="row-even"><td><p>P15</p></td>
-<td><p>1-2</p></td>
-<td><p>Current sources and fault protection powered from board ±15V sources</p></td>
+<tr class="row-even"><td><p>JP16</p></td>
+<td><p>Mounted</p></td>
+<td><p>MODE (Device 1) [Slave Mode]</p></td>
+</tr>
+<tr class="row-odd"><td><p>JP17</p></td>
+<td><p>Mounted</p></td>
+<td><p>MODE (Device 2) [Slave Mode]</p></td>
 </tr>
 </tbody>
 </table>
@@ -345,16 +346,19 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>spi_cn0561_axi_regmap</p></td>
+<tr class="row-even"><td><p>dual_ad7134_axi_regmap</p></td>
 <td><p>0x44A0_0000</p></td>
 </tr>
-<tr class="row-odd"><td><p>axi_cn0561_dma</p></td>
+<tr class="row-odd"><td><p>axi_ad7134_dma</p></td>
 <td><p>0x44A3_0000</p></td>
 </tr>
-<tr class="row-even"><td><p>odr_generator</p></td>
+<tr class="row-even"><td><p>axi_sdp_clkgen</p></td>
+<td><p>0x44A4_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>odr_generator</p></td>
 <td><p>0x44B0_0000</p></td>
 </tr>
-<tr class="row-odd"><td><p>axi_cn0561_clkgen</p></td>
+<tr class="row-even"><td><p>axi_ad7134_clkgen</p></td>
 <td><p>0x44B1_0000</p></td>
 </tr>
 </tbody>
@@ -381,8 +385,13 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 <tbody>
 <tr class="row-even"><td><p>PS</p></td>
 <td><p>SPI 0</p></td>
-<td><p>AD4134</p></td>
+<td><p>AD7134</p></td>
 <td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>PS</p></td>
+<td><p>SPI 0</p></td>
+<td><p>AD7134</p></td>
+<td><p>1</p></td>
 </tr>
 </tbody>
 </table>
@@ -415,35 +424,40 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 </tr>
 </thead>
 <tbody>
-<tr class="row-odd"><td><p>cn0561_gpio[7:4]</p></td>
+<tr class="row-odd"><td><p>ad713x_dclkmode</p></td>
 <td><p>INOUT</p></td>
-<td><p>42:39</p></td>
-<td><p>96:93</p></td>
+<td><p>49</p></td>
+<td><p>103</p></td>
 </tr>
-<tr class="row-even"><td><p>cn0561_gpio[2:0]</p></td>
+<tr class="row-even"><td><p>ad713x_pinbspi</p></td>
 <td><p>INOUT</p></td>
-<td><p>38:36</p></td>
-<td><p>92:90</p></td>
+<td><p>48</p></td>
+<td><p>102</p></td>
 </tr>
-<tr class="row-odd"><td><p>cn0561_pinbspi</p></td>
+<tr class="row-odd"><td><p>ad713x_dclkio[1:0]</p></td>
 <td><p>INOUT</p></td>
-<td><p>35</p></td>
-<td><p>89</p></td>
+<td><p>47:46</p></td>
+<td><p>101:100</p></td>
 </tr>
-<tr class="row-even"><td><p>cn0561_mode</p></td>
+<tr class="row-even"><td><p>ad713x_gpio[7:0]</p></td>
 <td><p>INOUT</p></td>
-<td><p>34</p></td>
-<td><p>88</p></td>
+<td><p>45:38</p></td>
+<td><p>99:92</p></td>
 </tr>
-<tr class="row-odd"><td><p>cn0561_pdn</p></td>
+<tr class="row-odd"><td><p>ad713x_mode[1:0]</p></td>
 <td><p>INOUT</p></td>
-<td><p>33</p></td>
-<td><p>87</p></td>
+<td><p>37:36</p></td>
+<td><p>91:90</p></td>
 </tr>
-<tr class="row-even"><td><p>cn0561_resetn</p></td>
+<tr class="row-even"><td><p>ad713x_pdn[1:0]</p></td>
 <td><p>INOUT</p></td>
-<td><p>32</p></td>
-<td><p>86</p></td>
+<td><p>35:34</p></td>
+<td><p>89:88</p></td>
+</tr>
+<tr class="row-odd"><td><p>ad713x_resetn[1:0]</p></td>
+<td><p>INOUT</p></td>
+<td><p>33:32</p></td>
+<td><p>87:86</p></td>
 </tr>
 </tbody>
 </table>
@@ -462,12 +476,12 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>axi_cn0561_dma</p></td>
+<tr class="row-even"><td><p>axi_ad7134_dma</p></td>
 <td><p>13</p></td>
 <td><p>57</p></td>
 <td><p>89</p></td>
 </tr>
-<tr class="row-odd"><td><p>spi_cn0561</p></td>
+<tr class="row-odd"><td><p>dual_ad7134</p></td>
 <td><p>12</p></td>
 <td><p>56</p></td>
 <td><p>88</p></td>
@@ -486,8 +500,8 @@ the source you must
 <a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
 the HDL repository, and then build the project as follows:.</p>
 <p><strong>Linux/Cygwin/WSL</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>user@analog:~$ cd hdl/projects/cn0561/zed
-<span class="linenos">2</span>user@analog:~/hdl/projects/cn0561/zed$ make
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>user@analog:~$ cd hdl/projects/ad7134_fmc/zed
+<span class="linenos">2</span>user@analog:~/hdl/projects/ad7134_fmc/zed$ make
 </pre></div>
 </div>
 <p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a>
@@ -498,13 +512,14 @@ user guide.</p>
 <section id="hardware-related">
 <h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Product datasheet: <a class="reference external" href="https://www.analog.com/AD4134">AD4134</a></p></li>
+<li><p>Product datasheet: <a class="reference external" href="https://www.analog.com/AD7134">AD7134</a></p></li>
+<li><p><a class="reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/eval-ad7134fmcz-ug-1599.pdf">UG-1599: EVAL-AD7134FMCZ Board User Guide</a></p></li>
 </ul>
 </section>
 <section id="hdl-related">
 <h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/cn0561">CN0561 HDL project source code</a></p></li>
+<li><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/ad7134_fmc">AD7134-FMC HDL project source code</a></p></li>
 </ul>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -528,11 +543,11 @@ user guide.</p>
 <td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_dmac">library/axi_dmac</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">here</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>AXI_HDMI_TX **</p></td>
+<tr class="row-even"><td><p>AXI_HDMI_TX</p></td>
 <td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_hdmi_tx">library/axi_hdmi_tx</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_hdmi_tx">[Wiki]</a></p></td>
 </tr>
-<tr class="row-odd"><td><p>AXI_I2S_ADI *</p></td>
+<tr class="row-odd"><td><p>AXI_I2S_ADI</p></td>
 <td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_i2s_adi">library/axi_i2s_adi</a></p></td>
 <td><p>—</p></td>
 </tr>
@@ -540,7 +555,7 @@ user guide.</p>
 <td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_pwm_gen">library/axi_pwm_gen</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_pwm_gen">[Wiki]</a></p></td>
 </tr>
-<tr class="row-odd"><td><p>AXI_SDDIF_TX *</p></td>
+<tr class="row-odd"><td><p>AXI_SDDIF_TX</p></td>
 <td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_spdif_tx">library/axi_spdif_tx</a></p></td>
 <td><p>—</p></td>
 </tr>
@@ -568,19 +583,12 @@ user guide.</p>
 <td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/sysid_rom">library/sysid_rom</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_sysid">[Wiki]</a></p></td>
 </tr>
-<tr class="row-even"><td><p>UTIL_I2C_MIXER *</p></td>
+<tr class="row-even"><td><p>UTIL_I2C_MIXER</p></td>
 <td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/util_i2c_mixer">library/util_i2c_mixer</a></p></td>
 <td><p>—</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="note admonition">
-<p class="admonition-title">Legend</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code>  instantiated only for Zed carrier</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> instantiated only for Zed and De10Nano carriers</p></li>
-</ul>
 </div>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../library/spi_engine/index.html#spi-engine"><span class="std std-ref">SPI Engine Framework documentation</span></a></p></li>
@@ -589,7 +597,7 @@ user guide.</p>
 <section id="software-related">
 <h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p><a class="reference external" href="https://github.com/analogdevicesinc/no-os/blob/main/projects/cn0561">CN0561 No-OS project source code</a></p></li>
+<li><p><a class="reference external" href="https://github.com/analogdevicesinc/no-os/blob/main/projects/ad713x_fmcz">AD7134-FMC No-OS project source code</a></p></li>
 <li><p><a class="reference external" href="https://github.com/analogdevicesinc/no-os/blob/main/drivers/adc/ad713x">AD4134/AD7134 No-OS Driver source code</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/uc-drivers/ad713x">AD4134/AD7134 No-OS Driver documentation</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/no-os/build">How to build No-OS</a></p></li>
@@ -629,15 +637,23 @@ are, the lower the chances to receive support from <a class="reference external"
       <footer>
         
         <div class="related-pages">
-          
-          <a class="prev-page" href="../adaq7980_sdz/index.html">
+          <a class="next-page" href="../ad719x_asdz/index.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">AD719X-ASDZ HDL project</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="../ad5766_sdz/index.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">ADAQ7980-SDZ HDL project</div>
+                <div class="title">AD5766-SDZ HDL project</div>
                 
               </div>
             </a>
@@ -671,7 +687,7 @@ are, the lower the chances to receive support from <a class="reference external"
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">CN0561 HDL project</a><ul>
+<li><a class="reference internal" href="#">AD7134-FMC HDL project</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
 <li><a class="reference internal" href="#supported-boards">Supported boards</a></li>
 <li><a class="reference internal" href="#supported-devices">Supported devices</a></li>
