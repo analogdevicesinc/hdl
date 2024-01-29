@@ -37,7 +37,7 @@ in contrast with 48MHz supported on the Zedboard.
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-CN0561 <EVAL-CN0561>`
+-  :adi:`EVAL-CN0561 <design-center/reference-designs/circuits-from-the-lab/cn0531>`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -48,7 +48,7 @@ Supported carriers
 -------------------------------------------------------------------------------
 
 -  :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
--  :xilinx:`Cora Z7-07S <https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development/>` on Arduino type headers
+-  `Cora Z7-07S <https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development/>`_ on Arduino type headers
 -  `DE10-Nano <https://www.intel.com/content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`__ on Arduino type headers
 
 Block design
