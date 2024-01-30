@@ -192,7 +192,7 @@ HDL related
      - :git-hdl:`library/axi_clkgen <library/axi_clkgen>`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_clkgen>`
    * - AXI_HDMI_TX
-     - :git-hdl:`library/axi_hdmi_tx <library/axi_ad9434>`
+     - :git-hdl:`library/axi_hdmi_tx <library/axi_hdmi_tx>`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_hdmi_tx>`
    * - AXI_SPDIF_TX
      - :git-hdl:`library/axi_spdif_tx <library/axi_spdif_tx>`
