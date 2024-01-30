@@ -107,9 +107,7 @@ module axi_ad408x #(
   wire                    delay_locked;
   wire                    bitslip_enable;
   wire                    sync_status;
-  wire                    up_adc_ddr_edgesel;
   wire          [ 4:0]    up_adc_num_lanes;
-  wire                    up_adc_sdr_ddr_n;
   wire                    up_rstn;
   wire                    up_clk;
   wire          [13:0]    up_waddr_s;
@@ -221,7 +219,7 @@ module axi_ad408x #(
     .adc_clk(adc_clk),
     .adc_rst(adc_rst_s),
     .adc_r1_mode(),
-    .up_adc_ddr_edgesel(up_adc_ddr_edgesel),
+    .up_adc_ddr_edgesel(),
     .adc_pin_mode(),
     .adc_status('h00),
     .adc_sync_status(sync_status),
@@ -231,7 +229,7 @@ module axi_ad408x #(
     .adc_sref_sync(),
     .adc_sync(bitslip_enable),
     .up_adc_num_lanes(up_adc_num_lanes),
-    .up_adc_sdr_ddr_n(up_adc_sdr_ddr_n),
+    .up_adc_sdr_ddr_n(),
     .up_pps_rcounter(32'b0),
     .up_pps_status(1'b0),
     .up_pps_irq_mask(),
@@ -283,9 +281,7 @@ module axi_ad408x #(
     .cnv_in_p(cnv_in_p),
     .cnv_in_n(cnv_in_n),
     .sync_n(sync_n),
-    .sdr_ddr_n(up_adc_sdr_ddr_n),
     .num_lanes(up_adc_num_lanes),
-    .ddr_edge_sel(up_adc_ddr_edgesel),
     .up_clk(up_clk),
     .up_adc_dld(up_dld),
     .up_adc_dwdata(up_dwdata),
@@ -294,7 +290,7 @@ module axi_ad408x #(
     .delay_rst(delay_rst),
     .delay_locked(delay_locked),
     .adc_rst(adc_rst),
-    .adc_clk_div(adc_clk_s),
+    .adc_clk(adc_clk_s),
     .adc_data(adc_data),
     .adc_valid(adc_valid),
     .bitslip_enable(bitslip_enable),
