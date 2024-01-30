@@ -62,9 +62,7 @@ module ad408x_phy #(
     // Assumption:
     //  control bits are static after sync_n de-assertion
 
-  input                             sdr_ddr_n,
   input        [4:0]                num_lanes,
-  input                             ddr_edge_sel,
 
   // delay interface(for IDELAY macros)
 
@@ -80,7 +78,6 @@ module ad408x_phy #(
 
   input                             adc_rst,
   output                            adc_clk,
-  output                            adc_clk_div,
 
    output        [31:0]             adc_data,
    output                           adc_valid,
@@ -106,10 +103,12 @@ module ad408x_phy #(
    wire              adc_cnt_enable_s;
    wire    [ 1:0]    delay_locked_s;
    wire              single_lane;
-   reg     [ 8:0]    adc_cnt_p   = 'b0;
-   reg     [ 4:0]    cnv_in_io_d = 'b0;
-   reg               adc_valid_p = 'd0;
-   reg     [19:0]    adc_data_p  = 19'b0;
+
+   reg     [ 8:0]    adc_cnt_p          =   'b0;
+   reg     [ 4:0]    cnv_in_io_d        =   'b0;
+   reg               adc_valid_p        =   'd0;
+   reg     [19:0]    adc_data_p         = 19'b0;
+   reg               adc_cnt_enable_s_d =   'b0;
 
   assign delay_locked = &delay_locked_s;
   assign single_lane = num_lanes[0];
@@ -203,13 +202,14 @@ module ad408x_phy #(
   always @(posedge adc_clk_in_fast) begin
   
     cnv_in_io_d <= {cnv_in_io_d[3:0],cnv_in_io};
+    adc_cnt_enable_s_d <= adc_cnt_enable_s;
 
     if (~cnv_in_io_d[4] & cnv_in_io_d[3] ) begin
       adc_cnt_p <= 'h000;
     end else if (adc_cnt_enable_s == 1'b1) begin
       adc_cnt_p <= adc_cnt_p + 1'b1;
     end
-     if (adc_cnt_p == adc_cnt_value) begin
+     if (adc_cnt_p == adc_cnt_value && adc_cnt_enable_s_d == 1'b1) begin
       adc_valid_p <= 1'b1;
     end else begin
       adc_valid_p <= 1'b0;
@@ -235,10 +235,10 @@ module ad408x_phy #(
 
   // reg [19:0] adc_data_d;
   // reg [19:0] adc_data_dd;
-
+// 
   // reg        adc_valid_d;
   // reg        adc_valid_dd;
-
+// 
   // always @(posedge adc_clk_in_fast) begin
   //  
     // adc_data_d <= adc_data_p;
@@ -254,6 +254,6 @@ module ad408x_phy #(
   assign adc_valid = adc_valid_p;
 
   assign adc_clk     = adc_clk_in_fast;
-  assign adc_clk_div = adc_clk_in_fast;
+
   
 endmodule
