@@ -1,6 +1,6 @@
 ####################################################################################
 ####################################################################################
-## Copyright (c) 2024 Analog Devices, Inc.
+## Copyright (c) 2018 - 2024 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
@@ -12,8 +12,8 @@ M_DEPS += ../../scripts/adi_ip_xilinx.tcl
 
 M_VIVADO := vivado -mode batch -source
 
-XML_FLIST := spi_master.xml
-XML_FLIST += spi_master_rtl.xml
+XML_FLIST := spi_engine.xml
+XML_FLIST += spi_engine_rtl.xml
 XML_FLIST += spi_engine_ctrl.xml
 XML_FLIST += spi_engine_ctrl_rtl.xml
 XML_FLIST += spi_engine_offload_ctrl.xml

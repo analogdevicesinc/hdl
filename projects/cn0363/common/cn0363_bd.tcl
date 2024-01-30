@@ -1,11 +1,11 @@
 ###############################################################################
-## Copyright (C) 2016-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2016-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
 source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
 
-create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 spi
+create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 spi
 
 proc load_fir_filter_vector {filter_file} {
 	set fp [open $filter_file r]

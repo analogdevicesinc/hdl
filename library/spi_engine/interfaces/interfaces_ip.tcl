@@ -8,7 +8,7 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 # SPI interface
 
-adi_if_define "spi_master"
+adi_if_define "spi_engine"
 adi_if_ports output 1 sclk
 adi_if_ports output 1 sdo
 adi_if_ports output 1 sdo_t

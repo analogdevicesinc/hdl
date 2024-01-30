@@ -1,9 +1,9 @@
 ###############################################################################
-## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 ad738x_spi
+create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 ad738x_spi
 
 source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
 
