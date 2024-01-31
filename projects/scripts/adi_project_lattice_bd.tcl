@@ -16,6 +16,8 @@
 #     procedure.
 # * adi_ip_instance - Creates a Propel Builder ip config file and adds the
 #     specified ip to the opened project with that configuration.
+# * adi_ip_update - Updates a specified ip with new configurations and optional
+#     new name.
 ###############################################################################
 
 ###############################################################################
@@ -32,9 +34,13 @@
 # \opt[board] -board "Certus Pro NX Evaluation Board"
 # \opt[language] -language "verilog"
 # \opt[cmd_list] -cmd_list {{source ./system_bd.tcl}}
+# \opt[psc] -psc "${env(TOOLRTF)}/../../templates/MachXO3D_Template01/MachXO3D_Template01.psc"
 ###############################################################################
 proc adi_project_bd {project_name args} {
   puts "\nadi_project_bd:\n"
+
+  global env
+  set preinst_ip_mod_dir ${env(TOOLRTF)}
 
   array set opt [list -dev_select "auto" \
     -ppath "." \
@@ -42,6 +48,7 @@ proc adi_project_bd {project_name args} {
     -board "" \
     -speed "" \
     -language "verilog" \
+    -psc "" \
     -cmd_list {{source ./system_bd.tcl}} \
     {*}$args]
 
@@ -49,6 +56,7 @@ proc adi_project_bd {project_name args} {
   set ppath $opt(-ppath)
   set language $opt(-language)
   set cmd_list $opt(-cmd_list)
+  set psc $opt(-psc)
 
   global ad_hdl_dir
 
@@ -66,6 +74,7 @@ proc adi_project_bd {project_name args} {
     -board $board \
     -speed $speed \
     -language $language \
+    -psc $psc \
     -cmd_list $cmd_list
 }
 
@@ -89,6 +98,7 @@ proc adi_project_create_bd {project_name args} {
     -board "" \
     -speed "" \
     -language "verilog" \
+    -psc "" \
     -cmd_list "" \
     {*}$args]
 
@@ -97,6 +107,7 @@ proc adi_project_create_bd {project_name args} {
   set board $opt(-board)
   set speed $opt(-speed)
   set language $opt(-language)
+  set psc $opt(-psc)
   set cmd_list $opt(-cmd_list)
 
   global ad_hdl_dir
@@ -142,28 +153,42 @@ proc adi_project_create_bd {project_name args} {
   set ip_download_path ${env(USERPROFILE)}/PropelIPLocal
   set propel_builder_project_dir "$ppath/$project_name/$project_name"
 
-  file mkdir $propel_builder_project_dir
+  # I will think on library components later becouse those are still not
+  # applicable due to no ip generation tcl option. I will solve it later.
+
+  if {$psc == ""} {
+    file mkdir $propel_builder_project_dir
 
   # Creating the necessary .socproject file for being able to open the Radiant
   # and Propel SDK from Propel builder if needed.
-  set file [open "$ppath/$project_name/.socproject" w]
-  puts $file [format {<?xml version="1.0" encoding="UTF-8"?>
+    set file [open "$ppath/$project_name/.socproject" w]
+    puts $file [format {<?xml version="1.0" encoding="UTF-8"?>
 <propelProject>
   <builder-resource>
     <socProject sbxfile="./%s/%s.sbx"/>
   </builder-resource>
 </propelProject>} $project_name $project_name]
-  close $file
+    close $file
 
-  # I will think on library components later becouse those are still not
-  # applicable due to no ip generation tcl option. I will solve it later.
+    sbp_design new -name $project_name \
+      -path $propel_builder_project_dir/$project_name.sbx \
+      -device $device  \
+      -speed $speed \
+      -language $language \
+      -board $board
+  } else {
+    sbp_create_project  -name "$project_name" \
+      -path $ppath \
+      -device $device \
+      -speed $speed \
+      -language $language \
+      -psc $psc
 
-  sbp_design new -name $project_name \
-    -path $propel_builder_project_dir/$project_name.sbx \
-    -device $device  \
-    -speed $speed \
-    -language $language \
-    -board $board
+      foreach port [sbp_get_ports *] {
+        sbp_delete $port -type port
+      }
+  }
+
   sbp_design save
 
   foreach cmd $cmd_list {
@@ -180,16 +205,23 @@ proc adi_project_create_bd {project_name args} {
 # to keep the configured IP cores for the Radiant project.
 # Also generating the bsp after copying the configured IP cores to lib folder
 # because that's also based on the content of lib folder.
+#
+# Update: - If the psc default template file exists then the save works fine
+# and we do not need to generate the bsp separately also.
   sbp_design save
   sbp_design generate
 
-  file copy "$propel_builder_project_dir/.lib/latticesemi.com" \
-    "$propel_builder_project_dir/lib"
+  # sbp_design gen_tcl -proj_dir . -proj_name $project_name
+
+  if {$psc == ""} {
+    file copy "$propel_builder_project_dir/.lib/latticesemi.com" \
+      "$propel_builder_project_dir/lib"
 
 # Generating the bsp.
-  sbp_design pge sge \
-    -i "$ppath/$project_name/$project_name/$project_name.sbx" \
-    -o "$ppath"
+    sbp_design pge sge \
+      -i "$ppath/$project_name/$project_name/$project_name.sbx" \
+      -o "$ppath"
+  }
 
   sbp_design close
 }
@@ -201,15 +233,19 @@ proc adi_project_create_bd {project_name args} {
 # \opt[cfg_path] -cfg_path "./ipcfg"
 # \opt[vlnv] -vlnv {latticesemi.com:ip:cpu0:2.4.0}
 # \opt[ip_path] -ip_path "$ip_download_path/latticesemi.com_ip_riscv_mc_2.4.0"
+# \opt[meta_vlnv] -meta_vlnv {latticesemi.com:ip:riscv_mc:2.4.0}
 # \opt[ip_params] -ip_params {"SIMULATION": false, "DEBUG_ENABLE": true}
+# \opt[cfg_value] -cfg_value {SIMULATION: false, DEBUG_ENABLE: true}
 # \opt[ip_iname] -ip_iname cpu0_inst
 ###############################################################################
 proc adi_ip_config {args} {
   array set opt [list -cfg_path "./ipcfg" \
     -vlnv "" \
     -ip_path "" \
+    -meta_vlnv "" \
     -ip_params "" \
     -ip_iname "" \
+    -cfg_value "" \
     {*}$args]
 
   set cfg_path $opt(-cfg_path)
@@ -217,20 +253,47 @@ proc adi_ip_config {args} {
   set ip_path $opt(-ip_path)
   set ip_params $opt(-ip_params)
   set ip_iname $opt(-ip_iname)
+  set meta_vlnv $opt(-meta_vlnv)
+  set cfg_value $opt(-cfg_value)
 
   puts "adi_ip_config: $ip_iname"
 
-  if {[file exists $cfg_path] != 1} {
-    file mkdir $cfg_path
+  if {$cfg_value != ""} {
+    if {$meta_vlnv != ""} {
+      sbp_config_ip -vlnv $vlnv \
+      -meta_vlnv $meta_vlnv \
+      -cfg_value $cfg_value
+    }
+    if {$ip_path != ""} {
+      sbp_config_ip -vlnv $vlnv \
+      -meta_loc $ip_path \
+      -cfg_value $cfg_value
+    }
+  } else {
+    if {[file exists $cfg_path] != 1} {
+      file mkdir $cfg_path
+    }
+
+    set file [open "$cfg_path/$ip_iname.cfg" w]
+    puts $file [format {{%s}} $ip_params]
+    close $file
+
+    if {$meta_vlnv != ""} {
+      sbp_config_ip -vlnv $vlnv \
+      -meta_vlnv $meta_vlnv \
+      -cfg "$cfg_path/$ip_iname.cfg"
+    }
+    if {$ip_path != ""} {
+      sbp_config_ip -vlnv $vlnv \
+      -meta_loc $ip_path \
+      -cfg "$cfg_path/$ip_iname.cfg"
+
+## Old version from 2022.1, that still works in 2023.2 but not shown in help.
+      # sbp_design config_ip -vlnv $vlnv \
+      # -meta_loc $ip_path \
+      # -cfg "$cfg_path/$ip_iname.cfg"
+    }
   }
-
-  set file [open "$cfg_path/$ip_iname.cfg" w]
-  puts $file [format {{%s}} $ip_params]
-  close $file
-
-  sbp_design config_ip -vlnv $vlnv \
-    -meta_loc $ip_path \
-    -cfg "$cfg_path/$ip_iname.cfg"
 }
 
 ###############################################################################
@@ -241,15 +304,19 @@ proc adi_ip_config {args} {
 # \opt[cfg_path] -cfg_path "./ipcfg"
 # \opt[vlnv] -vlnv {latticesemi.com:ip:cpu0:2.4.0}
 # \opt[ip_path] -ip_path "$ip_download_path/latticesemi.com_ip_riscv_mc_2.4.0"
+# \opt[meta_vlnv] -meta_vlnv {latticesemi.com:ip:riscv_mc:2.4.0}
 # \opt[ip_params] -ip_params {"SIMULATION": false, "DEBUG_ENABLE": true}
+# \opt[cfg_value] -cfg_value {SIMULATION: false, DEBUG_ENABLE: true}
 # \opt[ip_iname] -ip_iname cpu0_inst
 ###############################################################################
 proc adi_ip_instance {args} {
   array set opt [list -cfg_path "./ipcfg" \
     -vlnv "" \
     -ip_path "" \
+    -meta_vlnv "" \
     -ip_params "" \
     -ip_iname "" \
+    -cfg_value "" \
     {*}$args]
 
   set vlnv $opt(-vlnv)
@@ -269,25 +336,36 @@ proc adi_ip_instance {args} {
 # \opt[cfg_path] -cfg_path "./ipcfg"
 # \opt[vlnv] -vlnv {latticesemi.com:ip:cpu0:2.4.0}
 # \opt[ip_path] -ip_path "$ip_download_path/latticesemi.com_ip_riscv_mc_2.4.0"
+# \opt[meta_vlnv] -meta_vlnv {latticesemi.com:ip:riscv_mc:2.4.0}
 # \opt[ip_params] -ip_params {"SIMULATION": false, "DEBUG_ENABLE": true}
+# \opt[cfg_value] -cfg_value {SIMULATION: false, DEBUG_ENABLE: true}
 # \opt[ip_iname] -ip_iname cpu0_inst
+# \opt[ip_niname] -ip_niname new_name_inst
 ###############################################################################
 proc adi_ip_update {args} {
   array set opt [list -cfg_path "./ipcfg" \
     -vlnv "" \
     -ip_path "" \
+    -meta_vlnv "" \
     -ip_params "" \
     -ip_iname "" \
+    -ip_niname "" \
+    -cfg_value "" \
     {*}$args]
 
   set vlnv $opt(-vlnv)
   set ip_iname $opt(-ip_iname)
+  set ip_niname $opt(-ip_niname)
 
-  puts "adi_ip_instance: $ip_iname"
+  puts "adi_ip_update: $ip_iname"
 
   adi_ip_config {*}$args
 
   global project_name
 
-  sbp_replace -vlnv $vlnv -name $ip_iname -component $project_name/$ip_iname
+  if {$ip_niname == ""} {
+    sbp_replace -vlnv $vlnv -name $ip_iname -component $project_name/$ip_iname
+  } else {
+    sbp_replace -vlnv $vlnv -name $ip_niname -component $project_name/$ip_iname
+  }
 }
