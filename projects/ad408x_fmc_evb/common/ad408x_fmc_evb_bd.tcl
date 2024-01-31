@@ -14,7 +14,9 @@ create_bd_port -dir I db_n
 create_bd_port -dir I sync_n
 create_bd_port -dir I cnv_in_p
 create_bd_port -dir I cnv_in_n
+create_bd_port -dir I filter_data_ready_n
 create_bd_port -dir O sys_cpu_out_clk
+
 
 # axi_ad408x
 
@@ -38,17 +40,17 @@ ad_ip_parameter axi_ad4080_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 # connect interface to axi_ad4080_adc
 
-ad_connect dco_p            axi_ad4080_adc/dclk_in_p
-ad_connect dco_n            axi_ad4080_adc/dclk_in_n
-ad_connect da_p             axi_ad4080_adc/data_a_in_p
-ad_connect da_n             axi_ad4080_adc/data_a_in_n
-ad_connect db_p             axi_ad4080_adc/data_b_in_p
-ad_connect db_n             axi_ad4080_adc/data_b_in_n
-ad_connect sync_n           axi_ad4080_adc/sync_n
-ad_connect cnv_in_p         axi_ad4080_adc/cnv_in_p
-ad_connect cnv_in_n         axi_ad4080_adc/cnv_in_n
-
-ad_connect $sys_iodelay_clk axi_ad4080_adc/delay_clk
+ad_connect dco_p                axi_ad4080_adc/dclk_in_p
+ad_connect dco_n                axi_ad4080_adc/dclk_in_n
+ad_connect da_p                 axi_ad4080_adc/data_a_in_p
+ad_connect da_n                 axi_ad4080_adc/data_a_in_n
+ad_connect db_p                 axi_ad4080_adc/data_b_in_p
+ad_connect db_n                 axi_ad4080_adc/data_b_in_n
+ad_connect sync_n               axi_ad4080_adc/sync_n
+ad_connect cnv_in_p             axi_ad4080_adc/cnv_in_p
+ad_connect cnv_in_n             axi_ad4080_adc/cnv_in_n
+ad_connect filter_data_ready_n  axi_ad4080_adc/filter_data_ready_n
+ad_connect $sys_iodelay_clk     axi_ad4080_adc/delay_clk
 
 # connect datapath
 

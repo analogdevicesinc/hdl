@@ -38,13 +38,14 @@
 module ad408x_phy #(
   parameter FPGA_TECHNOLOGY = 0,
   parameter DRP_WIDTH = 5,
-  parameter NUM_LANES = 2,  // Max number of lanes is 2
+  parameter NUM_LANES = 2,
   parameter IODELAY_CTRL = 1,
   parameter DELAY_REFCLK_FREQUENCY = 200,
   parameter IO_DELAY_GROUP = "dev_if_delay_group"
 ) (
 
   // device interface
+
   input                             dclk_in_n,
   input                             dclk_in_p,
   input                             data_a_in_n,
@@ -55,15 +56,19 @@ module ad408x_phy #(
   input                             cnv_in_p,
   input                             cnv_in_n,
 
-  // control interface
+  // reset signal 
 
-   input                              sync_n,
+  input                              sync_n,
 
-    // Assumption:
-    //  control bits are static after sync_n de-assertion
+  // Assumption:
+  //  control bits are static after sync_n de-assertion
 
   input        [4:0]                num_lanes,
   input                             self_sync,
+  input                             bitslip_enable,
+  input                             filter_enable,
+  input                             filter_data_ready_n,
+
   // delay interface(for IDELAY macros)
 
   input                             up_clk,
@@ -79,65 +84,64 @@ module ad408x_phy #(
   input                             adc_rst,
   output                            adc_clk,
 
-   output        [31:0]             adc_data,
-   output                           adc_valid,
+  // Output data 
 
-  // Debug interface
+  output        [31:0]             adc_data,
+  output                           adc_valid,
 
-  output                            clk_in_s,
-  input                             bitslip_enable,
+  // Synchronization signals used when CNV signal is not present 
+
   output                            sync_status
 );
-
-  wire           adc_clk_in_fast;
-  wire           cnv_in_io;
+  wire           adc_cnt_enable_s;
+  wire           serdes_reset_s;
+  wire   [ 5:0]  shift_cnt_value;
+  wire   [ 1:0]  delay_locked_s;
+  wire   [19:0]  pattern_value;
+  wire   [ 8:0]  adc_cnt_value;
   wire           rx_data_b_p;
   wire           rx_data_b_n;
   wire           rx_data_a_p;
   wire           rx_data_a_n;
-  wire   [ 8:0]  adc_cnt_value;
-  wire           adc_cnt_enable_s;
-  wire   [ 1:0]  delay_locked_s;
   wire           single_lane;
-  wire           serdes_reset_s;
-  wire           dclk_s;
-  wire   [19:0]  pattern_value;
   wire           cnv_in_io_s;
+  wire           cnv_in_io;
   wire           self_sync;
-  wire [ 5:0]    shift_cnt_value;
+  wire           adc_clk;
+  wire           dclk_s;
 
-  reg    [ 8:0]  adc_cnt_p          = 'b0;
-  reg    [ 4:0]  cnv_in_io_d        = 'b0;
-  reg            adc_valid_p        = 'd0;
-  reg    [19:0]  adc_data_p         = 'b0;
-  reg            adc_cnt_enable_s_d = 'b0;
   reg    [ 5:0]  serdes_reset       = 'b000110;
+  reg            adc_cnt_enable_s_d = 'b0;
+  reg            sync_status_int    = 'b0;
+  reg    [19:0]  adc_data_p         = 'b0;
+  reg    [19:0]  adc_data_d         = 'd0;
+  reg    [ 8:0]  adc_cnt_p          = 'b0;
+  reg    [ 5:0]  shift_cnt          = 'd0;
+  reg    [ 4:0]  cnv_in_io_d        = 'b0;
+  reg            single_lane_dd     = 'b0;
+  reg            single_lane_d      = 'b0;
+  reg            adc_valid_p        = 'd0;
+  reg            shift_cnt_en       = 'b0;
   reg            slip_d             = 'b0;
   reg            slip_dd            = 'b0;
-  reg            shift_cnt_en       = 'b0;
-  reg            sync_status_int    = 'b0;
-  reg    [ 5:0]  shift_cnt          = 'd0;
-  reg    [19:0]  adc_data_d         = 'd0;
-
-  assign delay_locked     = &delay_locked_s;
-  assign single_lane      = num_lanes[0];
-  assign sync_status      = sync_status_int;
-  assign serdes_reset_s   = serdes_reset[5];
-  assign adc_cnt_value    = (single_lane) ? 'h9 : 'h4;
+ 
+ 
+ 
   assign adc_cnt_enable_s = (adc_cnt_p < adc_cnt_value) ? 1'b1 : 1'b0;
-  assign pattern_value    = 20'hac5d6;
+  assign adc_cnt_value    = (single_lane) ? 'h9 : 'h4;
   assign cnv_in_io        = (self_sync) ? 1'b0 : cnv_in_io_s;
-  assign shift_cnt_value  = 'd39;
-
-  // Sign extend to 32 bits
-
+  assign serdes_reset_s   = serdes_reset[5];
+  assign single_lane      = num_lanes[0];
+  assign delay_locked     = &delay_locked_s;
+  assign sync_status      = sync_status_int;
   assign adc_data         = {{12{adc_data_d[19]}},adc_data_d};
   assign adc_valid        = adc_valid_p;
-  assign adc_clk          = adc_clk_in_fast;
+  assign filter_data_aqc  = filter_data_ready_n & filter_enable;
+  assign pattern_value    = 'hac5d6;
+  assign shift_cnt_value  = 'd39;
 
- 
   my_ila i_ila (
-    .clk(adc_clk_in_fast),
+    .clk(adc_clk),
     .probe0(cnv_in_io),
     .probe1(rx_data_b_p),
     .probe2(rx_data_b_n),
@@ -150,7 +154,13 @@ module ad408x_phy #(
     .probe9(adc_cnt_p),
     .probe10(cnv_in_io_d),
     .probe11(adc_valid_p),
-    .probe12(adc_data_p));
+    .probe12(adc_data_p),
+    .probe13(filter_data_ready_n),
+    .probe14(sync_status),
+    .probe15(filter_enable),
+    .probe16(bitslip_enable),
+    .probe17(self_sync),
+    .probe18(filter_data_aqc));
 
   IBUFDS i_cnv_in_ibuf(
   .I(cnv_in_p),
@@ -162,18 +172,14 @@ module ad408x_phy #(
     .I(dclk_in_p),
     .IB(dclk_in_n));
 
-   // It is added to constraint the tool to keep the logic in the same region
-   // as the input pins, otherwise the tool will automatically add a bufg and
-   // meeting the timing margins is harder.
-
   BUFH BUFH_inst (
-     .O(adc_clk_in_fast),
+     .O(adc_clk),
      .I(dclk_s));
 
   // Min 2 div_clk cycles once div_clk is running after deassertion of sync
-  // Control externally the reset of serdes for precise timing
+  // To make sure that the clocks are present and stable
 
-  always @(posedge adc_clk_in_fast or negedge sync_n) begin
+  always @(posedge adc_clk or negedge sync_n) begin
     if(~sync_n) begin
       serdes_reset <= 6'b000110;
     end else begin
@@ -190,7 +196,7 @@ module ad408x_phy #(
     .IODELAY_GROUP(IO_DELAY_GROUP),
     .REFCLK_FREQUENCY(DELAY_REFCLK_FREQUENCY)
   ) da_iddr (
-    .rx_clk(adc_clk_in_fast),
+    .rx_clk(adc_clk),
     .rx_data_in_p(data_a_in_p),
     .rx_data_in_n(data_a_in_n),
     .rx_data_p(rx_data_a_p),
@@ -212,7 +218,7 @@ module ad408x_phy #(
       .IODELAY_GROUP(IO_DELAY_GROUP),
       .REFCLK_FREQUENCY(DELAY_REFCLK_FREQUENCY)
     ) db_iddr (
-      .rx_clk(adc_clk_in_fast),
+      .rx_clk(adc_clk),
       .rx_data_in_p(data_b_in_p),
       .rx_data_in_n(data_b_in_n),
       .rx_data_p(rx_data_b_p),
@@ -225,14 +231,10 @@ module ad408x_phy #(
       .delay_rst(delay_rst),
       .delay_locked(delay_locked_s[0]));
 
+  // The shift_cnt_en signal will keep the data bits counter untill the pattern is captured in adc_data_p
 
-// ***************************************************************************
-// ***************************************************************************
-
-  // bitslip sync process
-
-  always @(posedge adc_clk_in_fast) begin
-    slip_d <= bitslip_enable & self_sync;
+  always @(posedge adc_clk) begin
+    slip_d  <= bitslip_enable & self_sync;
     slip_dd <= slip_d;
     if(serdes_reset_s || adc_data_p == pattern_value || shift_cnt == shift_cnt_value)
       shift_cnt_en <= 1'b0;
@@ -240,10 +242,12 @@ module ad408x_phy #(
       shift_cnt_en <= 1'b1;
   end
   
-  always @(posedge adc_clk_in_fast) begin
+  // Additional counter that makes sure that the sinchronization process works only for 39 clock periods
+
+  always @(posedge adc_clk) begin
     if(shift_cnt_en) begin
       if( serdes_reset_s) begin
-        shift_cnt <= 0;
+        shift_cnt       <= 6'b0;
         sync_status_int <= 1'b0;
       end else if( adc_data_p != pattern_value) begin
         shift_cnt <= shift_cnt + 1;
@@ -254,36 +258,38 @@ module ad408x_phy #(
     end
   end
 
-// ***************************************************************************
-// ***************************************************************************
+  // The counter resets based on the mode used: CNV is present or the design uses the self synchronization process
+  // The adc_cnt_value is either 4 or 9 based on the number of lanes used
 
-
-  always @(posedge adc_clk_in_fast) begin
+  always @(posedge adc_clk) begin
   
     cnv_in_io_d        <= {cnv_in_io_d[3:0], cnv_in_io};
     adc_cnt_enable_s_d <= adc_cnt_enable_s;
 
-    if ( (~cnv_in_io_d[4] & cnv_in_io_d[3]) || serdes_reset_s || shift_cnt_en || ~adc_cnt_enable_s) begin
+    if ( (~cnv_in_io_d[4] & cnv_in_io_d[3]) || serdes_reset_s || shift_cnt_en || (~adc_cnt_enable_s && ~filter_enable) || filter_data_aqc ) begin
       adc_cnt_p <= 'h000;
     end else if (adc_cnt_enable_s == 1'b1) begin
       adc_cnt_p <= adc_cnt_p + 1'b1;
     end
 
-     if (adc_cnt_p == adc_cnt_value && adc_cnt_enable_s_d == 1'b1) begin
+    if (adc_cnt_p == adc_cnt_value && adc_cnt_enable_s_d == 1'b1) begin
       adc_valid_p <= 1'b1;
     end else begin
       adc_valid_p <= 1'b0;
     end
   end
 
-  reg single_lane_d = 1'b0;
-  reg single_lane_dd = 1'b0;
+  //the single lane signal runs on the up clock and it's used on the adc_clk
 
-  always @(posedge adc_clk_in_fast) begin
+  always @(posedge adc_clk) begin
     single_lane_d  <= single_lane;
     single_lane_dd <= single_lane_d;
-    adc_data_d     <= adc_data_p;
+  end
 
+  // the captured bits are shifted in the adc_data_p register
+
+  always @(posedge adc_clk) begin
+    adc_data_d     <= adc_data_p;
     if(single_lane_dd) begin
         adc_data_p <= {adc_data_p[17:0], rx_data_a_p, rx_data_a_n};
     end else begin
