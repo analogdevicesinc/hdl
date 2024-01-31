@@ -108,6 +108,7 @@ module axi_ad408x #(
   wire                    bitslip_enable;
   wire                    sync_status;
   wire          [ 4:0]    up_adc_num_lanes;
+  wire                    up_adc_self_sync;
   wire                    up_rstn;
   wire                    up_clk;
   wire          [13:0]    up_waddr_s;
@@ -229,7 +230,7 @@ module axi_ad408x #(
     .adc_sref_sync(),
     .adc_sync(bitslip_enable),
     .up_adc_num_lanes(up_adc_num_lanes),
-    .up_adc_sdr_ddr_n(),
+    .up_adc_sdr_ddr_n(up_adc_self_sync),
     .up_pps_rcounter(32'b0),
     .up_pps_status(1'b0),
     .up_pps_irq_mask(),
@@ -282,6 +283,7 @@ module axi_ad408x #(
     .cnv_in_n(cnv_in_n),
     .sync_n(sync_n),
     .num_lanes(up_adc_num_lanes),
+    .self_sync(up_adc_self_sync),
     .up_clk(up_clk),
     .up_adc_dld(up_dld),
     .up_adc_dwdata(up_dwdata),

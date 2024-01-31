@@ -63,7 +63,7 @@ module ad408x_phy #(
     //  control bits are static after sync_n de-assertion
 
   input        [4:0]                num_lanes,
-
+  input                             self_sync,
   // delay interface(for IDELAY macros)
 
   input                             up_clk,
@@ -89,30 +89,53 @@ module ad408x_phy #(
   output                            sync_status
 );
 
-  localparam SEVEN_SERIES    = 1;
-  localparam ULTRASCALE      = 2;
-  localparam ULTRASCALE_PLUS = 3;
+  wire           adc_clk_in_fast;
+  wire           cnv_in_io;
+  wire           rx_data_b_p;
+  wire           rx_data_b_n;
+  wire           rx_data_a_p;
+  wire           rx_data_a_n;
+  wire   [ 8:0]  adc_cnt_value;
+  wire           adc_cnt_enable_s;
+  wire   [ 1:0]  delay_locked_s;
+  wire           single_lane;
+  wire           serdes_reset_s;
+  wire           dclk_s;
+  wire   [19:0]  pattern_value;
+  wire           cnv_in_io_s;
+  wire           self_sync;
+  wire [ 5:0]    shift_cnt_value;
 
-   wire              adc_clk_in_fast;
-   wire              cnv_in_io;
-   wire              rx_data_b_p;
-   wire              rx_data_b_n;
-   wire              rx_data_a_p;
-   wire              rx_data_a_n;
-   wire    [ 8:0]    adc_cnt_value;
-   wire              adc_cnt_enable_s;
-   wire    [ 1:0]    delay_locked_s;
-   wire              single_lane;
+  reg    [ 8:0]  adc_cnt_p          = 'b0;
+  reg    [ 4:0]  cnv_in_io_d        = 'b0;
+  reg            adc_valid_p        = 'd0;
+  reg    [19:0]  adc_data_p         = 'b0;
+  reg            adc_cnt_enable_s_d = 'b0;
+  reg    [ 5:0]  serdes_reset       = 'b000110;
+  reg            slip_d             = 'b0;
+  reg            slip_dd            = 'b0;
+  reg            shift_cnt_en       = 'b0;
+  reg            sync_status_int    = 'b0;
+  reg    [ 5:0]  shift_cnt          = 'd0;
+  reg    [19:0]  adc_data_d         = 'd0;
 
-   reg     [ 8:0]    adc_cnt_p          =   'b0;
-   reg     [ 4:0]    cnv_in_io_d        =   'b0;
-   reg               adc_valid_p        =   'd0;
-   reg     [19:0]    adc_data_p         = 19'b0;
-   reg               adc_cnt_enable_s_d =   'b0;
+  assign delay_locked     = &delay_locked_s;
+  assign single_lane      = num_lanes[0];
+  assign sync_status      = sync_status_int;
+  assign serdes_reset_s   = serdes_reset[5];
+  assign adc_cnt_value    = (single_lane) ? 'h9 : 'h4;
+  assign adc_cnt_enable_s = (adc_cnt_p < adc_cnt_value) ? 1'b1 : 1'b0;
+  assign pattern_value    = 20'hac5d6;
+  assign cnv_in_io        = (self_sync) ? 1'b0 : cnv_in_io_s;
+  assign shift_cnt_value  = 'd39;
 
-  assign delay_locked = &delay_locked_s;
-  assign single_lane = num_lanes[0];
+  // Sign extend to 32 bits
 
+  assign adc_data         = {{12{adc_data_d[19]}},adc_data_d};
+  assign adc_valid        = adc_valid_p;
+  assign adc_clk          = adc_clk_in_fast;
+
+ 
   my_ila i_ila (
     .clk(adc_clk_in_fast),
     .probe0(cnv_in_io),
@@ -129,13 +152,10 @@ module ad408x_phy #(
     .probe11(adc_valid_p),
     .probe12(adc_data_p));
 
-
-  wire dclk_s;
-
   IBUFDS i_cnv_in_ibuf(
   .I(cnv_in_p),
   .IB(cnv_in_n),
-  .O(cnv_in_io));
+  .O(cnv_in_io_s));
 
   IBUFDS i_dclk_bufds (
     .O(dclk_s),
@@ -149,8 +169,18 @@ module ad408x_phy #(
   BUFH BUFH_inst (
      .O(adc_clk_in_fast),
      .I(dclk_s));
-  
 
+  // Min 2 div_clk cycles once div_clk is running after deassertion of sync
+  // Control externally the reset of serdes for precise timing
+
+  always @(posedge adc_clk_in_fast or negedge sync_n) begin
+    if(~sync_n) begin
+      serdes_reset <= 6'b000110;
+    end else begin
+      serdes_reset <= {serdes_reset[4:0],1'b0};
+    end
+  end
+  
   ad_data_in # (
     .SINGLE_ENDED(0),
     .IDDR_CLK_EDGE("OPPOSITE_EDGE"),
@@ -195,20 +225,50 @@ module ad408x_phy #(
       .delay_rst(delay_rst),
       .delay_locked(delay_locked_s[0]));
 
-  assign adc_cnt_value    = (single_lane) ? 'h9 : 'h4;
-  assign adc_cnt_enable_s = (adc_cnt_p < adc_cnt_value) ? 1'b1 : 1'b0;
+
+// ***************************************************************************
+// ***************************************************************************
+
+  // bitslip sync process
+
+  always @(posedge adc_clk_in_fast) begin
+    slip_d <= bitslip_enable & self_sync;
+    slip_dd <= slip_d;
+    if(serdes_reset_s || adc_data_p == pattern_value || shift_cnt == shift_cnt_value)
+      shift_cnt_en <= 1'b0;
+    else if(slip_d & ~slip_dd)
+      shift_cnt_en <= 1'b1;
+  end
+  
+  always @(posedge adc_clk_in_fast) begin
+    if(shift_cnt_en) begin
+      if( serdes_reset_s) begin
+        shift_cnt <= 0;
+        sync_status_int <= 1'b0;
+      end else if( adc_data_p != pattern_value) begin
+        shift_cnt <= shift_cnt + 1;
+      end
+      if(adc_data_p == pattern_value) begin
+        sync_status_int <= 1'b1;
+      end
+    end
+  end
+
+// ***************************************************************************
+// ***************************************************************************
 
 
   always @(posedge adc_clk_in_fast) begin
   
-    cnv_in_io_d <= {cnv_in_io_d[3:0],cnv_in_io};
+    cnv_in_io_d        <= {cnv_in_io_d[3:0], cnv_in_io};
     adc_cnt_enable_s_d <= adc_cnt_enable_s;
 
-    if (~cnv_in_io_d[4] & cnv_in_io_d[3] ) begin
+    if ( (~cnv_in_io_d[4] & cnv_in_io_d[3]) || serdes_reset_s || shift_cnt_en || ~adc_cnt_enable_s) begin
       adc_cnt_p <= 'h000;
     end else if (adc_cnt_enable_s == 1'b1) begin
       adc_cnt_p <= adc_cnt_p + 1'b1;
     end
+
      if (adc_cnt_p == adc_cnt_value && adc_cnt_enable_s_d == 1'b1) begin
       adc_valid_p <= 1'b1;
     end else begin
@@ -216,44 +276,19 @@ module ad408x_phy #(
     end
   end
 
+  reg single_lane_d = 1'b0;
+  reg single_lane_dd = 1'b0;
+
   always @(posedge adc_clk_in_fast) begin
-    if(single_lane) begin 
-      if (adc_cnt_p == 'h000) begin
-        adc_data_p <= {18'd0, rx_data_a_p, rx_data_a_n};
-      end else begin
+    single_lane_d  <= single_lane;
+    single_lane_dd <= single_lane_d;
+    adc_data_d     <= adc_data_p;
+
+    if(single_lane_dd) begin
         adc_data_p <= {adc_data_p[17:0], rx_data_a_p, rx_data_a_n};
-      end
     end else begin
-      if (adc_cnt_p == 'h000) begin
-        adc_data_p <= {16'd0, rx_data_a_p, rx_data_b_p, rx_data_a_n, rx_data_b_n};
-      end else begin
         adc_data_p <= {adc_data_p[15:0], rx_data_a_p, rx_data_b_p, rx_data_a_n, rx_data_b_n};
-      end
     end
   end
 
-
-  // reg [19:0] adc_data_d;
-  // reg [19:0] adc_data_dd;
-// 
-  // reg        adc_valid_d;
-  // reg        adc_valid_dd;
-// 
-  // always @(posedge adc_clk_in_fast) begin
-  //  
-    // adc_data_d <= adc_data_p;
-    // adc_valid_d <= adc_valid_p;
-    // 
-    // adc_data_dd  <= adc_data_d;
-    // adc_valid_dd <= adc_valid_d;
-  // end
-
-   // Sign extend to 32 bits
-
-  assign adc_data  = {{12{adc_data_p[19]}},adc_data_p};
-  assign adc_valid = adc_valid_p;
-
-  assign adc_clk     = adc_clk_in_fast;
-
-  
 endmodule
