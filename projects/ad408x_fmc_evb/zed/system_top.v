@@ -212,13 +212,8 @@ module system_top (
     dbg_cnt_f <= dbg_cnt_f + 1;
   end
 
-  // Dummy function to prevent fpga_100_clk optimization
-  // Even if the clock is not used the diff termination should help signal
-  // integrity
 
-  // always @(posedge fpga_100_clk) begin
-    // dbg_cnt_100_f <= dbg_cnt_100_f + 1;
-  // end
+
 
   // instantiations
 
@@ -227,14 +222,9 @@ module system_top (
     .IB (clk_n),
     .O (fpga_clk));
 
-  // IBUFDS i_fpga_100_clk (
-    // .I (fpgaclk_p),
-    // .IB (fpgaclk_n),
-    // .O (fpga_100_clk));
-
   ad_iobuf #(
     .DATA_WIDTH(2)
-  ) i_gpio_4_3_mach1 (
+  ) i_gpio_3_2_mach1 (
     .dio_t(gpio_t[34:33]),
     .dio_i(gpio_o[34:33]),
     .dio_o(gpio_i[34:33]),
@@ -242,10 +232,10 @@ module system_top (
 
   ad_iobuf #(
     .DATA_WIDTH(1)
-  ) i_gpio_2_mach1 (
-    .dio_t(gpio_t[32]),
-    .dio_i(gpio_o[32]),
-    .dio_o(gpio_i[32]),
+  ) i_gpio_1_mach1 (
+    .dio_t(1'b1),
+    .dio_i(1'b0),
+    .dio_o(filter_data_ready_n),
     .dio_p(gpio1_fmc));
 
   ad_iobuf #(
@@ -343,6 +333,7 @@ module system_top (
     .db_n (db_n),
     .cnv_in_p(cnv_in_p),
     .cnv_in_n(cnv_in_n),
+    .filter_data_ready_n(filter_data_ready_n),
     .sync_n (ad9508_sync),
     .sys_cpu_out_clk (sys_cpu_out_clk));
 

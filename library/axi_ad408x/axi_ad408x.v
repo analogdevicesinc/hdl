@@ -59,6 +59,7 @@ module axi_ad408x #(
   input                   cnv_in_p,
   input                   cnv_in_n,
   input                   sync_n,
+  input                   filter_data_ready_n,
 
   // output data interface
 
@@ -100,26 +101,29 @@ module axi_ad408x #(
 
   // internal signals
 
-  wire                    adc_clk_s;
-  wire                    adc_rst_s;
-  wire                    adc_enable;
-  wire                    delay_rst;
-  wire                    delay_locked;
-  wire                    bitslip_enable;
-  wire                    sync_status;
-  wire          [ 4:0]    up_adc_num_lanes;
-  wire                    up_adc_self_sync;
-  wire                    up_rstn;
-  wire                    up_clk;
-  wire          [13:0]    up_waddr_s;
-  wire          [13:0]    up_raddr_s;
-  wire                    up_sel_s;
-  wire                    up_wr_s;
-  wire          [13:0]    up_addr_s;
-  wire          [31:0]    up_wdata_s;
-  wire          [31:0]    up_rdata_s  [0:NUM_OF_UP_SPACES-1];
-  wire                    up_rack_s   [0:NUM_OF_UP_SPACES-1];
-  wire                    up_wack_s   [0:NUM_OF_UP_SPACES-1];
+  wire             adc_clk_s;
+  wire             adc_rst_s;
+  wire             adc_enable;
+  wire             delay_rst;
+  wire             delay_locked;
+  wire             bitslip_enable;
+  wire             filter_enable;
+  wire             sync_status;
+  wire             self_sync;
+  wire    [7:0]    adc_custom_control_s;
+  wire   [ 4:0]    up_adc_num_lanes;
+  wire             up_rstn;
+  wire             up_clk;
+  wire   [13:0]    up_waddr_s;
+  wire   [13:0]    up_raddr_s;
+  wire             up_sel_s;
+  wire             up_wr_s;
+  wire   [13:0]    up_addr_s;
+  wire   [31:0]    up_wdata_s;
+  wire   [31:0]    up_rdata_s  [0:NUM_OF_UP_SPACES-1];
+  wire             up_rack_s   [0:NUM_OF_UP_SPACES-1];
+  wire             up_wack_s   [0:NUM_OF_UP_SPACES-1];
+
   wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
   wire  [DELAY_CTRL_DRP_WIDTH*DELAY_CTRL_NUM_LANES-1:0]  up_dwdata;
   wire  [DELAY_CTRL_DRP_WIDTH*DELAY_CTRL_NUM_LANES-1:0]  up_drdata;
@@ -136,6 +140,9 @@ module axi_ad408x #(
   assign adc_clk = adc_clk_s;
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
+
+  assign self_sync     = adc_custom_control_s[1]; 
+  assign filter_enable = adc_custom_control_s[0]; 
 
   always @(*)
   begin
@@ -225,12 +232,13 @@ module axi_ad408x #(
     .adc_status('h00),
     .adc_sync_status(sync_status),
     .adc_status_ovf(adc_dovf),
+    .adc_custom_control(adc_custom_control_s),
     .adc_clk_ratio(32'd1),
     .adc_start_code(),
     .adc_sref_sync(),
     .adc_sync(bitslip_enable),
     .up_adc_num_lanes(up_adc_num_lanes),
-    .up_adc_sdr_ddr_n(up_adc_self_sync),
+    .up_adc_sdr_ddr_n(),
     .up_pps_rcounter(32'b0),
     .up_pps_status(1'b0),
     .up_pps_irq_mask(),
@@ -283,7 +291,7 @@ module axi_ad408x #(
     .cnv_in_n(cnv_in_n),
     .sync_n(sync_n),
     .num_lanes(up_adc_num_lanes),
-    .self_sync(up_adc_self_sync),
+    .self_sync(self_sync),
     .up_clk(up_clk),
     .up_adc_dld(up_dld),
     .up_adc_dwdata(up_dwdata),
@@ -296,7 +304,10 @@ module axi_ad408x #(
     .adc_data(adc_data),
     .adc_valid(adc_valid),
     .bitslip_enable(bitslip_enable),
-    .sync_status(sync_status));
+    .sync_status(sync_status),
+    .filter_enable(filter_enable),
+    .filter_data_ready_n(filter_data_ready_n));
+
 
   // adc delay control
 
