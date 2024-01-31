@@ -6,34 +6,33 @@ CN0540 HDL project
 Overview
 --------------------------------------------------------------------------------
 
-The HDL reference design for the :adi:`CN0540` provides a high resolution, 
+The HDL reference design for the :adi:`CN0540` provides a high resolution,
 wide-bandwidth, high dynamic range, Integrated Electronics Piezoelectric (IEPE)
 compatible interface data acquisition system (DAQ) for interfacing with
-Integrated Circuit Piezo (ICP)/IEPE piezo vibration sensors. Most solutions 
+Integrated Circuit Piezo (ICP)/IEPE piezo vibration sensors. Most solutions
 which interface with piezo sensors in the market are AC coupled, lacking DC and
 sub-hertz measurement capability. This reference design is a DC coupled solution
-in which DC and sub-hertz precision are achieved. By looking at the complete 
+in which DC and sub-hertz precision are achieved. By looking at the complete
 data set from the vibration sensor in the frequency domain (DC - 50 kHz), the
 type and source of a machine fault can be better predicted using the; position,
 amplitude and number of harmonics found in the FFT spectrum.
 
 The data acquisition board incorporates a precision 24-bit, 1024kSPS Sigma-delta
 ADC :adi:`AD7768-1` and a 16-bit voltage output DAC :adi:`LTC2606`. Used as the
-ADC driver is a high linearity FDA :adi:`ADA4945-1` and a 200mA programmable 
+ADC driver is a high linearity FDA :adi:`ADA4945-1` and a 200mA programmable
 2-terminal current source :adi:`LT3092`. Analog input protection is provided by
 the switch :adi:`ADG5421F`.
 
-The design have a SPI Engine instance to control and acquire data from the 
-:adi:`AD7768-1` 24-bit precisions ADC, providing support to capture continuous
-samples at maximum sampling rate. Currently the design support FPGA carriers
-from both Intel and Xilinx.
+This project has a SPI Engine instance to control and acquire data from the
+:adi:`AD7768-1` 24-bit precision ADC. This instance provides support for
+capturing continuous samples at the maximum sample rate.
 
 Supported boards
 -------------------------------------------------------------------------------
 
 -  :adi:`EVAL-CN0540-ARDZ <CN0540>`
 
-Used devices
+Supported devices
 -------------------------------------------------------------------------------
 
 -  :adi:`AD7768-1`
@@ -66,9 +65,9 @@ Jumper setup
 ================== ================= ==========================================
 Jumper/Solder link Default Position  Description
 ================== ================= ==========================================
-P10                Inserted          Connects the current source to the circuit
+P10                Inserted          Connects the power source to the circuit
                                      and may be removed for testing without a
-                                     current source
+                                     power source
 ================== ================= ==========================================
 
 CPU/Memory interconnects addresses
@@ -92,7 +91,7 @@ axi_spi_engine_0**        0x0003_0000
 .. admonition:: Legend
    :class: note
 
-   -   ``*`` instantiated only for Cora_Z7
+   -   ``*`` instantiated only for Cora Z7S
    -   ``**`` instantiated only for De10-Nano
 
 I2C connections
@@ -116,7 +115,7 @@ I2C connections
      - i2c1
      - sys_hps_i2c1
      - ---
-     - --- 
+     - ---
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -139,7 +138,7 @@ GPIOs
 
 The Software GPIO number is calculated as follows:
 
--  Cora_Z7: the offset is 54
+-  Cora Z7S: the offset is 54
 
 .. list-table::
    :widths: 25 25 25 25
@@ -203,11 +202,11 @@ The Software GPIO number is calculated as follows:
    * -
      - (from FPGA view)
      -
-     - Cyclone V
+     - De10-Nano
    * - ltc2308_cs
      - OUT
      - 41
-     - 9  
+     - 9
    * - cn0540_blue_led
      - OUT
      - 40
@@ -215,28 +214,28 @@ The Software GPIO number is calculated as follows:
    * - cn0540_yellow_led
      - OUT
      - 39
-     - 7   
+     - 7
    * - cn0540_sw_ff
      - IN
      - 38
-     - 6    
+     - 6
    * - cn0540_shutdown
      - OUT
      - 36
      - 4
-   * - cn0540_drdy_aux 
+   * - cn0540_drdy_aux
      - OUT
      - 35
      - 3
    * - cn0540_csb_aux
      - OUT
      - 34
-     - 2 
-   * - cn0540_sync_in 
+     - 2
+   * - cn0540_sync_in
      - OUT
      - 33
      - 1
-   * - cn0540_reset_adc 
+   * - cn0540_reset_adc
      - OUT
      - 32
      - 0
@@ -255,7 +254,7 @@ spi_cn0540          11  55         87
 =================== === ========== ===========
 
 ================ === =============== ================
-Instance name    HDL Linux Cyclone V Actual Cyclone V
+Instance name    HDL Linux De10-Nano Actual De10-Nano
 ================ === =============== ================
 axi_spi_engine_0 5   45               77
 axi_dmac_0       4   44               76
@@ -275,32 +274,40 @@ the HDL repository, and then build the project as follows:
 
 .. code-block::
    :linenos:
-    
-   user@analog:~$ cd hdl/projects/cn0540/cora7s
-   user@analog:~/hdl/projects/cn0540/cora7s$ make
+
+   user@analog:~$ cd hdl/projects/cn0540/coraz7s
+   user@analog:~/hdl/projects/cn0540/coraz7s$ make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
 Resources
 -------------------------------------------------------------------------------
 
+Systems related
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Here you can find the quick start guides available for these evaluation boards:
+
+- :dokuwiki:`[Wiki] CN0540 with Cora Z7S quick start guide <resources/eval/user-guides/circuits-from-the-lab/cn0540/coraz7s>`
+- :dokuwiki:`[Wiki] CN0540 with DE10-Nano quick start quide <resources/eval/user-guides/circuits-from-the-lab/cn0540/de10-nano>`
+
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets:
+- Product datasheets:
 
--  :adi:`CN0540`
--  :adi:`AD7768-1`
--  :adi:`ADA4945-1`
--  :adi:`LT3092`
--  :adi:`LTC2606`
--  :dokuwiki:`Evaluation Board User Guide <resources/eval/user-guides/circuits-from-the-lab/cn0540>`
+  - :adi:`CN0540`
+  - :adi:`AD7768-1`
+  - :adi:`ADA4945-1`
+  - :adi:`LT3092`
+  - :adi:`LTC2606`
+- :dokuwiki:`Evaluation Board User Guide <resources/eval/user-guides/circuits-from-the-lab/cn0540>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  :git-hdl:`CN0540_ARDZ HDL project source code <projects/cn0540>`
--  :dokuwiki:`CN0540 - HDL <resources/eval/user-guides/circuits-from-the-lab/cn0540/hdl>`
+-  :dokuwiki:`[Wiki] CN0540 HDL project documentation <resources/eval/user-guides/circuits-from-the-lab/cn0540/hdl>`
 
 .. list-table::
    :widths: 30 35 35
@@ -332,7 +339,7 @@ HDL related
      - :ref:`here <spi_engine interconnect>`
    * - SPI_ENGINE_OFFLOAD
      - :git-hdl:`library/spi_engine/spi_engine_offload`
-     - :ref:`here <spi_engine offload>`  
+     - :ref:`here <spi_engine offload>`
    * - SYSID_ROM
      - :git-hdl:`library/sysid_rom <library/sysid_rom>`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
@@ -340,18 +347,15 @@ HDL related
 .. admonition:: Legend
    :class: note
 
-   -   ``*`` instantiated only for Cora_Z7
+   -   ``*`` instantiated only for Cora Z7S
    -   ``**`` instantiated only for De10-Nano
-
 
 -  :ref:`SPI Engine Framework documentation <spi_engine>`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-linux:`CN0540 - Linux driver source code <analogdevicesinc/linux/blob/main/drivers/iio/adc/ad7768-1.c>`
-- :dokuwiki:`CN0540 with Cora_Z7 <resources/eval/user-guides/circuits-from-the-lab/cn0540/coraz7s>`
-- :dokuwiki:`CN0540 with DE10-Nano <resources/eval/user-guides/circuits-from-the-lab/cn0540/de10-nano>`
+- :git-linux:`CN0540 Linux driver source code <analogdevicesinc/linux/blob/main/drivers/iio/adc/ad7768-1.c>`
 
 .. include:: ../common/more_information.rst
 
