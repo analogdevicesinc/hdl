@@ -7,7 +7,7 @@
 PROJECT_NAME := template_ctpnxe
 
 M_DEPS += ../../common/ctpnxe/ctpnxe_system_constr.pdc
-M_DEPS += ../../common/ctpnxe/ctpnxe_system_bd.tcl
-M_DEPS += ../../common/ctpnxe/riscvmc.mem
+M_DEPS += ../../common/ctpnxe/ctpnxe_system_bd_rx.tcl
+# M_DEPS += ../../common/ctpnxe/ctpnxe_system_bd.tcl
 
 include ../../scripts/project-lattice.mk
