@@ -75,6 +75,10 @@ module system_top (
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
+  wire            cnv_gpio_i;
+  wire            cnv_gpio_o;
+  wire            cnv_gpio_t;
+
 
   // instantiations
 
@@ -105,6 +109,14 @@ module system_top (
     .dio_o(gpio_i[7:2]),
     .dio_p(led));
 
+  ad_iobuf #( // CNV
+    .DATA_WIDTH(1)
+  ) i_cnv_iobuf (
+    .dio_t(cnv_gpio_t),
+    .dio_i(cnv_gpio_o),
+    .dio_o(cnv_gpio_i),
+    .dio_p(pulsar_adc_spi_cs));
+
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
     .ddr_ba (ddr_ba),
@@ -130,6 +142,9 @@ module system_top (
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .gpio_t (gpio_t),
+    .cnv_gpio_i (cnv_gpio_i),
+    .cnv_gpio_o (cnv_gpio_o),
+    .cnv_gpio_t (cnv_gpio_t),
     .spi0_clk_i (1'b0),
     .spi0_clk_o (),
     .spi0_csn_0_o (),
@@ -148,7 +163,7 @@ module system_top (
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o (),
-    .pulsar_adc_spi_cs(pulsar_adc_spi_cs),
+    .pulsar_adc_spi_cs(), // unconnected: using pl gpio
     .pulsar_adc_spi_sclk(pulsar_adc_spi_sclk),
     .pulsar_adc_spi_sdi(pulsar_adc_spi_sdi),
     .pulsar_adc_spi_sdo(pulsar_adc_spi_sdo),

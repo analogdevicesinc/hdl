@@ -27,6 +27,22 @@ ad_ip_instance axi_pwm_gen pulsar_adc_trigger_gen
 ad_ip_parameter pulsar_adc_trigger_gen CONFIG.PULSE_0_PERIOD 120
 ad_ip_parameter pulsar_adc_trigger_gen CONFIG.PULSE_0_WIDTH 1
 
+# gpio instance for controlling cnv (instead of using the spi engine's cs)
+
+create_bd_port -dir I -from 0 -to 0 cnv_gpio_i
+create_bd_port -dir O -from 0 -to 0 cnv_gpio_o
+create_bd_port -dir O -from 0 -to 0 cnv_gpio_t
+
+ad_ip_instance axi_gpio cnv_gpio
+ad_ip_parameter cnv_gpio CONFIG.C_IS_DUAL 0
+ad_ip_parameter cnv_gpio CONFIG.C_GPIO_WIDTH 1
+ad_ip_parameter cnv_gpio CONFIG.C_INTERRUPT_PRESENT 1
+
+ad_connect  cnv_gpio_i cnv_gpio/gpio_io_i
+ad_connect  cnv_gpio_o cnv_gpio/gpio_io_o
+ad_connect  cnv_gpio_t cnv_gpio/gpio_io_t
+
+
 # dma to receive data stream
 ad_ip_instance axi_dmac axi_pulsar_adc_dma
 ad_ip_parameter axi_pulsar_adc_dma CONFIG.DMA_TYPE_SRC 1
@@ -60,9 +76,11 @@ ad_cpu_interconnect 0x44a00000 $hier_spi_engine/${hier_spi_engine}_axi_regmap
 ad_cpu_interconnect 0x44a30000 axi_pulsar_adc_dma
 ad_cpu_interconnect 0x44a70000 spi_clkgen
 ad_cpu_interconnect 0x44b00000 pulsar_adc_trigger_gen
+ad_cpu_interconnect 0x44b30000 cnv_gpio
 
 ad_cpu_interrupt "ps-13" "mb-13" axi_pulsar_adc_dma/irq
 ad_cpu_interrupt "ps-12" "mb-12" /$hier_spi_engine/irq
+ad_cpu_interrupt "ps-11" "mb-11" cnv_gpio/ip2intc_irpt
 
 ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
 ad_mem_hp1_interconnect $sys_cpu_clk axi_pulsar_adc_dma/m_dest_axi
