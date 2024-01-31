@@ -22,4 +22,5 @@ if {$argc == 1} {
 #     -speed "" \
 #     -language "verilog" \
 #     -cmd_list {{source ./system_bd.tcl}}
+#     -psc "${env(TOOLRTF)}/../../templates/MachXO3D_Template01/MachXO3D_Template01.psc"
 adi_project_bd $project_name
