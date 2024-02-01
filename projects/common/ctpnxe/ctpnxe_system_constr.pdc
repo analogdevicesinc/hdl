@@ -1,0 +1,106 @@
+###############################################################################
+## Copyright (C) 2023 - 2024 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
+
+ldc_set_sysconfig {JTAG_PORT=ENABLE MASTER_SPI_PORT=SERIAL DONE_PORT=ENABLE INITN_PORT=ENABLE PROGRAMN_PORT=ENABLE MCCLK_FREQ=112.5 CONFIG_IOSLEW=FAST BOOTMODE=SINGLE CONFIGIO_VOLTAGE_BANK0=1.8 CONFIGIO_VOLTAGE_BANK1=3.3}
+
+#gpio LEDs 0-7
+ldc_set_location -site {N5} [get_ports {leds_0_to_23[0]}]
+ldc_set_location -site {N6} [get_ports {leds_0_to_23[1]}]
+ldc_set_location -site {N7} [get_ports {leds_0_to_23[2]}]
+ldc_set_location -site {N8} [get_ports {leds_0_to_23[3]}]
+ldc_set_location -site {L6} [get_ports {leds_0_to_23[4]}]
+ldc_set_location -site {N9} [get_ports {leds_0_to_23[5]}]
+ldc_set_location -site {L8} [get_ports {leds_0_to_23[6]}]
+ldc_set_location -site {M9} [get_ports {leds_0_to_23[7]}]
+ldc_set_location -site {N1} [get_ports {leds_0_to_23[8]}]
+ldc_set_location -site {N2} [get_ports {leds_0_to_23[9]}]
+ldc_set_location -site {N3} [get_ports {leds_0_to_23[10]}]
+ldc_set_location -site {M1} [get_ports {leds_0_to_23[11]}]
+ldc_set_location -site {M2} [get_ports {leds_0_to_23[12]}]
+ldc_set_location -site {M3} [get_ports {leds_0_to_23[13]}]
+ldc_set_location -site {L3} [get_ports {leds_0_to_23[14]}]
+ldc_set_location -site {N4} [get_ports {leds_0_to_23[15]}]
+ldc_set_location -site {T4} [get_ports {leds_0_to_23[16]}]
+ldc_set_location -site {T5} [get_ports {leds_0_to_23[17]}]
+ldc_set_location -site {T6} [get_ports {leds_0_to_23[18]}]
+ldc_set_location -site {T7} [get_ports {leds_0_to_23[19]}]
+ldc_set_location -site {U8} [get_ports {leds_0_to_23[20]}]
+ldc_set_location -site {T8} [get_ports {leds_0_to_23[21]}]
+ldc_set_location -site {R9} [get_ports {leds_0_to_23[22]}]
+ldc_set_location -site {P9} [get_ports {leds_0_to_23[23]}]
+
+ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports {leds_0_to_23[*]}]
+
+#dip SWs 1-8
+ldc_set_location -site {K8} [get_ports {dip_sw_1_to_8[0]}]
+ldc_set_location -site {K7} [get_ports {dip_sw_1_to_8[1]}]
+ldc_set_location -site {K6} [get_ports {dip_sw_1_to_8[2]}]
+ldc_set_location -site {K4} [get_ports {dip_sw_1_to_8[3]}]
+ldc_set_location -site {K3} [get_ports {dip_sw_1_to_8[4]}]
+ldc_set_location -site {K2} [get_ports {dip_sw_1_to_8[5]}]
+ldc_set_location -site {J7} [get_ports {dip_sw_1_to_8[6]}]
+ldc_set_location -site {J6} [get_ports {dip_sw_1_to_8[7]}]
+
+ldc_set_port -iobuf {IO_TYPE=LVCMOS18} [get_ports {dip_sw_1_to_8[*]}]
+
+# pmod1 IOs 0-7
+# ldc_set_location -site {V7} [get_ports {pmod1_io[0]}]
+# ldc_set_location -site {V6} [get_ports {pmod1_io[1]}]
+# ldc_set_location -site {V5} [get_ports {pmod1_io[2]}]
+# ldc_set_location -site {V4} [get_ports {pmod1_io[3]}]
+# ldc_set_location -site {V8} [get_ports {pmod1_io[4]}]
+# ldc_set_location -site {W7} [get_ports {pmod1_io[5]}]
+# ldc_set_location -site {W6} [get_ports {pmod1_io[6]}]
+# ldc_set_location -site {W5} [get_ports {pmod1_io[7]}]
+
+# ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports {pmod1_io[*]}]
+
+# push buttons
+ldc_set_location -site {J5} [get_ports sw_1]; # rstn
+ldc_set_location -site {J2} [get_ports sw_4]
+ldc_set_location -site {J3} [get_ports sw_5]
+
+ldc_set_port -iobuf {IO_TYPE=LVCMOS18} [get_ports sw_1]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS18} [get_ports sw_4]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS18} [get_ports sw_5]
+
+#uart
+ldc_set_location -site {L1} [get_ports txd_o]
+ldc_set_location -site {L2} [get_ports rxd_i]
+
+ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports rxd_i]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports txd_o]
+
+#i2c pmod2
+ldc_set_location -site {AA2} [get_ports scl_io]
+ldc_set_location -site {AA1} [get_ports sda_io]
+
+ldc_set_port -iobuf {IO_TYPE=LVCMOS33 PULLMODE=UP} [get_ports scl_io]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS33 PULLMODE=UP} [get_ports sda_io]
+
+#spi pmod0
+ldc_set_location -site {Y1} [get_ports {ssn_o[0]}]
+ldc_set_location -site {W2} [get_ports mosi_o]
+ldc_set_location -site {V3} [get_ports miso_i]
+ldc_set_location -site {V1} [get_ports sclk_o]
+
+ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports {ssn_o[0]}]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports mosi_o]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports miso_i]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports sclk_o]
+
+#clk
+ldc_set_location -site {N25} [get_ports clk_125]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports clk_125]
+
+#bank vcc_s
+ldc_set_vcc -bank 0 1.8
+ldc_set_vcc -bank 1 3.3
+ldc_set_vcc -bank 2 3.3
+ldc_set_vcc -bank 6 3.3
+ldc_set_vcc -bank 3 1.8
+ldc_set_vcc -bank 4 1.8
+ldc_set_vcc -bank 5 1.8
+ldc_set_vcc -bank 7 3.3

@@ -1,0 +1,13 @@
+####################################################################################
+## Copyright (c) 2018 - 2024 Analog Devices, Inc.
+### SPDX short identifier: BSD-1-Clause
+## Auto-generated, do not modify!
+####################################################################################
+
+PROJECT_NAME := template_ctpnxe
+
+M_DEPS += ../../common/ctpnxe/ctpnxe_system_constr.pdc
+M_DEPS += ../../common/ctpnxe/ctpnxe_system_bd_rx.tcl
+# M_DEPS += ../../common/ctpnxe/ctpnxe_system_bd_mc.tcl
+
+include ../../scripts/project-lattice.mk
