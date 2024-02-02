@@ -1,9 +1,9 @@
 ###############################################################################
-## Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2023-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-set REQUIRED_QUARTUS_VERSION 22.1std.0
+set REQUIRED_QUARTUS_VERSION 23.1std.0
 set QUARTUS_PRO_ISUSED 0
 source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project_intel.tcl
