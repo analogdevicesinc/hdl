@@ -159,6 +159,7 @@ module spi_engine_execution #(
   wire cs_sleep_counter_compare;
   wire cs_sleep_early_exit;
   reg cs_sleep_repeat;
+  reg cs_active;
 
   wire io_ready1;
   wire io_ready2;
@@ -420,7 +421,14 @@ module spi_engine_execution #(
   // used to latch the MISO lines, improving the overall timing margin of the
   // interface.
 
-  wire cs_active_s = (inst_d1 == CMD_CHIPSELECT) & ~(&cmd_d1[NUM_OF_CS-1:0]);
+  always @(posedge clk) begin
+    if (!resetn) begin // set cs_active during reset for a cycle to clear shift reg
+      cs_active <= 1;
+    end else begin
+      cs_active <= ~(&cmd_d1[NUM_OF_CS-1:0]) & cs_gen;
+    end
+  end
+
   genvar i;
 
   // NOTE: SPI configuration (CPOL/PHA) is only hardware configurable at this point
@@ -438,8 +446,8 @@ module spi_engine_execution #(
       for (i=0; i<NUM_OF_SDI; i=i+1) begin: g_sdi_shift_reg
         reg [DATA_WIDTH-1:0] data_sdi_shift;
 
-        always @(negedge echo_sclk or posedge cs_active_s) begin
-          if (cs_active_s) begin
+        always @(negedge echo_sclk or posedge cs_active) begin
+          if (cs_active) begin
             data_sdi_shift <= 0;
           end else begin
             data_sdi_shift <= {data_sdi_shift, sdi[i]};
@@ -454,8 +462,8 @@ module spi_engine_execution #(
 
       end
 
-      always @(posedge echo_sclk or posedge cs_active_s) begin
-        if (cs_active_s == 1'b1) begin
+      always @(posedge echo_sclk or posedge cs_active) begin
+        if (cs_active) begin
           sdi_counter <= 8'b0;
           sdi_counter_d <= 8'b0;
         end else begin
@@ -469,8 +477,8 @@ module spi_engine_execution #(
       // MISO shift register runs on positive echo_sclk
       for (i=0; i<NUM_OF_SDI; i=i+1) begin: g_sdi_shift_reg
         reg [DATA_WIDTH-1:0] data_sdi_shift;
-        always @(posedge echo_sclk or posedge cs_active_s) begin
-          if (cs_active_s) begin
+        always @(posedge echo_sclk or posedge cs_active) begin
+          if (cs_active) begin
             data_sdi_shift <= 0;
           end else begin
             data_sdi_shift <= {data_sdi_shift, sdi[i]};
@@ -483,8 +491,8 @@ module spi_engine_execution #(
         end
       end
 
-      always @(posedge echo_sclk or posedge cs_active_s) begin
-        if (cs_active_s == 1'b1) begin
+      always @(posedge echo_sclk or posedge cs_active) begin
+        if (cs_active) begin
           sdi_counter <= 8'b0;
           sdi_counter_d <= 8'b0;
         end else begin
@@ -503,7 +511,7 @@ module spi_engine_execution #(
 
     reg [3:0] last_sdi_bit_m = 4'b0;
     always @(posedge clk) begin
-      if (cs_active_s) begin
+      if (cs_active) begin
         last_sdi_bit_m <= 4'b0;
       end else begin
         last_sdi_bit_m <= {last_sdi_bit_m, last_sdi_bit};
@@ -511,7 +519,7 @@ module spi_engine_execution #(
     end
 
     always @(posedge clk) begin
-      if (cs_active_s) begin
+      if (cs_active) begin
         sdi_data_valid <= 1'b0;
       end else if (sdi_enabled == 1'b1 &&
                    last_sdi_bit_m[3] == 1'b0 &&
@@ -523,7 +531,7 @@ module spi_engine_execution #(
     end
 
     always @(posedge clk) begin
-      if (cs_active_s) begin
+      if (cs_active) begin
         num_of_transfers <= 8'b0;
       end else begin
         if (cmd_d1[15:12] == 4'b0) begin
@@ -533,7 +541,7 @@ module spi_engine_execution #(
     end
 
     always @(posedge clk) begin
-      if (cs_active_s) begin
+      if (cs_active) begin
         sdi_transfer_counter <= 0;
       end else if (last_sdi_bit_m[2] == 1'b0 &&
                    last_sdi_bit_m[1] == 1'b1) begin
@@ -554,7 +562,7 @@ module spi_engine_execution #(
       reg [DATA_WIDTH-1:0] data_sdi_shift;
 
       always @(posedge clk) begin
-        if (cs_active_s) begin
+        if (cs_active) begin
           data_sdi_shift <= 0;
         end else begin
           if (trigger_rx_s == 1'b1) begin
