@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -49,7 +49,9 @@ module ad_data_in #(
   parameter   IODELAY_ENABLE = 1,
   parameter   IODELAY_CTRL = 0,
   parameter   IODELAY_GROUP = "dev_if_delay_group",
-  parameter   REFCLK_FREQUENCY = 200
+  parameter   REFCLK_FREQUENCY = 200,
+  // for lvds mode only
+  parameter   INV_POL = 0
 ) (
 
   // data interface
@@ -122,6 +124,11 @@ module ad_data_in #(
   // internal signals
 
   wire                rx_data_ibuf_s;
+  // rx_data_ibuf_s inverted, taken from OB port of IBUFDS_DIFF_OUT
+  // check-out the doc here: https://docs.xilinx.com/r/2023.1-English/ug974-vivado-ultrascale-libraries/IBUFDS_DIFF_OUT
+  wire                rx_data_ibuf_inv_s;
+  // the not inverted version
+  wire                rx_data_ibuf_not_inv_s;
   wire                rx_data_idelay_s;
   wire        [ 8:0]  up_drdata_s;
 
@@ -169,10 +176,13 @@ module ad_data_in #(
       .I (rx_data_in_p),
       .O (rx_data_ibuf_s));
   end else begin
-    IBUFDS i_rx_data_ibuf (
+    IBUFDS_DIFF_OUT i_rx_data_ibuf (
       .I (rx_data_in_p),
       .IB (rx_data_in_n),
-      .O (rx_data_ibuf_s));
+      .O (rx_data_ibuf_not_inv_s),
+      .OB (rx_data_ibuf_inv_s));
+
+    assign rx_data_ibuf_s = (INV_POL == 1) ? rx_data_ibuf_inv_s : rx_data_ibuf_not_inv_s;
   end
   endgenerate
 
