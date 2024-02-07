@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2021-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -298,7 +298,8 @@ module axi_pwm_gen #(
     end
   end
 
-  assign pause_cnt = ((pwm_armed[1]  |
+  assign pause_cnt = ((pwm_armed[0]  |
+                       pwm_armed[1]  |
                        pwm_armed[2]  |
                        pwm_armed[3]  |
                        pwm_armed[4]  |
