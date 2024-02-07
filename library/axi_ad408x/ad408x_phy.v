@@ -93,6 +93,7 @@ module ad408x_phy #(
 
   output                            sync_status
 );
+
   wire           adc_cnt_enable_s;
   wire           serdes_reset_s;
   wire   [ 5:0]  shift_cnt_value;
@@ -109,6 +110,7 @@ module ad408x_phy #(
   wire           self_sync;
   wire           adc_clk;
   wire           dclk_s;
+  wire           filter_data_aqc;
 
   reg    [ 5:0]  serdes_reset       = 'b000110;
   reg            adc_cnt_enable_s_d = 'b0;
@@ -124,9 +126,7 @@ module ad408x_phy #(
   reg            shift_cnt_en       = 'b0;
   reg            slip_d             = 'b0;
   reg            slip_dd            = 'b0;
- 
- 
- 
+
   assign adc_cnt_enable_s = (adc_cnt_p < adc_cnt_value) ? 1'b1 : 1'b0;
   assign adc_cnt_value    = (single_lane) ? 'h9 : 'h4;
   assign cnv_in_io        = (self_sync) ? 1'b0 : cnv_in_io_s;
@@ -136,31 +136,8 @@ module ad408x_phy #(
   assign sync_status      = sync_status_int;
   assign adc_data         = {{12{adc_data_d[19]}},adc_data_d};
   assign adc_valid        = adc_valid_p;
-  assign filter_data_aqc  = filter_data_ready_n & filter_enable;
   assign pattern_value    = 'hac5d6;
   assign shift_cnt_value  = 'd39;
-
-  my_ila i_ila (
-    .clk(adc_clk),
-    .probe0(cnv_in_io),
-    .probe1(rx_data_b_p),
-    .probe2(rx_data_b_n),
-    .probe3(rx_data_a_p),
-    .probe4(rx_data_a_n),
-    .probe5(adc_data),
-    .probe6(adc_valid),
-    .probe7(adc_cnt_value),
-    .probe8(adc_cnt_enable_s),
-    .probe9(adc_cnt_p),
-    .probe10(cnv_in_io_d),
-    .probe11(adc_valid_p),
-    .probe12(adc_data_p),
-    .probe13(filter_data_ready_n),
-    .probe14(sync_status),
-    .probe15(filter_enable),
-    .probe16(bitslip_enable),
-    .probe17(self_sync),
-    .probe18(filter_data_aqc));
 
   IBUFDS i_cnv_in_ibuf(
   .I(cnv_in_p),
@@ -236,17 +213,19 @@ module ad408x_phy #(
   always @(posedge adc_clk) begin
     slip_d  <= bitslip_enable & self_sync;
     slip_dd <= slip_d;
-    if(serdes_reset_s || adc_data_p == pattern_value || shift_cnt == shift_cnt_value)
+    if(serdes_reset_s || adc_data_p == pattern_value || ((shift_cnt == shift_cnt_value) && ~filter_enable))
       shift_cnt_en <= 1'b0;
     else if(slip_d & ~slip_dd)
       shift_cnt_en <= 1'b1;
   end
   
   // Additional counter that makes sure that the sinchronization process works only for 39 clock periods
+  reg shift_cnt_en_d = 1'b0;
 
   always @(posedge adc_clk) begin
+    shift_cnt_en_d <= shift_cnt_en;
     if(shift_cnt_en) begin
-      if( serdes_reset_s) begin
+      if( serdes_reset_s || (~shift_cnt_en_d && shift_cnt_en )) begin
         shift_cnt       <= 6'b0;
         sync_status_int <= 1'b0;
       end else if( adc_data_p != pattern_value) begin
@@ -266,8 +245,8 @@ module ad408x_phy #(
     cnv_in_io_d        <= {cnv_in_io_d[3:0], cnv_in_io};
     adc_cnt_enable_s_d <= adc_cnt_enable_s;
 
-    if ( (~cnv_in_io_d[4] & cnv_in_io_d[3]) || serdes_reset_s || shift_cnt_en || (~adc_cnt_enable_s && ~filter_enable) || filter_data_aqc ) begin
-      adc_cnt_p <= 'h000;
+    if ( (~cnv_in_io_d[4] & cnv_in_io_d[3] && ~filter_enable) || serdes_reset_s || shift_cnt_en || (~adc_cnt_enable_s && ~filter_enable) || filter_data_ready_n_dd ) begin
+      adc_cnt_p <= 9'h0;
     end else if (adc_cnt_enable_s == 1'b1) begin
       adc_cnt_p <= adc_cnt_p + 1'b1;
     end
@@ -281,9 +260,15 @@ module ad408x_phy #(
 
   //the single lane signal runs on the up clock and it's used on the adc_clk
 
+  reg filter_data_ready_n_d    = 1'b0;
+  reg filter_data_ready_n_dd   = 1'b0;
+
   always @(posedge adc_clk) begin
     single_lane_d  <= single_lane;
     single_lane_dd <= single_lane_d;
+   
+    filter_data_ready_n_d  <= filter_data_ready_n;
+    filter_data_ready_n_dd  <= filter_data_ready_n_d && filter_enable;
   end
 
   // the captured bits are shifted in the adc_data_p register
