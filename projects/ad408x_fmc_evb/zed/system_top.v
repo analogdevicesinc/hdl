@@ -35,8 +35,6 @@
 
 `timescale 1ns/100ps
 
-`define ECHOED_CLK
-
 module system_top (
 
   inout   [14:0]  ddr_addr,
@@ -86,12 +84,6 @@ module system_top (
   input           otg_vbusoc,
 
   // FMC connector
-
-  // Default 100 MHz clock
-
-  // input           fpgaclk_p,
-  // input           fpgaclk_n,
-
   // LVDS data interace
 
   input           dco_p,
@@ -124,18 +116,7 @@ module system_top (
   output          pd_v33b,
   output          osc_en,
   output          ad9508_sync,
-
-`ifdef ECHOED_CLK
-  // Input for Echoed clock mode
-  input           clk_p,
-  input           clk_n,
-`else
-  // Output for self clocked mode
-  output          clk_p,
-  output          clk_n,
-  output          fpga_cnvp,
-  output          fpga_cnvn,
-`endif
+  inout [7:0]     pbio,
 
   // ADC SPI
 
@@ -183,7 +164,6 @@ module system_top (
   assign gp3_dir  = 1'b0;
   assign en_psu   = 1'b1;
   assign osc_en   = pwrgd;
-
   assign sync_req = gpio_o[42];
   assign pd_v33b  = 1'b1;
 
@@ -203,24 +183,6 @@ module system_top (
   always @(posedge sys_cpu_out_clk) begin
     dbg_cnt <= dbg_cnt + 1;
   end
-
-  // Dummy function to prevent fpga_clk optimization
-  // Even if the clock is not used the diff termination should help signal
-  // integrity
-
-  always @(posedge fpga_clk) begin
-    dbg_cnt_f <= dbg_cnt_f + 1;
-  end
-
-
-
-
-  // instantiations
-
-  IBUFDS i_fpga_clk (
-    .I (clk_p),
-    .IB (clk_n),
-    .O (fpga_clk));
 
   ad_iobuf #(
     .DATA_WIDTH(2)

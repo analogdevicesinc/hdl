@@ -138,14 +138,13 @@ module axi_ad408x #(
   integer j;
 
   assign adc_clk = adc_clk_s;
-  assign up_clk = s_axi_aclk;
+  assign up_clk  = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
 
   assign self_sync     = adc_custom_control_s[1]; 
   assign filter_enable = adc_custom_control_s[0]; 
 
-  always @(*)
-  begin
+  always @(*) begin
     up_rdata_r = 'h00;
     up_rack_r = 'h00;
     up_wack_r = 'h00;

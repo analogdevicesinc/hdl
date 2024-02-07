@@ -17,7 +17,6 @@ create_bd_port -dir I cnv_in_n
 create_bd_port -dir I filter_data_ready_n
 create_bd_port -dir O sys_cpu_out_clk
 
-
 # axi_ad408x
 
 ad_ip_instance axi_ad408x axi_ad4080_adc
