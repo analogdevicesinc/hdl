@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -22,6 +22,6 @@ set EXT_CLK $ad_project_params(EXT_CLK)
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
 ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/$mem_init_sys_path"
 ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
-set sys_cstring "$DEV_CONFIG,$SIMPLE_STATUS_CRC,$EXT_CLK"
+set sys_cstring "$DEV_CONFIG,$NUM_OF_SDI,$SIMPLE_STATUS_CRC,$EXT_CLK"
 
 sysid_gen_sys_init_file $sys_cstring

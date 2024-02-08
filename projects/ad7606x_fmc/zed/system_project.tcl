@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -11,8 +11,8 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 # DEV_CONFIG - The device which will be used
 #  - Options : AD7606B(0)/C-16(1)/C-18(2)
 # INTF - Operation interface
-#  - Options : Parallel/Serial
-# NUM_OF_SDI - NUmber of SDI lines used
+#  - Options : Parallel(0)/Serial(1)
+# NUM_OF_SDI - Number of SDI lines used
 #  - Options: 1, 2, 4, 8
 # SIMPLE_STATUS_CRC - ADC read mode options
 #  - Options : SIMPLE(0), STATUS(1), CRC(2) CRC_STATUS(3)
@@ -20,8 +20,22 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #  - Options : No(0), Yes(1)
 
 set DEV_CONFIG [get_env_param DEV_CONFIG 0]
-set INTF [get_env_param INTF 0]
-set NUM_OF_SDI [get_env_param NUM_OF_SDI 8]
+
+# This type of check is useful when build without the INTF or NUM_OF_SDI parameters, that affect the constraints file
+set INTF 1
+if {[info exists ::env(INTF)]} {
+  set INTF $::env(INTF)
+} else {
+  set env(INTF) $INTF
+}
+
+set NUM_OF_SDI 4
+if {[info exists ::env(NUM_OF_SDI)]} {
+  set NUM_OF_SDI $::env(NUM_OF_SDI)
+} else {
+  set env(NUM_OF_SDI) $NUM_OF_SDI
+}
+
 set SIMPLE_STATUS_CRC [get_env_param SIMPLE_STATUS_CRC 0]
 set EXT_CLK [get_env_param EXT_CLK 0]
 
