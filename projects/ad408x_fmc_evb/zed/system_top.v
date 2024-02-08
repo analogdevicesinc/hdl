@@ -116,7 +116,7 @@ module system_top (
   output          pd_v33b,
   output          osc_en,
   output          ad9508_sync,
-  inout [7:0]     pbio,
+  inout   [8:0]   pbio,
 
   // ADC SPI
 

@@ -6,9 +6,6 @@
 set_property -dict {PACKAGE_PIN L18 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports dco_p]     ; ## H4  FMC_CLK0_M2C_P  IO_L12P_T1_MRCC_34
 set_property -dict {PACKAGE_PIN L19 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports dco_n]     ; ## H5  FMC_CLK0_M2C_N  IO_L12N_T1_MRCC_34
 
-set_property -dict {PACKAGE_PIN N19 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports clk_p]     ; ## D8  FMC_LA01_CC_P   IO_L14P_T2_SRCC_34
-set_property -dict {PACKAGE_PIN N20 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports clk_n]     ; ## D9  FMC_LA01_CC_N   IO_L14N_T2_SRCC_34
-
 set_property -dict {PACKAGE_PIN P17 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports da_p]      ; ## H7  FMC_LA02_P      IO_L20P_T3_34   
 set_property -dict {PACKAGE_PIN P18 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports da_n]      ; ## H8  FMC_LA02_N      IO_L20N_T3_34  
 
@@ -63,21 +60,13 @@ set_property -dict {PACKAGE_PIN C20 IOSTANDARD LVCMOS25} [get_ports adf435x_lock
 
 # clocks
 
-create_clock -period 5 -name dco_clk [get_ports dco_p]
+create_clock -period 2.5 -name dco_clk [get_ports dco_p]
 
-set input_clock         dco_clk;      # Name of input clock
-set input_clock_period  2.500;        # Period of input clock (full-period)
-set skew_bre            1.000;        # Data invalid before the rising clock edge
-set skew_are            1.000;        # Data invalid after the rising clock edge
-set skew_bfe            1.000;        # Data invalid before the falling clock edge
-set skew_afe            1.000;        # Data invalid after the falling clock edge
-set input_ports         {da_p db_p};  # List of input ports
+set input_clock  dco_clk;     
+set data_delay   1.000;       
+set input_ports  {da_p db_p};  
 
-# 
-# Input Delay Constraint
-# 
-
-set_input_delay -clock $input_clock -max [expr $input_clock_period/2 + $skew_afe] [get_ports $input_ports];
-set_input_delay -clock $input_clock -min [expr $input_clock_period/2 - $skew_bfe] [get_ports $input_ports];
-set_input_delay -clock $input_clock -max [expr $input_clock_period/2 + $skew_are] [get_ports $input_ports] -clock_fall -add_delay;
-set_input_delay -clock $input_clock -min [expr $input_clock_period/2 - $skew_bre] [get_ports $input_ports] -clock_fall -add_delay;
+set_input_delay -clock $input_clock -max $data_delay [get_ports $input_ports];
+set_input_delay -clock $input_clock -min $data_delay [get_ports $input_ports];
+set_input_delay -clock $input_clock -max $data_delay [get_ports $input_ports] -clock_fall -add_delay;
+set_input_delay -clock $input_clock -min $data_delay [get_ports $input_ports] -clock_fall -add_delay;
