@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -32,6 +32,7 @@ create_bd_port -dir O tdd_sync_t
 
 ad_ip_instance axi_ad9361 axi_ad9361
 ad_ip_parameter axi_ad9361 CONFIG.ID 0
+ad_ip_parameter axi_ad9361 CONFIG.INV_POL 0
 
 # set to 1 for CORDIC or 2 for POLYNOMIAL
 ad_ip_parameter axi_ad9361 CONFIG.DAC_DDS_TYPE 1
