@@ -12,6 +12,8 @@ adi_ip_files axi_ad408x [list \
   "$ad_hdl_dir/library/xilinx/common/ad_serdes_in.v" \
   "$ad_hdl_dir/library/common/ad_pack.v" \
   "$ad_hdl_dir/library/common/ad_rst.v" \
+  "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
+  "$ad_hdl_dir/library/util_cdc/sync_event.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_data_clk.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_data_in.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_dcfilter.v" \
@@ -27,6 +29,7 @@ adi_ip_files axi_ad408x [list \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
+  "axi_ad408x_constr.xdc" \
   "ad408x_phy.v" \
   "axi_ad408x.v" ]
 
