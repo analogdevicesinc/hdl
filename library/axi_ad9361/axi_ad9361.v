@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -37,8 +37,6 @@
 
 module axi_ad9361 #(
 
-  // parameters
-
   parameter   ID = 0,
   parameter   MODE_1R1T = 0,
   parameter   FPGA_TECHNOLOGY = 0,
@@ -70,7 +68,12 @@ module axi_ad9361 #(
   parameter   MIMO_ENABLE = 0,
   parameter   USE_SSI_CLK = 1,
   parameter   DELAY_REFCLK_FREQUENCY = 200,
-  parameter   RX_NODPA = 0
+  parameter   RX_NODPA = 0,
+  // for lvds mode only -- polarity inversion for each line and for frame
+  // bits 5:0 - per line inversion of data in ad_data_in, lines 5-0
+  // bit 6 - frame inversion
+  // i.e.: 64 means inversion on all 5 lines and frame as well
+  parameter   INV_POL = 0
 ) (
 
   // physical interface (receive-lvds)
@@ -408,7 +411,8 @@ module axi_ad9361 #(
     .CLK_DESKEW (MIMO_ENABLE),
     .USE_SSI_CLK (USE_SSI_CLK),
     .DELAY_REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY),
-    .RX_NODPA (RX_NODPA)
+    .RX_NODPA (RX_NODPA),
+    .INV_POL (INV_POL)
   ) i_dev_if (
     .rx_clk_in_p (rx_clk_in_p),
     .rx_clk_in_n (rx_clk_in_n),

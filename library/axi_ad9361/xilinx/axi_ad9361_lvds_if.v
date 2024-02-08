@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -44,7 +44,12 @@ module axi_ad9361_lvds_if #(
   parameter   CLK_DESKEW = 0,
   parameter   USE_SSI_CLK = 1,
   parameter   DELAY_REFCLK_FREQUENCY = 200,
-  parameter   RX_NODPA = 0
+  parameter   RX_NODPA = 0,
+  // for lvds mode only -- polarity inversion for each line and for frame
+  // bits 5:0 - per line inversion of data in ad_data_in, lines 5-0
+  // bit 6 - frame inversion
+  // i.e.: 64 means inversion on all 5 lines and frame as well
+  parameter   INV_POL = 0
 ) (
 
   // physical interface (receive)
@@ -146,9 +151,9 @@ module axi_ad9361_lvds_if #(
   reg     [ 5:0]      tx_data_0_p = 'd0;
   reg     [ 5:0]      tx_data_1_p = 'd0;
   reg     [ 1:0]      tx_clk = 'd0;
-  reg                 tx_frame = 'd0;
-  reg     [ 5:0]      tx_data_0 = 'd0;
-  reg     [ 5:0]      tx_data_1 = 'd0;
+  reg                 tx_frame_r = 'd0;
+  reg     [ 5:0]      tx_data_0_r = 'd0;
+  reg     [ 5:0]      tx_data_1_r = 'd0;
   reg                 up_enable_int = 'd0;
   reg                 up_txnrx_int = 'd0;
   reg                 enable_up_m1 = 'd0;
@@ -166,6 +171,13 @@ module axi_ad9361_lvds_if #(
   wire    [ 5:0]      rx_data_0_s;
   wire    [ 1:0]      rx_frame_s;
   wire                locked_s;
+  wire                tx_frame_s;
+  wire    [ 5:0]      tx_data_0_s;
+  wire    [ 5:0]      tx_data_1_s;
+
+  // local parameters
+
+  localparam [6:0] INV_POL_PER_LINE = INV_POL;
 
   // drp interface signals
 
@@ -373,18 +385,18 @@ module axi_ad9361_lvds_if #(
 
     always @(posedge l_clk) begin
       tx_clk <= tx_clk_n;
-      tx_frame <= tx_frame_n;
-      tx_data_0 <= tx_data_0_n;
-      tx_data_1 <= tx_data_1_n;
+      tx_frame_r <= tx_frame_n;
+      tx_data_0_r <= tx_data_0_n;
+      tx_data_1_r <= tx_data_1_n;
     end
 
   end else begin /* CLK_DESKEW == 0 */
 
     always @(posedge l_clk) begin
       tx_clk <= tx_clk_p;
-      tx_frame <= tx_frame_p;
-      tx_data_0 <= tx_data_0_p;
-      tx_data_1 <= tx_data_1_p;
+      tx_frame_r <= tx_frame_p;
+      tx_data_0_r <= tx_data_0_p;
+      tx_data_1_r <= tx_data_1_p;
     end
 
   end
@@ -455,7 +467,8 @@ module axi_ad9361_lvds_if #(
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .IODELAY_CTRL (0),
     .IODELAY_GROUP (IO_DELAY_GROUP),
-    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY)
+    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY),
+    .INV_POL (INV_POL_PER_LINE[i])
   ) i_rx_data (
     .rx_clk (l_clk),
     .rx_data_in_p (rx_data_in_p[i]),
@@ -478,7 +491,8 @@ module axi_ad9361_lvds_if #(
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .IODELAY_CTRL (IODELAY_CTRL),
     .IODELAY_GROUP (IO_DELAY_GROUP),
-    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY)
+    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY),
+    .INV_POL (INV_POL_PER_LINE[6])
   ) i_rx_frame (
     .rx_clk (l_clk),
     .rx_data_in_p (rx_frame_in_p),
@@ -497,6 +511,10 @@ module axi_ad9361_lvds_if #(
 
   generate
   for (i = 0; i < 6; i = i + 1) begin: g_tx_data
+
+  assign tx_data_1_s[i] = (INV_POL_PER_LINE[i] == 1) ? ~tx_data_1_r[i] : tx_data_1_r[i];
+  assign tx_data_0_s[i] = (INV_POL_PER_LINE[i] == 1) ? ~tx_data_0_r[i] : tx_data_0_r[i];
+
   ad_data_out #(
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .IODELAY_ENABLE (DAC_IODELAY_ENABLE),
@@ -505,8 +523,8 @@ module axi_ad9361_lvds_if #(
     .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY)
   ) i_tx_data (
     .tx_clk (l_clk),
-    .tx_data_p (tx_data_1[i]),
-    .tx_data_n (tx_data_0[i]),
+    .tx_data_p (tx_data_1_s[i]),
+    .tx_data_n (tx_data_0_s[i]),
     .tx_data_out_p (tx_data_out_p[i]),
     .tx_data_out_n (tx_data_out_n[i]),
     .up_clk (up_clk),
@@ -521,6 +539,8 @@ module axi_ad9361_lvds_if #(
 
   // transmit frame interface, oddr -> obuf
 
+  assign tx_frame_s = (INV_POL_PER_LINE[6] == 1) ? ~tx_frame_r : tx_frame_r;
+
   ad_data_out #(
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .IODELAY_ENABLE (DAC_IODELAY_ENABLE),
@@ -529,8 +549,8 @@ module axi_ad9361_lvds_if #(
     .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY)
   ) i_tx_frame (
     .tx_clk (l_clk),
-    .tx_data_p (tx_frame),
-    .tx_data_n (tx_frame),
+    .tx_data_p (tx_frame_s),
+    .tx_data_n (tx_frame_s),
     .tx_data_out_p (tx_frame_out_p),
     .tx_data_out_n (tx_frame_out_n),
     .up_clk (up_clk),
