@@ -57,7 +57,7 @@ module adrv9001_rx #(
   input                   rx_strobe_in_p_strobe_in,
 
   input                   ref_clk,
-  input                   mcs,
+  input                   mcs_6th_pulse,
 
   // internal reset and clocks
   input                   adc_rst,
@@ -72,7 +72,7 @@ module adrv9001_rx #(
   output                  adc_valid,
 
   output     [31:0]       adc_clk_ratio,
-  output     [ 9:0]       mcs_to_strobe_delay,
+  output reg [ 9:0]       mcs_to_strobe_delay,
 
   // delay interface (for IDELAY macros)
   input                             up_clk,
@@ -105,21 +105,29 @@ module adrv9001_rx #(
   wire [NUM_LANES-1:0] data_s6;
   wire [NUM_LANES-1:0] data_s7;
   wire                 adc_clk_in_fast;
-  wire                 reset;
+  wire                 mcs_6th_pulse_s;
 
   // internal registers
 
+  reg       reset;
+  reg       sync_reset = 1'b0;
+  reg       mssi_sync_m1 = 1'b0;
+  reg       mssi_sync_m2 = 1'b0;
   reg [2:0] state_cnt = 7;
   reg [2:0] bufdiv_clr_state = 3;
   reg       bufdiv_ce = 1'b1;
   reg       bufdiv_clr = 1'b0;
   reg       serdes_reset = 1'b0;
   reg       serdes_next_reset = 1'b0;
-
   reg [7:0] serdes_min_reset_cycle = 8'hff;
-  reg       adc_data_strobe_event;
-  reg       mcs_6th_pulse;
   reg [9:0] mcs_to_strobe_cnt;
+  reg       mcs_6th_pulse_d;
+
+  reg [9:0] mcs_to_strobe_fine_delay;
+  reg [9:0] mcs_to_strobe_8_delays;
+  reg       fine_count_run;
+  reg [9:0] fine_count;
+  reg [9:0] coarse_count;
 
   // data interface
   ad_serdes_in #(
@@ -133,7 +141,7 @@ module adrv9001_rx #(
     .DRP_WIDTH (DRP_WIDTH),
     .SERDES_FACTOR (8)
   ) i_serdes (
-    .rst (adc_rst|serdes_reset),
+    .rst (adc_rst | serdes_reset),
     .clk (adc_clk_in_fast),
     .div_clk (adc_clk_div),
     .data_s0 (data_s0),
@@ -203,39 +211,27 @@ module adrv9001_rx #(
   end
   endgenerate
 
-  // mcs to strobe measure
+  // reset logic
 
   always @(posedge clk_in_s) begin
-    adc_data_strobe_event <= |adc_data_strobe;
-  end
-
-  // cdc + constraints
-  always @(posedge clk_in_s) begin
-    if (adc_data_strobe_event) begin
-      mcs_6th_pulse <= 0;
-    end else begin
-      mcs_6th_pulse <= (mcs_6th_pulse | mcs) & ~mssi_sync;
-    end
+    mssi_sync_m1 <= mssi_sync;
+    mssi_sync_m2 <= mssi_sync_m1;
   end
 
   always @(posedge clk_in_s or posedge mssi_sync) begin
     if (mssi_sync) begin
-      mcs_to_strobe_cnt <= 0;
+      sync_reset <= 1'b1;
     end else begin
-      if (mcs_6th_pulse) begin
-        mcs_to_strobe_cnt <= mcs_to_strobe_cnt + 1;
+      if (mssi_sync_m2) begin
+        sync_reset <= 1'b1;
+      end else begin
+        sync_reset <= 1'b0;
       end
     end
   end
 
-  assign mcs_to_strobe_delay = mcs_to_strobe_cnt;
-
-  // reset logic
-
-  assign adc_if_rst = adc_rst | mssi_sync;
-
-  always @(posedge clk_in_s, posedge mssi_sync) begin
-    if (mssi_sync == 1'b1) begin
+  always @(posedge clk_in_s, posedge sync_reset) begin
+    if (sync_reset) begin
       bufdiv_ce <= 1'b0;
       bufdiv_clr <= 1'b0;
       bufdiv_clr_state <= 3'd0;
@@ -291,8 +287,62 @@ module adrv9001_rx #(
     end
   end
 
+  sync_bits i_mcs_sync_in (
+    .in_bits(mcs_6th_pulse),
+    .out_clk(adc_clk_div),
+    .out_resetn(1'b1),
+    .out_bits(mcs_6th_pulse_s));
+
+  always @(posedge adc_clk_div, negedge bufdiv_ce) begin
+    if (bufdiv_ce == 1'b0) begin
+      reset <= 2'b1;
+    end else begin
+      reset <= 1'b0;
+    end
+  end
+
+  assign adc_if_rst = adc_rst | reset;
+
+  // mcs to strobe measure
+
+  always @(posedge adc_clk_div) begin
+    mcs_6th_pulse_d <= mcs_6th_pulse_s;
+    if (!mcs_6th_pulse_d & mcs_6th_pulse_s) begin
+      mcs_to_strobe_cnt <= 0;
+    end else begin
+      if (mcs_6th_pulse_s & !(|adc_data_strobe) & !fine_count_run) begin
+        mcs_to_strobe_cnt <= mcs_to_strobe_cnt + 1;
+      end
+    end
+  end
+
+  always @(posedge adc_clk_div) begin
+    if (!mcs_6th_pulse_d & mcs_6th_pulse_s) begin
+      mcs_to_strobe_fine_delay <= 'd0;
+      fine_count_run <= 1'b0;
+      fine_count <= 'd0;
+      coarse_count <= 'd0;
+      mcs_to_strobe_8_delays <= 'd0;
+    end else begin
+      if (|adc_data_strobe & !fine_count_run) begin
+        mcs_to_strobe_8_delays <= mcs_to_strobe_cnt;
+        mcs_to_strobe_fine_delay <= {2'b00, adc_data_strobe};
+        fine_count_run <= 1'b1;
+      end else if (fine_count_run) begin
+        if (|mcs_to_strobe_fine_delay) begin
+          fine_count <= fine_count + 1'b1;
+          coarse_count <= mcs_to_strobe_8_delays << 3;
+          mcs_to_strobe_fine_delay <= mcs_to_strobe_fine_delay >> 1;
+        end else begin
+          mcs_to_strobe_delay <= fine_count + coarse_count;
+        end
+      end
+    end
+  end
+
   generate
   if (FPGA_TECHNOLOGY == SEVEN_SERIES) begin
+   wire adc_clk_div_s;
 
     BUFIO i_clk_buf (
       .I (clk_in_s),
@@ -346,14 +396,22 @@ module adrv9001_rx #(
 
   // debug
 
-  (* MARK_DEBUG = "TRUE" *)  wire ila_adc_clk_div   = adc_clk_div  ;
-  (* MARK_DEBUG = "TRUE" *)  wire ila_adc_bufdiv_ce     = bufdiv_ce    ;
-  (* MARK_DEBUG = "TRUE" *)  wire ila_adc_bufdiv_clr    = bufdiv_clr   ;
-  (* MARK_DEBUG = "TRUE" *)  wire ila_adc_serdes_reset  = serdes_reset ;
-  (* MARK_DEBUG = "TRUE" *)  wire ila_adc_fast_clk  = clk_in_s ;
-  (* MARK_DEBUG = "TRUE" *)  wire ila_adc_data_0    = adc_data_0   ;
-  (* MARK_DEBUG = "TRUE" *)  wire ila_adc_data_1    = adc_data_1   ;
-  (* MARK_DEBUG = "TRUE" *)  wire ila_adc_data_strb = adc_data_strobe;
-  (* MARK_DEBUG = "TRUE" *)  wire ila_adc_data_clk  = adc_clk_div ;
+  (* MARK_DEBUG = "TRUE" *)  wire [9:0] ila_mcs_to_strobe_cnt        = mcs_to_strobe_cnt;
+  (* MARK_DEBUG = "TRUE" *)  wire [9:0] ila_mcs_to_strobe_fine_delay = mcs_to_strobe_fine_delay;
+  (* MARK_DEBUG = "TRUE" *)  wire [9:0] ila_mcs_to_strobe_8_delays   = mcs_to_strobe_8_delays;
+  (* MARK_DEBUG = "TRUE" *)  wire       ila_fine_count_run           = fine_count_run;
+  (* MARK_DEBUG = "TRUE" *)  wire [9:0] ila_fine_count               = fine_count;
+  (* MARK_DEBUG = "TRUE" *)  wire [9:0] ila_coarse_count             = coarse_count;
+  (* MARK_DEBUG = "TRUE" *)  wire       ila_mcs_6th_pulse_s          = mcs_6th_pulse_s;
+
+  (* MARK_DEBUG = "TRUE" *)  wire       ila_adc_clk_div       = adc_clk_div  ;
+  (* MARK_DEBUG = "TRUE" *)  wire       ila_adc_bufdiv_ce     = bufdiv_ce    ;
+  (* MARK_DEBUG = "TRUE" *)  wire       ila_adc_bufdiv_clr    = bufdiv_clr   ;
+  (* MARK_DEBUG = "TRUE" *)  wire [7:0] ila_adc_data_0        = adc_data_0   ;
+  (* MARK_DEBUG = "TRUE" *)  wire [7:0] ila_adc_data_1        = adc_data_1   ;
+  (* MARK_DEBUG = "TRUE" *)  wire [7:0] ila_adc_data_strb     = adc_data_strobe;
+
+  (* MARK_DEBUG = "TRUE" *)  wire       ila_adc_rst           = adc_rst;
+  (* MARK_DEBUG = "TRUE" *)  wire       ila_reset             = reset;
 
 endmodule

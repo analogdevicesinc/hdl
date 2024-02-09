@@ -63,7 +63,6 @@ module adrv9001_tx #(
 
   input                   rx_clk_div,
   input                   rx_clk,
-  input                   rx_ssi_rst,
 
   // internal resets and clocks
   output     [31:0]       dac_clk_ratio,
@@ -101,6 +100,9 @@ module adrv9001_tx #(
 
   // internal registers
 
+  reg       sync_reset = 1'b0;
+  reg       mssi_sync_m1 = 1'b0;
+  reg       mssi_sync_m2 = 1'b0;
   reg [2:0] state_cnt = 7;
   reg [2:0] bufdiv_clr_state = 3;
   reg       bufdiv_ce = 1'b1;
@@ -187,10 +189,25 @@ module adrv9001_tx #(
 
   // reset logic
 
-  assign reset = dac_rst | mssi_sync;
+  always @(posedge tx_dclk_in_s) begin
+    mssi_sync_m1 <= mssi_sync;
+    mssi_sync_m2 <= mssi_sync_m1;
+  end
 
-  always @(posedge tx_dclk_in_s, posedge mssi_sync) begin
+  always @(posedge tx_dclk_in_s or posedge mssi_sync) begin
     if (mssi_sync) begin
+      sync_reset <= 1'b1;
+    end else begin
+      if (mssi_sync_m2) begin
+        sync_reset <= 1'b1;
+      end else begin
+        sync_reset <= 1'b0;
+      end
+    end
+  end
+
+  always @(posedge tx_dclk_in_s, posedge sync_reset) begin
+    if (sync_reset) begin
       bufdiv_ce <= 1'b0;
       bufdiv_clr <= 1'b0;
       bufdiv_clr_state <= 3'd0;
@@ -225,9 +242,11 @@ module adrv9001_tx #(
     end
   end
 
+  assign reset = dac_rst | !bufdiv_ce;
+
   always @(posedge dac_clk_div, posedge reset) begin
     if (reset) begin
-      serdes_reset <= 1'b0;
+      serdes_reset <= 1'b1;
       serdes_next_reset <= 1'b1;
       serdes_min_reset_cycle <= 8'hff;
     end else begin
@@ -309,14 +328,14 @@ module adrv9001_tx #(
 
   // debug
 
-  (* MARK_DEBUG = "TRUE" *)  wire ila_dac_clk_div   = dac_clk_div  ;
-  (* MARK_DEBUG = "TRUE" *)  wire ila_dac_bufdiv_ce     = bufdiv_ce    ;
-  (* MARK_DEBUG = "TRUE" *)  wire ila_dac_bufdiv_clr    = bufdiv_clr   ;
-  (* MARK_DEBUG = "TRUE" *)  wire ila_dac_serdes_reset  = serdes_reset ;
-  (* MARK_DEBUG = "TRUE" *)  wire ila_dac_fast_clk  = dac_fast_clk ;
-  (* MARK_DEBUG = "TRUE" *)  wire ila_dac_data_0    = dac_data_0   ;
-  (* MARK_DEBUG = "TRUE" *)  wire ila_dac_data_1    = dac_data_1   ;
-  (* MARK_DEBUG = "TRUE" *)  wire ila_dac_data_strb = dac_data_strb;
-  (* MARK_DEBUG = "TRUE" *)  wire ila_dac_data_clk  = dac_data_clk ;
+  (* MARK_DEBUG = "TRUE" *)  wire       ila_dac_clk_div       = dac_clk_div  ;
+  (* MARK_DEBUG = "TRUE" *)  wire       ila_dac_bufdiv_ce     = bufdiv_ce    ;
+  (* MARK_DEBUG = "TRUE" *)  wire       ila_dac_bufdiv_clr    = bufdiv_clr   ;
+  (* MARK_DEBUG = "TRUE" *)  wire       ila_dac_serdes_reset  = serdes_reset ;
+  (* MARK_DEBUG = "TRUE" *)  wire [7:0] ila_dac_data_0        = dac_data_0   ;
+  (* MARK_DEBUG = "TRUE" *)  wire [7:0] ila_dac_data_1        = dac_data_1   ;
+  (* MARK_DEBUG = "TRUE" *)  wire [7:0] ila_dac_data_strb     = dac_data_strb;
+  (* MARK_DEBUG = "TRUE" *)  wire [7:0] ila_dac_data_clk      = dac_data_clk ;
+  (* MARK_DEBUG = "TRUE" *)  wire       ila_reset             = reset;
 
 endmodule

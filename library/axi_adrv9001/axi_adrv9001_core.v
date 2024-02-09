@@ -52,12 +52,12 @@ module axi_adrv9001_core #(
   parameter SPEED_GRADE = 0,
   parameter DEV_PACKAGE = 0,
   parameter EXT_SYNC = 0,
-
+  parameter ENABLE_REF_CLK_MON = 0,
+  parameter DEFAULT_REF_CLK = 30720, //KHz
   parameter DAC_DDS_TYPE = 1,
   parameter DAC_DDS_CORDIC_DW = 20,
   parameter DAC_DDS_CORDIC_PHASE_DW = 18
 ) (
-
   // ADC interface
   input                   rx1_clk,
   output                  rx1_rst,
@@ -104,11 +104,19 @@ module axi_adrv9001_core #(
   output                  tx2_symb_op,
   output                  tx2_symb_8_16b,
 
-  input       [ 31:0]     adc_clk_ratio,
-  input       [ 31:0]     dac_clk_ratio,
+  input        [31:0]     adc_clk_ratio,
+  input        [31:0]     dac_clk_ratio,
 
-  input       [  9:0]     rx1_mcs_to_strobe_delay,
-  input       [  9:0]     rx2_mcs_to_strobe_delay,
+  input        [ 9:0]     rx1_mcs_to_strobe_delay,
+  input        [ 9:0]     rx2_mcs_to_strobe_delay,
+
+  output       [31:0]     mcs_sync_pulse_width,
+  output       [31:0]     mcs_sync_pulse_1_delay,
+  output       [31:0]     mcs_sync_pulse_2_delay,
+  output       [31:0]     mcs_sync_pulse_3_delay,
+  output       [31:0]     mcs_sync_pulse_4_delay,
+  output       [31:0]     mcs_sync_pulse_5_delay,
+  output       [31:0]     mcs_sync_pulse_6_delay,
 
   // DMA interface
   output                  adc_1_valid,
@@ -195,9 +203,9 @@ module axi_adrv9001_core #(
   output  reg             up_rack
 );
 
-  wire   [7:0]   up_wack_s;
-  wire   [31:0]  up_rdata_s[0:7];
-  wire   [7:0]   up_rack_s;
+  wire   [8:0]   up_wack_s;
+  wire   [31:0]  up_rdata_s[0:8];
+  wire   [8:0]   up_rack_s;
 
   wire           tx1_data_valid_A;
   wire   [15:0]  tx1_data_i_A;
@@ -242,6 +250,8 @@ module axi_adrv9001_core #(
   wire           tx1_rst_cdc_s;
   wire           dac_sync_armed_cdc_s;
 
+  wire           adc_sync_1;
+  wire           adc_sync_2;
   wire           adc_1_armed_s;
   wire           adc_2_armed_s;
 
@@ -255,6 +265,9 @@ module axi_adrv9001_core #(
   reg    [15:0]  tx2_data_i_A_d;
   reg    [15:0]  tx2_data_q_A_d;
 
+  reg            capture_1_ready = 'd0;
+  reg            capture_2_ready = 'd0;
+
   // rx1_r1_mode and tx1_r1_mode considered static during operation
   // rx1_r1_mode should be 0 only when rx1_clk and rx2_clk have the same frequency
   // tx1_r1_mode should be 0 only when tx1_clk and tx2_clk have the same frequency
@@ -263,10 +276,10 @@ module axi_adrv9001_core #(
     .NUM_OF_BITS (6),
     .ASYNC_CLK (1)
   ) i_rx1_ctrl_sync (
-    .in_bits ({up_rx1_r1_mode,rx1_symb_op,rx1_symb_8_16b,rx1_sdr_ddr_n,rx1_single_lane,rx1_rst}),
+    .in_bits ({up_rx1_r1_mode,rx1_symb_op,rx1_symb_8_16b,rx1_sdr_ddr_n,rx1_single_lane,rx1_rst,adc_sync_1}),
     .out_clk (rx2_clk),
     .out_resetn (1'b1),
-    .out_bits ({rx1_r1_mode,rx1_symb_op_s,rx1_symb_8_16b_s,rx1_sdr_ddr_n_s,rx1_single_lane_s,rx1_rst_s}));
+    .out_bits ({rx1_r1_mode,rx1_symb_op_s,rx1_symb_8_16b_s,rx1_sdr_ddr_n_s,rx1_single_lane_s,rx1_rst_s,adc_sync_2}));
 
   sync_bits #(
     .NUM_OF_BITS (6),
@@ -331,7 +344,8 @@ module axi_adrv9001_core #(
                   up_rdata_s[4] |
                   up_rdata_s[5] |
                   up_rdata_s[6] |
-                  up_rdata_s[7];
+                  up_rdata_s[7] |
+                  up_rdata_s[8];
       up_rack  <= |up_rack_s;
       up_wack  <= |up_wack_s;
     end
@@ -343,17 +357,17 @@ module axi_adrv9001_core #(
     .ASYNC_CLK (1)
   ) i_rx_1_external_sync (
     .in_clk (ref_clk),
-    .in_event (transfer_sync_in | adc_sync),
+    .in_event (transfer_sync_in),
     .out_clk (rx1_clk),
     .out_event (adc_sync_cd_1));
 
   util_ext_sync #(
     .ENABLED (EXT_SYNC)
-  ) i_util_rx_1_ext_sync (
+  ) i_util_rx1_ext_sync (
     .clk (rx1_clk),
     .ext_sync_arm (adc_1_ext_sync_arm),
     .ext_sync_disarm (adc_1_ext_sync_disarm),
-    .sync_in (adc_sync_cd_1),
+    .sync_in (adc_sync_cd_1 | adc_sync_1),
     .sync_armed (adc_1_armed_s)
   );
 
@@ -363,17 +377,17 @@ module axi_adrv9001_core #(
     .ASYNC_CLK (1)
   ) i_rx_2_external_sync (
     .in_clk (ref_clk),
-    .in_event (transfer_sync_in | adc_sync),
+    .in_event (transfer_sync_in),
     .out_clk (rx2_clk),
     .out_event (adc_sync_cd_2));
 
   util_ext_sync #(
     .ENABLED (EXT_SYNC)
-  ) i_util_rx_2_ext_sync (
+  ) i_util_rx2_ext_sync (
     .clk (rx2_clk),
     .ext_sync_arm (adc_2_ext_sync_arm),
     .ext_sync_disarm (adc_2_ext_sync_disarm),
-    .sync_in (adc_sync_cd_2),
+    .sync_in (adc_sync_cd_2 | adc_sync_2),
     .sync_armed (adc_2_armed_s)
   );
 
@@ -422,24 +436,24 @@ module axi_adrv9001_core #(
   );
 
   // debug
-   (* MARK_DEBUG = "TRUE" *)  wire ila_dac_1_valid           = dac_1_valid;
-   (* MARK_DEBUG = "TRUE" *)  wire ila_dac_2_valid           = dac_2_valid;
-   (* MARK_DEBUG = "TRUE" *)  wire ila_dac_sync_cd_1         = dac_sync_cd_1;
-   (* MARK_DEBUG = "TRUE" *)  wire ila_dac_sync_cd_2         = dac_sync_cd_2;
-   (* MARK_DEBUG = "TRUE" *)  wire ila_dac_sync_armed_cd_1_s = dac_sync_armed_cd_1_s;
-   (* MARK_DEBUG = "TRUE" *)  wire ila_dac_sync_armed_cd_2_s = dac_sync_armed_cd_2_s;
-   (* MARK_DEBUG = "TRUE" *)  wire ila_tx1_data_i            = tx1_data_i;
-   (* MARK_DEBUG = "TRUE" *)  wire ila_tx2_data_i            = tx2_data_i;
-   (* MARK_DEBUG = "TRUE" *)  wire ila_adc_1_valid           = adc_1_valid;
-   (* MARK_DEBUG = "TRUE" *)  wire ila_adc_2_valid           = adc_2_valid;
-   (* MARK_DEBUG = "TRUE" *)  wire ila_adc_sync_cd_1         = adc_sync_cd_1;
-   (* MARK_DEBUG = "TRUE" *)  wire ila_adc_sync_cd_2         = adc_sync_cd_2;
-   (* MARK_DEBUG = "TRUE" *)  wire ila_adc_1_start_sync      = adc_1_start_sync;
-   (* MARK_DEBUG = "TRUE" *)  wire ila_adc_2_start_sync      = adc_2_start_sync;
-   (* MARK_DEBUG = "TRUE" *)  wire ila_rx1_data_i            = rx1_data_i;
-   (* MARK_DEBUG = "TRUE" *)  wire ila_rx1_data_q            = rx1_data_q;
-   (* MARK_DEBUG = "TRUE" *)  wire ila_rx2_data_i            = rx2_data_i;
-   (* MARK_DEBUG = "TRUE" *)  wire ila_rx2_data_q            = rx2_data_q;
+   (* MARK_DEBUG = "TRUE" *)  wire        ila_dac_1_valid           = dac_1_valid;
+   (* MARK_DEBUG = "TRUE" *)  wire        ila_dac_2_valid           = dac_2_valid;
+   (* MARK_DEBUG = "TRUE" *)  wire        ila_dac_sync_cd_1         = dac_sync_cd_1;
+   (* MARK_DEBUG = "TRUE" *)  wire        ila_dac_sync_cd_2         = dac_sync_cd_2;
+   (* MARK_DEBUG = "TRUE" *)  wire        ila_dac_sync_armed_cd_1_s = dac_sync_armed_cd_1_s;
+   (* MARK_DEBUG = "TRUE" *)  wire        ila_dac_sync_armed_cd_2_s = dac_sync_armed_cd_2_s;
+   (* MARK_DEBUG = "TRUE" *)  wire [15:0] ila_tx1_data_i            = tx1_data_i;
+   (* MARK_DEBUG = "TRUE" *)  wire [15:0] ila_tx2_data_i            = tx2_data_i;
+   (* MARK_DEBUG = "TRUE" *)  wire        ila_adc_1_valid           = adc_1_valid;
+   (* MARK_DEBUG = "TRUE" *)  wire        ila_adc_2_valid           = adc_2_valid;
+   (* MARK_DEBUG = "TRUE" *)  wire        ila_adc_sync_cd_1         = adc_sync_cd_1 | adc_sync_1;
+   (* MARK_DEBUG = "TRUE" *)  wire        ila_adc_sync_cd_2         = adc_sync_cd_2 | adc_sync_2;
+   (* MARK_DEBUG = "TRUE" *)  wire        ila_adc_1_start_sync      = adc_1_start_sync;
+   (* MARK_DEBUG = "TRUE" *)  wire        ila_adc_2_start_sync      = adc_2_start_sync;
+   (* MARK_DEBUG = "TRUE" *)  wire [15:0] ila_rx1_data_i            = rx1_data_i;
+   (* MARK_DEBUG = "TRUE" *)  wire [15:0] ila_rx1_data_q            = rx1_data_q;
+   (* MARK_DEBUG = "TRUE" *)  wire [15:0] ila_rx2_data_i            = rx2_data_i;
+   (* MARK_DEBUG = "TRUE" *)  wire [15:0] ila_rx2_data_q            = rx2_data_q;
 
   // end debug
 
@@ -478,7 +492,6 @@ module axi_adrv9001_core #(
     .up_adc_r1_mode (up_rx1_r1_mode),
 
     .adc_clk_ratio (adc_clk_ratio),
-    .mcs_to_strobe_delay (rx1_mcs_to_strobe_delay),
 
     .dac_data_valid_A (tx1_data_valid_A),
     .dac_data_i_A (tx1_data_i_A),
@@ -500,7 +513,7 @@ module axi_adrv9001_core #(
     .adc_data_q1 (adc_1_data_q1[15:0]),
 
     .adc_dovf (adc_1_dovf),
-    .adc_sync (adc_sync),
+    .adc_sync (adc_sync_1),
     .adc_sync_status (adc_1_start_sync),
     .adc_ext_sync_arm (adc_1_ext_sync_arm),
     .adc_ext_sync_disarm (adc_1_ext_sync_disarm),
@@ -547,7 +560,6 @@ module axi_adrv9001_core #(
     .adc_symb_8_16b (rx2_symb_8_16b_loc),
 
     .adc_clk_ratio (adc_clk_ratio),
-    .mcs_to_strobe_delay (rx2_mcs_to_strobe_delay),
 
     .dac_data_valid_A (tx2_data_valid_A),
     .dac_data_i_A (tx2_data_i_A),
@@ -809,5 +821,32 @@ module axi_adrv9001_core #(
   assign tdd_if2_mode = tx1_r1_mode||rx1_r1_mode ? tdd_if2_mode_loc : tdd_if1_mode;
 
   assign tdd_sync_cntr = tdd_sync_cntr1 | tdd_sync_cntr2;
+
+  axi_adrv9001_sync_ctrl #(
+    .BASE_ADDRESS (6'h14),
+    .ENABLE_REF_CLK_MON (ENABLE_REF_CLK_MON),
+    .DEFAULT_REF_CLK (DEFAULT_REF_CLK)
+  ) i_sync_ctrl (
+    .ref_clk (ref_clk),
+    .sync_config (),
+    .rx1_mcs_to_strobe_delay (rx1_mcs_to_strobe_delay),
+    .rx2_mcs_to_strobe_delay (rx2_mcs_to_strobe_delay),
+    .mcs_sync_pulse_width (mcs_sync_pulse_width),
+    .mcs_sync_pulse_1_delay (mcs_sync_pulse_1_delay),
+    .mcs_sync_pulse_2_delay (mcs_sync_pulse_2_delay),
+    .mcs_sync_pulse_3_delay (mcs_sync_pulse_3_delay),
+    .mcs_sync_pulse_4_delay (mcs_sync_pulse_4_delay),
+    .mcs_sync_pulse_5_delay (mcs_sync_pulse_5_delay),
+    .mcs_sync_pulse_6_delay (mcs_sync_pulse_6_delay),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
+    .up_wdata (up_wdata),
+    .up_wack (up_wack_s[8]),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
+    .up_rdata (up_rdata_s[8]),
+    .up_rack (up_rack_s[8]));
 
 endmodule

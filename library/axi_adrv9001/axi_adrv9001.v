@@ -54,8 +54,16 @@ module axi_adrv9001 #(
   parameter SPEED_GRADE = 0,
   parameter DEV_PACKAGE = 0,
   parameter EXT_SYNC = 0,
+  parameter ENABLE_REF_CLK_MON = 0,
+  parameter DEFAULT_REF_CLK = 30720, //KHz
   parameter USE_RX_CLK_FOR_TX = 0
 ) (
+  // debug
+  output                  mssi_out,
+  output                  transfer_out,
+  output                  adc_1_fast_clk,
+  //
+
   input                   ref_clk,
   //input                   external_mssi,
   input                   mcs_in,
@@ -257,6 +265,7 @@ module axi_adrv9001 #(
   wire            dac_2_valid;
 
   wire            mssi_sync;
+  wire            mcs_6th_pulse;
   wire            transfer_sync;
   // internal clocks & resets
   wire            up_rstn;
@@ -278,13 +287,33 @@ module axi_adrv9001 #(
   wire                              delay_rx2_locked;
   wire                       [31:0] adc_clk_ratio;
   wire                       [31:0] dac_clk_ratio;
+  wire                       [ 9:0] rx1_mcs_to_strobe_delay;
+  wire                       [ 9:0] rx2_mcs_to_strobe_delay;
+
+  wire                       [31:0] mcs_sync_pulse_width;
+  wire                       [31:0] mcs_sync_pulse_1_delay;
+  wire                       [31:0] mcs_sync_pulse_2_delay;
+  wire                       [31:0] mcs_sync_pulse_3_delay;
+  wire                       [31:0] mcs_sync_pulse_4_delay;
+  wire                       [31:0] mcs_sync_pulse_5_delay;
+  wire                       [31:0] mcs_sync_pulse_6_delay;
 
   // debug
 
+  assign mssi_out = mssi_sync;
+  assign transfer_out = transfer_sync;
   (* MARK_DEBUG = "TRUE" *) reg [ 15:0] dac_clk1_cnt;
   (* MARK_DEBUG = "TRUE" *) reg [ 15:0] dac_clk2_cnt;
   (* MARK_DEBUG = "TRUE" *) reg [ 15:0] adc_clk1_cnt;
   (* MARK_DEBUG = "TRUE" *) reg [ 15:0] adc_clk2_cnt;
+
+  (* MARK_DEBUG = "TRUE" *) wire  ila_mcs_out = mcs_out;
+  (* MARK_DEBUG = "TRUE" *) wire  ila_ref_clk = ref_clk;
+  (* MARK_DEBUG = "TRUE" *) wire  ila_mcs_in = mcs_in;
+  (* MARK_DEBUG = "TRUE" *) wire  ila_mcs_src = mcs_src;
+  (* MARK_DEBUG = "TRUE" *) wire  ila_mcs_or_transfer_sync_n = mcs_or_transfer_sync_n;
+  (* MARK_DEBUG = "TRUE" *) wire  ila_mssi_sync = mssi_sync;
+  (* MARK_DEBUG = "TRUE" *) wire  ila_transfer_sync = transfer_sync;
 
   // clk cnt
   always @(posedge dac_1_clk) begin
@@ -321,12 +350,20 @@ module axi_adrv9001 #(
 
   // end debug
 
-  axi_adrv9001_sync sync (
+  axi_adrv9001_sync i_sync (
     .ref_clk (ref_clk),
     .request_mcs (mcs_in),
     .mcs_src (mcs_src),
     .mcs_transfer_n (mcs_or_transfer_sync_n),
+    .mcs_sync_pulse_width (mcs_sync_pulse_width),
+    .mcs_sync_pulse_1_delay (mcs_sync_pulse_1_delay),
+    .mcs_sync_pulse_2_delay (mcs_sync_pulse_2_delay),
+    .mcs_sync_pulse_3_delay (mcs_sync_pulse_3_delay),
+    .mcs_sync_pulse_4_delay (mcs_sync_pulse_4_delay),
+    .mcs_sync_pulse_5_delay (mcs_sync_pulse_5_delay),
+    .mcs_sync_pulse_6_delay (mcs_sync_pulse_6_delay),
     .mcs_out (mcs_out),
+    .mcs_6th_pulse (mcs_6th_pulse),
     .mssi_sync (mssi_sync),
     .transfer_sync (transfer_sync)
   );
@@ -350,9 +387,10 @@ module axi_adrv9001 #(
     // Physical interface
     //
     .ref_clk (ref_clk),
-    .mcs (mcs_out),
+    .mcs_6th_pulse (mcs_6th_pulse),
     .mssi_sync (mssi_sync),
     .tx_output_enable (tx_output_enable),
+    .adc_1_fast_clk (adc_1_fast_clk),
 
     .rx1_dclk_in_n_NC (rx1_dclk_in_n_NC),
     .rx1_dclk_in_p_dclk_in (rx1_dclk_in_p_dclk_in),
@@ -489,7 +527,9 @@ module axi_adrv9001 #(
     .FPGA_FAMILY (FPGA_FAMILY),
     .SPEED_GRADE (SPEED_GRADE),
     .DEV_PACKAGE (DEV_PACKAGE),
-    .EXT_SYNC (EXT_SYNC)
+    .EXT_SYNC (EXT_SYNC),
+    .ENABLE_REF_CLK_MON (ENABLE_REF_CLK_MON),
+    .DEFAULT_REF_CLK (DEFAULT_REF_CLK)
   ) i_core (
     // ADC interface
     .rx1_clk (adc_1_clk),
@@ -611,6 +651,14 @@ module axi_adrv9001 #(
 
     .rx1_mcs_to_strobe_delay (rx1_mcs_to_strobe_delay),
     .rx2_mcs_to_strobe_delay (rx2_mcs_to_strobe_delay),
+
+    .mcs_sync_pulse_width   (mcs_sync_pulse_width),
+    .mcs_sync_pulse_1_delay (mcs_sync_pulse_1_delay),
+    .mcs_sync_pulse_2_delay (mcs_sync_pulse_2_delay),
+    .mcs_sync_pulse_3_delay (mcs_sync_pulse_3_delay),
+    .mcs_sync_pulse_4_delay (mcs_sync_pulse_4_delay),
+    .mcs_sync_pulse_5_delay (mcs_sync_pulse_5_delay),
+    .mcs_sync_pulse_6_delay (mcs_sync_pulse_6_delay),
 
     .up_rstn (up_rstn),
     .up_clk (up_clk),

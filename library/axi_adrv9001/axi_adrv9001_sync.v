@@ -41,67 +41,96 @@ module axi_adrv9001_sync #(
   input                   ref_clk,
   input                   request_mcs,
   input                   mcs_src,
+  input       [31:0]      mcs_sync_pulse_width,
+  input       [31:0]      mcs_sync_pulse_1_delay,
+  input       [31:0]      mcs_sync_pulse_2_delay,
+  input       [31:0]      mcs_sync_pulse_3_delay,
+  input       [31:0]      mcs_sync_pulse_4_delay,
+  input       [31:0]      mcs_sync_pulse_5_delay,
+  input       [31:0]      mcs_sync_pulse_6_delay,
   output  reg             mcs_out = 1'b0,
+  output                  mcs_6th_pulse,
   input                   mcs_transfer_n,
   output                  mssi_sync,
   output                  transfer_sync
 );
 
-  // local parameters
-
-
-  localparam  MCS_SYNC_PULSE_PERIOD = 32'd1000; // 26us    (ref_clk = 38.4M clk)
-  localparam  MCS_SYNC_PULSE_DELAY = 32'd4000;  // 104.1us (ref_clk = 38.4M clk)
-
   // internal registers
 
-  reg           request_d = 'd0;
+  reg           mcs_out_d = 'd0;
+  reg           request_m1 = 'd0;
+  reg           request_m2 = 'd0;
+  reg           request_mn = 'd0;
   reg           mcs_src_d = 'd0;
-  reg   [31:0]  mcs_sync_pulse_period_cnt = 32'd0;
+  reg   [31:0]  mcs_sync_pulse_width_cnt = 32'd0;
   reg   [31:0]  mcs_sync_pulse_delay_cnt = 32'd0;
   reg   [ 2:0]  mcs_sync_pulse_num = 3'd0;
   reg           mcs_sync_busy = 1'b0;
+  reg           mcs_rise_edge = 1'b0;
+  reg           mcs_fall_edge = 1'b0;
   reg           if_sync = 1'b0;
   reg   [31:0]  transfer_cnt = 32'd0;
   reg           transfer_busy = 1'b0;
-  reg           transfer_busy_d = 1'b0;
 
   // internal signals
 
   wire          mcs_start;
   wire          transfer_start;
   wire          req_rise_edge;
+  wire          req_fall_edge;
+  wire          mcs_out_rise_edge;
+  wire          mcs_out_fall_edge;
 
   // multi-chip or system synchronization
 
-  // consider ref_clk = 38.4M (26.042n)
+  // consider ref_clk = 30.72MHz (32.552ns)
   // the MCS sync requires 6 pulses of min 10us with a in between delay of min 100us
-  always @(posedge ref_clk) begin
-    request_d <= request_mcs;
+  // mcs_sync_pulse_width = 32'd62;        //   2.02 us (ref_clk = 30.72MHz)
+  // mcs_sync_pulse_max_delay = 32'd3073;  // 100.03 us (ref_clk = 30.72MHz)
+  // mcs_sync_pulse_min_delay = 32'd31;    //   1.01 us (ref_clk = 30.72MHz)
+
+  always @(negedge ref_clk) begin
+    request_m1 <= request_mcs;
+    request_m2 <= request_m1;
+    request_mn <= request_m2 & request_m1; // the pulse should be min 2 clk cycles
     mcs_src_d <= mcs_src;
   end
 
-  assign req_rise_edge = !request_d & request_mcs;
+  assign req_fall_edge = request_mn & !request_m1;
+  assign req_rise_edge = !request_mn & request_m1;
   assign mcs_start = req_rise_edge & !mcs_sync_busy & mcs_transfer_n;
-  assign transfer_start = req_rise_edge& !transfer_busy & !mcs_transfer_n;
+  assign transfer_start = req_rise_edge & !transfer_busy & !mcs_transfer_n;
 
-  always @(posedge ref_clk) begin
+  always @(negedge ref_clk) begin
     if (mcs_start) begin
       mcs_sync_busy <= 1'b1;
-      mcs_sync_pulse_period_cnt <= MCS_SYNC_PULSE_PERIOD;
-      mcs_sync_pulse_delay_cnt <= MCS_SYNC_PULSE_DELAY;
+      mcs_sync_pulse_width_cnt <= mcs_sync_pulse_width;
+      mcs_sync_pulse_delay_cnt <= mcs_sync_pulse_1_delay;
       mcs_out <= 1'b0;
     end else if (mcs_sync_busy == 1'b1) begin
-      if (mcs_sync_pulse_period_cnt != 32'd0) begin
-        mcs_sync_pulse_period_cnt <= mcs_sync_pulse_period_cnt - 32'd1;
+      mcs_out_d <= mcs_out;
+      if (mcs_sync_pulse_width_cnt != 32'd0) begin
+        mcs_sync_pulse_width_cnt <= mcs_sync_pulse_width_cnt - 32'd1;
         mcs_out <= 1'b1;
       end else if (mcs_sync_pulse_delay_cnt != 32'd0) begin
         mcs_sync_pulse_delay_cnt <= mcs_sync_pulse_delay_cnt - 32'd1;
         mcs_out <= 1'b0;
       end else begin
-        if (mcs_sync_pulse_num < 5) begin
-          mcs_sync_pulse_period_cnt <= MCS_SYNC_PULSE_PERIOD;
-          mcs_sync_pulse_delay_cnt <= MCS_SYNC_PULSE_DELAY;
+        if (mcs_sync_pulse_num == 0) begin
+          mcs_sync_pulse_width_cnt <= mcs_sync_pulse_width;
+          mcs_sync_pulse_delay_cnt <= mcs_sync_pulse_2_delay;
+        end else if (mcs_sync_pulse_num == 1) begin
+          mcs_sync_pulse_width_cnt <= mcs_sync_pulse_width;
+          mcs_sync_pulse_delay_cnt <= mcs_sync_pulse_3_delay;
+        end else if (mcs_sync_pulse_num == 2) begin
+          mcs_sync_pulse_width_cnt <= mcs_sync_pulse_width;
+          mcs_sync_pulse_delay_cnt <= mcs_sync_pulse_4_delay;
+        end else if (mcs_sync_pulse_num == 3) begin
+          mcs_sync_pulse_width_cnt <= mcs_sync_pulse_width;
+          mcs_sync_pulse_delay_cnt <= mcs_sync_pulse_5_delay;
+        end else if (mcs_sync_pulse_num == 4) begin
+          mcs_sync_pulse_width_cnt <= mcs_sync_pulse_width;
+          mcs_sync_pulse_delay_cnt <= mcs_sync_pulse_6_delay;
         end else begin
           mcs_sync_busy <= 1'b0;
         end
@@ -110,7 +139,10 @@ module axi_adrv9001_sync #(
     end
   end
 
-  always @(posedge ref_clk) begin
+  assign mcs_out_fall_edge = mcs_out_d & !mcs_out;
+  assign mcs_out_rise_edge = !mcs_out_d & mcs_out;
+
+  always @(negedge ref_clk) begin
     if (mcs_src) begin // internal mcs
       if (mcs_start) begin
         mcs_sync_pulse_num <= 3'd0;
@@ -119,37 +151,54 @@ module axi_adrv9001_sync #(
           mcs_sync_pulse_num <= mcs_sync_pulse_num + 1;
         end
       end
+      mcs_rise_edge <= mcs_out_rise_edge;
+      mcs_fall_edge <= mcs_out_fall_edge;
     end else begin  // external mcs
-      if (!mcs_src_d & mcs_src) begin // reset the mcs counter by toggeling the mcs_src
+      // reset the mcs counter by toggeling the mcs_src
+      if (!mcs_sync_pulse_num <=mcs_src_d & mcs_src) begin
+        mcs_sync_pulse_num <= 3'd0;
       end else begin
-        if (!request_d & request_mcs) begin
+        if (req_rise_edge) begin
           mcs_sync_pulse_num <= mcs_sync_pulse_num + 1;
         end
+      end
+      mcs_rise_edge <= req_fall_edge;
+      mcs_fall_edge <= req_rise_edge;
+    end
+  end
+
+  assign mcs_6th_pulse = (mcs_sync_pulse_num == 3'd5) ? mcs_out : 1'b0;
+
+  // MSSI reset on 4'th pulse fslling edge
+  always @(posedge ref_clk) begin
+    if (mcs_sync_pulse_num == 3'd3) begin
+      if (mcs_fall_edge == 1'd1) begin
+        if_sync <= 1'b1;
+      end
+    end else if (mcs_sync_pulse_num == 3'd4) begin
+      if (mcs_rise_edge == 1'd1) begin
+        if_sync <= 1'b0;
       end
     end
   end
 
-  // MSSI reset on 5'th pulse
-  always @(posedge ref_clk) begin
-    if (mcs_sync_pulse_num == 3'd4) begin
-      if_sync <= 1'b1;
-    end else begin
-      if_sync <= 1'b0;
-    end
-  end
+  assign mssi_sync = if_sync;
 
   always @(posedge ref_clk) begin
     if (transfer_start) begin
       transfer_busy <= 1'b1;
-      transfer_cnt <= MCS_SYNC_PULSE_PERIOD; // the request might have multiple edges
+      transfer_cnt <= 32'h0;
     end else if (transfer_busy == 1'b1) begin
-      if (transfer_cnt != 32'd0) begin
+      if (transfer_cnt == 32'h7ff) begin // the request might have multiple edges
         transfer_busy <= 1'b0;
+        transfer_cnt <= transfer_cnt;
+      end else begin
+        transfer_busy <= 1'b1;
+        transfer_cnt <= transfer_cnt + 1;
       end
     end
-    transfer_busy_d <= transfer_busy;
   end
 
-  assign transfer_sync = transfer_busy_d & !transfer_busy;
+  assign transfer_sync = transfer_busy;
 
 endmodule

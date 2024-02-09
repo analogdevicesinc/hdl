@@ -234,10 +234,10 @@ module axi_adrv9001_tx #(
       end
     end
 
-    (* MARK_DEBUG = "TRUE" *)  wire ila_dac_rate_cnt  = dac_rate_cnt;
-    (* MARK_DEBUG = "TRUE" *)  wire ila_dac_valid_int = dac_valid_int;
-    (* MARK_DEBUG = "TRUE" *)  wire ila_dac_rate_sync_in_s = dac_rate_sync_in_s;
-    (* MARK_DEBUG = "TRUE" *)  wire ila_dac_sync_out  = dac_sync_out;
+    (* MARK_DEBUG = "TRUE" *)  wire [15:0] ila_dac_rate_cnt  = dac_rate_cnt;
+    (* MARK_DEBUG = "TRUE" *)  wire        ila_dac_valid_int = dac_valid_int;
+    (* MARK_DEBUG = "TRUE" *)  wire        ila_dac_rate_sync_in_s = dac_rate_sync_in_s;
+    (* MARK_DEBUG = "TRUE" *)  wire        ila_dac_sync_out  = dac_sync_out;
 
     // dac channel 0
 
@@ -261,7 +261,7 @@ module axi_adrv9001_tx #(
       .dac_data_iq_in (dac_data_iq_q0_s),
       .dac_data_iq_out (dac_data_iq_i0_s),
       .dac_enable (dac_enable_i0),
-      .dac_data_sync (dac_data_sync_s),
+      .dac_data_sync (dac_transfer_sync_in_s),
       .dac_dds_format (dac_dds_format_s),
       .up_rstn (up_rstn),
       .up_clk (up_clk),
@@ -296,7 +296,7 @@ module axi_adrv9001_tx #(
       .dac_data_iq_in (dac_data_iq_i0_s),
       .dac_data_iq_out (dac_data_iq_q0_s),
       .dac_enable (dac_enable_q0),
-      .dac_data_sync (dac_data_sync_s),
+      .dac_data_sync (dac_transfer_sync_in_s),
       .dac_dds_format (dac_dds_format_s),
       .up_rstn (up_rstn),
       .up_clk (up_clk),
@@ -331,7 +331,7 @@ module axi_adrv9001_tx #(
       .dac_data_iq_in (dac_data_iq_q1_s),
       .dac_data_iq_out (dac_data_iq_i1_s),
       .dac_enable (dac_enable_i1),
-      .dac_data_sync (dac_data_sync_s),
+      .dac_data_sync (dac_transfer_sync_in_s),
       .dac_dds_format (dac_dds_format_s),
       .up_rstn (up_rstn),
       .up_clk (up_clk),
@@ -366,7 +366,7 @@ module axi_adrv9001_tx #(
       .dac_data_iq_in (dac_data_iq_i1_s),
       .dac_data_iq_out (dac_data_iq_q1_s),
       .dac_enable (dac_enable_q1),
-      .dac_data_sync (dac_data_sync_s),
+      .dac_data_sync (dac_transfer_sync_in_s),
       .dac_dds_format (dac_dds_format_s),
       .up_rstn (up_rstn),
       .up_clk (up_clk),

@@ -69,7 +69,6 @@ module axi_adrv9001_rx #(
   output                  up_adc_r1_mode,
 
   input       [ 31:0]     adc_clk_ratio,
-  input       [  9:0]     mcs_to_strobe_delay,
 
   // dac loopback interface
   input                   dac_data_valid_A,
@@ -368,7 +367,6 @@ module axi_adrv9001_rx #(
       .adc_sync_status (1'd0),
       .adc_status_ovf (adc_dovf),
       .adc_clk_ratio (adc_clk_ratio),
-      .mcs_to_strobe_delay (mcs_to_strobe_delay),
       .adc_start_code (),
       .adc_sref_sync (),
       .adc_sync (adc_sync),

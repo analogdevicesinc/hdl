@@ -227,6 +227,7 @@ module adrv9001_rx_link #(
   wire        rx_data16_1_packed_valid;
   wire        rx_data16_0_packed_osof;
   wire        rx_data16_1_packed_osof;
+  wire        rx_data32_0_packed_osof;
 
   wire [31:0] rx_data32_0_packed;
   wire        rx_data32_0_packed_valid;
@@ -330,13 +331,14 @@ module adrv9001_rx_link #(
   endgenerate
 
   // debug
-  (* MARK_DEBUG = "TRUE" *)  wire ila_rx_data16_0_packed_valid =  rx_data16_0_packed_valid;
-  (* MARK_DEBUG = "TRUE" *)  wire ila_rx_data32_0_packed_valid =  rx_data32_0_packed_valid;
-  (* MARK_DEBUG = "TRUE" *)  wire ila_rx_data16_1_packed_valid =  rx_data16_1_packed_valid;
-  (* MARK_DEBUG = "TRUE" *)  wire ila_data_strobe              =  data_strobe            ;
-  (* MARK_DEBUG = "TRUE" *)  wire ila_rx_data8_strobe_aligned  =  rx_data8_strobe_aligned;
-  (* MARK_DEBUG = "TRUE" *)  wire ila_rx_data16_0_packed_osof  =  rx_data16_0_packed_osof;
-  (* MARK_DEBUG = "TRUE" *)  wire ila_rx_data16_1_packed_osof  =  rx_data16_1_packed_osof;
-  (* MARK_DEBUG = "TRUE" *)  wire ila_rx_data32_0_packed_osof  =  rx_data32_0_packed_osof;
+  (* MARK_DEBUG = "TRUE" *)  wire       ila_rx_data8_0_packed_valid  =  rx_data8_0_aligned_valid;
+  (* MARK_DEBUG = "TRUE" *)  wire       ila_rx_data16_0_packed_valid =  rx_data16_0_packed_valid;
+  (* MARK_DEBUG = "TRUE" *)  wire       ila_rx_data32_0_packed_valid =  rx_data32_0_packed_valid;
+  (* MARK_DEBUG = "TRUE" *)  wire       ila_rx_data16_1_packed_valid =  rx_data16_1_packed_valid;
+  (* MARK_DEBUG = "TRUE" *)  wire [7:0] ila_data_strobe              =  data_strobe            ;
+  (* MARK_DEBUG = "TRUE" *)  wire [7:0] ila_rx_data8_strobe_aligned  =  rx_data8_strobe_aligned;
+  (* MARK_DEBUG = "TRUE" *)  wire       ila_rx_data16_0_packed_osof  =  rx_data16_0_packed_osof;
+  (* MARK_DEBUG = "TRUE" *)  wire       ila_rx_data16_1_packed_osof  =  rx_data16_1_packed_osof;
+  (* MARK_DEBUG = "TRUE" *)  wire       ila_rx_data32_0_packed_osof  =  rx_data32_0_packed_osof;
 
 endmodule

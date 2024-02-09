@@ -67,7 +67,6 @@ module up_adc_common #(
   input               adc_sync_status,
   input               adc_status_ovf,
   input       [31:0]  adc_clk_ratio,
-  input       [ 9:0]  mcs_to_strobe_delay,
   output      [31:0]  adc_start_code,
   output              adc_sref_sync,
   output              adc_sync,
@@ -184,7 +183,6 @@ module up_adc_common #(
   wire        [31:0]  up_drp_rdata_hold_s;
   wire        [31:0]  up_adc_config_rd;
   wire                up_adc_ctrl_status;
-  wire                up_mcs_to_strobe_delay;
 
   wire                adc_rst_n;
   wire                adc_rst_s;
@@ -499,7 +497,6 @@ module up_adc_common #(
           7'h23: up_rdata_int <= up_adc_config_ctrl;
           7'h28: up_rdata_int <= {24'd0, up_usr_chanmax_in};
           7'h29: up_rdata_int <= up_adc_start_code;
-          7'h2a: up_rdata_int <= up_mcs_to_strobe_delay;
           7'h2e: up_rdata_int <= up_adc_gpio_in;
           7'h2f: up_rdata_int <= up_adc_gpio_out_int;
           7'h30: up_rdata_int <= up_pps_rcounter;
@@ -581,7 +578,7 @@ module up_adc_common #(
   assign adc_rst = ~adc_rst_n;
 
   up_xfer_status #(
-    .DATA_WIDTH(46)
+    .DATA_WIDTH(36)
   ) i_xfer_status (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
@@ -589,16 +586,14 @@ module up_adc_common #(
                       up_status_s,
                       up_status_ovf_s,
                       up_adc_config_rd,
-                      up_adc_ctrl_status,
-                      up_mcs_to_strobe_delay}),
+                      up_adc_ctrl_status}),
     .d_rst (adc_rst_s),
     .d_clk (adc_clk),
     .d_data_status ({ adc_sync_status,
                       adc_status,
                       adc_status_ovf,
                       adc_config_rd,
-                      adc_ctrl_status,
-                      mcs_to_strobe_delay}));
+                      adc_ctrl_status}));
 
   // adc clock monitor
 

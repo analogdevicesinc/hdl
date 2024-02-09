@@ -158,7 +158,6 @@ module system_top (
   wire          fpga_ref_clk;
   wire          fpga_mcs_in;
   wire          mcs_out;
-  wire          mssi_sync;
   wire          mcs_or_transfer_sync_n_s;
 
   wire          gpio_rx1_enable_in;
@@ -181,8 +180,6 @@ module system_top (
   assign gpio_i[4] = vin_poe_valid_n;
   assign gpio_i[5] = vin_usb2_valid_n;
   assign gpio_i[6] = vin_usb1_valid_n;
-
-  //assign mssi_sync = gpio_o[7];
 
   assign usb_pd_reset = 1'b0;
   assign fan_en  = 1'b1;
@@ -261,7 +258,6 @@ module system_top (
     .mcs_in (fpga_mcs_in),
     .mcs_out (mcs_out),
     .mcs_src (adrv9002_mcssrc),
-    //.mssi_sync (mssi_sync),
     .mcs_or_transfer_sync_n(mcs_or_transfer_sync_n_s),
     .tx_output_enable (1'b1),
 

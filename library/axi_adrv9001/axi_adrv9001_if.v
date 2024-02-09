@@ -50,7 +50,7 @@ module axi_adrv9001_if #(
   parameter USE_RX_CLK_FOR_TX = 0
 ) (
   input             ref_clk,
-  input             mcs,
+  input             mcs_6th_pulse,
   input             tx_output_enable,
   input             mssi_sync,
 
@@ -224,7 +224,7 @@ module axi_adrv9001_if #(
     .rx_strobe_in_p_strobe_in (rx1_strobe_in_p_strobe_in),
 
     .ref_clk (ref_clk),
-    .mcs (mcs),
+    .mcs_6th_pulse (mcs_6th_pulse),
 
     .adc_rst (rx1_rst),
     .adc_clk (adc_1_clk),
@@ -292,10 +292,11 @@ module axi_adrv9001_if #(
       .rx_strobe_in_p_strobe_in (rx2_strobe_in_p_strobe_in),
 
       .ref_clk (ref_clk),
-      .mcs (mcs),
+      .mcs_6th_pulse (mcs_6th_pulse),
 
       .adc_rst (rx2_rst),
       .adc_clk (adc_2_clk),
+      .adc_if_rst (adc_2_if_rst),
       .adc_clk_div (adc_2_clk_div),
       .adc_data_0 (adc_2_data_0),
       .adc_data_1 (adc_2_data_1),

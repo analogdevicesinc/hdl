@@ -281,7 +281,6 @@ create_bd_port -dir I mcs_in
 create_bd_port -dir O mcs_out
 create_bd_port -dir I mcs_src
 create_bd_port -dir I mcs_or_transfer_sync_n
-#create_bd_port -dir I mssi_sync
 create_bd_port -dir I tx_output_enable
 
 create_bd_port -dir I s_1p0_rf_sns_p
@@ -400,10 +399,8 @@ ad_connect ref_clk                 axi_adrv9001/ref_clk
 ad_connect mcs_in                  axi_adrv9001/mcs_in
 ad_connect mcs_out                 axi_adrv9001/mcs_out
 ad_connect mcs_src                 axi_adrv9001/mcs_src
-#ad_connect mssi_sync               axi_adrv9001/_external_mssi_sync ;# is it used by linux ?? /remove or not
 ad_connect mcs_or_transfer_sync_n  axi_adrv9001/mcs_or_transfer_sync_n
 ad_connect tx_output_enable        axi_adrv9001/tx_output_enable
-
 
 ad_connect rx1_dclk_in_n     axi_adrv9001/rx1_dclk_in_n_NC
 ad_connect rx1_dclk_in_p     axi_adrv9001/rx1_dclk_in_p_dclk_in
@@ -644,27 +641,3 @@ set_property -dict [list \
 ] [get_bd_cells sys_ps8]
 endgroup
 
-ad_connect axi_adrv9001/ila_clk sys_ps8/pl_clk3
-
-############################################ MIPI ##############################
-#  set mipi_phy_if_0 [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:mipi_phy_rtl:1.0 mipi_phy_if_0 ]
-#
-#  # Create instance: mipi_csi2_rx_subsyst_0, and set properties
-#  set mipi_csi2_rx_subsyst_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:mipi_csi2_rx_subsystem:5.1 mipi_csi2_rx_subsyst_0 ]
-#  set_property -dict [ list \
-#   CONFIG.CLK_LANE_IO_LOC {H1} \
-#   CONFIG.CLK_LANE_IO_LOC_NAME {IO_L1P_T0L_N0_DBC_66} \
-#   CONFIG.CMN_NUM_LANES {2} \
-#   CONFIG.C_DPHY_LANES {2} \
-#   CONFIG.DATA_LANE0_IO_LOC {F4} \
-#   CONFIG.DATA_LANE0_IO_LOC_NAME {IO_L2P_T0L_N2_66} \
-#   CONFIG.DATA_LANE1_IO_LOC {E2} \
-#   CONFIG.DATA_LANE1_IO_LOC_NAME {IO_L3P_T0L_N4_AD15P_66} \
-#   CONFIG.HP_IO_BANK_SELECTION {66} \
-#   CONFIG.SupportLevel {1} \
-# ] $mipi_csi2_rx_subsyst_0
-#
-#  connect_bd_intf_net -intf_net mipi_phy_if_0_1 [get_bd_intf_ports mipi_phy_if_0] [get_bd_intf_pins mipi_csi2_rx_subsyst_0/mipi_phy_if]
-#  connect_bd_net [get_bd_pins mipi_csi2_rx_subsyst_0/dphy_clk_200M] [get_bd_pins sys_ps8/pl_clk1]
-#  connect_bd_net [get_bd_pins mipi_csi2_rx_subsyst_0/lite_aclk] [get_bd_pins mipi_csi2_rx_subsyst_0/video_aclk] [get_bd_pins sys_ps8/pl_clk0]
-#  connect_bd_net [get_bd_pins mipi_csi2_rx_subsyst_0/lite_aresetn] [get_bd_pins mipi_csi2_rx_subsyst_0/video_aresetn] [get_bd_pins pl_sysmon/s_axi_aresetn]

@@ -55,6 +55,7 @@ adi_ip_files axi_adrv9001 [list \
   "axi_adrv9001_tx_channel.v" \
   "axi_adrv9001_core.v" \
   "axi_adrv9001_sync.v" \
+  "axi_adrv9001_sync_ctrl.v" \
   "axi_adrv9001_constr.xdc" \
   "axi_adrv9001_tdd.v" \
   "axi_adrv9001.v" ]
