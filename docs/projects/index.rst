@@ -34,3 +34,4 @@ Contents
    CN0540 <cn0540/index>
    CN0561 <cn0561/index>
    PULSAR-ADC <pulsar_adc/index>
+   PULSAR-LVDS <pulsar_lvds/index>
