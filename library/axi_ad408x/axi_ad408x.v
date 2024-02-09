@@ -64,6 +64,7 @@ module axi_ad408x #(
   // output data interface
 
   output                  adc_clk,
+  output                  adc_clk_dma,
   output      [ 31:0]     adc_data,
   output                  adc_valid,
   input                   adc_dovf,
@@ -298,8 +299,9 @@ module axi_ad408x #(
     .delay_clk(delay_clk),
     .delay_rst(delay_rst),
     .delay_locked(delay_locked),
-    .adc_rst(adc_rst),
+    .adc_rst(adc_rst_s),
     .adc_clk(adc_clk_s),
+    .adc_clk_dma(adc_clk_dma),
     .adc_data(adc_data),
     .adc_valid(adc_valid),
     .bitslip_enable(bitslip_enable),
