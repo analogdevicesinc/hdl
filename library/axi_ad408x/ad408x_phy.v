@@ -58,16 +58,16 @@ module ad408x_phy #(
 
   // reset signal 
 
-  input                              sync_n,
+  (* MARK_DEBUG = "TRUE" *) input                              sync_n,
 
   // Assumption:
   //  control bits are static after sync_n de-assertion
 
-  input        [4:0]                num_lanes,
-  input                             self_sync,
-  input                             bitslip_enable,
-  input                             filter_enable,
-  input                             filter_data_ready_n,
+  (* MARK_DEBUG = "TRUE" *) input        [4:0]                num_lanes,
+  (* MARK_DEBUG = "TRUE" *) input                             self_sync,
+  (* MARK_DEBUG = "TRUE" *) input                             bitslip_enable,
+  (* MARK_DEBUG = "TRUE" *) input                             filter_enable,
+  (* MARK_DEBUG = "TRUE" *) input                             filter_data_ready_n,
 
   // delay interface(for IDELAY macros)
 
@@ -83,11 +83,11 @@ module ad408x_phy #(
 
   input                             adc_rst,
   output                            adc_clk,
-
+  (* MARK_DEBUG = "TRUE" *) output                            adc_clk_dma,
   // Output data 
 
-  output        [31:0]             adc_data,
-  output                           adc_valid,
+  (* MARK_DEBUG = "TRUE" *) output        [31:0]             adc_data,
+  (* MARK_DEBUG = "TRUE" *) output                           adc_valid,
 
   // Synchronization signals used when CNV signal is not present 
 
@@ -98,39 +98,42 @@ module ad408x_phy #(
   localparam  ULTRASCALE       = 2;
   localparam  ULTRASCALE_PLUS  = 3;
 
-  wire           adc_cnt_enable_s;
-  wire           serdes_reset_s;
-  wire   [ 4:0]  shift_cnt_value;
-  wire   [ 1:0]  delay_locked_s;
-  wire   [19:0]  pattern_value;
-  wire   [ 3:0]  adc_cnt_value;
-  wire           rx_data_b_p;
-  wire           rx_data_b_n;
-  wire           rx_data_a_p;
-  wire           rx_data_a_n;
-  wire           single_lane;
-  wire           cnv_in_io_s;
-  wire           cnv_in_io;
-  wire           self_sync;
+  (* MARK_DEBUG = "TRUE" *) wire           adc_cnt_enable_s;
+  (* MARK_DEBUG = "TRUE" *) wire           serdes_reset_s;
+  (* MARK_DEBUG = "TRUE" *) wire   [ 4:0]  shift_cnt_value;
+  (* MARK_DEBUG = "TRUE" *) wire   [ 1:0]  delay_locked_s;
+  (* MARK_DEBUG = "TRUE" *) wire   [19:0]  pattern_value;
+  (* MARK_DEBUG = "TRUE" *) wire   [ 3:0]  adc_cnt_value;
+  (* MARK_DEBUG = "TRUE" *) wire           rx_data_b_p;
+  (* MARK_DEBUG = "TRUE" *) wire           rx_data_b_n;
+  (* MARK_DEBUG = "TRUE" *) wire           rx_data_a_p;
+  (* MARK_DEBUG = "TRUE" *) wire           rx_data_a_n;
+  (* MARK_DEBUG = "TRUE" *) wire           single_lane;
+  (* MARK_DEBUG = "TRUE" *) wire           cnv_in_io_s;
+  (* MARK_DEBUG = "TRUE" *) wire           cnv_in_io;
   wire           adc_clk_in;
+  (* MARK_DEBUG = "TRUE" *) wire           adc_clk_div; 
   wire           dclk_s;
-  wire           filter_data_aqc;
+  (* MARK_DEBUG = "TRUE" *) wire           filter_data_aqc;
+  (* MARK_DEBUG = "TRUE" *) wire           sync_n_adc;
 
-  reg    [ 5:0]  serdes_reset       = 'b000110;
-  reg            adc_cnt_enable_s_d = 'b0;
-  reg            sync_status_int    = 'b0;
-  reg    [19:0]  adc_data_p         = 'b0;
-  reg    [19:0]  adc_data_d         = 'd0;
-  reg    [19:0]  adc_data_dd        = 'd0;
-  reg    [ 3:0]  adc_cnt_p          = 'b0;
-  reg    [ 4:0]  shift_cnt          = 'd0;
-  reg    [ 4:0]  cnv_in_io_d        = 'b0;
-  reg            single_lane_dd     = 'b0;
-  reg            single_lane_d      = 'b0;
-  reg            adc_valid_p        = 'd0;
-  reg            shift_cnt_en       = 'b0;
-  reg            slip_d             = 'b0;
-  reg            slip_dd            = 'b0;
+  (* MARK_DEBUG = "TRUE" *) reg            filter_data_ready_n_d = 'b0;
+  (* MARK_DEBUG = "TRUE" *) reg    [ 5:0]  serdes_reset          = 'b000110;
+  (* MARK_DEBUG = "TRUE" *) reg            adc_cnt_enable_s_d    = 'b0;
+  (* MARK_DEBUG = "TRUE" *) reg            sync_status_int       = 'b0;
+  (* MARK_DEBUG = "TRUE" *) reg    [19:0]  adc_data_p            = 'b0;
+  (* MARK_DEBUG = "TRUE" *) reg    [19:0]  adc_data_d            = 'd0;
+  (* MARK_DEBUG = "TRUE" *) reg    [19:0]  adc_data_dd           = 'd0;
+  (* MARK_DEBUG = "TRUE" *) reg    [19:0]  adc_data_ddd          = 'd0;
+  (* MARK_DEBUG = "TRUE" *) reg    [ 3:0]  adc_cnt_p             = 'b0;
+  (* MARK_DEBUG = "TRUE" *) reg    [ 4:0]  shift_cnt             = 'd0;
+  (* MARK_DEBUG = "TRUE" *) reg    [ 4:0]  cnv_in_io_d           = 'b0;
+  (* MARK_DEBUG = "TRUE" *) reg            single_lane_dd        = 'b0;
+  (* MARK_DEBUG = "TRUE" *) reg            single_lane_d         = 'b0;
+  (* MARK_DEBUG = "TRUE" *) reg            adc_valid_p           = 'd0;
+  (* MARK_DEBUG = "TRUE" *) reg            shift_cnt_en          = 'b0;
+  (* MARK_DEBUG = "TRUE" *) reg            slip_d                = 'b0;
+  (* MARK_DEBUG = "TRUE" *) reg            slip_dd               = 'b0;
 
   assign adc_cnt_enable_s = (adc_cnt_p < adc_cnt_value) ? 1'b1 : 1'b0;
   assign adc_cnt_value    = (single_lane) ? 'h9 : 'h4;
@@ -139,11 +142,11 @@ module ad408x_phy #(
   assign single_lane      = num_lanes[0];
   assign delay_locked     = &delay_locked_s;
   assign sync_status      = sync_status_int;
-  assign adc_data         = {{12{adc_data_dd[19]}},adc_data_dd};
+  assign adc_data         = {{12{adc_data_ddd[19]}},adc_data_ddd};
   assign pattern_value    = 'hac5d6;
   assign shift_cnt_value  = 'd19;
-  assign adc_clk          = adc_clk_div;
-
+  assign adc_clk          = adc_clk_in;
+  assign adc_clk_dma      = adc_clk_div;
   IBUFDS i_cnv_in_ibuf(
     .I(cnv_in_p),
     .IB(cnv_in_n),
@@ -161,8 +164,8 @@ module ad408x_phy #(
   // Min 2 div_clk cycles once div_clk is running after deassertion of sync
   // To make sure that the clocks are present and stable
 
-  always @(posedge adc_clk_in or negedge sync_n) begin
-    if(~sync_n) begin
+  always @(posedge adc_clk_in or negedge sync_n_adc) begin
+    if(~sync_n_adc) begin
       serdes_reset <= 6'b000110;
     end else begin
       serdes_reset <= {serdes_reset[4:0],1'b0};
@@ -175,7 +178,7 @@ module ad408x_phy #(
       BUFR #(
         .BUFR_DIVIDE("2")
       ) i_div_clk_buf (
-        .CLR (~sync_n),
+        .CLR (~sync_n_adc),
         .CE (1'b1),
         .I (adc_clk_in),
         .O (adc_clk_div));
@@ -189,10 +192,8 @@ module ad408x_phy #(
       ) i_div_clk_buf (
          .O (adc_clk_div),
          .CE (1'b1),
-         .CLR (~sync_n),
-         .I (adc_clk_in)
-      );
-  
+         .CLR (~sync_n_adc),
+         .I (adc_clk_in));
     end
   endgenerate
 
@@ -205,11 +206,25 @@ module ad408x_phy #(
     .out_clk(adc_clk_div),
     .out_event(adc_valid));
 
+  sync_event # (
+    .NUM_OF_EVENTS(1),
+    .ASYNC_CLK(1)
+  ) sync_n_sync (
+    .in_clk(up_clk),
+    .in_event(sync_n),
+    .out_clk(adc_clk_in),
+    .out_event(sync_n_adc));
+
 // compensate the delay added by the sync_event 
 
   always @(posedge adc_clk_in) begin
-    adc_data_d     <= adc_data_p;
-    adc_data_dd    <= adc_data_d;
+    if(adc_valid_p == 1'b1) begin 
+      adc_data_d <= adc_data_p;
+    end else begin 
+      adc_data_d <= adc_data_d;
+    end
+    adc_data_dd  <= adc_data_d;
+    adc_data_ddd <= adc_data_dd;
   end
 
   ad_data_in # (
@@ -277,9 +292,10 @@ module ad408x_phy #(
       if( serdes_reset_s || (~shift_cnt_en_d && shift_cnt_en )) begin
         shift_cnt       <= 6'b0;
         sync_status_int <= 1'b0;
-      end else if( adc_data_p != pattern_value) begin
+      end else begin
         shift_cnt <= shift_cnt + 1;
       end
+
       if(adc_data_p == pattern_value) begin
         sync_status_int <= 1'b1;
       end
@@ -290,14 +306,14 @@ module ad408x_phy #(
   // The adc_cnt_value is either 4 or 9 based on the number of lanes used
 
   wire rise_cnv_d;
-  assign rise_cnv_d = ~cnv_in_io_d[4] & cnv_in_io_d[3];
+  assign rise_cnv_d = ~cnv_in_io_d[0] & cnv_in_io;
 
   always @(posedge adc_clk_in) begin
   
     cnv_in_io_d        <= {cnv_in_io_d[3:0], cnv_in_io};
     adc_cnt_enable_s_d <= adc_cnt_enable_s;
 
-    if ( ( rise_cnv_d && ~filter_enable) || serdes_reset_s || shift_cnt_en || (~adc_cnt_enable_s && ~filter_enable) || filter_data_ready_n_dd ) begin
+    if ( ( rise_cnv_d && ~filter_enable) || serdes_reset_s || shift_cnt_en || (~adc_cnt_enable_s && ~filter_enable) || filter_data_ready_n_d ) begin
       adc_cnt_p <= 9'h0;
     end else if (adc_cnt_enable_s == 1'b1) begin
       adc_cnt_p <= adc_cnt_p + 1'b1;
@@ -312,15 +328,13 @@ module ad408x_phy #(
 
   //the single lane signal runs on the up clock and it's used on the adc_clk_in
 
-  reg filter_data_ready_n_d    = 1'b0;
-  reg filter_data_ready_n_dd   = 1'b0;
+
 
   always @(posedge adc_clk_in) begin
     single_lane_d  <= single_lane;
     single_lane_dd <= single_lane_d;
-   
-    filter_data_ready_n_d  <= filter_data_ready_n;
-    filter_data_ready_n_dd  <= filter_data_ready_n_d && filter_enable;
+
+    filter_data_ready_n_d   <= filter_data_ready_n && filter_enable;
   end
 
   // the captured bits are shifted in the adc_data_p register

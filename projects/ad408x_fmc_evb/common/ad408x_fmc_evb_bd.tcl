@@ -58,7 +58,7 @@ ad_connect axi_ad4080_adc/adc_valid axi_ad4080_dma/fifo_wr_en
 
 # system runs on phy's received clock
 
-ad_connect axi_ad4080_adc/adc_clk axi_ad4080_dma/fifo_wr_clk
+ad_connect axi_ad4080_adc/adc_clk_dma axi_ad4080_dma/fifo_wr_clk
 ad_connect $sys_cpu_clk sys_cpu_out_clk
 
 ad_connect $sys_cpu_resetn axi_ad4080_dma/m_dest_axi_aresetn
