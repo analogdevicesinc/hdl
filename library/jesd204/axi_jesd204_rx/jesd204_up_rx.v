@@ -37,7 +37,7 @@ module jesd204_up_rx #(
   input [8*NUM_LANES-1:0] core_status_lane_frame_align_err_cnt,
 
   input [32*NUM_LANES-1:0] core_status_err_statistics_cnt,
-  output [6:0] core_ctrl_err_statistics_mask,
+  output [8:0] core_ctrl_err_statistics_mask,
   output core_ctrl_err_statistics_reset,
 
   input up_cfg_is_writeable,
@@ -57,7 +57,7 @@ module jesd204_up_rx #(
   wire [32*NUM_LANES-1:0] up_status_err_statistics_cnt;
 
   reg up_ctrl_err_statistics_reset = 0;
-  reg [6:0] up_ctrl_err_statistics_mask = 7'h0;
+  reg [8:0] up_ctrl_err_statistics_mask = 9'h0;
 
   sync_data #(
     .NUM_OF_BITS(2+NUM_LANES*(3+2+32+8))
@@ -80,7 +80,7 @@ module jesd204_up_rx #(
     }));
 
   sync_data #(
-    .NUM_OF_BITS(8)
+    .NUM_OF_BITS(10)
   ) i_cdc_cfg (
     .in_clk(up_clk),
     .in_data({
@@ -108,9 +108,9 @@ module jesd204_up_rx #(
       /* 02-09 */ up_cfg_buffer_delay, /* Buffer release delay */
       /* 00-01 */ 2'b00 /* Data path width alignment */
     };
-    12'h91: up_rdata = {
-      /* 15-31 */ 17'h00, /* Reserved for future additions */
-      /* 08-14 */ up_ctrl_err_statistics_mask,
+    12'h91: up_rdata <= {
+      /* 17-31 */ 15'h00, /* Reserved for future additions */
+      /* 08-16 */ up_ctrl_err_statistics_mask,
       /* 01-07 */ 7'h0,
       /*    00 */ up_ctrl_err_statistics_reset
     };
@@ -142,7 +142,7 @@ module jesd204_up_rx #(
     if (up_reset == 1'b1) begin
       up_cfg_buffer_early_release <= 1'b0;
       up_cfg_buffer_delay <= 'h00;
-      up_ctrl_err_statistics_mask <= 7'h0;
+      up_ctrl_err_statistics_mask <= 9'h0;
       up_ctrl_err_statistics_reset <= 1'b0;
       up_cfg_frame_align_err_threshold <= 8'd4;
     end else if (up_wreq == 1'b1 && up_cfg_is_writeable == 1'b1) begin
@@ -156,7 +156,7 @@ module jesd204_up_rx #(
     end else if (up_wreq == 1'b1) begin
       case (up_waddr)
       12'h91: begin
-        up_ctrl_err_statistics_mask <= up_wdata[14:8];
+        up_ctrl_err_statistics_mask <= up_wdata[16:8];
         up_ctrl_err_statistics_reset <= up_wdata[0];
       end
       12'h92: begin

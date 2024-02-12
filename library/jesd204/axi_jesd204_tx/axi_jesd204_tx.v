@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2016-2022 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2016-2022, 2025 Analog Devices, Inc. All rights reserved.
 // SPDX short identifier: ADIJESD204
 // ***************************************************************************
 // ***************************************************************************
@@ -56,6 +56,7 @@ module axi_jesd204_tx #(
   output core_cfg_skip_ilas,
   output [7:0] core_cfg_mframes_per_ilas,
   output core_cfg_disable_char_replacement,
+  output [1:0] core_cfg_header_mode,
   output core_cfg_disable_scrambler,
 
   output [9:0] device_cfg_octets_per_multiframe,
@@ -187,6 +188,7 @@ module axi_jesd204_tx #(
     .core_cfg_links_disable(core_cfg_links_disable),
     .core_cfg_disable_scrambler(core_cfg_disable_scrambler),
     .core_cfg_disable_char_replacement(core_cfg_disable_char_replacement),
+    .core_cfg_header_mode(core_cfg_header_mode),
 
     .up_extra_cfg({
       /*    10 */ up_cfg_continuous_cgs,
