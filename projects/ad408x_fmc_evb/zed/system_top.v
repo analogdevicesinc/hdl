@@ -147,6 +147,10 @@ module system_top (
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
 
+
+  wire            filter_data_ready_n;
+  wire            sys_cpu_out_clk;
+
   reg             ad9508_sync_s = 1'b0;
   reg     [ 3:0]  sync_req_d    = 4'b0;
   reg     [26:0]  dbg_cnt       =  'b0;
