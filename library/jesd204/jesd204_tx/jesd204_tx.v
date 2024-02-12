@@ -54,6 +54,7 @@ module jesd204_tx #(
   parameter DATA_PATH_WIDTH = LINK_MODE[1] ? 8 : 4,
   parameter TPL_DATA_PATH_WIDTH = LINK_MODE[1] ? 8 : 4,
   parameter ENABLE_CHAR_REPLACE = 1'b0,
+  parameter ENABLE_FEC = 0,
   parameter ASYNC_CLK = 1
 ) (
   input clk,
@@ -89,6 +90,7 @@ module jesd204_tx #(
   input cfg_skip_ilas,
   input [7:0] cfg_mframes_per_ilas,
   input cfg_disable_char_replacement,
+  input [1:0] cfg_header_mode,
   input cfg_disable_scrambler,
 
   input [9:0] device_cfg_octets_per_multiframe,
@@ -486,7 +488,9 @@ pipeline_stage #(
       localparam D_STOP = D_START + DATA_PATH_WIDTH*8-1;
       localparam H_START = i * 2;
       localparam H_STOP = H_START + 2 -1;
-      jesd204_tx_lane_64b i_lane(
+      jesd204_tx_lane_64b #(
+        .ENABLE_FEC(ENABLE_FEC)
+      ) i_lane(
         .clk(clk),
         .reset(reset),
 
@@ -501,7 +505,7 @@ pipeline_stage #(
         .eoemb(eoemb_r),
 
         .cfg_disable_scrambler(cfg_disable_scrambler),
-        .cfg_header_mode(2'b0),
+        .cfg_header_mode(cfg_header_mode),
         .cfg_lane_disable(cfg_lanes_disable[i]));
     end
 

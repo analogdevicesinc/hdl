@@ -59,6 +59,7 @@ module jesd204_rx_header (
 
   output valid_eomb,
   output valid_eoemb,
+  output reg valid_fec,
   // Received header data qualified by valid_eomb
   output [11:0] crc12,
   output [2:0] crc3,
@@ -118,7 +119,7 @@ module jesd204_rx_header (
                cfg_header_mode == 1 ? {12'b0,cmd1} :
                cfg_header_mode == 3 ? cmd3 : 'b0;
 
-  assign fec = {sync_word[31:10],sync_word[8:5]};
+  assign fec = {sync_word[26:5],sync_word[3:0]};
 
   assign eomb  = sync_word[4:0] == 5'b00001;
   assign eoemb = sync_word[9] & eomb;
@@ -176,10 +177,19 @@ module jesd204_rx_header (
 
   assign invalid_eoemb = (sh_count == 0 && ~eoemb);
   assign invalid_eomb = (sh_count[4:0] == 0 && ~eomb);
-  assign valid_eomb = next_state[BIT_EMB_LOCK] && eomb;
-  assign valid_eoemb = next_state[BIT_EMB_LOCK] && eoemb;
+  assign valid_eomb = next_state[BIT_EMB_LOCK] && (sh_count == 0) && eomb;
+  assign valid_eoemb = next_state[BIT_EMB_LOCK] && (sh_count == 0) && eoemb;
 
   assign invalid_sequence = (invalid_eoemb || invalid_eomb);
+
+// FEC signal is available before EOMB
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    valid_fec <= 1'b0;
+  end else begin
+    valid_fec <= next_state[BIT_EMB_LOCK] && (sh_count[4:0] == 26);
+  end
+end
 
   always @(posedge clk) begin
     if (reset == 1'b1) begin

@@ -90,6 +90,7 @@ module axi_jesd204_rx #(
   output [7:0] core_cfg_octets_per_frame,
   output core_cfg_disable_scrambler,
   output core_cfg_disable_char_replacement,
+  output [1:0] core_cfg_header_mode,
   output [7:0] core_cfg_frame_align_err_threshold,
 
   output [9:0] device_cfg_octets_per_multiframe,
@@ -110,7 +111,7 @@ module axi_jesd204_rx #(
   input core_event_frame_alignment_error,
   input core_event_unexpected_lane_state_error,
 
-  output [6:0] core_ctrl_err_statistics_mask,
+  output [8:0] core_ctrl_err_statistics_mask,
   output core_ctrl_err_statistics_reset,
 
   input [32*NUM_LANES-1:0] core_status_err_statistics_cnt,
@@ -248,6 +249,7 @@ module axi_jesd204_rx #(
     .core_cfg_links_disable(core_cfg_links_disable),
     .core_cfg_disable_scrambler(core_cfg_disable_scrambler),
     .core_cfg_disable_char_replacement(core_cfg_disable_char_replacement),
+    .core_cfg_header_mode(core_cfg_header_mode),
 
     .up_extra_cfg({
       /* 00-07 */ up_cfg_frame_align_err_threshold

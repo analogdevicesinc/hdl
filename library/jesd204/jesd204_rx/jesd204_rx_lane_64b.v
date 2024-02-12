@@ -46,6 +46,7 @@
 
 module jesd204_rx_lane_64b #(
   parameter ELASTIC_BUFFER_SIZE = 256,
+  parameter ENABLE_FEC = 1'b0,
   parameter TPL_DATA_PATH_WIDTH = 8,
   parameter ASYNC_CLK = 0
 ) (
@@ -74,7 +75,7 @@ module jesd204_rx_lane_64b #(
   input [7:0] cfg_beats_per_multiframe,
 
   input ctrl_err_statistics_reset,
-  input [3:0] ctrl_err_statistics_mask,
+  input [5:0] ctrl_err_statistics_mask,
   output [31:0] status_err_statistics_cnt,
 
   output [2:0] status_lane_emb_state,
@@ -83,7 +84,6 @@ module jesd204_rx_lane_64b #(
 
   reg [11:0] crc12_calculated_prev;
 
-  wire [63:0] eomb_r;
   wire [63:0] phy_data_r;
   wire [63:0] data_descrambled_s;
   wire [63:0] data_descrambled;
@@ -95,12 +95,27 @@ module jesd204_rx_lane_64b #(
   wire event_unexpected_eomb;
   wire event_unexpected_eoemb;
   wire event_crc12_mismatch;
+  wire event_fec_trapped_error_flag;
+  wire event_fec_untrapped_error_flag;
   wire err_cnt_rst;
 
   wire [63:0] rx_data_msb_s;
 
   wire eomb;
   wire eoemb;
+  wire eomb_r;
+  wire valid_fec;
+  wire [25:0] fec_received;
+  wire fec_en;
+  wire [63:0] fec_data_out;
+  wire [63:0] scram_data_in;
+  wire fec_data_out_valid;
+  wire fec_trapped_error_flag;
+  wire fec_untrapped_error_flag;
+  wire buffer_not_ready_next;
+  wire buffer_ready_next;
+  reg [2:1] buffer_not_ready_r;
+  reg [2:1] buffer_ready_r;
 
   wire [7:0] sh_count;
 
@@ -119,9 +134,10 @@ module jesd204_rx_lane_64b #(
   
     .valid_eomb(eomb),
     .valid_eoemb(eoemb),
+    .valid_fec(valid_fec),
     .crc12(crc12_received),
     .crc3(),
-    .fec(),
+    .fec(fec_received),
     .cmd(),
     .sh_count(sh_count),
 
@@ -157,7 +173,7 @@ module jesd204_rx_lane_64b #(
   always @(posedge clk) begin
     if (reset == 1'b1) begin
       crc12_on <= 1'b0;
-    end else if (eomb_r) begin
+    end else if ((cfg_header_mode == 2'd0) && eomb_r) begin
       crc12_on <= 1'b1;
     end
   end
@@ -181,14 +197,41 @@ module jesd204_rx_lane_64b #(
 
   assign err_cnt_rst = reset || ctrl_err_statistics_reset;
 
+  assign fec_en = (cfg_header_mode == 2'd2);
+
+  if(ENABLE_FEC) begin : gen_fec
+    jesd204_fec_decode #(
+        .DATA_WIDTH     (64)
+    ) jesd204_fec_decode (
+      .data_out              (fec_data_out),
+      .data_out_valid        (fec_data_out_valid),
+      .trapped_error_flag    (fec_trapped_error_flag),
+      .untrapped_error_flag  (fec_untrapped_error_flag),
+      .clk                   (clk),
+      .rst                   (reset),
+      .eomb                  (eomb),
+      .fec_in_valid          (valid_fec),
+      .fec_in                (fec_received),
+      .data_in               (phy_data)
+    );
+
+    assign scram_data_in = fec_en ? fec_data_out : phy_data;
+    assign event_fec_trapped_error_flag = fec_en && fec_trapped_error_flag;
+    assign event_fec_untrapped_error_flag = fec_en && fec_untrapped_error_flag;
+  end else begin : gen_no_fec
+    assign scram_data_in = phy_data;
+  end
+
   error_monitor #(
-    .EVENT_WIDTH(4),
+  .EVENT_WIDTH(6),
     .CNT_WIDTH(32)
   ) i_error_monitor (
     .clk(clk),
     .reset(err_cnt_rst),
     .active(1'b1),
     .error_event({
+      event_fec_trapped_error_flag,
+      event_fec_untrapped_error_flag,
       event_invalid_header,
       event_unexpected_eomb,
       event_unexpected_eoemb,
@@ -202,9 +245,9 @@ module jesd204_rx_lane_64b #(
     .DESCRAMBLE(1)
   ) i_descrambler (
     .clk(clk),
-    .reset(1'b0),
+    .reset(reset),
     .enable(~cfg_disable_scrambler),
-    .data_in(phy_data),
+    .data_in(scram_data_in),
     .data_out(data_descrambled_s));
 
   pipeline_stage #(
@@ -224,13 +267,33 @@ module jesd204_rx_lane_64b #(
   // other lanes are not writing in the next half multiblock period stop
   // writing.
   // This limits the supported lane skew to half of the multiframe
+
+  assign buffer_not_ready_next = sh_count == {1'b0,cfg_beats_per_multiframe[7:1]} && all_buffer_ready_n;
+  assign buffer_ready_next = eomb;
+
   always @(posedge clk) begin
-    if (reset | ~emb_lock) begin
+    buffer_not_ready_r <= {buffer_not_ready_r[1], buffer_not_ready_next};
+    buffer_ready_r <= {buffer_ready_r[1], buffer_ready_next};
+  end
+
+  always @(posedge clk) begin
+    if (reset | ~emb_lock | (fec_en & ~fec_data_out_valid)) begin
       buffer_ready_n <= 1'b1;
-    end else if (sh_count == {1'b0,cfg_beats_per_multiframe[7:1]} && all_buffer_ready_n) begin
-      buffer_ready_n <= 1'b1;
-    end else if (eoemb) begin
-      buffer_ready_n <= 1'b0;
+    end else begin
+      // FEC data is delayed by 2 cycles
+      if(fec_en) begin
+        if(buffer_not_ready_r[2]) begin
+          buffer_ready_n <= 1'b1;
+        end else if(buffer_ready_r[2]) begin
+          buffer_ready_n <= 1'b0;
+        end
+      end else begin
+        if(buffer_not_ready_next) begin
+          buffer_ready_n <= 1'b1;
+        end else if(buffer_ready_next) begin
+          buffer_ready_n <= 1'b0;
+        end
+      end
     end
   end
 
