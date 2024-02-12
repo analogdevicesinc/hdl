@@ -8,7 +8,7 @@ Overview
 
 The :adi:`AD7625`, :adi:`AD7626`, :adi:`AD7960`, :adi:`AD7961` devices are parts
 from ADC LVDS PulSAR family.
-The :adi:`AD7625` / :adi:`AD7626` is a 16-bit, 6 MSPS / 10 MSPS, charge 
+The :adi:`AD7625` / :adi:`AD7626` is a 16-bit, 6 MSPS / 10 MSPS, charge
 redistribution successive approximation register (SAR) architecture, 
 analog to-digital converter (ADC). SAR architecture allows unmatched performance
 both in noise (92dB SNR) and in linearity (±1 LSB INL / ±0.45 LSB INL). The 
@@ -29,12 +29,12 @@ The SAR architecture allows unmatched performance both in noise and in linearity
 The :adi:`AD7960` / :adi:`AD7961` contains a low power, high speed, 18-bit/16-bit
 sampling ADC, an internal conversion clock, and an internal reference buffer.
 
-On the CNV± edge, the AD7960 samples the voltage difference between the IN+ and
-IN− pins. The voltages on these pins swing in opposite phase between 0 V and 
-4.096 V and between 0 V and 5 V. The reference voltage is applied to the part
-externally. All conversion results are available on a single LVDS self clocked
-or echoed clock serial interface. The AD7960 is available in a 32-lead LFCSP
-(QFN) with operation specified from −40°C to +85°C
+On the CNV± edge, the :adi:`AD7960` / :adi:`AD7961` samples the voltage
+difference between the IN+ and IN− pins. The voltages on these pins swing in
+opposite phase between 0 V and 4.096 V and between 0 V and 5 V. The reference
+voltage is applied to the part externally. All conversion results are available
+on a single LVDS self clocked or echoed clock serial interface. The AD7960 is
+available in a 32-lead LFCSP (QFN) with operation specified from −40°C to +85°C.
 
 Applications:
   * Digital imaging systems
@@ -94,13 +94,13 @@ The RESOLUTION_16_18N configuration parameter defines the resolution of the ADC
 (16 or 18  bits). By default it is set to 0. Depending of the project, some
 hardware modifications need to be done on the board and/or make command:
 
-In case of the **AD7960/AD7961** project:
+In case of the **AD7960** project:
 
 .. code-block::
 
    make RESOLUTION_16_18N=0
 
-In case of the **AD7625/AD7626** project:
+In case of the **AD7625/AD7626/AD7961** project:
 
 .. code-block::
 
@@ -113,52 +113,52 @@ Jumper setup AD7625/AD7626
 Jumper/Solder link Default Position  Description
 ================== ================= ===========================================
 LK2                Inserted          Connects REFIN to the 1.2V external
-                                     reference
+                                     reference.
 LK3                Inserted          Connects the 4.096 V output from the 
                                      :adi:`ADR4540` after buffer :adi:`AD8031`
-                                     solution
+                                     solution.
 LK6                B                 Connects the output of the VCM buffer to
                                      the VCM of the amplifier.
 LK9                A                 Connects to the 7 V supply coming from
-                                     the :adi:`ADP7102`
+                                     the :adi:`ADP7102`.
 LK10               A                 Connects to the −2.5 V coming from the
-                                     :adi:`ADP2300`
-JP1,JP2            B                 Connects CNV+ and CNV− from the FPGA
-JP6                B                 Connects 7 V to amplifier +VS 
-JP10               B                 Connects −2.5 V to amplifier −VS
+                                     :adi:`ADP2300`.
+JP1,JP2            B                 Connects CNV+ and CNV− from the FPGA.
+JP6                B                 Connects 7 V to amplifier +VS.
+JP10               B                 Connects −2.5 V to amplifier −VS.
 JP11,JP12          B                 Connect outputs from the :adi:`ADA4899-1`
-                                     to the inputs of the ADC
+                                     to the inputs of the ADC.
 JP13,JP14          B                 Connect outputs from the :adi:`ADA4899-1`
-                                     to the inputs of the ADC
+                                     to the inputs of the ADC.
 ================== ================= ===========================================
 
 Jumper setup AD7960/AD7961
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-================== ================= ===========================================
+================== ================= ============================================
 Jumper/Solder link Default Position  Description
-================== ================= ===========================================
+================== ================= ============================================
 LK2,LK3            Inserted          Option to use external amplifier supplies
-                                     + VS and – VS 
-LK4                Inserted          Connects to +7 V coming from :adi:`ADP7102`
+                                     + VS and – VS.
+LK4                Inserted          Connects to +7 V coming from :adi:`ADP7102`.
 LK5                B                 Connects to −2.5 V coming from 
-                                     :adi:`ADP2300` 
+                                     :adi:`ADP2300`.
 LK6                B                 Connects the output of VCM buffer to VCM
-                                     of amplifier
+                                     of amplifier.
 LK7                B                 Connects the +5 V output from 
-                                     :adi:`ADR4550` to REF buffer AD8031
+                                     :adi:`ADR4550` to REF buffer AD8031.
 JP1,JP2            B                 Connects analog inputs VIN+ and VIN− to
-                                     the inputs of the ADC driver 
-                                     :adi:`ADA4899-1` or :adi:`ADA4897-1`
+                                     the inputs of the ADC driver.
+                                     :adi:`ADA4899-1` or :adi:`ADA4897-1`.
 JP3,JP4            B                 Connect outputs from :adi:`ADA4899-1`
-                                     to inputs of :adi:`AD7960`
+                                     to inputs of :adi:`AD7960`.
 JP5                A                 Connect the VCM output from :adi:`AD7960`
-                                     to :adi:`AD8031`
+                                     to :adi:`AD8031`.
 JP7                A                 Connects REFIN to 2.048 V external
-                                     reference
-JP8                B                 Connects +7 V to amplifier +VS
-JP9                B                 Connects −2.5 V to amplifier −VS
-================== ================= ===========================================
+                                     reference.
+JP8                B                 Connects +7 V to amplifier +VS.
+JP9                B                 Connects −2.5 V to amplifier −VS.
+================== ================= ============================================
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -237,7 +237,7 @@ The Software GPIO number is calculated as follows:
 .. admonition:: Legend
    :class: note
 
-   -   ``**`` instantiated only for RESOLUTION_16_18N=0 (AD7960/AD7961)
+   -   ``**`` instantiated only for AD7960/AD7961
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -293,9 +293,9 @@ Hardware related
    -  :adi:`AD7626`
    -  :adi:`AD7960`
    -  :adi:`AD7961`
--  `UG-745, Evaluation Board User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/EVAL-AD7625FMCZ_7626FMCZ_UG-745.pdf>`__
--  `UG-490, Evaluation Board User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/EVAL-AD7625FMCZ_7626FMCZ_UG-745.pdf>`__
--  `UG-581, Evaluation Board User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/EVAL-AD7625FMCZ_7626FMCZ_UG-745.pdf>`__
+   -  :adi:`UG-745, Evaluation Board User Guide <media/en/technical-documentation/user-guides/EVAL-AD7625FMCZ_7626FMCZ_UG-745.pdf>`
+   -  :adi:`UG-490, Evaluation Board User Guide <media/en/technical-documentation/user-guides/UG-490.pdf>`
+   -  :adi:`UG-581, Evaluation Board User Guide <media/en/technical-documentation/user-guides/ug-581.pdf>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -326,7 +326,7 @@ HDL related
      - ---
    * - AXI_PWM_GEN
      - :git-hdl:`library/axi_pwm_gen`
-     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_pwm_gen>` 
+     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_pwm_gen>`
    * - AXI_SPDIF_TX
      - :git-hdl:`library/axi_spdif_tx <library/axi_spdif_tx>`
      - ---
