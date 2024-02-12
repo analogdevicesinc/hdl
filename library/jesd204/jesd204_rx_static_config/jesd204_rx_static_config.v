@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2017, 2018, 2020-2022 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2017, 2018, 2020-2022, 2025 Analog Devices, Inc. All rights reserved.
 // SPDX short identifier: ADIJESD204
 // ***************************************************************************
 // ***************************************************************************
@@ -15,6 +15,7 @@ module jesd204_rx_static_config #(
   parameter SCR = 1,
   parameter BUFFER_EARLY_RELEASE = 0,
   parameter LINK_MODE = 1, // 2 - 64B/66B;  1 - 8B/10B
+  parameter HEADER_MODE = 0, // 0 - CRC12 ; 1 - CRC3; 2 - FEC; 3 - CMD
   parameter SYSREF_DISABLE = 0,
   parameter SYSREF_ONE_SHOT = 0,
   /* Only 4, 8 are supported at the moment for 8b/10b and 8 for 64b */
@@ -29,6 +30,7 @@ module jesd204_rx_static_config #(
   output [7:0] cfg_octets_per_frame,
   output cfg_disable_scrambler,
   output cfg_disable_char_replacement,
+  output [1:0] cfg_header_mode,
   output [7:0] cfg_frame_align_err_threshold,
 
   output [9:0] device_cfg_octets_per_multiframe,
@@ -56,6 +58,7 @@ module jesd204_rx_static_config #(
   assign cfg_links_disable = {NUM_LINKS{1'b0}};
   assign cfg_disable_scrambler = SCR ? 1'b0 : 1'b1;
   assign cfg_disable_char_replacement = 1'b0;
+  assign cfg_header_mode = HEADER_MODE;
   assign cfg_frame_align_err_threshold = 8'd4;
 
 endmodule
