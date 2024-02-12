@@ -33,6 +33,7 @@ HDL Reference Designs
    ADAQ7980-SDZ <projects/adaq7980_sdz/index>
    CN0540 <projects/cn0540/index>
    CN0561 <projects/cn0561/index>
+   PULSAR-ADC <projects/pulsar_adc/index>
 
 .. role:: red
 .. role:: green
