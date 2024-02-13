@@ -58,16 +58,16 @@ module ad408x_phy #(
 
   // reset signal 
 
-  (* MARK_DEBUG = "TRUE" *) input                              sync_n,
+  input                              sync_n,
 
   // Assumption:
   //  control bits are static after sync_n de-assertion
 
-  (* MARK_DEBUG = "TRUE" *) input        [4:0]                num_lanes,
-  (* MARK_DEBUG = "TRUE" *) input                             self_sync,
-  (* MARK_DEBUG = "TRUE" *) input                             bitslip_enable,
-  (* MARK_DEBUG = "TRUE" *) input                             filter_enable,
-  (* MARK_DEBUG = "TRUE" *) input                             filter_data_ready_n,
+  input        [4:0]                num_lanes,
+  input                             self_sync,
+  input                             bitslip_enable,
+  input                             filter_enable,
+  input                             filter_data_ready_n,
 
   // delay interface(for IDELAY macros)
 
@@ -86,8 +86,8 @@ module ad408x_phy #(
  
   // Output data 
 
-  (* MARK_DEBUG = "TRUE" *) output        [31:0]             adc_data,
-  (* MARK_DEBUG = "TRUE" *) output                           adc_valid,
+  output        [31:0]             adc_data,
+  output                           adc_valid,
 
   // Synchronization signals used when CNV signal is not present 
 
@@ -98,40 +98,40 @@ module ad408x_phy #(
   localparam  ULTRASCALE       = 2;
   localparam  ULTRASCALE_PLUS  = 3;
 
-  (* MARK_DEBUG = "TRUE" *) wire           adc_cnt_enable_s;
-  (* MARK_DEBUG = "TRUE" *) wire   [ 4:0]  shift_cnt_value;
-  (* MARK_DEBUG = "TRUE" *) wire   [ 1:0]  delay_locked_s;
-  (* MARK_DEBUG = "TRUE" *) wire   [19:0]  pattern_value;
-  (* MARK_DEBUG = "TRUE" *) wire   [ 3:0]  adc_cnt_value;
-  (* MARK_DEBUG = "TRUE" *) wire           rx_data_b_p;
-  (* MARK_DEBUG = "TRUE" *) wire           rx_data_b_n;
-  (* MARK_DEBUG = "TRUE" *) wire           rx_data_a_p;
-  (* MARK_DEBUG = "TRUE" *) wire           rx_data_a_n;
-  (* MARK_DEBUG = "TRUE" *) wire           single_lane;
-  (* MARK_DEBUG = "TRUE" *) wire           cnv_in_io_s;
-  (* MARK_DEBUG = "TRUE" *) wire           cnv_in_io;
+  wire           adc_cnt_enable_s;
+  wire   [ 4:0]  shift_cnt_value;
+  wire   [ 1:0]  delay_locked_s;
+  wire   [19:0]  pattern_value;
+  wire   [ 3:0]  adc_cnt_value;
+  wire           rx_data_b_p;
+  wire           rx_data_b_n;
+  wire           rx_data_a_p;
+  wire           rx_data_a_n;
+  wire           single_lane;
+  wire           cnv_in_io_s;
+  wire           cnv_in_io;
   wire           adc_clk_phy;
-  (* MARK_DEBUG = "TRUE" *) wire           adc_clk_data; 
+  wire           adc_clk_data; 
   wire           dclk_s;
-  (* MARK_DEBUG = "TRUE" *) wire           filter_data_aqc;
-  (* MARK_DEBUG = "TRUE" *) wire           sync_n_adc;
+  wire           filter_data_aqc;
+  wire           sync_n_adc;
 
-  (* MARK_DEBUG = "TRUE" *) reg            filter_data_ready_n_d = 'b0;
-  (* MARK_DEBUG = "TRUE" *) reg            adc_cnt_enable_s_d    = 'b0;
-  (* MARK_DEBUG = "TRUE" *) reg            sync_status_int       = 'b0;
-  (* MARK_DEBUG = "TRUE" *) reg    [19:0]  adc_data_p            = 'b0;
-  (* MARK_DEBUG = "TRUE" *) reg    [19:0]  adc_data_d            = 'd0;
-  (* MARK_DEBUG = "TRUE" *) reg    [19:0]  adc_data_dd           = 'd0;
-  (* MARK_DEBUG = "TRUE" *) reg    [19:0]  adc_data_ddd          = 'd0;
-  (* MARK_DEBUG = "TRUE" *) reg    [ 3:0]  adc_cnt_p             = 'b0;
-  (* MARK_DEBUG = "TRUE" *) reg    [ 4:0]  shift_cnt             = 'd0;
-  (* MARK_DEBUG = "TRUE" *) reg    [ 4:0]  cnv_in_io_d           = 'b0;
-  (* MARK_DEBUG = "TRUE" *) reg            single_lane_dd        = 'b0;
-  (* MARK_DEBUG = "TRUE" *) reg            single_lane_d         = 'b0;
-  (* MARK_DEBUG = "TRUE" *) reg            adc_valid_p           = 'd0;
-  (* MARK_DEBUG = "TRUE" *) reg            shift_cnt_en          = 'b0;
-  (* MARK_DEBUG = "TRUE" *) reg            slip_d                = 'b0;
-  (* MARK_DEBUG = "TRUE" *) reg            slip_dd               = 'b0;
+  reg            filter_data_ready_n_d = 'b0;
+  reg            adc_cnt_enable_s_d    = 'b0;
+  reg            sync_status_int       = 'b0;
+  reg    [19:0]  adc_data_p            = 'b0;
+  reg    [19:0]  adc_data_d            = 'd0;
+  reg    [19:0]  adc_data_dd           = 'd0;
+  reg    [19:0]  adc_data_ddd          = 'd0;
+  reg    [ 3:0]  adc_cnt_p             = 'b0;
+  reg    [ 4:0]  shift_cnt             = 'd0;
+  reg    [ 4:0]  cnv_in_io_d           = 'b0;
+  reg            single_lane_dd        = 'b0;
+  reg            single_lane_d         = 'b0;
+  reg            adc_valid_p           = 'd0;
+  reg            shift_cnt_en          = 'b0;
+  reg            slip_d                = 'b0;
+  reg            slip_dd               = 'b0;
 
   assign adc_cnt_enable_s = (adc_cnt_p < adc_cnt_value) ? 1'b1 : 1'b0;
   assign adc_cnt_value    = (single_lane) ? 'h9 : 'h4;
@@ -143,6 +143,9 @@ module ad408x_phy #(
   assign pattern_value    = 'hac5d6;
   assign shift_cnt_value  = 'd19;
   assign adc_clk          = adc_clk_data;
+
+  // cdc between up_clk or adc_clk and adc_clk_phy
+
 
   IBUFDS i_cnv_in_ibuf(
     .I(cnv_in_p),
@@ -212,7 +215,7 @@ module ad408x_phy #(
     .IODELAY_GROUP(IO_DELAY_GROUP),
     .REFCLK_FREQUENCY(DELAY_REFCLK_FREQUENCY)
   ) da_iddr (
-    .rx_clk(~adc_clk_phy),
+    .rx_clk(adc_clk_phy),
     .rx_data_in_p(data_a_in_p),
     .rx_data_in_n(data_a_in_n),
     .rx_data_p(rx_data_a_p),
@@ -234,7 +237,7 @@ module ad408x_phy #(
       .IODELAY_GROUP(IO_DELAY_GROUP),
       .REFCLK_FREQUENCY(DELAY_REFCLK_FREQUENCY)
     ) db_iddr (
-      .rx_clk(~adc_clk_phy),
+      .rx_clk(adc_clk_phy),
       .rx_data_in_p(data_b_in_p),
       .rx_data_in_n(data_b_in_n),
       .rx_data_p(rx_data_b_p),
@@ -312,17 +315,43 @@ module ad408x_phy #(
     filter_data_ready_n_d   <= filter_data_ready_n && filter_enable;
   end
 
-  // the captured bits are shifted in the adc_data_p register
 
+
+reg [9:0] rx_a_pos;
+reg [9:0] rx_a_neg;
+reg [9:0] rx_b_neg;
+reg [9:0] rx_b_pos;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+                                 
+  always @(posedge adc_clk_phy) begin   
+    if(single_lane) begin
+      adc_data_p <=  { rx_a_pos[9],rx_a_neg[9],
+                       rx_a_pos[8],rx_a_neg[8],
+                       rx_a_pos[7],rx_a_neg[7],
+                       rx_a_pos[6],rx_a_neg[6],
+                       rx_a_pos[5],rx_a_neg[5],
+                       rx_a_pos[4],rx_a_neg[4],
+                       rx_a_pos[3],rx_a_neg[3],
+                       rx_a_pos[2],rx_a_neg[2],
+                       rx_a_pos[1],rx_a_neg[1],
+                       rx_a_pos[0],rx_a_neg[0]};                          
+    end else begin
+      adc_data_p <=  { rx_a_pos[4], rx_b_pos[4], rx_a_neg[4], rx_b_neg[4],
+                       rx_a_pos[3], rx_b_pos[3], rx_a_neg[3], rx_b_neg[3], 
+                       rx_a_pos[2], rx_b_pos[2], rx_a_neg[2], rx_b_neg[2],
+                       rx_a_pos[1], rx_b_pos[1], rx_a_neg[1], rx_b_neg[1],
+                       rx_a_pos[0], rx_b_pos[0], rx_a_neg[0], rx_b_neg[0]};
+      
+    end
+  end                              
 
   always @(posedge adc_clk_phy) begin
-    rx_a_pos <= {rx_a_pos,rx_data_a_p};
-    rx_b_pos <= {rx_b_pos,rx_data_b_p};
+    rx_a_pos <= {rx_a_pos[8:0],rx_data_a_p};
+    rx_b_pos <= {rx_b_pos[8:0],rx_data_b_p};
   end
   
   always @(negedge adc_clk_phy) begin
-    rx_a_neg <= {rx_a_neg,rx_data_a_n};
-    rx_b_neg <= {rx_b_neg,rx_data_b_n};
+    rx_a_neg <= {rx_a_neg[8:0],rx_data_a_n};
+    rx_b_neg <= {rx_b_neg[8:0],rx_data_b_n};
   end
 
 endmodule
