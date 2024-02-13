@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -18,4 +18,3 @@ sysid_gen_sys_init_file
 set sys_dma_clk [get_bd_nets sys_dma_clk]
 
 source ../common/cn0540_bd.tcl
-
