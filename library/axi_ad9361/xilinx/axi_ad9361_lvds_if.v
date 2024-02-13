@@ -45,10 +45,12 @@ module axi_ad9361_lvds_if #(
   parameter   USE_SSI_CLK = 1,
   parameter   DELAY_REFCLK_FREQUENCY = 200,
   parameter   RX_NODPA = 0,
-  // for lvds mode only -- polarity inversion for each line and for frame
+  // for lvds mode only -- polarity inversion for each line, for frame and
+  // clock
   // bits 5:0 - per line inversion of data in ad_data_in, lines 5-0
   // bit 6 - frame inversion
-  // i.e.: 64 means inversion on all 5 lines and frame as well
+  // bit 7 - clock inversion
+  // i.e.: 255 means inversion on all 6 lines, frame and clock as well
   parameter   INV_POL = 0
 ) (
 
@@ -177,7 +179,7 @@ module axi_ad9361_lvds_if #(
 
   // local parameters
 
-  localparam [6:0] INV_POL_PER_LINE = INV_POL;
+  localparam [7:0] INV_POL_PER_LINE = INV_POL;
 
   // drp interface signals
 
@@ -631,7 +633,9 @@ module axi_ad9361_lvds_if #(
 
   // device clock interface (receive clock)
   generate if (USE_SSI_CLK == 1) begin
-  ad_data_clk i_clk (
+  ad_data_clk #(
+    .INV_POL (INV_POL[7])
+  ) i_clk (
     .rst (1'd0),
     .locked (),
     .clk_in_p (rx_clk_in_p),

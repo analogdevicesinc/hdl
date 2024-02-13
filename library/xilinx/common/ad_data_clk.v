@@ -37,7 +37,10 @@
 
 module ad_data_clk #(
 
-  parameter   SINGLE_ENDED = 0
+  parameter   SINGLE_ENDED = 0,
+  // for lvds mode only
+  // invert polarity of signals
+  parameter   INV_POL = 0
 ) (
   input               rst,
   output              locked,
@@ -50,6 +53,8 @@ module ad_data_clk #(
   // internal signals
 
   wire                clk_ibuf_s;
+  wire                clk_ibuf_inv_s;
+  wire                clk_ibuf_not_inv_s;
 
   // defaults
 
@@ -59,14 +64,17 @@ module ad_data_clk #(
 
   generate
   if (SINGLE_ENDED == 1) begin
-  IBUFG i_rx_clk_ibuf (
-    .I (clk_in_p),
-    .O (clk_ibuf_s));
+    IBUFG i_rx_clk_ibuf (
+      .I (clk_in_p),
+      .O (clk_ibuf_s));
   end else begin
-  IBUFGDS i_rx_clk_ibuf (
-    .I (clk_in_p),
-    .IB (clk_in_n),
-    .O (clk_ibuf_s));
+    IBUFDS_DIFF_OUT i_rx_clk_ibuf (
+      .I (clk_in_p),
+      .IB (clk_in_n),
+      .O (clk_ibuf_not_inv_s),
+      .OB (clk_ibuf_inv_s));
+
+    assign clk_ibuf_s = (INV_POL == 1) ? clk_ibuf_inv_s : clk_ibuf_not_inv_s;
   end
   endgenerate
 

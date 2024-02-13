@@ -51,6 +51,7 @@ module ad_data_in #(
   parameter   IODELAY_GROUP = "dev_if_delay_group",
   parameter   REFCLK_FREQUENCY = 200,
   // for lvds mode only
+  // invert polarity of signals
   parameter   INV_POL = 0
 ) (
 
