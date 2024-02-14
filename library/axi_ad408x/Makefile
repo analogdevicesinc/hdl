@@ -18,6 +18,7 @@ GENERIC_DEPS += ../common/up_xfer_cntrl.v
 GENERIC_DEPS += ../common/up_xfer_status.v
 GENERIC_DEPS += ../util_cdc/sync_event.v
 GENERIC_DEPS += ../util_cdc/sync_bits.v
+GENERIC_DEPS += ../util_cdc/sync_data.v
 GENERIC_DEPS += ad408x_phy.v
 GENERIC_DEPS += axi_ad408x.v
 
