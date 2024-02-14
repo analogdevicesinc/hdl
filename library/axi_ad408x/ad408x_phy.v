@@ -67,7 +67,7 @@ module ad408x_phy #(
   input                             self_sync,
   input                             bitslip_enable,
   input                             filter_enable,
-  input                             filter_data_ready_n,
+  input                             filter_rdy_n,
 
   // delay interface(for IDELAY macros)
 
@@ -98,53 +98,52 @@ module ad408x_phy #(
   localparam  ULTRASCALE       = 2;
   localparam  ULTRASCALE_PLUS  = 3;
 
-  wire           adc_cnt_enable_s;
-  wire   [ 4:0]  shift_cnt_value;
+  localparam  [ 2:0]  IDLE         = 3'h0,
+                      COUNT        = 3'h1,
+                      FILTER_COUNT = 3'h2,
+                      SYNC         = 3'h3;
+
   wire   [ 1:0]  delay_locked_s;
   wire   [19:0]  pattern_value;
-  wire   [ 3:0]  adc_cnt_value;
+
   wire           rx_data_b_p;
   wire           rx_data_b_n;
   wire           rx_data_a_p;
   wire           rx_data_a_n;
+
   wire           single_lane;
   wire           cnv_in_io_s;
   wire           cnv_in_io;
   wire           adc_clk_phy;
   wire           adc_clk_data; 
   wire           dclk_s;
-  wire           filter_data_aqc;
-  wire           sync_n_adc;
 
-  reg            filter_data_ready_n_d = 'b0;
-  reg            adc_cnt_enable_s_d    = 'b0;
-  reg            sync_status_int       = 'b0;
-  reg    [19:0]  adc_data_p            = 'b0;
-  reg    [19:0]  adc_data_d            = 'd0;
-  reg    [19:0]  adc_data_dd           = 'd0;
-  reg    [19:0]  adc_data_ddd          = 'd0;
-  reg    [ 3:0]  adc_cnt_p             = 'b0;
-  reg    [ 4:0]  shift_cnt             = 'd0;
-  reg    [ 4:0]  cnv_in_io_d           = 'b0;
-  reg            single_lane_dd        = 'b0;
-  reg            single_lane_d         = 'b0;
-  reg            adc_valid_p           = 'd0;
-  reg            shift_cnt_en          = 'b0;
-  reg            slip_d                = 'b0;
-  reg            slip_dd               = 'b0;
+  //wire   [19:0]  adc_data_d  ;
+  wire   [19:0]  adc_data_dd ;
 
-  assign adc_cnt_enable_s = (adc_cnt_p < adc_cnt_value) ? 1'b1 : 1'b0;
-  assign adc_cnt_value    = (single_lane) ? 'h9 : 'h4;
-  assign cnv_in_io        = (self_sync) ? 1'b0 : cnv_in_io_s;
-  assign single_lane      = num_lanes[0];
-  assign delay_locked     = &delay_locked_s;
-  assign sync_status      = sync_status_int;
-  assign adc_data         = {{12{adc_data_ddd[19]}},adc_data_ddd};
-  assign pattern_value    = 'hac5d6;
-  assign shift_cnt_value  = 'd19;
-  assign adc_clk          = adc_clk_data;
 
-  // cdc between up_clk or adc_clk and adc_clk_phy
+  reg            sync_status_int     = 'b0;
+  reg    [19:0]  adc_data_p          = 'b0;
+  reg    [19:0]  adc_data_p_d        = 'b0;
+  reg    [19:0]  adc_data_d          = 'b0;
+  // reg    [19:0]  adc_data_dd         = 'b0;
+  reg    [19:0]  adc_data_ddd        = 'd0;
+  reg    [19:0]  adc_data_dddd       = 'd0;
+  reg    [ 3:0]  adc_cnt_p           = 'b0;
+  reg            adc_valid_p         = 'd0;
+  reg     [1:0]  slip_d              = 'b0;
+  reg            cycle_done          = 'b0;
+  reg    [ 2:0]  transfer_state      = 'b0;
+  reg    [ 2:0]  transfer_state_next = 'b0;
+
+
+  assign single_lane   = num_lanes[0];
+  assign delay_locked  = &delay_locked_s;
+  assign sync_status   = sync_status_int;
+  assign adc_data      = {{12{adc_data_dd[19]}},adc_data_dd};
+  assign adc_valid     = adc_valid_d;      
+  assign pattern_value = 'hd6ac5;
+  assign adc_clk       = adc_clk_data;
 
 
   IBUFDS i_cnv_in_ibuf(
@@ -185,37 +184,132 @@ module ad408x_phy #(
     end
   endgenerate
 
+  reg adc_valid_p_d = 'b0;
+  wire adc_valid_d;
   sync_event # (
     .NUM_OF_EVENTS(1),
     .ASYNC_CLK(1)
   ) valid_cdc_sync (
     .in_clk(adc_clk_phy),
-    .in_event(adc_valid_p),
+    .in_event(adc_valid_p_d),
     .out_clk(adc_clk_data),
-    .out_event(adc_valid));
+    .out_event(adc_valid_d));
+
+  sync_data #(
+    .NUM_OF_BITS (20),
+    .ASYNC_CLK (1)
+  ) adc_data_sync (
+    .in_clk (adc_clk_phy),
+    .in_data (adc_data_d),
+    .out_clk (adc_clk_data),
+    .out_data (adc_data_dd));
+
+
+
 
 // compensate the delay added by the sync_event 
 
   always @(posedge adc_clk_phy) begin
+    adc_data_p_d  <= adc_data_p;
+    adc_valid_p_d <= adc_valid_p;
     if(adc_valid_p == 1'b1) begin 
-      adc_data_d <= adc_data_p;
+      adc_data_d <= adc_data_p_d;
     end else begin 
       adc_data_d <= adc_data_d;
     end
-    adc_data_dd  <= adc_data_d;
-    adc_data_ddd <= adc_data_dd;
+  end
+ 
+wire      rise_cnv;
+wire      rise_slip;
+wire      slip;
+reg [1:0] cnv_in_io_d = 'b0;
+reg       filter_rdy_n_d = 'b0;
+
+assign cnv_in_io           =  cnv_in_io_s    & ~self_sync;
+assign slip                =  bitslip_enable &  self_sync;
+assign filter_rdy_n_s      =  filter_rdy_n   & filter_enable;
+assign fall_filter_ready   =  filter_rdy_n_d & ~filter_rdy_n_s;
+assign rise_cnv            = ~cnv_in_io_d[1] & cnv_in_io_d[0];
+assign rise_slip           = ~slip_d[1]      & slip_d[0];
+
+
+always @(posedge adc_clk_phy) begin
+  slip_d         <= {slip_d[0],slip};
+  cnv_in_io_d    <= {cnv_in_io_d[0],cnv_in_io};
+  filter_rdy_n_d <= filter_rdy_n_s;
+end
+
+
+always @(posedge adc_clk_phy) begin
+  if (adc_rst == 1'b1) begin
+    transfer_state <= IDLE;
+  end else begin
+    transfer_state <= transfer_state_next;
+  end
+end 
+
+// FSM next state logic
+
+  always @(*) begin
+    case (transfer_state)
+      IDLE : begin
+        cycle_done = 0;
+        sync_status_int     = 0;
+        transfer_state_next = (fall_filter_ready) ? FILTER_COUNT :((filter_enable) ? IDLE : COUNT);
+      end
+      COUNT : begin
+        transfer_state_next = (rise_slip) ? SYNC :((cycle_done)  ? ((filter_enable)  ? FILTER_COUNT : COUNT ) : COUNT );
+        cycle_done          = (single_lane) ? (adc_cnt_p == 4'h9) : (adc_cnt_p == 4'h4);
+      end
+      FILTER_COUNT : begin
+        transfer_state_next = (cycle_done)  ? IDLE : FILTER_COUNT;
+        cycle_done          = (single_lane) ? (adc_cnt_p == 4'h9) : (adc_cnt_p == 4'h4);
+      end
+      SYNC: begin
+        transfer_state_next = (cycle_done) ? ((fall_filter_ready) ? FILTER_COUNT : COUNT ) : SYNC;
+        cycle_done          = (adc_data_p_d == pattern_value);
+        sync_status_int     = (cycle_done) ? 1'b1 : sync_status_int;
+      end
+      default : begin
+        cycle_done = 0;
+        transfer_state_next = IDLE;
+      end
+    endcase
+  end
+
+
+  always @(posedge adc_clk_phy) begin
+    if (transfer_state == IDLE || transfer_state == SYNC || adc_rst == 1'b1 ) begin
+      adc_cnt_p <= 0;
+    end else if (transfer_state == COUNT || transfer_state == FILTER_COUNT ) begin
+      if (cycle_done) begin
+        adc_cnt_p   <= 0;
+        adc_valid_p <= 1'b1;
+      end else  begin
+        adc_cnt_p   <= adc_cnt_p + 1;
+        adc_valid_p <= 1'b0;
+      end
+    end
+  end
+
+  always @(posedge adc_clk_phy) begin
+    if(single_lane) begin
+        adc_data_p <= {adc_data_p[17:0], rx_data_a_p, rx_data_a_n};
+    end else begin
+        adc_data_p <= {adc_data_p[15:0], rx_data_a_p, rx_data_b_p, rx_data_a_n, rx_data_b_n};
+    end
   end
 
   ad_data_in # (
     .SINGLE_ENDED(0),
-    .IDDR_CLK_EDGE("OPPOSITE_EDGE"),
+    .IDDR_CLK_EDGE("SAME_EDGE_PIPELINED"),
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
     .DDR_SDR_N(1),
     .IODELAY_CTRL(IODELAY_CTRL),
     .IODELAY_GROUP(IO_DELAY_GROUP),
     .REFCLK_FREQUENCY(DELAY_REFCLK_FREQUENCY)
   ) da_iddr (
-    .rx_clk(adc_clk_phy),
+    .rx_clk(~adc_clk_phy),
     .rx_data_in_p(data_a_in_p),
     .rx_data_in_n(data_a_in_n),
     .rx_data_p(rx_data_a_p),
@@ -230,14 +324,14 @@ module ad408x_phy #(
 
     ad_data_in # (
       .SINGLE_ENDED(0),
-      .IDDR_CLK_EDGE("OPPOSITE_EDGE"),
+      .IDDR_CLK_EDGE("SAME_EDGE_PIPELINED"),
       .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
       .DDR_SDR_N(1),
       .IODELAY_CTRL(IODELAY_CTRL),
       .IODELAY_GROUP(IO_DELAY_GROUP),
       .REFCLK_FREQUENCY(DELAY_REFCLK_FREQUENCY)
     ) db_iddr (
-      .rx_clk(adc_clk_phy),
+      .rx_clk(~adc_clk_phy),
       .rx_data_in_p(data_b_in_p),
       .rx_data_in_n(data_b_in_n),
       .rx_data_p(rx_data_b_p),
@@ -248,110 +342,5 @@ module ad408x_phy #(
       .up_drdata(up_adc_drdata[9:5]),
       .delay_clk(delay_clk),
       .delay_rst(delay_rst),
-      .delay_locked(delay_locked_s[0]));
-
-  // The shift_cnt_en signal will keep the data bits counter untill the pattern is captured in adc_data_p
-
-  always @(posedge adc_clk_phy) begin
-    slip_d  <= bitslip_enable & self_sync;
-    slip_dd <= slip_d;
-    if(adc_rst || adc_data_p == pattern_value || ((shift_cnt == shift_cnt_value) && ~filter_enable))
-      shift_cnt_en <= 1'b0;
-    else if(slip_d & ~slip_dd)
-      shift_cnt_en <= 1'b1;
-  end
-  
-  // Additional counter that makes sure that the sinchronization doesn't take longer than 19 clock periods
-
-  reg shift_cnt_en_d = 1'b0;
-
-  always @(posedge adc_clk_phy) begin
-    shift_cnt_en_d <= shift_cnt_en;
-    if(shift_cnt_en) begin
-      if( adc_rst || (~shift_cnt_en_d && shift_cnt_en )) begin
-        shift_cnt       <= 6'b0;
-        sync_status_int <= 1'b0;
-      end else begin
-        shift_cnt <= shift_cnt + 1;
-      end
-
-      if(adc_data_p == pattern_value) begin
-        sync_status_int <= 1'b1;
-      end
-    end
-  end
-
-  // The counter resets based on the mode used: CNV is present or the design uses the self synchronization process
-  // The adc_cnt_value is either 4 or 9 based on the number of lanes used
-
-  wire rise_cnv_d;
-  assign rise_cnv_d = ~cnv_in_io_d[0] & cnv_in_io;
-
-  always @(posedge adc_clk_phy) begin
-  
-    cnv_in_io_d        <= {cnv_in_io_d[3:0], cnv_in_io};
-    adc_cnt_enable_s_d <= adc_cnt_enable_s;
-
-    if ( ( rise_cnv_d && ~filter_enable) || adc_rst || shift_cnt_en || (~adc_cnt_enable_s && ~filter_enable) || filter_data_ready_n_d ) begin
-      adc_cnt_p <= 9'h0;
-    end else if (adc_cnt_enable_s == 1'b1) begin
-      adc_cnt_p <= adc_cnt_p + 1'b1;
-    end
-
-    if (adc_cnt_p == adc_cnt_value && adc_cnt_enable_s_d == 1'b1) begin
-      adc_valid_p <= 1'b1;
-    end else begin
-      adc_valid_p <= 1'b0;
-    end
-  end
-
-  //the single lane signal runs on the up clock and it's used on the adc_clk_phy
-
-
-
-  always @(posedge adc_clk_phy) begin
-    single_lane_d  <= single_lane;
-    single_lane_dd <= single_lane_d;
-    filter_data_ready_n_d   <= filter_data_ready_n && filter_enable;
-  end
-
-
-
-reg [9:0] rx_a_pos;
-reg [9:0] rx_a_neg;
-reg [9:0] rx_b_neg;
-reg [9:0] rx_b_pos;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
-                                 
-  always @(posedge adc_clk_phy) begin   
-    if(single_lane) begin
-      adc_data_p <=  { rx_a_pos[9],rx_a_neg[9],
-                       rx_a_pos[8],rx_a_neg[8],
-                       rx_a_pos[7],rx_a_neg[7],
-                       rx_a_pos[6],rx_a_neg[6],
-                       rx_a_pos[5],rx_a_neg[5],
-                       rx_a_pos[4],rx_a_neg[4],
-                       rx_a_pos[3],rx_a_neg[3],
-                       rx_a_pos[2],rx_a_neg[2],
-                       rx_a_pos[1],rx_a_neg[1],
-                       rx_a_pos[0],rx_a_neg[0]};                          
-    end else begin
-      adc_data_p <=  { rx_a_pos[4], rx_b_pos[4], rx_a_neg[4], rx_b_neg[4],
-                       rx_a_pos[3], rx_b_pos[3], rx_a_neg[3], rx_b_neg[3], 
-                       rx_a_pos[2], rx_b_pos[2], rx_a_neg[2], rx_b_neg[2],
-                       rx_a_pos[1], rx_b_pos[1], rx_a_neg[1], rx_b_neg[1],
-                       rx_a_pos[0], rx_b_pos[0], rx_a_neg[0], rx_b_neg[0]};
-      
-    end
-  end                              
-
-  always @(posedge adc_clk_phy) begin
-    rx_a_pos <= {rx_a_pos[8:0],rx_data_a_p};
-    rx_b_pos <= {rx_b_pos[8:0],rx_data_b_p};
-  end
-  
-  always @(negedge adc_clk_phy) begin
-    rx_a_neg <= {rx_a_neg[8:0],rx_data_a_n};
-    rx_b_neg <= {rx_b_neg[8:0],rx_data_b_n};
-  end
-
+      .delay_locked(delay_locked_s[0]));                                                                                                                                                                                                                                                                                                                                                                                                                                  
 endmodule

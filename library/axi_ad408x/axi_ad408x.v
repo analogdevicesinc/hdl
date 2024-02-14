@@ -305,7 +305,7 @@ module axi_ad408x #(
     .bitslip_enable(bitslip_enable),
     .sync_status(sync_status),
     .filter_enable(filter_enable),
-    .filter_data_ready_n(filter_data_ready_n));
+    .filter_rdy_n(filter_data_ready_n));
 
 
   // adc delay control
