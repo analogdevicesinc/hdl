@@ -1,6 +1,6 @@
 .. _pulsar_lvds:
 
-PULSAR_LVDS HDL project
+PULSAR-LVDS HDL project
 ==================================================================================
 
 Overview
@@ -336,11 +336,10 @@ HDL related
    * - SYSID_ROM
      - :git-hdl:`library/sysid_rom <library/sysid_rom>`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
-   * - UTIL_I2C-MIXER
+   * - UTIL_I2C_MIXER
      - :git-hdl:`library/util_i2c_mixer <library/util_i2c_mixer>`
      - ---
 
 .. include:: ../common/more_information.rst
 
 .. include:: ../common/support.rst
-
