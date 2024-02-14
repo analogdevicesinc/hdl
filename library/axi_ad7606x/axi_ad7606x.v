@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -41,7 +41,6 @@ module axi_ad7606x #(
   parameter       DEV_CONFIG = 0,
   parameter       ADC_TO_DMA_N_BITS = 16,
   parameter       ADC_N_BITS = 16,
-  parameter       ADC_READ_MODE = 0,
   parameter       EXTERNAL_CLK = 0
 ) (
 

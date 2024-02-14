@@ -9,14 +9,12 @@ set INTF $ad_project_params(INTF)
 set NUM_OF_SDI $ad_project_params(NUM_OF_SDI)
 set ADC_N_BITS [expr {$DEV_CONFIG == 2 ? 18 : 16}]
 set ADC_TO_DMA_N_BITS [expr {$ADC_N_BITS == 16 ? 16 : 32}]
-set SIMPLE_STATUS_CRC $ad_project_params(SIMPLE_STATUS_CRC)
 set EXT_CLK $ad_project_params(EXT_CLK)
 set TOTAL_N_BITS_DMA [expr {$ADC_TO_DMA_N_BITS*8}]
 
 puts "build parameters: DEV_CONFIG: $DEV_CONFIG"
 puts "build parameters: INTF: $INTF"
 puts "build parameters: NUM_OF_SDI: $NUM_OF_SDI"
-puts "build parameters: SIMPLE_STATUS_CRC: $SIMPLE_STATUS_CRC"
 puts "build parameters: EXT_CLK: $EXT_CLK"
 
 # control lines
@@ -51,7 +49,6 @@ switch $INTF {
     ad_ip_parameter axi_ad7606x CONFIG.DEV_CONFIG $DEV_CONFIG
     ad_ip_parameter axi_ad7606x CONFIG.ADC_N_BITS $ADC_N_BITS
     ad_ip_parameter axi_ad7606x CONFIG.ADC_TO_DMA_N_BITS $ADC_TO_DMA_N_BITS
-    ad_ip_parameter axi_ad7606x CONFIG.ADC_READ_MODE $SIMPLE_STATUS_CRC
     ad_ip_parameter axi_ad7606x CONFIG.EXTERNAL_CLK $EXT_CLK
     
     # axi_pwm_gen
@@ -84,7 +81,7 @@ switch $INTF {
       ad_ip_parameter adc_clk_generator CONFIG.CLKOUT1_REQUESTED_DUTY_CYCLE 50.000
       ad_ip_parameter adc_clk_generator CONFIG.PRIM_SOURCE Global_buffer
       ad_ip_parameter adc_clk_generator CONFIG.CLKIN1_UI_JITTER 0
-      ad_ip_parameter adc_clk_generator CONFIG.PRIM_IN_FREQ 100.000 
+      ad_ip_parameter adc_clk_generator CONFIG.PRIM_IN_FREQ 100.000
     
       ad_connect  sys_cpu_clk adc_clk_generator/clk_in1
       ad_connect  sys_cpu_resetn adc_clk_generator/resetn
