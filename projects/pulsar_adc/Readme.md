@@ -1,4 +1,4 @@
-# PULSAR_ADC_PMDZ HDL Project
+# PULSAR_ADC HDL Project
 
 Here are some pointers to help you:
   * [Board Product Page](https://www.analog.com/eval-ad400x-fmcz)
@@ -27,6 +27,7 @@ Here are some pointers to help you:
   * Parts : [AD4008:   16-Bit, 2 MSPS/1 MSPS/500 kSPS, Precision, Pseudo Differential, SAR ADCs](https://www.analog.com/ad4008)
   * Parts : [AD4010:   18-Bit, 2 MSPS/1 MSPS/500 kSPS, Precision, Pseudo Differential, SAR ADCs](https://www.analog.com/ad4010)
   * Parts : [AD4011:   18-Bit, 2 MSPS/1 MSPS/500 kSPS, Easy Drive, Differential SAR ADCs](https://www.analog.com/ad4011)
+  * Parts : [ADAQ4003: 18-Bit, 2 MSPS, Precision DAQ, Differential SAR ADCs](https://www.analog.com/adaq4003)
   * Parts : [AD4020:   20-Bit, 1.8 MSPS/1 MSPS/500 kSPS, Easy Drive, Differential SAR ADCs](https://www.analog.com/ad4020)
 
   * Project Doc: https://wiki.analog.com/resources/eval/10-lead-pulsar-adc-evaluation-board
@@ -63,4 +64,5 @@ Here are some pointers to help you:
   * AD4008
   * AD4010
   * AD4011
+  * ADAQ4003
   * AD4020

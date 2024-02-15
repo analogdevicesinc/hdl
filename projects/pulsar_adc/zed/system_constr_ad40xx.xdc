@@ -3,12 +3,14 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-# adaq400x PMOD SPI interface - the PMOD JA1 is used
+# ad40xx_fmc SPI interface
 
-set_property -dict {PACKAGE_PIN AA11 IOSTANDARD LVCMOS33} [get_ports adaq400x_spi_sdo]       ; ## JA2
-set_property -dict {PACKAGE_PIN Y10  IOSTANDARD LVCMOS33} [get_ports adaq400x_spi_sdi]       ; ## JA3
-set_property -dict {PACKAGE_PIN AA9  IOSTANDARD LVCMOS33} [get_ports adaq400x_spi_sclk]      ; ## JA4
-set_property -dict {PACKAGE_PIN Y11  IOSTANDARD LVCMOS33} [get_ports adaq400x_spi_cs]        ; ## JA1
+set_property -dict {PACKAGE_PIN P17 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports ad40xx_spi_sdo]       ; ## H7   FMC_LA02_P     IO_L20P_T3_34
+set_property -dict {PACKAGE_PIN N19 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports ad40xx_spi_sdi]       ; ## D8   FMC_LA01_CC_P  IO_L14P_T2_SRCC_34
+set_property -dict {PACKAGE_PIN M19 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports ad40xx_spi_sclk]      ; ## G6   FMC_LA00_CC_P  IO_L13P_T2_MRCC_34
+set_property -dict {PACKAGE_PIN M20 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports ad40xx_spi_cs]        ; ## G7   FMC_LA00_CC_N  IO_L13N_T2_MRCC_34
+
+set_property -dict {PACKAGE_PIN P22 IOSTANDARD LVCMOS25} [get_ports ad40xx_amp_pd]                 ; ## G10  FMC_LA03_N     IO_L16N_T2_34
 
 # NOTE: clk_fpga_0 is the first PL fabric clock, also called $sys_cpu_clk
 
@@ -22,5 +24,5 @@ create_generated_clock -name spi_clk -source [get_pins -filter name=~*CLKIN1 -of
 set_multicycle_path -setup 8 -to [get_cells -hierarchical -filter {NAME=~*/data_sdo_shift_reg[*]}] -from [get_clocks spi_clk]
 set_multicycle_path -hold  7 -to [get_cells -hierarchical -filter {NAME=~*/data_sdo_shift_reg[*]}] -from [get_clocks spi_clk]
 
-set_multicycle_path -setup 8 -to [get_cells -hierarchical -filter {NAME=~*/execution/inst/left_aligned_reg*}] -from [get_clocks spi_clk]
-set_multicycle_path -hold  7 -to [get_cells -hierarchical -filter {NAME=~*/execution/inst/left_aligned_reg*}] -from [get_clocks spi_clk]
+set_multicycle_path -setup 8 -to [get_cells -hierarchical -filter {NAME=~*/spi_pulsar_adc_execution/inst/left_aligned_reg*}] -from [get_clocks spi_clk]
+set_multicycle_path -hold  7 -to [get_cells -hierarchical -filter {NAME=~*/spi_pulsar_adc_execution/inst/left_aligned_reg*}] -from [get_clocks spi_clk]
