@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2023-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -19,7 +19,6 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 set DEV_CONFIG [get_env_param DEV_CONFIG 0]
 
-# This type of check is useful when build without the INTF or NUM_OF_SDI parameters, that affect the constraints file
 set INTF 1
 if {[info exists ::env(INTF)]} {
   set INTF $::env(INTF)
