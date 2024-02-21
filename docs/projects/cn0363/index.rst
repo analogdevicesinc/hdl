@@ -1,15 +1,15 @@
 .. _cn0363:
 
 CN0363 HDL project
-=================================================================================
+==================================================================================
 
 Overview
----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------
 
-The :adi:`EVAL-CN0363-PMDZ` is a dual channel colorimeter featuring a modulated
-light source transmitter, programmable gain transimpedance amplifiers on each
-channel, and a very low noise, 24-bit sigma delta ADC. The output of the ADC
-connects via a standard PMOD connector to a FPGA. The FPGA takes the sampled
+The :adi:`EVAL-CN0363-PMDZ <CN0363>` is a dual channel colorimeter featuring a
+modulated light source transmitter, programmable gain transimpedance amplifiers
+on each channel, and a very low noise, 24-bit sigma delta ADC. The output of the
+ADC connects via a standard PMOD connector to a FPGA. The FPGA takes the sampled
 data from the ADC and implements a synchronous detection algorithm. By using
 modulated light and digital synchronous detection, rather than a constant (dc)
 source, the system strongly rejects any noise sources at frequencies other than
@@ -21,14 +21,14 @@ the basis of many chemical analysis and environmental monitoring instruments
 used to measure concentrations and characterize materials through absorption
 spectroscopy.
 
-The :adi:`EVAL-CN0363-PMDZ` HDL reference design is based on the Analog Devices
-base reference design for the ZED board. In addition to the base reference design
-:adi:`EVAL-CN0363-PMDZ` HDL reference design implements function blocks to
-communicate over a SPI bus with the :adi:`AD7175-2` Sigma-Delta ADC to configure
-it and receive the raw ADC data as well a configure the :adi:`AD5201` digital
-potentiometer. The data received from the ADC is passed to a processing pipeline
-which performs a digital synchronous detector and finally write the data to
-system memory using a DMA. The HDL reference design is also responsible for
+The :adi:`EVAL-CN0363-PMDZ <CN0363>` HDL reference design is based on the Analog
+Devices base reference design for the ZED board. In addition to the base reference
+design :adi:`EVAL-CN0363-PMDZ <CN0363>` HDL reference design implements function
+blocks to communicate over a SPI bus with the :adi:`AD7175-2` Sigma-Delta ADC to
+configure it and receive the raw ADC data as well a configure the :adi:`AD5201`
+digital potentiometer. The data received from the ADC is passed to a processing
+pipeline which performs a digital synchronous detector and finally write the data
+to system memory using a DMA. The HDL reference design is also responsible for
 generating the LED excitation signal. A simplified functional block diagram of
 the system is given below.
 
@@ -277,7 +277,7 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-linux:`CN0363 Linux driver source code <analogdevicesinc/linux/blob/main/drivers/iio/adc/ad_adc.c>`
+- :git-linux:`CN0363 Linux driver source code <drivers/iio/adc/ad_adc.c>`
 - :dokuwiki:`CN0363 Linux Driver [Wiki] <resources/eval/user-guides/eval-cn0363-pmdz/software/linux/drivers>`
 
 .. include:: ../common/more_information.rst
