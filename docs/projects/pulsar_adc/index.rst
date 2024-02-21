@@ -23,12 +23,12 @@ field programmable gate array (FPGA) mezzanine card (FMC) interposer board that
 interfaces with the system demonstration controller board.
 The :adi:`ADAQ4003` is an 18-bit precision data acquisition sub-system SiP
 design on a laminate that includes the :adi:`AD4003` ADC with a fully
-differential driver the :adi:`ADA4945`, a reference buffer (the :adi:`ADA4807`),
-a precision resistor iPassive network on a separate die along with discrete
-capacitors and resistors. The device solves many design challenges for a wide
-range of applications similar to :adi:`AD400x`, yet it still provides the
-flexibility. It offers over 75% area savings compared to discrete design and
-reduces TTM.
+differential driver the :adi:`ADA4945-1`, a reference buffer
+(the :adi:`ADA4807-1`), a precision resistor iPassive network on a separate die
+along with discrete capacitors and resistors. The device solves many design
+challenges for a wide range of applications similar to AD400x, yet it still
+provides the flexibility. It offers over 75% area savings compared to discrete
+design and reduces TTM.
 
 PulSAR converters which have FMC boards associated with them are AD40xx family.
 The :adi:`AD4003` / :adi:`AD4007` / :adi:`AD4011` / :adi:`AD4020` are low noise,
@@ -408,8 +408,8 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-linux:`PulSAR ADC PMDZ Linux driver source code <analogdevicesinc/linux/blob/main/drivers/iio/adc/ad_pulsar.c>`
-- :git-linux:`AD40xx/ADAQ40xx Linux driver source code <analogdevicesinc/linux/blob/main/drivers/iio/adc/ad400x.c>`
+- :git-linux:`PulSAR ADC PMDZ Linux driver source code <drivers/iio/adc/ad_pulsar.c>`
+- :git-linux:`AD40xx/ADAQ40xx Linux driver source code <drivers/iio/adc/ad400x.c>`
 
 .. include:: ../common/more_information.rst
 
