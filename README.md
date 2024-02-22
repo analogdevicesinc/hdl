@@ -47,9 +47,13 @@ This repository supports reference designs for different [Analog Devices boards]
 
 ### Building documentation
 
+Ensure pip is newer than version 23.
+```
+pip install pip --upgrade
+```
 Install the documentation tools.
 ```
-(cd docs ; pip install -r requirements.txt)
+(cd docs ; pip install -r requirements.txt --upgrade)
 ```
 Build the libraries (recommended).
 ```

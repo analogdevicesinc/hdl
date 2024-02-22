@@ -36,7 +36,7 @@ Contents
 #. :ref:`porting_project`: How to port a project to a non-supported carrier
 #. :ref:`customize_hdl`: Using and modifying the HDL design
 #. :ref:`hdl_coding_guideline`: The Verilog/VHDL coding guidelines that the
-   HDL team is following
+   HDL team follows
 #. :ref:`docs_guidelines`: Documentation guidelines
 #. :ref:`third_party`: Third party forks with derived work
 #. :dokuwiki:`Reference designs using AMD Xilinx hardware <resources/alliances/xilinx>`

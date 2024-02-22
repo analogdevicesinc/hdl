@@ -154,8 +154,7 @@ Vivado and \*_hw.tcl for Quartus) .
    design.
 
    To find more information about how to build the libraries, please visit
-   the :ref:`Building & Generating programming files
-   <build_hdl>` section.
+   the :ref:`Building & Generating programming files <build_hdl>` section.
 
 
 Repository releases and branches

@@ -36,9 +36,10 @@ Block design
 -------------------------------------------------------------------------------
 
 The reference design uses the standard :ref:`SPI Engine Framework <spi_engine>`
-to interface the :adi:`AD4696` ADC in single SDO Mode. The :ref:`SPI Engine
-Offload module <spi_engine offload>`, which can be used to capture continuous
-data stream at maximum data rate, is triggered by the BUSY signal of the device. 
+to interface the :adi:`AD4696` ADC in single SDO Mode.
+The :ref:`SPI Engine Offload module <spi_engine offload>`, which can be used to
+capture continuous data stream at maximum data rate, is triggered by the BUSY
+signal of the device.
 
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
