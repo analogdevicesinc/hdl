@@ -11,10 +11,10 @@ D8         LA01_CC_P      CORE_CLK_C_P          sysref_c_p            LVDS      
 D9         LA01_CC_N      CORE_CLK_C_N          sysref_c_n            LVDS       DIFF_TERM TRUE
 G6         LA00_CC_P      CORE_CLK_D_P          sysref_d_p            LVDS       DIFF_TERM TRUE
 G7         LA00_CC_N      CORE_CLK_D_N          sysref_d_n            LVDS       DIFF_TERM TRUE
-G2         CLK1_M2C_P     JESD_SYSREF_FPGA_D_P  core_clk_d_p          LVDS       DIFF_TERM TRUE
-G3         CLK1_M2C_N     JESD_SYSREF_FPGA_D_N  core_clk_d_n          LVDS       DIFF_TERM TRUE
 H4         CLK0_M2C_P     JESD_SYSREF_FPGA_C_P  core_clk_c_p          LVDS       DIFF_TERM TRUE
 H5         CLK0_M2C_N     JESD_SYSREF_FPGA_C_N  core_clk_c_n          LVDS       DIFF_TERM TRUE
+G2         CLK1_M2C_P     JESD_SYSREF_FPGA_D_P  core_clk_d_p          LVDS       DIFF_TERM TRUE
+G3         CLK1_M2C_N     JESD_SYSREF_FPGA_D_N  core_clk_d_n          LVDS       DIFF_TERM TRUE
 
 G15        LA12_P         SYNCINB1_C_P          rx_os_sync_c_p        LVDS       #N/A
 G16        LA12_N         SYNCINB1_C_N          rx_os_sync_c_n        LVDS       #N/A
@@ -49,10 +49,10 @@ B16        DP6_M2C_P      JESD_SERDOUT2_D_P     {rx_data_d_p[2]}      #N/A      
 B17        DP6_M2C_N      JESD_SERDOUT2_D_N     {rx_data_d_n[2]}      #N/A       #N/A
 B12        DP7_M2C_P      JESD_SERDOUT3_D_P     {rx_data_d_p[3]}      #N/A       #N/A
 B13        DP7_M2C_N      JESD_SERDOUT3_D_N     {rx_data_d_n[3]}      #N/A       #N/A
-C2         DP0_C2M_P      JESD_SERDIN1_C_P      {tx_data_c_p[0]}      #N/A       #N/A
-C3         DP0_C2M_N      JESD_SERDIN1_C_N      {tx_data_c_n[0]}      #N/A       #N/A
-A22        DP1_C2M_P      JESD_SERDIN0_C_P      {tx_data_c_p[1]}      #N/A       #N/A
-A23        DP1_C2M_N      JESD_SERDIN0_C_N      {tx_data_c_n[1]}      #N/A       #N/A
+A22        DP1_C2M_P      JESD_SERDIN0_C_P      {tx_data_c_p[0]}      #N/A       #N/A
+A23        DP1_C2M_N      JESD_SERDIN0_C_N      {tx_data_c_n[0]}      #N/A       #N/A
+C2         DP0_C2M_P      JESD_SERDIN1_C_P      {tx_data_c_p[1]}      #N/A       #N/A
+C3         DP0_C2M_N      JESD_SERDIN1_C_N      {tx_data_c_n[1]}      #N/A       #N/A
 A26        DP2_C2M_P      JESD_SERDIN2_C_P      {tx_data_c_p[2]}      #N/A       #N/A
 A27        DP2_C2M_N      JESD_SERDIN2_C_N      {tx_data_c_n[2]}      #N/A       #N/A
 A30        DP3_C2M_P      JESD_SERDIN3_C_P      {tx_data_c_p[3]}      #N/A       #N/A
