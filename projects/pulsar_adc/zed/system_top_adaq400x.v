@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2021-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -26,7 +26,7 @@
 //
 //   2. An ADI specific BSD license, which can be found in the top level directory
 //      of this repository (LICENSE_ADIBSD), and also on-line at:
-//      https://github.com/analogdevicesinc/hdl/blob/main/LICENSE_ADIBSD
+//      https://github.com/analogdevicesinc/hdl/blob/master/LICENSE_ADIBSD
 //      This will allow to generate bit files and not release the source code,
 //      as long as it attaches to an ADI device.
 //
@@ -83,14 +83,12 @@ module system_top (
 
   input           otg_vbusoc,
 
-  // ad400x SPI configuration interface
+  // adaq400x SPI configuration interface
 
-  input           ad40xx_spi_sdi,
-  output          ad40xx_spi_sdo,
-  output          ad40xx_spi_sclk,
-  output          ad40xx_spi_cs,
-
-  inout           ad40xx_amp_pd
+  input           adaq400x_spi_sdi,
+  output          adaq400x_spi_sdo,
+  output          adaq400x_spi_sclk,
+  output          adaq400x_spi_cs
 );
 
   // internal signals
@@ -107,15 +105,7 @@ module system_top (
 
   // instantiations
 
-  assign gpio_i[63:33] = 31'b0;
-
-  ad_iobuf #(
-    .DATA_WIDTH(1)
-  ) i_admp_pd_iobuf (
-    .dio_t(gpio_t[32]),
-    .dio_i(gpio_o[32]),
-    .dio_o(gpio_i[32]),
-    .dio_p(ad40xx_amp_pd));
+  assign gpio_i[63:32] = gpio_o[63:32];
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -202,11 +192,12 @@ module system_top (
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o (),
-    .ad40xx_spi_sdo (ad40xx_spi_sdo),
-    .ad40xx_spi_sdo_t (),
-    .ad40xx_spi_sdi (ad40xx_spi_sdi),
-    .ad40xx_spi_cs (ad40xx_spi_cs),
-    .ad40xx_spi_sclk (ad40xx_spi_sclk),
+    .pulsar_adc_spi_cs (adaq400x_spi_cs),
+    .pulsar_adc_spi_sclk (adaq400x_spi_sclk),
+    .pulsar_adc_spi_sdi (adaq400x_spi_sdi),
+    .pulsar_adc_spi_sdo (adaq400x_spi_sdo),
+    .pulsar_adc_spi_sdo_t (),
+    .pulsar_adc_spi_three_wire (),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));
 

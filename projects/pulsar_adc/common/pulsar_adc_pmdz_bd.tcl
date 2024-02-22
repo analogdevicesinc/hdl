@@ -1,11 +1,12 @@
 ###############################################################################
-## Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2021-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
 create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 pulsar_adc_spi
 source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
 
+# If the ADC resolution <= 16, data_width is set 16 else 32
 set data_width    32
 set async_spi_clk 1
 set num_cs        1

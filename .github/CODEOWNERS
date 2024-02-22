@@ -14,9 +14,6 @@
 *      adrian.costina@analog.com andrei.grozav@analog.com paul.pop@analog.com
 
 ##### Code owners for projects #####
-# Code owners for ad40xx_fmc folder
-/projects/ad40xx_fmc/      paul.pop@analog.com adrian.costina@analog.com
-
 # Code owners for ad4630_fmc folder
 /projects/ad4630_fmc/      sergiu.arpadi@analog.com paul.pop@analog.com
 
