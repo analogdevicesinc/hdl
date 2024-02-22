@@ -1,163 +1,110 @@
-<!doctype html>
-<html class="no-js" lang="en" data-content_root="">
-  <head><meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="AD7616-SDZ HDL project" href="../ad7616_sdz/index.html" /><link rel="prev" title="AD719X-ASDZ HDL project" href="../ad719x_asdz/index.html" />
+<!DOCTYPE html>
 
-    <link rel="shortcut icon" href="../../_static/icon.svg"/><!-- Generated with Sphinx 7.1.2 and Furo 2023.09.10 -->
-        <title>AD738x_FMC HDL project - HDL, Analog Devices v0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=36a5483c" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e974aa45" />
-    
-    
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-
-<style>
-  body {
-    --color-code-background: #f8f8f8;
-  --color-code-foreground: black;
+    <title>AD738x_FMC HDL project &#8212; HDL  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=84b5089d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="https://wavedrom.com/skins/default.js"></script>
+    <script src="https://wavedrom.com/wavedrom.min.js"></script>
+    <script defer="" src="../../_static/app.umd.js?v=37ac5827"></script>
+    <link rel="icon" href="../../_static/icon.svg"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="AD7616-SDZ HDL project" href="../ad7616_sdz/index.html" />
+    <link rel="prev" title="AD719X-ASDZ HDL project" href="../ad719x_asdz/index.html" />
+   
   
-  }
-  @media not print {
-    body[data-theme="dark"] {
-      --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
+    <meta name="robots" content="noindex">
   
-    }
-    @media (prefers-color-scheme: dark) {
-      body:not([data-theme="light"]) {
-        --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
-  
-      }
-    }
-  }
-</style></head>
-  <body>
-    
-    <script>
-      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
-    </script>
-    
 
-<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-  <symbol id="svg-toc" viewBox="0 0 24 24">
-    <title>Contents</title>
-    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
-      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
-    </svg>
-  </symbol>
-  <symbol id="svg-menu" viewBox="0 0 24 24">
-    <title>Menu</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
-      <line x1="3" y1="12" x2="21" y2="12"></line>
-      <line x1="3" y1="6" x2="21" y2="6"></line>
-      <line x1="3" y1="18" x2="21" y2="18"></line>
-    </svg>
-  </symbol>
-  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
-    <title>Expand</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
-      <polyline points="9 18 15 12 9 6"></polyline>
-    </svg>
-  </symbol>
-  <symbol id="svg-sun" viewBox="0 0 24 24">
-    <title>Light mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
-      <circle cx="12" cy="12" r="5"></circle>
-      <line x1="12" y1="1" x2="12" y2="3"></line>
-      <line x1="12" y1="21" x2="12" y2="23"></line>
-      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-      <line x1="1" y1="12" x2="3" y2="12"></line>
-      <line x1="21" y1="12" x2="23" y2="12"></line>
-      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-    </svg>
-  </symbol>
-  <symbol id="svg-moon" viewBox="0 0 24 24">
-    <title>Dark mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
-    </svg>
-  </symbol>
-  <symbol id="svg-sun-half" viewBox="0 0 24 24">
-    <title>Auto light/dark mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
-      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M13 12h5" />
-      <path d="M13 15h4" />
-      <path d="M13 18h1" />
-      <path d="M13 9h4" />
-      <path d="M13 6h1" />
-    </svg>
-  </symbol>
-</svg>
-
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
-<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
-<label class="overlay sidebar-overlay" for="__navigation">
-  <div class="visually-hidden">Hide navigation sidebar</div>
-</label>
-<label class="overlay toc-overlay" for="__toc">
-  <div class="visually-hidden">Hide table of contents sidebar</div>
-</label>
-
-
-
-<div class="page">
-  <header class="mobile-header">
-    <div class="header-left">
-      <label class="nav-overlay-icon" for="__navigation">
-        <div class="visually-hidden">Toggle site navigation sidebar</div>
-        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
-      </label>
-    </div>
-    <div class="header-center">
-      <a href="../../index.html"><div class="brand">HDL, Analog Devices v0.1 documentation</div></a>
-    </div>
-    <div class="header-right">
-      <div class="theme-toggle-container theme-toggle-header">
-        <button class="theme-toggle">
-          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
-          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
-          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
-          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
-        </button>
+  </head><body>
+  <input type="checkbox" id="input-showsidebar">
+  <input type="checkbox" id="input-showonthispage">
+  <header>
+    <div class="header">
+      <div id="left">
+        <label id="show-sidebar" for="input-showsidebar" title="Show/hide index"></label>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
-        <div class="visually-hidden">Toggle table of contents sidebar</div>
-        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
-      </label>
+      <div id="right">
+        <a id="logo" href="../../index.html"></a>
+        <span>
+          <label id="show-onthispage" for="input-showonthispage" title="Show/hide contents"></label>
+        </span>
+      </div>
+    </div>
+    <div class="subdomain-tree">
+      <root>
+  <a href="../../../documentation/index.html">System Level</a>
+  <a href="../../index.html" class="current">HDL</a>
+  <a href="../../../no-os/index.html">no-OS</a>
+  <a href="../../../pyadi-iio/index.html">pyadi-iio</a>
+</root>
+
     </div>
   </header>
-  <aside class="sidebar-drawer">
-    <div class="sidebar-container">
-      
-      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="onthispage">On this page</div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">AD738x_FMC HDL project</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#supported-boards">Supported boards</a></li>
+<li><a class="reference internal" href="#supported-devices">Supported devices</a></li>
+<li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
+<li><a class="reference internal" href="#block-design">Block design</a><ul>
+<li><a class="reference internal" href="#block-diagram">Block diagram</a></li>
+<li><a class="reference internal" href="#jumper-setup">Jumper setup</a></li>
+<li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
+<li><a class="reference internal" href="#i2c-connections">I2C connections</a></li>
+<li><a class="reference internal" href="#spi-connections">SPI connections</a></li>
+<li><a class="reference internal" href="#interrupts">Interrupts</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#building-the-hdl-project">Building the HDL project</a></li>
+<li><a class="reference internal" href="#resources">Resources</a><ul>
+<li><a class="reference internal" href="#hardware-related">Hardware related</a></li>
+<li><a class="reference internal" href="#hdl-related">HDL related</a></li>
+<li><a class="reference internal" href="#software-related">Software related</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#more-information">More information</a></li>
+<li><a class="reference internal" href="#support">Support</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
   
-  
-  <span class="sidebar-brand-text">HDL, Analog Devices v0.1 documentation</span>
-  
-</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
-  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
-  <input type="hidden" name="check_keywords" value="yes">
-  <input type="hidden" name="area" value="default">
-</form>
-<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <p class="caption" role="heading"><span class="caption-text">User guide</span></p>
-<ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../user_guide/index.html">User Guide</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of User Guide</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="subdomain-tree">
+  <root>
+  <a href="../../../documentation/index.html">System Level</a>
+  <a href="../../index.html" class="current">HDL</a>
+  <a href="../../../no-os/index.html">no-OS</a>
+  <a href="../../../pyadi-iio/index.html">pyadi-iio</a>
+</root>
+
+</div>
+<div class="sidebar-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/index.html">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/introduction.html">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/git_repository.html">Git repository</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/releases.html">Releases</a></li>
@@ -171,77 +118,59 @@
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/third_party.html">Third party forks</a></li>
 </ul>
 </li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Libraries</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../library/axi_dmac/index.html">High-Speed DMA Controller</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../library/spi_engine/index.html">SPI Engine</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of SPI Engine</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../library/spi_engine/spi_engine_execution.html">Execution Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../library/spi_engine/axi_spi_engine.html">AXI Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../library/spi_engine/spi_engine_offload.html">Offload Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../library/spi_engine/spi_engine_interconnect.html">Interconnect Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../library/spi_engine/control-interface.html">Control Interface</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../library/spi_engine/offload-control-interface.html">Offload Control Interface</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../library/spi_engine/spi-bus-interface.html">SPI Bus Interface</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../library/spi_engine/instruction-format.html">Instruction Set Specification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../library/spi_engine/pipeline-delays.html">Pipeline Delays</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../library/spi_engine/tutorial.html">Tutorial - PulSAR ADC</a></li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../../library/index.html">Libraries</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_dmac/index.html">High-Speed DMA Controller</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../../library/spi_engine/index.html">SPI Engine</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/spi_engine_execution.html">Execution Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/axi_spi_engine.html">AXI Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/spi_engine_offload.html">Offload Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/spi_engine_interconnect.html">Interconnect Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/control-interface.html">Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/offload-control-interface.html">Offload Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/spi-bus-interface.html">SPI Bus Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/instruction-format.html">Instruction Set Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/pipeline-delays.html">Pipeline Delays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/tutorial.html">Tutorial - PulSAR ADC</a></li>
 </ul>
 </li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Projects</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../ad4134_fmc/index.html">AD4134-FMC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ad469x_fmc/index.html">AD469X-FMC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ad5766_sdz/index.html">AD5766-SDZ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ad7134_fmc/index.html">AD7134-FMC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ad719x_asdz/index.html">AD719X-ASDZ</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">AD738X-FMC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ad7616_sdz/index.html">AD7616-SDZ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ad9081_fmca_ebz/index.html">AD9081-FMCA-EBZ/AD9082-FMCA-EBZ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ad9434_fmc/index.html">AD9434-FMC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ad9783_ebz/index.html">AD9783-EBZ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cn0540/index.html">CN0540</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cn0561/index.html">CN0561</a></li>
+</li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../ad4134_fmc/index.html">AD4134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad4630_fmc/index.html">AD4630-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad469x_fmc/index.html">AD469X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad5766_sdz/index.html">AD5766-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad7134_fmc/index.html">AD7134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad719x_asdz/index.html">AD719X-ASDZ</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">AD738X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad7616_sdz/index.html">AD7616-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9081_fmca_ebz/index.html">AD9081-FMCA-EBZ/AD9082-FMCA-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9434_fmc/index.html">AD9434-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9783_ebz/index.html">AD9783-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cn0363/index.html">CN0363</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cn0540/index.html">CN0540</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cn0561/index.html">CN0561</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pulsar_adc/index.html">PULSAR-ADC</a></li>
 </ul>
+</li>
+</ul>
+</body>
+</html>
 
 </div>
-</div>
-
-      </div>
-      
-    </div>
-  </aside>
-  <div class="main">
-    <div class="content">
-      <div class="article-container">
-        <a href="#" class="back-to-top muted-link">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
-          </svg>
-          <span>Back to top</span>
-        </a>
-        <div class="content-icon-container">
-          
-<div class="theme-toggle-container theme-toggle-content">
-            <button class="theme-toggle">
-              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
-              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
-              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
-              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
-            </button>
-          </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
-            <div class="visually-hidden">Toggle table of contents sidebar</div>
-            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
-          </label>
         </div>
-        <article role="main">
-          <section id="ad738x-fmc-hdl-project">
-<span id="ad738x-fmc"></span><h1>AD738x_FMC HDL project<a class="headerlink" href="#ad738x-fmc-hdl-project" title="Permalink to this heading">#</a></h1>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body" role="main">
+            
+  <section id="ad738x-fmc-hdl-project">
+<span id="ad738x-fmc"></span><h1>AD738x_FMC HDL project<a class="headerlink" href="#ad738x-fmc-hdl-project" title="Link to this heading">#</a></h1>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
 <p>The <a class="reference external" href="https://www.analog.com/AD7380">AD7380</a>/ <a class="reference external" href="https://www.analog.com/AD7381">AD7381</a> are a 16-bit and 14-bit pin-compatible family
 of dual simultaneous sampling, high speed, low power, successive approximation
 register (SAR) analog-to-digital converters (ADCs) that operate from a 3.3 V
@@ -279,7 +208,7 @@ from -40°C to +125°C temperature range.</p>
 </dl>
 </section>
 <section id="supported-boards">
-<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading">#</a></h2>
+<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://www.analog.com/EVAL-AD7380FMCZ">EVAL-AD7380FMCZ</a></p></li>
 <li><p><a class="reference external" href="https://www.analog.com/EVAL-AD7381FMCZ">EVAL-AD7381FMCZ</a></p></li>
@@ -289,7 +218,7 @@ from -40°C to +125°C temperature range.</p>
 </ul>
 </section>
 <section id="supported-devices">
-<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading">#</a></h2>
+<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://www.analog.com/AD7380">AD7380</a></p></li>
 <li><p><a class="reference external" href="https://www.analog.com/AD7381">AD7381</a></p></li>
@@ -307,20 +236,20 @@ from -40°C to +125°C temperature range.</p>
 </ul>
 </section>
 <section id="supported-carriers">
-<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading">#</a></h2>
+<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html">ZedBoard</a> on FMC slot</p></li>
 </ul>
 </section>
 <section id="block-design">
-<h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading">#</a></h2>
+<h2>Block design<a class="headerlink" href="#block-design" title="Link to this heading">#</a></h2>
 <section id="block-diagram">
-<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h3>
+<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Link to this heading">#</a></h3>
 <p>The data path and clock domains are depicted in the below diagram:</p>
 <a class="reference internal image-reference" href="../../_images/ad738x_spi_engine_hdl.svg"><img alt="AD738X_FMC block diagram" class="align-center" src="../../_images/ad738x_spi_engine_hdl.svg" width="800" /></a>
 </section>
 <section id="jumper-setup">
-<h3>Jumper setup<a class="headerlink" href="#jumper-setup" title="Permalink to this heading">#</a></h3>
+<h3>Jumper setup<a class="headerlink" href="#jumper-setup" title="Link to this heading">#</a></h3>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -385,7 +314,7 @@ A1 buffer amplifier</p></td>
 </div>
 </section>
 <section id="cpu-memory-interconnects-addresses">
-<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading">#</a></h3>
+<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Link to this heading">#</a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture"><span class="std std-ref">HDL Architecture</span></a>).</p>
 <div class="table-wrapper docutils container">
@@ -413,7 +342,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="i2c-connections">
-<h3>I2C connections<a class="headerlink" href="#i2c-connections" title="Permalink to this heading">#</a></h3>
+<h3>I2C connections<a class="headerlink" href="#i2c-connections" title="Link to this heading">#</a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -449,7 +378,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="spi-connections">
-<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Permalink to this heading">#</a></h3>
+<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Link to this heading">#</a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -476,7 +405,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="interrupts">
-<h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading">#</a></h3>
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading">#</a></h3>
 <p>Below are the Programmable Logic interrupts used in this project.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -504,10 +433,10 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </section>
 </section>
 <section id="building-the-hdl-project">
-<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading">#</a></h2>
+<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Link to this heading">#</a></h2>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI does not distribute the bit/elf files of these projects so they
-must be built from the sources available <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main//">here</a>. To get
+must be built from the sources available <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">here</a>. To get
 the source you must
 <a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
 the HDL repository, and then build the project as follows:</p>
@@ -519,9 +448,9 @@ the HDL repository, and then build the project as follows:</p>
 <p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 </section>
 <section id="resources">
-<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading">#</a></h2>
+<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading">#</a></h2>
 <section id="hardware-related">
-<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading">#</a></h3>
+<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Product datasheets:</p>
 <ul>
@@ -544,7 +473,7 @@ the HDL repository, and then build the project as follows:</p>
 </ul>
 </section>
 <section id="hdl-related">
-<h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading">#</a></h3>
+<h3>HDL related<a class="headerlink" href="#hdl-related" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/ad738x_fmc">AD738x_FMC HDL project source code</a></p></li>
 </ul>
@@ -622,7 +551,7 @@ the HDL repository, and then build the project as follows:</p>
 </ul>
 </section>
 <section id="software-related">
-<h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading">#</a></h3>
+<h3>Software related<a class="headerlink" href="#software-related" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/analogdevicesinc/no-os/blob/main/projects/ad738x_fmcz">AD738X_FMC No-OS project</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad738x">AD738X_FMC - No-OS Driver [Wiki]</a></p></li>
@@ -631,13 +560,13 @@ the HDL repository, and then build the project as follows:</p>
 </section>
 </section>
 <section id="more-information">
-<h2>More information<a class="headerlink" href="#more-information" title="Permalink to this heading">#</a></h2>
+<h2>More information<a class="headerlink" href="#more-information" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../user_guide/index.html#user-guide"><span class="std std-ref">ADI HDL User guide</span></a></p></li>
 </ul>
 </section>
 <section id="support">
-<h2>Support<a class="headerlink" href="#support" title="Permalink to this heading">#</a></h2>
+<h2>Support<a class="headerlink" href="#support" title="Link to this heading">#</a></h2>
 <p><a class="reference external" href="https://www.analog.com/en/index.html">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
 using the <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">reference design</a> with <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> components via the
 <a class="reference external" href="https://ez.analog.com/fpga">EngineerZone</a> FPGA reference designs forum.</p>
@@ -658,100 +587,37 @@ are, the lower the chances to receive support from <a class="reference external"
         }
         window.onload = init;
     </script>
-        </article>
-      </div>
-      <footer>
-        
-        <div class="related-pages">
-          <a class="next-page" href="../ad7616_sdz/index.html">
-              <div class="page-info">
-                <div class="context">
-                  <span>Next</span>
-                </div>
-                <div class="title">AD7616-SDZ HDL project</div>
-              </div>
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-            </a>
-          <a class="prev-page" href="../ad719x_asdz/index.html">
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-              <div class="page-info">
-                <div class="context">
-                  <span>Previous</span>
-                </div>
-                
-                <div class="title">AD719X-ASDZ HDL project</div>
-                
-              </div>
-            </a>
-        </div>
-        <div class="bottom-of-page">
-          <div class="left-details">
-            <div class="copyright">
-                Copyright &#169; 2023, Analog Devices Inc
-            </div>
-            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
-            
-            <a href="https://github.com/pradyunsg/furo">Furo</a>
-            
-          </div>
-          <div class="right-details">
-            
-          </div>
-        </div>
-        
-      </footer>
-    </div>
-    <aside class="toc-drawer">
-      
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">AD738x_FMC HDL project</a><ul>
-<li><a class="reference internal" href="#overview">Overview</a></li>
-<li><a class="reference internal" href="#supported-boards">Supported boards</a></li>
-<li><a class="reference internal" href="#supported-devices">Supported devices</a></li>
-<li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
-<li><a class="reference internal" href="#block-design">Block design</a><ul>
-<li><a class="reference internal" href="#block-diagram">Block diagram</a></li>
-<li><a class="reference internal" href="#jumper-setup">Jumper setup</a></li>
-<li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
-<li><a class="reference internal" href="#i2c-connections">I2C connections</a></li>
-<li><a class="reference internal" href="#spi-connections">SPI connections</a></li>
-<li><a class="reference internal" href="#interrupts">Interrupts</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#building-the-hdl-project">Building the HDL project</a></li>
-<li><a class="reference internal" href="#resources">Resources</a><ul>
-<li><a class="reference internal" href="#hardware-related">Hardware related</a></li>
-<li><a class="reference internal" href="#hdl-related">HDL related</a></li>
-<li><a class="reference internal" href="#software-related">Software related</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#more-information">More information</a></li>
-<li><a class="reference internal" href="#support">Support</a></li>
-</ul>
-</li>
-</ul>
 
           </div>
+              <div class="related">
+                &nbsp;
+    <a href="../ad719x_asdz/index.html" title="Previous document" class="prev">AD719X-ASDZ HDL project</a>
+    <a href="../ad7616_sdz/index.html" title="Next document" class="next">AD7616-SDZ HDL project</a>
+              </div>
+          
         </div>
       </div>
-      
-      
-    </aside>
   </div>
-</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=4c0d86c8"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
-    <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
-    <script src="https://wavedrom.com/skins/default.js"></script>
-    <script src="https://wavedrom.com/wavedrom.min.js"></script>
-    </body>
+
+  <div id="vertical-border"></div>
+
+  <label id="cancel-area-showsidebar" for="input-showsidebar"></label>
+  <label id="cancel-area-showonthispage" for="input-showonthispage"></label>
+
+  
+  <form action="" method="get" class="search-area">
+    <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+    <button value="search"></button>
+    <span id="search-progress"></span>
+  </form>
+  
+    <footer>
+      &#169;2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
 </html>

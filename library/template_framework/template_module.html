@@ -1,163 +1,90 @@
-<!doctype html>
-<html class="no-js" lang="en" data-content_root="">
-  <head><meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
+<!DOCTYPE html>
 
-    <link rel="shortcut icon" href="../../_static/icon.svg"/><!-- Generated with Sphinx 7.1.2 and Furo 2023.09.10 -->
-        <title>Template Module - HDL, Analog Devices v0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=36a5483c" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e974aa45" />
-    
-    
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-
-<style>
-  body {
-    --color-code-background: #f8f8f8;
-  --color-code-foreground: black;
+    <title>Template Module &#8212; HDL  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=84b5089d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="https://wavedrom.com/skins/default.js"></script>
+    <script src="https://wavedrom.com/wavedrom.min.js"></script>
+    <script defer="" src="../../_static/app.umd.js?v=37ac5827"></script>
+    <link rel="icon" href="../../_static/icon.svg"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
   
-  }
-  @media not print {
-    body[data-theme="dark"] {
-      --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
+    <meta name="robots" content="noindex">
   
-    }
-    @media (prefers-color-scheme: dark) {
-      body:not([data-theme="light"]) {
-        --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
-  
-      }
-    }
-  }
-</style></head>
-  <body>
-    
-    <script>
-      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
-    </script>
-    
 
-<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-  <symbol id="svg-toc" viewBox="0 0 24 24">
-    <title>Contents</title>
-    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
-      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
-    </svg>
-  </symbol>
-  <symbol id="svg-menu" viewBox="0 0 24 24">
-    <title>Menu</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
-      <line x1="3" y1="12" x2="21" y2="12"></line>
-      <line x1="3" y1="6" x2="21" y2="6"></line>
-      <line x1="3" y1="18" x2="21" y2="18"></line>
-    </svg>
-  </symbol>
-  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
-    <title>Expand</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
-      <polyline points="9 18 15 12 9 6"></polyline>
-    </svg>
-  </symbol>
-  <symbol id="svg-sun" viewBox="0 0 24 24">
-    <title>Light mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
-      <circle cx="12" cy="12" r="5"></circle>
-      <line x1="12" y1="1" x2="12" y2="3"></line>
-      <line x1="12" y1="21" x2="12" y2="23"></line>
-      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-      <line x1="1" y1="12" x2="3" y2="12"></line>
-      <line x1="21" y1="12" x2="23" y2="12"></line>
-      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-    </svg>
-  </symbol>
-  <symbol id="svg-moon" viewBox="0 0 24 24">
-    <title>Dark mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
-    </svg>
-  </symbol>
-  <symbol id="svg-sun-half" viewBox="0 0 24 24">
-    <title>Auto light/dark mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
-      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M13 12h5" />
-      <path d="M13 15h4" />
-      <path d="M13 18h1" />
-      <path d="M13 9h4" />
-      <path d="M13 6h1" />
-    </svg>
-  </symbol>
-</svg>
-
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
-<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
-<label class="overlay sidebar-overlay" for="__navigation">
-  <div class="visually-hidden">Hide navigation sidebar</div>
-</label>
-<label class="overlay toc-overlay" for="__toc">
-  <div class="visually-hidden">Hide table of contents sidebar</div>
-</label>
-
-
-
-<div class="page">
-  <header class="mobile-header">
-    <div class="header-left">
-      <label class="nav-overlay-icon" for="__navigation">
-        <div class="visually-hidden">Toggle site navigation sidebar</div>
-        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
-      </label>
-    </div>
-    <div class="header-center">
-      <a href="../../index.html"><div class="brand">HDL, Analog Devices v0.1 documentation</div></a>
-    </div>
-    <div class="header-right">
-      <div class="theme-toggle-container theme-toggle-header">
-        <button class="theme-toggle">
-          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
-          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
-          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
-          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
-        </button>
+  </head><body>
+  <input type="checkbox" id="input-showsidebar">
+  <input type="checkbox" id="input-showonthispage">
+  <header>
+    <div class="header">
+      <div id="left">
+        <label id="show-sidebar" for="input-showsidebar" title="Show/hide index"></label>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
-        <div class="visually-hidden">Toggle table of contents sidebar</div>
-        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
-      </label>
+      <div id="right">
+        <a id="logo" href="../../index.html"></a>
+        <span>
+          <label id="show-onthispage" for="input-showonthispage" title="Show/hide contents"></label>
+        </span>
+      </div>
+    </div>
+    <div class="subdomain-tree">
+      <root>
+  <a href="../../../documentation/index.html">System Level</a>
+  <a href="../../index.html" class="current">HDL</a>
+  <a href="../../../no-os/index.html">no-OS</a>
+  <a href="../../../pyadi-iio/index.html">pyadi-iio</a>
+</root>
+
     </div>
   </header>
-  <aside class="sidebar-drawer">
-    <div class="sidebar-container">
-      
-      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="onthispage">On this page</div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">Template Module</a><ul>
+<li><a class="reference internal" href="#files">Files</a></li>
+<li><a class="reference internal" href="#configuration-parameters">Configuration Parameters</a></li>
+<li><a class="reference internal" href="#signal-and-interface-pins">Signal and Interface Pins</a></li>
+<li><a class="reference internal" href="#theory-of-operation">Theory of Operation</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
   
-  
-  <span class="sidebar-brand-text">HDL, Analog Devices v0.1 documentation</span>
-  
-</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
-  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
-  <input type="hidden" name="check_keywords" value="yes">
-  <input type="hidden" name="area" value="default">
-</form>
-<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <p class="caption" role="heading"><span class="caption-text">User guide</span></p>
-<ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../user_guide/index.html">User Guide</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of User Guide</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="subdomain-tree">
+  <root>
+  <a href="../../../documentation/index.html">System Level</a>
+  <a href="../../index.html" class="current">HDL</a>
+  <a href="../../../no-os/index.html">no-OS</a>
+  <a href="../../../pyadi-iio/index.html">pyadi-iio</a>
+</root>
+
+</div>
+<div class="sidebar-tree">
+  <html>
+  <body><ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/index.html">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/introduction.html">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/git_repository.html">Git repository</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/releases.html">Releases</a></li>
@@ -171,84 +98,66 @@
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/third_party.html">Third party forks</a></li>
 </ul>
 </li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Libraries</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../axi_dmac/index.html">High-Speed DMA Controller</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../spi_engine/index.html">SPI Engine</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of SPI Engine</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../spi_engine/spi_engine_execution.html">Execution Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../spi_engine/axi_spi_engine.html">AXI Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../spi_engine/spi_engine_offload.html">Offload Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../spi_engine/spi_engine_interconnect.html">Interconnect Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../spi_engine/control-interface.html">Control Interface</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../spi_engine/offload-control-interface.html">Offload Control Interface</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../spi_engine/spi-bus-interface.html">SPI Bus Interface</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../spi_engine/instruction-format.html">Instruction Set Specification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../spi_engine/pipeline-delays.html">Pipeline Delays</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../spi_engine/tutorial.html">Tutorial - PulSAR ADC</a></li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../index.html">Libraries</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../axi_dmac/index.html">High-Speed DMA Controller</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../spi_engine/index.html">SPI Engine</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/spi_engine_execution.html">Execution Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/axi_spi_engine.html">AXI Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/spi_engine_offload.html">Offload Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/spi_engine_interconnect.html">Interconnect Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/control-interface.html">Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/offload-control-interface.html">Offload Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/spi-bus-interface.html">SPI Bus Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/instruction-format.html">Instruction Set Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/pipeline-delays.html">Pipeline Delays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/tutorial.html">Tutorial - PulSAR ADC</a></li>
 </ul>
 </li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Projects</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../projects/ad4134_fmc/index.html">AD4134-FMC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../projects/ad469x_fmc/index.html">AD469X-FMC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../projects/ad7134_fmc/index.html">AD7134-FMC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../projects/ad719x_asdz/index.html">AD719X-ASDZ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../projects/ad738x_fmc/index.html">AD738X-FMC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../projects/ad7616_sdz/index.html">AD7616-SDZ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../projects/ad9081_fmca_ebz/index.html">AD9081-FMCA-EBZ/AD9082-FMCA-EBZ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../projects/ad9434_fmc/index.html">AD9434-FMC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../projects/adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../projects/cn0540/index.html">CN0540</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../projects/cn0561/index.html">CN0561</a></li>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../../projects/index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4134_fmc/index.html">AD4134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4630_fmc/index.html">AD4630-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad469x_fmc/index.html">AD469X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7134_fmc/index.html">AD7134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad719x_asdz/index.html">AD719X-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad738x_fmc/index.html">AD738X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7616_sdz/index.html">AD7616-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9081_fmca_ebz/index.html">AD9081-FMCA-EBZ/AD9082-FMCA-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9434_fmc/index.html">AD9434-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0363/index.html">CN0363</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0540/index.html">CN0540</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0561/index.html">CN0561</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/pulsar_adc/index.html">PULSAR-ADC</a></li>
 </ul>
+</li>
+</ul>
+</body>
+</html>
 
 </div>
-</div>
-
-      </div>
-      
-    </div>
-  </aside>
-  <div class="main">
-    <div class="content">
-      <div class="article-container">
-        <a href="#" class="back-to-top muted-link">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
-          </svg>
-          <span>Back to top</span>
-        </a>
-        <div class="content-icon-container">
-          
-<div class="theme-toggle-container theme-toggle-content">
-            <button class="theme-toggle">
-              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
-              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
-              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
-              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
-            </button>
-          </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
-            <div class="visually-hidden">Toggle table of contents sidebar</div>
-            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
-          </label>
         </div>
-        <article role="main">
-          <section id="template-module">
-<span id="template-framework-module"></span><h1>Template Module<a class="headerlink" href="#template-module" title="Permalink to this heading">#</a></h1>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body" role="main">
+            
+  <section id="template-module">
+<span id="template-framework-module"></span><h1>Template Module<a class="headerlink" href="#template-module" title="Link to this heading">#</a></h1>
 <div><section id="hdl-component-diagram">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 270.0 222" width="270.0" height="222"><style>
-				a {
-					text-decoration: none;
-				}
-				</style><defs><linearGradient id="ip_background" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#c4e5ff"/><stop offset="100%" stop-color="#ebf6ff"/></linearGradient></defs><rect x="36" y="36" width="198.0" height="132" rx="18" fill="url(#ip_background)"/><a href="#bus-interface-ctrl"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="54" y="72">ctrl</text></a><g transform="translate(36,64.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="54" y="96">clk</text></a><g transform="translate(36,88.0) scale(-1,1)"><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="54" y="120">resetn</text></a><g transform="translate(36,112.0) scale(-1,1)"><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="54" y="144">echo_sclk</text></a><g transform="translate(36,136.0) scale(-1,1)"><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#bus-interface-spi"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="216.0" y="72">spi</text></a><g transform="translate(234.0,64.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="216.0" y="96">active</text></a><g transform="translate(234.0,88.0) scale(1,1)"><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><rect x="36" y="36" width="198.0" height="132" rx="18" fill="none" stroke="#0067b9" stroke-width="3"/><text style="font: 16px sans-serif" fill="#0067b9" text-anchor="middle" dominant-baseline="middle" x="135.0" y="188">spi_engine_execution</text></svg></section>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 234.0 186" width="234.0" height="186"><style>
+                a {
+                    text-decoration: none;
+                }
+                </style><defs><linearGradient id="ip_background" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#c4e5ff"/><stop offset="100%" stop-color="#ebf6ff"/></linearGradient></defs><rect x="18" y="18" width="198.0" height="132" rx="18" fill="url(#ip_background)"/><a href="#bus-interface-ctrl"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="54">ctrl</text></a><g transform="translate(18,46.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="78">clk</text></a><g transform="translate(18,70.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="102">resetn</text></a><g transform="translate(18,94.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="126">echo_sclk</text></a><g transform="translate(18,118.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#bus-interface-spi"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="198.0" y="54">spi</text></a><g transform="translate(216.0,46.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="198.0" y="78">active</text></a><g transform="translate(216.0,70.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><rect x="18" y="18" width="198.0" height="132" rx="18" fill="none" stroke="#0067b9" stroke-width="3"/><text style="font: 16px sans-serif" fill="#0067b9" text-anchor="middle" dominant-baseline="middle" x="117.0" y="170">spi_engine_execution</text></svg></section>
 </div><p>The {module name} is responsible for {brief description}.</p>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading">#</a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Link to this heading">#</a></h2>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -272,14 +181,13 @@
 </div>
 </section>
 <section id="configuration-parameters">
-<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading">#</a></h2>
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading">#</a></h2>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Name</p></th>
 <th class="head"><p>Description</p></th>
-<th class="head"><p>Data Type</p></th>
 <th class="head"><p>Default Value</p></th>
 <th class="head"><p>Choices/Range</p></th>
 </tr>
@@ -290,15 +198,13 @@
 <p>Data width of the parallel SDI/SDO data interfaces.</p>
 </section>
 </td>
-<td class="type"><p>Long</p></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">8</span></code></td>
-<td><p>From 8 to 256.</p></td>
+<td class="range"><p>From 8 to 256.</p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">NUM_OF_SDI</span></code></td>
 <td class="description"><p>Number of MISO lines.</p></td>
-<td class="type"><p>Long</p></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
-<td><p>From 1 to 8.</p></td>
+<td class="range"><p>From 1 to 8.</p></td>
 </tr>
 </tbody>
 </table>
@@ -306,12 +212,11 @@
 </section>
 </div></section>
 <section id="signal-and-interface-pins">
-<h2>Signal and Interface Pins<a class="headerlink" href="#signal-and-interface-pins" title="Permalink to this heading">#</a></h2>
+<h2>Signal and Interface Pins<a class="headerlink" href="#signal-and-interface-pins" title="Link to this heading">#</a></h2>
 <div><section id="bus-interface-m_ctrl">
-<h3>m_ctrl<a class="headerlink" href="#bus-interface-m_ctrl" title="Permalink to this heading">#</a></h3>
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="4f81aab6c3f593abc152b26789a2741a5e2cbd43" name="4f81aab6c3f593abc152b26789a2741a5e2cbd43" type="checkbox"></input><label for="4f81aab6c3f593abc152b26789a2741a5e2cbd43"><p>Ports of m_ctrl bus.</p>
-<div class="icon"></div></label><div class="collapsible_content docutils container">
+<input class="collapsible_input" id="0112185e75f4ccbbfe8a6eda494b66a1728c4f61" name="0112185e75f4ccbbfe8a6eda494b66a1728c4f61" type="checkbox"></input><label for="0112185e75f4ccbbfe8a6eda494b66a1728c4f61"><div><p>m_ctrl</p>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -376,10 +281,9 @@
 </div>
 </section>
 <section id="bus-interface-s0_ctrl">
-<h3>s0_ctrl<a class="headerlink" href="#bus-interface-s0_ctrl" title="Permalink to this heading">#</a></h3>
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="c4ce348ea412d24d734db47f89ab02a36550fcfc" name="c4ce348ea412d24d734db47f89ab02a36550fcfc" type="checkbox"></input><label for="c4ce348ea412d24d734db47f89ab02a36550fcfc"><p>Ports of s0_ctrl bus.</p>
-<div class="icon"></div></label><div class="collapsible_content docutils container">
+<input class="collapsible_input" id="0c48e9f6cc4351b87211953c2bad4621e47d0499" name="0c48e9f6cc4351b87211953c2bad4621e47d0499" type="checkbox"></input><label for="0c48e9f6cc4351b87211953c2bad4621e47d0499"><div><p>s0_ctrl</p>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -444,10 +348,9 @@
 </div>
 </section>
 <section id="bus-interface-s1_ctrl">
-<h3>s1_ctrl<a class="headerlink" href="#bus-interface-s1_ctrl" title="Permalink to this heading">#</a></h3>
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="96941df42b30a569b55bd1a4a658c4d9809b8e87" name="96941df42b30a569b55bd1a4a658c4d9809b8e87" type="checkbox"></input><label for="96941df42b30a569b55bd1a4a658c4d9809b8e87"><p>Ports of s1_ctrl bus.</p>
-<div class="icon"></div></label><div class="collapsible_content docutils container">
+<input class="collapsible_input" id="0cfb882c1e7945908f471024eb2eaa8e67585b5d" name="0cfb882c1e7945908f471024eb2eaa8e67585b5d" type="checkbox"></input><label for="0cfb882c1e7945908f471024eb2eaa8e67585b5d"><div><p>s1_ctrl</p>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -512,9 +415,8 @@
 </div>
 </section>
 <section id="ports">
-<h3>Ports<a class="headerlink" href="#ports" title="Permalink to this heading">#</a></h3>
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="1130f9d1c1635dd7229a2efad01389094ea6d999" name="1130f9d1c1635dd7229a2efad01389094ea6d999" type="checkbox"></input><label for="1130f9d1c1635dd7229a2efad01389094ea6d999"><p>Ports table.</p>
+<input class="collapsible_input" id="16c2eb4dbbcdafb15c712951d6aee1bf0a101658" name="16c2eb4dbbcdafb15c712951d6aee1bf0a101658" type="checkbox"></input><label for="16c2eb4dbbcdafb15c712951d6aee1bf0a101658"><p>Ports</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -550,7 +452,7 @@
 </section>
 </div></section>
 <section id="theory-of-operation">
-<h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Permalink to this heading">#</a></h2>
+<h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Link to this heading">#</a></h2>
 <p>The {module name}  module implements {brief description}.</p>
 <img alt="../../_images/spi_engine.svg" src="../../_images/spi_engine.svg" /></section>
 </section>
@@ -561,64 +463,37 @@
         }
         window.onload = init;
     </script>
-        </article>
-      </div>
-      <footer>
-        
-        <div class="related-pages">
-          
-          
-        </div>
-        <div class="bottom-of-page">
-          <div class="left-details">
-            <div class="copyright">
-                Copyright &#169; 2023, Analog Devices Inc
-            </div>
-            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
-            
-            <a href="https://github.com/pradyunsg/furo">Furo</a>
-            
-          </div>
-          <div class="right-details">
-            
-          </div>
-        </div>
-        
-      </footer>
-    </div>
-    <aside class="toc-drawer">
-      
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Template Module</a><ul>
-<li><a class="reference internal" href="#files">Files</a></li>
-<li><a class="reference internal" href="#configuration-parameters">Configuration Parameters</a></li>
-<li><a class="reference internal" href="#signal-and-interface-pins">Signal and Interface Pins</a></li>
-<li><a class="reference internal" href="#theory-of-operation">Theory of Operation</a></li>
-</ul>
-</li>
-</ul>
 
           </div>
+              <div class="related">
+                &nbsp;
+    <div></div>
+    <div></div>
+              </div>
+          
         </div>
       </div>
-      
-      
-    </aside>
   </div>
-</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=4c0d86c8"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
-    <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
-    <script src="https://wavedrom.com/skins/default.js"></script>
-    <script src="https://wavedrom.com/wavedrom.min.js"></script>
-    </body>
+
+  <div id="vertical-border"></div>
+
+  <label id="cancel-area-showsidebar" for="input-showsidebar"></label>
+  <label id="cancel-area-showonthispage" for="input-showonthispage"></label>
+
+  
+  <form action="" method="get" class="search-area">
+    <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+    <button value="search"></button>
+    <span id="search-progress"></span>
+  </form>
+  
+    <footer>
+      &#169;2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
 </html>
