@@ -480,6 +480,9 @@ module axi_dmac #(
     .ctrl_pause(ctrl_pause),
     .ctrl_hwdesc(ctrl_hwdesc),
 
+    .ctrl_cache(m_dest_axi_awcache),
+    .ctrl_prot(m_dest_axi_awprot),
+
      // Request interface
     .request_valid(up_dma_req_valid),
     .request_ready(up_dma_req_ready),
@@ -576,8 +579,8 @@ module axi_dmac #(
     .m_axi_awlen(m_dest_axi_awlen),
     .m_axi_awsize(m_dest_axi_awsize),
     .m_axi_awburst(m_dest_axi_awburst),
-    .m_axi_awprot(m_dest_axi_awprot),
-    .m_axi_awcache(m_dest_axi_awcache),
+    .m_axi_awprot(),
+    .m_axi_awcache(),
     .m_axi_awvalid(m_dest_axi_awvalid),
     .m_axi_awready(m_dest_axi_awready),
 
