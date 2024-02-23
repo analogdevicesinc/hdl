@@ -81,6 +81,70 @@ ENDFIELD
 ############################################################################################
 
 REG
+0x04
+OFFLOAD_MEM_ADDR_WIDTH
+ENDREG
+
+FIELD
+[15:8] 0x04
+SDO_MEM_ADDRESS_WIDTH
+RO
+Address width for the data (SDO) memory on the Offload Module.
+The size of the memory is thus ``2**SDO_MEM_ADDRESS_WIDTH``.
+ENDFIELD
+
+FIELD
+[7:0] 0x04
+CMD_MEM_ADDRESS_WIDTH
+RO
+Address width for the command memory on the Offload Module.
+The size of the command memory is thus ``2**CMD_MEM_ADDRESS_WIDTH``.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x05
+FIFO_ADDR_WIDTH
+ENDREG
+
+FIELD
+[31:24] 0x05
+SDI_FIFO_ADDRESS_WIDTH
+RO
+Address width for the SDI FIFO.
+The size of the SDI FIFO is thus ``2**SDI_FIFO_ADDRESS_WIDTH``.
+ENDFIELD
+
+FIELD
+[23:16] 0x05
+SDO_FIFO_ADDRESS_WIDTH
+RO
+Address width for the SDO FIFO.
+The size of the SDO FIFO is thus ``2**SDO_FIFO_ADDRESS_WIDTH``.
+ENDFIELD
+
+FIELD
+[15:8] 0x04
+SYNC_FIFO_ADDRESS_WIDTH
+RO
+Address width for the synchronization FIFO.
+The size of the synchronization FIFO is thus ``2**SYNC_FIFO_ADDRESS_WIDTH``.
+ENDFIELD
+
+FIELD
+[7:0] 0x04
+CMD_FIFO_ADDRESS_WIDTH
+RO
+Address width for the command FIFO.
+The size of the command FIFO is thus ``2**CMD_FIFO_ADDRESS_WIDTH``.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
 0x10
 ENABLE
 ENDREG

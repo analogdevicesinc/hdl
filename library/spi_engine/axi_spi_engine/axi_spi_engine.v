@@ -334,12 +334,20 @@ module axi_spi_engine #(
   end
   endgenerate
 
+  reg [7:0] offload_sdo_mem_address_width = OFFLOAD0_SDO_MEM_ADDRESS_WIDTH;
+  reg [7:0] offload_cmd_mem_address_width = OFFLOAD0_CMD_MEM_ADDRESS_WIDTH;
+  reg [7:0] sdi_fifo_address_width = SDI_FIFO_ADDRESS_WIDTH;
+  reg [7:0] sdo_fifo_address_width = SDO_FIFO_ADDRESS_WIDTH;
+  reg [7:0] sync_fifo_address_width = SYNC_FIFO_ADDRESS_WIDTH;
+  reg [7:0] cmd_fifo_address_width = CMD_FIFO_ADDRESS_WIDTH;
   always @(posedge clk) begin
     case (up_raddr_s)
       8'h00: up_rdata_ff <= PCORE_VERSION;
       8'h01: up_rdata_ff <= ID;
       8'h02: up_rdata_ff <= up_scratch;
       8'h03: up_rdata_ff <= {8'b0, NUM_OF_SDI, DATA_WIDTH};
+      8'h04: up_rdata_ff <= {16'b0, offload_sdo_mem_address_width, offload_cmd_mem_address_width};
+      8'h05: up_rdata_ff <= {sdi_fifo_address_width, sdo_fifo_address_width, sync_fifo_address_width, cmd_fifo_address_width};
       8'h10: up_rdata_ff <= up_sw_reset;
       8'h20: up_rdata_ff <= up_irq_mask;
       8'h21: up_rdata_ff <= up_irq_pending;
