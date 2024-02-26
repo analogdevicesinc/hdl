@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>SPI Engine Tutorial - PulSAR-ADC &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=84b5089d" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
-    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=8dde5eb3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e974aa45" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://wavedrom.com/skins/default.js"></script>
     <script src="https://wavedrom.com/wavedrom.min.js"></script>
     <script defer="" src="../../_static/app.umd.js?v=37ac5827"></script>
@@ -162,13 +162,13 @@
           <div class="body" role="main">
             
   <section id="spi-engine-tutorial-pulsar-adc">
-<span id="spi-engine-tutorial"></span><h1>SPI Engine Tutorial - PulSAR-ADC<a class="headerlink" href="#spi-engine-tutorial-pulsar-adc" title="Link to this heading">#</a></h1>
+<span id="spi-engine-tutorial"></span><h1>SPI Engine Tutorial - PulSAR-ADC<a class="headerlink" href="#spi-engine-tutorial-pulsar-adc" title="Permalink to this heading">#</a></h1>
 <p>The goal of this tutorial is to present the process of adding
 <a class="reference internal" href="index.html#spi-engine"><span class="std std-ref">SPI Engine</span></a> support for an ADI precision converter or family of converters
 using a few simple steps.
 The target carrier is the Digilent Cora-z7s board using a PMOD connector.</p>
 <section id="evaluating-the-target-device">
-<h2>Evaluating the target device<a class="headerlink" href="#evaluating-the-target-device" title="Link to this heading">#</a></h2>
+<h2>Evaluating the target device<a class="headerlink" href="#evaluating-the-target-device" title="Permalink to this heading">#</a></h2>
 <p>The aim of this project is to provide support for a family of ADCs which come in
 the form of
 <a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods">pulsar-adc-pmods</a>.
@@ -327,7 +327,7 @@ time (T_ACQ 250ns). The other devices will work with the same HDL by just using
 different “downgraded” configurations.</p>
 </section>
 <section id="spi-engine-hierarchy-instantiation">
-<h2>SPI Engine hierarchy instantiation<a class="headerlink" href="#spi-engine-hierarchy-instantiation" title="Link to this heading">#</a></h2>
+<h2>SPI Engine hierarchy instantiation<a class="headerlink" href="#spi-engine-hierarchy-instantiation" title="Permalink to this heading">#</a></h2>
 <p>The SPI Engine can be implemented in two ways, either by placing and connecting
 each IP individually or by using the function provided by the
 <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/scripts/spi_engine.tcl">library/spi_engine/scripts/spi_engine.tcl</a> script.</p>
@@ -368,7 +368,7 @@ clock cycle. Needed for designs with high SCLK rate (&gt;50MHz).</p>
 </div>
 <img alt="../../_images/pulsar_hdl_1.svg" class="align-center" src="../../_images/pulsar_hdl_1.svg" /></section>
 <section id="spi-engine-reference-clock">
-<h2>SPI Engine reference clock<a class="headerlink" href="#spi-engine-reference-clock" title="Link to this heading">#</a></h2>
+<h2>SPI Engine reference clock<a class="headerlink" href="#spi-engine-reference-clock" title="Permalink to this heading">#</a></h2>
 <p>There are 3 categories of devices depending on the SPI interface clock (SCLK):
 80 MHz, 50MHz (one device) and 40MHz. SCLK will be derived from the spi_clk
 reference signal using an internal prescaler with this formula:</p>
@@ -395,7 +395,7 @@ timing. This IP can also be configured from software to output 100MHz.</p>
 </div>
 </section>
 <section id="ad7984-timing-diagram">
-<h2>AD7984 Timing diagram<a class="headerlink" href="#ad7984-timing-diagram" title="Link to this heading">#</a></h2>
+<h2>AD7984 Timing diagram<a class="headerlink" href="#ad7984-timing-diagram" title="Permalink to this heading">#</a></h2>
 <p>The operation mode that will be implemented using the SPI Engine in offload mode
 is the <span class="math notranslate nohighlight">\(\overline{CS}\)</span> Mode, 3-Wire with Busy Indicator Serial Interface Timing (SDI High),
 as shown in <a class="reference external" href="https://www.analog.com/media/en/technical-documentation/data-sheets//AD7984.pdf#[{&quot;num&quot;%3A51%2C&quot;gen&quot;%3A0}%2C{&quot;name&quot;%3A&quot;XYZ&quot;}%2C52%2C713%2C0]">AD7984 datasheet</a>,
@@ -409,7 +409,7 @@ page 18, figure 30.</p>
 </pre></div>
 </div>
 <section id="sample-rate-control">
-<h3>Sample rate control<a class="headerlink" href="#sample-rate-control" title="Link to this heading">#</a></h3>
+<h3>Sample rate control<a class="headerlink" href="#sample-rate-control" title="Permalink to this heading">#</a></h3>
 <p>The T_CYC parameter is the what sets the maximum sample rate (1/750 =&gt; 1333
 KSPS). To achieve precise control over the sample rate we will use a PWM
 generator (AXI PWM GEN) using the spi_clk as reference. The spi_clock is used to
@@ -436,7 +436,7 @@ PWM-trigger signal.</p>
 </section>
 </section>
 <section id="dma-setup">
-<h2>DMA setup<a class="headerlink" href="#dma-setup" title="Link to this heading">#</a></h2>
+<h2>DMA setup<a class="headerlink" href="#dma-setup" title="Permalink to this heading">#</a></h2>
 <p>DMA destination bus (connection to Zynq – DDR memory) shall always be 64 bit
 wide AXI4 MM and source bus shall be data_width * num_sdi = 32 bit, AXI4 Stream.</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">ad_ip_instance</span><span class="w"> </span>axi_dmac<span class="w"> </span>axi_pulsar_adc_dma
@@ -459,7 +459,7 @@ clock</p>
 </div>
 </section>
 <section id="system-top">
-<h2>System Top<a class="headerlink" href="#system-top" title="Link to this heading">#</a></h2>
+<h2>System Top<a class="headerlink" href="#system-top" title="Permalink to this heading">#</a></h2>
 <p>This is a layer on top of the system_wrapper generated by Vivado used to
 instantiate IO buffers, I/ODDRs or to create some custom connections which would
 be harder to do in the block design. It also allows for more consistency across
@@ -467,7 +467,7 @@ projects. In this particular case we use it to place an IO buffer for the ADC
 power down signal (pulsar_adc_spi_pd).</p>
 </section>
 <section id="system-constraints">
-<h2>System Constraints<a class="headerlink" href="#system-constraints" title="Link to this heading">#</a></h2>
+<h2>System Constraints<a class="headerlink" href="#system-constraints" title="Permalink to this heading">#</a></h2>
 <p>The system_constr.xdc file inside the carrier folder
 (/coraz7s/system_constr.xdc) is used for defining the physical FPGA pins used by
 this particular project (in this case the AD7984 ADC), excluding the “common”
@@ -486,11 +486,11 @@ the SPI Engine.</p>
 </div>
 </section>
 <section id="testbench">
-<h2>Testbench<a class="headerlink" href="#testbench" title="Link to this heading">#</a></h2>
+<h2>Testbench<a class="headerlink" href="#testbench" title="Permalink to this heading">#</a></h2>
 <p>To check the overall performance of the design and also to expose any major
 bugs, the system can be tested using a testbench from <a class="reference external" href="https://github.com/analogdevicesinc/testbenches">ADI Testbenches repository</a>.</p>
 <p>The testbench framework is designed to use the same bd.tcl as the actual project
-<a class="reference external" href="https://github.com/analogdevicesinc/testbenches/blob/main/pulsar_adc_pmdz/system_bd.tcl#L50">pulsar_adc_pmdz/system_bd.tcl#L50</a></p>
+<a class="reference external" href="https://github.com/analogdevicesinc/testbenches/blob/main/main:pulsar_adc_pmdz/system_bd.tcl#L50">main:pulsar_adc_pmdz/system_bd.tcl#L50</a></p>
 <p>The setup assumes the testbenches repo is cloned inside the hdl repo. To build
 the testbench project simply run <code class="code docutils literal notranslate"><span class="pre">make</span> <span class="pre">cfg1</span></code> from the
 <em>hdl/testbenches/pulsar_adc_pmdz/</em> folder. Besides exposing possible bugs,
@@ -498,7 +498,7 @@ using the testbench will provide the user with an early way of evaluating the
 timing of the design. The testbench can also be a very useful tool for IP
 development.</p>
 <section id="evaluating-the-result">
-<h3>Evaluating the result<a class="headerlink" href="#evaluating-the-result" title="Link to this heading">#</a></h3>
+<h3>Evaluating the result<a class="headerlink" href="#evaluating-the-result" title="Permalink to this heading">#</a></h3>
 <p>Due to the limits of the SPI Engine cores, T_CYC needs to be increased slightly
 over the minimum value, to ensure that the design meets the T_CONV minimum. This
 will slightly lower the maximum sample rate of the design from 1.333 MSPS to
@@ -513,7 +513,7 @@ development, using software.</p>
 </section>
 </section>
 <section id="software-section">
-<h2>Software section<a class="headerlink" href="#software-section" title="Link to this heading">#</a></h2>
+<h2>Software section<a class="headerlink" href="#software-section" title="Permalink to this heading">#</a></h2>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>This section is still under development.</p>

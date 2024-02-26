@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>AD7616-SDZ HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=84b5089d" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
-    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=8dde5eb3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e974aa45" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://wavedrom.com/skins/default.js"></script>
     <script src="https://wavedrom.com/wavedrom.min.js"></script>
     <script defer="" src="../../_static/app.umd.js?v=37ac5827"></script>
@@ -178,9 +178,9 @@
           <div class="body" role="main">
             
   <section id="ad7616-sdz-hdl-project">
-<span id="ad7616-sdz"></span><h1>AD7616-SDZ HDL project<a class="headerlink" href="#ad7616-sdz-hdl-project" title="Link to this heading">#</a></h1>
+<span id="ad7616-sdz"></span><h1>AD7616-SDZ HDL project<a class="headerlink" href="#ad7616-sdz-hdl-project" title="Permalink to this heading">#</a></h1>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h2>
 <p>The <a class="reference external" href="https://www.analog.com/AD7616">AD7616</a> is a 16-bit, data acquisition system (DAS) that supports
 dual simultaneous sampling of 16 channels. It operates from a single 5 V supply
 and can accommodate ±10 V, ±5 V, and ±2.5 V true bipolar input signals while
@@ -197,32 +197,32 @@ a flexible digital filter, a 2.5 V reference and reference buffer, and
 high-speed serial and parallel interfaces.</p>
 </section>
 <section id="supported-boards">
-<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Link to this heading">#</a></h2>
+<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://www.analog.com/EVAL-AD7616">EVAL-AD7616</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
-<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Link to this heading">#</a></h2>
+<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://www.analog.com/AD7616">AD7616</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
-<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Link to this heading">#</a></h2>
+<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html">ZedBoard</a> on FMC slot</p></li>
 <li><p><a class="reference external" href="https://www.xilinx.com/ZC706">ZC706</a> on FMC LPC slot</p></li>
 </ul>
 </section>
 <section id="other-required-hardware">
-<h2>Other required hardware<a class="headerlink" href="#other-required-hardware" title="Link to this heading">#</a></h2>
+<h2>Other required hardware<a class="headerlink" href="#other-required-hardware" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://www.analog.com/EVAL-SDP-I-FMC">SDP-I-FMC</a></p></li>
 </ul>
 </section>
 <section id="block-design">
-<h2>Block design<a class="headerlink" href="#block-design" title="Link to this heading">#</a></h2>
+<h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading">#</a></h2>
 <p>The data path of the HDL design is simple as follows:</p>
 <ul class="simple">
 <li><p>the parallel interface is controlled by the axi_ad7616 IP core</p></li>
@@ -231,19 +231,19 @@ high-speed serial and parallel interfaces.</p>
 <li><p>all the control pins of the device are driven by GPIOs</p></li>
 </ul>
 <section id="block-diagram">
-<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Link to this heading">#</a></h3>
+<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h3>
 <p>The data path and clock domains are depicted in the below diagrams:</p>
 <section id="ad7616-sdz-serial-interface">
-<h4>AD7616_SDZ serial interface<a class="headerlink" href="#ad7616-sdz-serial-interface" title="Link to this heading">#</a></h4>
+<h4>AD7616_SDZ serial interface<a class="headerlink" href="#ad7616-sdz-serial-interface" title="Permalink to this heading">#</a></h4>
 <a class="reference internal image-reference" href="../../_images/ad7616_serial_hdl.svg"><img alt="AD7616_SDZ using the serial interface block diagram" class="align-center" src="../../_images/ad7616_serial_hdl.svg" width="800" /></a>
 </section>
 <section id="ad7616-sdz-parallel-interface">
-<h4>AD7616_SDZ parallel interface<a class="headerlink" href="#ad7616-sdz-parallel-interface" title="Link to this heading">#</a></h4>
+<h4>AD7616_SDZ parallel interface<a class="headerlink" href="#ad7616-sdz-parallel-interface" title="Permalink to this heading">#</a></h4>
 <a class="reference internal image-reference" href="../../_images/ad7616_parallel_hdl.svg"><img alt="AD7616_SDZ using the parallel interface block diagram" class="align-center" src="../../_images/ad7616_parallel_hdl.svg" width="800" /></a>
 </section>
 </section>
 <section id="configuration-modes">
-<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Link to this heading">#</a></h3>
+<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading">#</a></h3>
 <p>The SER_PAR_N configuration parameter defines the interface type (Serial or
 Parallel). By default it is set to 1. Depending on the required interface mode,
 some hardware modifications need to be done on the board and/or make command:</p>
@@ -266,7 +266,7 @@ variable has been changed.</p>
 </div>
 </section>
 <section id="jumper-setup">
-<h3>Jumper setup<a class="headerlink" href="#jumper-setup" title="Link to this heading">#</a></h3>
+<h3>Jumper setup<a class="headerlink" href="#jumper-setup" title="Permalink to this heading">#</a></h3>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -317,7 +317,7 @@ variable has been changed.</p>
 </div>
 </section>
 <section id="cpu-memory-interconnects-addresses">
-<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Link to this heading">#</a></h3>
+<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading">#</a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL(see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture"><span class="std std-ref">HDL Architecture</span></a>).</p>
 <div class="table-wrapper docutils container">
@@ -355,7 +355,7 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 </div>
 </section>
 <section id="i2c-connections">
-<h3>I2C connections<a class="headerlink" href="#i2c-connections" title="Link to this heading">#</a></h3>
+<h3>I2C connections<a class="headerlink" href="#i2c-connections" title="Permalink to this heading">#</a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -391,7 +391,7 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 </div>
 </section>
 <section id="spi-connections">
-<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Link to this heading">#</a></h3>
+<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Permalink to this heading">#</a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -418,7 +418,7 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 </div>
 </section>
 <section id="gpios">
-<h3>GPIOs<a class="headerlink" href="#gpios" title="Link to this heading">#</a></h3>
+<h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading">#</a></h3>
 <p>The Software GPIO number is calculated as follows:</p>
 <ul class="simple">
 <li><p>Zynq-7000: if PS7 is used, then offset is 54</p></li>
@@ -490,7 +490,7 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 </div>
 </section>
 <section id="interrupts">
-<h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading">#</a></h3>
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading">#</a></h3>
 <p>Below are the Programmable Logic interrupts used in this project.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -530,7 +530,7 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 </section>
 </section>
 <section id="building-the-hdl-project">
-<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Link to this heading">#</a></h2>
+<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading">#</a></h2>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI does not distribute the bit/elf files of these projects so they
 must be built from the sources available <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">here</a>. To get
@@ -550,7 +550,7 @@ by the configuration used:</p>
 <p><code class="docutils literal notranslate"><span class="pre">SERPARN0</span></code></p>
 <p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 <section id="connections-and-hardware-changes">
-<h3>Connections and hardware changes<a class="headerlink" href="#connections-and-hardware-changes" title="Link to this heading">#</a></h3>
+<h3>Connections and hardware changes<a class="headerlink" href="#connections-and-hardware-changes" title="Permalink to this heading">#</a></h3>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p><strong>The following hardware changes are required:</strong></p>
@@ -566,16 +566,16 @@ be done.</p>
 </section>
 </section>
 <section id="resources">
-<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading">#</a></h2>
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading">#</a></h2>
 <section id="hardware-related">
-<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Link to this heading">#</a></h3>
+<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Product datasheet: <a class="reference external" href="https://www.analog.com/AD7616">AD7616</a></p></li>
 <li><p><a class="reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/EVAL-AD7616SDZ-7616-PSDZ-UG-1012.pdf">UG-1012, Evaluation Board User Guide</a></p></li>
 </ul>
 </section>
 <section id="hdl-related">
-<h3>HDL related<a class="headerlink" href="#hdl-related" title="Link to this heading">#</a></h3>
+<h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/ad7616_sdz">AD7616_SDZ HDL project source code</a></p></li>
 </ul>
@@ -668,7 +668,7 @@ be done.</p>
 </ul>
 </section>
 <section id="software-related">
-<h3>Software related<a class="headerlink" href="#software-related" title="Link to this heading">#</a></h3>
+<h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/analogdevicesinc/no-os/blob/main/projects/ad7616-sdz">AD7616_SDZ No-OS project source code</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/no-os/build">How to build No-OS</a></p></li>
@@ -676,13 +676,13 @@ be done.</p>
 </section>
 </section>
 <section id="more-information">
-<h2>More information<a class="headerlink" href="#more-information" title="Link to this heading">#</a></h2>
+<h2>More information<a class="headerlink" href="#more-information" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../user_guide/index.html#user-guide"><span class="std std-ref">ADI HDL User guide</span></a></p></li>
 </ul>
 </section>
 <section id="support">
-<h2>Support<a class="headerlink" href="#support" title="Link to this heading">#</a></h2>
+<h2>Support<a class="headerlink" href="#support" title="Permalink to this heading">#</a></h2>
 <p><a class="reference external" href="https://www.analog.com/en/index.html">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
 using the <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">reference design</a> with <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> components via the
 <a class="reference external" href="https://ez.analog.com/fpga">EngineerZone</a> FPGA reference designs forum.</p>

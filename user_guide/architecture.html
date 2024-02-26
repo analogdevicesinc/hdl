@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>HDL Architecture &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=84b5089d" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
-    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=8dde5eb3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e974aa45" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://wavedrom.com/skins/default.js"></script>
     <script src="https://wavedrom.com/wavedrom.min.js"></script>
     <script defer="" src="../_static/app.umd.js?v=37ac5827"></script>
@@ -185,7 +185,7 @@
           <div class="body" role="main">
             
   <section id="hdl-architecture">
-<span id="architecture"></span><h1>HDL Architecture<a class="headerlink" href="#hdl-architecture" title="Link to this heading">#</a></h1>
+<span id="architecture"></span><h1>HDL Architecture<a class="headerlink" href="#hdl-architecture" title="Permalink to this heading">#</a></h1>
 <p>Every HDL design of a reference project can be divided into two
 subsystems:</p>
 <ul class="simple">
@@ -214,11 +214,11 @@ independent</strong></p></li>
 </li>
 </ul>
 <section id="how-they-re-instantiated">
-<h2>How they’re instantiated<a class="headerlink" href="#how-they-re-instantiated" title="Link to this heading">#</a></h2>
+<h2>How they’re instantiated<a class="headerlink" href="#how-they-re-instantiated" title="Permalink to this heading">#</a></h2>
 <p>In case of a project, inside the <code class="docutils literal notranslate"><span class="pre">system_bd.tcl</span></code> file, we have to source
 the <em>base design first</em>, then the <em>board design</em>.</p>
 <section id="example">
-<h3>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h3>
+<h3>Example<a class="headerlink" href="#example" title="Permalink to this heading">#</a></h3>
 <p>Take <a class="reference external" href="https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD-FMCOMMS2.html">AD-FMCOMMS2-EBZ</a> with ZedBoard; the <code class="docutils literal notranslate"><span class="pre">system_bd.tcl</span></code> will look like the
 following:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span>/projects/common/zed/zed_system_bd.tcl
@@ -228,11 +228,11 @@ following:</p>
 </section>
 </section>
 <section id="typical-project-diagram">
-<h2>Typical project diagram<a class="headerlink" href="#typical-project-diagram" title="Link to this heading">#</a></h2>
+<h2>Typical project diagram<a class="headerlink" href="#typical-project-diagram" title="Permalink to this heading">#</a></h2>
 <p><img alt="HDL overall system" src="../_images/base_platform.svg" /></p>
 </section>
 <section id="base-design">
-<h2>Base Design<a class="headerlink" href="#base-design" title="Link to this heading">#</a></h2>
+<h2>Base Design<a class="headerlink" href="#base-design" title="Permalink to this heading">#</a></h2>
 <p>The base design contains all the I/O peripherals, memory interfaces
 and processing components, which are necessary for a fully functional
 Linux system. The majority of these components are Intel and AMD Xilinx IP
@@ -244,7 +244,7 @@ cores.</p>
 <li><p>Peripheral interfaces</p></li>
 </ul>
 <section id="microprocessor">
-<h3>Microprocessor<a class="headerlink" href="#microprocessor" title="Link to this heading">#</a></h3>
+<h3>Microprocessor<a class="headerlink" href="#microprocessor" title="Permalink to this heading">#</a></h3>
 <p>In our designs, we use only two types:</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -298,7 +298,7 @@ CIPS</a>
 </ul>
 </section>
 <section id="memory-interface-controller">
-<h3>Memory Interface Controller<a class="headerlink" href="#memory-interface-controller" title="Link to this heading">#</a></h3>
+<h3>Memory Interface Controller<a class="headerlink" href="#memory-interface-controller" title="Permalink to this heading">#</a></h3>
 <p>In almost all cases, the carrier board is not made and designed by
 Analog Devices, so the external memory solution of the system is given.
 Meaning we can not support, modify or alter this important part of the
@@ -315,14 +315,14 @@ available memory solutions for both Intel and AMD:</p>
 </ul>
 </section>
 <section id="peripheral-interfaces">
-<h3>Peripheral interfaces<a class="headerlink" href="#peripheral-interfaces" title="Link to this heading">#</a></h3>
+<h3>Peripheral interfaces<a class="headerlink" href="#peripheral-interfaces" title="Permalink to this heading">#</a></h3>
 <p>These interfaces are used to control external peripherals located on
 the prototyping board or the FMC IO board.</p>
 <p>In HDL, these ports are named slightly different than how they’re in
 the documentations. Thus, to make it easier for beginners, here you
 have the naming of the ports depending on the microprocessor used.</p>
 <section id="cpu-memory-interconnects-addresses">
-<h4>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Link to this heading">#</a></h4>
+<h4>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading">#</a></h4>
 <p>The memory addresses that will be used by software are based on the HDL
 addresses of the IP register map, to which an offset is added, depending
 on the architecture of the used FPGA (see also <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/scripts/adi_board.tcl">ad_cpu_interconnect
@@ -349,7 +349,7 @@ AXI peripherics will be placed in 0xB000_0000 - 0xBFFF_FFFF range
 by adding 0x4000_0000 to the address.</p>
 </section>
 <section id="spi">
-<h4>SPI<a class="headerlink" href="#spi" title="Link to this heading">#</a></h4>
+<h4>SPI<a class="headerlink" href="#spi" title="Permalink to this heading">#</a></h4>
 <p>In general, the base system has two Serial Peripheral Interfaces, which
 are used as a control interface for FMC/HSMC devices. These SPI
 interfaces are controlled by the integrated SPI controller of the <strong>Hard
@@ -357,7 +357,7 @@ Processor System</strong> (HPS) or <strong>Processing System 7/8</strong> (PS7/8
 Intel or AMD SPI controller core.</p>
 </section>
 <section id="i2c-i2s-spdif">
-<h4>I2C/I2S/SPDIF<a class="headerlink" href="#i2c-i2s-spdif" title="Link to this heading">#</a></h4>
+<h4>I2C/I2S/SPDIF<a class="headerlink" href="#i2c-i2s-spdif" title="Permalink to this heading">#</a></h4>
 <p>A couple of carrier boards require these standard interfaces for
 different purposes, for example, a configuration interface for an audio
 peripheral device. These peripherals do not necessarily have vital roles
@@ -365,13 +365,13 @@ in the reference design, it’s more like a generic goal to support all
 the provided peripherals of the carrier board.</p>
 </section>
 <section id="hdmi">
-<h4>HDMI<a class="headerlink" href="#hdmi" title="Link to this heading">#</a></h4>
+<h4>HDMI<a class="headerlink" href="#hdmi" title="Permalink to this heading">#</a></h4>
 <p>There is HDMI support for all the carriers which are using the ADV7511
 as HDMI transmitter. The HDMI transmitter core can be found
 <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_hdmi_tx">here</a>.</p>
 </section>
 <section id="gpios">
-<h4>GPIOs<a class="headerlink" href="#gpios" title="Link to this heading">#</a></h4>
+<h4>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading">#</a></h4>
 <p>The general rule of thumb is to define 64 GPIO pins for the base design:</p>
 <ul class="simple">
 <li><p>bits [31: 0] always belong to the carrier board;</p></li>
@@ -391,7 +391,7 @@ from the HDL project to obtain the final number used in software:</p>
 </ul>
 </section>
 <section id="connectivity">
-<h4>Connectivity<a class="headerlink" href="#connectivity" title="Link to this heading">#</a></h4>
+<h4>Connectivity<a class="headerlink" href="#connectivity" title="Permalink to this heading">#</a></h4>
 <ul class="simple">
 <li><p>Ethernet</p></li>
 <li><p>USB OTG</p></li>
@@ -401,7 +401,7 @@ of the board.</p>
 </section>
 </section>
 <section id="interrupts">
-<h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading">#</a></h3>
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading">#</a></h3>
 <p>When developing the Linux software parts for an HDL project, the
 interrupts number to the PS have a different number in the software
 side.</p>
@@ -411,7 +411,7 @@ might be used in the base design of the carrier!</p>
 <p>Always check which are used (in
 <code class="docutils literal notranslate"><span class="pre">/projects/common/$carrier/$carrier_system_bd.tcl</span></code>)</p>
 <section id="interrupts-table">
-<h4>Interrupts table<a class="headerlink" href="#interrupts-table" title="Link to this heading">#</a></h4>
+<h4>Interrupts table<a class="headerlink" href="#interrupts-table" title="Permalink to this heading">#</a></h4>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -577,9 +577,9 @@ might be used in the base design of the carrier!</p>
 </section>
 </section>
 <section id="board-design-and-capabilities">
-<h2>Board design and capabilities<a class="headerlink" href="#board-design-and-capabilities" title="Link to this heading">#</a></h2>
+<h2>Board design and capabilities<a class="headerlink" href="#board-design-and-capabilities" title="Permalink to this heading">#</a></h2>
 <section id="amd-platforms">
-<h3>AMD platforms<a class="headerlink" href="#amd-platforms" title="Link to this heading">#</a></h3>
+<h3>AMD platforms<a class="headerlink" href="#amd-platforms" title="Permalink to this heading">#</a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -724,7 +724,7 @@ both the carrier and the device(s)</p>
 </div>
 </section>
 <section id="intel-platforms">
-<h3>Intel platforms<a class="headerlink" href="#intel-platforms" title="Link to this heading">#</a></h3>
+<h3>Intel platforms<a class="headerlink" href="#intel-platforms" title="Permalink to this heading">#</a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -755,7 +755,7 @@ both the carrier and the device(s)</p>
 </table>
 </div>
 <section id="vadj-values">
-<h4>VADJ values<a class="headerlink" href="#vadj-values" title="Link to this heading">#</a></h4>
+<h4>VADJ values<a class="headerlink" href="#vadj-values" title="Permalink to this heading">#</a></h4>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -793,14 +793,14 @@ both the carrier and the device(s)</p>
 </section>
 </section>
 <section id="file-structure-of-a-project">
-<h2>File structure of a project<a class="headerlink" href="#file-structure-of-a-project" title="Link to this heading">#</a></h2>
+<h2>File structure of a project<a class="headerlink" href="#file-structure-of-a-project" title="Permalink to this heading">#</a></h2>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>In <code class="docutils literal notranslate"><span class="pre">/projects/common/$carrier_name/</span></code> you can find templates for the
 <em>system_top.v</em>, <em>Makefile</em>, etc. to help you when creating a new project.</p>
 </div>
 <section id="project-files-for-amd-boards">
-<h3>Project files for AMD boards<a class="headerlink" href="#project-files-for-amd-boards" title="Link to this heading">#</a></h3>
+<h3>Project files for AMD boards<a class="headerlink" href="#project-files-for-amd-boards" title="Permalink to this heading">#</a></h3>
 <p>A project for an AMD FPGA board should contain the following files:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">Makefile</span></code> — auto-generated file; contains all the IP
@@ -839,7 +839,7 @@ module, making the connections between the instantiated IPs</p></li>
 </ul>
 </section>
 <section id="project-files-for-intel-boards">
-<h3>Project files for Intel boards<a class="headerlink" href="#project-files-for-intel-boards" title="Link to this heading">#</a></h3>
+<h3>Project files for Intel boards<a class="headerlink" href="#project-files-for-intel-boards" title="Permalink to this heading">#</a></h3>
 <p>A project for an Intel FPGA board should contain the following files:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">Makefile</span></code> — auto-generated file; contains all the IP
@@ -862,7 +862,7 @@ etc. The I/O ports of this Verilog module will be connected to actual
 I/O pads of the FPGA</p></li>
 </ul>
 <section id="examples">
-<h4>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h4>
+<h4>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">#</a></h4>
 <p>Some carriers have a different name for these files, for example A10SoC
 has constraints file for both PL side and PS side:</p>
 <ul class="simple">

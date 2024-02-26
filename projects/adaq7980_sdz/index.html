@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>ADAQ7980-SDZ HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=84b5089d" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
-    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=8dde5eb3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e974aa45" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://wavedrom.com/skins/default.js"></script>
     <script src="https://wavedrom.com/wavedrom.min.js"></script>
     <script defer="" src="../../_static/app.umd.js?v=37ac5827"></script>
@@ -168,9 +168,9 @@
           <div class="body" role="main">
             
   <section id="adaq7980-sdz-hdl-project">
-<span id="adaq7980-sdz"></span><h1>ADAQ7980-SDZ HDL project<a class="headerlink" href="#adaq7980-sdz-hdl-project" title="Link to this heading">#</a></h1>
+<span id="adaq7980-sdz"></span><h1>ADAQ7980-SDZ HDL project<a class="headerlink" href="#adaq7980-sdz-hdl-project" title="Permalink to this heading">#</a></h1>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h2>
 <p>The <a class="reference external" href="https://www.analog.com/ADAQ7980">ADAQ7980</a>/<a class="reference external" href="https://www.analog.com/ADAQ7988">ADAQ7988</a> are 16-bit analog-to-digital converter
 (ADC) subsystems that integrate four common signal processing and conditioning
 blocks into a system in package (SiP) design that supports a variety of
@@ -205,33 +205,33 @@ logic. Specified operation of these devices is from −55°C to +125°C.</p>
 </dl>
 </section>
 <section id="supported-boards">
-<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Link to this heading">#</a></h2>
+<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://www.analog.com/EVAL-ADAQ7980">EVAL-ADAQ7980</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
-<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Link to this heading">#</a></h2>
+<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://www.analog.com/ADAQ7980">ADAQ7980</a></p></li>
 <li><p><a class="reference external" href="https://www.analog.com/ADAQ7988">ADAQ7988</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
-<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Link to this heading">#</a></h2>
+<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html">ZedBoard</a> on FMC slot</p></li>
 </ul>
 </section>
 <section id="block-design">
-<h2>Block design<a class="headerlink" href="#block-design" title="Link to this heading">#</a></h2>
+<h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading">#</a></h2>
 <section id="block-diagram">
-<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Link to this heading">#</a></h3>
+<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h3>
 <p>The data path and clock domains are depicted in the below diagram:</p>
 <a class="reference internal image-reference" href="../../_images/adaq7980_sdz_hdl.svg"><img alt="ADAQ7980_SDZ block diagram" class="align-center" src="../../_images/adaq7980_sdz_hdl.svg" width="800" /></a>
 </section>
 <section id="cpu-memory-interconnects-addresses">
-<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Link to this heading">#</a></h3>
+<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading">#</a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture"><span class="std std-ref">HDL Architecture</span></a>).</p>
 <div class="table-wrapper docutils container">
@@ -259,7 +259,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="i2c-connections">
-<h3>I2C connections<a class="headerlink" href="#i2c-connections" title="Link to this heading">#</a></h3>
+<h3>I2C connections<a class="headerlink" href="#i2c-connections" title="Permalink to this heading">#</a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -295,7 +295,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="spi-connections">
-<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Link to this heading">#</a></h3>
+<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Permalink to this heading">#</a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -322,7 +322,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="gpios">
-<h3>GPIOs<a class="headerlink" href="#gpios" title="Link to this heading">#</a></h3>
+<h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading">#</a></h3>
 <p>The Software GPIO number is calculated as follows:</p>
 <ul class="simple">
 <li><p>Zynq-7000: if PS7 is used, then offset is 54</p></li>
@@ -368,7 +368,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="interrupts">
-<h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading">#</a></h3>
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading">#</a></h3>
 <p>Below are the Programmable Logic interrupts used in this project.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -396,7 +396,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </section>
 </section>
 <section id="building-the-hdl-project">
-<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Link to this heading">#</a></h2>
+<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading">#</a></h2>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI does not distribute the bit/elf files of these projects so they
 must be built from the sources available <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">here</a>. To get the source
@@ -410,16 +410,16 @@ the HDL repository, and then build the project as follows:.</p>
 <p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 </section>
 <section id="resources">
-<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading">#</a></h2>
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading">#</a></h2>
 <section id="hardware-related">
-<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Link to this heading">#</a></h3>
+<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Product datasheet: <a class="reference external" href="https://www.analog.com/ADAQ7980">ADAQ7980</a>/<a class="reference external" href="https://www.analog.com/ADAQ7988">ADAQ7988</a></p></li>
 <li><p><a class="reference external" href="https://www.analog.com/media/en/technical-documentation/data-sheets/adaq7980-7988.pdf">UG-1060, Evaluation Board User Guide</a></p></li>
 </ul>
 </section>
 <section id="hdl-related">
-<h3>HDL related<a class="headerlink" href="#hdl-related" title="Link to this heading">#</a></h3>
+<h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/adaq7980_sdz">ADAQ7980_SDZ HDL project source code</a></p></li>
 </ul>
@@ -497,7 +497,7 @@ the HDL repository, and then build the project as follows:.</p>
 </ul>
 </section>
 <section id="software-related">
-<h3>Software related<a class="headerlink" href="#software-related" title="Link to this heading">#</a></h3>
+<h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/analogdevicesinc/no-os/blob/main/projects/adaq7980_sdz">ADAQ7980_SDZ No-OS project</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/no-os/build">How to build No-OS</a></p></li>
@@ -505,13 +505,13 @@ the HDL repository, and then build the project as follows:.</p>
 </section>
 </section>
 <section id="more-information">
-<h2>More information<a class="headerlink" href="#more-information" title="Link to this heading">#</a></h2>
+<h2>More information<a class="headerlink" href="#more-information" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../user_guide/index.html#user-guide"><span class="std std-ref">ADI HDL User guide</span></a></p></li>
 </ul>
 </section>
 <section id="support">
-<h2>Support<a class="headerlink" href="#support" title="Link to this heading">#</a></h2>
+<h2>Support<a class="headerlink" href="#support" title="Permalink to this heading">#</a></h2>
 <p><a class="reference external" href="https://www.analog.com/en/index.html">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
 using the <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">reference design</a> with <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> components via the
 <a class="reference external" href="https://ez.analog.com/fpga">EngineerZone</a> FPGA reference designs forum.</p>

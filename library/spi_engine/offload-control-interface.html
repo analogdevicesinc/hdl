@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>SPI Engine Offload Control Interface &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=84b5089d" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
-    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=8dde5eb3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e974aa45" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://wavedrom.com/skins/default.js"></script>
     <script src="https://wavedrom.com/wavedrom.min.js"></script>
     <script defer="" src="../../_static/app.umd.js?v=37ac5827"></script>
@@ -149,13 +149,13 @@
           <div class="body" role="main">
             
   <section id="spi-engine-offload-control-interface">
-<span id="id1"></span><h1>SPI Engine Offload Control Interface<a class="headerlink" href="#spi-engine-offload-control-interface" title="Link to this heading">#</a></h1>
+<span id="id1"></span><h1>SPI Engine Offload Control Interface<a class="headerlink" href="#spi-engine-offload-control-interface" title="Permalink to this heading">#</a></h1>
 <p>The SPI-Engine offload control interface is used to configure and control a
 <a class="reference internal" href="spi_engine_offload.html#spi-engine-offload"><span class="std std-ref">SPI Engine Offload Module</span></a>.
 It is used to activate/deactivate the core as well re-program the command and
 SDO data RAM.</p>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Link to this heading">#</a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading">#</a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -172,7 +172,7 @@ SDO data RAM.</p>
 </div>
 </section>
 <section id="signal-pins">
-<h2>Signal Pins<a class="headerlink" href="#signal-pins" title="Link to this heading">#</a></h2>
+<h2>Signal Pins<a class="headerlink" href="#signal-pins" title="Permalink to this heading">#</a></h2>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -220,7 +220,7 @@ SDO data RAM.</p>
 </div>
 </section>
 <section id="theory-of-operation">
-<h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Link to this heading">#</a></h2>
+<h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Permalink to this heading">#</a></h2>
 <p>The SPI-Engine offload core typically implements to RAMs, one for the command
 stream and one for the SDO data stream. If the <code class="docutils literal notranslate"><span class="pre">mem_reset</span></code> signal is asserted
 the content of both memories is cleared. Asserting <code class="docutils literal notranslate"><span class="pre">cmd_wr_en</span></code> will write the

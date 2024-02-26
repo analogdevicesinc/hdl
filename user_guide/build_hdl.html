@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Build an HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=84b5089d" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
-    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=8dde5eb3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e974aa45" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://wavedrom.com/skins/default.js"></script>
     <script src="https://wavedrom.com/wavedrom.min.js"></script>
     <script defer="" src="../_static/app.umd.js?v=37ac5827"></script>
@@ -178,7 +178,7 @@
           <div class="body" role="main">
             
   <section id="build-an-hdl-project">
-<span id="build-hdl"></span><h1>Build an HDL project<a class="headerlink" href="#build-an-hdl-project" title="Link to this heading">#</a></h1>
+<span id="build-hdl"></span><h1>Build an HDL project<a class="headerlink" href="#build-an-hdl-project" title="Permalink to this heading">#</a></h1>
 <p><strong>Please note that ADI only provides the source files necessary to create
 and build the designs. This means that you are responsible for modifying
 and building these projects.</strong></p>
@@ -189,7 +189,7 @@ The only catch is that if you run into problems, you have to resolve them indepe
 <p>The build process depends on certain software and tools, which you could use in many ways.
 We use <strong>command line</strong> and mostly <strong>Linux systems</strong>. On Windows, we use <strong>Cygwin</strong>.</p>
 <section id="setup-and-check-your-environment">
-<h2>Setup and check your environment<a class="headerlink" href="#setup-and-check-your-environment" title="Link to this heading">#</a></h2>
+<h2>Setup and check your environment<a class="headerlink" href="#setup-and-check-your-environment" title="Permalink to this heading">#</a></h2>
 <p>This section contains a guide about how to setup your environment to build any
 HDL project from the repository:</p>
 <ol class="arabic simple">
@@ -203,8 +203,8 @@ Make sure that you’re always using the latest release.</p></li>
 <li><p>Starting with <code class="docutils literal notranslate"><span class="pre">hdl_2021_r1</span></code> release branch:
 <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/scripts/adi_env.tcl">scripts/adi_env.tcl</a></p></li>
 <li><p>For <code class="docutils literal notranslate"><span class="pre">hdl_2019_r2</span></code> and older:
-<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/hdl_2019_r2/projects/scripts/adi_project_xilinx.tcl">hdl/projects/scripts/adi_project_xilinx.tcl</a> for Vivado, and
-<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/hdl_2019_r2/projects/scripts/adi_project_intel.tcl">hdl/projects/scripts/adi_project_intel.tcl</a> for Quartus.</p></li>
+<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/hdl_2019_r2:projects/scripts/adi_project_xilinx.tcl">hdl/projects/scripts/adi_project_xilinx.tcl</a> for Vivado, and
+<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/hdl_2019_r2:projects/scripts/adi_project_intel.tcl">hdl/projects/scripts/adi_project_intel.tcl</a> for Quartus.</p></li>
 </ul>
 </li>
 <li><p>Download the tools from the following links:</p>
@@ -265,7 +265,7 @@ if your setup is good.</p>
 </div>
 </div></section>
 <section id="setup-the-hdl-repository">
-<h2>Setup the HDL repository<a class="headerlink" href="#setup-the-hdl-repository" title="Link to this heading">#</a></h2>
+<h2>Setup the HDL repository<a class="headerlink" href="#setup-the-hdl-repository" title="Permalink to this heading">#</a></h2>
 <p>These designs are built upon ADI’s generic HDL reference designs framework.
 ADI does not distribute the bit/elf files of these projects so they
 must be built from the sources available <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">here</a>. To get
@@ -309,7 +309,7 @@ using <code class="docutils literal notranslate"><span class="pre">git</span> <s
 </div>
 </section>
 <section id="building-the-projects">
-<h2>Building the projects<a class="headerlink" href="#building-the-projects" title="Link to this heading">#</a></h2>
+<h2>Building the projects<a class="headerlink" href="#building-the-projects" title="Permalink to this heading">#</a></h2>
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>
 <p>Before building any project, you must have the environment prepared and the
@@ -317,7 +317,7 @@ proper tools. See <a class="reference internal" href="#tools">Tools</a> section 
 <a class="reference internal" href="#environment">Environment</a> section on how to set-up your environment.</p>
 </div>
 <section id="building-an-intel-project">
-<h3>Building an Intel project<a class="headerlink" href="#building-an-intel-project" title="Link to this heading">#</a></h3>
+<h3>Building an Intel project<a class="headerlink" href="#building-an-intel-project" title="Permalink to this heading">#</a></h3>
 <p>An Intel project build is relatively easy. There is no need to build any
 library components. Go to the directory of the project of interest,
 then inside the desired carrier run <code class="docutils literal notranslate"><span class="pre">make</span></code> to build
@@ -340,7 +340,7 @@ In that case, the make will get an additional attribute:
 <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">NIOS2_MMU=0</span></code></p>
 </div>
 <section id="checking-the-build-and-analyzing-results">
-<h4>Checking the build and analyzing results<a class="headerlink" href="#checking-the-build-and-analyzing-results" title="Link to this heading">#</a></h4>
+<h4>Checking the build and analyzing results<a class="headerlink" href="#checking-the-build-and-analyzing-results" title="Permalink to this heading">#</a></h4>
 <p>If you look closely at the <strong>rule</strong> for this target, you see it is just
 calling <code class="docutils literal notranslate"><span class="pre">quartus_sh</span></code> with the project TCL file and redirecting the
 output to a log file. In this case it is called <strong>adrv9371_a10soc_quartus.log</strong>
@@ -434,7 +434,7 @@ implementation.</p>
 </div></section>
 </section>
 <section id="building-an-amd-project">
-<h3>Building an AMD project<a class="headerlink" href="#building-an-amd-project" title="Link to this heading">#</a></h3>
+<h3>Building an AMD project<a class="headerlink" href="#building-an-amd-project" title="Permalink to this heading">#</a></h3>
 <p>An AMD project is built the same way as an Intel project. The only
 exception is that there are a few ‘sub-make(s)’ for the library
 components. The way of building a project in Cygwin and WSL is almost the same.
@@ -471,7 +471,7 @@ characters.</p>
 </pre></div>
 </div>
 <section id="enabling-out-of-context-synthesis">
-<h4>Enabling Out-of-Context synthesis<a class="headerlink" href="#enabling-out-of-context-synthesis" title="Link to this heading">#</a></h4>
+<h4>Enabling Out-of-Context synthesis<a class="headerlink" href="#enabling-out-of-context-synthesis" title="Permalink to this heading">#</a></h4>
 <p>You can opt in for out-of-context synthesis during the build by defining
 the <code class="docutils literal notranslate"><span class="pre">ADI_USE_OOC_SYNTHESIS</span></code> system variable. By setting the
 <code class="docutils literal notranslate"><span class="pre">ADI_MAX_OOC_JOBS</span></code> system variable you can adjust the number of
@@ -503,7 +503,7 @@ default mode. There is no need to set ADI_USE_OOC_SYNTHESIS variable.</p>
 </div>
 </section>
 <section id="checking-the-build-and-analyzing-results-of-library-components">
-<h4>Checking the build and analyzing results of library components<a class="headerlink" href="#checking-the-build-and-analyzing-results-of-library-components" title="Link to this heading">#</a></h4>
+<h4>Checking the build and analyzing results of library components<a class="headerlink" href="#checking-the-build-and-analyzing-results-of-library-components" title="Permalink to this heading">#</a></h4>
 <p>If you look closely, you see what it is actually doing. It enters a
 library component folder then calls <strong>Vivado</strong> in batch mode. The IP
 commands are in the source Tcl file and output is redirected to a log
@@ -522,7 +522,7 @@ tail<span class="w"> </span>library/axi_ad7768/axi_ad7768_ip.log
 </div>
 </section>
 <section id="checking-the-build-and-analyzing-results-of-projects">
-<h4>Checking the build and analyzing results of projects<a class="headerlink" href="#checking-the-build-and-analyzing-results-of-projects" title="Link to this heading">#</a></h4>
+<h4>Checking the build and analyzing results of projects<a class="headerlink" href="#checking-the-build-and-analyzing-results-of-projects" title="Permalink to this heading">#</a></h4>
 <p>The last thing that <code class="docutils literal notranslate"><span class="pre">make</span></code> does in this above example is building the project.
 It is exactly the same <strong>rule</strong> as the library component. The log file, in
 this example, is called <strong>daq2_zc706_vivado.log</strong> and is inside the
@@ -623,7 +623,7 @@ IP targets, synthesize the netlist and implementation.</p>
 </div></section>
 </section>
 <section id="supported-targets-of-make-command">
-<h3>Supported targets of <code class="docutils literal notranslate"><span class="pre">make</span></code> command<a class="headerlink" href="#supported-targets-of-make-command" title="Link to this heading">#</a></h3>
+<h3>Supported targets of <code class="docutils literal notranslate"><span class="pre">make</span></code> command<a class="headerlink" href="#supported-targets-of-make-command" title="Permalink to this heading">#</a></h3>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><a class="reference external" href="https://www.gnu.org/software/make/manual/make.html">Make</a> is a build
@@ -675,9 +675,9 @@ e.g. <code class="docutils literal notranslate"><span class="pre">component.xml<
 </section>
 </section>
 <section id="tools-and-their-versions">
-<h2>Tools and their versions<a class="headerlink" href="#tools-and-their-versions" title="Link to this heading">#</a></h2>
+<h2>Tools and their versions<a class="headerlink" href="#tools-and-their-versions" title="Permalink to this heading">#</a></h2>
 <section id="tools">
-<h3>Tools<a class="headerlink" href="#tools" title="Link to this heading">#</a></h3>
+<h3>Tools<a class="headerlink" href="#tools" title="Permalink to this heading">#</a></h3>
 <p>ADI provides reference designs for both Intel and AMD. Please note
 that we have no preference over Intel or AMD; if possible, we try to
 port the designs on both platforms. However, there are a few things you
@@ -687,7 +687,7 @@ expect and understand when using ADI HDL repository on these tools.
 <strong>A red text indicates that you must pay extra attention.</strong></p>
 <div class="table-wrapper colwidths-auto docutils container" id="id1">
 <table class="docutils align-default" id="id1">
-<caption><span class="caption-text">Tools</span><a class="headerlink" href="#id1" title="Link to this table">#</a></caption>
+<caption><span class="caption-text">Tools</span><a class="headerlink" href="#id1" title="Permalink to this table">#</a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Notes</p></th>
 <th class="head"><p>Intel</p></th>
@@ -752,7 +752,7 @@ slow and frustrating process)</span></p></td>
 </div>
 </section>
 <section id="tool-versions">
-<h3>Tool versions<a class="headerlink" href="#tool-versions" title="Link to this heading">#</a></h3>
+<h3>Tool versions<a class="headerlink" href="#tool-versions" title="Permalink to this heading">#</a></h3>
 <p>Though the ADI libraries work across different versions of the tools,
 the projects we provide <strong>may not</strong>. The AMD and Intel IPs may or may not
 work across versions. We can only assure you that they are tested and
@@ -778,13 +778,13 @@ which build the projects.</p>
 </section>
 </section>
 <section id="environment">
-<h2>Environment<a class="headerlink" href="#environment" title="Link to this heading">#</a></h2>
+<h2>Environment<a class="headerlink" href="#environment" title="Permalink to this heading">#</a></h2>
 <p>As said above, our recommended build flow is to use <code class="docutils literal notranslate"><span class="pre">make</span></code> and the
 command line version of the tools. This method facilitates our
 overall build and release process as it automatically builds the
 required libraries and dependencies.</p>
 <section id="linux-environment-setup">
-<h3>Linux environment setup<a class="headerlink" href="#linux-environment-setup" title="Link to this heading">#</a></h3>
+<h3>Linux environment setup<a class="headerlink" href="#linux-environment-setup" title="Permalink to this heading">#</a></h3>
 <p>All major distributions should have <code class="docutils literal notranslate"><span class="pre">make</span></code> installed by default. If not,
 if you try the command, it should tell you how to install it with the
 package name.</p>
@@ -801,7 +801,7 @@ the tools to set up the environment.</p>
 </div>
 </section>
 <section id="windows-environment-setup">
-<h3>Windows environment setup<a class="headerlink" href="#windows-environment-setup" title="Link to this heading">#</a></h3>
+<h3>Windows environment setup<a class="headerlink" href="#windows-environment-setup" title="Permalink to this heading">#</a></h3>
 <p>The best option on Windows is to use
 <a class="reference external" href="https://www.cygwin.com">Cygwin</a>. When installing it, select the
 <code class="docutils literal notranslate"><span class="pre">make</span></code> and <code class="docutils literal notranslate"><span class="pre">git</span></code> packages. The manual changes to your <strong>.bashrc</strong> do a lot
@@ -828,7 +828,7 @@ usually at <code class="docutils literal notranslate"><span class="pre">C:\Xilin
 </section>
 </section>
 <section id="preparing-the-sd-card">
-<h2>Preparing the SD card<a class="headerlink" href="#preparing-the-sd-card" title="Link to this heading">#</a></h2>
+<h2>Preparing the SD card<a class="headerlink" href="#preparing-the-sd-card" title="Permalink to this heading">#</a></h2>
 <p>Firstly, you have to check this
 <a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/zynq_images/windows_hosts">tutorial</a>
 on how to put the Linux image on your SD card. Once you are done with
@@ -872,7 +872,7 @@ usage:<span class="w"> </span>build_boot_bin.sh<span class="w"> </span>system_to
 </div>
 </div></section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/build-the-zynq-boot-image">How to build the Zynq boot image
 BOOT.BIN</a></p></li>
@@ -883,7 +883,7 @@ kernel</a></p></li>
 </ul>
 </section>
 <section id="errors-warnings-and-notes">
-<h2>Errors, Warnings and Notes<a class="headerlink" href="#errors-warnings-and-notes" title="Link to this heading">#</a></h2>
+<h2>Errors, Warnings and Notes<a class="headerlink" href="#errors-warnings-and-notes" title="Permalink to this heading">#</a></h2>
 <p>Assuming the right to make an honest comment, the tools (both Quartus
 and Vivado) are not that useful or friendly when it comes to messages.
 In most cases, you may see <strong>hacked-in</strong> debugging <code class="docutils literal notranslate"><span class="pre">printf</span></code> sort of
@@ -892,7 +892,7 @@ going to see a lot of <strong>warnings</strong> and some <strong>critical-warnin
 to what could be hard to answer). Here are some of the commonly asked
 EngineerZone questions and their explanations.</p>
 <section id="amd-vivado">
-<h3>AMD: Vivado<a class="headerlink" href="#amd-vivado" title="Link to this heading">#</a></h3>
+<h3>AMD: Vivado<a class="headerlink" href="#amd-vivado" title="Permalink to this heading">#</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ERROR</span><span class="p">:</span> <span class="p">[</span><span class="n">BD</span> <span class="mi">5</span><span class="o">-</span><span class="mi">216</span><span class="p">]</span> <span class="n">VLNV</span> <span class="o">&lt;</span><span class="n">analog</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">user</span><span class="p">:</span><span class="n">axi_clkgen</span><span class="p">:</span><span class="mf">1.0</span><span class="o">&gt;</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">supported</span> <span class="k">for</span> <span class="n">the</span> <span class="n">current</span> <span class="n">part</span><span class="o">.</span>
 
 <span class="n">ERROR</span><span class="p">:</span> <span class="p">[</span><span class="n">Common</span> <span class="mi">17</span><span class="o">-</span><span class="mi">39</span><span class="p">]</span> <span class="s1">&#39;create_bd_cell&#39;</span> <span class="n">failed</span> <span class="n">due</span> <span class="n">to</span> <span class="n">earlier</span> <span class="n">errors</span> <span class="k">while</span> <span class="n">executing</span>

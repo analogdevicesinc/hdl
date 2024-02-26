@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>SPI Engine Execution Module &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=84b5089d" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
-    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=8dde5eb3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e974aa45" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://wavedrom.com/skins/default.js"></script>
     <script src="https://wavedrom.com/wavedrom.min.js"></script>
     <script defer="" src="../../_static/app.umd.js?v=37ac5827"></script>
@@ -150,7 +150,7 @@
           <div class="body" role="main">
             
   <section id="spi-engine-execution-module">
-<span id="spi-engine-execution"></span><h1>SPI Engine Execution Module<a class="headerlink" href="#spi-engine-execution-module" title="Link to this heading">#</a></h1>
+<span id="spi-engine-execution"></span><h1>SPI Engine Execution Module<a class="headerlink" href="#spi-engine-execution-module" title="Permalink to this heading">#</a></h1>
 <div><section id="hdl-component-diagram">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 234.0 186" width="234.0" height="186"><style>
                 a {
@@ -161,7 +161,7 @@
 It is responsible for handling a SPI Engine control stream and translates it
 into low-level SPI bus transactions.</p>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Link to this heading">#</a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading">#</a></h2>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -185,7 +185,7 @@ into low-level SPI bus transactions.</p>
 </div>
 </section>
 <section id="configuration-parameters">
-<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading">#</a></h2>
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading">#</a></h2>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -207,7 +207,7 @@ into low-level SPI bus transactions.</p>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DEFAULT_SPI_CFG</span></code></td>
 <td class="description"><section>
-<p>Reset configuration value for the:ref:<cite>spi_engine spi-configuration-register</cite></p>
+<p>Reset configuration value for the <a class="reference internal" href="instruction-format.html#spi-engine-spi-configuration-register"><span class="std std-ref">SPI Configuration Register</span></a></p>
 </section>
 </td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
@@ -215,7 +215,7 @@ into low-level SPI bus transactions.</p>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DEFAULT_CLK_DIV</span></code></td>
 <td class="description"><section>
-<p>Reset configuration value for the:ref:<cite>spi_engine prescaler-configuration-register</cite></p>
+<p>Reset configuration value for the <a class="reference internal" href="instruction-format.html#spi-engine-prescaler-configuration-register"><span class="std std-ref">Prescaler Configuration Register</span></a></p>
 </section>
 </td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
@@ -223,7 +223,7 @@ into low-level SPI bus transactions.</p>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DATA_WIDTH</span></code></td>
 <td class="description"><section>
-<p>Data width of the parallel data stream. Will define the transaction’sgranularity. Supported values: 8/16/24/32</p>
+<p>Data width of the parallel data stream. Will define the transaction’s granularity. Supported values: 8/16/24/32</p>
 </section>
 </td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">8</span></code></td>
@@ -258,12 +258,12 @@ into low-level SPI bus transactions.</p>
 </section>
 </div></section>
 <section id="signal-and-interface-pins">
-<h2>Signal and Interface Pins<a class="headerlink" href="#signal-and-interface-pins" title="Link to this heading">#</a></h2>
+<h2>Signal and Interface Pins<a class="headerlink" href="#signal-and-interface-pins" title="Permalink to this heading">#</a></h2>
 <div><section id="bus-interface-ctrl">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="1d9e48cd581ca4bff14e812e60b255593b08a1f2" name="1d9e48cd581ca4bff14e812e60b255593b08a1f2" type="checkbox"></input><label for="1d9e48cd581ca4bff14e812e60b255593b08a1f2"><div><p>ctrl</p>
+<input class="collapsible_input" id="55096f5c41d27e7d18a5ace03156e3daf3c9b896" name="55096f5c41d27e7d18a5ace03156e3daf3c9b896" type="checkbox"></input><label for="55096f5c41d27e7d18a5ace03156e3daf3c9b896"><div><p>ctrl</p>
 <section>
-<p><a class="reference internal" href="control-interface.html#spi-engine-control-interface"><span class="std std-ref">SPI Engine Control Interface</span></a> slave.SPI Engine Control stream that contains commands and data for theexecution module.</p>
+<p><a class="reference internal" href="control-interface.html#spi-engine-control-interface"><span class="std std-ref">SPI Engine Control Interface</span></a> slave. SPI Engine Control stream that contains commands and data for the execution module.</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
@@ -331,9 +331,9 @@ into low-level SPI bus transactions.</p>
 </section>
 <section id="bus-interface-spi">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="efee56d94903e1b7e28b79f8005d10a42494ad38" name="efee56d94903e1b7e28b79f8005d10a42494ad38" type="checkbox"></input><label for="efee56d94903e1b7e28b79f8005d10a42494ad38"><div><p>spi</p>
+<input class="collapsible_input" id="c852aa60104caaf66fbd8c326bacbc05af09ac54" name="c852aa60104caaf66fbd8c326bacbc05af09ac54" type="checkbox"></input><label for="c852aa60104caaf66fbd8c326bacbc05af09ac54"><div><p>spi</p>
 <section>
-<p><a class="reference internal" href="spi-bus-interface.html#spi-engine-spi-bus-interface"><span class="std std-ref">SPI Bus Interface</span></a> master.Low-level SPI bus interface that is controlled by peripheral.</p>
+<p><a class="reference internal" href="spi-bus-interface.html#spi-engine-spi-bus-interface"><span class="std std-ref">SPI Bus Interface</span></a> master. Low-level SPI bus interface that is controlled by peripheral.</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
@@ -377,7 +377,7 @@ into low-level SPI bus transactions.</p>
 </section>
 <section id="ports">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="16c2eb4dbbcdafb15c712951d6aee1bf0a101658" name="16c2eb4dbbcdafb15c712951d6aee1bf0a101658" type="checkbox"></input><label for="16c2eb4dbbcdafb15c712951d6aee1bf0a101658"><p>Ports</p>
+<input class="collapsible_input" id="f8f665594685ab29deb41ff6d2cd1ab198b8a7bc" name="f8f665594685ab29deb41ff6d2cd1ab198b8a7bc" type="checkbox"></input><label for="f8f665594685ab29deb41ff6d2cd1ab198b8a7bc"><p>Ports</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -409,7 +409,7 @@ into low-level SPI bus transactions.</p>
 <td><p>out</p></td>
 <td><p></p></td>
 <td class="description"><section>
-<p>Indicates whether the peripheral is currently active and processingcommands.</p>
+<p>Indicates whether the peripheral is currently active and processing commands.</p>
 </section>
 </td>
 </tr>
@@ -426,7 +426,7 @@ into low-level SPI bus transactions.</p>
 </section>
 </div></section>
 <section id="theory-of-operation">
-<h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Link to this heading">#</a></h2>
+<h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Permalink to this heading">#</a></h2>
 <p>The SPI Engine Execution module implements the physical access to the SPI bus.
 It implements a small but powerful programmable state machine that translates a
 SPI Engine command stream into low-level SPI bus access.</p>

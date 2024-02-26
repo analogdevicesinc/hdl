@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>SPI Engine Interconnect Module &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=84b5089d" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
-    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=8dde5eb3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e974aa45" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://wavedrom.com/skins/default.js"></script>
     <script src="https://wavedrom.com/wavedrom.min.js"></script>
     <script defer="" src="../../_static/app.umd.js?v=37ac5827"></script>
@@ -150,13 +150,13 @@
           <div class="body" role="main">
             
   <section id="spi-engine-interconnect-module">
-<span id="spi-engine-interconnect"></span><h1>SPI Engine Interconnect Module<a class="headerlink" href="#spi-engine-interconnect-module" title="Link to this heading">#</a></h1>
+<span id="spi-engine-interconnect"></span><h1>SPI Engine Interconnect Module<a class="headerlink" href="#spi-engine-interconnect-module" title="Permalink to this heading">#</a></h1>
 <div><section id="hdl-component-diagram">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 214.8 186" width="214.8" height="186"><style>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 214.8 162" width="214.8" height="162"><style>
                 a {
                     text-decoration: none;
                 }
-                </style><defs><linearGradient id="ip_background" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#c4e5ff"/><stop offset="100%" stop-color="#ebf6ff"/></linearGradient></defs><rect x="18" y="18" width="178.8" height="132" rx="18" fill="url(#ip_background)"/><a href="#bus-interface-s0_ctrl"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="54">s0_ctrl</text></a><g transform="translate(18,46.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s1_ctrl"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="78">s1_ctrl</text></a><g transform="translate(18,70.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="102">clk</text></a><g transform="translate(18,94.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="126">resetn</text></a><g transform="translate(18,118.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#bus-interface-m_ctrl"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="178.8" y="54">m_ctrl</text></a><g transform="translate(196.8,46.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><rect x="18" y="18" width="178.8" height="132" rx="18" fill="none" stroke="#0067b9" stroke-width="3"/><text style="font: 16px sans-serif" fill="#0067b9" text-anchor="middle" dominant-baseline="middle" x="107.4" y="170">spi_engine_interconnect</text></svg></section>
+                </style><defs><linearGradient id="ip_background" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#c4e5ff"/><stop offset="100%" stop-color="#ebf6ff"/></linearGradient></defs><rect x="18" y="18" width="178.8" height="108" rx="18" fill="url(#ip_background)"/><a href="#bus-interface-s*_ctrl"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="54">s*_ctrl</text></a><g transform="translate(18,46.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="78">clk</text></a><g transform="translate(18,70.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="102">resetn</text></a><g transform="translate(18,94.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#bus-interface-m_ctrl"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="178.8" y="54">m_ctrl</text></a><g transform="translate(196.8,46.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><rect x="18" y="18" width="178.8" height="108" rx="18" fill="none" stroke="#0067b9" stroke-width="3"/><text style="font: 16px sans-serif" fill="#0067b9" text-anchor="middle" dominant-baseline="middle" x="107.4" y="146">spi_engine_interconnect</text></svg></section>
 </div><p>The SPI Engine Interconnect module allows connecting multiple
 <a class="reference internal" href="control-interface.html#spi-engine-control-interface"><span class="std std-ref">SPI Engine Control Interface</span></a> masters to a single
 <a class="reference internal" href="control-interface.html#spi-engine-control-interface"><span class="std std-ref">SPI Engine Control Interface</span></a> slave.
@@ -168,7 +168,7 @@ command streams.</p>
 a single execution module allows for the creation of flexible and efficient
 designs using standard components.</p>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Link to this heading">#</a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading">#</a></h2>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -193,7 +193,7 @@ peripheral.</p></td>
 </div>
 </section>
 <section id="configuration-parameters">
-<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading">#</a></h2>
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading">#</a></h2>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -227,12 +227,12 @@ peripheral.</p></td>
 </section>
 </div></section>
 <section id="signal-and-interface-pins">
-<h2>Signal and Interface Pins<a class="headerlink" href="#signal-and-interface-pins" title="Link to this heading">#</a></h2>
+<h2>Signal and Interface Pins<a class="headerlink" href="#signal-and-interface-pins" title="Permalink to this heading">#</a></h2>
 <div><section id="bus-interface-m_ctrl">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="0112185e75f4ccbbfe8a6eda494b66a1728c4f61" name="0112185e75f4ccbbfe8a6eda494b66a1728c4f61" type="checkbox"></input><label for="0112185e75f4ccbbfe8a6eda494b66a1728c4f61"><div><p>m_ctrl</p>
+<input class="collapsible_input" id="5299affac3ffdd98d2b758500e698bf15cab6a3e" name="5299affac3ffdd98d2b758500e698bf15cab6a3e" type="checkbox"></input><label for="5299affac3ffdd98d2b758500e698bf15cab6a3e"><div><p>m_ctrl</p>
 <section>
-<p><a class="reference internal" href="control-interface.html#spi-engine-control-interface"><span class="std std-ref">SPI Engine Control Interface</span></a> master.Connects to the control interface slave.</p>
+<p><a class="reference internal" href="control-interface.html#spi-engine-control-interface"><span class="std std-ref">SPI Engine Control Interface</span></a> master. Connects to the control interface slave.</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
@@ -298,12 +298,9 @@ peripheral.</p></td>
 </div>
 </div>
 </section>
-<section id="bus-interface-s0_ctrl">
+<section id="bus-interface-s*_ctrl">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="0c48e9f6cc4351b87211953c2bad4621e47d0499" name="0c48e9f6cc4351b87211953c2bad4621e47d0499" type="checkbox"></input><label for="0c48e9f6cc4351b87211953c2bad4621e47d0499"><div><p>s0_ctrl</p>
-<section>
-<p><a class="reference internal" href="control-interface.html#spi-engine-control-interface"><span class="std std-ref">SPI Engine Control Interface</span></a> slave.Connects to the first control interface master.</p>
-</section>
+<input class="collapsible_input" id="92b019dc18cadc83a13c9379d181152e82fa30d2" name="92b019dc18cadc83a13c9379d181152e82fa30d2" type="checkbox"></input><label for="92b019dc18cadc83a13c9379d181152e82fa30d2"><div><p>s*_ctrl</p>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -314,121 +311,51 @@ peripheral.</p></td>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s0_cmd_ready</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s*_cmd_ready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_READY</span></code></td>
 <td><p>out</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s0_cmd_valid</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s*_cmd_valid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_VALID</span></code></td>
 <td><p>in</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s0_cmd_data</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s*_cmd_data</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_DATA</span></code></td>
 <td><p>in</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s0_sdo_ready</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s*_sdo_ready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDO_READY</span></code></td>
 <td><p>out</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s0_sdo_valid</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s*_sdo_valid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDO_VALID</span></code></td>
 <td><p>in</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s0_sdo_data</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s*_sdo_data</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDO_DATA</span></code></td>
 <td><p>in</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s0_sdi_ready</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s*_sdi_ready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDI_READY</span></code></td>
 <td><p>in</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s0_sdi_valid</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s*_sdi_valid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDI_VALID</span></code></td>
 <td><p>out</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s0_sdi_data</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s*_sdi_data</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDI_DATA</span></code></td>
 <td><p>out</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s0_sync_ready</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s*_sync_ready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC_READY</span></code></td>
 <td><p>in</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s0_sync_valid</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s*_sync_valid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC_VALID</span></code></td>
 <td><p>out</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s0_sync</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">SYNC_DATA</span></code></td>
-<td><p>out</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</section>
-<section id="bus-interface-s1_ctrl">
-<div class="collapsible docutils container">
-<input class="collapsible_input" id="0cfb882c1e7945908f471024eb2eaa8e67585b5d" name="0cfb882c1e7945908f471024eb2eaa8e67585b5d" type="checkbox"></input><label for="0cfb882c1e7945908f471024eb2eaa8e67585b5d"><div><p>s1_ctrl</p>
-<section>
-<p><a class="reference internal" href="control-interface.html#spi-engine-control-interface"><span class="std std-ref">SPI Engine Control Interface</span></a> slave.Connects to the second control interface master.</p>
-</section>
-</div><div class="icon"></div></label><div class="collapsible_content docutils container">
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
-<th class="head"><p>Logical Port</p></th>
-<th class="head"><p>Direction</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s1_cmd_ready</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">CMD_READY</span></code></td>
-<td><p>out</p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s1_cmd_valid</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">CMD_VALID</span></code></td>
-<td><p>in</p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s1_cmd_data</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">CMD_DATA</span></code></td>
-<td><p>in</p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s1_sdo_ready</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">SDO_READY</span></code></td>
-<td><p>out</p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s1_sdo_valid</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">SDO_VALID</span></code></td>
-<td><p>in</p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s1_sdo_data</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">SDO_DATA</span></code></td>
-<td><p>in</p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s1_sdi_ready</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">SDI_READY</span></code></td>
-<td><p>in</p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s1_sdi_valid</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">SDI_VALID</span></code></td>
-<td><p>out</p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s1_sdi_data</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">SDI_DATA</span></code></td>
-<td><p>out</p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s1_sync_ready</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">SYNC_READY</span></code></td>
-<td><p>in</p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s1_sync_valid</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">SYNC_VALID</span></code></td>
-<td><p>out</p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s1_sync</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s*_sync</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC_DATA</span></code></td>
 <td><p>out</p></td>
 </tr>
@@ -440,7 +367,7 @@ peripheral.</p></td>
 </section>
 <section id="ports">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="16c2eb4dbbcdafb15c712951d6aee1bf0a101658" name="16c2eb4dbbcdafb15c712951d6aee1bf0a101658" type="checkbox"></input><label for="16c2eb4dbbcdafb15c712951d6aee1bf0a101658"><p>Ports</p>
+<input class="collapsible_input" id="4397c09858b895996ca1bc51a9d7e87cc4d32a10" name="4397c09858b895996ca1bc51a9d7e87cc4d32a10" type="checkbox"></input><label for="4397c09858b895996ca1bc51a9d7e87cc4d32a10"><p>Ports</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -464,7 +391,7 @@ peripheral.</p></td>
 <td><p>in</p></td>
 <td><p></p></td>
 <td class="description"><section>
-<p>Synchronous active-low reset.Resets the internal state of the module. Buses <code class="docutils literal notranslate"><span class="pre">m_ctrl</span></code>, <code class="docutils literal notranslate"><span class="pre">s0_ctrl</span></code>, <code class="docutils literal notranslate"><span class="pre">s1_ctrl</span></code> are synchronous to this reset signal.</p>
+<p>Synchronous active-low reset. Resets the internal state of the module. Buses <code class="docutils literal notranslate"><span class="pre">m_ctrl</span></code>, <code class="docutils literal notranslate"><span class="pre">s0_ctrl</span></code>, <code class="docutils literal notranslate"><span class="pre">s1_ctrl</span></code> are synchronous to this reset signal.</p>
 </section>
 </td>
 </tr>
@@ -476,7 +403,7 @@ peripheral.</p></td>
 </section>
 </div></section>
 <section id="theory-of-operation">
-<h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Link to this heading">#</a></h2>
+<h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Permalink to this heading">#</a></h2>
 <p>The SPI Engine Interconnect module has multiple
 <a class="reference internal" href="control-interface.html#spi-engine-control-interface"><span class="std std-ref">SPI Engine Control Interface</span></a> slave ports and a single
 <a class="reference internal" href="control-interface.html#spi-engine-control-interface"><span class="std std-ref">SPI Engine Control Interface</span></a> master port.

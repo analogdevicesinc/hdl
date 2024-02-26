@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>SPI Bus Interface &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=84b5089d" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
-    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=8dde5eb3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e974aa45" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://wavedrom.com/skins/default.js"></script>
     <script src="https://wavedrom.com/wavedrom.min.js"></script>
     <script defer="" src="../../_static/app.umd.js?v=37ac5827"></script>
@@ -152,10 +152,10 @@
           <div class="body" role="main">
             
   <section id="spi-bus-interface">
-<span id="spi-engine-spi-bus-interface"></span><h1>SPI Bus Interface<a class="headerlink" href="#spi-bus-interface" title="Link to this heading">#</a></h1>
+<span id="spi-engine-spi-bus-interface"></span><h1>SPI Bus Interface<a class="headerlink" href="#spi-bus-interface" title="Permalink to this heading">#</a></h1>
 <p>The SPI bus interface carries logical low-level SPI bus signals.</p>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Link to this heading">#</a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading">#</a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -172,7 +172,7 @@
 </div>
 </section>
 <section id="signal-pins">
-<h2>Signal Pins<a class="headerlink" href="#signal-pins" title="Link to this heading">#</a></h2>
+<h2>Signal Pins<a class="headerlink" href="#signal-pins" title="Permalink to this heading">#</a></h2>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -219,7 +219,7 @@ mode <code class="docutils literal notranslate"><span class="pre">sdi</span></co
 </div>
 </section>
 <section id="io-configuration">
-<h2>IO configuration<a class="headerlink" href="#io-configuration" title="Link to this heading">#</a></h2>
+<h2>IO configuration<a class="headerlink" href="#io-configuration" title="Permalink to this heading">#</a></h2>
 <a class="reference internal image-reference" href="../../_images/spi_bus.svg"><img alt="../../_images/spi_bus.svg" class="align-right" src="../../_images/spi_bus.svg" width="30%" /></a>
 <p>The SPI bus interface only carries a logical representation of the low-level SPI
 bus signals. The top-level module in the FPGA design project is responsible for
@@ -236,7 +236,7 @@ directly be connected to the input buffer for the <code class="docutils literal 
 when <code class="docutils literal notranslate"><span class="pre">mosi</span></code> tri-stating is not required the <code class="docutils literal notranslate"><span class="pre">sdo</span></code> signal can be directly
 connected to the <code class="docutils literal notranslate"><span class="pre">mosi</span></code> signal leaving the <code class="docutils literal notranslate"><span class="pre">sdo_t</span></code> signal unconnected.</p>
 <section id="example-verilog-io-configuration">
-<h3>Example Verilog IO configuration<a class="headerlink" href="#example-verilog-io-configuration" title="Link to this heading">#</a></h3>
+<h3>Example Verilog IO configuration<a class="headerlink" href="#example-verilog-io-configuration" title="Permalink to this heading">#</a></h3>
 <blockquote>
 <div><p>The following example Verilog code shows the most generic IO configuration,
 which represents the diagram above. Depending on system requirements some

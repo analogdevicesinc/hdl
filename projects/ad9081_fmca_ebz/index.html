@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>AD9081-FMCA-EBZ/AD9082-FMCA-EBZ HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=84b5089d" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
-    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=8dde5eb3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e974aa45" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://wavedrom.com/skins/default.js"></script>
     <script src="https://wavedrom.com/wavedrom.min.js"></script>
     <script defer="" src="../../_static/app.umd.js?v=37ac5827"></script>
@@ -185,9 +185,9 @@
           <div class="body" role="main">
             
   <section id="ad9081-fmca-ebz-ad9082-fmca-ebz-hdl-project">
-<span id="ad9081-fmca-ebz"></span><h1>AD9081-FMCA-EBZ/AD9082-FMCA-EBZ HDL project<a class="headerlink" href="#ad9081-fmca-ebz-ad9082-fmca-ebz-hdl-project" title="Link to this heading">#</a></h1>
+<span id="ad9081-fmca-ebz"></span><h1>AD9081-FMCA-EBZ/AD9082-FMCA-EBZ HDL project<a class="headerlink" href="#ad9081-fmca-ebz-ad9082-fmca-ebz-hdl-project" title="Permalink to this heading">#</a></h1>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h2>
 <p>The <a class="reference external" href="https://www.analog.com/EVAL-AD9081">AD9081-FMCA-EBZ</a> / <a class="reference external" href="https://www.analog.com/EVAL-AD9082">AD9082-FMCA-EBZ</a>
 reference design (also known as Single MxFE) is a processor based
 (e.g. Microblaze) embedded system.
@@ -214,14 +214,14 @@ having separate rx_device_clk/tx_device_clk and corresponding lane rates
 but must share the same reference clock.</p>
 </section>
 <section id="supported-boards">
-<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Link to this heading">#</a></h2>
+<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://www.analog.com/EVAL-AD9081">AD9081-FMCA-EBZ</a></p></li>
 <li><p><a class="reference external" href="https://www.analog.com/EVAL-AD9082">AD9082-FMCA-EBZ</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
-<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Link to this heading">#</a></h2>
+<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://www.analog.com/AD9081">AD9081</a></p></li>
 <li><p><a class="reference external" href="https://www.analog.com/AD9082">AD9082</a></p></li>
@@ -233,7 +233,7 @@ but must share the same reference clock.</p>
 </ul>
 </section>
 <section id="supported-carriers">
-<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Link to this heading">#</a></h2>
+<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading">#</a></h2>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -310,12 +310,12 @@ but must share the same reference clock.</p>
 </div>
 </section>
 <section id="block-design">
-<h2>Block design<a class="headerlink" href="#block-design" title="Link to this heading">#</a></h2>
+<h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading">#</a></h2>
 <section id="block-diagram">
-<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Link to this heading">#</a></h3>
+<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h3>
 <p>The data path and clock domains are depicted in the below diagrams:</p>
 <section id="example-block-design-for-single-link-m-8-l-4">
-<h4>Example block design for Single link; M=8; L=4<a class="headerlink" href="#example-block-design-for-single-link-m-8-l-4" title="Link to this heading">#</a></h4>
+<h4>Example block design for Single link; M=8; L=4<a class="headerlink" href="#example-block-design-for-single-link-m-8-l-4" title="Permalink to this heading">#</a></h4>
 <a class="reference internal image-reference" href="../../_images/ad9081_204b_M8L4.svg"><img alt="AD9081-FMCA-EBZ JESD204B M=8 L=4 block diagram" class="align-center" src="../../_images/ad9081_204b_M8L4.svg" width="800" /></a>
 <p>The Rx links (ADC Path) operate with the following parameters:</p>
 <ul class="simple">
@@ -341,7 +341,7 @@ Config 0x0A)</p></li>
 </ul>
 </section>
 <section id="example-block-design-for-single-link-m-4-l-8">
-<h4>Example block design for Single link; M=4; L=8<a class="headerlink" href="#example-block-design-for-single-link-m-4-l-8" title="Link to this heading">#</a></h4>
+<h4>Example block design for Single link; M=4; L=8<a class="headerlink" href="#example-block-design-for-single-link-m-4-l-8" title="Permalink to this heading">#</a></h4>
 <a class="reference internal image-reference" href="../../_images/ad9081_204b_M4L8.svg"><img alt="AD9081-FMCA-EBZ JESD204B M=4 L=8 block diagram" class="align-center" src="../../_images/ad9081_204b_M4L8.svg" width="800" /></a>
 <p>The Rx links are set for full bandwidth mode and operate with the
 following parameters:</p>
@@ -369,7 +369,7 @@ following parameters:</p>
 </ul>
 </section>
 <section id="example-block-design-for-single-link-m-2-l-8-jesd204c">
-<h4>Example block design for Single link; M=2; L=8; JESD204C<a class="headerlink" href="#example-block-design-for-single-link-m-2-l-8-jesd204c" title="Link to this heading">#</a></h4>
+<h4>Example block design for Single link; M=2; L=8; JESD204C<a class="headerlink" href="#example-block-design-for-single-link-m-2-l-8-jesd204c" title="Permalink to this heading">#</a></h4>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>In 2019_R2 release, the AMD JESD Physical layer IP Core is used,
@@ -419,7 +419,7 @@ however in newer versions it is replaced with ADI’s util_adxcvr IP core.</p>
 </section>
 </section>
 <section id="configuration-modes">
-<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Link to this heading">#</a></h3>
+<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading">#</a></h3>
 <p>The block design supports configuration of parameters and scales.</p>
 <p>We have listed a couple of examples at section
 <a class="reference internal" href="#building-the-hdl-project">Building the HDL project</a> and the default modes
@@ -468,18 +468,18 @@ kilosamples per converter (M)</p></li>
 </ul>
 </section>
 <section id="clock-scheme">
-<h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Link to this heading">#</a></h3>
+<h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Permalink to this heading">#</a></h3>
 <p>The clock sources depend on the carrier that is used:</p>
 <section id="zcu102">
-<h4><a class="reference external" href="https://www.xilinx.com/ZCU102">ZCU102</a><a class="headerlink" href="#zcu102" title="Link to this heading">#</a></h4>
+<h4><a class="reference external" href="https://www.xilinx.com/ZCU102">ZCU102</a><a class="headerlink" href="#zcu102" title="Permalink to this heading">#</a></h4>
 <a class="reference internal image-reference" href="../../_images/ad9081_clock_scheme_zcu102.svg"><img alt="AD9081-FMCA-EBZ ZCU102 clock scheme" class="align-center" src="../../_images/ad9081_clock_scheme_zcu102.svg" width="800" /></a>
 </section>
 <section id="vcu118">
-<h4><a class="reference external" href="https://www.xilinx.com/VCU118">VCU118</a><a class="headerlink" href="#vcu118" title="Link to this heading">#</a></h4>
+<h4><a class="reference external" href="https://www.xilinx.com/VCU118">VCU118</a><a class="headerlink" href="#vcu118" title="Permalink to this heading">#</a></h4>
 <a class="reference internal image-reference" href="../../_images/ad9081_clock_scheme_vcu118.svg"><img alt="AD9081-FMCA-EBZ VCU118 clock scheme" class="align-center" src="../../_images/ad9081_clock_scheme_vcu118.svg" width="800" /></a>
 </section>
 <section id="limitations">
-<h4>Limitations<a class="headerlink" href="#limitations" title="Link to this heading">#</a></h4>
+<h4>Limitations<a class="headerlink" href="#limitations" title="Permalink to this heading">#</a></h4>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>For the parameter selection, the following restrictions apply:</p>
@@ -493,7 +493,7 @@ kilosamples per converter (M)</p></li>
 </section>
 </section>
 <section id="cpu-memory-interconnects-addresses">
-<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Link to this heading">#</a></h3>
+<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading">#</a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture"><span class="std std-ref">HDL Architecture</span></a>).</p>
 <p>Depending on the values of parameters $INTF_CFG, $ADI_PHY_SEL and $TDD_SUPPORT,
@@ -581,7 +581,7 @@ some IPs are instatiated and some are not.</p>
 </div>
 </section>
 <section id="spi-connections">
-<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Link to this heading">#</a></h3>
+<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Permalink to this heading">#</a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -613,7 +613,7 @@ some IPs are instatiated and some are not.</p>
 </div>
 </section>
 <section id="gpios">
-<h3>GPIOs<a class="headerlink" href="#gpios" title="Link to this heading">#</a></h3>
+<h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading">#</a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -709,7 +709,7 @@ some IPs are instatiated and some are not.</p>
 </div>
 </section>
 <section id="interrupts">
-<h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading">#</a></h3>
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading">#</a></h3>
 <p>Below are the Programmable Logic interrupts used in this project.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -757,7 +757,7 @@ some IPs are instatiated and some are not.</p>
 </section>
 </section>
 <section id="building-the-hdl-project">
-<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Link to this heading">#</a></h2>
+<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading">#</a></h2>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI does not distribute the bit/elf files of these projects so they
 must be built from the sources available <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">here</a>. To get
@@ -1179,9 +1179,9 @@ characters.</p>
 <p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 </section>
 <section id="software-considerations">
-<h2>Software considerations<a class="headerlink" href="#software-considerations" title="Link to this heading">#</a></h2>
+<h2>Software considerations<a class="headerlink" href="#software-considerations" title="Permalink to this heading">#</a></h2>
 <section id="adc-crossbar-config">
-<h3>ADC - crossbar config<a class="headerlink" href="#adc-crossbar-config" title="Link to this heading">#</a></h3>
+<h3>ADC - crossbar config<a class="headerlink" href="#adc-crossbar-config" title="Permalink to this heading">#</a></h3>
 <p>Due to physical constraints, Rx lanes are reordered as described in the
 following table.</p>
 <p>e.g physical lane 2 from ADC connects to logical lane 7
@@ -1224,7 +1224,7 @@ accordingly.</p>
 </div>
 </section>
 <section id="dac-crossbar-config">
-<h3>DAC - crossbar config<a class="headerlink" href="#dac-crossbar-config" title="Link to this heading">#</a></h3>
+<h3>DAC - crossbar config<a class="headerlink" href="#dac-crossbar-config" title="Permalink to this heading">#</a></h3>
 <p>Due to physical constraints, Tx lanes are reordered as described in the
 following table.</p>
 <p>e.g physical lane 2 from DAC connects to logical lane 7
@@ -1268,9 +1268,9 @@ accordingly.</p>
 </section>
 </section>
 <section id="resources">
-<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading">#</a></h2>
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading">#</a></h2>
 <section id="systems-related">
-<h3>Systems related<a class="headerlink" href="#systems-related" title="Link to this heading">#</a></h3>
+<h3>Systems related<a class="headerlink" href="#systems-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9081_fmca_ebz">[Wiki] AD9081 &amp; AD9082 &amp; AD9988 &amp; AD9986 Prototyping Platform User Guide</a></p></li>
 <li><p>Here you can find all the quick start guides on wiki documentation:dokuwiki:<cite>[Wiki] AD9081 Quick Start Guides &lt;resources/eval/user-guides/ad9081_fmca_ebz/quickstart&gt;</cite></p></li>
@@ -1308,7 +1308,7 @@ accordingly.</p>
 </div>
 </section>
 <section id="hardware-related">
-<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Link to this heading">#</a></h3>
+<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Product datasheets:</p>
 <ul>
@@ -1323,7 +1323,7 @@ accordingly.</p>
 </ul>
 </section>
 <section id="hdl-related">
-<h3>HDL related<a class="headerlink" href="#hdl-related" title="Link to this heading">#</a></h3>
+<h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/ad9081_fmca_ebz">AD9081_FMCA_EBZ HDL project source code</a></p></li>
 <li><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/ad9082_fmca_ebz">AD9082_FMCA_EBZ HDL project source code</a></p></li>
@@ -1399,7 +1399,7 @@ accordingly.</p>
 </ul>
 </section>
 <section id="software-related">
-<h3>Software related<a class="headerlink" href="#software-related" title="Link to this heading">#</a></h3>
+<h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-mxfe/ad9081">[Wiki] AD9081-FMCA-EBZ Linux driver wiki page</a></p></li>
 <li><p>Python support:</p>
@@ -1412,13 +1412,13 @@ accordingly.</p>
 </section>
 </section>
 <section id="more-information">
-<h2>More information<a class="headerlink" href="#more-information" title="Link to this heading">#</a></h2>
+<h2>More information<a class="headerlink" href="#more-information" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../user_guide/index.html#user-guide"><span class="std std-ref">ADI HDL User guide</span></a></p></li>
 </ul>
 </section>
 <section id="support">
-<h2>Support<a class="headerlink" href="#support" title="Link to this heading">#</a></h2>
+<h2>Support<a class="headerlink" href="#support" title="Permalink to this heading">#</a></h2>
 <p><a class="reference external" href="https://www.analog.com/en/index.html">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
 using the <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">reference design</a> with <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> components via the
 <a class="reference external" href="https://ez.analog.com/fpga">EngineerZone</a> FPGA reference designs forum.</p>

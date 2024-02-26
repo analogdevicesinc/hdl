@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>HDL Git repository &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=84b5089d" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
-    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=8dde5eb3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e974aa45" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://wavedrom.com/skins/default.js"></script>
     <script src="https://wavedrom.com/wavedrom.min.js"></script>
     <script defer="" src="../_static/app.umd.js?v=37ac5827"></script>
@@ -152,7 +152,7 @@
           <div class="body" role="main">
             
   <section id="hdl-git-repository">
-<span id="git-repository"></span><h1>HDL Git repository<a class="headerlink" href="#hdl-git-repository" title="Link to this heading">#</a></h1>
+<span id="git-repository"></span><h1>HDL Git repository<a class="headerlink" href="#hdl-git-repository" title="Permalink to this heading">#</a></h1>
 <p>All the HDL sources can be found in the following git repository:</p>
 <p><a class="reference external" href="https://github.com/analogdevicesinc/hdl">ADI HDL repository</a></p>
 <p>We assume that the user is familiar with <a class="reference external" href="https://git-scm.com/">git</a>.
@@ -180,7 +180,7 @@ want to keep the hdl source</p></li>
 instructions</p></li>
 </ol>
 <section id="folder-structure">
-<h2>Folder structure<a class="headerlink" href="#folder-structure" title="Link to this heading">#</a></h2>
+<h2>Folder structure<a class="headerlink" href="#folder-structure" title="Permalink to this heading">#</a></h2>
 <p>The root of the HDL repository has the following structure:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span>
 <span class="o">+--</span> <span class="o">.</span><span class="n">github</span>
@@ -209,7 +209,7 @@ files that Git should ignore. The root <strong>Makefile</strong> can be used to 
 all the project of the repository. To learn more about hdl <strong>Makefiles</strong>
 visit the <a class="reference internal" href="build_hdl.html#build-hdl"><span class="std std-ref">Building &amp; Generating programming files</span></a> section.</p>
 <section id="the-projects-are-structured-as-follows">
-<h3>The projects are structured as follows<a class="headerlink" href="#the-projects-are-structured-as-follows" title="Link to this heading">#</a></h3>
+<h3>The projects are structured as follows<a class="headerlink" href="#the-projects-are-structured-as-follows" title="Permalink to this heading">#</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>.
 +-- docs
 +-- library
@@ -255,7 +255,7 @@ folder, that means your FPGA board with that particular FMC board is not
 supported.</p>
 </section>
 <section id="the-library-are-structured-as-follows">
-<h3>The library are structured as follows<a class="headerlink" href="#the-library-are-structured-as-follows" title="Link to this heading">#</a></h3>
+<h3>The library are structured as follows<a class="headerlink" href="#the-library-are-structured-as-follows" title="Permalink to this heading">#</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>.
 +-- library
 ¦   +-- ad463x_data_capture
@@ -294,7 +294,7 @@ the <a class="reference internal" href="build_hdl.html#build-hdl"><span class="s
 </section>
 </section>
 <section id="repository-releases-and-branches">
-<h2>Repository releases and branches<a class="headerlink" href="#repository-releases-and-branches" title="Link to this heading">#</a></h2>
+<h2>Repository releases and branches<a class="headerlink" href="#repository-releases-and-branches" title="Permalink to this heading">#</a></h2>
 <p>The repository may contain multiple branches and tags. The
 <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">main</a> branch
 is the development branch (latest sources, but not stable). If you check
@@ -302,7 +302,7 @@ out this branch, some builds may fail. If you are not into any kind of
 experimentation, you should only check out one of the release branch.</p>
 <p>All our release branches have the following naming convention:
 <strong>hdl_</strong>[year_of_release]<strong>_r</strong>[1 or 2]. (e.g.
-<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/hdl_2014_r2/">hdl_2014_r2</a>)</p>
+<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/hdl_2014_r2:">hdl_2014_r2</a>)</p>
 <p>ADI does two releases each year when all the projects get an update to
 support the latest tools and get additional new features. ** The
 main branch is always synchronized with the latest release.** If you

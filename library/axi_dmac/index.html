@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>High-Speed DMA Controller &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=84b5089d" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
-    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=8dde5eb3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e974aa45" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://wavedrom.com/skins/default.js"></script>
     <script src="https://wavedrom.com/wavedrom.min.js"></script>
     <script defer="" src="../../_static/app.umd.js?v=37ac5827"></script>
@@ -200,7 +200,7 @@
           <div class="body" role="main">
             
   <section id="high-speed-dma-controller">
-<span id="axi-dmac"></span><h1>High-Speed DMA Controller<a class="headerlink" href="#high-speed-dma-controller" title="Link to this heading">#</a></h1>
+<span id="axi-dmac"></span><h1>High-Speed DMA Controller<a class="headerlink" href="#high-speed-dma-controller" title="Permalink to this heading">#</a></h1>
 <div><section id="hdl-component-diagram">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 474.0 474" width="474.0" height="474"><style>
                 a {
@@ -211,7 +211,7 @@
 intended to be used to transfer data between system memory and other peripherals
 like high-speed converters.</p>
 <section id="features">
-<h2>Features<a class="headerlink" href="#features" title="Link to this heading">#</a></h2>
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p>Supports multiple interface types</p>
 <ul>
@@ -231,7 +231,7 @@ like high-speed converters.</p>
 </ul>
 </section>
 <section id="utilization">
-<h2>Utilization<a class="headerlink" href="#utilization" title="Link to this heading">#</a></h2>
+<h2>Utilization<a class="headerlink" href="#utilization" title="Permalink to this heading">#</a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -262,7 +262,7 @@ like high-speed converters.</p>
 </div>
 </section>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Link to this heading">#</a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading">#</a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -279,10 +279,10 @@ like high-speed converters.</p>
 </div>
 </section>
 <section id="block-diagram">
-<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Link to this heading">#</a></h2>
+<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h2>
 <img alt="AXI DMAC block diagram" class="align-center" src="../../_images/block_diagram.svg" /></section>
 <section id="configuration-parameters">
-<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading">#</a></h2>
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading">#</a></h2>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -328,7 +328,7 @@ like high-speed converters.</p>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DMA_LENGTH_WIDTH</span></code></td>
 <td class="description"><section>
-<p>Width of transfer length control register in bits.Limits length of the transfers to 2**<code class="docutils literal notranslate"><span class="pre">DMA_LENGTH_WIDTH</span></code>.</p>
+<p>Width of transfer length control register in bits. Limits length of the transfers to 2**<code class="docutils literal notranslate"><span class="pre">DMA_LENGTH_WIDTH</span></code>.</p>
 </section>
 </td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">24</span></code></td>
@@ -456,7 +456,7 @@ like high-speed converters.</p>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code></td>
 <td class="description"><section>
-<p>Interface type for the destination interface(0 = AXI-MM, 1 = AXI-Streaming, 2 = ADI-FIFO).</p>
+<p>Interface type for the destination interface (0 = AXI-MM, 1 = AXI-Streaming, 2 = ADI-FIFO).</p>
 </section>
 </td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
@@ -464,7 +464,7 @@ like high-speed converters.</p>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code></td>
 <td class="description"><section>
-<p>Interface type for the source interface(0 = AXI-MM, 1 = AXI-Streaming, 2 = ADI-FIFO).</p>
+<p>Interface type for the source interface (0 = AXI-MM, 1 = AXI-Streaming, 2 = ADI-FIFO).</p>
 </section>
 </td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">2</span></code></td>
@@ -480,7 +480,7 @@ like high-speed converters.</p>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">MAX_BYTES_PER_BURST</span></code></td>
 <td class="description"><section>
-<p>Maximum size of bursts in bytes. Must be power of 2 in a range of 2beats to 4096 bytesThe size of the burst is limited by the largest burst that both sourceand destination supports. This depends on the selected protocol.For AXI3 the maximum beats per burst is 16, while for AXI4 is 256. Fornon AXI interfaces the maximum beats per burst is in theory unlimitedbut it is set to 1024 to provide a reasonable upper threshold.This limitation is done internally in the core.</p>
+<p>Maximum size of bursts in bytes. Must be power of 2 in a range of 2 beats to 4096 bytes The size of the burst is limited by the largest burst that both source and destination supports. This depends on the selected protocol. For AXI3 the maximum beats per burst is 16, while for AXI4 is 256. For non AXI interfaces the maximum beats per burst is in theory unlimited but it is set to 1024 to provide a reasonable upper threshold. This limitation is done internally in the core.</p>
 </section>
 </td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">128</span></code></td>
@@ -488,7 +488,7 @@ like high-speed converters.</p>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">FIFO_SIZE</span></code></td>
 <td class="description"><section>
-<p>Size of the store-and-forward memory in bursts. Size of a burst isdefined by the <code class="docutils literal notranslate"><span class="pre">MAX_BYTES_PER_BURST</span></code> parameter. Must be power of 2 inthe range of 2 to 32.</p>
+<p>Size of the store-and-forward memory in bursts. Size of a burst is defined by the <code class="docutils literal notranslate"><span class="pre">MAX_BYTES_PER_BURST</span></code> parameter. Must be power of 2 in the range of 2 to 32.</p>
 </section>
 </td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">8</span></code></td>
@@ -529,7 +529,7 @@ like high-speed converters.</p>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ENABLE_DIAGNOSTICS_IF</span></code></td>
 <td class="description"><section>
-<p>Add insight into internal operation of the core, for debug purposesonly.</p>
+<p>Add insight into internal operation of the core, for debug purposes only.</p>
 </section>
 </td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">False</span></code></td>
@@ -551,10 +551,10 @@ like high-speed converters.</p>
 </section>
 </div></section>
 <section id="interface">
-<h2>Interface<a class="headerlink" href="#interface" title="Link to this heading">#</a></h2>
+<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading">#</a></h2>
 <div><section id="bus-interface-s_axi">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="980258dcde280f661452e16ad4a058310ad5625b" name="980258dcde280f661452e16ad4a058310ad5625b" type="checkbox"></input><label for="980258dcde280f661452e16ad4a058310ad5625b"><div><p>s_axi</p>
+<input class="collapsible_input" id="290bcd2234b973364523417703f864cc1c12557f" name="290bcd2234b973364523417703f864cc1c12557f" type="checkbox"></input><label for="290bcd2234b973364523417703f864cc1c12557f"><div><p>s_axi</p>
 <section>
 <p>Memory mapped AXI-lite bus that provides access to modules register map.</p>
 </section>
@@ -652,7 +652,7 @@ like high-speed converters.</p>
 </section>
 <section id="bus-interface-s_axi_aclk">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="56d323e32978bcc644ccb2e296643e21c7c806b1" name="56d323e32978bcc644ccb2e296643e21c7c806b1" type="checkbox"></input><label for="56d323e32978bcc644ccb2e296643e21c7c806b1"><div><p>s_axi_aclk</p>
+<input class="collapsible_input" id="89afa83364423167e2fcd1f50bf22c6e7449183c" name="89afa83364423167e2fcd1f50bf22c6e7449183c" type="checkbox"></input><label for="89afa83364423167e2fcd1f50bf22c6e7449183c"><div><p>s_axi_aclk</p>
 <section>
 <p>All <code class="docutils literal notranslate"><span class="pre">s_axi</span></code> signals and <code class="docutils literal notranslate"><span class="pre">irq</span></code> are synchronous to this clock.</p>
 </section>
@@ -678,7 +678,7 @@ like high-speed converters.</p>
 </section>
 <section id="bus-interface-s_axi_aresetn">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="e2fa37586f1723b0a03285809f07cc61e65d42a5" name="e2fa37586f1723b0a03285809f07cc61e65d42a5" type="checkbox"></input><label for="e2fa37586f1723b0a03285809f07cc61e65d42a5"><div><p>s_axi_aresetn</p>
+<input class="collapsible_input" id="b7aae5736b5d1a71334a97a9827bc3f14a5dd8a9" name="b7aae5736b5d1a71334a97a9827bc3f14a5dd8a9" type="checkbox"></input><label for="b7aae5736b5d1a71334a97a9827bc3f14a5dd8a9"><div><p>s_axi_aresetn</p>
 <section>
 <p>Resets the internal state of the peripheral.</p>
 </section>
@@ -704,7 +704,7 @@ like high-speed converters.</p>
 </section>
 <section id="bus-interface-m_dest_axi">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="afdae9bede8ac5884b725830d3663fd9ae843d3f" name="afdae9bede8ac5884b725830d3663fd9ae843d3f" type="checkbox"></input><label for="afdae9bede8ac5884b725830d3663fd9ae843d3f"><div><p>m_dest_axi</p>
+<input class="collapsible_input" id="0f20b218e7ce8e8cf2d79db6b4f9f3dd224b5b2f" name="0f20b218e7ce8e8cf2d79db6b4f9f3dd224b5b2f" type="checkbox"></input><label for="0f20b218e7ce8e8cf2d79db6b4f9f3dd224b5b2f"><div><p>m_dest_axi</p>
 <span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">0</span></code><span>.</span><section>
 <p>Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code> parameter is set to AXI-MM (0).</p>
 </section>
@@ -870,7 +870,7 @@ like high-speed converters.</p>
 </section>
 <section id="bus-interface-m_sg_axi">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="a22ca599af3b896d7516ae70ba7431c51648b894" name="a22ca599af3b896d7516ae70ba7431c51648b894" type="checkbox"></input><label for="a22ca599af3b896d7516ae70ba7431c51648b894"><div><p>m_sg_axi</p>
+<input class="collapsible_input" id="78dde761cd273177c6018777495e019f77eebe9a" name="78dde761cd273177c6018777495e019f77eebe9a" type="checkbox"></input><label for="78dde761cd273177c6018777495e019f77eebe9a"><div><p>m_sg_axi</p>
 <span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">DMA_SG_TRANSFER</span> <span class="pre">=</span> <span class="pre">1</span></code><span>.</span><section>
 <p>Only present when <code class="docutils literal notranslate"><span class="pre">DMA_SG_TRANSFER</span></code> parameter is set.</p>
 </section>
@@ -1036,7 +1036,7 @@ like high-speed converters.</p>
 </section>
 <section id="bus-interface-m_src_axi">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="6250b3f1f7e0ea4df78ec213991760510db20361" name="6250b3f1f7e0ea4df78ec213991760510db20361" type="checkbox"></input><label for="6250b3f1f7e0ea4df78ec213991760510db20361"><div><p>m_src_axi</p>
+<input class="collapsible_input" id="9b29b7d093e63d683542d08cee35ef8b95e8be01" name="9b29b7d093e63d683542d08cee35ef8b95e8be01" type="checkbox"></input><label for="9b29b7d093e63d683542d08cee35ef8b95e8be01"><div><p>m_src_axi</p>
 <span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">0</span></code><span>.</span><section>
 <p>Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code> parameter is set to AXI-MM (0).</p>
 </section>
@@ -1202,9 +1202,9 @@ like high-speed converters.</p>
 </section>
 <section id="bus-interface-fifo_rd_clk">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="2c543ec0332c812816c030e9765ef3a53af3781d" name="2c543ec0332c812816c030e9765ef3a53af3781d" type="checkbox"></input><label for="2c543ec0332c812816c030e9765ef3a53af3781d"><div><p>fifo_rd_clk</p>
+<input class="collapsible_input" id="7ee1a86923178ea1948a828a7b0f153bb2c8d1aa" name="7ee1a86923178ea1948a828a7b0f153bb2c8d1aa" type="checkbox"></input><label for="7ee1a86923178ea1948a828a7b0f153bb2c8d1aa"><div><p>fifo_rd_clk</p>
 <section>
-<p>The <code class="docutils literal notranslate"><span class="pre">fifo_rd</span></code> interface is synchronous to this clock.Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code> parameter is set to FIFO (2).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">fifo_rd</span></code> interface is synchronous to this clock. Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code> parameter is set to FIFO (2).</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
@@ -1228,9 +1228,9 @@ like high-speed converters.</p>
 </section>
 <section id="bus-interface-fifo_wr_clk">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="982ed8e735781f428014095ff2c61865189db395" name="982ed8e735781f428014095ff2c61865189db395" type="checkbox"></input><label for="982ed8e735781f428014095ff2c61865189db395"><div><p>fifo_wr_clk</p>
+<input class="collapsible_input" id="7fce42da9361fca677fbeba6d1d3f1377c622c6a" name="7fce42da9361fca677fbeba6d1d3f1377c622c6a" type="checkbox"></input><label for="7fce42da9361fca677fbeba6d1d3f1377c622c6a"><div><p>fifo_wr_clk</p>
 <section>
-<p>The fifo_wr interface is synchronous to this clock.Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code> parameter is set to FIFO (2).</p>
+<p>The fifo_wr interface is synchronous to this clock. Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code> parameter is set to FIFO (2).</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
@@ -1254,9 +1254,9 @@ like high-speed converters.</p>
 </section>
 <section id="bus-interface-m_axis_aclk">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="7432ac0d696b395915df1aa0854a5aaea7e939f6" name="7432ac0d696b395915df1aa0854a5aaea7e939f6" type="checkbox"></input><label for="7432ac0d696b395915df1aa0854a5aaea7e939f6"><div><p>m_axis_aclk</p>
+<input class="collapsible_input" id="dba1426ad2c6966812281ce1576ad366c6148f5b" name="dba1426ad2c6966812281ce1576ad366c6148f5b" type="checkbox"></input><label for="dba1426ad2c6966812281ce1576ad366c6148f5b"><div><p>m_axis_aclk</p>
 <section>
-<p>The <code class="docutils literal notranslate"><span class="pre">m_axis</span></code> interface is synchronous to this clock.Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code> parameter is set to AXI-Streaming(1).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">m_axis</span></code> interface is synchronous to this clock. Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code> parameter is set to AXI-Streaming (1).</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
@@ -1280,9 +1280,9 @@ like high-speed converters.</p>
 </section>
 <section id="bus-interface-m_dest_axi_aclk">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="a054bb6b2b16d2d83aa0b28f4b9ab03eb4667fac" name="a054bb6b2b16d2d83aa0b28f4b9ab03eb4667fac" type="checkbox"></input><label for="a054bb6b2b16d2d83aa0b28f4b9ab03eb4667fac"><div><p>m_dest_axi_aclk</p>
+<input class="collapsible_input" id="28d9fbdb89979d043c280859bb6756f87f2d674d" name="28d9fbdb89979d043c280859bb6756f87f2d674d" type="checkbox"></input><label for="28d9fbdb89979d043c280859bb6756f87f2d674d"><div><p>m_dest_axi_aclk</p>
 <section>
-<p>The <code class="docutils literal notranslate"><span class="pre">m_src_axi</span></code> interface is synchronous to this clock.Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code> parameter is set to AXI-MM (0).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">m_src_axi</span></code> interface is synchronous to this clock. Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code> parameter is set to AXI-MM (0).</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
@@ -1306,9 +1306,9 @@ like high-speed converters.</p>
 </section>
 <section id="bus-interface-m_sg_axi_aclk">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="1a431420a2021a16e3ab96950c552d212c2484bf" name="1a431420a2021a16e3ab96950c552d212c2484bf" type="checkbox"></input><label for="1a431420a2021a16e3ab96950c552d212c2484bf"><div><p>m_sg_axi_aclk</p>
+<input class="collapsible_input" id="c2324058e8e3375e5d3e91338b1899c55559e312" name="c2324058e8e3375e5d3e91338b1899c55559e312" type="checkbox"></input><label for="c2324058e8e3375e5d3e91338b1899c55559e312"><div><p>m_sg_axi_aclk</p>
 <section>
-<p>The <code class="docutils literal notranslate"><span class="pre">m_sg_axi</span></code> interface is synchronous to this clock.Only present when <code class="docutils literal notranslate"><span class="pre">DMA_SG_TRANSFER</span></code> parameter is set.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">m_sg_axi</span></code> interface is synchronous to this clock. Only present when <code class="docutils literal notranslate"><span class="pre">DMA_SG_TRANSFER</span></code> parameter is set.</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
@@ -1332,9 +1332,9 @@ like high-speed converters.</p>
 </section>
 <section id="bus-interface-m_src_axi_aclk">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="db1af6b52e22f24d24850f7c9d1e60871cd266da" name="db1af6b52e22f24d24850f7c9d1e60871cd266da" type="checkbox"></input><label for="db1af6b52e22f24d24850f7c9d1e60871cd266da"><div><p>m_src_axi_aclk</p>
+<input class="collapsible_input" id="724bd6835407de85a0c36163d49c858dcbdf8a03" name="724bd6835407de85a0c36163d49c858dcbdf8a03" type="checkbox"></input><label for="724bd6835407de85a0c36163d49c858dcbdf8a03"><div><p>m_src_axi_aclk</p>
 <section>
-<p>The m_src_axi interface is synchronous to this clock.Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code> parameter is set to AXI-MM (0).</p>
+<p>The m_src_axi interface is synchronous to this clock. Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code> parameter is set to AXI-MM (0).</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
@@ -1358,9 +1358,9 @@ like high-speed converters.</p>
 </section>
 <section id="bus-interface-s_axis_aclk">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="a0a28e4f3b41c6ecf6a8831e55821ab5a5513f8e" name="a0a28e4f3b41c6ecf6a8831e55821ab5a5513f8e" type="checkbox"></input><label for="a0a28e4f3b41c6ecf6a8831e55821ab5a5513f8e"><div><p>s_axis_aclk</p>
+<input class="collapsible_input" id="d2c429da90ed649c44b5eab5665ff0394dc477fd" name="d2c429da90ed649c44b5eab5665ff0394dc477fd" type="checkbox"></input><label for="d2c429da90ed649c44b5eab5665ff0394dc477fd"><div><p>s_axis_aclk</p>
 <section>
-<p>The <code class="docutils literal notranslate"><span class="pre">s_axis</span></code> interface is synchronous to this clock.Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code> parameter is set to AXI-Streaming(1).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">s_axis</span></code> interface is synchronous to this clock. Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code> parameter is set to AXI-Streaming (1).</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
@@ -1384,9 +1384,9 @@ like high-speed converters.</p>
 </section>
 <section id="bus-interface-m_dest_axi_aresetn">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="07ebd99ac72000120c84aacd3f307bec9afb2c41" name="07ebd99ac72000120c84aacd3f307bec9afb2c41" type="checkbox"></input><label for="07ebd99ac72000120c84aacd3f307bec9afb2c41"><div><p>m_dest_axi_aresetn</p>
+<input class="collapsible_input" id="daa6b5a7619698c9fb2884dcdb82cd8ef6e46c99" name="daa6b5a7619698c9fb2884dcdb82cd8ef6e46c99" type="checkbox"></input><label for="daa6b5a7619698c9fb2884dcdb82cd8ef6e46c99"><div><p>m_dest_axi_aresetn</p>
 <section>
-<p>Reset for the <code class="docutils literal notranslate"><span class="pre">m_dest_axi</span></code> interface.Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code> parameter is set to AXI-MM (0).</p>
+<p>Reset for the <code class="docutils literal notranslate"><span class="pre">m_dest_axi</span></code> interface. Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code> parameter is set to AXI-MM (0).</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
@@ -1410,9 +1410,9 @@ like high-speed converters.</p>
 </section>
 <section id="bus-interface-m_sg_axi_aresetn">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="fbcded60bb56a086c63544c7cfd9623d6d7eb145" name="fbcded60bb56a086c63544c7cfd9623d6d7eb145" type="checkbox"></input><label for="fbcded60bb56a086c63544c7cfd9623d6d7eb145"><div><p>m_sg_axi_aresetn</p>
+<input class="collapsible_input" id="daebec6a87509545272094827be916493c92393a" name="daebec6a87509545272094827be916493c92393a" type="checkbox"></input><label for="daebec6a87509545272094827be916493c92393a"><div><p>m_sg_axi_aresetn</p>
 <section>
-<p>Reset for the <code class="docutils literal notranslate"><span class="pre">m_sg_axi</span></code> interface.Only present when <code class="docutils literal notranslate"><span class="pre">DMA_SG_TRANSFER</span></code> parameter is set.</p>
+<p>Reset for the <code class="docutils literal notranslate"><span class="pre">m_sg_axi</span></code> interface. Only present when <code class="docutils literal notranslate"><span class="pre">DMA_SG_TRANSFER</span></code> parameter is set.</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
@@ -1436,9 +1436,9 @@ like high-speed converters.</p>
 </section>
 <section id="bus-interface-m_src_axi_aresetn">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="17ad5879a232cdad80daa3fe906ebb4c473ff318" name="17ad5879a232cdad80daa3fe906ebb4c473ff318" type="checkbox"></input><label for="17ad5879a232cdad80daa3fe906ebb4c473ff318"><div><p>m_src_axi_aresetn</p>
+<input class="collapsible_input" id="985c3f6b1100e26510b84dea403ad0eab23b6fe5" name="985c3f6b1100e26510b84dea403ad0eab23b6fe5" type="checkbox"></input><label for="985c3f6b1100e26510b84dea403ad0eab23b6fe5"><div><p>m_src_axi_aresetn</p>
 <section>
-<p>Reset for the <code class="docutils literal notranslate"><span class="pre">m_src_axi</span></code> interface.Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code> parameter is set to AXI-MM (0).</p>
+<p>Reset for the <code class="docutils literal notranslate"><span class="pre">m_src_axi</span></code> interface. Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code> parameter is set to AXI-MM (0).</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
@@ -1462,9 +1462,9 @@ like high-speed converters.</p>
 </section>
 <section id="bus-interface-s_axis">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="42edf0202ad9b8fe3dba10b31f1974a2ac2407cf" name="42edf0202ad9b8fe3dba10b31f1974a2ac2407cf" type="checkbox"></input><label for="42edf0202ad9b8fe3dba10b31f1974a2ac2407cf"><div><p>s_axis</p>
+<input class="collapsible_input" id="baa67ecfe3c1e03d09191bcbf2e0f3ad581ace6c" name="baa67ecfe3c1e03d09191bcbf2e0f3ad581ace6c" type="checkbox"></input><label for="baa67ecfe3c1e03d09191bcbf2e0f3ad581ace6c"><div><p>s_axis</p>
 <span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">1</span></code><span>.</span><section>
-<p>Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code> parameter is set to AXI-Streaming(1).</p>
+<p>Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code> parameter is set to AXI-Streaming (1).</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
@@ -1520,9 +1520,9 @@ like high-speed converters.</p>
 </section>
 <section id="bus-interface-m_axis">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="8ea5fa459af98070d39f632d9fad0252ca33c601" name="8ea5fa459af98070d39f632d9fad0252ca33c601" type="checkbox"></input><label for="8ea5fa459af98070d39f632d9fad0252ca33c601"><div><p>m_axis</p>
+<input class="collapsible_input" id="0c3e872b3877f59e05ac68e14bd0ccd3a005a788" name="0c3e872b3877f59e05ac68e14bd0ccd3a005a788" type="checkbox"></input><label for="0c3e872b3877f59e05ac68e14bd0ccd3a005a788"><div><p>m_axis</p>
 <span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">1</span></code><span>.</span><section>
-<p>Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code> parameter is set to AXI-Streaming(1).</p>
+<p>Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code> parameter is set to AXI-Streaming (1).</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
@@ -1578,7 +1578,7 @@ like high-speed converters.</p>
 </section>
 <section id="bus-interface-fifo_wr">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="0b51895b023e7a0bbe7a3a68e3a040b5f3add8e1" name="0b51895b023e7a0bbe7a3a68e3a040b5f3add8e1" type="checkbox"></input><label for="0b51895b023e7a0bbe7a3a68e3a040b5f3add8e1"><div><p>fifo_wr</p>
+<input class="collapsible_input" id="8611b89da00fbdd1a9dca5bf8fab0f0b0abc0e80" name="8611b89da00fbdd1a9dca5bf8fab0f0b0abc0e80" type="checkbox"></input><label for="8611b89da00fbdd1a9dca5bf8fab0f0b0abc0e80"><div><p>fifo_wr</p>
 <span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">2</span></code><span>.</span><section>
 <p>Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code> parameter is set to FIFO (2).</p>
 </section>
@@ -1620,7 +1620,7 @@ like high-speed converters.</p>
 </section>
 <section id="bus-interface-fifo_rd">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="b362897530fcdeecd755e0210f2a74bce695d505" name="b362897530fcdeecd755e0210f2a74bce695d505" type="checkbox"></input><label for="b362897530fcdeecd755e0210f2a74bce695d505"><div><p>fifo_rd</p>
+<input class="collapsible_input" id="59c18f00313be83786888e32a4044c820cf1bb60" name="59c18f00313be83786888e32a4044c820cf1bb60" type="checkbox"></input><label for="59c18f00313be83786888e32a4044c820cf1bb60"><div><p>fifo_rd</p>
 <span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">2</span></code><span>.</span><section>
 <p>Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code> parameter is set to FIFO (2).</p>
 </section>
@@ -1658,9 +1658,9 @@ like high-speed converters.</p>
 </section>
 <section id="bus-interface-irq">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="5bb93ac55b1503a258261098162bb186ebcf2fb5" name="5bb93ac55b1503a258261098162bb186ebcf2fb5" type="checkbox"></input><label for="5bb93ac55b1503a258261098162bb186ebcf2fb5"><div><p>irq</p>
+<input class="collapsible_input" id="8e6c86eadabbaddda8f0b89981fdb48b8ada9e35" name="8e6c86eadabbaddda8f0b89981fdb48b8ada9e35" type="checkbox"></input><label for="8e6c86eadabbaddda8f0b89981fdb48b8ada9e35"><div><p>irq</p>
 <section>
-<p>Interrupt output of the module. Is asserted when at least one of themodules interrupt is pending and enabled.</p>
+<p>Interrupt output of the module. Is asserted when at least one of the modules interrupt is pending and enabled.</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
@@ -1684,7 +1684,7 @@ like high-speed converters.</p>
 </section>
 <section id="ports">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="16c2eb4dbbcdafb15c712951d6aee1bf0a101658" name="16c2eb4dbbcdafb15c712951d6aee1bf0a101658" type="checkbox"></input><label for="16c2eb4dbbcdafb15c712951d6aee1bf0a101658"><p>Ports</p>
+<input class="collapsible_input" id="4bff2085c925f4bd03cf6e07150c395397c724b6" name="4bff2085c925f4bd03cf6e07150c395397c724b6" type="checkbox"></input><label for="4bff2085c925f4bd03cf6e07150c395397c724b6"><p>Ports</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1727,7 +1727,7 @@ like high-speed converters.</p>
 </section>
 </div></section>
 <section id="register-map">
-<h2>Register Map<a class="headerlink" href="#register-map" title="Link to this heading">#</a></h2>
+<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading">#</a></h2>
 <div><section id="hdl-regmap">
 <section id="register-map-DMA Controller (axi_dmac)">
 <div class="collapsible docutils container">
@@ -2474,11 +2474,11 @@ like high-speed converters.</p>
 </section>
 </div></section>
 <section id="theory-of-operation">
-<h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Link to this heading">#</a></h2>
+<h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Permalink to this heading">#</a></h2>
 <section id="hdl-synthesis-settings">
-<h3>HDL Synthesis Settings<a class="headerlink" href="#hdl-synthesis-settings" title="Link to this heading">#</a></h3>
+<h3>HDL Synthesis Settings<a class="headerlink" href="#hdl-synthesis-settings" title="Permalink to this heading">#</a></h3>
 <section id="sizing-of-the-internal-store-and-forward-data-buffer">
-<h4>Sizing of the internal store-and-forward data buffer<a class="headerlink" href="#sizing-of-the-internal-store-and-forward-data-buffer" title="Link to this heading">#</a></h4>
+<h4>Sizing of the internal store-and-forward data buffer<a class="headerlink" href="#sizing-of-the-internal-store-and-forward-data-buffer" title="Permalink to this heading">#</a></h4>
 <p>An internal buffer is used to store data from the source interface before it is
 forwarded to the destination once that can accept it. The purpose of the buffer
 is to even out the rate mismatches between the source and destination. e.g if
@@ -2502,9 +2502,9 @@ BUFFER_WIDTH_IN_BYTES</p></li>
 </section>
 </section>
 <section id="interfaces-and-signals">
-<h3>Interfaces and Signals<a class="headerlink" href="#interfaces-and-signals" title="Link to this heading">#</a></h3>
+<h3>Interfaces and Signals<a class="headerlink" href="#interfaces-and-signals" title="Permalink to this heading">#</a></h3>
 <section id="register-map-configuration-interface">
-<h4>Register Map Configuration Interface<a class="headerlink" href="#register-map-configuration-interface" title="Link to this heading">#</a></h4>
+<h4>Register Map Configuration Interface<a class="headerlink" href="#register-map-configuration-interface" title="Permalink to this heading">#</a></h4>
 <p>The register map configuration interface can be accessed through the AXI4-Lite
 <code class="docutils literal notranslate"><span class="pre">S_AXI</span></code> interface. The interface is synchronous to the <code class="docutils literal notranslate"><span class="pre">s_axi_aclk</span></code>. The
 <code class="docutils literal notranslate"><span class="pre">s_axi_aresetn</span></code> signal is used to reset the peripheral and should be asserted
@@ -2512,9 +2512,9 @@ during system startup until the <code class="docutils literal notranslate"><span
 De-assertion of the reset signal should by synchronous to <code class="docutils literal notranslate"><span class="pre">s_axi_aclk</span></code>.</p>
 </section>
 <section id="data-interfaces">
-<h4>Data Interfaces<a class="headerlink" href="#data-interfaces" title="Link to this heading">#</a></h4>
+<h4>Data Interfaces<a class="headerlink" href="#data-interfaces" title="Permalink to this heading">#</a></h4>
 <section id="axi-streaming-slave">
-<h5>AXI-Streaming slave<a class="headerlink" href="#axi-streaming-slave" title="Link to this heading">#</a></h5>
+<h5>AXI-Streaming slave<a class="headerlink" href="#axi-streaming-slave" title="Permalink to this heading">#</a></h5>
 <p>The interface back-pressures through the <code class="docutils literal notranslate"><span class="pre">s_axis_ready</span></code> signal. If the core is
 in the idle state the <code class="docutils literal notranslate"><span class="pre">s_axis_ready</span></code> signal will stay low until a descriptor
 is submitted. The <code class="docutils literal notranslate"><span class="pre">s_axis_ready</span></code> will go low once the internal buffer of the
@@ -2535,13 +2535,13 @@ descriptor is queued (submitted) it will stay high and so on.</p>
 </section>
 </section>
 <section id="configuration-interface">
-<h3>Configuration Interface<a class="headerlink" href="#configuration-interface" title="Link to this heading">#</a></h3>
+<h3>Configuration Interface<a class="headerlink" href="#configuration-interface" title="Permalink to this heading">#</a></h3>
 <p>The peripheral features a register map configuration interface that can be
 accessed through the AXI4-Lite <code class="docutils literal notranslate"><span class="pre">S_AXI</span></code> port. The register map can be used to
 configure the peripherals operational parameters, query the current status of
 the device and query the features supported by the device.</p>
 <section id="peripheral-identification">
-<h4>Peripheral Identification<a class="headerlink" href="#peripheral-identification" title="Link to this heading">#</a></h4>
+<h4>Peripheral Identification<a class="headerlink" href="#peripheral-identification" title="Permalink to this heading">#</a></h4>
 <p>The peripheral contains multiple registers that allow the identification of the
 peripheral as well as discovery of features that were configured at HDL
 synthesis time. Apart from the <code class="docutils literal notranslate"><span class="pre">SCRATCH</span></code> register all registers in this
@@ -2568,7 +2568,7 @@ the peripheral exists at the expected location in the memory mapped IO register
 space.</p>
 </section>
 <section id="interrupt-handling">
-<h4>Interrupt Handling<a class="headerlink" href="#interrupt-handling" title="Link to this heading">#</a></h4>
+<h4>Interrupt Handling<a class="headerlink" href="#interrupt-handling" title="Permalink to this heading">#</a></h4>
 <p>Interrupt processing is handled by three closely related registers. All three
 registers follow the same layout, each bit in the register corresponds to one
 particular interrupt.</p>
@@ -2597,7 +2597,7 @@ multiple bits in a single write operation.</p>
 <p>For more details regarding interrupt operation see the <a class="reference internal" href="#axi-dmac-interrupts"><span class="std std-ref">Interrupts</span></a>.</p>
 </section>
 <section id="transfer-configuration">
-<h4>Transfer Configuration<a class="headerlink" href="#transfer-configuration" title="Link to this heading">#</a></h4>
+<h4>Transfer Configuration<a class="headerlink" href="#transfer-configuration" title="Permalink to this heading">#</a></h4>
 <p>The <code class="docutils literal notranslate"><span class="pre">DEST_ADDRESS</span></code> (<code class="docutils literal notranslate"><span class="pre">0x410</span></code>) register contains the destination address of
 the transfer. The address must be aligned to the destination bus width.
 Non-aligned addresses will be automatically aligned internally by setting the
@@ -2631,7 +2631,7 @@ during the last beat of the AXI Stream transfer.</p></li>
 </ul>
 </section>
 <section id="transfer-submission">
-<h4>Transfer Submission<a class="headerlink" href="#transfer-submission" title="Link to this heading">#</a></h4>
+<h4>Transfer Submission<a class="headerlink" href="#transfer-submission" title="Permalink to this heading">#</a></h4>
 <p>Writing a 1 to the <code class="docutils literal notranslate"><span class="pre">TRANSFER_SUBMIT</span></code> (<code class="docutils literal notranslate"><span class="pre">0x408</span></code>) register queues a new
 transfer. If the internal transfer queue is full the <code class="docutils literal notranslate"><span class="pre">TRANSFER_SUBMIT</span></code> bit
 will stay asserted until room becomes available, the bit transitions back to 0
@@ -2651,7 +2651,7 @@ has been completed by checking the corresponding bit in the <code class="docutil
 the <code class="docutils literal notranslate"><span class="pre">TRANSFER_SUBMIT</span></code> bit.</p>
 </section>
 <section id="transfer-status">
-<h4>Transfer Status<a class="headerlink" href="#transfer-status" title="Link to this heading">#</a></h4>
+<h4>Transfer Status<a class="headerlink" href="#transfer-status" title="Permalink to this heading">#</a></h4>
 <p>The <code class="docutils literal notranslate"><span class="pre">TRANSFER_DONE</span></code> (<code class="docutils literal notranslate"><span class="pre">0x428</span></code>) register indicates whether a submitted
 transfer has been completed. Each bit in the register corresponds to transfer
 ID. When a new transfer is submitted the corresponding bit in the register is
@@ -2662,7 +2662,7 @@ active transfer. When no transfer is active the value of register will be equal
 to the value of the <code class="docutils literal notranslate"><span class="pre">TRANSFER_ID</span></code> (<code class="docutils literal notranslate"><span class="pre">0x404</span></code>) register.</p>
 </section>
 <section id="transfer-length-reporting">
-<h4>Transfer length reporting<a class="headerlink" href="#transfer-length-reporting" title="Link to this heading">#</a></h4>
+<h4>Transfer length reporting<a class="headerlink" href="#transfer-length-reporting" title="Permalink to this heading">#</a></h4>
 <p>When using MM or FIFO source interfaces the amount of data which the core will
 transfer is defined by <code class="docutils literal notranslate"><span class="pre">X_LENGTH</span></code> and <code class="docutils literal notranslate"><span class="pre">Y_LENGTH</span></code> registers in the moment of
 the transfer submission. Once the corresponding bit from the <code class="docutils literal notranslate"><span class="pre">TRANSFER_DONE</span></code>
@@ -2684,7 +2684,7 @@ cleared once the transfer completes. This register should be used for debugging
 purposes only.</p>
 </section>
 <section id="transfer-tear-down">
-<h4>Transfer Tear-down<a class="headerlink" href="#transfer-tear-down" title="Link to this heading">#</a></h4>
+<h4>Transfer Tear-down<a class="headerlink" href="#transfer-tear-down" title="Permalink to this heading">#</a></h4>
 <p>Non-cyclic transfers stop once the programmed amount of data is transferred to
 the destination. Cyclic transfers needs to be stopped with software intervention
 by setting the <code class="docutils literal notranslate"><span class="pre">ENABLE</span></code> control bit to 0. In case if required, non cyclic
@@ -2707,7 +2707,7 @@ valid without breaking the interface semantics</p>
 </section>
 </section>
 <section id="interrupts">
-<span id="axi-dmac-interrupts"></span><h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading">#</a></h3>
+<span id="axi-dmac-interrupts"></span><h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading">#</a></h3>
 <p>The DMA controller supports interrupts to allow asynchronous notification of
 certain events to the CPU. This can be used as an alternative to busy-polling
 the status registers. Two types of interrupt events are implemented by the DMA
@@ -2727,7 +2727,7 @@ case the interrupt handler will only run once. Software should always check all
 submitted transfers for completion.</p>
 </section>
 <section id="d-transfers">
-<h3>2D Transfers<a class="headerlink" href="#d-transfers" title="Link to this heading">#</a></h3>
+<h3>2D Transfers<a class="headerlink" href="#d-transfers" title="Permalink to this heading">#</a></h3>
 <p>If the <code class="docutils literal notranslate"><span class="pre">DMA_2D_TRANSFER</span></code> HDL synthesis configuration parameter is set the DMA
 controller has support for 2D transfers.</p>
 <p>A 2D transfer is composed of a number of rows with each row containing a certain
@@ -2752,7 +2752,7 @@ the stride and so on.</p>
 considered and the number of rows per transfer is fixed to 1.</p>
 </section>
 <section id="cyclic-transfers">
-<span id="axi-dmac-cyclic-transfers"></span><h3>Cyclic Transfers<a class="headerlink" href="#cyclic-transfers" title="Link to this heading">#</a></h3>
+<span id="axi-dmac-cyclic-transfers"></span><h3>Cyclic Transfers<a class="headerlink" href="#cyclic-transfers" title="Permalink to this heading">#</a></h3>
 <p>If the <code class="docutils literal notranslate"><span class="pre">CYCLIC</span></code> HDL synthesis configuration parameter is set the DMA
 controller has support for cyclic transfers.</p>
 <p>A cyclic transfer once completed will restart automatically with the same
@@ -2767,7 +2767,7 @@ cyclic transfer the DMA channel must be disabled.</p>
 transfer (and before stopping the cyclic transfer) will never be executed.</p>
 </section>
 <section id="scatter-gather-transfers">
-<h3>Scatter-Gather Transfers<a class="headerlink" href="#scatter-gather-transfers" title="Link to this heading">#</a></h3>
+<h3>Scatter-Gather Transfers<a class="headerlink" href="#scatter-gather-transfers" title="Permalink to this heading">#</a></h3>
 <p>If the <code class="docutils literal notranslate"><span class="pre">DMA_SG_TRANSFER</span></code> HDL synthesis configuration parameter is set the DMA
 controller has support for scatter-gather transfers.</p>
 <p>The scatter-gather optional feature allows the DMA to access noncontiguous areas
@@ -2781,7 +2781,7 @@ the <em>scattered</em> memory data from multiple addresses.</p>
 <p>The scatter-gather has its own dedicated AXI3/4 memory mapped interface
 <code class="docutils literal notranslate"><span class="pre">m_sg_axi</span></code> through which it receives the descriptor data.</p>
 <section id="descriptor-structure">
-<h4>Descriptor Structure<a class="headerlink" href="#descriptor-structure" title="Link to this heading">#</a></h4>
+<h4>Descriptor Structure<a class="headerlink" href="#descriptor-structure" title="Permalink to this heading">#</a></h4>
 <p>The scatter-gather interface fetches the descriptor information from memory in
 the following order:</p>
 <div class="table-wrapper docutils container">
@@ -2848,7 +2848,7 @@ the next row for the destination address.</p></td>
 transfers and should be set to 0 if 2D transfers are not required.</p>
 </section>
 <section id="id1">
-<h4>Transfer Configuration<a class="headerlink" href="#id1" title="Link to this heading">#</a></h4>
+<h4>Transfer Configuration<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h4>
 <p>The scatter-gather transfers are enabled through the <code class="docutils literal notranslate"><span class="pre">HWDESC</span></code> bit from the
 <code class="docutils literal notranslate"><span class="pre">CONTROL</span></code> (<code class="docutils literal notranslate"><span class="pre">0x400</span></code>) register. Once this bit is set, cyclic transfers are
 disabled, since the same cyclic behavior can be replicated using a descriptor
@@ -2869,7 +2869,7 @@ of the application.</p>
 </section>
 </section>
 <section id="transfer-start-synchronization">
-<h3>Transfer Start Synchronization<a class="headerlink" href="#transfer-start-synchronization" title="Link to this heading">#</a></h3>
+<h3>Transfer Start Synchronization<a class="headerlink" href="#transfer-start-synchronization" title="Permalink to this heading">#</a></h3>
 <p>If the transfer start synchronization feature of the DMA controller is enabled
 the start of a transfer is synchronized to a flag in the data stream. This is
 primarily useful if the data stream does not have any back-pressure and one unit
@@ -2883,7 +2883,7 @@ in <code class="docutils literal notranslate"><span class="pre">s_axis_user[0]</
 the same control signal as the data.</p>
 </section>
 <section id="diagnostics-interface">
-<h3>Diagnostics interface<a class="headerlink" href="#diagnostics-interface" title="Link to this heading">#</a></h3>
+<h3>Diagnostics interface<a class="headerlink" href="#diagnostics-interface" title="Permalink to this heading">#</a></h3>
 <p>For debug purposes a diagnostics interface is added to the core.
 The <code class="docutils literal notranslate"><span class="pre">dest_diag_level_bursts</span></code> signal adds insight into the fullness of the
 internal memory buffer during operation. The information is exposed in number
@@ -2894,9 +2894,9 @@ the DMAC on its destination port. The signal is synchronous to the destination
 clock domain (<code class="docutils literal notranslate"><span class="pre">m_dest_axi_aclk</span></code> or <code class="docutils literal notranslate"><span class="pre">m_axis_aclk</span></code> depending on <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code>).</p>
 </section>
 <section id="limitations">
-<h3>Limitations<a class="headerlink" href="#limitations" title="Link to this heading">#</a></h3>
+<h3>Limitations<a class="headerlink" href="#limitations" title="Permalink to this heading">#</a></h3>
 <section id="axi-4kbyte-address-boundary">
-<h4>AXI 4kByte Address Boundary<a class="headerlink" href="#axi-4kbyte-address-boundary" title="Link to this heading">#</a></h4>
+<h4>AXI 4kByte Address Boundary<a class="headerlink" href="#axi-4kbyte-address-boundary" title="Permalink to this heading">#</a></h4>
 <p>Software must program the <code class="docutils literal notranslate"><span class="pre">SRC_ADDRESS</span></code> and <code class="docutils literal notranslate"><span class="pre">DEST_ADDRESS</span></code> registers in such
 way that AXI burst won’t cross the 4kB address boundary. The following condition
 must hold:</p>
@@ -2908,7 +2908,7 @@ must hold:</p>
 </ul>
 </section>
 <section id="address-alignment">
-<h4>Address Alignment<a class="headerlink" href="#address-alignment" title="Link to this heading">#</a></h4>
+<h4>Address Alignment<a class="headerlink" href="#address-alignment" title="Permalink to this heading">#</a></h4>
 <p>Software must program the <code class="docutils literal notranslate"><span class="pre">SRC_ADDRESS</span></code> and <code class="docutils literal notranslate"><span class="pre">DEST_ADDRESS</span></code>registers to be
 multiple of the corresponding MM data bus. The following conditions must hold:</p>
 <ul class="simple">
@@ -2917,7 +2917,7 @@ multiple of the corresponding MM data bus. The following conditions must hold:</
 </ul>
 </section>
 <section id="transfer-length-alignment">
-<h4>Transfer Length Alignment<a class="headerlink" href="#transfer-length-alignment" title="Link to this heading">#</a></h4>
+<h4>Transfer Length Alignment<a class="headerlink" href="#transfer-length-alignment" title="Permalink to this heading">#</a></h4>
 <p>Software must program the <code class="docutils literal notranslate"><span class="pre">X_LENGTH</span></code> register to be multiple of the widest
 data bus. The following condition must hold:</p>
 <ul class="simple">
@@ -2940,21 +2940,21 @@ bytes.</p>
 still needs to be aligned to the width of the MM interface that it belongs to.</p>
 </section>
 <section id="scatter-gather-datapath-width">
-<h4>Scatter-Gather Datapath Width<a class="headerlink" href="#scatter-gather-datapath-width" title="Link to this heading">#</a></h4>
+<h4>Scatter-Gather Datapath Width<a class="headerlink" href="#scatter-gather-datapath-width" title="Permalink to this heading">#</a></h4>
 <p>The scatter-gather dedicated interface <code class="docutils literal notranslate"><span class="pre">m_sg_axi</span></code> currently supports only
 64-bit transfers. <code class="docutils literal notranslate"><span class="pre">DMA_DATA_WIDTH_SG</span></code> can only be set to 64.</p>
 </section>
 </section>
 </section>
 <section id="software-support">
-<h2>Software Support<a class="headerlink" href="#software-support" title="Link to this heading">#</a></h2>
+<h2>Software Support<a class="headerlink" href="#software-support" title="Permalink to this heading">#</a></h2>
 <p>Analog Devices recommends to use the provided software drivers.</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/axi-dmac">Analog Device AXI-DMAC DMA Controller Linux Driver</a></p></li>
 </ul>
 </section>
 <section id="known-issues">
-<h2>Known Issues<a class="headerlink" href="#known-issues" title="Link to this heading">#</a></h2>
+<h2>Known Issues<a class="headerlink" href="#known-issues" title="Permalink to this heading">#</a></h2>
 <p>1. When max bytes per burst matches the data width of destination interface an
 erroneous extra beat is inserted after every valid beat on the destination side.
 Example configuration:</p>
@@ -2966,12 +2966,12 @@ Example configuration:</p>
 <p>Workaround: increase the max bytes per burst to larger than 128</p>
 </section>
 <section id="technical-support">
-<h2>Technical Support<a class="headerlink" href="#technical-support" title="Link to this heading">#</a></h2>
+<h2>Technical Support<a class="headerlink" href="#technical-support" title="Permalink to this heading">#</a></h2>
 <p>Analog Devices will provide limited online support for anyone using the core
 with Analog Devices components (ADC, DAC, Video, Audio, etc) via the <a class="reference external" href="https://ez.analog.com/fpga">EngineerZone</a>.</p>
 </section>
 <section id="glossary">
-<h2>Glossary<a class="headerlink" href="#glossary" title="Link to this heading">#</a></h2>
+<h2>Glossary<a class="headerlink" href="#glossary" title="Permalink to this heading">#</a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>

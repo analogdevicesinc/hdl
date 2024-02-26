@@ -1,0 +1,155 @@
+.sidebar-brand {
+	background-color: #f8f9fb;
+	border-radius: .25em;
+	margin: var(--sidebar-item-spacing-vertical)
+				calc(var(--sidebar-item-spacing-horizontal)/2)
+				0
+				calc(var(--sidebar-item-spacing-horizontal)/2);
+	padding: 0;
+	width: 11em;
+	margin-left: 2.25em;
+}
+.sidebar-brand::before {
+	content: "";
+	display: block;
+	height: 4.5em;
+	background-size: auto 5.625em;
+	background-image: url(HDL_logo.svg);
+	background-position: -10em -.5em;
+	background-repeat: no-repeat;
+}
+.sidebar-brand-text {
+	display: none;
+}
+body[data-theme="dark"] .sidebar-brand {
+	color: #fff;
+}
+@media (min-width: 56em){
+	.content {
+		width: 52em;
+	}
+}
+figure > object {
+	max-width: 100%;
+}
+img {
+	background: #fff;
+	border-radius: .25em;
+	padding: .5em 0;
+}
+iframe {
+	width: calc(50.625rem - 1rem);
+	height: calc(28.47rem - 0.5625rem);
+	margin-left: -1rem;
+}
+@media (max-width:50.625rem) {
+	iframe {
+		width: calc(100vw - 1rem);
+		height: calc(56.25vw - 1rem);
+		margin-left: -1rem;
+	}
+}
+.WaveDrom {
+	background: #fff;
+	border-radius: .25em;
+	padding: .5em 0;
+}
+table.regmap {
+	font-size: .9em;
+}
+table.regmap .caption-text{
+	font-size: 1rem;
+}
+th, td.type {
+	white-space: nowrap;
+}
+td.description {
+	width: 45%;
+	font-size:.8em;
+}
+.red {
+	color: red;
+}
+.green {
+	color: green;
+}
+#signal-and-interface-pins h3 {
+	font-weight: normal;
+}
+.table-wrapper {
+	overflow: visible;
+}
+.collapsible {
+	border: 1px solid var(--color-table-border);
+	border-radius: .25em;
+	margin-bottom: -1px;
+}
+.collapsible_input {
+	display: none;
+}
+.collapsible_content {
+	border-top: 1px solid var(--color-table-border);
+	overflow: hidden;
+	height: 0;
+	padding: 0 .75em !important;
+	transition: ease opacity .25s;
+	opacity: 0;
+}
+.collapsible label {
+	width: 100%;
+	padding: 0.75em 1em 0.75em .75em;
+	user-select: none;
+	box-sizing: border-box;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	font-weight: bold;
+	color: var(--color-toc-item-text);
+}
+.collapsible label .icon {
+	border: solid var(--color-toc-item-text);
+	border-width: 0 2px 2px 0;
+	display: block;
+	transition: transform ease .125s, margin-top ease .125s;
+	width: .6em;
+	height: .6em;
+	transform: rotate(-45deg);
+}
+.collapsible label p {
+	display: inline-block;
+	margin: 0;
+}
+.collapsible label, .collapsible div {
+	transition: box-shadow ease .25s;
+}
+.collapsible label:hover ~ div, .collapsible label:hover {
+	box-shadow: 0 .2rem .5rem rgba(0,0,0,.05),0 0 .0625rem rgba(0,0,0,.1);
+}
+.collapsible_input:checked ~ label .icon {
+	transform: rotate(45deg);
+	margin-top: -.5em;
+}
+.collapsible_content {
+	overflow: auto;
+}
+.collapsible_input:checked ~ .collapsible_content {
+	height: 100%;
+	opacity: 1;
+}
+.default {
+	min-width: 5em;
+	max-width: 11em;
+	line-break: anywhere;
+}
+.default .pre {
+	white-space: pre;
+}
+
+#hdl-component-diagram {
+	text-align: center;
+}
+
+#hdl-component-diagram svg {
+	max-width: 100%;
+}

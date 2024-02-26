@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>SPI Engine Offload Module &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=84b5089d" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
-    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=8dde5eb3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e974aa45" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://wavedrom.com/skins/default.js"></script>
     <script src="https://wavedrom.com/wavedrom.min.js"></script>
     <script defer="" src="../../_static/app.umd.js?v=37ac5827"></script>
@@ -149,7 +149,7 @@
           <div class="body" role="main">
             
   <section id="spi-engine-offload-module">
-<span id="spi-engine-offload"></span><h1>SPI Engine Offload Module<a class="headerlink" href="#spi-engine-offload-module" title="Link to this heading">#</a></h1>
+<span id="spi-engine-offload"></span><h1>SPI Engine Offload Module<a class="headerlink" href="#spi-engine-offload-module" title="Permalink to this heading">#</a></h1>
 <div><section id="hdl-component-diagram">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 454.8 210" width="454.8" height="210"><style>
                 a {
@@ -161,7 +161,7 @@ data stream in a RAM or ROM module. The command stream is executed when the
 <code class="docutils literal notranslate"><span class="pre">trigger</span></code> signal is asserted. This allows the execution of SPI transactions
 with a very short delay in reaction to a event.</p>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Link to this heading">#</a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading">#</a></h2>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -186,7 +186,7 @@ peripheral.</p></td>
 </div>
 </section>
 <section id="configuration-parameters">
-<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading">#</a></h2>
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading">#</a></h2>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -200,7 +200,7 @@ peripheral.</p></td>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ASYNC_SPI_CLK</span></code></td>
 <td class="description"><section>
-<p>If set to 1 the <code class="docutils literal notranslate"><span class="pre">ctrl_clk</span></code> and <code class="docutils literal notranslate"><span class="pre">spi_clk</span></code> are assumed to beasynchronous.</p>
+<p>If set to 1 the <code class="docutils literal notranslate"><span class="pre">ctrl_clk</span></code> and <code class="docutils literal notranslate"><span class="pre">spi_clk</span></code> are assumed to be asynchronous.</p>
 </section>
 </td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">False</span></code></td>
@@ -213,7 +213,7 @@ peripheral.</p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">CMD_MEM_ADDRESS_WIDTH</span></code></td>
 <td class="description"><section>
-<p>Configures the size of the command stream storage. The size is``2**CMD_MEM_ADDR_WIDTH`` entries.</p>
+<p>Configures the size of the command stream storage. The size is <code class="docutils literal notranslate"><span class="pre">2**CMD_MEM_ADDR_WIDTH</span></code> entries.</p>
 </section>
 </td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">4</span></code></td>
@@ -221,7 +221,7 @@ peripheral.</p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">SDO_MEM_ADDRESS_WIDTH</span></code></td>
 <td class="description"><section>
-<p>Configures the size of the SDO data stream storage. The size is``2**SDO_MEM_ADDR_WIDTH`` entries.</p>
+<p>Configures the size of the SDO data stream storage. The size is <code class="docutils literal notranslate"><span class="pre">2**SDO_MEM_ADDR_WIDTH</span></code> entries.</p>
 </section>
 </td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">4</span></code></td>
@@ -243,12 +243,12 @@ peripheral.</p></td>
 </section>
 </div></section>
 <section id="signal-and-interface-pins">
-<h2>Signal and Interface Pins<a class="headerlink" href="#signal-and-interface-pins" title="Link to this heading">#</a></h2>
+<h2>Signal and Interface Pins<a class="headerlink" href="#signal-and-interface-pins" title="Permalink to this heading">#</a></h2>
 <div><section id="bus-interface-spi_engine_ctrl">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="5b38c7cafaaff4a264816142a4e072c216b972b1" name="5b38c7cafaaff4a264816142a4e072c216b972b1" type="checkbox"></input><label for="5b38c7cafaaff4a264816142a4e072c216b972b1"><div><p>spi_engine_ctrl</p>
+<input class="collapsible_input" id="0b3c067d8d12fbeb50ad8e176568150f846e6cc8" name="0b3c067d8d12fbeb50ad8e176568150f846e6cc8" type="checkbox"></input><label for="0b3c067d8d12fbeb50ad8e176568150f846e6cc8"><div><p>spi_engine_ctrl</p>
 <section>
-<p><a class="reference internal" href="control-interface.html#spi-engine-control-interface"><span class="std std-ref">SPI Engine Control Interface</span></a> master.SPI Engine Control stream that contains commands and data.</p>
+<p><a class="reference internal" href="control-interface.html#spi-engine-control-interface"><span class="std std-ref">SPI Engine Control Interface</span></a> master. SPI Engine Control stream that contains commands and data.</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
@@ -316,9 +316,9 @@ peripheral.</p></td>
 </section>
 <section id="bus-interface-spi_engine_offload_ctrl">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="723b7702f532505f2dc4795ac757c8d0d0af756a" name="723b7702f532505f2dc4795ac757c8d0d0af756a" type="checkbox"></input><label for="723b7702f532505f2dc4795ac757c8d0d0af756a"><div><p>spi_engine_offload_ctrl</p>
+<input class="collapsible_input" id="5ff91291cbb40297e04658afec1d80e8b007c3f0" name="5ff91291cbb40297e04658afec1d80e8b007c3f0" type="checkbox"></input><label for="5ff91291cbb40297e04658afec1d80e8b007c3f0"><div><p>spi_engine_offload_ctrl</p>
 <section>
-<p><a class="reference internal" href="offload-control-interface.html#spi-engine-offload-control-interface"><span class="std std-ref">SPI Engine Offload Control Interface</span></a> slave.Control interface which allows to re-program the stored command and SDOdata stream.</p>
+<p><a class="reference internal" href="offload-control-interface.html#spi-engine-offload-control-interface"><span class="std std-ref">SPI Engine Offload Control Interface</span></a> slave. Control interface which allows to re-program the stored command and SDO data stream.</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
@@ -378,9 +378,9 @@ peripheral.</p></td>
 </section>
 <section id="bus-interface-offload_sdi">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="42dc869f4e9432e4e90c2831271a7a8afd69dd3c" name="42dc869f4e9432e4e90c2831271a7a8afd69dd3c" type="checkbox"></input><label for="42dc869f4e9432e4e90c2831271a7a8afd69dd3c"><div><p>offload_sdi</p>
+<input class="collapsible_input" id="386d93c7b8c3f04cd46dfe925578d14060af3b8e" name="386d93c7b8c3f04cd46dfe925578d14060af3b8e" type="checkbox"></input><label for="386d93c7b8c3f04cd46dfe925578d14060af3b8e"><div><p>offload_sdi</p>
 <section>
-<p>Streaming AXI masterOutput stream of the received SPI data.</p>
+<p>Streaming AXI master Output stream of the received SPI data.</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
@@ -412,7 +412,7 @@ peripheral.</p></td>
 </section>
 <section id="ports">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="16c2eb4dbbcdafb15c712951d6aee1bf0a101658" name="16c2eb4dbbcdafb15c712951d6aee1bf0a101658" type="checkbox"></input><label for="16c2eb4dbbcdafb15c712951d6aee1bf0a101658"><p>Ports</p>
+<input class="collapsible_input" id="b9a54f1d920814d745cd52561a7fdea77f074868" name="b9a54f1d920814d745cd52561a7fdea77f074868" type="checkbox"></input><label for="b9a54f1d920814d745cd52561a7fdea77f074868"><p>Ports</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -436,7 +436,7 @@ peripheral.</p></td>
 <td><p>in</p></td>
 <td><p></p></td>
 <td class="description"><section>
-<p>The <code class="docutils literal notranslate"><span class="pre">spi_engine_ctrl</span></code> signals, <code class="docutils literal notranslate"><span class="pre">offload_sdi</span></code> signals andtrigger are synchronous to this clock. Bus <code class="docutils literal notranslate"><span class="pre">spi_engine_ctrl_offload_sdi</span></code> is synchronous to this clock domain.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">spi_engine_ctrl</span></code> signals, <code class="docutils literal notranslate"><span class="pre">offload_sdi</span></code> signals and trigger are synchronous to this clock. Bus <code class="docutils literal notranslate"><span class="pre">spi_engine_ctrl_offload_sdi</span></code> is synchronous to this clock domain.</p>
 </section>
 </td>
 </tr>
@@ -444,7 +444,7 @@ peripheral.</p></td>
 <td><p>in</p></td>
 <td><p></p></td>
 <td class="description"><section>
-<p>Synchronous active low reset- Resets the internal state machine of the core. Bus <code class="docutils literal notranslate"><span class="pre">spi_engine_ctrl_offload_sdi</span></code> is synchronous to this reset signal.</p>
+<p>Synchronous active low reset - Resets the internal state machine of the core. Bus <code class="docutils literal notranslate"><span class="pre">spi_engine_ctrl_offload_sdi</span></code> is synchronous to this reset signal.</p>
 </section>
 </td>
 </tr>
@@ -452,7 +452,7 @@ peripheral.</p></td>
 <td><p>in</p></td>
 <td><p></p></td>
 <td class="description"><section>
-<p>When asserted the stored command and data stream is send out on the``spi_engine_ctrl`` interface.</p>
+<p>When asserted the stored command and data stream is send out on the <code class="docutils literal notranslate"><span class="pre">spi_engine_ctrl</span></code> interface.</p>
 </section>
 </td>
 </tr>
