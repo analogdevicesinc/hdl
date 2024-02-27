@@ -14,7 +14,6 @@ The core handles the JESD204B/C de-framing of the payload data.
 The peripheral can be configured at runtime through a AXI4-Lite memory mapped
 register map.
 
-
 Features
 --------------------------------------------------------------------------------
 
@@ -24,7 +23,6 @@ Features
    binary);
 -  Runtime re-configurability through memory-mapped register interface
    (AXI4-Lite).
-
 
 Files
 --------------------------------------------------------------------------------
@@ -36,7 +34,6 @@ Block Diagram
 
 .. image:: ad_ip_jesd204_transport_adc.svg
   :align: center
-
 
 Synthesis Configuration Parameters
 --------------------------------------------------------------------------------
@@ -72,7 +69,6 @@ Synthesis Configuration Parameters
 .. *- PN31_ENABLE
 .. - Enable PN31 check.
 
-
 Signal and Interface Pins
 --------------------------------------------------------------------------------
 
@@ -105,7 +101,6 @@ Signal and Interface Pins
 The S_AXI interface is synchronous to the s_axi_aclk clock. All other signals
 and interfaces are synchronous to the device_clk clock.
 
-
 Register Map
 --------------------------------------------------------------------------------
 
@@ -125,14 +120,11 @@ Register Map
    :name: ADC_CHANNEL
    :no-type-info:
 
-
 Theory of Operation
 --------------------------------------------------------------------------------
 
-
 Interfaces and Signals
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 
 Configuration Interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -142,14 +134,12 @@ accessed through the AXI4-Lite ``S_AXI`` port. The register map can be used to
 configure the peripherals operational parameters, query the current status of
 the device and query the features supported by the device.
 
-
 Link layer interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The link layer interface description can be found in the 
 :ref:`User Data Interface <axi_jesd204_rx_user_data>` section of the 
 :ref:`JESD204B/C Link Receive Peripheral <axi_jesd204_rx>` IP.
-
 
 Application layer interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -172,7 +162,6 @@ number of converters and n the number of samples per converter per beat.
 The core asserts the ``enable`` signal for each channel that is enabled by the
 software.
 
-
 Clock Monitor
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -185,14 +174,12 @@ The number is represented as unsigned 16.16 format. Assuming a 100MHz processor
 clock this corresponds to a resolution of 1.523kHz per LSB. A raw value of 0
 indicates that the link clock is currently not active.
 
-
 Data Formatter
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The component is configured by the ``REG_CHAN_CNTRL`` register
 ``FORMAT_SIGNEXT,FORMAT_TYPE,FORMAT_ENABLE`` fields. The block introduces one
 clock cycle latency.
-
 
 PRBS Check
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -233,7 +220,6 @@ is set according to the ``TWOS_COMPLEMENT`` synthesis parameter.
 For each channel mismatches are reported in ``PN_ERR`` and ``PN_OOS`` fields of
 the ``REG_CHAN_STATUS`` register.
 
-
 External synchronization
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -256,7 +242,6 @@ While the synchronization mechanism is armed, the ``adc_rst`` output signal is
 set so downstream logic can be cleared in order to have a fresh start once the
 trigger is received.
 
-
 Software Support
 --------------------------------------------------------------------------------
 
@@ -265,7 +250,6 @@ Software Support
    Analog Devices provided JESD204B/C software packages for interfacing the
    peripheral. Analog Devices is not able to provide support in case issues arise
    from using custom low-level software for interfacing the peripheral.
-
 
 Restrictions
 --------------------------------------------------------------------------------
@@ -279,10 +263,8 @@ supported by the peripheral: 1, 2, 4
 
 .. _ad_ip_jesd204_tpl_adc_supported_devices:
 
-
 Supported Devices
 --------------------------------------------------------------------------------
-
 
 JESD204B Analog-to-Digital Converters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -317,7 +299,6 @@ JESD204B Analog-to-Digital Converters
 -  :adi:`AD9083 <en/products/AD9083>`: 16-Channel, 125 MHz Bandwidth, 
    JESD204B Analog-to-Digital Converter.
 
-
 JESD204B RF Transceivers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -331,7 +312,6 @@ JESD204B RF Transceivers
 -  :adi:`ADRV9008-2 <en/products/ADRV9008-2>`: SDR Integrated, Dual RF Transmitter 
    with Observation Path.
 
-
 JESD204B/C Mixed-Signal Front Ends
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -340,14 +320,12 @@ JESD204B/C Mixed-Signal Front Ends
 -  :adi:`AD9082 <en/products/AD9082>`: MxFE™ QUAD, 16-Bit, 12GSPS RFDAC and DUAL, 12-Bit,
    6GSPS RFADC.
 
-
 More Information
 --------------------------------------------------------------------------------
 
 -  :ref:`JESD204 Interface Framework <jesd204>`
 -  :dokuwiki:`Glossary of terms <resources/fpga/peripherals/jesd204/jesd204_glossary>`
 -  :ref:`HDL User Guide <user_guide>`
-
 
 Technical Support
 --------------------------------------------------------------------------------

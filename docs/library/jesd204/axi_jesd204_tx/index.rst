@@ -24,7 +24,6 @@ To form a complete JESD204 transmit logic device it has to be combined with a
 :ref:`PHY layer <jesd204_physical_layer>` and
 :ref:`transport layer <jesd204_transport_layer>` peripheral.
 
-
 Features
 --------------------------------------------------------------------------------
 
@@ -39,7 +38,6 @@ Features
 *  Max Lanerate with 64B/66B mode: 32 Gbps;
 *  Low Latency;
 *  Independent per lane enable/disable.
-
 
 Utilization
 --------------------------------------------------------------------------------
@@ -57,31 +55,30 @@ Utilization
     +               +---------+----+---+
     |               |8        |TBD |TBD|
     +---------------+---------+----+---+
-    |Xilinx Artix 7 |1        |TBD |TBD|
-    +               +---------+----+---+
+    |AMD Xilinx     |1        |TBD |TBD|
+    |Artix 7        +---------+----+---+
     |               |2        |TBD |TBD|
     +               +---------+----+---+
     |               |4        |TBD |TBD|
     +               +---------+----+---+
     |               |8        |TBD |TBD|
     +---------------+---------+----+---+
-    |Xilinx Kintex 7|1        |TBD |TBD|
-    +               +---------+----+---+
+    |AMD Xilinx     |1        |TBD |TBD|
+    |Kintex 7       +---------+----+---+
     |               |2        |TBD |TBD|
     +               +---------+----+---+
     |               |4        |824 |897|
     +               +---------+----+---+
     |               |8        |TBD |TBD|
     +---------------+---------+----+---+
-    |Xilinx Virtex 7|1        |TBD |TBD|
-    +               +---------+----+---+
+    |AMD Xilinx     |1        |TBD |TBD|
+    |Virtex 7       +---------+----+---+
     |               |2        |TBD |TBD|
     +               +---------+----+---+
     |               |4        |TBD |TBD|
     +               +---------+----+---+
     |               |8        |TBD |TBD|
     +---------------+---------+----+---+
-    
 
 Files
 --------------------------------------------------------------------------------
@@ -97,13 +94,11 @@ Files
      - TCL script to generate the Vivado IP-integrator project for the
        peripheral.
 
-
 Block Diagram
 --------------------------------------------------------------------------------
 
 .. image:: axi_jesd204_tx_204c.svg
    :align: center
-
 
 AXI JESD204 TX Synthesis Configuration Parameters
 --------------------------------------------------------------------------------
@@ -124,7 +119,6 @@ AXI JESD204 TX Synthesis Configuration Parameters
      - Data path width in bytes. Set it 4 in case of 8B/10B, 8 in case of
        64B/66B.
 
-
 JESD204 TX Synthesis Configuration Parameters
 --------------------------------------------------------------------------------
 
@@ -143,7 +137,6 @@ JESD204 TX Synthesis Configuration Parameters
        conversion. If not set, ``TPL_DATA_PATH_WIDTH`` must match
        ``DATA_PATH_WIDTH``, the same clock must be connected to ``clk`` and
        ``device_clk`` inputs.
-
 
 AXI JESD204 TX Signal and Interface Pins
 --------------------------------------------------------------------------------
@@ -166,7 +159,6 @@ AXI JESD204 TX Signal and Interface Pins
     * - device_reset
       - Reset active high synchronous with the 
         :dokuwiki:`Device clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>`.
-
 
 JESD204 TX Signal and Interface Pins
 --------------------------------------------------------------------------------
@@ -191,14 +183,12 @@ JESD204 TX Signal and Interface Pins
     * - tx_phy*
       - n-th lane of the JESD204 interface (``0 <= n < NUM_LANES``).
 
-
 Register Map
 --------------------------------------------------------------------------------
 
 .. hdl-regmap::
    :name: JESD_TX
    :no-type-info:
-
 
 Theory of Operation
 --------------------------------------------------------------------------------
@@ -213,10 +203,8 @@ The register map is used to configure the operational parameters of the link
 processor as well as to query the current state of the link processor. The link
 processor itself is responsible for handling the JESD204 link layer protocol.
 
-
 Interfaces and Signals
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 
 Register Map Configuration Interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -226,7 +214,6 @@ The register map configuration interface can be accessed through the AXI4-Lite
 ``s_axi_aresetn`` signal is used to reset the peripheral and should be asserted
 during system startup until the ``s_axi_aclk`` is active and stable.
 De-assertion of the reset signal should by synchronous to ``s_axi_aclk``.
-
 
 JESD204B Control Signals
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -245,7 +232,6 @@ important that setup and hold of the external signal relative to the
 ``device_clk`` signal are met. Otherwise deterministic latency can not be
 guaranteed.
 
-
 Transceiver Interface (TX_PHYn)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -257,7 +243,6 @@ The physical layer peripheral receiving data from these interfaces are
 responsible for performing the final 8b10b mapping as well as serializing the
 data and transmitting it on the physical CML differential high-speed serial
 lane.
-
 
 .. _axi_jesd204_tx_user_data:
 
@@ -318,7 +303,6 @@ transmitted first, the octet placed in the highest 8 bits is transmitted last.
 Data corresponding to lanes that have been disabled are ignored and their value
 is don't care.
 
-
 Configuration Interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -326,7 +310,6 @@ The peripheral features a register map configuration interface that can be
 accessed through the AXI4-Lite ``S_AXI`` port. The register map can be used to
 configure the peripherals operational parameters, query the current status of
 the device and query the features supported by the device.
-
 
 Peripheral Identification and HDL Synthesis Settings
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -375,7 +358,6 @@ log2() of the data path width. Possible values are:
 #. Internal data path width is 4;
 #. Internal data path width is 8.
 
-
 Interrupt Handling
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -413,7 +395,6 @@ multiple bits in a single write operation.
 For more details regarding interrupt operation see the 
 :ref:`interrupts section <axi_jesd204_tx_interrupts>` of this document.
 
-
 Link Control
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -439,7 +420,6 @@ regardless of the setting of ``LINK_DISABLE``. The external link reset is
 controlled by the fabric and might be asserted if the link clock is not stable
 yet.
 
-
 Multi-link Control
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -451,7 +431,6 @@ FPGA receives multiple SYNC signals, one for each link.
 For a 8B/10B link the ``MULTI_LINK_DISABLE`` register allows activating or
 deactivating each ``SYNC~`` lines independently. This is useful when depending
 on the use case profile some converter devices are supposed to be disabled.
-
 
 Link Configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -519,7 +498,6 @@ register is read-only and the ILAS will always last for four multi-frames. The
 ``LINK_CONFIG3`` register is used only in 8B/10B links and completely
 disregarded in 64B/66B mode.
 
-
 ILAS Configuration Data
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -534,7 +512,6 @@ configuration data octets. Aside from the ``LID`` and ``FCHK`` fields all fields
 for each of the lanes map to the same internal storage. This means only the
 ``LID`` and ``FCHK`` fields can be configured with per-lane configuration data,
 all other fields must be set to the same value for all lanes.
-
 
 SYSREF Handling
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -571,7 +548,6 @@ also be cleared when the link is disabled.
 Note that the ``SYSREF_STATUS`` register will not record any events if SYSREF
 operation is disabled or the JESD204 link is disabled.
 
-
 Link Status
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -601,7 +577,6 @@ The ``STATUS_SYNC`` (``[4]``) field represents the raw state of the external
 SYNC~ and can be used to monitor whether the JESD204B converter device has
 requested link synchronization. This is available only for 8B/10B links.
 
-
 Manual Synchronization Request
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -627,7 +602,6 @@ too much, the link would stay in ``CGS`` and wait the de-assertion of ``SYNC~``
 which won't happen. In this case the ``SYNC_STATUS`` would stay low and
 ``LINK_STATE``\ would be ``CGS``.
 
-
 Clock Monitor
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -644,7 +618,6 @@ The number is represented as unsigned 16.16 format. Assuming a 100MHz processor
 clock this corresponds to a resolution of 1.523kHz per LSB. A raw value of 0
 indicates that the link clock is currently not active.
 
-
 .. _axi_jesd204_tx_interrupts:
 
 Interrupts
@@ -652,13 +625,11 @@ Interrupts
 
 The core does not generates interrupts.
 
-
 8B/10B Link
 --------------------------------------------------------------------------------
 
 .. image:: axi_jesd204_tx_204c_8b10b.svg
    :align: center
-
 
 .. _axi_jesd204_tx_8b_10b_link_state_machine:
 
@@ -673,7 +644,6 @@ DATA. Upon reset the peripheral starts in the WAIT phase. The CGS and ILAS
 phases are used during the initialization of the JESD204B link. The DATA phase
 is used during normal operation when user data is transmitted across the
 JESD204B link.
-
 
 Wait Phase (WAIT)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -696,7 +666,6 @@ to the WAIT state.
 
 Lanes that have been disabled in the register map configuration interface will
 behave as if the link was in the WAIT state regardless of the actual state.
-
 
 Code Group Synchronization Phase (CGS)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -722,7 +691,6 @@ not.
 By default the peripheral will transition to the ILAS phase at the end of the
 CGS phase. If the core is configured to skip the ILAS phase it will instead
 directly transition to the DATA phase.
-
 
 Initial Lane Alignment Sequence Phase (ILAS)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -809,7 +777,6 @@ otherwise undefined behavior might occur.
 
 Data on the ``TX_DATA`` port corresponding to a disabled lane is ignored.
 
-
 8B/10B Multi-endpoint TX link establishment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -851,12 +818,10 @@ The steps of the link bring-up are presented below:
    ``LMFC`` periods later the actual ``DATA``. **In SC1 if** ``SYSREF`` **is not
    captured the link transmit peripheral will stay in CGS state.**
 
-
 Diagnostics
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 :dokuwiki:`Troubleshooting JESD204B Tx links <resources/fpga/peripherals/jesd204/jesd204_troubleshooting>`
-
 
 64B/66B Link
 --------------------------------------------------------------------------------
@@ -881,7 +846,6 @@ For each multiblock sent on the data interface a CRC is calculated which is sent
 on the 2 bit sync header stream during the next multiblock period. Beside the
 CRC the sync header stream contains synchronization information to mark the
 boundary of the multiblock and extended multiblocks.
-
 
 Dual clock operation
 --------------------------------------------------------------------------------
@@ -919,7 +883,6 @@ In this context the link clock will be lane rate/40 or lane rate/80 for 204B
 depending on DATA_PATH_WIDTH and lane rate / 66 for 204C 64B/66B, however the
 device clock could vary based in the F parameter.
 
-
 Software Support
 --------------------------------------------------------------------------------
 
@@ -931,7 +894,6 @@ Software Support
     from using custom low-level software for interfacing the peripheral.
 
 -  :dokuwiki:`JESD204B Transmit Linux Driver Support <resources/tools-software/linux-drivers/jesd204/axi_jesd204_tx>`
-
 
 Restrictions
 --------------------------------------------------------------------------------
@@ -966,12 +928,10 @@ The following lists where the peripheral deviates from the standard:
 -  No support for alignment character replacement when scrambling is
    disabled.(No longer applies starting from 1.06.a).
 
-
 .. _axi_jesd204_tx_supported_devices:
 
 Supported Devices
 --------------------------------------------------------------------------------
-
 
 JESD204B Digital-to-Analog Converters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1005,7 +965,6 @@ JESD204B Digital-to-Analog Converters
 -  :adi:`AD9176 <en/products/AD9176>`: Dual, 16-Bit, 12.6 GSPS RF DAC with 
    Wideband Channelizers.
 
-
 JESD204B RF Transceivers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1019,7 +978,6 @@ JESD204B RF Transceivers
 -  :adi:`ADRV9008-2 <en/products/ADRV9008-2>`: SDR Integrated, Dual RF Transmitter 
    with Observation Path.
 
-
 JESD204B/C Mixed-Signal Front Ends
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1027,7 +985,6 @@ JESD204B/C Mixed-Signal Front Ends
    Quad, 12-Bit, 4GSPS RFADC;
 -  :adi:`AD9082 <en/products/AD9082>`: MxFE™ QUAD, 16-Bit, 12GSPS RFDAC and 
    DUAL, 12-Bit, 6GSPS RFADC.
-
 
 Technical Support
 --------------------------------------------------------------------------------
@@ -1039,7 +996,6 @@ deterministic support when using this core with an ADI component, please
 investigate a commercial license. Using a non-ADI JESD204 device with this core
 is possible under the GPL, but Analog Devices will not help with issues you may
 encounter.
-
 
 More Information
 --------------------------------------------------------------------------------

@@ -39,7 +39,6 @@ fully integrated system level experience. This solution includes
    * :ref:`Software <software_support_label>` to configure the converter 
      devices and FPGA HDL peripherals
 
-
 How to Obtain a License
 --------------------------------------------------------------------------------
 
@@ -60,7 +59,6 @@ The core is released under two difference licenses. You may choose either:
 There is only one core, the only difference is the license and support. If you
 have a question about the license: you can email
 `jesd204-licensing@analog.com <jesd204-licensing@analog.com>`__.
-
 
 .. _fpga_hdl_support_label:
 
@@ -91,7 +89,6 @@ specific signal processing.
 .. image:: jesd204_tx_chain.svg
    :align: center
 
-
 .. _jesd204_physical_layer:
 
 Physical Layer
@@ -99,13 +96,12 @@ Physical Layer
 
 Physical layer peripherals are responsible for interfacing and configuring the
 high-speed serial transceivers. Currently we have support for GTXE2, GTHE3,
-GTHE4, GTYE4 for Xilinx and Arria 10 transceivers for Intel.
+GTHE4, GTYE4 for AMD Xilinx and Arria 10 transceivers for Intel.
 
 *  :ref:`axi_adxcvr`: JESD204B Gigabit 
    Transceiver Register Configuration Peripheral
 *  :ref:`UTIL_ADXCVR <util_adxcvr>`: JESD204B Gigabit 
-   Transceiver Interface Peripheral for Xilinx FPGAs
-
+   Transceiver Interface Peripheral for AMD Xilinx FPGAs
 
 Link Layer
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -118,7 +114,6 @@ alignment monitoring.
    JESD204B/C Link Layer Transmit Peripheral
 *  :ref:`JESD204B/C Receive Peripheral <axi_jesd204_rx>`: 
    JESD204B/C Link Layer Receive Peripheral
-
 
 .. _jesd204_transport_layer:
 
@@ -133,7 +128,6 @@ and de-framing.
 *  :ref:`DAC JESD204B/C Transport Peripheral <ad_ip_jesd204_tpl_dac>`:
    JESD204B/C Transport Layer Transmit Peripheral
 
-
 Interfaces
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -141,12 +135,10 @@ Interfaces are a well-defined collection of wires that are used to communicate
 between components. The following interfaces are used to connect components of
 the HDL JESD204B/C processing stack.
 
-
 .. _software_support_label:
 
 Software Support
 --------------------------------------------------------------------------------
-
 
 Linux
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -173,7 +165,6 @@ Linux
    -  :dokuwiki:`ADRV9009, ADRV9008 highly integrated, wideband RF transceiver Linux device driver <resources/tools-software/linux-drivers/iio-transceiver/adrv9009>`
    -  :dokuwiki:`AD9371, AD9375 highly integrated, wideband RF transceiver Linux device driver <resources/tools-software/linux-drivers/iio-transceiver/ad9371>`
 
-
 No-OS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -182,7 +173,6 @@ No-OS
 -  :dokuwiki:`ADI JESD204B/C Transmit Peripheral No-OS Driver <resources/tools-software/uc-drivers/jesd204/axi_jesd204_tx>`
 -  :dokuwiki:`AXI ADC No-OS Driver <resources/tools-software/uc-drivers/jesd204/axi_adc_core>`
 -  :dokuwiki:`AXI DAC No-OS Driver <resources/tools-software/uc-drivers/jesd204/axi_dac_core>`
-
 
 Tutorial
 --------------------------------------------------------------------------------
@@ -194,65 +184,64 @@ Tutorial
 #. Checkout the :ref:`HDL Source <build_hdl>`, and then build
    either one of:
 
-   #. :dokuwiki:`HDL Xilinx <resources/fpga/peripherals/jesd204/tutorial/hdl_xilinx>`
+   #. :dokuwiki:`HDL AMD Xilinx <resources/fpga/peripherals/jesd204/tutorial/hdl_xilinx>`
    #. :dokuwiki:`HDL Altera <resources/fpga/peripherals/jesd204/tutorial/hdl_altera>`
 
 #. :dokuwiki:`Linux <resources/fpga/peripherals/jesd204/tutorial/linux>`
-
 
 Example Projects
 --------------------------------------------------------------------------------
 
 -  :dokuwiki:`AD-FMCADC2-EBZ Reference Design <resources/fpga/xilinx/fmc/ad-fmcadc2-ebz>`
 
-   -  :git-hdl:`Xilinx VC707 <projects/fmcadc2/vc707>`
-   -  :git-hdl:`Xilinx ZC706 <projects/fmcadc2/zc706>`
+   -  :git-hdl:`AMD Xilinx VC707 <projects/fmcadc2/vc707>`
+   -  :git-hdl:`AMD Xilinx ZC706 <projects/fmcadc2/zc706>`
 
 -  :dokuwiki:`AD-FMCADC3-EBZ Reference Design <resources/fpga/xilinx/fmc/ad-fmcadc3-ebz>`
 
-   -  :git-hdl:`Xilinx VC707 <projects/fmcadc2/vc707>`
-   -  :git-hdl:`Xilinx ZC706 <projects/fmcadc2/zc706>`
+   -  :git-hdl:`AMD Xilinx VC707 <projects/fmcadc2/vc707>`
+   -  :git-hdl:`AMD Xilinx ZC706 <projects/fmcadc2/zc706>`
 
 -  :dokuwiki:`AD-FMCADC4-EBZ Reference Design (retired) <resources/fpga/xilinx/fmc/ad-fmcadc4-ebz>`
 
-   -  :git-hdl:`Xilinx ZC706 <hdl_2018_r2:projects/fmcadc4/zc706>`
+   -  :git-hdl:`AMD Xilinx ZC706 <hdl_2018_r2:projects/fmcadc4/zc706>`
 
 -  :dokuwiki:`AD-FMCJESDADC1-EBZ Reference Design <resources/fpga/xilinx/fmc/ad-fmcjesdadc1-ebz>`
 
-   -  :git-hdl:`Xilinx KC705 <projects/fmcjesdadc1/kc705>`
-   -  :git-hdl:`Xilinx VC707 <projects/fmcjesdadc1/vc707>`
-   -  :git-hdl:`Xilinx ZC706 <projects/fmcjesdadc1/zc706>`
+   -  :git-hdl:`AMD Xilinx KC705 <projects/fmcjesdadc1/kc705>`
+   -  :git-hdl:`AMD Xilinx VC707 <projects/fmcjesdadc1/vc707>`
+   -  :git-hdl:`AMD Xilinx ZC706 <projects/fmcjesdadc1/zc706>`
 
 -  :dokuwiki:`AD-FMCOMMS11-EBZ Reference Design <resources/eval/user-guides/ad-fmcomms11-ebz>`
 
-   -  :git-hdl:`Xilinx ZC706 <projects/fmcomms11/zc706>`
+   -  :git-hdl:`AMD Xilinx ZC706 <projects/fmcomms11/zc706>`
 
 -  :dokuwiki:`AD-FMCDAQ2-EBZ Reference Design <resources/eval/user-guides/ad-fmcdaq2-ebz>`
 
    -  :git-hdl:`Intel A10SOC <projects/daq2/a10soc>`
-   -  :git-hdl:`Xilinx KC705 <projects/daq2/kc705>`
-   -  :git-hdl:`Xilinx KCU105 <projects/daq2/kcu105>`
-   -  :git-hdl:`Xilinx VC707 <hdl_2018_r2:projects/daq2/vc707>`
-   -  :git-hdl:`Xilinx ZC706 <projects/daq2/zc706>`
-   -  :git-hdl:`Xilinx ZCU102 <projects/daq2/zcu102>`
+   -  :git-hdl:`AMD Xilinx KC705 <projects/daq2/kc705>`
+   -  :git-hdl:`AMD Xilinx KCU105 <projects/daq2/kcu105>`
+   -  :git-hdl:`AMD Xilinx VC707 <hdl_2018_r2:projects/daq2/vc707>`
+   -  :git-hdl:`AMD Xilinx ZC706 <projects/daq2/zc706>`
+   -  :git-hdl:`AMD Xilinx ZCU102 <projects/daq2/zcu102>`
 
 -  :dokuwiki:`AD-FMCDAQ3-EBZ Reference Design <resources/eval/user-guides/ad-fmcdaq3-ebz>`
 
-   -  :git-hdl:`Xilinx KCU105 <projects/daq3/kcu105>`
-   -  :git-hdl:`Xilinx VCU118 <projects/daq3/vcu118>`
-   -  :git-hdl:`Xilinx ZC706 <projects/daq3/zc706>`
-   -  :git-hdl:`Xilinx ZCU102 <projects/daq3/zcu102>`
+   -  :git-hdl:`AMD Xilinx KCU105 <projects/daq3/kcu105>`
+   -  :git-hdl:`AMD Xilinx VCU118 <projects/daq3/vcu118>`
+   -  :git-hdl:`AMD Xilinx ZC706 <projects/daq3/zc706>`
+   -  :git-hdl:`AMD Xilinx ZCU102 <projects/daq3/zcu102>`
 
 -  :dokuwiki:`ADRV9371 Reference Design <resources/eval/user-guides/mykonos>`
 
    -  :git-hdl:`Intel A10SOC <projects/adrv9371x/a10soc>`
-   -  :git-hdl:`Xilinx KCU105 <projects/adrv9371x/kcu105>`
-   -  :git-hdl:`Xilinx ZC706 <projects/adrv9371x/zc706>`
-   -  :git-hdl:`Xilinx ZCU102 <projects/adrv9371x/zcu102>`
+   -  :git-hdl:`AMD Xilinx KCU105 <projects/adrv9371x/kcu105>`
+   -  :git-hdl:`AMD Xilinx ZC706 <projects/adrv9371x/zc706>`
+   -  :git-hdl:`AMD Xilinx ZCU102 <projects/adrv9371x/zcu102>`
    
 -  :dokuwiki:`ADRV9009 Reference Design <resources/eval/user-guides/adrv9009>`
 
-   -  :git-hdl:`Xilinx ZCU102 <projects/adrv9009/zcu102>`
+   -  :git-hdl:`AMD Xilinx ZCU102 <projects/adrv9009/zcu102>`
 
 -  :dokuwiki:`ADRV9009-ZU11EG-SOM Reference Design <resources/eval/user-guides/adrv9009-zu11eg>`
 
@@ -261,26 +250,24 @@ Example Projects
 -  :dokuwiki:`AD917X Reference Design <resources/eval/user-guides/ad-dac-fmc-ebz>`
 
    -  :git-hdl:`Intel A10SOC <projects/dac_fmc_ebz/a10soc>`
-   -  :git-hdl:`Xilinx ZC706 <projects/dac_fmc_ebz/zc706>`
-   -  :git-hdl:`Xilinx ZCU102 <projects/dac_fmc_ebz/zcu102>`
+   -  :git-hdl:`AMD Xilinx ZC706 <projects/dac_fmc_ebz/zc706>`
+   -  :git-hdl:`AMD Xilinx ZCU102 <projects/dac_fmc_ebz/zcu102>`
 
 -  :dokuwiki:`AD9081 Reference Design <resources/eval/user-guides/ad9081_fmca_ebz/ad9081_fmca_ebz_hdl>`
 
-   -  :git-hdl:`Xilinx ZCU102 <projects/ad9081_fmca_ebz/zcu102>`
-   -  :git-hdl:`Xilinx VCU118 <projects/ad9081_fmca_ebz/vcu118>`
+   -  :git-hdl:`AMD Xilinx ZCU102 <projects/ad9081_fmca_ebz/zcu102>`
+   -  :git-hdl:`AMD Xilinx VCU118 <projects/ad9081_fmca_ebz/vcu118>`
 
 Additional Information
 --------------------------------------------------------------------------------
 
 -  :dokuwiki:`JESD204B Glossary <resources/fpga/peripherals/jesd204/jesd204_glossary>`
 
-
 Technical Articles
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  :adi:`JESD204B Survival Guide <media/en/technical-documentation/technical-articles/JESD204B-Survival-Guide.pdf>`
 -  :adi:`Synchronizing Sample Clocks of a Data Converter Array <en/resources/technical-articles/synchronizing-sample-clocks-of-a-data-converter-array>`
-
 
 .. _rapid_prototyping_label:
 
@@ -303,7 +290,6 @@ JESD204B Rapid Prototyping Platforms
 -  :adi:`EVAL-FMCDAQ3-EBZ <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-FMCDAQ3-EBZ>`
    :dokuwiki:`(User Guide) <resources/eval/user-guides/ad-fmcdaq3-ebz>`
 -  :adi:`EVAL-AD917X <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad9172>`
-
 
 JESD204B Analog-to-Digital Converters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -338,7 +324,6 @@ JESD204B Analog-to-Digital Converters
 -  :adi:`AD9083 <en/products/AD9083>`: 16-Channel, 125 MHz Bandwidth, JESD204B
    Analog-to-Digital Converter
 
-
 JESD204B Digital-to-Analog Converters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -371,7 +356,6 @@ JESD204B Digital-to-Analog Converters
 -  :adi:`AD9176 <en/products/AD9176>`: Dual, 16-Bit, 12.6 GSPS RF DAC with 
    Wideband Channelizers
 
-
 JESD204B RF Transceivers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -384,7 +368,6 @@ JESD204B RF Transceivers
 -  :adi:`ADRV9008-1 <en/products/ADRV9008-1>`: SDR Integrated, Dual RF Receiver
 -  :adi:`ADRV9008-2 <en/products/ADRV9008-2>`: SDR Integrated, Dual RF 
    Transmitter with Observation Path
-
 
 JESD204B/C Mixed-Signal Front Ends
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

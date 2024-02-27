@@ -24,7 +24,6 @@ To form a complete JESD204 receive logic device it has to be combined with a
 :ref:`PHY layer <jesd204_physical_layer>` and
 :ref:`transport layer <jesd204_transport_layer>` peripheral.
 
-
 Features
 --------------------------------------------------------------------------------
 
@@ -40,7 +39,6 @@ Features
 -  Max Lanerate with 64B/66B mode: 32 Gbps;
 -  Low Latency;
 -  Independent per lane enable/disable.
-
 
 Utilization
 --------------------------------------------------------------------------------
@@ -58,31 +56,30 @@ Utilization
     +               +---------+----+---+
     |               |8        |TBD |TBD|
     +---------------+---------+----+---+
-    |Xilinx Artix 7 |1        |TBD |TBD|
-    +               +---------+----+---+
+    |AMD Xilinx     |1        |TBD |TBD|
+    |Artix 7        +---------+----+---+
     |               |2        |TBD |TBD|
     +               +---------+----+---+
     |               |4        |TBD |TBD|
     +               +---------+----+---+
     |               |8        |TBD |TBD|
     +---------------+---------+----+---+
-    |Xilinx Kintex 7|1        |TBD |TBD|
-    +               +---------+----+---+
+    |AMD Xilinx     |1        |TBD |TBD|
+    |Kintex 7       +---------+----+---+
     |               |2        |TBD |TBD|
     +               +---------+----+---+
     |               |4        |824 |897|
     +               +---------+----+---+
     |               |8        |TBD |TBD|
     +---------------+---------+----+---+
-    |Xilinx Virtex 7|1        |TBD |TBD|
-    +               +---------+----+---+
+    |AMD Xilinx     |1        |TBD |TBD|
+    |Virtex 7       +---------+----+---+
     |               |2        |TBD |TBD|
     +               +---------+----+---+
     |               |4        |TBD |TBD|
     +               +---------+----+---+
     |               |8        |TBD |TBD|
     +---------------+---------+----+---+
-
 
 Files
 --------------------------------------------------------------------------------
@@ -98,13 +95,11 @@ Files
      - TCL script to generate the Vivado IP-integrator project for the
        peripheral.
 
-
 Block Diagram
 --------------------------------------------------------------------------------
 
 .. image:: axi_jesd204_rx_204c.svg
    :align: center
-
 
 AXI JESD204 RX Synthesis Configuration Parameters
 --------------------------------------------------------------------------------
@@ -125,7 +120,6 @@ AXI JESD204 RX Synthesis Configuration Parameters
      - Data path width in bytes. Set it to 4 in case of 8B/10B, 8 in case of
        64B/66B
 
-
 JESD204 RX Synthesis Configuration Parameters
 --------------------------------------------------------------------------------
 
@@ -144,7 +138,6 @@ JESD204 RX Synthesis Configuration Parameters
        conversion. If not set, ``TPL_DATA_PATH_WIDTH`` must match
        ``DATA_PATH_WIDTH``, the same clock must be connected to ``clk`` and
        ``device_clk`` inputs.
-
 
 AXI JESD204 RX Signal and Interface Pins
 --------------------------------------------------------------------------------
@@ -167,7 +160,6 @@ AXI JESD204 RX Signal and Interface Pins
     * - device_reset
       - Reset active high synchronous with the 
         :dokuwiki:`Device clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>`.
-
 
 JESD204 RX Signal and Interface Pins
 --------------------------------------------------------------------------------
@@ -198,14 +190,12 @@ JESD204 RX Signal and Interface Pins
 .. * - phy_ready
      - phy_ready Transceiver status.
 
-
 Register Map
 --------------------------------------------------------------------------------
 
 .. hdl-regmap::
    :name: JESD_RX
    :no-type-info:
-
 
 Theory of Operation
 --------------------------------------------------------------------------------
@@ -220,10 +210,8 @@ The register map is used to configure the operational parameters of the link
 processor as well as to query the current state of the link processor. The link
 processor itself is responsible for handling the JESD204 link layer protocol.
 
-
 Interfaces and Signals
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 
 Register Map Configuration Interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -233,7 +221,6 @@ The register map configuration interface can be accessed through the AXI4-Lite
 ``s_axi_aresetn`` signal is used to reset the peripheral and should be asserted
 during system startup until the ``s_axi_aclk`` is active and stable.
 De-assertion of the reset signal should be synchronous to ``s_axi_aclk``.
-
 
 JESD204 Control Signals
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -255,7 +242,6 @@ important that setup and hold of the external signal relative to the
 ``device_clk`` signal are met. Otherwise, deterministic latency cannot be
 guaranteed.
 
-
 Transceiver Interface (RX_PHYn)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -265,7 +251,6 @@ transceiver peripheral.
 
 The physical layer is responsible for clock recovery, character alignment,
 de-serialization as well an 8b10b decoding.
-
 
 .. _axi_jesd204_rx_user_data:
  
@@ -326,7 +311,6 @@ received first, the octet placed in the highest 8 bits was received last.
 Data corresponding to lanes that have been disabled should be ignored and their
 value is undefined.
 
-
 Configuration Interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -334,7 +318,6 @@ The peripheral features a register map configuration interface that can be
 accessed through the AXI4-Lite ``S_AXI`` port. The register map can be used to
 configure the peripherals operational parameters, query the current status of
 the device and query the features supported by the device.
-
 
 Peripheral Identification and HDL Synthesis Settings
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -389,7 +372,6 @@ maximum local-multi-frame-clock (LMFC) / local-multiblock-clock (LEMC) period
 (subclass 1) as well as the maximum skew between individual lanes (subclass 0).
 Both must be less than the elastic buffer size.
 
-
 Interrupt Handling
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -427,7 +409,6 @@ multiple bits in a single write operation.
 For more details regarding interrupt operation see the 
 :ref:`interrupts section <axi_jesd204_rx_interrupts>` of this document.
 
-
 Link Control
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -453,7 +434,6 @@ regardless of the setting of ``LINK_DISABLE``. The external link reset is
 controlled by the fabric and might be asserted if the link clock is not stable
 yet.
 
-
 Multi-link Control
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -465,7 +445,6 @@ and established at the same time. For an 8B/10B RX link, this means that the
 For an 8B/10B link the ``MULTI_LINK_DISABLE`` register allows activating or
 deactivating each ``SYNC~`` lines independently. This is useful when depending
 on the use case profile some converter devices are supposed to be disabled.
-
 
 Link Configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -552,7 +531,6 @@ This mechanism can be used to reduce overall latency while still maintaining
 deterministic latency if the maximum link latency (overall valid PVT settings)
 is known.
 
-
 SYSREF Handling
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -585,7 +563,6 @@ also be cleared when the link is disabled.
 
 Note that the ``SYSREF_STATUS`` register will not record any events if SYSREF
 operation is disabled or the JESD204 link is disabled.
-
 
 Link Status
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -623,7 +600,6 @@ Possible values for a 64B/66B link are:
 The state of each individual lane can be queried from the 
 :ref:`lane status <axi_jesd204_rx_lane_status>` registers.
 
-
 .. _axi_jesd204_rx_lane_status:
 
 Lane Status
@@ -631,7 +607,6 @@ Lane Status
 
 Each lane has a independent status register (``LANEn_STATUS`` (``0x300``)) that
 indicates the current state of the lane.
-
 
 8B/10B Link Lane Status Fields
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -652,7 +627,6 @@ when the SYNC~ signal was de-asserted and when the frame synchronization for
 this particular lane has completed. The ``LANEn_LATENCY`` register only holds
 valid data if the ``IFS_READY`` bit of the ``LANEn_STATUS`` register is set.
 
-
 64B/66B Link Lane Status Fields
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
@@ -665,7 +639,6 @@ Multi-Block alignment state machine:
    threshold is reached;
 -  EMB_LOCK (3'b100): Asserted by receiver to indicate that extended multiblock
    alignment has been achieved.
-
 
 8B/10B Link ILAS Configuration Data
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -683,7 +656,6 @@ The received ILAS configuration data can be used to verify that the transmitter
 device is using the expected configuration and that the lane and device mapping
 is correct.
 
-
 Clock Monitor
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -700,7 +672,6 @@ The number is represented as unsigned 16.16 format. Assuming a 100MHz processor
 clock this corresponds to a resolution of 1.523kHz per LSB. A raw value of 0
 indicates that the link clock is currently not active.
 
-
 .. _axi_jesd204_rx_interrupts:
 
 Interrupts
@@ -708,16 +679,13 @@ Interrupts
 
 The core does not generates interrupts.
 
-
 8B/10B Link
 --------------------------------------------------------------------------------
 
 .. image:: axi_jesd204_rx_204c_8b10b.svg
    :align: center
 
-
 .. _axi_jesd204_rx_8b10b_link_state_machine:
-
 
 8B/10B Link State Machine
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -730,7 +698,6 @@ CGS, or DATA. Upon reset the peripheral starts in the RESET phase. The WAIT FOR
 PHY and CGS phases are used during the initialization of the JESD204 link. The
 DATA phase is used during normal operation when user data is received across the
 JESD204 link.
-
 
 RESET phase
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -745,14 +712,12 @@ to the RESET state.
 Lanes that have been disabled in the register map configuration interface will
 behave as if the link was in the RESET state regardless of the actual state.
 
-
 WAIT FOR PHY phase
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 During the WAIT FOR PHY phase the peripheral will wait for all PHY controllers
 for all enabled lanes to be ready for operation. Once this condition is
 satisfied the controlled will transition to the CGS phase.
-
 
 CGS phase
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -765,7 +730,6 @@ adjust its state machine according to the received characters.
 
 Once all enabled lanes have entered the DATA state the link state will
 transition from the CGS phase to the DATA phase.
-
 
 DATA phase
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -803,8 +767,6 @@ are reported when a misaligned alignment character is received.
 
 Data on the ``RX_DATA`` port corresponding to a disabled lanes are undefined and
 should be ignored.
-
-
 
 8B/10B Multi-endpoint RX link establishment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -851,7 +813,6 @@ The steps of the link bring-up are presented below:
    the ``ILAS`` sequence, then after typically 4 ``LMFC`` periods later the
    actual ``DATA``.
 
-
 64B/66B Link
 --------------------------------------------------------------------------------
 
@@ -874,7 +835,6 @@ can be masked from the corresponding bit of the ``LINK_CONF3`` register.
 .. image:: axi_jesd204_rx_204c_64b66b.svg
    :align: center
 
-
 .. _axi_jesd204_rx_64b66b_link_state_machine:
 
 64B/66B Link State Machine
@@ -889,7 +849,6 @@ across the JESD204 link.
 .. image:: jesd204c_rx_state_machine.svg
    :align: right
 
-
 .. _axi_jesd204_rx_reset-phase-1:
 
 RESET phase
@@ -902,7 +861,6 @@ transition from the RESET phase to the WAIT FOR PHY phase.
 If at any point the peripheral is disabled it will automatically transition back
 to the RESET state.
 
-
 WAIT BS phase
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -913,7 +871,6 @@ controlled will transition to the BLOCK SYNC phase.
 
 If one of the enabled lanes loses the the sync header alignment the link will
 fall back to WAIT BS state.
-
 
 BLOCK SYNC phase
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -927,7 +884,6 @@ released at a well defined moment relative to the ``SYSREF`` signal.
 
 .. _axi_jesd204_rx_data-phase-1:
 
-
 DATA phase
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -935,7 +891,6 @@ The DATA phase is the main operating mode of the peripheral. In this phase it
 will transmit transport layer data at the ``RX_DATA`` port. When the peripheral
 enters the DATA phase the ``valid`` signal of the ``RX_DATA`` interface will be
 asserted to indicate that transport layer data is now available.
-
 
 64B/66B Link Extended MultiBlock Alignment State Machine
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -948,7 +903,6 @@ across all enabled lanes. This is done through the elastic buffer.
 .. image:: jesd204c_rx_emb_state_machine.svg
    :align: right
 
-
 EMB INIT State
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -960,7 +914,6 @@ extended multiblock marker is detected in the sync header stream.
 At any moment the PHY loses sync header alignment the state machine will fall
 back to the EMB INIT state.
 
-
 EMB HUNT State
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -969,7 +922,6 @@ extended multiblock indicators, once this is achieved the state machine enters
 the EMB LOCK state. In case invalid end of multiblock or end of extended
 multiblock markers are detected the state machine falls back to the EMB INIT
 state.
-
 
 EMB LOCK State
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -980,7 +932,6 @@ the state machine will return in the EMB INIT state. This state ensures the
 validity of the 32 bit sync words constructed from the sync header stream. For
 each multiblock the calculated CRC of the previous multiblock is extracted from
 the current sync word.
-
 
 Dual clock operation
 --------------------------------------------------------------------------------
@@ -1018,7 +969,6 @@ In this context the link clock will be lane rate/40 or lane rate/80 for 204B
 depending on DATA_PATH_WIDTH and lane rate/66 for 204C 64B/66B, however the
 device clock could vary based in the F parameter.
 
-
 64b/66b Link latency reduction
 --------------------------------------------------------------------------------
 
@@ -1054,7 +1004,6 @@ Where:
 slightly to have a better margin against power-up to power-up latency
 variations.**
 
-
 Software Support
 --------------------------------------------------------------------------------
 
@@ -1065,7 +1014,6 @@ Software Support
    from using custom low-level software for interfacing the peripheral.
 
 -  :dokuwiki:`JESD204 Receive Linux Driver Support <resources/tools-software/linux-drivers/jesd204/axi_jesd204_rx>`
-
 
 Restrictions
 --------------------------------------------------------------------------------
@@ -1100,18 +1048,15 @@ The following lists where the peripheral deviates from the standard:
 -  No support for alignment character replacement when scrambling is disabled.
    (No longer applies starting from 1.07.a).
 
-
 Additional Information
 --------------------------------------------------------------------------------
 
 -  :dokuwiki:`JESD204 Glossary <resources/fpga/peripherals/jesd204/jesd204_glossary>`
 
-
 .. _axi_jesd204_rx_supported_devices:
 
 Supported Devices
 --------------------------------------------------------------------------------
-
 
 JESD204B Analog-to-Digital Converters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1159,7 +1104,6 @@ JESD204B RF Transceivers
 -  :adi:`ADRV9008-2 <en/products/ADRV9008-2>`: SDR Integrated, Dual RF 
    Transmitter with Observation Path
 
-
 JESD204B/C Mixed-Signal Front Ends
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1167,7 +1111,6 @@ JESD204B/C Mixed-Signal Front Ends
    Quad, 12-Bit, 4GSPS RFADC
 -  :adi:`AD9082 <en/products/AD9082>`: MxFE™ QUAD, 16-Bit, 12GSPS RFDAC and 
    DUAL, 12-Bit, 6GSPS RFADC
-
 
 Technical Support
 --------------------------------------------------------------------------------
@@ -1179,7 +1122,6 @@ deterministic support when using this core with an ADI component, please
 investigate a commercial license. Using a non-ADI JESD204 device with this core
 is possible under the GPL, but Analog Devices will not help with issues you may
 encounter.
-
 
 More Information
 --------------------------------------------------------------------------------

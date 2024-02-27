@@ -1,6 +1,6 @@
 .. _util_adxcvr:
 
-UTIL_ADXCVR core for Xilinx devices
+UTIL_ADXCVR core for AMD Xilinx devices
 ================================================================================
 
 .. hdl-component-diagram::
@@ -16,7 +16,7 @@ exposing just the necessary ports and attributes.
     To understand the below wiki page is important to have a basic
     understanding about High Speed Serial I/O interfaces and Gigabit Serial
     Transceivers. To find more information about these technologies, please visit
-    the :xilinx:`Xilinx's solution center <support/answers/37181.html>`.
+    the :xilinx:`AMD Xilinx's solution center <support/answers/37181.html>`.
 
 Currently this IP supports three different GT types:
 
@@ -29,7 +29,6 @@ Currently this IP supports three different GT types:
 -  GTYE4
    (:xilinx:`Ultrascale and Ultrascale+ <support/documentation/user_guides/ug578-ultrascale-gty-transceivers.pdf>`)
 
-
 Features
 --------------------------------------------------------------------------------
 
@@ -39,7 +38,6 @@ Features
 *  Supports dynamic reconfiguration
 *  RX Eye Scan
 
-
 Block Diagram
 --------------------------------------------------------------------------------
 
@@ -48,7 +46,6 @@ quad contains a GTEX2_COMMON and four GTXE2_CHANNEL primitives.
 
 .. image:: gtx_column.svg
    :align: center
-
 
 Configuration Parameters
 --------------------------------------------------------------------------------
@@ -100,10 +97,8 @@ Configuration Parameters
     - Per lane polarity inversion. Set the n-th bit to invert the polarity of
       the n-th receive lane.
 
-
 Interface
 --------------------------------------------------------------------------------
-
 
 Microprocessor clock and reset
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -121,7 +116,6 @@ Microprocessor clock and reset
      - ``input``
      - System reset, the same as AXI memory map slave interface reset
 
-
 PLL reference clock
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -137,7 +131,6 @@ PLL reference clock
    * - ``cpll_ref_clk_0``
      - ``input``
      - Reference clock for the CPLL
-
 
 RX interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -176,7 +169,6 @@ RX interface
      - ``input``
      - RX enable comma alignment from the JESD204B IP
 
-
 TX interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -205,7 +197,6 @@ TX interface
      - ``input[31:0]``
      - TX data from the JESD204B IP
 
-
 Common DRP Interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -221,7 +212,6 @@ Common DRP Interface
        of AXI_ADXCVR. This is a QUAD interface, shared by four transceiver
        lanes. This interface is available only if parameter QPLL_ENABLE is set
        to 0x1.
-
 
 Channel DRP Interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -243,7 +233,6 @@ Channel DRP Interface
        of AXI_ADXCVR. This is a channel interface, one per each TX transceiver
        lane.
 
-
 Eye Scan DRP Interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -260,15 +249,13 @@ Eye Scan DRP Interface
        transceiver lane. This interface is available only if parameter
        TX_OR_RX_N is set to 0x0.
 
-
 Design Guidelines
 --------------------------------------------------------------------------------
 
 .. note::
-  Please refer to :dokuwiki:`Xilinx FPGAs Transceivers Wizard <resources/fpga/docs/xgt_wizard>` 
+  Please refer to :dokuwiki:`AMD Xilinx FPGAs Transceivers Wizard <resources/fpga/docs/xgt_wizard>` 
   to generate the optimal parameters needed to configure the transceivers for 
   your project.
-
 
 Physical constraints considerations
 --------------------------------------------------------------------------------
@@ -309,13 +296,11 @@ complementary reordering is required either in the converter device (lane
 crossbars) or inside the FPGA between the physical and link layer, to connect
 the logical lanes with the same index on both end of the link.
 
-
 Software Guidelines
 --------------------------------------------------------------------------------
 
 The software can configure this core through the :ref:`AXI_ADXCVR <axi_adxcvr>` IP
 core.
-
 
 References
 --------------------------------------------------------------------------------
@@ -324,7 +309,6 @@ References
 -  :xilinx:`7 Series FPGAs GTX/GTH Transceivers <support/documentation/user_guides/ug476_7Series_Transceivers.pdf>`
 -  :xilinx:`UltraScale Architecture GTH Transceivers <support/documentation/user_guides/ug576-ultrascale-gth-transceivers.pdf>`
 -  :xilinx:`UltraScale Architecture GTY Transceivers <support/documentation/user_guides/ug578-ultrascale-gty-transceivers.pdf>`
-
 
 More Information
 --------------------------------------------------------------------------------

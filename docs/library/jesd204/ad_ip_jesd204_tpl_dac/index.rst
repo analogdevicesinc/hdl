@@ -18,7 +18,6 @@ can be used to dynamically generate test-tones.
 The peripheral can be configured at runtime through a AXI4-Lite memory mapped
 register map.
 
-
 Features
 --------------------------------------------------------------------------------
 
@@ -28,19 +27,16 @@ Features
 -  Runtime re-configurability through memory-mapped register interface
    (AXI4-Lite).
 
-
 Files
 --------------------------------------------------------------------------------
 
 :git-hdl:`ad_ip_jesd204_tpl_dac.v <library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac.v>`
-
 
 Block Diagram
 --------------------------------------------------------------------------------
 
 .. image:: ad_ip_jesd204_transport_dac.svg
   :align: center
-
 
 Synthesis Configuration Parameters
 --------------------------------------------------------------------------------
@@ -74,7 +70,6 @@ Synthesis Configuration Parameters
      - CORDIC DDS Phase Width.
    * - DATAPATH_DISABLE
      - Disable instantiation of DDS core.
-  
 
 Signal and Interface Pins
 --------------------------------------------------------------------------------
@@ -102,7 +97,6 @@ Signal and Interface Pins
     * - dac_dunf
       - Application layer underflow.
 
-
 Register Map
 --------------------------------------------------------------------------------
 
@@ -122,10 +116,8 @@ Register Map
    :name: DAC_CHANNEL
    :no-type-info:
 
-
 Theory of Operation
 --------------------------------------------------------------------------------
-
 
 Data paths
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -139,10 +131,8 @@ The data is intended for the DAC can have multiple sources:
 -  **PRBS source** For each DAC channel one of the following PN sequence can be
    selected: PN7, PN15, inverted PN7, inverted PN15.
 
-
 Interfaces and Signals
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 
 Application layer interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -167,14 +157,12 @@ The core asserts the ``enable`` signal for each channel that is enabled by the
 software. The ``dac_ddata`` data bus must contain data for each channel
 regardless if the channels are enabled or not.
 
-
 Link layer interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The link layer interface description can be found in the 
 :ref:`User Data Interface <axi_jesd204_tx_user_data>` section of the 
 :ref:`JESD204B/C Link Transmit Peripheral <axi_jesd204_tx>` IP.
-
 
 Clock Monitor
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -187,7 +175,6 @@ running at the expected rate.
 The number is represented as unsigned 16.16 format. Assuming a 100MHz processor
 clock this corresponds to a resolution of 1.523kHz per LSB. A raw value of 0
 indicates that the link clock is currently not active.
-
 
 External synchronization
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -215,7 +202,6 @@ gated until the trigger signal is received. The gating happens only during this
 period, meaning that ``dac_valid`` will stay high in all other cases (normal
 operation).
 
-
 Restrictions
 --------------------------------------------------------------------------------
 
@@ -226,7 +212,6 @@ supported by the peripheral: 1, 2, 4
    `this <https://github.com/analogdevicesinc/hdl/commit/454b900f90081fb95be857114e768f662178c8bd>`__
    commit this restriction no longer applies
 
-
 Software Support
 --------------------------------------------------------------------------------
 
@@ -236,12 +221,10 @@ Software Support
   Analog Devices is not able to provide support in case issues arise from using
   custom low-level software for interfacing the peripheral.
 
-
 .. _ad_ip_jesd204_tpl_dac_supported_devices:
 
 Supported Devices
 --------------------------------------------------------------------------------
-
 
 JESD204B Digital-to-Analog Converters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -275,7 +258,6 @@ JESD204B Digital-to-Analog Converters
 -  :adi:`AD9176 <en/products/AD9176>`: Dual, 16-Bit, 12.6 GSPS RF DAC with 
    Wideband Channelizers.
 
-
 JESD204B RF Transceivers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -289,7 +271,6 @@ JESD204B RF Transceivers
 -  :adi:`ADRV9008-2 <en/products/ADRV9008-2>`: SDR Integrated, Dual RF Transmitter 
    with Observation Path.
 
-
 JESD204B/C Mixed-Signal Front Ends
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -298,14 +279,12 @@ JESD204B/C Mixed-Signal Front Ends
 -  :adi:`AD9082 <en/products/AD9082>`: MxFE™ QUAD, 16-Bit, 12GSPS RFDAC and 
    DUAL, 12-Bit, 6GSPS RFADC.
 
-
 More Information
 --------------------------------------------------------------------------------
 
 -  :ref:`JESD204 Interface Framework <jesd204>`
 -  :dokuwiki:`Glossary of terms <resources/fpga/peripherals/jesd204/jesd204_glossary>`
 -  :ref:`HDL User Guide <user_guide>`
-
 
 Technical Support
 --------------------------------------------------------------------------------
