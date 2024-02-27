@@ -19,7 +19,7 @@ RO
 ENDFIELD
 
 FIELD
-[15:8] 0x00
+[15:8] 0x01
 VERSION_MINOR
 RO
 ENDFIELD
@@ -90,7 +90,7 @@ FIELD
 SDO_MEM_ADDRESS_WIDTH
 RO
 Address width for the data (SDO) memory on the Offload Module.
-The size of the memory is thus ``2**SDO_MEM_ADDRESS_WIDTH``.
+The size of the memory is thus ``2**SDO_MEM_ADDRESS_WIDTH`` data words.
 ENDFIELD
 
 FIELD
@@ -98,7 +98,7 @@ FIELD
 CMD_MEM_ADDRESS_WIDTH
 RO
 Address width for the command memory on the Offload Module.
-The size of the command memory is thus ``2**CMD_MEM_ADDRESS_WIDTH``.
+The size of the command memory is thus ``2**CMD_MEM_ADDRESS_WIDTH`` instructions.
 ENDFIELD
 
 ############################################################################################
