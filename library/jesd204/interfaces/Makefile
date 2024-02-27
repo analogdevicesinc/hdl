@@ -33,6 +33,7 @@ XML_FLIST += jesd204_rx_event_rtl.xml
 
 M_FLIST := *.log
 M_FLIST += *.jou
+M_FLIST += *.sv
 M_FLIST += $(XML_FLIST)
 
 .PHONY: all xilinx clean clean-all
