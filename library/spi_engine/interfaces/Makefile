@@ -1,6 +1,6 @@
 ####################################################################################
 ####################################################################################
-## Copyright (c) 2018 - 2021 Analog Devices, Inc.
+## Copyright (c) 2018 - 2024 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
@@ -12,24 +12,12 @@ M_DEPS += ../../scripts/adi_ip_xilinx.tcl
 
 M_VIVADO := vivado -mode batch -source
 
-XML_FLIST := jesd204_tx_cfg.xml
-XML_FLIST += jesd204_tx_cfg_rtl.xml
-XML_FLIST += jesd204_tx_ilas_config.xml
-XML_FLIST += jesd204_tx_ilas_config_rtl.xml
-XML_FLIST += jesd204_tx_status.xml
-XML_FLIST += jesd204_tx_status_rtl.xml
-XML_FLIST += jesd204_tx_event.xml
-XML_FLIST += jesd204_tx_event_rtl.xml
-XML_FLIST += jesd204_tx_ctrl.xml
-XML_FLIST += jesd204_tx_ctrl_rtl.xml
-XML_FLIST += jesd204_rx_cfg.xml
-XML_FLIST += jesd204_rx_cfg_rtl.xml
-XML_FLIST += jesd204_rx_status.xml
-XML_FLIST += jesd204_rx_status_rtl.xml
-XML_FLIST += jesd204_rx_ilas_config.xml
-XML_FLIST += jesd204_rx_ilas_config_rtl.xml
-XML_FLIST += jesd204_rx_event.xml
-XML_FLIST += jesd204_rx_event_rtl.xml
+XML_FLIST := spi_engine.xml
+XML_FLIST += spi_engine_rtl.xml
+XML_FLIST += spi_engine_ctrl.xml
+XML_FLIST += spi_engine_ctrl_rtl.xml
+XML_FLIST += spi_engine_offload_ctrl.xml
+XML_FLIST += spi_engine_offload_ctrl_rtl.xml
 
 M_FLIST := *.log
 M_FLIST += *.jou

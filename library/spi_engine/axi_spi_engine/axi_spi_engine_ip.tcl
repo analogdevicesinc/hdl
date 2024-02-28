@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2015-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2015-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -34,18 +34,18 @@ adi_add_bus "spi_engine_ctrl" "master" \
 	"analog.com:interface:spi_engine_ctrl_rtl:1.0" \
 	"analog.com:interface:spi_engine_ctrl:1.0" \
 	{
-		{"cmd_ready" "CMD_READY"} \
-		{"cmd_valid" "CMD_VALID"} \
-		{"cmd_data" "CMD_DATA"} \
-		{"sdo_data_ready" "SDO_READY"} \
-		{"sdo_data_valid" "SDO_VALID"} \
-		{"sdo_data" "SDO_DATA"} \
-		{"sdi_data_ready" "SDI_READY"} \
-		{"sdi_data_valid" "SDI_VALID"} \
-		{"sdi_data" "SDI_DATA"} \
-		{"sync_ready" "SYNC_READY"} \
-		{"sync_valid" "SYNC_VALID"} \
-		{"sync_data" "SYNC_DATA"} \
+		{"cmd_ready" "cmd_ready"} \
+		{"cmd_valid" "cmd_valid"} \
+		{"cmd_data" "cmd_data"} \
+		{"sdo_data_ready" "sdo_ready"} \
+		{"sdo_data_valid" "sdo_valid"} \
+		{"sdo_data" "sdo_data"} \
+		{"sdi_data_ready" "sdi_ready"} \
+		{"sdi_data_valid" "sdi_valid"} \
+		{"sdi_data" "sdi_data"} \
+		{"sync_ready" "sync_ready"} \
+		{"sync_valid" "sync_valid"} \
+		{"sync_data" "sync_data"} \
 	}
 adi_add_bus_clock "spi_clk" "spi_engine_ctrl" "spi_resetn" "master"
 
@@ -53,18 +53,17 @@ adi_add_bus "spi_engine_offload_ctrl0" "master" \
 	"analog.com:interface:spi_engine_offload_ctrl_rtl:1.0" \
 	"analog.com:interface:spi_engine_offload_ctrl:1.0" \
 	{ \
-		{ "offload0_cmd_wr_en" "CMD_WR_EN"} \
-		{ "offload0_cmd_wr_data" "CMD_WR_DATA"} \
-		{ "offload0_sdo_wr_en" "SDO_WR_EN"} \
-		{ "offload0_sdo_wr_data" "SDO_WR_DATA"} \
-		{ "offload0_enable" "ENABLE"} \
-		{ "offload0_enabled" "ENABLED"} \
-		{ "offload0_mem_reset" "MEM_RESET"} \
-		{ "offload_sync_ready" "SYNC_READY"} \
-		{ "offload_sync_valid" "SYNC_VALID"} \
-		{ "offload_sync_data" "SYNC_DATA"} \
+		{ "offload0_cmd_wr_en" "cmd_wr_en"} \
+		{ "offload0_cmd_wr_data" "cmd_wr_data"} \
+		{ "offload0_sdo_wr_en" "sdo_wr_en"} \
+		{ "offload0_sdo_wr_data" "sdo_wr_data"} \
+		{ "offload0_enable" "enable"} \
+		{ "offload0_enabled" "enabled"} \
+		{ "offload0_mem_reset" "mem_reset"} \
+		{ "offload_sync_ready" "sync_ready"} \
+		{ "offload_sync_valid" "sync_valid"} \
+		{ "offload_sync_data" "sync_data"} \
 	}
-
 adi_add_bus_clock "s_axi_aclk" "spi_engine_offload_ctrl0:s_axi" "s_axi_aresetn"
 
 foreach port {"up_clk" "up_rstn" "up_wreq" "up_waddr" "up_wdata" "up_rreq" "up_raddr"} {
