@@ -24,18 +24,18 @@ adi_add_bus "m_ctrl" "master" \
 	"analog.com:interface:spi_engine_ctrl_rtl:1.0" \
 	"analog.com:interface:spi_engine_ctrl:1.0" \
 	{ \
-		{"m_cmd_ready" "CMD_READY"} \
-		{"m_cmd_valid" "CMD_VALID"} \
-		{"m_cmd_data" "CMD_DATA"} \
-		{"m_sdo_ready" "SDO_READY"} \
-		{"m_sdo_valid" "SDO_VALID"} \
-		{"m_sdo_data" "SDO_DATA"} \
-		{"m_sdi_ready" "SDI_READY"} \
-		{"m_sdi_valid" "SDI_VALID"} \
-		{"m_sdi_data" "SDI_DATA"} \
-		{"m_sync_ready" "SYNC_READY"} \
-		{"m_sync_valid" "SYNC_VALID"} \
-		{"m_sync" "SYNC_DATA"} \
+		{"m_cmd_ready" "cmd_ready"} \
+		{"m_cmd_valid" "cmd_valid"} \
+		{"m_cmd_data" "cmd_data"} \
+		{"m_sdo_ready" "sdo_ready"} \
+		{"m_sdo_valid" "sdo_valid"} \
+		{"m_sdo_data" "sdo_data"} \
+		{"m_sdi_ready" "sdi_ready"} \
+		{"m_sdi_valid" "sdi_valid"} \
+		{"m_sdi_data" "sdi_data"} \
+		{"m_sync_ready" "sync_ready"} \
+		{"m_sync_valid" "sync_valid"} \
+		{"m_sync" "sync_data"} \
 	}
 adi_add_bus_clock "clk" "m_ctrl" "resetn"
 
@@ -44,18 +44,18 @@ foreach prefix [list "s0" "s1"] {
 		"analog.com:interface:spi_engine_ctrl_rtl:1.0" \
 		"analog.com:interface:spi_engine_ctrl:1.0" \
 		[list \
-			[list [format "%s_cmd_ready" $prefix] "CMD_READY"] \
-			[list [format "%s_cmd_valid" $prefix] "CMD_VALID"] \
-			[list [format "%s_cmd_data" $prefix] "CMD_DATA"] \
-			[list [format "%s_sdo_ready" $prefix] "SDO_READY"] \
-			[list [format "%s_sdo_valid" $prefix] "SDO_VALID"] \
-			[list [format "%s_sdo_data" $prefix] "SDO_DATA"] \
-			[list [format "%s_sdi_ready" $prefix] "SDI_READY"] \
-			[list [format "%s_sdi_valid" $prefix] "SDI_VALID"] \
-			[list [format "%s_sdi_data" $prefix] "SDI_DATA"] \
-			[list [format "%s_sync_ready" $prefix] "SYNC_READY"] \
-			[list [format "%s_sync_valid" $prefix] "SYNC_VALID"] \
-			[list [format "%s_sync" $prefix] "SYNC_DATA"] \
+			[list [format "%s_cmd_ready" $prefix] "cmd_ready"] \
+			[list [format "%s_cmd_valid" $prefix] "cmd_valid"] \
+			[list [format "%s_cmd_data" $prefix] "cmd_data"] \
+			[list [format "%s_sdo_ready" $prefix] "sdo_ready"] \
+			[list [format "%s_sdo_valid" $prefix] "sdo_valid"] \
+			[list [format "%s_sdo_data" $prefix] "sdo_data"] \
+			[list [format "%s_sdi_ready" $prefix] "sdi_ready"] \
+			[list [format "%s_sdi_valid" $prefix] "sdi_valid"] \
+			[list [format "%s_sdi_data" $prefix] "sdi_data"] \
+			[list [format "%s_sync_ready" $prefix] "sync_ready"] \
+			[list [format "%s_sync_valid" $prefix] "sync_valid"] \
+			[list [format "%s_sync" $prefix] "sync_data"] \
 		]
 	adi_add_bus_clock "clk" [format "%s_ctrl" $prefix] "resetn"
 }

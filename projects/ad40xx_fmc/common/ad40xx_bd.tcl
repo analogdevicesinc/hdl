@@ -1,9 +1,9 @@
 ###############################################################################
-## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 ad40xx_spi
+create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 ad40xx_spi
 
 
 ## To support the 1.8MSPS (SCLK == 100 MHz), set the spi clock to 200 MHz
@@ -20,7 +20,7 @@ current_bd_instance /spi_ad40xx
   create_bd_pin -dir I -type rst resetn
   create_bd_pin -dir I -type clk spi_clk
   create_bd_pin -dir O irq
-  create_bd_intf_pin -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 m_spi
+  create_bd_intf_pin -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 m_spi
   create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:axis_rtl:1.0 M_AXIS_SAMPLE
 
   if {$ADC_RESOLUTION <= 16} {

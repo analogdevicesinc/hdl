@@ -1,5 +1,5 @@
 ####################################################################################
-## Copyright (c) 2018 - 2023 Analog Devices, Inc.
+## Copyright (c) 2018 - 2024 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
@@ -10,7 +10,7 @@ GENERIC_DEPS += util_sigma_delta_spi.v
 
 XILINX_DEPS += util_sigma_delta_spi_ip.tcl
 
-XILINX_DEPS += ../spi_engine/interfaces/spi_master.xml
-XILINX_DEPS += ../spi_engine/interfaces/spi_master_rtl.xml
+XILINX_DEPS += ../spi_engine/interfaces/spi_engine.xml
+XILINX_DEPS += ../spi_engine/interfaces/spi_engine_rtl.xml
 
 include ../scripts/library.mk

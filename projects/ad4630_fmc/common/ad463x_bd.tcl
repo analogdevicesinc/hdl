@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2021-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -21,7 +21,7 @@ set cnv_ref_clk 100
 # NOTE: this is a default value, software may or may not change this
 set adc_sampling_rate 1000000
 
-#create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 ad463x_spi
+#create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 ad463x_spi
 
 create_bd_port -dir O ad463x_spi_sclk
 create_bd_port -dir O ad463x_spi_cs
