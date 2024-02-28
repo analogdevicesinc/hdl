@@ -9,7 +9,7 @@ Overview
 The :adi:`AD7606` is a 8-/6-/4-Channel DAS with 16-Bit, Bipolar Input,
 Simultaneous Sampling ADC. Each part contains analog input clamp protection, a
 second-order antialiasing filter, a track-and-hold amplifier, a 16-bit charge
-redistribution successive approximation analog-to-digital converter (ADC), a 
+redistribution successive approximation analog-to-digital converter (ADC), a
 flexible digital filter, a 2.5 V reference and reference buffer, and high speed
 serial and parallel interfaces. The :adi:`AD7606` operate from a single 5 V
 supply and can accommodate ±10 V and ±5 V true bipolar input signals while
@@ -29,7 +29,7 @@ single-ended and unipolar single-ended options.
 
 The :adi:`EVAL-AD7606B-FMCZ <EVAL-AD7606B-FMCZ>` and
 :adi:`EVAL-AD7606C-18 <EVAL-AD7606C-18>` evaluation boards are designed to
-help users to easily evaluate the features of :adi:`AD7606B`, 
+help users to easily evaluate the features of :adi:`AD7606B`,
 :adi:`AD7606C-16` and :adi:`AD7606C-18` analog-to-digital converters (ADCs).
 
 Supported boards
@@ -114,16 +114,16 @@ In case of the **SERIAL** interface:
    -   JP5 - Position B - Parallel interface
 
 The DEV_CONFIG configuration parameter defines the device which will be used:
--  Options: 0 - AD7606B, 1 - AD7606C-16, 2 - AD7606C-18. 
+-  Options: 0 - AD7606B, 1 - AD7606C-16, 2 - AD7606C-18.
 By default it is set to 0.
 
 The NUM_OF_SDI configuration parameter defines the number of SDI lines used:
--  Options: 1, 2, 4, 8. 
+-  Options: 1, 2, 4, 8.
 By default is set to 8.
 
 The EXT_CLK configuration parameter defines the external clock option for
 the ADC clock:
--  Options: 0 - No, 1 - Yes. 
+-  Options: 0 - No, 1 - Yes.
 By default is set to 0.
 
 Jumper setup
@@ -274,7 +274,7 @@ Interrupts
 
 Below are the Programmable Logic interrupts used in this project.
 
-=============== === ========== ===========  
+=============== === ========== ===========
 Instance name   HDL Linux Zynq Actual Zynq
 =============== === ========== ===========
 axi_ad7606_dma  13  57         89
@@ -410,7 +410,7 @@ HDL related
      - ---
    * - UTIL_CPACK2
      - :git-hdl:`library/util_pack/util_cpack2 <library/util_pack/util_cpack2>` *
-     - :dokuwiki:`[Wiki] <resources/fpga/docs/util_cpack>`  
+     - :dokuwiki:`[Wiki] <resources/fpga/docs/util_cpack>`
 
 .. admonition:: Legend
    :class: note
