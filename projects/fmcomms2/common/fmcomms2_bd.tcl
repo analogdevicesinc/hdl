@@ -218,14 +218,13 @@ ad_connect $sys_cpu_resetn axi_ad9361_dac_dma/m_sg_axi_aresetn
 ad_cpu_interconnect 0x79020000 axi_ad9361
 ad_cpu_interconnect 0x7C400000 axi_ad9361_adc_dma
 ad_cpu_interconnect 0x7C420000 axi_ad9361_dac_dma
-ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
 ad_mem_hpc0_interconnect $sys_cpu_clk sys_ps7/S_AXI_HPC0
 ad_mem_hpc0_interconnect $sys_cpu_clk axi_ad9361_adc_dma/m_dest_axi
-ad_mem_hp2_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP2
-ad_mem_hp2_interconnect $sys_cpu_clk axi_ad9361_dac_dma/m_src_axi
+ad_mem_hpc0_interconnect $sys_cpu_clk axi_ad9361_dac_dma/m_src_axi
 
-ad_mem_hp2_interconnect $sys_cpu_clk axi_ad9361_dac_dma/m_sg_axi
+ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
 ad_mem_hp1_interconnect $sys_cpu_clk axi_ad9361_adc_dma/m_sg_axi
+ad_mem_hp1_interconnect $sys_cpu_clk axi_ad9361_dac_dma/m_sg_axi
 
 # interrupts
 
