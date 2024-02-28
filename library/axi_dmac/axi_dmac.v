@@ -480,8 +480,10 @@ module axi_dmac #(
     .ctrl_pause(ctrl_pause),
     .ctrl_hwdesc(ctrl_hwdesc),
 
-    .ctrl_cache(m_dest_axi_awcache),
-    .ctrl_prot(m_dest_axi_awprot),
+    .ctrl_arcache(m_src_axi_arcache),
+    .ctrl_arprot(m_src_axi_arprot),
+    .ctrl_awcache(m_dest_axi_awcache),
+    .ctrl_awprot(m_dest_axi_awprot),
 
      // Request interface
     .request_valid(up_dma_req_valid),
@@ -600,8 +602,8 @@ module axi_dmac #(
     .m_axi_arlen(m_src_axi_arlen),
     .m_axi_arsize(m_src_axi_arsize),
     .m_axi_arburst(m_src_axi_arburst),
-    .m_axi_arprot(m_src_axi_arprot),
-    .m_axi_arcache(m_src_axi_arcache),
+    .m_axi_arprot(),
+    .m_axi_arcache(),
 
     .m_axi_rdata(m_src_axi_rdata),
     .m_axi_rready(m_src_axi_rready),

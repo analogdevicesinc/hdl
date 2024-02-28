@@ -92,8 +92,10 @@ module axi_dmac_regmap #(
   output reg ctrl_pause = 1'b0,
   output reg ctrl_hwdesc = 1'b0,
 
-  output reg [3:0] ctrl_cache = 4'h0,
-  output reg [2:0] ctrl_prot  = 3'h0,
+  output reg [3:0] ctrl_arcache = 4'h0,
+  output reg [2:0] ctrl_arprot  = 3'h0,
+  output reg [3:0] ctrl_awcache = 4'h0,
+  output reg [2:0] ctrl_awprot  = 3'h0,
 
   // DMA request interface
   output request_valid,
@@ -186,8 +188,10 @@ module axi_dmac_regmap #(
       up_irq_mask <= 2'b11;
       up_scratch <= 32'h00;
       up_wack <= 1'b0;
-      ctrl_cache <= 4'h0;
-      ctrl_prot  <= 3'h0;
+      ctrl_arcache <= 4'h0;
+      ctrl_arprot  <= 3'h0;
+      ctrl_awcache <= 4'h0;
+      ctrl_awprot  <= 3'h0;
     end else begin
       up_wack <= up_wreq;
 
@@ -197,8 +201,10 @@ module axi_dmac_regmap #(
           up_scratch <= up_wdata;
           end
         9'h005: begin
-          ctrl_cache <= up_wdata[7:4];
-          ctrl_prot  <= up_wdata[3:1];
+          ctrl_arcache <= up_wdata[15:12];
+          ctrl_arprot  <= up_wdata[11:9];
+          ctrl_awcache <= up_wdata[7:4];
+          ctrl_awprot  <= up_wdata[3:1];
           end
         9'h020: begin
           up_irq_mask <= up_wdata[1:0];
@@ -232,7 +238,7 @@ module axi_dmac_regmap #(
                            4'b0,BYTES_PER_BURST_WIDTH[3:0],
                            2'b0,DMA_TYPE_SRC[1:0],BYTES_PER_BEAT_WIDTH_SRC[3:0],
                            2'b0,DMA_TYPE_DEST[1:0],BYTES_PER_BEAT_WIDTH_DEST[3:0]};
-      9'h005: up_rdata <= {24'd0, ctrl_cache, ctrl_prot, CACHE_COHERENT_DEST};
+      9'h005: up_rdata <= {16'b0, ctrl_arcache, ctrl_arprot, 1'b0, ctrl_awcache, ctrl_awprot, CACHE_COHERENT_DEST};
       9'h020: up_rdata <= up_irq_mask;
       9'h021: up_rdata <= up_irq_pending;
       9'h022: up_rdata <= up_irq_source;
