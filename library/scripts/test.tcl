@@ -424,7 +424,8 @@ namespace eval ipl {
         }
     }
 
-    proc portsa {path} {
+    proc getmod {path} {
+        set debug 0
         set file [open $path]
         set data [read $file]
         close $file
@@ -440,34 +441,27 @@ namespace eval ipl {
                     set parameter [string map {" " ""} [lindex $values 0]]
                     set portdata [list type $type name $parameter]
                     set parlist [list {*}$parlist $portdata]
-                    puts "par no def val"
-                    puts $parameter
+                    if {$debug} {
+                        puts "$type\t$parameter"
+                    }
                 } else {
                     set portname [string map {" " ""} [lindex $values 0]]
                     set portdata [list type $type name $portname]
                     set portlist [list {*}$portlist $portdata]
-                    if {$type == "input"} {
-                        puts "input pin"
-                        puts "$type\t$portname"
-                    }
-                    if {$type == "output"} {
-                        puts "output pin"
-                        puts "$type\t$portname"
-                    }
-                    if {$type == "inout"} {
-                        puts "inout pin"
+                    if {$debug} {
                         puts "$type\t$portname"
                     }
                 }
             } elseif {[llength $line] > 2} {
                 if {$type == "parameter"} {
-                    puts "par with def val"
                     set values [split $values "="]
                     set parameter [string map {" " ""} [lindex $values 0]]
                     set default_value [string map {" " ""} [lindex $values 1]]
                     set portdata [list type $type name $parameter defval $default_value]
                     set parlist [list {*}$parlist $portdata]
-                    puts "$parameter = $default_value"
+                    if {$debug} {
+                        puts "$type\t$parameter = $default_value"
+                    }
                 } else {
                     set sep {[}
                     set values [split $line $sep]
@@ -482,16 +476,8 @@ namespace eval ipl {
 
                     set portdata [list type $type name $portname from $from to $to]
                     set portlist [list {*}$portlist $portdata]
-                    puts "$type\t$from\t:\t$to\t$portname"
-
-                    if {$type == "input"} {
-                        puts "input bus"
-                    }
-                    if {$type == "output"} {
-                        puts "output bus"
-                    }
-                    if {$type == "inout"} {
-                        puts "inout bus"
+                    if {$debug} {
+                        puts "$type\t$from\t:\t$to\t$portname"
                     }
                 }
             }
