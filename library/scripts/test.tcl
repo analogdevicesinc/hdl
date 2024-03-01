@@ -271,10 +271,10 @@ namespace eval ipl {
 
         if {$port != ""} {
             set ptnode [ipl::getnode ip_desc lsccip:ports $ip]
-            puts $ptnode
+            # puts $ptnode
             if {[lindex $ptnode 0] == ""} {
                 lset ptnode 0 {lsccip:ports}
-                puts $ptnode
+                # puts $ptnode
                 set ip [ipl::setnode ip_desc lsccip:ports $ptnode $ip]
             }
             set node [list lsccip:port [list {0} $port] {} {}]
@@ -510,5 +510,77 @@ namespace eval ipl {
             }
             puts "-------------------------------------------------------------"
         }
+    }
+
+    proc addports {args} {
+        array set opt [list -ip "$::ipl::ip" \
+            -mod_data "" \
+            -other_option "" \
+        {*}$args]
+        set ip $opt(-ip)
+        set mod_data $opt(-mod_data)
+        # to do: check the input parameters
+
+        foreach data [dict get $mod_data portlist] {
+            set dir [dict get $data type]
+            switch $dir {
+                input {
+                    set dir in
+                }
+                output {
+                    set dir out
+                }
+                inout {
+                    set dir inout
+                }
+            }
+            set name [dict get $data name]
+
+            if {[llength $data] > 4} {
+                set from [dict get $data from]
+                set to [dict get $data to]
+                set pd "name=$name dir=$dir range=($to,$from) conn_mod=axi_dmac"
+            } else {
+                set pd "name=$name dir=$dir conn_mod=axi_dmac"
+            }
+            set ip [ipl::ports -ip $ip -id $name -port $pd]
+        }
+        return $ip
+    }
+
+    proc tw {} {
+        set mod_data [ipl::getmod axi_dmac.v]
+        set ip $::ipl::ip
+        foreach data [dict get $mod_data portlist] {
+            set dir [dict get $data type]
+            switch $dir {
+                input {
+                    set dir in
+                }
+                output {
+                    set dir out
+                }
+                inout {
+                    set dir inout
+                }
+            }
+            set name [dict get $data name]
+            set c {"}
+            set op {(}
+            set cl {)}
+            if {[llength $data] > 4} {
+                set from [dict get $data from]
+                set to [dict get $data to]
+                
+                set pd "name=$c$name$c dir=$c$dir$c range=$c$op$to,$from$cl$c conn_port=$c$name$c conn_mod=axi_dmac dangling=$c$c stick_low=$c$c"
+            } else {
+                set pd "name=$c$name$c dir=$c$dir$c conn_port=$c$name$c \
+                conn_mod=axi_dmac dangling=$c$c stick_low=$c$c"
+            }
+            set ip [ipl::ports -ip $ip -id $name -port $pd]
+        }
+        ipl::xmlgen $ip
+
+        # ipl::getaxi [ipl::getmod axi_dmac.v]
     }
 }
