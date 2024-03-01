@@ -96,7 +96,7 @@ module system_top (
   inout                   gpio_1_mode_1,
   inout                   gpio_2_mode_2,
   inout                   gpio_3_mode_3,
-  inout                   gpio_4_filter,
+  output                  gpio_4_filter,
   output                  reset_n,
   output                  start_n,
   output                  mclk
@@ -133,19 +133,19 @@ module system_top (
   // use crystal
 
   assign mclk = 1'b0;
-  assign start_n = gpio_o[33];
+  assign start_n = 1'b1;
+  assign gpio_4_filter = 1'b1;
   assign reset_n = gpio_o[32];
 
   // instantiations
 
   ad_iobuf #(
-    .DATA_WIDTH(5)
+    .DATA_WIDTH(4)
   ) i_iobuf (
-    .dio_t (gpio_t[52:48]),
-    .dio_i (gpio_o[52:48]),
-    .dio_o (gpio_i[52:48]),
-    .dio_p ({ gpio_4_filter,        // 52
-              gpio_3_mode_3,        // 51
+    .dio_t (gpio_t[51:48]),
+    .dio_i (gpio_o[51:48]),
+    .dio_o (gpio_i[51:48]),
+    .dio_p ({ gpio_3_mode_3,        // 51
               gpio_2_mode_2,        // 50
               gpio_1_mode_1,        // 49
               gpio_0_mode_0         // 48
