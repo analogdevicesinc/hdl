@@ -260,7 +260,7 @@ The Software GPIO number is calculated as follows:
      - 89
    * - adc_os
      - OUT
-     - 34:32
+     - 34-32
      - 88-86
 
 .. admonition:: Legend
@@ -405,7 +405,7 @@ HDL related
    * - SYSID_ROM
      - :git-hdl:`library/sysid_rom <library/sysid_rom>`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
-   * - UTIL_I2C-MIXER
+   * - UTIL_I2C_MIXER
      - :git-hdl:`library/util_i2c_mixer <library/util_i2c_mixer>`
      - ---
    * - UTIL_CPACK2
