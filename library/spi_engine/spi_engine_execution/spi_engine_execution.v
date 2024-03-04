@@ -116,6 +116,8 @@ module spi_engine_execution #(
   reg trigger_next = 1'b0;
   reg wait_for_io = 1'b0;
   reg transfer_active = 1'b0;
+  reg transfer_active_d = 1'b0;
+  wire transfer_active_posedge;
 
   wire last_bit;
   wire first_bit;
@@ -133,6 +135,7 @@ module spi_engine_execution #(
   reg cpha = DEFAULT_SPI_CFG[0];
   reg cpol = DEFAULT_SPI_CFG[1];
   reg [7:0] clk_div = DEFAULT_CLK_DIV;
+  reg clear_sel = DEFAULT_SPI_CFG[3];
 
   reg sdo_enabled = 1'b0;
   reg sdi_enabled = 1'b0;
@@ -206,6 +209,7 @@ module spi_engine_execution #(
       cpha <= DEFAULT_SPI_CFG[0];
       cpol <= DEFAULT_SPI_CFG[1];
       three_wire <= DEFAULT_SPI_CFG[2];
+      clear_sel  <= DEFAULT_SPI_CFG[3];
       clk_div <= DEFAULT_CLK_DIV;
       word_length <= DATA_WIDTH;
       left_aligned <= 8'b0;
@@ -214,6 +218,7 @@ module spi_engine_execution #(
         cpha <= cmd[0];
         cpol <= cmd[1];
         three_wire <= cmd[2];
+        clear_sel  <= cmd[3];
       end else if (cmd[9:8] == REG_CLK_DIV) begin
         clk_div <= cmd[7:0];
       end else if (cmd[9:8] == REG_WORD_LENGTH) begin
@@ -356,8 +361,10 @@ module spi_engine_execution #(
   always @(posedge clk) begin
     if (resetn == 1'b0) begin
       transfer_active <= 1'b0;
+      transfer_active_d <= 1'b0;
       wait_for_io <= 1'b0;
     end else begin
+      transfer_active_d <= transfer_active;
       if (exec_transfer_cmd == 1'b1) begin
         wait_for_io <= 1'b1;
         transfer_active <= 1'b0;
@@ -375,6 +382,7 @@ module spi_engine_execution #(
       end
     end
   end
+  assign transfer_active_posedge = transfer_active && !transfer_active_d;
 
   always @(posedge clk) begin
     if (transfer_active == 1'b1 || wait_for_io == 1'b1)
@@ -425,7 +433,7 @@ module spi_engine_execution #(
     if (!resetn) begin // set cs_active during reset for a cycle to clear shift reg
       cs_active <= 1;
     end else begin
-      cs_active <= ~(&cmd_d1[NUM_OF_CS-1:0]) & cs_gen;
+      cs_active <= (clear_sel) ? transfer_active_posedge : ~(&cmd_d1[NUM_OF_CS-1:0]) & cs_gen;
     end
   end
 

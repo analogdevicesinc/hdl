@@ -197,9 +197,16 @@ bus behavior.
    * - Bits
      - Name
      - Description
-   * - [7:3]
+   * - [7:4]
      - reserved
      - Must always be 0.
+   * - [3]
+     - clear_sel
+     - Configures the behavior when clearing internal buffers. The default 
+     - behavior, when 0, is to clear when cs is activated. When set to 1, 
+     - everything is cleared on the start of each transfer, regardless of cs 
+     - value. For non-conventional cases, where cs is used in non-standard 
+     - ways, or when not used at all, we recommend setting this to 1.
    * - [2]
      - three_wire
      - Configures the output of the three_wire pin.
