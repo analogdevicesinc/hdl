@@ -33,6 +33,12 @@ namespace eval ipl {
             {lsccip:componentGenerators} {{} {} {} {}}
         }
     }
+    #  <lsccip:generatorExe>testbench/cache_update.py</lsccip:generatorExe>
+    set componentGenerator_desc {{lsccip:componentGenerator} {} {} {
+            {lsccip:name} {{lsccip:name} {} {} {}}
+            {lsccip:generatorExe} {{lsccip:generatorExe} {} {} {}}
+        }
+    }
     set busInterfaces_desc {{lsccip:busInterfaces} {{0}
         {xmlns:lsccip="http://www.latticesemi.com/XMLSchema/Radiant/ip"}} {} {}}
     set busInterface_desc {{lsccip:busInterface} {} {} {
@@ -70,9 +76,9 @@ namespace eval ipl {
     ## to do #############
     set memoryMaps_desc {}
 
-    set ip [list {} {} {} [list ip_desc $ip_desc addressSpaces_desc\
-        {} businterfaces_desc\
-        {} memoryMaps_desc {}]]
+    set ip [list {} {} {} [list ip_desc $ip_desc addressSpaces_desc {} \
+        busInterfaces_desc {} \
+        memoryMaps_desc {}]]
 
     proc xmlgen {node {nid "0"} {index 0}} {
         set name [lindex $node 0]
@@ -302,41 +308,6 @@ namespace eval ipl {
         return $ip
     }
 
-    proc addifs {args} {
-        array set opt [list -ip "$::ipl::ip" \
-            -name "" \
-            -display_name "" \
-            -description "" \
-            -bus_type "" \
-            -abstraction_ref "" \
-            -portmap "" \
-        {*}$args]
-
-        set ip $opt(-ip)
-        set port $opt(-port)
-        # do some tasks
-        return $ip
-    }
-
-    proc addif {args} {
-        array set opt [list -ip "$::ipl::ip" \
-            -name "" \
-            -display_name "" \
-            -description "" \
-            -bus_type "" \
-            -abstraction_ref "" \
-            -portmap "" \
-            -mod_data "" \
-            -if_name "" \
-            -exep_ports "" \
-        {*}$args]
-
-        set ip $opt(-ip)
-        set port $opt(-port)
-        # do some tasks
-        return $ip
-    }
-
     set addrid 0
     proc address {args} {
         set debug 0
@@ -414,13 +385,13 @@ namespace eval ipl {
         set ip [lindex $ip 3]
         array set opt [list ip_desc "" \
             addressSpaces_desc "" \
-            businterfaces_desc "" \
+            busInterfaces_desc "" \
             memoryMaps_desc "" \
             {*}$ip]
 
         set ip_desc $opt(ip_desc)
         set addressSpaces_desc $opt(addressSpaces_desc)
-        set businterfaces_desc $opt(businterfaces_desc)
+        set busInterfaces_desc $opt(busInterfaces_desc)
         set memoryMaps_desc $opt(memoryMaps_desc)
 
         # to do: add the include section for xml files automatically
@@ -444,13 +415,13 @@ namespace eval ipl {
             puts "WARNING, No addressSpaces_desc defined!"
         }
 
-        if {$businterfaces_desc != ""} {
+        if {$busInterfaces_desc != ""} {
             set file [open "bus_interface.xml" w]
-            puts [xmlgen $businterfaces_desc]
-            puts $file [xmlgen $businterfaces_desc]
+            puts [xmlgen $busInterfaces_desc]
+            puts $file [xmlgen $busInterfaces_desc]
             close $file
         } else {
-            puts "WARNING, No businterfaces_desc defined!"
+            puts "WARNING, No busInterfaces_desc defined!"
         }
 
         if {$memoryMaps_desc != ""} {
@@ -530,6 +501,82 @@ namespace eval ipl {
         }
         set module_data [list portlist $portlist parlist $parlist mod_name $mod_name]
         return $module_data
+    }
+
+    proc addifs {args} {
+        array set opt [list -ip "$::ipl::ip" \
+            -name "" \
+            -display_name "" \
+            -description "" \
+            -bus_type "" \
+            -abstraction_ref "" \
+            -portmap "" \
+        {*}$args]
+
+        set ip $opt(-ip)
+        set port $opt(-port)
+        # do some tasks
+        return $ip
+    }
+
+    proc addif {args} {
+        array set opt [list -ip "$::ipl::ip" \
+            -name "" \
+            -display_name "" \
+            -description "" \
+            -bus_type "" \
+            -abstraction_ref "" \
+            -mod_data "" \
+            -if_name "" \
+            -exep_ports "" \
+        {*}$args]
+
+        set ip $opt(-ip)
+        set mod_data $opt(-mod_data)
+        set name $opt(-name)
+        set if_name $opt(-if_name)
+        set display_name $opt(-display_name)
+        set exep_ports $opt(-exep_ports)
+        set description $opt(-description)
+        set bus_type $opt(-bus_type)
+        set abst_ref $opt(-abstraction_ref)
+
+        set ports [dict get $mod_data portlist]
+
+        set bif $::ipl::busInterface_desc
+        set bif [ipl::setnode {} lsccip:name [list lsccip:name {} $name {}] $bif]
+        set bif [ipl::setnode {} lsccip:displayName [list lsccip:displayName {} $display_name {}] $bif]
+        set bif [ipl::setnode {} lsccip:description [list lsccip:description {} $description {}] $bif]
+        set bif [ipl::setnode {} lsccip:busType [list lsccip:busType $bus_type {} {}] $bif]
+        set bif [ipl::setnode lsccip:abstractionTypes lsccip:abstractionRef [list lsccip:abstractionRef [list {0} $abst_ref] {} {}] $bif]
+
+        set plist {}
+        foreach line $ports {
+            set reg [list ${if_name}_.+]
+            set pname [dict get $line name]
+            if {[lsearch $exep_ports $pname] == -1 && [regexp $reg $pname]} {
+                set logic [string toupper [string map [list ${if_name}_ ""] $pname]]
+                set pmap [ipl::setnode lsccip:logicalPort lsccip:name [list lsccip:name {} $logic {}] $::ipl::portMap_desc]
+                set pmap [ipl::setnode lsccip:physicalPort lsccip:name [list lsccip:name {} $pname {}] $pmap]
+                set bif [ipl::setnode lsccip:abstractionTypes/lsccip:portMaps $pname $pmap $bif]
+                # dict set plist $pname $pmap
+            }
+        }
+        # set bif [ipl::setnode lsccip:abstractionTypes lsccip:portMaps [list lsccip:portMaps {} {} $plist] $bif]
+        puts [ipl::xmlgen $bif]
+        set bifs [ipl::getnode {} busInterfaces_desc $ip]
+        if {$bifs == ""} {
+            set bifs $::ipl::busInterfaces_desc
+        }
+        puts $bifs
+        set bifsl [lindex $bifs 3]
+        puts $bifsl
+        dict set bifsl $if_name $bif
+        lset bifs 3 $bifsl
+        puts $bifs
+        set ip [ipl::setnode {} busInterfaces_desc $bifs $ip]
+        # do some tasks
+        return $ip
     }
 
 # to do check the ports to select the interface type
@@ -660,8 +707,14 @@ namespace eval ipl {
         set mod_name [dict get $mod_data mod_name]
         set ip [ipl::general -ip $ip -name $mod_name]
         # ipl::xmlgen $ip
+        set ip [ipl::addif -ip $ip -mod_data $mod_data -name s_axi -if_name s_axi \
+            -exep_ports [list s_axi_aclk s_axi_aresetn] \
+            -display_name s_axi \
+            -description s_axi \
+            -bus_type bussztype \
+            -abstraction_ref abstraction_ref]
         ipl::genip $ip
-        ipl::getaxi $mod_data
+
 
         # ipl::getaxi [ipl::getmod axi_dmac.v]
     }
