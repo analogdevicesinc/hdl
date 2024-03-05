@@ -334,40 +334,151 @@ namespace eval ipl {
 ## modify to specify all the port data
 ## create rmport
 ## set only the specified attributes
+    # set portid 0
+    # proc addport {args} {
+    #     set debug 0
+    #     array set opt [list -ip "$::ipl::ip" \
+    #         -id "" \
+    #         -port "" \
+    #     {*}$args]
+
+    #     set ip $opt(-ip)
+    #     set id $opt(-id)
+    #     set port $opt(-port)
+
+    #     if {$port != ""} {
+    #         set ptnode [ipl::getnode ip_desc lsccip:ports $ip]
+    #         if {$debug} {
+    #             puts $ptnode
+    #         }
+    #         if {[lindex $ptnode 0] == ""} {
+    #             lset ptnode 0 {lsccip:ports}
+    #             if {$debug} {
+    #                 puts $ptnode
+    #             }
+    #             set ip [ipl::setnode ip_desc lsccip:ports $ptnode $ip]
+    #         }
+    #         set node [list lsccip:port [list {0} $port] {} {}]
+    #         if {$id == ""} {
+    #             set ip [ipl::setnode ip_desc/lsccip:ports $::ipl::portid $node $ip]
+    #             incr ipl::portid
+    #         } else {
+    #             set ip [ipl::setnode ip_desc/lsccip:ports $id $node $ip]
+    #         }
+    #     }
+    #     # to do for multiple ports
+    #     # to do autodetect ports
+    #     return $ip
+    # }
+
     set portid 0
     proc addport {args} {
         set debug 0
         array set opt [list -ip "$::ipl::ip" \
             -id "" \
-            -port "" \
+            -name "" \
+            -dir "" \
+            -range "" \
+            -conn_mod "" \
+            -conn_port "" \
+            -conn_range "" \
+            -stick_high "" \
+            -stick_low "" \
+            -stick_value "" \
+            -dangling "" \
+            -attribute "" \
+            -port_type "" \
         {*}$args]
 
         set ip $opt(-ip)
         set id $opt(-id)
-        set port $opt(-port)
+        set name $opt(-name)
+        set dir $opt(-dir)
+        set conn_mod $opt(-conn_mod)
+    
+        set options {
+            -ip
+            -id
+            -name -> MANDATORY
+            -dir -> MANDATORY
+            -range
+            -conn_mod -> MANDATORY
+            -conn_port
+            -conn_range
+            -stick_high
+            -stick_low
+            -stick_value
+            -dangling
+            -attribute
+            -port_type
+        }
 
-        if {$port != ""} {
-            set ptnode [ipl::getnode ip_desc lsccip:ports $ip]
+        set optl {
+            -name
+            -dir
+            -range
+            -conn_mod
+            -conn_port
+            -conn_range
+            -stick_high
+            -stick_low
+            -stick_value
+            -dangling
+            -attribute
+            -port_type
+        }
+
+        # if {$name == ""} {
+        #     puts {ERROR in addport proc, you must specify the -name option!}
+        #     puts $options
+        #     exit 2
+        # }
+        # if {$dir == ""} {
+        #     puts {ERROR in addport proc, you must specify the -dir option!}
+        #     puts $options
+        #     exit 2
+        # }
+        # if {$conn_mod == ""} {
+        #     puts {ERROR in addport proc, you must specify the -conn_mod option!}
+        #     puts $options
+        #     exit 2
+        # }
+
+        set atts {}
+        foreach attid $optl {
+            set att $opt($attid)
+            if {$att != ""} {
+                set atts [list {*}$atts $attid $opt($attid)]
+            }
+        }
+        set ptnode [ipl::getnode ip_desc lsccip:ports $ip]
+        if {$debug} {
+            puts $ptnode
+        }
+        if {[lindex $ptnode 0] == ""} {
+            lset ptnode 0 {lsccip:ports}
             if {$debug} {
                 puts $ptnode
             }
-            if {[lindex $ptnode 0] == ""} {
-                lset ptnode 0 {lsccip:ports}
-                if {$debug} {
-                    puts $ptnode
+            set ip [ipl::setnode ip_desc lsccip:ports $ptnode $ip]
+        }
+        if {$id != ""} {
+            if {[ipl::getnode ip_desc/lsccip:ports $id $ip] != ""} {
+                foreach attid $optl {
+                    set att $opt($attid)
+                    if {$att != ""} {
+                        set ip [ipl::setatt ip_desc/lsccip:ports $id $attid $opt($attid) $ip]
+                    }
                 }
-                set ip [ipl::setnode ip_desc lsccip:ports $ptnode $ip]
-            }
-            set node [list lsccip:port [list {0} $port] {} {}]
-            if {$id == ""} {
-                set ip [ipl::setnode ip_desc/lsccip:ports $::ipl::portid $node $ip]
-                incr ipl::portid
             } else {
+                set node [list lsccip:port $atts {} {}]
                 set ip [ipl::setnode ip_desc/lsccip:ports $id $node $ip]
             }
+        } else {
+            set node [list lsccip:port $atts {} {}]
+            set ip [ipl::setnode ip_desc/lsccip:ports $::ipl::portid $node $ip]
+            incr ipl::portid
         }
-        # to do for multiple ports
-        # to do autodetect ports
         return $ip
     }
 
@@ -400,9 +511,9 @@ namespace eval ipl {
                 set ip [ipl::setnode "" addressSpaces_desc $adnode $ip]
             }
             set addrsp $::ipl::addressSpace_desc
-            set addrsp [ipl::setnode {} lsccip:name [list lsccip:name {} $name {}] $addrsp]
-            set addrsp [ipl::setnode {} lsccip:range [list lsccip:range {} $range {}] $addrsp]
-            set addrsp [ipl::setnode {} lsccip:width [list lsccip:width {} $width {}] $addrsp]
+            set addrsp [ipl::setncont {} lsccip:name $name $addrsp]
+            set addrsp [ipl::setncont {} lsccip:range $range $addrsp]
+            set addrsp [ipl::setncont {} lsccip:width $width $addrsp]
    
             if {$id == ""} {
                 set ip [ipl::setnode addressSpaces_desc $::ipl::addrid $addrsp $ip]
@@ -428,8 +539,9 @@ namespace eval ipl {
         set include $opt(-include)
         
         if {$include != ""} {
-            set include [format {"parse="xml" href="%s"} $include]
-            set node [list xi:include [list {0} $include] {} {}]
+            set c {"}
+            # set include [format {parse="xml" href="%s"} $include]
+            set node [list xi:include [list parse {parse="xml"} href href=$c$include$c] {} {}]
             if {$debug} {
                 puts $node
             }
@@ -440,7 +552,6 @@ namespace eval ipl {
                 set ip [ipl::setnode ip_desc/xi:include $id $node $ip]
             }
         }
-
         return $ip
     }
 
@@ -607,11 +718,11 @@ namespace eval ipl {
         set ports [dict get $mod_data portlist]
 
         set bif $::ipl::busInterface_desc
-        set bif [ipl::setnode {} lsccip:name [list lsccip:name {} $name {}] $bif]
-        set bif [ipl::setnode {} lsccip:displayName [list lsccip:displayName {} $display_name {}] $bif]
-        set bif [ipl::setnode {} lsccip:description [list lsccip:description {} $description {}] $bif]
-        set bif [ipl::setnode {} lsccip:busType [list lsccip:busType [list {0} $bus_type] {} {}] $bif]
-        set bif [ipl::setnode lsccip:abstractionTypes lsccip:abstractionRef [list lsccip:abstractionRef [list {0} $abst_ref] {} {}] $bif]
+        set bif [ipl::setncont {} lsccip:name $name $bif]
+        set bif [ipl::setncont {} lsccip:displayName $display_name $bif]
+        set bif [ipl::setncont {} lsccip:description $description $bif]
+        set bif [ipl::setatts {} lsccip:busType [list {0} $bus_type] $bif]
+        set bif [ipl::setatts lsccip:abstractionTypes lsccip:abstractionRef [list {0} $abst_ref] $bif]
 
         set plist {}
         foreach line $ports {
@@ -619,26 +730,22 @@ namespace eval ipl {
             set pname [dict get $line name]
             if {[lsearch $exep_ports $pname] == -1 && [regexp $reg $pname]} {
                 set logic [string toupper [string map [list ${if_name}_ ""] $pname]]
-                set pmap [ipl::setnode lsccip:logicalPort lsccip:name [list lsccip:name {} $logic {}] $::ipl::portMap_desc]
-                set pmap [ipl::setnode lsccip:physicalPort lsccip:name [list lsccip:name {} $pname {}] $pmap]
+                set pmap [ipl::setncont lsccip:logicalPort lsccip:name $logic $::ipl::portMap_desc]
+                set pmap [ipl::setncont lsccip:physicalPort lsccip:name $pname $pmap]
                 set bif [ipl::setnode lsccip:abstractionTypes/lsccip:portMaps $pname $pmap $bif]
-                # dict set plist $pname $pmap
             }
         }
-        # set bif [ipl::setnode lsccip:abstractionTypes lsccip:portMaps [list lsccip:portMaps {} {} $plist] $bif]
-        puts [ipl::xmlgen $bif]
         set bifs [ipl::getnode {} busInterfaces_desc $ip]
         if {$bifs == ""} {
             set bifs $::ipl::busInterfaces_desc
         }
-        puts $bifs
         set bifsl [lindex $bifs 3]
-        puts $bifsl
         dict set bifsl $if_name $bif
         lset bifs 3 $bifsl
-        puts $bifs
         set ip [ipl::setnode {} busInterfaces_desc $bifs $ip]
-        # do some tasks
+
+        # to do: manual portlist/portmap
+        # - update ports attributes with the interface attribute
         return $ip
     }
 
