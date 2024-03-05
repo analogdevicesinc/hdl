@@ -198,6 +198,70 @@ namespace eval ipl {
         return $desc
     }
 
+    proc getatts {path nodeid {desc {"" "" "" ""}}} {
+        set node [ipl::getnode $path $nodeid $desc]
+        return [lindex $node 1]
+    }
+    proc getatt {path nodeid attid {desc {"" "" "" ""}}} {
+        set node [ipl::getnode $path $nodeid $desc]
+        set atts [lindex $node 1]
+        return [dict get $atts $attid]
+    }
+    proc setatts {path nodeid atts {desc {"" "" "" ""}}} {
+        set node [ipl::getnode $path $nodeid $desc]
+        lset node 1 $atts
+        return [ipl::setnode $path $nodeid $node $desc]
+    }
+    proc setatt {path nodeid attid att {desc {"" "" "" ""}}} {
+        set node [ipl::getnode $path $nodeid $desc]
+        set atts [lindex $node 1]
+        dict set atts $attid $att
+        lset node 1 $atts
+        return [ipl::setnode $path $nodeid $node $desc]
+    }
+    proc rmatts {path nodeid {desc {"" "" "" ""}}} {
+        set node [ipl::getnode $path $nodeid $desc]
+        lset node 1 {}
+        return [ipl::setnode $path $nodeid $node $desc]
+    }
+    proc rmatt {path nodeid attid {desc {"" "" "" ""}}} {
+        set node [ipl::getnode $path $nodeid $desc]
+        set atts [lindex $node 1]
+        dict unset atts $attid
+        lset node 1 $atts
+        return [ipl::setnode $path $nodeid $node $desc]
+    }
+
+    proc getnname {path nodeid {desc {"" "" "" ""}}} {
+        set node [ipl::getnode $path $nodeid $desc]
+        return [lindex $node 0]
+    }
+    proc setnname {path nodeid nname {desc {"" "" "" ""}}} {
+        set node [ipl::getnode $path $nodeid $desc]
+        lset node 0 $nname
+        return [ipl::setnode $path $nodeid $node $desc]
+    }
+    proc rmnname {path nodeid {desc {"" "" "" ""}}} {
+        set node [ipl::getnode $path $nodeid $desc]
+        lset node 0 {}
+        return [ipl::setnode $path $nodeid $node $desc]
+    }
+
+    proc getncont {path nodeid {desc {"" "" "" ""}}} {
+        set node [ipl::getnode $path $nodeid $desc]
+        return [lindex $node 2]
+    }
+    proc setncont {path nodeid cont {desc {"" "" "" ""}}} {
+        set node [ipl::getnode $path $nodeid $desc]
+        lset node 2 $cont
+        return [ipl::setnode $path $nodeid $node $desc]
+    }
+    proc rmncont {path nodeid {desc {"" "" "" ""}}} {
+        set node [ipl::getnode $path $nodeid $desc]
+        lset node 2 {}
+        return [ipl::setnode $path $nodeid $node $desc]
+    }
+
     proc general {args} {
         array set opt [list -ip "$::ipl::ip" \
             -vendor "analog.com" \
@@ -226,10 +290,9 @@ namespace eval ipl {
         set supported_products $opt(-supported_products)
         set supported_platforms $opt(-supported_platforms)
 
-        set ip [ipl::setnode ip_desc/lsccip:general lsccip:name \
-            [list lsccip:name {} $name {}] $ip]
-        set ip [ipl::setnode ip_desc/lsccip:general lsccip:display_name \
-            [list lsccip:display_name {} $name {}] $ip]
+        set ip [ipl::setncont ip_desc/lsccip:general lsccip:name $name $ip]
+        set ip [ipl::setncont ip_desc/lsccip:general lsccip:display_name $name $ip]
+
         # to do the rest of parameters
         return $ip
     }
@@ -547,7 +610,7 @@ namespace eval ipl {
         set bif [ipl::setnode {} lsccip:name [list lsccip:name {} $name {}] $bif]
         set bif [ipl::setnode {} lsccip:displayName [list lsccip:displayName {} $display_name {}] $bif]
         set bif [ipl::setnode {} lsccip:description [list lsccip:description {} $description {}] $bif]
-        set bif [ipl::setnode {} lsccip:busType [list lsccip:busType $bus_type {} {}] $bif]
+        set bif [ipl::setnode {} lsccip:busType [list lsccip:busType [list {0} $bus_type] {} {}] $bif]
         set bif [ipl::setnode lsccip:abstractionTypes lsccip:abstractionRef [list lsccip:abstractionRef [list {0} $abst_ref] {} {}] $bif]
 
         set plist {}
@@ -711,6 +774,24 @@ namespace eval ipl {
             -exep_ports [list s_axi_aclk s_axi_aresetn] \
             -display_name s_axi \
             -description s_axi \
+            -bus_type bussztype \
+            -abstraction_ref abstraction_ref]
+        set ip [ipl::addif -ip $ip -mod_data $mod_data -name m_dest_axi -if_name m_dest_axi \
+            -exep_ports [list m_dest_axi_aclk m_dest_axi_aresetn] \
+            -display_name m_dest_axi \
+            -description m_dest_axi \
+            -bus_type bussztype \
+            -abstraction_ref abstraction_ref]
+        set ip [ipl::addif -ip $ip -mod_data $mod_data -name m_src_axi -if_name m_src_axi \
+            -exep_ports [list m_src_axi_aclk m_src_axi_aresetn] \
+            -display_name m_src_axi \
+            -description m_src_axi \
+            -bus_type bussztype \
+            -abstraction_ref abstraction_ref]
+        set ip [ipl::addif -ip $ip -mod_data $mod_data -name m_sg_axi -if_name m_sg_axi \
+            -exep_ports [list m_sg_axi_aclk m_sg_axi_aresetn] \
+            -display_name m_sg_axi \
+            -description m_sg_axi \
             -bus_type bussztype \
             -abstraction_ref abstraction_ref]
         ipl::genip $ip
