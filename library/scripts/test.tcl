@@ -331,48 +331,9 @@ namespace eval ipl {
         }
         return $ip
     }
-## modify to specify all the port data
-## create rmport
-## set only the specified attributes
-    # set portid 0
-    # proc addport {args} {
-    #     set debug 0
-    #     array set opt [list -ip "$::ipl::ip" \
-    #         -id "" \
-    #         -port "" \
-    #     {*}$args]
-
-    #     set ip $opt(-ip)
-    #     set id $opt(-id)
-    #     set port $opt(-port)
-
-    #     if {$port != ""} {
-    #         set ptnode [ipl::getnode ip_desc lsccip:ports $ip]
-    #         if {$debug} {
-    #             puts $ptnode
-    #         }
-    #         if {[lindex $ptnode 0] == ""} {
-    #             lset ptnode 0 {lsccip:ports}
-    #             if {$debug} {
-    #                 puts $ptnode
-    #             }
-    #             set ip [ipl::setnode ip_desc lsccip:ports $ptnode $ip]
-    #         }
-    #         set node [list lsccip:port [list {0} $port] {} {}]
-    #         if {$id == ""} {
-    #             set ip [ipl::setnode ip_desc/lsccip:ports $::ipl::portid $node $ip]
-    #             incr ipl::portid
-    #         } else {
-    #             set ip [ipl::setnode ip_desc/lsccip:ports $id $node $ip]
-    #         }
-    #     }
-    #     # to do for multiple ports
-    #     # to do autodetect ports
-    #     return $ip
-    # }
 
     set portid 0
-    proc addport {args} {
+    proc setport {args} {
         set debug 0
         array set opt [list -ip "$::ipl::ip" \
             -id "" \
@@ -392,27 +353,7 @@ namespace eval ipl {
 
         set ip $opt(-ip)
         set id $opt(-id)
-        set name $opt(-name)
-        set dir $opt(-dir)
-        set conn_mod $opt(-conn_mod)
     
-        set options {
-            -ip
-            -id
-            -name -> MANDATORY
-            -dir -> MANDATORY
-            -range
-            -conn_mod -> MANDATORY
-            -conn_port
-            -conn_range
-            -stick_high
-            -stick_low
-            -stick_value
-            -dangling
-            -attribute
-            -port_type
-        }
-
         set optl {
             -name
             -dir
@@ -427,22 +368,6 @@ namespace eval ipl {
             -attribute
             -port_type
         }
-
-        # if {$name == ""} {
-        #     puts {ERROR in addport proc, you must specify the -name option!}
-        #     puts $options
-        #     exit 2
-        # }
-        # if {$dir == ""} {
-        #     puts {ERROR in addport proc, you must specify the -dir option!}
-        #     puts $options
-        #     exit 2
-        # }
-        # if {$conn_mod == ""} {
-        #     puts {ERROR in addport proc, you must specify the -conn_mod option!}
-        #     puts $options
-        #     exit 2
-        # }
 
         set atts {}
         foreach attid $optl {
