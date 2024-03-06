@@ -7,7 +7,7 @@
 
     <title>AXI SPI Engine Module &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=8dde5eb3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=b0c19d0f" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e974aa45" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
@@ -44,7 +44,7 @@
       <root>
   <a href="../../../documentation/index.html">System Level</a>
   <a href="../../index.html" class="current">HDL</a>
-  <a href="../../../no-os/index.html">no-OS</a>
+  <a href="../../../no-OS/index.html">no-OS</a>
   <a href="../../../pyadi-iio/index.html">pyadi-iio</a>
 </root>
 
@@ -88,7 +88,7 @@
   <root>
   <a href="../../../documentation/index.html">System Level</a>
   <a href="../../index.html" class="current">HDL</a>
-  <a href="../../../no-os/index.html">no-OS</a>
+  <a href="../../../no-OS/index.html">no-OS</a>
   <a href="../../../pyadi-iio/index.html">pyadi-iio</a>
 </root>
 
@@ -479,51 +479,51 @@ generate SPI transactions.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cmd_ready</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">CMD_READY</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">cmd_ready</span></code></td>
 <td><p>in</p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">cmd_valid</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">CMD_VALID</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">cmd_valid</span></code></td>
 <td><p>out</p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cmd_data</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">CMD_DATA</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">cmd_data</span></code></td>
 <td><p>out</p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">sdo_data_ready</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">SDO_READY</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sdo_ready</span></code></td>
 <td><p>in</p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">sdo_data_valid</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">SDO_VALID</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sdo_valid</span></code></td>
 <td><p>out</p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">sdo_data</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">SDO_DATA</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sdo_data</span></code></td>
 <td><p>out</p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">sdi_data_ready</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">SDI_READY</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sdi_ready</span></code></td>
 <td><p>out</p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">sdi_data_valid</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">SDI_VALID</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sdi_valid</span></code></td>
 <td><p>in</p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">sdi_data</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">SDI_DATA</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sdi_data</span></code></td>
 <td><p>in</p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">sync_ready</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">SYNC_READY</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sync_ready</span></code></td>
 <td><p>out</p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">sync_valid</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">SYNC_VALID</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sync_valid</span></code></td>
 <td><p>in</p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">sync_data</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">SYNC_DATA</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sync_data</span></code></td>
 <td><p>in</p></td>
 </tr>
 </tbody>
@@ -546,43 +546,43 @@ generate SPI transactions.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">offload_sync_ready</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">SYNC_READY</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sync_ready</span></code></td>
 <td><p>out</p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">offload_sync_valid</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">SYNC_VALID</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sync_valid</span></code></td>
 <td><p>in</p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">offload_sync_data</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">SYNC_DATA</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sync_data</span></code></td>
 <td><p>in</p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">offload*_cmd_wr_en</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">CMD_WR_EN</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">cmd_wr_en</span></code></td>
 <td><p>out</p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">offload*_cmd_wr_data</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">CMD_WR_DATA</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">cmd_wr_data</span></code></td>
 <td><p>out</p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">offload*_sdo_wr_en</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">SDO_WR_EN</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sdo_wr_en</span></code></td>
 <td><p>out</p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">offload*_sdo_wr_data</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">SDO_WR_DATA</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sdo_wr_data</span></code></td>
 <td><p>out</p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">offload*_enable</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">ENABLE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">enable</span></code></td>
 <td><p>out</p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">offload*_enabled</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">ENABLED</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">enabled</span></code></td>
 <td><p>in</p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">offload*_mem_reset</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">MEM_RESET</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">mem_reset</span></code></td>
 <td><p>out</p></td>
 </tr>
 </tbody>
