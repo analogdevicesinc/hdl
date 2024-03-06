@@ -836,24 +836,29 @@ namespace eval ipl {
             -bus_type $bustype \
             -abstraction_ref $abstref \
             -master_slave slave]
-        # set ip [ipl::addif -ip $ip -mod_data $mod_data -name m_dest_axi -if_name m_dest_axi \
-        #     -exep_ports [list m_dest_axi_aclk m_dest_axi_aresetn] \
-        #     -display_name m_dest_axi \
-        #     -description m_dest_axi \
-        #     -bus_type bussztype \
-        #     -abstraction_ref abstraction_ref]
-        # set ip [ipl::addif -ip $ip -mod_data $mod_data -name m_src_axi -if_name m_src_axi \
-        #     -exep_ports [list m_src_axi_aclk m_src_axi_aresetn] \
-        #     -display_name m_src_axi \
-        #     -description m_src_axi \
-        #     -bus_type bussztype \
-        #     -abstraction_ref abstraction_ref]
-        # set ip [ipl::addif -ip $ip -mod_data $mod_data -name m_sg_axi -if_name m_sg_axi \
-        #     -exep_ports [list m_sg_axi_aclk m_sg_axi_aresetn] \
-        #     -display_name m_sg_axi \
-        #     -description m_sg_axi \
-        #     -bus_type bussztype \
-        #     -abstraction_ref abstraction_ref]
+        set bustype {library="AMBA4" name="AXI4" vendor="amba.com" version="r0p0"}
+        set abstref {library="AMBA4" name="AXI4_rtl" vendor="amba.com" version="r0p0"}
+        set ip [ipl::addif -ip $ip -mod_data $mod_data -name m_dest_axi -if_name m_dest_axi \
+            -exep_ports [list m_dest_axi_aclk m_dest_axi_aresetn] \
+            -display_name m_dest_axi \
+            -description m_dest_axi \
+            -bus_type $bustype \
+            -abstraction_ref $abstref \
+            -master_slave master]
+        set ip [ipl::addif -ip $ip -mod_data $mod_data -name m_src_axi -if_name m_src_axi \
+            -exep_ports [list m_src_axi_aclk m_src_axi_aresetn] \
+            -display_name m_src_axi \
+            -description m_src_axi \
+            -bus_type $bustype \
+            -abstraction_ref $abstref \
+            -master_slave master]
+        set ip [ipl::addif -ip $ip -mod_data $mod_data -name m_sg_axi -if_name m_sg_axi \
+            -exep_ports [list m_sg_axi_aclk m_sg_axi_aresetn] \
+            -display_name m_sg_axi \
+            -description m_sg_axi \
+            -bus_type $bustype \
+            -abstraction_ref $abstref \
+            -master_slave master]
         ipl::genip $ip
 
 
