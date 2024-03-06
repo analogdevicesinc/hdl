@@ -298,38 +298,110 @@ namespace eval ipl {
     }
 
     set settingid 0
-    proc addst {args} {
+    proc settpar {args} {
         set debug 0
         array set opt [list -ip "$::ipl::ip" \
             -id "" \
-            -setting "" \
+            -title "" \
+            -type "" \
+            -value_type "" \
+            -value_expr "" \
+            -options "" \
+            -output_formatter "" \
+            -bool_value_mapping "" \
+            -hidden "" \
+            -drc "" \
+            -regex "" \
+            -value_range "" \
+            -config_groups "" \
+            -Description "" \
+            -group1 "" \
+            -group2 "" \
+            -macro_name "" \
         {*}$args]
+
+        set optl {
+            -id
+            -title
+            -type
+            -value_type
+            -value_expr
+            -options
+            -output_formatter
+            -bool_value_mapping
+            -hidden
+            -drc
+            -regex
+            -value_range
+            -config_groups
+            -Description
+            -group1
+            -group2
+            -macro_name
+        }
 
         set ip $opt(-ip)
         set id $opt(-id)
-        set setting $opt(-setting)
+        # set setting $opt(-setting)
 
-        if {$setting != ""} {
-            set stnode [ipl::getnode ip_desc lsccip:settings $ip]
+        set atts {}
+        foreach attid $optl {
+            set att $opt($attid)
+            if {$att != ""} {
+                set atts [list {*}$atts $attid $opt($attid)]
+            }
+        }
+        set stnode [ipl::getnode ip_desc lsccip:settings $ip]
+        if {$debug} {
+            puts $stnode
+        }
+        if {[lindex $stnode 0] == ""} {
+            lset stnode 0 {lsccip:settings}
             if {$debug} {
                 puts $stnode
             }
-            if {[lindex $stnode 0] == ""} {
-                lset stnode 0 {lsccip:settings}
-                if {$debug} {
-                    puts $stnode
+            set ip [ipl::setnode ip_desc lsccip:settings $stnode $ip]
+        }
+        if {$id != ""} {
+            if {[ipl::getnode ip_desc/lsccip:settings $id $ip] != ""} {
+                foreach attid $optl {
+                    set att $opt($attid)
+                    if {$att != ""} {
+                        set ip [ipl::setatt ip_desc/lsccip:settings $id $attid $opt($attid) $ip]
+                    }
                 }
-                set ip [ipl::setnode ip_desc lsccip:settings $stnode $ip]
-            }
-            set node [list lsccip:setting [list {0} $setting] {} {}]
-            if {$id == ""} {
-                set ip [ipl::setnode ip_desc/lsccip:settings $::ipl::settingid $node $ip]
-                incr ipl::settingid
             } else {
+                set node [list lsccip:setting $atts {} {}]
                 set ip [ipl::setnode ip_desc/lsccip:settings $id $node $ip]
             }
+        } else {
+            set node [list lsccip:setting $atts {} {}]
+            set ip [ipl::setnode ip_desc/lsccip:settings $::ipl::settingid $node $ip]
+            incr ipl::settingid
         }
         return $ip
+
+        # if {$setting != ""} {
+        #     set stnode [ipl::getnode ip_desc lsccip:settings $ip]
+        #     if {$debug} {
+        #         puts $stnode
+        #     }
+        #     if {[lindex $stnode 0] == ""} {
+        #         lset stnode 0 {lsccip:settings}
+        #         if {$debug} {
+        #             puts $stnode
+        #         }
+        #         set ip [ipl::setnode ip_desc lsccip:settings $stnode $ip]
+        #     }
+        #     set node [list lsccip:setting [list {0} $setting] {} {}]
+        #     if {$id == ""} {
+        #         set ip [ipl::setnode ip_desc/lsccip:settings $::ipl::settingid $node $ip]
+        #         incr ipl::settingid
+        #     } else {
+        #         set ip [ipl::setnode ip_desc/lsccip:settings $id $node $ip]
+        #     }
+        # }
+        # return $ip
     }
 
     set portid 0
