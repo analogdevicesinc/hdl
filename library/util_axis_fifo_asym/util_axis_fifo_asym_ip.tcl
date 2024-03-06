@@ -30,6 +30,7 @@ adi_add_bus "s_axis" "slave" \
 		{"s_axis_ready" "TREADY"} \
 		{"s_axis_data" "TDATA"} \
 		{"s_axis_tlast" "TLAST"} \
+		{"s_axis_tkeep" "TKEEP"} \
 	}
 
 adi_add_bus "m_axis" "master" \
@@ -40,11 +41,30 @@ adi_add_bus "m_axis" "master" \
 		{"m_axis_ready" "TREADY"} \
 		{"m_axis_data" "TDATA"} \
 		{"m_axis_tlast" "TLAST"} \
+		{"m_axis_tkeep" "TKEEP"} \
 	}
 
 adi_add_bus_clock "m_axis_aclk" "m_axis" "m_axis_aresetn"
 adi_add_bus_clock "s_axis_aclk" "s_axis" "s_axis_aresetn"
 
+set cc [ipx::current_core]
+
+set_property -dict [list \
+	"value_format" "bool" \
+	"value" "false" \
+] [ipx::get_user_parameters S_FIFO_LIMITED -of_objects $cc]
+
+set_property -dict [list \
+	"value_format" "bool" \
+	"value" "false" \
+] [ipx::get_hdl_parameters S_FIFO_LIMITED -of_objects $cc]
+
+set_property -dict [list \
+	"display_name" "S FIFO Limited" \
+	"tooltip" "Limit the amount of data the the Slave FIFO can accumulate. Enabling this bit may reduce the size of S Address, Almost Empty Threshold and Almost Full Threshold depending on the Slave and Master data width ratio." \
+] [ipgui::get_guiparamspec -name "S_FIFO_LIMITED" -component $cc]
+
 ## TODO: Validate RD_ADDRESS_WIDTH
 
-ipx::save_core [ipx::current_core]
+ipx::create_xgui_files $cc
+ipx::save_core $cc
