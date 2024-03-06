@@ -43,7 +43,8 @@ module util_axis_fifo_asym #(
   parameter ALMOST_EMPTY_THRESHOLD = 4,
   parameter ALMOST_FULL_THRESHOLD = 4,
   parameter TLAST_EN = 0,
-  parameter TKEEP_EN = 0
+  parameter TKEEP_EN = 0,
+  parameter S_FIFO_LIMITED = 0
 ) (
   input m_axis_aclk,
   input m_axis_aresetn,
@@ -76,9 +77,9 @@ module util_axis_fifo_asym #(
 
   // atomic parameters - NOTE: depth is always defined by the slave attributes
   localparam A_WIDTH = (RATIO_TYPE) ? M_DATA_WIDTH : S_DATA_WIDTH;
-  localparam A_ADDRESS = (RATIO_TYPE) ? S_ADDRESS_WIDTH : (S_ADDRESS_WIDTH-$clog2(RATIO));
-  localparam A_ALMOST_FULL_THRESHOLD = (RATIO_TYPE) ? ALMOST_FULL_THRESHOLD : (ALMOST_FULL_THRESHOLD/RATIO);
-  localparam A_ALMOST_EMPTY_THRESHOLD = (RATIO_TYPE) ? (ALMOST_EMPTY_THRESHOLD/RATIO) : ALMOST_EMPTY_THRESHOLD;
+  localparam A_ADDRESS = (S_FIFO_LIMITED) ? ((RATIO_TYPE) ? S_ADDRESS_WIDTH : (S_ADDRESS_WIDTH-$clog2(RATIO))) : S_ADDRESS_WIDTH;
+  localparam A_ALMOST_FULL_THRESHOLD = (S_FIFO_LIMITED) ? ((RATIO_TYPE) ? ALMOST_FULL_THRESHOLD : (ALMOST_FULL_THRESHOLD/RATIO)) : ALMOST_FULL_THRESHOLD;
+  localparam A_ALMOST_EMPTY_THRESHOLD = (S_FIFO_LIMITED) ? ((RATIO_TYPE) ? (ALMOST_EMPTY_THRESHOLD/RATIO) : ALMOST_EMPTY_THRESHOLD) : ALMOST_EMPTY_THRESHOLD; 
 
   // slave and master sequencers
   reg [$clog2(RATIO)-1:0] s_axis_counter;
@@ -219,7 +220,7 @@ module util_axis_fifo_asym #(
     end else begin : big_master
 
       for (i=0; i<RATIO; i=i+1) begin
-        assign m_axis_ready_int_s[i] = m_axis_ready;
+        assign m_axis_ready_int_s[i] = m_axis_ready && &m_axis_valid_int_s;
       end
 
       for (i=0; i<RATIO; i=i+1) begin
@@ -232,7 +233,7 @@ module util_axis_fifo_asym #(
       assign m_axis_data = m_axis_data_int_s;
       // if every instance has a valid data, the interface has valid data,
       // otherwise valid is asserted only if TLAST is asserted
-      assign m_axis_valid = (|m_axis_tlast_int_s) ? |m_axis_valid_int_s : &m_axis_valid_int_s;
+      assign m_axis_valid = &m_axis_valid_int_s;
       // if one of the atomic instance is empty, m_axis_empty should be asserted
       assign m_axis_empty = |m_axis_empty_int_s;
       assign m_axis_almost_empty = |m_axis_almost_empty_int_s;
@@ -243,7 +244,6 @@ module util_axis_fifo_asym #(
     end
 
     assign m_axis_tlast = (m_axis_valid) ? |m_axis_tlast_int_s : 1'b0;
-
   endgenerate
 
   // slave handshake counter
@@ -272,11 +272,15 @@ module util_axis_fifo_asym #(
       end else begin
         // in case of a small slave, after an active TLAST reset the counter
         always @(posedge s_axis_aclk) begin
-          if (!s_axis_aresetn || s_axis_tlast_d) begin
+          if (!s_axis_aresetn) begin
             s_axis_counter <= 0;
           end else begin
             if (s_axis_ready && s_axis_valid) begin
-              s_axis_counter <= s_axis_counter + 1'b1;
+              if (s_axis_tlast) begin
+                s_axis_counter <= 0;
+              end else begin
+                s_axis_counter <= s_axis_counter + 1'b1;
+              end
             end
           end
         end
