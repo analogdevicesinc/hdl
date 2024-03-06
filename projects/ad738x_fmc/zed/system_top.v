@@ -35,8 +35,9 @@
 
 `timescale 1ns/100ps
 
-module system_top (
-
+module system_top #(
+   parameter ALERT_SPI_N = 0
+) (
   inout   [14:0]  ddr_addr,
   inout   [ 2:0]  ddr_ba,
   inout           ddr_cas_n,
@@ -104,7 +105,11 @@ module system_top (
 
   // instantiations
 
-  assign gpio_i[63:32] = gpio_o[63:32];
+  assign gpio_i[63:33] = gpio_o[63:33];
+
+  assign gpio_i[32] = ALERT_SPI_N ? spi_sdib : 0;
+  assign ad738x_spi_sdi_s = (ALERT_SPI_N == 0) ? {spi_sdib, spi_sdia} : spi_sdia;
+
   ad_iobuf #(
     .DATA_WIDTH(32)
   ) i_iobuf (
@@ -174,7 +179,7 @@ module system_top (
     .iic_mux_sda_t (iic_mux_sda_t_s),
     .ad738x_spi_sdo (spi_sdo),
     .ad738x_spi_sdo_t (),
-    .ad738x_spi_sdi ({spi_sdib, spi_sdia}),
+    .ad738x_spi_sdi (ad738x_spi_sdi_s),
     .ad738x_spi_cs (spi_cs),
     .ad738x_spi_sclk (spi_sclk),
     .otg_vbusoc (otg_vbusoc),
