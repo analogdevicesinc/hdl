@@ -404,6 +404,28 @@ separate sections. **Firstly** register types and then wire types.
 The source files *should* have the format shown in Annex 1 for
 Verilog code and Annex 2 for VHDL code.
 
+**A18**
+
+Local parameters **must** be declared first, before declaring wires
+or registers.
+
+.. _example-a18:
+
+.. code-block::
+   :linenos:
+   :emphasize-lines: 1-3
+
+   localparam   LOCAL_PARAM1;
+   localparam   NEXT_LOCAL_PARAM;
+   localparam   LOCAL_PARAM2;
+
+   reg  [ 3:0]  my_signal1;
+   reg  [ 4:0]  my_signal2;         
+   reg          my_signal3;         
+
+   wire [ 2:0]  my_wire1;          
+   wire         my_wire2;          
+
 B. Naming Conventions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
