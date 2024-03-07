@@ -47,7 +47,7 @@ set_output_delay -clock ndac_sclk -min [expr $ndac_tdata_trace_delay_min - $ndac
 set_multicycle_path 4 -setup -start -from [get_clocks -of_objects [get_pins i_system_wrapper/system_i/axi_spi_ndac/ext_spi_clk]] -to ndac_sclk
 set_multicycle_path 3 -hold -from [get_clocks -of_objects [get_pins i_system_wrapper/system_i/axi_spi_ndac/ext_spi_clk]] -to ndac_sclk
 
-## axi_spi_adl5960_1
+## axi_spi_adl5960
 set adl5960_tco_max 30
 set adl5960_tco_min 25
 set adl5960_tsu 15
@@ -58,17 +58,17 @@ set adl5960_tdata_trace_delay_min 0.025
 set adl5960_tclk_trace_delay_max 0.05
 set adl5960_tclk_trace_delay_min 0.025
 
-create_generated_clock -name adl5960_sclk -source [get_pins i_system_wrapper/system_i/axi_spi_adl5960_1/ext_spi_clk] -divide_by 16 [get_ports spi_adl5960_1_sck]
+create_generated_clock -name adl5960_sclk -source [get_pins i_system_wrapper/system_i/axi_spi_adl5960/ext_spi_clk] -divide_by 16 [get_ports spi_adl5960_sck]
 
-set_input_delay -clock adl5960_sclk -max [expr $adl5960_tco_max + $adl5960_tdata_trace_delay_max + $adl5960_tclk_trace_delay_max] [get_ports spi_adl5960_1_sdio] -clock_fall;
-set_input_delay -clock adl5960_sclk -min [expr $adl5960_tco_min + $adl5960_tdata_trace_delay_min + $adl5960_tclk_trace_delay_min] [get_ports spi_adl5960_1_sdio] -clock_fall;
-set_multicycle_path 16 -setup -from adl5960_sclk -to [get_clocks -of_objects [get_pins i_system_wrapper/system_i/axi_spi_adl5960_1/ext_spi_clk]]
-set_multicycle_path 15 -hold -end -from adl5960_sclk -to [get_clocks -of_objects [get_pins i_system_wrapper/system_i/axi_spi_adl5960_1/ext_spi_clk]]
+set_input_delay -clock adl5960_sclk -max [expr $adl5960_tco_max + $adl5960_tdata_trace_delay_max + $adl5960_tclk_trace_delay_max] [get_ports spi_adl5960_sdio] -clock_fall;
+set_input_delay -clock adl5960_sclk -min [expr $adl5960_tco_min + $adl5960_tdata_trace_delay_min + $adl5960_tclk_trace_delay_min] [get_ports spi_adl5960_sdio] -clock_fall;
+set_multicycle_path 16 -setup -from adl5960_sclk -to [get_clocks -of_objects [get_pins i_system_wrapper/system_i/axi_spi_adl5960/ext_spi_clk]]
+set_multicycle_path 15 -hold -end -from adl5960_sclk -to [get_clocks -of_objects [get_pins i_system_wrapper/system_i/axi_spi_adl5960/ext_spi_clk]]
 
-set_output_delay -clock adl5960_sclk -max [expr $adl5960_tsu + $adl5960_tdata_trace_delay_max - $adl5960_tclk_trace_delay_min] [get_ports spi_adl5960_1_sdio];
-set_output_delay -clock adl5960_sclk -min [expr $adl5960_tdata_trace_delay_min - $adl5960_th - $adl5960_tclk_trace_delay_max] [get_ports spi_adl5960_1_sdio];
-set_multicycle_path 16 -setup -start -from [get_clocks -of_objects [get_pins i_system_wrapper/system_i/axi_spi_adl5960_1/ext_spi_clk]] -to adl5960_sclk
-set_multicycle_path 15 -hold -from [get_clocks -of_objects [get_pins i_system_wrapper/system_i/axi_spi_adl5960_1/ext_spi_clk]] -to adl5960_sclk
+set_output_delay -clock adl5960_sclk -max [expr $adl5960_tsu + $adl5960_tdata_trace_delay_max - $adl5960_tclk_trace_delay_min] [get_ports spi_adl5960_sdio];
+set_output_delay -clock adl5960_sclk -min [expr $adl5960_tdata_trace_delay_min - $adl5960_th - $adl5960_tclk_trace_delay_max] [get_ports spi_adl5960_sdio];
+set_multicycle_path 16 -setup -start -from [get_clocks -of_objects [get_pins i_system_wrapper/system_i/axi_spi_adl5960/ext_spi_clk]] -to adl5960_sclk
+set_multicycle_path 15 -hold -from [get_clocks -of_objects [get_pins i_system_wrapper/system_i/axi_spi_adl5960/ext_spi_clk]] -to adl5960_sclk
 
 ## axi_spi_fpga_busf
 set busf_tco_max 6
