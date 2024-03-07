@@ -306,7 +306,6 @@ namespace eval ipl {
     proc settpar {args} {
         set debug 0
         array set opt [list -ip "$::ipl::ip" \
-            -sid "" \
             -id "" \
             -title "" \
             -type "" \
@@ -331,36 +330,37 @@ namespace eval ipl {
         # -optional for entering exact xml attribute string
 
         set optl {
-            -id
-            -type
-            -value_type
-            -conn_mod
-            -title
-            -default
-            -value_expr
-            -options
-            -output_formatter
-            -bool_value_mapping
-            -editable
-            -hidden
-            -drc
-            -regex
-            -value_range
-            -config_groups
-            -description
-            -group1
-            -group2
-            -macro_name
+            id
+            type
+            value_type
+            conn_mod
+            title
+            default
+            value_expr
+            options
+            output_formatter
+            bool_value_mapping
+            editable
+            hidden
+            drc
+            regex
+            value_range
+            config_groups
+            description
+            group1
+            group2
+            macro_name
         }
 
         set ip $opt(-ip)
-        set sid $opt(-sid)
+        set id $opt(-id)
 
+        set c {"}
         set atts {}
         foreach attid $optl {
-            set att $opt($attid)
+            set att $opt(-$attid)
             if {$att != ""} {
-                set atts [list {*}$atts $attid $opt($attid)]
+                set atts [list {*}$atts $attid "${attid}=$c$att$c"]
             }
         }
         set stnode [ipl::getnode ip_desc lsccip:settings $ip]
@@ -374,17 +374,17 @@ namespace eval ipl {
             }
             set ip [ipl::setnode ip_desc lsccip:settings $stnode $ip]
         }
-        if {$sid != ""} {
-            if {[ipl::getnode ip_desc/lsccip:settings $sid $ip] != ""} {
+        if {$id != ""} {
+            if {[ipl::getnode ip_desc/lsccip:settings $id $ip] != ""} {
                 foreach attid $optl {
-                    set att $opt($attid)
+                    set att $opt(-$attid)
                     if {$att != ""} {
-                        set ip [ipl::setatt ip_desc/lsccip:settings $sid $attid $opt($attid) $ip]
+                        set ip [ipl::setatt ip_desc/lsccip:settings $id $attid "${attid}=$c$att$c" $ip]
                     }
                 }
             } else {
                 set node [list lsccip:setting $atts {} {}]
-                set ip [ipl::setnode ip_desc/lsccip:settings $sid $node $ip]
+                set ip [ipl::setnode ip_desc/lsccip:settings $id $node $ip]
             }
         } else {
             set node [list lsccip:setting $atts {} {}]
@@ -398,7 +398,6 @@ namespace eval ipl {
     proc setport {args} {
         set debug 0
         array set opt [list -ip "$::ipl::ip" \
-            -id "" \
             -name "" \
             -dir "" \
             -range "" \
@@ -416,29 +415,30 @@ namespace eval ipl {
         # -optional for entering exact xml attribute string
 
         set ip $opt(-ip)
-        set id $opt(-id)
+        set id $opt(-name)
     
         set optl {
-            -name
-            -dir
-            -conn_mod
-            -range
-            -conn_port
-            -conn_range
-            -stick_high
-            -stick_low
-            -stick_value
-            -dangling
-            -bus_interface
-            -attribute
-            -port_type
+            name
+            dir
+            conn_mod
+            range
+            conn_port
+            conn_range
+            stick_high
+            stick_low
+            stick_value
+            dangling
+            bus_interface
+            attribute
+            port_type
         }
 
+        set c {"}
         set atts {}
         foreach attid $optl {
-            set att $opt($attid)
+            set att $opt(-$attid)
             if {$att != ""} {
-                set atts [list {*}$atts $attid $opt($attid)]
+                set atts [list {*}$atts $attid "${attid}=$c$att$c"]
             }
         }
         set ptnode [ipl::getnode ip_desc lsccip:ports $ip]
@@ -455,9 +455,9 @@ namespace eval ipl {
         if {$id != ""} {
             if {[ipl::getnode ip_desc/lsccip:ports $id $ip] != ""} {
                 foreach attid $optl {
-                    set att $opt($attid)
+                    set att $opt(-$attid)
                     if {$att != ""} {
-                        set ip [ipl::setatt ip_desc/lsccip:ports $id $attid $opt($attid) $ip]
+                        set ip [ipl::setatt ip_desc/lsccip:ports $id $attid "${attid}=$c$att$c" $ip]
                     }
                 }
             } else {
@@ -658,7 +658,7 @@ namespace eval ipl {
         return $module_data
     }
 
-    proc addifs {args} {
+    proc addifsa {args} {
         array set opt [list -ip "$::ipl::ip" \
             -name "" \
             -display_name "" \
@@ -673,9 +673,6 @@ namespace eval ipl {
         # do some tasks
         return $ip
     }
-# to do:
-# -addif only by list of logical and pysical port names
-# -addifmd call addif and use module data to generate the logical an physical port pairs
     proc addif {args} {
         array set opt [list -ip "$::ipl::ip" \
             -name "" \
@@ -711,7 +708,7 @@ namespace eval ipl {
             set pmap [ipl::setncont lsccip:logicalPort lsccip:name $logic $::ipl::portMap_desc]
             set pmap [ipl::setncont lsccip:physicalPort lsccip:name $pname $pmap]
             set bif [ipl::setnode lsccip:abstractionTypes/lsccip:abstractionType/lsccip:portMaps $pname $pmap $bif]
-            set ip [ipl::setport -ip $ip -id $pname -bus_interface bus_interface=${c}$name$c]
+            set ip [ipl::setport -ip $ip -name $pname -bus_interface $name]
         }
         set bifs [ipl::getnode {} busInterfaces_desc $ip]
         if {$bifs == ""} {
@@ -800,21 +797,20 @@ namespace eval ipl {
                 }
             }
             set name [dict get $data name]
-            set c {"}
             set op {(}
             set cl {)}
             if {[llength $data] > 4} {
                 set from [dict get $data from]
                 set to [dict get $data to]
-                set ip [ipl::setport -ip $ip -id $name -name name=$c$name$c \
-                    -dir dir=$c$dir$c -range range=$c$op$to,$from$cl$c \
-                    -conn_port conn_port=$c$name$c \
-                    -conn_mod conn_mod=$c$mod_name$c]
+                set ip [ipl::setport -ip $ip -name $name \
+                    -dir $dir -range "$op$to,$from$cl" \
+                    -conn_port $name \
+                    -conn_mod $mod_name]
             } else {
-                set ip [ipl::setport -ip $ip -id $name -name name=$c$name$c \
-                    -dir dir=$c$dir$c \
-                    -conn_port conn_port=$c$name$c \
-                    -conn_mod conn_mod=$c$mod_name$c]
+                set ip [ipl::setport -ip $ip -name $name \
+                    -dir $dir \
+                    -conn_port $name \
+                    -conn_mod $mod_name]
             }
         }
         return $ip
@@ -831,25 +827,21 @@ namespace eval ipl {
         set mod_name [dict get $mod_data mod_name]
         foreach data [dict get $mod_data parlist] {
             set name [dict get $data name]
-            set c {"}
-            set op {(}
-            set cl {)}
-
             if {[llength $data] > 4} {
                 set defval [dict get $data defval]
-                set ip [ipl::settpar -ip $ip -sid $name -id id=$c$name$c \
-                    -type type=${c}param$c -value_type value_type=${c}int$c \
-                    -conn_mod conn_mod=$c$mod_name$c -title title=$c$name$c \
-                    -default default=${c}$defval$c \
-                    -output_formatter output_formatter=${c}nostr$c \
-                    -group1 group1=${c}PARAMS$c -group2 group2=${c}GLOB$c]
+                set ip [ipl::settpar -ip $ip -id $name \
+                    -type param -value_type int \
+                    -conn_mod $mod_name -title $name \
+                    -default $defval \
+                    -output_formatter nostr \
+                    -group1 PARAMS -group2 GLOB]
             } else {
-                set ip [ipl::settpar -ip $ip -sid $name -id id=$c$name$c \
-                    -type type=${c}param$c -value_type value_type=${c}int$c \
-                    -conn_mod conn_mod=$c$mod_name$c -title title=$c$name$c \
-                    -output_formatter output_formatter=${c}nostr$c \
-                    -group1 group1=${c}PARAMS$c \
-                    -group2 group2=${c}GLOB$c]
+                set ip [ipl::settpar -ip $ip -id $name \
+                    -type param -value_type int \
+                    -conn_mod $mod_name -title $name \
+                    -output_formatter nostr \
+                    -group1 PARAMS \
+                    -group2 GLOB]
             }
         }
         return $ip
@@ -877,22 +869,25 @@ namespace eval ipl {
             -master_slave slave]
         set bustype {library="AMBA4" name="AXI4" vendor="amba.com" version="r0p0"}
         set abstref {library="AMBA4" name="AXI4_rtl" vendor="amba.com" version="r0p0"}
-        set ip [ipl::addifa -ip $ip -mod_data $mod_data -name m_dest_axi -v_name m_dest_axi \
+        set ip [ipl::addifa -ip $ip -mod_data $mod_data -v_name m_dest_axi \
             -exept_pl [list m_dest_axi_aclk m_dest_axi_aresetn] \
+            -name m_dest_axi \
             -display_name m_dest_axi \
             -description m_dest_axi \
             -bus_type $bustype \
             -abstraction_ref $abstref \
             -master_slave master]
-        set ip [ipl::addifa -ip $ip -mod_data $mod_data -name m_src_axi -v_name m_src_axi \
+        set ip [ipl::addifa -ip $ip -mod_data $mod_data -v_name m_src_axi \
             -exept_pl [list m_src_axi_aclk m_src_axi_aresetn] \
+            -name m_src_axi \
             -display_name m_src_axi \
             -description m_src_axi \
             -bus_type $bustype \
             -abstraction_ref $abstref \
             -master_slave master]
-        set ip [ipl::addifa -ip $ip -mod_data $mod_data -name m_sg_axi -v_name m_sg_axi \
+        set ip [ipl::addifa -ip $ip -mod_data $mod_data -v_name m_sg_axi \
             -exept_pl [list m_sg_axi_aclk m_sg_axi_aresetn] \
+            -name m_sg_axi \
             -display_name m_sg_axi \
             -description m_sg_axi \
             -bus_type $bustype \
