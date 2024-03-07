@@ -472,6 +472,70 @@ namespace eval ipl {
         return $ip
     }
 
+    proc igports {args} {
+        array set opt [list -ip "$::ipl::ip" \
+            -portlist "" \
+            -expression "" \
+        {*}$args]
+
+        set ip $opt(-ip)
+        set portlist $opt(-portlist)
+        set expression $opt(-expression)
+
+        foreach port $portlist {
+            set dir [ipl::getatt ip_desc/lsccip:ports $port dir $ip]
+            if {$dir == "dir=\"in\""} {
+                set ip [ipl::setport -ip $ip -name $port -stick_low $expression]
+            } else {
+                set ip [ipl::setport -ip $ip -name $port -dangling $expression]
+            }
+        }
+        return $ip
+    }
+
+    proc getiports {args} {
+        array set opt [list -mod_data "" \
+            -v_name "" \
+            -exept_pl "" \
+        {*}$args]
+
+        set mod_data $opt(-mod_data)
+        set v_name $opt(-v_name)
+        set exept_pl $opt(-exept_pl)
+        set ports [dict get $mod_data portlist]
+
+        set portlist {}
+        set regx [list ${v_name}_.+]
+        foreach line $ports {
+            set pname [dict get $line name]
+            if {[lsearch $exept_pl $pname] == -1 && [regexp $regx $pname]} {
+                set portlist [list {*}$portlist $pname]
+            }
+        }
+        return $portlist
+    }
+
+    proc igiports {args} {
+        array set opt [list -ip "$::ipl::ip" \
+            -mod_data "" \
+            -v_name "" \
+            -exept_pl "" \
+            -expression "" \
+        {*}$args]
+
+        set ip $opt(-ip)
+        set mod_data $opt(-mod_data)
+        set expression $opt(-expression)
+
+        set v_name $opt(-v_name)
+        set exept_pl $opt(-exept_pl)
+
+        set portlist [ipl::getiports -mod_data $mod_data -v_name $v_name -exept_pl $exept_pl]
+
+        set ip [ipl::igports -ip $ip -expression $expression -portlist $portlist]
+        return $ip
+    }
+
     set addrid 0
     proc address {args} {
         set debug 0
@@ -755,16 +819,12 @@ namespace eval ipl {
         set v_name $opt(-v_name)
         set exept_pl $opt(-exept_pl)
 
-        set ports [dict get $mod_data portlist]
-
         set portmap {}
-        foreach line $ports {
-            set regx [list ${v_name}_.+]
-            set pname [dict get $line name]
-            if {[lsearch $exept_pl $pname] == -1 && [regexp $regx $pname]} {
-                set logic [string toupper [string map [list ${v_name}_ ""] $pname]]
-                set portmap [list {*}$portmap [list $pname $logic]]
-            }
+        set portlist [ipl::getiports -mod_data $mod_data -v_name $v_name -exept_pl $exept_pl]
+
+        foreach pname $portlist {
+            set logic [string toupper [string map [list ${v_name}_ ""] $pname]]
+            set portmap [list {*}$portmap [list $pname $logic]]
         }
         # puts $portmap
         return [ipl::addif {*}$argl -portmap $portmap]
@@ -775,8 +835,6 @@ namespace eval ipl {
     proc addports {args} {
         array set opt [list -ip "$::ipl::ip" \
             -mod_data "" \
-            -bus_interface "" \
-            -ignore_expr "" \
         {*}$args]
         set ip $opt(-ip)
         set mod_data $opt(-mod_data)
@@ -867,6 +925,10 @@ namespace eval ipl {
             -bus_type $bustype \
             -abstraction_ref $abstref \
             -master_slave slave]
+        # set ip [ipl::igiports -ip $ip \
+        #     -mod_data $mod_data \
+        #     -v_name s_axi \
+        #     -expression true]
         set bustype {library="AMBA4" name="AXI4" vendor="amba.com" version="r0p0"}
         set abstref {library="AMBA4" name="AXI4_rtl" vendor="amba.com" version="r0p0"}
         set ip [ipl::addifa -ip $ip -mod_data $mod_data -v_name m_dest_axi \
@@ -895,7 +957,7 @@ namespace eval ipl {
             -master_slave master]
         ipl::genip $ip
 
-
+        # return $ip
         # ipl::getaxi [ipl::getmod axi_dmac.v]
     }
 
