@@ -3,7 +3,7 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-proc spi_engine_create {{name "spi_engine"} {data_width 32} {async_spi_clk 1} {num_cs 1} {num_sdi 1} {num_sdo 1} {sdi_delay 0} {echo_sclk 0}} {
+proc spi_engine_create {{name "spi_engine"} {data_width 32} {async_spi_clk 1} {num_cs 1} {num_sdi 1} {num_sdo 1} {sdi_delay 0} {echo_sclk 0} {cmd_mem_addr_width 4} {data_mem_addr_width 4} {sdi_fifo_addr_width 5} {sdo_fifo_addr_width 5} {sync_fifo_addr_width 4} {cmd_fifo_addr_width 4}} {
   puts "echo_sclk: $echo_sclk"
 
   create_bd_cell -type hier $name
@@ -40,11 +40,19 @@ proc spi_engine_create {{name "spi_engine"} {data_width 32} {async_spi_clk 1} {n
   ad_ip_parameter $axi_regmap CONFIG.NUM_OFFLOAD 1
   ad_ip_parameter $axi_regmap CONFIG.NUM_OF_SDI $num_sdi
   ad_ip_parameter $axi_regmap CONFIG.ASYNC_SPI_CLK $async_spi_clk
+  ad_ip_parameter $axi_regmap CONFIG.OFFLOAD0_CMD_MEM_ADDRESS_WIDTH $cmd_mem_addr_width
+  ad_ip_parameter $axi_regmap CONFIG.OFFLOAD0_SDO_MEM_ADDRESS_WIDTH $data_mem_addr_width
+  ad_ip_parameter $axi_regmap CONFIG.SDI_FIFO_ADDRESS_WIDTH $sdi_fifo_addr_width
+  ad_ip_parameter $axi_regmap CONFIG.SDO_FIFO_ADDRESS_WIDTH $sdo_fifo_addr_width
+  ad_ip_parameter $axi_regmap CONFIG.SYNC_FIFO_ADDRESS_WIDTH $sync_fifo_addr_width
+  ad_ip_parameter $axi_regmap CONFIG.CMD_FIFO_ADDRESS_WIDTH $cmd_fifo_addr_width
 
   ad_ip_instance spi_engine_offload $offload
   ad_ip_parameter $offload CONFIG.DATA_WIDTH $data_width
   ad_ip_parameter $offload CONFIG.ASYNC_SPI_CLK $async_spi_clk
   ad_ip_parameter $offload CONFIG.NUM_OF_SDI $num_sdi
+  ad_ip_parameter $offload CONFIG.CMD_MEM_ADDRESS_WIDTH $cmd_mem_addr_width
+  ad_ip_parameter $offload CONFIG.SDO_MEM_ADDRESS_WIDTH $data_mem_addr_width
 
   ad_ip_instance spi_engine_interconnect $interconnect
   ad_ip_parameter $interconnect CONFIG.DATA_WIDTH $data_width
