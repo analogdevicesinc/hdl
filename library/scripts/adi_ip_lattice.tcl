@@ -269,7 +269,7 @@ namespace eval ipl {
 
     proc general {args} {
         array set opt [list -ip "$::ipl::ip" \
-            -vendor "analog.com" \
+            -vendor "latticesemi.com" \
             -library "ip" \
             -name "" \
             -display_name "" \
@@ -277,28 +277,46 @@ namespace eval ipl {
             -category "ADI" \
             -keywords "ADI IP" \
             -min_radiant_version "2022.1" \
+            -max_radiant_version "" \
+            -type "" \
             -min_esi_version "2022.1" \
+            -max_esi_version "" \
             -supported_products "" \
             -supported_platforms "" \
         {*}$args]
 
+        set optl {
+            vendor
+            library
+            name
+            display_name
+            version
+            category
+            keywords
+            min_radiant_version
+            max_radiant_version
+            type
+            min_esi_version
+            max_esi_version
+        }
         set ip $opt(-ip)
-        set vendor $opt(-vendor)
-        set library $opt(-library)
-        set display_name $opt(-display_name)
-        set name $opt(-name)
-        set version $opt(-version)
-        set category $opt(-category)
-        set keywords $opt(-keywords)
-        set min_radiant_version $opt(-min_radiant_version)
-        set min_esi_version $opt(-min_esi_version)
         set supported_products $opt(-supported_products)
         set supported_platforms $opt(-supported_platforms)
 
-        set ip [ipl::setncont ip_desc/lsccip:general lsccip:name $name $ip]
-        set ip [ipl::setncont ip_desc/lsccip:general lsccip:display_name $name $ip]
-
-        # to do the rest of parameters
+        foreach op $optl {
+            set val $opt(-$op)
+            if {$val != ""} {
+                set ip [ipl::setncont ip_desc/lsccip:general "lsccip:$op" $val $ip]
+            }
+        }
+        foreach family $supported_products {
+            set sfamily [list lsccip:supported_family "name=\"$family\"" {} {}]
+            set ip [ipl::setnode ip_desc/lsccip:general/lsccip:supported_products $family $sfamily $ip]
+        }
+        foreach platform $supported_platforms {
+            set splatform [list lsccip:supported_platform "name=\"$platform\"" {} {}]
+            set ip [ipl::setnode ip_desc/lsccip:general/lsccip:supported_platforms $platform $splatform $ip]
+        }
         return $ip
     }
 
@@ -915,6 +933,7 @@ namespace eval ipl {
         set ip [ipl::addpars -ip $ip -mod_data $mod_data]
 
         set ip [ipl::general -ip $ip -name [dict get $mod_data mod_name]]
+        set ip [ipl::general -ip $ip -display_name "AXI_DMA ADI"]
         # ipl::xmlgen $ip
         set bustype {library="AMBA4" name="AXI4-Lite" vendor="amba.com" version="r0p0"}
         set abstref {library="AMBA4" name="AXI4-Lite_rtl" vendor="amba.com" version="r0p0"}
