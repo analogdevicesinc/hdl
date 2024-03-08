@@ -83,6 +83,16 @@ namespace eval ipl {
         busInterfaces_desc {} \
         memoryMaps_desc {}]]
 
+    set cc {}
+
+    proc setcc {ip} {
+        set ipl::cc $ip
+    }
+    
+    proc current_core {} {
+        return $cc
+    }
+
     proc xmlgen {node {nid "0"} {index 0}} {
         set name [lindex $node 0]
         set attr [lindex $node 1]
@@ -927,6 +937,36 @@ namespace eval ipl {
             }
         }
         return $ip
+    }
+
+    proc import {args} {
+        array set opt [list -flist "" \
+            -path "" \
+        {*}$args]
+
+        set flist $opt(-flist)
+        set path $opt(-path)
+        # to do:
+        #  - check if the folder exists
+        #  - if not create it
+        #  - copy the files in the flist to the path
+    }
+    
+    proc importa {args} {
+        array set opt [list -spath "" \
+            -sdepth "" \
+            -regex "" \
+            -path "" \
+        {*}$args]
+
+        set spath $opt(-spath)
+        set sdepth $opt(-sdepth)
+        set regex $opt(-regex)
+        set path $opt(-path)
+        # to do:
+        #  - check if the folder exists
+        #  - if not create it
+        #  - copy the files in the flist to the path
     }
 
     proc tw {} {
