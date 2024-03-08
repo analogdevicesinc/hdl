@@ -49,20 +49,37 @@ adi_add_bus_clock "s_axis_aclk" "s_axis" "s_axis_aresetn"
 
 set cc [ipx::current_core]
 
+# FIFO_LIMITED Property
 set_property -dict [list \
 	"value_format" "bool" \
 	"value" "false" \
-] [ipx::get_user_parameters S_FIFO_LIMITED -of_objects $cc]
+] [ipx::get_user_parameters FIFO_LIMITED -of_objects $cc]
 
 set_property -dict [list \
 	"value_format" "bool" \
 	"value" "false" \
-] [ipx::get_hdl_parameters S_FIFO_LIMITED -of_objects $cc]
+] [ipx::get_hdl_parameters FIFO_LIMITED -of_objects $cc]
 
 set_property -dict [list \
-	"display_name" "S FIFO Limited" \
-	"tooltip" "Limit the amount of data the the Slave FIFO can accumulate. Enabling this bit may reduce the size of S Address, Almost Empty Threshold and Almost Full Threshold depending on the Slave and Master data width ratio." \
-] [ipgui::get_guiparamspec -name "S_FIFO_LIMITED" -component $cc]
+	"display_name" "FIFO Sample Limited" \
+	"tooltip" "Limit the amount of samples the FIFO can accumulate. Enabling this bit may reduce the size of Address, Almost Empty Threshold and Almost Full Threshold depending on the Slave and Master data width ratio." \
+] [ipgui::get_guiparamspec -name "FIFO_LIMITED" -component $cc]
+
+
+set_property -dict [list \
+	"value_format" "bool" \
+	"value" "false" \
+] [ipx::get_user_parameters ADDRESS_WIDTH_PERSPECTIVE -of_objects $cc]
+
+set_property -dict [list \
+	"value_format" "bool" \
+	"value" "false" \
+] [ipx::get_hdl_parameters ADDRESS_WIDTH_PERSPECTIVE -of_objects $cc]
+
+set_property -dict [list \
+	"display_name" "Address Width Perspective" \
+	"tooltip" "Sets the address width from the perspective of Master if True, or Slave if false." \
+] [ipgui::get_guiparamspec -name "ADDRESS_WIDTH_PERSPECTIVE" -component $cc]
 
 ## TODO: Validate RD_ADDRESS_WIDTH
 
