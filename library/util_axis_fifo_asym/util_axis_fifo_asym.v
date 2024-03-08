@@ -37,14 +37,15 @@
 module util_axis_fifo_asym #(
   parameter ASYNC_CLK = 1,
   parameter S_DATA_WIDTH = 64,
-  parameter S_ADDRESS_WIDTH = 5,
+  parameter ADDRESS_WIDTH = 5,
   parameter M_DATA_WIDTH = 128,
   parameter M_AXIS_REGISTERED = 1,
   parameter ALMOST_EMPTY_THRESHOLD = 4,
   parameter ALMOST_FULL_THRESHOLD = 4,
   parameter TLAST_EN = 0,
   parameter TKEEP_EN = 0,
-  parameter S_FIFO_LIMITED = 0
+  parameter FIFO_LIMITED = 0,
+  parameter ADDRESS_WIDTH_PERSPECTIVE = 0
 ) (
   input m_axis_aclk,
   input m_axis_aresetn,
@@ -66,7 +67,7 @@ module util_axis_fifo_asym #(
   input s_axis_tlast,
   output s_axis_full,
   output s_axis_almost_full,
-  output [S_ADDRESS_WIDTH-1:0] s_axis_room
+  output [ADDRESS_WIDTH-1:0] s_axis_room
 );
 
   // define which interface has a wider bus
@@ -77,9 +78,11 @@ module util_axis_fifo_asym #(
 
   // atomic parameters - NOTE: depth is always defined by the slave attributes
   localparam A_WIDTH = (RATIO_TYPE) ? M_DATA_WIDTH : S_DATA_WIDTH;
-  localparam A_ADDRESS = (S_FIFO_LIMITED) ? ((RATIO_TYPE) ? S_ADDRESS_WIDTH : (S_ADDRESS_WIDTH-$clog2(RATIO))) : S_ADDRESS_WIDTH;
-  localparam A_ALMOST_FULL_THRESHOLD = (S_FIFO_LIMITED) ? ((RATIO_TYPE) ? ALMOST_FULL_THRESHOLD : (ALMOST_FULL_THRESHOLD/RATIO)) : ALMOST_FULL_THRESHOLD;
-  localparam A_ALMOST_EMPTY_THRESHOLD = (S_FIFO_LIMITED) ? ((RATIO_TYPE) ? (ALMOST_EMPTY_THRESHOLD/RATIO) : ALMOST_EMPTY_THRESHOLD) : ALMOST_EMPTY_THRESHOLD; 
+  localparam A_ADDRESS = (ADDRESS_WIDTH_PERSPECTIVE) ?
+    ((FIFO_LIMITED) ? ((RATIO_TYPE) ? (ADDRESS_WIDTH-$clog2(RATIO)) : ADDRESS_WIDTH) : ADDRESS_WIDTH) :
+    ((FIFO_LIMITED) ? ((RATIO_TYPE) ? ADDRESS_WIDTH : (ADDRESS_WIDTH-$clog2(RATIO))) : ADDRESS_WIDTH);
+  localparam A_ALMOST_FULL_THRESHOLD = (RATIO_TYPE) ? ALMOST_FULL_THRESHOLD : (ALMOST_FULL_THRESHOLD/RATIO);
+  localparam A_ALMOST_EMPTY_THRESHOLD = (RATIO_TYPE) ? (ALMOST_EMPTY_THRESHOLD/RATIO) : ALMOST_EMPTY_THRESHOLD;
 
   // slave and master sequencers
   reg [$clog2(RATIO)-1:0] s_axis_counter;
