@@ -15,13 +15,15 @@ namespace eval ipl {
                     {lsccip:category} {{lsccip:category} {} {ADI} {}}
                     {lsccip:keywords} {{lsccip:keywords} {} {ADI IP} {}}
                     {lsccip:min_radiant_version} {{lsccip:min_radiant_version} {} {2022.1} {}}
+                    {lsccip:max_radiant_version} {{} {} {} {}}
                     {lsccip:min_esi_version} {{lsccip:min_esi_version} {} {1.0} {}}
+                    {lsccip:max_esi_version} {{} {} {} {}}
                     {lsccip:supported_products} {{lsccip:supported_products} {} {} {
-                        {0} {{lsccip:supported_family} {{0} {name="*"}} {} {}}
+                        {*} {{lsccip:supported_family} {{name} {name="*"}} {} {}}
                     }}
                     {lsccip:supported_platforms} {{lsccip:supported_platforms} {} {} {
-                        {0} {{lsccip:supported_platform} {{0} {name="radiant"}} {} {}}
-                        {1} {{lsccip:supported_platform} {{0} {name="esi"}} {} {}}
+                        {radiant} {{lsccip:supported_platform} {{name} {name="radiant"}} {} {}}
+                        {esi} {{lsccip:supported_platform} {{name} {name="esi"}} {} {}}
                     }}
                 }
             }
@@ -306,15 +308,19 @@ namespace eval ipl {
         foreach op $optl {
             set val $opt(-$op)
             if {$val != ""} {
-                set ip [ipl::setncont ip_desc/lsccip:general "lsccip:$op" $val $ip]
+                if {[ipl::getnname ip_desc/lsccip:general "lsccip:$op" $ip] != ""} {
+                    set ip [ipl::setncont ip_desc/lsccip:general "lsccip:$op" $val $ip]
+                } else {
+                    set ip [ipl::setnode ip_desc/lsccip:general "lsccip:$op" [list "lsccip:$op" {} $val {}] $ip]
+                }
             }
         }
         foreach family $supported_products {
-            set sfamily [list lsccip:supported_family "name=\"$family\"" {} {}]
+            set sfamily [list lsccip:supported_family [list name "name=\"$family\""] {} {}]
             set ip [ipl::setnode ip_desc/lsccip:general/lsccip:supported_products $family $sfamily $ip]
         }
         foreach platform $supported_platforms {
-            set splatform [list lsccip:supported_platform "name=\"$platform\"" {} {}]
+            set splatform [list lsccip:supported_platform [list name "name=\"$platform\""] {} {}]
             set ip [ipl::setnode ip_desc/lsccip:general/lsccip:supported_platforms $platform $splatform $ip]
         }
         return $ip
@@ -927,14 +933,22 @@ namespace eval ipl {
         set mod_data [ipl::getmod axi_dmac.v]
         set ip $::ipl::ip
 
-        # foreach line [dict get $mod_data parlist] {puts $line}
-
         set ip [ipl::addports -ip $ip -mod_data $mod_data]
         set ip [ipl::addpars -ip $ip -mod_data $mod_data]
 
         set ip [ipl::general -ip $ip -name [dict get $mod_data mod_name]]
         set ip [ipl::general -ip $ip -display_name "AXI_DMA ADI"]
-        # ipl::xmlgen $ip
+        set ip [ipl::general -ip $ip -supported_products {*}]
+        set ip [ipl::general -ip $ip -supported_platforms {esi radiant}]
+        set ip [ipl::general  -vendor "latticesemi.com" \
+            -library "ip" \
+            -version "1.0" \
+            -category "ADI" \
+            -keywords "ADI IP" \
+            -min_radiant_version "2022.1" \
+            -max_radiant_version "2023.2" \
+            -min_esi_version "2022.1" -ip $ip]
+        
         set bustype {library="AMBA4" name="AXI4-Lite" vendor="amba.com" version="r0p0"}
         set abstref {library="AMBA4" name="AXI4-Lite_rtl" vendor="amba.com" version="r0p0"}
         set ip [ipl::addifa -ip $ip -mod_data $mod_data -name s_axi -v_name s_axi \
