@@ -645,16 +645,6 @@ namespace eval ipl {
     }
 
     proc genip {ip} {
-        set addressSpaces_desc [ipl::getnode {} addressSpaces_desc $ip]
-        if {$addressSpaces_desc != ""} {
-            set ip [ipl::include -ip $ip -include address_space.xml]
-            set file [open "address_space.xml" w]
-            puts [xmlgen $addressSpaces_desc]
-            puts $file [xmlgen $addressSpaces_desc]
-            close $file
-        } else {
-            puts "WARNING, No addressSpaces_desc defined!"
-        }
         set busInterfaces_desc [ipl::getnode {} busInterfaces_desc $ip]
         if {$busInterfaces_desc != ""} {
             set ip [ipl::include -ip $ip -include bus_interface.xml]
@@ -674,6 +664,16 @@ namespace eval ipl {
             close $file
         } else {
             puts "WARNING, No memoryMaps_desc defined!"
+        }
+        set addressSpaces_desc [ipl::getnode {} addressSpaces_desc $ip]
+        if {$addressSpaces_desc != ""} {
+            set ip [ipl::include -ip $ip -include address_space.xml]
+            set file [open "address_space.xml" w]
+            puts [xmlgen $addressSpaces_desc]
+            puts $file [xmlgen $addressSpaces_desc]
+            close $file
+        } else {
+            puts "WARNING, No addressSpaces_desc defined!"
         }
         set ip_desc [ipl::getnode {} ip_desc $ip]
         if {$ip_desc != ""} {
@@ -779,6 +779,8 @@ namespace eval ipl {
             -bus_type "" \
             -abstraction_ref "" \
             -master_slave "" \
+            -mmap_ref "" \
+            -aspace_ref "" \
             -portmap "" \
         {*}$args]
         
@@ -790,6 +792,8 @@ namespace eval ipl {
         set bus_type $opt(-bus_type)
         set abst_ref $opt(-abstraction_ref)
         set master_slave $opt(-master_slave)
+        set mmap_ref $opt(-mmap_ref)
+        set aspace_ref $opt(-aspace_ref)
         set portmap $opt(-portmap)
 
         set bif $::ipl::busInterface_desc
@@ -799,6 +803,15 @@ namespace eval ipl {
         set bif [ipl::setatts {} lsccip:busType [list {0} $bus_type] $bif]
         set bif [ipl::setatts lsccip:abstractionTypes/lsccip:abstractionType lsccip:abstractionRef [list {0} $abst_ref] $bif]
         set bif [ipl::setnname {} lsccip:master_slave lsccip:$master_slave $bif]
+
+        if {$master_slave == "slave" && $mmap_ref != ""} {
+            set mmap_ref_node [list lsccip:memoryMapRef [list memoryMapRef "memoryMapRef=\"$mmap_ref\""] {} {}]
+            set bif [ipl::setnode lsccip:master_slave lsccip:memoryMapRef $mmap_ref_node $bif]
+        }
+        if {$master_slave == "master" && $aspace_ref != ""} {
+            set aspace_ref_node [list lsccip:addressSpaceRef [list addressSpaceRef "addressSpaceRef=\"$aspace_ref\""] {} {}]
+            set bif [ipl::setnode lsccip:master_slave lsccip:addressSpaceRef $aspace_ref_node $bif]
+        }
 
         foreach line $portmap {
             set pname [lindex $line 0]
@@ -830,6 +843,8 @@ namespace eval ipl {
             -bus_type "" \
             -abstraction_ref "" \
             -master_slave "" \
+            -mmap_ref "" \
+            -aspace_ref "" \
             -mod_data "" \
             -v_name "" \
             -exept_pl "" \
@@ -843,6 +858,8 @@ namespace eval ipl {
             -bus_type
             -abstraction_ref
             -master_slave
+            -mmap_ref
+            -aspace_ref
         }
         set argl {}
         foreach op $optl {
@@ -997,7 +1014,8 @@ namespace eval ipl {
             -description s_axi \
             -bus_type $bustype \
             -abstraction_ref $abstref \
-            -master_slave slave]
+            -master_slave slave \
+            -mmap_ref axi_dmac_mem_map]
         # set ip [ipl::igiports -ip $ip \
         #     -mod_data $mod_data \
         #     -v_name s_axi \
@@ -1061,4 +1079,11 @@ namespace eval ipl {
             puts "-------------------------------------------------------------"
         }
     }
+
+    # to do:
+    # -add memory map descriptors and set procedure, this can be included at addif procedure
+    # -extend address space descriptor and add set procedures, this can be included at addif procedure
+    # -add source file include procedure
+    # -add ip create procedure that will create the necessary folders, collect the files, and generates the ip based in the ip script.
+    # -create make script.
 }
