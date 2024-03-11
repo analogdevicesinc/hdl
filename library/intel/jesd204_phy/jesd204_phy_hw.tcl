@@ -170,6 +170,7 @@ proc jesd204_phy_composition_callback {} {
       set_instance_parameter_value native_phy pldif_tx_double_width_transfer_enable 1
       set_instance_parameter_value native_phy pldif_tx_fifo_mode "phase_comp"
       set_instance_parameter_value native_phy pldif_tile_tx_fifo_mode "phase_comp"
+      set_instance_parameter_value native_phy pldif_tx_fifo_pfull_thld 10
       set_instance_parameter_value native_phy enable_port_tx_clkout2 1
       set_instance_parameter_value native_phy pldif_tx_clkout2_sel "TX_WORD_CLK"
       set_instance_parameter_value native_phy pldif_tx_clkout2_div 2
@@ -179,6 +180,7 @@ proc jesd204_phy_composition_callback {} {
     } else {
       set_instance_parameter_value native_phy fgt_rx_pll_refclk_freq_mhz [format {%.6f} $refclk_frequency]
       set_instance_parameter_value native_phy pmaif_rx_fifo_mode_s "register"
+      set_instance_parameter_value native_phy pldif_rx_double_width_transfer_enable 1
       set_instance_parameter_value native_phy enable_port_rx_clkout2 1
       set_instance_parameter_value native_phy pldif_rx_clkout2_sel "RX_WORD_CLK"
       set_instance_parameter_value native_phy pldif_rx_clkout2_div 2
@@ -340,7 +342,7 @@ proc jesd204_phy_composition_callback {} {
     }
 
     # export ${tx_rx}_serial_data, ${tx_rx}_serial_data_n
-    foreach x {serial_data serial_data_n} {
+    foreach x {serial_data} {
       add_interface ${x} conduit end
       set_interface_property ${x} EXPORT_OF native_phy.${tx_rx}_${x}
     }
@@ -387,7 +389,7 @@ proc jesd204_phy_composition_callback {} {
           [expr ($lane_invert >> $i) & 1]
         add_connection link_clock.clk soft_pcs_${i}.clock
         add_connection link_clock.clk_reset soft_pcs_${i}.reset
-        add_connection soft_pcs_${i}.tx_raw_data phy_glue.tx_raw_data_${i}
+        add_connection phy_glue.tx_raw_data_${i} soft_pcs_${i}.tx_raw_data
 
         set_interface_property phy_${i} EXPORT_OF soft_pcs_${i}.tx_phy
       } else {

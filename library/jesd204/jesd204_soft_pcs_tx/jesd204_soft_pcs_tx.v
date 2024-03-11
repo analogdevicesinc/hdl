@@ -32,12 +32,13 @@ assign data_inv_s = INVERT_OUTPUTS ? ~data_s : data_s;
 
 always @(posedge clk) begin
   data <= IFC_TYPE == 0 ? data_inv_s : { // F-Tile padding
-                          /* 79-60 */ 20'b0,
-                          /* 59-40 */ data_inv_s[39:20],
+                          /*    79 */ 1'b1,
+                          /* 78-60 */ 19'b0,
+                          /* 59-40 */ data_inv_s[19:0],
                           /*    39 */ 1'b0,
                           /*    38 */ 1'b1,
                           /* 37-20 */ 18'b0,
-                          /* 19-00 */ data_inv_s[19:0]};
+                          /* 19-00 */ data_inv_s[39:20]};
 end
 
 generate

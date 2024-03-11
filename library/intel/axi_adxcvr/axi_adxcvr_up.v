@@ -88,8 +88,8 @@ module axi_adxcvr_up #(
   // internal signals
 
   wire                          up_ready_s;
-  wire    [31:0]                up_status_32_s;
-  wire    [31:0]                up_rparam_s;
+  (* preserve_for_debug *) wire    [31:0]                up_status_32_s;
+  (* preserve_for_debug *) wire    [31:0]                up_rparam_s;
 
   // defaults
 

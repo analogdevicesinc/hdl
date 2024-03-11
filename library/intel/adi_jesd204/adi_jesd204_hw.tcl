@@ -576,6 +576,8 @@ proc jesd204_compose {} {
   set_instance_parameter_value jesd204_${tx_rx} {NUM_LANES} $num_of_lanes
   set_instance_parameter_value jesd204_${tx_rx} {ASYNC_CLK} $dual_clk_mode
   set_instance_parameter_value jesd204_${tx_rx} {TPL_DATA_PATH_WIDTH} $tpl_data_path_width
+  set_instance_parameter_value jesd204_${tx_rx} {LINK_MODE} 1; # 8B10B
+
 
   add_connection $link_clock axi_jesd204_${tx_rx}.core_clock
   add_connection $device_clock axi_jesd204_${tx_rx}.device_clock
@@ -656,5 +658,8 @@ proc jesd204_compose {} {
 
   add_interface serial_data conduit end
   set_interface_property serial_data EXPORT_OF phy.serial_data
+
+  # add_interface serial_data_n conduit end
+  # set_interface_property serial_data_n EXPORT_OF phy.serial_data_n
 
 }

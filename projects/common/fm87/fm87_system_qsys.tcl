@@ -328,16 +328,16 @@ proc ad_cpu_interrupt {m_irq m_port} {
 
 proc ad_cpu_interconnect {m_base m_port {avl_bridge ""} {avl_bridge_base 0x00000000} {avl_address_width 18}} {
   if {[string equal ${avl_bridge} ""]} {
-    add_connection sys_hps.h2f_lw_axi_master ${m_port}
-    set_connection_parameter_value sys_hps.h2f_lw_axi_master/${m_port} baseAddress ${m_base}
+    add_connection sys_hps.h2f_axi_master ${m_port}
+    set_connection_parameter_value sys_hps.h2f_axi_master/${m_port} baseAddress ${m_base}
   } else {
     if {[lsearch -exact [get_instances] ${avl_bridge}] == -1} {
       ## Instantiate the bridge and connect the interfaces
       add_instance ${avl_bridge} altera_avalon_mm_bridge
       set_instance_parameter_value ${avl_bridge} {ADDRESS_WIDTH} $avl_address_width
       set_instance_parameter_value ${avl_bridge} {SYNC_RESET} {1}
-      add_connection sys_hps.h2f_lw_axi_master ${avl_bridge}.s0
-      set_connection_parameter_value sys_hps.h2f_lw_axi_master/${avl_bridge}.s0 baseAddress ${avl_bridge_base}
+      add_connection sys_hps.h2f_axi_master ${avl_bridge}.s0
+      set_connection_parameter_value sys_hps.h2f_axi_master/${avl_bridge}.s0 baseAddress ${avl_bridge_base}
       add_connection sys_clk.clk ${avl_bridge}.clk
       add_connection sys_clk.clk_reset ${avl_bridge}.reset
     }
