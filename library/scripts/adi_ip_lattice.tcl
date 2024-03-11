@@ -72,12 +72,25 @@ namespace eval ipl {
         {{0} {xmlns:lsccip="http://www.latticesemi.com/XMLSchema/Radiant/ip"}} {} {}}
     set addressSpace_desc {{lsccip:addressSpace} {} {} {
             {lsccip:name} {{lsccip:name} {} {} {}}
-            {lsccip:range} {{lsccip:range} {} {} {}}
-            {lsccip:width} {{lsccip:width} {} {} {}}
+            {lsccip:range} {{lsccip:range} {} {0x100000000} {}}
+            {lsccip:width} {{lsccip:width} {} {32} {}}
         }
     }
-    ## to do #############
-    set memoryMaps_desc {}
+    set memoryMaps_desc {{lsccip:memoryMaps}
+        {{0} {xmlns:lsccip="http://www.latticesemi.com/XMLSchema/Radiant/ip"}} {} {}}
+    set memoryMap_desc {{lsccip:memoryMap} {} {} {
+            {lsccip:name} {{lsccip:name} {} {} {}}
+            {lsccip:description} {{lsccip:description} {} {} {}}
+            {lsccip:addressBlock} {{lsccip:addressBlock} {} {} {}}
+        }
+    }
+    set addressBlock_desc {{lsccip:addressBlock} {} {} {
+            {lsccip:name} {{lsccip:name} {} {} {}}
+            {lsccip:baseAddress} {{lsccip:baseAddress} {} {0} {}}
+            {lsccip:range} {{lsccip:range} {} {4096} {}}
+            {lsccip:width} {{lsccip:width} {} {32} {}}
+        }
+    }
 
     set ip [list {} {} {} [list ip_desc $ip_desc addressSpaces_desc {} \
         busInterfaces_desc {} \
@@ -570,23 +583,21 @@ namespace eval ipl {
         return $ip
     }
 
-    set addrid 0
     proc address {args} {
         set debug 0
         array set opt [list -ip "$::ipl::ip" \
-            -id "" \
             -name "" \
             -range "" \
             -width "" \
         {*}$args]
 
         set ip $opt(-ip)
-        set id $opt(-id)
+        set id $opt(-name)
         set name $opt(-name)
         set range $opt(-range)
         set width $opt(-width)
 
-        if {$name != "" && $range != "" && $width != ""} {
+        if {$name != ""} {
             set adnode [ipl::getnode "" addressSpaces_desc $ip]
             if {$debug} {
                 puts $adnode
@@ -600,15 +611,82 @@ namespace eval ipl {
             }
             set addrsp $::ipl::addressSpace_desc
             set addrsp [ipl::setncont {} lsccip:name $name $addrsp]
-            set addrsp [ipl::setncont {} lsccip:range $range $addrsp]
-            set addrsp [ipl::setncont {} lsccip:width $width $addrsp]
-   
-            if {$id == ""} {
-                set ip [ipl::setnode addressSpaces_desc $::ipl::addrid $addrsp $ip]
-                incr ipl::addrid
-            } else {
-                set ip [ipl::setnode addressSpaces_desc $id $addrsp $ip]
+            if {$range != ""} {
+                set addrsp [ipl::setncont {} lsccip:range $range $addrsp]
             }
+            if {$width != ""} {
+                set addrsp [ipl::setncont {} lsccip:width $width $addrsp]
+            }
+   
+            set ip [ipl::setnode addressSpaces_desc $id $addrsp $ip]
+        }
+
+        return $ip
+    }
+
+    # set memoryMaps_desc {{lsccip:memoryMaps}
+    #     {{0} {xmlns:lsccip="http://www.latticesemi.com/XMLSchema/Radiant/ip"}} {} {}}
+    # set memoryMap_desc {{lsccip:memoryMap} {} {} {
+    #         {lsccip:name} {{lsccip:name} {} {} {}}
+    #         {lsccip:description} {{lsccip:description} {} {} {}}
+    #         {lsccip:addressBlock} {{} {} {} {}}
+    #     }
+    # }
+    # set addressBlock_desc {{lsccip:addressBlock} {} {} {
+    #         {lsccip:name} {{lsccip:name} {} {} {}}
+    #         {lsccip:baseAddress} {{lsccip:baseAddress} {} {0} {}}
+    #         {lsccip:range} {{lsccip:range} {} {4k} {}}
+    #         {lsccip:width} {{lsccip:width} {} {32} {}}
+    #     }
+    # }
+
+    proc mmap {args} {
+        set debug 0
+        array set opt [list -ip "$::ipl::ip" \
+            -name "" \
+            -description "" \
+            -baseAddress "" \
+            -range "" \
+            -width "" \
+        {*}$args]
+
+        set ip $opt(-ip)
+        set id $opt(-name)
+        set name $opt(-name)
+        set description $opt(-description)
+        set baseAddress $opt(-baseAddress)
+        set range $opt(-range)
+        set width $opt(-width)
+
+        if {$name != ""} {
+            set mmapsnode [ipl::getnode "" memoryMaps_desc $ip]
+            if {$debug} {
+                puts $mmapsnode
+            }
+            if {[lindex $mmapsnode 0] == ""} {
+                set mmapsnode $::ipl::memoryMaps_desc
+                if {$debug} {
+                    puts $mmapsnode
+                }
+                set ip [ipl::setnode "" memoryMaps_desc $mmapsnode $ip]
+            }
+            set mmapn $::ipl::memoryMap_desc
+            set mmapn [ipl::setncont {} lsccip:name $name $mmapn]
+            set mmapn [ipl::setncont {} lsccip:description $description $mmapn]
+            set adbln $::ipl::addressBlock_desc
+            set adbln [ipl::setncont {} lsccip:name ${name}_reg_space $adbln]
+            if {$baseAddress != ""} {
+                set adbln [ipl::setncont {} lsccip:baseAddress $baseAddress $adbln]
+            }
+            if {$range != ""} {
+                set adbln [ipl::setncont {} lsccip:range $range $adbln]
+            }
+            if {$width != ""} {
+                set adbln [ipl::setncont {} lsccip:width $width $adbln]
+            }
+   
+            set mmapn [ipl::setnode {} lsccip:addressBlock $adbln $mmapn]
+            set ip [ipl::setnode memoryMaps_desc $id $mmapn $ip]
         }
 
         return $ip
@@ -655,16 +733,6 @@ namespace eval ipl {
         } else {
             puts "WARNING, No busInterfaces_desc defined!"
         }
-        set memoryMaps_desc [ipl::getnode {} memoryMaps_desc $ip]
-        if {$memoryMaps_desc != ""} {
-            set ip [ipl::include -ip $ip -include memory_map.xml]
-            set file [open "memory_map.xml" w]
-            puts [xmlgen $memoryMaps_desc]
-            puts $file [xmlgen $memoryMaps_desc]
-            close $file
-        } else {
-            puts "WARNING, No memoryMaps_desc defined!"
-        }
         set addressSpaces_desc [ipl::getnode {} addressSpaces_desc $ip]
         if {$addressSpaces_desc != ""} {
             set ip [ipl::include -ip $ip -include address_space.xml]
@@ -674,6 +742,16 @@ namespace eval ipl {
             close $file
         } else {
             puts "WARNING, No addressSpaces_desc defined!"
+        }
+        set memoryMaps_desc [ipl::getnode {} memoryMaps_desc $ip]
+        if {$memoryMaps_desc != ""} {
+            set ip [ipl::include -ip $ip -include memory_map.xml]
+            set file [open "memory_map.xml" w]
+            puts [xmlgen $memoryMaps_desc]
+            puts $file [xmlgen $memoryMaps_desc]
+            close $file
+        } else {
+            puts "WARNING, No memoryMaps_desc defined!"
         }
         set ip_desc [ipl::getnode {} ip_desc $ip]
         if {$ip_desc != ""} {
@@ -912,7 +990,7 @@ namespace eval ipl {
                 set from [dict get $data from]
                 set to [dict get $data to]
                 set ip [ipl::setport -ip $ip -name $name \
-                    -dir $dir -range "$op$to,$from$cl" \
+                    -dir $dir -range "$op$from,$to$cl" \
                     -conn_port $name \
                     -conn_mod $mod_name]
             } else {
@@ -1005,6 +1083,17 @@ namespace eval ipl {
             -min_radiant_version "2022.1" \
             -max_radiant_version "2023.2" \
             -min_esi_version "2022.1" -ip $ip]
+
+        set ip [ipl::mmap -ip $ip \
+            -name "axi_dmac_mem_map" \
+            -description "axi_dmac_mem_map"]
+            # -baseAddress 0 \
+            # -range 4096 \
+            # -width 32]
+        set ip [ipl::address -ip $ip \
+            -name "m_dest_axi_aspace" \
+            -range 0x100000000 \
+            -width 32]
         
         set bustype {library="AMBA4" name="AXI4-Lite" vendor="amba.com" version="r0p0"}
         set abstref {library="AMBA4" name="AXI4-Lite_rtl" vendor="amba.com" version="r0p0"}
@@ -1029,7 +1118,8 @@ namespace eval ipl {
             -description m_dest_axi \
             -bus_type $bustype \
             -abstraction_ref $abstref \
-            -master_slave master]
+            -master_slave master \
+            -aspace_ref m_dest_axi_aspace]
         set ip [ipl::addifa -ip $ip -mod_data $mod_data -v_name m_src_axi \
             -exept_pl [list m_src_axi_aclk m_src_axi_aresetn] \
             -name m_src_axi \
