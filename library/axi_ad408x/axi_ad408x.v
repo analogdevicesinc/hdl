@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2023(c) Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL(Verilog or VHDL) components. The individual modules are
@@ -39,17 +39,16 @@ module axi_ad408x #(
   parameter   ID = 0,
   parameter   FPGA_TECHNOLOGY = 0,
   parameter   DRP_WIDTH = 5,
-  parameter   NUM_LANES = 2,   // Max number of lanes is 2 
-  parameter   NUM_OF_CHANNELS = 2,
-  parameter   DDR_SUPPORT = 1,
+  parameter   NUM_LANES = 2,   // Max number of lanes is 2
+  parameter   NUM_OF_CHANNELS = 1,
   parameter   HAS_DELAY_CTRL = 0,
   parameter   DELAY_CTRL_NUM_LANES = 1,
   parameter   DELAY_CTRL_DRP_WIDTH = 5,
   parameter   IODELAY_CTRL = 1,
   parameter   IO_DELAY_GROUP = "dev_if_delay_group"
-)( 
+) (
 
-  // ADC interface 
+  // ADC interface
 
   input                   dclk_in_n,
   input                   dclk_in_p,
@@ -57,24 +56,24 @@ module axi_ad408x #(
   input                   data_a_in_p,
   input                   data_b_in_n,
   input                   data_b_in_p,
+  input                   cnv_in_p,
+  input                   cnv_in_n,
   input                   sync_n,
-  input                   uncorrected_mode,
+  input                   filter_data_ready_n,
 
   // output data interface
 
   output                  adc_clk,
-  output      [ 31:0]     adc_data, 
+  output      [ 31:0]     adc_data,
   output                  adc_valid,
-  output      [127:0]     adc_uncor_data,
-  output                  adc_uncor_valid,
   input                   adc_dovf,
 
-  // delay interface 
- 
+  // delay interface
+
   input                   delay_clk,
 
-  // AXI interface 
- 
+  // AXI interface
+
   input                   s_axi_aclk,
   input                   s_axi_aresetn,
   input                   s_axi_awvalid,
@@ -100,33 +99,35 @@ module axi_ad408x #(
 
   localparam NUM_OF_UP_SPACES = 1 + NUM_OF_CHANNELS + HAS_DELAY_CTRL;
 
-  // internal signals 
+  // internal signals
 
-  wire                    adc_clk_s;
-  wire                    adc_rst_s;
-  wire                    adc_enable;
-  wire                    delay_rst;
-  wire                    delay_locked;
-  wire                    bitslip_enable; 
-  wire                    sync_status;
-  wire                    up_adc_ddr_edgesel;
-  wire          [ 4:0]    up_adc_num_lanes;
-  wire                    up_adc_sdr_ddr_n;
-  wire                    up_rstn;
-  wire                    up_clk;
-  wire          [13:0]    up_waddr_s;
-  wire          [13:0]    up_raddr_s;
-  wire                    up_sel_s;
-  wire                    up_wr_s;
-  wire          [13:0]    up_addr_s;
-  wire          [31:0]    up_wdata_s;
-  wire          [31:0]    up_rdata_s  [0:NUM_OF_UP_SPACES-1];
-  wire                    up_rack_s   [0:NUM_OF_UP_SPACES-1];
-  wire                    up_wack_s   [0:NUM_OF_UP_SPACES-1];
+  wire             adc_clk_s;
+  wire             adc_rst_s;
+  wire             adc_enable;
+  wire             delay_rst;
+  wire             delay_locked;
+  wire             bitslip_enable;
+  wire             filter_enable;
+  wire             sync_status;
+  wire             self_sync;
+  wire    [7:0]    adc_custom_control_s;
+  wire   [ 4:0]    up_adc_num_lanes;
+  wire             up_rstn;
+  wire             up_clk;
+  wire   [13:0]    up_waddr_s;
+  wire   [13:0]    up_raddr_s;
+  wire             up_sel_s;
+  wire             up_wr_s;
+  wire   [13:0]    up_addr_s;
+  wire   [31:0]    up_wdata_s;
+  wire   [31:0]    up_rdata_s  [0:NUM_OF_UP_SPACES-1];
+  wire             up_rack_s   [0:NUM_OF_UP_SPACES-1];
+  wire             up_wack_s   [0:NUM_OF_UP_SPACES-1];
+
   wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
   wire  [DELAY_CTRL_DRP_WIDTH*DELAY_CTRL_NUM_LANES-1:0]  up_dwdata;
   wire  [DELAY_CTRL_DRP_WIDTH*DELAY_CTRL_NUM_LANES-1:0]  up_drdata;
-  
+
   reg [31:0]  up_rdata_r;
   reg         up_rack_r;
   reg         up_wack_r;
@@ -137,11 +138,13 @@ module axi_ad408x #(
   integer j;
 
   assign adc_clk = adc_clk_s;
-  assign up_clk = s_axi_aclk;
+  assign up_clk  = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
-  
-  always @(*)
-  begin
+
+  assign self_sync     = adc_custom_control_s[1]; 
+  assign filter_enable = adc_custom_control_s[0]; 
+
+  always @(*) begin
     up_rdata_r = 'h00;
     up_rack_r = 'h00;
     up_wack_r = 'h00;
@@ -166,74 +169,75 @@ module axi_ad408x #(
 
   up_adc_channel #(
     .CHANNEL_ID(0)
- ) ad408x_channel_0(
-  .adc_clk(adc_clk_s),
-  .adc_rst(adc_rst_s),
-  .adc_enable(adc_enable),
-  .adc_iqcor_enb(),
-  .adc_dcfilt_enb(),
-  .adc_dfmt_se(),
-  .adc_dfmt_type(),
-  .adc_dfmt_enable(),
-  .adc_dcfilt_offset(),
-  .adc_dcfilt_coeff(),
-  .adc_iqcor_coeff_1(),
-  .adc_iqcor_coeff_2(),
-  .adc_pnseq_sel(),
-  .adc_data_sel(),
-  .adc_pn_err(1'b0),
-  .adc_pn_oos(1'b0),
-  .adc_or(),
-  .adc_read_data(),
-  .adc_status_header('b0),
-  .adc_crc_err('b0),
-  .up_adc_crc_err(),
-  .up_adc_pn_err(),
-  .up_adc_pn_oos(),
-  .up_adc_or(),
-  .up_usr_datatype_be(),
-  .up_usr_datatype_signed(),
-  .up_usr_datatype_shift(),
-  .up_usr_datatype_total_bits(),
-  .up_usr_datatype_bits(),
-  .up_usr_decimation_m(),
-  .up_usr_decimation_n(),
-  .adc_usr_datatype_be(1'b0),
-  .adc_usr_datatype_signed(1'b1),
-  .adc_usr_datatype_shift(8'd0),
-  .adc_usr_datatype_total_bits(8'd32),
-  .adc_usr_datatype_bits(8'd32),
-  .adc_usr_decimation_m(16'd1),
-  .adc_usr_decimation_n(16'd1),
-  .up_rstn(up_rstn),
-  .up_clk(up_clk),
-  .up_wreq(up_wreq_s),
-  .up_waddr(up_waddr_s),
-  .up_wdata(up_wdata_s),
-  .up_wack(up_wack_s[0]),
-  .up_rreq(up_rreq_s),
-  .up_raddr(up_raddr_s),
-  .up_rdata(up_rdata_s[0]),
-  .up_rack(up_rack_s[0]));
-   
+  ) ad408x_channel_0 (
+    .adc_clk(adc_clk_s),
+    .adc_rst(adc_rst_s),
+    .adc_enable(adc_enable),
+    .adc_iqcor_enb(),
+    .adc_dcfilt_enb(),
+    .adc_dfmt_se(),
+    .adc_dfmt_type(),
+    .adc_dfmt_enable(),
+    .adc_dcfilt_offset(),
+    .adc_dcfilt_coeff(),
+    .adc_iqcor_coeff_1(),
+    .adc_iqcor_coeff_2(),
+    .adc_pnseq_sel(),
+    .adc_data_sel(),
+    .adc_pn_err(1'b0),
+    .adc_pn_oos(1'b0),
+    .adc_or(),
+    .adc_read_data(),
+    .adc_status_header('b0),
+    .adc_crc_err('b0),
+    .up_adc_crc_err(),
+    .up_adc_pn_err(),
+    .up_adc_pn_oos(),
+    .up_adc_or(),
+    .up_usr_datatype_be(),
+    .up_usr_datatype_signed(),
+    .up_usr_datatype_shift(),
+    .up_usr_datatype_total_bits(),
+    .up_usr_datatype_bits(),
+    .up_usr_decimation_m(),
+    .up_usr_decimation_n(),
+    .adc_usr_datatype_be(1'b0),
+    .adc_usr_datatype_signed(1'b1),
+    .adc_usr_datatype_shift(8'd0),
+    .adc_usr_datatype_total_bits(8'd32),
+    .adc_usr_datatype_bits(8'd32),
+    .adc_usr_decimation_m(16'd1),
+    .adc_usr_decimation_n(16'd1),
+    .up_rstn(up_rstn),
+    .up_clk(up_clk),
+    .up_wreq(up_wreq_s),
+    .up_waddr(up_waddr_s),
+    .up_wdata(up_wdata_s),
+    .up_wack(up_wack_s[0]),
+    .up_rreq(up_rreq_s),
+    .up_raddr(up_raddr_s),
+    .up_rdata(up_rdata_s[0]),
+    .up_rack(up_rack_s[0]));
+
   up_adc_common #(
     .ID(ID)
   ) i_up_adc_common (
     .mmcm_rst(),
-    .adc_clk(adc_clk),
+    .adc_clk(adc_clk_s),
     .adc_rst(adc_rst_s),
     .adc_r1_mode(),
-    .up_adc_ddr_edgesel(up_adc_ddr_edgesel),
+    .up_adc_ddr_edgesel(),
     .adc_pin_mode(),
     .adc_status('h00),
     .adc_sync_status(sync_status),
     .adc_status_ovf(adc_dovf),
-    .adc_clk_ratio(32'd1),
+    .adc_custom_control(adc_custom_control_s),
+    .adc_clk_ratio(32'd2),
     .adc_start_code(),
     .adc_sref_sync(),
     .adc_sync(bitslip_enable),
     .up_adc_num_lanes(up_adc_num_lanes),
-    .up_adc_sdr_ddr_n(up_adc_sdr_ddr_n),
+    .up_adc_sdr_ddr_n(),
     .up_pps_rcounter(32'b0),
     .up_pps_status(1'b0),
     .up_pps_irq_mask(),
@@ -267,13 +271,12 @@ module axi_ad408x #(
     .up_rdata(up_rdata_s[1]),
     .up_rack(up_rack_s[1]));
 
- // ad4080 interface module 
+ // ad4080 interface module
 
   ad408x_phy #(
-    .FPGA_TECHNOLOGY(3),
+    .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
     .DRP_WIDTH(DRP_WIDTH),
     .NUM_LANES(NUM_LANES),
-    .DDR_SUPPORT(DDR_SUPPORT),
     .IODELAY_CTRL(IODELAY_CTRL),
     .IO_DELAY_GROUP(IO_DELAY_GROUP)
   ) ad408x_interface (
@@ -283,11 +286,10 @@ module axi_ad408x #(
     .data_a_in_p(data_a_in_p),
     .data_b_in_n(data_b_in_n),
     .data_b_in_p(data_b_in_p),
-    .sync_n(sync_n),
-    .sdr_ddr_n(up_adc_sdr_ddr_n),
+    .cnv_in_p(cnv_in_p),
+    .cnv_in_n(cnv_in_n),
     .num_lanes(up_adc_num_lanes),
-    .ddr_edge_sel(up_adc_ddr_edgesel),
-    .uncorrected_mode(uncorrected_mode),
+    .self_sync(self_sync),
     .up_clk(up_clk),
     .up_adc_dld(up_dld),
     .up_adc_dwdata(up_dwdata),
@@ -295,14 +297,15 @@ module axi_ad408x #(
     .delay_clk(delay_clk),
     .delay_rst(delay_rst),
     .delay_locked(delay_locked),
-    .adc_rst(adc_rst),
-    .adc_clk_div(adc_clk_s),
+    .adc_rst(adc_rst_s),
+    .adc_clk(adc_clk_s),
     .adc_data(adc_data),
     .adc_valid(adc_valid),
-    .adc_uncor_data(adc_uncor_data),
-    .adc_uncor_valid(adc_uncor_valid),
     .bitslip_enable(bitslip_enable),
-    .sync_status(sync_status));
+    .sync_status(sync_status),
+    .filter_enable(filter_enable),
+    .filter_rdy_n(filter_data_ready_n));
+
 
   // adc delay control
 

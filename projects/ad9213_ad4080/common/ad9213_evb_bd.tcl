@@ -31,7 +31,6 @@ create_bd_port -dir O ad4080_csn_o
 create_bd_port -dir I ad4080_csn_i
 create_bd_port -dir I ad4080_clk_i
 create_bd_port -dir O ad4080_clk_o
-#create_bd_port -dir I ad4080_sdo_i
 create_bd_port -dir O ad4080_sdo_o
 create_bd_port -dir I ad4080_sdi_i
 
@@ -47,7 +46,6 @@ create_bd_port -dir O ltc2644_csn_o
 create_bd_port -dir I ltc2644_csn_i
 create_bd_port -dir I ltc2644_clk_i
 create_bd_port -dir O ltc2644_clk_o
-#create_bd_port -dir I ltc2644_sdo_i
 create_bd_port -dir O ltc2644_sdo_o
 create_bd_port -dir I ltc2644_sdi_i
 
@@ -59,8 +57,10 @@ create_bd_port -dir I da_p
 create_bd_port -dir I da_n
 create_bd_port -dir I db_p
 create_bd_port -dir I db_n
-create_bd_port -dir I uncorrected_mode
 create_bd_port -dir I sync_n
+create_bd_port -dir I cnv_in_p
+create_bd_port -dir I cnv_in_n
+create_bd_port -dir I filter_data_ready_n
 create_bd_port -dir O sys_cpu_out_clk
 
 # adc peripherals
@@ -111,7 +111,6 @@ ad_ip_instance axi_ad408x axi_ad4080_adc
 ad_ip_parameter axi_ad4080_adc CONFIG.NUM_OF_CHANNELS 1
 ad_ip_parameter axi_ad4080_adc CONFIG.HAS_DELAY_CTRL 1
 ad_ip_parameter axi_ad4080_adc CONFIG.DELAY_CTRL_NUM_LANES 2
-ad_ip_parameter axi_ad4080_adc CONFIG.DDR_SUPPORT 1
 
 # dma for rx1
 
@@ -124,19 +123,6 @@ ad_ip_parameter axi_ad4080_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_ad4080_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_ad4080_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad4080_dma CONFIG.DMA_DATA_WIDTH_SRC 32
-
-# dma for uncorrected
-
-ad_ip_instance axi_dmac axi_ad4080_uc_dma
-ad_ip_parameter axi_ad4080_uc_dma CONFIG.DMA_TYPE_SRC 2
-ad_ip_parameter axi_ad4080_uc_dma CONFIG.DMA_TYPE_DEST 0
-ad_ip_parameter axi_ad4080_uc_dma CONFIG.CYCLIC 0
-ad_ip_parameter axi_ad4080_uc_dma CONFIG.SYNC_TRANSFER_START 0
-ad_ip_parameter axi_ad4080_uc_dma CONFIG.AXI_SLICE_SRC 0
-ad_ip_parameter axi_ad4080_uc_dma CONFIG.AXI_SLICE_DEST 0
-ad_ip_parameter axi_ad4080_uc_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_ad4080_uc_dma CONFIG.DMA_DATA_WIDTH_SRC 128
-
 
 # reference clocks & resets
 
@@ -231,7 +217,6 @@ ad_connect ad4080_csn_i ad4080_spi/ss_i
 ad_connect ad4080_csn_o ad4080_spi/ss_o
 ad_connect ad4080_clk_i ad4080_spi/sck_i
 ad_connect ad4080_clk_o ad4080_spi/sck_o
-#ad_connect ad4080_sdo_i ad4080_spi/io0_i
 ad_connect ad4080_sdo_o ad4080_spi/io0_o
 ad_connect ad4080_sdi_i ad4080_spi/io1_i
 
@@ -261,7 +246,6 @@ ad_connect ltc2644_csn_i ltc2644_spi/ss_i
 ad_connect ltc2644_csn_o ltc2644_spi/ss_o
 ad_connect ltc2644_clk_i ltc2644_spi/sck_i
 ad_connect ltc2644_clk_o ltc2644_spi/sck_o
-#ad_connect ltc2644_sdo_i ltc2644_spi/io0_i
 ad_connect ltc2644_sdo_o ltc2644_spi/io0_o
 ad_connect ltc2644_sdi_i ltc2644_spi/io1_i
 
@@ -269,33 +253,29 @@ ad_connect $sys_cpu_clk ltc2644_spi/ext_spi_clk
 
 # connect interface to axi_ad4080_adc
 
-ad_connect dco_p            axi_ad4080_adc/dclk_in_p
-ad_connect dco_n            axi_ad4080_adc/dclk_in_n
-ad_connect da_p             axi_ad4080_adc/data_a_in_p
-ad_connect da_n             axi_ad4080_adc/data_a_in_n
-ad_connect db_p             axi_ad4080_adc/data_b_in_p
-ad_connect db_n             axi_ad4080_adc/data_b_in_n
-ad_connect sync_n           axi_ad4080_adc/sync_n
-ad_connect uncorrected_mode axi_ad4080_adc/uncorrected_mode
-
-ad_connect $sys_iodelay_clk axi_ad4080_adc/delay_clk
+ad_connect dco_p                axi_ad4080_adc/dclk_in_p
+ad_connect dco_n                axi_ad4080_adc/dclk_in_n
+ad_connect da_p                 axi_ad4080_adc/data_a_in_p
+ad_connect da_n                 axi_ad4080_adc/data_a_in_n
+ad_connect db_p                 axi_ad4080_adc/data_b_in_p
+ad_connect db_n                 axi_ad4080_adc/data_b_in_n
+ad_connect sync_n               axi_ad4080_adc/sync_n
+ad_connect cnv_in_p             axi_ad4080_adc/cnv_in_p
+ad_connect cnv_in_n             axi_ad4080_adc/cnv_in_n
+ad_connect filter_data_ready_n  axi_ad4080_adc/filter_data_ready_n
+ad_connect $sys_iodelay_clk     axi_ad4080_adc/delay_clk
 
 # connect datapath
 
 ad_connect axi_ad4080_adc/adc_data  axi_ad4080_dma/fifo_wr_din
 ad_connect axi_ad4080_adc/adc_valid axi_ad4080_dma/fifo_wr_en
 
-ad_connect axi_ad4080_adc/adc_uncor_data  axi_ad4080_uc_dma/fifo_wr_din
-ad_connect axi_ad4080_adc/adc_uncor_valid axi_ad4080_uc_dma/fifo_wr_en
-
 # system runs on phy's received clock
 
 ad_connect axi_ad4080_adc/adc_clk axi_ad4080_dma/fifo_wr_clk
-ad_connect axi_ad4080_adc/adc_clk axi_ad4080_uc_dma/fifo_wr_clk
 ad_connect $sys_cpu_clk sys_cpu_out_clk
 
 ad_connect $sys_cpu_resetn axi_ad4080_dma/m_dest_axi_aresetn
-ad_connect $sys_cpu_resetn axi_ad4080_uc_dma/m_dest_axi_aresetn
 
 # interconnect (cpu)
 ad_cpu_interconnect 0x44a60000 axi_ad9213_xcvr
@@ -308,13 +288,11 @@ ad_cpu_interconnect 0x44a74000 ltc2644_spi
 ad_cpu_interconnect 0x7c420000 axi_ad9213_dma
 ad_cpu_interconnect 0x44A00000 axi_ad4080_adc
 ad_cpu_interconnect 0x44A30000 axi_ad4080_dma
-ad_cpu_interconnect 0x44A40000 axi_ad4080_uc_dma
 
 # interconnect (gt/adc)
 ad_mem_hp0_interconnect $sys_cpu_clk axi_ad9213_xcvr/m_axi
 ad_mem_hp0_interconnect $sys_cpu_clk axi_ad9213_dma/m_dest_axi
 ad_mem_hp0_interconnect $sys_cpu_clk axi_ad4080_dma/m_dest_axi
-ad_mem_hp0_interconnect $sys_cpu_clk axi_ad4080_uc_dma/m_dest_axi
 
 # interrupts
 ad_cpu_interrupt ps-17 mb-7 hmc7044_spi/ip2intc_irpt
@@ -325,4 +303,3 @@ ad_cpu_interrupt ps-10 mb-14 ltc2644_spi/ip2intc_irpt
 ad_cpu_interrupt ps-12 mb-12 axi_ad9213_dma/irq
 ad_cpu_interrupt ps-11 mb-13 axi_ad9213_jesd/irq
 ad_cpu_interrupt ps-14 mb-10 axi_ad4080_dma/irq
-ad_cpu_interrupt ps-13 mb-11 axi_ad4080_uc_dma/irq

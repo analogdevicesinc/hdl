@@ -110,11 +110,6 @@ module system_top (
   output                  hmc_sync_req,
 
   // FMC connector
-
-  // Default 100 MHz clock
-  input                   fpgaclk_p,
-  input                   fpgaclk_n,
-
   // LVDS data interace
   input                   dco_p,
   input                   dco_n,
@@ -122,6 +117,8 @@ module system_top (
   input                   da_n,
   input                   db_p,
   input                   db_n,
+  input                   cnv_in_p,
+  input                   cnv_in_n,
 
   // SPI data interface
 
@@ -129,19 +126,6 @@ module system_top (
   inout                   gpio1_fmc,
   inout                   gpio2_fmc,
   inout                   gpio3_fmc,
-
-`ifdef ECHOED_CLK
-  // Input for Echoed clock mode
-  input                   clk_p,
-  input                   clk_n,
-`else
-  // Output for self clocked mode
-  output                  clk_p,
-  output                  clk_n,
-  output                  fpga_cnvp,
-  output                  fpga_cnvn,
-`endif
-
   inout                   adrf5203_ctrl_0,
   inout                   adrf5203_ctrl_1,
   inout                   adrf5203_ctrl_2,
@@ -283,22 +267,20 @@ module system_top (
 
   // instantiations
 
-  IBUFDS i_fpga_clk (
-    .I (clk_p),
-    .IB (clk_n),
-    .O (fpga_clk));
-
-  IBUFDS i_fpga_100_clk (
-    .I (fpgaclk_p),
-    .IB (fpgaclk_n),
-    .O (fpga_100_clk));
+  ad_iobuf #(
+    .DATA_WIDTH(1)
+  ) i_gpio_1_mach1 (
+    .dio_t(1'b1),
+    .dio_i(1'b0),
+    .dio_o(filter_data_ready_n),
+    .dio_p(gpio1_fmc));
 
   ad_iobuf #(
-    .DATA_WIDTH(16)
+    .DATA_WIDTH(15)
   ) i_gpio (
-    .dio_t(gpio_t[54:39]),
-    .dio_i(gpio_o[54:39]),
-    .dio_o(gpio_i[54:39]),
+    .dio_t(gpio_t[53:39]),
+    .dio_i(gpio_o[53:39]),
+    .dio_o(gpio_i[53:39]),
     .dio_p({adrf5203_ctrl_0,
             adrf5203_ctrl_1,
             adrf5203_ctrl_2,
@@ -307,7 +289,6 @@ module system_top (
             adl5580_en,
             gpio3_fmc,
             gpio2_fmc,
-            gpio1_fmc,
             dig_ext_p,
             dig_ext_n,
             ltc2644_ldac,
@@ -413,7 +394,7 @@ module system_top (
     .ad4080_csn_i (cs_n_src),
     .ad4080_csn_o (cs_n_src),
     .ad4080_sdi_i (sdi_src),
-//    .ad4080_sdo_i (gpio0_fmc),
+
     .ad4080_sdo_o (gpio0_fmc),
 
     .adl5580_clk_i (adl5580_sclk),
@@ -429,7 +410,7 @@ module system_top (
     .ltc2644_csn_i (ltc2644_cs),
     .ltc2644_csn_o (ltc2644_cs),
     .ltc2644_sdi_i (ltc2644_sdi),
-//    .ltc2644_sdo_i (ltc2644_sdo),
+
     .ltc2644_sdo_o (ltc2644_sdo),
 
     // FMC
@@ -439,8 +420,8 @@ module system_top (
     .da_n (da_n),
     .db_p (db_p),
     .db_n (db_n),
-    .sys_cpu_out_clk (sys_cpu_out_clk),
-    .uncorrected_mode (1'b0)
-    );
+    .cnv_in_p(cnv_in_p),
+    .cnv_in_n(cnv_in_n),
+    .filter_data_ready_n(filter_data_ready_n));
 
 endmodule

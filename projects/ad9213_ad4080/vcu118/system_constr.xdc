@@ -87,18 +87,16 @@ set_input_delay -clock [get_clocks global_clk_0] \
   [expr [get_property PERIOD [get_clocks global_clk_0]] / 2] \
   [get_ports {rx_sysref_*}]
 
-#set_property -dict {PACKAGE_PIN R31  IOSTANDARD LVDS} [get_ports fpga_cnvp]                                   ; ## C22  FMC_LA18_CC_P        IO_L10P_T1U_N6_QBC_AD4P_45
-#set_property -dict {PACKAGE_PIN P31  IOSTANDARD LVDS} [get_ports fpga_cnvn]                                   ; ## C23  FMC_LA18_CC_N        IO_L10N_T1U_N7_QBC_AD4N_45
 set_property -dict {PACKAGE_PIN V33  IOSTANDARD LVCMOS18} [get_ports adrf5203_ctrl_0]                         ; ## C26  FMC_LA27_P           IO_L5P_T0U_N8_AD14P_45
 set_property -dict {PACKAGE_PIN V34  IOSTANDARD LVCMOS18} [get_ports adrf5203_ctrl_1]                         ; ## C27  FMC_LA27_N           IO_L5N_T0U_N9_AD14N_45
-set_property -dict {PACKAGE_PIN R34  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [get_ports clk_p]                ; ## D20  FMC_LA17_CC_P        IO_L13P_T2L_N0_GC_QBC_45
-set_property -dict {PACKAGE_PIN P34  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [get_ports clk_n]                ; ## D21  FMC_LA17_CC_N        IO_L13N_T2L_N1_GC_QBC_45
 set_property -dict {PACKAGE_PIN Y32  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [get_ports da_p]                 ; ## D23  FMC_LA23_P           IO_L1P_T0L_N0_DBC_45
 set_property -dict {PACKAGE_PIN W32  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [get_ports da_n]                 ; ## D24  FMC_LA23_N           IO_L1N_T0L_N1_DBC_45
 set_property -dict {PACKAGE_PIN V32  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [get_ports db_p]                 ; ## D26  FMC_LA26_P           IO_L2P_T0L_N2_45
 set_property -dict {PACKAGE_PIN U33  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [get_ports db_n]                 ; ## D27  FMC_LA26_N           IO_L2N_T0L_N3_45
 set_property -dict {PACKAGE_PIN P35  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [get_ports dco_p]                ; ## G2   FMC_CLK1_M2C_P       IO_L14P_T2L_N2_GC_45
 set_property -dict {PACKAGE_PIN P36  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [get_ports dco_n]                ; ## G3   FMC_CLK1_M2C_N       IO_L14N_T2L_N3_GC_45
+set_property -dict {PACKAGE_PIN R31  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [get_ports cnv_in_p]             ; ## C22  FMC_LA18_CC_P        IO_L10P_T1U_N6_QBC_AD4P_45
+set_property -dict {PACKAGE_PIN P31  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [get_ports cnv_in_n]             ; ## C23  FMC_LA18_CC_N        IO_L10N_T1U_N7_QBC_AD4N_45
 set_property -dict {PACKAGE_PIN AH33 IOSTANDARD LVCMOS18} [get_ports adg5419_ctrl]                            ; ## G15  FMC_LA12_P           IO_L21P_T3L_N4_AD8P_43
 set_property -dict {PACKAGE_PIN AH34 IOSTANDARD LVCMOS18} [get_ports ada4945_disable]                         ; ## G16  FMC_LA12_N           IO_L21N_T3L_N5_AD8N_43
 set_property -dict {PACKAGE_PIN N32  IOSTANDARD LVCMOS18} [get_ports adl5580_csb]                             ; ## G21  FMC_LA20_P           IO_L23P_T3U_N8_45
