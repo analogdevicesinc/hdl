@@ -272,7 +272,6 @@ Software related
 -  :git-no-os:`AD7768 No-OS project source code <projects/ad7768-evb>`
 -  :dokuwiki:`[Wiki] AD7768 IIO Precision ADC Linux Driver <resources/tools-software/linux-drivers/iio-adc/ad7768>`
 
-
 .. include:: ../common/more_information.rst
 
 .. include:: ../common/support.rst
