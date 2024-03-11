@@ -473,6 +473,21 @@ separate sections. <strong>Firstly</strong> register types and then wire types.<
 <p><strong>A17</strong></p>
 <p>The source files <em>should</em> have the format shown in Annex 1 for
 Verilog code and Annex 2 for VHDL code.</p>
+<p><strong>A18</strong></p>
+<p>Local parameters <strong>must</strong> be declared first, before declaring wires
+or registers.</p>
+<div class="highlight-default notranslate" id="example-a18"><div class="highlight"><pre><span></span><span class="hll"><span class="linenos"> 1</span><span class="n">localparam</span>   <span class="n">LOCAL_PARAM1</span><span class="p">;</span>
+</span><span class="hll"><span class="linenos"> 2</span><span class="n">localparam</span>   <span class="n">NEXT_LOCAL_PARAM</span><span class="p">;</span>
+</span><span class="hll"><span class="linenos"> 3</span><span class="n">localparam</span>   <span class="n">LOCAL_PARAM2</span><span class="p">;</span>
+</span><span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="n">reg</span>  <span class="p">[</span> <span class="mi">3</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>  <span class="n">my_signal1</span><span class="p">;</span>
+<span class="linenos"> 6</span><span class="n">reg</span>  <span class="p">[</span> <span class="mi">4</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>  <span class="n">my_signal2</span><span class="p">;</span>
+<span class="linenos"> 7</span><span class="n">reg</span>          <span class="n">my_signal3</span><span class="p">;</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="n">wire</span> <span class="p">[</span> <span class="mi">2</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>  <span class="n">my_wire1</span><span class="p">;</span>
+<span class="linenos">10</span><span class="n">wire</span>         <span class="n">my_wire2</span><span class="p">;</span>
+</pre></div>
+</div>
 </section>
 <section id="b-naming-conventions">
 <h3>B. Naming Conventions<a class="headerlink" href="#b-naming-conventions" title="Permalink to this heading">#</a></h3>
