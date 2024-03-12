@@ -25,6 +25,7 @@ namespace eval ipl {
                         {radiant} {{lsccip:supported_platform} {{name} {name="radiant"}} {} {}}
                         {esi} {{lsccip:supported_platform} {{name} {name="esi"}} {} {}}
                     }}
+                    {href} {{} {} {https://wiki.analog.com/resources/fpga/docs/ip_cores} {}}
                 }
             }
             {lsccip:settings} {{} {} {} {}}
@@ -92,7 +93,8 @@ namespace eval ipl {
         }
     }
 
-    set ip [list {} {} {} [list ip_desc $ip_desc addressSpaces_desc {} \
+    set ip [list {} {} {} [list fdeps {} \
+        ip_desc $ip_desc addressSpaces_desc {} \
         busInterfaces_desc {} \
         memoryMaps_desc {}]]
 
@@ -228,6 +230,57 @@ namespace eval ipl {
         return $desc
     }
 
+    proc getnchilds {path id desc} {
+        set childs [lindex $desc 3]
+        set pth [string map {/ " "} $path]
+        set pth0 [lindex $pth 0]
+        set pt [string map {" " /} [lrange $pth 1 end]]
+
+        if {[llength $pth] != 0 } {
+            if {[dict keys $childs $pth0] != ""} {
+                return [getnchilds $pt $id [dict get $childs $pth0]]
+            } else {
+                puts {ERROR: Wrong path, please check the path in the \
+                getnode {path id node {desc {}}} process!}
+                exit 2
+            }
+        } else {
+            if {[dict keys $childs $id] != ""} {
+                set node [dict get $childs $id]
+                return [lindex $node 3]
+            }
+        }
+    }
+# test it!
+    proc rmnchilds {path id desc} {
+        set childs [lindex $desc 3]
+        set pth [string map {/ " "} $path]
+        set pth0 [lindex $pth 0]
+        set pt [string map {" " /} [lrange $pth 1 end]]
+
+        if {[llength $pth] != 0 } {
+            if {[dict keys $childs $pth0] != ""} {
+                dict set childs $pth0 [rmnchilds $pt $id [dict get $childs $pth0]]
+                lset desc 3 $childs
+            } else {
+                puts {ERROR: Wrong path, please check the path in the \
+                rmnode {path id node {desc {}}} process!}
+                exit 2
+            }
+        } else {
+            if {[dict keys $childs $id] != ""} {
+                set node [dict get $childs $id]
+                lset node 3 {}
+                dict set childs $id $node
+                lset desc 3 $childs
+            } else {
+                puts "rmnchilds:"
+                puts "WARNING, no element with id:$id found!"
+            }
+        }
+        return $desc
+    }
+
     proc getatts {path nodeid {desc {"" "" "" ""}}} {
         set node [ipl::getnode $path $nodeid $desc]
         return [lindex $node 1]
@@ -308,6 +361,7 @@ namespace eval ipl {
             -max_esi_version "" \
             -supported_products "" \
             -supported_platforms "" \
+            -href "" \
         {*}$args]
 
         set optl {
@@ -325,8 +379,13 @@ namespace eval ipl {
             max_esi_version
         }
         set ip $opt(-ip)
+        set href $opt(-href)
         set supported_products $opt(-supported_products)
         set supported_platforms $opt(-supported_platforms)
+
+        if {$href != ""} {
+            set ip [ipl::setncont ip_desc/lsccip:general href $href $ip]
+        }
 
         foreach op $optl {
             set val $opt(-$op)
@@ -624,22 +683,6 @@ namespace eval ipl {
         return $ip
     }
 
-    # set memoryMaps_desc {{lsccip:memoryMaps}
-    #     {{0} {xmlns:lsccip="http://www.latticesemi.com/XMLSchema/Radiant/ip"}} {} {}}
-    # set memoryMap_desc {{lsccip:memoryMap} {} {} {
-    #         {lsccip:name} {{lsccip:name} {} {} {}}
-    #         {lsccip:description} {{lsccip:description} {} {} {}}
-    #         {lsccip:addressBlock} {{} {} {} {}}
-    #     }
-    # }
-    # set addressBlock_desc {{lsccip:addressBlock} {} {} {
-    #         {lsccip:name} {{lsccip:name} {} {} {}}
-    #         {lsccip:baseAddress} {{lsccip:baseAddress} {} {0} {}}
-    #         {lsccip:range} {{lsccip:range} {} {4k} {}}
-    #         {lsccip:width} {{lsccip:width} {} {32} {}}
-    #     }
-    # }
-
     proc mmap {args} {
         set debug 0
         array set opt [list -ip "$::ipl::ip" \
@@ -723,6 +766,11 @@ namespace eval ipl {
     }
 
     proc genip {ip} {
+        set file [open "introduction.html" w]
+        foreach line [ipl::docsgen $ip] {
+            puts $file $line
+        }
+        close $file
         set busInterfaces_desc [ipl::getnode {} busInterfaces_desc $ip]
         if {$busInterfaces_desc != ""} {
             set ip [ipl::include -ip $ip -include bus_interface.xml]
@@ -757,7 +805,6 @@ namespace eval ipl {
         if {$ip_desc != ""} {
             set file [open "metadata.xml" w]
             puts [xmlgen $ip_desc]
-            # puts $file {<?xml version="1.0"?>}
             puts $file [xmlgen $ip_desc]
             close $file
         } else {
@@ -1034,34 +1081,88 @@ namespace eval ipl {
         return $ip
     }
 
-    proc import {args} {
-        array set opt [list -flist "" \
-            -path "" \
-        {*}$args]
+    proc docsgen {ip} {
+        set display_name [ipl::getncont ip_desc/lsccip:general lsccip:display_name $ip]
+        set name [ipl::getncont ip_desc/lsccip:general lsccip:name $ip]
+        set version [ipl::getncont ip_desc/lsccip:general lsccip:version $ip]
+        set keywords [ipl::getncont ip_desc/lsccip:general lsccip:keywords $ip]
+        set href [ipl::getncont ip_desc/lsccip:general href $ip]
 
-        set flist $opt(-flist)
-        set path $opt(-path)
-        # to do:
-        #  - check if the folder exists
-        #  - if not create it
-        #  - copy the files in the flist to the path
+        set supported_products [ipl::getnchilds ip_desc/lsccip:general lsccip:supported_products $ip]
+        set devices {}
+        foreach {id product} $supported_products {
+            append devices $id
+        }
+
+        set doc {}
+        lappend doc "<HEAD>"
+        lappend doc "  <TITLE> $name </TITLE>"
+        lappend doc "</HEAD>"
+        lappend doc "<BODY>"
+        lappend doc "  <H1> $display_name </H1>"
+        lappend doc "  <H2> Keywords </H2>"
+        lappend doc "  <P> $keywords </P>"
+        lappend doc "  <H2> Devices Supported </H2>"
+        lappend doc "  <P> $devices </P>"
+        lappend doc "  <H2> Reference </H2>"
+        lappend doc "  <UL>"
+        lappend doc "    <P>"
+        lappend doc "      <LI><A HREF=\"$href\" CLASS=\"URL\">Documentation</A>"
+        lappend doc "  </UL>"
+        lappend doc "  <H2> Version </H2>"
+        lappend doc "  <TABLE cellpadding=\"10\">"
+        lappend doc "    <TR>"
+        lappend doc "      <TD><B> $version </B></TD> <TD> $keywords </TD>"
+        lappend doc "    </TR>"
+        lappend doc "  </TABLE>"
+        lappend doc "</BODY>"
+        return $doc
     }
-    
-    proc importa {args} {
-        array set opt [list -spath "" \
-            -sdepth "" \
+
+    proc addfiles {args} {
+        array set opt [list -ip $ip \
+            -spath "" \
+            -sdepth 0 \
             -regex "" \
-            -path "" \
+            -extl {{*.v}} \
+            -dpath "rtl" \
         {*}$args]
 
+        set ip $opt(-ip)
         set spath $opt(-spath)
         set sdepth $opt(-sdepth)
         set regex $opt(-regex)
-        set path $opt(-path)
-        # to do:
-        #  - check if the folder exists
-        #  - if not create it
-        #  - copy the files in the flist to the path
+        set extl $opt(-extl)
+        set dpath $opt(-dpath)
+
+        if {$extl != ""} {
+            set flist [ipl::get_file_list $spath $extl $sdepth]
+        }
+        if {$regex != ""} {
+            set flist [regexp -all -inline $regex $flist]
+        }
+
+        # if {[file exists $dpath] != 1} {
+        #     file mkdir $dpath
+        # }
+        # file copy {*}$flist $dpath
+  
+        return [ipl::setnode fdeps $dpath $flist $ip]
+    }
+
+    proc get_file_list {path {extension_list {*}} {depth 0}} {
+        set file_list {}
+        foreach ext $extension_list {
+            set file_list [list {*}$file_list \
+            {*}[glob -nocomplain -type f -directory $path $ext]]
+        }
+        if {$depth > 0} {
+            foreach dir [glob -nocomplain -type d -directory $path *] {
+            set file_list [list {*}$file_list \
+                {*}[get_file_list $dir $extension_list [expr {$depth-1}]]]
+            }
+        }
+        return $file_list
     }
 
     proc tw {} {
@@ -1075,6 +1176,7 @@ namespace eval ipl {
         set ip [ipl::general -ip $ip -display_name "AXI_DMA ADI"]
         set ip [ipl::general -ip $ip -supported_products {*}]
         set ip [ipl::general -ip $ip -supported_platforms {esi radiant}]
+        set ip [ipl::general -ip $ip -href "https://wiki.analog.com/resources/fpga/docs/axi_dmac"]
         set ip [ipl::general  -vendor "latticesemi.com" \
             -library "ip" \
             -version "1.0" \
@@ -1086,10 +1188,10 @@ namespace eval ipl {
 
         set ip [ipl::mmap -ip $ip \
             -name "axi_dmac_mem_map" \
-            -description "axi_dmac_mem_map"]
-            # -baseAddress 0 \
-            # -range 4096 \
-            # -width 32]
+            -description "axi_dmac_mem_map" \
+            -baseAddress 0 \
+            -range 4096 \
+            -width 32]
         set ip [ipl::address -ip $ip \
             -name "m_dest_axi_aspace" \
             -range 0x100000000 \
