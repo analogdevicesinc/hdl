@@ -21,6 +21,9 @@ set cnv_ref_clk 100
 # NOTE: this is a default value, software may or may not change this
 set adc_sampling_rate 1000000
 
+# specify the MAX17687 and LT8608 SYNC signal frequency (400KHz)
+set max17687_sync_freq 400000
+
 #create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 ad463x_spi
 
 create_bd_port -dir O ad463x_spi_sclk
@@ -33,6 +36,8 @@ create_bd_port -dir I ad463x_echo_sclk
 create_bd_port -dir I ad463x_busy
 create_bd_port -dir O ad463x_cnv
 create_bd_port -dir I ad463x_ext_clk
+
+create_bd_port -dir O max17687_sync_clk
 
 ## To support the 2MSPS (SCLK == 80 MHz), set the spi clock to 160 MHz
 
@@ -70,6 +75,9 @@ ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_axi_regmap CONFIG.CFG_INFO_3
 ## CNV generator; the actual sample rate will be PULSE_PERIOD * (1/cnv_ref_clk)
 set sampling_cycle [expr int(ceil(double($cnv_ref_clk * 1000000) / $adc_sampling_rate))]
 
+## setup the pulse period for the MAX17687 and LT8608 SYNC signal
+set max17687_cycle [expr int(ceil(double($cnv_ref_clk * 1000000) / $max17687_sync_freq))] 
+
 ad_ip_instance axi_pwm_gen cnv_generator
 ad_ip_parameter cnv_generator CONFIG.N_PWMS 2
 ad_ip_parameter cnv_generator CONFIG.PULSE_0_PERIOD $sampling_cycle
@@ -77,6 +85,11 @@ ad_ip_parameter cnv_generator CONFIG.PULSE_0_WIDTH 1
 ad_ip_parameter cnv_generator CONFIG.PULSE_1_PERIOD $sampling_cycle
 ad_ip_parameter cnv_generator CONFIG.PULSE_1_WIDTH 1
 ad_ip_parameter cnv_generator CONFIG.PULSE_1_OFFSET 1
+
+ad_ip_instance axi_pwm_gen sync_generator
+ad_ip_parameter sync_generator CONFIG.N_PWMS 1
+ad_ip_parameter sync_generator CONFIG.PULSE_0_PERIOD $max17687_cycle
+ad_ip_parameter sync_generator CONFIG.PULSE_0_WIDTH [expr int(ceil(double($max17687_cycle) / 2))]
 
 ad_ip_instance spi_axis_reorder data_reorder
 ad_ip_parameter data_reorder CONFIG.NUM_OF_LANES $NUM_OF_SDI
@@ -171,15 +184,18 @@ if {$CAPTURE_ZONE == 1} {
 
 }
 ad_connect ad463x_cnv cnv_generator/pwm_1
+ad_connect max17687_sync_clk sync_generator/pwm_0
 
 # clocks
 
 ad_connect $sys_cpu_clk $hier_spi_engine/clk
 ad_connect $sys_cpu_clk cnv_generator/s_axi_aclk
+ad_connect $sys_cpu_clk sync_generator/s_axi_aclk
 ad_connect spi_clk $hier_spi_engine/spi_clk
 ad_connect spi_clk data_reorder/axis_aclk
 ad_connect spi_clk axi_ad463x_dma/s_axis_aclk
 ad_connect ad463x_ext_clk cnv_generator/ext_clk
+ad_connect ad463x_ext_clk sync_generator/ext_clk
 
 # resets
 
@@ -201,6 +217,7 @@ ad_connect  axi_ad463x_dma/s_axis data_reorder/m_axis
 
 ad_cpu_interconnect 0x44a00000 $hier_spi_engine/${hier_spi_engine}_axi_regmap
 ad_cpu_interconnect 0x44b00000 cnv_generator
+ad_cpu_interconnect 0x44c00000 sync_generator
 ad_cpu_interconnect 0x44a30000 axi_ad463x_dma
 ad_cpu_interconnect 0x44a70000 spi_clkgen
 

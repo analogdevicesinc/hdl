@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2021-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -95,7 +95,13 @@ module system_top #(
   input           ad463x_ext_clk,
   output          ad463x_cnv,
   input           ad463x_busy,
-  inout           ad463x_resetn
+  inout           ad463x_resetn,
+
+  inout   [ 1:0]  adaq42xx_pgia_mux,
+
+  inout           max17687_rst,
+  output          max17687_en,
+  output          max17687_sync_clk
 );
 
   // internal signals
@@ -114,7 +120,8 @@ module system_top #(
 
   // instantiations
 
-  assign gpio_i[63:33] = 31'b0;
+  assign gpio_i[63:36] = 27'b0;
+  assign max17687_en = 1'b1;
 
   ad_data_clk #(
     .SINGLE_ENDED (1)
@@ -135,12 +142,14 @@ module system_top #(
     .clk (ad463x_echo_sclk_s));
 
   ad_iobuf #(
-    .DATA_WIDTH(1)
+    .DATA_WIDTH(4)
   ) i_ad463x_gpio_iobuf (
-    .dio_t(gpio_t[32]),
-    .dio_i(gpio_o[32]),
-    .dio_o(gpio_i[32]),
-    .dio_p(ad463x_resetn));
+    .dio_t(gpio_t[35:32]),
+    .dio_i(gpio_o[35:32]),
+    .dio_o(gpio_i[35:32]),
+    .dio_p ({max17687_rst,      // 35
+             adaq42xx_pgia_mux, // 34:33
+             ad463x_resetn}));  // 32
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -235,6 +244,7 @@ module system_top #(
     .ad463x_busy (ad463x_busy),
     .ad463x_cnv (ad463x_cnv),
     .ad463x_ext_clk (ext_clk_s),
+    .max17687_sync_clk (max17687_sync_clk),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));
 
