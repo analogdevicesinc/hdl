@@ -636,6 +636,28 @@ namespace eval ipl {
         return $ip
     }
 
+    proc generator {args} {
+        array set opt [list -ip "$::ipl::ip" \
+            -name "" \
+            -generator "" \
+        {*}$args]
+
+        set ip $opt(-ip)
+        set name $opt(-name)
+        set generator $opt(-generator)
+
+        if {$name != ""} {
+            if {[ipl::getnname ip_desc lsccip:componentGenerators $ip] == ""} {
+                set ip [ipl::setnname ip_desc lsccip:componentGenerators lsccip:componentGenerators $ip]
+            }
+            set cpgen $::ipl::componentGenerator_desc
+            set cpgen [ipl::setncont {} lsccip:name $name $cpgen]
+            set cpgen [ipl::setncont {} lsccip:generatorExe $generator $cpgen]
+            set ip [ipl::setnode ip_desc/lsccip:componentGenerators $name $cpgen $ip]
+        }
+        return $ip
+    }
+
     proc address {args} {
         set debug 0
         array set opt [list -ip "$::ipl::ip" \
@@ -1190,6 +1212,8 @@ namespace eval ipl {
             -max_radiant_version "2023.2" \
             -min_esi_version "2022.1" -ip $ip]
 
+        set ip [ipl::generator -name blabla -generator eval/blabla.py -ip $ip]
+
         set ip [ipl::mmap -ip $ip \
             -name "axi_dmac_mem_map" \
             -description "axi_dmac_mem_map" \
@@ -1249,8 +1273,9 @@ namespace eval ipl {
         #     -regex "" \
         #     -extl {{*.v}} \
         #     -dpath "rtl" \
-        
         set ip [ipl::addfiles -spath ../axi_dmac -dpath rtl -extl {*.v *.vh} -ip $ip]
+        set ip [ipl::addfiles -spath ./ -dpath eval -extl {blabla.py} -ip $ip]
+        # set ip [ipl::addfiles -spath ./ -dpath plugin -extl {blabla.py} -ip $ip]
         ipl::genip $ip
 
         # return $ip
