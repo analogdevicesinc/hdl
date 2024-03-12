@@ -93,7 +93,7 @@ namespace eval ipl {
         }
     }
 
-    set ip [list {} {} {} [list fdeps {} \
+    set ip [list {} {} {} [list fdeps {{fdeps} {} {} {}} \
         ip_desc $ip_desc addressSpaces_desc {} \
         busInterfaces_desc {} \
         memoryMaps_desc {}]]
@@ -251,7 +251,7 @@ namespace eval ipl {
             }
         }
     }
-# test it!
+
     proc rmnchilds {path id desc} {
         set childs [lindex $desc 3]
         set pth [string map {/ " "} $path]
@@ -408,7 +408,6 @@ namespace eval ipl {
         return $ip
     }
 
-    set settingid 0
     proc settpar {args} {
         set debug 0
         array set opt [list -ip "$::ipl::ip" \
@@ -493,14 +492,11 @@ namespace eval ipl {
                 set ip [ipl::setnode ip_desc/lsccip:settings $id $node $ip]
             }
         } else {
-            set node [list lsccip:setting $atts {} {}]
-            set ip [ipl::setnode ip_desc/lsccip:settings $::ipl::settingid $node $ip]
-            incr ipl::settingid
+            puts "WARNING, you must define '-id'"
         }
         return $ip
     }
 
-    set portid 0
     proc setport {args} {
         set debug 0
         array set opt [list -ip "$::ipl::ip" \
@@ -571,9 +567,7 @@ namespace eval ipl {
                 set ip [ipl::setnode ip_desc/lsccip:ports $id $node $ip]
             }
         } else {
-            set node [list lsccip:port $atts {} {}]
-            set ip [ipl::setnode ip_desc/lsccip:ports $::ipl::portid $node $ip]
-            incr ipl::portid
+            puts "WARNING, you must define '-name'"
         }
         return $ip
     }
@@ -765,16 +759,33 @@ namespace eval ipl {
         return $ip
     }
 
-    proc genip {ip} {
-        set file [open "introduction.html" w]
+    proc genip {ip {dpath {./}}} {
+        set ip_name [ipl::getncont ip_desc/lsccip:general lsccip:name $ip]
+        if {[file exist $dpath] != 1} {
+            file mkdir $dpath
+        }
+        if {[file exist $dpath/$ip_name/doc] != 1} {
+            file mkdir $dpath/$ip_name/doc
+        }
+        set file [open "$dpath/$ip_name/doc/introduction.html" w]
         foreach line [ipl::docsgen $ip] {
             puts $file $line
         }
         close $file
+        set fdeps [ipl::getnchilds {} fdeps $ip]
+        foreach {folder flist} $fdeps {
+            if {[file exists $dpath/$ip_name/$folder] != 1} {
+                file mkdir $dpath/$ip_name/$folder
+            }
+            if {$flist != ""} {
+                file copy -force {*}$flist $dpath/$ip_name/$folder
+            }
+        }
+
         set busInterfaces_desc [ipl::getnode {} busInterfaces_desc $ip]
         if {$busInterfaces_desc != ""} {
             set ip [ipl::include -ip $ip -include bus_interface.xml]
-            set file [open "bus_interface.xml" w]
+            set file [open "$dpath/$ip_name/bus_interface.xml" w]
             puts [xmlgen $busInterfaces_desc]
             puts $file [xmlgen $busInterfaces_desc]
             close $file
@@ -784,7 +795,7 @@ namespace eval ipl {
         set addressSpaces_desc [ipl::getnode {} addressSpaces_desc $ip]
         if {$addressSpaces_desc != ""} {
             set ip [ipl::include -ip $ip -include address_space.xml]
-            set file [open "address_space.xml" w]
+            set file [open "$dpath/$ip_name/address_space.xml" w]
             puts [xmlgen $addressSpaces_desc]
             puts $file [xmlgen $addressSpaces_desc]
             close $file
@@ -794,7 +805,7 @@ namespace eval ipl {
         set memoryMaps_desc [ipl::getnode {} memoryMaps_desc $ip]
         if {$memoryMaps_desc != ""} {
             set ip [ipl::include -ip $ip -include memory_map.xml]
-            set file [open "memory_map.xml" w]
+            set file [open "$dpath/$ip_name/memory_map.xml" w]
             puts [xmlgen $memoryMaps_desc]
             puts $file [xmlgen $memoryMaps_desc]
             close $file
@@ -803,7 +814,7 @@ namespace eval ipl {
         }
         set ip_desc [ipl::getnode {} ip_desc $ip]
         if {$ip_desc != ""} {
-            set file [open "metadata.xml" w]
+            set file [open "$dpath/$ip_name/metadata.xml" w]
             puts [xmlgen $ip_desc]
             puts $file [xmlgen $ip_desc]
             close $file
@@ -1006,8 +1017,6 @@ namespace eval ipl {
         return [ipl::addif {*}$argl -portmap $portmap]
     }
 
-# create an ignore ports or ignore interface option
-# automaticalli set dandling or stick low based on if it is input or output
     proc addports {args} {
         array set opt [list -ip "$::ipl::ip" \
             -mod_data "" \
@@ -1118,13 +1127,13 @@ namespace eval ipl {
         lappend doc "</BODY>"
         return $doc
     }
-
+# check it
     proc addfiles {args} {
-        array set opt [list -ip $ip \
+        array set opt [list -ip "$::ipl::ip" \
             -spath "" \
             -sdepth 0 \
             -regex "" \
-            -extl {{*.v}} \
+            -extl {*.v} \
             -dpath "rtl" \
         {*}$args]
 
@@ -1142,15 +1151,10 @@ namespace eval ipl {
             set flist [regexp -all -inline $regex $flist]
         }
 
-        # if {[file exists $dpath] != 1} {
-        #     file mkdir $dpath
-        # }
-        # file copy {*}$flist $dpath
-  
         return [ipl::setnode fdeps $dpath $flist $ip]
     }
 
-    proc get_file_list {path {extension_list {*}} {depth 0}} {
+    proc get_file_list {path {extension_list {*.v}} {depth 0}} {
         set file_list {}
         foreach ext $extension_list {
             set file_list [list {*}$file_list \
@@ -1238,6 +1242,15 @@ namespace eval ipl {
             -bus_type $bustype \
             -abstraction_ref $abstref \
             -master_slave master]
+
+        # array set opt [list -ip $ip \
+        #     -spath "" \
+        #     -sdepth 0 \
+        #     -regex "" \
+        #     -extl {{*.v}} \
+        #     -dpath "rtl" \
+        
+        set ip [ipl::addfiles -spath ../axi_dmac -dpath rtl -extl {*.v *.vh} -ip $ip]
         ipl::genip $ip
 
         # return $ip
