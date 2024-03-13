@@ -92,7 +92,13 @@ module system_top (
   output          ad40xx_spi_cs,
 
   inout           ad40xx_amp_pd,
-  inout           ad7944_turbo);
+  inout           ad7944_turbo,
+
+  output          ref_clk,
+  output          pwm_0,
+  output          pwm_1,
+  output          pwm_2
+  );
 
   // internal signals
 
@@ -209,6 +215,10 @@ module system_top (
     .pulsar_adc_spi_sdo(ad40xx_spi_sdo),
     .pulsar_adc_spi_sdo_t(),
     .pulsar_adc_spi_three_wire(),
+    .ref_clk (ref_clk),
+    .pwm_0 (pwm_0),
+    .pwm_1 (pwm_1),
+    .pwm_2 (pwm_2),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));
 

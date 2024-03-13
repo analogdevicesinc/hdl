@@ -9,6 +9,13 @@ set_property -dict {PACKAGE_PIN M20 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports ad4
 set_property -dict {PACKAGE_PIN P22 IOSTANDARD LVCMOS25} [get_ports ad40xx_amp_pd]                 ; ## G10  FMC_LPC_LA03_N
 set_property -dict {PACKAGE_PIN N20 IOSTANDARD LVCMOS25} [get_ports ad7944_turbo]                  ; ## D09  FMC_LA01_CC_N
 
+# JB Pmod - Bank 13
+
+set_property -dict {PACKAGE_PIN W12  IOSTANDARD LVCMOS33} [get_ports ref_clk]                      ;  # "JB1"
+set_property -dict {PACKAGE_PIN W11  IOSTANDARD LVCMOS33} [get_ports pwm_0]                        ;  # "JB2"
+set_property -dict {PACKAGE_PIN V10  IOSTANDARD LVCMOS33} [get_ports pwm_1]                        ;  # "JB3"
+set_property -dict {PACKAGE_PIN W8   IOSTANDARD LVCMOS33} [get_ports pwm_2]                        ;  # "JB4"
+
 
 
 # NOTE: clk_fpga_0 is the first PL fabric clock, also called $sys_cpu_clk
@@ -23,6 +30,6 @@ create_generated_clock -name spi_clk -source [get_pins -filter name=~*CLKIN1 -of
 set_multicycle_path -setup 8 -to [get_cells -hierarchical -filter {NAME=~*/data_sdo_shift_reg[*]}] -from [get_clocks spi_clk]
 set_multicycle_path -hold  7 -to [get_cells -hierarchical -filter {NAME=~*/data_sdo_shift_reg[*]}] -from [get_clocks spi_clk]
 
-set_multicycle_path -setup 8 -to [get_cells -hierarchical -filter {NAME=~*/execution/inst/left_aligned_reg*}] -from [get_clocks spi_clk]
-set_multicycle_path -hold  7 -to [get_cells -hierarchical -filter {NAME=~*/execution/inst/left_aligned_reg*}] -from [get_clocks spi_clk]
+set_multicycle_path -setup 8 -to [get_cells -hierarchical -filter {NAME=~*/spi_pulsar_adc_execution/inst/left_aligned_reg*}] -from [get_clocks spi_clk]
+set_multicycle_path -hold  7 -to [get_cells -hierarchical -filter {NAME=~*/spi_pulsar_adc_execution/inst/left_aligned_reg*}] -from [get_clocks spi_clk]
 

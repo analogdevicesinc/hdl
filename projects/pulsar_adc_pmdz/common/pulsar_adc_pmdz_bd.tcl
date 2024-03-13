@@ -3,6 +3,11 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
+create_bd_port -dir O ref_clk
+create_bd_port -dir O pwm_0
+create_bd_port -dir O pwm_1
+create_bd_port -dir O pwm_2
+
 create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 pulsar_adc_spi
 source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
 
@@ -24,8 +29,13 @@ ad_ip_parameter spi_clkgen CONFIG.VCO_DIV 1
 ad_ip_parameter spi_clkgen CONFIG.VCO_MUL 8
 
 ad_ip_instance axi_pwm_gen pulsar_adc_trigger_gen
+ad_ip_parameter pulsar_adc_trigger_gen CONFIG.N_PWMS 3
 ad_ip_parameter pulsar_adc_trigger_gen CONFIG.PULSE_0_PERIOD 89
 ad_ip_parameter pulsar_adc_trigger_gen CONFIG.PULSE_0_WIDTH 1
+ad_ip_parameter pulsar_adc_trigger_gen CONFIG.PULSE_1_PERIOD 89
+ad_ip_parameter pulsar_adc_trigger_gen CONFIG.PULSE_1_WIDTH 1
+ad_ip_parameter pulsar_adc_trigger_gen CONFIG.PULSE_2_PERIOD 89
+ad_ip_parameter pulsar_adc_trigger_gen CONFIG.PULSE_2_WIDTH 1
 
 # dma to receive data stream
 ad_ip_instance axi_dmac axi_pulsar_adc_dma
@@ -55,6 +65,11 @@ ad_connect spi_clk $hier_spi_engine/spi_clk
 ad_connect spi_clk axi_pulsar_adc_dma/s_axis_aclk
 ad_connect sys_cpu_resetn $hier_spi_engine/resetn
 ad_connect sys_cpu_resetn axi_pulsar_adc_dma/m_dest_axi_aresetn
+
+ad_connect ref_clk      spi_clkgen/clk_0
+ad_connect pwm_0        pulsar_adc_trigger_gen/pwm_0
+ad_connect pwm_1        pulsar_adc_trigger_gen/pwm_1
+ad_connect pwm_2        pulsar_adc_trigger_gen/pwm_2
 
 ad_cpu_interconnect 0x44a00000 $hier_spi_engine/${hier_spi_engine}_axi_regmap
 ad_cpu_interconnect 0x44a30000 axi_pulsar_adc_dma
