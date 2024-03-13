@@ -34,7 +34,6 @@ namespace eval ipl {
             {lsccip:componentGenerators} {{} {} {} {}}
         }
     }
-    #  <lsccip:generatorExe>testbench/cache_update.py</lsccip:generatorExe>
     set componentGenerator_desc {{lsccip:componentGenerator} {} {} {
             {lsccip:name} {{lsccip:name} {} {} {}}
             {lsccip:generatorExe} {{lsccip:generatorExe} {} {} {}}
@@ -93,7 +92,15 @@ namespace eval ipl {
         }
     }
 
-    set ip [list {} {} {} [list fdeps {{fdeps} {} {} {}} \
+    set ip [list {} {} {} [list fdeps {{fdeps} {} {} {
+                {eval} {}
+                {plugin} {}
+                {doc} {}
+                {rtl} {}
+                {testbench} {}
+                {driver} {}
+                {ldc} {}
+            }} \
         ip_desc $ip_desc addressSpaces_desc {} \
         busInterfaces_desc {} \
         memoryMaps_desc {}]]
@@ -751,7 +758,6 @@ namespace eval ipl {
         return $ip
     }
 
-# to do: call it in genip and automatically include based on the defined xml descriptors in the IP structure
     set inclid 0
     proc include {args} {
         set debug 0
@@ -796,10 +802,10 @@ namespace eval ipl {
         close $file
         set fdeps [ipl::getnchilds {} fdeps $ip]
         foreach {folder flist} $fdeps {
-            if {[file exists $dpath/$ip_name/$folder] != 1} {
-                file mkdir $dpath/$ip_name/$folder
-            }
             if {$flist != ""} {
+                if {[file exists $dpath/$ip_name/$folder] != 1} {
+                    file mkdir $dpath/$ip_name/$folder
+                }
                 file copy -force {*}$flist $dpath/$ip_name/$folder
             }
         }
@@ -1149,7 +1155,7 @@ namespace eval ipl {
         lappend doc "</BODY>"
         return $doc
     }
-# check it
+
     proc addfiles {args} {
         array set opt [list -ip "$::ipl::ip" \
             -spath "" \
@@ -1267,12 +1273,12 @@ namespace eval ipl {
             -abstraction_ref $abstref \
             -master_slave master]
 
-        # array set opt [list -ip $ip \
-        #     -spath "" \
-        #     -sdepth 0 \
-        #     -regex "" \
-        #     -extl {{*.v}} \
-        #     -dpath "rtl" \
+        # -ip
+        # -spath
+        # -sdepth
+        # -regex
+        # -extl {*.v}
+        # -dpath "rtl"
         set ip [ipl::addfiles -spath ../axi_dmac -dpath rtl -extl {*.v *.vh} -ip $ip]
         set ip [ipl::addfiles -spath ./ -dpath eval -extl {blabla.py} -ip $ip]
         # set ip [ipl::addfiles -spath ./ -dpath plugin -extl {blabla.py} -ip $ip]
