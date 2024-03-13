@@ -37,6 +37,13 @@ integrates all critical power supply and reference bypass capacitors, reducing
 the footprint and system component count, and lessening sensitivity to board
 layout.
 
+The ADAQ4224 is a μModule® precision data acquisition (DAQ) signal chain 
+solution that reduces the development cycle of a precision measurement system 
+by transferring the signal chain design challenge of component selection, 
+optimization, and layout from the designer to the device. With a guaranteed 
+maximum ±TBD ppm INL and no missing codes at 24 bits, the ADAQ4224 achieves
+unparalleled precision from −40°C to +85°C.
+
 The HDL reference design for the :adi:`EVAL-AD4630_FMCZ` and
 :adi:`EVAL-AD4030_FMCZ` provides all the interfaces that are necessary to
 interact with the device using a Xilinx FPGA development board. The design has
@@ -61,6 +68,8 @@ Supported boards
 -  :adi:`EVAL-AD4030-24FMCZ <EVAL-AD4030-24FMCZ>`
 -  :adi:`EVAL-AD4630-16FMCZ <EVAL-AD4630-16FMCZ>`
 -  :adi:`EVAL-AD4630-24FMCZ <EVAL-AD4630-24FMCZ>`
+-  EVAL-ADAQ4224-FMCZ <EVAL-ADAQ4224>
+-  EVAL-ISO-4224-FMCZ <EVAL-ISO-ADAQ4224>
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -68,6 +77,7 @@ Supported devices
 -  :adi:`AD4030-24`
 -  :adi:`AD4630-16`
 -  :adi:`AD4630-24`
+-  ADAQ4224
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -121,6 +131,11 @@ where the two signals will have different frequencies.
    :align: center
    :alt: AD4630_FMC SPI mode - transfer zone 2 block diagram
 
+.. image:: adaq42xx_hdl_cm0_cz2_1.svg
+   :width: 800
+   :align: center
+   :alt: ADAQ4224_FMC SPI mode - transfer zone 2 block diagram
+
 Echo clock mode - transfer zone 2
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -134,6 +149,11 @@ mode.
    :width: 800
    :align: center
    :alt: AD4630_FMC Echo clock mode - transfer zone 2 block diagram
+
+.. image:: adaq42xx_hdl_cm1_cz2_1.svg
+   :width: 800
+   :align: center
+   :alt: ADAQ4224_FMC Echo clock mode - transfer zone 2 block diagram
 
 The design supports the following interface and clock modes both in SDR and DDR:
 
@@ -176,7 +196,13 @@ spi_ad463x_axi_regmap     0x44A0_0000
 axi_ad463x_dma            0x44A3_0000
 spi_clkgen                0x44A7_0000
 cnv_generator             0x44B0_0000
+sync_generator*           0x44C0_0000
 ========================  ===========
+
+.. admonition:: Legend
+   :class: note
+
+   -   ``*`` instantiated, but only used for ADAQ4224 with isolated power supply 
 
 I2C connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -195,11 +221,21 @@ I2C connections
      - axi_iic_fmc
      - 0x4162_0000
      - ---
-   * - PL
-     - iic_main
-     - axi_iic_main
-     - 0x4160_0000
-     - ---
+   * - 
+     - 
+     - 
+     - 0x50
+     - eeprom
+   * - 
+     - 
+     - 
+     - 0x5F
+     - temperature sensor  *
+
+.. admonition:: Legend
+   :class: note
+
+   -   ``*`` Temperature Sensor HW Monitor is present only in ADAQ4224
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -240,7 +276,25 @@ The Software GPIO number is calculated as follows:
      - INOUT
      - 32
      - 86
-     
+   * - adaq42xx_pgia_mux[0]*
+     - INOUT
+     - 33
+     - 87
+   * - adaq42xx_pgia_mux[1]*
+     - INOUT
+     - 34
+     - 88
+   * - max17687_rst**
+     - INOUT
+     - 35
+     - 89
+
+.. admonition:: Legend
+   :class: note
+
+   -   ``*`` instantiated, but used for ADAQ4224 only
+   -   ``**`` instantiated, but used for ADAQ4224 with isolated power supply
+
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
