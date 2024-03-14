@@ -92,6 +92,77 @@ namespace eval ipl {
         }
     }
 
+    set abstractionDefinition_desc {
+        {ipxact:abstractionDefinition}
+        {xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:ipxact="http://www.accellera.org/XMLSchema/IPXACT/1685-2014"
+            xsi:schemaLocation="http://www.accellera.org/XMLSchema/IPXACT/1685-2014 http://www.accellera.org/XMLSchema/IPXACT/1685-2014/index.xsd"}
+        {} {{ipxact:vendor} {{ipxact:vendor} {} {} {}}
+            {ipxact:library} {{ipxact:library} {} {} {}}
+            {ipxact:name} {{ipxact:name} {} {} {}}
+            {ipxact:version} {{ipxact:version} {} {} {}}
+            {ipxact:busType} {{ipxact:busType} {} {} {}}
+            {ipxact:ports} {{ipxact:ports} {} {} {}}
+            {ipxact:description} {{ipxact:description} {} {} {}}
+        }
+    }
+
+    set busDefinition_desc {
+        {ipxact:busDefinition} 
+        {xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:ipxact="http://www.accellera.org/XMLSchema/IPXACT/1685-2014"
+            xsi:schemaLocation="http://www.accellera.org/XMLSchema/IPXACT/1685-2014 http://www.accellera.org/XMLSchema/IPXACT/1685-2014/index.xsd"}
+        {} {{ipxact:vendor} {{ipxact:vendor} {} {} {}}
+            {ipxact:library} {{ipxact:library} {} {} {}}
+            {ipxact:name} {{ipxact:name} {} {} {}}
+            {ipxact:version} {{ipxact:version} {} {} {}}
+            {ipxact:directConnection} {{ipxact:directConnection} {} {} {}}
+            {ipxact:isAddressable} {{ipxact:isAddressable} {} {} {}}
+            {ipxact:description} {{ipxact:description} {} {} {}}
+        }
+    }
+
+    set interface { abstractionDefinition_desc {}
+        busDefinition_desc {}
+    }
+
+# <ipxact:requiresDriver driverType="singleShot">true</ipxact:requiresDriver>
+# <ipxact:requiresDriver driverType="clock">true</ipxact:requiresDriver>
+    set port_desc {
+        {ipxact:port} {} {} {
+            {ipxact:logicalName} {{ipxact:logicalName} {} {} {}}
+            {ipxact:description} {{ipxact:description} {} {} {}}
+            {ipxact:wire} {{ipxact:wire} {} {} {
+                    {ipxact:qualifier} {{ipxact:qualifier} {} {} {
+                            {ipxact:isClock} {{ipxact:isClock} {} {} {}}
+                            {ipxact:isReset} {{ipxact:isReset} {} {} {}}
+                            {ipxact:isAddress} {{ipxact:isAddress} {} {} {}}
+                            {ipxact:isData} {{ipxact:isData} {} {} {}}
+                        }
+                    }
+                    {ipxact:onMaster} {{ipxact:onMaster} {} {} {
+                            {ipxact:presence} {{ipxact:presence} {} {} {}}
+                            {ipxact:width} {{} {} {} {}}
+                            {ipxact:direction} {{ipxact:direction} {} {} {}}
+                        }
+                    }
+                    {ipxact:onSlave} {{ipxact:onSlave} {} {} {
+                            {ipxact:presence} {{ipxact:presence} {} {} {}}
+                            {ipxact:width} {{} {} {} {}}
+                            {ipxact:direction} {{ipxact:direction} {} {} {}}
+                        }
+                    }
+                    {ipxact:requiresDriver} {{} {} {} {}}
+                }
+            }
+        }
+    }
+
+    proc set_up_if {args} {
+    }
+    proc set_up_if_ports {args} {
+    }
+
     set ip [list {} {} {} [list fdeps {{fdeps} {} {} {
                 {eval} {}
                 {plugin} {}
@@ -1272,6 +1343,71 @@ namespace eval ipl {
             -bus_type $bustype \
             -abstraction_ref $abstref \
             -master_slave master]
+        set bustype {library="interface" name="fifo_wr" vendor="analog.com" version="1.0"}
+        set abstref {library="interface" name="fifo_wr_rtl" vendor="analog.com" version="1.0"}
+        set ip [ipl::addif -ip $ip \
+            -name fifo_wr \
+            -display_name fifo_wr \
+            -description fifo_wr \
+            -bus_type $bustype \
+            -abstraction_ref $abstref \
+            -master_slave slave \
+            -portmap { \
+                {"fifo_wr_en" "EN"} \
+                {"fifo_wr_din" "DATA"} \
+                {"fifo_wr_overflow" "OVERFLOW"} \
+                {"fifo_wr_sync" "SYNC"} \
+                {"fifo_wr_xfer_req" "XFER_REQ"} \
+            }]
+        set ip [ipl::addif -ip $ip \
+            -name fifo_wr_m \
+            -display_name fifo_wr_m \
+            -description fifo_wr_m \
+            -bus_type $bustype \
+            -abstraction_ref $abstref \
+            -master_slave master \
+            -portmap { \
+                {"fifo_wr_m_en" "EN"} \
+                {"fifo_wr_m_dout" "DATA"} \
+                {"fifo_wr_m_overflow" "OVERFLOW"} \
+                {"fifo_wr_m_sync" "SYNC"} \
+                {"fifo_wr_m_xfer_req" "XFER_REQ"} \
+            }]
+        set bustype {library="AMBA4" name="AXI4Stream" vendor="amba.com" version="r0p0"}
+        set abstref {library="AMBA4" name="AXI4Stream_rtl" vendor="amba.com" version="r0p0"}
+        set ip [ipl::addif -ip $ip \
+            -name s_axis \
+            -display_name s_axis \
+            -description s_axis \
+            -bus_type $bustype \
+            -abstraction_ref $abstref \
+            -master_slave slave \
+            -portmap [list {"s_axis_ready" "TREADY"} \
+                            {"s_axis_valid" "TVALID"} \
+                            {"s_axis_data" "TDATA"} \
+                            {"s_axis_strb" "TSTRB"} \
+                            {"s_axis_keep" "TKEEP"} \
+                            {"s_axis_user" "TUSER"} \
+                            {"s_axis_id" "TID"} \
+                            {"s_axis_dest" "TDEST"} \
+                            {"s_axis_last" "TLAST"}]]
+
+        set ip [ipl::addif -ip $ip \
+        -name m_axis \
+        -display_name m_axis \
+        -description m_axis \
+        -bus_type $bustype \
+        -abstraction_ref $abstref \
+        -master_slave master \
+        -portmap [list {"m_axis_ready" "TREADY"} \
+                        {"m_axis_valid" "TVALID"} \
+                        {"m_axis_data" "TDATA"} \
+                        {"m_axis_strb" "TSTRB"} \
+                        {"m_axis_keep" "TKEEP"} \
+                        {"m_axis_user" "TUSER"} \
+                        {"m_axis_id" "TID"} \
+                        {"m_axis_dest" "TDEST"} \
+                        {"m_axis_last" "TLAST"}]]
 
         # -ip
         # -spath
