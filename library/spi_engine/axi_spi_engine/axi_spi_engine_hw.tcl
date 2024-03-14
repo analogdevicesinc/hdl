@@ -109,12 +109,6 @@ proc p_elaboration {} {
 
   }
 
-  ad_interface signal  pulse_gen_period  output  32
-  ad_interface signal  pulse_gen_width   output  32
-  ad_interface signal  pulse_gen_load    output   1
-
-  lappend disabled_intfs if_pulse_gen_period if_pulse_gen_width if_pulse_gen_load
-
   foreach interface $disabled_intfs {
     set_interface_property $interface ENABLED false
   }

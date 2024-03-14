@@ -10,6 +10,7 @@ source ../../scripts/adi_ip_intel.tcl
 ad_ip_create spi_engine_offload {SPI Engine Offload} p_elaboration
 ad_ip_files spi_engine_offload [list\
   $ad_hdl_dir/library/util_cdc/sync_bits.v \
+  $ad_hdl_dir/library/util_cdc/sync_event.v \
   spi_engine_offload.v]
 
 # parameters
