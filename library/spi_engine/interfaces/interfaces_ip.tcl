@@ -22,11 +22,11 @@ adi_if_define "spi_engine_ctrl"
 adi_if_ports input 1 cmd_ready
 adi_if_ports output 1 cmd_valid
 adi_if_ports output 16 cmd_data
-adi_if_ports input 1 sdo_data_ready
-adi_if_ports output 1 sdo_data_valid
+adi_if_ports input 1 sdo_ready
+adi_if_ports output 1 sdo_valid
 adi_if_ports output -1 sdo_data
-adi_if_ports output 1 sdi_data_ready
-adi_if_ports input 1 sdi_data_valid
+adi_if_ports output 1 sdi_ready
+adi_if_ports input 1 sdi_valid
 adi_if_ports input -1 sdi_data
 adi_if_ports output 1 sync_ready
 adi_if_ports input 1 sync_valid

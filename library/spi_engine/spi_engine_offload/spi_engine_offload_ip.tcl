@@ -66,9 +66,9 @@ adi_add_bus "offload_sdi" "master" \
 	"xilinx.com:interface:axis_rtl:1.0" \
 	"xilinx.com:interface:axis:1.0" \
 	{ \
-		{"offload_sdi_valid" "tvalid"} \
-		{"offload_sdi_ready" "tready"} \
-		{"offload_sdi_data" "tdata"} \
+		{"offload_sdi_valid" "TVALID"} \
+		{"offload_sdi_ready" "TREADY"} \
+		{"offload_sdi_data" "TDATA"} \
 	}
 
 adi_add_bus_clock "spi_clk" "spi_engine_ctrl:offload_sdi" "spi_resetn"
