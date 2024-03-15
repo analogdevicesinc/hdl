@@ -94,9 +94,9 @@ namespace eval ipl {
 
     set abstractionDefinition_desc {
         {ipxact:abstractionDefinition}
-        {xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        {{0} {xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xmlns:ipxact="http://www.accellera.org/XMLSchema/IPXACT/1685-2014"
-            xsi:schemaLocation="http://www.accellera.org/XMLSchema/IPXACT/1685-2014 http://www.accellera.org/XMLSchema/IPXACT/1685-2014/index.xsd"}
+            xsi:schemaLocation="http://www.accellera.org/XMLSchema/IPXACT/1685-2014 http://www.accellera.org/XMLSchema/IPXACT/1685-2014/index.xsd"}}
         {} {{ipxact:vendor} {{ipxact:vendor} {} {} {}}
             {ipxact:library} {{ipxact:library} {} {} {}}
             {ipxact:name} {{ipxact:name} {} {} {}}
@@ -109,9 +109,9 @@ namespace eval ipl {
 
     set busDefinition_desc {
         {ipxact:busDefinition} 
-        {xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        {{0} {xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xmlns:ipxact="http://www.accellera.org/XMLSchema/IPXACT/1685-2014"
-            xsi:schemaLocation="http://www.accellera.org/XMLSchema/IPXACT/1685-2014 http://www.accellera.org/XMLSchema/IPXACT/1685-2014/index.xsd"}
+            xsi:schemaLocation="http://www.accellera.org/XMLSchema/IPXACT/1685-2014 http://www.accellera.org/XMLSchema/IPXACT/1685-2014/index.xsd"}}
         {} {{ipxact:vendor} {{ipxact:vendor} {} {} {}}
             {ipxact:library} {{ipxact:library} {} {} {}}
             {ipxact:name} {{ipxact:name} {} {} {}}
@@ -122,8 +122,10 @@ namespace eval ipl {
         }
     }
 
-    set interface { abstractionDefinition_desc {}
-        busDefinition_desc {}
+    set if { {} {} {} {
+            abstractionDefinition_desc {{} {} {} {}}
+            busDefinition_desc {{} {} {} {}}
+        }
     }
 
 # <ipxact:requiresDriver driverType="singleShot">true</ipxact:requiresDriver>
@@ -134,22 +136,22 @@ namespace eval ipl {
             {ipxact:description} {{ipxact:description} {} {} {}}
             {ipxact:wire} {{ipxact:wire} {} {} {
                     {ipxact:qualifier} {{ipxact:qualifier} {} {} {
-                            {ipxact:isClock} {{ipxact:isClock} {} {} {}}
-                            {ipxact:isReset} {{ipxact:isReset} {} {} {}}
-                            {ipxact:isAddress} {{ipxact:isAddress} {} {} {}}
-                            {ipxact:isData} {{ipxact:isData} {} {} {}}
+                            {ipxact:isClock} {{} {} {} {}}
+                            {ipxact:isReset} {{} {} {} {}}
+                            {ipxact:isAddress} {{} {} {} {}}
+                            {ipxact:isData} {{} {} {} {}}
                         }
                     }
                     {ipxact:onMaster} {{ipxact:onMaster} {} {} {
-                            {ipxact:presence} {{ipxact:presence} {} {} {}}
+                            {ipxact:presence} {{ipxact:presence} {} {optional} {}}
                             {ipxact:width} {{} {} {} {}}
-                            {ipxact:direction} {{ipxact:direction} {} {} {}}
+                            {ipxact:direction} {{ipxact:direction} {} {out} {}}
                         }
                     }
                     {ipxact:onSlave} {{ipxact:onSlave} {} {} {
-                            {ipxact:presence} {{ipxact:presence} {} {} {}}
+                            {ipxact:presence} {{ipxact:presence} {} {optional} {}}
                             {ipxact:width} {{} {} {} {}}
-                            {ipxact:direction} {{ipxact:direction} {} {} {}}
+                            {ipxact:direction} {{ipxact:direction} {} {in} {}}
                         }
                     }
                     {ipxact:requiresDriver} {{} {} {} {}}
@@ -158,9 +160,182 @@ namespace eval ipl {
         }
     }
 
-    proc set_up_if {args} {
+    proc createcif {args} {
+        array set opt [list -if "$::ipl::if" \
+            -vendor "" \
+            -library "" \
+            -name "" \
+            -version "" \
+            -directConnection "" \
+            -isAddressable "" \
+            -description "" \
+            -busType ""  \
+            -ports ""  \
+        {*}$args]
+        
+        set if $opt(-if)
+        set busType $opt(-busType)
+        set ports $opt(-ports)
+
+        set optla {
+            vendor
+            library
+            name
+            version
+            description
+        }
+        set optlb {
+            vendor
+            library
+            name
+            version
+            directConnection
+            isAddressable
+            description
+        }
+        if {[ipl::getnchilds {} abstractionDefinition_desc $if] == ""} {
+            set abst $::ipl::abstractionDefinition_desc
+            set if [ipl::setnode {} abstractionDefinition_desc $abst $if]
+        }
+        if {[ipl::getnchilds {} busDefinition_desc $if] == ""} {
+            set busd $::ipl::busDefinition_desc
+            set if [ipl::setnode {} busDefinition_desc $busd $if]
+        }
+        set if [ipl::setatt abstractionDefinition_desc ipxact:busType busType busType $if]
+        foreach op $optla {
+            set val $opt(-$op)
+            if {$val != ""} {
+                if {[ipl::getnname abstractionDefinition_desc "ipxact:$op" $if] != ""} {
+                    set if [ipl::setncont abstractionDefinition_desc "ipxact:$op" $val $if]
+                } else {
+                    set if [ipl::setnode abstractionDefinition_desc "ipxact:$op" [list "ipxact:$op" {} $val {}] $if]
+                }
+            }
+        }
+        foreach op $optlb {
+            set val $opt(-$op)
+            if {$val != ""} {
+                if {[ipl::getnname busDefinition_desc "ipxact:$op" $if] != ""} {
+                    set if [ipl::setncont busDefinition_desc "ipxact:$op" $val $if]
+                } else {
+                    set if [ipl::setnode busDefinition_desc "ipxact:$op" [list "ipxact:$op" {} $val {}] $if]
+                }
+            }
+        }
+        set if [ipl::addcifports $if $ports]
+        return $if
     }
-    proc set_up_if_ports {args} {
+    proc addcifport {args} {
+        array set opt [list -if "$::ipl::if" \
+            -logicalName "" \
+            -description "" \
+            -qualifier "data" \
+            -presence "" \
+            -width "" \
+            -direction "" \
+        {*}$args]
+
+        set if $opt(-if)
+        set logicalName $opt(-logicalName)
+        set description $opt(-description)
+        set qualifier $opt(-qualifier)
+        set presence $opt(-presence)
+        set width $opt(-width)
+        set direction $opt(-direction)
+        set port $::ipl::port_desc
+
+        if {$logicalName != ""} {
+            set port [ipl::setncont {} ipxact:logicalName $logicalName $port]
+        }
+        if {$description != ""} {
+            set port [ipl::setncont {} ipxact:description $description $port]
+        }
+        switch $qualifier {
+            clock {
+                set port [ipl::setnname ipxact:wire/ipxact:qualifier ipxact:isClock ipxact:isClock $port]
+                set port [ipl::setncont ipxact:wire/ipxact:qualifier ipxact:isClock true $port]
+            }
+            reset {
+                set port [ipl::setnname ipxact:wire/ipxact:qualifier ipxact:isReset ipxact:isReset $port]
+                set port [ipl::setncont ipxact:wire/ipxact:qualifier ipxact:isReset true $port]
+            }
+            data {
+                set port [ipl::setnname ipxact:wire/ipxact:qualifier ipxact:isData ipxact:isData $port]
+                set port [ipl::setncont ipxact:wire/ipxact:qualifier ipxact:isData true $port]
+            }
+            address {
+                set port [ipl::setnname ipxact:wire/ipxact:qualifier ipxact:isAddress ipxact:isAddress $port]
+                set port [ipl::setncont ipxact:wire/ipxact:qualifier ipxact:isAddress true $port]
+            }
+            add {
+                set port [ipl::setnname ipxact:wire/ipxact:qualifier ipxact:isAddress ipxact:isAddress $port]
+                set port [ipl::setncont ipxact:wire/ipxact:qualifier ipxact:isAddress true $port]
+            }
+        }
+        if {$presence != ""} {
+            set port [ipl::setncont ipxact:wire/ipxact:onMaster ipxact:presence $presence $port]
+            set port [ipl::setncont ipxact:wire/ipxact:onSlave ipxact:presence $presence $port]
+        }
+        if {$width != ""} {
+            set port [ipl::setnname ipxact:wire/ipxact:onMaster ipxact:width ipxact:width $port]
+            set port [ipl::setnname ipxact:wire/ipxact:onSlave ipxact:width ipxact:width $port]
+            set port [ipl::setncont ipxact:wire/ipxact:onMaster ipxact:width $width $port]
+            set port [ipl::setncont ipxact:wire/ipxact:onSlave ipxact:width $width $port]
+        }
+        if {$direction != ""} {
+            if {$direction == "in"} {
+                set port [ipl::setncont ipxact:wire/ipxact:onMaster ipxact:direction in $port]
+                set port [ipl::setncont ipxact:wire/ipxact:onSlave ipxact:direction out $port]
+            }
+            if {$direction == "out"} {
+                set port [ipl::setncont ipxact:wire/ipxact:onMaster ipxact:direction out $port]
+                set port [ipl::setncont ipxact:wire/ipxact:onSlave ipxact:direction in $port]
+            }
+        }
+        if {$qualifier == "clock" || $qualifier == "reset"} {
+            set port [ipl::setncont ipxact:wire/ipxact:onMaster ipxact:direction in $port]
+            set port [ipl::setncont ipxact:wire/ipxact:onSlave ipxact:direction in $port]
+            set port [ipl::setnname ipxact:wire ipxact:requiresDriver ipxact:requiresDriver $port]
+            switch $qualifier {
+                clock {
+                    set port [ipl::setatt ipxact:wire ipxact:requiresDriver driverType "driverType=\"clock\"" $port]
+                }
+                reset {
+                    set port [ipl::setatt ipxact:wire ipxact:requiresDriver driverType "driverType=\"singleShot\"" $port]
+                }
+            }
+            set port [ipl::setncont ipxact:wire ipxact:requiresDriver true $port]
+        }
+        if {[ipl::getnchilds {} abstractionDefinition_desc $if] == ""} {
+            set abst $::ipl::abstractionDefinition_desc
+            set if [ipl::setnode {} abstractionDefinition_desc $abst $if]
+        }
+        set if [ipl::setnode abstractionDefinition_desc/ipxact:ports $logicalName $port $if]
+        return $if
+    }
+    proc addcifports {if ports} {
+        foreach port $ports {
+            set opts {}
+            if {[dict keys $port -n] != ""} {
+                dict set opts -logicalName [dict get $port -n]
+            }
+            if {[dict keys $port -d] != ""} {
+                dict set opts -direction [dict get $port -d]
+            }
+            if {[dict keys $port -w] != ""} {
+                dict set opts -width [dict get $port -w]
+            }
+            if {[dict keys $port -q] != ""} {
+                dict set opts -qualifier [dict get $port -q]
+            }
+            if {[dict keys $port -p] != ""} {
+                dict set opts -presence [dict get $port -p]
+            }
+            set if [ipl::addcifport -if $if {*}$opts]
+        }
+        return $if
+    }
+    proc genif {if {path ./}} {
     }
 
     set ip [list {} {} {} [list fdeps {{fdeps} {} {} {
