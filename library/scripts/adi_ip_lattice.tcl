@@ -169,13 +169,15 @@ namespace eval ipl {
             -directConnection "" \
             -isAddressable "" \
             -description "" \
-            -busType ""  \
             -ports ""  \
         {*}$args]
         
         set if $opt(-if)
-        set busType $opt(-busType)
         set ports $opt(-ports)
+        set library $opt(-library)
+        set name $opt(-name)
+        set version $opt(-version)
+        set vendor $opt(-vendor)
 
         set optla {
             vendor
@@ -201,7 +203,11 @@ namespace eval ipl {
             set busd $::ipl::busDefinition_desc
             set if [ipl::setnode {} busDefinition_desc $busd $if]
         }
-        set if [ipl::setatt abstractionDefinition_desc ipxact:busType busType busType $if]
+        set atts [list library "library=\"$library\"" \
+            name "name=\"$name\"" \
+            vendor "vendor=\"$vendor\"" \
+            version "version=\"$version\""]
+        set if [ipl::setatts abstractionDefinition_desc ipxact:busType $atts $if]
         foreach op $optla {
             set val $opt(-$op)
             if {$val != ""} {
@@ -249,6 +255,8 @@ namespace eval ipl {
         }
         if {$description != ""} {
             set port [ipl::setncont {} ipxact:description $description $port]
+        } else {
+            set port [ipl::setncont {} ipxact:description "$logicalName port" $port]
         }
         switch $qualifier {
             clock {
@@ -335,7 +343,27 @@ namespace eval ipl {
         }
         return $if
     }
-    proc genif {if {path ./}} {
+    proc genif {if {dpath ./}} {
+        set abstractionDefinition [ipl::getnode {} abstractionDefinition_desc $if]
+        set busDefinition [ipl::getnode {} busDefinition_desc $if]
+
+        set vendor [ipl::getncont busDefinition_desc ipxact:vendor $if]
+        set library [ipl::getncont busDefinition_desc ipxact:library $if]
+        set name [ipl::getncont busDefinition_desc ipxact:name $if]
+        set version [ipl::getncont busDefinition_desc ipxact:version $if]
+
+        if {[file exist $dpath/$vendor/$library/$name/$version] != 1} {
+            file mkdir $dpath/$vendor/$library/$name/$version
+        }
+
+        set busdef [open "$dpath/$vendor/$library/$name/$version/${name}.xml" w]
+        puts $busdef {<?xml version="1.0" encoding="UTF-8"?>}
+        puts $busdef [ipl::xmlgen $busDefinition]
+        close $busdef
+        set abstdef [open "$dpath/$vendor/$library/$name/$version/${name}_rtl.xml" w]
+        puts $abstdef {<?xml version="1.0" encoding="UTF-8"?>}
+        puts $abstdef [ipl::xmlgen $abstractionDefinition]
+        close $abstdef
     }
 
     set ip [list {} {} {} [list fdeps {{fdeps} {} {} {
@@ -911,7 +939,7 @@ namespace eval ipl {
         return $ip
     }
 
-    proc address {args} {
+    proc addressp {args} {
         set debug 0
         array set opt [list -ip "$::ipl::ip" \
             -name "" \
@@ -1183,7 +1211,11 @@ namespace eval ipl {
     }
     proc addif {args} {
         array set opt [list -ip "$::ipl::ip" \
+            -vendor "" \
+            -library "" \
             -name "" \
+            -version "" \
+            -iname "" \
             -display_name "" \
             -description "" \
             -bus_type "" \
@@ -1193,25 +1225,33 @@ namespace eval ipl {
             -aspace_ref "" \
             -portmap "" \
         {*}$args]
-        
+
         set c {"}
         set ip $opt(-ip)
-        set name $opt(-name)
+        set iname $opt(-iname)
         set display_name $opt(-display_name)
         set description $opt(-description)
-        set bus_type $opt(-bus_type)
-        set abst_ref $opt(-abstraction_ref)
+        set vendor $opt(-vendor)
+        set library $opt(-library)
+        set name $opt(-name)
+        set version $opt(-version)
         set master_slave $opt(-master_slave)
         set mmap_ref $opt(-mmap_ref)
         set aspace_ref $opt(-aspace_ref)
         set portmap $opt(-portmap)
 
+        set atts [list library "library=\"$library\"" \
+            name "name=\"$name\"" \
+            vendor "vendor=\"$vendor\"" \
+            version "version=\"$version\""]
+
         set bif $::ipl::busInterface_desc
-        set bif [ipl::setncont {} lsccip:name $name $bif]
+        set bif [ipl::setncont {} lsccip:name $iname $bif]
         set bif [ipl::setncont {} lsccip:displayName $display_name $bif]
         set bif [ipl::setncont {} lsccip:description $description $bif]
-        set bif [ipl::setatts {} lsccip:busType [list {0} $bus_type] $bif]
-        set bif [ipl::setatts lsccip:abstractionTypes/lsccip:abstractionType lsccip:abstractionRef [list {0} $abst_ref] $bif]
+        set bif [ipl::setatts {} lsccip:busType $atts $bif]
+        dict set atts name "name=\"${name}_rtl\""
+        set bif [ipl::setatts lsccip:abstractionTypes/lsccip:abstractionType lsccip:abstractionRef $atts $bif]
         set bif [ipl::setnname {} lsccip:master_slave lsccip:$master_slave $bif]
 
         if {$master_slave == "slave" && $mmap_ref != ""} {
@@ -1229,14 +1269,14 @@ namespace eval ipl {
             set pmap [ipl::setncont lsccip:logicalPort lsccip:name $logic $::ipl::portMap_desc]
             set pmap [ipl::setncont lsccip:physicalPort lsccip:name $pname $pmap]
             set bif [ipl::setnode lsccip:abstractionTypes/lsccip:abstractionType/lsccip:portMaps $pname $pmap $bif]
-            set ip [ipl::setport -ip $ip -name $pname -bus_interface $name]
+            set ip [ipl::setport -ip $ip -name $pname -bus_interface $iname]
         }
         set bifs [ipl::getnode {} busInterfaces_desc $ip]
         if {$bifs == ""} {
             set bifs $::ipl::busInterfaces_desc
         }
         set bifsl [lindex $bifs 3]
-        dict set bifsl $name $bif
+        dict set bifsl $iname $bif
         lset bifs 3 $bifsl
         set ip [ipl::setnode {} busInterfaces_desc $bifs $ip]
 
@@ -1247,11 +1287,13 @@ namespace eval ipl {
     }
     proc addifa {args} {
         array set opt [list -ip "$::ipl::ip" \
-            -name "" \
+            -iname "" \
             -display_name "" \
             -description "" \
-            -bus_type "" \
-            -abstraction_ref "" \
+            -vendor "" \
+            -library "" \
+            -name "" \
+            -version "" \
             -master_slave "" \
             -mmap_ref "" \
             -aspace_ref "" \
@@ -1262,11 +1304,13 @@ namespace eval ipl {
 
         set optl {
             -ip
-            -name
+            -iname
             -display_name
             -description
-            -bus_type
-            -abstraction_ref
+            -vendor
+            -library
+            -name
+            -version
             -master_slave
             -mmap_ref
             -aspace_ref
@@ -1472,60 +1516,66 @@ namespace eval ipl {
             -baseAddress 0 \
             -range 4096 \
             -width 32]
-        set ip [ipl::address -ip $ip \
+        set ip [ipl::addressp -ip $ip \
             -name "m_dest_axi_aspace" \
             -range 0x100000000 \
             -width 32]
         
-        set bustype {library="AMBA4" name="AXI4-Lite" vendor="amba.com" version="r0p0"}
-        set abstref {library="AMBA4" name="AXI4-Lite_rtl" vendor="amba.com" version="r0p0"}
-        set ip [ipl::addifa -ip $ip -mod_data $mod_data -name s_axi -v_name s_axi \
+        set ip [ipl::addifa -ip $ip -mod_data $mod_data -iname s_axi -v_name s_axi \
             -exept_pl [list s_axi_aclk s_axi_aresetn] \
             -display_name s_axi \
             -description s_axi \
-            -bus_type $bustype \
-            -abstraction_ref $abstref \
             -master_slave slave \
-            -mmap_ref axi_dmac_mem_map]
+            -mmap_ref axi_dmac_mem_map \
+            -vendor amba.com -library AMBA4 -name AXI4-Lite -version r0p0 ]
         # set ip [ipl::igiports -ip $ip \
         #     -mod_data $mod_data \
         #     -v_name s_axi \
         #     -expression true]
-        set bustype {library="AMBA4" name="AXI4" vendor="amba.com" version="r0p0"}
-        set abstref {library="AMBA4" name="AXI4_rtl" vendor="amba.com" version="r0p0"}
         set ip [ipl::addifa -ip $ip -mod_data $mod_data -v_name m_dest_axi \
             -exept_pl [list m_dest_axi_aclk m_dest_axi_aresetn] \
-            -name m_dest_axi \
+            -iname m_dest_axi \
             -display_name m_dest_axi \
             -description m_dest_axi \
-            -bus_type $bustype \
-            -abstraction_ref $abstref \
             -master_slave master \
-            -aspace_ref m_dest_axi_aspace]
+            -aspace_ref m_dest_axi_aspace \
+            -vendor amba.com -library AMBA4 -name AXI4 -version r0p0]
         set ip [ipl::addifa -ip $ip -mod_data $mod_data -v_name m_src_axi \
             -exept_pl [list m_src_axi_aclk m_src_axi_aresetn] \
-            -name m_src_axi \
+            -iname m_src_axi \
             -display_name m_src_axi \
             -description m_src_axi \
-            -bus_type $bustype \
-            -abstraction_ref $abstref \
-            -master_slave master]
+            -master_slave master \
+            -vendor amba.com -library AMBA4 -name AXI4 -version r0p0]
         set ip [ipl::addifa -ip $ip -mod_data $mod_data -v_name m_sg_axi \
             -exept_pl [list m_sg_axi_aclk m_sg_axi_aresetn] \
-            -name m_sg_axi \
+            -iname m_sg_axi \
             -display_name m_sg_axi \
             -description m_sg_axi \
-            -bus_type $bustype \
-            -abstraction_ref $abstref \
-            -master_slave master]
-        set bustype {library="interface" name="fifo_wr" vendor="analog.com" version="1.0"}
-        set abstref {library="interface" name="fifo_wr_rtl" vendor="analog.com" version="1.0"}
-        set ip [ipl::addif -ip $ip \
+            -master_slave master \
+            -vendor amba.com -library AMBA4 -name AXI4 -version r0p0]
+
+        set if [ipl::createcif -vendor analog.com \
+            -library ADI \
             -name fifo_wr \
+            -version 1.0 \
+            -directConnection true \
+            -isAddressable false \
+            -description "ADI fifo interface" \
+            -ports {
+                {-n DATA -d out -p required}
+                {-n EN -d out -p required -w 1}
+                {-n OVERFLOW -w 1 -p optional -d in}
+                {-n SYNC -p optional -w 1 -d out}
+                {-n XFER_REQ -p optional -w 1 -d in}
+            }]
+        global env
+        set ifp "${env(TOOLRTF)}/ip/interfaces"
+        ipl::genif $if $ifp
+        set ip [ipl::addif -ip $ip \
+            -iname fifo_wr \
             -display_name fifo_wr \
             -description fifo_wr \
-            -bus_type $bustype \
-            -abstraction_ref $abstref \
             -master_slave slave \
             -portmap { \
                 {"fifo_wr_en" "EN"} \
@@ -1533,13 +1583,12 @@ namespace eval ipl {
                 {"fifo_wr_overflow" "OVERFLOW"} \
                 {"fifo_wr_sync" "SYNC"} \
                 {"fifo_wr_xfer_req" "XFER_REQ"} \
-            }]
+            } \
+            -vendor analog.com -library ADI -name fifo_wr -version 1.0]
         set ip [ipl::addif -ip $ip \
-            -name fifo_wr_m \
+            -iname fifo_wr_m \
             -display_name fifo_wr_m \
             -description fifo_wr_m \
-            -bus_type $bustype \
-            -abstraction_ref $abstref \
             -master_slave master \
             -portmap { \
                 {"fifo_wr_m_en" "EN"} \
@@ -1547,15 +1596,12 @@ namespace eval ipl {
                 {"fifo_wr_m_overflow" "OVERFLOW"} \
                 {"fifo_wr_m_sync" "SYNC"} \
                 {"fifo_wr_m_xfer_req" "XFER_REQ"} \
-            }]
-        set bustype {library="AMBA4" name="AXI4Stream" vendor="amba.com" version="r0p0"}
-        set abstref {library="AMBA4" name="AXI4Stream_rtl" vendor="amba.com" version="r0p0"}
+            } \
+            -vendor analog.com -library ADI -name fifo_wr -version 1.0]
         set ip [ipl::addif -ip $ip \
-            -name s_axis \
+            -iname s_axis \
             -display_name s_axis \
             -description s_axis \
-            -bus_type $bustype \
-            -abstraction_ref $abstref \
             -master_slave slave \
             -portmap [list {"s_axis_ready" "TREADY"} \
                             {"s_axis_valid" "TVALID"} \
@@ -1565,24 +1611,23 @@ namespace eval ipl {
                             {"s_axis_user" "TUSER"} \
                             {"s_axis_id" "TID"} \
                             {"s_axis_dest" "TDEST"} \
-                            {"s_axis_last" "TLAST"}]]
-
+                            {"s_axis_last" "TLAST"}] \
+            -vendor amba.com -library AMBA4 -name AXI4Stream -version r0p0]
         set ip [ipl::addif -ip $ip \
-        -name m_axis \
-        -display_name m_axis \
-        -description m_axis \
-        -bus_type $bustype \
-        -abstraction_ref $abstref \
-        -master_slave master \
-        -portmap [list {"m_axis_ready" "TREADY"} \
-                        {"m_axis_valid" "TVALID"} \
-                        {"m_axis_data" "TDATA"} \
-                        {"m_axis_strb" "TSTRB"} \
-                        {"m_axis_keep" "TKEEP"} \
-                        {"m_axis_user" "TUSER"} \
-                        {"m_axis_id" "TID"} \
-                        {"m_axis_dest" "TDEST"} \
-                        {"m_axis_last" "TLAST"}]]
+            -iname m_axis \
+            -display_name m_axis \
+            -description m_axis \
+            -master_slave master \
+            -portmap [list {"m_axis_ready" "TREADY"} \
+                            {"m_axis_valid" "TVALID"} \
+                            {"m_axis_data" "TDATA"} \
+                            {"m_axis_strb" "TSTRB"} \
+                            {"m_axis_keep" "TKEEP"} \
+                            {"m_axis_user" "TUSER"} \
+                            {"m_axis_id" "TID"} \
+                            {"m_axis_dest" "TDEST"} \
+                            {"m_axis_last" "TLAST"}] \
+            -vendor amba.com -library AMBA4 -name AXI4Stream -version r0p0]
 
         # -ip
         # -spath
