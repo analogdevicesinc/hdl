@@ -199,6 +199,7 @@ ad_ip_parameter axi_ad9361 CONFIG.ID 0
 ad_ip_parameter axi_ad9361 CONFIG.CMOS_OR_LVDS_N 1
 ad_ip_parameter axi_ad9361 CONFIG.MODE_1R1T 0
 ad_ip_parameter axi_ad9361 CONFIG.ADC_INIT_DELAY 21
+ad_ip_parameter axi_ad9361 CONFIG.DAC_EXT_SYNC 1
 
 ad_ip_instance axi_dmac axi_ad9361_dac_dma
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_TYPE_SRC 0
@@ -343,6 +344,7 @@ ad_connect logic_inv/Op1  axi_ad9361/rst
 ad_connect logic_inv/Res  axi_tdd_0/resetn
 ad_connect axi_ad9361/l_clk axi_tdd_0/clk
 ad_connect axi_tdd_0/sync_in tdd_ext_sync
+ad_connect axi_tdd_0/sync_out axi_ad9361/dac_sync_in
 ad_connect axi_tdd_0/tdd_channel_0 txdata_o
 ad_connect axi_tdd_0/tdd_channel_1 axi_ad9361_adc_dma/fifo_wr_sync
 

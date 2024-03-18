@@ -79,6 +79,7 @@ ad_ip_instance axi_ad9361 axi_ad9361_1
 ad_ip_parameter axi_ad9361_1 CONFIG.ID 1
 ad_ip_parameter axi_ad9361_1 CONFIG.IO_DELAY_GROUP dev_1_if_delay_group
 ad_ip_parameter axi_ad9361_1 CONFIG.USE_SSI_CLK 0
+ad_ip_parameter axi_ad9361_1 CONFIG.DAC_EXT_SYNC 1
 ad_connect $sys_iodelay_clk axi_ad9361_1/delay_clk
 ad_connect axi_ad9361_0/l_clk axi_ad9361_1/clk
 ad_connect axi_ad9361_0/dac_sync_out axi_ad9361_1/dac_sync_in
