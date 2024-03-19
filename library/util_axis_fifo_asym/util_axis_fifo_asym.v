@@ -81,8 +81,8 @@ module util_axis_fifo_asym #(
   localparam A_ADDRESS = (ADDRESS_WIDTH_PERSPECTIVE) ?
     ((FIFO_LIMITED) ? ((RATIO_TYPE) ? (ADDRESS_WIDTH-$clog2(RATIO)) : ADDRESS_WIDTH) : ADDRESS_WIDTH) :
     ((FIFO_LIMITED) ? ((RATIO_TYPE) ? ADDRESS_WIDTH : (ADDRESS_WIDTH-$clog2(RATIO))) : ADDRESS_WIDTH);
-  localparam A_ALMOST_FULL_THRESHOLD = (RATIO_TYPE) ? ALMOST_FULL_THRESHOLD : (ALMOST_FULL_THRESHOLD/RATIO);
-  localparam A_ALMOST_EMPTY_THRESHOLD = (RATIO_TYPE) ? (ALMOST_EMPTY_THRESHOLD/RATIO) : ALMOST_EMPTY_THRESHOLD;
+  localparam A_ALMOST_FULL_THRESHOLD = (RATIO_TYPE) ? ALMOST_FULL_THRESHOLD : ((ALMOST_FULL_THRESHOLD+RATIO-1)/RATIO);
+  localparam A_ALMOST_EMPTY_THRESHOLD = (RATIO_TYPE) ? ((ALMOST_EMPTY_THRESHOLD+RATIO-1)/RATIO) : ALMOST_EMPTY_THRESHOLD;
 
   // slave and master sequencers
   reg [$clog2(RATIO)-1:0] s_axis_counter;
@@ -150,7 +150,7 @@ module util_axis_fifo_asym #(
 
       for (i=0; i<RATIO; i=i+1) begin
         assign s_axis_valid_int_s[i] = s_axis_valid & s_axis_ready;
-        assign s_axis_tlast_int_s[i] = s_axis_tlast;
+        assign s_axis_tlast_int_s[i] = (i==RATIO-1) ? s_axis_tlast : 1'b0;
       end
 
       assign s_axis_tkeep_int_s = s_axis_tkeep;
@@ -212,6 +212,7 @@ module util_axis_fifo_asym #(
 
       // VALID/EMPTY/ALMOST_EMPTY is driven by the current atomic instance
       assign m_axis_valid = m_axis_valid_int_s >> m_axis_counter;
+      assign m_axis_tlast = m_axis_tlast_int_s >> m_axis_counter;
 
       // the FIFO has the same level as the last atomic instance
       // (NOTE: this is not the real level value, rather the value will be updated
@@ -244,9 +245,10 @@ module util_axis_fifo_asym #(
       // the FIFO has the same room as the atomic FIFO
       assign m_axis_level = m_axis_level_int_s[A_ADDRESS-1:0];
 
+      assign m_axis_tlast = (m_axis_valid) ? |m_axis_tlast_int_s : 1'b0;
+
     end
 
-    assign m_axis_tlast = (m_axis_valid) ? |m_axis_tlast_int_s : 1'b0;
   endgenerate
 
   // slave handshake counter
