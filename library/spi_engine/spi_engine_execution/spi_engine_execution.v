@@ -76,10 +76,10 @@ module spi_engine_execution #(
   output reg three_wire
 );
 
-  localparam CMD_TRANSFER = 2'b00;
-  localparam CMD_CHIPSELECT = 2'b01;
-  localparam CMD_WRITE = 2'b10;
-  localparam CMD_MISC = 2'b11;
+  localparam CMD_TRANSFER = 4'b0000;
+  localparam CMD_CHIPSELECT = 4'b0001;
+  localparam CMD_WRITE = 4'b0010;
+  localparam CMD_MISC = 4'b0011;
 
   localparam MISC_SYNC = 1'b0;
   localparam MISC_SLEEP = 1'b1;
@@ -141,8 +141,8 @@ module spi_engine_execution #(
 
   reg [SDI_DELAY+1:0] trigger_rx_d = {(SDI_DELAY+2){1'b0}};
 
-  wire [1:0] inst = cmd[13:12];
-  wire [1:0] inst_d1 = cmd_d1[13:12];
+  wire [3:0] inst = cmd[15:12];
+  wire [3:0] inst_d1 = cmd_d1[15:12];
 
   wire exec_cmd = cmd_ready && cmd_valid;
   wire exec_transfer_cmd = exec_cmd && inst == CMD_TRANSFER;
