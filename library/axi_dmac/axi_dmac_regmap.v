@@ -53,7 +53,7 @@ module axi_dmac_regmap #(
   parameter DMA_2D_TRANSFER = 0,
   parameter DMA_SG_TRANSFER = 0,
   parameter SYNC_TRANSFER_START = 0,
-  parameter CACHE_COHERENT_DEST = 0
+  parameter CACHE_COHERENT = 0
 ) (
 
   // Slave AXI interface
@@ -238,7 +238,7 @@ module axi_dmac_regmap #(
                            4'b0,BYTES_PER_BURST_WIDTH[3:0],
                            2'b0,DMA_TYPE_SRC[1:0],BYTES_PER_BEAT_WIDTH_SRC[3:0],
                            2'b0,DMA_TYPE_DEST[1:0],BYTES_PER_BEAT_WIDTH_DEST[3:0]};
-      9'h005: up_rdata <= {16'b0, ctrl_arcache, ctrl_arprot, 1'b0, ctrl_awcache, ctrl_awprot, CACHE_COHERENT_DEST};
+      9'h005: up_rdata <= {16'b0, ctrl_arcache, ctrl_arprot, 1'b0, ctrl_awcache, ctrl_awprot, CACHE_COHERENT};
       9'h020: up_rdata <= up_irq_mask;
       9'h021: up_rdata <= up_irq_pending;
       9'h022: up_rdata <= up_irq_source;
